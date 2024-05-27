@@ -21,7 +21,7 @@ EcmaScript supports two numeric types.
 
 EcmaScript and TypeScript both do not support operator overloading, despite some [previous](https://github.com/tc39/notes/blob/main/meetings/2023-11/november-28.md#withdrawing-operator-overloading) [attempts](https://github.com/microsoft/TypeScript/issues/2319) to do so.
 
-TealScript [makes use of branded `number` types](https://tealscript.netlify.app/guides/supported-types/numbers/) for all bit sizes from 8 => 512. Since the source code is never executed, the safe limits of the `number` type are not a concern. Compiled code does not perform overflow checks on calculations until a return value is being encoded meaning a uint<8> is effectively a uint<64> until it's returned.
+TealScript [makes use of branded `number` types](https://tealscript.netlify.app/guides/supported-types/numbers/) for all bit sizes from 8 => 512, although it doesn't allow `number` variables, you must specify the actual type you want (e.g. `uint64`). Since the source code is never executed, the safe limits of the `number` type are not a concern. Compiled code does not perform overflow checks on calculations until a return value is being encoded meaning a uint<8> is effectively a uint<64> until it's returned.
 
 Algorand Python has specific [UInt64 and BigUint types](https://algorandfoundation.github.io/puya/lg-types.html#avm-types) that have semantics that exactly match the AVM semantics. Python allows for operator overloading so these types also use native operators (where they align to functionality in the underlying AVM).
 
@@ -122,7 +122,9 @@ The drawbacks of this solution are:
  - Less implicit type safety as TypeScript will infer the type of any binary math expression to be the base numeric type (`number`). A type annotation will be required where ever an identifier is declared and additional type checking will be required by the compiler to catch instances of assigning one numeric type to the other.
  - In order to have 'run on Node.js' semantics of a `uint64` or `biguint` match 'run on the AVM', a transpiler will be required to wrap numeric operations in logic that checks for over and under flows.
 
-A variation of the above with non-optional `__type` tags would prevent accidental implicit assignment errors, but require explicit casting on all ops
+TEALScript uses a similar approach to this, but uses `number` as the underlying type rather than `bigint`, which has the aforementioned downside of not being able to safely represent a 64-bit unsigned integer, but does has the advantage of being directly compatible with raw numbers (e.g. `3` rather than `3n`) and JavaScript prototype methods that return `number` like `array.length`. The requirement for semantic compatibility dictates that we need to use `bigint` rather than `number` since it's the correct type to represent the data and we will be able to create wrapper classes for things like arrays that have more explicitly typed methods for things like length.
+
+A variation of the above with non-optional `__type` tags would prevent accidental implicit assignment errors, but require explicit casting on all ops and any methods that return a `number` such as the `length` method on arrays.
 
 ```ts
 declare function Uint64(v): uint64
@@ -143,9 +145,8 @@ c2 = Uint64(a + b) // ok
 c2 = (a + b) as uint64 // ok
 ```
 
-This introduces a degree of type safety at the expense of legibility.
+This introduces a degree of type safety with the in-built TypeScript type system at the expense of legibility.
 
-TealScript uses a similar approach to this, but uses `number` as the underlying type rather than `bigint`, which has the aforementioned downside of not being able to safely represent a 64-bit unsigned integer.
 
 
 ## Preferred option

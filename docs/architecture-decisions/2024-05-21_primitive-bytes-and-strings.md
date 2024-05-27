@@ -105,6 +105,7 @@ const a = Bytes("Hello")
 const b = Bytes.fromHex("ABFF")
 const c = Bytes.fromBase64("...")
 const d = Bytes.fromInts(255, 123, 28, 20)
+const e = Bytes`${a} World!`
 
 
 function testValue(x: bytes, y: bytes): bytes {
