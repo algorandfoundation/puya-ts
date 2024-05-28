@@ -97,7 +97,7 @@ To have equality checks behave as expected we would need a transpilation step to
 
 ### Option 3 - Implement bytes as a class but define it as a type + factory
 
-We can iron out some of the rough edges of using a class by only exposing a factory method for `Bytes` and a resulting type `bytes`. This removes the need for the `new` keyword and lets us use a 'primitive looking' type alias (`bytes` versus `Bytes` - much like `string` and `String`). We can use [tagged templates](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#tagged_templates) to improve the ux of multipart concat expressions.
+We can iron out some of the rough edges of using a class by only exposing a factory method for `Bytes` and a resulting type `bytes`. This removes the need for the `new` keyword and lets us use a 'primitive looking' type alias (`bytes` versus `Bytes` - much like `string` and `String`). We can use [tagged templates](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#tagged_templates) to improve the user experience of multipart concat expressions in lieu of having the `+` operator.
 
 ```ts
 
