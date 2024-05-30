@@ -9,9 +9,9 @@
 
 ## Context
 
-See [Architecture Decision Record - Primitive integer types](./2024-05-21_primitive-bytes-and-strings.md) for related decision and context.
+See [Architecture Decision Record - Primitive integer types](./2024-05-21_primitive-integer-types.md) for related decision and context.
 
-The AVM's only non-integer type is a variable length byte array. When *not* being interpreted as a `biguint`, leading zeros are significant and length is constant unless explicitly manipulated. Strings can only be represented in the AVM if they are encoded as bytes. The AVM supports byte literals in the form of base16, base64, and utf8 encoded strings. Once a literal has been parsed, the AVM has no concept of the original encoding or of utf8 characters. As a result, whilst a byte array can be indexed to receive a single byte (or a slice of bytes); it cannot be index to return a single utf8 *character* - unless one assumes all characters in the original string were ASCII (ie. single byte) characters.
+The AVM's only non-integer type is a variable length byte array. When *not* being interpreted as a `biguint`, leading zeros are significant and length is constant unless explicitly manipulated. Strings can only be represented in the AVM if they are encoded as bytes. The AVM supports byte literals in the form of base16, base64, and utf8 encoded strings. Once a literal has been parsed, the AVM has no concept of the original encoding or of utf8 characters. As a result, whilst a byte array can be indexed to receive a single byte (or a slice of bytes); it cannot be indexed to return a single utf8 *character* - unless one assumes all characters in the original string were ASCII (ie. single byte) characters.
 
 EcmaScript provides two relevant types for bytes and strings.
 
