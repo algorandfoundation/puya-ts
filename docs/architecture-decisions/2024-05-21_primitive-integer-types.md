@@ -123,6 +123,8 @@ The drawbacks of this solution are:
  - Less implicit type safety for branded types as TypeScript will infer the type of any binary math expression to be the base numeric type (a type annotation will be required where ever an identifier is declared, and the compiler will need to enforce this)
  - In order to have TypeScript execution semantics of a `uint64` or `biguint` match the AVM, a custom TypeScript transformer will be required to wrap numeric operations in logic that checks for over and under flows line-by-line; this is straightforward to write though and has been successfully spiked out
  - Additional type checking will be required by the compiler to catch instances of assigning one numeric type to the other (accidental implicit assignment) e.g. assigning a `uint64` value to `biguint`.
+ - Literals will require an `n` suffix
+ - `bigint` cannot be used to index an object/array (only `number | string | symbol`)
 
 
 ### Option 4 Explicitly tagged brand types
