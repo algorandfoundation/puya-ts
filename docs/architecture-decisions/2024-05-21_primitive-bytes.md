@@ -1,4 +1,4 @@
-# Architecture Decision Record - Primitive bytes and strings
+# Architecture Decision Record - Primitive bytes
 
 - **Status**: Draft
 - **Owner:** Tristan Menzel
@@ -17,8 +17,7 @@ Algorand Python has specific [Bytes and String types](https://algorandfoundation
 
 ## Requirements
 
-- Support bytes AVM type and a string type that supports ASCII UTF-8 strings
-- Use idiomatic TypeScript expressions for string expressions
+- Support bytes AVM type
 - Semantic compatibility between AVM execution and TypeScript execution (e.g. in unit tests)
 
 ## Principles
@@ -46,7 +45,7 @@ const b3 = b1 + b1
 
 Whilst binary data is often a representation of a utf-8 string, it is not always - so direct use of the string type is not a natural fit. It doesn't allow us to represent alternative encodings (b16/b64) and the existing api surface is very 'string' centric. Much of the api would also be expensive to implement on the AVM leading to a bunch of 'dead' methods hanging off the type (or a significant amount of work implementing all the methods). The signatures of these methods also use `number` which is [not a semantically relevant type](./2024-05-21_primitive-integer-types.md).
 
-Achieving semantic compatibility with EcmaScript's `String` type would also be very expensive as it uses utf-16 encoding underneath whilst an ABI string is utf-8 encoded. A significant number of ops (and program size) would be required to convert between the two. If we were to ignore this and use utf-8 at runtime, apis such as `.length` would return different results. For example `"😄".length` in ES returns `2` whilst utf-8 encoding would yield `1` codepoint or `4` bytes, similarly indexing and slicing would yield different results.
+Achieving semantic compatability with EcmaScript's `String` type would also be very expensive as it uses utf-16 encoding underneath whilst an ABI string is utf-8 encoded. A significant number of ops (and program size) would be required to convert between the two. If we were to ignore this and use utf-8 at runtime, apis such as `.length` would return different results. For example `"😄".length` in ES returns `2` whilst utf-8 encoding would yield `1` codepoint or `4` bytes, similarly indexing and slicing would yield different results. We would also need a way to specify non-utf-8 bytes values. Eg. from base16 or base64.
 
 The Uint8Array type is fit for purpose as an encoding mechanism but the API is not as friendly as it could be for writing declarative contracts. The `new` keyword feels unnatural for something that is ostensibly a primitive type. The fact that it is mutable also complicates the implementation the compiler produces for the AVM.
 
@@ -69,7 +68,7 @@ The downsides of using `string` are listed in Option 1.
 
 ### Option 3 - Define a class to represent Bytes
 
-A `Bytes` class and `Str` (Name TBD) class are defined with a very specific API tailored to operations which are available on the AVM:
+A `Bytes` class is defined with a very specific API tailored to operations which are available on the AVM:
 
 ```ts
 class Bytes {
@@ -84,21 +83,27 @@ class Bytes {
   at(x: uint64): Bytes {
     return new Bytes(this.v[x])
   }
+  
+  static fromHex(v: string): Bytes {
+      
+  }
+  
+  static fromBase64(v: string): Bytes {
+      
+  }
+  
 
   /* etc */
 }
 
-class Str {
-  /* implementation */
-}
+
 ```
 
 This solution provides great type safety and requires no transpilation to run _correctly_ on Node.js. However, non-primitive types in Node.js have equality checked by reference. Again the `new` keyword feels unnatural. Due to lack of overloading, `+` will not work as expected however concatenations do not require the same understanding of "order of operations" and nesting as numeric operations, so a `concat` method isn't as unwieldy (but still isn't idiomatic).
 
 ```ts
-const a = new Bytes('Hello')
-const b = new Bytes('World')
-const c = new Str('Example string')
+const a = new Bytes("Hello")
+const b = new Bytes("World")
 const ab = a.concat(b)
 
 function testValue(x: Bytes) {
@@ -117,7 +122,7 @@ To have equality checks behave as expected we would need a transpilation step to
 
 ### Option 4 - Implement bytes as a class but define it as a type + factory
 
-We can iron out some of the rough edges of using a class by only exposing a factory method for `Bytes`/`Str` and a resulting type `bytes`/`str`. This removes the need for the `new` keyword and lets us use a 'primitive looking' type alias (`bytes` versus `Bytes`, `str` versus `Str` - much like `string` and `String`). We can use [tagged templates](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#tagged_templates) to improve the user experience of multipart concat expressions in lieu of having the `+` operator.
+We can iron out some of the rough edges of using a class by only exposing a factory method for `Bytes` and a resulting type `bytes`. This removes the need for the `new` keyword and lets us use a 'primitive looking' type alias (`bytes` versus `Bytes` - much like `string` and `String`). We can use [tagged templates](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#tagged_templates) to improve the user experience of multipart concat expressions in lieu of having the `+` operator.
 
 ```ts
 export type bytes = {
@@ -144,12 +149,10 @@ function testValue(x: bytes, y: bytes): bytes {
   return Bytes`${x} and ${y}`
 }
 
-const f = Str`Example string`
+
 ```
 
-Whilst we still can't accept string literals on their own, the tagged template is almost as concise.
-
-Having `bytes` and `str` behave like a primitive value type (value equality) whilst not _actually_ being a primitive is not strictly semantically compatible with EcmaScript however the lowercase type names (plus factory with no `new` keyword) communicates the intention of it being a primitive value type and there is an existing precedence of introducing new value types to the language in a similar pattern (`bigint` and `BigInt`). Essentially - if EcmaScript were to have a primitive bytes type, this is most likely what it would look like.
+Having `bytes` behave like a primitive value type (value equality) whilst not _actually_ being a primitive is not strictly semantically compatible with EcmaScript however the lowercase type names (plus factory with no `new` keyword) communicates the intention of it being a primitive value type and there is an existing precedence of introducing new value types to the language in a similar pattern (`bigint` and `BigInt`). Essentially - if EcmaScript were to have a primitive bytes type, this is most likely what it would look like.
 
 ## Preferred option
 
@@ -157,25 +160,7 @@ Option 3 can be excluded because the requirement for a `new` keyword feels unnat
 
 Option 1 and 2 are not preferred as they make maintaining semantic compatibility with EcmaScript impractical.
 
-Option 4 gives us the most natural feeling api whilst still giving us full control over the api surface. It doesn't support the `+` operator, but supports interpolation and `.concat` which gives us most of what `+` provides other than augmented assignment (ie. `+=`).
-
-We should select an appropriate name for the type representing an AVM string. It should not conflict with the semantically incompatible EcmaScript type `string`.
-
-- `str`/`Str`:
-  - ✅ Short
-  - ✅ obvious what it is
-  - ✅ obvious equivalent in ABI types
-  - ❌ NOT obvious how it differs from EcmaScript `string`
-- `utf8`/`Utf8`:
-  - ✅ Short
-  - ✅ reasonably obvious what it is
-  - 🤔 less obvious equivalent in ABI types
-  - ✅ obvious how it differs to `string`
-- `utf8string`/`Utf8String`
-  - ❌ Verbose
-  - ✅ obvious equivalent in ABI types
-  - ✅ very obvious what it is
-  - ✅ obvious how it differs to `string`
+Option 4 gives us the most natural feeling api whilst still giving us full control over the api surface. It doesn't support the `+` operator, but supports interpolation and `.concat` which gives us most of what `+` provides other than augmented assignment (ie. `+=`). 
 
 ## Selected option
 
