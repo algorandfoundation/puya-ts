@@ -1,4 +1,3 @@
-@@ -0,0 +1,250 @@
 # Architecture Decision Record - String as alias or type
 
 - **Status**: Draft
@@ -36,7 +35,7 @@ The purpose of this ADR is to decide how strings are represented in Algorand TS.
 
 ### Option 1 - Alias the bytes type
 
-Introduce an alias for the existing bytes type. The alias is nothing but an alternative name and the types of `str` and `bytes` are interchangeable. 
+Introduce an alias for the existing bytes type. The alias is nothing but an alternative name and the types of `str` and `bytes` are interchangeable. This is loosely the approach taken by TealScript currently.
 
 ```ts
 type str = bytes
