@@ -1,4 +1,3 @@
-@@ -0,0 +1,250 @@
 # Architecture Decision Record - Imports or ambient types
 
 - **Status**: Draft
@@ -29,7 +28,7 @@ Algorand Python exposes types through a number of stub modules. The root module 
 
 ### Option 1 - Ambient typing
 
-All types and apis are declared against the global scope and are available without importing.
+All types and apis are declared against the global scope and are available without importing. This is how TealScript currently works however TealScript is not executable TypeScript/JavaScript so simply having types available is enough.
 
 Pros:
  - No need for importing anything
