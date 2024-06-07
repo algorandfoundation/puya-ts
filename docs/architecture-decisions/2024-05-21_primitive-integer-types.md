@@ -176,4 +176,4 @@ Option 1 and 2 are excluded because they don't meet the requirements of semantic
 
 ## Selected option
 
-TBD
+Option 5 has been selected as the best option
