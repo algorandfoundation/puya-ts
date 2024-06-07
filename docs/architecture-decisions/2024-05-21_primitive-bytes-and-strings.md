@@ -193,4 +193,4 @@ We should select an appropriate name for the type representing an AVM string. It
 
 ## Selected option
 
-TBD
+Option 4 has been selected as the best option
