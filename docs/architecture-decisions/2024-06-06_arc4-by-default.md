@@ -124,7 +124,7 @@ Cons:
 
 ### Option 3 - Option 2, but use public/private keywords
 
-The specific characteristics of python that lead to mandatory decorators on all methods do not apply to the TypeScript solution. Whilst still keeping the separation of ARC4 from option 2, we could use TypeScript's `public` and `private` keywords to flag an ABI method versus a private subroutine. The decorator would still be used in cases where a non-default on completion action was required but otherwise optional. We can require explicit access keywords (`public`/`private`/`protected`) on all methods to work around the potential security issues of public by default.
+The specific characteristics of python that lead to mandatory decorators on all methods do not apply to the TypeScript solution. Whilst still keeping the separation of ARC4 from option 2, we could use TypeScript's `public` and `private` keywords to flag an ABI method versus a private subroutine. The decorator would still be used in cases where a non-default on completion action was required but otherwise optional. We can require explicit access keywords (`public`/`private`/`protected`) on all methods to work around the potential security issues of public by default. This behaviour would only apply when extending `arc4.Arc4Contract`. Access modifiers on a contract which extends the base `Contract` would have no implicit effect.
 
 ```ts
 export default class DemoContract extends arc4.Arc4Contract {
