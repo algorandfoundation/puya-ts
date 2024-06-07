@@ -5,7 +5,7 @@
 - **Deciders**: Alessandro Cappellato (Algorand Foundation), Bruno Martins (Algorand Foundation), Rob Moore (MakerX)
 - **Date created**: 2024-06-05
 - **Date decided**: N/A
-- **Date updated**: 2024-06-05
+- **Date updated**: 2024-06-07
 
 ## Context
 
@@ -44,7 +44,7 @@ Cons:
 All types exist in modules under an `@algorandfoundation/algo-ts` package and are only available when imported explicitly. Importing a missing type in modern IDEs is usually as simple as hitting a keyboard combination. Eg. `alt` + `enter` or `ctrl` + `.`. 
 
 Pros:
- - API can be divided in sub-modules of related types
+ - API can be divided in submodules of related types
  - Idiomatic with modern TypeScript development
  - Can offer filtered intellisense options by grouping things like operations under `op.*`
 
@@ -53,9 +53,9 @@ Cons:
  - Imports occasionally need to be pruned as code is refactored lest we face the wrath of the linter (but IDEs are great at helping us with this)
 
 
-## Preferred options
+## Preferred option
 
-TBD
+Option 2 is the preferred option as the ability to group related types into submodules which can be imported as required whilst not having _ALL_ the types appear under intellisense provides a better developer experience. Importing from modules is also the standard approach to modern TypeScript development which aligns with our guiding principle of familiarity to TypeScript developers. 
 
 ## Selected option
 
