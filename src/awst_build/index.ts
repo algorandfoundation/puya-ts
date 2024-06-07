@@ -1,0 +1,30 @@
+import ts from 'typescript'
+import { SourceFileVisitor } from './source-file-visitor'
+import { ToCodeVisitor } from '../awst/to-code-visitor'
+import { CompileOptions } from '../compile-options'
+import { ArtifactKind, writeArtifact } from '../write-artifact'
+import { ModuleStatement } from '../awst/nodes'
+import { resolveModuleMetadata } from '../parser/resolve-module-metadata'
+
+export function buildAwst(program: ts.Program, options: CompileOptions) {
+  const moduleAwst: Record<string, ModuleStatement[]> = {}
+  for (const sourceFile of program.getSourceFiles()) {
+    if (sourceFile.isDeclarationFile) continue
+    const metadata = resolveModuleMetadata(sourceFile, program)
+    const visitor = new SourceFileVisitor(sourceFile, program)
+
+    const statements = Array.from(visitor.gatherStatements())
+
+    if (options.outputAwst) {
+      writeArtifact({
+        sourceFile: sourceFile.fileName,
+        outDir: options.outDir,
+        kind: ArtifactKind.Awst,
+        obj: statements,
+        visitor: new ToCodeVisitor(),
+      })
+    }
+    moduleAwst[metadata.moduleName] = statements
+  }
+  return moduleAwst
+}

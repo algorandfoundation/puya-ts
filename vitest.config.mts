@@ -1,0 +1,24 @@
+import { defineConfig } from 'vitest/config'
+import typescript from "@rollup/plugin-typescript";
+import {puyaTsTransformer} from "./packages/algo-ts-testing/src/test-transformer";
+
+export default defineConfig({
+  resolve: {
+    conditions: ['dev'],
+  },
+  esbuild: {},
+  plugins: [
+    typescript({
+      target: 'ES2022',
+      compilerOptions: {
+        lib: ['es2023']
+      },
+      transformers: {
+        before: [puyaTsTransformer]
+      }
+    })
+  ],
+  test: {
+    globals: true,
+  },
+})

@@ -1,0 +1,289 @@
+import * as nodes from './nodes'
+import {
+  BytesEncoding,
+  ExpressionVisitor,
+  FreeSubroutineTarget,
+  InstanceSubroutineTarget,
+  ModuleStatementVisitor,
+  StatementVisitor,
+} from './nodes'
+import { TodoError } from '../errors'
+import { logger } from '../logger'
+import { uint8ArrayToUtf8 } from '../util'
+
+function printBytes(value: Uint8Array, encoding: BytesEncoding) {
+  switch (encoding) {
+    case BytesEncoding.utf8:
+      return uint8ArrayToUtf8(value)
+    default:
+      // TODO: other encodings
+      return value.toString()
+  }
+}
+
+export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, StatementVisitor<string[]>, ExpressionVisitor<string> {
+  visitIntegerConstant(expression: nodes.IntegerConstant): string {
+    if (expression.tealAlias) return expression.tealAlias
+    return `${expression.value}`
+  }
+  visitDecimalConstant(expression: nodes.DecimalConstant): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitBoolConstant(expression: nodes.BoolConstant): string {
+    return expression.value ? 'True' : 'False'
+  }
+  visitBytesConstant(expression: nodes.BytesConstant): string {
+    return printBytes(expression.value, expression.encoding)
+  }
+  visitStringConstant(expression: nodes.StringConstant): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitTemplateVar(expression: nodes.TemplateVar): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitMethodConstant(expression: nodes.MethodConstant): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitAddressConstant(expression: nodes.AddressConstant): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitARC4Encode(expression: nodes.ARC4Encode): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitCopy(expression: nodes.Copy): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitArrayConcat(expression: nodes.ArrayConcat): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitArrayPop(expression: nodes.ArrayPop): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitArrayExtend(expression: nodes.ArrayExtend): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitARC4Decode(expression: nodes.ARC4Decode): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitIntrinsicCall(expression: nodes.IntrinsicCall): string {
+    const immediates = expression.immediates.length ? `<${expression.immediates.map((i) => i).join(', ')}>` : ''
+    const stack = expression.stackArgs.map((a) => a.accept(this)).join(', ')
+    return `${expression.opCode}${immediates}(${stack})`
+  }
+  visitCreateInnerTransaction(expression: nodes.CreateInnerTransaction): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitUpdateInnerTransaction(expression: nodes.UpdateInnerTransaction): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitCheckedMaybe(expression: nodes.CheckedMaybe): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitTupleExpression(expression: nodes.TupleExpression): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitTupleItemExpression(expression: nodes.TupleItemExpression): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitVarExpression(expression: nodes.VarExpression): string {
+    return expression.name
+  }
+  visitInnerTransactionField(expression: nodes.InnerTransactionField): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitSubmitInnerTransaction(expression: nodes.SubmitInnerTransaction): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitFieldExpression(expression: nodes.FieldExpression): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitIndexExpression(expression: nodes.IndexExpression): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitSliceExpression(expression: nodes.SliceExpression): string {
+    return `${expression.base.accept(this)}[${expression.beginIndex?.accept(this) ?? ''}:${expression.endIndex?.accept(this) ?? ''}]`
+  }
+  visitAppStateExpression(expression: nodes.AppStateExpression): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitAppAccountStateExpression(expression: nodes.AppAccountStateExpression): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitSingleEvaluation(expression: nodes.SingleEvaluation): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitReinterpretCast(expression: nodes.ReinterpretCast): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitNewArray(expression: nodes.NewArray): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitConditionalExpression(expression: nodes.ConditionalExpression): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitAssignmentExpression(expression: nodes.AssignmentExpression): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitNumericComparisonExpression(expression: nodes.NumericComparisonExpression): string {
+    return `${expression.lhs.accept(this)} ${expression.operator} ${expression.rhs.accept(this)}`
+  }
+  visitBytesComparisonExpression(expression: nodes.BytesComparisonExpression): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitSubroutineCallExpression(expression: nodes.SubroutineCallExpression): string {
+    const target =
+      expression.target instanceof FreeSubroutineTarget ? '' : expression.target instanceof InstanceSubroutineTarget ? 'this.' : 'super.'
+    return `${target}${expression.target.name}(${expression.args.map((a) => a.value.accept(this)).join(', ')})`
+  }
+  visitUInt64UnaryOperation(expression: nodes.UInt64UnaryOperation): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitBytesUnaryOperation(expression: nodes.BytesUnaryOperation): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitUInt64BinaryOperation(expression: nodes.UInt64BinaryOperation): string {
+    return `${expression.left.accept(this)} ${expression.op} ${expression.right.accept(this)}`
+  }
+  visitBigUIntBinaryOperation(expression: nodes.BigUIntBinaryOperation): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitBytesBinaryOperation(expression: nodes.BytesBinaryOperation): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitBooleanBinaryOperation(expression: nodes.BooleanBinaryOperation): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitNot(expression: nodes.Not): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitContains(expression: nodes.Contains): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitEnumeration(expression: nodes.Enumeration): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitReversed(expression: nodes.Reversed): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitStateGet(expression: nodes.StateGet): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitStateGetEx(expression: nodes.StateGetEx): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitStateExists(expression: nodes.StateExists): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitNewStruct(expression: nodes.NewStruct): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitExpressionStatement(statement: nodes.ExpressionStatement): string[] {
+    return [statement.expr.accept(this)]
+  }
+  visitBlock(statement: nodes.Block): string[] {
+    return statement.body.flatMap((b) => b.accept(this))
+  }
+  visitIfElse(statement: nodes.IfElse): string[] {
+    return [
+      `if (${statement.condition.accept(this)}) {`,
+      ...indent(statement.ifBranch.accept(this)),
+      ...(statement.elseBranch ? ['} else {', ...indent(statement.elseBranch.accept(this)), '}'] : ['}']),
+    ]
+  }
+  visitSwitch(statement: nodes.Switch): string[] {
+    throw new TodoError('Method not implemented.', { sourceLocation: statement.sourceLocation })
+  }
+  visitWhileLoop(statement: nodes.WhileLoop): string[] {
+    throw new TodoError('Method not implemented.', { sourceLocation: statement.sourceLocation })
+  }
+  visitBreakStatement(statement: nodes.BreakStatement): string[] {
+    throw new TodoError('Method not implemented.', { sourceLocation: statement.sourceLocation })
+  }
+  visitContinueStatement(statement: nodes.ContinueStatement): string[] {
+    throw new TodoError('Method not implemented.', { sourceLocation: statement.sourceLocation })
+  }
+  visitAssertStatement(statement: nodes.AssertStatement): string[] {
+    throw new TodoError('Method not implemented.', { sourceLocation: statement.sourceLocation })
+  }
+  visitReturnStatement(statement: nodes.ReturnStatement): string[] {
+    return [`return ${statement.value?.accept(this) ?? ''}`]
+  }
+  visitAssignmentStatement(statement: nodes.AssignmentStatement): string[] {
+    return [`var ${statement.target.accept(this)}: ${statement.target.wtype} = ${statement.value.accept(this)}`]
+  }
+  visitUInt64AugmentedAssignment(statement: nodes.UInt64AugmentedAssignment): string[] {
+    throw new TodoError('Method not implemented.', { sourceLocation: statement.sourceLocation })
+  }
+  visitBigUIntAugmentedAssignment(statement: nodes.BigUIntAugmentedAssignment): string[] {
+    throw new TodoError('Method not implemented.', { sourceLocation: statement.sourceLocation })
+  }
+  visitBytesAugmentedAssignment(statement: nodes.BytesAugmentedAssignment): string[] {
+    throw new TodoError('Method not implemented.', { sourceLocation: statement.sourceLocation })
+  }
+  visitForInLoop(statement: nodes.ForInLoop): string[] {
+    throw new TodoError('Method not implemented.', { sourceLocation: statement.sourceLocation })
+  }
+  visitStateDelete(statement: nodes.StateDelete): string[] {
+    throw new TodoError('Method not implemented.', { sourceLocation: statement.sourceLocation })
+  }
+  visitConstantDeclaration(moduleStatement: nodes.ConstantDeclaration): string[] {
+    return [`${moduleStatement.name} = ${moduleStatement.value}`]
+  }
+  visitSubroutine(moduleStatement: nodes.Subroutine): string[] {
+    const args = moduleStatement.args.map((a) => `${a.name}: ${a.wtype}`).join(', ')
+    return [
+      `subroutine ${moduleStatement.name}(${args}): ${moduleStatement.returnType}`,
+      '{',
+      ...indent(moduleStatement.body.accept(this)),
+      '}',
+    ]
+  }
+  visitContractMethod(statement: nodes.ContractMethod): string[] {
+    return [`${statement.name}(): ${statement.returnType}`, '{', ...indent(statement.body.accept(this)), '}', '']
+  }
+  visitLogicSignature(moduleStatement: nodes.LogicSignature): string[] {
+    throw new TodoError('Method not implemented.', { sourceLocation: moduleStatement.sourceLocation })
+  }
+  visitContractFragment(c: nodes.ContractFragment): string[] {
+    const body: string[] = []
+    if (c.appState.size) {
+      logger.warn(c.sourceLocation, 'Handle appState to-code')
+    }
+    if (c.reservedScratchSpace.size) {
+      logger.warn(c.sourceLocation, 'Handle reservedScratchSpace to-code')
+    }
+    if (c.init) {
+      body.push(...this.visitSpecialMethod(c.init, 'constructor'))
+    }
+    if (c.approvalProgram) {
+      body.push(...this.visitSpecialMethod(c.approvalProgram, 'approvalProgram'))
+    }
+    if (c.clearProgram) {
+      body.push(...this.visitSpecialMethod(c.clearProgram, 'clearProgram'))
+    }
+    for (const method of c.subroutines) {
+      body.push(...method.accept(this))
+    }
+
+    const header = ['contract', c.name]
+    if (c.isAbstract) {
+      header.splice(0, 0, 'abstract')
+    }
+    if (c.bases.length) {
+      header.push('extends', c.bases.map((b) => `${b.moduleName}::${b.className}`).join(', '))
+    }
+
+    return [header.join(' '), '{', ...indent(body), '}']
+  }
+  visitStructureDefinition(moduleStatement: nodes.StructureDefinition): string[] {
+    throw new TodoError('Method not implemented.', { sourceLocation: moduleStatement.sourceLocation })
+  }
+
+  visitSpecialMethod(statement: nodes.ContractMethod, name: string): string[] {
+    return [`${name}(): ${statement.returnType}`, '{', ...indent(statement.body.accept(this)), '}', '']
+  }
+}
+
+function indent(lines: string[], indentSize = '  '): string[] {
+  return lines.map((l) => `${indentSize}${l}`)
+}
