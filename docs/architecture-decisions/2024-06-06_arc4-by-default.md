@@ -86,7 +86,7 @@ export default class HelloWorldContract extends Contract {
       return true
    }
 
-   clearState(): boolean {
+   clearStateProgram(): boolean {
       return true
    }
 }
@@ -127,14 +127,50 @@ Cons:
 The specific characteristics of python that lead to mandatory decorators on all methods do not apply to the TypeScript solution. Whilst still keeping the separation of ARC4 from option 2, we could use TypeScript's `public` and `private` keywords to flag an ABI method versus a private subroutine. The decorator would still be used in cases where a non-default on completion action was required but otherwise optional. We can require explicit access keywords (`public`/`private`/`protected`) on all methods to work around the potential security issues of public by default. This behaviour would only apply when extending `arc4.Arc4Contract`. Access modifiers on a contract which extends the base `Contract` would have no implicit effect.
 
 ```ts
+export class NonAbiContract extends Contract {
+    public override approvalProgram(): boolean {
+        // Freedom to implement whatever routing makes sense in this method. The only requirement is to return boolean | uint64
+        return true
+    }
+    public override clearStateProgram(): boolean {
+        return true
+    }
+}
+
+
 export default class DemoContract extends arc4.Arc4Contract {
-   // @arc4.abimethod({ allowActions: ['NoOp'] }) is implied 
-   public generalNoOpMethod(): void {}
+    constructor() {
+        super()
+        // Constructor is called implicitly on application created before any other method
+        
+    }
+    
+    @arc4.abimethod({ create: 'require' })
+    public createApplication(): void {        
+    }
+    
+    @arc4.baremethod({ create: 'require', allowActions: ['NoOp'] })
+    public createBare(): void {
+        // Called when Transaction.nummAppArgs is 0 
+    }
 
-   @arc4.abimethod({ allowActions: ['NoOp', 'OptIn'] })
-   public specificOnCompletion(): void {}
+    // @arc4.abimethod({ allowActions: ['NoOp'] }) is implied 
+    public generalNoOpMethod(): void {
+    }
 
-   private privateSubroutine(): void {}
+    @arc4.abimethod({allowActions: ['NoOp', 'OptIn']})
+    public specificOnCompletion(): void {
+    }
+    
+    // Force override keyword because it gives us an error if the method does not exist on the base type (eg. because there's a typo)
+    // 'protected' because this method should not be directly callable (ie. not an abi method)
+    protected override onUnmatchedRoute(): void {
+        // Called for any non-clearstate on completion action where Transaction.applicationArgs(0) did not match any abi method selector
+        // base implementation raises an error
+    }
+
+    private privateSubroutine(): void {
+    }
 }
 ```
 
@@ -146,7 +182,7 @@ Cons:
 
 ## Preferred options
 
-TBD
+Option 3 is the preferred option as it balances familiarity with Algorand Python whilst embracing the language features of TypeScript (access modifier keywords). It also presents a simple migration path for existing TealScript contracts. A combination of jsdocs describing the different base contracts and their purpose, and compiler output can be used to reduce the likelihood of new developers accidentally using the wrong base type.
 
 ## Selected option
 
