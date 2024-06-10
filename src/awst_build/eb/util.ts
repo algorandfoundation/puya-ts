@@ -1,93 +1,71 @@
-import { ExpressionBuilder } from './index'
-import { awst, wtypes } from '../../awst'
-import { CodeError, InternalError } from '../../errors'
+import { InstanceBuilder, NodeBuilder } from './index'
+import { awst } from '../../awst'
+import { CodeError } from '../../errors'
+import { bytesPType, PType, uint64PType } from '../ptypes'
+import { SourceLocation } from '../../awst/source-location'
+import { LiteralExpressionBuilder } from './literal-expression-builder'
 import { BytesExpressionBuilder } from './bytes-expression-builder'
 import { nodeFactory } from '../../awst/node-factory'
 import { UInt64ExpressionBuilder } from './uint64-expression-builder'
-import { BoolExpressionBuilder } from './bool-expression-builder'
 
-export function requireExpressionOfType(ebOrLit: ExpressionBuilder | awst.Literal, wtype: wtypes.WType): awst.Expression {
-  const expr = requireExpression(ebOrLit)
-  if (expr.wtype.equals(wtype)) {
-    return expr
+export function requireExpressionOfType(builder: InstanceBuilder, ptype: PType, sourceLocation: SourceLocation): awst.Expression {
+  if (builder instanceof LiteralExpressionBuilder) {
+    return convertLiteral(builder, ptype, sourceLocation).resolve()
   }
-  throw new CodeError(`Expected expression of type ${wtype}, got ${expr.wtype}`, {
-    sourceLocation: expr.sourceLocation,
+  if (builder.ptype?.equals(ptype)) {
+    return builder.resolve()
+  }
+  throw new CodeError(`Expected expression of type ${ptype}, got ${builder.typeDescription}`, {
+    sourceLocation,
   })
 }
 
-export function requireExpressionsOfType<const TWTypes extends [...wtypes.WType[]]>(
-  ebOrLits: ReadonlyArray<ExpressionBuilder | awst.Literal>,
-  wtypes: TWTypes,
+export function requireInstanceBuilder(builder: NodeBuilder, sourceLocation: SourceLocation): InstanceBuilder {
+  if (builder instanceof InstanceBuilder) return builder
+  throw new CodeError(`Expected instance of a type, got ${builder.typeDescription}`, { sourceLocation })
+}
+
+export function requireExpressionsOfType<const TPTypes extends [...PType[]]>(
+  builders: ReadonlyArray<InstanceBuilder>,
+  ptypes: TPTypes,
+  sourceLocation: SourceLocation,
 ): Array<awst.Expression> {
-  if (ebOrLits.length === wtypes.length) {
-    return ebOrLits.map((ebOrLit, i) => requireExpressionOfType(ebOrLit, wtypes[i]))
+  if (builders.length === ptypes.length) {
+    return builders.map((builder, i) => requireExpressionOfType(builder, ptypes[i], sourceLocation))
   }
-  throw new CodeError(`Expected ${wtypes.length} args with types ${wtypes.join(', ')}`, { sourceLocation: ebOrLits[0]?.sourceLocation })
+  throw new CodeError(`Expected ${ptypes.length} args with types ${ptypes.join(', ')}`, { sourceLocation })
 }
 
-export function requireLiteral(ebOrLit: ExpressionBuilder | awst.Literal): awst.Literal {
-  if (!(ebOrLit instanceof awst.Literal))
-    throw new CodeError(`Expected a literal value`, {
-      sourceLocation: ebOrLit.sourceLocation,
-    })
-  return ebOrLit
+export function requireConstant(
+  builder: InstanceBuilder,
+  sourceLocation: SourceLocation,
+): awst.StringConstant | awst.BytesConstant | awst.IntegerConstant | awst.BoolConstant {
+  const expr = builder.resolve()
+  if (expr instanceof awst.StringConstant) {
+    return expr
+  }
+  if (expr instanceof awst.BytesConstant) {
+    return expr
+  }
+  if (expr instanceof awst.IntegerConstant) {
+    return expr
+  }
+  if (expr instanceof awst.BoolConstant) {
+    return expr
+  }
+  throw new CodeError(`Expected compile time constant value`, { sourceLocation })
 }
 
-export function requireExpression(ebOrLit: ExpressionBuilder | awst.Literal): awst.Expression {
-  if (ebOrLit instanceof ExpressionBuilder) {
-    return ebOrLit.rvalue()
+function convertLiteral(builder: LiteralExpressionBuilder, ptype: PType, sourceLocation: SourceLocation): InstanceBuilder {
+  if (ptype.equals(bytesPType)) {
+    if (builder.value instanceof Uint8Array) {
+      return new BytesExpressionBuilder(nodeFactory.bytesConstant({ value: builder.value, sourceLocation }))
+    }
+  } else if (ptype.equals(uint64PType)) {
+    if (typeof builder.value === 'bigint') {
+      return new UInt64ExpressionBuilder(nodeFactory.uInt64Constant({ value: builder.value, sourceLocation }))
+    }
   }
-  if (ebOrLit.value instanceof Uint8Array) {
-    return nodeFactory.bytesConstant({
-      value: ebOrLit.value,
-      sourceLocation: ebOrLit.sourceLocation,
-    })
-  }
-  switch (typeof ebOrLit.value) {
-    case 'bigint':
-      return nodeFactory.uInt64Constant({
-        value: ebOrLit.value,
-        sourceLocation: ebOrLit.sourceLocation,
-      })
-    case 'boolean':
-      return nodeFactory.boolConstant({
-        value: ebOrLit.value,
-        sourceLocation: ebOrLit.sourceLocation,
-      })
-    default:
-      throw new InternalError(`Unsupported literal: ${typeof ebOrLit.value}`)
-  }
-}
 
-export function requireExpressionBuilder(ebOrLit: ExpressionBuilder | awst.Literal): ExpressionBuilder {
-  if (ebOrLit instanceof ExpressionBuilder) {
-    return ebOrLit
-  }
-  if (ebOrLit.value instanceof Uint8Array) {
-    return new BytesExpressionBuilder(
-      nodeFactory.bytesConstant({
-        value: ebOrLit.value,
-        sourceLocation: ebOrLit.sourceLocation,
-      }),
-    )
-  }
-  switch (typeof ebOrLit.value) {
-    case 'bigint':
-      return new UInt64ExpressionBuilder(
-        nodeFactory.uInt64Constant({
-          value: ebOrLit.value,
-          sourceLocation: ebOrLit.sourceLocation,
-        }),
-      )
-    case 'boolean':
-      return new BoolExpressionBuilder(
-        nodeFactory.boolConstant({
-          value: ebOrLit.value,
-          sourceLocation: ebOrLit.sourceLocation,
-        }),
-      )
-    default:
-      throw new InternalError(`Unsupported literal: ${typeof ebOrLit.value}`)
-  }
+  throw new CodeError(`Literal cannot be converted to type ${ptype.name}`, { sourceLocation })
 }

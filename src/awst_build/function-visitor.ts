@@ -15,12 +15,13 @@ import {
 } from '../visitor/syntax-names'
 import { NotSupported, TodoError } from '../errors'
 import { logger } from '../logger'
-import { ExpressionBuilder } from './eb'
-import { requireExpressionBuilder } from './eb/util'
+import { NodeBuilder } from './eb'
 import { nodeFactory } from '../awst/node-factory'
 import { wrapInBlock } from '../awst/util'
-import { typeRegistry } from './ptypes'
+
 import { UInt64ExpressionBuilder } from './eb/uint64-expression-builder'
+import { LiteralExpressionBuilder } from './eb/literal-expression-builder'
+import { requireInstanceBuilder } from './eb/util'
 
 export type ContractMethodInfo = {
   className: string
@@ -38,7 +39,7 @@ export class FunctionVisitor
     Visitor<ts.ParameterDeclaration, awst.SubroutineArgument>,
     Visitor<ts.Block, awst.Block>,
     Visitor<Statements, awst.Statement | awst.Statement[]>,
-    Visitor<Expressions, ExpressionBuilder | awst.Literal>
+    Visitor<Expressions, NodeBuilder>
 {
   private readonly _result: awst.Subroutine | awst.ContractMethod
   constructor(ctx: FunctionContext, node: ts.MethodDeclaration | ts.FunctionDeclaration, contractInfo: ContractMethodInfo | undefined) {
@@ -76,111 +77,112 @@ export class FunctionVisitor
     }
   }
 
-  visitIdentifier(node: ts.Identifier): ExpressionBuilder | awst.Literal {
+  visitIdentifier(node: ts.Identifier): NodeBuilder {
     const constant = this.context.tryResolveConstant(node)
     if (constant) {
-      return nodeFactory.literal({
-        sourceLocation: constant.sourceLocation,
-        value: constant.value,
-      })
+      return new LiteralExpressionBuilder(constant.value, constant.sourceLocation)
     }
-    return this.context.getExpressionBuilderForNode(node)
+    return this.context.getBuilderForNode(node)
   }
   visitTypeAliasDeclaration(node: ts.TypeAliasDeclaration): awst.Statement[] {
     return []
   }
-  visitImportKeyword(node: ts.ImportExpression): awst.Literal | ExpressionBuilder {
+  visitImportKeyword(node: ts.ImportExpression): NodeBuilder {
     throw new TodoError()
   }
-  visitNullKeyword(node: ts.NullLiteral): awst.Literal | ExpressionBuilder {
+  visitNullKeyword(node: ts.NullLiteral): NodeBuilder {
     throw new TodoError()
   }
-  visitPrivateIdentifier(node: ts.PrivateIdentifier): awst.Literal | ExpressionBuilder {
+  visitPrivateIdentifier(node: ts.PrivateIdentifier): NodeBuilder {
     throw new TodoError()
   }
-  visitSuperKeyword(node: ts.SuperExpression): awst.Literal | ExpressionBuilder {
+  visitSuperKeyword(node: ts.SuperExpression): NodeBuilder {
     throw new TodoError()
   }
-  visitThisKeyword(node: ts.ThisExpression): awst.Literal | ExpressionBuilder {
+  visitThisKeyword(node: ts.ThisExpression): NodeBuilder {
     throw new TodoError()
   }
 
-  visitFunctionExpression(node: ts.FunctionExpression): awst.Literal | ExpressionBuilder {
+  visitFunctionExpression(node: ts.FunctionExpression): NodeBuilder {
     throw new TodoError()
   }
-  visitClassExpression(node: ts.ClassExpression): awst.Literal | ExpressionBuilder {
+  visitClassExpression(node: ts.ClassExpression): NodeBuilder {
     throw new TodoError()
   }
-  visitObjectLiteralExpression(node: ts.ObjectLiteralExpression): awst.Literal | ExpressionBuilder {
+  visitObjectLiteralExpression(node: ts.ObjectLiteralExpression): NodeBuilder {
     throw new TodoError()
   }
-  visitArrayLiteralExpression(node: ts.ArrayLiteralExpression): awst.Literal | ExpressionBuilder {
+  visitArrayLiteralExpression(node: ts.ArrayLiteralExpression): NodeBuilder {
     throw new TodoError()
   }
-  visitPropertyAccessExpression(node: ts.PropertyAccessExpression): awst.Literal | ExpressionBuilder {
-    const target = requireExpressionBuilder(this.accept(node.expression))
+  visitPropertyAccessExpression(node: ts.PropertyAccessExpression): NodeBuilder {
+    const target = this.accept(node.expression)
     const property = this.context.textVisitor.accept(node.name)
     return target.memberAccess(property, this.sourceLocation(node))
   }
-  visitElementAccessExpression(node: ts.ElementAccessExpression): awst.Literal | ExpressionBuilder {
+  visitElementAccessExpression(node: ts.ElementAccessExpression): NodeBuilder {
     throw new TodoError()
   }
-  visitCallExpression(node: ts.CallExpression): awst.Literal | ExpressionBuilder {
-    const eb = requireExpressionBuilder(this.accept(node.expression))
-    const args = node.arguments.map((a) => this.accept(a))
-    return eb.call(args, this.sourceLocation(node))
+  visitCallExpression(node: ts.CallExpression): NodeBuilder {
+    const sourceLocation = this.sourceLocation(node)
+    const eb = this.accept(node.expression)
+    const args = node.arguments.map((a) => requireInstanceBuilder(this.accept(a), sourceLocation))
+    return eb.call(args, sourceLocation)
   }
-  visitNewExpression(node: ts.NewExpression): awst.Literal | ExpressionBuilder {
+  visitNewExpression(node: ts.NewExpression): NodeBuilder {
     throw new TodoError()
   }
-  visitTaggedTemplateExpression(node: ts.TaggedTemplateExpression): awst.Literal | ExpressionBuilder {
-    const target = requireExpressionBuilder(this.accept(node.tag))
+  visitTaggedTemplateExpression(node: ts.TaggedTemplateExpression): NodeBuilder {
+    const sourceLocation = this.sourceLocation(node)
+    const target = this.accept(node.tag)
     if (ts.isNoSubstitutionTemplateLiteral(node.template)) {
-      return target.taggedTemplate(this.context.textVisitor.accept(node.template), [], this.sourceLocation(node))
+      return target.taggedTemplate(this.context.textVisitor.accept(node.template), [], sourceLocation)
     } else {
       const head = this.context.textVisitor.accept(node.template.head)
-      const spans = node.template.templateSpans.map((s) => [this.accept(s.expression), this.context.textVisitor.accept(s.literal)] as const)
-      return target.taggedTemplate(head, spans, this.sourceLocation(node))
+      const spans = node.template.templateSpans.map(
+        (s) => [requireInstanceBuilder(this.accept(s.expression), sourceLocation), this.context.textVisitor.accept(s.literal)] as const,
+      )
+      return target.taggedTemplate(head, spans, sourceLocation)
     }
   }
-  visitTypeAssertionExpression(node: ts.TypeAssertion): awst.Literal | ExpressionBuilder {
+  visitTypeAssertionExpression(node: ts.TypeAssertion): NodeBuilder {
     throw new TodoError()
   }
-  visitParenthesizedExpression(node: ts.ParenthesizedExpression): awst.Literal | ExpressionBuilder {
+  visitParenthesizedExpression(node: ts.ParenthesizedExpression): NodeBuilder {
     throw new TodoError()
   }
-  visitDeleteExpression(node: ts.DeleteExpression): awst.Literal | ExpressionBuilder {
+  visitDeleteExpression(node: ts.DeleteExpression): NodeBuilder {
     throw new TodoError()
   }
-  visitTypeOfExpression(node: ts.TypeOfExpression): awst.Literal | ExpressionBuilder {
+  visitTypeOfExpression(node: ts.TypeOfExpression): NodeBuilder {
     throw new TodoError()
   }
-  visitVoidExpression(node: ts.VoidExpression): awst.Literal | ExpressionBuilder {
+  visitVoidExpression(node: ts.VoidExpression): NodeBuilder {
     throw new TodoError()
   }
-  visitAwaitExpression(node: ts.AwaitExpression): awst.Literal | ExpressionBuilder {
+  visitAwaitExpression(node: ts.AwaitExpression): NodeBuilder {
     throw new TodoError()
   }
-  visitPrefixUnaryExpression(node: ts.PrefixUnaryExpression): awst.Literal | ExpressionBuilder {
+  visitPrefixUnaryExpression(node: ts.PrefixUnaryExpression): NodeBuilder {
     throw new TodoError()
   }
-  visitPostfixUnaryExpression(node: ts.PostfixUnaryExpression): awst.Literal | ExpressionBuilder {
+  visitPostfixUnaryExpression(node: ts.PostfixUnaryExpression): NodeBuilder {
     throw new TodoError()
   }
-  visitBinaryExpression(node: ts.BinaryExpression): awst.Literal | ExpressionBuilder {
-    const left = requireExpressionBuilder(this.accept(node.left))
-    const right = this.accept(node.right)
+  visitBinaryExpression(node: ts.BinaryExpression): NodeBuilder {
     const sourceLocation = this.sourceLocation(node)
+    const left = requireInstanceBuilder(this.accept(node.left), sourceLocation)
+    const right = requireInstanceBuilder(this.accept(node.right), sourceLocation)
     const binaryOpKind = node.operatorToken.kind
     if (isKeyOf(binaryOpKind, BinaryOpSyntaxes)) {
       return left.binaryOp(right, BinaryOpSyntaxes[binaryOpKind], sourceLocation)
     } else if (isKeyOf(binaryOpKind, AugmentedAssignmentBinaryOp)) {
       const temp = left.binaryOp(right, AugmentedAssignmentBinaryOp[binaryOpKind], sourceLocation)
       const assignmentExpression = nodeFactory.assignmentExpression({
-        target: left.lvalue(),
+        target: left.resolveLValue(),
         sourceLocation: sourceLocation,
-        value: temp.rvalue(),
-        wtype: temp.rvalue().wtype,
+        value: temp.resolve(),
+        wtype: temp.resolve().wtype,
       })
       return new UInt64ExpressionBuilder(assignmentExpression)
     } else if (isKeyOf(binaryOpKind, ComparisonOpSyntaxes)) {
@@ -188,31 +190,31 @@ export class FunctionVisitor
     }
     throw new NotSupported(`Binary expression with op ${getSyntaxName(binaryOpKind)}}`)
   }
-  visitConditionalExpression(node: ts.ConditionalExpression): awst.Literal | ExpressionBuilder {
+  visitConditionalExpression(node: ts.ConditionalExpression): NodeBuilder {
     throw new TodoError()
   }
-  visitTemplateExpression(node: ts.TemplateExpression): awst.Literal | ExpressionBuilder {
+  visitTemplateExpression(node: ts.TemplateExpression): NodeBuilder {
     throw new TodoError()
   }
-  visitYieldExpression(node: ts.YieldExpression): awst.Literal | ExpressionBuilder {
+  visitYieldExpression(node: ts.YieldExpression): NodeBuilder {
     throw new TodoError()
   }
-  visitOmittedExpression(node: ts.OmittedExpression): awst.Literal | ExpressionBuilder {
+  visitOmittedExpression(node: ts.OmittedExpression): NodeBuilder {
     throw new TodoError()
   }
-  visitExpressionWithTypeArguments(node: ts.ExpressionWithTypeArguments): awst.Literal | ExpressionBuilder {
+  visitExpressionWithTypeArguments(node: ts.ExpressionWithTypeArguments): NodeBuilder {
     throw new TodoError()
   }
-  visitAsExpression(node: ts.AsExpression): awst.Literal | ExpressionBuilder {
+  visitAsExpression(node: ts.AsExpression): NodeBuilder {
     throw new TodoError()
   }
-  visitNonNullExpression(node: ts.NonNullExpression): awst.Literal | ExpressionBuilder {
+  visitNonNullExpression(node: ts.NonNullExpression): NodeBuilder {
     throw new TodoError()
   }
-  visitSyntheticExpression(node: ts.SyntheticExpression): awst.Literal | ExpressionBuilder {
+  visitSyntheticExpression(node: ts.SyntheticExpression): NodeBuilder {
     throw new TodoError()
   }
-  visitSatisfiesExpression(node: ts.SatisfiesExpression): awst.Literal | ExpressionBuilder {
+  visitSatisfiesExpression(node: ts.SatisfiesExpression): NodeBuilder {
     throw new TodoError()
   }
 
@@ -224,16 +226,17 @@ export class FunctionVisitor
 
   visitVariableStatement(node: ts.VariableStatement): awst.Statement | awst.Statement[] {
     return node.declarationList.declarations.flatMap((d) => {
+      const sourceLocation = this.sourceLocation(d)
       if (!d.initializer) {
-        logger.warn(this.sourceLocation(d), 'Ignoring variable statement with no initializer')
+        logger.warn(sourceLocation, 'Ignoring variable statement with no initializer')
         return []
       }
-      const target = requireExpressionBuilder(this.accept(d.name))
-      const value = requireExpressionBuilder(this.accept(d.initializer))
+      const target = requireInstanceBuilder(this.accept(d.name), sourceLocation)
+      const value = requireInstanceBuilder(this.accept(d.initializer), sourceLocation)
       return nodeFactory.assignmentStatement({
-        target: target.lvalue(),
-        sourceLocation: this.sourceLocation(d),
-        value: value.rvalue(),
+        target: target.resolveLValue(),
+        sourceLocation: sourceLocation,
+        value: value.resolve(),
       })
     })
   }
@@ -255,14 +258,15 @@ export class FunctionVisitor
     throw new TodoError()
   }
   visitExpressionStatement(node: ts.ExpressionStatement): awst.Statement | awst.Statement[] {
+    const sourceLocation = this.sourceLocation(node)
     return new awst.ExpressionStatement({
-      sourceLocation: this.sourceLocation(node),
-      expr: requireExpressionBuilder(this.accept(node.expression)).rvalue(),
+      sourceLocation: sourceLocation,
+      expr: requireInstanceBuilder(this.accept(node.expression), sourceLocation).resolve(),
     })
   }
   visitIfStatement(node: ts.IfStatement): awst.Statement | awst.Statement[] {
     const sourceLocation = this.sourceLocation(node)
-    const condition = requireExpressionBuilder(this.accept(node.expression)).boolEval(sourceLocation, false)
+    const condition = this.accept(node.expression).boolEval(sourceLocation, false)
 
     const ifBranch = wrapInBlock(this.accept(node.thenStatement), this.sourceLocation(node.thenStatement))
     const elseBranch = node.elseStatement && wrapInBlock(this.accept(node.elseStatement), this.sourceLocation(node.elseStatement))
@@ -291,9 +295,10 @@ export class FunctionVisitor
     })
   }
   visitReturnStatement(node: ts.ReturnStatement): awst.Statement | awst.Statement[] {
+    const sourceLocation = this.sourceLocation(node)
     return nodeFactory.returnStatement({
-      sourceLocation: this.sourceLocation(node),
-      value: node.expression && requireExpressionBuilder(this.accept(node.expression)).rvalue(),
+      sourceLocation: sourceLocation,
+      value: node.expression && requireInstanceBuilder(this.accept(node.expression), sourceLocation).resolve(),
     })
   }
   visitWithStatement(node: ts.WithStatement): awst.Statement | awst.Statement[] {

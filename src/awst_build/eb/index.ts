@@ -2,6 +2,8 @@ import { SourceLocation } from '../../awst/source-location'
 import { awst, wtypes } from '../../awst'
 import { CodeError, NotSupported } from '../../errors'
 import { WType } from '../../awst/wtypes'
+import { PType } from '../ptypes'
+import { Node } from '../../awst/nodes'
 
 export enum BuilderComparisonOp {
   eq = '==',
@@ -43,29 +45,32 @@ export enum BuilderBinaryOp {
   comma = ',',
 }
 
-export abstract class ExpressionBuilder {
+export abstract class NodeBuilder {
   constructor(public readonly sourceLocation: SourceLocation) {}
 
-  abstract rvalue(): awst.Expression
-  abstract lvalue(): awst.LValue
+  abstract get ptype(): PType | undefined
 
-  buildAssignmentSource(): awst.Expression {
-    return this.rvalue()
-  }
-
-  get valueType(): wtypes.WType | undefined {
-    return undefined
-  }
-
-  protected get typeDescription(): string {
-    if (this.valueType) {
-      return this.valueType.name
+  public get typeDescription(): string {
+    if (this.ptype) {
+      return this.ptype.name
     }
     return this.constructor.name
   }
 
-  delete(sourceLocation: SourceLocation): awst.Statement {
-    throw new NotSupported(`Deleting ${this.typeDescription}`, {
+  call(args: ReadonlyArray<InstanceBuilder>, sourceLocation: SourceLocation): InstanceBuilder {
+    throw new NotSupported(`Calling ${this.typeDescription}`, {
+      sourceLocation,
+    })
+  }
+
+  taggedTemplate(head: string, spans: ReadonlyArray<readonly [InstanceBuilder, string]>, sourceLocation: SourceLocation): InstanceBuilder {
+    throw new NotSupported(`Tagged templates on ${this.typeDescription}`, {
+      sourceLocation,
+    })
+  }
+
+  memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
+    throw new NotSupported(`Accessing member ${name} on ${this.typeDescription}`, {
       sourceLocation,
     })
   }
@@ -75,42 +80,53 @@ export abstract class ExpressionBuilder {
       sourceLocation,
     })
   }
-  unaryOp(op: BuilderUnaryOp, sourceLocation: SourceLocation): ExpressionBuilder {
+}
+
+export abstract class InstanceBuilder extends NodeBuilder {
+  constructor(sourceLocation: SourceLocation) {
+    super(sourceLocation)
+  }
+
+  abstract resolve(): awst.Expression
+  abstract resolveLValue(): awst.LValue
+
+  buildAssignmentSource(): awst.Expression {
+    return this.resolve()
+  }
+
+  get valueType(): wtypes.WType | undefined {
+    return undefined
+  }
+
+  toBytes(sourceLocation: SourceLocation): awst.Expression {
+    throw new NotSupported(`Serializing ${this.typeDescription} to bytes`, {
+      sourceLocation,
+    })
+  }
+
+  delete(sourceLocation: SourceLocation): awst.Statement {
+    throw new NotSupported(`Deleting ${this.typeDescription}`, {
+      sourceLocation,
+    })
+  }
+
+  unaryOp(op: BuilderUnaryOp, sourceLocation: SourceLocation): InstanceBuilder {
     throw new NotSupported(`Unary ${op} op on ${this.typeDescription}`, {
       sourceLocation,
     })
   }
 
-  compare(other: ExpressionBuilder | awst.Literal, op: BuilderComparisonOp, sourceLocation: SourceLocation): ExpressionBuilder {
+  compare(other: InstanceBuilder, op: BuilderComparisonOp, sourceLocation: SourceLocation): InstanceBuilder {
     throw new NotSupported(`${op} on ${this.typeDescription}`, {
       sourceLocation,
     })
   }
-  binaryOp(other: ExpressionBuilder | awst.Literal, op: BuilderBinaryOp, sourceLocation: SourceLocation): ExpressionBuilder {
+  binaryOp(other: InstanceBuilder, op: BuilderBinaryOp, sourceLocation: SourceLocation): InstanceBuilder {
     throw new NotSupported(`${op} on ${this.typeDescription}`, {
-      sourceLocation,
-    })
-  }
-  call(args: ReadonlyArray<ExpressionBuilder | awst.Literal>, sourceLocation: SourceLocation): ExpressionBuilder {
-    throw new NotSupported(`Calling ${this.typeDescription}`, {
-      sourceLocation,
-    })
-  }
-  taggedTemplate(
-    head: string,
-    spans: ReadonlyArray<readonly [ExpressionBuilder | awst.Literal, string]>,
-    sourceLocation: SourceLocation,
-  ): ExpressionBuilder {
-    throw new NotSupported(`Tagged templates on ${this.typeDescription}`, {
       sourceLocation,
     })
   }
 
-  memberAccess(name: string, sourceLocation: SourceLocation): ExpressionBuilder | awst.Literal {
-    throw new NotSupported(`Accessing member ${name} on ${this.typeDescription}`, {
-      sourceLocation,
-    })
-  }
   iterate(sourceLocation: SourceLocation): awst.Expression {
     throw new NotSupported(`Iteration on ${this.typeDescription}`, {
       sourceLocation,
@@ -118,64 +134,33 @@ export abstract class ExpressionBuilder {
   }
 }
 
-export abstract class IntermediateExpressionBuilder extends ExpressionBuilder {
-  rvalue(): awst.Expression {
-    throw new CodeError(`${this.typeDescription} is not valid as an rvalue`, {
-      sourceLocation: this.sourceLocation,
-    })
+export abstract class TypeClassBuilder extends NodeBuilder {
+  constructor(location: SourceLocation) {
+    super(location)
   }
-  lvalue(): awst.LValue {
-    throw new CodeError(`${this.typeDescription} is not valid as an lvalue`, {
-      sourceLocation: this.sourceLocation,
-    })
-  }
-
-  private throwNotAValue(sourceLocation: SourceLocation): never {
-    throw new CodeError(`${this.typeDescription} is not a value`, {
-      sourceLocation,
-    })
+  abstract produces(): PType
+}
+export abstract class FunctionBuilder extends NodeBuilder {
+  get ptype(): PType | undefined {
+    return undefined
   }
 
-  unaryOp(op: BuilderUnaryOp, sourceLocation: SourceLocation): ExpressionBuilder {
-    this.throwNotAValue(sourceLocation)
-  }
-  delete(sourceLocation: SourceLocation): awst.Statement {
-    this.throwNotAValue(sourceLocation)
-  }
-
-  boolEval(sourceLocation: SourceLocation, _negate: boolean): awst.Expression {
-    this.throwNotAValue(sourceLocation)
-  }
-
-  compare(other: ExpressionBuilder | awst.Literal, op: BuilderComparisonOp, sourceLocation: SourceLocation): ExpressionBuilder {
-    this.throwNotAValue(sourceLocation)
-  }
-  binaryOp(other: ExpressionBuilder | awst.Literal, op: BuilderBinaryOp, sourceLocation: SourceLocation): ExpressionBuilder {
-    this.throwNotAValue(sourceLocation)
+  constructor(location: SourceLocation) {
+    super(location)
   }
 }
 
-export abstract class TypeClassExpressionBuilder extends IntermediateExpressionBuilder {
-  abstract produces(): wtypes.WType
-}
-
-export abstract class ValueExpressionBuilder extends ExpressionBuilder {
+export abstract class InstanceExpressionBuilder extends InstanceBuilder {
   constructor(protected _expr: awst.Expression) {
     super(_expr.sourceLocation)
   }
 
-  abstract get wtype(): wtypes.WType
-
-  get valueType(): WType | undefined {
-    return this.wtype
-  }
-
-  rvalue() {
+  resolve() {
     return this._expr
   }
 
-  lvalue() {
-    return requireLValue(this.rvalue())
+  resolveLValue() {
+    return requireLValue(this.resolve())
   }
 }
 

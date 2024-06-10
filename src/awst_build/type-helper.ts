@@ -2,9 +2,9 @@ import ts from 'typescript'
 import { InternalError } from '../errors'
 import { wtypes } from '../awst'
 import { SourceLocation } from '../awst/source-location'
-import { ExpressionBuilder } from './eb'
 import { boolPType, FreeSubroutineType, PType, typeRegistry } from './ptypes'
 import { codeInvariant } from '../util'
+import { InstanceBuilder, NodeBuilder } from './eb'
 
 export class TypeHelper {
   constructor(private checker: ts.TypeChecker) {}
@@ -89,7 +89,7 @@ export class TypeHelper {
     return typeRegistry.tryResolvePType(this.getSymbolFullName(symbol, sourceLocation).join('::'))
   }
 
-  tryGetEbForNode(node: ts.Node, sourceLocation: SourceLocation): ExpressionBuilder | undefined {
+  tryGetBuilderForNode(node: ts.Node, sourceLocation: SourceLocation): NodeBuilder | undefined {
     const symbol = this.getUnaliasedSymbolForNode(node)
     if (symbol) {
       if (symbol.flags & ts.SymbolFlags.Value) {

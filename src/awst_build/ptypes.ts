@@ -1,18 +1,18 @@
 import { awst, wtypes } from '../awst'
-import { ExpressionBuilder } from './eb'
 import { SourceLocation } from '../awst/source-location'
 import { VoidExpressionBuilder } from './eb/void-expression-builder'
 import { BoolExpressionBuilder } from './eb/bool-expression-builder'
-import { UInt64ExpressionBuilder, UInt64FunctionExpressionBuilder } from './eb/uint64-expression-builder'
-import { BytesExpressionBuilder, BytesFunctionExpressionBuilder } from './eb/bytes-expression-builder'
+import { UInt64ExpressionBuilder, UInt64FunctionBuilder } from './eb/uint64-expression-builder'
+import { BytesExpressionBuilder, BytesFunctionBuilder } from './eb/bytes-expression-builder'
 import { OpModuleExpressionBuilder } from './eb/op-module-expression-builder'
-import { LogExpressionBuilder } from './eb/log-expression-builder'
+import { LogFunctionBuilder } from './eb/log-function-builder'
 import ts from 'typescript'
 import { InternalError, throwError } from '../errors'
 import { codeInvariant } from '../util'
 import { DeliberateAny } from '../typescript-helpers'
 import { FreeSubroutineExpressionBuilder } from './eb/free-subroutine-expression-builder'
-import { StrExpressionBuilder, StrFunctionExpressionBuilder } from './eb/str-expression-builder'
+import { StrExpressionBuilder, StrFunctionBuilder } from './eb/str-expression-builder'
+import { InstanceBuilder, InstanceExpressionBuilder, NodeBuilder } from './eb'
 
 /**
  * Represents a public type visible to a developer of AlgoTS
@@ -41,6 +41,10 @@ export abstract class PType {
     codeInvariant(this.wtype, `${this.fullName} does not have a wtype`)
     return this.wtype
   }
+
+  equals(other: PType): boolean {
+    return this.fullName === other.fullName
+  }
 }
 
 class SimpleType extends PType {
@@ -55,7 +59,17 @@ class SimpleType extends PType {
     this.module = module
   }
 }
+class LiteralValueType extends PType {
+  readonly wtype: undefined = undefined
+  readonly name: string
+  readonly module: string
 
+  constructor({ name, module }: { name: string; module: string }) {
+    super()
+    this.name = name
+    this.module = module
+  }
+}
 class LibFunctionType extends PType {
   readonly wtype: undefined
   readonly name: string
@@ -85,8 +99,8 @@ class NamespaceType extends PType {
   }
 }
 
-type ValueExpressionBuilderCtor = { new (expr: awst.Expression, ptype: PType): ExpressionBuilder }
-type SingletonExpressionBuilderCtor = { new (sourceLocation: SourceLocation, ptype: PType): ExpressionBuilder }
+type ValueExpressionBuilderCtor = { new (expr: awst.Expression, ptype: PType): InstanceExpressionBuilder }
+type SingletonExpressionBuilderCtor = { new (sourceLocation: SourceLocation, ptype: PType): NodeBuilder }
 
 type PTypeClass = { new (...args: DeliberateAny): PType }
 class TypeRegistry {
@@ -128,7 +142,7 @@ class TypeRegistry {
     return ptype
   }
 
-  tryGetSingletonEb(ptype: PType, sourceLocation: SourceLocation): ExpressionBuilder | undefined {
+  tryGetSingletonEb(ptype: PType, sourceLocation: SourceLocation): NodeBuilder | undefined {
     const eb = this.singletonEbs.get(ptype)
     if (eb) {
       return new eb(sourceLocation, ptype)
@@ -142,17 +156,17 @@ class TypeRegistry {
     return undefined
   }
 
-  getInstanceEb(expression: awst.Expression, ptype: PType): ExpressionBuilder {
+  getInstanceEb(expression: awst.Expression, ptype: PType): InstanceBuilder {
     return (
       this.tryGetInstanceEb(expression, ptype) ??
       throwError(
-        new InternalError(`No instance ExpressionBuilder registered for ${expression.wtype}`, {
+        new InternalError(`No InstanceBuilder registered for ${expression.wtype}`, {
           sourceLocation: expression.sourceLocation,
         }),
       )
     )
   }
-  tryGetInstanceEb(expression: awst.Expression, ptype: PType): ExpressionBuilder | undefined {
+  tryGetInstanceEb(expression: awst.Expression, ptype: PType): InstanceBuilder | undefined {
     const eb = this.instanceEbs.get(ptype)
     if (eb) {
       return new eb(expression, ptype)
@@ -172,7 +186,6 @@ export const voidPType = new SimpleType({
   module: 'lib.d.ts',
   wtype: wtypes.voidWType,
 })
-typeRegistry.register({ ptype: voidPType, instanceEb: VoidExpressionBuilder })
 
 export const boolPType = new SimpleType({
   name: 'boolean',
@@ -186,6 +199,16 @@ export const BooleanFunction = new LibFunctionType({
   module: 'lib.d.ts',
 })
 
+export const bigintLiteralPType = new LiteralValueType({
+  name: 'bigint',
+  module: 'lib.d.ts',
+})
+
+export const stringLiteralPType = new LiteralValueType({
+  name: 'string',
+  module: 'lib.d.ts',
+})
+
 export const uint64PType = new SimpleType({
   name: 'uint64',
   module: '@algorandfoundation/algo-ts/primitives.d.ts',
@@ -196,7 +219,7 @@ export const Uint64Function = new LibFunctionType({
   name: 'Uint64',
   module: '@algorandfoundation/algo-ts/primitives.d.ts',
 })
-typeRegistry.register({ ptype: Uint64Function, symbolEb: UInt64FunctionExpressionBuilder })
+typeRegistry.register({ ptype: Uint64Function, symbolEb: UInt64FunctionBuilder })
 
 export const biguintPType = new SimpleType({
   name: 'biguint',
@@ -218,7 +241,7 @@ export const BytesFunction = new LibFunctionType({
   name: 'Bytes',
   module: '@algorandfoundation/algo-ts/primitives.d.ts',
 })
-typeRegistry.register({ ptype: BytesFunction, symbolEb: BytesFunctionExpressionBuilder })
+typeRegistry.register({ ptype: BytesFunction, symbolEb: BytesFunctionBuilder })
 
 export const strPType = new SimpleType({
   name: 'str',
@@ -230,7 +253,7 @@ export const StrFunction = new LibFunctionType({
   name: 'Str',
   module: '@algorandfoundation/algo-ts/primitives.d.ts',
 })
-typeRegistry.register({ ptype: StrFunction, symbolEb: StrFunctionExpressionBuilder })
+typeRegistry.register({ ptype: StrFunction, symbolEb: StrFunctionBuilder })
 export const opNamespace = new NamespaceType({
   name: 'op',
   module: '@algorandfoundation/algo-ts/op.d.ts',
@@ -240,7 +263,7 @@ export const logFunction = new LibFunctionType({
   name: 'log',
   module: '@algorandfoundation/algo-ts/util.d.ts',
 })
-typeRegistry.register({ ptype: logFunction, symbolEb: LogExpressionBuilder })
+typeRegistry.register({ ptype: logFunction, symbolEb: LogFunctionBuilder })
 
 export class FreeSubroutineType extends PType {
   readonly wtype: undefined

@@ -1,18 +1,22 @@
-import { ExpressionBuilder, IntermediateExpressionBuilder } from './index'
+import { FunctionBuilder, InstanceBuilder, NodeBuilder } from './index'
 import { SourceLocation } from '../../awst/source-location'
-import { Expression, Literal } from '../../awst/nodes'
+import { Expression } from '../../awst/nodes'
 import { CodeError } from '../../errors'
 import { nodeFactory } from '../../awst/node-factory'
-import { requireExpressionOfType, requireLiteral } from './util'
+import { requireConstant, requireExpressionOfType } from './util'
 import { bytesPType, PType, typeRegistry, uint64PType } from '../ptypes'
 
-export class OpModuleExpressionBuilder extends IntermediateExpressionBuilder {
-  memberAccess(name: string, sourceLocation: SourceLocation): ExpressionBuilder | Literal {
+export class OpModuleExpressionBuilder extends NodeBuilder {
+  get ptype(): PType | undefined {
+    return undefined
+  }
+
+  memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
     switch (name) {
       case 'Txn':
         return new TxnExpressionBuilder(sourceLocation)
       case 'btoi':
-        return new IntrinsicOpExpressionBuilder(sourceLocation, {
+        return new IntrinsicOpBuilder(sourceLocation, {
           op: 'btoi',
           argNames: ['value'],
           immediateArgs: [],
@@ -24,11 +28,14 @@ export class OpModuleExpressionBuilder extends IntermediateExpressionBuilder {
   }
 }
 
-export class TxnExpressionBuilder extends IntermediateExpressionBuilder {
-  memberAccess(name: string, sourceLocation: SourceLocation): ExpressionBuilder | Literal {
+export class TxnExpressionBuilder extends NodeBuilder {
+  get ptype(): PType | undefined {
+    return undefined
+  }
+  memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
     switch (name) {
       case 'applicationArgs':
-        return new IntrinsicOpExpressionBuilder(sourceLocation, {
+        return new IntrinsicOpBuilder(sourceLocation, {
           op: 'txn',
           argNames: ['n'],
           immediateArgs: ['ApplicationArgs'],
@@ -60,7 +67,7 @@ type IntrinsicOpMapping = {
   ptype: PType
 }
 
-export class IntrinsicOpExpressionBuilder extends IntermediateExpressionBuilder {
+export class IntrinsicOpBuilder extends FunctionBuilder {
   constructor(
     sourceLocation: SourceLocation,
     private opMapping: IntrinsicOpMapping,
@@ -68,7 +75,7 @@ export class IntrinsicOpExpressionBuilder extends IntermediateExpressionBuilder 
     super(sourceLocation)
   }
 
-  call(args: Array<ExpressionBuilder | Literal>, sourceLocation: SourceLocation): ExpressionBuilder {
+  call(args: Array<InstanceBuilder>, sourceLocation: SourceLocation): InstanceBuilder {
     if (args.length !== this.opMapping.argNames.length) {
       throw new CodeError(`Expected ${this.opMapping.argNames.length} args`, {
         sourceLocation,
@@ -78,15 +85,15 @@ export class IntrinsicOpExpressionBuilder extends IntermediateExpressionBuilder 
     const mapStackArg = (arg: Expression | StackArg): Expression => {
       if (arg instanceof Expression) return arg
 
-      return requireExpressionOfType(args[this.opMapping.argNames.indexOf(arg.name)], arg.ptype.wtypeOrThrow)
+      return requireExpressionOfType(args[this.opMapping.argNames.indexOf(arg.name)], arg.ptype, sourceLocation)
     }
 
     const mapImmediateArg = (arg: string | ImmediateArgMapping | bigint): string | bigint => {
-      if (typeof arg == 'string' || typeof arg == 'bigint') return arg
+      if (typeof arg === 'string' || typeof arg === 'bigint') return arg
 
-      const lit = requireLiteral(args[this.opMapping.argNames.indexOf(arg.name)])
+      const lit = requireConstant(args[this.opMapping.argNames.indexOf(arg.name)], sourceLocation)
       const allowedTypes = Array.isArray(arg.literalType) ? arg.literalType : [arg.literalType]
-      if (allowedTypes.some((a) => a == typeof lit.value)) {
+      if (allowedTypes.some((a) => a === typeof lit.value)) {
         return lit.value as string | bigint
       }
       throw new CodeError(`Expected argument of type ${arg.literalType} for param ${arg.name}`, {
@@ -104,7 +111,5 @@ export class IntrinsicOpExpressionBuilder extends IntermediateExpressionBuilder 
       }),
       this.opMapping.ptype,
     )
-
-    return super.call(args, sourceLocation)
   }
 }

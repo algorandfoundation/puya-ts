@@ -8,6 +8,8 @@ import * as awst from '../awst/nodes'
 import { SourceLocation } from '../awst/source-location'
 import { nodeFactory } from '../awst/node-factory'
 import { wtypes } from '../awst'
+import { InstanceBuilder } from '../awst_build/eb'
+import { LiteralExpressionBuilder } from '../awst_build/eb/literal-expression-builder'
 
 type UnionToIntersection<T> = (T extends DeliberateAny ? (x: T) => void : never) extends (x: infer TIntersection) => void
   ? TIntersection
@@ -55,55 +57,40 @@ export const accept = <TSelf extends { context: BaseContext }, T extends ts.Node
   return {} as DeliberateAny
 }
 
-export abstract class BaseVisitor<TContext extends BaseContext> implements Visitor<LiteralExpressions, awst.Literal> {
+export abstract class BaseVisitor<TContext extends BaseContext> implements Visitor<LiteralExpressions, InstanceBuilder> {
   constructor(public context: TContext) {}
 
-  visitBigIntLiteral(node: ts.BigIntLiteral): awst.Literal {
-    return nodeFactory.literal({
-      value: BigInt(node.text.slice(0, -1)),
-      sourceLocation: this.sourceLocation(node),
-    })
+  visitBigIntLiteral(node: ts.BigIntLiteral): InstanceBuilder {
+    return new LiteralExpressionBuilder(BigInt(node.text.slice(0, -1)), this.sourceLocation(node))
   }
 
-  visitRegularExpressionLiteral(node: ts.RegularExpressionLiteral): awst.Literal {
+  visitRegularExpressionLiteral(node: ts.RegularExpressionLiteral): InstanceBuilder {
     throw new NotSupported('Regular expressions', {
       sourceLocation: this.sourceLocation(node),
     })
   }
 
-  visitFalseKeyword(node: ts.FalseLiteral): awst.Literal {
-    return nodeFactory.boolConstant({
-      sourceLocation: this.sourceLocation(node),
-      value: false,
-    })
+  visitFalseKeyword(node: ts.FalseLiteral): InstanceBuilder {
+    return new LiteralExpressionBuilder(false, this.sourceLocation(node))
   }
-  visitTrueKeyword(node: ts.TrueLiteral): awst.Literal {
-    return nodeFactory.boolConstant({
-      sourceLocation: this.sourceLocation(node),
-      value: true,
-    })
+
+  visitTrueKeyword(node: ts.TrueLiteral): InstanceBuilder {
+    return new LiteralExpressionBuilder(true, this.sourceLocation(node))
   }
 
   sourceLocation(node: ts.Node): SourceLocation {
     return this.context.getSourceLocation(node)
   }
 
-  visitStringLiteral(node: ts.StringLiteral): awst.Literal {
-    return new awst.Literal({
-      sourceLocation: this.context.getSourceLocation(node),
-      value: node.text,
-    })
+  visitStringLiteral(node: ts.StringLiteral): InstanceBuilder {
+    return new LiteralExpressionBuilder(node.text, this.sourceLocation(node))
   }
-  visitNoSubstitutionTemplateLiteral(node: ts.NoSubstitutionTemplateLiteral): awst.Literal {
-    return new awst.Literal({
-      sourceLocation: this.context.getSourceLocation(node),
-      value: node.text,
-    })
+
+  visitNoSubstitutionTemplateLiteral(node: ts.NoSubstitutionTemplateLiteral): InstanceBuilder {
+    return new LiteralExpressionBuilder(node.text, this.sourceLocation(node))
   }
-  visitNumericLiteral(node: ts.NumericLiteral): awst.Literal {
-    return new awst.Literal({
-      sourceLocation: this.context.getSourceLocation(node),
-      value: BigInt(node.text),
-    })
+
+  visitNumericLiteral(node: ts.NumericLiteral): InstanceBuilder {
+    return new LiteralExpressionBuilder(BigInt(node.text), this.sourceLocation(node))
   }
 }

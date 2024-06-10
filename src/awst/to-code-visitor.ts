@@ -113,7 +113,7 @@ export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, Statemen
     throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
   }
   visitReinterpretCast(expression: nodes.ReinterpretCast): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    return `reinterpret_cast<${expression.wtype}>(${expression.expr.accept(this)})`
   }
   visitNewArray(expression: nodes.NewArray): string {
     throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
@@ -148,7 +148,7 @@ export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, Statemen
     throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
   }
   visitBytesBinaryOperation(expression: nodes.BytesBinaryOperation): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    return `${expression.left.accept(this)} ${expression.op} ${expression.right.accept(this)}`
   }
   visitBooleanBinaryOperation(expression: nodes.BooleanBinaryOperation): string {
     throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })

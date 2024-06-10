@@ -3,18 +3,18 @@ import { SourceLocation } from '../awst/source-location'
 import { awst } from '../awst'
 import { TypeHelper } from './type-helper'
 import { TextVisitor } from './text-visitor'
-import { ExpressionBuilder } from './eb'
 import { CodeError } from '../errors'
 import { nodeFactory } from '../awst/node-factory'
 import { codeInvariant, invariant } from '../util'
 import { ConstantDeclaration } from '../awst/nodes'
 import { PType, typeRegistry } from './ptypes'
+import { NodeBuilder } from './eb'
 
 export abstract class BaseContext {
   abstract getSourceLocation(node: ts.Node): SourceLocation
   abstract tryResolveConstant(node: ts.Identifier): awst.ConstantDeclaration | undefined
   abstract readonly moduleName: string
-  abstract getExpressionBuilderForNode(node: ts.Identifier): ExpressionBuilder
+  abstract getBuilderForNode(node: ts.Identifier): NodeBuilder
   abstract getPTypeForNode(node: ts.Node): PType
   abstract getImplicitReturnType(node: ts.FunctionDeclaration | ts.MethodDeclaration): PType
 }
@@ -106,9 +106,9 @@ export class SourceFileContext extends BaseContext {
     return this.typeHelper.ptypeForTsType(returnTsType, this.getSourceLocation(node))
   }
 
-  getExpressionBuilderForNode(node: ts.Identifier): ExpressionBuilder {
+  getBuilderForNode(node: ts.Identifier): NodeBuilder {
     const sourceLocation = this.getSourceLocation(node)
-    const eb = this.typeHelper.tryGetEbForNode(node, sourceLocation)
+    const eb = this.typeHelper.tryGetBuilderForNode(node, sourceLocation)
     if (eb) return eb
 
     const ptype = this.getPTypeForNode(node)

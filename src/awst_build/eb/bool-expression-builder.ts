@@ -1,11 +1,12 @@
 import { awst, wtypes } from '../../awst'
-import { ValueExpressionBuilder } from './index'
+import { InstanceExpressionBuilder } from './index'
 import { SourceLocation } from '../../awst/source-location'
 import { nodeFactory } from '../../awst/node-factory'
+import * as ptypes from '../ptypes'
 
-export class BoolExpressionBuilder extends ValueExpressionBuilder {
-  get wtype(): wtypes.WType {
-    return wtypes.boolWType
+export class BoolExpressionBuilder extends InstanceExpressionBuilder {
+  get ptype(): ptypes.PType {
+    return ptypes.boolPType
   }
 
   boolEval(sourceLocation: SourceLocation, negate: boolean): awst.Expression {

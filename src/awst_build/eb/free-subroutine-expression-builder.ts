@@ -1,24 +1,27 @@
-import { ExpressionBuilder, IntermediateExpressionBuilder } from './index'
+import { FunctionBuilder, InstanceBuilder } from './index'
 import { SourceLocation } from '../../awst/source-location'
 import { PType, FreeSubroutineType, typeRegistry } from '../ptypes'
 import { InternalError } from '../../errors'
-import { Literal } from '../../awst/nodes'
 import { nodeFactory } from '../../awst/node-factory'
 import { requireExpressionOfType } from './util'
 
-export class FreeSubroutineExpressionBuilder extends IntermediateExpressionBuilder {
-  private readonly ptype: FreeSubroutineType
+export class FreeSubroutineExpressionBuilder extends FunctionBuilder {
+  private readonly _ptype: FreeSubroutineType
   constructor(sourceLocation: SourceLocation, ptype: PType) {
     super(sourceLocation)
     if (!(ptype instanceof FreeSubroutineType)) {
       throw new InternalError(`Invalid ptype`)
     }
-    this.ptype = ptype
+    this._ptype = ptype
   }
 
-  call(args: ReadonlyArray<ExpressionBuilder | Literal>, sourceLocation: SourceLocation): ExpressionBuilder {
+  get ptype() {
+    return this._ptype
+  }
+
+  call(args: ReadonlyArray<InstanceBuilder>, sourceLocation: SourceLocation): InstanceBuilder {
     const mappedArgs = args.map((a, i) =>
-      nodeFactory.callArg({ name: undefined, value: requireExpressionOfType(a, this.ptype.parameters[i].wtypeOrThrow) }),
+      nodeFactory.callArg({ name: undefined, value: requireExpressionOfType(a, this.ptype.parameters[i], sourceLocation) }),
     )
 
     return typeRegistry.getInstanceEb(

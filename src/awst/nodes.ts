@@ -23,13 +23,6 @@ export class ExpressionStatement extends Statement {
     return visitor.visitExpressionStatement(this)
   }
 }
-export class Literal extends Node {
-  constructor(props: Props<Literal>) {
-    super()
-    Object.assign(this, props)
-  }
-  value!: bigint | string | Uint8Array | boolean
-}
 export class Block extends Statement {
   constructor(props: Props<Block>) {
     super()
@@ -999,7 +992,6 @@ export class Module {
 export type LValue = VarExpression | FieldExpression | IndexExpression | TupleExpression | AppStateExpression | AppAccountStateExpression
 export const concreteNodes = {
   expressionStatement: ExpressionStatement,
-  literal: Literal,
   block: Block,
   ifElse: IfElse,
   switch: Switch,
