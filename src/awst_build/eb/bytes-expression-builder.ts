@@ -29,7 +29,7 @@ export class BytesFunctionExpressionBuilder extends TypeClassExpressionBuilder {
   }
 
   call(args: Array<ExpressionBuilder | Literal>, sourceLocation: SourceLocation): ExpressionBuilder {
-    if (args.length == 0) {
+    if (args.length === 0) {
       return new BytesExpressionBuilder(
         nodeFactory.bytesConstant({
           sourceLocation,

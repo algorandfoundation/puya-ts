@@ -12,6 +12,7 @@ import { InternalError, throwError } from '../errors'
 import { codeInvariant } from '../util'
 import { DeliberateAny } from '../typescript-helpers'
 import { FreeSubroutineExpressionBuilder } from './eb/free-subroutine-expression-builder'
+import { StrExpressionBuilder, StrFunctionExpressionBuilder } from './eb/str-expression-builder'
 
 /**
  * Represents a public type visible to a developer of AlgoTS
@@ -218,6 +219,18 @@ export const BytesFunction = new LibFunctionType({
   module: '@algorandfoundation/algo-ts/primitives.d.ts',
 })
 typeRegistry.register({ ptype: BytesFunction, symbolEb: BytesFunctionExpressionBuilder })
+
+export const strPType = new SimpleType({
+  name: 'str',
+  module: '@algorandfoundation/algo-ts/primitives.d.ts',
+  wtype: wtypes.stringWType,
+})
+typeRegistry.register({ ptype: strPType, instanceEb: StrExpressionBuilder })
+export const StrFunction = new LibFunctionType({
+  name: 'Str',
+  module: '@algorandfoundation/algo-ts/primitives.d.ts',
+})
+typeRegistry.register({ ptype: StrFunction, symbolEb: StrFunctionExpressionBuilder })
 export const opNamespace = new NamespaceType({
   name: 'op',
   module: '@algorandfoundation/algo-ts/op.d.ts',

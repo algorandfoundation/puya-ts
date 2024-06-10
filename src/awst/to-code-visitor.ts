@@ -36,7 +36,7 @@ export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, Statemen
     return printBytes(expression.value, expression.encoding)
   }
   visitStringConstant(expression: nodes.StringConstant): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    return `"${expression.value}"`
   }
   visitTemplateVar(expression: nodes.TemplateVar): string {
     throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })

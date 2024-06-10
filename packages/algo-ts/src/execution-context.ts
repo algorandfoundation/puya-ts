@@ -3,12 +3,12 @@ import { OpsImplementation } from './op-types'
 import { Application, Asset } from './reference'
 
 export type ExecutionContext = {
-  log(...args: Array<Uint64Compat | BytesCompat | BigUintCompat>): void
+  log(...args: Array<Uint64Compat | BytesCompat | BigUintCompat | StringCompat>): void
   ops: Partial<OpsImplementation>
   makeUint64(v: Uint64Compat): uint64
   makeInterpolatedBytes(b: TemplateStringsArray, replacements: BytesCompat[]): bytes
   makeBytes(b: BytesCompat): bytes
-  makeString(s: StringCompat): str
+  makeString(s: StringCompat | bytes): str
   makeBigUint(v: BigUintCompat): biguint
   application(id: uint64): Application
   asset(id: uint64): Asset

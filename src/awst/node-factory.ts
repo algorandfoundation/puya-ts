@@ -1,4 +1,4 @@
-import { Block, BoolConstant, BytesConstant, BytesEncoding, concreteNodes, IntegerConstant, Statement } from './nodes'
+import { Block, BoolConstant, BytesConstant, BytesEncoding, concreteNodes, IntegerConstant, Statement, StringConstant } from './nodes'
 import { DeliberateAny, Props } from '../typescript-helpers'
 import { SourceLocation } from './source-location'
 import * as wtypes from './wtypes'
@@ -12,6 +12,12 @@ const explicitNodeFactory = {
       encoding: BytesEncoding.unknown,
       ...props,
       wtype: wtypes.bytesWType,
+    })
+  },
+  stringConstant(props: { value: string; sourceLocation: SourceLocation }): StringConstant {
+    return new StringConstant({
+      ...props,
+      wtype: wtypes.stringWType,
     })
   },
   uInt64Constant(props: { value: bigint; tealAlias?: string; sourceLocation: SourceLocation }): IntegerConstant {
@@ -44,7 +50,7 @@ type FactoryMethod<TKey extends keyof ConcreteNodes> = TKey extends keyof Explic
   : DefaultNodeFactory<TKey>
 
 function isNodeName(value: string | symbol): value is keyof ConcreteNodes {
-  return typeof value == 'string' && Object.hasOwn(concreteNodes, value)
+  return typeof value === 'string' && Object.hasOwn(concreteNodes, value)
 }
 
 function hasExplicitFactory(value: string): value is keyof typeof explicitNodeFactory {
