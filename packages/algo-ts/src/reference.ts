@@ -1,212 +1,157 @@
 import { uint64, bytes, BytesBacked, BytesCompat, Bytes } from './primitives'
 import { ctxMgr } from './execution-context'
 
-export class Account implements BytesBacked {
-  #address: bytes
-  constructor(address: bytes) {
-    this.#address = address
-  }
+export type Account = {
+  readonly bytes: bytes
+}
+export function Account(address: bytes): Account {
+  return ctxMgr.instance.account(address)
+}
 
-  get bytes(): bytes {
-    return this.#address
-  }
-
-  static from_bytes(value: BytesCompat): Account {
-    return new Account(Bytes(value))
-  }
+export function Asset(assetId: uint64): Asset {
+  return ctxMgr.instance.asset(assetId)
 }
 /**
  * An Asset on the Algorand network.
  */
-export class Asset {
-  #id: uint64
-  constructor(assetId: uint64) {
-    this.#id = assetId
-  }
+export type Asset = {
   /**
    * Returns the id of the Asset
    */
-  get id(): uint64 {
-    return this.#id
-  }
+  readonly id: uint64
 
   /**
    * Total number of units of this asset
    */
-  get total(): uint64 {
-    return ctxMgr.instance.asset(this.#id).total
-  }
+  readonly total: uint64
 
   /**
    * @see AssetParams.Decimals
    */
-  get decimals(): uint64 {
-    return ctxMgr.instance.asset(this.#id).decimals
-  }
+  readonly decimals: uint64
 
   /**
    * Frozen by default or not
    */
-  get defaultFrozen(): boolean {
-    return ctxMgr.instance.asset(this.#id).defaultFrozen
-  }
+  readonly defaultFrozen: boolean
 
   /**
    * Asset unit name
    */
-  get unitName(): bytes {
-    return ctxMgr.instance.asset(this.#id).unitName
-  }
+  readonly unitName: bytes
 
   /**
    * Asset name
    */
-  get name(): bytes {
-    return ctxMgr.instance.asset(this.#id).name
-  }
+  readonly name: bytes
 
   /**
    * URL with additional info about the asset
    */
-  get url(): bytes {
-    return ctxMgr.instance.asset(this.#id).url
-  }
+  readonly url: bytes
 
   /**
    * Arbitrary commitment
    */
-  get metadataHash(): bytes {
-    return ctxMgr.instance.asset(this.#id).metadataHash
-  }
+  readonly metadataHash: bytes
 
   /**
    * Manager address
    */
-  get manager(): Account {
-    return ctxMgr.instance.asset(this.#id).manager
-  }
+  readonly manager: Account
 
   /**
    * Reserve address
    */
-  get reserve(): Account {
-    return ctxMgr.instance.asset(this.#id).reserve
-  }
+  readonly reserve: Account
 
   /**
    * Freeze address
    */
-  get freeze(): Account {
-    return ctxMgr.instance.asset(this.#id).freeze
-  }
+  readonly freeze: Account
 
   /**
    * Clawback address
    */
-  get clawback(): Account {
-    return ctxMgr.instance.asset(this.#id).clawback
-  }
+  readonly clawback: Account
 
   /**
    * Creator address
    */
-  get creator(): Account {
-    return ctxMgr.instance.asset(this.#id).creator
-  }
+  readonly creator: Account
 
   /**
    * Amount of the asset unit held by this account. Fails if the account has not
    * opted in to the asset.
    * Asset and supplied Account must be an available resource
-   * @param account: Account
+   * @param account Account
    * @return balance: uint64
    */
-  balance(account: Account): uint64 {
-    return ctxMgr.instance.asset(this.#id).balance(account)
-  }
+  balance(account: Account): uint64
 
   /**
    * Is the asset frozen or not. Fails if the account has not
    * opted in to the asset.
    * Asset and supplied Account must be an available resource
-   * @param account: Account
+   * @param account Account
    * @return isFrozen: boolean
    */
-  frozen(account: Account): boolean {
-    return ctxMgr.instance.asset(this.#id).frozen(account)
-  }
+  frozen(account: Account): boolean
 }
+export function Application(applicationId: uint64): Application {
+  return ctxMgr.instance.application(applicationId)
+}
+
 /**
  * An Application on the Algorand network.
  */
-export class Application {
-  #id: uint64
-  constructor(applicationId: uint64) {
-    this.#id = applicationId
-  }
-  get id(): uint64 {
-    return this.#id
-  }
+export type Application = {
+  /**
+   * The id of this application on the current network
+   */
+  readonly id: uint64
   /**
    * Bytecode of Approval Program
    */
-  get approvalProgram(): bytes {
-    return ctxMgr.instance.application(this.#id).approvalProgram
-  }
+  readonly approvalProgram: bytes
 
   /**
    * Bytecode of Clear State Program
    */
-  get clearStateProgram(): bytes {
-    return ctxMgr.instance.application(this.#id).clearStateProgram
-  }
+  readonly clearStateProgram: bytes
 
   /**
    * Number of uint64 values allowed in Global State
    */
-  get globalNumUint(): uint64 {
-    return ctxMgr.instance.application(this.#id).globalNumUint
-  }
+  readonly globalNumUint: uint64
 
   /**
    * Number of byte array values allowed in Global State
    */
-  get globalNumBytes(): uint64 {
-    return ctxMgr.instance.application(this.#id).globalNumBytes
-  }
+  readonly globalNumBytes: uint64
 
   /**
    * Number of uint64 values allowed in Local State
    */
-  get localNumUint(): uint64 {
-    return ctxMgr.instance.application(this.#id).localNumUint
-  }
+  readonly localNumUint: uint64
 
   /**
    * Number of byte array values allowed in Local State
    */
-  get localNumBytes(): uint64 {
-    return ctxMgr.instance.application(this.#id).localNumBytes
-  }
+  readonly localNumBytes: uint64
 
   /**
    * Number of Extra Program Pages of code space
    */
-  get extraProgramPages(): uint64 {
-    return ctxMgr.instance.application(this.#id).extraProgramPages
-  }
+  readonly extraProgramPages: uint64
 
   /**
    * Creator address
    */
-  get creator(): Account {
-    return ctxMgr.instance.application(this.#id).creator
-  }
+  readonly creator: Account
 
   /**
    * Address for which this application has authority
    */
-  get address(): Account {
-    return ctxMgr.instance.application(this.#id).address
-  }
+  readonly address: Account
 }

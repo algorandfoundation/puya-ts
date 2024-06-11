@@ -115,7 +115,3 @@ export class Address extends StaticArray<Byte, 32> {
     throw new Error('TODO')
   }
 }
-
-const myDynamic = new DynamicArray<uint64>(1, 2, 3)
-const myStatic = new StaticArray(Bytes`Hello`, Bytes`World`)
-const myTuple = new Tuple(1, true, 'hello')

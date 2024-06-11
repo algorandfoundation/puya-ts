@@ -1,6 +1,6 @@
 import { biguint, BigUintCompat, bytes, BytesCompat, str, StringCompat, uint64, Uint64Compat } from './primitives'
 import { OpsImplementation } from './op-types'
-import { Application, Asset } from './reference'
+import { Account, Application, Asset } from './reference'
 
 export type ExecutionContext = {
   log(...args: Array<Uint64Compat | BytesCompat | BigUintCompat | StringCompat>): void
@@ -12,6 +12,7 @@ export type ExecutionContext = {
   makeBigUint(v: BigUintCompat): biguint
   application(id: uint64): Application
   asset(id: uint64): Asset
+  account(address: bytes): Account
   arrayAt<T>(arrayLike: T[], index: Uint64Compat): T
   arraySlice<T>(arrayLike: T[], start: Uint64Compat, end: Uint64Compat): T[]
 
@@ -19,20 +20,23 @@ export type ExecutionContext = {
   err(message?: string): never
 }
 
-export const ctxMgr = (() => {
-  let instance: ExecutionContext | undefined = undefined
-  return {
-    set instance(ctx: ExecutionContext) {
-      if (instance != undefined) throw new Error('Execution context has already been set')
+declare global {
+  // eslint-disable-next-line no-var
+  var puyaTsExecutionContext: ExecutionContext | undefined
+}
 
-      instance = ctx
-    },
-    get instance() {
-      if (instance == undefined) throw new Error('No execution context has been set')
-      return instance
-    },
-    reset() {
-      instance = undefined
-    },
-  }
-})()
+export const ctxMgr = {
+  set instance(ctx: ExecutionContext) {
+    const instance = global.puyaTsExecutionContext
+    if (instance != undefined) throw new Error('Execution context has already been set')
+    global.puyaTsExecutionContext = ctx
+  },
+  get instance() {
+    const instance = global.puyaTsExecutionContext
+    if (instance == undefined) throw new Error('No execution context has been set')
+    return instance
+  },
+  reset() {
+    global.puyaTsExecutionContext = undefined
+  },
+}

@@ -1,7 +1,6 @@
-import { Contract } from '@algorandfoundation/algo-ts'
+import { Contract, internal } from '@algorandfoundation/algo-ts'
 import { makeBigInt } from './primitives'
 import { TestExecutionContext } from './test-execution-context'
-import { internal } from '@algorandfoundation/algo-ts'
 import { Transaction } from './transactions/client'
 import { encodeTransactions } from './transactions'
 import { AvmError, CodeError, InternalError } from './errors'

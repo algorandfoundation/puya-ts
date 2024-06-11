@@ -5,7 +5,11 @@ import json from '@rollup/plugin-json'
 import type { RollupOptions } from 'rollup'
 
 const config: RollupOptions = {
-  input: ['src/index.ts', 'src/runtime-helpers.ts', 'src/test-transformer/index.ts'],
+  input: {
+    index: 'src/index.ts',
+    'runtime-helpers': 'src/runtime-helpers.ts',
+    'test-transformer/index': 'src/test-transformer/index.ts',
+  },
   output: [
     {
       dir: 'dist',

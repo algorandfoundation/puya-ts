@@ -1,4 +1,4 @@
-import { BigUintCompat, bytes, BytesCompat, uint64, biguint, Uint64Compat } from '@algorandfoundation/algo-ts'
+import { BigUintCompat, bytes, BytesCompat, uint64, biguint, Uint64Compat, StringCompat, str } from '@algorandfoundation/algo-ts'
 import { AvmError, internalError } from './errors'
 import { nameOfType } from './util'
 import { bigIntToUint8Array, uint8ArrayToBigInt, utf8ToUint8Array } from './encoding-util'
@@ -45,7 +45,12 @@ export const isUint64 = (v: unknown): v is Uint64Compat => {
 export const isBigUint = (v: unknown): v is biguint => {
   return v instanceof BigUintCls
 }
+export const makeStr = (v: StringCompat | StrCls): str => {
+  if (typeof v === 'string') return new StrCls(v) as unknown as str
+  if (v instanceof StrCls) return v as unknown as str
 
+  internalError(`Cannot convert ${nameOfType(v)} to str`)
+}
 export const makeBytes = (v: BytesCompat | BytesCls): bytes => {
   if (typeof v === 'string') return new BytesCls(utf8ToUint8Array(v)) as unknown as bytes
   if (v instanceof BytesCls) return v as unknown as bytes
@@ -164,5 +169,13 @@ export class BytesCls {
 
   valueOf(): Uint8Array {
     return this.#v
+  }
+}
+export class StrCls {
+  #v: string
+  public value: string
+  constructor(v: string) {
+    this.#v = v
+    this.value = v
   }
 }

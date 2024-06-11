@@ -10,11 +10,13 @@ import {
   Asset,
   StringCompat,
   str,
+  Account,
 } from '@algorandfoundation/algo-ts'
-import { encodeBytes, makeBigUint, makeBytes, makeNumber, makeUint64, makeUInt8Array } from './primitives'
+import { encodeBytes, makeBigUint, makeBytes, makeNumber, makeStr, makeUint64, makeUInt8Array } from './primitives'
 import { buildOpsImplementation } from './ops-implementation'
 import { Transaction } from './transactions/runtime'
 import { AssertError, avmError, AvmError } from './errors'
+import { AccountCls, ApplicationCls, AssetCls } from './reference'
 
 export class TestExecutionContext implements internal.ExecutionContext {
   #logs: bytes[] = []
@@ -24,6 +26,10 @@ export class TestExecutionContext implements internal.ExecutionContext {
     this.#txnGroup = txnGroup
   }
 
+  account(address: bytes): Account {
+    return new AccountCls(address)
+  }
+
   arrayAt<T>(arrayLike: T[], index: Uint64Compat): T {
     return arrayLike.at(makeNumber(index)) ?? avmError('Index out of bounds')
   }
@@ -31,11 +37,11 @@ export class TestExecutionContext implements internal.ExecutionContext {
     return arrayLike.slice(makeNumber(start), makeNumber(end))
   }
 
-  application(_id: uint64): Application {
-    throw new Error('Method not implemented.')
+  application(id: uint64): Application {
+    return new ApplicationCls(id)
   }
-  asset(_id: uint64): Asset {
-    throw new Error('Method not implemented.')
+  asset(id: uint64): Asset {
+    return new AssetCls(id)
   }
 
   log(...args: (Uint64Compat | BytesCompat)[]): void {
@@ -58,8 +64,8 @@ export class TestExecutionContext implements internal.ExecutionContext {
       })
       .reduce((a, b) => a.concat(b))
   }
-  makeString(_s: StringCompat): str {
-    throw new Error('Not implemented')
+  makeString(s: StringCompat): str {
+    return makeStr(s)
   }
 
   makeBytes(b: BytesCompat): bytes {
