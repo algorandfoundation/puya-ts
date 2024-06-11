@@ -3,6 +3,7 @@ import * as fs from 'node:fs'
 
 export enum ArtifactKind {
   Awst,
+  AwstJson,
 }
 
 function mkDirIfNotExists(dir: string) {
@@ -30,6 +31,10 @@ export function writeArtifact<TObj extends { accept(x: TVisitor): string | strin
   switch (kind) {
     case ArtifactKind.Awst:
       outFilePath = path.join(outDirectory, `${path.basename(sourceFile, '.algo.ts')}.awst`)
+      break
+    case ArtifactKind.AwstJson:
+      outFilePath = path.join(outDirectory, `${path.basename(sourceFile, '.algo.ts')}.awst.json`)
+      break
   }
 
   const content = Array.from([obj])

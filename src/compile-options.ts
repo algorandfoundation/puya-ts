@@ -7,10 +7,19 @@ import { PuyaError } from './errors'
 export interface CompileOptions {
   filePaths: string[]
   outputAwst: boolean
+  outputAwstJson: boolean
   outDir: string
 }
 
-export const buildOptions = ({ paths, outputAwst, outDir }: { paths: string; outputAwst: boolean; outDir: string }): CompileOptions => {
+export const buildOptions = ({
+  paths,
+  ...rest
+}: {
+  paths: string
+  outputAwst: boolean
+  outDir: string
+  outputAwstJson: boolean
+}): CompileOptions => {
   const filePaths = []
 
   for (const p of paths) {
@@ -36,8 +45,7 @@ export const buildOptions = ({ paths, outputAwst, outDir }: { paths: string; out
   }
 
   return {
-    outputAwst,
     filePaths,
-    outDir,
+    ...rest,
   }
 }

@@ -5,6 +5,7 @@ import { CompileOptions } from '../compile-options'
 import { ArtifactKind, writeArtifact } from '../write-artifact'
 import { ModuleStatement } from '../awst/nodes'
 import { resolveModuleMetadata } from '../parser/resolve-module-metadata'
+import { ToJsonVisitor } from '../awst/to-json-visitor'
 
 export function buildAwst(program: ts.Program, options: CompileOptions) {
   const moduleAwst: Record<string, ModuleStatement[]> = {}
@@ -22,6 +23,15 @@ export function buildAwst(program: ts.Program, options: CompileOptions) {
         kind: ArtifactKind.Awst,
         obj: statements,
         visitor: new ToCodeVisitor(),
+      })
+    }
+    if (options.outputAwstJson) {
+      writeArtifact({
+        sourceFile: sourceFile.fileName,
+        outDir: options.outDir,
+        kind: ArtifactKind.AwstJson,
+        obj: statements,
+        visitor: new ToJsonVisitor(),
       })
     }
     moduleAwst[metadata.moduleName] = statements
