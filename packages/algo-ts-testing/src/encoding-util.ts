@@ -40,3 +40,7 @@ export const uint8ArrayToUtf8 = (value: Uint8Array): string => {
   const decoder = new TextDecoder()
   return decoder.decode(value)
 }
+
+export const uint8ArrayToHex = (value: Uint8Array): string => {
+  return Buffer.from(value).toString('hex')
+}

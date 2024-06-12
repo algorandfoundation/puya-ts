@@ -1,27 +1,36 @@
-import { BigUintCompat, bytes, BytesCompat, uint64, biguint, Uint64Compat, StringCompat, str } from '@algorandfoundation/algo-ts'
+import { BigUintCompat, bytes, BytesCompat, uint64, biguint, Uint64Compat, StringCompat, str, internal } from '@algorandfoundation/algo-ts'
 import { AvmError, internalError } from './errors'
 import { nameOfType } from './util'
-import { bigIntToUint8Array, uint8ArrayToBigInt, utf8ToUint8Array } from './encoding-util'
+import { bigIntToUint8Array, uint8ArrayToBigInt, uint8ArrayToHex, uint8ArrayToUtf8, utf8ToUint8Array } from './encoding-util'
 
 export function btoi(bytes: BytesCompat): uint64 {
-  return makeUint64(uint8ArrayToBigInt(makeUInt8Array(bytes).valueOf()))
+  return BytesCls.fromCompat(bytes).toUint64().asAlgoTs()
 }
 export function itob(value: Uint64Compat): bytes {
-  return makeBytes(bigIntToUint8Array(checkUint64(makeBigInt(value))))
+  return Uint64Cls.fromCompat(value).toBytes().asAlgoTs()
 }
 
-export const encodeBytes = (val: unknown): bytes => {
-  if (val instanceof Uint8Array) return makeBytes(val)
-  if (val instanceof BytesCls) return val as unknown as bytes
-  if (val instanceof Uint64Cls) return makeBytes(bigIntToUint8Array(val.valueOf(), 8))
-  if (val instanceof BigUintCls) return makeBytes(bigIntToUint8Array(val.valueOf(), 'dynamic'))
+export function toExternalValue(val: uint64): bigint
+export function toExternalValue(val: biguint): bigint
+export function toExternalValue(val: bytes): Uint8Array
+export function toExternalValue(val: str): string
+export function toExternalValue(val: uint64 | biguint | bytes | str) {
+  const cls = val as unknown
+  if (cls instanceof BytesCls) return cls.asUint8Array()
+  if (cls instanceof Uint64Cls) return cls.asBigInt()
+  if (cls instanceof BigUintCls) return cls.asBigInt()
+  if (cls instanceof StrCls) return cls.asString()
+}
+export const toBytes = (val: unknown): bytes => {
+  if (val instanceof AlgoTsPrimitiveCls) return val.toBytes().asAlgoTs()
+
   switch (typeof val) {
     case 'string':
-      return makeBytes(val)
+      return StrCls.fromCompat(val).toBytes().asAlgoTs()
     case 'bigint':
-      return makeBytes(bigIntToUint8Array(val, 8))
+      return BigUintCls.fromCompat(val).toBytes().asAlgoTs()
     case 'number':
-      return makeBytes(bigIntToUint8Array(BigInt(val), 8))
+      return Uint64Cls.fromCompat(val).toBytes().asAlgoTs()
     default:
       internalError(`Unsupported arg type ${nameOfType(val)}`)
   }
@@ -30,42 +39,18 @@ export const encodeBytes = (val: unknown): bytes => {
 export const isBytes = (v: unknown): v is BytesCompat => {
   if (typeof v === 'string') return true
   if (v instanceof BytesCls) return true
-  if (v instanceof Uint8Array) return true
-  return false
+  return v instanceof Uint8Array
 }
 
 export const isUint64 = (v: unknown): v is Uint64Compat => {
   if (typeof v == 'boolean') return true
   if (typeof v == 'number') return true
   if (typeof v == 'bigint') return true
-  if (v instanceof Uint64Cls) return true
-  return false
+  return v instanceof Uint64Cls
 }
 
 export const isBigUint = (v: unknown): v is biguint => {
   return v instanceof BigUintCls
-}
-export const makeStr = (v: StringCompat | StrCls): str => {
-  if (typeof v === 'string') return new StrCls(v) as unknown as str
-  if (v instanceof StrCls) return v as unknown as str
-
-  internalError(`Cannot convert ${nameOfType(v)} to str`)
-}
-export const makeBytes = (v: BytesCompat | BytesCls): bytes => {
-  if (typeof v === 'string') return new BytesCls(utf8ToUint8Array(v)) as unknown as bytes
-  if (v instanceof BytesCls) return v as unknown as bytes
-  if (v instanceof Uint8Array) return new BytesCls(v) as unknown as bytes
-  internalError(`Cannot convert ${nameOfType(v)} to bytes`)
-}
-export const makeUInt8Array = (v: BytesCompat | BytesCls): Uint8Array => {
-  if (typeof v === 'string') return utf8ToUint8Array(v)
-  if (v instanceof BytesCls) return v.valueOf()
-  if (v instanceof Uint8Array) return v
-  internalError(`Cannot convert ${nameOfType(v)} to bytes`)
-}
-
-export const makeHex = (v: BytesCompat): string => {
-  return Buffer.from(makeUInt8Array(v)).toString('hex')
 }
 
 export const checkUint64 = (v: bigint): bigint => {
@@ -74,108 +59,189 @@ export const checkUint64 = (v: bigint): bigint => {
   return u64
 }
 
-export const checkBigUint = (v: bigint): biguint => {
+export const checkBigUint = (v: bigint): bigint => {
   const uBig = BigInt.asUintN(64 * 8, v)
   if (uBig !== v) throw new AvmError(`BigUint over or underflow`)
-  return uBig as biguint
+  return uBig
 }
 
-export const makeUint64 = (v: Uint64Compat): uint64 => {
-  if (typeof v == 'boolean') return new Uint64Cls(v ? 1n : 0n) as unknown as uint64
-  if (typeof v == 'number') return new Uint64Cls(BigInt(v)) as unknown as uint64
-  if (typeof v == 'bigint') return new Uint64Cls(v) as unknown as uint64
-  internalError(`Cannot convert ${v} to uint64`)
+export abstract class AlgoTsPrimitiveCls {
+  abstract valueOf(): bigint | string | boolean
+
+  abstract toBytes(): BytesCls
 }
 
-export const makeBigUint = (v: BigUintCompat): biguint => {
-  if (typeof v == 'boolean') return new BigUintCls(v ? 1n : 0n) as unknown as biguint
-  if (typeof v == 'number') return new BigUintCls(BigInt(v)) as unknown as biguint
-  if (typeof v == 'bigint') return new BigUintCls(v) as unknown as biguint
-  const maybeCls: unknown = v
-  if (maybeCls instanceof BytesCls) return new BigUintCls(uint8ArrayToBigInt(maybeCls.valueOf())) as unknown as biguint
-  internalError(`Cannot convert ${nameOfType(v)} to BigUint`)
-}
-
-export const makeBigInt = (v: Uint64Compat | BigUintCompat | Uint64Cls | BigUintCls): bigint => {
-  if (typeof v == 'boolean') return v ? 1n : 0n
-  if (typeof v == 'number') return BigInt(v)
-  if (typeof v == 'bigint') return v
-  if (v instanceof Uint64Cls) return v.valueOf()
-  if (v instanceof BigUintCls) return v.valueOf()
-  internalError(`Cannot convert ${nameOfType(v)} to bigint`)
-}
-export const makeNumber = (v: unknown): number => {
-  if (typeof v == 'boolean') return v ? 1 : 0
-  if (typeof v == 'number') return v
-  if (typeof v == 'bigint') return safeBigIntToNumber(v)
-  if (v instanceof Uint64Cls) return safeBigIntToNumber(v.valueOf())
-  internalError(`Cannot convert ${v} to number`)
-}
-
-function safeBigIntToNumber(value: bigint): number {
-  if (value > Number.MAX_SAFE_INTEGER) {
-    throw new AvmError('value cannot be safely converted to a number')
+export class Uint64Cls extends AlgoTsPrimitiveCls {
+  public readonly value: bigint
+  constructor(value: bigint | number | string) {
+    super()
+    this.value = BigInt(value)
+    checkUint64(this.value)
   }
-  return Number(value)
-}
 
-export class Uint64Cls {
-  constructor(public readonly value: bigint) {
-    checkUint64(value)
+  static fromCompat(v: Uint64Compat): Uint64Cls {
+    if (typeof v == 'boolean') return new Uint64Cls(v ? 1n : 0n)
+    if (typeof v == 'number') return new Uint64Cls(BigInt(v))
+    if (typeof v == 'bigint') return new Uint64Cls(v)
+    internalError(`Cannot convert ${v} to uint64`)
+  }
+
+  static getNumber(v: Uint64Compat): number {
+    return Uint64Cls.fromCompat(v).asNumber()
   }
 
   valueOf(): bigint {
     return this.value
   }
+
+  toBytes(): BytesCls {
+    return new BytesCls(bigIntToUint8Array(this.value, 8))
+  }
+
+  asAlgoTs(): uint64 {
+    return this as unknown as uint64
+  }
+
+  asBigInt(): bigint {
+    return this.value
+  }
+  asNumber(): number {
+    if (this.value > Number.MAX_SAFE_INTEGER) {
+      throw new AvmError('value cannot be safely converted to a number')
+    }
+    return Number(this.value)
+  }
 }
 
-export class BigUintCls {
+export class BigUintCls extends AlgoTsPrimitiveCls {
   constructor(public readonly value: bigint) {
+    super()
     checkBigUint(value)
   }
   valueOf(): bigint {
     return this.value
   }
+
+  toBytes(): BytesCls {
+    return new BytesCls(bigIntToUint8Array(this.value))
+  }
+
+  asAlgoTs(): biguint {
+    return this as unknown as biguint
+  }
+
+  asBigInt(): bigint {
+    return this.value
+  }
+  asNumber(): number {
+    if (this.value > Number.MAX_SAFE_INTEGER) {
+      throw new AvmError('value cannot be safely converted to a number')
+    }
+    return Number(this.value)
+  }
+
+  static fromCompat(v: BigUintCompat | BytesCls): BigUintCls {
+    if (typeof v == 'boolean') return new BigUintCls(v ? 1n : 0n)
+    if (typeof v == 'number') return new BigUintCls(BigInt(v))
+    if (typeof v == 'bigint') return new BigUintCls(v)
+    if (v instanceof BytesCls) return v.toBigUint()
+    internalError(`Cannot convert ${nameOfType(v)} to BigUint`)
+  }
 }
 
-export class BytesCls {
+export class BytesCls extends AlgoTsPrimitiveCls {
   #v: Uint8Array
   value: string
   constructor(v: Uint8Array) {
+    super()
     this.#v = v
-    this.value = makeHex(v)
+    this.value = uint8ArrayToHex(v)
   }
 
   get length() {
-    return makeUint64(this.#v.length)
+    return new Uint64Cls(this.#v.length)
   }
 
+  toBytes(): BytesCls {
+    return this
+  }
   at(i: Uint64Compat): BytesCls {
-    const start = makeNumber(i)
+    const start = Uint64Cls.fromCompat(i).asNumber()
     return new BytesCls(this.#v.slice(start, start + 1))
   }
 
   slice(start: Uint64Compat, end: Uint64Compat): BytesCls {
-    return new BytesCls(this.#v.slice(makeNumber(start), makeNumber(end)))
+    const sliced = internal.ctxMgr.instance.arraySlice(this.#v, start, end)
+    return new BytesCls(sliced)
   }
 
-  concat(other: BytesCompat): BytesCls {
-    const otherArray = makeUInt8Array(other)
+  concat(other: BytesCompat | BytesCls): BytesCls {
+    const otherArray = BytesCls.fromCompat(other).asUint8Array()
     const mergedArray = new Uint8Array(this.#v.length + otherArray.length)
     mergedArray.set(this.#v)
     mergedArray.set(otherArray, this.#v.length)
     return new BytesCls(mergedArray)
   }
 
-  valueOf(): Uint8Array {
+  valueOf(): string {
+    return this.value
+  }
+
+  static fromCompat(v: BytesCompat | BytesCls): BytesCls {
+    if (typeof v === 'string') return new BytesCls(utf8ToUint8Array(v))
+    if (v instanceof BytesCls) return v
+    if (v instanceof Uint8Array) return new BytesCls(v)
+    internalError(`Cannot convert ${nameOfType(v)} to bytes`)
+  }
+
+  toUint64(): Uint64Cls {
+    return new Uint64Cls(uint8ArrayToBigInt(this.#v))
+  }
+  toBigUint(): BigUintCls {
+    return new BigUintCls(uint8ArrayToBigInt(this.#v))
+  }
+
+  asAlgoTs(): bytes {
+    return this as unknown as bytes
+  }
+
+  asUint8Array(): Uint8Array {
     return this.#v
   }
 }
-export class StrCls {
+export class StrCls extends AlgoTsPrimitiveCls {
   #v: string
   public value: string
   constructor(v: string) {
+    super()
     this.#v = v
     this.value = v
+  }
+
+  concat(other: StringCompat | StrCls) {
+    return new StrCls(this.#v + StrCls.fromCompat(other).#v)
+  }
+
+  asString() {
+    return this.#v
+  }
+
+  valueOf(): string {
+    return this.#v
+  }
+
+  toBytes(): BytesCls {
+    return new BytesCls(utf8ToUint8Array(this.#v))
+  }
+
+  static fromCompat(v: StringCompat | BytesCls | StrCls): StrCls {
+    if (v instanceof StrCls) return v
+    if (typeof v === 'string') return new StrCls(v)
+    if (v instanceof BytesCls) return new StrCls(uint8ArrayToUtf8(v.asUint8Array()))
+    internalError(`Cannot convert ${nameOfType(v)} to str`)
+  }
+
+  asAlgoTs(): str {
+    return this as unknown as str
   }
 }

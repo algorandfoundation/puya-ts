@@ -12,11 +12,12 @@ import {
   str,
   Account,
 } from '@algorandfoundation/algo-ts'
-import { encodeBytes, makeBigUint, makeBytes, makeNumber, makeStr, makeUint64, makeUInt8Array } from './primitives'
+import { BigUintCls, BytesCls, toExternalValue, StrCls, Uint64Cls, toBytes } from './primitives'
 import { buildOpsImplementation } from './ops-implementation'
 import { Transaction } from './transactions/runtime'
 import { AssertError, avmError, AvmError } from './errors'
 import { AccountCls, ApplicationCls, AssetCls } from './reference'
+import { DeliberateAny } from './typescript-helpers'
 
 export class TestExecutionContext implements internal.ExecutionContext {
   #logs: bytes[] = []
@@ -31,10 +32,12 @@ export class TestExecutionContext implements internal.ExecutionContext {
   }
 
   arrayAt<T>(arrayLike: T[], index: Uint64Compat): T {
-    return arrayLike.at(makeNumber(index)) ?? avmError('Index out of bounds')
+    return arrayLike.at(Uint64Cls.fromCompat(index).asNumber()) ?? avmError('Index out of bounds')
   }
-  arraySlice<T>(arrayLike: T[], start: Uint64Compat, end: Uint64Compat): T[] {
-    return arrayLike.slice(makeNumber(start), makeNumber(end))
+  arraySlice(arrayLike: Uint8Array, start: Uint64Compat, end: Uint64Compat): Uint8Array
+  arraySlice<T>(arrayLike: T[], start: Uint64Compat, end: Uint64Compat): T[]
+  arraySlice<T>(arrayLike: T[] | Uint8Array, start: Uint64Compat, end: Uint64Compat) {
+    return arrayLike.slice(Uint64Cls.getNumber(start), Uint64Cls.getNumber(end)) as DeliberateAny
   }
 
   application(id: uint64): Application {
@@ -45,37 +48,50 @@ export class TestExecutionContext implements internal.ExecutionContext {
   }
 
   log(...args: (Uint64Compat | BytesCompat)[]): void {
-    this.#logs.push(args.map(encodeBytes).reduce((left, right) => left.concat(right)))
+    this.#logs.push(args.map(toBytes).reduce((left, right) => left.concat(right)))
   }
   get ops(): Partial<internal.OpsImplementation> {
     return buildOpsImplementation(this.#txnGroup)
   }
   makeUint64(v: Uint64Compat): uint64 {
-    return makeUint64(v)
+    return Uint64Cls.fromCompat(v).asAlgoTs()
   }
   makeInterpolatedBytes(b: TemplateStringsArray, replacements: BytesCompat[]): bytes {
     return b
       .flatMap((templateText, index) => {
         const replacement = replacements[index]
         if (replacement) {
-          return [makeBytes(templateText), makeBytes(replacement)]
+          return [BytesCls.fromCompat(templateText), BytesCls.fromCompat(replacement)]
         }
-        return [makeBytes(templateText)]
+        return [BytesCls.fromCompat(templateText)]
       })
       .reduce((a, b) => a.concat(b))
+      .asAlgoTs()
+  }
+  makeInterpolatedString(s: TemplateStringsArray, replacements: StringCompat[]): str {
+    return s
+      .flatMap((templateText, index) => {
+        const replacement = replacements[index]
+        if (replacement) {
+          return [StrCls.fromCompat(templateText), StrCls.fromCompat(replacement)]
+        }
+        return [StrCls.fromCompat(templateText)]
+      })
+      .reduce((a, b) => a.concat(b))
+      .asAlgoTs()
   }
   makeString(s: StringCompat): str {
-    return makeStr(s)
+    return StrCls.fromCompat(s).asAlgoTs()
   }
 
   makeBytes(b: BytesCompat): bytes {
-    return makeBytes(b)
+    return BytesCls.fromCompat(b).asAlgoTs()
   }
   makeBigUint(v: BigUintCompat): biguint {
-    return makeBigUint(v)
+    return BigUintCls.fromCompat(v).asAlgoTs()
   }
   get rawLogs() {
-    return this.#logs.map(makeUInt8Array)
+    return this.#logs.map((l) => toExternalValue(l))
   }
 
   assert(condition: unknown, message?: string): asserts condition {

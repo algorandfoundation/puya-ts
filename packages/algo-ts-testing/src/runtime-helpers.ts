@@ -1,4 +1,4 @@
-import { BigUintCls, isBigUint, isBytes, isUint64, makeBigInt, makeBytes, makeHex, makeUint64, Uint64Cls } from './primitives'
+import { AlgoTsPrimitiveCls, BigUintCls, Uint64Cls } from './primitives'
 import { codeError, internalError } from './errors'
 import { nameOfType } from './util'
 import { DeliberateAny } from './typescript-helpers'
@@ -7,18 +7,15 @@ export function switchableValue(x: unknown): bigint | string | boolean {
   if (typeof x === 'boolean') return x
   if (typeof x === 'bigint') return x
   if (typeof x === 'string') return x
-  if (isBytes(x)) return makeHex(x)
-  if (isUint64(x)) return makeBigInt(x)
-  if (isBigUint(x)) return makeBigInt(x)
+  if (x instanceof AlgoTsPrimitiveCls) return x.valueOf()
   internalError(`Cannot convert ${nameOfType(x)} to switchable value`)
 }
-
-export function wrapLiteral(x: unknown) {
-  if (typeof x === 'boolean') return x
-  if (isBytes(x)) return makeBytes(x)
-  if (isUint64(x)) return makeUint64(x)
-  internalError(`Cannot wrap ${nameOfType(x)}`)
-}
+// export function wrapLiteral(x: unknown) {
+//   if (typeof x === 'boolean') return x
+//   if (isBytes(x)) return makeBytes(x)
+//   if (isUint64(x)) return makeUint64(x)
+//   internalError(`Cannot wrap ${nameOfType(x)}`)
+// }
 
 type BinaryOps = '+' | '-' | '*' | '**' | '/' | '>' | '>=' | '<' | '<=' | '===' | '!==' | '<<' | '>>'
 

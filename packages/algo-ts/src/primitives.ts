@@ -97,7 +97,7 @@ export function Str(value: string): str
 export function Str(value: bytes): str
 export function Str(value: string | bytes | TemplateStringsArray, ...replacements: StringCompat[]): str {
   if (isTemplateStringsArray(value)) {
-    throw new Error('TODO')
+    return ctxMgr.instance.makeInterpolatedString(value, replacements)
   } else {
     return ctxMgr.instance.makeString(value)
   }

@@ -7,6 +7,7 @@ export type ExecutionContext = {
   ops: Partial<OpsImplementation>
   makeUint64(v: Uint64Compat): uint64
   makeInterpolatedBytes(b: TemplateStringsArray, replacements: BytesCompat[]): bytes
+  makeInterpolatedString(b: TemplateStringsArray, replacements: StringCompat[]): str
   makeBytes(b: BytesCompat): bytes
   makeString(s: StringCompat | bytes): str
   makeBigUint(v: BigUintCompat): biguint
@@ -14,6 +15,7 @@ export type ExecutionContext = {
   asset(id: uint64): Asset
   account(address: bytes): Account
   arrayAt<T>(arrayLike: T[], index: Uint64Compat): T
+  arraySlice(arrayLike: Uint8Array, start: Uint64Compat, end: Uint64Compat): Uint8Array
   arraySlice<T>(arrayLike: T[], start: Uint64Compat, end: Uint64Compat): T[]
 
   assert(condition: unknown, message?: string): asserts condition

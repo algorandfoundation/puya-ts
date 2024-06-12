@@ -1,4 +1,4 @@
-import { expect, it, describe } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { TestHarness } from '@algorandfoundation/algo-ts-testing'
 
 describe('When calling the HelloWorldContract', () => {

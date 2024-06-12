@@ -1,5 +1,4 @@
 import { Contract, internal } from '@algorandfoundation/algo-ts'
-import { makeBigInt } from './primitives'
 import { TestExecutionContext } from './test-execution-context'
 import { Transaction } from './transactions/client'
 import { encodeTransactions } from './transactions'
@@ -30,7 +29,14 @@ export class TestHarness<T extends Contract> {
 
       let returnValue: bigint | Error
       try {
-        returnValue = makeBigInt(instance.approvalProgram())
+        const temp = instance.approvalProgram()
+        if (temp === true) {
+          returnValue = 1n
+        } else if (temp === false) {
+          returnValue = 0n
+        } else {
+          returnValue = BigInt(temp.valueOf())
+        }
       } catch (e) {
         if (e instanceof AvmError) {
           returnValue = e
