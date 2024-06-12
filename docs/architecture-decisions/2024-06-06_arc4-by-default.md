@@ -180,9 +180,79 @@ Pros:
 Cons:
 - Not as explicit / does this make it harder for newcomers?
 
+### Option 4 - Hybrid of above options plus additional feedback
+
+ - Only one Contract type
+ - access modifiers are required on all methods (prevents accidental exposure of methods)
+ - override keyword required when overriding base method (gives devs better ux with auto-completion of names and squiggles for typos)
+ - public methods are ABI methods
+ - private and protected methods are subroutines
+ - optional attribute to configure allowable actions and create/not on create behaviour
+ - ABI routing only occurs if no `approvalProgram`, or if `super.approvalProgram()` is invoked
+ - `onUnmatchedRoute` called if no routing matches, default implementation is to error
+ - New cli parameter `--abi-version arc4` (arc4 is default and only option) is responsible for triggering arc4 behaviour
+
+
+```ts
+export default class DemoContract extends Contract {
+    constructor() {
+        super()
+        // Constructor is called implicitly on application created before any other method
+        
+    }
+    
+    public override approvalProgram(): boolean {
+        // abi method routing happens when we call `super.approvalProgram()`. We 
+        // can omit the call to have no routing or just not override `approvalProgram()` at all 
+        // to have default routing.
+        return super.approvalProgram()
+    }
+    
+    public override clearStateProgram(): boolean {
+        // Option to override clear state program or omit to use default implementation (return 1) 
+        return super.clearStateProgram()
+    }
+    
+    @arc4.abimethod({ create: 'require' })
+    public createApplication(): void {        
+    }
+    
+    @arc4.baremethod({ create: 'require', allowActions: ['NoOp'] })
+    public createBare(): void {
+        // Called when Transaction.nummAppArgs is 0 
+    }
+
+    // @arc4.abimethod({ allowActions: ['NoOp'] }) is implied 
+    public generalNoOpMethod(): void {
+    }
+
+    @arc4.abimethod({allowActions: ['NoOp', 'OptIn']})
+    public specificOnCompletion(): void {
+    }
+    
+    // Force override keyword because it gives us an error if the method does not exist on the base type (eg. because there's a typo)
+    // 'protected' because this method should not be directly callable (ie. not an abi method)
+    protected override onUnmatchedRoute(): void {
+        // Called for any non-clearstate on completion action where Transaction.applicationArgs(0) did not match any abi method selector
+        // base implementation raises an error
+    }
+
+    private privateSubroutine(): void {
+    }
+}
+```
+
+Pros:
+ - Guides newcomers into the pit of success (using arc4)
+ - Allows power users to breakout of arc4 by default with minimal fuss (and full control)
+
+Cons:
+ - Different to algopy approach unless algopy is updated to match (which would be a breaking change)
+ - Possibly requires changes to puya to support some of the behaviour
+
 ## Preferred options
 
-Option 3 is the preferred option as it balances familiarity with Algorand Python whilst embracing the language features of TypeScript (access modifier keywords). It also presents a simple migration path for existing TealScript contracts. A combination of jsdocs describing the different base contracts and their purpose, and compiler output can be used to reduce the likelihood of new developers accidentally using the wrong base type.
+Option 4 is the preferred option as it best balances all requirements, pros, and cons
 
 ## Selected option
 
