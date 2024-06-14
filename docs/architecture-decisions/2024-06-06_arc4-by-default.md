@@ -66,7 +66,7 @@ Cons:
 
 ### Option 2 - Minimum Viable Smart Contract by default, ARC4 is opt in
 
-The approach taken by Alogrand Python is that a smart contract which extends the base `algopy.Contract` class will inherit no behaviour beyond that described in the context above (ie. `onComplete == clearState ? clearStateProgram() : approvalProgram()`).  This means the minimum viable smart contract (MVSC) would look something like this:
+The approach taken by Algorand Python is that a smart contract which extends the base `algopy.Contract` class will inherit no behaviour beyond that described in the context above (ie. `onComplete == clearState ? clearStateProgram() : approvalProgram()`).  This means the minimum viable smart contract would look something like this:
 
 ```python
 # Contract which always approves
@@ -81,7 +81,7 @@ class MVContract(Contract):
 a TypeScript version might look like this:
 
 ```ts
-export default class HelloWorldContract extends Contract {
+export default class MVContract extends Contract {
    approvalProgram(): boolean {
       return true
    }
@@ -93,7 +93,7 @@ export default class HelloWorldContract extends Contract {
 
 ```
 
-An ARC4 compliant contract would instead extend the `algopy.arc4.ARC4Contract` base class. Each method must be decorated with either `@abimethod` or `@subroutine` to indicate a public or private method. 
+An ARC4 compliant contract would instead extend the `algopy.arc4.ARC4Contract` base class. In Algorand Python, each method must be decorated with either `@abimethod` or `@subroutine` to indicate a public or private method respectively. 
 
 ```python
 class HelloWorldContract(ARC4Contract):
@@ -102,7 +102,7 @@ class HelloWorldContract(ARC4Contract):
         return "Hello, " + name
 ```
 
-or in TypeScript
+a TypeScript version might look like this:
 
 ```ts
 export default class HelloWorldContract extends arc4.Arc4Contract {
@@ -114,17 +114,22 @@ export default class HelloWorldContract extends arc4.Arc4Contract {
 ```
 
 Pros:
-- ARC4 support is built on top of a framework that can function in its own right giving us greater confidence we can support the next ARC if/when it comes, without breaking existing ARC4 support
-- MVSC gives power users absolute control without ARC4 getting in the way
+- ARC4 support is built on top of a framework that can function in its own right giving us greater confidence we can support new ARC standards if/when they come, without breaking existing ARC4 support
+- Minimum viable smart contract gives power users absolute control of the AVM without ARC4 getting in the way
 - Explicit decorators reduce the likelihood of accidentally exposing a method publicly.
 
 Cons:
 - A developer needs to consciously choose ARC4 which means they need to be aware of it beforehand, and require a basic understanding of its workings
 - Requiring decorators on all methods adds noise to what might otherwise be a very terse contract.
 
-### Option 3 - Option 2, but use public/private keywords
+### Option 3 - Option 2, but using public/private keywords
 
-The specific characteristics of python that lead to mandatory decorators on all methods do not apply to the TypeScript solution. Whilst still keeping the separation of ARC4 from option 2, we could use TypeScript's `public` and `private` keywords to flag an ABI method versus a private subroutine. The decorator would still be used in cases where a non-default on completion action was required but otherwise optional. We can require explicit access keywords (`public`/`private`/`protected`) on all methods to work around the potential security issues of public by default. This behaviour would only apply when extending `arc4.Arc4Contract`. Access modifiers on a contract which extends the base `Contract` would have no implicit effect.
+The specific characteristics of Python that lead to mandatory decorators on all Algorand Python methods do not apply to TypeScript. Whilst still keeping the separation of ARC4 from option 2, we could use TypeScript's `public` and `private` keywords to flag an ABI method versus a private subroutine. This behaviour aligns nicely to the concept of a deployed app being equivalent to an [instance of the class](https://algorandfoundation.github.io/puya/lg-structure.html#contract-classes). The decorator would still be used in cases where a non-default on completion action was required but otherwise optional. We can require (via the compiler) explicit access keywords (`public`/`private`/`protected`) on all methods to work around the potential security issues of public by default. This behaviour would only apply when extending `arc4.Arc4Contract`. Access modifiers on a contract which extends the base `Contract` would have no implicit effect outside of controlling code reuse with inheritance.
+
+ - Access modifiers are required on all methods (prevents accidental exposure of methods)
+ - public methods are ABI methods
+ - private and protected methods are subroutines
+ - optional attribute to configure allowable actions and create/not on create behaviour
 
 ```ts
 export class NonAbiContract extends Contract {
@@ -142,7 +147,6 @@ export default class DemoContract extends arc4.Arc4Contract {
     constructor() {
         super()
         // Constructor is called implicitly on application created before any other method
-        
     }
     
     @arc4.abimethod({ create: 'require' })
@@ -162,13 +166,6 @@ export default class DemoContract extends arc4.Arc4Contract {
     public specificOnCompletion(): void {
     }
     
-    // Force override keyword because it gives us an error if the method does not exist on the base type (eg. because there's a typo)
-    // 'protected' because this method should not be directly callable (ie. not an abi method)
-    protected override onUnmatchedRoute(): void {
-        // Called for any non-clearstate on completion action where Transaction.applicationArgs(0) did not match any abi method selector
-        // base implementation raises an error
-    }
-
     private privateSubroutine(): void {
     }
 }
@@ -178,41 +175,37 @@ Pros:
 - Access modifier keywords are idiomatic TypeScript
 
 Cons:
-- Not as explicit / does this make it harder for newcomers?
+- A developer needs to consciously choose ARC4 which means they need to be aware of it beforehand, and require a basic understanding of its workings
 
-### Option 4 - Hybrid of above options plus additional feedback
+### Option 4 - Hybrid of Options 1 and 3
 
- - Only one Contract type
- - access modifiers are required on all methods (prevents accidental exposure of methods)
- - override keyword required when overriding base method (gives devs better ux with auto-completion of names and squiggles for typos)
- - public methods are ABI methods
- - private and protected methods are subroutines
- - optional attribute to configure allowable actions and create/not on create behaviour
- - ABI routing only occurs if no `approvalProgram`, or if `super.approvalProgram()` is invoked
- - `onUnmatchedRoute` called if no routing matches, default implementation is to error
- - New cli parameter `--abi-version arc4` (arc4 is default and only option) is responsible for triggering arc4 behaviour
+ - ARC-4 is default (like option 1)
+     - If in the future there is a logical different ARC standard that makes sense to be the default it would be possible to add either a new CLI parameter or different base class that could be used to trigger that different behaviour
+     - `BaseContract` available as escape hatch to control raw AVM behaviour (matching the functionality exposed by the Puya compiler architecture)
+ - There is an escape hatch to do fallback routing (like option 1, although the suggested approach differs; see below)
+     - `onUnmatchedRoute` called if no routing matches, default implementation is to error
+ - Constructor allows for common initialisation logic and provides the "app is equivalent to a class instance" behaviour
+ - Access modifiers are required on all methods and determine subroutine vs ARC-4 method (Like options 1 and 3)
+ - Optional attribute to configure allowable actions and create/not on create behaviour
 
 
 ```ts
+export class NonAbiContract extends BaseContract {
+    public override approvalProgram(): boolean {
+        // Freedom to implement whatever routing makes sense in this method. The only requirement is to return boolean | uint64
+        return true
+    }
+    public override clearStateProgram(): boolean {
+        return true
+    }
+}
+
 export default class DemoContract extends Contract {
     constructor() {
         super()
         // Constructor is called implicitly on application created before any other method
-        
     }
-    
-    public override approvalProgram(): boolean {
-        // abi method routing happens when we call `super.approvalProgram()`. We 
-        // can omit the call to have no routing or just not override `approvalProgram()` at all 
-        // to have default routing.
-        return super.approvalProgram()
-    }
-    
-    public override clearStateProgram(): boolean {
-        // Option to override clear state program or omit to use default implementation (return 1) 
-        return super.clearStateProgram()
-    }
-    
+
     @arc4.abimethod({ create: 'require' })
     public createApplication(): void {        
     }
@@ -231,7 +224,9 @@ export default class DemoContract extends Contract {
     }
     
     // Force override keyword because it gives us an error if the method does not exist on the base type (eg. because there's a typo)
-    // 'protected' because this method should not be directly callable (ie. not an abi method)
+    //   'protected' because this method should not be directly callable (ie. not an abi method)
+    // Having this as a single method rather than an attribute like in Option 1 let's the semantics of the language
+    //   guide us on how to use this functionality
     protected override onUnmatchedRoute(): void {
         // Called for any non-clearstate on completion action where Transaction.applicationArgs(0) did not match any abi method selector
         // base implementation raises an error
@@ -243,12 +238,11 @@ export default class DemoContract extends Contract {
 ```
 
 Pros:
- - Guides newcomers into the pit of success (using arc4)
- - Allows power users to breakout of arc4 by default with minimal fuss (and full control)
+ - Guides newcomers into the pit of success (using arc4 by default, obvious unmatched extension behaviour, constructor )
+ - Allows power users to breakout of ARC-4 by default with minimal fuss (and full control) (extending `BaseContract`)
 
 Cons:
- - Different to algopy approach unless algopy is updated to match (which would be a breaking change)
- - Possibly requires changes to puya to support some of the behaviour
+ - Slight breaking change to TEALScript, but minimal and only for advanced use case that is rarely used (fallback router)
 
 ## Preferred options
 
