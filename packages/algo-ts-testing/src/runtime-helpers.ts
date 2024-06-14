@@ -2,7 +2,7 @@ import { AlgoTsPrimitiveCls, BigUintCls, Uint64Cls } from './primitives'
 import { codeError, internalError } from './errors'
 import { nameOfType } from './util'
 import { DeliberateAny } from './typescript-helpers'
-
+export { attachAbiMetadata } from './abi-metadata'
 export function switchableValue(x: unknown): bigint | string | boolean {
   if (typeof x === 'boolean') return x
   if (typeof x === 'bigint') return x
