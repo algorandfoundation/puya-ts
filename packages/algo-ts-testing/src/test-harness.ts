@@ -1,4 +1,4 @@
-import { Contract, internal } from '@algorandfoundation/algo-ts'
+import { BaseContract, Contract, internal } from '@algorandfoundation/algo-ts'
 import { TestExecutionContext } from './test-execution-context'
 import { Transaction } from './transactions/client'
 import { encodeTransactions } from './transactions'
@@ -11,12 +11,12 @@ export type SimulateResult = {
   returnValue: bigint | Error
 }
 
-type AsyncContract<T extends Contract> = () => Promise<{ default: { new (): T } }>
+type AsyncContract<T extends BaseContract> = () => Promise<{ default: { new (): T } }>
 
-export class TestHarness<T extends Contract> {
+export class TestHarness<T extends BaseContract> {
   protected constructor(private module: AsyncContract<T>) {}
 
-  public static for<T extends Contract>(contract: AsyncContract<T>): TestHarness<T> {
+  public static for<T extends BaseContract>(contract: AsyncContract<T>): TestHarness<T> {
     return new TestHarness(contract)
   }
 

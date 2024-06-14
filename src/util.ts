@@ -1,4 +1,4 @@
-import { CodeError, NotSupported } from './errors'
+import { CodeError } from './errors'
 import { SourceLocation } from './awst/source-location'
 import { TextDecoder } from 'node:util'
 

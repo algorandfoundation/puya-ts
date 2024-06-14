@@ -1,10 +1,14 @@
 import { AnyFunction, DeliberateAny } from '../typescript-helpers'
-
+import { BaseContract } from '../base-contract'
 export * from './encoded-types'
-const InternalSymbol = Symbol('Internal')
-export class Arc4Contract {
-  approvalProgram(): typeof InternalSymbol {
-    return InternalSymbol
+
+export class Contract extends BaseContract {
+  override approvalProgram(): boolean {
+    return true
+  }
+
+  override clearState(): boolean {
+    return true
   }
 }
 
@@ -55,7 +59,7 @@ export type AbiMethodConfig =
       name?: string
     }
 export function abimethod(config?: AbiMethodConfig) {
-  return function (target: AnyFunction, ctx: ClassMethodDecoratorContext<Arc4Contract>) {}
+  return function (target: AnyFunction, ctx: ClassMethodDecoratorContext<Contract>) {}
 }
 
 export type BareMethodConfig = {
@@ -71,5 +75,5 @@ export type BareMethodConfig = {
   onCreate?: CreateOptions
 }
 export function baremethod(config?: BareMethodConfig) {
-  return function (target: () => DeliberateAny, ctx: ClassMethodDecoratorContext<Arc4Contract>) {}
+  return function (target: () => DeliberateAny, ctx: ClassMethodDecoratorContext<Contract>) {}
 }

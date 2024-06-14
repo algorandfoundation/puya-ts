@@ -1,4 +1,4 @@
-import { DeliberateAny, Props } from '../typescript-helpers'
+import { DeliberateAny } from '../typescript-helpers'
 
 export type WTypeClass = { new (...args: DeliberateAny[]): WType }
 
@@ -14,7 +14,7 @@ export class WType {
   readonly scalar: boolean
 
   equals(other: WType): boolean {
-    return other.name == this.name
+    return other.name === this.name
   }
 
   toString(): string {

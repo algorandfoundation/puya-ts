@@ -1,8 +1,6 @@
 import { createColorFormatter } from '@makerx/color-console'
 import { SourceLocation } from './awst/source-location'
 import chalk from 'chalk'
-import ts from 'typescript'
-import Log = ts.server.typingsInstaller.Log
 import { CodeError, PuyaError, TodoError } from './errors'
 
 const colorLogger = {

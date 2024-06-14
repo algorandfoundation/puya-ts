@@ -2,7 +2,7 @@ import { SourceFileContext, UniqueNameResolver } from './context'
 import { ModuleStatements } from '../visitor/syntax-names'
 import * as awst from '../awst/nodes'
 import ts from 'typescript'
-import { CodeError, TodoError } from '../errors'
+import { CodeError } from '../errors'
 import { BaseVisitor, Visitor, accept } from '../visitor/visitor'
 import { ContractVisitor } from './contract-visitor'
 import { FunctionVisitor } from './function-visitor'
@@ -25,13 +25,18 @@ export class SourceFileVisitor extends BaseVisitor<SourceFileContext> implements
     }
   }
 
+  visitTypeAliasDeclaration(_node: ts.TypeAliasDeclaration): StatementOrDeferred {
+    // Ignore these for now - but maybe we need to do something with them when it comes to structs
+    return []
+  }
+
   visitFunctionDeclaration(node: ts.FunctionDeclaration): StatementOrDeferred {
     return () => logPuyaExceptions(() => FunctionVisitor.buildSubroutine(this.context, node), this.sourceLocation(node))
   }
 
   public *gatherStatements(): Generator<awst.ModuleStatement, void, void> {
     for (const statements of this._moduleStatements) {
-      if (typeof statements == 'function') {
+      if (typeof statements === 'function') {
         for (const s of expandMaybeArray(statements())) {
           yield s
         }

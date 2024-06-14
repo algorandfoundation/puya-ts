@@ -1,9 +1,7 @@
 import { SourceLocation } from '../../awst/source-location'
 import { awst, wtypes } from '../../awst'
 import { CodeError, NotSupported } from '../../errors'
-import { WType } from '../../awst/wtypes'
 import { PType } from '../ptypes'
-import { Node } from '../../awst/nodes'
 
 export enum BuilderComparisonOp {
   eq = '==',

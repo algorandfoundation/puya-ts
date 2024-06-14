@@ -39,11 +39,3 @@ export class LogFunctionBuilder extends FunctionBuilder {
     )
   }
 }
-
-function convertToBytes(expr: awst.Expression, sourceLocation: SourceLocation): awst.Expression {
-  if (expr.wtype.equals(wtypes.bytesWType)) return expr
-  if (expr.wtype.equals(wtypes.boolWType)) return intrinsicFactory.itob({ value: expr, sourceLocation })
-  if (expr.wtype.equals(wtypes.uint64WType)) return intrinsicFactory.itob({ value: expr, sourceLocation })
-
-  throw new CodeError(`Expression ${expr.wtype} has no implicit conversion to bytes`)
-}

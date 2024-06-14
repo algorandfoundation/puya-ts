@@ -1,7 +1,7 @@
 import ts from 'typescript'
 import { DeliberateAny } from '../../../../src/typescript-helpers'
 import { getPropertyNameAsString } from './helpers'
-import { TransformerError } from './errors'
+import { TypeReflector } from './type-reflector'
 
 const factory = ts.factory
 export const nodeFactory = {
@@ -29,14 +29,14 @@ export const nodeFactory = {
     )
   },
 
-  attachMetaData(classIdentifier: ts.Identifier, method: ts.MethodDeclaration) {
+  attachMetaData(classIdentifier: ts.Identifier, method: ts.MethodDeclaration, typeReflector: TypeReflector) {
     const methodName = getPropertyNameAsString(method.name)
     const metadata = factory.createObjectLiteralExpression([
       factory.createPropertyAssignment('methodName', methodName),
       factory.createPropertyAssignment('methodSelector', methodName),
       factory.createPropertyAssignment(
         'argTypes',
-        factory.createArrayLiteralExpression(method.parameters.map((p) => factory.createStringLiteral(p.type?.getText() ?? 'n/a'))),
+        factory.createArrayLiteralExpression(method.parameters.map((p) => factory.createStringLiteral(typeReflector.reflectType(p)))),
       ),
       factory.createPropertyAssignment('returnType', factory.createStringLiteral(method.type?.getText() ?? 'n/a')),
     ])

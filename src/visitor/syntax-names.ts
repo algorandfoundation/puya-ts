@@ -371,7 +371,12 @@ export const getSyntaxName = (kind: ts.SyntaxKind): string => {
 
 export type SyntaxKindNameType = typeof SyntaxKindName
 
-export type ModuleStatements = ts.ClassDeclaration | ts.ImportDeclaration | ts.VariableStatement | ts.FunctionDeclaration
+export type ModuleStatements =
+  | ts.ClassDeclaration
+  | ts.ImportDeclaration
+  | ts.VariableStatement
+  | ts.FunctionDeclaration
+  | ts.TypeAliasDeclaration
 
 export type PrimaryExpressions =
   | LiteralExpressions

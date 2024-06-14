@@ -5,7 +5,7 @@ import * as awst from '../awst/nodes'
 import { ContractFragment, ContractMethod } from '../awst/nodes'
 import { ClassElements } from '../visitor/syntax-names'
 import { TodoError } from '../errors'
-import { codeInvariant, invariant } from '../util'
+import { codeInvariant } from '../util'
 import { Constants } from '../constants'
 import { FunctionVisitor } from './function-visitor'
 
@@ -30,7 +30,7 @@ export class ContractVisitor extends BaseVisitor<ContractContext> implements Vis
     codeInvariant(classDec.name, 'Anonymous classes are not supported for contracts', sourceLocation)
     this._className = this.context.textVisitor.accept(classDec.name)
 
-    const isAbstract = Boolean(classDec.modifiers?.some((m) => m.kind == ts.SyntaxKind.AbstractKeyword))
+    const isAbstract = Boolean(classDec.modifiers?.some((m) => m.kind === ts.SyntaxKind.AbstractKeyword))
 
     for (const member of classDec.members) {
       this.accept(member)

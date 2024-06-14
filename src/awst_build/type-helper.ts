@@ -1,10 +1,9 @@
 import ts from 'typescript'
 import { InternalError } from '../errors'
-import { wtypes } from '../awst'
 import { SourceLocation } from '../awst/source-location'
 import { boolPType, FreeSubroutineType, PType, typeRegistry } from './ptypes'
 import { codeInvariant } from '../util'
-import { InstanceBuilder, NodeBuilder } from './eb'
+import { NodeBuilder } from './eb'
 
 export class TypeHelper {
   constructor(private checker: ts.TypeChecker) {}

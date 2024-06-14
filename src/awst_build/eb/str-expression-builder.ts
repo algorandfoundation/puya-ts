@@ -1,4 +1,3 @@
-import { WType } from '../../awst/wtypes'
 import { SourceLocation } from '../../awst/source-location'
 import { nodeFactory } from '../../awst/node-factory'
 import { CodeError } from '../../errors'
@@ -6,9 +5,9 @@ import { intrinsicFactory } from '../../awst/intrinsic-factory'
 import { requireExpressionsOfType } from './util'
 import { awst, wtypes } from '../../awst'
 import { FunctionBuilder, InstanceBuilder, InstanceExpressionBuilder, NodeBuilder } from './index'
-import { bytesPType, PType, strPType } from '../ptypes'
+import { bytesPType, strPType } from '../ptypes'
 import { LiteralExpressionBuilder } from './literal-expression-builder'
-import { BytesBinaryOperation, BytesBinaryOperator } from '../../awst/nodes'
+import { BytesBinaryOperator } from '../../awst/nodes'
 
 export class StrFunctionBuilder extends FunctionBuilder {
   taggedTemplate(head: string, spans: ReadonlyArray<readonly [InstanceBuilder, string]>, sourceLocation: SourceLocation): InstanceBuilder {
