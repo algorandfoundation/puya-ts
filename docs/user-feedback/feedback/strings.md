@@ -2,6 +2,8 @@
 
 Feedback for the [strings walkthrough](./../walkthroughs/strings.md).
 
+The corresponding ADR is [here](../../architecture-decisions/2024-05-21_primitive-bytes-and-strings.md).
+
 ## Joe Polny (@joe-p)
 
 ### Option 5: Extended String Prototype With Branding

@@ -122,7 +122,3 @@ concatStrings(a: str, b: str): string {
 ### Questions
 
 - How do you feel about not being able to use the `string` class or string literals?
-
-# Corresponding ADR(s)
-
-- [Primitive Bytes and Strings](../../architecture-decisions/2024-05-21_primitive-bytes-and-strings.md)
