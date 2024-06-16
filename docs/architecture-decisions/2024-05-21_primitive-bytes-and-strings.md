@@ -164,15 +164,30 @@ Whilst we still can't accept string literals on their own, the tagged template i
 
 Having `bytes` and `str` behave like a primitive value type (value equality) whilst not _actually_ being a primitive is not strictly semantically compatible with EcmaScript however the lowercase type names (plus factory with no `new` keyword) communicates the intention of it being a primitive value type and there is an existing precedence of introducing new value types to the language in a similar pattern (`bigint` and `BigInt`). Essentially - if EcmaScript were to have a primitive bytes type, this is most likely what it would look like.
 
+
+### Option 5 - Use branded strings with extended prototype
+
+Option 2 has the developer experience that will be the most familiar to developers (coming from TypeScript or TEALScript), but suffers from semantic incompatability. In paticular, index-based functions would not work as expected (or be very expensive to implement) because EcmaScript indexes strings by characters, not bytes.
+
+For example, `'á'[0]` would return `'á'` in EcmaScript, but would return `0xC3` in TEALScript because it gets the first byte (and this character is a two byte sequence).
+
+To solve this, we could extend the prototype of `string` to have byte-specific functions. For example, `.getByte(i)` instead of `[i]` and `.sliceBytes(i)` instead of `.slice(i)`. If a developer tries to use the character-based functions, the compiler can throw an error. We can also show an error in the IDE via TypeScript plugins.
+
+If the AVM were to ever support character-based operations, we could enable the character-based functions.
+
+The main downside of this approach is "extra" methods in the `string` prototype that are not applicable to the AVM. This, however, is currently how TEALScript functions with many native types and it has not been a problem for developers (provided the error is clear). As mentioned, this can also be solved at the IDE level via TypeScript plugins.
+
 ## Preferred option
 
 Option 3 can be excluded because the requirement for a `new` keyword feels unnatural for representing a primitive value type. 
 
 Option 1 and 2 are not preferred as they make maintaining semantic compatability with EcmaScript impractical.
 
+Option 5 offers the most familiar developer experience at the expensive of extra methods in the prototype.
+
 Option 4 gives us the most natural feeling api whilst still giving us full control over the api surface. It doesn't support the `+` operator, but supports interpolation and `.concat` which gives us most of what `+` provides other than augmented assignment (ie. `+=`). 
 
-We should select an appropriate name for the type representing an AVM string. It should not conflict with the semantically incompatible EcmaScript type `string`. 
+Option 4 would also require us to select an appropriate name for the type representing an AVM string. It should not conflict with the semantically incompatible EcmaScript type `string`. 
  - `str`/`Str`: 
    - ✅ Short
    - ✅ obvious what it is
@@ -193,4 +208,4 @@ We should select an appropriate name for the type representing an AVM string. It
 
 ## Selected option
 
-Option 4 has been selected as the best option
+TBD
