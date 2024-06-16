@@ -98,6 +98,8 @@ concatStrings(str1: string, str2: string): string {
 
 ### Using Custom Class
 
+**Note:** The exact type name may be anything. Some examples: `str`, `utf8`, `utf8String`. In the examples, `str` is used.
+
 ```ts
 getValueAtIndex(str: str, idx: str): str {
     return Str`The value at ${idx} is ${str[idx]}`;
