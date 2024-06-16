@@ -204,7 +204,7 @@ Option 4 would also require us to select an appropriate name for the type repres
    - ✅ very obvious what it is
    - ✅ obvious how it differs to `string`
 
-
+Option 5 would be the preferred option if we were to prioritize developer experience whereas option 4 would be best if we priotized control over the prototype.
 
 ## Selected option
 
