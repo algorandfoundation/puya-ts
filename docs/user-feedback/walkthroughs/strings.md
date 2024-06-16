@@ -5,16 +5,16 @@ This walkthrough will cover how strings are handled in Algorand TypeScript.
 # TypeScript Equivalent
 
 ```ts
-getValueAtIndex(str: string, idx: number): string {
-    return `The value at ${idx} is ${str[idx]}`;
+getValueAtIndex(input: string, idx: number): string {
+    return `The value at ${idx} is ${input[idx]}`;
 }
 
 helloWorld(): string {
     return "Hello, World!";
 }
 
-concatStrings(str1: string, str2: string): string {
-    return str1 + str2;
+concatStrings(a: string, b: string): string {
+    return a + b;
 }
 ```
 
@@ -49,24 +49,27 @@ The same can be said for other character-based operations, such as `length`, `sl
 ### Attempting Regular TypeScript
 
 ```ts
-getValueAtIndex(str: string, idx: number): string {
-    return `The value at ${idx} is ${str[idx]}`; // Compiler Error: Algorand TypeScript does not support usage of [] on strings
+getValueAtIndex(input: string, idx: number): string {
+    return `The value at ${idx} is ${input[idx]}`; // Compiler Error: Algorand TypeScript does not support usage of [] on strings
 }
+
+// The following functions work as-is
 
 helloWorld(): string {
     return "Hello, World!";
 }
 
-concatStrings(str1: string, str2: string): string {
-    return str1 + str2;
+concatStrings(a: string, b: string): string {
+    return a + b;
 }
 ```
 
 ### Using Byte-Based Prototype Functions
 
 ```ts
-getValueAtIndex(str: string, idx: number): string {
-    return `The value at ${idx} is ${str.getByte(idx)}`;
+getValueAtIndex(input: string, idx: number): string {
+    // Note use of .getByte instead of []
+    return `The value at ${idx} is ${input.getByte(idx)}`;
 }
 ```
 
@@ -83,34 +86,36 @@ getValueAtIndex("¡Hola!", 0); // "The value at 0 is \xC2"
 ### Attempting Regular TypeScript
 
 ```ts
-getValueAtIndex(str: string, idx: number): string {
-    return `The value at ${idx} is ${str[idx]}`; // Compiler Error: string is not supported by Algorand TypeScript
+getValueAtIndex(input: string, idx: number): string {
+    return `The value at ${idx} is ${input[idx]}`; // Compiler Error: string is not supported by Algorand TypeScript
 }
 
 helloWorld(): string {
     return "Hello, World!"; // Compiler Error: string is not supported by Algorand TypeScript
 }
 
-concatStrings(str1: string, str2: string): string {
-    return str1 + str2; // Compiler Error: string is not supported by Algorand TypeScript
+concatStrings(a: string, b: string): string {
+    return a + b; // Compiler Error: string is not supported by Algorand TypeScript
 }
 ```
 
 ### Using Custom Class
 
-**Note:** The exact type name may be anything. Some examples: `str`, `utf8`, `utf8String`. In the examples, `str` is used.
+**Note:** The exact type name may be anything. Some examples: `str`, `utf8`, `utf8String`. In the examples, `str` is used
 
 ```ts
-getValueAtIndex(str: str, idx: str): str {
-    return Str`The value at ${idx} is ${str[idx]}`;
+getValueAtIndex(input: str, idx: uint64): str {
+    // Instead of string literals, we used a tagged template
+    return Str`The value at ${idx} is ${input[idx]}`;
 }
 
 helloWorld(): string {
     return Str`Hello, World!`;
 }
 
-concatStrings(str1: str, str2: str): string {
-    return concat(str1, str2);
+concatStrings(a: str, b: str): string {
+    // Instead of using the `+` operator, we used a custom function
+    return concat(a, b);
 }
 ```
 
