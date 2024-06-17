@@ -1,6 +1,6 @@
 import typescript from '@rollup/plugin-typescript'
 import type { RollupOptions } from 'rollup'
-import { puyaTsTransformer } from '@algorandfoundation/algo-ts-testing/test-transformer'
+import { puyaTsTransformer } from '../src/test-transformer'
 
 const config: RollupOptions = {
   input: ['examples/hello-world-abi/contract.algo.ts', 'examples/hello-world/contract.algo.ts'],

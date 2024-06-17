@@ -1,6 +1,6 @@
 import { defineConfig } from 'vitest/config'
 import typescript from "@rollup/plugin-typescript";
-import {puyaTsTransformer} from "@algorandfoundation/algo-ts-testing/test-transformer";
+import {puyaTsTransformer} from "./src/test-transformer";
 
 export default defineConfig({
   resolve: {

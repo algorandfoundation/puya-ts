@@ -1,5 +1,5 @@
 import ts from 'typescript'
-import { DeliberateAny } from '../../../../src/typescript-helpers'
+import { DeliberateAny } from '../typescript-helpers'
 import { getPropertyNameAsString } from './helpers'
 import { TypeReflector } from './type-reflector'
 
