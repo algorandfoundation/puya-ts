@@ -16,7 +16,7 @@ The corresponding ADR is [here](../../architecture-decisions/2024-05-21_primitiv
 ### Option 4: Custom Class
 
 - I don't like not being able to use string literals
-- I don't like not being able to use `+` for concatenation (although I ackknowledge this is minor)
+- I don't like not being able to use `+` for concatenation (although I acknowledge this is minor)
 - This feels rather foreign and verbose
 
 ### Overall Feedback

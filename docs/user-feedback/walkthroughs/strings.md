@@ -50,7 +50,7 @@ The same can be said for other character-based operations, such as `length`, `sl
 
 ```ts
 getValueAtIndex(input: string, idx: number): string {
-    return `The value at ${idx} is ${input[idx]}`; // Compiler Error: Algorand TypeScript does not support usage of [] on strings
+    return `The value at ${idx} is ${input[idx]}`; // IDE & Compiler Error: Algorand TypeScript does not support usage of [] on strings
 }
 
 // The following functions work as-is
@@ -87,15 +87,15 @@ getValueAtIndex("¡Hola!", 0); // "The value at 0 is \xC2"
 
 ```ts
 getValueAtIndex(input: string, idx: number): string {
-    return `The value at ${idx} is ${input[idx]}`; // Compiler Error: string is not supported by Algorand TypeScript
+    return `The value at ${idx} is ${input[idx]}`; // IDE & Compiler Error: string is not supported by Algorand TypeScript
 }
 
 helloWorld(): string {
-    return "Hello, World!"; // Compiler Error: string is not supported by Algorand TypeScript
+    return "Hello, World!"; // IDE & Compiler Error: string is not supported by Algorand TypeScript
 }
 
 concatStrings(a: string, b: string): string {
-    return a + b; // Compiler Error: string is not supported by Algorand TypeScript
+    return a + b; // IDE & Compiler Error: string is not supported by Algorand TypeScript
 }
 ```
 
