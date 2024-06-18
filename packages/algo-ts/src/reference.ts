@@ -4,11 +4,15 @@ import { ctxMgr } from './execution-context'
 export type Account = {
   readonly bytes: bytes
 }
-export function Account(address: bytes): Account {
+export function Account(): Account
+export function Account(address: bytes): Account
+export function Account(address?: bytes): Account {
   return ctxMgr.instance.account(address)
 }
 
-export function Asset(assetId: uint64): Asset {
+export function Asset(): Asset
+export function Asset(assetId: uint64): Asset
+export function Asset(assetId?: uint64): Asset {
   return ctxMgr.instance.asset(assetId)
 }
 /**

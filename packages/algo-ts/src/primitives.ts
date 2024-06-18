@@ -50,11 +50,14 @@ export type bytes = {
   at(i: Uint64Compat): bytes
 
   concat(other: BytesCompat): bytes
+
+  asStr(): str
 } & symbol
 
 export function Bytes(value: TemplateStringsArray, ...replacements: BytesCompat[]): bytes
 export function Bytes(value: BytesCompat): bytes
-export function Bytes(value: BytesCompat | TemplateStringsArray, ...replacements: BytesCompat[]): bytes {
+export function Bytes(): bytes
+export function Bytes(value?: BytesCompat | TemplateStringsArray, ...replacements: BytesCompat[]): bytes {
   if (isTemplateStringsArray(value)) {
     return ctxMgr.instance.makeInterpolatedBytes(value, replacements)
   } else {
@@ -87,18 +90,37 @@ export interface BytesBacked {
 
 export type str = {
   readonly bytes: bytes
-
+  concat(other: StringCompat): str
   startsWith(searchString: StringCompat): boolean
   endsWith(searchString: StringCompat): boolean
 }
 
 export function Str(value: TemplateStringsArray, ...replacements: StringCompat[]): str
-export function Str(value: string): str
+export function Str(value: StringCompat): str
 export function Str(value: bytes): str
-export function Str(value: string | bytes | TemplateStringsArray, ...replacements: StringCompat[]): str {
+export function Str(): str
+export function Str(value?: StringCompat | bytes | TemplateStringsArray, ...replacements: StringCompat[]): str {
   if (isTemplateStringsArray(value)) {
     return ctxMgr.instance.makeInterpolatedString(value, replacements)
   } else {
     return ctxMgr.instance.makeString(value)
+  }
+}
+
+export class StrBuilder {
+  #value: str
+  constructor()
+  constructor(initialValue: StringCompat)
+  constructor(initialValue?: StringCompat) {
+    this.#value = initialValue ? Str(initialValue) : Str()
+  }
+
+  append(value: StringCompat): StrBuilder {
+    this.#value = this.#value.concat(value)
+    return this
+  }
+
+  get value(): str {
+    return this.#value
   }
 }

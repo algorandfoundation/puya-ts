@@ -1,4 +1,13 @@
-import { BoolConstant, BytesConstant, BytesEncoding, concreteNodes, IntegerConstant, StringConstant } from './nodes'
+import {
+  BoolConstant,
+  BytesConstant,
+  BytesEncoding,
+  concreteNodes,
+  Expression,
+  IntegerConstant,
+  IntrinsicCall,
+  StringConstant,
+} from './nodes'
 import { DeliberateAny } from '../typescript-helpers'
 import { SourceLocation } from './source-location'
 import * as wtypes from './wtypes'

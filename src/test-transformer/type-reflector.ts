@@ -1,5 +1,6 @@
 import ts from 'typescript'
 import { TransformerError } from './errors'
+import { hasFlags } from '../util'
 
 const { SyntaxKind } = ts
 
@@ -17,6 +18,10 @@ export class TypeReflector {
 
   reflectType(node: ts.ParameterDeclaration): string {
     const type = this.checker.getTypeAtLocation(node)
+
+    if (hasFlags(type.flags, ts.TypeFlags.String)) {
+      return 'string'
+    }
 
     if (type.aliasSymbol) {
       return type.aliasSymbol.name
@@ -68,7 +73,7 @@ export class TypeReflector {
   private getSymbolFullName(symbol: ts.Symbol): [string, string] {
     const declaration = symbol.declarations?.[0]
     if (declaration) {
-      if (symbol.flags & ts.SymbolFlags.Namespace) {
+      if (hasFlags(symbol.flags, ts.SymbolFlags.Namespace)) {
         return [this.getModuleName(declaration), '*']
       }
       return [this.getModuleName(declaration), symbol.name]

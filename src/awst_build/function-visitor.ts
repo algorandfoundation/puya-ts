@@ -21,14 +21,18 @@ import { wrapInBlock } from '../awst/util'
 
 import { UInt64ExpressionBuilder } from './eb/uint64-expression-builder'
 import { LiteralExpressionBuilder } from './eb/literal-expression-builder'
-import { requireInstanceBuilder } from './eb/util'
+import { requireExpressionOfType, requireInstanceBuilder } from './eb/util'
+import { PType } from './ptypes'
 
 export type ContractMethodInfo = {
   className: string
 }
 
 export class FunctionContext extends SourceFileContext {
-  constructor(parent: ContractContext | SourceFileContext) {
+  constructor(
+    parent: ContractContext | SourceFileContext,
+    public readonly returnType: PType,
+  ) {
     super(parent.sourceFile, parent.program, parent.nameResolver.createChild())
   }
 }
@@ -51,7 +55,6 @@ export class FunctionVisitor
     const args = node.parameters.map((p) => this.accept(p))
     codeInvariant(node.body, 'Functions must have a body')
     const body = this.accept(node.body)
-    const returnType = node.type ? this.context.getPTypeForNode(node.type) : this.context.getImplicitReturnType(node)
     if (contractInfo) {
       this._result = new awst.ContractMethod({
         className: contractInfo.className,
@@ -60,7 +63,7 @@ export class FunctionVisitor
         sourceLocation,
         moduleName: this.context.moduleName,
         args,
-        returnType: returnType.wtypeOrThrow,
+        returnType: ctx.returnType.wtypeOrThrow,
         body,
         docstring: undefined,
       })
@@ -70,7 +73,7 @@ export class FunctionVisitor
         sourceLocation,
         moduleName: this.context.moduleName,
         args,
-        returnType: returnType.wtypeOrThrow,
+        returnType: ctx.returnType.wtypeOrThrow,
         body,
         docstring: undefined,
       })
@@ -177,18 +180,13 @@ export class FunctionVisitor
     if (isKeyOf(binaryOpKind, BinaryOpSyntaxes)) {
       return left.binaryOp(right, BinaryOpSyntaxes[binaryOpKind], sourceLocation)
     } else if (isKeyOf(binaryOpKind, AugmentedAssignmentBinaryOp)) {
-      const temp = left.binaryOp(right, AugmentedAssignmentBinaryOp[binaryOpKind], sourceLocation)
-      const assignmentExpression = nodeFactory.assignmentExpression({
-        target: left.resolveLValue(),
-        sourceLocation: sourceLocation,
-        value: temp.resolve(),
-        wtype: temp.resolve().wtype,
-      })
-      return new UInt64ExpressionBuilder(assignmentExpression)
+      return left.augmentedAssignment(right, AugmentedAssignmentBinaryOp[binaryOpKind], sourceLocation)
+    } else if (binaryOpKind === ts.SyntaxKind.EqualsToken) {
+      return left.assign(right, sourceLocation)
     } else if (isKeyOf(binaryOpKind, ComparisonOpSyntaxes)) {
       return left.compare(right, ComparisonOpSyntaxes[binaryOpKind], sourceLocation)
     }
-    throw new NotSupported(`Binary expression with op ${getSyntaxName(binaryOpKind)}}`)
+    throw new NotSupported(`Binary expression with op ${getSyntaxName(binaryOpKind)}`)
   }
   visitConditionalExpression(node: ts.ConditionalExpression): NodeBuilder {
     throw new TodoError()
@@ -296,9 +294,16 @@ export class FunctionVisitor
   }
   visitReturnStatement(node: ts.ReturnStatement): awst.Statement | awst.Statement[] {
     const sourceLocation = this.sourceLocation(node)
+    if (!node.expression) {
+      return nodeFactory.returnStatement({
+        sourceLocation: sourceLocation,
+        value: undefined,
+      })
+    }
+    const returnValue = this.accept(node.expression)
     return nodeFactory.returnStatement({
       sourceLocation: sourceLocation,
-      value: node.expression && requireInstanceBuilder(this.accept(node.expression), sourceLocation).resolve(),
+      value: requireExpressionOfType(returnValue, this.context.returnType, sourceLocation),
     })
   }
   visitWithStatement(node: ts.WithStatement): awst.Statement | awst.Statement[] {
@@ -347,7 +352,9 @@ export class FunctionVisitor
   private accept = <TNode extends ts.Node>(node: TNode) => accept<FunctionVisitor, TNode>(this, node)
 
   public static buildSubroutine(ctx: SourceFileContext, node: ts.FunctionDeclaration): awst.Subroutine {
-    const result = new FunctionVisitor(new FunctionContext(ctx), node, undefined).result
+    const returnType = node.type ? ctx.getPTypeForNode(node.type) : ctx.getImplicitReturnType(node)
+
+    const result = new FunctionVisitor(new FunctionContext(ctx, returnType), node, undefined).result
     invariant(result instanceof awst.Subroutine, "result must be Subroutine'")
     return result
   }
@@ -356,7 +363,8 @@ export class FunctionVisitor
     node: ts.MethodDeclaration,
     contractMethodInfo: ContractMethodInfo,
   ): awst.ContractMethod {
-    const result = new FunctionVisitor(new FunctionContext(ctx), node, contractMethodInfo).result
+    const returnType = node.type ? ctx.getPTypeForNode(node.type) : ctx.getImplicitReturnType(node)
+    const result = new FunctionVisitor(new FunctionContext(ctx, returnType), node, contractMethodInfo).result
     invariant(result instanceof awst.ContractMethod, "result must be ContractMethod'")
     return result
   }

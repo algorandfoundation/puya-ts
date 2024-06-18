@@ -1,8 +1,8 @@
 import ts from 'typescript'
-import { InternalError } from '../errors'
+import { CodeError, InternalError } from '../errors'
 import { SourceLocation } from '../awst/source-location'
 import { boolPType, FreeSubroutineType, PType, typeRegistry } from './ptypes'
-import { codeInvariant } from '../util'
+import { codeInvariant, hasAnyFlag, hasFlags } from '../util'
 import { NodeBuilder } from './eb'
 
 export class TypeHelper {
@@ -11,7 +11,7 @@ export class TypeHelper {
   getUnaliasedSymbolForNode(node: ts.Node) {
     const symbol = this.checker.getSymbolAtLocation(node)
     if (symbol) {
-      if (symbol.flags & ts.SymbolFlags.Alias) {
+      if (hasFlags(symbol.flags, ts.SymbolFlags.Alias)) {
         return this.checker.getAliasedSymbol(symbol)
       }
       return symbol
@@ -27,7 +27,7 @@ export class TypeHelper {
   }
 
   ptypeForTsType(tsType: ts.Type, sourceLocation: SourceLocation): PType {
-    if (tsType.flags & ts.TypeFlags.Boolean) {
+    if (hasFlags(tsType.flags, ts.TypeFlags.Boolean)) {
       return boolPType
     }
 
@@ -39,7 +39,7 @@ export class TypeHelper {
     if (tsType.symbol) {
       return this.pTypeForSymbol(tsType.symbol, sourceLocation)
     }
-    throw new Error()
+    throw new CodeError(`Cannot resolve ptype for tsType ${tsType}`, { sourceLocation })
   }
 
   ptypeForNode(node: ts.Node, sourceLocation: SourceLocation): PType {
@@ -49,7 +49,7 @@ export class TypeHelper {
     }
     const symbol = this.getUnaliasedSymbolForNode(node)
     if (symbol) {
-      if (symbol.flags & ts.SymbolFlags.Type) {
+      if (hasFlags(symbol.flags, ts.SymbolFlags.Type)) {
         this.pTypeForSymbol(symbol, sourceLocation)
       }
       const tsType = this.checker.getTypeOfSymbol(symbol)
@@ -71,7 +71,7 @@ export class TypeHelper {
   private getSymbolFullName(symbol: ts.Symbol, sourceLocation: SourceLocation): [string, string] {
     const declaration = symbol.declarations?.[0]
     if (declaration) {
-      if (symbol.flags & ts.SymbolFlags.Namespace) {
+      if (hasAnyFlag(symbol.flags, ts.SymbolFlags.Namespace) && !hasFlags(symbol.flags, ts.SymbolFlags.Function)) {
         return [this.getModuleName(declaration), '*']
       }
       return [this.getModuleName(declaration), symbol.name]
@@ -91,7 +91,7 @@ export class TypeHelper {
   tryGetBuilderForNode(node: ts.Node, sourceLocation: SourceLocation): NodeBuilder | undefined {
     const symbol = this.getUnaliasedSymbolForNode(node)
     if (symbol) {
-      if (symbol.flags & ts.SymbolFlags.Value) {
+      if (hasAnyFlag(symbol.flags, ts.SymbolFlags.Value)) {
         const ptype = this.tryPTypeForSymbol(symbol, sourceLocation)
         if (ptype) {
           const eb = typeRegistry.tryGetSingletonEb(ptype, sourceLocation)
@@ -100,7 +100,7 @@ export class TypeHelper {
           }
           return undefined
         }
-        if (symbol.flags & ts.SymbolFlags.Function) {
+        if (hasFlags(symbol.flags, ts.SymbolFlags.Function)) {
           const type = this.checker.getTypeOfSymbol(symbol)
           const sig = type.getCallSignatures()
           codeInvariant(sig.length === 1, `User defined functions can only have one call signature`, sourceLocation)

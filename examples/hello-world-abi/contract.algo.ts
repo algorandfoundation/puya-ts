@@ -1,5 +1,4 @@
 import { arc4, str, Str } from '@algorandfoundation/algo-ts'
-type aliasStr = str
 
 abstract class Intermediate extends arc4.Contract {
   sayBananas(): str {
@@ -8,7 +7,7 @@ abstract class Intermediate extends arc4.Contract {
 }
 
 export default class HelloWorldContract extends Intermediate {
-  sayHello(name: str, otherName: aliasStr): str {
+  sayHello(name: str, otherName: str): str {
     return Str`Hello ${name}${otherName}`
   }
 }

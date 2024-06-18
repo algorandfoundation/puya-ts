@@ -17,5 +17,21 @@
       "warn",
       { "ignoreRestSiblings": true, "argsIgnorePattern": "(^_)|(node)", "destructuredArrayIgnorePattern": "^_" }
     ]
-  }
+  },
+  "overrides": [
+    {
+      "files": ["*.algo.ts"],
+      "rules": {
+        "@typescript-eslint/explicit-member-accessibility": [
+          "error",
+          {
+            "accessibility": "off",
+            "overrides": {
+              "methods": "explicit"
+            }
+          }
+        ]
+      }
+    }
+  ]
 }

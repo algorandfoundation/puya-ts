@@ -75,7 +75,7 @@ const tryGetSourceLocationFromError = (error: unknown): SourceLocation | undefin
 
 export const logger = new PuyaLogger()
 
-export const logPuyaExceptions = <T>(action: () => T, sourceLocation: SourceLocation): T => {
+export const logPuyaExceptions = <T>(action: () => T, sourceLocation: SourceLocation): T | undefined => {
   try {
     return action()
   } catch (e) {
@@ -86,7 +86,6 @@ export const logPuyaExceptions = <T>(action: () => T, sourceLocation: SourceLoca
     } else {
       throw e
     }
-    // TODO: Maybe remove this
-    return undefined as T
+    return undefined
   }
 }

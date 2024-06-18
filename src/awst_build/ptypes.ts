@@ -43,6 +43,10 @@ export abstract class PType {
   equals(other: PType): boolean {
     return this.fullName === other.fullName
   }
+
+  toString(): string {
+    return this.name
+  }
 }
 
 class SimpleType extends PType {

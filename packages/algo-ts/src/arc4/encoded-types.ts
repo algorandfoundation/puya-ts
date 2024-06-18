@@ -69,6 +69,12 @@ abstract class Arc4Array<TItem> extends AbiEncoded {
   slice(start: Uint64Compat, end: Uint64Compat): DynamicArray<TItem> {
     return new DynamicArray(...ctxMgr.instance.arraySlice(this.items, start, end))
   }
+  [Symbol.iterator](): IterableIterator<TItem> {
+    return this.items[Symbol.iterator]()
+  }
+  forEach(callbackFn: (item: TItem, index: uint64) => void): void {
+    this.items.forEach(callbackFn)
+  }
 }
 
 export class StaticArray<TItem, TLength extends number> extends Arc4Array<TItem> {

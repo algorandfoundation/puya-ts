@@ -1,4 +1,4 @@
-import { wtypes } from '../../awst'
+import { awst, wtypes } from '../../awst'
 import { BuilderBinaryOp, BuilderComparisonOp, FunctionBuilder, InstanceBuilder, InstanceExpressionBuilder } from './index'
 import { NumericComparison, UInt64BinaryOperator } from '../../awst/nodes'
 import { SourceLocation } from '../../awst/source-location'
@@ -6,8 +6,11 @@ import { nodeFactory } from '../../awst/node-factory'
 import { CodeError, NotSupported } from '../../errors'
 import { requireExpressionOfType } from './util'
 import { tryConvertEnum } from '../../util'
-import { PType, Uint64Function, uint64PType } from '../ptypes'
+import { bigintLiteralPType, PType, Uint64Function, uint64PType } from '../ptypes'
 import { BoolExpressionBuilder } from './bool-expression-builder'
+import { LiteralExpressionBuilder } from './literal-expression-builder'
+import { VoidExpressionBuilder } from './void-expression-builder'
+import { intrinsicFactory } from '../../awst/intrinsic-factory'
 
 export class UInt64FunctionBuilder extends FunctionBuilder {
   get ptype(): PType | undefined {
@@ -23,15 +26,12 @@ export class UInt64FunctionBuilder extends FunctionBuilder {
         }),
       )
     }
-    // const [arg0] = args
-    // if (arg0 instanceof Literal && typeof arg0.value === 'bigint') {
-    //   return new UInt64ExpressionBuilder(
-    //     nodeFactory.uInt64Constant({
-    //       sourceLocation,
-    //       value: arg0.value,
-    //     }),
-    //   )
-    // }
+    if (args.length === 1) {
+      const [arg0] = args
+      if (arg0 instanceof LiteralExpressionBuilder) {
+        return arg0.resolveToPType(uint64PType, sourceLocation)
+      }
+    }
     throw CodeError.unexpectedUnhandledArgs({ sourceLocation })
   }
 }
@@ -77,5 +77,20 @@ export class UInt64ExpressionBuilder extends InstanceExpressionBuilder {
         wtype: wtypes.uint64WType,
       }),
     )
+  }
+
+  assign(other: InstanceBuilder, sourceLocation: SourceLocation): InstanceBuilder {
+    return new UInt64ExpressionBuilder(
+      nodeFactory.assignmentExpression({
+        target: this.resolveLValue(),
+        sourceLocation,
+        value: requireExpressionOfType(other, uint64PType, sourceLocation),
+        wtype: uint64PType.wtypeOrThrow,
+      }),
+    )
+  }
+
+  toBytes(sourceLocation: SourceLocation): awst.Expression {
+    return intrinsicFactory.itob({ value: this.resolve(), sourceLocation })
   }
 }

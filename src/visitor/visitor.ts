@@ -7,6 +7,7 @@ import { BaseContext } from '../awst_build/context'
 import { SourceLocation } from '../awst/source-location'
 import { InstanceBuilder } from '../awst_build/eb'
 import { LiteralExpressionBuilder } from '../awst_build/eb/literal-expression-builder'
+import { AnyExpressionBuilder } from '../awst_build/eb/any-expression-builder'
 
 type UnionToIntersection<T> = (T extends DeliberateAny ? (x: T) => void : never) extends (x: infer TIntersection) => void
   ? TIntersection
@@ -45,13 +46,14 @@ export const accept = <TSelf extends { context: BaseContext }, T extends ts.Node
     const visitFunction = `visit${nodeName}`
     const sourceLocation = visitor.context.getSourceLocation(node)
     if (visitFunction in Object.getPrototypeOf(visitor)) {
-      return logPuyaExceptions(() => Object.getPrototypeOf(visitor)[visitFunction].call(visitor, node), sourceLocation)
+      const result = logPuyaExceptions(() => Object.getPrototypeOf(visitor)[visitFunction].call(visitor, node), sourceLocation)
+      if (result) return result
     } else {
       logger.error(sourceLocation, `Unsupported syntax visitor ${nodeName}`)
     }
   }
   // Return a value so the visitor can keep traversing and potentially discover more errors
-  return {} as DeliberateAny
+  return new AnyExpressionBuilder(visitor.context.getSourceLocation(node)) as DeliberateAny
 }
 
 export abstract class BaseVisitor<TContext extends BaseContext> implements Visitor<LiteralExpressions, InstanceBuilder> {

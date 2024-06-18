@@ -65,6 +65,10 @@ export class BytesExpressionBuilder extends InstanceExpressionBuilder {
     }
     return super.memberAccess(name, sourceLocation)
   }
+
+  toBytes(): awst.Expression {
+    return this.resolve()
+  }
 }
 
 export class ConcatExpressionBuilder extends FunctionBuilder {

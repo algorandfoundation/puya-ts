@@ -88,10 +88,6 @@ export abstract class InstanceBuilder extends NodeBuilder {
   abstract resolve(): awst.Expression
   abstract resolveLValue(): awst.LValue
 
-  buildAssignmentSource(): awst.Expression {
-    return this.resolve()
-  }
-
   get valueType(): wtypes.WType | undefined {
     return undefined
   }
@@ -127,6 +123,16 @@ export abstract class InstanceBuilder extends NodeBuilder {
 
   iterate(sourceLocation: SourceLocation): awst.Expression {
     throw new NotSupported(`Iteration on ${this.typeDescription}`, {
+      sourceLocation,
+    })
+  }
+  assign(other: InstanceBuilder, sourceLocation: SourceLocation): InstanceBuilder {
+    throw new NotSupported(`Assignment to ${this.typeDescription}`, {
+      sourceLocation,
+    })
+  }
+  augmentedAssignment(other: InstanceBuilder, op: BuilderBinaryOp, sourceLocation: SourceLocation): InstanceBuilder {
+    throw new NotSupported(`Augmented assignment to ${this.typeDescription} with ${op}`, {
       sourceLocation,
     })
   }

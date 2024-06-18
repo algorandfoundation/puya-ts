@@ -55,3 +55,6 @@ export const uint8ArrayToUtf8 = (value: Uint8Array): string => {
   const decoder = new TextDecoder()
   return decoder.decode(value)
 }
+
+export const hasFlags = <T extends number>(value: T, flags: T): boolean => (value & flags) === flags
+export const hasAnyFlag = <T extends number>(value: T, flags: T): boolean => Boolean(value & flags)
