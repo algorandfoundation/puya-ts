@@ -18,10 +18,10 @@ export class LiteralExpressionBuilder extends InstanceBuilder {
         sourceLocation: this.sourceLocation,
       })
     }
-    throw new Error('A literal is not valid at this point.')
+    throw new CodeError('A literal is not valid at this point.', { sourceLocation: this.sourceLocation })
   }
   resolveLValue(): LValue {
-    throw new Error('Method not implemented.')
+    throw new CodeError('Method not implemented.', { sourceLocation: this.sourceLocation })
   }
   get ptype(): PType | undefined {
     return this._ptype

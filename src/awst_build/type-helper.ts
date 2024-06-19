@@ -1,7 +1,7 @@
 import ts from 'typescript'
 import { CodeError, InternalError } from '../errors'
 import { SourceLocation } from '../awst/source-location'
-import { boolPType, FreeSubroutineType, PType, typeRegistry } from './ptypes'
+import { boolPType, FreeSubroutineType, PType, typeRegistry, voidPType } from './ptypes'
 import { codeInvariant, hasAnyFlag, hasFlags } from '../util'
 import { NodeBuilder } from './eb'
 
@@ -29,6 +29,15 @@ export class TypeHelper {
   ptypeForTsType(tsType: ts.Type, sourceLocation: SourceLocation): PType {
     if (hasFlags(tsType.flags, ts.TypeFlags.Boolean)) {
       return boolPType
+    }
+    if (hasFlags(tsType.flags, ts.TypeFlags.Void)) {
+      return voidPType
+    }
+    if (hasFlags(tsType.flags, ts.TypeFlags.Unknown)) {
+      throw new CodeError(`Type resolves to unknown`, { sourceLocation })
+    }
+    if (hasFlags(tsType.flags, ts.TypeFlags.Number)) {
+      throw new CodeError(`Numeric type requires explicit type annotation (eg. uint64)`, { sourceLocation })
     }
 
     if (tsType.aliasSymbol) {

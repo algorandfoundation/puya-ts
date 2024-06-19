@@ -96,9 +96,10 @@ export default class VotingRoundApp extends arc4.Contract {
       },
       'Payment must be to app address',
     )
-    const tallyBoxSize = this.totalOptions! * VOTE_COUNT_BYTES
+    const tallyBoxSize: uint64 = this.totalOptions! * VOTE_COUNT_BYTES
 
-    const minBalanceReq = ASSET_MIN_BALANCE * 2 + 1000 + BOX_FLAT_MIN_BALANCE + BOX_BYTE_MIN_BALANCE + tallyBoxSize * BOX_BYTE_MIN_BALANCE
+    const minBalanceReq: uint64 =
+      ASSET_MIN_BALANCE * 2 + 1000 + BOX_FLAT_MIN_BALANCE + BOX_BYTE_MIN_BALANCE + tallyBoxSize * BOX_BYTE_MIN_BALANCE
 
     log(minBalanceReq)
 
@@ -192,7 +193,7 @@ export default class VotingRoundApp extends arc4.Contract {
       },
       'Number of answers incorrect',
     )
-    const minBalReq = BOX_FLAT_MIN_BALANCE + (32 + 2 + VOTE_INDEX_BYTES * answerIds.length) * BOX_BYTE_MIN_BALANCE
+    const minBalReq: uint64 = BOX_FLAT_MIN_BALANCE + (32 + 2 + VOTE_INDEX_BYTES * answerIds.length) * BOX_BYTE_MIN_BALANCE
     log(minBalReq)
     assertMatch(
       fundMinBalReq,

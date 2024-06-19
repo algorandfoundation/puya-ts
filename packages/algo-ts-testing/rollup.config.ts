@@ -1,5 +1,4 @@
 import nodeResolve from '@rollup/plugin-node-resolve'
-import commonjs from '@rollup/plugin-commonjs'
 import typescript from '@rollup/plugin-typescript'
 import json from '@rollup/plugin-json'
 import type { RollupOptions } from 'rollup'
@@ -8,7 +7,6 @@ const config: RollupOptions = {
   input: {
     index: 'src/index.ts',
     'runtime-helpers': 'src/runtime-helpers.ts',
-    'test-transformer/index': 'src/test-transformer/index.ts',
   },
   output: [
     {
