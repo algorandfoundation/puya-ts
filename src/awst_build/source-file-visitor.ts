@@ -31,7 +31,7 @@ export class SourceFileVisitor extends BaseVisitor<SourceFileContext> implements
   }
 
   visitFunctionDeclaration(node: ts.FunctionDeclaration): StatementOrDeferred {
-    return () => logPuyaExceptions(() => FunctionVisitor.buildSubroutine(this.context, node), this.sourceLocation(node))
+    return () => logPuyaExceptions(() => FunctionVisitor.buildSubroutine(this.context, node), this.sourceLocation(node)) ?? []
   }
 
   public *gatherStatements(): Generator<awst.ModuleStatement, void, void> {
@@ -73,6 +73,6 @@ export class SourceFileVisitor extends BaseVisitor<SourceFileContext> implements
     return []
   }
   visitClassDeclaration(node: ts.ClassDeclaration): StatementOrDeferred {
-    return () => logPuyaExceptions(() => ContractVisitor.buildContract(this.context, node), this.sourceLocation(node))
+    return () => logPuyaExceptions(() => ContractVisitor.buildContract(this.context, node), this.sourceLocation(node)) ?? []
   }
 }
