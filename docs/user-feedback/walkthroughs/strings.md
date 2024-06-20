@@ -18,65 +18,37 @@ concatStrings(a: string, b: string): string {
 }
 ```
 
+# Problems
+
+One of the [guiding principles](../../README.md#guiding-principals) for Algorand TypeScript is to maintain familiarity with TypeScript. This means ideally we natively support all of the features of `string`. The AVM, however, does not support character-based operations on strings. Implementing string-based operations in the AVM would be very inefficient and does not make sense in most smart contract contexts. If we did support indexing into strings, Algorand Type would have to be byte-based thus the same code in TypeScript would result in different output in Algorand TypeScript which could result in unexpected behavior.
+
+## Example
+
+### TypeScript
+
 ```ts
-helloWorld(); // "Hello, World!"
-getValueAtIndex("¡Hola!", 0); // "The value at 0 is ¡"
-concatStrings("Hello, ", "World!"); // "Hello, World!"
+getValueAtIndex("👍", 0); // "The value at 0 is 👍"
 ```
 
-# Reasons for Deviation
-
-TypeScript strings are UTF-16 encoded and can be indexed by character. The AVM does not natively support character-based operations and they would be too expensive to implement. Instead, we need to use byte-based operations. This means that the above function call would work differently in Algorand TypeScript.
-
-## TypeScript
+### Algorand TypeScript
 
 ```ts
-getValueAtIndex("¡Hola!", 0); // "The value at 0 is ¡"
-```
-
-## Algorand TypeScript
-
-```ts
-getValueAtIndex("¡Hola!", 0); // "The value at 0 is \xC2"
+getValueAtIndex("👍", 0); // "The value at 0 is \xF0"
 ```
 
 The same can be said for other character-based operations, such as `length`, `slice`, `splice`, etc.
 
 # Proposed Solutions
 
-## Option 5: Extended string prototype with branding
+## Option 5: Extended string prototype
 
-### Attempting Regular TypeScript
+This option proposes to support the `string` type but only support a subset of the prototype methods. In paticular, any character-based method would not be supported. Instead we would extend the `String` prototype with byte-based functions. For example:
 
-```ts
-getValueAtIndex(input: string, idx: number): string {
-    // Error: [] not supported, use .getByte instead
-    return `The value at ${idx} is ${input[idx]}`;
-}
-
-// The following functions work as-is
-
-helloWorld(): string {
-    return "Hello, World!";
-}
-
-concatStrings(a: string, b: string): string {
-    return a + b;
-}
-```
-
-### Using Byte-Based Prototype Functions
-
-```ts
-getValueAtIndex(input: string, idx: number): string {
-    // Note use of .getByte instead of []
-    return `The value at ${idx} is ${input.getByte(idx)}`;
-}
-```
-
-```ts
-getValueAtIndex("¡Hola!", 0); // "The value at 0 is \xC2"
-```
+| Native TypeScript | Algorand TypeScript |
+| ----------------- | ------------------- |
+| `[]`              | `getByte`           |
+| `length`          | `byteLength`        |
+| `slice`           | `sliceBytes`        |
 
 ### Questions
 
@@ -84,53 +56,31 @@ getValueAtIndex("¡Hola!", 0); // "The value at 0 is \xC2"
 
 ## Option 4: Custom Class
 
-### Attempting Regular TypeScript
+Rather than having a partially implemented `string` class, we could create a custom class that represents a string. This class would have a constructor and tagged literal.
 
-```ts
-// Error: string not supported, use str instead
-getValueAtIndex(input: string, idx: number): string {
-    // Error: Template literals not supported, use Str tag instead
-    return `The value at ${idx} is ${input[idx]}`;
-}
-
-// Error: string not supported, use str instead
-helloWorld(): string {
-    // Error: String literals not supported, use Str tag instead
-    return "Hello, World!";
-}
-
-// Error: string not supported, use str instead
-concatStrings(a: string, b: string): string {
-    // Error: + not supported on strings, use Str tag instead
-    return a + b;
-}
-```
-
-### Using Custom Class
+| Native TypeScript         | Algorand TypeScript             |
+| ------------------------- | ------------------------------- |
+| `helloName(name: string)` | `helloName(name: str)`          |
+| `"Hello, World!"`         | <pre>Str\`Hello, World!\`</pre> |
 
 **Note:** The exact type name may be anything. Some examples: `str`, `utf8`, `utf8String`. In the examples, `str` is used
-
-```ts
-getValueAtIndex(input: str, idx: uint64): str {
-    // Instead of string literals, we used a tagged template
-    return Str`The value at ${idx} is ${input[idx]}`;
-}
-
-helloWorld(): string {
-    return Str`Hello, World!`;
-}
-
-concatStrings(a: str, b: str): string {
-    // Instead of using the `+` operator, we used a custom function
-    return concat(a, b);
-}
-```
 
 ### Questions
 
 - How do you feel about not being able to use the `string` class or string literals?
 
-## Comparison
+# Feature Comparison
+
+| Feature                     | Benefit                                                 | Option 5: Extended String Prototype | Option 4: Custom Class |
+| --------------------------- | ------------------------------------------------------- | ----------------------------------- | ---------------------- |
+| `string` support            | Can use the native `string` type they are familiar with | ✅                                  | ❌                     |
+| String literals             | Can use `"` or `'` for literal string values            | ✅                                  | ❌                     |
+| Fully-implemented prototype | IDEs **MAY\*** not show unsupported methods             | ❌                                  | ✅                     |
+| Concatenation with `+`      | Can use `+` to concatenate two strings                  | ✅                                  | ❌                     |
+
+\* TypeScript does have a [plugins feature](https://github.com/microsoft/TypeScript/wiki/Writing-a-Language-Service-Plugin#whats-a-language-service-plugin) that would enable us to modify the IDE experience, but it may be non-trivial for users to set up.
+
+# Code Comparison
 
 ### Attempting Regular TypeScript
 
@@ -192,8 +142,8 @@ concatStrings(a: string, b: string): string {
 
 <table>
 <tr>
-<th>Option 5</th>
-<th>Option 4</th>
+<th>Option 5: Extended String Prototype</th>
+<th>Option 4: Custom Class</th>
 </tr>
 
 <tr>
@@ -238,33 +188,6 @@ concatStrings(a: str, b: str): string {
 
 </tr>
 </table>
-
-### Summaries
-
-<table>
-<tr>
-<th>Option 5</th>
-<th>Option 4</th>
-</tr>
-
-<tr>
-<td>
-
-- `string` type supported
-- Character based methods (`[]`, `length`, `splice`, etc.) are not supported
-- Those methods **MAY\*** still show in IDEs, but will throw errors at compile time
-</td>
-<td>
-
-- `string` type not supported
-- String literals not supported
-- Custom tag or constructor must be used for all strings
-- IDE is guranteed to only show supported methods
-</td>
-</tr>
-</table>
-
-\* TypeScript does have a plugins feature that would enable us to modify the IDE experience, but it may be non-trivial for users to set up.
 
 ## General Questions
 
