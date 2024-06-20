@@ -11,7 +11,7 @@ The corresponding ADR is [here](../../architecture-decisions/2024-05-21_primitiv
 - I like being able to use the `string` type and string literals
 - Ideally would want to be able to use character-based functions, but I understand the limitations
 - I definitely prefer the explicit byte-based functions over semantic incompatability
-- I find compiler/IDE errors on string functions acceptable, especially since there are many other limitations with Algorand TypeScript
+- I find compiler errors on string functions acceptable, especially since there are many other limitations with Algorand TypeScript
 
 ### Option 4: Custom Class
 
