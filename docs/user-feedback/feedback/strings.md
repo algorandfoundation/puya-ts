@@ -24,3 +24,4 @@ The corresponding ADR is [here](../../architecture-decisions/2024-05-21_primitiv
 
 - I prefer option 5 due to familiarity with TypeScript even with the limitations
 - I also like option 5 due to it being less of a breaking change coming from TEALScript
+- IDE warnings and modified auto-complete would be nice, but not essential
