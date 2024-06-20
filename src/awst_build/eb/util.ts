@@ -52,3 +52,10 @@ export function requireConstant(
   }
   throw new CodeError(`Expected compile time constant value`, { sourceLocation })
 }
+
+export function requireStringLiteral(builder: InstanceBuilder, sourceLocation: SourceLocation): string {
+  if (builder instanceof LiteralExpressionBuilder && typeof builder.value === 'string') {
+    return builder.value
+  }
+  throw new CodeError('Expected string literal', { sourceLocation })
+}

@@ -11,6 +11,7 @@ import { DeliberateAny } from '../typescript-helpers'
 import { FreeSubroutineExpressionBuilder } from './eb/free-subroutine-expression-builder'
 import { StrExpressionBuilder, StrFunctionBuilder } from './eb/str-expression-builder'
 import { InstanceBuilder, InstanceExpressionBuilder, NodeBuilder } from './eb'
+import { AssertFunctionBuilder } from './eb/assert-function-builder'
 
 /**
  * Represents a public type visible to a developer of AlgoTS
@@ -266,6 +267,11 @@ export const logFunction = new LibFunctionType({
   module: '@algorandfoundation/algo-ts/util.d.ts',
 })
 typeRegistry.register({ ptype: logFunction, symbolEb: LogFunctionBuilder })
+export const assertFunction = new LibFunctionType({
+  name: 'assert',
+  module: '@algorandfoundation/algo-ts/util.d.ts',
+})
+typeRegistry.register({ ptype: assertFunction, symbolEb: AssertFunctionBuilder })
 
 export class FreeSubroutineType extends PType {
   readonly wtype: undefined
