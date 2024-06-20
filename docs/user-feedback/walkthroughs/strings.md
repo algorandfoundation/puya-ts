@@ -206,11 +206,11 @@ getValueAtIndex(input: string, idx: number): string {
 }
 
 helloWorld(): string {
-return "Hello, World!";
+    return "Hello, World!";
 }
 
 concatStrings(a: string, b: string): string {
-return a + b;
+    return a + b;
 }
 
 ```
