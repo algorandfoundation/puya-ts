@@ -239,6 +239,34 @@ concatStrings(a: str, b: str): string {
 </tr>
 </table>
 
+### Summaries
+
+<table>
+<tr>
+<th>Option 5</th>
+<th>Option 4</th>
+</tr>
+
+<tr>
+<td>
+
+- `string` type supported
+- Character based methods (`[]`, `length`, `splice`, etc.) are not supported
+- Those methods **MAY\*** still show in IDEs, but will throw errors at compile time
+</td>
+<td>
+
+- `string` type not supported
+- String literals not supported
+- Custom tag or constructor must be used for all strings
+- IDE is guranteed to only show supported methods
+</td>
+</tr>
+</table>
+
+\* TypeScript does have a plugins feature that would enable us to modify the IDE experience, but it may be non-trivial for users to set up.
+
 ## General Questions
 
 - Would seeing errors in your IDE change your opinion on the proposed solutions?
+- Would the IDE hiding unsupported methods change your opinions on the proposed solutions?
