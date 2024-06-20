@@ -50,7 +50,8 @@ The same can be said for other character-based operations, such as `length`, `sl
 
 ```ts
 getValueAtIndex(input: string, idx: number): string {
-    return `The value at ${idx} is ${input[idx]}`; // Compiler Error: Algorand TypeScript does not support usage of [] on strings
+    // Error: [] not supported, use .getByte instead
+    return `The value at ${idx} is ${input[idx]}`;
 }
 
 // The following functions work as-is
@@ -86,16 +87,22 @@ getValueAtIndex("¡Hola!", 0); // "The value at 0 is \xC2"
 ### Attempting Regular TypeScript
 
 ```ts
+// Error: string not supported, use str instead
 getValueAtIndex(input: string, idx: number): string {
-    return `The value at ${idx} is ${input[idx]}`; // Compiler Error: string is not supported by Algorand TypeScript
+    // Error: Template literals not supported, use Str tag instead
+    return `The value at ${idx} is ${input[idx]}`;
 }
 
+// Error: string is not supported by Algorand TypeScript
 helloWorld(): string {
-    return "Hello, World!"; // Compiler Error: string is not supported by Algorand TypeScript
+    // Error: String literals not supported, use Str tag instead
+    return "Hello, World!";
 }
 
+// Error: string is not supported by Algorand TypeScript
 concatStrings(a: string, b: string): string {
-    return a + b; // Compiler Error: string is not supported by Algorand TypeScript
+    // Error: + not supported on strings, use Str tag instead
+    return a + b;
 }
 ```
 
@@ -122,6 +129,115 @@ concatStrings(a: str, b: str): string {
 ### Questions
 
 - How do you feel about not being able to use the `string` class or string literals?
+
+## Comparison
+
+### Attempting Regular TypeScript
+
+<table>
+<tr>
+<th>Option 5</th>
+<th>Option 4</th>
+</tr>
+
+<tr>
+<td>
+
+```ts
+getValueAtIndex(input: string, idx: number): string {
+    // Error: [] not supported, use .getByte instead
+    return `The value at ${idx} is ${input[idx]}`;
+}
+
+// The following functions work as-is
+
+helloWorld(): string {
+    return "Hello, World!";
+}
+
+concatStrings(a: string, b: string): string {
+    return a + b;
+}
+```
+
+</td>
+<td>
+
+```ts
+// Error: string not supported, use str instead
+getValueAtIndex(input: string, idx: number): string {
+    // Error: Template literals not supported, use Str tag instead
+    return `The value at ${idx} is ${input[idx]}`;
+}
+
+// Error: string is not supported by Algorand TypeScript
+helloWorld(): string {
+    // Error: String literals not supported, use Str tag instead
+    return "Hello, World!";
+}
+
+// Error: string is not supported by Algorand TypeScript
+concatStrings(a: string, b: string): string {
+    // Error: + not supported on strings, use Str tag instead
+    return a + b;
+}
+```
+
+</td>
+
+</tr>
+</table>
+
+### Algorand TypeScript
+
+<table>
+<tr>
+<th>Option 5</th>
+<th>Option 4</th>
+</tr>
+
+<tr>
+<td>
+
+```ts
+getValueAtIndex(input: string, idx: number): string {
+    // Note use of .getByte instead of []
+    return `The value at ${idx} is ${input.getByte(idx)}`;
+}
+
+helloWorld(): string {
+return "Hello, World!";
+}
+
+concatStrings(a: string, b: string): string {
+return a + b;
+}
+
+```
+
+</td>
+<td>
+
+```ts
+getValueAtIndex(input: str, idx: uint64): str {
+    // Instead of string literals, we used a tagged template
+    return Str`The value at ${idx} is ${input[idx]}`;
+}
+
+helloWorld(): string {
+    return Str`Hello, World!`;
+}
+
+concatStrings(a: str, b: str): string {
+    // Instead of using the `+` operator, we used a custom function
+    return concat(a, b);
+}
+```
+
+</td>
+
+</tr>
+</table>
 
 ## General Questions
 
