@@ -93,13 +93,13 @@ getValueAtIndex(input: string, idx: number): string {
     return `The value at ${idx} is ${input[idx]}`;
 }
 
-// Error: string is not supported by Algorand TypeScript
+// Error: string not supported, use str instead
 helloWorld(): string {
     // Error: String literals not supported, use Str tag instead
     return "Hello, World!";
 }
 
-// Error: string is not supported by Algorand TypeScript
+// Error: string not supported, use str instead
 concatStrings(a: string, b: string): string {
     // Error: + not supported on strings, use Str tag instead
     return a + b;
@@ -170,13 +170,13 @@ getValueAtIndex(input: string, idx: number): string {
     return `The value at ${idx} is ${input[idx]}`;
 }
 
-// Error: string is not supported by Algorand TypeScript
+// Error: string not supported, use str instead
 helloWorld(): string {
     // Error: String literals not supported, use Str tag instead
     return "Hello, World!";
 }
 
-// Error: string is not supported by Algorand TypeScript
+// Error: string not supported, use str instead
 concatStrings(a: string, b: string): string {
     // Error: + not supported on strings, use Str tag instead
     return a + b;
