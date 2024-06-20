@@ -18,6 +18,7 @@ The corresponding ADR is [here](../../architecture-decisions/2024-05-21_primitiv
 - I don't like not being able to use string literals
 - I don't like not being able to use `+` for concatenation (although I acknowledge this is minor)
 - This feels rather foreign and verbose
+- Reminiscent of PyTeal `Bytes`, which was a common point of friction
 
 ### Overall Feedback
 
