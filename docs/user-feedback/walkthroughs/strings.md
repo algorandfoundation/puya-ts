@@ -191,5 +191,5 @@ concatStrings(a: str, b: str): string {
 
 ## General Questions
 
-- Would seeing errors in your IDE change your opinion on the proposed solutions?
+- Would seeing these compiler errors in your IDE prior to compilation change your opinion on the proposed solutions?
 - Would the IDE hiding unsupported methods change your opinions on the proposed solutions?
