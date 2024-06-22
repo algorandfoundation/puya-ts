@@ -2,7 +2,7 @@
 
 This walkthrough will cover how strings are handled in Algorand TypeScript.
 
-# TypeScript Equivalent
+# Native TypeScript Baseline
 
 ```ts
 getValueAtIndex(input: string, idx: number): string {

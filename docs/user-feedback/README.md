@@ -44,4 +44,47 @@ Users should not look at the feedback until they've provided feedback themselves
 
 ## Process
 
-The Algorand Foundation team will be reaching out to users for guided sessions where we will be responsible for taking the users through the walkthrough and summarizing their feedback. Feedback summaries MUST be approved by the user. Users can also provide feedback on their own time by following the walkthroughs and making a PR to the relevant feedback document.
+The Algorand Foundation team will be reaching out to users for guided sessions where we will be responsible for taking the users through the walkthrough and summarizing their feedback. Feedback summaries MUST be approved by the user.
+
+### Self-Guided Feedback
+
+If you are going through walkthroughs on your own you can provide feedback by making a PR with the following changes
+
+#### User Profile
+
+In [users.md](./users.md) add a new user profile with some bullet points about yourself. In patciular, we are interested in your experience with TypeScript and Algorand. If you wish to be anonymous, you can use "User N" as your identifier, with N being the next available number (for example, if there's a "User 10", but not "User 11", you'd be "User 11").
+
+##### Example
+
+```md
+### User N
+
+- 5 years TypeScript experience
+- New to blockchain and Algorand
+```
+
+#### Feedback
+
+Then for each walkthrough you go through, add a new section in the corresponding feedback document. For example, if you go through the [strings walkthrough](./walkthroughs/strings.md), you would add a new section in [feedback/strings.md](./feedback/strings.md).
+
+Ideally you would provide feedback for each proposed solution and then an overall feedback section. The feedback should be concise and to the point. If you have a lot of feedback, consider breaking it up into bullet points.
+
+##### Example
+
+```md
+### User N
+
+#### Option X
+
+- This is how I'd expect it to work
+- Reminds of of SomeRandomLibrary
+
+#### Option Y
+
+- I see the value, but seems a little confusing
+- I like the error clarity
+
+#### Overall Feedback
+
+- I generally prefer option X, but if we could get feature A from option Y that would make it even better
+```
