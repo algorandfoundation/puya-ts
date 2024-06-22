@@ -2,7 +2,7 @@
 
 ## Goals
 
-The Algorand Foundation is working on developing tooling to make it easier for developers to build on Algorand. One of the key components of this tooling is smart contract languages. The Algorand Foudnation has previously released Algorand Python, which enables developers to write smart contracts in Python. The compiler for Algorand Python is called Puya and can be leveraged by any other language. The next language being developed for Puya is Algorand TypeScript. The goal is Algorand TypeScript is to make it easy for TypeScript develoeprs to start building on Algorand. The full list of guiding pinciples can be found [here](../README.md#guiding-principals).
+The Algorand Foundation is working on developing tooling to make it easier for developers to build on Algorand. One of the key components of this tooling is smart contract languages. The Algorand Foundation has previously released Algorand Python, which enables developers to write smart contracts in Python. The compiler for Algorand Python is called Puya and can be leveraged by any other language. The next language being developed for Puya is Algorand TypeScript. The goal is Algorand TypeScript is to make it easy for TypeScript develoeprs to start building on Algorand. The full list of guiding principles can be found [here](../README.md#guiding-principals).
 
 This directory contains documents that offer a streamlined walkthrough of the potential options being explored. The goal is to expose users to various experiences without explaining too much rationale up front. This process allows us to distill the experience users want to help guide us on product decisions.
 
@@ -14,7 +14,7 @@ Profiles of the users that provide feedback will be included in [users.md](./use
 
 Each guided walkthrough will contain the following secions (if applicable)
 
-### TypeScript Equivalent
+### Native TypeScript Baseline
 
 This section will contain a TypeScript snippet that demonstrates the feature we are trying to replicate in PuyaTS. There shouldn't be much feedback relevant to this section. It exists to simply set the stage of what we are trying to accomplish.
 
