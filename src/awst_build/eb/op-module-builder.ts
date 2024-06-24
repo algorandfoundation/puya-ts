@@ -6,11 +6,11 @@ import { nodeFactory } from '../../awst/node-factory'
 import { requestConstantOfType, requestExpressionOfType, requestStringLiteral } from './util'
 import { PType } from '../ptypes'
 import { IntrinsicOpGrouping, IntrinsicOpMapping, OP_METADATA } from '../op-metadata'
-import { enumerate } from '../../util'
-import { IntrinsicEnumType } from '../ptypes/ptype-classes'
+import { enumerate, invariant } from '../../util'
+import { IntrinsicEnumType, IntrinsicFunctionGroupType, IntrinsicFunctionType } from '../ptypes/ptype-classes'
 import { typeRegistry } from '../type-registry'
 
-export class OpModuleExpressionBuilder extends NodeBuilder {
+export class OpModuleBuilder extends NodeBuilder {
   get ptype(): PType | undefined {
     return undefined
   }
@@ -23,22 +23,33 @@ export class OpModuleExpressionBuilder extends NodeBuilder {
     const metaData = OP_METADATA[name]
 
     if (metaData.type === 'op-grouping') {
-      return new OpGroupingExpressionBuilder(sourceLocation, metaData)
+      return new IntrinsicOpGroupBuilder(
+        sourceLocation,
+        new IntrinsicFunctionGroupType({
+          name: name,
+        }),
+      )
     } else {
-      return new IntrinsicOpBuilder(sourceLocation, metaData)
+      return new FreeIntrinsicOpBuilder(
+        sourceLocation,
+        new IntrinsicFunctionType({
+          name: name,
+        }),
+      )
     }
   }
 }
 
-export class OpGroupingExpressionBuilder extends NodeBuilder {
-  constructor(
-    sourceLocation: SourceLocation,
-    private opGrouping: IntrinsicOpGrouping,
-  ) {
+export class IntrinsicOpGroupBuilder extends NodeBuilder {
+  private opGrouping: IntrinsicOpGrouping
+  public readonly ptype: IntrinsicFunctionGroupType
+  constructor(sourceLocation: SourceLocation, ptype: PType) {
     super(sourceLocation)
-  }
-  get ptype(): PType | undefined {
-    return undefined
+    invariant(ptype instanceof IntrinsicFunctionGroupType, 'ptype must be IntrinsicFunctionGroupType')
+    this.ptype = ptype
+    const metaData = OP_METADATA[ptype.name]
+    invariant(metaData.type === 'op-grouping', 'ptype must map to op-grouping')
+    this.opGrouping = metaData
   }
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
     if (!Object.hasOwn(this.opGrouping.ops, name)) {
@@ -46,12 +57,8 @@ export class OpGroupingExpressionBuilder extends NodeBuilder {
     }
     const metaData = this.opGrouping.ops[name]
 
-    if (
-      metaData.signatures.some(
-        (s) => s.immediateArgs.some((a) => typeof a !== 'object') || s.stackArgs.some((a) => !(a instanceof Expression)),
-      )
-    ) {
-      return new IntrinsicOpBuilder(sourceLocation, metaData)
+    if (metaData.signatures.some((s) => s.argNames.length)) {
+      return new GroupedIntrinsicOpBuilder(sourceLocation, metaData)
     }
 
     const [sig] = metaData.signatures
@@ -81,8 +88,8 @@ export class OpGroupingExpressionBuilder extends NodeBuilder {
   }
 }
 
-export class IntrinsicOpBuilder extends FunctionBuilder {
-  constructor(
+abstract class IntrinsicOpBuilderBase extends FunctionBuilder {
+  protected constructor(
     sourceLocation: SourceLocation,
     private opMapping: IntrinsicOpMapping,
   ) {
@@ -159,5 +166,26 @@ export class IntrinsicOpBuilder extends FunctionBuilder {
       )
     }
     throw new CodeError(`Could not map arguments to any known signature`, { sourceLocation })
+  }
+}
+
+export class FreeIntrinsicOpBuilder extends IntrinsicOpBuilderBase {
+  private readonly _ptype: IntrinsicFunctionType
+  constructor(sourceLocation: SourceLocation, ptype: PType) {
+    invariant(ptype instanceof IntrinsicFunctionType, 'ptype must be IntrinsicFunctionType')
+    const metaData = OP_METADATA[ptype.name]
+    invariant(metaData.type === 'op-mapping', 'ptype must map to op-grouping')
+    super(sourceLocation, metaData)
+    this._ptype = ptype
+  }
+
+  get ptype(): IntrinsicFunctionType {
+    return this._ptype
+  }
+}
+
+export class GroupedIntrinsicOpBuilder extends IntrinsicOpBuilderBase {
+  constructor(sourceLocation: SourceLocation, opMapping: IntrinsicOpMapping) {
+    super(sourceLocation, opMapping)
   }
 }

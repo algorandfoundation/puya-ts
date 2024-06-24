@@ -172,7 +172,7 @@ export default class VotingRoundApp extends arc4.Contract {
 
   private allowedToVote(signature: bytes): boolean {
     ensureBudget(2000)
-    return op.ed25519VerifyBare(Txn.sender.bytes, signature, this.snapshotPublicKey!)
+    return op.ed25519verifyBare(Txn.sender.bytes, signature, this.snapshotPublicKey!)
   }
 
   private alreadyVoted(): boolean {

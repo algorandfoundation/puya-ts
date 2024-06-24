@@ -1,6 +1,7 @@
 import { wtypes } from '../../awst'
 import { codeInvariant } from '../../util'
 import { WTuple, WType } from '../../awst/wtypes'
+import { Constants } from '../../constants'
 
 /**
  * Represents a public type visible to a developer of AlgoTS
@@ -71,6 +72,26 @@ export class LibFunctionType extends PType {
     super()
     this.name = name
     this.module = module
+  }
+}
+export class IntrinsicFunctionGroupType extends PType {
+  readonly wtype: undefined
+  readonly name: string
+  readonly module: string = Constants.opModuleName
+
+  constructor({ name }: { name: string }) {
+    super()
+    this.name = name
+  }
+}
+export class IntrinsicFunctionType extends PType {
+  readonly wtype: undefined
+  readonly name: string
+  readonly module: string = Constants.opModuleName
+
+  constructor({ name }: { name: string }) {
+    super()
+    this.name = name
   }
 }
 

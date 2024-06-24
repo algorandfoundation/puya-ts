@@ -2,7 +2,7 @@ import { bytes, Uint64Compat, internal, Account, uint64, Txn } from '@algorandfo
 import { btoi, itob, Uint64Cls } from './primitives'
 import { Transaction } from './transactions/runtime'
 import { internalError } from './errors'
-export const buildOpsImplementation = (txnGroup: Transaction[]): Partial<internal.OpsImplementation> => {
+export const buildOpsImplementation = (txnGroup: Transaction[]): Partial<internal.OpsNamespace> => {
   const currentTransaction =
     txnGroup.find((t) => t.type === 'appl') ??
     internalError('Transaction group must contain at least one ApplicationCall transaction (type="appl")')
@@ -10,7 +10,7 @@ export const buildOpsImplementation = (txnGroup: Transaction[]): Partial<interna
   return {
     btoi,
     itob,
-    txn: {
+    Txn: {
       applicationArgs(_n: Uint64Compat): bytes {
         return currentTransaction.args[Uint64Cls.getNumber(_n)]
       },

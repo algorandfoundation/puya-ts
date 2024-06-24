@@ -58,10 +58,13 @@ export class SourceFileVisitor extends BaseVisitor<SourceFileContext> implements
       if (!dec.initializer) {
         throw new CodeError(`Module level variable declarations must be initialized with a value.`, { sourceLocation })
       }
-      const value = CompileTimeConstantVisitor.getCompileTimeConstant(this.context, dec.initializer)
       if (!ts.isIdentifier(dec.name)) {
         throw new CodeError(`Module level variable declarations must use plain identifiers.`, { sourceLocation })
       }
+      const ptype = this.context.getPTypeForNode(dec.name)
+
+      const value = CompileTimeConstantVisitor.getCompileTimeConstant(this.context, dec.initializer, ptype)
+
       return nodeFactory.constantDeclaration({
         value: value.value,
         sourceLocation,

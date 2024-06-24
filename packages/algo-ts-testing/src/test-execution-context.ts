@@ -50,7 +50,7 @@ export class TestExecutionContext implements internal.ExecutionContext {
   log(...args: (Uint64Compat | BytesCompat)[]): void {
     this.#logs.push(args.map(toBytes).reduce((left, right) => left.concat(right)))
   }
-  get ops(): Partial<internal.OpsImplementation> {
+  get ops(): Partial<internal.OpsNamespace> {
     return buildOpsImplementation(this.#txnGroup)
   }
   makeUint64(v: Uint64Compat): uint64 {

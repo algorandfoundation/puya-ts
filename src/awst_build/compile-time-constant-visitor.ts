@@ -37,9 +37,8 @@ import ts, {
 } from 'typescript'
 import { NotSupported } from '../errors'
 import { NodeBuilder } from './eb'
-import { requireConstant, requireInstanceBuilder } from './eb/util'
-
-type Constant = awst.IntegerConstant | awst.BoolConstant | awst.BytesConstant | awst.StringConstant
+import { requireConstantOfType, requireInstanceBuilder } from './eb/util'
+import { PType } from './ptypes'
 
 /**
  * Parses an expression and attempts to extract a compile time constant from it.
@@ -49,11 +48,10 @@ type Constant = awst.IntegerConstant | awst.BoolConstant | awst.BytesConstant | 
 export class CompileTimeConstantVisitor extends BaseVisitor<BaseContext> implements Visitor<Expressions, NodeBuilder> {
   public accept = <TNode extends ts.Node>(node: TNode) => accept<CompileTimeConstantVisitor, TNode>(this, node)
 
-  static getCompileTimeConstant(context: BaseContext, node: ts.Expression): Constant {
+  static getCompileTimeConstant(context: BaseContext, node: ts.Expression, ptype: PType): awst.Constant {
     const visitor = new CompileTimeConstantVisitor(context)
     const sourceLocation = context.getSourceLocation(node)
-    const result = requireInstanceBuilder(visitor.accept(node), sourceLocation)
-    return requireConstant(result, sourceLocation)
+    return requireConstantOfType(visitor.accept(node), ptype, sourceLocation)
   }
 
   constructor(context: BaseContext) {

@@ -19,13 +19,21 @@ import { BoolExpressionBuilder } from './eb/bool-expression-builder'
 import { UInt64ExpressionBuilder, UInt64FunctionBuilder } from './eb/uint64-expression-builder'
 import { BytesExpressionBuilder, BytesFunctionBuilder } from './eb/bytes-expression-builder'
 import { StrExpressionBuilder, StrFunctionBuilder } from './eb/str-expression-builder'
-import { OpModuleExpressionBuilder } from './eb/op-module-expression-builder'
+import { FreeIntrinsicOpBuilder, IntrinsicOpGroupBuilder, OpModuleBuilder } from './eb/op-module-builder'
 import { LogFunctionBuilder } from './eb/log-function-builder'
 import { AssertFunctionBuilder } from './eb/assert-function-builder'
 import { FreeSubroutineExpressionBuilder } from './eb/free-subroutine-expression-builder'
 import { awst } from '../awst'
-import { FreeSubroutineType, IntrinsicEnumType } from './ptypes/ptype-classes'
+import {
+  FreeSubroutineType,
+  IntrinsicEnumType,
+  IntrinsicFunctionGroupType,
+  IntrinsicFunctionType,
+  LibFunctionType,
+} from './ptypes/ptype-classes'
 import { IntrinsicEnumBuilder } from './eb/intrinsic-enum-builder'
+import { OP_METADATA } from './op-metadata'
+import { Constants } from '../constants'
 
 type ValueExpressionBuilderCtor = { new (expr: awst.Expression, ptype: PType): InstanceExpressionBuilder }
 type SingletonExpressionBuilderCtor = { new (sourceLocation: SourceLocation, ptype: PType): NodeBuilder }
@@ -57,6 +65,20 @@ class TypeRegistry {
     for (const v of this.types) {
       if (v instanceof PType && v.fullName === fullName) return v
     }
+    const [module, identifer] = fullName.split('::')
+    if (module === Constants.opModuleName) {
+      const metadata = OP_METADATA[identifer]
+      if (metadata?.type === 'op-grouping') {
+        return new IntrinsicFunctionGroupType({
+          name: identifer,
+        })
+      } else if (metadata?.type === 'op-mapping') {
+        return new IntrinsicFunctionType({
+          name: identifer,
+        })
+      }
+    }
+
     return undefined
   }
 
@@ -117,9 +139,11 @@ typeRegistry.register({ ptype: bytesPType, instanceEb: BytesExpressionBuilder })
 typeRegistry.register({ ptype: BytesFunction, symbolEb: BytesFunctionBuilder })
 typeRegistry.register({ ptype: strPType, instanceEb: StrExpressionBuilder })
 typeRegistry.register({ ptype: StrFunction, symbolEb: StrFunctionBuilder })
-typeRegistry.register({ ptype: opNamespace, symbolEb: OpModuleExpressionBuilder })
+typeRegistry.register({ ptype: opNamespace, symbolEb: OpModuleBuilder })
 typeRegistry.register({ ptype: logFunction, symbolEb: LogFunctionBuilder })
 typeRegistry.register({ ptype: assertFunction, symbolEb: AssertFunctionBuilder })
 
 typeRegistry.register({ ptype: FreeSubroutineType, symbolEb: FreeSubroutineExpressionBuilder })
 typeRegistry.register({ ptype: IntrinsicEnumType, symbolEb: IntrinsicEnumBuilder })
+typeRegistry.register({ ptype: IntrinsicFunctionType, symbolEb: FreeIntrinsicOpBuilder })
+typeRegistry.register({ ptype: IntrinsicFunctionGroupType, symbolEb: IntrinsicOpGroupBuilder })

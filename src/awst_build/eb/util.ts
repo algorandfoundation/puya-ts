@@ -66,31 +66,35 @@ export function requireConstant(
   throw new CodeError(`Expected compile time constant value`, { sourceLocation })
 }
 
-export function requestConstantOfType(builder: InstanceBuilder, ptype: PType, sourceLocation: SourceLocation) {
+export function requestConstantOfType(builder: NodeBuilder, ptype: PType, sourceLocation: SourceLocation): awst.Constant | undefined {
   if (builder instanceof LiteralExpressionBuilder) {
     if (builder.resolvableToPType(ptype)) {
-      return builder.resolveToPType(ptype, sourceLocation).resolve()
+      const expr = builder.resolveToPType(ptype, sourceLocation).resolve()
+      if (isConstant(expr)) return expr
     }
     return undefined
   }
-  if (builder.ptype?.equals(ptype)) {
+  if (builder instanceof InstanceBuilder && builder.ptype?.equals(ptype)) {
     const expr = builder.resolve()
-    if (expr instanceof awst.StringConstant) {
-      return expr
-    }
-    if (expr instanceof awst.BytesConstant) {
-      return expr
-    }
-    if (expr instanceof awst.IntegerConstant) {
-      return expr
-    }
-    if (expr instanceof awst.BoolConstant) {
-      return expr
-    }
+    if (isConstant(expr)) return expr
   }
   return undefined
 }
 
+function isConstant(expr: awst.Expression): expr is awst.Constant {
+  return (
+    expr instanceof awst.StringConstant ||
+    expr instanceof awst.BytesConstant ||
+    expr instanceof awst.IntegerConstant ||
+    expr instanceof awst.BoolConstant
+  )
+}
+
+export function requireConstantOfType(builder: NodeBuilder, ptype: PType, sourceLocation: SourceLocation): awst.Constant {
+  const constExpr = requestConstantOfType(builder, ptype, sourceLocation)
+  if (constExpr) return constExpr
+  throw new CodeError(`Expected constant of type ${ptype}`, { sourceLocation })
+}
 export function requestStringLiteral(builder: InstanceBuilder): string | undefined {
   if (builder instanceof LiteralExpressionBuilder && typeof builder.value === 'string') {
     return builder.value

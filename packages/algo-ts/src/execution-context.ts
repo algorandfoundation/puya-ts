@@ -1,10 +1,10 @@
 import { biguint, BigUintCompat, bytes, BytesCompat, str, StringCompat, uint64, Uint64Compat } from './primitives'
-import { OpsImplementation } from './op-types'
+import { OpsNamespace } from './op-types'
 import { Account, Application, Asset } from './reference'
 
 export type ExecutionContext = {
   log(...args: Array<Uint64Compat | BytesCompat | BigUintCompat | StringCompat>): void
-  ops: Partial<OpsImplementation>
+  ops: Partial<OpsNamespace>
   makeUint64(v: Uint64Compat): uint64
   makeInterpolatedBytes(b: TemplateStringsArray, replacements: BytesCompat[]): bytes
   makeInterpolatedString(b: TemplateStringsArray, replacements: StringCompat[]): str
