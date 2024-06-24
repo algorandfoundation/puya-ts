@@ -17,6 +17,19 @@ export function requireExpressionOfType(builder: NodeBuilder, ptype: PType, sour
   })
 }
 
+export function requestExpressionOfType(builder: NodeBuilder, ptype: PType, sourceLocation: SourceLocation): awst.Expression | undefined {
+  if (builder instanceof LiteralExpressionBuilder) {
+    if (builder.resolvableToPType(ptype)) {
+      return builder.resolveToPType(ptype, sourceLocation).resolve()
+    }
+    return undefined
+  }
+  if (builder instanceof InstanceBuilder && builder.ptype?.equals(ptype)) {
+    return builder.resolve()
+  }
+  return undefined
+}
+
 export function requireInstanceBuilder(builder: NodeBuilder, sourceLocation: SourceLocation): InstanceBuilder {
   if (builder instanceof InstanceBuilder) return builder
   throw new CodeError(`Expected instance of a type, got ${builder.typeDescription}`, { sourceLocation })
@@ -51,6 +64,38 @@ export function requireConstant(
     return expr
   }
   throw new CodeError(`Expected compile time constant value`, { sourceLocation })
+}
+
+export function requestConstantOfType(builder: InstanceBuilder, ptype: PType, sourceLocation: SourceLocation) {
+  if (builder instanceof LiteralExpressionBuilder) {
+    if (builder.resolvableToPType(ptype)) {
+      return builder.resolveToPType(ptype, sourceLocation).resolve()
+    }
+    return undefined
+  }
+  if (builder.ptype?.equals(ptype)) {
+    const expr = builder.resolve()
+    if (expr instanceof awst.StringConstant) {
+      return expr
+    }
+    if (expr instanceof awst.BytesConstant) {
+      return expr
+    }
+    if (expr instanceof awst.IntegerConstant) {
+      return expr
+    }
+    if (expr instanceof awst.BoolConstant) {
+      return expr
+    }
+  }
+  return undefined
+}
+
+export function requestStringLiteral(builder: InstanceBuilder): string | undefined {
+  if (builder instanceof LiteralExpressionBuilder && typeof builder.value === 'string') {
+    return builder.value
+  }
+  return undefined
 }
 
 export function requireStringLiteral(builder: InstanceBuilder, sourceLocation: SourceLocation): string {

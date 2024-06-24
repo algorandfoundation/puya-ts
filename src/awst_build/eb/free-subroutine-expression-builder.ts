@@ -1,9 +1,10 @@
 import { FunctionBuilder, InstanceBuilder } from './index'
 import { SourceLocation } from '../../awst/source-location'
-import { PType, FreeSubroutineType, typeRegistry } from '../ptypes'
+import { FreeSubroutineType, PType } from '../ptypes'
 import { InternalError } from '../../errors'
 import { nodeFactory } from '../../awst/node-factory'
 import { requireExpressionOfType } from './util'
+import { typeRegistry } from '../type-registry'
 
 export class FreeSubroutineExpressionBuilder extends FunctionBuilder {
   private readonly _ptype: FreeSubroutineType

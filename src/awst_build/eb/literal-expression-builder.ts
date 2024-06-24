@@ -44,6 +44,22 @@ export class LiteralExpressionBuilder extends InstanceBuilder {
         break
     }
   }
+  resolvableToPType(ptype: PType): boolean {
+    if (ptype.equals(bytesPType)) {
+      if (this.value instanceof Uint8Array) {
+        return true
+      }
+    } else if (ptype.equals(uint64PType)) {
+      if (typeof this.value === 'bigint') {
+        return true
+      }
+    } else if (ptype.equals(boolPType)) {
+      if (typeof this.value === 'boolean') {
+        return true
+      }
+    }
+    return false
+  }
   resolveToPType(ptype: PType, sourceLocation: SourceLocation): InstanceBuilder {
     if (ptype.equals(bytesPType)) {
       if (this.value instanceof Uint8Array) {

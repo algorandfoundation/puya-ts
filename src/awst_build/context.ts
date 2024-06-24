@@ -7,8 +7,9 @@ import { CodeError } from '../errors'
 import { nodeFactory } from '../awst/node-factory'
 import { codeInvariant, invariant } from '../util'
 import { ConstantDeclaration } from '../awst/nodes'
-import { PType, typeRegistry } from './ptypes'
+import { PType } from './ptypes'
 import { NodeBuilder } from './eb'
+import { typeRegistry } from './type-registry'
 
 export abstract class BaseContext {
   abstract getSourceLocation(node: ts.Node): SourceLocation

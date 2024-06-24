@@ -1,4 +1,5 @@
 import { DeliberateAny } from '../typescript-helpers'
+import { it } from 'vitest'
 
 export type WTypeClass = { new (...args: DeliberateAny[]): WType }
 
@@ -45,13 +46,33 @@ export const stringWType = new WType({
 export const biguintWType = new WType({
   name: 'biguint',
 })
+export const assetWType = new WType({
+  name: 'asset',
+})
+
+export const accountWType = new WType({
+  name: 'account',
+})
+export const applicationWType = new WType({
+  name: 'application',
+})
 
 export abstract class ARC4Type extends WType {}
 
 export class WStructType extends WType {}
 export class WInnerTransactionFields extends WType {}
 
-export class WTuple extends WType {}
+export class WTuple extends WType {
+  items: WType[]
+  constructor(props: { items: WType[]; immutable: boolean }) {
+    super({
+      name: 'WTuple',
+      scalar: false,
+      immutable: props.immutable,
+    })
+    this.items = props.items
+  }
+}
 export class WArray extends WType {}
 
 export class ARC4UFixedNxM extends ARC4Type {}

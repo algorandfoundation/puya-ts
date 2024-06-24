@@ -31,7 +31,10 @@
     "algo-ts-testing": "run-s algo-ts-testing:*",
     "algo-ts-testing:build": "cd packages/algo-ts-testing && npm run build",
     "algo-ts-testing:install": "npm i -D @algorandfoundation/algo-ts-testing@./packages/algo-ts-testing/dist",
-    "npm-install-all": "cd packages/algo-ts && npm i && npm run build && cd ../algo-ts-testing && npm i && npm run build && cd ../../ && npm i"
+    "npm-install-all": "cd packages/algo-ts && npm i && npm run build && cd ../algo-ts-testing && npm i && npm run build && cd ../../ && npm i",
+    "script:op-types": "tsx ./scripts/generate-op-types.ts packages/algo-ts/src/op-types.ts && cd packages/algo-ts && eslint src/op-types.ts --fix",
+    "script:op-metadata": "tsx ./scripts/generate-op-metadata.ts src/awst_build/op-metadata.ts && eslint src/awst_build/op-metadata.ts --fix",
+    "script:op-ptypes": "tsx ./scripts/generate-op-ptypes.ts src/awst_build/ptypes/op-ptypes.ts && eslint src/awst_build/ptypes/op-ptypes.ts --fix"
   },
   "author": "",
   "license": "MIT",
@@ -50,6 +53,7 @@
     "@vitest/coverage-v8": "1.6.0",
     "better-npm-audit": "3.7.3",
     "copyfiles": "2.4.1",
+    "change-case": "^5.4.4",
     "eslint": "8.56.0",
     "npm-run-all": "4.1.5",
     "prettier": "3.2.5",
