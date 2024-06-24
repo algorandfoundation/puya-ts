@@ -50,10 +50,6 @@ This option proposes to support the `string` type but only support a subset of t
 | `length`          | `byteLength`        |
 | `slice`           | `sliceBytes`        |
 
-### Questions
-
-- How do you feel about not being able to use the `[]` operator (and other character-based functions) on strings?
-
 ## Option 4: Custom Class
 
 Rather than having a partially implemented `string` class, we could create a custom class that represents a string. This class would have a constructor and tagged literal.
@@ -65,17 +61,13 @@ Rather than having a partially implemented `string` class, we could create a cus
 
 **Note:** The exact type name may be anything. Some examples: `str`, `utf8`, `utf8String`. In the examples, `str` is used
 
-### Questions
-
-- How do you feel about not being able to use the `string` class or string literals?
-
 # Feature Comparison
 
 | Feature                     | Benefit                                                 | Option 5: Extended String Prototype | Option 4: Custom Class |
 | --------------------------- | ------------------------------------------------------- | ----------------------------------- | ---------------------- |
 | `string` support            | Can use the native `string` type they are familiar with | ✅                                  | ❌                     |
 | String literals             | Can use `"` or `'` for literal string values            | ✅                                  | ❌                     |
-| Fully-implemented prototype | IDEs **MAY\*** not show unsupported methods             | ❌                                  | ✅                     |
+| Fully-implemented prototype | IDEs only show supported methods\*                      | ❌                                  | ✅                     |
 | Concatenation with `+`      | Can use `+` to concatenate two strings                  | ✅                                  | ❌                     |
 
 \* TypeScript does have a [plugins feature](https://github.com/microsoft/TypeScript/wiki/Writing-a-Language-Service-Plugin#whats-a-language-service-plugin) that would enable us to modify the IDE experience, but it may be non-trivial for users to set up.
