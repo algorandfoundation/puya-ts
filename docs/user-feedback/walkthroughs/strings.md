@@ -40,7 +40,7 @@ The same can be said for other character-based operations, such as `length`, `sl
 
 # Proposed Solutions
 
-## Option 5: Extended string prototype
+## Extended string prototype
 
 This option proposes to support the `string` type but only support a subset of the prototype methods. In paticular, any character-based method would not be supported. Instead we would extend the `String` prototype with byte-based functions. For example:
 
@@ -50,7 +50,7 @@ This option proposes to support the `string` type but only support a subset of t
 | `length`          | `byteLength`        |
 | `slice`           | `sliceBytes`        |
 
-## Option 4: Custom Class
+## Custom Class
 
 Rather than having a partially implemented `string` class, we could create a custom class that represents a string. This class would have a constructor and tagged literal.
 
@@ -63,12 +63,12 @@ Rather than having a partially implemented `string` class, we could create a cus
 
 # Feature Comparison
 
-| Feature                     | Benefit                                                 | Option 5: Extended String Prototype | Option 4: Custom Class |
-| --------------------------- | ------------------------------------------------------- | ----------------------------------- | ---------------------- |
-| `string` support            | Can use the native `string` type they are familiar with | ✅                                  | ❌                     |
-| String literals             | Can use `"` or `'` for literal string values            | ✅                                  | ❌                     |
-| Fully-implemented prototype | IDEs only show supported methods\*                      | ❌                                  | ✅                     |
-| Concatenation with `+`      | Can use `+` to concatenate two strings                  | ✅                                  | ❌                     |
+| Feature                     | Benefit                                                 | Extended String Prototype | Custom Class |
+| --------------------------- | ------------------------------------------------------- | ------------------------- | ------------ |
+| `string` support            | Can use the native `string` type they are familiar with | ✅                        | ❌           |
+| String literals             | Can use `"` or `'` for literal string values            | ✅                        | ❌           |
+| Fully-implemented prototype | IDEs only show supported methods\*                      | ❌                        | ✅           |
+| Concatenation with `+`      | Can use `+` to concatenate two strings                  | ✅                        | ❌           |
 
 \* TypeScript does have a [plugins feature](https://github.com/microsoft/TypeScript/wiki/Writing-a-Language-Service-Plugin#whats-a-language-service-plugin) that would enable us to modify the IDE experience, but it may be non-trivial for users to set up.
 
@@ -78,8 +78,8 @@ Rather than having a partially implemented `string` class, we could create a cus
 
 <table>
 <tr>
-<th>Option 5</th>
-<th>Option 4</th>
+<th>Extended String Prototype</th>
+<th>Custom Class</th>
 </tr>
 
 <tr>
@@ -134,8 +134,8 @@ concatStrings(a: string, b: string): string {
 
 <table>
 <tr>
-<th>Option 5: Extended String Prototype</th>
-<th>Option 4: Custom Class</th>
+<th>Extended String Prototype</th>
+<th>Custom Class</th>
 </tr>
 
 <tr>
@@ -185,3 +185,7 @@ concatStrings(a: str, b: str): string {
 
 - Would seeing these compiler errors in your IDE prior to compilation change your opinion on the proposed solutions?
 - Would the IDE hiding unsupported methods change your opinions on the proposed solutions?
+
+## Relevant ADR(s)
+
+- [Primitive Bytes and Strings](../../architecture-decisions/2024-05-21_primitive-bytes-and-strings.md)
