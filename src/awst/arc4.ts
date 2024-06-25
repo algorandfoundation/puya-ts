@@ -9,15 +9,25 @@ export enum OnCompletionAction {
   DeleteApplication = 5,
 }
 
-export interface ARC4MethodConfig {
+export enum ARC4CreateOption {
+  Allow = 'allow',
+  Require = 'require',
+  Disallow = 'disallow',
+}
+
+export interface ARC4BareMethodConfig {
+  source_location: SourceLocation | undefined
+  allowed_completion_types: [...OnCompletionAction[]]
+  create: ARC4CreateOption
+}
+
+export interface ARC4ABIMethodConfig {
   source_location: SourceLocation | undefined
   name: string
   is_bare: boolean
-  allow_create: boolean
-  require_create: boolean
+  create: ARC4CreateOption
   readonly: boolean
   allowed_completion_types: [...OnCompletionAction[]]
-
   default_args: Record<string, string>
   structs: Readonly<Record<string, ARC32StructDef>>
 }

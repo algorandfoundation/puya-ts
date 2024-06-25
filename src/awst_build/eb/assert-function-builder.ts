@@ -2,11 +2,9 @@ import { FunctionBuilder, InstanceBuilder } from './index'
 import { SourceLocation } from '../../awst/source-location'
 import { VoidExpressionBuilder } from './void-expression-builder'
 import { nodeFactory } from '../../awst/node-factory'
-import { awst, wtypes } from '../../awst'
-import { intrinsicFactory } from '../../awst/intrinsic-factory'
-import { CodeError, InternalError, throwError } from '../../errors'
-import { requireConstant, requireInstanceBuilder, requireStringLiteral } from './util'
-import { Expression } from '../../awst/nodes'
+import { wtypes } from '../../awst'
+import { CodeError } from '../../errors'
+import { requireStringLiteral } from './util'
 
 export class AssertFunctionBuilder extends FunctionBuilder {
   call(args: Array<InstanceBuilder>, sourceLocation: SourceLocation): InstanceBuilder {
