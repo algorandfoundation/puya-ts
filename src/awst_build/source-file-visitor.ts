@@ -3,13 +3,14 @@ import { ModuleStatements } from '../visitor/syntax-names'
 import * as awst from '../awst/nodes'
 import ts from 'typescript'
 import { CodeError } from '../errors'
-import { BaseVisitor, Visitor, accept } from '../visitor/visitor'
+import { Visitor, accept } from '../visitor/visitor'
 import { ContractVisitor } from './contract-visitor'
 import { FunctionVisitor } from './function-visitor'
 import { logger, logPuyaExceptions } from '../logger'
 import { CompileTimeConstantVisitor } from './compile-time-constant-visitor'
 import { expandMaybeArray } from '../util'
 import { nodeFactory } from '../awst/node-factory'
+import { BaseVisitor } from '../visitor/base-visitor'
 
 type StatementOrDeferred = awst.ModuleStatement[] | awst.ModuleStatement | (() => awst.ModuleStatement[] | awst.ModuleStatement)
 

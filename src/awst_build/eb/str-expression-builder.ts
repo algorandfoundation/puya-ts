@@ -5,7 +5,7 @@ import { intrinsicFactory } from '../../awst/intrinsic-factory'
 import { requireExpressionsOfType } from './util'
 import { awst, wtypes } from '../../awst'
 import { FunctionBuilder, InstanceBuilder, InstanceExpressionBuilder, NodeBuilder } from './index'
-import { bytesPType, strPType } from '../ptypes'
+import { bytesPType, PType, strPType } from '../ptypes'
 import { LiteralExpressionBuilder } from './literal-expression-builder'
 import { BytesBinaryOperator } from '../../awst/nodes'
 
@@ -41,7 +41,7 @@ export class StrFunctionBuilder extends FunctionBuilder {
     return new StrExpressionBuilder(result)
   }
 
-  call(args: Array<InstanceBuilder>, sourceLocation: SourceLocation): InstanceBuilder {
+  call(args: Array<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
     if (args.length === 0) {
       return new StrExpressionBuilder(
         nodeFactory.stringConstant({
@@ -119,7 +119,7 @@ export class ConcatExpressionBuilder extends FunctionBuilder {
     super(expr.sourceLocation)
   }
 
-  call(args: ReadonlyArray<InstanceBuilder>, sourceLocation: SourceLocation) {
+  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation) {
     const [other] = requireExpressionsOfType(args, [strPType], sourceLocation)
     return new StrExpressionBuilder(
       intrinsicFactory.bytesConcat({

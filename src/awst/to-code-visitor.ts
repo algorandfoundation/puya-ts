@@ -22,6 +22,12 @@ function printBytes(value: Uint8Array, encoding: BytesEncoding) {
 }
 
 export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, StatementVisitor<string[]>, ExpressionVisitor<string> {
+  visitIntersectionSliceExpression(expression: nodes.IntersectionSliceExpression): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitBoxValueExpression(expression: nodes.BoxValueExpression): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
   visitIntegerConstant(expression: nodes.IntegerConstant): string {
     if (expression.tealAlias) return expression.tealAlias
     return `${expression.value}`

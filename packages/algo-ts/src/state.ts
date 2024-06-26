@@ -8,7 +8,7 @@ export type GlobalStateProxy<ValueType> = {
 }
 
 /** A single key in global state */
-export function GlobalState<ValueType>(options?: { key?: string }): GlobalStateProxy<ValueType> {
+export function GlobalState<ValueType>(options?: { key?: string; initialValue?: ValueType }): GlobalStateProxy<ValueType> {
   return undefined as unknown as GlobalStateProxy<ValueType>
 }
 

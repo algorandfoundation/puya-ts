@@ -7,9 +7,10 @@ import { intrinsicFactory } from '../../awst/intrinsic-factory'
 import { CodeError, InternalError, throwError } from '../../errors'
 import { requireInstanceBuilder } from './util'
 import { Expression } from '../../awst/nodes'
+import { PType } from '../ptypes'
 
 export class LogFunctionBuilder extends FunctionBuilder {
-  call(args: Array<InstanceBuilder>, sourceLocation: SourceLocation): InstanceBuilder {
+  call(args: Array<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
     const argsExps = args.map((a) => requireInstanceBuilder(a, sourceLocation))
 
     let logBytes: awst.Expression

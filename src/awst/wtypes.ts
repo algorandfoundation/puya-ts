@@ -1,5 +1,4 @@
 import { DeliberateAny } from '../typescript-helpers'
-import { it } from 'vitest'
 
 export type WTypeClass = { new (...args: DeliberateAny[]): WType }
 
@@ -39,6 +38,12 @@ export const uint64WType = new WType({
 })
 export const bytesWType = new WType({
   name: 'bytes',
+})
+export const stateKeyWType = new WType({
+  name: 'state_key',
+})
+export const boxKeyWType = new WType({
+  name: 'box_key',
 })
 export const stringWType = new WType({
   name: 'string',

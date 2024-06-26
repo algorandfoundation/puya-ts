@@ -269,6 +269,7 @@ export class IntrinsicCall extends Expression {
   opCode!: string
   immediates!: Array<string | bigint>
   stackArgs!: Array<Expression>
+  comment?: string | undefined
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitIntrinsicCall(this)
   }

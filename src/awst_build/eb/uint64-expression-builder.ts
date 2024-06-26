@@ -6,10 +6,9 @@ import { nodeFactory } from '../../awst/node-factory'
 import { CodeError, NotSupported } from '../../errors'
 import { requireExpressionOfType } from './util'
 import { tryConvertEnum } from '../../util'
-import { bigintLiteralPType, PType, Uint64Function, uint64PType } from '../ptypes'
+import { PType, Uint64Function, uint64PType } from '../ptypes'
 import { BoolExpressionBuilder } from './bool-expression-builder'
 import { LiteralExpressionBuilder } from './literal-expression-builder'
-import { VoidExpressionBuilder } from './void-expression-builder'
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
 
 export class UInt64FunctionBuilder extends FunctionBuilder {
@@ -17,7 +16,7 @@ export class UInt64FunctionBuilder extends FunctionBuilder {
     return Uint64Function
   }
 
-  call(args: Array<InstanceBuilder>, sourceLocation: SourceLocation): InstanceBuilder {
+  call(args: Array<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
     if (args.length === 0) {
       return new UInt64ExpressionBuilder(
         nodeFactory.uInt64Constant({

@@ -20,7 +20,7 @@ export class FreeSubroutineExpressionBuilder extends FunctionBuilder {
     return this._ptype
   }
 
-  call(args: ReadonlyArray<InstanceBuilder>, sourceLocation: SourceLocation): InstanceBuilder {
+  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
     const mappedArgs = args.map((a, i) =>
       nodeFactory.callArg({ name: undefined, value: requireExpressionOfType(a, this.ptype.parameters[i], sourceLocation) }),
     )

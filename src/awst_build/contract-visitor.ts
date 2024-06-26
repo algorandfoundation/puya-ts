@@ -1,4 +1,4 @@
-import { accept, BaseVisitor, Visitor } from '../visitor/visitor'
+import { accept, Visitor } from '../visitor/visitor'
 import { SourceFileContext } from './context'
 import ts from 'typescript'
 import * as awst from '../awst/nodes'
@@ -8,6 +8,8 @@ import { TodoError } from '../errors'
 import { codeInvariant } from '../util'
 import { Constants } from '../constants'
 import { FunctionVisitor } from './function-visitor'
+import { logger } from '../logger'
+import { BaseVisitor } from '../visitor/base-visitor'
 
 export class ContractContext extends SourceFileContext {
   constructor(parent: SourceFileContext) {
@@ -28,7 +30,7 @@ export class ContractVisitor extends BaseVisitor<ContractContext> implements Vis
     super(ctx)
     const sourceLocation = this.context.getSourceLocation(classDec)
     codeInvariant(classDec.name, 'Anonymous classes are not supported for contracts', sourceLocation)
-    this._className = this.context.textVisitor.accept(classDec.name)
+    this._className = this.textVisitor.accept(classDec.name)
 
     const isAbstract = Boolean(classDec.modifiers?.some((m) => m.kind === ts.SyntaxKind.AbstractKeyword))
 
@@ -50,6 +52,7 @@ export class ContractVisitor extends BaseVisitor<ContractContext> implements Vis
       bases: [],
       moduleName: this.context.moduleName,
       reservedScratchSpace: new Set(),
+      methods: new Map(),
       sourceLocation: sourceLocation,
       stateTotals: {
         globalBytes: undefined,
@@ -57,24 +60,23 @@ export class ContractVisitor extends BaseVisitor<ContractContext> implements Vis
         localBytes: undefined,
         localUints: undefined,
       },
-      symtable: new Map(),
     })
   }
 
   visitClassStaticBlockDeclaration(node: ts.ClassStaticBlockDeclaration): void {
-    throw new TodoError()
+    throw new TodoError('visitClassStaticBlockDeclaration')
   }
   visitConstructor(node: ts.ConstructorDeclaration): void {
-    throw new TodoError()
+    throw new TodoError('visitConstructor')
   }
   visitGetAccessor(node: ts.GetAccessorDeclaration): void {
-    throw new TodoError()
+    throw new TodoError('visitGetAccessor')
   }
   visitIndexSignature(node: ts.IndexSignatureDeclaration): void {
-    throw new TodoError()
+    throw new TodoError('visitIndexSignature')
   }
   visitMethodDeclaration(node: ts.MethodDeclaration): void {
-    const methodName = this.context.textVisitor.accept(node.name)
+    const methodName = this.textVisitor.accept(node.name)
 
     switch (methodName) {
       case Constants.approvalProgramMethodName:
@@ -88,13 +90,26 @@ export class ContractVisitor extends BaseVisitor<ContractContext> implements Vis
     }
   }
   visitPropertyDeclaration(node: ts.PropertyDeclaration): void {
-    throw new TodoError()
+    const sourceLocation = this.sourceLocation(node)
+    codeInvariant(!node.questionToken, 'Optional properties are not supported', sourceLocation)
+    codeInvariant(!node.exclamationToken, 'Non-null assertion operators on properties are not supported', sourceLocation)
+    // TODO: Check modifiers?
+
+    const propertyName = this.textVisitor.accept(node.name)
+    codeInvariant(node.initializer, 'Properties must have an initializer', sourceLocation)
+    if (node.type) {
+      logger.info(sourceLocation, 'Type annotations are not required on initialized properties')
+    }
+    const initializer = this.accept(node.initializer)
+
+    return
+    // TODO: do something with initializer
   }
   visitSemicolonClassElement(node: ts.SemicolonClassElement): void {
-    throw new TodoError()
+    throw new TodoError('visitSemicolonClassElement')
   }
   visitSetAccessor(node: ts.SetAccessorDeclaration): void {
-    throw new TodoError()
+    throw new TodoError('visitSetAccessor')
   }
 
   public static buildContract(ctx: SourceFileContext, classDec: ts.ClassDeclaration): awst.ContractFragment {

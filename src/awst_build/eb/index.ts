@@ -55,7 +55,7 @@ export abstract class NodeBuilder {
     return this.constructor.name
   }
 
-  call(args: ReadonlyArray<InstanceBuilder>, sourceLocation: SourceLocation): InstanceBuilder {
+  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
     throw new NotSupported(`Calling ${this.typeDescription}`, {
       sourceLocation,
     })

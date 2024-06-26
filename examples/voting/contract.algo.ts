@@ -46,21 +46,21 @@ type VotingPreconditions = {
   current_time: uint64
 }
 export default class VotingRoundApp extends arc4.Contract {
-  isBootstrapped = false
-  voterCount = Uint64(0)
+  isBootstrapped = GlobalState<boolean>({ initialValue: false })
+  voterCount = GlobalState({ initialValue: Uint64(0) })
   closeTime = GlobalState<uint64>()
   tallyBox = BoxRef({ key: Bytes`V` })
   votesByAccount = BoxMap<Account, VoteIndexArray>({ keyPrefix: Bytes() })
-  voteId?: str
-  snapshotPublicKey?: bytes
-  metadataIpfsCid?: str
-  startTime?: uint64
-  nftImageUrl?: str
-  endTime?: uint64
-  quorum?: uint64
-  optionCounts?: VoteIndexArray
-  totalOptions?: uint64
-  nftAsset?: Asset
+  voteId = GlobalState<str>()
+  snapshotPublicKey = GlobalState<bytes>()
+  metadataIpfsCid = GlobalState<str>()
+  startTime = GlobalState<uint64>()
+  nftImageUrl = GlobalState<str>()
+  endTime = GlobalState<uint64>()
+  quorum = GlobalState<uint64>()
+  optionCounts = GlobalState<VoteIndexArray>()
+  totalOptions = GlobalState<uint64>()
+  nftAsset = GlobalState<Asset>()
 
   @abimethod({ onCreate: 'require' })
   public create(
@@ -76,19 +76,19 @@ export default class VotingRoundApp extends arc4.Contract {
     assert(startTime < endTime, 'End time should be after start time')
     assert(endTime >= Global.latestTimestamp, 'End time should be in the future')
 
-    this.voteId = voteId
-    this.snapshotPublicKey = snapshotPublicKey
-    this.metadataIpfsCid = metadataIpfsCid
-    this.startTime = startTime
-    this.endTime = endTime
-    this.quorum = quorum
-    this.nftImageUrl = nftImageUrl
+    this.voteId.value = voteId
+    this.snapshotPublicKey.value = snapshotPublicKey
+    this.metadataIpfsCid.value = metadataIpfsCid
+    this.startTime.value = startTime
+    this.endTime.value = endTime
+    this.quorum.value = quorum
+    this.nftImageUrl.value = nftImageUrl
     this.storeOptionCounts(optionCounts)
   }
 
   public bootstrap(fundMinBalReq: gtxn.PayTxn): void {
-    assert(!this.isBootstrapped, 'Must not be already bootstrapped')
-    this.isBootstrapped = true
+    assert(!this.isBootstrapped.value, 'Must not be already bootstrapped')
+    this.isBootstrapped.value = true
     assertMatch(
       fundMinBalReq,
       {
@@ -96,7 +96,7 @@ export default class VotingRoundApp extends arc4.Contract {
       },
       'Payment must be to app address',
     )
-    const tallyBoxSize: uint64 = this.totalOptions! * VOTE_COUNT_BYTES
+    const tallyBoxSize: uint64 = this.totalOptions.value * VOTE_COUNT_BYTES
 
     const minBalanceReq: uint64 =
       ASSET_MIN_BALANCE * 2 + 1000 + BOX_FLAT_MIN_BALANCE + BOX_BYTE_MIN_BALANCE + tallyBoxSize * BOX_BYTE_MIN_BALANCE
@@ -121,16 +121,16 @@ export default class VotingRoundApp extends arc4.Contract {
     // Do we need a way to declare string literals where we ignore leading whitespace?
     const note = new StrBuilder(Str`{
       "standard":"arc69",
-      "description":"This is a voting result NFT for voting round with ID ${this.voteId!}",
+      "description":"This is a voting result NFT for voting round with ID ${this.voteId.value}",
       "properties":{
-        "metadata":"ipfs://${this.metadataIpfsCid!}",
-        "id":"${this.voteId!}",
-        "quorum":"${itoa(this.quorum!)}}",
-        "voterCount":"${itoa(this.voterCount)}",
+        "metadata":"ipfs://${this.metadataIpfsCid.value}",
+        "id":"${this.voteId.value}",
+        "quorum":"${itoa(this.quorum.value)}}",
+        "voterCount":"${itoa(this.voterCount.value)}",
         "tallies": [`)
 
     let currentIndex = Uint64(0)
-    this.optionCounts!.forEach((questionOptions, questionIndex) => {
+    this.optionCounts.value.forEach((questionOptions, questionIndex) => {
       if (questionIndex > 0) {
         note.append(',')
       }
@@ -148,13 +148,13 @@ export default class VotingRoundApp extends arc4.Contract {
     })
     note.append(']}}')
 
-    this.nftAsset = itxn.submitAssetCreate({
+    this.nftAsset.value = itxn.submitAssetCreate({
       total: 1,
       decimals: 0,
       defaultFrozen: false,
-      name: Str`[VOTE RESULT] ${this.voteId!}`.bytes,
+      name: Str`[VOTE RESULT] ${this.voteId.value}`.bytes,
       unitName: Str`VOTERSLT`.bytes,
-      url: this.nftImageUrl!.bytes,
+      url: this.nftImageUrl.value.bytes,
       note: note.value.bytes,
       fee: Global.minTxnFee,
     }).config_asset
@@ -172,7 +172,7 @@ export default class VotingRoundApp extends arc4.Contract {
 
   private allowedToVote(signature: bytes): boolean {
     ensureBudget(2000)
-    return op.ed25519verifyBare(Txn.sender.bytes, signature, this.snapshotPublicKey!)
+    return op.ed25519verifyBare(Txn.sender.bytes, signature, this.snapshotPublicKey.value)
   }
 
   private alreadyVoted(): boolean {
@@ -185,7 +185,7 @@ export default class VotingRoundApp extends arc4.Contract {
     assert(this.votingOpen(), 'Voting not open')
     assert(!this.alreadyVoted(), 'Already voted')
 
-    const questionsCount = this.optionCounts!.length
+    const questionsCount = this.optionCounts.value.length
     assertMatch(
       answerIds,
       {
@@ -206,17 +206,22 @@ export default class VotingRoundApp extends arc4.Contract {
     let cumulativeOffset = Uint64(0)
     for (const questionIndex of urange(questionsCount)) {
       const answerOptionIndex = answerIds.at(questionIndex).native
-      const optionsCount = this.optionCounts!.at(questionIndex).native
+      const optionsCount = this.optionCounts.value.at(questionIndex).native
       assert(answerOptionIndex < optionsCount, 'Answer option index invalid')
       this.incrementVoteInBox(cumulativeOffset + answerOptionIndex)
       cumulativeOffset += optionsCount
       this.votesByAccount.set(Txn.sender, answerIds)
-      this.voterCount += 1
+      this.voterCount.value += 1
     }
   }
 
   private votingOpen(): boolean {
-    return this.isBootstrapped && !this.closeTime && this.startTime! <= Global.latestTimestamp && Global.latestTimestamp <= this.endTime!
+    return (
+      this.isBootstrapped.value &&
+      !this.closeTime.hasValue &&
+      this.startTime.value <= Global.latestTimestamp &&
+      Global.latestTimestamp <= this.endTime.value
+    )
   }
 
   private storeOptionCounts(optionCounts: VoteIndexArray) {
@@ -226,8 +231,8 @@ export default class VotingRoundApp extends arc4.Contract {
     for (const item of optionCounts) {
       totalOptions += item.native
     }
-    this.optionCounts = optionCounts
-    this.totalOptions = totalOptions
+    this.optionCounts.value = optionCounts
+    this.totalOptions.value = totalOptions
   }
 
   private getVoteFromBox(index: uint64): uint64 {

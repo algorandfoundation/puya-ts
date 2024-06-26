@@ -32,7 +32,7 @@ export class AnyExpressionBuilder extends InstanceBuilder {
     return new AnyExpressionBuilder(sourceLocation)
   }
 
-  call(args: ReadonlyArray<InstanceBuilder>, sourceLocation: SourceLocation): InstanceBuilder {
+  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
     return new AnyExpressionBuilder(sourceLocation)
   }
 

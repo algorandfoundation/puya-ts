@@ -1,4 +1,4 @@
-import { BaseVisitor, Visitor, accept } from '../visitor/visitor'
+import { Visitor, accept } from '../visitor/visitor'
 import { BaseContext } from './context'
 import { Expressions } from '../visitor/syntax-names'
 import { awst } from '../awst'
@@ -39,6 +39,7 @@ import { NotSupported } from '../errors'
 import { NodeBuilder } from './eb'
 import { requireConstantOfType, requireInstanceBuilder } from './eb/util'
 import { PType } from './ptypes'
+import { BaseVisitor } from '../visitor/base-visitor'
 
 /**
  * Parses an expression and attempts to extract a compile time constant from it.
@@ -65,7 +66,10 @@ export class CompileTimeConstantVisitor extends BaseVisitor<BaseContext> impleme
     const target = this.accept(node.expression)
     const sourceLocation = this.sourceLocation(node)
     const args = node.arguments.map((a) => requireInstanceBuilder(this.accept(a), sourceLocation))
-    return target.call(args, this.sourceLocation(node))
+    // TODO: Check this works
+    const typeArgs = node.typeArguments?.map((t) => this.context.getPTypeForNode(t)) ?? []
+
+    return target.call(args, typeArgs, this.sourceLocation(node))
   }
 
   visitPropertyAccessExpression(node: PropertyAccessExpression): NodeBuilder {
