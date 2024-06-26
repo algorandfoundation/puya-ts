@@ -23,7 +23,7 @@ export class BytesFunctionBuilder extends FunctionBuilder {
     )
   }
 
-  call(args: Array<InstanceBuilder>, sourceLocation: SourceLocation): InstanceBuilder {
+  call(args: Array<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
     if (args.length === 0) {
       return new BytesExpressionBuilder(
         nodeFactory.bytesConstant({
@@ -76,7 +76,7 @@ export class ConcatExpressionBuilder extends FunctionBuilder {
     super(expr.sourceLocation)
   }
 
-  call(args: ReadonlyArray<InstanceBuilder>, sourceLocation: SourceLocation) {
+  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation) {
     const [other] = requireExpressionsOfType(args, [bytesPType], sourceLocation)
     return new BytesExpressionBuilder(
       intrinsicFactory.bytesConcat({
@@ -92,7 +92,7 @@ export class BytesSliceBuilder extends FunctionBuilder {
   constructor(private expr: awst.Expression) {
     super(expr.sourceLocation)
   }
-  call(args: ReadonlyArray<InstanceBuilder>, sourceLocation: SourceLocation) {
+  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation) {
     // TODO: Needs to do range check on target and handle negative values
     // TODO: Also handle single arg
     const [start, stop] = requireExpressionsOfType(args, [uint64PType, uint64PType], sourceLocation)
@@ -113,7 +113,7 @@ export class BytesAtBuilder extends FunctionBuilder {
     super(expr.sourceLocation)
   }
 
-  call(args: ReadonlyArray<InstanceBuilder>, sourceLocation: SourceLocation) {
+  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation) {
     const [index] = requireExpressionsOfType(args, [uint64PType], sourceLocation)
     // TODO: Needs to do range check on target and handle negative values
     return new BytesExpressionBuilder(

@@ -5,9 +5,10 @@ import { nodeFactory } from '../../awst/node-factory'
 import { wtypes } from '../../awst'
 import { CodeError } from '../../errors'
 import { requireStringLiteral } from './util'
+import { PType } from '../ptypes'
 
 export class AssertFunctionBuilder extends FunctionBuilder {
-  call(args: Array<InstanceBuilder>, sourceLocation: SourceLocation): InstanceBuilder {
+  call(args: Array<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
     const [condition, message, ...rest] = args
     if (rest.length !== 0) {
       throw CodeError.unexpectedUnhandledArgs({ sourceLocation })
@@ -30,6 +31,7 @@ export class AssertFunctionBuilder extends FunctionBuilder {
         stackArgs: [condition.boolEval(sourceLocation, false)],
         immediates: [],
         wtype: wtypes.voidWType,
+        comment: messageStr,
       }),
     )
   }

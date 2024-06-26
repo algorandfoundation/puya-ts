@@ -7,7 +7,7 @@ import { CodeError } from '../errors'
 import { nodeFactory } from '../awst/node-factory'
 import { codeInvariant, invariant } from '../util'
 import { ConstantDeclaration } from '../awst/nodes'
-import { PType } from './ptypes'
+import { PType, voidPType } from './ptypes'
 import { NodeBuilder } from './eb'
 import { typeRegistry } from './type-registry'
 
@@ -67,7 +67,6 @@ export class UniqueNameResolver {
 
 export class SourceFileContext extends BaseContext {
   private readonly typeHelper: TypeHelper
-  readonly textVisitor: TextVisitor
   readonly constants: Map<string, awst.ConstantDeclaration> = new Map()
   constructor(
     public readonly sourceFile: ts.SourceFile,
@@ -76,7 +75,6 @@ export class SourceFileContext extends BaseContext {
   ) {
     super()
     this.typeHelper = new TypeHelper(program.getTypeChecker())
-    this.textVisitor = new TextVisitor(this)
   }
 
   tryResolveConstant(node: ts.Identifier): ConstantDeclaration | undefined {

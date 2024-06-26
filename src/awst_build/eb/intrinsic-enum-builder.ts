@@ -1,4 +1,4 @@
-import { InstanceBuilder, InstanceExpressionBuilder, NodeBuilder } from './index'
+import { NodeBuilder } from './index'
 import { SourceLocation } from '../../awst/source-location'
 import { IntrinsicEnumType, PType } from '../ptypes/ptype-classes'
 import { LiteralExpressionBuilder } from './literal-expression-builder'

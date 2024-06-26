@@ -2,6 +2,7 @@ import { wtypes } from '../../awst'
 import { codeInvariant } from '../../util'
 import { WTuple, WType } from '../../awst/wtypes'
 import { Constants } from '../../constants'
+import { bytesPType } from './index'
 
 /**
  * Represents a public type visible to a developer of AlgoTS
@@ -155,5 +156,35 @@ export class TuplePType extends PType {
       items: props.items.map((i) => i.wtypeOrThrow),
       immutable: props.immutable,
     })
+  }
+}
+
+export abstract class StorageProxyPType<TContent extends PType> extends PType {
+  readonly wtype: WType
+  readonly contentType: TContent
+
+  protected constructor(props: { content: TContent; keyWType: WType }) {
+    super()
+    this.wtype = props.keyWType
+    this.contentType = props.content
+  }
+}
+
+export class GlobalStateType<TContent extends PType> extends StorageProxyPType<TContent> {
+  readonly module: string = Constants.stateModuleName
+  get name() {
+    return `GlobalState<${this.contentType.fullName}>`
+  }
+  constructor(props: { content: TContent }) {
+    super({ ...props, keyWType: wtypes.stateKeyWType })
+  }
+}
+export class LocalStateType<TContent extends PType> extends StorageProxyPType<TContent> {
+  readonly module: string = Constants.stateModuleName
+  get name() {
+    return `LocalState<${this.contentType.fullName}>`
+  }
+  constructor(props: { content: TContent }) {
+    super({ ...props, keyWType: wtypes.stateKeyWType })
   }
 }

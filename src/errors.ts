@@ -23,8 +23,8 @@ export class CodeError extends PuyaError {
 export class TodoError extends PuyaError {}
 export class InternalError extends PuyaError {}
 export class NotSupported extends CodeError {
-  constructor(thing: string, options?: PuyaErrorOptions) {
-    super(`${thing} is not supported`, options)
+  constructor(featureName: string, options?: PuyaErrorOptions) {
+    super(`${featureName} are not supported`, options)
   }
 }
 

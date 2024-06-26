@@ -1,12 +1,8 @@
 import ts from 'typescript'
 import { DeliberateAny } from '../typescript-helpers'
 import { logger, logPuyaExceptions } from '../logger'
-import { getNodeName, LiteralExpressions, MapBaseType, SyntaxKindName, SyntaxKindNameType } from './syntax-names'
-import { NotSupported } from '../errors'
+import { getNodeName, MapBaseType, SyntaxKindName, SyntaxKindNameType } from './syntax-names'
 import { BaseContext } from '../awst_build/context'
-import { SourceLocation } from '../awst/source-location'
-import { InstanceBuilder } from '../awst_build/eb'
-import { LiteralExpressionBuilder } from '../awst_build/eb/literal-expression-builder'
 import { AnyExpressionBuilder } from '../awst_build/eb/any-expression-builder'
 
 type UnionToIntersection<T> = (T extends DeliberateAny ? (x: T) => void : never) extends (x: infer TIntersection) => void
@@ -54,42 +50,4 @@ export const accept = <TSelf extends { context: BaseContext }, T extends ts.Node
   }
   // Return a value so the visitor can keep traversing and potentially discover more errors
   return new AnyExpressionBuilder(visitor.context.getSourceLocation(node)) as DeliberateAny
-}
-
-export abstract class BaseVisitor<TContext extends BaseContext> implements Visitor<LiteralExpressions, InstanceBuilder> {
-  constructor(public context: TContext) {}
-
-  visitBigIntLiteral(node: ts.BigIntLiteral): InstanceBuilder {
-    return new LiteralExpressionBuilder(BigInt(node.text.slice(0, -1)), this.sourceLocation(node))
-  }
-
-  visitRegularExpressionLiteral(node: ts.RegularExpressionLiteral): InstanceBuilder {
-    throw new NotSupported('Regular expressions', {
-      sourceLocation: this.sourceLocation(node),
-    })
-  }
-
-  visitFalseKeyword(node: ts.FalseLiteral): InstanceBuilder {
-    return new LiteralExpressionBuilder(false, this.sourceLocation(node))
-  }
-
-  visitTrueKeyword(node: ts.TrueLiteral): InstanceBuilder {
-    return new LiteralExpressionBuilder(true, this.sourceLocation(node))
-  }
-
-  sourceLocation(node: ts.Node): SourceLocation {
-    return this.context.getSourceLocation(node)
-  }
-
-  visitStringLiteral(node: ts.StringLiteral): InstanceBuilder {
-    return new LiteralExpressionBuilder(node.text, this.sourceLocation(node))
-  }
-
-  visitNoSubstitutionTemplateLiteral(node: ts.NoSubstitutionTemplateLiteral): InstanceBuilder {
-    return new LiteralExpressionBuilder(node.text, this.sourceLocation(node))
-  }
-
-  visitNumericLiteral(node: ts.NumericLiteral): InstanceBuilder {
-    return new LiteralExpressionBuilder(BigInt(node.text), this.sourceLocation(node))
-  }
 }

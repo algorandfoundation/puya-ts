@@ -19,12 +19,13 @@ export interface ARC4BareMethodConfig {
   source_location: SourceLocation | undefined
   allowed_completion_types: [...OnCompletionAction[]]
   create: ARC4CreateOption
+  is_bare: true
 }
 
 export interface ARC4ABIMethodConfig {
   source_location: SourceLocation | undefined
   name: string
-  is_bare: boolean
+  is_bare: false
   create: ARC4CreateOption
   readonly: boolean
   allowed_completion_types: [...OnCompletionAction[]]

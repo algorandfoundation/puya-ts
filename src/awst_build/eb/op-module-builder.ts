@@ -96,7 +96,7 @@ abstract class IntrinsicOpBuilderBase extends FunctionBuilder {
     super(sourceLocation)
   }
 
-  call(args: Array<InstanceBuilder>, sourceLocation: SourceLocation): InstanceBuilder {
+  call(args: Array<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
     signatureLoop: for (const [index, sig] of enumerate(this.opMapping.signatures)) {
       const isLastSig = index + 1 >= this.opMapping.signatures.length
       if (args.length !== sig.argNames.length) {

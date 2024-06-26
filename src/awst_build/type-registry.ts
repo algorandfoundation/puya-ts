@@ -7,6 +7,7 @@ import {
   boolPType,
   BytesFunction,
   bytesPType,
+  GlobalStateFunction,
   logFunction,
   opNamespace,
   PType,
@@ -24,16 +25,11 @@ import { LogFunctionBuilder } from './eb/log-function-builder'
 import { AssertFunctionBuilder } from './eb/assert-function-builder'
 import { FreeSubroutineExpressionBuilder } from './eb/free-subroutine-expression-builder'
 import { awst } from '../awst'
-import {
-  FreeSubroutineType,
-  IntrinsicEnumType,
-  IntrinsicFunctionGroupType,
-  IntrinsicFunctionType,
-  LibFunctionType,
-} from './ptypes/ptype-classes'
+import { FreeSubroutineType, IntrinsicEnumType, IntrinsicFunctionGroupType, IntrinsicFunctionType } from './ptypes/ptype-classes'
 import { IntrinsicEnumBuilder } from './eb/intrinsic-enum-builder'
 import { OP_METADATA } from './op-metadata'
 import { Constants } from '../constants'
+import { GlobalStateFunctionBuilder } from './eb/storage/global-state'
 
 type ValueExpressionBuilderCtor = { new (expr: awst.Expression, ptype: PType): InstanceExpressionBuilder }
 type SingletonExpressionBuilderCtor = { new (sourceLocation: SourceLocation, ptype: PType): NodeBuilder }
@@ -147,3 +143,4 @@ typeRegistry.register({ ptype: FreeSubroutineType, symbolEb: FreeSubroutineExpre
 typeRegistry.register({ ptype: IntrinsicEnumType, symbolEb: IntrinsicEnumBuilder })
 typeRegistry.register({ ptype: IntrinsicFunctionType, symbolEb: FreeIntrinsicOpBuilder })
 typeRegistry.register({ ptype: IntrinsicFunctionGroupType, symbolEb: IntrinsicOpGroupBuilder })
+typeRegistry.register({ ptype: GlobalStateFunction, symbolEb: GlobalStateFunctionBuilder })
