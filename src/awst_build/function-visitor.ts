@@ -10,7 +10,7 @@ import { logger } from '../logger'
 import { nodeFactory } from '../awst/node-factory'
 import { wrapInBlock } from '../awst/util'
 import { requireExpressionOfType, requireInstanceBuilder } from './eb/util'
-import { PType } from './ptypes'
+import { PType, voidPType } from './ptypes'
 import { ARC4CreateOption, OnCompletionAction } from '../awst/arc4'
 import { BaseVisitor } from '../visitor/base-visitor'
 
@@ -19,10 +19,7 @@ export type ContractMethodInfo = {
 }
 
 export class FunctionContext extends SourceFileContext {
-  constructor(
-    parent: ContractContext | SourceFileContext,
-    public readonly returnType: PType,
-  ) {
+  constructor(parent: ContractContext | SourceFileContext) {
     super(parent.sourceFile, parent.program, parent.nameResolver.createChild())
   }
 }
@@ -37,11 +34,24 @@ export class FunctionVisitor
   private accept = <TNode extends ts.Node>(node: TNode) => accept<FunctionVisitor, TNode>(this, node)
 
   private readonly _result: awst.Subroutine | awst.ContractMethod
-  constructor(ctx: FunctionContext, node: ts.MethodDeclaration | ts.FunctionDeclaration, contractInfo: ContractMethodInfo | undefined) {
+  private readonly _returnType: PType
+  private readonly _functionName: string
+  constructor(
+    ctx: FunctionContext,
+    node: ts.MethodDeclaration | ts.FunctionDeclaration | ts.ConstructorDeclaration,
+    contractInfo: ContractMethodInfo | undefined,
+  ) {
     super(ctx)
     const sourceLocation = this.sourceLocation(node)
-    codeInvariant(node.name, 'Anonymous functions are not supported', sourceLocation)
-    const name = this.textVisitor.accept(node.name)
+
+    if (ts.isConstructorDeclaration(node)) {
+      this._functionName = '~ctor~'
+      this._returnType = voidPType
+    } else {
+      codeInvariant(node.name, 'Anonymous functions are not supported', sourceLocation)
+      this._functionName = this.textVisitor.accept(node.name)
+      this._returnType = node.type ? ctx.getPTypeForNode(node.type) : ctx.getImplicitReturnType(node)
+    }
 
     const args = node.parameters.map((p) => this.accept(p))
     codeInvariant(node.body, 'Functions must have a body')
@@ -55,21 +65,21 @@ export class FunctionVisitor
           create: ARC4CreateOption.Disallow,
           source_location: sourceLocation,
         },
-        name,
+        name: this._functionName,
         sourceLocation,
         moduleName: this.context.moduleName,
         args,
-        returnType: ctx.returnType.wtypeOrThrow,
+        returnType: this._returnType.wtypeOrThrow,
         body,
         docstring: undefined,
       })
     } else {
       this._result = new awst.Subroutine({
-        name,
+        name: this._functionName,
         sourceLocation,
         moduleName: this.context.moduleName,
         args,
-        returnType: ctx.returnType.wtypeOrThrow,
+        returnType: this._returnType.wtypeOrThrow,
         body,
         docstring: undefined,
       })
@@ -167,7 +177,7 @@ export class FunctionVisitor
     const returnValue = this.accept(node.expression)
     return nodeFactory.returnStatement({
       sourceLocation: sourceLocation,
-      value: requireExpressionOfType(returnValue, this.context.returnType, sourceLocation),
+      value: requireExpressionOfType(returnValue, this._returnType, sourceLocation),
     })
   }
   visitWithStatement(node: ts.WithStatement): awst.Statement | awst.Statement[] {
@@ -214,9 +224,7 @@ export class FunctionVisitor
   }
 
   public static buildSubroutine(ctx: SourceFileContext, node: ts.FunctionDeclaration): awst.Subroutine {
-    const returnType = node.type ? ctx.getPTypeForNode(node.type) : ctx.getImplicitReturnType(node)
-
-    const result = new FunctionVisitor(new FunctionContext(ctx, returnType), node, undefined).result
+    const result = new FunctionVisitor(new FunctionContext(ctx), node, undefined).result
     invariant(result instanceof awst.Subroutine, "result must be Subroutine'")
     return result
   }
@@ -225,8 +233,12 @@ export class FunctionVisitor
     node: ts.MethodDeclaration,
     contractMethodInfo: ContractMethodInfo,
   ): awst.ContractMethod {
-    const returnType = node.type ? ctx.getPTypeForNode(node.type) : ctx.getImplicitReturnType(node)
-    const result = new FunctionVisitor(new FunctionContext(ctx, returnType), node, contractMethodInfo).result
+    const result = new FunctionVisitor(new FunctionContext(ctx), node, contractMethodInfo).result
+    invariant(result instanceof awst.ContractMethod, "result must be ContractMethod'")
+    return result
+  }
+  public static buildConstructor(ctx: ContractContext, node: ts.ConstructorDeclaration, contractMethodInfo: ContractMethodInfo) {
+    const result = new FunctionVisitor(new FunctionContext(ctx), node, contractMethodInfo).result
     invariant(result instanceof awst.ContractMethod, "result must be ContractMethod'")
     return result
   }

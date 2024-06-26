@@ -2,10 +2,10 @@ import ts from 'typescript'
 import { CodeError, InternalError } from '../errors'
 import { SourceLocation } from '../awst/source-location'
 import { boolPType, PType, voidPType } from './ptypes'
-import { codeInvariant, hasAnyFlag, hasFlags } from '../util'
+import { codeInvariant, hasAnyFlag, hasFlags, invariant } from '../util'
 import { NodeBuilder } from './eb'
 import { typeRegistry } from './type-registry'
-import { FreeSubroutineType } from './ptypes/ptype-classes'
+import { ContractClassType, FreeSubroutineType } from './ptypes/ptype-classes'
 
 export class TypeHelper {
   constructor(private checker: ts.TypeChecker) {}
@@ -58,15 +58,35 @@ export class TypeHelper {
       const type = this.checker.getTypeFromTypeNode(node)
       return this.ptypeForTsType(type, sourceLocation)
     }
+    if (ts.isClassDeclaration(node)) {
+      return this.ptypeForClass(node, sourceLocation)
+    }
     const symbol = this.getUnaliasedSymbolForNode(node)
     if (symbol) {
       if (hasFlags(symbol.flags, ts.SymbolFlags.Type)) {
         this.pTypeForSymbol(symbol, sourceLocation)
       }
+      if (hasFlags(symbol.flags, ts.SymbolFlags.Class)) {
+        invariant(symbol.valueDeclaration && ts.isClassDeclaration(symbol.valueDeclaration), 'Value declaration must be class declaration')
+        return this.ptypeForClass(symbol.valueDeclaration, sourceLocation)
+      }
       const tsType = this.checker.getTypeOfSymbol(symbol)
       return this.ptypeForTsType(tsType, sourceLocation)
     }
     throw new Error()
+  }
+
+  private ptypeForClass(declaration: ts.ClassDeclaration, sourceLocation: SourceLocation): PType {
+    codeInvariant(declaration.name, 'Class declaration must have a name', sourceLocation)
+    const moduleName = this.getModuleName(declaration)
+    const contractName = declaration.name.text
+
+    return new ContractClassType({
+      name: contractName,
+      module: moduleName,
+      properties: {},
+      methods: {},
+    })
   }
 
   private getModuleName(declaration: ts.Declaration): string {

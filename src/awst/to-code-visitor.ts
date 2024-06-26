@@ -1,5 +1,7 @@
 import * as nodes from './nodes'
 import {
+  AppStorageDefinition,
+  AppStorageKind,
   BytesEncoding,
   ExpressionVisitor,
   FreeSubroutineTarget,
@@ -253,7 +255,28 @@ export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, Statemen
   visitContractFragment(c: nodes.ContractFragment): string[] {
     const body: string[] = []
     if (c.appState.size) {
-      logger.warn(c.sourceLocation, 'Handle appState to-code')
+      const storageByKind = Array.from(c.appState.values()).reduce(
+        (acc, cur) => acc.set(cur.kind, [...(acc.get(cur.kind) ?? []), cur]),
+        new Map<AppStorageKind, AppStorageDefinition[]>(),
+      )
+      for (const [name, kind] of [
+        ['globals', AppStorageKind.appGlobal],
+        ['locals', AppStorageKind.accountLocal],
+        ['boxes', AppStorageKind.box],
+      ] as const) {
+        const items = storageByKind.get(kind)
+        if (items?.length) {
+          body.push(
+            `${name} {`,
+            ...indent(
+              items.map((g) =>
+                g.keyWtype ? `[${g.key.accept(this)}]: ${g.keyWtype} => ${g.storageWtype}` : `[${g.key.accept(this)}]: ${g.storageWtype}`,
+              ),
+            ),
+            '}',
+          )
+        }
+      }
     }
     if (c.reservedScratchSpace.size) {
       logger.warn(c.sourceLocation, 'Handle reservedScratchSpace to-code')

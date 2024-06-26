@@ -19,6 +19,11 @@ export class CodeError extends PuyaError {
       sourceLocation,
     })
   }
+  static invalidAssignmentTarget({ sourceLocation, name }: { sourceLocation: SourceLocation; name: string }) {
+    return new CodeError(`${name} is not a valid assignment target`, {
+      sourceLocation,
+    })
+  }
 }
 export class TodoError extends PuyaError {}
 export class InternalError extends PuyaError {}

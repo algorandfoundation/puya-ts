@@ -3,6 +3,7 @@ import { codeInvariant } from '../../util'
 import { WTuple, WType } from '../../awst/wtypes'
 import { Constants } from '../../constants'
 import { bytesPType } from './index'
+import { resolveSrv } from 'node:dns'
 
 /**
  * Represents a public type visible to a developer of AlgoTS
@@ -186,5 +187,21 @@ export class LocalStateType<TContent extends PType> extends StorageProxyPType<TC
   }
   constructor(props: { content: TContent }) {
     super({ ...props, keyWType: wtypes.stateKeyWType })
+  }
+}
+export class ContractClassType extends PType {
+  readonly wtype = undefined
+  readonly name: string
+  readonly module: string
+
+  constructor(props: {
+    module: string
+    name: string
+    properties: Record<string, PType>
+    methods: Record<string, readonly [Array<PType>, PType]>
+  }) {
+    super()
+    this.name = props.name
+    this.module = props.module
   }
 }

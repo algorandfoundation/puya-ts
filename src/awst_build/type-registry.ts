@@ -4,6 +4,7 @@ import { DeliberateAny } from '../typescript-helpers'
 import { InternalError, throwError } from '../errors'
 import {
   assertFunction,
+  assetPType,
   boolPType,
   BytesFunction,
   bytesPType,
@@ -30,6 +31,7 @@ import { IntrinsicEnumBuilder } from './eb/intrinsic-enum-builder'
 import { OP_METADATA } from './op-metadata'
 import { Constants } from '../constants'
 import { GlobalStateFunctionBuilder } from './eb/storage/global-state'
+import { AssetExpressionBuilder, AssetFunctionBuilder } from './eb/reference/asset'
 
 type ValueExpressionBuilderCtor = { new (expr: awst.Expression, ptype: PType): InstanceExpressionBuilder }
 type SingletonExpressionBuilderCtor = { new (sourceLocation: SourceLocation, ptype: PType): NodeBuilder }
@@ -138,6 +140,8 @@ typeRegistry.register({ ptype: StrFunction, symbolEb: StrFunctionBuilder })
 typeRegistry.register({ ptype: opNamespace, symbolEb: OpModuleBuilder })
 typeRegistry.register({ ptype: logFunction, symbolEb: LogFunctionBuilder })
 typeRegistry.register({ ptype: assertFunction, symbolEb: AssertFunctionBuilder })
+
+typeRegistry.register({ ptype: assetPType, instanceEb: AssetExpressionBuilder, symbolEb: AssetFunctionBuilder })
 
 typeRegistry.register({ ptype: FreeSubroutineType, symbolEb: FreeSubroutineExpressionBuilder })
 typeRegistry.register({ ptype: IntrinsicEnumType, symbolEb: IntrinsicEnumBuilder })

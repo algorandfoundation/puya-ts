@@ -3,15 +3,16 @@ import { DeliberateAny } from '../typescript-helpers'
 import { SourceLocation } from './source-location'
 import * as wtypes from './wtypes'
 import { invariant } from '../util'
+import { WType } from './wtypes'
 
 type ConcreteNodes = typeof concreteNodes
 
 const explicitNodeFactory = {
-  bytesConstant(props: { value: Uint8Array; encoding?: BytesEncoding; sourceLocation: SourceLocation }): BytesConstant {
+  bytesConstant(props: { value: Uint8Array; encoding?: BytesEncoding; sourceLocation: SourceLocation; wtype?: WType }): BytesConstant {
     return new BytesConstant({
       encoding: BytesEncoding.unknown,
-      ...props,
       wtype: wtypes.bytesWType,
+      ...props,
     })
   },
   stringConstant(props: { value: string; sourceLocation: SourceLocation }): StringConstant {

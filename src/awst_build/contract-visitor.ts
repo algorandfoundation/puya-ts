@@ -2,14 +2,16 @@ import { accept, Visitor } from '../visitor/visitor'
 import { SourceFileContext } from './context'
 import ts from 'typescript'
 import * as awst from '../awst/nodes'
-import { ContractFragment, ContractMethod } from '../awst/nodes'
+import { AppStorageDefinition, ContractFragment, ContractMethod } from '../awst/nodes'
 import { ClassElements } from '../visitor/syntax-names'
 import { TodoError } from '../errors'
-import { codeInvariant } from '../util'
+import { codeInvariant, invariant } from '../util'
 import { Constants } from '../constants'
 import { FunctionVisitor } from './function-visitor'
 import { logger } from '../logger'
 import { BaseVisitor } from '../visitor/base-visitor'
+import { GlobalStateFunctionResultBuilder } from './eb/storage/global-state'
+import { ContractClassType } from './ptypes/ptype-classes'
 
 export class ContractContext extends SourceFileContext {
   constructor(parent: SourceFileContext) {
@@ -23,6 +25,8 @@ export class ContractVisitor extends BaseVisitor<ContractContext> implements Vis
   private _approvalProgram?: ContractMethod
   private _clearStateProgram?: ContractMethod
   private _className: string
+  private _contractPType: ContractClassType
+  private _appState = new Map<string, AppStorageDefinition>()
   public readonly result: ContractFragment
   public accept = <TNode extends ts.Node>(node: TNode) => accept<ContractVisitor, TNode>(this, node)
 
@@ -31,6 +35,10 @@ export class ContractVisitor extends BaseVisitor<ContractContext> implements Vis
     const sourceLocation = this.context.getSourceLocation(classDec)
     codeInvariant(classDec.name, 'Anonymous classes are not supported for contracts', sourceLocation)
     this._className = this.textVisitor.accept(classDec.name)
+
+    const contractPtype = this.context.getPTypeForNode(classDec)
+    invariant(contractPtype instanceof ContractClassType, 'Contract PType must be ContractClassType')
+    this._contractPType = contractPtype
 
     const isAbstract = Boolean(classDec.modifiers?.some((m) => m.kind === ts.SyntaxKind.AbstractKeyword))
 
@@ -41,7 +49,7 @@ export class ContractVisitor extends BaseVisitor<ContractContext> implements Vis
     this.result = new ContractFragment({
       name: this._className,
       nameOverride: undefined,
-      appState: new Map(),
+      appState: this._appState,
       init: this._ctor,
       subroutines: this._subroutines,
       docstring: undefined,
@@ -67,7 +75,7 @@ export class ContractVisitor extends BaseVisitor<ContractContext> implements Vis
     throw new TodoError('visitClassStaticBlockDeclaration')
   }
   visitConstructor(node: ts.ConstructorDeclaration): void {
-    throw new TodoError('visitConstructor')
+    this._ctor = FunctionVisitor.buildConstructor(this.context, node, { className: this._className })
   }
   visitGetAccessor(node: ts.GetAccessorDeclaration): void {
     throw new TodoError('visitGetAccessor')
@@ -101,6 +109,11 @@ export class ContractVisitor extends BaseVisitor<ContractContext> implements Vis
       logger.info(sourceLocation, 'Type annotations are not required on initialized properties')
     }
     const initializer = this.accept(node.initializer)
+
+    if (initializer instanceof GlobalStateFunctionResultBuilder) {
+      const storageDef = initializer.buildStorageDefinition(propertyName, this.sourceLocation(node.name), this._contractPType)
+      this._appState.set(propertyName, storageDef.definition)
+    }
 
     return
     // TODO: do something with initializer
