@@ -7,6 +7,7 @@ import { UInt64ExpressionBuilder } from './uint64-expression-builder'
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
 import { requireExpressionsOfType } from './util'
 import { BytesFunction, bytesPType, PType, uint64PType } from '../ptypes'
+import { StrExpressionBuilder } from './str-expression-builder'
 
 export class BytesFunctionBuilder extends FunctionBuilder {
   get ptype(): PType | undefined {
@@ -58,6 +59,8 @@ export class BytesExpressionBuilder extends InstanceExpressionBuilder {
             sourceLocation,
           }),
         )
+      case 'asStr':
+        return new AsStringBuilder(this._expr)
       case 'concat':
         return new ConcatExpressionBuilder(this._expr)
       case 'at':
@@ -103,6 +106,22 @@ export class BytesSliceBuilder extends FunctionBuilder {
         beginIndex: start,
         endIndex: stop,
         wtype: wtypes.bytesWType,
+      }),
+    )
+  }
+}
+
+export class AsStringBuilder extends FunctionBuilder {
+  constructor(private expr: awst.Expression) {
+    super(expr.sourceLocation)
+  }
+
+  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
+    return new StrExpressionBuilder(
+      nodeFactory.reinterpretCast({
+        wtype: wtypes.stringWType,
+        expr: this.expr,
+        sourceLocation,
       }),
     )
   }

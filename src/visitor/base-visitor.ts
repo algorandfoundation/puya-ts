@@ -10,6 +10,8 @@ import { requireInstanceBuilder } from '../awst_build/eb/util'
 import { accept, Visitor } from './visitor'
 import { ObjectLiteralExpressionBuilder } from '../awst_build/eb/object-literal-expression-builder'
 import { codeInvariant } from '../util'
+import { ContractClassType } from '../awst_build/ptypes/ptype-classes'
+import { ContractThisBuilder } from '../awst_build/eb/contract-builder'
 
 export abstract class BaseVisitor<TContext extends BaseContext> implements Visitor<Expressions, NodeBuilder> {
   private baseAccept = <TNode extends ts.Node>(node: TNode) => accept<BaseVisitor<BaseContext>, TNode>(this, node)
@@ -62,27 +64,32 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
   }
 
   visitImportKeyword(node: ts.ImportExpression): NodeBuilder {
-    throw new TodoError()
+    throw new TodoError('ImportExpression')
   }
 
   visitNullKeyword(node: ts.NullLiteral): NodeBuilder {
-    throw new TodoError()
+    throw new TodoError('NullLiteral')
   }
 
   visitPrivateIdentifier(node: ts.PrivateIdentifier): NodeBuilder {
-    throw new TodoError()
+    throw new TodoError('PrivateIdentifier')
   }
 
   visitSuperKeyword(node: ts.SuperExpression): NodeBuilder {
-    throw new TodoError()
+    throw new TodoError('SuperExpression')
   }
 
   visitThisKeyword(node: ts.ThisExpression): NodeBuilder {
-    throw new TodoError()
+    const ptype = this.context.getPTypeForNode(node)
+    const sourceLocation = this.sourceLocation(node)
+    if (ptype instanceof ContractClassType) {
+      return new ContractThisBuilder(ptype, sourceLocation)
+    }
+    throw new CodeError(`'this' keyword is not valid outside of a contract type`, { sourceLocation })
   }
 
   visitFunctionExpression(node: ts.FunctionExpression): NodeBuilder {
-    throw new TodoError()
+    throw new TodoError('FunctionExpression')
   }
 
   visitClassExpression(node: ts.ClassExpression): NodeBuilder {
@@ -106,7 +113,7 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
   }
 
   visitArrayLiteralExpression(node: ts.ArrayLiteralExpression): NodeBuilder {
-    throw new TodoError()
+    throw new TodoError('ArrayLiteralExpression')
   }
 
   visitPropertyAccessExpression(node: ts.PropertyAccessExpression): NodeBuilder {
@@ -116,7 +123,7 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
   }
 
   visitElementAccessExpression(node: ts.ElementAccessExpression): NodeBuilder {
-    throw new TodoError()
+    throw new TodoError('ElementAccessExpression')
   }
 
   visitCallExpression(node: ts.CallExpression): NodeBuilder {
@@ -129,7 +136,7 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
   }
 
   visitNewExpression(node: ts.NewExpression): NodeBuilder {
-    throw new TodoError()
+    throw new TodoError('NewExpression')
   }
 
   visitTaggedTemplateExpression(node: ts.TaggedTemplateExpression): NodeBuilder {
@@ -147,35 +154,35 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
   }
 
   visitTypeAssertionExpression(node: ts.TypeAssertion): NodeBuilder {
-    throw new TodoError()
+    throw new TodoError('TypeAssertion')
   }
 
   visitParenthesizedExpression(node: ts.ParenthesizedExpression): NodeBuilder {
-    throw new TodoError()
+    throw new TodoError('ParenthesizedExpression')
   }
 
   visitDeleteExpression(node: ts.DeleteExpression): NodeBuilder {
-    throw new TodoError()
+    throw new TodoError('DeleteExpression')
   }
 
   visitTypeOfExpression(node: ts.TypeOfExpression): NodeBuilder {
-    throw new TodoError()
+    throw new TodoError('TypeOfExpression')
   }
 
   visitVoidExpression(node: ts.VoidExpression): NodeBuilder {
-    throw new TodoError()
+    throw new TodoError('VoidExpression')
   }
 
   visitAwaitExpression(node: ts.AwaitExpression): NodeBuilder {
-    throw new TodoError()
+    throw new TodoError('AwaitExpression')
   }
 
   visitPrefixUnaryExpression(node: ts.PrefixUnaryExpression): NodeBuilder {
-    throw new TodoError()
+    throw new TodoError('PrefixUnaryExpression')
   }
 
   visitPostfixUnaryExpression(node: ts.PostfixUnaryExpression): NodeBuilder {
-    throw new TodoError()
+    throw new TodoError('PostfixUnaryExpression')
   }
 
   visitBinaryExpression(node: ts.BinaryExpression): NodeBuilder {
@@ -196,38 +203,38 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
   }
 
   visitConditionalExpression(node: ts.ConditionalExpression): NodeBuilder {
-    throw new TodoError()
+    throw new TodoError('ConditionalExpression')
   }
 
   visitTemplateExpression(node: ts.TemplateExpression): NodeBuilder {
-    throw new TodoError()
+    throw new TodoError('TemplateExpression')
   }
 
   visitYieldExpression(node: ts.YieldExpression): NodeBuilder {
-    throw new TodoError()
+    throw new TodoError('YieldExpression')
   }
 
   visitOmittedExpression(node: ts.OmittedExpression): NodeBuilder {
-    throw new TodoError()
+    throw new TodoError('OmittedExpression')
   }
 
   visitExpressionWithTypeArguments(node: ts.ExpressionWithTypeArguments): NodeBuilder {
-    throw new TodoError()
+    throw new TodoError('ExpressionWithTypeArguments')
   }
 
   visitAsExpression(node: ts.AsExpression): NodeBuilder {
-    throw new TodoError()
+    throw new TodoError('AsExpression')
   }
 
   visitNonNullExpression(node: ts.NonNullExpression): NodeBuilder {
-    throw new TodoError()
+    throw new TodoError('NonNullExpression')
   }
 
   visitSyntheticExpression(node: ts.SyntheticExpression): NodeBuilder {
-    throw new TodoError()
+    throw new TodoError('SyntheticExpression')
   }
 
   visitSatisfiesExpression(node: ts.SatisfiesExpression): NodeBuilder {
-    throw new TodoError()
+    throw new TodoError('SatisfiesExpression')
   }
 }
