@@ -67,7 +67,7 @@ export class CompileTimeConstantVisitor extends BaseVisitor<BaseContext> impleme
     const sourceLocation = this.sourceLocation(node)
     const args = node.arguments.map((a) => requireInstanceBuilder(this.accept(a), sourceLocation))
     // TODO: Check this works
-    const typeArgs = node.typeArguments?.map((t) => this.context.getPTypeForNode(t)) ?? []
+    const typeArgs = node.typeArguments?.map((t) => this.context.resolver.resolveTypeNode(t)) ?? []
 
     return target.call(args, typeArgs, this.sourceLocation(node))
   }

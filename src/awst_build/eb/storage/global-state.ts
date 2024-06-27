@@ -1,7 +1,15 @@
-import { FunctionBuilder, InstanceBuilder } from '../index'
+import { FunctionBuilder, InstanceBuilder, InstanceExpressionBuilder, NodeBuilder } from '../index'
 import { SourceLocation } from '../../../awst/source-location'
 import { bytesPType, PType } from '../../ptypes'
-import { AppStorageDefinition, AppStorageKind, BytesConstant, BytesEncoding, Expression, LValue } from '../../../awst/nodes'
+import {
+  AppStateExpression,
+  AppStorageDefinition,
+  AppStorageKind,
+  BytesConstant,
+  BytesEncoding,
+  Expression,
+  LValue,
+} from '../../../awst/nodes'
 import { ContractClassType, GlobalStateType } from '../../ptypes/ptype-classes'
 import { codeInvariant, invariant, utf8ToUint8Array } from '../../../util'
 import { CodeError } from '../../../errors'
@@ -9,6 +17,7 @@ import { ObjectLiteralExpressionBuilder } from '../object-literal-expression-bui
 import { requireExpressionOfType, requireInstanceBuilder } from '../util'
 import { nodeFactory } from '../../../awst/node-factory'
 import { AppStorageDeclaration } from '../../contract-data'
+import { typeRegistry } from '../../type-registry'
 
 export class GlobalStateFunctionBuilder extends FunctionBuilder {
   constructor(sourceLocation: SourceLocation) {
@@ -49,14 +58,45 @@ export class GlobalStateFunctionBuilder extends FunctionBuilder {
   }
 }
 
+export class GlobalStateExpressionBuilder extends InstanceExpressionBuilder {
+  private readonly _ptype: GlobalStateType
+  constructor(expr: Expression, ptype: PType) {
+    super(expr)
+    invariant(ptype instanceof GlobalStateType, 'ptype must be instance of GlobalStateType')
+    this._ptype = ptype
+  }
+  get ptype(): PType | undefined {
+    return this._ptype
+  }
+
+  memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
+    switch (name) {
+      case 'value':
+        // TODO: use value proxy
+        return typeRegistry.getInstanceEb(this.buildField(sourceLocation), this._ptype.contentType)
+    }
+    return super.memberAccess(name, sourceLocation)
+  }
+
+  private buildField(sourceLocation: SourceLocation): AppStateExpression {
+    return nodeFactory.appStateExpression({
+      key: this._expr,
+      wtype: this._ptype.contentType.wtypeOrThrow,
+      existsAssertionMessage: 'check GlobalState exists',
+      sourceLocation,
+    })
+  }
+}
+
 export class GlobalStateFunctionResultBuilder extends InstanceBuilder {
   resolve(): Expression {
-    throw new Error('Method not implemented.')
+    codeInvariant(this._expr, 'Global state must have explicit key provided if not be assigned to a contract property', this.sourceLocation)
+    return this._expr
   }
   resolveLValue(): LValue {
     throw CodeError.invalidAssignmentTarget({ name: this.typeDescription, sourceLocation: this.sourceLocation })
   }
-  private _ptype: GlobalStateType<PType>
+  private _ptype: GlobalStateType
   private _expr: Expression | undefined
   constructor(expr: Expression | undefined, ptype: PType, config: { initialValue?: Expression; sourceLocation: SourceLocation }) {
     const sourceLocation = expr?.sourceLocation ?? config?.sourceLocation

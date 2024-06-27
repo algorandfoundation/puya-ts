@@ -1,16 +1,17 @@
 import { FunctionBuilder, InstanceBuilder } from './index'
 import { SourceLocation } from '../../awst/source-location'
-import { FreeSubroutineType, PType } from '../ptypes'
+import { PType } from '../ptypes'
 import { InternalError } from '../../errors'
 import { nodeFactory } from '../../awst/node-factory'
 import { requireExpressionOfType } from './util'
 import { typeRegistry } from '../type-registry'
+import { FunctionType } from '../ptypes/ptype-classes'
 
 export class FreeSubroutineExpressionBuilder extends FunctionBuilder {
-  private readonly _ptype: FreeSubroutineType
+  private readonly _ptype: FunctionType
   constructor(sourceLocation: SourceLocation, ptype: PType) {
     super(sourceLocation)
-    if (!(ptype instanceof FreeSubroutineType)) {
+    if (!(ptype instanceof FunctionType)) {
       throw new InternalError(`Invalid ptype`)
     }
     this._ptype = ptype

@@ -1,9 +1,7 @@
 import * as fs from 'fs'
 import { pascalCase } from 'change-case'
-import { AlgoTsType, buildOpModule, OpModule } from './build-op-module'
+import { AlgoTsType, buildOpModule, ENUMS_TO_EXPOSE, OpModule } from './build-op-module'
 import { enumerate, hasFlags } from '../src/util'
-
-const ENUMS_TO_EXPOSE = new Set(['EC', 'ECDSA', 'vrf_verify', 'base64', 'json_ref'])
 
 function* emitTypes(module: OpModule) {
   function* emitHeader() {

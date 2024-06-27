@@ -10,14 +10,16 @@ import { ConstantDeclaration } from '../awst/nodes'
 import { PType, voidPType } from './ptypes'
 import { NodeBuilder } from './eb'
 import { typeRegistry } from './type-registry'
+import { TypeResolver } from './type-resolver'
 
 export abstract class BaseContext {
   abstract getSourceLocation(node: ts.Node): SourceLocation
   abstract tryResolveConstant(node: ts.Identifier): awst.ConstantDeclaration | undefined
   abstract readonly moduleName: string
   abstract getBuilderForNode(node: ts.Identifier): NodeBuilder
-  abstract getPTypeForNode(node: ts.Node): PType
-  abstract getImplicitReturnType(node: ts.FunctionDeclaration | ts.MethodDeclaration): PType
+  // abstract getPTypeForNode(node: ts.Node): PType
+  // abstract getImplicitReturnType(node: ts.FunctionDeclaration | ts.MethodDeclaration): PType
+  abstract get resolver(): TypeResolver
 }
 
 export class UniqueNameResolver {
@@ -68,6 +70,7 @@ export class UniqueNameResolver {
 export class SourceFileContext extends BaseContext {
   private readonly typeHelper: TypeHelper
   readonly constants: Map<string, awst.ConstantDeclaration> = new Map()
+  public readonly resolver: TypeResolver
   constructor(
     public readonly sourceFile: ts.SourceFile,
     public readonly program: ts.Program,
@@ -75,6 +78,7 @@ export class SourceFileContext extends BaseContext {
   ) {
     super()
     this.typeHelper = new TypeHelper(program.getTypeChecker())
+    this.resolver = new TypeResolver(program.getTypeChecker())
   }
 
   tryResolveConstant(node: ts.Identifier): ConstantDeclaration | undefined {
@@ -107,10 +111,12 @@ export class SourceFileContext extends BaseContext {
 
   getBuilderForNode(node: ts.Identifier): NodeBuilder {
     const sourceLocation = this.getSourceLocation(node)
-    const eb = this.typeHelper.tryGetBuilderForNode(node, sourceLocation)
-    if (eb) return eb
+    const singletonPType = this.resolver.resolveSingleton(node, sourceLocation)
+    if (singletonPType) {
+      return typeRegistry.getSingletonEb(singletonPType, sourceLocation)
+    }
 
-    const ptype = this.getPTypeForNode(node)
+    const ptype = this.resolver.resolveInstance(node, sourceLocation)
     return typeRegistry.getInstanceEb(
       nodeFactory.varExpression({
         sourceLocation,

@@ -8,14 +8,14 @@ import { nodeFactory } from '../awst/node-factory'
 
 export class AppStorageDeclaration {
   readonly memberName: string
-  readonly ptype: GlobalStateType<PType> | LocalStateType<PType>
+  readonly ptype: GlobalStateType | LocalStateType
   readonly keyOverride: BytesConstant | undefined
   readonly sourceLocation: SourceLocation
   readonly definedIn: ContractClassType
   readonly description: string | undefined
   constructor(props: {
     memberName: string
-    ptype: GlobalStateType<PType> | LocalStateType<PType>
+    ptype: GlobalStateType | LocalStateType
     keyOverride: BytesConstant | undefined
     sourceLocation: SourceLocation
     definedIn: ContractClassType
