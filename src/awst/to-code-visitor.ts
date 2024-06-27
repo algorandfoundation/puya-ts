@@ -112,7 +112,7 @@ export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, Statemen
     return `${expression.base.accept(this)}[${expression.beginIndex?.accept(this) ?? ''}:${expression.endIndex?.accept(this) ?? ''}]`
   }
   visitAppStateExpression(expression: nodes.AppStateExpression): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    return `GlobalState[${expression.key.accept(this)}]`
   }
   visitAppAccountStateExpression(expression: nodes.AppAccountStateExpression): string {
     throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })

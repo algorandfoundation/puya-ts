@@ -12,11 +12,6 @@ export enum Ecdsa {
   Secp256k1 = 'Secp256k1',
   Secp256r1 = 'Secp256r1',
 }
-export enum JsonRef {
-  JSONString = 'JSONString',
-  JSONUint64 = 'JSONUint64',
-  JSONObject = 'JSONObject',
-}
 export enum VrfVerify {
   VrfAlgorand = 'VrfAlgorand',
 }

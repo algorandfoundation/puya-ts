@@ -1,24 +1,25 @@
 import { Account } from './reference'
+import { bytes } from './primitives'
 
 /** A value saved in global state */
-export type GlobalStateProxy<ValueType> = {
+export type GlobalState<ValueType> = {
   value: ValueType
   delete: () => void
   hasValue: boolean
 }
 
 /** A single key in global state */
-export function GlobalState<ValueType>(options?: { key?: string; initialValue?: ValueType }): GlobalStateProxy<ValueType> {
-  return undefined as unknown as GlobalStateProxy<ValueType>
+export function GlobalState<ValueType>(options?: { key?: bytes; initialValue?: ValueType }): GlobalState<ValueType> {
+  return undefined as unknown as GlobalState<ValueType>
 }
 
 /** A value saved in local state */
-declare type LocalStateProxy<ValueType> = {
+declare type LocalState<ValueType> = {
   value: ValueType
   hasValue: boolean
 }
 
 /** A single key in local state */
-export function LocalState<ValueType>(options?: { key?: string }): (account: Account) => LocalStateProxy<ValueType> {
-  return undefined as unknown as () => LocalStateProxy<ValueType>
+export function LocalState<ValueType>(options?: { key?: bytes }): (account: Account) => LocalState<ValueType> {
+  return undefined as unknown as () => LocalState<ValueType>
 }

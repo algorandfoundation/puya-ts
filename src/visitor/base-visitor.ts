@@ -80,7 +80,7 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
   }
 
   visitThisKeyword(node: ts.ThisExpression): NodeBuilder {
-    const ptype = this.context.getPTypeForNode(node)
+    const ptype = this.context.resolver.resolveInstance(node)
     const sourceLocation = this.sourceLocation(node)
     if (ptype instanceof ContractClassType) {
       return new ContractThisBuilder(ptype, sourceLocation)
@@ -131,7 +131,7 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
     const eb = this.baseAccept(node.expression)
     const args = node.arguments.map((a) => requireInstanceBuilder(this.baseAccept(a), sourceLocation))
     // TODO: Check this works
-    const typeArgs = node.typeArguments?.map((t) => this.context.getPTypeForNode(t)) ?? []
+    const typeArgs = node.typeArguments?.map((t) => this.context.resolver.resolveTypeNode(t)) ?? []
     return eb.call(args, typeArgs, sourceLocation)
   }
 

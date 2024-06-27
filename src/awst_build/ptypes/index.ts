@@ -1,7 +1,7 @@
 import { wtypes } from '../../awst'
 import { LibFunctionType, LiteralValueType, NamespaceType, SimpleType } from './ptype-classes'
 import { Constants } from '../../constants'
-export { PType, TuplePType, IntrinsicEnumType, FreeSubroutineType } from './ptype-classes'
+export { PType, TuplePType, IntrinsicEnumType } from './ptype-classes'
 export * from './op-ptypes'
 export const voidPType = new SimpleType({
   name: 'void',
