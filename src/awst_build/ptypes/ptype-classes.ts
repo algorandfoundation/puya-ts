@@ -53,6 +53,23 @@ export class SimpleType extends PType {
     this.module = module
   }
 }
+
+/**
+ * Transient types can appear in expressions but should not be used as variable or return types
+ */
+export class TransientType extends PType {
+  readonly wtype: undefined = undefined
+  readonly name: string
+  readonly module: string
+  readonly altType: PType
+
+  constructor({ name, module, altType }: { name: string; module: string; altType: PType }) {
+    super()
+    this.name = name
+    this.module = module
+    this.altType = altType
+  }
+}
 export class LiteralValueType extends PType {
   readonly wtype: undefined = undefined
   readonly name: string

@@ -1,17 +1,24 @@
-import { BaseContext } from '../awst_build/context'
-import { AugmentedAssignmentBinaryOp, BinaryOpSyntaxes, ComparisonOpSyntaxes, Expressions, getSyntaxName, isKeyOf } from './syntax-names'
-import { InstanceBuilder, NodeBuilder } from '../awst_build/eb'
+import { BaseContext } from './context'
+import {
+  AugmentedAssignmentBinaryOp,
+  BinaryOpSyntaxes,
+  ComparisonOpSyntaxes,
+  Expressions,
+  getSyntaxName,
+  isKeyOf,
+} from '../visitor/syntax-names'
+import { InstanceBuilder, NodeBuilder } from './eb'
 import ts from 'typescript'
-import { TextVisitor } from '../awst_build/text-visitor'
-import { LiteralExpressionBuilder } from '../awst_build/eb/literal-expression-builder'
+import { TextVisitor } from './text-visitor'
+import { LiteralExpressionBuilder } from './eb/literal-expression-builder'
 import { CodeError, NotSupported, TodoError } from '../errors'
 import { SourceLocation } from '../awst/source-location'
-import { requireInstanceBuilder } from '../awst_build/eb/util'
-import { accept, Visitor } from './visitor'
-import { ObjectLiteralExpressionBuilder } from '../awst_build/eb/object-literal-expression-builder'
+import { requireInstanceBuilder } from './eb/util'
+import { accept, Visitor } from '../visitor/visitor'
+import { ObjectLiteralExpressionBuilder } from './eb/object-literal-expression-builder'
 import { codeInvariant } from '../util'
-import { ContractClassType } from '../awst_build/ptypes/ptype-classes'
-import { ContractThisBuilder } from '../awst_build/eb/contract-builder'
+import { ContractClassType } from './ptypes/ptype-classes'
+import { ContractThisBuilder } from './eb/contract-builder'
 
 export abstract class BaseVisitor<TContext extends BaseContext> implements Visitor<Expressions, NodeBuilder> {
   private baseAccept = <TNode extends ts.Node>(node: TNode) => accept<BaseVisitor<BaseContext>, TNode>(this, node)
@@ -80,8 +87,8 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
   }
 
   visitThisKeyword(node: ts.ThisExpression): NodeBuilder {
-    const ptype = this.context.resolver.resolveInstance(node)
     const sourceLocation = this.sourceLocation(node)
+    const ptype = this.context.resolver.resolveInstance(node, sourceLocation)
     if (ptype instanceof ContractClassType) {
       return new ContractThisBuilder(ptype, sourceLocation)
     }
@@ -131,7 +138,7 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
     const eb = this.baseAccept(node.expression)
     const args = node.arguments.map((a) => requireInstanceBuilder(this.baseAccept(a), sourceLocation))
     // TODO: Check this works
-    const typeArgs = node.typeArguments?.map((t) => this.context.resolver.resolveTypeNode(t)) ?? []
+    const typeArgs = node.typeArguments?.map((t) => this.context.resolver.resolveTypeNode(t, sourceLocation)) ?? []
     return eb.call(args, typeArgs, sourceLocation)
   }
 

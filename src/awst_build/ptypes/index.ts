@@ -1,5 +1,5 @@
 import { wtypes } from '../../awst'
-import { LibFunctionType, LiteralValueType, NamespaceType, SimpleType } from './ptype-classes'
+import { LibFunctionType, LiteralValueType, NamespaceType, SimpleType, TransientType } from './ptype-classes'
 import { Constants } from '../../constants'
 export { PType, TuplePType, IntrinsicEnumType } from './ptype-classes'
 export * from './op-ptypes'
@@ -34,6 +34,12 @@ export const uint64PType = new SimpleType({
   name: 'uint64',
   module: Constants.primitivesModuleName,
   wtype: wtypes.uint64WType,
+})
+
+export const numberPType = new TransientType({
+  name: 'number',
+  module: 'lib.d.ts',
+  altType: uint64PType,
 })
 export const Uint64Function = new LibFunctionType({
   name: 'Uint64',

@@ -9,7 +9,7 @@ import { codeInvariant, invariant } from '../util'
 import { Constants } from '../constants'
 import { FunctionVisitor } from './function-visitor'
 import { logger } from '../logger'
-import { BaseVisitor } from '../visitor/base-visitor'
+import { BaseVisitor } from './base-visitor'
 import { GlobalStateFunctionResultBuilder } from './eb/storage/global-state'
 import { ContractClassType } from './ptypes/ptype-classes'
 

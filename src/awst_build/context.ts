@@ -11,6 +11,7 @@ import { PType, voidPType } from './ptypes'
 import { NodeBuilder } from './eb'
 import { typeRegistry } from './type-registry'
 import { TypeResolver } from './type-resolver'
+import { FunctionType } from './ptypes/ptype-classes'
 
 export abstract class BaseContext {
   abstract getSourceLocation(node: ts.Node): SourceLocation
@@ -68,17 +69,18 @@ export class UniqueNameResolver {
 }
 
 export class SourceFileContext extends BaseContext {
-  private readonly typeHelper: TypeHelper
   readonly constants: Map<string, awst.ConstantDeclaration> = new Map()
   public readonly resolver: TypeResolver
+
+  private readonly checker: ts.TypeChecker
   constructor(
     public readonly sourceFile: ts.SourceFile,
     public readonly program: ts.Program,
     public readonly nameResolver: UniqueNameResolver,
   ) {
     super()
-    this.typeHelper = new TypeHelper(program.getTypeChecker())
-    this.resolver = new TypeResolver(program.getTypeChecker())
+    this.checker = program.getTypeChecker()
+    this.resolver = new TypeResolver(this.checker)
   }
 
   tryResolveConstant(node: ts.Identifier): ConstantDeclaration | undefined {
@@ -88,25 +90,31 @@ export class SourceFileContext extends BaseContext {
 
   resolveVariable(node: ts.BindingName) {
     codeInvariant(ts.isIdentifier(node), 'Only basic identifiers supported for now')
-    const symbol = this.typeHelper.getUnaliasedSymbolForNode(node)
+    const symbol = this.checker.getSymbolAtLocation(node)
     invariant(symbol, 'There must be a symbol for an identifier node')
     return this.nameResolver.resolveUniqueName(node.text, symbol)
   }
 
   getPTypeForNode(node: ts.Node): PType {
-    return this.typeHelper.ptypeForNode(node, this.getSourceLocation(node))
+    const sourceLocation = this.getSourceLocation(node)
+    return this.resolver.resolveSingleton(node, sourceLocation) ?? this.resolver.resolveInstance(node, sourceLocation)
   }
 
   getImplicitReturnType(node: ts.FunctionDeclaration | ts.MethodDeclaration): PType {
     const sourceLocation = this.getSourceLocation(node)
-    const returnTsType = this.typeHelper.returnTypeForNode(node, sourceLocation)
-    if (returnTsType.flags & (ts.TypeFlags.BigInt | ts.TypeFlags.Number)) {
-      throw new CodeError('Return type cannot be implicitly resolved to an AlgoTs type. Please add an explicit return type annotation', {
-        sourceLocation,
-      })
-    }
 
-    return this.typeHelper.ptypeForTsType(returnTsType, this.getSourceLocation(node))
+    const ptype = this.resolver.resolveInstance(node, sourceLocation)
+    invariant(ptype instanceof FunctionType, 'ptype of function declaration must be FunctionType')
+    return ptype.returnType
+    //
+    // const returnTsType = this.typeHelper.returnTypeForNode(node, sourceLocation)
+    // if (returnTsType.flags & (ts.TypeFlags.BigInt | ts.TypeFlags.Number)) {
+    //   throw new CodeError('Return type cannot be implicitly resolved to an AlgoTs type. Please add an explicit return type annotation', {
+    //     sourceLocation,
+    //   })
+    // }
+    //
+    // return this.typeHelper.ptypeForTsType(returnTsType, this.getSourceLocation(node))
   }
 
   getBuilderForNode(node: ts.Identifier): NodeBuilder {

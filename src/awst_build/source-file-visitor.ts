@@ -10,7 +10,7 @@ import { logger, logPuyaExceptions } from '../logger'
 import { CompileTimeConstantVisitor } from './compile-time-constant-visitor'
 import { expandMaybeArray } from '../util'
 import { nodeFactory } from '../awst/node-factory'
-import { BaseVisitor } from '../visitor/base-visitor'
+import { BaseVisitor } from './base-visitor'
 
 type StatementOrDeferred = awst.ModuleStatement[] | awst.ModuleStatement | (() => awst.ModuleStatement[] | awst.ModuleStatement)
 
