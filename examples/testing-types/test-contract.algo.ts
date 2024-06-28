@@ -7,9 +7,13 @@ class MyContract extends Contract {
   //   return this.example.value
   // }
 
-  public demo() {
+  public demo(): uint64 {
     const e = GlobalState({ initialValue: Uint64(3), key: Bytes`boo` })
 
-    return e.value
+    return e.value + this.other()
+  }
+
+  public other() {
+    return Uint64(3)
   }
 }

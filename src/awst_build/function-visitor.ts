@@ -12,7 +12,8 @@ import { wrapInBlock } from '../awst/util'
 import { requireExpressionOfType, requireInstanceBuilder } from './eb/util'
 import { PType, voidPType } from './ptypes'
 import { ARC4CreateOption, OnCompletionAction } from '../awst/arc4'
-import { BaseVisitor } from '../visitor/base-visitor'
+import { BaseVisitor } from './base-visitor'
+import { TransientType } from './ptypes/ptype-classes'
 
 export type ContractMethodInfo = {
   className: string
@@ -51,6 +52,12 @@ export class FunctionVisitor
       codeInvariant(node.name, 'Anonymous functions are not supported', sourceLocation)
       this._functionName = this.textVisitor.accept(node.name)
       this._returnType = node.type ? ctx.getPTypeForNode(node.type) : ctx.getImplicitReturnType(node)
+      if (this._returnType instanceof TransientType) {
+        logger.error(
+          sourceLocation,
+          `${this._returnType} cannot be used as a return type. Consider annotating the return type explicitly as ${this._returnType.altType}`,
+        )
+      }
     }
 
     const args = node.parameters.map((p) => this.accept(p))

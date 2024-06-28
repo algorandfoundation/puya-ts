@@ -39,7 +39,7 @@ import { NotSupported } from '../errors'
 import { NodeBuilder } from './eb'
 import { requireConstantOfType, requireInstanceBuilder } from './eb/util'
 import { PType } from './ptypes'
-import { BaseVisitor } from '../visitor/base-visitor'
+import { BaseVisitor } from './base-visitor'
 
 /**
  * Parses an expression and attempts to extract a compile time constant from it.
@@ -67,7 +67,7 @@ export class CompileTimeConstantVisitor extends BaseVisitor<BaseContext> impleme
     const sourceLocation = this.sourceLocation(node)
     const args = node.arguments.map((a) => requireInstanceBuilder(this.accept(a), sourceLocation))
     // TODO: Check this works
-    const typeArgs = node.typeArguments?.map((t) => this.context.resolver.resolveTypeNode(t)) ?? []
+    const typeArgs = node.typeArguments?.map((t) => this.context.resolver.resolveTypeNode(t, sourceLocation)) ?? []
 
     return target.call(args, typeArgs, this.sourceLocation(node))
   }

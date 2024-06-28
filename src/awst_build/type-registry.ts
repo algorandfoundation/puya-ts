@@ -27,12 +27,12 @@ import { LogFunctionBuilder } from './eb/log-function-builder'
 import { AssertFunctionBuilder } from './eb/assert-function-builder'
 import { FreeSubroutineExpressionBuilder } from './eb/free-subroutine-expression-builder'
 import { awst } from '../awst'
-import { FunctionType, GlobalStateType, IntrinsicEnumType, IntrinsicFunctionGroupType, IntrinsicFunctionType } from './ptypes/ptype-classes'
+import { FunctionType, GlobalStateType, IntrinsicFunctionGroupType, IntrinsicFunctionType } from './ptypes/ptype-classes'
 import { IntrinsicEnumBuilder } from './eb/intrinsic-enum-builder'
 import { OP_METADATA } from './op-metadata'
-import { Constants } from '../constants'
-import { GlobalStateExpressionBuilder, GlobalStateFunctionBuilder, GlobalStateFunctionResultBuilder } from './eb/storage/global-state'
+import { GlobalStateExpressionBuilder, GlobalStateFunctionBuilder } from './eb/storage/global-state'
 import { AssetExpressionBuilder, AssetFunctionBuilder } from './eb/reference/asset'
+import { SymbolName } from './symbol-name'
 
 type ValueExpressionBuilderCtor = { new (expr: awst.Expression, ptype: PType): InstanceExpressionBuilder }
 type SingletonExpressionBuilderCtor = { new (sourceLocation: SourceLocation, ptype: PType): NodeBuilder }
@@ -68,17 +68,17 @@ class TypeRegistry {
     this.instanceEbs.set(ptype, instanceEb)
   }
 
-  tryResolvePType(fullName: string): PType | undefined {
+  tryResolvePType(symbolName: SymbolName): PType | undefined {
     for (const v of this.types) {
-      if (v instanceof PType && v.fullName === fullName) return v
+      if (v instanceof PType && v.fullName === symbolName.fullName) return v
     }
     return undefined
   }
 
-  resolvePType(fullName: string, sourceLocation: SourceLocation): PType {
-    const ptype = this.tryResolvePType(fullName)
+  resolvePType(symbolName: SymbolName, sourceLocation: SourceLocation): PType {
+    const ptype = this.tryResolvePType(symbolName)
     if (!ptype) {
-      throw new InternalError(`Cannot resolve ptype for ${fullName}`, {
+      throw new InternalError(`Cannot resolve ptype for ${symbolName}`, {
         sourceLocation,
       })
     }
@@ -132,13 +132,13 @@ class TypeRegistry {
     return undefined
   }
 
-  resolveGenericPType(fullname: string, typeArgs: PType[], sourceLocation: SourceLocation) {
+  resolveGenericPType(symbolName: SymbolName, typeArgs: PType[], sourceLocation: SourceLocation) {
     for (const pt of this.genericTypes.values()) {
-      if (pt.baseFullName === fullname) {
+      if (pt.baseFullName === symbolName.fullName) {
         return pt.parametise(typeArgs)
       }
     }
-    throw new CodeError(`${fullname} could not be resolved to a generic type`, { sourceLocation })
+    throw new CodeError(`${symbolName} could not be resolved to a generic type`, { sourceLocation })
   }
 }
 export const typeRegistry = new TypeRegistry()
