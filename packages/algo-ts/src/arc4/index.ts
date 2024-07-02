@@ -7,7 +7,7 @@ export class Contract extends BaseContract {
     return true
   }
 
-  override clearState(): boolean {
+  override clearStateProgram(): boolean {
     return true
   }
 }

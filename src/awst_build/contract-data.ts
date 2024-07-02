@@ -1,4 +1,3 @@
-import { PType } from './ptypes'
 import { AppStorageDefinition, AppStorageKind, BytesConstant, BytesEncoding } from '../awst/nodes'
 import { SourceLocation } from '../awst/source-location'
 import { ContractClassType, GlobalStateType, LocalStateType } from './ptypes/ptype-classes'

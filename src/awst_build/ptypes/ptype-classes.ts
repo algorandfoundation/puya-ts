@@ -243,12 +243,46 @@ export class ContractClassType extends PType {
   readonly properties: Record<string, PType>
   readonly methods: Record<string, FunctionType>
   readonly singleton = true
+  readonly baseType: ContractClassType | undefined
 
-  constructor(props: { module: string; name: string; properties: Record<string, AppStorageType>; methods: Record<string, FunctionType> }) {
+  constructor(props: {
+    module: string
+    name: string
+    properties: Record<string, AppStorageType>
+    methods: Record<string, FunctionType>
+    baseType: ContractClassType | undefined
+  }) {
     super()
     this.name = props.name
     this.module = props.module
     this.properties = props.properties
     this.methods = props.methods
+    this.baseType = props.baseType
+  }
+
+  get isARC4(): boolean {
+    return this.baseType?.isARC4 === true
+  }
+}
+
+export class BaseContractClassType extends ContractClassType {
+  readonly _isArc4: boolean
+  get isARC4(): boolean {
+    return super.isARC4
+  }
+
+  constructor({
+    isArc4,
+    ...rest
+  }: {
+    isArc4: boolean
+    module: string
+    name: string
+    properties: Record<string, AppStorageType>
+    methods: Record<string, FunctionType>
+    baseType: ContractClassType | undefined
+  }) {
+    super(rest)
+    this._isArc4 = isArc4
   }
 }

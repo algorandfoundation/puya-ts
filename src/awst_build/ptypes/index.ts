@@ -1,5 +1,13 @@
 import { wtypes } from '../../awst'
-import { LibFunctionType, LiteralValueType, NamespaceType, InstanceType, TransientType } from './ptype-classes'
+import {
+  LibFunctionType,
+  LiteralValueType,
+  NamespaceType,
+  InstanceType,
+  TransientType,
+  FunctionType,
+  BaseContractClassType,
+} from './ptype-classes'
 import { Constants } from '../../constants'
 export { PType, TuplePType, IntrinsicEnumType } from './ptype-classes'
 export * from './op-ptypes'
@@ -111,4 +119,40 @@ export const applicationPType = new InstanceType({
 export const GlobalStateFunction = new LibFunctionType({
   name: 'GlobalState',
   module: Constants.stateModuleName,
+})
+export const BaseContractType = new BaseContractClassType({
+  module: Constants.baseContractModuleName,
+  name: 'BaseContract',
+  methods: {
+    clearStateProgram: new FunctionType({
+      name: Constants.clearStateProgramMethodName,
+      module: Constants.baseContractModuleName,
+      returnType: boolPType,
+      parameters: [],
+    }),
+  },
+  properties: {},
+  baseType: undefined,
+  isArc4: false,
+})
+export const ContractType = new BaseContractClassType({
+  module: Constants.arc4ModuleName,
+  name: 'Contract',
+  methods: {
+    approvalProgram: new FunctionType({
+      name: Constants.approvalProgramMethodName,
+      module: Constants.arc4ModuleName,
+      returnType: boolPType,
+      parameters: [],
+    }),
+    clearStateProgram: new FunctionType({
+      name: Constants.clearStateProgramMethodName,
+      module: Constants.arc4ModuleName,
+      returnType: boolPType,
+      parameters: [],
+    }),
+  },
+  properties: {},
+  baseType: BaseContractType,
+  isArc4: true,
 })
