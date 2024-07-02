@@ -2,7 +2,6 @@ import { wtypes } from '../../awst'
 import { codeInvariant } from '../../util'
 import { WTuple, WType } from '../../awst/wtypes'
 import { Constants } from '../../constants'
-import { GlobalState } from '../../../packages/algo-ts'
 
 /**
  * Represents a public type visible to a developer of AlgoTS
@@ -23,6 +22,8 @@ export abstract class PType {
    */
   abstract readonly module: string
 
+  abstract readonly singleton: boolean
+
   get fullName() {
     return `${this.module}::${this.name}`
   }
@@ -33,7 +34,7 @@ export abstract class PType {
   }
 
   equals(other: PType): boolean {
-    return this.fullName === other.fullName
+    return other instanceof this.constructor && this.fullName === other.fullName
   }
 
   toString(): string {
@@ -41,10 +42,11 @@ export abstract class PType {
   }
 }
 
-export class SimpleType extends PType {
+export class InstanceType extends PType {
   readonly wtype: wtypes.WType | undefined
   readonly name: string
   readonly module: string
+  readonly singleton = false
 
   constructor({ name, module, wtype }: { name: string; module: string; wtype: wtypes.WType }) {
     super()
@@ -62,18 +64,21 @@ export class TransientType extends PType {
   readonly name: string
   readonly module: string
   readonly altType: PType
+  readonly singleton: boolean
 
-  constructor({ name, module, altType }: { name: string; module: string; altType: PType }) {
+  constructor({ name, module, altType, singleton }: { name: string; module: string; altType: PType; singleton: boolean }) {
     super()
     this.name = name
     this.module = module
     this.altType = altType
+    this.singleton = singleton
   }
 }
 export class LiteralValueType extends PType {
   readonly wtype: undefined = undefined
   readonly name: string
   readonly module: string
+  readonly singleton = false
 
   constructor({ name, module }: { name: string; module: string }) {
     super()
@@ -85,6 +90,7 @@ export class LibFunctionType extends PType {
   readonly wtype: undefined
   readonly name: string
   readonly module: string
+  readonly singleton = true
 
   constructor({ name, module }: { name: string; module: string }) {
     super()
@@ -96,6 +102,7 @@ export class IntrinsicFunctionGroupType extends PType {
   readonly wtype: undefined
   readonly name: string
   readonly module: string = Constants.opModuleName
+  readonly singleton = true
 
   constructor({ name }: { name: string }) {
     super()
@@ -106,6 +113,7 @@ export class IntrinsicFunctionType extends PType {
   readonly wtype: undefined
   readonly name: string
   readonly module: string = Constants.opModuleName
+  readonly singleton = true
 
   constructor({ name }: { name: string }) {
     super()
@@ -118,6 +126,7 @@ export class NamespaceType extends PType {
   readonly name: string
   readonly factory: undefined
   readonly module: string
+  readonly singleton = true
 
   constructor({ name, module }: { name: string; module: string }) {
     super()
@@ -136,6 +145,7 @@ export class IntrinsicEnumType extends PType {
   readonly factory: undefined
   readonly module: string
   readonly members: Array<[string, string]>
+  readonly singleton = true
 
   constructor({ name, module, members }: { name: string; module: string; members: Array<[string, string]> }) {
     super()
@@ -151,6 +161,7 @@ export class FunctionType extends PType {
   readonly module: string
   readonly returnType: PType
   readonly parameters: PType[]
+  readonly singleton = true
 
   constructor(props: { name: string; module: string; returnType: PType; parameters: PType[] }) {
     super()
@@ -165,6 +176,8 @@ export class TuplePType extends PType {
   readonly name: string = 'Tuple'
   readonly module: string = 'lib.d.ts'
   readonly items: PType[]
+  readonly singleton = true
+
   constructor(props: { items: PType[]; immutable: boolean }) {
     super()
     this.items = props.items
@@ -178,6 +191,7 @@ export class TuplePType extends PType {
 export abstract class StorageProxyPType extends PType {
   readonly wtype: WType
   readonly contentType: PType
+  readonly singleton = false
 
   protected constructor(props: { content: PType; keyWType: WType }) {
     super()
@@ -200,7 +214,7 @@ export class GlobalStateType extends StorageProxyPType {
   static get baseFullName(): string {
     return `${Constants.stateModuleName}::GlobalState`
   }
-  static parametise(typeArgs: PType[]): GlobalStateType {
+  static parameterise(typeArgs: PType[]): GlobalStateType {
     codeInvariant(typeArgs.length === 1, 'GlobalState type expects exactly one type parameter')
     return new GlobalStateType({
       content: typeArgs[0],
@@ -228,6 +242,7 @@ export class ContractClassType extends PType {
   readonly module: string
   readonly properties: Record<string, PType>
   readonly methods: Record<string, FunctionType>
+  readonly singleton = true
 
   constructor(props: { module: string; name: string; properties: Record<string, AppStorageType>; methods: Record<string, FunctionType> }) {
     super()

@@ -97,34 +97,24 @@ export class SourceFileContext extends BaseContext {
 
   getPTypeForNode(node: ts.Node): PType {
     const sourceLocation = this.getSourceLocation(node)
-    return this.resolver.resolveSingleton(node, sourceLocation) ?? this.resolver.resolveInstance(node, sourceLocation)
+    return this.resolver.resolve(node, sourceLocation)
   }
 
   getImplicitReturnType(node: ts.FunctionDeclaration | ts.MethodDeclaration): PType {
     const sourceLocation = this.getSourceLocation(node)
 
-    const ptype = this.resolver.resolveInstance(node, sourceLocation)
+    const ptype = this.resolver.resolve(node, sourceLocation)
     invariant(ptype instanceof FunctionType, 'ptype of function declaration must be FunctionType')
     return ptype.returnType
-    //
-    // const returnTsType = this.typeHelper.returnTypeForNode(node, sourceLocation)
-    // if (returnTsType.flags & (ts.TypeFlags.BigInt | ts.TypeFlags.Number)) {
-    //   throw new CodeError('Return type cannot be implicitly resolved to an AlgoTs type. Please add an explicit return type annotation', {
-    //     sourceLocation,
-    //   })
-    // }
-    //
-    // return this.typeHelper.ptypeForTsType(returnTsType, this.getSourceLocation(node))
   }
 
   getBuilderForNode(node: ts.Identifier): NodeBuilder {
     const sourceLocation = this.getSourceLocation(node)
-    const singletonPType = this.resolver.resolveSingleton(node, sourceLocation)
-    if (singletonPType) {
-      return typeRegistry.getSingletonEb(singletonPType, sourceLocation)
-    }
+    const ptype = this.resolver.resolve(node, sourceLocation)
 
-    const ptype = this.resolver.resolveInstance(node, sourceLocation)
+    if (ptype.singleton) {
+      return typeRegistry.getSingletonEb(ptype, sourceLocation)
+    }
     return typeRegistry.getInstanceEb(
       nodeFactory.varExpression({
         sourceLocation,

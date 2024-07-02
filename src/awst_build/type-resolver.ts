@@ -23,33 +23,24 @@ export class TypeResolver {
     return undefined
   }
 
-  resolveSingleton(node: ts.Node, sourceLocation: SourceLocation): PType | undefined {
+  resolve(node: ts.Node, sourceLocation: SourceLocation): PType {
     const symbol = this.getUnaliasedSymbolForNode(node)
-    if (symbol === undefined) {
-      return undefined
+    if (symbol !== undefined) {
+      const symbolName = symbol && this.getSymbolFullName(symbol, sourceLocation)
+      const ptype = typeRegistry.tryResolveSingletonName(symbolName)
+      if (ptype === undefined && symbolName.module.startsWith(Constants.algoTsPackage)) {
+        logger.warn(sourceLocation, `${symbolName} could not be resolved to a singleton ptype`)
+      }
+      if (ptype) {
+        return ptype
+      }
     }
-    const symbolName = symbol && this.getSymbolFullName(symbol, sourceLocation)
-    const ptype = typeRegistry.tryResolvePType(symbolName)
-    if (ptype === undefined && symbolName.module.startsWith(Constants.algoTsPackage)) {
-      logger.warn(sourceLocation, `${symbolName} could not be resolved to a singleton ptype`)
-    }
-    return ptype
-  }
-
-  resolveInstance(node: ts.Node, sourceLocation: SourceLocation): PType {
     const type = this.checker.getTypeAtLocation(node)
-    if (node.kind === SyntaxKind.ThisKeyword) {
+    if (node.kind === SyntaxKind.ThisKeyword || node.kind === SyntaxKind.SuperKeyword) {
       const [declaration] = type.symbol.declarations ?? []
-      return this.resolveInstance(declaration, sourceLocation)
+      return this.resolve(declaration, sourceLocation)
     }
     return this.resolveType(type, sourceLocation)
-    // const typeName = this.getTypeName(type, sourceLocation)
-    //
-    // const ptype = typeRegistry.tryResolvePType(typeName)
-    // if (ptype === undefined) {
-    //   throw new CodeError(`${typeName} could not be resolved to an instance ptype`, { sourceLocation })
-    // }
-    // return ptype
   }
 
   resolveTypeNode(node: ts.TypeNode, sourceLocation: SourceLocation): PType {
@@ -115,7 +106,7 @@ export class TypeResolver {
       const typeArgs = tsType.aliasTypeArguments.map((a) => this.resolveType(a, sourceLocation))
       return typeRegistry.resolveGenericPType(typeName, typeArgs, sourceLocation)
     } else {
-      return typeRegistry.resolvePType(typeName, sourceLocation)
+      return typeRegistry.resolveInstancePType(typeName, sourceLocation)
     }
   }
 

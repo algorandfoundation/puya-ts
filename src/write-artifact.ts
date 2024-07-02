@@ -18,11 +18,13 @@ export function writeArtifact<TObj extends { accept(x: TVisitor): string | strin
   kind,
   obj,
   visitor,
+  joinArtifacts = (artifacts) => artifacts.join('\n'),
 }: {
   sourceFile: string
   outDir: string
   kind: ArtifactKind
   artifactName?: string
+  joinArtifacts?: (artifacts: string[]) => string
   obj: TObj | TObj[]
   visitor: TVisitor
 }) {
@@ -37,10 +39,11 @@ export function writeArtifact<TObj extends { accept(x: TVisitor): string | strin
       break
   }
 
-  const content = Array.from([obj])
-    .flat()
-    .flatMap((o) => o.accept(visitor))
-    .join('\n')
+  const content = joinArtifacts(
+    Array.from([obj])
+      .flat()
+      .flatMap((o) => o.accept(visitor)),
+  )
   mkDirIfNotExists(path.dirname(outFilePath))
   fs.writeFileSync(outFilePath, content, 'utf-8')
 }
