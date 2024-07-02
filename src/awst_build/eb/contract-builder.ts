@@ -2,12 +2,8 @@ import { PType } from '../ptypes'
 import { NodeBuilder } from './index'
 import { SourceLocation } from '../../awst/source-location'
 import { ContractClassType, GlobalStateType } from '../ptypes/ptype-classes'
-import {
-  BaseContractMethodExpressionBuilder,
-  ContractMethodExpressionBuilder,
-  FreeSubroutineExpressionBuilder,
-} from './free-subroutine-expression-builder'
-import { GlobalStateExpressionBuilder, GlobalStateFunctionResultBuilder } from './storage/global-state'
+import { BaseContractMethodExpressionBuilder, ContractMethodExpressionBuilder } from './free-subroutine-expression-builder'
+import { GlobalStateExpressionBuilder } from './storage/global-state'
 import { nodeFactory } from '../../awst/node-factory'
 
 export class ContractThisBuilder extends NodeBuilder {

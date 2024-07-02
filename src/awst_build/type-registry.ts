@@ -34,7 +34,6 @@ import { OP_METADATA } from './op-metadata'
 import { GlobalStateExpressionBuilder, GlobalStateFunctionBuilder } from './eb/storage/global-state'
 import { AssetExpressionBuilder, AssetFunctionBuilder } from './eb/reference/asset'
 import { SymbolName } from './symbol-name'
-import { invariant } from '../util'
 
 type ValueExpressionBuilderCtor = { new (expr: awst.Expression, ptype: PType): InstanceExpressionBuilder }
 type SingletonExpressionBuilderCtor = { new (sourceLocation: SourceLocation, ptype: PType): NodeBuilder }

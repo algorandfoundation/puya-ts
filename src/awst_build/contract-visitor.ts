@@ -56,7 +56,7 @@ export class ContractVisitor extends BaseVisitor<ContractContext> implements Vis
       approvalProgram: this._approvalProgram,
       clearProgram: this._clearStateProgram,
       isAbstract,
-      isArc4: false,
+      isArc4: contractPtype.isARC4,
       bases: [],
       moduleName: this.context.moduleName,
       reservedScratchSpace: new Set(),
@@ -90,7 +90,7 @@ export class ContractVisitor extends BaseVisitor<ContractContext> implements Vis
       case Constants.approvalProgramMethodName:
         this._approvalProgram = FunctionVisitor.buildContractMethod(this.context, node, { className: this._className })
         break
-      case Constants.clearStateMethodName:
+      case Constants.clearStateProgramMethodName:
         this._clearStateProgram = FunctionVisitor.buildContractMethod(this.context, node, { className: this._className })
         break
       default:

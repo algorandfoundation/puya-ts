@@ -1,7 +1,7 @@
 import ts, { SyntaxKind } from 'typescript'
-import { boolPType, numberPType, PType, voidPType } from './ptypes'
+import { BaseContractType, boolPType, ContractType, numberPType, PType, voidPType } from './ptypes'
 import { SourceLocation } from '../awst/source-location'
-import { codeInvariant, hasAnyFlag, hasFlags } from '../util'
+import { codeInvariant, hasAnyFlag, hasFlags, invariant } from '../util'
 import { CodeError, InternalError } from '../errors'
 import { typeRegistry } from './type-registry'
 import { logger } from '../logger'
@@ -64,42 +64,20 @@ export class TypeResolver {
     const typeName = this.getTypeName(tsType, sourceLocation)
 
     if (tsType.isClass()) {
-      // TODO: Check extends contract type
-      const properties: Record<string, AppStorageType> = {}
-      const methods: Record<string, FunctionType> = {}
-      for (const prop of tsType.getProperties()) {
-        const type = this.checker.getTypeOfSymbol(prop)
-        const ptype = this.resolveType(type, sourceLocation)
-        if (ptype instanceof GlobalStateType) {
-          properties[prop.name] = ptype
-        } else if (ptype instanceof FunctionType) {
-          methods[prop.name] = ptype
-        } else {
-          throw new InternalError(`Unhandled property type ${ptype}`, { sourceLocation })
-        }
+      if (typeName.fullName === ContractType.fullName) return ContractType
+      if (typeName.fullName === BaseContractType.fullName) return BaseContractType
+      const [baseType, ...rest] = tsType.getBaseTypes()?.map((t) => this.resolveType(t, sourceLocation)) ?? []
+
+      invariant(rest.length === 0, 'Class can have at most one base type')
+
+      if (baseType instanceof ContractClassType) {
+        return this.reflectContractType(typeName, tsType, baseType, sourceLocation)
       }
-      return new ContractClassType({
-        properties,
-        methods,
-        name: typeName.name,
-        module: typeName.module,
-      })
+      throw new CodeError('Classes must extend "Contract" or "BaseContract" base classes to be considered a contract', { sourceLocation })
     }
     const callSignatures = this.checker.getSignaturesOfType(tsType, ts.SignatureKind.Call)
     if (callSignatures.length) {
-      codeInvariant(callSignatures.length === 1, 'User defined functions must have exactly 1 call signature')
-      const [sig] = callSignatures
-      const returnType = this.resolveType(sig.getReturnType(), sourceLocation)
-      const parameters = sig.getParameters().map((p) => {
-        const paramType = this.checker.getTypeOfSymbol(p)
-        return this.resolveType(paramType, sourceLocation)
-      })
-      return new FunctionType({
-        returnType,
-        parameters,
-        name: typeName.name,
-        module: typeName.module,
-      })
+      return this.reflectFunctionType(typeName, callSignatures, sourceLocation)
     }
 
     if (tsType.aliasTypeArguments?.length) {
@@ -108,6 +86,50 @@ export class TypeResolver {
     } else {
       return typeRegistry.resolveInstancePType(typeName, sourceLocation)
     }
+  }
+
+  private reflectFunctionType(typeName: SymbolName, callSignatures: readonly ts.Signature[], sourceLocation: SourceLocation): FunctionType {
+    codeInvariant(callSignatures.length === 1, 'User defined functions must have exactly 1 call signature')
+    const [sig] = callSignatures
+    const returnType = this.resolveType(sig.getReturnType(), sourceLocation)
+    const parameters = sig.getParameters().map((p) => {
+      const paramType = this.checker.getTypeOfSymbol(p)
+      return this.resolveType(paramType, sourceLocation)
+    })
+    return new FunctionType({
+      returnType,
+      parameters,
+      name: typeName.name,
+      module: typeName.module,
+    })
+  }
+
+  private reflectContractType(
+    typeName: SymbolName,
+    tsType: ts.Type,
+    baseType: ContractClassType,
+    sourceLocation: SourceLocation,
+  ): ContractClassType {
+    const properties: Record<string, AppStorageType> = {}
+    const methods: Record<string, FunctionType> = {}
+    for (const prop of tsType.getProperties()) {
+      const type = this.checker.getTypeOfSymbol(prop)
+      const ptype = this.resolveType(type, sourceLocation)
+      if (ptype instanceof GlobalStateType) {
+        properties[prop.name] = ptype
+      } else if (ptype instanceof FunctionType) {
+        methods[prop.name] = ptype
+      } else {
+        throw new InternalError(`Unhandled property type ${ptype}`, { sourceLocation })
+      }
+    }
+    return new ContractClassType({
+      properties,
+      methods,
+      name: typeName.name,
+      module: typeName.module,
+      baseType,
+    })
   }
 
   private getTypeName(type: ts.Type, sourceLocation: SourceLocation): SymbolName {

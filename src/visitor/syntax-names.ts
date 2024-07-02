@@ -377,6 +377,7 @@ export type ModuleStatements =
   | ts.VariableStatement
   | ts.FunctionDeclaration
   | ts.TypeAliasDeclaration
+  | ts.InterfaceDeclaration
 
 export type PrimaryExpressions =
   | LiteralExpressions

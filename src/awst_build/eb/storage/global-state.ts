@@ -1,17 +1,9 @@
 import { FunctionBuilder, InstanceBuilder, InstanceExpressionBuilder, NodeBuilder } from '../index'
 import { SourceLocation } from '../../../awst/source-location'
 import { bytesPType, PType } from '../../ptypes'
-import {
-  AppStateExpression,
-  AppStorageDefinition,
-  AppStorageKind,
-  BytesConstant,
-  BytesEncoding,
-  Expression,
-  LValue,
-} from '../../../awst/nodes'
+import { AppStateExpression, BytesConstant, Expression, LValue } from '../../../awst/nodes'
 import { ContractClassType, GlobalStateType } from '../../ptypes/ptype-classes'
-import { codeInvariant, invariant, utf8ToUint8Array } from '../../../util'
+import { codeInvariant, invariant } from '../../../util'
 import { CodeError } from '../../../errors'
 import { ObjectLiteralExpressionBuilder } from '../object-literal-expression-builder'
 import { requireExpressionOfType, requireInstanceBuilder } from '../util'
