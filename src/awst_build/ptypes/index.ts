@@ -1,15 +1,15 @@
 import { wtypes } from '../../awst'
-import { LibFunctionType, LiteralValueType, NamespaceType, SimpleType, TransientType } from './ptype-classes'
+import { LibFunctionType, LiteralValueType, NamespaceType, InstanceType, TransientType } from './ptype-classes'
 import { Constants } from '../../constants'
 export { PType, TuplePType, IntrinsicEnumType } from './ptype-classes'
 export * from './op-ptypes'
-export const voidPType = new SimpleType({
+export const voidPType = new InstanceType({
   name: 'void',
   module: 'lib.d.ts',
   wtype: wtypes.voidWType,
 })
 
-export const boolPType = new SimpleType({
+export const boolPType = new InstanceType({
   name: 'boolean',
   module: 'lib.d.ts',
   wtype: wtypes.boolWType,
@@ -30,7 +30,7 @@ export const stringLiteralPType = new LiteralValueType({
   module: 'lib.d.ts',
 })
 
-export const uint64PType = new SimpleType({
+export const uint64PType = new InstanceType({
   name: 'uint64',
   module: Constants.primitivesModuleName,
   wtype: wtypes.uint64WType,
@@ -40,13 +40,14 @@ export const numberPType = new TransientType({
   name: 'number',
   module: 'lib.d.ts',
   altType: uint64PType,
+  singleton: false,
 })
 export const Uint64Function = new LibFunctionType({
   name: 'Uint64',
   module: Constants.primitivesModuleName,
 })
 
-export const biguintPType = new SimpleType({
+export const biguintPType = new InstanceType({
   name: 'biguint',
   module: Constants.primitivesModuleName,
   wtype: wtypes.biguintWType,
@@ -56,7 +57,7 @@ export const BigUintFunction = new LibFunctionType({
   name: 'BigUint',
   module: Constants.primitivesModuleName,
 })
-export const bytesPType = new SimpleType({
+export const bytesPType = new InstanceType({
   name: 'bytes',
   module: Constants.primitivesModuleName,
   wtype: wtypes.bytesWType,
@@ -66,7 +67,7 @@ export const BytesFunction = new LibFunctionType({
   module: Constants.primitivesModuleName,
 })
 
-export const strPType = new SimpleType({
+export const strPType = new InstanceType({
   name: 'str',
   module: Constants.primitivesModuleName,
   wtype: wtypes.stringWType,
@@ -88,17 +89,21 @@ export const assertFunction = new LibFunctionType({
   module: Constants.utilModuleName,
 })
 
-export const assetPType = new SimpleType({
+export const assetPType = new InstanceType({
   name: 'Asset',
   wtype: wtypes.assetWType,
   module: Constants.referenceModuleName,
 })
-export const accountPType = new SimpleType({
+export const AssetFunction = new LibFunctionType({
+  name: 'Asset',
+  module: Constants.referenceModuleName,
+})
+export const accountPType = new InstanceType({
   name: 'Account',
   wtype: wtypes.accountWType,
   module: Constants.referenceModuleName,
 })
-export const applicationPType = new SimpleType({
+export const applicationPType = new InstanceType({
   name: 'Application',
   wtype: wtypes.applicationWType,
   module: Constants.referenceModuleName,

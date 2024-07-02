@@ -5,6 +5,7 @@ import { CodeError, InternalError, throwError } from '../errors'
 import {
   ALL_OP_ENUMS,
   assertFunction,
+  AssetFunction,
   assetPType,
   boolPType,
   BytesFunction,
@@ -33,12 +34,13 @@ import { OP_METADATA } from './op-metadata'
 import { GlobalStateExpressionBuilder, GlobalStateFunctionBuilder } from './eb/storage/global-state'
 import { AssetExpressionBuilder, AssetFunctionBuilder } from './eb/reference/asset'
 import { SymbolName } from './symbol-name'
+import { invariant } from '../util'
 
 type ValueExpressionBuilderCtor = { new (expr: awst.Expression, ptype: PType): InstanceExpressionBuilder }
 type SingletonExpressionBuilderCtor = { new (sourceLocation: SourceLocation, ptype: PType): NodeBuilder }
 
 type PTypeClass = { new (...args: DeliberateAny): PType }
-type GenericPTypeClass = { new (...args: DeliberateAny): PType; get baseFullName(): string; parametise(typeArgs: PType[]): PType }
+type GenericPTypeClass = { new (...args: DeliberateAny): PType; get baseFullName(): string; parameterise(typeArgs: PType[]): PType }
 class TypeRegistry {
   private readonly singletonEbs: Map<PType | PTypeClass, SingletonExpressionBuilderCtor> = new Map()
   private readonly instanceEbs: Map<PType | PTypeClass, ValueExpressionBuilderCtor> = new Map()
@@ -49,15 +51,23 @@ class TypeRegistry {
     ptype,
     singletonEb,
     instanceEb,
-  }: {
-    ptype: PType | PTypeClass
-    singletonEb?: SingletonExpressionBuilderCtor
-    instanceEb?: ValueExpressionBuilderCtor
-  }) {
+  }:
+    | {
+        ptype: PType | PTypeClass
+        singletonEb: SingletonExpressionBuilderCtor
+        instanceEb?: undefined
+      }
+    | {
+        ptype: PType | PTypeClass
+        singletonEb?: undefined
+        instanceEb: ValueExpressionBuilderCtor
+      }) {
     if (this.types.has(ptype) || this.genericTypes.has(ptype as GenericPTypeClass))
       throw new InternalError(`${ptype} has already been registered`)
     this.types.add(ptype)
-    if (singletonEb) this.singletonEbs.set(ptype, singletonEb)
+    if (singletonEb) {
+      this.singletonEbs.set(ptype, singletonEb)
+    }
     if (instanceEb) {
       this.instanceEbs.set(ptype, instanceEb)
     }
@@ -68,15 +78,28 @@ class TypeRegistry {
     this.instanceEbs.set(ptype, instanceEb)
   }
 
-  tryResolvePType(symbolName: SymbolName): PType | undefined {
-    for (const v of this.types) {
+  /**
+   * Try to resolve a symbol name to a singleton ptype
+   * @param symbolName The name of the symbol
+   */
+  tryResolveSingletonName(symbolName: SymbolName): PType | undefined {
+    for (const v of this.singletonEbs.keys()) if (v instanceof PType && v.fullName === symbolName.fullName) return v
+    return undefined
+  }
+
+  /**
+   * Try to resolve a symbol name to an instance ptype
+   * @param symbolName The name of the symbol
+   */
+  tryResolveInstancePType(symbolName: SymbolName): PType | undefined {
+    for (const v of this.instanceEbs.keys()) {
       if (v instanceof PType && v.fullName === symbolName.fullName) return v
     }
     return undefined
   }
 
-  resolvePType(symbolName: SymbolName, sourceLocation: SourceLocation): PType {
-    const ptype = this.tryResolvePType(symbolName)
+  resolveInstancePType(symbolName: SymbolName, sourceLocation: SourceLocation): PType {
+    const ptype = this.tryResolveInstancePType(symbolName)
     if (!ptype) {
       throw new InternalError(`Cannot resolve ptype for ${symbolName}`, {
         sourceLocation,
@@ -135,7 +158,7 @@ class TypeRegistry {
   resolveGenericPType(symbolName: SymbolName, typeArgs: PType[], sourceLocation: SourceLocation) {
     for (const pt of this.genericTypes.values()) {
       if (pt.baseFullName === symbolName.fullName) {
-        return pt.parametise(typeArgs)
+        return pt.parameterise(typeArgs)
       }
     }
     throw new CodeError(`${symbolName} could not be resolved to a generic type`, { sourceLocation })
@@ -153,7 +176,8 @@ typeRegistry.register({ ptype: StrFunction, singletonEb: StrFunctionBuilder })
 typeRegistry.register({ ptype: opNamespace, singletonEb: OpModuleBuilder })
 typeRegistry.register({ ptype: logFunction, singletonEb: LogFunctionBuilder })
 typeRegistry.register({ ptype: assertFunction, singletonEb: AssertFunctionBuilder })
-typeRegistry.register({ ptype: assetPType, instanceEb: AssetExpressionBuilder, singletonEb: AssetFunctionBuilder })
+typeRegistry.register({ ptype: AssetFunction, singletonEb: AssetFunctionBuilder })
+typeRegistry.register({ ptype: assetPType, instanceEb: AssetExpressionBuilder })
 typeRegistry.register({ ptype: FunctionType, singletonEb: FreeSubroutineExpressionBuilder })
 
 for (const enumPType of ALL_OP_ENUMS) {

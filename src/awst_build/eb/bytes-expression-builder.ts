@@ -1,13 +1,16 @@
 import { awst, wtypes } from '../../awst'
-import { FunctionBuilder, InstanceBuilder, InstanceExpressionBuilder, NodeBuilder } from './index'
+import { BuilderComparisonOp, FunctionBuilder, InstanceBuilder, InstanceExpressionBuilder, NodeBuilder } from './index'
 import { SourceLocation } from '../../awst/source-location'
 import { nodeFactory } from '../../awst/node-factory'
 import { CodeError } from '../../errors'
 import { UInt64ExpressionBuilder } from './uint64-expression-builder'
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
-import { requireExpressionsOfType } from './util'
-import { BytesFunction, bytesPType, PType, uint64PType } from '../ptypes'
+import { requireExpressionOfType, requireExpressionsOfType } from './util'
+import { BytesFunction, bytesPType, PType, strPType, uint64PType } from '../ptypes'
 import { StrExpressionBuilder } from './str-expression-builder'
+import { BoolExpressionBuilder } from './bool-expression-builder'
+import { BytesBinaryOperator, BytesEncoding, EqualityComparison } from '../../awst/nodes'
+import { utf8ToUint8Array } from '../../util'
 
 export class BytesFunctionBuilder extends FunctionBuilder {
   get ptype(): PType | undefined {
@@ -15,13 +18,36 @@ export class BytesFunctionBuilder extends FunctionBuilder {
   }
 
   taggedTemplate(head: string, spans: ReadonlyArray<readonly [InstanceBuilder, string]>, sourceLocation: SourceLocation): InstanceBuilder {
-    // TODO: convert head and concat spans
-    return new BytesExpressionBuilder(
-      nodeFactory.bytesConstant({
+    let result: awst.Expression = nodeFactory.bytesConstant({
+      sourceLocation,
+      encoding: BytesEncoding.utf8,
+      value: utf8ToUint8Array(head),
+    })
+    for (const [value, joiningText] of spans) {
+      const valueBytes = value.ptype?.equals(strPType) ? value.resolve() : value.toBytes(sourceLocation)
+      result = nodeFactory.bytesBinaryOperation({
+        left: result,
+        right: valueBytes,
+        op: BytesBinaryOperator.add,
         sourceLocation,
-        value: new Uint8Array(),
-      }),
-    )
+        wtype: wtypes.bytesWType,
+      })
+      if (joiningText) {
+        result = nodeFactory.bytesBinaryOperation({
+          left: result,
+          right: nodeFactory.bytesConstant({
+            sourceLocation,
+            value: utf8ToUint8Array(joiningText),
+            encoding: BytesEncoding.utf8,
+          }),
+          op: BytesBinaryOperator.add,
+          sourceLocation,
+          wtype: wtypes.bytesWType,
+        })
+      }
+    }
+
+    return new BytesExpressionBuilder(result)
   }
 
   call(args: Array<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
@@ -46,6 +72,15 @@ export class BytesFunctionBuilder extends FunctionBuilder {
   }
 }
 
+const builderCompareToBytesCompare: Record<BuilderComparisonOp, EqualityComparison | undefined> = {
+  [BuilderComparisonOp.ne]: EqualityComparison.ne,
+  [BuilderComparisonOp.eq]: EqualityComparison.eq,
+  [BuilderComparisonOp.lt]: undefined,
+  [BuilderComparisonOp.lte]: undefined,
+  [BuilderComparisonOp.gt]: undefined,
+  [BuilderComparisonOp.gte]: undefined,
+}
+
 export class BytesExpressionBuilder extends InstanceExpressionBuilder {
   get ptype() {
     return bytesPType
@@ -67,6 +102,21 @@ export class BytesExpressionBuilder extends InstanceExpressionBuilder {
         return new BytesAtBuilder(this._expr)
     }
     return super.memberAccess(name, sourceLocation)
+  }
+  compare(other: InstanceBuilder, op: BuilderComparisonOp, sourceLocation: SourceLocation): InstanceBuilder {
+    const equalityOp = builderCompareToBytesCompare[op]
+    if (equalityOp) {
+      return new BoolExpressionBuilder(
+        nodeFactory.bytesComparisonExpression({
+          sourceLocation,
+          operator: equalityOp,
+          wtype: wtypes.boolWType,
+          lhs: this._expr,
+          rhs: requireExpressionOfType(other, bytesPType, sourceLocation),
+        }),
+      )
+    }
+    return super.compare(other, op, sourceLocation)
   }
 
   toBytes(): awst.Expression {

@@ -32,6 +32,7 @@ export function buildAwst(program: ts.Program, options: CompileOptions) {
         kind: ArtifactKind.AwstJson,
         obj: statements,
         visitor: new ToJsonVisitor(),
+        joinArtifacts: (artifacts) => `[\n${artifacts.join(',\n')}\n]`,
       })
     }
     moduleAwst[metadata.moduleName] = statements

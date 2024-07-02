@@ -5,38 +5,79 @@ import { InternalError } from '../../errors'
 import { nodeFactory } from '../../awst/node-factory'
 import { requireExpressionOfType } from './util'
 import { typeRegistry } from '../type-registry'
-import { FunctionType } from '../ptypes/ptype-classes'
+import { ContractClassType, FunctionType } from '../ptypes/ptype-classes'
+import { BaseClassSubroutineTarget, FreeSubroutineTarget, InstanceSubroutineTarget } from '../../awst/nodes'
 
-export class FreeSubroutineExpressionBuilder extends FunctionBuilder {
-  private readonly _ptype: FunctionType
-  constructor(sourceLocation: SourceLocation, ptype: PType) {
+abstract class SubroutineExpressionBuilder extends FunctionBuilder {
+  protected constructor(
+    sourceLocation: SourceLocation,
+    protected readonly _ptype: FunctionType,
+    protected readonly target: FreeSubroutineTarget | InstanceSubroutineTarget | BaseClassSubroutineTarget,
+  ) {
     super(sourceLocation)
-    if (!(ptype instanceof FunctionType)) {
-      throw new InternalError(`Invalid ptype`)
-    }
-    this._ptype = ptype
   }
 
   get ptype() {
     return this._ptype
   }
 
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
+  call(args: ReadonlyArray<InstanceBuilder>, _typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
     const mappedArgs = args.map((a, i) =>
       nodeFactory.callArg({ name: undefined, value: requireExpressionOfType(a, this.ptype.parameters[i], sourceLocation) }),
     )
 
     return typeRegistry.getInstanceEb(
       nodeFactory.subroutineCallExpression({
-        target: nodeFactory.freeSubroutineTarget({
-          name: this.ptype.name,
-          moduleName: this.ptype.module,
-        }),
+        target: this.target,
         args: mappedArgs,
         sourceLocation: sourceLocation,
         wtype: this.ptype.returnType.wtypeOrThrow,
       }),
       this.ptype.returnType,
+    )
+  }
+}
+
+export class ContractMethodExpressionBuilder extends SubroutineExpressionBuilder {
+  constructor(sourceLocation: SourceLocation, ptype: FunctionType) {
+    super(
+      sourceLocation,
+      ptype,
+      nodeFactory.instanceSubroutineTarget({
+        name: ptype.name,
+      }),
+    )
+  }
+}
+
+export class BaseContractMethodExpressionBuilder extends SubroutineExpressionBuilder {
+  constructor(sourceLocation: SourceLocation, ptype: FunctionType, baseContractPType: ContractClassType) {
+    super(
+      sourceLocation,
+      ptype,
+      nodeFactory.baseClassSubroutineTarget({
+        name: ptype.name,
+        baseClass: {
+          className: baseContractPType.name,
+          moduleName: baseContractPType.module,
+        },
+      }),
+    )
+  }
+}
+
+export class FreeSubroutineExpressionBuilder extends SubroutineExpressionBuilder {
+  constructor(sourceLocation: SourceLocation, ptype: PType) {
+    if (!(ptype instanceof FunctionType)) {
+      throw new InternalError(`Invalid ptype`)
+    }
+    super(
+      sourceLocation,
+      ptype,
+      nodeFactory.freeSubroutineTarget({
+        name: ptype.name,
+        moduleName: ptype.module,
+      }),
     )
   }
 }

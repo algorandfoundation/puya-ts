@@ -29,7 +29,7 @@ export class TodoError extends PuyaError {}
 export class InternalError extends PuyaError {}
 export class NotSupported extends CodeError {
   constructor(featureName: string, options?: PuyaErrorOptions) {
-    super(`${featureName} are not supported`, options)
+    super(`Not Supported: ${featureName}`, options)
   }
 }
 

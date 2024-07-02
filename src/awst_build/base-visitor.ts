@@ -18,7 +18,7 @@ import { accept, Visitor } from '../visitor/visitor'
 import { ObjectLiteralExpressionBuilder } from './eb/object-literal-expression-builder'
 import { codeInvariant } from '../util'
 import { ContractClassType } from './ptypes/ptype-classes'
-import { ContractThisBuilder } from './eb/contract-builder'
+import { ContractSuperBuilder, ContractThisBuilder } from './eb/contract-builder'
 
 export abstract class BaseVisitor<TContext extends BaseContext> implements Visitor<Expressions, NodeBuilder> {
   private baseAccept = <TNode extends ts.Node>(node: TNode) => accept<BaseVisitor<BaseContext>, TNode>(this, node)
@@ -83,12 +83,17 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
   }
 
   visitSuperKeyword(node: ts.SuperExpression): NodeBuilder {
-    throw new TodoError('SuperExpression')
+    const sourceLocation = this.sourceLocation(node)
+    const ptype = this.context.resolver.resolve(node, sourceLocation)
+    if (ptype instanceof ContractClassType) {
+      return new ContractSuperBuilder(ptype, sourceLocation)
+    }
+    throw new CodeError(`'super' keyword is not valid outside of a contract type`, { sourceLocation })
   }
 
   visitThisKeyword(node: ts.ThisExpression): NodeBuilder {
     const sourceLocation = this.sourceLocation(node)
-    const ptype = this.context.resolver.resolveInstance(node, sourceLocation)
+    const ptype = this.context.resolver.resolve(node, sourceLocation)
     if (ptype instanceof ContractClassType) {
       return new ContractThisBuilder(ptype, sourceLocation)
     }

@@ -16,7 +16,7 @@ import { uint8ArrayToUtf8 } from '../util'
 function printBytes(value: Uint8Array, encoding: BytesEncoding) {
   switch (encoding) {
     case BytesEncoding.utf8:
-      return uint8ArrayToUtf8(value)
+      return `"${uint8ArrayToUtf8(value)}"`
     default:
       // TODO: other encodings
       return value.toString()
@@ -136,7 +136,7 @@ export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, Statemen
     return `${expression.lhs.accept(this)} ${expression.operator} ${expression.rhs.accept(this)}`
   }
   visitBytesComparisonExpression(expression: nodes.BytesComparisonExpression): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    return `${expression.lhs.accept(this)} ${expression.operator} ${expression.rhs.accept(this)}`
   }
   visitSubroutineCallExpression(expression: nodes.SubroutineCallExpression): string {
     const target =

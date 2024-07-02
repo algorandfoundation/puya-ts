@@ -8,10 +8,10 @@ import { FunctionBuilder, InstanceBuilder, InstanceExpressionBuilder, NodeBuilde
 import { bytesPType, PType, strPType } from '../ptypes'
 import { LiteralExpressionBuilder } from './literal-expression-builder'
 import { BytesBinaryOperator } from '../../awst/nodes'
+import { BytesExpressionBuilder } from './bytes-expression-builder'
 
 export class StrFunctionBuilder extends FunctionBuilder {
   taggedTemplate(head: string, spans: ReadonlyArray<readonly [InstanceBuilder, string]>, sourceLocation: SourceLocation): InstanceBuilder {
-    // TODO: convert head and concat spans
     let result: awst.Expression = nodeFactory.stringConstant({
       sourceLocation,
       value: head,
@@ -101,6 +101,14 @@ export class StrExpressionBuilder extends InstanceExpressionBuilder {
     switch (name) {
       case 'concat':
         return new ConcatExpressionBuilder(this._expr)
+      case 'bytes':
+        return new BytesExpressionBuilder(
+          nodeFactory.reinterpretCast({
+            expr: this._expr,
+            wtype: bytesPType.wtypeOrThrow,
+            sourceLocation,
+          }),
+        )
     }
     return super.memberAccess(name, sourceLocation)
   }
