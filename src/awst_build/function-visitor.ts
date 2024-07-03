@@ -120,13 +120,13 @@ export class FunctionVisitor
     })
   }
   visitForStatement(node: ts.ForStatement): awst.Statement | awst.Statement[] {
-    throw new TodoError()
+    throw new TodoError('ForStatement')
   }
   visitForOfStatement(node: ts.ForOfStatement): awst.Statement | awst.Statement[] {
-    throw new TodoError()
+    throw new TodoError('ForOfStatement')
   }
   visitForInStatement(node: ts.ForInStatement): awst.Statement | awst.Statement[] {
-    throw new TodoError()
+    throw new TodoError('ForInStatement')
   }
   visitTryStatement(node: ts.TryStatement): awst.Statement | awst.Statement[] {
     throw new NotSupported('Try statements', {
@@ -134,7 +134,7 @@ export class FunctionVisitor
     })
   }
   visitEmptyStatement(node: ts.EmptyStatement): awst.Statement | awst.Statement[] {
-    throw new TodoError()
+    throw new TodoError('EmptyStatement')
   }
   visitExpressionStatement(node: ts.ExpressionStatement): awst.Statement | awst.Statement[] {
     const sourceLocation = this.sourceLocation(node)
@@ -158,10 +158,10 @@ export class FunctionVisitor
     })
   }
   visitDoStatement(node: ts.DoStatement): awst.Statement | awst.Statement[] {
-    throw new TodoError()
+    throw new TodoError('DoStatement')
   }
   visitWhileStatement(node: ts.WhileStatement): awst.Statement | awst.Statement[] {
-    throw new TodoError()
+    throw new TodoError('WhileStatement')
   }
   visitContinueStatement(node: ts.ContinueStatement): awst.Statement | awst.Statement[] {
     return new awst.ContinueStatement({
@@ -188,10 +188,10 @@ export class FunctionVisitor
     })
   }
   visitWithStatement(node: ts.WithStatement): awst.Statement | awst.Statement[] {
-    throw new TodoError()
+    throw new TodoError('WithStatement')
   }
   visitSwitchStatement(node: ts.SwitchStatement): awst.Statement | awst.Statement[] {
-    throw new TodoError()
+    throw new TodoError('SwitchStatement')
   }
   visitLabeledStatement(node: ts.LabeledStatement): awst.Statement | awst.Statement[] {
     return this.accept(node.statement)

@@ -1,5 +1,16 @@
 import ts, { SyntaxKind } from 'typescript'
-import { BaseContractType, boolPType, ContractType, numberPType, PType, voidPType } from './ptypes'
+import {
+  ApprovalProgram,
+  BaseContractType,
+  boolPType,
+  ClearStateProgram,
+  ContractType,
+  numberPType,
+  PType,
+  StringFunction,
+  stringPType,
+  voidPType,
+} from './ptypes'
 import { SourceLocation } from '../awst/source-location'
 import { codeInvariant, hasAnyFlag, hasFlags, invariant } from '../util'
 import { CodeError, InternalError } from '../errors'
@@ -55,6 +66,9 @@ export class TypeResolver {
     if (hasFlags(tsType.flags, ts.TypeFlags.Void)) {
       return voidPType
     }
+    if (hasFlags(tsType.flags, ts.TypeFlags.String)) {
+      return stringPType
+    }
     if (hasFlags(tsType.flags, ts.TypeFlags.Unknown)) {
       throw new CodeError(`Type resolves to unknown`, { sourceLocation })
     }
@@ -62,6 +76,8 @@ export class TypeResolver {
       return numberPType
     }
     const typeName = this.getTypeName(tsType, sourceLocation)
+
+    if (typeName.fullName === StringFunction.fullName) return StringFunction
 
     if (tsType.isClass()) {
       if (typeName.fullName === ContractType.fullName) return ContractType
@@ -89,6 +105,9 @@ export class TypeResolver {
   }
 
   private reflectFunctionType(typeName: SymbolName, callSignatures: readonly ts.Signature[], sourceLocation: SourceLocation): FunctionType {
+    if (typeName.fullName === ApprovalProgram.fullName) return ApprovalProgram
+    if (typeName.fullName === ClearStateProgram.fullName) return ClearStateProgram
+
     codeInvariant(callSignatures.length === 1, 'User defined functions must have exactly 1 call signature')
     const [sig] = callSignatures
     const returnType = this.resolveType(sig.getReturnType(), sourceLocation)
@@ -147,7 +166,7 @@ export class TypeResolver {
   }
 
   private getSymbolFullName(symbol: ts.Symbol, sourceLocation: SourceLocation): SymbolName {
-    const declaration = symbol.declarations?.[0]
+    const declaration = symbol?.declarations?.[0]
     if (declaration) {
       if (hasAnyFlag(symbol.flags, ts.SymbolFlags.Namespace) && !hasFlags(symbol.flags, ts.SymbolFlags.Function)) {
         return new SymbolName({

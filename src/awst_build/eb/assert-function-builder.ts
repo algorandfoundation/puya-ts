@@ -4,8 +4,10 @@ import { VoidExpressionBuilder } from './void-expression-builder'
 import { nodeFactory } from '../../awst/node-factory'
 import { wtypes } from '../../awst'
 import { CodeError } from '../../errors'
-import { requireStringLiteral } from './util'
-import { PType } from '../ptypes'
+import { PType, stringPType } from '../ptypes'
+import { requireConstantOfType } from './util'
+import { invariant } from '../../util'
+import { StringConstant } from '../../awst/nodes'
 
 export class AssertFunctionBuilder extends FunctionBuilder {
   call(args: Array<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
@@ -19,7 +21,9 @@ export class AssertFunctionBuilder extends FunctionBuilder {
     }
     let messageStr: string | undefined
     if (message) {
-      messageStr = requireStringLiteral(message, sourceLocation)
+      const messageConst = requireConstantOfType(message, stringPType, sourceLocation)
+      invariant(messageConst instanceof StringConstant, 'messageConst must be StringConst')
+      messageStr = messageConst.value
     }
 
     // TODO: This should use an AssertExpression node, but it doesn't exist right now - only AssertStatement, but we can't return a statement

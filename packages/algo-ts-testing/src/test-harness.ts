@@ -1,4 +1,4 @@
-import { BaseContract, Contract, internal } from '@algorandfoundation/algo-ts'
+import { BaseContract, internal } from '@algorandfoundation/algo-ts'
 import { TestExecutionContext } from './test-execution-context'
 import { Transaction } from './transactions/client'
 import { encodeTransactions } from './transactions'

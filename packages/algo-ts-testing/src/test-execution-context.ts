@@ -8,11 +8,9 @@ import {
   bytes,
   Application,
   Asset,
-  StringCompat,
-  str,
   Account,
 } from '@algorandfoundation/algo-ts'
-import { BigUintCls, BytesCls, toExternalValue, StrCls, Uint64Cls, toBytes } from './primitives'
+import { BigUintCls, BytesCls, toExternalValue, Uint64Cls, toBytes } from './primitives'
 import { buildOpsImplementation } from './ops-implementation'
 import { Transaction } from './transactions/runtime'
 import { AssertError, avmError, AvmError } from './errors'
@@ -67,21 +65,6 @@ export class TestExecutionContext implements internal.ExecutionContext {
       })
       .reduce((a, b) => a.concat(b))
       .asAlgoTs()
-  }
-  makeInterpolatedString(s: TemplateStringsArray, replacements: StringCompat[]): str {
-    return s
-      .flatMap((templateText, index) => {
-        const replacement = replacements[index]
-        if (replacement) {
-          return [StrCls.fromCompat(templateText), StrCls.fromCompat(replacement)]
-        }
-        return [StrCls.fromCompat(templateText)]
-      })
-      .reduce((a, b) => a.concat(b))
-      .asAlgoTs()
-  }
-  makeString(s: StringCompat): str {
-    return StrCls.fromCompat(s).asAlgoTs()
   }
 
   makeBytes(b: BytesCompat): bytes {

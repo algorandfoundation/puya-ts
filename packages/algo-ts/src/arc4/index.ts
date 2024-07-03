@@ -6,10 +6,6 @@ export class Contract extends BaseContract {
   override approvalProgram(): boolean {
     return true
   }
-
-  override clearStateProgram(): boolean {
-    return true
-  }
 }
 
 type CreateOptions = 'allow' | 'disallow' | 'require'

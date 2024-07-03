@@ -130,7 +130,7 @@ export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, Statemen
     throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
   }
   visitAssignmentExpression(expression: nodes.AssignmentExpression): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    return `${expression.target.accept(this)} = ${expression.value.accept(this)}`
   }
   visitNumericComparisonExpression(expression: nodes.NumericComparisonExpression): string {
     return `${expression.lhs.accept(this)} ${expression.operator} ${expression.rhs.accept(this)}`

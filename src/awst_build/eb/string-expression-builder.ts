@@ -1,23 +1,22 @@
 import { SourceLocation } from '../../awst/source-location'
 import { nodeFactory } from '../../awst/node-factory'
 import { CodeError } from '../../errors'
-import { intrinsicFactory } from '../../awst/intrinsic-factory'
-import { requireExpressionsOfType } from './util'
 import { awst, wtypes } from '../../awst'
 import { FunctionBuilder, InstanceBuilder, InstanceExpressionBuilder, NodeBuilder } from './index'
-import { bytesPType, PType, strPType } from '../ptypes'
+import { bytesPType, PType, stringPType } from '../ptypes'
 import { LiteralExpressionBuilder } from './literal-expression-builder'
 import { BytesBinaryOperator } from '../../awst/nodes'
-import { BytesExpressionBuilder } from './bytes-expression-builder'
+import { requireExpressionOfType, requireExpressionsOfType } from './util'
+import { intrinsicFactory } from '../../awst/intrinsic-factory'
 
-export class StrFunctionBuilder extends FunctionBuilder {
+export class StringFunctionBuilder extends FunctionBuilder {
   taggedTemplate(head: string, spans: ReadonlyArray<readonly [InstanceBuilder, string]>, sourceLocation: SourceLocation): InstanceBuilder {
     let result: awst.Expression = nodeFactory.stringConstant({
       sourceLocation,
       value: head,
     })
     for (const [value, joiningText] of spans) {
-      const valueBytes = value.ptype?.equals(strPType) ? value.resolve() : value.toBytes(sourceLocation)
+      const valueBytes = value.ptype?.equals(stringPType) ? value.resolve() : value.toBytes(sourceLocation)
       result = nodeFactory.bytesBinaryOperation({
         left: result,
         right: valueBytes,
@@ -38,12 +37,12 @@ export class StrFunctionBuilder extends FunctionBuilder {
         })
       }
     }
-    return new StrExpressionBuilder(result)
+    return new StringExpressionBuilder(result)
   }
 
   call(args: Array<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
     if (args.length === 0) {
-      return new StrExpressionBuilder(
+      return new StringExpressionBuilder(
         nodeFactory.stringConstant({
           sourceLocation,
           value: '',
@@ -56,7 +55,7 @@ export class StrFunctionBuilder extends FunctionBuilder {
         throw new CodeError('TODO: Handle literal')
       } else {
         if (arg0.ptype?.equals(bytesPType)) {
-          return new StrExpressionBuilder(
+          return new StringExpressionBuilder(
             nodeFactory.reinterpretCast({
               expr: arg0.resolve(),
               sourceLocation,
@@ -66,53 +65,22 @@ export class StrFunctionBuilder extends FunctionBuilder {
         }
       }
     }
-    // const [arg0] = args
-    // if (arg0 instanceof Literal) {
-    //   if (typeof arg0.value === 'string') {
-    //     return new StrExpressionBuilder(
-    //       nodeFactory.stringConstant({
-    //         sourceLocation,
-    //         value: arg0.value,
-    //       }),
-    //     )
-    //   } else if (arg0.value instanceof Uint8Array) {
-    //     return new StrExpressionBuilder(
-    //       nodeFactory.reinterpretCast({
-    //         expr: nodeFactory.bytesConstant({
-    //           sourceLocation,
-    //           value: arg0.value,
-    //         }),
-    //         sourceLocation,
-    //         wtype: wtypes.stringWType,
-    //       }),
-    //     )
-    //   }
-    // }
     throw CodeError.unexpectedUnhandledArgs({ sourceLocation })
   }
 }
 
-export class StrExpressionBuilder extends InstanceExpressionBuilder {
+export class StringExpressionBuilder extends InstanceExpressionBuilder {
   get ptype() {
-    return strPType
+    return stringPType
   }
 
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
     switch (name) {
       case 'concat':
         return new ConcatExpressionBuilder(this._expr)
-      case 'bytes':
-        return new BytesExpressionBuilder(
-          nodeFactory.reinterpretCast({
-            expr: this._expr,
-            wtype: bytesPType.wtypeOrThrow,
-            sourceLocation,
-          }),
-        )
     }
     return super.memberAccess(name, sourceLocation)
   }
-
   toBytes(sourceLocation: SourceLocation): awst.Expression {
     return nodeFactory.reinterpretCast({
       expr: this._expr,
@@ -128,13 +96,17 @@ export class ConcatExpressionBuilder extends FunctionBuilder {
   }
 
   call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation) {
-    const [other] = requireExpressionsOfType(args, [strPType], sourceLocation)
-    return new StrExpressionBuilder(
-      intrinsicFactory.bytesConcat({
-        left: this.expr,
-        right: other,
-        sourceLocation: sourceLocation,
-      }),
+    const others = args.map((a) => requireExpressionOfType(a, stringPType, sourceLocation))
+    return new StringExpressionBuilder(
+      others.reduce(
+        (acc, cur) =>
+          intrinsicFactory.bytesConcat({
+            left: acc,
+            right: cur,
+            sourceLocation: sourceLocation,
+          }),
+        this.expr,
+      ),
     )
   }
 }

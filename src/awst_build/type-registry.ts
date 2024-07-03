@@ -14,15 +14,15 @@ import {
   logFunction,
   opNamespace,
   PType,
-  StrFunction,
-  strPType,
+  StringFunction,
+  stringPType,
   Uint64Function,
   uint64PType,
 } from './ptypes'
 import { BoolExpressionBuilder } from './eb/bool-expression-builder'
 import { UInt64ExpressionBuilder, UInt64FunctionBuilder } from './eb/uint64-expression-builder'
 import { BytesExpressionBuilder, BytesFunctionBuilder } from './eb/bytes-expression-builder'
-import { StrExpressionBuilder, StrFunctionBuilder } from './eb/str-expression-builder'
+import { StringExpressionBuilder, StringFunctionBuilder } from './eb/string-expression-builder'
 import { FreeIntrinsicOpBuilder, IntrinsicOpGroupBuilder, OpModuleBuilder } from './eb/op-module-builder'
 import { LogFunctionBuilder } from './eb/log-function-builder'
 import { AssertFunctionBuilder } from './eb/assert-function-builder'
@@ -170,8 +170,8 @@ typeRegistry.register({ ptype: uint64PType, instanceEb: UInt64ExpressionBuilder 
 typeRegistry.register({ ptype: Uint64Function, singletonEb: UInt64FunctionBuilder })
 typeRegistry.register({ ptype: bytesPType, instanceEb: BytesExpressionBuilder })
 typeRegistry.register({ ptype: BytesFunction, singletonEb: BytesFunctionBuilder })
-typeRegistry.register({ ptype: strPType, instanceEb: StrExpressionBuilder })
-typeRegistry.register({ ptype: StrFunction, singletonEb: StrFunctionBuilder })
+typeRegistry.register({ ptype: stringPType, instanceEb: StringExpressionBuilder })
+typeRegistry.register({ ptype: StringFunction, singletonEb: StringFunctionBuilder })
 typeRegistry.register({ ptype: opNamespace, singletonEb: OpModuleBuilder })
 typeRegistry.register({ ptype: logFunction, singletonEb: LogFunctionBuilder })
 typeRegistry.register({ ptype: assertFunction, singletonEb: AssertFunctionBuilder })

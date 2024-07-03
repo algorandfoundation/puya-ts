@@ -19,6 +19,9 @@ import { ObjectLiteralExpressionBuilder } from './eb/object-literal-expression-b
 import { codeInvariant } from '../util'
 import { ContractClassType } from './ptypes/ptype-classes'
 import { ContractSuperBuilder, ContractThisBuilder } from './eb/contract-builder'
+import { StringFunctionBuilder, StringExpressionBuilder } from './eb/string-expression-builder'
+import { nodeFactory } from '../awst/node-factory'
+import { logger } from '../logger'
 
 export abstract class BaseVisitor<TContext extends BaseContext> implements Visitor<Expressions, NodeBuilder> {
   private baseAccept = <TNode extends ts.Node>(node: TNode) => accept<BaseVisitor<BaseContext>, TNode>(this, node)
@@ -51,11 +54,11 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
   }
 
   visitStringLiteral(node: ts.StringLiteral): InstanceBuilder {
-    return new LiteralExpressionBuilder(node.text, this.sourceLocation(node))
+    return new StringExpressionBuilder(nodeFactory.stringConstant({ value: node.text, sourceLocation: this.sourceLocation(node) }))
   }
 
   visitNoSubstitutionTemplateLiteral(node: ts.NoSubstitutionTemplateLiteral): InstanceBuilder {
-    return new LiteralExpressionBuilder(node.text, this.sourceLocation(node))
+    return new StringExpressionBuilder(nodeFactory.stringConstant({ value: node.text, sourceLocation: this.sourceLocation(node) }))
   }
 
   visitNumericLiteral(node: ts.NumericLiteral): InstanceBuilder {
@@ -65,7 +68,8 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
   visitIdentifier(node: ts.Identifier): NodeBuilder {
     const constant = this.context.tryResolveConstant(node)
     if (constant) {
-      return new LiteralExpressionBuilder(constant.value, constant.sourceLocation)
+      throw new TodoError('Update constant resolution', { sourceLocation: constant.sourceLocation })
+      //return new LiteralExpressionBuilder(constant.value, constant.sourceLocation)
     }
     return this.context.getBuilderForNode(node)
   }
@@ -219,7 +223,14 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
   }
 
   visitTemplateExpression(node: ts.TemplateExpression): NodeBuilder {
-    throw new TodoError('TemplateExpression')
+    const sourceLocation = this.sourceLocation(node)
+    const target = new StringFunctionBuilder(sourceLocation)
+
+    const head = this.textVisitor.accept(node.head)
+    const spans = node.templateSpans.map(
+      (s) => [requireInstanceBuilder(this.baseAccept(s.expression), sourceLocation), this.textVisitor.accept(s.literal)] as const,
+    )
+    return target.taggedTemplate(head, spans, sourceLocation)
   }
 
   visitYieldExpression(node: ts.YieldExpression): NodeBuilder {

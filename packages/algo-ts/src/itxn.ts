@@ -1,4 +1,4 @@
-import { bytes, str, uint64 } from './primitives'
+import { bytes, uint64 } from './primitives'
 import type { Account, Asset } from './reference'
 import { AssetConfigTxn, AssetTransferTxn, PayTxn } from './transactions'
 
@@ -10,7 +10,7 @@ interface CommonTransactionParams {
   /** If set, changes the authAddr of `sender` to the given address  */
   rekeyTo?: Account
   /** The note field for this transaction */
-  note?: str | bytes
+  note?: string | bytes
 }
 
 interface AssetTransferParams extends CommonTransactionParams {
@@ -41,8 +41,8 @@ interface AssetConfigParams extends CommonTransactionParams {
   configAssetClawback?: Account
 }
 interface AssetCreateParams extends CommonTransactionParams {
-  name?: str | bytes
-  unitName?: str | bytes
+  name?: string | bytes
+  unitName?: string | bytes
   total: uint64
   decimals?: uint64
   manager?: Account
@@ -50,7 +50,7 @@ interface AssetCreateParams extends CommonTransactionParams {
   freeze?: Account
   clawback?: Account
   defaultFrozen?: boolean
-  url?: str | bytes
+  url?: string | bytes
   metadataHash?: bytes
 }
 export function submitAssetTransfer(params: AssetTransferParams): AssetTransferTxn {
