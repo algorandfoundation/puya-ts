@@ -1,14 +1,14 @@
 import { InstanceBuilder } from './index'
 import { SourceLocation } from '../../awst/source-location'
 import { Expression, LValue } from '../../awst/nodes'
-import { bigintLiteralPType, boolPType, bytesPType, PType, stringLiteralPType, uint64PType } from '../ptypes'
+import { bigintLiteralPType, boolPType, bytesPType, PType, uint64PType } from '../ptypes'
 import { nodeFactory } from '../../awst/node-factory'
 import { BytesExpressionBuilder } from './bytes-expression-builder'
 import { UInt64ExpressionBuilder } from './uint64-expression-builder'
 import { BoolExpressionBuilder } from './bool-expression-builder'
 import { CodeError } from '../../errors'
 
-type ConstantValue = bigint | string | Uint8Array | boolean
+type ConstantValue = bigint | Uint8Array | boolean
 
 export class LiteralExpressionBuilder extends InstanceBuilder {
   resolve(): Expression {
@@ -35,9 +35,6 @@ export class LiteralExpressionBuilder extends InstanceBuilder {
     switch (typeof this.value) {
       case 'boolean':
         this._ptype = boolPType
-        break
-      case 'string':
-        this._ptype = stringLiteralPType
         break
       case 'bigint':
         this._ptype = bigintLiteralPType

@@ -3,8 +3,8 @@ import { SourceLocation } from '../../awst/source-location'
 import { Expression, IntegerConstant, StringConstant } from '../../awst/nodes'
 import { CodeError, InternalError } from '../../errors'
 import { nodeFactory } from '../../awst/node-factory'
-import { requestConstantOfType, requestExpressionOfType, requestStringLiteral } from './util'
-import { PType } from '../ptypes'
+import { requestConstantOfType, requestExpressionOfType } from './util'
+import { PType, stringPType } from '../ptypes'
 import { IntrinsicOpGrouping, IntrinsicOpMapping, OP_METADATA } from '../op-metadata'
 import { enumerate, invariant } from '../../util'
 import { IntrinsicEnumType, IntrinsicFunctionGroupType, IntrinsicFunctionType } from '../ptypes/ptype-classes'
@@ -136,9 +136,10 @@ abstract class IntrinsicOpBuilderBase extends FunctionBuilder {
 
         for (const ptype of arg.ptypes) {
           if (ptype instanceof IntrinsicEnumType) {
-            const enumValue = requestStringLiteral(thisArg)
+            const enumValue = requestConstantOfType(thisArg, stringPType, sourceLocation)
             if (enumValue) {
-              immediates.push(enumValue)
+              invariant(enumValue instanceof StringConstant, 'stringPType constant must be StringConstant')
+              immediates.push(enumValue.value)
               continue immediateArgLoop
             }
           }

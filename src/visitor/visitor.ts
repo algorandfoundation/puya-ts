@@ -3,7 +3,7 @@ import { DeliberateAny } from '../typescript-helpers'
 import { logger, logPuyaExceptions } from '../logger'
 import { getNodeName, MapBaseType, SyntaxKindName, SyntaxKindNameType } from './syntax-names'
 import { BaseContext } from '../awst_build/context'
-import { AnyExpressionBuilder } from '../awst_build/eb/any-expression-builder'
+import { AwstBuildFailureError } from '../errors'
 
 type UnionToIntersection<T> = (T extends DeliberateAny ? (x: T) => void : never) extends (x: infer TIntersection) => void
   ? TIntersection
@@ -37,17 +37,18 @@ export const accept = <TSelf extends { context: BaseContext }, T extends ts.Node
   visitor: TSelf,
   node: T,
 ): ReturnTypeForNode<MapBaseType<T>, TSelf> => {
+  const sourceLocation = visitor.context.getSourceLocation(node)
   if (node.kind in SyntaxKindName) {
     const nodeName = getNodeName(node)
     const visitFunction = `visit${nodeName}`
-    const sourceLocation = visitor.context.getSourceLocation(node)
     if (visitFunction in Object.getPrototypeOf(visitor)) {
       const result = logPuyaExceptions(() => Object.getPrototypeOf(visitor)[visitFunction].call(visitor, node), sourceLocation)
-      if (result) return result
+      if (result !== undefined) return result
     } else {
       logger.error(sourceLocation, `Unsupported syntax visitor ${nodeName}`)
     }
+  } else {
+    logger.error(sourceLocation, `Unknown syntax kind ${node.kind}`)
   }
-  // Return a value so the visitor can keep traversing and potentially discover more errors
-  return new AnyExpressionBuilder(visitor.context.getSourceLocation(node)) as DeliberateAny
+  throw new AwstBuildFailureError()
 }

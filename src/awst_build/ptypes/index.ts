@@ -32,10 +32,14 @@ export const bigintLiteralPType = new LiteralValueType({
   name: 'bigint',
   module: 'lib.d.ts',
 })
-
-export const stringLiteralPType = new LiteralValueType({
-  name: 'string',
+export const stringPType = new InstanceType({
+  name: 'str',
   module: 'lib.d.ts',
+  wtype: wtypes.stringWType,
+})
+export const StringFunction = new LibFunctionType({
+  name: 'String',
+  module: 'typescript/lib/lib.es5.d.ts',
 })
 
 export const uint64PType = new InstanceType({
@@ -75,15 +79,6 @@ export const BytesFunction = new LibFunctionType({
   module: Constants.primitivesModuleName,
 })
 
-export const strPType = new InstanceType({
-  name: 'str',
-  module: Constants.primitivesModuleName,
-  wtype: wtypes.stringWType,
-})
-export const StrFunction = new LibFunctionType({
-  name: 'Str',
-  module: Constants.primitivesModuleName,
-})
 export const opNamespace = new NamespaceType({
   name: 'op',
   module: Constants.opModuleName,
@@ -120,16 +115,26 @@ export const GlobalStateFunction = new LibFunctionType({
   name: 'GlobalState',
   module: Constants.stateModuleName,
 })
+
+export const ClearStateProgram = new FunctionType({
+  name: Constants.clearStateProgramMethodName,
+  module: Constants.baseContractModuleName,
+  returnType: uint64PType,
+  parameters: [],
+})
+
+export const ApprovalProgram = new FunctionType({
+  name: Constants.approvalProgramMethodName,
+  module: Constants.arc4ModuleName,
+  returnType: boolPType,
+  parameters: [],
+})
+
 export const BaseContractType = new BaseContractClassType({
   module: Constants.baseContractModuleName,
   name: 'BaseContract',
   methods: {
-    clearStateProgram: new FunctionType({
-      name: Constants.clearStateProgramMethodName,
-      module: Constants.baseContractModuleName,
-      returnType: boolPType,
-      parameters: [],
-    }),
+    clearStateProgram: ClearStateProgram,
   },
   properties: {},
   baseType: undefined,
@@ -139,18 +144,8 @@ export const ContractType = new BaseContractClassType({
   module: Constants.arc4ModuleName,
   name: 'Contract',
   methods: {
-    approvalProgram: new FunctionType({
-      name: Constants.approvalProgramMethodName,
-      module: Constants.arc4ModuleName,
-      returnType: boolPType,
-      parameters: [],
-    }),
-    clearStateProgram: new FunctionType({
-      name: Constants.clearStateProgramMethodName,
-      module: Constants.arc4ModuleName,
-      returnType: boolPType,
-      parameters: [],
-    }),
+    approvalProgram: ApprovalProgram,
+    clearStateProgram: ClearStateProgram,
   },
   properties: {},
   baseType: BaseContractType,

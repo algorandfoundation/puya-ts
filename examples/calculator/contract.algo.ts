@@ -1,16 +1,16 @@
-import { Bytes, uint64, Contract, Txn, log, op, assert, err, Uint64, bytes, str, Str } from '@algorandfoundation/algo-ts'
+import { Bytes, uint64, Contract, Txn, log, op, assert, err, Uint64 } from '@algorandfoundation/algo-ts'
 
 const ADD = Uint64(1)
 const SUB = Uint64(2)
 const MUL = Uint64(3)
 const DIV = Uint64(4)
-function itoa(i: uint64): str {
+function itoa(i: uint64): string {
   const digits = Bytes`0123456789`
   const radix = digits.length
   if (i < radix) {
-    return digits.at(i).asStr()
+    return digits.at(i).toString()
   }
-  return itoa(i / radix).concat(digits.at(i % radix).asStr())
+  return itoa(i / radix).concat(digits.at(i % radix).toString())
 }
 export default class MyContract extends Contract {
   public approvalProgram(): boolean {
@@ -33,20 +33,20 @@ export default class MyContract extends Contract {
       b = op.btoi(b_bytes)
     }
     const result = this.doCalc(action, a, b)
-    const result_b = Str`${itoa(a)}${this.op(action)}${itoa(b)} = ${itoa(result)}`
+    const result_b = `${itoa(a)}${this.op(action)}${itoa(b)} = ${itoa(result)}`
     log(result_b)
     return true
   }
-  public op(action: uint64): str {
+  public op(action: uint64): string {
     switch (action) {
       case ADD:
-        return Str` + `
+        return ` + `
       case SUB:
-        return Str` - `
+        return ` - `
       case MUL:
-        return Str` * `
+        return ` * `
       case DIV:
-        return Str` / `
+        return ` / `
       default:
         err('Unknown operation')
     }

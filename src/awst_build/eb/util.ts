@@ -95,16 +95,3 @@ export function requireConstantOfType(builder: NodeBuilder, ptype: PType, source
   if (constExpr) return constExpr
   throw new CodeError(`Expected constant of type ${ptype}`, { sourceLocation })
 }
-export function requestStringLiteral(builder: InstanceBuilder): string | undefined {
-  if (builder instanceof LiteralExpressionBuilder && typeof builder.value === 'string') {
-    return builder.value
-  }
-  return undefined
-}
-
-export function requireStringLiteral(builder: InstanceBuilder, sourceLocation: SourceLocation): string {
-  if (builder instanceof LiteralExpressionBuilder && typeof builder.value === 'string') {
-    return builder.value
-  }
-  throw new CodeError('Expected string literal', { sourceLocation })
-}

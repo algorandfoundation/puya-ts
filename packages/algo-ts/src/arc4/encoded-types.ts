@@ -1,4 +1,4 @@
-import { biguint, BigUintCompat, Bytes, bytes, BytesBacked, str, StringCompat, Uint64, uint64, Uint64Compat } from '../primitives'
+import { biguint, BigUintCompat, Bytes, bytes, BytesBacked, StringCompat, uint64, Uint64Compat } from '../primitives'
 import { ctxMgr } from '../execution-context'
 import { err } from '../util'
 import { Account } from '../reference'
@@ -17,7 +17,7 @@ export class Str extends AbiEncoded {
   constructor(s: StringCompat) {
     super()
   }
-  get native(): str {
+  get native(): string {
     throw new Error('TODO')
   }
 }

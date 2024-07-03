@@ -6,11 +6,11 @@ import { CodeError } from '../../errors'
 import { UInt64ExpressionBuilder } from './uint64-expression-builder'
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
 import { requireExpressionOfType, requireExpressionsOfType } from './util'
-import { BytesFunction, bytesPType, PType, strPType, uint64PType } from '../ptypes'
-import { StrExpressionBuilder } from './str-expression-builder'
+import { BytesFunction, bytesPType, PType, stringPType, uint64PType } from '../ptypes'
+import { StringExpressionBuilder } from './string-expression-builder'
 import { BoolExpressionBuilder } from './bool-expression-builder'
 import { BytesBinaryOperator, BytesEncoding, EqualityComparison } from '../../awst/nodes'
-import { utf8ToUint8Array } from '../../util'
+import { codeInvariant, utf8ToUint8Array } from '../../util'
 
 export class BytesFunctionBuilder extends FunctionBuilder {
   get ptype(): PType | undefined {
@@ -24,7 +24,7 @@ export class BytesFunctionBuilder extends FunctionBuilder {
       value: utf8ToUint8Array(head),
     })
     for (const [value, joiningText] of spans) {
-      const valueBytes = value.ptype?.equals(strPType) ? value.resolve() : value.toBytes(sourceLocation)
+      const valueBytes = value.ptype?.equals(stringPType) ? value.resolve() : value.toBytes(sourceLocation)
       result = nodeFactory.bytesBinaryOperation({
         left: result,
         right: valueBytes,
@@ -94,8 +94,8 @@ export class BytesExpressionBuilder extends InstanceExpressionBuilder {
             sourceLocation,
           }),
         )
-      case 'asStr':
-        return new AsStringBuilder(this._expr)
+      case 'toString':
+        return new ToStringBuilder(this._expr)
       case 'concat':
         return new ConcatExpressionBuilder(this._expr)
       case 'at':
@@ -161,13 +161,14 @@ export class BytesSliceBuilder extends FunctionBuilder {
   }
 }
 
-export class AsStringBuilder extends FunctionBuilder {
+export class ToStringBuilder extends FunctionBuilder {
   constructor(private expr: awst.Expression) {
     super(expr.sourceLocation)
   }
 
   call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
-    return new StrExpressionBuilder(
+    codeInvariant(args.length === 0, 'bytes.toString expects no args', sourceLocation)
+    return new StringExpressionBuilder(
       nodeFactory.reinterpretCast({
         wtype: wtypes.stringWType,
         expr: this.expr,
