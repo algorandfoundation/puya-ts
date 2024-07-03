@@ -18,7 +18,7 @@ ARC4 specifies `byte` as just an alias for `uint8` and `string` as an alias for 
 
 Algorand Python uses `algopy.Bytes` to represent a byte array and `algopy.String` to represent a utf8 string. The string type has a `.bytes` property to retrieve the underlying byte array and a byte array can be re-interpreted as a string with `String.from_bytes(...)`. In addition to these types, Algorand Python also has arc4 encoded equivalents `aglopy.arc4.DynamicBytes` and `algopy.arc4.String` which represent data encoded as per the arc4 spec. 
 
-The purpose of this ADR is to decide how strings are represented in Algorand TS. The name `str` will be used in this ADR as `string` is an existing EcmaScript type which has been ruled out in [this ADR](./2024-05-21_primitive-bytes-and-strings.md). 
+The purpose of this ADR is to decide how strings are represented in Algorand TS. 
 
 
 ## Requirements
@@ -80,6 +80,31 @@ Cons:
 - Have to add `.bytes` when assigning/comparing to `bytes` or use `from_bytes` when converting a byte array to a string
 - `bytes` and `str` type might look the same for now leading to the question of what's the point of a separate type, and we may _never_ add additional string specific functionality.
 
+### Option 3 - native string
+
+Use native javascript strings for string values with the option to go from bytes to string via `.toString()` and string to bytes via `Bytes(yourString)`. Native APIs which expect bytes can take a union of `string | bytes` to cut back on boilerplate conversions. Explicit conversion would be required when comparing `bytes` to `string`. We would not touch `String.prototype` and using most methods on the `string` type will be a compiler error. If we need to add more string utility methods at a later date, these would be static methods (eg. `someUtility(myString, arg1, arg2)`) rather than instance methods added to the prototype.
+
+```ts
+
+function myFunction(value: string, other: bytes) {
+    value.startsWith("") // allowed
+    value[4] // not allowed (can't index by char)
+    value.slice(3, 4) // not allowed
+    log(value)
+    log(`Interpolated ${value}`)
+    return value === other.toString() && Bytes(value) === other && other.equals(value)
+}
+
+```
+
+Pros:
+ - Meets developer expectations - a string is a string
+ - Can use literals
+ - Can use `+` and `+=`
+
+Cons: 
+ - Some operations will feel more verbose eg. getting the byte length will require `Bytes(value).length` since `value.length` should return the number of utf-16 code units to be semantically correct.
+ 
 
 ## Preferred options
 
