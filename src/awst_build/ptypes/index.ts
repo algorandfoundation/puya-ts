@@ -92,6 +92,11 @@ export const assertFunction = new LibFunctionType({
   module: Constants.utilModuleName,
 })
 
+export const errFunction = new LibFunctionType({
+  name: 'err',
+  module: Constants.utilModuleName,
+})
+
 export const assetPType = new InstanceType({
   name: 'Asset',
   wtype: wtypes.assetWType,

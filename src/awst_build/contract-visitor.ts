@@ -4,7 +4,7 @@ import ts from 'typescript'
 import * as awst from '../awst/nodes'
 import { AppStorageDefinition, ContractFragment, ContractMethod } from '../awst/nodes'
 import { ClassElements } from '../visitor/syntax-names'
-import { TodoError } from '../errors'
+import { AwstBuildFailureError, TodoError } from '../errors'
 import { codeInvariant, invariant } from '../util'
 import { Constants } from '../constants'
 import { FunctionVisitor } from './function-visitor'
@@ -43,7 +43,14 @@ export class ContractVisitor extends BaseVisitor<ContractContext> implements Vis
     const isAbstract = Boolean(classDec.modifiers?.some((m) => m.kind === ts.SyntaxKind.AbstractKeyword))
 
     for (const member of classDec.members) {
-      this.accept(member)
+      try {
+        this.accept(member)
+      } catch (e) {
+        // Ignore this error and continue visiting other members, so we can show additional errors
+        if (!(e instanceof AwstBuildFailureError)) {
+          throw e
+        }
+      }
     }
 
     this.result = new ContractFragment({

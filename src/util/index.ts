@@ -1,7 +1,8 @@
-import { CodeError } from './errors'
-import { SourceLocation } from './awst/source-location'
+import { CodeError } from '../errors'
+import { SourceLocation } from '../awst/source-location'
 import { TextDecoder } from 'node:util'
-
+import { Buffer } from 'node:buffer'
+export { base32ToUint8Array, uint8ArrayToBase32 } from './base-32'
 class InvariantError extends Error {}
 export function invariant(condition: unknown, message: string): asserts condition {
   if (!condition) {
@@ -44,6 +45,14 @@ export const tryConvertEnum = <TEnumIn, TEnumOut, TKeys extends string>(
 
 export const expandMaybeArray = <T>(maybeArray: T | T[]): T[] => {
   return Array.isArray(maybeArray) ? maybeArray : [maybeArray]
+}
+
+export const hexToUint8Array = (value: string): Uint8Array => {
+  invariant(value.length % 2 === 0, 'Hex string must have even number of characters')
+  return new Uint8Array(new Array(value.length / 2).fill(0).map((_, i) => parseInt(value.slice(i * 2, i * 2 + 1), 16)))
+}
+export const base64ToUint8Array = (value: string): Uint8Array => {
+  return new Uint8Array(Buffer.from(value, 'base64'))
 }
 
 export const utf8ToUint8Array = (value: string): Uint8Array => {

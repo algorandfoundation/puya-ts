@@ -12,14 +12,19 @@ import {
 import { TodoError } from '../errors'
 import { logger } from '../logger'
 import { uint8ArrayToUtf8 } from '../util'
+import { Buffer } from 'node:buffer'
+import { uint8ArrayToBase32 } from '../util/base-32'
 
 function printBytes(value: Uint8Array, encoding: BytesEncoding) {
   switch (encoding) {
     case BytesEncoding.utf8:
       return `"${uint8ArrayToUtf8(value)}"`
+    case BytesEncoding.base64:
+      return `b64<${Buffer.from(value).toString('base64')}>`
+    case BytesEncoding.base32:
+      return `b32<${uint8ArrayToBase32(value)}>`
     default:
-      // TODO: other encodings
-      return value.toString()
+      return `hex<${Buffer.from(value).toString('hex')}>`
   }
 }
 
@@ -199,7 +204,12 @@ export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, Statemen
     ]
   }
   visitSwitch(statement: nodes.Switch): string[] {
-    throw new TodoError('Method not implemented.', { sourceLocation: statement.sourceLocation })
+    return [
+      `switch (${statement.value.accept(this)}) {`,
+      ...statement.cases.flatMap((c) => indent([...c.clauses.map((cl) => `case ${cl.accept(this)}:`), ...indent(c.block.accept(this))])),
+      ...(statement.defaultCase ? indent(['default:', ...indent(statement.defaultCase.accept(this))]) : []),
+      '}',
+    ]
   }
   visitWhileLoop(statement: nodes.WhileLoop): string[] {
     throw new TodoError('Method not implemented.', { sourceLocation: statement.sourceLocation })
@@ -208,9 +218,6 @@ export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, Statemen
     throw new TodoError('Method not implemented.', { sourceLocation: statement.sourceLocation })
   }
   visitContinueStatement(statement: nodes.ContinueStatement): string[] {
-    throw new TodoError('Method not implemented.', { sourceLocation: statement.sourceLocation })
-  }
-  visitAssertStatement(statement: nodes.AssertStatement): string[] {
     throw new TodoError('Method not implemented.', { sourceLocation: statement.sourceLocation })
   }
   visitReturnStatement(statement: nodes.ReturnStatement): string[] {

@@ -26,13 +26,37 @@ export class AssertFunctionBuilder extends FunctionBuilder {
       messageStr = messageConst.value
     }
 
-    // TODO: This should use an AssertExpression node, but it doesn't exist right now - only AssertStatement, but we can't return a statement
-    // from a builder
     return new VoidExpressionBuilder(
       nodeFactory.intrinsicCall({
         opCode: 'assert',
         sourceLocation: sourceLocation,
         stackArgs: [condition.boolEval(sourceLocation, false)],
+        immediates: [],
+        wtype: wtypes.voidWType,
+        comment: messageStr,
+      }),
+    )
+  }
+}
+
+export class ErrFunctionBuilder extends FunctionBuilder {
+  call(args: Array<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
+    const [message, ...rest] = args
+    if (rest.length !== 0) {
+      throw CodeError.unexpectedUnhandledArgs({ sourceLocation })
+    }
+
+    let messageStr: string | undefined
+    if (message) {
+      const messageConst = requireConstantOfType(message, stringPType, sourceLocation)
+      invariant(messageConst instanceof StringConstant, 'messageConst must be StringConst')
+      messageStr = messageConst.value
+    }
+    return new VoidExpressionBuilder(
+      nodeFactory.intrinsicCall({
+        opCode: 'err',
+        sourceLocation: sourceLocation,
+        stackArgs: [],
         immediates: [],
         wtype: wtypes.voidWType,
         comment: messageStr,

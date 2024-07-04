@@ -10,6 +10,7 @@ import {
   boolPType,
   BytesFunction,
   bytesPType,
+  errFunction,
   GlobalStateFunction,
   logFunction,
   opNamespace,
@@ -25,7 +26,7 @@ import { BytesExpressionBuilder, BytesFunctionBuilder } from './eb/bytes-express
 import { StringExpressionBuilder, StringFunctionBuilder } from './eb/string-expression-builder'
 import { FreeIntrinsicOpBuilder, IntrinsicOpGroupBuilder, OpModuleBuilder } from './eb/op-module-builder'
 import { LogFunctionBuilder } from './eb/log-function-builder'
-import { AssertFunctionBuilder } from './eb/assert-function-builder'
+import { AssertFunctionBuilder, ErrFunctionBuilder } from './eb/assert-function-builder'
 import { FreeSubroutineExpressionBuilder } from './eb/free-subroutine-expression-builder'
 import { awst } from '../awst'
 import { FunctionType, GlobalStateType, IntrinsicFunctionGroupType, IntrinsicFunctionType } from './ptypes/ptype-classes'
@@ -175,6 +176,7 @@ typeRegistry.register({ ptype: StringFunction, singletonEb: StringFunctionBuilde
 typeRegistry.register({ ptype: opNamespace, singletonEb: OpModuleBuilder })
 typeRegistry.register({ ptype: logFunction, singletonEb: LogFunctionBuilder })
 typeRegistry.register({ ptype: assertFunction, singletonEb: AssertFunctionBuilder })
+typeRegistry.register({ ptype: errFunction, singletonEb: ErrFunctionBuilder })
 typeRegistry.register({ ptype: AssetFunction, singletonEb: AssetFunctionBuilder })
 typeRegistry.register({ ptype: assetPType, instanceEb: AssetExpressionBuilder })
 typeRegistry.register({ ptype: FunctionType, singletonEb: FreeSubroutineExpressionBuilder })

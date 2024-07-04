@@ -42,8 +42,7 @@ export const accept = <TSelf extends { context: BaseContext }, T extends ts.Node
     const nodeName = getNodeName(node)
     const visitFunction = `visit${nodeName}`
     if (visitFunction in Object.getPrototypeOf(visitor)) {
-      const result = logPuyaExceptions(() => Object.getPrototypeOf(visitor)[visitFunction].call(visitor, node), sourceLocation)
-      if (result !== undefined) return result
+      return logPuyaExceptions(() => Object.getPrototypeOf(visitor)[visitFunction].call(visitor, node), sourceLocation)
     } else {
       logger.error(sourceLocation, `Unsupported syntax visitor ${nodeName}`)
     }
