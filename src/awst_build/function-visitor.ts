@@ -2,7 +2,7 @@ import { accept, Visitor } from '../visitor/visitor'
 import { SourceFileContext } from './context'
 import { ContractContext } from './contract-visitor'
 import * as awst from '../awst/nodes'
-import ts from 'typescript'
+import ts, { SyntaxKind } from 'typescript'
 import { codeInvariant, invariant } from '../util'
 import { Statements } from '../visitor/syntax-names'
 import { NotSupported, TodoError } from '../errors'
@@ -14,6 +14,7 @@ import { PType, voidPType } from './ptypes'
 import { ARC4CreateOption, OnCompletionAction } from '../awst/arc4'
 import { BaseVisitor } from './base-visitor'
 import { TransientType } from './ptypes/ptype-classes'
+import { SourceLocation } from '../awst/source-location'
 
 export type ContractMethodInfo = {
   className: string
@@ -164,13 +165,17 @@ export class FunctionVisitor
     throw new TodoError('WhileStatement')
   }
   visitContinueStatement(node: ts.ContinueStatement): awst.Statement | awst.Statement[] {
+    const sourceLocation = this.sourceLocation(node)
+    codeInvariant(!node.label, 'Continuing to a labeled construct is not currently supported', sourceLocation)
     return new awst.ContinueStatement({
-      sourceLocation: this.sourceLocation(node),
+      sourceLocation: sourceLocation,
     })
   }
   visitBreakStatement(node: ts.BreakStatement): awst.Statement | awst.Statement[] {
+    const sourceLocation = this.sourceLocation(node)
+    codeInvariant(!node.label, 'Breaking to a labeled construct is not currently supported', sourceLocation)
     return new awst.BreakStatement({
-      sourceLocation: this.sourceLocation(node),
+      sourceLocation: sourceLocation,
     })
   }
   visitReturnStatement(node: ts.ReturnStatement): awst.Statement | awst.Statement[] {
@@ -191,8 +196,62 @@ export class FunctionVisitor
     throw new TodoError('WithStatement')
   }
   visitSwitchStatement(node: ts.SwitchStatement): awst.Statement | awst.Statement[] {
-    throw new TodoError('SwitchStatement')
+    const buildSwitchCaseBody = (statements: ts.NodeArray<ts.Statement>, sourceLocation: SourceLocation) => {
+      // TODO: This should check that all code paths result in a `return` or a `break` so as to prevent case fall through
+      // It is a non-trivial task however as there could be nested switch blocks, loops and labeled break/continue
+      return wrapInBlock(
+        statements.flatMap((s) => this.accept(s)),
+        sourceLocation,
+      )
+    }
+
+    const sourceLocation = this.sourceLocation(node)
+
+    const caseBlocks: awst.SwitchCaseBlock[] = []
+
+    const current = {
+      clauses: new Array<awst.Expression>(),
+    }
+
+    let defaultCase: awst.Block | undefined = undefined
+    const subject = requireInstanceBuilder(this.accept(node.expression), sourceLocation)
+
+    codeInvariant(subject.ptype, 'The subject of a switch statement must have a resolvable ptype', this.sourceLocation(node.expression))
+
+    // Collate clauses without statements with the proceeding clause
+    for (const clause of node.caseBlock.clauses) {
+      const sourceLocation = this.sourceLocation(clause)
+      if (clause.kind === SyntaxKind.DefaultClause) {
+        defaultCase = buildSwitchCaseBody(clause.statements, sourceLocation)
+        if (current.clauses.length) {
+          logger.warn(current.clauses[0].sourceLocation, 'Switch cases which fall through to the default clause are ignored')
+        }
+      } else {
+        if (defaultCase) {
+          logger.warn(sourceLocation, 'Switch cases appearing after a default clause are ignored')
+        }
+        current.clauses.push(requireExpressionOfType(this.accept(clause.expression), subject.ptype, sourceLocation))
+        if (clause.statements.length) {
+          caseBlocks.push(
+            nodeFactory.switchCaseBlock({
+              sourceLocation,
+              clauses: current.clauses,
+              block: buildSwitchCaseBody(clause.statements, sourceLocation),
+            }),
+          )
+          current.clauses = []
+        }
+      }
+    }
+
+    return nodeFactory.switch({
+      value: subject.resolve(),
+      sourceLocation,
+      defaultCase,
+      cases: caseBlocks,
+    })
   }
+
   visitLabeledStatement(node: ts.LabeledStatement): awst.Statement | awst.Statement[] {
     return this.accept(node.statement)
   }

@@ -27,6 +27,11 @@ export class CodeError extends PuyaError {
       sourceLocation,
     })
   }
+  static expectedCompileTimeConstant({ sourceLocation }: { sourceLocation: SourceLocation }) {
+    return new CodeError('Expected compile time constant', {
+      sourceLocation,
+    })
+  }
   static invalidAssignmentTarget({ sourceLocation, name }: { sourceLocation: SourceLocation; name: string }) {
     return new CodeError(`${name} is not a valid assignment target`, {
       sourceLocation,
@@ -43,4 +48,15 @@ export class NotSupported extends CodeError {
 
 export const throwError = (error: Error): never => {
   throw error
+}
+export const wrapInCodeError = <T>(func: () => T, sourceLocation: SourceLocation) => {
+  try {
+    return func()
+  } catch (e) {
+    if (e instanceof Error) {
+      throw new CodeError(e.message, { sourceLocation, cause: e })
+    } else {
+      throw new CodeError(String(e), { sourceLocation })
+    }
+  }
 }

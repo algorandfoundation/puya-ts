@@ -1,0 +1,30 @@
+abstract contract ExampleBase
+{
+  baseMethod(): uint64
+  {
+    return 2
+  }
+  
+}
+contract Example
+{
+  approvalProgram(): bool
+  {
+    return this.localMethod() + super.baseMethod() == freeMethod() - this.baseMethod()
+  }
+  
+  baseMethod(): uint64
+  {
+    return 1
+  }
+  
+  localMethod(): uint64
+  {
+    return 5
+  }
+  
+}
+subroutine freeMethod(): uint64
+{
+  return 7
+}

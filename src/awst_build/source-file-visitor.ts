@@ -2,7 +2,7 @@ import { SourceFileContext, UniqueNameResolver } from './context'
 import { ModuleStatements } from '../visitor/syntax-names'
 import * as awst from '../awst/nodes'
 import ts from 'typescript'
-import { CodeError } from '../errors'
+import { AwstBuildFailureError, CodeError } from '../errors'
 import { Visitor, accept } from '../visitor/visitor'
 import { ContractVisitor } from './contract-visitor'
 import { FunctionVisitor } from './function-visitor'
@@ -38,18 +38,25 @@ export class SourceFileVisitor extends BaseVisitor<SourceFileContext> implements
   }
 
   visitFunctionDeclaration(node: ts.FunctionDeclaration): StatementOrDeferred {
-    return () => logPuyaExceptions(() => FunctionVisitor.buildSubroutine(this.context, node), this.sourceLocation(node)) ?? []
+    return () => logPuyaExceptions(() => FunctionVisitor.buildSubroutine(this.context, node), this.sourceLocation(node))
   }
 
   public *gatherStatements(): Generator<awst.ModuleStatement, void, void> {
     for (const statements of this._moduleStatements) {
-      if (typeof statements === 'function') {
-        for (const s of expandMaybeArray(statements())) {
-          yield s
+      try {
+        if (typeof statements === 'function') {
+          for (const s of expandMaybeArray(statements())) {
+            yield s
+          }
+        } else {
+          for (const s of expandMaybeArray(statements)) {
+            yield s
+          }
         }
-      } else {
-        for (const s of expandMaybeArray(statements)) {
-          yield s
+      } catch (e) {
+        // Ignore this error and continue visiting other statements, so we can show additional errors
+        if (!(e instanceof AwstBuildFailureError)) {
+          throw e
         }
       }
     }
@@ -86,7 +93,7 @@ export class SourceFileVisitor extends BaseVisitor<SourceFileContext> implements
     const sourceLocation = this.sourceLocation(node)
     const ptype = this.context.resolver.resolve(node, sourceLocation)
     if (ptype instanceof ContractClassType) {
-      return () => logPuyaExceptions(() => ContractVisitor.buildContract(this.context, node), sourceLocation) ?? []
+      return () => logPuyaExceptions(() => ContractVisitor.buildContract(this.context, node), sourceLocation)
     } else {
       logger.warn(sourceLocation, `Ignoring class declaration ${ptype.fullName}`)
       return []

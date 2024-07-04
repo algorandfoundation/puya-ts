@@ -1,7 +1,7 @@
 import { createColorFormatter } from '@makerx/color-console'
 import { SourceLocation } from './awst/source-location'
 import chalk from 'chalk'
-import { CodeError, PuyaError, TodoError } from './errors'
+import { AwstBuildFailureError, CodeError, PuyaError, TodoError } from './errors'
 
 const colorLogger = {
   info: createColorFormatter(chalk.cyan, chalk.blue, 'info', console),
@@ -75,7 +75,7 @@ const tryGetSourceLocationFromError = (error: unknown): SourceLocation | undefin
 
 export const logger = new PuyaLogger()
 
-export const logPuyaExceptions = <T>(action: () => T, sourceLocation: SourceLocation): T | undefined => {
+export const logPuyaExceptions = <T>(action: () => T, sourceLocation: SourceLocation): T => {
   try {
     return action()
   } catch (e) {
@@ -86,6 +86,6 @@ export const logPuyaExceptions = <T>(action: () => T, sourceLocation: SourceLoca
     } else {
       throw e
     }
-    return undefined
+    throw new AwstBuildFailureError()
   }
 }

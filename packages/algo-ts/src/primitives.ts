@@ -80,6 +80,14 @@ Bytes.fromBase64 = (b64: string): bytes => {
   throw new Error('TODO')
 }
 
+/**
+ * Create a new bytes value from a base 32 encoded string
+ * @param b32
+ */
+Bytes.fromBase32 = (b32: string): bytes => {
+  throw new Error('TODO')
+}
+
 function isTemplateStringsArray(v: unknown): v is TemplateStringsArray {
   return Boolean(v) && Array.isArray(v) && typeof v[0] === 'string'
 }

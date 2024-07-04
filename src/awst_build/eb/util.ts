@@ -7,7 +7,7 @@ import { LiteralExpressionBuilder } from './literal-expression-builder'
 
 export function requireExpressionOfType(builder: NodeBuilder, ptype: PType, sourceLocation: SourceLocation): awst.Expression {
   if (builder instanceof LiteralExpressionBuilder) {
-    return builder.resolveToPType(ptype, sourceLocation).resolve()
+    return builder.resolveToPType(ptype).resolve()
   }
   if (builder instanceof InstanceBuilder && builder.ptype?.equals(ptype)) {
     return builder.resolve()
@@ -20,7 +20,7 @@ export function requireExpressionOfType(builder: NodeBuilder, ptype: PType, sour
 export function requestExpressionOfType(builder: NodeBuilder, ptype: PType, sourceLocation: SourceLocation): awst.Expression | undefined {
   if (builder instanceof LiteralExpressionBuilder) {
     if (builder.resolvableToPType(ptype)) {
-      return builder.resolveToPType(ptype, sourceLocation).resolve()
+      return builder.resolveToPType(ptype).resolve()
     }
     return undefined
   }
@@ -69,7 +69,7 @@ export function requireConstant(
 export function requestConstantOfType(builder: NodeBuilder, ptype: PType, sourceLocation: SourceLocation): awst.Constant | undefined {
   if (builder instanceof LiteralExpressionBuilder) {
     if (builder.resolvableToPType(ptype)) {
-      const expr = builder.resolveToPType(ptype, sourceLocation).resolve()
+      const expr = builder.resolveToPType(ptype).resolve()
       if (isConstant(expr)) return expr
     }
     return undefined

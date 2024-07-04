@@ -1,0 +1,22 @@
+subroutine test_uint64(x: uint64): uint64
+{
+  switch (x) {
+    case 1:
+    case 2:
+    case 4:
+      return 3
+    default:
+      return 1
+  }
+}
+subroutine test_bytes(x: bytes): bytes
+{
+  switch (x) {
+    case reinterpret_cast<bytes>("hmmm"):
+    case hex<0f>:
+    case b64<ZHNmc2Rmc2Q=>:
+    case b32<OASGMZ3OMATGOZDGMASGM>:
+      return x
+  }
+  return x
+}

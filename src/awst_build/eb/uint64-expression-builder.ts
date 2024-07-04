@@ -28,7 +28,7 @@ export class UInt64FunctionBuilder extends FunctionBuilder {
     if (args.length === 1) {
       const [arg0] = args
       if (arg0 instanceof LiteralExpressionBuilder) {
-        return arg0.resolveToPType(uint64PType, sourceLocation)
+        return arg0.resolveToPType(uint64PType)
       }
     }
     throw CodeError.unexpectedUnhandledArgs({ sourceLocation })

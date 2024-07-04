@@ -57,20 +57,20 @@ export class LiteralExpressionBuilder extends InstanceBuilder {
     }
     return false
   }
-  resolveToPType(ptype: PType, sourceLocation: SourceLocation): InstanceBuilder {
+  resolveToPType(ptype: PType): InstanceBuilder {
     if (ptype.equals(bytesPType)) {
       if (this.value instanceof Uint8Array) {
-        return new BytesExpressionBuilder(nodeFactory.bytesConstant({ value: this.value, sourceLocation }))
+        return new BytesExpressionBuilder(nodeFactory.bytesConstant({ value: this.value, sourceLocation: this.sourceLocation }))
       }
     } else if (ptype.equals(uint64PType)) {
       if (typeof this.value === 'bigint') {
-        return new UInt64ExpressionBuilder(nodeFactory.uInt64Constant({ value: this.value, sourceLocation }))
+        return new UInt64ExpressionBuilder(nodeFactory.uInt64Constant({ value: this.value, sourceLocation: this.sourceLocation }))
       }
     } else if (ptype.equals(boolPType)) {
       if (typeof this.value === 'boolean') {
-        return new BoolExpressionBuilder(nodeFactory.boolConstant({ value: this.value, sourceLocation }))
+        return new BoolExpressionBuilder(nodeFactory.boolConstant({ value: this.value, sourceLocation: this.sourceLocation }))
       }
     }
-    throw new CodeError(`Literal cannot be converted to type ${ptype.name}`, { sourceLocation })
+    throw new CodeError(`Literal cannot be converted to type ${ptype.name}`, { sourceLocation: this.sourceLocation })
   }
 }

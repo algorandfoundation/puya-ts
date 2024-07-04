@@ -1,0 +1,245 @@
+[
+{
+  "_type": "ContractFragment",
+  "sourceLocation": "tests/approvals/call-expressions.algo.ts[2:0-6:1]",
+  "name": "ExampleBase",
+  "moduleName": "tests/approvals/call-expressions.algo.ts",
+  "isAbstract": true,
+  "isArc4": false,
+  "bases": [],
+  "subroutines": [
+    {
+      "_type": "ContractMethod",
+      "sourceLocation": "tests/approvals/call-expressions.algo.ts[3:2-5:3]",
+      "name": "baseMethod",
+      "moduleName": "tests/approvals/call-expressions.algo.ts",
+      "args": [],
+      "returnType": "uint64",
+      "body": {
+        "_type": "Block",
+        "sourceLocation": "tests/approvals/call-expressions.algo.ts[3:33-5:3]",
+        "body": [
+          {
+            "_type": "ReturnStatement",
+            "sourceLocation": "tests/approvals/call-expressions.algo.ts[4:4-4:12]",
+            "value": {
+              "_type": "IntegerConstant",
+              "sourceLocation": "tests/approvals/call-expressions.algo.ts[4:11-4:12]",
+              "wtype": "uint64",
+              "value": "2n"
+            }
+          }
+        ]
+      },
+      "className": "ExampleBase",
+      "arc4MethodConfig": {
+        "is_bare": true,
+        "allowed_completion_types": [
+          0
+        ],
+        "create": "disallow",
+        "source_location": "tests/approvals/call-expressions.algo.ts[3:2-5:3]"
+      }
+    }
+  ],
+  "appState": {},
+  "reservedScratchSpace": {},
+  "stateTotals": {},
+  "methods": {}
+},
+{
+  "_type": "ContractFragment",
+  "sourceLocation": "tests/approvals/call-expressions.algo.ts[8:0-18:1]",
+  "name": "Example",
+  "moduleName": "tests/approvals/call-expressions.algo.ts",
+  "isAbstract": false,
+  "isArc4": false,
+  "bases": [],
+  "approvalProgram": {
+    "_type": "ContractMethod",
+    "sourceLocation": "tests/approvals/call-expressions.algo.ts[9:2-11:3]",
+    "name": "approvalProgram",
+    "moduleName": "tests/approvals/call-expressions.algo.ts",
+    "args": [],
+    "returnType": "bool",
+    "body": {
+      "_type": "Block",
+      "sourceLocation": "tests/approvals/call-expressions.algo.ts[9:36-11:3]",
+      "body": [
+        {
+          "_type": "ReturnStatement",
+          "sourceLocation": "tests/approvals/call-expressions.algo.ts[10:4-10:87]",
+          "value": {
+            "_type": "NumericComparisonExpression",
+            "sourceLocation": "tests/approvals/call-expressions.algo.ts[10:11-10:87]",
+            "wtype": "bool",
+            "lhs": {
+              "_type": "UInt64BinaryOperation",
+              "sourceLocation": "tests/approvals/call-expressions.algo.ts[10:11-10:50]",
+              "wtype": "uint64",
+              "left": {
+                "_type": "SubroutineCallExpression",
+                "sourceLocation": "tests/approvals/call-expressions.algo.ts[10:11-10:29]",
+                "wtype": "uint64",
+                "target": {
+                  "_type": "InstanceSubroutineTarget",
+                  "name": "localMethod"
+                },
+                "args": []
+              },
+              "op": "+",
+              "right": {
+                "_type": "SubroutineCallExpression",
+                "sourceLocation": "tests/approvals/call-expressions.algo.ts[10:32-10:50]",
+                "wtype": "uint64",
+                "target": {
+                  "_type": "BaseClassSubroutineTarget",
+                  "baseClass": {
+                    "className": "ExampleBase",
+                    "moduleName": "tests/approvals/call-expressions.algo.ts"
+                  },
+                  "name": "baseMethod"
+                },
+                "args": []
+              }
+            },
+            "operator": "==",
+            "rhs": {
+              "_type": "UInt64BinaryOperation",
+              "sourceLocation": "tests/approvals/call-expressions.algo.ts[10:55-10:87]",
+              "wtype": "uint64",
+              "left": {
+                "_type": "SubroutineCallExpression",
+                "sourceLocation": "tests/approvals/call-expressions.algo.ts[10:55-10:67]",
+                "wtype": "uint64",
+                "target": {
+                  "_type": "FreeSubroutineTarget",
+                  "moduleName": "tests/approvals/call-expressions.algo.ts",
+                  "name": "freeMethod"
+                },
+                "args": []
+              },
+              "op": "-",
+              "right": {
+                "_type": "SubroutineCallExpression",
+                "sourceLocation": "tests/approvals/call-expressions.algo.ts[10:70-10:87]",
+                "wtype": "uint64",
+                "target": {
+                  "_type": "InstanceSubroutineTarget",
+                  "name": "baseMethod"
+                },
+                "args": []
+              }
+            }
+          }
+        }
+      ]
+    },
+    "className": "Example",
+    "arc4MethodConfig": {
+      "is_bare": true,
+      "allowed_completion_types": [
+        0
+      ],
+      "create": "disallow",
+      "source_location": "tests/approvals/call-expressions.algo.ts[9:2-11:3]"
+    }
+  },
+  "subroutines": [
+    {
+      "_type": "ContractMethod",
+      "sourceLocation": "tests/approvals/call-expressions.algo.ts[12:2-14:3]",
+      "name": "baseMethod",
+      "moduleName": "tests/approvals/call-expressions.algo.ts",
+      "args": [],
+      "returnType": "uint64",
+      "body": {
+        "_type": "Block",
+        "sourceLocation": "tests/approvals/call-expressions.algo.ts[12:33-14:3]",
+        "body": [
+          {
+            "_type": "ReturnStatement",
+            "sourceLocation": "tests/approvals/call-expressions.algo.ts[13:4-13:12]",
+            "value": {
+              "_type": "IntegerConstant",
+              "sourceLocation": "tests/approvals/call-expressions.algo.ts[13:11-13:12]",
+              "wtype": "uint64",
+              "value": "1n"
+            }
+          }
+        ]
+      },
+      "className": "Example",
+      "arc4MethodConfig": {
+        "is_bare": true,
+        "allowed_completion_types": [
+          0
+        ],
+        "create": "disallow",
+        "source_location": "tests/approvals/call-expressions.algo.ts[12:2-14:3]"
+      }
+    },
+    {
+      "_type": "ContractMethod",
+      "sourceLocation": "tests/approvals/call-expressions.algo.ts[15:2-17:3]",
+      "name": "localMethod",
+      "moduleName": "tests/approvals/call-expressions.algo.ts",
+      "args": [],
+      "returnType": "uint64",
+      "body": {
+        "_type": "Block",
+        "sourceLocation": "tests/approvals/call-expressions.algo.ts[15:32-17:3]",
+        "body": [
+          {
+            "_type": "ReturnStatement",
+            "sourceLocation": "tests/approvals/call-expressions.algo.ts[16:4-16:12]",
+            "value": {
+              "_type": "IntegerConstant",
+              "sourceLocation": "tests/approvals/call-expressions.algo.ts[16:11-16:12]",
+              "wtype": "uint64",
+              "value": "5n"
+            }
+          }
+        ]
+      },
+      "className": "Example",
+      "arc4MethodConfig": {
+        "is_bare": true,
+        "allowed_completion_types": [
+          0
+        ],
+        "create": "disallow",
+        "source_location": "tests/approvals/call-expressions.algo.ts[15:2-17:3]"
+      }
+    }
+  ],
+  "appState": {},
+  "reservedScratchSpace": {},
+  "stateTotals": {},
+  "methods": {}
+},
+{
+  "_type": "Subroutine",
+  "sourceLocation": "tests/approvals/call-expressions.algo.ts[20:0-22:1]",
+  "name": "freeMethod",
+  "moduleName": "tests/approvals/call-expressions.algo.ts",
+  "args": [],
+  "returnType": "uint64",
+  "body": {
+    "_type": "Block",
+    "sourceLocation": "tests/approvals/call-expressions.algo.ts[20:30-22:1]",
+    "body": [
+      {
+        "_type": "ReturnStatement",
+        "sourceLocation": "tests/approvals/call-expressions.algo.ts[21:2-21:10]",
+        "value": {
+          "_type": "IntegerConstant",
+          "sourceLocation": "tests/approvals/call-expressions.algo.ts[21:9-21:10]",
+          "wtype": "uint64",
+          "value": "7n"
+        }
+      }
+    ]
+  }
+}
+]
