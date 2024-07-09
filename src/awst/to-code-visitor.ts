@@ -212,7 +212,7 @@ export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, Statemen
     ]
   }
   visitWhileLoop(statement: nodes.WhileLoop): string[] {
-    throw new TodoError('Method not implemented.', { sourceLocation: statement.sourceLocation })
+    return [`while (${statement.condition.accept(this)}) {`, ...indent(statement.loopBody.accept(this)), '}']
   }
   visitBreakStatement(statement: nodes.BreakStatement): string[] {
     throw new TodoError('Method not implemented.', { sourceLocation: statement.sourceLocation })
@@ -236,7 +236,11 @@ export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, Statemen
     throw new TodoError('Method not implemented.', { sourceLocation: statement.sourceLocation })
   }
   visitForInLoop(statement: nodes.ForInLoop): string[] {
-    throw new TodoError('Method not implemented.', { sourceLocation: statement.sourceLocation })
+    return [
+      `for (${statement.items.accept(this)} in ${statement.sequence.accept(this)}) {`,
+      ...indent(statement.loopBody.accept(this)),
+      '}',
+    ]
   }
   visitStateDelete(statement: nodes.StateDelete): string[] {
     throw new TodoError('Method not implemented.', { sourceLocation: statement.sourceLocation })

@@ -9,12 +9,13 @@ import { NotSupported, TodoError } from '../errors'
 import { logger } from '../logger'
 import { nodeFactory } from '../awst/node-factory'
 import { wrapInBlock } from '../awst/util'
-import { requireExpressionOfType, requireInstanceBuilder } from './eb/util'
+import { requestExpressionOfType, requireExpressionOfType, requireInstanceBuilder } from './eb/util'
 import { PType, voidPType } from './ptypes'
 import { ARC4CreateOption, OnCompletionAction } from '../awst/arc4'
 import { BaseVisitor } from './base-visitor'
 import { TransientType } from './ptypes/ptype-classes'
 import { SourceLocation } from '../awst/source-location'
+import { NodeBuilder } from './eb'
 
 export type ContractMethodInfo = {
   className: string
@@ -112,22 +113,45 @@ export class FunctionVisitor
         return []
       }
       const target = requireInstanceBuilder(this.accept(d.name), sourceLocation)
-      const value = requireInstanceBuilder(this.accept(d.initializer), sourceLocation)
+      invariant(target.ptype, 'Target of assignment must have ptype')
+      const value = requireExpressionOfType(this.accept(d.initializer), target.ptype, sourceLocation)
       return nodeFactory.assignmentStatement({
         target: target.resolveLValue(),
         sourceLocation: sourceLocation,
-        value: value.resolve(),
+        value,
       })
     })
   }
+
   visitForStatement(node: ts.ForStatement): awst.Statement | awst.Statement[] {
     throw new TodoError('ForStatement')
   }
   visitForOfStatement(node: ts.ForOfStatement): awst.Statement | awst.Statement[] {
-    throw new TodoError('ForOfStatement')
+    const sourceLocation = this.sourceLocation(node)
+
+    let items: awst.LValue
+    if (ts.isExpression(node.initializer)) {
+      items = requireInstanceBuilder(this.accept(node.initializer), sourceLocation).resolveLValue()
+    } else {
+      codeInvariant(
+        node.initializer.declarations.length === 1,
+        'For of loops can only declare a single loop variable',
+        this.sourceLocation(node.initializer),
+      )
+      const [declaration] = node.initializer.declarations
+      items = requireInstanceBuilder(this.accept(declaration.name), sourceLocation).resolveLValue()
+    }
+    return nodeFactory.forInLoop({
+      sourceLocation,
+      sequence: requireInstanceBuilder(this.accept(node.expression), sourceLocation).iterate(sourceLocation),
+      items,
+      loopBody: wrapInBlock(this.accept(node.statement), sourceLocation),
+    })
   }
   visitForInStatement(node: ts.ForInStatement): awst.Statement | awst.Statement[] {
-    throw new TodoError('ForInStatement')
+    throw new NotSupported('For in statements', {
+      sourceLocation: this.sourceLocation(node),
+    })
   }
   visitTryStatement(node: ts.TryStatement): awst.Statement | awst.Statement[] {
     throw new NotSupported('Try statements', {
@@ -139,9 +163,10 @@ export class FunctionVisitor
   }
   visitExpressionStatement(node: ts.ExpressionStatement): awst.Statement | awst.Statement[] {
     const sourceLocation = this.sourceLocation(node)
+    const expr = this.accept(node.expression)
     return new awst.ExpressionStatement({
       sourceLocation: sourceLocation,
-      expr: requireInstanceBuilder(this.accept(node.expression), sourceLocation).resolve(),
+      expr: requireInstanceBuilder(expr, sourceLocation).resolve(),
     })
   }
   visitIfStatement(node: ts.IfStatement): awst.Statement | awst.Statement[] {
@@ -162,7 +187,12 @@ export class FunctionVisitor
     throw new TodoError('DoStatement')
   }
   visitWhileStatement(node: ts.WhileStatement): awst.Statement | awst.Statement[] {
-    throw new TodoError('WhileStatement')
+    const sourceLocation = this.sourceLocation(node)
+    return nodeFactory.whileLoop({
+      sourceLocation,
+      condition: this.accept(node.expression).boolEval(sourceLocation, false),
+      loopBody: wrapInBlock(this.accept(node.statement), this.sourceLocation(node.statement)),
+    })
   }
   visitContinueStatement(node: ts.ContinueStatement): awst.Statement | awst.Statement[] {
     const sourceLocation = this.sourceLocation(node)
@@ -193,63 +223,62 @@ export class FunctionVisitor
     })
   }
   visitWithStatement(node: ts.WithStatement): awst.Statement | awst.Statement[] {
-    throw new TodoError('WithStatement')
+    throw new NotSupported('with statements', { sourceLocation: this.sourceLocation(node) })
   }
   visitSwitchStatement(node: ts.SwitchStatement): awst.Statement | awst.Statement[] {
-    const buildSwitchCaseBody = (statements: ts.NodeArray<ts.Statement>, sourceLocation: SourceLocation) => {
-      // TODO: This should check that all code paths result in a `return` or a `break` so as to prevent case fall through
-      // It is a non-trivial task however as there could be nested switch blocks, loops and labeled break/continue
-      return wrapInBlock(
-        statements.flatMap((s) => this.accept(s)),
-        sourceLocation,
-      )
-    }
-
-    const sourceLocation = this.sourceLocation(node)
-
-    const caseBlocks: awst.SwitchCaseBlock[] = []
-
-    const current = {
-      clauses: new Array<awst.Expression>(),
-    }
-
-    let defaultCase: awst.Block | undefined = undefined
-    const subject = requireInstanceBuilder(this.accept(node.expression), sourceLocation)
-
-    codeInvariant(subject.ptype, 'The subject of a switch statement must have a resolvable ptype', this.sourceLocation(node.expression))
-
-    // Collate clauses without statements with the proceeding clause
-    for (const clause of node.caseBlock.clauses) {
-      const sourceLocation = this.sourceLocation(clause)
-      if (clause.kind === SyntaxKind.DefaultClause) {
-        defaultCase = buildSwitchCaseBody(clause.statements, sourceLocation)
-        if (current.clauses.length) {
-          logger.warn(current.clauses[0].sourceLocation, 'Switch cases which fall through to the default clause are ignored')
-        }
-      } else {
-        if (defaultCase) {
-          logger.warn(sourceLocation, 'Switch cases appearing after a default clause are ignored')
-        }
-        current.clauses.push(requireExpressionOfType(this.accept(clause.expression), subject.ptype, sourceLocation))
-        if (clause.statements.length) {
-          caseBlocks.push(
-            nodeFactory.switchCaseBlock({
-              sourceLocation,
-              clauses: current.clauses,
-              block: buildSwitchCaseBody(clause.statements, sourceLocation),
-            }),
-          )
-          current.clauses = []
-        }
-      }
-    }
-
-    return nodeFactory.switch({
-      value: subject.resolve(),
-      sourceLocation,
-      defaultCase,
-      cases: caseBlocks,
-    })
+    throw new TodoError('SwitchStatement')
+    // const buildSwitchCaseBody = (statements: ts.NodeArray<ts.Statement>, sourceLocation: SourceLocation) => {
+    //   return wrapInBlock(
+    //     statements.flatMap((s) => this.accept(s)),
+    //     sourceLocation,
+    //   )
+    // }
+    //
+    // const sourceLocation = this.sourceLocation(node)
+    //
+    // const caseBlocks: awst.SwitchCaseBlock[] = []
+    //
+    // const current = {
+    //   clauses: new Array<awst.Expression>(),
+    // }
+    //
+    // let defaultCase: awst.Block | undefined = undefined
+    // const subject = requireInstanceBuilder(this.accept(node.expression), sourceLocation)
+    //
+    // codeInvariant(subject.ptype, 'The subject of a switch statement must have a resolvable ptype', this.sourceLocation(node.expression))
+    //
+    // // Collate clauses without statements with the proceeding clause
+    // for (const clause of node.caseBlock.clauses) {
+    //   const sourceLocation = this.sourceLocation(clause)
+    //   if (clause.kind === SyntaxKind.DefaultClause) {
+    //     defaultCase = buildSwitchCaseBody(clause.statements, sourceLocation)
+    //     if (current.clauses.length) {
+    //       logger.warn(current.clauses[0].sourceLocation, 'Switch cases which fall through to the default clause are ignored')
+    //     }
+    //   } else {
+    //     if (defaultCase) {
+    //       logger.warn(sourceLocation, 'Switch cases appearing after a default clause are ignored')
+    //     }
+    //     current.clauses.push(requireExpressionOfType(this.accept(clause.expression), subject.ptype, sourceLocation))
+    //     if (clause.statements.length) {
+    //       caseBlocks.push(
+    //         nodeFactory.switchCaseBlock({
+    //           sourceLocation,
+    //           clauses: current.clauses,
+    //           block: buildSwitchCaseBody(clause.statements, sourceLocation),
+    //         }),
+    //       )
+    //       current.clauses = []
+    //     }
+    //   }
+    // }
+    //
+    // return nodeFactory.switch({
+    //   value: subject.resolve(),
+    //   sourceLocation,
+    //   defaultCase,
+    //   cases: caseBlocks,
+    // })
   }
 
   visitLabeledStatement(node: ts.LabeledStatement): awst.Statement | awst.Statement[] {

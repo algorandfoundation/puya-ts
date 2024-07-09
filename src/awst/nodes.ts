@@ -3,6 +3,76 @@ import * as wtypes from './wtypes'
 import { SourceLocation } from './source-location'
 import { ARC4BareMethodConfig, ARC4ABIMethodConfig } from './arc4'
 import { Props } from '../typescript-helpers'
+export enum TxnField {
+  sender,
+  fee,
+  firstValid,
+  firstValidTime,
+  lastValid,
+  note,
+  lease,
+  receiver,
+  amount,
+  closeRemainderTo,
+  votePK,
+  selectionPK,
+  voteFirst,
+  voteLast,
+  voteKeyDilution,
+  type,
+  typeEnum,
+  xferAsset,
+  assetAmount,
+  assetSender,
+  assetReceiver,
+  assetCloseTo,
+  groupIndex,
+  txID,
+  applicationID,
+  onCompletion,
+  numAppArgs,
+  numAccounts,
+  approvalProgram,
+  clearStateProgram,
+  rekeyTo,
+  configAsset,
+  configAssetTotal,
+  configAssetDecimals,
+  configAssetDefaultFrozen,
+  configAssetUnitName,
+  configAssetName,
+  configAssetURL,
+  configAssetMetadataHash,
+  configAssetManager,
+  configAssetReserve,
+  configAssetFreeze,
+  configAssetClawback,
+  freezeAsset,
+  freezeAssetAccount,
+  freezeAssetFrozen,
+  numAssets,
+  numApplications,
+  globalNumUint,
+  globalNumByteSlice,
+  localNumUint,
+  localNumByteSlice,
+  extraProgramPages,
+  nonparticipation,
+  numLogs,
+  createdAssetID,
+  createdApplicationID,
+  lastLog,
+  stateProofPK,
+  numApprovalProgramPages,
+  numClearStateProgramPages,
+  applicationArgs,
+  accounts,
+  assets,
+  applications,
+  logs,
+  approvalProgramPages,
+  clearStateProgramPages,
+}
 export abstract class Node {
   protected constructor(props: Props<Node>) {
     this.sourceLocation = props.sourceLocation
@@ -59,15 +129,6 @@ export class IfElse extends Statement {
     return visitor.visitIfElse(this)
   }
 }
-export class SwitchCaseBlock extends Node {
-  constructor(props: Props<SwitchCaseBlock>) {
-    super(props)
-    this.clauses = props.clauses
-    this.block = props.block
-  }
-  clauses: Array<Expression>
-  block: Block
-}
 export class Switch extends Statement {
   constructor(props: Props<Switch>) {
     super(props)
@@ -76,7 +137,7 @@ export class Switch extends Statement {
     this.defaultCase = props.defaultCase
   }
   value: Expression
-  cases: Array<SwitchCaseBlock>
+  cases: Map<Expression, Block>
   defaultCase?: Block | undefined
   accept<T>(visitor: StatementVisitor<T>): T {
     return visitor.visitSwitch(this)
@@ -302,42 +363,6 @@ export class IntrinsicCall extends Expression {
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitIntrinsicCall(this)
   }
-}
-export class TxnField {
-  constructor(props: Props<TxnField>) {
-    this.wtype = props.wtype
-    this.additionalInputWtypes = props.additionalInputWtypes
-    this.immediate = props.immediate
-    this.numValues = props.numValues
-    this.isInnerParam = props.isInnerParam
-  }
-  wtype: wtypes.WType
-  additionalInputWtypes: Array<wtypes.WType | wtypes.WType>
-  immediate: string
-  numValues: bigint
-  isInnerParam: boolean
-}
-export class TxnFields {
-  constructor(props: Props<TxnFields>) {
-    this.approvalProgramPages = props.approvalProgramPages
-    this.clearStateProgramPages = props.clearStateProgramPages
-    this.fee = props.fee
-    this.type = props.type
-    this.appArgs = props.appArgs
-    this.accounts = props.accounts
-    this.assets = props.assets
-    this.apps = props.apps
-    this.lastLog = props.lastLog
-  }
-  approvalProgramPages: TxnField
-  clearStateProgramPages: TxnField
-  fee: TxnField
-  type: TxnField
-  appArgs: TxnField
-  accounts: TxnField
-  assets: TxnField
-  apps: TxnField
-  lastLog: TxnField
 }
 export class CreateInnerTransaction extends Expression {
   constructor(props: Props<CreateInnerTransaction>) {
@@ -914,17 +939,6 @@ export class BytesAugmentedAssignment extends Statement {
     return visitor.visitBytesAugmentedAssignment(this)
   }
 }
-export class Range extends Node {
-  constructor(props: Props<Range>) {
-    super(props)
-    this.start = props.start
-    this.stop = props.stop
-    this.step = props.step
-  }
-  start: Expression
-  stop: Expression
-  step: Expression
-}
 export class OpUp extends Node {
   constructor(props: Props<OpUp>) {
     super(props)
@@ -937,7 +951,7 @@ export class Enumeration extends Expression {
     super(props)
     this.expr = props.expr
   }
-  expr: Expression | Range
+  expr: Expression
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitEnumeration(this)
   }
@@ -947,7 +961,7 @@ export class Reversed extends Expression {
     super(props)
     this.expr = props.expr
   }
-  expr: Expression | Range
+  expr: Expression
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitReversed(this)
   }
@@ -959,7 +973,7 @@ export class ForInLoop extends Statement {
     this.items = props.items
     this.loopBody = props.loopBody
   }
-  sequence: Expression | Range
+  sequence: Expression
   items:
     | VarExpression
     | FieldExpression
@@ -1215,7 +1229,6 @@ export const concreteNodes = {
   expressionStatement: ExpressionStatement,
   block: Block,
   ifElse: IfElse,
-  switchCaseBlock: SwitchCaseBlock,
   switch: Switch,
   whileLoop: WhileLoop,
   breakStatement: BreakStatement,
@@ -1236,8 +1249,6 @@ export const concreteNodes = {
   arrayExtend: ArrayExtend,
   aRC4Decode: ARC4Decode,
   intrinsicCall: IntrinsicCall,
-  txnField: TxnField,
-  txnFields: TxnFields,
   createInnerTransaction: CreateInnerTransaction,
   updateInnerTransaction: UpdateInnerTransaction,
   checkedMaybe: CheckedMaybe,
@@ -1278,7 +1289,6 @@ export const concreteNodes = {
   uInt64AugmentedAssignment: UInt64AugmentedAssignment,
   bigUIntAugmentedAssignment: BigUIntAugmentedAssignment,
   bytesAugmentedAssignment: BytesAugmentedAssignment,
-  range: Range,
   opUp: OpUp,
   enumeration: Enumeration,
   reversed: Reversed,

@@ -176,7 +176,7 @@ export class TuplePType extends PType {
   readonly name: string = 'Tuple'
   readonly module: string = 'lib.d.ts'
   readonly items: PType[]
-  readonly singleton = true
+  readonly singleton = false
 
   constructor(props: { items: PType[]; immutable: boolean }) {
     super()

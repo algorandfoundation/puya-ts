@@ -17,6 +17,7 @@ import {
   PType,
   StringFunction,
   stringPType,
+  TuplePType,
   Uint64Function,
   uint64PType,
 } from './ptypes'
@@ -35,6 +36,7 @@ import { OP_METADATA } from './op-metadata'
 import { GlobalStateExpressionBuilder, GlobalStateFunctionBuilder } from './eb/storage/global-state'
 import { AssetExpressionBuilder, AssetFunctionBuilder } from './eb/reference/asset'
 import { SymbolName } from './symbol-name'
+import { TupleExpressionBuilder } from './eb/tuple-expression-builder'
 
 type ValueExpressionBuilderCtor = { new (expr: awst.Expression, ptype: PType): InstanceExpressionBuilder }
 type SingletonExpressionBuilderCtor = { new (sourceLocation: SourceLocation, ptype: PType): NodeBuilder }
@@ -204,3 +206,4 @@ for (const [name, metadata] of Object.entries(OP_METADATA)) {
 
 typeRegistry.register({ ptype: GlobalStateFunction, singletonEb: GlobalStateFunctionBuilder })
 typeRegistry.registerGeneric({ ptype: GlobalStateType, instanceEb: GlobalStateExpressionBuilder })
+typeRegistry.register({ ptype: TuplePType, instanceEb: TupleExpressionBuilder })
