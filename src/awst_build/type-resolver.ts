@@ -1,4 +1,4 @@
-import ts, { SyntaxKind } from 'typescript'
+import ts, { ObjectType, SyntaxKind, TupleType } from 'typescript'
 import {
   ApprovalProgram,
   BaseContractType,
@@ -9,6 +9,7 @@ import {
   PType,
   StringFunction,
   stringPType,
+  TuplePType,
   voidPType,
 } from './ptypes'
 import { SourceLocation } from '../awst/source-location'
@@ -75,6 +76,18 @@ export class TypeResolver {
     if (hasFlags(tsType.flags, ts.TypeFlags.Number) && tsType.getSymbol() === undefined) {
       return numberPType
     }
+    if (isTupleReference(tsType)) {
+      //codeInvariant(tsType.readonly, 'Tuple types should be declared as readonly', sourceLocation)
+      codeInvariant(tsType.target.minLength, 'Tuple types cannot have a zero length', sourceLocation)
+      codeInvariant(tsType.target.fixedLength, 'Tuple types should have a fixed length', sourceLocation)
+      codeInvariant(tsType.typeArguments, 'Tuple items must have types', sourceLocation)
+
+      return new TuplePType({
+        items: tsType.typeArguments.map((t) => this.resolveType(t, sourceLocation)),
+        immutable: tsType.target.readonly,
+      })
+    }
+
     const typeName = this.getTypeName(tsType, sourceLocation)
 
     if (typeName.fullName === StringFunction.fullName) return StringFunction
@@ -178,4 +191,18 @@ export class TypeResolver {
     }
     throw new InternalError(`Symbol does not have a declaration`, { sourceLocation })
   }
+}
+
+function isObjectType(tsType: ts.Type): tsType is ts.ObjectType {
+  return hasFlags(tsType.flags, ts.TypeFlags.Object)
+}
+function isTypeReference(tsType: ts.Type): tsType is ts.TypeReference {
+  return isObjectType(tsType) && hasFlags(tsType.objectFlags, ts.ObjectFlags.Reference)
+}
+function isTupleType(tsType: ts.Type): tsType is ts.TupleType {
+  return isObjectType(tsType) && hasFlags(tsType.objectFlags, ts.ObjectFlags.Tuple)
+}
+
+function isTupleReference(tsType: ts.Type): tsType is ts.TypeReference & { target: ts.TupleType } {
+  return isTypeReference(tsType) && isTupleType(tsType.target)
 }

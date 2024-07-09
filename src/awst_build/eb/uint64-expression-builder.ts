@@ -1,5 +1,5 @@
 import { awst, wtypes } from '../../awst'
-import { BuilderBinaryOp, BuilderComparisonOp, FunctionBuilder, InstanceBuilder, InstanceExpressionBuilder } from './index'
+import { BuilderBinaryOp, BuilderComparisonOp, FunctionBuilder, InstanceBuilder, InstanceExpressionBuilder, requireLValue } from './index'
 import { NumericComparison, UInt64BinaryOperator } from '../../awst/nodes'
 import { SourceLocation } from '../../awst/source-location'
 import { nodeFactory } from '../../awst/node-factory'
@@ -72,6 +72,17 @@ export class UInt64ExpressionBuilder extends InstanceExpressionBuilder {
         left: this._expr,
         right: otherExpr,
         op: uintOp,
+        sourceLocation,
+        wtype: wtypes.uint64WType,
+      }),
+    )
+  }
+
+  augmentedAssignment(other: InstanceBuilder, op: BuilderBinaryOp, sourceLocation: SourceLocation): InstanceBuilder {
+    return new UInt64ExpressionBuilder(
+      nodeFactory.assignmentExpression({
+        target: this.resolveLValue(),
+        value: this.binaryOp(other, op, sourceLocation).resolve(),
         sourceLocation,
         wtype: wtypes.uint64WType,
       }),

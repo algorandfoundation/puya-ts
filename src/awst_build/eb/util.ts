@@ -17,7 +17,7 @@ export function requireExpressionOfType(builder: NodeBuilder, ptype: PType, sour
   })
 }
 
-export function requestExpressionOfType(builder: NodeBuilder, ptype: PType, sourceLocation: SourceLocation): awst.Expression | undefined {
+export function requestExpressionOfType(builder: NodeBuilder, ptype: PType): awst.Expression | undefined {
   if (builder instanceof LiteralExpressionBuilder) {
     if (builder.resolvableToPType(ptype)) {
       return builder.resolveToPType(ptype).resolve()

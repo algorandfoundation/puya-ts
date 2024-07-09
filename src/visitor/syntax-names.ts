@@ -1,5 +1,6 @@
 import ts from 'typescript'
 import { BuilderBinaryOp, BuilderComparisonOp, BuilderUnaryOp } from '../awst_build/eb'
+import { DeliberateAny } from '../typescript-helpers'
 
 export const SyntaxKindName = {
   [ts.SyntaxKind.Unknown]: 'Unknown',
@@ -487,17 +488,19 @@ export type Expressions =
  * Map an inherited base type to a union type of "all" the nodes which extend that base type
  * where "all" is limited to nodes relevant to this compiler.
  */
-export type MapBaseType<T> = IfEquals<
-  T,
-  ts.Expression,
-  Expressions,
-  IfEquals<
-    T,
-    ts.LeftHandSideExpression,
-    LeftHandSideExpression,
-    IfEquals<T, ts.Statement, Statements, IfEquals<T, ts.ClassElement, ClassElements, T>>
-  >
->
+export type MapBaseType<T> = T extends DeliberateAny
+  ? IfEquals<
+      T,
+      ts.Expression,
+      Expressions,
+      IfEquals<
+        T,
+        ts.LeftHandSideExpression,
+        LeftHandSideExpression,
+        IfEquals<T, ts.Statement, Statements, IfEquals<T, ts.ClassElement, ClassElements, T>>
+      >
+    >
+  : never
 
 type IfEquals<T, U, Y = unknown, N = never> = ((x: T) => T) extends (x: U) => U ? (((x: U) => U) extends (x: T) => T ? Y : N) : N
 
