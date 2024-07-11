@@ -66,7 +66,7 @@ export function requireConstant(
   throw new CodeError(`Expected compile time constant value`, { sourceLocation })
 }
 
-export function requestConstantOfType(builder: NodeBuilder, ptype: PType, sourceLocation: SourceLocation): awst.Constant | undefined {
+export function requestConstantOfType(builder: NodeBuilder, ptype: PType): awst.Constant | undefined {
   if (builder instanceof LiteralExpressionBuilder) {
     if (builder.resolvableToPType(ptype)) {
       const expr = builder.resolveToPType(ptype).resolve()
@@ -91,7 +91,7 @@ function isConstant(expr: awst.Expression): expr is awst.Constant {
 }
 
 export function requireConstantOfType(builder: NodeBuilder, ptype: PType, sourceLocation: SourceLocation): awst.Constant {
-  const constExpr = requestConstantOfType(builder, ptype, sourceLocation)
+  const constExpr = requestConstantOfType(builder, ptype)
   if (constExpr) return constExpr
   throw new CodeError(`Expected constant of type ${ptype}`, { sourceLocation })
 }

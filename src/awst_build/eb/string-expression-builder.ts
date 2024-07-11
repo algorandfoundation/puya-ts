@@ -6,7 +6,7 @@ import { FunctionBuilder, InstanceBuilder, InstanceExpressionBuilder, NodeBuilde
 import { bytesPType, PType, stringPType } from '../ptypes'
 import { LiteralExpressionBuilder } from './literal-expression-builder'
 import { BytesBinaryOperator } from '../../awst/nodes'
-import { requireExpressionOfType, requireExpressionsOfType } from './util'
+import { requireExpressionOfType } from './util'
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
 
 export class StringFunctionBuilder extends FunctionBuilder {

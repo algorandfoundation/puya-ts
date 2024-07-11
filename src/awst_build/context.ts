@@ -2,7 +2,7 @@ import ts from 'typescript'
 import { SourceLocation } from '../awst/source-location'
 import { awst } from '../awst'
 import { nodeFactory } from '../awst/node-factory'
-import { codeInvariant, invariant } from '../util'
+import { codeInvariant, invariant, toSubScript } from '../util'
 import { ConstantDeclaration } from '../awst/nodes'
 import { PType } from './ptypes'
 import { NodeBuilder } from './eb'
@@ -21,8 +21,8 @@ export abstract class BaseContext {
 }
 
 export class UniqueNameResolver {
-  readonly symbolToName: Map<ts.Symbol, string>
-  readonly nameToCount: Map<string, number>
+  protected readonly symbolToName: Map<ts.Symbol, string>
+  protected readonly nameToCount: Map<string, number>
 
   constructor(parent?: UniqueNameResolver) {
     if (parent) {
@@ -44,20 +44,11 @@ export class UniqueNameResolver {
     if (nameCount === 0) {
       uniqueName = rawName
     } else {
-      uniqueName = `${rawName}${this.toSubNumber(nameCount)}`
+      uniqueName = `${rawName}${toSubScript(nameCount)}`
     }
     this.nameToCount.set(rawName, nameCount + 1)
     this.symbolToName.set(symbol, uniqueName)
     return uniqueName
-  }
-
-  private toSubNumber(num: number) {
-    const subNumbers = ['\u2080', '\u2081', '\u2082', '\u2083', '\u2084', '\u2085', '\u2086', '\u2087', '\u2088', '\u2089']
-    return num
-      .toFixed(0)
-      .split('')
-      .map((x) => subNumbers[parseInt(x)])
-      .join('')
   }
 
   createChild(): UniqueNameResolver {
@@ -69,7 +60,7 @@ export class SourceFileContext extends BaseContext {
   readonly constants: Map<string, awst.ConstantDeclaration> = new Map()
   public readonly resolver: TypeResolver
 
-  private readonly checker: ts.TypeChecker
+  protected readonly checker: ts.TypeChecker
   constructor(
     public readonly sourceFile: ts.SourceFile,
     public readonly program: ts.Program,

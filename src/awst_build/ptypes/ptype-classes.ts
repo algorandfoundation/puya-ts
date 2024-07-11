@@ -2,6 +2,7 @@ import { wtypes } from '../../awst'
 import { codeInvariant } from '../../util'
 import { WTuple, WType } from '../../awst/wtypes'
 import { Constants } from '../../constants'
+import { CodeError } from '../../errors'
 
 /**
  * Represents a public type visible to a developer of AlgoTS
@@ -65,13 +66,31 @@ export class TransientType extends PType {
   readonly module: string
   readonly altType: PType
   readonly singleton: boolean
+  private readonly wtypeMessage: string | undefined
 
-  constructor({ name, module, altType, singleton }: { name: string; module: string; altType: PType; singleton: boolean }) {
+  constructor({
+    name,
+    module,
+    altType,
+    singleton,
+    wtypeMessage,
+  }: {
+    name: string
+    module: string
+    altType: PType
+    singleton: boolean
+    wtypeMessage?: string
+  }) {
     super()
     this.name = name
     this.module = module
     this.altType = altType
     this.singleton = singleton
+    this.wtypeMessage = wtypeMessage
+  }
+
+  get wtypeOrThrow(): WType {
+    throw new CodeError(this.wtypeMessage ?? `${this.fullName} is not valid as a variable, parameter, or property type`)
   }
 }
 export class LiteralValueType extends PType {

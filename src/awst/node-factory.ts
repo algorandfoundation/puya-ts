@@ -1,4 +1,15 @@
-import { BoolConstant, BytesConstant, BytesEncoding, concreteNodes, IntegerConstant, StringConstant } from './nodes'
+import {
+  Block,
+  BoolConstant,
+  BytesConstant,
+  BytesEncoding,
+  concreteNodes,
+  Expression,
+  ExpressionStatement,
+  IntegerConstant,
+  Statement,
+  StringConstant,
+} from './nodes'
 import { DeliberateAny } from '../typescript-helpers'
 import { SourceLocation } from './source-location'
 import * as wtypes from './wtypes'
@@ -32,6 +43,23 @@ const explicitNodeFactory = {
     return new BoolConstant({
       wtype: wtypes.boolWType,
       ...props,
+    })
+  },
+  expressionStatement({ expr }: { expr: Expression }) {
+    return new ExpressionStatement({
+      expr,
+      sourceLocation: expr.sourceLocation,
+    })
+  },
+  block(
+    { sourceLocation, comment, label }: { sourceLocation: SourceLocation; comment?: string; label?: string },
+    ...statements: Array<Statement | Statement[]>
+  ) {
+    return new Block({
+      body: statements.flat(),
+      sourceLocation,
+      comment,
+      label,
     })
   },
 } satisfies { [key in keyof ConcreteNodes]?: (...args: DeliberateAny[]) => InstanceType<ConcreteNodes[key]> }

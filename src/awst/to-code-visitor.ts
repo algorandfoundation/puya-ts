@@ -13,7 +13,7 @@ import { TodoError } from '../errors'
 import { logger } from '../logger'
 import { uint8ArrayToUtf8 } from '../util'
 import { Buffer } from 'node:buffer'
-import { uint8ArrayToBase32 } from '../util/base-32'
+import { uint8ArrayToBase32 } from '../util'
 
 function printBytes(value: Uint8Array, encoding: BytesEncoding) {
   switch (encoding) {
@@ -29,6 +29,9 @@ function printBytes(value: Uint8Array, encoding: BytesEncoding) {
 }
 
 export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, StatementVisitor<string[]>, ExpressionVisitor<string> {
+  visitGoto(statement: nodes.Goto): string[] {
+    return [`goto ${statement.label}`]
+  }
   visitIntersectionSliceExpression(expression: nodes.IntersectionSliceExpression): string {
     throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
   }
@@ -194,7 +197,7 @@ export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, Statemen
     return [statement.expr.accept(this)]
   }
   visitBlock(statement: nodes.Block): string[] {
-    return statement.body.flatMap((b) => b.accept(this))
+    return [...(statement.label ? [`${statement.label}:`] : []), ...statement.body.flatMap((b) => b.accept(this))]
   }
   visitIfElse(statement: nodes.IfElse): string[] {
     return [
@@ -206,19 +209,15 @@ export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, Statemen
   visitSwitch(statement: nodes.Switch): string[] {
     return [
       `switch (${statement.value.accept(this)}) {`,
-      ...statement.cases.flatMap((c) => indent([...c.clauses.map((cl) => `case ${cl.accept(this)}:`), ...indent(c.block.accept(this))])),
+      ...indent(
+        Array.from(statement.cases.entries()).flatMap(([clause, block]) => [`case ${clause.accept(this)}:`, ...indent(block.accept(this))]),
+      ),
       ...(statement.defaultCase ? indent(['default:', ...indent(statement.defaultCase.accept(this))]) : []),
       '}',
     ]
   }
   visitWhileLoop(statement: nodes.WhileLoop): string[] {
     return [`while (${statement.condition.accept(this)}) {`, ...indent(statement.loopBody.accept(this)), '}']
-  }
-  visitBreakStatement(statement: nodes.BreakStatement): string[] {
-    throw new TodoError('Method not implemented.', { sourceLocation: statement.sourceLocation })
-  }
-  visitContinueStatement(statement: nodes.ContinueStatement): string[] {
-    throw new TodoError('Method not implemented.', { sourceLocation: statement.sourceLocation })
   }
   visitReturnStatement(statement: nodes.ReturnStatement): string[] {
     return [`return ${statement.value?.accept(this) ?? ''}`]

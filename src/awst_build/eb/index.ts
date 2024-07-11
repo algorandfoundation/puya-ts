@@ -73,8 +73,8 @@ export abstract class NodeBuilder {
     })
   }
 
-  boolEval(sourceLocation: SourceLocation, negate: boolean): awst.Expression {
-    throw new NotSupported(`${negate ? 'Negated ' : ''} boolean evaluation of ${this.typeDescription}`, {
+  boolEval(sourceLocation: SourceLocation): awst.Expression {
+    throw new NotSupported(`Boolean evaluation of ${this.typeDescription}`, {
       sourceLocation,
     })
   }

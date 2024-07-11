@@ -2,6 +2,7 @@ import { CodeError } from '../errors'
 import { SourceLocation } from '../awst/source-location'
 import { TextDecoder } from 'node:util'
 import { Buffer } from 'node:buffer'
+import { DeliberateAny } from '../typescript-helpers'
 export { base32ToUint8Array, uint8ArrayToBase32 } from './base-32'
 class InvariantError extends Error {}
 export function invariant(condition: unknown, message: string): asserts condition {
@@ -74,4 +75,20 @@ export function* enumerate<T>(iterable: Iterable<T>): IterableIterator<readonly 
     yield [i, item]
     i++
   }
+}
+
+export function toSubScript(num: number) {
+  const subNumbers = ['\u2080', '\u2081', '\u2082', '\u2083', '\u2084', '\u2085', '\u2086', '\u2087', '\u2088', '\u2089']
+  return num
+    .toFixed(0)
+    .split('')
+    .map((x) => subNumbers[parseInt(x)])
+    .join('')
+}
+
+export function instanceOfAny<T extends Array<{ new (...args: DeliberateAny[]): DeliberateAny }>>(
+  x: unknown,
+  ...types: T
+): x is InstanceType<T[number]> {
+  return types.some((t) => x instanceof t)
 }

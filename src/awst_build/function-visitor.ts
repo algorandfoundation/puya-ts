@@ -2,31 +2,33 @@ import { accept, Visitor } from '../visitor/visitor'
 import { SourceFileContext } from './context'
 import { ContractContext } from './contract-visitor'
 import * as awst from '../awst/nodes'
-import ts, { SyntaxKind } from 'typescript'
-import { codeInvariant, invariant } from '../util'
+import ts from 'typescript'
+import { codeInvariant, enumerate, instanceOfAny, invariant } from '../util'
 import { Statements } from '../visitor/syntax-names'
 import { NotSupported, TodoError } from '../errors'
 import { logger } from '../logger'
 import { nodeFactory } from '../awst/node-factory'
-import { wrapInBlock } from '../awst/util'
-import { requestExpressionOfType, requireExpressionOfType, requireInstanceBuilder } from './eb/util'
+import { requireExpressionOfType, requireInstanceBuilder } from './eb/util'
 import { PType, voidPType } from './ptypes'
 import { ARC4CreateOption, OnCompletionAction } from '../awst/arc4'
 import { BaseVisitor } from './base-visitor'
 import { TransientType } from './ptypes/ptype-classes'
-import { SourceLocation } from '../awst/source-location'
-import { NodeBuilder } from './eb'
+import { SwitchLoopContext } from './switch-loop-context'
+import { Block, Goto, ReturnStatement } from '../awst/nodes'
 
 export type ContractMethodInfo = {
   className: string
 }
 
 export class FunctionContext extends SourceFileContext {
+  readonly switchLoopContext: SwitchLoopContext
   constructor(parent: ContractContext | SourceFileContext) {
     super(parent.sourceFile, parent.program, parent.nameResolver.createChild())
+    this.switchLoopContext = new SwitchLoopContext(this.checker)
   }
 }
 
+// noinspection JSUnusedGlobalSymbols
 export class FunctionVisitor
   extends BaseVisitor<FunctionContext>
   implements
@@ -105,11 +107,11 @@ export class FunctionVisitor
     })
   }
 
-  visitVariableStatement(node: ts.VariableStatement): awst.Statement | awst.Statement[] {
-    return node.declarationList.declarations.flatMap((d) => {
+  visitVariableDeclarationList(node: ts.VariableDeclarationList): awst.Statement[] {
+    return node.declarations.flatMap((d) => {
       const sourceLocation = this.sourceLocation(d)
       if (!d.initializer) {
-        logger.warn(sourceLocation, 'Ignoring variable statement with no initializer')
+        logger.debug(sourceLocation, 'Ignoring variable statement with no initializer')
         return []
       }
       const target = requireInstanceBuilder(this.accept(d.name), sourceLocation)
@@ -123,8 +125,51 @@ export class FunctionVisitor
     })
   }
 
+  visitVariableStatement(node: ts.VariableStatement): awst.Statement | awst.Statement[] {
+    return this.accept(node.declarationList)
+  }
+
   visitForStatement(node: ts.ForStatement): awst.Statement | awst.Statement[] {
-    throw new TodoError('ForStatement')
+    const sourceLocation = this.sourceLocation(node)
+    let init: awst.Statement[] = []
+    if (node.initializer) {
+      if (ts.isExpression(node.initializer)) {
+        init = [
+          nodeFactory.expressionStatement({
+            expr: requireInstanceBuilder(this.accept(node.initializer), sourceLocation).resolve(),
+          }),
+        ]
+      } else {
+        init = this.accept(node.initializer)
+      }
+    }
+    let incrementor: awst.Statement[] = []
+    if (node.incrementor) {
+      incrementor = [
+        nodeFactory.expressionStatement({
+          expr: requireInstanceBuilder(this.accept(node.incrementor), sourceLocation).resolve(),
+        }),
+      ]
+    }
+    using ctx = this.context.switchLoopContext.enterLoop(node, sourceLocation)
+    return [
+      ...init,
+      nodeFactory.whileLoop({
+        sourceLocation,
+        condition: node.condition
+          ? requireInstanceBuilder(this.accept(node.condition), sourceLocation).boolEval(sourceLocation)
+          : nodeFactory.boolConstant({ value: true, sourceLocation }),
+        loopBody: nodeFactory.block(
+          {
+            sourceLocation,
+          },
+          this.accept(node.statement),
+          ctx.continueTarget,
+          incrementor,
+        ),
+      }),
+      ctx.breakTarget,
+    ]
   }
   visitForOfStatement(node: ts.ForOfStatement): awst.Statement | awst.Statement[] {
     const sourceLocation = this.sourceLocation(node)
@@ -141,12 +186,17 @@ export class FunctionVisitor
       const [declaration] = node.initializer.declarations
       items = requireInstanceBuilder(this.accept(declaration.name), sourceLocation).resolveLValue()
     }
-    return nodeFactory.forInLoop({
-      sourceLocation,
-      sequence: requireInstanceBuilder(this.accept(node.expression), sourceLocation).iterate(sourceLocation),
-      items,
-      loopBody: wrapInBlock(this.accept(node.statement), sourceLocation),
-    })
+    using ctx = this.context.switchLoopContext.enterLoop(node, sourceLocation)
+    return nodeFactory.block(
+      { sourceLocation },
+      nodeFactory.forInLoop({
+        sourceLocation,
+        sequence: requireInstanceBuilder(this.accept(node.expression), sourceLocation).iterate(sourceLocation),
+        items,
+        loopBody: nodeFactory.block({ sourceLocation }, this.accept(node.statement), ctx.continueTarget),
+      }),
+      ctx.breakTarget,
+    )
   }
   visitForInStatement(node: ts.ForInStatement): awst.Statement | awst.Statement[] {
     throw new NotSupported('For in statements', {
@@ -171,10 +221,11 @@ export class FunctionVisitor
   }
   visitIfStatement(node: ts.IfStatement): awst.Statement | awst.Statement[] {
     const sourceLocation = this.sourceLocation(node)
-    const condition = this.accept(node.expression).boolEval(sourceLocation, false)
+    const condition = this.accept(node.expression).boolEval(sourceLocation)
 
-    const ifBranch = wrapInBlock(this.accept(node.thenStatement), this.sourceLocation(node.thenStatement))
-    const elseBranch = node.elseStatement && wrapInBlock(this.accept(node.elseStatement), this.sourceLocation(node.elseStatement))
+    const ifBranch = nodeFactory.block({ sourceLocation: this.sourceLocation(node.thenStatement) }, this.accept(node.thenStatement))
+    const elseBranch =
+      node.elseStatement && nodeFactory.block({ sourceLocation: this.sourceLocation(node.elseStatement) }, this.accept(node.elseStatement))
 
     return nodeFactory.ifElse({
       condition,
@@ -188,24 +239,32 @@ export class FunctionVisitor
   }
   visitWhileStatement(node: ts.WhileStatement): awst.Statement | awst.Statement[] {
     const sourceLocation = this.sourceLocation(node)
-    return nodeFactory.whileLoop({
-      sourceLocation,
-      condition: this.accept(node.expression).boolEval(sourceLocation, false),
-      loopBody: wrapInBlock(this.accept(node.statement), this.sourceLocation(node.statement)),
-    })
+    using ctx = this.context.switchLoopContext.enterLoop(node, sourceLocation)
+
+    return nodeFactory.block(
+      { sourceLocation },
+      nodeFactory.whileLoop({
+        sourceLocation,
+        condition: this.accept(node.expression).boolEval(sourceLocation),
+        loopBody: nodeFactory.block({ sourceLocation }, this.accept(node.statement), ctx.continueTarget),
+      }),
+      ctx.breakTarget,
+    )
   }
   visitContinueStatement(node: ts.ContinueStatement): awst.Statement | awst.Statement[] {
     const sourceLocation = this.sourceLocation(node)
-    codeInvariant(!node.label, 'Continuing to a labeled construct is not currently supported', sourceLocation)
-    return new awst.ContinueStatement({
-      sourceLocation: sourceLocation,
+
+    return nodeFactory.goto({
+      sourceLocation,
+      label: this.context.switchLoopContext.getContinueTarget(node.label, sourceLocation),
     })
   }
   visitBreakStatement(node: ts.BreakStatement): awst.Statement | awst.Statement[] {
     const sourceLocation = this.sourceLocation(node)
-    codeInvariant(!node.label, 'Breaking to a labeled construct is not currently supported', sourceLocation)
-    return new awst.BreakStatement({
-      sourceLocation: sourceLocation,
+
+    return nodeFactory.goto({
+      sourceLocation,
+      label: this.context.switchLoopContext.getBreakTarget(node.label, sourceLocation),
     })
   }
   visitReturnStatement(node: ts.ReturnStatement): awst.Statement | awst.Statement[] {
@@ -226,59 +285,47 @@ export class FunctionVisitor
     throw new NotSupported('with statements', { sourceLocation: this.sourceLocation(node) })
   }
   visitSwitchStatement(node: ts.SwitchStatement): awst.Statement | awst.Statement[] {
-    throw new TodoError('SwitchStatement')
-    // const buildSwitchCaseBody = (statements: ts.NodeArray<ts.Statement>, sourceLocation: SourceLocation) => {
-    //   return wrapInBlock(
-    //     statements.flatMap((s) => this.accept(s)),
-    //     sourceLocation,
-    //   )
-    // }
-    //
-    // const sourceLocation = this.sourceLocation(node)
-    //
-    // const caseBlocks: awst.SwitchCaseBlock[] = []
-    //
-    // const current = {
-    //   clauses: new Array<awst.Expression>(),
-    // }
-    //
-    // let defaultCase: awst.Block | undefined = undefined
-    // const subject = requireInstanceBuilder(this.accept(node.expression), sourceLocation)
-    //
-    // codeInvariant(subject.ptype, 'The subject of a switch statement must have a resolvable ptype', this.sourceLocation(node.expression))
-    //
-    // // Collate clauses without statements with the proceeding clause
-    // for (const clause of node.caseBlock.clauses) {
-    //   const sourceLocation = this.sourceLocation(clause)
-    //   if (clause.kind === SyntaxKind.DefaultClause) {
-    //     defaultCase = buildSwitchCaseBody(clause.statements, sourceLocation)
-    //     if (current.clauses.length) {
-    //       logger.warn(current.clauses[0].sourceLocation, 'Switch cases which fall through to the default clause are ignored')
-    //     }
-    //   } else {
-    //     if (defaultCase) {
-    //       logger.warn(sourceLocation, 'Switch cases appearing after a default clause are ignored')
-    //     }
-    //     current.clauses.push(requireExpressionOfType(this.accept(clause.expression), subject.ptype, sourceLocation))
-    //     if (clause.statements.length) {
-    //       caseBlocks.push(
-    //         nodeFactory.switchCaseBlock({
-    //           sourceLocation,
-    //           clauses: current.clauses,
-    //           block: buildSwitchCaseBody(clause.statements, sourceLocation),
-    //         }),
-    //       )
-    //       current.clauses = []
-    //     }
-    //   }
-    // }
-    //
-    // return nodeFactory.switch({
-    //   value: subject.resolve(),
-    //   sourceLocation,
-    //   defaultCase,
-    //   cases: caseBlocks,
-    // })
+    const sourceLocation = this.sourceLocation(node)
+    using ctx = this.context.switchLoopContext.enterSwitch(node, sourceLocation)
+
+    const subject = requireInstanceBuilder(this.accept(node.expression), sourceLocation)
+    codeInvariant(subject.ptype, 'The subject of a switch statement must have a resolvable ptype', this.sourceLocation(node.expression))
+
+    let defaultCase: Block | undefined = undefined
+    const cases = new Map<awst.Expression, awst.Block>()
+    for (const [index, clause] of enumerate(node.caseBlock.clauses)) {
+      const sourceLocation = this.sourceLocation(clause)
+
+      const statements = clause.statements.flatMap((s) => this.accept(s))
+      const isNotLastCase = index + 1 < node.caseBlock.clauses.length
+      const isObviouslyTerminated = instanceOfAny(statements.at(-1), Goto, ReturnStatement)
+      const caseBlock = nodeFactory.block(
+        {
+          sourceLocation,
+        },
+        ctx.caseTarget(index, sourceLocation),
+        statements,
+        ...(isNotLastCase && !isObviouslyTerminated ? [ctx.gotoCase(index + 1, sourceLocation)] : []),
+      )
+      if (clause.kind === ts.SyntaxKind.DefaultClause) {
+        defaultCase = caseBlock
+      } else {
+        const clauseExpr = requireExpressionOfType(this.accept(clause.expression), subject.ptype, sourceLocation)
+        cases.set(clauseExpr, caseBlock)
+      }
+    }
+    return nodeFactory.block(
+      {
+        sourceLocation,
+      },
+      nodeFactory.switch({
+        value: subject.resolve(),
+        sourceLocation,
+        cases,
+        defaultCase,
+      }),
+      ctx.breakTarget,
+    )
   }
 
   visitLabeledStatement(node: ts.LabeledStatement): awst.Statement | awst.Statement[] {
@@ -294,20 +341,21 @@ export class FunctionVisitor
     return []
   }
   visitImportDeclaration(node: ts.ImportDeclaration): awst.Statement | awst.Statement[] {
-    return []
+    throw new NotSupported('Non-top-level import declarations')
   }
 
   visitBlock(node: ts.Block): awst.Block {
-    return new awst.Block({
-      body: node.statements.flatMap((s) => this.accept(s)),
-      description: undefined,
-      sourceLocation: this.sourceLocation(node),
-    })
+    return nodeFactory.block(
+      {
+        sourceLocation: this.sourceLocation(node),
+      },
+      node.statements.flatMap((s) => this.accept(s)),
+    )
   }
 
   visitParameter(node: ts.ParameterDeclaration): awst.SubroutineArgument {
     codeInvariant(node.type, 'Parameters must have type annotation')
-    return new awst.SubroutineArgument({
+    return nodeFactory.subroutineArgument({
       sourceLocation: this.sourceLocation(node),
       name: this.context.resolveVariable(node.name),
       wtype: this.context.getPTypeForNode(node.type).wtypeOrThrow,

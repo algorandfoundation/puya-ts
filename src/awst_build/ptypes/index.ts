@@ -53,6 +53,7 @@ export const numberPType = new TransientType({
   module: 'lib.d.ts',
   altType: uint64PType,
   singleton: false,
+  wtypeMessage: 'number is not valid as a variable, parameter, or property type. Please use an algo-ts type such as `uint64` or `biguint`',
 })
 export const Uint64Function = new LibFunctionType({
   name: 'Uint64',
