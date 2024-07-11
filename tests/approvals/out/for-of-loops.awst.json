@@ -34,59 +34,83 @@
         }
       },
       {
-        "_type": "ForInLoop",
+        "_type": "Block",
         "sourceLocation": "tests/approvals/for-of-loops.algo.ts[4:2-6:3]",
-        "sequence": {
-          "_type": "VarExpression",
-          "sourceLocation": "tests/approvals/for-of-loops.algo.ts[4:21-4:26]",
-          "wtype": "WTuple",
-          "name": "items"
-        },
-        "items": {
-          "_type": "VarExpression",
-          "sourceLocation": "tests/approvals/for-of-loops.algo.ts[4:13-4:17]",
-          "wtype": "uint64",
-          "name": "item"
-        },
-        "loopBody": {
-          "_type": "Block",
-          "sourceLocation": "tests/approvals/for-of-loops.algo.ts[4:28-6:3]",
-          "body": [
-            {
-              "_type": "ExpressionStatement",
-              "sourceLocation": "tests/approvals/for-of-loops.algo.ts[5:4-5:17]",
-              "expr": {
-                "_type": "AssignmentExpression",
-                "sourceLocation": "tests/approvals/for-of-loops.algo.ts[5:4-5:17]",
-                "wtype": "uint64",
-                "target": {
-                  "_type": "VarExpression",
-                  "sourceLocation": "tests/approvals/for-of-loops.algo.ts[5:4-5:9]",
-                  "wtype": "uint64",
-                  "name": "total"
+        "body": [
+          {
+            "_type": "ForInLoop",
+            "sourceLocation": "tests/approvals/for-of-loops.algo.ts[4:2-6:3]",
+            "sequence": {
+              "_type": "VarExpression",
+              "sourceLocation": "tests/approvals/for-of-loops.algo.ts[4:21-4:26]",
+              "wtype": "WTuple",
+              "name": "items"
+            },
+            "items": {
+              "_type": "VarExpression",
+              "sourceLocation": "tests/approvals/for-of-loops.algo.ts[4:13-4:17]",
+              "wtype": "uint64",
+              "name": "item"
+            },
+            "loopBody": {
+              "_type": "Block",
+              "sourceLocation": "tests/approvals/for-of-loops.algo.ts[4:2-6:3]",
+              "body": [
+                {
+                  "_type": "Block",
+                  "sourceLocation": "tests/approvals/for-of-loops.algo.ts[4:28-6:3]",
+                  "body": [
+                    {
+                      "_type": "ExpressionStatement",
+                      "sourceLocation": "tests/approvals/for-of-loops.algo.ts[5:4-5:17]",
+                      "expr": {
+                        "_type": "AssignmentExpression",
+                        "sourceLocation": "tests/approvals/for-of-loops.algo.ts[5:4-5:17]",
+                        "wtype": "uint64",
+                        "target": {
+                          "_type": "VarExpression",
+                          "sourceLocation": "tests/approvals/for-of-loops.algo.ts[5:4-5:9]",
+                          "wtype": "uint64",
+                          "name": "total"
+                        },
+                        "value": {
+                          "_type": "UInt64BinaryOperation",
+                          "sourceLocation": "tests/approvals/for-of-loops.algo.ts[5:4-5:17]",
+                          "wtype": "uint64",
+                          "left": {
+                            "_type": "VarExpression",
+                            "sourceLocation": "tests/approvals/for-of-loops.algo.ts[5:4-5:9]",
+                            "wtype": "uint64",
+                            "name": "total"
+                          },
+                          "op": "+",
+                          "right": {
+                            "_type": "VarExpression",
+                            "sourceLocation": "tests/approvals/for-of-loops.algo.ts[5:13-5:17]",
+                            "wtype": "uint64",
+                            "name": "item"
+                          }
+                        }
+                      }
+                    }
+                  ]
                 },
-                "value": {
-                  "_type": "UInt64BinaryOperation",
-                  "sourceLocation": "tests/approvals/for-of-loops.algo.ts[5:4-5:17]",
-                  "wtype": "uint64",
-                  "left": {
-                    "_type": "VarExpression",
-                    "sourceLocation": "tests/approvals/for-of-loops.algo.ts[5:4-5:9]",
-                    "wtype": "uint64",
-                    "name": "total"
-                  },
-                  "op": "+",
-                  "right": {
-                    "_type": "VarExpression",
-                    "sourceLocation": "tests/approvals/for-of-loops.algo.ts[5:13-5:17]",
-                    "wtype": "uint64",
-                    "name": "item"
-                  }
+                {
+                  "_type": "Block",
+                  "sourceLocation": "tests/approvals/for-of-loops.algo.ts[4:2-6:3]",
+                  "body": [],
+                  "label": "#loopᶜ"
                 }
-              }
+              ]
             }
-          ]
-        }
+          },
+          {
+            "_type": "Block",
+            "sourceLocation": "tests/approvals/for-of-loops.algo.ts[4:2-6:3]",
+            "body": [],
+            "label": "#loopᵇ"
+          }
+        ]
       },
       {
         "_type": "ReturnStatement",

@@ -1,7 +1,5 @@
-import { awst, wtypes } from '../../awst'
+import { awst } from '../../awst'
 import { InstanceExpressionBuilder } from './index'
-import { SourceLocation } from '../../awst/source-location'
-import { nodeFactory } from '../../awst/node-factory'
 import * as ptypes from '../ptypes'
 
 export class BoolExpressionBuilder extends InstanceExpressionBuilder {
@@ -9,14 +7,7 @@ export class BoolExpressionBuilder extends InstanceExpressionBuilder {
     return ptypes.boolPType
   }
 
-  boolEval(sourceLocation: SourceLocation, negate: boolean): awst.Expression {
-    if (negate) {
-      return nodeFactory.not({
-        expr: this._expr,
-        sourceLocation,
-        wtype: wtypes.boolWType,
-      })
-    }
+  boolEval(): awst.Expression {
     return this._expr
   }
 }

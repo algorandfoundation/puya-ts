@@ -30,7 +30,7 @@ export class AssertFunctionBuilder extends FunctionBuilder {
       nodeFactory.intrinsicCall({
         opCode: 'assert',
         sourceLocation: sourceLocation,
-        stackArgs: [condition.boolEval(sourceLocation, false)],
+        stackArgs: [condition.boolEval(sourceLocation)],
         immediates: [],
         wtype: wtypes.voidWType,
         comment: messageStr,

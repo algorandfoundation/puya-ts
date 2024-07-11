@@ -21,7 +21,6 @@ import { ContractClassType } from './ptypes/ptype-classes'
 import { ContractSuperBuilder, ContractThisBuilder } from './eb/contract-builder'
 import { StringFunctionBuilder, StringExpressionBuilder } from './eb/string-expression-builder'
 import { nodeFactory } from '../awst/node-factory'
-import { logger } from '../logger'
 
 export abstract class BaseVisitor<TContext extends BaseContext> implements Visitor<Expressions, NodeBuilder> {
   private baseAccept = <TNode extends ts.Node>(node: TNode) => accept<BaseVisitor<BaseContext>, TNode>(this, node)

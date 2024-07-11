@@ -12,6 +12,20 @@ function test_uint64(x: uint64): uint64 {
   }
 }
 
+function test_break(x: uint64): uint64 {
+  let i: uint64 = 0
+  switch (x) {
+    case 1:
+    case 2:
+    case Uint64(4):
+      i += x
+      break
+    case 5:
+      i *= x
+  }
+  return i
+}
+
 function test_bytes(x: bytes): bytes {
   switch (x) {
     case Bytes('hmmm'):

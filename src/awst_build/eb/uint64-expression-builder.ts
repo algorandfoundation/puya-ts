@@ -1,5 +1,5 @@
 import { awst, wtypes } from '../../awst'
-import { BuilderBinaryOp, BuilderComparisonOp, FunctionBuilder, InstanceBuilder, InstanceExpressionBuilder, requireLValue } from './index'
+import { BuilderBinaryOp, BuilderComparisonOp, FunctionBuilder, InstanceBuilder, InstanceExpressionBuilder } from './index'
 import { NumericComparison, UInt64BinaryOperator } from '../../awst/nodes'
 import { SourceLocation } from '../../awst/source-location'
 import { nodeFactory } from '../../awst/node-factory'

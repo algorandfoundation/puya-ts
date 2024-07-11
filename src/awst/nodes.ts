@@ -107,12 +107,26 @@ export class Block extends Statement {
   constructor(props: Props<Block>) {
     super(props)
     this.body = props.body
-    this.description = props.description
+    this.label = props.label
+    this.comment = props.comment
   }
   body: Array<Statement>
-  description?: string | undefined
+  label?: string | undefined
+  comment?: string | undefined
   accept<T>(visitor: StatementVisitor<T>): T {
     return visitor.visitBlock(this)
+  }
+}
+export class Goto extends Statement {
+  constructor(props: Props<Goto>) {
+    super(props)
+    this.label = props.label
+    this.description = props.description
+  }
+  label: string
+  description?: string | undefined
+  accept<T>(visitor: StatementVisitor<T>): T {
+    return visitor.visitGoto(this)
   }
 }
 export class IfElse extends Statement {
@@ -153,22 +167,6 @@ export class WhileLoop extends Statement {
   loopBody: Block
   accept<T>(visitor: StatementVisitor<T>): T {
     return visitor.visitWhileLoop(this)
-  }
-}
-export class BreakStatement extends Statement {
-  constructor(props: Props<BreakStatement>) {
-    super(props)
-  }
-  accept<T>(visitor: StatementVisitor<T>): T {
-    return visitor.visitBreakStatement(this)
-  }
-}
-export class ContinueStatement extends Statement {
-  constructor(props: Props<ContinueStatement>) {
-    super(props)
-  }
-  accept<T>(visitor: StatementVisitor<T>): T {
-    return visitor.visitContinueStatement(this)
   }
 }
 export class ReturnStatement extends Statement {
@@ -1228,11 +1226,10 @@ export type Constant = IntegerConstant | BoolConstant | BytesConstant | StringCo
 export const concreteNodes = {
   expressionStatement: ExpressionStatement,
   block: Block,
+  goto: Goto,
   ifElse: IfElse,
   switch: Switch,
   whileLoop: WhileLoop,
-  breakStatement: BreakStatement,
-  continueStatement: ContinueStatement,
   returnStatement: ReturnStatement,
   integerConstant: IntegerConstant,
   decimalConstant: DecimalConstant,
@@ -1369,11 +1366,10 @@ export interface ExpressionVisitor<T> {
 export interface StatementVisitor<T> {
   visitExpressionStatement(statement: ExpressionStatement): T
   visitBlock(statement: Block): T
+  visitGoto(statement: Goto): T
   visitIfElse(statement: IfElse): T
   visitSwitch(statement: Switch): T
   visitWhileLoop(statement: WhileLoop): T
-  visitBreakStatement(statement: BreakStatement): T
-  visitContinueStatement(statement: ContinueStatement): T
   visitReturnStatement(statement: ReturnStatement): T
   visitAssignmentStatement(statement: AssignmentStatement): T
   visitUInt64AugmentedAssignment(statement: UInt64AugmentedAssignment): T

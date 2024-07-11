@@ -1,4 +1,4 @@
-import ts, { ObjectType, SyntaxKind, TupleType } from 'typescript'
+import ts from 'typescript'
 import {
   ApprovalProgram,
   BaseContractType,
@@ -48,7 +48,7 @@ export class TypeResolver {
       }
     }
     const type = this.checker.getTypeAtLocation(node)
-    if (node.kind === SyntaxKind.ThisKeyword || node.kind === SyntaxKind.SuperKeyword) {
+    if (node.kind === ts.SyntaxKind.ThisKeyword || node.kind === ts.SyntaxKind.SuperKeyword) {
       const [declaration] = type.symbol.declarations ?? []
       return this.resolve(declaration, sourceLocation)
     }
