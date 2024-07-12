@@ -10,36 +10,6 @@ import { enumerate, invariant } from '../../util'
 import { IntrinsicEnumType, IntrinsicFunctionGroupType, IntrinsicFunctionType } from '../ptypes/ptype-classes'
 import { typeRegistry } from '../type-registry'
 
-export class OpModuleBuilder extends NodeBuilder {
-  get ptype(): PType | undefined {
-    return undefined
-  }
-
-  memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
-    if (!Object.hasOwn(OP_METADATA, name)) {
-      return super.memberAccess(name, sourceLocation)
-    }
-
-    const metaData = OP_METADATA[name]
-
-    if (metaData.type === 'op-grouping') {
-      return new IntrinsicOpGroupBuilder(
-        sourceLocation,
-        new IntrinsicFunctionGroupType({
-          name: name,
-        }),
-      )
-    } else {
-      return new FreeIntrinsicOpBuilder(
-        sourceLocation,
-        new IntrinsicFunctionType({
-          name: name,
-        }),
-      )
-    }
-  }
-}
-
 export class IntrinsicOpGroupBuilder extends NodeBuilder {
   private opGrouping: IntrinsicOpGrouping
   public readonly ptype: IntrinsicFunctionGroupType

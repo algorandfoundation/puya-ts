@@ -4,6 +4,8 @@ import { DeliberateAny } from '../typescript-helpers'
 import { CodeError, InternalError, throwError } from '../errors'
 import {
   ALL_OP_ENUMS,
+  arc4AbiMethodDecorator,
+  arc4BareMethodDecorator,
   assertFunction,
   AssetFunction,
   assetPType,
@@ -13,30 +15,33 @@ import {
   errFunction,
   GlobalStateFunction,
   logFunction,
-  opNamespace,
   PType,
   StringFunction,
   stringPType,
   TuplePType,
   Uint64Function,
   uint64PType,
+  voidPType,
 } from './ptypes'
 import { BoolExpressionBuilder } from './eb/bool-expression-builder'
 import { UInt64ExpressionBuilder, UInt64FunctionBuilder } from './eb/uint64-expression-builder'
 import { BytesExpressionBuilder, BytesFunctionBuilder } from './eb/bytes-expression-builder'
 import { StringExpressionBuilder, StringFunctionBuilder } from './eb/string-expression-builder'
-import { FreeIntrinsicOpBuilder, IntrinsicOpGroupBuilder, OpModuleBuilder } from './eb/op-module-builder'
+import { FreeIntrinsicOpBuilder, IntrinsicOpGroupBuilder } from './eb/op-module-builder'
 import { LogFunctionBuilder } from './eb/log-function-builder'
 import { AssertFunctionBuilder, ErrFunctionBuilder } from './eb/assert-function-builder'
 import { FreeSubroutineExpressionBuilder } from './eb/free-subroutine-expression-builder'
 import { awst } from '../awst'
-import { FunctionType, GlobalStateType, IntrinsicFunctionGroupType, IntrinsicFunctionType } from './ptypes/ptype-classes'
+import { FunctionType, GlobalStateType, IntrinsicFunctionGroupType, IntrinsicFunctionType, NamespacePType } from './ptypes/ptype-classes'
 import { IntrinsicEnumBuilder } from './eb/intrinsic-enum-builder'
 import { OP_METADATA } from './op-metadata'
 import { GlobalStateExpressionBuilder, GlobalStateFunctionBuilder } from './eb/storage/global-state'
 import { AssetExpressionBuilder, AssetFunctionBuilder } from './eb/reference/asset'
 import { SymbolName } from './symbol-name'
 import { TupleExpressionBuilder } from './eb/tuple-expression-builder'
+import { Arc4AbiMethodDecoratorBuilder, Arc4BareMethodDecoratorBuilder } from './eb/arc4-bare-method-decorator-builder'
+import { NamespaceBuilder } from './eb/namespace-builder'
+import { VoidExpressionBuilder } from './eb/void-expression-builder'
 
 type ValueExpressionBuilderCtor = { new (expr: awst.Expression, ptype: PType): InstanceExpressionBuilder }
 type SingletonExpressionBuilderCtor = { new (sourceLocation: SourceLocation, ptype: PType): NodeBuilder }
@@ -175,14 +180,14 @@ typeRegistry.register({ ptype: bytesPType, instanceEb: BytesExpressionBuilder })
 typeRegistry.register({ ptype: BytesFunction, singletonEb: BytesFunctionBuilder })
 typeRegistry.register({ ptype: stringPType, instanceEb: StringExpressionBuilder })
 typeRegistry.register({ ptype: StringFunction, singletonEb: StringFunctionBuilder })
-typeRegistry.register({ ptype: opNamespace, singletonEb: OpModuleBuilder })
 typeRegistry.register({ ptype: logFunction, singletonEb: LogFunctionBuilder })
 typeRegistry.register({ ptype: assertFunction, singletonEb: AssertFunctionBuilder })
 typeRegistry.register({ ptype: errFunction, singletonEb: ErrFunctionBuilder })
 typeRegistry.register({ ptype: AssetFunction, singletonEb: AssetFunctionBuilder })
 typeRegistry.register({ ptype: assetPType, instanceEb: AssetExpressionBuilder })
 typeRegistry.register({ ptype: FunctionType, singletonEb: FreeSubroutineExpressionBuilder })
-
+typeRegistry.register({ ptype: NamespacePType, singletonEb: NamespaceBuilder })
+typeRegistry.register({ ptype: voidPType, instanceEb: VoidExpressionBuilder })
 for (const enumPType of ALL_OP_ENUMS) {
   typeRegistry.register({ ptype: enumPType, singletonEb: IntrinsicEnumBuilder })
 }
@@ -207,3 +212,5 @@ for (const [name, metadata] of Object.entries(OP_METADATA)) {
 typeRegistry.register({ ptype: GlobalStateFunction, singletonEb: GlobalStateFunctionBuilder })
 typeRegistry.registerGeneric({ ptype: GlobalStateType, instanceEb: GlobalStateExpressionBuilder })
 typeRegistry.register({ ptype: TuplePType, instanceEb: TupleExpressionBuilder })
+typeRegistry.register({ ptype: arc4AbiMethodDecorator, singletonEb: Arc4AbiMethodDecoratorBuilder })
+typeRegistry.register({ ptype: arc4BareMethodDecorator, singletonEb: Arc4BareMethodDecoratorBuilder })

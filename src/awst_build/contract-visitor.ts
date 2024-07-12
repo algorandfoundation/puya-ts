@@ -4,7 +4,7 @@ import ts from 'typescript'
 import * as awst from '../awst/nodes'
 import { AppStorageDefinition, ContractFragment, ContractMethod } from '../awst/nodes'
 import { ClassElements } from '../visitor/syntax-names'
-import { AwstBuildFailureError, TodoError } from '../errors'
+import { AwstBuildFailureError, NotSupported, TodoError } from '../errors'
 import { codeInvariant, invariant } from '../util'
 import { Constants } from '../constants'
 import { FunctionVisitor } from './function-visitor'
@@ -12,6 +12,10 @@ import { logger } from '../logger'
 import { BaseVisitor } from './base-visitor'
 import { GlobalStateFunctionResultBuilder } from './eb/storage/global-state'
 import { ContractClassType } from './ptypes/ptype-classes'
+import { nodeFactory } from '../awst/node-factory'
+import { DecoratorData, DecoratorVisitor } from './decorator-visitor'
+import { SourceLocation } from '../awst/source-location'
+import { ARC4CreateOption, OnCompletionAction } from '../awst/arc4'
 
 export class ContractContext extends SourceFileContext {
   constructor(parent: SourceFileContext) {
@@ -38,6 +42,7 @@ export class ContractVisitor extends BaseVisitor<ContractContext> implements Vis
 
     const contractPtype = this.context.getPTypeForNode(classDec)
     invariant(contractPtype instanceof ContractClassType, 'Contract PType must be ContractClassType')
+    invariant(contractPtype.baseType, 'Contract must have base type')
     this._contractPType = contractPtype
 
     const isAbstract = Boolean(classDec.modifiers?.some((m) => m.kind === ts.SyntaxKind.AbstractKeyword))
@@ -64,8 +69,13 @@ export class ContractVisitor extends BaseVisitor<ContractContext> implements Vis
       clearProgram: this._clearStateProgram,
       isAbstract,
       isArc4: contractPtype.isARC4,
-      bases: [],
-      moduleName: this.context.moduleName,
+      bases: [
+        nodeFactory.contractReference({
+          className: contractPtype.baseType.name,
+          moduleName: contractPtype.baseType.module,
+        }),
+      ],
+      moduleName: this._contractPType.module,
       reservedScratchSpace: new Set(),
       methods: new Map(),
       sourceLocation: sourceLocation,
@@ -88,20 +98,91 @@ export class ContractVisitor extends BaseVisitor<ContractContext> implements Vis
     throw new TodoError('visitGetAccessor')
   }
   visitIndexSignature(node: ts.IndexSignatureDeclaration): void {
-    throw new TodoError('visitIndexSignature')
+    throw new NotSupported('Index signatures')
   }
+
+  private buildArc4Config({
+    decorator,
+    methodName,
+    isPublic,
+    methodLocation,
+  }: {
+    methodName: string
+    decorator: DecoratorData | undefined
+    isPublic: boolean
+    methodLocation: SourceLocation
+  }): awst.ContractMethod['arc4MethodConfig'] {
+    if (decorator?.type === 'arc4.baremethod') {
+      return {
+        source_location: decorator.sourceLocation,
+        allowed_completion_types: decorator.ocas,
+        create: decorator.create,
+        is_bare: true,
+      }
+    } else if (decorator?.type === 'arc4.abimethod') {
+      return {
+        source_location: decorator.sourceLocation,
+        allowed_completion_types: decorator.ocas,
+        create: decorator.create,
+        is_bare: false,
+        name: decorator.nameOverride ?? methodName,
+        readonly: decorator.readonly,
+        default_args: {}, // TODO
+        structs: {}, // TODO
+      }
+    } else if (isPublic && this._contractPType.isARC4) {
+      return {
+        source_location: methodLocation,
+        allowed_completion_types: [OnCompletionAction.NoOp],
+        is_bare: false,
+        create: ARC4CreateOption.Disallow,
+        name: methodName,
+        readonly: false,
+        default_args: {}, // TODO
+        structs: {}, // TODO
+      }
+    }
+  }
+
   visitMethodDeclaration(node: ts.MethodDeclaration): void {
+    const sourceLocation = this.sourceLocation(node)
     const methodName = this.textVisitor.accept(node.name)
+
+    const decorators = (node.modifiers ?? []).flatMap((modifier) => {
+      if (!ts.isDecorator(modifier)) return []
+
+      return DecoratorVisitor.buildDecoratorData(this.context, modifier)
+    })
+    const isPublic = node.modifiers?.some((m) => m.kind === ts.SyntaxKind.PublicKeyword) === true
+
+    if (decorators.length > 1) {
+      logger.error(
+        sourceLocation,
+        'Only one decorator is allowed per method. Multiple on complete actions can be provided in a single decorator',
+      )
+    }
 
     switch (methodName) {
       case Constants.approvalProgramMethodName:
+        if (decorators.length) logger.error(sourceLocation, `${Constants.approvalProgramMethodName} should not have a decorator`)
         this._approvalProgram = FunctionVisitor.buildContractMethod(this.context, node, { className: this._className })
         break
       case Constants.clearStateProgramMethodName:
+        if (decorators.length) logger.error(sourceLocation, `${Constants.clearStateProgramMethodName} should not have a decorator`)
         this._clearStateProgram = FunctionVisitor.buildContractMethod(this.context, node, { className: this._className })
         break
       default:
-        this._subroutines.push(FunctionVisitor.buildContractMethod(this.context, node, { className: this._className }))
+        this._subroutines.push(
+          FunctionVisitor.buildContractMethod(this.context, node, {
+            className: this._className,
+            arc4MethodConfig: this.buildArc4Config({
+              decorator: decorators[0],
+              methodName,
+              isPublic,
+              methodLocation: sourceLocation,
+            }),
+          }),
+        )
     }
   }
   visitPropertyDeclaration(node: ts.PropertyDeclaration): void {
@@ -126,7 +207,7 @@ export class ContractVisitor extends BaseVisitor<ContractContext> implements Vis
     // TODO: do something with initializer
   }
   visitSemicolonClassElement(node: ts.SemicolonClassElement): void {
-    throw new TodoError('visitSemicolonClassElement')
+    // Ignore
   }
   visitSetAccessor(node: ts.SetAccessorDeclaration): void {
     throw new TodoError('visitSetAccessor')

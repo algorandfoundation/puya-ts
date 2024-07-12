@@ -21,6 +21,7 @@ import { ContractClassType } from './ptypes/ptype-classes'
 import { ContractSuperBuilder, ContractThisBuilder } from './eb/contract-builder'
 import { StringFunctionBuilder, StringExpressionBuilder } from './eb/string-expression-builder'
 import { nodeFactory } from '../awst/node-factory'
+import { ArrayLiteralExpressionBuilder } from './eb/array-literal-expression-builder'
 
 export abstract class BaseVisitor<TContext extends BaseContext> implements Visitor<Expressions, NodeBuilder> {
   private baseAccept = <TNode extends ts.Node>(node: TNode) => accept<BaseVisitor<BaseContext>, TNode>(this, node)
@@ -128,7 +129,11 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
   }
 
   visitArrayLiteralExpression(node: ts.ArrayLiteralExpression): NodeBuilder {
-    throw new TodoError('ArrayLiteralExpression')
+    const sourceLocation = this.sourceLocation(node)
+    return new ArrayLiteralExpressionBuilder(
+      sourceLocation,
+      node.elements.map((e) => requireInstanceBuilder(this.baseAccept(e), sourceLocation)),
+    )
   }
 
   visitPropertyAccessExpression(node: ts.PropertyAccessExpression): NodeBuilder {

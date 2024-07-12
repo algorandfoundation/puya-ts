@@ -140,7 +140,7 @@ export class IntrinsicFunctionType extends PType {
   }
 }
 
-export class NamespaceType extends PType {
+export class NamespacePType extends PType {
   readonly wtype: undefined
   readonly name: string
   readonly factory: undefined
@@ -155,6 +155,10 @@ export class NamespaceType extends PType {
 
   get fullName() {
     return `${this.module}::*`
+  }
+
+  toString(): string {
+    return this.module
   }
 }
 

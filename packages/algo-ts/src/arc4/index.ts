@@ -11,49 +11,27 @@ export class Contract extends BaseContract {
 type CreateOptions = 'allow' | 'disallow' | 'require'
 export type OnCompleteAction = 'NoOp' | 'OptIn' | 'CloseOut' | 'UpdateApplication' | 'DeleteApplication'
 
-export type AbiMethodConfig =
-  | {
-      /**
-       * Which on complete action(s) are allowed when invoking this method.
-       * @default 'NoOp'
-       */
-      allowActions?: OnCompleteAction | OnCompleteAction[]
-      /**
-       * Whether this method should be callable when creating the application.
-       * @default 'disallow'
-       */
-      onCreate?: CreateOptions
-      /**
-       * Does the method only perform read operations (no mutation of chain state)
-       * @default false
-       */
-      readonly?: false
-      /**
-       * Override the name used to generate the abi method selector
-       */
-      name?: string
-    }
-  | {
-      /**
-       * Which on complete action(s) are allowed when invoking this method.
-       * @default 'NoOp'
-       */
-      allowActions?: 'NoOp'
-      /**
-       * Whether this method should be callable when creating the application.
-       * @default 'disallow'
-       */
-      onCreate?: CreateOptions
-      /**
-       * Does the method only perform read operations (no mutation of chain state)
-       * @default false
-       */
-      readonly: true
-      /**
-       * Override the name used to generate the abi method selector
-       */
-      name?: string
-    }
+export type AbiMethodConfig = {
+  /**
+   * Which on complete action(s) are allowed when invoking this method.
+   * @default 'NoOp'
+   */
+  allowActions?: OnCompleteAction | OnCompleteAction[]
+  /**
+   * Whether this method should be callable when creating the application.
+   * @default 'disallow'
+   */
+  onCreate?: CreateOptions
+  /**
+   * Does the method only perform read operations (no mutation of chain state)
+   * @default false
+   */
+  readonly?: false
+  /**
+   * Override the name used to generate the abi method selector
+   */
+  name?: string
+}
 export function abimethod(config?: AbiMethodConfig) {
   return function (target: AnyFunction, ctx: ClassMethodDecoratorContext<Contract>) {}
 }

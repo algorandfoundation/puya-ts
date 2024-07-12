@@ -13,10 +13,7 @@ import { FunctionType } from './ptypes/ptype-classes'
 export abstract class BaseContext {
   abstract getSourceLocation(node: ts.Node): SourceLocation
   abstract tryResolveConstant(node: ts.Identifier): awst.ConstantDeclaration | undefined
-  abstract readonly moduleName: string
   abstract getBuilderForNode(node: ts.Identifier): NodeBuilder
-  // abstract getPTypeForNode(node: ts.Node): PType
-  // abstract getImplicitReturnType(node: ts.FunctionDeclaration | ts.MethodDeclaration): PType
   abstract get resolver(): TypeResolver
 }
 
@@ -68,7 +65,7 @@ export class SourceFileContext extends BaseContext {
   ) {
     super()
     this.checker = program.getTypeChecker()
-    this.resolver = new TypeResolver(this.checker)
+    this.resolver = new TypeResolver(this.checker, this.program.getCurrentDirectory())
   }
 
   tryResolveConstant(node: ts.Identifier): ConstantDeclaration | undefined {
@@ -114,10 +111,6 @@ export class SourceFileContext extends BaseContext {
   }
 
   getSourceLocation(node: ts.Node) {
-    return SourceLocation.fromNode(this.sourceFile, node)
-  }
-
-  get moduleName() {
-    return this.sourceFile.fileName
+    return SourceLocation.fromNode(this.sourceFile, node, this.program.getCurrentDirectory())
   }
 }

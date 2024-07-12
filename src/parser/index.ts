@@ -26,7 +26,7 @@ export function createTsProgram(options: CompileOptions) {
 function reportDiagnostics(program: ts.Program) {
   function reportDiagnostic(diagnostic: ts.Diagnostic) {
     if (isDiagnosticWithLocation(diagnostic)) {
-      const sourceLocation = SourceLocation.fromDiagnostic(diagnostic)
+      const sourceLocation = SourceLocation.fromDiagnostic(diagnostic, program.getCurrentDirectory())
       const text = typeof diagnostic.messageText === 'string' ? diagnostic.messageText : diagnostic.messageText.messageText
       switch (diagnostic.category) {
         case ts.DiagnosticCategory.Error:
