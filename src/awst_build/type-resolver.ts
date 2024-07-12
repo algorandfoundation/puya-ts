@@ -13,16 +13,20 @@ import {
   voidPType,
 } from './ptypes'
 import { SourceLocation } from '../awst/source-location'
-import { codeInvariant, hasAnyFlag, hasFlags, invariant } from '../util'
+import { codeInvariant, hasAnyFlag, hasFlags, invariant, normalisePath } from '../util'
 import { CodeError, InternalError } from '../errors'
 import { typeRegistry } from './type-registry'
 import { logger } from '../logger'
 import { Constants } from '../constants'
-import { AppStorageType, ContractClassType, FunctionType, GlobalStateType } from './ptypes/ptype-classes'
+import { AppStorageType, ContractClassType, FunctionType, GlobalStateType, NamespacePType } from './ptypes/ptype-classes'
 import { SymbolName } from './symbol-name'
+import path from 'node:path'
 
 export class TypeResolver {
-  constructor(private readonly checker: ts.TypeChecker) {}
+  constructor(
+    private readonly checker: ts.TypeChecker,
+    private readonly programDirectory: string,
+  ) {}
 
   private getUnaliasedSymbolForNode(node: ts.Node) {
     const symbol = this.checker.getSymbolAtLocation(node)
@@ -39,6 +43,9 @@ export class TypeResolver {
     const symbol = this.getUnaliasedSymbolForNode(node)
     if (symbol !== undefined) {
       const symbolName = symbol && this.getSymbolFullName(symbol, sourceLocation)
+      if (symbolName.name === '*') {
+        return new NamespacePType(symbolName)
+      }
       const ptype = typeRegistry.tryResolveSingletonName(symbolName)
       if (ptype === undefined && symbolName.module.startsWith(Constants.algoTsPackage)) {
         logger.warn(sourceLocation, `${symbolName} could not be resolved to a singleton ptype`)
@@ -168,26 +175,16 @@ export class TypeResolver {
     return this.getSymbolFullName(type.aliasSymbol ?? type.symbol, sourceLocation)
   }
 
-  private getModuleName(declaration: ts.Declaration): string {
-    const sourceFileName = declaration.getSourceFile().fileName
-    const nodeModuleName = /node_modules\/(.*)$/.exec(sourceFileName)
-
-    if (nodeModuleName) {
-      return nodeModuleName[1]
-    }
-    return sourceFileName
-  }
-
   private getSymbolFullName(symbol: ts.Symbol, sourceLocation: SourceLocation): SymbolName {
     const declaration = symbol?.declarations?.[0]
     if (declaration) {
       if (hasAnyFlag(symbol.flags, ts.SymbolFlags.Namespace) && !hasFlags(symbol.flags, ts.SymbolFlags.Function)) {
         return new SymbolName({
-          module: this.getModuleName(declaration),
+          module: normalisePath(declaration.getSourceFile().fileName, this.programDirectory),
           name: '*',
         })
       }
-      return new SymbolName({ module: this.getModuleName(declaration), name: symbol.name })
+      return new SymbolName({ module: normalisePath(declaration.getSourceFile().fileName, this.programDirectory), name: symbol.name })
     }
     throw new InternalError(`Symbol does not have a declaration`, { sourceLocation })
   }

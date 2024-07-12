@@ -10,7 +10,6 @@ import { logger } from '../logger'
 import { nodeFactory } from '../awst/node-factory'
 import { requireExpressionOfType, requireInstanceBuilder } from './eb/util'
 import { PType, voidPType } from './ptypes'
-import { ARC4CreateOption, OnCompletionAction } from '../awst/arc4'
 import { BaseVisitor } from './base-visitor'
 import { TransientType } from './ptypes/ptype-classes'
 import { SwitchLoopContext } from './switch-loop-context'
@@ -18,6 +17,7 @@ import { Block, Goto, ReturnStatement } from '../awst/nodes'
 
 export type ContractMethodInfo = {
   className: string
+  arc4MethodConfig?: awst.ContractMethod['arc4MethodConfig']
 }
 
 export class FunctionContext extends SourceFileContext {
@@ -63,6 +63,7 @@ export class FunctionVisitor
         )
       }
     }
+    const type = ctx.getPTypeForNode(node)
 
     const args = node.parameters.map((p) => this.accept(p))
     codeInvariant(node.body, 'Functions must have a body')
@@ -70,15 +71,10 @@ export class FunctionVisitor
     if (contractInfo) {
       this._result = new awst.ContractMethod({
         className: contractInfo.className,
-        arc4MethodConfig: {
-          is_bare: true,
-          allowed_completion_types: [OnCompletionAction.NoOp],
-          create: ARC4CreateOption.Disallow,
-          source_location: sourceLocation,
-        },
+        arc4MethodConfig: contractInfo.arc4MethodConfig,
         name: this._functionName,
         sourceLocation,
-        moduleName: this.context.moduleName,
+        moduleName: type.module,
         args,
         returnType: this._returnType.wtypeOrThrow,
         body,
@@ -88,7 +84,7 @@ export class FunctionVisitor
       this._result = new awst.Subroutine({
         name: this._functionName,
         sourceLocation,
-        moduleName: this.context.moduleName,
+        moduleName: type.module,
         args,
         returnType: this._returnType.wtypeOrThrow,
         body,

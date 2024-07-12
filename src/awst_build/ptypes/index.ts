@@ -2,7 +2,7 @@ import { wtypes } from '../../awst'
 import {
   LibFunctionType,
   LiteralValueType,
-  NamespaceType,
+  NamespacePType,
   InstanceType,
   TransientType,
   FunctionType,
@@ -80,10 +80,6 @@ export const BytesFunction = new LibFunctionType({
   module: Constants.primitivesModuleName,
 })
 
-export const opNamespace = new NamespaceType({
-  name: 'op',
-  module: Constants.opModuleName,
-})
 export const logFunction = new LibFunctionType({
   name: 'log',
   module: Constants.utilModuleName,
@@ -156,4 +152,13 @@ export const ContractType = new BaseContractClassType({
   properties: {},
   baseType: BaseContractType,
   isArc4: true,
+})
+
+export const arc4BareMethodDecorator = new LibFunctionType({
+  module: Constants.arc4ModuleName,
+  name: 'baremethod',
+})
+export const arc4AbiMethodDecorator = new LibFunctionType({
+  module: Constants.arc4ModuleName,
+  name: 'abimethod',
 })

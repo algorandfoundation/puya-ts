@@ -3,6 +3,7 @@ import { SourceLocation } from '../awst/source-location'
 import { TextDecoder } from 'node:util'
 import { Buffer } from 'node:buffer'
 import { DeliberateAny } from '../typescript-helpers'
+import path from 'node:path'
 export { base32ToUint8Array, uint8ArrayToBase32 } from './base-32'
 class InvariantError extends Error {}
 export function invariant(condition: unknown, message: string): asserts condition {
@@ -91,4 +92,25 @@ export function instanceOfAny<T extends Array<{ new (...args: DeliberateAny[]): 
   ...types: T
 ): x is InstanceType<T[number]> {
   return types.some((t) => x instanceof t)
+}
+
+/**
+ * Normalise a file path to only include relevant segments.
+ *
+ *  - Anything in /node_modules/ is truncated to <package-name>/path.ext
+ *  - Anything in workingDirectory is truncated relative to the workingDirectory
+ *  - Forward slashes are used to segment paths
+ * @param filePath
+ * @param workingDirectory
+ */
+export function normalisePath(filePath: string, workingDirectory: string): string {
+  const nodeModuleName = /node_modules\/(.*)$/.exec(filePath)
+
+  if (nodeModuleName) {
+    return nodeModuleName[1]
+  }
+  const cwd = path.normalize(`${workingDirectory}/`)
+  const normalizedPath = path.normalize(filePath)
+  const moduleName = normalizedPath.startsWith(cwd) ? normalizedPath.slice(cwd.length) : normalizedPath
+  return moduleName.replaceAll('\\', '/')
 }

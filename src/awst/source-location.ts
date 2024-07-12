@@ -1,4 +1,5 @@
 import ts from 'typescript'
+import { normalisePath } from '../util'
 
 export class SourceLocation {
   file: string
@@ -15,7 +16,7 @@ export class SourceLocation {
     this.endColumn = props.endColumn
   }
 
-  static fromNode(sourceFile: ts.SourceFile, node: ts.Node): SourceLocation {
+  static fromNode(sourceFile: ts.SourceFile, node: ts.Node, programDirectory: string): SourceLocation {
     const startPos = node.getStart(sourceFile)
     const width = node.getWidth(sourceFile)
 
@@ -23,7 +24,7 @@ export class SourceLocation {
     const endLoc = sourceFile.getLineAndCharacterOfPosition(startPos + width)
 
     return new SourceLocation({
-      file: sourceFile.fileName,
+      file: normalisePath(sourceFile.fileName, programDirectory),
       line: startLoc.line,
       endLine: endLoc.line,
       column: startLoc.character,
@@ -31,11 +32,11 @@ export class SourceLocation {
     })
   }
 
-  static fromDiagnostic(diagnostic: ts.DiagnosticWithLocation): SourceLocation {
+  static fromDiagnostic(diagnostic: ts.DiagnosticWithLocation, programDirectory: string): SourceLocation {
     const startLoc = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start)
 
     return new SourceLocation({
-      file: diagnostic.file.fileName,
+      file: normalisePath(diagnostic.file.fileName, programDirectory),
       line: startLoc.line,
       endLine: startLoc.line,
       column: startLoc.character,

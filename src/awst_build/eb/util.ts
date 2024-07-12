@@ -4,6 +4,7 @@ import { CodeError } from '../../errors'
 import { PType } from '../ptypes'
 import { SourceLocation } from '../../awst/source-location'
 import { LiteralExpressionBuilder } from './literal-expression-builder'
+import { DeliberateAny } from '../../typescript-helpers'
 
 export function requireExpressionOfType(builder: NodeBuilder, ptype: PType, sourceLocation: SourceLocation): awst.Expression {
   if (builder instanceof LiteralExpressionBuilder) {
@@ -61,6 +62,17 @@ export function requireConstant(
     return expr
   }
   if (expr instanceof awst.BoolConstant) {
+    return expr
+  }
+  throw new CodeError(`Expected compile time constant value`, { sourceLocation })
+}
+export function requireSpecificConstant<T extends awst.Constant>(
+  builder: InstanceBuilder,
+  sourceLocation: SourceLocation,
+  constantType: { new (...args: DeliberateAny): T },
+): T {
+  const expr = builder.resolve()
+  if (expr instanceof constantType) {
     return expr
   }
   throw new CodeError(`Expected compile time constant value`, { sourceLocation })
