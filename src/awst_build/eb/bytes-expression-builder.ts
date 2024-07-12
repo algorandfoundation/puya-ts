@@ -9,7 +9,7 @@ import { requireExpressionOfType, requireExpressionsOfType } from './util'
 import { BytesFunction, bytesPType, PType, stringPType, uint64PType } from '../ptypes'
 import { StringExpressionBuilder } from './string-expression-builder'
 import { BoolExpressionBuilder } from './bool-expression-builder'
-import { BytesBinaryOperator, BytesEncoding, EqualityComparison, StringConstant } from '../../awst/nodes'
+import { BytesBinaryOperator, BytesComparisonExpression, BytesEncoding, EqualityComparison, StringConstant } from '../../awst/nodes'
 import { base32ToUint8Array, base64ToUint8Array, codeInvariant, hexToUint8Array, utf8ToUint8Array } from '../../util'
 import { LiteralExpressionBuilder } from './literal-expression-builder'
 
@@ -157,6 +157,15 @@ export class BytesExpressionBuilder extends InstanceExpressionBuilder {
       )
     }
     return super.compare(other, op, sourceLocation)
+  }
+  boolEval(sourceLocation: SourceLocation): awst.Expression {
+    return nodeFactory.bytesComparisonExpression({
+      lhs: this._expr,
+      rhs: nodeFactory.bytesConstant({ value: new Uint8Array(), sourceLocation }),
+      sourceLocation,
+      wtype: wtypes.boolWType,
+      operator: EqualityComparison.ne,
+    })
   }
 
   toBytes(): awst.Expression {

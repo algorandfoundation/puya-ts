@@ -5,9 +5,10 @@ import { awst, wtypes } from '../../awst'
 import { FunctionBuilder, InstanceBuilder, InstanceExpressionBuilder, NodeBuilder } from './index'
 import { bytesPType, PType, stringPType } from '../ptypes'
 import { LiteralExpressionBuilder } from './literal-expression-builder'
-import { BytesBinaryOperator } from '../../awst/nodes'
+import { BytesBinaryOperator, BytesEncoding } from '../../awst/nodes'
 import { requireExpressionOfType } from './util'
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
+import { utf8ToUint8Array } from '../../util'
 
 export class StringFunctionBuilder extends FunctionBuilder {
   taggedTemplate(head: string, spans: ReadonlyArray<readonly [InstanceBuilder, string]>, sourceLocation: SourceLocation): InstanceBuilder {
@@ -82,6 +83,13 @@ export class StringExpressionBuilder extends InstanceExpressionBuilder {
     return super.memberAccess(name, sourceLocation)
   }
   toBytes(sourceLocation: SourceLocation): awst.Expression {
+    if (this._expr instanceof awst.StringConstant) {
+      return nodeFactory.bytesConstant({
+        value: utf8ToUint8Array(this._expr.value),
+        encoding: BytesEncoding.utf8,
+        sourceLocation: this._expr.sourceLocation,
+      })
+    }
     return nodeFactory.reinterpretCast({
       expr: this._expr,
       sourceLocation,
