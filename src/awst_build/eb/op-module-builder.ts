@@ -88,7 +88,7 @@ abstract class IntrinsicOpBuilderBase extends FunctionBuilder {
         const thisArg = args[sig.argNames.indexOf(arg.name)]
 
         for (const ptype of arg.ptypes) {
-          const expr = requestExpressionOfType(thisArg, ptype)
+          const expr = requestExpressionOfType(thisArg, ptype, sourceLocation)
           if (expr) {
             stackArgs.push(expr)
             continue stackArgLoop
@@ -106,14 +106,14 @@ abstract class IntrinsicOpBuilderBase extends FunctionBuilder {
 
         for (const ptype of arg.ptypes) {
           if (ptype instanceof IntrinsicEnumType) {
-            const enumValue = requestConstantOfType(thisArg, stringPType)
+            const enumValue = requestConstantOfType(thisArg, stringPType, sourceLocation)
             if (enumValue) {
               invariant(enumValue instanceof StringConstant, 'stringPType constant must be StringConstant')
               immediates.push(enumValue.value)
               continue immediateArgLoop
             }
           }
-          const constantValue = requestConstantOfType(thisArg, ptype)
+          const constantValue = requestConstantOfType(thisArg, ptype, sourceLocation)
           if (constantValue) {
             if (constantValue instanceof IntegerConstant || constantValue instanceof StringConstant) {
               immediates.push(constantValue.value)

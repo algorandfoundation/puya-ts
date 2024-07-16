@@ -1,5 +1,12 @@
 import { awst, wtypes } from '../../awst'
-import { BuilderBinaryOp, BuilderComparisonOp, FunctionBuilder, InstanceBuilder, InstanceExpressionBuilder } from './index'
+import {
+  BuilderBinaryOp,
+  BuilderComparisonOp,
+  FunctionBuilder,
+  InstanceBuilder,
+  InstanceExpressionBuilder,
+  LiteralExpressionBuilder,
+} from './index'
 import { NumericComparison, UInt64BinaryOperator } from '../../awst/nodes'
 import { SourceLocation } from '../../awst/source-location'
 import { nodeFactory } from '../../awst/node-factory'
@@ -8,7 +15,6 @@ import { requireExpressionOfType } from './util'
 import { tryConvertEnum } from '../../util'
 import { PType, Uint64Function, uint64PType } from '../ptypes'
 import { BoolExpressionBuilder } from './bool-expression-builder'
-import { LiteralExpressionBuilder } from './literal-expression-builder'
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
 
 export class UInt64FunctionBuilder extends FunctionBuilder {
@@ -28,7 +34,7 @@ export class UInt64FunctionBuilder extends FunctionBuilder {
     if (args.length === 1) {
       const [arg0] = args
       if (arg0 instanceof LiteralExpressionBuilder) {
-        return arg0.resolveToPType(uint64PType)
+        return arg0.resolveToPType(uint64PType, sourceLocation)
       }
     }
     throw CodeError.unexpectedUnhandledArgs({ sourceLocation })

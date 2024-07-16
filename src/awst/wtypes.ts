@@ -77,6 +77,10 @@ export class WTuple extends WType {
     })
     this.items = props.items
   }
+
+  toString(): string {
+    return `${this.immutable ? 'readonly' : ''}tuple[${this.items.join(', ')}]`
+  }
 }
 export class WArray extends WType {}
 

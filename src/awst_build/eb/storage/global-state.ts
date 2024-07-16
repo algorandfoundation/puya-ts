@@ -2,7 +2,7 @@ import { FunctionBuilder, InstanceBuilder, InstanceExpressionBuilder, NodeBuilde
 import { SourceLocation } from '../../../awst/source-location'
 import { bytesPType, PType } from '../../ptypes'
 import { AppStateExpression, BytesConstant, Expression, LValue } from '../../../awst/nodes'
-import { ContractClassType, GlobalStateType } from '../../ptypes/ptype-classes'
+import { ContractClassPType, GlobalStateType } from '../../ptypes/ptype-classes'
 import { codeInvariant, invariant } from '../../../util'
 import { CodeError } from '../../../errors'
 import { ObjectLiteralExpressionBuilder } from '../object-literal-expression-builder'
@@ -27,7 +27,7 @@ export class GlobalStateFunctionBuilder extends FunctionBuilder {
         const [arg0] = args
         codeInvariant(arg0 instanceof ObjectLiteralExpressionBuilder, 'Expected object literal')
         if (arg0.hasProperty('initialValue')) {
-          const initialValueBuilder = requireInstanceBuilder(arg0.resolveProperty('initialValue', sourceLocation), sourceLocation)
+          const initialValueBuilder = requireInstanceBuilder(arg0.memberAccess('initialValue', sourceLocation), sourceLocation)
           if (contentPType) {
             initialValue = requireExpressionOfType(initialValueBuilder, contentPType, sourceLocation)
           } else {
@@ -37,7 +37,7 @@ export class GlobalStateFunctionBuilder extends FunctionBuilder {
           }
         }
         if (arg0.hasProperty('key')) {
-          key = requireExpressionOfType(arg0.resolveProperty('key', sourceLocation), bytesPType, sourceLocation)
+          key = requireExpressionOfType(arg0.memberAccess('key', sourceLocation), bytesPType, sourceLocation)
         }
         break
       }
@@ -103,7 +103,7 @@ export class GlobalStateFunctionResultBuilder extends InstanceBuilder {
     return this._ptype
   }
 
-  buildStorageDefinition(memberName: string, memberLocation: SourceLocation, contractType: ContractClassType): AppStorageDeclaration {
+  buildStorageDefinition(memberName: string, memberLocation: SourceLocation, contractType: ContractClassPType): AppStorageDeclaration {
     if (this._expr)
       codeInvariant(
         this._expr instanceof BytesConstant,

@@ -4,16 +4,18 @@ import { ContractContext } from './contract-visitor'
 import * as awst from '../awst/nodes'
 import ts from 'typescript'
 import { codeInvariant, enumerate, instanceOfAny, invariant } from '../util'
-import { Statements } from '../visitor/syntax-names'
-import { NotSupported, TodoError } from '../errors'
+import { getNodeName, Statements } from '../visitor/syntax-names'
+import { CodeError, NotSupported, TodoError } from '../errors'
 import { logger } from '../logger'
 import { nodeFactory } from '../awst/node-factory'
 import { requireExpressionOfType, requireInstanceBuilder } from './eb/util'
 import { PType, voidPType } from './ptypes'
 import { BaseVisitor } from './base-visitor'
-import { TransientType } from './ptypes/ptype-classes'
+import { ObjectPType, TransientType } from './ptypes/ptype-classes'
 import { SwitchLoopContext } from './switch-loop-context'
 import { Block, Goto, ReturnStatement } from '../awst/nodes'
+import { SourceLocation } from '../awst/source-location'
+import { typeRegistry } from './type-registry'
 
 export type ContractMethodInfo = {
   className: string
@@ -25,6 +27,12 @@ export class FunctionContext extends SourceFileContext {
   constructor(parent: ContractContext | SourceFileContext) {
     super(parent.sourceFile, parent.program, parent.nameResolver.createChild())
     this.switchLoopContext = new SwitchLoopContext(this.checker)
+  }
+
+  getDestructuredParamName(node: ts.ParameterDeclaration) {
+    const symbol = (node as { symbol?: ts.Symbol }).symbol
+    invariant(symbol, 'Param node must have symbol')
+    return this.nameResolver.resolveUniqueName('p', symbol)
   }
 }
 
@@ -66,8 +74,11 @@ export class FunctionVisitor
     const type = ctx.getPTypeForNode(node)
 
     const args = node.parameters.map((p) => this.accept(p))
+    const assignDestructuredParams = this.evaluateParameterBindingExpressions(node.parameters, sourceLocation)
     codeInvariant(node.body, 'Functions must have a body')
-    const body = this.accept(node.body)
+    const body = assignDestructuredParams.length
+      ? nodeFactory.block({ sourceLocation }, assignDestructuredParams, this.accept(node.body))
+      : this.accept(node.body)
     if (contractInfo) {
       this._result = new awst.ContractMethod({
         className: contractInfo.className,
@@ -91,6 +102,60 @@ export class FunctionVisitor
         docstring: undefined,
       })
     }
+  }
+
+  evaluateParameterBindingExpressions(parameters: Iterable<ts.ParameterDeclaration>, sourceLocation: SourceLocation): awst.Statement[] {
+    const assignments: awst.Statement[] = []
+    for (const p of parameters) {
+      const sourceLocation = this.sourceLocation(p)
+      if (ts.isObjectBindingPattern(p.name)) {
+        const paramPType = this.context.resolver.resolve(p, sourceLocation)
+        const paramName = this.context.getDestructuredParamName(p)
+        const paramBuilder = typeRegistry.getInstanceEb(
+          nodeFactory.varExpression({
+            name: paramName,
+            sourceLocation,
+            wtype: paramPType.wtypeOrThrow,
+          }),
+          paramPType,
+        )
+        for (const element of p.name.elements) {
+          const sourceLocation = this.sourceLocation(element)
+          codeInvariant(ts.isIdentifier(element.name), 'Nested object destructuring is not supported', sourceLocation)
+          codeInvariant(!element.dotDotDotToken, 'Spread operator is not supported', sourceLocation)
+
+          const propertyName = this.textVisitor.accept(element.propertyName ? element.propertyName : element.name)
+          const elementPType = this.context.resolver.resolve(element, sourceLocation)
+          assignments.push(
+            nodeFactory.assignmentStatement({
+              target: nodeFactory.varExpression({
+                name: this.context.resolveVariable(element.name),
+                sourceLocation,
+                wtype: elementPType.wtypeOrThrow,
+              }),
+              sourceLocation,
+              value: requireExpressionOfType(paramBuilder.memberAccess(propertyName, sourceLocation), elementPType, sourceLocation),
+            }),
+          )
+        }
+      } else if (ts.isArrayBindingPattern(p.name)) {
+        logger.warn(sourceLocation, 'TODO: Array binding patterns')
+      } else {
+        invariant(ts.isIdentifier(p.name), 'Name should be identifier if none of the above')
+      }
+    }
+
+    if (assignments.length === 0) return []
+
+    return [
+      nodeFactory.block(
+        {
+          sourceLocation,
+          comment: 'Destructured params',
+        },
+        ...assignments,
+      ),
+    ]
   }
 
   visitTypeAliasDeclaration(node: ts.TypeAliasDeclaration): awst.Statement[] {
@@ -350,12 +415,42 @@ export class FunctionVisitor
   }
 
   visitParameter(node: ts.ParameterDeclaration): awst.SubroutineArgument {
-    codeInvariant(node.type, 'Parameters must have type annotation')
-    return nodeFactory.subroutineArgument({
-      sourceLocation: this.sourceLocation(node),
-      name: this.context.resolveVariable(node.name),
-      wtype: this.context.getPTypeForNode(node.type).wtypeOrThrow,
-    })
+    const sourceLocation = this.sourceLocation(node)
+    codeInvariant(node.type, 'Parameters must have type annotation', sourceLocation)
+    codeInvariant(!node.dotDotDotToken, 'Rest parameters are not supported', sourceLocation)
+    codeInvariant(!node.questionToken, 'Optional parameters are not supported', sourceLocation)
+    if (node.initializer) {
+      logger.warn(sourceLocation, 'TODO: Default parameter values')
+    }
+    const paramPType = this.context.getPTypeForNode(node.type)
+
+    if (ts.isIdentifier(node.name)) {
+      return nodeFactory.subroutineArgument({
+        sourceLocation: sourceLocation,
+        name: this.context.resolveVariable(node.name),
+        wtype: paramPType.wtypeOrThrow,
+      })
+    } else if (ts.isObjectBindingPattern(node.name)) {
+      codeInvariant(paramPType instanceof ObjectPType, 'Param type must be object if it is being destructured', sourceLocation)
+      return nodeFactory.subroutineArgument({
+        sourceLocation,
+        name: this.context.getDestructuredParamName(node),
+        wtype: paramPType.wtype,
+      })
+
+      // return node.name.elements.map((e): awst.SubroutineArgument => {
+      //   const sourceLocation = this.sourceLocation(e)
+      //   codeInvariant(ts.isIdentifier(e.name), 'Nested object destructuring is not supported', sourceLocation)
+      //
+      //   return nodeFactory.subroutineArgument({
+      //     sourceLocation: sourceLocation,
+      //     name: this.context.resolveVariable(e.name),
+      //     wtype: paramPType.getPropertyType(e.name.text).wtypeOrThrow,
+      //   })
+      // })
+    } else {
+      throw new CodeError(`Unsupported parameter declaration type ${getNodeName(node)}`, { sourceLocation })
+    }
   }
 
   get result() {

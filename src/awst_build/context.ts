@@ -8,7 +8,7 @@ import { PType } from './ptypes'
 import { NodeBuilder } from './eb'
 import { typeRegistry } from './type-registry'
 import { TypeResolver } from './type-resolver'
-import { FunctionType } from './ptypes/ptype-classes'
+import { FunctionPType } from './ptypes/ptype-classes'
 
 export abstract class BaseContext {
   abstract getSourceLocation(node: ts.Node): SourceLocation
@@ -73,7 +73,7 @@ export class SourceFileContext extends BaseContext {
     return this.constants.get(constantName)
   }
 
-  resolveVariable(node: ts.BindingName) {
+  resolveVariable(node: ts.Identifier) {
     codeInvariant(ts.isIdentifier(node), 'Only basic identifiers supported for now')
     const symbol = this.checker.getSymbolAtLocation(node)
     invariant(symbol, 'There must be a symbol for an identifier node')
@@ -89,7 +89,7 @@ export class SourceFileContext extends BaseContext {
     const sourceLocation = this.getSourceLocation(node)
 
     const ptype = this.resolver.resolve(node, sourceLocation)
-    invariant(ptype instanceof FunctionType, 'ptype of function declaration must be FunctionType')
+    invariant(ptype instanceof FunctionPType, 'ptype of function declaration must be FunctionType')
     return ptype.returnType
   }
 

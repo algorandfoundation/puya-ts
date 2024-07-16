@@ -10,18 +10,18 @@ import {
 import { InstanceBuilder, NodeBuilder } from './eb'
 import ts from 'typescript'
 import { TextVisitor } from './text-visitor'
-import { LiteralExpressionBuilder } from './eb/literal-expression-builder'
 import { CodeError, NotSupported, TodoError } from '../errors'
 import { SourceLocation } from '../awst/source-location'
 import { requireInstanceBuilder } from './eb/util'
 import { accept, Visitor } from '../visitor/visitor'
 import { ObjectLiteralExpressionBuilder } from './eb/object-literal-expression-builder'
-import { codeInvariant } from '../util'
-import { ContractClassType } from './ptypes/ptype-classes'
+import { codeInvariant, invariant } from '../util'
+import { ContractClassPType, ObjectPType } from './ptypes/ptype-classes'
 import { ContractSuperBuilder, ContractThisBuilder } from './eb/contract-builder'
 import { StringFunctionBuilder, StringExpressionBuilder } from './eb/string-expression-builder'
 import { nodeFactory } from '../awst/node-factory'
 import { ArrayLiteralExpressionBuilder } from './eb/array-literal-expression-builder'
+import { ScalarLiteralExpressionBuilder } from './eb/literal-expression-builder'
 
 export abstract class BaseVisitor<TContext extends BaseContext> implements Visitor<Expressions, NodeBuilder> {
   private baseAccept = <TNode extends ts.Node>(node: TNode) => accept<BaseVisitor<BaseContext>, TNode>(this, node)
@@ -32,7 +32,7 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
   }
 
   visitBigIntLiteral(node: ts.BigIntLiteral): InstanceBuilder {
-    return new LiteralExpressionBuilder(BigInt(node.text.slice(0, -1)), this.sourceLocation(node))
+    return new ScalarLiteralExpressionBuilder(BigInt(node.text.slice(0, -1)), this.sourceLocation(node))
   }
 
   visitRegularExpressionLiteral(node: ts.RegularExpressionLiteral): InstanceBuilder {
@@ -42,11 +42,11 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
   }
 
   visitFalseKeyword(node: ts.FalseLiteral): InstanceBuilder {
-    return new LiteralExpressionBuilder(false, this.sourceLocation(node))
+    return new ScalarLiteralExpressionBuilder(false, this.sourceLocation(node))
   }
 
   visitTrueKeyword(node: ts.TrueLiteral): InstanceBuilder {
-    return new LiteralExpressionBuilder(true, this.sourceLocation(node))
+    return new ScalarLiteralExpressionBuilder(true, this.sourceLocation(node))
   }
 
   sourceLocation(node: ts.Node): SourceLocation {
@@ -62,7 +62,7 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
   }
 
   visitNumericLiteral(node: ts.NumericLiteral): InstanceBuilder {
-    return new LiteralExpressionBuilder(BigInt(node.text), this.sourceLocation(node))
+    return new ScalarLiteralExpressionBuilder(BigInt(node.text), this.sourceLocation(node))
   }
 
   visitIdentifier(node: ts.Identifier): NodeBuilder {
@@ -89,7 +89,7 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
   visitSuperKeyword(node: ts.SuperExpression): NodeBuilder {
     const sourceLocation = this.sourceLocation(node)
     const ptype = this.context.resolver.resolve(node, sourceLocation)
-    if (ptype instanceof ContractClassType) {
+    if (ptype instanceof ContractClassPType) {
       return new ContractSuperBuilder(ptype, sourceLocation)
     }
     throw new CodeError(`'super' keyword is not valid outside of a contract type`, { sourceLocation })
@@ -98,7 +98,7 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
   visitThisKeyword(node: ts.ThisExpression): NodeBuilder {
     const sourceLocation = this.sourceLocation(node)
     const ptype = this.context.resolver.resolve(node, sourceLocation)
-    if (ptype instanceof ContractClassType) {
+    if (ptype instanceof ContractClassPType) {
       return new ContractThisBuilder(ptype, sourceLocation)
     }
     throw new CodeError(`'this' keyword is not valid outside of a contract type`, { sourceLocation })
@@ -124,8 +124,9 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
       }
       return []
     })
-
-    return new ObjectLiteralExpressionBuilder(sourceLocation, Object.fromEntries(properties))
+    const ptype = this.context.resolver.resolve(node, sourceLocation)
+    invariant(ptype instanceof ObjectPType, 'Object literal ptype should resolve to ObjectPType')
+    return new ObjectLiteralExpressionBuilder(sourceLocation, ptype, Object.fromEntries(properties))
   }
 
   visitArrayLiteralExpression(node: ts.ArrayLiteralExpression): NodeBuilder {

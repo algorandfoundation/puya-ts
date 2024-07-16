@@ -1,7 +1,7 @@
 import { SourceLocation } from '../../awst/source-location'
 import { awst, wtypes } from '../../awst'
 import { CodeError, NotSupported } from '../../errors'
-import { PType } from '../ptypes'
+import { boolPType, bytesPType, PType, uint64PType } from '../ptypes'
 
 export enum BuilderComparisonOp {
   eq = '==',
@@ -136,6 +136,11 @@ export abstract class InstanceBuilder extends NodeBuilder {
       sourceLocation,
     })
   }
+}
+
+export abstract class LiteralExpressionBuilder extends InstanceBuilder {
+  abstract resolvableToPType(ptype: PType, sourceLocation: SourceLocation): boolean
+  abstract resolveToPType(ptype: PType, sourceLocation: SourceLocation): InstanceBuilder
 }
 
 export abstract class TypeClassBuilder extends NodeBuilder {

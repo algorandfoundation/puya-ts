@@ -5,7 +5,7 @@ import {
   NamespacePType,
   InstanceType,
   TransientType,
-  FunctionType,
+  FunctionPType,
   BaseContractClassType,
 } from './ptype-classes'
 import { Constants } from '../../constants'
@@ -118,14 +118,14 @@ export const GlobalStateFunction = new LibFunctionType({
   module: Constants.stateModuleName,
 })
 
-export const ClearStateProgram = new FunctionType({
+export const ClearStateProgram = new FunctionPType({
   name: Constants.clearStateProgramMethodName,
   module: Constants.baseContractModuleName,
   returnType: uint64PType,
   parameters: [],
 })
 
-export const ApprovalProgram = new FunctionType({
+export const ApprovalProgram = new FunctionPType({
   name: Constants.approvalProgramMethodName,
   module: Constants.arc4ModuleName,
   returnType: boolPType,

@@ -1,5 +1,5 @@
 import { wtypes } from '../../awst'
-import { codeInvariant } from '../../util'
+import { codeInvariant, sortBy } from '../../util'
 import { WTuple, WType } from '../../awst/wtypes'
 import { Constants } from '../../constants'
 import { CodeError } from '../../errors'
@@ -178,7 +178,7 @@ export class IntrinsicEnumType extends PType {
   }
 }
 
-export class FunctionType extends PType {
+export class FunctionPType extends PType {
   readonly wtype: undefined
   readonly name: string
   readonly module: string
@@ -259,21 +259,21 @@ export function isAppStorageType(ptype: PType): ptype is AppStorageType {
   return ptype instanceof GlobalStateType || ptype instanceof LocalStateType
 }
 
-export class ContractClassType extends PType {
+export class ContractClassPType extends PType {
   readonly wtype = undefined
   readonly name: string
   readonly module: string
   readonly properties: Record<string, PType>
-  readonly methods: Record<string, FunctionType>
+  readonly methods: Record<string, FunctionPType>
   readonly singleton = true
-  readonly baseType: ContractClassType | undefined
+  readonly baseType: ContractClassPType | undefined
 
   constructor(props: {
     module: string
     name: string
     properties: Record<string, AppStorageType>
-    methods: Record<string, FunctionType>
-    baseType: ContractClassType | undefined
+    methods: Record<string, FunctionPType>
+    baseType: ContractClassPType | undefined
   }) {
     super()
     this.name = props.name
@@ -287,8 +287,39 @@ export class ContractClassType extends PType {
     return this.baseType?.isARC4 === true
   }
 }
+export class ObjectPType extends PType {
+  readonly name: string
+  readonly module: string
+  readonly properties: Record<string, PType>
+  readonly singleton = false
 
-export class BaseContractClassType extends ContractClassType {
+  constructor(props: { module: string; name: string; properties: Record<string, PType> }) {
+    super()
+    this.name = props.name
+    this.module = props.module
+    this.properties = props.properties
+  }
+
+  get wtype(): WTuple {
+    return new WTuple({
+      items: this.orderedProperties().map(([_, ptype]) => ptype.wtypeOrThrow),
+      immutable: false,
+    })
+  }
+
+  orderedProperties() {
+    return Object.entries(this.properties).toSorted(sortBy(([key]) => key))
+  }
+
+  getPropertyType(name: string): PType {
+    if (Object.hasOwn(this.properties, name)) {
+      return this.properties[name]
+    }
+    throw new CodeError(`${this} does not have property ${name}`)
+  }
+}
+
+export class BaseContractClassType extends ContractClassPType {
   readonly _isArc4: boolean
   get isARC4(): boolean {
     return super.isARC4
@@ -302,8 +333,8 @@ export class BaseContractClassType extends ContractClassType {
     module: string
     name: string
     properties: Record<string, AppStorageType>
-    methods: Record<string, FunctionType>
-    baseType: ContractClassType | undefined
+    methods: Record<string, FunctionPType>
+    baseType: ContractClassPType | undefined
   }) {
     super(rest)
     this._isArc4 = isArc4

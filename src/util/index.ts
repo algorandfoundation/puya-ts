@@ -68,7 +68,7 @@ export const uint8ArrayToUtf8 = (value: Uint8Array): string => {
 }
 
 export const hasFlags = <T extends number>(value: T, flags: T): boolean => (value & flags) === flags
-export const hasAnyFlag = <T extends number>(value: T, flags: T): boolean => Boolean(value & flags)
+export const intersectsFlags = <T extends number>(value: T, flags: T): boolean => Boolean(value & flags)
 
 export function* enumerate<T>(iterable: Iterable<T>): IterableIterator<readonly [number, T]> {
   let i = 0
@@ -114,3 +114,12 @@ export function normalisePath(filePath: string, workingDirectory: string): strin
   const moduleName = normalizedPath.startsWith(cwd) ? normalizedPath.slice(cwd.length) : normalizedPath
   return moduleName.replaceAll('\\', '/')
 }
+
+type SortDir = 'asc' | 'desc'
+export const sortBy =
+  <T, TKey>(keySelector: (item: T) => TKey, dir: SortDir = 'asc') =>
+  (a: T, b: T) => {
+    const keyA = keySelector(a)
+    const keyB = keySelector(b)
+    return (dir === 'desc' ? -1 : 1) * (keyA < keyB ? -1 : keyA > keyB ? 1 : 0)
+  }

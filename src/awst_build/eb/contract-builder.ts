@@ -1,14 +1,14 @@
 import { PType } from '../ptypes'
 import { NodeBuilder } from './index'
 import { SourceLocation } from '../../awst/source-location'
-import { ContractClassType, GlobalStateType } from '../ptypes/ptype-classes'
+import { ContractClassPType, GlobalStateType } from '../ptypes/ptype-classes'
 import { BaseContractMethodExpressionBuilder, ContractMethodExpressionBuilder } from './free-subroutine-expression-builder'
 import { GlobalStateExpressionBuilder } from './storage/global-state'
 import { nodeFactory } from '../../awst/node-factory'
 
 export class ContractThisBuilder extends NodeBuilder {
-  private readonly _ptype: ContractClassType
-  constructor(ptype: ContractClassType, sourceLocation: SourceLocation) {
+  private readonly _ptype: ContractClassPType
+  constructor(ptype: ContractClassPType, sourceLocation: SourceLocation) {
     super(sourceLocation)
     this._ptype = ptype
   }
@@ -34,8 +34,8 @@ export class ContractThisBuilder extends NodeBuilder {
 }
 
 export class ContractSuperBuilder extends NodeBuilder {
-  private readonly _ptype: ContractClassType
-  constructor(ptype: ContractClassType, sourceLocation: SourceLocation) {
+  private readonly _ptype: ContractClassPType
+  constructor(ptype: ContractClassPType, sourceLocation: SourceLocation) {
     super(sourceLocation)
     this._ptype = ptype
   }
