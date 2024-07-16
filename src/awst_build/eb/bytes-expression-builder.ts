@@ -1,5 +1,12 @@
 import { awst, wtypes } from '../../awst'
-import { BuilderComparisonOp, FunctionBuilder, InstanceBuilder, InstanceExpressionBuilder, NodeBuilder } from './index'
+import {
+  BuilderComparisonOp,
+  FunctionBuilder,
+  InstanceBuilder,
+  InstanceExpressionBuilder,
+  LiteralExpressionBuilder,
+  NodeBuilder,
+} from './index'
 import { SourceLocation } from '../../awst/source-location'
 import { nodeFactory } from '../../awst/node-factory'
 import { CodeError, wrapInCodeError } from '../../errors'
@@ -9,9 +16,8 @@ import { requireExpressionOfType, requireExpressionsOfType } from './util'
 import { BytesFunction, bytesPType, PType, stringPType, uint64PType } from '../ptypes'
 import { StringExpressionBuilder } from './string-expression-builder'
 import { BoolExpressionBuilder } from './bool-expression-builder'
-import { BytesBinaryOperator, BytesComparisonExpression, BytesEncoding, EqualityComparison, StringConstant } from '../../awst/nodes'
+import { BytesBinaryOperator, BytesEncoding, EqualityComparison, StringConstant } from '../../awst/nodes'
 import { base32ToUint8Array, base64ToUint8Array, codeInvariant, hexToUint8Array, utf8ToUint8Array } from '../../util'
-import { LiteralExpressionBuilder } from './literal-expression-builder'
 
 export class BytesFunctionBuilder extends FunctionBuilder {
   get ptype(): PType | undefined {
@@ -66,7 +72,7 @@ export class BytesFunctionBuilder extends FunctionBuilder {
       throw CodeError.unexpectedUnhandledArgs({ sourceLocation })
     }
     if (arg0 instanceof LiteralExpressionBuilder) {
-      return arg0.resolveToPType(bytesPType)
+      return arg0.resolveToPType(bytesPType, sourceLocation)
     } else {
       if (arg0.ptype?.equals(stringPType)) {
         return new BytesExpressionBuilder(arg0.toBytes(sourceLocation))

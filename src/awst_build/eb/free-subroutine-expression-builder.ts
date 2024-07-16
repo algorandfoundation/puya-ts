@@ -5,13 +5,13 @@ import { InternalError } from '../../errors'
 import { nodeFactory } from '../../awst/node-factory'
 import { requireExpressionOfType } from './util'
 import { typeRegistry } from '../type-registry'
-import { ContractClassType, FunctionType } from '../ptypes/ptype-classes'
+import { ContractClassPType, FunctionPType } from '../ptypes/ptype-classes'
 import { BaseClassSubroutineTarget, FreeSubroutineTarget, InstanceSubroutineTarget } from '../../awst/nodes'
 
 abstract class SubroutineExpressionBuilder extends FunctionBuilder {
   protected constructor(
     sourceLocation: SourceLocation,
-    protected readonly _ptype: FunctionType,
+    protected readonly _ptype: FunctionPType,
     protected readonly target: FreeSubroutineTarget | InstanceSubroutineTarget | BaseClassSubroutineTarget,
   ) {
     super(sourceLocation)
@@ -39,7 +39,7 @@ abstract class SubroutineExpressionBuilder extends FunctionBuilder {
 }
 
 export class ContractMethodExpressionBuilder extends SubroutineExpressionBuilder {
-  constructor(sourceLocation: SourceLocation, ptype: FunctionType) {
+  constructor(sourceLocation: SourceLocation, ptype: FunctionPType) {
     super(
       sourceLocation,
       ptype,
@@ -51,7 +51,7 @@ export class ContractMethodExpressionBuilder extends SubroutineExpressionBuilder
 }
 
 export class BaseContractMethodExpressionBuilder extends SubroutineExpressionBuilder {
-  constructor(sourceLocation: SourceLocation, ptype: FunctionType, baseContractPType: ContractClassType) {
+  constructor(sourceLocation: SourceLocation, ptype: FunctionPType, baseContractPType: ContractClassPType) {
     super(
       sourceLocation,
       ptype,
@@ -68,7 +68,7 @@ export class BaseContractMethodExpressionBuilder extends SubroutineExpressionBui
 
 export class FreeSubroutineExpressionBuilder extends SubroutineExpressionBuilder {
   constructor(sourceLocation: SourceLocation, ptype: PType) {
-    if (!(ptype instanceof FunctionType)) {
+    if (!(ptype instanceof FunctionPType)) {
       throw new InternalError(`Invalid ptype`)
     }
     super(

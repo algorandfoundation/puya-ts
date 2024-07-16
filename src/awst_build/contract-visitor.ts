@@ -11,7 +11,7 @@ import { FunctionVisitor } from './function-visitor'
 import { logger } from '../logger'
 import { BaseVisitor } from './base-visitor'
 import { GlobalStateFunctionResultBuilder } from './eb/storage/global-state'
-import { ContractClassType } from './ptypes/ptype-classes'
+import { ContractClassPType } from './ptypes/ptype-classes'
 import { nodeFactory } from '../awst/node-factory'
 import { DecoratorData, DecoratorVisitor } from './decorator-visitor'
 import { SourceLocation } from '../awst/source-location'
@@ -29,7 +29,7 @@ export class ContractVisitor extends BaseVisitor<ContractContext> implements Vis
   private _approvalProgram?: ContractMethod
   private _clearStateProgram?: ContractMethod
   private _className: string
-  private _contractPType: ContractClassType
+  private _contractPType: ContractClassPType
   private _appState = new Map<string, AppStorageDefinition>()
   public readonly result: ContractFragment
   public accept = <TNode extends ts.Node>(node: TNode) => accept<ContractVisitor, TNode>(this, node)
@@ -41,7 +41,7 @@ export class ContractVisitor extends BaseVisitor<ContractContext> implements Vis
     this._className = this.textVisitor.accept(classDec.name)
 
     const contractPtype = this.context.getPTypeForNode(classDec)
-    invariant(contractPtype instanceof ContractClassType, 'Contract PType must be ContractClassType')
+    invariant(contractPtype instanceof ContractClassPType, 'Contract PType must be ContractClassType')
     invariant(contractPtype.baseType, 'Contract must have base type')
     this._contractPType = contractPtype
 

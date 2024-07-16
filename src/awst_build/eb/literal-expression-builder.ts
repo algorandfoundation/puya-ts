@@ -1,4 +1,4 @@
-import { InstanceBuilder } from './index'
+import { InstanceBuilder, LiteralExpressionBuilder } from './index'
 import { SourceLocation } from '../../awst/source-location'
 import { Expression, LValue } from '../../awst/nodes'
 import { bigintLiteralPType, boolPType, bytesPType, PType, uint64PType } from '../ptypes'
@@ -10,7 +10,7 @@ import { CodeError } from '../../errors'
 
 type ConstantValue = bigint | Uint8Array | boolean
 
-export class LiteralExpressionBuilder extends InstanceBuilder {
+export class ScalarLiteralExpressionBuilder extends LiteralExpressionBuilder {
   resolve(): Expression {
     if (typeof this.value === 'boolean') {
       return nodeFactory.boolConstant({
@@ -57,7 +57,7 @@ export class LiteralExpressionBuilder extends InstanceBuilder {
     }
     return false
   }
-  resolveToPType(ptype: PType): InstanceBuilder {
+  resolveToPType(ptype: PType, sourceLocation: SourceLocation): InstanceBuilder {
     if (ptype.equals(bytesPType)) {
       if (this.value instanceof Uint8Array) {
         return new BytesExpressionBuilder(nodeFactory.bytesConstant({ value: this.value, sourceLocation: this.sourceLocation }))
@@ -71,6 +71,6 @@ export class LiteralExpressionBuilder extends InstanceBuilder {
         return new BoolExpressionBuilder(nodeFactory.boolConstant({ value: this.value, sourceLocation: this.sourceLocation }))
       }
     }
-    throw new CodeError(`Literal cannot be converted to type ${ptype.name}`, { sourceLocation: this.sourceLocation })
+    throw new CodeError(`Literal cannot be converted to type ${ptype.name}`, { sourceLocation })
   }
 }

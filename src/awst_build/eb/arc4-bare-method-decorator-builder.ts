@@ -6,7 +6,7 @@ import { DecoratorData } from '../decorator-visitor'
 import { codeInvariant } from '../../util'
 import { ObjectLiteralExpressionBuilder } from './object-literal-expression-builder'
 import { StringExpressionBuilder } from './string-expression-builder'
-import { requireConstant, requireSpecificConstant } from './util'
+import { requireConstant, requireInstanceBuilder, requireSpecificConstant } from './util'
 import { StringConstant } from '../../awst/nodes'
 import { ArrayLiteralExpressionBuilder } from './array-literal-expression-builder'
 import { CodeError } from '../../errors'
@@ -47,7 +47,7 @@ export class Arc4BareMethodDecoratorBuilder extends NodeBuilder {
 
     const ocas = resolveOnCompletionActions(config, sourceLocation)
     const createOption = config.hasProperty('create')
-      ? mapStringValue(createMap, config.resolveProperty('create', sourceLocation), sourceLocation)
+      ? mapStringValue(createMap, config.memberAccess('create', sourceLocation), sourceLocation)
       : ARC4CreateOption.Disallow
     return new DecoratorDataBuilder(sourceLocation, {
       type: 'arc4.baremethod',
@@ -81,7 +81,7 @@ export class Arc4AbiMethodDecoratorBuilder extends NodeBuilder {
 
     const ocas = resolveOnCompletionActions(config, sourceLocation)
     const createOption = config.hasProperty('create')
-      ? mapStringValue(createMap, config.resolveProperty('create', sourceLocation), sourceLocation)
+      ? mapStringValue(createMap, config.memberAccess('create', sourceLocation), sourceLocation)
       : ARC4CreateOption.Disallow
     return new DecoratorDataBuilder(sourceLocation, {
       type: 'arc4.abimethod',
@@ -102,7 +102,7 @@ function mapStringValue<T>(map: Record<string, T>, value: InstanceBuilder, sourc
 
 function resolveOnCompletionActions(config: ObjectLiteralExpressionBuilder, sourceLocation: SourceLocation): OnCompletionAction[] {
   if (!config.hasProperty('allowActions')) return [OnCompletionAction.NoOp]
-  const value = config.resolveProperty('allowActions', sourceLocation)
+  const value = config.memberAccess('allowActions', sourceLocation)
   if (value instanceof StringExpressionBuilder) {
     return [mapStringValue(ocaMap, value, sourceLocation)]
   } else if (value instanceof ArrayLiteralExpressionBuilder) {

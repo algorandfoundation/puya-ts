@@ -1,6 +1,6 @@
 import { AppStorageDefinition, AppStorageKind, BytesConstant, BytesEncoding } from '../awst/nodes'
 import { SourceLocation } from '../awst/source-location'
-import { ContractClassType, GlobalStateType, LocalStateType } from './ptypes/ptype-classes'
+import { ContractClassPType, GlobalStateType, LocalStateType } from './ptypes/ptype-classes'
 import { invariant, utf8ToUint8Array } from '../util'
 import { TodoError } from '../errors'
 import { nodeFactory } from '../awst/node-factory'
@@ -10,14 +10,14 @@ export class AppStorageDeclaration {
   readonly ptype: GlobalStateType | LocalStateType
   readonly keyOverride: BytesConstant | undefined
   readonly sourceLocation: SourceLocation
-  readonly definedIn: ContractClassType
+  readonly definedIn: ContractClassPType
   readonly description: string | undefined
   constructor(props: {
     memberName: string
     ptype: GlobalStateType | LocalStateType
     keyOverride: BytesConstant | undefined
     sourceLocation: SourceLocation
-    definedIn: ContractClassType
+    definedIn: ContractClassPType
     description: string | undefined
   }) {
     this.memberName = props.memberName

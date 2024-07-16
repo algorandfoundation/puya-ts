@@ -1,14 +1,13 @@
-import { InstanceBuilder, NodeBuilder } from './index'
+import { InstanceBuilder, LiteralExpressionBuilder, NodeBuilder } from './index'
 import { awst } from '../../awst'
 import { CodeError } from '../../errors'
 import { PType } from '../ptypes'
 import { SourceLocation } from '../../awst/source-location'
-import { LiteralExpressionBuilder } from './literal-expression-builder'
 import { DeliberateAny } from '../../typescript-helpers'
 
 export function requireExpressionOfType(builder: NodeBuilder, ptype: PType, sourceLocation: SourceLocation): awst.Expression {
   if (builder instanceof LiteralExpressionBuilder) {
-    return builder.resolveToPType(ptype).resolve()
+    return builder.resolveToPType(ptype, sourceLocation).resolve()
   }
   if (builder instanceof InstanceBuilder && builder.ptype?.equals(ptype)) {
     return builder.resolve()
@@ -18,10 +17,10 @@ export function requireExpressionOfType(builder: NodeBuilder, ptype: PType, sour
   })
 }
 
-export function requestExpressionOfType(builder: NodeBuilder, ptype: PType): awst.Expression | undefined {
+export function requestExpressionOfType(builder: NodeBuilder, ptype: PType, sourceLocation: SourceLocation): awst.Expression | undefined {
   if (builder instanceof LiteralExpressionBuilder) {
-    if (builder.resolvableToPType(ptype)) {
-      return builder.resolveToPType(ptype).resolve()
+    if (builder.resolvableToPType(ptype, sourceLocation)) {
+      return builder.resolveToPType(ptype, sourceLocation).resolve()
     }
     return undefined
   }
@@ -78,10 +77,10 @@ export function requireSpecificConstant<T extends awst.Constant>(
   throw new CodeError(`Expected compile time constant value`, { sourceLocation })
 }
 
-export function requestConstantOfType(builder: NodeBuilder, ptype: PType): awst.Constant | undefined {
+export function requestConstantOfType(builder: NodeBuilder, ptype: PType, sourceLocation: SourceLocation): awst.Constant | undefined {
   if (builder instanceof LiteralExpressionBuilder) {
-    if (builder.resolvableToPType(ptype)) {
-      const expr = builder.resolveToPType(ptype).resolve()
+    if (builder.resolvableToPType(ptype, sourceLocation)) {
+      const expr = builder.resolveToPType(ptype, sourceLocation).resolve()
       if (isConstant(expr)) return expr
     }
     return undefined
@@ -103,7 +102,7 @@ function isConstant(expr: awst.Expression): expr is awst.Constant {
 }
 
 export function requireConstantOfType(builder: NodeBuilder, ptype: PType, sourceLocation: SourceLocation): awst.Constant {
-  const constExpr = requestConstantOfType(builder, ptype)
+  const constExpr = requestConstantOfType(builder, ptype, sourceLocation)
   if (constExpr) return constExpr
   throw new CodeError(`Expected constant of type ${ptype}`, { sourceLocation })
 }

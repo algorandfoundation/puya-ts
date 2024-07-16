@@ -13,12 +13,12 @@ import {
   voidPType,
 } from './ptypes'
 import { SourceLocation } from '../awst/source-location'
-import { codeInvariant, hasAnyFlag, hasFlags, invariant, normalisePath } from '../util'
+import { codeInvariant, intersectsFlags, hasFlags, invariant, normalisePath } from '../util'
 import { CodeError, InternalError } from '../errors'
 import { typeRegistry } from './type-registry'
 import { logger } from '../logger'
 import { Constants } from '../constants'
-import { AppStorageType, ContractClassType, FunctionType, GlobalStateType, NamespacePType } from './ptypes/ptype-classes'
+import { AppStorageType, ContractClassPType, FunctionPType, GlobalStateType, NamespacePType, ObjectPType } from './ptypes/ptype-classes'
 import { SymbolName } from './symbol-name'
 import path from 'node:path'
 
@@ -68,7 +68,7 @@ export class TypeResolver {
   }
 
   resolveType(tsType: ts.Type, sourceLocation: SourceLocation): PType {
-    if (hasFlags(tsType.flags, ts.TypeFlags.Boolean)) {
+    if (hasFlags(tsType.flags, ts.TypeFlags.Boolean) || hasFlags(tsType.flags, ts.TypeFlags.BooleanLiteral)) {
       return boolPType
     }
     if (hasFlags(tsType.flags, ts.TypeFlags.Void)) {
@@ -106,7 +106,7 @@ export class TypeResolver {
 
       invariant(rest.length === 0, 'Class can have at most one base type')
 
-      if (baseType instanceof ContractClassType) {
+      if (baseType instanceof ContractClassPType) {
         return this.reflectContractType(typeName, tsType, baseType, sourceLocation)
       }
       throw new CodeError('Classes must extend "Contract" or "BaseContract" base classes to be considered a contract', { sourceLocation })
@@ -114,6 +114,13 @@ export class TypeResolver {
     const callSignatures = this.checker.getSignaturesOfType(tsType, ts.SignatureKind.Call)
     if (callSignatures.length) {
       return this.reflectFunctionType(typeName, callSignatures, sourceLocation)
+    }
+    if (
+      isObjectType(tsType) &&
+      hasFlags(tsType.objectFlags, ts.ObjectFlags.Anonymous) &&
+      !typeName.module.startsWith(Constants.algoTsPackage)
+    ) {
+      return this.reflectObjectType(tsType, sourceLocation)
     }
 
     if (tsType.aliasTypeArguments?.length) {
@@ -124,7 +131,29 @@ export class TypeResolver {
     }
   }
 
-  private reflectFunctionType(typeName: SymbolName, callSignatures: readonly ts.Signature[], sourceLocation: SourceLocation): FunctionType {
+  private reflectObjectType(tsType: ts.Type, sourceLocation: SourceLocation): ObjectPType {
+    const properties: Record<string, PType> = {}
+    for (const prop of tsType.getProperties()) {
+      const type = this.checker.getTypeOfSymbol(prop)
+      const ptype = this.resolveType(type, sourceLocation)
+      if (ptype.singleton) {
+        logger.error(sourceLocation, `${ptype} is not a valid object property type`)
+      } else {
+        properties[prop.name] = ptype
+      }
+    }
+    return new ObjectPType({
+      name: 'Anoymous',
+      module: '',
+      properties,
+    })
+  }
+
+  private reflectFunctionType(
+    typeName: SymbolName,
+    callSignatures: readonly ts.Signature[],
+    sourceLocation: SourceLocation,
+  ): FunctionPType {
     if (typeName.fullName === ApprovalProgram.fullName) return ApprovalProgram
     if (typeName.fullName === ClearStateProgram.fullName) return ClearStateProgram
 
@@ -135,7 +164,7 @@ export class TypeResolver {
       const paramType = this.checker.getTypeOfSymbol(p)
       return this.resolveType(paramType, sourceLocation)
     })
-    return new FunctionType({
+    return new FunctionPType({
       returnType,
       parameters,
       name: typeName.name,
@@ -146,23 +175,23 @@ export class TypeResolver {
   private reflectContractType(
     typeName: SymbolName,
     tsType: ts.Type,
-    baseType: ContractClassType,
+    baseType: ContractClassPType,
     sourceLocation: SourceLocation,
-  ): ContractClassType {
+  ): ContractClassPType {
     const properties: Record<string, AppStorageType> = {}
-    const methods: Record<string, FunctionType> = {}
+    const methods: Record<string, FunctionPType> = {}
     for (const prop of tsType.getProperties()) {
       const type = this.checker.getTypeOfSymbol(prop)
       const ptype = this.resolveType(type, sourceLocation)
       if (ptype instanceof GlobalStateType) {
         properties[prop.name] = ptype
-      } else if (ptype instanceof FunctionType) {
+      } else if (ptype instanceof FunctionPType) {
         methods[prop.name] = ptype
       } else {
         throw new InternalError(`Unhandled property type ${ptype}`, { sourceLocation })
       }
     }
-    return new ContractClassType({
+    return new ContractClassPType({
       properties,
       methods,
       name: typeName.name,
@@ -178,7 +207,7 @@ export class TypeResolver {
   private getSymbolFullName(symbol: ts.Symbol, sourceLocation: SourceLocation): SymbolName {
     const declaration = symbol?.declarations?.[0]
     if (declaration) {
-      if (hasAnyFlag(symbol.flags, ts.SymbolFlags.Namespace) && !hasFlags(symbol.flags, ts.SymbolFlags.Function)) {
+      if (intersectsFlags(symbol.flags, ts.SymbolFlags.Namespace) && !hasFlags(symbol.flags, ts.SymbolFlags.Function)) {
         return new SymbolName({
           module: normalisePath(declaration.getSourceFile().fileName, this.programDirectory),
           name: '*',

@@ -96,10 +96,10 @@ export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, Statemen
     throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
   }
   visitTupleExpression(expression: nodes.TupleExpression): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    return `<tuple>[${expression.items.map((i) => i.accept(this)).join(', ')}]`
   }
   visitTupleItemExpression(expression: nodes.TupleItemExpression): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    return `${expression.base.accept(this)}.${expression.index}`
   }
   visitVarExpression(expression: nodes.VarExpression): string {
     return expression.name

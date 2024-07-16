@@ -1,0 +1,13 @@
+subroutine test(p: tuple[uint64, bytes, bool]): void
+{
+  var a: uint64 = p.0
+  var b: bytes = p.1
+  var c: bool = p.2
+  log(concat(concat(itob(a), b), itob(c)))
+}
+subroutine init(): void
+{
+  test(<tuple>[1, "", False])
+  var temp: tuple[uint64, bytes, bool] = <tuple>[2, "Hello", True]
+  test(temp)
+}

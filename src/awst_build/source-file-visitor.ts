@@ -11,7 +11,7 @@ import { CompileTimeConstantVisitor } from './compile-time-constant-visitor'
 import { expandMaybeArray } from '../util'
 import { nodeFactory } from '../awst/node-factory'
 import { BaseVisitor } from './base-visitor'
-import { ContractClassType } from './ptypes/ptype-classes'
+import { ContractClassPType } from './ptypes/ptype-classes'
 
 type StatementOrDeferred = awst.ModuleStatement[] | awst.ModuleStatement | (() => awst.ModuleStatement[] | awst.ModuleStatement)
 
@@ -92,7 +92,7 @@ export class SourceFileVisitor extends BaseVisitor<SourceFileContext> implements
   visitClassDeclaration(node: ts.ClassDeclaration): StatementOrDeferred {
     const sourceLocation = this.sourceLocation(node)
     const ptype = this.context.resolver.resolve(node, sourceLocation)
-    if (ptype instanceof ContractClassType) {
+    if (ptype instanceof ContractClassPType) {
       return () => logPuyaExceptions(() => ContractVisitor.buildContract(this.context, node), sourceLocation)
     } else {
       logger.warn(sourceLocation, `Ignoring class declaration ${ptype.fullName}`)
