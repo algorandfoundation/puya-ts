@@ -7,7 +7,17 @@ import { ObjectPType } from '../ptypes/ptype-classes'
 import { nodeFactory } from '../../awst/node-factory'
 import { CodeError } from '../../errors'
 import { typeRegistry } from '../type-registry'
-import { requestExpressionOfType, requireExpressionOfType } from './util'
+import { requestExpressionOfType, requireExpressionOfType, requireInstanceBuilder } from './util'
+
+export type ObjectLiteralParts =
+  | {
+      type: 'properties'
+      properties: Record<string, InstanceBuilder>
+    }
+  | {
+      type: 'spread-object'
+      obj: InstanceBuilder
+    }
 
 export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
   readonly _ptype: ObjectPType
@@ -18,7 +28,7 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
   constructor(
     sourceLocation: SourceLocation,
     ptype: ObjectPType,
-    private readonly properties: Record<string, InstanceBuilder>,
+    private readonly parts: ObjectLiteralParts[],
   ) {
     super(sourceLocation)
     this._ptype = ptype
@@ -32,12 +42,22 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
     throw new CodeError('Object literal is not a valid assignment target', { sourceLocation: this.sourceLocation })
   }
   memberAccess(name: string, sourceLocation: SourceLocation): InstanceBuilder {
-    codeInvariant(Object.hasOwn(this.properties, name), `${name} is required`, sourceLocation)
-    return this.properties[name]
+    for (const part of this.parts.toReversed()) {
+      if (part.type === 'properties') {
+        if (Object.hasOwn(part.properties, name)) {
+          return part.properties[name]
+        }
+      } else {
+        if (part.obj.hasProperty(name)) {
+          return requireInstanceBuilder(part.obj.memberAccess(name, sourceLocation), sourceLocation)
+        }
+      }
+    }
+    throw new CodeError(`${name} does not exist on ${this.typeDescription}`, { sourceLocation })
   }
 
   hasProperty(name: string): boolean {
-    return Object.hasOwn(this.properties, name)
+    return this.parts.some((part) => (part.type === 'properties' ? Object.hasOwn(part.properties, name) : part.obj.hasProperty(name)))
   }
 
   private toTuple(ptype: ObjectPType, sourceLocation: SourceLocation): Expression {
@@ -91,5 +111,9 @@ export class ObjectExpressionBuilder extends InstanceExpressionBuilder {
       }),
       propertyPtype,
     )
+  }
+
+  hasProperty(name: string): boolean {
+    return this.ptype.orderedProperties().some(([prop]) => prop === name)
   }
 }

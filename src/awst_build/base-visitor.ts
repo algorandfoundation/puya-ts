@@ -4,6 +4,7 @@ import {
   BinaryOpSyntaxes,
   ComparisonOpSyntaxes,
   Expressions,
+  getNodeName,
   getSyntaxName,
   isKeyOf,
 } from '../visitor/syntax-names'
@@ -14,7 +15,7 @@ import { CodeError, NotSupported, TodoError } from '../errors'
 import { SourceLocation } from '../awst/source-location'
 import { requireInstanceBuilder } from './eb/util'
 import { accept, Visitor } from '../visitor/visitor'
-import { ObjectLiteralExpressionBuilder } from './eb/object-literal-expression-builder'
+import { ObjectLiteralExpressionBuilder, ObjectLiteralParts } from './eb/object-literal-expression-builder'
 import { codeInvariant, invariant } from '../util'
 import { ContractClassPType, ObjectPType } from './ptypes/ptype-classes'
 import { ContractSuperBuilder, ContractThisBuilder } from './eb/contract-builder'
@@ -22,6 +23,7 @@ import { StringFunctionBuilder, StringExpressionBuilder } from './eb/string-expr
 import { nodeFactory } from '../awst/node-factory'
 import { ArrayLiteralExpressionBuilder } from './eb/array-literal-expression-builder'
 import { ScalarLiteralExpressionBuilder } from './eb/literal-expression-builder'
+import { logger } from '../logger'
 
 export abstract class BaseVisitor<TContext extends BaseContext> implements Visitor<Expressions, NodeBuilder> {
   private baseAccept = <TNode extends ts.Node>(node: TNode) => accept<BaseVisitor<BaseContext>, TNode>(this, node)
@@ -114,19 +116,42 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
 
   visitObjectLiteralExpression(node: ts.ObjectLiteralExpression): NodeBuilder {
     const sourceLocation = this.sourceLocation(node)
-    const properties: Array<[string, InstanceBuilder]> = node.properties.flatMap((p) => {
+    const parts: Array<ObjectLiteralParts> = node.properties.flatMap((p): ObjectLiteralParts[] => {
       const propertySourceLocation = this.sourceLocation(p)
-      if (ts.isPropertyAssignment(p)) {
-        return [[this.textVisitor.accept(p.name), requireInstanceBuilder(this.baseAccept(p.initializer), propertySourceLocation)]]
-      } else if (ts.isShorthandPropertyAssignment(p)) {
-        codeInvariant(!p.objectAssignmentInitializer, 'Object assignment initializer not supported', propertySourceLocation)
-        return [[this.textVisitor.accept(p.name), requireInstanceBuilder(this.baseAccept(p.name), propertySourceLocation)]]
+      switch (p.kind) {
+        case ts.SyntaxKind.PropertyAssignment:
+          return [
+            {
+              type: 'properties',
+              properties: {
+                [this.textVisitor.accept(p.name)]: requireInstanceBuilder(this.baseAccept(p.initializer), propertySourceLocation),
+              },
+            },
+          ]
+        case ts.SyntaxKind.ShorthandPropertyAssignment:
+          codeInvariant(!p.objectAssignmentInitializer, 'Object assignment initializer not supported', propertySourceLocation)
+          codeInvariant(!p.equalsToken, 'Equals token is not valid here', propertySourceLocation)
+          return [
+            {
+              type: 'properties',
+              properties: { [this.textVisitor.accept(p.name)]: requireInstanceBuilder(this.baseAccept(p.name), propertySourceLocation) },
+            },
+          ]
+        case ts.SyntaxKind.SpreadAssignment:
+          return [
+            {
+              type: 'spread-object',
+              obj: requireInstanceBuilder(this.baseAccept(p.expression), propertySourceLocation),
+            },
+          ]
+        default:
+          logger.error(propertySourceLocation, `Unsupported object literal property kind ${getNodeName(p)}`)
+          return []
       }
-      return []
     })
     const ptype = this.context.resolver.resolve(node, sourceLocation)
     invariant(ptype instanceof ObjectPType, 'Object literal ptype should resolve to ObjectPType')
-    return new ObjectLiteralExpressionBuilder(sourceLocation, ptype, Object.fromEntries(properties))
+    return new ObjectLiteralExpressionBuilder(sourceLocation, ptype, parts)
   }
 
   visitArrayLiteralExpression(node: ts.ArrayLiteralExpression): NodeBuilder {

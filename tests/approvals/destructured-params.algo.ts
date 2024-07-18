@@ -9,3 +9,13 @@ function init() {
   const temp = { a: Uint64(2), b: Bytes('Hello'), c: true }
   test(temp)
 }
+
+function test2(args: { x: boolean; y: boolean; z: readonly [string, string] }) {
+  const {
+    a,
+    b,
+    args: { x, y },
+  } = { a: true, b: false, args }
+
+  const args2 = { ...args, x: true, y: true }
+}

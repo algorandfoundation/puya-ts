@@ -75,7 +75,7 @@ export class SourceFileContext extends BaseContext {
 
   resolveVariable(node: ts.Identifier) {
     codeInvariant(ts.isIdentifier(node), 'Only basic identifiers supported for now')
-    const symbol = this.checker.getSymbolAtLocation(node)
+    const symbol = this.checker.resolveName(node.text, node, ts.SymbolFlags.All, false)
     invariant(symbol, 'There must be a symbol for an identifier node')
     return this.nameResolver.resolveUniqueName(node.text, symbol)
   }
