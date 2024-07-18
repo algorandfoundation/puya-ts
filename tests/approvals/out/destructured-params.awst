@@ -11,3 +11,11 @@ subroutine init(): void
   var temp: tuple[uint64, bytes, bool] = <tuple>[2, "Hello", True]
   test(temp)
 }
+subroutine test2(args: tuple[bool, bool, readonlytuple[string, string]]): void
+{
+  var a: bool = True
+  var b: bool = False
+  var x: bool = args.0
+  var y: bool = args.1
+  var args2: tuple[bool, bool, readonlytuple[string, string]] = <tuple>[True, True, args.2]
+}

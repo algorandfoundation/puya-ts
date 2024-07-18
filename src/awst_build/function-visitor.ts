@@ -5,7 +5,7 @@ import * as awst from '../awst/nodes'
 import ts from 'typescript'
 import { codeInvariant, enumerate, instanceOfAny, invariant } from '../util'
 import { getNodeName, Statements } from '../visitor/syntax-names'
-import { CodeError, NotSupported, TodoError } from '../errors'
+import { CodeError, InternalError, NotSupported, TodoError } from '../errors'
 import { logger } from '../logger'
 import { nodeFactory } from '../awst/node-factory'
 import { requireExpressionOfType, requireInstanceBuilder } from './eb/util'
@@ -16,6 +16,7 @@ import { SwitchLoopContext } from './switch-loop-context'
 import { Block, Goto, ReturnStatement } from '../awst/nodes'
 import { SourceLocation } from '../awst/source-location'
 import { typeRegistry } from './type-registry'
+import { InstanceBuilder } from './eb'
 
 export type ContractMethodInfo = {
   className: string
@@ -104,11 +105,55 @@ export class FunctionVisitor
     }
   }
 
+  *bindingNameAssignment(bindingName: ts.BindingName, source: InstanceBuilder, sourceLocation: SourceLocation): Iterable<awst.Statement> {
+    switch (bindingName.kind) {
+      case ts.SyntaxKind.ObjectBindingPattern: {
+        for (const element of bindingName.elements) {
+          const sourceLocation = this.sourceLocation(element)
+          if (!ts.isIdentifier(element.name)) {
+            element.propertyName
+          }
+
+          const propertyNameIdentifier = element.propertyName ?? element.name
+          invariant(ts.isIdentifier(propertyNameIdentifier), 'propertyName must be an identifier')
+
+          const propertyName = this.textVisitor.accept(propertyNameIdentifier)
+          codeInvariant(!element.dotDotDotToken, 'Spread operator is not supported', sourceLocation)
+
+          yield* this.bindingNameAssignment(
+            element.name,
+            requireInstanceBuilder(source.memberAccess(propertyName, sourceLocation), sourceLocation),
+            sourceLocation,
+          )
+        }
+        break
+      }
+      case ts.SyntaxKind.ArrayBindingPattern: {
+        logger.warn(sourceLocation, 'TODO: Array binding patterns')
+        break
+      }
+
+      case ts.SyntaxKind.Identifier: {
+        const target = requireInstanceBuilder(this.accept(bindingName), sourceLocation)
+        invariant(target.ptype, 'Target of assignment must have ptype')
+        const value = requireExpressionOfType(source, target.ptype, sourceLocation)
+        yield nodeFactory.assignmentStatement({
+          target: target.resolveLValue(),
+          sourceLocation,
+          value,
+        })
+        break
+      }
+      default:
+        throw new InternalError('Unhandled binding name', { sourceLocation })
+    }
+  }
+
   evaluateParameterBindingExpressions(parameters: Iterable<ts.ParameterDeclaration>, sourceLocation: SourceLocation): awst.Statement[] {
     const assignments: awst.Statement[] = []
     for (const p of parameters) {
       const sourceLocation = this.sourceLocation(p)
-      if (ts.isObjectBindingPattern(p.name)) {
+      if (!ts.isIdentifier(p.name)) {
         const paramPType = this.context.resolver.resolve(p, sourceLocation)
         const paramName = this.context.getDestructuredParamName(p)
         const paramBuilder = typeRegistry.getInstanceEb(
@@ -119,29 +164,7 @@ export class FunctionVisitor
           }),
           paramPType,
         )
-        for (const element of p.name.elements) {
-          const sourceLocation = this.sourceLocation(element)
-          codeInvariant(ts.isIdentifier(element.name), 'Nested object destructuring is not supported', sourceLocation)
-          codeInvariant(!element.dotDotDotToken, 'Spread operator is not supported', sourceLocation)
-
-          const propertyName = this.textVisitor.accept(element.propertyName ? element.propertyName : element.name)
-          const elementPType = this.context.resolver.resolve(element, sourceLocation)
-          assignments.push(
-            nodeFactory.assignmentStatement({
-              target: nodeFactory.varExpression({
-                name: this.context.resolveVariable(element.name),
-                sourceLocation,
-                wtype: elementPType.wtypeOrThrow,
-              }),
-              sourceLocation,
-              value: requireExpressionOfType(paramBuilder.memberAccess(propertyName, sourceLocation), elementPType, sourceLocation),
-            }),
-          )
-        }
-      } else if (ts.isArrayBindingPattern(p.name)) {
-        logger.warn(sourceLocation, 'TODO: Array binding patterns')
-      } else {
-        invariant(ts.isIdentifier(p.name), 'Name should be identifier if none of the above')
+        assignments.push(...this.bindingNameAssignment(p.name, paramBuilder, sourceLocation))
       }
     }
 
@@ -175,14 +198,18 @@ export class FunctionVisitor
         logger.debug(sourceLocation, 'Ignoring variable statement with no initializer')
         return []
       }
-      const target = requireInstanceBuilder(this.accept(d.name), sourceLocation)
-      invariant(target.ptype, 'Target of assignment must have ptype')
-      const value = requireExpressionOfType(this.accept(d.initializer), target.ptype, sourceLocation)
-      return nodeFactory.assignmentStatement({
-        target: target.resolveLValue(),
-        sourceLocation: sourceLocation,
-        value,
-      })
+
+      // const target = requireInstanceBuilder(this.accept(d.name), sourceLocation)
+      // invariant(target.ptype, 'Target of assignment must have ptype')
+      const source = requireInstanceBuilder(this.accept(d.initializer), sourceLocation)
+      return Array.from(this.bindingNameAssignment(d.name, source, sourceLocation))
+      //
+      // const value = requireExpressionOfType(this.accept(d.initializer), target.ptype, sourceLocation)
+      // return nodeFactory.assignmentStatement({
+      //   target: target.resolveLValue(),
+      //   sourceLocation: sourceLocation,
+      //   value,
+      // })
     })
   }
 

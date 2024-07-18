@@ -136,6 +136,9 @@ export abstract class InstanceBuilder extends NodeBuilder {
       sourceLocation,
     })
   }
+  hasProperty(name: string): boolean {
+    throw new NotSupported(`Has property checks on ${this.typeDescription}`)
+  }
 }
 
 export abstract class LiteralExpressionBuilder extends InstanceBuilder {
