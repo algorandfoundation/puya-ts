@@ -12,6 +12,7 @@ import { expandMaybeArray } from '../util'
 import { nodeFactory } from '../awst/node-factory'
 import { BaseVisitor } from './base-visitor'
 import { ContractClassPType } from './ptypes/ptype-classes'
+import { requireConstant, requireConstantOfType } from './eb/util'
 
 type StatementOrDeferred = awst.ModuleStatement[] | awst.ModuleStatement | (() => awst.ModuleStatement[] | awst.ModuleStatement)
 
@@ -77,7 +78,8 @@ export class SourceFileVisitor extends BaseVisitor<SourceFileContext> implements
       }
       const ptype = this.context.getPTypeForNode(dec.name)
 
-      const value = CompileTimeConstantVisitor.getCompileTimeConstant(this.context, dec.initializer, ptype)
+      //const value = CompileTimeConstantVisitor.getCompileTimeConstant(this.context, dec.initializer, ptype)
+      const value = requireConstantOfType(this.accept(dec.initializer), ptype, sourceLocation)
 
       return nodeFactory.constantDeclaration({
         value: value.value,

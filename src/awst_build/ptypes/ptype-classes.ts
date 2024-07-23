@@ -2,7 +2,7 @@ import { wtypes } from '../../awst'
 import { codeInvariant, sortBy } from '../../util'
 import { WTuple, WType } from '../../awst/wtypes'
 import { Constants } from '../../constants'
-import { CodeError } from '../../errors'
+import { CodeError, NotSupported } from '../../errors'
 
 /**
  * Represents a public type visible to a developer of AlgoTS
@@ -338,5 +338,21 @@ export class BaseContractClassType extends ContractClassPType {
   }) {
     super(rest)
     this._isArc4 = isArc4
+  }
+}
+
+export class UnsupportedType extends PType {
+  readonly name: string
+  readonly module: string
+  readonly singleton = false
+
+  constructor({ name, module }: { name: string; module: string }) {
+    super()
+    this.name = name
+    this.module = module
+  }
+
+  get wtype(): WType {
+    throw new NotSupported(`The type ${this.fullName} is not supported`)
   }
 }

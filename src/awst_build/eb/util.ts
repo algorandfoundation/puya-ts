@@ -47,10 +47,10 @@ export function requireExpressionsOfType<const TPTypes extends [...PType[]]>(
 }
 
 export function requireConstant(
-  builder: InstanceBuilder,
+  builder: NodeBuilder,
   sourceLocation: SourceLocation,
 ): awst.StringConstant | awst.BytesConstant | awst.IntegerConstant | awst.BoolConstant {
-  const expr = builder.resolve()
+  const expr = requireInstanceBuilder(builder, sourceLocation).resolve()
   if (expr instanceof awst.StringConstant) {
     return expr
   }

@@ -32,6 +32,29 @@ export class SourceLocation {
     })
   }
 
+  static fromFile(sourceFile: ts.SourceFile, programDirectory: string): SourceLocation {
+    return new SourceLocation({
+      file: normalisePath(sourceFile.fileName, programDirectory),
+      line: 0,
+      endLine: 0,
+      column: 0,
+      endColumn: 0,
+    })
+  }
+
+  static fromTextRange(sourceFile: ts.SourceFile, textRange: ts.TextRange, programDirectory: string): SourceLocation {
+    const startLoc = sourceFile.getLineAndCharacterOfPosition(textRange.pos)
+    const endLoc = sourceFile.getLineAndCharacterOfPosition(textRange.end)
+
+    return new SourceLocation({
+      file: normalisePath(sourceFile.fileName, programDirectory),
+      line: startLoc.line,
+      endLine: endLoc.line,
+      column: startLoc.character,
+      endColumn: endLoc.character,
+    })
+  }
+
   static fromDiagnostic(diagnostic: ts.DiagnosticWithLocation, programDirectory: string): SourceLocation {
     const startLoc = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start)
 

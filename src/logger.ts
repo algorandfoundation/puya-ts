@@ -14,7 +14,7 @@ const colorLogger = {
 
 type NodeOrSourceLocation = SourceLocation | { sourceLocation: SourceLocation }
 
-type LogEvent = {
+export type LogEvent = {
   level: 'error' | 'info' | 'warn' | 'debug' | 'fatal'
   message: string
   sourceLocation: SourceLocation | undefined
@@ -37,6 +37,14 @@ class PuyaLogger {
     } else {
       colorLogger[logEvent.level]`[${paddedLevel}] ${logEvent.message}`
     }
+  }
+
+  reset(): void {
+    this.logEvents = []
+  }
+
+  export(): LogEvent[] {
+    return this.logEvents.slice()
   }
 
   error(error: Error): void

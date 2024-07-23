@@ -77,7 +77,7 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
   }
 
   visitImportKeyword(node: ts.ImportExpression): NodeBuilder {
-    throw new TodoError('ImportExpression')
+    throw new NotSupported('Dynamic imports', { sourceLocation: this.sourceLocation(node) })
   }
 
   visitNullKeyword(node: ts.NullLiteral): NodeBuilder {
