@@ -39,6 +39,7 @@ import {
   IntrinsicFunctionType,
   NamespacePType,
   ObjectPType,
+  UnsupportedType,
 } from './ptypes/ptype-classes'
 import { IntrinsicEnumBuilder } from './eb/intrinsic-enum-builder'
 import { OP_METADATA } from './op-metadata'
@@ -116,6 +117,9 @@ class TypeRegistry {
   resolveInstancePType(symbolName: SymbolName, sourceLocation: SourceLocation): PType {
     const ptype = this.tryResolveInstancePType(symbolName)
     if (!ptype) {
+      if (symbolName.module.startsWith('typescript/lib')) {
+        return new UnsupportedType(symbolName)
+      }
       throw new InternalError(`Cannot resolve ptype for ${symbolName}`, {
         sourceLocation,
       })

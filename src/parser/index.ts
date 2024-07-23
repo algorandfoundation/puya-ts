@@ -3,6 +3,12 @@ import { resolveModuleNameLiterals } from './resolve-module-name-literals'
 import { CompileOptions } from '../compile-options'
 import { SourceLocation } from '../awst/source-location'
 import { logger } from '../logger'
+import { resolveModuleMetadata } from './resolve-module-metadata'
+
+export type CreateProgramResult = {
+  sourceFiles: Record<string, ts.SourceFile>
+  program: ts.Program
+}
 
 export function createTsProgram(options: CompileOptions) {
   const compilerOptions: ts.CompilerOptions = {
@@ -20,7 +26,21 @@ export function createTsProgram(options: CompileOptions) {
   })
 
   reportDiagnostics(program)
-  return program
+
+  const sourceFiles = Object.fromEntries(
+    program
+      .getSourceFiles()
+      .filter((f) => !f.isDeclarationFile)
+      .map((f) => {
+        const metadata = resolveModuleMetadata(f, program)
+        return [metadata.moduleName, f]
+      }),
+  )
+
+  return {
+    sourceFiles,
+    program,
+  }
 }
 
 function reportDiagnostics(program: ts.Program) {
