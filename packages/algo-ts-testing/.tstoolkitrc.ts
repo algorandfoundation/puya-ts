@@ -8,8 +8,7 @@ const config: TsToolkitConfig = {
     main: 'index.ts',
     exports: {
       '.': "index.ts",
-      './runtime-helpers': 'runtime-helpers.ts',
-      './test-transformer': 'test-transformer/index.ts'
+      './runtime-helpers': 'runtime-helpers.ts'
     }
   }
 }
