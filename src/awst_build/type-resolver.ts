@@ -1,10 +1,12 @@
 import ts from 'typescript'
 import {
+  anyPType,
   ApprovalProgram,
   BaseContractType,
   boolPType,
   ClearStateProgram,
   ContractType,
+  nullPType,
   numberPType,
   PType,
   StringFunction,
@@ -18,9 +20,16 @@ import { CodeError, InternalError } from '../errors'
 import { typeRegistry } from './type-registry'
 import { logger } from '../logger'
 import { Constants } from '../constants'
-import { AppStorageType, ContractClassPType, FunctionPType, GlobalStateType, NamespacePType, ObjectPType } from './ptypes/ptype-classes'
+import {
+  AppStorageType,
+  ContractClassPType,
+  FunctionPType,
+  GlobalStateType,
+  NamespacePType,
+  ObjectPType,
+  UnsupportedType,
+} from './ptypes/ptype-classes'
 import { SymbolName } from './symbol-name'
-import path from 'node:path'
 
 export class TypeResolver {
   constructor(
@@ -68,19 +77,25 @@ export class TypeResolver {
   }
 
   resolveType(tsType: ts.Type, sourceLocation: SourceLocation): PType {
-    if (hasFlags(tsType.flags, ts.TypeFlags.Boolean) || hasFlags(tsType.flags, ts.TypeFlags.BooleanLiteral)) {
+    if (hasFlags(tsType.flags, ts.TypeFlags.Null)) {
+      return nullPType
+    }
+    if (hasFlags(tsType.flags, ts.TypeFlags.Any)) {
+      return anyPType
+    }
+    if (intersectsFlags(tsType.flags, ts.TypeFlags.Boolean | ts.TypeFlags.BooleanLiteral)) {
       return boolPType
     }
     if (hasFlags(tsType.flags, ts.TypeFlags.Void)) {
       return voidPType
     }
-    if (hasFlags(tsType.flags, ts.TypeFlags.String)) {
+    if (intersectsFlags(tsType.flags, ts.TypeFlags.String | ts.TypeFlags.StringLiteral)) {
       return stringPType
     }
     if (hasFlags(tsType.flags, ts.TypeFlags.Unknown)) {
       throw new CodeError(`Type resolves to unknown`, { sourceLocation })
     }
-    if (hasFlags(tsType.flags, ts.TypeFlags.Number) && tsType.getSymbol() === undefined) {
+    if (intersectsFlags(tsType.flags, ts.TypeFlags.Number | ts.TypeFlags.NumberLiteral) && tsType.getSymbol() === undefined) {
       return numberPType
     }
     if (isTupleReference(tsType)) {
@@ -162,7 +177,7 @@ export class TypeResolver {
     const returnType = this.resolveType(sig.getReturnType(), sourceLocation)
     const parameters = sig.getParameters().map((p) => {
       const paramType = this.checker.getTypeOfSymbol(p)
-      return this.resolveType(paramType, sourceLocation)
+      return [p.name, this.resolveType(paramType, sourceLocation)] as const
     })
     return new FunctionPType({
       returnType,

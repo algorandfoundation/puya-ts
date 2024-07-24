@@ -23,7 +23,7 @@ abstract class SubroutineExpressionBuilder extends FunctionBuilder {
 
   call(args: ReadonlyArray<InstanceBuilder>, _typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
     const mappedArgs = args.map((a, i) =>
-      nodeFactory.callArg({ name: undefined, value: requireExpressionOfType(a, this.ptype.parameters[i], sourceLocation) }),
+      nodeFactory.callArg({ name: undefined, value: requireExpressionOfType(a, this.ptype.parameters[i][1], sourceLocation) }),
     )
 
     return typeRegistry.getInstanceEb(

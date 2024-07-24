@@ -183,10 +183,10 @@ export class FunctionPType extends PType {
   readonly name: string
   readonly module: string
   readonly returnType: PType
-  readonly parameters: PType[]
+  readonly parameters: Array<readonly [string, PType]>
   readonly singleton = true
 
-  constructor(props: { name: string; module: string; returnType: PType; parameters: PType[] }) {
+  constructor(props: { name: string; module: string; returnType: PType; parameters: Array<readonly [string, PType]> }) {
     super()
     this.name = props.name
     this.module = props.module

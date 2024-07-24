@@ -4,18 +4,19 @@ import ts from 'typescript'
 import * as awst from '../awst/nodes'
 import { AppStorageDefinition, ContractFragment, ContractMethod } from '../awst/nodes'
 import { ClassElements } from '../visitor/syntax-names'
-import { AwstBuildFailureError, NotSupported, TodoError } from '../errors'
+import { AwstBuildFailureError, CodeError, NotSupported, TodoError } from '../errors'
 import { codeInvariant, invariant } from '../util'
 import { Constants } from '../constants'
 import { FunctionVisitor } from './function-visitor'
 import { logger } from '../logger'
 import { BaseVisitor } from './base-visitor'
 import { GlobalStateFunctionResultBuilder } from './eb/storage/global-state'
-import { ContractClassPType } from './ptypes/ptype-classes'
+import { ContractClassPType, GlobalStateType } from './ptypes/ptype-classes'
 import { nodeFactory } from '../awst/node-factory'
-import { DecoratorData, DecoratorVisitor } from './decorator-visitor'
+import { Arc4AbiDecoratorData, DecoratorData, DecoratorVisitor } from './decorator-visitor'
 import { SourceLocation } from '../awst/source-location'
-import { ARC4CreateOption, OnCompletionAction } from '../awst/arc4'
+import { ARC4CreateOption, DefaultArgumentSource, OnCompletionAction } from '../awst/arc4'
+import { isValidLiteralForPType } from './eb/util'
 
 export class ContractContext extends SourceFileContext {
   constructor(parent: SourceFileContext) {
@@ -101,6 +102,58 @@ export class ContractVisitor extends BaseVisitor<ContractContext> implements Vis
     throw new NotSupported('Index signatures')
   }
 
+  private buildDefaultArgument({
+    methodName,
+    parameterName,
+    config,
+    decoratorLocation,
+  }: {
+    methodName: string
+    parameterName: string
+    config: Arc4AbiDecoratorData['defaultArguments'][string]
+    decoratorLocation: SourceLocation
+  }): DefaultArgumentSource {
+    const [, paramType] = this._contractPType.methods[methodName].parameters.find(([p]) => p === parameterName) ?? [undefined, undefined]
+    codeInvariant(
+      paramType,
+      `Default argument specification '${parameterName}' does not match any parameters on the target method`,
+      decoratorLocation,
+    )
+    if (config.type === 'constant') {
+      codeInvariant(isValidLiteralForPType(config.value, paramType), `Literal cannot be converted to type ${paramType}`, decoratorLocation)
+
+      return {
+        source: 'constant',
+        value: config.value,
+      }
+    }
+    const methodType = this._contractPType.methods[config.name]
+    if (methodType) {
+      codeInvariant(
+        methodType.returnType.equals(paramType),
+        `Default argument specification for '${parameterName}' does not match parameter type`,
+        decoratorLocation,
+      )
+      return {
+        source: 'abi-method',
+        memberName: config.name,
+      }
+    }
+    const propertyType = this._contractPType.properties[config.name]
+    if (propertyType instanceof GlobalStateType) {
+      codeInvariant(
+        propertyType.contentType.equals(paramType),
+        `Default argument specification for '${parameterName}' does not match parameter type`,
+        decoratorLocation,
+      )
+      return {
+        source: 'global-state',
+        memberName: config.name,
+      }
+    }
+    throw new TodoError('Unsupported default argument config')
+  }
+
   private buildArc4Config({
     decorator,
     methodName,
@@ -112,6 +165,10 @@ export class ContractVisitor extends BaseVisitor<ContractContext> implements Vis
     isPublic: boolean
     methodLocation: SourceLocation
   }): awst.ContractMethod['arc4MethodConfig'] {
+    if (!isPublic && decorator && [Constants.arc4BareDecoratorName, Constants.arc4AbiDecoratorName].includes(decorator.type)) {
+      logger.error(methodLocation, 'Private method cannot be exposed as an abi method')
+    }
+
     if (decorator?.type === 'arc4.baremethod') {
       return {
         source_location: decorator.sourceLocation,
@@ -127,7 +184,17 @@ export class ContractVisitor extends BaseVisitor<ContractContext> implements Vis
         is_bare: false,
         name: decorator.nameOverride ?? methodName,
         readonly: decorator.readonly,
-        default_args: {}, // TODO
+        defaultArgs: Object.fromEntries(
+          Object.entries(decorator.defaultArguments).map(([parameterName, argConfig]) => [
+            parameterName,
+            this.buildDefaultArgument({
+              methodName,
+              parameterName,
+              config: argConfig,
+              decoratorLocation: decorator.sourceLocation,
+            }),
+          ]),
+        ),
         structs: {}, // TODO
       }
     } else if (isPublic && this._contractPType.isARC4) {
@@ -138,7 +205,7 @@ export class ContractVisitor extends BaseVisitor<ContractContext> implements Vis
         create: ARC4CreateOption.Disallow,
         name: methodName,
         readonly: false,
-        default_args: {}, // TODO
+        defaultArgs: {},
         structs: {}, // TODO
       }
     }

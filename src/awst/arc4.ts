@@ -22,6 +22,24 @@ export interface ARC4BareMethodConfig {
   is_bare: true
 }
 
+export type DefaultArgumentSource =
+  | {
+      source: 'constant'
+      value: string | bigint | number | boolean | Uint8Array
+    }
+  | {
+      source: 'global-state'
+      memberName: string
+    }
+  | {
+      source: 'local-state'
+      memberName: string
+    }
+  | {
+      source: 'abi-method'
+      memberName: string
+    }
+
 export interface ARC4ABIMethodConfig {
   source_location: SourceLocation | undefined
   name: string
@@ -29,8 +47,8 @@ export interface ARC4ABIMethodConfig {
   create: ARC4CreateOption
   readonly: boolean
   allowed_completion_types: [...OnCompletionAction[]]
-  default_args: Record<string, string>
-  structs: Readonly<Record<string, ARC32StructDef>>
+  defaultArgs: Record<string, DefaultArgumentSource>
+  structs: Record<string, ARC32StructDef>
 }
 
 export interface ARC32StructDef {

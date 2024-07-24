@@ -7,12 +7,11 @@ import { Visitor, accept } from '../visitor/visitor'
 import { ContractVisitor } from './contract-visitor'
 import { FunctionVisitor } from './function-visitor'
 import { logger, logPuyaExceptions } from '../logger'
-import { CompileTimeConstantVisitor } from './compile-time-constant-visitor'
 import { expandMaybeArray } from '../util'
 import { nodeFactory } from '../awst/node-factory'
 import { BaseVisitor } from './base-visitor'
 import { ContractClassPType } from './ptypes/ptype-classes'
-import { requireConstant, requireConstantOfType } from './eb/util'
+import { requireConstantOfType } from './eb/util'
 
 type StatementOrDeferred = awst.ModuleStatement[] | awst.ModuleStatement | (() => awst.ModuleStatement[] | awst.ModuleStatement)
 

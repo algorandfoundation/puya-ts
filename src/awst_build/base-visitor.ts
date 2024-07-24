@@ -22,7 +22,7 @@ import { ContractSuperBuilder, ContractThisBuilder } from './eb/contract-builder
 import { StringFunctionBuilder, StringExpressionBuilder } from './eb/string-expression-builder'
 import { nodeFactory } from '../awst/node-factory'
 import { ArrayLiteralExpressionBuilder } from './eb/array-literal-expression-builder'
-import { ScalarLiteralExpressionBuilder } from './eb/literal-expression-builder'
+import { ScalarLiteralExpressionBuilder } from './eb/scalar-literal-expression-builder'
 import { logger } from '../logger'
 
 export abstract class BaseVisitor<TContext extends BaseContext> implements Visitor<Expressions, NodeBuilder> {
@@ -81,7 +81,7 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
   }
 
   visitNullKeyword(node: ts.NullLiteral): NodeBuilder {
-    throw new TodoError('NullLiteral')
+    throw new NotSupported('Null values', { sourceLocation: this.sourceLocation(node) })
   }
 
   visitPrivateIdentifier(node: ts.PrivateIdentifier): NodeBuilder {
