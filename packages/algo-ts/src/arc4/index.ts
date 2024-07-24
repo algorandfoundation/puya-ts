@@ -11,7 +11,8 @@ export class Contract extends BaseContract {
 type CreateOptions = 'allow' | 'disallow' | 'require'
 export type OnCompleteAction = 'NoOp' | 'OptIn' | 'CloseOut' | 'UpdateApplication' | 'DeleteApplication'
 
-export type AbiMethodConfig = {
+export type DefaultArgument<TContract extends Contract> = { constant: string | boolean | number | bigint } | { from: keyof TContract }
+export type AbiMethodConfig<TContract extends Contract> = {
   /**
    * Which on complete action(s) are allowed when invoking this method.
    * @default 'NoOp'
@@ -26,14 +27,16 @@ export type AbiMethodConfig = {
    * Does the method only perform read operations (no mutation of chain state)
    * @default false
    */
-  readonly?: false
+  readonly?: boolean
   /**
    * Override the name used to generate the abi method selector
    */
   name?: string
+
+  defaultArguments?: Record<string, DefaultArgument<TContract>>
 }
-export function abimethod(config?: AbiMethodConfig) {
-  return function (target: AnyFunction, ctx: ClassMethodDecoratorContext<Contract>) {}
+export function abimethod<TContract extends Contract>(config?: AbiMethodConfig<TContract>) {
+  return function (target: AnyFunction, ctx: ClassMethodDecoratorContext<TContract>) {}
 }
 
 export type BareMethodConfig = {
@@ -48,6 +51,6 @@ export type BareMethodConfig = {
    */
   onCreate?: CreateOptions
 }
-export function baremethod(config?: BareMethodConfig) {
-  return function (target: () => DeliberateAny, ctx: ClassMethodDecoratorContext<Contract>) {}
+export function baremethod<TContract extends Contract>(config?: BareMethodConfig) {
+  return function (target: () => DeliberateAny, ctx: ClassMethodDecoratorContext<TContract>) {}
 }

@@ -7,8 +7,9 @@ import { BytesExpressionBuilder } from './bytes-expression-builder'
 import { UInt64ExpressionBuilder } from './uint64-expression-builder'
 import { BoolExpressionBuilder } from './bool-expression-builder'
 import { CodeError } from '../../errors'
-
-type ConstantValue = bigint | Uint8Array | boolean
+import { ConstantValue } from '../../awst'
+import { codeInvariant } from '../../util'
+import { isValidLiteralForPType } from './util'
 
 export class ScalarLiteralExpressionBuilder extends LiteralExpressionBuilder {
   resolve(): Expression {
@@ -43,21 +44,17 @@ export class ScalarLiteralExpressionBuilder extends LiteralExpressionBuilder {
   }
   resolvableToPType(ptype: PType): boolean {
     if (ptype.equals(bytesPType)) {
-      if (this.value instanceof Uint8Array) {
-        return true
-      }
+      return this.value instanceof Uint8Array
     } else if (ptype.equals(uint64PType)) {
-      if (typeof this.value === 'bigint') {
-        return true
-      }
+      return typeof this.value === 'bigint'
     } else if (ptype.equals(boolPType)) {
-      if (typeof this.value === 'boolean') {
-        return true
-      }
+      return typeof this.value === 'boolean'
     }
     return false
   }
+
   resolveToPType(ptype: PType, sourceLocation: SourceLocation): InstanceBuilder {
+    codeInvariant(isValidLiteralForPType(this.value, ptype), `Literal cannot be converted to type ${ptype.name}`, sourceLocation)
     if (ptype.equals(bytesPType)) {
       if (this.value instanceof Uint8Array) {
         return new BytesExpressionBuilder(nodeFactory.bytesConstant({ value: this.value, sourceLocation: this.sourceLocation }))

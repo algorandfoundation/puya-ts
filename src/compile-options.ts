@@ -11,11 +11,11 @@ export interface CompileOptions {
   outDir: string
 }
 
-export const buildOptions = ({
+export const buildCompileOptions = ({
   paths,
   ...rest
 }: {
-  paths: string
+  paths: string[]
   outputAwst: boolean
   outDir: string
   outputAwstJson: boolean

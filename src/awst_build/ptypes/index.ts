@@ -7,6 +7,7 @@ import {
   TransientType,
   FunctionPType,
   BaseContractClassType,
+  UnsupportedType,
 } from './ptype-classes'
 import { Constants } from '../../constants'
 export { PType, TuplePType, IntrinsicEnumType } from './ptype-classes'
@@ -15,6 +16,15 @@ export const voidPType = new InstanceType({
   name: 'void',
   module: 'lib.d.ts',
   wtype: wtypes.voidWType,
+})
+
+export const nullPType = new UnsupportedType({
+  name: 'null',
+  module: 'lib.d.ts',
+})
+export const anyPType = new UnsupportedType({
+  name: 'any',
+  module: 'lib.d.ts',
 })
 
 export const boolPType = new InstanceType({

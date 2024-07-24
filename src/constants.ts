@@ -11,4 +11,6 @@ export const Constants = {
   referenceModuleName: `${algoTsPackage}/reference.d.ts`,
   stateModuleName: `${algoTsPackage}/state.d.ts`,
   primitivesModuleName: `${algoTsPackage}/primitives.d.ts`,
+  arc4BareDecoratorName: 'arc4.baremethod',
+  arc4AbiDecoratorName: 'arc4.abimethod',
 } as const

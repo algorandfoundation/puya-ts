@@ -3,7 +3,8 @@ import { resolveModuleNameLiterals } from './resolve-module-name-literals'
 import { CompileOptions } from '../compile-options'
 import { SourceLocation } from '../awst/source-location'
 import { logger } from '../logger'
-import { resolveModuleMetadata } from './resolve-module-metadata'
+import { normalisePath } from '../util'
+import { DeliberateAny } from '../typescript-helpers'
 
 export type CreateProgramResult = {
   sourceFiles: Record<string, ts.SourceFile>
@@ -24,6 +25,7 @@ export function createTsProgram(options: CompileOptions) {
     ...host,
     resolveModuleNameLiterals,
   })
+  const programDirectory = program.getCurrentDirectory()
 
   reportDiagnostics(program)
 
@@ -32,8 +34,13 @@ export function createTsProgram(options: CompileOptions) {
       .getSourceFiles()
       .filter((f) => !f.isDeclarationFile)
       .map((f) => {
-        const metadata = resolveModuleMetadata(f, program)
-        return [metadata.moduleName, f]
+        if (!(f as DeliberateAny)['externalModuleIndicator']) {
+          logger.warn(
+            SourceLocation.fromFile(f, programDirectory),
+            'File is being interpreted as a script because it has no import or export statements. Containing statements will be evaluated in a global context.',
+          )
+        }
+        return [normalisePath(f.fileName, programDirectory), f]
       }),
   )
 

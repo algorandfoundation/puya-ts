@@ -1,9 +1,13 @@
 import { InstanceBuilder, LiteralExpressionBuilder, NodeBuilder } from './index'
-import { awst } from '../../awst'
+import { awst, ConstantValue } from '../../awst'
 import { CodeError } from '../../errors'
-import { PType } from '../ptypes'
+import { biguintPType, boolPType, bytesPType, PType, stringPType, uint64PType } from '../ptypes'
 import { SourceLocation } from '../../awst/source-location'
 import { DeliberateAny } from '../../typescript-helpers'
+import { codeInvariant } from '../../util'
+import { StringConstant } from '../../awst/nodes'
+import { ScalarLiteralExpressionBuilder } from './scalar-literal-expression-builder'
+import { boolean } from 'zod'
 
 export function requireExpressionOfType(builder: NodeBuilder, ptype: PType, sourceLocation: SourceLocation): awst.Expression {
   if (builder instanceof LiteralExpressionBuilder) {
@@ -46,35 +50,10 @@ export function requireExpressionsOfType<const TPTypes extends [...PType[]]>(
   throw new CodeError(`Expected ${ptypes.length} args with types ${ptypes.join(', ')}`, { sourceLocation })
 }
 
-export function requireConstant(
-  builder: NodeBuilder,
-  sourceLocation: SourceLocation,
-): awst.StringConstant | awst.BytesConstant | awst.IntegerConstant | awst.BoolConstant {
-  const expr = requireInstanceBuilder(builder, sourceLocation).resolve()
-  if (expr instanceof awst.StringConstant) {
-    return expr
-  }
-  if (expr instanceof awst.BytesConstant) {
-    return expr
-  }
-  if (expr instanceof awst.IntegerConstant) {
-    return expr
-  }
-  if (expr instanceof awst.BoolConstant) {
-    return expr
-  }
-  throw new CodeError(`Expected compile time constant value`, { sourceLocation })
-}
-export function requireSpecificConstant<T extends awst.Constant>(
-  builder: InstanceBuilder,
-  sourceLocation: SourceLocation,
-  constantType: { new (...args: DeliberateAny): T },
-): T {
-  const expr = builder.resolve()
-  if (expr instanceof constantType) {
-    return expr
-  }
-  throw new CodeError(`Expected compile time constant value`, { sourceLocation })
+export function requireStringConstant(builder: InstanceBuilder, sourceLocation: SourceLocation): awst.StringConstant {
+  const constant = requireConstantOfType(builder, stringPType, sourceLocation)
+  codeInvariant(constant instanceof StringConstant, 'Expected string constant')
+  return constant
 }
 
 export function requestConstantOfType(builder: NodeBuilder, ptype: PType, sourceLocation: SourceLocation): awst.Constant | undefined {
@@ -105,4 +84,32 @@ export function requireConstantOfType(builder: NodeBuilder, ptype: PType, source
   const constExpr = requestConstantOfType(builder, ptype, sourceLocation)
   if (constExpr) return constExpr
   throw new CodeError(`Expected constant of type ${ptype}`, { sourceLocation })
+}
+
+export function requireConstantValue(builder: NodeBuilder, sourceLocation: SourceLocation): ConstantValue {
+  if (builder instanceof ScalarLiteralExpressionBuilder) {
+    return builder.value
+  }
+  const value = requireInstanceBuilder(builder, sourceLocation).resolve()
+  codeInvariant(isConstant(value), 'Expected compile time constant')
+  return value.value
+}
+
+export function isValidLiteralForPType(literalValue: ConstantValue, ptype: PType): boolean {
+  if (ptype.equals(stringPType)) {
+    return typeof literalValue === 'string'
+  }
+  if (ptype.equals(uint64PType)) {
+    return typeof literalValue === 'bigint' && 0 <= literalValue && literalValue <= 2n ** 64n
+  }
+  if (ptype.equals(biguintPType)) {
+    return typeof literalValue === 'bigint' && 0 <= literalValue && literalValue <= 2n ** 512n
+  }
+  if (ptype.equals(boolPType)) {
+    return typeof literalValue === 'boolean'
+  }
+  if (ptype.equals(bytesPType)) {
+    return literalValue instanceof Uint8Array
+  }
+  return false
 }

@@ -2,14 +2,15 @@ import { arc4AbiMethodDecorator, arc4BareMethodDecorator, PType } from '../ptype
 import { InstanceBuilder, NodeBuilder } from './index'
 import { SourceLocation } from '../../awst/source-location'
 import { ARC4CreateOption, OnCompletionAction } from '../../awst/arc4'
-import { DecoratorData } from '../decorator-visitor'
+import { Arc4AbiDecoratorData, DecoratorData } from '../decorator-visitor'
 import { codeInvariant } from '../../util'
 import { ObjectLiteralExpressionBuilder } from './object-literal-expression-builder'
 import { StringExpressionBuilder } from './string-expression-builder'
-import { requireConstant, requireInstanceBuilder, requireSpecificConstant } from './util'
-import { StringConstant } from '../../awst/nodes'
+import { requireConstantValue, requireStringConstant } from './util'
 import { ArrayLiteralExpressionBuilder } from './array-literal-expression-builder'
 import { CodeError } from '../../errors'
+import { logger } from '../../logger'
+import { Constants } from '../../constants'
 
 const ocaMap: Record<string, OnCompletionAction> = {
   NoOp: OnCompletionAction.NoOp,
@@ -50,7 +51,7 @@ export class Arc4BareMethodDecoratorBuilder extends NodeBuilder {
       ? mapStringValue(createMap, config.memberAccess('create', sourceLocation), sourceLocation)
       : ARC4CreateOption.Disallow
     return new DecoratorDataBuilder(sourceLocation, {
-      type: 'arc4.baremethod',
+      type: Constants.arc4BareDecoratorName,
       ocas,
       create: createOption,
       sourceLocation: sourceLocation,
@@ -71,8 +72,9 @@ export class Arc4AbiMethodDecoratorBuilder extends NodeBuilder {
         ocas: [OnCompletionAction.NoOp],
         create: ARC4CreateOption.Disallow,
         sourceLocation: sourceLocation,
-        nameOverride: '',
+        nameOverride: undefined,
         readonly: false,
+        defaultArguments: {},
       })
     }
     codeInvariant(args.length === 1, `${this.ptype} expects at most 1 argument`, sourceLocation)
@@ -80,22 +82,30 @@ export class Arc4AbiMethodDecoratorBuilder extends NodeBuilder {
     codeInvariant(config instanceof ObjectLiteralExpressionBuilder, `${this.ptype} expects an object literal as its 1st argument`)
 
     const ocas = resolveOnCompletionActions(config, sourceLocation)
+    if (ocas.length !== new Set(ocas).size) {
+      logger.error(sourceLocation, 'Duplicate on completion actions')
+    }
     const createOption = config.hasProperty('create')
       ? mapStringValue(createMap, config.memberAccess('create', sourceLocation), sourceLocation)
       : ARC4CreateOption.Disallow
+    const nameOverride = config.hasProperty('name')
+      ? requireStringConstant(config.memberAccess('name', sourceLocation), sourceLocation).value
+      : undefined
+
     return new DecoratorDataBuilder(sourceLocation, {
-      type: 'arc4.abimethod',
+      type: Constants.arc4AbiDecoratorName,
       ocas,
       create: createOption,
       sourceLocation: sourceLocation,
-      nameOverride: '',
+      nameOverride,
       readonly: false,
+      defaultArguments: resolveDefaultArguments(config, sourceLocation),
     })
   }
 }
 
 function mapStringValue<T>(map: Record<string, T>, value: InstanceBuilder, sourceLocation: SourceLocation) {
-  const strValue = requireSpecificConstant(value, sourceLocation, StringConstant).value
+  const strValue = requireStringConstant(value, sourceLocation).value
   if (Object.hasOwn(map, strValue)) return map[strValue]
   throw new CodeError(`${strValue} is not valid at this location`, { sourceLocation })
 }
@@ -110,6 +120,39 @@ function resolveOnCompletionActions(config: ObjectLiteralExpressionBuilder, sour
   } else {
     throw new CodeError('Unexpected value for onComplete', { sourceLocation })
   }
+}
+
+function resolveDefaultArguments(
+  config: ObjectLiteralExpressionBuilder,
+  sourceLocation: SourceLocation,
+): Arc4AbiDecoratorData['defaultArguments'] {
+  const result: Arc4AbiDecoratorData['defaultArguments'] = {}
+  if (!config.hasProperty('defaultArguments')) return result
+  const defaultArgumentsConfig = config.memberAccess('defaultArguments', sourceLocation)
+  codeInvariant(
+    defaultArgumentsConfig instanceof ObjectLiteralExpressionBuilder,
+    `Default argument specification should be an object literal`,
+  )
+  for (const [parameterName] of defaultArgumentsConfig.ptype.orderedProperties()) {
+    const paramConfig = defaultArgumentsConfig.memberAccess(parameterName, sourceLocation)
+    codeInvariant(paramConfig instanceof ObjectLiteralExpressionBuilder, 'Default argument specification should be an object literal')
+
+    if (paramConfig.hasProperty('fromConstant')) {
+      result[parameterName] = {
+        type: 'constant',
+        value: requireConstantValue(paramConfig.memberAccess('fromConstant', sourceLocation), sourceLocation),
+      }
+    } else if (paramConfig.hasProperty('fromMember')) {
+      result[parameterName] = {
+        type: 'member',
+        name: requireStringConstant(paramConfig.memberAccess('fromMember', sourceLocation), sourceLocation).value,
+      }
+    } else {
+      logger.error(sourceLocation, 'Default argument specifications should specify fromConstant or fromMember')
+    }
+  }
+
+  return result
 }
 
 export class DecoratorDataBuilder extends NodeBuilder {
