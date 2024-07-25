@@ -1,6 +1,6 @@
+import typescript from '@rollup/plugin-typescript'
 import { defineConfig } from 'vitest/config'
-import typescript from "@rollup/plugin-typescript";
-import {puyaTsTransformer} from "./src/test-transformer";
+import { puyaTsTransformer } from './src/test-transformer'
 
 export default defineConfig({
   resolve: {
@@ -11,14 +11,15 @@ export default defineConfig({
     typescript({
       target: 'ES2022',
       compilerOptions: {
-        lib: ['es2023']
+        lib: ['es2023'],
       },
       transformers: {
-        before: [puyaTsTransformer]
-      }
-    })
+        before: [puyaTsTransformer],
+      },
+    }),
   ],
   test: {
     globals: true,
+    setupFiles: ['./vitest.setup.ts'],
   },
 })

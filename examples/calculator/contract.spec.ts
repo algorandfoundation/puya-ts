@@ -1,38 +1,46 @@
-import { TestHarness } from '@algorandfoundation/algo-ts-testing'
-import { describe, expect, it } from 'vitest'
+import { AvmError } from '@algorandfoundation/algo-ts-testing'
+import { beforeEach, describe, expect, it } from 'vitest'
+import type { AlgorandTestContext } from '../../vitest.setup'
+import type MyContract from './contract.algo'
+
+interface ContractTestContext extends AlgorandTestContext {
+  contract: MyContract
+}
+
+beforeEach<ContractTestContext>(async (context) => {
+  context.contract = new (await import('./contract.algo')).default()
+})
 
 describe('Calculator', () => {
-  const harness = TestHarness.for(() => import('./contract.algo'))
   describe('when calling with with no args', () => {
-    it('errors', async () => {
-      const result = await harness.simulate([
+    it<ContractTestContext>('errors', async ({ ctx, contract }) => {
+      ctx.gtxn = [
         {
           sender: '',
           type: 'appl',
           args: [],
         },
-      ])
-      expect(result.returnValue).toBeInstanceOf(Error)
-      if (result.returnValue instanceof Error) {
-        expect(result.returnValue.message).toBe('Unknown operation')
-      }
+      ]
+
+      expect(() => contract.approvalProgram()).toThrowError(new AvmError('Unknown operation'))
     })
   })
-  describe('when calling with with no args', () => {
-    it('Returns 1', async () => {
-      const result = await harness.simulate([
+  describe('when calling with with three args', () => {
+    it<ContractTestContext>('Returns 1', async ({ ctx, contract }) => {
+      ctx.gtxn = [
         {
           sender: '',
           type: 'appl',
           args: [1, 2, 3],
         },
-      ])
-      const [left, right, outcome] = result.exportLogs('i', 'i', 's')
+      ]
+      const result = contract.approvalProgram()
+      const [left, right, outcome] = ctx.exportLogs('i', 'i', 's')
 
       expect(left).toBe(2n)
       expect(right).toBe(3n)
-      expect(outcome).toBe('2 + 3 = 5')
-      expect(result.returnValue).toBe(1n)
+      expect(outcome).toBe('32 + 33 = 35')
+      expect(result).toBe(true)
     })
   })
 })

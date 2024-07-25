@@ -18,11 +18,11 @@ import { AccountCls, ApplicationCls, AssetCls } from './reference'
 import { DeliberateAny } from './typescript-helpers'
 
 export class TestExecutionContext implements internal.ExecutionContext {
-  #logs: bytes[] = []
-  #txnGroup: Transaction[]
+  logs: bytes[] = []
+  txnGroup: Transaction[] = []
 
   constructor(txnGroup: Transaction[]) {
-    this.#txnGroup = txnGroup
+    this.txnGroup = txnGroup
   }
 
   account(address: bytes): Account {
@@ -46,10 +46,10 @@ export class TestExecutionContext implements internal.ExecutionContext {
   }
 
   log(...args: (Uint64Compat | BytesCompat)[]): void {
-    this.#logs.push(args.map(toBytes).reduce((left, right) => left.concat(right)))
+    this.logs.push(args.map(toBytes).reduce((left, right) => left.concat(right)))
   }
   get ops(): Partial<internal.OpsNamespace> {
-    return buildOpsImplementation(this.#txnGroup)
+    return buildOpsImplementation(this.txnGroup)
   }
   makeUint64(v: Uint64Compat): uint64 {
     return Uint64Cls.fromCompat(v).asAlgoTs()
@@ -74,7 +74,7 @@ export class TestExecutionContext implements internal.ExecutionContext {
     return BigUintCls.fromCompat(v).asAlgoTs()
   }
   get rawLogs() {
-    return this.#logs.map((l) => toExternalValue(l))
+    return this.logs.map((l) => toExternalValue(l))
   }
 
   assert(condition: unknown, message?: string): asserts condition {

@@ -1,19 +1,28 @@
-import { TestHarness } from '@algorandfoundation/algo-ts-testing'
-import { describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
+import { AlgorandTestContext } from '../../vitest.setup'
+import HelloWorldContract from './contract.algo'
+
+interface ContractTestContext extends AlgorandTestContext {
+  contract: HelloWorldContract
+}
+
+beforeEach<ContractTestContext>(async (context) => {
+  context.contract = new (await import('./contract.algo')).default()
+})
 
 describe('When calling the HelloWorldContract', () => {
-  const harness = TestHarness.for(() => import('./contract.algo'))
   describe("with ['world']", () => {
-    it('logs Hello, World', async () => {
-      const result = await harness.simulate([
+    it<ContractTestContext>('logs Hello, World', async ({ ctx, contract }) => {
+      ctx.gtxn = [
         {
           sender: '',
           type: 'appl',
           args: ['World'],
         },
-      ])
-      expect(result.exportLogs('s')).toStrictEqual(['Hello, World'])
-      expect(result.returnValue).toBe(1n)
+      ]
+      const result = contract.approvalProgram()
+      expect(ctx.exportLogs('s')).toStrictEqual(['Hello, 576f726c64'])
+      expect(result).toBe(true)
     })
   })
 })

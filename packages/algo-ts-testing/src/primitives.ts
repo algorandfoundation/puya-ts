@@ -1,7 +1,7 @@
-import { BigUintCompat, bytes, BytesCompat, uint64, biguint, Uint64Compat, internal } from '@algorandfoundation/algo-ts'
+import { biguint, BigUintCompat, bytes, BytesCompat, internal, uint64, Uint64Compat } from '@algorandfoundation/algo-ts'
+import { bigIntToUint8Array, uint8ArrayToBigInt, uint8ArrayToHex, utf8ToUint8Array } from './encoding-util'
 import { AvmError, internalError } from './errors'
 import { nameOfType } from './util'
-import { bigIntToUint8Array, uint8ArrayToBigInt, uint8ArrayToHex, utf8ToUint8Array } from './encoding-util'
 
 export function btoi(bytes: BytesCompat): uint64 {
   return BytesCls.fromCompat(bytes).toUint64().asAlgoTs()
@@ -165,8 +165,8 @@ export class BytesCls extends AlgoTsPrimitiveCls {
   toBytes(): BytesCls {
     return this
   }
-  at(i: Uint64Compat): BytesCls {
-    const start = Uint64Cls.fromCompat(i).asNumber()
+  at(i: Uint64Compat | Uint64Cls): BytesCls {
+    const start = i instanceof Uint64Cls ? i.asNumber() : Uint64Cls.fromCompat(i).asNumber()
     return new BytesCls(this.#v.slice(start, start + 1))
   }
 
@@ -199,6 +199,9 @@ export class BytesCls extends AlgoTsPrimitiveCls {
   }
   toBigUint(): BigUintCls {
     return new BigUintCls(uint8ArrayToBigInt(this.#v))
+  }
+  toString(): string {
+    return this.value
   }
 
   asAlgoTs(): bytes {
