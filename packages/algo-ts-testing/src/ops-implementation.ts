@@ -14,10 +14,10 @@ export const buildOpsImplementation = (txnGroup: Transaction[]): Partial<interna
       applicationArgs(_n: Uint64Compat): bytes {
         return currentTransaction.args[Uint64Cls.getNumber(_n)]
       },
-      sender(): Account {
+      get sender(): Account {
         return currentTransaction.sender
       },
-      numAppArgs(): uint64 {
+      get numAppArgs(): uint64 {
         return Uint64Cls.getNumber(currentTransaction.args.length)
       },
     } as unknown as typeof Txn,

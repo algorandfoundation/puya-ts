@@ -1,7 +1,46 @@
-import { Account, Asset, Application, bytes, uint64 } from '@algorandfoundation/algo-ts'
+import { Account, Application, Asset, bytes, uint64 } from '@algorandfoundation/algo-ts'
 
 export class AccountCls implements Account {
   constructor(private address: bytes) {}
+  get balance(): uint64 {
+    throw new Error('Not implemented')
+  }
+  get minBalance(): uint64 {
+    throw new Error('Not implemented')
+  }
+  get authAddress(): Account {
+    throw new Error('Not implemented')
+  }
+  get totalNumUint(): uint64 {
+    throw new Error('Not implemented')
+  }
+  get totalNumByteSlice(): uint64 {
+    throw new Error('Not implemented')
+  }
+  get totalExtraAppPages(): uint64 {
+    throw new Error('Not implemented')
+  }
+  get totalAppsCreated(): uint64 {
+    throw new Error('Not implemented')
+  }
+  get totalAppsOptedIn(): uint64 {
+    throw new Error('Not implemented')
+  }
+  get totalAssetsCreated(): uint64 {
+    throw new Error('Not implemented')
+  }
+  get totalAssets(): uint64 {
+    throw new Error('Not implemented')
+  }
+  get totalBoxes(): uint64 {
+    throw new Error('Not implemented')
+  }
+  get totalBoxBytes(): uint64 {
+    throw new Error('Not implemented')
+  }
+  isOptedIn(_assetOrApp: Asset | Application): boolean {
+    throw new Error('Method not implemented.')
+  }
 
   get bytes(): bytes {
     return this.address
