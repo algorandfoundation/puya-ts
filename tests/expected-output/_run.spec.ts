@@ -49,29 +49,6 @@ describe('Expected output', () => {
       }
     })
   })
-  // it('has expected output', () => {
-  //   const expectedLogs = extractExpectLogs(result)
-  //   const matchedLogs = new Set<LogEvent>()
-  //   for (const expectedLog of expectedLogs) {
-  //     const matchedLog = result.logs.find(
-  //       (l) =>
-  //         l.level === expectedLog.level &&
-  //         l.sourceLocation?.line === expectedLog.sourceLocation.line &&
-  //         l.message.startsWith(expectedLog.message),
-  //     )
-  //     if (!matchedLog) {
-  //       throw new Error(`${expectedLog.sourceLocation} Missing log: [${expectedLog.level}] ${expectedLog.message}`)
-  //     } else {
-  //       matchedLogs.add(matchedLog)
-  //     }
-  //   }
-  //   const unmatchedLogs = result.logs.filter((l) => !matchedLogs.has(l))
-  //   for (const unmatchedLog of unmatchedLogs) {
-  //     // eslint-disable-next-line no-console
-  //     console.warn(`${unmatchedLog.sourceLocation} [${unmatchedLog.level}] ${unmatchedLog.message}`)
-  //   }
-  //   expect(unmatchedLogs.length).toBe(1)
-  // })
 })
 
 type ExpectedLog = {

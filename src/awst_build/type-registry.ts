@@ -9,6 +9,8 @@ import {
   assertFunction,
   AssetFunction,
   assetPType,
+  BigUintFunction,
+  biguintPType,
   boolPType,
   BytesFunction,
   bytesPType,
@@ -51,6 +53,7 @@ import { Arc4AbiMethodDecoratorBuilder, Arc4BareMethodDecoratorBuilder } from '.
 import { NamespaceBuilder } from './eb/namespace-builder'
 import { VoidExpressionBuilder } from './eb/void-expression-builder'
 import { ObjectExpressionBuilder } from './eb/object-literal-expression-builder'
+import { BigUintExpressionBuilder, BigUintFunctionBuilder } from './eb/biguint-expression-builder'
 
 type ValueExpressionBuilderCtor = { new (expr: awst.Expression, ptype: PType): InstanceExpressionBuilder }
 type SingletonExpressionBuilderCtor = { new (sourceLocation: SourceLocation, ptype: PType): NodeBuilder }
@@ -188,6 +191,8 @@ export const typeRegistry = new TypeRegistry()
 typeRegistry.register({ ptype: boolPType, instanceEb: BoolExpressionBuilder })
 typeRegistry.register({ ptype: uint64PType, instanceEb: UInt64ExpressionBuilder })
 typeRegistry.register({ ptype: Uint64Function, singletonEb: UInt64FunctionBuilder })
+typeRegistry.register({ ptype: biguintPType, instanceEb: BigUintExpressionBuilder })
+typeRegistry.register({ ptype: BigUintFunction, singletonEb: BigUintFunctionBuilder })
 typeRegistry.register({ ptype: bytesPType, instanceEb: BytesExpressionBuilder })
 typeRegistry.register({ ptype: BytesFunction, singletonEb: BytesFunctionBuilder })
 typeRegistry.register({ ptype: stringPType, instanceEb: StringExpressionBuilder })

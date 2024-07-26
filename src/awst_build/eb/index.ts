@@ -1,7 +1,9 @@
 import { SourceLocation } from '../../awst/source-location'
 import { awst, wtypes } from '../../awst'
 import { CodeError, NotSupported } from '../../errors'
-import { boolPType, bytesPType, PType, uint64PType } from '../ptypes'
+import { PType } from '../ptypes'
+import { logger } from '../../logger'
+import { Expression } from '../../awst/nodes'
 
 export enum BuilderComparisonOp {
   eq = '==',
@@ -73,6 +75,12 @@ export abstract class NodeBuilder {
     })
   }
 
+  indexAccess(index: InstanceBuilder, sourceLocation: SourceLocation): NodeBuilder {
+    throw new NotSupported(`Indexing ${this.typeDescription}`, {
+      sourceLocation,
+    })
+  }
+
   boolEval(sourceLocation: SourceLocation): awst.Expression {
     throw new NotSupported(`Boolean evaluation of ${this.typeDescription}`, {
       sourceLocation,
@@ -104,8 +112,13 @@ export abstract class InstanceBuilder extends NodeBuilder {
     })
   }
 
-  unaryOp(op: BuilderUnaryOp, sourceLocation: SourceLocation): InstanceBuilder {
-    throw new NotSupported(`Unary ${op} op on ${this.typeDescription}`, {
+  prefixUnaryOp(op: BuilderUnaryOp, sourceLocation: SourceLocation): InstanceBuilder {
+    throw new NotSupported(`Prefix Unary ${op} op on ${this.typeDescription}`, {
+      sourceLocation,
+    })
+  }
+  postfixUnaryOp(op: BuilderUnaryOp, sourceLocation: SourceLocation): InstanceBuilder {
+    throw new NotSupported(`Postfix Unary ${op} op on ${this.typeDescription}`, {
       sourceLocation,
     })
   }
@@ -136,7 +149,7 @@ export abstract class InstanceBuilder extends NodeBuilder {
       sourceLocation,
     })
   }
-  hasProperty(name: string): boolean {
+  hasProperty(_name: string): boolean {
     throw new NotSupported(`Has property checks on ${this.typeDescription}`)
   }
 }
@@ -159,6 +172,21 @@ export abstract class FunctionBuilder extends NodeBuilder {
 
   constructor(location: SourceLocation) {
     super(location)
+  }
+}
+
+export abstract class ParameterlessFunctionBuilder extends FunctionBuilder {
+  constructor(
+    private readonly expression: Expression,
+    private readonly definition: (expr: Expression, sourceLocation: SourceLocation) => NodeBuilder,
+  ) {
+    super(expression.sourceLocation)
+  }
+
+  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    if (args.length) logger.error(sourceLocation, 'Function expects no arguments')
+    if (typeArgs.length) logger.error(sourceLocation, 'Function expects type arguments')
+    return this.definition(this.expression, sourceLocation)
   }
 }
 

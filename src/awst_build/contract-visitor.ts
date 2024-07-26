@@ -4,7 +4,7 @@ import ts from 'typescript'
 import * as awst from '../awst/nodes'
 import { AppStorageDefinition, ContractFragment, ContractMethod } from '../awst/nodes'
 import { ClassElements } from '../visitor/syntax-names'
-import { AwstBuildFailureError, CodeError, NotSupported, TodoError } from '../errors'
+import { AwstBuildFailureError, NotSupported, TodoError } from '../errors'
 import { codeInvariant, invariant } from '../util'
 import { Constants } from '../constants'
 import { FunctionVisitor } from './function-visitor'
@@ -12,10 +12,9 @@ import { logger } from '../logger'
 import { BaseVisitor } from './base-visitor'
 import { GlobalStateFunctionResultBuilder } from './eb/storage/global-state'
 import { ContractClassPType, GlobalStateType } from './ptypes/ptype-classes'
-import { nodeFactory } from '../awst/node-factory'
 import { Arc4AbiDecoratorData, DecoratorData, DecoratorVisitor } from './decorator-visitor'
 import { SourceLocation } from '../awst/source-location'
-import { ARC4CreateOption, DefaultArgumentSource, OnCompletionAction } from '../awst/arc4'
+import { ARC4CreateOption, DefaultArgumentSource, OnCompletionAction } from '../awst/models'
 import { isValidLiteralForPType } from './eb/util'
 
 export class ContractContext extends SourceFileContext {
@@ -71,10 +70,10 @@ export class ContractVisitor extends BaseVisitor<ContractContext> implements Vis
       isAbstract,
       isArc4: contractPtype.isARC4,
       bases: [
-        nodeFactory.contractReference({
-          className: contractPtype.baseType.name,
-          moduleName: contractPtype.baseType.module,
-        }),
+        {
+          name: contractPtype.baseType.name,
+          module: contractPtype.baseType.module,
+        },
       ],
       moduleName: this._contractPType.module,
       reservedScratchSpace: new Set(),

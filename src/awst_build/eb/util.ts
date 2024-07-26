@@ -3,11 +3,9 @@ import { awst, ConstantValue } from '../../awst'
 import { CodeError } from '../../errors'
 import { biguintPType, boolPType, bytesPType, PType, stringPType, uint64PType } from '../ptypes'
 import { SourceLocation } from '../../awst/source-location'
-import { DeliberateAny } from '../../typescript-helpers'
 import { codeInvariant } from '../../util'
 import { StringConstant } from '../../awst/nodes'
 import { ScalarLiteralExpressionBuilder } from './scalar-literal-expression-builder'
-import { boolean } from 'zod'
 
 export function requireExpressionOfType(builder: NodeBuilder, ptype: PType, sourceLocation: SourceLocation): awst.Expression {
   if (builder instanceof LiteralExpressionBuilder) {

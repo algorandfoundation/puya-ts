@@ -27,10 +27,27 @@ function printBytes(value: Uint8Array, encoding: BytesEncoding) {
       return `hex<${Buffer.from(value).toString('hex')}>`
   }
 }
-
 export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, StatementVisitor<string[]>, ExpressionVisitor<string> {
+  visitUInt64PostfixUnaryOperation(expression: nodes.UInt64PostfixUnaryOperation): string {
+    return `${expression.target.accept(this)}${expression.op}`
+  }
+  visitBigUIntPostfixUnaryOperation(expression: nodes.BigUIntPostfixUnaryOperation): string {
+    return `${expression.target.accept(this)}${expression.op}`
+  }
+  visitCompiledContract(expression: nodes.CompiledContract): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitCompiledLogicSig(expression: nodes.CompiledLogicSig): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+  visitLoopExit(statement: nodes.LoopExit): string[] {
+    throw new TodoError('Method not implemented.', { sourceLocation: statement.sourceLocation })
+  }
+  visitLoopContinue(statement: nodes.LoopContinue): string[] {
+    throw new TodoError('Method not implemented.', { sourceLocation: statement.sourceLocation })
+  }
   visitGoto(statement: nodes.Goto): string[] {
-    return [`goto ${statement.label}`]
+    return [`goto ${statement.target}`]
   }
   visitIntersectionSliceExpression(expression: nodes.IntersectionSliceExpression): string {
     throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
@@ -138,7 +155,9 @@ export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, Statemen
     throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
   }
   visitAssignmentExpression(expression: nodes.AssignmentExpression): string {
-    return `${expression.target.accept(this)} = ${expression.value.accept(this)}`
+    const rvalue =
+      expression.value instanceof nodes.AssignmentExpression ? `(${expression.value.accept(this)})` : expression.value.accept(this)
+    return `${expression.target.accept(this)} = ${rvalue}`
   }
   visitNumericComparisonExpression(expression: nodes.NumericComparisonExpression): string {
     return `${expression.lhs.accept(this)} ${expression.operator} ${expression.rhs.accept(this)}`
@@ -152,16 +171,16 @@ export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, Statemen
     return `${target}${expression.target.name}(${expression.args.map((a) => a.value.accept(this)).join(', ')})`
   }
   visitUInt64UnaryOperation(expression: nodes.UInt64UnaryOperation): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    return `${expression.op}${expression.expr.accept(this)}`
   }
   visitBytesUnaryOperation(expression: nodes.BytesUnaryOperation): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    return `${expression.op}${expression.expr.accept(this)}`
   }
   visitUInt64BinaryOperation(expression: nodes.UInt64BinaryOperation): string {
     return `${expression.left.accept(this)} ${expression.op} ${expression.right.accept(this)}`
   }
   visitBigUIntBinaryOperation(expression: nodes.BigUIntBinaryOperation): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    return `${expression.left.accept(this)} ${expression.op} ${expression.right.accept(this)}`
   }
   visitBytesBinaryOperation(expression: nodes.BytesBinaryOperation): string {
     return `${expression.left.accept(this)} ${expression.op} ${expression.right.accept(this)}`
@@ -170,7 +189,7 @@ export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, Statemen
     throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
   }
   visitNot(expression: nodes.Not): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    return `!${expression.expr.accept(this)}`
   }
   visitContains(expression: nodes.Contains): string {
     throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
@@ -309,7 +328,7 @@ export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, Statemen
       header.splice(0, 0, 'abstract')
     }
     if (c.bases.length) {
-      header.push('extends', c.bases.map((b) => `${b.moduleName}::${b.className}`).join(', '))
+      header.push('extends', c.bases.map((b) => `${b.module}::${b.name}`).join(', '))
     }
 
     return [header.join(' '), '{', ...indent(body), '}']

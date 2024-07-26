@@ -7,6 +7,7 @@ import {
   getNodeName,
   getSyntaxName,
   isKeyOf,
+  UnaryExpressionUnaryOps,
 } from '../visitor/syntax-names'
 import { InstanceBuilder, NodeBuilder } from './eb'
 import ts from 'typescript'
@@ -33,14 +34,21 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
     this.textVisitor = new TextVisitor(context)
   }
 
+  logNotSupported(node: ts.Node | undefined, message: string) {
+    if (!node) return
+    logger.error(new NotSupported(message, { sourceLocation: this.sourceLocation(node) }))
+  }
+
+  throwNotSupported(node: ts.Node, message: string): never {
+    throw new NotSupported(message, { sourceLocation: this.sourceLocation(node) })
+  }
+
   visitBigIntLiteral(node: ts.BigIntLiteral): InstanceBuilder {
     return new ScalarLiteralExpressionBuilder(BigInt(node.text.slice(0, -1)), this.sourceLocation(node))
   }
 
   visitRegularExpressionLiteral(node: ts.RegularExpressionLiteral): InstanceBuilder {
-    throw new NotSupported('Regular expressions', {
-      sourceLocation: this.sourceLocation(node),
-    })
+    this.throwNotSupported(node, 'Regular expressions')
   }
 
   visitFalseKeyword(node: ts.FalseLiteral): InstanceBuilder {
@@ -77,11 +85,11 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
   }
 
   visitImportKeyword(node: ts.ImportExpression): NodeBuilder {
-    throw new NotSupported('Dynamic imports', { sourceLocation: this.sourceLocation(node) })
+    this.throwNotSupported(node, 'Dynamic imports')
   }
 
   visitNullKeyword(node: ts.NullLiteral): NodeBuilder {
-    throw new NotSupported('Null values', { sourceLocation: this.sourceLocation(node) })
+    this.throwNotSupported(node, 'Null values')
   }
 
   visitPrivateIdentifier(node: ts.PrivateIdentifier): NodeBuilder {
@@ -111,7 +119,7 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
   }
 
   visitClassExpression(node: ts.ClassExpression): NodeBuilder {
-    throw new NotSupported('Class expressions')
+    this.throwNotSupported(node, 'Class expressions')
   }
 
   visitObjectLiteralExpression(node: ts.ObjectLiteralExpression): NodeBuilder {
@@ -130,7 +138,7 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
           ]
         case ts.SyntaxKind.ShorthandPropertyAssignment:
           codeInvariant(!p.objectAssignmentInitializer, 'Object assignment initializer not supported', propertySourceLocation)
-          codeInvariant(!p.equalsToken, 'Equals token is not valid here', propertySourceLocation)
+          this.logNotSupported(p.equalsToken, 'The equals token is not valid here')
           return [
             {
               type: 'properties',
@@ -163,20 +171,26 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
   }
 
   visitPropertyAccessExpression(node: ts.PropertyAccessExpression): NodeBuilder {
+    this.logNotSupported(node.questionDotToken, 'The optional chaining (?.) operator is not supported')
     const target = this.baseAccept(node.expression)
     const property = this.textVisitor.accept(node.name)
     return target.memberAccess(property, this.sourceLocation(node))
   }
 
   visitElementAccessExpression(node: ts.ElementAccessExpression): NodeBuilder {
-    throw new TodoError('ElementAccessExpression')
+    this.logNotSupported(node.questionDotToken, 'The optional chaining (?.) operator is not supported')
+
+    const sourceLocation = this.sourceLocation(node)
+    const target = this.baseAccept(node.expression)
+    const argument = this.baseAccept(node.argumentExpression)
+    return target.indexAccess(requireInstanceBuilder(argument, this.sourceLocation(node.argumentExpression)), sourceLocation)
   }
 
   visitCallExpression(node: ts.CallExpression): NodeBuilder {
+    this.logNotSupported(node.questionDotToken, 'The optional chaining (?.) operator is not supported')
     const sourceLocation = this.sourceLocation(node)
     const eb = this.baseAccept(node.expression)
     const args = node.arguments.map((a) => requireInstanceBuilder(this.baseAccept(a), sourceLocation))
-    // TODO: Check this works
     const typeArgs = node.typeArguments?.map((t) => this.context.resolver.resolveTypeNode(t, sourceLocation)) ?? []
     return eb.call(args, typeArgs, sourceLocation)
   }
@@ -204,11 +218,16 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
   }
 
   visitParenthesizedExpression(node: ts.ParenthesizedExpression): NodeBuilder {
-    throw new TodoError('ParenthesizedExpression')
+    return this.baseAccept(node.expression)
   }
 
+  /**
+   * `delete obj.prop`
+   *
+   * Not supported currently as typescript requires 'prop' to be optional and we don't support optional values
+   */
   visitDeleteExpression(node: ts.DeleteExpression): NodeBuilder {
-    throw new TodoError('DeleteExpression')
+    this.throwNotSupported(node, 'Delete expressions')
   }
 
   visitTypeOfExpression(node: ts.TypeOfExpression): NodeBuilder {
@@ -224,11 +243,17 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
   }
 
   visitPrefixUnaryExpression(node: ts.PrefixUnaryExpression): NodeBuilder {
-    throw new TodoError('PrefixUnaryExpression')
+    const sourceLocation = this.sourceLocation(node)
+    const target = requireInstanceBuilder(this.baseAccept(node.operand), sourceLocation)
+    const op = UnaryExpressionUnaryOps[node.operator]
+    return target.prefixUnaryOp(op, sourceLocation)
   }
 
   visitPostfixUnaryExpression(node: ts.PostfixUnaryExpression): NodeBuilder {
-    throw new TodoError('PostfixUnaryExpression')
+    const sourceLocation = this.sourceLocation(node)
+    const target = requireInstanceBuilder(this.baseAccept(node.operand), sourceLocation)
+    const op = UnaryExpressionUnaryOps[node.operator]
+    return target.postfixUnaryOp(op, sourceLocation)
   }
 
   visitBinaryExpression(node: ts.BinaryExpression): NodeBuilder {

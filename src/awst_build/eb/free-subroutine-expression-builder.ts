@@ -58,8 +58,8 @@ export class BaseContractMethodExpressionBuilder extends SubroutineExpressionBui
       nodeFactory.baseClassSubroutineTarget({
         name: ptype.name,
         baseClass: {
-          className: baseContractPType.name,
-          moduleName: baseContractPType.module,
+          name: baseContractPType.name,
+          module: baseContractPType.module,
         },
       }),
     )
