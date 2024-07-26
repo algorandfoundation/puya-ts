@@ -7,7 +7,7 @@ export type ExecutionContext = {
   ops: Partial<OpsNamespace>
   makeUint64(v: Uint64Compat): uint64
   makeInterpolatedBytes(b: TemplateStringsArray, replacements: BytesCompat[]): bytes
-  makeBytes(b: BytesCompat | undefined): bytes
+  makeBytes(b: BytesCompat): bytes
   makeBigUint(v: BigUintCompat): biguint
   application(id: uint64): Application
   asset(id: uint64 | undefined): Asset

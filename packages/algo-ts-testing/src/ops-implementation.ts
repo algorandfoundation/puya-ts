@@ -1,7 +1,7 @@
-import { bytes, Uint64Compat, internal, Account, uint64, Txn } from '@algorandfoundation/algo-ts'
-import { btoi, itob, Uint64Cls } from './primitives'
-import { Transaction } from './transactions/runtime'
+import { Account, bytes, internal, Txn, uint64 } from '@algorandfoundation/algo-ts'
 import { internalError } from './errors'
+import { btoi, itob, StubUint64Compat, Uint64Cls } from './primitives'
+import { Transaction } from './transactions/runtime'
 export const buildOpsImplementation = (txnGroup: Transaction[]): Partial<internal.OpsNamespace> => {
   const currentTransaction =
     txnGroup.find((t) => t.type === 'appl') ??
@@ -11,7 +11,7 @@ export const buildOpsImplementation = (txnGroup: Transaction[]): Partial<interna
     btoi,
     itob,
     Txn: {
-      applicationArgs(_n: Uint64Compat): bytes {
+      applicationArgs(_n: StubUint64Compat): bytes {
         return currentTransaction.args[Uint64Cls.getNumber(_n)]
       },
       get sender(): Account {

@@ -3,10 +3,14 @@ import { bigIntToUint8Array, uint8ArrayToBigInt, uint8ArrayToHex, utf8ToUint8Arr
 import { AvmError, internalError } from './errors'
 import { nameOfType } from './util'
 
-export function btoi(bytes: BytesCompat): uint64 {
+export type StubBigUintCompat = BigUintCompat | BigUintCls
+export type StubBytesCompat = BytesCompat | BytesCls
+export type StubUint64Compat = Uint64Compat | Uint64Cls
+
+export function btoi(bytes: StubBytesCompat): uint64 {
   return BytesCls.fromCompat(bytes).toUint64().asAlgoTs()
 }
-export function itob(value: Uint64Compat): bytes {
+export function itob(value: StubUint64Compat): bytes {
   return Uint64Cls.fromCompat(value).toBytes().asAlgoTs()
 }
 
@@ -36,13 +40,13 @@ export const toBytes = (val: unknown): bytes => {
   }
 }
 
-export const isBytes = (v: unknown): v is BytesCompat => {
+export const isBytes = (v: unknown): v is StubBytesCompat => {
   if (typeof v === 'string') return true
   if (v instanceof BytesCls) return true
   return v instanceof Uint8Array
 }
 
-export const isUint64 = (v: unknown): v is Uint64Compat => {
+export const isUint64 = (v: unknown): v is StubUint64Compat => {
   if (typeof v == 'boolean') return true
   if (typeof v == 'number') return true
   if (typeof v == 'bigint') return true
@@ -79,14 +83,14 @@ export class Uint64Cls extends AlgoTsPrimitiveCls {
     checkUint64(this.value)
   }
 
-  static fromCompat(v: Uint64Compat): Uint64Cls {
+  static fromCompat(v: StubUint64Compat): Uint64Cls {
     if (typeof v == 'boolean') return new Uint64Cls(v ? 1n : 0n)
     if (typeof v == 'number') return new Uint64Cls(BigInt(v))
     if (typeof v == 'bigint') return new Uint64Cls(v)
     internalError(`Cannot convert ${v} to uint64`)
   }
 
-  static getNumber(v: Uint64Compat): number {
+  static getNumber(v: StubUint64Compat): number {
     return Uint64Cls.fromCompat(v).asNumber()
   }
 
@@ -140,11 +144,11 @@ export class BigUintCls extends AlgoTsPrimitiveCls {
     return Number(this.value)
   }
 
-  static fromCompat(v: BigUintCompat | BytesCls): BigUintCls {
+  static fromCompat(v: StubBigUintCompat): BigUintCls {
     if (typeof v == 'boolean') return new BigUintCls(v ? 1n : 0n)
     if (typeof v == 'number') return new BigUintCls(BigInt(v))
     if (typeof v == 'bigint') return new BigUintCls(v)
-    if (v instanceof BytesCls) return v.toBigUint()
+    if (v instanceof BigUintCls) return v
     internalError(`Cannot convert ${nameOfType(v)} to BigUint`)
   }
 }
@@ -165,17 +169,19 @@ export class BytesCls extends AlgoTsPrimitiveCls {
   toBytes(): BytesCls {
     return this
   }
-  at(i: Uint64Compat | Uint64Cls): BytesCls {
+  at(i: StubUint64Compat): BytesCls {
     const start = i instanceof Uint64Cls ? i.asNumber() : Uint64Cls.fromCompat(i).asNumber()
     return new BytesCls(this.#v.slice(start, start + 1))
   }
 
-  slice(start: Uint64Compat, end: Uint64Compat): BytesCls {
-    const sliced = internal.ctxMgr.instance.arraySlice(this.#v, start, end)
+  slice(start: StubUint64Compat, end: StubUint64Compat): BytesCls {
+    const startNumber = start instanceof Uint64Cls ? start.asNumber() : start
+    const endNumber = end instanceof Uint64Cls ? end.asNumber() : end
+    const sliced = internal.ctxMgr.instance.arraySlice(this.#v, startNumber, endNumber)
     return new BytesCls(sliced)
   }
 
-  concat(other: BytesCompat | BytesCls): BytesCls {
+  concat(other: StubBytesCompat): BytesCls {
     const otherArray = BytesCls.fromCompat(other).asUint8Array()
     const mergedArray = new Uint8Array(this.#v.length + otherArray.length)
     mergedArray.set(this.#v)
@@ -187,7 +193,7 @@ export class BytesCls extends AlgoTsPrimitiveCls {
     return this.value
   }
 
-  static fromCompat(v: BytesCompat | BytesCls): BytesCls {
+  static fromCompat(v: StubBytesCompat): BytesCls {
     if (typeof v === 'string') return new BytesCls(utf8ToUint8Array(v))
     if (v instanceof BytesCls) return v
     if (v instanceof Uint8Array) return new BytesCls(v)
