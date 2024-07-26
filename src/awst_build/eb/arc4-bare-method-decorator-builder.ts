@@ -1,7 +1,7 @@
 import { arc4AbiMethodDecorator, arc4BareMethodDecorator, PType } from '../ptypes'
 import { InstanceBuilder, NodeBuilder } from './index'
 import { SourceLocation } from '../../awst/source-location'
-import { ARC4CreateOption, OnCompletionAction } from '../../awst/arc4'
+import { ARC4CreateOption, OnCompletionAction } from '../../awst/models'
 import { Arc4AbiDecoratorData, DecoratorData } from '../decorator-visitor'
 import { codeInvariant } from '../../util'
 import { ObjectLiteralExpressionBuilder } from './object-literal-expression-builder'
@@ -137,15 +137,15 @@ function resolveDefaultArguments(
     const paramConfig = defaultArgumentsConfig.memberAccess(parameterName, sourceLocation)
     codeInvariant(paramConfig instanceof ObjectLiteralExpressionBuilder, 'Default argument specification should be an object literal')
 
-    if (paramConfig.hasProperty('fromConstant')) {
+    if (paramConfig.hasProperty('constant')) {
       result[parameterName] = {
         type: 'constant',
-        value: requireConstantValue(paramConfig.memberAccess('fromConstant', sourceLocation), sourceLocation),
+        value: requireConstantValue(paramConfig.memberAccess('constant', sourceLocation), sourceLocation),
       }
-    } else if (paramConfig.hasProperty('fromMember')) {
+    } else if (paramConfig.hasProperty('from')) {
       result[parameterName] = {
         type: 'member',
-        name: requireStringConstant(paramConfig.memberAccess('fromMember', sourceLocation), sourceLocation).value,
+        name: requireStringConstant(paramConfig.memberAccess('from', sourceLocation), sourceLocation).value,
       }
     } else {
       logger.error(sourceLocation, 'Default argument specifications should specify fromConstant or fromMember')

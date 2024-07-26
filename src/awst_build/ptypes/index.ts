@@ -2,7 +2,6 @@ import { wtypes } from '../../awst'
 import {
   LibFunctionType,
   LiteralValueType,
-  NamespacePType,
   InstanceType,
   TransientType,
   FunctionPType,

@@ -15,6 +15,6 @@ export default class AbiDecorators extends Contract {
   globalValue = GlobalState({ initialValue: Uint64(123) })
 
   // @expect-error Default argument specification for 'a' does not match parameter type
-  @abimethod({ defaultArguments: { a: { fromMember: 'globalValue' } } })
+  @abimethod({ defaultArguments: { a: { from: 'globalValue' } } })
   public methodWithDefaults(a: bytes): void {}
 }

@@ -44,7 +44,7 @@ export abstract class PType {
 }
 
 export class InstanceType extends PType {
-  readonly wtype: wtypes.WType | undefined
+  readonly wtype: wtypes.WType
   readonly name: string
   readonly module: string
   readonly singleton = false

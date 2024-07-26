@@ -1,7 +1,7 @@
 import { BaseVisitor } from './base-visitor'
 import { SourceFileContext } from './context'
 import ts from 'typescript'
-import { ARC4CreateOption, DefaultArgumentSource, OnCompletionAction } from '../awst/arc4'
+import { ARC4CreateOption, OnCompletionAction } from '../awst/models'
 import { accept } from '../visitor/visitor'
 import { invariant } from '../util'
 import { DecoratorDataBuilder } from './eb/arc4-bare-method-decorator-builder'

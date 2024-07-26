@@ -14,7 +14,7 @@ export default class AbiDecorators extends Contract {
 
   globalValue = GlobalState({ initialValue: Uint64(123) })
 
-  @abimethod({ defaultArguments: { a: { fromMember: 'globalValue' }, b: { fromMember: 'readonly' }, c: { fromConstant: 145 } } })
+  @abimethod({ defaultArguments: { a: { from: 'globalValue' }, b: { from: 'readonly' }, c: { constant: 145 } } })
   public methodWithDefaults(a: uint64, b: uint64, c: uint64): uint64 {
     return a * b + c
   }

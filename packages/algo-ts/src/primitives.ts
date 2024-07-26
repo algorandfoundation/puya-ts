@@ -51,6 +51,8 @@ export type bytes = {
 
   concat(other: BytesCompat): bytes
 
+  bitwiseInvert(): bytes
+
   toString(): string
 }
 

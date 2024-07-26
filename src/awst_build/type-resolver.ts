@@ -20,15 +20,7 @@ import { CodeError, InternalError } from '../errors'
 import { typeRegistry } from './type-registry'
 import { logger } from '../logger'
 import { Constants } from '../constants'
-import {
-  AppStorageType,
-  ContractClassPType,
-  FunctionPType,
-  GlobalStateType,
-  NamespacePType,
-  ObjectPType,
-  UnsupportedType,
-} from './ptypes/ptype-classes'
+import { AppStorageType, ContractClassPType, FunctionPType, GlobalStateType, NamespacePType, ObjectPType } from './ptypes/ptype-classes'
 import { SymbolName } from './symbol-name'
 
 export class TypeResolver {

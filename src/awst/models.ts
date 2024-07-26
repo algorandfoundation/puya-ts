@@ -55,3 +55,9 @@ export interface ARC32StructDef {
   name: string
   elements: [...[string, string][]]
 }
+
+export type ContractReference = {
+  name: string
+  module: string
+}
+export type LogicSigReference = { name: string; module: string }

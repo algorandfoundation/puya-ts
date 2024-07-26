@@ -5,7 +5,7 @@ import { ArtifactKind, writeArtifact } from '../write-artifact'
 import { ModuleStatement } from '../awst/nodes'
 import { ToJsonVisitor } from '../awst/to-json-visitor'
 import { CreateProgramResult } from '../parser'
-import { AwstBuildFailureError, PuyaError } from '../errors'
+import { AwstBuildFailureError } from '../errors'
 import { logger } from '../logger'
 import { SourceLocation } from '../awst/source-location'
 

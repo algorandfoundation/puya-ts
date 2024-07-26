@@ -1,11 +1,13 @@
 import { awst, wtypes } from '../../awst'
 import {
   BuilderComparisonOp,
+  BuilderUnaryOp,
   FunctionBuilder,
   InstanceBuilder,
   InstanceExpressionBuilder,
   LiteralExpressionBuilder,
   NodeBuilder,
+  ParameterlessFunctionBuilder,
 } from './index'
 import { SourceLocation } from '../../awst/source-location'
 import { nodeFactory } from '../../awst/node-factory'
@@ -16,8 +18,10 @@ import { requireExpressionOfType, requireExpressionsOfType } from './util'
 import { BytesFunction, bytesPType, PType, stringPType, uint64PType } from '../ptypes'
 import { StringExpressionBuilder } from './string-expression-builder'
 import { BoolExpressionBuilder } from './bool-expression-builder'
-import { BytesBinaryOperator, BytesEncoding, EqualityComparison, StringConstant } from '../../awst/nodes'
-import { base32ToUint8Array, base64ToUint8Array, codeInvariant, hexToUint8Array, utf8ToUint8Array } from '../../util'
+import { BytesBinaryOperator, BytesEncoding, BytesUnaryOperator, EqualityComparison, StringConstant } from '../../awst/nodes'
+import { base32ToUint8Array, base64ToUint8Array, hexToUint8Array, utf8ToUint8Array } from '../../util'
+import { ScalarLiteralExpressionBuilder } from './scalar-literal-expression-builder'
+import { logger } from '../../logger'
 
 export class BytesFunctionBuilder extends FunctionBuilder {
   get ptype(): PType | undefined {
@@ -131,6 +135,26 @@ export class BytesExpressionBuilder extends InstanceExpressionBuilder {
   get ptype() {
     return bytesPType
   }
+  prefixUnaryOp(op: BuilderUnaryOp, sourceLocation: SourceLocation): InstanceBuilder {
+    switch (op) {
+      case BuilderUnaryOp.bit_inv:
+        logger.error(
+          sourceLocation,
+          `The '~' ${this.typeDescription} operator coerces the target value to a number type. Use {bytes expression}.bitwiseInvert() instead`,
+        )
+        return new ScalarLiteralExpressionBuilder(0n, sourceLocation)
+      case BuilderUnaryOp.log_not:
+        return new BoolExpressionBuilder(
+          nodeFactory.not({
+            expr: this.boolEval(sourceLocation),
+            sourceLocation,
+            wtype: wtypes.boolWType,
+          }),
+        )
+    }
+    return super.prefixUnaryOp(op, sourceLocation)
+  }
+
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
     switch (name) {
       case 'length':
@@ -140,6 +164,8 @@ export class BytesExpressionBuilder extends InstanceExpressionBuilder {
             sourceLocation,
           }),
         )
+      case 'bitwiseInvert':
+        return new BytesInvertBuilder(this._expr)
       case 'toString':
         return new ToStringBuilder(this._expr)
       case 'concat':
@@ -196,6 +222,23 @@ export class ConcatExpressionBuilder extends FunctionBuilder {
   }
 }
 
+export class BytesInvertBuilder extends ParameterlessFunctionBuilder {
+  constructor(private expr: awst.Expression) {
+    super(
+      expr,
+      (expr, sourceLocation) =>
+        new BytesExpressionBuilder(
+          nodeFactory.bytesUnaryOperation({
+            wtype: wtypes.bytesWType,
+            expr: this.expr,
+            op: BytesUnaryOperator.bitInvert,
+            sourceLocation,
+          }),
+        ),
+    )
+  }
+}
+
 export class BytesSliceBuilder extends FunctionBuilder {
   constructor(private expr: awst.Expression) {
     super(expr.sourceLocation)
@@ -216,19 +259,18 @@ export class BytesSliceBuilder extends FunctionBuilder {
   }
 }
 
-export class ToStringBuilder extends FunctionBuilder {
+export class ToStringBuilder extends ParameterlessFunctionBuilder {
   constructor(private expr: awst.Expression) {
-    super(expr.sourceLocation)
-  }
-
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
-    codeInvariant(args.length === 0, 'bytes.toString expects no args', sourceLocation)
-    return new StringExpressionBuilder(
-      nodeFactory.reinterpretCast({
-        wtype: wtypes.stringWType,
-        expr: this.expr,
-        sourceLocation,
-      }),
+    super(
+      expr,
+      (expr, sourceLocation) =>
+        new StringExpressionBuilder(
+          nodeFactory.reinterpretCast({
+            wtype: wtypes.stringWType,
+            expr: this.expr,
+            sourceLocation,
+          }),
+        ),
     )
   }
 }

@@ -1,4 +1,5 @@
 import {
+  BigUIntBinaryOperation,
   Block,
   BoolConstant,
   BytesConstant,
@@ -9,8 +10,9 @@ import {
   IntegerConstant,
   Statement,
   StringConstant,
+  UInt64BinaryOperation,
 } from './nodes'
-import { DeliberateAny } from '../typescript-helpers'
+import { DeliberateAny, Props } from '../typescript-helpers'
 import { SourceLocation } from './source-location'
 import * as wtypes from './wtypes'
 import { invariant } from '../util'
@@ -37,6 +39,24 @@ const explicitNodeFactory = {
       wtype: wtypes.uint64WType,
       ...props,
       tealAlias: props.tealAlias,
+    })
+  },
+  bigUIntConstant(props: { value: bigint; sourceLocation: SourceLocation }): IntegerConstant {
+    return new IntegerConstant({
+      wtype: wtypes.biguintWType,
+      ...props,
+    })
+  },
+  uInt64BinaryOperation(props: Omit<Props<UInt64BinaryOperation>, 'wtype'>): UInt64BinaryOperation {
+    return new UInt64BinaryOperation({
+      wtype: wtypes.uint64WType,
+      ...props,
+    })
+  },
+  bigUIntBinaryOperation(props: Omit<Props<BigUIntBinaryOperation>, 'wtype'>): BigUIntBinaryOperation {
+    return new BigUIntBinaryOperation({
+      wtype: wtypes.biguintWType,
+      ...props,
     })
   },
   boolConstant(props: { value: boolean; sourceLocation: SourceLocation }): BoolConstant {

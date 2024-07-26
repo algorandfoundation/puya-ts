@@ -8,26 +8,27 @@ import {
   InstanceExpressionBuilder,
   LiteralExpressionBuilder,
 } from './index'
-import { NumericComparison, UInt64BinaryOperator, UInt64PostfixUnaryOperator, UInt64UnaryOperator } from '../../awst/nodes'
+import { BigUIntBinaryOperator, BigUIntPostfixUnaryOperator, NumericComparison } from '../../awst/nodes'
 import { SourceLocation } from '../../awst/source-location'
 import { nodeFactory } from '../../awst/node-factory'
 import { CodeError, NotSupported } from '../../errors'
 import { requireExpressionOfType } from './util'
 import { tryConvertEnum } from '../../util'
-import { PType, Uint64Function, uint64PType } from '../ptypes'
+import { biguintPType, PType, Uint64Function } from '../ptypes'
 import { BoolExpressionBuilder } from './bool-expression-builder'
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
 import { InstanceType } from '../ptypes/ptype-classes'
+import { logger } from '../../logger'
 
-export class UInt64FunctionBuilder extends FunctionBuilder {
+export class BigUintFunctionBuilder extends FunctionBuilder {
   get ptype(): PType | undefined {
     return Uint64Function
   }
 
   call(args: Array<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
     if (args.length === 0) {
-      return new UInt64ExpressionBuilder(
-        nodeFactory.uInt64Constant({
+      return new BigUintExpressionBuilder(
+        nodeFactory.bigUIntConstant({
           sourceLocation,
           value: 0n,
         }),
@@ -36,19 +37,19 @@ export class UInt64FunctionBuilder extends FunctionBuilder {
     if (args.length === 1) {
       const [arg0] = args
       if (arg0 instanceof LiteralExpressionBuilder) {
-        return arg0.resolveToPType(uint64PType, sourceLocation)
+        return arg0.resolveToPType(biguintPType, sourceLocation)
       }
     }
     throw CodeError.unexpectedUnhandledArgs({ sourceLocation })
   }
 }
 
-export class UInt64ExpressionBuilder extends InstanceExpressionBuilder {
+export class BigUintExpressionBuilder extends InstanceExpressionBuilder {
   get ptype(): InstanceType {
-    return uint64PType
+    return biguintPType
   }
   compare(other: InstanceBuilder, op: BuilderComparisonOp, sourceLocation: SourceLocation): InstanceBuilder {
-    const otherExpr = requireExpressionOfType(other, uint64PType, sourceLocation)
+    const otherExpr = requireExpressionOfType(other, biguintPType, sourceLocation)
     const numComOp = tryConvertEnum(op, BuilderComparisonOp, NumericComparison)
     if (numComOp === undefined) {
       throw new NotSupported(`Numeric comparison operator ${op}`, {
@@ -67,24 +68,18 @@ export class UInt64ExpressionBuilder extends InstanceExpressionBuilder {
   }
 
   prefixUnaryOp(op: BuilderUnaryOp, sourceLocation: SourceLocation): InstanceBuilder {
-    let binaryOp: UInt64BinaryOperator
+    let binaryOp: BigUIntBinaryOperator
 
     switch (op) {
       case BuilderUnaryOp.inc:
-        binaryOp = UInt64BinaryOperator.add
+        binaryOp = BigUIntBinaryOperator.add
         break
       case BuilderUnaryOp.dec:
-        binaryOp = UInt64BinaryOperator.sub
+        binaryOp = BigUIntBinaryOperator.sub
         break
       case BuilderUnaryOp.bit_inv:
-        return new UInt64ExpressionBuilder(
-          nodeFactory.uInt64UnaryOperation({
-            op: UInt64UnaryOperator.bitInvert,
-            sourceLocation,
-            expr: this.resolve(),
-            wtype: this.ptype.wtype,
-          }),
-        )
+        logger.error(sourceLocation, `Bitwise inversion of ${this.typeDescription} is not supported as the bit size is indeterminate`)
+        return this
       case BuilderUnaryOp.log_not:
         return new BoolExpressionBuilder(
           nodeFactory.not({
@@ -98,14 +93,14 @@ export class UInt64ExpressionBuilder extends InstanceExpressionBuilder {
       default:
         return super.prefixUnaryOp(op, sourceLocation)
     }
-    return new UInt64ExpressionBuilder(
+    return new BigUintExpressionBuilder(
       nodeFactory.assignmentExpression({
         target: this.resolveLValue(),
         sourceLocation,
         wtype: this.ptype.wtype,
-        value: nodeFactory.uInt64BinaryOperation({
+        value: nodeFactory.bigUIntBinaryOperation({
           left: this.resolve(),
-          right: nodeFactory.uInt64Constant({ value: 1n, sourceLocation }),
+          right: nodeFactory.bigUIntConstant({ value: 1n, sourceLocation }),
           op: binaryOp,
           sourceLocation,
         }),
@@ -114,19 +109,19 @@ export class UInt64ExpressionBuilder extends InstanceExpressionBuilder {
   }
 
   postfixUnaryOp(op: BuilderUnaryOp, sourceLocation: SourceLocation): InstanceBuilder {
-    let unaryOp: UInt64PostfixUnaryOperator
+    let unaryOp: BigUIntPostfixUnaryOperator
     switch (op) {
       case BuilderUnaryOp.inc:
-        unaryOp = UInt64PostfixUnaryOperator.increment
+        unaryOp = BigUIntPostfixUnaryOperator.increment
         break
       case BuilderUnaryOp.dec:
-        unaryOp = UInt64PostfixUnaryOperator.decrement
+        unaryOp = BigUIntPostfixUnaryOperator.decrement
         break
       default:
         return super.postfixUnaryOp(op, sourceLocation)
     }
-    return new UInt64ExpressionBuilder(
-      nodeFactory.uInt64PostfixUnaryOperation({
+    return new BigUintExpressionBuilder(
+      nodeFactory.bigUIntPostfixUnaryOperation({
         sourceLocation,
         target: this.resolveLValue(),
         wtype: this.ptype.wtype,
@@ -136,16 +131,16 @@ export class UInt64ExpressionBuilder extends InstanceExpressionBuilder {
   }
 
   binaryOp(other: InstanceBuilder, op: BuilderBinaryOp, sourceLocation: SourceLocation): InstanceBuilder {
-    const otherExpr = requireExpressionOfType(other, uint64PType, sourceLocation)
+    const otherExpr = requireExpressionOfType(other, biguintPType, sourceLocation)
 
-    const uintOp = op === BuilderBinaryOp.div ? UInt64BinaryOperator.floorDiv : tryConvertEnum(op, BuilderBinaryOp, UInt64BinaryOperator)
+    const uintOp = op === BuilderBinaryOp.div ? BigUIntBinaryOperator.floorDiv : tryConvertEnum(op, BuilderBinaryOp, BigUIntBinaryOperator)
     if (uintOp === undefined) {
-      throw new NotSupported(`UInt64 binary operator ${op}`, {
+      throw new NotSupported(`BigUint binary operator ${op}`, {
         sourceLocation,
       })
     }
-    return new UInt64ExpressionBuilder(
-      nodeFactory.uInt64BinaryOperation({
+    return new BigUintExpressionBuilder(
+      nodeFactory.bigUIntBinaryOperation({
         left: this._expr,
         right: otherExpr,
         op: uintOp,
@@ -155,23 +150,23 @@ export class UInt64ExpressionBuilder extends InstanceExpressionBuilder {
   }
 
   augmentedAssignment(other: InstanceBuilder, op: BuilderBinaryOp, sourceLocation: SourceLocation): InstanceBuilder {
-    return new UInt64ExpressionBuilder(
+    return new BigUintExpressionBuilder(
       nodeFactory.assignmentExpression({
         target: this.resolveLValue(),
         value: this.binaryOp(other, op, sourceLocation).resolve(),
         sourceLocation,
-        wtype: wtypes.uint64WType,
+        wtype: wtypes.biguintWType,
       }),
     )
   }
 
   assign(other: InstanceBuilder, sourceLocation: SourceLocation): InstanceBuilder {
-    return new UInt64ExpressionBuilder(
+    return new BigUintExpressionBuilder(
       nodeFactory.assignmentExpression({
         target: this.resolveLValue(),
         sourceLocation,
-        value: requireExpressionOfType(other, uint64PType, sourceLocation),
-        wtype: uint64PType.wtypeOrThrow,
+        value: requireExpressionOfType(other, biguintPType, sourceLocation),
+        wtype: biguintPType.wtypeOrThrow,
       }),
     )
   }

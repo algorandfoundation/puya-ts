@@ -85,7 +85,7 @@ export class SwitchLoopContext {
         return nodeFactory.block({ sourceLocation, label: `${uniqueName}ᶜ${toSubScript(caseIndex)}` })
       },
       gotoCase(caseIndex: number, sourceLocation: SourceLocation): Goto {
-        return nodeFactory.goto({ sourceLocation, label: `${uniqueName}ᶜ${toSubScript(caseIndex)}` })
+        return nodeFactory.goto({ sourceLocation, target: `${uniqueName}ᶜ${toSubScript(caseIndex)}` })
       },
       [Symbol.dispose]: () => {
         const popped = this.switchLoopStack.pop()

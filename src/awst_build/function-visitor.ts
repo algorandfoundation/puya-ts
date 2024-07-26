@@ -5,7 +5,7 @@ import * as awst from '../awst/nodes'
 import ts from 'typescript'
 import { codeInvariant, enumerate, instanceOfAny, invariant } from '../util'
 import { getNodeName, Statements } from '../visitor/syntax-names'
-import { CodeError, InternalError, NotSupported, TodoError } from '../errors'
+import { AwstBuildFailureError, CodeError, InternalError, NotSupported, TodoError } from '../errors'
 import { logger } from '../logger'
 import { nodeFactory } from '../awst/node-factory'
 import { requireExpressionOfType, requireInstanceBuilder } from './eb/util'
@@ -344,7 +344,7 @@ export class FunctionVisitor
 
     return nodeFactory.goto({
       sourceLocation,
-      label: this.context.switchLoopContext.getContinueTarget(node.label, sourceLocation),
+      target: this.context.switchLoopContext.getContinueTarget(node.label, sourceLocation),
     })
   }
   visitBreakStatement(node: ts.BreakStatement): awst.Statement | awst.Statement[] {
@@ -352,7 +352,7 @@ export class FunctionVisitor
 
     return nodeFactory.goto({
       sourceLocation,
-      label: this.context.switchLoopContext.getBreakTarget(node.label, sourceLocation),
+      target: this.context.switchLoopContext.getBreakTarget(node.label, sourceLocation),
     })
   }
   visitReturnStatement(node: ts.ReturnStatement): awst.Statement | awst.Statement[] {
@@ -437,7 +437,14 @@ export class FunctionVisitor
       {
         sourceLocation: this.sourceLocation(node),
       },
-      node.statements.flatMap((s) => this.accept(s)),
+      node.statements.flatMap((s) => {
+        try {
+          return this.accept(s)
+        } catch (e) {
+          if (e instanceof AwstBuildFailureError) return []
+          throw e
+        }
+      }),
     )
   }
 
