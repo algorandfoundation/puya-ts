@@ -1,15 +1,16 @@
-import {
-  Account,
-  Application,
-  Asset,
-  biguint,
-  bytes,
-  internal,
-  uint64
-} from '@algorandfoundation/algo-ts'
+import { Account, Application, Asset, biguint, bytes, internal, uint64 } from '@algorandfoundation/algo-ts'
 import { AssertError, avmError, AvmError } from './errors'
 import { buildOpsImplementation } from './ops-implementation'
-import { BigUintCls, BytesCls, StubBigUintCompat, StubBytesCompat, StubUint64Compat, toBytes, toExternalValue, Uint64Cls } from './primitives'
+import {
+  BigUintCls,
+  BytesCls,
+  StubBigUintCompat,
+  StubBytesCompat,
+  StubUint64Compat,
+  toBytes,
+  toExternalValue,
+  Uint64Cls,
+} from './primitives'
 import { AccountCls, ApplicationCls, AssetCls } from './reference'
 import { Transaction } from './transactions/runtime'
 import { DeliberateAny } from './typescript-helpers'

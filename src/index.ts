@@ -1,10 +1,10 @@
-import { createTsProgram } from './parser'
-import { CompileOptions } from './compile-options'
-import { buildAwst } from './awst_build'
-import { ModuleStatement } from './awst/nodes'
-import { LogEvent, logger } from './logger'
-import { AwstBuildFailureError } from './errors'
 import ts from 'typescript'
+import { ModuleStatement } from './awst/nodes'
+import { buildAwst } from './awst_build'
+import { CompileOptions } from './compile-options'
+import { AwstBuildFailureError } from './errors'
+import { LogEvent, logger } from './logger'
+import { createTsProgram } from './parser'
 
 export type CompileResult = {
   logs: LogEvent[]

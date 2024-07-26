@@ -23,5 +23,4 @@ export class TestHarness {
   reset() {
     internal.ctxMgr.reset()
   }
-
 }
