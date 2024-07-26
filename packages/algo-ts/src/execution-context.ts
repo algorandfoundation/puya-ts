@@ -1,5 +1,5 @@
-import { biguint, BigUintCompat, bytes, BytesCompat, StringCompat, uint64, Uint64Compat } from './primitives'
 import { OpsNamespace } from './op-types'
+import { biguint, BigUintCompat, bytes, BytesCompat, StringCompat, uint64, Uint64Compat } from './primitives'
 import { Account, Application, Asset } from './reference'
 
 export type ExecutionContext = {
@@ -7,7 +7,7 @@ export type ExecutionContext = {
   ops: Partial<OpsNamespace>
   makeUint64(v: Uint64Compat): uint64
   makeInterpolatedBytes(b: TemplateStringsArray, replacements: BytesCompat[]): bytes
-  makeBytes(b: BytesCompat | undefined): bytes
+  makeBytes(b: BytesCompat): bytes
   makeBigUint(v: BigUintCompat): biguint
   application(id: uint64): Application
   asset(id: uint64 | undefined): Asset
