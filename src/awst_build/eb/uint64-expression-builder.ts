@@ -8,7 +8,7 @@ import {
   InstanceExpressionBuilder,
   LiteralExpressionBuilder,
 } from './index'
-import { NumericComparison, UInt64BinaryOperator, UInt64PostfixUnaryOperator, UInt64UnaryOperator } from '../../awst/nodes'
+import { Expression, NumericComparison, UInt64BinaryOperator, UInt64PostfixUnaryOperator, UInt64UnaryOperator } from '../../awst/nodes'
 import { SourceLocation } from '../../awst/source-location'
 import { nodeFactory } from '../../awst/node-factory'
 import { CodeError, NotSupported } from '../../errors'
@@ -47,6 +47,15 @@ export class UInt64ExpressionBuilder extends InstanceExpressionBuilder {
   get ptype(): InstanceType {
     return uint64PType
   }
+  boolEval(sourceLocation: SourceLocation): Expression {
+    return nodeFactory.numericComparisonExpression({
+      sourceLocation,
+      operator: NumericComparison.ne,
+      lhs: this.resolve(),
+      rhs: nodeFactory.uInt64Constant({ value: 0n, sourceLocation }),
+    })
+  }
+
   compare(other: InstanceBuilder, op: BuilderComparisonOp, sourceLocation: SourceLocation): InstanceBuilder {
     const otherExpr = requireExpressionOfType(other, uint64PType, sourceLocation)
     const numComOp = tryConvertEnum(op, BuilderComparisonOp, NumericComparison)
@@ -61,7 +70,6 @@ export class UInt64ExpressionBuilder extends InstanceExpressionBuilder {
         rhs: otherExpr,
         operator: numComOp,
         sourceLocation,
-        wtype: wtypes.boolWType,
       }),
     )
   }

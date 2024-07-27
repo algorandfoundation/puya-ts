@@ -8,6 +8,7 @@ import {
   Expression,
   ExpressionStatement,
   IntegerConstant,
+  NumericComparisonExpression,
   Statement,
   StringConstant,
   UInt64BinaryOperation,
@@ -16,7 +17,7 @@ import { DeliberateAny, Props } from '../typescript-helpers'
 import { SourceLocation } from './source-location'
 import * as wtypes from './wtypes'
 import { invariant } from '../util'
-import { WType } from './wtypes'
+import { boolWType, WType } from './wtypes'
 
 type ConcreteNodes = typeof concreteNodes
 
@@ -56,6 +57,12 @@ const explicitNodeFactory = {
   bigUIntBinaryOperation(props: Omit<Props<BigUIntBinaryOperation>, 'wtype'>): BigUIntBinaryOperation {
     return new BigUIntBinaryOperation({
       wtype: wtypes.biguintWType,
+      ...props,
+    })
+  },
+  numericComparisonExpression(props: Omit<Props<NumericComparisonExpression>, 'wtype'>): NumericComparisonExpression {
+    return new NumericComparisonExpression({
+      wtype: boolWType,
       ...props,
     })
   },

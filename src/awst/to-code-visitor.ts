@@ -152,7 +152,7 @@ export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, Statemen
     throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
   }
   visitConditionalExpression(expression: nodes.ConditionalExpression): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    return `${expression.condition.accept(this)} ? ${expression.trueExpr.accept(this)} : ${expression.falseExpr.accept(this)}`
   }
   visitAssignmentExpression(expression: nodes.AssignmentExpression): string {
     const rvalue =
