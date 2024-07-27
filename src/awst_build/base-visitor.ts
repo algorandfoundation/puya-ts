@@ -14,7 +14,7 @@ import ts from 'typescript'
 import { TextVisitor } from './text-visitor'
 import { CodeError, NotSupported, TodoError } from '../errors'
 import { SourceLocation } from '../awst/source-location'
-import { requireInstanceBuilder } from './eb/util'
+import { requireExpressionOfType, requireInstanceBuilder } from './eb/util'
 import { accept, Visitor } from '../visitor/visitor'
 import { ObjectLiteralExpressionBuilder, ObjectLiteralParts } from './eb/object-literal-expression-builder'
 import { codeInvariant, invariant } from '../util'
@@ -25,6 +25,8 @@ import { nodeFactory } from '../awst/node-factory'
 import { ArrayLiteralExpressionBuilder } from './eb/array-literal-expression-builder'
 import { ScalarLiteralExpressionBuilder } from './eb/scalar-literal-expression-builder'
 import { logger } from '../logger'
+import { typeRegistry } from './type-registry'
+import { ConditionalExpressionBuilder } from './eb/conditional-expression-builder'
 
 export abstract class BaseVisitor<TContext extends BaseContext> implements Visitor<Expressions, NodeBuilder> {
   private baseAccept = <TNode extends ts.Node>(node: TNode) => accept<BaseVisitor<BaseContext>, TNode>(this, node)
@@ -274,7 +276,17 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
   }
 
   visitConditionalExpression(node: ts.ConditionalExpression): NodeBuilder {
-    throw new TodoError('ConditionalExpression')
+    const sourceLocation = this.sourceLocation(node)
+    const condition = requireInstanceBuilder(this.baseAccept(node.condition), sourceLocation).boolEval(sourceLocation)
+    const whenTrue = requireInstanceBuilder(this.baseAccept(node.whenTrue), sourceLocation)
+    const whenFalse = requireInstanceBuilder(this.baseAccept(node.whenFalse), sourceLocation)
+    const ptype = this.context.resolver.resolve(node, sourceLocation)
+    return new ConditionalExpressionBuilder(sourceLocation, {
+      condition,
+      whenTrue,
+      whenFalse,
+      ptype,
+    })
   }
 
   visitTemplateExpression(node: ts.TemplateExpression): NodeBuilder {

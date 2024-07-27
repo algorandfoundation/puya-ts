@@ -1,4 +1,4 @@
-import ts from 'typescript'
+import ts, { UnionType } from 'typescript'
 import {
   anyPType,
   ApprovalProgram,
@@ -20,7 +20,16 @@ import { CodeError, InternalError } from '../errors'
 import { typeRegistry } from './type-registry'
 import { logger } from '../logger'
 import { Constants } from '../constants'
-import { AppStorageType, ContractClassPType, FunctionPType, GlobalStateType, NamespacePType, ObjectPType } from './ptypes/ptype-classes'
+import {
+  AppStorageType,
+  ContractClassPType,
+  FunctionPType,
+  GlobalStateType,
+  LiteralOnlyType,
+  NamespacePType,
+  ObjectPType,
+  UnionPType,
+} from './ptypes/ptype-classes'
 import { SymbolName } from './symbol-name'
 
 export class TypeResolver {
@@ -69,6 +78,9 @@ export class TypeResolver {
   }
 
   resolveType(tsType: ts.Type, sourceLocation: SourceLocation): PType {
+    if (isUnionType(tsType)) {
+      return UnionPType.fromTypes(tsType.types.map((t) => this.resolveType(t, sourceLocation)))
+    }
     if (hasFlags(tsType.flags, ts.TypeFlags.Null)) {
       return nullPType
     }
@@ -238,4 +250,8 @@ function isTupleType(tsType: ts.Type): tsType is ts.TupleType {
 
 function isTupleReference(tsType: ts.Type): tsType is ts.TypeReference & { target: ts.TupleType } {
   return isTypeReference(tsType) && isTupleType(tsType.target)
+}
+
+function isUnionType(tsType: ts.Type): tsType is ts.UnionType {
+  return tsType.flags === ts.TypeFlags.Union
 }

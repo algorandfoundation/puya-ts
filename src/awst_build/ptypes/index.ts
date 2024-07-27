@@ -1,13 +1,5 @@
 import { wtypes } from '../../awst'
-import {
-  LibFunctionType,
-  LiteralValueType,
-  InstanceType,
-  TransientType,
-  FunctionPType,
-  BaseContractClassType,
-  UnsupportedType,
-} from './ptype-classes'
+import { LibFunctionType, InstanceType, LiteralOnlyType, FunctionPType, BaseContractClassType, UnsupportedType } from './ptype-classes'
 import { Constants } from '../../constants'
 export { PType, TuplePType, IntrinsicEnumType } from './ptype-classes'
 export * from './op-ptypes'
@@ -37,9 +29,12 @@ export const BooleanFunction = new LibFunctionType({
   module: 'lib.d.ts',
 })
 
-export const bigintLiteralPType = new LiteralValueType({
+export const bigintLiteralPType = new LiteralOnlyType({
   name: 'bigint',
   module: 'lib.d.ts',
+  resolvableTo: [],
+  singleton: false,
+  wtypeMessage: 'bigint is not valid as a variable, parameter, or property type. Please use an algo-ts type such as `uint64` or `biguint`',
 })
 export const stringPType = new InstanceType({
   name: 'str',
@@ -56,23 +51,21 @@ export const uint64PType = new InstanceType({
   module: Constants.primitivesModuleName,
   wtype: wtypes.uint64WType,
 })
-
-export const numberPType = new TransientType({
+export const biguintPType = new InstanceType({
+  name: 'biguint',
+  module: Constants.primitivesModuleName,
+  wtype: wtypes.biguintWType,
+})
+export const numberPType = new LiteralOnlyType({
   name: 'number',
   module: 'lib.d.ts',
-  altType: uint64PType,
+  resolvableTo: [uint64PType, biguintPType],
   singleton: false,
   wtypeMessage: 'number is not valid as a variable, parameter, or property type. Please use an algo-ts type such as `uint64` or `biguint`',
 })
 export const Uint64Function = new LibFunctionType({
   name: 'Uint64',
   module: Constants.primitivesModuleName,
-})
-
-export const biguintPType = new InstanceType({
-  name: 'biguint',
-  module: Constants.primitivesModuleName,
-  wtype: wtypes.biguintWType,
 })
 
 export const BigUintFunction = new LibFunctionType({

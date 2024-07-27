@@ -1,0 +1,215 @@
+[
+{
+  "_type": "Subroutine",
+  "sourceLocation": "tests/approvals/conditional-expression.algo.ts[2:0-9:1]",
+  "name": "test",
+  "moduleName": "tests/approvals/conditional-expression.algo.ts",
+  "args": [
+    {
+      "_type": "SubroutineArgument",
+      "sourceLocation": "tests/approvals/conditional-expression.algo.ts[2:14-2:23]",
+      "name": "x",
+      "wtype": "uint64"
+    },
+    {
+      "_type": "SubroutineArgument",
+      "sourceLocation": "tests/approvals/conditional-expression.algo.ts[2:25-2:34]",
+      "name": "y",
+      "wtype": "uint64"
+    }
+  ],
+  "returnType": "uint64",
+  "body": {
+    "_type": "Block",
+    "sourceLocation": "tests/approvals/conditional-expression.algo.ts[2:36-9:1]",
+    "body": [
+      {
+        "_type": "AssignmentStatement",
+        "sourceLocation": "tests/approvals/conditional-expression.algo.ts[3:8-3:25]",
+        "target": {
+          "_type": "VarExpression",
+          "sourceLocation": "tests/approvals/conditional-expression.algo.ts[3:8-3:9]",
+          "wtype": "uint64",
+          "name": "a"
+        },
+        "value": {
+          "_type": "ConditionalExpression",
+          "sourceLocation": "tests/approvals/conditional-expression.algo.ts[3:12-3:25]",
+          "wtype": "uint64",
+          "condition": {
+            "_type": "NumericComparisonExpression",
+            "sourceLocation": "tests/approvals/conditional-expression.algo.ts[3:12-3:17]",
+            "wtype": "bool",
+            "lhs": {
+              "_type": "VarExpression",
+              "sourceLocation": "tests/approvals/conditional-expression.algo.ts[3:12-3:13]",
+              "wtype": "uint64",
+              "name": "x"
+            },
+            "operator": "<",
+            "rhs": {
+              "_type": "IntegerConstant",
+              "sourceLocation": "tests/approvals/conditional-expression.algo.ts[3:16-3:17]",
+              "wtype": "uint64",
+              "value": "4n"
+            }
+          },
+          "trueExpr": {
+            "_type": "VarExpression",
+            "sourceLocation": "tests/approvals/conditional-expression.algo.ts[3:20-3:21]",
+            "wtype": "uint64",
+            "name": "x"
+          },
+          "falseExpr": {
+            "_type": "VarExpression",
+            "sourceLocation": "tests/approvals/conditional-expression.algo.ts[3:24-3:25]",
+            "wtype": "uint64",
+            "name": "y"
+          }
+        }
+      },
+      {
+        "_type": "AssignmentStatement",
+        "sourceLocation": "tests/approvals/conditional-expression.algo.ts[4:8-4:33]",
+        "target": {
+          "_type": "VarExpression",
+          "sourceLocation": "tests/approvals/conditional-expression.algo.ts[4:8-4:9]",
+          "wtype": "uint64",
+          "name": "b"
+        },
+        "value": {
+          "_type": "ConditionalExpression",
+          "sourceLocation": "tests/approvals/conditional-expression.algo.ts[4:20-4:33]",
+          "wtype": "uint64",
+          "condition": {
+            "_type": "NumericComparisonExpression",
+            "sourceLocation": "tests/approvals/conditional-expression.algo.ts[4:20-4:33]",
+            "wtype": "bool",
+            "lhs": {
+              "_type": "UInt64BinaryOperation",
+              "sourceLocation": "tests/approvals/conditional-expression.algo.ts[4:20-4:25]",
+              "wtype": "uint64",
+              "left": {
+                "_type": "VarExpression",
+                "sourceLocation": "tests/approvals/conditional-expression.algo.ts[4:20-4:21]",
+                "wtype": "uint64",
+                "name": "y"
+              },
+              "op": "%",
+              "right": {
+                "_type": "IntegerConstant",
+                "sourceLocation": "tests/approvals/conditional-expression.algo.ts[4:24-4:25]",
+                "wtype": "uint64",
+                "value": "2n"
+              }
+            },
+            "operator": "!=",
+            "rhs": {
+              "_type": "IntegerConstant",
+              "sourceLocation": "tests/approvals/conditional-expression.algo.ts[4:20-4:33]",
+              "wtype": "uint64",
+              "value": "0n"
+            }
+          },
+          "trueExpr": {
+            "_type": "IntegerConstant",
+            "sourceLocation": "tests/approvals/conditional-expression.algo.ts[4:28-4:29]",
+            "wtype": "uint64",
+            "value": "2n"
+          },
+          "falseExpr": {
+            "_type": "IntegerConstant",
+            "sourceLocation": "tests/approvals/conditional-expression.algo.ts[4:32-4:33]",
+            "wtype": "uint64",
+            "value": "1n"
+          }
+        }
+      },
+      {
+        "_type": "AssignmentStatement",
+        "sourceLocation": "tests/approvals/conditional-expression.algo.ts[5:8-5:48]",
+        "target": {
+          "_type": "VarExpression",
+          "sourceLocation": "tests/approvals/conditional-expression.algo.ts[5:8-5:9]",
+          "wtype": "uint64",
+          "name": "c"
+        },
+        "value": {
+          "_type": "ConditionalExpression",
+          "sourceLocation": "tests/approvals/conditional-expression.algo.ts[5:20-5:48]",
+          "wtype": "uint64",
+          "condition": {
+            "_type": "NumericComparisonExpression",
+            "sourceLocation": "tests/approvals/conditional-expression.algo.ts[5:20-5:25]",
+            "wtype": "bool",
+            "lhs": {
+              "_type": "VarExpression",
+              "sourceLocation": "tests/approvals/conditional-expression.algo.ts[5:20-5:21]",
+              "wtype": "uint64",
+              "name": "x"
+            },
+            "operator": ">",
+            "rhs": {
+              "_type": "VarExpression",
+              "sourceLocation": "tests/approvals/conditional-expression.algo.ts[5:24-5:25]",
+              "wtype": "uint64",
+              "name": "y"
+            }
+          },
+          "trueExpr": {
+            "_type": "ConditionalExpression",
+            "sourceLocation": "tests/approvals/conditional-expression.algo.ts[5:29-5:43]",
+            "wtype": "uint64",
+            "condition": {
+              "_type": "NumericComparisonExpression",
+              "sourceLocation": "tests/approvals/conditional-expression.algo.ts[5:29-5:35]",
+              "wtype": "bool",
+              "lhs": {
+                "_type": "VarExpression",
+                "sourceLocation": "tests/approvals/conditional-expression.algo.ts[5:29-5:30]",
+                "wtype": "uint64",
+                "name": "y"
+              },
+              "operator": ">",
+              "rhs": {
+                "_type": "IntegerConstant",
+                "sourceLocation": "tests/approvals/conditional-expression.algo.ts[5:33-5:35]",
+                "wtype": "uint64",
+                "value": "10n"
+              }
+            },
+            "trueExpr": {
+              "_type": "IntegerConstant",
+              "sourceLocation": "tests/approvals/conditional-expression.algo.ts[5:38-5:39]",
+              "wtype": "uint64",
+              "value": "3n"
+            },
+            "falseExpr": {
+              "_type": "VarExpression",
+              "sourceLocation": "tests/approvals/conditional-expression.algo.ts[5:42-5:43]",
+              "wtype": "uint64",
+              "name": "y"
+            }
+          },
+          "falseExpr": {
+            "_type": "VarExpression",
+            "sourceLocation": "tests/approvals/conditional-expression.algo.ts[5:47-5:48]",
+            "wtype": "uint64",
+            "name": "x"
+          }
+        }
+      },
+      {
+        "_type": "ReturnStatement",
+        "sourceLocation": "tests/approvals/conditional-expression.algo.ts[8:2-8:10]",
+        "value": {
+          "_type": "VarExpression",
+          "sourceLocation": "tests/approvals/conditional-expression.algo.ts[8:9-8:10]",
+          "wtype": "uint64",
+          "name": "a"
+        }
+      }
+    ]
+  }
+}
+]

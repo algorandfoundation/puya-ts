@@ -1,8 +1,9 @@
 import { wtypes } from '../../awst'
-import { codeInvariant, sortBy } from '../../util'
+import { codeInvariant, distinct, sortBy } from '../../util'
 import { WTuple, WType } from '../../awst/wtypes'
 import { Constants } from '../../constants'
-import { CodeError, NotSupported } from '../../errors'
+import { CodeError, InternalError, NotSupported } from '../../errors'
+import { numberPType, uint64PType } from './index'
 
 /**
  * Represents a public type visible to a developer of AlgoTS
@@ -60,31 +61,31 @@ export class InstanceType extends PType {
 /**
  * Transient types can appear in expressions but should not be used as variable or return types
  */
-export class TransientType extends PType {
+export class LiteralOnlyType extends PType {
   readonly wtype: undefined = undefined
   readonly name: string
   readonly module: string
-  readonly altType: PType
+  readonly resolvableTo: PType[]
   readonly singleton: boolean
   private readonly wtypeMessage: string | undefined
 
   constructor({
     name,
     module,
-    altType,
+    resolvableTo,
     singleton,
     wtypeMessage,
   }: {
     name: string
     module: string
-    altType: PType
+    resolvableTo: PType[]
     singleton: boolean
     wtypeMessage?: string
   }) {
     super()
     this.name = name
     this.module = module
-    this.altType = altType
+    this.resolvableTo = resolvableTo
     this.singleton = singleton
     this.wtypeMessage = wtypeMessage
   }
@@ -93,18 +94,7 @@ export class TransientType extends PType {
     throw new CodeError(this.wtypeMessage ?? `${this.fullName} is not valid as a variable, parameter, or property type`)
   }
 }
-export class LiteralValueType extends PType {
-  readonly wtype: undefined = undefined
-  readonly name: string
-  readonly module: string
-  readonly singleton = false
 
-  constructor({ name, module }: { name: string; module: string }) {
-    super()
-    this.name = name
-    this.module = module
-  }
-}
 export class LibFunctionType extends PType {
   readonly wtype: undefined
   readonly name: string
@@ -354,5 +344,44 @@ export class UnsupportedType extends PType {
 
   get wtype(): WType {
     throw new NotSupported(`The type ${this.fullName} is not supported`)
+  }
+}
+
+export class UnionPType extends PType {
+  get name() {
+    return this.types.map((t) => t.name).join(' | ')
+  }
+  get fullName() {
+    return this.types.map((t) => t.fullName).join(' | ')
+  }
+  readonly module = 'lib.d.ts'
+  readonly singleton = false
+  readonly types: PType[]
+  readonly wtype = undefined
+  private constructor({ types }: { types: PType[] }) {
+    super()
+    this.types = types
+  }
+
+  get wtypeOrThrow(): never {
+    if (this.equals(UnionPType.fromTypes([uint64PType, numberPType]))) {
+      throw new CodeError(
+        'number is not valid as a variable, parameter, or property type. Please annotate with an algo-ts type such as uint64 or biguint',
+      )
+    }
+    throw new CodeError('Union types are not valid as a variable, parameter, or property type.')
+  }
+
+  static fromTypes(types: PType[]) {
+    if (types.length === 0) {
+      throw new InternalError('Cannot create union of zero types')
+    }
+    const distinctTypes = types.filter(distinct((t) => t.fullName)).toSorted(sortBy((t) => t.fullName))
+    if (distinctTypes.length === 1) {
+      return distinctTypes[0]
+    }
+    return new UnionPType({
+      types: distinctTypes,
+    })
   }
 }

@@ -6,9 +6,10 @@ import { SourceLocation } from '../../awst/source-location'
 import { codeInvariant } from '../../util'
 import { StringConstant } from '../../awst/nodes'
 import { ScalarLiteralExpressionBuilder } from './scalar-literal-expression-builder'
+import { ConditionalExpressionBuilder } from './conditional-expression-builder'
 
 export function requireExpressionOfType(builder: NodeBuilder, ptype: PType, sourceLocation: SourceLocation): awst.Expression {
-  if (builder instanceof LiteralExpressionBuilder) {
+  if (builder instanceof LiteralExpressionBuilder || builder instanceof ConditionalExpressionBuilder) {
     return builder.resolveToPType(ptype, sourceLocation).resolve()
   }
   if (builder instanceof InstanceBuilder && builder.ptype?.equals(ptype)) {

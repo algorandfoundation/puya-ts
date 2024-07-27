@@ -11,7 +11,7 @@ import { nodeFactory } from '../awst/node-factory'
 import { requireExpressionOfType, requireInstanceBuilder } from './eb/util'
 import { PType, voidPType } from './ptypes'
 import { BaseVisitor } from './base-visitor'
-import { ObjectPType, TransientType } from './ptypes/ptype-classes'
+import { ObjectPType, LiteralOnlyType } from './ptypes/ptype-classes'
 import { SwitchLoopContext } from './switch-loop-context'
 import { Block, Goto, ReturnStatement } from '../awst/nodes'
 import { SourceLocation } from '../awst/source-location'
@@ -65,10 +65,10 @@ export class FunctionVisitor
       codeInvariant(node.name, 'Anonymous functions are not supported', sourceLocation)
       this._functionName = this.textVisitor.accept(node.name)
       this._returnType = node.type ? ctx.getPTypeForNode(node.type) : ctx.getImplicitReturnType(node)
-      if (this._returnType instanceof TransientType) {
+      if (this._returnType instanceof LiteralOnlyType) {
         logger.error(
           sourceLocation,
-          `${this._returnType} cannot be used as a return type. Consider annotating the return type explicitly as ${this._returnType.altType}`,
+          `${this._returnType} cannot be used as a return type. Consider annotating the return type explicitly as ${this._returnType.resolvableTo.length > 1 ? 'one of ' : ' '}${this._returnType.resolvableTo.join(', ')}`,
         )
       }
     }
@@ -199,17 +199,8 @@ export class FunctionVisitor
         return []
       }
 
-      // const target = requireInstanceBuilder(this.accept(d.name), sourceLocation)
-      // invariant(target.ptype, 'Target of assignment must have ptype')
       const source = requireInstanceBuilder(this.accept(d.initializer), sourceLocation)
       return Array.from(this.bindingNameAssignment(d.name, source, sourceLocation))
-      //
-      // const value = requireExpressionOfType(this.accept(d.initializer), target.ptype, sourceLocation)
-      // return nodeFactory.assignmentStatement({
-      //   target: target.resolveLValue(),
-      //   sourceLocation: sourceLocation,
-      //   value,
-      // })
     })
   }
 
