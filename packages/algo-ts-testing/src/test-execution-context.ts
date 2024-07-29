@@ -1,11 +1,13 @@
-import { Account, Application, Asset, biguint, bytes, internal, uint64 } from '@algorandfoundation/algo-ts'
+import { Account, Application, Asset, biguint, bytes, internal, str, uint64 } from '@algorandfoundation/algo-ts'
 import { AssertError, avmError, AvmError } from './errors'
 import { buildOpsImplementation } from './ops-implementation'
 import {
   BigUintCls,
   BytesCls,
+  StrCls,
   StubBigUintCompat,
   StubBytesCompat,
+  StubStrCompat,
   StubUint64Compat,
   toBytes,
   toExternalValue,
@@ -67,6 +69,22 @@ export class TestExecutionContext implements internal.ExecutionContext {
 
   makeBytes(b: StubBytesCompat): bytes {
     return BytesCls.fromCompat(b).asAlgoTs()
+  }
+  makeInterpolatedStr(b: TemplateStringsArray, replacements: StubStrCompat[]): str {
+    return b
+      .flatMap((templateText, index) => {
+        const replacement = replacements[index]
+        if (replacement) {
+          return [StrCls.fromCompat(templateText), StrCls.fromCompat(replacement)]
+        }
+        return [StrCls.fromCompat(templateText)]
+      })
+      .reduce((a, b) => a.concat(b))
+      .asAlgoTs()
+  }
+
+  makeStr(b: StubStrCompat): str {
+    return StrCls.fromCompat(b).asAlgoTs()
   }
   makeBigUint(v: StubBigUintCompat): biguint {
     return BigUintCls.fromCompat(v).asAlgoTs()

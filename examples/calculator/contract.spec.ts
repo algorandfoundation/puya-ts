@@ -39,7 +39,7 @@ describe('Calculator', () => {
 
       expect(left).toBe(2n)
       expect(right).toBe(3n)
-      expect(outcome).toBe('32 + 33 = 35')
+      expect(outcome).toBe('2 + 3 = 5')
       expect(result).toBe(true)
     })
   })
