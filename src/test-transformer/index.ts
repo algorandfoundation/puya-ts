@@ -3,13 +3,14 @@ import { DeliberateAny } from '../../packages/algo-ts-testing/src/typescript-hel
 import { TypeReflector } from './type-reflector'
 import { SourceFileVisitor } from './visitors'
 
+const includes: string[] = ['.algo.ts', '.spec.ts']
 const programTransformer = {
   type: 'program',
   factory(program: ts.Program): ts.TransformerFactory<ts.SourceFile> {
     const typeReflector = new TypeReflector(program)
     return (context) => {
       return (sourceFile) => {
-        if (!sourceFile.fileName.endsWith('.algo.ts')) return sourceFile
+        if (!includes.some((i) => sourceFile.fileName.endsWith(i))) return sourceFile
         return new SourceFileVisitor(context, sourceFile, typeReflector).result()
       }
     }
