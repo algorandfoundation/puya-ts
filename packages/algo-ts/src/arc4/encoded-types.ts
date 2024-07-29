@@ -1,5 +1,5 @@
 import { ctxMgr } from '../execution-context'
-import { biguint, BigUintCompat, bytes, BytesBacked, StringCompat, uint64, Uint64Compat } from '../primitives'
+import { biguint, BigUintCompat, bytes, BytesBacked, StrCompat, uint64, Uint64Compat } from '../primitives'
 import { Account } from '../reference'
 import { err } from '../util'
 
@@ -14,7 +14,7 @@ abstract class AbiEncoded implements BytesBacked {
 }
 
 export class Str extends AbiEncoded {
-  constructor(s: StringCompat) {
+  constructor(s: StrCompat) {
     super()
   }
   get native(): string {

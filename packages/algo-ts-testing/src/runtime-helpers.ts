@@ -31,7 +31,7 @@ export function binaryOp(left: unknown, right: unknown, op: BinaryOps) {
   const lbi = tryGetBigInt(left)
   const rbi = tryGetBigInt(right)
   if (lbi !== undefined && rbi !== undefined) {
-    const result =  defaultBinaryOp(lbi, rbi, op)
+    const result = defaultBinaryOp(lbi, rbi, op)
     if (left instanceof BigUintCls || right instanceof BigUintCls) {
       return new BigUintCls(result)
     } else if (left instanceof Uint64Cls || right instanceof Uint64Cls) {
