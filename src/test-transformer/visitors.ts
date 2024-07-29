@@ -1,7 +1,7 @@
 import ts from 'typescript'
-import { TypeReflector } from './type-reflector'
 import { nodeFactory } from './node-factory'
 import { supportedBinaryOpString } from './supported-binary-op-string'
+import { TypeReflector } from './type-reflector'
 
 const { factory } = ts
 
@@ -25,7 +25,6 @@ export class SourceFileVisitor {
 
   public result(): ts.SourceFile {
     const updatedSourceFile = ts.visitNode(this.sourceFile, this.visit) as ts.SourceFile
-
     return factory.updateSourceFile(updatedSourceFile, [
       nodeFactory.importHelpers(),
       ...updatedSourceFile.statements,
@@ -34,8 +33,8 @@ export class SourceFileVisitor {
   }
 
   private visit = (node: ts.Node): ts.Node => {
-    if (ts.isFunctionDeclaration(node)) {
-      return new FunctionDecVisitor(this.context, node).result()
+    if (ts.isFunctionLike(node)) {
+      return new FunctionLikeDecVisitor(this.context, node).result()
     }
     if (ts.isClassDeclaration(node)) {
       return new ClassVisitor(this.context, this.helper, node).result()
@@ -70,16 +69,16 @@ class FunctionOrMethodVisitor {
   }
 }
 
-class FunctionDecVisitor extends FunctionOrMethodVisitor {
+class FunctionLikeDecVisitor extends FunctionOrMethodVisitor {
   constructor(
     context: ts.TransformationContext,
-    private funcNode: ts.FunctionDeclaration,
+    private funcNode: ts.SignatureDeclaration,
   ) {
     super(context)
   }
 
-  public result(): ts.FunctionDeclaration {
-    return ts.visitNode(this.funcNode, this.visit) as ts.FunctionDeclaration
+  public result(): ts.SignatureDeclaration {
+    return ts.visitNode(this.funcNode, this.visit) as ts.SignatureDeclaration
   }
 }
 class MethodDecVisitor extends FunctionOrMethodVisitor {
