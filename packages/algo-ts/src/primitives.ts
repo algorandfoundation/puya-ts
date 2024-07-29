@@ -2,7 +2,7 @@ import { ctxMgr } from './execution-context'
 
 export type Uint64Compat = uint64 | bigint | boolean | number
 export type BigUintCompat = Uint64Compat | bigint | bytes | number
-export type StringCompat = string
+export type StrCompat = string | str
 export type BytesCompat = bytes | string | Uint8Array
 
 /**
@@ -87,6 +87,19 @@ Bytes.fromBase64 = (b64: string): bytes => {
  */
 Bytes.fromBase32 = (b32: string): bytes => {
   throw new Error('TODO')
+}
+
+export type str = {
+  toString(): string
+}
+export function Str(value: TemplateStringsArray, ...replacements: StrCompat[]): str
+export function Str(value: StrCompat): str
+export function Str(value: TemplateStringsArray | StrCompat, ...replacements: StrCompat[]): str {
+  if (isTemplateStringsArray(value)) {
+    return ctxMgr.instance.makeInterpolatedStr(value, replacements)
+  } else {
+    return ctxMgr.instance.makeStr(value)
+  }
 }
 
 function isTemplateStringsArray(v: unknown): v is TemplateStringsArray {

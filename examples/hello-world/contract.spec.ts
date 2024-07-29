@@ -21,7 +21,7 @@ describe('When calling the HelloWorldContract', () => {
         },
       ]
       const result = contract.approvalProgram()
-      expect(ctx.exportLogs('s')).toStrictEqual(['Hello, 576f726c64'])
+      expect(ctx.exportLogs('s')).toStrictEqual(['Hello, World'])
       expect(result).toBe(true)
     })
   })
