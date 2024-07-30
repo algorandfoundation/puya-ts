@@ -1,4 +1,4 @@
-import { uint8ArrayToBigInt, uint8ArrayToUtf8 } from './encoding-util'
+import { uint8ArrayToBigInt, uint8ArrayToUtf8 } from './internal'
 
 export type LogDecoding = 'i' | 's' | 'b'
 
