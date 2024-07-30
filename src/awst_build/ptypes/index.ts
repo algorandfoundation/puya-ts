@@ -1,5 +1,5 @@
 import { wtypes } from '../../awst'
-import { LibFunctionType, InstanceType, LiteralOnlyType, FunctionPType, BaseContractClassType, UnsupportedType } from './ptype-classes'
+import { LibFunctionType, InstanceType, TransientType, FunctionPType, BaseContractClassType, UnsupportedType } from './ptype-classes'
 import { Constants } from '../../constants'
 export { PType, TuplePType, IntrinsicEnumType } from './ptype-classes'
 export * from './op-ptypes'
@@ -29,12 +29,14 @@ export const BooleanFunction = new LibFunctionType({
   module: 'lib.d.ts',
 })
 
-export const bigintPType = new LiteralOnlyType({
+export const bigintPType = new TransientType({
   name: 'bigint',
   module: 'lib.d.ts',
-  resolvableTo: [],
   singleton: false,
-  wtypeMessage: 'bigint is not valid as a variable, parameter, or property type. Please use an algo-ts type such as `uint64` or `biguint`',
+  typeMessage:
+    '`bigint` is not valid as a variable, parameter, return, or property type. Please use an algo-ts type such as `biguint` or `uint64`',
+  expressionMessage:
+    'Expression of type `bigint` must be explicitly converted to an algo-ts type, for example by wrapping the expression in `Uint64(...)`',
 })
 export const stringPType = new InstanceType({
   name: 'string',
@@ -56,12 +58,14 @@ export const biguintPType = new InstanceType({
   module: Constants.primitivesModuleName,
   wtype: wtypes.biguintWType,
 })
-export const numberPType = new LiteralOnlyType({
+export const numberPType = new TransientType({
   name: 'number',
   module: 'lib.d.ts',
-  resolvableTo: [uint64PType, biguintPType],
   singleton: false,
-  wtypeMessage: 'number is not valid as a variable, parameter, or property type. Please use an algo-ts type such as `uint64` or `biguint`',
+  typeMessage:
+    '`number` is not valid as a variable, parameter, return, or property type. Please use an algo-ts type such as `uint64` or `biguint`',
+  expressionMessage:
+    'Expression of type `number` must be explicitly converted to an algo-ts type, for example by wrapping the expression in `Uint64(...)`',
 })
 export const Uint64Function = new LibFunctionType({
   name: 'Uint64',

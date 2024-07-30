@@ -567,8 +567,10 @@ export class SingleEvaluation extends Expression {
   constructor(props: Props<SingleEvaluation>) {
     super(props)
     this.source = props.source
+    this.id = props.id
   }
   source: Expression
+  id: string
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitSingleEvaluation(this)
   }

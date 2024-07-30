@@ -174,21 +174,14 @@
         "_type": "ReturnStatement",
         "sourceLocation": "tests/approvals/prefix-postfix-operators.algo.ts[8:2-8:11]",
         "value": {
-          "_type": "NumericComparisonExpression",
+          "_type": "Not",
           "sourceLocation": "tests/approvals/prefix-postfix-operators.algo.ts[8:9-8:11]",
           "wtype": "bool",
-          "lhs": {
+          "expr": {
             "_type": "VarExpression",
             "sourceLocation": "tests/approvals/prefix-postfix-operators.algo.ts[8:10-8:11]",
             "wtype": "uint64",
             "name": "y"
-          },
-          "operator": "==",
-          "rhs": {
-            "_type": "IntegerConstant",
-            "sourceLocation": "tests/approvals/prefix-postfix-operators.algo.ts[8:9-8:11]",
-            "wtype": "uint64",
-            "value": "0n"
           }
         }
       }
@@ -343,21 +336,23 @@
         "_type": "ReturnStatement",
         "sourceLocation": "tests/approvals/prefix-postfix-operators.algo.ts[15:2-15:11]",
         "value": {
-          "_type": "NumericComparisonExpression",
+          "_type": "Not",
           "sourceLocation": "tests/approvals/prefix-postfix-operators.algo.ts[15:9-15:11]",
           "wtype": "bool",
-          "lhs": {
-            "_type": "VarExpression",
-            "sourceLocation": "tests/approvals/prefix-postfix-operators.algo.ts[15:10-15:11]",
-            "wtype": "biguint",
-            "name": "y"
-          },
-          "operator": "==",
-          "rhs": {
-            "_type": "IntegerConstant",
+          "expr": {
+            "_type": "IntrinsicCall",
             "sourceLocation": "tests/approvals/prefix-postfix-operators.algo.ts[15:9-15:11]",
             "wtype": "uint64",
-            "value": "0n"
+            "opCode": "bitlen",
+            "immediates": [],
+            "stackArgs": [
+              {
+                "_type": "VarExpression",
+                "sourceLocation": "tests/approvals/prefix-postfix-operators.algo.ts[15:10-15:11]",
+                "wtype": "biguint",
+                "name": "y"
+              }
+            ]
           }
         }
       }

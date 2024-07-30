@@ -1,5 +1,4 @@
 import { Visitor, accept } from '../visitor/visitor'
-import { BaseContext } from './context'
 import { Expressions } from '../visitor/syntax-names'
 import { awst } from '../awst'
 import ts, {
@@ -40,6 +39,7 @@ import { NodeBuilder } from './eb'
 import { requireConstantOfType, requireInstanceBuilder } from './eb/util'
 import { PType } from './ptypes'
 import { BaseVisitor } from './base-visitor'
+import { BaseContext } from './context/base-context'
 
 /**
  * Parses an expression and attempts to extract a compile time constant from it.

@@ -1,4 +1,4 @@
-import { SourceFileContext, UniqueNameResolver } from './context'
+import { SourceFileContext } from './context'
 import { ModuleStatements } from '../visitor/syntax-names'
 import * as awst from '../awst/nodes'
 import ts from 'typescript'
@@ -12,6 +12,7 @@ import { nodeFactory } from '../awst/node-factory'
 import { BaseVisitor } from './base-visitor'
 import { ContractClassPType } from './ptypes/ptype-classes'
 import { requireConstantOfType } from './eb/util'
+import { UniqueNameResolver } from './context/unique-name-resolver'
 
 type StatementOrDeferred = awst.ModuleStatement[] | awst.ModuleStatement | (() => awst.ModuleStatement[] | awst.ModuleStatement)
 

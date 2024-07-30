@@ -1,4 +1,3 @@
-import { BaseContext } from './context'
 import {
   AugmentedAssignmentBinaryOp,
   AugmentedAssignmentLogicalOpSyntaxes,
@@ -20,7 +19,7 @@ import { requireExpressionOfType, requireInstanceBuilder } from './eb/util'
 import { accept, Visitor } from '../visitor/visitor'
 import { ObjectLiteralExpressionBuilder, ObjectLiteralParts } from './eb/literal/object-literal-expression-builder'
 import { codeInvariant, invariant } from '../util'
-import { ContractClassPType, ObjectPType } from './ptypes/ptype-classes'
+import { ContractClassPType, ObjectPType, PType } from './ptypes/ptype-classes'
 import { ContractSuperBuilder, ContractThisBuilder } from './eb/contract-builder'
 import { StringFunctionBuilder, StringExpressionBuilder } from './eb/string-expression-builder'
 import { nodeFactory } from '../awst/node-factory'
@@ -31,6 +30,9 @@ import { typeRegistry } from './type-registry'
 import { ConditionalExpressionBuilder } from './eb/literal/conditional-expression-builder'
 import { BooleanExpressionBuilder } from './eb/boolean-expression-builder'
 import { bigintPType, boolPType, numberPType } from './ptypes'
+import { BaseContext } from './context/base-context'
+import { Expression } from '../awst/nodes'
+import nodeResolve from '@rollup/plugin-node-resolve'
 
 export abstract class BaseVisitor<TContext extends BaseContext> implements Visitor<Expressions, NodeBuilder> {
   private baseAccept = <TNode extends ts.Node>(node: TNode) => accept<BaseVisitor<BaseContext>, TNode>(this, node)
@@ -265,6 +267,16 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
     return target.postfixUnaryOp(op, sourceLocation)
   }
 
+  evaluateCondition(nodeOrBuilder: ts.Expression | NodeBuilder): Expression {
+    using _ = this.context.evaluationCtx.enterBooleanContext()
+    if (nodeOrBuilder instanceof NodeBuilder) {
+      return requireInstanceBuilder(nodeOrBuilder, nodeOrBuilder.sourceLocation).boolEval(nodeOrBuilder.sourceLocation)
+    } else {
+      const sourceLocation = this.sourceLocation(nodeOrBuilder)
+      return requireInstanceBuilder(this.baseAccept(nodeOrBuilder), sourceLocation).boolEval(sourceLocation)
+    }
+  }
+
   visitBinaryExpression(node: ts.BinaryExpression): NodeBuilder {
     const sourceLocation = this.sourceLocation(node)
     const left = requireInstanceBuilder(this.baseAccept(node.left), sourceLocation)
@@ -289,15 +301,25 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
             op: LogicalOpSyntaxes[binaryOpKind],
           }),
         )
+      } else if (this.context.evaluationCtx.isBoolean) {
+        return new BooleanExpressionBuilder(
+          nodeFactory.booleanBinaryOperation({
+            left: left.boolEval(sourceLocation),
+            right: right.boolEval(sourceLocation),
+            sourceLocation,
+            wtype: boolPType.wtype,
+            op: LogicalOpSyntaxes[binaryOpKind],
+          }),
+        )
       } else {
         // Expand as assignment
         // const x = a and b
         const leftSingle = left.singleEvaluation()
         const isOr = binaryOpKind === ts.SyntaxKind.BarBarToken
         const ptype = this.context.resolver.resolve(node, sourceLocation)
-        return new ConditionalExpressionBuilder({
+        return this.createConditionalExpression({
           sourceLocation,
-          condition: leftSingle,
+          condition: this.evaluateCondition(leftSingle),
           whenTrue: isOr ? leftSingle : right,
           whenFalse: isOr ? right : leftSingle,
           ptype: ptype,
@@ -320,10 +342,32 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
 
   visitConditionalExpression(node: ts.ConditionalExpression): NodeBuilder {
     const sourceLocation = this.sourceLocation(node)
-    const condition = requireInstanceBuilder(this.baseAccept(node.condition), sourceLocation)
+    const condition = this.evaluateCondition(node.condition)
     const whenTrue = requireInstanceBuilder(this.baseAccept(node.whenTrue), sourceLocation)
     const whenFalse = requireInstanceBuilder(this.baseAccept(node.whenFalse), sourceLocation)
     const ptype = this.context.resolver.resolve(node, sourceLocation)
+    return this.createConditionalExpression({
+      condition,
+      sourceLocation,
+      whenFalse,
+      whenTrue,
+      ptype,
+    })
+  }
+
+  createConditionalExpression({
+    condition,
+    ptype,
+    whenFalse,
+    whenTrue,
+    sourceLocation,
+  }: {
+    ptype: PType
+    condition: Expression
+    whenTrue: InstanceBuilder
+    whenFalse: InstanceBuilder
+    sourceLocation: SourceLocation
+  }): InstanceBuilder {
     // If the expression has a wtype, we can resolve it immediately - if not, we defer the resolution until we have more context
     // (eg. the type of the assignment target)
     if (ptype.wtype) {
@@ -332,7 +376,7 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
           sourceLocation: sourceLocation,
           falseExpr: requireExpressionOfType(whenFalse, ptype, sourceLocation),
           trueExpr: requireExpressionOfType(whenTrue, ptype, sourceLocation),
-          condition: condition.boolEval(sourceLocation),
+          condition: condition,
           wtype: ptype.wtypeOrThrow,
         }),
         ptype,

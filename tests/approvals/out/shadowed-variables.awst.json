@@ -32,24 +32,23 @@
         "_type": "IfElse",
         "sourceLocation": "tests/approvals/shadowed-variables.algo.ts[5:2-8:3]",
         "condition": {
-          "_type": "BytesComparisonExpression",
-          "sourceLocation": "tests/approvals/shadowed-variables.algo.ts[5:2-8:3]",
+          "_type": "ReinterpretCast",
+          "sourceLocation": "tests/approvals/shadowed-variables.algo.ts[5:6-5:7]",
           "wtype": "bool",
-          "lhs": {
-            "_type": "VarExpression",
+          "expr": {
+            "_type": "IntrinsicCall",
             "sourceLocation": "tests/approvals/shadowed-variables.algo.ts[5:6-5:7]",
-            "wtype": "bytes",
-            "name": "a₁"
-          },
-          "operator": "!=",
-          "rhs": {
-            "_type": "BytesConstant",
-            "sourceLocation": "tests/approvals/shadowed-variables.algo.ts[5:2-8:3]",
-            "wtype": "bytes",
-            "value": {
-              "_type": "Uint8Array"
-            },
-            "encoding": "unknown"
+            "wtype": "uint64",
+            "opCode": "len",
+            "immediates": [],
+            "stackArgs": [
+              {
+                "_type": "VarExpression",
+                "sourceLocation": "tests/approvals/shadowed-variables.algo.ts[5:6-5:7]",
+                "wtype": "bytes",
+                "name": "a₁"
+              }
+            ]
           }
         },
         "ifBranch": {

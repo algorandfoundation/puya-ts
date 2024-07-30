@@ -19,6 +19,7 @@ import { BooleanExpressionBuilder } from './boolean-expression-builder'
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
 import { InstanceType } from '../ptypes/ptype-classes'
 import { logger } from '../../logger'
+import { UInt64ExpressionBuilder } from './uint64-expression-builder'
 
 export class BigUintFunctionBuilder extends FunctionBuilder {
   get ptype(): PType | undefined {
@@ -66,12 +67,12 @@ export class BigUintExpressionBuilder extends InstanceExpressionBuilder {
     )
   }
   boolEval(sourceLocation: SourceLocation, negate: boolean = false): Expression {
-    return nodeFactory.numericComparisonExpression({
-      sourceLocation,
-      lhs: this.resolve(),
-      rhs: nodeFactory.uInt64Constant({ value: 0n, sourceLocation }),
-      operator: negate ? NumericComparison.eq : NumericComparison.ne,
-    })
+    return new UInt64ExpressionBuilder(
+      intrinsicFactory.bitLen({
+        value: this._expr,
+        sourceLocation,
+      }),
+    ).boolEval(sourceLocation, negate)
   }
 
   prefixUnaryOp(op: BuilderUnaryOp, sourceLocation: SourceLocation): InstanceBuilder {

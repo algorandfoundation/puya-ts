@@ -1,12 +1,12 @@
 import { biguint, uint64 } from '@algorandfoundation/algo-ts'
 
 function test_uint64() {
-  // @expect-error number is not valid as a variable, parameter, or property type.
+  // @expect-error `number` is not valid as a variable, parameter, return, or property type. Please use an algo-ts type such as `uint64` or `biguint`
   const x = 4 * 100 + 10
 }
 
 function test_biguint() {
-  // @expect-error bigint is not valid as a variable, parameter, or property type.
+  // @expect-error `bigint` is not valid as a variable, parameter, return, or property type. Please use an algo-ts type such as `biguint` or `uint64`
   const x: bigint = 5n
   const y: biguint = 5n
   // @expect-error Not Supported: BigUint binary operator '**'

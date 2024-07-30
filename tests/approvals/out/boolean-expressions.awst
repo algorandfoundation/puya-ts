@@ -1,10 +1,10 @@
 subroutine test(a: uint64, b: uint64, c: string, d: bytes, e: uint64): bool
 {
-  (singleEval(() => a) != 0 ? singleEval(() => a) : b)
-  ((singleEval(() => a) != 0 ? singleEval(() => a) != 0 : b != 0) ? singleEval(() => (singleEval(() => a) != 0 ? singleEval(() => a) : b)) : e)
-  var x: uint64 = ((singleEval(() => a) != 0 ? singleEval(() => a) != 0 : b != 0) ? singleEval(() => (singleEval(() => a) != 0 ? singleEval(() => a) : b)) : e)
-  var y: uint64 = (singleEval(() => a) != 0 ? b : singleEval(() => a))
-  if ((singleEval(() => a) != 0 ? singleEval(() => a) != 0 : (singleEval(() => c) != 0x ? d != 0x : singleEval(() => c) != 0x))) {
+  var x: uint64 = (Boolean((#se0 = (Boolean(a) ? a : b))) ? #se0 : e)
+  assert(Boolean((Boolean((#se1 = (Boolean(a) ? b : a))) ? e : #se1)))
+  var y: uint64 = (Boolean(a) ? b : a)
+  var z: uint64 = (Boolean(a) and Boolean(len(d)) or Boolean(y) ? (Boolean(x) ? x : y) : (Boolean(x) ? y : x))
+  if (Boolean(a) or Boolean(len(c)) and Boolean(len(d))) {
     return True
   }
   return False

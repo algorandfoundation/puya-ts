@@ -10,7 +10,8 @@ import ts, {
 } from 'typescript'
 import { Visitor, accept } from '../visitor/visitor'
 import { NotSupported } from '../errors'
-import { BaseContext } from './context'
+
+import { BaseContext } from './context/base-context'
 
 type ObjectNames = PropertyName | PseudoLiteralToken
 
