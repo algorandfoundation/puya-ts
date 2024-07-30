@@ -1,4 +1,4 @@
-import { biguint, BigUintCompat, bytes, BytesCompat, internal, str, StrCompat, uint64, Uint64Compat } from '@algorandfoundation/algo-ts'
+import { biguint, BigUintCompat, bytes, BytesCompat, internal, uint64, Uint64Compat } from '@algorandfoundation/algo-ts'
 import { bigIntToUint8Array, uint8ArrayToBigInt, uint8ArrayToUtf8, utf8ToUint8Array } from './encoding-util'
 import { AvmError, internalError } from './errors'
 import { nameOfType } from './util'
@@ -6,7 +6,6 @@ import { nameOfType } from './util'
 export type StubBigUintCompat = BigUintCompat | BigUintCls
 export type StubBytesCompat = BytesCompat | BytesCls
 export type StubUint64Compat = Uint64Compat | Uint64Cls
-export type StubStrCompat = StrCompat | StrCls
 
 export function btoi(bytes: StubBytesCompat): uint64 {
   return BytesCls.fromCompat(bytes).toUint64().asAlgoTs()
@@ -189,10 +188,11 @@ export class BytesCls extends AlgoTsPrimitiveCls {
   }
 
   valueOf(): string {
-    return this.toString()
+    return uint8ArrayToUtf8(this.#v)
   }
 
-  static fromCompat(v: StubBytesCompat): BytesCls {
+  static fromCompat(v: StubBytesCompat | undefined): BytesCls {
+    if (v === undefined) return new BytesCls(new Uint8Array(0))
     if (typeof v === 'string') return new BytesCls(utf8ToUint8Array(v))
     if (v instanceof BytesCls) return v
     if (v instanceof Uint8Array) return new BytesCls(v)
@@ -206,7 +206,7 @@ export class BytesCls extends AlgoTsPrimitiveCls {
     return new BigUintCls(uint8ArrayToBigInt(this.#v))
   }
   toString(): string {
-    return uint8ArrayToUtf8(this.#v)
+    return this.valueOf()
   }
 
   asAlgoTs(): bytes {
@@ -215,41 +215,5 @@ export class BytesCls extends AlgoTsPrimitiveCls {
 
   asUint8Array(): Uint8Array {
     return this.#v
-  }
-}
-
-export class StrCls extends AlgoTsPrimitiveCls {
-  #v: string
-
-  constructor(v: string) {
-    super()
-    this.#v = v
-  }
-
-  valueOf(): string {
-    return this.#v
-  }
-
-  toBytes(): BytesCls {
-    return BytesCls.fromCompat(this.#v)
-  }
-
-  toString(): string {
-    return this.#v
-  }
-
-  concat(other: StubStrCompat): StrCls {
-    const otherString = StrCls.fromCompat(other).valueOf()
-    return new StrCls(this.#v + otherString)
-  }
-
-  asAlgoTs(): str {
-    return this as unknown as str
-  }
-
-  static fromCompat(v: StubStrCompat): StrCls {
-    if (typeof v === 'string') return new StrCls(v)
-    if (v instanceof StrCls) return v
-    internalError(`Cannot convert ${nameOfType(v)} to str`)
   }
 }
