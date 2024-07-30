@@ -1,28 +1,30 @@
 import { Account, Application, Asset, biguint, bytes, internal, uint64 } from '@algorandfoundation/algo-ts'
-import { AssertError, avmError, AvmError } from './errors'
-import { buildOpsImplementation } from './ops-implementation'
 import {
+  AccountCls,
+  ApplicationCls,
+  AssertError,
+  AssetCls,
+  avmError,
+  AvmError,
   BigUintCls,
+  buildOpsImplementation,
   BytesCls,
+  StateStore,
   StubBigUintCompat,
   StubBytesCompat,
   StubUint64Compat,
   toBytes,
   toExternalValue,
   Uint64Cls,
-} from './primitives'
-import { AccountCls, ApplicationCls, AssetCls } from './reference'
-import { Transaction } from './transactions/runtime'
+} from './internal'
 import { DeliberateAny } from './typescript-helpers'
-
+console.log('test-execution-context')
 export class TestExecutionContext implements internal.ExecutionContext {
-  logs: bytes[] = []
-  txnGroup: Transaction[] = []
+  #stateStore: StateStore | undefined
 
-  constructor(txnGroup: Transaction[]) {
-    this.txnGroup = txnGroup
+  set stateStore(store: StateStore) {
+    this.#stateStore = store
   }
-
   account(address: bytes): Account {
     return new AccountCls(address)
   }
@@ -44,10 +46,10 @@ export class TestExecutionContext implements internal.ExecutionContext {
   }
 
   log(...args: (StubUint64Compat | StubBytesCompat)[]): void {
-    this.logs.push(args.map(toBytes).reduce((left, right) => left.concat(right)))
+    this.#stateStore!.logs.push(args.map(toBytes).reduce((left, right) => left.concat(right)))
   }
   get ops(): Partial<internal.OpsNamespace> {
-    return buildOpsImplementation(this.txnGroup)
+    return buildOpsImplementation(this.#stateStore!.txnGroup)
   }
   makeUint64(v: StubUint64Compat): uint64 {
     return Uint64Cls.fromCompat(v).asAlgoTs()
@@ -72,7 +74,7 @@ export class TestExecutionContext implements internal.ExecutionContext {
     return BigUintCls.fromCompat(v).asAlgoTs()
   }
   get rawLogs() {
-    return this.logs.map((l) => toExternalValue(l))
+    return this.#stateStore!.logs.map((l) => toExternalValue(l))
   }
 
   assert(condition: unknown, message?: string): asserts condition {

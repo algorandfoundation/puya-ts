@@ -1,5 +1,5 @@
-import { AvmError } from './errors'
 import { TextDecoder } from 'node:util'
+import { AvmError } from './internal'
 
 export const uint8ArrayToBigInt = (v: Uint8Array): bigint => {
   // Assume big-endian
