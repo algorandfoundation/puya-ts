@@ -40,7 +40,7 @@ export class SwitchLoopContext {
   }
 
   enterLoop(
-    node: ts.WhileStatement | ts.ForStatement | ts.ForOfStatement | ts.ForInStatement,
+    node: ts.WhileStatement | ts.ForStatement | ts.ForOfStatement | ts.ForInStatement | ts.DoStatement,
     sourceLocation: SourceLocation,
   ): LoopContext {
     const label = ts.isLabeledStatement(node.parent) ? node?.parent.label : undefined

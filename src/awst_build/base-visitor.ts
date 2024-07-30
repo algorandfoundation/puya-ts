@@ -267,13 +267,13 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
     return target.postfixUnaryOp(op, sourceLocation)
   }
 
-  evaluateCondition(nodeOrBuilder: ts.Expression | NodeBuilder): Expression {
+  evaluateCondition(nodeOrBuilder: ts.Expression | NodeBuilder, negate = false): Expression {
     using _ = this.context.evaluationCtx.enterBooleanContext()
     if (nodeOrBuilder instanceof NodeBuilder) {
-      return requireInstanceBuilder(nodeOrBuilder, nodeOrBuilder.sourceLocation).boolEval(nodeOrBuilder.sourceLocation)
+      return requireInstanceBuilder(nodeOrBuilder, nodeOrBuilder.sourceLocation).boolEval(nodeOrBuilder.sourceLocation, negate)
     } else {
       const sourceLocation = this.sourceLocation(nodeOrBuilder)
-      return requireInstanceBuilder(this.baseAccept(nodeOrBuilder), sourceLocation).boolEval(sourceLocation)
+      return requireInstanceBuilder(this.baseAccept(nodeOrBuilder), sourceLocation).boolEval(sourceLocation, negate)
     }
   }
 
