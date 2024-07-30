@@ -1,8 +1,8 @@
 import { Uint64, uint64 } from '@algorandfoundation/algo-ts'
 
-function test_while(stop: uint64) {
+function test_do(stop: uint64) {
   let i = Uint64(0)
-  while (i < stop) {
+  do {
     i += 1
-  }
+  } while (i < stop)
 }

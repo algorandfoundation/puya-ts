@@ -1,0 +1,150 @@
+[
+{
+  "_type": "Subroutine",
+  "sourceLocation": "tests/approvals/do-loops.algo.ts[2:0-7:1]",
+  "name": "test_do",
+  "moduleName": "tests/approvals/do-loops.algo.ts",
+  "args": [
+    {
+      "_type": "SubroutineArgument",
+      "sourceLocation": "tests/approvals/do-loops.algo.ts[2:17-2:29]",
+      "name": "stop",
+      "wtype": "uint64"
+    }
+  ],
+  "returnType": "void",
+  "body": {
+    "_type": "Block",
+    "sourceLocation": "tests/approvals/do-loops.algo.ts[2:31-7:1]",
+    "body": [
+      {
+        "_type": "AssignmentStatement",
+        "sourceLocation": "tests/approvals/do-loops.algo.ts[3:6-3:19]",
+        "target": {
+          "_type": "VarExpression",
+          "sourceLocation": "tests/approvals/do-loops.algo.ts[3:6-3:7]",
+          "wtype": "uint64",
+          "name": "i"
+        },
+        "value": {
+          "_type": "IntegerConstant",
+          "sourceLocation": "tests/approvals/do-loops.algo.ts[3:17-3:18]",
+          "wtype": "uint64",
+          "value": "0n"
+        }
+      },
+      {
+        "_type": "Block",
+        "sourceLocation": "tests/approvals/do-loops.algo.ts[4:2-6:20]",
+        "body": [
+          {
+            "_type": "WhileLoop",
+            "sourceLocation": "tests/approvals/do-loops.algo.ts[4:2-6:20]",
+            "condition": {
+              "_type": "BoolConstant",
+              "sourceLocation": "tests/approvals/do-loops.algo.ts[4:2-6:20]",
+              "wtype": "bool",
+              "value": true
+            },
+            "loopBody": {
+              "_type": "Block",
+              "sourceLocation": "tests/approvals/do-loops.algo.ts[4:2-6:20]",
+              "body": [
+                {
+                  "_type": "Block",
+                  "sourceLocation": "tests/approvals/do-loops.algo.ts[4:5-6:3]",
+                  "body": [
+                    {
+                      "_type": "ExpressionStatement",
+                      "sourceLocation": "tests/approvals/do-loops.algo.ts[5:4-5:10]",
+                      "expr": {
+                        "_type": "AssignmentExpression",
+                        "sourceLocation": "tests/approvals/do-loops.algo.ts[5:4-5:10]",
+                        "wtype": "uint64",
+                        "target": {
+                          "_type": "VarExpression",
+                          "sourceLocation": "tests/approvals/do-loops.algo.ts[5:4-5:5]",
+                          "wtype": "uint64",
+                          "name": "i"
+                        },
+                        "value": {
+                          "_type": "UInt64BinaryOperation",
+                          "sourceLocation": "tests/approvals/do-loops.algo.ts[5:4-5:10]",
+                          "wtype": "uint64",
+                          "left": {
+                            "_type": "VarExpression",
+                            "sourceLocation": "tests/approvals/do-loops.algo.ts[5:4-5:5]",
+                            "wtype": "uint64",
+                            "name": "i"
+                          },
+                          "op": "+",
+                          "right": {
+                            "_type": "IntegerConstant",
+                            "sourceLocation": "tests/approvals/do-loops.algo.ts[5:9-5:10]",
+                            "wtype": "uint64",
+                            "value": "1n"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "_type": "Block",
+                  "sourceLocation": "tests/approvals/do-loops.algo.ts[4:2-6:20]",
+                  "body": [],
+                  "label": "#loopᶜ"
+                },
+                {
+                  "_type": "IfElse",
+                  "sourceLocation": "tests/approvals/do-loops.algo.ts[4:2-6:20]",
+                  "condition": {
+                    "_type": "Not",
+                    "sourceLocation": "tests/approvals/do-loops.algo.ts[6:11-6:19]",
+                    "wtype": "bool",
+                    "expr": {
+                      "_type": "NumericComparisonExpression",
+                      "sourceLocation": "tests/approvals/do-loops.algo.ts[6:11-6:19]",
+                      "wtype": "bool",
+                      "lhs": {
+                        "_type": "VarExpression",
+                        "sourceLocation": "tests/approvals/do-loops.algo.ts[6:11-6:12]",
+                        "wtype": "uint64",
+                        "name": "i"
+                      },
+                      "operator": "<",
+                      "rhs": {
+                        "_type": "VarExpression",
+                        "sourceLocation": "tests/approvals/do-loops.algo.ts[6:15-6:19]",
+                        "wtype": "uint64",
+                        "name": "stop"
+                      }
+                    }
+                  },
+                  "ifBranch": {
+                    "_type": "Block",
+                    "sourceLocation": "tests/approvals/do-loops.algo.ts[4:2-6:20]",
+                    "body": [
+                      {
+                        "_type": "Goto",
+                        "sourceLocation": "tests/approvals/do-loops.algo.ts[4:2-6:20]",
+                        "target": "#loopᵇ"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "_type": "Block",
+            "sourceLocation": "tests/approvals/do-loops.algo.ts[4:2-6:20]",
+            "body": [],
+            "label": "#loopᵇ"
+          }
+        ]
+      }
+    ]
+  }
+}
+]

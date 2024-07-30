@@ -235,9 +235,7 @@ export class FunctionVisitor
       ...init,
       nodeFactory.whileLoop({
         sourceLocation,
-        condition: node.condition
-          ? requireInstanceBuilder(this.accept(node.condition), sourceLocation).boolEval(sourceLocation)
-          : nodeFactory.boolConstant({ value: true, sourceLocation }),
+        condition: node.condition ? this.evaluateCondition(node.condition) : nodeFactory.boolConstant({ value: true, sourceLocation }),
         loopBody: nodeFactory.block(
           {
             sourceLocation,
@@ -314,7 +312,27 @@ export class FunctionVisitor
     })
   }
   visitDoStatement(node: ts.DoStatement): awst.Statement | awst.Statement[] {
-    throw new TodoError('DoStatement')
+    const sourceLocation = this.sourceLocation(node)
+    using ctx = this.context.switchLoopContext.enterLoop(node, sourceLocation)
+    invariant(ctx.breakTarget.label, 'Break target must have a label')
+    return nodeFactory.block(
+      { sourceLocation },
+      nodeFactory.whileLoop({
+        sourceLocation,
+        condition: nodeFactory.boolConstant({ value: true, sourceLocation }),
+        loopBody: nodeFactory.block(
+          { sourceLocation },
+          this.accept(node.statement),
+          ctx.continueTarget,
+          nodeFactory.ifElse({
+            condition: this.evaluateCondition(node.expression, true),
+            sourceLocation,
+            ifBranch: nodeFactory.block({ sourceLocation }, nodeFactory.goto({ sourceLocation, target: ctx.breakTarget.label })),
+          }),
+        ),
+      }),
+      ctx.breakTarget,
+    )
   }
   visitWhileStatement(node: ts.WhileStatement): awst.Statement | awst.Statement[] {
     const sourceLocation = this.sourceLocation(node)
