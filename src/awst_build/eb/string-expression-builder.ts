@@ -4,10 +4,11 @@ import { CodeError } from '../../errors'
 import { awst, wtypes } from '../../awst'
 import { FunctionBuilder, InstanceBuilder, InstanceExpressionBuilder, LiteralExpressionBuilder, NodeBuilder } from './index'
 import { bytesPType, PType, stringPType } from '../ptypes'
-import { BytesBinaryOperator, BytesEncoding } from '../../awst/nodes'
+import { BytesBinaryOperator, BytesEncoding, EqualityComparison, Expression } from '../../awst/nodes'
 import { requireExpressionOfType } from './util'
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
 import { utf8ToUint8Array } from '../../util'
+import { UInt64ExpressionBuilder } from './uint64-expression-builder'
 
 export class StringFunctionBuilder extends FunctionBuilder {
   taggedTemplate(head: string, spans: ReadonlyArray<readonly [InstanceBuilder, string]>, sourceLocation: SourceLocation): InstanceBuilder {
@@ -54,7 +55,7 @@ export class StringFunctionBuilder extends FunctionBuilder {
       if (arg0 instanceof LiteralExpressionBuilder) {
         throw new CodeError('TODO: Handle literal')
       } else {
-        if (arg0.ptype?.equals(bytesPType)) {
+        if (arg0.ptype.equals(bytesPType)) {
           return new StringExpressionBuilder(
             nodeFactory.reinterpretCast({
               expr: arg0.resolve(),
@@ -72,6 +73,16 @@ export class StringFunctionBuilder extends FunctionBuilder {
 export class StringExpressionBuilder extends InstanceExpressionBuilder {
   get ptype() {
     return stringPType
+  }
+
+  boolEval(sourceLocation: SourceLocation, negate = false): Expression {
+    return nodeFactory.bytesComparisonExpression({
+      lhs: this._expr,
+      rhs: nodeFactory.bytesConstant({ value: new Uint8Array(), sourceLocation }),
+      sourceLocation,
+      wtype: wtypes.boolWType,
+      operator: negate ? EqualityComparison.eq : EqualityComparison.ne,
+    })
   }
 
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {

@@ -8,7 +8,9 @@ import {
   Expression,
   ExpressionStatement,
   IntegerConstant,
+  Not,
   NumericComparisonExpression,
+  SingleEvaluation,
   Statement,
   StringConstant,
   UInt64BinaryOperation,
@@ -48,6 +50,12 @@ const explicitNodeFactory = {
       ...props,
     })
   },
+  not(props: { expr: Expression; sourceLocation: SourceLocation }): Not {
+    return new Not({
+      wtype: boolWType,
+      ...props,
+    })
+  },
   uInt64BinaryOperation(props: Omit<Props<UInt64BinaryOperation>, 'wtype'>): UInt64BinaryOperation {
     return new UInt64BinaryOperation({
       wtype: wtypes.uint64WType,
@@ -70,6 +78,13 @@ const explicitNodeFactory = {
     return new BoolConstant({
       wtype: wtypes.boolWType,
       ...props,
+    })
+  },
+  singleEvaluation({ source }: { source: Expression }) {
+    return new SingleEvaluation({
+      sourceLocation: source.sourceLocation,
+      wtype: source.wtype,
+      source,
     })
   },
   expressionStatement({ expr }: { expr: Expression }) {

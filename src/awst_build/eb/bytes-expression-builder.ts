@@ -15,12 +15,12 @@ import { CodeError, wrapInCodeError } from '../../errors'
 import { UInt64ExpressionBuilder } from './uint64-expression-builder'
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
 import { requireExpressionOfType, requireExpressionsOfType } from './util'
-import { BytesFunction, bytesPType, PType, stringPType, uint64PType } from '../ptypes'
+import { BytesFunction, bytesPType, numberPType, PType, stringPType, uint64PType } from '../ptypes'
 import { StringExpressionBuilder } from './string-expression-builder'
-import { BoolExpressionBuilder } from './bool-expression-builder'
-import { BytesBinaryOperator, BytesEncoding, BytesUnaryOperator, EqualityComparison, StringConstant } from '../../awst/nodes'
+import { BooleanExpressionBuilder } from './boolean-expression-builder'
+import { BytesBinaryOperator, BytesEncoding, BytesUnaryOperator, EqualityComparison, Expression, StringConstant } from '../../awst/nodes'
 import { base32ToUint8Array, base64ToUint8Array, hexToUint8Array, utf8ToUint8Array } from '../../util'
-import { ScalarLiteralExpressionBuilder } from './scalar-literal-expression-builder'
+import { BigIntLiteralExpressionBuilder } from './literal/big-int-literal-expression-builder'
 import { logger } from '../../logger'
 
 export class BytesFunctionBuilder extends FunctionBuilder {
@@ -142,15 +142,7 @@ export class BytesExpressionBuilder extends InstanceExpressionBuilder {
           sourceLocation,
           `The '~' ${this.typeDescription} operator coerces the target value to a number type. Use {bytes expression}.bitwiseInvert() instead`,
         )
-        return new ScalarLiteralExpressionBuilder(0n, sourceLocation)
-      case BuilderUnaryOp.log_not:
-        return new BoolExpressionBuilder(
-          nodeFactory.not({
-            expr: this.boolEval(sourceLocation),
-            sourceLocation,
-            wtype: wtypes.boolWType,
-          }),
-        )
+        return new BigIntLiteralExpressionBuilder(0n, numberPType, sourceLocation)
     }
     return super.prefixUnaryOp(op, sourceLocation)
   }
@@ -178,7 +170,7 @@ export class BytesExpressionBuilder extends InstanceExpressionBuilder {
   compare(other: InstanceBuilder, op: BuilderComparisonOp, sourceLocation: SourceLocation): InstanceBuilder {
     const equalityOp = builderCompareToBytesCompare[op]
     if (equalityOp) {
-      return new BoolExpressionBuilder(
+      return new BooleanExpressionBuilder(
         nodeFactory.bytesComparisonExpression({
           sourceLocation,
           operator: equalityOp,
@@ -190,13 +182,13 @@ export class BytesExpressionBuilder extends InstanceExpressionBuilder {
     }
     return super.compare(other, op, sourceLocation)
   }
-  boolEval(sourceLocation: SourceLocation): awst.Expression {
+  boolEval(sourceLocation: SourceLocation, negate: boolean): awst.Expression {
     return nodeFactory.bytesComparisonExpression({
       lhs: this._expr,
       rhs: nodeFactory.bytesConstant({ value: new Uint8Array(), sourceLocation }),
       sourceLocation,
       wtype: wtypes.boolWType,
-      operator: EqualityComparison.ne,
+      operator: negate ? EqualityComparison.eq : EqualityComparison.ne,
     })
   }
 

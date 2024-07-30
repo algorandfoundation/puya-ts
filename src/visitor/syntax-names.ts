@@ -1,6 +1,7 @@
 import ts from 'typescript'
 import { BuilderBinaryOp, BuilderComparisonOp, BuilderUnaryOp } from '../awst_build/eb'
 import { DeliberateAny } from '../typescript-helpers'
+import { BinaryBooleanOperator, BooleanBinaryOperation } from '../awst/nodes'
 
 export const SyntaxKindName = {
   [ts.SyntaxKind.Unknown]: 'Unknown',
@@ -518,6 +519,15 @@ export const BinaryOpSyntaxes = {
   [ts.SyntaxKind.GreaterThanGreaterThanToken]: BuilderBinaryOp.rshift,
 } as const
 
+export const LogicalOpSyntaxes = {
+  [ts.SyntaxKind.AmpersandAmpersandToken]: BinaryBooleanOperator.and,
+  [ts.SyntaxKind.BarBarToken]: BinaryBooleanOperator.or,
+}
+export const AugmentedAssignmentLogicalOpSyntaxes = {
+  [ts.SyntaxKind.AmpersandAmpersandEqualsToken]: BinaryBooleanOperator.and,
+  [ts.SyntaxKind.BarBarEqualsToken]: BinaryBooleanOperator.or,
+}
+
 export function isKeyOf<TMap extends object>(key: PropertyKey, map: TMap): key is keyof TMap {
   return Object.hasOwn(map, key)
 }
@@ -551,5 +561,4 @@ export const UnaryExpressionUnaryOps = {
   [ts.SyntaxKind.PlusToken]: BuilderUnaryOp.pos,
   [ts.SyntaxKind.MinusToken]: BuilderUnaryOp.neg,
   [ts.SyntaxKind.TildeToken]: BuilderUnaryOp.bit_inv,
-  [ts.SyntaxKind.ExclamationToken]: BuilderUnaryOp.log_not,
 }

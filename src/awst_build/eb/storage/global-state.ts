@@ -5,7 +5,7 @@ import { AppStateExpression, BytesConstant, Expression, LValue } from '../../../
 import { ContractClassPType, GlobalStateType } from '../../ptypes/ptype-classes'
 import { codeInvariant, invariant } from '../../../util'
 import { CodeError } from '../../../errors'
-import { ObjectLiteralExpressionBuilder } from '../object-literal-expression-builder'
+import { ObjectLiteralExpressionBuilder } from '../literal/object-literal-expression-builder'
 import { requireExpressionOfType, requireInstanceBuilder } from '../util'
 import { nodeFactory } from '../../../awst/node-factory'
 import { AppStorageDeclaration } from '../../contract-data'
@@ -57,7 +57,7 @@ export class GlobalStateExpressionBuilder extends InstanceExpressionBuilder {
     invariant(ptype instanceof GlobalStateType, 'ptype must be instance of GlobalStateType')
     this._ptype = ptype
   }
-  get ptype(): PType | undefined {
+  get ptype(): PType {
     return this._ptype
   }
 

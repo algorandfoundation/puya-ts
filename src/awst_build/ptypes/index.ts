@@ -29,7 +29,7 @@ export const BooleanFunction = new LibFunctionType({
   module: 'lib.d.ts',
 })
 
-export const bigintLiteralPType = new LiteralOnlyType({
+export const bigintPType = new LiteralOnlyType({
   name: 'bigint',
   module: 'lib.d.ts',
   resolvableTo: [],
@@ -37,7 +37,7 @@ export const bigintLiteralPType = new LiteralOnlyType({
   wtypeMessage: 'bigint is not valid as a variable, parameter, or property type. Please use an algo-ts type such as `uint64` or `biguint`',
 })
 export const stringPType = new InstanceType({
-  name: 'str',
+  name: 'string',
   module: 'lib.d.ts',
   wtype: wtypes.stringWType,
 })

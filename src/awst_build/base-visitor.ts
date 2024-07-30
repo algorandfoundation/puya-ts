@@ -1,12 +1,14 @@
 import { BaseContext } from './context'
 import {
   AugmentedAssignmentBinaryOp,
+  AugmentedAssignmentLogicalOpSyntaxes,
   BinaryOpSyntaxes,
   ComparisonOpSyntaxes,
   Expressions,
   getNodeName,
   getSyntaxName,
   isKeyOf,
+  LogicalOpSyntaxes,
   UnaryExpressionUnaryOps,
 } from '../visitor/syntax-names'
 import { InstanceBuilder, NodeBuilder } from './eb'
@@ -16,17 +18,19 @@ import { CodeError, NotSupported, TodoError } from '../errors'
 import { SourceLocation } from '../awst/source-location'
 import { requireExpressionOfType, requireInstanceBuilder } from './eb/util'
 import { accept, Visitor } from '../visitor/visitor'
-import { ObjectLiteralExpressionBuilder, ObjectLiteralParts } from './eb/object-literal-expression-builder'
+import { ObjectLiteralExpressionBuilder, ObjectLiteralParts } from './eb/literal/object-literal-expression-builder'
 import { codeInvariant, invariant } from '../util'
 import { ContractClassPType, ObjectPType } from './ptypes/ptype-classes'
 import { ContractSuperBuilder, ContractThisBuilder } from './eb/contract-builder'
 import { StringFunctionBuilder, StringExpressionBuilder } from './eb/string-expression-builder'
 import { nodeFactory } from '../awst/node-factory'
 import { ArrayLiteralExpressionBuilder } from './eb/array-literal-expression-builder'
-import { ScalarLiteralExpressionBuilder } from './eb/scalar-literal-expression-builder'
+import { BigIntLiteralExpressionBuilder } from './eb/literal/big-int-literal-expression-builder'
 import { logger } from '../logger'
 import { typeRegistry } from './type-registry'
-import { ConditionalExpressionBuilder } from './eb/conditional-expression-builder'
+import { ConditionalExpressionBuilder } from './eb/literal/conditional-expression-builder'
+import { BooleanExpressionBuilder } from './eb/boolean-expression-builder'
+import { bigintPType, boolPType, numberPType } from './ptypes'
 
 export abstract class BaseVisitor<TContext extends BaseContext> implements Visitor<Expressions, NodeBuilder> {
   private baseAccept = <TNode extends ts.Node>(node: TNode) => accept<BaseVisitor<BaseContext>, TNode>(this, node)
@@ -46,7 +50,7 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
   }
 
   visitBigIntLiteral(node: ts.BigIntLiteral): InstanceBuilder {
-    return new ScalarLiteralExpressionBuilder(BigInt(node.text.slice(0, -1)), this.sourceLocation(node))
+    return new BigIntLiteralExpressionBuilder(BigInt(node.text.slice(0, -1)), bigintPType, this.sourceLocation(node))
   }
 
   visitRegularExpressionLiteral(node: ts.RegularExpressionLiteral): InstanceBuilder {
@@ -54,11 +58,11 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
   }
 
   visitFalseKeyword(node: ts.FalseLiteral): InstanceBuilder {
-    return new ScalarLiteralExpressionBuilder(false, this.sourceLocation(node))
+    return new BooleanExpressionBuilder(nodeFactory.boolConstant({ value: false, sourceLocation: this.sourceLocation(node) }))
   }
 
   visitTrueKeyword(node: ts.TrueLiteral): InstanceBuilder {
-    return new ScalarLiteralExpressionBuilder(true, this.sourceLocation(node))
+    return new BooleanExpressionBuilder(nodeFactory.boolConstant({ value: true, sourceLocation: this.sourceLocation(node) }))
   }
 
   sourceLocation(node: ts.Node): SourceLocation {
@@ -74,7 +78,7 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
   }
 
   visitNumericLiteral(node: ts.NumericLiteral): InstanceBuilder {
-    return new ScalarLiteralExpressionBuilder(BigInt(node.text), this.sourceLocation(node))
+    return new BigIntLiteralExpressionBuilder(BigInt(node.text), numberPType, this.sourceLocation(node))
   }
 
   visitIdentifier(node: ts.Identifier): NodeBuilder {
@@ -247,6 +251,9 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
   visitPrefixUnaryExpression(node: ts.PrefixUnaryExpression): NodeBuilder {
     const sourceLocation = this.sourceLocation(node)
     const target = requireInstanceBuilder(this.baseAccept(node.operand), sourceLocation)
+    if (node.operator === ts.SyntaxKind.ExclamationToken) {
+      return new BooleanExpressionBuilder(target.boolEval(sourceLocation, true))
+    }
     const op = UnaryExpressionUnaryOps[node.operator]
     return target.prefixUnaryOp(op, sourceLocation)
   }
@@ -271,22 +278,67 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
       return left.assign(right, sourceLocation)
     } else if (isKeyOf(binaryOpKind, ComparisonOpSyntaxes)) {
       return left.compare(right, ComparisonOpSyntaxes[binaryOpKind], sourceLocation)
+    } else if (isKeyOf(binaryOpKind, LogicalOpSyntaxes)) {
+      if (left.ptype.equals(boolPType) && right.ptype.equals(boolPType)) {
+        return new BooleanExpressionBuilder(
+          nodeFactory.booleanBinaryOperation({
+            left: requireExpressionOfType(left, boolPType, sourceLocation),
+            right: requireExpressionOfType(right, boolPType, sourceLocation),
+            sourceLocation,
+            wtype: boolPType.wtype,
+            op: LogicalOpSyntaxes[binaryOpKind],
+          }),
+        )
+      } else {
+        // Expand as assignment
+        // const x = a and b
+        const leftSingle = left.singleEvaluation()
+        const isOr = binaryOpKind === ts.SyntaxKind.BarBarToken
+        const ptype = this.context.resolver.resolve(node, sourceLocation)
+        return new ConditionalExpressionBuilder({
+          sourceLocation,
+          condition: leftSingle,
+          whenTrue: isOr ? leftSingle : right,
+          whenFalse: isOr ? right : leftSingle,
+          ptype: ptype,
+        })
+      }
+    } else if (isKeyOf(binaryOpKind, AugmentedAssignmentLogicalOpSyntaxes)) {
+      const expr = new BooleanExpressionBuilder(
+        nodeFactory.booleanBinaryOperation({
+          left: requireExpressionOfType(left, boolPType, sourceLocation),
+          right: requireExpressionOfType(right, boolPType, sourceLocation),
+          sourceLocation,
+          wtype: boolPType.wtype,
+          op: AugmentedAssignmentLogicalOpSyntaxes[binaryOpKind],
+        }),
+      )
+      return left.assign(expr, sourceLocation)
     }
     throw new NotSupported(`Binary expression with op ${getSyntaxName(binaryOpKind)}`)
   }
 
   visitConditionalExpression(node: ts.ConditionalExpression): NodeBuilder {
     const sourceLocation = this.sourceLocation(node)
-    const condition = requireInstanceBuilder(this.baseAccept(node.condition), sourceLocation).boolEval(sourceLocation)
+    const condition = requireInstanceBuilder(this.baseAccept(node.condition), sourceLocation)
     const whenTrue = requireInstanceBuilder(this.baseAccept(node.whenTrue), sourceLocation)
     const whenFalse = requireInstanceBuilder(this.baseAccept(node.whenFalse), sourceLocation)
     const ptype = this.context.resolver.resolve(node, sourceLocation)
-    return new ConditionalExpressionBuilder(sourceLocation, {
-      condition,
-      whenTrue,
-      whenFalse,
-      ptype,
-    })
+    // If the expression has a wtype, we can resolve it immediately - if not, we defer the resolution until we have more context
+    // (eg. the type of the assignment target)
+    if (ptype.wtype) {
+      return typeRegistry.getInstanceEb(
+        nodeFactory.conditionalExpression({
+          sourceLocation: sourceLocation,
+          falseExpr: requireExpressionOfType(whenFalse, ptype, sourceLocation),
+          trueExpr: requireExpressionOfType(whenTrue, ptype, sourceLocation),
+          condition: condition.boolEval(sourceLocation),
+          wtype: ptype.wtypeOrThrow,
+        }),
+        ptype,
+      )
+    }
+    return new ConditionalExpressionBuilder({ sourceLocation, condition, whenTrue, whenFalse, ptype })
   }
 
   visitTemplateExpression(node: ts.TemplateExpression): NodeBuilder {

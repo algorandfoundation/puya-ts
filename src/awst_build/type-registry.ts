@@ -25,7 +25,7 @@ import {
   uint64PType,
   voidPType,
 } from './ptypes'
-import { BoolExpressionBuilder } from './eb/bool-expression-builder'
+import { BooleanExpressionBuilder } from './eb/boolean-expression-builder'
 import { UInt64ExpressionBuilder, UInt64FunctionBuilder } from './eb/uint64-expression-builder'
 import { BytesExpressionBuilder, BytesFunctionBuilder } from './eb/bytes-expression-builder'
 import { StringExpressionBuilder, StringFunctionBuilder } from './eb/string-expression-builder'
@@ -52,7 +52,7 @@ import { TupleExpressionBuilder } from './eb/tuple-expression-builder'
 import { Arc4AbiMethodDecoratorBuilder, Arc4BareMethodDecoratorBuilder } from './eb/arc4-bare-method-decorator-builder'
 import { NamespaceBuilder } from './eb/namespace-builder'
 import { VoidExpressionBuilder } from './eb/void-expression-builder'
-import { ObjectExpressionBuilder } from './eb/object-literal-expression-builder'
+import { ObjectExpressionBuilder } from './eb/literal/object-literal-expression-builder'
 import { BigUintExpressionBuilder, BigUintFunctionBuilder } from './eb/biguint-expression-builder'
 
 type ValueExpressionBuilderCtor = { new (expr: awst.Expression, ptype: PType): InstanceExpressionBuilder }
@@ -188,7 +188,7 @@ class TypeRegistry {
 }
 export const typeRegistry = new TypeRegistry()
 
-typeRegistry.register({ ptype: boolPType, instanceEb: BoolExpressionBuilder })
+typeRegistry.register({ ptype: boolPType, instanceEb: BooleanExpressionBuilder })
 typeRegistry.register({ ptype: uint64PType, instanceEb: UInt64ExpressionBuilder })
 typeRegistry.register({ ptype: Uint64Function, singletonEb: UInt64FunctionBuilder })
 typeRegistry.register({ ptype: biguintPType, instanceEb: BigUintExpressionBuilder })

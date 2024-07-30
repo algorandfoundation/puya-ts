@@ -15,7 +15,7 @@ import { CodeError, NotSupported } from '../../errors'
 import { requireExpressionOfType } from './util'
 import { tryConvertEnum } from '../../util'
 import { PType, Uint64Function, uint64PType } from '../ptypes'
-import { BoolExpressionBuilder } from './bool-expression-builder'
+import { BooleanExpressionBuilder } from './boolean-expression-builder'
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
 import { InstanceType } from '../ptypes/ptype-classes'
 
@@ -47,12 +47,12 @@ export class UInt64ExpressionBuilder extends InstanceExpressionBuilder {
   get ptype(): InstanceType {
     return uint64PType
   }
-  boolEval(sourceLocation: SourceLocation): Expression {
+  boolEval(sourceLocation: SourceLocation, negate: boolean): Expression {
     return nodeFactory.numericComparisonExpression({
       sourceLocation,
-      operator: NumericComparison.ne,
       lhs: this.resolve(),
       rhs: nodeFactory.uInt64Constant({ value: 0n, sourceLocation }),
+      operator: negate ? NumericComparison.eq : NumericComparison.ne,
     })
   }
 
@@ -64,7 +64,7 @@ export class UInt64ExpressionBuilder extends InstanceExpressionBuilder {
         sourceLocation,
       })
     }
-    return new BoolExpressionBuilder(
+    return new BooleanExpressionBuilder(
       nodeFactory.numericComparisonExpression({
         lhs: this._expr,
         rhs: otherExpr,
@@ -91,14 +91,6 @@ export class UInt64ExpressionBuilder extends InstanceExpressionBuilder {
             sourceLocation,
             expr: this.resolve(),
             wtype: this.ptype.wtype,
-          }),
-        )
-      case BuilderUnaryOp.log_not:
-        return new BoolExpressionBuilder(
-          nodeFactory.not({
-            expr: this.resolve(),
-            sourceLocation,
-            wtype: wtypes.boolWType,
           }),
         )
       case BuilderUnaryOp.pos:

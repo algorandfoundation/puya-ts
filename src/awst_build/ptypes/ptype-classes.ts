@@ -332,6 +332,7 @@ export class BaseContractClassType extends ContractClassPType {
 }
 
 export class UnsupportedType extends PType {
+  readonly wtype: undefined = undefined
   readonly name: string
   readonly module: string
   readonly singleton = false
@@ -342,7 +343,7 @@ export class UnsupportedType extends PType {
     this.module = module
   }
 
-  get wtype(): WType {
+  get wtypeOrThrow(): WType {
     throw new NotSupported(`The type ${this.fullName} is not supported`)
   }
 }

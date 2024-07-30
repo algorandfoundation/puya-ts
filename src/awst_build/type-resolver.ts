@@ -1,8 +1,9 @@
-import ts, { UnionType } from 'typescript'
+import ts from 'typescript'
 import {
   anyPType,
   ApprovalProgram,
   BaseContractType,
+  bigintPType,
   boolPType,
   ClearStateProgram,
   ContractType,
@@ -25,7 +26,6 @@ import {
   ContractClassPType,
   FunctionPType,
   GlobalStateType,
-  LiteralOnlyType,
   NamespacePType,
   ObjectPType,
   UnionPType,
@@ -101,6 +101,9 @@ export class TypeResolver {
     }
     if (intersectsFlags(tsType.flags, ts.TypeFlags.Number | ts.TypeFlags.NumberLiteral) && tsType.getSymbol() === undefined) {
       return numberPType
+    }
+    if (intersectsFlags(tsType.flags, ts.TypeFlags.BigInt | ts.TypeFlags.BigIntLiteral) && tsType.getSymbol() === undefined) {
+      return bigintPType
     }
     if (isTupleReference(tsType)) {
       //codeInvariant(tsType.readonly, 'Tuple types should be declared as readonly', sourceLocation)

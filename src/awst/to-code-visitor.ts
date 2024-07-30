@@ -24,7 +24,7 @@ function printBytes(value: Uint8Array, encoding: BytesEncoding) {
     case BytesEncoding.base32:
       return `b32<${uint8ArrayToBase32(value)}>`
     default:
-      return `hex<${Buffer.from(value).toString('hex')}>`
+      return `0x${Buffer.from(value).toString('hex')}`
   }
 }
 export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, StatementVisitor<string[]>, ExpressionVisitor<string> {
@@ -143,7 +143,7 @@ export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, Statemen
     throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
   }
   visitSingleEvaluation(expression: nodes.SingleEvaluation): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    return `singleEval(() => ${expression.source.accept(this)})`
   }
   visitReinterpretCast(expression: nodes.ReinterpretCast): string {
     return `reinterpret_cast<${expression.wtype}>(${expression.expr.accept(this)})`
@@ -152,7 +152,7 @@ export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, Statemen
     throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
   }
   visitConditionalExpression(expression: nodes.ConditionalExpression): string {
-    return `${expression.condition.accept(this)} ? ${expression.trueExpr.accept(this)} : ${expression.falseExpr.accept(this)}`
+    return `(${expression.condition.accept(this)} ? ${expression.trueExpr.accept(this)} : ${expression.falseExpr.accept(this)})`
   }
   visitAssignmentExpression(expression: nodes.AssignmentExpression): string {
     const rvalue =
@@ -186,7 +186,7 @@ export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, Statemen
     return `${expression.left.accept(this)} ${expression.op} ${expression.right.accept(this)}`
   }
   visitBooleanBinaryOperation(expression: nodes.BooleanBinaryOperation): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    return `${expression.left.accept(this)} ${expression.op} ${expression.right.accept(this)}`
   }
   visitNot(expression: nodes.Not): string {
     return `!${expression.expr.accept(this)}`
