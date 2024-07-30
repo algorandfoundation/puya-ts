@@ -1,2 +1,2 @@
-export { AvmError } from './errors'
-export { TestHarness } from './test-harness'
+console.log('index')
+export { AvmError, TestHarness } from './internal'

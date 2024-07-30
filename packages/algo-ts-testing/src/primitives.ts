@@ -1,7 +1,5 @@
 import { biguint, BigUintCompat, bytes, BytesCompat, internal, uint64, Uint64Compat } from '@algorandfoundation/algo-ts'
-import { bigIntToUint8Array, uint8ArrayToBigInt, uint8ArrayToUtf8, utf8ToUint8Array } from './encoding-util'
-import { AvmError, internalError } from './errors'
-import { nameOfType } from './util'
+import { AvmError, bigIntToUint8Array, internalError, nameOfType, uint8ArrayToBigInt, uint8ArrayToUtf8, utf8ToUint8Array } from './internal'
 
 export type StubBigUintCompat = BigUintCompat | BigUintCls
 export type StubBytesCompat = BytesCompat | BytesCls
