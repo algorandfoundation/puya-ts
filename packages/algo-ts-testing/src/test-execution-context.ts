@@ -18,7 +18,6 @@ import {
   Uint64Cls,
 } from './internal'
 import { DeliberateAny } from './typescript-helpers'
-console.log('test-execution-context')
 export class TestExecutionContext implements internal.ExecutionContext {
   #stateStore: StateStore | undefined
 
@@ -49,7 +48,7 @@ export class TestExecutionContext implements internal.ExecutionContext {
     this.#stateStore!.logs.push(args.map(toBytes).reduce((left, right) => left.concat(right)))
   }
   get ops(): Partial<internal.OpsNamespace> {
-    return buildOpsImplementation(this.#stateStore!.txnGroup)
+    return buildOpsImplementation(this.#stateStore!)
   }
   makeUint64(v: StubUint64Compat): uint64 {
     return Uint64Cls.fromCompat(v).asAlgoTs()

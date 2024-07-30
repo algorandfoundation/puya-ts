@@ -1,12 +1,19 @@
-import { bytes } from '@algorandfoundation/algo-ts'
+import { Account, Bytes, bytes } from '@algorandfoundation/algo-ts'
+import algosdk from 'algosdk'
 import { TransactionBase } from './internal'
 
 export class StateStore {
   logs: bytes[] = []
   txnGroup: TransactionBase[] = []
+  defaultCreator: Account
+
+  constructor() {
+    this.defaultCreator = Account(Bytes(algosdk.generateAccount().addr))
+  }
 
   reset() {
     this.logs = []
     this.txnGroup = []
+    this.defaultCreator = Account(Bytes(algosdk.generateAccount().addr))
   }
 }

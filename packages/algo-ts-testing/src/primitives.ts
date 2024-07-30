@@ -85,6 +85,7 @@ export class Uint64Cls extends AlgoTsPrimitiveCls {
     if (typeof v == 'boolean') return new Uint64Cls(v ? 1n : 0n)
     if (typeof v == 'number') return new Uint64Cls(BigInt(v))
     if (typeof v == 'bigint') return new Uint64Cls(v)
+    if (v instanceof Uint64Cls) return v
     internalError(`Cannot convert ${v} to uint64`)
   }
 
