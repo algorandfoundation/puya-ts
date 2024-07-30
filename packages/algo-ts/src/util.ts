@@ -1,7 +1,7 @@
+import { biguint, BigUintCompat, BytesCompat, StringCompat, uint64, Uint64Compat } from './primitives'
 import { ctxMgr } from './execution-context'
-import { biguint, BigUintCompat, BytesCompat, StrCompat, uint64, Uint64Compat } from './primitives'
 
-export function log(...args: Array<Uint64Compat | BytesCompat | BigUintCompat | StrCompat>): void {
+export function log(...args: Array<Uint64Compat | BytesCompat | BigUintCompat | StringCompat>): void {
   ctxMgr.instance.log(...args)
 }
 

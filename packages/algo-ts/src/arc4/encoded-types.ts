@@ -1,7 +1,7 @@
+import { biguint, BigUintCompat, Bytes, bytes, BytesBacked, StringCompat, uint64, Uint64Compat } from '../primitives'
 import { ctxMgr } from '../execution-context'
-import { biguint, BigUintCompat, bytes, BytesBacked, StrCompat, uint64, Uint64Compat } from '../primitives'
-import { Account } from '../reference'
 import { err } from '../util'
+import { Account } from '../reference'
 
 export type BitSize = 8 | 16 | 32 | 64 | 128 | 256 | 512
 type NativeForArc4Int<N extends BitSize> = N extends 8 | 16 | 32 | 64 ? uint64 : biguint
@@ -14,7 +14,7 @@ abstract class AbiEncoded implements BytesBacked {
 }
 
 export class Str extends AbiEncoded {
-  constructor(s: StrCompat) {
+  constructor(s: StringCompat) {
     super()
   }
   get native(): string {
