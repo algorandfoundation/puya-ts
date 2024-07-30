@@ -1,6 +1,5 @@
 import { Account, bytes, uint64, Uint64 } from '@algorandfoundation/algo-ts'
 
-console.log('transactions')
 export enum TransactionType {
   /**
    * A Payment transaction
