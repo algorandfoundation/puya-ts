@@ -31,6 +31,15 @@ export const intrinsicFactory = {
       wtype: wtypes.uint64WType,
     })
   },
+  bitLen({ value, sourceLocation }: { value: awst.Expression; sourceLocation: SourceLocation }) {
+    return nodeFactory.intrinsicCall({
+      opCode: 'bitlen',
+      stackArgs: [value],
+      sourceLocation: sourceLocation,
+      immediates: [],
+      wtype: wtypes.uint64WType,
+    })
+  },
   itob({ value, sourceLocation }: { value: awst.Expression; sourceLocation: SourceLocation }): awst.IntrinsicCall {
     return nodeFactory.intrinsicCall({
       sourceLocation,

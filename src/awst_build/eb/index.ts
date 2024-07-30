@@ -3,10 +3,11 @@ import { awst, wtypes } from '../../awst'
 import { CodeError, NotSupported } from '../../errors'
 import { PType } from '../ptypes'
 import { logger } from '../../logger'
-import { Expression } from '../../awst/nodes'
+import { Expression, LValue } from '../../awst/nodes'
 import { codeInvariant } from '../../util'
 import { typeRegistry } from '../type-registry'
 import { nodeFactory } from '../../awst/node-factory'
+import { TransientType } from '../ptypes/ptype-classes'
 
 export enum BuilderComparisonOp {
   eq = '==',
@@ -107,6 +108,10 @@ export abstract class InstanceBuilder extends NodeBuilder {
   }
 
   singleEvaluation(): InstanceBuilder {
+    const expr = this.resolve()
+    if (expr instanceof awst.VarExpression) {
+      return typeRegistry.getInstanceEb(expr, this.ptype)
+    }
     return typeRegistry.getInstanceEb(
       nodeFactory.singleEvaluation({
         source: this.resolve(),
@@ -115,18 +120,8 @@ export abstract class InstanceBuilder extends NodeBuilder {
     )
   }
 
-  get valueType(): wtypes.WType | undefined {
-    return undefined
-  }
-
   toBytes(sourceLocation: SourceLocation): awst.Expression {
     throw new NotSupported(`Serializing ${this.typeDescription} to bytes`, {
-      sourceLocation,
-    })
-  }
-
-  delete(sourceLocation: SourceLocation): awst.Statement {
-    throw new NotSupported(`Deleting ${this.typeDescription}`, {
       sourceLocation,
     })
   }
@@ -136,6 +131,7 @@ export abstract class InstanceBuilder extends NodeBuilder {
       sourceLocation,
     })
   }
+
   postfixUnaryOp(op: BuilderUnaryOp, sourceLocation: SourceLocation): InstanceBuilder {
     throw new NotSupported(`Postfix Unary ${op} op on ${this.typeDescription}`, {
       sourceLocation,
@@ -147,6 +143,7 @@ export abstract class InstanceBuilder extends NodeBuilder {
       sourceLocation,
     })
   }
+
   binaryOp(other: InstanceBuilder, op: BuilderBinaryOp, sourceLocation: SourceLocation): InstanceBuilder {
     throw new NotSupported(`${op} on ${this.typeDescription}`, {
       sourceLocation,
@@ -158,24 +155,92 @@ export abstract class InstanceBuilder extends NodeBuilder {
       sourceLocation,
     })
   }
+
   assign(other: InstanceBuilder, sourceLocation: SourceLocation): InstanceBuilder {
     throw new NotSupported(`Assignment to ${this.typeDescription}`, {
       sourceLocation,
     })
   }
+
   augmentedAssignment(other: InstanceBuilder, op: BuilderBinaryOp, sourceLocation: SourceLocation): InstanceBuilder {
     throw new NotSupported(`Augmented assignment to ${this.typeDescription} with ${op}`, {
       sourceLocation,
     })
   }
+
   hasProperty(_name: string): boolean {
     throw new NotSupported(`Has property checks on ${this.typeDescription}`)
   }
 }
 
 export abstract class LiteralExpressionBuilder extends InstanceBuilder {
+  resolve(): Expression {
+    throw new CodeError('A literal value is not valid here', { sourceLocation: this.sourceLocation })
+  }
+  resolveLValue(): LValue {
+    throw new CodeError('A literal value is not valid here', { sourceLocation: this.sourceLocation })
+  }
+
   abstract resolvableToPType(ptype: PType, sourceLocation: SourceLocation): boolean
   abstract resolveToPType(ptype: PType, sourceLocation: SourceLocation): InstanceBuilder
+
+  private throwInvalidExpression(): never {
+    if (this.ptype instanceof TransientType) throw new CodeError(this.ptype.expressionMessage, { sourceLocation: this.sourceLocation })
+    throw new CodeError('Hmmm')
+  }
+
+  compare(other: InstanceBuilder, op: BuilderComparisonOp, sourceLocation: SourceLocation): InstanceBuilder {
+    this.throwInvalidExpression()
+  }
+
+  assign(other: InstanceBuilder, sourceLocation: SourceLocation): InstanceBuilder {
+    this.throwInvalidExpression()
+  }
+
+  binaryOp(other: InstanceBuilder, op: BuilderBinaryOp, sourceLocation: SourceLocation): InstanceBuilder {
+    this.throwInvalidExpression()
+  }
+  memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
+    this.throwInvalidExpression()
+  }
+  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    this.throwInvalidExpression()
+  }
+
+  taggedTemplate(head: string, spans: ReadonlyArray<readonly [InstanceBuilder, string]>, sourceLocation: SourceLocation): InstanceBuilder {
+    this.throwInvalidExpression()
+  }
+
+  indexAccess(index: InstanceBuilder, sourceLocation: SourceLocation): NodeBuilder {
+    this.throwInvalidExpression()
+  }
+  singleEvaluation(): InstanceBuilder {
+    this.throwInvalidExpression()
+  }
+
+  toBytes(sourceLocation: SourceLocation): awst.Expression {
+    this.throwInvalidExpression()
+  }
+
+  prefixUnaryOp(op: BuilderUnaryOp, sourceLocation: SourceLocation): InstanceBuilder {
+    this.throwInvalidExpression()
+  }
+
+  postfixUnaryOp(op: BuilderUnaryOp, sourceLocation: SourceLocation): InstanceBuilder {
+    this.throwInvalidExpression()
+  }
+
+  iterate(sourceLocation: SourceLocation): awst.Expression {
+    this.throwInvalidExpression()
+  }
+
+  augmentedAssignment(other: InstanceBuilder, op: BuilderBinaryOp, sourceLocation: SourceLocation): InstanceBuilder {
+    this.throwInvalidExpression()
+  }
+
+  hasProperty(_name: string): boolean {
+    this.throwInvalidExpression()
+  }
 }
 
 export class DeferredTypeExpressionBuilder extends LiteralExpressionBuilder {

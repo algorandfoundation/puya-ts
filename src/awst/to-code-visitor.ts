@@ -14,6 +14,7 @@ import { logger } from '../logger'
 import { uint8ArrayToUtf8 } from '../util'
 import { Buffer } from 'node:buffer'
 import { uint8ArrayToBase32 } from '../util'
+import { boolWType } from './wtypes'
 
 function printBytes(value: Uint8Array, encoding: BytesEncoding) {
   switch (encoding) {
@@ -28,6 +29,7 @@ function printBytes(value: Uint8Array, encoding: BytesEncoding) {
   }
 }
 export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, StatementVisitor<string[]>, ExpressionVisitor<string> {
+  #singleEval = new Set<string>()
   visitUInt64PostfixUnaryOperation(expression: nodes.UInt64PostfixUnaryOperation): string {
     return `${expression.target.accept(this)}${expression.op}`
   }
@@ -143,10 +145,18 @@ export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, Statemen
     throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
   }
   visitSingleEvaluation(expression: nodes.SingleEvaluation): string {
-    return `singleEval(() => ${expression.source.accept(this)})`
+    if (this.#singleEval.has(expression.id)) {
+      return `#${expression.id}`
+    }
+    this.#singleEval.add(expression.id)
+    return `(#${expression.id} = ${expression.source.accept(this)})`
   }
   visitReinterpretCast(expression: nodes.ReinterpretCast): string {
-    return `reinterpret_cast<${expression.wtype}>(${expression.expr.accept(this)})`
+    const target = expression.expr.accept(this)
+    if (expression.wtype.equals(boolWType)) {
+      return `Boolean(${target})`
+    }
+    return `reinterpret_cast<${expression.wtype}>(${target})`
   }
   visitNewArray(expression: nodes.NewArray): string {
     throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })

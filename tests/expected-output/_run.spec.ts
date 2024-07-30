@@ -6,6 +6,24 @@ import { LogEvent } from '../../src/logger'
 import { buildCompileOptions } from '../../src/compile-options'
 import { invariant } from '../../src/util'
 
+/**
+ * Verify that specific code produces specific compiler output.
+ *
+ * Code files in `tests/expected-output/**` are parsed and comments which match the pattern of
+ * // @expect-<level> message
+ * are extracted. These patterns indicate that a particular log message is expected from the compiler at the next line.
+ *
+ * After compilation these expected logs are matched to actual output.
+ *
+ * All expected logs MUST be found in the output
+ * All output logs MUST be expected
+ *
+ * The line numbers MUST match the line after the comment
+ * The expected log level MUST match the observed log level
+ * If the message ends in a `...` token, the observed log message MUST start with the expected log message (minus the `...`)
+ * Otherwise the expected message MUST match the observed log message verbatim.
+ *
+ */
 describe('Expected output', () => {
   const result = compile(
     buildCompileOptions({
@@ -27,12 +45,7 @@ describe('Expected output', () => {
       const expectedLogs = extractExpectLogs(ast, result.programDirectory)
       const matchedLogs = new Set<LogEvent>()
       for (const expectedLog of expectedLogs) {
-        const matchedLog = logs.find(
-          (l) =>
-            l.level === expectedLog.level &&
-            l.sourceLocation?.line === expectedLog.sourceLocation.line &&
-            l.message.startsWith(expectedLog.message),
-        )
+        const matchedLog = logs.find((l) => expectedLog.test(l))
         if (!matchedLog) {
           expect.fail(`${expectedLog.sourceLocation} Missing log: [${expectedLog.level}] ${expectedLog.message}`)
         } else {
@@ -55,6 +68,7 @@ type ExpectedLog = {
   level: LogEvent['level']
   message: string
   sourceLocation: SourceLocation
+  test(log: LogEvent): boolean
 }
 
 function extractExpectLogs(sourceFile: ts.SourceFile, programDirectory: string) {
@@ -67,15 +81,14 @@ function extractExpectLogs(sourceFile: ts.SourceFile, programDirectory: string) 
     if (commentRanges?.length) {
       for (const commentRange of commentRanges) {
         const comment = sourceFile.getFullText().slice(commentRange.pos, commentRange.end)
-        const match = /^\/\/ @expect-(\w+) (.*)$/.exec(comment)
+        const match = /^\/\/ @expect-(\w+)\s+(.*)$/.exec(comment)
         if (match) {
           const level = match[1]
           const message = match[2]
           if (!['error', 'info', 'warn', 'debug', 'fatal'].includes(level)) {
-            throw new Error(`Unxpected log level ${level} in @expect-* comment`)
+            throw new Error(`Unexpected log level ${level} in @expect-* comment`)
           }
           const commentLocation = SourceLocation.fromTextRange(sourceFile, commentRange, programDirectory)
-
           expectedLogs.push({
             level: level as LogEvent['level'],
             message,
@@ -84,6 +97,16 @@ function extractExpectLogs(sourceFile: ts.SourceFile, programDirectory: string) 
               line: commentLocation.line + 1,
               endLine: commentLocation.endLine + 1,
             }),
+            test(log) {
+              if (log.level === this.level && log.sourceLocation?.line === this.sourceLocation.line) {
+                if (this.message.endsWith('...')) {
+                  return log.message.startsWith(this.message.slice(0, -3))
+                } else {
+                  return log.message === this.message
+                }
+              }
+              return false
+            },
           })
         }
       }

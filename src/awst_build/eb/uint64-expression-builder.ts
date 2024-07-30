@@ -18,6 +18,7 @@ import { PType, Uint64Function, uint64PType } from '../ptypes'
 import { BooleanExpressionBuilder } from './boolean-expression-builder'
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
 import { InstanceType } from '../ptypes/ptype-classes'
+import { boolWType } from '../../awst/wtypes'
 
 export class UInt64FunctionBuilder extends FunctionBuilder {
   get ptype(): PType | undefined {
@@ -48,11 +49,16 @@ export class UInt64ExpressionBuilder extends InstanceExpressionBuilder {
     return uint64PType
   }
   boolEval(sourceLocation: SourceLocation, negate: boolean): Expression {
-    return nodeFactory.numericComparisonExpression({
+    if (negate) {
+      return nodeFactory.not({
+        expr: this.resolve(),
+        sourceLocation,
+      })
+    }
+    return nodeFactory.reinterpretCast({
       sourceLocation,
-      lhs: this.resolve(),
-      rhs: nodeFactory.uInt64Constant({ value: 0n, sourceLocation }),
-      operator: negate ? NumericComparison.eq : NumericComparison.ne,
+      expr: this.resolve(),
+      wtype: boolWType,
     })
   }
 

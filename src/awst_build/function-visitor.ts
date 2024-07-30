@@ -11,12 +11,13 @@ import { nodeFactory } from '../awst/node-factory'
 import { requireExpressionOfType, requireInstanceBuilder } from './eb/util'
 import { PType, voidPType } from './ptypes'
 import { BaseVisitor } from './base-visitor'
-import { ObjectPType, LiteralOnlyType } from './ptypes/ptype-classes'
-import { SwitchLoopContext } from './switch-loop-context'
+import { ObjectPType, TransientType } from './ptypes/ptype-classes'
+import { SwitchLoopContext } from './context/switch-loop-context'
 import { Block, Goto, ReturnStatement } from '../awst/nodes'
 import { SourceLocation } from '../awst/source-location'
 import { typeRegistry } from './type-registry'
 import { InstanceBuilder } from './eb'
+import { EvaluationContext } from './context/evaluation-context'
 
 export type ContractMethodInfo = {
   className: string
@@ -25,9 +26,11 @@ export type ContractMethodInfo = {
 
 export class FunctionContext extends SourceFileContext {
   readonly switchLoopContext: SwitchLoopContext
+  readonly evaluationCtx: EvaluationContext
   constructor(parent: ContractContext | SourceFileContext) {
     super(parent.sourceFile, parent.program, parent.nameResolver.createChild())
     this.switchLoopContext = new SwitchLoopContext(this.checker)
+    this.evaluationCtx = new EvaluationContext()
   }
 
   getDestructuredParamName(node: ts.ParameterDeclaration) {
@@ -65,11 +68,8 @@ export class FunctionVisitor
       codeInvariant(node.name, 'Anonymous functions are not supported', sourceLocation)
       this._functionName = this.textVisitor.accept(node.name)
       this._returnType = node.type ? ctx.getPTypeForNode(node.type) : ctx.getImplicitReturnType(node)
-      if (this._returnType instanceof LiteralOnlyType) {
-        logger.error(
-          sourceLocation,
-          `${this._returnType} cannot be used as a return type. Consider annotating the return type explicitly as ${this._returnType.resolvableTo.length > 1 ? 'one of ' : ' '}${this._returnType.resolvableTo.join(', ')}`,
-        )
+      if (this._returnType instanceof TransientType) {
+        logger.error(sourceLocation, this._returnType.typeMessage)
       }
     }
     const type = ctx.getPTypeForNode(node)
@@ -300,7 +300,7 @@ export class FunctionVisitor
   }
   visitIfStatement(node: ts.IfStatement): awst.Statement | awst.Statement[] {
     const sourceLocation = this.sourceLocation(node)
-    const condition = this.accept(node.expression).boolEval(sourceLocation)
+    const condition = this.evaluateCondition(node.expression)
 
     const ifBranch = nodeFactory.block({ sourceLocation: this.sourceLocation(node.thenStatement) }, this.accept(node.thenStatement))
     const elseBranch =
@@ -324,7 +324,7 @@ export class FunctionVisitor
       { sourceLocation },
       nodeFactory.whileLoop({
         sourceLocation,
-        condition: this.accept(node.expression).boolEval(sourceLocation),
+        condition: this.evaluateCondition(node.expression),
         loopBody: nodeFactory.block({ sourceLocation }, this.accept(node.statement), ctx.continueTarget),
       }),
       ctx.breakTarget,
@@ -462,17 +462,6 @@ export class FunctionVisitor
         name: this.context.getDestructuredParamName(node),
         wtype: paramPType.wtype,
       })
-
-      // return node.name.elements.map((e): awst.SubroutineArgument => {
-      //   const sourceLocation = this.sourceLocation(e)
-      //   codeInvariant(ts.isIdentifier(e.name), 'Nested object destructuring is not supported', sourceLocation)
-      //
-      //   return nodeFactory.subroutineArgument({
-      //     sourceLocation: sourceLocation,
-      //     name: this.context.resolveVariable(e.name),
-      //     wtype: paramPType.getPropertyType(e.name.text).wtypeOrThrow,
-      //   })
-      // })
     } else {
       throw new CodeError(`Unsupported parameter declaration type ${getNodeName(node)}`, { sourceLocation })
     }

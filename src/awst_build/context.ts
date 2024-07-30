@@ -2,60 +2,21 @@ import ts from 'typescript'
 import { SourceLocation } from '../awst/source-location'
 import { awst } from '../awst'
 import { nodeFactory } from '../awst/node-factory'
-import { codeInvariant, invariant, toSubScript } from '../util'
+import { codeInvariant, invariant } from '../util'
 import { ConstantDeclaration } from '../awst/nodes'
 import { PType } from './ptypes'
 import { NodeBuilder } from './eb'
 import { typeRegistry } from './type-registry'
 import { TypeResolver } from './type-resolver'
 import { FunctionPType } from './ptypes/ptype-classes'
-
-export abstract class BaseContext {
-  abstract getSourceLocation(node: ts.Node): SourceLocation
-  abstract tryResolveConstant(node: ts.Identifier): awst.ConstantDeclaration | undefined
-  abstract getBuilderForNode(node: ts.Identifier): NodeBuilder
-  abstract get resolver(): TypeResolver
-}
-
-export class UniqueNameResolver {
-  protected readonly symbolToName: Map<ts.Symbol, string>
-  protected readonly nameToCount: Map<string, number>
-
-  constructor(parent?: UniqueNameResolver) {
-    if (parent) {
-      this.symbolToName = new Map(parent.symbolToName.entries())
-      this.nameToCount = new Map(parent.nameToCount.entries())
-    } else {
-      this.symbolToName = new Map()
-      this.nameToCount = new Map()
-    }
-  }
-
-  resolveUniqueName(rawName: string, symbol: ts.Symbol): string {
-    const name = this.symbolToName.get(symbol)
-    if (name) {
-      return name
-    }
-    const nameCount = this.nameToCount.get(rawName) ?? 0
-    let uniqueName
-    if (nameCount === 0) {
-      uniqueName = rawName
-    } else {
-      uniqueName = `${rawName}${toSubScript(nameCount)}`
-    }
-    this.nameToCount.set(rawName, nameCount + 1)
-    this.symbolToName.set(symbol, uniqueName)
-    return uniqueName
-  }
-
-  createChild(): UniqueNameResolver {
-    return new UniqueNameResolver(this)
-  }
-}
+import { UniqueNameResolver } from './context/unique-name-resolver'
+import { BaseContext } from './context/base-context'
+import { EvaluationContext } from './context/evaluation-context'
 
 export class SourceFileContext extends BaseContext {
   readonly constants: Map<string, awst.ConstantDeclaration> = new Map()
   public readonly resolver: TypeResolver
+  public readonly evaluationCtx: EvaluationContext
 
   protected readonly checker: ts.TypeChecker
   constructor(
@@ -66,6 +27,7 @@ export class SourceFileContext extends BaseContext {
     super()
     this.checker = program.getTypeChecker()
     this.resolver = new TypeResolver(this.checker, this.program.getCurrentDirectory())
+    this.evaluationCtx = new EvaluationContext()
   }
 
   tryResolveConstant(node: ts.Identifier): ConstantDeclaration | undefined {

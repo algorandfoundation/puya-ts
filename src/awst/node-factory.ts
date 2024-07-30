@@ -22,7 +22,7 @@ import { invariant } from '../util'
 import { boolWType, WType } from './wtypes'
 
 type ConcreteNodes = typeof concreteNodes
-
+let singleEval = 0
 const explicitNodeFactory = {
   bytesConstant(props: { value: Uint8Array; encoding?: BytesEncoding; sourceLocation: SourceLocation; wtype?: WType }): BytesConstant {
     return new BytesConstant({
@@ -82,6 +82,7 @@ const explicitNodeFactory = {
   },
   singleEvaluation({ source }: { source: Expression }) {
     return new SingleEvaluation({
+      id: `se${singleEval++}`,
       sourceLocation: source.sourceLocation,
       wtype: source.wtype,
       source,

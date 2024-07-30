@@ -183,13 +183,12 @@ export class BytesExpressionBuilder extends InstanceExpressionBuilder {
     return super.compare(other, op, sourceLocation)
   }
   boolEval(sourceLocation: SourceLocation, negate: boolean): awst.Expression {
-    return nodeFactory.bytesComparisonExpression({
-      lhs: this._expr,
-      rhs: nodeFactory.bytesConstant({ value: new Uint8Array(), sourceLocation }),
-      sourceLocation,
-      wtype: wtypes.boolWType,
-      operator: negate ? EqualityComparison.eq : EqualityComparison.ne,
-    })
+    return new UInt64ExpressionBuilder(
+      intrinsicFactory.bytesLen({
+        value: this._expr,
+        sourceLocation,
+      }),
+    ).boolEval(sourceLocation, negate)
   }
 
   toBytes(): awst.Expression {

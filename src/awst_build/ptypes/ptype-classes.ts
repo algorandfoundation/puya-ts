@@ -3,7 +3,7 @@ import { codeInvariant, distinct, sortBy } from '../../util'
 import { WTuple, WType } from '../../awst/wtypes'
 import { Constants } from '../../constants'
 import { CodeError, InternalError, NotSupported } from '../../errors'
-import { numberPType, uint64PType } from './index'
+import { bigintPType, biguintPType, numberPType, uint64PType } from './index'
 
 /**
  * Represents a public type visible to a developer of AlgoTS
@@ -61,37 +61,37 @@ export class InstanceType extends PType {
 /**
  * Transient types can appear in expressions but should not be used as variable or return types
  */
-export class LiteralOnlyType extends PType {
+export class TransientType extends PType {
   readonly wtype: undefined = undefined
   readonly name: string
   readonly module: string
-  readonly resolvableTo: PType[]
   readonly singleton: boolean
-  private readonly wtypeMessage: string | undefined
+  readonly typeMessage: string
+  readonly expressionMessage: string
 
   constructor({
     name,
     module,
-    resolvableTo,
     singleton,
-    wtypeMessage,
+    typeMessage,
+    expressionMessage,
   }: {
     name: string
     module: string
-    resolvableTo: PType[]
     singleton: boolean
-    wtypeMessage?: string
+    typeMessage: string
+    expressionMessage: string
   }) {
     super()
     this.name = name
     this.module = module
-    this.resolvableTo = resolvableTo
     this.singleton = singleton
-    this.wtypeMessage = wtypeMessage
+    this.typeMessage = typeMessage
+    this.expressionMessage = expressionMessage
   }
 
   get wtypeOrThrow(): WType {
-    throw new CodeError(this.wtypeMessage ?? `${this.fullName} is not valid as a variable, parameter, or property type`)
+    throw new CodeError(this.typeMessage)
   }
 }
 
@@ -348,29 +348,41 @@ export class UnsupportedType extends PType {
   }
 }
 
-export class UnionPType extends PType {
-  get name() {
-    return this.types.map((t) => t.name).join(' | ')
-  }
+function ptypesEqual(a: PType[], b: PType[]): boolean {
+  const aSorted = a.filter(distinct((t) => t.fullName)).toSorted(sortBy((t) => t.fullName))
+  const bSorted = b.filter(distinct((t) => t.fullName)).toSorted(sortBy((t) => t.fullName))
+  return aSorted.length === bSorted.length && aSorted.every((aa, i) => aa.equals(bSorted[i]))
+}
+
+export class UnionPType extends TransientType {
   get fullName() {
     return this.types.map((t) => t.fullName).join(' | ')
   }
-  readonly module = 'lib.d.ts'
   readonly singleton = false
   readonly types: PType[]
   readonly wtype = undefined
   private constructor({ types }: { types: PType[] }) {
-    super()
-    this.types = types
-  }
-
-  get wtypeOrThrow(): never {
-    if (this.equals(UnionPType.fromTypes([uint64PType, numberPType]))) {
-      throw new CodeError(
-        'number is not valid as a variable, parameter, or property type. Please annotate with an algo-ts type such as uint64 or biguint',
-      )
+    let typeMessage: string
+    let expressionMessage: string
+    if (ptypesEqual(types, [uint64PType, numberPType])) {
+      typeMessage = numberPType.typeMessage
+      expressionMessage = numberPType.expressionMessage
+    } else if (ptypesEqual(types, [biguintPType, bigintPType])) {
+      typeMessage = bigintPType.typeMessage
+      expressionMessage = bigintPType.expressionMessage
+    } else {
+      typeMessage = 'Union types are not valid as a variable, parameter, return, or property type.'
+      expressionMessage = 'Union types are only valid in boolean expressions.'
     }
-    throw new CodeError('Union types are not valid as a variable, parameter, or property type.')
+    const name = types.map((t) => t.name).join(' | ')
+    super({
+      name,
+      module: 'lib.d.ts',
+      singleton: false,
+      typeMessage: `${typeMessage} Expression type is ${name}`,
+      expressionMessage: `${expressionMessage} Expression type is ${name}`,
+    })
+    this.types = types
   }
 
   static fromTypes(types: PType[]) {
