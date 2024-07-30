@@ -1,8 +1,7 @@
-import { internal } from '@algorandfoundation/algo-ts';
-import { DecodedLogs, decodeLogs, LogDecoding, StateStore, TestExecutionContext, TransactionBase } from './internal';
-(function setupGlobalContext() {
+import { Account, bytes, gtxn, internal } from '@algorandfoundation/algo-ts'
+import { DecodedLogs, decodeLogs, LogDecoding, StateStore, TestExecutionContext, TransactionBase, TransactionType } from './internal'
+;(function setupGlobalContext() {
   internal.ctxMgr.instance = new TestExecutionContext()
-
 })()
 export class TestHarness {
   #testExecutionContext: TestExecutionContext
@@ -15,7 +14,23 @@ export class TestHarness {
   }
 
   set gtxn(value: TransactionBase[]) {
-    this.#stateStore.txnGroup = value
+    this.#stateStore.txnGroup.push(...value)
+  }
+
+  get defaultCreator(): Account {
+    return this.#stateStore.defaultCreator
+  }
+
+  anyApplicationCallTransaction(txn: Partial<gtxn.ApplicationTxn> & { args: bytes[] }): gtxn.ApplicationTxn {
+    return {
+      sender: this.defaultCreator,
+      type: TransactionType.ApplicationCall,
+      app_args(index) {
+        return txn.args[index]
+      },
+      num_app_args: txn.args.length,
+      ...txn,
+    } as gtxn.ApplicationTxn
   }
 
   exportLogs<const T extends [...LogDecoding[]]>(...decoding: T): DecodedLogs<T> {
