@@ -1,7 +1,9 @@
-subroutine test(x: uint64, y: uint64): uint64
+subroutine test(x: uint64, y: uint64): bool
 {
-  var a: uint64 = x < 4 ? x : y
-  var b: uint64 = y % 2 != 0 ? 2 : 1
-  var c: uint64 = x > y ? y > 10 ? 3 : y : x
-  return a
+  var a: uint64 = (x < 4 ? x : y) + x
+  var b: uint64 = (y % 2 != 0 ? 2 : 1)
+  var c: uint64 = (x > y ? (y > 10 ? 3 : y) : x)
+  var d: uint64 = (y % 2 != 0 ? 2 : 1) + (x < 4 ? x : y)
+  var e: uint64 = (singleEval(() => x) != 0 ? singleEval(() => x) : 4)
+  return True
 }

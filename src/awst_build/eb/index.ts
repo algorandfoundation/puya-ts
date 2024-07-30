@@ -4,6 +4,9 @@ import { CodeError, NotSupported } from '../../errors'
 import { PType } from '../ptypes'
 import { logger } from '../../logger'
 import { Expression } from '../../awst/nodes'
+import { codeInvariant } from '../../util'
+import { typeRegistry } from '../type-registry'
+import { nodeFactory } from '../../awst/node-factory'
 
 export enum BuilderComparisonOp {
   eq = '==',
@@ -17,7 +20,6 @@ export enum BuilderUnaryOp {
   inc = '++',
   dec = '--',
   bit_inv = '~',
-  log_not = '!',
   neg = '-',
   pos = '+',
 }
@@ -81,7 +83,7 @@ export abstract class NodeBuilder {
     })
   }
 
-  boolEval(sourceLocation: SourceLocation): awst.Expression {
+  boolEval(sourceLocation: SourceLocation, negate = false): awst.Expression {
     throw new NotSupported(`Boolean evaluation of ${this.typeDescription}`, {
       sourceLocation,
     })
@@ -92,9 +94,26 @@ export abstract class InstanceBuilder extends NodeBuilder {
   constructor(sourceLocation: SourceLocation) {
     super(sourceLocation)
   }
-
+  abstract get ptype(): PType
   abstract resolve(): awst.Expression
   abstract resolveLValue(): awst.LValue
+
+  resolvableToPType(ptype: PType, sourceLocation: SourceLocation): boolean {
+    return this.ptype.equals(ptype)
+  }
+  resolveToPType(ptype: PType, sourceLocation: SourceLocation): InstanceBuilder {
+    codeInvariant(this.ptype.equals(ptype), `Required expression of type ${ptype} but found ${this.ptype}`)
+    return this
+  }
+
+  singleEvaluation(): InstanceBuilder {
+    return typeRegistry.getInstanceEb(
+      nodeFactory.singleEvaluation({
+        source: this.resolve(),
+      }),
+      this.ptype,
+    )
+  }
 
   get valueType(): wtypes.WType | undefined {
     return undefined
@@ -157,6 +176,67 @@ export abstract class InstanceBuilder extends NodeBuilder {
 export abstract class LiteralExpressionBuilder extends InstanceBuilder {
   abstract resolvableToPType(ptype: PType, sourceLocation: SourceLocation): boolean
   abstract resolveToPType(ptype: PType, sourceLocation: SourceLocation): InstanceBuilder
+}
+
+export class DeferredTypeExpressionBuilder extends LiteralExpressionBuilder {
+  #ptype: PType
+  #base: InstanceBuilder
+  #op: (b: InstanceBuilder) => InstanceBuilder
+  get ptype(): PType {
+    return this.#ptype
+  }
+  resolve(): awst.Expression {
+    throw new Error('Method not implemented.')
+  }
+  resolveLValue(): awst.LValue {
+    throw new Error('Method not implemented.')
+  }
+
+  boolEval(sourceLocation: SourceLocation, negate: boolean = false): Expression {
+    return this.#base.boolEval(sourceLocation, negate)
+  }
+
+  constructor({
+    ptype,
+    base,
+    sourceLocation,
+    op,
+  }: {
+    ptype: PType
+    sourceLocation: SourceLocation
+    base: InstanceBuilder
+    op: (builder: InstanceBuilder) => InstanceBuilder
+  }) {
+    super(sourceLocation)
+    this.#op = op
+    this.#ptype = ptype
+    this.#base = base
+  }
+
+  resolvableToPType(ptype: PType, sourceLocation: SourceLocation): boolean {
+    return this.#base.resolvableToPType(ptype, sourceLocation)
+  }
+  resolveToPType(ptype: PType, sourceLocation: SourceLocation): InstanceBuilder {
+    return this.#op(this.#base.resolveToPType(ptype, sourceLocation))
+  }
+
+  binaryOp(other: InstanceBuilder, op: BuilderBinaryOp, sourceLocation: SourceLocation): InstanceBuilder {
+    return new DeferredTypeExpressionBuilder({
+      ptype: this.ptype,
+      sourceLocation,
+      base: this.#base,
+      op: (b) => this.#op(b).binaryOp(other, op, sourceLocation),
+    })
+  }
+
+  singleEvaluation(): InstanceBuilder {
+    return new DeferredTypeExpressionBuilder({
+      ptype: this.ptype,
+      sourceLocation: this.sourceLocation,
+      base: this.#base,
+      op: (b) => this.#op(b).singleEvaluation(),
+    })
+  }
 }
 
 export abstract class TypeClassBuilder extends NodeBuilder {

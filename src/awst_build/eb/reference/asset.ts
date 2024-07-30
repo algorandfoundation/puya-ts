@@ -24,7 +24,7 @@ export class AssetExpressionBuilder extends InstanceExpressionBuilder {
     super(expr)
   }
 
-  get ptype(): PType | undefined {
+  get ptype(): PType {
     return assetPType
   }
 }

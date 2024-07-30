@@ -1,0 +1,11 @@
+subroutine test(a: uint64, b: uint64, c: string, d: bytes, e: uint64): bool
+{
+  (singleEval(() => a) != 0 ? singleEval(() => a) : b)
+  ((singleEval(() => a) != 0 ? singleEval(() => a) != 0 : b != 0) ? singleEval(() => (singleEval(() => a) != 0 ? singleEval(() => a) : b)) : e)
+  var x: uint64 = ((singleEval(() => a) != 0 ? singleEval(() => a) != 0 : b != 0) ? singleEval(() => (singleEval(() => a) != 0 ? singleEval(() => a) : b)) : e)
+  var y: uint64 = (singleEval(() => a) != 0 ? b : singleEval(() => a))
+  if ((singleEval(() => a) != 0 ? singleEval(() => a) != 0 : (singleEval(() => c) != 0x ? d != 0x : singleEval(() => c) != 0x))) {
+    return True
+  }
+  return False
+}

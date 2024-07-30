@@ -5,19 +5,25 @@ import { biguintPType, boolPType, bytesPType, PType, stringPType, uint64PType } 
 import { SourceLocation } from '../../awst/source-location'
 import { codeInvariant } from '../../util'
 import { StringConstant } from '../../awst/nodes'
-import { ScalarLiteralExpressionBuilder } from './scalar-literal-expression-builder'
-import { ConditionalExpressionBuilder } from './conditional-expression-builder'
+import { BigIntLiteralExpressionBuilder } from './literal/big-int-literal-expression-builder'
 
 export function requireExpressionOfType(builder: NodeBuilder, ptype: PType, sourceLocation: SourceLocation): awst.Expression {
-  if (builder instanceof LiteralExpressionBuilder || builder instanceof ConditionalExpressionBuilder) {
+  if (builder instanceof LiteralExpressionBuilder) {
     return builder.resolveToPType(ptype, sourceLocation).resolve()
   }
-  if (builder instanceof InstanceBuilder && builder.ptype?.equals(ptype)) {
+  if (builder instanceof InstanceBuilder && builder.ptype.equals(ptype)) {
     return builder.resolve()
   }
   throw new CodeError(`Expected expression of type ${ptype}, got ${builder.typeDescription}`, {
     sourceLocation,
   })
+}
+
+export function resolvableToType(builder: NodeBuilder, ptype: PType, sourceLocation: SourceLocation) {
+  if (builder instanceof LiteralExpressionBuilder) {
+    return builder.resolvableToPType(ptype, sourceLocation)
+  }
+  return builder instanceof InstanceBuilder && builder.ptype.equals(ptype)
 }
 
 export function requestExpressionOfType(builder: NodeBuilder, ptype: PType, sourceLocation: SourceLocation): awst.Expression | undefined {
@@ -86,7 +92,7 @@ export function requireConstantOfType(builder: NodeBuilder, ptype: PType, source
 }
 
 export function requireConstantValue(builder: NodeBuilder, sourceLocation: SourceLocation): ConstantValue {
-  if (builder instanceof ScalarLiteralExpressionBuilder) {
+  if (builder instanceof BigIntLiteralExpressionBuilder) {
     return builder.value
   }
   const value = requireInstanceBuilder(builder, sourceLocation).resolve()
@@ -99,10 +105,10 @@ export function isValidLiteralForPType(literalValue: ConstantValue, ptype: PType
     return typeof literalValue === 'string'
   }
   if (ptype.equals(uint64PType)) {
-    return typeof literalValue === 'bigint' && 0 <= literalValue && literalValue <= 2n ** 64n
+    return typeof literalValue === 'bigint' && 0 <= literalValue && literalValue < 2n ** 64n
   }
   if (ptype.equals(biguintPType)) {
-    return typeof literalValue === 'bigint' && 0 <= literalValue && literalValue <= 2n ** 512n
+    return typeof literalValue === 'bigint' && 0 <= literalValue && literalValue < 2n ** 512n
   }
   if (ptype.equals(boolPType)) {
     return typeof literalValue === 'boolean'

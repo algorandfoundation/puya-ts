@@ -17,7 +17,7 @@ export class ArrayLiteralExpressionBuilder extends InstanceBuilder {
   resolveLValue(): LValue {
     throw new Error('Method not implemented.')
   }
-  get ptype(): PType | undefined {
+  get ptype(): PType {
     throw new Error('Method not implemented.')
   }
 

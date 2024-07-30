@@ -8,14 +8,14 @@ import {
   InstanceExpressionBuilder,
   LiteralExpressionBuilder,
 } from './index'
-import { BigUIntBinaryOperator, BigUIntPostfixUnaryOperator, NumericComparison } from '../../awst/nodes'
+import { BigUIntBinaryOperator, BigUIntPostfixUnaryOperator, Expression, NumericComparison } from '../../awst/nodes'
 import { SourceLocation } from '../../awst/source-location'
 import { nodeFactory } from '../../awst/node-factory'
 import { CodeError, NotSupported } from '../../errors'
 import { requireExpressionOfType } from './util'
 import { tryConvertEnum } from '../../util'
 import { biguintPType, PType, Uint64Function } from '../ptypes'
-import { BoolExpressionBuilder } from './bool-expression-builder'
+import { BooleanExpressionBuilder } from './boolean-expression-builder'
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
 import { InstanceType } from '../ptypes/ptype-classes'
 import { logger } from '../../logger'
@@ -56,15 +56,22 @@ export class BigUintExpressionBuilder extends InstanceExpressionBuilder {
         sourceLocation,
       })
     }
-    return new BoolExpressionBuilder(
+    return new BooleanExpressionBuilder(
       nodeFactory.numericComparisonExpression({
         lhs: this._expr,
         rhs: otherExpr,
         operator: numComOp,
         sourceLocation,
-        wtype: wtypes.boolWType,
       }),
     )
+  }
+  boolEval(sourceLocation: SourceLocation, negate: boolean = false): Expression {
+    return nodeFactory.numericComparisonExpression({
+      sourceLocation,
+      lhs: this.resolve(),
+      rhs: nodeFactory.uInt64Constant({ value: 0n, sourceLocation }),
+      operator: negate ? NumericComparison.eq : NumericComparison.ne,
+    })
   }
 
   prefixUnaryOp(op: BuilderUnaryOp, sourceLocation: SourceLocation): InstanceBuilder {
@@ -80,14 +87,7 @@ export class BigUintExpressionBuilder extends InstanceExpressionBuilder {
       case BuilderUnaryOp.bit_inv:
         logger.error(sourceLocation, `Bitwise inversion of ${this.typeDescription} is not supported as the bit size is indeterminate`)
         return this
-      case BuilderUnaryOp.log_not:
-        return new BoolExpressionBuilder(
-          nodeFactory.not({
-            expr: this.resolve(),
-            sourceLocation,
-            wtype: wtypes.boolWType,
-          }),
-        )
+
       case BuilderUnaryOp.pos:
         return this
       default:
@@ -135,7 +135,7 @@ export class BigUintExpressionBuilder extends InstanceExpressionBuilder {
 
     const uintOp = op === BuilderBinaryOp.div ? BigUIntBinaryOperator.floorDiv : tryConvertEnum(op, BuilderBinaryOp, BigUIntBinaryOperator)
     if (uintOp === undefined) {
-      throw new NotSupported(`BigUint binary operator ${op}`, {
+      throw new NotSupported(`BigUint binary operator '${op}'`, {
         sourceLocation,
       })
     }
