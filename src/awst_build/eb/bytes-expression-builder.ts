@@ -15,13 +15,14 @@ import { CodeError, wrapInCodeError } from '../../errors'
 import { UInt64ExpressionBuilder } from './uint64-expression-builder'
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
 import { requireExpressionOfType, requireExpressionsOfType } from './util'
-import { BytesFunction, bytesPType, numberPType, PType, stringPType, uint64PType } from '../ptypes'
+import { biguintPType, BytesFunction, bytesPType, numberPType, PType, stringPType, uint64PType } from '../ptypes'
 import { StringExpressionBuilder } from './string-expression-builder'
 import { BooleanExpressionBuilder } from './boolean-expression-builder'
 import { BytesBinaryOperator, BytesEncoding, BytesUnaryOperator, EqualityComparison, Expression, StringConstant } from '../../awst/nodes'
 import { base32ToUint8Array, base64ToUint8Array, hexToUint8Array, utf8ToUint8Array } from '../../util'
 import { BigIntLiteralExpressionBuilder } from './literal/big-int-literal-expression-builder'
 import { logger } from '../../logger'
+import { InstanceType } from '../ptypes/ptype-classes'
 
 export class BytesFunctionBuilder extends FunctionBuilder {
   get ptype(): PType | undefined {
@@ -131,9 +132,9 @@ const builderCompareToBytesCompare: Record<BuilderComparisonOp, EqualityComparis
   [BuilderComparisonOp.gte]: undefined,
 }
 
-export class BytesExpressionBuilder extends InstanceExpressionBuilder {
-  get ptype() {
-    return bytesPType
+export class BytesExpressionBuilder extends InstanceExpressionBuilder<InstanceType> {
+  constructor(expr: Expression) {
+    super(expr, bytesPType)
   }
   prefixUnaryOp(op: BuilderUnaryOp, sourceLocation: SourceLocation): InstanceBuilder {
     switch (op) {

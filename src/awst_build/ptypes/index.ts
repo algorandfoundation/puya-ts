@@ -123,6 +123,10 @@ export const GlobalStateFunction = new LibFunctionType({
   name: 'GlobalState',
   module: Constants.stateModuleName,
 })
+export const BoxFunction = new LibFunctionType({
+  name: 'Box',
+  module: Constants.boxModuleName,
+})
 
 export const ClearStateProgram = new FunctionPType({
   name: Constants.clearStateProgramMethodName,

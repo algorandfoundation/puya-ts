@@ -1,6 +1,6 @@
 import { bytes, uint64 } from './primitives'
 
-type Box<TValue> = {
+export type Box<TValue> = {
   readonly key: bytes
   value: TValue
 
@@ -10,7 +10,7 @@ type Box<TValue> = {
   readonly length: uint64
 }
 
-type BoxMap<TKey, TValue> = {
+export type BoxMap<TKey, TValue> = {
   readonly keyPrefix: bytes
   get(key: TKey, options: { default: TValue }): TValue
   set(key: TKey, value: TValue): void
@@ -19,7 +19,7 @@ type BoxMap<TKey, TValue> = {
   length(key: TKey): uint64
 }
 
-type BoxRef = {
+export type BoxRef = {
   readonly key: bytes
 
   readonly exists: boolean

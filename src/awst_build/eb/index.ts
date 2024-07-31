@@ -91,11 +91,11 @@ export abstract class NodeBuilder {
   }
 }
 
-export abstract class InstanceBuilder extends NodeBuilder {
+export abstract class InstanceBuilder<TPType extends PType = PType> extends NodeBuilder {
   constructor(sourceLocation: SourceLocation) {
     super(sourceLocation)
   }
-  abstract get ptype(): PType
+  abstract get ptype(): TPType
   abstract resolve(): awst.Expression
   abstract resolveLValue(): awst.LValue
 
@@ -243,73 +243,6 @@ export abstract class LiteralExpressionBuilder extends InstanceBuilder {
   }
 }
 
-export class DeferredTypeExpressionBuilder extends LiteralExpressionBuilder {
-  #ptype: PType
-  #base: InstanceBuilder
-  #op: (b: InstanceBuilder) => InstanceBuilder
-  get ptype(): PType {
-    return this.#ptype
-  }
-  resolve(): awst.Expression {
-    throw new Error('Method not implemented.')
-  }
-  resolveLValue(): awst.LValue {
-    throw new Error('Method not implemented.')
-  }
-
-  boolEval(sourceLocation: SourceLocation, negate: boolean = false): Expression {
-    return this.#base.boolEval(sourceLocation, negate)
-  }
-
-  constructor({
-    ptype,
-    base,
-    sourceLocation,
-    op,
-  }: {
-    ptype: PType
-    sourceLocation: SourceLocation
-    base: InstanceBuilder
-    op: (builder: InstanceBuilder) => InstanceBuilder
-  }) {
-    super(sourceLocation)
-    this.#op = op
-    this.#ptype = ptype
-    this.#base = base
-  }
-
-  resolvableToPType(ptype: PType, sourceLocation: SourceLocation): boolean {
-    return this.#base.resolvableToPType(ptype, sourceLocation)
-  }
-  resolveToPType(ptype: PType, sourceLocation: SourceLocation): InstanceBuilder {
-    return this.#op(this.#base.resolveToPType(ptype, sourceLocation))
-  }
-
-  binaryOp(other: InstanceBuilder, op: BuilderBinaryOp, sourceLocation: SourceLocation): InstanceBuilder {
-    return new DeferredTypeExpressionBuilder({
-      ptype: this.ptype,
-      sourceLocation,
-      base: this.#base,
-      op: (b) => this.#op(b).binaryOp(other, op, sourceLocation),
-    })
-  }
-
-  singleEvaluation(): InstanceBuilder {
-    return new DeferredTypeExpressionBuilder({
-      ptype: this.ptype,
-      sourceLocation: this.sourceLocation,
-      base: this.#base,
-      op: (b) => this.#op(b).singleEvaluation(),
-    })
-  }
-}
-
-export abstract class TypeClassBuilder extends NodeBuilder {
-  constructor(location: SourceLocation) {
-    super(location)
-  }
-  abstract produces(): PType
-}
 export abstract class FunctionBuilder extends NodeBuilder {
   get ptype(): PType | undefined {
     return undefined
@@ -335,9 +268,19 @@ export abstract class ParameterlessFunctionBuilder extends FunctionBuilder {
   }
 }
 
-export abstract class InstanceExpressionBuilder extends InstanceBuilder {
-  constructor(protected _expr: awst.Expression) {
+export abstract class InstanceExpressionBuilder<TPType extends PType> extends InstanceBuilder<PType> {
+  #ptype: TPType
+
+  get ptype(): TPType {
+    return this.#ptype
+  }
+
+  constructor(
+    protected _expr: awst.Expression,
+    ptype: TPType,
+  ) {
     super(_expr.sourceLocation)
+    this.#ptype = ptype
   }
 
   resolve() {
@@ -357,15 +300,16 @@ export function requireLValue(expr: awst.Expression): awst.LValue {
     awst.TupleExpression,
     awst.AppStateExpression,
     awst.AppAccountStateExpression,
+    awst.BoxValueExpression,
   ]
   if (!lValueNodes.some((l) => expr instanceof l)) {
-    throw new CodeError(`${expr.wtype} is not a valid assignment target`, {
+    throw new CodeError(`Expression is not a valid assignment target`, {
       sourceLocation: expr.sourceLocation,
     })
   }
   if (expr instanceof awst.IndexExpression || expr instanceof awst.FieldExpression) {
     if (expr.base.wtype.immutable) {
-      throw new CodeError(`${expr.wtype} is not a valid assignment target as it is immutabe`, {
+      throw new CodeError(`${expr.wtype} is not a valid assignment target as it is immutable`, {
         sourceLocation: expr.sourceLocation,
       })
     }

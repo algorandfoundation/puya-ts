@@ -50,22 +50,17 @@ export class GlobalStateFunctionBuilder extends FunctionBuilder {
   }
 }
 
-export class GlobalStateExpressionBuilder extends InstanceExpressionBuilder {
-  private readonly _ptype: GlobalStateType
+export class GlobalStateExpressionBuilder extends InstanceExpressionBuilder<GlobalStateType> {
   constructor(expr: Expression, ptype: PType) {
-    super(expr)
     invariant(ptype instanceof GlobalStateType, 'ptype must be instance of GlobalStateType')
-    this._ptype = ptype
-  }
-  get ptype(): PType {
-    return this._ptype
+    super(expr, ptype)
   }
 
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
     switch (name) {
       case 'value':
         // TODO: use value proxy
-        return typeRegistry.getInstanceEb(this.buildField(sourceLocation), this._ptype.contentType)
+        return typeRegistry.getInstanceEb(this.buildField(sourceLocation), this.ptype.contentType)
     }
     return super.memberAccess(name, sourceLocation)
   }
@@ -73,7 +68,7 @@ export class GlobalStateExpressionBuilder extends InstanceExpressionBuilder {
   private buildField(sourceLocation: SourceLocation): AppStateExpression {
     return nodeFactory.appStateExpression({
       key: this._expr,
-      wtype: this._ptype.contentType.wtypeOrThrow,
+      wtype: this.ptype.contentType.wtypeOrThrow,
       existsAssertionMessage: 'check GlobalState exists',
       sourceLocation,
     })

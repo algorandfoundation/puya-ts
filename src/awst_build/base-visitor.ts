@@ -84,11 +84,6 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
   }
 
   visitIdentifier(node: ts.Identifier): NodeBuilder {
-    const constant = this.context.tryResolveConstant(node)
-    if (constant) {
-      throw new TodoError('Update constant resolution', { sourceLocation: constant.sourceLocation })
-      //return new LiteralExpressionBuilder(constant.value, constant.sourceLocation)
-    }
     return this.context.getBuilderForNode(node)
   }
 
@@ -106,7 +101,7 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
 
   visitSuperKeyword(node: ts.SuperExpression): NodeBuilder {
     const sourceLocation = this.sourceLocation(node)
-    const ptype = this.context.resolver.resolve(node, sourceLocation)
+    const ptype = this.context.getPTypeForNode(node)
     if (ptype instanceof ContractClassPType) {
       return new ContractSuperBuilder(ptype, sourceLocation)
     }
@@ -115,7 +110,7 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
 
   visitThisKeyword(node: ts.ThisExpression): NodeBuilder {
     const sourceLocation = this.sourceLocation(node)
-    const ptype = this.context.resolver.resolve(node, sourceLocation)
+    const ptype = this.context.getPTypeForNode(node)
     if (ptype instanceof ContractClassPType) {
       return new ContractThisBuilder(ptype, sourceLocation)
     }
@@ -165,7 +160,7 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
           return []
       }
     })
-    const ptype = this.context.resolver.resolve(node, sourceLocation)
+    const ptype = this.context.getPTypeForNode(node)
     invariant(ptype instanceof ObjectPType, 'Object literal ptype should resolve to ObjectPType')
     return new ObjectLiteralExpressionBuilder(sourceLocation, ptype, parts)
   }
@@ -199,7 +194,7 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
     const sourceLocation = this.sourceLocation(node)
     const eb = this.baseAccept(node.expression)
     const args = node.arguments.map((a) => requireInstanceBuilder(this.baseAccept(a), sourceLocation))
-    const typeArgs = node.typeArguments?.map((t) => this.context.resolver.resolveTypeNode(t, sourceLocation)) ?? []
+    const typeArgs = node.typeArguments?.map((t) => this.context.getPTypeForNode(t)) ?? []
     return eb.call(args, typeArgs, sourceLocation)
   }
 
@@ -301,7 +296,7 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
       const right = requireInstanceBuilder(this.baseAccept(node.right), sourceLocation)
       return left.compare(right, ComparisonOpSyntaxes[binaryOpKind], sourceLocation)
     } else if (isKeyOf(binaryOpKind, LogicalOpSyntaxes)) {
-      const ptype = this.context.resolver.resolve(node, sourceLocation)
+      const ptype = this.context.getPTypeForNode(node)
       if (ptype.equals(boolPType)) {
         const left = requireInstanceBuilder(this.baseAccept(node.left), sourceLocation)
         const right = requireInstanceBuilder(this.baseAccept(node.right), sourceLocation)
@@ -363,7 +358,7 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
     const condition = this.evaluateCondition(node.condition)
     const whenTrue = requireInstanceBuilder(this.baseAccept(node.whenTrue), sourceLocation)
     const whenFalse = requireInstanceBuilder(this.baseAccept(node.whenFalse), sourceLocation)
-    const ptype = this.context.resolver.resolve(node, sourceLocation)
+    const ptype = this.context.getPTypeForNode(node)
     return this.createConditionalExpression({
       condition,
       sourceLocation,

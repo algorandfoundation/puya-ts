@@ -243,6 +243,24 @@ export class LocalStateType extends StorageProxyPType {
     super({ ...props, keyWType: wtypes.stateKeyWType })
   }
 }
+export class BoxPType extends StorageProxyPType {
+  readonly module = Constants.boxModuleName
+  get name() {
+    return `Box<${this.contentType.fullName}>`
+  }
+  constructor(props: { content: PType }) {
+    super({ ...props, keyWType: wtypes.boxKeyWType })
+  }
+  static get baseFullName(): string {
+    return `${Constants.boxModuleName}::Box`
+  }
+  static parameterise(typeArgs: PType[]): BoxPType {
+    codeInvariant(typeArgs.length === 1, 'Box type expects exactly one type parameter')
+    return new BoxPType({
+      content: typeArgs[0],
+    })
+  }
+}
 export type AppStorageType = GlobalStateType | LocalStateType
 
 export function isAppStorageType(ptype: PType): ptype is AppStorageType {

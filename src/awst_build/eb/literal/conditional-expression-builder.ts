@@ -1,4 +1,4 @@
-import { BuilderBinaryOp, BuilderComparisonOp, DeferredTypeExpressionBuilder, InstanceBuilder, LiteralExpressionBuilder } from '../index'
+import { InstanceBuilder, LiteralExpressionBuilder } from '../index'
 import { SourceLocation } from '../../../awst/source-location'
 import { Expression, LValue } from '../../../awst/nodes'
 import { PType } from '../../ptypes'

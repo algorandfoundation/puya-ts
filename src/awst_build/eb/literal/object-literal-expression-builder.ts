@@ -85,15 +85,10 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
   }
 }
 
-export class ObjectExpressionBuilder extends InstanceExpressionBuilder {
-  readonly _ptype: ObjectPType
-  get ptype(): ObjectPType {
-    return this._ptype
-  }
+export class ObjectExpressionBuilder extends InstanceExpressionBuilder<ObjectPType> {
   constructor(expr: Expression, ptype: PType) {
-    super(expr)
     invariant(ptype instanceof ObjectPType, `ObjectExpressionBuilder must be instantiated with ptype of ObjectPType`)
-    this._ptype = ptype
+    super(expr, ptype)
   }
 
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {

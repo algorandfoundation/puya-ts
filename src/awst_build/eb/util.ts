@@ -85,10 +85,15 @@ function isConstant(expr: awst.Expression): expr is awst.Constant {
   )
 }
 
-export function requireConstantOfType(builder: NodeBuilder, ptype: PType, sourceLocation: SourceLocation): awst.Constant {
+export function requireConstantOfType(
+  builder: NodeBuilder,
+  ptype: PType,
+  sourceLocation: SourceLocation,
+  messageOverride?: string,
+): awst.Constant {
   const constExpr = requestConstantOfType(builder, ptype, sourceLocation)
   if (constExpr) return constExpr
-  throw new CodeError(`Expected constant of type ${ptype}`, { sourceLocation })
+  throw new CodeError(messageOverride ?? `Expected constant of type ${ptype}`, { sourceLocation })
 }
 
 export function requireConstantValue(builder: NodeBuilder, sourceLocation: SourceLocation): ConstantValue {

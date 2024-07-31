@@ -15,6 +15,7 @@ import { uint8ArrayToUtf8 } from '../util'
 import { Buffer } from 'node:buffer'
 import { uint8ArrayToBase32 } from '../util'
 import { boolWType } from './wtypes'
+import { ConstantValue } from './index'
 
 function printBytes(value: Uint8Array, encoding: BytesEncoding) {
   switch (encoding) {
@@ -26,6 +27,17 @@ function printBytes(value: Uint8Array, encoding: BytesEncoding) {
       return `b32<${uint8ArrayToBase32(value)}>`
     default:
       return `0x${Buffer.from(value).toString('hex')}`
+  }
+}
+function printConstant(value: ConstantValue): string {
+  switch (typeof value) {
+    case 'bigint':
+      return `u${value}`
+    case 'boolean':
+    case 'string':
+      return `${value}`
+    default:
+      return printBytes(value, BytesEncoding.unknown)
   }
 }
 export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, StatementVisitor<string[]>, ExpressionVisitor<string> {
@@ -55,7 +67,10 @@ export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, Statemen
     throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
   }
   visitBoxValueExpression(expression: nodes.BoxValueExpression): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    if (expression.key instanceof nodes.BytesConstant) {
+      return `Box[${expression.key.accept(this)}].value`
+    }
+    return `${expression.key.accept(this)}.value`
   }
   visitIntegerConstant(expression: nodes.IntegerConstant): string {
     if (expression.tealAlias) return expression.tealAlias
@@ -274,7 +289,7 @@ export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, Statemen
     throw new TodoError('Method not implemented.', { sourceLocation: statement.sourceLocation })
   }
   visitConstantDeclaration(moduleStatement: nodes.ConstantDeclaration): string[] {
-    return [`${moduleStatement.name} = ${moduleStatement.value}`]
+    return [`${moduleStatement.name} = ${printConstant(moduleStatement.value)}`]
   }
   visitSubroutine(moduleStatement: nodes.Subroutine): string[] {
     const args = moduleStatement.args.map((a) => `${a.name}: ${a.wtype}`).join(', ')

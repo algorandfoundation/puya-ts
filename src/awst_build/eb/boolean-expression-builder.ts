@@ -9,6 +9,7 @@ import { nodeFactory } from '../../awst/node-factory'
 import { codeInvariant, tryConvertEnum } from '../../util'
 import { CodeError } from '../../errors'
 import { boolWType } from '../../awst/wtypes'
+import { InstanceType } from '../ptypes/ptype-classes'
 
 export class BooleanFunctionBuilder extends FunctionBuilder {
   call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
@@ -56,9 +57,9 @@ export class BooleanFunctionBuilder extends FunctionBuilder {
   }
 }
 
-export class BooleanExpressionBuilder extends InstanceExpressionBuilder {
-  get ptype(): ptypes.PType {
-    return ptypes.boolPType
+export class BooleanExpressionBuilder extends InstanceExpressionBuilder<InstanceType> {
+  constructor(expr: Expression) {
+    super(expr, boolPType)
   }
 
   boolEval(sourceLocation: SourceLocation, negate: boolean): awst.Expression {
