@@ -2,14 +2,14 @@ import { internal, op, Uint64 } from '@algorandfoundation/algo-ts'
 
 import { beforeEach, describe, expect, it } from 'vitest'
 import { AlgorandTestContext } from '../../vitest.setup'
-import MyContract from './contract.algo'
+import { MyContract } from './contract.algo'
 
 interface ContractTestContext extends AlgorandTestContext {
   contract: MyContract
 }
 
 beforeEach<ContractTestContext>(async (context) => {
-  context.contract = new (await import('./contract.algo')).default()
+  context.contract = new MyContract()
 })
 
 describe('Calculator', () => {

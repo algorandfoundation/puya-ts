@@ -12,7 +12,7 @@ function itoa(i: uint64): string {
   }
   return itoa(i / radix).concat(digits.at(i % radix).toString())
 }
-export default class MyContract extends Contract {
+export class MyContract extends Contract {
   public approvalProgram(): boolean {
     const numArgs = Txn.numAppArgs
     let a: uint64, b: uint64, action: uint64
