@@ -1,6 +1,7 @@
 import { uint64 } from './primitives'
 
-import type * as txnTypes from './transactions'
+import * as txnTypes from './transactions'
+export { TransactionType } from './transactions'
 
 export interface PayTxn extends txnTypes.PayTxn {}
 export interface KeyRegistrationTxn extends txnTypes.KeyRegistrationTxn {}

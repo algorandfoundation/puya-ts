@@ -1,11 +1,12 @@
-import { BtoiType, Ed25519verifyBareType, GlobalType, ItobType, OpsNamespace, TxnType } from './op-types'
-import { btoi as btoiImpl, itob as itobImpl } from './impl/primitives'
-import { bytes, BytesCompat, uint64, Uint64Compat } from './primitives'
-import { Account, Asset, Application } from './reference'
+import { ctxMgr } from './execution-context'
+import { btoi as btoiImpl, itob as itobImpl, Uint64Cls } from './impl/primitives'
+import { BtoiType, Ed25519verifyBareType, GlobalType, ItobType, TxnType } from './op-types'
+import { Bytes, bytes, Uint64, uint64 } from './primitives'
+import { Account, Application, Asset } from './reference'
 
 export const Txn: TxnType = {
   get sender(): Account {
-    throw new Error('TODO')
+    return ctxMgr.instance.currentTransaction.sender
   },
 
   /**
@@ -187,14 +188,22 @@ export const Txn: TxnType = {
    * Arguments passed to the application in the ApplicationCall transaction
    */
   applicationArgs(a: uint64): bytes {
-    throw new Error('TODO')
+    const currentTransaction = ctxMgr.instance.currentTransaction
+    if ('appArgs' in currentTransaction) {
+      return currentTransaction.appArgs(Uint64Cls.getNumber(a))
+    }
+    return Bytes()
   },
 
   /**
    * Number of ApplicationArgs
    */
   get numAppArgs(): uint64 {
-    throw new Error('TODO')
+    const currentTransaction = ctxMgr.instance.currentTransaction
+    if ('numAppArgs' in currentTransaction) {
+      return currentTransaction.numAppArgs
+    }
+    return Uint64(0)
   },
 
   /**

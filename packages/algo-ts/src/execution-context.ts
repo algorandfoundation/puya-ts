@@ -1,12 +1,13 @@
-import { OpsNamespace } from './op-types'
-import { biguint, BigUintCompat, bytes, BytesCompat, StringCompat, uint64, Uint64Compat } from './primitives'
+import { bytes, uint64 } from './primitives'
 import { Account, Application, Asset } from './reference'
+import { Transaction } from './transactions'
 
 export type ExecutionContext = {
   log(value: bytes): void
   application(id: uint64): Application
   asset(id: uint64 | undefined): Asset
   account(address: bytes | undefined): Account
+  currentTransaction: Transaction
 }
 
 declare global {

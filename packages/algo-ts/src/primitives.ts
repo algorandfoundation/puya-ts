@@ -58,7 +58,8 @@ export type bytes = {
 
 export function Bytes(value: TemplateStringsArray, ...replacements: BytesCompat[]): bytes
 export function Bytes(value: BytesCompat): bytes
-export function Bytes(value: BytesCompat | TemplateStringsArray, ...replacements: BytesCompat[]): bytes {
+export function Bytes(): bytes
+export function Bytes(value?: BytesCompat | TemplateStringsArray, ...replacements: BytesCompat[]): bytes {
   if (isTemplateStringsArray(value)) {
     return BytesCls.fromInterpolation(value, replacements).asAlgoTs()
   } else {

@@ -1,6 +1,6 @@
-import { Account, Application, Asset, bytes, internal, uint64 } from '@algorandfoundation/algo-ts'
-import { StateStore } from './state-store'
+import { Account, Application, Asset, bytes, gtxn, internal, uint64 } from '@algorandfoundation/algo-ts'
 import { AccountCls, ApplicationCls, AssetCls } from './reference'
+import { StateStore } from './state-store'
 
 export class TestExecutionContext implements internal.ExecutionContext {
   #stateStore: StateStore | undefined
@@ -22,7 +22,12 @@ export class TestExecutionContext implements internal.ExecutionContext {
   log(value: bytes): void {
     this.#stateStore!.logs.push(value)
   }
-  get rawLogs() {
-    return this.#stateStore!.logs.map((l) => internal.primitives.toExternalValue(l))
+
+  get currentTransaction() {
+    const result = this.#stateStore!.txnGroup.find((t) => t.type === gtxn.TransactionType.ApplicationCall)
+    if (!result) {
+      throw internal.errors.internalError('Transaction group must contain at least one ApplicationCall transaction (type="appl")')
+    }
+    return result as gtxn.ApplicationTxn
   }
 }

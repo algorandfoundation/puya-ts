@@ -92,6 +92,10 @@ interface TransactionBase {
 
 export interface PayTxn extends TransactionBase {
   /**
+   * Transaction type as integer
+   */
+  type: TransactionType.Payment
+  /**
    * 32 byte address
    */
   receiver: Account
@@ -105,14 +109,13 @@ export interface PayTxn extends TransactionBase {
    * 32 byte address
    */
   closeRemainderTo: Account
-
-  /**
-   * Transaction type as integer
-   */
-  type: TransactionType.Payment
 }
 
 export interface KeyRegistrationTxn extends TransactionBase {
+  /**
+   * Transaction type as integer
+   */
+  type: TransactionType.KeyRegistration
   /**
    * 32 byte address
    */
@@ -147,13 +150,13 @@ export interface KeyRegistrationTxn extends TransactionBase {
    * 64 byte state proof public key
    */
   stateProofKey: bytes
-  /**
-   * Transaction type as integer
-   */
-  type: TransactionType.KeyRegistration
 }
 
 export interface AssetConfigTxn extends TransactionBase {
+  /**
+   * Transaction type as integer
+   */
+  type: TransactionType.AssetConfig
   /**
    * Asset ID in asset config transaction
    */
@@ -213,13 +216,13 @@ export interface AssetConfigTxn extends TransactionBase {
    * 32 byte address
    */
   clawback: Account
-  /**
-   * Transaction type as integer
-   */
-  type: TransactionType.AssetConfig
 }
 
 export interface AssetTransferTxn extends TransactionBase {
+  /**
+   * Transaction type as integer
+   */
+  type: TransactionType.AssetTransfer
   /**
    * Asset ID
    */
@@ -244,13 +247,13 @@ export interface AssetTransferTxn extends TransactionBase {
    * 32 byte address
    */
   assetCloseTo: Account
-  /**
-   * Transaction type as integer
-   */
-  type: TransactionType.AssetTransfer
 }
 
 export interface AssetFreezeTxn extends TransactionBase {
+  /**
+   * Transaction type as integer
+   */
+  type: TransactionType.AssetFreeze
   /**
    * Asset ID being frozen or un-frozen
    */
@@ -265,13 +268,14 @@ export interface AssetFreezeTxn extends TransactionBase {
    * The new frozen value
    */
   frozen: boolean
-  /**
-   * Transaction type as integer
-   */
-  type: TransactionType.AssetFreeze
 }
 
 export interface ApplicationTxn extends TransactionBase {
+  /**
+   * Transaction type as integer
+   */
+  type: TransactionType.ApplicationCall
+
   /**
    * ApplicationID from ApplicationCall transaction
    */
@@ -382,10 +386,6 @@ export interface ApplicationTxn extends TransactionBase {
    * Clear State Program as an array of pages
    */
   clearStateProgramPages(index: uint64): bytes
-  /**
-   * Transaction type as integer
-   */
-  type: TransactionType.ApplicationCall
 }
 
 export type Transaction = PayTxn | KeyRegistrationTxn | AssetConfigTxn | AssetTransferTxn | AssetFreezeTxn | ApplicationTxn
