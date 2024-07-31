@@ -1,27 +1,28 @@
-import { Account, bytes, gtxn, internal, Txn, uint64 } from '@algorandfoundation/algo-ts'
-import { btoi, internalError, itob, StateStore, StubUint64Compat, TransactionType, Uint64Cls } from './internal'
-export const buildOpsImplementation = (store: StateStore): Partial<internal.OpsNamespace> => {
-  const currentTransaction = () => {
-    const result = store.txnGroup.find((t) => t.type === TransactionType.ApplicationCall)
-    if (!result) {
-      throw internalError('Transaction group must contain at least one ApplicationCall transaction (type="appl")')
-    }
-    return result as gtxn.ApplicationTxn
-  }
-
-  return {
-    btoi,
-    itob,
-    Txn: {
-      applicationArgs(_n: StubUint64Compat): bytes {
-        return currentTransaction().app_args(Uint64Cls.getNumber(_n))
-      },
-      get sender(): Account {
-        return currentTransaction().sender
-      },
-      get numAppArgs(): uint64 {
-        return Uint64Cls.getNumber(currentTransaction().num_app_args)
-      },
-    } as unknown as typeof Txn,
-  }
-}
+// import { Account, bytes, gtxn, internal, Txn, uint64 } from '@algorandfoundation/algo-ts'
+// import { StateStore } from './state-store'
+// import { TransactionType } from './transactions'
+// export const buildOpsImplementation = (store: StateStore): Partial<internal.OpsNamespace> => {
+//   const currentTransaction = () => {
+//     const result = store.txnGroup.find((t) => t.type === TransactionType.ApplicationCall)
+//     if (!result) {
+//       throw internal.errors.internalError('Transaction group must contain at least one ApplicationCall transaction (type="appl")')
+//     }
+//     return result as gtxn.ApplicationTxn
+//   }
+//
+//   return {
+//     btoi: internal.primitives.btoi,
+//     itob: internal.primitives.itob,
+//     Txn: {
+//       applicationArgs(_n: internalStubUint64Compat): bytes {
+//         return currentTransaction().app_args(Uint64Cls.getNumber(_n))
+//       },
+//       get sender(): Account {
+//         return currentTransaction().sender
+//       },
+//       get numAppArgs(): uint64 {
+//         return Uint64Cls.getNumber(currentTransaction().num_app_args)
+//       },
+//     } as unknown as typeof Txn,
+//   }
+// }

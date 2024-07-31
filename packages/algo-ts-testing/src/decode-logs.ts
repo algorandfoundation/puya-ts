@@ -1,4 +1,4 @@
-import { uint8ArrayToBigInt, uint8ArrayToUtf8 } from './internal'
+import { uint8ArrayToBigInt, uint8ArrayToUtf8 } from '../../algo-ts/src/impl/encoding-util'
 
 export type LogDecoding = 'i' | 's' | 'b'
 

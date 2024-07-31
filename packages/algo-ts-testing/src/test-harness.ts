@@ -1,5 +1,8 @@
 import { Account, bytes, gtxn, internal } from '@algorandfoundation/algo-ts'
-import { DecodedLogs, decodeLogs, LogDecoding, StateStore, TestExecutionContext, TransactionBase, TransactionType } from './internal'
+import { TestExecutionContext } from './test-execution-context'
+import { StateStore } from './state-store'
+import { TransactionBase, TransactionType } from './transactions'
+import { DecodedLogs, decodeLogs, LogDecoding } from './decode-logs'
 ;(function setupGlobalContext() {
   internal.ctxMgr.instance = new TestExecutionContext()
 })()

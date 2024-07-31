@@ -1,7 +1,7 @@
 import { biguint, BigUintCompat, Bytes, bytes, BytesBacked, StringCompat, uint64, Uint64Compat } from '../primitives'
-import { ctxMgr } from '../execution-context'
 import { err } from '../util'
 import { Account } from '../reference'
+import { arrayUtil } from '../impl/primitives'
 
 export type BitSize = 8 | 16 | 32 | 64 | 128 | 256 | 512
 type NativeForArc4Int<N extends BitSize> = N extends 8 | 16 | 32 | 64 ? uint64 : biguint
@@ -64,10 +64,10 @@ abstract class Arc4Array<TItem> extends AbiEncoded {
     throw new Error('TODO')
   }
   at(index: Uint64Compat): TItem {
-    return ctxMgr.instance.arrayAt(this.items, index)
+    return arrayUtil.arrayAt(this.items, index)
   }
   slice(start: Uint64Compat, end: Uint64Compat): DynamicArray<TItem> {
-    return new DynamicArray(...ctxMgr.instance.arraySlice(this.items, start, end))
+    return new DynamicArray(...arrayUtil.arraySlice(this.items, start, end))
   }
   [Symbol.iterator](): IterableIterator<TItem> {
     return this.items[Symbol.iterator]()

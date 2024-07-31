@@ -1,1 +1,1 @@
-export { AvmError, TestHarness } from './internal'
+export { TestHarness } from './test-harness'

@@ -1,15 +1,20 @@
 import { biguint, BigUintCompat, BytesCompat, StringCompat, uint64, Uint64Compat } from './primitives'
 import { ctxMgr } from './execution-context'
+import { AssertError, AvmError } from './impl/errors'
+import { toBytes } from './impl/primitives'
 
 export function log(...args: Array<Uint64Compat | BytesCompat | BigUintCompat | StringCompat>): void {
-  ctxMgr.instance.log(...args)
+  ctxMgr.instance.log(args.map(toBytes).reduce((left, right) => left.concat(right)))
 }
 
 export function assert(condition: unknown, message?: string): asserts condition {
-  return ctxMgr.instance.assert(condition, message)
+  if (!condition) {
+    throw new AssertError(message ?? 'Assertion failed')
+  }
 }
+
 export function err(message?: string): never {
-  return ctxMgr.instance.err(message)
+  throw new AvmError(message ?? 'Err')
 }
 
 type NumericComparison<T> = T | { lessThan: T } | { greaterThan: T } | { greaterThanEq: T } | { lessThanEq: T } | { between: [T, T] }
