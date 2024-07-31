@@ -1,13 +1,16 @@
+import { internal } from '@algorandfoundation/algo-ts'
 import { DeliberateAny } from './typescript-helpers'
 import { nameOfType } from './util'
 export { attachAbiMetadata } from './abi-metadata'
-import { internal } from '@algorandfoundation/algo-ts'
 
 export function switchableValue(x: unknown): bigint | string | boolean {
   if (typeof x === 'boolean') return x
   if (typeof x === 'bigint') return x
   if (typeof x === 'string') return x
   if (x instanceof internal.primitives.AlgoTsPrimitiveCls) return x.valueOf()
+  const typeName = nameOfType(x)
+  if (typeName === 'Uint64Cls') return (x as internal.primitives.Uint64Cls).valueOf()
+  if (typeName === 'BigUintCls') return (x as internal.primitives.BigUintCls).valueOf()
   internal.errors.internalError(`Cannot convert ${nameOfType(x)} to switchable value`)
 }
 // export function wrapLiteral(x: unknown) {
@@ -32,6 +35,8 @@ export function binaryOp(left: unknown, right: unknown, op: BinaryOps) {
   const rbi = tryGetBigInt(right)
   if (lbi !== undefined && rbi !== undefined) {
     const result = defaultBinaryOp(lbi, rbi, op)
+    // if result is not a number (e.g. a boolean), return as it is
+    if (!tryGetBigInt(result)) return result
     if (left instanceof internal.primitives.BigUintCls || right instanceof internal.primitives.BigUintCls) {
       return new internal.primitives.BigUintCls(result)
     } else if (left instanceof internal.primitives.Uint64Cls || right instanceof internal.primitives.Uint64Cls) {

@@ -1,10 +1,9 @@
-import { Account, Bytes, bytes } from '@algorandfoundation/algo-ts'
+import { Account, Bytes, bytes, gtxn } from '@algorandfoundation/algo-ts'
 import algosdk from 'algosdk'
-import { TransactionBase } from './transactions'
 
 export class StateStore {
   logs: bytes[] = []
-  txnGroup: TransactionBase[] = []
+  txnGroup: gtxn.Transaction[] = []
   defaultCreator: Account
 
   constructor() {

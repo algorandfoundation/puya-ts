@@ -1,5 +1,5 @@
-import { op, Uint64 } from '@algorandfoundation/algo-ts'
-import { AvmError } from '@algorandfoundation/algo-ts-testing'
+import { internal, op, Uint64 } from '@algorandfoundation/algo-ts'
+
 import { beforeEach, describe, expect, it } from 'vitest'
 import type { AlgorandTestContext } from '../../vitest.setup'
 import type MyContract from './contract.algo'
@@ -21,7 +21,7 @@ describe('Calculator', () => {
         }),
       ]
 
-      expect(() => contract.approvalProgram()).toThrowError(new AvmError('Unknown operation'))
+      expect(() => contract.approvalProgram()).toThrowError(new internal.errors.AvmError('Unknown operation'))
     })
   })
   describe('when calling with with three args', () => {
