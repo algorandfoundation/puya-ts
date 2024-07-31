@@ -3,6 +3,7 @@ import { btoi as btoiImpl, itob as itobImpl, Uint64Cls } from './impl/primitives
 import { BtoiType, Ed25519verifyBareType, GlobalType, ItobType, TxnType } from './op-types'
 import { Bytes, bytes, Uint64, uint64 } from './primitives'
 import { Account, Application, Asset } from './reference'
+import { TransactionType } from './transactions'
 
 export const Txn: TxnType = {
   get sender(): Account {
@@ -189,7 +190,7 @@ export const Txn: TxnType = {
    */
   applicationArgs(a: uint64): bytes {
     const currentTransaction = ctxMgr.instance.currentTransaction
-    if ('appArgs' in currentTransaction) {
+    if (currentTransaction.type === TransactionType.ApplicationCall) {
       return currentTransaction.appArgs(Uint64Cls.getNumber(a))
     }
     return Bytes()
@@ -200,7 +201,7 @@ export const Txn: TxnType = {
    */
   get numAppArgs(): uint64 {
     const currentTransaction = ctxMgr.instance.currentTransaction
-    if ('numAppArgs' in currentTransaction) {
+    if (currentTransaction.type === TransactionType.ApplicationCall) {
       return currentTransaction.numAppArgs
     }
     return Uint64(0)
