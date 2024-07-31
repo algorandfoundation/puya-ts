@@ -28,6 +28,6 @@ export class TestExecutionContext implements internal.ExecutionContext {
     if (!result) {
       throw internal.errors.internalError('Transaction group must contain at least one ApplicationCall transaction (type="appl")')
     }
-    return result as gtxn.ApplicationTxn
+    return result
   }
 }
