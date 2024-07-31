@@ -1,6 +1,9 @@
-import { Account, bytes, gtxn, internal } from '@algorandfoundation/algo-ts';
-import { DecodedLogs, decodeLogs, LogDecoding, StateStore, TestExecutionContext, TransactionBase, TransactionType } from './internal';
-(function setupGlobalContext() {
+import { Account, bytes, gtxn, internal } from '@algorandfoundation/algo-ts'
+import { DecodedLogs, decodeLogs, LogDecoding } from './decode-logs'
+import { StateStore } from './state-store'
+import { TestExecutionContext } from './test-execution-context'
+import { TransactionBase, TransactionType } from './transactions'
+;(function setupGlobalContext() {
   internal.ctxMgr.instance = new TestExecutionContext()
 })()
 export class TestHarness {

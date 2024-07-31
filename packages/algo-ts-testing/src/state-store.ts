@@ -1,6 +1,6 @@
 import { Account, Bytes, bytes } from '@algorandfoundation/algo-ts'
 import algosdk from 'algosdk'
-import { TransactionBase } from './internal'
+import { TransactionBase } from './transactions'
 
 export class StateStore {
   logs: bytes[] = []

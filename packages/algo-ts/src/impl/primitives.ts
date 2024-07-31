@@ -1,5 +1,8 @@
-import { biguint, BigUintCompat, bytes, BytesCompat, internal, uint64, Uint64Compat } from '@algorandfoundation/algo-ts'
-import { AvmError, bigIntToUint8Array, internalError, nameOfType, uint8ArrayToBigInt, uint8ArrayToUtf8, utf8ToUint8Array } from './internal'
+import type { biguint, BigUintCompat, bytes, BytesCompat, internal, uint64, Uint64Compat } from '../index'
+import { bigIntToUint8Array, uint8ArrayToBigInt, uint8ArrayToUtf8, utf8ToUint8Array } from './encoding-util'
+import { avmError, AvmError, internalError } from './errors'
+import { nameOfType } from './name-of-type'
+import { DeliberateAny } from '../typescript-helpers'
 
 export type StubBigUintCompat = BigUintCompat | BigUintCls
 export type StubBytesCompat = BytesCompat | BytesCls
@@ -174,7 +177,7 @@ export class BytesCls extends AlgoTsPrimitiveCls {
   slice(start: StubUint64Compat, end: StubUint64Compat): BytesCls {
     const startNumber = start instanceof Uint64Cls ? start.asNumber() : start
     const endNumber = end instanceof Uint64Cls ? end.asNumber() : end
-    const sliced = internal.ctxMgr.instance.arraySlice(this.#v, startNumber, endNumber)
+    const sliced = arrayUtil.arraySlice(this.#v, startNumber, endNumber)
     return new BytesCls(sliced)
   }
 
@@ -190,12 +193,23 @@ export class BytesCls extends AlgoTsPrimitiveCls {
     return uint8ArrayToUtf8(this.#v)
   }
 
-  static fromCompat(v: StubBytesCompat | undefined): BytesCls {
-    if (v === undefined) return new BytesCls(new Uint8Array(0))
+  static fromCompat(v: StubBytesCompat): BytesCls {
     if (typeof v === 'string') return new BytesCls(utf8ToUint8Array(v))
     if (v instanceof BytesCls) return v
     if (v instanceof Uint8Array) return new BytesCls(v)
     internalError(`Cannot convert ${nameOfType(v)} to bytes`)
+  }
+
+  static fromInterpolation(template: TemplateStringsArray, replacements: StubBytesCompat[]) {
+    return template
+      .flatMap((templateText, index) => {
+        const replacement = replacements[index]
+        if (replacement) {
+          return [BytesCls.fromCompat(templateText), BytesCls.fromCompat(replacement)]
+        }
+        return [BytesCls.fromCompat(templateText)]
+      })
+      .reduce((a, b) => a.concat(b))
   }
 
   toUint64(): Uint64Cls {
@@ -216,3 +230,14 @@ export class BytesCls extends AlgoTsPrimitiveCls {
     return this.#v
   }
 }
+
+export const arrayUtil = new (class {
+  arrayAt<T>(arrayLike: T[], index: StubUint64Compat): T {
+    return arrayLike.at(Uint64Cls.fromCompat(index).asNumber()) ?? avmError('Index out of bounds')
+  }
+  arraySlice(arrayLike: Uint8Array, start: StubUint64Compat, end: StubUint64Compat): Uint8Array
+  arraySlice<T>(arrayLike: T[], start: StubUint64Compat, end: StubUint64Compat): T[]
+  arraySlice<T>(arrayLike: T[] | Uint8Array, start: StubUint64Compat, end: StubUint64Compat) {
+    return arrayLike.slice(Uint64Cls.getNumber(start), Uint64Cls.getNumber(end)) as DeliberateAny
+  }
+})()

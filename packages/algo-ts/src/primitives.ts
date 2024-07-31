@@ -1,4 +1,4 @@
-import { ctxMgr } from './execution-context'
+import { BigUintCls, BytesCls, Uint64Cls } from './impl/primitives'
 
 export type Uint64Compat = uint64 | bigint | boolean | number
 export type BigUintCompat = Uint64Compat | bigint | bytes | number
@@ -20,7 +20,7 @@ export function Uint64(v: bigint): uint64
 export function Uint64(v: number): uint64
 export function Uint64(v: boolean): uint64
 export function Uint64(v: Uint64Compat): uint64 {
-  return ctxMgr.instance.makeUint64(v)
+  return Uint64Cls.fromCompat(v).asAlgoTs()
 }
 
 /**
@@ -41,7 +41,7 @@ export function BigUint(v: boolean): biguint
 export function BigUint(v: number): biguint
 export function BigUint(v: bytes): biguint
 export function BigUint(v: BigUintCompat): biguint {
-  return ctxMgr.instance.makeBigUint(v)
+  return BigUintCls.fromCompat(v).asAlgoTs()
 }
 
 export type bytes = {
@@ -58,12 +58,11 @@ export type bytes = {
 
 export function Bytes(value: TemplateStringsArray, ...replacements: BytesCompat[]): bytes
 export function Bytes(value: BytesCompat): bytes
-export function Bytes(): bytes
-export function Bytes(value?: BytesCompat | TemplateStringsArray, ...replacements: BytesCompat[]): bytes {
+export function Bytes(value: BytesCompat | TemplateStringsArray, ...replacements: BytesCompat[]): bytes {
   if (isTemplateStringsArray(value)) {
-    return ctxMgr.instance.makeInterpolatedBytes(value, replacements)
+    return BytesCls.fromInterpolation(value, replacements).asAlgoTs()
   } else {
-    return ctxMgr.instance.makeBytes(value)
+    return BytesCls.fromCompat(value).asAlgoTs()
   }
 }
 

@@ -1,23 +1,7 @@
-import { Account, Application, Asset, biguint, bytes, internal, uint64 } from '@algorandfoundation/algo-ts'
-import {
-  AccountCls,
-  ApplicationCls,
-  AssertError,
-  AssetCls,
-  avmError,
-  AvmError,
-  BigUintCls,
-  buildOpsImplementation,
-  BytesCls,
-  StateStore,
-  StubBigUintCompat,
-  StubBytesCompat,
-  StubUint64Compat,
-  toBytes,
-  toExternalValue,
-  Uint64Cls,
-} from './internal'
-import { DeliberateAny } from './typescript-helpers'
+import { Account, Application, Asset, bytes, internal, uint64 } from '@algorandfoundation/algo-ts'
+import { StateStore } from './state-store'
+import { AccountCls, ApplicationCls, AssetCls } from './reference'
+
 export class TestExecutionContext implements internal.ExecutionContext {
   #stateStore: StateStore | undefined
 
@@ -28,15 +12,6 @@ export class TestExecutionContext implements internal.ExecutionContext {
     return new AccountCls(address)
   }
 
-  arrayAt<T>(arrayLike: T[], index: StubUint64Compat): T {
-    return arrayLike.at(Uint64Cls.fromCompat(index).asNumber()) ?? avmError('Index out of bounds')
-  }
-  arraySlice(arrayLike: Uint8Array, start: StubUint64Compat, end: StubUint64Compat): Uint8Array
-  arraySlice<T>(arrayLike: T[], start: StubUint64Compat, end: StubUint64Compat): T[]
-  arraySlice<T>(arrayLike: T[] | Uint8Array, start: StubUint64Compat, end: StubUint64Compat) {
-    return arrayLike.slice(Uint64Cls.getNumber(start), Uint64Cls.getNumber(end)) as DeliberateAny
-  }
-
   application(id: uint64): Application {
     return new ApplicationCls(id)
   }
@@ -44,45 +19,10 @@ export class TestExecutionContext implements internal.ExecutionContext {
     return new AssetCls(id)
   }
 
-  log(...args: (StubUint64Compat | StubBytesCompat)[]): void {
-    this.#stateStore!.logs.push(args.map(toBytes).reduce((left, right) => left.concat(right)))
-  }
-  get ops(): Partial<internal.OpsNamespace> {
-    return buildOpsImplementation(this.#stateStore!)
-  }
-  makeUint64(v: StubUint64Compat): uint64 {
-    return Uint64Cls.fromCompat(v).asAlgoTs()
-  }
-  makeInterpolatedBytes(b: TemplateStringsArray, replacements: StubBytesCompat[]): bytes {
-    return b
-      .flatMap((templateText, index) => {
-        const replacement = replacements[index]
-        if (replacement) {
-          return [BytesCls.fromCompat(templateText), BytesCls.fromCompat(replacement)]
-        }
-        return [BytesCls.fromCompat(templateText)]
-      })
-      .reduce((a, b) => a.concat(b))
-      .asAlgoTs()
-  }
-
-  makeBytes(b: StubBytesCompat | undefined): bytes {
-    return BytesCls.fromCompat(b).asAlgoTs()
-  }
-  makeBigUint(v: StubBigUintCompat): biguint {
-    return BigUintCls.fromCompat(v).asAlgoTs()
+  log(value: bytes): void {
+    this.#stateStore!.logs.push(value)
   }
   get rawLogs() {
-    return this.#stateStore!.logs.map((l) => toExternalValue(l))
-  }
-
-  assert(condition: unknown, message?: string): asserts condition {
-    if (!condition) {
-      throw new AssertError(message ?? 'Assertion failed')
-    }
-  }
-
-  err(message?: string): never {
-    throw new AvmError(message ?? 'Err')
+    return this.#stateStore!.logs.map((l) => internal.primitives.toExternalValue(l))
   }
 }

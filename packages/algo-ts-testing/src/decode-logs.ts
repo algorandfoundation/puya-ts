@@ -1,4 +1,4 @@
-import { uint8ArrayToBigInt, uint8ArrayToUtf8 } from './internal'
+import { internal } from '@algorandfoundation/algo-ts'
 
 export type LogDecoding = 'i' | 's' | 'b'
 
@@ -10,9 +10,9 @@ export function decodeLogs<const T extends [...LogDecoding[]]>(logs: Uint8Array[
   return logs.map((log, i) => {
     switch (decoding[i]) {
       case 'i':
-        return uint8ArrayToBigInt(log)
+        return internal.encodingUtil.uint8ArrayToBigInt(log)
       case 's':
-        return uint8ArrayToUtf8(log)
+        return internal.encodingUtil.uint8ArrayToUtf8(log)
       default:
         return log
     }
