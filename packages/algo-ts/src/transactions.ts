@@ -5,7 +5,7 @@ import { Account, Application, Asset } from './reference'
 /**
  * The different transaction types available in a transaction
  */
-enum TransactionType {
+export enum TransactionType {
   /**
    * A Payment transaction
    */
@@ -74,11 +74,6 @@ interface TransactionBase {
   type_bytes: bytes
 
   /**
-   * Transaction type as integer
-   */
-  type: TransactionType
-
-  /**
    * Position of this transaction within an atomic group
    * A stand-alone transaction is implicitly element 0 in a group of 1
    */
@@ -97,6 +92,10 @@ interface TransactionBase {
 
 export interface PayTxn extends TransactionBase {
   /**
+   * Transaction type as integer
+   */
+  type: TransactionType.Payment
+  /**
    * 32 byte address
    */
   receiver: Account
@@ -113,6 +112,10 @@ export interface PayTxn extends TransactionBase {
 }
 
 export interface KeyRegistrationTxn extends TransactionBase {
+  /**
+   * Transaction type as integer
+   */
+  type: TransactionType.KeyRegistration
   /**
    * 32 byte address
    */
@@ -150,6 +153,10 @@ export interface KeyRegistrationTxn extends TransactionBase {
 }
 
 export interface AssetConfigTxn extends TransactionBase {
+  /**
+   * Transaction type as integer
+   */
+  type: TransactionType.AssetConfig
   /**
    * Asset ID in asset config transaction
    */
@@ -213,6 +220,10 @@ export interface AssetConfigTxn extends TransactionBase {
 
 export interface AssetTransferTxn extends TransactionBase {
   /**
+   * Transaction type as integer
+   */
+  type: TransactionType.AssetTransfer
+  /**
    * Asset ID
    */
   xferAsset: Asset
@@ -240,6 +251,10 @@ export interface AssetTransferTxn extends TransactionBase {
 
 export interface AssetFreezeTxn extends TransactionBase {
   /**
+   * Transaction type as integer
+   */
+  type: TransactionType.AssetFreeze
+  /**
    * Asset ID being frozen or un-frozen
    */
   freeze_asset: Asset
@@ -256,6 +271,11 @@ export interface AssetFreezeTxn extends TransactionBase {
 }
 
 export interface ApplicationTxn extends TransactionBase {
+  /**
+   * Transaction type as integer
+   */
+  type: TransactionType.ApplicationCall
+
   /**
    * ApplicationID from ApplicationCall transaction
    */
@@ -367,3 +387,5 @@ export interface ApplicationTxn extends TransactionBase {
    */
   clear_state_program_pages(index: uint64): bytes
 }
+
+export type AnyTransaction = PayTxn | KeyRegistrationTxn | AssetConfigTxn | AssetTransferTxn | AssetFreezeTxn | ApplicationTxn

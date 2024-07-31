@@ -1,8 +1,8 @@
-import type { biguint, BigUintCompat, bytes, BytesCompat, internal, uint64, Uint64Compat } from '../index'
+import type { biguint, BigUintCompat, bytes, BytesCompat, uint64, Uint64Compat } from '../index'
+import { DeliberateAny } from '../typescript-helpers'
 import { bigIntToUint8Array, uint8ArrayToBigInt, uint8ArrayToUtf8, utf8ToUint8Array } from './encoding-util'
 import { avmError, AvmError, internalError } from './errors'
 import { nameOfType } from './name-of-type'
-import { DeliberateAny } from '../typescript-helpers'
 
 export type StubBigUintCompat = BigUintCompat | BigUintCls
 export type StubBytesCompat = BytesCompat | BytesCls
@@ -21,9 +21,10 @@ export function toExternalValue(val: bytes): Uint8Array
 export function toExternalValue(val: string): string
 export function toExternalValue(val: uint64 | biguint | bytes | string) {
   const cls = val as unknown
-  if (cls instanceof BytesCls) return cls.asUint8Array()
-  if (cls instanceof Uint64Cls) return cls.asBigInt()
-  if (cls instanceof BigUintCls) return cls.asBigInt()
+  const typeName = nameOfType(cls)
+  if (cls instanceof BytesCls || typeName === 'BytesCls') return (cls as BytesCls).asUint8Array()
+  if (cls instanceof Uint64Cls || typeName === 'Uint64Cls') return (cls as Uint64Cls).asBigInt()
+  if (cls instanceof BigUintCls || typeName === 'BigUintCls') return (cls as BigUintCls).asBigInt()
   if (typeof val === 'string') return val
 }
 export const toBytes = (val: unknown): bytes => {
@@ -193,7 +194,8 @@ export class BytesCls extends AlgoTsPrimitiveCls {
     return uint8ArrayToUtf8(this.#v)
   }
 
-  static fromCompat(v: StubBytesCompat): BytesCls {
+  static fromCompat(v: StubBytesCompat | undefined): BytesCls {
+    if (v === undefined) return new BytesCls(new Uint8Array())
     if (typeof v === 'string') return new BytesCls(utf8ToUint8Array(v))
     if (v instanceof BytesCls) return v
     if (v instanceof Uint8Array) return new BytesCls(v)

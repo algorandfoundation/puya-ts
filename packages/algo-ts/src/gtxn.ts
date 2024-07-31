@@ -1,1 +1,1 @@
-export { ApplicationTxn, AssetConfigTxn, AssetTransferTxn, PayTxn } from './transactions'
+export { AnyTransaction, ApplicationTxn, AssetConfigTxn, AssetTransferTxn, PayTxn, TransactionType } from './transactions'

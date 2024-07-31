@@ -1,23 +1,22 @@
-import { Account, bytes, gtxn, internal } from '@algorandfoundation/algo-ts'
-import { TestExecutionContext } from './test-execution-context'
-import { StateStore } from './state-store'
-import { TransactionBase, TransactionType } from './transactions'
+import { Account, bytes, gtxn, internal, Uint64 } from '@algorandfoundation/algo-ts'
 import { DecodedLogs, decodeLogs, LogDecoding } from './decode-logs'
-;(function setupGlobalContext() {
-  internal.ctxMgr.instance = new TestExecutionContext()
-})()
+import { StateStore } from './state-store'
+import { TestExecutionContext } from './test-execution-context'
+
 export class TestHarness {
   #testExecutionContext: TestExecutionContext
   #stateStore: StateStore
 
   constructor() {
+    this.#testExecutionContext = new TestExecutionContext()
+    internal.ctxMgr.instance = this.#testExecutionContext
+
     this.#stateStore = new StateStore()
-    this.#testExecutionContext = internal.ctxMgr.instance as TestExecutionContext
     this.#testExecutionContext.stateStore = this.#stateStore
   }
 
-  set gtxn(value: TransactionBase[]) {
-    this.#stateStore.txnGroup.push(...value)
+  set gtxn(value: gtxn.AnyTransaction[]) {
+    this.#stateStore.txnGroup = value
   }
 
   get defaultCreator(): Account {
@@ -27,20 +26,22 @@ export class TestHarness {
   anyApplicationCallTransaction(txn: Partial<gtxn.ApplicationTxn> & { args: bytes[] }): gtxn.ApplicationTxn {
     return {
       sender: this.defaultCreator,
-      type: TransactionType.ApplicationCall,
+      type: gtxn.TransactionType.ApplicationCall,
       app_args(index) {
         return txn.args[index]
       },
-      num_app_args: txn.args.length,
+      num_app_args: Uint64(txn.args.length),
       ...txn,
     } as gtxn.ApplicationTxn
   }
 
   exportLogs<const T extends [...LogDecoding[]]>(...decoding: T): DecodedLogs<T> {
-    return decodeLogs(this.#testExecutionContext.rawLogs, decoding)
+    const rawLogs = this.#stateStore!.logs.map((l) => internal.primitives.toExternalValue(l))
+    return decodeLogs(rawLogs, decoding)
   }
 
   reset() {
     this.#stateStore.reset()
+    internal.ctxMgr.reset()
   }
 }
