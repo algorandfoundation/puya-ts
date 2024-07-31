@@ -1,14 +1,14 @@
-import { internalError } from './errors'
-import { AlgoTsPrimitiveCls, BigUintCls, Uint64Cls } from './primitives'
 import { DeliberateAny } from './typescript-helpers'
 import { nameOfType } from './util'
 export { attachAbiMetadata } from './abi-metadata'
+import { internal } from '@algorandfoundation/algo-ts'
+
 export function switchableValue(x: unknown): bigint | string | boolean {
   if (typeof x === 'boolean') return x
   if (typeof x === 'bigint') return x
   if (typeof x === 'string') return x
-  if (x instanceof AlgoTsPrimitiveCls) return x.valueOf()
-  internalError(`Cannot convert ${nameOfType(x)} to switchable value`)
+  if (x instanceof internal.primitives.AlgoTsPrimitiveCls) return x.valueOf()
+  internal.errors.internalError(`Cannot convert ${nameOfType(x)} to switchable value`)
 }
 // export function wrapLiteral(x: unknown) {
 //   if (typeof x === 'boolean') return x
@@ -22,8 +22,8 @@ type BinaryOps = '+' | '-' | '*' | '**' | '/' | '>' | '>=' | '<' | '<=' | '===' 
 function tryGetBigInt(value: unknown): bigint | undefined {
   if (typeof value == 'bigint') return value
   if (typeof value == 'number') return BigInt(value)
-  if (value instanceof Uint64Cls) return value.valueOf()
-  if (value instanceof BigUintCls) return value.valueOf()
+  if (value instanceof internal.primitives.Uint64Cls) return value.valueOf()
+  if (value instanceof internal.primitives.BigUintCls) return value.valueOf()
   return undefined
 }
 
@@ -32,10 +32,10 @@ export function binaryOp(left: unknown, right: unknown, op: BinaryOps) {
   const rbi = tryGetBigInt(right)
   if (lbi !== undefined && rbi !== undefined) {
     const result = defaultBinaryOp(lbi, rbi, op)
-    if (left instanceof BigUintCls || right instanceof BigUintCls) {
-      return new BigUintCls(result)
-    } else if (left instanceof Uint64Cls || right instanceof Uint64Cls) {
-      return new Uint64Cls(result)
+    if (left instanceof internal.primitives.BigUintCls || right instanceof internal.primitives.BigUintCls) {
+      return new internal.primitives.BigUintCls(result)
+    } else if (left instanceof internal.primitives.Uint64Cls || right instanceof internal.primitives.Uint64Cls) {
+      return new internal.primitives.Uint64Cls(result)
     }
     return result
   }
@@ -71,6 +71,6 @@ function defaultBinaryOp(left: DeliberateAny, right: DeliberateAny, op: BinaryOp
     case '!==':
       return left !== right
     default:
-      internalError(`Unsupported operator ${op}`)
+      internal.errors.internalError(`Unsupported operator ${op}`)
   }
 }
