@@ -9,27 +9,27 @@ export enum TransactionType {
   /**
    * A Payment transaction
    */
-  Payment = Uint64(0),
+  Payment = 0,
   /**
    * A Key Registration transaction
    */
-  KeyRegistration = Uint64(1),
+  KeyRegistration = 1,
   /**
    * An Asset Config transaction
    */
-  AssetConfig = Uint64(2),
+  AssetConfig = 2,
   /**
    * An Asset Transfer transaction
    */
-  AssetTransfer = Uint64(3),
+  AssetTransfer = 3,
   /**
    * An Asset Freeze transaction
    */
-  AssetFreeze = Uint64(4),
+  AssetFreeze = 4,
   /**
    * An Application Call transaction
    */
-  ApplicationCall = Uint64(5),
+  ApplicationCall = 5,
 }
 
 interface TransactionBase {
