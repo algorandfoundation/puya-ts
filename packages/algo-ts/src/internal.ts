@@ -1,4 +1,5 @@
 export { OpsNamespace } from './op-types'
 export * as primitives from './impl/primitives'
 export * as errors from './impl/errors'
+export * as encodingUtil from './impl/encoding-util'
 export { ExecutionContext, ctxMgr } from './execution-context'
