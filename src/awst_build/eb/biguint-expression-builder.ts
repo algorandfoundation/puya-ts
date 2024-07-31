@@ -45,9 +45,9 @@ export class BigUintFunctionBuilder extends FunctionBuilder {
   }
 }
 
-export class BigUintExpressionBuilder extends InstanceExpressionBuilder {
-  get ptype(): InstanceType {
-    return biguintPType
+export class BigUintExpressionBuilder extends InstanceExpressionBuilder<InstanceType> {
+  constructor(expr: Expression) {
+    super(expr, biguintPType)
   }
   compare(other: InstanceBuilder, op: BuilderComparisonOp, sourceLocation: SourceLocation): InstanceBuilder {
     const otherExpr = requireExpressionOfType(other, biguintPType, sourceLocation)

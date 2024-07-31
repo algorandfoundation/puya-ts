@@ -1,5 +1,5 @@
 import { accept, Visitor } from '../visitor/visitor'
-import { SourceFileContext } from './context'
+import { SourceFileContext } from './source-file-context'
 import { ContractContext } from './contract-visitor'
 import * as awst from '../awst/nodes'
 import ts from 'typescript'
@@ -9,28 +9,26 @@ import { AwstBuildFailureError, CodeError, InternalError, NotSupported, TodoErro
 import { logger } from '../logger'
 import { nodeFactory } from '../awst/node-factory'
 import { requireExpressionOfType, requireInstanceBuilder } from './eb/util'
-import { PType, voidPType } from './ptypes'
 import { BaseVisitor } from './base-visitor'
-import { ObjectPType, TransientType } from './ptypes/ptype-classes'
+import { FunctionPType, ObjectPType, TransientType } from './ptypes/ptype-classes'
 import { SwitchLoopContext } from './context/switch-loop-context'
 import { Block, Goto, ReturnStatement } from '../awst/nodes'
 import { SourceLocation } from '../awst/source-location'
 import { typeRegistry } from './type-registry'
 import { InstanceBuilder } from './eb'
-import { EvaluationContext } from './context/evaluation-context'
+import { SubContext } from './context/base-context'
 
 export type ContractMethodInfo = {
   className: string
   arc4MethodConfig?: awst.ContractMethod['arc4MethodConfig']
 }
 
-export class FunctionContext extends SourceFileContext {
+export class FunctionContext extends SubContext {
   readonly switchLoopContext: SwitchLoopContext
-  readonly evaluationCtx: EvaluationContext
+
   constructor(parent: ContractContext | SourceFileContext) {
-    super(parent.sourceFile, parent.program, parent.nameResolver.createChild())
-    this.switchLoopContext = new SwitchLoopContext(this.checker)
-    this.evaluationCtx = new EvaluationContext()
+    super(parent, parent.nameResolver.createChild())
+    this.switchLoopContext = new SwitchLoopContext()
   }
 
   getDestructuredParamName(node: ts.ParameterDeclaration) {
@@ -51,7 +49,7 @@ export class FunctionVisitor
   private accept = <TNode extends ts.Node>(node: TNode) => accept<FunctionVisitor, TNode>(this, node)
 
   private readonly _result: awst.Subroutine | awst.ContractMethod
-  private readonly _returnType: PType
+  private readonly _functionType: FunctionPType
   private readonly _functionName: string
   constructor(
     ctx: FunctionContext,
@@ -61,18 +59,18 @@ export class FunctionVisitor
     super(ctx)
     const sourceLocation = this.sourceLocation(node)
 
+    const type = ctx.getPTypeForNode(node)
+    invariant(type instanceof FunctionPType, 'type of function must be FunctionPType')
+    this._functionType = type
+    if (this._functionType.returnType instanceof TransientType) {
+      logger.error(sourceLocation, this._functionType.returnType.typeMessage)
+    }
     if (ts.isConstructorDeclaration(node)) {
       this._functionName = '~ctor~'
-      this._returnType = voidPType
     } else {
       codeInvariant(node.name, 'Anonymous functions are not supported', sourceLocation)
       this._functionName = this.textVisitor.accept(node.name)
-      this._returnType = node.type ? ctx.getPTypeForNode(node.type) : ctx.getImplicitReturnType(node)
-      if (this._returnType instanceof TransientType) {
-        logger.error(sourceLocation, this._returnType.typeMessage)
-      }
     }
-    const type = ctx.getPTypeForNode(node)
 
     const args = node.parameters.map((p) => this.accept(p))
     const assignDestructuredParams = this.evaluateParameterBindingExpressions(node.parameters, sourceLocation)
@@ -88,7 +86,7 @@ export class FunctionVisitor
         sourceLocation,
         moduleName: type.module,
         args,
-        returnType: this._returnType.wtypeOrThrow,
+        returnType: this._functionType.returnType.wtypeOrThrow,
         body,
         docstring: undefined,
       })
@@ -98,7 +96,7 @@ export class FunctionVisitor
         sourceLocation,
         moduleName: type.module,
         args,
-        returnType: this._returnType.wtypeOrThrow,
+        returnType: this._functionType.returnType.wtypeOrThrow,
         body,
         docstring: undefined,
       })
@@ -154,7 +152,7 @@ export class FunctionVisitor
     for (const p of parameters) {
       const sourceLocation = this.sourceLocation(p)
       if (!ts.isIdentifier(p.name)) {
-        const paramPType = this.context.resolver.resolve(p, sourceLocation)
+        const paramPType = this.context.getPTypeForNode(p)
         const paramName = this.context.getDestructuredParamName(p)
         const paramBuilder = typeRegistry.getInstanceEb(
           nodeFactory.varExpression({
@@ -375,7 +373,7 @@ export class FunctionVisitor
     const returnValue = this.accept(node.expression)
     return nodeFactory.returnStatement({
       sourceLocation: sourceLocation,
-      value: requireExpressionOfType(returnValue, this._returnType, sourceLocation),
+      value: requireExpressionOfType(returnValue, this._functionType.returnType, sourceLocation),
     })
   }
   visitWithStatement(node: ts.WithStatement): awst.Statement | awst.Statement[] {
@@ -470,7 +468,7 @@ export class FunctionVisitor
     if (ts.isIdentifier(node.name)) {
       return nodeFactory.subroutineArgument({
         sourceLocation: sourceLocation,
-        name: this.context.resolveVariable(node.name),
+        name: this.context.resolveVariableName(node.name),
         wtype: paramPType.wtypeOrThrow,
       })
     } else if (ts.isObjectBindingPattern(node.name)) {

@@ -19,7 +19,7 @@ export class SwitchLoopContext {
   private labelCount = defaultRecord<string, number>(() => 0)
   private unlabelledCount = defaultRecord<SwitchOrLoop, number>(() => 0)
 
-  constructor(private checker: ts.TypeChecker) {}
+  constructor() {}
 
   private switchLoopStack: Array<{ type: SwitchOrLoop; uniqueName: string; label?: string }> = []
 

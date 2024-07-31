@@ -3,12 +3,13 @@ import { nodeFactory } from '../../awst/node-factory'
 import { CodeError } from '../../errors'
 import { awst, wtypes } from '../../awst'
 import { FunctionBuilder, InstanceBuilder, InstanceExpressionBuilder, LiteralExpressionBuilder, NodeBuilder } from './index'
-import { bytesPType, PType, stringPType } from '../ptypes'
+import { biguintPType, bytesPType, PType, stringPType } from '../ptypes'
 import { BytesBinaryOperator, BytesEncoding, EqualityComparison, Expression } from '../../awst/nodes'
 import { requireExpressionOfType } from './util'
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
 import { utf8ToUint8Array } from '../../util'
 import { UInt64ExpressionBuilder } from './uint64-expression-builder'
+import { InstanceType } from '../ptypes/ptype-classes'
 
 export class StringFunctionBuilder extends FunctionBuilder {
   taggedTemplate(head: string, spans: ReadonlyArray<readonly [InstanceBuilder, string]>, sourceLocation: SourceLocation): InstanceBuilder {
@@ -70,9 +71,9 @@ export class StringFunctionBuilder extends FunctionBuilder {
   }
 }
 
-export class StringExpressionBuilder extends InstanceExpressionBuilder {
-  get ptype() {
-    return stringPType
+export class StringExpressionBuilder extends InstanceExpressionBuilder<InstanceType> {
+  constructor(expr: Expression) {
+    super(expr, stringPType)
   }
 
   boolEval(sourceLocation: SourceLocation, negate = false): Expression {

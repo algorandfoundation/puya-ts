@@ -1,5 +1,5 @@
 import { accept, Visitor } from '../visitor/visitor'
-import { SourceFileContext } from './context'
+import { SourceFileContext } from './source-file-context'
 import ts from 'typescript'
 import * as awst from '../awst/nodes'
 import { AppStorageDefinition, ContractFragment, ContractMethod } from '../awst/nodes'
@@ -16,10 +16,11 @@ import { Arc4AbiDecoratorData, DecoratorData, DecoratorVisitor } from './decorat
 import { SourceLocation } from '../awst/source-location'
 import { ARC4CreateOption, DefaultArgumentSource, OnCompletionAction } from '../awst/models'
 import { isValidLiteralForPType } from './eb/util'
+import { SubContext } from './context/base-context'
 
-export class ContractContext extends SourceFileContext {
+export class ContractContext extends SubContext {
   constructor(parent: SourceFileContext) {
-    super(parent.sourceFile, parent.program, parent.nameResolver.createChild())
+    super(parent, parent.nameResolver.createChild())
   }
 }
 

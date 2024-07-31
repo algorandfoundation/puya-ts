@@ -13,6 +13,7 @@ import {
   biguintPType,
   BooleanFunction,
   boolPType,
+  BoxFunction,
   BytesFunction,
   bytesPType,
   errFunction,
@@ -36,6 +37,7 @@ import { AssertFunctionBuilder, ErrFunctionBuilder } from './eb/assert-function-
 import { FreeSubroutineExpressionBuilder } from './eb/free-subroutine-expression-builder'
 import { awst } from '../awst'
 import {
+  BoxPType,
   FunctionPType,
   GlobalStateType,
   IntrinsicFunctionGroupType,
@@ -55,15 +57,16 @@ import { NamespaceBuilder } from './eb/namespace-builder'
 import { VoidExpressionBuilder } from './eb/void-expression-builder'
 import { ObjectExpressionBuilder } from './eb/literal/object-literal-expression-builder'
 import { BigUintExpressionBuilder, BigUintFunctionBuilder } from './eb/biguint-expression-builder'
+import { BoxExpressionBuilder, BoxFunctionBuilder } from './eb/storage/box'
 
-type ValueExpressionBuilderCtor = { new (expr: awst.Expression, ptype: PType): InstanceExpressionBuilder }
+type ValueExpressionBuilderCtor<TPType extends PType> = { new (expr: awst.Expression, ptype: PType): InstanceExpressionBuilder<TPType> }
 type SingletonExpressionBuilderCtor = { new (sourceLocation: SourceLocation, ptype: PType): NodeBuilder }
 
 type PTypeClass = { new (...args: DeliberateAny): PType }
 type GenericPTypeClass = { new (...args: DeliberateAny): PType; get baseFullName(): string; parameterise(typeArgs: PType[]): PType }
 class TypeRegistry {
   private readonly singletonEbs: Map<PType | PTypeClass, SingletonExpressionBuilderCtor> = new Map()
-  private readonly instanceEbs: Map<PType | PTypeClass, ValueExpressionBuilderCtor> = new Map()
+  private readonly instanceEbs: Map<PType | PTypeClass, ValueExpressionBuilderCtor<PType>> = new Map()
   private readonly types: Set<PType | PTypeClass> = new Set()
   private readonly genericTypes: Set<GenericPTypeClass> = new Set()
 
@@ -80,7 +83,7 @@ class TypeRegistry {
     | {
         ptype: PType | PTypeClass
         singletonEb?: undefined
-        instanceEb: ValueExpressionBuilderCtor
+        instanceEb: ValueExpressionBuilderCtor<PType>
       }) {
     if (this.types.has(ptype) || this.genericTypes.has(ptype as GenericPTypeClass))
       throw new InternalError(`${ptype} has already been registered`)
@@ -92,7 +95,7 @@ class TypeRegistry {
       this.instanceEbs.set(ptype, instanceEb)
     }
   }
-  registerGeneric({ ptype, instanceEb }: { ptype: GenericPTypeClass; instanceEb: ValueExpressionBuilderCtor }) {
+  registerGeneric({ ptype, instanceEb }: { ptype: GenericPTypeClass; instanceEb: ValueExpressionBuilderCtor<PType> }) {
     if (this.genericTypes.has(ptype) || this.types.has(ptype)) throw new InternalError(`${ptype} has already been registered`)
     this.genericTypes.add(ptype)
     this.instanceEbs.set(ptype, instanceEb)
@@ -230,6 +233,8 @@ for (const [name, metadata] of Object.entries(OP_METADATA)) {
 
 typeRegistry.register({ ptype: GlobalStateFunction, singletonEb: GlobalStateFunctionBuilder })
 typeRegistry.registerGeneric({ ptype: GlobalStateType, instanceEb: GlobalStateExpressionBuilder })
+typeRegistry.register({ ptype: BoxFunction, singletonEb: BoxFunctionBuilder })
+typeRegistry.registerGeneric({ ptype: BoxPType, instanceEb: BoxExpressionBuilder })
 typeRegistry.register({ ptype: TuplePType, instanceEb: TupleExpressionBuilder })
 typeRegistry.register({ ptype: arc4AbiMethodDecorator, singletonEb: Arc4AbiMethodDecoratorBuilder })
 typeRegistry.register({ ptype: arc4BareMethodDecorator, singletonEb: Arc4BareMethodDecoratorBuilder })

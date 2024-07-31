@@ -1,4 +1,4 @@
-import { SourceFileContext } from './context'
+import { SourceFileContext } from './source-file-context'
 import { ModuleStatements } from '../visitor/syntax-names'
 import * as awst from '../awst/nodes'
 import ts from 'typescript'
@@ -79,12 +79,19 @@ export class SourceFileVisitor extends BaseVisitor<SourceFileContext> implements
       const ptype = this.context.getPTypeForNode(dec.name)
 
       //const value = CompileTimeConstantVisitor.getCompileTimeConstant(this.context, dec.initializer, ptype)
-      const value = requireConstantOfType(this.accept(dec.initializer), ptype, sourceLocation)
+      const value = requireConstantOfType(
+        this.accept(dec.initializer),
+        ptype,
+        sourceLocation,
+        'Module level assignments must be compile time constants',
+      )
+      const constantName = this.context.resolveVariableName(dec.name)
+      this.context.constants.set(constantName, value)
 
       return nodeFactory.constantDeclaration({
         value: value.value,
         sourceLocation,
-        name: this.context.resolveVariable(dec.name),
+        name: constantName,
       })
     })
   }
@@ -93,7 +100,7 @@ export class SourceFileVisitor extends BaseVisitor<SourceFileContext> implements
   }
   visitClassDeclaration(node: ts.ClassDeclaration): StatementOrDeferred {
     const sourceLocation = this.sourceLocation(node)
-    const ptype = this.context.resolver.resolve(node, sourceLocation)
+    const ptype = this.context.getPTypeForNode(node)
     if (ptype instanceof ContractClassPType) {
       return () => logPuyaExceptions(() => ContractVisitor.buildContract(this.context, node), sourceLocation)
     } else {

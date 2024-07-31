@@ -44,9 +44,9 @@ export class UInt64FunctionBuilder extends FunctionBuilder {
   }
 }
 
-export class UInt64ExpressionBuilder extends InstanceExpressionBuilder {
-  get ptype(): InstanceType {
-    return uint64PType
+export class UInt64ExpressionBuilder extends InstanceExpressionBuilder<InstanceType> {
+  constructor(expr: Expression) {
+    super(expr, uint64PType)
   }
   boolEval(sourceLocation: SourceLocation, negate: boolean): Expression {
     if (negate) {
