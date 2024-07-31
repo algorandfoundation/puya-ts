@@ -4,6 +4,7 @@ import {
   ApprovalProgram,
   BaseContractType,
   bigintPType,
+  BooleanFunction,
   boolPType,
   ClearStateProgram,
   ContractType,
@@ -120,6 +121,7 @@ export class TypeResolver {
     const typeName = this.getTypeName(tsType, sourceLocation)
 
     if (typeName.fullName === StringFunction.fullName) return StringFunction
+    if (typeName.fullName === BooleanFunction.fullName) return BooleanFunction
 
     if (tsType.isClass()) {
       if (typeName.fullName === ContractType.fullName) return ContractType

@@ -26,7 +26,7 @@ export const boolPType = new InstanceType({
 
 export const BooleanFunction = new LibFunctionType({
   name: 'Boolean',
-  module: 'lib.d.ts',
+  module: 'typescript/lib/lib.es5.d.ts',
 })
 
 export const bigintPType = new TransientType({

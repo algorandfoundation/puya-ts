@@ -1,0 +1,752 @@
+[
+{
+  "_type": "Subroutine",
+  "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[2:0-15:1]",
+  "name": "test_truthyness",
+  "moduleName": "tests/approvals/boolean-conversions.algo.ts",
+  "args": [
+    {
+      "_type": "SubroutineArgument",
+      "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[2:25-2:34]",
+      "name": "a",
+      "wtype": "uint64"
+    },
+    {
+      "_type": "SubroutineArgument",
+      "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[2:36-2:45]",
+      "name": "b",
+      "wtype": "uint64"
+    },
+    {
+      "_type": "SubroutineArgument",
+      "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[2:47-2:56]",
+      "name": "c",
+      "wtype": "string"
+    },
+    {
+      "_type": "SubroutineArgument",
+      "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[2:58-2:66]",
+      "name": "d",
+      "wtype": "bytes"
+    },
+    {
+      "_type": "SubroutineArgument",
+      "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[2:68-2:77]",
+      "name": "e",
+      "wtype": "uint64"
+    }
+  ],
+  "returnType": "void",
+  "body": {
+    "_type": "Block",
+    "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[2:79-15:1]",
+    "body": [
+      {
+        "_type": "ExpressionStatement",
+        "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[3:2-3:29]",
+        "expr": {
+          "_type": "IntrinsicCall",
+          "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[3:2-3:29]",
+          "wtype": "void",
+          "opCode": "assert",
+          "immediates": [],
+          "stackArgs": [
+            {
+              "_type": "BoolConstant",
+              "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[3:9-3:11]",
+              "wtype": "bool",
+              "value": true
+            }
+          ],
+          "comment": "Zero is falsy"
+        }
+      },
+      {
+        "_type": "ExpressionStatement",
+        "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[4:2-4:33]",
+        "expr": {
+          "_type": "IntrinsicCall",
+          "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[4:2-4:33]",
+          "wtype": "void",
+          "opCode": "assert",
+          "immediates": [],
+          "stackArgs": [
+            {
+              "_type": "BoolConstant",
+              "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[4:2-4:33]",
+              "wtype": "bool",
+              "value": true
+            }
+          ],
+          "comment": "Non zero is truthy"
+        }
+      },
+      {
+        "_type": "ExpressionStatement",
+        "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[5:2-5:37]",
+        "expr": {
+          "_type": "IntrinsicCall",
+          "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[5:2-5:37]",
+          "wtype": "void",
+          "opCode": "assert",
+          "immediates": [],
+          "stackArgs": [
+            {
+              "_type": "Not",
+              "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[5:9-5:19]",
+              "wtype": "bool",
+              "expr": {
+                "_type": "IntegerConstant",
+                "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[5:17-5:18]",
+                "wtype": "uint64",
+                "value": "0n"
+              }
+            }
+          ],
+          "comment": "Zero is falsy"
+        }
+      },
+      {
+        "_type": "ExpressionStatement",
+        "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[6:2-6:41]",
+        "expr": {
+          "_type": "IntrinsicCall",
+          "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[6:2-6:41]",
+          "wtype": "void",
+          "opCode": "assert",
+          "immediates": [],
+          "stackArgs": [
+            {
+              "_type": "ReinterpretCast",
+              "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[6:2-6:41]",
+              "wtype": "bool",
+              "expr": {
+                "_type": "IntegerConstant",
+                "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[6:16-6:17]",
+                "wtype": "uint64",
+                "value": "1n"
+              }
+            }
+          ],
+          "comment": "Non zero is truthy"
+        }
+      },
+      {
+        "_type": "ExpressionStatement",
+        "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[7:2-7:38]",
+        "expr": {
+          "_type": "IntrinsicCall",
+          "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[7:2-7:38]",
+          "wtype": "void",
+          "opCode": "assert",
+          "immediates": [],
+          "stackArgs": [
+            {
+              "_type": "Not",
+              "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[7:9-7:20]",
+              "wtype": "bool",
+              "expr": {
+                "_type": "IntrinsicCall",
+                "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[7:9-7:20]",
+                "wtype": "uint64",
+                "opCode": "bitlen",
+                "immediates": [],
+                "stackArgs": [
+                  {
+                    "_type": "IntegerConstant",
+                    "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[7:18-7:19]",
+                    "wtype": "biguint",
+                    "value": "0n"
+                  }
+                ]
+              }
+            }
+          ],
+          "comment": "Zero is falsy"
+        }
+      },
+      {
+        "_type": "ExpressionStatement",
+        "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[8:2-8:42]",
+        "expr": {
+          "_type": "IntrinsicCall",
+          "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[8:2-8:42]",
+          "wtype": "void",
+          "opCode": "assert",
+          "immediates": [],
+          "stackArgs": [
+            {
+              "_type": "ReinterpretCast",
+              "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[8:2-8:42]",
+              "wtype": "bool",
+              "expr": {
+                "_type": "IntrinsicCall",
+                "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[8:2-8:42]",
+                "wtype": "uint64",
+                "opCode": "bitlen",
+                "immediates": [],
+                "stackArgs": [
+                  {
+                    "_type": "IntegerConstant",
+                    "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[8:17-8:18]",
+                    "wtype": "biguint",
+                    "value": "1n"
+                  }
+                ]
+              }
+            }
+          ],
+          "comment": "Non zero is truthy"
+        }
+      },
+      {
+        "_type": "ExpressionStatement",
+        "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[9:2-9:36]",
+        "expr": {
+          "_type": "IntrinsicCall",
+          "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[9:2-9:36]",
+          "wtype": "void",
+          "opCode": "assert",
+          "immediates": [],
+          "stackArgs": [
+            {
+              "_type": "Not",
+              "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[9:9-9:17]",
+              "wtype": "bool",
+              "expr": {
+                "_type": "IntrinsicCall",
+                "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[9:9-9:17]",
+                "wtype": "uint64",
+                "opCode": "len",
+                "immediates": [],
+                "stackArgs": [
+                  {
+                    "_type": "BytesConstant",
+                    "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[9:10-9:17]",
+                    "wtype": "bytes",
+                    "value": {
+                      "_type": "Uint8Array"
+                    },
+                    "encoding": "unknown"
+                  }
+                ]
+              }
+            }
+          ],
+          "comment": "Empty is falsy"
+        }
+      },
+      {
+        "_type": "ExpressionStatement",
+        "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[10:2-10:45]",
+        "expr": {
+          "_type": "IntrinsicCall",
+          "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[10:2-10:45]",
+          "wtype": "void",
+          "opCode": "assert",
+          "immediates": [],
+          "stackArgs": [
+            {
+              "_type": "ReinterpretCast",
+              "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[10:2-10:45]",
+              "wtype": "bool",
+              "expr": {
+                "_type": "IntrinsicCall",
+                "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[10:2-10:45]",
+                "wtype": "uint64",
+                "opCode": "len",
+                "immediates": [],
+                "stackArgs": [
+                  {
+                    "_type": "BytesConstant",
+                    "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[10:15-10:20]",
+                    "wtype": "bytes",
+                    "value": {
+                      "0": 97,
+                      "1": 98,
+                      "2": 99,
+                      "_type": "Uint8Array"
+                    },
+                    "encoding": "utf8"
+                  }
+                ]
+              }
+            }
+          ],
+          "comment": "Non empty is truthy"
+        }
+      },
+      {
+        "_type": "ExpressionStatement",
+        "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[11:2-11:31]",
+        "expr": {
+          "_type": "IntrinsicCall",
+          "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[11:2-11:31]",
+          "wtype": "void",
+          "opCode": "assert",
+          "immediates": [],
+          "stackArgs": [
+            {
+              "_type": "Not",
+              "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[11:9-11:12]",
+              "wtype": "bool",
+              "expr": {
+                "_type": "IntrinsicCall",
+                "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[11:9-11:12]",
+                "wtype": "uint64",
+                "opCode": "len",
+                "immediates": [],
+                "stackArgs": [
+                  {
+                    "_type": "StringConstant",
+                    "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[11:10-11:12]",
+                    "wtype": "string",
+                    "value": ""
+                  }
+                ]
+              }
+            }
+          ],
+          "comment": "Empty is falsy"
+        }
+      },
+      {
+        "_type": "ExpressionStatement",
+        "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[12:2-12:38]",
+        "expr": {
+          "_type": "IntrinsicCall",
+          "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[12:2-12:38]",
+          "wtype": "void",
+          "opCode": "assert",
+          "immediates": [],
+          "stackArgs": [
+            {
+              "_type": "ReinterpretCast",
+              "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[12:2-12:38]",
+              "wtype": "bool",
+              "expr": {
+                "_type": "IntrinsicCall",
+                "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[12:2-12:38]",
+                "wtype": "uint64",
+                "opCode": "len",
+                "immediates": [],
+                "stackArgs": [
+                  {
+                    "_type": "StringConstant",
+                    "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[12:9-12:14]",
+                    "wtype": "string",
+                    "value": "abc"
+                  }
+                ]
+              }
+            }
+          ],
+          "comment": "Non empty is truthy"
+        }
+      },
+      {
+        "_type": "ExpressionStatement",
+        "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[13:2-13:34]",
+        "expr": {
+          "_type": "IntrinsicCall",
+          "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[13:2-13:34]",
+          "wtype": "void",
+          "opCode": "assert",
+          "immediates": [],
+          "stackArgs": [
+            {
+              "_type": "Not",
+              "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[13:9-13:15]",
+              "wtype": "bool",
+              "expr": {
+                "_type": "BoolConstant",
+                "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[13:10-13:15]",
+                "wtype": "bool",
+                "value": false
+              }
+            }
+          ],
+          "comment": "False is falsy"
+        }
+      },
+      {
+        "_type": "ExpressionStatement",
+        "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[14:2-14:32]",
+        "expr": {
+          "_type": "IntrinsicCall",
+          "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[14:2-14:32]",
+          "wtype": "void",
+          "opCode": "assert",
+          "immediates": [],
+          "stackArgs": [
+            {
+              "_type": "BoolConstant",
+              "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[14:9-14:13]",
+              "wtype": "bool",
+              "value": true
+            }
+          ],
+          "comment": "True is truthy"
+        }
+      }
+    ]
+  }
+},
+{
+  "_type": "Subroutine",
+  "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[17:0-23:1]",
+  "name": "test_booleans_are_equal",
+  "moduleName": "tests/approvals/boolean-conversions.algo.ts",
+  "args": [],
+  "returnType": "void",
+  "body": {
+    "_type": "Block",
+    "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[17:35-23:1]",
+    "body": [
+      {
+        "_type": "ExpressionStatement",
+        "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[18:2-18:35]",
+        "expr": {
+          "_type": "IntrinsicCall",
+          "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[18:2-18:35]",
+          "wtype": "void",
+          "opCode": "assert",
+          "immediates": [],
+          "stackArgs": [
+            {
+              "_type": "NumericComparisonExpression",
+              "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[18:9-18:34]",
+              "wtype": "bool",
+              "lhs": {
+                "_type": "Not",
+                "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[18:9-18:19]",
+                "wtype": "bool",
+                "expr": {
+                  "_type": "Not",
+                  "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[18:9-18:19]",
+                  "wtype": "bool",
+                  "expr": {
+                    "_type": "BoolConstant",
+                    "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[18:9-18:19]",
+                    "wtype": "bool",
+                    "value": true
+                  }
+                }
+              },
+              "operator": "==",
+              "rhs": {
+                "_type": "Not",
+                "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[18:24-18:34]",
+                "wtype": "bool",
+                "expr": {
+                  "_type": "Not",
+                  "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[18:24-18:34]",
+                  "wtype": "bool",
+                  "expr": {
+                    "_type": "BoolConstant",
+                    "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[18:24-18:34]",
+                    "wtype": "bool",
+                    "value": true
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "_type": "ExpressionStatement",
+        "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[19:2-19:51]",
+        "expr": {
+          "_type": "IntrinsicCall",
+          "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[19:2-19:51]",
+          "wtype": "void",
+          "opCode": "assert",
+          "immediates": [],
+          "stackArgs": [
+            {
+              "_type": "NumericComparisonExpression",
+              "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[19:9-19:50]",
+              "wtype": "bool",
+              "lhs": {
+                "_type": "Not",
+                "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[19:9-19:27]",
+                "wtype": "bool",
+                "expr": {
+                  "_type": "Not",
+                  "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[19:9-19:27]",
+                  "wtype": "bool",
+                  "expr": {
+                    "_type": "ReinterpretCast",
+                    "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[19:9-19:27]",
+                    "wtype": "bool",
+                    "expr": {
+                      "_type": "IntegerConstant",
+                      "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[19:24-19:25]",
+                      "wtype": "uint64",
+                      "value": "1n"
+                    }
+                  }
+                }
+              },
+              "operator": "==",
+              "rhs": {
+                "_type": "Not",
+                "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[19:32-19:50]",
+                "wtype": "bool",
+                "expr": {
+                  "_type": "Not",
+                  "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[19:32-19:50]",
+                  "wtype": "bool",
+                  "expr": {
+                    "_type": "ReinterpretCast",
+                    "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[19:32-19:50]",
+                    "wtype": "bool",
+                    "expr": {
+                      "_type": "IntegerConstant",
+                      "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[19:47-19:48]",
+                      "wtype": "uint64",
+                      "value": "5n"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "_type": "ExpressionStatement",
+        "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[20:2-20:53]",
+        "expr": {
+          "_type": "IntrinsicCall",
+          "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[20:2-20:53]",
+          "wtype": "void",
+          "opCode": "assert",
+          "immediates": [],
+          "stackArgs": [
+            {
+              "_type": "NumericComparisonExpression",
+              "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[20:9-20:52]",
+              "wtype": "bool",
+              "lhs": {
+                "_type": "Not",
+                "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[20:9-20:28]",
+                "wtype": "bool",
+                "expr": {
+                  "_type": "Not",
+                  "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[20:9-20:28]",
+                  "wtype": "bool",
+                  "expr": {
+                    "_type": "ReinterpretCast",
+                    "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[20:9-20:28]",
+                    "wtype": "bool",
+                    "expr": {
+                      "_type": "IntrinsicCall",
+                      "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[20:9-20:28]",
+                      "wtype": "uint64",
+                      "opCode": "bitlen",
+                      "immediates": [],
+                      "stackArgs": [
+                        {
+                          "_type": "IntegerConstant",
+                          "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[20:25-20:26]",
+                          "wtype": "biguint",
+                          "value": "1n"
+                        }
+                      ]
+                    }
+                  }
+                }
+              },
+              "operator": "==",
+              "rhs": {
+                "_type": "Not",
+                "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[20:33-20:52]",
+                "wtype": "bool",
+                "expr": {
+                  "_type": "Not",
+                  "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[20:33-20:52]",
+                  "wtype": "bool",
+                  "expr": {
+                    "_type": "ReinterpretCast",
+                    "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[20:33-20:52]",
+                    "wtype": "bool",
+                    "expr": {
+                      "_type": "IntrinsicCall",
+                      "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[20:33-20:52]",
+                      "wtype": "uint64",
+                      "opCode": "bitlen",
+                      "immediates": [],
+                      "stackArgs": [
+                        {
+                          "_type": "IntegerConstant",
+                          "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[20:49-20:50]",
+                          "wtype": "biguint",
+                          "value": "5n"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "_type": "ExpressionStatement",
+        "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[21:2-21:60]",
+        "expr": {
+          "_type": "IntrinsicCall",
+          "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[21:2-21:60]",
+          "wtype": "void",
+          "opCode": "assert",
+          "immediates": [],
+          "stackArgs": [
+            {
+              "_type": "NumericComparisonExpression",
+              "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[21:9-21:59]",
+              "wtype": "bool",
+              "lhs": {
+                "_type": "BytesComparisonExpression",
+                "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[21:9-21:30]",
+                "wtype": "bool",
+                "lhs": {
+                  "_type": "BytesConstant",
+                  "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[21:23-21:28]",
+                  "wtype": "bytes",
+                  "value": {
+                    "0": 97,
+                    "1": 98,
+                    "2": 99,
+                    "_type": "Uint8Array"
+                  },
+                  "encoding": "utf8"
+                },
+                "operator": "!=",
+                "rhs": {
+                  "_type": "BytesConstant",
+                  "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[21:9-21:30]",
+                  "wtype": "bytes",
+                  "value": {
+                    "_type": "Uint8Array"
+                  },
+                  "encoding": "unknown"
+                }
+              },
+              "operator": "==",
+              "rhs": {
+                "_type": "BytesComparisonExpression",
+                "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[21:35-21:59]",
+                "wtype": "bool",
+                "lhs": {
+                  "_type": "BytesConstant",
+                  "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[21:49-21:57]",
+                  "wtype": "bytes",
+                  "value": {
+                    "0": 97,
+                    "1": 98,
+                    "2": 99,
+                    "3": 100,
+                    "4": 101,
+                    "5": 102,
+                    "_type": "Uint8Array"
+                  },
+                  "encoding": "utf8"
+                },
+                "operator": "!=",
+                "rhs": {
+                  "_type": "BytesConstant",
+                  "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[21:35-21:59]",
+                  "wtype": "bytes",
+                  "value": {
+                    "_type": "Uint8Array"
+                  },
+                  "encoding": "unknown"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "_type": "ExpressionStatement",
+        "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[22:2-22:46]",
+        "expr": {
+          "_type": "IntrinsicCall",
+          "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[22:2-22:46]",
+          "wtype": "void",
+          "opCode": "assert",
+          "immediates": [],
+          "stackArgs": [
+            {
+              "_type": "NumericComparisonExpression",
+              "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[22:9-22:45]",
+              "wtype": "bool",
+              "lhs": {
+                "_type": "BytesComparisonExpression",
+                "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[22:9-22:23]",
+                "wtype": "bool",
+                "lhs": {
+                  "_type": "BytesConstant",
+                  "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[22:17-22:22]",
+                  "wtype": "bytes",
+                  "value": {
+                    "0": 97,
+                    "1": 98,
+                    "2": 99,
+                    "_type": "Uint8Array"
+                  },
+                  "encoding": "utf8"
+                },
+                "operator": "!=",
+                "rhs": {
+                  "_type": "BytesConstant",
+                  "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[22:9-22:23]",
+                  "wtype": "bytes",
+                  "value": {
+                    "_type": "Uint8Array"
+                  },
+                  "encoding": "unknown"
+                }
+              },
+              "operator": "==",
+              "rhs": {
+                "_type": "BytesComparisonExpression",
+                "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[22:28-22:45]",
+                "wtype": "bool",
+                "lhs": {
+                  "_type": "BytesConstant",
+                  "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[22:36-22:44]",
+                  "wtype": "bytes",
+                  "value": {
+                    "0": 97,
+                    "1": 98,
+                    "2": 99,
+                    "3": 100,
+                    "4": 101,
+                    "5": 102,
+                    "_type": "Uint8Array"
+                  },
+                  "encoding": "utf8"
+                },
+                "operator": "!=",
+                "rhs": {
+                  "_type": "BytesConstant",
+                  "sourceLocation": "tests/approvals/boolean-conversions.algo.ts[22:28-22:45]",
+                  "wtype": "bytes",
+                  "value": {
+                    "_type": "Uint8Array"
+                  },
+                  "encoding": "unknown"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
+]

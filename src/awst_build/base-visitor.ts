@@ -279,19 +279,33 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
 
   visitBinaryExpression(node: ts.BinaryExpression): NodeBuilder {
     const sourceLocation = this.sourceLocation(node)
-    const left = requireInstanceBuilder(this.baseAccept(node.left), sourceLocation)
-    const right = requireInstanceBuilder(this.baseAccept(node.right), sourceLocation)
     const binaryOpKind = node.operatorToken.kind
     if (isKeyOf(binaryOpKind, BinaryOpSyntaxes)) {
+      const left = requireInstanceBuilder(this.baseAccept(node.left), sourceLocation)
+      const right = requireInstanceBuilder(this.baseAccept(node.right), sourceLocation)
       return left.binaryOp(right, BinaryOpSyntaxes[binaryOpKind], sourceLocation)
     } else if (isKeyOf(binaryOpKind, AugmentedAssignmentBinaryOp)) {
+      using _ = this.context.evaluationCtx.leaveBooleanContext()
+
+      const left = requireInstanceBuilder(this.baseAccept(node.left), sourceLocation)
+      const right = requireInstanceBuilder(this.baseAccept(node.right), sourceLocation)
       return left.augmentedAssignment(right, AugmentedAssignmentBinaryOp[binaryOpKind], sourceLocation)
     } else if (binaryOpKind === ts.SyntaxKind.EqualsToken) {
+      using _ = this.context.evaluationCtx.leaveBooleanContext()
+
+      const left = requireInstanceBuilder(this.baseAccept(node.left), sourceLocation)
+      const right = requireInstanceBuilder(this.baseAccept(node.right), sourceLocation)
       return left.assign(right, sourceLocation)
     } else if (isKeyOf(binaryOpKind, ComparisonOpSyntaxes)) {
+      const left = requireInstanceBuilder(this.baseAccept(node.left), sourceLocation)
+      const right = requireInstanceBuilder(this.baseAccept(node.right), sourceLocation)
       return left.compare(right, ComparisonOpSyntaxes[binaryOpKind], sourceLocation)
     } else if (isKeyOf(binaryOpKind, LogicalOpSyntaxes)) {
-      if (left.ptype.equals(boolPType) && right.ptype.equals(boolPType)) {
+      const ptype = this.context.resolver.resolve(node, sourceLocation)
+      if (ptype.equals(boolPType)) {
+        const left = requireInstanceBuilder(this.baseAccept(node.left), sourceLocation)
+        const right = requireInstanceBuilder(this.baseAccept(node.right), sourceLocation)
+
         return new BooleanExpressionBuilder(
           nodeFactory.booleanBinaryOperation({
             left: requireExpressionOfType(left, boolPType, sourceLocation),
@@ -302,6 +316,8 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
           }),
         )
       } else if (this.context.evaluationCtx.isBoolean) {
+        const left = requireInstanceBuilder(this.baseAccept(node.left), sourceLocation)
+        const right = requireInstanceBuilder(this.baseAccept(node.right), sourceLocation)
         return new BooleanExpressionBuilder(
           nodeFactory.booleanBinaryOperation({
             left: left.boolEval(sourceLocation),
@@ -312,11 +328,10 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
           }),
         )
       } else {
-        // Expand as assignment
-        // const x = a and b
+        const left = requireInstanceBuilder(this.baseAccept(node.left), sourceLocation)
+        const right = requireInstanceBuilder(this.baseAccept(node.right), sourceLocation)
         const leftSingle = left.singleEvaluation()
         const isOr = binaryOpKind === ts.SyntaxKind.BarBarToken
-        const ptype = this.context.resolver.resolve(node, sourceLocation)
         return this.createConditionalExpression({
           sourceLocation,
           condition: this.evaluateCondition(leftSingle),
@@ -326,6 +341,9 @@ export abstract class BaseVisitor<TContext extends BaseContext> implements Visit
         })
       }
     } else if (isKeyOf(binaryOpKind, AugmentedAssignmentLogicalOpSyntaxes)) {
+      using _ = this.context.evaluationCtx.leaveBooleanContext()
+      const left = requireInstanceBuilder(this.baseAccept(node.left), sourceLocation)
+      const right = requireInstanceBuilder(this.baseAccept(node.right), sourceLocation)
       const expr = new BooleanExpressionBuilder(
         nodeFactory.booleanBinaryOperation({
           left: requireExpressionOfType(left, boolPType, sourceLocation),
