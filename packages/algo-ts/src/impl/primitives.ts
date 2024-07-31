@@ -64,7 +64,6 @@ export const checkUint64 = (v: bigint): bigint => {
   if (u64 !== v) throw new AvmError(`Uint64 over or underflow`)
   return u64
 }
-
 export const checkBigUint = (v: bigint): bigint => {
   const uBig = BigInt.asUintN(64 * 8, v)
   if (uBig !== v) throw new AvmError(`BigUint over or underflow`)
@@ -72,8 +71,11 @@ export const checkBigUint = (v: bigint): bigint => {
 }
 
 export abstract class AlgoTsPrimitiveCls {
+  private readonly _type = 'AlgoTsPrimitiveCls'
+  static isInstance(x: unknown): x is AlgoTsPrimitiveCls {
+    return x instanceof Object && Object.hasOwn(x, '_type') && (x as { _type?: unknown })['_type'] === 'AlgoTsPrimitiveCls'
+  }
   abstract valueOf(): bigint | string | boolean
-
   abstract toBytes(): BytesCls
 }
 
