@@ -27,6 +27,11 @@ export class CodeError extends PuyaError {
       sourceLocation,
     })
   }
+  static unexpectedTypeArgs({ sourceLocation }: { sourceLocation: SourceLocation }) {
+    return new CodeError('Function does not accept type arguments', {
+      sourceLocation,
+    })
+  }
   static expectedCompileTimeConstant({ sourceLocation }: { sourceLocation: SourceLocation }) {
     return new CodeError('Expected compile time constant', {
       sourceLocation,

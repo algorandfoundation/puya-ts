@@ -32,6 +32,14 @@ export class BigIntLiteralExpressionBuilder extends LiteralExpressionBuilder {
   resolvableToPType(ptype: PType): boolean {
     return ptype.equals(uint64PType) || ptype.equals(biguintPType)
   }
+  boolEval(sourceLocation: SourceLocation, negate: boolean = false): Expression {
+    const value = negate ? !this.value : Boolean(this.value)
+
+    return nodeFactory.boolConstant({
+      value,
+      sourceLocation,
+    })
+  }
 
   resolveToPType(ptype: PType, sourceLocation: SourceLocation): InstanceBuilder {
     codeInvariant(isValidLiteralForPType(this.value, ptype), `${ptype.name} cannot be converted to type ${ptype.name}`, sourceLocation)

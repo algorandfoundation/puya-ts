@@ -11,6 +11,7 @@ import {
   assetPType,
   BigUintFunction,
   biguintPType,
+  BooleanFunction,
   boolPType,
   BytesFunction,
   bytesPType,
@@ -25,7 +26,7 @@ import {
   uint64PType,
   voidPType,
 } from './ptypes'
-import { BooleanExpressionBuilder } from './eb/boolean-expression-builder'
+import { BooleanExpressionBuilder, BooleanFunctionBuilder } from './eb/boolean-expression-builder'
 import { UInt64ExpressionBuilder, UInt64FunctionBuilder } from './eb/uint64-expression-builder'
 import { BytesExpressionBuilder, BytesFunctionBuilder } from './eb/bytes-expression-builder'
 import { StringExpressionBuilder, StringFunctionBuilder } from './eb/string-expression-builder'
@@ -189,6 +190,7 @@ class TypeRegistry {
 export const typeRegistry = new TypeRegistry()
 
 typeRegistry.register({ ptype: boolPType, instanceEb: BooleanExpressionBuilder })
+typeRegistry.register({ ptype: BooleanFunction, singletonEb: BooleanFunctionBuilder })
 typeRegistry.register({ ptype: uint64PType, instanceEb: UInt64ExpressionBuilder })
 typeRegistry.register({ ptype: Uint64Function, singletonEb: UInt64FunctionBuilder })
 typeRegistry.register({ ptype: biguintPType, instanceEb: BigUintExpressionBuilder })

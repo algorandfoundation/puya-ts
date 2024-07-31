@@ -8,5 +8,10 @@ function test(a: uint64, b: uint64, c: string, d: bytes, e: uint64) {
   if (a || (c && d)) {
     return true
   }
+
+  let f: uint64 = 0
+  if ((f = a || b)) {
+    return true
+  }
   return false
 }
