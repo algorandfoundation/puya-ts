@@ -1,9 +1,16 @@
 import { ctxMgr } from './execution-context'
-import { btoi as btoiImpl, itob as itobImpl, Uint64Cls } from './impl/primitives'
+import { BytesCls, StubBytesCompat, StubUint64Compat, Uint64Cls } from './impl/primitives'
 import { BtoiType, Ed25519verifyBareType, GlobalType, ItobType, TxnType } from './op-types'
 import { Bytes, bytes, Uint64, uint64 } from './primitives'
 import { Account, Application, Asset } from './reference'
 import { TransactionType } from './transactions'
+
+export const btoi: BtoiType = (bytes: StubBytesCompat): uint64 => {
+  return BytesCls.fromCompat(bytes).toUint64().asAlgoTs()
+}
+export const itob: ItobType = (value: StubUint64Compat): bytes => {
+  return Uint64Cls.fromCompat(value).toBytes().asAlgoTs()
+}
 
 export const Txn: TxnType = {
   get sender(): Account {
@@ -614,8 +621,6 @@ export const Global: GlobalType = {
     throw new Error('TODO')
   },
 }
-export const btoi: BtoiType = btoiImpl
-export const itob: ItobType = itobImpl
 export const ed25519verifyBare: Ed25519verifyBareType = (a: bytes, b: bytes, c: bytes) => {
   throw new Error('TODO')
 }
