@@ -8,13 +8,6 @@ export type StubBigUintCompat = BigUintCompat | BigUintCls
 export type StubBytesCompat = BytesCompat | BytesCls
 export type StubUint64Compat = Uint64Compat | Uint64Cls
 
-export function btoi(bytes: StubBytesCompat): uint64 {
-  return BytesCls.fromCompat(bytes).toUint64().asAlgoTs()
-}
-export function itob(value: StubUint64Compat): bytes {
-  return Uint64Cls.fromCompat(value).toBytes().asAlgoTs()
-}
-
 export function toExternalValue(val: uint64): bigint
 export function toExternalValue(val: biguint): bigint
 export function toExternalValue(val: bytes): Uint8Array
