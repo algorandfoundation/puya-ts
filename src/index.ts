@@ -1,10 +1,13 @@
 import { createTsProgram } from './parser'
-import { CompileOptions } from './compile-options'
+import type { CompileOptions } from './compile-options'
 import { buildAwst } from './awst_build'
-import { ModuleStatement } from './awst/nodes'
-import { LogEvent, logger } from './logger'
+import type { ModuleStatement } from './awst/nodes'
+import type { LogEvent } from './logger'
+import { logger } from './logger'
 import { AwstBuildFailureError } from './errors'
-import ts from 'typescript'
+import type ts from 'typescript'
+import { registerPTypes } from './awst_build/ptypes/register'
+import { typeRegistry } from './awst_build/type-registry'
 
 export type CompileResult = {
   logs: LogEvent[]
@@ -14,6 +17,7 @@ export type CompileResult = {
 }
 
 export function compile(options: CompileOptions): CompileResult {
+  registerPTypes(typeRegistry)
   // logger.info(undefined, `Compiling source file: ${src}`)
   const programResult = createTsProgram(options)
   const programDirectory = programResult.program.getCurrentDirectory()

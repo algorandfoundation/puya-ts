@@ -1,18 +1,23 @@
-import { InstanceBuilder, LiteralExpressionBuilder, NodeBuilder } from './index'
-import { awst, ConstantValue } from '../../awst'
-import { CodeError } from '../../errors'
-import { biguintPType, boolPType, bytesPType, PType, stringPType, uint64PType } from '../ptypes'
-import { SourceLocation } from '../../awst/source-location'
-import { codeInvariant } from '../../util'
-import { StringConstant } from '../../awst/nodes'
-import { BigIntLiteralExpressionBuilder } from './literal/big-int-literal-expression-builder'
+import type { NodeBuilder } from '../index'
+import { InstanceBuilder } from '../index'
+import type { awst, ConstantValue } from '../../../awst'
+import { isConstant } from '../../../awst'
+import { CodeError } from '../../../errors'
+import type { PType } from '../../ptypes'
+import { biguintPType, boolPType, bytesPType, stringPType, uint64PType } from '../../ptypes'
+import type { SourceLocation } from '../../../awst/source-location'
+import { codeInvariant } from '../../../util'
+import type { Expression } from '../../../awst/nodes'
+import { StringConstant } from '../../../awst/nodes'
+import type { Tuple } from '../../../typescript-helpers'
+import { logger } from '../../../logger'
+import { LiteralExpressionBuilder } from '../literal-expression-builder'
 
 export function requireExpressionOfType(builder: NodeBuilder, ptype: PType, sourceLocation: SourceLocation): awst.Expression {
-  if (builder instanceof LiteralExpressionBuilder) {
-    return builder.resolveToPType(ptype, sourceLocation).resolve()
-  }
-  if (builder instanceof InstanceBuilder && builder.ptype.equals(ptype)) {
-    return builder.resolve()
+  if (builder instanceof InstanceBuilder) {
+    if (builder.resolvableToPType(ptype, sourceLocation)) {
+      return builder.resolveToPType(ptype, sourceLocation).resolve()
+    }
   }
   throw new CodeError(`Expected expression of type ${ptype}, got ${builder.typeDescription}`, {
     sourceLocation,
@@ -76,15 +81,6 @@ export function requestConstantOfType(builder: NodeBuilder, ptype: PType, source
   return undefined
 }
 
-function isConstant(expr: awst.Expression): expr is awst.Constant {
-  return (
-    expr instanceof awst.StringConstant ||
-    expr instanceof awst.BytesConstant ||
-    expr instanceof awst.IntegerConstant ||
-    expr instanceof awst.BoolConstant
-  )
-}
-
 export function requireConstantOfType(
   builder: NodeBuilder,
   ptype: PType,
@@ -94,15 +90,6 @@ export function requireConstantOfType(
   const constExpr = requestConstantOfType(builder, ptype, sourceLocation)
   if (constExpr) return constExpr
   throw new CodeError(messageOverride ?? `Expected constant of type ${ptype}`, { sourceLocation })
-}
-
-export function requireConstantValue(builder: NodeBuilder, sourceLocation: SourceLocation): ConstantValue {
-  if (builder instanceof BigIntLiteralExpressionBuilder) {
-    return builder.value
-  }
-  const value = requireInstanceBuilder(builder, sourceLocation).resolve()
-  codeInvariant(isConstant(value), 'Expected compile time constant')
-  return value.value
 }
 
 export function isValidLiteralForPType(literalValue: ConstantValue, ptype: PType): boolean {
@@ -122,4 +109,58 @@ export function isValidLiteralForPType(literalValue: ConstantValue, ptype: PType
     return literalValue instanceof Uint8Array
   }
   return false
+}
+
+export function parseTypeArgs<T extends number>(
+  typeArgs: ReadonlyArray<PType>,
+  sourceLocation: SourceLocation,
+  funcName: string,
+  expectedCount: T,
+): Tuple<PType, T> {
+  if (typeArgs.length !== expectedCount) {
+    const err = new CodeError(`${funcName} expects exactly ${expectedCount} type argument${expectedCount === 1 ? '' : 's'}`, {
+      sourceLocation,
+    })
+    if (typeArgs.length > expectedCount) {
+      logger.error(err)
+      return typeArgs.slice(0, expectedCount) as Tuple<PType, T>
+    }
+    throw err
+  }
+  return typeArgs as Tuple<PType, T>
+}
+
+type OptionalArg = [PType, undefined]
+type RequiredArg = [PType]
+type ArgSpec = OptionalArg | RequiredArg
+
+type ArgsForMap<T extends Record<string, ArgSpec>> = {
+  [key in keyof T]: T[key] extends OptionalArg ? Expression | undefined : Expression
+}
+
+export function parseObjArgs<T extends Record<string, ArgSpec>>(
+  args: ReadonlyArray<InstanceBuilder>,
+  sourceLocation: SourceLocation,
+  funcName: string,
+  argMap: T,
+): ArgsForMap<T> {
+  if (args.length !== 1) {
+    throw new CodeError(`${funcName} expects exactly one argument`)
+  }
+  const arg = args[0]
+
+  return Object.entries(argMap).reduce(
+    (acc, [property, spec]) => {
+      const [ptype, ...rest] = spec
+      if (arg.hasProperty(property)) {
+        acc[property] = requireExpressionOfType(arg.memberAccess(property, sourceLocation), ptype, sourceLocation)
+        return acc
+      }
+      if (rest.length === 0) {
+        throw new CodeError(`Arg 0 for ${funcName} is missing required property ${property}`, { sourceLocation })
+      }
+      return acc
+    },
+    {} as Record<string, Expression>,
+  ) as ArgsForMap<T>
 }

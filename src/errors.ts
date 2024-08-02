@@ -1,4 +1,4 @@
-import { SourceLocation } from './awst/source-location'
+import type { SourceLocation } from './awst/source-location'
 
 type PuyaErrorOptions = {
   cause?: Error

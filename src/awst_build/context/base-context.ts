@@ -1,53 +1,110 @@
 import ts from 'typescript'
 import { SourceLocation } from '../../awst/source-location'
-import { NodeBuilder } from '../eb'
-import { TypeResolver } from '../type-resolver'
+import type { NodeBuilder } from '../eb'
 import { EvaluationContext } from './evaluation-context'
 import { UniqueNameResolver } from './unique-name-resolver'
-import { PType } from '../ptypes'
-import { undefined } from 'zod'
+import type { PType } from '../ptypes'
+import { SwitchLoopContext } from './switch-loop-context'
+import { TypeResolver } from '../type-resolver'
+import { codeInvariant, invariant } from '../../util'
+import { typeRegistry } from '../type-registry'
+import { nodeFactory } from '../../awst/node-factory'
+import type { awst } from '../../awst'
+import type { Constant } from '../../awst/nodes'
+import { logger } from '../../logger'
+import { CodeError } from '../../errors'
 
-export abstract class BaseContext {
-  #evalCtx = new EvaluationContext()
+export interface VisitorContext {
+  getSourceLocation(node: ts.Node): SourceLocation
+  getBuilderForNode(node: ts.Identifier): NodeBuilder
+  getPTypeForNode(node: ts.Node): PType
+  resolveVariableName(node: ts.Identifier): string
+  resolveDestructuredParamName(node: ts.ParameterDeclaration): string
+  addConstant(name: string, value: awst.Constant): void
+  get evaluationCtx(): EvaluationContext
+  get switchLoopCtx(): SwitchLoopContext
 
-  abstract getSourceLocation(node: ts.Node): SourceLocation
-
-  abstract getBuilderForNode(node: ts.Identifier): NodeBuilder
-  abstract getPTypeForNode(node: ts.Node): PType
-  abstract resolveVariableName(node: ts.Identifier): string
-  // abstract get resolver(): TypeResolver
-
-  get evaluationCtx(): EvaluationContext {
-    return this.#evalCtx
-  }
+  createChildContext(): VisitorContext
 }
 
-export abstract class SubContext extends BaseContext {
-  #parent: BaseContext
-  readonly nameResolver: UniqueNameResolver
+export function buildContextForSourceFile(sourceFile: ts.SourceFile, program: ts.Program): VisitorContext {
+  return VisitorContextImpl.forFile(sourceFile, program)
+}
 
-  protected constructor(parent: BaseContext, nameResolver: UniqueNameResolver) {
-    super()
-    this.#parent = parent
-    this.nameResolver = nameResolver
+class VisitorContextImpl implements VisitorContext {
+  readonly evaluationCtx = new EvaluationContext()
+  readonly switchLoopCtx = new SwitchLoopContext()
+  readonly typeResolver: TypeResolver
+  readonly typeChecker: ts.TypeChecker
+  private constructor(
+    public readonly sourceFile: ts.SourceFile,
+    public readonly program: ts.Program,
+    private readonly constants: Map<string, awst.Constant>,
+    private readonly nameResolver: UniqueNameResolver,
+  ) {
+    this.typeChecker = program.getTypeChecker()
+    this.typeResolver = new TypeResolver(this.typeChecker, this.program.getCurrentDirectory())
   }
 
-  getSourceLocation(node: ts.Node): SourceLocation {
-    return this.#parent.getSourceLocation(node)
+  static forFile(sourceFile: ts.SourceFile, program: ts.Program): VisitorContext {
+    return new VisitorContextImpl(sourceFile, program, new Map(), new UniqueNameResolver())
   }
 
-  getBuilderForNode(node: ts.Identifier): NodeBuilder {
-    return this.#parent.getBuilderForNode(node)
+  addConstant(name: string, value: Constant) {
+    if (this.constants.has(name)) {
+      logger.error(new CodeError(`Duplicate definitions found for constant ${name}`, { sourceLocation: value.sourceLocation }))
+      return
+    }
+    this.constants.set(name, value)
+  }
+
+  createChildContext(): VisitorContext {
+    return new VisitorContextImpl(this.sourceFile, this.program, this.constants, this.nameResolver.createChild())
+  }
+
+  resolveDestructuredParamName(node: ts.ParameterDeclaration) {
+    const symbol = (node as { symbol?: ts.Symbol }).symbol
+    invariant(symbol, 'Param node must have symbol')
+    return this.nameResolver.resolveUniqueName('p', symbol)
+  }
+  resolveVariableName(node: ts.Identifier) {
+    codeInvariant(ts.isIdentifier(node), 'Only basic identifiers supported for now')
+    const symbol = this.typeChecker.resolveName(node.text, node, ts.SymbolFlags.All, false)
+    invariant(symbol, 'There must be a symbol for an identifier node')
+    return this.nameResolver.resolveUniqueName(node.text, symbol)
   }
 
   getPTypeForNode(node: ts.Node): PType {
-    return this.#parent.getPTypeForNode(node)
-  }
-  resolveVariableName(node: ts.Identifier): string {
-    return this.#parent.resolveVariableName(node)
+    const sourceLocation = this.getSourceLocation(node)
+    if (ts.isTypeNode(node)) {
+      return this.typeResolver.resolveTypeNode(node, sourceLocation)
+    }
+    return this.typeResolver.resolve(node, sourceLocation)
   }
 
-  // get resolver(): TypeResolver {
-  //   return this.#parent.resolver
-  // }
+  getBuilderForNode(node: ts.Identifier): NodeBuilder {
+    const sourceLocation = this.getSourceLocation(node)
+    const ptype = this.typeResolver.resolve(node, sourceLocation)
+
+    if (ptype.singleton) {
+      return typeRegistry.getSingletonEb(ptype, sourceLocation)
+    }
+    const variableName = this.resolveVariableName(node)
+    const constantValue = this.constants.get(variableName)
+    if (constantValue) {
+      return typeRegistry.getInstanceEb(constantValue, ptype)
+    }
+    return typeRegistry.getInstanceEb(
+      nodeFactory.varExpression({
+        sourceLocation,
+        name: variableName,
+        wtype: ptype.wtypeOrThrow,
+      }),
+      ptype,
+    )
+  }
+
+  getSourceLocation(node: ts.Node) {
+    return SourceLocation.fromNode(this.sourceFile, node, this.program.getCurrentDirectory())
+  }
 }

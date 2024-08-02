@@ -1,15 +1,16 @@
-import { awst } from '../../awst'
-import { BuilderComparisonOp, FunctionBuilder, InstanceBuilder, InstanceExpressionBuilder, NodeBuilder } from './index'
-import * as ptypes from '../ptypes'
-import { SourceLocation } from '../../awst/source-location'
-import { EqualityComparison, Expression, NumericComparison } from '../../awst/nodes'
+import type { awst } from '../../awst'
+import type { InstanceBuilder, NodeBuilder } from './index'
+import { BuilderComparisonOp, FunctionBuilder, InstanceExpressionBuilder } from './index'
+import type { SourceLocation } from '../../awst/source-location'
+import type { Expression } from '../../awst/nodes'
+import { EqualityComparison, NumericComparison } from '../../awst/nodes'
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
-import { boolPType, bytesPType, PType, stringPType } from '../ptypes'
+import type { PType } from '../ptypes'
+import { boolPType, bytesPType, stringPType } from '../ptypes'
 import { nodeFactory } from '../../awst/node-factory'
 import { codeInvariant, tryConvertEnum } from '../../util'
 import { CodeError } from '../../errors'
-import { boolWType } from '../../awst/wtypes'
-import { InstanceType } from '../ptypes/ptype-classes'
+import type { InstanceType } from '../ptypes'
 
 export class BooleanFunctionBuilder extends FunctionBuilder {
   call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
@@ -27,7 +28,6 @@ export class BooleanFunctionBuilder extends FunctionBuilder {
           operator: EqualityComparison.ne,
           lhs: value.resolve(),
           rhs: nodeFactory.bytesConstant({ value: new Uint8Array(), sourceLocation }),
-          wtype: boolWType,
         }),
       )
     } else if (value.ptype.equals(stringPType)) {
@@ -37,7 +37,6 @@ export class BooleanFunctionBuilder extends FunctionBuilder {
           operator: EqualityComparison.ne,
           lhs: value.toBytes(sourceLocation),
           rhs: nodeFactory.bytesConstant({ value: new Uint8Array(), sourceLocation }),
-          wtype: boolWType,
         }),
       )
     } else {

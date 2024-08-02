@@ -1,7 +1,7 @@
 import { InstanceBuilder } from './index'
-import { SourceLocation } from '../../awst/source-location'
-import { Expression, LValue } from '../../awst/nodes'
-import { PType } from '../ptypes'
+import type { SourceLocation } from '../../awst/source-location'
+import type { Expression, LValue } from '../../awst/nodes'
+import type { PType } from '../ptypes'
 
 export class ArrayLiteralExpressionBuilder extends InstanceBuilder {
   constructor(

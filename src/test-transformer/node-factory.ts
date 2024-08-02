@@ -1,7 +1,7 @@
 import ts from 'typescript'
-import { DeliberateAny } from '../typescript-helpers'
+import type { DeliberateAny } from '../typescript-helpers'
 import { getPropertyNameAsString } from './helpers'
-import { TypeReflector } from './type-reflector'
+import type { TypeReflector } from './type-reflector'
 
 const factory = ts.factory
 export const nodeFactory = {

@@ -1,4 +1,5 @@
-import ts, { BinaryOperator } from 'typescript'
+import type { BinaryOperator } from 'typescript'
+import ts from 'typescript'
 
 export function supportedBinaryOpString(x: BinaryOperator): string | undefined {
   switch (x) {

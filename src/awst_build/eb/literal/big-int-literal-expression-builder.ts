@@ -1,7 +1,9 @@
-import { BuilderBinaryOp, BuilderComparisonOp, InstanceBuilder, LiteralExpressionBuilder } from '../index'
-import { SourceLocation } from '../../../awst/source-location'
-import { Expression, LValue } from '../../../awst/nodes'
-import { biguintPType, PType, uint64PType } from '../../ptypes'
+import type { BuilderBinaryOp, BuilderComparisonOp, InstanceBuilder } from '../index'
+import type { SourceLocation } from '../../../awst/source-location'
+import type { Expression, LValue } from '../../../awst/nodes'
+import type { PType } from '../../ptypes'
+import { boolPType } from '../../ptypes'
+import { biguintPType, uint64PType } from '../../ptypes'
 import { nodeFactory } from '../../../awst/node-factory'
 import { UInt64ExpressionBuilder } from '../uint64-expression-builder'
 import { CodeError } from '../../../errors'
@@ -9,6 +11,8 @@ import { codeInvariant } from '../../../util'
 import { isValidLiteralForPType } from '../util'
 import { BigUintExpressionBuilder } from '../biguint-expression-builder'
 import { foldBinaryOp, foldComparisonOp } from '../folding'
+import { LiteralExpressionBuilder } from '../literal-expression-builder'
+import { typeRegistry } from '../../type-registry'
 
 export class BigIntLiteralExpressionBuilder extends LiteralExpressionBuilder {
   resolve(): Expression {
@@ -56,7 +60,7 @@ export class BigIntLiteralExpressionBuilder extends LiteralExpressionBuilder {
       return this.resolveToPType(other.ptype, sourceLocation).binaryOp(other, op, sourceLocation)
     }
     if (other instanceof BigIntLiteralExpressionBuilder) {
-      return foldBinaryOp(this, other, op, sourceLocation)
+      return new BigIntLiteralExpressionBuilder(foldBinaryOp(this.value, other.value, op, sourceLocation), this.ptype, sourceLocation)
     }
     return super.binaryOp(other, op, sourceLocation)
   }
@@ -65,7 +69,7 @@ export class BigIntLiteralExpressionBuilder extends LiteralExpressionBuilder {
       return this.resolveToPType(other.ptype, sourceLocation).compare(other, op, sourceLocation)
     }
     if (other instanceof BigIntLiteralExpressionBuilder) {
-      return foldComparisonOp(this, other, op, sourceLocation)
+      return typeRegistry.getInstanceEb(foldComparisonOp(this.value, other.value, op, sourceLocation), boolPType)
     }
     return super.compare(other, op, sourceLocation)
   }

@@ -1,27 +1,28 @@
-import { SourceFileContext } from './source-file-context'
-import { ModuleStatements } from '../visitor/syntax-names'
-import * as awst from '../awst/nodes'
+import type { ModuleStatements } from '../visitor/syntax-names'
+import type * as awst from '../awst/nodes'
 import ts from 'typescript'
 import { AwstBuildFailureError, CodeError } from '../errors'
-import { Visitor, accept } from '../visitor/visitor'
+import type { Visitor } from '../visitor/visitor'
+import { accept } from '../visitor/visitor'
 import { ContractVisitor } from './contract-visitor'
 import { FunctionVisitor } from './function-visitor'
 import { logger, logPuyaExceptions } from '../logger'
 import { expandMaybeArray } from '../util'
 import { nodeFactory } from '../awst/node-factory'
 import { BaseVisitor } from './base-visitor'
-import { ContractClassPType } from './ptypes/ptype-classes'
+import { ContractClassPType } from './ptypes'
 import { requireConstantOfType } from './eb/util'
-import { UniqueNameResolver } from './context/unique-name-resolver'
+
+import { buildContextForSourceFile } from './context/base-context'
 
 type StatementOrDeferred = awst.ModuleStatement[] | awst.ModuleStatement | (() => awst.ModuleStatement[] | awst.ModuleStatement)
 
-export class SourceFileVisitor extends BaseVisitor<SourceFileContext> implements Visitor<ModuleStatements, StatementOrDeferred> {
+export class SourceFileVisitor extends BaseVisitor implements Visitor<ModuleStatements, StatementOrDeferred> {
   private _moduleStatements: StatementOrDeferred[] = []
   private accept = <TNode extends ts.Node>(node: TNode) => accept<SourceFileVisitor, TNode>(this, node)
 
   constructor(sourceFile: ts.SourceFile, program: ts.Program) {
-    super(new SourceFileContext(sourceFile, program, new UniqueNameResolver()))
+    super(buildContextForSourceFile(sourceFile, program))
 
     for (const statement of sourceFile.statements) {
       this._moduleStatements.push(this.accept(statement))
@@ -86,7 +87,7 @@ export class SourceFileVisitor extends BaseVisitor<SourceFileContext> implements
         'Module level assignments must be compile time constants',
       )
       const constantName = this.context.resolveVariableName(dec.name)
-      this.context.constants.set(constantName, value)
+      this.context.addConstant(constantName, value)
 
       return nodeFactory.constantDeclaration({
         value: value.value,

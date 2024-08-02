@@ -1,13 +1,15 @@
-import { Expression, LValue } from '../../../awst/nodes'
-import { PType } from '../../ptypes'
-import { InstanceBuilder, InstanceExpressionBuilder, LiteralExpressionBuilder, NodeBuilder } from '../index'
-import { SourceLocation } from '../../../awst/source-location'
+import type { Expression, LValue } from '../../../awst/nodes'
+import type { PType } from '../../ptypes'
+import type { InstanceBuilder, NodeBuilder } from '../index'
+import { InstanceExpressionBuilder } from '../index'
+import type { SourceLocation } from '../../../awst/source-location'
 import { codeInvariant, invariant } from '../../../util'
-import { ObjectPType } from '../../ptypes/ptype-classes'
+import { ObjectPType } from '../../ptypes'
 import { nodeFactory } from '../../../awst/node-factory'
 import { CodeError } from '../../../errors'
 import { typeRegistry } from '../../type-registry'
 import { requestExpressionOfType, requireExpressionOfType, requireInstanceBuilder } from '../util'
+import { LiteralExpressionBuilder } from '../literal-expression-builder'
 
 export type ObjectLiteralParts =
   | {

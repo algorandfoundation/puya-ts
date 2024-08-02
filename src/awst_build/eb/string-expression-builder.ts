@@ -1,15 +1,19 @@
-import { SourceLocation } from '../../awst/source-location'
+import type { SourceLocation } from '../../awst/source-location'
 import { nodeFactory } from '../../awst/node-factory'
-import { CodeError } from '../../errors'
+import { CodeError, NotSupported } from '../../errors'
 import { awst, wtypes } from '../../awst'
-import { FunctionBuilder, InstanceBuilder, InstanceExpressionBuilder, LiteralExpressionBuilder, NodeBuilder } from './index'
-import { biguintPType, bytesPType, PType, stringPType } from '../ptypes'
-import { BytesBinaryOperator, BytesEncoding, EqualityComparison, Expression } from '../../awst/nodes'
+import type { InstanceBuilder, NodeBuilder } from './index'
+import { BuilderComparisonOp, FunctionBuilder, InstanceExpressionBuilder } from './index'
+import { boolPType } from '../ptypes'
+import { bytesPType, stringPType } from '../ptypes'
+import type { Expression } from '../../awst/nodes'
+import { BytesBinaryOperator, BytesEncoding, EqualityComparison } from '../../awst/nodes'
 import { requireExpressionOfType } from './util'
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
-import { utf8ToUint8Array } from '../../util'
+import { tryConvertEnum, utf8ToUint8Array } from '../../util'
 import { UInt64ExpressionBuilder } from './uint64-expression-builder'
-import { InstanceType } from '../ptypes/ptype-classes'
+import type { InstanceType, PType } from '../ptypes'
+import { instanceEb } from '../type-registry'
 
 export class StringFunctionBuilder extends FunctionBuilder {
   taggedTemplate(head: string, spans: ReadonlyArray<readonly [InstanceBuilder, string]>, sourceLocation: SourceLocation): InstanceBuilder {
@@ -53,18 +57,15 @@ export class StringFunctionBuilder extends FunctionBuilder {
     }
     if (args.length === 1) {
       const [arg0] = args
-      if (arg0 instanceof LiteralExpressionBuilder) {
-        throw new CodeError('TODO: Handle literal')
-      } else {
-        if (arg0.ptype.equals(bytesPType)) {
-          return new StringExpressionBuilder(
-            nodeFactory.reinterpretCast({
-              expr: arg0.resolve(),
-              sourceLocation,
-              wtype: wtypes.stringWType,
-            }),
-          )
-        }
+
+      if (arg0.ptype.equals(bytesPType)) {
+        return new StringExpressionBuilder(
+          nodeFactory.reinterpretCast({
+            expr: arg0.resolve(),
+            sourceLocation,
+            wtype: wtypes.stringWType,
+          }),
+        )
       }
     }
     throw CodeError.unexpectedUnhandledArgs({ sourceLocation })
@@ -74,6 +75,16 @@ export class StringFunctionBuilder extends FunctionBuilder {
 export class StringExpressionBuilder extends InstanceExpressionBuilder<InstanceType> {
   constructor(expr: Expression) {
     super(expr, stringPType)
+  }
+  resolvableToPType(ptype: PType, sourceLocation: SourceLocation): boolean {
+    return ptype.equals(bytesPType) || super.resolvableToPType(ptype, sourceLocation)
+  }
+
+  resolveToPType(ptype: PType, sourceLocation: SourceLocation): InstanceBuilder {
+    if (ptype.equals(bytesPType)) {
+      return instanceEb(this.toBytes(sourceLocation), bytesPType)
+    }
+    return super.resolveToPType(ptype, sourceLocation)
   }
 
   boolEval(sourceLocation: SourceLocation, negate = false): Expression {
@@ -92,6 +103,25 @@ export class StringExpressionBuilder extends InstanceExpressionBuilder<InstanceT
     }
     return super.memberAccess(name, sourceLocation)
   }
+  compare(other: InstanceBuilder, op: BuilderComparisonOp, sourceLocation: SourceLocation): InstanceBuilder {
+    const otherExpr = requireExpressionOfType(other, stringPType, sourceLocation)
+    const numComOp = tryConvertEnum(op, BuilderComparisonOp, EqualityComparison)
+    if (numComOp === undefined) {
+      throw new NotSupported(`Numeric comparison operator ${op}`, {
+        sourceLocation,
+      })
+    }
+    return instanceEb(
+      nodeFactory.bytesComparisonExpression({
+        lhs: this._expr,
+        rhs: otherExpr,
+        operator: numComOp,
+        sourceLocation,
+      }),
+      boolPType,
+    )
+  }
+
   toBytes(sourceLocation: SourceLocation): awst.Expression {
     if (this._expr instanceof awst.StringConstant) {
       return nodeFactory.bytesConstant({

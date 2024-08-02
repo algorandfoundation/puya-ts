@@ -1,5 +1,5 @@
-import ts from 'typescript'
-import { DeliberateAny } from '../../packages/algo-ts-testing/src/typescript-helpers'
+import type ts from 'typescript'
+import type { DeliberateAny } from '../../packages/algo-ts-testing/src/typescript-helpers'
 import { TypeReflector } from './type-reflector'
 import { SourceFileVisitor } from './visitors'
 

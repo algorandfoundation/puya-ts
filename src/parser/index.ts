@@ -1,10 +1,10 @@
 import ts from 'typescript'
 import { resolveModuleNameLiterals } from './resolve-module-name-literals'
-import { CompileOptions } from '../compile-options'
+import type { CompileOptions } from '../compile-options'
 import { SourceLocation } from '../awst/source-location'
 import { logger } from '../logger'
 import { normalisePath } from '../util'
-import { DeliberateAny } from '../typescript-helpers'
+import type { DeliberateAny } from '../typescript-helpers'
 
 export type CreateProgramResult = {
   sourceFiles: Record<string, ts.SourceFile>

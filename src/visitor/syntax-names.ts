@@ -1,7 +1,7 @@
 import ts from 'typescript'
 import { BuilderBinaryOp, BuilderComparisonOp, BuilderUnaryOp } from '../awst_build/eb'
-import { DeliberateAny } from '../typescript-helpers'
-import { BinaryBooleanOperator, BooleanBinaryOperation } from '../awst/nodes'
+import type { DeliberateAny } from '../typescript-helpers'
+import { BinaryBooleanOperator } from '../awst/nodes'
 
 export const SyntaxKindName = {
   [ts.SyntaxKind.Unknown]: 'Unknown',

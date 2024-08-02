@@ -1,4 +1,4 @@
-import ts from 'typescript'
+import type ts from 'typescript'
 import { toSubScript } from '../../util'
 
 export class UniqueNameResolver {

@@ -1,13 +1,15 @@
-import { FunctionBuilder, InstanceBuilder } from './index'
-import { SourceLocation } from '../../awst/source-location'
+import type { InstanceBuilder } from './index'
+import { FunctionBuilder } from './index'
+import type { SourceLocation } from '../../awst/source-location'
 import { VoidExpressionBuilder } from './void-expression-builder'
 import { nodeFactory } from '../../awst/node-factory'
-import { awst, wtypes } from '../../awst'
+import type { awst } from '../../awst'
+import { wtypes } from '../../awst'
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
 import { CodeError, InternalError, throwError } from '../../errors'
 import { requireInstanceBuilder } from './util'
-import { Expression } from '../../awst/nodes'
-import { PType } from '../ptypes'
+import type { Expression } from '../../awst/nodes'
+import type { PType } from '../ptypes'
 
 export class LogFunctionBuilder extends FunctionBuilder {
   call(args: Array<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {

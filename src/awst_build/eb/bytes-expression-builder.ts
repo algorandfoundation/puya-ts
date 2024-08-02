@@ -1,28 +1,25 @@
-import { awst, wtypes } from '../../awst'
-import {
-  BuilderComparisonOp,
-  BuilderUnaryOp,
-  FunctionBuilder,
-  InstanceBuilder,
-  InstanceExpressionBuilder,
-  LiteralExpressionBuilder,
-  NodeBuilder,
-  ParameterlessFunctionBuilder,
-} from './index'
-import { SourceLocation } from '../../awst/source-location'
+import type { awst } from '../../awst'
+import { wtypes } from '../../awst'
+import type { InstanceBuilder, NodeBuilder } from './index'
+import { BuilderComparisonOp, BuilderUnaryOp, FunctionBuilder, InstanceExpressionBuilder, ParameterlessFunctionBuilder } from './index'
+import type { SourceLocation } from '../../awst/source-location'
 import { nodeFactory } from '../../awst/node-factory'
 import { CodeError, wrapInCodeError } from '../../errors'
 import { UInt64ExpressionBuilder } from './uint64-expression-builder'
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
 import { requireExpressionOfType, requireExpressionsOfType } from './util'
-import { biguintPType, BytesFunction, bytesPType, numberPType, PType, stringPType, uint64PType } from '../ptypes'
+import type { PType } from '../ptypes'
+import { BytesFunction, bytesPType, numberPType, stringPType, uint64PType } from '../ptypes'
 import { StringExpressionBuilder } from './string-expression-builder'
 import { BooleanExpressionBuilder } from './boolean-expression-builder'
-import { BytesBinaryOperator, BytesEncoding, BytesUnaryOperator, EqualityComparison, Expression, StringConstant } from '../../awst/nodes'
+import type { Expression } from '../../awst/nodes'
+import { BytesBinaryOperator, BytesEncoding, BytesUnaryOperator, EqualityComparison, StringConstant } from '../../awst/nodes'
 import { base32ToUint8Array, base64ToUint8Array, hexToUint8Array, utf8ToUint8Array } from '../../util'
 import { BigIntLiteralExpressionBuilder } from './literal/big-int-literal-expression-builder'
 import { logger } from '../../logger'
-import { InstanceType } from '../ptypes/ptype-classes'
+import type { InstanceType } from '../ptypes'
+import { LiteralExpressionBuilder } from './literal-expression-builder'
+import { instanceEb } from '../type-registry'
 
 export class BytesFunctionBuilder extends FunctionBuilder {
   get ptype(): PType | undefined {
@@ -175,7 +172,6 @@ export class BytesExpressionBuilder extends InstanceExpressionBuilder<InstanceTy
         nodeFactory.bytesComparisonExpression({
           sourceLocation,
           operator: equalityOp,
-          wtype: wtypes.boolWType,
           lhs: this._expr,
           rhs: requireExpressionOfType(other, bytesPType, sourceLocation),
         }),
@@ -275,7 +271,7 @@ export class BytesAtBuilder extends FunctionBuilder {
   call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation) {
     const [index] = requireExpressionsOfType(args, [uint64PType], sourceLocation)
     // TODO: Needs to do range check on target and handle negative values
-    return new BytesExpressionBuilder(
+    return instanceEb(
       nodeFactory.sliceExpression({
         base: this.expr,
         sourceLocation: sourceLocation,
@@ -283,6 +279,7 @@ export class BytesAtBuilder extends FunctionBuilder {
         endIndex: nodeFactory.uInt64Constant({ value: 1n, sourceLocation }),
         wtype: wtypes.bytesWType,
       }),
+      bytesPType,
     )
   }
 }

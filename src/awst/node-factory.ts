@@ -1,25 +1,26 @@
+import type { Expression, Statement } from './nodes'
 import {
   BigUIntBinaryOperation,
   Block,
   BoolConstant,
+  BytesComparisonExpression,
   BytesConstant,
   BytesEncoding,
   concreteNodes,
-  Expression,
   ExpressionStatement,
   IntegerConstant,
   Not,
   NumericComparisonExpression,
   SingleEvaluation,
-  Statement,
   StringConstant,
   UInt64BinaryOperation,
 } from './nodes'
-import { DeliberateAny, Props } from '../typescript-helpers'
-import { SourceLocation } from './source-location'
+import type { DeliberateAny, Props } from '../typescript-helpers'
+import type { SourceLocation } from './source-location'
 import * as wtypes from './wtypes'
 import { invariant } from '../util'
-import { boolWType, WType } from './wtypes'
+import type { WType } from './wtypes'
+import { boolWType } from './wtypes'
 
 type ConcreteNodes = typeof concreteNodes
 let singleEval = 0
@@ -70,6 +71,12 @@ const explicitNodeFactory = {
   },
   numericComparisonExpression(props: Omit<Props<NumericComparisonExpression>, 'wtype'>): NumericComparisonExpression {
     return new NumericComparisonExpression({
+      wtype: boolWType,
+      ...props,
+    })
+  },
+  bytesComparisonExpression(props: Omit<Props<BytesComparisonExpression>, 'wtype'>): BytesComparisonExpression {
+    return new BytesComparisonExpression({
       wtype: boolWType,
       ...props,
     })

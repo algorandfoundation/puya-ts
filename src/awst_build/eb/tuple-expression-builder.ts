@@ -1,7 +1,8 @@
-import { PType, TuplePType } from '../ptypes'
+import type { PType } from '../ptypes'
+import { TuplePType } from '../ptypes'
 import { InstanceExpressionBuilder } from './index'
 import { invariant } from '../../util'
-import { Expression } from '../../awst/nodes'
+import type { Expression } from '../../awst/nodes'
 
 export class TupleExpressionBuilder extends InstanceExpressionBuilder<TuplePType> {
   constructor(expression: Expression, ptype: PType) {

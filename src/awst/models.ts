@@ -1,4 +1,4 @@
-import { SourceLocation } from './source-location'
+import type { SourceLocation } from './source-location'
 
 export enum OnCompletionAction {
   NoOp = 0,

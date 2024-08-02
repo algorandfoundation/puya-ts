@@ -1,21 +1,13 @@
 import * as nodes from './nodes'
-import {
-  AppStorageDefinition,
-  AppStorageKind,
-  BytesEncoding,
-  ExpressionVisitor,
-  FreeSubroutineTarget,
-  InstanceSubroutineTarget,
-  ModuleStatementVisitor,
-  StatementVisitor,
-} from './nodes'
+import type { AppStorageDefinition, ExpressionVisitor, ModuleStatementVisitor, StatementVisitor } from './nodes'
+import { AppStorageKind, BytesEncoding, FreeSubroutineTarget, InstanceSubroutineTarget } from './nodes'
 import { TodoError } from '../errors'
 import { logger } from '../logger'
 import { uint8ArrayToUtf8 } from '../util'
 import { Buffer } from 'node:buffer'
 import { uint8ArrayToBase32 } from '../util'
 import { boolWType } from './wtypes'
-import { ConstantValue } from './index'
+import type { ConstantValue } from './index'
 
 function printBytes(value: Uint8Array, encoding: BytesEncoding) {
   switch (encoding) {
