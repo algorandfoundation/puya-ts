@@ -20,11 +20,10 @@ export function toExternalValue(val: biguint): bigint
 export function toExternalValue(val: bytes): Uint8Array
 export function toExternalValue(val: string): string
 export function toExternalValue(val: uint64 | biguint | bytes | string) {
-  const cls = val as unknown
-  const typeName = nameOfType(cls)
-  if (cls instanceof BytesCls || typeName === 'BytesCls') return (cls as BytesCls).asUint8Array()
-  if (cls instanceof Uint64Cls || typeName === 'Uint64Cls') return (cls as Uint64Cls).asBigInt()
-  if (cls instanceof BigUintCls || typeName === 'BigUintCls') return (cls as BigUintCls).asBigInt()
+  const instance = val as unknown
+  if (BytesCls.isClassOf(instance)) return (instance as BytesCls).asUint8Array()
+  if (Uint64Cls.isClassOf(instance)) return (instance as Uint64Cls).asBigInt()
+  if (BigUintCls.isClassOf(instance)) return (instance as BigUintCls).asBigInt()
   if (typeof val === 'string') return val
 }
 export const toBytes = (val: unknown): bytes => {
@@ -71,9 +70,14 @@ export const checkBigUint = (v: bigint): bigint => {
 }
 
 export abstract class AlgoTsPrimitiveCls {
-  private readonly _type = 'AlgoTsPrimitiveCls'
-  static isInstance(x: unknown): x is AlgoTsPrimitiveCls {
-    return x instanceof Object && Object.hasOwn(x, '_type') && (x as { _type?: unknown })['_type'] === 'AlgoTsPrimitiveCls'
+  private readonly _type: string = 'AlgoTsPrimitiveCls'
+
+  constructor(t: string) {
+    this._type = `AlgoTsPrimitiveCls.${t}`
+  }
+
+  static isClassOf(x: unknown): x is AlgoTsPrimitiveCls {
+    return x instanceof Object && '_type' in x && (x as { _type: string })['_type'].startsWith('AlgoTsPrimitiveCls')
   }
   abstract valueOf(): bigint | string | boolean
   abstract toBytes(): BytesCls
@@ -82,11 +86,10 @@ export abstract class AlgoTsPrimitiveCls {
 export class Uint64Cls extends AlgoTsPrimitiveCls {
   public readonly value: bigint
   constructor(value: bigint | number | string) {
-    super()
+    super('Uint64Cls')
     this.value = BigInt(value)
     checkUint64(this.value)
   }
-
   static fromCompat(v: StubUint64Compat): Uint64Cls {
     if (typeof v == 'boolean') return new Uint64Cls(v ? 1n : 0n)
     if (typeof v == 'number') return new Uint64Cls(BigInt(v))
@@ -124,7 +127,7 @@ export class Uint64Cls extends AlgoTsPrimitiveCls {
 
 export class BigUintCls extends AlgoTsPrimitiveCls {
   constructor(public readonly value: bigint) {
-    super()
+    super('BigUintCls')
     checkBigUint(value)
   }
   valueOf(): bigint {
@@ -161,7 +164,7 @@ export class BigUintCls extends AlgoTsPrimitiveCls {
 export class BytesCls extends AlgoTsPrimitiveCls {
   #v: Uint8Array
   constructor(v: Uint8Array) {
-    super()
+    super('BytesCls')
     this.#v = v
   }
 
