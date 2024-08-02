@@ -7,7 +7,7 @@ export function switchableValue(x: unknown): bigint | string | boolean {
   if (typeof x === 'boolean') return x
   if (typeof x === 'bigint') return x
   if (typeof x === 'string') return x
-  if (internal.primitives.AlgoTsPrimitiveCls.isInstance(x)) return x.valueOf()
+  if (internal.primitives.AlgoTsPrimitiveCls.isClassOf(x)) return x.valueOf()
   internal.errors.internalError(`Cannot convert ${nameOfType(x)} to switchable value`)
 }
 // export function wrapLiteral(x: unknown) {
