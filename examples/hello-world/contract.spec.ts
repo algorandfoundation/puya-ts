@@ -6,11 +6,11 @@ import HelloWorldContract from './contract.algo'
 describe('When calling the HelloWorldContract', () => {
   describe("with ['world']", () => {
     it('logs Hello, World', async ({ ctx }: AlgorandTestContext) => {
-      ctx.gtxn = [
+      ctx.setTransactionGroup([
         ctx.anyApplicationCallTransaction({
           args: [Bytes('World')],
         }),
-      ]
+      ])
       const contract = new HelloWorldContract()
       const result = contract.approvalProgram()
       expect(ctx.exportLogs('s')).toStrictEqual(['Hello, World'])

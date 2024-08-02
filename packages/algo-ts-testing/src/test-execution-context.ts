@@ -20,7 +20,11 @@ export class TestExecutionContext implements internal.ExecutionContext {
   }
 
   log(value: bytes): void {
-    this.#stateStore!.logs.push(value)
+    const activeTransaction = this.#stateStore!.activeTransaction
+    if (activeTransaction.type !== gtxn.TransactionType.ApplicationCall) {
+      throw internal.errors.internalError('Cannot log outside of an application call context')
+    }
+    this.#stateStore!.addApplicationLog(activeTransaction.appId, value)
   }
 
   get currentTransaction() {
