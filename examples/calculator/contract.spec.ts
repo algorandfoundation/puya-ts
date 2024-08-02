@@ -6,11 +6,11 @@ import MyContract from './contract.algo'
 describe('Calculator', () => {
   describe('when calling with with no args', () => {
     it('errors', async ({ ctx }: AlgorandTestContext) => {
-      ctx.gtxn = [
+      ctx.setTransactionGroup([
         ctx.anyApplicationCallTransaction({
           args: [],
         }),
-      ]
+      ])
       const contract = new MyContract()
 
       expect(() => contract.approvalProgram()).toThrowError(new internal.errors.AvmError('Unknown operation'))
@@ -18,11 +18,11 @@ describe('Calculator', () => {
   })
   describe('when calling with with three args', () => {
     it('Returns 1', async ({ ctx }: AlgorandTestContext) => {
-      ctx.gtxn = [
+      ctx.setTransactionGroup([
         ctx.anyApplicationCallTransaction({
           args: [op.itob(Uint64(1)), op.itob(Uint64(2)), op.itob(Uint64(3))],
         }),
-      ]
+      ])
       const contract = new MyContract()
       const result = contract.approvalProgram()
       const [left, right, outcome] = ctx.exportLogs('i', 'i', 's')

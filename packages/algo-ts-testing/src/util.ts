@@ -8,3 +8,9 @@ export const nameOfType = (x: unknown) => {
   }
   return typeof x
 }
+
+export function* iterBigInt(start: bigint, end: bigint): Generator<bigint> {
+  for (let i = start; i < end; i++) {
+    yield BigInt(i)
+  }
+}
