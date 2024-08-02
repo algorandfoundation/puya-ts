@@ -1,9 +1,10 @@
-import { accept, Visitor } from '../visitor/visitor'
-import { SourceFileContext } from './source-file-context'
+import type { Visitor } from '../visitor/visitor'
+import { accept } from '../visitor/visitor'
 import ts from 'typescript'
-import * as awst from '../awst/nodes'
-import { AppStorageDefinition, ContractFragment, ContractMethod } from '../awst/nodes'
-import { ClassElements } from '../visitor/syntax-names'
+import type * as awst from '../awst/nodes'
+import type { AppStorageDefinition, ContractMethod } from '../awst/nodes'
+import { ContractFragment } from '../awst/nodes'
+import type { ClassElements } from '../visitor/syntax-names'
 import { AwstBuildFailureError, NotSupported, TodoError } from '../errors'
 import { codeInvariant, invariant } from '../util'
 import { Constants } from '../constants'
@@ -11,20 +12,16 @@ import { FunctionVisitor } from './function-visitor'
 import { logger } from '../logger'
 import { BaseVisitor } from './base-visitor'
 import { GlobalStateFunctionResultBuilder } from './eb/storage/global-state'
-import { ContractClassPType, GlobalStateType } from './ptypes/ptype-classes'
-import { Arc4AbiDecoratorData, DecoratorData, DecoratorVisitor } from './decorator-visitor'
-import { SourceLocation } from '../awst/source-location'
-import { ARC4CreateOption, DefaultArgumentSource, OnCompletionAction } from '../awst/models'
+import { ContractClassPType, GlobalStateType } from './ptypes'
+import type { Arc4AbiDecoratorData, DecoratorData } from './decorator-visitor'
+import { DecoratorVisitor } from './decorator-visitor'
+import type { SourceLocation } from '../awst/source-location'
+import type { DefaultArgumentSource } from '../awst/models'
+import { ARC4CreateOption, OnCompletionAction } from '../awst/models'
 import { isValidLiteralForPType } from './eb/util'
-import { SubContext } from './context/base-context'
+import type { VisitorContext } from './context/base-context'
 
-export class ContractContext extends SubContext {
-  constructor(parent: SourceFileContext) {
-    super(parent, parent.nameResolver.createChild())
-  }
-}
-
-export class ContractVisitor extends BaseVisitor<ContractContext> implements Visitor<ClassElements, void> {
+export class ContractVisitor extends BaseVisitor implements Visitor<ClassElements, void> {
   private _ctor?: ContractMethod
   private _subroutines: ContractMethod[] = []
   private _approvalProgram?: ContractMethod
@@ -35,7 +32,7 @@ export class ContractVisitor extends BaseVisitor<ContractContext> implements Vis
   public readonly result: ContractFragment
   public accept = <TNode extends ts.Node>(node: TNode) => accept<ContractVisitor, TNode>(this, node)
 
-  constructor(ctx: ContractContext, classDec: ts.ClassDeclaration) {
+  constructor(ctx: VisitorContext, classDec: ts.ClassDeclaration) {
     super(ctx)
     const sourceLocation = this.context.getSourceLocation(classDec)
     codeInvariant(classDec.name, 'Anonymous classes are not supported for contracts', sourceLocation)
@@ -280,7 +277,7 @@ export class ContractVisitor extends BaseVisitor<ContractContext> implements Vis
     throw new TodoError('visitSetAccessor')
   }
 
-  public static buildContract(ctx: SourceFileContext, classDec: ts.ClassDeclaration): awst.ContractFragment {
-    return new ContractVisitor(new ContractContext(ctx), classDec).result
+  public static buildContract(ctx: VisitorContext, classDec: ts.ClassDeclaration): awst.ContractFragment {
+    return new ContractVisitor(ctx.createChildContext(), classDec).result
   }
 }

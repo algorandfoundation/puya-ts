@@ -1,13 +1,12 @@
-import { InstanceBuilder, LiteralExpressionBuilder } from '../index'
-import { SourceLocation } from '../../../awst/source-location'
-import { Expression, LValue } from '../../../awst/nodes'
-import { PType } from '../../ptypes'
+import type { InstanceBuilder } from '../index'
+import type { SourceLocation } from '../../../awst/source-location'
+import type { Expression } from '../../../awst/nodes'
+import type { PType } from '../../ptypes'
 import { nodeFactory } from '../../../awst/node-factory'
 import { requireExpressionOfType, resolvableToType } from '../util'
 import { typeRegistry } from '../../type-registry'
 import { boolWType } from '../../../awst/wtypes'
-import { CodeError } from '../../../errors'
-import { TransientType } from '../../ptypes/ptype-classes'
+import { LiteralExpressionBuilder } from '../literal-expression-builder'
 
 export class ConditionalExpressionBuilder extends LiteralExpressionBuilder {
   private readonly _ptype: PType

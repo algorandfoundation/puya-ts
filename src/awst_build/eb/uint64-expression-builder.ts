@@ -1,24 +1,21 @@
-import { awst, wtypes } from '../../awst'
-import {
-  BuilderBinaryOp,
-  BuilderComparisonOp,
-  BuilderUnaryOp,
-  FunctionBuilder,
-  InstanceBuilder,
-  InstanceExpressionBuilder,
-  LiteralExpressionBuilder,
-} from './index'
-import { Expression, NumericComparison, UInt64BinaryOperator, UInt64PostfixUnaryOperator, UInt64UnaryOperator } from '../../awst/nodes'
-import { SourceLocation } from '../../awst/source-location'
+import type { awst } from '../../awst'
+import { wtypes } from '../../awst'
+import type { InstanceBuilder } from './index'
+import { BuilderBinaryOp, BuilderComparisonOp, BuilderUnaryOp, FunctionBuilder, InstanceExpressionBuilder } from './index'
+import type { Expression } from '../../awst/nodes'
+import { NumericComparison, UInt64BinaryOperator, UInt64PostfixUnaryOperator, UInt64UnaryOperator } from '../../awst/nodes'
+import type { SourceLocation } from '../../awst/source-location'
 import { nodeFactory } from '../../awst/node-factory'
 import { CodeError, NotSupported } from '../../errors'
 import { requireExpressionOfType } from './util'
 import { tryConvertEnum } from '../../util'
-import { PType, Uint64Function, uint64PType } from '../ptypes'
+import type { PType } from '../ptypes'
+import { Uint64Function, uint64PType } from '../ptypes'
 import { BooleanExpressionBuilder } from './boolean-expression-builder'
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
-import { InstanceType } from '../ptypes/ptype-classes'
+import type { InstanceType } from '../ptypes'
 import { boolWType } from '../../awst/wtypes'
+import { LiteralExpressionBuilder } from './literal-expression-builder'
 
 export class UInt64FunctionBuilder extends FunctionBuilder {
   get ptype(): PType | undefined {

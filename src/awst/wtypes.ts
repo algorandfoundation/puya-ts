@@ -1,4 +1,4 @@
-import { DeliberateAny } from '../typescript-helpers'
+import type { DeliberateAny } from '../typescript-helpers'
 
 export type WTypeClass = { new (...args: DeliberateAny[]): WType }
 
@@ -82,7 +82,17 @@ export class WTuple extends WType {
     return `${this.immutable ? 'readonly' : ''}tuple[${this.items.join(', ')}]`
   }
 }
-export class WArray extends WType {}
+export class WArray extends WType {
+  itemType: WType
+  constructor(props: { itemType: WType; immutable: boolean }) {
+    super({
+      name: 'WArray',
+      scalar: false,
+      immutable: props.immutable,
+    })
+    this.itemType = props.itemType
+  }
+}
 
 export class ARC4UFixedNxM extends ARC4Type {}
 

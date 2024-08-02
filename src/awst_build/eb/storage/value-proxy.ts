@@ -1,8 +1,9 @@
-import { BuilderBinaryOp, BuilderComparisonOp, BuilderUnaryOp, InstanceBuilder, InstanceExpressionBuilder, NodeBuilder } from '../index'
-import { PType } from '../../ptypes'
+import type { BuilderBinaryOp, BuilderComparisonOp, BuilderUnaryOp, InstanceBuilder, NodeBuilder } from '../index'
+import { InstanceExpressionBuilder } from '../index'
+import type { PType } from '../../ptypes'
 import { typeRegistry } from '../../type-registry'
-import { SourceLocation } from '../../../awst/source-location'
-import { Expression } from '../../../awst/nodes'
+import type { SourceLocation } from '../../../awst/source-location'
+import type { Expression } from '../../../awst/nodes'
 
 export abstract class ValueProxy<TPType extends PType> extends InstanceExpressionBuilder<TPType> {
   private get proxied(): InstanceBuilder {

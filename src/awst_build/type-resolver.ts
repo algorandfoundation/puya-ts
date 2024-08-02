@@ -1,4 +1,5 @@
 import ts from 'typescript'
+import { ArrayPType } from './ptypes'
 import {
   anyPType,
   ApprovalProgram,
@@ -10,27 +11,19 @@ import {
   ContractType,
   nullPType,
   numberPType,
-  PType,
   StringFunction,
   stringPType,
   TuplePType,
   voidPType,
 } from './ptypes'
-import { SourceLocation } from '../awst/source-location'
+import type { SourceLocation } from '../awst/source-location'
 import { codeInvariant, intersectsFlags, hasFlags, invariant, normalisePath } from '../util'
 import { CodeError, InternalError } from '../errors'
 import { typeRegistry } from './type-registry'
 import { logger } from '../logger'
 import { Constants } from '../constants'
-import {
-  AppStorageType,
-  ContractClassPType,
-  FunctionPType,
-  GlobalStateType,
-  NamespacePType,
-  ObjectPType,
-  UnionPType,
-} from './ptypes/ptype-classes'
+import type { AppStorageType, PType } from './ptypes'
+import { ContractClassPType, FunctionPType, GlobalStateType, NamespacePType, ObjectPType, UnionPType } from './ptypes'
 import { SymbolName } from './symbol-name'
 
 export class TypeResolver {
@@ -147,6 +140,19 @@ export class TypeResolver {
       return this.reflectObjectType(tsType, sourceLocation)
     }
 
+    if (typeName.fullName === 'typescript/lib/lib.es5.d.ts::Array') {
+      // There has to be a better way to do this
+      const itemType = tsType.getNumberIndexType()
+      if (!itemType) {
+        throw new CodeError('Cannot determine array item type', { sourceLocation })
+      } else {
+        const itemPType = this.resolveType(itemType, sourceLocation)
+        return new ArrayPType({
+          itemType: itemPType,
+          immutable: false,
+        })
+      }
+    }
     if (tsType.aliasTypeArguments?.length) {
       const typeArgs = tsType.aliasTypeArguments.map((a) => this.resolveType(a, sourceLocation))
       return typeRegistry.resolveGenericPType(typeName, typeArgs, sourceLocation)

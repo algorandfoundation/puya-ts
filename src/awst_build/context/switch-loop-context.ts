@@ -1,8 +1,8 @@
 import ts from 'typescript'
-import { SourceLocation } from '../../awst/source-location'
+import type { SourceLocation } from '../../awst/source-location'
 import { codeInvariant, invariant, toSubScript } from '../../util'
 import { nodeFactory } from '../../awst/node-factory'
-import { Block, Goto } from '../../awst/nodes'
+import type { Block, Goto } from '../../awst/nodes'
 import { defaultRecord } from '../../util/default-map'
 
 type SwitchOrLoop = 'switch' | 'loop'

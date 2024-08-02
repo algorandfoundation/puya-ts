@@ -1,4 +1,4 @@
-import ts, {
+import type {
   ComputedPropertyName,
   Identifier,
   NoSubstitutionTemplateLiteral,
@@ -8,15 +8,16 @@ import ts, {
   PseudoLiteralToken,
   StringLiteral,
 } from 'typescript'
-import { Visitor, accept } from '../visitor/visitor'
+import type ts from 'typescript'
+import type { Visitor } from '../visitor/visitor'
+import { accept } from '../visitor/visitor'
 import { NotSupported } from '../errors'
-
-import { BaseContext } from './context/base-context'
+import type { VisitorContext } from './context/base-context'
 
 type ObjectNames = PropertyName | PseudoLiteralToken
 
 export class TextVisitor implements Visitor<ObjectNames, string> {
-  constructor(public context: BaseContext) {}
+  constructor(public context: VisitorContext) {}
 
   visitTemplateHead(node: ts.TemplateHead): string {
     return node.text

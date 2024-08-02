@@ -1,5 +1,5 @@
 import ts from 'typescript'
-import { TypeReflector } from './type-reflector'
+import type { TypeReflector } from './type-reflector'
 import { nodeFactory } from './node-factory'
 import { supportedBinaryOpString } from './supported-binary-op-string'
 

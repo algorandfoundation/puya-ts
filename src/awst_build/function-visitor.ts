@@ -1,46 +1,31 @@
-import { accept, Visitor } from '../visitor/visitor'
-import { SourceFileContext } from './source-file-context'
-import { ContractContext } from './contract-visitor'
+import type { Visitor } from '../visitor/visitor'
+import { accept } from '../visitor/visitor'
 import * as awst from '../awst/nodes'
 import ts from 'typescript'
 import { codeInvariant, enumerate, instanceOfAny, invariant } from '../util'
-import { getNodeName, Statements } from '../visitor/syntax-names'
+import type { Statements } from '../visitor/syntax-names'
+import { getNodeName } from '../visitor/syntax-names'
 import { AwstBuildFailureError, CodeError, InternalError, NotSupported, TodoError } from '../errors'
 import { logger } from '../logger'
 import { nodeFactory } from '../awst/node-factory'
 import { requireExpressionOfType, requireInstanceBuilder } from './eb/util'
 import { BaseVisitor } from './base-visitor'
-import { FunctionPType, ObjectPType, TransientType } from './ptypes/ptype-classes'
-import { SwitchLoopContext } from './context/switch-loop-context'
-import { Block, Goto, ReturnStatement } from '../awst/nodes'
-import { SourceLocation } from '../awst/source-location'
+import { FunctionPType, ObjectPType, TransientType } from './ptypes'
+import type { Block } from '../awst/nodes'
+import { Goto, ReturnStatement } from '../awst/nodes'
+import type { SourceLocation } from '../awst/source-location'
 import { typeRegistry } from './type-registry'
-import { InstanceBuilder } from './eb'
-import { SubContext } from './context/base-context'
+import type { InstanceBuilder } from './eb'
+import type { VisitorContext } from './context/base-context'
 
 export type ContractMethodInfo = {
   className: string
   arc4MethodConfig?: awst.ContractMethod['arc4MethodConfig']
 }
 
-export class FunctionContext extends SubContext {
-  readonly switchLoopContext: SwitchLoopContext
-
-  constructor(parent: ContractContext | SourceFileContext) {
-    super(parent, parent.nameResolver.createChild())
-    this.switchLoopContext = new SwitchLoopContext()
-  }
-
-  getDestructuredParamName(node: ts.ParameterDeclaration) {
-    const symbol = (node as { symbol?: ts.Symbol }).symbol
-    invariant(symbol, 'Param node must have symbol')
-    return this.nameResolver.resolveUniqueName('p', symbol)
-  }
-}
-
 // noinspection JSUnusedGlobalSymbols
 export class FunctionVisitor
-  extends BaseVisitor<FunctionContext>
+  extends BaseVisitor
   implements
     Visitor<ts.ParameterDeclaration, awst.SubroutineArgument>,
     Visitor<ts.Block, awst.Block>,
@@ -52,7 +37,7 @@ export class FunctionVisitor
   private readonly _functionType: FunctionPType
   private readonly _functionName: string
   constructor(
-    ctx: FunctionContext,
+    ctx: VisitorContext,
     node: ts.MethodDeclaration | ts.FunctionDeclaration | ts.ConstructorDeclaration,
     contractInfo: ContractMethodInfo | undefined,
   ) {
@@ -153,7 +138,7 @@ export class FunctionVisitor
       const sourceLocation = this.sourceLocation(p)
       if (!ts.isIdentifier(p.name)) {
         const paramPType = this.context.getPTypeForNode(p)
-        const paramName = this.context.getDestructuredParamName(p)
+        const paramName = this.context.resolveDestructuredParamName(p)
         const paramBuilder = typeRegistry.getInstanceEb(
           nodeFactory.varExpression({
             name: paramName,
@@ -228,7 +213,7 @@ export class FunctionVisitor
         }),
       ]
     }
-    using ctx = this.context.switchLoopContext.enterLoop(node, sourceLocation)
+    using ctx = this.context.switchLoopCtx.enterLoop(node, sourceLocation)
     return [
       ...init,
       nodeFactory.whileLoop({
@@ -261,7 +246,7 @@ export class FunctionVisitor
       const [declaration] = node.initializer.declarations
       items = requireInstanceBuilder(this.accept(declaration.name), sourceLocation).resolveLValue()
     }
-    using ctx = this.context.switchLoopContext.enterLoop(node, sourceLocation)
+    using ctx = this.context.switchLoopCtx.enterLoop(node, sourceLocation)
     return nodeFactory.block(
       { sourceLocation },
       nodeFactory.forInLoop({
@@ -311,7 +296,7 @@ export class FunctionVisitor
   }
   visitDoStatement(node: ts.DoStatement): awst.Statement | awst.Statement[] {
     const sourceLocation = this.sourceLocation(node)
-    using ctx = this.context.switchLoopContext.enterLoop(node, sourceLocation)
+    using ctx = this.context.switchLoopCtx.enterLoop(node, sourceLocation)
     invariant(ctx.breakTarget.label, 'Break target must have a label')
     return nodeFactory.block(
       { sourceLocation },
@@ -334,7 +319,7 @@ export class FunctionVisitor
   }
   visitWhileStatement(node: ts.WhileStatement): awst.Statement | awst.Statement[] {
     const sourceLocation = this.sourceLocation(node)
-    using ctx = this.context.switchLoopContext.enterLoop(node, sourceLocation)
+    using ctx = this.context.switchLoopCtx.enterLoop(node, sourceLocation)
 
     return nodeFactory.block(
       { sourceLocation },
@@ -351,7 +336,7 @@ export class FunctionVisitor
 
     return nodeFactory.goto({
       sourceLocation,
-      target: this.context.switchLoopContext.getContinueTarget(node.label, sourceLocation),
+      target: this.context.switchLoopCtx.getContinueTarget(node.label, sourceLocation),
     })
   }
   visitBreakStatement(node: ts.BreakStatement): awst.Statement | awst.Statement[] {
@@ -359,7 +344,7 @@ export class FunctionVisitor
 
     return nodeFactory.goto({
       sourceLocation,
-      target: this.context.switchLoopContext.getBreakTarget(node.label, sourceLocation),
+      target: this.context.switchLoopCtx.getBreakTarget(node.label, sourceLocation),
     })
   }
   visitReturnStatement(node: ts.ReturnStatement): awst.Statement | awst.Statement[] {
@@ -381,7 +366,7 @@ export class FunctionVisitor
   }
   visitSwitchStatement(node: ts.SwitchStatement): awst.Statement | awst.Statement[] {
     const sourceLocation = this.sourceLocation(node)
-    using ctx = this.context.switchLoopContext.enterSwitch(node, sourceLocation)
+    using ctx = this.context.switchLoopCtx.enterSwitch(node, sourceLocation)
 
     const subject = requireInstanceBuilder(this.accept(node.expression), sourceLocation)
     codeInvariant(subject.ptype, 'The subject of a switch statement must have a resolvable ptype', this.sourceLocation(node.expression))
@@ -475,7 +460,7 @@ export class FunctionVisitor
       codeInvariant(paramPType instanceof ObjectPType, 'Param type must be object if it is being destructured', sourceLocation)
       return nodeFactory.subroutineArgument({
         sourceLocation,
-        name: this.context.getDestructuredParamName(node),
+        name: this.context.resolveDestructuredParamName(node),
         wtype: paramPType.wtype,
       })
     } else {
@@ -487,22 +472,22 @@ export class FunctionVisitor
     return this._result
   }
 
-  public static buildSubroutine(ctx: SourceFileContext, node: ts.FunctionDeclaration): awst.Subroutine {
-    const result = new FunctionVisitor(new FunctionContext(ctx), node, undefined).result
+  public static buildSubroutine(parentCtx: VisitorContext, node: ts.FunctionDeclaration): awst.Subroutine {
+    const result = new FunctionVisitor(parentCtx.createChildContext(), node, undefined).result
     invariant(result instanceof awst.Subroutine, "result must be Subroutine'")
     return result
   }
   public static buildContractMethod(
-    ctx: ContractContext,
+    parentCtx: VisitorContext,
     node: ts.MethodDeclaration,
     contractMethodInfo: ContractMethodInfo,
   ): awst.ContractMethod {
-    const result = new FunctionVisitor(new FunctionContext(ctx), node, contractMethodInfo).result
+    const result = new FunctionVisitor(parentCtx.createChildContext(), node, contractMethodInfo).result
     invariant(result instanceof awst.ContractMethod, "result must be ContractMethod'")
     return result
   }
-  public static buildConstructor(ctx: ContractContext, node: ts.ConstructorDeclaration, contractMethodInfo: ContractMethodInfo) {
-    const result = new FunctionVisitor(new FunctionContext(ctx), node, contractMethodInfo).result
+  public static buildConstructor(parentCtx: VisitorContext, node: ts.ConstructorDeclaration, contractMethodInfo: ContractMethodInfo) {
+    const result = new FunctionVisitor(parentCtx.createChildContext(), node, contractMethodInfo).result
     invariant(result instanceof awst.ContractMethod, "result must be ContractMethod'")
     return result
   }

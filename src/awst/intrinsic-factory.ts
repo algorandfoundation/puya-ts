@@ -1,8 +1,8 @@
-import * as awst from './nodes'
+import type * as awst from './nodes'
 import * as wtypes from './wtypes'
 import { nodeFactory } from './node-factory'
-import { SourceLocation } from './source-location'
-import { DeliberateAny } from '../typescript-helpers'
+import type { SourceLocation } from './source-location'
+import type { DeliberateAny } from '../typescript-helpers'
 
 export const intrinsicFactory = {
   bytesConcat({

@@ -1,70 +1,21 @@
-import { InstanceBuilder, InstanceExpressionBuilder, NodeBuilder } from './eb'
-import { SourceLocation } from '../awst/source-location'
-import { DeliberateAny } from '../typescript-helpers'
+import type { InstanceBuilder, InstanceExpressionBuilder, NodeBuilder } from './eb'
+import type { SourceLocation } from '../awst/source-location'
+import type { DeliberateAny } from '../typescript-helpers'
 import { CodeError, InternalError, throwError } from '../errors'
-import {
-  ALL_OP_ENUMS,
-  arc4AbiMethodDecorator,
-  arc4BareMethodDecorator,
-  assertFunction,
-  AssetFunction,
-  assetPType,
-  BigUintFunction,
-  biguintPType,
-  BooleanFunction,
-  boolPType,
-  BoxFunction,
-  BytesFunction,
-  bytesPType,
-  errFunction,
-  GlobalStateFunction,
-  logFunction,
-  PType,
-  StringFunction,
-  stringPType,
-  TuplePType,
-  Uint64Function,
-  uint64PType,
-  voidPType,
-} from './ptypes'
-import { BooleanExpressionBuilder, BooleanFunctionBuilder } from './eb/boolean-expression-builder'
-import { UInt64ExpressionBuilder, UInt64FunctionBuilder } from './eb/uint64-expression-builder'
-import { BytesExpressionBuilder, BytesFunctionBuilder } from './eb/bytes-expression-builder'
-import { StringExpressionBuilder, StringFunctionBuilder } from './eb/string-expression-builder'
-import { FreeIntrinsicOpBuilder, IntrinsicOpGroupBuilder } from './eb/op-module-builder'
-import { LogFunctionBuilder } from './eb/log-function-builder'
-import { AssertFunctionBuilder, ErrFunctionBuilder } from './eb/assert-function-builder'
-import { FreeSubroutineExpressionBuilder } from './eb/free-subroutine-expression-builder'
-import { awst } from '../awst'
-import {
-  BoxPType,
-  FunctionPType,
-  GlobalStateType,
-  IntrinsicFunctionGroupType,
-  IntrinsicFunctionType,
-  NamespacePType,
-  ObjectPType,
-  UnsupportedType,
-} from './ptypes/ptype-classes'
-import { IntrinsicEnumBuilder } from './eb/intrinsic-enum-builder'
-import { OP_METADATA } from './op-metadata'
-import { GlobalStateExpressionBuilder, GlobalStateFunctionBuilder } from './eb/storage/global-state'
-import { AssetExpressionBuilder, AssetFunctionBuilder } from './eb/reference/asset'
-import { SymbolName } from './symbol-name'
-import { TupleExpressionBuilder } from './eb/tuple-expression-builder'
-import { Arc4AbiMethodDecoratorBuilder, Arc4BareMethodDecoratorBuilder } from './eb/arc4-bare-method-decorator-builder'
-import { NamespaceBuilder } from './eb/namespace-builder'
-import { VoidExpressionBuilder } from './eb/void-expression-builder'
-import { ObjectExpressionBuilder } from './eb/literal/object-literal-expression-builder'
-import { BigUintExpressionBuilder, BigUintFunctionBuilder } from './eb/biguint-expression-builder'
-import { BoxExpressionBuilder, BoxFunctionBuilder } from './eb/storage/box'
+import { PType } from './ptypes'
+import type { awst } from '../awst'
+import type { SymbolName } from './symbol-name'
 
 type ValueExpressionBuilderCtor<TPType extends PType> = { new (expr: awst.Expression, ptype: PType): InstanceExpressionBuilder<TPType> }
 type SingletonExpressionBuilderCtor = { new (sourceLocation: SourceLocation, ptype: PType): NodeBuilder }
 
 type PTypeClass = { new (...args: DeliberateAny): PType }
 type GenericPTypeClass = { new (...args: DeliberateAny): PType; get baseFullName(): string; parameterise(typeArgs: PType[]): PType }
-class TypeRegistry {
+export class TypeRegistry {
+  get hasRegistrations() {
+    return this.types.size > 0 || this.genericTypes.size > 0
+  }
+
   private readonly singletonEbs: Map<PType | PTypeClass, SingletonExpressionBuilderCtor> = new Map()
   private readonly instanceEbs: Map<PType | PTypeClass, ValueExpressionBuilderCtor<PType>> = new Map()
   private readonly types: Set<PType | PTypeClass> = new Set()
@@ -125,9 +76,9 @@ class TypeRegistry {
     const ptype = this.tryResolveInstancePType(symbolName)
     if (!ptype) {
       if (symbolName.module.startsWith('typescript/lib')) {
-        return new UnsupportedType(symbolName)
+        throw new CodeError(`${symbolName} type is not supported`, { sourceLocation })
       }
-      throw new InternalError(`Cannot resolve ptype for ${symbolName}`, {
+      throw new InternalError(`Cannot resolve ptype for symbol ${symbolName}`, {
         sourceLocation,
       })
     }
@@ -192,50 +143,6 @@ class TypeRegistry {
 }
 export const typeRegistry = new TypeRegistry()
 
-typeRegistry.register({ ptype: boolPType, instanceEb: BooleanExpressionBuilder })
-typeRegistry.register({ ptype: BooleanFunction, singletonEb: BooleanFunctionBuilder })
-typeRegistry.register({ ptype: uint64PType, instanceEb: UInt64ExpressionBuilder })
-typeRegistry.register({ ptype: Uint64Function, singletonEb: UInt64FunctionBuilder })
-typeRegistry.register({ ptype: biguintPType, instanceEb: BigUintExpressionBuilder })
-typeRegistry.register({ ptype: BigUintFunction, singletonEb: BigUintFunctionBuilder })
-typeRegistry.register({ ptype: bytesPType, instanceEb: BytesExpressionBuilder })
-typeRegistry.register({ ptype: BytesFunction, singletonEb: BytesFunctionBuilder })
-typeRegistry.register({ ptype: stringPType, instanceEb: StringExpressionBuilder })
-typeRegistry.register({ ptype: StringFunction, singletonEb: StringFunctionBuilder })
-typeRegistry.register({ ptype: logFunction, singletonEb: LogFunctionBuilder })
-typeRegistry.register({ ptype: assertFunction, singletonEb: AssertFunctionBuilder })
-typeRegistry.register({ ptype: errFunction, singletonEb: ErrFunctionBuilder })
-typeRegistry.register({ ptype: AssetFunction, singletonEb: AssetFunctionBuilder })
-typeRegistry.register({ ptype: assetPType, instanceEb: AssetExpressionBuilder })
-typeRegistry.register({ ptype: FunctionPType, singletonEb: FreeSubroutineExpressionBuilder })
-typeRegistry.register({ ptype: NamespacePType, singletonEb: NamespaceBuilder })
-typeRegistry.register({ ptype: voidPType, instanceEb: VoidExpressionBuilder })
-for (const enumPType of ALL_OP_ENUMS) {
-  typeRegistry.register({ ptype: enumPType, singletonEb: IntrinsicEnumBuilder })
+export function instanceEb(expr: awst.Expression, ptype: PType) {
+  return typeRegistry.getInstanceEb(expr, ptype)
 }
-for (const [name, metadata] of Object.entries(OP_METADATA)) {
-  if (metadata.type === 'op-grouping') {
-    typeRegistry.register({
-      ptype: new IntrinsicFunctionGroupType({
-        name,
-      }),
-      singletonEb: IntrinsicOpGroupBuilder,
-    })
-  } else {
-    typeRegistry.register({
-      ptype: new IntrinsicFunctionType({
-        name,
-      }),
-      singletonEb: FreeIntrinsicOpBuilder,
-    })
-  }
-}
-
-typeRegistry.register({ ptype: GlobalStateFunction, singletonEb: GlobalStateFunctionBuilder })
-typeRegistry.registerGeneric({ ptype: GlobalStateType, instanceEb: GlobalStateExpressionBuilder })
-typeRegistry.register({ ptype: BoxFunction, singletonEb: BoxFunctionBuilder })
-typeRegistry.registerGeneric({ ptype: BoxPType, instanceEb: BoxExpressionBuilder })
-typeRegistry.register({ ptype: TuplePType, instanceEb: TupleExpressionBuilder })
-typeRegistry.register({ ptype: arc4AbiMethodDecorator, singletonEb: Arc4AbiMethodDecoratorBuilder })
-typeRegistry.register({ ptype: arc4BareMethodDecorator, singletonEb: Arc4BareMethodDecoratorBuilder })
-typeRegistry.register({ ptype: ObjectPType, instanceEb: ObjectExpressionBuilder })

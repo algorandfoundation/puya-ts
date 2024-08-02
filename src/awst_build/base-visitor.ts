@@ -1,25 +1,29 @@
+import type { Expressions } from '../visitor/syntax-names'
 import {
   AugmentedAssignmentBinaryOp,
   AugmentedAssignmentLogicalOpSyntaxes,
   BinaryOpSyntaxes,
   ComparisonOpSyntaxes,
-  Expressions,
   getNodeName,
   getSyntaxName,
   isKeyOf,
   LogicalOpSyntaxes,
   UnaryExpressionUnaryOps,
 } from '../visitor/syntax-names'
-import { InstanceBuilder, NodeBuilder } from './eb'
+import type { InstanceBuilder } from './eb'
+import { NodeBuilder } from './eb'
 import ts from 'typescript'
 import { TextVisitor } from './text-visitor'
 import { CodeError, NotSupported, TodoError } from '../errors'
-import { SourceLocation } from '../awst/source-location'
+import type { SourceLocation } from '../awst/source-location'
 import { requireExpressionOfType, requireInstanceBuilder } from './eb/util'
-import { accept, Visitor } from '../visitor/visitor'
-import { ObjectLiteralExpressionBuilder, ObjectLiteralParts } from './eb/literal/object-literal-expression-builder'
+import type { Visitor } from '../visitor/visitor'
+import { accept } from '../visitor/visitor'
+import type { ObjectLiteralParts } from './eb/literal/object-literal-expression-builder'
+import { ObjectLiteralExpressionBuilder } from './eb/literal/object-literal-expression-builder'
 import { codeInvariant, invariant } from '../util'
-import { ContractClassPType, ObjectPType, PType } from './ptypes/ptype-classes'
+import type { PType } from './ptypes'
+import { ContractClassPType, ObjectPType } from './ptypes'
 import { ContractSuperBuilder, ContractThisBuilder } from './eb/contract-builder'
 import { StringFunctionBuilder, StringExpressionBuilder } from './eb/string-expression-builder'
 import { nodeFactory } from '../awst/node-factory'
@@ -30,15 +34,14 @@ import { typeRegistry } from './type-registry'
 import { ConditionalExpressionBuilder } from './eb/literal/conditional-expression-builder'
 import { BooleanExpressionBuilder } from './eb/boolean-expression-builder'
 import { bigintPType, boolPType, numberPType } from './ptypes'
-import { BaseContext } from './context/base-context'
-import { Expression } from '../awst/nodes'
-import nodeResolve from '@rollup/plugin-node-resolve'
+import type { VisitorContext } from './context/base-context'
+import type { Expression } from '../awst/nodes'
 
-export abstract class BaseVisitor<TContext extends BaseContext> implements Visitor<Expressions, NodeBuilder> {
-  private baseAccept = <TNode extends ts.Node>(node: TNode) => accept<BaseVisitor<BaseContext>, TNode>(this, node)
+export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
+  private baseAccept = <TNode extends ts.Node>(node: TNode) => accept<BaseVisitor, TNode>(this, node)
   readonly textVisitor: TextVisitor
 
-  protected constructor(public context: TContext) {
+  protected constructor(public context: VisitorContext) {
     this.textVisitor = new TextVisitor(context)
   }
 
