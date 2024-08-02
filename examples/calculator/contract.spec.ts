@@ -1,36 +1,29 @@
 import { internal, op, Uint64 } from '@algorandfoundation/algo-ts'
-
-import { beforeEach, describe, expect, it } from 'vitest'
-import type { AlgorandTestContext } from '../../vitest.setup'
-import type MyContract from './contract.algo'
-
-interface ContractTestContext extends AlgorandTestContext {
-  contract: MyContract
-}
-
-beforeEach<ContractTestContext>(async (context) => {
-  context.contract = new (await import('./contract.algo')).default()
-})
+import { describe, expect, it } from 'vitest'
+import { AlgorandTestContext } from '../../vitest.setup'
+import MyContract from './contract.algo'
 
 describe('Calculator', () => {
   describe('when calling with with no args', () => {
-    it<ContractTestContext>('errors', async ({ ctx, contract }) => {
+    it('errors', async ({ ctx }: AlgorandTestContext) => {
       ctx.gtxn = [
         ctx.anyApplicationCallTransaction({
           args: [],
         }),
       ]
+      const contract = new MyContract()
 
       expect(() => contract.approvalProgram()).toThrowError(new internal.errors.AvmError('Unknown operation'))
     })
   })
   describe('when calling with with three args', () => {
-    it<ContractTestContext>('Returns 1', async ({ ctx, contract }) => {
+    it('Returns 1', async ({ ctx }: AlgorandTestContext) => {
       ctx.gtxn = [
         ctx.anyApplicationCallTransaction({
           args: [op.itob(Uint64(1)), op.itob(Uint64(2)), op.itob(Uint64(3))],
         }),
       ]
+      const contract = new MyContract()
       const result = contract.approvalProgram()
       const [left, right, outcome] = ctx.exportLogs('i', 'i', 's')
 
