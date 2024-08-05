@@ -11,7 +11,22 @@ interface IConstructor<T> {
 
 const getContractProxyHandler = <T extends BaseContract>(context: TestExecutionContext): ProxyHandler<IConstructor<T>> => ({
   construct(target, args) {
-    const instance = new target(...args)
+    const instance = new Proxy(new target(...args), {
+      get(target, prop, receiver) {
+        const orig = Reflect.get(target, prop, receiver)
+        if (prop === 'approvalProgram' || prop === 'clearStateProgram') {
+          return function () {
+            try {
+              context.activeContract = target as unknown as T
+              return (orig as () => boolean | uint64).apply(target)
+            } finally {
+              context.activeContract = undefined
+            }
+          }
+        }
+        return orig
+      },
+    })
     const application = context.anyApplication()
     context.addAppIdContractMap(asBigInt(application.id), instance)
     return instance
@@ -21,6 +36,7 @@ const getContractProxyHandler = <T extends BaseContract>(context: TestExecutionC
 export class TestExecutionContext implements internal.ExecutionContext {
   #stateStore: StateStore
   #appIdIter = iterBigInt(1001n, 2n ** 64n - 1n)
+  #active_contract: BaseContract | undefined
 
   constructor() {
     internal.ctxMgr.instance = this
@@ -66,6 +82,14 @@ export class TestExecutionContext implements internal.ExecutionContext {
 
   get defaultCreator(): Account {
     return this.#stateStore.defaultCreator
+  }
+
+  get activeContract(): BaseContract | undefined {
+    return this.#active_contract
+  }
+
+  set activeContract(contract: BaseContract | undefined) {
+    this.#active_contract = contract
   }
 
   setTransactionGroup(group: gtxn.Transaction[], activeTransactionIndex?: number) {

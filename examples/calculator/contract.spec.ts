@@ -14,7 +14,7 @@ describe('Calculator', () => {
         }),
       ])
 
-      expect(() => contract.approvalProgram()).toThrowError(new internal.errors.AvmError('Unknown operation'))      
+      expect(() => contract.approvalProgram()).toThrowError(new internal.errors.AvmError('Unknown operation'))
     })
   })
   describe('when calling with with three args', () => {
@@ -26,9 +26,10 @@ describe('Calculator', () => {
           args: [op.itob(Uint64(1)), op.itob(Uint64(2)), op.itob(Uint64(3))],
         }),
       ])
+
       const result = contract.approvalProgram()
       const [left, right, outcome] = ctx.exportLogs('i', 'i', 's')
-      
+
       expect(left).toBe(2n)
       expect(right).toBe(3n)
       expect(outcome).toBe('2 + 3 = 5')
