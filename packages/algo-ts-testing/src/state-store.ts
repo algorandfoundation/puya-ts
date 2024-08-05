@@ -1,4 +1,4 @@
-import { Account, Application, Bytes, bytes, gtxn, internal } from '@algorandfoundation/algo-ts'
+import { Account, Application, BaseContract, Bytes, bytes, gtxn, internal } from '@algorandfoundation/algo-ts'
 import algosdk from 'algosdk'
 
 interface ApplicationLogs {
@@ -11,6 +11,8 @@ export class StateStore {
   txnGroup: gtxn.Transaction[] = []
   defaultCreator: Account
   activeTransactionIndex: number | undefined
+  applications = new Map<bigint, Application>()
+  appIdContractMap = new Map<bigint, BaseContract>()
 
   constructor() {
     this.defaultCreator = Account(Bytes(algosdk.generateAccount().addr))

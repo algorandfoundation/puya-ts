@@ -1,12 +1,23 @@
-import { Account, Application, bytes, gtxn, internal, Uint64 } from '@algorandfoundation/algo-ts'
+import { Account, Application, BaseContract, bytes, gtxn, internal, Uint64 } from '@algorandfoundation/algo-ts'
 import { DecodedLogs, decodeLogs, LogDecoding } from './decode-logs'
 import { StateStore } from './state-store'
 import { TestExecutionContext } from './test-execution-context'
-import { iterBigInt } from './util'
+import { DeliberateAny } from './typescript-helpers'
+import { asBigInt, iterBigInt } from './util'
 
-(function setupGlobalContext() {
-  internal.ctxMgr.instance = new TestExecutionContext()
-})()
+interface IConstructor<T> {
+  new(...args: DeliberateAny[]): T
+}
+
+const getContractProxyHandler = <T extends BaseContract>(harness: TestHarness): ProxyHandler<IConstructor<T>> => ({
+  construct(target, args) {
+    const instance = new target(...args)
+    const application = harness.anyApplication()
+    harness.addAppIdContractMap(asBigInt(application.id), instance)
+    return instance
+  },
+})
+
 export class TestHarness {
   #testExecutionContext: TestExecutionContext
   #stateStore: StateStore
@@ -29,26 +40,39 @@ export class TestHarness {
     return this.#stateStore.defaultCreator
   }
 
-  anyApplicationCallTransaction(txn: Partial<gtxn.ApplicationTxn> & { args: bytes[] }): gtxn.ApplicationTxn {
+  addAppIdContractMap(appId: bigint, contract: BaseContract): void {
+    this.#stateStore!.appIdContractMap.set(appId, contract)
+  }
+
+  getApplicationForContract(contract: BaseContract): Application {
+    for (const [appId, c] of this.#stateStore!.appIdContractMap) {
+      if (c === contract) return this.#stateStore!.applications.get(appId)!
+    }
+    throw internal.errors.internalError('Contract not found in test harness')
+  }
+
+  anyApplicationCallTransaction({ appId, args, ...rest }: Partial<gtxn.ApplicationTxn> & { args: bytes[] }): gtxn.ApplicationTxn {
     return {
       sender: this.defaultCreator,
       type: gtxn.TransactionType.ApplicationCall,
-      numAppArgs: Uint64(txn.args.length),
+      numAppArgs: Uint64(args.length),
       appId: this.anyApplication(),
       appArgs(index) {
-        return txn.args[index]
+        return args[index]
       },
-      ...txn,
+      ...rest,
     } as gtxn.ApplicationTxn
   }
 
   anyApplication(app?: Partial<Application>): Application {
     const { id, ...rest } = app ?? {}
     const appId = id ?? this.#appIdIter.next().value
-    return {
+    const application = {
       id: appId,
       ...rest,
     } as Application
+    this.#stateStore!.applications.set(asBigInt(application.id), application)
+    return application
   }
 
   exportLogs<const T extends [...LogDecoding[]]>(...decoding: T): DecodedLogs<T> {
@@ -64,5 +88,10 @@ export class TestHarness {
   reset() {
     this.#stateStore = new StateStore()
     internal.ctxMgr.reset()
+  }
+
+  create<T extends BaseContract>(type: IConstructor<T>, ...args: DeliberateAny[]): T {
+    const proxy = new Proxy(type, getContractProxyHandler<T>(this))
+    return new proxy(...args)
   }
 }
