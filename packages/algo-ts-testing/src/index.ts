@@ -1,1 +1,1 @@
-export { TestHarness } from './test-harness'
+export { TestExecutionContext } from './test-execution-context'
