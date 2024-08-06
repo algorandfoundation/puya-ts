@@ -22,8 +22,8 @@ type BinaryOps = '+' | '-' | '*' | '**' | '/' | '>' | '>=' | '<' | '<=' | '===' 
 function tryGetBigInt(value: unknown): bigint | undefined {
   if (typeof value == 'bigint') return value
   if (typeof value == 'number') return BigInt(value)
-  if (value instanceof internal.primitives.Uint64Cls) return value.valueOf()
-  if (value instanceof internal.primitives.BigUintCls) return value.valueOf()
+  if (internal.primitives.Uint64Cls.isClassOf(value)) return (value as internal.primitives.Uint64Cls).valueOf()
+  if (internal.primitives.BigUintCls.isClassOf(value)) return (value as internal.primitives.BigUintCls).valueOf()
   return undefined
 }
 
@@ -34,9 +34,9 @@ export function binaryOp(left: unknown, right: unknown, op: BinaryOps) {
     const result = defaultBinaryOp(lbi, rbi, op)
     // if result is not a number (e.g. a boolean), return as it is
     if (!tryGetBigInt(result)) return result
-    if (left instanceof internal.primitives.BigUintCls || right instanceof internal.primitives.BigUintCls) {
+    if (internal.primitives.BigUintCls.isClassOf(left) || internal.primitives.BigUintCls.isClassOf(right)) {
       return new internal.primitives.BigUintCls(result)
-    } else if (left instanceof internal.primitives.Uint64Cls || right instanceof internal.primitives.Uint64Cls) {
+    } else if (internal.primitives.Uint64Cls.isClassOf(left) || internal.primitives.Uint64Cls.isClassOf(right)) {
       return new internal.primitives.Uint64Cls(result)
     }
     return result

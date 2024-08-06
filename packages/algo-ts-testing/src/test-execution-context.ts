@@ -1,4 +1,5 @@
-import { Account, Application, Asset, BaseContract, bytes, gtxn, internal, Uint64, uint64 } from '@algorandfoundation/algo-ts'
+import { Account, Application, Asset, BaseContract, Bytes, bytes, gtxn, internal, Uint64, uint64 } from '@algorandfoundation/algo-ts'
+import algosdk from 'algosdk'
 import { DecodedLogs, decodeLogs, LogDecoding } from './decode-logs'
 import { AccountCls, ApplicationCls, AssetCls } from './reference'
 import { StateStore } from './state-store'
@@ -6,7 +7,7 @@ import { DeliberateAny } from './typescript-helpers'
 import { asBigInt, iterBigInt } from './util'
 
 interface IConstructor<T> {
-  new(...args: DeliberateAny[]): T
+  new (...args: DeliberateAny[]): T
 }
 
 const getContractProxyHandler = <T extends BaseContract>(context: TestExecutionContext): ProxyHandler<IConstructor<T>> => ({
@@ -108,9 +109,9 @@ export class TestExecutionContext implements internal.ExecutionContext {
     throw internal.errors.internalError('Contract not found in test harness')
   }
 
-  anyApplicationCallTransaction({ appId, args, ...rest }: Partial<gtxn.ApplicationTxn> & { args: bytes[] }): gtxn.ApplicationTxn {
+  anyApplicationCallTransaction({ appId, args, sender, ...rest }: Partial<gtxn.ApplicationTxn> & { args: bytes[] }): gtxn.ApplicationTxn {
     return {
-      sender: this.defaultCreator,
+      sender: sender ?? this.defaultCreator,
       type: gtxn.TransactionType.ApplicationCall,
       numAppArgs: Uint64(args.length),
       appId: appId ?? this.anyApplication(),
@@ -121,6 +122,13 @@ export class TestExecutionContext implements internal.ExecutionContext {
     } as gtxn.ApplicationTxn
   }
 
+  anyPaymentTransaction({ sender, ...rest }: Partial<gtxn.PayTxn>): gtxn.PayTxn {
+    return {
+      sender: sender ?? this.defaultCreator,
+      type: gtxn.TransactionType.Payment,
+      ...rest,
+    } as gtxn.PayTxn
+  }
   anyApplication(app?: Partial<Application>): Application {
     const { id, ...rest } = app ?? {}
     const appId = id ?? this.#appIdIter.next().value
@@ -130,6 +138,14 @@ export class TestExecutionContext implements internal.ExecutionContext {
     } as Application
     this.#stateStore.applications.set(asBigInt(application.id), application)
     return application
+  }
+
+  anyAccount(account?: Partial<Account>): Account {
+    const { bytes, ...rest } = account ?? {}
+    return {
+      bytes: bytes ?? Bytes(algosdk.generateAccount().addr),
+      ...rest,
+    } as Account
   }
 
   create<T extends BaseContract>(type: IConstructor<T>, ...args: DeliberateAny[]): T {
