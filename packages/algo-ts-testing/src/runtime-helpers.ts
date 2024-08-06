@@ -7,7 +7,7 @@ export function switchableValue(x: unknown): bigint | string | boolean {
   if (typeof x === 'boolean') return x
   if (typeof x === 'bigint') return x
   if (typeof x === 'string') return x
-  if (internal.primitives.AlgoTsPrimitiveCls.isClassOf(x)) return x.valueOf()
+  if (x instanceof internal.primitives.AlgoTsPrimitiveCls) return x.valueOf()
   internal.errors.internalError(`Cannot convert ${nameOfType(x)} to switchable value`)
 }
 // export function wrapLiteral(x: unknown) {
@@ -22,8 +22,8 @@ type BinaryOps = '+' | '-' | '*' | '**' | '/' | '>' | '>=' | '<' | '<=' | '===' 
 function tryGetBigInt(value: unknown): bigint | undefined {
   if (typeof value == 'bigint') return value
   if (typeof value == 'number') return BigInt(value)
-  if (internal.primitives.Uint64Cls.isClassOf(value)) return (value as internal.primitives.Uint64Cls).valueOf()
-  if (internal.primitives.BigUintCls.isClassOf(value)) return (value as internal.primitives.BigUintCls).valueOf()
+  if (value instanceof internal.primitives.Uint64Cls) return value.valueOf()
+  if (value instanceof internal.primitives.BigUintCls) return value.valueOf()
   return undefined
 }
 
@@ -34,9 +34,9 @@ export function binaryOp(left: unknown, right: unknown, op: BinaryOps) {
     const result = defaultBinaryOp(lbi, rbi, op)
     // if result is not a number (e.g. a boolean), return as it is
     if (!tryGetBigInt(result)) return result
-    if (internal.primitives.BigUintCls.isClassOf(left) || internal.primitives.BigUintCls.isClassOf(right)) {
+    if (left instanceof internal.primitives.BigUintCls || right instanceof internal.primitives.BigUintCls) {
       return new internal.primitives.BigUintCls(result)
-    } else if (internal.primitives.Uint64Cls.isClassOf(left) || internal.primitives.Uint64Cls.isClassOf(right)) {
+    } else if (left instanceof internal.primitives.Uint64Cls || right instanceof internal.primitives.Uint64Cls) {
       return new internal.primitives.Uint64Cls(result)
     }
     return result

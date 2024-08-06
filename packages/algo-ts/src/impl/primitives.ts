@@ -14,13 +14,13 @@ export function toExternalValue(val: bytes): Uint8Array
 export function toExternalValue(val: string): string
 export function toExternalValue(val: uint64 | biguint | bytes | string) {
   const instance = val as unknown
-  if (BytesCls.isClassOf(instance)) return (instance as BytesCls).asUint8Array()
-  if (Uint64Cls.isClassOf(instance)) return (instance as Uint64Cls).asBigInt()
-  if (BigUintCls.isClassOf(instance)) return (instance as BigUintCls).asBigInt()
+  if (instance instanceof BytesCls) return instance.asUint8Array()
+  if (instance instanceof Uint64Cls) return instance.asBigInt()
+  if (instance instanceof BigUintCls) return instance.asBigInt()
   if (typeof val === 'string') return val
 }
 export const toBytes = (val: unknown): bytes => {
-  if (AlgoTsPrimitiveCls.isClassOf(val)) return val.toBytes().asAlgoTs()
+  if (val instanceof AlgoTsPrimitiveCls) return val.toBytes().asAlgoTs()
 
   switch (typeof val) {
     case 'string':
@@ -36,7 +36,7 @@ export const toBytes = (val: unknown): bytes => {
 
 export const isBytes = (v: unknown): v is StubBytesCompat => {
   if (typeof v === 'string') return true
-  if (BytesCls.isClassOf(v)) return true
+  if (v instanceof BytesCls) return true
   return v instanceof Uint8Array
 }
 
@@ -44,11 +44,11 @@ export const isUint64 = (v: unknown): v is StubUint64Compat => {
   if (typeof v == 'boolean') return true
   if (typeof v == 'number') return true
   if (typeof v == 'bigint') return true
-  return Uint64Cls.isClassOf(v)
+  return v instanceof Uint64Cls
 }
 
 export const isBigUint = (v: unknown): v is biguint => {
-  return BigUintCls.isClassOf(v)
+  return v instanceof BigUintCls
 }
 
 export const checkUint64 = (v: bigint): bigint => {
@@ -69,9 +69,10 @@ export abstract class AlgoTsPrimitiveCls {
     this._type = `${AlgoTsPrimitiveCls.name}.${t}`
   }
 
-  static isClassOf(x: unknown): x is AlgoTsPrimitiveCls {
+  static [Symbol.hasInstance](x: unknown): x is AlgoTsPrimitiveCls {
     return x instanceof Object && '_type' in x && (x as { _type: string })['_type'].startsWith(AlgoTsPrimitiveCls.name)
   }
+
   abstract valueOf(): bigint | string | boolean
   abstract toBytes(): BytesCls
 }
@@ -83,14 +84,14 @@ export class Uint64Cls extends AlgoTsPrimitiveCls {
     this.value = BigInt(value)
     checkUint64(this.value)
   }
-  static isClassOf(x: unknown): x is Uint64Cls {
+  static [Symbol.hasInstance](x: unknown): x is Uint64Cls {
     return x instanceof Object && '_type' in x && (x as { _type: string })['_type'].endsWith(Uint64Cls.name)
   }
   static fromCompat(v: StubUint64Compat): Uint64Cls {
     if (typeof v == 'boolean') return new Uint64Cls(v ? 1n : 0n)
     if (typeof v == 'number') return new Uint64Cls(BigInt(v))
     if (typeof v == 'bigint') return new Uint64Cls(v)
-    if (Uint64Cls.isClassOf(v)) return v
+    if (v instanceof Uint64Cls) return v
     internalError(`Cannot convert ${v} to uint64`)
   }
 
@@ -147,14 +148,14 @@ export class BigUintCls extends AlgoTsPrimitiveCls {
     }
     return Number(this.value)
   }
-  static isClassOf(x: unknown): x is BigUintCls {
+  static [Symbol.hasInstance](x: unknown): x is BigUintCls {
     return x instanceof Object && '_type' in x && (x as { _type: string })['_type'].endsWith(BigUintCls.name)
   }
   static fromCompat(v: StubBigUintCompat): BigUintCls {
     if (typeof v == 'boolean') return new BigUintCls(v ? 1n : 0n)
     if (typeof v == 'number') return new BigUintCls(BigInt(v))
     if (typeof v == 'bigint') return new BigUintCls(v)
-    if (BigUintCls.isClassOf(v)) return v
+    if (v instanceof BigUintCls) return v
     internalError(`Cannot convert ${nameOfType(v)} to BigUint`)
   }
 }
@@ -174,13 +175,13 @@ export class BytesCls extends AlgoTsPrimitiveCls {
     return this
   }
   at(i: StubUint64Compat): BytesCls {
-    const start = Uint64Cls.isClassOf(i) ? i.asNumber() : Uint64Cls.fromCompat(i).asNumber()
+    const start = i instanceof Uint64Cls ? i.asNumber() : Uint64Cls.fromCompat(i).asNumber()
     return new BytesCls(this.#v.slice(start, start + 1))
   }
 
   slice(start: StubUint64Compat, end: StubUint64Compat): BytesCls {
-    const startNumber = Uint64Cls.isClassOf(start) ? start.asNumber() : start
-    const endNumber = Uint64Cls.isClassOf(end) ? end.asNumber() : end
+    const startNumber = start instanceof Uint64Cls ? start.asNumber() : start
+    const endNumber = end instanceof Uint64Cls ? end.asNumber() : end
     const sliced = arrayUtil.arraySlice(this.#v, startNumber, endNumber)
     return new BytesCls(sliced)
   }
@@ -197,14 +198,14 @@ export class BytesCls extends AlgoTsPrimitiveCls {
     return uint8ArrayToUtf8(this.#v)
   }
 
-  static isClassOf(x: unknown): x is BytesCls {
+  static [Symbol.hasInstance](x: unknown): x is BytesCls {
     return x instanceof Object && '_type' in x && (x as { _type: string })['_type'].endsWith(BytesCls.name)
   }
 
   static fromCompat(v: StubBytesCompat | undefined): BytesCls {
     if (v === undefined) return new BytesCls(new Uint8Array())
     if (typeof v === 'string') return new BytesCls(utf8ToUint8Array(v))
-    if (BytesCls.isClassOf(v)) return v
+    if (v instanceof BytesCls) return v
     if (v instanceof Uint8Array) return new BytesCls(v)
     internalError(`Cannot convert ${nameOfType(v)} to bytes`)
   }
