@@ -1,3 +1,4 @@
+import { GlobalStateCls, LocalStateMapCls } from './impl/state'
 import { bytes } from './primitives'
 import { Account } from './reference'
 
@@ -9,22 +10,19 @@ export type GlobalState<ValueType> = {
 }
 
 /** A single key in global state */
-export function GlobalState<ValueType>(options?: { key?: bytes | string; initialValue?: ValueType }): GlobalState<ValueType> {
-  return undefined as unknown as GlobalState<ValueType>
+export function GlobalState<ValueType>(options?: { key?: bytes; initialValue?: ValueType }): GlobalState<ValueType> {
+  return new GlobalStateCls(options?.key, options?.initialValue)
 }
 
 /** A value saved in local state */
-export type LocalStateForAccount<ValueType> = {
+declare type LocalState<ValueType> = {
   value: ValueType
   hasValue: boolean
   delete: () => void
 }
 
-export type LocalState<ValueType> = {
-  (account: Account): LocalStateForAccount<ValueType>
-}
-
 /** A single key in local state */
-export function LocalState<ValueType>(options?: { key?: bytes | string }): LocalState<ValueType> {
-  return undefined as unknown as LocalState<ValueType>
+export function LocalState<ValueType>(options?: { key?: bytes }): (account: Account) => LocalState<ValueType> {
+  const map = new LocalStateMapCls<ValueType>(options?.key)
+  return map.getValue.bind(map)
 }
