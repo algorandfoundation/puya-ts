@@ -22,7 +22,7 @@ export abstract class LiteralExpressionBuilder extends InstanceBuilder {
 
   private throwInvalidExpression(): never {
     if (this.ptype instanceof TransientType) throw new CodeError(this.ptype.expressionMessage, { sourceLocation: this.sourceLocation })
-    throw new CodeError('Hmmm')
+    throw new CodeError(`Invalid expression type ${this.ptype}`, { sourceLocation: this.sourceLocation })
   }
 
   compare(other: InstanceBuilder, op: BuilderComparisonOp, sourceLocation: SourceLocation): InstanceBuilder {

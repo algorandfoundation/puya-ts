@@ -264,6 +264,15 @@ export function isAppStorageType(ptype: PType): ptype is AppStorageType {
   return ptype instanceof GlobalStateType || ptype instanceof LocalStateType
 }
 
+export class AnyPType extends PType {
+  get wtype(): never {
+    throw new CodeError('`any` is not valid as a variable, parameter, return, or property type.')
+  }
+  readonly name = 'any'
+  readonly module = 'lib.d.ts'
+  readonly singleton = false
+}
+
 export class InstanceType extends PType {
   readonly wtype: wtypes.WType
   readonly name: string
@@ -361,16 +370,19 @@ export class TuplePType extends PType {
     return `${this.module}::Tuple<${this.items.map((i) => i.fullName).join(', ')}>`
   }
 
-  readonly wtype: WTuple
   readonly items: PType[]
   readonly singleton = false
-
+  readonly immutable: boolean
   constructor(props: { items: PType[]; immutable: boolean }) {
     super()
     this.items = props.items
-    this.wtype = new WTuple({
-      items: props.items.map((i) => i.wtypeOrThrow),
-      immutable: props.immutable,
+    this.immutable = props.immutable
+  }
+
+  get wtype(): WTuple {
+    return new WTuple({
+      items: this.items.map((i) => i.wtypeOrThrow),
+      immutable: this.immutable,
     })
   }
 }
@@ -381,7 +393,7 @@ export class ArrayPType extends PType {
   readonly singleton = false
 
   get name() {
-    return `Array<${this.itemType.name}`
+    return `Array<${this.itemType.name}>`
   }
   get fullName() {
     return `${this.module}::Array<${this.itemType.fullName}>`
@@ -444,10 +456,11 @@ export const nullPType = new UnsupportedType({
   name: 'null',
   module: 'lib.d.ts',
 })
-export const anyPType = new UnsupportedType({
-  name: 'any',
+export const undefinedPType = new UnsupportedType({
+  name: 'undefined',
   module: 'lib.d.ts',
 })
+export const anyPType = new AnyPType()
 
 export const boolPType = new InstanceType({
   name: 'boolean',

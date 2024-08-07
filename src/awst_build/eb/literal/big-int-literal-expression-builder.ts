@@ -24,6 +24,10 @@ export class BigIntLiteralExpressionBuilder extends LiteralExpressionBuilder {
   get ptype(): PType {
     return this._ptype
   }
+  singleEvaluation(): InstanceBuilder {
+    return this
+  }
+
   private readonly _ptype: PType
   constructor(
     public readonly value: bigint,

@@ -20,6 +20,7 @@ export interface VisitorContext {
   getPTypeForNode(node: ts.Node): PType
   resolveVariableName(node: ts.Identifier): string
   resolveDestructuredParamName(node: ts.ParameterDeclaration): string
+  generateDiscardedVarName(): string
   addConstant(name: string, value: awst.Constant): void
   get evaluationCtx(): EvaluationContext
   get switchLoopCtx(): SwitchLoopContext
@@ -66,6 +67,9 @@ class VisitorContextImpl implements VisitorContext {
     const symbol = (node as { symbol?: ts.Symbol }).symbol
     invariant(symbol, 'Param node must have symbol')
     return this.nameResolver.resolveUniqueName('p', symbol)
+  }
+  generateDiscardedVarName() {
+    return this.nameResolver.resolveUniqueName('_', undefined)
   }
   resolveVariableName(node: ts.Identifier) {
     codeInvariant(ts.isIdentifier(node), 'Only basic identifiers supported for now')

@@ -1,0 +1,20 @@
+subroutine test(): void
+{
+  var a: uint64 = (#se0 = produceItems()).0
+  var b: bytes = #se0.1
+  var c: bool = #se0.2
+  var d: biguint = #se0.3
+  var e: biguint = (#se1 = produceItems()).3
+  var f: tuple[uint64, bytes, bool, biguint] = (#se2 = <tuple>[g, _, _₁, i] = produceItems())
+}
+subroutine produceItems(): tuple[uint64, bytes, bool, biguint]
+{
+  return <tuple>[1, "", False, 999]
+}
+subroutine testLiteralToLiteral(): void
+{
+  var a: uint64 = 4
+  var b: uint64 = 1
+  var e: uint64 = (#se3 = <tuple>[c, d] = <tuple>[a, b]).0
+  var f: uint64 = #se3.1
+}
