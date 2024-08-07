@@ -13,6 +13,8 @@ export class StateStore {
   activeTransactionIndex: number | undefined
   applications = new Map<bigint, Application>()
   appIdContractMap = new Map<bigint, BaseContract>()
+  appGlobalStateMap = new Map<bigint, Map<bytes, internal.state.GlobalStateCls<unknown>>>()
+  appIdLocalStateMap = new Map<bigint, Map<bytes, internal.state.LocalStateMapCls<unknown>>>()
 
   constructor() {
     this.defaultCreator = Account(Bytes(algosdk.generateAccount().addr))

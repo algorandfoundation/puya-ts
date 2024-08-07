@@ -3,10 +3,16 @@ import { Account } from '../reference'
 import { AssertError } from './errors'
 
 export class GlobalStateCls<ValueType> {
+  private readonly _type: string = GlobalStateCls.name
+
   #value: ValueType | undefined
   key: bytes | undefined
   delete: () => void = () => {
     this.#value = undefined
+  }
+
+  static [Symbol.hasInstance](x: unknown): x is GlobalStateCls<unknown> {
+    return x instanceof Object && '_type' in x && (x as { _type: string })['_type'] === GlobalStateCls.name
   }
 
   get value(): ValueType {
@@ -53,11 +59,6 @@ export class LocalStateCls<ValueType> {
 
 export class LocalStateMapCls<ValueType> {
   #value = new Map<bytes, LocalStateCls<ValueType>>()
-  key: bytes | undefined
-
-  constructor(key?: bytes) {
-    this.key = key
-  }
 
   getValue(account: Account): LocalStateCls<ValueType> {
     if (!this.#value.has(account.bytes)) {

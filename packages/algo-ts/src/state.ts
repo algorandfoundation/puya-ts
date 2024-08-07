@@ -23,6 +23,10 @@ declare type LocalState<ValueType> = {
 
 /** A single key in local state */
 export function LocalState<ValueType>(options?: { key?: bytes }): (account: Account) => LocalState<ValueType> {
-  const map = new LocalStateMapCls<ValueType>(options?.key)
-  return map.getValue.bind(map)
+  function localStateInternal(account: Account): LocalState<ValueType> {
+    return localStateInternal.map.getValue(account)
+  }
+  localStateInternal.key = options?.key
+  localStateInternal.map = new LocalStateMapCls<ValueType>()
+  return localStateInternal
 }
