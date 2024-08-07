@@ -10,16 +10,39 @@ interface IConstructor<T> {
   new (...args: DeliberateAny[]): T
 }
 
-const extractStatesIntoContext = (context: TestExecutionContext, contract: BaseContract, appId: uint64) => {
+type StateTotals = Pick<Application, 'globalNumBytes' | 'globalNumUint' | 'localNumBytes' | 'localNumUint'>
+
+interface States {
+  globalStates: Map<bytes, internal.state.GlobalStateCls<unknown>>
+  localStates: Map<bytes, internal.state.LocalStateMapCls<unknown>>
+  totals: StateTotals
+}
+
+const extractStates = (contract: BaseContract): States => {
+  const stateTotals = { globalNumBytes: 0, globalNumUint: 0, localNumBytes: 0, localNumUint: 0 }
+  const states = {
+    globalStates: new Map<bytes, internal.state.GlobalStateCls<unknown>>(),
+    localStates: new Map<bytes, internal.state.LocalStateMapCls<unknown>>(),
+    totals: stateTotals,
+  }
   Object.entries(contract).forEach(([key, value]) => {
     if (value instanceof Function && value.name === 'localStateInternal') {
       if (value.key === undefined) value.key = Bytes(key)
-      context.pushLocalState(appId, value.key, value.map)
+      states.localStates.set(value.key, value.map)
+
+      const isUint = value.map._type.toLowerCase().startsWith('uint64')
+      stateTotals.localNumBytes += isUint ? 0 : 1
+      stateTotals.localNumUint += isUint ? 1 : 0
     } else if (value instanceof internal.state.GlobalStateCls) {
       if (value.key === undefined) value.key = Bytes(key)
-      context.pushGlobalState(appId, value.key, value)
+      states.globalStates.set(value.key, value)
+
+      const isUint = (value as DeliberateAny)._type.toLowerCase().startsWith('uint64')
+      stateTotals.globalNumBytes += isUint ? 0 : 1
+      stateTotals.globalNumUint += isUint ? 1 : 0
     }
   })
+  return states
 }
 
 const getContractProxyHandler = <T extends BaseContract>(context: TestExecutionContext): ProxyHandler<IConstructor<T>> => ({
@@ -40,9 +63,17 @@ const getContractProxyHandler = <T extends BaseContract>(context: TestExecutionC
         return orig
       },
     })
-    const application = context.anyApplication()
+    const states = extractStates(instance)
+    const application = context.anyApplication({
+      ...states.totals,
+    })
     context.addAppIdContractMap(application.id, instance)
-    extractStatesIntoContext(context, instance, application.id)
+    states.globalStates.forEach((value, key) => {
+      context.pushGlobalState(application.id, key, value)
+    })
+    states.localStates.forEach((value, key) => {
+      context.pushLocalState(application.id, key, value)
+    })
     return instance
   },
 })
