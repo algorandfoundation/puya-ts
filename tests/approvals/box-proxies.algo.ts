@@ -7,6 +7,21 @@ function testBox(box: Box<string>, value: string) {
   boxA.value = value
 
   assert(box.value === boxA.value)
+
+  assert(box.exists && boxA.exists)
+
+  box.delete()
+  boxA.delete()
+  assert(!box.exists && !boxA.exists)
+
+  const defaultVal = 'O'
+  assert(boxA.get({ default: defaultVal }) === box.get({ default: defaultVal }))
+
+  let [, e] = box.maybe()
+  assert(!e)
+  box.value = value
+  ;[, e] = box.maybe()
+  assert(e)
 }
 
 const boxMap = BoxMap<string, bytes>({ keyPrefix: '' })

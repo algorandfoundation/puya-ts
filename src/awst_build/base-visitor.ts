@@ -36,6 +36,7 @@ import { BooleanExpressionBuilder } from './eb/boolean-expression-builder'
 import { bigintPType, boolPType, numberPType } from './ptypes'
 import type { VisitorContext } from './context/base-context'
 import type { Expression } from '../awst/nodes'
+import { OmittedExpressionBuilder } from './eb/omitted-expression-builder'
 
 export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   private baseAccept = <TNode extends ts.Node>(node: TNode) => accept<BaseVisitor, TNode>(this, node)
@@ -417,7 +418,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   }
 
   visitOmittedExpression(node: ts.OmittedExpression): NodeBuilder {
-    throw new TodoError('OmittedExpression')
+    return new OmittedExpressionBuilder(this.context.getSourceLocation(node))
   }
 
   visitExpressionWithTypeArguments(node: ts.ExpressionWithTypeArguments): NodeBuilder {
@@ -432,11 +433,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
     throw new TodoError('NonNullExpression')
   }
 
-  visitSyntheticExpression(node: ts.SyntheticExpression): NodeBuilder {
-    throw new TodoError('SyntheticExpression')
-  }
-
   visitSatisfiesExpression(node: ts.SatisfiesExpression): NodeBuilder {
-    throw new TodoError('SatisfiesExpression')
+    return this.baseAccept(node.expression)
   }
 }

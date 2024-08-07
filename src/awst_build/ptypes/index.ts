@@ -231,20 +231,20 @@ export class BoxMapPType extends StorageProxyPType {
   static readonly baseFullName = `${Constants.boxModuleName}::${BoxMapPType.baseName}`
   readonly module: string = Constants.boxModuleName
   get name() {
-    return `${BoxMapPType.baseName}<${this.keyPrefixType.name}, ${this.contentType.name}>`
+    return `${BoxMapPType.baseName}<${this.keyType.name}, ${this.contentType.name}>`
   }
   get fullName() {
-    return `${BoxMapPType.baseFullName}<${this.keyPrefixType.name}, ${this.contentType.fullName}>`
+    return `${BoxMapPType.baseFullName}<${this.keyType.name}, ${this.contentType.fullName}>`
   }
-  readonly keyPrefixType: PType
-  constructor(props: { content: PType; keyPrefix: PType }) {
+  readonly keyType: PType
+  constructor(props: { content: PType; keyType: PType }) {
     super({ ...props, keyWType: wtypes.boxKeyWType })
-    this.keyPrefixType = props.keyPrefix
+    this.keyType = props.keyType
   }
   static parameterise(typeArgs: PType[]): BoxMapPType {
     codeInvariant(typeArgs.length === 2, `${BoxMapPType.baseName} type expects exactly two type parameters`)
     return new BoxMapPType({
-      keyPrefix: typeArgs[0],
+      keyType: typeArgs[0],
       content: typeArgs[1],
     })
   }
@@ -361,7 +361,7 @@ export class TuplePType extends PType {
     return `${this.module}::Tuple<${this.items.map((i) => i.fullName).join(', ')}>`
   }
 
-  readonly wtype: WType
+  readonly wtype: WTuple
   readonly items: PType[]
   readonly singleton = false
 

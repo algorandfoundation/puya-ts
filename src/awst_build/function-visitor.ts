@@ -10,13 +10,14 @@ import { logger } from '../logger'
 import { nodeFactory } from '../awst/node-factory'
 import { requireExpressionOfType, requireInstanceBuilder } from './eb/util'
 import { BaseVisitor } from './base-visitor'
-import { FunctionPType, ObjectPType, TransientType } from './ptypes'
+import { FunctionPType, numberPType, ObjectPType, TransientType } from './ptypes'
 import type { Block } from '../awst/nodes'
 import { Goto, ReturnStatement } from '../awst/nodes'
 import type { SourceLocation } from '../awst/source-location'
 import { typeRegistry } from './type-registry'
 import type { InstanceBuilder } from './eb'
 import type { VisitorContext } from './context/base-context'
+import { BigIntLiteralExpressionBuilder } from './eb/literal/big-int-literal-expression-builder'
 
 export type ContractMethodInfo = {
   className: string
@@ -93,9 +94,6 @@ export class FunctionVisitor
       case ts.SyntaxKind.ObjectBindingPattern: {
         for (const element of bindingName.elements) {
           const sourceLocation = this.sourceLocation(element)
-          if (!ts.isIdentifier(element.name)) {
-            element.propertyName
-          }
 
           const propertyNameIdentifier = element.propertyName ?? element.name
           invariant(ts.isIdentifier(propertyNameIdentifier), 'propertyName must be an identifier')
@@ -112,7 +110,19 @@ export class FunctionVisitor
         break
       }
       case ts.SyntaxKind.ArrayBindingPattern: {
-        logger.warn(sourceLocation, 'TODO: Array binding patterns')
+        for (const [index, element] of enumerate(bindingName.elements)) {
+          if (ts.isOmittedExpression(element)) continue
+          const sourceLocation = this.context.getSourceLocation(element)
+          codeInvariant(!element.dotDotDotToken, 'Spread operator is not supported', sourceLocation)
+          yield* this.bindingNameAssignment(
+            element.name,
+            requireInstanceBuilder(
+              source.indexAccess(new BigIntLiteralExpressionBuilder(BigInt(index), numberPType, sourceLocation), sourceLocation),
+              sourceLocation,
+            ),
+            sourceLocation,
+          )
+        }
         break
       }
 
@@ -131,7 +141,6 @@ export class FunctionVisitor
         throw new InternalError('Unhandled binding name', { sourceLocation })
     }
   }
-
   evaluateParameterBindingExpressions(parameters: Iterable<ts.ParameterDeclaration>, sourceLocation: SourceLocation): awst.Statement[] {
     const assignments: awst.Statement[] = []
     for (const p of parameters) {
