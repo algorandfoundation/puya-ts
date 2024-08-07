@@ -218,7 +218,11 @@ export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, Statemen
     throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
   }
   visitStateGet(expression: nodes.StateGet): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    return `STATE_GET(${expression.field.accept(this)}, default=${expression.default.accept(this)}`
+  }
+
+  visitStateDelete(statement: nodes.StateDelete): string {
+    return `STATE_DEL(${statement.field.accept(this)})`
   }
   visitStateGetEx(expression: nodes.StateGetEx): string {
     throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
@@ -276,9 +280,6 @@ export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, Statemen
       ...indent(statement.loopBody.accept(this)),
       '}',
     ]
-  }
-  visitStateDelete(statement: nodes.StateDelete): string[] {
-    throw new TodoError('Method not implemented.', { sourceLocation: statement.sourceLocation })
   }
   visitConstantDeclaration(moduleStatement: nodes.ConstantDeclaration): string[] {
     return [`${moduleStatement.name} = ${printConstant(moduleStatement.value)}`]

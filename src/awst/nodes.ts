@@ -1071,13 +1071,14 @@ export class StateExists extends Expression {
     return visitor.visitStateExists(this)
   }
 }
-export class StateDelete extends Statement {
+export class StateDelete extends Expression {
   constructor(props: Props<StateDelete>) {
     super(props)
     this.field = props.field
+    this.wtype = props.wtype
   }
   field: AppStateExpression | AppAccountStateExpression | BoxValueExpression
-  accept<T>(visitor: StatementVisitor<T>): T {
+  accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitStateDelete(this)
   }
 }
@@ -1448,6 +1449,7 @@ export interface ExpressionVisitor<T> {
   visitStateGet(expression: StateGet): T
   visitStateGetEx(expression: StateGetEx): T
   visitStateExists(expression: StateExists): T
+  visitStateDelete(expression: StateDelete): T
   visitNewStruct(expression: NewStruct): T
   visitCompiledContract(expression: CompiledContract): T
   visitCompiledLogicSig(expression: CompiledLogicSig): T
@@ -1467,7 +1469,6 @@ export interface StatementVisitor<T> {
   visitBigUIntAugmentedAssignment(statement: BigUIntAugmentedAssignment): T
   visitBytesAugmentedAssignment(statement: BytesAugmentedAssignment): T
   visitForInLoop(statement: ForInLoop): T
-  visitStateDelete(statement: StateDelete): T
 }
 export interface ModuleStatementVisitor<T> {
   visitConstantDeclaration(moduleStatement: ConstantDeclaration): T

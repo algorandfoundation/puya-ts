@@ -480,7 +480,6 @@ export type Expressions =
   | ts.ExpressionWithTypeArguments
   | ts.AsExpression
   | ts.NonNullExpression
-  | ts.SyntheticExpression
   | ts.SatisfiesExpression
   | PrimaryExpressions
   | LeftHandSideExpression

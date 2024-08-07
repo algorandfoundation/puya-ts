@@ -179,6 +179,8 @@ export abstract class FunctionBuilder extends NodeBuilder {
   constructor(location: SourceLocation) {
     super(location)
   }
+
+  abstract call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder
 }
 
 export abstract class ParameterlessFunctionBuilder extends FunctionBuilder {

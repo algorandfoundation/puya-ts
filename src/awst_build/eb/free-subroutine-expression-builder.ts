@@ -4,11 +4,11 @@ import type { SourceLocation } from '../../awst/source-location'
 import type { PType } from '../ptypes'
 import { InternalError } from '../../errors'
 import { nodeFactory } from '../../awst/node-factory'
-import { parseTypeArgs, requireExpressionOfType } from './util'
 import { typeRegistry } from '../type-registry'
 import type { ContractClassPType } from '../ptypes'
 import { FunctionPType } from '../ptypes'
 import type { BaseClassSubroutineTarget, FreeSubroutineTarget, InstanceSubroutineTarget } from '../../awst/nodes'
+import { parseFunctionArgs } from './util/arg-parsing'
 
 abstract class SubroutineExpressionBuilder extends FunctionBuilder {
   protected constructor(
@@ -23,17 +23,20 @@ abstract class SubroutineExpressionBuilder extends FunctionBuilder {
     return this._ptype
   }
 
-  call(args: ReadonlyArray<InstanceBuilder>, _typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
-    parseTypeArgs(_typeArgs, sourceLocation, this._ptype.name, 0)
-
-    const mappedArgs = args.map((a, i) =>
-      nodeFactory.callArg({ name: undefined, value: requireExpressionOfType(a, this.ptype.parameters[i][1], a.sourceLocation) }),
-    )
+  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
+    const { args: mappedArgs } = parseFunctionArgs({
+      args,
+      typeArgs,
+      funcName: this.ptype.name,
+      callLocation: sourceLocation,
+      genericTypeArgs: 0,
+      argMap: this.ptype.parameters.map(([_, ptype]) => [ptype]),
+    })
 
     return typeRegistry.getInstanceEb(
       nodeFactory.subroutineCallExpression({
         target: this.target,
-        args: mappedArgs,
+        args: mappedArgs.map((a) => nodeFactory.callArg({ name: undefined, value: a })),
         sourceLocation: sourceLocation,
         wtype: this.ptype.returnType.wtypeOrThrow,
       }),
