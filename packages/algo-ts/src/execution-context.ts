@@ -8,6 +8,7 @@ export type ExecutionContext = {
   asset(id: uint64 | undefined): Asset
   account(address: bytes | undefined): Account
   currentTransaction: Transaction
+  currentTransactionGroup: Transaction[]
 }
 
 declare global {
