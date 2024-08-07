@@ -10,13 +10,25 @@ interface IConstructor<T> {
   new (...args: DeliberateAny[]): T
 }
 
+const extractStatesIntoContext = (context: TestExecutionContext, contract: BaseContract, appId: uint64) => {
+  Object.entries(contract).forEach(([key, value]) => {
+    if (value instanceof Function && value.name === 'localStateInternal') {
+      if (value.key === undefined) value.key = Bytes(key)
+      context.pushLocalState(appId, value.key, value.map)
+    } else if (value instanceof internal.state.GlobalStateCls) {
+      if (value.key === undefined) value.key = Bytes(key)
+      context.pushGlobalState(appId, value.key, value)
+    }
+  })
+}
+
 const getContractProxyHandler = <T extends BaseContract>(context: TestExecutionContext): ProxyHandler<IConstructor<T>> => ({
   construct(target, args) {
     const instance = new Proxy(new target(...args), {
       get(target, prop, receiver) {
         const orig = Reflect.get(target, prop, receiver)
         if (prop === 'approvalProgram' || prop === 'clearStateProgram') {
-          return function () {
+          return () => {
             try {
               context.activeContract = target as unknown as T
               return (orig as () => boolean | uint64).apply(target)
@@ -29,7 +41,8 @@ const getContractProxyHandler = <T extends BaseContract>(context: TestExecutionC
       },
     })
     const application = context.anyApplication()
-    context.addAppIdContractMap(asBigInt(application.id), instance)
+    context.addAppIdContractMap(application.id, instance)
+    extractStatesIntoContext(context, instance, application.id)
     return instance
   },
 })
@@ -98,8 +111,24 @@ export class TestExecutionContext implements internal.ExecutionContext {
     this.#stateStore.activeTransactionIndex = activeTransactionIndex ?? (group.length === 1 ? 0 : undefined)
   }
 
-  addAppIdContractMap(appId: bigint, contract: BaseContract): void {
-    this.#stateStore.appIdContractMap.set(appId, contract)
+  pushLocalState(appId: bigint | uint64, key: bytes, value: internal.state.LocalStateMapCls<unknown>) {
+    const appIdBigInt = asBigInt(appId)
+    if (!this.#stateStore.appIdLocalStateMap.has(appIdBigInt)) {
+      this.#stateStore.appIdLocalStateMap.set(appIdBigInt, new Map())
+    }
+    this.#stateStore.appIdLocalStateMap.get(appIdBigInt)!.set(key, value)
+  }
+
+  pushGlobalState(appId: bigint | uint64, key: bytes, value: internal.state.GlobalStateCls<unknown>) {
+    const appIdBigInt = asBigInt(appId)
+    if (!this.#stateStore.appGlobalStateMap.has(appIdBigInt)) {
+      this.#stateStore.appGlobalStateMap.set(appIdBigInt, new Map())
+    }
+    this.#stateStore.appGlobalStateMap.get(appIdBigInt)!.set(key, value)
+  }
+
+  addAppIdContractMap(appId: bigint | uint64, contract: BaseContract): void {
+    this.#stateStore.appIdContractMap.set(asBigInt(appId), contract)
   }
 
   getApplicationForContract(contract: BaseContract): Application {
