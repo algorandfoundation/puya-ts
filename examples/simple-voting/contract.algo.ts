@@ -2,9 +2,9 @@ import type { Account, bytes, uint64 } from '@algorandfoundation/algo-ts'
 import { BaseContract, Bytes, GlobalState, LocalState, op, Uint64 } from '@algorandfoundation/algo-ts'
 
 export default class SimpleVotingContract extends BaseContract {
-  topic = GlobalState<bytes>({ initialValue: Bytes('default_topic'), key: Bytes('topic') })
-  votes = GlobalState<uint64>({ initialValue: Uint64(0), key: Bytes('votes') })
-  voted = LocalState<uint64>({ key: Bytes('voted') })
+  topic = GlobalState({ initialValue: Bytes('default_topic'), key: Bytes('topic') })
+  votes = GlobalState({ initialValue: Uint64(0), key: Bytes('votes') })
+  voted = LocalState(Uint64)
 
   public approvalProgram(): uint64 {
     switch (op.Txn.applicationArgs(0)) {
