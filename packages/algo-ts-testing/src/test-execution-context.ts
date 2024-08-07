@@ -137,6 +137,10 @@ export class TestExecutionContext implements internal.ExecutionContext {
     this.#active_contract = contract
   }
 
+  get currentTransactionGroup() {
+    return this.#stateStore.txnGroup
+  }
+
   setTransactionGroup(group: gtxn.Transaction[], activeTransactionIndex?: number) {
     this.#stateStore.txnGroup = group
     this.#stateStore.activeTransactionIndex = activeTransactionIndex ?? (group.length === 1 ? 0 : undefined)

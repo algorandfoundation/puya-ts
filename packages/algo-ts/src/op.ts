@@ -1,9 +1,9 @@
 import { ctxMgr } from './execution-context'
 import { BytesCls, StubBytesCompat, StubUint64Compat, Uint64Cls } from './impl/primitives'
-import { BtoiType, Ed25519verifyBareType, GlobalType, ItobType, TxnType } from './op-types'
+import { BtoiType, Ed25519verifyBareType, GlobalType, GTxnType, ItobType, TxnType } from './op-types'
 import { Bytes, bytes, Uint64, uint64 } from './primitives'
 import { Account, Application, Asset } from './reference'
-import { TransactionType } from './transactions'
+import { PayTxn, TransactionType } from './transactions'
 
 export const btoi: BtoiType = (bytes: StubBytesCompat): uint64 => {
   return BytesCls.fromCompat(bytes).toUint64().asAlgoTs()
@@ -11,7 +11,214 @@ export const btoi: BtoiType = (bytes: StubBytesCompat): uint64 => {
 export const itob: ItobType = (value: StubUint64Compat): bytes => {
   return Uint64Cls.fromCompat(value).toBytes().asAlgoTs()
 }
-
+export const GTxn: GTxnType = {
+  sender(t: uint64): Account {
+    throw new Error('TODO')
+  },
+  fee(t: uint64): uint64 {
+    throw new Error('TODO')
+  },
+  firstValid(t: uint64): uint64 {
+    throw new Error('TODO')
+  },
+  firstValidTime(t: uint64): uint64 {
+    throw new Error('TODO')
+  },
+  lastValid(t: uint64): uint64 {
+    throw new Error('TODO')
+  },
+  note(t: uint64): bytes {
+    throw new Error('TODO')
+  },
+  lease(t: uint64): bytes {
+    throw new Error('TODO')
+  },
+  receiver(t: uint64): Account {
+    throw new Error('TODO')
+  },
+  amount(t: uint64): uint64 {
+    const i = Uint64Cls.getNumber(t)
+    return (ctxMgr.instance.currentTransactionGroup[i] as PayTxn).amount
+  },
+  closeRemainderTo(t: uint64): Account {
+    throw new Error('TODO')
+  },
+  votePk(t: uint64): bytes {
+    throw new Error('TODO')
+  },
+  selectionPk(t: uint64): bytes {
+    throw new Error('TODO')
+  },
+  voteFirst(t: uint64): uint64 {
+    throw new Error('TODO')
+  },
+  voteLast(t: uint64): uint64 {
+    throw new Error('TODO')
+  },
+  voteKeyDilution(t: uint64): uint64 {
+    throw new Error('TODO')
+  },
+  type(t: uint64): bytes {
+    throw new Error('TODO')
+  },
+  typeEnum(t: uint64): uint64 {
+    const i = Uint64Cls.getNumber(t)
+    return ctxMgr.instance.currentTransactionGroup[i].type
+  },
+  xferAsset(t: uint64): Asset {
+    throw new Error('TODO')
+  },
+  assetAmount(t: uint64): uint64 {
+    throw new Error('TODO')
+  },
+  assetSender(t: uint64): Account {
+    throw new Error('TODO')
+  },
+  assetReceiver(t: uint64): Account {
+    throw new Error('TODO')
+  },
+  assetCloseTo(t: uint64): Account {
+    throw new Error('TODO')
+  },
+  groupIndex(t: uint64): uint64 {
+    throw new Error('TODO')
+  },
+  txId(t: uint64): bytes {
+    throw new Error('TODO')
+  },
+  applicationId(t: uint64): Application {
+    throw new Error('TODO')
+  },
+  onCompletion(t: uint64): uint64 {
+    throw new Error('TODO')
+  },
+  applicationArgs(a: uint64, b: uint64): bytes {
+    throw new Error('TODO')
+  },
+  numAppArgs(t: uint64): uint64 {
+    throw new Error('TODO')
+  },
+  accounts(a: uint64, b: uint64): Account {
+    throw new Error('TODO')
+  },
+  numAccounts(t: uint64): uint64 {
+    throw new Error('TODO')
+  },
+  approvalProgram(t: uint64): bytes {
+    throw new Error('TODO')
+  },
+  clearStateProgram(t: uint64): bytes {
+    throw new Error('TODO')
+  },
+  rekeyTo(t: uint64): Account {
+    throw new Error('TODO')
+  },
+  configAsset(t: uint64): Asset {
+    throw new Error('TODO')
+  },
+  configAssetTotal(t: uint64): uint64 {
+    throw new Error('TODO')
+  },
+  configAssetDecimals(t: uint64): uint64 {
+    throw new Error('TODO')
+  },
+  configAssetDefaultFrozen(t: uint64): boolean {
+    throw new Error('TODO')
+  },
+  configAssetUnitName(t: uint64): bytes {
+    throw new Error('TODO')
+  },
+  configAssetName(t: uint64): bytes {
+    throw new Error('TODO')
+  },
+  configAssetUrl(t: uint64): bytes {
+    throw new Error('TODO')
+  },
+  configAssetMetadataHash(t: uint64): bytes {
+    throw new Error('TODO')
+  },
+  configAssetManager(t: uint64): Account {
+    throw new Error('TODO')
+  },
+  configAssetReserve(t: uint64): Account {
+    throw new Error('TODO')
+  },
+  configAssetFreeze(t: uint64): Account {
+    throw new Error('TODO')
+  },
+  configAssetClawback(t: uint64): Account {
+    throw new Error('TODO')
+  },
+  freezeAsset(t: uint64): Asset {
+    throw new Error('TODO')
+  },
+  freezeAssetAccount(t: uint64): Account {
+    throw new Error('TODO')
+  },
+  freezeAssetFrozen(t: uint64): boolean {
+    throw new Error('TODO')
+  },
+  assets(a: uint64, b: uint64): Asset {
+    throw new Error('TODO')
+  },
+  numAssets(t: uint64): uint64 {
+    throw new Error('TODO')
+  },
+  applications(a: uint64, b: uint64): Application {
+    throw new Error('TODO')
+  },
+  numApplications(t: uint64): uint64 {
+    throw new Error('TODO')
+  },
+  globalNumUint(t: uint64): uint64 {
+    throw new Error('TODO')
+  },
+  globalNumByteSlice(t: uint64): uint64 {
+    throw new Error('TODO')
+  },
+  localNumUint(t: uint64): uint64 {
+    throw new Error('TODO')
+  },
+  localNumByteSlice(t: uint64): uint64 {
+    throw new Error('TODO')
+  },
+  extraProgramPages(t: uint64): uint64 {
+    throw new Error('TODO')
+  },
+  nonparticipation(t: uint64): boolean {
+    throw new Error('TODO')
+  },
+  logs(a: uint64, b: uint64): bytes {
+    throw new Error('TODO')
+  },
+  numLogs(t: uint64): uint64 {
+    throw new Error('TODO')
+  },
+  createdAssetId(t: uint64): Asset {
+    throw new Error('TODO')
+  },
+  createdApplicationId(t: uint64): Application {
+    throw new Error('TODO')
+  },
+  lastLog(t: uint64): bytes {
+    throw new Error('TODO')
+  },
+  stateProofPk(t: uint64): bytes {
+    throw new Error('TODO')
+  },
+  approvalProgramPages(a: uint64, b: uint64): bytes {
+    throw new Error('TODO')
+  },
+  numApprovalProgramPages(t: uint64): uint64 {
+    throw new Error('TODO')
+  },
+  clearStateProgramPages(a: uint64, b: uint64): bytes {
+    throw new Error('TODO')
+  },
+  numClearStateProgramPages(t: uint64): uint64 {
+    throw new Error('TODO')
+  },
+}
 export const Txn: TxnType = {
   get sender(): Account {
     return ctxMgr.instance.currentTransaction.sender
@@ -527,7 +734,7 @@ export const Global: GlobalType = {
    * Number of transactions in this atomic transaction group. At least 1
    */
   get groupSize(): uint64 {
-    throw new Error('TODO')
+    return Uint64(ctxMgr.instance.currentTransactionGroup.length)
   },
 
   /**
