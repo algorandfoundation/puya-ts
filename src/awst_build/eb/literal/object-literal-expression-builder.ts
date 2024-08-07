@@ -1,15 +1,14 @@
 import type { Expression, LValue } from '../../../awst/nodes'
 import type { PType } from '../../ptypes'
-import type { InstanceBuilder, NodeBuilder } from '../index'
-import { InstanceExpressionBuilder } from '../index'
-import type { SourceLocation } from '../../../awst/source-location'
-import { codeInvariant, invariant } from '../../../util'
 import { ObjectPType } from '../../ptypes'
+import type { InstanceBuilder } from '../index'
+import type { SourceLocation } from '../../../awst/source-location'
+import { codeInvariant } from '../../../util'
 import { nodeFactory } from '../../../awst/node-factory'
 import { CodeError } from '../../../errors'
-import { typeRegistry } from '../../type-registry'
 import { requestExpressionOfType, requireExpressionOfType, requireInstanceBuilder } from '../util'
 import { LiteralExpressionBuilder } from '../literal-expression-builder'
+import { ObjectExpressionBuilder } from './object-expression-builder'
 
 export type ObjectLiteralParts =
   | {
@@ -31,6 +30,7 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
     sourceLocation: SourceLocation,
     ptype: ObjectPType,
     private readonly parts: ObjectLiteralParts[],
+    private readonly generateDiscardedVarName: () => string,
   ) {
     super(sourceLocation)
     this._ptype = ptype
@@ -85,32 +85,30 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
     codeInvariant(ptype instanceof ObjectPType, `Object literal cannot be resolved to type ${ptype}`, sourceLocation)
     return new ObjectExpressionBuilder(this.toTuple(ptype, sourceLocation), ptype)
   }
-}
 
-export class ObjectExpressionBuilder extends InstanceExpressionBuilder<ObjectPType> {
-  constructor(expr: Expression, ptype: PType) {
-    invariant(ptype instanceof ObjectPType, `ObjectExpressionBuilder must be instantiated with ptype of ObjectPType`)
-    super(expr, ptype)
-  }
+  assign(other: InstanceBuilder, sourceLocation: SourceLocation): InstanceBuilder {
+    const sourceType = other.ptype
+    codeInvariant(sourceType instanceof ObjectPType, 'Assignment source must be an object type')
+    const source = other.resolve()
 
-  memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
-    const propertyIndex = this.ptype.orderedProperties().findIndex(([prop]) => prop === name)
-    if (propertyIndex === -1) {
-      return super.memberAccess(name, sourceLocation)
+    const targets: LValue[] = []
+    for (const [sourceProp, sourcePropType] of sourceType.orderedProperties()) {
+      if (this.hasProperty(sourceProp)) {
+        targets.push(this.memberAccess(sourceProp, sourceLocation).resolveLValue())
+      } else {
+        targets.push(
+          nodeFactory.varExpression({ name: this.generateDiscardedVarName(), sourceLocation, wtype: sourcePropType.wtypeOrThrow }),
+        )
+      }
     }
-    const propertyPtype = this.ptype.getPropertyType(name)
-    return typeRegistry.getInstanceEb(
-      nodeFactory.tupleItemExpression({
-        index: BigInt(propertyIndex),
+    return new ObjectExpressionBuilder(
+      nodeFactory.assignmentExpression({
+        target: nodeFactory.tupleExpression({ items: targets, sourceLocation, wtype: sourceType.wtype }),
+        value: source,
         sourceLocation,
-        wtype: propertyPtype.wtypeOrThrow,
-        base: this._expr,
+        wtype: sourceType.wtype,
       }),
-      propertyPtype,
+      sourceType,
     )
-  }
-
-  hasProperty(name: string): boolean {
-    return this.ptype.orderedProperties().some(([prop]) => prop === name)
   }
 }

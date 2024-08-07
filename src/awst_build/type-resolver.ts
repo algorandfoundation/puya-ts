@@ -1,5 +1,5 @@
 import ts from 'typescript'
-import { ArrayPType } from './ptypes'
+import { ArrayPType, undefinedPType } from './ptypes'
 import {
   anyPType,
   ApprovalProgram,
@@ -74,6 +74,9 @@ export class TypeResolver {
   resolveType(tsType: ts.Type, sourceLocation: SourceLocation): PType {
     if (isUnionType(tsType)) {
       return UnionPType.fromTypes(tsType.types.map((t) => this.resolveType(t, sourceLocation)))
+    }
+    if (tsType.flags === ts.TypeFlags.Undefined) {
+      return undefinedPType
     }
     if (hasFlags(tsType.flags, ts.TypeFlags.Null)) {
       return nullPType
@@ -173,8 +176,8 @@ export class TypeResolver {
       }
     }
     return new ObjectPType({
-      name: 'Anoymous',
-      module: '',
+      name: 'Object literal',
+      module: 'lib.d.ts',
       properties,
     })
   }

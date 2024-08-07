@@ -191,7 +191,7 @@ export class FunctionVisitor
         return []
       }
 
-      const source = requireInstanceBuilder(this.accept(d.initializer), sourceLocation)
+      const source = requireInstanceBuilder(this.accept(d.initializer), sourceLocation).singleEvaluation()
       return Array.from(this.bindingNameAssignment(d.name, source, sourceLocation))
     })
   }

@@ -25,7 +25,6 @@ import {
 } from '../eb/storage/box'
 import { TupleExpressionBuilder } from '../eb/tuple-expression-builder'
 import { Arc4AbiMethodDecoratorBuilder, Arc4BareMethodDecoratorBuilder } from '../eb/arc4-bare-method-decorator-builder'
-import { ObjectExpressionBuilder } from '../eb/literal/object-literal-expression-builder'
 import {
   arc4AbiMethodDecorator,
   arc4BareMethodDecorator,
@@ -60,6 +59,7 @@ import {
   uint64PType,
   voidPType,
 } from './index'
+import { ObjectExpressionBuilder } from '../eb/literal/object-expression-builder'
 
 export function registerPTypes(typeRegistry: TypeRegistry) {
   if (typeRegistry.hasRegistrations) {

@@ -15,8 +15,14 @@ export class UniqueNameResolver {
     }
   }
 
-  resolveUniqueName(rawName: string, symbol: ts.Symbol): string {
-    const name = this.symbolToName.get(symbol)
+  /**
+   * Resolve a rawName to a unique name within the scope of this resolver. When provided
+   * with a symbol which has already been seen, return the same name
+   * @param rawName
+   * @param symbol
+   */
+  resolveUniqueName(rawName: string, symbol: ts.Symbol | undefined): string {
+    const name = symbol && this.symbolToName.get(symbol)
     if (name) {
       return name
     }
@@ -28,7 +34,9 @@ export class UniqueNameResolver {
       uniqueName = `${rawName}${toSubScript(nameCount)}`
     }
     this.nameToCount.set(rawName, nameCount + 1)
-    this.symbolToName.set(symbol, uniqueName)
+    if (symbol) {
+      this.symbolToName.set(symbol, uniqueName)
+    }
     return uniqueName
   }
 

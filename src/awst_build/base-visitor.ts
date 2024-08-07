@@ -166,7 +166,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
     })
     const ptype = this.context.getPTypeForNode(node)
     invariant(ptype instanceof ObjectPType, 'Object literal ptype should resolve to ObjectPType')
-    return new ObjectLiteralExpressionBuilder(sourceLocation, ptype, parts)
+    return new ObjectLiteralExpressionBuilder(sourceLocation, ptype, parts, () => this.context.generateDiscardedVarName())
   }
 
   visitArrayLiteralExpression(node: ts.ArrayLiteralExpression): NodeBuilder {
@@ -418,7 +418,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   }
 
   visitOmittedExpression(node: ts.OmittedExpression): NodeBuilder {
-    return new OmittedExpressionBuilder(this.context.getSourceLocation(node))
+    return new OmittedExpressionBuilder(this.context.generateDiscardedVarName(), this.context.getSourceLocation(node))
   }
 
   visitExpressionWithTypeArguments(node: ts.ExpressionWithTypeArguments): NodeBuilder {
@@ -426,6 +426,11 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   }
 
   visitAsExpression(node: ts.AsExpression): NodeBuilder {
+    // TODO: Is this robust enough??
+    if (ts.isTypeReferenceNode(node.type) && ts.isIdentifier(node.type.typeName) && node.type.typeName.text === 'const') {
+      // TODO: Do we need to do resolveAsPType here to re-resolve the target expression
+      return this.baseAccept(node.expression)
+    }
     throw new TodoError('AsExpression')
   }
 
