@@ -2,6 +2,7 @@ import ts from 'typescript'
 import type { DeliberateAny } from '../typescript-helpers'
 import { getPropertyNameAsString } from './helpers'
 import type { TypeReflector } from './type-reflector'
+import type { FunctionPType } from '../awst_build/ptypes'
 
 const factory = ts.factory
 export const nodeFactory = {
@@ -29,16 +30,16 @@ export const nodeFactory = {
     )
   },
 
-  attachMetaData(classIdentifier: ts.Identifier, method: ts.MethodDeclaration, typeReflector: TypeReflector) {
+  attachMetaData(classIdentifier: ts.Identifier, method: ts.MethodDeclaration, functionType: FunctionPType) {
     const methodName = getPropertyNameAsString(method.name)
     const metadata = factory.createObjectLiteralExpression([
       factory.createPropertyAssignment('methodName', methodName),
       factory.createPropertyAssignment('methodSelector', methodName),
       factory.createPropertyAssignment(
         'argTypes',
-        factory.createArrayLiteralExpression(method.parameters.map((p) => factory.createStringLiteral(typeReflector.reflectType(p)))),
+        factory.createArrayLiteralExpression(functionType.parameters.map((p) => factory.createStringLiteral(p[1].fullName))),
       ),
-      factory.createPropertyAssignment('returnType', factory.createStringLiteral(method.type?.getText() ?? 'n/a')),
+      factory.createPropertyAssignment('returnType', factory.createStringLiteral(functionType.returnType.fullName)),
     ])
     return factory.createExpressionStatement(
       factory.createCallExpression(

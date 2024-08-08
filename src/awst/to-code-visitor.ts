@@ -218,17 +218,19 @@ export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, Statemen
     throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
   }
   visitStateGet(expression: nodes.StateGet): string {
-    return `STATE_GET(${expression.field.accept(this)}, default=${expression.default.accept(this)}`
+    return `STATE_GET(${expression.field.accept(this)}, default=${expression.default.accept(this)})`
   }
 
-  visitStateDelete(statement: nodes.StateDelete): string {
-    return `STATE_DEL(${statement.field.accept(this)})`
+  visitStateDelete(expression: nodes.StateDelete): string {
+    return `STATE_DEL(${expression.field.accept(this)})`
   }
   visitStateGetEx(expression: nodes.StateGetEx): string {
+    return `STATE_GET_EX(${expression.field.accept(this)})`
+
     throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
   }
   visitStateExists(expression: nodes.StateExists): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    return `STATE_EXISTS(${expression.field.accept(this)})`
   }
   visitNewStruct(expression: nodes.NewStruct): string {
     throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
