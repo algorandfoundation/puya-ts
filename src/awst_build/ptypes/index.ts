@@ -205,7 +205,7 @@ export class LocalStateType extends StorageProxyPType {
   constructor(props: { content: PType }) {
     super({ ...props, keyWType: wtypes.stateKeyWType })
   }
-  static parameterise(typeArgs: PType[]): GlobalStateType {
+  static parameterise(typeArgs: PType[]): LocalStateType {
     codeInvariant(typeArgs.length === 1, 'LocalState type expects exactly one type parameter')
     return new LocalStateType({
       content: typeArgs[0],
