@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest'
 import { compile, CompileResult } from '../../src'
 import ts from 'typescript'
 import { SourceLocation } from '../../src/awst/source-location'
-import { LogEvent } from '../../src/logger'
+import type { LogEvent } from '../../src/logger'
+import { logger } from '../../src/logger'
 import { buildCompileOptions } from '../../src/compile-options'
 import { invariant } from '../../src/util'
 
@@ -25,6 +26,8 @@ import { invariant } from '../../src/util'
  *
  */
 describe('Expected output', () => {
+  logger.outputToConsole = false
+
   const result = compile(
     buildCompileOptions({
       outputAwstJson: false,
