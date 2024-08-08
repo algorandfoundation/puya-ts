@@ -20,3 +20,9 @@ export function* iterBigInt(start: bigint, end: bigint): Generator<bigint> {
 export function asBigInt(v: internal.primitives.StubUint64Compat): bigint {
   return internal.primitives.Uint64Cls.fromCompat(v).value
 }
+
+export function extractGenericTypeArgs(t: string): string[] {
+  const match = t.match(/<(.*)>/)
+  if (!match) return []
+  return match[1].split(',').map((x) => x.trim())
+}

@@ -5,7 +5,7 @@ const VOTE_PRICE = Uint64(10_000)
 export default class SimpleVotingContract extends BaseContract {
   topic = GlobalState({ initialValue: Bytes('default_topic'), key: Bytes('topic') })
   votes = GlobalState({ initialValue: Uint64(0), key: Bytes('votes') })
-  voted = LocalState(Uint64)
+  voted = LocalState<uint64>()
 
   public approvalProgram(): uint64 {
     switch (op.Txn.applicationArgs(0)) {

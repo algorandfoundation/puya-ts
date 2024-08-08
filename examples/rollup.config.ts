@@ -8,6 +8,7 @@ const config: RollupOptions = {
     'examples/hello-world/contract.algo.ts',
     'examples/auction/contract.algo.ts',
     'examples/voting/contract.algo.ts',
+    'examples/simple-voting/contract.algo.ts',
   ],
   output: [
     {

@@ -1,7 +1,7 @@
 import ts from 'typescript'
+import type { FunctionPType } from '../awst_build/ptypes'
 import type { DeliberateAny } from '../typescript-helpers'
 import { getPropertyNameAsString } from './helpers'
-import type { FunctionPType } from '../awst_build/ptypes'
 
 const factory = ts.factory
 export const nodeFactory = {
@@ -46,6 +46,17 @@ export const nodeFactory = {
         undefined,
         [classIdentifier, methodName, metadata],
       ),
+    )
+  },
+
+  captureGenericTypeInfo(x: ts.Expression, type: string) {
+    return factory.createCallExpression(
+      factory.createPropertyAccessExpression(
+        factory.createIdentifier('runtimeHelpers'),
+        factory.createIdentifier('captureGenericTypeInfo'),
+      ),
+      undefined,
+      [x, factory.createStringLiteral(type)],
     )
   },
 } satisfies Record<string, (...args: DeliberateAny[]) => ts.Node>
