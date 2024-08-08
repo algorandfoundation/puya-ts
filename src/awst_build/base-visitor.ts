@@ -21,8 +21,10 @@ import type { Visitor } from '../visitor/visitor'
 import { accept } from '../visitor/visitor'
 import type { ObjectLiteralParts } from './eb/literal/object-literal-expression-builder'
 import { ObjectLiteralExpressionBuilder } from './eb/literal/object-literal-expression-builder'
-import { codeInvariant, invariant } from '../util'
+import { codeInvariant, enumerate, invariant } from '../util'
 import type { PType } from './ptypes'
+import { bigintBiguintUnion, numberUint64Union } from './ptypes'
+import { TuplePType } from './ptypes'
 import { ContractClassPType, ObjectPType } from './ptypes'
 import { ContractSuperBuilder, ContractThisBuilder } from './eb/contract-builder'
 import { StringFunctionBuilder, StringExpressionBuilder } from './eb/string-expression-builder'
@@ -35,12 +37,9 @@ import { ConditionalExpressionBuilder } from './eb/literal/conditional-expressio
 import { BooleanExpressionBuilder } from './eb/boolean-expression-builder'
 import { bigintPType, boolPType, numberPType } from './ptypes'
 import type { VisitorContext } from './context/base-context'
-import type { Expression, LValue } from '../awst/nodes'
-import type { Statement } from '../awst/nodes'
+import type { Statement, Expression, LValue } from '../awst/nodes'
 import { OmittedExpressionBuilder } from './eb/omitted-expression-builder'
 import { awst } from '../awst'
-import exp from 'node:constants'
-import { ObjectExpressionBuilder } from './eb/literal/object-expression-builder'
 
 export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   private baseAccept = <TNode extends ts.Node>(node: TNode) => accept<BaseVisitor, TNode>(this, node)
@@ -422,7 +421,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   }
 
   visitOmittedExpression(node: ts.OmittedExpression): NodeBuilder {
-    return new OmittedExpressionBuilder(this.context.generateDiscardedVarName(), this.context.getSourceLocation(node))
+    return new OmittedExpressionBuilder(this.context.getSourceLocation(node))
   }
 
   visitExpressionWithTypeArguments(node: ts.ExpressionWithTypeArguments): NodeBuilder {
@@ -460,50 +459,119 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
     if (source.ptype.equals(target.ptype)) {
       return instanceEb(
         nodeFactory.assignmentExpression({
-          target: this.getLValue(target, source.ptype, sourceLocation),
+          target: target.resolveLValue(),
           sourceLocation,
           value: source.resolve(),
-          wtype: target.ptype.wtypeOrThrow,
         }),
         target.ptype,
       )
     } else {
+      const assignmentType = this.buildAssignmentExpressionType(target.ptype, source.ptype)
       return instanceEb(
         nodeFactory.assignmentExpression({
-          target: this.getLValue(target, source.ptype, sourceLocation),
+          target: this.buildLValue(target, assignmentType, sourceLocation),
           sourceLocation,
-          value: source.resolveToPType(target.ptype, sourceLocation).resolve(),
-          wtype: target.ptype.wtypeOrThrow,
+          value: source.resolveToPType(assignmentType, sourceLocation).resolve(),
         }),
-        target.ptype,
+        assignmentType,
       )
     }
   }
 
-  private getLValue(target: InstanceBuilder, sourceType: PType, sourceLocation: SourceLocation): LValue {
-    // const sourceType = other.ptype
-    // codeInvariant(sourceType instanceof ObjectPType, 'Assignment source must be an object type')
-    // const source = other.resolve()
-    //
-    // const targets: LValue[] = []
-    // for (const [sourceProp, sourcePropType] of sourceType.orderedProperties()) {
-    //   if (this.hasProperty(sourceProp)) {
-    //     targets.push(this.memberAccess(sourceProp, sourceLocation).resolveLValue())
-    //   } else {
-    //     targets.push(
-    //       nodeFactory.varExpression({ name: this.generateDiscardedVarName(), sourceLocation, wtype: sourcePropType.wtypeOrThrow }),
-    //     )
-    //   }
-    // }
-    // return new ObjectExpressionBuilder(
-    //   nodeFactory.assignmentExpression({
-    //     target: nodeFactory.tupleExpression({ items: targets, sourceLocation, wtype: sourceType.wtype }),
-    //     value: source,
-    //     sourceLocation,
-    //     wtype: sourceType.wtype,
-    //   }),
-    //   sourceType,
-    // )
-    return target.resolveLValue()
+  /**
+   * Given a target and source type, produce a type that represents the result of an assignment expression.
+   *
+   * This will largely represent the sourceType verbatim with the exception of numeric literal types which need
+   * to be narrowed using the targetType.
+   *
+   * Eg. a `number` on the rhs should be narrowed to whatever the lhs is for example uint64.
+   * @param targetType
+   * @param sourceType
+   * @private
+   */
+  private buildAssignmentExpressionType(targetType: PType, sourceType: PType): PType {
+    if (sourceType.equals(targetType)) {
+      return targetType
+    }
+    if (sourceType.equals(numberPType) || sourceType.equals(numberUint64Union)) {
+      return targetType
+    }
+    if (sourceType.equals(bigintPType) || sourceType.equals(bigintBiguintUnion)) {
+      return targetType
+    }
+    if (sourceType instanceof TuplePType) {
+      codeInvariant(targetType instanceof TuplePType, 'Target type should match assignment type')
+      return new TuplePType({
+        items: sourceType.items.map((item, index) => this.buildAssignmentExpressionType(targetType.items[index], item)),
+        immutable: sourceType.immutable,
+      })
+    }
+    if (sourceType instanceof ObjectPType) {
+      codeInvariant(targetType instanceof ObjectPType, 'Target type should match assignment type')
+      return new ObjectPType({
+        properties: Object.fromEntries(
+          sourceType
+            .orderedProperties()
+            .map(([prop, propType]): [string, PType] => [
+              prop,
+              prop in targetType.properties ? this.buildAssignmentExpressionType(targetType.getPropertyType(prop), propType) : propType,
+            ]),
+        ),
+      })
+    }
+    return sourceType
+  }
+
+  private buildLValue(target: InstanceBuilder, assignmentType: PType, sourceLocation: SourceLocation): LValue {
+    if (target instanceof ArrayLiteralExpressionBuilder) {
+      if (assignmentType instanceof TuplePType) {
+        const targetItems = target.resolveItems()
+
+        const targets: LValue[] = []
+        for (const [index, sourceItemType] of enumerate(assignmentType.items)) {
+          const targetItem = targetItems[index]
+          if (targetItem && !(targetItem instanceof OmittedExpressionBuilder)) {
+            targets.push(targetItem.resolveToPType(sourceItemType, sourceLocation).resolveLValue())
+          } else {
+            targets.push(
+              nodeFactory.varExpression({
+                name: this.context.generateDiscardedVarName(),
+                sourceLocation,
+                wtype: sourceItemType.wtypeOrThrow,
+              }),
+            )
+          }
+        }
+        return nodeFactory.tupleExpression({ items: targets, sourceLocation })
+      }
+    }
+    if (target instanceof ObjectLiteralExpressionBuilder) {
+      if (assignmentType instanceof ObjectPType) {
+        const targets: LValue[] = []
+        for (const [propName, propType] of assignmentType.orderedProperties()) {
+          if (target.hasProperty(propName)) {
+            targets.push(target.memberAccess(propName, sourceLocation).resolveLValue())
+          } else {
+            targets.push(
+              nodeFactory.varExpression({
+                name: this.context.generateDiscardedVarName(),
+                sourceLocation,
+                wtype: propType.wtypeOrThrow,
+              }),
+            )
+          }
+        }
+        return nodeFactory.tupleExpression({ items: targets, sourceLocation })
+      }
+    }
+    if (target.ptype.equals(assignmentType)) {
+      return target.resolveLValue()
+    }
+    throw new CodeError(
+      `The target of an assignment must have the same type as the source. Target: ${target.ptype}, Source: ${assignmentType}`,
+      {
+        sourceLocation,
+      },
+    )
   }
 }

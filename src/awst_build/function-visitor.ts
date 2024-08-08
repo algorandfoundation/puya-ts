@@ -11,16 +11,14 @@ import { nodeFactory } from '../awst/node-factory'
 import { requireExpressionOfType, requireInstanceBuilder } from './eb/util'
 import { BaseVisitor } from './base-visitor'
 import type { PType } from './ptypes'
-import { FunctionPType, numberPType, ObjectPType, TransientType } from './ptypes'
+import { FunctionPType, ObjectPType, TransientType } from './ptypes'
 import type { Block } from '../awst/nodes'
 import { Goto, ReturnStatement } from '../awst/nodes'
 import type { SourceLocation } from '../awst/source-location'
 import { typeRegistry } from './type-registry'
 import type { InstanceBuilder } from './eb'
 import type { VisitorContext } from './context/base-context'
-import { BigIntLiteralExpressionBuilder } from './eb/literal/big-int-literal-expression-builder'
 import { OmittedExpressionBuilder } from './eb/omitted-expression-builder'
-import { TupleExpressionBuilder } from './eb/tuple-expression-builder'
 import { ArrayLiteralExpressionBuilder } from './eb/array-literal-expression-builder'
 import { ObjectLiteralExpressionBuilder } from './eb/literal/object-literal-expression-builder'
 
@@ -94,59 +92,6 @@ export class FunctionVisitor
     }
   }
 
-  *bindingNameAssignment(bindingName: ts.BindingName, source: InstanceBuilder, sourceLocation: SourceLocation): Iterable<awst.Statement> {
-    switch (bindingName.kind) {
-      case ts.SyntaxKind.ObjectBindingPattern: {
-        for (const element of bindingName.elements) {
-          const sourceLocation = this.sourceLocation(element)
-
-          const propertyNameIdentifier = element.propertyName ?? element.name
-          invariant(ts.isIdentifier(propertyNameIdentifier), 'propertyName must be an identifier')
-
-          const propertyName = this.textVisitor.accept(propertyNameIdentifier)
-          codeInvariant(!element.dotDotDotToken, 'Spread operator is not supported', sourceLocation)
-
-          yield* this.bindingNameAssignment(
-            element.name,
-            requireInstanceBuilder(source.memberAccess(propertyName, sourceLocation), sourceLocation),
-            sourceLocation,
-          )
-        }
-        break
-      }
-      case ts.SyntaxKind.ArrayBindingPattern: {
-        for (const [index, element] of enumerate(bindingName.elements)) {
-          if (ts.isOmittedExpression(element)) continue
-          const sourceLocation = this.context.getSourceLocation(element)
-          codeInvariant(!element.dotDotDotToken, 'Spread operator is not supported', sourceLocation)
-          yield* this.bindingNameAssignment(
-            element.name,
-            requireInstanceBuilder(
-              source.indexAccess(new BigIntLiteralExpressionBuilder(BigInt(index), numberPType, sourceLocation), sourceLocation),
-              sourceLocation,
-            ),
-            sourceLocation,
-          )
-        }
-        break
-      }
-
-      case ts.SyntaxKind.Identifier: {
-        const target = requireInstanceBuilder(this.accept(bindingName), sourceLocation)
-        invariant(target.ptype, 'Target of assignment must have ptype')
-        const value = requireExpressionOfType(source, target.ptype, sourceLocation)
-        yield nodeFactory.assignmentStatement({
-          target: target.resolveLValue(),
-          sourceLocation,
-          value,
-        })
-        break
-      }
-      default:
-        throw new InternalError('Unhandled binding name', { sourceLocation })
-    }
-  }
-
   buildAssignmentTarget(bindingName: ts.BindingName, sourceLocation: SourceLocation): InstanceBuilder {
     switch (bindingName.kind) {
       case ts.SyntaxKind.ObjectBindingPattern: {
@@ -177,7 +122,7 @@ export class FunctionVisitor
           const sourceLocation = this.context.getSourceLocation(element)
 
           if (ts.isOmittedExpression(element)) {
-            items.push(new OmittedExpressionBuilder(this.context.generateDiscardedVarName(), sourceLocation))
+            items.push(new OmittedExpressionBuilder(sourceLocation))
           } else {
             codeInvariant(!element.dotDotDotToken, 'Spread operator is not supported', sourceLocation)
             codeInvariant(!element.initializer, 'Initializer on array binding expression is not supported', sourceLocation)
@@ -242,7 +187,6 @@ export class FunctionVisitor
     return node.declarations.flatMap((d) => {
       const sourceLocation = this.sourceLocation(d)
       if (!d.initializer) {
-        logger.debug(sourceLocation, 'Ignoring variable statement with no initializer')
         return []
       }
 

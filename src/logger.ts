@@ -22,6 +22,7 @@ export type LogEvent = {
 
 class PuyaLogger {
   private logEvents: LogEvent[] = []
+  outputToConsole: boolean = true
   constructor() {}
 
   private addLog(level: LogEvent['level'], source: NodeOrSourceLocation | undefined, message: string) {
@@ -31,6 +32,7 @@ class PuyaLogger {
       level,
     }
     this.logEvents.push(logEvent)
+    if (this.outputToConsole) return
     const paddedLevel = `     ${logEvent.level}`.slice(-5)
     if (logEvent.sourceLocation) {
       colorLogger[logEvent.level]`${logEvent.sourceLocation} [${paddedLevel}] ${logEvent.message}`

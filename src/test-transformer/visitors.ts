@@ -31,7 +31,6 @@ export class SourceFileVisitor {
         try {
           return typeResolver.resolve(node, this.sourceLocation(node))
         } catch (e) {
-          console.error(e)
           return anyPType
         }
       },

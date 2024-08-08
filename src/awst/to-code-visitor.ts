@@ -174,7 +174,7 @@ export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, Statemen
   visitAssignmentExpression(expression: nodes.AssignmentExpression): string {
     const rvalue =
       expression.value instanceof nodes.AssignmentExpression ? `(${expression.value.accept(this)})` : expression.value.accept(this)
-    return `${expression.target.accept(this)} = ${rvalue}`
+    return `(${expression.target.accept(this)} = ${rvalue})`
   }
   visitNumericComparisonExpression(expression: nodes.NumericComparisonExpression): string {
     return `${expression.lhs.accept(this)} ${expression.operator} ${expression.rhs.accept(this)}`

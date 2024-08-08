@@ -1,8 +1,8 @@
 boxA = 0x41
 subroutine testBox(box: box_key, value: string): void
 {
-  box.value = value
-  Box["A"].value = value
+  (box.value = value)
+  (Box["A"].value = value)
   assert(box.value == Box["A"].value)
   assert(STATE_EXISTS(box.value) and STATE_EXISTS(Box["A"].value))
   STATE_DEL(box.value)
@@ -10,15 +10,17 @@ subroutine testBox(box: box_key, value: string): void
   assert(!STATE_EXISTS(box.value) and !STATE_EXISTS(Box["A"].value))
   var defaultVal: string = "O"
   assert(STATE_GET(Box["A"].value, default=defaultVal) == STATE_GET(box.value, default=defaultVal))
+  var <tuple>[_, e]: readonlytuple[string, bool] = STATE_GET_EX(box.value)
   assert(!e)
-  box.value = value
+  (box.value = value)
+  (<tuple>[_₁, e] = STATE_GET_EX(box.value))
   assert(e)
 }
 boxMap = 0x
 subroutine testBoxMap(box: box_key, key: string, value: bytes): void
 {
-  concat(box, reinterpret_cast<bytes>(key)).value = value
-  concat("", reinterpret_cast<bytes>(key)).value = value
+  (concat(box, reinterpret_cast<bytes>(key)).value = value)
+  (concat("", reinterpret_cast<bytes>(key)).value = value)
   assert(concat(box, reinterpret_cast<bytes>(key)).value == concat("", reinterpret_cast<bytes>(key)).value)
   STATE_DEL(concat(box, reinterpret_cast<bytes>(key)).value)
   assert(STATE_GET(concat(box, reinterpret_cast<bytes>("" + key + "x")).value, default="b") == STATE_GET(concat("", reinterpret_cast<bytes>("" + key + "x")).value, default="b"))

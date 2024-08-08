@@ -1,3 +1,8 @@
+subroutine test(p: tuple[uint64, bytes, bool]): void
+{
+  var <tuple>[a, b, c]: tuple[uint64, bytes, bool] = p
+  log(concat(concat(itob(a), b), itob(c)))
+}
 subroutine init(): void
 {
   test(<tuple>[1, "", False])
@@ -6,5 +11,6 @@ subroutine init(): void
 }
 subroutine test2(args: tuple[bool, bool, readonlytuple[string, string]]): void
 {
+  var <tuple>[a, <tuple>[x, y], b]: tuple[bool, tuple[bool, bool, readonlytuple[string, string]], bool] = <tuple>[True, args, False]
   var args2: tuple[bool, bool, readonlytuple[string, string]] = <tuple>[True, True, args.2]
 }

@@ -2,8 +2,10 @@ import { describe, expect, it } from 'vitest'
 import { compile } from '../../src'
 import { buildCompileOptions } from '../../src/compile-options'
 import { invariant } from '../../src/util'
+import { logger } from '../../src/logger'
 
 describe('Approvals', () => {
+  logger.outputToConsole = false
   const result = compile(
     buildCompileOptions({
       outputAwstJson: false,

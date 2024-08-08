@@ -5,8 +5,8 @@ import type { PType } from '../ptypes'
 import { TuplePType } from '../ptypes'
 import { TupleExpressionBuilder } from './tuple-expression-builder'
 import { nodeFactory } from '../../awst/node-factory'
-import { codeInvariant, enumerate } from '../../util'
 import { requireExpressionOfType } from './util'
+import { codeInvariant } from '../../util'
 
 export class ArrayLiteralExpressionBuilder extends InstanceBuilder {
   #ptype: TuplePType
@@ -29,7 +29,6 @@ export class ArrayLiteralExpressionBuilder extends InstanceBuilder {
 
   private toTuple(ptype: TuplePType, sourceLocation: SourceLocation): Expression {
     return nodeFactory.tupleExpression({
-      wtype: ptype.wtype,
       items: this.items.map((item, index) => requireExpressionOfType(item, ptype.items[index], sourceLocation)),
       sourceLocation,
     })
@@ -38,7 +37,6 @@ export class ArrayLiteralExpressionBuilder extends InstanceBuilder {
   resolveLValue(): LValue {
     return nodeFactory.tupleExpression({
       items: this.items.map((i) => i.resolveLValue()),
-      wtype: this.ptype.wtype,
       sourceLocation: this.sourceLocation,
     })
   }
@@ -48,11 +46,14 @@ export class ArrayLiteralExpressionBuilder extends InstanceBuilder {
 
   resolveToPType(ptype: PType, sourceLocation: SourceLocation): InstanceBuilder {
     if (ptype instanceof TuplePType) {
+      codeInvariant(
+        ptype.items.length === this.items.length,
+        `Value of length ${this.items.length} cannot be resolved to type of length ${ptype.items.length}`,
+      )
       return new TupleExpressionBuilder(
         nodeFactory.tupleExpression({
           items: ptype.items.map((itemType, index) => this.items[index].resolveToPType(itemType, sourceLocation).resolve()),
           sourceLocation: this.sourceLocation,
-          wtype: ptype.wtype,
         }),
         ptype,
       )
@@ -69,25 +70,5 @@ export class ArrayLiteralExpressionBuilder extends InstanceBuilder {
 
   resolveItems(): InstanceBuilder[] {
     return this.items
-  }
-
-  assign(other: InstanceBuilder, sourceLocation: SourceLocation): InstanceBuilder {
-    const sourceType = other.ptype
-    codeInvariant(sourceType instanceof TuplePType, 'Assignment source must be a tuple type')
-    const source = other.resolve()
-
-    const targets: LValue[] = []
-    for (const [index, item] of enumerate(this.items)) {
-      targets.push(item.resolveToPType(sourceType.items[index], sourceLocation).resolveLValue())
-    }
-    return new TupleExpressionBuilder(
-      nodeFactory.assignmentExpression({
-        target: nodeFactory.tupleExpression({ items: targets, sourceLocation, wtype: sourceType.wtype }),
-        value: source,
-        sourceLocation,
-        wtype: sourceType.wtype,
-      }),
-      sourceType,
-    )
   }
 }

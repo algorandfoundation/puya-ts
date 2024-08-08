@@ -6,8 +6,7 @@ function test() {
   const { d: e } = produceItems()
   let g: uint64, i: biguint
   const f = ({ a: g, d: i } = produceItems())
-
-  const j: { a: uint64 } = produceItems()
+  receivePartial(produceItems())
 }
 
 function produceItems(): { a: uint64; b: bytes; c: boolean; d: biguint } {
@@ -18,6 +17,8 @@ function produceItems(): { a: uint64; b: bytes; c: boolean; d: biguint } {
     d: 999n,
   }
 }
+
+function receivePartial(x: { a: uint64; d: biguint }) {}
 
 function testLiteralToLiteral() {
   const a: uint64 = 4

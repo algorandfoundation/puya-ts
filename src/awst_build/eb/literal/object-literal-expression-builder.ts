@@ -41,7 +41,10 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
     return this.toTuple(this.ptype, this.sourceLocation)
   }
   resolveLValue(): LValue {
-    throw new CodeError('Object literal is not a valid assignment target', { sourceLocation: this.sourceLocation })
+    return nodeFactory.tupleExpression({
+      items: this.ptype.orderedProperties().map(([p, propPType]) => this.memberAccess(p, this.sourceLocation).resolveLValue()),
+      sourceLocation: this.sourceLocation,
+    })
   }
   memberAccess(name: string, sourceLocation: SourceLocation): InstanceBuilder {
     for (const part of this.parts.toReversed()) {
@@ -68,7 +71,6 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
         .orderedProperties()
         .map(([p, propPType]) => requireExpressionOfType(this.memberAccess(p, sourceLocation), propPType, sourceLocation)),
       sourceLocation,
-      wtype: ptype.wtype,
     })
   }
 
@@ -103,10 +105,9 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
     }
     return new ObjectExpressionBuilder(
       nodeFactory.assignmentExpression({
-        target: nodeFactory.tupleExpression({ items: targets, sourceLocation, wtype: sourceType.wtype }),
+        target: nodeFactory.tupleExpression({ items: targets, sourceLocation }),
         value: source,
         sourceLocation,
-        wtype: sourceType.wtype,
       }),
       sourceType,
     )

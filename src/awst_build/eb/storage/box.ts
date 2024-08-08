@@ -164,7 +164,6 @@ class BoxValueExpressionBuilder extends ValueProxy<PType> {
         target: this.resolveLValue(),
         value,
         sourceLocation,
-        wtype: this.ptype.wtypeOrThrow,
       }),
       this.ptype,
     )
@@ -325,7 +324,6 @@ class BoxMapSetFunctionBuilder extends BoxMapFunctionBuilderBase {
       nodeFactory.assignmentExpression({
         target: this.boxValueExpression(key),
         sourceLocation,
-        wtype: this.contentType.wtypeOrThrow,
         value,
       }),
       this.contentType,
