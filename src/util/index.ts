@@ -104,8 +104,11 @@ export function instanceOfAny<T extends Array<{ new (...args: DeliberateAny[]): 
  * @param workingDirectory
  */
 export function normalisePath(filePath: string, workingDirectory: string): string {
+  const localPackageName = /packages\/algo-ts\/dist\/(.*)$/.exec(filePath)
+  if (localPackageName) {
+    return `@algorandfoundation/algo-ts/${localPackageName[1]}`
+  }
   const nodeModuleName = /node_modules\/(.*)$/.exec(filePath)
-
   if (nodeModuleName) {
     return nodeModuleName[1]
   }

@@ -6,7 +6,7 @@ import { bytesPType } from '../../ptypes'
 import type { AppStateExpression, Expression, LValue } from '../../../awst/nodes'
 import { BytesConstant } from '../../../awst/nodes'
 import type { ContractClassPType } from '../../ptypes'
-import { GlobalStateType } from '../../ptypes'
+import { LocalStateType } from '../../ptypes'
 import { codeInvariant, invariant } from '../../../util'
 import { CodeError } from '../../../errors'
 import { ObjectLiteralExpressionBuilder } from '../literal/object-literal-expression-builder'
@@ -15,14 +15,13 @@ import { nodeFactory } from '../../../awst/node-factory'
 import { AppStorageDeclaration } from '../../contract-data'
 import { typeRegistry } from '../../type-registry'
 
-export class GlobalStateFunctionBuilder extends FunctionBuilder {
+export class LocalStateFunctionBuilder extends FunctionBuilder {
   constructor(sourceLocation: SourceLocation) {
     super(sourceLocation)
   }
 
   call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
-    let [contentPType] = typeArgs
-    let initialValue: Expression | undefined
+    const [contentPType] = typeArgs
     let key: Expression | undefined = undefined
     switch (args.length) {
       case 0:
@@ -30,16 +29,7 @@ export class GlobalStateFunctionBuilder extends FunctionBuilder {
       case 1: {
         const [arg0] = args
         codeInvariant(arg0 instanceof ObjectLiteralExpressionBuilder, 'Expected object literal')
-        if (arg0.hasProperty('initialValue')) {
-          const initialValueBuilder = requireInstanceBuilder(arg0.memberAccess('initialValue', sourceLocation), sourceLocation)
-          if (contentPType) {
-            initialValue = requireExpressionOfType(initialValueBuilder, contentPType, sourceLocation)
-          } else {
-            initialValue = initialValueBuilder.resolve()
-            invariant(initialValueBuilder.ptype, 'Builder must have a ptype')
-            contentPType = initialValueBuilder.ptype
-          }
-        }
+
         if (arg0.hasProperty('key')) {
           key = requireExpressionOfType(arg0.memberAccess('key', sourceLocation), bytesPType, sourceLocation)
         }
@@ -49,14 +39,14 @@ export class GlobalStateFunctionBuilder extends FunctionBuilder {
         throw CodeError.unexpectedUnhandledArgs({ sourceLocation })
     }
     codeInvariant(contentPType, `Generic type 'ValueType' is required if not providing an initial value`)
-    const ptype = new GlobalStateType({ content: contentPType })
-    return new GlobalStateFunctionResultBuilder(key, ptype, { initialValue, sourceLocation })
+    const ptype = new LocalStateType({ content: contentPType })
+    return new LocalStateFunctionResultBuilder(key, ptype, { sourceLocation })
   }
 }
 
-export class GlobalStateExpressionBuilder extends InstanceExpressionBuilder<GlobalStateType> {
+export class LocalStateExpressionBuilder extends InstanceExpressionBuilder<LocalStateType> {
   constructor(expr: Expression, ptype: PType) {
-    invariant(ptype instanceof GlobalStateType, 'ptype must be instance of GlobalStateType')
+    invariant(ptype instanceof LocalStateType, 'ptype must be instance of LocalStateType')
     super(expr, ptype)
   }
 
@@ -73,17 +63,17 @@ export class GlobalStateExpressionBuilder extends InstanceExpressionBuilder<Glob
     return nodeFactory.appStateExpression({
       key: this._expr,
       wtype: this.ptype.contentType.wtypeOrThrow,
-      existsAssertionMessage: 'check GlobalState exists',
+      existsAssertionMessage: 'check LocalState exists',
       sourceLocation,
     })
   }
 }
 
-export class GlobalStateFunctionResultBuilder extends InstanceBuilder<GlobalStateType> {
+export class LocalStateFunctionResultBuilder extends InstanceBuilder<LocalStateType> {
   resolve(): Expression {
     codeInvariant(
       this._expr,
-      'Global state must have explicit key provided if not being assigned to a contract property',
+      'Local state must have explicit key provided if not being assigned to a contract property',
       this.sourceLocation,
     )
     return this._expr
@@ -91,18 +81,18 @@ export class GlobalStateFunctionResultBuilder extends InstanceBuilder<GlobalStat
   resolveLValue(): LValue {
     throw CodeError.invalidAssignmentTarget({ name: this.typeDescription, sourceLocation: this.sourceLocation })
   }
-  private _ptype: GlobalStateType
+  private _ptype: LocalStateType
   private _expr: Expression | undefined
-  constructor(expr: Expression | undefined, ptype: PType, config: { initialValue?: Expression; sourceLocation: SourceLocation }) {
+  constructor(expr: Expression | undefined, ptype: PType, config: { sourceLocation: SourceLocation }) {
     const sourceLocation = expr?.sourceLocation ?? config?.sourceLocation
     invariant(sourceLocation, 'Must have expression or config')
     super(sourceLocation)
-    invariant(ptype instanceof GlobalStateType, 'ptype must be GlobalStateType')
+    invariant(ptype instanceof LocalStateType, 'ptype must be LocalStateType')
     this._ptype = ptype
     this._expr = expr
   }
 
-  get ptype(): GlobalStateType {
+  get ptype(): LocalStateType {
     return this._ptype
   }
 

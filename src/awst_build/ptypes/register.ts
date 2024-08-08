@@ -26,6 +26,8 @@ import {
 import { TupleExpressionBuilder } from '../eb/tuple-expression-builder'
 import { Arc4AbiMethodDecoratorBuilder, Arc4BareMethodDecoratorBuilder } from '../eb/arc4-bare-method-decorator-builder'
 import {
+  AccountFunction,
+  accountPType,
   arc4AbiMethodDecorator,
   arc4BareMethodDecorator,
   assertFunction,
@@ -49,6 +51,8 @@ import {
   GlobalStateType,
   IntrinsicFunctionGroupType,
   IntrinsicFunctionType,
+  LocalStateFunction,
+  LocalStateType,
   logFunction,
   NamespacePType,
   ObjectPType,
@@ -60,6 +64,8 @@ import {
   voidPType,
 } from './index'
 import { ObjectExpressionBuilder } from '../eb/literal/object-expression-builder'
+import { AccountExpressionBuilder, AccountFunctionBuilder } from '../eb/account/account-function-builder'
+import { LocalStateExpressionBuilder, LocalStateFunctionBuilder } from '../eb/storage/local-state'
 
 export function registerPTypes(typeRegistry: TypeRegistry) {
   if (typeRegistry.hasRegistrations) {
@@ -106,6 +112,8 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
 
   typeRegistry.register({ ptype: GlobalStateFunction, singletonEb: GlobalStateFunctionBuilder })
   typeRegistry.registerGeneric({ ptype: GlobalStateType, instanceEb: GlobalStateExpressionBuilder })
+  typeRegistry.register({ ptype: LocalStateFunction, singletonEb: LocalStateFunctionBuilder })
+  typeRegistry.registerGeneric({ ptype: LocalStateType, instanceEb: LocalStateExpressionBuilder })
   typeRegistry.register({ ptype: BoxFunction, singletonEb: BoxFunctionBuilder })
   typeRegistry.registerGeneric({ ptype: BoxPType, instanceEb: BoxExpressionBuilder })
   typeRegistry.register({ ptype: BoxMapFunction, singletonEb: BoxMapFunctionBuilder })
@@ -116,4 +124,6 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: arc4AbiMethodDecorator, singletonEb: Arc4AbiMethodDecoratorBuilder })
   typeRegistry.register({ ptype: arc4BareMethodDecorator, singletonEb: Arc4BareMethodDecoratorBuilder })
   typeRegistry.register({ ptype: ObjectPType, instanceEb: ObjectExpressionBuilder })
+  typeRegistry.register({ ptype: AccountFunction, singletonEb: AccountFunctionBuilder })
+  typeRegistry.register({ ptype: accountPType, instanceEb: AccountExpressionBuilder })
 }

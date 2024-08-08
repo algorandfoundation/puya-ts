@@ -2,15 +2,18 @@ import type ts from 'typescript'
 import type { DeliberateAny } from '../../packages/algo-ts-testing/src/typescript-helpers'
 import { TypeReflector } from './type-reflector'
 import { SourceFileVisitor } from './visitors'
+import { TypeResolver } from '../awst_build/type-resolver'
+import { registerPTypes } from '../awst_build/ptypes/register'
+import { typeRegistry } from '../awst_build/type-registry'
 
 const programTransformer = {
   type: 'program',
   factory(program: ts.Program): ts.TransformerFactory<ts.SourceFile> {
-    const typeReflector = new TypeReflector(program)
+    registerPTypes(typeRegistry)
     return (context) => {
       return (sourceFile) => {
         if (!sourceFile.fileName.endsWith('.algo.ts')) return sourceFile
-        return new SourceFileVisitor(context, sourceFile, typeReflector).result()
+        return new SourceFileVisitor(context, sourceFile, program).result()
       }
     }
   },

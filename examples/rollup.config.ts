@@ -3,7 +3,12 @@ import type { RollupOptions } from 'rollup'
 import { puyaTsTransformer } from '../src/test-transformer'
 
 const config: RollupOptions = {
-  input: ['examples/hello-world-abi/contract.algo.ts', 'examples/hello-world/contract.algo.ts'],
+  input: [
+    'examples/hello-world-abi/contract.algo.ts',
+    'examples/hello-world/contract.algo.ts',
+    'examples/auction/contract.algo.ts',
+    'examples/voting/contract.algo.ts',
+  ],
   output: [
     {
       dir: 'examples/debug-out',

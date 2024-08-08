@@ -1,13 +1,19 @@
 import ts from 'typescript'
-import type { TypeReflector } from './type-reflector'
 import { nodeFactory } from './node-factory'
 import { supportedBinaryOpString } from './supported-binary-op-string'
+import { TypeResolver } from '../awst_build/type-resolver'
+import { SourceLocation } from '../awst/source-location'
+import type { PType } from '../awst_build/ptypes'
+import { anyPType } from '../awst_build/ptypes'
+import { FunctionPType } from '../awst_build/ptypes'
+import { ContractClassPType } from '../awst_build/ptypes'
 
 const { factory } = ts
 
 type VisitorHelper = {
   additionalStatements: ts.Statement[]
-  typeReflector: TypeReflector
+  resolveType(node: ts.Node): PType
+  sourceLocation(node: ts.Node): SourceLocation
 }
 
 export class SourceFileVisitor {
@@ -15,11 +21,23 @@ export class SourceFileVisitor {
   constructor(
     private context: ts.TransformationContext,
     private sourceFile: ts.SourceFile,
-    typeReflector: TypeReflector,
+    program: ts.Program,
   ) {
+    const typeResolver = new TypeResolver(program.getTypeChecker(), program.getCurrentDirectory())
+
     this.helper = {
       additionalStatements: [],
-      typeReflector,
+      resolveType(node: ts.Node): PType {
+        try {
+          return typeResolver.resolve(node, this.sourceLocation(node))
+        } catch (e) {
+          console.error(e)
+          return anyPType
+        }
+      },
+      sourceLocation(node: ts.Node): SourceLocation {
+        return SourceLocation.fromNode(sourceFile, node, program.getCurrentDirectory())
+      },
     }
   }
 
@@ -102,7 +120,9 @@ class ClassVisitor {
     private helper: VisitorHelper,
     private classDec: ts.ClassDeclaration,
   ) {
-    this.isArc4 = helper.typeReflector.isArc4Contract(classDec)
+    const classType = helper.resolveType(classDec)
+
+    this.isArc4 = classType instanceof ContractClassPType && classType.isARC4
   }
 
   public result(): ts.ClassDeclaration {
@@ -112,7 +132,10 @@ class ClassVisitor {
   private visit = (node: ts.Node): ts.Node => {
     if (ts.isMethodDeclaration(node)) {
       if (this.classDec.name && this.isArc4) {
-        this.helper.additionalStatements.push(nodeFactory.attachMetaData(this.classDec.name, node, this.helper.typeReflector))
+        const methodType = this.helper.resolveType(node)
+        if (methodType instanceof FunctionPType) {
+          this.helper.additionalStatements.push(nodeFactory.attachMetaData(this.classDec.name, node, methodType))
+        }
       }
 
       return new MethodDecVisitor(this.context, node).result()

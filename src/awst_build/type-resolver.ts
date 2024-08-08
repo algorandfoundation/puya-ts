@@ -175,11 +175,7 @@ export class TypeResolver {
         properties[prop.name] = ptype
       }
     }
-    return new ObjectPType({
-      name: 'Object literal',
-      module: 'lib.d.ts',
-      properties,
-    })
+    return ObjectPType.literal(properties)
   }
 
   private reflectFunctionType(

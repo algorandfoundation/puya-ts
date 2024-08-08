@@ -96,7 +96,7 @@ export class ContractClassPType extends PType {
 export class BaseContractClassType extends ContractClassPType {
   readonly _isArc4: boolean
   get isARC4(): boolean {
-    return super.isARC4
+    return this._isArc4
   }
 
   constructor({
@@ -204,6 +204,12 @@ export class LocalStateType extends StorageProxyPType {
   }
   constructor(props: { content: PType }) {
     super({ ...props, keyWType: wtypes.stateKeyWType })
+  }
+  static parameterise(typeArgs: PType[]): GlobalStateType {
+    codeInvariant(typeArgs.length === 1, 'LocalState type expects exactly one type parameter')
+    return new LocalStateType({
+      content: typeArgs[0],
+    })
   }
 }
 export class BoxPType extends StorageProxyPType {
@@ -421,6 +427,15 @@ export class ObjectPType extends PType {
     this.properties = props.properties
   }
 
+  static literal(props: Record<string, PType> | Array<[string, PType]>) {
+    const properties = Array.isArray(props) ? Object.fromEntries(props) : props
+    return new ObjectPType({
+      name: 'Object literal',
+      module: 'lib.d.ts',
+      properties,
+    })
+  }
+
   get wtype(): WTuple {
     return new WTuple({
       items: this.orderedProperties().map(([_, ptype]) => ptype.wtypeOrThrow),
@@ -558,6 +573,10 @@ export const accountPType = new InstanceType({
   wtype: wtypes.accountWType,
   module: Constants.referenceModuleName,
 })
+export const AccountFunction = new LibFunctionType({
+  name: 'Account',
+  module: Constants.referenceModuleName,
+})
 export const applicationPType = new InstanceType({
   name: 'Application',
   wtype: wtypes.applicationWType,
@@ -565,6 +584,10 @@ export const applicationPType = new InstanceType({
 })
 export const GlobalStateFunction = new LibFunctionType({
   name: 'GlobalState',
+  module: Constants.stateModuleName,
+})
+export const LocalStateFunction = new LibFunctionType({
+  name: 'LocalState',
   module: Constants.stateModuleName,
 })
 export const BoxFunction = new LibFunctionType({
