@@ -76,3 +76,13 @@ function defaultBinaryOp(left: DeliberateAny, right: DeliberateAny, op: BinaryOp
       internal.errors.internalError(`Unsupported operator ${op}`)
   }
 }
+
+const genericTypeMap = new Map<DeliberateAny, string>()
+export function captureGenericTypeInfo(target: DeliberateAny, t: string) {
+  genericTypeMap.set(target, t)
+  return target
+}
+
+export function getGenericTypeInfo(target: DeliberateAny): string | undefined {
+  return genericTypeMap.get(target)
+}

@@ -1,12 +1,11 @@
 import ts from 'typescript'
-import { nodeFactory } from './node-factory'
-import { supportedBinaryOpString } from './supported-binary-op-string'
-import { TypeResolver } from '../awst_build/type-resolver'
 import { SourceLocation } from '../awst/source-location'
 import type { PType } from '../awst_build/ptypes'
-import { anyPType } from '../awst_build/ptypes'
-import { FunctionPType } from '../awst_build/ptypes'
-import { ContractClassPType } from '../awst_build/ptypes'
+import { anyPType, ContractClassPType, FunctionPType } from '../awst_build/ptypes'
+import { typeRegistry } from '../awst_build/type-registry'
+import { TypeResolver } from '../awst_build/type-resolver'
+import { nodeFactory } from './node-factory'
+import { supportedBinaryOpString } from './supported-binary-op-string'
 
 const { factory } = ts
 
@@ -63,7 +62,7 @@ export class SourceFileVisitor {
 }
 
 class FunctionOrMethodVisitor {
-  constructor(protected context: ts.TransformationContext) {}
+  constructor(protected context: ts.TransformationContext) { }
   protected visit = (node: ts.Node): ts.Node => {
     return ts.visitEachChild(this.updateNode(node), this.visit, this.context)
   }
@@ -140,6 +139,17 @@ class ClassVisitor {
       return new MethodDecVisitor(this.context, node).result()
     }
 
+    if (ts.isCallExpression(node)) {
+      let type = this.helper.resolveType(node)
+
+      // `voted = LocalState<uint64>()` is resolved to FunctionPType with returnType LocalState<uint64>
+      if (type instanceof FunctionPType) type = type.returnType
+
+      if (typeRegistry.isGeneric(type)) {
+        const typeName = type.name
+        return nodeFactory.captureGenericTypeInfo(ts.visitEachChild(node, this.visit, this.context), typeName)
+      }
+    }
     return ts.visitEachChild(node, this.visit, this.context)
   }
 }
