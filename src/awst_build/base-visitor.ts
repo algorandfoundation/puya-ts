@@ -30,13 +30,17 @@ import { nodeFactory } from '../awst/node-factory'
 import { ArrayLiteralExpressionBuilder } from './eb/array-literal-expression-builder'
 import { BigIntLiteralExpressionBuilder } from './eb/literal/big-int-literal-expression-builder'
 import { logger } from '../logger'
-import { typeRegistry } from './type-registry'
+import { instanceEb, typeRegistry } from './type-registry'
 import { ConditionalExpressionBuilder } from './eb/literal/conditional-expression-builder'
 import { BooleanExpressionBuilder } from './eb/boolean-expression-builder'
 import { bigintPType, boolPType, numberPType } from './ptypes'
 import type { VisitorContext } from './context/base-context'
-import type { Expression } from '../awst/nodes'
+import type { Expression, LValue } from '../awst/nodes'
+import type { Statement } from '../awst/nodes'
 import { OmittedExpressionBuilder } from './eb/omitted-expression-builder'
+import { awst } from '../awst'
+import exp from 'node:constants'
+import { ObjectExpressionBuilder } from './eb/literal/object-expression-builder'
 
 export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   private baseAccept = <TNode extends ts.Node>(node: TNode) => accept<BaseVisitor, TNode>(this, node)
@@ -294,7 +298,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
 
       const left = requireInstanceBuilder(this.baseAccept(node.left), sourceLocation)
       const right = requireInstanceBuilder(this.baseAccept(node.right), sourceLocation)
-      return left.assign(right, sourceLocation)
+      return this.handleAssignment(left, right, sourceLocation)
     } else if (isKeyOf(binaryOpKind, ComparisonOpSyntaxes)) {
       const left = requireInstanceBuilder(this.baseAccept(node.left), sourceLocation)
       const right = requireInstanceBuilder(this.baseAccept(node.right), sourceLocation)
@@ -352,7 +356,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
           op: AugmentedAssignmentLogicalOpSyntaxes[binaryOpKind],
         }),
       )
-      return left.assign(expr, sourceLocation)
+      return this.handleAssignment(left, expr, sourceLocation)
     }
     throw new NotSupported(`Binary expression with op ${getSyntaxName(binaryOpKind)}`)
   }
@@ -440,5 +444,66 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
 
   visitSatisfiesExpression(node: ts.SatisfiesExpression): NodeBuilder {
     return this.baseAccept(node.expression)
+  }
+
+  handleAssignmentStatement(target: InstanceBuilder, source: InstanceBuilder, sourceLocation: SourceLocation): Statement {
+    const expr = this.handleAssignment(target, source, sourceLocation).resolve()
+    if (expr instanceof awst.AssignmentExpression) {
+      return nodeFactory.assignmentStatement({
+        ...expr,
+      })
+    }
+    return nodeFactory.expressionStatement({ expr })
+  }
+
+  handleAssignment(target: InstanceBuilder, source: InstanceBuilder, sourceLocation: SourceLocation): InstanceBuilder {
+    if (source.ptype.equals(target.ptype)) {
+      return instanceEb(
+        nodeFactory.assignmentExpression({
+          target: this.getLValue(target, source.ptype, sourceLocation),
+          sourceLocation,
+          value: source.resolve(),
+          wtype: target.ptype.wtypeOrThrow,
+        }),
+        target.ptype,
+      )
+    } else {
+      return instanceEb(
+        nodeFactory.assignmentExpression({
+          target: this.getLValue(target, source.ptype, sourceLocation),
+          sourceLocation,
+          value: source.resolveToPType(target.ptype, sourceLocation).resolve(),
+          wtype: target.ptype.wtypeOrThrow,
+        }),
+        target.ptype,
+      )
+    }
+  }
+
+  private getLValue(target: InstanceBuilder, sourceType: PType, sourceLocation: SourceLocation): LValue {
+    // const sourceType = other.ptype
+    // codeInvariant(sourceType instanceof ObjectPType, 'Assignment source must be an object type')
+    // const source = other.resolve()
+    //
+    // const targets: LValue[] = []
+    // for (const [sourceProp, sourcePropType] of sourceType.orderedProperties()) {
+    //   if (this.hasProperty(sourceProp)) {
+    //     targets.push(this.memberAccess(sourceProp, sourceLocation).resolveLValue())
+    //   } else {
+    //     targets.push(
+    //       nodeFactory.varExpression({ name: this.generateDiscardedVarName(), sourceLocation, wtype: sourcePropType.wtypeOrThrow }),
+    //     )
+    //   }
+    // }
+    // return new ObjectExpressionBuilder(
+    //   nodeFactory.assignmentExpression({
+    //     target: nodeFactory.tupleExpression({ items: targets, sourceLocation, wtype: sourceType.wtype }),
+    //     value: source,
+    //     sourceLocation,
+    //     wtype: sourceType.wtype,
+    //   }),
+    //   sourceType,
+    // )
+    return target.resolveLValue()
   }
 }

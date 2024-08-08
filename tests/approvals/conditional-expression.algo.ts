@@ -1,4 +1,5 @@
-import { Uint64, uint64 } from '@algorandfoundation/algo-ts'
+import type { uint64 } from '@algorandfoundation/algo-ts'
+import { Uint64 } from '@algorandfoundation/algo-ts'
 
 function test(x: uint64, y: uint64) {
   const a: uint64 = (x < 4 ? x : y) + x

@@ -1,11 +1,6 @@
 subroutine test(): void
 {
-  var a: uint64 = (#se0 = produceItems()).0
-  var b: bytes = #se0.1
-  var c: bool = #se0.2
-  var d: biguint = #se0.3
-  var e: bool = (#se1 = produceItems()).2
-  var f: tuple[uint64, bytes, bool, biguint] = (#se2 = <tuple>[g, _, _₁, i] = produceItems())
+  var <tuple>[a, b, c, d]: readonlytuple[uint64, bytes, bool, biguint] = produceItems()
 }
 subroutine produceItems(): tuple[uint64, bytes, bool, biguint]
 {
@@ -13,10 +8,9 @@ subroutine produceItems(): tuple[uint64, bytes, bool, biguint]
 }
 subroutine testLiteralDestructuring(): void
 {
-  var a: uint64 = (#se3 = 1)
-  var b: uint64 = (#se4 = 2)
-  var x: uint64 = (#se5 = <tuple>[b, a] = <tuple>[a, b]).0
-  var y: uint64 = #se5.1
+  var a: uint64 = 1
+  var b: uint64 = 2
+  var <tuple>[x, y]: readonlytuple[uint64, uint64] = <tuple>[b, a] = <tuple>[a, b]
   assert(x == b)
   assert(y == a)
 }
