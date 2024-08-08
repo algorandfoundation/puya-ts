@@ -10,6 +10,7 @@ import { logger } from '../logger'
 import { nodeFactory } from '../awst/node-factory'
 import { requireExpressionOfType, requireInstanceBuilder } from './eb/util'
 import { BaseVisitor } from './base-visitor'
+import type { PType } from './ptypes'
 import { FunctionPType, numberPType, ObjectPType, TransientType } from './ptypes'
 import type { Block } from '../awst/nodes'
 import { Goto, ReturnStatement } from '../awst/nodes'
@@ -18,6 +19,10 @@ import { typeRegistry } from './type-registry'
 import type { InstanceBuilder } from './eb'
 import type { VisitorContext } from './context/base-context'
 import { BigIntLiteralExpressionBuilder } from './eb/literal/big-int-literal-expression-builder'
+import { OmittedExpressionBuilder } from './eb/omitted-expression-builder'
+import { TupleExpressionBuilder } from './eb/tuple-expression-builder'
+import { ArrayLiteralExpressionBuilder } from './eb/array-literal-expression-builder'
+import { ObjectLiteralExpressionBuilder } from './eb/literal/object-literal-expression-builder'
 
 export type ContractMethodInfo = {
   className: string
@@ -141,6 +146,55 @@ export class FunctionVisitor
         throw new InternalError('Unhandled binding name', { sourceLocation })
     }
   }
+
+  buildAssignmentTarget(bindingName: ts.BindingName, sourceLocation: SourceLocation): InstanceBuilder {
+    switch (bindingName.kind) {
+      case ts.SyntaxKind.ObjectBindingPattern: {
+        const props = Array<[string, InstanceBuilder]>()
+        for (const element of bindingName.elements) {
+          const sourceLocation = this.sourceLocation(element)
+
+          const propertyNameIdentifier = element.propertyName ?? element.name
+          invariant(ts.isIdentifier(propertyNameIdentifier), 'propertyName must be an identifier')
+
+          const propertyName = this.textVisitor.accept(propertyNameIdentifier)
+          codeInvariant(!element.dotDotDotToken, 'Spread operator is not supported', sourceLocation)
+          codeInvariant(!element.initializer, 'Initializer on object binding pattern is not supported', sourceLocation)
+
+          props.push([propertyName, this.buildAssignmentTarget(element.name, sourceLocation)])
+        }
+        const ptype = ObjectPType.literal(props.map(([name, builder]): [string, PType] => [name, builder.ptype]))
+        return new ObjectLiteralExpressionBuilder(
+          sourceLocation,
+          ptype,
+          [{ type: 'properties', properties: Object.fromEntries(props) }],
+          () => this.context.generateDiscardedVarName(),
+        )
+      }
+      case ts.SyntaxKind.ArrayBindingPattern: {
+        const items: InstanceBuilder[] = []
+        for (const element of bindingName.elements) {
+          const sourceLocation = this.context.getSourceLocation(element)
+
+          if (ts.isOmittedExpression(element)) {
+            items.push(new OmittedExpressionBuilder(this.context.generateDiscardedVarName(), sourceLocation))
+          } else {
+            codeInvariant(!element.dotDotDotToken, 'Spread operator is not supported', sourceLocation)
+            codeInvariant(!element.initializer, 'Initializer on array binding expression is not supported', sourceLocation)
+            codeInvariant(!element.propertyName, 'Property name on array binding expression is not supported', sourceLocation)
+            items.push(this.buildAssignmentTarget(element.name, sourceLocation))
+          }
+        }
+        return new ArrayLiteralExpressionBuilder(sourceLocation, items)
+      }
+
+      case ts.SyntaxKind.Identifier: {
+        return requireInstanceBuilder(this.accept(bindingName), sourceLocation)
+      }
+      default:
+        throw new InternalError('Unhandled binding name', { sourceLocation })
+    }
+  }
   evaluateParameterBindingExpressions(parameters: Iterable<ts.ParameterDeclaration>, sourceLocation: SourceLocation): awst.Statement[] {
     const assignments: awst.Statement[] = []
     for (const p of parameters) {
@@ -156,7 +210,8 @@ export class FunctionVisitor
           }),
           paramPType,
         )
-        assignments.push(...this.bindingNameAssignment(p.name, paramBuilder, sourceLocation))
+
+        assignments.push(this.handleAssignmentStatement(this.buildAssignmentTarget(p.name, sourceLocation), paramBuilder, sourceLocation))
       }
     }
 
@@ -191,8 +246,9 @@ export class FunctionVisitor
         return []
       }
 
-      const source = requireInstanceBuilder(this.accept(d.initializer), sourceLocation).singleEvaluation()
-      return Array.from(this.bindingNameAssignment(d.name, source, sourceLocation))
+      const source = requireInstanceBuilder(this.accept(d.initializer), sourceLocation)
+
+      return this.handleAssignmentStatement(this.buildAssignmentTarget(d.name, sourceLocation), source, sourceLocation)
     })
   }
 

@@ -5,6 +5,7 @@ import { Bytes } from '@algorandfoundation/algo-ts'
 function test() {
   const [a, b, c, d] = produceItems()
   const [, , e] = produceItems()
+
   let g: uint64, i: biguint
   const f = ([g, , , i] = produceItems())
 }

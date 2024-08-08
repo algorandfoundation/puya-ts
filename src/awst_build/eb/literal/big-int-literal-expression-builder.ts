@@ -38,7 +38,7 @@ export class BigIntLiteralExpressionBuilder extends LiteralExpressionBuilder {
     this._ptype = ptype
   }
   resolvableToPType(ptype: PType): boolean {
-    return ptype.equals(uint64PType) || ptype.equals(biguintPType)
+    return ptype.equals(uint64PType) || ptype.equals(biguintPType) || ptype.equals(this.ptype)
   }
   boolEval(sourceLocation: SourceLocation, negate: boolean = false): Expression {
     const value = negate ? !this.value : Boolean(this.value)
@@ -50,6 +50,7 @@ export class BigIntLiteralExpressionBuilder extends LiteralExpressionBuilder {
   }
 
   resolveToPType(ptype: PType, sourceLocation: SourceLocation): InstanceBuilder {
+    if (ptype.equals(this.ptype)) return this
     codeInvariant(isValidLiteralForPType(this.value, ptype), `${ptype.name} cannot be converted to type ${ptype.name}`, sourceLocation)
     if (ptype.equals(uint64PType)) {
       return new UInt64ExpressionBuilder(nodeFactory.uInt64Constant({ value: this.value, sourceLocation: this.sourceLocation }))

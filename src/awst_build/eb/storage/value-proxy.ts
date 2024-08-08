@@ -13,9 +13,6 @@ export abstract class ValueProxy<TPType extends PType> extends InstanceExpressio
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
     return this.proxied.memberAccess(name, sourceLocation)
   }
-  assign(other: InstanceBuilder, sourceLocation: SourceLocation): InstanceBuilder {
-    return this.proxied.assign(other, sourceLocation)
-  }
   augmentedAssignment(other: InstanceBuilder, op: BuilderBinaryOp, sourceLocation: SourceLocation): InstanceBuilder {
     return this.proxied.augmentedAssignment(other, op, sourceLocation)
   }

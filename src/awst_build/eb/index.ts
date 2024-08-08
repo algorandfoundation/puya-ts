@@ -5,7 +5,7 @@ import type { PType } from '../ptypes'
 import { logger } from '../../logger'
 import type { Expression } from '../../awst/nodes'
 import { codeInvariant } from '../../util'
-import { typeRegistry } from '../type-registry'
+import { instanceEb, typeRegistry } from '../type-registry'
 import { nodeFactory } from '../../awst/node-factory'
 
 export enum BuilderComparisonOp {
@@ -150,12 +150,6 @@ export abstract class InstanceBuilder<TPType extends PType = PType> extends Node
 
   iterate(sourceLocation: SourceLocation): awst.Expression {
     throw new NotSupported(`Iteration on ${this.typeDescription}`, {
-      sourceLocation,
-    })
-  }
-
-  assign(other: InstanceBuilder, sourceLocation: SourceLocation): InstanceBuilder {
-    throw new NotSupported(`Assignment to ${this.typeDescription}`, {
       sourceLocation,
     })
   }

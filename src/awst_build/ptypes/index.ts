@@ -415,14 +415,14 @@ export class ArrayPType extends PType {
 }
 
 export class ObjectPType extends PType {
-  readonly name: string
+  #name: string
   readonly module: string
   readonly properties: Record<string, PType>
   readonly singleton = false
 
   constructor(props: { module: string; name: string; properties: Record<string, PType> }) {
     super()
-    this.name = props.name
+    this.#name = props.name
     this.module = props.module
     this.properties = props.properties
   }
@@ -430,7 +430,7 @@ export class ObjectPType extends PType {
   static literal(props: Record<string, PType> | Array<[string, PType]>) {
     const properties = Array.isArray(props) ? Object.fromEntries(props) : props
     return new ObjectPType({
-      name: 'Object literal',
+      name: 'Object',
       module: 'lib.d.ts',
       properties,
     })
@@ -452,6 +452,18 @@ export class ObjectPType extends PType {
       return this.properties[name]
     }
     throw new CodeError(`${this} does not have property ${name}`)
+  }
+
+  get name(): string {
+    return `{${this.orderedProperties()
+      .map((p) => `${p[0]}:${p[1].name}`)
+      .join(',')}}`
+  }
+
+  get fullName(): string {
+    return `{${this.orderedProperties()
+      .map((p) => `${p[0]}:${p[1].fullName}`)
+      .join(',')}}`
   }
 }
 
