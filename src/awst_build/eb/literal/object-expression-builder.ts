@@ -1,10 +1,13 @@
+import type { InstanceBuilder } from '../index'
 import { InstanceExpressionBuilder, type NodeBuilder } from '../index'
 import { ObjectPType, type PType } from '../../ptypes'
 import type { Expression } from '../../../awst/nodes'
 import { invariant } from '../../../util'
 import type { SourceLocation } from '../../../awst/source-location'
-import { typeRegistry } from '../../type-registry'
+import { instanceEb } from '../../type-registry'
 import { nodeFactory } from '../../../awst/node-factory'
+import { CodeError } from '../../../errors'
+import { requireExpressionOfType } from '../util'
 
 export class ObjectExpressionBuilder extends InstanceExpressionBuilder<ObjectPType> {
   constructor(expr: Expression, ptype: PType) {
@@ -18,7 +21,7 @@ export class ObjectExpressionBuilder extends InstanceExpressionBuilder<ObjectPTy
       return super.memberAccess(name, sourceLocation)
     }
     const propertyPtype = this.ptype.getPropertyType(name)
-    return typeRegistry.getInstanceEb(
+    return instanceEb(
       nodeFactory.tupleItemExpression({
         index: BigInt(propertyIndex),
         sourceLocation,
@@ -31,5 +34,28 @@ export class ObjectExpressionBuilder extends InstanceExpressionBuilder<ObjectPTy
 
   hasProperty(name: string): boolean {
     return this.ptype.orderedProperties().some(([prop]) => prop === name)
+  }
+
+  resolvableToPType(ptype: PType, sourceLocation: SourceLocation): ptype is ObjectPType {
+    if (ptype instanceof ObjectPType) {
+      return ptype.orderedProperties().every(([prop, propType]) => this.ptype.hasPropertyOfType(prop, propType))
+    }
+    return false
+  }
+
+  resolveToPType(ptype: PType, sourceLocation: SourceLocation): InstanceBuilder {
+    if (this.resolvableToPType(ptype, sourceLocation)) {
+      const base = this.singleEvaluation()
+      return instanceEb(
+        nodeFactory.tupleExpression({
+          sourceLocation,
+          items: ptype
+            .orderedProperties()
+            .map(([prop, propType]) => requireExpressionOfType(base.memberAccess(prop, sourceLocation), propType, sourceLocation)),
+        }),
+        ptype,
+      )
+    }
+    throw CodeError.cannotResolveToType({ sourceType: this.ptype, targetType: ptype, sourceLocation })
   }
 }

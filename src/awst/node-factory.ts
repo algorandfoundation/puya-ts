@@ -1,4 +1,7 @@
 import type { Expression, Statement } from './nodes'
+import { TupleExpression } from './nodes'
+import { AssignmentStatement } from './nodes'
+import { AssignmentExpression } from './nodes'
 import {
   BigUIntBinaryOperation,
   Block,
@@ -18,8 +21,9 @@ import {
 import type { DeliberateAny, Props } from '../typescript-helpers'
 import type { SourceLocation } from './source-location'
 import * as wtypes from './wtypes'
-import { invariant } from '../util'
+import { codeInvariant, invariant } from '../util'
 import type { WType } from './wtypes'
+import { WTuple } from './wtypes'
 import { boolWType } from './wtypes'
 
 type ConcreteNodes = typeof concreteNodes
@@ -110,6 +114,45 @@ const explicitNodeFactory = {
       sourceLocation,
       comment,
       label,
+    })
+  },
+  assignmentExpression({
+    target,
+    value,
+    sourceLocation,
+  }: {
+    target: AssignmentExpression['target']
+    value: Expression
+    sourceLocation: SourceLocation
+  }) {
+    codeInvariant(target.wtype.equals(value.wtype), `Assignment target type ${target.wtype} must match assigned value type ${value.wtype}`)
+    return new AssignmentExpression({
+      target,
+      value,
+      wtype: value.wtype,
+      sourceLocation,
+    })
+  },
+  assignmentStatement({
+    target,
+    value,
+    sourceLocation,
+  }: {
+    target: AssignmentStatement['target']
+    value: Expression
+    sourceLocation: SourceLocation
+  }) {
+    codeInvariant(target.wtype.equals(value.wtype), `Assignment target type ${target.wtype} must match assigned value type ${value.wtype}`)
+    return new AssignmentStatement({
+      target,
+      value,
+      sourceLocation,
+    })
+  },
+  tupleExpression(props: Omit<Props<TupleExpression>, 'wtype'>) {
+    return new TupleExpression({
+      ...props,
+      wtype: new WTuple({ items: props.items.map((i) => i.wtype), immutable: true }),
     })
   },
 } satisfies { [key in keyof ConcreteNodes]?: (...args: DeliberateAny[]) => InstanceType<ConcreteNodes[key]> }

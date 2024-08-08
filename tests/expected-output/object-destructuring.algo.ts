@@ -4,6 +4,8 @@ import { Bytes } from '@algorandfoundation/algo-ts'
 function test() {
   // @expect-error Spread operator is not supported
   const { a: h, ...j } = produceItems()
+  // @expect-error The target of an assignment must have the same type as the source...
+  const x: { a: uint64; d: biguint } = produceItems()
 }
 
 function produceItems(): { a: uint64; b: bytes; c: boolean; d: biguint } {

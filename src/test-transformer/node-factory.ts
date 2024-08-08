@@ -1,7 +1,6 @@
 import ts from 'typescript'
 import type { DeliberateAny } from '../typescript-helpers'
 import { getPropertyNameAsString } from './helpers'
-import type { TypeReflector } from './type-reflector'
 import type { FunctionPType } from '../awst_build/ptypes'
 
 const factory = ts.factory

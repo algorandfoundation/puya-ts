@@ -1,8 +1,6 @@
 import type ts from 'typescript'
 import type { DeliberateAny } from '../../packages/algo-ts-testing/src/typescript-helpers'
-import { TypeReflector } from './type-reflector'
 import { SourceFileVisitor } from './visitors'
-import { TypeResolver } from '../awst_build/type-resolver'
 import { registerPTypes } from '../awst_build/ptypes/register'
 import { typeRegistry } from '../awst_build/type-registry'
 

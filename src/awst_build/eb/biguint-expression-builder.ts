@@ -1,5 +1,4 @@
 import type { awst } from '../../awst'
-import { wtypes } from '../../awst'
 import type { InstanceBuilder } from './index'
 import { BuilderBinaryOp, BuilderComparisonOp, BuilderUnaryOp, FunctionBuilder, InstanceExpressionBuilder } from './index'
 import type { Expression } from '../../awst/nodes'
@@ -95,7 +94,6 @@ export class BigUintExpressionBuilder extends InstanceExpressionBuilder<Instance
       nodeFactory.assignmentExpression({
         target: this.resolveLValue(),
         sourceLocation,
-        wtype: this.ptype.wtype,
         value: nodeFactory.bigUIntBinaryOperation({
           left: this.resolve(),
           right: nodeFactory.bigUIntConstant({ value: 1n, sourceLocation }),
@@ -153,7 +151,6 @@ export class BigUintExpressionBuilder extends InstanceExpressionBuilder<Instance
         target: this.resolveLValue(),
         value: this.binaryOp(other, op, sourceLocation).resolve(),
         sourceLocation,
-        wtype: wtypes.biguintWType,
       }),
     )
   }
@@ -164,7 +161,6 @@ export class BigUintExpressionBuilder extends InstanceExpressionBuilder<Instance
         target: this.resolveLValue(),
         sourceLocation,
         value: requireExpressionOfType(other, biguintPType, sourceLocation),
-        wtype: biguintPType.wtypeOrThrow,
       }),
     )
   }

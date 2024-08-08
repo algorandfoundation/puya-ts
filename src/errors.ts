@@ -1,4 +1,5 @@
 import type { SourceLocation } from './awst/source-location'
+import type { PType } from './awst_build/ptypes'
 
 type PuyaErrorOptions = {
   cause?: Error
@@ -41,6 +42,17 @@ export class CodeError extends PuyaError {
     return new CodeError(`${name} is not a valid assignment target`, {
       sourceLocation,
     })
+  }
+  static cannotResolveToType({
+    sourceType,
+    targetType,
+    sourceLocation,
+  }: {
+    sourceLocation: SourceLocation
+    sourceType: PType
+    targetType: PType
+  }) {
+    return new CodeError(`Cannot resolve ${sourceType} to ${targetType}`, { sourceLocation })
   }
 }
 export class TodoError extends PuyaError {}

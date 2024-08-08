@@ -420,18 +420,16 @@ export class ObjectPType extends PType {
   readonly properties: Record<string, PType>
   readonly singleton = false
 
-  constructor(props: { module: string; name: string; properties: Record<string, PType> }) {
+  constructor(props: { module?: string; name?: string; properties: Record<string, PType> }) {
     super()
-    this.#name = props.name
-    this.module = props.module
+    this.#name = props.name ?? ''
+    this.module = props.module ?? ''
     this.properties = props.properties
   }
 
   static literal(props: Record<string, PType> | Array<[string, PType]>) {
     const properties = Array.isArray(props) ? Object.fromEntries(props) : props
     return new ObjectPType({
-      name: 'Object',
-      module: 'lib.d.ts',
       properties,
     })
   }
@@ -454,14 +452,23 @@ export class ObjectPType extends PType {
     throw new CodeError(`${this} does not have property ${name}`)
   }
 
+  hasProperty(name: string): boolean {
+    return Object.hasOwn(this.properties, name)
+  }
+
+  hasPropertyOfType(name: string, type: PType) {
+    return this.hasProperty(name) && this.properties[name].equals(type)
+  }
+
   get name(): string {
-    return `{${this.orderedProperties()
+    return `${this.#name}{${this.orderedProperties()
       .map((p) => `${p[0]}:${p[1].name}`)
       .join(',')}}`
   }
 
   get fullName(): string {
-    return `{${this.orderedProperties()
+    const alias = [this.module, this.#name].filter(Boolean).join('::')
+    return `${alias}{${this.orderedProperties()
       .map((p) => `${p[0]}:${p[1].fullName}`)
       .join(',')}}`
   }
@@ -538,6 +545,8 @@ export const numberPType = new TransientType({
   expressionMessage:
     'Expression of type `number` must be explicitly converted to an algo-ts type, for example by wrapping the expression in `Uint64(...)`',
 })
+export const numberUint64Union = UnionPType.fromTypes([numberPType, uint64PType])
+export const bigintBiguintUnion = UnionPType.fromTypes([bigintPType, biguintPType])
 export const Uint64Function = new LibFunctionType({
   name: 'Uint64',
   module: Constants.primitivesModuleName,

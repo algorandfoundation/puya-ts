@@ -4,8 +4,7 @@ import { CodeError, NotSupported } from '../../errors'
 import type { PType } from '../ptypes'
 import { logger } from '../../logger'
 import type { Expression } from '../../awst/nodes'
-import { codeInvariant } from '../../util'
-import { instanceEb, typeRegistry } from '../type-registry'
+import { instanceEb } from '../type-registry'
 import { nodeFactory } from '../../awst/node-factory'
 
 export enum BuilderComparisonOp {
@@ -101,16 +100,18 @@ export abstract class InstanceBuilder<TPType extends PType = PType> extends Node
     return this.ptype.equals(ptype)
   }
   resolveToPType(ptype: PType, sourceLocation: SourceLocation): InstanceBuilder {
-    codeInvariant(this.ptype.equals(ptype), `Required expression of type ${ptype} but found ${this.ptype}`)
-    return this
+    if (this.resolvableToPType(ptype, sourceLocation)) {
+      return this
+    }
+    throw CodeError.cannotResolveToType({ sourceType: this.ptype, targetType: ptype, sourceLocation })
   }
 
   singleEvaluation(): InstanceBuilder {
     const expr = this.resolve()
     if (expr instanceof awst.VarExpression) {
-      return typeRegistry.getInstanceEb(expr, this.ptype)
+      return this
     }
-    return typeRegistry.getInstanceEb(
+    return instanceEb(
       nodeFactory.singleEvaluation({
         source: this.resolve(),
       }),
