@@ -32,7 +32,7 @@ class PuyaLogger {
       level,
     }
     this.logEvents.push(logEvent)
-    if (this.outputToConsole) return
+    if (!this.outputToConsole) return
     const paddedLevel = `     ${logEvent.level}`.slice(-5)
     if (logEvent.sourceLocation) {
       colorLogger[logEvent.level]`${logEvent.sourceLocation} [${paddedLevel}] ${logEvent.message}`

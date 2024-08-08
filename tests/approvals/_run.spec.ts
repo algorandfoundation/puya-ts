@@ -5,7 +5,6 @@ import { invariant } from '../../src/util'
 import { logger } from '../../src/logger'
 
 describe('Approvals', () => {
-  logger.outputToConsole = false
   const result = compile(
     buildCompileOptions({
       outputAwstJson: false,
