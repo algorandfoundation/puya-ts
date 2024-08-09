@@ -7,9 +7,9 @@ describe('When calling the HelloWorldContract', () => {
   describe("with ['world']", () => {
     it('logs Hello, World', async ({ ctx }: AlgorandTestContext) => {
       const contract = ctx.contract.create(HelloWorldContract)
-      ctx.setTransactionGroup([
-        ctx.anyApplicationCallTransaction({
-          app_id: ctx.getApplicationForContract(contract),
+      ctx.txn.addTxnGroup([
+        ctx.any.txn.applicationCall({
+          app_id: ctx.ledger.getApplicationForContract(contract),
           args: [Bytes('World')],
         }),
       ])

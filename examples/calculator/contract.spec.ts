@@ -7,9 +7,9 @@ describe('Calculator', () => {
   describe('when calling with with no args', () => {
     it('errors', async ({ ctx }: AlgorandTestContext) => {
       const contract = ctx.contract.create(MyContract)
-      ctx.setTransactionGroup([
-        ctx.anyApplicationCallTransaction({
-          app_id: ctx.getApplicationForContract(contract),
+      ctx.txn.addTxnGroup([
+        ctx.any.txn.applicationCall({
+          app_id: ctx.ledger.getApplicationForContract(contract),
           args: [],
         }),
       ])
@@ -20,9 +20,9 @@ describe('Calculator', () => {
   describe('when calling with with three args', () => {
     it('Returns 1', async ({ ctx }: AlgorandTestContext) => {
       const contract = ctx.contract.create(MyContract)
-      ctx.setTransactionGroup([
-        ctx.anyApplicationCallTransaction({
-          app_id: ctx.getApplicationForContract(contract),
+      ctx.txn.addTxnGroup([
+        ctx.any.txn.applicationCall({
+          app_id: ctx.ledger.getApplicationForContract(contract),
           args: [op.itob(Uint64(1)), op.itob(Uint64(2)), op.itob(Uint64(3))],
         }),
       ])
