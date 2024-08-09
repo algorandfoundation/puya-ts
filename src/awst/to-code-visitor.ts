@@ -90,7 +90,7 @@ export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, Statemen
     throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
   }
   visitARC4Encode(expression: nodes.ARC4Encode): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    return `ARC4_ENCODE(${expression.value.accept(this)}, wtype=${expression.wtype})`
   }
   visitCopy(expression: nodes.Copy): string {
     throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })

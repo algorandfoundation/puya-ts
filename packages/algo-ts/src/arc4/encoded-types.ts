@@ -22,7 +22,7 @@ export class Str extends AbiEncoded {
   }
 }
 export class UintN<N extends BitSize> extends AbiEncoded {
-  constructor(v: CompatForArc4Int<N>, n?: N) {
+  constructor(v?: CompatForArc4Int<N>) {
     super()
   }
   get native(): NativeForArc4Int<N> {

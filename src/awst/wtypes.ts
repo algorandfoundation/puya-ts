@@ -94,6 +94,15 @@ export class WArray extends WType {
   }
 }
 
+export class ARC4UIntN extends ARC4Type {
+  readonly n: bigint
+  constructor({ n }: { n: bigint }) {
+    super({
+      name: `arc4.uint${n}`,
+    })
+    this.n = n
+  }
+}
 export class ARC4UFixedNxM extends ARC4Type {}
 
 export class ARC4Struct extends ARC4Type {}

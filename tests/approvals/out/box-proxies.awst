@@ -29,4 +29,9 @@ boxRef = 0x616263
 subroutine testBoxRef(box: box_key): void
 {
   var someBytes: bytes = 0x0f0f0f0f
+  box_put(box.value, someBytes)
+  box_put(Box["abc"].value, someBytes)
+  box_splice(box.value, 1, 2, 0x00)
+  box_splice(Box["abc"].value, 1, 2, 0x00)
+  assert(box.value == 0x0f000f0f)
 }

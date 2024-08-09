@@ -1,4 +1,5 @@
-import { abimethod, bytes, Contract, GlobalState, uint64, Uint64 } from '@algorandfoundation/algo-ts'
+import type { bytes } from '@algorandfoundation/algo-ts'
+import { abimethod, Contract, GlobalState, uint64, Uint64 } from '@algorandfoundation/algo-ts'
 
 export default class AbiDecorators extends Contract {
   // @expect-error Duplicate on completion actions

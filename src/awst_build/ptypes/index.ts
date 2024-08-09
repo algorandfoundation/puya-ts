@@ -2,6 +2,7 @@ import { Constants } from '../../constants'
 import { wtypes } from '../../awst'
 import { codeInvariant, distinct, sortBy } from '../../util'
 import type { WType } from '../../awst/wtypes'
+import { ARC4UIntN } from '../../awst/wtypes'
 import { WArray } from '../../awst/wtypes'
 import { WTuple } from '../../awst/wtypes'
 import { CodeError, InternalError, NotSupported } from '../../errors'
@@ -305,6 +306,35 @@ export class LibFunctionType extends PType {
     this.module = module
   }
 }
+export const UintNConstructor = new LibFunctionType({
+  name: 'UintN',
+  module: Constants.arc4EncodedTypesModuleName,
+})
+export class UintNType extends PType {
+  static baseFullName = `${Constants.arc4EncodedTypesModuleName}::UintN`
+  readonly module = Constants.arc4EncodedTypesModuleName
+  readonly n: bigint
+  readonly name: string
+  readonly singleton = false
+  get wtype(): WType | undefined {
+    return new ARC4UIntN({ n: this.n })
+  }
+
+  constructor({ n }: { n: bigint }) {
+    super()
+    codeInvariant(n >= 8n && n <= 512n && n % 8n === 0n, 'n must be between 8 and 512, and a multiple of 8')
+    this.n = n
+    this.name = `UIntN<${n}>`
+  }
+
+  static parameterise(typeArgs: PType[]): UintNType {
+    codeInvariant(typeArgs.length === 1, 'UintNType type expects exactly one type parameter')
+    const [size] = typeArgs
+    codeInvariant(size instanceof NumberPType && size.literalValue, 'Generic type param for UintNType must be a literal number')
+
+    return new UintNType({ n: size.literalValue })
+  }
+}
 
 export class IntrinsicFunctionGroupType extends PType {
   readonly wtype: undefined
@@ -507,15 +537,22 @@ export const BooleanFunction = new LibFunctionType({
   module: 'typescript/lib/lib.es5.d.ts',
 })
 
-export const bigintPType = new TransientType({
-  name: 'bigint',
-  module: 'lib.d.ts',
-  singleton: false,
-  typeMessage:
-    '`bigint` is not valid as a variable, parameter, return, or property type. Please use an algo-ts type such as `biguint` or `uint64`',
-  expressionMessage:
-    'Expression of type `bigint` must be explicitly converted to an algo-ts type, for example by wrapping the expression in `Uint64(...)`',
-})
+export class BigIntPType extends TransientType {
+  readonly literalValue: bigint | undefined
+  constructor(props?: { literalValue: bigint }) {
+    super({
+      name: 'bigint',
+      module: 'lib.d.ts',
+      singleton: false,
+      typeMessage:
+        '`bigint` is not valid as a variable, parameter, return, or property type. Please use an algo-ts type such as `biguint` or `uint64`',
+      expressionMessage:
+        'Expression of type `bigint` must be explicitly converted to an algo-ts type, for example by wrapping the expression in `Uint64(...)`',
+    })
+    this.literalValue = props?.literalValue
+  }
+}
+export const bigintPType = new BigIntPType()
 export const stringPType = new InstanceType({
   name: 'string',
   module: 'lib.d.ts',
@@ -536,15 +573,22 @@ export const biguintPType = new InstanceType({
   module: Constants.primitivesModuleName,
   wtype: wtypes.biguintWType,
 })
-export const numberPType = new TransientType({
-  name: 'number',
-  module: 'lib.d.ts',
-  singleton: false,
-  typeMessage:
-    '`number` is not valid as a variable, parameter, return, or property type. Please use an algo-ts type such as `uint64` or `biguint`',
-  expressionMessage:
-    'Expression of type `number` must be explicitly converted to an algo-ts type, for example by wrapping the expression in `Uint64(...)`',
-})
+export class NumberPType extends TransientType {
+  readonly literalValue: bigint | undefined
+  constructor(props?: { literalValue: bigint }) {
+    const typeName = props?.literalValue.toString() ?? 'number'
+    super({
+      name: `${typeName}`,
+      module: 'lib.d.ts',
+      singleton: false,
+      typeMessage: `\`${typeName}\` is not valid as a variable, parameter, return, or property type. Please use an algo-ts type such as \`uint64\` or \`biguint\``,
+      expressionMessage: `Expression of type \`${typeName}\` must be explicitly converted to an algo-ts type, for example by wrapping the expression in \`Uint64(...)\``,
+    })
+    this.literalValue = props?.literalValue
+  }
+}
+// TODO: get rid of this value and check `instanceof NumberPType` instead
+export const numberPType = new NumberPType()
 export const numberUint64Union = UnionPType.fromTypes([numberPType, uint64PType])
 export const bigintBiguintUnion = UnionPType.fromTypes([bigintPType, biguintPType])
 export const Uint64Function = new LibFunctionType({

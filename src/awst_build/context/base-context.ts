@@ -18,6 +18,7 @@ export interface VisitorContext {
   getSourceLocation(node: ts.Node): SourceLocation
   getBuilderForNode(node: ts.Identifier): NodeBuilder
   getPTypeForNode(node: ts.Node): PType
+  getGenericTypeArgsForNode(node: ts.Node): PType[]
   resolveVariableName(node: ts.Identifier): string
   resolveDestructuredParamName(node: ts.ParameterDeclaration): string
   generateDiscardedVarName(): string
@@ -84,6 +85,11 @@ class VisitorContextImpl implements VisitorContext {
       return this.typeResolver.resolveTypeNode(node, sourceLocation)
     }
     return this.typeResolver.resolve(node, sourceLocation)
+  }
+
+  getGenericTypeArgsForNode(node: ts.Node): PType[] {
+    const sourceLocation = this.getSourceLocation(node)
+    return this.typeResolver.resolveGenericTypeArgumentsOfNode(node, sourceLocation)
   }
 
   getBuilderForNode(node: ts.Identifier): NodeBuilder {

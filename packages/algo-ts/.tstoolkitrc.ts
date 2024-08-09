@@ -7,7 +7,8 @@ const config: TsToolkitConfig = {
     moduleType: 'module',
     main: 'index.ts',
     exports: {
-      '.': "index.ts"
+      '.': "index.ts",
+      './arc4': "arc4/index.ts"
     }
   }
 }

@@ -1,23 +1,19 @@
+import type { Account, bytes, uint64, gtxn, Asset } from '@algorandfoundation/algo-ts'
 import {
   abimethod,
-  Account,
   arc4,
   assert,
   assertMatch,
-  bytes,
   Bytes,
   Global,
   GlobalState,
   Uint64,
-  uint64,
   BoxRef,
   BoxMap,
-  gtxn,
   log,
   ensureBudget,
   op,
   itxn,
-  Asset,
   Txn,
   urange,
 } from '@algorandfoundation/algo-ts'
@@ -58,10 +54,6 @@ export default class VotingRoundApp extends arc4.Contract {
   optionCounts = GlobalState<VoteIndexArray>()
   totalOptions = GlobalState<uint64>()
   nftAsset = GlobalState<Asset>()
-  constructor() {
-    super()
-    this.nftAsset.value = Asset(4)
-  }
 
   @abimethod({ onCreate: 'require' })
   public create(
