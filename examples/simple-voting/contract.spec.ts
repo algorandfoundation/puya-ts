@@ -11,13 +11,13 @@ describe('Simple voting contract', () => {
       it('should set the topic', async ({ ctx }: AlgorandTestContext) => {
         const contract = ctx.contract.create(SimpleVotingContract)
         const topic = Bytes('new_topic')
-        ctx.setTransactionGroup(
+        ctx.txn.addTxnGroup(
           [
-            ctx.anyApplicationCallTransaction({
-              app_id: ctx.getApplicationForContract(contract),
+            ctx.any.txn.applicationCall({
+              app_id: ctx.ledger.getApplicationForContract(contract),
               args: [Bytes('set_topic'), topic],
             }),
-            ctx.anyPaymentTransaction({
+            ctx.any.txn.payment({
               amount: Uint64(10_000),
             }),
           ],
@@ -34,7 +34,7 @@ describe('Simple voting contract', () => {
     it('records the vote correctly', async ({ ctx }: AlgorandTestContext) => {
       const contract = ctx.contract.create(SimpleVotingContract)
       contract.votes.value = Uint64(0)
-      const voter = ctx.defaultCreator
+      const voter = ctx.defaultSender
 
       const result = castVote(ctx, contract, voter)
 
@@ -44,7 +44,7 @@ describe('Simple voting contract', () => {
     })
     it('ignores subsequent votes from the same voter', async ({ ctx }: AlgorandTestContext) => {
       const contract = ctx.contract.create(SimpleVotingContract)
-      const voter = ctx.anyAccount()
+      const voter = ctx.any.account()
       contract.voted(voter).value = Uint64(1)
       contract.votes.value = Uint64(1)
 
@@ -58,20 +58,20 @@ describe('Simple voting contract', () => {
   describe('When getting the votes', () => {
     it('returns the correct number of votes', async ({ ctx }: AlgorandTestContext) => {
       const contract = ctx.contract.create(SimpleVotingContract)
-      const voter1 = ctx.anyAccount()
-      const voter2 = ctx.anyAccount()
+      const voter1 = ctx.any.account()
+      const voter2 = ctx.any.account()
       castVote(ctx, contract, voter1)
       castVote(ctx, contract, voter2)
 
-      ctx.setTransactionGroup(
+      ctx.txn.addTxnGroup(
         [
-          ctx.anyApplicationCallTransaction({
-            app_id: ctx.getApplicationForContract(contract),
-            sender: ctx.defaultCreator,
+          ctx.any.txn.applicationCall({
+            app_id: ctx.ledger.getApplicationForContract(contract),
+            sender: ctx.defaultSender,
             args: [Bytes('get_votes')],
           }),
-          ctx.anyPaymentTransaction({
-            sender: ctx.defaultCreator,
+          ctx.any.txn.payment({
+            sender: ctx.defaultSender,
             amount: Uint64(10_000),
           }),
         ],
@@ -85,14 +85,14 @@ describe('Simple voting contract', () => {
 })
 
 const castVote = (ctx: TestExecutionContext, contract: SimpleVotingContract, voter: Account): uint64 => {
-  ctx.setTransactionGroup(
+  ctx.txn.addTxnGroup(
     [
-      ctx.anyApplicationCallTransaction({
-        app_id: ctx.getApplicationForContract(contract),
+      ctx.any.txn.applicationCall({
+        app_id: ctx.ledger.getApplicationForContract(contract),
         sender: voter,
         args: [Bytes('vote'), voter.bytes],
       }),
-      ctx.anyPaymentTransaction({
+      ctx.any.txn.payment({
         sender: voter,
         amount: Uint64(10_000),
       }),

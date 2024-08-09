@@ -1,8 +1,8 @@
 import { Application, BaseContract, Bytes, bytes, internal, uint64 } from '@algorandfoundation/algo-ts'
-import { getGenericTypeInfo } from './runtime-helpers'
-import { TestExecutionContext } from './test-execution-context'
-import { DeliberateAny } from './typescript-helpers'
-import { extractGenericTypeArgs } from './util'
+import { getGenericTypeInfo } from '../runtime-helpers'
+import { TestExecutionContext } from '../test-execution-context'
+import { DeliberateAny } from '../typescript-helpers'
+import { extractGenericTypeArgs } from '../util'
 
 interface IConstructor<T> {
   new (...args: DeliberateAny[]): T
@@ -68,10 +68,10 @@ export class ContractContext {
     const onConstructed = (instance: BaseContract) => {
       const states = extractStates(instance)
 
-      const application = context.anyApplication({
+      const application = context.any.application({
         ...states.totals,
       })
-      context.addAppIdContractMap(application.id, instance)
+      context.ledger.addAppIdContractMap(application.id, instance)
       this.#statesMap.set(instance, states)
     }
     return {
