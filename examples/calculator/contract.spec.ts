@@ -6,7 +6,7 @@ import MyContract from './contract.algo'
 describe('Calculator', () => {
   describe('when calling with with no args', () => {
     it('errors', async ({ ctx }: AlgorandTestContext) => {
-      const contract = ctx.create(MyContract)
+      const contract = ctx.contract.create(MyContract)
       ctx.setTransactionGroup([
         ctx.anyApplicationCallTransaction({
           app_id: ctx.getApplicationForContract(contract),
@@ -19,7 +19,7 @@ describe('Calculator', () => {
   })
   describe('when calling with with three args', () => {
     it('Returns 1', async ({ ctx }: AlgorandTestContext) => {
-      const contract = ctx.create(MyContract)
+      const contract = ctx.contract.create(MyContract)
       ctx.setTransactionGroup([
         ctx.anyApplicationCallTransaction({
           app_id: ctx.getApplicationForContract(contract),

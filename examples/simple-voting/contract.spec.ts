@@ -9,7 +9,7 @@ describe('Simple voting contract', () => {
   describe('When setting the topic', () => {
     describe('with correct arguments', () => {
       it('should set the topic', async ({ ctx }: AlgorandTestContext) => {
-        const contract = ctx.create(SimpleVotingContract)
+        const contract = ctx.contract.create(SimpleVotingContract)
         const topic = Bytes('new_topic')
         ctx.setTransactionGroup(
           [
@@ -32,7 +32,7 @@ describe('Simple voting contract', () => {
   })
   describe('When voting', () => {
     it('records the vote correctly', async ({ ctx }: AlgorandTestContext) => {
-      const contract = ctx.create(SimpleVotingContract)
+      const contract = ctx.contract.create(SimpleVotingContract)
       contract.votes.value = Uint64(0)
       const voter = ctx.defaultCreator
 
@@ -43,7 +43,7 @@ describe('Simple voting contract', () => {
       expect(contract.voted(voter).value).toEqual(Uint64(1))
     })
     it('ignores subsequent votes from the same voter', async ({ ctx }: AlgorandTestContext) => {
-      const contract = ctx.create(SimpleVotingContract)
+      const contract = ctx.contract.create(SimpleVotingContract)
       const voter = ctx.anyAccount()
       contract.voted(voter).value = Uint64(1)
       contract.votes.value = Uint64(1)
@@ -57,7 +57,7 @@ describe('Simple voting contract', () => {
   })
   describe('When getting the votes', () => {
     it('returns the correct number of votes', async ({ ctx }: AlgorandTestContext) => {
-      const contract = ctx.create(SimpleVotingContract)
+      const contract = ctx.contract.create(SimpleVotingContract)
       const voter1 = ctx.anyAccount()
       const voter2 = ctx.anyAccount()
       castVote(ctx, contract, voter1)
