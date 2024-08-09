@@ -1,5 +1,5 @@
 import ts from 'typescript'
-import { ArrayPType, undefinedPType } from './ptypes'
+import { ArrayPType, BigIntPType, LocalStateType, NumberPType, StorageProxyPType, undefinedPType } from './ptypes'
 import {
   anyPType,
   ApprovalProgram,
@@ -71,6 +71,16 @@ export class TypeResolver {
     return this.resolveType(type, sourceLocation)
   }
 
+  resolveGenericTypeArgumentsOfNode(node: ts.Node, sourceLocation: SourceLocation): PType[] {
+    const tsType = this.checker.getTypeAtLocation(node)
+    if (tsType.aliasTypeArguments?.length) {
+      return tsType.aliasTypeArguments.map((a) => this.resolveType(a, sourceLocation))
+    } else if (isTypeReference(tsType) && tsType.typeArguments?.length) {
+      return tsType.typeArguments.map((t) => this.resolveType(t, sourceLocation))
+    }
+    return []
+  }
+
   resolveType(tsType: ts.Type, sourceLocation: SourceLocation): PType {
     if (isUnionType(tsType)) {
       return UnionPType.fromTypes(tsType.types.map((t) => this.resolveType(t, sourceLocation)))
@@ -97,9 +107,15 @@ export class TypeResolver {
       throw new CodeError(`Type resolves to unknown`, { sourceLocation })
     }
     if (intersectsFlags(tsType.flags, ts.TypeFlags.Number | ts.TypeFlags.NumberLiteral) && tsType.getSymbol() === undefined) {
+      if (tsType.isNumberLiteral()) {
+        return new NumberPType({ literalValue: BigInt(tsType.value) })
+      }
       return numberPType
     }
     if (intersectsFlags(tsType.flags, ts.TypeFlags.BigInt | ts.TypeFlags.BigIntLiteral) && tsType.getSymbol() === undefined) {
+      if (tsType.isLiteral() && typeof tsType.value === 'object') {
+        return new BigIntPType({ literalValue: BigInt(tsType.value.base10Value) * (tsType.value.negative ? -1n : 1n) })
+      }
       return bigintPType
     }
     if (isTupleReference(tsType)) {
@@ -156,8 +172,12 @@ export class TypeResolver {
         })
       }
     }
+
     if (tsType.aliasTypeArguments?.length) {
       const typeArgs = tsType.aliasTypeArguments.map((a) => this.resolveType(a, sourceLocation))
+      return typeRegistry.resolveGenericPType(typeName, typeArgs, sourceLocation)
+    } else if (isTypeReference(tsType) && tsType.typeArguments?.length) {
+      const typeArgs = tsType.typeArguments.map((a) => this.resolveType(a, sourceLocation))
       return typeRegistry.resolveGenericPType(typeName, typeArgs, sourceLocation)
     } else {
       return typeRegistry.resolveInstancePType(typeName, sourceLocation)
@@ -212,7 +232,7 @@ export class TypeResolver {
     for (const prop of tsType.getProperties()) {
       const type = this.checker.getTypeOfSymbol(prop)
       const ptype = this.resolveType(type, sourceLocation)
-      if (ptype instanceof GlobalStateType) {
+      if (ptype instanceof StorageProxyPType) {
         properties[prop.name] = ptype
       } else if (ptype instanceof FunctionPType) {
         methods[prop.name] = ptype

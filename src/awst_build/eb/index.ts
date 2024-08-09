@@ -63,6 +63,10 @@ export abstract class NodeBuilder {
     })
   }
 
+  newCall(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
+    throw new NotSupported(`Calling ${this.typeDescription} with the new keyword`, { sourceLocation })
+  }
+
   taggedTemplate(head: string, spans: ReadonlyArray<readonly [InstanceBuilder, string]>, sourceLocation: SourceLocation): InstanceBuilder {
     throw new NotSupported(`Tagged templates on ${this.typeDescription}`, {
       sourceLocation,

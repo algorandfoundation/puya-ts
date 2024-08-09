@@ -61,11 +61,14 @@ import {
   TuplePType,
   Uint64Function,
   uint64PType,
+  UintNConstructor,
+  UintNType,
   voidPType,
 } from './index'
 import { ObjectExpressionBuilder } from '../eb/literal/object-expression-builder'
 import { AccountExpressionBuilder, AccountFunctionBuilder } from '../eb/account/account-function-builder'
 import { LocalStateExpressionBuilder, LocalStateFunctionBuilder } from '../eb/storage/local-state'
+import { UintNConstructorBuilder, UintNExpressionBuilder } from '../eb/arc4/uint-n-constructor-builder'
 
 export function registerPTypes(typeRegistry: TypeRegistry) {
   if (typeRegistry.hasRegistrations) {
@@ -126,4 +129,6 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: ObjectPType, instanceEb: ObjectExpressionBuilder })
   typeRegistry.register({ ptype: AccountFunction, singletonEb: AccountFunctionBuilder })
   typeRegistry.register({ ptype: accountPType, instanceEb: AccountExpressionBuilder })
+  typeRegistry.register({ ptype: UintNConstructor, singletonEb: UintNConstructorBuilder })
+  typeRegistry.registerGeneric({ ptype: UintNType, instanceEb: UintNExpressionBuilder })
 }

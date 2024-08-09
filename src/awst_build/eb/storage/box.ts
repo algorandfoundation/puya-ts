@@ -1,5 +1,7 @@
 import type { BoxValueExpression, Expression } from '../../../awst/nodes'
 import type { PType } from '../../ptypes'
+import { uint64PType } from '../../ptypes'
+import { voidPType } from '../../ptypes'
 import { boolPType, TuplePType } from '../../ptypes'
 import { boxRefType, bytesPType } from '../../ptypes'
 import type { InstanceBuilder, NodeBuilder } from '../index'
@@ -92,6 +94,78 @@ export class BoxRefExpressionBuilder extends InstanceExpressionBuilder<BoxRefPTy
   constructor(expr: Expression, ptype: PType) {
     invariant(ptype instanceof BoxRefPType, 'BoxRefExpressionBuilder must be constructed with ptype of BoxRefPType')
     super(expr, ptype)
+  }
+
+  memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
+    const boxValueExpr = boxValue({
+      key: this._expr,
+      sourceLocation,
+      contentType: this.ptype.contentType,
+    })
+    switch (name) {
+      case 'put':
+        return new BoxRefPutFunctionBuilder(boxValueExpr)
+      case 'splice':
+        return new BoxRefSpliceFunctionBuilder(boxValueExpr)
+      case 'value':
+        return new BoxValueExpressionBuilder(boxValueExpr, this.ptype.contentType)
+    }
+    return super.memberAccess(name, sourceLocation)
+  }
+}
+
+export abstract class BoxRefBaseFunctionBuilder extends FunctionBuilder {
+  constructor(protected readonly boxValue: BoxValueExpression) {
+    super(boxValue.sourceLocation)
+  }
+}
+
+export class BoxRefPutFunctionBuilder extends BoxRefBaseFunctionBuilder {
+  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    const {
+      args: [value],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 0,
+      funcName: 'BoxRef.put',
+      callLocation: sourceLocation,
+      argMap: [[bytesPType]],
+    })
+    return instanceEb(
+      nodeFactory.intrinsicCall({
+        opCode: 'box_put',
+        stackArgs: [this.boxValue, value],
+        wtype: voidWType,
+        immediates: [],
+        sourceLocation,
+      }),
+      voidPType,
+    )
+  }
+}
+export class BoxRefSpliceFunctionBuilder extends BoxRefBaseFunctionBuilder {
+  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    const {
+      args: [start, stop, value],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 0,
+      funcName: 'BoxRef.put',
+      callLocation: sourceLocation,
+      argMap: [[uint64PType], [uint64PType], [bytesPType]],
+    })
+    return instanceEb(
+      nodeFactory.intrinsicCall({
+        opCode: 'box_splice',
+        stackArgs: [this.boxValue, start, stop, value],
+        wtype: voidWType,
+        immediates: [],
+        sourceLocation,
+      }),
+      voidPType,
+    )
   }
 }
 

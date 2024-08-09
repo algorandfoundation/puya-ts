@@ -5,7 +5,7 @@ import { CodeError } from '../../../errors'
 import { logger } from '../../../logger'
 import type { Expression } from '../../../awst/nodes'
 import type { InstanceBuilder } from '../index'
-import { requireExpressionOfType } from './index'
+import { requireExpressionOfType, requireInstanceBuilder } from './index'
 
 function parseTypeArgs<T extends number>(
   typeArgs: ReadonlyArray<PType>,
@@ -36,7 +36,17 @@ type OptionalArg = [PType, undefined]
  * Will be mapped to `Expression`
  */
 type RequiredArg = [PType]
-type ArgSpec = OptionalArg | RequiredArg
+/**
+ * Required arg, but don't convert to an expression
+ * Will be mapped to `InstanceBuilder`
+ */
+type RequiredBuilder = ['*']
+/**
+ * Optional arg, but don't convert to an expression
+ * Will be mapped to `InstanceBuilder | undefined`
+ */
+type OptionalBuilder = ['*', undefined]
+type ArgSpec = OptionalArg | RequiredArg | RequiredBuilder | OptionalBuilder
 
 /**
  * Object arg spec
@@ -67,7 +77,11 @@ type ArgFor<T extends ObjArgSpec | ArgSpec> = T extends ObjArgSpec
     ? Expression | undefined
     : T extends RequiredArg
       ? Expression
-      : never
+      : T extends OptionalBuilder
+        ? InstanceBuilder | undefined
+        : T extends RequiredBuilder
+          ? InstanceBuilder
+          : never
 /**
  * Maps each arg to an expected output type
  */
@@ -85,7 +99,11 @@ function parseObjArg<T extends Record<string, ArgSpec>>(
     (acc, [property, spec]) => {
       const [ptype, ...rest] = spec
       if (arg?.hasProperty(property)) {
-        acc[property] = requireExpressionOfType(arg.memberAccess(property, sourceLocation), ptype, sourceLocation)
+        if (ptype === '*') {
+          acc[property] = requireInstanceBuilder(arg.memberAccess(property, sourceLocation), sourceLocation)
+        } else {
+          acc[property] = requireExpressionOfType(arg.memberAccess(property, sourceLocation), ptype, sourceLocation)
+        }
         return acc
       }
       if (rest.length === 0) {
@@ -95,7 +113,7 @@ function parseObjArg<T extends Record<string, ArgSpec>>(
       }
       return acc
     },
-    {} as Record<string, Expression>,
+    {} as Record<string, Expression | InstanceBuilder>,
   ) as ArgsForObjSpec<T>
 }
 
@@ -149,7 +167,11 @@ export function parseFunctionArgs<const TGenericCount extends number, const TArg
       if (Array.isArray(a)) {
         const [ptype, ...rest] = a
         if (source) {
-          return requireExpressionOfType(source, ptype, callLocation)
+          if (ptype === '*') {
+            return source
+          } else {
+            return requireExpressionOfType(source, ptype, callLocation)
+          }
         }
         if (rest.length === 0) {
           throw new CodeError(`Arg ${i} for ${funcName} is missing`, { sourceLocation: callLocation })

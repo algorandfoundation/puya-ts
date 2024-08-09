@@ -30,7 +30,10 @@ function cli() {
           paths,
           ...cliOptions,
         })
-        compile(compileOptions)
+        const result = compile(compileOptions)
+        if (result.logs.some((l) => l.level === 'error' || l.level === 'fatal')) {
+          process.exit(-1)
+        }
       } catch (e) {
         if (e instanceof Error) {
           logger.error(e)

@@ -43,4 +43,7 @@ function testBoxRef(box: BoxRef) {
   const someBytes = Bytes.fromHex('FFFFFFFF')
   box.put(someBytes)
   boxRef.put(someBytes)
+  box.splice(1, 2, Bytes.fromHex('00'))
+  boxRef.splice(1, 2, Bytes.fromHex('00'))
+  assert(box.value === Bytes.fromHex('FF00FFFF'))
 }

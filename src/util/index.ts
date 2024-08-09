@@ -1,9 +1,10 @@
-import { CodeError } from '../errors'
+import { CodeError, InternalError } from '../errors'
 import type { SourceLocation } from '../awst/source-location'
 import { TextDecoder } from 'node:util'
 import { Buffer } from 'node:buffer'
 import type { DeliberateAny } from '../typescript-helpers'
 import path from 'node:path'
+import { AvmError } from '../../packages/algo-ts-testing/src/errors'
 export { base32ToUint8Array, uint8ArrayToBase32 } from './base-32'
 class InvariantError extends Error {}
 export function invariant(condition: unknown, message: string): asserts condition {
@@ -65,6 +66,28 @@ export const utf8ToUint8Array = (value: string): Uint8Array => {
 export const uint8ArrayToUtf8 = (value: Uint8Array): string => {
   const decoder = new TextDecoder()
   return decoder.decode(value)
+}
+
+export const bigIntToUint8Array = (val: bigint, fixedSize: number | 'dynamic' = 'dynamic'): Uint8Array => {
+  const maxBytes = fixedSize === 'dynamic' ? 64 : fixedSize
+
+  let hex = val.toString(16)
+
+  // Pad the hex with zeros so it matches the size in bytes
+  if (fixedSize !== 'dynamic' && hex.length !== fixedSize * 2) {
+    hex = hex.padStart(fixedSize * 2, '0')
+  } else if (hex.length % 2 === 1) {
+    // Pad to 'whole' byte
+    hex = `0${hex}`
+  }
+  if (hex.length > maxBytes * 2) {
+    throw new InternalError(`Cannot encode ${val} as ${maxBytes} bytes as it would overflow`)
+  }
+  const byteArray = new Uint8Array(hex.length / 2)
+  for (let i = 0, j = 0; i < hex.length / 2; i++, j += 2) {
+    byteArray[i] = parseInt(hex.slice(j, j + 2), 16)
+  }
+  return byteArray
 }
 
 export const hasFlags = <T extends number>(value: T, flags: T): boolean => (value & flags) === flags

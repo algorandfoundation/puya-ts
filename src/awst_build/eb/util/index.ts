@@ -4,6 +4,7 @@ import type { awst, ConstantValue } from '../../../awst'
 import { isConstant } from '../../../awst'
 import { CodeError } from '../../../errors'
 import type { PType } from '../../ptypes'
+import { UintNType } from '../../ptypes'
 import { biguintPType, boolPType, bytesPType, stringPType, uint64PType } from '../../ptypes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { codeInvariant } from '../../../util'
@@ -105,6 +106,9 @@ export function isValidLiteralForPType(literalValue: ConstantValue, ptype: PType
   }
   if (ptype.equals(biguintPType)) {
     return typeof literalValue === 'bigint' && 0 <= literalValue && literalValue < 2n ** 512n
+  }
+  if (ptype instanceof UintNType) {
+    return typeof literalValue === 'bigint' && 0 <= literalValue && literalValue < 2n ** ptype.n
   }
   if (ptype.equals(boolPType)) {
     return typeof literalValue === 'boolean'
