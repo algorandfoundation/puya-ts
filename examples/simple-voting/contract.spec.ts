@@ -11,7 +11,8 @@ describe('Simple voting contract', () => {
       it('should set the topic', async ({ ctx }: AlgorandTestContext) => {
         const contract = ctx.contract.create(SimpleVotingContract)
         const topic = Bytes('new_topic')
-        ctx.txn.addTxnGroup(
+
+        const result = ctx.txn.executeInScope(
           [
             ctx.any.txn.applicationCall({
               app_id: ctx.ledger.getApplicationForContract(contract),
@@ -22,9 +23,8 @@ describe('Simple voting contract', () => {
             }),
           ],
           0,
-        )
+        )(contract.approvalProgram)
 
-        const result = contract.approvalProgram()
         expect(result).toEqual(Uint64(1))
         expect(contract.topic.value.toString()).toBe(topic.toString())
       })
@@ -63,7 +63,7 @@ describe('Simple voting contract', () => {
       castVote(ctx, contract, voter1)
       castVote(ctx, contract, voter2)
 
-      ctx.txn.addTxnGroup(
+      const result = ctx.txn.executeInScope(
         [
           ctx.any.txn.applicationCall({
             app_id: ctx.ledger.getApplicationForContract(contract),
@@ -76,16 +76,15 @@ describe('Simple voting contract', () => {
           }),
         ],
         0,
-      )
+      )(contract.approvalProgram)
 
-      const result = contract.approvalProgram()
       expect(result).toEqual(Uint64(2))
     })
   })
 })
 
-const castVote = (ctx: TestExecutionContext, contract: SimpleVotingContract, voter: Account): uint64 => {
-  ctx.txn.addTxnGroup(
+const castVote = (ctx: TestExecutionContext, contract: SimpleVotingContract, voter: Account): uint64 =>
+  ctx.txn.executeInScope(
     [
       ctx.any.txn.applicationCall({
         app_id: ctx.ledger.getApplicationForContract(contract),
@@ -98,6 +97,4 @@ const castVote = (ctx: TestExecutionContext, contract: SimpleVotingContract, vot
       }),
     ],
     0,
-  )
-  return contract.approvalProgram()
-}
+  )(contract.approvalProgram)

@@ -1,4 +1,4 @@
-import { Account, Application, Asset, BaseContract, Bytes, bytes, gtxn, internal, uint64 } from '@algorandfoundation/algo-ts'
+import { Account, Application, Asset, Bytes, bytes, gtxn, internal, uint64 } from '@algorandfoundation/algo-ts'
 import algosdk from 'algosdk'
 import { DecodedLogs, decodeLogs, LogDecoding } from './decode-logs'
 import { AccountCls, ApplicationCls, AssetCls } from './reference'
@@ -10,7 +10,6 @@ import { ValueGenerator } from './value-generators'
 
 export class TestExecutionContext implements internal.ExecutionContext {
   #applicationLogs: Map<bigint, bytes[]>
-  #active_contract: BaseContract | undefined
   #contractContext: ContractContext
   #ledgerContext: LedgerContext
   #txnContext: TransactionContext
@@ -20,10 +19,10 @@ export class TestExecutionContext implements internal.ExecutionContext {
   constructor() {
     internal.ctxMgr.instance = this
     this.#applicationLogs = new Map()
-    this.#contractContext = new ContractContext(this)
+    this.#contractContext = new ContractContext()
     this.#ledgerContext = new LedgerContext()
-    this.#txnContext = new TransactionContext(this)
-    this.#valueGenerator = new ValueGenerator(this)
+    this.#txnContext = new TransactionContext()
+    this.#valueGenerator = new ValueGenerator()
     this.#defaultSender = Account(Bytes(algosdk.generateAccount().addr))
   }
 
@@ -39,7 +38,7 @@ export class TestExecutionContext implements internal.ExecutionContext {
   }
 
   log(value: bytes): void {
-    const activeTransaction = this.txn.lastActiveTransaction
+    const activeTransaction = this.txn.activeTransaction
     if (activeTransaction.type !== gtxn.TransactionType.ApplicationCall) {
       throw internal.errors.internalError('Cannot log outside of an application call context')
     }
@@ -50,12 +49,8 @@ export class TestExecutionContext implements internal.ExecutionContext {
     this.#applicationLogs.get(applicationId)!.push(value)
   }
 
-  exportLogs<const T extends [...LogDecoding[]]>(...decoding: T): DecodedLogs<T> {
-    const activeTransaction = this.txn.lastActiveTransaction
-    if (activeTransaction.type !== gtxn.TransactionType.ApplicationCall)
-      throw internal.errors.internalError('Cannot export logs outside of an application call context')
-
-    const applicationLogs = this.#applicationLogs.get(asBigInt(activeTransaction.appId.id)) ?? []
+  exportLogs<const T extends [...LogDecoding[]]>(appId: uint64, ...decoding: T): DecodedLogs<T> {
+    const applicationLogs = this.#applicationLogs.get(asBigInt(appId)) ?? []
     const rawLogs = applicationLogs.map((l) => internal.primitives.toExternalValue(l))
     return decodeLogs(rawLogs, decoding)
   }
@@ -76,32 +71,23 @@ export class TestExecutionContext implements internal.ExecutionContext {
     return this.#valueGenerator
   }
 
+  get currentTransactionGroup() {
+    return this.txn.activeGroup.transactions
+  }
+
   get currentTransaction() {
-    return this.txn.lastActiveTransaction
+    return this.txn.activeTransaction
   }
 
   get defaultSender(): Account {
     return this.#defaultSender
   }
 
-  get activeContract(): BaseContract | undefined {
-    return this.#active_contract
-  }
-
-  set activeContract(contract: BaseContract | undefined) {
-    this.#active_contract = contract
-  }
-
-  get currentTransactionGroup() {
-    return this.txn.lastTxnGroup.transactions
-  }
-
   reset() {
-    this.#active_contract = undefined
     this.#applicationLogs.clear()
-    this.#contractContext = new ContractContext(this)
+    this.#contractContext = new ContractContext()
     this.#ledgerContext = new LedgerContext()
-    this.#txnContext = new TransactionContext(this)
+    this.#txnContext = new TransactionContext()
     internal.ctxMgr.reset()
   }
 }

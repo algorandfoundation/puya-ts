@@ -7,15 +7,15 @@ describe('When calling the HelloWorldContract', () => {
   describe("with ['world']", () => {
     it('logs Hello, World', async ({ ctx }: AlgorandTestContext) => {
       const contract = ctx.contract.create(HelloWorldContract)
-      ctx.txn.addTxnGroup([
+      const application = ctx.ledger.getApplicationForContract(contract)
+      const result = ctx.txn.executeInScope([
         ctx.any.txn.applicationCall({
-          app_id: ctx.ledger.getApplicationForContract(contract),
+          app_id: application,
           args: [Bytes('World')],
         }),
-      ])
+      ])(contract.approvalProgram)
 
-      const result = contract.approvalProgram()
-      expect(ctx.exportLogs('s')).toStrictEqual(['Hello, World'])
+      expect(ctx.exportLogs(application.id, 's')).toStrictEqual(['Hello, World'])
       expect(result).toBe(true)
     })
   })
