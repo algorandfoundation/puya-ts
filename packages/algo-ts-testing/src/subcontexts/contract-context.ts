@@ -51,12 +51,7 @@ const extractStates = (contract: BaseContract): States => {
 }
 
 export class ContractContext {
-  #context: TestExecutionContext
   #statesMap = new Map<BaseContract, States>()
-
-  constructor(context: TestExecutionContext) {
-    this.#context = context
-  }
 
   create<T extends BaseContract>(type: IConstructor<T>, ...args: DeliberateAny[]): T {
     const proxy = new Proxy(type, this.getContractProxyHandler<T>())
@@ -64,7 +59,7 @@ export class ContractContext {
   }
 
   private getContractProxyHandler<T extends BaseContract>(): ProxyHandler<IConstructor<T>> {
-    const context = this.#context
+    const context = internal.ctxMgr.instance as TestExecutionContext
     const onConstructed = (instance: BaseContract) => {
       const states = extractStates(instance)
 
@@ -81,12 +76,9 @@ export class ContractContext {
             const orig = Reflect.get(target, prop, receiver)
             if (prop === 'approvalProgram' || prop === 'clearStateProgram') {
               return () => {
-                try {
-                  context.activeContract = target as unknown as T
-                  return (orig as () => boolean | uint64).apply(target)
-                } finally {
-                  context.activeContract = undefined
-                }
+                const app = context.ledger.getApplicationForContract(receiver)
+                const txns = [context.any.txn.applicationCall({ appId: app })]
+                return context.txn.tryExecuteInActiveScope(txns)(() => (orig as () => boolean | uint64).apply(receiver))
               }
             }
             return orig

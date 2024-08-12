@@ -7,28 +7,28 @@ describe('Calculator', () => {
   describe('when calling with with no args', () => {
     it('errors', async ({ ctx }: AlgorandTestContext) => {
       const contract = ctx.contract.create(MyContract)
-      ctx.txn.addTxnGroup([
+      ctx.txn.executeInScope([
         ctx.any.txn.applicationCall({
           app_id: ctx.ledger.getApplicationForContract(contract),
           args: [],
         }),
-      ])
-
-      expect(() => contract.approvalProgram()).toThrowError(new internal.errors.AvmError('Unknown operation'))
+      ])(() => {
+        expect(() => contract.approvalProgram()).toThrowError(new internal.errors.AvmError('Unknown operation'))
+      })
     })
   })
   describe('when calling with with three args', () => {
     it('Returns 1', async ({ ctx }: AlgorandTestContext) => {
       const contract = ctx.contract.create(MyContract)
-      ctx.txn.addTxnGroup([
+      const application = ctx.ledger.getApplicationForContract(contract)
+      const result = ctx.txn.executeInScope([
         ctx.any.txn.applicationCall({
-          app_id: ctx.ledger.getApplicationForContract(contract),
+          app_id: application,
           args: [op.itob(Uint64(1)), op.itob(Uint64(2)), op.itob(Uint64(3))],
         }),
-      ])
+      ])(contract.approvalProgram)
 
-      const result = contract.approvalProgram()
-      const [left, right, outcome] = ctx.exportLogs('i', 'i', 's')
+      const [left, right, outcome] = ctx.exportLogs(application.id, 'i', 'i', 's')
 
       expect(left).toBe(2n)
       expect(right).toBe(3n)
