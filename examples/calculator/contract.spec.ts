@@ -9,7 +9,7 @@ describe('Calculator', () => {
       const contract = ctx.contract.create(MyContract)
       ctx.txn.executeInScope([
         ctx.any.txn.applicationCall({
-          app_id: ctx.ledger.getApplicationForContract(contract),
+          appId: ctx.ledger.getApplicationForContract(contract),
           args: [],
         }),
       ])(() => {
@@ -23,7 +23,7 @@ describe('Calculator', () => {
       const application = ctx.ledger.getApplicationForContract(contract)
       const result = ctx.txn.executeInScope([
         ctx.any.txn.applicationCall({
-          app_id: application,
+          appId: application,
           args: [op.itob(Uint64(1)), op.itob(Uint64(2)), op.itob(Uint64(3))],
         }),
       ])(contract.approvalProgram)
