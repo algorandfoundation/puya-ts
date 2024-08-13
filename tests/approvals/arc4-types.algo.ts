@@ -6,5 +6,7 @@ function test(n: uint64, b: biguint, c: UintN<256>) {
   const x2 = new UintN<8>(255n)
   const y = new UintN<16>()
   const z = new UintN<8>(n)
-  const a = new UintN(b)
+  const z_native = z.native
+  const a = new UintN<128>(b)
+  const a_native = a.native
 }

@@ -36,7 +36,12 @@ export type AbiMethodConfig<TContract extends Contract> = {
   defaultArguments?: Record<string, DefaultArgument<TContract>>
 }
 export function abimethod<TContract extends Contract>(config?: AbiMethodConfig<TContract>) {
-  return function (target: AnyFunction, ctx: ClassMethodDecoratorContext<TContract>) {}
+  return function <TArgs extends DeliberateAny[], TReturn>(
+    target: (this: TContract, ...args: TArgs) => TReturn,
+    ctx: ClassMethodDecoratorContext<TContract>,
+  ): (this: TContract, ...args: TArgs) => TReturn {
+    return target
+  }
 }
 
 export type BareMethodConfig = {
@@ -52,5 +57,10 @@ export type BareMethodConfig = {
   onCreate?: CreateOptions
 }
 export function baremethod<TContract extends Contract>(config?: BareMethodConfig) {
-  return function (target: () => DeliberateAny, ctx: ClassMethodDecoratorContext<TContract>) {}
+  return function <TArgs extends DeliberateAny[], TReturn>(
+    target: (this: TContract, ...args: TArgs) => TReturn,
+    ctx: ClassMethodDecoratorContext<TContract>,
+  ): (this: TContract, ...args: TArgs) => TReturn {
+    return target
+  }
 }

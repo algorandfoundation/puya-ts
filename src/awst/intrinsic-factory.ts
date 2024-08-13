@@ -49,4 +49,13 @@ export const intrinsicFactory = {
       opCode: 'itob',
     })
   },
+  btoi({ value, sourceLocation }: { value: awst.Expression; sourceLocation: SourceLocation }): awst.IntrinsicCall {
+    return nodeFactory.intrinsicCall({
+      sourceLocation,
+      stackArgs: [value],
+      immediates: [],
+      wtype: wtypes.uint64WType,
+      opCode: 'btoi',
+    })
+  },
 } satisfies Record<string, (args: DeliberateAny) => awst.IntrinsicCall>

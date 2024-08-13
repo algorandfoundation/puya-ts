@@ -1,5 +1,10 @@
-abstract contract ExampleBase extends @algorandfoundation/algo-ts/arc4/index.d.ts::Contract
+abstract contract ExampleBase
 {
+  clearProgram(): bool
+  {
+    return True
+  }
+  
   baseMethod(): uint64
   {
     return 2
@@ -11,6 +16,11 @@ contract Example extends tests/approvals/call-expressions.algo.ts::ExampleBase
   approvalProgram(): bool
   {
     return this.localMethod() + super.baseMethod() == freeMethod() - this.baseMethod()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
   }
   
   baseMethod(): uint64

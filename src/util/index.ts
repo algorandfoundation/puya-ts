@@ -4,8 +4,8 @@ import { TextDecoder } from 'node:util'
 import { Buffer } from 'node:buffer'
 import type { DeliberateAny } from '../typescript-helpers'
 import path from 'node:path'
-import { AvmError } from '../../packages/algo-ts-testing/src/errors'
 export { base32ToUint8Array, uint8ArrayToBase32 } from './base-32'
+
 class InvariantError extends Error {}
 export function invariant(condition: unknown, message: string): asserts condition {
   if (!condition) {

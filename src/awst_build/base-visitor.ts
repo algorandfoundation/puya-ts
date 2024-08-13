@@ -23,7 +23,10 @@ import type { ObjectLiteralParts } from './eb/literal/object-literal-expression-
 import { ObjectLiteralExpressionBuilder } from './eb/literal/object-literal-expression-builder'
 import { codeInvariant, enumerate, invariant } from '../util'
 import type { PType } from './ptypes'
-import { bigintBiguintUnion, numberUint64Union } from './ptypes'
+import { biguintPType } from './ptypes'
+import { uint64PType, UnionPType } from './ptypes'
+import { NumberPType } from './ptypes'
+import { BigIntPType } from './ptypes'
 import { TuplePType } from './ptypes'
 import { ContractClassPType, ObjectPType } from './ptypes'
 import { ContractSuperBuilder, ContractThisBuilder } from './eb/contract-builder'
@@ -35,7 +38,7 @@ import { logger } from '../logger'
 import { instanceEb, typeRegistry } from './type-registry'
 import { ConditionalExpressionBuilder } from './eb/literal/conditional-expression-builder'
 import { BooleanExpressionBuilder } from './eb/boolean-expression-builder'
-import { bigintPType, boolPType, numberPType } from './ptypes'
+import { boolPType } from './ptypes'
 import type { VisitorContext } from './context/base-context'
 import type { Statement, Expression, LValue } from '../awst/nodes'
 import { OmittedExpressionBuilder } from './eb/omitted-expression-builder'
@@ -59,7 +62,8 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   }
 
   visitBigIntLiteral(node: ts.BigIntLiteral): InstanceBuilder {
-    return new BigIntLiteralExpressionBuilder(BigInt(node.text.slice(0, -1)), bigintPType, this.sourceLocation(node))
+    const literalValue = BigInt(node.text.slice(0, -1))
+    return new BigIntLiteralExpressionBuilder(literalValue, new BigIntPType({ literalValue }), this.sourceLocation(node))
   }
 
   visitRegularExpressionLiteral(node: ts.RegularExpressionLiteral): InstanceBuilder {
@@ -87,7 +91,8 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   }
 
   visitNumericLiteral(node: ts.NumericLiteral): InstanceBuilder {
-    return new BigIntLiteralExpressionBuilder(BigInt(node.text), numberPType, this.sourceLocation(node))
+    const literalValue = BigInt(node.text)
+    return new BigIntLiteralExpressionBuilder(literalValue, new NumberPType({ literalValue }), this.sourceLocation(node))
   }
 
   visitIdentifier(node: ts.Identifier): NodeBuilder {
@@ -497,10 +502,16 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
     if (sourceType.equals(targetType)) {
       return targetType
     }
-    if (sourceType.equals(numberPType) || sourceType.equals(numberUint64Union)) {
+    if (
+      sourceType instanceof NumberPType ||
+      (sourceType instanceof UnionPType && sourceType.types.every((t) => t.equals(uint64PType) || t instanceof NumberPType))
+    ) {
       return targetType
     }
-    if (sourceType.equals(bigintPType) || sourceType.equals(bigintBiguintUnion)) {
+    if (
+      sourceType instanceof BigIntPType ||
+      (sourceType instanceof UnionPType && sourceType.types.every((t) => t.equals(biguintPType) || t instanceof BigIntPType))
+    ) {
       return targetType
     }
     if (sourceType instanceof TuplePType) {

@@ -1,6 +1,6 @@
 import type { InstanceBuilder } from '../index'
-import { InstanceExpressionBuilder } from '../index'
 import { NodeBuilder } from '../index'
+import { InstanceExpressionBuilder } from '../index'
 import type { PType } from '../../ptypes'
 import { NumberPType } from '../../ptypes'
 import { biguintPType } from '../../ptypes'
@@ -13,6 +13,8 @@ import { bigIntToUint8Array, codeInvariant, invariant } from '../../../util'
 import { parseFunctionArgs } from '../util/arg-parsing'
 import { isValidLiteralForPType } from '../util'
 import { nodeFactory } from '../../../awst/node-factory'
+import { instanceEb } from '../../type-registry'
+import { intrinsicFactory } from '../../../awst/intrinsic-factory'
 
 export class UintNConstructorBuilder extends NodeBuilder {
   get ptype(): undefined {
@@ -32,7 +34,7 @@ export class UintNConstructorBuilder extends NodeBuilder {
     })
     codeInvariant(
       size instanceof NumberPType && size.literalValue !== undefined,
-      `Generic type of ${this.typeDescription} must be a literal number`,
+      `Generic type of ${this.typeDescription} must be a literal number. Inferred type is ${size.name}`,
     )
     const ptype = new UintNType({ n: size.literalValue })
 
@@ -101,5 +103,18 @@ export class UintNExpressionBuilder extends InstanceExpressionBuilder<UintNType>
   constructor(expr: Expression, ptype: PType) {
     invariant(ptype instanceof UintNType, 'ptype must be instance of UIntNType')
     super(expr, ptype)
+  }
+
+  memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
+    switch (name) {
+      case 'native':
+        if (this.ptype.n <= 64) {
+          return instanceEb(intrinsicFactory.btoi({ value: this._expr, sourceLocation }), uint64PType)
+        } else {
+          return instanceEb(nodeFactory.reinterpretCast({ expr: this._expr, sourceLocation, wtype: biguintPType.wtype }), biguintPType)
+        }
+    }
+
+    return super.memberAccess(name, sourceLocation)
   }
 }

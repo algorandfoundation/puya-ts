@@ -8,8 +8,8 @@ import { CodeError, wrapInCodeError } from '../../errors'
 import { UInt64ExpressionBuilder } from './uint64-expression-builder'
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
 import { requireExpressionOfType, requireExpressionsOfType } from './util'
-import type { PType } from '../ptypes'
-import { BytesFunction, bytesPType, numberPType, stringPType, uint64PType } from '../ptypes'
+import { NumberPType } from '../ptypes'
+import { BytesFunction, bytesPType, stringPType, uint64PType } from '../ptypes'
 import { StringExpressionBuilder } from './string-expression-builder'
 import { BooleanExpressionBuilder } from './boolean-expression-builder'
 import type { Expression } from '../../awst/nodes'
@@ -17,7 +17,7 @@ import { BytesBinaryOperator, BytesEncoding, BytesUnaryOperator, EqualityCompari
 import { base32ToUint8Array, base64ToUint8Array, hexToUint8Array, utf8ToUint8Array } from '../../util'
 import { BigIntLiteralExpressionBuilder } from './literal/big-int-literal-expression-builder'
 import { logger } from '../../logger'
-import type { InstanceType } from '../ptypes'
+import type { InstanceType, PType } from '../ptypes'
 import { LiteralExpressionBuilder } from './literal-expression-builder'
 import { instanceEb } from '../type-registry'
 
@@ -140,7 +140,7 @@ export class BytesExpressionBuilder extends InstanceExpressionBuilder<InstanceTy
           sourceLocation,
           `The '~' ${this.typeDescription} operator coerces the target value to a number type. Use {bytes expression}.bitwiseInvert() instead`,
         )
-        return new BigIntLiteralExpressionBuilder(0n, numberPType, sourceLocation)
+        return new BigIntLiteralExpressionBuilder(0n, new NumberPType({ literalValue: 0n }), sourceLocation)
     }
     return super.prefixUnaryOp(op, sourceLocation)
   }

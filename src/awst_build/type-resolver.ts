@@ -1,16 +1,23 @@
 import ts from 'typescript'
-import { ArrayPType, BigIntPType, LocalStateType, NumberPType, StorageProxyPType, undefinedPType } from './ptypes'
+import {
+  ArrayPType,
+  BigIntPType,
+  ClassMethodDecoratorContext,
+  neverPType,
+  NumberPType,
+  StorageProxyPType,
+  TypeParameterType,
+  undefinedPType,
+} from './ptypes'
 import {
   anyPType,
   ApprovalProgram,
   BaseContractType,
-  bigintPType,
   BooleanFunction,
   boolPType,
   ClearStateProgram,
   ContractType,
   nullPType,
-  numberPType,
   StringFunction,
   stringPType,
   TuplePType,
@@ -23,7 +30,7 @@ import { typeRegistry } from './type-registry'
 import { logger } from '../logger'
 import { Constants } from '../constants'
 import type { AppStorageType, PType } from './ptypes'
-import { ContractClassPType, FunctionPType, GlobalStateType, NamespacePType, ObjectPType, UnionPType } from './ptypes'
+import { ContractClassPType, FunctionPType, NamespacePType, ObjectPType, UnionPType } from './ptypes'
 import { SymbolName } from './symbol-name'
 
 export class TypeResolver {
@@ -87,11 +94,14 @@ export class TypeResolver {
     if (intersectsFlags(tsType.flags, ts.TypeFlags.Boolean | ts.TypeFlags.BooleanLiteral)) {
       return boolPType
     }
-    if (hasFlags(tsType.flags, ts.TypeFlags.Void)) {
+    if (tsType.flags === ts.TypeFlags.Void) {
       return voidPType
     }
     if (intersectsFlags(tsType.flags, ts.TypeFlags.String | ts.TypeFlags.StringLiteral)) {
       return stringPType
+    }
+    if (tsType.flags === ts.TypeFlags.Never) {
+      return neverPType
     }
     if (hasFlags(tsType.flags, ts.TypeFlags.Unknown)) {
       throw new CodeError(`Type resolves to unknown`, { sourceLocation })
@@ -100,13 +110,13 @@ export class TypeResolver {
       if (tsType.isNumberLiteral()) {
         return new NumberPType({ literalValue: BigInt(tsType.value) })
       }
-      return numberPType
+      return new NumberPType()
     }
     if (intersectsFlags(tsType.flags, ts.TypeFlags.BigInt | ts.TypeFlags.BigIntLiteral) && tsType.getSymbol() === undefined) {
       if (tsType.isLiteral() && typeof tsType.value === 'object') {
         return new BigIntPType({ literalValue: BigInt(tsType.value.base10Value) * (tsType.value.negative ? -1n : 1n) })
       }
-      return bigintPType
+      return new BigIntPType()
     }
     if (isTupleReference(tsType)) {
       //codeInvariant(tsType.readonly, 'Tuple types should be declared as readonly', sourceLocation)
@@ -121,9 +131,13 @@ export class TypeResolver {
     }
 
     const typeName = this.getTypeName(tsType, sourceLocation)
-
+    if (tsType.flags === ts.TypeFlags.TypeParameter) {
+      return new TypeParameterType(typeName)
+    }
+    // TODO: These should be resolved from the typeRegistry, but it needs to happen before checking call signatures below
     if (typeName.fullName === StringFunction.fullName) return StringFunction
     if (typeName.fullName === BooleanFunction.fullName) return BooleanFunction
+    if (typeName.fullName === ClassMethodDecoratorContext.fullName) return ClassMethodDecoratorContext
 
     if (tsType.isClass()) {
       if (typeName.fullName === ContractType.fullName) return ContractType
