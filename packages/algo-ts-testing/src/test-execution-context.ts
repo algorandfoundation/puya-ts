@@ -1,6 +1,7 @@
 import { Account, Application, Asset, Bytes, bytes, gtxn, internal, uint64 } from '@algorandfoundation/algo-ts'
 import algosdk from 'algosdk'
 import { DecodedLogs, decodeLogs, LogDecoding } from './decode-logs'
+import { Global, GTxn, Txn } from './impl/op'
 import { AccountCls, ApplicationCls, AssetCls } from './reference'
 import { ContractContext } from './subcontexts/contract-context'
 import { LedgerContext } from './subcontexts/ledger-context'
@@ -55,6 +56,9 @@ export class TestExecutionContext implements internal.ExecutionContext {
     return decodeLogs(rawLogs, decoding)
   }
 
+  get op() {
+    return { Txn, GTxn, Global }
+  }
   get contract() {
     return this.#contractContext
   }
@@ -69,14 +73,6 @@ export class TestExecutionContext implements internal.ExecutionContext {
 
   get any() {
     return this.#valueGenerator
-  }
-
-  get currentTransactionGroup() {
-    return this.txn.activeGroup.transactions
-  }
-
-  get currentTransaction() {
-    return this.txn.activeTransaction
   }
 
   get defaultSender(): Account {
