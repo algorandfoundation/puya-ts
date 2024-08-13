@@ -144,7 +144,7 @@ export interface KeyRegistrationTxn extends TransactionBase {
   /**
    * Marks an account nonparticipating for rewards
    */
-  nonparticipation: boolean
+  nonParticipation: boolean
 
   /**
    * 64 byte state proof public key

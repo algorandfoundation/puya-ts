@@ -15,7 +15,7 @@ describe('Simple voting contract', () => {
         const result = ctx.txn.executeInScope(
           [
             ctx.any.txn.applicationCall({
-              app_id: ctx.ledger.getApplicationForContract(contract),
+              appId: ctx.ledger.getApplicationForContract(contract),
               args: [Bytes('set_topic'), topic],
             }),
             ctx.any.txn.payment({
@@ -66,7 +66,7 @@ describe('Simple voting contract', () => {
       const result = ctx.txn.executeInScope(
         [
           ctx.any.txn.applicationCall({
-            app_id: ctx.ledger.getApplicationForContract(contract),
+            appId: ctx.ledger.getApplicationForContract(contract),
             sender: ctx.defaultSender,
             args: [Bytes('get_votes')],
           }),
@@ -87,7 +87,7 @@ const castVote = (ctx: TestExecutionContext, contract: SimpleVotingContract, vot
   ctx.txn.executeInScope(
     [
       ctx.any.txn.applicationCall({
-        app_id: ctx.ledger.getApplicationForContract(contract),
+        appId: ctx.ledger.getApplicationForContract(contract),
         sender: voter,
         args: [Bytes('vote'), voter.bytes],
       }),
