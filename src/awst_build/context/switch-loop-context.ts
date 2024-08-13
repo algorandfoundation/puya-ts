@@ -15,6 +15,11 @@ type SwitchContext = Disposable & {
 
 const breakSuffix = 'ᵇ'
 const continueSuffix = 'ᶜ'
+
+/**
+ * Tracks parent switches and loops so that break and continue statements
+ * can target the correct parent.
+ */
 export class SwitchLoopContext {
   private labelCount = defaultRecord<string, number>(() => 0)
   private unlabelledCount = defaultRecord<SwitchOrLoop, number>(() => 0)

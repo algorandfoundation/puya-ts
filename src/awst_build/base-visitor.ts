@@ -201,7 +201,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
     const sourceLocation = this.sourceLocation(node)
     const eb = this.baseAccept(node.expression)
     const args = node.arguments.map((a) => requireInstanceBuilder(this.baseAccept(a), sourceLocation))
-    const typeArgs = node.typeArguments?.map((t) => this.context.getPTypeForNode(t)) ?? this.context.getGenericTypeArgsForNode(node)
+    const typeArgs = node.typeArguments?.map((t) => this.context.getPTypeForNode(t)) ?? this.context.getPTypeForNode(node).getGenericArgs()
     return eb.call(args, typeArgs, sourceLocation)
   }
 
@@ -209,7 +209,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
     const sourceLocation = this.sourceLocation(node)
     const eb = this.baseAccept(node.expression)
     const args = node.arguments?.map((a) => requireInstanceBuilder(this.baseAccept(a), sourceLocation)) ?? []
-    const typeArgs = node.typeArguments?.map((t) => this.context.getPTypeForNode(t)) ?? this.context.getGenericTypeArgsForNode(node)
+    const typeArgs = node.typeArguments?.map((t) => this.context.getPTypeForNode(t)) ?? this.context.getPTypeForNode(node).getGenericArgs()
     return eb.newCall(args, typeArgs, sourceLocation)
   }
 

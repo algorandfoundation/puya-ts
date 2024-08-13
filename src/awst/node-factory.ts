@@ -27,6 +27,7 @@ import { WTuple } from './wtypes'
 import { boolWType } from './wtypes'
 
 type ConcreteNodes = typeof concreteNodes
+
 let singleEval = 0
 const explicitNodeFactory = {
   bytesConstant(props: { value: Uint8Array; encoding?: BytesEncoding; sourceLocation: SourceLocation; wtype?: WType }): BytesConstant {

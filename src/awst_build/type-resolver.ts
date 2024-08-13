@@ -71,16 +71,6 @@ export class TypeResolver {
     return this.resolveType(type, sourceLocation)
   }
 
-  resolveGenericTypeArgumentsOfNode(node: ts.Node, sourceLocation: SourceLocation): PType[] {
-    const tsType = this.checker.getTypeAtLocation(node)
-    if (tsType.aliasTypeArguments?.length) {
-      return tsType.aliasTypeArguments.map((a) => this.resolveType(a, sourceLocation))
-    } else if (isTypeReference(tsType) && tsType.typeArguments?.length) {
-      return tsType.typeArguments.map((t) => this.resolveType(t, sourceLocation))
-    }
-    return []
-  }
-
   resolveType(tsType: ts.Type, sourceLocation: SourceLocation): PType {
     if (isUnionType(tsType)) {
       return UnionPType.fromTypes(tsType.types.map((t) => this.resolveType(t, sourceLocation)))

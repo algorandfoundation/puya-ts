@@ -348,7 +348,7 @@ export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, Statemen
       header.splice(0, 0, 'abstract')
     }
     if (c.bases.length) {
-      header.push('extends', c.bases.map((b) => `${b.module}::${b.name}`).join(', '))
+      header.push('extends', c.bases.map((b) => `${b.moduleName}::${b.className}`).join(', '))
     }
 
     return [header.join(' '), '{', ...indent(body), '}']

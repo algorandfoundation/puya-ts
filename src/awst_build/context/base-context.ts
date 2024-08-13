@@ -15,17 +15,63 @@ import { logger } from '../../logger'
 import { CodeError } from '../../errors'
 
 export interface VisitorContext {
+  /**
+   * Get the source location of a node in the current source file
+   * @param node
+   */
   getSourceLocation(node: ts.Node): SourceLocation
+
+  /**
+   * Get NodeBuilder instance for the given identifier.
+   * @param node
+   */
   getBuilderForNode(node: ts.Identifier): NodeBuilder
+
+  /**
+   * Reflect the PType of the given node
+   * @param node
+   */
   getPTypeForNode(node: ts.Node): PType
-  getGenericTypeArgsForNode(node: ts.Node): PType[]
+
+  /**
+   * Resolve the given identifier to a unique variable name that accounts
+   * for shadowed variable names.
+   * @param node
+   */
   resolveVariableName(node: ts.Identifier): string
+
+  /**
+   * Resolve the given parameter declaration to a unique parameter name to be used
+   * in destructuring assignments where no explicit parameter name is available.
+   * @param node
+   */
   resolveDestructuredParamName(node: ts.ParameterDeclaration): string
+
+  /**
+   * Generate a unique variable name for a discarded value.
+   */
   generateDiscardedVarName(): string
+
+  /**
+   * Add a named constant to the current context
+   * @param name The unique name of the constant declaration in this source file
+   * @param value The compile time constant value
+   */
   addConstant(name: string, value: awst.Constant): void
+
+  /**
+   * Retrieve the evaluation context
+   */
   get evaluationCtx(): EvaluationContext
+
+  /**
+   * Retrieve the switch loop context
+   */
   get switchLoopCtx(): SwitchLoopContext
 
+  /**
+   * Create a child context from this context. Used when entering a child parsing context such as a class or function.
+   */
   createChildContext(): VisitorContext
 }
 
@@ -85,11 +131,6 @@ class VisitorContextImpl implements VisitorContext {
       return this.typeResolver.resolveTypeNode(node, sourceLocation)
     }
     return this.typeResolver.resolve(node, sourceLocation)
-  }
-
-  getGenericTypeArgsForNode(node: ts.Node): PType[] {
-    const sourceLocation = this.getSourceLocation(node)
-    return this.typeResolver.resolveGenericTypeArgumentsOfNode(node, sourceLocation)
   }
 
   getBuilderForNode(node: ts.Identifier): NodeBuilder {

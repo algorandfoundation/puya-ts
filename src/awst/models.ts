@@ -15,6 +15,15 @@ export enum ARC4CreateOption {
   Disallow = 'disallow',
 }
 
+class ModelBase {
+  /**
+   * This field prevents us from accidentally passing an object literal with structural equality to
+   * a model class instead of any instance of the class, which would stuff up the serialization
+   * @private
+   */
+  #isModel = true
+}
+
 export interface ARC4BareMethodConfig {
   source_location: SourceLocation | undefined
   allowed_completion_types: [...OnCompletionAction[]]
@@ -56,8 +65,21 @@ export interface ARC32StructDef {
   elements: [...[string, string][]]
 }
 
-export type ContractReference = {
-  name: string
-  module: string
+export class ContractReference extends ModelBase {
+  constructor({ className, moduleName }: { className: string; moduleName: string }) {
+    super()
+    this.className = className
+    this.moduleName = moduleName
+  }
+  readonly className: string
+  readonly moduleName: string
 }
-export type LogicSigReference = { name: string; module: string }
+export class LogicSigReference extends ModelBase {
+  constructor({ name, moduleName }: { name: string; moduleName: string }) {
+    super()
+    this.name = name
+    this.moduleName = moduleName
+  }
+  readonly name: string
+  readonly moduleName: string
+}
