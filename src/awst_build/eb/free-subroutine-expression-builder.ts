@@ -9,6 +9,7 @@ import type { ContractClassPType } from '../ptypes'
 import { FunctionPType } from '../ptypes'
 import type { BaseClassSubroutineTarget, FreeSubroutineTarget, InstanceSubroutineTarget } from '../../awst/nodes'
 import { parseFunctionArgs } from './util/arg-parsing'
+import { ContractReference } from '../../awst/models'
 
 abstract class SubroutineExpressionBuilder extends FunctionBuilder {
   protected constructor(
@@ -64,10 +65,10 @@ export class BaseContractMethodExpressionBuilder extends SubroutineExpressionBui
       ptype,
       nodeFactory.baseClassSubroutineTarget({
         name: ptype.name,
-        baseClass: {
-          name: baseContractPType.name,
-          module: baseContractPType.module,
-        },
+        baseClass: new ContractReference({
+          className: baseContractPType.name,
+          moduleName: baseContractPType.module,
+        }),
       }),
     )
   }

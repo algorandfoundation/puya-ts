@@ -12,14 +12,17 @@ import { FunctionVisitor } from './function-visitor'
 import { logger } from '../logger'
 import { BaseVisitor } from './base-visitor'
 import { GlobalStateFunctionResultBuilder } from './eb/storage/global-state'
-import { ContractClassPType, GlobalStateType } from './ptypes'
+import { BaseContractType, boolPType, ContractClassPType, ContractType, GlobalStateType } from './ptypes'
 import type { Arc4AbiDecoratorData, DecoratorData } from './decorator-visitor'
 import { DecoratorVisitor } from './decorator-visitor'
 import type { SourceLocation } from '../awst/source-location'
 import type { DefaultArgumentSource } from '../awst/models'
+import { ContractReference } from '../awst/models'
 import { ARC4CreateOption, OnCompletionAction } from '../awst/models'
 import { isValidLiteralForPType } from './eb/util'
 import type { VisitorContext } from './context/base-context'
+import { nodeFactory } from '../awst/node-factory'
+import { boolWType } from '../awst/wtypes'
 
 export class ContractVisitor extends BaseVisitor implements Visitor<ClassElements, void> {
   private _ctor?: ContractMethod
@@ -64,15 +67,10 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
       subroutines: this._subroutines,
       docstring: undefined,
       approvalProgram: this._approvalProgram,
-      clearProgram: this._clearStateProgram,
+      clearProgram: this._clearStateProgram ?? this.makeDefaultClearStateProgram(sourceLocation, contractPtype),
       isAbstract,
       isArc4: contractPtype.isARC4,
-      bases: [
-        {
-          name: contractPtype.baseType.name,
-          module: contractPtype.baseType.module,
-        },
-      ],
+      bases: this.buildContractReferences(contractPtype),
       moduleName: this._contractPType.module,
       reservedScratchSpace: new Set(),
       methods: new Map(),
@@ -84,6 +82,41 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
         localUints: undefined,
       },
     })
+  }
+
+  private makeDefaultClearStateProgram(sourceLocation: SourceLocation, contractType: ContractClassPType) {
+    return nodeFactory.contractMethod({
+      name: Constants.clearStateProgramMethodName,
+      moduleName: contractType.module,
+      args: [],
+      arc4MethodConfig: undefined,
+      sourceLocation,
+      className: contractType.name,
+      returnType: boolWType,
+      body: nodeFactory.block(
+        {
+          sourceLocation,
+        },
+        nodeFactory.returnStatement({
+          sourceLocation,
+          value: nodeFactory.boolConstant({ value: true, sourceLocation }),
+        }),
+      ),
+    })
+  }
+
+  private buildContractReferences(contractType: ContractClassPType): ContractReference[] {
+    const baseType = contractType.baseType
+    if (baseType === undefined || baseType.equals(BaseContractType) || baseType.equals(ContractType)) {
+      return []
+    } else {
+      return [
+        new ContractReference({
+          className: baseType.name,
+          moduleName: baseType.module,
+        }),
+      ]
+    }
   }
 
   visitClassStaticBlockDeclaration(node: ts.ClassStaticBlockDeclaration): void {

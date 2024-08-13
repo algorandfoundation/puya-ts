@@ -38,4 +38,8 @@ export abstract class PType {
   toString(): string {
     return this.name
   }
+
+  getGenericArgs(): PType[] {
+    return []
+  }
 }

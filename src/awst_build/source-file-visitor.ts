@@ -21,7 +21,10 @@ export class SourceFileVisitor extends BaseVisitor implements Visitor<ModuleStat
   private _moduleStatements: StatementOrDeferred[] = []
   private accept = <TNode extends ts.Node>(node: TNode) => accept<SourceFileVisitor, TNode>(this, node)
 
-  constructor(sourceFile: ts.SourceFile, program: ts.Program) {
+  constructor(
+    private readonly sourceFile: ts.SourceFile,
+    program: ts.Program,
+  ) {
     super(buildContextForSourceFile(sourceFile, program))
 
     for (const statement of sourceFile.statements) {
@@ -43,7 +46,15 @@ export class SourceFileVisitor extends BaseVisitor implements Visitor<ModuleStat
     return () => logPuyaExceptions(() => FunctionVisitor.buildSubroutine(this.context, node), this.sourceLocation(node))
   }
 
-  public *gatherStatements(): Generator<awst.ModuleStatement, void, void> {
+  buildModule(): awst.Module {
+    return nodeFactory.module({
+      name: this.sourceFile.fileName,
+      sourceFilePath: this.sourceFile.fileName,
+      body: Array.from(this.gatherStatements()),
+    })
+  }
+
+  private *gatherStatements(): Generator<awst.ModuleStatement, void, void> {
     for (const statements of this._moduleStatements) {
       try {
         if (typeof statements === 'function') {

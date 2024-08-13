@@ -1,4 +1,5 @@
-import { Bytes, uint64, Contract, Txn, log, op, assert, err, Uint64 } from '@algorandfoundation/algo-ts'
+import type { uint64 } from '@algorandfoundation/algo-ts'
+import { Bytes, Contract, Txn, log, op, assert, err, Uint64 } from '@algorandfoundation/algo-ts'
 
 const ADD = Uint64(1)
 const SUB = Uint64(2)
