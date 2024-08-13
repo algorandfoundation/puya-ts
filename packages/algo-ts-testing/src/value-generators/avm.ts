@@ -1,7 +1,6 @@
-import { Account, Application, Bytes, internal } from '@algorandfoundation/algo-ts'
+import { Account, Application, Bytes } from '@algorandfoundation/algo-ts'
 import algosdk from 'algosdk'
-import { TestExecutionContext } from '../test-execution-context'
-import { asBigInt } from '../util'
+import { asBigInt, getTestExecutionContext } from '../util'
 
 export class AvmValueGenerator {
   account(account?: Partial<Account>): Account {
@@ -14,7 +13,7 @@ export class AvmValueGenerator {
 
   application(app?: Partial<Application>): Application {
     const { id, ...rest } = app ?? {}
-    const context = internal.ctxMgr.instance as TestExecutionContext
+    const context = getTestExecutionContext()
     const appId = id ?? context.ledger.appIdIter.next().value
     const application = {
       id: appId,

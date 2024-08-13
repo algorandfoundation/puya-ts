@@ -1,4 +1,5 @@
 import { internal } from '@algorandfoundation/algo-ts'
+import { TestExecutionContext } from './test-execution-context'
 
 export const nameOfType = (x: unknown) => {
   if (typeof x === 'object') {
@@ -26,3 +27,5 @@ export function extractGenericTypeArgs(t: string): string[] {
   if (!match) return []
   return match[1].split(',').map((x) => x.trim())
 }
+
+export const getTestExecutionContext = (): TestExecutionContext => internal.ctxMgr.instance as TestExecutionContext

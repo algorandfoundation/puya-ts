@@ -1,8 +1,7 @@
 import { Application, BaseContract, Bytes, bytes, internal, uint64 } from '@algorandfoundation/algo-ts'
 import { getGenericTypeInfo } from '../runtime-helpers'
-import { TestExecutionContext } from '../test-execution-context'
 import { DeliberateAny } from '../typescript-helpers'
-import { extractGenericTypeArgs } from '../util'
+import { extractGenericTypeArgs, getTestExecutionContext } from '../util'
 
 interface IConstructor<T> {
   new (...args: DeliberateAny[]): T
@@ -60,7 +59,7 @@ export class ContractContext {
   }
 
   private getContractProxyHandler<T extends BaseContract>(): ProxyHandler<IConstructor<T>> {
-    const context = internal.ctxMgr.instance as TestExecutionContext
+    const context = getTestExecutionContext()
     const onConstructed = (instance: BaseContract) => {
       const states = extractStates(instance)
 
