@@ -38,6 +38,8 @@ export function binaryOp(left: unknown, right: unknown, op: BinaryOps) {
       return new internal.primitives.BigUintCls(result)
     } else if (left instanceof internal.primitives.Uint64Cls || right instanceof internal.primitives.Uint64Cls) {
       return new internal.primitives.Uint64Cls(result)
+    } else if (typeof left === 'number' && typeof right === 'number' && result <= Number.MAX_SAFE_INTEGER) {
+      return Number(result)
     }
     return result
   }
