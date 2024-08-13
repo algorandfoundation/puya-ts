@@ -126,12 +126,10 @@ export class UnionPType extends TransientType {
   private constructor({ types }: { types: PType[] }) {
     let typeMessage: string
     let expressionMessage: string
-    if (ptypesEqual(types, [uint64PType, numberPType])) {
-      typeMessage = numberPType.typeMessage
-      expressionMessage = numberPType.expressionMessage
-    } else if (ptypesEqual(types, [biguintPType, bigintPType])) {
-      typeMessage = bigintPType.typeMessage
-      expressionMessage = bigintPType.expressionMessage
+    const transientType = types.find((t) => t instanceof TransientType)
+    if (transientType) {
+      typeMessage = transientType.typeMessage
+      expressionMessage = transientType.expressionMessage
     } else {
       typeMessage = 'Union types are not valid as a variable, parameter, return, or property type.'
       expressionMessage = 'Union types are only valid in boolean expressions.'
@@ -171,6 +169,8 @@ export abstract class StorageProxyPType extends PType {
     this.wtype = props.keyWType
     this.contentType = props.content
   }
+
+  abstract getGenericArgs(): PType[]
 }
 
 export class GlobalStateType extends StorageProxyPType {
@@ -192,6 +192,10 @@ export class GlobalStateType extends StorageProxyPType {
       content: typeArgs[0],
     })
   }
+
+  getGenericArgs(): PType[] {
+    return [this.contentType]
+  }
 }
 export class LocalStateType extends StorageProxyPType {
   static readonly baseName = 'LocalState'
@@ -212,6 +216,10 @@ export class LocalStateType extends StorageProxyPType {
       content: typeArgs[0],
     })
   }
+
+  getGenericArgs(): PType[] {
+    return [this.contentType]
+  }
 }
 export class BoxPType extends StorageProxyPType {
   static readonly baseName = 'Box'
@@ -231,6 +239,10 @@ export class BoxPType extends StorageProxyPType {
     return new BoxPType({
       content: typeArgs[0],
     })
+  }
+
+  getGenericArgs(): PType[] {
+    return [this.contentType]
   }
 }
 export class BoxMapPType extends StorageProxyPType {
@@ -255,6 +267,10 @@ export class BoxMapPType extends StorageProxyPType {
       content: typeArgs[1],
     })
   }
+
+  getGenericArgs(): PType[] {
+    return [this.keyType, this.contentType]
+  }
 }
 export class BoxRefPType extends StorageProxyPType {
   readonly module = Constants.boxModuleName
@@ -264,12 +280,51 @@ export class BoxRefPType extends StorageProxyPType {
   constructor() {
     super({ keyWType: wtypes.boxKeyWType, content: bytesPType })
   }
+
+  getGenericArgs(): PType[] {
+    return []
+  }
 }
 export type AppStorageType = GlobalStateType | LocalStateType
 
 export function isAppStorageType(ptype: PType): ptype is AppStorageType {
   return ptype instanceof GlobalStateType || ptype instanceof LocalStateType
 }
+
+/**
+ * An open generic type parameter
+ */
+export class TypeParameterType extends PType {
+  readonly name: string
+  readonly module: string
+  readonly singleton = false
+  readonly wtype = undefined
+  constructor({ name, module }: { name: string; module: string }) {
+    super()
+    this.name = name
+    this.module = module
+  }
+}
+
+/**
+ * A type from the typescript libs which might pop up in type reflection
+ * but is not relevant to the output of the compiler
+ */
+export class InternalType extends PType {
+  readonly name: string
+  readonly module: string
+  readonly singleton = false
+  readonly wtype = undefined
+  constructor({ name, module }: { name: string; module: string }) {
+    super()
+    this.name = name
+    this.module = module
+  }
+}
+export const ClassMethodDecoratorContext = new InternalType({
+  module: 'typescript/lib/lib.decorators.d.ts',
+  name: 'ClassMethodDecoratorContext',
+})
 
 export class AnyPType extends PType {
   get wtype(): never {
@@ -330,9 +385,16 @@ export class UintNType extends PType {
   static parameterise(typeArgs: PType[]): UintNType {
     codeInvariant(typeArgs.length === 1, 'UintNType type expects exactly one type parameter')
     const [size] = typeArgs
-    codeInvariant(size instanceof NumberPType && size.literalValue, 'Generic type param for UintNType must be a literal number')
+    codeInvariant(
+      size instanceof NumberPType && size.literalValue,
+      `Generic type param for UintNType must be a literal number. Inferred type is ${size.name}`,
+    )
 
     return new UintNType({ n: size.literalValue })
+  }
+
+  getGenericArgs(): PType[] {
+    return [new NumberPType({ literalValue: this.n })]
   }
 }
 
@@ -504,14 +566,13 @@ export class ObjectPType extends PType {
   }
 }
 
-function ptypesEqual(a: PType[], b: PType[]): boolean {
-  const aSorted = a.filter(distinct((t) => t.fullName)).toSorted(sortBy((t) => t.fullName))
-  const bSorted = b.filter(distinct((t) => t.fullName)).toSorted(sortBy((t) => t.fullName))
-  return aSorted.length === bSorted.length && aSorted.every((aa, i) => aa.equals(bSorted[i]))
-}
-
 export const voidPType = new InstanceType({
   name: 'void',
+  module: 'lib.d.ts',
+  wtype: wtypes.voidWType,
+})
+export const neverPType = new InstanceType({
+  name: 'never',
   module: 'lib.d.ts',
   wtype: wtypes.voidWType,
 })
@@ -552,7 +613,6 @@ export class BigIntPType extends TransientType {
     this.literalValue = props?.literalValue
   }
 }
-export const bigintPType = new BigIntPType()
 export const stringPType = new InstanceType({
   name: 'string',
   module: 'lib.d.ts',
@@ -587,10 +647,6 @@ export class NumberPType extends TransientType {
     this.literalValue = props?.literalValue
   }
 }
-// TODO: get rid of this value and check `instanceof NumberPType` instead
-export const numberPType = new NumberPType()
-export const numberUint64Union = UnionPType.fromTypes([numberPType, uint64PType])
-export const bigintBiguintUnion = UnionPType.fromTypes([bigintPType, biguintPType])
 export const Uint64Function = new LibFunctionType({
   name: 'Uint64',
   module: Constants.primitivesModuleName,

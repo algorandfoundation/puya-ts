@@ -1,7 +1,7 @@
 import { createTsProgram } from './parser'
 import type { CompileOptions } from './compile-options'
 import { buildAwst } from './awst_build'
-import type { ModuleStatement } from './awst/nodes'
+import type { Module } from './awst/nodes'
 import type { LogEvent } from './logger'
 import { logger } from './logger'
 import { AwstBuildFailureError } from './errors'
@@ -14,7 +14,7 @@ import { jsonSerializeAwst } from './awst/json-serialize-awst'
 export type CompileResult = {
   logs: LogEvent[]
   programDirectory: string
-  awst?: Record<string, ModuleStatement[]>
+  awst?: Record<string, Module>
   ast?: Record<string, ts.SourceFile>
 }
 
@@ -24,7 +24,7 @@ export function compile(options: CompileOptions): CompileResult {
   const programResult = createTsProgram(options)
   const programDirectory = programResult.program.getCurrentDirectory()
 
-  let moduleAwst: Record<string, ModuleStatement[]> = {}
+  let moduleAwst: Record<string, Module> = {}
   try {
     moduleAwst = buildAwst(programResult, options)
   } catch (e) {
