@@ -7,10 +7,11 @@ import { logger } from '../../src/logger'
 describe('Approvals', () => {
   const result = compile(
     buildCompileOptions({
-      outputAwstJson: false,
-      outputAwst: false,
+      outputAwstJson: true,
+      outputAwst: true,
       paths: ['tests/approvals'],
       outDir: '',
+      dryRun: true,
     }),
   )
   invariant(result.ast, 'Compilation must result in ast')

@@ -2,6 +2,7 @@ import { Constants } from '../../constants'
 import { wtypes } from '../../awst'
 import { codeInvariant, distinct, sortBy } from '../../util'
 import type { WType } from '../../awst/wtypes'
+import { biguintWType, uint64WType } from '../../awst/wtypes'
 import { ARC4UIntN } from '../../awst/wtypes'
 import { WArray } from '../../awst/wtypes'
 import { WTuple } from '../../awst/wtypes'
@@ -371,7 +372,8 @@ export class UintNType extends PType {
   readonly n: bigint
   readonly name: string
   readonly singleton = false
-  get wtype(): WType | undefined {
+
+  get wtype(): WType {
     return new ARC4UIntN({ n: this.n })
   }
 
@@ -479,7 +481,7 @@ export class TuplePType extends PType {
 
   get wtype(): WTuple {
     return new WTuple({
-      items: this.items.map((i) => i.wtypeOrThrow),
+      types: this.items.map((i) => i.wtypeOrThrow),
       immutable: this.immutable,
     })
   }
@@ -528,7 +530,7 @@ export class ObjectPType extends PType {
 
   get wtype(): WTuple {
     return new WTuple({
-      items: this.orderedProperties().map(([_, ptype]) => ptype.wtypeOrThrow),
+      types: this.orderedProperties().map(([_, ptype]) => ptype.wtypeOrThrow),
       immutable: false,
     })
   }

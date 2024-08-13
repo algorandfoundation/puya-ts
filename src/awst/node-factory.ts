@@ -153,7 +153,7 @@ const explicitNodeFactory = {
   tupleExpression(props: Omit<Props<TupleExpression>, 'wtype'>) {
     return new TupleExpression({
       ...props,
-      wtype: new WTuple({ items: props.items.map((i) => i.wtype), immutable: true }),
+      wtype: new WTuple({ types: props.items.map((i) => i.wtype), immutable: true }),
     })
   },
 } satisfies { [key in keyof ConcreteNodes]?: (...args: DeliberateAny[]) => InstanceType<ConcreteNodes[key]> }
