@@ -9,6 +9,10 @@ export interface CompileOptions {
   outputAwst: boolean
   outputAwstJson: boolean
   outDir: string
+  /*
+  Don't generate artifacts for puya, or invoke puya
+   */
+  dryRun: boolean
 }
 
 export const buildCompileOptions = ({
@@ -19,6 +23,7 @@ export const buildCompileOptions = ({
   outputAwst: boolean
   outDir: string
   outputAwstJson: boolean
+  dryRun: boolean
 }): CompileOptions => {
   const filePaths = []
 

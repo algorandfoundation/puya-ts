@@ -34,6 +34,7 @@ describe('Expected output', () => {
       outputAwst: false,
       paths: ['tests/expected-output'],
       outDir: '',
+      dryRun: true,
     }),
   )
   invariant(result.ast, 'Compilation must result in ast')

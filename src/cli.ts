@@ -8,6 +8,7 @@ const cliOptionsSchema = z.object({
   outputAwst: z.boolean(),
   outputAwstJson: z.boolean(),
   outDir: z.string(),
+  dryRun: z.boolean(),
 })
 
 const cliArgumentsSchema = z.array(z.string())
@@ -18,9 +19,10 @@ function cli() {
   commander
     .command('build')
     .argument('<paths...>', 'The path, or paths to search for compatible .algo.ts files')
-    .addOption(new Option('--output-awst', 'Output debugging awst file per parsed file').default(true))
-    .addOption(new Option('--output-awst-json', 'Output debugging awst json file per parsed file').default(true))
+    .addOption(new Option('--output-awst', 'Output debugging awst file per parsed file').default(false))
+    .addOption(new Option('--output-awst-json', 'Output debugging awst json file per parsed file').default(false))
     .addOption(new Option('--out-dir [outDir]').default('out'))
+    .addOption(new Option('--dry-run').default(false))
     .action((args, options) => {
       try {
         const paths = cliArgumentsSchema.parse(args)

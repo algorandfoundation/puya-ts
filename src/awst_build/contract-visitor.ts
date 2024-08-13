@@ -12,11 +12,13 @@ import { FunctionVisitor } from './function-visitor'
 import { logger } from '../logger'
 import { BaseVisitor } from './base-visitor'
 import { GlobalStateFunctionResultBuilder } from './eb/storage/global-state'
-import { BaseContractType, ContractClassPType, ContractType, GlobalStateType } from './ptypes'
+import { arc4BareMethodDecorator, BaseContractType, ContractClassPType, ContractType, GlobalStateType } from './ptypes'
 import type { Arc4AbiDecoratorData, DecoratorData } from './decorator-visitor'
 import { DecoratorVisitor } from './decorator-visitor'
 import type { SourceLocation } from '../awst/source-location'
 import type { DefaultArgumentSource } from '../awst/models'
+import { ARC4BareMethodConfig } from '../awst/models'
+import { ARC4ABIMethodConfig } from '../awst/models'
 import { ContractReference } from '../awst/models'
 import { ARC4CreateOption, OnCompletionAction } from '../awst/models'
 import { isValidLiteralForPType } from './eb/util'
@@ -66,7 +68,7 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
       init: this._ctor,
       subroutines: this._subroutines,
       docstring: undefined,
-      approvalProgram: this._approvalProgram,
+      approvalProgram: this._approvalProgram ?? this.makeDefaultApprovalProgram(sourceLocation, contractPtype),
       clearProgram: this._clearStateProgram ?? this.makeDefaultClearStateProgram(sourceLocation, contractPtype),
       isAbstract,
       isArc4: contractPtype.isARC4,
@@ -87,6 +89,27 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
   private makeDefaultClearStateProgram(sourceLocation: SourceLocation, contractType: ContractClassPType) {
     return nodeFactory.contractMethod({
       name: Constants.clearStateProgramMethodName,
+      moduleName: contractType.module,
+      args: [],
+      arc4MethodConfig: undefined,
+      sourceLocation,
+      className: contractType.name,
+      returnType: boolWType,
+      body: nodeFactory.block(
+        {
+          sourceLocation,
+        },
+        nodeFactory.returnStatement({
+          sourceLocation,
+          value: nodeFactory.boolConstant({ value: true, sourceLocation }),
+        }),
+      ),
+    })
+  }
+  private makeDefaultApprovalProgram(sourceLocation: SourceLocation, contractType: ContractClassPType) {
+    // TODO: This should be updated to return the arc4 router node, and should only be used if it's an arc4 contract
+    return nodeFactory.contractMethod({
+      name: Constants.approvalProgramMethodName,
       moduleName: contractType.module,
       args: [],
       arc4MethodConfig: undefined,
@@ -200,18 +223,16 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
     }
 
     if (decorator?.type === 'arc4.baremethod') {
-      return {
-        source_location: decorator.sourceLocation,
-        allowed_completion_types: decorator.ocas,
+      return new ARC4BareMethodConfig({
+        sourceLocation: decorator.sourceLocation,
+        allowedCompletionTypes: decorator.ocas,
         create: decorator.create,
-        is_bare: true,
-      }
+      })
     } else if (decorator?.type === 'arc4.abimethod') {
-      return {
-        source_location: decorator.sourceLocation,
-        allowed_completion_types: decorator.ocas,
+      return new ARC4ABIMethodConfig({
+        sourceLocation: decorator.sourceLocation,
+        allowedCompletionTypes: decorator.ocas,
         create: decorator.create,
-        is_bare: false,
         name: decorator.nameOverride ?? methodName,
         readonly: decorator.readonly,
         defaultArgs: Object.fromEntries(
@@ -226,18 +247,18 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
           ]),
         ),
         structs: {}, // TODO
-      }
+      })
     } else if (isPublic && this._contractPType.isARC4) {
-      return {
-        source_location: methodLocation,
-        allowed_completion_types: [OnCompletionAction.NoOp],
-        is_bare: false,
+      return new ARC4ABIMethodConfig({
+        sourceLocation: methodLocation,
+        allowedCompletionTypes: [OnCompletionAction.NoOp],
+
         create: ARC4CreateOption.Disallow,
         name: methodName,
         readonly: false,
         defaultArgs: {},
         structs: {}, // TODO
-      }
+      })
     }
   }
 

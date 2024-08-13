@@ -1,4 +1,5 @@
 import type { SourceLocation } from './source-location'
+import type { Props } from '../typescript-helpers'
 
 export enum OnCompletionAction {
   NoOp = 0,
@@ -10,9 +11,9 @@ export enum OnCompletionAction {
 }
 
 export enum ARC4CreateOption {
-  Allow = 'allow',
-  Require = 'require',
-  Disallow = 'disallow',
+  Allow = 1,
+  Require = 2,
+  Disallow = 3,
 }
 
 class ModelBase {
@@ -24,11 +25,17 @@ class ModelBase {
   #isModel = true
 }
 
-export interface ARC4BareMethodConfig {
-  source_location: SourceLocation | undefined
-  allowed_completion_types: [...OnCompletionAction[]]
-  create: ARC4CreateOption
-  is_bare: true
+export class ARC4BareMethodConfig extends ModelBase {
+  readonly sourceLocation: SourceLocation | undefined
+  readonly allowedCompletionTypes: OnCompletionAction[]
+  readonly create: ARC4CreateOption
+  readonly isBare = true as const
+  constructor(props: Omit<Props<ARC4BareMethodConfig>, 'isBare'>) {
+    super()
+    this.sourceLocation = props.sourceLocation
+    this.allowedCompletionTypes = props.allowedCompletionTypes
+    this.create = props.create
+  }
 }
 
 export type DefaultArgumentSource =
@@ -49,15 +56,25 @@ export type DefaultArgumentSource =
       memberName: string
     }
 
-export interface ARC4ABIMethodConfig {
-  source_location: SourceLocation | undefined
-  name: string
-  is_bare: false
-  create: ARC4CreateOption
-  readonly: boolean
-  allowed_completion_types: [...OnCompletionAction[]]
-  defaultArgs: Record<string, DefaultArgumentSource>
-  structs: Record<string, ARC32StructDef>
+export class ARC4ABIMethodConfig extends ModelBase {
+  readonly sourceLocation: SourceLocation | undefined
+  readonly name: string
+  readonly isBare = false as const
+  readonly create: ARC4CreateOption
+  readonly readonly: boolean
+  readonly allowedCompletionTypes: OnCompletionAction[]
+  readonly defaultArgs: Record<string, DefaultArgumentSource>
+  readonly structs: Record<string, ARC32StructDef>
+  constructor(props: Omit<Props<ARC4ABIMethodConfig>, 'isBare'>) {
+    super()
+    this.sourceLocation = props.sourceLocation
+    this.name = props.name
+    this.create = props.create
+    this.readonly = props.readonly
+    this.allowedCompletionTypes = props.allowedCompletionTypes
+    this.defaultArgs = props.defaultArgs
+    this.structs = props.structs
+  }
 }
 
 export interface ARC32StructDef {

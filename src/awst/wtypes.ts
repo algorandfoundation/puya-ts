@@ -1,3 +1,7 @@
+import type { Props } from '../typescript-helpers'
+import { biguintPType, uint64PType } from '../awst_build/ptypes'
+import { invariant } from '../util'
+
 export enum AVMType {
   bytes = 1 << 0,
   uint64 = 1 << 1,
@@ -83,24 +87,48 @@ export const applicationWType = new WType({
   scalarType: AVMType.uint64,
 })
 
-export abstract class ARC4Type extends WType {}
+export abstract class ARC4Type extends WType {
+  readonly decodeType: WType | undefined
+  readonly arc4Name: string
+  readonly otherEncodeableTypes: WType[]
+  constructor({
+    decodeType,
+    arc4Name,
+    otherEncodeableTypes,
+    ...rest
+  }: {
+    decodeType: WType | undefined
+    arc4Name: string
+    otherEncodeableTypes: WType[]
+    name: string
+    immutable?: boolean
+    scalarType: AVMType | undefined
+    ephemeral?: boolean
+  }) {
+    super(rest)
+    this.arc4Name = arc4Name
+    this.decodeType = decodeType
+    this.otherEncodeableTypes = otherEncodeableTypes
+  }
+}
 
 export class WStructType extends WType {}
 export class WInnerTransactionFields extends WType {}
 
 export class WTuple extends WType {
-  items: WType[]
-  constructor(props: { items: WType[]; immutable: boolean }) {
+  types: WType[]
+  constructor(props: { types: WType[]; immutable: boolean }) {
     super({
       name: 'WTuple',
       scalarType: undefined,
       immutable: props.immutable,
     })
-    this.items = props.items
+    invariant(props.types.length, 'Tuple length cannot be zero')
+    this.types = props.types
   }
 
   toString(): string {
-    return `${this.immutable ? 'readonly' : ''}tuple[${this.items.join(', ')}]`
+    return `${this.immutable ? 'readonly' : ''}tuple[${this.types.join(', ')}]`
   }
 }
 export class WArray extends WType {
@@ -121,6 +149,9 @@ export class ARC4UIntN extends ARC4Type {
     super({
       name: `arc4.uint${n}`,
       scalarType: AVMType.bytes,
+      decodeType: n <= 64 ? uint64WType : biguintWType,
+      arc4Name: `uint${n}`,
+      otherEncodeableTypes: [uint64WType, biguintWType, boolWType],
     })
     this.n = n
   }
