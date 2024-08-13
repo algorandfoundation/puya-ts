@@ -16,7 +16,8 @@ interface States {
   totals: StateTotals
 }
 
-const isUint64GenericType = (typeName: string) => {
+const isUint64GenericType = (typeName: string | undefined) => {
+  if (typeName === undefined) return false
   const genericTypes: string[] = extractGenericTypeArgs(typeName)
   return genericTypes.some((t) => t.toLocaleLowerCase() === 'uint64')
 }
