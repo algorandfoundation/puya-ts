@@ -8,12 +8,14 @@ describe('When calling the HelloWorldContract', () => {
     it('logs Hello, World', async ({ ctx }: AlgorandTestContext) => {
       const contract = ctx.contract.create(HelloWorldContract)
       const application = ctx.ledger.getApplicationForContract(contract)
-      const result = ctx.txn.executeInScope([
-        ctx.any.txn.applicationCall({
-          appId: application,
-          args: [Bytes('World')],
-        }),
-      ])(contract.approvalProgram)
+      const result = ctx.txn
+        .createExecutionScope([
+          ctx.any.txn.applicationCall({
+            appId: application,
+            args: [Bytes('World')],
+          }),
+        ])
+        .execute(contract.approvalProgram)
 
       expect(ctx.exportLogs(application.id, 's')).toStrictEqual(['Hello, World'])
       expect(result).toBe(true)

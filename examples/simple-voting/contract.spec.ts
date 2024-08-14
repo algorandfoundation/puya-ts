@@ -12,18 +12,20 @@ describe('Simple voting contract', () => {
         const contract = ctx.contract.create(SimpleVotingContract)
         const topic = Bytes('new_topic')
 
-        const result = ctx.txn.executeInScope(
-          [
-            ctx.any.txn.applicationCall({
-              appId: ctx.ledger.getApplicationForContract(contract),
-              args: [Bytes('set_topic'), topic],
-            }),
-            ctx.any.txn.payment({
-              amount: Uint64(10_000),
-            }),
-          ],
-          0,
-        )(contract.approvalProgram)
+        const result = ctx.txn
+          .createExecutionScope(
+            [
+              ctx.any.txn.applicationCall({
+                appId: ctx.ledger.getApplicationForContract(contract),
+                args: [Bytes('set_topic'), topic],
+              }),
+              ctx.any.txn.payment({
+                amount: Uint64(10_000),
+              }),
+            ],
+            0,
+          )
+          .execute(contract.approvalProgram)
 
         expect(result).toEqual(Uint64(1))
         expect(contract.topic.value.toString()).toBe(topic.toString())
@@ -63,20 +65,20 @@ describe('Simple voting contract', () => {
       castVote(ctx, contract, voter1)
       castVote(ctx, contract, voter2)
 
-      const result = ctx.txn.executeInScope(
-        [
-          ctx.any.txn.applicationCall({
-            appId: ctx.ledger.getApplicationForContract(contract),
-            sender: ctx.defaultSender,
-            args: [Bytes('get_votes')],
-          }),
-          ctx.any.txn.payment({
-            sender: ctx.defaultSender,
-            amount: Uint64(10_000),
-          }),
-        ],
-        0,
-      )(contract.approvalProgram)
+      const result = ctx.txn
+        .createExecutionScope(
+          [
+            ctx.any.txn.applicationCall({
+              appId: ctx.ledger.getApplicationForContract(contract),
+              args: [Bytes('get_votes')],
+            }),
+            ctx.any.txn.payment({
+              amount: Uint64(10_000),
+            }),
+          ],
+          0,
+        )
+        .execute(contract.approvalProgram)
 
       expect(result).toEqual(Uint64(2))
     })
@@ -84,17 +86,19 @@ describe('Simple voting contract', () => {
 })
 
 const castVote = (ctx: TestExecutionContext, contract: SimpleVotingContract, voter: Account): uint64 =>
-  ctx.txn.executeInScope(
-    [
-      ctx.any.txn.applicationCall({
-        appId: ctx.ledger.getApplicationForContract(contract),
-        sender: voter,
-        args: [Bytes('vote'), voter.bytes],
-      }),
-      ctx.any.txn.payment({
-        sender: voter,
-        amount: Uint64(10_000),
-      }),
-    ],
-    0,
-  )(contract.approvalProgram)
+  ctx.txn
+    .createExecutionScope(
+      [
+        ctx.any.txn.applicationCall({
+          appId: ctx.ledger.getApplicationForContract(contract),
+          sender: voter,
+          args: [Bytes('vote'), voter.bytes],
+        }),
+        ctx.any.txn.payment({
+          sender: voter,
+          amount: Uint64(10_000),
+        }),
+      ],
+      0,
+    )
+    .execute(contract.approvalProgram)
