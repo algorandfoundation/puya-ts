@@ -1,5 +1,6 @@
 import { Account, Application, Asset, Bytes, bytes, gtxn, internal, uint64 } from '@algorandfoundation/algo-ts'
 import algosdk from 'algosdk'
+import { captureMethodConfig } from './abi-metadata'
 import { DecodedLogs, decodeLogs, LogDecoding } from './decode-logs'
 import { Global, GTxn, Txn } from './impl/op'
 import { AccountCls, ApplicationCls, AssetCls } from './reference'
@@ -34,6 +35,7 @@ export class TestExecutionContext implements internal.ExecutionContext {
   application(id: uint64): Application {
     return new ApplicationCls(id)
   }
+
   asset(id: uint64): Asset {
     return new AssetCls(id)
   }
@@ -77,6 +79,12 @@ export class TestExecutionContext implements internal.ExecutionContext {
 
   get defaultSender(): Account {
     return this.#defaultSender
+  }
+
+  get abiMetadata() {
+    return {
+      captureMethodConfig,
+    }
   }
 
   reset() {

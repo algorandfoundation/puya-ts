@@ -1,4 +1,5 @@
 import { BaseContract } from '../base-contract'
+import { ctxMgr } from '../execution-context'
 import { Uint64 } from '../primitives'
 import { DeliberateAny } from '../typescript-helpers'
 
@@ -10,7 +11,7 @@ export class Contract extends BaseContract {
   }
 }
 
-type CreateOptions = 'allow' | 'disallow' | 'require'
+export type CreateOptions = 'allow' | 'disallow' | 'require'
 export type OnCompleteActionStr = 'NoOp' | 'OptIn' | 'CloseOut' | 'UpdateApplication' | 'DeleteApplication'
 
 export enum OnCompleteAction {
@@ -51,6 +52,9 @@ export function abimethod<TContract extends Contract>(config?: AbiMethodConfig<T
     target: (this: TContract, ...args: TArgs) => TReturn,
     ctx: ClassMethodDecoratorContext<TContract>,
   ): (this: TContract, ...args: TArgs) => TReturn {
+    ctx.addInitializer(function () {
+      ctxMgr.instance.abiMetadata.captureMethodConfig(this, target.name, config)
+    })
     return target
   }
 }
@@ -72,6 +76,9 @@ export function baremethod<TContract extends Contract>(config?: BareMethodConfig
     target: (this: TContract, ...args: TArgs) => TReturn,
     ctx: ClassMethodDecoratorContext<TContract>,
   ): (this: TContract, ...args: TArgs) => TReturn {
+    ctx.addInitializer(function () {
+      ctxMgr.instance.abiMetadata.captureMethodConfig(this, target.name, config)
+    })
     return target
   }
 }
