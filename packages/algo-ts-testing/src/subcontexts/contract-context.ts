@@ -78,7 +78,7 @@ export class ContractContext {
               return () => {
                 const app = context.ledger.getApplicationForContract(receiver)
                 const txns = [context.any.txn.applicationCall({ appId: app })]
-                return context.txn.ensureExecutionScope(txns).execute(() => (orig as () => boolean | uint64).apply(receiver))
+                return context.txn.ensureScope(txns).execute(() => (orig as () => boolean | uint64).apply(receiver))
               }
             }
             return orig

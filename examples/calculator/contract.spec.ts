@@ -8,7 +8,7 @@ describe('Calculator', () => {
     it('errors', async ({ ctx }: AlgorandTestContext) => {
       const contract = ctx.contract.create(MyContract)
       ctx.txn
-        .createExecutionScope([
+        .createScope([
           ctx.any.txn.applicationCall({
             appId: ctx.ledger.getApplicationForContract(contract),
             args: [],
@@ -24,7 +24,7 @@ describe('Calculator', () => {
       const contract = ctx.contract.create(MyContract)
       const application = ctx.ledger.getApplicationForContract(contract)
       const result = ctx.txn
-        .createExecutionScope([
+        .createScope([
           ctx.any.txn.applicationCall({
             appId: application,
             args: [op.itob(Uint64(1)), op.itob(Uint64(2)), op.itob(Uint64(3))],
