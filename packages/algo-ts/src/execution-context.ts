@@ -1,3 +1,5 @@
+import { Contract } from '.'
+import { AbiMethodConfig, BareMethodConfig } from './arc4'
 import { GlobalType, GTxnType, TxnType } from './op-types'
 import { bytes, uint64 } from './primitives'
 import { Account, Application, Asset } from './reference'
@@ -8,6 +10,9 @@ export type ExecutionContext = {
   asset(id: uint64 | undefined): Asset
   account(address: bytes | undefined): Account
   op: { Txn: TxnType; GTxn: GTxnType; Global: GlobalType }
+  abiMetadata: {
+    captureMethodConfig<T extends Contract>(contract: T, methodName: string, config?: AbiMethodConfig<T> | BareMethodConfig): void
+  }
 }
 
 declare global {
