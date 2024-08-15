@@ -25,7 +25,7 @@ export class TransactionContext {
   #groups: TransactionGroup[] = []
   #activeGroup: TransactionGroup | undefined
 
-  createExecutionScope(group: gtxn.Transaction[], activeTransactionIndex?: number): ExecutionScope {
+  createScope(group: gtxn.Transaction[], activeTransactionIndex?: number): ExecutionScope {
     const transactionGroup = new TransactionGroup(group, activeTransactionIndex)
     const previousGroup = this.#activeGroup
     this.#activeGroup = transactionGroup
@@ -45,9 +45,9 @@ export class TransactionContext {
     }
   }
 
-  ensureExecutionScope(group: gtxn.Transaction[], activeTransactionIndex?: number): ExecutionScope {
+  ensureScope(group: gtxn.Transaction[], activeTransactionIndex?: number): ExecutionScope {
     if (!this.#activeGroup || !this.#activeGroup.transactions.length) {
-      return this.createExecutionScope(group, activeTransactionIndex)
+      return this.createScope(group, activeTransactionIndex)
     }
     return {
       execute: <TReturn>(body: () => TReturn) => {

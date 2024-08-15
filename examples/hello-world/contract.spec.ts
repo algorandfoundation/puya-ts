@@ -9,7 +9,7 @@ describe('When calling the HelloWorldContract', () => {
       const contract = ctx.contract.create(HelloWorldContract)
       const application = ctx.ledger.getApplicationForContract(contract)
       const result = ctx.txn
-        .createExecutionScope([
+        .createScope([
           ctx.any.txn.applicationCall({
             appId: application,
             args: [Bytes('World')],
