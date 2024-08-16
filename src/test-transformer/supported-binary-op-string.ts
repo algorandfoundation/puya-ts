@@ -9,6 +9,8 @@ export function supportedBinaryOpString(x: BinaryOperator): string | undefined {
       return '+'
     case ts.SyntaxKind.EqualsEqualsEqualsToken:
       return '==='
+    case ts.SyntaxKind.ExclamationEqualsEqualsToken:
+      return '!=='
     case ts.SyntaxKind.GreaterThanEqualsToken:
       return '>='
     case ts.SyntaxKind.AsteriskToken:
@@ -32,7 +34,6 @@ export function supportedBinaryOpString(x: BinaryOperator): string | undefined {
     case ts.SyntaxKind.CommaToken:
     case ts.SyntaxKind.EqualsEqualsToken:
     case ts.SyntaxKind.EqualsToken:
-    case ts.SyntaxKind.ExclamationEqualsEqualsToken:
     case ts.SyntaxKind.ExclamationEqualsToken:
     case ts.SyntaxKind.InKeyword:
     case ts.SyntaxKind.GreaterThanToken:
