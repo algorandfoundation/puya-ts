@@ -30,6 +30,11 @@ export const captureMethodConfig = <T extends Contract>(
   metadata.onCreate = config?.onCreate ?? 'disallow'
 }
 
+export const hasAbiMetadata = <T extends Contract>(contract: T): boolean => {
+  const contractClass = contract.constructor as { new (): T }
+  return AbiMetaSymbol in contractClass
+}
+
 export const getAbiMetadata = <T extends Contract>(contract: T, methodName: string): AbiMetadata => {
   const contractClass = contract.constructor as { new (): T }
   const metadatas: Record<string, AbiMetadata> = (AbiMetaSymbol in contractClass ? contractClass[AbiMetaSymbol] : {}) as Record<
