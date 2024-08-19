@@ -5,7 +5,7 @@ import { anyPType, ContractClassPType, FunctionPType } from '../awst_build/ptype
 import { typeRegistry } from '../awst_build/type-registry'
 import { TypeResolver } from '../awst_build/type-resolver'
 import { nodeFactory } from './node-factory'
-import { supportedBinaryOpString } from './supported-binary-op-string'
+import { supportedBinaryOpString, supportedPrefixUnaryOpString } from './supported-binary-op-string'
 
 const { factory } = ts
 
@@ -80,6 +80,12 @@ class FunctionOrMethodVisitor {
       const tokenText = supportedBinaryOpString(node.operatorToken.kind)
       if (tokenText) {
         return nodeFactory.binaryOp(node.left, node.right, tokenText)
+      }
+    }
+    if (ts.isPrefixUnaryExpression(node)) {
+      const tokenText = supportedPrefixUnaryOpString(node.operator)
+      if (tokenText) {
+        return nodeFactory.prefixUnaryOp(node.operand, tokenText)
       }
     }
     return node
