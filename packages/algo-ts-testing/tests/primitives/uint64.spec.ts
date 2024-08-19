@@ -1,9 +1,10 @@
-import { Uint64 } from '@algorandfoundation/algo-ts'
+import { internal, uint64, Uint64 } from '@algorandfoundation/algo-ts'
 import { AppSpec } from '@algorandfoundation/algokit-utils/types/app-spec'
 import { describe, expect, it } from 'vitest'
-import { MAX_UINT64 } from '../../src/constants'
 import appSpecJson from '../artifacts/primitive-ops/data/PrimitiveOpsContract.arc32.json'
 import { getAlgorandAppClient, getAvmResult } from '../avm-invoker'
+
+const MAX_UINT64 = internal.constants.MAX_UINT64
 
 const asUint64 = (val: bigint | number) => (typeof val === 'bigint') ? Uint64(val) : Uint64(val)
 
@@ -11,112 +12,60 @@ describe('Unit64', async () => {
   const appClient = await getAlgorandAppClient(appSpecJson as AppSpec)
 
   describe.each([
-    [0, 0],
-    [0, 1],
-    [0, MAX_UINT64],
-    [1, 0],
-    [1, 1],
-    [1, MAX_UINT64],
-    [13, 42],
-    [MAX_UINT64, MAX_UINT64]
-  ])('logical operators', async (a, b) => {
-    const uintA = asUint64(a)
-    const uintB = asUint64(b)
-
-    it(`${a} === ${b}`, async () => {
-      const avmResult = await getAvmResult<boolean>(appClient, 'verify_uint64_eq', a, b)
-      let result = uintA === uintB
-      expect(result, `for values: ${a}, ${b}`).toBe(avmResult)
-
-      if (typeof a === 'number') {
-        result = a === uintB
-        expect(result, `for values: ${a}, ${b}`).toBe(avmResult)
+    'eq',
+    'ne',
+    'lt',
+    'le',
+    'gt',
+    'ge',
+  ])('logical operators', async (op) => {
+    const operator = (function () {
+      switch (op) {
+        case 'eq': return '==='
+        case 'ne': return '!=='
+        case 'lt': return '<'
+        case 'le': return '<='
+        case 'gt': return '>'
+        case 'ge': return '>='
+        default: throw new Error(`Unknown operator: ${op}`)
       }
+    })()
+    describe.each([
+      [0, 0],
+      [0, 1],
+      [0, MAX_UINT64],
+      [1, 0],
+      [1, 1],
+      [1, MAX_UINT64],
+      [13, 42],
+      [MAX_UINT64, MAX_UINT64]
+    ])(`${operator}`, async (a, b) => {
+      const uintA = asUint64(a)
+      const uintB = asUint64(b)
 
-      if (typeof b === 'number') {
-        result = uintA === b
-        expect(result, `for values: ${a}, ${b}`).toBe(avmResult)
+      const getStubResult = (a: number | bigint | uint64, b: number | bigint | uint64) => {
+        switch (operator) {
+          case '===': return a === b
+          case '!==': return a !== b
+          case '<': return a < b
+          case '<=': return a <= b
+          case '>': return a > b
+          case '>=': return a >= b
+          default: throw new Error(`Unknown operator: ${op}`)
+        }
       }
-    })
-
-    it(`${a} !== ${b}`, async () => {
-      const avmResult = await getAvmResult<boolean>(appClient, 'verify_uint64_ne', a, b)
-      let result = uintA !== uintB
-      expect(result, `for values: ${a}, ${b}`).toBe(avmResult)
-
-      if (typeof a === 'number') {
-        result = a !== uintB
+      it(`${a} ${operator} ${b}`, async () => {
+        const avmResult = await getAvmResult<boolean>(appClient, `verify_uint64_${op}`, a, b)
+        let result = getStubResult(uintA, uintB)
         expect(result, `for values: ${a}, ${b}`).toBe(avmResult)
-      }
 
-      if (typeof b === 'number') {
-        result = uintA !== b
+        result = getStubResult(a, uintB)
         expect(result, `for values: ${a}, ${b}`).toBe(avmResult)
-      }
-    })
 
-    it(`${a} < ${b}`, async () => {
-      const avmResult = await getAvmResult<boolean>(appClient, 'verify_uint64_lt', a, b)
-      let result = uintA < uintB
-      expect(result, `for values: ${a}, ${b}`).toBe(avmResult)
-
-      if (typeof a === 'number') {
-        result = a < uintB
+        result = getStubResult(uintA, b)
         expect(result, `for values: ${a}, ${b}`).toBe(avmResult)
-      }
 
-      if (typeof b === 'number') {
-        result = uintA < b
-        expect(result, `for values: ${a}, ${b}`).toBe(avmResult)
-      }
-    })
-
-    it(`${a} <= ${b}`, async () => {
-      const avmResult = await getAvmResult<boolean>(appClient, 'verify_uint64_le', a, b)
-      let result = uintA <= uintB
-      expect(result, `for values: ${a}, ${b}`).toBe(avmResult)
-
-      if (typeof a === 'number') {
-        result = a <= uintB
-        expect(result, `for values: ${a}, ${b}`).toBe(avmResult)
-      }
-
-      if (typeof b === 'number') {
-        result = uintA <= b
-        expect(result, `for values: ${a}, ${b}`).toBe(avmResult)
-      }
-    })
-
-    it(`${a} > ${b}`, async () => {
-      const avmResult = await getAvmResult<boolean>(appClient, 'verify_uint64_gt', a, b)
-      let result = uintA > uintB
-      expect(result, `for values: ${a}, ${b}`).toBe(avmResult)
-
-      if (typeof a === 'number') {
-        result = a > uintB
-        expect(result, `for values: ${a}, ${b}`).toBe(avmResult)
-      }
-
-      if (typeof b === 'number') {
-        result = uintA > b
-        expect(result, `for values: ${a}, ${b}`).toBe(avmResult)
-      }
-    })
-
-    it(`${a} >= ${b}`, async () => {
-      const avmResult = await getAvmResult<boolean>(appClient, 'verify_uint64_ge', a, b)
-      let result = uintA >= uintB
-      expect(result, `for values: ${a}, ${b}`).toBe(avmResult)
-
-      if (typeof a === 'number') {
-        result = a >= uintB
-        expect(result, `for values: ${a}, ${b}`).toBe(avmResult)
-      }
-
-      if (typeof b === 'number') {
-        result = uintA >= b
-        expect(result, `for values: ${a}, ${b}`).toBe(avmResult)
-      }
+      })
     })
   })
 
@@ -336,13 +285,13 @@ describe('Unit64', async () => {
     it(`${a} % ${b}`, async () => {
       await expect(getAvmResult<bigint>(appClient, 'verify_uint64_mod', a, b)).rejects.toThrow('% 0')
 
-      expect(() => asUint64(a) % asUint64(b)).toThrow('Division by zero')
+      expect(() => asUint64(a) % asUint64(b)).toThrow('Modulo by zero')
 
       if (typeof a === 'number') {
-        expect(() => a % asUint64(b)).toThrow('Division by zero')
+        expect(() => a % asUint64(b)).toThrow('Modulo by zero')
       }
 
-      expect(() => asUint64(a) % b).toThrow('Division by zero')
+      expect(() => asUint64(a) % b).toThrow('Modulo by zero')
     })
   })
 
@@ -402,63 +351,53 @@ describe('Unit64', async () => {
   })
 
   describe.each([
+    'and',
+    'or',
+    'xor',
+  ])('bitwise operators', async (op) => {
+  describe.each([
     [0, 0],
     [MAX_UINT64, MAX_UINT64],
     [0, MAX_UINT64],
     [MAX_UINT64, 0],
     [42, MAX_UINT64],
     [MAX_UINT64, 42]
-  ])('bitwise operations', async (a, b) => {
+  ])(`${op}`, async (a, b) => {
     const uintA = asUint64(a)
     const uintB = asUint64(b)
-    it(`${a} & ${b}`, async () => {
-      const avmResult = await getAvmResult<bigint>(appClient, 'verify_uint64_and', a, b)
-      let result = uintA & uintB
+    const operator = (function () {
+      switch (op) {
+        case 'and': return '&'
+        case 'or': return '|'
+        case 'xor': return '^'
+        default: throw new Error(`Unknown operator: ${op}`)
+      }
+    })()
+    const getStubResult = (a: number | uint64, b: number | uint64) => {
+      switch (op) {
+        case 'and': return a & b
+        case 'or': return a | b
+        case 'xor': return a ^ b
+        default: throw new Error(`Unknown operator: ${op}`)
+      }
+    }
+    it(`${a} ${operator} ${b}`, async () => {
+      const avmResult = await getAvmResult<bigint>(appClient, `verify_uint64_${op}`, a, b)
+      let result = getStubResult(uintA, uintB)
       expect(result.valueOf(), `for values: ${a}, ${b}`).toBe(avmResult)
 
       if (typeof a === 'number') {
-        result = a & uintB
+        result = getStubResult(a, uintB)
         expect(result.valueOf(), `for values: ${a}, ${b}`).toBe(avmResult)
       }
 
       if (typeof b === 'number') {
-        result = uintA & b
-        expect(result.valueOf(), `for values: ${a}, ${b}`).toBe(avmResult)
-      }
-    })
-
-    it(`${a} | ${b}`, async () => {
-      const avmResult = await getAvmResult<bigint>(appClient, 'verify_uint64_or', a, b)
-      let result = uintA | uintB
-      expect(result.valueOf(), `for values: ${a}, ${b}`).toBe(avmResult)
-
-      if (typeof a === 'number') {
-        result = a | uintB
-        expect(result.valueOf(), `for values: ${a}, ${b}`).toBe(avmResult)
-      }
-
-      if (typeof b === 'number') {
-        result = uintA | b
-        expect(result.valueOf(), `for values: ${a}, ${b}`).toBe(avmResult)
-      }
-    })
-
-    it(`${a} ^ ${b}`, async () => {
-      const avmResult = await getAvmResult<bigint>(appClient, 'verify_uint64_xor', a, b)
-      let result = uintA ^ uintB
-      expect(result.valueOf(), `for values: ${a}, ${b}`).toBe(avmResult)
-
-      if (typeof a === 'number') {
-        result = a ^ uintB
-        expect(result.valueOf(), `for values: ${a}, ${b}`).toBe(avmResult)
-      }
-
-      if (typeof b === 'number') {
-        result = uintA ^ b
+        result = getStubResult(uintA, b)
         expect(result.valueOf(), `for values: ${a}, ${b}`).toBe(avmResult)
       }
     })
   })
+})
 
   describe.each([
     0,
@@ -550,8 +489,8 @@ describe('Unit64', async () => {
 
   describe.each([
     -1,
-    -MAX_UINT64,
-    -MAX_UINT64 * 2n
+    -internal.constants.MAX_UINT64,
+    -internal.constants.MAX_UINT64 * 2n
   ])('value too small', (a) => {
     it(`${a}`, () => {
       expect(() => asUint64(a)).toThrow('Uint64 over or underflow')

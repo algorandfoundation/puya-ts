@@ -11,8 +11,18 @@ export function supportedBinaryOpString(x: BinaryOperator): string | undefined {
       return '==='
     case ts.SyntaxKind.ExclamationEqualsEqualsToken:
       return '!=='
+    case ts.SyntaxKind.GreaterThanToken:
+      return '>'
     case ts.SyntaxKind.GreaterThanEqualsToken:
       return '>='
+    case ts.SyntaxKind.GreaterThanGreaterThanToken:
+      return '>>'
+    case ts.SyntaxKind.LessThanToken:
+      return '<'
+    case ts.SyntaxKind.LessThanEqualsToken:
+      return '<='
+    case ts.SyntaxKind.LessThanLessThanToken:
+      return '<<'
     case ts.SyntaxKind.AsteriskToken:
       return '*'
     case ts.SyntaxKind.AsteriskAsteriskToken:
@@ -27,10 +37,6 @@ export function supportedBinaryOpString(x: BinaryOperator): string | undefined {
       return '|'
     case ts.SyntaxKind.CaretToken:
       return '^'
-    case ts.SyntaxKind.GreaterThanGreaterThanToken:
-      return '>>'
-    case ts.SyntaxKind.LessThanLessThanToken:
-      return '<<'
     case ts.SyntaxKind.AmpersandAmpersandEqualsToken:
     case ts.SyntaxKind.AmpersandAmpersandToken:
     case ts.SyntaxKind.AmpersandEqualsToken:
@@ -45,10 +51,7 @@ export function supportedBinaryOpString(x: BinaryOperator): string | undefined {
     case ts.SyntaxKind.EqualsToken:
     case ts.SyntaxKind.ExclamationEqualsToken:
     case ts.SyntaxKind.InKeyword:
-    case ts.SyntaxKind.GreaterThanToken:
     case ts.SyntaxKind.InstanceOfKeyword:
-    case ts.SyntaxKind.LessThanEqualsToken:
-    case ts.SyntaxKind.LessThanToken:
     case ts.SyntaxKind.PercentEqualsToken:
     case ts.SyntaxKind.PlusEqualsToken:
     case ts.SyntaxKind.QuestionQuestionEqualsToken:

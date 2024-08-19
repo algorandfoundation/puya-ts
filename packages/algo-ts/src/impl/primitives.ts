@@ -1,10 +1,13 @@
 import type { biguint, BigUintCompat, bytes, BytesCompat, uint64, Uint64Compat } from '../index'
 import { DeliberateAny } from '../typescript-helpers'
+import { MAX_UINT64 } from './constants'
 import { bigIntToUint8Array, uint8ArrayToBigInt, uint8ArrayToUtf8, utf8ToUint8Array } from './encoding-util'
-import { avmError, AvmError, internalError } from './errors'
+import { avmError, AvmError, CodeError, internalError } from './errors'
 import { nameOfType } from './name-of-type'
 
-export type StubBigUintCompat = BigUintCompat | BigUintCls
+export type BinaryOps = '+' | '-' | '*' | '**' | '/' | '%' | '>' | '>=' | '<' | '<=' | '===' | '!==' | '<<' | '>>' | '&' | '|' | '^'
+
+export type StubBigUintCompat = BigUintCompat | BigUintCls | Uint64Cls
 export type StubBytesCompat = BytesCompat | BytesCls
 export type StubUint64Compat = Uint64Compat | Uint64Cls
 
@@ -99,6 +102,67 @@ export class Uint64Cls extends AlgoTsPrimitiveCls {
     return Uint64Cls.fromCompat(v).asNumber()
   }
 
+  static binaryOp(left: DeliberateAny, right: DeliberateAny, op: BinaryOps): DeliberateAny {
+    const lbi = checkUint64(this.fromCompat(left).value)
+    const rbi = checkUint64(this.fromCompat(right).value)
+    const result = (function () {
+      switch (op) {
+        case '+':
+          return lbi + rbi
+        case '-':
+          return lbi - rbi
+        case '*':
+          return lbi * rbi
+        case '**':
+          if (lbi === 0n && rbi === 0n) {
+            throw new CodeError('0 ** 0 is undefined')
+          }
+          return lbi ** rbi
+        case '/':
+          if (rbi === 0n) {
+            throw new CodeError('Division by zero')
+          }
+          return lbi / rbi
+        case '%':
+          if (rbi === 0n) {
+            throw new CodeError('Modulo by zero')
+          }
+          return lbi % rbi
+        case '>>':
+          if (rbi > 63n) {
+            throw new CodeError('expected shift <= 63')
+          }
+          return (lbi >> rbi) & MAX_UINT64
+        case '<<':
+          if (rbi > 63n) {
+            throw new CodeError('expected shift <= 63')
+          }
+          return (lbi << rbi) & MAX_UINT64
+        case '>':
+          return lbi > rbi
+        case '<':
+          return lbi < rbi
+        case '>=':
+          return lbi >= rbi
+        case '<=':
+          return lbi <= rbi
+        case '===':
+          return lbi === rbi
+        case '!==':
+          return lbi !== rbi
+        case '&':
+          return lbi & rbi
+        case '|':
+          return lbi | rbi
+        case '^':
+          return lbi ^ rbi
+        default:
+          internalError(`Unsupported operator ${op}`)
+      }
+    })()
+    return typeof result === 'boolean' ? result : new Uint64Cls(result)
+  }
+
   valueOf(): bigint {
     return this.value
   }
@@ -125,7 +189,6 @@ export class Uint64Cls extends AlgoTsPrimitiveCls {
 export class BigUintCls extends AlgoTsPrimitiveCls {
   constructor(public readonly value: bigint) {
     super(BigUintCls.name)
-    checkBigUint(value)
   }
   valueOf(): bigint {
     return this.value
@@ -155,8 +218,65 @@ export class BigUintCls extends AlgoTsPrimitiveCls {
     if (typeof v == 'boolean') return new BigUintCls(v ? 1n : 0n)
     if (typeof v == 'number') return new BigUintCls(BigInt(v))
     if (typeof v == 'bigint') return new BigUintCls(v)
+    if (v instanceof Uint64Cls) return new BigUintCls(v.value)
+    if (v instanceof BytesCls) return v.toBigUint()
     if (v instanceof BigUintCls) return v
     internalError(`Cannot convert ${nameOfType(v)} to BigUint`)
+  }
+
+  static binaryOp(left: DeliberateAny, right: DeliberateAny, op: BinaryOps): DeliberateAny {
+    const lbi = checkBigUint(this.fromCompat(left).value)
+    const rbi = checkBigUint(this.fromCompat(right).value)
+    const result = (function () {
+      switch (op) {
+        case '+':
+          return lbi + rbi
+        case '-':
+          return lbi - rbi
+        case '*':
+          return lbi * rbi
+        case '**':
+          if (lbi === 0n && rbi === 0n) {
+            throw new CodeError('0 ** 0 is undefined')
+          }
+          return lbi ** rbi
+        case '/':
+          if (rbi === 0n) {
+            throw new CodeError('Division by zero')
+          }
+          return lbi / rbi
+        case '%':
+          if (rbi === 0n) {
+            throw new CodeError('Modulo by zero')
+          }
+          return lbi % rbi
+        case '>>':
+          throw new CodeError('BigUint does not support >> operator')
+        case '<<':
+          throw new CodeError('BigUint does not support << operator')
+        case '>':
+          return lbi > rbi
+        case '<':
+          return lbi < rbi
+        case '>=':
+          return lbi >= rbi
+        case '<=':
+          return lbi <= rbi
+        case '===':
+          return lbi === rbi
+        case '!==':
+          return lbi !== rbi
+        case '&':
+          return lbi & rbi
+        case '|':
+          return lbi | rbi
+        case '^':
+          return lbi ^ rbi
+        default:
+          internalError(`Unsupported operator ${op}`)
+      }
+    })()
+    return typeof result === 'boolean' ? result : new BigUintCls(checkBigUint(result))
   }
 }
 
