@@ -2,10 +2,10 @@ import * as algokit from '@algorandfoundation/algokit-utils'
 import { ABIAppCallArg } from '@algorandfoundation/algokit-utils/types/app'
 import { ApplicationClient } from '@algorandfoundation/algokit-utils/types/app-client'
 import { AppSpec } from '@algorandfoundation/algokit-utils/types/app-spec'
-import { warningConsoleLogger } from '@algorandfoundation/algokit-utils/types/logging'
+import { nullLogger } from '@algorandfoundation/algokit-utils/types/logging'
 import { ABIValue } from 'algosdk'
 
-algokit.Config.configure({ logger: warningConsoleLogger })
+algokit.Config.configure({ logger: nullLogger })
 
 export const getAlgorandAppClient = async (appSpec: AppSpec): Promise<ApplicationClient> => {
   const client = algokit.AlgorandClient.defaultLocalNet()

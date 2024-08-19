@@ -1,4 +1,4 @@
-import type { BinaryOperator } from 'typescript'
+import type { BinaryOperator, PrefixUnaryOperator } from 'typescript'
 import ts from 'typescript'
 
 export function supportedBinaryOpString(x: BinaryOperator): string | undefined {
@@ -19,18 +19,27 @@ export function supportedBinaryOpString(x: BinaryOperator): string | undefined {
       return '**'
     case ts.SyntaxKind.SlashToken:
       return '/'
+    case ts.SyntaxKind.PercentToken:
+      return '%'
+    case ts.SyntaxKind.AmpersandToken:
+      return '&'
+    case ts.SyntaxKind.BarToken:
+      return '|'
+    case ts.SyntaxKind.CaretToken:
+      return '^'
+    case ts.SyntaxKind.GreaterThanGreaterThanToken:
+      return '>>'
+    case ts.SyntaxKind.LessThanLessThanToken:
+      return '<<'
     case ts.SyntaxKind.AmpersandAmpersandEqualsToken:
     case ts.SyntaxKind.AmpersandAmpersandToken:
     case ts.SyntaxKind.AmpersandEqualsToken:
-    case ts.SyntaxKind.AmpersandToken:
     case ts.SyntaxKind.AsteriskAsteriskEqualsToken:
     case ts.SyntaxKind.AsteriskEqualsToken:
     case ts.SyntaxKind.BarBarEqualsToken:
     case ts.SyntaxKind.BarBarToken:
     case ts.SyntaxKind.BarEqualsToken:
-    case ts.SyntaxKind.BarToken:
     case ts.SyntaxKind.CaretEqualsToken:
-    case ts.SyntaxKind.CaretToken:
     case ts.SyntaxKind.CommaToken:
     case ts.SyntaxKind.EqualsEqualsToken:
     case ts.SyntaxKind.EqualsToken:
@@ -38,7 +47,6 @@ export function supportedBinaryOpString(x: BinaryOperator): string | undefined {
     case ts.SyntaxKind.InKeyword:
     case ts.SyntaxKind.GreaterThanToken:
     case ts.SyntaxKind.InstanceOfKeyword:
-    case ts.SyntaxKind.PercentToken:
     case ts.SyntaxKind.LessThanEqualsToken:
     case ts.SyntaxKind.LessThanToken:
     case ts.SyntaxKind.PercentEqualsToken:
@@ -48,11 +56,18 @@ export function supportedBinaryOpString(x: BinaryOperator): string | undefined {
     case ts.SyntaxKind.SlashEqualsToken:
     case ts.SyntaxKind.QuestionQuestionToken:
     case ts.SyntaxKind.GreaterThanGreaterThanEqualsToken:
-    case ts.SyntaxKind.GreaterThanGreaterThanToken:
     case ts.SyntaxKind.LessThanLessThanEqualsToken:
-    case ts.SyntaxKind.LessThanLessThanToken:
     case ts.SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken:
     case ts.SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
+      return undefined
+  }
+}
+
+export function supportedPrefixUnaryOpString(x: PrefixUnaryOperator): string | undefined {
+  switch (x) {
+    case ts.SyntaxKind.TildeToken:
+      return '~'
+    default:
       return undefined
   }
 }

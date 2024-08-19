@@ -1,4 +1,5 @@
 import { internal } from '@algorandfoundation/algo-ts'
+import { MAX_UINT64 } from './constants'
 import { DeliberateAny } from './typescript-helpers'
 import { nameOfType } from './util'
 export { attachAbiMetadata } from './abi-metadata'
@@ -17,7 +18,8 @@ export function switchableValue(x: unknown): bigint | string | boolean {
 //   internalError(`Cannot wrap ${nameOfType(x)}`)
 // }
 
-type BinaryOps = '+' | '-' | '*' | '**' | '/' | '>' | '>=' | '<' | '<=' | '===' | '!==' | '<<' | '>>'
+type BinaryOps = '+' | '-' | '*' | '**' | '/' | '%' | '>' | '>=' | '<' | '<=' | '===' | '!==' | '<<' | '>>' | '&' | '|' | '^'
+type UnaryOps = '~'
 
 function tryGetBigInt(value: unknown): bigint | undefined {
   if (typeof value == 'bigint') return value
@@ -46,6 +48,25 @@ export function binaryOp(left: unknown, right: unknown, op: BinaryOps) {
   return defaultBinaryOp(left, right, op)
 }
 
+export function unaryOp(operand: unknown, op: UnaryOps) {
+  const bi = tryGetBigInt(operand)
+  if (bi !== undefined) {
+    const result = defaultUnaryOp(bi, op)
+
+    // if result is not a number (e.g. a boolean), return as it is
+    if (!tryGetBigInt(result)) return result
+    if (operand instanceof internal.primitives.BigUintCls) {
+      return new internal.primitives.BigUintCls(result)
+    } else if (operand instanceof internal.primitives.Uint64Cls) {
+      return new internal.primitives.Uint64Cls(result)
+    } else if (typeof operand === 'number' && result <= Number.MAX_SAFE_INTEGER) {
+      return Number(result)
+    }
+    return result
+  }
+  return defaultUnaryOp(operand, op)
+}
+
 function defaultBinaryOp(left: DeliberateAny, right: DeliberateAny, op: BinaryOps): DeliberateAny {
   switch (op) {
     case '+':
@@ -55,12 +76,29 @@ function defaultBinaryOp(left: DeliberateAny, right: DeliberateAny, op: BinaryOp
     case '*':
       return left * right
     case '**':
+      if (left === 0n && right === 0n) {
+        throw new internal.errors.CodeError('0 ** 0 is undefined')
+      }
       return left ** right
     case '/':
       return left / right
+    case '%':
+      return left % right
     case '>>':
+      if (typeof left === 'bigint' && typeof right === 'bigint') {
+        if (right > 63n) {
+          throw new internal.errors.CodeError('expected shift <= 63')
+        }
+        return (left >> right) & MAX_UINT64
+      }
       return left >> right
     case '<<':
+      if (typeof left === 'bigint' && typeof right === 'bigint') {
+        if (right > 63n) {
+          throw new internal.errors.CodeError('expected shift <= 63')
+        }
+        return (left << right) & MAX_UINT64
+      }
       return left << right
     case '>':
       return left > right
@@ -74,6 +112,24 @@ function defaultBinaryOp(left: DeliberateAny, right: DeliberateAny, op: BinaryOp
       return left === right
     case '!==':
       return left !== right
+    case '&':
+      return left & right
+    case '|':
+      return left | right
+    case '^':
+      return left ^ right
+    default:
+      internal.errors.internalError(`Unsupported operator ${op}`)
+  }
+}
+
+function defaultUnaryOp(operand: DeliberateAny, op: UnaryOps): DeliberateAny {
+  switch (op) {
+    case '~':
+      if (typeof operand === 'bigint') {
+        return ~operand & MAX_UINT64
+      }
+      return ~operand
     default:
       internal.errors.internalError(`Unsupported operator ${op}`)
   }

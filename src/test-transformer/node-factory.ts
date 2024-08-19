@@ -29,6 +29,14 @@ export const nodeFactory = {
     )
   },
 
+  prefixUnaryOp(operand: ts.Expression, op: string) {
+    return factory.createCallExpression(
+      factory.createPropertyAccessExpression(factory.createIdentifier('runtimeHelpers'), factory.createIdentifier('unaryOp')),
+      undefined,
+      [operand, factory.createStringLiteral(op)],
+    )
+  },
+
   attachMetaData(classIdentifier: ts.Identifier, method: ts.MethodDeclaration, functionType: FunctionPType) {
     const methodName = getPropertyNameAsString(method.name)
     const metadata = factory.createObjectLiteralExpression([
