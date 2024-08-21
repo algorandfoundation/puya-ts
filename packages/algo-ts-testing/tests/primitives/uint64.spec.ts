@@ -1,10 +1,9 @@
-import { internal, uint64, Uint64 } from '@algorandfoundation/algo-ts'
+import { uint64, Uint64 } from '@algorandfoundation/algo-ts'
 import { AppSpec } from '@algorandfoundation/algokit-utils/types/app-spec'
 import { describe, expect, it } from 'vitest'
+import { MAX_UINT64 } from '../../src/constants'
 import appSpecJson from '../artifacts/primitive-ops/data/PrimitiveOpsContract.arc32.json'
 import { getAlgorandAppClient, getAvmResult } from '../avm-invoker'
-
-const MAX_UINT64 = internal.constants.MAX_UINT64
 
 const asUint64 = (val: bigint | number) => (typeof val === 'bigint') ? Uint64(val) : Uint64(val)
 
@@ -355,49 +354,49 @@ describe('Unit64', async () => {
     'or',
     'xor',
   ])('bitwise operators', async (op) => {
-  describe.each([
-    [0, 0],
-    [MAX_UINT64, MAX_UINT64],
-    [0, MAX_UINT64],
-    [MAX_UINT64, 0],
-    [42, MAX_UINT64],
-    [MAX_UINT64, 42]
-  ])(`${op}`, async (a, b) => {
-    const uintA = asUint64(a)
-    const uintB = asUint64(b)
-    const operator = (function () {
-      switch (op) {
-        case 'and': return '&'
-        case 'or': return '|'
-        case 'xor': return '^'
-        default: throw new Error(`Unknown operator: ${op}`)
+    describe.each([
+      [0, 0],
+      [MAX_UINT64, MAX_UINT64],
+      [0, MAX_UINT64],
+      [MAX_UINT64, 0],
+      [42, MAX_UINT64],
+      [MAX_UINT64, 42]
+    ])(`${op}`, async (a, b) => {
+      const uintA = asUint64(a)
+      const uintB = asUint64(b)
+      const operator = (function () {
+        switch (op) {
+          case 'and': return '&'
+          case 'or': return '|'
+          case 'xor': return '^'
+          default: throw new Error(`Unknown operator: ${op}`)
+        }
+      })()
+      const getStubResult = (a: number | uint64, b: number | uint64) => {
+        switch (op) {
+          case 'and': return a & b
+          case 'or': return a | b
+          case 'xor': return a ^ b
+          default: throw new Error(`Unknown operator: ${op}`)
+        }
       }
-    })()
-    const getStubResult = (a: number | uint64, b: number | uint64) => {
-      switch (op) {
-        case 'and': return a & b
-        case 'or': return a | b
-        case 'xor': return a ^ b
-        default: throw new Error(`Unknown operator: ${op}`)
-      }
-    }
-    it(`${a} ${operator} ${b}`, async () => {
-      const avmResult = await getAvmResult<bigint>(appClient, `verify_uint64_${op}`, a, b)
-      let result = getStubResult(uintA, uintB)
-      expect(result.valueOf(), `for values: ${a}, ${b}`).toBe(avmResult)
-
-      if (typeof a === 'number') {
-        result = getStubResult(a, uintB)
+      it(`${a} ${operator} ${b}`, async () => {
+        const avmResult = await getAvmResult<bigint>(appClient, `verify_uint64_${op}`, a, b)
+        let result = getStubResult(uintA, uintB)
         expect(result.valueOf(), `for values: ${a}, ${b}`).toBe(avmResult)
-      }
 
-      if (typeof b === 'number') {
-        result = getStubResult(uintA, b)
-        expect(result.valueOf(), `for values: ${a}, ${b}`).toBe(avmResult)
-      }
+        if (typeof a === 'number') {
+          result = getStubResult(a, uintB)
+          expect(result.valueOf(), `for values: ${a}, ${b}`).toBe(avmResult)
+        }
+
+        if (typeof b === 'number') {
+          result = getStubResult(uintA, b)
+          expect(result.valueOf(), `for values: ${a}, ${b}`).toBe(avmResult)
+        }
+      })
     })
   })
-})
 
   describe.each([
     0,
@@ -489,8 +488,8 @@ describe('Unit64', async () => {
 
   describe.each([
     -1,
-    -internal.constants.MAX_UINT64,
-    -internal.constants.MAX_UINT64 * 2n
+    -MAX_UINT64,
+    -MAX_UINT64 * 2n
   ])('value too small', (a) => {
     it(`${a}`, () => {
       expect(() => asUint64(a)).toThrow('Uint64 over or underflow')
