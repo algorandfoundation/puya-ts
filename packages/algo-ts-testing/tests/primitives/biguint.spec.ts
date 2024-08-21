@@ -1,11 +1,9 @@
 import { biguint, BigUint, Bytes, internal, Uint64 } from '@algorandfoundation/algo-ts';
 import { AppSpec } from '@algorandfoundation/algokit-utils/types/app-spec';
 import { describe, expect, it } from 'vitest';
+import { MAX_UINT512, MAX_UINT64 } from '../../src/constants';
 import appSpecJson from '../artifacts/primitive-ops/data/PrimitiveOpsContract.arc32.json';
 import { getAlgorandAppClient, getAvmResult, getAvmResultRaw } from '../avm-invoker';
-
-const MAX_UINT512 = internal.constants.MAX_UINT512
-const MAX_UINT64 = internal.constants.MAX_UINT64
 
 const asBigUint = (val: bigint | number) => (typeof val === 'bigint') ? BigUint(val) : BigUint(val)
 
@@ -610,8 +608,8 @@ describe('BigUint', async () => {
 
   describe.each([
     -1,
-    -internal.constants.MAX_UINT512,
-    -internal.constants.MAX_UINT512 * 2n
+    -MAX_UINT512,
+    -MAX_UINT512 * 2n
   ])('value too small', (a) => {
     it(`${a}`, () => {
       const bigUintA = asBigUint(a)
