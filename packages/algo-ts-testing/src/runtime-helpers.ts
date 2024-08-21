@@ -54,9 +54,16 @@ export function binaryOp(left: unknown, right: unknown, op: BinaryOps) {
   return defaultBinaryOp(left, right, op)
 }
 
+export function unaryOp(operand: unknown, op: UnaryOps) {
+  if (operand instanceof internal.primitives.Uint64Cls) {
+    return uint64UnaryOp(operand, op)
+  }
+  return defaultUnaryOp(operand, op)
+}
+
 function uint64BinaryOp(left: DeliberateAny, right: DeliberateAny, op: BinaryOps): DeliberateAny {
-  const lbi = internal.primitives.checkUint64(internal.primitives.Uint64Cls.fromCompat(left).value)
-  const rbi = internal.primitives.checkUint64(internal.primitives.Uint64Cls.fromCompat(right).value)
+  const lbi = internal.primitives.Uint64Cls.fromCompat(left).value
+  const rbi = internal.primitives.Uint64Cls.fromCompat(right).value
   const result = (function () {
     switch (op) {
       case '+':
@@ -170,25 +177,6 @@ function bigUintBinaryOp(left: DeliberateAny, right: DeliberateAny, op: BinaryOp
   return typeof result === 'boolean' ? result : new internal.primitives.BigUintCls(internal.primitives.checkBigUint(result))
 }
 
-export function unaryOp(operand: unknown, op: UnaryOps) {
-  const bi = tryGetBigInt(operand)
-  if (bi !== undefined) {
-    const result = defaultUnaryOp(bi, op)
-
-    // if result is not a number (e.g. a boolean), return as it is
-    if (!tryGetBigInt(result)) return result
-    if (operand instanceof internal.primitives.BigUintCls) {
-      return new internal.primitives.BigUintCls(result)
-    } else if (operand instanceof internal.primitives.Uint64Cls) {
-      return new internal.primitives.Uint64Cls(result)
-    } else if (typeof operand === 'number' && result <= Number.MAX_SAFE_INTEGER) {
-      return Number(result)
-    }
-    return result
-  }
-  return defaultUnaryOp(operand, op)
-}
-
 function defaultBinaryOp(left: DeliberateAny, right: DeliberateAny, op: BinaryOps): DeliberateAny {
   switch (op) {
     case '+':
@@ -245,16 +233,18 @@ function defaultBinaryOp(left: DeliberateAny, right: DeliberateAny, op: BinaryOp
   }
 }
 
-function defaultUnaryOp(operand: DeliberateAny, op: UnaryOps): DeliberateAny {
+function uint64UnaryOp(operand: DeliberateAny, op: UnaryOps): DeliberateAny {
+  const obi = internal.primitives.Uint64Cls.fromCompat(operand).value
   switch (op) {
     case '~':
-      if (typeof operand === 'bigint') {
-        return ~operand & MAX_UINT64
-      }
-      return ~operand
+      return ~obi & MAX_UINT64
     default:
       internal.errors.internalError(`Unsupported operator ${op}`)
   }
+}
+
+function defaultUnaryOp(_operand: DeliberateAny, op: UnaryOps): DeliberateAny {
+  internal.errors.internalError(`Unsupported operator ${op}`)
 }
 
 const genericTypeMap = new Map<DeliberateAny, string>()
