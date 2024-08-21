@@ -403,7 +403,7 @@ describe('Unit64', async () => {
     1,
     42,
     MAX_UINT64
-  ])('bitwise not', async (a) => {
+  ])('bitwise invert', async (a) => {
     it(`~${a}`, async () => {
       const avmResult = await getAvmResult<bigint>(appClient, 'verify_uint64_not', a)
       let result = ~asUint64(a)
