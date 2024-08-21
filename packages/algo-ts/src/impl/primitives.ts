@@ -4,6 +4,9 @@ import { bigIntToUint8Array, uint8ArrayToBigInt, uint8ArrayToUtf8, utf8ToUint8Ar
 import { avmError, AvmError, internalError } from './errors'
 import { nameOfType } from './name-of-type'
 
+const MAX_UINT8 = 2 ** 8 - 1
+const MAX_BYTES_SIZE = 4096
+
 export type StubBigUintCompat = BigUintCompat | BigUintCls | Uint64Cls
 export type StubBytesCompat = BytesCompat | BytesCls
 export type StubUint64Compat = Uint64Compat | Uint64Cls
@@ -60,6 +63,11 @@ export const checkBigUint = (v: bigint): bigint => {
   const uBig = BigInt.asUintN(64 * 8, v)
   if (uBig !== v) throw new AvmError(`BigUint over or underflow`)
   return uBig
+}
+
+export const checkBytes = (v: Uint8Array): Uint8Array => {
+  if (v.length > MAX_BYTES_SIZE) throw new AvmError(`Bytes length ${v.length} exceeds maximum length ${MAX_BYTES_SIZE}`)
+  return v
 }
 
 export abstract class AlgoTsPrimitiveCls {
@@ -166,6 +174,7 @@ export class BytesCls extends AlgoTsPrimitiveCls {
   constructor(v: Uint8Array) {
     super(BytesCls.name)
     this.#v = v
+    checkBytes(this.#v)
   }
 
   get length() {
@@ -175,6 +184,7 @@ export class BytesCls extends AlgoTsPrimitiveCls {
   toBytes(): BytesCls {
     return this
   }
+
   at(i: StubUint64Compat): BytesCls {
     const start = i instanceof Uint64Cls ? i.asNumber() : Uint64Cls.fromCompat(i).asNumber()
     return new BytesCls(this.#v.slice(start, start + 1))
@@ -193,6 +203,46 @@ export class BytesCls extends AlgoTsPrimitiveCls {
     mergedArray.set(this.#v)
     mergedArray.set(otherArray, this.#v.length)
     return new BytesCls(mergedArray)
+  }
+
+  bitwiseAnd(other: StubBytesCompat): BytesCls {
+    return this.bitwiseOp(other, (a, b) => a & b)
+  }
+
+  bitwiseOr(other: StubBytesCompat): BytesCls {
+    return this.bitwiseOp(other, (a, b) => a | b)
+  }
+
+  bitwiseXor(other: StubBytesCompat): BytesCls {
+    return this.bitwiseOp(other, (a, b) => a ^ b)
+  }
+
+  bitwiseInvert(): BytesCls {
+    const result = new Uint8Array(this.#v.length)
+    this.#v.forEach((v, i) => {
+      result[i] = ~v & MAX_UINT8
+    })
+    return new BytesCls(result)
+  }
+
+  equals(other: StubBytesCompat): boolean {
+    const otherArray = BytesCls.fromCompat(other).asUint8Array()
+    if (this.#v.length !== otherArray.length) return false
+    for (let i = 0; i < this.#v.length; i++) {
+      if (this.#v[i] !== otherArray[i]) return false
+    }
+    return true
+  }
+
+  private bitwiseOp(other: StubBytesCompat, op: (a: number, b: number) => number): BytesCls {
+    const otherArray = BytesCls.fromCompat(other).asUint8Array()
+    const result = new Uint8Array(Math.max(this.#v.length, otherArray.length))
+    for (let i = result.length - 1; i >= 0; i--) {
+      const thisIndex = i - (result.length - this.#v.length)
+      const otherIndex = i - (result.length - otherArray.length)
+      result[i] = op(this.#v[thisIndex] ?? 0, otherArray[otherIndex] ?? 0)
+    }
+    return new BytesCls(result)
   }
 
   valueOf(): string {

@@ -51,7 +51,15 @@ export type bytes = {
 
   concat(other: BytesCompat): bytes
 
+  bitwiseAnd(other: BytesCompat): bytes
+
+  bitwiseOr(other: BytesCompat): bytes
+
+  bitwiseXor(other: BytesCompat): bytes
+
   bitwiseInvert(): bytes
+
+  equals(other: BytesCompat): boolean
 
   toString(): string
 }
