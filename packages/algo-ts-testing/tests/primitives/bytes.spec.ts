@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 import { MAX_BYTES_SIZE } from '../../src/constants';
 import appSpecJson from '../artifacts/primitive-ops/data/PrimitiveOpsContract.arc32.json';
 import { getAlgorandAppClient, getAvmResult, getAvmResultRaw } from '../avm-invoker';
-import { padUint8Array } from '../util';
+import { asUint8Array, padUint8Array } from '../util';
 
 describe('Bytes', async () => {
   const appClient = await getAlgorandAppClient(appSpecJson as AppSpec)
@@ -29,7 +29,7 @@ describe('Bytes', async () => {
       const bytesA = Bytes(padUint8Array(uint8ArrayA, padASize))
       const bytesB = Bytes(padUint8Array(uint8ArrayB, padBSize))
       const result = bytesA.concat(bytesB)
-      const resultUint8Array = (result as unknown as internal.primitives.BytesCls).asUint8Array()
+      const resultUint8Array = asUint8Array(result)
       const resultHash = new Uint8Array(createHash('sha256').update(resultUint8Array).digest())
       expect(resultHash, `for values: ${a}, ${b}`).toEqual(avmResult)
     })
@@ -82,7 +82,7 @@ describe('Bytes', async () => {
         const uint8ArrayB = internal.encodingUtil.utf8ToUint8Array(b)
         const avmResult = (await getAvmResultRaw(appClient, `verify_bytes_${op}`, uint8ArrayA, uint8ArrayB))!
         let result = getStubResult(bytesA, bytesB)
-        let resultUint8Array = (result as unknown as internal.primitives.BytesCls).asUint8Array()
+        let resultUint8Array = asUint8Array(result)
         expect(resultUint8Array, `for values: ${a}, ${b}`).toEqual(avmResult)
       })
     })
@@ -101,7 +101,7 @@ describe('Bytes', async () => {
 
       const bytesA = Bytes(padUint8Array(uint8ArrayA, padSize))
       let result = bytesA.bitwiseInvert()
-      let resultUint8Array = (result as unknown as internal.primitives.BytesCls).asUint8Array()
+      let resultUint8Array = asUint8Array(result)
       const resultHash = new Uint8Array(createHash('sha256').update(resultUint8Array).digest())
 
       expect(resultHash, `for value: ${a}`).toEqual(avmResult)
@@ -152,21 +152,21 @@ describe('Bytes', async () => {
     it('hex', () => {
       const hex = 'FF'
       const bytes = Bytes.fromHex(hex)
-      const resultUint8Array = (bytes as unknown as internal.primitives.BytesCls).asUint8Array()
+      const resultUint8Array = asUint8Array(bytes)
       expect(resultUint8Array).toEqual(Uint8Array.from([0xFF]))
     })
 
     it('base64', () => {
       const base64 = '/w=='
       const bytes = Bytes.fromBase64(base64)
-      const resultUint8Array = (bytes as unknown as internal.primitives.BytesCls).asUint8Array()
+      const resultUint8Array = asUint8Array(bytes)
       expect(resultUint8Array).toEqual(Uint8Array.from([0xFF]))
     })
 
     it('base32', () => {
       const base32 = '74======'
       const bytes = Bytes.fromBase32(base32)
-      const resultUint8Array = (bytes as unknown as internal.primitives.BytesCls).asUint8Array()
+      const resultUint8Array = asUint8Array(bytes)
       expect(resultUint8Array).toEqual(Uint8Array.from([0xFF]))
     })
   })

@@ -4,8 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { MAX_UINT512, MAX_UINT64 } from '../../src/constants';
 import appSpecJson from '../artifacts/primitive-ops/data/PrimitiveOpsContract.arc32.json';
 import { getAlgorandAppClient, getAvmResult, getAvmResultRaw } from '../avm-invoker';
-
-const asBigUint = (val: bigint | number) => (typeof val === 'bigint') ? BigUint(val) : BigUint(val)
+import { asBigUint } from '../util';
 
 describe('BigUint', async () => {
   const appClient = await getAlgorandAppClient(appSpecJson as AppSpec)
