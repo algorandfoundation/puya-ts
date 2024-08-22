@@ -148,7 +148,6 @@ describe('Bytes', async () => {
     })
   })
 
-
   describe('from encoded string', () => {
     it('hex', () => {
       const hex = 'FF'
@@ -169,6 +168,27 @@ describe('Bytes', async () => {
       const bytes = Bytes.fromBase32(base32)
       const resultUint8Array = (bytes as unknown as internal.primitives.BytesCls).asUint8Array()
       expect(resultUint8Array).toEqual(Uint8Array.from([0xFF]))
+    })
+  })
+
+  describe.each([
+    MAX_BYTES_SIZE + 1,
+    MAX_BYTES_SIZE * 2,
+  ])('value overflows', (size) => {
+    it(`${size} bytes`, () => {
+      const a = new Uint8Array(size).fill(0)
+      expect(() => Bytes(a)).toThrow(/Bytes length \d+ exceeds maximum length/)
+    })
+  })
+
+  describe.each([
+    [undefined, new Uint8Array(0)],
+    ['ABC', new Uint8Array([0x41, 0x42, 0x43])],
+    [new Uint8Array([0xFF, 0x00]), new Uint8Array([0xFF, 0x00])],
+  ])('fromCompat', (a, b) => {
+    it(`${a} fromCompat`, async () => {
+      const result = internal.primitives.BytesCls.fromCompat(a)
+      expect(result.asUint8Array()).toEqual(b)
     })
   })
 })

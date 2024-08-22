@@ -1,4 +1,4 @@
-import { uint64, Uint64 } from '@algorandfoundation/algo-ts'
+import { internal, uint64, Uint64 } from '@algorandfoundation/algo-ts'
 import { AppSpec } from '@algorandfoundation/algokit-utils/types/app-spec'
 import { describe, expect, it } from 'vitest'
 import { MAX_UINT64 } from '../../src/constants'
@@ -493,6 +493,23 @@ describe('Unit64', async () => {
   ])('value too small', (a) => {
     it(`${a}`, () => {
       expect(() => asUint64(a)).toThrow('Uint64 over or underflow')
+    })
+  })
+
+  describe.each([
+    [true, 1n],
+    [false, 0n],
+    [0, 0n],
+    [1, 1n],
+    [42, 42n],
+    [0n, 0n],
+    [1n, 1n],
+    [42n, 42n],
+    [MAX_UINT64, MAX_UINT64]
+  ])('fromCompat', async (a, b) => {
+    it(`${a}`, async () => {
+      let result = internal.primitives.Uint64Cls.fromCompat(a)
+      expect(result.valueOf(), `for value: ${a}`).toBe(b)
     })
   })
 })
