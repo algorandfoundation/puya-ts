@@ -1,4 +1,4 @@
-import { Bytes, internal, op, uint64 } from '@algorandfoundation/algo-ts'
+import { BigUint, Bytes, internal, op, uint64 } from '@algorandfoundation/algo-ts'
 import { AppSpec } from '@algorandfoundation/algokit-utils/types/app-spec'
 import { afterEach } from 'node:test'
 import { describe, expect, test } from 'vitest'
@@ -6,7 +6,7 @@ import { TestExecutionContext } from '../src'
 import { MAX_UINT512, MAX_UINT64 } from '../src/constants'
 import appSpecJson from './artifacts/miscellaneous-ops/data/MiscellaneousOpsContract.arc32.json'
 import { getAlgorandAppClient, getAvmResult, getAvmResultRaw } from './avm-invoker'
-import { asUint64, asUint8Array } from './util'
+import { asBigUintCls, asBytesCls, asUint64, asUint8Array, base64Encode, base64UrlEncode } from './util'
 
 
 const avm_int_arg_overflow_error = "is not a non-negative int or too big to fit in size"
@@ -49,6 +49,50 @@ describe('Pure op codes', async () => {
     })
   })
 
+  describe('base64Decode', async () => {
+    test.each([
+      base64Encode(""),
+      base64Encode("abc"),
+      base64Encode("hello, world."),
+      base64Encode("0123."),
+      base64Encode(new Uint8Array([0xff])),
+      base64Encode(new Uint8Array(Array(256).fill(0x00).concat([0xff]))),
+    ])('should decode standard base64 string', async (a) => {
+      const avmResult = (await getAvmResultRaw(appClient, 'verify_base64_decode_standard', asUint8Array(a)))!
+      const result = op.base64Decode(internal.opTypes.Base64.StdEncoding, a)
+      expect(asBytesCls(result).asUint8Array()).toEqual(avmResult)
+    })
+
+    test.each([
+      Bytes(new Uint8Array(Array(256).fill(0x00).concat([0xff]))),
+      asBigUintCls(BigUint(MAX_UINT512)).toBytes().asAlgoTs(),
+    ])('should throw error when input is not a valid base64 string', async (a) => {
+      await expect(getAvmResultRaw(appClient, 'verify_base64_decode_standard', asUint8Array(a))).rejects.toThrow('illegal base64 data at input byte 0')
+      expect(() => op.base64Decode(internal.opTypes.Base64.StdEncoding, a)).toThrow('illegal base64 data')
+    })
+
+    test.each([
+      base64UrlEncode(""),
+      base64UrlEncode("abc"),
+      base64UrlEncode("hello, world."),
+      base64UrlEncode("0123."),
+      base64UrlEncode(new Uint8Array([0xff])),
+      base64UrlEncode(new Uint8Array(Array(256).fill(0x00).concat([0xff]))),
+    ])('should decode base64url string', async (a) => {
+      const avmResult = (await getAvmResultRaw(appClient, 'verify_base64_decode_url', asUint8Array(a)))!
+      const result = op.base64Decode(internal.opTypes.Base64.URLEncoding, a)
+      expect(asBytesCls(result).asUint8Array()).toEqual(avmResult)
+    })
+
+    test.each([
+      Bytes(new Uint8Array(Array(256).fill(0x00).concat([0xff]))),
+      asBigUintCls(BigUint(MAX_UINT512)).toBytes().asAlgoTs(),
+    ])('should throw error when input is not a valid base64url string', async (a) => {
+      await expect(getAvmResultRaw(appClient, 'verify_base64_decode_url', asUint8Array(a))).rejects.toThrow('illegal base64 data')
+      expect(() => op.base64Decode(internal.opTypes.Base64.URLEncoding, a)).toThrow('illegal base64 data')
+    })
+  })
+
   describe('btoi', async () => {
     test.each([
       Bytes(internal.encodingUtil.bigIntToUint8Array(0n)),
@@ -72,7 +116,7 @@ describe('Pure op codes', async () => {
     })
   })
 
-  describe('itob', async (a) => {
+  describe('itob', async () => {
     test.each([
       0,
       42,

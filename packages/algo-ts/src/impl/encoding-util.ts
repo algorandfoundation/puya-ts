@@ -46,4 +46,6 @@ export const uint8ArrayToHex = (value: Uint8Array): string => Buffer.from(value)
 
 export const uint8ArrayToBase64 = (value: Uint8Array): string => Buffer.from(value).toString('base64')
 
+export const uint8ArrayToBase64Url = (value: Uint8Array): string => Buffer.from(value).toString('base64url')
+
 export const uint8ArrayToBase32 = (value: Uint8Array): string => base32.encode(value)

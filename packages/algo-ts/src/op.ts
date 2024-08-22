@@ -1,9 +1,12 @@
 import { ctxMgr } from './execution-context'
-import { AddwType, BtoiType, Ed25519verifyBareType, GlobalType, GTxnType, ItobType, TxnType } from './op-types'
+import { AddwType, Base64DecodeType, BtoiType, Ed25519verifyBareType, GlobalType, GTxnType, ItobType, TxnType } from './op-types'
 import { bytes } from './primitives'
 
 export const addw: AddwType = (a, b) => {
   return ctxMgr.instance.op.addw!(a, b)
+}
+export const base64Decode: Base64DecodeType = (e, a) => {
+  return ctxMgr.instance.op.base64Decode!(e, a)
 }
 export const btoi: BtoiType = (bytes) => {
   return ctxMgr.instance.op.btoi!(bytes)

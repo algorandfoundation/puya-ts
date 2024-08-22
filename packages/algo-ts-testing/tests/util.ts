@@ -1,4 +1,4 @@
-import { biguint, BigUint, bytes, internal, uint64, Uint64 } from '@algorandfoundation/algo-ts'
+import { biguint, BigUint, Bytes, bytes, internal, uint64, Uint64 } from '@algorandfoundation/algo-ts'
 
 export const padUint8Array = (arr: Uint8Array, padSize: number): Uint8Array => {
   const paddedUint8Array = new Uint8Array(arr.length + padSize).fill(0)
@@ -19,3 +19,7 @@ export const asBigUint = (val: bigint | number) => (typeof val === 'bigint' ? Bi
 export const asBigUintCls = (val: biguint) => val as unknown as internal.primitives.BigUintCls
 
 export const asBytesCls = (val: bytes) => val as unknown as internal.primitives.BytesCls
+
+export const base64Encode = (value: Uint8Array | string): bytes => Bytes(Buffer.from(value).toString('base64'))
+
+export const base64UrlEncode = (value: Uint8Array | string): bytes => Bytes(Buffer.from(value).toString('base64url'))
