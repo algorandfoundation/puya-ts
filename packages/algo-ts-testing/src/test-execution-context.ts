@@ -2,7 +2,7 @@ import { Account, Application, Asset, Bytes, bytes, gtxn, internal, uint64 } fro
 import algosdk from 'algosdk'
 import { captureMethodConfig } from './abi-metadata'
 import { DecodedLogs, decodeLogs, LogDecoding } from './decode-logs'
-import { Global, GTxn, Txn } from './impl/op'
+import * as ops from './impl'
 import { AccountCls, ApplicationCls, AssetCls } from './reference'
 import { ContractContext } from './subcontexts/contract-context'
 import { LedgerContext } from './subcontexts/ledger-context'
@@ -59,7 +59,7 @@ export class TestExecutionContext implements internal.ExecutionContext {
   }
 
   get op() {
-    return { Txn, GTxn, Global }
+    return ops
   }
   get contract() {
     return this.#contractContext
