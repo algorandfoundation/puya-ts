@@ -11,6 +11,23 @@ export const addw: internal.opTypes.AddwType = (
   return toUint128(sum)
 }
 
+export const base64Decode: internal.opTypes.Base64DecodeType = (
+  e: internal.opTypes.Base64,
+  a: internal.primitives.StubBytesCompat,
+): bytes => {
+  const encoding = e === internal.opTypes.Base64.StdEncoding ? 'base64' : 'base64url'
+  const bytesValue = internal.primitives.BytesCls.fromCompat(a)
+  const stringValue = bytesValue.toString()
+
+  const bufferResult = Buffer.from(stringValue, encoding)
+  if (bufferResult.toString(encoding) !== stringValue) {
+    internal.errors.avmError('illegal base64 data')
+  }
+
+  const uint8ArrayResult = new Uint8Array(bufferResult)
+  return internal.primitives.BytesCls.fromCompat(uint8ArrayResult).asAlgoTs()
+}
+
 export const btoi: internal.opTypes.BtoiType = (value: internal.primitives.StubBytesCompat): uint64 => {
   const bytesValue = internal.primitives.BytesCls.fromCompat(value)
   if (bytesValue.length.asAlgoTs() > 8) {
