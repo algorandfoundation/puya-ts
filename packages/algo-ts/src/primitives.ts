@@ -80,14 +80,14 @@ export function Bytes(value?: BytesCompat | TemplateStringsArray, ...replacement
  * @param hex
  */
 Bytes.fromHex = (hex: string): bytes => {
-  throw new Error('TODO')
+  return BytesCls.fromHex(hex).asAlgoTs()
 }
 /**
  * Create a new bytes value from a base 64 encoded string
  * @param b64
  */
 Bytes.fromBase64 = (b64: string): bytes => {
-  throw new Error('TODO')
+  return BytesCls.fromBase64(b64).asAlgoTs()
 }
 
 /**
@@ -95,7 +95,7 @@ Bytes.fromBase64 = (b64: string): bytes => {
  * @param b32
  */
 Bytes.fromBase32 = (b32: string): bytes => {
-  throw new Error('TODO')
+  return BytesCls.fromBase32(b32).asAlgoTs()
 }
 
 function isTemplateStringsArray(v: unknown): v is TemplateStringsArray {

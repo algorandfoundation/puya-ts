@@ -1,3 +1,4 @@
+import * as base32 from 'hi-base32'
 import { TextDecoder } from 'node:util'
 import { AvmError } from './errors'
 
@@ -41,6 +42,8 @@ export const uint8ArrayToUtf8 = (value: Uint8Array): string => {
   return decoder.decode(value)
 }
 
-export const uint8ArrayToHex = (value: Uint8Array): string => {
-  return Buffer.from(value).toString('hex')
-}
+export const uint8ArrayToHex = (value: Uint8Array): string => Buffer.from(value).toString('hex')
+
+export const uint8ArrayToBase64 = (value: Uint8Array): string => Buffer.from(value).toString('base64')
+
+export const uint8ArrayToBase32 = (value: Uint8Array): string => base32.encode(value)

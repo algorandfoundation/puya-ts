@@ -147,4 +147,28 @@ describe('Bytes', async () => {
       expect(result, `for values: ${a}, ${b}`).toEqual(avmResult)
     })
   })
+
+
+  describe('from encoded string', () => {
+    it('hex', () => {
+      const hex = 'FF'
+      const bytes = Bytes.fromHex(hex)
+      const resultUint8Array = (bytes as unknown as internal.primitives.BytesCls).asUint8Array()
+      expect(resultUint8Array).toEqual(Uint8Array.from([0xFF]))
+    })
+
+    it('base64', () => {
+      const base64 = '/w=='
+      const bytes = Bytes.fromBase64(base64)
+      const resultUint8Array = (bytes as unknown as internal.primitives.BytesCls).asUint8Array()
+      expect(resultUint8Array).toEqual(Uint8Array.from([0xFF]))
+    })
+
+    it('base32', () => {
+      const base32 = '74======'
+      const bytes = Bytes.fromBase32(base32)
+      const resultUint8Array = (bytes as unknown as internal.primitives.BytesCls).asUint8Array()
+      expect(resultUint8Array).toEqual(Uint8Array.from([0xFF]))
+    })
+  })
 })
