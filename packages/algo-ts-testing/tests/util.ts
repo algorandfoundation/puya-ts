@@ -1,4 +1,4 @@
-import { BigUint, bytes, internal, Uint64 } from '@algorandfoundation/algo-ts'
+import { biguint, BigUint, bytes, internal, uint64, Uint64 } from '@algorandfoundation/algo-ts'
 
 export const padUint8Array = (arr: Uint8Array, padSize: number): Uint8Array => {
   const paddedUint8Array = new Uint8Array(arr.length + padSize).fill(0)
@@ -7,9 +7,15 @@ export const padUint8Array = (arr: Uint8Array, padSize: number): Uint8Array => {
 }
 
 export const asUint8Array = (value: bytes): Uint8Array => {
-  return (value as unknown as internal.primitives.BytesCls).asUint8Array()
+  return asBytesCls(value).asUint8Array()
 }
 
-export const asUint64 = (val: bigint | number) => (typeof val === 'bigint') ? Uint64(val) : Uint64(val)
+export const asUint64 = (val: bigint | number) => (typeof val === 'bigint' ? Uint64(val) : Uint64(val))
 
-export const asBigUint = (val: bigint | number) => (typeof val === 'bigint') ? BigUint(val) : BigUint(val)
+export const asUint64Cls = (val: uint64) => val as unknown as internal.primitives.Uint64Cls
+
+export const asBigUint = (val: bigint | number) => (typeof val === 'bigint' ? BigUint(val) : BigUint(val))
+
+export const asBigUintCls = (val: biguint) => val as unknown as internal.primitives.BigUintCls
+
+export const asBytesCls = (val: bytes) => val as unknown as internal.primitives.BytesCls

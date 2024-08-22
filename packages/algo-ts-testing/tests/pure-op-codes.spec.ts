@@ -19,6 +19,36 @@ describe('Pure op codes', async () => {
     ctx.reset()
   })
 
+  describe('addw', async () => {
+    test.each([
+      [0, 0],
+      [0, MAX_UINT64],
+      [MAX_UINT64, 0],
+      [1, 0],
+      [0, 1],
+      [100, 42],
+      [1, MAX_UINT64 - 1n],
+      [MAX_UINT64 - 1n, 1],
+      [100, MAX_UINT64],
+      [MAX_UINT64, MAX_UINT64],
+    ])('should add two uint64 values', async (a, b) => {
+      const avmResult = await getAvmResult<uint64[]>(appClient, 'verify_addw', a, b)
+      const result = op.addw(asUint64(a), asUint64(b))
+      expect(result[0].valueOf()).toBe(avmResult[0])
+      expect(result[1].valueOf()).toBe(avmResult[1])
+    })
+
+    test.each([
+      [1, MAX_UINT64 + 1n],
+      [MAX_UINT64 + 1n, 1],
+      [0, MAX_UINT512],
+      [MAX_UINT512 * 2n, 0],
+    ])('should throw error when input overflows', async (a, b) => {
+      await expect(getAvmResultRaw(appClient, 'verify_addw', a, b)).rejects.toThrow(avm_int_arg_overflow_error)
+      expect(() => op.addw(asUint64(a), asUint64(b))).toThrow('Uint64 over or underflow')
+    })
+  })
+
   describe('btoi', async () => {
     test.each([
       Bytes(internal.encodingUtil.bigIntToUint8Array(0n)),

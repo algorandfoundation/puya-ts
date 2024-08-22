@@ -6,7 +6,6 @@ import appSpecJson from '../artifacts/primitive-ops/data/PrimitiveOpsContract.ar
 import { getAlgorandAppClient, getAvmResult } from '../avm-invoker'
 import { asUint64 } from '../util'
 
-
 describe('Unit64', async () => {
   const appClient = await getAlgorandAppClient(appSpecJson as AppSpec)
 
