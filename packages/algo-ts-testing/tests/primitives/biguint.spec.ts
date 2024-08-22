@@ -616,4 +616,23 @@ describe('BigUint', async () => {
       expect(() => bigUintA === asBigUint(a)).toThrow('BigUint over or underflow')
     })
   })
+
+  describe.each([
+    [true, 1n],
+    [false, 0n],
+    [0, 0n],
+    [1, 1n],
+    [42, 42n],
+    [0n, 0n],
+    [1n, 1n],
+    [42n, 42n],
+    [MAX_UINT512, MAX_UINT512],
+    [MAX_UINT512 * 2n, MAX_UINT512 * 2n],
+    [Bytes('hello'), 448378203247n]
+  ])('fromCompat', async (a, b) => {
+    it(`${a}`, async () => {
+      let result = internal.primitives.BigUintCls.fromCompat(a)
+      expect(result.valueOf(), `for value: ${a}`).toBe(b)
+    })
+  })
 })
