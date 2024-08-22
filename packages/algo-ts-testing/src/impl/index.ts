@@ -1,4 +1,4 @@
 export { Global } from './global'
 export { GTxn } from './gtxn'
-export * from './op'
+export * from './pure'
 export { Txn } from './txn'
