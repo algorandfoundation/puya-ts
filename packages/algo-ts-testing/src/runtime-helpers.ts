@@ -174,7 +174,14 @@ function bigUintBinaryOp(left: DeliberateAny, right: DeliberateAny, op: BinaryOp
         internal.errors.internalError(`Unsupported operator ${op}`)
     }
   })()
-  return typeof result === 'boolean' ? result : new internal.primitives.BigUintCls(internal.primitives.checkBigUint(result))
+  if (typeof result === 'boolean') {
+    return result
+  }
+
+  if (result < 0) {
+    internal.errors.avmError('BigUint underflow')
+  }
+  return new internal.primitives.BigUintCls(result)
 }
 
 function defaultBinaryOp(left: DeliberateAny, right: DeliberateAny, op: BinaryOps): DeliberateAny {

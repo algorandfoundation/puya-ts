@@ -11,7 +11,7 @@ export const uint8ArrayToBigInt = (v: Uint8Array): bigint => {
 }
 
 export const bigIntToUint8Array = (val: bigint, fixedSize: number | 'dynamic' = 'dynamic'): Uint8Array => {
-  const maxBytes = fixedSize == 'dynamic' ? 64 : fixedSize
+  const maxBytes = fixedSize == 'dynamic' ? undefined : fixedSize
 
   let hex = val.toString(16)
 
@@ -22,7 +22,7 @@ export const bigIntToUint8Array = (val: bigint, fixedSize: number | 'dynamic' = 
     // Pad to 'whole' byte
     hex = `0${hex}`
   }
-  if (hex.length > maxBytes * 2) {
+  if (maxBytes && hex.length > maxBytes * 2) {
     throw new AvmError(`Cannot encode ${val} as ${maxBytes} bytes as it would overflow`)
   }
   const byteArray = new Uint8Array(hex.length / 2)
