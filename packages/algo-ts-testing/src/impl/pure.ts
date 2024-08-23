@@ -54,6 +54,20 @@ export const bzero = (a: internal.primitives.StubUint64Compat): bytes => {
   return Bytes(new Uint8Array(Array(Number(size)).fill(0x00)))
 }
 
+export const divmodw = (
+  a: internal.primitives.StubUint64Compat,
+  b: internal.primitives.StubUint64Compat,
+  c: internal.primitives.StubUint64Compat,
+  d: internal.primitives.StubUint64Compat,
+): readonly [uint64, uint64, uint64, uint64] => {
+  const i = uint128ToBigInt(a, b)
+  const j = uint128ToBigInt(c, d)
+
+  const div = i / j
+  const mod = i % j
+  return [...toUint128(div), ...toUint128(mod)]
+}
+
 export const itob = (a: internal.primitives.StubUint64Compat): bytes => {
   return internal.primitives.Uint64Cls.fromCompat(a).toBytes().asAlgoTs()
 }
@@ -73,4 +87,10 @@ const toUint128 = (value: bigint): [uint64, uint64] => {
   const cf = value >> 64n
   const rest = value & MAX_UINT64
   return [Uint64(cf), Uint64(rest)]
+}
+
+const uint128ToBigInt = (a: internal.primitives.StubUint64Compat, b: internal.primitives.StubUint64Compat): bigint => {
+  const bigIntA = internal.primitives.Uint64Cls.fromCompat(a).asBigInt()
+  const bigIntB = internal.primitives.Uint64Cls.fromCompat(b).asBigInt()
+  return (bigIntA << 64n) + bigIntB
 }

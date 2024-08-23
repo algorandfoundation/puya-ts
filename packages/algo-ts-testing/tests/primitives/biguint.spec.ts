@@ -517,12 +517,12 @@ describe('BigUint', async () => {
       const bytesB = internal.encodingUtil.bigIntToUint8Array(0n)
 
       await expect(getAvmResultRaw(appClient, 'verify_biguint_mod', bytesA, bytesB)).rejects.toThrow('modulo by zero')
-      expect(() => bigUintA % bigUintB).toThrow('Modulo by zero')
+      expect(() => bigUintA % bigUintB).toThrow('Division by zero')
 
       if (typeof a === 'bigint') {
-        expect(() => a % bigUintB).toThrow('Modulo by zero')
+        expect(() => a % bigUintB).toThrow('Division by zero')
       }
-      expect(() => bigUintA % 0n).toThrow('Modulo by zero')
+      expect(() => bigUintA % 0n).toThrow('Division by zero')
     })
   })
 
