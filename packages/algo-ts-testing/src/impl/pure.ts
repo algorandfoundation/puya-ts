@@ -1,5 +1,5 @@
-import { biguint, bytes, internal, Uint64, uint64 } from '@algorandfoundation/algo-ts'
-import { MAX_UINT64 } from '../constants'
+import { biguint, Bytes, bytes, internal, Uint64, uint64 } from '@algorandfoundation/algo-ts'
+import { MAX_BYTES_SIZE, MAX_UINT64 } from '../constants'
 import { asMaybeBytesCls, asMaybeUint64Cls } from '../util'
 
 export const addw = (a: internal.primitives.StubUint64Compat, b: internal.primitives.StubUint64Compat): readonly [uint64, uint64] => {
@@ -23,9 +23,9 @@ export const base64Decode = (e: internal.opTypes.Base64, a: internal.primitives.
   return internal.primitives.BytesCls.fromCompat(uint8ArrayResult).asAlgoTs()
 }
 
-export const bitLength = (value: internal.primitives.StubUint64Compat | internal.primitives.StubBytesCompat): uint64 => {
-  const uint64Cls = asMaybeUint64Cls(value)
-  const bigUintCls = asMaybeBytesCls(value)?.toBigUint()
+export const bitLength = (a: internal.primitives.StubUint64Compat | internal.primitives.StubBytesCompat): uint64 => {
+  const uint64Cls = asMaybeUint64Cls(a)
+  const bigUintCls = asMaybeBytesCls(a)?.toBigUint()
   const bigIntValue = (uint64Cls?.asBigInt() ?? bigUintCls?.asBigInt())!
   const binaryValue = bigIntValue === 0n ? '' : bigIntValue.toString(2)
   return Uint64(binaryValue.length)
@@ -38,16 +38,24 @@ export const bsqrt = (a: internal.primitives.StubBigUintCompat): biguint => {
   return internal.primitives.BigUintCls.fromCompat(sqrtValue).asAlgoTs()
 }
 
-export const btoi = (value: internal.primitives.StubBytesCompat): uint64 => {
-  const bytesValue = internal.primitives.BytesCls.fromCompat(value)
+export const btoi = (a: internal.primitives.StubBytesCompat): uint64 => {
+  const bytesValue = internal.primitives.BytesCls.fromCompat(a)
   if (bytesValue.length.asAlgoTs() > 8) {
     internal.errors.avmError(`btoi arg too long, got [${bytesValue.length.valueOf()}]bytes`)
   }
   return bytesValue.toUint64().asAlgoTs()
 }
 
-export const itob = (value: internal.primitives.StubUint64Compat): bytes => {
-  return internal.primitives.Uint64Cls.fromCompat(value).toBytes().asAlgoTs()
+export const bzero = (a: internal.primitives.StubUint64Compat): bytes => {
+  const size = internal.primitives.Uint64Cls.fromCompat(a).asBigInt()
+  if (size > MAX_BYTES_SIZE) {
+    internal.errors.avmError('bzero attempted to create a too large string')
+  }
+  return Bytes(new Uint8Array(Array(Number(size)).fill(0x00)))
+}
+
+export const itob = (a: internal.primitives.StubUint64Compat): bytes => {
+  return internal.primitives.Uint64Cls.fromCompat(a).toBytes().asAlgoTs()
 }
 
 const squareroot = (x: bigint): bigint => {

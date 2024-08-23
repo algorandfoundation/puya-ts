@@ -7,7 +7,7 @@ import { MAX_BYTES_SIZE, MAX_UINT512, MAX_UINT64 } from '../src/constants'
 import * as op from '../src/impl/pure'
 import appSpecJson from './artifacts/miscellaneous-ops/data/MiscellaneousOpsContract.arc32.json'
 import { getAlgorandAppClient, getAvmResult, getAvmResultRaw } from './avm-invoker'
-import { asBigUintCls, asBytesCls, asUint8Array, base64Encode, base64UrlEncode } from './util'
+import { asBigUintCls, asBytesCls, asUint8Array, base64Encode, base64UrlEncode, getSha256Hash } from './util'
 
 const avm_int_arg_overflow_error = "is not a non-negative int or too big to fit in size"
 
@@ -153,7 +153,7 @@ describe('Pure op codes', async () => {
     test.each([
       MAX_UINT512 + 1n,
       MAX_UINT512 * 2n
-    ])('should throw error when input overlfows', async (a) => {
+    ])('should throw error when input overflows', async (a) => {
       const uint8ArrayA = internal.encodingUtil.bigIntToUint8Array(BigInt(a))
       await expect(getAvmResultRaw(appClient, 'verify_bsqrt', uint8ArrayA)).rejects.toThrow('math attempted on large byte-array')
       expect(() => op.bsqrt(a)).toThrow('BigUint over or underflow')
@@ -180,6 +180,28 @@ describe('Pure op codes', async () => {
       const errorRegex = new RegExp(`btoi arg too long, got \\[${a.length.valueOf()}\\]bytes`)
       await expect(getAvmResultRaw(appClient, 'verify_btoi', asUint8Array(a))).rejects.toThrow(errorRegex)
       expect(() => op.btoi(a)).toThrow(errorRegex)
+    })
+  })
+
+  describe('bzero', async () => {
+    test.each([
+      0,
+      1,
+      42,
+      MAX_BYTES_SIZE
+    ])('should retrun a zero filled bytes value of the given size', async (a) => {
+      const avmResult = (await getAvmResultRaw(appClient, 'verify_bzero', a))!
+      const result = op.bzero(a)
+      const resultHash = getSha256Hash(asUint8Array(result))
+      expect(resultHash).toEqual(avmResult)
+    })
+
+    test.each([
+      MAX_BYTES_SIZE + 1,
+      MAX_UINT64
+    ])('should throw error when input overflows', async (a) => {
+      await expect(getAvmResultRaw(appClient, 'verify_bzero', a)).rejects.toThrow('bzero attempted to create a too large string')
+      expect(() => op.bzero(a)).toThrow('bzero attempted to create a too large string')
     })
   })
 
