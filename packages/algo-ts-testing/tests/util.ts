@@ -6,9 +6,7 @@ export const padUint8Array = (arr: Uint8Array, padSize: number): Uint8Array => {
   return paddedUint8Array
 }
 
-export const asUint8Array = (value: bytes): Uint8Array => {
-  return asBytesCls(value).asUint8Array()
-}
+export const asUint8Array = (value: bytes): Uint8Array => asBytesCls(value).asUint8Array()
 
 export const asUint64Cls = (val: uint64) => val as unknown as internal.primitives.Uint64Cls
 

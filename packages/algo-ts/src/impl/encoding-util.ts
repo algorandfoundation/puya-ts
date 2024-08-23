@@ -11,7 +11,10 @@ export const uint8ArrayToBigInt = (v: Uint8Array): bigint => {
 }
 
 export const bigIntToUint8Array = (val: bigint, fixedSize: number | 'dynamic' = 'dynamic'): Uint8Array => {
-  const maxBytes = fixedSize == 'dynamic' ? undefined : fixedSize
+  if (val === 0n && fixedSize === 'dynamic') {
+    return new Uint8Array(0)
+  }
+  const maxBytes = fixedSize === 'dynamic' ? undefined : fixedSize
 
   let hex = val.toString(16)
 

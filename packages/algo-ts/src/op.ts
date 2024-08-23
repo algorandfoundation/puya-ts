@@ -3,6 +3,7 @@ import {
   AddwType,
   Base64DecodeType,
   BitLengthType,
+  BsqrtType,
   BtoiType,
   Ed25519verifyBareType,
   GlobalType,
@@ -20,6 +21,9 @@ export const base64Decode: Base64DecodeType = (e, a) => {
 }
 export const bitLength: BitLengthType = (value) => {
   return ctxMgr.instance.op.bitLength!(value)
+}
+export const bsqrt: BsqrtType = (a: bigint) => {
+  return ctxMgr.instance.op.bsqrt!(a)
 }
 export const btoi: BtoiType = (bytes) => {
   return ctxMgr.instance.op.btoi!(bytes)

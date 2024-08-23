@@ -131,6 +131,35 @@ describe('Pure op codes', async () => {
     })
   })
 
+  describe('bsqrt', async () => {
+    test.each([
+      0,
+      1,
+      2,
+      9,
+      13,
+      144n,
+      MAX_UINT64,
+      MAX_UINT512
+    ])('should compute the square root of a big uint', async (a) => {
+      const uint8ArrayA = internal.encodingUtil.bigIntToUint8Array(BigInt(a))
+      const avmResult = (await getAvmResultRaw(appClient, 'verify_bsqrt', uint8ArrayA))!
+
+      const result = op.bsqrt(a)
+      const bytesResult = asBigUintCls(result).toBytes()
+      expect(bytesResult.asUint8Array()).toEqual(avmResult)
+    })
+
+    test.each([
+      MAX_UINT512 + 1n,
+      MAX_UINT512 * 2n
+    ])('should throw error when input overlfows', async (a) => {
+      const uint8ArrayA = internal.encodingUtil.bigIntToUint8Array(BigInt(a))
+      await expect(getAvmResultRaw(appClient, 'verify_bsqrt', uint8ArrayA)).rejects.toThrow('math attempted on large byte-array')
+      expect(() => op.bsqrt(a)).toThrow('BigUint over or underflow')
+    })
+  })
+
   describe('btoi', async () => {
     test.each([
       Bytes(internal.encodingUtil.bigIntToUint8Array(0n)),
