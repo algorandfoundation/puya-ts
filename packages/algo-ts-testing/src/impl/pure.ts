@@ -1,4 +1,4 @@
-import { bytes, internal, Uint64, uint64 } from '@algorandfoundation/algo-ts'
+import { biguint, bytes, internal, Uint64, uint64 } from '@algorandfoundation/algo-ts'
 import { MAX_UINT64 } from '../constants'
 import { asMaybeBytesCls, asMaybeUint64Cls } from '../util'
 
@@ -27,11 +27,15 @@ export const bitLength = (value: internal.primitives.StubUint64Compat | internal
   const uint64Cls = asMaybeUint64Cls(value)
   const bigUintCls = asMaybeBytesCls(value)?.toBigUint()
   const bigIntValue = (uint64Cls?.asBigInt() ?? bigUintCls?.asBigInt())!
-  if (bigIntValue === 0n) {
-    return Uint64(0)
-  }
-  const binaryValue = bigIntValue.toString(2)
+  const binaryValue = bigIntValue === 0n ? '' : bigIntValue.toString(2)
   return Uint64(binaryValue.length)
+}
+
+export const bsqrt = (a: internal.primitives.StubBigUintCompat): biguint => {
+  const bigUintClsValue = internal.primitives.BigUintCls.fromCompat(a)
+  const bigintValue = internal.primitives.checkBigUint(bigUintClsValue.asBigInt())
+  const sqrtValue = squareroot(bigintValue)
+  return internal.primitives.BigUintCls.fromCompat(sqrtValue).asAlgoTs()
 }
 
 export const btoi = (value: internal.primitives.StubBytesCompat): uint64 => {
@@ -44,6 +48,17 @@ export const btoi = (value: internal.primitives.StubBytesCompat): uint64 => {
 
 export const itob = (value: internal.primitives.StubUint64Compat): bytes => {
   return internal.primitives.Uint64Cls.fromCompat(value).toBytes().asAlgoTs()
+}
+
+const squareroot = (x: bigint): bigint => {
+  let lo = 0n,
+    hi = x
+  while (lo <= hi) {
+    const mid = (lo + hi) / 2n
+    if (mid * mid > x) hi = mid - 1n
+    else lo = mid + 1n
+  }
+  return hi
 }
 
 const toUint128 = (value: bigint): [uint64, uint64] => {
