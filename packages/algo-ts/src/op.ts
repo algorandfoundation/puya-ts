@@ -6,6 +6,7 @@ import {
   BsqrtType,
   BtoiType,
   BzeroType,
+  DivmodwType,
   Ed25519verifyBareType,
   GlobalType,
   GTxnType,
@@ -31,6 +32,9 @@ export const btoi: BtoiType = (a) => {
 }
 export const bzero: BzeroType = (a) => {
   return ctxMgr.instance.op.bzero!(a)
+}
+export const divmodw: DivmodwType = (a, b, c, d) => {
+  return ctxMgr.instance.op.divmodw!(a, b, c, d)
 }
 export const itob: ItobType = (a) => {
   return ctxMgr.instance.op.itob!(a)

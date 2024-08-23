@@ -78,14 +78,8 @@ function uint64BinaryOp(left: DeliberateAny, right: DeliberateAny, op: BinaryOps
         }
         return lbi ** rbi
       case '/':
-        if (rbi === 0n) {
-          throw new internal.errors.CodeError('Division by zero')
-        }
         return lbi / rbi
       case '%':
-        if (rbi === 0n) {
-          throw new internal.errors.CodeError('Modulo by zero')
-        }
         return lbi % rbi
       case '>>':
         if (rbi > 63n) {
@@ -139,14 +133,8 @@ function bigUintBinaryOp(left: DeliberateAny, right: DeliberateAny, op: BinaryOp
         }
         return lbi ** rbi
       case '/':
-        if (rbi === 0n) {
-          throw new internal.errors.CodeError('Division by zero')
-        }
         return lbi / rbi
       case '%':
-        if (rbi === 0n) {
-          throw new internal.errors.CodeError('Modulo by zero')
-        }
         return lbi % rbi
       case '>>':
         throw new internal.errors.CodeError('BigUint does not support >> operator')

@@ -199,9 +199,66 @@ describe('Pure op codes', async () => {
     test.each([
       MAX_BYTES_SIZE + 1,
       MAX_UINT64
-    ])('should throw error when input overflows', async (a) => {
+    ])('should throw error when result overflows', async (a) => {
       await expect(getAvmResultRaw(appClient, 'verify_bzero', a)).rejects.toThrow('bzero attempted to create a too large string')
       expect(() => op.bzero(a)).toThrow('bzero attempted to create a too large string')
+    })
+
+    test.each([
+      MAX_UINT64 + 1n,
+      MAX_UINT512,
+      MAX_UINT512 * 2n
+    ])('should throw error when input overflows', async (a) => {
+      await expect(getAvmResultRaw(appClient, 'verify_bzero', a)).rejects.toThrow(avm_int_arg_overflow_error)
+      expect(() => op.bzero(a)).toThrow('Uint64 over or underflow')
+    })
+  })
+
+  describe('divmodw', async () => {
+    test.each([
+      [0, 1, 0, 1],
+      [100, 42, 100, 42],
+      [42, 100, 42, 100],
+      [0, MAX_UINT64, 0, MAX_UINT64],
+      [MAX_UINT64, 1, MAX_UINT64, 1],
+      [1, MAX_UINT64, 1, MAX_UINT64],
+      [MAX_UINT64 - 1n, 1, MAX_UINT64 - 1n, 1],
+      [1, MAX_UINT64 - 1n, 1, MAX_UINT64 - 1n],
+      [100, MAX_UINT64, 100, MAX_UINT64],
+      [MAX_UINT64, MAX_UINT64, MAX_UINT64, MAX_UINT64],
+    ])('should calculate div and mod results', async (a, b, c, d) => {
+      const avmResult = await getAvmResult<uint64[]>(appClient, 'verify_divmodw', a, b, c, d)
+      const result = op.divmodw(a, b, c, d)
+      expect(result[0].valueOf()).toBe(avmResult[0])
+      expect(result[1].valueOf()).toBe(avmResult[1])
+      expect(result[2].valueOf()).toBe(avmResult[2])
+      expect(result[3].valueOf()).toBe(avmResult[3])
+    })
+
+    test.each([
+      [1, MAX_UINT64 + 1n, 1, MAX_UINT64 + 1n],
+      [MAX_UINT64 + 1n, 1, MAX_UINT64 + 1n, 1],
+      [0, MAX_UINT512, 0, MAX_UINT512],
+      [MAX_UINT512 * 2n, 1, MAX_UINT512 * 2n, 1],
+    ])('should throw error when input overflows', async (a, b, c, d) => {
+      await expect(getAvmResultRaw(appClient, 'verify_divmodw', a, b, c, d)).rejects.toThrow(avm_int_arg_overflow_error)
+      expect(() => op.divmodw(a, b, c, d)).toThrow('Uint64 over or underflow')
+    })
+
+    test.each([
+      [0, 1],
+      [100, 42],
+      [42, 100],
+      [0, MAX_UINT64],
+      [MAX_UINT64, 1],
+      [1, MAX_UINT64],
+      [MAX_UINT64 - 1n, 1],
+      [1, MAX_UINT64 - 1n],
+      [100, MAX_UINT64],
+      [MAX_UINT64, MAX_UINT64],
+    ])('should throw error when dividing by zero', async (a, b) => {
+      await expect(getAvmResultRaw(appClient, 'verify_divmodw', a, b, 0, 0)).rejects.toThrow('/ 0')
+      expect(() => op.divmodw(a, b, 0, 0)).toThrow('Division by zero')
     })
   })
 

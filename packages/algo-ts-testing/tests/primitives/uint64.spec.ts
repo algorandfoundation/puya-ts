@@ -284,13 +284,13 @@ describe('Unit64', async () => {
     it(`${a} % ${b}`, async () => {
       await expect(getAvmResult<bigint>(appClient, 'verify_uint64_mod', a, b)).rejects.toThrow('% 0')
 
-      expect(() => asUint64(a) % asUint64(b)).toThrow('Modulo by zero')
+      expect(() => asUint64(a) % asUint64(b)).toThrow('Division by zero')
 
       if (typeof a === 'number') {
-        expect(() => a % asUint64(b)).toThrow('Modulo by zero')
+        expect(() => a % asUint64(b)).toThrow('Division by zero')
       }
 
-      expect(() => asUint64(a) % b).toThrow('Modulo by zero')
+      expect(() => asUint64(a) % b).toThrow('Division by zero')
     })
   })
 
