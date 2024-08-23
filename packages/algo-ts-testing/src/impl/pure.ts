@@ -1,20 +1,15 @@
 import { bytes, internal, Uint64, uint64 } from '@algorandfoundation/algo-ts'
 import { MAX_UINT64 } from '../constants'
+import { asMaybeBytesCls, asMaybeUint64Cls } from '../util'
 
-export const addw: internal.opTypes.AddwType = (
-  a: internal.primitives.StubUint64Compat,
-  b: internal.primitives.StubUint64Compat,
-): readonly [uint64, uint64] => {
+export const addw = (a: internal.primitives.StubUint64Compat, b: internal.primitives.StubUint64Compat): readonly [uint64, uint64] => {
   const uint64A = internal.primitives.Uint64Cls.fromCompat(a)
   const uint64B = internal.primitives.Uint64Cls.fromCompat(b)
   const sum = uint64A.asBigInt() + uint64B.asBigInt()
   return toUint128(sum)
 }
 
-export const base64Decode: internal.opTypes.Base64DecodeType = (
-  e: internal.opTypes.Base64,
-  a: internal.primitives.StubBytesCompat,
-): bytes => {
+export const base64Decode = (e: internal.opTypes.Base64, a: internal.primitives.StubBytesCompat): bytes => {
   const encoding = e === internal.opTypes.Base64.StdEncoding ? 'base64' : 'base64url'
   const bytesValue = internal.primitives.BytesCls.fromCompat(a)
   const stringValue = bytesValue.toString()
@@ -28,7 +23,18 @@ export const base64Decode: internal.opTypes.Base64DecodeType = (
   return internal.primitives.BytesCls.fromCompat(uint8ArrayResult).asAlgoTs()
 }
 
-export const btoi: internal.opTypes.BtoiType = (value: internal.primitives.StubBytesCompat): uint64 => {
+export const bitLength = (value: internal.primitives.StubUint64Compat | internal.primitives.StubBytesCompat): uint64 => {
+  const uint64Cls = asMaybeUint64Cls(value)
+  const bigUintCls = asMaybeBytesCls(value)?.toBigUint()
+  const bigIntValue = (uint64Cls?.asBigInt() ?? bigUintCls?.asBigInt())!
+  if (bigIntValue === 0n) {
+    return Uint64(0)
+  }
+  const binaryValue = bigIntValue.toString(2)
+  return Uint64(binaryValue.length)
+}
+
+export const btoi = (value: internal.primitives.StubBytesCompat): uint64 => {
   const bytesValue = internal.primitives.BytesCls.fromCompat(value)
   if (bytesValue.length.asAlgoTs() > 8) {
     internal.errors.avmError(`btoi arg too long, got [${bytesValue.length.valueOf()}]bytes`)
@@ -36,7 +42,7 @@ export const btoi: internal.opTypes.BtoiType = (value: internal.primitives.StubB
   return bytesValue.toUint64().asAlgoTs()
 }
 
-export const itob: internal.opTypes.ItobType = (value: internal.primitives.StubUint64Compat): bytes => {
+export const itob = (value: internal.primitives.StubUint64Compat): bytes => {
   return internal.primitives.Uint64Cls.fromCompat(value).toBytes().asAlgoTs()
 }
 

@@ -1,5 +1,6 @@
 import { internal } from '@algorandfoundation/algo-ts'
 import { TestExecutionContext } from './test-execution-context'
+import { DeliberateAny } from './typescript-helpers'
 
 export const nameOfType = (x: unknown) => {
   if (typeof x === 'object') {
@@ -29,3 +30,29 @@ export function extractGenericTypeArgs(t: string): string[] {
 }
 
 export const getTestExecutionContext = (): TestExecutionContext => internal.ctxMgr.instance as TestExecutionContext
+
+export const asMaybeUint64Cls = (val: DeliberateAny) => {
+  try {
+    return internal.primitives.Uint64Cls.fromCompat(val)
+  } catch (e) {
+    if (e instanceof internal.errors.InternalError) {
+      // swallow error and return undefined
+    } else {
+      throw e
+    }
+  }
+  return undefined
+}
+
+export const asMaybeBytesCls = (val: DeliberateAny) => {
+  try {
+    return internal.primitives.BytesCls.fromCompat(val)
+  } catch (e) {
+    if (e instanceof internal.errors.InternalError) {
+      // swallow error and return undefined
+    } else {
+      throw e
+    }
+  }
+  return undefined
+}
