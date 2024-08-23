@@ -1,11 +1,10 @@
 import { bytes, Bytes, internal } from '@algorandfoundation/algo-ts';
 import { AppSpec } from '@algorandfoundation/algokit-utils/types/app-spec';
-import { createHash } from 'crypto';
 import { describe, expect, it } from 'vitest';
 import { MAX_BYTES_SIZE } from '../../src/constants';
 import appSpecJson from '../artifacts/primitive-ops/data/PrimitiveOpsContract.arc32.json';
 import { getAlgorandAppClient, getAvmResult, getAvmResultRaw } from '../avm-invoker';
-import { asUint8Array, padUint8Array } from '../util';
+import { asUint8Array, getSha256Hash, padUint8Array } from '../util';
 
 describe('Bytes', async () => {
   const appClient = await getAlgorandAppClient(appSpecJson as AppSpec)
@@ -30,7 +29,7 @@ describe('Bytes', async () => {
       const bytesB = Bytes(padUint8Array(uint8ArrayB, padBSize))
       const result = bytesA.concat(bytesB)
       const resultUint8Array = asUint8Array(result)
-      const resultHash = new Uint8Array(createHash('sha256').update(resultUint8Array).digest())
+      const resultHash = getSha256Hash(resultUint8Array)
       expect(resultHash, `for values: ${a}, ${b}`).toEqual(avmResult)
     })
   })
@@ -102,7 +101,7 @@ describe('Bytes', async () => {
       const bytesA = Bytes(padUint8Array(uint8ArrayA, padSize))
       let result = bytesA.bitwiseInvert()
       let resultUint8Array = asUint8Array(result)
-      const resultHash = new Uint8Array(createHash('sha256').update(resultUint8Array).digest())
+      const resultHash = getSha256Hash(resultUint8Array)
 
       expect(resultHash, `for value: ${a}`).toEqual(avmResult)
     })

@@ -5,6 +5,7 @@ import {
   BitLengthType,
   BsqrtType,
   BtoiType,
+  BzeroType,
   Ed25519verifyBareType,
   GlobalType,
   GTxnType,
@@ -19,17 +20,20 @@ export const addw: AddwType = (a, b) => {
 export const base64Decode: Base64DecodeType = (e, a) => {
   return ctxMgr.instance.op.base64Decode!(e, a)
 }
-export const bitLength: BitLengthType = (value) => {
-  return ctxMgr.instance.op.bitLength!(value)
+export const bitLength: BitLengthType = (a) => {
+  return ctxMgr.instance.op.bitLength!(a)
 }
-export const bsqrt: BsqrtType = (a: bigint) => {
+export const bsqrt: BsqrtType = (a) => {
   return ctxMgr.instance.op.bsqrt!(a)
 }
-export const btoi: BtoiType = (bytes) => {
-  return ctxMgr.instance.op.btoi!(bytes)
+export const btoi: BtoiType = (a) => {
+  return ctxMgr.instance.op.btoi!(a)
 }
-export const itob: ItobType = (value) => {
-  return ctxMgr.instance.op.itob!(value)
+export const bzero: BzeroType = (a) => {
+  return ctxMgr.instance.op.bzero!(a)
+}
+export const itob: ItobType = (a) => {
+  return ctxMgr.instance.op.itob!(a)
 }
 
 export const GTxn: GTxnType = new Proxy({} as GTxnType, {
