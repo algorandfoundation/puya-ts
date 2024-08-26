@@ -74,6 +74,16 @@ export const divmodw = (
   return [...toUint128(div), ...toUint128(mod)]
 }
 
+export const divw = (
+  a: internal.primitives.StubUint64Compat,
+  b: internal.primitives.StubUint64Compat,
+  c: internal.primitives.StubUint64Compat,
+): uint64 => {
+  const i = uint128ToBigInt(a, b)
+  const j = internal.primitives.Uint64Cls.fromCompat(c).asBigInt()
+  return Uint64(i / j)
+}
+
 export const itob = (a: internal.primitives.StubUint64Compat): bytes => {
   return internal.primitives.Uint64Cls.fromCompat(a).toBytes().asAlgoTs()
 }

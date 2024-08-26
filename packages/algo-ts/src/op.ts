@@ -8,6 +8,7 @@ import {
   BzeroType,
   ConcatType,
   DivmodwType,
+  DivwType,
   Ed25519verifyBareType,
   GlobalType,
   GTxnType,
@@ -39,6 +40,9 @@ export const concat: ConcatType = (...args) => {
 }
 export const divmodw: DivmodwType = (...args) => {
   return ctxMgr.instance.op.divmodw!(...args)
+}
+export const divw: DivwType = (...args) => {
+  return ctxMgr.instance.op.divw!(...args)
 }
 export const itob: ItobType = (...args) => {
   return ctxMgr.instance.op.itob!(...args)

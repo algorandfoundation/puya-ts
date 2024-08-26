@@ -296,6 +296,57 @@ describe('Pure op codes', async () => {
     })
   })
 
+  describe('divw', async () => {
+    test.each([
+      [0, 1, 1],
+      [42, 100, 100],
+      [0, MAX_UINT64, MAX_UINT64],
+      [1, MAX_UINT64, MAX_UINT64],
+      [1, MAX_UINT64 - 1n, MAX_UINT64 - 1n],
+      [100, MAX_UINT64, MAX_UINT64],
+    ])('should calculate div result', async (a, b, c) => {
+      const avmResult = await getAvmResult<uint64[]>(appClient, 'verify_divw', a, b, c)
+      const result = op.divw(a, b, c)
+      expect(result.valueOf()).toBe(avmResult)
+    })
+
+    test.each([
+      [0, 1],
+      [100, 42],
+      [42, 100],
+      [0, MAX_UINT64],
+      [MAX_UINT64, 1],
+      [1, MAX_UINT64],
+      [MAX_UINT64 - 1n, 1],
+      [1, MAX_UINT64 - 1n],
+      [100, MAX_UINT64],
+      [MAX_UINT64, MAX_UINT64],
+    ])('should throw error when dividing by zero', async (a, b) => {
+      await expect(getAvmResultRaw(appClient, 'verify_divw', a, b, 0)).rejects.toThrow('divw 0')
+      expect(() => op.divw(a, b, 0)).toThrow('Division by zero')
+    })
+
+    test.each([
+      [1, MAX_UINT64 + 1n, 1],
+      [MAX_UINT64 + 1n, 1, MAX_UINT64 + 1n],
+      [0, MAX_UINT512, MAX_UINT512],
+      [MAX_UINT512 * 2n, 1, MAX_UINT512 * 2n],
+    ])('should throw error when input overflows', async (a, b, c) => {
+      await expect(getAvmResultRaw(appClient, 'verify_divw', a, b, c)).rejects.toThrow(avm_int_arg_overflow_error)
+      expect(() => op.divw(a, b, c)).toThrow('Uint64 over or underflow')
+    })
+
+    test.each([
+      [100, 42, 42],
+      [MAX_UINT64, 1, 1],
+      [MAX_UINT64 - 1n, 1, 1],
+      [MAX_UINT64, MAX_UINT64, MAX_UINT64],
+    ])('should throw error when result overflows', async (a, b, c) => {
+      await expect(getAvmResultRaw(appClient, 'verify_divw', a, b, c)).rejects.toThrow('divw overflow')
+      expect(() => op.divw(a, b, c)).toThrow('Uint64 over or underflow')
+    })
+  })
+
   describe('itob', async () => {
     test.each([
       0,
