@@ -6,6 +6,7 @@ import {
   BsqrtType,
   BtoiType,
   BzeroType,
+  ConcatType,
   DivmodwType,
   Ed25519verifyBareType,
   GlobalType,
@@ -15,29 +16,32 @@ import {
 } from './op-types'
 import { bytes } from './primitives'
 
-export const addw: AddwType = (a, b) => {
-  return ctxMgr.instance.op.addw!(a, b)
+export const addw: AddwType = (...args) => {
+  return ctxMgr.instance.op.addw!(...args)
 }
-export const base64Decode: Base64DecodeType = (e, a) => {
-  return ctxMgr.instance.op.base64Decode!(e, a)
+export const base64Decode: Base64DecodeType = (...args) => {
+  return ctxMgr.instance.op.base64Decode!(...args)
 }
-export const bitLength: BitLengthType = (a) => {
-  return ctxMgr.instance.op.bitLength!(a)
+export const bitLength: BitLengthType = (...args) => {
+  return ctxMgr.instance.op.bitLength!(...args)
 }
-export const bsqrt: BsqrtType = (a) => {
-  return ctxMgr.instance.op.bsqrt!(a)
+export const bsqrt: BsqrtType = (...args) => {
+  return ctxMgr.instance.op.bsqrt!(...args)
 }
-export const btoi: BtoiType = (a) => {
-  return ctxMgr.instance.op.btoi!(a)
+export const btoi: BtoiType = (...args) => {
+  return ctxMgr.instance.op.btoi!(...args)
 }
-export const bzero: BzeroType = (a) => {
-  return ctxMgr.instance.op.bzero!(a)
+export const bzero: BzeroType = (...args) => {
+  return ctxMgr.instance.op.bzero!(...args)
 }
-export const divmodw: DivmodwType = (a, b, c, d) => {
-  return ctxMgr.instance.op.divmodw!(a, b, c, d)
+export const concat: ConcatType = (...args) => {
+  return ctxMgr.instance.op.concat!(...args)
 }
-export const itob: ItobType = (a) => {
-  return ctxMgr.instance.op.itob!(a)
+export const divmodw: DivmodwType = (...args) => {
+  return ctxMgr.instance.op.divmodw!(...args)
+}
+export const itob: ItobType = (...args) => {
+  return ctxMgr.instance.op.itob!(...args)
 }
 
 export const GTxn: GTxnType = new Proxy({} as GTxnType, {

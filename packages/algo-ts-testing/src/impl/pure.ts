@@ -54,6 +54,12 @@ export const bzero = (a: internal.primitives.StubUint64Compat): bytes => {
   return Bytes(new Uint8Array(Array(Number(size)).fill(0x00)))
 }
 
+export const concat = (a: internal.primitives.StubBytesCompat, b: internal.primitives.StubBytesCompat): bytes => {
+  const bytesA = internal.primitives.BytesCls.fromCompat(a)
+  const bytesB = internal.primitives.BytesCls.fromCompat(b)
+  return bytesA.concat(bytesB).asAlgoTs()
+}
+
 export const divmodw = (
   a: internal.primitives.StubUint64Compat,
   b: internal.primitives.StubUint64Compat,
