@@ -1,7 +1,7 @@
 import { BigUint, Bytes, internal, uint64 } from '@algorandfoundation/algo-ts'
 import { AppSpec } from '@algorandfoundation/algokit-utils/types/app-spec'
 import { afterEach } from 'node:test'
-import { describe, expect, test } from 'vitest'
+import { describe, expect, it, test } from 'vitest'
 import { TestExecutionContext } from '../src'
 import { MAX_BYTES_SIZE, MAX_UINT512, MAX_UINT64 } from '../src/constants'
 import * as op from '../src/impl/pure'
@@ -344,6 +344,44 @@ describe('Pure op codes', async () => {
     ])('should throw error when result overflows', async (a, b, c) => {
       await expect(getAvmResultRaw(appClient, 'verify_divw', a, b, c)).rejects.toThrow('divw overflow')
       expect(() => op.divw(a, b, c)).toThrow('Uint64 over or underflow')
+    })
+  })
+
+  describe('exp', async () => {
+    test.each([
+      [0, 1],
+      [1, 0],
+      [42, 11],
+      [4294967295n, 2],
+      [1, MAX_UINT64],
+    ])('should calculate the exponentiation result', async (a, b) => {
+      const avmResult = await getAvmResult<uint64>(appClient, 'verify_exp', a, b)
+      const result = op.exp(a, b)
+      expect(result.valueOf()).toBe(avmResult)
+    })
+
+    test.each([
+      [100, 42],
+      [MAX_UINT64, 2],
+      [2, 64],
+    ])('should throw error when result overflows', async (a, b) => {
+      await expect(getAvmResultRaw(appClient, 'verify_exp', a, b)).rejects.toThrow('overflow')
+      expect(() => op.exp(a, b)).toThrow('Uint64 over or underflow')
+    })
+
+    test.each([
+      [1, MAX_UINT64 + 1n],
+      [MAX_UINT64 + 1n, 1],
+      [0, MAX_UINT512],
+      [MAX_UINT512 * 2n, 1],
+    ])('should throw error when input overflows', async (a, b) => {
+      await expect(getAvmResultRaw(appClient, 'verify_exp', a, b)).rejects.toThrow(avm_int_arg_overflow_error)
+      expect(() => op.exp(a, b)).toThrow('Uint64 over or underflow')
+    })
+
+    it('0 ** 0 is not supported', async () => {
+      await expect(getAvmResultRaw(appClient, 'verify_exp', 0, 0)).rejects.toThrow('0^0 is undefined')
+      expect(() => op.exp(0, 0)).toThrow('0 ** 0 is undefined')
     })
   })
 

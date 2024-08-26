@@ -74,7 +74,7 @@ function uint64BinaryOp(left: DeliberateAny, right: DeliberateAny, op: BinaryOps
         return lbi * rbi
       case '**':
         if (lbi === 0n && rbi === 0n) {
-          throw new internal.errors.CodeError('0 ** 0 is undefined')
+          throw internal.errors.codeError('0 ** 0 is undefined')
         }
         return lbi ** rbi
       case '/':
@@ -129,7 +129,7 @@ function bigUintBinaryOp(left: DeliberateAny, right: DeliberateAny, op: BinaryOp
         return lbi * rbi
       case '**':
         if (lbi === 0n && rbi === 0n) {
-          throw new internal.errors.CodeError('0 ** 0 is undefined')
+          throw internal.errors.codeError('0 ** 0 is undefined')
         }
         return lbi ** rbi
       case '/':
