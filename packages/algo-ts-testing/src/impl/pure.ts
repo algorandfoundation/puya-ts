@@ -93,6 +93,15 @@ export const exp = (a: internal.primitives.StubUint64Compat, b: internal.primiti
   return Uint64(base ** exponent)
 }
 
+export const expw = (a: internal.primitives.StubUint64Compat, b: internal.primitives.StubUint64Compat): readonly [uint64, uint64] => {
+  const base = internal.primitives.Uint64Cls.fromCompat(a).asBigInt()
+  const exponent = internal.primitives.Uint64Cls.fromCompat(b).asBigInt()
+  if (base === 0n && exponent === 0n) {
+    throw internal.errors.codeError('0 ** 0 is undefined')
+  }
+  return toUint128(base ** exponent)
+}
+
 export const itob = (a: internal.primitives.StubUint64Compat): bytes => {
   return internal.primitives.Uint64Cls.fromCompat(a).toBytes().asAlgoTs()
 }
