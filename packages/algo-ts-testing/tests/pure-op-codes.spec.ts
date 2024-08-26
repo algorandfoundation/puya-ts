@@ -10,6 +10,7 @@ import { getAlgorandAppClient, getAvmResult, getAvmResultRaw } from './avm-invok
 import { asBigUintCls, asBytesCls, asUint8Array, base64Encode, base64UrlEncode, getPaddedUint8Array, getSha256Hash } from './util'
 
 const avm_int_arg_overflow_error = "is not a non-negative int or too big to fit in size"
+const sqrtMaxUint64 = 4294967295n
 
 describe('Pure op codes', async () => {
   const appClient = await getAlgorandAppClient(appSpecJson as AppSpec)
@@ -352,7 +353,7 @@ describe('Pure op codes', async () => {
       [0, 1],
       [1, 0],
       [42, 11],
-      [4294967295n, 2],
+      [sqrtMaxUint64, 2],
       [1, MAX_UINT64],
     ])('should calculate the exponentiation result', async (a, b) => {
       const avmResult = await getAvmResult<uint64>(appClient, 'verify_exp', a, b)
@@ -382,6 +383,45 @@ describe('Pure op codes', async () => {
     it('0 ** 0 is not supported', async () => {
       await expect(getAvmResultRaw(appClient, 'verify_exp', 0, 0)).rejects.toThrow('0^0 is undefined')
       expect(() => op.exp(0, 0)).toThrow('0 ** 0 is undefined')
+    })
+  })
+
+  describe('expw', async () => {
+    test.each([
+      [0, 1],
+      [1, 0],
+      [42, 11],
+      [sqrtMaxUint64, 4],
+      [2, 127]
+    ])('should calculate the exponentiation result', async (a, b) => {
+      const avmResult = await getAvmResult<uint64[]>(appClient, 'verify_expw', a, b)
+      const result = op.expw(a, b)
+      expect(result[0].valueOf()).toBe(avmResult[0])
+      expect(result[1].valueOf()).toBe(avmResult[1])
+    })
+
+    test.each([
+      [100, 42],
+      [MAX_UINT64, 3],
+      [2, 128],
+    ])('should throw error when result overflows', async (a, b) => {
+      await expect(getAvmResultRaw(appClient, 'verify_expw', a, b)).rejects.toThrow('overflow')
+      expect(() => op.expw(a, b)).toThrow('Uint64 over or underflow')
+    })
+
+    test.each([
+      [1, MAX_UINT64 + 1n],
+      [MAX_UINT64 + 1n, 1],
+      [0, MAX_UINT512],
+      [MAX_UINT512 * 2n, 1],
+    ])(`should throw error when input overflows`, async (a, b) => {
+      await expect(getAvmResultRaw(appClient, 'verify_expw', a, b)).rejects.toThrow(avm_int_arg_overflow_error)
+      expect(() => op.expw(a, b)).toThrow('Uint64 over or underflow')
+    })
+
+    it('0 ** 0 is not supported', async () => {
+      await expect(getAvmResultRaw(appClient, 'verify_expw', 0, 0)).rejects.toThrow('0^0 is undefined')
+      expect(() => op.expw(0, 0)).toThrow('0 ** 0 is undefined')
     })
   })
 

@@ -11,6 +11,7 @@ import {
   DivwType,
   Ed25519verifyBareType,
   ExpType,
+  ExpwType,
   GlobalType,
   GTxnType,
   ItobType,
@@ -47,6 +48,9 @@ export const divw: DivwType = (...args) => {
 }
 export const exp: ExpType = (...args) => {
   return ctxMgr.instance.op.exp!(...args)
+}
+export const expw: ExpwType = (...args) => {
+  return ctxMgr.instance.op.expw!(...args)
 }
 export const itob: ItobType = (...args) => {
   return ctxMgr.instance.op.itob!(...args)
