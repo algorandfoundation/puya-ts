@@ -7,7 +7,7 @@ import { MAX_BYTES_SIZE, MAX_UINT512, MAX_UINT64 } from '../src/constants'
 import * as op from '../src/impl/pure'
 import appSpecJson from './artifacts/miscellaneous-ops/data/MiscellaneousOpsContract.arc32.json'
 import { getAlgorandAppClient, getAvmResult, getAvmResultRaw } from './avm-invoker'
-import { asBigUintCls, asBytesCls, asUint8Array, base64Encode, base64UrlEncode, getSha256Hash } from './util'
+import { asBigUintCls, asBytesCls, asUint8Array, base64Encode, base64UrlEncode, getPaddedUint8Array, getSha256Hash } from './util'
 
 const avm_int_arg_overflow_error = "is not a non-negative int or too big to fit in size"
 
@@ -105,7 +105,7 @@ describe('Pure op codes', async () => {
       [Bytes(new Uint8Array()), 0]
     ])('should return the number of bits for the bytes input', async (a, padSize) => {
       const avmResult = await getAvmResult<uint64>(appClient, 'verify_bytes_bitlen', asUint8Array(a), padSize)
-      const paddedA = Bytes(new Uint8Array(padSize).fill(0x00)).concat(asUint8Array(a))
+      const paddedA = getPaddedUint8Array(padSize, a)
       const result = op.bitLength(paddedA)
       expect(result.valueOf()).toBe(avmResult)
     })
@@ -211,6 +211,40 @@ describe('Pure op codes', async () => {
     ])('should throw error when input overflows', async (a) => {
       await expect(getAvmResultRaw(appClient, 'verify_bzero', a)).rejects.toThrow(avm_int_arg_overflow_error)
       expect(() => op.bzero(a)).toThrow('Uint64 over or underflow')
+    })
+  })
+
+  describe('concat', async () => {
+    test.each([
+      ["", "", 0, 0],
+      ["1", "", 0, 0],
+      ["", "1", 0, 0],
+      ["1", "1", 0, 0],
+      ["", "0", 0, MAX_BYTES_SIZE - 1],
+      ["0", "", MAX_BYTES_SIZE - 1, 0],
+      ["1", "0", 0, MAX_BYTES_SIZE - 2],
+      ["1", "0", MAX_BYTES_SIZE - 2, 0],
+    ])('should retrun concatenated bytes', async (a, b, padASize, padBSize) => {
+      const avmResult = (await getAvmResultRaw(appClient, 'verify_concat', asUint8Array(a), asUint8Array(b), padASize, padBSize))!
+
+      const paddedA = getPaddedUint8Array(padASize, a)
+      const paddedB = getPaddedUint8Array(padBSize, b)
+
+      const result = op.concat(paddedA, paddedB)
+      const resultHash = getSha256Hash(asUint8Array(result))
+      expect(resultHash).toEqual(avmResult)
+    })
+
+    test.each([
+      ["1", "0", MAX_BYTES_SIZE, 0],
+      ["1", "1", MAX_BYTES_SIZE, MAX_BYTES_SIZE],
+      ["1", "0", 0, MAX_BYTES_SIZE]
+    ])('should throw error when input overflows', async (a, b, padASize, padBSize) => {
+      await expect(getAvmResultRaw(appClient, 'verify_concat', asUint8Array(a), asUint8Array(b), padASize, padBSize)).rejects.toThrow(/concat produced a too big \(\d+\) byte-array/)
+      const paddedA = getPaddedUint8Array(padASize, a)
+      const paddedB = getPaddedUint8Array(padBSize, b)
+
+      expect(() => op.concat(paddedA, paddedB)).toThrow(/Bytes length \d+ exceeds maximum length/)
     })
   })
 
