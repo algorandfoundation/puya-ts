@@ -22,6 +22,7 @@ import {
   GTxnType,
   ItobType,
   MulwType,
+  ReplaceType,
   TxnType,
 } from './op-types'
 import { bytes } from './primitives'
@@ -82,6 +83,9 @@ export const itob: ItobType = (...args) => {
 }
 export const mulw: MulwType = (...args) => {
   return ctxMgr.instance.op.mulw!(...args)
+}
+export const replace: ReplaceType = (...args) => {
+  return ctxMgr.instance.op.replace!(...args)
 }
 
 export const GTxn: GTxnType = new Proxy({} as GTxnType, {

@@ -191,6 +191,28 @@ export const mulw = (a: internal.primitives.StubUint64Compat, b: internal.primit
   return toUint128(product)
 }
 
+export const replace = (
+  a: internal.primitives.StubBytesCompat,
+  b: internal.primitives.StubUint64Compat,
+  c: internal.primitives.StubBytesCompat,
+): bytes => {
+  const bytesValue = internal.primitives.BytesCls.fromCompat(a)
+  const index = internal.primitives.Uint64Cls.fromCompat(b).asNumber()
+  const replacement = internal.primitives.BytesCls.fromCompat(c)
+
+  const valueLength = bytesValue.length.asNumber()
+  const replacementLength = replacement.length.asNumber()
+
+  if (index + replacementLength > valueLength) {
+    internal.errors.codeError(`expected value <= ${valueLength}, got: ${index + replacementLength}`)
+  }
+  return bytesValue
+    .slice(0, index)
+    .concat(replacement)
+    .concat(bytesValue.slice(index + replacementLength, valueLength))
+    .asAlgoTs()
+}
+
 const squareroot = (x: bigint): bigint => {
   let lo = 0n,
     hi = x
