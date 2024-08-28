@@ -642,6 +642,37 @@ describe('Pure op codes', async () => {
     })
   })
 
+  describe('getBytes', async () => {
+    test.each([
+      [new Uint8Array([0x00]), 0],
+      [getPaddedUint8Array(2, intToBytes(256)), 3],
+      [getPaddedUint8Array(2, intToBytes(256)), 0],
+      [getPaddedUint8Array(2, intToBytes(256)), 1],
+      [getPaddedUint8Array(2, intToBytes(65530)), 3],
+      [intToBytes(MAX_UINT64), 7],
+      [intToBytes(MAX_UINT64 - 1n), 0],
+      [intToBytes(MAX_UINT64 - 1n), 7],
+      [intToBytes(MAX_UINT512), 63],
+      [intToBytes(MAX_UINT512 - 1n), 63],
+      [intToBytes(MAX_UINT512), 0],
+    ])('should get the bytes value of the given input', async (a, b) => {
+      const avmResult = await getAvmResult<uint64>(appClient, 'verify_getbyte', asUint8Array(a), b)
+      const result = op.getBytes(a, b)
+      expect(result.valueOf()).toEqual(avmResult)
+    })
+
+    test.each([
+      [new Uint8Array([0x00]), 8],
+      [intToBytes(MAX_UINT64), 64],
+      [intToBytes(MAX_UINT64 - 1n), 64],
+      [intToBytes(MAX_UINT512), 512],
+      [intToBytes(MAX_UINT512 - 1n), 512],
+    ])('should thorw error when index out of bound', async (a, b) => {
+      await expect(getAvmResult<uint64>(appClient, 'verify_getbyte', asUint8Array(a), b)).rejects.toThrow('getbyte index beyond array length')
+      expect(() => op.getBytes(a, b)).toThrow(/getBytes index \d+ is beyond length/)
+    })
+  })
+
   describe('itob', async () => {
     test.each([
       0,

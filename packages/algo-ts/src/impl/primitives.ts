@@ -187,7 +187,7 @@ export class BytesCls extends AlgoTsPrimitiveCls {
   }
 
   at(i: StubUint64Compat): BytesCls {
-    const start = i instanceof Uint64Cls ? i.asNumber() : Uint64Cls.fromCompat(i).asNumber()
+    const start = Uint64Cls.fromCompat(i).asNumber()
     return new BytesCls(this.#v.slice(start, start + 1))
   }
 
