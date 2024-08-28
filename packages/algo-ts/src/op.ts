@@ -16,6 +16,7 @@ import {
   ExtractUint16Type,
   ExtractUint32Type,
   ExtractUint64Type,
+  GetBitType,
   GlobalType,
   GTxnType,
   ItobType,
@@ -67,6 +68,9 @@ export const extractUint32: ExtractUint32Type = (...args) => {
 }
 export const extractUint64: ExtractUint64Type = (...args) => {
   return ctxMgr.instance.op.extractUint64!(...args)
+}
+export const getBit: GetBitType = (...args) => {
+  return ctxMgr.instance.op.getBit!(...args)
 }
 export const itob: ItobType = (...args) => {
   return ctxMgr.instance.op.itob!(...args)
