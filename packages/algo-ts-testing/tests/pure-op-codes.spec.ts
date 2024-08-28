@@ -723,4 +723,30 @@ describe('Pure op codes', async () => {
       expect(() => op.mulw(a, b)).toThrow('Uint64 over or underflow')
     })
   })
+
+  describe('replace', async () => {
+    test.each([
+      ["hello, world.", 5, "!!"],
+      ["hello, world.", 5, ""],
+      ["hello, world.", 5, ", there."],
+      ["hello, world.", 12, "!"],
+      ["hello, world.", 12, ""],
+      ["hello, world.", 0, "H"],
+      ["", 0, ""],
+    ])(`should replace bytes in the input`, async (a, b, c) => {
+      const avmResult = (await getAvmResultRaw(appClient, 'verify_replace', asUint8Array(a), b, asUint8Array(c)))!
+      const result = op.replace(a, b, c)
+      expect(asUint8Array(result)).toEqual(avmResult)
+    })
+
+    test.each([
+      ["", 0, "A"],
+      ["hello", 5, "!!"],
+      ["hello", 6, "!"],
+      ["hello", 0, "Hello, world"],
+    ])(`should throw error when replacement result in longer bytes length`, async (a, b, c) => {
+      await expect(getAvmResultRaw(appClient, 'verify_replace', asUint8Array(a), b, asUint8Array(c))).rejects.toThrow(/replacement (start|end) \d+ beyond (original )*length/)
+      expect(() => op.replace(a, b, c)).toThrow(`expected value <= ${a.length}`)
+    })
+  })
 })
