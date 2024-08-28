@@ -112,8 +112,8 @@ export class Uint64Cls extends AlgoTsPrimitiveCls {
     return this.value
   }
 
-  toBytes(): BytesCls {
-    return new BytesCls(bigIntToUint8Array(this.value, 8))
+  toBytes(isDynamic: boolean = false): BytesCls {
+    return new BytesCls(bigIntToUint8Array(this.value, isDynamic ? 'dynamic' : 8))
   }
 
   asAlgoTs(): uint64 {
