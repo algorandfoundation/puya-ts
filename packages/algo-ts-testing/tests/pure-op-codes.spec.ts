@@ -514,6 +514,41 @@ describe('Pure op codes', async () => {
     })
   })
 
+  describe('extractUint32', async () => {
+    test.each([
+      [new Uint8Array([0x0f, 0x66, 0x66, 0x66]), 0],
+      [getPaddedUint8Array(4, intToBytes(256)), 2],
+      [intToBytes(MAX_UINT64), 4],
+      [intToBytes(MAX_UINT512), 60],
+    ])(`should extract uint32 from the input`, async (a, b) => {
+      const avmResult = await getAvmResult<uint64>(appClient, 'verify_extract_uint32', asUint8Array(a), b)
+      const result = op.extractUint32(a, b)
+      expect(result.valueOf()).toBe(avmResult)
+    })
+
+    test.each([
+      [getPaddedUint8Array(4, intToBytes(256)), MAX_UINT64 + 1n],
+      [intToBytes(MAX_UINT64), MAX_UINT64 + 1n],
+      [intToBytes(MAX_UINT512), MAX_UINT512],
+    ])(`should throw error when input overflows`, async (a, b) => {
+      await expect(getAvmResult<uint64>(appClient, 'verify_extract_uint32', asUint8Array(a), b)).rejects.toThrow(avmIntArgOverflowError)
+      expect(() => op.extractUint32(a, b)).toThrow('Uint64 over or underflow')
+    })
+
+    test.each([
+      [intToBytes(0), 0],
+      [intToBytes(0), 1],
+      [intToBytes(256), 1],
+      [getPaddedUint8Array(4, intToBytes(256)), 3],
+      [intToBytes(MAX_UINT64), 8],
+      [intToBytes(MAX_UINT512), 65],
+    ])(`should throw error when input is invalid`, async (a, b) => {
+      await expect(getAvmResult<uint64>(appClient, 'verify_extract_uint32', asUint8Array(a), b)).rejects.toThrow(extractOutOfBoundError)
+      expect(() => op.extractUint32(a, b)).toThrow(extractOutOfBoundError)
+    })
+
+  })
+
   describe('itob', async () => {
     test.each([
       0,
