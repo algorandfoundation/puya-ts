@@ -21,6 +21,7 @@ import {
   GlobalType,
   GTxnType,
   ItobType,
+  MulwType,
   TxnType,
 } from './op-types'
 import { bytes } from './primitives'
@@ -78,6 +79,9 @@ export const getBytes: GetBytesType = (...args) => {
 }
 export const itob: ItobType = (...args) => {
   return ctxMgr.instance.op.itob!(...args)
+}
+export const mulw: MulwType = (...args) => {
+  return ctxMgr.instance.op.mulw!(...args)
 }
 
 export const GTxn: GTxnType = new Proxy({} as GTxnType, {
