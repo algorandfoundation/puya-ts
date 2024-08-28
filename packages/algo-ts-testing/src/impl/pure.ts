@@ -184,6 +184,13 @@ export const itob = (a: internal.primitives.StubUint64Compat): bytes => {
   return internal.primitives.Uint64Cls.fromCompat(a).toBytes().asAlgoTs()
 }
 
+export const mulw = (a: internal.primitives.StubUint64Compat, b: internal.primitives.StubUint64Compat): readonly [uint64, uint64] => {
+  const uint64A = internal.primitives.Uint64Cls.fromCompat(a)
+  const uint64B = internal.primitives.Uint64Cls.fromCompat(b)
+  const product = uint64A.asBigInt() * uint64B.asBigInt()
+  return toUint128(product)
+}
+
 const squareroot = (x: bigint): bigint => {
   let lo = 0n,
     hi = x

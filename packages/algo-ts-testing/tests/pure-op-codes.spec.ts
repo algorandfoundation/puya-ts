@@ -695,4 +695,32 @@ describe('Pure op codes', async () => {
       expect(() => op.itob(a)).toThrow('Uint64 over or underflow')
     })
   })
+
+  describe('mulw', async () => {
+    test.each([
+      [0, 0],
+      [1, 0],
+      [0, 1],
+      [100, 42],
+      [1, MAX_UINT64 - 1n],
+      [MAX_UINT64 - 1n, 1],
+      [100, MAX_UINT64],
+      [MAX_UINT64, MAX_UINT64],
+    ])(`should calculate the multiplication result`, async (a, b) => {
+      const avmResult = await getAvmResult<uint64[]>(appClient, 'verify_mulw', a, b)
+      const result = op.mulw(a, b)
+      expect(result[0].valueOf()).toBe(avmResult[0])
+      expect(result[1].valueOf()).toBe(avmResult[1])
+    })
+
+    test.each([
+      [1, MAX_UINT64 + 1n],
+      [MAX_UINT64 + 1n, 1],
+      [0, MAX_UINT512],
+      [MAX_UINT512 * 2n, 0],
+    ])(`should throw error when input overflows`, async (a, b) => {
+      await expect(getAvmResult<uint64[]>(appClient, 'verify_mulw', a, b)).rejects.toThrow(avmIntArgOverflowError)
+      expect(() => op.mulw(a, b)).toThrow('Uint64 over or underflow')
+    })
+  })
 })
