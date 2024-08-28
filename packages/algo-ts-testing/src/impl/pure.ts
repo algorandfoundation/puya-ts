@@ -171,6 +171,15 @@ export const getBit = (
   return binaryString[index] === '1' ? Uint64(1) : Uint64(0)
 }
 
+export const getBytes = (a: internal.primitives.StubBytesCompat, b: internal.primitives.StubUint64Compat): uint64 => {
+  const bytesValue = internal.primitives.BytesCls.fromCompat(a)
+  const index = internal.primitives.Uint64Cls.fromCompat(b).asNumber()
+  if (index >= bytesValue.length.asNumber()) {
+    internal.errors.codeError(`getBytes index ${index} is beyond length`)
+  }
+  return bytesValue.at(index).toUint64().asAlgoTs()
+}
+
 export const itob = (a: internal.primitives.StubUint64Compat): bytes => {
   return internal.primitives.Uint64Cls.fromCompat(a).toBytes().asAlgoTs()
 }
