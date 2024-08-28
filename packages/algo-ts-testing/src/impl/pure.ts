@@ -139,6 +139,12 @@ export const extractUint32 = (a: internal.primitives.StubBytesCompat, b: interna
   return bytesResult.toUint64().asAlgoTs()
 }
 
+export const extractUint64 = (a: internal.primitives.StubBytesCompat, b: internal.primitives.StubUint64Compat): uint64 => {
+  const result = extract(a, b, 8)
+  const bytesResult = internal.primitives.BytesCls.fromCompat(result)
+  return bytesResult.toUint64().asAlgoTs()
+}
+
 export const itob = (a: internal.primitives.StubUint64Compat): bytes => {
   return internal.primitives.Uint64Cls.fromCompat(a).toBytes().asAlgoTs()
 }
