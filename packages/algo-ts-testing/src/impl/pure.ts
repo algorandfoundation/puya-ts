@@ -213,6 +213,18 @@ export const replace = (
     .asAlgoTs()
 }
 
+export const selectBytes = (
+  a: internal.primitives.StubUint64Compat | internal.primitives.StubBytesCompat,
+  b: internal.primitives.StubUint64Compat | internal.primitives.StubBytesCompat,
+  c: internal.primitives.StubUint64Compat,
+): bytes => {
+  const bytesA = (asMaybeUint64Cls(a)?.toBytes(true) ?? asMaybeBytesCls(a))!
+  const bytesB = (asMaybeUint64Cls(b)?.toBytes(true) ?? asMaybeBytesCls(b))!
+  const bigIntC = internal.primitives.Uint64Cls.fromCompat(c).asBigInt()
+
+  return (bigIntC !== 0n ? bytesB : bytesA).asAlgoTs()
+}
+
 const squareroot = (x: bigint): bigint => {
   let lo = 0n,
     hi = x
