@@ -27,3 +27,5 @@ export const getPaddedUint8Array = (padSize: number, value: internal.primitives.
   result.set([...Array(padSize).fill(0x00), ...uint8ArrayValue])
   return result
 }
+
+export const intToBytes = (value: internal.primitives.StubBigUintCompat): internal.primitives.BytesCls => internal.primitives.BigUintCls.fromCompat(value).toBytes()

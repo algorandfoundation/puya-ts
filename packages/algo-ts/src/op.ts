@@ -13,6 +13,7 @@ import {
   ExpType,
   ExpwType,
   ExtractType,
+  ExtractUint16Type,
   GlobalType,
   GTxnType,
   ItobType,
@@ -55,6 +56,9 @@ export const expw: ExpwType = (...args) => {
 }
 export const extract: ExtractType = (...args) => {
   return ctxMgr.instance.op.extract!(...args)
+}
+export const extractUint16: ExtractUint16Type = (...args) => {
+  return ctxMgr.instance.op.extractUint16!(...args)
 }
 export const itob: ItobType = (...args) => {
   return ctxMgr.instance.op.itob!(...args)

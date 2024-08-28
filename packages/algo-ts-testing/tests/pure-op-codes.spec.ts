@@ -7,9 +7,10 @@ import { MAX_BYTES_SIZE, MAX_UINT512, MAX_UINT64 } from '../src/constants'
 import * as op from '../src/impl/pure'
 import appSpecJson from './artifacts/miscellaneous-ops/data/MiscellaneousOpsContract.arc32.json'
 import { getAlgorandAppClient, getAvmResult, getAvmResultRaw } from './avm-invoker'
-import { asBigUintCls, asBytesCls, asUint8Array, base64Encode, base64UrlEncode, getPaddedUint8Array, getSha256Hash } from './util'
+import { asBigUintCls, asBytesCls, asUint8Array, base64Encode, base64UrlEncode, getPaddedUint8Array, getSha256Hash, intToBytes } from './util'
 
-const avm_int_arg_overflow_error = "is not a non-negative int or too big to fit in size"
+const avmIntArgOverflowError = "is not a non-negative int or too big to fit in size"
+const extractOutOfBoundError = /extraction (start|end) \d+ is beyond length/
 const sqrtMaxUint64 = 4294967295n
 
 describe('Pure op codes', async () => {
@@ -45,7 +46,7 @@ describe('Pure op codes', async () => {
       [0, MAX_UINT512],
       [MAX_UINT512 * 2n, 0],
     ])('should throw error when input overflows', async (a, b) => {
-      await expect(getAvmResultRaw(appClient, 'verify_addw', a, b)).rejects.toThrow(avm_int_arg_overflow_error)
+      await expect(getAvmResultRaw(appClient, 'verify_addw', a, b)).rejects.toThrow(avmIntArgOverflowError)
       expect(() => op.addw(a, b)).toThrow('Uint64 over or underflow')
     })
   })
@@ -127,7 +128,7 @@ describe('Pure op codes', async () => {
       MAX_UINT512,
       MAX_UINT512 * 2n
     ])('should throw error when uint64 input overflows', async (a) => {
-      await expect(getAvmResultRaw(appClient, 'verify_uint64_bitlen', a)).rejects.toThrow(avm_int_arg_overflow_error)
+      await expect(getAvmResultRaw(appClient, 'verify_uint64_bitlen', a)).rejects.toThrow(avmIntArgOverflowError)
       expect(() => op.bitLength(a)).toThrow('Uint64 over or underflow')
     })
   })
@@ -210,7 +211,7 @@ describe('Pure op codes', async () => {
       MAX_UINT512,
       MAX_UINT512 * 2n
     ])('should throw error when input overflows', async (a) => {
-      await expect(getAvmResultRaw(appClient, 'verify_bzero', a)).rejects.toThrow(avm_int_arg_overflow_error)
+      await expect(getAvmResultRaw(appClient, 'verify_bzero', a)).rejects.toThrow(avmIntArgOverflowError)
       expect(() => op.bzero(a)).toThrow('Uint64 over or underflow')
     })
   })
@@ -276,7 +277,7 @@ describe('Pure op codes', async () => {
       [0, MAX_UINT512, 0, MAX_UINT512],
       [MAX_UINT512 * 2n, 1, MAX_UINT512 * 2n, 1],
     ])('should throw error when input overflows', async (a, b, c, d) => {
-      await expect(getAvmResultRaw(appClient, 'verify_divmodw', a, b, c, d)).rejects.toThrow(avm_int_arg_overflow_error)
+      await expect(getAvmResultRaw(appClient, 'verify_divmodw', a, b, c, d)).rejects.toThrow(avmIntArgOverflowError)
       expect(() => op.divmodw(a, b, c, d)).toThrow('Uint64 over or underflow')
     })
 
@@ -333,7 +334,7 @@ describe('Pure op codes', async () => {
       [0, MAX_UINT512, MAX_UINT512],
       [MAX_UINT512 * 2n, 1, MAX_UINT512 * 2n],
     ])('should throw error when input overflows', async (a, b, c) => {
-      await expect(getAvmResultRaw(appClient, 'verify_divw', a, b, c)).rejects.toThrow(avm_int_arg_overflow_error)
+      await expect(getAvmResultRaw(appClient, 'verify_divw', a, b, c)).rejects.toThrow(avmIntArgOverflowError)
       expect(() => op.divw(a, b, c)).toThrow('Uint64 over or underflow')
     })
 
@@ -376,7 +377,7 @@ describe('Pure op codes', async () => {
       [0, MAX_UINT512],
       [MAX_UINT512 * 2n, 1],
     ])('should throw error when input overflows', async (a, b) => {
-      await expect(getAvmResultRaw(appClient, 'verify_exp', a, b)).rejects.toThrow(avm_int_arg_overflow_error)
+      await expect(getAvmResultRaw(appClient, 'verify_exp', a, b)).rejects.toThrow(avmIntArgOverflowError)
       expect(() => op.exp(a, b)).toThrow('Uint64 over or underflow')
     })
 
@@ -415,7 +416,7 @@ describe('Pure op codes', async () => {
       [0, MAX_UINT512],
       [MAX_UINT512 * 2n, 1],
     ])(`should throw error when input overflows`, async (a, b) => {
-      await expect(getAvmResultRaw(appClient, 'verify_expw', a, b)).rejects.toThrow(avm_int_arg_overflow_error)
+      await expect(getAvmResultRaw(appClient, 'verify_expw', a, b)).rejects.toThrow(avmIntArgOverflowError)
       expect(() => op.expw(a, b)).toThrow('Uint64 over or underflow')
     })
 
@@ -463,7 +464,7 @@ describe('Pure op codes', async () => {
       [MAX_UINT512 * 2n, 1],
     ])(`should throw error when input overflows`, async (b, c) => {
       const a = "hello, world".repeat(30)
-      await expect(getAvmResultRaw(appClient, 'verify_extract', asUint8Array(a), b, c)).rejects.toThrow(avm_int_arg_overflow_error)
+      await expect(getAvmResultRaw(appClient, 'verify_extract', asUint8Array(a), b, c)).rejects.toThrow(avmIntArgOverflowError)
       expect(() => op.extract(a, b, c)).toThrow('Uint64 over or underflow')
     })
 
@@ -474,8 +475,42 @@ describe('Pure op codes', async () => {
       [8, 5],
     ])('should throw error when input is invalid', async (b, c) => {
       const a = "hello, world"
-      await expect(getAvmResultRaw(appClient, 'verify_extract', asUint8Array(a), b, c)).rejects.toThrow(/extraction (start|end) \d+ is beyond length/)
-      expect(() => op.extract(a, b, c)).toThrow(/extraction (start|end) \d+ is beyond length/)
+      await expect(getAvmResultRaw(appClient, 'verify_extract', asUint8Array(a), b, c)).rejects.toThrow(extractOutOfBoundError)
+      expect(() => op.extract(a, b, c)).toThrow(extractOutOfBoundError)
+    })
+  })
+
+  describe('extractUint16', async () => {
+    test.each([
+      [intToBytes(256), 0],
+      [getPaddedUint8Array(2, intToBytes(256)), 2],
+      [intToBytes(MAX_UINT64), 6],
+      [intToBytes(MAX_UINT512), 62],
+    ])(`should extract uint16 from the input`, async (a, b) => {
+      const avmResult = await getAvmResult<uint64>(appClient, 'verify_extract_uint16', asUint8Array(a), b)
+      const result = op.extractUint16(a, b)
+      expect(result.valueOf()).toBe(avmResult)
+    })
+
+    test.each([
+      [getPaddedUint8Array(2, intToBytes(256)), MAX_UINT64 + 1n],
+      [intToBytes(MAX_UINT64), MAX_UINT64 + 1n],
+      [intToBytes(MAX_UINT512), MAX_UINT512],
+    ])(`should throw error when input overflows`, async (a, b) => {
+      await expect(getAvmResult<uint64>(appClient, 'verify_extract_uint16', asUint8Array(a), b)).rejects.toThrow(avmIntArgOverflowError)
+      expect(() => op.extractUint16(a, b)).toThrow('Uint64 over or underflow')
+    })
+
+    test.each([
+      [intToBytes(0), 0],
+      [intToBytes(0), 1],
+      [intToBytes(256), 1],
+      [getPaddedUint8Array(2, intToBytes(256)), 3],
+      [intToBytes(MAX_UINT64), 8],
+      [intToBytes(MAX_UINT512), 65],
+    ])(`should throw error when input is invalid`, async (a, b) => {
+      await expect(getAvmResult<uint64>(appClient, 'verify_extract_uint16', asUint8Array(a), b)).rejects.toThrow(extractOutOfBoundError)
+      expect(() => op.extractUint16(a, b)).toThrow(extractOutOfBoundError)
     })
   })
 
@@ -497,7 +532,7 @@ describe('Pure op codes', async () => {
       MAX_UINT64 + 1n,
       MAX_UINT512
     ])('should throw error when input overflows', async (a) => {
-      await expect(getAvmResultRaw(appClient, 'verify_itob', a)).rejects.toThrow(avm_int_arg_overflow_error)
+      await expect(getAvmResultRaw(appClient, 'verify_itob', a)).rejects.toThrow(avmIntArgOverflowError)
       expect(() => op.itob(a)).toThrow('Uint64 over or underflow')
     })
   })
