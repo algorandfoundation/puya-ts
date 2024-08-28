@@ -1,4 +1,4 @@
-import { BigUint, Bytes, internal, uint64 } from '@algorandfoundation/algo-ts'
+import { BigUint, Bytes, internal, Uint64, uint64 } from '@algorandfoundation/algo-ts'
 import { AppSpec } from '@algorandfoundation/algokit-utils/types/app-spec'
 import { afterEach } from 'node:test'
 import { describe, expect, it, test } from 'vitest'
@@ -422,6 +422,60 @@ describe('Pure op codes', async () => {
     it('0 ** 0 is not supported', async () => {
       await expect(getAvmResultRaw(appClient, 'verify_expw', 0, 0)).rejects.toThrow('0^0 is undefined')
       expect(() => op.expw(0, 0)).toThrow('0 ** 0 is undefined')
+    })
+  })
+
+  describe('extract', async () => {
+    test.each([
+      [0, 0],
+      [0, 1],
+      [0, 2],
+      [11, 1],
+      [12, 0],
+      [8, 4],
+      [256, 0],
+      [256, 3],
+    ])(`should extract bytes from the input`, async (b, c) => {
+      const a = "hello, world".repeat(30)
+      const avmResult = (await getAvmResultRaw(appClient, 'verify_extract', asUint8Array(a), b, c))!
+      let result = op.extract(a, Uint64(b), Uint64(c))
+      expect(asUint8Array(result)).toEqual(avmResult)
+
+      if (c) {
+        result = op.extract(a, b, c)
+        expect(asUint8Array(result)).toEqual(avmResult)
+      }
+    })
+
+    test.each([
+      "hello, world",
+      "hi",
+    ])('should work to extract bytes from 2 to end', async (a) => {
+      const avmResult = (await getAvmResultRaw(appClient, 'verify_extract_from_2', asUint8Array(a)))!
+      const result = op.extract(a, 2, 0)
+      expect(asUint8Array(result)).toEqual(avmResult)
+    })
+
+    test.each([
+      [1, MAX_UINT64 + 1n],
+      [MAX_UINT64 + 1n, 1],
+      [0, MAX_UINT512],
+      [MAX_UINT512 * 2n, 1],
+    ])(`should throw error when input overflows`, async (b, c) => {
+      const a = "hello, world".repeat(30)
+      await expect(getAvmResultRaw(appClient, 'verify_extract', asUint8Array(a), b, c)).rejects.toThrow(avm_int_arg_overflow_error)
+      expect(() => op.extract(a, b, c)).toThrow('Uint64 over or underflow')
+    })
+
+    test.each([
+      [0, 13],
+      [13, 0],
+      [11, 2],
+      [8, 5],
+    ])('should throw error when input is invalid', async (b, c) => {
+      const a = "hello, world"
+      await expect(getAvmResultRaw(appClient, 'verify_extract', asUint8Array(a), b, c)).rejects.toThrow(/extraction (start|end) \d+ is beyond length/)
+      expect(() => op.extract(a, b, c)).toThrow(/extraction (start|end) \d+ is beyond length/)
     })
   })
 

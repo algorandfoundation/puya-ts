@@ -12,6 +12,7 @@ import {
   Ed25519verifyBareType,
   ExpType,
   ExpwType,
+  ExtractType,
   GlobalType,
   GTxnType,
   ItobType,
@@ -51,6 +52,9 @@ export const exp: ExpType = (...args) => {
 }
 export const expw: ExpwType = (...args) => {
   return ctxMgr.instance.op.expw!(...args)
+}
+export const extract: ExtractType = (...args) => {
+  return ctxMgr.instance.op.extract!(...args)
 }
 export const itob: ItobType = (...args) => {
   return ctxMgr.instance.op.itob!(...args)

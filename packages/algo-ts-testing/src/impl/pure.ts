@@ -102,6 +102,31 @@ export const expw = (a: internal.primitives.StubUint64Compat, b: internal.primit
   return toUint128(base ** exponent)
 }
 
+export const extract = (
+  a: internal.primitives.StubBytesCompat,
+  b: internal.primitives.StubUint64Compat,
+  c: internal.primitives.StubUint64Compat,
+): bytes => {
+  const bytesValue = internal.primitives.BytesCls.fromCompat(a)
+  const bytesLength = bytesValue.length.asBigInt()
+
+  const start = internal.primitives.Uint64Cls.fromCompat(b).asBigInt()
+  const length = internal.primitives.Uint64Cls.fromCompat(c).asBigInt()
+  let end = start + length
+  if ((typeof b === 'number' || typeof b === 'bigint') && (typeof c === 'number' || typeof c === 'bigint') && length === 0n) {
+    end = bytesLength
+  }
+
+  if (start > bytesLength) {
+    internal.errors.codeError(`extraction start ${start} is beyond length`)
+  }
+  if (end > bytesLength) {
+    internal.errors.codeError(`extraction end ${end} is beyond length`)
+  }
+
+  return bytesValue.slice(start, end).asAlgoTs()
+}
+
 export const itob = (a: internal.primitives.StubUint64Compat): bytes => {
   return internal.primitives.Uint64Cls.fromCompat(a).toBytes().asAlgoTs()
 }
