@@ -145,6 +145,32 @@ export const extractUint64 = (a: internal.primitives.StubBytesCompat, b: interna
   return bytesResult.toUint64().asAlgoTs()
 }
 
+export const getBit = (
+  a: internal.primitives.StubUint64Compat | internal.primitives.StubBytesCompat,
+  b: internal.primitives.StubUint64Compat,
+): uint64 => {
+  let binaryString: string
+  const uint64Cls = asMaybeUint64Cls(a)
+  const bytesCls = asMaybeBytesCls(a)
+
+  if (uint64Cls) {
+    binaryString = [...uint64Cls.toBytes().asUint8Array()]
+      .reverse()
+      .map((x) => x.toString(2).padStart(8, '0'))
+      .join('')
+  } else if (bytesCls) {
+    binaryString = [...bytesCls.asUint8Array()].map((x) => x.toString(2).padStart(8, '0')).join('')
+  } else {
+    internal.errors.codeError('unknown type for argument a')
+  }
+
+  const index = internal.primitives.Uint64Cls.fromCompat(b).asNumber()
+  if (index >= binaryString.length) {
+    internal.errors.codeError(`getBit index ${index} is beyond length`)
+  }
+  return binaryString[index] === '1' ? Uint64(1) : Uint64(0)
+}
+
 export const itob = (a: internal.primitives.StubUint64Compat): bytes => {
   return internal.primitives.Uint64Cls.fromCompat(a).toBytes().asAlgoTs()
 }

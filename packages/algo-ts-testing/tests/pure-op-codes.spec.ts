@@ -583,6 +583,65 @@ describe('Pure op codes', async () => {
     })
   })
 
+  describe('getBit', async () => {
+    test.each([
+      [new Uint8Array([0x00]), 0],
+      [getPaddedUint8Array(2, intToBytes(256)), 3],
+      [getPaddedUint8Array(2, intToBytes(256)), 0],
+      [getPaddedUint8Array(2, intToBytes(256)), 11],
+      [getPaddedUint8Array(2, intToBytes(65535)), 31],
+      [getPaddedUint8Array(2, intToBytes(65535)), 24],
+      [intToBytes(MAX_UINT64), 63],
+      [intToBytes(MAX_UINT64 - 1n), 63],
+      [intToBytes(MAX_UINT512), 511],
+      [intToBytes(MAX_UINT512 - 1n), 511],
+      [intToBytes(MAX_UINT64), 0],
+      [intToBytes(MAX_UINT512), 0]
+    ])(`should get the bit at the given index of bytes value`, async (a, b) => {
+      const avmResult = await getAvmResult<uint64>(appClient, 'verify_getbit_bytes', asUint8Array(a), b)
+      const result = op.getBit(a, b)
+      expect(result.valueOf()).toBe(avmResult)
+    })
+
+    test.each([
+      [new Uint8Array([0x00]), 8],
+      [intToBytes(MAX_UINT64), 64],
+      [intToBytes(MAX_UINT64 - 1n), 64],
+      [intToBytes(MAX_UINT512), 512],
+      [intToBytes(MAX_UINT512 - 1n), 512],
+    ])('should throw error when index out of bound of bytes value', async (a, b) => {
+      await expect(getAvmResult<uint64>(appClient, 'verify_getbit_bytes', asUint8Array(a), b)).rejects.toThrow('getbit index beyond byteslice')
+      expect(() => op.getBit(a, b)).toThrow(/getBit index \d+ is beyond length/)
+    })
+
+    test.each([
+      [0, 0],
+      [0, 3],
+      [0, 10],
+      [256, 3],
+      [256, 0],
+      [256, 11],
+      [65535, 15],
+      [65535, 7],
+      [65535, 63],
+      [MAX_UINT64, 63],
+      [MAX_UINT64 - 1n, 63],
+      [MAX_UINT64, 0],
+    ])(`should get the bit at the given index of uint64 value`, async (a, b) => {
+      const avmResult = await getAvmResult<uint64>(appClient, 'verify_getbit_uint64', a, b)
+      const result = op.getBit(a, b)
+      expect(result.valueOf()).toBe(avmResult)
+    })
+
+    test.each([
+      [MAX_UINT64, 64],
+      [MAX_UINT64 - 1n, 64],
+    ])(`should throw error when index out of bound of uint64 value`, async (a, b) => {
+      await expect(getAvmResult<uint64>(appClient, 'verify_getbit_uint64', a, b)).rejects.toThrow('getbit index > 63')
+      expect(() => op.getBit(a, b)).toThrow(/getBit index \d+ is beyond length/)
+    })
+  })
+
   describe('itob', async () => {
     test.each([
       0,
