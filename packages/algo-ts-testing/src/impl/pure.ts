@@ -225,6 +225,16 @@ export const selectBytes = (
   return (bigIntC !== 0n ? bytesB : bytesA).asAlgoTs()
 }
 
+export const selectUint64 = (
+  a: internal.primitives.StubUint64Compat | internal.primitives.StubBytesCompat,
+  b: internal.primitives.StubUint64Compat | internal.primitives.StubBytesCompat,
+  c: internal.primitives.StubUint64Compat,
+): uint64 => {
+  const result = selectBytes(a, b, c)
+  const bytesClsResult = internal.primitives.BytesCls.fromCompat(result)
+  return bytesClsResult.toUint64().asAlgoTs()
+}
+
 const squareroot = (x: bigint): bigint => {
   let lo = 0n,
     hi = x
