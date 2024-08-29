@@ -282,6 +282,18 @@ export const shl = (a: internal.primitives.StubUint64Compat, b: internal.primiti
   return Uint64(shifted)
 }
 
+export const shr = (a: internal.primitives.StubUint64Compat, b: internal.primitives.StubUint64Compat): uint64 => {
+  const uint64A = internal.primitives.Uint64Cls.fromCompat(a)
+  const uint64B = internal.primitives.Uint64Cls.fromCompat(b)
+  const bigIntA = uint64A.asBigInt()
+  const bigIntB = uint64B.asBigInt()
+  if (bigIntB >= UINT64_SIZE) {
+    internal.errors.codeError(`shr value ${bigIntB} >= ${UINT64_SIZE}`)
+  }
+  const shifted = bigIntA / 2n ** bigIntB
+  return Uint64(shifted)
+}
+
 const squareroot = (x: bigint): bigint => {
   let lo = 0n,
     hi = x

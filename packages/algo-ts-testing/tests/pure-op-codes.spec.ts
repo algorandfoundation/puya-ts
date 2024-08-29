@@ -947,4 +947,38 @@ describe('Pure op codes', async () => {
       expect(() => op.shl(a, b)).toThrow(`shl value ${b} >= 64`)
     })
   })
+
+  describe('shr', async () => {
+    test.each([
+      [0, 0],
+      [1, 0],
+      [0, 1],
+      [111, 42],
+      [1, 63],
+      [MAX_UINT64 - 1n, 63],
+      [MAX_UINT64, 63],
+    ])('should shift right the input', async (a, b) => {
+      const avmResult = await getAvmResult<uint64>(appClient, 'verify_shr', a, b)
+      const result = op.shr(a, b)
+      expect(result.valueOf()).toBe(avmResult)
+    })
+
+    test.each([
+      [1, MAX_UINT64 + 1n],
+      [MAX_UINT64 + 1n, 1],
+      [0, MAX_UINT512],
+      [MAX_UINT512 * 2n, 1],
+    ])('should throw error when input overflows', async (a, b) => {
+      await expect(getAvmResult<uint64>(appClient, 'verify_shr', a, b)).rejects.toThrow(avmIntArgOverflowError)
+      expect(() => op.shr(a, b)).toThrow('Uint64 over or underflow')
+    })
+
+    test.each([
+      [1, MAX_UINT64],
+      [MAX_UINT64, 64],
+    ])('should throw error when input is invalid', async (a, b) => {
+      await expect(getAvmResult<uint64>(appClient, 'verify_shr', a, b)).rejects.toThrow('shr arg too big')
+      expect(() => op.shr(a, b)).toThrow(`shr value ${b} >= 64`)
+    })
+  })
 })
