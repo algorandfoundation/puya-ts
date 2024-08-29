@@ -981,4 +981,28 @@ describe('Pure op codes', async () => {
       expect(() => op.shr(a, b)).toThrow(`shr value ${b} >= 64`)
     })
   })
+
+  describe('sqrt', async () => {
+    test.each([
+      0,
+      1,
+      2,
+      9,
+      13,
+      MAX_UINT64,
+    ])('should calculate the square root of the input', async (a) => {
+      const avmResult = await getAvmResult<uint64>(appClient, 'verify_sqrt', a)
+      const result = op.sqrt(a)
+      expect(result.valueOf()).toBe(avmResult)
+    })
+
+    test.each([
+      MAX_UINT64 + 1n,
+      MAX_UINT512,
+      MAX_UINT512 * 2n
+    ])('should throw error when input overflows', async (a) => {
+      await expect(getAvmResult<uint64>(appClient, 'verify_sqrt', a)).rejects.toThrow(avmIntArgOverflowError)
+      expect(() => op.sqrt(a)).toThrow('Uint64 over or underflow')
+    })
+  })
 })
