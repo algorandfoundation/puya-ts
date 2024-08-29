@@ -151,10 +151,11 @@ export const getBit = (
 ): uint64 => {
   const binaryString = toBinaryString(a)
   const index = internal.primitives.Uint64Cls.fromCompat(b).asNumber()
-  if (index >= binaryString.length) {
+  const adjustedIndex = asMaybeUint64Cls(a) ? binaryString.length - index - 1 : index
+  if (adjustedIndex < 0 || adjustedIndex >= binaryString.length) {
     internal.errors.codeError(`getBit index ${index} is beyond length`)
   }
-  return binaryString[index] === '1' ? Uint64(1) : Uint64(0)
+  return binaryString[adjustedIndex] === '1' ? Uint64(1) : Uint64(0)
 }
 
 export const getBytes = (a: internal.primitives.StubBytesCompat, b: internal.primitives.StubUint64Compat): uint64 => {
@@ -229,16 +230,20 @@ export const setBitBytes = (
   const binaryString = toBinaryString(a)
   const index = internal.primitives.Uint64Cls.fromCompat(b).asNumber()
   const bit = internal.primitives.Uint64Cls.fromCompat(c).asNumber()
-  if (index >= binaryString.length) {
-    internal.errors.codeError(`setBit index ${index} is beyond length`)
-  }
-  if (bit !== 0 && bit !== 1) {
-    internal.errors.codeError(`setBit value > 1`)
-  }
-  const updatedString = binaryString.slice(0, index) + bit.toString() + binaryString.slice(index + 1)
-  const newBytes = internal.primitives.BytesCls.fromCompat(new Uint8Array(updatedString.match(/.{1,8}/g)!.map((x) => parseInt(x, 2))))
-
+  const newBytes = setBit(binaryString, index, bit)
   return newBytes.asAlgoTs()
+}
+
+export const setBitUint64 = (
+  a: internal.primitives.StubUint64Compat | internal.primitives.StubBytesCompat,
+  b: internal.primitives.StubUint64Compat,
+  c: internal.primitives.StubUint64Compat,
+): uint64 => {
+  const binaryString = toBinaryString(a)
+  const index = internal.primitives.Uint64Cls.fromCompat(b).asNumber()
+  const bit = internal.primitives.Uint64Cls.fromCompat(c).asNumber()
+  const newBytes = setBit(binaryString, binaryString.length - index - 1, bit)
+  return newBytes.toUint64().asAlgoTs()
 }
 
 const squareroot = (x: bigint): bigint => {
@@ -269,14 +274,23 @@ const toBinaryString = (a: internal.primitives.StubUint64Compat | internal.primi
   const bytesCls = asMaybeBytesCls(a)
   let binaryString: string
   if (uint64Cls) {
-    binaryString = [...uint64Cls.toBytes().asUint8Array()]
-      .reverse()
-      .map((x) => x.toString(2).padStart(8, '0'))
-      .join('')
+    binaryString = [...uint64Cls.toBytes().asUint8Array()].map((x) => x.toString(2).padStart(8, '0')).join('')
   } else if (bytesCls) {
     binaryString = [...bytesCls.asUint8Array()].map((x) => x.toString(2).padStart(8, '0')).join('')
   } else {
     internal.errors.codeError('unknown type for argument a')
   }
   return binaryString
+}
+
+const setBit = (binaryString: string, index: number, bit: number): internal.primitives.BytesCls => {
+  if (index < 0 || index >= binaryString.length) {
+    internal.errors.codeError(`setBit index ${index < 0 ? binaryString.length - index : index} is beyond length`)
+  }
+  if (bit !== 0 && bit !== 1) {
+    internal.errors.codeError(`setBit value > 1`)
+  }
+  const updatedString = binaryString.slice(0, index) + bit.toString() + binaryString.slice(index + 1)
+  const newBytes = internal.primitives.BytesCls.fromCompat(new Uint8Array(updatedString.match(/.{1,8}/g)!.map((x) => parseInt(x, 2))))
+  return newBytes
 }

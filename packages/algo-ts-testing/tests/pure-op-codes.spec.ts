@@ -835,4 +835,41 @@ describe('Pure op codes', async () => {
       expect(() => op.setBitBytes(a, b, c)).toThrow(`setBit value > 1`)
     })
   })
+
+  describe('setBitUint64', async () => {
+    test.each([
+      [0, 0, 1],
+      [0, 3, 1],
+      [0, 10, 1],
+      [256, 3, 1],
+      [256, 0, 1],
+      [256, 11, 1],
+      [65535, 15, 0],
+      [65535, 7, 0],
+      [65535, 63, 1],
+      [MAX_UINT64, 63, 0],
+      [MAX_UINT64 - 1n, 63, 1],
+      [MAX_UINT64, 0, 0],
+    ])('should set the bit at the given index of uint64 value', async (a, b, c) => {
+      const avmResult = await getAvmResult<uint64>(appClient, 'verify_setbit_uint64', a, b, c)
+      const result = op.setBitUint64(a, b, c)
+      expect(result.valueOf()).toBe(avmResult)
+    })
+
+    test.each([
+      [MAX_UINT64, 64, 0],
+      [MAX_UINT64 - 1n, 64, 1],
+    ])(`should throw error when index out of bound of uint64 value`, async (a, b, c) => {
+      await expect(getAvmResult<uint64>(appClient, 'verify_setbit_uint64', a, b, c)).rejects.toThrow('setbit index > 63')
+      expect(() => op.setBitUint64(a, b, c)).toThrow(/setBit index \d+ is beyond length/)
+    })
+
+    it('should throw error when input is invalid', async () => {
+      const a = 0
+      const b = 2
+      const c = 2
+      await expect(getAvmResult<uint64>(appClient, 'verify_setbit_uint64', a, b, c)).rejects.toThrow('setbit value > 1')
+      expect(() => op.setBitUint64(a, b, c)).toThrow(`setBit value > 1`)
+    })
+  })
 })
