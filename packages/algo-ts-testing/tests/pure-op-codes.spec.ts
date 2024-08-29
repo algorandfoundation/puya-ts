@@ -872,4 +872,44 @@ describe('Pure op codes', async () => {
       expect(() => op.setBitUint64(a, b, c)).toThrow(`setBit value > 1`)
     })
   })
+
+  describe('setBytes', async () => {
+    test.each([
+      [new Uint8Array([0x00]), 0, 1],
+      [getPaddedUint8Array(2, intToBytes(256)), 3, 1],
+      [getPaddedUint8Array(2, intToBytes(256)), 0, 1],
+      [getPaddedUint8Array(2, intToBytes(256)), 1, 255],
+      [getPaddedUint8Array(2, intToBytes(65535)), 2, 0],
+      [getPaddedUint8Array(2, intToBytes(65535)), 2, 100],
+      [intToBytes(MAX_UINT64), 7, 0],
+      [intToBytes(MAX_UINT64 - 1n), 0, 42],
+      [intToBytes(MAX_UINT512), 63, 0],
+      [intToBytes(MAX_UINT512 - 1n), 1, 1],
+      [intToBytes(MAX_UINT64), 0, 0],
+      [intToBytes(MAX_UINT512), 0, 0],
+    ])(`should set bytes in the input`, async (a, b, c) => {
+      const avmResult = (await getAvmResultRaw(appClient, 'verify_setbyte', asUint8Array(a), b, c))!
+      const result = op.setBytes(a, b, c)
+      expect(asUint8Array(result)).toEqual(avmResult)
+    })
+
+    test.each([
+      [new Uint8Array([0x00]), 8, 1],
+      [intToBytes(MAX_UINT64), 64, 0],
+      [intToBytes(MAX_UINT64 - 1n), 64, 1],
+      [intToBytes(MAX_UINT512), 512, 0],
+      [intToBytes(MAX_UINT512 - 1n), 512, 1],
+    ])(`should throw error when index out of bound of bytes`, async (a, b, c) => {
+      await expect(getAvmResultRaw(appClient, 'verify_setbyte', asUint8Array(a), b, c)).rejects.toThrow('setbyte index beyond array length')
+      expect(() => op.setBytes(a, b, c)).toThrow(`setBytes index ${b} is beyond length`)
+    })
+
+    it('should throw error when input is invalid', async () => {
+      const a = new Uint8Array([0x00])
+      const b = 0
+      const c = 256
+      await expect(getAvmResultRaw(appClient, 'verify_setbyte', asUint8Array(a), b, c)).rejects.toThrow('setbyte value > 255')
+      expect(() => op.setBytes(a, b, c)).toThrow(`setBytes value ${c} > 255`)
+    })
+  })
 })

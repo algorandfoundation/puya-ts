@@ -56,3 +56,6 @@ export const asMaybeBytesCls = (val: DeliberateAny) => {
   }
   return undefined
 }
+
+export const binaryStringToBytes = (s: string): internal.primitives.BytesCls =>
+  internal.primitives.BytesCls.fromCompat(new Uint8Array(s.match(/.{1,8}/g)!.map((x) => parseInt(x, 2))))
