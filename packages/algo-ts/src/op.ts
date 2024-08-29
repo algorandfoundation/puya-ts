@@ -28,6 +28,7 @@ import {
   SetBitBytesType,
   SetBitUint64Type,
   SetBytesType,
+  ShlType,
   TxnType,
 } from './op-types'
 import { bytes } from './primitives'
@@ -106,6 +107,9 @@ export const setBitUint64: SetBitUint64Type = (...args) => {
 }
 export const setBytes: SetBytesType = (...args) => {
   return ctxMgr.instance.op.setBytes!(...args)
+}
+export const shl: ShlType = (...args) => {
+  return ctxMgr.instance.op.shl!(...args)
 }
 
 export const GTxn: GTxnType = new Proxy({} as GTxnType, {
