@@ -912,4 +912,39 @@ describe('Pure op codes', async () => {
       expect(() => op.setBytes(a, b, c)).toThrow(`setBytes value ${c} > 255`)
     })
   })
+
+  describe('shl', async () => {
+    test.each([
+      [0, 0],
+      [1, 0],
+      [0, 1],
+      [42, 0],
+      [100, 42],
+      [1, 63],
+      [MAX_UINT64 - 1n, 63],
+      [MAX_UINT64, 63],
+    ])(`should shift left the input`, async (a, b) => {
+      const avmResult = await getAvmResult<uint64>(appClient, 'verify_shl', a, b)
+      const result = op.shl(a, b)
+      expect(result.valueOf()).toBe(avmResult)
+    })
+
+    test.each([
+      [1, MAX_UINT64 + 1n],
+      [MAX_UINT64 + 1n, 1],
+      [0, MAX_UINT512],
+      [MAX_UINT512 * 2n, 0]
+    ])(`should throw error when input overflows`, async (a, b) => {
+      await expect(getAvmResult<uint64>(appClient, 'verify_shl', a, b)).rejects.toThrow(avmIntArgOverflowError)
+      expect(() => op.shl(a, b)).toThrow('Uint64 over or underflow')
+    })
+
+    test.each([
+      [1, MAX_UINT64],
+      [MAX_UINT64, 64],
+    ])(`should throw error when input is invalid`, async (a, b) => {
+      await expect(getAvmResult<uint64>(appClient, 'verify_shl', a, b)).rejects.toThrow('shl arg too big')
+      expect(() => op.shl(a, b)).toThrow(`shl value ${b} >= 64`)
+    })
+  })
 })

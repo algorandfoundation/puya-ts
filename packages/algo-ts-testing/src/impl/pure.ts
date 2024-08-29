@@ -1,5 +1,5 @@
 import { biguint, Bytes, bytes, internal, Uint64, uint64 } from '@algorandfoundation/algo-ts'
-import { BITS_IN_BYTE, MAX_BYTES_SIZE, MAX_UINT64, MAX_UINT8 } from '../constants'
+import { BITS_IN_BYTE, MAX_BYTES_SIZE, MAX_UINT64, MAX_UINT8, UINT64_SIZE } from '../constants'
 import { asMaybeBytesCls, asMaybeUint64Cls, binaryStringToBytes } from '../util'
 
 export const addw = (a: internal.primitives.StubUint64Compat, b: internal.primitives.StubUint64Compat): readonly [uint64, uint64] => {
@@ -268,6 +268,18 @@ export const setBytes = (
   const updatedString = binaryString.slice(0, bitIndex) + replacement + binaryString.slice(bitIndex + replacement.length)
   const updatedBytes = binaryStringToBytes(updatedString)
   return updatedBytes.asAlgoTs()
+}
+
+export const shl = (a: internal.primitives.StubUint64Compat, b: internal.primitives.StubUint64Compat): uint64 => {
+  const uint64A = internal.primitives.Uint64Cls.fromCompat(a)
+  const uint64B = internal.primitives.Uint64Cls.fromCompat(b)
+  const bigIntA = uint64A.asBigInt()
+  const bigIntB = uint64B.asBigInt()
+  if (bigIntB >= UINT64_SIZE) {
+    internal.errors.codeError(`shl value ${bigIntB} >= ${UINT64_SIZE}`)
+  }
+  const shifted = (bigIntA * 2n ** bigIntB) % 2n ** BigInt(UINT64_SIZE)
+  return Uint64(shifted)
 }
 
 const squareroot = (x: bigint): bigint => {
