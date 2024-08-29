@@ -149,21 +149,7 @@ export const getBit = (
   a: internal.primitives.StubUint64Compat | internal.primitives.StubBytesCompat,
   b: internal.primitives.StubUint64Compat,
 ): uint64 => {
-  let binaryString: string
-  const uint64Cls = asMaybeUint64Cls(a)
-  const bytesCls = asMaybeBytesCls(a)
-
-  if (uint64Cls) {
-    binaryString = [...uint64Cls.toBytes().asUint8Array()]
-      .reverse()
-      .map((x) => x.toString(2).padStart(8, '0'))
-      .join('')
-  } else if (bytesCls) {
-    binaryString = [...bytesCls.asUint8Array()].map((x) => x.toString(2).padStart(8, '0')).join('')
-  } else {
-    internal.errors.codeError('unknown type for argument a')
-  }
-
+  const binaryString = toBinaryString(a)
   const index = internal.primitives.Uint64Cls.fromCompat(b).asNumber()
   if (index >= binaryString.length) {
     internal.errors.codeError(`getBit index ${index} is beyond length`)
@@ -235,6 +221,26 @@ export const selectUint64 = (
   return bytesClsResult.toUint64().asAlgoTs()
 }
 
+export const setBitBytes = (
+  a: internal.primitives.StubUint64Compat | internal.primitives.StubBytesCompat,
+  b: internal.primitives.StubUint64Compat,
+  c: internal.primitives.StubUint64Compat,
+): bytes => {
+  const binaryString = toBinaryString(a)
+  const index = internal.primitives.Uint64Cls.fromCompat(b).asNumber()
+  const bit = internal.primitives.Uint64Cls.fromCompat(c).asNumber()
+  if (index >= binaryString.length) {
+    internal.errors.codeError(`setBit index ${index} is beyond length`)
+  }
+  if (bit !== 0 && bit !== 1) {
+    internal.errors.codeError(`setBit value > 1`)
+  }
+  const updatedString = binaryString.slice(0, index) + bit.toString() + binaryString.slice(index + 1)
+  const newBytes = internal.primitives.BytesCls.fromCompat(new Uint8Array(updatedString.match(/.{1,8}/g)!.map((x) => parseInt(x, 2))))
+
+  return newBytes.asAlgoTs()
+}
+
 const squareroot = (x: bigint): bigint => {
   let lo = 0n,
     hi = x
@@ -256,4 +262,21 @@ const uint128ToBigInt = (a: internal.primitives.StubUint64Compat, b: internal.pr
   const bigIntA = internal.primitives.Uint64Cls.fromCompat(a).asBigInt()
   const bigIntB = internal.primitives.Uint64Cls.fromCompat(b).asBigInt()
   return (bigIntA << 64n) + bigIntB
+}
+
+const toBinaryString = (a: internal.primitives.StubUint64Compat | internal.primitives.StubBytesCompat): string => {
+  const uint64Cls = asMaybeUint64Cls(a)
+  const bytesCls = asMaybeBytesCls(a)
+  let binaryString: string
+  if (uint64Cls) {
+    binaryString = [...uint64Cls.toBytes().asUint8Array()]
+      .reverse()
+      .map((x) => x.toString(2).padStart(8, '0'))
+      .join('')
+  } else if (bytesCls) {
+    binaryString = [...bytesCls.asUint8Array()].map((x) => x.toString(2).padStart(8, '0')).join('')
+  } else {
+    internal.errors.codeError('unknown type for argument a')
+  }
+  return binaryString
 }

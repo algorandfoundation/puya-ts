@@ -772,26 +772,6 @@ describe('Pure op codes', async () => {
       await expect(getAvmResultRaw(appClient, 'verify_select_bytes', asUint8Array(a), asUint8Array(b), c)).rejects.toThrow(avmIntArgOverflowError)
       expect(() => op.selectBytes(a, b, c)).toThrow('Uint64 over or underflow')
     })
-
-    test.each([
-      [10, 20, 0],
-      [10, 20, 1],
-      [256, 512, 2],
-      [10, MAX_UINT64, true],
-      [MAX_UINT64, 20, false],
-    ])('should select uint64 according to the input', async (a, b, c) => {
-      const avmResult = (await getAvmResultRaw(appClient, 'verify_select_bytes', asUint8Array(intToBytes(a)), asUint8Array(intToBytes(b)), c === true ? 1 : c === false ? 0 : c))!
-      const result = op.selectBytes(a, b, c)
-      expect(asUint8Array(result)).toEqual(avmResult)
-    })
-
-    test.each([
-      [MAX_UINT64 + 1n, MAX_UINT64 + 10n, MAX_UINT64 + 1n],
-      [MAX_UINT512, MAX_UINT512, MAX_UINT512],
-    ])(`should throw error when input overflows to select uint64`, async (a, b, c) => {
-      await expect(getAvmResultRaw(appClient, 'verify_select_bytes', asUint8Array(intToBytes(a)), asUint8Array(intToBytes(b)), c)).rejects.toThrow(avmIntArgOverflowError)
-      expect(() => op.selectBytes(a, b, c)).toThrow('Uint64 over or underflow')
-    })
   })
 
   describe('selectUint64', async () => {
@@ -813,6 +793,46 @@ describe('Pure op codes', async () => {
     ])(`should throw error when input overflows to select uint64`, async (a, b, c) => {
       await expect(getAvmResult<uint64>(appClient, 'verify_select_uint64', a, b, c)).rejects.toThrow(avmIntArgOverflowError)
       expect(() => op.selectUint64(a, b, c)).toThrow('Uint64 over or underflow')
+    })
+  })
+
+  describe('setBitBytes', async () => {
+    test.each([
+      [new Uint8Array([0x00]), 0, 1],
+      [getPaddedUint8Array(2, intToBytes(256)), 3, 1],
+      [getPaddedUint8Array(2, intToBytes(256)), 0, 1],
+      [getPaddedUint8Array(2, intToBytes(256)), 11, 1],
+      [getPaddedUint8Array(2, intToBytes(65535)), 31, 0],
+      [getPaddedUint8Array(2, intToBytes(65535)), 24, 0],
+      [intToBytes(MAX_UINT64), 63, 0],
+      [intToBytes(MAX_UINT64 - 1n), 63, 1],
+      [intToBytes(MAX_UINT512), 511, 0],
+      [intToBytes(MAX_UINT512 - 1n), 511, 1],
+      [intToBytes(MAX_UINT64), 0, 0],
+      [intToBytes(MAX_UINT512), 0, 0],
+    ])(`should set the bit at the given index of bytes value`, async (a, b, c) => {
+      const avmResult = (await getAvmResultRaw(appClient, 'verify_setbit_bytes', asUint8Array(a), b, c))!
+      const result = op.setBitBytes(a, b, c)
+      expect(asUint8Array(result)).toEqual(avmResult)
+    })
+
+    test.each([
+      [new Uint8Array([0x00]), 8, 1],
+      [intToBytes(MAX_UINT64), 64, 0],
+      [intToBytes(MAX_UINT64 - 1n), 64, 1],
+      [intToBytes(MAX_UINT512), 512, 0],
+      [intToBytes(MAX_UINT512 - 1n), 512, 1],
+    ])('should throw error when index out of bound of bytes value', async (a, b, c) => {
+      await expect(getAvmResultRaw(appClient, 'verify_setbit_bytes', asUint8Array(a), b, c)).rejects.toThrow('setbit index beyond byteslice')
+      expect(() => op.setBitBytes(a, b, c)).toThrow(/setBit index \d+ is beyond length/)
+    })
+
+    it('should throw error when input is invalid', async () => {
+      const a = new Uint8Array([0x00])
+      const b = 0
+      const c = 2
+      await expect(getAvmResultRaw(appClient, 'verify_setbit_bytes', asUint8Array(a), b, c)).rejects.toThrow('setbit value > 1')
+      expect(() => op.setBitBytes(a, b, c)).toThrow(`setBit value > 1`)
     })
   })
 })
