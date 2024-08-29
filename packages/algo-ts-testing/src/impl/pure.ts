@@ -294,6 +294,12 @@ export const shr = (a: internal.primitives.StubUint64Compat, b: internal.primiti
   return Uint64(shifted)
 }
 
+export const sqrt = (a: internal.primitives.StubUint64Compat): uint64 => {
+  const bigIntValue = internal.primitives.Uint64Cls.fromCompat(a).asBigInt()
+  const sqrtValue = squareroot(bigIntValue)
+  return Uint64(sqrtValue)
+}
+
 const squareroot = (x: bigint): bigint => {
   let lo = 0n,
     hi = x
