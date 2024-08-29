@@ -24,6 +24,7 @@ import {
   MulwType,
   ReplaceType,
   SelectBytesType,
+  SelectUint64Type,
   TxnType,
 } from './op-types'
 import { bytes } from './primitives'
@@ -90,6 +91,9 @@ export const replace: ReplaceType = (...args) => {
 }
 export const selectBytes: SelectBytesType = (...args) => {
   return ctxMgr.instance.op.selectBytes!(...args)
+}
+export const selectUint64: SelectUint64Type = (...args) => {
+  return ctxMgr.instance.op.selectUint64!(...args)
 }
 
 export const GTxn: GTxnType = new Proxy({} as GTxnType, {

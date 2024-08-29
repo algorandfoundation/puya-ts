@@ -793,4 +793,26 @@ describe('Pure op codes', async () => {
       expect(() => op.selectBytes(a, b, c)).toThrow('Uint64 over or underflow')
     })
   })
+
+  describe('selectUint64', async () => {
+    test.each([
+      [10, 20, 0],
+      [10, 20, 1],
+      [256, 512, 2],
+      [10, MAX_UINT64, true],
+      [MAX_UINT64, 20, false],
+    ])('should select uint64 according to the input', async (a, b, c) => {
+      const avmResult = await getAvmResult<uint64>(appClient, 'verify_select_uint64', a, b, c === true ? 1 : c === false ? 0 : c)
+      const result = op.selectUint64(a, b, c)
+      expect(result.valueOf()).toEqual(avmResult)
+    })
+
+    test.each([
+      [MAX_UINT64 + 1n, MAX_UINT64 + 10n, MAX_UINT64 + 1n],
+      [MAX_UINT512, MAX_UINT512, MAX_UINT512],
+    ])(`should throw error when input overflows to select uint64`, async (a, b, c) => {
+      await expect(getAvmResult<uint64>(appClient, 'verify_select_uint64', a, b, c)).rejects.toThrow(avmIntArgOverflowError)
+      expect(() => op.selectUint64(a, b, c)).toThrow('Uint64 over or underflow')
+    })
+  })
 })
