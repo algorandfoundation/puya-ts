@@ -31,6 +31,7 @@ import {
   ShlType,
   ShrType,
   SqrtType,
+  SubstringType,
   TxnType,
 } from './op-types'
 import { bytes } from './primitives'
@@ -118,6 +119,9 @@ export const shr: ShrType = (...args) => {
 }
 export const sqrt: SqrtType = (...args) => {
   return ctxMgr.instance.op.sqrt!(...args)
+}
+export const substring: SubstringType = (...args) => {
+  return ctxMgr.instance.op.substring!(...args)
 }
 
 export const GTxn: GTxnType = new Proxy({} as GTxnType, {
