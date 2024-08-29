@@ -1005,4 +1005,40 @@ describe('Pure op codes', async () => {
       expect(() => op.sqrt(a)).toThrow('Uint64 over or underflow')
     })
   })
+
+  describe('substring', async () => {
+    test.each([
+      ["hello, world.", 5, 5],
+      ["hello, world.", 5, 6],
+      ["hello, world.", 5, 7],
+      ["hello, world.", 12, 13],
+      ["hello, world.", 11, 13],
+      ["hello, world.", 0, 1],
+      ["hello, world.", 0, 2],
+      ["hello, world.", 0, 13],
+      ["", 0, 0],
+    ])('should extract substring from the input', async (a, b, c) => {
+      const avmResult = (await getAvmResultRaw(appClient, 'verify_substring', asUint8Array(a), b, c))!
+      const result = op.substring(a, b, c)
+      expect(asUint8Array(result)).toEqual(avmResult)
+    })
+
+    test.each([
+      ["", 0, 1],
+      ["hello", 5, 7],
+      ["hello", 4, 3],
+      ["hello", 0, 7],
+    ])('should throw error when input is invalid', async (a, b, c) => {
+      await expect(getAvmResultRaw(appClient, 'verify_substring', asUint8Array(a), b, c)).rejects.toThrow(/(substring range beyond length of string)|(substring end before start)/)
+      expect(() => op.substring(a, b, c)).toThrow(/(substring range beyond length of string)|(substring end before start)/)
+    })
+
+    test.each([
+      ["", MAX_UINT64, MAX_UINT64 + 1n],
+      ["hello", MAX_UINT64 + 1n, MAX_UINT64 + 2n],
+    ])('should throw error when input overflows', async (a, b, c) => {
+      await expect(getAvmResultRaw(appClient, 'verify_substring', asUint8Array(a), b, c)).rejects.toThrow(avmIntArgOverflowError)
+      expect(() => op.substring(a, b, c)).toThrow('Uint64 over or underflow')
+    })
+  })
 })

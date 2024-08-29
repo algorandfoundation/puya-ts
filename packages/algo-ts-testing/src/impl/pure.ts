@@ -300,6 +300,23 @@ export const sqrt = (a: internal.primitives.StubUint64Compat): uint64 => {
   return Uint64(sqrtValue)
 }
 
+export const substring = (
+  a: internal.primitives.StubBytesCompat,
+  b: internal.primitives.StubUint64Compat,
+  c: internal.primitives.StubUint64Compat,
+): bytes => {
+  const bytesValue = internal.primitives.BytesCls.fromCompat(a)
+  const start = internal.primitives.Uint64Cls.fromCompat(b).asBigInt()
+  const end = internal.primitives.Uint64Cls.fromCompat(c).asBigInt()
+  if (start > end) {
+    internal.errors.codeError('substring end before start')
+  }
+  if (end > bytesValue.length.asNumber()) {
+    internal.errors.codeError('substring range beyond length of string')
+  }
+  return bytesValue.slice(start, end).asAlgoTs()
+}
+
 const squareroot = (x: bigint): bigint => {
   let lo = 0n,
     hi = x
