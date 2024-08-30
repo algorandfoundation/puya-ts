@@ -21,6 +21,7 @@ import {
   GlobalType,
   GTxnType,
   ItobType,
+  JsonRefType,
   MulwType,
   ReplaceType,
   SelectBytesType,
@@ -123,6 +124,12 @@ export const sqrt: SqrtType = (...args) => {
 export const substring: SubstringType = (...args) => {
   return ctxMgr.instance.op.substring!(...args)
 }
+
+export const JsonRef: JsonRefType = new Proxy({} as JsonRefType, {
+  get: (_target, prop) => {
+    return Reflect.get(ctxMgr.instance.op.JsonRef!, prop)
+  },
+})
 
 export const GTxn: GTxnType = new Proxy({} as GTxnType, {
   get: (_target, prop) => {
