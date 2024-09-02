@@ -22,6 +22,7 @@ import {
   GTxnType,
   ItobType,
   JsonRefType,
+  Keccak256Type,
   MulwType,
   ReplaceType,
   SelectBytesType,
@@ -29,6 +30,9 @@ import {
   SetBitBytesType,
   SetBitUint64Type,
   SetBytesType,
+  Sha256Type,
+  Sha3_256Type,
+  Sha512_256Type,
   ShlType,
   ShrType,
   SqrtType,
@@ -124,12 +128,24 @@ export const sqrt: SqrtType = (...args) => {
 export const substring: SubstringType = (...args) => {
   return ctxMgr.instance.op.substring!(...args)
 }
-
 export const JsonRef: JsonRefType = new Proxy({} as JsonRefType, {
   get: (_target, prop) => {
     return Reflect.get(ctxMgr.instance.op.JsonRef!, prop)
   },
 })
+
+export const sha256: Sha256Type = (...args) => {
+  return ctxMgr.instance.op.sha256!(...args)
+}
+export const sha3_256: Sha3_256Type = (...args) => {
+  return ctxMgr.instance.op.sha3_256!(...args)
+}
+export const keccak256: Keccak256Type = (...args) => {
+  return ctxMgr.instance.op.keccak256!(...args)
+}
+export const sha512_256: Sha512_256Type = (...args) => {
+  return ctxMgr.instance.op.sha512_256!(...args)
+}
 
 export const GTxn: GTxnType = new Proxy({} as GTxnType, {
   get: (_target, prop) => {
