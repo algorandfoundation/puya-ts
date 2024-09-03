@@ -23,7 +23,7 @@ describe('Bytes', async () => {
 
       const uint8ArrayA = internal.encodingUtil.utf8ToUint8Array(a)
       const uint8ArrayB = internal.encodingUtil.utf8ToUint8Array(b)
-      const avmResult = (await getAvmResultRaw(appClient, `verify_bytes_add`, uint8ArrayA, uint8ArrayB, padASize, padBSize))!
+      const avmResult = (await getAvmResultRaw({ appClient }, `verify_bytes_add`, uint8ArrayA, uint8ArrayB, padASize, padBSize))!
 
       const bytesA = Bytes(padUint8Array(uint8ArrayA, padASize))
       const bytesB = Bytes(padUint8Array(uint8ArrayB, padBSize))
@@ -43,7 +43,7 @@ describe('Bytes', async () => {
       const uint8ArrayA = internal.encodingUtil.utf8ToUint8Array(a)
       const uint8ArrayB = internal.encodingUtil.utf8ToUint8Array(b)
 
-      await expect(getAvmResultRaw(appClient, `verify_bytes_add`, uint8ArrayA, uint8ArrayB, padASize, padBSize)).rejects.toThrow(/concat produced a too big \(\d+\) byte-array/)
+      await expect(getAvmResultRaw({ appClient }, `verify_bytes_add`, uint8ArrayA, uint8ArrayB, padASize, padBSize)).rejects.toThrow(/concat produced a too big \(\d+\) byte-array/)
 
       const bytesA = Bytes(padUint8Array(uint8ArrayA, padASize))
       const bytesB = Bytes(padUint8Array(uint8ArrayB, padBSize))
@@ -79,7 +79,7 @@ describe('Bytes', async () => {
 
         const uint8ArrayA = internal.encodingUtil.utf8ToUint8Array(a)
         const uint8ArrayB = internal.encodingUtil.utf8ToUint8Array(b)
-        const avmResult = (await getAvmResultRaw(appClient, `verify_bytes_${op}`, uint8ArrayA, uint8ArrayB))!
+        const avmResult = (await getAvmResultRaw({ appClient }, `verify_bytes_${op}`, uint8ArrayA, uint8ArrayB))!
         let result = getStubResult(bytesA, bytesB)
         let resultUint8Array = asUint8Array(result)
         expect(resultUint8Array, `for values: ${a}, ${b}`).toEqual(avmResult)
@@ -96,7 +96,7 @@ describe('Bytes', async () => {
   ])('bitwise invert', async (a, padSize) => {
     it(`~${a}`, async () => {
       const uint8ArrayA = internal.encodingUtil.utf8ToUint8Array(a)
-      const avmResult = (await getAvmResultRaw(appClient, `verify_bytes_not`, uint8ArrayA, padSize))!
+      const avmResult = (await getAvmResultRaw({ appClient }, `verify_bytes_not`, uint8ArrayA, padSize))!
 
       const bytesA = Bytes(padUint8Array(uint8ArrayA, padSize))
       let result = bytesA.bitwiseInvert()
@@ -121,7 +121,7 @@ describe('Bytes', async () => {
       const uint8ArrayA = internal.encodingUtil.utf8ToUint8Array(a)
       const uint8ArrayB = internal.encodingUtil.utf8ToUint8Array(b)
 
-      const avmResult = await getAvmResult<boolean>(appClient, `verify_bytes_eq`, uint8ArrayA, uint8ArrayB)
+      const avmResult = await getAvmResult<boolean>({ appClient }, `verify_bytes_eq`, uint8ArrayA, uint8ArrayB)
       let result = bytesA.equals(bytesB)
       expect(result, `for values: ${a}, ${b}`).toEqual(avmResult)
     })
@@ -141,7 +141,7 @@ describe('Bytes', async () => {
       const uint8ArrayA = internal.encodingUtil.utf8ToUint8Array(a)
       const uint8ArrayB = internal.encodingUtil.utf8ToUint8Array(b)
 
-      const avmResult = await getAvmResult<boolean>(appClient, `verify_bytes_ne`, uint8ArrayA, uint8ArrayB)
+      const avmResult = await getAvmResult<boolean>({ appClient }, `verify_bytes_ne`, uint8ArrayA, uint8ArrayB)
       let result = !bytesA.equals(bytesB)
       expect(result, `for values: ${a}, ${b}`).toEqual(avmResult)
     })
