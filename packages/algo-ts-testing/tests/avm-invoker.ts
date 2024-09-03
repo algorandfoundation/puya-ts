@@ -3,6 +3,7 @@ import { ABIAppCallArg, ABIReturn } from '@algorandfoundation/algokit-utils/type
 import { ApplicationClient } from '@algorandfoundation/algokit-utils/types/app-client'
 import { AppSpec } from '@algorandfoundation/algokit-utils/types/app-spec'
 import { nullLogger } from '@algorandfoundation/algokit-utils/types/logging'
+import { SendTransactionParams } from '@algorandfoundation/algokit-utils/types/transaction'
 import { ABIValue } from 'algosdk'
 import { randomUUID } from 'crypto'
 
@@ -17,8 +18,8 @@ export const getAlgorandAppClient = async (appSpec: AppSpec): Promise<Applicatio
   return appClient
 }
 
-const inovkeMethod = async (appClient: ApplicationClient, method: string, ...methodArgs: ABIAppCallArg[]): Promise<ABIReturn> => {
-  const response = await appClient.call({ method, methodArgs, note: randomUUID() })
+const inovkeMethod = async (appClient: ApplicationClient, method: string, sendParams?: SendTransactionParams, ...methodArgs: ABIAppCallArg[]): Promise<ABIReturn> => {
+  const response = await appClient.call({ method, methodArgs, note: randomUUID(), sendParams })
   if (!response.return) {
     throw new Error(`${method} did not return a value`)
   }
@@ -28,12 +29,12 @@ const inovkeMethod = async (appClient: ApplicationClient, method: string, ...met
   return response.return
 }
 
-export const getAvmResult = async <TResult extends ABIValue>(appClient: ApplicationClient, method: string, ...methodArgs: ABIAppCallArg[]): Promise<TResult> => {
-  const result = await inovkeMethod(appClient, method, ...methodArgs)
+export const getAvmResult = async <TResult extends ABIValue>({ appClient, sendParams }: { appClient: ApplicationClient, sendParams?: SendTransactionParams }, method: string, ...methodArgs: ABIAppCallArg[]): Promise<TResult> => {
+  const result = await inovkeMethod(appClient, method, sendParams, ...methodArgs)
   return result.returnValue as TResult
 }
 
-export const getAvmResultRaw = async (appClient: ApplicationClient, method: string, ...methodArgs: ABIAppCallArg[]): Promise<Uint8Array | undefined> => {
-  const result = await inovkeMethod(appClient, method, ...methodArgs)
+export const getAvmResultRaw = async ({ appClient, sendParams }: { appClient: ApplicationClient, sendParams?: SendTransactionParams }, method: string, ...methodArgs: ABIAppCallArg[]): Promise<Uint8Array | undefined> => {
+  const result = await inovkeMethod(appClient, method, sendParams, ...methodArgs)
   return result.rawReturnValue?.slice(ARC4_PREFIX_LENGTH)
 }

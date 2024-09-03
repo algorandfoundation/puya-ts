@@ -39,7 +39,6 @@ import {
   SubstringType,
   TxnType,
 } from './op-types'
-import { bytes } from './primitives'
 
 export const addw: AddwType = (...args) => {
   return ctxMgr.instance.op.addw!(...args)
@@ -146,6 +145,9 @@ export const keccak256: Keccak256Type = (...args) => {
 export const sha512_256: Sha512_256Type = (...args) => {
   return ctxMgr.instance.op.sha512_256!(...args)
 }
+export const ed25519verifyBare: Ed25519verifyBareType = (...args) => {
+  return ctxMgr.instance.op.ed25519verifyBare!(...args)
+}
 
 export const GTxn: GTxnType = new Proxy({} as GTxnType, {
   get: (_target, prop) => {
@@ -164,7 +166,3 @@ export const Global: GlobalType = new Proxy({} as GlobalType, {
     return Reflect.get(ctxMgr.instance.op.Global!, prop)
   },
 })
-
-export const ed25519verifyBare: Ed25519verifyBareType = (a: bytes, b: bytes, c: bytes) => {
-  throw new Error('TODO')
-}

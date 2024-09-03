@@ -56,7 +56,7 @@ describe('BigUint', async () => {
       const bytesB = internal.encodingUtil.bigIntToUint8Array(bigUintB.valueOf())
 
       it(`${a} ${operator} ${b}`, async () => {
-        const avmResult = await getAvmResult<boolean>(appClient, `verify_biguint_${op}`, bytesA, bytesB)
+        const avmResult = await getAvmResult<boolean>({ appClient }, `verify_biguint_${op}`, bytesA, bytesB)
         let result = getStubResult(bigUintA, bigUintB)
         expect(result, `for values: ${a}, ${b}`).toBe(avmResult)
 
@@ -88,15 +88,15 @@ describe('BigUint', async () => {
       const paddedBigUintB = BigUint(Bytes(paddedBytesB))
 
       it(`${a} ${operator} ${b}`, async () => {
-        let avmResult = await getAvmResult<boolean>(appClient, `verify_biguint_${op}`, bytesA, paddedBytesB)
+        let avmResult = await getAvmResult<boolean>({ appClient }, `verify_biguint_${op}`, bytesA, paddedBytesB)
         let result = getStubResult(bigUintA, paddedBigUintB)
         expect(result, `for padded b: ${a}, ${b}`).toBe(avmResult)
 
-        avmResult = await getAvmResult<boolean>(appClient, `verify_biguint_${op}`, paddedBytesA, bytesB)
+        avmResult = await getAvmResult<boolean>({ appClient }, `verify_biguint_${op}`, paddedBytesA, bytesB)
         result = getStubResult(paddedBigUintA, bigUintB)
         expect(result, `for padded a: ${a}, ${b}`).toBe(avmResult)
 
-        avmResult = await getAvmResult<boolean>(appClient, `verify_biguint_${op}`, paddedBytesA, paddedBytesB)
+        avmResult = await getAvmResult<boolean>({ appClient }, `verify_biguint_${op}`, paddedBytesA, paddedBytesB)
         result = getStubResult(paddedBigUintA, paddedBigUintB)
         expect(result, `for padded a and b: ${a}, ${b}`).toBe(avmResult)
       })
@@ -116,7 +116,7 @@ describe('BigUint', async () => {
       const uintB = (typeof b === 'bigint') ? Uint64(b) : Uint64(b)
 
       it(`${a} ${operator} ${b}`, async () => {
-        let avmResult = await getAvmResult<boolean>(appClient, `verify_biguint_${op}_uint64`, bytesA, b)
+        let avmResult = await getAvmResult<boolean>({ appClient }, `verify_biguint_${op}_uint64`, bytesA, b)
         let result = getStubResult(bigUintA, uintB)
         expect(result, `for values: ${a}, ${b}`).toBe(avmResult)
       })
@@ -135,7 +135,7 @@ describe('BigUint', async () => {
       const bigUintB = BigUint(Bytes(bytesB))
 
       it(`${a} ${operator} ${b}`, async () => {
-        await expect(getAvmResult<boolean>(appClient, `verify_biguint_${op}`, bytesA, bytesB)).rejects.toThrow('math attempted on large byte-array')
+        await expect(getAvmResult<boolean>({ appClient }, `verify_biguint_${op}`, bytesA, bytesB)).rejects.toThrow('math attempted on large byte-array')
         expect(() => getStubResult(bigUintA, bigUintB)).toThrow('BigUint over or underflow')
 
         expect(() => getStubResult(a, bigUintB)).toThrow('BigUint over or underflow')
@@ -163,7 +163,7 @@ describe('BigUint', async () => {
       const bytesA = internal.encodingUtil.bigIntToUint8Array(bigUintA.valueOf())
       const bytesB = internal.encodingUtil.bigIntToUint8Array(bigUintB.valueOf())
 
-      const avmResult = (await getAvmResultRaw(appClient, 'verify_biguint_add', bytesA, bytesB))!
+      const avmResult = (await getAvmResultRaw({ appClient }, 'verify_biguint_add', bytesA, bytesB))!
       const avmResultValue = internal.encodingUtil.uint8ArrayToBigInt(avmResult)
       let result = bigUintA + bigUintB
       expect(result.valueOf(), `for values: ${a}, ${b}`).toBe(avmResultValue)
@@ -192,7 +192,7 @@ describe('BigUint', async () => {
       const bytesA = internal.encodingUtil.bigIntToUint8Array(bigUintA.valueOf())
       const bytesB = internal.encodingUtil.bigIntToUint8Array(bigUintB.valueOf())
 
-      const avmResult = (await getAvmResultRaw(appClient, 'verify_biguint_add', bytesA, bytesB))!
+      const avmResult = (await getAvmResultRaw({ appClient }, 'verify_biguint_add', bytesA, bytesB))!
       const avmResultValue = internal.encodingUtil.uint8ArrayToBigInt(avmResult)
       let result = bigUintA + bigUintB
       expect(result.valueOf(), `for values: ${a}, ${b}`).toBe(avmResultValue)
@@ -220,7 +220,7 @@ describe('BigUint', async () => {
     const bigUintB = BigUint(Bytes(bytesB))
 
     it(`${a} + ${b}`, async () => {
-      await expect(getAvmResultRaw(appClient, 'verify_biguint_add', bytesA, bytesB)).rejects.toThrow('math attempted on large byte-array')
+      await expect(getAvmResultRaw({ appClient }, 'verify_biguint_add', bytesA, bytesB)).rejects.toThrow('math attempted on large byte-array')
       expect(() => bigUintA + bigUintB).toThrow('BigUint over or underflow')
 
       if (typeof a === 'bigint') {
@@ -248,7 +248,7 @@ describe('BigUint', async () => {
       const bytesA = internal.encodingUtil.bigIntToUint8Array(bigUintA.valueOf())
       const bytesB = internal.encodingUtil.bigIntToUint8Array(bigUintB.valueOf())
 
-      const avmResult = (await getAvmResultRaw(appClient, 'verify_biguint_sub', bytesA, bytesB))!
+      const avmResult = (await getAvmResultRaw({ appClient }, 'verify_biguint_sub', bytesA, bytesB))!
       const avmResultValue = internal.encodingUtil.uint8ArrayToBigInt(avmResult)
       let result = bigUintA - bigUintB
       expect(result.valueOf(), `for values: ${a}, ${b}`).toBe(avmResultValue)
@@ -278,7 +278,7 @@ describe('BigUint', async () => {
       const bytesA = internal.encodingUtil.bigIntToUint8Array(bigUintA.valueOf())
       const bytesB = internal.encodingUtil.bigIntToUint8Array(bigUintB.valueOf())
 
-      await expect(getAvmResultRaw(appClient, 'verify_biguint_sub', bytesA, bytesB)).rejects.toThrow('math would have negative result')
+      await expect(getAvmResultRaw({ appClient }, 'verify_biguint_sub', bytesA, bytesB)).rejects.toThrow('math would have negative result')
       expect(() => bigUintA - bigUintB).toThrow('BigUint underflow')
 
       if (typeof a === 'bigint') {
@@ -302,7 +302,7 @@ describe('BigUint', async () => {
     const bigUintB = BigUint(Bytes(bytesB))
 
     it(`${a} - ${b}`, async () => {
-      await expect(getAvmResultRaw(appClient, 'verify_biguint_sub', bytesA, bytesB)).rejects.toThrow('math attempted on large byte-array')
+      await expect(getAvmResultRaw({ appClient }, 'verify_biguint_sub', bytesA, bytesB)).rejects.toThrow('math attempted on large byte-array')
       expect(() => bigUintA - bigUintB).toThrow('BigUint over or underflow')
 
       if (typeof a === 'bigint') {
@@ -329,7 +329,7 @@ describe('BigUint', async () => {
       const bytesA = internal.encodingUtil.bigIntToUint8Array(bigUintA.valueOf())
       const bytesB = internal.encodingUtil.bigIntToUint8Array(bigUintB.valueOf())
 
-      const avmResult = (await getAvmResultRaw(appClient, 'verify_biguint_mul', bytesA, bytesB))!
+      const avmResult = (await getAvmResultRaw({ appClient }, 'verify_biguint_mul', bytesA, bytesB))!
       const avmResultValue = internal.encodingUtil.uint8ArrayToBigInt(avmResult)
       let result = bigUintA * bigUintB
       expect(result.valueOf(), `for values: ${a}, ${b}`).toBe(avmResultValue)
@@ -357,7 +357,7 @@ describe('BigUint', async () => {
       const bytesA = internal.encodingUtil.bigIntToUint8Array(bigUintA.valueOf())
       const bytesB = internal.encodingUtil.bigIntToUint8Array(bigUintB.valueOf())
 
-      const avmResult = (await getAvmResultRaw(appClient, 'verify_biguint_mul', bytesA, bytesB))!
+      const avmResult = (await getAvmResultRaw({ appClient }, 'verify_biguint_mul', bytesA, bytesB))!
       const avmResultValue = internal.encodingUtil.uint8ArrayToBigInt(avmResult)
       let result = bigUintA * bigUintB
       expect(result.valueOf(), `for values: ${a}, ${b}`).toBe(avmResultValue)
@@ -385,7 +385,7 @@ describe('BigUint', async () => {
       const bigUintA = BigUint(Bytes(bytesA))
       const bigUintB = BigUint(Bytes(bytesB))
 
-      await expect(getAvmResultRaw(appClient, 'verify_biguint_mul', bytesA, bytesB)).rejects.toThrow('math attempted on large byte-array')
+      await expect(getAvmResultRaw({ appClient }, 'verify_biguint_mul', bytesA, bytesB)).rejects.toThrow('math attempted on large byte-array')
       expect(() => bigUintA * bigUintB).toThrow('BigUint over or underflow')
 
       if (typeof a === 'bigint') {
@@ -412,7 +412,7 @@ describe('BigUint', async () => {
       const bytesA = internal.encodingUtil.bigIntToUint8Array(bigUintA.valueOf())
       const bytesB = internal.encodingUtil.bigIntToUint8Array(bigUintB.valueOf())
 
-      const avmResult = (await getAvmResultRaw(appClient, 'verify_biguint_div', bytesA, bytesB))!
+      const avmResult = (await getAvmResultRaw({ appClient }, 'verify_biguint_div', bytesA, bytesB))!
       const avmResultValue = internal.encodingUtil.uint8ArrayToBigInt(avmResult)
       let result = bigUintA / bigUintB
       expect(result.valueOf(), `for values: ${a}, ${b}`).toBe(avmResultValue)
@@ -440,7 +440,7 @@ describe('BigUint', async () => {
       const bytesA = internal.encodingUtil.bigIntToUint8Array(bigUintA.valueOf())
       const bytesB = internal.encodingUtil.bigIntToUint8Array(0n)
 
-      await expect(getAvmResultRaw(appClient, 'verify_biguint_div', bytesA, bytesB)).rejects.toThrow('division by zero')
+      await expect(getAvmResultRaw({ appClient }, 'verify_biguint_div', bytesA, bytesB)).rejects.toThrow('division by zero')
       expect(() => bigUintA / bigUintB).toThrow('Division by zero')
 
       if (typeof a === 'bigint') {
@@ -461,7 +461,7 @@ describe('BigUint', async () => {
       const bigUintA = BigUint(Bytes(bytesA))
       const bigUintB = BigUint(Bytes(bytesB))
 
-      await expect(getAvmResultRaw(appClient, 'verify_biguint_div', bytesA, bytesB)).rejects.toThrow('math attempted on large byte-array')
+      await expect(getAvmResultRaw({ appClient }, 'verify_biguint_div', bytesA, bytesB)).rejects.toThrow('math attempted on large byte-array')
       expect(() => bigUintA / bigUintB).toThrow('BigUint over or underflow')
 
       if (typeof a === 'bigint') {
@@ -488,7 +488,7 @@ describe('BigUint', async () => {
       const bytesA = internal.encodingUtil.bigIntToUint8Array(bigUintA.valueOf())
       const bytesB = internal.encodingUtil.bigIntToUint8Array(bigUintB.valueOf())
 
-      const avmResult = (await getAvmResultRaw(appClient, 'verify_biguint_mod', bytesA, bytesB))!
+      const avmResult = (await getAvmResultRaw({ appClient }, 'verify_biguint_mod', bytesA, bytesB))!
       const avmResultValue = internal.encodingUtil.uint8ArrayToBigInt(avmResult)
       let result = bigUintA % bigUintB
       expect(result.valueOf(), `for values: ${a}, ${b}`).toBe(avmResultValue)
@@ -516,7 +516,7 @@ describe('BigUint', async () => {
       const bytesA = internal.encodingUtil.bigIntToUint8Array(bigUintA.valueOf())
       const bytesB = internal.encodingUtil.bigIntToUint8Array(0n)
 
-      await expect(getAvmResultRaw(appClient, 'verify_biguint_mod', bytesA, bytesB)).rejects.toThrow('modulo by zero')
+      await expect(getAvmResultRaw({ appClient }, 'verify_biguint_mod', bytesA, bytesB)).rejects.toThrow('modulo by zero')
       expect(() => bigUintA % bigUintB).toThrow('Division by zero')
 
       if (typeof a === 'bigint') {
@@ -537,7 +537,7 @@ describe('BigUint', async () => {
       const bigUintA = BigUint(Bytes(bytesA))
       const bigUintB = BigUint(Bytes(bytesB))
 
-      await expect(getAvmResultRaw(appClient, 'verify_biguint_mod', bytesA, bytesB)).rejects.toThrow('math attempted on large byte-array')
+      await expect(getAvmResultRaw({ appClient }, 'verify_biguint_mod', bytesA, bytesB)).rejects.toThrow('math attempted on large byte-array')
       expect(() => bigUintA % bigUintB).toThrow('BigUint over or underflow')
 
       if (typeof a === 'bigint') {
@@ -586,7 +586,7 @@ describe('BigUint', async () => {
       const bytesB = internal.encodingUtil.bigIntToUint8Array(bigUintB.valueOf())
 
       it(`${a} ${operator} ${b}`, async () => {
-        const avmResult = (await getAvmResultRaw(appClient, `verify_biguint_${op}`, bytesA, bytesB))!
+        const avmResult = (await getAvmResultRaw({ appClient }, `verify_biguint_${op}`, bytesA, bytesB))!
         const avmResultValue = internal.encodingUtil.uint8ArrayToBigInt(avmResult)
         let result = getStubResult(bigUintA, bigUintB)
         expect(result.valueOf(), `for values: ${a}, ${b}`).toBe(avmResultValue)
