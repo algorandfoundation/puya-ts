@@ -9,6 +9,9 @@ import {
   ConcatType,
   DivmodwType,
   DivwType,
+  EcdsaPkDecompressType,
+  EcdsaPkRecoverType,
+  EcdsaVerifyType,
   Ed25519verifyBareType,
   ExpType,
   ExpwType,
@@ -147,6 +150,15 @@ export const sha512_256: Sha512_256Type = (...args) => {
 }
 export const ed25519verifyBare: Ed25519verifyBareType = (...args) => {
   return ctxMgr.instance.op.ed25519verifyBare!(...args)
+}
+export const ecdsaVerify: EcdsaVerifyType = (...args) => {
+  return ctxMgr.instance.op.ecdsaVerify!(...args)
+}
+export const ecdsaPkRecover: EcdsaPkRecoverType = (...args) => {
+  return ctxMgr.instance.op.ecdsaPkRecover!(...args)
+}
+export const ecdsaPkDecompress: EcdsaPkDecompressType = (...args) => {
+  return ctxMgr.instance.op.ecdsaPkDecompress!(...args)
 }
 
 export const GTxn: GTxnType = new Proxy({} as GTxnType, {
