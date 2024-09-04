@@ -181,7 +181,7 @@ describe('crypto op codes', async () => {
     const b = internal.primitives.BytesCls.fromHex("372a3afb42f55449c94aaa5f274f26543e77e8d8af4babee1a6fbc1c0391aa9e6e0b8d8d7f4ed045d5b517fea8ad3566025ae90d2f29f632e38384b4c4f5b9eb741c6e446b0f540c1b3761d814438b04")
     const c = internal.primitives.BytesCls.fromHex("3a2740da7a0788ebb12a52154acbcca1813c128ca0b249e93f8eb6563fee418d")
 
-    it('should throw not impelemented error', async () => {
+    it('should throw not available error', async () => {
       expect(() => op.vrfVerify(internal.opTypes.VrfVerify.VrfAlgorand, a, b, c)).toThrow('vrfVerify is not available in test context')
     })
 
@@ -194,6 +194,17 @@ describe('crypto op codes', async () => {
       expect(asUint8Array(result[0])).toEqual(new Uint8Array(avmResult[0]))
       expect(result[1]).toEqual(avmResult[1])
 
+    })
+  })
+
+  describe('EllipticCurve', async () => {
+    it('should throw not available error', async () => {
+      expect(() => op.EllipticCurve.add(internal.opTypes.Ec.BN254g2, Bytes(""), Bytes(""))).toThrow('EllipticCurve.add is not available in test context')
+      expect(() => op.EllipticCurve.mapTo(internal.opTypes.Ec.BN254g2, Bytes(""))).toThrow('EllipticCurve.mapTo is not available in test context')
+      expect(() => op.EllipticCurve.pairingCheck(internal.opTypes.Ec.BN254g2, Bytes(""), Bytes(""))).toThrow('EllipticCurve.pairingCheck is not available in test context')
+      expect(() => op.EllipticCurve.scalarMul(internal.opTypes.Ec.BN254g2, Bytes(""), Bytes(""))).toThrow('EllipticCurve.scalarMul is not available in test context')
+      expect(() => op.EllipticCurve.scalarMulMulti(internal.opTypes.Ec.BN254g2, Bytes(""), Bytes(""))).toThrow('EllipticCurve.scalarMulMulti is not available in test context')
+      expect(() => op.EllipticCurve.subgroupCheck(internal.opTypes.Ec.BN254g2, Bytes(""))).toThrow('EllipticCurve.subgroupCheck is not available in test context')
     })
   })
 })

@@ -13,6 +13,7 @@ import {
   EcdsaPkRecoverType,
   EcdsaVerifyType,
   Ed25519verifyBareType,
+  EllipticCurveType,
   ExpType,
   ExpwType,
   ExtractType,
@@ -165,6 +166,11 @@ export const vrfVerify: VrfVerifyType = (...args) => {
   return ctxMgr.instance.op.vrfVerify!(...args)
 }
 
+export const EllipticCurve: EllipticCurveType = new Proxy({} as EllipticCurveType, {
+  get: (_target, prop) => {
+    return Reflect.get(ctxMgr.instance.op.EllipticCurve!, prop)
+  },
+})
 export const GTxn: GTxnType = new Proxy({} as GTxnType, {
   get: (_target, prop) => {
     return Reflect.get(ctxMgr.instance.op.GTxn!, prop)
