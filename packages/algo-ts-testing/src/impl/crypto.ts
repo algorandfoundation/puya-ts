@@ -90,7 +90,9 @@ export const ecdsaPkRecover = (
     recoveryId.asNumber(),
   )
 
-  return [Bytes.fromHex(pubKey.getX().toString('hex')), Bytes.fromHex(pubKey.getY().toString('hex'))]
+  const x = pubKey.getX().toArray('be')
+  const y = pubKey.getY().toArray('be')
+  return [Bytes(new Uint8Array(x)), Bytes(new Uint8Array(y))]
 }
 
 export const ecdsaPkDecompress = (v: internal.opTypes.Ecdsa, a: internal.primitives.StubBytesCompat): readonly [bytes, bytes] => {
@@ -99,7 +101,10 @@ export const ecdsaPkDecompress = (v: internal.opTypes.Ecdsa, a: internal.primiti
   const ecdsa = new ec(curveMap[v])
   const keyPair = ecdsa.keyFromPublic(bytesA.asUint8Array())
   const pubKey = keyPair.getPublic()
-  return [Bytes.fromHex(pubKey.getX().toString('hex')), Bytes.fromHex(pubKey.getY().toString('hex'))]
+
+  const x = pubKey.getX().toArray('be')
+  const y = pubKey.getY().toArray('be')
+  return [Bytes(new Uint8Array(x)), Bytes(new Uint8Array(y))]
 }
 
 export const vrfVerify = (

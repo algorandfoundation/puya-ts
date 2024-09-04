@@ -137,8 +137,12 @@ describe('crypto op codes', async () => {
   describe('ecdsaPkRecover', async () => {
     it('should be able to recover k1 public key', async () => {
       const testData = generateEcdsaTestData(internal.opTypes.Ecdsa.Secp256k1)
-      const avmResult = await getAvmResult<uint64[][]>({ appClient, sendParams: { fee: AlgoAmount.Algos(5000) } }, 'verify_ecdsa_recover_k1', asUint8Array(testData.data), testData.recoveryId.asNumber(), asUint8Array(testData.r), asUint8Array(testData.s))
-      const result = op.ecdsaPkRecover(internal.opTypes.Ecdsa.Secp256k1, testData.data, testData.recoveryId, testData.r, testData.s)
+      const a = testData.data
+      const b = testData.recoveryId
+      const c = testData.r
+      const d = testData.s
+      const avmResult = await getAvmResult<uint64[][]>({ appClient, sendParams: { fee: AlgoAmount.Algos(5000) } }, 'verify_ecdsa_recover_k1', asUint8Array(a), b.asNumber(), asUint8Array(c), asUint8Array(d))
+      const result = op.ecdsaPkRecover(internal.opTypes.Ecdsa.Secp256k1, a, b, c, d)
 
       expect(asUint8Array(result[0])).toEqual(new Uint8Array(avmResult[0]))
       expect(asUint8Array(result[1])).toEqual(new Uint8Array(avmResult[1]))
@@ -146,9 +150,13 @@ describe('crypto op codes', async () => {
 
     it('should throw unsupported error when trying to recover r1 public key', async () => {
       const testData = generateEcdsaTestData(internal.opTypes.Ecdsa.Secp256r1)
-      await expect(getAvmResult<uint64[][]>({ appClient, sendParams: { fee: AlgoAmount.Algos(5000) } }, 'verify_ecdsa_recover_r1', asUint8Array(testData.data), testData.recoveryId.asNumber(), asUint8Array(testData.r), asUint8Array(testData.s))).rejects.toThrow('unsupported curve')
+      const a = testData.data
+      const b = testData.recoveryId
+      const c = testData.r
+      const d = testData.s
+      await expect(getAvmResult<uint64[][]>({ appClient, sendParams: { fee: AlgoAmount.Algos(5000) } }, 'verify_ecdsa_recover_r1', asUint8Array(a), b.asNumber(), asUint8Array(c), asUint8Array(d))).rejects.toThrow('unsupported curve')
 
-      expect(() => op.ecdsaPkRecover(internal.opTypes.Ecdsa.Secp256r1, testData.data, testData.recoveryId, testData.r, testData.s)).toThrow('Unsupported ECDSA curve')
+      expect(() => op.ecdsaPkRecover(internal.opTypes.Ecdsa.Secp256r1, a, b, c, d)).toThrow('Unsupported ECDSA curve')
     })
 
   })
@@ -193,7 +201,7 @@ describe('crypto op codes', async () => {
 const generateEcdsaTestData = (v: internal.opTypes.Ecdsa) => {
   const ecdsa = new ec(curveMap[v])
   const keyPair = ecdsa.genKeyPair()
-  const pk = keyPair.getPublic("hex")
+  const pk = keyPair.getPublic("array")
   const data = internal.primitives.BytesCls.fromCompat("test data for ecdsa")
   const messageHash = js_keccak256.create().update(data.asUint8Array()).digest()
   const signature = keyPair.sign(messageHash)
@@ -201,11 +209,11 @@ const generateEcdsaTestData = (v: internal.opTypes.Ecdsa) => {
 
   return {
     "data": internal.primitives.BytesCls.fromCompat(new Uint8Array(messageHash)),
-    "r": internal.primitives.BytesCls.fromHex(signature.r.toString("hex")),
-    "s": internal.primitives.BytesCls.fromHex(signature.s.toString("hex")),
+    "r": internal.primitives.BytesCls.fromCompat(new Uint8Array(signature.r.toArray('be'))),
+    "s": internal.primitives.BytesCls.fromCompat(new Uint8Array(signature.s.toArray('be'))),
     "recoveryId": internal.primitives.Uint64Cls.fromCompat(recoveryId),
-    "pubkeyX": internal.primitives.BytesCls.fromHex(pk.slice(0, 32)),
-    "pubkeyY": internal.primitives.BytesCls.fromHex(pk.slice(32)),
+    "pubkeyX": internal.primitives.BytesCls.fromCompat(new Uint8Array(pk.slice(0, 32))),
+    "pubkeyY": internal.primitives.BytesCls.fromCompat(new Uint8Array(pk.slice(32))),
   }
 }
 
