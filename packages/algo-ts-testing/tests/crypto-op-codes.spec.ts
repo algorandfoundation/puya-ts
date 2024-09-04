@@ -4,7 +4,7 @@ import { AppSpec } from '@algorandfoundation/algokit-utils/types/app-spec';
 import { ec } from 'elliptic';
 import { keccak256 as js_keccak256 } from 'js-sha3';
 import nacl from 'tweetnacl';
-import { afterEach, describe, expect, it, test } from 'vitest';
+import { afterEach, describe, expect, it, test, vi } from 'vitest';
 import { TestExecutionContext } from '../src';
 import { MAX_BYTES_SIZE } from '../src/constants';
 import * as op from '../src/impl/crypto';
@@ -18,6 +18,13 @@ const curveMap = {
   [internal.opTypes.Ecdsa.Secp256r1]: 'p256',
 }
 
+vi.mock('../src/impl/crypto', async (importOriginal) => {
+  const mod = await importOriginal<typeof import('../src/impl/crypto')>()
+  return {
+    ...mod,
+    mockedVrfVerify: vi.fn()
+  }
+})
 describe('crypto op codes', async () => {
   const appClient = await getAlgorandAppClient(appSpecJson as AppSpec)
   const ctx = new TestExecutionContext()
@@ -158,6 +165,27 @@ describe('crypto op codes', async () => {
 
       expect(asUint8Array(result[0])).toEqual(new Uint8Array(avmResult[0]))
       expect(asUint8Array(result[1])).toEqual(new Uint8Array(avmResult[1]))
+    })
+  })
+
+  describe('vrfVerify', async () => {
+    const a = internal.primitives.BytesCls.fromHex("528b9e23d93d0e020a119d7ba213f6beb1c1f3495a217166ecd20f5a70e7c2d7")
+    const b = internal.primitives.BytesCls.fromHex("372a3afb42f55449c94aaa5f274f26543e77e8d8af4babee1a6fbc1c0391aa9e6e0b8d8d7f4ed045d5b517fea8ad3566025ae90d2f29f632e38384b4c4f5b9eb741c6e446b0f540c1b3761d814438b04")
+    const c = internal.primitives.BytesCls.fromHex("3a2740da7a0788ebb12a52154acbcca1813c128ca0b249e93f8eb6563fee418d")
+
+    it('should throw not impelemented error', async () => {
+      expect(() => op.vrfVerify(internal.opTypes.VrfVerify.VrfAlgorand, a, b, c)).toThrow('vrfVerify is not available in test context')
+    })
+
+    it('should return mocked result', async () => {
+      const avmResult = await getAvmResult<[Uint8Array,boolean]>({ appClient, sendParams: { fee: AlgoAmount.Algos(6000) } }, 'verify_vrf_verify', asUint8Array(a), asUint8Array(b), asUint8Array(c))
+      const mockedVrfVerify = (op as any).mockedVrfVerify
+      mockedVrfVerify.mockReturnValue([internal.primitives.BytesCls.fromCompat(new Uint8Array(avmResult[0])), avmResult[1]])
+      const result = mockedVrfVerify(a, b, c)
+
+      expect(asUint8Array(result[0])).toEqual(new Uint8Array(avmResult[0]))
+      expect(result[1]).toEqual(avmResult[1])
+
     })
   })
 })

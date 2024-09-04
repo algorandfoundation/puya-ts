@@ -41,6 +41,7 @@ import {
   SqrtType,
   SubstringType,
   TxnType,
+  VrfVerifyType,
 } from './op-types'
 
 export const addw: AddwType = (...args) => {
@@ -159,6 +160,9 @@ export const ecdsaPkRecover: EcdsaPkRecoverType = (...args) => {
 }
 export const ecdsaPkDecompress: EcdsaPkDecompressType = (...args) => {
   return ctxMgr.instance.op.ecdsaPkDecompress!(...args)
+}
+export const vrfVerify: VrfVerifyType = (...args) => {
+  return ctxMgr.instance.op.vrfVerify!(...args)
 }
 
 export const GTxn: GTxnType = new Proxy({} as GTxnType, {
