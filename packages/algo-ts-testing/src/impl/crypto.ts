@@ -4,6 +4,7 @@ import { sha256 as js_sha256 } from 'js-sha256'
 import { keccak256 as js_keccak256, sha3_256 as js_sha3_256 } from 'js-sha3'
 import { sha512_256 as js_sha512_256 } from 'js-sha512'
 import nacl from 'tweetnacl'
+import { notImplementedError } from '../errors'
 
 export const sha256 = (a: internal.primitives.StubBytesCompat): bytes => {
   const bytesA = internal.primitives.BytesCls.fromCompat(a)
@@ -99,6 +100,15 @@ export const ecdsaPkDecompress = (v: internal.opTypes.Ecdsa, a: internal.primiti
   const keyPair = ecdsa.keyFromPublic(bytesA.asUint8Array())
   const pubKey = keyPair.getPublic()
   return [Bytes.fromHex(pubKey.getX().toString('hex')), Bytes.fromHex(pubKey.getY().toString('hex'))]
+}
+
+export const vrfVerify = (
+  _s: internal.opTypes.VrfVerify,
+  _a: internal.primitives.StubBytesCompat,
+  _b: internal.primitives.StubBytesCompat,
+  _c: internal.primitives.StubBytesCompat,
+): readonly [bytes, boolean] => {
+  notImplementedError('vrfVerify')
 }
 
 const curveMap = {
