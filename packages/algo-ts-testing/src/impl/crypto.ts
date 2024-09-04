@@ -116,6 +116,12 @@ export const vrfVerify = (
   notImplementedError('vrfVerify')
 }
 
+export const EllipticCurve = new Proxy({} as internal.opTypes.EllipticCurveType, {
+  get: (_target, prop) => {
+    notImplementedError(`EllipticCurve.${prop.toString()}`)
+  },
+})
+
 const curveMap = {
   [internal.opTypes.Ecdsa.Secp256k1]: 'secp256k1',
   [internal.opTypes.Ecdsa.Secp256r1]: 'p256',
