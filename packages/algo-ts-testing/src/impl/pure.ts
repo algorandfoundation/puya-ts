@@ -1,7 +1,7 @@
 import { biguint, Bytes, bytes, internal, Uint64, uint64 } from '@algorandfoundation/algo-ts'
 import { BITS_IN_BYTE, MAX_BYTES_SIZE, MAX_UINT64, MAX_UINT8, UINT64_SIZE } from '../constants'
 import { asMaybeBytesCls, asMaybeUint64Cls, binaryStringToBytes } from '../util'
-import { JSONParser } from './json-parser'
+import { notImplementedError } from '../errors'
 
 export const addw = (a: internal.primitives.StubUint64Compat, b: internal.primitives.StubUint64Compat): readonly [uint64, uint64] => {
   const uint64A = internal.primitives.Uint64Cls.fromCompat(a)
@@ -318,64 +318,11 @@ export const substring = (
   return bytesValue.slice(start, end).asAlgoTs()
 }
 
-export const JsonRef = {
-  jsonString(a: internal.primitives.StubBytesCompat, b: internal.primitives.StubBytesCompat): bytes {
-    const bytesA = internal.primitives.BytesCls.fromCompat(a)
-    const bytesB = internal.primitives.BytesCls.fromCompat(b)
-
-    const inputString = bytesA.toString()
-    ensureValidJson(inputString)
-
-    const key = bytesB.toString()
-    const obj = JSONParser.parse(inputString)
-    const result = obj[key]
-    if (result === undefined) {
-      internal.errors.codeError(`key ${key} not found in JSON text`)
-    } else if (!isJsonStringValue(result)) {
-      internal.errors.codeError('value must be a string type')
-    }
-    const stringResult = typeof result === 'object' ? JSON.stringify(result) : result.toString()
-    return Bytes(stringResult)
+export const JsonRef = new Proxy({} as internal.opTypes.JsonRefType, {
+  get: (_target, prop) => {
+    notImplementedError(`JsonRef.${prop.toString()}`)
   },
-
-  jsonUint64(a: internal.primitives.StubBytesCompat, b: internal.primitives.StubBytesCompat): uint64 {
-    const bytesA = internal.primitives.BytesCls.fromCompat(a)
-    const bytesB = internal.primitives.BytesCls.fromCompat(b)
-
-    const inputString = bytesA.toString()
-    ensureValidJson(inputString)
-
-    const obj = JSONParser.parse(inputString)
-    const result = obj[bytesB.toString()]
-    if (result === undefined) {
-      internal.errors.codeError(`key ${bytesB.toString()} not found in JSON text`)
-    } else if (!isJsonBigInt(result)) {
-      internal.errors.codeError('value must be a numeric type')
-    }
-    const bigintResult = BigInt(result)
-
-    const uint64Result = asMaybeUint64Cls(bigintResult)
-    return uint64Result!.asAlgoTs()
-  },
-
-  jsonObject(a: internal.primitives.StubBytesCompat, b: internal.primitives.StubBytesCompat): bytes {
-    const bytesA = internal.primitives.BytesCls.fromCompat(a)
-    const bytesB = internal.primitives.BytesCls.fromCompat(b)
-
-    const inputString = bytesA.toString()
-    ensureValidJson(inputString)
-
-    const obj = JSONParser.parse(inputString)
-    const result = obj[bytesB.toString()]
-    if (result === undefined) {
-      internal.errors.codeError(`key ${bytesB.toString()} not found in JSON text`)
-    } else if (!isJsonObject(result)) {
-      internal.errors.codeError('value must be an object type')
-    }
-    const stringResult = result
-    return Bytes(stringResult)
-  },
-}
+})
 
 const squareroot = (x: bigint): bigint => {
   let lo = 0n,
@@ -423,38 +370,4 @@ const setBit = (binaryString: string, index: number, bit: number): internal.prim
   }
   const updatedString = binaryString.slice(0, index) + bit.toString() + binaryString.slice(index + 1)
   return binaryStringToBytes(updatedString)
-}
-
-const ensureValidJson = (value: string): void => {
-  try {
-    JSONParser.parse(value)
-  } catch {
-    internal.errors.codeError('error while parsing JSON text, invalid json text')
-  }
-}
-const isJsonStringValue = (value: string): boolean => {
-  try {
-    if (typeof value !== 'string') return false
-    JSON.parse(value)
-    return false
-  } catch {
-    return true
-  }
-}
-const isJsonObject = (value: string): boolean => {
-  try {
-    const obj = JSON.parse(value)
-    return typeof obj === 'object'
-  } catch (e) {
-    return false
-  }
-}
-
-const isJsonBigInt = (value: bigint | boolean | number | string): boolean => {
-  try {
-    BigInt(value)
-    return true
-  } catch {
-    return false
-  }
 }
