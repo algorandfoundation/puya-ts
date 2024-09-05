@@ -1,4 +1,5 @@
 import { ctxMgr } from './execution-context'
+
 import {
   AddwType,
   Base64DecodeType,
@@ -28,6 +29,7 @@ import {
   JsonRefType,
   Keccak256Type,
   MulwType,
+  OpsNamespace,
   ReplaceType,
   SelectBytesType,
   SelectUint64Type,
@@ -44,147 +46,72 @@ import {
   TxnType,
   VrfVerifyType,
 } from './op-types'
+import { AnyFunction, DeliberateAny } from './typescript-helpers'
 
-export const addw: AddwType = (...args) => {
-  return ctxMgr.instance.op.addw!(...args)
-}
-export const base64Decode: Base64DecodeType = (...args) => {
-  return ctxMgr.instance.op.base64Decode!(...args)
-}
-export const bitLength: BitLengthType = (...args) => {
-  return ctxMgr.instance.op.bitLength!(...args)
-}
-export const bsqrt: BsqrtType = (...args) => {
-  return ctxMgr.instance.op.bsqrt!(...args)
-}
-export const btoi: BtoiType = (...args) => {
-  return ctxMgr.instance.op.btoi!(...args)
-}
-export const bzero: BzeroType = (...args) => {
-  return ctxMgr.instance.op.bzero!(...args)
-}
-export const concat: ConcatType = (...args) => {
-  return ctxMgr.instance.op.concat!(...args)
-}
-export const divmodw: DivmodwType = (...args) => {
-  return ctxMgr.instance.op.divmodw!(...args)
-}
-export const divw: DivwType = (...args) => {
-  return ctxMgr.instance.op.divw!(...args)
-}
-export const exp: ExpType = (...args) => {
-  return ctxMgr.instance.op.exp!(...args)
-}
-export const expw: ExpwType = (...args) => {
-  return ctxMgr.instance.op.expw!(...args)
-}
-export const extract: ExtractType = (...args) => {
-  return ctxMgr.instance.op.extract!(...args)
-}
-export const extractUint16: ExtractUint16Type = (...args) => {
-  return ctxMgr.instance.op.extractUint16!(...args)
-}
-export const extractUint32: ExtractUint32Type = (...args) => {
-  return ctxMgr.instance.op.extractUint32!(...args)
-}
-export const extractUint64: ExtractUint64Type = (...args) => {
-  return ctxMgr.instance.op.extractUint64!(...args)
-}
-export const getBit: GetBitType = (...args) => {
-  return ctxMgr.instance.op.getBit!(...args)
-}
-export const getBytes: GetBytesType = (...args) => {
-  return ctxMgr.instance.op.getBytes!(...args)
-}
-export const itob: ItobType = (...args) => {
-  return ctxMgr.instance.op.itob!(...args)
-}
-export const mulw: MulwType = (...args) => {
-  return ctxMgr.instance.op.mulw!(...args)
-}
-export const replace: ReplaceType = (...args) => {
-  return ctxMgr.instance.op.replace!(...args)
-}
-export const selectBytes: SelectBytesType = (...args) => {
-  return ctxMgr.instance.op.selectBytes!(...args)
-}
-export const selectUint64: SelectUint64Type = (...args) => {
-  return ctxMgr.instance.op.selectUint64!(...args)
-}
-export const setBitBytes: SetBitBytesType = (...args) => {
-  return ctxMgr.instance.op.setBitBytes!(...args)
-}
-export const setBitUint64: SetBitUint64Type = (...args) => {
-  return ctxMgr.instance.op.setBitUint64!(...args)
-}
-export const setBytes: SetBytesType = (...args) => {
-  return ctxMgr.instance.op.setBytes!(...args)
-}
-export const shl: ShlType = (...args) => {
-  return ctxMgr.instance.op.shl!(...args)
-}
-export const shr: ShrType = (...args) => {
-  return ctxMgr.instance.op.shr!(...args)
-}
-export const sqrt: SqrtType = (...args) => {
-  return ctxMgr.instance.op.sqrt!(...args)
-}
-export const substring: SubstringType = (...args) => {
-  return ctxMgr.instance.op.substring!(...args)
-}
-export const JsonRef: JsonRefType = new Proxy({} as JsonRefType, {
-  get: (_target, prop) => {
-    return Reflect.get(ctxMgr.instance.op.JsonRef!, prop)
-  },
-})
+type KeyIsFunction<TKey extends keyof TObj, TObj> = TKey extends DeliberateAny ? (TObj[TKey] extends AnyFunction ? TKey : never) : never
+type KeyIsNotFunction<TKey extends keyof TObj, TObj> = TKey extends DeliberateAny ? (TObj[TKey] extends AnyFunction ? never : TKey) : never
+type ObjectKeys = KeyIsNotFunction<keyof OpsNamespace, OpsNamespace>
+type FunctionKeys = KeyIsFunction<keyof OpsNamespace, OpsNamespace>
 
-export const sha256: Sha256Type = (...args) => {
-  return ctxMgr.instance.op.sha256!(...args)
-}
-export const sha3_256: Sha3_256Type = (...args) => {
-  return ctxMgr.instance.op.sha3_256!(...args)
-}
-export const keccak256: Keccak256Type = (...args) => {
-  return ctxMgr.instance.op.keccak256!(...args)
-}
-export const sha512_256: Sha512_256Type = (...args) => {
-  return ctxMgr.instance.op.sha512_256!(...args)
-}
-export const ed25519verifyBare: Ed25519verifyBareType = (...args) => {
-  return ctxMgr.instance.op.ed25519verifyBare!(...args)
-}
-export const ecdsaVerify: EcdsaVerifyType = (...args) => {
-  return ctxMgr.instance.op.ecdsaVerify!(...args)
-}
-export const ecdsaPkRecover: EcdsaPkRecoverType = (...args) => {
-  return ctxMgr.instance.op.ecdsaPkRecover!(...args)
-}
-export const ecdsaPkDecompress: EcdsaPkDecompressType = (...args) => {
-  return ctxMgr.instance.op.ecdsaPkDecompress!(...args)
-}
-export const vrfVerify: VrfVerifyType = (...args) => {
-  return ctxMgr.instance.op.vrfVerify!(...args)
+const createFunctionProxy = <TName extends FunctionKeys>(name: TName) => {
+  return (...args: Parameters<OpsNamespace[TName]>): ReturnType<OpsNamespace[TName]> => {
+    const implementation: AnyFunction = (ctxMgr.instance.op as OpsNamespace)[name] as OpsNamespace[TName]
+    return implementation(...args) as ReturnType<OpsNamespace[TName]>
+  }
 }
 
-export const EllipticCurve: EllipticCurveType = new Proxy({} as EllipticCurveType, {
-  get: (_target, prop) => {
-    return Reflect.get(ctxMgr.instance.op.EllipticCurve!, prop)
-  },
-})
-export const GTxn: GTxnType = new Proxy({} as GTxnType, {
-  get: (_target, prop) => {
-    return Reflect.get(ctxMgr.instance.op.GTxn!, prop)
-  },
-})
+const createObjectProxy = <TName extends ObjectKeys>(name: TName) => {
+  return new Proxy(
+    {} as OpsNamespace[TName],
+    {
+      get<TProperty extends keyof OpsNamespace[TName]>(_target: OpsNamespace[TName], property: TProperty): OpsNamespace[TName][TProperty] {
+        return Reflect.get(ctxMgr.instance.op[name]!, property)
+      },
+    } as ProxyHandler<OpsNamespace[TName]>,
+  )
+}
 
-export const Txn: TxnType = new Proxy({} as TxnType, {
-  get: (_target, prop) => {
-    return Reflect.get(ctxMgr.instance.op.Txn!, prop)
-  },
-})
+export const addw: AddwType = createFunctionProxy('addw')
+export const base64Decode: Base64DecodeType = createFunctionProxy('base64Decode')
+export const bitLength: BitLengthType = createFunctionProxy('bitLength')
+export const bsqrt: BsqrtType = createFunctionProxy('bsqrt')
+export const btoi: BtoiType = createFunctionProxy('btoi')
+export const bzero: BzeroType = createFunctionProxy('bzero')
+export const concat: ConcatType = createFunctionProxy('concat')
+export const divmodw: DivmodwType = createFunctionProxy('divmodw')
+export const divw: DivwType = createFunctionProxy('divw')
+export const ecdsaPkDecompress: EcdsaPkDecompressType = createFunctionProxy('ecdsaPkDecompress')
+export const ecdsaPkRecover: EcdsaPkRecoverType = createFunctionProxy('ecdsaPkRecover')
+export const ecdsaVerify: EcdsaVerifyType = createFunctionProxy('ecdsaVerify')
+export const ed25519verifyBare: Ed25519verifyBareType = createFunctionProxy('ed25519verifyBare')
+export const exp: ExpType = createFunctionProxy('exp')
+export const expw: ExpwType = createFunctionProxy('expw')
+export const extract: ExtractType = createFunctionProxy('extract')
+export const extractUint16: ExtractUint16Type = createFunctionProxy('extractUint16')
+export const extractUint32: ExtractUint32Type = createFunctionProxy('extractUint32')
+export const extractUint64: ExtractUint64Type = createFunctionProxy('extractUint64')
+export const getBit: GetBitType = createFunctionProxy('getBit')
+export const getBytes: GetBytesType = createFunctionProxy('getBytes')
+export const itob: ItobType = createFunctionProxy('itob')
+export const keccak256: Keccak256Type = createFunctionProxy('keccak256')
+export const mulw: MulwType = createFunctionProxy('mulw')
+export const replace: ReplaceType = createFunctionProxy('replace')
+export const selectBytes: SelectBytesType = createFunctionProxy('selectBytes')
+export const selectUint64: SelectUint64Type = createFunctionProxy('selectUint64')
+export const setBitBytes: SetBitBytesType = createFunctionProxy('setBitBytes')
+export const setBitUint64: SetBitUint64Type = createFunctionProxy('setBitUint64')
+export const setBytes: SetBytesType = createFunctionProxy('setBytes')
+export const sha256: Sha256Type = createFunctionProxy('sha256')
+export const sha3_256: Sha3_256Type = createFunctionProxy('sha3_256')
+export const sha512_256: Sha512_256Type = createFunctionProxy('sha512_256')
+export const shl: ShlType = createFunctionProxy('shl')
+export const shr: ShrType = createFunctionProxy('shr')
+export const sqrt: SqrtType = createFunctionProxy('sqrt')
+export const substring: SubstringType = createFunctionProxy('substring')
+export const vrfVerify: VrfVerifyType = createFunctionProxy('vrfVerify')
 
-export const Global: GlobalType = new Proxy({} as GlobalType, {
-  get: (_target, prop) => {
-    return Reflect.get(ctxMgr.instance.op.Global!, prop)
-  },
-})
+export const EllipticCurve: EllipticCurveType = createObjectProxy('EllipticCurve')
+export const Global: GlobalType = createObjectProxy('Global')
+export const GTxn: GTxnType = createObjectProxy('GTxn')
+export const JsonRef: JsonRefType = createObjectProxy('JsonRef')
+export const Txn: TxnType = createObjectProxy('Txn')
