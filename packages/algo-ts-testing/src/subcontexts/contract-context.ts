@@ -1,8 +1,9 @@
 import { Application, BaseContract, Bytes, bytes, Contract, internal } from '@algorandfoundation/algo-ts'
 import { hasAbiMetadata } from '../abi-metadata'
+import { lazyContext } from '../context-helpers/internal-context'
 import { getGenericTypeInfo } from '../runtime-helpers'
 import { DeliberateAny } from '../typescript-helpers'
-import { extractGenericTypeArgs, getTestExecutionContext } from '../util'
+import { extractGenericTypeArgs } from '../util'
 
 interface IConstructor<T> {
   new (...args: DeliberateAny[]): T
@@ -60,14 +61,13 @@ export class ContractContext {
   }
 
   private getContractProxyHandler<T extends BaseContract>(): ProxyHandler<IConstructor<T>> {
-    const context = getTestExecutionContext()
     const onConstructed = (instance: BaseContract) => {
       const states = extractStates(instance)
 
-      const application = context.any.application({
+      const application = lazyContext.any.application({
         ...states.totals,
       })
-      context.ledger.addAppIdContractMap(application.id, instance)
+      lazyContext.ledger.addAppIdContractMap(application.id, instance)
       this.#statesMap.set(instance, states)
     }
     return {
@@ -78,9 +78,9 @@ export class ContractContext {
             const orig = Reflect.get(target, prop, receiver)
             if (isArc4 || prop === 'approvalProgram' || prop === 'clearStateProgram') {
               return (...args: DeliberateAny[]): DeliberateAny => {
-                const app = context.ledger.getApplicationForContract(receiver)
-                const txns = [context.any.txn.applicationCall({ appId: app, sender: context.defaultSender })]
-                return context.txn.ensureScope(txns).execute(() => (orig as DeliberateAny).apply(target, args))
+                const app = lazyContext.ledger.getApplicationForContract(receiver)
+                const txns = [lazyContext.any.txn.applicationCall({ appId: app, sender: lazyContext.defaultSender })]
+                return lazyContext.txn.ensureScope(txns).execute(() => (orig as DeliberateAny).apply(target, args))
               }
             }
             return orig
