@@ -1,10 +1,9 @@
 import { Account, Application, Asset, Bytes, bytes, gtxn, internal, Uint64, uint64 } from '@algorandfoundation/algo-ts'
-import { getTestExecutionContext } from '../util'
+import { lazyContext } from '../context-helpers/internal-context'
 
 export const Txn: internal.opTypes.TxnType = {
   get sender(): Account {
-    const context = getTestExecutionContext()
-    const currentTransaction = context.txn.activeTransaction
+    const currentTransaction = lazyContext.txn.activeTransaction
     return currentTransaction.sender
   },
 
@@ -187,8 +186,7 @@ export const Txn: internal.opTypes.TxnType = {
    * Arguments passed to the application in the ApplicationCall transaction
    */
   applicationArgs(a: uint64): bytes {
-    const context = getTestExecutionContext()
-    const currentTransaction = context.txn.activeTransaction
+    const currentTransaction = lazyContext.txn.activeTransaction
     if (currentTransaction.type === gtxn.TransactionType.ApplicationCall) {
       return currentTransaction.appArgs(internal.primitives.Uint64Cls.getNumber(a))
     }
@@ -199,8 +197,7 @@ export const Txn: internal.opTypes.TxnType = {
    * Number of ApplicationArgs
    */
   get numAppArgs(): uint64 {
-    const context = getTestExecutionContext()
-    const currentTransaction = context.txn.activeTransaction
+    const currentTransaction = lazyContext.txn.activeTransaction
     if (currentTransaction.type === gtxn.TransactionType.ApplicationCall) {
       return currentTransaction.numAppArgs
     }

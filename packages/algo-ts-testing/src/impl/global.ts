@@ -1,5 +1,5 @@
 import { Account, Application, bytes, internal, Uint64, uint64 } from '@algorandfoundation/algo-ts'
-import { getTestExecutionContext } from '../util'
+import { lazyContext } from '../context-helpers/internal-context'
 
 export const Global: internal.opTypes.GlobalType = {
   /**
@@ -34,8 +34,7 @@ export const Global: internal.opTypes.GlobalType = {
    * Number of transactions in this atomic transaction group. At least 1
    */
   get groupSize(): uint64 {
-    const context = getTestExecutionContext()
-    const currentTransactionGroup = context.txn.activeGroup.transactions
+    const currentTransactionGroup = lazyContext.txn.activeGroup.transactions
     return Uint64(currentTransactionGroup.length)
   },
 

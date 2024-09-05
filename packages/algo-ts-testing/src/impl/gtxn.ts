@@ -1,5 +1,5 @@
 import { Account, Application, Asset, bytes, gtxn, internal, uint64 } from '@algorandfoundation/algo-ts'
-import { getTestExecutionContext } from '../util'
+import { lazyContext } from '../context-helpers/internal-context'
 
 export const GTxn: internal.opTypes.GTxnType = {
   sender(_t: uint64): Account {
@@ -28,8 +28,7 @@ export const GTxn: internal.opTypes.GTxnType = {
   },
   amount(t: uint64): uint64 {
     const i = internal.primitives.Uint64Cls.getNumber(t)
-    const context = getTestExecutionContext()
-    const currentTransactionGroup = context.txn.activeGroup.transactions
+    const currentTransactionGroup = lazyContext.txn.activeGroup.transactions
     return (currentTransactionGroup[i] as gtxn.PayTxn).amount
   },
   closeRemainderTo(_t: uint64): Account {
@@ -55,8 +54,7 @@ export const GTxn: internal.opTypes.GTxnType = {
   },
   typeEnum(t: uint64): uint64 {
     const i = internal.primitives.Uint64Cls.getNumber(t)
-    const context = getTestExecutionContext()
-    const currentTransactionGroup = context.txn.activeGroup.transactions
+    const currentTransactionGroup = lazyContext.txn.activeGroup.transactions
     return currentTransactionGroup[i].type
   },
   xferAsset(_t: uint64): Asset {

@@ -1,6 +1,7 @@
 import { Account, Application, Bytes } from '@algorandfoundation/algo-ts'
 import algosdk from 'algosdk'
-import { asBigInt, getTestExecutionContext } from '../util'
+import { lazyContext } from '../context-helpers/internal-context'
+import { asBigInt } from '../util'
 
 export class AvmValueGenerator {
   account(account?: Partial<Account>): Account {
@@ -13,13 +14,12 @@ export class AvmValueGenerator {
 
   application(app?: Partial<Application>): Application {
     const { id, ...rest } = app ?? {}
-    const context = getTestExecutionContext()
-    const appId = id ?? context.ledger.appIdIter.next().value
+    const appId = id ?? lazyContext.ledger.appIdIter.next().value
     const application = {
       id: appId,
       ...rest,
     } as Application
-    context.ledger.applications.set(asBigInt(application.id), application)
+    lazyContext.ledger.applications.set(asBigInt(application.id), application)
     return application
   }
 }
