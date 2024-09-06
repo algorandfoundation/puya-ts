@@ -6,8 +6,9 @@ import { logger } from '../logger'
 import { normalisePath } from '../util'
 import type { DeliberateAny } from '../typescript-helpers'
 
+export type SourceFileMapping = Record<string, ts.SourceFile>
 export type CreateProgramResult = {
-  sourceFiles: Record<string, ts.SourceFile>
+  sourceFiles: SourceFileMapping
   program: ts.Program
 }
 

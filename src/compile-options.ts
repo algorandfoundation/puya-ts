@@ -1,11 +1,13 @@
 import path from 'node:path'
 import * as fs from 'node:fs'
 import { globSync } from 'glob'
+import type { LogLevel } from './logger'
 import { logger } from './logger'
 import { PuyaError } from './errors'
 
 export interface CompileOptions {
   filePaths: string[]
+  logLevel: LogLevel
   outputAwst: boolean
   outputAwstJson: boolean
   outDir: string
@@ -24,6 +26,7 @@ export const buildCompileOptions = ({
   outDir: string
   outputAwstJson: boolean
   dryRun: boolean
+  logLevel: LogLevel
 }): CompileOptions => {
   const filePaths = []
 

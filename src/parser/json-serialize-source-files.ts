@@ -1,9 +1,10 @@
 import ts from 'typescript'
 import path from 'node:path'
+import type { SourceFileMapping } from './index'
 
-export function jsonSerializeSourceFiles(ast: Record<string, ts.SourceFile>, programDirectory: string) {
+export function jsonSerializeSourceFiles(sourceFiles: SourceFileMapping, programDirectory: string) {
   return JSON.stringify(
-    Object.fromEntries(Object.entries(ast).map(([key, value]) => [path.join(programDirectory, key), value] as const)),
+    Object.fromEntries(Object.entries(sourceFiles).map(([key, value]) => [path.join(programDirectory, key), value] as const)),
     (key, value) => {
       if (ts.isSourceFile(value)) {
         return value.getFullText().split(/\n/g)

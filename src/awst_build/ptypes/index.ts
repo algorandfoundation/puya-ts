@@ -373,7 +373,7 @@ export class UintNType extends PType {
   readonly name: string
   readonly singleton = false
 
-  get wtype(): WType {
+  get wtype(): ARC4UIntN {
     return new ARC4UIntN({ n: this.n })
   }
 

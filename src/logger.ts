@@ -1,31 +1,52 @@
-import { createColorFormatter } from '@makerx/color-console'
 import { SourceLocation } from './awst/source-location'
 import chalk from 'chalk'
 import { AwstBuildFailureError, CodeError, PuyaError, TodoError } from './errors'
 
-const colorLogger = {
-  info: createColorFormatter(chalk.cyan, chalk.blue, 'info', console),
-  debug: createColorFormatter(chalk.white, chalk.white.bold, 'log', console),
-  warn: createColorFormatter(chalk.yellow, chalk.yellow.bold, 'warn', console),
-  // success: createColorFormatter(chalk.green, chalk.green.bold, 'log', console),
-  error: createColorFormatter(chalk.red, chalk.red.bold, 'error', console),
-  fatal: createColorFormatter(chalk.redBright, chalk.red.bold, 'error', console),
+type ColorFn = (text: string) => string
+const levelConfig: Record<LogEvent['level'], { colorFn: ColorFn; writeFn: (...args: unknown[]) => void; order: number }> = {
+  /* eslint-disable no-console */
+  debug: { colorFn: chalk.green, writeFn: console.debug, order: 0 },
+  info: { colorFn: chalk.green, writeFn: console.info, order: 1 },
+  warn: { colorFn: chalk.yellow, writeFn: console.warn, order: 2 },
+  error: { colorFn: chalk.red, writeFn: console.error, order: 3 },
+  critical: { colorFn: chalk.red, writeFn: console.error, order: 4 },
+  /* eslint-enable no-console */
 }
 
 type NodeOrSourceLocation = SourceLocation | { sourceLocation: SourceLocation }
 
+export enum LogLevel {
+  Error = 'error',
+  Info = 'info',
+  Warn = 'warn',
+  Debug = 'debug',
+  Critical = 'critical',
+}
+
 export type LogEvent = {
-  level: 'error' | 'info' | 'warn' | 'debug' | 'fatal'
+  level: LogLevel
   message: string
   sourceLocation: SourceLocation | undefined
 }
 
 class PuyaLogger {
   private logEvents: LogEvent[] = []
+  private minLogLevel: LogLevel = LogLevel.Debug
+
+  public configure(options?: { outputToConsole?: boolean; minLogLevel?: LogLevel }) {
+    if (options?.outputToConsole !== undefined) this.outputToConsole = options.outputToConsole
+    if (options?.minLogLevel !== undefined) {
+      this.minLogLevel = options.minLogLevel
+    }
+  }
+
   outputToConsole: boolean = true
   constructor() {}
 
   private addLog(level: LogEvent['level'], source: NodeOrSourceLocation | undefined, message: string) {
+    const config = levelConfig[level]
+    if (config.order < levelConfig[this.minLogLevel].order) return
+
     const logEvent: LogEvent = {
       sourceLocation: source ? (source instanceof SourceLocation ? source : source.sourceLocation) : undefined,
       message,
@@ -33,16 +54,20 @@ class PuyaLogger {
     }
     this.logEvents.push(logEvent)
     if (!this.outputToConsole) return
-    const paddedLevel = `     ${logEvent.level}`.slice(-5)
+
+    let logText = `${config.colorFn(logEvent.level)}: ${logEvent.message}`
     if (logEvent.sourceLocation) {
-      colorLogger[logEvent.level]`${logEvent.sourceLocation} [${paddedLevel}] ${logEvent.message}`
-    } else {
-      colorLogger[logEvent.level]`[${paddedLevel}] ${logEvent.message}`
+      logText = `${logEvent.sourceLocation} ${logText}`
     }
+    config.writeFn(logText)
   }
 
   reset(): void {
     this.logEvents = []
+  }
+
+  hasErrors(): boolean {
+    return this.logEvents.some((e) => e.level === 'error')
   }
 
   export(): LogEvent[] {
@@ -54,25 +79,25 @@ class PuyaLogger {
   error(source: NodeOrSourceLocation | undefined | Error, message?: string): void {
     if (source instanceof Error) {
       const stack = source instanceof CodeError ? '' : source.stack
-      this.addLog('error', tryGetSourceLocationFromError(source), `${source.message} \n${stack}`)
+      this.addLog(LogLevel.Error, tryGetSourceLocationFromError(source), `${source.message} \n${stack}`)
       if (source.cause) {
-        this.addLog('error', tryGetSourceLocationFromError(source.cause), `Caused by: ${source.cause}`)
+        this.addLog(LogLevel.Error, tryGetSourceLocationFromError(source.cause), `Caused by: ${source.cause}`)
       }
     } else {
-      this.addLog('error', source, message ?? '')
+      this.addLog(LogLevel.Error, source, message ?? '')
     }
   }
   info(source: NodeOrSourceLocation | undefined, message: string): void {
-    this.addLog('info', source, message)
+    this.addLog(LogLevel.Info, source, message)
   }
   debug(source: NodeOrSourceLocation | undefined, message: string): void {
-    this.addLog('debug', source, message)
+    this.addLog(LogLevel.Debug, source, message)
   }
   warn(source: NodeOrSourceLocation | undefined, message: string): void {
-    this.addLog('warn', source, message)
+    this.addLog(LogLevel.Warn, source, message)
   }
   fatal(source: NodeOrSourceLocation | undefined, message: string): void {
-    this.addLog('fatal', source, message)
+    this.addLog(LogLevel.Critical, source, message)
   }
 }
 
