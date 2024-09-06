@@ -25,20 +25,20 @@ export class SourceLocation {
 
     return new SourceLocation({
       file: normalisePath(sourceFile.fileName, programDirectory),
-      line: startLoc.line,
-      endLine: endLoc.line,
-      column: startLoc.character,
-      endColumn: endLoc.character,
+      line: startLoc.line + 1,
+      endLine: endLoc.line + 1,
+      column: startLoc.character + 1,
+      endColumn: endLoc.character + 1,
     })
   }
 
   static fromFile(sourceFile: ts.SourceFile, programDirectory: string): SourceLocation {
     return new SourceLocation({
       file: normalisePath(sourceFile.fileName, programDirectory),
-      line: 0,
-      endLine: 0,
-      column: 0,
-      endColumn: 0,
+      line: 1,
+      endLine: 1,
+      column: 1,
+      endColumn: 1,
     })
   }
 
@@ -48,10 +48,10 @@ export class SourceLocation {
 
     return new SourceLocation({
       file: normalisePath(sourceFile.fileName, programDirectory),
-      line: startLoc.line,
-      endLine: endLoc.line,
-      column: startLoc.character,
-      endColumn: endLoc.character,
+      line: startLoc.line + 1,
+      endLine: endLoc.line + 1,
+      column: startLoc.character + 1,
+      endColumn: endLoc.character + 1,
     })
   }
 
@@ -60,15 +60,15 @@ export class SourceLocation {
 
     return new SourceLocation({
       file: normalisePath(diagnostic.file.fileName, programDirectory),
-      line: startLoc.line,
-      endLine: startLoc.line,
-      column: startLoc.character,
-      endColumn: startLoc.character,
+      line: startLoc.line + 1,
+      endLine: startLoc.line + 1,
+      column: startLoc.character + 1,
+      endColumn: startLoc.character + 1,
     })
   }
 
   toString() {
-    return `${this.file}:${this.line + 1}:${this.column + 1}`
+    return `${this.file}:${this.line}:${this.column}`
   }
 
   static fromLocations(...sourceLocation: SourceLocation[]): SourceLocation {
