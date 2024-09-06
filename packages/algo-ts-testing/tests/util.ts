@@ -1,4 +1,4 @@
-import { biguint, Bytes, bytes, internal, uint64 } from '@algorandfoundation/algo-ts'
+import { Bytes, bytes, internal } from '@algorandfoundation/algo-ts'
 import { createHash } from 'crypto'
 
 export const padUint8Array = (arr: Uint8Array, padSize: number): Uint8Array => {
@@ -8,12 +8,6 @@ export const padUint8Array = (arr: Uint8Array, padSize: number): Uint8Array => {
 }
 
 export const asUint8Array = (value: internal.primitives.StubBytesCompat): Uint8Array => internal.primitives.BytesCls.fromCompat(value).asUint8Array()
-
-export const asUint64Cls = (val: uint64) => val as unknown as internal.primitives.Uint64Cls
-
-export const asBigUintCls = (val: biguint) => val as unknown as internal.primitives.BigUintCls
-
-export const asBytesCls = (val: bytes) => val as unknown as internal.primitives.BytesCls
 
 export const base64Encode = (value: Uint8Array | string): bytes => Bytes(Buffer.from(value).toString('base64'))
 

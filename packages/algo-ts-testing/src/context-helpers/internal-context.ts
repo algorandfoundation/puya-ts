@@ -1,4 +1,5 @@
 import { internal } from '@algorandfoundation/algo-ts'
+import { AccountData } from '../subcontexts/ledger-context'
 import { TestExecutionContext } from '../test-execution-context'
 
 /**
@@ -29,6 +30,15 @@ class InternalContext {
 
   get any() {
     return this.value.any
+  }
+
+  getAccountData(accountPublicKey: internal.primitives.StubBytesCompat): AccountData {
+    const key = internal.primitives.BytesCls.fromCompat(accountPublicKey)
+    const data = this.ledger.accountDataMap.get(key.toString())
+    if (!data) {
+      throw internal.errors.internalError('Unknown account, check correct testing context is active')
+    }
+    return data
   }
 }
 

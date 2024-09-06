@@ -1,49 +1,64 @@
-import { Account, Application, Asset, bytes, uint64 } from '@algorandfoundation/algo-ts'
+import { Account, Application, Asset, bytes, internal, uint64 } from '@algorandfoundation/algo-ts'
+import { lazyContext } from './context-helpers/internal-context'
+import { AccountData } from './subcontexts/ledger-context'
+import { asUint64Cls } from './util'
 
 export class AccountCls implements Account {
   constructor(private address: bytes) {}
-  get balance(): uint64 {
-    throw new Error('Not implemented')
-  }
-  get minBalance(): uint64 {
-    throw new Error('Not implemented')
-  }
-  get authAddress(): Account {
-    throw new Error('Not implemented')
-  }
-  get totalNumUint(): uint64 {
-    throw new Error('Not implemented')
-  }
-  get totalNumByteSlice(): uint64 {
-    throw new Error('Not implemented')
-  }
-  get totalExtraAppPages(): uint64 {
-    throw new Error('Not implemented')
-  }
-  get totalAppsCreated(): uint64 {
-    throw new Error('Not implemented')
-  }
-  get totalAppsOptedIn(): uint64 {
-    throw new Error('Not implemented')
-  }
-  get totalAssetsCreated(): uint64 {
-    throw new Error('Not implemented')
-  }
-  get totalAssets(): uint64 {
-    throw new Error('Not implemented')
-  }
-  get totalBoxes(): uint64 {
-    throw new Error('Not implemented')
-  }
-  get totalBoxBytes(): uint64 {
-    throw new Error('Not implemented')
-  }
-  isOptedIn(_assetOrApp: Asset | Application): boolean {
-    throw new Error('Method not implemented.')
+
+  private get data(): AccountData {
+    return lazyContext.getAccountData(this.address)
   }
 
   get bytes(): bytes {
     return this.address
+  }
+
+  get balance(): uint64 {
+    return this.data.account.balance
+  }
+  get minBalance(): uint64 {
+    return this.data.account.minBalance
+  }
+  get authAddress(): Account {
+    return this.data.account.authAddress
+  }
+  get totalNumUint(): uint64 {
+    return this.data.account.totalNumUint
+  }
+  get totalNumByteSlice(): uint64 {
+    return this.data.account.totalNumByteSlice
+  }
+  get totalExtraAppPages(): uint64 {
+    return this.data.account.totalExtraAppPages
+  }
+  get totalAppsCreated(): uint64 {
+    return this.data.account.totalAppsCreated
+  }
+  get totalAppsOptedIn(): uint64 {
+    return this.data.account.totalAppsOptedIn
+  }
+  get totalAssetsCreated(): uint64 {
+    return this.data.account.totalAssetsCreated
+  }
+  get totalAssets(): uint64 {
+    return this.data.account.totalAssets
+  }
+  get totalBoxes(): uint64 {
+    return this.data.account.totalBoxes
+  }
+  get totalBoxBytes(): uint64 {
+    return this.data.account.totalBoxBytes
+  }
+
+  isOptedIn(assetOrApp: Asset | Application): boolean {
+    if (assetOrApp instanceof AssetCls) {
+      return this.data.optedAssets.has(asUint64Cls(assetOrApp.id).asBigInt())
+    }
+    if (assetOrApp instanceof ApplicationCls) {
+      return this.data.optedApplications.has(asUint64Cls(assetOrApp.id).asBigInt())
+    }
+    internal.errors.internalError('Invalid argument type. Must be an `algopy.Asset` or `algopy.Application` instance.')
   }
 }
 

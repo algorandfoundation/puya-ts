@@ -96,6 +96,7 @@ export type Account = {
    */
   isOptedIn(assetOrApp: Asset | Application): boolean
 }
+
 export function Account(): Account
 export function Account(address: bytes): Account
 export function Account(address?: bytes): Account {
