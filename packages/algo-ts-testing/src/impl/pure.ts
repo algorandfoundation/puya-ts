@@ -1,7 +1,7 @@
 import { biguint, Bytes, bytes, internal, Uint64, uint64 } from '@algorandfoundation/algo-ts'
 import { BITS_IN_BYTE, MAX_BYTES_SIZE, MAX_UINT64, MAX_UINT8, UINT64_SIZE } from '../constants'
-import { asMaybeBytesCls, asMaybeUint64Cls, binaryStringToBytes } from '../util'
 import { notImplementedError } from '../errors'
+import { asMaybeBytesCls, asMaybeUint64Cls, binaryStringToBytes } from '../util'
 
 export const addw = (a: internal.primitives.StubUint64Compat, b: internal.primitives.StubUint64Compat): readonly [uint64, uint64] => {
   const uint64A = internal.primitives.Uint64Cls.fromCompat(a)
@@ -247,7 +247,7 @@ export const setBitUint64 = (
   return newBytes.toUint64().asAlgoTs()
 }
 
-export const setBytes = (
+export const setByte = (
   a: internal.primitives.StubBytesCompat,
   b: internal.primitives.StubUint64Compat,
   c: internal.primitives.StubUint64Compat,
@@ -261,10 +261,10 @@ export const setBytes = (
   const replacement = replacementNumber === 0n ? '0'.repeat(BITS_IN_BYTE) : toBinaryString(c, true)
 
   if (bitIndex >= binaryString.length) {
-    internal.errors.codeError(`setBytes index ${byteIndex} is beyond length`)
+    internal.errors.codeError(`setByte index ${byteIndex} is beyond length`)
   }
   if (replacementNumber > MAX_UINT8) {
-    internal.errors.codeError(`setBytes value ${replacementNumber} > ${MAX_UINT8}`)
+    internal.errors.codeError(`setByte value ${replacementNumber} > ${MAX_UINT8}`)
   }
   const updatedString = binaryString.slice(0, bitIndex) + replacement + binaryString.slice(bitIndex + replacement.length)
   const updatedBytes = binaryStringToBytes(updatedString)

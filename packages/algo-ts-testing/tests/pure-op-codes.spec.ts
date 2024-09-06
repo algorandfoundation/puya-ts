@@ -5,9 +5,10 @@ import { describe, expect, it, test } from 'vitest'
 import { TestExecutionContext } from '../src'
 import { MAX_BYTES_SIZE, MAX_UINT512, MAX_UINT64 } from '../src/constants'
 import * as op from '../src/impl/pure'
+import { asBigUintCls, asBytesCls } from '../src/util'
 import appSpecJson from './artifacts/miscellaneous-ops/data/MiscellaneousOpsContract.arc32.json'
 import { getAlgorandAppClient, getAvmResult, getAvmResultRaw } from './avm-invoker'
-import { asBigUintCls, asBytesCls, asUint8Array, base64Encode, base64UrlEncode, getPaddedUint8Array, getSha256Hash, intToBytes } from './util'
+import { asUint8Array, base64Encode, base64UrlEncode, getPaddedUint8Array, getSha256Hash, intToBytes } from './util'
 
 const avmIntArgOverflowError = "is not a non-negative int or too big to fit in size"
 const extractOutOfBoundError = /extraction (start|end) \d+ is beyond length/
@@ -873,7 +874,7 @@ describe('Pure op codes', async () => {
     })
   })
 
-  describe('setBytes', async () => {
+  describe('setByte', async () => {
     test.each([
       [new Uint8Array([0x00]), 0, 1],
       [getPaddedUint8Array(2, intToBytes(256)), 3, 1],
@@ -889,7 +890,7 @@ describe('Pure op codes', async () => {
       [intToBytes(MAX_UINT512), 0, 0],
     ])(`should set bytes in the input`, async (a, b, c) => {
       const avmResult = (await getAvmResultRaw({ appClient }, 'verify_setbyte', asUint8Array(a), b, c))!
-      const result = op.setBytes(a, b, c)
+      const result = op.setByte(a, b, c)
       expect(asUint8Array(result)).toEqual(avmResult)
     })
 
@@ -901,7 +902,7 @@ describe('Pure op codes', async () => {
       [intToBytes(MAX_UINT512 - 1n), 512, 1],
     ])(`should throw error when index out of bound of bytes`, async (a, b, c) => {
       await expect(getAvmResultRaw({ appClient }, 'verify_setbyte', asUint8Array(a), b, c)).rejects.toThrow('setbyte index beyond array length')
-      expect(() => op.setBytes(a, b, c)).toThrow(`setBytes index ${b} is beyond length`)
+      expect(() => op.setByte(a, b, c)).toThrow(`setByte index ${b} is beyond length`)
     })
 
     it('should throw error when input is invalid', async () => {
@@ -909,7 +910,7 @@ describe('Pure op codes', async () => {
       const b = 0
       const c = 256
       await expect(getAvmResultRaw({ appClient }, 'verify_setbyte', asUint8Array(a), b, c)).rejects.toThrow('setbyte value > 255')
-      expect(() => op.setBytes(a, b, c)).toThrow(`setBytes value ${c} > 255`)
+      expect(() => op.setByte(a, b, c)).toThrow(`setByte value ${c} > 255`)
     })
   })
 

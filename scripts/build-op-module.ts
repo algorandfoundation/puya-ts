@@ -1,7 +1,7 @@
-import langSpec from '../langspec.puya.json'
-import type { Op } from './langspec'
-import { hasFlags, invariant } from '../src/util'
 import { camelCase, pascalCase } from 'change-case'
+import langSpec from '../langspec.puya.json'
+import { hasFlags, invariant } from '../src/util'
+import type { Op } from './langspec'
 
 function range(start: number, end: number) {
   return Array(end - start)
@@ -438,6 +438,52 @@ export function buildOpModule() {
       }
     }
   }
+  // Manually handle select overloads
+  opModule.items.push({
+    type: 'op-overloaded-function',
+    name: 'select',
+    signatures: [
+      {
+        stackArgs: [
+          {
+            name: 'a',
+            type: AlgoTsType.Bytes,
+          },
+          {
+            name: 'b',
+            type: AlgoTsType.Bytes,
+          },
+          {
+            name: 'c',
+            type: AlgoTsType.Uint64,
+          },
+        ],
+        immediateArgs: [],
+        returnTypes: [AlgoTsType.Bytes],
+        docs: ['selects one of two values based on top-of-stack: B if C != 0, else A'],
+      },
+      {
+        stackArgs: [
+          {
+            name: 'a',
+            type: AlgoTsType.Uint64,
+          },
+          {
+            name: 'b',
+            type: AlgoTsType.Uint64,
+          },
+          {
+            name: 'c',
+            type: AlgoTsType.Uint64,
+          },
+        ],
+        immediateArgs: [],
+        returnTypes: [AlgoTsType.Uint64],
+        docs: ['selects one of two values based on top-of-stack: B if C != 0, else A'],
+      },
+    ],
+    opCode: 'select',
+  })
 
   // Manually handle set bit overloads
   opModule.items.push({

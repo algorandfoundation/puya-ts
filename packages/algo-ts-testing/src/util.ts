@@ -28,6 +28,12 @@ export function extractGenericTypeArgs(t: string): string[] {
   return match[1].split(',').map((x) => x.trim())
 }
 
+export const asUint64Cls = (val: internal.primitives.StubUint64Compat) => internal.primitives.Uint64Cls.fromCompat(val)
+
+export const asBigUintCls = (val: internal.primitives.StubBigUintCompat) => internal.primitives.BigUintCls.fromCompat(val)
+
+export const asBytesCls = (val: internal.primitives.StubBytesCompat) => internal.primitives.BytesCls.fromCompat(val)
+
 export const asMaybeUint64Cls = (val: DeliberateAny) => {
   try {
     return internal.primitives.Uint64Cls.fromCompat(val)

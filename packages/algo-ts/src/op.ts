@@ -22,7 +22,7 @@ import {
   ExtractUint32Type,
   ExtractUint64Type,
   GetBitType,
-  GetBytesType,
+  GetByteType,
   GlobalType,
   GTxnType,
   ItobType,
@@ -31,11 +31,9 @@ import {
   MulwType,
   OpsNamespace,
   ReplaceType,
-  SelectBytesType,
-  SelectUint64Type,
-  SetBitBytesType,
-  SetBitUint64Type,
-  SetBytesType,
+  SelectType,
+  SetbitType,
+  SetByteType,
   Sha256Type,
   Sha3_256Type,
   Sha512_256Type,
@@ -91,16 +89,14 @@ export const extractUint16: ExtractUint16Type = createFunctionProxy('extractUint
 export const extractUint32: ExtractUint32Type = createFunctionProxy('extractUint32')
 export const extractUint64: ExtractUint64Type = createFunctionProxy('extractUint64')
 export const getBit: GetBitType = createFunctionProxy('getBit')
-export const getBytes: GetBytesType = createFunctionProxy('getBytes')
+export const getByte: GetByteType = createFunctionProxy('getByte')
 export const itob: ItobType = createFunctionProxy('itob')
 export const keccak256: Keccak256Type = createFunctionProxy('keccak256')
 export const mulw: MulwType = createFunctionProxy('mulw')
 export const replace: ReplaceType = createFunctionProxy('replace')
-export const selectBytes: SelectBytesType = createFunctionProxy('selectBytes')
-export const selectUint64: SelectUint64Type = createFunctionProxy('selectUint64')
-export const setBitBytes: SetBitBytesType = createFunctionProxy('setBitBytes')
-export const setBitUint64: SetBitUint64Type = createFunctionProxy('setBitUint64')
-export const setBytes: SetBytesType = createFunctionProxy('setBytes')
+export const select: SelectType = createFunctionProxy('select') as SelectType
+export const setbit: SetbitType = createFunctionProxy('setbit') as SetbitType
+export const setByte: SetByteType = createFunctionProxy('setByte')
 export const sha256: Sha256Type = createFunctionProxy('sha256')
 export const sha3_256: Sha3_256Type = createFunctionProxy('sha3_256')
 export const sha512_256: Sha512_256Type = createFunctionProxy('sha512_256')
