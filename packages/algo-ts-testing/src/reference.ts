@@ -1,7 +1,7 @@
 import { Account, Application, Asset, bytes, internal, uint64 } from '@algorandfoundation/algo-ts'
 import { lazyContext } from './context-helpers/internal-context'
-import { AccountData } from './subcontexts/ledger-context'
-import { asUint64Cls } from './util'
+import { AccountData, ApplicationData, AssetData, AssetHolding } from './subcontexts/ledger-context'
+import { asBigInt, asUint64Cls } from './util'
 
 export class AccountCls implements Account {
   constructor(private address: bytes) {}
@@ -64,77 +64,96 @@ export class AccountCls implements Account {
 
 export class AssetCls implements Asset {
   constructor(public readonly id: uint64) {}
+
+  private get data(): AssetData {
+    return lazyContext.getAssetData(this.id)
+  }
+
   get total(): uint64 {
-    throw new Error('Not implemented')
+    return this.data.total
   }
   get decimals(): uint64 {
-    throw new Error('Not implemented')
+    return this.data.decimals
   }
   get defaultFrozen(): boolean {
-    throw new Error('Not implemented')
+    return this.data.defaultFrozen
   }
   get unitName(): bytes {
-    throw new Error('Not implemented')
+    return this.data.unitName
   }
   get name(): bytes {
-    throw new Error('Not implemented')
+    return this.data.name
   }
   get url(): bytes {
-    throw new Error('Not implemented')
+    return this.data.url
   }
   get metadataHash(): bytes {
-    throw new Error('Not implemented')
+    return this.data.metadataHash
   }
   get manager(): Account {
-    throw new Error('Not implemented')
+    return this.data.manager
   }
   get reserve(): Account {
-    throw new Error('Not implemented')
+    return this.data.reserve
   }
   get freeze(): Account {
-    throw new Error('Not implemented')
+    return this.data.freeze
   }
   get clawback(): Account {
-    throw new Error('Not implemented')
+    return this.data.clawback
   }
   get creator(): Account {
-    throw new Error('Not implemented')
+    return this.data.creator
   }
-  balance(_account: Account): uint64 {
-    throw new Error('Method not implemented.')
+  balance(account: Account): uint64 {
+    return this.getAssetHolding(account).balance
   }
-  frozen(_account: Account): boolean {
-    throw new Error('Method not implemented.')
+  frozen(account: Account): boolean {
+    return this.getAssetHolding(account).frozen
+  }
+
+  private getAssetHolding(account: Account): AssetHolding {
+    const accountData = lazyContext.getAccountData(account.bytes)
+    if (!accountData.optedAssets.has(asBigInt(this.id))) {
+      internal.errors.internalError(
+        'The asset is not opted into the account! Use `ctx.any.account(opted_asset_balances={{ASSET_ID: VALUE}})` to set emulated opted asset into the account.',
+      )
+    }
+    return accountData.optedAssets.get(asBigInt(this.id))!
   }
 }
 
 export class ApplicationCls implements Application {
   constructor(public readonly id: uint64) {}
+
+  private get data(): ApplicationData {
+    return lazyContext.getApplicationData(this.id)
+  }
   get approvalProgram(): bytes {
-    throw new Error('Method not implemented.')
+    return this.data.approvalProgram
   }
   get clearStateProgram(): bytes {
-    throw new Error('Method not implemented.')
+    return this.data.clearStateProgram
   }
   get globalNumUint(): uint64 {
-    throw new Error('Method not implemented.')
+    return this.data.globalNumUint
   }
   get globalNumBytes(): uint64 {
-    throw new Error('Method not implemented.')
+    return this.data.globalNumBytes
   }
   get localNumUint(): uint64 {
-    throw new Error('Method not implemented.')
+    return this.data.localNumUint
   }
   get localNumBytes(): uint64 {
-    throw new Error('Method not implemented.')
+    return this.data.localNumBytes
   }
   get extraProgramPages(): uint64 {
-    throw new Error('Method not implemented.')
+    return this.data.extraProgramPages
   }
   get creator(): Account {
-    throw new Error('Method not implemented.')
+    return this.data.creator
   }
   get address(): Account {
-    throw new Error('Method not implemented.')
+    return this.data.address
   }
 }
