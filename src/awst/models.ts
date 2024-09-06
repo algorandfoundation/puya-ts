@@ -1,5 +1,6 @@
 import type { SourceLocation } from './source-location'
 import type { Props } from '../typescript-helpers'
+import type { ContractClassPType } from '../awst_build/ptypes'
 
 export enum OnCompletionAction {
   NoOp = 0,
@@ -90,6 +91,17 @@ export class ContractReference extends ModelBase {
   }
   readonly className: string
   readonly moduleName: string
+
+  toString(): string {
+    return `${this.moduleName}::${this.className}`
+  }
+
+  static fromPType(contractPType: ContractClassPType): ContractReference {
+    return new ContractReference({
+      className: contractPType.name,
+      moduleName: contractPType.module,
+    })
+  }
 }
 export class LogicSigReference extends ModelBase {
   constructor({ name, moduleName }: { name: string; moduleName: string }) {
@@ -99,4 +111,8 @@ export class LogicSigReference extends ModelBase {
   }
   readonly name: string
   readonly moduleName: string
+
+  toString(): string {
+    return `${this.moduleName}::${this.name}`
+  }
 }

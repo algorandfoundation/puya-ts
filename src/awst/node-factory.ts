@@ -1,4 +1,6 @@
 import type { Expression, Statement } from './nodes'
+import { IntrinsicCall } from './nodes'
+import { MethodDocumentation } from './nodes'
 import { TupleExpression } from './nodes'
 import { AssignmentStatement } from './nodes'
 import { AssignmentExpression } from './nodes'
@@ -28,7 +30,7 @@ import { boolWType } from './wtypes'
 
 type ConcreteNodes = typeof concreteNodes
 
-let singleEval = 0
+let singleEval = 0n
 const explicitNodeFactory = {
   bytesConstant(props: { value: Uint8Array; encoding?: BytesEncoding; sourceLocation: SourceLocation; wtype?: WType }): BytesConstant {
     return new BytesConstant({
@@ -47,13 +49,14 @@ const explicitNodeFactory = {
     return new IntegerConstant({
       wtype: wtypes.uint64WType,
       ...props,
-      tealAlias: props.tealAlias,
+      tealAlias: props.tealAlias ?? null,
     })
   },
   bigUIntConstant(props: { value: bigint; sourceLocation: SourceLocation }): IntegerConstant {
     return new IntegerConstant({
       wtype: wtypes.biguintWType,
       ...props,
+      tealAlias: null,
     })
   },
   not(props: { expr: Expression; sourceLocation: SourceLocation }): Not {
@@ -94,7 +97,7 @@ const explicitNodeFactory = {
   },
   singleEvaluation({ source }: { source: Expression }) {
     return new SingleEvaluation({
-      id: `se${singleEval++}`,
+      id: singleEval++,
       sourceLocation: source.sourceLocation,
       wtype: source.wtype,
       source,
@@ -113,8 +116,8 @@ const explicitNodeFactory = {
     return new Block({
       body: statements.flat(),
       sourceLocation,
-      comment,
-      label,
+      comment: comment ?? null,
+      label: label ?? null,
     })
   },
   assignmentExpression({
@@ -154,6 +157,19 @@ const explicitNodeFactory = {
     return new TupleExpression({
       ...props,
       wtype: new WTuple({ types: props.items.map((i) => i.wtype), immutable: true }),
+    })
+  },
+  methodDocumentation(props?: { description?: string | null; args?: Map<string, string>; returns?: string | null }) {
+    return new MethodDocumentation({
+      args: props?.args ?? new Map(),
+      description: props?.description ?? null,
+      returns: props?.returns ?? null,
+    })
+  },
+  intrinsicCall(props: Omit<Props<IntrinsicCall>, 'comment'> & { comment?: string | null }) {
+    return new IntrinsicCall({
+      ...props,
+      comment: props.comment ?? null,
     })
   },
 } satisfies { [key in keyof ConcreteNodes]?: (...args: DeliberateAny[]) => InstanceType<ConcreteNodes[key]> }

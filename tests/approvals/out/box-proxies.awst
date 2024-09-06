@@ -1,4 +1,3 @@
-boxA = 0x41
 subroutine testBox(box: box_key, value: string): void
 {
   (box.value = value)
@@ -16,7 +15,6 @@ subroutine testBox(box: box_key, value: string): void
   (<tuple>[_₁, e] = STATE_GET_EX(box.value))
   assert(e)
 }
-boxMap = 0x
 subroutine testBoxMap(box: box_key, key: string, value: bytes): void
 {
   (concat(box, reinterpret_cast<bytes>(key)).value = value)
@@ -25,7 +23,6 @@ subroutine testBoxMap(box: box_key, key: string, value: bytes): void
   STATE_DEL(concat(box, reinterpret_cast<bytes>(key)).value)
   assert(STATE_GET(concat(box, reinterpret_cast<bytes>("" + key + "x")).value, default="b") == STATE_GET(concat("", reinterpret_cast<bytes>("" + key + "x")).value, default="b"))
 }
-boxRef = 0x616263
 subroutine testBoxRef(box: box_key): void
 {
   var someBytes: bytes = 0x0f0f0f0f

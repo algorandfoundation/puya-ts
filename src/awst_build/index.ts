@@ -1,17 +1,17 @@
 import { SourceFileVisitor } from './source-file-visitor'
-import { ToCodeVisitor } from '../awst/to-code-visitor'
 import type { CompileOptions } from '../compile-options'
-import { ArtifactKind, writeArtifact } from '../write-artifact'
-import type { Module } from '../awst/nodes'
+import type { AWST } from '../awst/nodes'
 import type { CreateProgramResult } from '../parser'
 import { AwstBuildFailureError } from '../errors'
 import { logger } from '../logger'
 import { SourceLocation } from '../awst/source-location'
+import { ArtifactKind, writeArtifact } from '../write-artifact'
+import { ToCodeVisitor } from '../awst/to-code-visitor'
 import { jsonSerializeAwst } from '../awst/json-serialize-awst'
 
 export function buildAwst({ program, sourceFiles }: CreateProgramResult, options: CompileOptions) {
-  const moduleAwst: Record<string, Module> = {}
-  for (const [path, sourceFile] of Object.entries(sourceFiles)) {
+  const moduleAwst: AWST[] = []
+  for (const sourceFile of Object.values(sourceFiles)) {
     try {
       const visitor = new SourceFileVisitor(sourceFile, program)
 
@@ -25,7 +25,7 @@ export function buildAwst({ program, sourceFiles }: CreateProgramResult, options
           obj: module,
           buildArtifact(module): string {
             const toCode = new ToCodeVisitor()
-            return module.body.flatMap((s) => s.accept(toCode)).join('\n')
+            return module.flatMap((s) => s.accept(toCode)).join('\n')
           },
         })
       }
@@ -35,12 +35,12 @@ export function buildAwst({ program, sourceFiles }: CreateProgramResult, options
           outDir: options.outDir,
           kind: ArtifactKind.AwstJson,
           obj: module,
-          buildArtifact(obj): string {
-            return jsonSerializeAwst({ [path]: module })
+          buildArtifact(module): string {
+            return jsonSerializeAwst(module)
           },
         })
       }
-      moduleAwst[path] = module
+      moduleAwst.push(...module)
     } catch (e) {
       if (e instanceof AwstBuildFailureError) {
         logger.error(SourceLocation.fromFile(sourceFile, program.getCurrentDirectory()), e.message)

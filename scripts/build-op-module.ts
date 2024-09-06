@@ -1,5 +1,5 @@
 import langSpec from '../langspec.puya.json'
-import { Op } from './langspec'
+import type { Op } from './langspec'
 import { hasFlags, invariant } from '../src/util'
 import { camelCase, pascalCase } from 'change-case'
 
@@ -189,8 +189,8 @@ const RENAMED_OPCODES_MAP = new Map([
   ['gloadss', 'gload'],
   ['setbit', 'setBit'],
   ['bitlen', 'bitLength'],
-  ['setbyte', 'setBytes'],
-  ['getbyte', 'getBytes'],
+  ['setbyte', 'setByte'],
+  ['getbyte', 'getByte'],
   ['getbit', 'getBit'],
 ])
 type OpNameConfig = {

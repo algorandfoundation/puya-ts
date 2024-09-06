@@ -116,8 +116,8 @@ export class GlobalStateFunctionResultBuilder extends InstanceBuilder<GlobalStat
       sourceLocation: memberLocation,
       ptype: this._ptype,
       memberName: memberName,
-      keyOverride: this._expr,
-      description: undefined,
+      keyOverride: this._expr ?? null,
+      description: null,
       definedIn: contractType,
     })
   }

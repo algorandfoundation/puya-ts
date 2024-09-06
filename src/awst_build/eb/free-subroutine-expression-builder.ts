@@ -7,15 +7,14 @@ import { nodeFactory } from '../../awst/node-factory'
 import { typeRegistry } from '../type-registry'
 import type { ContractClassPType } from '../ptypes'
 import { FunctionPType } from '../ptypes'
-import type { BaseClassSubroutineTarget, FreeSubroutineTarget, InstanceSubroutineTarget } from '../../awst/nodes'
+import type { InstanceMethodTarget, InstanceSuperMethodTarget, SubroutineID } from '../../awst/nodes'
 import { parseFunctionArgs } from './util/arg-parsing'
-import { ContractReference } from '../../awst/models'
 
 abstract class SubroutineExpressionBuilder extends FunctionBuilder {
   protected constructor(
     sourceLocation: SourceLocation,
     protected readonly _ptype: FunctionPType,
-    protected readonly target: FreeSubroutineTarget | InstanceSubroutineTarget | BaseClassSubroutineTarget,
+    protected readonly target: SubroutineID | InstanceMethodTarget | InstanceSuperMethodTarget,
   ) {
     super(sourceLocation)
   }
@@ -37,7 +36,7 @@ abstract class SubroutineExpressionBuilder extends FunctionBuilder {
     return typeRegistry.getInstanceEb(
       nodeFactory.subroutineCallExpression({
         target: this.target,
-        args: mappedArgs.map((a) => nodeFactory.callArg({ name: undefined, value: a })),
+        args: mappedArgs.map((a) => nodeFactory.callArg({ name: null, value: a })),
         sourceLocation: sourceLocation,
         wtype: this.ptype.returnType.wtypeOrThrow,
       }),
@@ -51,8 +50,8 @@ export class ContractMethodExpressionBuilder extends SubroutineExpressionBuilder
     super(
       sourceLocation,
       ptype,
-      nodeFactory.instanceSubroutineTarget({
-        name: ptype.name,
+      nodeFactory.instanceMethodTarget({
+        memberName: ptype.name,
       }),
     )
   }
@@ -63,12 +62,8 @@ export class BaseContractMethodExpressionBuilder extends SubroutineExpressionBui
     super(
       sourceLocation,
       ptype,
-      nodeFactory.baseClassSubroutineTarget({
-        name: ptype.name,
-        baseClass: new ContractReference({
-          className: baseContractPType.name,
-          moduleName: baseContractPType.module,
-        }),
+      nodeFactory.instanceSuperMethodTarget({
+        memberName: ptype.name,
       }),
     )
   }
@@ -82,9 +77,8 @@ export class FreeSubroutineExpressionBuilder extends SubroutineExpressionBuilder
     super(
       sourceLocation,
       ptype,
-      nodeFactory.freeSubroutineTarget({
-        name: ptype.name,
-        moduleName: ptype.module,
+      nodeFactory.subroutineID({
+        target: ptype.fullName,
       }),
     )
   }

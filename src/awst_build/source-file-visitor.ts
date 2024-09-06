@@ -8,17 +8,16 @@ import { ContractVisitor } from './contract-visitor'
 import { FunctionVisitor } from './function-visitor'
 import { logger, logPuyaExceptions } from '../logger'
 import { expandMaybeArray } from '../util'
-import { nodeFactory } from '../awst/node-factory'
 import { BaseVisitor } from './base-visitor'
 import { ContractClassPType } from './ptypes'
 import { requireConstantOfType } from './eb/util'
 
 import { buildContextForSourceFile } from './context/base-context'
 
-type StatementOrDeferred = awst.ModuleStatement[] | awst.ModuleStatement | (() => awst.ModuleStatement[] | awst.ModuleStatement)
+type NodeOrDeferred = awst.AWST[] | awst.AWST | (() => awst.AWST[] | awst.AWST)
 
-export class SourceFileVisitor extends BaseVisitor implements Visitor<ModuleStatements, StatementOrDeferred> {
-  private _moduleStatements: StatementOrDeferred[] = []
+export class SourceFileVisitor extends BaseVisitor implements Visitor<ModuleStatements, NodeOrDeferred> {
+  private _moduleStatements: NodeOrDeferred[] = []
   private accept = <TNode extends ts.Node>(node: TNode) => accept<SourceFileVisitor, TNode>(this, node)
 
   constructor(
@@ -32,29 +31,25 @@ export class SourceFileVisitor extends BaseVisitor implements Visitor<ModuleStat
     }
   }
 
-  visitInterfaceDeclaration(node: ts.InterfaceDeclaration): StatementOrDeferred {
+  visitInterfaceDeclaration(node: ts.InterfaceDeclaration): NodeOrDeferred {
     // Ignore these for now
     return []
   }
 
-  visitTypeAliasDeclaration(_node: ts.TypeAliasDeclaration): StatementOrDeferred {
+  visitTypeAliasDeclaration(_node: ts.TypeAliasDeclaration): NodeOrDeferred {
     // Ignore these for now - but maybe we need to do something with them when it comes to structs
     return []
   }
 
-  visitFunctionDeclaration(node: ts.FunctionDeclaration): StatementOrDeferred {
+  visitFunctionDeclaration(node: ts.FunctionDeclaration): NodeOrDeferred {
     return () => logPuyaExceptions(() => FunctionVisitor.buildSubroutine(this.context, node), this.sourceLocation(node))
   }
 
-  buildModule(): awst.Module {
-    return nodeFactory.module({
-      name: this.sourceFile.fileName,
-      sourceFilePath: this.sourceFile.fileName,
-      body: Array.from(this.gatherStatements()),
-    })
+  buildModule(): awst.AWST[] {
+    return Array.from(this.gatherStatements())
   }
 
-  private *gatherStatements(): Generator<awst.ModuleStatement, void, void> {
+  private *gatherStatements(): Generator<awst.AWST, void, void> {
     for (const statements of this._moduleStatements) {
       try {
         if (typeof statements === 'function') {
@@ -75,13 +70,13 @@ export class SourceFileVisitor extends BaseVisitor implements Visitor<ModuleStat
     }
   }
 
-  visitVariableStatement(node: ts.VariableStatement): StatementOrDeferred {
+  visitVariableStatement(node: ts.VariableStatement): NodeOrDeferred {
     const sourceLocation = this.sourceLocation(node)
     if (!(node.declarationList.flags & ts.NodeFlags.Const)) {
       logger.error(new CodeError(`Module level variable declarations must use the 'const' keyword.`, { sourceLocation }))
     }
 
-    return node.declarationList.declarations.map((dec) => {
+    return node.declarationList.declarations.flatMap((dec) => {
       if (!dec.initializer) {
         throw new CodeError(`Module level variable declarations must be initialized with a value.`, { sourceLocation })
       }
@@ -100,17 +95,13 @@ export class SourceFileVisitor extends BaseVisitor implements Visitor<ModuleStat
       const constantName = this.context.resolveVariableName(dec.name)
       this.context.addConstant(constantName, value)
 
-      return nodeFactory.constantDeclaration({
-        value: value.value,
-        sourceLocation,
-        name: constantName,
-      })
+      return []
     })
   }
-  visitImportDeclaration(_node: ts.ImportDeclaration): StatementOrDeferred {
+  visitImportDeclaration(_node: ts.ImportDeclaration): NodeOrDeferred {
     return []
   }
-  visitClassDeclaration(node: ts.ClassDeclaration): StatementOrDeferred {
+  visitClassDeclaration(node: ts.ClassDeclaration): NodeOrDeferred {
     const sourceLocation = this.sourceLocation(node)
     const ptype = this.context.getPTypeForNode(node)
     if (ptype instanceof ContractClassPType) {

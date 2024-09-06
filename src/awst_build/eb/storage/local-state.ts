@@ -106,8 +106,8 @@ export class LocalStateFunctionResultBuilder extends InstanceBuilder<LocalStateT
       sourceLocation: memberLocation,
       ptype: this._ptype,
       memberName: memberName,
-      keyOverride: this._expr,
-      description: undefined,
+      keyOverride: this._expr ?? null,
+      description: null,
       definedIn: contractType,
     })
   }
