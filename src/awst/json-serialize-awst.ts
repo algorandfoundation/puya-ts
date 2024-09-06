@@ -2,6 +2,9 @@ import { snakeCase } from 'change-case'
 import type { RootNode } from './nodes'
 import { ContractReference, LogicSigReference } from './models'
 import { buildBase85Encoder } from '../util/base-85'
+import { SourceLocation } from './source-location'
+import { invariant } from '../util'
+import path from 'node:path'
 export class SnakeCaseSerializer<T> {
   constructor(private readonly spaces = 2) {}
   public serialize(obj: T): string {
@@ -19,7 +22,15 @@ export class SnakeCaseSerializer<T> {
 }
 
 export class AwstSerializer extends SnakeCaseSerializer<RootNode[]> {
-  b85 = buildBase85Encoder()
+  constructor(
+    private options?: {
+      sourcePaths?: 'absolute' | 'relative'
+      programDirectory?: string
+    },
+  ) {
+    super()
+  }
+  private b85 = buildBase85Encoder()
 
   protected serializerFunction(key: string, value: unknown): unknown {
     if (typeof value === 'bigint') {
@@ -37,6 +48,16 @@ export class AwstSerializer extends SnakeCaseSerializer<RootNode[]> {
     }
     if (value instanceof ContractReference || value instanceof LogicSigReference) {
       return value.toString()
+    }
+    if (value instanceof SourceLocation) {
+      if (this.options?.sourcePaths === 'absolute') {
+        invariant(this.options.programDirectory, 'Program directory must be supplied for absoluate paths')
+        return {
+          ...value,
+          file: path.join(this.options.programDirectory, value.file),
+        } satisfies SourceLocation
+      }
+      return value
     }
     if (value instanceof Uint8Array) {
       return this.b85.encode(value)

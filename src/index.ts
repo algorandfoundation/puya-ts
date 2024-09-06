@@ -8,7 +8,7 @@ import type ts from 'typescript'
 import { registerPTypes } from './awst_build/ptypes/register'
 import { typeRegistry } from './awst_build/type-registry'
 import { generateTempFile } from './util/generate-temp-file'
-import { jsonSerializeAwst, SnakeCaseSerializer } from './awst/json-serialize-awst'
+import { AwstSerializer, jsonSerializeAwst, SnakeCaseSerializer } from './awst/json-serialize-awst'
 import { jsonSerializeSourceFiles } from './parser/json-serialize-source-files'
 import type { AWST } from './awst/nodes'
 import { ContractFragment } from './awst/nodes'
@@ -63,12 +63,21 @@ export function compile(options: CompileOptions): CompileResult {
     throw e
   }
   if (!options.dryRun) {
+    // Write AWST file
     const moduleAwstFile = generateTempFile()
     logger.info(undefined, `Writing awst to ${moduleAwstFile.filePath}`)
-    moduleAwstFile.writeFileSync(jsonSerializeAwst(moduleAwst), 'utf-8')
+    const serializer = new AwstSerializer({
+      programDirectory: programDirectory,
+      sourcePaths: 'absolute',
+    })
+    moduleAwstFile.writeFileSync(serializer.serialize(moduleAwst), 'utf-8')
+
+    // Write source annotations
     const moduleSourceFile = generateTempFile()
     logger.info(undefined, `Write source to ${moduleSourceFile.filePath}`)
-    moduleSourceFile.writeFileSync(jsonSerializeSourceFiles(programResult.sourceFiles), 'utf-8')
+    moduleSourceFile.writeFileSync(jsonSerializeSourceFiles(programResult.sourceFiles, programDirectory), 'utf-8')
+
+    // Write puya options
     const puyaOptions = new PuyaOptions({
       compileOptions: options,
       compilationSet: buildCompilationSet({
