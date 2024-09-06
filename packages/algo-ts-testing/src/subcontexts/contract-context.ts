@@ -64,7 +64,7 @@ export class ContractContext {
     const onConstructed = (instance: BaseContract) => {
       const states = extractStates(instance)
 
-      const application = lazyContext.any.application({
+      const application = lazyContext.any.application(undefined, {
         ...states.totals,
       })
       lazyContext.ledger.addAppIdContractMap(application.id, instance)

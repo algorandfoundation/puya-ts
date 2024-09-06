@@ -1,7 +1,7 @@
 import { biguint, Bytes, bytes, internal, Uint64, uint64 } from '@algorandfoundation/algo-ts'
 import { BITS_IN_BYTE, MAX_BYTES_SIZE, MAX_UINT64, MAX_UINT8, UINT64_SIZE } from '../constants'
 import { notImplementedError } from '../errors'
-import { asMaybeBytesCls, asMaybeUint64Cls, binaryStringToBytes } from '../util'
+import { asBigUint, asBytes, asMaybeBytesCls, asMaybeUint64Cls, asUint64Cls, binaryStringToBytes } from '../util'
 
 export const addw = (a: internal.primitives.StubUint64Compat, b: internal.primitives.StubUint64Compat): readonly [uint64, uint64] => {
   const uint64A = internal.primitives.Uint64Cls.fromCompat(a)
@@ -21,7 +21,7 @@ export const base64Decode = (e: internal.opTypes.Base64, a: internal.primitives.
   }
 
   const uint8ArrayResult = new Uint8Array(bufferResult)
-  return internal.primitives.BytesCls.fromCompat(uint8ArrayResult).asAlgoTs()
+  return asBytes(uint8ArrayResult)
 }
 
 export const bitLength = (a: internal.primitives.StubUint64Compat | internal.primitives.StubBytesCompat): uint64 => {
@@ -36,7 +36,7 @@ export const bsqrt = (a: internal.primitives.StubBigUintCompat): biguint => {
   const bigUintClsValue = internal.primitives.BigUintCls.fromCompat(a)
   const bigintValue = internal.primitives.checkBigUint(bigUintClsValue.asBigInt())
   const sqrtValue = squareroot(bigintValue)
-  return internal.primitives.BigUintCls.fromCompat(sqrtValue).asAlgoTs()
+  return asBigUint(sqrtValue)
 }
 
 export const btoi = (a: internal.primitives.StubBytesCompat): uint64 => {
@@ -169,7 +169,7 @@ export const getByte = (a: internal.primitives.StubBytesCompat, b: internal.prim
 }
 
 export const itob = (a: internal.primitives.StubUint64Compat): bytes => {
-  return internal.primitives.Uint64Cls.fromCompat(a).toBytes().asAlgoTs()
+  return asUint64Cls(a).toBytes().asAlgoTs()
 }
 
 export const mulw = (a: internal.primitives.StubUint64Compat, b: internal.primitives.StubUint64Compat): readonly [uint64, uint64] => {

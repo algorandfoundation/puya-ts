@@ -1,5 +1,5 @@
 import { internal } from '@algorandfoundation/algo-ts'
-import { AccountData } from '../subcontexts/ledger-context'
+import { AccountData, ApplicationData, AssetData } from '../subcontexts/ledger-context'
 import { TestExecutionContext } from '../test-execution-context'
 
 /**
@@ -37,6 +37,24 @@ class InternalContext {
     const data = this.ledger.accountDataMap.get(key.toString())
     if (!data) {
       throw internal.errors.internalError('Unknown account, check correct testing context is active')
+    }
+    return data
+  }
+
+  getAssetData(id: internal.primitives.StubUint64Compat): AssetData {
+    const key = internal.primitives.Uint64Cls.fromCompat(id)
+    const data = this.ledger.assetDataMap.get(key.asBigInt())
+    if (!data) {
+      throw internal.errors.internalError('Unknown asset, check correct testing context is active')
+    }
+    return data
+  }
+
+  getApplicationData(id: internal.primitives.StubUint64Compat): ApplicationData {
+    const key = internal.primitives.Uint64Cls.fromCompat(id)
+    const data = this.ledger.applicationDataMap.get(key.asBigInt())
+    if (!data) {
+      throw internal.errors.internalError('Unknown application, check correct testing context is active')
     }
     return data
   }

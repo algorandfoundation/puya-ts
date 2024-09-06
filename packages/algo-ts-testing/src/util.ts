@@ -1,4 +1,5 @@
 import { internal } from '@algorandfoundation/algo-ts'
+import { BITS_IN_BYTE, MAX_UINT8, UINT512_SIZE } from './constants'
 import { DeliberateAny } from './typescript-helpers'
 
 export const nameOfType = (x: unknown) => {
@@ -34,6 +35,12 @@ export const asBigUintCls = (val: internal.primitives.StubBigUintCompat) => inte
 
 export const asBytesCls = (val: internal.primitives.StubBytesCompat) => internal.primitives.BytesCls.fromCompat(val)
 
+export const asUint64 = (val: internal.primitives.StubUint64Compat) => asUint64Cls(val).asAlgoTs()
+
+export const asBigUint = (val: internal.primitives.StubBigUintCompat) => asBigUintCls(val).asAlgoTs()
+
+export const asBytes = (val: internal.primitives.StubBytesCompat) => asBytesCls(val).asAlgoTs()
+
 export const asMaybeUint64Cls = (val: DeliberateAny) => {
   try {
     return internal.primitives.Uint64Cls.fromCompat(val)
@@ -62,3 +69,16 @@ export const asMaybeBytesCls = (val: DeliberateAny) => {
 
 export const binaryStringToBytes = (s: string): internal.primitives.BytesCls =>
   internal.primitives.BytesCls.fromCompat(new Uint8Array(s.match(/.{1,8}/g)!.map((x) => parseInt(x, 2))))
+
+export const getRandomNumber = (min: number, max: number): number => {
+  return Math.floor(Math.random() * (max - min + 1)) + min
+}
+
+export const getRandomBigInt = (min: number | bigint, max: number | bigint): bigint => {
+  const bigIntMin = BigInt(min)
+  const bigIntMax = BigInt(max)
+  const randomValue = [...Array(UINT512_SIZE / BITS_IN_BYTE).keys()]
+    .map(() => getRandomNumber(0, MAX_UINT8))
+    .reduce((acc, x) => acc * 256n + BigInt(x), 0n)
+  return (randomValue % (bigIntMax - bigIntMin)) + bigIntMin
+}

@@ -4,7 +4,7 @@ import { asBigInt } from '../util'
 
 export class TxnValueGenerator {
   applicationCall({ appId, args, sender, ...rest }: Partial<gtxn.ApplicationTxn> & { args?: bytes[] }): gtxn.ApplicationTxn {
-    if (appId && !lazyContext.ledger.applications.has(asBigInt(appId.id))) {
+    if (appId && !lazyContext.ledger.applicationDataMap.has(asBigInt(appId.id))) {
       throw new internal.errors.InternalError(`Application ID ${appId.id} not found in test context`)
     }
     return {
