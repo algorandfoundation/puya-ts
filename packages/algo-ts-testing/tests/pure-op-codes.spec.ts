@@ -1,4 +1,4 @@
-import { BigUint, Bytes, internal, Uint64, uint64 } from '@algorandfoundation/algo-ts'
+import { BigUint, bytes, Bytes, internal, Uint64, uint64 } from '@algorandfoundation/algo-ts'
 import { AppSpec } from '@algorandfoundation/algokit-utils/types/app-spec'
 import { afterEach } from 'node:test'
 import { describe, expect, it, test } from 'vitest'
@@ -643,7 +643,7 @@ describe('Pure op codes', async () => {
     })
   })
 
-  describe('getBytes', async () => {
+  describe('getByte', async () => {
     test.each([
       [new Uint8Array([0x00]), 0],
       [getPaddedUint8Array(2, intToBytes(256)), 3],
@@ -658,7 +658,7 @@ describe('Pure op codes', async () => {
       [intToBytes(MAX_UINT512), 0],
     ])('should get the bytes value of the given input', async (a, b) => {
       const avmResult = await getAvmResult<uint64>({ appClient }, 'verify_getbyte', asUint8Array(a), b)
-      const result = op.getBytes(a, b)
+      const result = op.getByte(a, b)
       expect(result.valueOf()).toEqual(avmResult)
     })
 
@@ -670,7 +670,7 @@ describe('Pure op codes', async () => {
       [intToBytes(MAX_UINT512 - 1n), 512],
     ])('should thorw error when index out of bound', async (a, b) => {
       await expect(getAvmResult<uint64>({ appClient }, 'verify_getbyte', asUint8Array(a), b)).rejects.toThrow('getbyte index beyond array length')
-      expect(() => op.getBytes(a, b)).toThrow(/getBytes index \d+ is beyond length/)
+      expect(() => op.getByte(a, b)).toThrow(/getBytes index \d+ is beyond length/)
     })
   })
 
@@ -751,7 +751,7 @@ describe('Pure op codes', async () => {
     })
   })
 
-  describe('selectBytes', async () => {
+  describe('select', async () => {
     test.each([
       ["one", "two", 0],
       ["one", "two", 1],
@@ -762,7 +762,7 @@ describe('Pure op codes', async () => {
       [new Uint8Array([0x00, 0x00, 0xff]), new Uint8Array([0xff]), 1n],
     ])(`should select bytes according to the input`, async (a, b, c) => {
       const avmResult = (await getAvmResultRaw({ appClient }, 'verify_select_bytes', asUint8Array(a), asUint8Array(b), c === true ? 1 : c === false ? 0 : c))!
-      const result = op.selectBytes(a, b, c)
+      const result = op.select(a, b, c)
       expect(asUint8Array(result)).toEqual(avmResult)
     })
 
@@ -771,11 +771,9 @@ describe('Pure op codes', async () => {
       [new Uint8Array([0x00, 0x00, 0xff]), new Uint8Array([0xff]), MAX_UINT512],
     ])(`should throw error when input overflows to select bytes`, async (a, b, c) => {
       await expect(getAvmResultRaw({ appClient }, 'verify_select_bytes', asUint8Array(a), asUint8Array(b), c)).rejects.toThrow(avmIntArgOverflowError)
-      expect(() => op.selectBytes(a, b, c)).toThrow('Uint64 over or underflow')
+      expect(() => op.select(a, b, c)).toThrow('Uint64 over or underflow')
     })
-  })
 
-  describe('selectUint64', async () => {
     test.each([
       [10, 20, 0],
       [10, 20, 1],
@@ -784,7 +782,7 @@ describe('Pure op codes', async () => {
       [MAX_UINT64, 20, false],
     ])('should select uint64 according to the input', async (a, b, c) => {
       const avmResult = await getAvmResult<uint64>({ appClient }, 'verify_select_uint64', a, b, c === true ? 1 : c === false ? 0 : c)
-      const result = op.selectUint64(a, b, c)
+      const result = op.select(a, b, c)
       expect(result.valueOf()).toEqual(avmResult)
     })
 
@@ -793,11 +791,11 @@ describe('Pure op codes', async () => {
       [MAX_UINT512, MAX_UINT512, MAX_UINT512],
     ])(`should throw error when input overflows to select uint64`, async (a, b, c) => {
       await expect(getAvmResult<uint64>({ appClient }, 'verify_select_uint64', a, b, c)).rejects.toThrow(avmIntArgOverflowError)
-      expect(() => op.selectUint64(a, b, c)).toThrow('Uint64 over or underflow')
+      expect(() => op.select(a, b, c)).toThrow('Uint64 over or underflow')
     })
   })
 
-  describe('setBitBytes', async () => {
+  describe('setBit', async () => {
     test.each([
       [new Uint8Array([0x00]), 0, 1],
       [getPaddedUint8Array(2, intToBytes(256)), 3, 1],
@@ -813,7 +811,7 @@ describe('Pure op codes', async () => {
       [intToBytes(MAX_UINT512), 0, 0],
     ])(`should set the bit at the given index of bytes value`, async (a, b, c) => {
       const avmResult = (await getAvmResultRaw({ appClient }, 'verify_setbit_bytes', asUint8Array(a), b, c))!
-      const result = op.setBitBytes(a, b, c)
+      const result = op.setBit(a, b, c) as bytes
       expect(asUint8Array(result)).toEqual(avmResult)
     })
 
@@ -825,7 +823,7 @@ describe('Pure op codes', async () => {
       [intToBytes(MAX_UINT512 - 1n), 512, 1],
     ])('should throw error when index out of bound of bytes value', async (a, b, c) => {
       await expect(getAvmResultRaw({ appClient }, 'verify_setbit_bytes', asUint8Array(a), b, c)).rejects.toThrow('setbit index beyond byteslice')
-      expect(() => op.setBitBytes(a, b, c)).toThrow(/setBit index \d+ is beyond length/)
+      expect(() => op.setBit(a, b, c)).toThrow(/setBit index \d+ is beyond length/)
     })
 
     it('should throw error when input is invalid', async () => {
@@ -833,11 +831,9 @@ describe('Pure op codes', async () => {
       const b = 0
       const c = 2
       await expect(getAvmResultRaw({ appClient }, 'verify_setbit_bytes', asUint8Array(a), b, c)).rejects.toThrow('setbit value > 1')
-      expect(() => op.setBitBytes(a, b, c)).toThrow(`setBit value > 1`)
+      expect(() => op.setBit(a, b, c)).toThrow(`setBit value > 1`)
     })
-  })
 
-  describe('setBitUint64', async () => {
     test.each([
       [0, 0, 1],
       [0, 3, 1],
@@ -853,7 +849,7 @@ describe('Pure op codes', async () => {
       [MAX_UINT64, 0, 0],
     ])('should set the bit at the given index of uint64 value', async (a, b, c) => {
       const avmResult = await getAvmResult<uint64>({ appClient }, 'verify_setbit_uint64', a, b, c)
-      const result = op.setBitUint64(a, b, c)
+      const result = op.setBit(a, b, c)
       expect(result.valueOf()).toBe(avmResult)
     })
 
@@ -862,7 +858,7 @@ describe('Pure op codes', async () => {
       [MAX_UINT64 - 1n, 64, 1],
     ])(`should throw error when index out of bound of uint64 value`, async (a, b, c) => {
       await expect(getAvmResult<uint64>({ appClient }, 'verify_setbit_uint64', a, b, c)).rejects.toThrow('setbit index > 63')
-      expect(() => op.setBitUint64(a, b, c)).toThrow(/setBit index \d+ is beyond length/)
+      expect(() => op.setBit(a, b, c)).toThrow(/setBit index \d+ is beyond length/)
     })
 
     it('should throw error when input is invalid', async () => {
@@ -870,7 +866,7 @@ describe('Pure op codes', async () => {
       const b = 2
       const c = 2
       await expect(getAvmResult<uint64>({ appClient }, 'verify_setbit_uint64', a, b, c)).rejects.toThrow('setbit value > 1')
-      expect(() => op.setBitUint64(a, b, c)).toThrow(`setBit value > 1`)
+      expect(() => op.setBit(a, b, c)).toThrow(`setBit value > 1`)
     })
   })
 
