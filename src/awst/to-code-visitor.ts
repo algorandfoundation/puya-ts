@@ -1,6 +1,8 @@
 import * as nodes from './nodes'
-import type { AppStorageDefinition, ExpressionVisitor, ModuleStatementVisitor, StatementVisitor } from './nodes'
-import { AppStorageKind, BytesEncoding, FreeSubroutineTarget, InstanceSubroutineTarget } from './nodes'
+import type { AppStorageDefinition, ContractMemberNodeVisitor, ExpressionVisitor, RootNodeVisitor, StatementVisitor } from './nodes'
+import { InstanceSuperMethodTarget } from './nodes'
+import { ContractMethodTarget, InstanceMethodTarget, SubroutineID } from './nodes'
+import { AppStorageKind, BytesEncoding } from './nodes'
 import { TodoError } from '../errors'
 import { logger } from '../logger'
 import { uint8ArrayToUtf8 } from '../util'
@@ -32,8 +34,25 @@ function printConstant(value: ConstantValue): string {
       return printBytes(value, BytesEncoding.unknown)
   }
 }
-export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, StatementVisitor<string[]>, ExpressionVisitor<string> {
-  #singleEval = new Set<string>()
+export class ToCodeVisitor
+  implements RootNodeVisitor<string[]>, ContractMemberNodeVisitor<string[]>, StatementVisitor<string[]>, ExpressionVisitor<string>
+{
+  visitVoidConstant(expression: nodes.VoidConstant): string {
+    throw new Error('Method not implemented.')
+  }
+  visitGroupTransactionReference(expression: nodes.GroupTransactionReference): string {
+    throw new Error('Method not implemented.')
+  }
+  visitPuyaLibCall(expression: nodes.PuyaLibCall): string {
+    throw new Error('Method not implemented.')
+  }
+  visitARC4Router(expression: nodes.ARC4Router): string {
+    throw new Error('Method not implemented.')
+  }
+  visitAppStorageDefinition(contractMemberNode: AppStorageDefinition): string[] {
+    throw new Error('Method not implemented.')
+  }
+  #singleEval = new Set<bigint>()
   visitUInt64PostfixUnaryOperation(expression: nodes.UInt64PostfixUnaryOperation): string {
     return `${expression.target.accept(this)}${expression.op}`
   }
@@ -183,9 +202,15 @@ export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, Statemen
     return `${expression.lhs.accept(this)} ${expression.operator} ${expression.rhs.accept(this)}`
   }
   visitSubroutineCallExpression(expression: nodes.SubroutineCallExpression): string {
-    const target =
-      expression.target instanceof FreeSubroutineTarget ? '' : expression.target instanceof InstanceSubroutineTarget ? 'this.' : 'super.'
-    return `${target}${expression.target.name}(${expression.args.map((a) => a.value.accept(this)).join(', ')})`
+    const target = this.visitCallTarget(expression.target)
+    return `${target}(${expression.args.map((a) => a.value.accept(this)).join(', ')})`
+  }
+  visitCallTarget(target: nodes.SubroutineCallExpression['target']) {
+    if (target instanceof SubroutineID) return target.target
+    if (target instanceof ContractMethodTarget) return `${target.cref}.${target.memberName}`
+    if (target instanceof InstanceMethodTarget) return `this.${target.memberName}`
+    if (target instanceof InstanceSuperMethodTarget) return `super.${target.memberName}`
+    throw new TodoError(`Unhandled target: ${target}`)
   }
   visitUInt64UnaryOperation(expression: nodes.UInt64UnaryOperation): string {
     return `${expression.op}${expression.expr.accept(this)}`
@@ -207,9 +232,6 @@ export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, Statemen
   }
   visitNot(expression: nodes.Not): string {
     return `!${expression.expr.accept(this)}`
-  }
-  visitContains(expression: nodes.Contains): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
   }
   visitEnumeration(expression: nodes.Enumeration): string {
     throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
@@ -283,9 +305,6 @@ export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, Statemen
       '}',
     ]
   }
-  visitConstantDeclaration(moduleStatement: nodes.ConstantDeclaration): string[] {
-    return [`${moduleStatement.name} = ${printConstant(moduleStatement.value)}`]
-  }
   visitSubroutine(moduleStatement: nodes.Subroutine): string[] {
     const args = moduleStatement.args.map((a) => `${a.name}: ${a.wtype}`).join(', ')
     return [
@@ -296,7 +315,7 @@ export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, Statemen
     ]
   }
   visitContractMethod(statement: nodes.ContractMethod): string[] {
-    return [`${statement.name}(): ${statement.returnType}`, '{', ...indent(statement.body.accept(this)), '}', '']
+    return [`${statement.memberName}(): ${statement.returnType}`, '{', ...indent(statement.body.accept(this)), '}', '']
   }
   visitLogicSignature(moduleStatement: nodes.LogicSignature): string[] {
     throw new TodoError('Method not implemented.', { sourceLocation: moduleStatement.sourceLocation })
@@ -344,17 +363,11 @@ export class ToCodeVisitor implements ModuleStatementVisitor<string[]>, Statemen
     }
 
     const header = ['contract', c.name]
-    if (c.isAbstract) {
-      header.splice(0, 0, 'abstract')
-    }
     if (c.bases.length) {
       header.push('extends', c.bases.map((b) => `${b.moduleName}::${b.className}`).join(', '))
     }
 
     return [header.join(' '), '{', ...indent(body), '}']
-  }
-  visitStructureDefinition(moduleStatement: nodes.StructureDefinition): string[] {
-    throw new TodoError('Method not implemented.', { sourceLocation: moduleStatement.sourceLocation })
   }
 
   visitSpecialMethod(statement: nodes.ContractMethod, name: string): string[] {

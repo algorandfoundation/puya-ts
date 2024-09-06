@@ -21,7 +21,7 @@ export class AssertFunctionBuilder extends FunctionBuilder {
     if (condition === undefined) {
       throw new CodeError('Missing required argument: condition', { sourceLocation })
     }
-    let messageStr: string | undefined
+    let messageStr: string | null = null
     if (message) {
       const messageConst = requireConstantOfType(message, stringPType, sourceLocation)
       invariant(messageConst instanceof StringConstant, 'messageConst must be StringConst')
@@ -48,7 +48,7 @@ export class ErrFunctionBuilder extends FunctionBuilder {
       throw CodeError.unexpectedUnhandledArgs({ sourceLocation })
     }
 
-    let messageStr: string | undefined
+    let messageStr: string | null = null
     if (message) {
       const messageConst = requireConstantOfType(message, stringPType, sourceLocation)
       invariant(messageConst instanceof StringConstant, 'messageConst must be StringConst')

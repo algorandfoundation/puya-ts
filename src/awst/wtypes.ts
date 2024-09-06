@@ -12,7 +12,7 @@ export class WType {
   constructor(props: { name: string; immutable?: boolean; scalarType: AVMType | undefined; ephemeral?: boolean }) {
     this.name = props.name
     this.immutable = props.immutable ?? true
-    this.scalarType = props.scalarType
+    this.scalarType = props.scalarType ?? null
     this.ephemeral = props.ephemeral ?? false
   }
 
@@ -26,7 +26,7 @@ export class WType {
   /**
    * The AVM stack type of this type (if any)
    */
-  readonly scalarType: AVMType | undefined
+  readonly scalarType: AVMType | null
 
   equals(other: WType): boolean {
     return other.name === this.name
@@ -132,7 +132,7 @@ export class WTuple extends WType {
   }
 }
 export class WArray extends WType {
-  itemType: WType
+  readonly itemType: WType
   constructor(props: { itemType: WType; immutable: boolean }) {
     super({
       name: 'WArray',
@@ -142,6 +142,19 @@ export class WArray extends WType {
     this.itemType = props.itemType
   }
 }
+
+export class WEnumeration extends WType {
+  readonly sequenceType: WType
+  constructor(props: { sequenceType: WType }) {
+    super({
+      name: 'WArray',
+      scalarType: undefined,
+      immutable: true,
+    })
+    this.sequenceType = props.sequenceType
+  }
+}
+export class WGroupTransaction extends WType {}
 
 export class ARC4UIntN extends ARC4Type {
   readonly n: bigint

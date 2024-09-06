@@ -17,9 +17,9 @@ import type { Arc4AbiDecoratorData, DecoratorData } from './decorator-visitor'
 import { DecoratorVisitor } from './decorator-visitor'
 import type { SourceLocation } from '../awst/source-location'
 import type { DefaultArgumentSource } from '../awst/models'
+import { ContractReference } from '../awst/models'
 import { ARC4BareMethodConfig } from '../awst/models'
 import { ARC4ABIMethodConfig } from '../awst/models'
-import { ContractReference } from '../awst/models'
 import { ARC4CreateOption, OnCompletionAction } from '../awst/models'
 import { isValidLiteralForPType } from './eb/util'
 import type { VisitorContext } from './context/base-context'
@@ -63,38 +63,38 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
 
     this.result = new ContractFragment({
       name: this._className,
-      nameOverride: undefined,
       appState: this._appState,
-      init: this._ctor,
+      init: this._ctor ?? null,
       subroutines: this._subroutines,
-      docstring: undefined,
+      docstring: null,
       approvalProgram: this._approvalProgram ?? this.makeDefaultApprovalProgram(sourceLocation, contractPtype),
       clearProgram: this._clearStateProgram ?? this.makeDefaultClearStateProgram(sourceLocation, contractPtype),
-      isAbstract,
-      isArc4: contractPtype.isARC4,
+      // isArc4: contractPtype.isARC4,
       bases: this.buildContractReferences(contractPtype),
-      moduleName: this._contractPType.module,
+      id: ContractReference.fromPType(this._contractPType),
       reservedScratchSpace: new Set(),
       methods: new Map(),
       sourceLocation: sourceLocation,
       stateTotals: {
-        globalBytes: undefined,
-        globalUints: undefined,
-        localBytes: undefined,
-        localUints: undefined,
+        globalBytes: null,
+        globalUints: null,
+        localBytes: null,
+        localUints: null,
       },
     })
   }
 
   private makeDefaultClearStateProgram(sourceLocation: SourceLocation, contractType: ContractClassPType) {
     return nodeFactory.contractMethod({
-      name: Constants.clearStateProgramMethodName,
-      moduleName: contractType.module,
+      memberName: Constants.clearStateProgramMethodName,
+      cref: ContractReference.fromPType(contractType),
       args: [],
-      arc4MethodConfig: undefined,
+      arc4MethodConfig: null,
       sourceLocation,
-      className: contractType.name,
       returnType: boolWType,
+      synthetic: true,
+      inheritable: true,
+      documentation: nodeFactory.methodDocumentation(),
       body: nodeFactory.block(
         {
           sourceLocation,
@@ -109,13 +109,15 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
   private makeDefaultApprovalProgram(sourceLocation: SourceLocation, contractType: ContractClassPType) {
     // TODO: This should be updated to return the arc4 router node, and should only be used if it's an arc4 contract
     return nodeFactory.contractMethod({
-      name: Constants.approvalProgramMethodName,
-      moduleName: contractType.module,
+      memberName: Constants.approvalProgramMethodName,
+      cref: ContractReference.fromPType(contractType),
       args: [],
-      arc4MethodConfig: undefined,
+      arc4MethodConfig: null,
       sourceLocation,
-      className: contractType.name,
       returnType: boolWType,
+      synthetic: true,
+      inheritable: true,
+      documentation: nodeFactory.methodDocumentation({ args: new Map() }),
       body: nodeFactory.block(
         {
           sourceLocation,
@@ -146,7 +148,7 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
     throw new TodoError('visitClassStaticBlockDeclaration')
   }
   visitConstructor(node: ts.ConstructorDeclaration): void {
-    this._ctor = FunctionVisitor.buildConstructor(this.context, node, { className: this._className })
+    this._ctor = FunctionVisitor.buildConstructor(this.context, node, { cref: ContractReference.fromPType(this._contractPType) })
   }
   visitGetAccessor(node: ts.GetAccessorDeclaration): void {
     throw new TodoError('visitGetAccessor')
@@ -260,6 +262,7 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
         structs: {}, // TODO
       })
     }
+    return null
   }
 
   visitMethodDeclaration(node: ts.MethodDeclaration): void {
@@ -279,20 +282,20 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
         'Only one decorator is allowed per method. Multiple on complete actions can be provided in a single decorator',
       )
     }
-
+    const cref = ContractReference.fromPType(this._contractPType)
     switch (methodName) {
       case Constants.approvalProgramMethodName:
         if (decorators.length) logger.error(sourceLocation, `${Constants.approvalProgramMethodName} should not have a decorator`)
-        this._approvalProgram = FunctionVisitor.buildContractMethod(this.context, node, { className: this._className })
+        this._approvalProgram = FunctionVisitor.buildContractMethod(this.context, node, { cref })
         break
       case Constants.clearStateProgramMethodName:
         if (decorators.length) logger.error(sourceLocation, `${Constants.clearStateProgramMethodName} should not have a decorator`)
-        this._clearStateProgram = FunctionVisitor.buildContractMethod(this.context, node, { className: this._className })
+        this._clearStateProgram = FunctionVisitor.buildContractMethod(this.context, node, { cref })
         break
       default:
         this._subroutines.push(
           FunctionVisitor.buildContractMethod(this.context, node, {
-            className: this._className,
+            cref,
             arc4MethodConfig: this.buildArc4Config({
               decorator: decorators[0],
               methodName,

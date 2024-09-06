@@ -10,17 +10,17 @@ import { nodeFactory } from '../awst/node-factory'
 export class AppStorageDeclaration {
   readonly memberName: string
   readonly ptype: GlobalStateType | LocalStateType
-  readonly keyOverride: BytesConstant | undefined
+  readonly keyOverride: BytesConstant | null
   readonly sourceLocation: SourceLocation
   readonly definedIn: ContractClassPType
-  readonly description: string | undefined
+  readonly description: string | null
   constructor(props: {
     memberName: string
     ptype: GlobalStateType | LocalStateType
-    keyOverride: BytesConstant | undefined
+    keyOverride: BytesConstant | null
     sourceLocation: SourceLocation
     definedIn: ContractClassPType
-    description: string | undefined
+    description: string | null
   }) {
     this.memberName = props.memberName
     this.ptype = props.ptype
@@ -55,12 +55,12 @@ export class AppStorageDeclaration {
   }
 
   get definition(): AppStorageDefinition {
-    return {
+    return nodeFactory.appStorageDefinition({
       ...this,
       kind: this.kind,
       key: this.key,
-      keyWtype: undefined,
+      keyWtype: null,
       storageWtype: this.ptype.contentType.wtypeOrThrow,
-    }
+    })
   }
 }

@@ -3,6 +3,7 @@ import type * as wtypes from './wtypes'
 import type { SourceLocation } from './source-location'
 import type { ARC4BareMethodConfig, ARC4ABIMethodConfig, ContractReference, LogicSigReference } from './models'
 import type { Props } from '../typescript-helpers'
+import { classes } from 'polytype'
 export enum TxnField {
   sender,
   fee,
@@ -73,20 +74,26 @@ export enum TxnField {
   approvalProgramPages,
   clearStateProgramPages,
 }
+export class SubroutineID {
+  constructor(props: Props<SubroutineID>) {
+    this.target = props.target
+  }
+  target: string
+}
 export abstract class Node {
-  protected constructor(props: Props<Node>) {
+  constructor(props: Props<Node>) {
     this.sourceLocation = props.sourceLocation
   }
   sourceLocation: SourceLocation
 }
 export abstract class Statement extends Node {
-  protected constructor(props: Props<Statement>) {
+  constructor(props: Props<Statement>) {
     super(props)
   }
   abstract accept<T>(visitor: StatementVisitor<T>): T
 }
 export abstract class Expression extends Node {
-  protected constructor(props: Props<Expression>) {
+  constructor(props: Props<Expression>) {
     super(props)
     this.wtype = props.wtype
   }
@@ -97,8 +104,10 @@ export class ExpressionStatement extends Statement {
   constructor(props: Props<ExpressionStatement>) {
     super(props)
     this.expr = props.expr
+    this.sourceLocation = props.sourceLocation
   }
   expr: Expression
+  sourceLocation: SourceLocation
   accept<T>(visitor: StatementVisitor<T>): T {
     return visitor.visitExpressionStatement(this)
   }
@@ -111,8 +120,8 @@ export class Block extends Statement {
     this.comment = props.comment
   }
   body: Array<Statement>
-  label?: string | undefined
-  comment?: string | undefined
+  label: string | null
+  comment: string | null
   accept<T>(visitor: StatementVisitor<T>): T {
     return visitor.visitBlock(this)
   }
@@ -136,7 +145,7 @@ export class IfElse extends Statement {
   }
   condition: Expression
   ifBranch: Block
-  elseBranch?: Block | undefined
+  elseBranch: Block | null
   accept<T>(visitor: StatementVisitor<T>): T {
     return visitor.visitIfElse(this)
   }
@@ -150,7 +159,7 @@ export class Switch extends Statement {
   }
   value: Expression
   cases: Map<Expression, Block>
-  defaultCase?: Block | undefined
+  defaultCase: Block | null
   accept<T>(visitor: StatementVisitor<T>): T {
     return visitor.visitSwitch(this)
   }
@@ -188,7 +197,7 @@ export class ReturnStatement extends Statement {
     super(props)
     this.value = props.value
   }
-  value?: Expression | undefined
+  value: Expression | null
   accept<T>(visitor: StatementVisitor<T>): T {
     return visitor.visitReturnStatement(this)
   }
@@ -201,7 +210,7 @@ export class IntegerConstant extends Expression {
     this.tealAlias = props.tealAlias
   }
   value: bigint
-  tealAlias?: string | undefined
+  tealAlias: string | null
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitIntegerConstant(this)
   }
@@ -258,6 +267,15 @@ export class StringConstant extends Expression {
   value: string
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitStringConstant(this)
+  }
+}
+export class VoidConstant extends Expression {
+  constructor(props: Props<VoidConstant>) {
+    super(props)
+    this.wtype = props.wtype
+  }
+  accept<T>(visitor: ExpressionVisitor<T>): T {
+    return visitor.visitVoidConstant(this)
   }
 }
 export class TemplateVar extends Expression {
@@ -371,7 +389,7 @@ export class IntrinsicCall extends Expression {
   opCode: string
   immediates: Array<string | bigint>
   stackArgs: Array<Expression>
-  comment?: string | undefined
+  comment: string | null
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitIntrinsicCall(this)
   }
@@ -401,14 +419,29 @@ export class UpdateInnerTransaction extends Expression {
     return visitor.visitUpdateInnerTransaction(this)
   }
 }
+export class GroupTransactionReference extends Expression {
+  constructor(props: Props<GroupTransactionReference>) {
+    super(props)
+    this.index = props.index
+    this.wtype = props.wtype
+  }
+  index: Expression
+  declare wtype: wtypes.WGroupTransaction
+  accept<T>(visitor: ExpressionVisitor<T>): T {
+    return visitor.visitGroupTransactionReference(this)
+  }
+}
 export class CheckedMaybe extends Expression {
   constructor(props: Props<CheckedMaybe>) {
     super(props)
     this.expr = props.expr
     this.comment = props.comment
+    this.wtype = props.wtype
+    this.sourceLocation = props.sourceLocation
   }
   expr: Expression
   comment: string
+  sourceLocation: SourceLocation
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitCheckedMaybe(this)
   }
@@ -430,6 +463,7 @@ export class TupleItemExpression extends Expression {
     super(props)
     this.base = props.base
     this.index = props.index
+    this.wtype = props.wtype
   }
   base: Expression
   index: bigint
@@ -456,7 +490,7 @@ export class InnerTransactionField extends Expression {
   }
   itxn: Expression
   field: TxnField
-  arrayIndex?: Expression | undefined
+  arrayIndex: Expression | null
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitInnerTransactionField(this)
   }
@@ -464,10 +498,10 @@ export class InnerTransactionField extends Expression {
 export class SubmitInnerTransaction extends Expression {
   constructor(props: Props<SubmitInnerTransaction>) {
     super(props)
-    this.group = props.group
+    this.itxns = props.itxns
     this.wtype = props.wtype
   }
-  group: Expression | [Expression]
+  itxns: Array<Expression>
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitSubmitInnerTransaction(this)
   }
@@ -505,8 +539,8 @@ export class SliceExpression extends Expression {
     this.endIndex = props.endIndex
   }
   base: Expression
-  beginIndex?: Expression | undefined
-  endIndex?: Expression | undefined
+  beginIndex: Expression | null
+  endIndex: Expression | null
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitSliceExpression(this)
   }
@@ -519,8 +553,8 @@ export class IntersectionSliceExpression extends Expression {
     this.endIndex = props.endIndex
   }
   base: Expression
-  beginIndex?: Expression | bigint | undefined
-  endIndex?: Expression | bigint | undefined
+  beginIndex: Expression | bigint | null
+  endIndex: Expression | bigint | null
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitIntersectionSliceExpression(this)
   }
@@ -532,7 +566,7 @@ export class AppStateExpression extends Expression {
     this.existsAssertionMessage = props.existsAssertionMessage
   }
   key: Expression
-  existsAssertionMessage?: string | undefined
+  existsAssertionMessage: string | null
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitAppStateExpression(this)
   }
@@ -545,7 +579,7 @@ export class AppAccountStateExpression extends Expression {
     this.account = props.account
   }
   key: Expression
-  existsAssertionMessage?: string | undefined
+  existsAssertionMessage: string | null
   account: Expression
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitAppAccountStateExpression(this)
@@ -558,7 +592,7 @@ export class BoxValueExpression extends Expression {
     this.existsAssertionMessage = props.existsAssertionMessage
   }
   key: Expression
-  existsAssertionMessage?: string | undefined
+  existsAssertionMessage: string | null
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitBoxValueExpression(this)
   }
@@ -568,9 +602,12 @@ export class SingleEvaluation extends Expression {
     super(props)
     this.source = props.source
     this.id = props.id
+    this.wtype = props.wtype
+    this.sourceLocation = props.sourceLocation
   }
   source: Expression
-  id: string
+  id: bigint
+  sourceLocation: SourceLocation
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitSingleEvaluation(this)
   }
@@ -636,6 +673,7 @@ export class AssignmentExpression extends Expression {
     super(props)
     this.target = props.target
     this.value = props.value
+    this.wtype = props.wtype
   }
   target:
     | VarExpression
@@ -692,34 +730,32 @@ export class BytesComparisonExpression extends Expression {
     return visitor.visitBytesComparisonExpression(this)
   }
 }
-export class InstanceSubroutineTarget {
-  constructor(props: Props<InstanceSubroutineTarget>) {
-    this.name = props.name
+export class InstanceMethodTarget {
+  constructor(props: Props<InstanceMethodTarget>) {
+    this.memberName = props.memberName
   }
-  name: string
+  memberName: string
 }
-export class BaseClassSubroutineTarget {
-  constructor(props: Props<BaseClassSubroutineTarget>) {
-    this.baseClass = props.baseClass
-    this.name = props.name
+export class InstanceSuperMethodTarget {
+  constructor(props: Props<InstanceSuperMethodTarget>) {
+    this.memberName = props.memberName
   }
-  baseClass: ContractReference
-  name: string
+  memberName: string
 }
-export class FreeSubroutineTarget {
-  constructor(props: Props<FreeSubroutineTarget>) {
-    this.moduleName = props.moduleName
-    this.name = props.name
+export class ContractMethodTarget {
+  constructor(props: Props<ContractMethodTarget>) {
+    this.cref = props.cref
+    this.memberName = props.memberName
   }
-  moduleName: string
-  name: string
+  cref: ContractReference
+  memberName: string
 }
 export class CallArg {
   constructor(props: Props<CallArg>) {
     this.name = props.name
     this.value = props.value
   }
-  name?: string | undefined
+  name: string | null
   value: Expression
 }
 export class SubroutineCallExpression extends Expression {
@@ -728,10 +764,37 @@ export class SubroutineCallExpression extends Expression {
     this.target = props.target
     this.args = props.args
   }
-  target: FreeSubroutineTarget | InstanceSubroutineTarget | BaseClassSubroutineTarget
+  target: SubroutineID | InstanceMethodTarget | InstanceSuperMethodTarget | ContractMethodTarget
   args: Array<CallArg>
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitSubroutineCallExpression(this)
+  }
+}
+export class PuyaLibData {
+  constructor(props: Props<PuyaLibData>) {
+    this.id = props.id
+    this.params = props.params
+    this.wtype = props.wtype
+  }
+  id: string
+  params: Map<string, wtypes.WType>
+  wtype: wtypes.WType
+}
+export enum PuyaLibFunction {
+  ensureBudget,
+  isSubstring,
+}
+export class PuyaLibCall extends Expression {
+  constructor(props: Props<PuyaLibCall>) {
+    super(props)
+    this.func = props.func
+    this.args = props.args
+    this.wtype = props.wtype
+  }
+  func: PuyaLibFunction
+  args: Array<CallArg>
+  accept<T>(visitor: ExpressionVisitor<T>): T {
+    return visitor.visitPuyaLibCall(this)
   }
 }
 export enum UInt64BinaryOperator {
@@ -911,19 +974,6 @@ export class Not extends Expression {
     return visitor.visitNot(this)
   }
 }
-export class Contains extends Expression {
-  constructor(props: Props<Contains>) {
-    super(props)
-    this.item = props.item
-    this.sequence = props.sequence
-    this.wtype = props.wtype
-  }
-  item: Expression
-  sequence: Expression
-  accept<T>(visitor: ExpressionVisitor<T>): T {
-    return visitor.visitContains(this)
-  }
-}
 export class UInt64AugmentedAssignment extends Statement {
   constructor(props: Props<UInt64AugmentedAssignment>) {
     super(props)
@@ -987,19 +1037,14 @@ export class BytesAugmentedAssignment extends Statement {
     return visitor.visitBytesAugmentedAssignment(this)
   }
 }
-export class OpUp extends Node {
-  constructor(props: Props<OpUp>) {
-    super(props)
-    this.n = props.n
-  }
-  n: Expression
-}
 export class Enumeration extends Expression {
   constructor(props: Props<Enumeration>) {
     super(props)
     this.expr = props.expr
+    this.wtype = props.wtype
   }
   expr: Expression
+  declare wtype: wtypes.WEnumeration
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitEnumeration(this)
   }
@@ -1008,6 +1053,7 @@ export class Reversed extends Expression {
   constructor(props: Props<Reversed>) {
     super(props)
     this.expr = props.expr
+    this.wtype = props.wtype
   }
   expr: Expression
   accept<T>(visitor: ExpressionVisitor<T>): T {
@@ -1094,66 +1140,78 @@ export class NewStruct extends Expression {
     return visitor.visitNewStruct(this)
   }
 }
-export abstract class ModuleStatement extends Node {
-  protected constructor(props: Props<ModuleStatement>) {
+export abstract class RootNode extends Node {
+  constructor(props: Props<RootNode>) {
     super(props)
-    this.name = props.name
   }
-  name: string
-  abstract accept<T>(visitor: ModuleStatementVisitor<T>): T
+  abstract accept<T>(visitor: RootNodeVisitor<T>): T
 }
-export class ConstantDeclaration extends ModuleStatement {
-  constructor(props: Props<ConstantDeclaration>) {
-    super(props)
-    this.value = props.value
-  }
-  value: bigint | string | Uint8Array | boolean
-  accept<T>(visitor: ModuleStatementVisitor<T>): T {
-    return visitor.visitConstantDeclaration(this)
-  }
-}
-export class SubroutineArgument extends Node {
+export class SubroutineArgument {
   constructor(props: Props<SubroutineArgument>) {
-    super(props)
     this.name = props.name
     this.wtype = props.wtype
+    this.sourceLocation = props.sourceLocation
   }
   name: string
   wtype: wtypes.WType
+  sourceLocation: SourceLocation | null
 }
-export abstract class _Function extends ModuleStatement {
-  protected constructor(props: Props<_Function>) {
+export class MethodDocumentation {
+  constructor(props: Props<MethodDocumentation>) {
+    this.description = props.description
+    this.args = props.args
+    this.returns = props.returns
+  }
+  description: string | null
+  args: Map<string, string>
+  returns: string | null
+}
+export abstract class _Function extends Node {
+  constructor(props: Props<_Function>) {
     super(props)
-    this.moduleName = props.moduleName
     this.args = props.args
     this.returnType = props.returnType
     this.body = props.body
-    this.docstring = props.docstring
+    this.documentation = props.documentation
   }
-  moduleName: string
   args: Array<SubroutineArgument>
   returnType: wtypes.WType
   body: Block
-  docstring?: string | undefined
-  abstract accept<T>(visitor: ModuleStatementVisitor<T>): T
+  documentation: MethodDocumentation
 }
-export class Subroutine extends _Function {
+export class Subroutine extends classes(_Function, RootNode) {
   constructor(props: Props<Subroutine>) {
-    super(props)
+    super([props], [props])
+    this.id = props.id
+    this.name = props.name
   }
-  accept<T>(visitor: ModuleStatementVisitor<T>): T {
+  id: string
+  name: string
+  accept<T>(visitor: RootNodeVisitor<T>): T {
     return visitor.visitSubroutine(this)
   }
 }
-export class ContractMethod extends _Function {
-  constructor(props: Props<ContractMethod>) {
+export abstract class ContractMemberNode extends Node {
+  constructor(props: Props<ContractMemberNode>) {
     super(props)
-    this.className = props.className
-    this.arc4MethodConfig = props.arc4MethodConfig
   }
-  className: string
-  arc4MethodConfig?: ARC4BareMethodConfig | ARC4ABIMethodConfig | undefined
-  accept<T>(visitor: ModuleStatementVisitor<T>): T {
+  abstract accept<T>(visitor: ContractMemberNodeVisitor<T>): T
+}
+export class ContractMethod extends classes(_Function, ContractMemberNode) {
+  constructor(props: Props<ContractMethod>) {
+    super([props], [props])
+    this.cref = props.cref
+    this.memberName = props.memberName
+    this.arc4MethodConfig = props.arc4MethodConfig
+    this.synthetic = props.synthetic
+    this.inheritable = props.inheritable
+  }
+  cref: ContractReference
+  memberName: string
+  arc4MethodConfig: ARC4BareMethodConfig | ARC4ABIMethodConfig | null
+  synthetic: boolean
+  inheritable: boolean
+  accept<T>(visitor: ContractMemberNodeVisitor<T>): T {
     return visitor.visitContractMethod(this)
   }
 }
@@ -1162,7 +1220,7 @@ export enum AppStorageKind {
   accountLocal,
   box,
 }
-export class AppStorageDefinition extends Node {
+export class AppStorageDefinition extends ContractMemberNode {
   constructor(props: Props<AppStorageDefinition>) {
     super(props)
     this.memberName = props.memberName
@@ -1175,19 +1233,26 @@ export class AppStorageDefinition extends Node {
   memberName: string
   kind: AppStorageKind
   storageWtype: wtypes.WType
-  keyWtype?: wtypes.WType | undefined
+  keyWtype: wtypes.WType | null
   key: BytesConstant
-  description?: string | undefined
+  description: string | null
+  accept<T>(visitor: ContractMemberNodeVisitor<T>): T {
+    return visitor.visitAppStorageDefinition(this)
+  }
 }
-export class LogicSignature extends ModuleStatement {
+export class LogicSignature extends RootNode {
   constructor(props: Props<LogicSignature>) {
     super(props)
-    this.moduleName = props.moduleName
+    this.id = props.id
+    this.shortName = props.shortName
     this.program = props.program
+    this.docstring = props.docstring
   }
-  moduleName: string
+  id: LogicSigReference
+  shortName: string
   program: Subroutine
-  accept<T>(visitor: ModuleStatementVisitor<T>): T {
+  docstring: string | null
+  accept<T>(visitor: RootNodeVisitor<T>): T {
     return visitor.visitLogicSignature(this)
   }
 }
@@ -1201,7 +1266,7 @@ export class CompiledContract extends Expression {
   }
   contract: ContractReference
   allocationOverrides: Map<TxnField, Expression>
-  prefix?: string | undefined
+  prefix: string | null
   templateVariables: Map<string, Expression>
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitCompiledContract(this)
@@ -1215,7 +1280,7 @@ export class CompiledLogicSig extends Expression {
     this.templateVariables = props.templateVariables
   }
   logicSig: LogicSigReference
-  prefix?: string | undefined
+  prefix: string | null
   templateVariables: Map<string, Expression>
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitCompiledLogicSig(this)
@@ -1228,18 +1293,25 @@ export class StateTotals {
     this.globalBytes = props.globalBytes
     this.localBytes = props.localBytes
   }
-  globalUints?: bigint | undefined
-  localUints?: bigint | undefined
-  globalBytes?: bigint | undefined
-  localBytes?: bigint | undefined
+  globalUints: bigint | null
+  localUints: bigint | null
+  globalBytes: bigint | null
+  localBytes: bigint | null
 }
-export class ContractFragment extends ModuleStatement {
+export class ARC4Router extends Expression {
+  constructor(props: Props<ARC4Router>) {
+    super(props)
+    this.wtype = props.wtype
+  }
+  accept<T>(visitor: ExpressionVisitor<T>): T {
+    return visitor.visitARC4Router(this)
+  }
+}
+export class ContractFragment extends RootNode {
   constructor(props: Props<ContractFragment>) {
     super(props)
-    this.moduleName = props.moduleName
-    this.nameOverride = props.nameOverride
-    this.isAbstract = props.isAbstract
-    this.isArc4 = props.isArc4
+    this.id = props.id
+    this.name = props.name
     this.bases = props.bases
     this.init = props.init
     this.approvalProgram = props.approvalProgram
@@ -1251,60 +1323,27 @@ export class ContractFragment extends ModuleStatement {
     this.docstring = props.docstring
     this.methods = props.methods
   }
-  moduleName: string
-  nameOverride?: string | undefined
-  isAbstract: boolean
-  isArc4: boolean
+  id: ContractReference
+  name: string
   bases: Array<ContractReference>
-  init?: ContractMethod | undefined
-  approvalProgram?: ContractMethod | undefined
-  clearProgram?: ContractMethod | undefined
+  init: ContractMethod | null
+  approvalProgram: ContractMethod | null
+  clearProgram: ContractMethod | null
   subroutines: Array<ContractMethod>
   appState: Map<string, AppStorageDefinition>
   reservedScratchSpace: Set<bigint>
-  stateTotals?: StateTotals | undefined
-  docstring?: string | undefined
+  stateTotals: StateTotals | null
+  docstring: string | null
   methods: Map<string, ContractMethod>
-  accept<T>(visitor: ModuleStatementVisitor<T>): T {
+  accept<T>(visitor: RootNodeVisitor<T>): T {
     return visitor.visitContractFragment(this)
   }
 }
-export class StructureField extends Node {
-  constructor(props: Props<StructureField>) {
-    super(props)
-    this.name = props.name
-    this.wtype = props.wtype
-  }
-  name: string
-  wtype: wtypes.WType
-}
-export class StructureDefinition extends ModuleStatement {
-  constructor(props: Props<StructureDefinition>) {
-    super(props)
-    this.fields = props.fields
-    this.wtype = props.wtype
-    this.docstring = props.docstring
-  }
-  fields: Array<StructureField>
-  wtype: wtypes.WType
-  docstring?: string | undefined
-  accept<T>(visitor: ModuleStatementVisitor<T>): T {
-    return visitor.visitStructureDefinition(this)
-  }
-}
-export class Module {
-  constructor(props: Props<Module>) {
-    this.name = props.name
-    this.sourceFilePath = props.sourceFilePath
-    this.body = props.body
-  }
-  name: string
-  sourceFilePath: string
-  body: Array<ModuleStatement>
-}
 export type LValue = VarExpression | FieldExpression | IndexExpression | TupleExpression | AppStateExpression | AppAccountStateExpression
 export type Constant = IntegerConstant | BoolConstant | BytesConstant | StringConstant
+export type AWST = ContractFragment | LogicSignature | Subroutine
 export const concreteNodes = {
+  subroutineID: SubroutineID,
   expressionStatement: ExpressionStatement,
   block: Block,
   goto: Goto,
@@ -1319,6 +1358,7 @@ export const concreteNodes = {
   boolConstant: BoolConstant,
   bytesConstant: BytesConstant,
   stringConstant: StringConstant,
+  voidConstant: VoidConstant,
   templateVar: TemplateVar,
   methodConstant: MethodConstant,
   addressConstant: AddressConstant,
@@ -1331,6 +1371,7 @@ export const concreteNodes = {
   intrinsicCall: IntrinsicCall,
   createInnerTransaction: CreateInnerTransaction,
   updateInnerTransaction: UpdateInnerTransaction,
+  groupTransactionReference: GroupTransactionReference,
   checkedMaybe: CheckedMaybe,
   tupleExpression: TupleExpression,
   tupleItemExpression: TupleItemExpression,
@@ -1352,11 +1393,13 @@ export const concreteNodes = {
   assignmentExpression: AssignmentExpression,
   numericComparisonExpression: NumericComparisonExpression,
   bytesComparisonExpression: BytesComparisonExpression,
-  instanceSubroutineTarget: InstanceSubroutineTarget,
-  baseClassSubroutineTarget: BaseClassSubroutineTarget,
-  freeSubroutineTarget: FreeSubroutineTarget,
+  instanceMethodTarget: InstanceMethodTarget,
+  instanceSuperMethodTarget: InstanceSuperMethodTarget,
+  contractMethodTarget: ContractMethodTarget,
   callArg: CallArg,
   subroutineCallExpression: SubroutineCallExpression,
+  puyaLibData: PuyaLibData,
+  puyaLibCall: PuyaLibCall,
   uInt64UnaryOperation: UInt64UnaryOperation,
   uInt64PostfixUnaryOperation: UInt64PostfixUnaryOperation,
   bigUIntPostfixUnaryOperation: BigUIntPostfixUnaryOperation,
@@ -1366,11 +1409,9 @@ export const concreteNodes = {
   bytesBinaryOperation: BytesBinaryOperation,
   booleanBinaryOperation: BooleanBinaryOperation,
   not: Not,
-  contains: Contains,
   uInt64AugmentedAssignment: UInt64AugmentedAssignment,
   bigUIntAugmentedAssignment: BigUIntAugmentedAssignment,
   bytesAugmentedAssignment: BytesAugmentedAssignment,
-  opUp: OpUp,
   enumeration: Enumeration,
   reversed: Reversed,
   forInLoop: ForInLoop,
@@ -1379,8 +1420,8 @@ export const concreteNodes = {
   stateExists: StateExists,
   stateDelete: StateDelete,
   newStruct: NewStruct,
-  constantDeclaration: ConstantDeclaration,
   subroutineArgument: SubroutineArgument,
+  methodDocumentation: MethodDocumentation,
   subroutine: Subroutine,
   contractMethod: ContractMethod,
   appStorageDefinition: AppStorageDefinition,
@@ -1388,10 +1429,8 @@ export const concreteNodes = {
   compiledContract: CompiledContract,
   compiledLogicSig: CompiledLogicSig,
   stateTotals: StateTotals,
+  aRC4Router: ARC4Router,
   contractFragment: ContractFragment,
-  structureField: StructureField,
-  structureDefinition: StructureDefinition,
-  module: Module,
   uInt64Constant: IntegerConstant,
   bigUIntConstant: IntegerConstant,
 } as const
@@ -1401,6 +1440,7 @@ export interface ExpressionVisitor<T> {
   visitBoolConstant(expression: BoolConstant): T
   visitBytesConstant(expression: BytesConstant): T
   visitStringConstant(expression: StringConstant): T
+  visitVoidConstant(expression: VoidConstant): T
   visitTemplateVar(expression: TemplateVar): T
   visitMethodConstant(expression: MethodConstant): T
   visitAddressConstant(expression: AddressConstant): T
@@ -1413,6 +1453,7 @@ export interface ExpressionVisitor<T> {
   visitIntrinsicCall(expression: IntrinsicCall): T
   visitCreateInnerTransaction(expression: CreateInnerTransaction): T
   visitUpdateInnerTransaction(expression: UpdateInnerTransaction): T
+  visitGroupTransactionReference(expression: GroupTransactionReference): T
   visitCheckedMaybe(expression: CheckedMaybe): T
   visitTupleExpression(expression: TupleExpression): T
   visitTupleItemExpression(expression: TupleItemExpression): T
@@ -1434,6 +1475,7 @@ export interface ExpressionVisitor<T> {
   visitNumericComparisonExpression(expression: NumericComparisonExpression): T
   visitBytesComparisonExpression(expression: BytesComparisonExpression): T
   visitSubroutineCallExpression(expression: SubroutineCallExpression): T
+  visitPuyaLibCall(expression: PuyaLibCall): T
   visitUInt64UnaryOperation(expression: UInt64UnaryOperation): T
   visitUInt64PostfixUnaryOperation(expression: UInt64PostfixUnaryOperation): T
   visitBigUIntPostfixUnaryOperation(expression: BigUIntPostfixUnaryOperation): T
@@ -1443,7 +1485,6 @@ export interface ExpressionVisitor<T> {
   visitBytesBinaryOperation(expression: BytesBinaryOperation): T
   visitBooleanBinaryOperation(expression: BooleanBinaryOperation): T
   visitNot(expression: Not): T
-  visitContains(expression: Contains): T
   visitEnumeration(expression: Enumeration): T
   visitReversed(expression: Reversed): T
   visitStateGet(expression: StateGet): T
@@ -1453,6 +1494,7 @@ export interface ExpressionVisitor<T> {
   visitNewStruct(expression: NewStruct): T
   visitCompiledContract(expression: CompiledContract): T
   visitCompiledLogicSig(expression: CompiledLogicSig): T
+  visitARC4Router(expression: ARC4Router): T
 }
 export interface StatementVisitor<T> {
   visitExpressionStatement(statement: ExpressionStatement): T
@@ -1470,11 +1512,12 @@ export interface StatementVisitor<T> {
   visitBytesAugmentedAssignment(statement: BytesAugmentedAssignment): T
   visitForInLoop(statement: ForInLoop): T
 }
-export interface ModuleStatementVisitor<T> {
-  visitConstantDeclaration(moduleStatement: ConstantDeclaration): T
-  visitSubroutine(moduleStatement: Subroutine): T
-  visitContractMethod(moduleStatement: ContractMethod): T
-  visitLogicSignature(moduleStatement: LogicSignature): T
-  visitContractFragment(moduleStatement: ContractFragment): T
-  visitStructureDefinition(moduleStatement: StructureDefinition): T
+export interface ContractMemberNodeVisitor<T> {
+  visitContractMethod(contractMemberNode: ContractMethod): T
+  visitAppStorageDefinition(contractMemberNode: AppStorageDefinition): T
+}
+export interface RootNodeVisitor<T> {
+  visitSubroutine(rootNode: Subroutine): T
+  visitLogicSignature(rootNode: LogicSignature): T
+  visitContractFragment(rootNode: ContractFragment): T
 }

@@ -6,12 +6,16 @@ import type { Block, Goto } from '../../awst/nodes'
 import { defaultRecord } from '../../util/default-map'
 
 type SwitchOrLoop = 'switch' | 'loop'
-type LoopContext = Disposable & { breakTarget: Block; continueTarget: Block }
+type LoopContext = Disposable & { breakTarget: Block; continueTarget: Block; readonly hasBreaks: boolean; readonly hasContinues: boolean }
 type SwitchContext = Disposable & {
   breakTarget: Block
   caseTarget(caseIndex: number, sourceLocation: SourceLocation): Block
   gotoCase(caseIndex: number, sourceLocation: SourceLocation): Goto
+  readonly hasBreaks: boolean
 }
+type StackData =
+  | { type: 'switch'; uniqueName: string; label?: string; numBreaks: number }
+  | { type: 'loop'; uniqueName: string; label?: string; numBreaks: number; numContinues: number }
 
 const breakSuffix = 'ᵇ'
 const continueSuffix = 'ᶜ'
@@ -26,21 +30,21 @@ export class SwitchLoopContext {
 
   constructor() {}
 
-  private switchLoopStack: Array<{ type: SwitchOrLoop; uniqueName: string; label?: string }> = []
+  private switchLoopStack: Array<StackData> = []
 
   getBreakTarget(label: ts.Identifier | undefined, sourceLocation: SourceLocation): string {
     const labelName = label?.text
     const item = this.switchLoopStack.toReversed().find(({ label }) => labelName === undefined || label === labelName)
     codeInvariant(item, 'Break must must exist inside a switch or loop construct', sourceLocation)
+    item.numBreaks++
     return `${item.uniqueName}${breakSuffix}`
   }
 
   getContinueTarget(label: ts.Identifier | undefined, sourceLocation: SourceLocation): string {
     const labelName = label?.text
-    const item = this.switchLoopStack
-      .toReversed()
-      .find(({ type, label }) => type === 'loop' && (labelName === undefined || label === labelName))
-    codeInvariant(item, 'Break must must exist inside a switch or loop construct', sourceLocation)
+    const item = this.switchLoopStack.toReversed().find(({ label }) => labelName === undefined || label === labelName)
+    codeInvariant(item?.type === 'loop', 'Continue must must exist inside a loop construct', sourceLocation)
+    item.numContinues++
     return `${item.uniqueName}${continueSuffix}`
   }
 
@@ -51,17 +55,26 @@ export class SwitchLoopContext {
     const label = ts.isLabeledStatement(node.parent) ? node?.parent.label : undefined
 
     const uniqueName = this.uniqueNameForLabel(label, 'loop')
-    this.switchLoopStack.push({
+    const stackData: StackData = {
       uniqueName,
       label: label?.text,
       type: 'loop',
-    })
+      numBreaks: 0,
+      numContinues: 0,
+    }
+    this.switchLoopStack.push(stackData)
     return {
       breakTarget: nodeFactory.block({ sourceLocation, label: `${uniqueName}${breakSuffix}` }),
       continueTarget: nodeFactory.block({ sourceLocation, label: `${uniqueName}${continueSuffix}` }),
       [Symbol.dispose]: () => {
         const popped = this.switchLoopStack.pop()
         invariant(popped?.uniqueName === uniqueName && popped.type === 'loop', 'Switch loop stack is unbalanced')
+      },
+      get hasBreaks() {
+        return stackData.numBreaks > 0
+      },
+      get hasContinues() {
+        return stackData.numContinues > 0
       },
     }
   }
@@ -79,11 +92,13 @@ export class SwitchLoopContext {
   enterSwitch(node: ts.SwitchStatement, sourceLocation: SourceLocation): SwitchContext {
     const label = ts.isLabeledStatement(node.parent) ? node?.parent.label : undefined
     const uniqueName = this.uniqueNameForLabel(label, 'switch')
-    this.switchLoopStack.push({
+    const stackData: StackData = {
       uniqueName,
       label: label?.text,
       type: 'switch',
-    })
+      numBreaks: 0,
+    }
+    this.switchLoopStack.push(stackData)
     return {
       breakTarget: nodeFactory.block({ sourceLocation, label: `${uniqueName}${breakSuffix}` }),
       caseTarget(caseIndex: number, sourceLocation: SourceLocation) {
@@ -95,6 +110,9 @@ export class SwitchLoopContext {
       [Symbol.dispose]: () => {
         const popped = this.switchLoopStack.pop()
         invariant(popped?.uniqueName === uniqueName && popped.type === 'switch', 'Switch loop stack is unbalanced')
+      },
+      get hasBreaks() {
+        return stackData.numBreaks > 0
       },
     }
   }

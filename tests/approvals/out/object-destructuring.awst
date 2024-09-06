@@ -1,9 +1,9 @@
 subroutine test(): void
 {
-  var <tuple>[a, b, c, d]: readonlytuple[uint64, bytes, bool, biguint] = produceItems()
-  var <tuple>[_, _₁, _₂, e]: readonlytuple[uint64, bytes, bool, biguint] = <tuple>[(#se0 = produceItems()).0, #se0.1, #se0.2, #se0.3]
-  var f: tuple[uint64, bytes, bool, biguint] = (<tuple>[g, _₃, _₄, i] = <tuple>[(#se1 = produceItems()).0, #se1.1, #se1.2, #se1.3])
-  receivePartial(<tuple>[(#se2 = produceItems()).0, #se2.3])
+  var <tuple>[a, b, c, d]: readonlytuple[uint64, bytes, bool, biguint] = tests/approvals/object-destructuring.algo.ts::produceItems()
+  var <tuple>[_, _₁, _₂, e]: readonlytuple[uint64, bytes, bool, biguint] = <tuple>[(#0 = tests/approvals/object-destructuring.algo.ts::produceItems()).0, #0.1, #0.2, #0.3]
+  var f: tuple[uint64, bytes, bool, biguint] = (<tuple>[g, _₃, _₄, i] = <tuple>[(#1 = tests/approvals/object-destructuring.algo.ts::produceItems()).0, #1.1, #1.2, #1.3])
+  tests/approvals/object-destructuring.algo.ts::receivePartial(<tuple>[(#2 = tests/approvals/object-destructuring.algo.ts::produceItems()).0, #2.3])
 }
 subroutine produceItems(): tuple[uint64, bytes, bool, biguint]
 {

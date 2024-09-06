@@ -21,9 +21,11 @@ import type { VisitorContext } from './context/base-context'
 import { OmittedExpressionBuilder } from './eb/omitted-expression-builder'
 import { ArrayLiteralExpressionBuilder } from './eb/array-literal-expression-builder'
 import { ObjectLiteralExpressionBuilder } from './eb/literal/object-literal-expression-builder'
+import { SymbolName } from './symbol-name'
+import type { ContractReference } from '../awst/models'
 
 export type ContractMethodInfo = {
-  className: string
+  cref: ContractReference
   arc4MethodConfig?: awst.ContractMethod['arc4MethodConfig']
 }
 
@@ -67,27 +69,33 @@ export class FunctionVisitor
     const body = assignDestructuredParams.length
       ? nodeFactory.block({ sourceLocation }, assignDestructuredParams, this.accept(node.body))
       : this.accept(node.body)
+    const documentation = nodeFactory.methodDocumentation({
+      args: new Map(),
+      description: null,
+      returns: null,
+    })
     if (contractInfo) {
       this._result = new awst.ContractMethod({
-        className: contractInfo.className,
-        arc4MethodConfig: contractInfo.arc4MethodConfig,
-        name: this._functionName,
+        arc4MethodConfig: contractInfo.arc4MethodConfig ?? null,
+        memberName: this._functionName,
         sourceLocation,
-        moduleName: type.module,
         args,
         returnType: this._functionType.returnType.wtypeOrThrow,
         body,
-        docstring: undefined,
+        inheritable: true,
+        synthetic: false,
+        cref: contractInfo.cref,
+        documentation,
       })
     } else {
       this._result = new awst.Subroutine({
+        id: new SymbolName({ name: this._functionName, module: type.module }).fullName,
         name: this._functionName,
         sourceLocation,
-        moduleName: type.module,
         args,
         returnType: this._functionType.returnType.wtypeOrThrow,
         body,
-        docstring: undefined,
+        documentation,
       })
     }
   }
@@ -299,7 +307,7 @@ export class FunctionVisitor
     return nodeFactory.ifElse({
       condition,
       ifBranch,
-      elseBranch,
+      elseBranch: elseBranch ?? null,
       sourceLocation,
     })
   }
@@ -320,6 +328,7 @@ export class FunctionVisitor
             condition: this.evaluateCondition(node.expression, true),
             sourceLocation,
             ifBranch: nodeFactory.block({ sourceLocation }, nodeFactory.goto({ sourceLocation, target: ctx.breakTarget.label })),
+            elseBranch: null,
           }),
         ),
       }),
@@ -361,7 +370,7 @@ export class FunctionVisitor
     if (!node.expression) {
       return nodeFactory.returnStatement({
         sourceLocation: sourceLocation,
-        value: undefined,
+        value: null,
       })
     }
     const returnValue = this.accept(node.expression)
@@ -380,7 +389,7 @@ export class FunctionVisitor
     const subject = requireInstanceBuilder(this.accept(node.expression), sourceLocation)
     codeInvariant(subject.ptype, 'The subject of a switch statement must have a resolvable ptype', this.sourceLocation(node.expression))
 
-    let defaultCase: Block | undefined = undefined
+    let defaultCase: Block | null = null
     const cases = new Map<awst.Expression, awst.Block>()
     for (const [index, clause] of enumerate(node.caseBlock.clauses)) {
       const sourceLocation = this.sourceLocation(clause)
@@ -403,16 +412,20 @@ export class FunctionVisitor
         cases.set(clauseExpr, caseBlock)
       }
     }
+    const switchStatement = nodeFactory.switch({
+      value: subject.resolve(),
+      sourceLocation,
+      cases,
+      defaultCase,
+    })
+    if (!ctx.hasBreaks) {
+      return switchStatement
+    }
     return nodeFactory.block(
       {
         sourceLocation,
       },
-      nodeFactory.switch({
-        value: subject.resolve(),
-        sourceLocation,
-        cases,
-        defaultCase,
-      }),
+      switchStatement,
       ctx.breakTarget,
     )
   }
