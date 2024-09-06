@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest'
-import { compile, CompileResult } from '../../src'
+import { compile } from '../../src'
 import ts from 'typescript'
 import { SourceLocation } from '../../src/awst/source-location'
 import type { LogEvent } from '../../src/logger'
-import { logger } from '../../src/logger'
+import { logger, LogLevel } from '../../src/logger'
 import { buildCompileOptions } from '../../src/compile-options'
 import { invariant } from '../../src/util'
 
@@ -35,6 +35,7 @@ describe('Expected output', () => {
       paths: ['tests/expected-output'],
       outDir: '',
       dryRun: true,
+      logLevel: LogLevel.Debug,
     }),
   )
   invariant(result.ast, 'Compilation must result in ast')

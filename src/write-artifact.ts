@@ -1,5 +1,6 @@
 import path from 'node:path'
 import * as fs from 'node:fs'
+import { logger } from './logger'
 
 export enum ArtifactKind {
   Awst,
@@ -38,7 +39,7 @@ export function writeArtifact<TObj>({
   }
 
   const content = buildArtifact(obj)
-
+  logger.info(undefined, `Writing ${outFilePath}`)
   mkDirIfNotExists(path.dirname(outFilePath))
   fs.writeFileSync(outFilePath, content, 'utf-8')
 }

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { compile } from '../../src'
 import { buildCompileOptions } from '../../src/compile-options'
 import { invariant } from '../../src/util'
-import { logger } from '../../src/logger'
+import { LogLevel } from '../../src/logger'
 
 describe('Approvals', () => {
   const result = compile(
@@ -12,6 +12,7 @@ describe('Approvals', () => {
       paths: ['tests/approvals'],
       outDir: '',
       dryRun: true,
+      logLevel: LogLevel.Debug,
     }),
   )
   invariant(result.ast, 'Compilation must result in ast')

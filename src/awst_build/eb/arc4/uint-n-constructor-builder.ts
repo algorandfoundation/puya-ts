@@ -63,7 +63,7 @@ export class UintNConstructorBuilder extends NodeBuilder {
       } else {
         return new UintNExpressionBuilder(
           nodeFactory.aRC4Encode({
-            wtype: ptype.wtypeOrThrow,
+            wtype: ptype.wtype,
             sourceLocation,
             value: initialValue,
           }),
@@ -87,7 +87,7 @@ export class UintNConstructorBuilder extends NodeBuilder {
       } else {
         return new UintNExpressionBuilder(
           nodeFactory.aRC4Encode({
-            wtype: ptype.wtypeOrThrow,
+            wtype: ptype.wtype,
             sourceLocation,
             value: initialValue,
           }),
