@@ -1,6 +1,7 @@
 import * as fs from 'fs'
 import { pascalCase } from 'change-case'
-import { AlgoTsType, buildOpModule, ENUMS_TO_EXPOSE, OpModule } from './build-op-module'
+import type { OpModule } from './build-op-module'
+import { AlgoTsType, buildOpModule, ENUMS_TO_EXPOSE } from './build-op-module'
 import { enumerate, hasFlags } from '../src/util'
 
 function* emitTypes(module: OpModule) {
@@ -110,6 +111,26 @@ import { Account, Application, Asset } from './reference'
       yield `) => `
       yield* emitReturnTypes(item.returnTypes)
       yield '\n'
+    } else if (item.type === 'op-overloaded-function') {
+      yield `export type ${pascalCase(item.name)}Type = `
+      for (const signature of item.signatures) {
+        yield '\n  & (('
+        for (const arg of signature.immediateArgs) {
+          yield arg.name
+          yield ':'
+          yield Array.from(emitArgType(arg.type)).join(' | ')
+          yield ','
+        }
+        for (const arg of signature.stackArgs) {
+          yield arg.name
+          yield ':'
+          yield Array.from(emitArgType(arg.type)).join(' | ')
+          yield ','
+        }
+        yield `) => `
+        yield* emitReturnTypes(signature.returnTypes)
+        yield ')\n'
+      }
     } else {
       yield* emitDoc(item.docs)
 
@@ -147,7 +168,7 @@ import { Account, Application, Asset } from './reference'
   yield* emitHeader()
   yield `export type OpsNamespace = {\n`
   for (const item of opModule.items) {
-    if (item.type === 'op-function') {
+    if (item.type === 'op-function' || item.type === 'op-overloaded-function') {
       yield `${item.name}: ${pascalCase(item.name)}Type, `
     } else {
       yield `${item.name}: ${item.name}Type, `

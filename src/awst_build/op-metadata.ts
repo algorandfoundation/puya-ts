@@ -1239,7 +1239,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
       },
     ],
   },
-  getBytes: {
+  getByte: {
     type: 'op-mapping',
     op: 'getbyte',
     signatures: [
@@ -4188,71 +4188,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
       },
     ],
   },
-  selectBytes: {
-    type: 'op-mapping',
-    op: 'select',
-    signatures: [
-      {
-        argNames: ['a', 'b', 'c'],
-        immediateArgs: [],
-        stackArgs: [
-          { name: 'a', ptypes: [ptypes.uint64PType, ptypes.bytesPType] },
-          { name: 'b', ptypes: [ptypes.uint64PType, ptypes.bytesPType] },
-          { name: 'c', ptypes: [ptypes.boolPType] },
-        ],
-        returnType: ptypes.bytesPType,
-      },
-    ],
-  },
-  selectUint64: {
-    type: 'op-mapping',
-    op: 'select',
-    signatures: [
-      {
-        argNames: ['a', 'b', 'c'],
-        immediateArgs: [],
-        stackArgs: [
-          { name: 'a', ptypes: [ptypes.uint64PType, ptypes.bytesPType] },
-          { name: 'b', ptypes: [ptypes.uint64PType, ptypes.bytesPType] },
-          { name: 'c', ptypes: [ptypes.boolPType] },
-        ],
-        returnType: ptypes.uint64PType,
-      },
-    ],
-  },
-  setBitBytes: {
-    type: 'op-mapping',
-    op: 'setbit',
-    signatures: [
-      {
-        argNames: ['a', 'b', 'c'],
-        immediateArgs: [],
-        stackArgs: [
-          { name: 'a', ptypes: [ptypes.uint64PType, ptypes.bytesPType] },
-          { name: 'b', ptypes: [ptypes.uint64PType] },
-          { name: 'c', ptypes: [ptypes.uint64PType] },
-        ],
-        returnType: ptypes.bytesPType,
-      },
-    ],
-  },
-  setBitUint64: {
-    type: 'op-mapping',
-    op: 'setbit',
-    signatures: [
-      {
-        argNames: ['a', 'b', 'c'],
-        immediateArgs: [],
-        stackArgs: [
-          { name: 'a', ptypes: [ptypes.uint64PType, ptypes.bytesPType] },
-          { name: 'b', ptypes: [ptypes.uint64PType] },
-          { name: 'c', ptypes: [ptypes.uint64PType] },
-        ],
-        returnType: ptypes.uint64PType,
-      },
-    ],
-  },
-  setBytes: {
+  setByte: {
     type: 'op-mapping',
     op: 'setbyte',
     signatures: [
@@ -4750,6 +4686,32 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           { name: 'c', ptypes: [ptypes.bytesPType] },
         ],
         returnType: new ptypes.TuplePType({ items: [ptypes.bytesPType, ptypes.boolPType], immutable: true }),
+      },
+    ],
+  },
+  setbit: {
+    type: 'op-mapping',
+    op: 'setbit',
+    signatures: [
+      {
+        argNames: ['target', 'n', 'c'],
+        immediateArgs: [],
+        stackArgs: [
+          { name: 'target', ptypes: [ptypes.bytesPType] },
+          { name: 'n', ptypes: [ptypes.uint64PType] },
+          { name: 'c', ptypes: [ptypes.uint64PType] },
+        ],
+        returnType: ptypes.bytesPType,
+      },
+      {
+        argNames: ['target', 'n', 'c'],
+        immediateArgs: [],
+        stackArgs: [
+          { name: 'target', ptypes: [ptypes.uint64PType] },
+          { name: 'n', ptypes: [ptypes.uint64PType] },
+          { name: 'c', ptypes: [ptypes.uint64PType] },
+        ],
+        returnType: ptypes.uint64PType,
       },
     ],
   },

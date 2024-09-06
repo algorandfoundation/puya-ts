@@ -1,5 +1,5 @@
 import { ctxMgr } from './execution-context'
-import { OpsNamespace } from './op-types'
+import { OpsNamespace, SetbitType } from './op-types'
 import { ArgumentsType } from 'vitest'
 import { DeliberateAny } from './typescript-helpers'
 
@@ -33,3 +33,4 @@ export const Global = createObjectProxy('Global')
 export const btoi = createFunctionProxy('btoi')
 export const itob = createFunctionProxy('itob')
 export const ed25519verifyBare = createFunctionProxy('ed25519verifyBare')
+export const setbit = createFunctionProxy('setbit') as SetbitType
