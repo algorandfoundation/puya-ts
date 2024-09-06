@@ -1,7 +1,9 @@
 import * as fs from 'fs'
 import { camelCase } from 'change-case'
-import { AlgoTsType, buildOpModule, OpFunction, OpGrouping } from './build-op-module'
+import type { OpFunction, OpGrouping, OpOverloadedFunction } from './build-op-module'
+import { AlgoTsType, buildOpModule } from './build-op-module'
 import { enumerate, hasFlags } from '../src/util'
+import { it } from 'vitest'
 
 const opModule = buildOpModule()
 
@@ -153,6 +155,36 @@ function* emitTypes() {
     yield `}]`
     yield '},'
   }
+  function* emitOpOverloadedMapping(op: OpOverloadedFunction) {
+    yield `'${op.name}': `
+    yield `{`
+    yield `type: 'op-mapping',`
+    yield `op: '${op.opCode}',`
+    yield `signatures: [`
+    for (const signature of op.signatures) {
+      yield '{'
+      yield `argNames: [`
+      for (const arg of signature.immediateArgs) {
+        yield `'${arg.name}',`
+      }
+      yield signature.stackArgs.map((a) => `'${a.name}'`).join(', ')
+      yield '],'
+      yield 'immediateArgs: ['
+      for (const ia of signature.immediateArgs) {
+        yield `{ name: '${ia.name}', ptypes: [${Array.from(algoTsToLiteralPType(ia.type)).join(', ')}] },`
+      }
+      yield '],'
+      yield 'stackArgs: ['
+      for (const sa of signature.stackArgs) {
+        yield `{ name: '${sa.name}', ptypes: [${Array.from(algoTsToPType(sa.type)).join(', ')}] },`
+      }
+      yield '],'
+      yield `returnType: ${mapReturnType(signature.returnTypes)},`
+      yield '},'
+    }
+    yield `]`
+    yield '},'
+  }
 
   function* emitOpGrouping(group: OpGrouping) {
     yield `${group.name}: `
@@ -174,6 +206,8 @@ function* emitTypes() {
   for (const item of opModule.items) {
     if (item.type === 'op-function') {
       yield* emitOpMapping(item)
+    } else if (item.type === 'op-overloaded-function') {
+      yield* emitOpOverloadedMapping(item)
     } else {
       yield* emitOpGrouping(item)
     }

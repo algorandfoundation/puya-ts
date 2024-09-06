@@ -73,6 +73,10 @@ const EXCLUDED_OPCODES = new Set([
   'assert',
   'err',
   'return',
+
+  // Special handling
+  'select',
+  'setbit',
 ])
 
 const OPERATOR_OPCODES = new Set([
@@ -284,6 +288,13 @@ export type EnumArgMeta = {
   pos: number
 }
 
+export type OpOverloadedFunction = {
+  type: 'op-overloaded-function'
+  signatures: Array<{ immediateArgs: OpArg[]; stackArgs: OpArg[]; returnTypes: AlgoTsType[]; docs: string[] | string }>
+  name: string
+  opCode: string
+}
+
 export type OpFunction = {
   type: 'op-function'
   enumArg?: EnumArgMeta
@@ -303,7 +314,7 @@ export type OpGrouping = {
 }
 
 export type OpModule = {
-  items: Array<OpFunction | OpGrouping>
+  items: Array<OpFunction | OpGrouping | OpOverloadedFunction>
   enums: EnumDef[]
 }
 
@@ -427,6 +438,54 @@ export function buildOpModule() {
       }
     }
   }
+
+  // Manually handle set bit overloads
+  opModule.items.push({
+    type: 'op-overloaded-function',
+    name: 'setbit',
+    signatures: [
+      {
+        stackArgs: [
+          {
+            name: 'target',
+            type: AlgoTsType.Bytes,
+          },
+          {
+            name: 'n',
+            type: AlgoTsType.Uint64,
+          },
+          {
+            name: 'c',
+            type: AlgoTsType.Uint64,
+          },
+        ],
+        immediateArgs: [],
+        returnTypes: [AlgoTsType.Bytes],
+        docs: ['Set the nth bit of target to the value of c (1 or 0)'],
+      },
+      {
+        stackArgs: [
+          {
+            name: 'target',
+            type: AlgoTsType.Uint64,
+          },
+          {
+            name: 'n',
+            type: AlgoTsType.Uint64,
+          },
+          {
+            name: 'c',
+            type: AlgoTsType.Uint64,
+          },
+        ],
+        immediateArgs: [],
+        returnTypes: [AlgoTsType.Uint64],
+        docs: ['Set the nth bit of target to the value of c (1 or 0)'],
+      },
+    ],
+    opCode: 'setbit',
+  })
+
   return opModule
 }
 
