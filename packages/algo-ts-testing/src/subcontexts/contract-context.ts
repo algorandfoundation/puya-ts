@@ -53,8 +53,6 @@ const extractStates = (contract: BaseContract): States => {
 }
 
 export class ContractContext {
-  #statesMap = new Map<BaseContract, States>()
-
   create<T extends BaseContract>(type: IConstructor<T>, ...args: DeliberateAny[]): T {
     const proxy = new Proxy(type, this.getContractProxyHandler<T>())
     return new proxy(...args)
@@ -64,11 +62,10 @@ export class ContractContext {
     const onConstructed = (instance: BaseContract) => {
       const states = extractStates(instance)
 
-      const application = lazyContext.any.application(undefined, {
+      const application = lazyContext.any.application({
         ...states.totals,
       })
       lazyContext.ledger.addAppIdContractMap(application.id, instance)
-      this.#statesMap.set(instance, states)
     }
     return {
       construct(target, args) {

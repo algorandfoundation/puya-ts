@@ -7,8 +7,8 @@ import { Account, Application, Asset } from './reference'
 export type ExecutionContext = {
   log(value: bytes): void
   application(id: uint64): Application
-  asset(id: uint64 | undefined): Asset
-  account(address: bytes | undefined): Account
+  asset(id?: uint64): Asset
+  account(address?: bytes): Account
   op: Partial<OpsNamespace>
   abiMetadata: {
     captureMethodConfig<T extends Contract>(contract: T, methodName: string, config?: AbiMethodConfig<T> | BareMethodConfig): void
