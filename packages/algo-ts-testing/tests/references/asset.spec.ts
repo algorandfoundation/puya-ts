@@ -1,7 +1,7 @@
 import { afterEach } from "node:test";
 import { describe, expect, it, test } from "vitest";
 import { TestExecutionContext } from "../../src";
-import { AssetCls } from "../../src/reference";
+import { AssetCls } from "../../src/impl/asset";
 import { Account, Asset, Bytes, Uint64 } from "@algorandfoundation/algo-ts";
 import { asBytes, asUint64 } from "../../src/util";
 import { asUint8Array } from "../util";
@@ -47,7 +47,7 @@ describe('Asset', () => {
     false
   ])('can have frozen status set and retrieved', (defaultFrozen) => {
     const asset = ctx.any.asset({ defaultFrozen })
-    const account = ctx.any.account({}, new Map([[asset.id, 0n]]))
+    const account = ctx.any.account({ optedAssetBalances: new Map([[asset.id, 0n]]) })
 
     expect(asset.frozen(account)).toBe(defaultFrozen)
   })
@@ -68,7 +68,7 @@ describe('Asset', () => {
       reserve: Account(),
     }
 
-    const asset  = ctx.any.asset(assetData)
+    const asset = ctx.any.asset(assetData)
 
     expect(asset.total.valueOf()).toBe(assetData.total.valueOf())
     expect(asset.decimals.valueOf()).toBe(assetData.decimals.valueOf())

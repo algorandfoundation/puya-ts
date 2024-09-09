@@ -1,60 +1,9 @@
-import { Account, Application, Asset, BaseContract, internal, uint64 } from '@algorandfoundation/algo-ts'
-import { ALWAYS_APPROVE_TEAL_PROGRAM, DEFAULT_ACCOUNT_MIN_BALANCE, MAX_UINT64 } from '../constants'
-import { Mutable } from '../typescript-helpers'
+import { Account, Application, Asset, BaseContract, internal } from '@algorandfoundation/algo-ts'
+import { MAX_UINT64 } from '../constants'
 import { asBigInt, asBytesCls, asMaybeBytesCls, asMaybeUint64Cls, asUint64, asUint64Cls, iterBigInt } from '../util'
-import { lazyContext } from '../context-helpers/internal-context'
-
-export class AssetHolding {
-  balance: uint64
-  frozen: boolean
-  constructor(balance: internal.primitives.StubUint64Compat, frozen: boolean) {
-    this.balance = asUint64(balance)
-    this.frozen = frozen
-  }
-}
-export class AccountData {
-  optedAssets = new Map<bigint, AssetHolding>()
-  optedApplications = new Map<bigint, Application>()
-  account: Mutable<Omit<Account, 'bytes' | 'isOptedIn'>>
-
-  constructor() {
-    this.account = {
-      totalAppsCreated: 0,
-      totalAppsOptedIn: 0,
-      totalAssets: 0,
-      totalAssetsCreated: 0,
-      totalBoxBytes: 0,
-      totalBoxes: 0,
-      totalExtraAppPages: 0,
-      totalNumByteSlice: 0,
-      totalNumUint: 0,
-      minBalance: DEFAULT_ACCOUNT_MIN_BALANCE,
-      balance: 0,
-      authAddress: Account(),
-    }
-  }
-}
-
-export type AssetData = Mutable<Omit<Asset, 'id' | 'balance' | 'frozen'>>
-
-export class ApplicationData {
-  application: Mutable<Omit<Application, 'id'>>
-  isCreating: boolean = false
-
-  constructor() {
-    this.application = {
-      approvalProgram: ALWAYS_APPROVE_TEAL_PROGRAM,
-      clearStateProgram: ALWAYS_APPROVE_TEAL_PROGRAM,
-      globalNumUint: 0,
-      globalNumBytes: 0,
-      localNumUint: 0,
-      localNumBytes: 0,
-      extraProgramPages: 0,
-      creator: lazyContext.defaultSender,
-      address: lazyContext.defaultSender,
-    }
-  }
-}
+import { AccountData, AssetHolding } from '../impl/account'
+import { ApplicationData } from '../impl/application'
+import { AssetData } from '../impl/asset'
 
 export class LedgerContext {
   appIdIter = iterBigInt(1001n, MAX_UINT64)

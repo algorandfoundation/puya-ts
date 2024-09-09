@@ -1,5 +1,7 @@
 import { internal } from '@algorandfoundation/algo-ts'
-import { AccountData, ApplicationData, AssetData } from '../subcontexts/ledger-context'
+import { AccountData } from '../impl/account'
+import { ApplicationData } from '../impl/application'
+import { AssetData } from '../impl/asset'
 import { TestExecutionContext } from '../test-execution-context'
 
 /**

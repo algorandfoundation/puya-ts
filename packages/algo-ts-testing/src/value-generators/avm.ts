@@ -3,9 +3,20 @@ import algosdk from 'algosdk'
 import { randomBytes } from 'crypto'
 import { MAX_BYTES_SIZE, MAX_UINT64, ZERO_ADDRESS } from '../constants'
 import { lazyContext } from '../context-helpers/internal-context'
-import { AccountCls, ApplicationCls, AssetCls } from '../reference'
-import { AccountData, ApplicationData, AssetData } from '../subcontexts/ledger-context'
+import { AccountCls, AccountData } from '../impl/account'
+import { ApplicationCls, ApplicationData } from '../impl/application'
+import { AssetCls, AssetData } from '../impl/asset'
 import { asBigInt, asBytesCls, asUint64Cls, getRandomBigInt } from '../util'
+
+type AccountContextData = Partial<AccountData['account']> & {
+  address?: internal.primitives.StubBytesCompat
+  optedAssetBalances?: Map<internal.primitives.StubUint64Compat, internal.primitives.StubUint64Compat>
+  optedApplications?: Application[]
+}
+
+type AssetContextData = Partial<AssetData> & { assetId?: internal.primitives.StubUint64Compat }
+
+type ApplicationContextData = Partial<ApplicationData['application']> & { applicationId?: internal.primitives.StubUint64Compat }
 
 export class AvmValueGenerator {
   uint64(minValue: number | bigint = 0n, maxValue: number | bigint = MAX_UINT64): uint64 {
@@ -25,12 +36,8 @@ export class AvmValueGenerator {
     return Bytes(new Uint8Array(randomBytes(length)))
   }
 
-  account(
-    account?: Partial<AccountData['account']> & { address?: internal.primitives.StubBytesCompat },
-    optedAssetBalances?: Map<internal.primitives.StubUint64Compat, internal.primitives.StubUint64Compat>,
-    optedApplications?: Application[],
-  ): Account {
-    const addr = account?.address ? asBytesCls(account.address).toString() : undefined
+  account(input?: AccountContextData): Account {
+    const addr = input?.address ? asBytesCls(input.address).toString() : undefined
     if (addr && lazyContext.ledger.accountDataMap.has(addr)) {
       internal.errors.internalError(
         'Account with such address already exists in testing context. Use `context.ledger.getAccount(address)` to retrieve the existing account.',
@@ -39,27 +46,28 @@ export class AvmValueGenerator {
 
     const accountAddress = addr ?? algosdk.generateAccount().addr
     const data = new AccountData()
+    const { address, optedAssetBalances, optedApplications, ...account } = input ?? {}
     data.account = {
       ...data.account,
       ...account,
     }
     lazyContext.ledger.accountDataMap.set(accountAddress, data)
 
-    if (optedAssetBalances) {
-      for (const [assetId, balance] of optedAssetBalances) {
+    if (input?.optedAssetBalances) {
+      for (const [assetId, balance] of input.optedAssetBalances) {
         lazyContext.ledger.updateAssetHolding(accountAddress, assetId, balance)
       }
     }
-    if (optedApplications) {
-      for (const app of optedApplications) {
+    if (input?.optedApplications) {
+      for (const app of input.optedApplications) {
         data.optedApplications.set(asBigInt(app.id), app)
       }
     }
     return new AccountCls(Bytes(accountAddress))
   }
 
-  asset(assetData?: Partial<AssetData> & { assetId?: internal.primitives.StubUint64Compat }): Asset {
-    const id = assetData?.assetId
+  asset(input?: AssetContextData): Asset {
+    const id = input?.assetId
     if (id && lazyContext.ledger.assetDataMap.has(asBigInt(id))) {
       internal.errors.internalError('Asset with such ID already exists in testing context!')
     }
@@ -78,6 +86,7 @@ export class AvmValueGenerator {
       creator: lazyContext.defaultSender,
       reserve: Account(ZERO_ADDRESS),
     }
+    const { assetId: _, ...assetData } = input ?? {}
     lazyContext.ledger.assetDataMap.set(assetId.asBigInt(), {
       ...defaultAssetData,
       ...assetData,
@@ -85,15 +94,14 @@ export class AvmValueGenerator {
     return new AssetCls(assetId.asAlgoTs())
   }
 
-  application(
-    applicationData?: Partial<ApplicationData['application']> & { applicationId?: internal.primitives.StubUint64Compat },
-  ): Application {
-    const id = applicationData?.applicationId
+  application(input?: ApplicationContextData): Application {
+    const id = input?.applicationId
     if (id && lazyContext.ledger.applicationDataMap.has(asBigInt(id))) {
       internal.errors.internalError('Application with such ID already exists in testing context!')
     }
     const applicationId = asUint64Cls(id ?? lazyContext.ledger.appIdIter.next().value)
     const data = new ApplicationData()
+    const { applicationId: _, ...applicationData } = input ?? {}
     data.application = {
       ...data.application,
       ...applicationData,
