@@ -1,17 +1,18 @@
 import { Account, Application, Asset, bytes, internal, uint64 } from '@algorandfoundation/algo-ts'
 import { lazyContext } from './context-helpers/internal-context'
 import { AccountData, ApplicationData, AssetData, AssetHolding } from './subcontexts/ledger-context'
-import { asBigInt, asUint64Cls } from './util'
+import { asBigInt, asBytes, asUint64, asUint64Cls } from './util'
+import { ZERO_ADDRESS } from './constants'
 
 export class AccountCls implements Account {
-  constructor(private address: bytes) {}
+  readonly bytes: bytes
 
-  private get data(): AccountData {
-    return lazyContext.getAccountData(this.address)
+  constructor(address?: internal.primitives.StubBytesCompat) {
+    this.bytes = asBytes(address ?? ZERO_ADDRESS)
   }
 
-  get bytes(): bytes {
-    return this.address
+  private get data(): AccountData {
+    return lazyContext.getAccountData(this.bytes)
   }
 
   get balance(): uint64 {
@@ -63,7 +64,11 @@ export class AccountCls implements Account {
 }
 
 export class AssetCls implements Asset {
-  constructor(public readonly id: uint64) {}
+  readonly id: uint64
+
+  constructor(id?: internal.primitives.StubUint64Compat) {
+    this.id = asUint64(id ?? 0)
+  }
 
   private get data(): AssetData {
     return lazyContext.getAssetData(this.id)
@@ -130,30 +135,30 @@ export class ApplicationCls implements Application {
     return lazyContext.getApplicationData(this.id)
   }
   get approvalProgram(): bytes {
-    return this.data.approvalProgram
+    return this.data.application.approvalProgram
   }
   get clearStateProgram(): bytes {
-    return this.data.clearStateProgram
+    return this.data.application.clearStateProgram
   }
   get globalNumUint(): uint64 {
-    return this.data.globalNumUint
+    return this.data.application.globalNumUint
   }
   get globalNumBytes(): uint64 {
-    return this.data.globalNumBytes
+    return this.data.application.globalNumBytes
   }
   get localNumUint(): uint64 {
-    return this.data.localNumUint
+    return this.data.application.localNumUint
   }
   get localNumBytes(): uint64 {
-    return this.data.localNumBytes
+    return this.data.application.localNumBytes
   }
   get extraProgramPages(): uint64 {
-    return this.data.extraProgramPages
+    return this.data.application.extraProgramPages
   }
   get creator(): Account {
-    return this.data.creator
+    return this.data.application.creator
   }
   get address(): Account {
-    return this.data.address
+    return this.data.application.address
   }
 }

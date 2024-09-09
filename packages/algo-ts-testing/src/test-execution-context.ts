@@ -28,7 +28,7 @@ export class TestExecutionContext implements internal.ExecutionContext {
     this.#defaultSender = Account(Bytes(algosdk.generateAccount().addr))
   }
 
-  account(address: bytes): Account {
+  account(address?: bytes): Account {
     return new AccountCls(address)
   }
 
@@ -36,7 +36,7 @@ export class TestExecutionContext implements internal.ExecutionContext {
     return new ApplicationCls(id)
   }
 
-  asset(id: uint64): Asset {
+  asset(id?: uint64): Asset {
     return new AssetCls(id)
   }
 
