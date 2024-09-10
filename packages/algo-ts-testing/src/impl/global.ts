@@ -34,7 +34,7 @@ export const Global: internal.opTypes.GlobalType = {
    * Number of transactions in this atomic transaction group. At least 1
    */
   get groupSize(): uint64 {
-    const currentTransactionGroup = lazyContext.txn.activeGroup.transactions
+    const currentTransactionGroup = lazyContext.activeGroup.transactions
     return Uint64(currentTransactionGroup.length)
   },
 

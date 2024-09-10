@@ -34,7 +34,7 @@ export class TestExecutionContext implements internal.ExecutionContext {
     return new AccountCls(address)
   }
 
-  application(id: uint64): Application {
+  application(id?: uint64): Application {
     return new ApplicationCls(id)
   }
 

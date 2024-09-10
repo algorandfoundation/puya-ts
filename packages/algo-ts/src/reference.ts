@@ -195,7 +195,10 @@ export type Asset = {
    */
   frozen(account: Account): boolean
 }
-export function Application(applicationId: uint64): Application {
+
+export function Application(): Application
+export function Application(applicationId: uint64): Application
+export function Application(applicationId?: uint64): Application {
   return ctxMgr.instance.application(applicationId)
 }
 
