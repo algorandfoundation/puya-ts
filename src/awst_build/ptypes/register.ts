@@ -28,11 +28,15 @@ import { Arc4AbiMethodDecoratorBuilder, Arc4BareMethodDecoratorBuilder } from '.
 import {
   AccountFunction,
   accountPType,
+  applicationGroupTransaction,
   arc4AbiMethodDecorator,
   arc4BareMethodDecorator,
   assertFunction,
+  assetConfigGroupTransaction,
+  assetFreezeGroupTransaction,
   AssetFunction,
   assetPType,
+  assetTransferGroupTransaction,
   BigUintFunction,
   biguintPType,
   BooleanFunction,
@@ -51,11 +55,13 @@ import {
   GlobalStateType,
   IntrinsicFunctionGroupType,
   IntrinsicFunctionType,
+  keyRegistrationGroupTransaction,
   LocalStateFunction,
   LocalStateType,
   logFunction,
   NamespacePType,
   ObjectPType,
+  paymentGroupTransaction,
   StringFunction,
   stringPType,
   TuplePType,
@@ -69,6 +75,7 @@ import { ObjectExpressionBuilder } from '../eb/literal/object-expression-builder
 import { AccountExpressionBuilder, AccountFunctionBuilder } from '../eb/account/account-function-builder'
 import { LocalStateExpressionBuilder, LocalStateFunctionBuilder } from '../eb/storage/local-state'
 import { UintNConstructorBuilder, UintNExpressionBuilder } from '../eb/arc4/uint-n-constructor-builder'
+import { GroupTransactionExpressionBuilder } from '../eb/transactions/asset-transfer'
 
 export function registerPTypes(typeRegistry: TypeRegistry) {
   if (typeRegistry.hasRegistrations) {
@@ -131,4 +138,10 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: accountPType, instanceEb: AccountExpressionBuilder })
   typeRegistry.register({ ptype: UintNConstructor, singletonEb: UintNConstructorBuilder })
   typeRegistry.registerGeneric({ ptype: UintNType, instanceEb: UintNExpressionBuilder })
+  typeRegistry.register({ ptype: paymentGroupTransaction, instanceEb: GroupTransactionExpressionBuilder })
+  typeRegistry.register({ ptype: keyRegistrationGroupTransaction, instanceEb: GroupTransactionExpressionBuilder })
+  typeRegistry.register({ ptype: assetConfigGroupTransaction, instanceEb: GroupTransactionExpressionBuilder })
+  typeRegistry.register({ ptype: assetTransferGroupTransaction, instanceEb: GroupTransactionExpressionBuilder })
+  typeRegistry.register({ ptype: assetFreezeGroupTransaction, instanceEb: GroupTransactionExpressionBuilder })
+  typeRegistry.register({ ptype: applicationGroupTransaction, instanceEb: GroupTransactionExpressionBuilder })
 }

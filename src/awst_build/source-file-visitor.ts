@@ -12,7 +12,8 @@ import { BaseVisitor } from './base-visitor'
 import { ContractClassPType } from './ptypes'
 import { requireConstantOfType } from './eb/util'
 
-import { buildContextForSourceFile } from './context/base-context'
+import { buildContextForSourceFile } from './context/awst-build-context'
+import { SubroutineVisitor } from './subroutine-visitor'
 
 type NodeOrDeferred = awst.AWST[] | awst.AWST | (() => awst.AWST[] | awst.AWST)
 
@@ -42,7 +43,7 @@ export class SourceFileVisitor extends BaseVisitor implements Visitor<ModuleStat
   }
 
   visitFunctionDeclaration(node: ts.FunctionDeclaration): NodeOrDeferred {
-    return () => logPuyaExceptions(() => FunctionVisitor.buildSubroutine(this.context, node), this.sourceLocation(node))
+    return () => logPuyaExceptions(() => SubroutineVisitor.buildSubroutine(this.context, node), this.sourceLocation(node))
   }
 
   buildModule(): awst.AWST[] {

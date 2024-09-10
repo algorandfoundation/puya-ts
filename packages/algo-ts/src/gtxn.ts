@@ -1,1 +1,1 @@
-export { PayTxn, AssetTransferTxn, AssetConfigTxn } from './transactions'
+export { PayTxn, AssetTransferTxn, AssetConfigTxn, AssetFreezeTxn, ApplicationTxn, KeyRegistrationTxn } from './transactions'

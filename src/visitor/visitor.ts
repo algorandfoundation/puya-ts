@@ -4,7 +4,7 @@ import { logger, logPuyaExceptions } from '../logger'
 import type { MapBaseType, SyntaxKindNameType } from './syntax-names'
 import { getNodeName, SyntaxKindName } from './syntax-names'
 import { AwstBuildFailureError } from '../errors'
-import type { VisitorContext } from '../awst_build/context/base-context'
+import type { AwstBuildContext } from '../awst_build/context/awst-build-context'
 
 type UnionToIntersection<T> = (T extends DeliberateAny ? (x: T) => void : never) extends (x: infer TIntersection) => void
   ? TIntersection
@@ -34,7 +34,7 @@ export type MethodReturnType<TMethod, TVisitor> = TMethod extends keyof TVisitor
 
 export type ReturnTypeForNode<T extends ts.Node, TVisitor> = MethodReturnType<VisitorMethod<KindForNode<T>>, TVisitor>
 
-export const accept = <TSelf extends { context: VisitorContext }, T extends ts.Node>(
+export const accept = <TSelf extends { context: AwstBuildContext }, T extends ts.Node>(
   visitor: TSelf,
   node: T,
 ): ReturnTypeForNode<MapBaseType<T>, TSelf> => {

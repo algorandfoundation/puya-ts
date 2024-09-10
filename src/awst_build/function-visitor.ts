@@ -1,6 +1,8 @@
 import type { Visitor } from '../visitor/visitor'
 import { accept } from '../visitor/visitor'
+import type { Block } from '../awst/nodes'
 import * as awst from '../awst/nodes'
+import { Goto, ReturnStatement } from '../awst/nodes'
 import ts from 'typescript'
 import { codeInvariant, enumerate, instanceOfAny, invariant } from '../util'
 import type { Statements } from '../visitor/syntax-names'
@@ -12,22 +14,13 @@ import { requireExpressionOfType, requireInstanceBuilder } from './eb/util'
 import { BaseVisitor } from './base-visitor'
 import type { PType } from './ptypes'
 import { FunctionPType, ObjectPType, TransientType } from './ptypes'
-import type { Block } from '../awst/nodes'
-import { Goto, ReturnStatement } from '../awst/nodes'
 import type { SourceLocation } from '../awst/source-location'
 import { typeRegistry } from './type-registry'
 import type { InstanceBuilder } from './eb'
-import type { VisitorContext } from './context/base-context'
+import type { AwstBuildContext } from './context/awst-build-context'
 import { OmittedExpressionBuilder } from './eb/omitted-expression-builder'
 import { ArrayLiteralExpressionBuilder } from './eb/array-literal-expression-builder'
 import { ObjectLiteralExpressionBuilder } from './eb/literal/object-literal-expression-builder'
-import { SymbolName } from './symbol-name'
-import type { ContractReference } from '../awst/models'
-
-export type ContractMethodInfo = {
-  cref: ContractReference
-  arc4MethodConfig?: awst.ContractMethod['arc4MethodConfig']
-}
 
 // noinspection JSUnusedGlobalSymbols
 export class FunctionVisitor
@@ -39,14 +32,13 @@ export class FunctionVisitor
 {
   private accept = <TNode extends ts.Node>(node: TNode) => accept<FunctionVisitor, TNode>(this, node)
 
-  private readonly _result: awst.Subroutine | awst.ContractMethod
-  private readonly _functionType: FunctionPType
-  private readonly _functionName: string
-  constructor(
-    ctx: VisitorContext,
-    node: ts.MethodDeclaration | ts.FunctionDeclaration | ts.ConstructorDeclaration,
-    contractInfo: ContractMethodInfo | undefined,
-  ) {
+  protected readonly _functionType: FunctionPType
+  protected readonly _functionName: string
+  protected readonly _args: awst.SubroutineArgument[]
+  protected readonly _documentation: awst.MethodDocumentation
+  protected readonly _body: awst.Block
+
+  constructor(ctx: AwstBuildContext, node: ts.MethodDeclaration | ts.FunctionDeclaration | ts.ConstructorDeclaration) {
     super(ctx)
     const sourceLocation = this.sourceLocation(node)
 
@@ -63,41 +55,17 @@ export class FunctionVisitor
       this._functionName = this.textVisitor.accept(node.name)
     }
 
-    const args = node.parameters.map((p) => this.accept(p))
+    this._args = node.parameters.map((p) => this.accept(p))
     const assignDestructuredParams = this.evaluateParameterBindingExpressions(node.parameters, sourceLocation)
     codeInvariant(node.body, 'Functions must have a body')
-    const body = assignDestructuredParams.length
+    this._body = assignDestructuredParams.length
       ? nodeFactory.block({ sourceLocation }, assignDestructuredParams, this.accept(node.body))
       : this.accept(node.body)
-    const documentation = nodeFactory.methodDocumentation({
+    this._documentation = nodeFactory.methodDocumentation({
       args: new Map(),
       description: null,
       returns: null,
     })
-    if (contractInfo) {
-      this._result = new awst.ContractMethod({
-        arc4MethodConfig: contractInfo.arc4MethodConfig ?? null,
-        memberName: this._functionName,
-        sourceLocation,
-        args,
-        returnType: this._functionType.returnType.wtypeOrThrow,
-        body,
-        inheritable: true,
-        synthetic: false,
-        cref: contractInfo.cref,
-        documentation,
-      })
-    } else {
-      this._result = new awst.Subroutine({
-        id: new SymbolName({ name: this._functionName, module: type.module }).fullName,
-        name: this._functionName,
-        sourceLocation,
-        args,
-        returnType: this._functionType.returnType.wtypeOrThrow,
-        body,
-        documentation,
-      })
-    }
   }
 
   buildAssignmentTarget(bindingName: ts.BindingName, sourceLocation: SourceLocation): InstanceBuilder {
@@ -488,29 +456,5 @@ export class FunctionVisitor
     } else {
       throw new CodeError(`Unsupported parameter declaration type ${getNodeName(node)}`, { sourceLocation })
     }
-  }
-
-  get result() {
-    return this._result
-  }
-
-  public static buildSubroutine(parentCtx: VisitorContext, node: ts.FunctionDeclaration): awst.Subroutine {
-    const result = new FunctionVisitor(parentCtx.createChildContext(), node, undefined).result
-    invariant(result instanceof awst.Subroutine, "result must be Subroutine'")
-    return result
-  }
-  public static buildContractMethod(
-    parentCtx: VisitorContext,
-    node: ts.MethodDeclaration,
-    contractMethodInfo: ContractMethodInfo,
-  ): awst.ContractMethod {
-    const result = new FunctionVisitor(parentCtx.createChildContext(), node, contractMethodInfo).result
-    invariant(result instanceof awst.ContractMethod, "result must be ContractMethod'")
-    return result
-  }
-  public static buildConstructor(parentCtx: VisitorContext, node: ts.ConstructorDeclaration, contractMethodInfo: ContractMethodInfo) {
-    const result = new FunctionVisitor(parentCtx.createChildContext(), node, contractMethodInfo).result
-    invariant(result instanceof awst.ContractMethod, "result must be ContractMethod'")
-    return result
   }
 }
