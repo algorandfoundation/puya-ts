@@ -1,7 +1,8 @@
 import { Account, Application, bytes, uint64 } from '@algorandfoundation/algo-ts'
+import { ALWAYS_APPROVE_TEAL_PROGRAM } from '../constants'
 import { lazyContext } from '../context-helpers/internal-context'
 import { Mutable } from '../typescript-helpers'
-import { ALWAYS_APPROVE_TEAL_PROGRAM } from '../constants'
+import { asUint64 } from '../util'
 
 export class ApplicationData {
   application: Mutable<Omit<Application, 'id'>>
@@ -23,7 +24,11 @@ export class ApplicationData {
 }
 
 export class ApplicationCls implements Application {
-  constructor(public readonly id: uint64) {}
+  readonly id: uint64
+
+  constructor(id?: uint64) {
+    this.id = asUint64(id ?? 0)
+  }
 
   private get data(): ApplicationData {
     return lazyContext.getApplicationData(this.id)

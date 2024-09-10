@@ -1,4 +1,6 @@
 import { gtxn, internal } from '@algorandfoundation/algo-ts'
+import algosdk from 'algosdk'
+import { asUint64 } from '../util'
 
 function ScopeGenerator(dispose: () => void) {
   function* internal() {
@@ -56,8 +58,8 @@ export class TransactionContext {
     }
   }
 
-  get activeGroup(): TransactionGroup {
-    return this.#activeGroup ?? new TransactionGroup([])
+  get activeGroup(): TransactionGroup | undefined {
+    return this.#activeGroup
   }
 
   get activeTransaction(): gtxn.Transaction {
@@ -66,7 +68,7 @@ export class TransactionContext {
 
   get lastGroup(): TransactionGroup {
     if (this.#groups.length === 0) {
-      throw new internal.errors.InternalError('No group transactions found!')
+      internal.errors.internalError('No group transactions found!')
     }
     return this.#groups.at(-1)!
   }
@@ -76,13 +78,21 @@ export class TransactionContext {
   }
 }
 
-class TransactionGroup {
+export class TransactionGroup {
   activeTransactionIndex: number
 
   constructor(
     public transactions: gtxn.Transaction[],
     activeTransactionIndex?: number,
   ) {
+    if (transactions.length > algosdk.AtomicTransactionComposer.MAX_GROUP_SIZE) {
+      internal.errors.internalError(
+        `Transaction group can have at most ${algosdk.AtomicTransactionComposer.MAX_GROUP_SIZE} transactions, as per AVM limits.`,
+      )
+    }
+    transactions.forEach((txn, index) => {
+      txn.groupIndex = asUint64(index)
+    })
     this.activeTransactionIndex = activeTransactionIndex === undefined ? transactions.length - 1 : activeTransactionIndex
   }
 
@@ -92,11 +102,11 @@ class TransactionGroup {
 
   get activeApplicationId() {
     if (this.transactions.length === 0) {
-      throw new internal.errors.InternalError('No transactions in the group')
+      internal.errors.internalError('No transactions in the group')
     }
     if ('appId' in this.activeTransaction) {
       return this.activeTransaction.appId.id
     }
-    throw new internal.errors.InternalError('No app_id found in the active transaction')
+    internal.errors.internalError('No app_id found in the active transaction')
   }
 }

@@ -1,4 +1,5 @@
 import { internal } from '@algorandfoundation/algo-ts'
+import { randomBytes } from 'crypto'
 import { BITS_IN_BYTE, MAX_UINT8, UINT512_SIZE } from './constants'
 import { DeliberateAny } from './typescript-helpers'
 
@@ -19,9 +20,9 @@ export function* iterBigInt(start: bigint, end: bigint): Generator<bigint> {
   }
 }
 
-export function asBigInt(v: internal.primitives.StubUint64Compat): bigint {
-  return internal.primitives.Uint64Cls.fromCompat(v).value
-}
+export const asBigInt = (v: internal.primitives.StubUint64Compat): bigint => asUint64Cls(v).asBigInt()
+
+export const asNumber = (v: internal.primitives.StubUint64Compat): number => asUint64Cls(v).asNumber()
 
 export function extractGenericTypeArgs(t: string): string[] {
   const match = t.match(/<(.*)>/)
@@ -82,3 +83,5 @@ export const getRandomBigInt = (min: number | bigint, max: number | bigint): big
     .reduce((acc, x) => acc * 256n + BigInt(x), 0n)
   return (randomValue % (bigIntMax - bigIntMin)) + bigIntMin
 }
+
+export const getRandomBytes = (length: number): internal.primitives.BytesCls => asBytesCls(new Uint8Array(randomBytes(length)))

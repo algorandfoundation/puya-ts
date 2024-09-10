@@ -1,10 +1,10 @@
 import { Account, Application, Asset, bytes, internal, uint64 } from '@algorandfoundation/algo-ts'
-import { lazyContext } from '../context-helpers/internal-context'
-import { asBytes, asUint64, asUint64Cls } from '../util'
 import { DEFAULT_ACCOUNT_MIN_BALANCE, ZERO_ADDRESS } from '../constants'
-import { AssetCls } from './asset'
-import { ApplicationCls } from './application'
+import { lazyContext } from '../context-helpers/internal-context'
 import { Mutable } from '../typescript-helpers'
+import { asBytes, asUint64, asUint64Cls } from '../util'
+import { ApplicationCls } from './application'
+import { AssetCls } from './asset'
 
 export class AssetHolding {
   balance: uint64
@@ -93,6 +93,6 @@ export class AccountCls implements Account {
     if (assetOrApp instanceof ApplicationCls) {
       return this.data.optedApplications.has(asUint64Cls(assetOrApp.id).asBigInt())
     }
-    internal.errors.internalError('Invalid argument type. Must be an `algopy.Asset` or `algopy.Application` instance.')
+    throw new internal.errors.InternalError('Invalid argument type. Must be an `algopy.Asset` or `algopy.Application` instance.')
   }
 }

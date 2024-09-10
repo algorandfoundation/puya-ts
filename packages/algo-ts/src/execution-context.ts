@@ -6,7 +6,7 @@ import { Account, Application, Asset } from './reference'
 
 export type ExecutionContext = {
   log(value: bytes): void
-  application(id: uint64): Application
+  application(id?: uint64): Application
   asset(id?: uint64): Asset
   account(address?: bytes): Account
   op: Partial<OpsNamespace>

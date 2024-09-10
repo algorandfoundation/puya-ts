@@ -1,9 +1,9 @@
 import { Account, Application, Asset, BaseContract, internal } from '@algorandfoundation/algo-ts'
 import { MAX_UINT64 } from '../constants'
-import { asBigInt, asBytesCls, asMaybeBytesCls, asMaybeUint64Cls, asUint64, asUint64Cls, iterBigInt } from '../util'
 import { AccountData, AssetHolding } from '../impl/account'
 import { ApplicationData } from '../impl/application'
 import { AssetData } from '../impl/asset'
+import { asBigInt, asBytesCls, asMaybeBytesCls, asMaybeUint64Cls, asUint64, asUint64Cls, iterBigInt } from '../util'
 
 export class LedgerContext {
   appIdIter = iterBigInt(1001n, MAX_UINT64)
@@ -17,6 +17,21 @@ export class LedgerContext {
     this.appIdContractMap.set(asBigInt(appId), contract)
   }
 
+  getAsset(assetId: internal.primitives.StubUint64Compat): Asset {
+    const id = asBigInt(assetId)
+    if (this.assetDataMap.has(id)) {
+      return Asset(asUint64(id))
+    }
+    throw internal.errors.internalError('Unknown asset, check correct testing context is active')
+  }
+
+  getApplication(applicationId: internal.primitives.StubUint64Compat): Application {
+    const id = asBigInt(applicationId)
+    if (this.applicationDataMap.has(id)) {
+      return Application(asUint64(id))
+    }
+    throw internal.errors.internalError('Unknown application, check correct testing context is active')
+  }
   getApplicationForContract(contract: BaseContract): Application {
     for (const [appId, c] of this.appIdContractMap) {
       if (c === contract) {

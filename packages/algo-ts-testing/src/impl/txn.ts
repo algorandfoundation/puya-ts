@@ -186,7 +186,7 @@ export const Txn: internal.opTypes.TxnType = {
    * Arguments passed to the application in the ApplicationCall transaction
    */
   applicationArgs(a: uint64): bytes {
-    const currentTransaction = lazyContext.txn.activeTransaction
+    const currentTransaction = lazyContext.activeGroup.activeTransaction
     if (currentTransaction.type === gtxn.TransactionType.ApplicationCall) {
       return currentTransaction.appArgs(internal.primitives.Uint64Cls.getNumber(a))
     }

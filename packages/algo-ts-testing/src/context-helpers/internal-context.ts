@@ -2,6 +2,7 @@ import { internal } from '@algorandfoundation/algo-ts'
 import { AccountData } from '../impl/account'
 import { ApplicationData } from '../impl/application'
 import { AssetData } from '../impl/asset'
+import { TransactionGroup } from '../subcontexts/transaction-context'
 import { TestExecutionContext } from '../test-execution-context'
 
 /**
@@ -32,6 +33,18 @@ class InternalContext {
 
   get any() {
     return this.value.any
+  }
+
+  get activeApplication() {
+    return this.ledger.getApplication(this.activeGroup.activeApplicationId)
+  }
+
+  get activeGroup(): TransactionGroup {
+    const group = this.value.txn.activeGroup
+    if (!group) {
+      throw internal.errors.internalError('no active txn group')
+    }
+    return group
   }
 
   getAccountData(accountPublicKey: internal.primitives.StubBytesCompat): AccountData {
