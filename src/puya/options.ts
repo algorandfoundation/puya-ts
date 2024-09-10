@@ -1,30 +1,46 @@
 import type { CompileOptions } from '../compile-options'
 
-enum LocalsCoalescingStrategy {
+export enum LocalsCoalescingStrategy {
   root_operand = 'root_operand',
   root_operand_excluding_args = 'root_operand_excluding_args',
   aggressive = 'aggressive',
 }
 export type CompilationSet = Record<string, string>
 
+export type PuyaPassThroughOptions = Omit<PuyaOptions, 'compilationSet'>
+
 export class PuyaOptions {
-  outputTeal: boolean = true
-  outputArc32: boolean = true
-  outputSsaIr: boolean = false
-  outputOptimizationIr: boolean = false
-  outputDestructuredIr: boolean = false
-  outputMemoryIr: boolean = false
-  outputBytecode: boolean = false
-  matchAlgodBytecode: boolean = false
-  debugLevel: number = 1
-  optimizationLevel: number = 1
-  targetAvmVersion: number = 10 // todo: move to a constant
-  cliTemplateDefinitions: string[] = []
-  templateVarsPrefix: string = 'TMPL_'
-  localsCoalescingStrategy: LocalsCoalescingStrategy = LocalsCoalescingStrategy.root_operand
+  outputTeal: boolean
+  outputArc32: boolean
+  outputSsaIr: boolean
+  outputOptimizationIr: boolean
+  outputDestructuredIr: boolean
+  outputMemoryIr: boolean
+  outputBytecode: boolean
+  matchAlgodBytecode: boolean
+  debugLevel: number
+  optimizationLevel: number
+  targetAvmVersion: number
+  cliTemplateDefinitions: string[]
+  templateVarsPrefix: string
+  localsCoalescingStrategy: LocalsCoalescingStrategy
 
   compilationSet: CompilationSet
-  constructor({ compileOptions, compilationSet }: { compileOptions: CompileOptions; compilationSet: CompilationSet }) {
+  constructor({ passThroughOptions, compilationSet }: { passThroughOptions: PuyaPassThroughOptions; compilationSet: CompilationSet }) {
     this.compilationSet = compilationSet
+    this.outputTeal = passThroughOptions.outputTeal
+    this.outputArc32 = passThroughOptions.outputArc32
+    this.outputSsaIr = passThroughOptions.outputSsaIr
+    this.outputOptimizationIr = passThroughOptions.outputOptimizationIr
+    this.outputDestructuredIr = passThroughOptions.outputDestructuredIr
+    this.outputMemoryIr = passThroughOptions.outputMemoryIr
+    this.outputBytecode = passThroughOptions.outputBytecode
+    this.matchAlgodBytecode = passThroughOptions.matchAlgodBytecode
+    this.debugLevel = passThroughOptions.debugLevel
+    this.optimizationLevel = passThroughOptions.optimizationLevel
+    this.targetAvmVersion = passThroughOptions.targetAvmVersion
+    this.cliTemplateDefinitions = passThroughOptions.cliTemplateDefinitions
+    this.templateVarsPrefix = passThroughOptions.templateVarsPrefix
+    this.localsCoalescingStrategy = passThroughOptions.localsCoalescingStrategy
   }
 }
