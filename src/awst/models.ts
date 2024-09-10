@@ -116,3 +116,12 @@ export class LogicSigReference extends ModelBase {
     return `${this.moduleName}::${this.name}`
   }
 }
+
+export enum TransactionKind {
+  Payment = 1,
+  KeyRegistration = 2,
+  AssetConfig = 3,
+  AssetTransfer = 4,
+  AssetFreeze = 5,
+  Application = 6,
+}

@@ -2,12 +2,11 @@ import { Constants } from '../../constants'
 import { wtypes } from '../../awst'
 import { codeInvariant, distinct, sortBy } from '../../util'
 import type { WType } from '../../awst/wtypes'
-import { biguintWType, uint64WType } from '../../awst/wtypes'
-import { ARC4UIntN } from '../../awst/wtypes'
-import { WArray } from '../../awst/wtypes'
-import { WTuple } from '../../awst/wtypes'
+import { ARC4UIntN, WArray, WTuple } from '../../awst/wtypes'
 import { CodeError, InternalError, NotSupported } from '../../errors'
 import { PType } from './base'
+import { TransactionKind } from '../../awst/models'
+
 export * from './intrinsic-enum-type'
 export * from './op-ptypes'
 export * from './base'
@@ -73,25 +72,25 @@ export class ContractClassPType extends PType {
   readonly properties: Record<string, PType>
   readonly methods: Record<string, FunctionPType>
   readonly singleton = true
-  readonly baseType: ContractClassPType | undefined
+  readonly baseTypes: ContractClassPType[]
 
   constructor(props: {
     module: string
     name: string
     properties: Record<string, AppStorageType>
     methods: Record<string, FunctionPType>
-    baseType: ContractClassPType | undefined
+    baseTypes: ContractClassPType[]
   }) {
     super()
     this.name = props.name
     this.module = props.module
     this.properties = props.properties
     this.methods = props.methods
-    this.baseType = props.baseType
+    this.baseTypes = props.baseTypes
   }
 
   get isARC4(): boolean {
-    return this.baseType?.isARC4 === true
+    return this.baseTypes.some((b) => b.isARC4)
   }
 }
 
@@ -110,7 +109,7 @@ export class BaseContractClassType extends ContractClassPType {
     name: string
     properties: Record<string, AppStorageType>
     methods: Record<string, FunctionPType>
-    baseType: ContractClassPType | undefined
+    baseTypes: ContractClassPType[]
   }) {
     super(rest)
     this._isArc4 = isArc4
@@ -578,6 +577,10 @@ export const neverPType = new InstanceType({
   module: 'lib.d.ts',
   wtype: wtypes.voidWType,
 })
+export const unknownPType = new UnsupportedType({
+  name: 'unknown',
+  module: 'lib.d.ts',
+})
 
 export const nullPType = new UnsupportedType({
   name: 'null',
@@ -748,7 +751,7 @@ export const BaseContractType = new BaseContractClassType({
     clearStateProgram: ClearStateProgram,
   },
   properties: {},
-  baseType: undefined,
+  baseTypes: [],
   isArc4: false,
 })
 export const ContractType = new BaseContractClassType({
@@ -759,7 +762,7 @@ export const ContractType = new BaseContractClassType({
     clearStateProgram: ClearStateProgram,
   },
   properties: {},
-  baseType: BaseContractType,
+  baseTypes: [BaseContractType],
   isArc4: true,
 })
 
@@ -770,4 +773,43 @@ export const arc4BareMethodDecorator = new LibFunctionType({
 export const arc4AbiMethodDecorator = new LibFunctionType({
   module: Constants.arc4ModuleName,
   name: 'abimethod',
+})
+
+export class GroupTransactionPType extends PType {
+  readonly wtype = undefined
+  readonly name: string
+  readonly kind: TransactionKind
+  readonly module = Constants.transactionsModuleName
+  readonly singleton = false
+
+  constructor({ kind, name }: { kind: TransactionKind; name: string }) {
+    super()
+    this.name = name
+    this.kind = kind
+  }
+}
+
+export const paymentGroupTransaction = new GroupTransactionPType({
+  name: 'PayTxn',
+  kind: TransactionKind.Payment,
+})
+export const keyRegistrationGroupTransaction = new GroupTransactionPType({
+  name: 'KeyRegistrationTxn',
+  kind: TransactionKind.KeyRegistration,
+})
+export const assetConfigGroupTransaction = new GroupTransactionPType({
+  name: 'AssetConfigTxn',
+  kind: TransactionKind.AssetConfig,
+})
+export const assetTransferGroupTransaction = new GroupTransactionPType({
+  name: 'AssetTransferTxn',
+  kind: TransactionKind.AssetTransfer,
+})
+export const assetFreezeGroupTransaction = new GroupTransactionPType({
+  name: 'AssetFreezeTxn',
+  kind: TransactionKind.AssetFreeze,
+})
+export const applicationGroupTransaction = new GroupTransactionPType({
+  name: 'ApplicationTxn',
+  kind: TransactionKind.Application,
 })

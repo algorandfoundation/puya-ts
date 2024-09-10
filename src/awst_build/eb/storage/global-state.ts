@@ -1,11 +1,11 @@
 import type { NodeBuilder } from '../index'
 import { FunctionBuilder, InstanceBuilder, InstanceExpressionBuilder } from '../index'
 import type { SourceLocation } from '../../../awst/source-location'
-import type { PType } from '../../ptypes'
+import { boolPType } from '../../ptypes'
 import { bytesPType } from '../../ptypes'
 import type { AppStateExpression, Expression, LValue } from '../../../awst/nodes'
 import { BytesConstant } from '../../../awst/nodes'
-import type { ContractClassPType } from '../../ptypes'
+import type { ContractClassPType, PType } from '../../ptypes'
 import { GlobalStateType } from '../../ptypes'
 import { codeInvariant, invariant } from '../../../util'
 import { CodeError } from '../../../errors'
@@ -14,6 +14,10 @@ import { requireExpressionOfType, requireInstanceBuilder } from '../util'
 import { nodeFactory } from '../../../awst/node-factory'
 import { AppStorageDeclaration } from '../../contract-data'
 import { typeRegistry } from '../../type-registry'
+import { BooleanExpressionBuilder } from '../boolean-expression-builder'
+import { parseFunctionArgs } from '../util/arg-parsing'
+import type { WType } from '../../../awst/wtypes'
+import { stateKeyWType } from '../../../awst/wtypes'
 
 export class GlobalStateFunctionBuilder extends FunctionBuilder {
   constructor(sourceLocation: SourceLocation) {
@@ -21,36 +25,47 @@ export class GlobalStateFunctionBuilder extends FunctionBuilder {
   }
 
   call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
-    let [contentPType] = typeArgs
-    let initialValue: Expression | undefined
-    let key: Expression | undefined = undefined
-    switch (args.length) {
-      case 0:
-        break
-      case 1: {
-        const [arg0] = args
-        codeInvariant(arg0 instanceof ObjectLiteralExpressionBuilder, 'Expected object literal')
-        if (arg0.hasProperty('initialValue')) {
-          const initialValueBuilder = requireInstanceBuilder(arg0.memberAccess('initialValue', sourceLocation), sourceLocation)
-          if (contentPType) {
-            initialValue = requireExpressionOfType(initialValueBuilder, contentPType, sourceLocation)
-          } else {
-            initialValue = initialValueBuilder.resolve()
-            invariant(initialValueBuilder.ptype, 'Builder must have a ptype')
-            contentPType = initialValueBuilder.ptype
-          }
-        }
-        if (arg0.hasProperty('key')) {
-          key = requireExpressionOfType(arg0.memberAccess('key', sourceLocation), bytesPType, sourceLocation)
-        }
-        break
-      }
-      default:
-        throw CodeError.unexpectedUnhandledArgs({ sourceLocation })
-    }
+    const [contentPType] = typeArgs
+    const {
+      args: [{ initialValue, key }],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 1,
+      argMap: [
+        {
+          initialValue: [contentPType, undefined],
+          key: ['*', undefined],
+        },
+      ],
+      funcName: 'GlobalState function',
+      callLocation: sourceLocation,
+    })
     codeInvariant(contentPType, `Generic type 'ValueType' is required if not providing an initial value`)
     const ptype = new GlobalStateType({ content: contentPType })
-    return new GlobalStateFunctionResultBuilder(key, ptype, { initialValue, sourceLocation })
+
+    return new GlobalStateFunctionResultBuilder(extractKeyOverride(key, stateKeyWType, sourceLocation), ptype, {
+      initialValue,
+      sourceLocation,
+    })
+  }
+}
+
+function extractKeyOverride(key: InstanceBuilder | undefined, keyWType: WType, sourceLocation: SourceLocation): Expression | undefined {
+  if (!key) return undefined
+
+  const keyBytes = key.toBytes(sourceLocation)
+  if (keyBytes instanceof BytesConstant) {
+    return nodeFactory.bytesConstant({
+      ...keyBytes,
+      wtype: keyWType,
+    })
+  } else {
+    return nodeFactory.reinterpretCast({
+      expr: keyBytes,
+      wtype: keyWType,
+      sourceLocation: sourceLocation,
+    })
   }
 }
 
@@ -63,8 +78,15 @@ export class GlobalStateExpressionBuilder extends InstanceExpressionBuilder<Glob
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
     switch (name) {
       case 'value':
-        // TODO: use value proxy
         return typeRegistry.getInstanceEb(this.buildField(sourceLocation), this.ptype.contentType)
+      case 'hasValue':
+        return new BooleanExpressionBuilder(
+          nodeFactory.stateExists({
+            field: this.buildField(sourceLocation),
+            wtype: boolPType.wtype,
+            sourceLocation,
+          }),
+        )
     }
     return super.memberAccess(name, sourceLocation)
   }
@@ -106,11 +128,11 @@ export class GlobalStateFunctionResultBuilder extends InstanceBuilder<GlobalStat
     return this._ptype
   }
 
-  buildStorageDefinition(memberName: string, memberLocation: SourceLocation, contractType: ContractClassPType): AppStorageDeclaration {
+  buildStorageDeclaration(memberName: string, memberLocation: SourceLocation, contractType: ContractClassPType): AppStorageDeclaration {
     if (this._expr)
       codeInvariant(
         this._expr instanceof BytesConstant,
-        `key is must be a compile time constant value if ${this.typeDescription} is assigned to a contract member`,
+        `key must be a compile time constant value if ${this.typeDescription} is assigned to a contract member`,
       )
     return new AppStorageDeclaration({
       sourceLocation: memberLocation,

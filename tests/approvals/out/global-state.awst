@@ -1,10 +1,15 @@
 contract TestContract
 {
   globals {
+    ["noInitial"]: bytes
     ["testState"]: uint64
+    ["TESTSTATE"]: uint64
   }
   approvalProgram(): bool
   {
+    assert(STATE_EXISTS(GlobalState["testState"]))
+    assert(GlobalState["testState"] == 2)
+    (GlobalState["testState"] = btoi(txnas<ApplicationArgs>(0)))
     return True
   }
   

@@ -1,3 +1,5 @@
+import { utf8ToUint8Array } from './util'
+
 const algoTsPackage = '@algorandfoundation/algo-ts'
 
 export const Constants = {
@@ -11,6 +13,7 @@ export const Constants = {
   referenceModuleName: `${algoTsPackage}/reference.d.ts`,
   stateModuleName: `${algoTsPackage}/state.d.ts`,
   boxModuleName: `${algoTsPackage}/box.d.ts`,
+  transactionsModuleName: `${algoTsPackage}/transactions.d.ts`,
   primitivesModuleName: `${algoTsPackage}/primitives.d.ts`,
   arc4EncodedTypesModuleName: `${algoTsPackage}/arc4/encoded-types.d.ts`,
   arc4BareDecoratorName: 'arc4.baremethod',

@@ -6,7 +6,7 @@ import { invariant } from '../util'
 import { DecoratorDataBuilder } from './eb/arc4-bare-method-decorator-builder'
 import type { SourceLocation } from '../awst/source-location'
 import type { Constants } from '../constants'
-import type { VisitorContext } from './context/base-context'
+import type { AwstBuildContext } from './context/awst-build-context'
 
 export type Arc4AbiDecoratorData = {
   type: typeof Constants.arc4AbiDecoratorName
@@ -42,7 +42,7 @@ export class DecoratorVisitor extends BaseVisitor {
 
   public readonly result: DecoratorData
 
-  constructor(context: VisitorContext, node: ts.Decorator) {
+  constructor(context: AwstBuildContext, node: ts.Decorator) {
     super(context)
 
     const expr = this.accept(node.expression)
@@ -50,7 +50,7 @@ export class DecoratorVisitor extends BaseVisitor {
     this.result = expr.resolveDecoratorData()
   }
 
-  static buildDecoratorData(context: VisitorContext, node: ts.Decorator): DecoratorData {
+  static buildDecoratorData(context: AwstBuildContext, node: ts.Decorator): DecoratorData {
     return new DecoratorVisitor(context.createChildContext(), node).result
   }
 }

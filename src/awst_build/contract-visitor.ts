@@ -22,9 +22,10 @@ import { ARC4BareMethodConfig } from '../awst/models'
 import { ARC4ABIMethodConfig } from '../awst/models'
 import { ARC4CreateOption, OnCompletionAction } from '../awst/models'
 import { isValidLiteralForPType } from './eb/util'
-import type { VisitorContext } from './context/base-context'
+import type { AwstBuildContext } from './context/awst-build-context'
 import { nodeFactory } from '../awst/node-factory'
 import { boolWType } from '../awst/wtypes'
+import { ContractMethodVisitor } from './contract-method-visitor'
 
 export class ContractVisitor extends BaseVisitor implements Visitor<ClassElements, void> {
   private _ctor?: ContractMethod
@@ -33,11 +34,10 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
   private _clearStateProgram?: ContractMethod
   private _className: string
   private _contractPType: ContractClassPType
-  private _appState = new Map<string, AppStorageDefinition>()
   public readonly result: ContractFragment
   public accept = <TNode extends ts.Node>(node: TNode) => accept<ContractVisitor, TNode>(this, node)
 
-  constructor(ctx: VisitorContext, classDec: ts.ClassDeclaration) {
+  constructor(ctx: AwstBuildContext, classDec: ts.ClassDeclaration) {
     super(ctx)
     const sourceLocation = this.context.getSourceLocation(classDec)
     codeInvariant(classDec.name, 'Anonymous classes are not supported for contracts', sourceLocation)
@@ -45,7 +45,6 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
 
     const contractPtype = this.context.getPTypeForNode(classDec)
     invariant(contractPtype instanceof ContractClassPType, 'Contract PType must be ContractClassType')
-    invariant(contractPtype.baseType, 'Contract must have base type')
     this._contractPType = contractPtype
 
     const isAbstract = Boolean(classDec.modifiers?.some((m) => m.kind === ts.SyntaxKind.AbstractKeyword))
@@ -63,7 +62,7 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
 
     this.result = new ContractFragment({
       name: this._className,
-      appState: this._appState,
+      appState: this.context.getStorageDefinitionsForContract(this._contractPType),
       init: this._ctor ?? null,
       subroutines: this._subroutines,
       docstring: null,
@@ -131,24 +130,23 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
   }
 
   private buildContractReferences(contractType: ContractClassPType): ContractReference[] {
-    const baseType = contractType.baseType
-    if (baseType === undefined || baseType.equals(BaseContractType) || baseType.equals(ContractType)) {
-      return []
-    } else {
-      return [
-        new ContractReference({
+    return contractType.baseTypes.flatMap((baseType) => {
+      if (baseType.equals(BaseContractType) || baseType.equals(ContractType)) {
+        return []
+      } else {
+        return new ContractReference({
           className: baseType.name,
           moduleName: baseType.module,
-        }),
-      ]
-    }
+        })
+      }
+    })
   }
 
   visitClassStaticBlockDeclaration(node: ts.ClassStaticBlockDeclaration): void {
     throw new TodoError('visitClassStaticBlockDeclaration')
   }
   visitConstructor(node: ts.ConstructorDeclaration): void {
-    this._ctor = FunctionVisitor.buildConstructor(this.context, node, { cref: ContractReference.fromPType(this._contractPType) })
+    this._ctor = ContractMethodVisitor.buildConstructor(this.context, node, { cref: ContractReference.fromPType(this._contractPType) })
   }
   visitGetAccessor(node: ts.GetAccessorDeclaration): void {
     throw new TodoError('visitGetAccessor')
@@ -286,15 +284,15 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
     switch (methodName) {
       case Constants.approvalProgramMethodName:
         if (decorators.length) logger.error(sourceLocation, `${Constants.approvalProgramMethodName} should not have a decorator`)
-        this._approvalProgram = FunctionVisitor.buildContractMethod(this.context, node, { cref })
+        this._approvalProgram = ContractMethodVisitor.buildContractMethod(this.context, node, { cref })
         break
       case Constants.clearStateProgramMethodName:
         if (decorators.length) logger.error(sourceLocation, `${Constants.clearStateProgramMethodName} should not have a decorator`)
-        this._clearStateProgram = FunctionVisitor.buildContractMethod(this.context, node, { cref })
+        this._clearStateProgram = ContractMethodVisitor.buildContractMethod(this.context, node, { cref })
         break
       default:
         this._subroutines.push(
-          FunctionVisitor.buildContractMethod(this.context, node, {
+          ContractMethodVisitor.buildContractMethod(this.context, node, {
             cref,
             arc4MethodConfig: this.buildArc4Config({
               decorator: decorators[0],
@@ -320,8 +318,8 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
     const initializer = this.accept(node.initializer)
 
     if (initializer instanceof GlobalStateFunctionResultBuilder) {
-      const storageDef = initializer.buildStorageDefinition(propertyName, this.sourceLocation(node.name), this._contractPType)
-      this._appState.set(propertyName, storageDef.definition)
+      const storageDeclaration = initializer.buildStorageDeclaration(propertyName, this.sourceLocation(node.name), this._contractPType)
+      this.context.addStorageDeclaration(storageDeclaration)
     }
 
     return
@@ -334,7 +332,7 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
     throw new TodoError('visitSetAccessor')
   }
 
-  public static buildContract(ctx: VisitorContext, classDec: ts.ClassDeclaration): awst.ContractFragment {
+  public static buildContract(ctx: AwstBuildContext, classDec: ts.ClassDeclaration): awst.ContractFragment {
     return new ContractVisitor(ctx.createChildContext(), classDec).result
   }
 }

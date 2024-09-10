@@ -12,12 +12,12 @@ import type ts from 'typescript'
 import type { Visitor } from '../visitor/visitor'
 import { accept } from '../visitor/visitor'
 import { NotSupported } from '../errors'
-import type { VisitorContext } from './context/base-context'
+import type { AwstBuildContext } from './context/awst-build-context'
 
 type ObjectNames = PropertyName | PseudoLiteralToken
 
 export class TextVisitor implements Visitor<ObjectNames, string> {
-  constructor(public context: VisitorContext) {}
+  constructor(public context: AwstBuildContext) {}
 
   visitTemplateHead(node: ts.TemplateHead): string {
     return node.text

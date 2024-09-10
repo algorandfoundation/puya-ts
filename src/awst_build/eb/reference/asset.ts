@@ -7,14 +7,24 @@ import { requireExpressionsOfType } from '../util'
 import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
 import type { InstanceType } from '../../ptypes'
+import { parseFunctionArgs } from '../util/arg-parsing'
 
 export class AssetFunctionBuilder extends FunctionBuilder {
   call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
-    const [id] = requireExpressionsOfType(args, [uint64PType], sourceLocation)
+    const {
+      args: [assetId],
+    } = parseFunctionArgs({
+      argMap: [[uint64PType, undefined]],
+      args,
+      typeArgs,
+      genericTypeArgs: 0,
+      funcName: 'Asset function',
+      callLocation: sourceLocation,
+    })
 
     return new AssetExpressionBuilder(
       nodeFactory.reinterpretCast({
-        expr: id,
+        expr: assetId ?? nodeFactory.uInt64Constant({ value: 0n, sourceLocation }),
         sourceLocation,
         wtype: assetPType.wtypeOrThrow,
       }),

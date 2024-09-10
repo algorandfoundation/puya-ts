@@ -1,32 +1,47 @@
-import type { PType } from '../ptypes'
-import { NodeBuilder } from './index'
+import type { NodeBuilder } from './index'
+import { InstanceBuilder } from './index'
 import type { SourceLocation } from '../../awst/source-location'
 import type { ContractClassPType } from '../ptypes'
 import { GlobalStateType } from '../ptypes'
-import { BaseContractMethodExpressionBuilder, ContractMethodExpressionBuilder } from './free-subroutine-expression-builder'
+import { ContractMethodExpressionBuilder } from './free-subroutine-expression-builder'
 import { GlobalStateExpressionBuilder } from './storage/global-state'
-import { nodeFactory } from '../../awst/node-factory'
+import type { Expression, LValue } from '../../awst/nodes'
+import type { AwstBuildContext } from '../context/awst-build-context'
+import { codeInvariant } from '../../util'
+import { CodeError } from '../../errors'
 
-export class ContractThisBuilder extends NodeBuilder {
-  private readonly _ptype: ContractClassPType
-  constructor(ptype: ContractClassPType, sourceLocation: SourceLocation) {
+export class ContractThisBuilder extends InstanceBuilder<ContractClassPType> {
+  resolve(): Expression {
+    throw new CodeError('this keyword is not valid as a value', { sourceLocation: this.sourceLocation })
+  }
+  resolveLValue(): LValue {
+    throw new CodeError('this keyword is not valid as a value', { sourceLocation: this.sourceLocation })
+  }
+  readonly #ptype: ContractClassPType
+  constructor(
+    ptype: ContractClassPType,
+    sourceLocation: SourceLocation,
+    private context: AwstBuildContext,
+  ) {
     super(sourceLocation)
-    this._ptype = ptype
+    this.#ptype = ptype
   }
 
-  get ptype(): PType {
-    return this._ptype
+  get ptype(): ContractClassPType {
+    return this.#ptype
   }
 
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
-    const property = this._ptype.properties[name]
+    const property = this.ptype.properties[name]
     if (property) {
+      const storageDeclaration = this.context.getStorageDeclaration(this.ptype, name)
       if (property instanceof GlobalStateType) {
-        // TODO: Retrieve key for global state
-        return new GlobalStateExpressionBuilder(nodeFactory.bytesConstant({ value: new Uint8Array(), sourceLocation }), property)
+        codeInvariant(storageDeclaration, `No declaration exists for property ${property}.`, sourceLocation)
+
+        return new GlobalStateExpressionBuilder(storageDeclaration.key, property)
       }
     }
-    const method = this._ptype.methods[name]
+    const method = this.ptype.methods[name]
     if (method) {
       return new ContractMethodExpressionBuilder(sourceLocation, method)
     }
@@ -34,29 +49,8 @@ export class ContractThisBuilder extends NodeBuilder {
   }
 }
 
-export class ContractSuperBuilder extends NodeBuilder {
-  private readonly _ptype: ContractClassPType
-  constructor(ptype: ContractClassPType, sourceLocation: SourceLocation) {
-    super(sourceLocation)
-    this._ptype = ptype
-  }
-
-  get ptype(): PType {
-    return this._ptype
-  }
-
-  memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
-    const property = this._ptype.properties[name]
-    if (property) {
-      if (property instanceof GlobalStateType) {
-        // TODO: Retrieve key for global state
-        return new GlobalStateExpressionBuilder(nodeFactory.bytesConstant({ value: new Uint8Array(), sourceLocation }), property)
-      }
-    }
-    const method = this._ptype.methods[name]
-    if (method) {
-      return new BaseContractMethodExpressionBuilder(sourceLocation, method, this._ptype)
-    }
-    return super.memberAccess(name, sourceLocation)
+export class ContractSuperBuilder extends ContractThisBuilder {
+  constructor(ptype: ContractClassPType, sourceLocation: SourceLocation, context: AwstBuildContext) {
+    super(ptype, sourceLocation, context)
   }
 }

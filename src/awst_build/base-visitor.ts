@@ -39,7 +39,7 @@ import { instanceEb, typeRegistry } from './type-registry'
 import { ConditionalExpressionBuilder } from './eb/literal/conditional-expression-builder'
 import { BooleanExpressionBuilder } from './eb/boolean-expression-builder'
 import { boolPType } from './ptypes'
-import type { VisitorContext } from './context/base-context'
+import type { AwstBuildContext } from './context/awst-build-context'
 import type { Statement, Expression, LValue } from '../awst/nodes'
 import { OmittedExpressionBuilder } from './eb/omitted-expression-builder'
 import { awst } from '../awst'
@@ -48,7 +48,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   private baseAccept = <TNode extends ts.Node>(node: TNode) => accept<BaseVisitor, TNode>(this, node)
   readonly textVisitor: TextVisitor
 
-  protected constructor(public context: VisitorContext) {
+  protected constructor(public context: AwstBuildContext) {
     this.textVisitor = new TextVisitor(context)
   }
 
@@ -112,21 +112,11 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   }
 
   visitSuperKeyword(node: ts.SuperExpression): NodeBuilder {
-    const sourceLocation = this.sourceLocation(node)
-    const ptype = this.context.getPTypeForNode(node)
-    if (ptype instanceof ContractClassPType) {
-      return new ContractSuperBuilder(ptype, sourceLocation)
-    }
-    throw new CodeError(`'super' keyword is not valid outside of a contract type`, { sourceLocation })
+    this.throwNotSupported(node, `'super' keyword outside of a contract type`)
   }
 
   visitThisKeyword(node: ts.ThisExpression): NodeBuilder {
-    const sourceLocation = this.sourceLocation(node)
-    const ptype = this.context.getPTypeForNode(node)
-    if (ptype instanceof ContractClassPType) {
-      return new ContractThisBuilder(ptype, sourceLocation)
-    }
-    throw new CodeError(`'this' keyword is not valid outside of a contract type`, { sourceLocation })
+    this.throwNotSupported(node, `'this' keyword outside of a contract type`)
   }
 
   visitFunctionExpression(node: ts.FunctionExpression): NodeBuilder {

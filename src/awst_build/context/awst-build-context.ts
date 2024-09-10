@@ -3,18 +3,19 @@ import { SourceLocation } from '../../awst/source-location'
 import type { NodeBuilder } from '../eb'
 import { EvaluationContext } from './evaluation-context'
 import { UniqueNameResolver } from './unique-name-resolver'
-import type { PType } from '../ptypes'
+import type { ContractClassPType, PType } from '../ptypes'
 import { SwitchLoopContext } from './switch-loop-context'
 import { TypeResolver } from '../type-resolver'
 import { codeInvariant, invariant } from '../../util'
 import { typeRegistry } from '../type-registry'
 import { nodeFactory } from '../../awst/node-factory'
 import type { awst } from '../../awst'
-import type { Constant } from '../../awst/nodes'
+import type { AppStorageDefinition, Constant } from '../../awst/nodes'
 import { logger } from '../../logger'
 import { CodeError } from '../../errors'
+import type { AppStorageDeclaration } from '../contract-data'
 
-export interface VisitorContext {
+export interface AwstBuildContext {
   /**
    * Get the source location of a node in the current source file
    * @param node
@@ -72,14 +73,20 @@ export interface VisitorContext {
   /**
    * Create a child context from this context. Used when entering a child parsing context such as a class or function.
    */
-  createChildContext(): VisitorContext
+  createChildContext(): AwstBuildContext
+
+  addStorageDeclaration(declaration: AppStorageDeclaration): void
+
+  getStorageDeclaration(contractType: ContractClassPType, memberName: string): AppStorageDeclaration | undefined
+
+  getStorageDefinitionsForContract(contractType: ContractClassPType): Map<string, AppStorageDefinition>
 }
 
-export function buildContextForSourceFile(sourceFile: ts.SourceFile, program: ts.Program): VisitorContext {
-  return VisitorContextImpl.forFile(sourceFile, program)
+export function buildContextForSourceFile(sourceFile: ts.SourceFile, program: ts.Program): AwstBuildContext {
+  return AwstBuildContextImpl.forFile(sourceFile, program)
 }
 
-class VisitorContextImpl implements VisitorContext {
+class AwstBuildContextImpl implements AwstBuildContext {
   readonly evaluationCtx = new EvaluationContext()
   readonly switchLoopCtx = new SwitchLoopContext()
   readonly typeResolver: TypeResolver
@@ -89,13 +96,14 @@ class VisitorContextImpl implements VisitorContext {
     public readonly program: ts.Program,
     private readonly constants: Map<string, awst.Constant>,
     private readonly nameResolver: UniqueNameResolver,
+    private readonly storageDeclarations: Map<string, Map<string, AppStorageDeclaration>>,
   ) {
     this.typeChecker = program.getTypeChecker()
     this.typeResolver = new TypeResolver(this.typeChecker, this.program.getCurrentDirectory())
   }
 
-  static forFile(sourceFile: ts.SourceFile, program: ts.Program): VisitorContext {
-    return new VisitorContextImpl(sourceFile, program, new Map(), new UniqueNameResolver())
+  static forFile(sourceFile: ts.SourceFile, program: ts.Program): AwstBuildContext {
+    return new AwstBuildContextImpl(sourceFile, program, new Map(), new UniqueNameResolver(), new Map())
   }
 
   addConstant(name: string, value: Constant) {
@@ -106,8 +114,14 @@ class VisitorContextImpl implements VisitorContext {
     this.constants.set(name, value)
   }
 
-  createChildContext(): VisitorContext {
-    return new VisitorContextImpl(this.sourceFile, this.program, this.constants, this.nameResolver.createChild())
+  createChildContext(): AwstBuildContext {
+    return new AwstBuildContextImpl(
+      this.sourceFile,
+      this.program,
+      this.constants,
+      this.nameResolver.createChild(),
+      this.storageDeclarations,
+    )
   }
 
   resolveDestructuredParamName(node: ts.ParameterDeclaration) {
@@ -157,5 +171,49 @@ class VisitorContextImpl implements VisitorContext {
 
   getSourceLocation(node: ts.Node) {
     return SourceLocation.fromNode(this.sourceFile, node, this.program.getCurrentDirectory())
+  }
+
+  addStorageDeclaration(declaration: AppStorageDeclaration): void {
+    const contractDeclarations = this.storageDeclarations.get(declaration.definedIn.fullName) ?? new Map()
+    if (contractDeclarations.size === 0) {
+      // Add to map if new
+      this.storageDeclarations.set(declaration.definedIn.fullName, contractDeclarations)
+    }
+    if (contractDeclarations.has(declaration.memberName)) {
+      logger.error(declaration.sourceLocation, `Duplicate declaration of member ${declaration.memberName} on ${declaration.definedIn}`)
+    }
+    contractDeclarations.set(declaration.memberName, declaration)
+  }
+
+  getStorageDeclaration(contractType: ContractClassPType, memberName: string): AppStorageDeclaration | undefined {
+    return this.storageDeclarations.get(contractType.fullName)?.get(memberName)
+  }
+
+  getStorageDefinitionsForContract(contractType: ContractClassPType): Map<string, AppStorageDefinition> {
+    const result = new Map<string, AppStorageDefinition>()
+    for (const baseType of contractType.baseTypes) {
+      for (const [member, definition] of this.getStorageDefinitionsForContract(baseType)) {
+        if (result.has(member)) {
+          logger.error(
+            definition.sourceLocation,
+            `Redefinition of app storage member, original declared in ${result.get(member)?.sourceLocation}`,
+          )
+        }
+        result.set(member, definition)
+      }
+    }
+    const localDeclarations = this.storageDeclarations.get(contractType.fullName)
+    if (localDeclarations) {
+      for (const [member, declaration] of localDeclarations) {
+        if (result.has(member)) {
+          logger.error(
+            declaration.sourceLocation,
+            `Redefinition of app storage member, original declared in ${result.get(member)?.sourceLocation}`,
+          )
+        }
+        result.set(member, declaration.definition)
+      }
+    }
+    return result
   }
 }

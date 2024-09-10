@@ -59,7 +59,7 @@ type ObjArgSpec = Record<string, ArgSpec>
  * Maps an ObjArgSpec to its output type
  */
 type ArgsForObjSpec<T extends ObjArgSpec> = {
-  [key in keyof T]: T[key] extends OptionalArg ? Expression | undefined : Expression
+  [key in keyof T]: ArgFor<T[key]>
 }
 /**
  * Defines the expected shape of a single argument.

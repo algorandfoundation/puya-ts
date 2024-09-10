@@ -8,6 +8,7 @@ import {
   StorageProxyPType,
   TypeParameterType,
   undefinedPType,
+  unknownPType,
 } from './ptypes'
 import {
   anyPType,
@@ -104,7 +105,7 @@ export class TypeResolver {
       return neverPType
     }
     if (hasFlags(tsType.flags, ts.TypeFlags.Unknown)) {
-      throw new CodeError(`Type resolves to unknown`, { sourceLocation })
+      return unknownPType
     }
     if (intersectsFlags(tsType.flags, ts.TypeFlags.Number | ts.TypeFlags.NumberLiteral) && tsType.getSymbol() === undefined) {
       if (tsType.isNumberLiteral()) {
@@ -249,7 +250,7 @@ export class TypeResolver {
       methods,
       name: typeName.name,
       module: typeName.module,
-      baseType,
+      baseTypes: [baseType],
     })
   }
 
