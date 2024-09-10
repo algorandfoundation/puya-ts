@@ -4,6 +4,7 @@ import { logger, LogLevel } from '../logger'
 import { generateTempFile } from '../util/generate-temp-file'
 import { AwstSerializer, SnakeCaseSerializer } from '../awst/json-serialize-awst'
 import type { SourceFileMapping } from '../parser'
+import type { PuyaPassThroughOptions } from './options'
 import { PuyaOptions } from './options'
 import type { CompileOptions } from '../compile-options'
 import { buildCompilationSet } from './build-compilation-set'
@@ -13,12 +14,14 @@ export function invokePuya({
   moduleAwst,
   programDirectory,
   sourceFiles,
-  options,
+  compileOptions,
+  passThroughOptions,
 }: {
   moduleAwst: AWST[]
   programDirectory: string
   sourceFiles: SourceFileMapping
-  options: CompileOptions
+  compileOptions: CompileOptions
+  passThroughOptions: PuyaPassThroughOptions
 }) {
   // Write AWST file
   using moduleAwstFile = generateTempFile()
@@ -36,11 +39,11 @@ export function invokePuya({
 
   // Write puya options
   const puyaOptions = new PuyaOptions({
-    compileOptions: options,
+    passThroughOptions: passThroughOptions,
     compilationSet: buildCompilationSet({
       awst: moduleAwst,
-      inputPaths: options.filePaths,
-      outDir: options.outDir,
+      inputPaths: compileOptions.filePaths,
+      outDir: compileOptions.outDir,
       programDirectory,
     }),
   })
@@ -60,7 +63,7 @@ export function invokePuya({
       `--source-annotations`,
       moduleSourceFile.filePath,
       '--log-level',
-      getPuyaLogLevel(options.logLevel),
+      getPuyaLogLevel(compileOptions.logLevel),
     ],
     cwd: 'c:\\source\\algorand\\puya\\',
   })

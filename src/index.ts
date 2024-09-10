@@ -9,6 +9,7 @@ import { registerPTypes } from './awst_build/ptypes/register'
 import { typeRegistry } from './awst_build/type-registry'
 import type { AWST } from './awst/nodes'
 import { invokePuya } from './puya'
+import type { PuyaPassThroughOptions } from './puya/options'
 
 export type CompileResult = {
   logs: LogEvent[]
@@ -17,7 +18,7 @@ export type CompileResult = {
   ast?: Record<string, ts.SourceFile>
 }
 
-export function compile(options: CompileOptions): CompileResult {
+export function compile(options: CompileOptions, passThroughOptions: PuyaPassThroughOptions): CompileResult {
   registerPTypes(typeRegistry)
   const programResult = createTsProgram(options)
   const programDirectory = programResult.program.getCurrentDirectory()
@@ -37,7 +38,8 @@ export function compile(options: CompileOptions): CompileResult {
   }
   if (!options.dryRun) {
     invokePuya({
-      options,
+      passThroughOptions,
+      compileOptions: options,
       moduleAwst,
       programDirectory,
       sourceFiles: programResult.sourceFiles,
