@@ -30,13 +30,9 @@ export class FunctionVisitor
     Visitor<ts.Block, awst.Block>,
     Visitor<Statements, awst.Statement | awst.Statement[]>
 {
-  private accept = <TNode extends ts.Node>(node: TNode) => accept<FunctionVisitor, TNode>(this, node)
+  protected accept = <TNode extends ts.Node>(node: TNode) => accept<FunctionVisitor, TNode>(this, node)
 
   protected readonly _functionType: FunctionPType
-  protected readonly _functionName: string
-  protected readonly _args: awst.SubroutineArgument[]
-  protected readonly _documentation: awst.MethodDocumentation
-  protected readonly _body: awst.Block
 
   constructor(ctx: AwstBuildContext, node: ts.MethodDeclaration | ts.FunctionDeclaration | ts.ConstructorDeclaration) {
     super(ctx)
@@ -48,24 +44,31 @@ export class FunctionVisitor
     if (this._functionType.returnType instanceof TransientType) {
       logger.error(sourceLocation, this._functionType.returnType.typeMessage)
     }
-    if (ts.isConstructorDeclaration(node)) {
-      this._functionName = '~ctor~'
-    } else {
-      codeInvariant(node.name, 'Anonymous functions are not supported', sourceLocation)
-      this._functionName = this.textVisitor.accept(node.name)
-    }
+  }
 
-    this._args = node.parameters.map((p) => this.accept(p))
+  protected buildFunctionAwst(node: ts.MethodDeclaration | ts.FunctionDeclaration | ts.ConstructorDeclaration): {
+    args: awst.SubroutineArgument[]
+    documentation: awst.MethodDocumentation
+    body: awst.Block
+  } {
+    const sourceLocation = this.sourceLocation(node)
+
+    const args = node.parameters.map((p) => this.accept(p))
     const assignDestructuredParams = this.evaluateParameterBindingExpressions(node.parameters, sourceLocation)
     codeInvariant(node.body, 'Functions must have a body')
-    this._body = assignDestructuredParams.length
+    const body = assignDestructuredParams.length
       ? nodeFactory.block({ sourceLocation }, assignDestructuredParams, this.accept(node.body))
       : this.accept(node.body)
-    this._documentation = nodeFactory.methodDocumentation({
+    const documentation = nodeFactory.methodDocumentation({
       args: new Map(),
       description: null,
       returns: null,
     })
+    return {
+      args,
+      body,
+      documentation,
+    }
   }
 
   buildAssignmentTarget(bindingName: ts.BindingName, sourceLocation: SourceLocation): InstanceBuilder {

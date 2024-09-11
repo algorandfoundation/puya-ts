@@ -1339,7 +1339,14 @@ export class ContractFragment extends RootNode {
     return visitor.visitContractFragment(this)
   }
 }
-export type LValue = VarExpression | FieldExpression | IndexExpression | TupleExpression | AppStateExpression | AppAccountStateExpression
+export type LValue =
+  | VarExpression
+  | FieldExpression
+  | IndexExpression
+  | TupleExpression
+  | AppStateExpression
+  | AppAccountStateExpression
+  | BoxValueExpression
 export type Constant = IntegerConstant | BoolConstant | BytesConstant | StringConstant
 export type AWST = ContractFragment | LogicSignature | Subroutine
 export const concreteNodes = {

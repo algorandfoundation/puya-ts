@@ -1,7 +1,6 @@
 import * as awst from '../awst/nodes'
 import type { AwstBuildContext } from './context/awst-build-context'
 import type ts from 'typescript'
-import { SymbolName } from './symbol-name'
 import { FunctionVisitor } from './function-visitor'
 import { invariant } from '../util'
 
@@ -11,15 +10,16 @@ export class SubroutineVisitor extends FunctionVisitor {
   constructor(ctx: AwstBuildContext, node: ts.FunctionDeclaration) {
     super(ctx, node)
     const sourceLocation = this.sourceLocation(node)
+    const { args, body, documentation } = this.buildFunctionAwst(node)
 
     this._result = new awst.Subroutine({
-      id: new SymbolName({ name: this._functionName, module: this._functionType.module }).fullName,
-      name: this._functionName,
+      id: this._functionType.fullName,
+      name: this._functionType.name,
       sourceLocation,
-      args: this._args,
+      args,
       returnType: this._functionType.returnType.wtypeOrThrow,
-      body: this._body,
-      documentation: this._documentation,
+      body,
+      documentation,
     })
   }
 

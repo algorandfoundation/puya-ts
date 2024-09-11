@@ -115,6 +115,7 @@ export class GlobalStateFunctionResultBuilder extends InstanceBuilder<GlobalStat
   }
   private _ptype: GlobalStateType
   private _expr: Expression | undefined
+  public readonly initialValue: Expression | undefined
   constructor(expr: Expression | undefined, ptype: PType, config: { initialValue?: Expression; sourceLocation: SourceLocation }) {
     const sourceLocation = expr?.sourceLocation ?? config?.sourceLocation
     invariant(sourceLocation, 'Must have expression or config')
@@ -122,6 +123,7 @@ export class GlobalStateFunctionResultBuilder extends InstanceBuilder<GlobalStat
     invariant(ptype instanceof GlobalStateType, 'ptype must be GlobalStateType')
     this._ptype = ptype
     this._expr = expr
+    this.initialValue = config.initialValue
   }
 
   get ptype(): GlobalStateType {

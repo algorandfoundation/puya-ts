@@ -1,5 +1,3 @@
-import { utf8ToUint8Array } from './util'
-
 const algoTsPackage = '@algorandfoundation/algo-ts'
 
 export const Constants = {
@@ -18,4 +16,6 @@ export const Constants = {
   arc4EncodedTypesModuleName: `${algoTsPackage}/arc4/encoded-types.d.ts`,
   arc4BareDecoratorName: 'arc4.baremethod',
   arc4AbiDecoratorName: 'arc4.abimethod',
+
+  constructorMethodName: 'constructor',
 } as const

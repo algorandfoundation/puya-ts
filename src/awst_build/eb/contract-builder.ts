@@ -1,7 +1,8 @@
 import type { NodeBuilder } from './index'
 import { InstanceBuilder } from './index'
 import type { SourceLocation } from '../../awst/source-location'
-import type { ContractClassPType } from '../ptypes'
+import type { ContractClassPType, PType } from '../ptypes'
+import { arc4BaseContractType, baseContractType } from '../ptypes'
 import { GlobalStateType } from '../ptypes'
 import { ContractMethodExpressionBuilder } from './free-subroutine-expression-builder'
 import { GlobalStateExpressionBuilder } from './storage/global-state'
@@ -9,6 +10,10 @@ import type { Expression, LValue } from '../../awst/nodes'
 import type { AwstBuildContext } from '../context/awst-build-context'
 import { codeInvariant } from '../../util'
 import { CodeError } from '../../errors'
+import { VoidExpressionBuilder } from './void-expression-builder'
+import { nodeFactory } from '../../awst/node-factory'
+import { Constants } from '../../constants'
+import { voidWType } from '../../awst/wtypes'
 
 export class ContractThisBuilder extends InstanceBuilder<ContractClassPType> {
   resolve(): Expression {
@@ -52,5 +57,24 @@ export class ContractThisBuilder extends InstanceBuilder<ContractClassPType> {
 export class ContractSuperBuilder extends ContractThisBuilder {
   constructor(ptype: ContractClassPType, sourceLocation: SourceLocation, context: AwstBuildContext) {
     super(ptype, sourceLocation, context)
+  }
+
+  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    if (this.ptype.equals(baseContractType) || this.ptype.equals(arc4BaseContractType)) {
+      // Contract base types have no code to execute so we can just return void
+      return new VoidExpressionBuilder(nodeFactory.voidConstant({ sourceLocation }))
+    }
+    codeInvariant(args.length === 0, 'Constructor arguments are not supported', sourceLocation)
+    codeInvariant(typeArgs.length === 0, 'Super calls cannot be generic', sourceLocation)
+    return new VoidExpressionBuilder(
+      nodeFactory.subroutineCallExpression({
+        target: nodeFactory.instanceSuperMethodTarget({
+          memberName: Constants.constructorMethodName,
+        }),
+        args: [],
+        sourceLocation,
+        wtype: voidWType,
+      }),
+    )
   }
 }

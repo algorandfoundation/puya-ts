@@ -1,10 +1,44 @@
-contract TestContract
+contract BaseTestContract
 {
   globals {
+    ["baseTestState"]: string
+  }
+  constructor(): void
+  {
+    void
+    var GlobalState["baseTestState"]: string = "testing 123"
+  }
+  
+  approvalProgram(): bool
+  {
+    return True
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+}
+contract TestContract extends tests/approvals/global-state.algo.ts::BaseTestContract
+{
+  globals {
+    ["baseTestState"]: string
     ["noInitial"]: bytes
+    ["noInitialInt"]: uint64
     ["testState"]: uint64
     ["TESTSTATE"]: uint64
   }
+  constructor(): void
+  {
+    var someValue: uint64 = 72057594037927936
+    super.constructor()
+    var GlobalState["testState"]: uint64 = 2
+    var GlobalState["TESTSTATE"]: uint64 = 5
+    assert(GlobalState["baseTestState"] == "testing 123")
+    (GlobalState["noInitialInt"] = someValue * GlobalState["testState"])
+  }
+  
   approvalProgram(): bool
   {
     assert(STATE_EXISTS(GlobalState["testState"]))

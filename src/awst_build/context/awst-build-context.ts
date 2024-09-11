@@ -186,7 +186,13 @@ class AwstBuildContextImpl implements AwstBuildContext {
   }
 
   getStorageDeclaration(contractType: ContractClassPType, memberName: string): AppStorageDeclaration | undefined {
-    return this.storageDeclarations.get(contractType.fullName)?.get(memberName)
+    const declaration = this.storageDeclarations.get(contractType.fullName)?.get(memberName)
+    if (declaration) return declaration
+    for (const baseType of contractType.baseTypes) {
+      const baseDeclaration = this.getStorageDeclaration(baseType, memberName)
+      if (baseDeclaration) return baseDeclaration
+    }
+    return undefined
   }
 
   getStorageDefinitionsForContract(contractType: ContractClassPType): Map<string, AppStorageDefinition> {

@@ -1,4 +1,4 @@
-import type { AppStorageDefinition, BytesConstant } from '../awst/nodes'
+import type { AppAccountStateExpression, AppStateExpression, AppStorageDefinition, BoxValueExpression, BytesConstant } from '../awst/nodes'
 import { AppStorageKind, BytesEncoding } from '../awst/nodes'
 import type { SourceLocation } from '../awst/source-location'
 import type { BoxMapPType, BoxPType, BoxRefPType, ContractClassPType } from './ptypes'

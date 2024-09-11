@@ -744,7 +744,7 @@ export const ApprovalProgram = new FunctionPType({
   parameters: [],
 })
 
-export const BaseContractType = new BaseContractClassType({
+export const baseContractType = new BaseContractClassType({
   module: Constants.baseContractModuleName,
   name: 'BaseContract',
   methods: {
@@ -754,7 +754,7 @@ export const BaseContractType = new BaseContractClassType({
   baseTypes: [],
   isArc4: false,
 })
-export const ContractType = new BaseContractClassType({
+export const arc4BaseContractType = new BaseContractClassType({
   module: Constants.arc4ModuleName,
   name: 'Contract',
   methods: {
@@ -762,7 +762,7 @@ export const ContractType = new BaseContractClassType({
     clearStateProgram: ClearStateProgram,
   },
   properties: {},
-  baseTypes: [BaseContractType],
+  baseTypes: [baseContractType],
   isArc4: true,
 })
 
