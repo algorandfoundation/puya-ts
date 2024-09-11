@@ -3,11 +3,11 @@ import { lazyContext } from '../context-helpers/internal-context'
 import { FunctionKeys, Mutable, ObjectKeys } from '../typescript-helpers'
 import { asNumber, getRandomBytes } from '../util'
 
-type TxnFields<TTxn> = Partial<Mutable<Pick<TTxn, ObjectKeys<TTxn>>>>
-type TxnFuncs<TTxn> = Pick<TTxn, FunctionKeys<TTxn>>
+export type TxnFields<TTxn> = Partial<Mutable<Pick<TTxn, ObjectKeys<TTxn>>>>
+export type TxnFuncs<TTxn> = Pick<TTxn, FunctionKeys<TTxn>>
 
-const baseDefaultFields = {
-  sender: lazyContext.activeApplication.address,
+const baseDefaultFields = () => ({
+  sender: lazyContext.defaultSender,
   fee: Uint64(0),
   firstValid: Uint64(0),
   firstValidTime: Uint64(0),
@@ -18,9 +18,9 @@ const baseDefaultFields = {
   groupIndex: Uint64(0),
   txnId: getRandomBytes(32).asAlgoTs(),
   rekeyTo: Account(),
-}
+})
 
-const getTxnProxy = <TTxn extends gtxn.AnyTransaction>(fields: TxnFields<TTxn>, funcs: TxnFuncs<TTxn>) => {
+const getTxnProxy = <TTxn extends gtxn.Transaction>(fields: TxnFields<TTxn>, funcs: TxnFuncs<TTxn>) => {
   return new Proxy(
     {} as TTxn,
     {
@@ -31,9 +31,9 @@ const getTxnProxy = <TTxn extends gtxn.AnyTransaction>(fields: TxnFields<TTxn>, 
   )
 }
 
-export const PayTransaction = (txnFields: TxnFields<gtxn.PayTxn>) => {
+export const PaymentTransaction = (txnFields: TxnFields<gtxn.PaymentTxn>) => {
   const defaultFields: Required<typeof txnFields> = {
-    ...baseDefaultFields,
+    ...baseDefaultFields(),
     type: gtxn.TransactionType.Payment,
     receiver: Account(),
     amount: Uint64(0),
@@ -44,12 +44,12 @@ export const PayTransaction = (txnFields: TxnFields<gtxn.PayTxn>) => {
     ...txnFields,
   }
 
-  return getTxnProxy(fields, {} as TxnFuncs<gtxn.PayTxn>)
+  return getTxnProxy(fields, {} as TxnFuncs<gtxn.PaymentTxn>)
 }
 
 export const KeyRegistrationTransaction = (txnFields: TxnFields<gtxn.KeyRegistrationTxn>) => {
   const defaultFields: Required<typeof txnFields> = {
-    ...baseDefaultFields,
+    ...baseDefaultFields(),
     type: gtxn.TransactionType.KeyRegistration,
     voteKey: Bytes(),
     selectionKey: Bytes(),
@@ -68,7 +68,7 @@ export const KeyRegistrationTransaction = (txnFields: TxnFields<gtxn.KeyRegistra
 
 export const AssetConfigTransaction = (txnFields: TxnFields<gtxn.AssetConfigTxn>) => {
   const defaultFields: Required<typeof txnFields> = {
-    ...baseDefaultFields,
+    ...baseDefaultFields(),
     type: gtxn.TransactionType.AssetConfig,
     configAsset: Asset(),
     total: Uint64(0),
@@ -92,7 +92,7 @@ export const AssetConfigTransaction = (txnFields: TxnFields<gtxn.AssetConfigTxn>
 
 export const AssetTransferTransaction = (txnFields: TxnFields<gtxn.AssetTransferTxn>) => {
   const defaultFields: Required<typeof txnFields> = {
-    ...baseDefaultFields,
+    ...baseDefaultFields(),
     type: gtxn.TransactionType.AssetTransfer,
     xferAsset: Asset(),
     assetAmount: Uint64(0),
@@ -109,7 +109,7 @@ export const AssetTransferTransaction = (txnFields: TxnFields<gtxn.AssetTransfer
 
 export const AssetFreezeTransaction = (txnFields: TxnFields<gtxn.AssetFreezeTxn>) => {
   const defaultFields: Required<typeof txnFields> = {
-    ...baseDefaultFields,
+    ...baseDefaultFields(),
     type: gtxn.TransactionType.AssetFreeze,
     freezeAsset: Asset(),
     freezeAccount: Account(),
@@ -122,7 +122,7 @@ export const AssetFreezeTransaction = (txnFields: TxnFields<gtxn.AssetFreezeTxn>
   return getTxnProxy(fields, {} as TxnFuncs<gtxn.AssetFreezeTxn>)
 }
 
-type ApplicationTransactionFields = TxnFields<gtxn.ApplicationTxn> &
+export type ApplicationTransactionFields = TxnFields<gtxn.ApplicationTxn> &
   Partial<{
     appArgs: Array<bytes>
     accounts: Array<Account>
@@ -133,7 +133,7 @@ type ApplicationTransactionFields = TxnFields<gtxn.ApplicationTxn> &
   }>
 export const ApplicationTransaction = (txnFields: ApplicationTransactionFields) => {
   const defaultFields: Required<typeof txnFields> = {
-    ...baseDefaultFields,
+    ...baseDefaultFields(),
     type: gtxn.TransactionType.ApplicationCall,
     appId: Application(),
     onCompletion: 'NoOp',
@@ -144,6 +144,24 @@ export const ApplicationTransaction = (txnFields: ApplicationTransactionFields) 
     extraProgramPages: Uint64(0),
     lastLog: Bytes(),
 
+    approvalProgram: Bytes(),
+    clearStateProgram: Bytes(),
+    numAppArgs: Uint64(0),
+    numAccounts: Uint64(0),
+    numAssets: Uint64(0),
+    numApps: Uint64(0),
+    numApprovalProgramPages: Uint64(0),
+    numClearStateProgramPages: Uint64(0),
+
+    appArgs: [],
+    accounts: [],
+    assets: [],
+    apps: [],
+    approvalProgramPages: [],
+    clearStateProgramPages: [],
+  }
+  const fields: Required<typeof txnFields> = {
+    ...defaultFields,
     get approvalProgram() {
       return this.approvalProgramPages[0] ?? Bytes()
     },
@@ -168,16 +186,6 @@ export const ApplicationTransaction = (txnFields: ApplicationTransactionFields) 
     get numClearStateProgramPages() {
       return Uint64(this.clearStateProgramPages.length)
     },
-
-    appArgs: [],
-    accounts: [],
-    assets: [],
-    apps: [],
-    approvalProgramPages: [],
-    clearStateProgramPages: [],
-  }
-  const fields = {
-    ...defaultFields,
     ...txnFields,
   }
   const funcs: TxnFuncs<gtxn.ApplicationTxn> = {

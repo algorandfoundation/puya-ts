@@ -5,7 +5,7 @@ import type { Account, Application, Asset } from './reference'
 import type * as txnTypes from './transactions'
 import { DeliberateAny } from './typescript-helpers'
 
-export interface PaymentInnerTxn extends txnTypes.PayTxn {}
+export interface PaymentInnerTxn extends txnTypes.PaymentTxn {}
 export interface KeyRegistrationInnerTxn extends txnTypes.KeyRegistrationTxn {}
 export interface AssetConfigInnerTxn extends txnTypes.AssetConfigTxn {}
 export interface AssetTransferInnerTxn extends txnTypes.AssetTransferTxn {}
