@@ -7,20 +7,23 @@ import type { SourceFileMapping } from '../parser'
 import type { PuyaPassThroughOptions } from './options'
 import { PuyaOptions } from './options'
 import type { CompileOptions } from '../compile-options'
-import { buildCompilationSet } from './build-compilation-set'
+import { buildCompilationSetMapping } from './build-compilation-set-mapping'
 import { runChildProc } from './run-child-proc'
+import type { CompilationSet } from '../awst/models'
 
 export function invokePuya({
   moduleAwst,
   programDirectory,
   sourceFiles,
   compileOptions,
+  compilationSet,
   passThroughOptions,
 }: {
   moduleAwst: AWST[]
   programDirectory: string
   sourceFiles: SourceFileMapping
   compileOptions: CompileOptions
+  compilationSet: CompilationSet
   passThroughOptions: PuyaPassThroughOptions
 }) {
   // Write AWST file
@@ -40,9 +43,10 @@ export function invokePuya({
   // Write puya options
   const puyaOptions = new PuyaOptions({
     passThroughOptions: passThroughOptions,
-    compilationSet: buildCompilationSet({
+    compilationSet: buildCompilationSetMapping({
       awst: moduleAwst,
       inputPaths: compileOptions.filePaths,
+      compilationSet,
       outDir: compileOptions.outDir,
       programDirectory,
     }),

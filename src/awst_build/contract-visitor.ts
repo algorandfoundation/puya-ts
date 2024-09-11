@@ -31,8 +31,8 @@ import { ConstructorVisitor } from './constructor-visitor'
 export class ContractVisitor extends BaseVisitor implements Visitor<ClassElements, void> {
   private _ctor?: ContractMethod
   private _subroutines: ContractMethod[] = []
-  private _approvalProgram?: ContractMethod
-  private _clearStateProgram?: ContractMethod
+  private _approvalProgram: ContractMethod | null = null
+  private _clearStateProgram: ContractMethod | null = null
   private _className: string
   private _contractPType: ContractClassPType
   private readonly _propertyInitialization: awst.Statement[] = []
@@ -62,20 +62,18 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
         this.acceptAndIgnoreBuildErrors(member)
       }
     }
-
+    const cref = ContractReference.fromPType(this._contractPType)
     this.result = new ContractFragment({
       name: this._className,
       appState: this.context.getStorageDefinitionsForContract(this._contractPType),
       init: this._ctor ?? this.makeDefaultConstructor(sourceLocation),
       subroutines: this._subroutines,
       docstring: null,
-      approvalProgram: this._approvalProgram ?? this.makeDefaultApprovalProgram(sourceLocation),
-      clearProgram: this._clearStateProgram ?? this.makeDefaultClearStateProgram(sourceLocation),
-      // isArc4: contractPtype.isARC4,
-      bases: this.buildContractReferences(contractPtype),
-      id: ContractReference.fromPType(this._contractPType),
+      approvalProgram: this._approvalProgram,
+      clearProgram: this._clearStateProgram,
+      bases: this.getBaseContracts(contractPtype),
+      id: cref,
       reservedScratchSpace: new Set(),
-      methods: new Map(),
       sourceLocation: sourceLocation,
       stateTotals: {
         globalBytes: null,
@@ -84,6 +82,9 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
         localUints: null,
       },
     })
+    if (!isAbstract) {
+      this.context.addToCompilationSet(cref)
+    }
   }
 
   private acceptAndIgnoreBuildErrors(node: ts.ClassElement) {
@@ -122,62 +123,15 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
     })
   }
 
-  private makeDefaultClearStateProgram(sourceLocation: SourceLocation) {
-    return nodeFactory.contractMethod({
-      memberName: Constants.clearStateProgramMethodName,
-      cref: ContractReference.fromPType(this._contractPType),
-      args: [],
-      arc4MethodConfig: null,
-      sourceLocation,
-      returnType: boolWType,
-      synthetic: true,
-      inheritable: true,
-      documentation: nodeFactory.methodDocumentation(),
-      body: nodeFactory.block(
-        {
-          sourceLocation,
-        },
-        nodeFactory.returnStatement({
-          sourceLocation,
-          value: nodeFactory.boolConstant({ value: true, sourceLocation }),
-        }),
-      ),
-    })
-  }
-  private makeDefaultApprovalProgram(sourceLocation: SourceLocation) {
-    // TODO: This should be updated to return the arc4 router node, and should only be used if it's an arc4 contract
-    return nodeFactory.contractMethod({
-      memberName: Constants.approvalProgramMethodName,
-      cref: ContractReference.fromPType(this._contractPType),
-      args: [],
-      arc4MethodConfig: null,
-      sourceLocation,
-      returnType: boolWType,
-      synthetic: true,
-      inheritable: true,
-      documentation: nodeFactory.methodDocumentation({ args: new Map() }),
-      body: nodeFactory.block(
-        {
-          sourceLocation,
-        },
-        nodeFactory.returnStatement({
-          sourceLocation,
-          value: nodeFactory.boolConstant({ value: true, sourceLocation }),
-        }),
-      ),
-    })
-  }
-
-  private buildContractReferences(contractType: ContractClassPType): ContractReference[] {
+  private getBaseContracts(contractType: ContractClassPType): ContractReference[] {
     return contractType.baseTypes.flatMap((baseType) => {
-      if (baseType.equals(baseContractType) || baseType.equals(arc4BaseContractType)) {
-        return []
-      } else {
-        return new ContractReference({
+      return [
+        new ContractReference({
           className: baseType.name,
           moduleName: baseType.module,
-        })
-      }
+        }),
+        ...this.getBaseContracts(baseType),
+      ]
     })
   }
 

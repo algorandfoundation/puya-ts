@@ -92,8 +92,12 @@ export class ContractReference extends ModelBase {
   readonly className: string
   readonly moduleName: string
 
-  toString(): string {
+  get id() {
     return `${this.moduleName}::${this.className}`
+  }
+
+  toString(): string {
+    return this.id
   }
 
   static fromPType(contractPType: ContractClassPType): ContractReference {
@@ -112,10 +116,15 @@ export class LogicSigReference extends ModelBase {
   readonly name: string
   readonly moduleName: string
 
-  toString(): string {
+  get id() {
     return `${this.moduleName}::${this.name}`
   }
+
+  toString(): string {
+    return this.id
+  }
 }
+export type CompilationSet = ReadonlyArray<ContractReference | LogicSigReference>
 
 export enum TransactionKind {
   Payment = 1,

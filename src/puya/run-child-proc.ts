@@ -1,4 +1,5 @@
 import { sync } from 'cross-spawn'
+import { logger } from '../logger'
 
 export function runChildProc({ command, args, cwd }: { command: string; args: string[]; cwd?: string }) {
   const proc = sync(command, args, {
@@ -12,6 +13,6 @@ export function runChildProc({ command, args, cwd }: { command: string; args: st
     throw proc.error
   }
   if (proc.status !== 0) {
-    process.exit(proc.status)
+    logger.fatal(undefined, `Compilation exited with status ${proc.status}`)
   }
 }

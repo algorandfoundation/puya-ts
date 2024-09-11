@@ -5,7 +5,7 @@ export enum LocalsCoalescingStrategy {
   root_operand_excluding_args = 'root_operand_excluding_args',
   aggressive = 'aggressive',
 }
-export type CompilationSet = Record<string, string>
+export type CompilationSetMapping = Record<string, string>
 
 export const defaultPuyaOptions: PuyaPassThroughOptions = {
   outputTeal: true,
@@ -41,8 +41,14 @@ export class PuyaOptions {
   templateVarsPrefix: string
   localsCoalescingStrategy: LocalsCoalescingStrategy
 
-  compilationSet: CompilationSet
-  constructor({ passThroughOptions, compilationSet }: { passThroughOptions: PuyaPassThroughOptions; compilationSet: CompilationSet }) {
+  compilationSet: CompilationSetMapping
+  constructor({
+    passThroughOptions,
+    compilationSet,
+  }: {
+    passThroughOptions: PuyaPassThroughOptions
+    compilationSet: CompilationSetMapping
+  }) {
     this.compilationSet = compilationSet
     this.outputTeal = passThroughOptions.outputTeal
     this.outputArc32 = passThroughOptions.outputArc32

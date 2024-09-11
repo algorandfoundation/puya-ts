@@ -8,12 +8,16 @@ import { SourceLocation } from '../awst/source-location'
 import { ArtifactKind, writeArtifact } from '../write-artifact'
 import { ToCodeVisitor } from '../awst/to-code-visitor'
 import { jsonSerializeAwst } from '../awst/json-serialize-awst'
+import { buildLibAwst } from './lib'
+import type { CompilationSet } from './context/awst-build-context'
+import { buildContextForProgram } from './context/awst-build-context'
 
-export function buildAwst({ program, sourceFiles }: CreateProgramResult, options: CompileOptions) {
-  const moduleAwst: AWST[] = []
+export function buildAwst({ program, sourceFiles }: CreateProgramResult, options: CompileOptions): [AWST[], CompilationSet] {
+  const awstBuildContext = buildContextForProgram(program)
+  const moduleAwst: AWST[] = [...buildLibAwst()]
   for (const sourceFile of Object.values(sourceFiles)) {
     try {
-      const visitor = new SourceFileVisitor(sourceFile, program)
+      const visitor = new SourceFileVisitor(awstBuildContext.createChildContext(), sourceFile)
 
       const module = visitor.buildModule()
 
@@ -49,5 +53,5 @@ export function buildAwst({ program, sourceFiles }: CreateProgramResult, options
       }
     }
   }
-  return moduleAwst
+  return [moduleAwst, awstBuildContext.compilationSet]
 }

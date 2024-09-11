@@ -22,6 +22,16 @@ export const intrinsicFactory = {
       opCode: 'concat',
     })
   },
+  err({ sourceLocation, comment }: { sourceLocation: SourceLocation; comment: string | null }) {
+    return nodeFactory.intrinsicCall({
+      opCode: 'err',
+      sourceLocation,
+      stackArgs: [],
+      immediates: [],
+      wtype: wtypes.voidWType,
+      comment,
+    })
+  },
   bytesLen({ value, sourceLocation }: { value: awst.Expression; sourceLocation: SourceLocation }) {
     return nodeFactory.intrinsicCall({
       opCode: 'len',
