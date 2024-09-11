@@ -20,7 +20,7 @@ export class TupleExpressionBuilder extends InstanceExpressionBuilder<TuplePType
   }
 
   indexAccess(index: InstanceBuilder, sourceLocation: SourceLocation): NodeBuilder {
-    const indexNum = requireIntegerConstant(index, sourceLocation).value
+    const indexNum = requireIntegerConstant(index).value
     const itemType = this.ptype.items[Number(indexNum)]
 
     return instanceEb(

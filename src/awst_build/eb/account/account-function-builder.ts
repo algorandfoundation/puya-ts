@@ -19,13 +19,13 @@ export class AccountFunctionBuilder extends FunctionBuilder {
       callLocation: sourceLocation,
       funcName: 'Account function',
       genericTypeArgs: 0,
-      argMap: [[bytesPType, undefined]],
+      argSpec: (a) => [a.optional(bytesPType)],
     })
 
     if (addressBytes) {
       return new AccountExpressionBuilder(
         nodeFactory.reinterpretCast({
-          expr: addressBytes,
+          expr: addressBytes.resolve(),
           wtype: accountPType.wtype,
           sourceLocation,
         }),

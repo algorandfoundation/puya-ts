@@ -1,5 +1,6 @@
 import type { BoxValueExpression, Expression } from '../../../awst/nodes'
 import type { PType } from '../../ptypes'
+import { stringPType } from '../../ptypes'
 import { uint64PType } from '../../ptypes'
 import { voidPType } from '../../ptypes'
 import { boolPType, TuplePType } from '../../ptypes'
@@ -31,11 +32,11 @@ export class BoxFunctionBuilder extends FunctionBuilder {
       funcName: `Box`,
       callLocation: sourceLocation,
       genericTypeArgs: 1,
-      argMap: [{ key: [bytesPType] }],
+      argSpec: (a) => [a.obj({ key: a.required(bytesPType, stringPType) })],
     })
 
     const ptype = new BoxPType({ content: contentPType })
-    return new BoxExpressionBuilder(key, ptype)
+    return new BoxExpressionBuilder(key.resolve(), ptype)
   }
 }
 export class BoxRefFunctionBuilder extends FunctionBuilder {
@@ -48,16 +49,16 @@ export class BoxRefFunctionBuilder extends FunctionBuilder {
       funcName: `BoxRef`,
       callLocation: sourceLocation,
       genericTypeArgs: 0,
-      argMap: [{ key: [bytesPType] }],
+      argSpec: (a) => [a.obj({ key: a.required(bytesPType, stringPType) })],
     })
 
-    return new BoxRefExpressionBuilder(key, boxRefType)
+    return new BoxRefExpressionBuilder(key.resolve(), boxRefType)
   }
 }
 export class BoxMapFunctionBuilder extends FunctionBuilder {
   call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
-      ptypes: [keyPrefixPType, contentPType],
+      ptypes: [keySuffixType, contentPType],
       args: [{ keyPrefix }],
     } = parseFunctionArgs({
       args,
@@ -65,11 +66,11 @@ export class BoxMapFunctionBuilder extends FunctionBuilder {
       funcName: `BoxMap`,
       callLocation: sourceLocation,
       genericTypeArgs: 2,
-      argMap: [{ keyPrefix: [bytesPType] }],
+      argSpec: (a) => [a.obj({ keyPrefix: a.required(bytesPType, stringPType) })],
     })
 
-    const ptype = new BoxMapPType({ content: contentPType, keyType: keyPrefixPType })
-    return new BoxMapExpressionBuilder(keyPrefix, ptype)
+    const ptype = new BoxMapPType({ content: contentPType, keyType: keySuffixType })
+    return new BoxMapExpressionBuilder(keyPrefix.resolve(), ptype)
   }
 }
 
@@ -130,12 +131,12 @@ export class BoxRefPutFunctionBuilder extends BoxRefBaseFunctionBuilder {
       genericTypeArgs: 0,
       funcName: 'BoxRef.put',
       callLocation: sourceLocation,
-      argMap: [[bytesPType]],
+      argSpec: (a) => [a.required(bytesPType)],
     })
     return instanceEb(
       nodeFactory.intrinsicCall({
         opCode: 'box_put',
-        stackArgs: [this.boxValue, value],
+        stackArgs: [this.boxValue, value.resolve()],
         wtype: voidWType,
         immediates: [],
         sourceLocation,
@@ -152,14 +153,14 @@ export class BoxRefSpliceFunctionBuilder extends BoxRefBaseFunctionBuilder {
       args,
       typeArgs,
       genericTypeArgs: 0,
-      funcName: 'BoxRef.put',
+      funcName: 'BoxRef.splice',
       callLocation: sourceLocation,
-      argMap: [[uint64PType], [uint64PType], [bytesPType]],
+      argSpec: (a) => [a.required(uint64PType), a.required(uint64PType), a.required(bytesPType)],
     })
     return instanceEb(
       nodeFactory.intrinsicCall({
         opCode: 'box_splice',
-        stackArgs: [this.boxValue, start, stop, value],
+        stackArgs: [this.boxValue, start.resolve(), stop.resolve(), value.resolve()],
         wtype: voidWType,
         immediates: [],
         sourceLocation,
@@ -277,14 +278,14 @@ class BoxGetFunctionBuilder extends FunctionBuilder {
       funcName: 'Box.get',
       callLocation: sourceLocation,
       genericTypeArgs: 0,
-      argMap: [{ default: [this.contentType, undefined] }],
+      argSpec: (a) => [a.obj({ default: a.optional(this.contentType) })],
     })
 
     if (defaultValue) {
       return instanceEb(
         nodeFactory.stateGet({
           sourceLocation,
-          default: defaultValue,
+          default: defaultValue.resolve(),
           wtype: this.contentType.wtypeOrThrow,
           field: this.boxValue,
         }),
@@ -310,7 +311,7 @@ class BoxMaybeFunctionBuilder extends FunctionBuilder {
       funcName: 'Box.maybe',
       callLocation: sourceLocation,
       genericTypeArgs: 0,
-      argMap: [],
+      argSpec: () => [],
     })
     const type = new TuplePType({ items: [this.contentType, boolPType], immutable: true })
 
@@ -363,21 +364,21 @@ class BoxMapGetFunctionBuilder extends BoxMapFunctionBuilderBase {
       funcName: 'BoxMap.set',
       callLocation: sourceLocation,
       genericTypeArgs: 0,
-      argMap: [[this.keyType], { default: [this.contentType, undefined] }],
+      argSpec: (a) => [a.required(this.keyType), a.obj({ default: a.optional(this.contentType) })],
     })
 
     if (defaultValue) {
       return instanceEb(
         nodeFactory.stateGet({
           sourceLocation,
-          default: defaultValue,
+          default: defaultValue.resolve(),
           wtype: this.contentType.wtypeOrThrow,
-          field: this.boxValueExpression(key),
+          field: this.boxValueExpression(key.resolve()),
         }),
         this.contentType,
       )
     } else {
-      return new BoxValueExpressionBuilder(this.boxValueExpression(key), this.contentType)
+      return new BoxValueExpressionBuilder(this.boxValueExpression(key.resolve()), this.contentType)
     }
   }
 }
@@ -391,14 +392,14 @@ class BoxMapSetFunctionBuilder extends BoxMapFunctionBuilderBase {
       funcName: 'BoxMap.set',
       callLocation: sourceLocation,
       genericTypeArgs: 0,
-      argMap: [[this.keyType], [this.contentType]],
+      argSpec: (a) => [a.required(this.keyType), a.required(this.contentType)],
     })
 
     return instanceEb(
       nodeFactory.assignmentExpression({
-        target: this.boxValueExpression(key),
+        target: this.boxValueExpression(key.resolve()),
         sourceLocation,
-        value,
+        value: value.resolve(),
       }),
       this.contentType,
     )
@@ -414,12 +415,12 @@ class BoxMapDeleteFunctionBuilder extends BoxMapFunctionBuilderBase {
       funcName: 'BoxMap.delete',
       callLocation: sourceLocation,
       genericTypeArgs: 0,
-      argMap: [[this.keyType]],
+      argSpec: (a) => [a.required(this.keyType)],
     })
 
     return new VoidExpressionBuilder(
       nodeFactory.stateDelete({
-        field: this.boxValueExpression(key),
+        field: this.boxValueExpression(key.resolve()),
         sourceLocation,
         wtype: voidWType,
       }),

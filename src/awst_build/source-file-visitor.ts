@@ -87,12 +87,7 @@ export class SourceFileVisitor extends BaseVisitor implements Visitor<ModuleStat
       const ptype = this.context.getPTypeForNode(dec.name)
 
       //const value = CompileTimeConstantVisitor.getCompileTimeConstant(this.context, dec.initializer, ptype)
-      const value = requireConstantOfType(
-        this.accept(dec.initializer),
-        ptype,
-        sourceLocation,
-        'Module level assignments must be compile time constants',
-      )
+      const value = requireConstantOfType(this.accept(dec.initializer), ptype, 'Module level assignments must be compile time constants')
       const constantName = this.context.resolveVariableName(dec.name)
       this.context.addConstant(constantName, value)
 

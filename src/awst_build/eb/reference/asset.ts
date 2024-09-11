@@ -3,7 +3,6 @@ import { assetPType, uint64PType } from '../../ptypes'
 import type { InstanceBuilder } from '../index'
 import { FunctionBuilder, InstanceExpressionBuilder } from '../index'
 import type { SourceLocation } from '../../../awst/source-location'
-import { requireExpressionsOfType } from '../util'
 import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
 import type { InstanceType } from '../../ptypes'
@@ -14,7 +13,7 @@ export class AssetFunctionBuilder extends FunctionBuilder {
     const {
       args: [assetId],
     } = parseFunctionArgs({
-      argMap: [[uint64PType, undefined]],
+      argSpec: (a) => [a.required(uint64PType)],
       args,
       typeArgs,
       genericTypeArgs: 0,
@@ -24,7 +23,7 @@ export class AssetFunctionBuilder extends FunctionBuilder {
 
     return new AssetExpressionBuilder(
       nodeFactory.reinterpretCast({
-        expr: assetId ?? nodeFactory.uInt64Constant({ value: 0n, sourceLocation }),
+        expr: assetId?.resolve() ?? nodeFactory.uInt64Constant({ value: 0n, sourceLocation }),
         sourceLocation,
         wtype: assetPType.wtypeOrThrow,
       }),

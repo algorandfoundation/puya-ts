@@ -5,7 +5,7 @@ import { CodeError } from '../../../errors'
 import { logger } from '../../../logger'
 import type { Expression } from '../../../awst/nodes'
 import type { InstanceBuilder } from '../index'
-import { requireExpressionOfType, requireInstanceBuilder } from './index'
+import { requestBuilderOfType, requestExpressionOfType, requireInstanceBuilder, resolvableToType } from './index'
 
 function parseTypeArgs<T extends number>(
   typeArgs: ReadonlyArray<PType>,
@@ -26,34 +26,26 @@ function parseTypeArgs<T extends number>(
   return typeArgs as Tuple<PType, T>
 }
 
+const ArgSpecDiscriminator = Symbol('_specType')
+
 /**
  * Optional arg spec
  * Will be mapped to `Expression | undefined`
  */
-type OptionalArg = [PType, undefined]
+type OptionalArg = { t: PType[]; required: false; [ArgSpecDiscriminator]: 'arg' }
 /**
  * Required arg spec
  * Will be mapped to `Expression`
  */
-type RequiredArg = [PType]
-/**
- * Required arg, but don't convert to an expression
- * Will be mapped to `InstanceBuilder`
- */
-type RequiredBuilder = ['*']
-/**
- * Optional arg, but don't convert to an expression
- * Will be mapped to `InstanceBuilder | undefined`
- */
-type OptionalBuilder = ['*', undefined]
-type ArgSpec = OptionalArg | RequiredArg | RequiredBuilder | OptionalBuilder
+type RequiredArg = { t: PType[]; required: true; [ArgSpecDiscriminator]: 'arg' }
+type ArgSpec = OptionalArg | RequiredArg
 
 /**
  * Object arg spec
  * Will be mapped to an object with the same keys where each property
  * is mapped to a Required or Optional spec
  */
-type ObjArgSpec = Record<string, ArgSpec>
+type ObjArgSpec = Record<string, ArgSpec> & { [ArgSpecDiscriminator]: 'obj' }
 
 /**
  * Maps an ObjArgSpec to its output type
@@ -69,19 +61,15 @@ type ArgsForObjSpec<T extends ObjArgSpec> = {
 type ArgMap = ArgSpec | ObjArgSpec
 
 /**
- * Maps an arg spect to its output type
+ * Maps an arg spec to its output type
  */
 type ArgFor<T extends ObjArgSpec | ArgSpec> = T extends ObjArgSpec
   ? ArgsForObjSpec<T>
   : T extends OptionalArg
-    ? Expression | undefined
+    ? InstanceBuilder | undefined
     : T extends RequiredArg
-      ? Expression
-      : T extends OptionalBuilder
-        ? InstanceBuilder | undefined
-        : T extends RequiredBuilder
-          ? InstanceBuilder
-          : never
+      ? InstanceBuilder
+      : never
 /**
  * Maps each arg to an expected output type
  */
@@ -89,7 +77,7 @@ type ParsedArgs<T extends [...DeliberateAny[]]> = T extends [infer T1 extends Ar
   ? [ArgFor<T1>, ...ParsedArgs<TRest>]
   : []
 
-function parseObjArg<T extends Record<string, ArgSpec>>(
+function parseObjArg<T extends ObjArgSpec>(
   arg: InstanceBuilder | undefined,
   sourceLocation: SourceLocation,
   subject: string,
@@ -97,16 +85,28 @@ function parseObjArg<T extends Record<string, ArgSpec>>(
 ): ArgsForObjSpec<T> {
   return Object.entries(argMap).reduce(
     (acc, [property, spec]) => {
-      const [ptype, ...rest] = spec
       if (arg?.hasProperty(property)) {
-        if (ptype === '*') {
-          acc[property] = requireInstanceBuilder(arg.memberAccess(property, sourceLocation), sourceLocation)
+        const builder = arg.memberAccess(property, sourceLocation)
+        if (spec.t.length === 0) {
+          acc[property] = requireInstanceBuilder(builder, sourceLocation)
         } else {
-          acc[property] = requireExpressionOfType(arg.memberAccess(property, sourceLocation), ptype, sourceLocation)
+          for (const t of spec.t) {
+            const typedBuilder = requestBuilderOfType(builder, t, sourceLocation)
+            if (typedBuilder) {
+              acc[property] = typedBuilder
+              return acc
+            }
+          }
+          throw new CodeError(
+            `${subject} has an incorrect type for property '${property}' of ${builder.ptype}. Expected ${spec.t.join(' or ')}`,
+            {
+              sourceLocation: arg?.sourceLocation ?? sourceLocation,
+            },
+          )
         }
         return acc
       }
-      if (rest.length === 0) {
+      if (spec.required) {
         throw new CodeError(`${subject} is missing required property ${property}`, {
           sourceLocation: arg?.sourceLocation ?? sourceLocation,
         })
@@ -117,13 +117,42 @@ function parseObjArg<T extends Record<string, ArgSpec>>(
   ) as ArgsForObjSpec<T>
 }
 
+const argSpecFactory = {
+  /**
+   * A required arg with one of the specified types
+   * @param ptypes
+   */
+  required(...ptypes: PType[]): RequiredArg {
+    return { t: ptypes, required: true, [ArgSpecDiscriminator]: 'arg' }
+  },
+  /**
+   * An optional arg with one of the specified types
+   * @param ptypes
+   */
+  optional(...ptypes: PType[]): OptionalArg {
+    return { t: ptypes, required: false, [ArgSpecDiscriminator]: 'arg' }
+  },
+  /**
+   * An object map arg, if all properties are optional - the arg itself becomes optional
+   * @param props A mapping of expected properties to expected ptypes
+   */
+  obj<T extends Omit<ObjArgSpec, typeof ArgSpecDiscriminator>>(props: T): T & { [ArgSpecDiscriminator]: 'obj' } {
+    return {
+      ...props,
+      [ArgSpecDiscriminator]: 'obj',
+    }
+  },
+}
+
+export type ArgSpecFactory = typeof argSpecFactory
+
 export function parseFunctionArgs<const TGenericCount extends number, const TArgMap extends [...ArgMap[]]>({
   args,
   typeArgs,
   funcName,
   callLocation,
   genericTypeArgs,
-  argMap,
+  argSpec,
 }: {
   /**
    * Raw args array passed to call function
@@ -149,7 +178,7 @@ export function parseFunctionArgs<const TGenericCount extends number, const TArg
   /**
    * A mapping of expected argument types
    */
-  argMap: TArgMap
+  argSpec: (a: ArgSpecFactory) => TArgMap
 }): {
   /**
    * A tuple of generic type args with a length of `TGenericCount`
@@ -157,6 +186,7 @@ export function parseFunctionArgs<const TGenericCount extends number, const TArg
   ptypes: Tuple<PType, TGenericCount>
   args: ParsedArgs<TArgMap>
 } {
+  const argMap = argSpec(argSpecFactory)
   if (args.length > argMap.length) {
     throw new CodeError(`${funcName} has ${args.length - argMap.length} too many args`, { sourceLocation: callLocation })
   }
@@ -164,17 +194,24 @@ export function parseFunctionArgs<const TGenericCount extends number, const TArg
     ptypes: parseTypeArgs(typeArgs, callLocation, funcName, genericTypeArgs),
     args: argMap.map((a, i) => {
       const source: InstanceBuilder<PType> | undefined = args[i]
-      if (Array.isArray(a)) {
-        const [ptype, ...rest] = a
+      if (a[ArgSpecDiscriminator] === 'arg') {
         if (source) {
-          if (ptype === '*') {
+          if (a.t.length === 0) {
             return source
           } else {
-            return requireExpressionOfType(source, ptype, callLocation)
+            for (const t of a.t) {
+              const builder = requestBuilderOfType(source, t, callLocation)
+              if (builder) {
+                return builder
+              }
+            }
+            throw new CodeError(`Arg ${i} of ${funcName} has an incorrect type of ${source.ptype}. Expected ${a.t.join(' or ')}`, {
+              sourceLocation: callLocation,
+            })
           }
         }
-        if (rest.length === 0) {
-          throw new CodeError(`Arg ${i} for ${funcName} is missing`, { sourceLocation: callLocation })
+        if (a.required) {
+          throw new CodeError(`Arg ${i} of ${funcName} is missing`, { sourceLocation: callLocation })
         }
       } else {
         return parseObjArg(source, callLocation, `Arg ${i} for ${funcName}`, a)

@@ -1,5 +1,10 @@
 contract ExampleBase
 {
+  constructor(): void
+  {
+    void
+  }
+  
   approvalProgram(): bool
   {
     return True
@@ -18,9 +23,14 @@ contract ExampleBase
 }
 contract Example extends tests/approvals/call-expressions.algo.ts::ExampleBase
 {
+  constructor(): void
+  {
+    super.constructor()
+  }
+  
   approvalProgram(): bool
   {
-    return this.localMethod() + super.baseMethod() == tests/approvals/call-expressions.algo.ts::freeMethod() - this.baseMethod()
+    return this.localMethod() + this.baseMethod() == tests/approvals/call-expressions.algo.ts::freeMethod() - this.baseMethod()
   }
   
   clearProgram(): bool
