@@ -1,4 +1,4 @@
-contract BaseTestContract
+contract BaseTestContract extends @algorandfoundation/algo-ts/arc4/index.d.ts::Contract, @algorandfoundation/algo-ts/base-contract.d.ts::BaseContract
 {
   globals {
     ["baseTestState"]: string
@@ -9,18 +9,8 @@ contract BaseTestContract
     var GlobalState["baseTestState"]: string = "testing 123"
   }
   
-  approvalProgram(): bool
-  {
-    return True
-  }
-  
-  clearProgram(): bool
-  {
-    return True
-  }
-  
 }
-contract TestContract extends tests/approvals/global-state.algo.ts::BaseTestContract
+contract TestContract extends tests/approvals/global-state.algo.ts::BaseTestContract, @algorandfoundation/algo-ts/arc4/index.d.ts::Contract, @algorandfoundation/algo-ts/base-contract.d.ts::BaseContract
 {
   globals {
     ["baseTestState"]: string
@@ -44,11 +34,6 @@ contract TestContract extends tests/approvals/global-state.algo.ts::BaseTestCont
     assert(STATE_EXISTS(GlobalState["testState"]))
     assert(GlobalState["testState"] == 2)
     (GlobalState["testState"] = btoi(txnas<ApplicationArgs>(0)))
-    return True
-  }
-  
-  clearProgram(): bool
-  {
     return True
   }
   

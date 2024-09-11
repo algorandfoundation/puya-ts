@@ -1321,7 +1321,6 @@ export class ContractFragment extends RootNode {
     this.reservedScratchSpace = props.reservedScratchSpace
     this.stateTotals = props.stateTotals
     this.docstring = props.docstring
-    this.methods = props.methods
   }
   id: ContractReference
   name: string
@@ -1334,19 +1333,11 @@ export class ContractFragment extends RootNode {
   reservedScratchSpace: Set<bigint>
   stateTotals: StateTotals | null
   docstring: string | null
-  methods: Map<string, ContractMethod>
   accept<T>(visitor: RootNodeVisitor<T>): T {
     return visitor.visitContractFragment(this)
   }
 }
-export type LValue =
-  | VarExpression
-  | FieldExpression
-  | IndexExpression
-  | TupleExpression
-  | AppStateExpression
-  | AppAccountStateExpression
-  | BoxValueExpression
+export type LValue = VarExpression | FieldExpression | IndexExpression | TupleExpression | AppStateExpression | AppAccountStateExpression
 export type Constant = IntegerConstant | BoolConstant | BytesConstant | StringConstant
 export type AWST = ContractFragment | LogicSignature | Subroutine
 export const concreteNodes = {

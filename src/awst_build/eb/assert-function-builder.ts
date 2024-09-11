@@ -7,9 +7,11 @@ import { wtypes } from '../../awst'
 import { CodeError } from '../../errors'
 import type { PType } from '../ptypes'
 import { stringPType } from '../ptypes'
-import { requireConstantOfType } from './util'
+import { requireConstantOfType, requireStringConstant } from './util'
 import { invariant } from '../../util'
 import { StringConstant } from '../../awst/nodes'
+import { intrinsicFactory } from '../../awst/intrinsic-factory'
+import { parseFunctionArgs } from './util/arg-parsing'
 
 export class AssertFunctionBuilder extends FunctionBuilder {
   call(args: Array<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
@@ -43,25 +45,21 @@ export class AssertFunctionBuilder extends FunctionBuilder {
 
 export class ErrFunctionBuilder extends FunctionBuilder {
   call(args: Array<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
-    const [message, ...rest] = args
-    if (rest.length !== 0) {
-      throw CodeError.unexpectedUnhandledArgs({ sourceLocation })
-    }
+    const {
+      args: [message],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 0,
+      callLocation: sourceLocation,
+      argSpec: (a) => [a.optional(stringPType)],
+      funcName: 'err',
+    })
 
-    let messageStr: string | null = null
-    if (message) {
-      const messageConst = requireConstantOfType(message, stringPType)
-      invariant(messageConst instanceof StringConstant, 'messageConst must be StringConst')
-      messageStr = messageConst.value
-    }
     return new VoidExpressionBuilder(
-      nodeFactory.intrinsicCall({
-        opCode: 'err',
-        sourceLocation: sourceLocation,
-        stackArgs: [],
-        immediates: [],
-        wtype: wtypes.voidWType,
-        comment: messageStr,
+      intrinsicFactory.err({
+        sourceLocation,
+        comment: message ? requireStringConstant(message).value : null,
       }),
     )
   }

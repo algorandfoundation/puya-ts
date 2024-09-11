@@ -5,14 +5,13 @@ import { AwstBuildFailureError, CodeError } from '../errors'
 import type { Visitor } from '../visitor/visitor'
 import { accept } from '../visitor/visitor'
 import { ContractVisitor } from './contract-visitor'
-import { FunctionVisitor } from './function-visitor'
 import { logger, logPuyaExceptions } from '../logger'
 import { expandMaybeArray } from '../util'
 import { BaseVisitor } from './base-visitor'
 import { ContractClassPType } from './ptypes'
 import { requireConstantOfType } from './eb/util'
 
-import { buildContextForSourceFile } from './context/awst-build-context'
+import type { AwstBuildContext } from './context/awst-build-context'
 import { SubroutineVisitor } from './subroutine-visitor'
 
 type NodeOrDeferred = awst.AWST[] | awst.AWST | (() => awst.AWST[] | awst.AWST)
@@ -21,11 +20,8 @@ export class SourceFileVisitor extends BaseVisitor implements Visitor<ModuleStat
   private _moduleStatements: NodeOrDeferred[] = []
   private accept = <TNode extends ts.Node>(node: TNode) => accept<SourceFileVisitor, TNode>(this, node)
 
-  constructor(
-    private readonly sourceFile: ts.SourceFile,
-    program: ts.Program,
-  ) {
-    super(buildContextForSourceFile(sourceFile, program))
+  constructor(context: AwstBuildContext, sourceFile: ts.SourceFile) {
+    super(context)
 
     for (const statement of sourceFile.statements) {
       this._moduleStatements.push(this.accept(statement))

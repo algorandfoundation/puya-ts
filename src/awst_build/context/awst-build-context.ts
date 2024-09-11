@@ -14,7 +14,7 @@ import type { AppStorageDefinition, Constant } from '../../awst/nodes'
 import { logger } from '../../logger'
 import { CodeError } from '../../errors'
 import type { AppStorageDeclaration } from '../contract-data'
-
+import type { CompilationSet, ContractReference, LogicSigReference } from '../../awst/models'
 export interface AwstBuildContext {
   /**
    * Get the source location of a node in the current source file
@@ -80,10 +80,14 @@ export interface AwstBuildContext {
   getStorageDeclaration(contractType: ContractClassPType, memberName: string): AppStorageDeclaration | undefined
 
   getStorageDefinitionsForContract(contractType: ContractClassPType): Map<string, AppStorageDefinition>
+
+  addToCompilationSet(compilationTarget: ContractReference | LogicSigReference): void
+
+  get compilationSet(): CompilationSet
 }
 
-export function buildContextForSourceFile(sourceFile: ts.SourceFile, program: ts.Program): AwstBuildContext {
-  return AwstBuildContextImpl.forFile(sourceFile, program)
+export function buildContextForProgram(program: ts.Program): AwstBuildContext {
+  return AwstBuildContextImpl.forProgram(program)
 }
 
 class AwstBuildContextImpl implements AwstBuildContext {
@@ -91,19 +95,21 @@ class AwstBuildContextImpl implements AwstBuildContext {
   readonly switchLoopCtx = new SwitchLoopContext()
   readonly typeResolver: TypeResolver
   readonly typeChecker: ts.TypeChecker
+  readonly #compilationSet: Array<ContractReference | LogicSigReference>
   private constructor(
-    public readonly sourceFile: ts.SourceFile,
     public readonly program: ts.Program,
     private readonly constants: Map<string, awst.Constant>,
     private readonly nameResolver: UniqueNameResolver,
     private readonly storageDeclarations: Map<string, Map<string, AppStorageDeclaration>>,
+    compilationSet: Array<ContractReference | LogicSigReference>,
   ) {
     this.typeChecker = program.getTypeChecker()
     this.typeResolver = new TypeResolver(this.typeChecker, this.program.getCurrentDirectory())
+    this.#compilationSet = compilationSet
   }
 
-  static forFile(sourceFile: ts.SourceFile, program: ts.Program): AwstBuildContext {
-    return new AwstBuildContextImpl(sourceFile, program, new Map(), new UniqueNameResolver(), new Map())
+  static forProgram(program: ts.Program): AwstBuildContext {
+    return new AwstBuildContextImpl(program, new Map(), new UniqueNameResolver(), new Map(), [])
   }
 
   addConstant(name: string, value: Constant) {
@@ -116,11 +122,11 @@ class AwstBuildContextImpl implements AwstBuildContext {
 
   createChildContext(): AwstBuildContext {
     return new AwstBuildContextImpl(
-      this.sourceFile,
       this.program,
-      this.constants,
+      new Map(this.constants),
       this.nameResolver.createChild(),
       this.storageDeclarations,
+      this.#compilationSet,
     )
   }
 
@@ -170,7 +176,8 @@ class AwstBuildContextImpl implements AwstBuildContext {
   }
 
   getSourceLocation(node: ts.Node) {
-    return SourceLocation.fromNode(this.sourceFile, node, this.program.getCurrentDirectory())
+    const sourceFile = node.getSourceFile()
+    return SourceLocation.fromNode(sourceFile, node, this.program.getCurrentDirectory())
   }
 
   addStorageDeclaration(declaration: AppStorageDeclaration): void {
@@ -221,5 +228,17 @@ class AwstBuildContextImpl implements AwstBuildContext {
       }
     }
     return result
+  }
+
+  addToCompilationSet(compilationTarget: ContractReference | LogicSigReference) {
+    if (this.#compilationSet.some((s) => s.id === compilationTarget.id)) {
+      logger.debug(undefined, `${compilationTarget.id} already exists in compilation set`)
+      return
+    }
+    this.#compilationSet.push(compilationTarget)
+  }
+
+  get compilationSet() {
+    return this.#compilationSet.slice()
   }
 }

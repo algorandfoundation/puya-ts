@@ -1,4 +1,4 @@
-contract AbiDecorators
+contract AbiDecorators extends @algorandfoundation/algo-ts/arc4/index.d.ts::Contract, @algorandfoundation/algo-ts/base-contract.d.ts::BaseContract
 {
   globals {
     ["globalValue"]: uint64
@@ -7,16 +7,6 @@ contract AbiDecorators
   {
     void
     var GlobalState["globalValue"]: uint64 = 123
-  }
-  
-  approvalProgram(): bool
-  {
-    return True
-  }
-  
-  clearProgram(): bool
-  {
-    return True
   }
   
   justNoop(): void

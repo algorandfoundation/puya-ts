@@ -1,0 +1,37 @@
+contract SimpleContract extends @algorandfoundation/algo-ts/base-contract.d.ts::BaseContract
+{
+  globals {
+    ["someState"]: uint64
+  }
+  constructor(): void
+  {
+    void
+  }
+  
+  simpleMethod(): uint64
+  {
+    return a * b
+  }
+  
+}
+contract Arc4Contract extends @algorandfoundation/algo-ts/arc4/index.d.ts::Contract, @algorandfoundation/algo-ts/base-contract.d.ts::BaseContract
+{
+  globals {
+    ["someState"]: uint64
+  }
+  constructor(): void
+  {
+    void
+  }
+  
+  simpleMethod(): uint64
+  {
+    return a * b
+  }
+  
+  simpleAbiMethod(): uint64
+  {
+    return a + b
+  }
+  
+}
