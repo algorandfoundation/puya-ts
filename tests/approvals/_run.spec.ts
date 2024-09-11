@@ -3,6 +3,7 @@ import { compile } from '../../src'
 import { buildCompileOptions } from '../../src/compile-options'
 import { invariant } from '../../src/util'
 import { LogLevel } from '../../src/logger'
+import { defaultPuyaOptions } from '../../src/puya/options'
 
 describe('Approvals', () => {
   const result = compile(
@@ -14,6 +15,7 @@ describe('Approvals', () => {
       dryRun: true,
       logLevel: LogLevel.Debug,
     }),
+    defaultPuyaOptions,
   )
   invariant(result.ast, 'Compilation must result in ast')
   const paths = Object.entries(result.ast ?? {}).map(([path, ast]) => ({

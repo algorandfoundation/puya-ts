@@ -38,7 +38,7 @@ export class ToCodeVisitor
   implements RootNodeVisitor<string[]>, ContractMemberNodeVisitor<string[]>, StatementVisitor<string[]>, ExpressionVisitor<string>
 {
   visitVoidConstant(expression: nodes.VoidConstant): string {
-    throw new Error('Method not implemented.')
+    return `void`
   }
   visitGroupTransactionReference(expression: nodes.GroupTransactionReference): string {
     throw new Error('Method not implemented.')

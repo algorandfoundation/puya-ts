@@ -13,11 +13,11 @@ import {
 import {
   anyPType,
   ApprovalProgram,
-  BaseContractType,
+  baseContractType,
   BooleanFunction,
   boolPType,
   ClearStateProgram,
-  ContractType,
+  arc4BaseContractType,
   nullPType,
   StringFunction,
   stringPType,
@@ -60,7 +60,13 @@ export class TypeResolver {
       }
       const ptype = typeRegistry.tryResolveSingletonName(symbolName)
       if (ptype === undefined && symbolName.module.startsWith(Constants.algoTsPackage)) {
-        logger.warn(sourceLocation, `${symbolName} could not be resolved to a singleton ptype`)
+        /*
+         Most symbols in the algo-ts module should resolve to a singleton instance
+         This can probably be removed once we've implemented ptypes for everything in algo-ts
+
+         */
+        if (symbolName.fullName !== baseContractType.fullName && symbolName.fullName !== arc4BaseContractType.fullName)
+          logger.warn(sourceLocation, `${symbolName} could not be resolved to a singleton ptype`)
       }
       if (ptype) {
         return ptype
@@ -70,6 +76,19 @@ export class TypeResolver {
     if (node.kind === ts.SyntaxKind.ThisKeyword || node.kind === ts.SyntaxKind.SuperKeyword) {
       const [declaration] = type.symbol.declarations ?? []
       return this.resolve(declaration, sourceLocation)
+    }
+    if (ts.isConstructorDeclaration(node)) {
+      const signature = this.checker.getSignatureFromDeclaration(node)
+      invariant(signature, 'Constructor node must have call signature')
+      const parentType = this.getTypeName(this.checker.getTypeAtLocation(node.parent), sourceLocation)
+      return this.reflectFunctionType(
+        new SymbolName({
+          name: Constants.constructorMethodName,
+          module: parentType.module,
+        }),
+        [signature],
+        sourceLocation,
+      )
     }
     return this.resolveType(type, sourceLocation)
   }
@@ -141,8 +160,8 @@ export class TypeResolver {
     if (typeName.fullName === ClassMethodDecoratorContext.fullName) return ClassMethodDecoratorContext
 
     if (tsType.isClass()) {
-      if (typeName.fullName === ContractType.fullName) return ContractType
-      if (typeName.fullName === BaseContractType.fullName) return BaseContractType
+      if (typeName.fullName === arc4BaseContractType.fullName) return arc4BaseContractType
+      if (typeName.fullName === baseContractType.fullName) return baseContractType
       const [baseType, ...rest] = tsType.getBaseTypes()?.map((t) => this.resolveType(t, sourceLocation)) ?? []
 
       invariant(rest.length === 0, 'Class can have at most one base type')

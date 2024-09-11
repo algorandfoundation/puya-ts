@@ -14,35 +14,7 @@ export type ContractMethodInfo = {
   arc4MethodConfig?: awst.ContractMethod['arc4MethodConfig']
 }
 
-export class ContractMethodVisitor extends FunctionVisitor {
-  private readonly _result: awst.ContractMethod
-
-  constructor(
-    ctx: AwstBuildContext,
-    node: ts.MethodDeclaration | ts.ConstructorDeclaration,
-    private contractInfo: ContractMethodInfo,
-  ) {
-    super(ctx, node)
-    const sourceLocation = this.sourceLocation(node)
-
-    this._result = new awst.ContractMethod({
-      arc4MethodConfig: contractInfo.arc4MethodConfig ?? null,
-      memberName: this._functionName,
-      sourceLocation,
-      args: this._args,
-      returnType: this._functionType.returnType.wtypeOrThrow,
-      body: this._body,
-      inheritable: true,
-      synthetic: false,
-      cref: contractInfo.cref,
-      documentation: this._documentation,
-    })
-  }
-
-  get result() {
-    return this._result
-  }
-
+export class ContractMethodBaseVisitor extends FunctionVisitor {
   visitSuperKeyword(node: ts.SuperExpression): NodeBuilder {
     const sourceLocation = this.sourceLocation(node)
     const ptype = this.context.getPTypeForNode(node)
@@ -60,17 +32,39 @@ export class ContractMethodVisitor extends FunctionVisitor {
     }
     throw new CodeError(`'this' keyword is not valid outside of a contract type`, { sourceLocation })
   }
+}
+
+export class ContractMethodVisitor extends ContractMethodBaseVisitor {
+  private readonly _result: awst.ContractMethod
+
+  constructor(ctx: AwstBuildContext, node: ts.MethodDeclaration, contractInfo: ContractMethodInfo) {
+    super(ctx, node)
+    const sourceLocation = this.sourceLocation(node)
+    const { args, body, documentation } = this.buildFunctionAwst(node)
+
+    this._result = new awst.ContractMethod({
+      arc4MethodConfig: contractInfo.arc4MethodConfig ?? null,
+      memberName: this._functionType.name,
+      sourceLocation,
+      args,
+      returnType: this._functionType.returnType.wtypeOrThrow,
+      body,
+      inheritable: true,
+      synthetic: false,
+      cref: contractInfo.cref,
+      documentation,
+    })
+  }
+
+  get result() {
+    return this._result
+  }
 
   public static buildContractMethod(
     parentCtx: AwstBuildContext,
     node: ts.MethodDeclaration,
     contractMethodInfo: ContractMethodInfo,
   ): awst.ContractMethod {
-    const result = new ContractMethodVisitor(parentCtx.createChildContext(), node, contractMethodInfo).result
-    invariant(result instanceof awst.ContractMethod, "result must be ContractMethod'")
-    return result
-  }
-  public static buildConstructor(parentCtx: AwstBuildContext, node: ts.ConstructorDeclaration, contractMethodInfo: ContractMethodInfo) {
     const result = new ContractMethodVisitor(parentCtx.createChildContext(), node, contractMethodInfo).result
     invariant(result instanceof awst.ContractMethod, "result must be ContractMethod'")
     return result

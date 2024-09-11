@@ -1,4 +1,5 @@
 import type { Expression, Statement } from './nodes'
+import { VoidConstant } from './nodes'
 import { IntrinsicCall } from './nodes'
 import { MethodDocumentation } from './nodes'
 import { TupleExpression } from './nodes'
@@ -25,6 +26,7 @@ import type { SourceLocation } from './source-location'
 import * as wtypes from './wtypes'
 import { codeInvariant, invariant } from '../util'
 import type { WType } from './wtypes'
+import { voidWType } from './wtypes'
 import { WTuple } from './wtypes'
 import { boolWType } from './wtypes'
 
@@ -32,6 +34,12 @@ type ConcreteNodes = typeof concreteNodes
 
 let singleEval = 0n
 const explicitNodeFactory = {
+  voidConstant(props: { sourceLocation: SourceLocation }): VoidConstant {
+    return new VoidConstant({
+      ...props,
+      wtype: voidWType,
+    })
+  },
   bytesConstant(props: { value: Uint8Array; encoding?: BytesEncoding; sourceLocation: SourceLocation; wtype?: WType }): BytesConstant {
     return new BytesConstant({
       encoding: BytesEncoding.unknown,

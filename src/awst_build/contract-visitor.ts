@@ -2,17 +2,16 @@ import type { Visitor } from '../visitor/visitor'
 import { accept } from '../visitor/visitor'
 import ts from 'typescript'
 import type * as awst from '../awst/nodes'
-import type { AppStorageDefinition, ContractMethod } from '../awst/nodes'
+import type { ContractMethod } from '../awst/nodes'
 import { ContractFragment } from '../awst/nodes'
 import type { ClassElements } from '../visitor/syntax-names'
 import { AwstBuildFailureError, NotSupported, TodoError } from '../errors'
 import { codeInvariant, invariant } from '../util'
 import { Constants } from '../constants'
-import { FunctionVisitor } from './function-visitor'
 import { logger } from '../logger'
 import { BaseVisitor } from './base-visitor'
 import { GlobalStateFunctionResultBuilder } from './eb/storage/global-state'
-import { arc4BareMethodDecorator, BaseContractType, ContractClassPType, ContractType, GlobalStateType } from './ptypes'
+import { baseContractType, ContractClassPType, arc4BaseContractType, GlobalStateType } from './ptypes'
 import type { Arc4AbiDecoratorData, DecoratorData } from './decorator-visitor'
 import { DecoratorVisitor } from './decorator-visitor'
 import type { SourceLocation } from '../awst/source-location'
@@ -21,11 +20,13 @@ import { ContractReference } from '../awst/models'
 import { ARC4BareMethodConfig } from '../awst/models'
 import { ARC4ABIMethodConfig } from '../awst/models'
 import { ARC4CreateOption, OnCompletionAction } from '../awst/models'
-import { isValidLiteralForPType } from './eb/util'
+import { isValidLiteralForPType, requireInstanceBuilder } from './eb/util'
 import type { AwstBuildContext } from './context/awst-build-context'
 import { nodeFactory } from '../awst/node-factory'
-import { boolWType } from '../awst/wtypes'
+import { boolWType, voidWType } from '../awst/wtypes'
 import { ContractMethodVisitor } from './contract-method-visitor'
+import { ContractSuperBuilder } from './eb/contract-builder'
+import { ConstructorVisitor } from './constructor-visitor'
 
 export class ContractVisitor extends BaseVisitor implements Visitor<ClassElements, void> {
   private _ctor?: ContractMethod
@@ -34,6 +35,7 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
   private _clearStateProgram?: ContractMethod
   private _className: string
   private _contractPType: ContractClassPType
+  private readonly _propertyInitialization: awst.Statement[] = []
   public readonly result: ContractFragment
   public accept = <TNode extends ts.Node>(node: TNode) => accept<ContractVisitor, TNode>(this, node)
 
@@ -49,25 +51,26 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
 
     const isAbstract = Boolean(classDec.modifiers?.some((m) => m.kind === ts.SyntaxKind.AbstractKeyword))
 
+    for (const property of classDec.members.filter(ts.isPropertyDeclaration)) {
+      this.acceptAndIgnoreBuildErrors(property)
+    }
+    const ctor = classDec.members.find(ts.isConstructorDeclaration)
+    if (ctor) this.acceptAndIgnoreBuildErrors(ctor)
+
     for (const member of classDec.members) {
-      try {
-        this.accept(member)
-      } catch (e) {
-        // Ignore this error and continue visiting other members, so we can show additional errors
-        if (!(e instanceof AwstBuildFailureError)) {
-          throw e
-        }
+      if (!ts.isConstructorDeclaration(member) && !ts.isPropertyDeclaration(member)) {
+        this.acceptAndIgnoreBuildErrors(member)
       }
     }
 
     this.result = new ContractFragment({
       name: this._className,
       appState: this.context.getStorageDefinitionsForContract(this._contractPType),
-      init: this._ctor ?? null,
+      init: this._ctor ?? this.makeDefaultConstructor(sourceLocation),
       subroutines: this._subroutines,
       docstring: null,
-      approvalProgram: this._approvalProgram ?? this.makeDefaultApprovalProgram(sourceLocation, contractPtype),
-      clearProgram: this._clearStateProgram ?? this.makeDefaultClearStateProgram(sourceLocation, contractPtype),
+      approvalProgram: this._approvalProgram ?? this.makeDefaultApprovalProgram(sourceLocation),
+      clearProgram: this._clearStateProgram ?? this.makeDefaultClearStateProgram(sourceLocation),
       // isArc4: contractPtype.isARC4,
       bases: this.buildContractReferences(contractPtype),
       id: ContractReference.fromPType(this._contractPType),
@@ -83,10 +86,46 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
     })
   }
 
-  private makeDefaultClearStateProgram(sourceLocation: SourceLocation, contractType: ContractClassPType) {
+  private acceptAndIgnoreBuildErrors(node: ts.ClassElement) {
+    try {
+      this.accept(node)
+    } catch (e) {
+      // Ignore this error and continue visiting other members, so we can show additional errors
+      if (!(e instanceof AwstBuildFailureError)) {
+        throw e
+      }
+    }
+  }
+
+  private makeDefaultConstructor(sourceLocation: SourceLocation) {
+    invariant(this._contractPType.baseTypes.length === 1, 'Only single base type supported for now')
+    return nodeFactory.contractMethod({
+      memberName: Constants.constructorMethodName,
+      cref: ContractReference.fromPType(this._contractPType),
+      args: [],
+      arc4MethodConfig: null,
+      sourceLocation,
+      returnType: voidWType,
+      synthetic: true,
+      inheritable: true,
+      documentation: nodeFactory.methodDocumentation(),
+      body: nodeFactory.block(
+        { sourceLocation },
+        nodeFactory.expressionStatement({
+          expr: requireInstanceBuilder(
+            new ContractSuperBuilder(this._contractPType.baseTypes[0], sourceLocation, this.context).call([], [], sourceLocation),
+            sourceLocation,
+          ).resolve(),
+        }),
+        ...this._propertyInitialization,
+      ),
+    })
+  }
+
+  private makeDefaultClearStateProgram(sourceLocation: SourceLocation) {
     return nodeFactory.contractMethod({
       memberName: Constants.clearStateProgramMethodName,
-      cref: ContractReference.fromPType(contractType),
+      cref: ContractReference.fromPType(this._contractPType),
       args: [],
       arc4MethodConfig: null,
       sourceLocation,
@@ -105,11 +144,11 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
       ),
     })
   }
-  private makeDefaultApprovalProgram(sourceLocation: SourceLocation, contractType: ContractClassPType) {
+  private makeDefaultApprovalProgram(sourceLocation: SourceLocation) {
     // TODO: This should be updated to return the arc4 router node, and should only be used if it's an arc4 contract
     return nodeFactory.contractMethod({
       memberName: Constants.approvalProgramMethodName,
-      cref: ContractReference.fromPType(contractType),
+      cref: ContractReference.fromPType(this._contractPType),
       args: [],
       arc4MethodConfig: null,
       sourceLocation,
@@ -131,7 +170,7 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
 
   private buildContractReferences(contractType: ContractClassPType): ContractReference[] {
     return contractType.baseTypes.flatMap((baseType) => {
-      if (baseType.equals(BaseContractType) || baseType.equals(ContractType)) {
+      if (baseType.equals(baseContractType) || baseType.equals(arc4BaseContractType)) {
         return []
       } else {
         return new ContractReference({
@@ -146,7 +185,10 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
     throw new TodoError('visitClassStaticBlockDeclaration')
   }
   visitConstructor(node: ts.ConstructorDeclaration): void {
-    this._ctor = ContractMethodVisitor.buildConstructor(this.context, node, { cref: ContractReference.fromPType(this._contractPType) })
+    this._ctor = ConstructorVisitor.buildConstructor(this.context, node, {
+      cref: ContractReference.fromPType(this._contractPType),
+      propertyInitializerStatements: this._propertyInitialization,
+    })
   }
   visitGetAccessor(node: ts.GetAccessorDeclaration): void {
     throw new TodoError('visitGetAccessor')
@@ -320,6 +362,20 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
     if (initializer instanceof GlobalStateFunctionResultBuilder) {
       const storageDeclaration = initializer.buildStorageDeclaration(propertyName, this.sourceLocation(node.name), this._contractPType)
       this.context.addStorageDeclaration(storageDeclaration)
+      if (initializer.initialValue) {
+        this._propertyInitialization.push(
+          nodeFactory.assignmentStatement({
+            target: nodeFactory.appStateExpression({
+              key: storageDeclaration.key,
+              wtype: storageDeclaration.ptype.contentType.wtypeOrThrow,
+              sourceLocation: storageDeclaration.sourceLocation,
+              existsAssertionMessage: null,
+            }),
+            value: initializer.initialValue,
+            sourceLocation,
+          }),
+        )
+      }
     }
 
     return

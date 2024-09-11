@@ -6,6 +6,7 @@ import type { LogEvent } from '../../src/logger'
 import { logger, LogLevel } from '../../src/logger'
 import { buildCompileOptions } from '../../src/compile-options'
 import { invariant } from '../../src/util'
+import { defaultPuyaOptions } from '../../src/puya/options'
 
 /**
  * Verify that specific code produces specific compiler output.
@@ -37,6 +38,7 @@ describe('Expected output', () => {
       dryRun: true,
       logLevel: LogLevel.Debug,
     }),
+    defaultPuyaOptions,
   )
   invariant(result.ast, 'Compilation must result in ast')
   const paths = Object.entries(result.ast ?? {}).map(([path, ast]) => ({

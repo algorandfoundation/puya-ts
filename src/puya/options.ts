@@ -7,6 +7,22 @@ export enum LocalsCoalescingStrategy {
 }
 export type CompilationSet = Record<string, string>
 
+export const defaultPuyaOptions: PuyaPassThroughOptions = {
+  outputTeal: true,
+  outputArc32: true,
+  outputSsaIr: false,
+  outputOptimizationIr: false,
+  outputDestructuredIr: false,
+  outputMemoryIr: false,
+  outputBytecode: false,
+  matchAlgodBytecode: false,
+  debugLevel: 1,
+  optimizationLevel: 1,
+  targetAvmVersion: 10,
+  cliTemplateDefinitions: [],
+  templateVarsPrefix: 'TMPL_',
+  localsCoalescingStrategy: LocalsCoalescingStrategy.root_operand,
+}
 export type PuyaPassThroughOptions = Omit<PuyaOptions, 'compilationSet'>
 
 export class PuyaOptions {
