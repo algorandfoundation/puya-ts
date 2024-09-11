@@ -1,12 +1,13 @@
-import { InstanceBuilder } from './index'
-import type { SourceLocation } from '../../awst/source-location'
-import type { Expression, LValue } from '../../awst/nodes'
-import type { PType } from '../ptypes'
-import { TuplePType } from '../ptypes'
-import { TupleExpressionBuilder } from './tuple-expression-builder'
-import { nodeFactory } from '../../awst/node-factory'
-import { requireExpressionOfType } from './util'
-import { codeInvariant } from '../../util'
+import { InstanceBuilder } from '../index'
+import type { SourceLocation } from '../../../awst/source-location'
+import type { Expression, LValue } from '../../../awst/nodes'
+import type { PType } from '../../ptypes'
+import { ArrayPType } from '../../ptypes'
+import { TuplePType } from '../../ptypes'
+import { TupleExpressionBuilder } from '../tuple-expression-builder'
+import { nodeFactory } from '../../../awst/node-factory'
+import { requireExpressionOfType } from '../util'
+import { codeInvariant } from '../../../util'
 
 export class ArrayLiteralExpressionBuilder extends InstanceBuilder {
   #ptype: TuplePType
@@ -58,12 +59,21 @@ export class ArrayLiteralExpressionBuilder extends InstanceBuilder {
         ptype,
       )
     }
+    if (ptype instanceof ArrayPType) {
+      return new ArrayLiteralExpressionBuilder(
+        this.sourceLocation,
+        this.items.map((i) => i.resolveToPType(ptype.itemType, sourceLocation)),
+      )
+    }
     return super.resolveToPType(ptype, sourceLocation)
   }
   resolvableToPType(ptype: PType, sourceLocation: SourceLocation): boolean {
     if (this.ptype.equals(ptype)) return true
     if (ptype instanceof TuplePType) {
       return ptype.items.every((itemType, index) => this.items[index].resolvableToPType(itemType, sourceLocation))
+    }
+    if (ptype instanceof ArrayPType) {
+      return this.items.every((i) => i.resolveToPType(ptype.itemType, sourceLocation))
     }
     return false
   }

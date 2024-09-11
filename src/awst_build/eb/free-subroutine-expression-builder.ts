@@ -30,13 +30,13 @@ abstract class SubroutineExpressionBuilder extends FunctionBuilder {
       funcName: this.ptype.name,
       callLocation: sourceLocation,
       genericTypeArgs: 0,
-      argMap: this.ptype.parameters.map(([_, ptype]) => [ptype]),
+      argSpec: (a) => this.ptype.parameters.map(([_, ptype]) => a.required(ptype)),
     })
 
     return typeRegistry.getInstanceEb(
       nodeFactory.subroutineCallExpression({
         target: this.target,
-        args: mappedArgs.map((a) => nodeFactory.callArg({ name: null, value: a })),
+        args: mappedArgs.map((a: InstanceBuilder) => nodeFactory.callArg({ name: null, value: a.resolve() })),
         sourceLocation: sourceLocation,
         wtype: this.ptype.returnType.wtypeOrThrow,
       }),

@@ -19,7 +19,7 @@ import { typeRegistry } from './type-registry'
 import type { InstanceBuilder } from './eb'
 import type { AwstBuildContext } from './context/awst-build-context'
 import { OmittedExpressionBuilder } from './eb/omitted-expression-builder'
-import { ArrayLiteralExpressionBuilder } from './eb/array-literal-expression-builder'
+import { ArrayLiteralExpressionBuilder } from './eb/literal/array-literal-expression-builder'
 import { ObjectLiteralExpressionBuilder } from './eb/literal/object-literal-expression-builder'
 
 // noinspection JSUnusedGlobalSymbols

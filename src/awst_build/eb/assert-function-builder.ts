@@ -23,7 +23,7 @@ export class AssertFunctionBuilder extends FunctionBuilder {
     }
     let messageStr: string | null = null
     if (message) {
-      const messageConst = requireConstantOfType(message, stringPType, sourceLocation)
+      const messageConst = requireConstantOfType(message, stringPType)
       invariant(messageConst instanceof StringConstant, 'messageConst must be StringConst')
       messageStr = messageConst.value
     }
@@ -50,7 +50,7 @@ export class ErrFunctionBuilder extends FunctionBuilder {
 
     let messageStr: string | null = null
     if (message) {
-      const messageConst = requireConstantOfType(message, stringPType, sourceLocation)
+      const messageConst = requireConstantOfType(message, stringPType)
       invariant(messageConst instanceof StringConstant, 'messageConst must be StringConst')
       messageStr = messageConst.value
     }

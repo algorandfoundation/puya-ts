@@ -1,7 +1,7 @@
 import type { NodeBuilder } from '../index'
 import { FunctionBuilder, InstanceBuilder, InstanceExpressionBuilder } from '../index'
 import type { SourceLocation } from '../../../awst/source-location'
-import { boolPType } from '../../ptypes'
+import { boolPType, stringPType } from '../../ptypes'
 import { bytesPType } from '../../ptypes'
 import type { AppStateExpression, Expression, LValue } from '../../../awst/nodes'
 import { BytesConstant } from '../../../awst/nodes'
@@ -32,11 +32,11 @@ export class GlobalStateFunctionBuilder extends FunctionBuilder {
       args,
       typeArgs,
       genericTypeArgs: 1,
-      argMap: [
-        {
-          initialValue: [contentPType, undefined],
-          key: ['*', undefined],
-        },
+      argSpec: (a) => [
+        a.obj({
+          initialValue: a.optional(contentPType),
+          key: a.optional(stringPType, bytesPType),
+        }),
       ],
       funcName: 'GlobalState function',
       callLocation: sourceLocation,
@@ -45,7 +45,7 @@ export class GlobalStateFunctionBuilder extends FunctionBuilder {
     const ptype = new GlobalStateType({ content: contentPType })
 
     return new GlobalStateFunctionResultBuilder(extractKeyOverride(key, stateKeyWType, sourceLocation), ptype, {
-      initialValue,
+      initialValue: initialValue?.resolve(),
       sourceLocation,
     })
   }

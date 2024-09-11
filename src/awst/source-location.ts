@@ -27,8 +27,8 @@ export class SourceLocation {
       file: normalisePath(sourceFile.fileName, programDirectory),
       line: startLoc.line + 1,
       endLine: endLoc.line + 1,
-      column: startLoc.character + 1,
-      endColumn: endLoc.character + 1,
+      column: startLoc.character,
+      endColumn: endLoc.character,
     })
   }
 
@@ -50,8 +50,8 @@ export class SourceLocation {
       file: normalisePath(sourceFile.fileName, programDirectory),
       line: startLoc.line + 1,
       endLine: endLoc.line + 1,
-      column: startLoc.character + 1,
-      endColumn: endLoc.character + 1,
+      column: startLoc.character,
+      endColumn: endLoc.character,
     })
   }
 
@@ -62,8 +62,8 @@ export class SourceLocation {
       file: normalisePath(diagnostic.file.fileName, programDirectory),
       line: startLoc.line + 1,
       endLine: startLoc.line + 1,
-      column: startLoc.character + 1,
-      endColumn: startLoc.character + 1,
+      column: startLoc.character,
+      endColumn: startLoc.character,
     })
   }
 

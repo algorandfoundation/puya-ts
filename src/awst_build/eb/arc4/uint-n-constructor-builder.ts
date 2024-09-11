@@ -29,7 +29,7 @@ export class UintNConstructorBuilder extends NodeBuilder {
       typeArgs,
       genericTypeArgs: 1,
       funcName: 'UintN constructor',
-      argMap: [['*', undefined]],
+      argSpec: (a) => [a.optional()],
       callLocation: sourceLocation,
     })
     codeInvariant(
