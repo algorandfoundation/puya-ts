@@ -11,7 +11,7 @@ describe('Calculator', () => {
         .createScope([
           ctx.any.txn.applicationCall({
             appId: ctx.ledger.getApplicationForContract(contract),
-            args: [],
+            appArgs: [],
           }),
         ])
         .execute(() => {
@@ -27,7 +27,7 @@ describe('Calculator', () => {
         .createScope([
           ctx.any.txn.applicationCall({
             appId: application,
-            args: [op.itob(Uint64(1)), op.itob(Uint64(2)), op.itob(Uint64(3))],
+            appArgs: [op.itob(Uint64(1)), op.itob(Uint64(2)), op.itob(Uint64(3))],
           }),
         ])
         .execute(contract.approvalProgram)

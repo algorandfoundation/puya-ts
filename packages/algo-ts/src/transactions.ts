@@ -90,7 +90,7 @@ interface TransactionBase {
   rekeyTo: Account
 }
 
-export interface PayTxn extends TransactionBase {
+export interface PaymentTxn extends TransactionBase {
   /**
    * Transaction type as integer
    */
@@ -388,4 +388,4 @@ export interface ApplicationTxn extends TransactionBase {
   clearStateProgramPages(index: uint64): bytes
 }
 
-export type Transaction = PayTxn | KeyRegistrationTxn | AssetConfigTxn | AssetTransferTxn | AssetFreezeTxn | ApplicationTxn
+export type Transaction = PaymentTxn | KeyRegistrationTxn | AssetConfigTxn | AssetTransferTxn | AssetFreezeTxn | ApplicationTxn

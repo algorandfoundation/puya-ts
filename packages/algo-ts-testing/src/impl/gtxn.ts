@@ -29,7 +29,7 @@ export const GTxn: internal.opTypes.GTxnType = {
   amount(t: uint64): uint64 {
     const i = internal.primitives.Uint64Cls.getNumber(t)
     const currentTransactionGroup = lazyContext.activeGroup.transactions
-    return (currentTransactionGroup[i] as gtxn.PayTxn).amount
+    return (currentTransactionGroup[i] as gtxn.PaymentTxn).amount
   },
   closeRemainderTo(_t: uint64): Account {
     throw new Error('TODO')

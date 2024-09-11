@@ -1,29 +1,46 @@
-import { bytes, gtxn, internal, Uint64 } from '@algorandfoundation/algo-ts'
+import { gtxn, internal } from '@algorandfoundation/algo-ts'
 import { lazyContext } from '../context-helpers/internal-context'
+import {
+  ApplicationTransaction,
+  ApplicationTransactionFields,
+  AssetConfigTransaction,
+  AssetFreezeTransaction,
+  AssetTransferTransaction,
+  KeyRegistrationTransaction,
+  PaymentTransaction,
+  TxnFields,
+} from '../impl/transactions'
 import { asBigInt } from '../util'
 
 export class TxnValueGenerator {
-  applicationCall({ appId, args, sender, ...rest }: Partial<gtxn.ApplicationTxn> & { args?: bytes[] }): gtxn.ApplicationTxn {
-    if (appId && !lazyContext.ledger.applicationDataMap.has(asBigInt(appId.id))) {
-      internal.errors.internalError(`Application ID ${appId.id} not found in test context`)
+  applicationCall(fields: ApplicationTransactionFields): gtxn.ApplicationTxn {
+    if (fields.appId && !lazyContext.ledger.applicationDataMap.has(asBigInt(fields.appId.id))) {
+      internal.errors.internalError(`Application ID ${fields.appId.id} not found in test context`)
     }
-    return {
-      sender: sender ?? lazyContext.defaultSender,
-      type: gtxn.TransactionType.ApplicationCall,
-      numAppArgs: Uint64(args?.length ?? 0),
-      appId: appId ?? lazyContext.any.application(),
-      appArgs(index) {
-        return args![index]
-      },
-      ...rest,
-    } as gtxn.ApplicationTxn
+    if (!fields.appId) {
+      fields.appId = lazyContext.any.application()
+    }
+
+    return ApplicationTransaction(fields)
   }
 
-  payment({ sender, ...rest }: Partial<gtxn.PayTxn>): gtxn.PayTxn {
-    return {
-      sender: sender ?? lazyContext.defaultSender,
-      type: gtxn.TransactionType.Payment,
-      ...rest,
-    } as gtxn.PayTxn
+  payment(fields: TxnFields<gtxn.PaymentTxn>): gtxn.PaymentTxn {
+    return PaymentTransaction(fields)
+  }
+
+  keyRegistration(fields: TxnFields<gtxn.KeyRegistrationTxn>): gtxn.KeyRegistrationTxn {
+    return KeyRegistrationTransaction(fields)
+  }
+
+  assetConfig(fields: TxnFields<gtxn.AssetConfigTxn>): gtxn.AssetConfigTxn {
+    return AssetConfigTransaction(fields)
+  }
+
+  assetTransfer(fields: TxnFields<gtxn.AssetTransferTxn>): gtxn.AssetTransferTxn {
+    return AssetTransferTransaction(fields)
+  }
+
+  assetFreeze(fields: TxnFields<gtxn.AssetFreezeTxn>): gtxn.AssetFreezeTxn {
+    return AssetFreezeTransaction(fields)
   }
 }

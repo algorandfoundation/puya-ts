@@ -12,7 +12,7 @@ describe('When calling the HelloWorldContract', () => {
         .createScope([
           ctx.any.txn.applicationCall({
             appId: application,
-            args: [Bytes('World')],
+            appArgs: [Bytes('World')],
           }),
         ])
         .execute(contract.approvalProgram)

@@ -76,7 +76,7 @@ export class ContractContext {
             if (isArc4 || prop === 'approvalProgram' || prop === 'clearStateProgram') {
               return (...args: DeliberateAny[]): DeliberateAny => {
                 const app = lazyContext.ledger.getApplicationForContract(receiver)
-                const txns = [lazyContext.any.txn.applicationCall({ appId: app, sender: lazyContext.defaultSender })]
+                const txns = [lazyContext.any.txn.applicationCall({ appId: app })]
                 return lazyContext.txn.ensureScope(txns).execute(() => (orig as DeliberateAny).apply(target, args))
               }
             }
