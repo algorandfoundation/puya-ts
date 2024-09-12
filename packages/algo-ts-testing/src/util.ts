@@ -85,3 +85,16 @@ export const getRandomBigInt = (min: number | bigint, max: number | bigint): big
 }
 
 export const getRandomBytes = (length: number): internal.primitives.BytesCls => asBytesCls(new Uint8Array(randomBytes(length)))
+
+const NoValue = Symbol('no-value')
+type LazyInstance<T> = () => T
+export const Lazy = <T>(factory: () => T): LazyInstance<T> => {
+  let val: T | typeof NoValue = NoValue
+
+  return () => {
+    if (val === NoValue) {
+      val = factory()
+    }
+    return val
+  }
+}

@@ -111,3 +111,5 @@ export const Global: GlobalType = createObjectProxy('Global')
 export const GTxn: GTxnType = createObjectProxy('GTxn')
 export const JsonRef: JsonRefType = createObjectProxy('JsonRef')
 export const Txn: TxnType = createObjectProxy('Txn')
+
+export const AssetParams = createObjectProxy('AssetParams')
