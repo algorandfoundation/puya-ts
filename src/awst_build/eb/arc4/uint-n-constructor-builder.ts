@@ -2,10 +2,8 @@ import type { InstanceBuilder } from '../index'
 import { NodeBuilder } from '../index'
 import { InstanceExpressionBuilder } from '../index'
 import type { PType } from '../../ptypes'
-import { NumberPType } from '../../ptypes'
-import { biguintPType } from '../../ptypes'
-import { uint64PType } from '../../ptypes'
-import { UintNType } from '../../ptypes'
+import { NumberPType, biguintPType, uint64PType } from '../../ptypes'
+import { UintNType } from '../../ptypes/arc4-types'
 import type { SourceLocation } from '../../../awst/source-location'
 import type { Expression } from '../../../awst/nodes'
 import { IntegerConstant } from '../../../awst/nodes'
@@ -35,6 +33,7 @@ export class UintNConstructorBuilder extends NodeBuilder {
     codeInvariant(
       size instanceof NumberPType && size.literalValue !== undefined,
       `Generic type of ${this.typeDescription} must be a literal number. Inferred type is ${size.name}`,
+      sourceLocation,
     )
     const ptype = new UintNType({ n: size.literalValue })
 

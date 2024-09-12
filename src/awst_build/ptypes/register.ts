@@ -67,8 +67,6 @@ import {
   TuplePType,
   Uint64Function,
   uint64PType,
-  UintNConstructor,
-  UintNType,
   voidPType,
 } from './index'
 import { ObjectExpressionBuilder } from '../eb/literal/object-expression-builder'
@@ -76,6 +74,20 @@ import { AccountExpressionBuilder, AccountFunctionBuilder } from '../eb/account/
 import { LocalStateExpressionBuilder, LocalStateFunctionBuilder } from '../eb/storage/local-state'
 import { UintNConstructorBuilder, UintNExpressionBuilder } from '../eb/arc4/uint-n-constructor-builder'
 import { GroupTransactionExpressionBuilder } from '../eb/transactions/asset-transfer'
+import {
+  DynamicArrayConstructor,
+  DynamicArrayType,
+  StaticArrayConstructor,
+  StaticArrayType,
+  UintNConstructor,
+  UintNType,
+} from './arc4-types'
+import {
+  DynamicArrayConstructorBuilder,
+  DynamicArrayExpressionBuilder,
+  StaticArrayConstructorBuilder,
+  StaticArrayExpressionBuilder,
+} from '../eb/arc4/arrays'
 
 export function registerPTypes(typeRegistry: TypeRegistry) {
   if (typeRegistry.hasRegistrations) {
@@ -138,6 +150,11 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: accountPType, instanceEb: AccountExpressionBuilder })
   typeRegistry.register({ ptype: UintNConstructor, singletonEb: UintNConstructorBuilder })
   typeRegistry.registerGeneric({ ptype: UintNType, instanceEb: UintNExpressionBuilder })
+  typeRegistry.register({ ptype: DynamicArrayConstructor, singletonEb: DynamicArrayConstructorBuilder })
+  typeRegistry.registerGeneric({ ptype: DynamicArrayType, instanceEb: DynamicArrayExpressionBuilder })
+  typeRegistry.register({ ptype: StaticArrayConstructor, singletonEb: StaticArrayConstructorBuilder })
+  typeRegistry.registerGeneric({ ptype: StaticArrayType, instanceEb: StaticArrayExpressionBuilder })
+
   typeRegistry.register({ ptype: paymentGroupTransaction, instanceEb: GroupTransactionExpressionBuilder })
   typeRegistry.register({ ptype: keyRegistrationGroupTransaction, instanceEb: GroupTransactionExpressionBuilder })
   typeRegistry.register({ ptype: assetConfigGroupTransaction, instanceEb: GroupTransactionExpressionBuilder })

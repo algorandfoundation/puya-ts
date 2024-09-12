@@ -38,7 +38,7 @@ type VotingPreconditions = {
   has_already_voted: boolean
   current_time: uint64
 }
-export default class VotingRoundApp extends arc4.Contract {
+export class VotingRoundApp extends arc4.Contract {
   isBootstrapped = GlobalState<boolean>({ initialValue: false })
   voterCount = GlobalState({ initialValue: Uint64(0) })
   closeTime = GlobalState<uint64>()
