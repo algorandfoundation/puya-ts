@@ -117,7 +117,7 @@ export type AppGlobalType = {
    *  * @return did_exist flag (top of the stack, 1 if the application and key existed and 0 otherwise), value. The value is zero (of type uint64) if the key does not exist.
    * @see Native TEAL opcode: [`app_global_get_ex`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_global_get_ex)
    */
-  getExBytes(a: Application, b: bytes): readonly [bytes, boolean]
+  getExBytes(a: Application | uint64, b: bytes): readonly [bytes, boolean]
 
   /**
    * X is the global state of application A, key B. Y is 1 if key existed, else 0
@@ -125,7 +125,7 @@ export type AppGlobalType = {
    *  * @return did_exist flag (top of the stack, 1 if the application and key existed and 0 otherwise), value. The value is zero (of type uint64) if the key does not exist.
    * @see Native TEAL opcode: [`app_global_get_ex`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_global_get_ex)
    */
-  getExUint64(a: Application, b: bytes): readonly [uint64, boolean]
+  getExUint64(a: Application | uint64, b: bytes): readonly [uint64, boolean]
 
   /**
    * write B to key A in the global state of the current application
@@ -168,7 +168,7 @@ export type AppLocalType = {
    *  * @return did_exist flag (top of the stack, 1 if the application and key existed and 0 otherwise), value. The value is zero (of type uint64) if the key does not exist.
    * @see Native TEAL opcode: [`app_local_get_ex`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_local_get_ex)
    */
-  getExBytes(a: Account | uint64, b: Application, c: bytes): readonly [bytes, boolean]
+  getExBytes(a: Account | uint64, b: Application | uint64, c: bytes): readonly [bytes, boolean]
 
   /**
    * X is the local state of application B, key C in account A. Y is 1 if key existed, else 0
@@ -176,7 +176,7 @@ export type AppLocalType = {
    *  * @return did_exist flag (top of the stack, 1 if the application and key existed and 0 otherwise), value. The value is zero (of type uint64) if the key does not exist.
    * @see Native TEAL opcode: [`app_local_get_ex`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_local_get_ex)
    */
-  getExUint64(a: Account | uint64, b: Application, c: bytes): readonly [uint64, boolean]
+  getExUint64(a: Account | uint64, b: Application | uint64, c: bytes): readonly [uint64, boolean]
 
   /**
    * write C to key B in account A's local state of the current application
@@ -192,53 +192,53 @@ export type AppLocalType = {
  *  * @return 1 if opted in and 0 otherwise.
  * @see Native TEAL opcode: [`app_opted_in`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_opted_in)
  */
-export type AppOptedInType = (a: Account | uint64, b: Application) => boolean
+export type AppOptedInType = (a: Account | uint64, b: Application | uint64) => boolean
 
 export type AppParamsType = {
   /**
    * Bytecode of Approval Program
    */
-  appApprovalProgram(a: Application): readonly [bytes, boolean]
+  appApprovalProgram(a: Application | uint64): readonly [bytes, boolean]
 
   /**
    * Bytecode of Clear State Program
    */
-  appClearStateProgram(a: Application): readonly [bytes, boolean]
+  appClearStateProgram(a: Application | uint64): readonly [bytes, boolean]
 
   /**
    * Number of uint64 values allowed in Global State
    */
-  appGlobalNumUint(a: Application): readonly [uint64, boolean]
+  appGlobalNumUint(a: Application | uint64): readonly [uint64, boolean]
 
   /**
    * Number of byte array values allowed in Global State
    */
-  appGlobalNumByteSlice(a: Application): readonly [uint64, boolean]
+  appGlobalNumByteSlice(a: Application | uint64): readonly [uint64, boolean]
 
   /**
    * Number of uint64 values allowed in Local State
    */
-  appLocalNumUint(a: Application): readonly [uint64, boolean]
+  appLocalNumUint(a: Application | uint64): readonly [uint64, boolean]
 
   /**
    * Number of byte array values allowed in Local State
    */
-  appLocalNumByteSlice(a: Application): readonly [uint64, boolean]
+  appLocalNumByteSlice(a: Application | uint64): readonly [uint64, boolean]
 
   /**
    * Number of Extra Program Pages of code space
    */
-  appExtraProgramPages(a: Application): readonly [uint64, boolean]
+  appExtraProgramPages(a: Application | uint64): readonly [uint64, boolean]
 
   /**
    * Creator address
    */
-  appCreator(a: Application): readonly [Account, boolean]
+  appCreator(a: Application | uint64): readonly [Account, boolean]
 
   /**
    * Address for which this application has authority
    */
-  appAddress(a: Application): readonly [Account, boolean]
+  appAddress(a: Application | uint64): readonly [Account, boolean]
 }
 
 /**
@@ -251,74 +251,74 @@ export type AssetHoldingType = {
   /**
    * Amount of the asset unit held by this account
    */
-  assetBalance(a: Account | uint64, b: Asset): readonly [uint64, boolean]
+  assetBalance(a: Account | uint64, b: Asset | uint64): readonly [uint64, boolean]
 
   /**
    * Is the asset frozen or not
    */
-  assetFrozen(a: Account | uint64, b: Asset): readonly [boolean, boolean]
+  assetFrozen(a: Account | uint64, b: Asset | uint64): readonly [boolean, boolean]
 }
 
 export type AssetParamsType = {
   /**
    * Total number of units of this asset
    */
-  assetTotal(a: Asset): readonly [uint64, boolean]
+  assetTotal(a: Asset | uint64): readonly [uint64, boolean]
 
   /**
    * See AssetParams.Decimals
    */
-  assetDecimals(a: Asset): readonly [uint64, boolean]
+  assetDecimals(a: Asset | uint64): readonly [uint64, boolean]
 
   /**
    * Frozen by default or not
    */
-  assetDefaultFrozen(a: Asset): readonly [boolean, boolean]
+  assetDefaultFrozen(a: Asset | uint64): readonly [boolean, boolean]
 
   /**
    * Asset unit name
    */
-  assetUnitName(a: Asset): readonly [bytes, boolean]
+  assetUnitName(a: Asset | uint64): readonly [bytes, boolean]
 
   /**
    * Asset name
    */
-  assetName(a: Asset): readonly [bytes, boolean]
+  assetName(a: Asset | uint64): readonly [bytes, boolean]
 
   /**
    * URL with additional info about the asset
    */
-  assetUrl(a: Asset): readonly [bytes, boolean]
+  assetUrl(a: Asset | uint64): readonly [bytes, boolean]
 
   /**
    * Arbitrary commitment
    */
-  assetMetadataHash(a: Asset): readonly [bytes, boolean]
+  assetMetadataHash(a: Asset | uint64): readonly [bytes, boolean]
 
   /**
    * Manager address
    */
-  assetManager(a: Asset): readonly [Account, boolean]
+  assetManager(a: Asset | uint64): readonly [Account, boolean]
 
   /**
    * Reserve address
    */
-  assetReserve(a: Asset): readonly [Account, boolean]
+  assetReserve(a: Asset | uint64): readonly [Account, boolean]
 
   /**
    * Freeze address
    */
-  assetFreeze(a: Asset): readonly [Account, boolean]
+  assetFreeze(a: Asset | uint64): readonly [Account, boolean]
 
   /**
    * Clawback address
    */
-  assetClawback(a: Asset): readonly [Account, boolean]
+  assetClawback(a: Asset | uint64): readonly [Account, boolean]
 
   /**
    * Creator address
    */
-  assetCreator(a: Asset): readonly [Account, boolean]
+  assetCreator(a: Asset | uint64): readonly [Account, boolean]
 }
 
 /**
@@ -1823,7 +1823,7 @@ export type ITxnCreateType = {
   /**
    * Asset ID
    */
-  setXferAsset(a: Asset): void
+  setXferAsset(a: Asset | uint64): void
 
   /**
    * value in Asset's units
@@ -1848,7 +1848,7 @@ export type ITxnCreateType = {
   /**
    * ApplicationID from ApplicationCall transaction
    */
-  setApplicationId(a: Application): void
+  setApplicationId(a: Application | uint64): void
 
   /**
    * ApplicationCall transaction on completion action
@@ -1883,7 +1883,7 @@ export type ITxnCreateType = {
   /**
    * Asset ID in asset config transaction
    */
-  setConfigAsset(a: Asset): void
+  setConfigAsset(a: Asset | uint64): void
 
   /**
    * Total number of units of this asset created
@@ -1943,7 +1943,7 @@ export type ITxnCreateType = {
   /**
    * Asset ID being frozen or un-frozen
    */
-  setFreezeAsset(a: Asset): void
+  setFreezeAsset(a: Asset | uint64): void
 
   /**
    * 32 byte address of the account whose asset slot is being frozen or un-frozen
