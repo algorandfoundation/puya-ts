@@ -95,5 +95,6 @@ export class TestExecutionContext implements internal.ExecutionContext {
     this.#ledgerContext = new LedgerContext()
     this.#txnContext = new TransactionContext()
     internal.ctxMgr.reset()
+    internal.ctxMgr.instance = this
   }
 }
