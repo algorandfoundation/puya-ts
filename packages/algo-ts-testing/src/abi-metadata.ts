@@ -1,5 +1,6 @@
 import { Contract } from '@algorandfoundation/algo-ts'
 import { AbiMethodConfig, BareMethodConfig, CreateOptions } from '@algorandfoundation/algo-ts/arc4'
+import { DeliberateAny } from './typescript-helpers'
 
 export interface AbiMetadata {
   methodName: string
@@ -32,14 +33,16 @@ export const captureMethodConfig = <T extends Contract>(
 
 export const hasAbiMetadata = <T extends Contract>(contract: T): boolean => {
   const contractClass = contract.constructor as { new (): T }
-  return AbiMetaSymbol in contractClass
+  return (
+    Object.getOwnPropertySymbols(contractClass).some((s) => s.toString() === AbiMetaSymbol.toString()) || AbiMetaSymbol in contractClass
+  )
 }
 
 export const getAbiMetadata = <T extends Contract>(contract: T, methodName: string): AbiMetadata => {
   const contractClass = contract.constructor as { new (): T }
-  const metadatas: Record<string, AbiMetadata> = (AbiMetaSymbol in contractClass ? contractClass[AbiMetaSymbol] : {}) as Record<
-    string,
-    AbiMetadata
-  >
+  const s = Object.getOwnPropertySymbols(contractClass).find((s) => s.toString() === AbiMetaSymbol.toString())
+  const metadatas: Record<string, AbiMetadata> = (
+    s ? (contractClass as DeliberateAny)[s] : AbiMetaSymbol in contractClass ? contractClass[AbiMetaSymbol] : {}
+  ) as Record<string, AbiMetadata>
   return metadatas[methodName]
 }

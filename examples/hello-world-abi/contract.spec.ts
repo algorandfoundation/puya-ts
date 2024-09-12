@@ -1,10 +1,14 @@
 import type { gtxn } from '@algorandfoundation/algo-ts'
-import { describe, expect, it } from 'vitest'
-import type { AlgorandTestContext } from '../../vitest.setup'
+import { afterEach, describe, expect, it } from 'vitest'
 import HelloWorldContract from './contract.algo'
+import { TestExecutionContext } from '@algorandfoundation/algo-ts-testing'
 
 describe('HelloWorldContract', () => {
-  it('logs the returned value when sayBananas is called', async ({ ctx }: AlgorandTestContext) => {
+  const ctx = new TestExecutionContext()
+  afterEach(() => {
+    ctx.reset()
+  })
+  it('logs the returned value when sayBananas is called', async () => {
     const contract = ctx.contract.create(HelloWorldContract)
     const result = contract.sayBananas()
 
@@ -13,7 +17,7 @@ describe('HelloWorldContract', () => {
     expect(result).toBe('Bananas')
     expect(ctx.exportLogs(application.id, 's')).toStrictEqual([result])
   })
-  it('logs the returned value when sayHello is called', async ({ ctx }: AlgorandTestContext) => {
+  it('logs the returned value when sayHello is called', async () => {
     const contract = ctx.contract.create(HelloWorldContract)
     const result = contract.sayHello('John', 'Doe')
 

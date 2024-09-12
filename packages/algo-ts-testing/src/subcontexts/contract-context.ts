@@ -1,9 +1,10 @@
-import { Application, BaseContract, Bytes, bytes, Contract, internal } from '@algorandfoundation/algo-ts'
+import { Application, Asset, BaseContract, Bytes, bytes, Contract, internal } from '@algorandfoundation/algo-ts'
 import { hasAbiMetadata } from '../abi-metadata'
 import { lazyContext } from '../context-helpers/internal-context'
 import { getGenericTypeInfo } from '../runtime-helpers'
 import { DeliberateAny } from '../typescript-helpers'
 import { extractGenericTypeArgs } from '../util'
+import { AssetCls } from '../impl/asset'
 
 interface IConstructor<T> {
   new (...args: DeliberateAny[]): T
@@ -52,6 +53,16 @@ const extractStates = (contract: BaseContract): States => {
   return states
 }
 
+const extractArraysFromArgs = (args: DeliberateAny[]): { assets: Asset[] } => {
+  const assets: Asset[] = []
+  for (const arg of args) {
+    if (arg instanceof AssetCls) {
+      assets.push(arg as Asset)
+    }
+  }
+  return { assets }
+}
+
 export class ContractContext {
   create<T extends BaseContract>(type: IConstructor<T>, ...args: DeliberateAny[]): T {
     const proxy = new Proxy(type, this.getContractProxyHandler<T>())
@@ -76,7 +87,8 @@ export class ContractContext {
             if (isArc4 || prop === 'approvalProgram' || prop === 'clearStateProgram') {
               return (...args: DeliberateAny[]): DeliberateAny => {
                 const app = lazyContext.ledger.getApplicationForContract(receiver)
-                const txns = [lazyContext.any.txn.applicationCall({ appId: app })]
+                const txnArgs = extractArraysFromArgs(args)
+                const txns = [lazyContext.any.txn.applicationCall({ appId: app, ...txnArgs })]
                 return lazyContext.txn.ensureScope(txns).execute(() => (orig as DeliberateAny).apply(target, args))
               }
             }

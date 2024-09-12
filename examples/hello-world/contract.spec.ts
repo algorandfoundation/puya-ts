@@ -1,11 +1,15 @@
 import { Bytes } from '@algorandfoundation/algo-ts'
-import { describe, expect, it } from 'vitest'
-import type { AlgorandTestContext } from '../../vitest.setup'
+import { afterEach, describe, expect, it } from 'vitest'
 import HelloWorldContract from './contract.algo'
+import { TestExecutionContext } from '@algorandfoundation/algo-ts-testing'
 
 describe('When calling the HelloWorldContract', () => {
+  const ctx = new TestExecutionContext()
+  afterEach(() => {
+    ctx.reset()
+  })
   describe("with ['world']", () => {
-    it('logs Hello, World', async ({ ctx }: AlgorandTestContext) => {
+    it('logs Hello, World', async () => {
       const contract = ctx.contract.create(HelloWorldContract)
       const application = ctx.ledger.getApplicationForContract(contract)
       const result = ctx.txn

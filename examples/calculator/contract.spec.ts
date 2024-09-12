@@ -1,11 +1,16 @@
 import { internal, op, Uint64 } from '@algorandfoundation/algo-ts'
-import { describe, expect, it } from 'vitest'
-import type { AlgorandTestContext } from '../../vitest.setup'
+import { afterEach, describe, expect, it } from 'vitest'
+
 import MyContract from './contract.algo'
+import { TestExecutionContext } from '@algorandfoundation/algo-ts-testing'
 
 describe('Calculator', () => {
+  const ctx = new TestExecutionContext()
+  afterEach(() => {
+    ctx.reset()
+  })
   describe('when calling with with no args', () => {
-    it('errors', async ({ ctx }: AlgorandTestContext) => {
+    it('errors', async () => {
       const contract = ctx.contract.create(MyContract)
       ctx.txn
         .createScope([
@@ -20,7 +25,7 @@ describe('Calculator', () => {
     })
   })
   describe('when calling with with three args', () => {
-    it('Returns 1', async ({ ctx }: AlgorandTestContext) => {
+    it('Returns 1', async () => {
       const contract = ctx.contract.create(MyContract)
       const application = ctx.ledger.getApplicationForContract(contract)
       const result = ctx.txn

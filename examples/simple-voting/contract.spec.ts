@@ -1,14 +1,17 @@
 import type { Account, uint64 } from '@algorandfoundation/algo-ts'
 import { Bytes, Uint64 } from '@algorandfoundation/algo-ts'
-import type { TestExecutionContext } from '@algorandfoundation/algo-ts-testing'
-import { describe, expect, it } from 'vitest'
-import type { AlgorandTestContext } from '../../vitest.setup'
+import { TestExecutionContext } from '@algorandfoundation/algo-ts-testing'
+import { afterEach, describe, expect, it } from 'vitest'
 import SimpleVotingContract from './contract.algo'
 
 describe('Simple voting contract', () => {
+  const ctx = new TestExecutionContext()
+  afterEach(() => {
+    ctx.reset()
+  })
   describe('When setting the topic', () => {
     describe('with correct arguments', () => {
-      it('should set the topic', async ({ ctx }: AlgorandTestContext) => {
+      it('should set the topic', async () => {
         const contract = ctx.contract.create(SimpleVotingContract)
         const topic = Bytes('new_topic')
 
@@ -33,7 +36,7 @@ describe('Simple voting contract', () => {
     })
   })
   describe('When voting', () => {
-    it('records the vote correctly', async ({ ctx }: AlgorandTestContext) => {
+    it('records the vote correctly', async () => {
       const contract = ctx.contract.create(SimpleVotingContract)
       contract.votes.value = Uint64(0)
       const voter = ctx.defaultSender
@@ -44,7 +47,7 @@ describe('Simple voting contract', () => {
       expect(contract.votes.value).toEqual(Uint64(1))
       expect(contract.voted(voter).value).toEqual(Uint64(1))
     })
-    it('ignores subsequent votes from the same voter', async ({ ctx }: AlgorandTestContext) => {
+    it('ignores subsequent votes from the same voter', async () => {
       const contract = ctx.contract.create(SimpleVotingContract)
       const voter = ctx.any.account()
       contract.voted(voter).value = Uint64(1)
@@ -58,7 +61,7 @@ describe('Simple voting contract', () => {
     })
   })
   describe('When getting the votes', () => {
-    it('returns the correct number of votes', async ({ ctx }: AlgorandTestContext) => {
+    it('returns the correct number of votes', async () => {
       const contract = ctx.contract.create(SimpleVotingContract)
       const voter1 = ctx.any.account()
       const voter2 = ctx.any.account()

@@ -1,7 +1,6 @@
 import { BigUint, bytes, Bytes, internal, Uint64, uint64 } from '@algorandfoundation/algo-ts'
 import { AppSpec } from '@algorandfoundation/algokit-utils/types/app-spec'
-import { afterEach } from 'node:test'
-import { describe, expect, it, test } from 'vitest'
+import { afterEach, describe, expect, it, test } from 'vitest'
 import { TestExecutionContext } from '../src'
 import { MAX_BYTES_SIZE, MAX_UINT512, MAX_UINT64 } from '../src/constants'
 import * as op from '../src/impl/pure'
