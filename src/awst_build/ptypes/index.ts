@@ -785,11 +785,11 @@ export class TransactionFunctionType extends LibFunctionType {
 }
 
 export const paymentGtxnType = new GroupTransactionPType({
-  name: 'PayTxn',
+  name: 'PaymentTxn',
   kind: TransactionKind.pay,
 })
 export const PayTxnFunction = new TransactionFunctionType({
-  name: 'PayTxn',
+  name: 'PaymentTxn',
   module: Constants.gtxnModuleName,
   kind: TransactionKind.pay,
 })

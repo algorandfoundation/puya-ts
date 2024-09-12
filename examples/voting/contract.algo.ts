@@ -81,7 +81,7 @@ export class VotingRoundApp extends arc4.Contract {
     this.storeOptionCounts(optionCounts)
   }
 
-  public bootstrap(fundMinBalReq: gtxn.PayTxn): void {
+  public bootstrap(fundMinBalReq: gtxn.PaymentTxn): void {
     assert(!this.isBootstrapped.value, 'Must not be already bootstrapped')
     this.isBootstrapped.value = true
     assertMatch(
@@ -176,7 +176,7 @@ export class VotingRoundApp extends arc4.Contract {
     return this.votesByAccount.has(Txn.sender)
   }
 
-  public vote(fundMinBalReq: gtxn.PayTxn, signature: bytes, answerIds: VoteIndexArray): void {
+  public vote(fundMinBalReq: gtxn.PaymentTxn, signature: bytes, answerIds: VoteIndexArray): void {
     ensureBudget(7700, OpUpFeeSource.GroupCredit)
     assert(this.allowedToVote(signature), 'Not allowed to vote')
     assert(this.votingOpen(), 'Voting not open')
