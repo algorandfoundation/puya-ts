@@ -8,3 +8,24 @@ subroutine test(n: uint64, b: biguint, c: arc4.uint256): void
   var a: arc4.uint128 = ARC4_ENCODE(b, wtype=arc4.uint128)
   var a_native: biguint = reinterpret_cast<biguint>(a)
 }
+subroutine test_arrays(n: arc4.uint64): void
+{
+  var myArray: arc4.dynamic_array<arc4.uint64> = new arc4.dynamic_array<arc4.uint64>(n, n, n)
+  var myStatic: arc4.static_array<arc4.uint64> = new arc4.static_array<arc4.uint64>(n, n)
+  var myStatic2: arc4.static_array<arc4.uint64> = new arc4.static_array<arc4.uint64>(n, n, n)
+}
+contract Arc4TypesTestContract extends @algorandfoundation/algo-ts/base-contract.d.ts::BaseContract
+{
+  constructor(): void
+  {
+    void
+  }
+  
+  approvalProgram(): bool
+  {
+    tests/approvals/arc4-types.algo.ts::test(1, 2, 0x04)
+    tests/approvals/arc4-types.algo.ts::test_arrays(0x41)
+    return True
+  }
+  
+}

@@ -75,7 +75,11 @@ type ArgFor<T extends ObjArgSpec | ArgSpec> = T extends ObjArgSpec
  */
 type ParsedArgs<T extends [...DeliberateAny[]]> = T extends [infer T1 extends ArgMap, ...infer TRest]
   ? [ArgFor<T1>, ...ParsedArgs<TRest>]
-  : []
+  : T extends []
+    ? []
+    : T extends Array<infer TItem extends ArgMap>
+      ? Array<ArgFor<TItem>>
+      : never
 
 function parseObjArg<T extends ObjArgSpec>(
   arg: InstanceBuilder | undefined,

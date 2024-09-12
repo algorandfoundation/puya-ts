@@ -173,7 +173,7 @@ export class ToCodeVisitor
     return `reinterpret_cast<${expression.wtype}>(${target})`
   }
   visitNewArray(expression: nodes.NewArray): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    return `new ${expression.wtype.name}(${expression.values.map((v) => v.accept(this)).join(', ')})`
   }
   visitConditionalExpression(expression: nodes.ConditionalExpression): string {
     return `(${expression.condition.accept(this)} ? ${expression.trueExpr.accept(this)} : ${expression.falseExpr.accept(this)})`

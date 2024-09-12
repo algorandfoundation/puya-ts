@@ -2,7 +2,7 @@ import { Constants } from '../../constants'
 import { wtypes } from '../../awst'
 import { codeInvariant, distinct, sortBy } from '../../util'
 import type { WType } from '../../awst/wtypes'
-import { ARC4UIntN, WArray, WTuple } from '../../awst/wtypes'
+import { WArray, WTuple } from '../../awst/wtypes'
 import { CodeError, InternalError, NotSupported } from '../../errors'
 import { PType } from './base'
 import { TransactionKind } from '../../awst/models'
@@ -365,43 +365,6 @@ export class LibFunctionType extends PType {
     super()
     this.name = name
     this.module = module
-  }
-}
-export const UintNConstructor = new LibFunctionType({
-  name: 'UintN',
-  module: Constants.arc4EncodedTypesModuleName,
-})
-export class UintNType extends PType {
-  static baseFullName = `${Constants.arc4EncodedTypesModuleName}::UintN`
-  readonly module = Constants.arc4EncodedTypesModuleName
-  readonly n: bigint
-  readonly name: string
-  readonly singleton = false
-
-  get wtype(): ARC4UIntN {
-    return new ARC4UIntN({ n: this.n })
-  }
-
-  constructor({ n }: { n: bigint }) {
-    super()
-    codeInvariant(n >= 8n && n <= 512n && n % 8n === 0n, 'n must be between 8 and 512, and a multiple of 8')
-    this.n = n
-    this.name = `UIntN<${n}>`
-  }
-
-  static parameterise(typeArgs: PType[]): UintNType {
-    codeInvariant(typeArgs.length === 1, 'UintNType type expects exactly one type parameter')
-    const [size] = typeArgs
-    codeInvariant(
-      size instanceof NumberPType && size.literalValue,
-      `Generic type param for UintNType must be a literal number. Inferred type is ${size.name}`,
-    )
-
-    return new UintNType({ n: size.literalValue })
-  }
-
-  getGenericArgs(): PType[] {
-    return [new NumberPType({ literalValue: this.n })]
   }
 }
 

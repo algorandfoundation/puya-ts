@@ -274,7 +274,14 @@ export class TypeResolver {
   }
 
   private getTypeName(type: ts.Type, sourceLocation: SourceLocation): SymbolName {
-    return this.getSymbolFullName(type.aliasSymbol ?? type.symbol, sourceLocation)
+    if (type.aliasSymbol) {
+      const name = this.getSymbolFullName(type.aliasSymbol, sourceLocation)
+      // We only respect type aliases within the algo ts package, otherwise use the
+      // unaliased symbol
+      if (name.module.startsWith(Constants.algoTsPackage)) return name
+    }
+    invariant(type.symbol, 'Type must have a symbol')
+    return this.getSymbolFullName(type.symbol, sourceLocation)
   }
 
   private getSymbolFullName(symbol: ts.Symbol, sourceLocation: SourceLocation): SymbolName {

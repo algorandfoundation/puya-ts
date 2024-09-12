@@ -1,4 +1,6 @@
 import { invariant } from '../util'
+import { PType } from '../awst_build/ptypes'
+import type { SourceLocation } from './source-location'
 
 export enum AVMType {
   bytes = 1 << 0,
@@ -7,10 +9,10 @@ export enum AVMType {
 }
 
 export class WType {
-  constructor(props: { name: string; immutable?: boolean; scalarType: AVMType | undefined; ephemeral?: boolean }) {
+  constructor(props: { name: string; immutable?: boolean; scalarType: AVMType | null; ephemeral?: boolean }) {
     this.name = props.name
     this.immutable = props.immutable ?? true
-    this.scalarType = props.scalarType ?? null
+    this.scalarType = props.scalarType
     this.ephemeral = props.ephemeral ?? false
   }
 
@@ -41,7 +43,7 @@ export class WType {
 
 export const voidWType = new WType({
   name: 'void',
-  scalarType: undefined,
+  scalarType: null,
 })
 export const boolWType = new WType({
   name: 'bool',
@@ -86,7 +88,7 @@ export const applicationWType = new WType({
 })
 
 export abstract class ARC4Type extends WType {
-  readonly decodeType: WType | undefined
+  readonly decodeType: WType | null
   readonly arc4Name: string
   readonly otherEncodeableTypes: WType[]
   constructor({
@@ -95,12 +97,12 @@ export abstract class ARC4Type extends WType {
     otherEncodeableTypes,
     ...rest
   }: {
-    decodeType: WType | undefined
+    decodeType: WType | null
     arc4Name: string
     otherEncodeableTypes: WType[]
     name: string
     immutable?: boolean
-    scalarType: AVMType | undefined
+    scalarType: AVMType | null
     ephemeral?: boolean
   }) {
     super(rest)
@@ -118,7 +120,7 @@ export class WTuple extends WType {
   constructor(props: { types: WType[]; immutable: boolean }) {
     super({
       name: 'WTuple',
-      scalarType: undefined,
+      scalarType: null,
       immutable: props.immutable,
     })
     invariant(props.types.length, 'Tuple length cannot be zero')
@@ -134,7 +136,7 @@ export class WArray extends WType {
   constructor(props: { itemType: WType; immutable: boolean }) {
     super({
       name: 'WArray',
-      scalarType: undefined,
+      scalarType: null,
       immutable: props.immutable,
     })
     this.itemType = props.itemType
@@ -146,7 +148,7 @@ export class WEnumeration extends WType {
   constructor(props: { sequenceType: WType }) {
     super({
       name: 'WArray',
-      scalarType: undefined,
+      scalarType: null,
       immutable: true,
     })
     this.sequenceType = props.sequenceType
@@ -171,4 +173,32 @@ export class ARC4UFixedNxM extends ARC4Type {}
 
 export class ARC4Struct extends ARC4Type {}
 
-export abstract class ARC4Array extends ARC4Type {}
+export abstract class ARC4Array extends ARC4Type {
+  readonly elementType: ARC4Type
+  protected constructor(props: { arc4Name: string; otherEncodeableTypes: WType[]; name: string; elementType: ARC4Type }) {
+    super({ decodeType: null, scalarType: AVMType.bytes, immutable: false, ...props })
+    this.elementType = props.elementType
+  }
+}
+
+export class ARC4DynamicArray extends ARC4Array {
+  readonly sourceLocation: SourceLocation | null
+  constructor({ elementType, sourceLocation }: { elementType: ARC4Type; sourceLocation?: SourceLocation }) {
+    super({ elementType, name: `arc4.dynamic_array<${elementType.name}>`, arc4Name: `${elementType.arc4Name}[]`, otherEncodeableTypes: [] })
+    this.sourceLocation = sourceLocation ?? null
+  }
+}
+export class ARC4StaticArray extends ARC4Array {
+  readonly sourceLocation: SourceLocation | null
+  readonly arraySize: bigint
+  constructor({ elementType, sourceLocation, arraySize }: { arraySize: bigint; elementType: ARC4Type; sourceLocation?: SourceLocation }) {
+    super({
+      elementType,
+      name: `arc4.static_array<${elementType.name}>`,
+      arc4Name: `${elementType.arc4Name}[${arraySize}]`,
+      otherEncodeableTypes: [],
+    })
+    this.sourceLocation = sourceLocation ?? null
+    this.arraySize = arraySize
+  }
+}
