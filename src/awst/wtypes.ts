@@ -1,5 +1,3 @@
-import type { Props } from '../typescript-helpers'
-import { biguintPType, uint64PType } from '../awst_build/ptypes'
 import { invariant } from '../util'
 
 export enum AVMType {

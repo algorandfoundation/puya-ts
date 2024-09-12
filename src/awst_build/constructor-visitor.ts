@@ -5,7 +5,6 @@ import { voidPType } from './ptypes'
 import { codeInvariant, invariant } from '../util'
 import { ContractMethodBaseVisitor } from './contract-method-visitor'
 import type { ContractReference } from '../awst/models'
-import type { NodeBuilder } from './eb'
 import { nodeFactory } from '../awst/node-factory'
 import { AwstBuildFailureError } from '../errors'
 

@@ -5,7 +5,7 @@ import { CodeError } from '../../../errors'
 import { logger } from '../../../logger'
 import type { Expression } from '../../../awst/nodes'
 import type { InstanceBuilder } from '../index'
-import { requestBuilderOfType, requestExpressionOfType, requireInstanceBuilder, resolvableToType } from './index'
+import { requestBuilderOfType, requireInstanceBuilder } from './index'
 
 function parseTypeArgs<T extends number>(
   typeArgs: ReadonlyArray<PType>,

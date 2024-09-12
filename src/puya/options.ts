@@ -1,5 +1,3 @@
-import type { CompileOptions } from '../compile-options'
-
 export enum LocalsCoalescingStrategy {
   root_operand = 'root_operand',
   root_operand_excluding_args = 'root_operand_excluding_args',

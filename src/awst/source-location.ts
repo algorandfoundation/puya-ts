@@ -68,7 +68,7 @@ export class SourceLocation {
   }
 
   toString() {
-    return `${this.file}:${this.line}:${this.column}`
+    return `${this.file}:${this.line}:${this.column + 1}`
   }
 
   static fromLocations(...sourceLocation: SourceLocation[]): SourceLocation {

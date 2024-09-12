@@ -1,8 +1,6 @@
 import type { AWST } from '../awst/nodes'
-import { ContractFragment } from '../awst/nodes'
 import type { CompilationSetMapping } from './options'
 import type { CompilationSet } from '../awst/models'
-import { LogicSigReference } from '../awst/models'
 import path from 'node:path'
 
 export function buildCompilationSetMapping({

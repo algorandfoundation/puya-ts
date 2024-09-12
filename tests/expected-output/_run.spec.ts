@@ -54,7 +54,12 @@ describe('Expected output', () => {
       for (const expectedLog of expectedLogs) {
         const matchedLog = logs.find((l) => expectedLog.test(l))
         if (!matchedLog) {
-          expect.fail(`${expectedLog.sourceLocation} Missing log: [${expectedLog.level}] ${expectedLog.message}`)
+          const potentialCandidate = logs.find(
+            (l) => l.sourceLocation?.file === expectedLog.sourceLocation.file && l.sourceLocation.line === expectedLog.sourceLocation.line,
+          )
+
+          throw new MissingLogError(expectedLog, potentialCandidate)
+          //expect.fail(`${expectedLog.sourceLocation} Missing log: [${expectedLog.level}] ${expectedLog.message}`)
         } else {
           matchedLogs.add(matchedLog)
         }
@@ -71,8 +76,29 @@ describe('Expected output', () => {
   })
 })
 
+class MissingLogError implements Error {
+  constructor(
+    private expectedLog: {
+      level: LogLevel
+      message: string
+      sourceLocation: SourceLocation
+    },
+    private potentialMatch?: LogEvent,
+  ) {}
+  get message() {
+    const foundLog = this.potentialMatch ? `Found log: [${this.potentialMatch.level}] ${this.potentialMatch.message}` : 'Found log: <none>'
+    return `Expected log: [${this.expectedLog.level}] ${this.expectedLog.message}\n${foundLog}`
+  }
+  get stack() {
+    return this.expectedLog.sourceLocation.toString()
+  }
+  get name() {
+    return 'MissingLogError'
+  }
+}
+
 type ExpectedLog = {
-  level: LogEvent['level']
+  level: LogLevel
   message: string
   sourceLocation: SourceLocation
   test(log: LogEvent): boolean
