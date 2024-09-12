@@ -9,7 +9,6 @@ import { uint8ArrayToUtf8 } from '../util'
 import { Buffer } from 'node:buffer'
 import { uint8ArrayToBase32 } from '../util'
 import { boolWType } from './wtypes'
-import type { ConstantValue } from './index'
 
 function printBytes(value: Uint8Array, encoding: BytesEncoding) {
   switch (encoding) {
@@ -21,17 +20,6 @@ function printBytes(value: Uint8Array, encoding: BytesEncoding) {
       return `b32<${uint8ArrayToBase32(value)}>`
     default:
       return `0x${Buffer.from(value).toString('hex')}`
-  }
-}
-function printConstant(value: ConstantValue): string {
-  switch (typeof value) {
-    case 'bigint':
-      return `u${value}`
-    case 'boolean':
-    case 'string':
-      return `${value}`
-    default:
-      return printBytes(value, BytesEncoding.unknown)
   }
 }
 export class ToCodeVisitor

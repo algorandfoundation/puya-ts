@@ -9,8 +9,8 @@ import { ArtifactKind, writeArtifact } from '../write-artifact'
 import { ToCodeVisitor } from '../awst/to-code-visitor'
 import { jsonSerializeAwst } from '../awst/json-serialize-awst'
 import { buildLibAwst } from './lib'
-import type { CompilationSet } from './context/awst-build-context'
 import { buildContextForProgram } from './context/awst-build-context'
+import type { CompilationSet } from '../awst/models'
 
 export function buildAwst({ program, sourceFiles }: CreateProgramResult, options: CompileOptions): [AWST[], CompilationSet] {
   const awstBuildContext = buildContextForProgram(program)

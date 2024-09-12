@@ -53,11 +53,17 @@ export class UnsupportedType extends PType {
   readonly name: string
   readonly module: string
   readonly singleton = false
+  #fullName: string | undefined
 
-  constructor({ name, module }: { name: string; module: string }) {
+  constructor({ name, module, fullName }: { name: string; module: string; fullName?: string }) {
     super()
     this.name = name
     this.module = module
+    this.#fullName = fullName
+  }
+
+  get fullName() {
+    return this.#fullName ?? super.fullName
   }
 
   get wtypeOrThrow(): WType {
@@ -580,15 +586,18 @@ export const neverPType = new InstanceType({
 export const unknownPType = new UnsupportedType({
   name: 'unknown',
   module: 'lib.d.ts',
+  fullName: 'unknown',
 })
 
 export const nullPType = new UnsupportedType({
   name: 'null',
   module: 'lib.d.ts',
+  fullName: 'null',
 })
 export const undefinedPType = new UnsupportedType({
   name: 'undefined',
   module: 'lib.d.ts',
+  fullName: 'undefined',
 })
 export const anyPType = new AnyPType()
 
@@ -647,7 +656,7 @@ export class NumberPType extends TransientType {
       module: 'lib.d.ts',
       singleton: false,
       typeMessage: `\`${typeName}\` is not valid as a variable, parameter, return, or property type. Please use an algo-ts type such as \`uint64\` or \`biguint\``,
-      expressionMessage: `Expression of type \`${typeName}\` must be explicitly converted to an algo-ts type, for example by wrapping the expression in \`Uint64(...)\``,
+      expressionMessage: `Expression of type \`number\` must be explicitly converted to an algo-ts type, for example by wrapping the expression in \`Uint64(...)\``,
     })
     this.literalValue = props?.literalValue
   }

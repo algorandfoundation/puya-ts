@@ -115,9 +115,9 @@ export const logPuyaExceptions = <T>(action: () => T, sourceLocation: SourceLoca
     return action()
   } catch (e) {
     if (e instanceof TodoError) {
-      logger.warn(sourceLocation, `TODO: ${e.message}`)
+      logger.warn(e.sourceLocation ?? sourceLocation, `TODO: ${e.message}`)
     } else if (e instanceof PuyaError) {
-      logger.error(sourceLocation, e.message)
+      logger.error(e.sourceLocation ?? sourceLocation, e.message)
     } else {
       throw e
     }

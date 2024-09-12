@@ -113,7 +113,12 @@ function resolveOnCompletionActions(oca: InstanceBuilder | undefined): OnComplet
   if (value instanceof StringConstant) {
     return [mapStringConstant(ocaMap, value)]
   } else if (value instanceof TupleExpression) {
-    return value.items.map((item) => mapStringConstant(ocaMap, item))
+    const ocas = value.items.map((item) => mapStringConstant(ocaMap, item))
+    const distinctOcas = Array.from(new Set(ocas))
+    if (distinctOcas.length !== ocas.length) {
+      logger.warn(oca.sourceLocation, 'Duplicate on completion actions')
+    }
+    return ocas
   } else {
     throw new CodeError('Unexpected value for onComplete', { sourceLocation: oca.sourceLocation })
   }
