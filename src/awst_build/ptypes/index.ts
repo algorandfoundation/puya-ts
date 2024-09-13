@@ -2,9 +2,7 @@ import { Constants } from '../../constants'
 import { wtypes } from '../../awst'
 import { codeInvariant, distinct, sortBy } from '../../util'
 import type { WType } from '../../awst/wtypes'
-import { uint64WType } from '../../awst/wtypes'
-import { WGroupTransaction } from '../../awst/wtypes'
-import { WArray, WTuple } from '../../awst/wtypes'
+import { uint64WType, WArray, WGroupTransaction, WTuple } from '../../awst/wtypes'
 import { CodeError, InternalError, NotSupported } from '../../errors'
 import { PType } from './base'
 import { TransactionKind } from '../../awst/models'
@@ -757,7 +755,7 @@ export class GroupTransactionPType extends PType {
   }
   readonly name: string
   readonly kind: TransactionKind | undefined
-  readonly module = Constants.transactionsModuleName
+  readonly module = Constants.gtxnModuleName
   readonly singleton = false
 
   constructor({ kind, name }: { kind?: TransactionKind; name: string }) {
@@ -767,29 +765,77 @@ export class GroupTransactionPType extends PType {
   }
 }
 
+export class TransactionFunctionType extends LibFunctionType {
+  readonly kind: TransactionKind | undefined
+
+  constructor({ name, module, kind }: { name: string; module: string; kind: TransactionKind | undefined }) {
+    super({ name, module })
+    this.kind = kind
+  }
+}
+
 export const paymentGroupTransaction = new GroupTransactionPType({
   name: 'PayTxn',
+  kind: TransactionKind.Payment,
+})
+export const PayTxnFunction = new TransactionFunctionType({
+  name: 'PayTxn',
+  module: Constants.gtxnModuleName,
   kind: TransactionKind.Payment,
 })
 export const keyRegistrationGroupTransaction = new GroupTransactionPType({
   name: 'KeyRegistrationTxn',
   kind: TransactionKind.KeyRegistration,
 })
+export const KeyRegistrationTxnFunction = new TransactionFunctionType({
+  name: 'KeyRegistrationTxn',
+  module: Constants.gtxnModuleName,
+  kind: TransactionKind.KeyRegistration,
+})
 export const assetConfigGroupTransaction = new GroupTransactionPType({
   name: 'AssetConfigTxn',
+  kind: TransactionKind.AssetConfig,
+})
+export const AssetConfigTxnFunction = new TransactionFunctionType({
+  name: 'AssetConfigTxn',
+  module: Constants.gtxnModuleName,
   kind: TransactionKind.AssetConfig,
 })
 export const assetTransferGroupTransaction = new GroupTransactionPType({
   name: 'AssetTransferTxn',
   kind: TransactionKind.AssetTransfer,
 })
+export const AssetTransferTxnFunction = new TransactionFunctionType({
+  name: 'AssetTransferTxn',
+  module: Constants.gtxnModuleName,
+  kind: TransactionKind.AssetTransfer,
+})
 export const assetFreezeGroupTransaction = new GroupTransactionPType({
   name: 'AssetFreezeTxn',
+  kind: TransactionKind.AssetFreeze,
+})
+export const AssetFreezeTxnFunction = new TransactionFunctionType({
+  name: 'AssetFreezeTxn',
+  module: Constants.gtxnModuleName,
   kind: TransactionKind.AssetFreeze,
 })
 export const applicationGroupTransaction = new GroupTransactionPType({
   name: 'ApplicationTxn',
   kind: TransactionKind.Application,
+})
+export const ApplicationTxnFunction = new TransactionFunctionType({
+  name: 'ApplicationTxn',
+  module: Constants.gtxnModuleName,
+  kind: TransactionKind.Application,
+})
+export const anyGroupTransaction = new GroupTransactionPType({
+  name: 'Transaction',
+  kind: undefined,
+})
+export const TransactionFunction = new TransactionFunctionType({
+  name: 'Transaction',
+  module: Constants.gtxnModuleName,
+  kind: undefined,
 })
 
 export const assertMatchFunction = new LibFunctionType({

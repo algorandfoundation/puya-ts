@@ -8,19 +8,17 @@ import { nodeFactory } from '../../awst/node-factory'
 import { CodeError, NotSupported } from '../../errors'
 import { requireExpressionOfType } from './util'
 import { tryConvertEnum } from '../../util'
-import type { PType } from '../ptypes'
-import { biguintPType, Uint64Function } from '../ptypes'
+import { BigUintFunction } from '../ptypes'
+import { biguintPType } from '../ptypes'
 import { BooleanExpressionBuilder } from './boolean-expression-builder'
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
-import type { InstanceType } from '../ptypes'
+import type { InstanceType, PType } from '../ptypes'
 import { logger } from '../../logger'
 import { UInt64ExpressionBuilder } from './uint64-expression-builder'
 import { LiteralExpressionBuilder } from './literal-expression-builder'
 
 export class BigUintFunctionBuilder extends FunctionBuilder {
-  get ptype(): PType | undefined {
-    return Uint64Function
-  }
+  readonly ptype = BigUintFunction
 
   call(args: Array<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
     if (args.length === 0) {

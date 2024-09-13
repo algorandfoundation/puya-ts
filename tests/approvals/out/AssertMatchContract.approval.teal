@@ -1,0 +1,87 @@
+#pragma version 10
+
+tests/approvals/assert-match.algo.ts::AssertMatchContract.approvalProgram:
+    // C:/Source/algorand/puya-ts/tests/approvals/assert-match.algo.ts:16
+    // const txn = gtxn.PayTxn(1)
+    int 1
+    // C:/Source/algorand/puya-ts/tests/approvals/assert-match.algo.ts:17
+    // test(txn)
+    callsub test
+    // C:/Source/algorand/puya-ts/tests/approvals/assert-match.algo.ts:18
+    // return true
+    int 1
+    return
+
+
+// tests/approvals/assert-match.algo.ts::test(x: uint64) -> void:
+test:
+    // C:/Source/algorand/puya-ts/tests/approvals/assert-match.algo.ts:3
+    // function test(x: gtxn.PayTxn) {
+    proto 1 0
+    // C:/Source/algorand/puya-ts/tests/approvals/assert-match.algo.ts:4
+    // assertMatch(x, {
+    frame_dig -1
+    gtxns Amount
+    // C:/Source/algorand/puya-ts/tests/approvals/assert-match.algo.ts:5
+    // amount: { between: [0, 50000] },
+    int 50000
+    // C:/Source/algorand/puya-ts/tests/approvals/assert-match.algo.ts:4
+    // assertMatch(x, {
+    <=
+    bz test_bool_false@8
+    frame_dig -1
+    gtxns CloseRemainderTo
+    // C:/Source/algorand/puya-ts/tests/approvals/assert-match.algo.ts:8
+    // closeRemainderTo: Global.zeroAddress,
+    global ZeroAddress
+    // C:/Source/algorand/puya-ts/tests/approvals/assert-match.algo.ts:4
+    // assertMatch(x, {
+    ==
+    bz test_bool_false@8
+    frame_dig -1
+    gtxns FirstValid
+    // C:/Source/algorand/puya-ts/tests/approvals/assert-match.algo.ts:9
+    // firstValid: { greaterThan: 1 },
+    int 1
+    // C:/Source/algorand/puya-ts/tests/approvals/assert-match.algo.ts:4
+    // assertMatch(x, {
+    >
+    bz test_bool_false@8
+    frame_dig -1
+    gtxns LastValid
+    // C:/Source/algorand/puya-ts/tests/approvals/assert-match.algo.ts:10
+    // lastValid: { lessThan: 2 ** 40 },
+    int 1099511627776
+    // C:/Source/algorand/puya-ts/tests/approvals/assert-match.algo.ts:4
+    // assertMatch(x, {
+    <
+    bz test_bool_false@8
+    frame_dig -1
+    gtxns Receiver
+    // C:/Source/algorand/puya-ts/tests/approvals/assert-match.algo.ts:7
+    // receiver: Global.currentApplicationAddress,
+    global CurrentApplicationAddress
+    // C:/Source/algorand/puya-ts/tests/approvals/assert-match.algo.ts:4
+    // assertMatch(x, {
+    ==
+    bz test_bool_false@8
+    frame_dig -1
+    gtxns Sender
+    // C:/Source/algorand/puya-ts/tests/approvals/assert-match.algo.ts:6
+    // sender: Txn.sender,
+    txn Sender
+    // C:/Source/algorand/puya-ts/tests/approvals/assert-match.algo.ts:4
+    // assertMatch(x, {
+    ==
+    bz test_bool_false@8
+    int 1
+    b test_bool_merge@9
+
+test_bool_false@8:
+    int 0
+
+test_bool_merge@9:
+    // C:/Source/algorand/puya-ts/tests/approvals/assert-match.algo.ts:4
+    // assertMatch(x, {
+    assert // assert target is match for conditions
+    retsub

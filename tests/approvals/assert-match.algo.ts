@@ -1,5 +1,4 @@
-import type { gtxn } from '@algorandfoundation/algo-ts'
-import { assertMatch, Global, Txn } from '@algorandfoundation/algo-ts'
+import { assertMatch, Global, Txn, gtxn, BaseContract } from '@algorandfoundation/algo-ts'
 
 function test(x: gtxn.PayTxn) {
   assertMatch(x, {
@@ -10,4 +9,12 @@ function test(x: gtxn.PayTxn) {
     firstValid: { greaterThan: 1 },
     lastValid: { lessThan: 2 ** 40 },
   })
+}
+
+export class AssertMatchContract extends BaseContract {
+  public approvalProgram(): boolean {
+    const txn = gtxn.PayTxn(1)
+    test(txn)
+    return true
+  }
 }

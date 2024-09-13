@@ -23,6 +23,16 @@ export function requireExpressionOfType(builder: NodeBuilder, ptype: PType): Exp
     sourceLocation: builder.sourceLocation,
   })
 }
+export function requireBuilderOfType(builder: NodeBuilder, ptype: PType): InstanceBuilder {
+  if (builder instanceof InstanceBuilder) {
+    if (builder.resolvableToPType(ptype)) {
+      return builder.resolveToPType(ptype)
+    }
+  }
+  throw new CodeError(`Expected expression of type ${ptype}, got ${builder.typeDescription}`, {
+    sourceLocation: builder.sourceLocation,
+  })
+}
 
 export function resolvableToType(builder: NodeBuilder, ptype: PType): builder is InstanceBuilder {
   if (builder instanceof InstanceBuilder) {

@@ -17,9 +17,7 @@ import { boolWType } from '../../awst/wtypes'
 import { LiteralExpressionBuilder } from './literal-expression-builder'
 
 export class UInt64FunctionBuilder extends FunctionBuilder {
-  get ptype(): PType | undefined {
-    return Uint64Function
-  }
+  readonly ptype = Uint64Function
 
   call(args: Array<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
     if (args.length === 0) {
