@@ -92,7 +92,7 @@ function parseObjArg<T extends ObjArgSpec>(
       if (arg?.hasProperty(property)) {
         const builder = arg.memberAccess(property, sourceLocation)
         if (spec.t.length === 0) {
-          acc[property] = requireInstanceBuilder(builder, sourceLocation)
+          acc[property] = requireInstanceBuilder(builder)
         } else {
           for (const t of spec.t) {
             const typedBuilder = requestBuilderOfType(builder, t, sourceLocation)

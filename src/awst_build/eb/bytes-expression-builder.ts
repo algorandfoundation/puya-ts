@@ -1,7 +1,7 @@
 import type { awst } from '../../awst'
 import { wtypes } from '../../awst'
-import type { InstanceBuilder, NodeBuilder } from './index'
-import { BuilderComparisonOp, BuilderUnaryOp, FunctionBuilder, InstanceExpressionBuilder, ParameterlessFunctionBuilder } from './index'
+import type { InstanceBuilder, NodeBuilder, BuilderComparisonOp } from './index'
+import { BuilderUnaryOp, FunctionBuilder, InstanceExpressionBuilder, ParameterlessFunctionBuilder } from './index'
 import type { SourceLocation } from '../../awst/source-location'
 import { nodeFactory } from '../../awst/node-factory'
 import { CodeError, wrapInCodeError } from '../../errors'
@@ -20,6 +20,7 @@ import { logger } from '../../logger'
 import type { InstanceType, PType } from '../ptypes'
 import { LiteralExpressionBuilder } from './literal-expression-builder'
 import { instanceEb } from '../type-registry'
+import { compareBytes } from './util/compare-bytes'
 
 export class BytesFunctionBuilder extends FunctionBuilder {
   get ptype(): PType | undefined {
@@ -120,15 +121,6 @@ class FromEncodingBuilder extends FunctionBuilder {
   }
 }
 
-const builderCompareToBytesCompare: Record<BuilderComparisonOp, EqualityComparison | undefined> = {
-  [BuilderComparisonOp.ne]: EqualityComparison.ne,
-  [BuilderComparisonOp.eq]: EqualityComparison.eq,
-  [BuilderComparisonOp.lt]: undefined,
-  [BuilderComparisonOp.lte]: undefined,
-  [BuilderComparisonOp.gt]: undefined,
-  [BuilderComparisonOp.gte]: undefined,
-}
-
 export class BytesExpressionBuilder extends InstanceExpressionBuilder<InstanceType> {
   constructor(expr: Expression) {
     super(expr, bytesPType)
@@ -166,18 +158,7 @@ export class BytesExpressionBuilder extends InstanceExpressionBuilder<InstanceTy
     return super.memberAccess(name, sourceLocation)
   }
   compare(other: InstanceBuilder, op: BuilderComparisonOp, sourceLocation: SourceLocation): InstanceBuilder {
-    const equalityOp = builderCompareToBytesCompare[op]
-    if (equalityOp) {
-      return new BooleanExpressionBuilder(
-        nodeFactory.bytesComparisonExpression({
-          sourceLocation,
-          operator: equalityOp,
-          lhs: this._expr,
-          rhs: requireExpressionOfType(other, bytesPType, sourceLocation),
-        }),
-      )
-    }
-    return super.compare(other, op, sourceLocation)
+    return compareBytes(this._expr, requireExpressionOfType(other, bytesPType, sourceLocation), op, sourceLocation, this.typeDescription)
   }
   boolEval(sourceLocation: SourceLocation, negate: boolean): awst.Expression {
     return new UInt64ExpressionBuilder(

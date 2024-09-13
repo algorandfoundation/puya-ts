@@ -32,6 +32,7 @@ import {
   arc4AbiMethodDecorator,
   arc4BareMethodDecorator,
   assertFunction,
+  assertMatchFunction,
   assetConfigGroupTransaction,
   assetFreezeGroupTransaction,
   AssetFunction,
@@ -88,6 +89,7 @@ import {
   StaticArrayConstructorBuilder,
   StaticArrayExpressionBuilder,
 } from '../eb/arc4/arrays'
+import { AssertMatchFunctionBuilder } from '../eb/assert-match-function-builder'
 
 export function registerPTypes(typeRegistry: TypeRegistry) {
   if (typeRegistry.hasRegistrations) {
@@ -161,4 +163,6 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: assetTransferGroupTransaction, instanceEb: GroupTransactionExpressionBuilder })
   typeRegistry.register({ ptype: assetFreezeGroupTransaction, instanceEb: GroupTransactionExpressionBuilder })
   typeRegistry.register({ ptype: applicationGroupTransaction, instanceEb: GroupTransactionExpressionBuilder })
+
+  typeRegistry.register({ ptype: assertMatchFunction, singletonEb: AssertMatchFunctionBuilder })
 }

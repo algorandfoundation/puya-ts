@@ -31,12 +31,9 @@ export class AssertFunctionBuilder extends FunctionBuilder {
     }
 
     return new VoidExpressionBuilder(
-      nodeFactory.intrinsicCall({
-        opCode: 'assert',
-        sourceLocation: sourceLocation,
-        stackArgs: [condition.boolEval(sourceLocation)],
-        immediates: [],
-        wtype: wtypes.voidWType,
+      intrinsicFactory.assert({
+        sourceLocation,
+        condition: condition.boolEval(sourceLocation),
         comment: messageStr,
       }),
     )

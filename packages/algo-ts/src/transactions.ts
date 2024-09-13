@@ -1,6 +1,6 @@
 import { Account, Application, Asset } from './reference'
 import { bytes, Uint64, uint64 } from './primitives'
-import { OnCompleteAction } from './arc4'
+import { OnCompleteActionStr } from './arc4'
 
 /**
  * The different transaction types available in a transaction
@@ -46,17 +46,17 @@ interface TransactionBase {
   /**
    * round number
    */
-  first_valid: uint64
+  firstValid: uint64
 
   /**
    * UNIX timestamp of block before txn.FirstValid. Fails if negative
    */
-  first_valid_time: uint64
+  firstValidTime: uint64
 
   /**
    * round number
    */
-  last_valid: uint64
+  lastValid: uint64
 
   /**
    * Any data up to 1024 bytes
@@ -71,7 +71,7 @@ interface TransactionBase {
   /**
    * Transaction type as bytes
    */
-  type_bytes: bytes
+  typeBytes: bytes
 
   /**
    * Transaction type as integer
@@ -82,17 +82,17 @@ interface TransactionBase {
    * Position of this transaction within an atomic group
    * A stand-alone transaction is implicitly element 0 in a group of 1
    */
-  group_index: uint64
+  groupIndex: uint64
 
   /**
    * The computed ID for this transaction. 32 bytes.
    */
-  txn_id: bytes
+  txnId: bytes
 
   /**
    * 32 byte Sender's new AuthAddr
    */
-  rekey_to: Account
+  rekeyTo: Account
 }
 
 export interface PayTxn extends TransactionBase {
@@ -109,51 +109,51 @@ export interface PayTxn extends TransactionBase {
   /**
    * 32 byte address
    */
-  close_remainder_to: Account
+  closeRemainderTo: Account
 }
 
 export interface KeyRegistrationTxn extends TransactionBase {
   /**
    * 32 byte address
    */
-  vote_key: bytes
+  voteKey: bytes
 
   /**
    * 32 byte address
    */
-  selection_key: bytes
+  selectionKey: bytes
 
   /**
    * The first round that the participation key is valid.
    */
-  vote_first: uint64
+  voteFirst: uint64
 
   /**
    * The last round that the participation key is valid.
    */
-  vote_last: uint64
+  voteLast: uint64
 
   /**
    * Dilution for the 2-level participation key
    */
-  vote_key_dilution: uint64
+  voteKeyDilution: uint64
 
   /**
    * Marks an account nonparticipating for rewards
    */
-  non_participation: boolean
+  nonparticipation: boolean
 
   /**
    * 64 byte state proof public key
    */
-  state_proof_key: bytes
+  stateProofKey: bytes
 }
 
 export interface AssetConfigTxn extends TransactionBase {
   /**
    * Asset ID in asset config transaction
    */
-  config_asset: Asset
+  configAsset: Asset
 
   /**
    * Total number of units of this asset created
@@ -168,17 +168,17 @@ export interface AssetConfigTxn extends TransactionBase {
   /**
    * Whether the asset's slots are frozen by default or not, 0 or 1
    */
-  default_frozen: boolean
+  defaultFrozen: boolean
 
   /**
    * Unit name of the asset
    */
-  unit_name: bytes
+  unitName: bytes
 
   /**
    * The asset name
    */
-  asset_name: bytes
+  assetName: bytes
 
   /**
    * URL
@@ -188,7 +188,7 @@ export interface AssetConfigTxn extends TransactionBase {
   /**
    * 32 byte commitment to unspecified asset metadata
    */
-  metadata_hash: bytes
+  metadataHash: bytes
 
   /**
    * 32 byte address
@@ -242,12 +242,12 @@ export interface AssetFreezeTxn extends TransactionBase {
   /**
    * Asset ID being frozen or un-frozen
    */
-  freeze_asset: Asset
+  freezeAsset: Asset
 
   /**
    * 32 byte address of the account whose asset slot is being frozen or un-frozen
    */
-  freeze_account: Account
+  freezeAccount: Account
 
   /**
    * The new frozen value
@@ -259,88 +259,88 @@ export interface ApplicationTxn extends TransactionBase {
   /**
    * ApplicationID from ApplicationCall transaction
    */
-  app_id: Application
+  appId: Application
 
   /**
    * ApplicationCall transaction on completion action
    */
-  on_completion: OnCompleteAction
+  onCompletion: OnCompleteActionStr
 
   /**
    * Number of ApplicationArgs
    */
-  num_app_args: uint64
+  numAppArgs: uint64
 
   /**
    * Number of ApplicationArgs
    */
-  num_accounts: uint64
+  numAccounts: uint64
 
   /**
    * Approval program
    */
-  approval_program: bytes
+  approvalProgram: bytes
 
   /**
    * Clear State program
    */
-  clear_state_program: bytes
+  clearStateProgram: bytes
 
   /**
    * Number of Assets
    */
-  num_assets: uint64
+  numAssets: uint64
 
   /**
    * Number of Applications
    */
-  num_apps: uint64
+  numApps: uint64
 
   /**
    * Number of global state integers in ApplicationCall
    */
-  global_num_uint: uint64
+  globalNumUint: uint64
 
   /**
    * Number of global state byteslices in ApplicationCall
    */
-  global_num_bytes: uint64
+  globalNumBytes: uint64
 
   /**
    * Number of local state integers in ApplicationCall
    */
-  local_num_uint: uint64
+  localNumUint: uint64
 
   /**
    * Number of local state byteslices in ApplicationCall
    */
-  local_num_bytes: uint64
+  localNumBytes: uint64
 
   /**
    * Number of additional pages for each of the application's approval and clear state programs. An ExtraProgramPages of 1 means 2048 more total bytes, or 1024 for each program.
    */
-  extra_program_pages: uint64
+  extraProgramPages: uint64
 
   /**
    * The last message emitted. Empty bytes if none were emitted. Application mode only
    */
-  last_log: bytes
+  lastLog: bytes
 
   /**
    * Number of Approval Program pages
    */
-  num_approval_program_pages: uint64
+  numApprovalProgramPages: uint64
 
   /**
    * Number of Clear State Program pages
    */
-  num_clear_state_program_pages: uint64
+  numClearStateProgramPages: uint64
 
   /**
    * Arguments passed to the application in the ApplicationCall transaction
    * @param index
    */
-  app_args(index: uint64): bytes
+  appArgs(index: uint64): bytes
 
   /**
    * Accounts listed in the ApplicationCall transaction
@@ -360,10 +360,10 @@ export interface ApplicationTxn extends TransactionBase {
   /**
    * Approval Program as an array of pages
    */
-  approval_program_pages(index: uint64): bytes
+  approvalProgramPages(index: uint64): bytes
 
   /**
    * Clear State Program as an array of pages
    */
-  clear_state_program_pages(index: uint64): bytes
+  clearStateProgramPages(index: uint64): bytes
 }

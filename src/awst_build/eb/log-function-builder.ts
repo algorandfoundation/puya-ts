@@ -13,7 +13,7 @@ import type { PType } from '../ptypes'
 
 export class LogFunctionBuilder extends FunctionBuilder {
   call(args: Array<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
-    const argsExps = args.map((a) => requireInstanceBuilder(a, sourceLocation))
+    const argsExps = args.map((a) => requireInstanceBuilder(a))
 
     let logBytes: awst.Expression
     if (argsExps.length === 0) {

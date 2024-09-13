@@ -2,12 +2,14 @@ import type { SourceLocation } from '../../../awst/source-location'
 import type { PType } from '../../ptypes'
 import { accountPType } from '../../ptypes'
 import { bytesPType } from '../../ptypes'
-import type { InstanceBuilder, NodeBuilder } from '../index'
+import type { BuilderComparisonOp, InstanceBuilder, NodeBuilder } from '../index'
 import { InstanceExpressionBuilder } from '../index'
 import { FunctionBuilder } from '../index'
 import { CodeError } from '../../../errors'
 import { parseFunctionArgs } from '../util/arg-parsing'
 import { nodeFactory } from '../../../awst/node-factory'
+import { compareBytes } from '../util/compare-bytes'
+import { requireExpressionOfType } from '../util'
 
 export class AccountFunctionBuilder extends FunctionBuilder {
   call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
@@ -43,7 +45,10 @@ export class AccountFunctionBuilder extends FunctionBuilder {
         accountPType,
       )
     }
-    throw new CodeError('Method not implemented.')
   }
 }
-export class AccountExpressionBuilder extends InstanceExpressionBuilder<PType> {}
+export class AccountExpressionBuilder extends InstanceExpressionBuilder<PType> {
+  compare(other: InstanceBuilder, op: BuilderComparisonOp, sourceLocation: SourceLocation): InstanceBuilder {
+    return compareBytes(this._expr, requireExpressionOfType(other, accountPType, sourceLocation), op, sourceLocation, this.typeDescription)
+  }
+}

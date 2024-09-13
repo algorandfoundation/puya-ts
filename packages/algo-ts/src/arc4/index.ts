@@ -1,5 +1,6 @@
 import { AnyFunction, DeliberateAny } from '../typescript-helpers'
 import { BaseContract } from '../base-contract'
+import { Uint64 } from '../primitives'
 export * from './encoded-types'
 
 export class Contract extends BaseContract {
@@ -9,7 +10,16 @@ export class Contract extends BaseContract {
 }
 
 type CreateOptions = 'allow' | 'disallow' | 'require'
-export type OnCompleteAction = 'NoOp' | 'OptIn' | 'CloseOut' | 'UpdateApplication' | 'DeleteApplication'
+export type OnCompleteActionStr = 'NoOp' | 'OptIn' | 'CloseOut' | 'UpdateApplication' | 'DeleteApplication'
+
+export enum OnCompleteAction {
+  NoOp = Uint64(0),
+  OptIn = Uint64(1),
+  CloseOut = Uint64(2),
+  ClearState = Uint64(3),
+  UpdateApplication = Uint64(4),
+  DeleteApplication = Uint64(5),
+}
 
 export type DefaultArgument<TContract extends Contract> = { constant: string | boolean | number | bigint } | { from: keyof TContract }
 export type AbiMethodConfig<TContract extends Contract> = {
@@ -17,7 +27,7 @@ export type AbiMethodConfig<TContract extends Contract> = {
    * Which on complete action(s) are allowed when invoking this method.
    * @default 'NoOp'
    */
-  allowActions?: OnCompleteAction | OnCompleteAction[]
+  allowActions?: OnCompleteActionStr | OnCompleteActionStr[]
   /**
    * Whether this method should be callable when creating the application.
    * @default 'disallow'
@@ -49,7 +59,7 @@ export type BareMethodConfig = {
    * Which on complete action(s) are allowed when invoking this method.
    * @default 'NoOp'
    */
-  allowActions?: OnCompleteAction | OnCompleteAction[]
+  allowActions?: OnCompleteActionStr | OnCompleteActionStr[]
   /**
    * Whether this method should be callable when creating the application.
    * @default 'disallow'

@@ -1,6 +1,7 @@
 import { invariant } from '../util'
 import { PType } from '../awst_build/ptypes'
 import type { SourceLocation } from './source-location'
+import type { TransactionKind } from './models'
 
 export enum AVMType {
   bytes = 1 << 0,
@@ -154,7 +155,16 @@ export class WEnumeration extends WType {
     this.sequenceType = props.sequenceType
   }
 }
-export class WGroupTransaction extends WType {}
+export class WGroupTransaction extends WType {
+  transactionType: TransactionKind | null
+  constructor({ transactionType }: { transactionType?: TransactionKind }) {
+    super({
+      scalarType: AVMType.uint64,
+      name: transactionType === undefined ? 'group_transaction' : `group_transaction_${transactionType}`,
+    })
+    this.transactionType = transactionType ?? null
+  }
+}
 
 export class ARC4UIntN extends ARC4Type {
   readonly n: bigint

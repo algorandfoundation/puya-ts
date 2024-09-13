@@ -115,7 +115,6 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
         nodeFactory.expressionStatement({
           expr: requireInstanceBuilder(
             new ContractSuperBuilder(this._contractPType.baseTypes[0], sourceLocation, this.context).call([], [], sourceLocation),
-            sourceLocation,
           ).resolve(),
         }),
         ...this._propertyInitialization,

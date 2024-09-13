@@ -113,7 +113,7 @@ export class FunctionVisitor
       }
 
       case ts.SyntaxKind.Identifier: {
-        return requireInstanceBuilder(this.accept(bindingName), sourceLocation)
+        return requireInstanceBuilder(this.accept(bindingName))
       }
       default:
         throw new InternalError('Unhandled binding name', { sourceLocation })
@@ -169,7 +169,7 @@ export class FunctionVisitor
         return []
       }
 
-      const source = requireInstanceBuilder(this.accept(d.initializer), sourceLocation)
+      const source = requireInstanceBuilder(this.accept(d.initializer))
 
       return this.handleAssignmentStatement(this.buildAssignmentTarget(d.name, sourceLocation), source, sourceLocation)
     })
@@ -186,7 +186,7 @@ export class FunctionVisitor
       if (ts.isExpression(node.initializer)) {
         init = [
           nodeFactory.expressionStatement({
-            expr: requireInstanceBuilder(this.accept(node.initializer), sourceLocation).resolve(),
+            expr: requireInstanceBuilder(this.accept(node.initializer)).resolve(),
           }),
         ]
       } else {
@@ -197,7 +197,7 @@ export class FunctionVisitor
     if (node.incrementor) {
       incrementor = [
         nodeFactory.expressionStatement({
-          expr: requireInstanceBuilder(this.accept(node.incrementor), sourceLocation).resolve(),
+          expr: requireInstanceBuilder(this.accept(node.incrementor)).resolve(),
         }),
       ]
     }
@@ -224,7 +224,7 @@ export class FunctionVisitor
 
     let items: awst.LValue
     if (ts.isExpression(node.initializer)) {
-      items = requireInstanceBuilder(this.accept(node.initializer), sourceLocation).resolveLValue()
+      items = requireInstanceBuilder(this.accept(node.initializer)).resolveLValue()
     } else {
       codeInvariant(
         node.initializer.declarations.length === 1,
@@ -232,14 +232,14 @@ export class FunctionVisitor
         this.sourceLocation(node.initializer),
       )
       const [declaration] = node.initializer.declarations
-      items = requireInstanceBuilder(this.accept(declaration.name), sourceLocation).resolveLValue()
+      items = requireInstanceBuilder(this.accept(declaration.name)).resolveLValue()
     }
     using ctx = this.context.switchLoopCtx.enterLoop(node, sourceLocation)
     return nodeFactory.block(
       { sourceLocation },
       nodeFactory.forInLoop({
         sourceLocation,
-        sequence: requireInstanceBuilder(this.accept(node.expression), sourceLocation).iterate(sourceLocation),
+        sequence: requireInstanceBuilder(this.accept(node.expression)).iterate(sourceLocation),
         items,
         loopBody: nodeFactory.block({ sourceLocation }, this.accept(node.statement), ctx.continueTarget),
       }),
@@ -264,7 +264,7 @@ export class FunctionVisitor
     const expr = this.accept(node.expression)
     return new awst.ExpressionStatement({
       sourceLocation: sourceLocation,
-      expr: requireInstanceBuilder(expr, sourceLocation).resolve(),
+      expr: requireInstanceBuilder(expr).resolve(),
     })
   }
   visitIfStatement(node: ts.IfStatement): awst.Statement | awst.Statement[] {
@@ -357,7 +357,7 @@ export class FunctionVisitor
     const sourceLocation = this.sourceLocation(node)
     using ctx = this.context.switchLoopCtx.enterSwitch(node, sourceLocation)
 
-    const subject = requireInstanceBuilder(this.accept(node.expression), sourceLocation)
+    const subject = requireInstanceBuilder(this.accept(node.expression))
     codeInvariant(subject.ptype, 'The subject of a switch statement must have a resolvable ptype', this.sourceLocation(node.expression))
 
     let defaultCase: Block | null = null

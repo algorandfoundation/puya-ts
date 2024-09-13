@@ -2,6 +2,8 @@ import { Constants } from '../../constants'
 import { wtypes } from '../../awst'
 import { codeInvariant, distinct, sortBy } from '../../util'
 import type { WType } from '../../awst/wtypes'
+import { uint64WType } from '../../awst/wtypes'
+import { WGroupTransaction } from '../../awst/wtypes'
 import { WArray, WTuple } from '../../awst/wtypes'
 import { CodeError, InternalError, NotSupported } from '../../errors'
 import { PType } from './base'
@@ -748,13 +750,17 @@ export const arc4AbiMethodDecorator = new LibFunctionType({
 })
 
 export class GroupTransactionPType extends PType {
-  readonly wtype = undefined
+  get wtype() {
+    return new WGroupTransaction({
+      transactionType: this.kind,
+    })
+  }
   readonly name: string
-  readonly kind: TransactionKind
+  readonly kind: TransactionKind | undefined
   readonly module = Constants.transactionsModuleName
   readonly singleton = false
 
-  constructor({ kind, name }: { kind: TransactionKind; name: string }) {
+  constructor({ kind, name }: { kind?: TransactionKind; name: string }) {
     super()
     this.name = name
     this.kind = kind
@@ -784,4 +790,31 @@ export const assetFreezeGroupTransaction = new GroupTransactionPType({
 export const applicationGroupTransaction = new GroupTransactionPType({
   name: 'ApplicationTxn',
   kind: TransactionKind.Application,
+})
+
+export const assertMatchFunction = new LibFunctionType({
+  name: 'assertMatch',
+  module: Constants.utilModuleName,
+})
+
+export class Uint64EnumType extends PType {
+  readonly wtype = uint64WType
+  readonly name: string
+  readonly module: string
+  readonly singleton = true
+
+  constructor(props: { name: string; module: string }) {
+    super()
+    this.name = props.name
+    this.module = props.module
+  }
+}
+
+export const transactionTypeType = new Uint64EnumType({
+  module: Constants.transactionsModuleName,
+  name: 'TransactionType',
+})
+export const onCompleteActionType = new Uint64EnumType({
+  module: Constants.arc4ModuleName,
+  name: 'OnCompleteAction',
 })
