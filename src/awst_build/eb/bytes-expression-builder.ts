@@ -22,9 +22,7 @@ import { instanceEb } from '../type-registry'
 import { compareBytes } from './util/compare-bytes'
 
 export class BytesFunctionBuilder extends FunctionBuilder {
-  get ptype(): PType | undefined {
-    return BytesFunction
-  }
+  readonly ptype = BytesFunction
 
   taggedTemplate(head: string, spans: ReadonlyArray<readonly [InstanceBuilder, string]>, sourceLocation: SourceLocation): InstanceBuilder {
     let result: awst.Expression = nodeFactory.bytesConstant({

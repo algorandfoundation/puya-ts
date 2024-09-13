@@ -28,16 +28,21 @@ import { Arc4AbiMethodDecoratorBuilder, Arc4BareMethodDecoratorBuilder } from '.
 import {
   AccountFunction,
   accountPType,
+  anyGroupTransaction,
   applicationGroupTransaction,
+  ApplicationTxnFunction,
   arc4AbiMethodDecorator,
   arc4BareMethodDecorator,
   assertFunction,
   assertMatchFunction,
   assetConfigGroupTransaction,
+  AssetConfigTxnFunction,
   assetFreezeGroupTransaction,
+  AssetFreezeTxnFunction,
   AssetFunction,
   assetPType,
   assetTransferGroupTransaction,
+  AssetTransferTxnFunction,
   BigUintFunction,
   biguintPType,
   BooleanFunction,
@@ -57,14 +62,17 @@ import {
   IntrinsicFunctionGroupType,
   IntrinsicFunctionType,
   keyRegistrationGroupTransaction,
+  KeyRegistrationTxnFunction,
   LocalStateFunction,
   LocalStateType,
   logFunction,
   NamespacePType,
   ObjectPType,
   paymentGroupTransaction,
+  PayTxnFunction,
   StringFunction,
   stringPType,
+  TransactionFunction,
   TuplePType,
   Uint64Function,
   uint64PType,
@@ -74,7 +82,7 @@ import { ObjectExpressionBuilder } from '../eb/literal/object-expression-builder
 import { AccountExpressionBuilder, AccountFunctionBuilder } from '../eb/account/account-function-builder'
 import { LocalStateExpressionBuilder, LocalStateFunctionBuilder } from '../eb/storage/local-state'
 import { UintNConstructorBuilder, UintNExpressionBuilder } from '../eb/arc4/uint-n-constructor-builder'
-import { GroupTransactionExpressionBuilder } from '../eb/transactions/asset-transfer'
+import { GroupTransactionExpressionBuilder, GroupTransactionFunctionBuilder } from '../eb/transactions/group-transactions'
 import {
   DynamicArrayConstructor,
   DynamicArrayType,
@@ -158,11 +166,19 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.registerGeneric({ ptype: StaticArrayType, instanceEb: StaticArrayExpressionBuilder })
 
   typeRegistry.register({ ptype: paymentGroupTransaction, instanceEb: GroupTransactionExpressionBuilder })
+  typeRegistry.register({ ptype: PayTxnFunction, singletonEb: GroupTransactionFunctionBuilder })
   typeRegistry.register({ ptype: keyRegistrationGroupTransaction, instanceEb: GroupTransactionExpressionBuilder })
+  typeRegistry.register({ ptype: KeyRegistrationTxnFunction, singletonEb: GroupTransactionFunctionBuilder })
   typeRegistry.register({ ptype: assetConfigGroupTransaction, instanceEb: GroupTransactionExpressionBuilder })
+  typeRegistry.register({ ptype: AssetConfigTxnFunction, singletonEb: GroupTransactionFunctionBuilder })
   typeRegistry.register({ ptype: assetTransferGroupTransaction, instanceEb: GroupTransactionExpressionBuilder })
+  typeRegistry.register({ ptype: AssetTransferTxnFunction, singletonEb: GroupTransactionFunctionBuilder })
   typeRegistry.register({ ptype: assetFreezeGroupTransaction, instanceEb: GroupTransactionExpressionBuilder })
+  typeRegistry.register({ ptype: AssetFreezeTxnFunction, singletonEb: GroupTransactionFunctionBuilder })
   typeRegistry.register({ ptype: applicationGroupTransaction, instanceEb: GroupTransactionExpressionBuilder })
+  typeRegistry.register({ ptype: ApplicationTxnFunction, singletonEb: GroupTransactionFunctionBuilder })
+  typeRegistry.register({ ptype: anyGroupTransaction, instanceEb: GroupTransactionExpressionBuilder })
+  typeRegistry.register({ ptype: TransactionFunction, singletonEb: GroupTransactionFunctionBuilder })
 
   typeRegistry.register({ ptype: assertMatchFunction, singletonEb: AssertMatchFunctionBuilder })
 }

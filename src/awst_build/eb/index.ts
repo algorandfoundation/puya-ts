@@ -48,7 +48,7 @@ export enum BuilderBinaryOp {
 export abstract class NodeBuilder {
   constructor(public readonly sourceLocation: SourceLocation) {}
 
-  abstract get ptype(): PType | undefined
+  abstract readonly ptype: PType | undefined
 
   public get typeDescription(): string {
     if (this.ptype) {
@@ -172,9 +172,7 @@ export abstract class InstanceBuilder<TPType extends PType = PType> extends Node
 }
 
 export abstract class FunctionBuilder extends NodeBuilder {
-  get ptype(): PType | undefined {
-    return undefined
-  }
+  readonly ptype: PType | undefined = undefined
 
   constructor(location: SourceLocation) {
     super(location)

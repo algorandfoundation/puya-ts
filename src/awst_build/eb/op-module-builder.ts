@@ -144,17 +144,13 @@ abstract class IntrinsicOpBuilderBase extends FunctionBuilder {
 }
 
 export class FreeIntrinsicOpBuilder extends IntrinsicOpBuilderBase {
-  private readonly _ptype: IntrinsicFunctionType
+  readonly ptype: IntrinsicFunctionType
   constructor(sourceLocation: SourceLocation, ptype: PType) {
     invariant(ptype instanceof IntrinsicFunctionType, 'ptype must be IntrinsicFunctionType')
     const metaData = OP_METADATA[ptype.name]
     invariant(metaData.type === 'op-mapping', 'ptype must map to op-grouping')
     super(sourceLocation, metaData)
-    this._ptype = ptype
-  }
-
-  get ptype(): IntrinsicFunctionType {
-    return this._ptype
+    this.ptype = ptype
   }
 }
 

@@ -13,14 +13,10 @@ import { parseFunctionArgs } from './util/arg-parsing'
 abstract class SubroutineExpressionBuilder extends FunctionBuilder {
   protected constructor(
     sourceLocation: SourceLocation,
-    protected readonly _ptype: FunctionPType,
+    public readonly ptype: FunctionPType,
     protected readonly target: SubroutineID | InstanceMethodTarget | InstanceSuperMethodTarget,
   ) {
     super(sourceLocation)
-  }
-
-  get ptype(): FunctionPType {
-    return this._ptype
   }
 
   call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {

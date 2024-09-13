@@ -1,3 +1,4 @@
+import type { NodeBuilder } from '../index'
 import { InstanceBuilder } from '../index'
 import type { SourceLocation } from '../../../awst/source-location'
 import type { Expression, LValue } from '../../../awst/nodes'
@@ -6,8 +7,9 @@ import { ArrayPType } from '../../ptypes'
 import { TuplePType } from '../../ptypes'
 import { TupleExpressionBuilder } from '../tuple-expression-builder'
 import { nodeFactory } from '../../../awst/node-factory'
-import { requireExpressionOfType } from '../util'
+import { requireExpressionOfType, requireIntegerConstant } from '../util'
 import { codeInvariant } from '../../../util'
+import { instanceEb } from '../../type-registry'
 
 export class ArrayLiteralExpressionBuilder extends InstanceBuilder {
   #ptype: TuplePType
@@ -26,6 +28,12 @@ export class ArrayLiteralExpressionBuilder extends InstanceBuilder {
 
   singleEvaluation(): InstanceBuilder {
     return this
+  }
+
+  indexAccess(index: InstanceBuilder, sourceLocation: SourceLocation): NodeBuilder {
+    const indexNum = Number(requireIntegerConstant(index).value)
+    codeInvariant(indexNum < this.items.length, `Index ${indexNum} out of bounds of array`, sourceLocation)
+    return this.items[indexNum]
   }
 
   private toTuple(ptype: TuplePType, sourceLocation: SourceLocation): Expression {

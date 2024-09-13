@@ -1,9 +1,15 @@
 import type { InstanceBuilder, NodeBuilder } from '../index'
-import { FunctionBuilder } from '../index'
-import { InstanceExpressionBuilder } from '../index'
+import { FunctionBuilder, InstanceExpressionBuilder } from '../index'
 import type { PType } from '../../ptypes'
-import { uint64PType } from '../../ptypes'
-import { GroupTransactionPType } from '../../ptypes'
+import {
+  applicationGroupTransaction,
+  assetConfigGroupTransaction,
+  assetFreezeGroupTransaction,
+  assetTransferGroupTransaction,
+  keyRegistrationGroupTransaction,
+  paymentGroupTransaction,
+} from '../../ptypes'
+import { anyGroupTransaction, GroupTransactionPType, TransactionFunctionType, uint64PType } from '../../ptypes'
 import type { Expression } from '../../../awst/nodes'
 import { invariant } from '../../../util'
 import type { SourceLocation } from '../../../awst/source-location'
@@ -13,6 +19,7 @@ import { TxnFields } from '../../../awst/txn-fields'
 import { instanceEb } from '../../type-registry'
 import { nodeFactory } from '../../../awst/node-factory'
 import { parseFunctionArgs } from '../util/arg-parsing'
+import { TransactionKind } from '../../../awst/models'
 
 export class GroupTransactionExpressionBuilder extends InstanceExpressionBuilder<GroupTransactionPType> {
   constructor(expr: Expression, ptype: PType) {
@@ -50,6 +57,38 @@ export class GroupTransactionExpressionBuilder extends InstanceExpressionBuilder
   }
 }
 
+export class GroupTransactionFunctionBuilder extends FunctionBuilder {
+  readonly ptype: TransactionFunctionType
+
+  constructor(sourceLocation: SourceLocation, ptype: PType) {
+    super(sourceLocation)
+    invariant(ptype instanceof TransactionFunctionType, 'ptype must be instance of TransactionFunctionType')
+    this.ptype = ptype
+  }
+  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    const {
+      args: [groupIndex],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 0,
+      callLocation: sourceLocation,
+      funcName: this.ptype.name,
+      argSpec: (a) => [a.required(uint64PType)],
+    })
+    const txnPType = getGroupTransactionType(this.ptype.kind)
+
+    return new GroupTransactionExpressionBuilder(
+      nodeFactory.reinterpretCast({
+        expr: groupIndex.resolve(),
+        wtype: txnPType.wtype,
+        sourceLocation,
+      }),
+      txnPType,
+    )
+  }
+}
+
 class IndexedTransactionFieldFunctionBuilder extends FunctionBuilder {
   constructor(
     private gtxn: Expression,
@@ -79,5 +118,24 @@ class IndexedTransactionFieldFunctionBuilder extends FunctionBuilder {
       }),
       this.config.returnType,
     )
+  }
+}
+
+function getGroupTransactionType(kind: TransactionKind | undefined): GroupTransactionPType {
+  switch (kind) {
+    case TransactionKind.Payment:
+      return paymentGroupTransaction
+    case TransactionKind.KeyRegistration:
+      return keyRegistrationGroupTransaction
+    case TransactionKind.AssetConfig:
+      return assetConfigGroupTransaction
+    case TransactionKind.AssetTransfer:
+      return assetTransferGroupTransaction
+    case TransactionKind.AssetFreeze:
+      return assetFreezeGroupTransaction
+    case TransactionKind.Application:
+      return applicationGroupTransaction
+    default:
+      return anyGroupTransaction
   }
 }

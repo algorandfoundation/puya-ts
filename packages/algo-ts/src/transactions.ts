@@ -9,27 +9,27 @@ enum TransactionType {
   /**
    * A Payment transaction
    */
-  Payment = Uint64(1),
+  Payment = 1,
   /**
    * A Key Registration transaction
    */
-  KeyRegistration = Uint64(2),
+  KeyRegistration = 2,
   /**
    * An Asset Config transaction
    */
-  AssetConfig = Uint64(3),
+  AssetConfig = 3,
   /**
    * An Asset Transfer transaction
    */
-  AssetTransfer = Uint64(4),
+  AssetTransfer = 4,
   /**
    * An Asset Freeze transaction
    */
-  AssetFreeze = Uint64(5),
+  AssetFreeze = 5,
   /**
    * An Application Call transaction
    */
-  ApplicationCall = Uint64(6),
+  ApplicationCall = 6,
 }
 
 interface TransactionBase {
@@ -367,3 +367,5 @@ export interface ApplicationTxn extends TransactionBase {
    */
   clearStateProgramPages(index: uint64): bytes
 }
+
+export type Transaction = PayTxn | KeyRegistrationTxn | AssetConfigTxn | AssetTransferTxn | AssetFreezeTxn | ApplicationTxn
