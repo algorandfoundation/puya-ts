@@ -1,4 +1,4 @@
 subroutine test(x: group_transaction_1): void
 {
-  assert(gtxns<Receiver>(x) == global<CurrentApplicationAddress>() and gtxns<Sender>(x) == txn<Sender>())
+  assert(gtxns<CloseRemainderTo>(x) == global<ZeroAddress>() and gtxns<Receiver>(x) == global<CurrentApplicationAddress>() and gtxns<Sender>(x) == txn<Sender>())
 }

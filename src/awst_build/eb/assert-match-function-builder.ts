@@ -12,6 +12,7 @@ import { nodeFactory } from '../../awst/node-factory'
 import { requireInstanceBuilder } from './util'
 import { VoidExpressionBuilder } from './void-expression-builder'
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
+import { logger } from '../../logger'
 
 export class AssertMatchFunctionBuilder extends NodeBuilder {
   readonly ptype = assertMatchFunction
@@ -43,8 +44,9 @@ export class AssertMatchFunctionBuilder extends NodeBuilder {
           )
         } else {
           // Handle lt/gt/between
+          logger.error(testProperty.sourceLocation, 'Unhandled assertMatch expression')
         }
-        return undefined
+        return acc
       }, undefined)
 
     codeInvariant(condition, 'assertMatch must have at least 1 condition', sourceLocation)
