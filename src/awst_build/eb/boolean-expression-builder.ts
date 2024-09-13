@@ -82,7 +82,7 @@ export class BooleanExpressionBuilder extends InstanceExpressionBuilder<Instance
       nodeFactory.numericComparisonExpression({
         operator,
         lhs: this.resolve(),
-        rhs: other.resolveToPType(boolPType, sourceLocation).resolve(),
+        rhs: other.resolveToPType(boolPType).resolve(),
         sourceLocation,
       }),
     )

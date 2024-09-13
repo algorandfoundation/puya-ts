@@ -49,20 +49,20 @@ export class BigIntLiteralExpressionBuilder extends LiteralExpressionBuilder {
     })
   }
 
-  resolveToPType(ptype: PType, sourceLocation: SourceLocation): InstanceBuilder {
+  resolveToPType(ptype: PType): InstanceBuilder {
     if (ptype.equals(this.ptype)) return this
-    codeInvariant(isValidLiteralForPType(this.value, ptype), `${ptype.name} cannot be converted to type ${ptype.name}`, sourceLocation)
+    codeInvariant(isValidLiteralForPType(this.value, ptype), `${ptype.name} cannot be converted to type ${ptype.name}`, this.sourceLocation)
     if (ptype.equals(uint64PType)) {
       return new UInt64ExpressionBuilder(nodeFactory.uInt64Constant({ value: this.value, sourceLocation: this.sourceLocation }))
     } else if (ptype.equals(biguintPType)) {
       return new BigUintExpressionBuilder(nodeFactory.bigUIntConstant({ value: this.value, sourceLocation: this.sourceLocation }))
     }
-    throw new CodeError(`${ptype.name} cannot be converted to type ${ptype.name}`, { sourceLocation })
+    throw new CodeError(`${ptype.name} cannot be converted to type ${ptype.name}`, { sourceLocation: this.sourceLocation })
   }
 
   binaryOp(other: InstanceBuilder, op: BuilderBinaryOp, sourceLocation: SourceLocation): InstanceBuilder {
     if (other.ptype.wtype) {
-      return this.resolveToPType(other.ptype, sourceLocation).binaryOp(other, op, sourceLocation)
+      return this.resolveToPType(other.ptype).binaryOp(other, op, sourceLocation)
     }
     if (other instanceof BigIntLiteralExpressionBuilder) {
       return new BigIntLiteralExpressionBuilder(foldBinaryOp(this.value, other.value, op, sourceLocation), this.ptype, sourceLocation)
@@ -71,7 +71,7 @@ export class BigIntLiteralExpressionBuilder extends LiteralExpressionBuilder {
   }
   compare(other: InstanceBuilder, op: BuilderComparisonOp, sourceLocation: SourceLocation): InstanceBuilder {
     if (other.ptype.wtype) {
-      return this.resolveToPType(other.ptype, sourceLocation).compare(other, op, sourceLocation)
+      return this.resolveToPType(other.ptype).compare(other, op, sourceLocation)
     }
     if (other instanceof BigIntLiteralExpressionBuilder) {
       return typeRegistry.getInstanceEb(foldComparisonOp(this.value, other.value, op, sourceLocation), boolPType)

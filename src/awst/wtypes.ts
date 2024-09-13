@@ -1,5 +1,4 @@
 import { invariant } from '../util'
-import { PType } from '../awst_build/ptypes'
 import type { SourceLocation } from './source-location'
 import type { TransactionKind } from './models'
 

@@ -1,4 +1,5 @@
-import { bytes, Bytes } from '@algorandfoundation/algo-ts'
+import type { bytes } from '@algorandfoundation/algo-ts'
+import { Bytes } from '@algorandfoundation/algo-ts'
 
 const a = Bytes('123')
 

@@ -1,4 +1,4 @@
-import { biguint, bytes, uint64 } from '@algorandfoundation/algo-ts'
+import type { biguint, bytes, uint64 } from '@algorandfoundation/algo-ts'
 
 function test_uint64(x: uint64, y: uint64) {
   x++

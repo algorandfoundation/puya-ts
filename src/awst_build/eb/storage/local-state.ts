@@ -31,7 +31,7 @@ export class LocalStateFunctionBuilder extends FunctionBuilder {
         codeInvariant(arg0 instanceof ObjectLiteralExpressionBuilder, 'Expected object literal')
 
         if (arg0.hasProperty('key')) {
-          key = requireExpressionOfType(arg0.memberAccess('key', sourceLocation), bytesPType, sourceLocation)
+          key = requireExpressionOfType(arg0.memberAccess('key', sourceLocation), bytesPType)
         }
         break
       }

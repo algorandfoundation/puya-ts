@@ -1,4 +1,5 @@
-import { uint64, Contract } from '@algorandfoundation/algo-ts'
+import type { uint64 } from '@algorandfoundation/algo-ts'
+import { Contract } from '@algorandfoundation/algo-ts'
 
 abstract class ExampleBase extends Contract {
   protected baseMethod(): uint64 {

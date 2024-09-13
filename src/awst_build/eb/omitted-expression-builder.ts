@@ -3,7 +3,6 @@ import type { PType } from '../ptypes'
 import { anyPType } from '../ptypes'
 import { InstanceBuilder } from './index'
 import { CodeError, InternalError } from '../../errors'
-import type { SourceLocation } from '../../awst/source-location'
 
 export class OmittedExpressionBuilder extends InstanceBuilder {
   get ptype(): PType {
@@ -16,7 +15,7 @@ export class OmittedExpressionBuilder extends InstanceBuilder {
     throw new InternalError('Omitted expression cannot be resolved to an lvalue', { sourceLocation: this.sourceLocation })
   }
 
-  resolvableToPType(ptype: PType, sourceLocation: SourceLocation): boolean {
+  resolvableToPType(ptype: PType): boolean {
     throw new InternalError('Omitted expression cannot be resolved to any type', { sourceLocation: this.sourceLocation })
   }
 }

@@ -33,7 +33,7 @@ export class UInt64FunctionBuilder extends FunctionBuilder {
     if (args.length === 1) {
       const [arg0] = args
       if (arg0 instanceof LiteralExpressionBuilder) {
-        return arg0.resolveToPType(uint64PType, sourceLocation)
+        return arg0.resolveToPType(uint64PType)
       }
     }
     throw CodeError.unexpectedUnhandledArgs({ sourceLocation })
@@ -59,7 +59,7 @@ export class UInt64ExpressionBuilder extends InstanceExpressionBuilder<InstanceT
   }
 
   compare(other: InstanceBuilder, op: BuilderComparisonOp, sourceLocation: SourceLocation): InstanceBuilder {
-    const otherExpr = requireExpressionOfType(other, uint64PType, sourceLocation)
+    const otherExpr = requireExpressionOfType(other, uint64PType)
     const numComOp = tryConvertEnum(op, BuilderComparisonOp, NumericComparison)
     if (numComOp === undefined) {
       throw new NotSupported(`Numeric comparison operator ${op}`, {
@@ -137,7 +137,7 @@ export class UInt64ExpressionBuilder extends InstanceExpressionBuilder<InstanceT
   }
 
   binaryOp(other: InstanceBuilder, op: BuilderBinaryOp, sourceLocation: SourceLocation): InstanceBuilder {
-    const otherExpr = requireExpressionOfType(other, uint64PType, sourceLocation)
+    const otherExpr = requireExpressionOfType(other, uint64PType)
 
     const uintOp = op === BuilderBinaryOp.div ? UInt64BinaryOperator.floorDiv : tryConvertEnum(op, BuilderBinaryOp, UInt64BinaryOperator)
     if (uintOp === undefined) {
@@ -170,7 +170,7 @@ export class UInt64ExpressionBuilder extends InstanceExpressionBuilder<InstanceT
       nodeFactory.assignmentExpression({
         target: this.resolveLValue(),
         sourceLocation,
-        value: requireExpressionOfType(other, uint64PType, sourceLocation),
+        value: requireExpressionOfType(other, uint64PType),
       }),
     )
   }

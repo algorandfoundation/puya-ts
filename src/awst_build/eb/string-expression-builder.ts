@@ -76,15 +76,16 @@ export class StringExpressionBuilder extends InstanceExpressionBuilder<InstanceT
   constructor(expr: Expression) {
     super(expr, stringPType)
   }
-  resolvableToPType(ptype: PType, sourceLocation: SourceLocation): boolean {
-    return ptype.equals(bytesPType) || super.resolvableToPType(ptype, sourceLocation)
+
+  resolvableToPType(ptype: PType): boolean {
+    return ptype.equals(bytesPType) || super.resolvableToPType(ptype)
   }
 
-  resolveToPType(ptype: PType, sourceLocation: SourceLocation): InstanceBuilder {
+  resolveToPType(ptype: PType): InstanceBuilder {
     if (ptype.equals(bytesPType)) {
-      return instanceEb(this.toBytes(sourceLocation), bytesPType)
+      return instanceEb(this.toBytes(this.sourceLocation), bytesPType)
     }
-    return super.resolveToPType(ptype, sourceLocation)
+    return super.resolveToPType(ptype)
   }
 
   boolEval(sourceLocation: SourceLocation, negate = false): Expression {
@@ -104,7 +105,7 @@ export class StringExpressionBuilder extends InstanceExpressionBuilder<InstanceT
     return super.memberAccess(name, sourceLocation)
   }
   compare(other: InstanceBuilder, op: BuilderComparisonOp, sourceLocation: SourceLocation): InstanceBuilder {
-    const otherExpr = requireExpressionOfType(other, stringPType, sourceLocation)
+    const otherExpr = requireExpressionOfType(other, stringPType)
     const numComOp = tryConvertEnum(op, BuilderComparisonOp, EqualityComparison)
     if (numComOp === undefined) {
       throw new NotSupported(`Numeric comparison operator ${op}`, {
@@ -144,7 +145,7 @@ export class ConcatExpressionBuilder extends FunctionBuilder {
   }
 
   call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation) {
-    const others = args.map((a) => requireExpressionOfType(a, stringPType, sourceLocation))
+    const others = args.map((a) => requireExpressionOfType(a, stringPType))
     return new StringExpressionBuilder(
       others.reduce(
         (acc, cur) =>

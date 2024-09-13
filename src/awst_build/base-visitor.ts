@@ -308,10 +308,9 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
 
         return new BooleanExpressionBuilder(
           nodeFactory.booleanBinaryOperation({
-            left: requireExpressionOfType(left, boolPType, sourceLocation),
-            right: requireExpressionOfType(right, boolPType, sourceLocation),
+            left: requireExpressionOfType(left, boolPType),
+            right: requireExpressionOfType(right, boolPType),
             sourceLocation,
-            wtype: boolPType.wtype,
             op: LogicalOpSyntaxes[binaryOpKind],
           }),
         )
@@ -323,7 +322,6 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
             left: left.boolEval(sourceLocation),
             right: right.boolEval(sourceLocation),
             sourceLocation,
-            wtype: boolPType.wtype,
             op: LogicalOpSyntaxes[binaryOpKind],
           }),
         )
@@ -346,10 +344,9 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
       const right = requireInstanceBuilder(this.baseAccept(node.right))
       const expr = new BooleanExpressionBuilder(
         nodeFactory.booleanBinaryOperation({
-          left: requireExpressionOfType(left, boolPType, sourceLocation),
-          right: requireExpressionOfType(right, boolPType, sourceLocation),
+          left: requireExpressionOfType(left, boolPType),
+          right: requireExpressionOfType(right, boolPType),
           sourceLocation,
-          wtype: boolPType.wtype,
           op: AugmentedAssignmentLogicalOpSyntaxes[binaryOpKind],
         }),
       )
@@ -392,8 +389,8 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
       return typeRegistry.getInstanceEb(
         nodeFactory.conditionalExpression({
           sourceLocation: sourceLocation,
-          falseExpr: requireExpressionOfType(whenFalse, ptype, sourceLocation),
-          trueExpr: requireExpressionOfType(whenTrue, ptype, sourceLocation),
+          falseExpr: requireExpressionOfType(whenFalse, ptype),
+          trueExpr: requireExpressionOfType(whenTrue, ptype),
           condition: condition,
           wtype: ptype.wtypeOrThrow,
         }),
@@ -469,7 +466,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
         nodeFactory.assignmentExpression({
           target: this.buildLValue(target, assignmentType, sourceLocation),
           sourceLocation,
-          value: source.resolveToPType(assignmentType, sourceLocation).resolve(),
+          value: source.resolveToPType(assignmentType).resolve(),
         }),
         assignmentType,
       )
@@ -535,7 +532,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
         for (const [index, sourceItemType] of enumerate(assignmentType.items)) {
           const targetItem = targetItems[index]
           if (targetItem && !(targetItem instanceof OmittedExpressionBuilder)) {
-            targets.push(targetItem.resolveToPType(sourceItemType, sourceLocation).resolveLValue())
+            targets.push(targetItem.resolveToPType(sourceItemType).resolveLValue())
           } else {
             targets.push(
               nodeFactory.varExpression({

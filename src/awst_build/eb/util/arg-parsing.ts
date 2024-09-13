@@ -95,7 +95,7 @@ function parseObjArg<T extends ObjArgSpec>(
           acc[property] = requireInstanceBuilder(builder)
         } else {
           for (const t of spec.t) {
-            const typedBuilder = requestBuilderOfType(builder, t, sourceLocation)
+            const typedBuilder = requestBuilderOfType(builder, t)
             if (typedBuilder) {
               acc[property] = typedBuilder
               return acc
@@ -204,7 +204,7 @@ export function parseFunctionArgs<const TGenericCount extends number, const TArg
             return source
           } else {
             for (const t of a.t) {
-              const builder = requestBuilderOfType(source, t, callLocation)
+              const builder = requestBuilderOfType(source, t)
               if (builder) {
                 return builder
               }

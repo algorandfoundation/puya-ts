@@ -36,26 +36,26 @@ export class ObjectExpressionBuilder extends InstanceExpressionBuilder<ObjectPTy
     return this.ptype.orderedProperties().some(([prop]) => prop === name)
   }
 
-  resolvableToPType(ptype: PType, sourceLocation: SourceLocation): ptype is ObjectPType {
+  resolvableToPType(ptype: PType): ptype is ObjectPType {
     if (ptype instanceof ObjectPType) {
       return ptype.orderedProperties().every(([prop, propType]) => this.ptype.hasPropertyOfType(prop, propType))
     }
     return false
   }
 
-  resolveToPType(ptype: PType, sourceLocation: SourceLocation): InstanceBuilder {
-    if (this.resolvableToPType(ptype, sourceLocation)) {
+  resolveToPType(ptype: PType): InstanceBuilder {
+    if (this.resolvableToPType(ptype)) {
       const base = this.singleEvaluation()
       return instanceEb(
         nodeFactory.tupleExpression({
-          sourceLocation,
+          sourceLocation: this.sourceLocation,
           items: ptype
             .orderedProperties()
-            .map(([prop, propType]) => requireExpressionOfType(base.memberAccess(prop, sourceLocation), propType, sourceLocation)),
+            .map(([prop, propType]) => requireExpressionOfType(base.memberAccess(prop, this.sourceLocation), propType)),
         }),
         ptype,
       )
     }
-    throw CodeError.cannotResolveToType({ sourceType: this.ptype, targetType: ptype, sourceLocation })
+    throw CodeError.cannotResolveToType({ sourceType: this.ptype, targetType: ptype, sourceLocation: this.sourceLocation })
   }
 }

@@ -16,9 +16,9 @@ export abstract class LiteralExpressionBuilder extends InstanceBuilder {
     throw new CodeError('A literal value is not valid here', { sourceLocation: this.sourceLocation })
   }
 
-  abstract resolvableToPType(ptype: PType, sourceLocation: SourceLocation): boolean
+  abstract resolvableToPType(ptype: PType): boolean
 
-  abstract resolveToPType(ptype: PType, sourceLocation: SourceLocation): InstanceBuilder
+  abstract resolveToPType(ptype: PType): InstanceBuilder
 
   private throwInvalidExpression(): never {
     if (this.ptype instanceof TransientType) throw new CodeError(this.ptype.expressionMessage, { sourceLocation: this.sourceLocation })

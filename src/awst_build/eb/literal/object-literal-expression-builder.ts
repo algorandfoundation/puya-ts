@@ -69,23 +69,24 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
     return nodeFactory.tupleExpression({
       items: ptype
         .orderedProperties()
-        .map(([p, propPType]) => requireExpressionOfType(this.memberAccess(p, sourceLocation), propPType, sourceLocation)),
-      sourceLocation,
+        .map(([p, propPType]) => requireExpressionOfType(this.memberAccess(p, this.sourceLocation), propPType)),
+      sourceLocation: this.sourceLocation,
     })
   }
 
-  resolvableToPType(ptype: PType, sourceLocation: SourceLocation): boolean {
+  resolvableToPType(ptype: PType): boolean {
     if (!(ptype instanceof ObjectPType)) return false
     for (const [prop, propPType] of ptype.orderedProperties()) {
       if (!this.hasProperty(prop)) return false
-      const propValue = requestExpressionOfType(this.memberAccess(prop, sourceLocation), propPType, sourceLocation)
+      const propValue = requestExpressionOfType(this.memberAccess(prop, this.sourceLocation), propPType)
       if (propValue === undefined) return false
     }
     return true
   }
-  resolveToPType(ptype: PType, sourceLocation: SourceLocation): InstanceBuilder {
-    codeInvariant(ptype instanceof ObjectPType, `Object literal cannot be resolved to type ${ptype}`, sourceLocation)
-    return new ObjectExpressionBuilder(this.toTuple(ptype, sourceLocation), ptype)
+
+  resolveToPType(ptype: PType): InstanceBuilder {
+    codeInvariant(ptype instanceof ObjectPType, `Object literal cannot be resolved to type ${ptype}`, this.sourceLocation)
+    return new ObjectExpressionBuilder(this.toTuple(ptype, this.sourceLocation), ptype)
   }
 
   assign(other: InstanceBuilder, sourceLocation: SourceLocation): InstanceBuilder {
