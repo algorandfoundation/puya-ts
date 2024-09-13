@@ -136,7 +136,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
             {
               type: 'properties',
               properties: {
-                [this.textVisitor.accept(p.name)]: requireInstanceBuilder(this.baseAccept(p.initializer), propertySourceLocation),
+                [this.textVisitor.accept(p.name)]: requireInstanceBuilder(this.baseAccept(p.initializer)),
               },
             },
           ]
@@ -146,14 +146,14 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
           return [
             {
               type: 'properties',
-              properties: { [this.textVisitor.accept(p.name)]: requireInstanceBuilder(this.baseAccept(p.name), propertySourceLocation) },
+              properties: { [this.textVisitor.accept(p.name)]: requireInstanceBuilder(this.baseAccept(p.name)) },
             },
           ]
         case ts.SyntaxKind.SpreadAssignment:
           return [
             {
               type: 'spread-object',
-              obj: requireInstanceBuilder(this.baseAccept(p.expression), propertySourceLocation),
+              obj: requireInstanceBuilder(this.baseAccept(p.expression)),
             },
           ]
         default:
@@ -170,7 +170,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
     const sourceLocation = this.sourceLocation(node)
     return new ArrayLiteralExpressionBuilder(
       sourceLocation,
-      node.elements.map((e) => requireInstanceBuilder(this.baseAccept(e), sourceLocation)),
+      node.elements.map((e) => requireInstanceBuilder(this.baseAccept(e))),
     )
   }
 
@@ -187,14 +187,14 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
     const sourceLocation = this.sourceLocation(node)
     const target = this.baseAccept(node.expression)
     const argument = this.baseAccept(node.argumentExpression)
-    return target.indexAccess(requireInstanceBuilder(argument, this.sourceLocation(node.argumentExpression)), sourceLocation)
+    return target.indexAccess(requireInstanceBuilder(argument), sourceLocation)
   }
 
   visitCallExpression(node: ts.CallExpression): NodeBuilder {
     this.logNotSupported(node.questionDotToken, 'The optional chaining (?.) operator is not supported')
     const sourceLocation = this.sourceLocation(node)
     const eb = this.baseAccept(node.expression)
-    const args = node.arguments.map((a) => requireInstanceBuilder(this.baseAccept(a), sourceLocation))
+    const args = node.arguments.map((a) => requireInstanceBuilder(this.baseAccept(a)))
     const typeArgs = node.typeArguments?.map((t) => this.context.getPTypeForNode(t)) ?? this.context.getPTypeForNode(node).getGenericArgs()
     return eb.call(args, typeArgs, sourceLocation)
   }
@@ -202,7 +202,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   visitNewExpression(node: ts.NewExpression): NodeBuilder {
     const sourceLocation = this.sourceLocation(node)
     const eb = this.baseAccept(node.expression)
-    const args = node.arguments?.map((a) => requireInstanceBuilder(this.baseAccept(a), sourceLocation)) ?? []
+    const args = node.arguments?.map((a) => requireInstanceBuilder(this.baseAccept(a))) ?? []
     const typeArgs = node.typeArguments?.map((t) => this.context.getPTypeForNode(t)) ?? this.context.getPTypeForNode(node).getGenericArgs()
     return eb.newCall(args, typeArgs, sourceLocation)
   }
@@ -215,7 +215,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
     } else {
       const head = this.textVisitor.accept(node.template.head)
       const spans = node.template.templateSpans.map(
-        (s) => [requireInstanceBuilder(this.baseAccept(s.expression), sourceLocation), this.textVisitor.accept(s.literal)] as const,
+        (s) => [requireInstanceBuilder(this.baseAccept(s.expression)), this.textVisitor.accept(s.literal)] as const,
       )
       return target.taggedTemplate(head, spans, sourceLocation)
     }
@@ -252,7 +252,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
 
   visitPrefixUnaryExpression(node: ts.PrefixUnaryExpression): NodeBuilder {
     const sourceLocation = this.sourceLocation(node)
-    const target = requireInstanceBuilder(this.baseAccept(node.operand), sourceLocation)
+    const target = requireInstanceBuilder(this.baseAccept(node.operand))
     if (node.operator === ts.SyntaxKind.ExclamationToken) {
       return new BooleanExpressionBuilder(target.boolEval(sourceLocation, true))
     }
@@ -262,7 +262,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
 
   visitPostfixUnaryExpression(node: ts.PostfixUnaryExpression): NodeBuilder {
     const sourceLocation = this.sourceLocation(node)
-    const target = requireInstanceBuilder(this.baseAccept(node.operand), sourceLocation)
+    const target = requireInstanceBuilder(this.baseAccept(node.operand))
     const op = UnaryExpressionUnaryOps[node.operator]
     return target.postfixUnaryOp(op, sourceLocation)
   }
@@ -270,10 +270,10 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   evaluateCondition(nodeOrBuilder: ts.Expression | NodeBuilder, negate = false): Expression {
     using _ = this.context.evaluationCtx.enterBooleanContext()
     if (nodeOrBuilder instanceof NodeBuilder) {
-      return requireInstanceBuilder(nodeOrBuilder, nodeOrBuilder.sourceLocation).boolEval(nodeOrBuilder.sourceLocation, negate)
+      return requireInstanceBuilder(nodeOrBuilder).boolEval(nodeOrBuilder.sourceLocation, negate)
     } else {
       const sourceLocation = this.sourceLocation(nodeOrBuilder)
-      return requireInstanceBuilder(this.baseAccept(nodeOrBuilder), sourceLocation).boolEval(sourceLocation, negate)
+      return requireInstanceBuilder(this.baseAccept(nodeOrBuilder)).boolEval(sourceLocation, negate)
     }
   }
 
@@ -281,30 +281,30 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
     const sourceLocation = this.sourceLocation(node)
     const binaryOpKind = node.operatorToken.kind
     if (isKeyOf(binaryOpKind, BinaryOpSyntaxes)) {
-      const left = requireInstanceBuilder(this.baseAccept(node.left), sourceLocation)
-      const right = requireInstanceBuilder(this.baseAccept(node.right), sourceLocation)
+      const left = requireInstanceBuilder(this.baseAccept(node.left))
+      const right = requireInstanceBuilder(this.baseAccept(node.right))
       return left.binaryOp(right, BinaryOpSyntaxes[binaryOpKind], sourceLocation)
     } else if (isKeyOf(binaryOpKind, AugmentedAssignmentBinaryOp)) {
       using _ = this.context.evaluationCtx.leaveBooleanContext()
 
-      const left = requireInstanceBuilder(this.baseAccept(node.left), sourceLocation)
-      const right = requireInstanceBuilder(this.baseAccept(node.right), sourceLocation)
+      const left = requireInstanceBuilder(this.baseAccept(node.left))
+      const right = requireInstanceBuilder(this.baseAccept(node.right))
       return left.augmentedAssignment(right, AugmentedAssignmentBinaryOp[binaryOpKind], sourceLocation)
     } else if (binaryOpKind === ts.SyntaxKind.EqualsToken) {
       using _ = this.context.evaluationCtx.leaveBooleanContext()
 
-      const left = requireInstanceBuilder(this.baseAccept(node.left), sourceLocation)
-      const right = requireInstanceBuilder(this.baseAccept(node.right), sourceLocation)
+      const left = requireInstanceBuilder(this.baseAccept(node.left))
+      const right = requireInstanceBuilder(this.baseAccept(node.right))
       return this.handleAssignment(left, right, sourceLocation)
     } else if (isKeyOf(binaryOpKind, ComparisonOpSyntaxes)) {
-      const left = requireInstanceBuilder(this.baseAccept(node.left), sourceLocation)
-      const right = requireInstanceBuilder(this.baseAccept(node.right), sourceLocation)
+      const left = requireInstanceBuilder(this.baseAccept(node.left))
+      const right = requireInstanceBuilder(this.baseAccept(node.right))
       return left.compare(right, ComparisonOpSyntaxes[binaryOpKind], sourceLocation)
     } else if (isKeyOf(binaryOpKind, LogicalOpSyntaxes)) {
       const ptype = this.context.getPTypeForNode(node)
       if (ptype.equals(boolPType)) {
-        const left = requireInstanceBuilder(this.baseAccept(node.left), sourceLocation)
-        const right = requireInstanceBuilder(this.baseAccept(node.right), sourceLocation)
+        const left = requireInstanceBuilder(this.baseAccept(node.left))
+        const right = requireInstanceBuilder(this.baseAccept(node.right))
 
         return new BooleanExpressionBuilder(
           nodeFactory.booleanBinaryOperation({
@@ -316,8 +316,8 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
           }),
         )
       } else if (this.context.evaluationCtx.isBoolean) {
-        const left = requireInstanceBuilder(this.baseAccept(node.left), sourceLocation)
-        const right = requireInstanceBuilder(this.baseAccept(node.right), sourceLocation)
+        const left = requireInstanceBuilder(this.baseAccept(node.left))
+        const right = requireInstanceBuilder(this.baseAccept(node.right))
         return new BooleanExpressionBuilder(
           nodeFactory.booleanBinaryOperation({
             left: left.boolEval(sourceLocation),
@@ -328,8 +328,8 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
           }),
         )
       } else {
-        const left = requireInstanceBuilder(this.baseAccept(node.left), sourceLocation)
-        const right = requireInstanceBuilder(this.baseAccept(node.right), sourceLocation)
+        const left = requireInstanceBuilder(this.baseAccept(node.left))
+        const right = requireInstanceBuilder(this.baseAccept(node.right))
         const leftSingle = left.singleEvaluation()
         const isOr = binaryOpKind === ts.SyntaxKind.BarBarToken
         return this.createConditionalExpression({
@@ -342,8 +342,8 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
       }
     } else if (isKeyOf(binaryOpKind, AugmentedAssignmentLogicalOpSyntaxes)) {
       using _ = this.context.evaluationCtx.leaveBooleanContext()
-      const left = requireInstanceBuilder(this.baseAccept(node.left), sourceLocation)
-      const right = requireInstanceBuilder(this.baseAccept(node.right), sourceLocation)
+      const left = requireInstanceBuilder(this.baseAccept(node.left))
+      const right = requireInstanceBuilder(this.baseAccept(node.right))
       const expr = new BooleanExpressionBuilder(
         nodeFactory.booleanBinaryOperation({
           left: requireExpressionOfType(left, boolPType, sourceLocation),
@@ -361,8 +361,8 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   visitConditionalExpression(node: ts.ConditionalExpression): NodeBuilder {
     const sourceLocation = this.sourceLocation(node)
     const condition = this.evaluateCondition(node.condition)
-    const whenTrue = requireInstanceBuilder(this.baseAccept(node.whenTrue), sourceLocation)
-    const whenFalse = requireInstanceBuilder(this.baseAccept(node.whenFalse), sourceLocation)
+    const whenTrue = requireInstanceBuilder(this.baseAccept(node.whenTrue))
+    const whenFalse = requireInstanceBuilder(this.baseAccept(node.whenFalse))
     const ptype = this.context.getPTypeForNode(node)
     return this.createConditionalExpression({
       condition,
@@ -409,7 +409,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
 
     const head = this.textVisitor.accept(node.head)
     const spans = node.templateSpans.map(
-      (s) => [requireInstanceBuilder(this.baseAccept(s.expression), sourceLocation), this.textVisitor.accept(s.literal)] as const,
+      (s) => [requireInstanceBuilder(this.baseAccept(s.expression)), this.textVisitor.accept(s.literal)] as const,
     )
     return target.taggedTemplate(head, spans, sourceLocation)
   }

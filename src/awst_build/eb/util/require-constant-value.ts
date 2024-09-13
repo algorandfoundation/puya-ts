@@ -10,7 +10,7 @@ export function requireConstantValue(builder: NodeBuilder, sourceLocation: Sourc
   if (builder instanceof BigIntLiteralExpressionBuilder) {
     return builder.value
   }
-  const value = requireInstanceBuilder(builder, sourceLocation).resolve()
+  const value = requireInstanceBuilder(builder).resolve()
   codeInvariant(isConstant(value), 'Expected compile time constant')
   return value.value
 }

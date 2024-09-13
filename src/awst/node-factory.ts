@@ -1,4 +1,5 @@
 import type { Expression, Statement } from './nodes'
+import { BooleanBinaryOperation } from './nodes'
 import { VoidConstant } from './nodes'
 import { IntrinsicCall } from './nodes'
 import { MethodDocumentation } from './nodes'
@@ -126,6 +127,12 @@ const explicitNodeFactory = {
       sourceLocation,
       comment: comment ?? null,
       label: label ?? null,
+    })
+  },
+  booleanBinaryOperation(props: Omit<Props<BooleanBinaryOperation>, 'wtype'>) {
+    return new BooleanBinaryOperation({
+      ...props,
+      wtype: boolWType,
     })
   },
   assignmentExpression({

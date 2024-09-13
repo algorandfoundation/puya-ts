@@ -3,6 +3,7 @@ import * as wtypes from './wtypes'
 import { nodeFactory } from './node-factory'
 import type { SourceLocation } from './source-location'
 import type { DeliberateAny } from '../typescript-helpers'
+import type { Expression } from './nodes'
 
 export const intrinsicFactory = {
   bytesConcat({
@@ -27,6 +28,16 @@ export const intrinsicFactory = {
       opCode: 'err',
       sourceLocation,
       stackArgs: [],
+      immediates: [],
+      wtype: wtypes.voidWType,
+      comment,
+    })
+  },
+  assert({ sourceLocation, comment, condition }: { sourceLocation: SourceLocation; comment: string | null; condition: Expression }) {
+    return nodeFactory.intrinsicCall({
+      opCode: 'assert',
+      sourceLocation,
+      stackArgs: [condition],
       immediates: [],
       wtype: wtypes.voidWType,
       comment,

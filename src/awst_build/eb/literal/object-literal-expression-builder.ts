@@ -54,7 +54,7 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
         }
       } else {
         if (part.obj.hasProperty(name)) {
-          return requireInstanceBuilder(part.obj.memberAccess(name, sourceLocation), sourceLocation)
+          return requireInstanceBuilder(part.obj.memberAccess(name, sourceLocation))
         }
       }
     }

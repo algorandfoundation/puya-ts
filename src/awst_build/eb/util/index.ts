@@ -49,9 +49,9 @@ export function requestBuilderOfType(builder: NodeBuilder, ptype: PType, sourceL
   return undefined
 }
 
-export function requireInstanceBuilder(builder: NodeBuilder, sourceLocation: SourceLocation): InstanceBuilder {
+export function requireInstanceBuilder(builder: NodeBuilder): InstanceBuilder {
   if (builder instanceof InstanceBuilder) return builder
-  throw new CodeError(`Expected instance of a type, got ${builder.typeDescription}`, { sourceLocation })
+  throw new CodeError(`Expected instance of a type, got ${builder.typeDescription}`, { sourceLocation: builder.sourceLocation })
 }
 
 export function requireExpressionsOfType<const TPTypes extends [...PType[]]>(
