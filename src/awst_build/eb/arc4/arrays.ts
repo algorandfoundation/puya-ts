@@ -1,6 +1,6 @@
 import type { InstanceBuilder } from '../index'
-import { InstanceExpressionBuilder } from '../index'
 import { NodeBuilder } from '../index'
+import { InstanceExpressionBuilder } from '../index'
 import type { PType } from '../../ptypes'
 import { NumberPType } from '../../ptypes'
 import type { SourceLocation } from '../../../awst/source-location'
@@ -13,6 +13,8 @@ import { codeInvariant, invariant } from '../../../util'
 import { parseFunctionArgs } from '../util/arg-parsing'
 import { requireExpressionOfType } from '../util'
 import { nodeFactory } from '../../../awst/node-factory'
+import { UInt64ExpressionBuilder } from '../uint64-expression-builder'
+import { uint64WType } from '../../../awst/wtypes'
 
 export class DynamicArrayConstructorBuilder extends NodeBuilder {
   readonly ptype = DynamicArrayConstructor
@@ -83,18 +85,47 @@ export class StaticArrayConstructorBuilder extends NodeBuilder {
   }
 }
 
-export abstract class ArrayExpressionBuilder extends InstanceExpressionBuilder<DynamicArrayType | StaticArrayType> {}
+export abstract class ArrayExpressionBuilder<
+  TArrayType extends DynamicArrayType | StaticArrayType,
+> extends InstanceExpressionBuilder<TArrayType> {
+  iterate(sourceLocation: SourceLocation): Expression {
+    return this.resolve()
+  }
+}
 
-export class DynamicArrayExpressionBuilder extends ArrayExpressionBuilder {
+export class DynamicArrayExpressionBuilder extends ArrayExpressionBuilder<DynamicArrayType> {
   constructor(expr: Expression, ptype: PType) {
     invariant(ptype instanceof DynamicArrayType, 'ptype must be instance of DynamicArrayType')
     super(expr, ptype)
   }
+  memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
+    switch (name) {
+      case 'length':
+        return new UInt64ExpressionBuilder(
+          nodeFactory.intrinsicCall({
+            opCode: 'extract_uint16',
+            immediates: [0n],
+            stackArgs: [this._expr],
+            sourceLocation,
+            wtype: uint64WType,
+          }),
+        )
+    }
+    return super.memberAccess(name, sourceLocation)
+  }
 }
 
-export class StaticArrayExpressionBuilder extends ArrayExpressionBuilder {
+export class StaticArrayExpressionBuilder extends ArrayExpressionBuilder<StaticArrayType> {
   constructor(expr: Expression, ptype: PType) {
     invariant(ptype instanceof StaticArrayType, 'ptype must be instance of StaticArrayType')
     super(expr, ptype)
+  }
+
+  memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
+    switch (name) {
+      case 'length':
+        return new UInt64ExpressionBuilder(nodeFactory.uInt64Constant({ value: this.ptype.arraySize, sourceLocation }))
+    }
+    return super.memberAccess(name, sourceLocation)
   }
 }
