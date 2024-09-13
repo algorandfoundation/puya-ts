@@ -9,6 +9,8 @@ import { parseFunctionArgs } from '../util/arg-parsing'
 import { nodeFactory } from '../../../awst/node-factory'
 import { compareBytes } from '../util/compare-bytes'
 import { requireExpressionOfType } from '../util'
+import { BytesExpressionBuilder } from '../bytes-expression-builder'
+import { bytesWType } from '../../../awst/wtypes'
 
 export class AccountFunctionBuilder extends FunctionBuilder {
   call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
@@ -49,5 +51,19 @@ export class AccountFunctionBuilder extends FunctionBuilder {
 export class AccountExpressionBuilder extends InstanceExpressionBuilder<PType> {
   compare(other: InstanceBuilder, op: BuilderComparisonOp, sourceLocation: SourceLocation): InstanceBuilder {
     return compareBytes(this._expr, requireExpressionOfType(other, accountPType), op, sourceLocation, this.typeDescription)
+  }
+
+  memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
+    switch (name) {
+      case 'bytes':
+        return new BytesExpressionBuilder(
+          nodeFactory.reinterpretCast({
+            expr: this._expr,
+            wtype: bytesWType,
+            sourceLocation,
+          }),
+        )
+    }
+    return super.memberAccess(name, sourceLocation)
   }
 }
