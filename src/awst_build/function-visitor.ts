@@ -347,7 +347,7 @@ export class FunctionVisitor
     const returnValue = this.accept(node.expression)
     return nodeFactory.returnStatement({
       sourceLocation: sourceLocation,
-      value: requireExpressionOfType(returnValue, this._functionType.returnType, sourceLocation),
+      value: requireExpressionOfType(returnValue, this._functionType.returnType),
     })
   }
   visitWithStatement(node: ts.WithStatement): awst.Statement | awst.Statement[] {
@@ -379,7 +379,7 @@ export class FunctionVisitor
       if (clause.kind === ts.SyntaxKind.DefaultClause) {
         defaultCase = caseBlock
       } else {
-        const clauseExpr = requireExpressionOfType(this.accept(clause.expression), subject.ptype, sourceLocation)
+        const clauseExpr = requireExpressionOfType(this.accept(clause.expression), subject.ptype)
         cases.set(clauseExpr, caseBlock)
       }
     }

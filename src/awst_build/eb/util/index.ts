@@ -8,41 +8,42 @@ import { UintNType } from '../../ptypes/arc4-types'
 import { biguintPType, boolPType, bytesPType, stringPType, uint64PType } from '../../ptypes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { codeInvariant } from '../../../util'
+import type { Expression } from '../../../awst/nodes'
 import { BoolConstant, IntegerConstant } from '../../../awst/nodes'
 import { StringConstant } from '../../../awst/nodes'
 import { LiteralExpressionBuilder } from '../literal-expression-builder'
 
-export function requireExpressionOfType(builder: NodeBuilder, ptype: PType, sourceLocation: SourceLocation): awst.Expression {
+export function requireExpressionOfType(builder: NodeBuilder, ptype: PType): Expression {
   if (builder instanceof InstanceBuilder) {
-    if (builder.resolvableToPType(ptype, sourceLocation)) {
-      return builder.resolveToPType(ptype, sourceLocation).resolve()
+    if (builder.resolvableToPType(ptype)) {
+      return builder.resolveToPType(ptype).resolve()
     }
   }
   throw new CodeError(`Expected expression of type ${ptype}, got ${builder.typeDescription}`, {
-    sourceLocation,
+    sourceLocation: builder.sourceLocation,
   })
 }
 
-export function resolvableToType(builder: NodeBuilder, ptype: PType, sourceLocation: SourceLocation): builder is InstanceBuilder {
+export function resolvableToType(builder: NodeBuilder, ptype: PType): builder is InstanceBuilder {
   if (builder instanceof InstanceBuilder) {
-    return builder.resolvableToPType(ptype, sourceLocation)
+    return builder.resolvableToPType(ptype)
   }
   return false
 }
 
-export function requestExpressionOfType(builder: NodeBuilder, ptype: PType, sourceLocation: SourceLocation): awst.Expression | undefined {
+export function requestExpressionOfType(builder: NodeBuilder, ptype: PType): Expression | undefined {
   if (builder instanceof InstanceBuilder) {
-    if (builder.resolvableToPType(ptype, sourceLocation)) {
-      return builder.resolveToPType(ptype, sourceLocation).resolve()
+    if (builder.resolvableToPType(ptype)) {
+      return builder.resolveToPType(ptype).resolve()
     }
     return undefined
   }
   return undefined
 }
-export function requestBuilderOfType(builder: NodeBuilder, ptype: PType, sourceLocation: SourceLocation): InstanceBuilder | undefined {
+export function requestBuilderOfType(builder: NodeBuilder, ptype: PType): InstanceBuilder | undefined {
   if (builder instanceof InstanceBuilder) {
-    if (builder.resolvableToPType(ptype, sourceLocation)) {
-      return builder.resolveToPType(ptype, sourceLocation)
+    if (builder.resolvableToPType(ptype)) {
+      return builder.resolveToPType(ptype)
     }
     return undefined
   }
@@ -60,7 +61,7 @@ export function requireExpressionsOfType<const TPTypes extends [...PType[]]>(
   sourceLocation: SourceLocation,
 ): Array<awst.Expression> {
   if (builders.length === ptypes.length) {
-    return builders.map((builder, i) => requireExpressionOfType(builder, ptypes[i], sourceLocation))
+    return builders.map((builder, i) => requireExpressionOfType(builder, ptypes[i]))
   }
   throw new CodeError(`Expected ${ptypes.length} args with types ${ptypes.join(', ')}`, { sourceLocation })
 }
@@ -83,8 +84,8 @@ export function requireBooleanConstant(builder: InstanceBuilder): awst.BoolConst
 
 export function requestConstantOfType(builder: NodeBuilder, ptype: PType): awst.Constant | undefined {
   if (builder instanceof LiteralExpressionBuilder) {
-    if (builder.resolvableToPType(ptype, builder.sourceLocation)) {
-      const expr = builder.resolveToPType(ptype, builder.sourceLocation).resolve()
+    if (builder.resolvableToPType(ptype)) {
+      const expr = builder.resolveToPType(ptype).resolve()
       if (isConstant(expr)) return expr
     }
     return undefined

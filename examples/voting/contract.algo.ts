@@ -150,7 +150,7 @@ export class VotingRoundApp extends arc4.Contract {
       url: this.nftImageUrl.value,
       note: note,
       fee: Global.minTxnFee,
-    }).config_asset
+    }).configAsset
   }
 
   @abimethod({ readonly: true })

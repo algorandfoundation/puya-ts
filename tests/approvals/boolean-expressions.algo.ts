@@ -1,4 +1,5 @@
-import { uint64, bytes, assert } from '@algorandfoundation/algo-ts'
+import type { uint64, bytes } from '@algorandfoundation/algo-ts'
+import { assert } from '@algorandfoundation/algo-ts'
 
 function test(a: uint64, b: uint64, c: string, d: bytes, e: uint64) {
   const x = a || b || e

@@ -100,14 +100,15 @@ export abstract class InstanceBuilder<TPType extends PType = PType> extends Node
   abstract resolve(): awst.Expression
   abstract resolveLValue(): awst.LValue
 
-  resolvableToPType(ptype: PType, sourceLocation: SourceLocation): boolean {
+  resolvableToPType(ptype: PType): boolean {
     return this.ptype.equals(ptype)
   }
-  resolveToPType(ptype: PType, sourceLocation: SourceLocation): InstanceBuilder {
-    if (this.resolvableToPType(ptype, sourceLocation)) {
+
+  resolveToPType(ptype: PType): InstanceBuilder {
+    if (this.resolvableToPType(ptype)) {
       return this
     }
-    throw CodeError.cannotResolveToType({ sourceType: this.ptype, targetType: ptype, sourceLocation })
+    throw CodeError.cannotResolveToType({ sourceType: this.ptype, targetType: ptype, sourceLocation: this.sourceLocation })
   }
 
   singleEvaluation(): InstanceBuilder {

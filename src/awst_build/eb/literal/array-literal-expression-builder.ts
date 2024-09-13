@@ -30,7 +30,7 @@ export class ArrayLiteralExpressionBuilder extends InstanceBuilder {
 
   private toTuple(ptype: TuplePType, sourceLocation: SourceLocation): Expression {
     return nodeFactory.tupleExpression({
-      items: this.items.map((item, index) => requireExpressionOfType(item, ptype.items[index], sourceLocation)),
+      items: this.items.map((item, index) => requireExpressionOfType(item, ptype.items[index])),
       sourceLocation,
     })
   }
@@ -45,7 +45,7 @@ export class ArrayLiteralExpressionBuilder extends InstanceBuilder {
     return this.#ptype
   }
 
-  resolveToPType(ptype: PType, sourceLocation: SourceLocation): InstanceBuilder {
+  resolveToPType(ptype: PType): InstanceBuilder {
     if (ptype instanceof TuplePType) {
       codeInvariant(
         ptype.items.length === this.items.length,
@@ -53,7 +53,7 @@ export class ArrayLiteralExpressionBuilder extends InstanceBuilder {
       )
       return new TupleExpressionBuilder(
         nodeFactory.tupleExpression({
-          items: ptype.items.map((itemType, index) => this.items[index].resolveToPType(itemType, sourceLocation).resolve()),
+          items: ptype.items.map((itemType, index) => this.items[index].resolveToPType(itemType).resolve()),
           sourceLocation: this.sourceLocation,
         }),
         ptype,
@@ -62,18 +62,19 @@ export class ArrayLiteralExpressionBuilder extends InstanceBuilder {
     if (ptype instanceof ArrayPType) {
       return new ArrayLiteralExpressionBuilder(
         this.sourceLocation,
-        this.items.map((i) => i.resolveToPType(ptype.itemType, sourceLocation)),
+        this.items.map((i) => i.resolveToPType(ptype.itemType)),
       )
     }
-    return super.resolveToPType(ptype, sourceLocation)
+    return super.resolveToPType(ptype)
   }
-  resolvableToPType(ptype: PType, sourceLocation: SourceLocation): boolean {
+
+  resolvableToPType(ptype: PType): boolean {
     if (this.ptype.equals(ptype)) return true
     if (ptype instanceof TuplePType) {
-      return ptype.items.every((itemType, index) => this.items[index].resolvableToPType(itemType, sourceLocation))
+      return ptype.items.every((itemType, index) => this.items[index].resolvableToPType(itemType))
     }
     if (ptype instanceof ArrayPType) {
-      return this.items.every((i) => i.resolveToPType(ptype.itemType, sourceLocation))
+      return this.items.every((i) => i.resolveToPType(ptype.itemType))
     }
     return false
   }

@@ -34,7 +34,7 @@ export class BigUintFunctionBuilder extends FunctionBuilder {
     if (args.length === 1) {
       const [arg0] = args
       if (arg0 instanceof LiteralExpressionBuilder) {
-        return arg0.resolveToPType(biguintPType, sourceLocation)
+        return arg0.resolveToPType(biguintPType)
       }
     }
     throw CodeError.unexpectedUnhandledArgs({ sourceLocation })
@@ -46,7 +46,7 @@ export class BigUintExpressionBuilder extends InstanceExpressionBuilder<Instance
     super(expr, biguintPType)
   }
   compare(other: InstanceBuilder, op: BuilderComparisonOp, sourceLocation: SourceLocation): InstanceBuilder {
-    const otherExpr = requireExpressionOfType(other, biguintPType, sourceLocation)
+    const otherExpr = requireExpressionOfType(other, biguintPType)
     const numComOp = tryConvertEnum(op, BuilderComparisonOp, NumericComparison)
     if (numComOp === undefined) {
       throw new NotSupported(`Numeric comparison operator ${op}`, {
@@ -127,7 +127,7 @@ export class BigUintExpressionBuilder extends InstanceExpressionBuilder<Instance
   }
 
   binaryOp(other: InstanceBuilder, op: BuilderBinaryOp, sourceLocation: SourceLocation): InstanceBuilder {
-    const otherExpr = requireExpressionOfType(other, biguintPType, sourceLocation)
+    const otherExpr = requireExpressionOfType(other, biguintPType)
 
     const uintOp = op === BuilderBinaryOp.div ? BigUIntBinaryOperator.floorDiv : tryConvertEnum(op, BuilderBinaryOp, BigUIntBinaryOperator)
     if (uintOp === undefined) {
@@ -160,7 +160,7 @@ export class BigUintExpressionBuilder extends InstanceExpressionBuilder<Instance
       nodeFactory.assignmentExpression({
         target: this.resolveLValue(),
         sourceLocation,
-        value: requireExpressionOfType(other, biguintPType, sourceLocation),
+        value: requireExpressionOfType(other, biguintPType),
       }),
     )
   }

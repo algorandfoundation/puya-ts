@@ -11,9 +11,8 @@ import { requireExpressionOfType, requireExpressionsOfType } from './util'
 import { NumberPType } from '../ptypes'
 import { BytesFunction, bytesPType, stringPType, uint64PType } from '../ptypes'
 import { StringExpressionBuilder } from './string-expression-builder'
-import { BooleanExpressionBuilder } from './boolean-expression-builder'
 import type { Expression } from '../../awst/nodes'
-import { BytesBinaryOperator, BytesEncoding, BytesUnaryOperator, EqualityComparison, StringConstant } from '../../awst/nodes'
+import { BytesBinaryOperator, BytesEncoding, BytesUnaryOperator, StringConstant } from '../../awst/nodes'
 import { base32ToUint8Array, base64ToUint8Array, hexToUint8Array, utf8ToUint8Array } from '../../util'
 import { BigIntLiteralExpressionBuilder } from './literal/big-int-literal-expression-builder'
 import { logger } from '../../logger'
@@ -75,7 +74,7 @@ export class BytesFunctionBuilder extends FunctionBuilder {
       throw CodeError.unexpectedUnhandledArgs({ sourceLocation })
     }
     if (arg0 instanceof LiteralExpressionBuilder) {
-      return arg0.resolveToPType(bytesPType, sourceLocation)
+      return arg0.resolveToPType(bytesPType)
     } else {
       if (arg0.ptype?.equals(stringPType)) {
         return new BytesExpressionBuilder(arg0.toBytes(sourceLocation))
@@ -158,7 +157,7 @@ export class BytesExpressionBuilder extends InstanceExpressionBuilder<InstanceTy
     return super.memberAccess(name, sourceLocation)
   }
   compare(other: InstanceBuilder, op: BuilderComparisonOp, sourceLocation: SourceLocation): InstanceBuilder {
-    return compareBytes(this._expr, requireExpressionOfType(other, bytesPType, sourceLocation), op, sourceLocation, this.typeDescription)
+    return compareBytes(this._expr, requireExpressionOfType(other, bytesPType), op, sourceLocation, this.typeDescription)
   }
   boolEval(sourceLocation: SourceLocation, negate: boolean): awst.Expression {
     return new UInt64ExpressionBuilder(

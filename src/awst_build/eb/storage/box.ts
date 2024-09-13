@@ -233,7 +233,7 @@ class BoxValueExpressionBuilder extends ValueProxy<PType> {
     super(boxValue, ptype)
   }
   assign(other: InstanceBuilder, sourceLocation: SourceLocation): InstanceBuilder {
-    const value = requireExpressionOfType(other, this.ptype, sourceLocation)
+    const value = requireExpressionOfType(other, this.ptype)
     return typeRegistry.getInstanceEb(
       nodeFactory.assignmentExpression({
         target: this.resolveLValue(),

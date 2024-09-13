@@ -47,8 +47,8 @@ export class UintNConstructorBuilder extends NodeBuilder {
         ptype,
       )
     }
-    if (initialValueBuilder.resolvableToPType(uint64PType, sourceLocation)) {
-      const initialValue = initialValueBuilder.resolveToPType(uint64PType, sourceLocation).resolve()
+    if (initialValueBuilder.resolvableToPType(uint64PType)) {
+      const initialValue = initialValueBuilder.resolveToPType(uint64PType).resolve()
       if (initialValue instanceof IntegerConstant) {
         codeInvariant(isValidLiteralForPType(initialValue.value, ptype), `${initialValue.value} cannot be converted to ${ptype}`)
         return new UintNExpressionBuilder(
@@ -71,8 +71,8 @@ export class UintNConstructorBuilder extends NodeBuilder {
       }
     }
 
-    if (initialValueBuilder.resolvableToPType(biguintPType, sourceLocation)) {
-      const initialValue = initialValueBuilder.resolveToPType(biguintPType, sourceLocation).resolve()
+    if (initialValueBuilder.resolvableToPType(biguintPType)) {
+      const initialValue = initialValueBuilder.resolveToPType(biguintPType).resolve()
       if (initialValue instanceof IntegerConstant) {
         codeInvariant(isValidLiteralForPType(initialValue.value, ptype), `${initialValue.value} cannot be converted to ${ptype}`)
         return new UintNExpressionBuilder(

@@ -91,7 +91,7 @@ abstract class IntrinsicOpBuilderBase extends FunctionBuilder {
         const thisArg = args[sig.argNames.indexOf(arg.name)]
 
         for (const ptype of arg.ptypes) {
-          const expr = requestExpressionOfType(thisArg, ptype, sourceLocation)
+          const expr = requestExpressionOfType(thisArg, ptype)
           if (expr) {
             stackArgs.push(expr)
             continue stackArgLoop

@@ -48,16 +48,16 @@ export class ConditionalExpressionBuilder extends LiteralExpressionBuilder {
     this.condition = condition
   }
 
-  resolvableToPType(ptype: PType, sourceLocation: SourceLocation): boolean {
-    return resolvableToType(this.whenTrue, ptype, sourceLocation) && resolvableToType(this.whenFalse, ptype, sourceLocation)
+  resolvableToPType(ptype: PType): boolean {
+    return resolvableToType(this.whenTrue, ptype) && resolvableToType(this.whenFalse, ptype)
   }
 
   resolveToPType(ptype: PType): InstanceBuilder {
     return typeRegistry.getInstanceEb(
       nodeFactory.conditionalExpression({
         sourceLocation: this.sourceLocation,
-        falseExpr: requireExpressionOfType(this.whenFalse, ptype, this.sourceLocation),
-        trueExpr: requireExpressionOfType(this.whenTrue, ptype, this.sourceLocation),
+        falseExpr: requireExpressionOfType(this.whenFalse, ptype),
+        trueExpr: requireExpressionOfType(this.whenTrue, ptype),
         condition: this.condition,
         wtype: ptype.wtypeOrThrow,
       }),

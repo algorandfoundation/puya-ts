@@ -29,7 +29,7 @@ export class DynamicArrayConstructorBuilder extends NodeBuilder {
       argSpec: (a) => args.map((_) => a.required()),
     })
     codeInvariant(elementType instanceof ARC4EncodedType, 'Element type must be an ARC4 encoded type', sourceLocation)
-    const initialItemExprs = initialItems.map((i) => requireExpressionOfType(i, elementType, sourceLocation))
+    const initialItemExprs = initialItems.map((i) => requireExpressionOfType(i, elementType))
     const ptype = new DynamicArrayType({ elementType, sourceLocation })
     return new DynamicArrayExpressionBuilder(
       nodeFactory.newArray({
@@ -61,7 +61,7 @@ export class StaticArrayConstructorBuilder extends NodeBuilder {
       `Array size type parameter of ${this.typeDescription} must be a literal number. Inferred type is ${arraySize.name}`,
       sourceLocation,
     )
-    const initialItemExprs = initialItems.map((i) => requireExpressionOfType(i, elementType, sourceLocation))
+    const initialItemExprs = initialItems.map((i) => requireExpressionOfType(i, elementType))
     const ptype = new StaticArrayType({ elementType, arraySize: arraySize.literalValue, sourceLocation })
 
     // TODO: We should support passing no args in which case the array should be initialized with 'default' values where
