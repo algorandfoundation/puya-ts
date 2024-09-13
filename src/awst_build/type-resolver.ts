@@ -287,7 +287,10 @@ export class TypeResolver {
   private getSymbolFullName(symbol: ts.Symbol, sourceLocation: SourceLocation): SymbolName {
     const declaration = symbol?.declarations?.[0]
     if (declaration) {
-      if (intersectsFlags(symbol.flags, ts.SymbolFlags.Namespace) && !hasFlags(symbol.flags, ts.SymbolFlags.Function)) {
+      if (
+        intersectsFlags(symbol.flags, ts.SymbolFlags.Namespace) &&
+        !intersectsFlags(symbol.flags, ts.SymbolFlags.Function | ts.SymbolFlags.RegularEnum)
+      ) {
         return new SymbolName({
           module: normalisePath(declaration.getSourceFile().fileName, this.programDirectory),
           name: '*',

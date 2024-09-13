@@ -32,7 +32,7 @@ export class ToCodeVisitor
     throw new Error('Method not implemented.')
   }
   visitPuyaLibCall(expression: nodes.PuyaLibCall): string {
-    throw new Error('Method not implemented.')
+    return `${expression.func}(${expression.args.map((a) => a.value.accept(this)).join(', ')})`
   }
   visitARC4Router(expression: nodes.ARC4Router): string {
     throw new Error('Method not implemented.')
