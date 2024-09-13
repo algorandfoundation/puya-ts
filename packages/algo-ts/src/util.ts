@@ -27,7 +27,13 @@ export function assertMatch<T>(subject: T, test: MatchTest<T>, message?: string)
   return true
 }
 
-export function ensureBudget(budget: uint64, feeSource: 'GroupCredit' | 'AppAccount' | 'Any' = 'GroupCredit') {
+export enum OpUpFeeSource {
+  GroupCredit = 0,
+  AppAccount = 1,
+  Any = 2,
+}
+
+export function ensureBudget(budget: uint64, feeSource: OpUpFeeSource = OpUpFeeSource.GroupCredit) {
   throw new Error('Not implemented')
 }
 

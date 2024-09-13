@@ -712,8 +712,8 @@ export class PuyaLibData {
   wtype: wtypes.WType
 }
 export enum PuyaLibFunction {
-  ensureBudget,
-  isSubstring,
+  ensureBudget = 'ensure_budget',
+  isSubstring = 'is_substring',
 }
 export class PuyaLibCall extends Expression {
   constructor(props: Props<PuyaLibCall>) {

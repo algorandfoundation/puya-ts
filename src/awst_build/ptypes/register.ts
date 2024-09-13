@@ -55,6 +55,7 @@ import {
   boxRefType,
   BytesFunction,
   bytesPType,
+  ensureBudgetFunction,
   errFunction,
   FunctionPType,
   GlobalStateFunction,
@@ -68,11 +69,14 @@ import {
   logFunction,
   NamespacePType,
   ObjectPType,
+  onCompleteActionType,
+  opUpFeeSourceType,
   paymentGroupTransaction,
   PayTxnFunction,
   StringFunction,
   stringPType,
   TransactionFunction,
+  transactionTypeType,
   TuplePType,
   Uint64Function,
   uint64PType,
@@ -98,6 +102,8 @@ import {
   StaticArrayExpressionBuilder,
 } from '../eb/arc4/arrays'
 import { AssertMatchFunctionBuilder } from '../eb/assert-match-function-builder'
+import { EnsureBudgetFunctionBuilder } from '../eb/ensure-budget'
+import { Uint64EnumTypeBuilder } from '../eb/uint64-enum-type-builder'
 
 export function registerPTypes(typeRegistry: TypeRegistry) {
   if (typeRegistry.hasRegistrations) {
@@ -181,4 +187,9 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: TransactionFunction, singletonEb: GroupTransactionFunctionBuilder })
 
   typeRegistry.register({ ptype: assertMatchFunction, singletonEb: AssertMatchFunctionBuilder })
+  typeRegistry.register({ ptype: ensureBudgetFunction, singletonEb: EnsureBudgetFunctionBuilder })
+
+  typeRegistry.register({ ptype: opUpFeeSourceType, singletonEb: Uint64EnumTypeBuilder })
+  typeRegistry.register({ ptype: onCompleteActionType, singletonEb: Uint64EnumTypeBuilder })
+  typeRegistry.register({ ptype: transactionTypeType, singletonEb: Uint64EnumTypeBuilder })
 }

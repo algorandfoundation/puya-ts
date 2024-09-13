@@ -848,19 +848,50 @@ export class Uint64EnumType extends PType {
   readonly name: string
   readonly module: string
   readonly singleton = true
+  readonly members: Record<string, bigint>
 
-  constructor(props: { name: string; module: string }) {
+  constructor(props: { name: string; module: string; members: Record<string, bigint> }) {
     super()
     this.name = props.name
     this.module = props.module
+    this.members = props.members
   }
 }
 
 export const transactionTypeType = new Uint64EnumType({
   module: Constants.transactionsModuleName,
   name: 'TransactionType',
+  members: {
+    Payment: 1n,
+    KeyRegistration: 2n,
+    AssetConfig: 3n,
+    AssetTransfer: 4n,
+    AssetFreeze: 5n,
+    Application: 6n,
+  },
 })
 export const onCompleteActionType = new Uint64EnumType({
   module: Constants.arc4ModuleName,
   name: 'OnCompleteAction',
+  members: {
+    NoOp: 0n,
+    OptIn: 1n,
+    CloseOut: 2n,
+    ClearState: 3n,
+    UpdateApplication: 4n,
+    DeleteApplication: 5n,
+  },
+})
+export const ensureBudgetFunction = new LibFunctionType({
+  name: 'ensureBudget',
+  module: Constants.utilModuleName,
+})
+export const opUpFeeSourceType = new Uint64EnumType({
+  module: Constants.utilModuleName,
+  name: 'OpUpFeeSource',
+  members: {
+    GroupCredit: 0n,
+    AppAccount: 1n,
+    Any: 2n,
+  },
 })

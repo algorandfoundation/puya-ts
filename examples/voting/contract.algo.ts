@@ -16,6 +16,7 @@ import {
   itxn,
   Txn,
   urange,
+  OpUpFeeSource,
 } from '@algorandfoundation/algo-ts'
 
 type VoteIndexArray = arc4.DynamicArray<arc4.UintN<8>>
@@ -107,7 +108,7 @@ export class VotingRoundApp extends arc4.Contract {
   }
 
   public close() {
-    ensureBudget(20000, 'GroupCredit')
+    ensureBudget(20000)
     assert(!this.closeTime.hasValue, 'Already closed')
     this.closeTime.value = Global.latestTimestamp
 
@@ -173,7 +174,7 @@ export class VotingRoundApp extends arc4.Contract {
   }
 
   public vote(fundMinBalReq: gtxn.PayTxn, signature: bytes, answerIds: VoteIndexArray): void {
-    ensureBudget(7700, 'GroupCredit')
+    ensureBudget(7700, OpUpFeeSource.GroupCredit)
     assert(this.allowedToVote(signature), 'Not allowed to vote')
     assert(this.votingOpen(), 'Voting not open')
     assert(!this.alreadyVoted(), 'Already voted')
