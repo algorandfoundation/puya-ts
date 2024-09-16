@@ -16,6 +16,7 @@ import { BooleanExpressionBuilder } from '../boolean-expression-builder'
 import { parseFunctionArgs } from '../util/arg-parsing'
 import type { WType } from '../../../awst/wtypes'
 import { stateKeyWType } from '../../../awst/wtypes'
+import { extractKey } from './util'
 
 export class GlobalStateFunctionBuilder extends FunctionBuilder {
   constructor(sourceLocation: SourceLocation) {
@@ -42,27 +43,9 @@ export class GlobalStateFunctionBuilder extends FunctionBuilder {
     codeInvariant(contentPType, `Generic type 'ValueType' is required if not providing an initial value`)
     const ptype = new GlobalStateType({ content: contentPType })
 
-    return new GlobalStateFunctionResultBuilder(extractKeyOverride(key, stateKeyWType, sourceLocation), ptype, {
+    return new GlobalStateFunctionResultBuilder(extractKey(key, stateKeyWType), ptype, {
       initialValue: initialValue?.resolve(),
       sourceLocation,
-    })
-  }
-}
-
-function extractKeyOverride(key: InstanceBuilder | undefined, keyWType: WType, sourceLocation: SourceLocation): Expression | undefined {
-  if (!key) return undefined
-
-  const keyBytes = key.toBytes(sourceLocation)
-  if (keyBytes instanceof BytesConstant) {
-    return nodeFactory.bytesConstant({
-      ...keyBytes,
-      wtype: keyWType,
-    })
-  } else {
-    return nodeFactory.reinterpretCast({
-      expr: keyBytes,
-      wtype: keyWType,
-      sourceLocation: sourceLocation,
     })
   }
 }

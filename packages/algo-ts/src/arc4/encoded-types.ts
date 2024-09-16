@@ -83,8 +83,13 @@ abstract class Arc4Array<TItem> extends AbiEncoded {
 export class StaticArray<TItem, TLength extends number> extends Arc4Array<TItem> {
   constructor()
   constructor(...items: TItem[] & { length: TLength })
+  constructor(...items: TItem[])
   constructor(...items: TItem[] & { length: TLength }) {
     super(items)
+  }
+
+  copy(): StaticArray<TItem, TLength> {
+    return new StaticArray<TItem, TLength>(...this.items)
   }
 }
 
@@ -95,6 +100,10 @@ export class DynamicArray<TItem> extends Arc4Array<TItem> {
   push(...items: TItem[]): void {}
   pop(): TItem {
     throw new Error('Not implemented')
+  }
+
+  copy(): DynamicArray<TItem> {
+    return new DynamicArray<TItem>(...this.items)
   }
 }
 

@@ -1,5 +1,6 @@
 import type { BoxValueExpression, Expression } from '../../../awst/nodes'
-import type { PType } from '../../ptypes'
+import { BytesConstant } from '../../../awst/nodes'
+import type { ContractClassPType, PType } from '../../ptypes'
 import { stringPType } from '../../ptypes'
 import { uint64PType } from '../../ptypes'
 import { voidPType } from '../../ptypes'
@@ -9,17 +10,20 @@ import type { InstanceBuilder, NodeBuilder } from '../index'
 import { ParameterlessFunctionBuilder } from '../index'
 import { FunctionBuilder, InstanceExpressionBuilder } from '../index'
 import { BoxMapPType, BoxPType, BoxRefPType } from '../../ptypes'
-import { invariant } from '../../../util'
+import { codeInvariant, invariant } from '../../../util'
 import type { SourceLocation } from '../../../awst/source-location'
 import { requireExpressionOfType } from '../util'
 import { ValueProxy } from './value-proxy'
 import { nodeFactory } from '../../../awst/node-factory'
 import { instanceEb, typeRegistry } from '../../type-registry'
 import { VoidExpressionBuilder } from '../void-expression-builder'
-import { boolWType, voidWType } from '../../../awst/wtypes'
+import { boolWType, boxKeyWType, bytesWType, voidWType } from '../../../awst/wtypes'
 import { parseFunctionArgs } from '../util/arg-parsing'
 import { intrinsicFactory } from '../../../awst/intrinsic-factory'
 import { BooleanExpressionBuilder } from '../boolean-expression-builder'
+import { AppStorageDeclaration } from '../../contract-data'
+import { extractKey } from './util'
+import { undefined } from 'zod'
 
 export class BoxFunctionBuilder extends FunctionBuilder {
   call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
@@ -36,7 +40,7 @@ export class BoxFunctionBuilder extends FunctionBuilder {
     })
 
     const ptype = new BoxPType({ content: contentPType })
-    return new BoxExpressionBuilder(key.resolve(), ptype)
+    return new BoxExpressionBuilder(extractKey(key, boxKeyWType), ptype)
   }
 }
 export class BoxRefFunctionBuilder extends FunctionBuilder {
@@ -52,7 +56,7 @@ export class BoxRefFunctionBuilder extends FunctionBuilder {
       argSpec: (a) => [a.obj({ key: a.required(bytesPType, stringPType) })],
     })
 
-    return new BoxRefExpressionBuilder(key.resolve(), boxRefType)
+    return new BoxRefExpressionBuilder(extractKey(key, boxKeyWType), boxRefType)
   }
 }
 export class BoxMapFunctionBuilder extends FunctionBuilder {
@@ -70,11 +74,30 @@ export class BoxMapFunctionBuilder extends FunctionBuilder {
     })
 
     const ptype = new BoxMapPType({ content: contentPType, keyType: keySuffixType })
-    return new BoxMapExpressionBuilder(keyPrefix.resolve(), ptype)
+    return new BoxMapExpressionBuilder(extractKey(keyPrefix, boxKeyWType), ptype)
   }
 }
 
-export class BoxMapExpressionBuilder extends InstanceExpressionBuilder<BoxMapPType> {
+export abstract class BoxProxyExpressionBuilder<
+  TProxyType extends BoxMapPType | BoxRefPType | BoxPType,
+> extends InstanceExpressionBuilder<TProxyType> {
+  buildStorageDeclaration(memberName: string, memberLocation: SourceLocation, contractType: ContractClassPType): AppStorageDeclaration {
+    codeInvariant(
+      this._expr instanceof BytesConstant,
+      `key${this.ptype instanceof BoxMapPType ? ' prefix' : ''} must be a compile time constant value if ${this.typeDescription} is assigned to a contract member`,
+    )
+    return new AppStorageDeclaration({
+      sourceLocation: memberLocation,
+      ptype: this.ptype,
+      memberName: memberName,
+      keyOverride: this._expr ?? null,
+      description: null,
+      definedIn: contractType,
+    })
+  }
+}
+
+export class BoxMapExpressionBuilder extends BoxProxyExpressionBuilder<BoxMapPType> {
   constructor(expr: Expression, ptype: PType) {
     invariant(ptype instanceof BoxMapPType, 'BoxMapExpressionBuilder must be constructed with ptype of BoxMapPType')
     super(expr, ptype)
@@ -87,11 +110,13 @@ export class BoxMapExpressionBuilder extends InstanceExpressionBuilder<BoxMapPTy
         return new BoxMapDeleteFunctionBuilder(this._expr, this.ptype, sourceLocation)
       case 'get':
         return new BoxMapGetFunctionBuilder(this._expr, this.ptype, sourceLocation)
+      case 'has':
+        return new BoxMapHasFunctionBuilder(this._expr, this.ptype, sourceLocation)
     }
     return super.memberAccess(name, sourceLocation)
   }
 }
-export class BoxRefExpressionBuilder extends InstanceExpressionBuilder<BoxRefPType> {
+export class BoxRefExpressionBuilder extends BoxProxyExpressionBuilder<BoxRefPType> {
   constructor(expr: Expression, ptype: PType) {
     invariant(ptype instanceof BoxRefPType, 'BoxRefExpressionBuilder must be constructed with ptype of BoxRefPType')
     super(expr, ptype)
@@ -108,6 +133,12 @@ export class BoxRefExpressionBuilder extends InstanceExpressionBuilder<BoxRefPTy
         return new BoxRefPutFunctionBuilder(boxValueExpr)
       case 'splice':
         return new BoxRefSpliceFunctionBuilder(boxValueExpr)
+      case 'create':
+        return new BoxRefCreateFunctionBuilder(boxValueExpr)
+      case 'extract':
+        return new BoxRefExtractFunctionBuilder(boxValueExpr)
+      case 'replace':
+        return new BoxRefReplaceFunctionBuilder(boxValueExpr)
       case 'value':
         return new BoxValueExpressionBuilder(boxValueExpr, this.ptype.contentType)
     }
@@ -118,6 +149,79 @@ export class BoxRefExpressionBuilder extends InstanceExpressionBuilder<BoxRefPTy
 export abstract class BoxRefBaseFunctionBuilder extends FunctionBuilder {
   constructor(protected readonly boxValue: BoxValueExpression) {
     super(boxValue.sourceLocation)
+  }
+}
+
+export class BoxRefCreateFunctionBuilder extends BoxRefBaseFunctionBuilder {
+  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    const {
+      args: [{ size }],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 0,
+      funcName: 'BoxRef.create',
+      callLocation: sourceLocation,
+      argSpec: (a) => [a.obj({ size: a.required(uint64PType) })],
+    })
+    return instanceEb(
+      nodeFactory.intrinsicCall({
+        opCode: 'box_create',
+        stackArgs: [this.boxValue, size.resolve()],
+        wtype: boolWType,
+        immediates: [],
+        sourceLocation,
+      }),
+      boolPType,
+    )
+  }
+}
+export class BoxRefExtractFunctionBuilder extends BoxRefBaseFunctionBuilder {
+  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    const {
+      args: [start, length],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 0,
+      funcName: 'BoxRef.extract',
+      callLocation: sourceLocation,
+      argSpec: (a) => [a.required(uint64PType), a.required(uint64PType)],
+    })
+    return instanceEb(
+      nodeFactory.intrinsicCall({
+        opCode: 'box_extract',
+        stackArgs: [this.boxValue, start.resolve(), length.resolve()],
+        wtype: bytesWType,
+        immediates: [],
+        sourceLocation,
+      }),
+      bytesPType,
+    )
+  }
+}
+export class BoxRefReplaceFunctionBuilder extends BoxRefBaseFunctionBuilder {
+  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    const {
+      args: [start, value],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 0,
+      funcName: 'BoxRef.replace',
+      callLocation: sourceLocation,
+      argSpec: (a) => [a.required(uint64PType), a.required(bytesPType)],
+    })
+    return instanceEb(
+      nodeFactory.intrinsicCall({
+        opCode: 'box_replace',
+        stackArgs: [this.boxValue, start.resolve(), value.resolve()],
+        wtype: voidWType,
+        immediates: [],
+        sourceLocation,
+      }),
+      voidPType,
+    )
   }
 }
 
@@ -187,7 +291,7 @@ function boxValue({
   })
 }
 
-export class BoxExpressionBuilder extends InstanceExpressionBuilder<BoxPType> {
+export class BoxExpressionBuilder extends BoxProxyExpressionBuilder<BoxPType> {
   constructor(expr: Expression, ptype: PType) {
     invariant(ptype instanceof BoxPType, 'BoxExpressionBuilder must be constructed with ptype of BoxPType')
     super(expr, ptype)
@@ -354,6 +458,28 @@ abstract class BoxMapFunctionBuilderBase extends FunctionBuilder {
     })
   }
 }
+class BoxMapHasFunctionBuilder extends BoxMapFunctionBuilderBase {
+  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    const {
+      args: [key],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      funcName: 'BoxMap.has',
+      callLocation: sourceLocation,
+      genericTypeArgs: 0,
+      argSpec: (a) => [a.required(this.keyType)],
+    })
+    return new BooleanExpressionBuilder(
+      nodeFactory.stateExists({
+        wtype: boolWType,
+        field: this.boxValueExpression(key.resolve()),
+        sourceLocation,
+      }),
+    )
+  }
+}
+
 class BoxMapGetFunctionBuilder extends BoxMapFunctionBuilderBase {
   call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {

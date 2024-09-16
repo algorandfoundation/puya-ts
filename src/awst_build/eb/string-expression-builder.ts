@@ -3,7 +3,6 @@ import { nodeFactory } from '../../awst/node-factory'
 import { CodeError, NotSupported } from '../../errors'
 import { awst, wtypes } from '../../awst'
 import type { InstanceBuilder, NodeBuilder } from './index'
-import { BuilderBinaryOp } from './index'
 import { BuilderBinaryOp, BuilderComparisonOp, FunctionBuilder, InstanceExpressionBuilder } from './index'
 import type { InstanceType, PType } from '../ptypes'
 import { boolPType, bytesPType, stringPType } from '../ptypes'
@@ -23,10 +22,10 @@ export class StringFunctionBuilder extends FunctionBuilder {
       value: head,
     })
     for (const [value, joiningText] of spans) {
-      const valueBytes = value.ptype?.equals(stringPType) ? value.resolve() : value.toBytes(sourceLocation)
+      const valueStr = value.toString(sourceLocation)
       result = nodeFactory.bytesBinaryOperation({
         left: result,
-        right: valueBytes,
+        right: valueStr,
         op: BytesBinaryOperator.add,
         sourceLocation,
         wtype: wtypes.stringWType,
@@ -162,6 +161,10 @@ export class StringExpressionBuilder extends InstanceExpressionBuilder<InstanceT
       sourceLocation,
       wtype: wtypes.bytesWType,
     })
+  }
+
+  toString(): Expression {
+    return this.resolve()
   }
 }
 

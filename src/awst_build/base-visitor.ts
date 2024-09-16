@@ -523,7 +523,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
     return sourceType
   }
 
-  private buildLValue(target: InstanceBuilder, assignmentType: PType, sourceLocation: SourceLocation): LValue {
+  buildLValue(target: InstanceBuilder, assignmentType: PType, sourceLocation: SourceLocation): LValue {
     if (target instanceof ArrayLiteralExpressionBuilder) {
       if (assignmentType instanceof TuplePType) {
         const targetItems = target.resolveItems()

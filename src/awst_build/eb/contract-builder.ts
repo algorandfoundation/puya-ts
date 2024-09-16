@@ -2,10 +2,11 @@ import type { NodeBuilder } from './index'
 import { InstanceBuilder } from './index'
 import type { SourceLocation } from '../../awst/source-location'
 import type { ContractClassPType, PType } from '../ptypes'
+import { StorageProxyPType } from '../ptypes'
 import { arc4BaseContractType, baseContractType } from '../ptypes'
-import { GlobalStateType } from '../ptypes'
+
 import { ContractMethodExpressionBuilder } from './free-subroutine-expression-builder'
-import { GlobalStateExpressionBuilder } from './storage/global-state'
+
 import type { Expression, LValue } from '../../awst/nodes'
 import type { AwstBuildContext } from '../context/awst-build-context'
 import { codeInvariant } from '../../util'
@@ -14,6 +15,8 @@ import { VoidExpressionBuilder } from './void-expression-builder'
 import { nodeFactory } from '../../awst/node-factory'
 import { Constants } from '../../constants'
 import { voidWType } from '../../awst/wtypes'
+
+import { instanceEb } from '../type-registry'
 
 export class ContractThisBuilder extends InstanceBuilder<ContractClassPType> {
   resolve(): Expression {
@@ -40,10 +43,9 @@ export class ContractThisBuilder extends InstanceBuilder<ContractClassPType> {
     const property = this.ptype.properties[name]
     if (property) {
       const storageDeclaration = this.context.getStorageDeclaration(this.ptype, name)
-      if (property instanceof GlobalStateType) {
+      if (property instanceof StorageProxyPType) {
         codeInvariant(storageDeclaration, `No declaration exists for property ${property}.`, sourceLocation)
-
-        return new GlobalStateExpressionBuilder(storageDeclaration.key, property)
+        return instanceEb(storageDeclaration.key, property)
       }
     }
     const method = this.ptype.methods[name]

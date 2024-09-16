@@ -2,7 +2,7 @@ export function defaultRecord<TKey extends PropertyKey, TValue>(defaultInit: (ke
   return new Proxy({} as Record<TKey, TValue>, {
     get(target, property, receiver) {
       if (!(property in target)) {
-        Object.assign(target, { property: defaultInit(property as TKey) })
+        Object.assign(target, { [property]: defaultInit(property as TKey) })
       }
       return Reflect.get(target, property, receiver)
     },

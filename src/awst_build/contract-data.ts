@@ -1,7 +1,8 @@
 import type { AppStorageDefinition, BytesConstant } from '../awst/nodes'
 import { AppStorageKind, BytesEncoding } from '../awst/nodes'
 import type { SourceLocation } from '../awst/source-location'
-import type { BoxMapPType, BoxPType, BoxRefPType, ContractClassPType } from './ptypes'
+import type { ContractClassPType, StorageProxyPType } from './ptypes'
+import { BoxMapPType, BoxPType, BoxRefPType } from './ptypes'
 import { GlobalStateType, LocalStateType } from './ptypes'
 import { invariant, utf8ToUint8Array } from '../util'
 import { CodeError, TodoError } from '../errors'
@@ -16,7 +17,7 @@ export class AppStorageDeclaration {
   readonly description: string | null
   constructor(props: {
     memberName: string
-    ptype: GlobalStateType | LocalStateType
+    ptype: StorageProxyPType
     keyOverride: BytesConstant | null
     sourceLocation: SourceLocation
     definedIn: ContractClassPType
@@ -37,7 +38,11 @@ export class AppStorageDeclaration {
     if (this.ptype instanceof LocalStateType) {
       return AppStorageKind.appGlobal
     }
-    throw new TodoError('Handle remaining ptypes')
+    invariant(
+      this.ptype instanceof BoxPType || this.ptype instanceof BoxRefPType || this.ptype instanceof BoxMapPType,
+      'Must be exhaustive check on ptype',
+    )
+    return AppStorageKind.box
   }
 
   get key(): BytesConstant {
