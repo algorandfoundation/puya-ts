@@ -9,7 +9,8 @@ export const MAX_BYTES_SIZE = 4096
 export const BITS_IN_BYTE = 8
 export const DEFAULT_ACCOUNT_MIN_BALANCE = 100_000
 
-export const ZERO_ADDRESS = Bytes(new Uint8Array(32))
+// algorand encoded address of 32 zero bytes
+export const ZERO_ADDRESS = Bytes('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ')
 
 /**
 "\x09"  # pragma version 9
