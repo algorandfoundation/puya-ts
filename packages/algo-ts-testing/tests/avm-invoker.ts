@@ -76,7 +76,6 @@ export const generateTestAsset = async (fields: {
     fields.decimals = 0
   }
   const params = await client.getSuggestedParams()
-
   const x = await algokit.createAsset({
     creator: fields.creator,
     total: BigInt(fields.total) * 10n ** BigInt(fields.decimals),
