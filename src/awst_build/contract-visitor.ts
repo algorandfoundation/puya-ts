@@ -27,6 +27,7 @@ import { voidWType } from '../awst/wtypes'
 import { ContractMethodVisitor } from './contract-method-visitor'
 import { ContractSuperBuilder } from './eb/contract-builder'
 import { ConstructorVisitor } from './constructor-visitor'
+import { BoxExpressionBuilder, BoxProxyExpressionBuilder } from './eb/storage/box'
 
 export class ContractVisitor extends BaseVisitor implements Visitor<ClassElements, void> {
   private _ctor?: ContractMethod
@@ -329,10 +330,13 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
           }),
         )
       }
+    } else if (initializer instanceof BoxProxyExpressionBuilder) {
+      this.context.addStorageDeclaration(
+        initializer.buildStorageDeclaration(propertyName, this.sourceLocation(node.name), this._contractPType),
+      )
     }
 
     return
-    // TODO: do something with initializer
   }
   visitSemicolonClassElement(node: ts.SemicolonClassElement): void {
     // Ignore

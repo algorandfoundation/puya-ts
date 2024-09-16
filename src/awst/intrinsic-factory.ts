@@ -16,7 +16,7 @@ export const intrinsicFactory = {
     right: awst.Expression
     sourceLocation: SourceLocation
   }): awst.IntrinsicCall {
-    invariant(left.wtype.equals(right.wtype), 'left and right operand wtypes must match')
+    // invariant(left.wtype.equals(right.wtype), 'left and right operand wtypes must match')
     return nodeFactory.intrinsicCall({
       sourceLocation,
       stackArgs: [left, right],

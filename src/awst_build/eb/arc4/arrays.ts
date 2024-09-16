@@ -1,6 +1,7 @@
 import type { InstanceBuilder } from '../index'
 import { BuilderBinaryOp, FunctionBuilder, InstanceExpressionBuilder, NodeBuilder } from '../index'
 import type { PType } from '../../ptypes'
+import { IterableIteratorType, TuplePType } from '../../ptypes'
 import { uint64PType } from '../../ptypes'
 import { NumberPType } from '../../ptypes'
 import type { SourceLocation } from '../../../awst/source-location'
@@ -21,6 +22,7 @@ import { uint64WType } from '../../../awst/wtypes'
 import { BigIntLiteralExpressionBuilder } from '../literal/big-int-literal-expression-builder'
 import { logger } from '../../../logger'
 import { instanceEb } from '../../type-registry'
+import { IterableIteratorExpressionBuilder } from '../iterable-iterator-expression-builder'
 
 export class DynamicArrayConstructorBuilder extends NodeBuilder {
   readonly ptype = DynamicArrayConstructor
@@ -102,8 +104,49 @@ export abstract class ArrayExpressionBuilder<
     switch (name) {
       case 'at':
         return new ArrayAtFunctionBuilder(this)
+      case 'entries':
+        return new EntriesFunctionBuilder(this)
+      case 'copy':
+        return new CopyFunctionBuilder(this)
     }
     return super.memberAccess(name, sourceLocation)
+  }
+}
+
+class CopyFunctionBuilder extends FunctionBuilder {
+  constructor(private arrayBuilder: ArrayExpressionBuilder<DynamicArrayType | StaticArrayType>) {
+    super(arrayBuilder.sourceLocation)
+  }
+
+  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    return instanceEb(
+      nodeFactory.copy({
+        value: this.arrayBuilder.resolve(),
+        sourceLocation,
+        wtype: this.arrayBuilder.ptype.wtype,
+      }),
+      this.arrayBuilder.ptype,
+    )
+  }
+}
+class EntriesFunctionBuilder extends FunctionBuilder {
+  constructor(private arrayBuilder: ArrayExpressionBuilder<DynamicArrayType | StaticArrayType>) {
+    super(arrayBuilder.sourceLocation)
+  }
+
+  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    parseFunctionArgs({ args, typeArgs, callLocation: sourceLocation, argSpec: (_) => [], genericTypeArgs: 0, funcName: 'entries' })
+    const iteratorType = IterableIteratorType.parameterise([
+      new TuplePType({ items: [uint64PType, this.arrayBuilder.ptype.elementType], immutable: true }),
+    ])
+    return new IterableIteratorExpressionBuilder(
+      nodeFactory.enumeration({
+        expr: this.arrayBuilder.iterate(sourceLocation),
+        sourceLocation,
+        wtype: iteratorType.wtype,
+      }),
+      iteratorType,
+    )
   }
 }
 
@@ -118,8 +161,8 @@ export class DynamicArrayExpressionBuilder extends ArrayExpressionBuilder<Dynami
         return new UInt64ExpressionBuilder(
           nodeFactory.intrinsicCall({
             opCode: 'extract_uint16',
-            immediates: [0n],
-            stackArgs: [this._expr],
+            immediates: [],
+            stackArgs: [this._expr, nodeFactory.uInt64Constant({ value: 0n, sourceLocation })],
             sourceLocation,
             wtype: uint64WType,
           }),

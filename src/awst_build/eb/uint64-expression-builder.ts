@@ -2,25 +2,38 @@ import type { awst } from '../../awst'
 import type { InstanceBuilder } from './index'
 import { BuilderBinaryOp, BuilderComparisonOp, BuilderUnaryOp, FunctionBuilder, InstanceExpressionBuilder } from './index'
 import type { Expression } from '../../awst/nodes'
+import { BoolConstant } from '../../awst/nodes'
 import { NumericComparison, UInt64BinaryOperator, UInt64PostfixUnaryOperator, UInt64UnaryOperator } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { nodeFactory } from '../../awst/node-factory'
 import { CodeError, NotSupported } from '../../errors'
 import { requireExpressionOfType } from './util'
 import { tryConvertEnum } from '../../util'
-import type { PType } from '../ptypes'
+import { biguintPType, boolPType } from '../ptypes'
 import { Uint64Function, uint64PType } from '../ptypes'
 import { BooleanExpressionBuilder } from './boolean-expression-builder'
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
-import type { InstanceType } from '../ptypes'
-import { boolWType } from '../../awst/wtypes'
+import type { InstanceType, PType } from '../ptypes'
+import { boolWType, uint64WType } from '../../awst/wtypes'
 import { LiteralExpressionBuilder } from './literal-expression-builder'
+import { parseFunctionArgs } from './util/arg-parsing'
 
 export class UInt64FunctionBuilder extends FunctionBuilder {
   readonly ptype = Uint64Function
 
   call(args: Array<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
-    if (args.length === 0) {
+    const {
+      args: [value],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 0,
+      callLocation: sourceLocation,
+      funcName: 'Uint64',
+      argSpec: (a) => [a.optional(uint64PType, boolPType)],
+    })
+
+    if (!value) {
       return new UInt64ExpressionBuilder(
         nodeFactory.uInt64Constant({
           sourceLocation,
@@ -28,13 +41,26 @@ export class UInt64FunctionBuilder extends FunctionBuilder {
         }),
       )
     }
-    if (args.length === 1) {
-      const [arg0] = args
-      if (arg0 instanceof LiteralExpressionBuilder) {
-        return arg0.resolveToPType(uint64PType)
+    if (value.ptype.equals(boolPType)) {
+      const expr = value.resolve()
+      if (expr instanceof BoolConstant) {
+        return new UInt64ExpressionBuilder(
+          nodeFactory.uInt64Constant({
+            sourceLocation,
+            value: expr.value ? 1n : 0n,
+          }),
+        )
+      } else {
+        return new UInt64ExpressionBuilder(
+          nodeFactory.reinterpretCast({
+            expr,
+            wtype: uint64WType,
+            sourceLocation,
+          }),
+        )
       }
     }
-    throw CodeError.unexpectedUnhandledArgs({ sourceLocation })
+    return value
   }
 }
 

@@ -11,6 +11,7 @@ import { compareBytes } from '../util/compare-bytes'
 import { requireExpressionOfType } from '../util'
 import { BytesExpressionBuilder } from '../bytes-expression-builder'
 import { bytesWType } from '../../../awst/wtypes'
+import type { Expression } from '../../../awst/nodes'
 
 export class AccountFunctionBuilder extends FunctionBuilder {
   call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
@@ -56,14 +57,16 @@ export class AccountExpressionBuilder extends InstanceExpressionBuilder<PType> {
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
     switch (name) {
       case 'bytes':
-        return new BytesExpressionBuilder(
-          nodeFactory.reinterpretCast({
-            expr: this._expr,
-            wtype: bytesWType,
-            sourceLocation,
-          }),
-        )
+        return new BytesExpressionBuilder(this.toBytes(sourceLocation))
     }
     return super.memberAccess(name, sourceLocation)
+  }
+
+  toBytes(sourceLocation: SourceLocation): Expression {
+    return nodeFactory.reinterpretCast({
+      expr: this._expr,
+      wtype: bytesWType,
+      sourceLocation,
+    })
   }
 }

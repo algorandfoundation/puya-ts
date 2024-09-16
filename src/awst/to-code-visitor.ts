@@ -103,7 +103,7 @@ export class ToCodeVisitor
     return `ARC4_ENCODE(${expression.value.accept(this)}, wtype=${expression.wtype})`
   }
   visitCopy(expression: nodes.Copy): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    return `copy(${expression.value.accept(this)})`
   }
   visitArrayConcat(expression: nodes.ArrayConcat): string {
     throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
@@ -225,7 +225,7 @@ export class ToCodeVisitor
     return `!${expression.expr.accept(this)}`
   }
   visitEnumeration(expression: nodes.Enumeration): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    return `enumerate(${expression.expr.accept(this)})`
   }
   visitReversed(expression: nodes.Reversed): string {
     throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })

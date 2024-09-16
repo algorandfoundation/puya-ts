@@ -12,14 +12,16 @@ import { NumberPType } from '../ptypes'
 import { BytesFunction, bytesPType, stringPType, uint64PType } from '../ptypes'
 import { StringExpressionBuilder } from './string-expression-builder'
 import type { Expression } from '../../awst/nodes'
+import { BytesConstant } from '../../awst/nodes'
 import { BytesBinaryOperator, BytesEncoding, BytesUnaryOperator, StringConstant } from '../../awst/nodes'
-import { base32ToUint8Array, base64ToUint8Array, hexToUint8Array, utf8ToUint8Array } from '../../util'
+import { base32ToUint8Array, base64ToUint8Array, hexToUint8Array, uint8ArrayToUtf8, utf8ToUint8Array } from '../../util'
 import { BigIntLiteralExpressionBuilder } from './literal/big-int-literal-expression-builder'
 import { logger } from '../../logger'
 import type { InstanceType, PType } from '../ptypes'
 import { LiteralExpressionBuilder } from './literal-expression-builder'
 import { instanceEb } from '../type-registry'
 import { compareBytes } from './util/compare-bytes'
+import { stringWType } from '../../awst/wtypes'
 
 export class BytesFunctionBuilder extends FunctionBuilder {
   readonly ptype = BytesFunction
@@ -168,6 +170,20 @@ export class BytesExpressionBuilder extends InstanceExpressionBuilder<InstanceTy
 
   toBytes(): awst.Expression {
     return this.resolve()
+  }
+
+  toString(sourceLocation: SourceLocation): Expression {
+    if (this._expr instanceof BytesConstant) {
+      return nodeFactory.stringConstant({
+        value: uint8ArrayToUtf8(this._expr.value),
+        sourceLocation: this._expr.sourceLocation,
+      })
+    }
+    return nodeFactory.reinterpretCast({
+      expr: this._expr,
+      sourceLocation,
+      wtype: stringWType,
+    })
   }
 }
 

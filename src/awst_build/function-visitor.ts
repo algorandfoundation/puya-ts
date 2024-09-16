@@ -219,6 +219,7 @@ export class FunctionVisitor
       ctx.breakTarget,
     ]
   }
+
   visitForOfStatement(node: ts.ForOfStatement): awst.Statement | awst.Statement[] {
     const sourceLocation = this.sourceLocation(node)
 
@@ -226,13 +227,10 @@ export class FunctionVisitor
     if (ts.isExpression(node.initializer)) {
       items = requireInstanceBuilder(this.accept(node.initializer)).resolveLValue()
     } else {
-      codeInvariant(
-        node.initializer.declarations.length === 1,
-        'For of loops can only declare a single loop variable',
-        this.sourceLocation(node.initializer),
-      )
+      const initializerSource = this.sourceLocation(node.initializer)
+      codeInvariant(node.initializer.declarations.length === 1, 'For of loops can only declare a single loop variable', initializerSource)
       const [declaration] = node.initializer.declarations
-      items = requireInstanceBuilder(this.accept(declaration.name)).resolveLValue()
+      items = this.buildAssignmentTarget(declaration.name, initializerSource).resolveLValue()
     }
     using ctx = this.context.switchLoopCtx.enterLoop(node, sourceLocation)
     return nodeFactory.block(

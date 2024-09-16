@@ -130,6 +130,12 @@ export abstract class InstanceBuilder<TPType extends PType = PType> extends Node
     })
   }
 
+  toString(sourceLocation: SourceLocation): awst.Expression {
+    throw new NotSupported(`Converting ${this.typeDescription} to string`, {
+      sourceLocation,
+    })
+  }
+
   prefixUnaryOp(op: BuilderUnaryOp, sourceLocation: SourceLocation): InstanceBuilder {
     throw new NotSupported(`Prefix Unary ${op} op on ${this.typeDescription}`, {
       sourceLocation,

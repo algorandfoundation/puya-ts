@@ -2,6 +2,7 @@ import { Constants } from '../../constants'
 import { wtypes } from '../../awst'
 import { codeInvariant, distinct, sortBy } from '../../util'
 import type { WType } from '../../awst/wtypes'
+import { WEnumeration } from '../../awst/wtypes'
 import { uint64WType, WArray, WGroupTransaction, WTuple } from '../../awst/wtypes'
 import { CodeError, InternalError, NotSupported } from '../../errors'
 import { PType } from './base'
@@ -15,7 +16,7 @@ export * from './base'
  * Transient types can appear in expressions but should not be used as variable or return types
  */
 export class TransientType extends PType {
-  readonly wtype: undefined = undefined
+  readonly wtype: WType | undefined = undefined
   readonly name: string
   readonly module: string
   readonly singleton: boolean
@@ -902,6 +903,7 @@ export const urangeFunction = new LibFunctionType({
 })
 
 export class IterableIteratorType extends TransientType {
+  readonly wtype: WEnumeration
   readonly itemType: PType
   constructor({ itemType }: { itemType: PType }) {
     super({
@@ -912,6 +914,7 @@ export class IterableIteratorType extends TransientType {
       singleton: false,
     })
     this.itemType = itemType
+    this.wtype = new WEnumeration({ sequenceType: this.itemType.wtypeOrThrow })
   }
   static readonly baseName = 'IterableIterator'
   static readonly moduleName = 'typescript/lib/lib.es2015.iterable.d.ts'
