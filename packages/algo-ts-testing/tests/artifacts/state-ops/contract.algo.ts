@@ -114,3 +114,17 @@ export class StateAssetParamsContract extends arc4.Contract {
   }
 
 }
+
+export class StateAcctParamsGetContract extends arc4.Contract {
+  @arc4.abimethod()
+  public verify_acct_balance(a: Account): uint64 {
+    const [value, funded] = op.AcctParams.acctBalance(a)
+    const [value_index, funded_index] = op.AcctParams.acctBalance(get_1st_ref_index())
+    assert(value == value_index, "expected value by index to match")
+    assert(funded == funded_index, "expected funded by index to match")
+    assert(value == a.balance, "expected Account balance to match")
+    assert(value == op.balance(a), "expected op.balance to match")
+    assert(value == op.balance(get_1st_ref_index()), "expected op.balance by index to match")
+    return value
+  }
+}

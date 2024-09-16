@@ -2,6 +2,7 @@ import { ctxMgr } from './execution-context'
 
 import {
   AddwType,
+  BalanceType,
   Base64DecodeType,
   BitLengthType,
   BsqrtType,
@@ -70,6 +71,7 @@ const createObjectProxy = <TName extends ObjectKeys>(name: TName) => {
 }
 
 export const addw: AddwType = createFunctionProxy('addw')
+export const balance: BalanceType = createFunctionProxy('balance')
 export const base64Decode: Base64DecodeType = createFunctionProxy('base64Decode')
 export const bitLength: BitLengthType = createFunctionProxy('bitLength')
 export const bsqrt: BsqrtType = createFunctionProxy('bsqrt')
@@ -113,3 +115,4 @@ export const JsonRef: JsonRefType = createObjectProxy('JsonRef')
 export const Txn: TxnType = createObjectProxy('Txn')
 
 export const AssetParams = createObjectProxy('AssetParams')
+export const AcctParams = createObjectProxy('AcctParams')
