@@ -1,6 +1,6 @@
 import { assertMatch, BaseContract, Global, gtxn, Txn } from '@algorandfoundation/algo-ts'
 
-function test(x: gtxn.PayTxn) {
+function test(x: gtxn.PaymentTxn) {
   assertMatch(x, {
     amount: { between: [0, 50000] },
     sender: Txn.sender,
