@@ -150,7 +150,7 @@ export class ToCodeVisitor
     throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
   }
   visitIndexExpression(expression: nodes.IndexExpression): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    return `${expression.base.accept(this)}[${expression.index.accept(this)}]`
   }
   visitSliceExpression(expression: nodes.SliceExpression): string {
     return `${expression.base.accept(this)}[${expression.beginIndex?.accept(this) ?? ''}:${expression.endIndex?.accept(this) ?? ''}]`
