@@ -1,18 +1,21 @@
 import { internal, uint64 } from '@algorandfoundation/algo-ts'
 import * as algokit from '@algorandfoundation/algokit-utils'
+import { AlgoAmount } from '@algorandfoundation/algokit-utils/types/amount'
 import { ABIAppCallArg, ABIReturn } from '@algorandfoundation/algokit-utils/types/app'
 import { ApplicationClient } from '@algorandfoundation/algokit-utils/types/app-client'
 import { AppSpec } from '@algorandfoundation/algokit-utils/types/app-spec'
 import { KmdAccountManager } from '@algorandfoundation/algokit-utils/types/kmd-account-manager'
 import { nullLogger } from '@algorandfoundation/algokit-utils/types/logging'
 import { SendTransactionFrom, SendTransactionParams } from '@algorandfoundation/algokit-utils/types/transaction'
-import { ABIValue } from 'algosdk'
+import { ABIValue, Account as algoSdkAccount, generateAccount } from 'algosdk'
 import { randomUUID } from 'crypto'
 import { asUint64, getRandomNumber, Lazy } from '../src/util'
 
 algokit.Config.configure({ logger: nullLogger })
 const ARC4_PREFIX_LENGTH = 2
 const algorandClient = Lazy(() => algokit.AlgorandClient.defaultLocalNet())
+
+export const INITIAL_BALANCE_MICRO_ALGOS = Number(20e6)
 
 export const getAlgorandAppClient = async (appSpec: AppSpec): Promise<ApplicationClient> => {
   const client = algorandClient()
@@ -47,6 +50,18 @@ export const getLocalNetDefaultAccount = () => {
   const client = algorandClient()
   const kmdAccountManager = new KmdAccountManager(client.client)
   return kmdAccountManager.getLocalNetDispenserAccount()
+}
+
+export const generateTestAccount = async (): Promise<algoSdkAccount> => {
+  const account = generateAccount()
+
+  await algokit.ensureFunded(
+    {
+      accountToFund: account,
+      minSpendingBalance: AlgoAmount.MicroAlgos(INITIAL_BALANCE_MICRO_ALGOS),
+    }, algorandClient().client.algod
+  )
+  return account
 }
 
 export const generateTestAsset = async (fields: {

@@ -1,10 +1,11 @@
-import { Application, Asset, BaseContract, Bytes, bytes, Contract, internal } from '@algorandfoundation/algo-ts'
+import { Account, Application, Asset, BaseContract, Bytes, bytes, Contract, internal } from '@algorandfoundation/algo-ts'
 import { hasAbiMetadata } from '../abi-metadata'
 import { lazyContext } from '../context-helpers/internal-context'
+import { AccountCls } from '../impl/account'
+import { AssetCls } from '../impl/asset'
 import { getGenericTypeInfo } from '../runtime-helpers'
 import { DeliberateAny } from '../typescript-helpers'
 import { extractGenericTypeArgs } from '../util'
-import { AssetCls } from '../impl/asset'
 
 interface IConstructor<T> {
   new (...args: DeliberateAny[]): T
@@ -53,14 +54,17 @@ const extractStates = (contract: BaseContract): States => {
   return states
 }
 
-const extractArraysFromArgs = (args: DeliberateAny[]): { assets: Asset[] } => {
+const extractArraysFromArgs = (args: DeliberateAny[]) => {
+  const accounts: Account[] = []
   const assets: Asset[] = []
   for (const arg of args) {
-    if (arg instanceof AssetCls) {
+    if (arg instanceof AccountCls) {
+      accounts.push(arg as Account)
+    } else if (arg instanceof AssetCls) {
       assets.push(arg as Asset)
     }
   }
-  return { assets }
+  return { accounts, assets }
 }
 
 export class ContractContext {
