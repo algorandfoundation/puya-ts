@@ -968,6 +968,21 @@ export class BytesAugmentedAssignment extends Statement {
     return visitor.visitBytesAugmentedAssignment(this)
   }
 }
+export class Range extends Expression {
+  constructor(props: Props<Range>) {
+    super(props)
+    this.wtype = props.wtype
+    this.start = props.start
+    this.stop = props.stop
+    this.step = props.step
+  }
+  start: Expression
+  stop: Expression
+  step: Expression
+  accept<T>(visitor: ExpressionVisitor<T>): T {
+    return visitor.visitRange(this)
+  }
+}
 export class Enumeration extends Expression {
   constructor(props: Props<Enumeration>) {
     super(props)
@@ -1341,6 +1356,7 @@ export const concreteNodes = {
   uInt64AugmentedAssignment: UInt64AugmentedAssignment,
   bigUIntAugmentedAssignment: BigUIntAugmentedAssignment,
   bytesAugmentedAssignment: BytesAugmentedAssignment,
+  range: Range,
   enumeration: Enumeration,
   reversed: Reversed,
   forInLoop: ForInLoop,
@@ -1414,6 +1430,7 @@ export interface ExpressionVisitor<T> {
   visitBytesBinaryOperation(expression: BytesBinaryOperation): T
   visitBooleanBinaryOperation(expression: BooleanBinaryOperation): T
   visitNot(expression: Not): T
+  visitRange(expression: Range): T
   visitEnumeration(expression: Enumeration): T
   visitReversed(expression: Reversed): T
   visitStateGet(expression: StateGet): T

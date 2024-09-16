@@ -62,6 +62,7 @@ import {
   GlobalStateType,
   IntrinsicFunctionGroupType,
   IntrinsicFunctionType,
+  IterableIteratorType,
   keyRegistrationGroupTransaction,
   KeyRegistrationTxnFunction,
   LocalStateFunction,
@@ -80,6 +81,7 @@ import {
   TuplePType,
   Uint64Function,
   uint64PType,
+  urangeFunction,
   voidPType,
 } from './index'
 import { ObjectExpressionBuilder } from '../eb/literal/object-expression-builder'
@@ -104,6 +106,8 @@ import {
 import { AssertMatchFunctionBuilder } from '../eb/assert-match-function-builder'
 import { EnsureBudgetFunctionBuilder } from '../eb/ensure-budget'
 import { Uint64EnumTypeBuilder } from '../eb/uint64-enum-type-builder'
+import { UrangeFunctionBuilder } from '../eb/urange-function'
+import { IterableIteratorExpressionBuilder } from '../eb/iterable-iterator-expression-builder'
 
 export function registerPTypes(typeRegistry: TypeRegistry) {
   if (typeRegistry.hasRegistrations) {
@@ -192,4 +196,7 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: opUpFeeSourceType, singletonEb: Uint64EnumTypeBuilder })
   typeRegistry.register({ ptype: onCompleteActionType, singletonEb: Uint64EnumTypeBuilder })
   typeRegistry.register({ ptype: transactionTypeType, singletonEb: Uint64EnumTypeBuilder })
+
+  typeRegistry.register({ ptype: urangeFunction, singletonEb: UrangeFunctionBuilder })
+  typeRegistry.registerGeneric({ ptype: IterableIteratorType, instanceEb: IterableIteratorExpressionBuilder })
 }

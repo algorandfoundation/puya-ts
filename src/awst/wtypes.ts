@@ -53,6 +53,11 @@ export const uint64WType = new WType({
   name: 'uint64',
   scalarType: AVMType.uint64,
 })
+export const uint64RangeWType = new WType({
+  name: 'uint64_range',
+  scalarType: null,
+  immutable: true,
+})
 export const bytesWType = new WType({
   name: 'bytes',
   scalarType: AVMType.bytes,
