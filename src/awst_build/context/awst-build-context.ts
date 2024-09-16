@@ -35,6 +35,12 @@ export interface AwstBuildContext {
   getPTypeForNode(node: ts.Node): PType
 
   /**
+   * Reflect generic type parameters for a call expression
+   * @param node
+   */
+  getTypeParameters(node: ts.CallExpression): PType[]
+
+  /**
    * Resolve the given identifier to a unique variable name that accounts
    * for shadowed variable names.
    * @param node
@@ -143,6 +149,10 @@ class AwstBuildContextImpl implements AwstBuildContext {
     const symbol = this.typeChecker.resolveName(node.text, node, ts.SymbolFlags.All, false)
     invariant(symbol, 'There must be a symbol for an identifier node')
     return this.nameResolver.resolveUniqueName(node.text, symbol)
+  }
+
+  getTypeParameters(node: ts.CallExpression): PType[] {
+    return this.typeResolver.resolveTypeParameters(node, this.getSourceLocation(node))
   }
 
   getPTypeForNode(node: ts.Node): PType {

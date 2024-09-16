@@ -93,6 +93,11 @@ const explicitNodeFactory = {
     })
   },
   bytesComparisonExpression(props: Omit<Props<BytesComparisonExpression>, 'wtype'>): BytesComparisonExpression {
+    codeInvariant(
+      props.lhs.wtype.equals(props.rhs.wtype),
+      `Operands type mismatch. lhs is ${props.lhs.wtype}, rhs is ${props.rhs.wtype}`,
+      props.sourceLocation,
+    )
     return new BytesComparisonExpression({
       wtype: boolWType,
       ...props,

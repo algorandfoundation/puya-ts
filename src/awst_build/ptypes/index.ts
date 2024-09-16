@@ -895,3 +895,39 @@ export const opUpFeeSourceType = new Uint64EnumType({
     Any: 2n,
   },
 })
+
+export const urangeFunction = new LibFunctionType({
+  name: 'urange',
+  module: Constants.utilModuleName,
+})
+
+export class IterableIteratorType extends TransientType {
+  readonly itemType: PType
+  constructor({ itemType }: { itemType: PType }) {
+    super({
+      name: `${IterableIteratorType.baseName}<${itemType.name}>`,
+      module: 'typescript/lib/lib.es2015.iterable.d.ts',
+      typeMessage: '`IterableIterator` is not valid as a variable, parameter, return, or property type. ',
+      expressionMessage: 'IterableIterator expressions can only be used in for loops',
+      singleton: false,
+    })
+    this.itemType = itemType
+  }
+  static readonly baseName = 'IterableIterator'
+  static readonly moduleName = 'typescript/lib/lib.es2015.iterable.d.ts'
+  static readonly baseFullName = `${IterableIteratorType.moduleName}::${IterableIteratorType.baseName}`
+
+  get fullName() {
+    return `${GlobalStateType.baseFullName}<${this.itemType.fullName}>`
+  }
+  static parameterise(typeArgs: PType[]): IterableIteratorType {
+    codeInvariant(typeArgs.length === 1, 'IterableIterator type expects exactly one type parameter')
+    return new IterableIteratorType({
+      itemType: typeArgs[0],
+    })
+  }
+
+  getGenericArgs(): PType[] {
+    return [this.itemType]
+  }
+}

@@ -124,7 +124,7 @@ export class VotingRoundApp extends arc4.Contract {
         "tallies": [`
 
     let currentIndex = Uint64(0)
-    this.optionCounts.value.forEach((questionOptions, questionIndex) => {
+    for (const [questionIndex, questionOptions] of this.optionCounts.value.entries()) {
       if (questionIndex > 0) {
         note += ','
       }
@@ -139,7 +139,7 @@ export class VotingRoundApp extends arc4.Contract {
         }
         note += ']'
       }
-    })
+    }
     note += ']}}'
 
     this.nftAsset.value = itxn.submitAssetCreate({

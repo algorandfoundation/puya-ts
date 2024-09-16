@@ -51,6 +51,19 @@ export class TypeResolver {
     return undefined
   }
 
+  resolveTypeParameters(node: ts.CallExpression, sourceLocation: SourceLocation) {
+    if (node.typeArguments) {
+      // Explicit type arguments
+      return node.typeArguments.map((t) => this.resolveTypeNode(t, sourceLocation))
+    }
+    const tsType = this.checker.getTypeAtLocation(node)
+    if (tsType.aliasTypeArguments) {
+      // Inferred type arguments
+      return tsType.aliasTypeArguments.map((t) => this.resolveType(t, sourceLocation))
+    }
+    return []
+  }
+
   resolve(node: ts.Node, sourceLocation: SourceLocation): PType {
     const symbol = this.getUnaliasedSymbolForNode(node)
     if (symbol !== undefined) {

@@ -9,7 +9,6 @@ import { TupleExpressionBuilder } from '../tuple-expression-builder'
 import { nodeFactory } from '../../../awst/node-factory'
 import { requireExpressionOfType, requireIntegerConstant } from '../util'
 import { codeInvariant } from '../../../util'
-import { instanceEb } from '../../type-registry'
 
 export class ArrayLiteralExpressionBuilder extends InstanceBuilder {
   #ptype: TuplePType

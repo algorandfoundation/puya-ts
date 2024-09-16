@@ -25,6 +25,9 @@ function printBytes(value: Uint8Array, encoding: BytesEncoding) {
 export class ToCodeVisitor
   implements RootNodeVisitor<string[]>, ContractMemberNodeVisitor<string[]>, StatementVisitor<string[]>, ExpressionVisitor<string>
 {
+  visitRange(expression: nodes.Range): string {
+    return `urange(${expression.start.accept(this)}, ${expression.stop.accept(this)}, ${expression.step.accept(this)})`
+  }
   visitVoidConstant(expression: nodes.VoidConstant): string {
     return `void`
   }
