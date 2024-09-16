@@ -3,17 +3,18 @@ import { nodeFactory } from '../../awst/node-factory'
 import { CodeError, NotSupported } from '../../errors'
 import { awst, wtypes } from '../../awst'
 import type { InstanceBuilder, NodeBuilder } from './index'
-import { BuilderComparisonOp, FunctionBuilder, InstanceExpressionBuilder } from './index'
-import { boolPType } from '../ptypes'
-import { bytesPType, stringPType } from '../ptypes'
+import { BuilderBinaryOp } from './index'
+import { BuilderBinaryOp, BuilderComparisonOp, FunctionBuilder, InstanceExpressionBuilder } from './index'
+import type { InstanceType, PType } from '../ptypes'
+import { boolPType, bytesPType, stringPType } from '../ptypes'
 import type { Expression } from '../../awst/nodes'
 import { BytesBinaryOperator, BytesEncoding, EqualityComparison } from '../../awst/nodes'
 import { requireExpressionOfType } from './util'
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
 import { tryConvertEnum, utf8ToUint8Array } from '../../util'
 import { UInt64ExpressionBuilder } from './uint64-expression-builder'
-import type { InstanceType, PType } from '../ptypes'
 import { instanceEb } from '../type-registry'
+import { parseFunctionArgs } from './util/arg-parsing'
 
 export class StringFunctionBuilder extends FunctionBuilder {
   taggedTemplate(head: string, spans: ReadonlyArray<readonly [InstanceBuilder, string]>, sourceLocation: SourceLocation): InstanceBuilder {
@@ -123,6 +124,31 @@ export class StringExpressionBuilder extends InstanceExpressionBuilder<InstanceT
     )
   }
 
+  binaryOp(other: InstanceBuilder, op: BuilderBinaryOp, sourceLocation: SourceLocation): InstanceBuilder {
+    switch (op) {
+      case BuilderBinaryOp.add:
+        return new StringExpressionBuilder(
+          intrinsicFactory.bytesConcat({
+            left: this.resolve(),
+            right: requireExpressionOfType(other, stringPType),
+            sourceLocation,
+          }),
+        )
+    }
+    return super.binaryOp(other, op, sourceLocation)
+  }
+
+  augmentedAssignment(other: InstanceBuilder, op: BuilderBinaryOp, sourceLocation: SourceLocation): InstanceBuilder {
+    const newValue = this.binaryOp(other, op, sourceLocation)
+    return new StringExpressionBuilder(
+      nodeFactory.assignmentExpression({
+        target: this.resolveLValue(),
+        sourceLocation,
+        value: newValue.resolve(),
+      }),
+    )
+  }
+
   toBytes(sourceLocation: SourceLocation): awst.Expression {
     if (this._expr instanceof awst.StringConstant) {
       return nodeFactory.bytesConstant({
@@ -145,13 +171,21 @@ export class ConcatExpressionBuilder extends FunctionBuilder {
   }
 
   call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation) {
-    const others = args.map((a) => requireExpressionOfType(a, stringPType))
+    const { args: others } = parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 0,
+      callLocation: sourceLocation,
+      funcName: 'concat',
+      argSpec: (a) => args.map((_) => a.required(stringPType)),
+    })
+
     return new StringExpressionBuilder(
       others.reduce(
         (acc, cur) =>
           intrinsicFactory.bytesConcat({
             left: acc,
-            right: cur,
+            right: cur.resolve(),
             sourceLocation: sourceLocation,
           }),
         this.expr,

@@ -1,20 +1,26 @@
 import type { InstanceBuilder } from '../index'
-import { NodeBuilder } from '../index'
-import { InstanceExpressionBuilder } from '../index'
+import { BuilderBinaryOp, FunctionBuilder, InstanceExpressionBuilder, NodeBuilder } from '../index'
 import type { PType } from '../../ptypes'
+import { uint64PType } from '../../ptypes'
 import { NumberPType } from '../../ptypes'
 import type { SourceLocation } from '../../../awst/source-location'
-import { DynamicArrayType } from '../../ptypes/arc4-types'
-import { ARC4EncodedType } from '../../ptypes/arc4-types'
-import { StaticArrayType } from '../../ptypes/arc4-types'
-import { DynamicArrayConstructor, StaticArrayConstructor } from '../../ptypes/arc4-types'
+import {
+  ARC4EncodedType,
+  DynamicArrayConstructor,
+  DynamicArrayType,
+  StaticArrayConstructor,
+  StaticArrayType,
+} from '../../ptypes/arc4-types'
 import type { Expression } from '../../../awst/nodes'
 import { codeInvariant, invariant } from '../../../util'
 import { parseFunctionArgs } from '../util/arg-parsing'
-import { requireExpressionOfType } from '../util'
+import { requireExpressionOfType, requireInstanceBuilder } from '../util'
 import { nodeFactory } from '../../../awst/node-factory'
 import { UInt64ExpressionBuilder } from '../uint64-expression-builder'
 import { uint64WType } from '../../../awst/wtypes'
+import { BigIntLiteralExpressionBuilder } from '../literal/big-int-literal-expression-builder'
+import { logger } from '../../../logger'
+import { instanceEb } from '../../type-registry'
 
 export class DynamicArrayConstructorBuilder extends NodeBuilder {
   readonly ptype = DynamicArrayConstructor
@@ -91,6 +97,14 @@ export abstract class ArrayExpressionBuilder<
   iterate(sourceLocation: SourceLocation): Expression {
     return this.resolve()
   }
+
+  memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
+    switch (name) {
+      case 'at':
+        return new ArrayAtFunctionBuilder(this)
+    }
+    return super.memberAccess(name, sourceLocation)
+  }
 }
 
 export class DynamicArrayExpressionBuilder extends ArrayExpressionBuilder<DynamicArrayType> {
@@ -127,5 +141,61 @@ export class StaticArrayExpressionBuilder extends ArrayExpressionBuilder<StaticA
         return new UInt64ExpressionBuilder(nodeFactory.uInt64Constant({ value: this.ptype.arraySize, sourceLocation }))
     }
     return super.memberAccess(name, sourceLocation)
+  }
+}
+
+export class ArrayAtFunctionBuilder extends FunctionBuilder {
+  constructor(private arrayBuilder: ArrayExpressionBuilder<StaticArrayType | DynamicArrayType>) {
+    super(arrayBuilder.sourceLocation)
+  }
+
+  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    const {
+      args: [index],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      funcName: 'at',
+      callLocation: sourceLocation,
+      genericTypeArgs: 0,
+      argSpec: (a) => [a.required()],
+    })
+
+    let indexExpr: Expression
+
+    if (index instanceof BigIntLiteralExpressionBuilder) {
+      if (this.arrayBuilder.ptype instanceof StaticArrayType) {
+        const staticSize = this.arrayBuilder.ptype.arraySize
+        if (index.value < -staticSize || index.value >= staticSize) {
+          logger.error(index.sourceLocation, 'Index access outside the bounds of the array')
+        }
+        indexExpr = nodeFactory.uInt64Constant({
+          value: index.value < 0 ? staticSize + index.value : index.value,
+          sourceLocation: index.sourceLocation,
+        })
+      } else {
+        const dynamicSize = requireInstanceBuilder(this.arrayBuilder.memberAccess('length', sourceLocation))
+        const absoluteIndex = nodeFactory.uInt64Constant({
+          value: index.value < 0n ? index.value * -1n : index.value,
+          sourceLocation: index.sourceLocation,
+        })
+        if (index.value < 0) {
+          indexExpr = dynamicSize.binaryOp(new UInt64ExpressionBuilder(absoluteIndex), BuilderBinaryOp.sub, index.sourceLocation).resolve()
+        } else {
+          indexExpr = absoluteIndex
+        }
+      }
+    } else {
+      indexExpr = index.resolveToPType(uint64PType).resolve()
+    }
+    return instanceEb(
+      nodeFactory.indexExpression({
+        base: this.arrayBuilder.resolve(),
+        index: indexExpr,
+        wtype: this.arrayBuilder.ptype.elementType.wtype,
+        sourceLocation,
+      }),
+      this.arrayBuilder.ptype.elementType,
+    )
   }
 }
