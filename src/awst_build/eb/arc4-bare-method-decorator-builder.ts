@@ -43,7 +43,7 @@ export class Arc4BareMethodDecoratorBuilder extends NodeBuilder {
     } = parseFunctionArgs({
       args,
       typeArgs,
-      genericTypeArgs: 0,
+      genericTypeArgs: 1,
       callLocation: sourceLocation,
       funcName: 'arc4.baremethod',
       argSpec: (a) => [
@@ -73,7 +73,7 @@ export class Arc4AbiMethodDecoratorBuilder extends NodeBuilder {
     } = parseFunctionArgs({
       args,
       typeArgs,
-      genericTypeArgs: 0,
+      genericTypeArgs: 1,
       callLocation: sourceLocation,
       funcName: 'arc4.abimethod',
       argSpec: (a) => [

@@ -14,7 +14,6 @@ import type { InstanceType } from '../ptypes'
 
 export class BooleanFunctionBuilder extends FunctionBuilder {
   call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
-    if (typeArgs.length) throw CodeError.unexpectedTypeArgs({ sourceLocation })
     if (args.length !== 1) throw CodeError.unexpectedUnhandledArgs({ sourceLocation })
 
     const [value] = args

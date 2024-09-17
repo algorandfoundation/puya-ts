@@ -33,6 +33,7 @@ import { Constants } from '../constants'
 import type { AppStorageType, PType } from './ptypes'
 import { ContractClassPType, FunctionPType, NamespacePType, ObjectPType, UnionPType } from './ptypes'
 import { SymbolName } from './symbol-name'
+import type { DeliberateAny } from '../typescript-helpers'
 
 export class TypeResolver {
   constructor(
@@ -56,12 +57,15 @@ export class TypeResolver {
       // Explicit type arguments
       return node.typeArguments.map((t) => this.resolveTypeNode(t, sourceLocation))
     }
-    const tsType = this.checker.getTypeAtLocation(node)
-    if (tsType.aliasTypeArguments) {
-      // Inferred type arguments
-      return tsType.aliasTypeArguments.map((t) => this.resolveType(t, sourceLocation))
-    }
-    return []
+    const sig = this.checker.getResolvedSignature(node)
+    invariant(sig, 'CallExpression must resolve to a signature')
+    /*
+      The method getTypeArgumentsForResolvedSignature has not made it into typescript yet, but it has been
+      proposed here: https://github.com/microsoft/TypeScript/issues/59637 and added to the backlog. For now
+      the method has been patched into the TypeScript 5.5.2 using patch-package
+     */
+    const tps = this.checker.getTypeArgumentsForResolvedSignature(sig)
+    return tps?.map((t) => this.resolveType(t, sourceLocation)) ?? []
   }
 
   resolve(node: ts.Node, sourceLocation: SourceLocation): PType {
@@ -167,6 +171,20 @@ export class TypeResolver {
     if (tsType.flags === ts.TypeFlags.TypeParameter) {
       return new TypeParameterType(typeName)
     }
+
+    if (tsType.aliasTypeArguments?.length) {
+      const typeArgs = tsType.aliasTypeArguments.map((a) => this.resolveType(a, sourceLocation))
+      const gt = typeRegistry.tryResolveGenericPType(typeName, typeArgs)
+      if (gt) return gt
+    } else if (isTypeReference(tsType) && tsType.typeArguments?.length) {
+      const typeArgs = tsType.typeArguments.map((a) => this.resolveType(a, sourceLocation))
+      const gt = typeRegistry.tryResolveGenericPType(typeName, typeArgs)
+      if (gt) return gt
+    } else {
+      const it = typeRegistry.tryResolveInstancePType(typeName)
+      if (it) return it
+    }
+
     // TODO: These should be resolved from the typeRegistry, but it needs to happen before checking call signatures below
     if (typeName.fullName === StringFunction.fullName) return StringFunction
     if (typeName.fullName === BooleanFunction.fullName) return BooleanFunction
@@ -188,16 +206,7 @@ export class TypeResolver {
     if (callSignatures.length) {
       return this.reflectFunctionType(typeName, callSignatures, sourceLocation)
     }
-    if (
-      isObjectType(tsType) &&
-      hasFlags(tsType.objectFlags, ts.ObjectFlags.Anonymous) &&
-      !typeName.module.startsWith(Constants.algoTsPackage)
-    ) {
-      return this.reflectObjectType(tsType, sourceLocation)
-    }
-
-    if (typeName.fullName === 'typescript/lib/lib.es5.d.ts::Array') {
-      // There has to be a better way to do this
+    if (this.checker.isArrayType(tsType)) {
       const itemType = tsType.getNumberIndexType()
       if (!itemType) {
         throw new CodeError('Cannot determine array item type', { sourceLocation })
@@ -209,16 +218,10 @@ export class TypeResolver {
         })
       }
     }
-
-    if (tsType.aliasTypeArguments?.length) {
-      const typeArgs = tsType.aliasTypeArguments.map((a) => this.resolveType(a, sourceLocation))
-      return typeRegistry.resolveGenericPType(typeName, typeArgs, sourceLocation)
-    } else if (isTypeReference(tsType) && tsType.typeArguments?.length) {
-      const typeArgs = tsType.typeArguments.map((a) => this.resolveType(a, sourceLocation))
-      return typeRegistry.resolveGenericPType(typeName, typeArgs, sourceLocation)
-    } else {
-      return typeRegistry.resolveInstancePType(typeName, sourceLocation)
+    if (isObjectType(tsType)) {
+      return this.reflectObjectType(tsType, sourceLocation)
     }
+    throw new InternalError(`Cannot determine type of ${typeName}`, { sourceLocation })
   }
 
   private reflectObjectType(tsType: ts.Type, sourceLocation: SourceLocation): ObjectPType {

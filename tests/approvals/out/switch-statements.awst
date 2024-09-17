@@ -2,16 +2,16 @@ subroutine test_uint64(x: uint64): uint64
 {
   switch (x) {
     case 1:
-      #switchᶜ₀:
-      goto #switchᶜ₁
+      #switch₁ᶜ₀:
+      goto #switch₁ᶜ₁
     case 2:
-      #switchᶜ₁:
-      goto #switchᶜ₂
+      #switch₁ᶜ₁:
+      goto #switch₁ᶜ₂
     case 4:
-      #switchᶜ₂:
+      #switch₁ᶜ₂:
       return 3
     default:
-      #switchᶜ₃:
+      #switch₁ᶜ₃:
       return 1
   }
 }
@@ -20,36 +20,36 @@ subroutine test_break(x: uint64): uint64
   var i: uint64 = 0
   switch (x) {
     case 1:
-      #switchᶜ₀:
-      goto #switchᶜ₁
+      #switch₁ᶜ₀:
+      goto #switch₁ᶜ₁
     case 2:
-      #switchᶜ₁:
-      goto #switchᶜ₂
+      #switch₁ᶜ₁:
+      goto #switch₁ᶜ₂
     case 4:
-      #switchᶜ₂:
+      #switch₁ᶜ₂:
       (i = i + x)
-      goto #switchᵇ
+      goto #switch₁ᵇ
     case 5:
-      #switchᶜ₃:
+      #switch₁ᶜ₃:
       (i = i * x)
   }
-  #switchᵇ:
+  #switch₁ᵇ:
   return i
 }
 subroutine test_bytes(x: bytes): bytes
 {
   switch (x) {
     case "hmmm":
-      #switchᶜ₀:
-      goto #switchᶜ₁
+      #switch₁ᶜ₀:
+      goto #switch₁ᶜ₁
     case 0x0f:
-      #switchᶜ₁:
-      goto #switchᶜ₂
+      #switch₁ᶜ₁:
+      goto #switch₁ᶜ₂
     case b64<ZHNmc2Rmc2Q=>:
-      #switchᶜ₂:
-      goto #switchᶜ₃
+      #switch₁ᶜ₂:
+      goto #switch₁ᶜ₃
     case b32<OASGMZ3OMATGOZDGMASGM>:
-      #switchᶜ₃:
+      #switch₁ᶜ₃:
       return x
   }
   return x

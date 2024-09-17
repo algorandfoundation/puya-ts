@@ -13,6 +13,7 @@ export const Constants = {
   boxModuleName: `${algoTsPackage}/box.d.ts`,
   transactionsModuleName: `${algoTsPackage}/transactions.d.ts`,
   gtxnModuleName: `${algoTsPackage}/gtxn.d.ts`,
+  itxnModuleName: `${algoTsPackage}/itxn.d.ts`,
   primitivesModuleName: `${algoTsPackage}/primitives.d.ts`,
   arc4EncodedTypesModuleName: `${algoTsPackage}/arc4/encoded-types.d.ts`,
   arc4BareDecoratorName: 'arc4.baremethod',
