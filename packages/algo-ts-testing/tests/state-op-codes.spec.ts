@@ -7,8 +7,9 @@ import { generateTestAccount, generateTestAsset, getAlgorandAppClient, getAvmRes
 import { ZERO_ADDRESS } from '../src/constants';
 import { AccountCls } from '../src/impl/account';
 import { asBigInt, asNumber } from '../src/util';
-import { StateAcctParamsGetContract, StateAssetParamsContract } from './artifacts/state-ops/contract.algo';
+import { StateAcctParamsGetContract, StateAssetHoldingContract, StateAssetParamsContract } from './artifacts/state-ops/contract.algo';
 import acctParamsAppSpecJson from './artifacts/state-ops/data/StateAcctParamsGetContract.arc32.json';
+import assetHoldingAppSpecJson from './artifacts/state-ops/data/StateAssetHoldingContract.arc32.json';
 import assetParamsAppSpecJson from './artifacts/state-ops/data/StateAssetParamsContract.arc32.json';
 import { asUint8Array } from './util';
 
@@ -67,6 +68,39 @@ describe('State op codes', async () => {
       }
     })
   })
+
+  describe('AssetHolding', async () => {
+    const appClient = await getAlgorandAppClient(assetHoldingAppSpecJson as AppSpec)
+    const dummyAccount = await getLocalNetDefaultAccount()
+    test.each([
+      ['verify_asset_holding_get', 100],
+      ['verify_asset_frozen_get', false],
+    ])('should return the correct field value of the asset holding', async (methodName, expectedValue) => {
+      const dummyAsset = await generateTestAsset({
+        creator: dummyAccount,
+        total: 100,
+        decimals: 0,
+        frozenByDefault: false
+      })
+      const avmResult = await getAvmResult({ appClient }, methodName, dummyAccount.addr, asBigInt(dummyAsset))
+
+      const mockAsset = ctx.any.asset()
+      const mockAccount = ctx.any.account({
+        optedAssetBalances: new Map([[mockAsset.id, 100]])
+      })
+      const mockContract = ctx.contract.create(StateAssetHoldingContract)
+      const mockResult = mockContract[methodName as keyof StateAssetHoldingContract](mockAccount, mockAsset)
+
+      if (typeof mockResult === 'boolean') {
+        expect(mockResult).toEqual(avmResult)
+        expect(mockResult).toEqual(expectedValue)
+      } else {
+        expect(mockResult.valueOf()).toEqual(avmResult)
+        expect(asNumber(mockResult as uint64)).toEqual(expectedValue)
+      }
+    })
+  })
+
   describe('AssetParams', async () => {
     const appClient = await getAlgorandAppClient(assetParamsAppSpecJson as AppSpec)
     const dummyAccount = await getLocalNetDefaultAccount()
