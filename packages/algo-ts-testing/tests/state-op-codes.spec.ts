@@ -2,13 +2,15 @@ import { Account, bytes, Bytes, internal, uint64, Uint64 } from '@algorandfounda
 import { AppSpec } from '@algorandfoundation/algokit-utils/types/app-spec';
 import { afterEach, describe, expect, test } from 'vitest';
 import { TestExecutionContext } from '../src';
-import { generateTestAccount, generateTestAsset, getAlgorandAppClient, getAvmResult, getLocalNetDefaultAccount, INITIAL_BALANCE_MICRO_ALGOS } from './avm-invoker';
+import { generateTestAccount, generateTestAsset, getAlgorandAppClient, getAlgorandAppClientWithApp, getAvmResult, getLocalNetDefaultAccount, INITIAL_BALANCE_MICRO_ALGOS } from './avm-invoker';
 
+import { AlgoAmount } from '@algorandfoundation/algokit-utils/types/amount';
 import { ZERO_ADDRESS } from '../src/constants';
 import { AccountCls } from '../src/impl/account';
 import { asBigInt, asNumber } from '../src/util';
-import { StateAcctParamsGetContract, StateAssetHoldingContract, StateAssetParamsContract } from './artifacts/state-ops/contract.algo';
+import { StateAcctParamsGetContract, StateAppParamsContract, StateAssetHoldingContract, StateAssetParamsContract } from './artifacts/state-ops/contract.algo';
 import acctParamsAppSpecJson from './artifacts/state-ops/data/StateAcctParamsGetContract.arc32.json';
+import appParamsAppSpecJson from './artifacts/state-ops/data/StateAppParamsContract.arc32.json';
 import assetHoldingAppSpecJson from './artifacts/state-ops/data/StateAssetHoldingContract.arc32.json';
 import assetParamsAppSpecJson from './artifacts/state-ops/data/StateAssetParamsContract.arc32.json';
 import { asUint8Array } from './util';
@@ -55,13 +57,58 @@ describe('State op codes', async () => {
         totalBoxBytes: Uint64(0),
       })
 
-      const avmResult = await getAvmResult({ appClient }, methodName, dummyAccount.addr)
+      const avmResult = await getAvmResult({ appClient, sendParams: { fee: AlgoAmount.Algos(1000) } }, methodName, dummyAccount.addr)
 
       const mockContract = ctx.contract.create(StateAcctParamsGetContract)
       const mockResult = mockContract[methodName as keyof StateAcctParamsGetContract](mockAccount)
       if (mockResult instanceof AccountCls) {
         expect(mockResult.bytes.valueOf()).toEqual(avmResult)
         expect(mockResult.bytes.valueOf()).toEqual((expectedValue as bytes).valueOf())
+      } else {
+        expect(mockResult.valueOf()).toEqual(avmResult)
+        expect(asNumber(mockResult as uint64)).toEqual(expectedValue)
+      }
+    })
+  })
+
+  describe('AppParams', async () => {
+    const [appClient, app] = await getAlgorandAppClientWithApp(appParamsAppSpecJson as AppSpec)
+    const dummyAccount = await getLocalNetDefaultAccount()
+    test.each([
+      ["verify_app_params_get_approval_program", undefined],
+      ["verify_app_params_get_clear_state_program", undefined],
+      ["verify_app_params_get_global_num_uint", 0],
+      ["verify_app_params_get_global_num_byte_slice", 0],
+      ["verify_app_params_get_local_num_uint", 0],
+      ["verify_app_params_get_local_num_byte_slice", 0],
+      ["verify_app_params_get_extra_program_pages", 0],
+      ["verify_app_params_get_creator", "app.creator"],
+      ["verify_app_params_get_address", "app.address"],
+    ])('should return the correct field value of the application', async (methodName, expectedValue) => {
+      const application = ctx.any.application({
+        applicationId: app.appId,
+        approvalProgram: Bytes(app.compiledApproval.compiledBase64ToBytes),
+        clearStateProgram: Bytes(app.compiledClear.compiledBase64ToBytes),
+        globalNumUint: Uint64(0),
+        globalNumBytes: Uint64(0),
+        localNumUint: Uint64(0),
+        localNumBytes: Uint64(0),
+        extraProgramPages: Uint64(0),
+        creator: Account(Bytes(dummyAccount.addr)),
+      })
+      const avmResult = await getAvmResult({ appClient, sendParams: { fee: AlgoAmount.Algos(1000) } }, methodName, app.appId)
+
+      const mockContract = ctx.contract.create(StateAppParamsContract)
+      const mockResult = mockContract[methodName as keyof StateAppParamsContract](application)
+
+      if (mockResult instanceof internal.primitives.BytesCls) {
+        expect([...asUint8Array(mockResult)]).toEqual(avmResult)
+      } else if (mockResult instanceof AccountCls) {
+        expect(mockResult.bytes.valueOf()).toEqual(avmResult)
+        const expected = expectedValue === 'app.creator' ? application.creator : expectedValue === 'app.address' ? application.address : undefined
+        if (expected) {
+          expect(mockResult.bytes.valueOf()).toEqual(expected.bytes.valueOf())
+        }
       } else {
         expect(mockResult.valueOf()).toEqual(avmResult)
         expect(asNumber(mockResult as uint64)).toEqual(expectedValue)

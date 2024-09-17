@@ -125,7 +125,6 @@ class ClassVisitor {
     private classDec: ts.ClassDeclaration,
   ) {
     const classType = helper.resolveType(classDec)
-
     this.isArc4 = classType instanceof ContractClassPType && classType.isARC4
   }
 

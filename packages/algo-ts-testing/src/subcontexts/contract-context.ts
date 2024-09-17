@@ -2,6 +2,7 @@ import { Account, Application, Asset, BaseContract, Bytes, bytes, Contract, inte
 import { hasAbiMetadata } from '../abi-metadata'
 import { lazyContext } from '../context-helpers/internal-context'
 import { AccountCls } from '../impl/account'
+import { ApplicationCls } from '../impl/application'
 import { AssetCls } from '../impl/asset'
 import { getGenericTypeInfo } from '../runtime-helpers'
 import { DeliberateAny } from '../typescript-helpers'
@@ -56,15 +57,18 @@ const extractStates = (contract: BaseContract): States => {
 
 const extractArraysFromArgs = (args: DeliberateAny[]) => {
   const accounts: Account[] = []
+  const apps: Application[] = []
   const assets: Asset[] = []
   for (const arg of args) {
     if (arg instanceof AccountCls) {
       accounts.push(arg as Account)
+    } else if (arg instanceof ApplicationCls) {
+      apps.push(arg as Application)
     } else if (arg instanceof AssetCls) {
       assets.push(arg as Asset)
     }
   }
-  return { accounts, assets }
+  return { accounts, apps, assets }
 }
 
 export class ContractContext {
