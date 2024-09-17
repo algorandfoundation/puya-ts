@@ -1,0 +1,547 @@
+#pragma version 10
+
+tests.artifacts.StateOps.contract.StateAppParamsContract.approval_program:
+    // tests/artifacts/StateOps/contract.py:248
+    // class StateAppParamsContract(ARC4Contract):
+    txn NumAppArgs
+    bz main_bare_routing@13
+    method "verify_app_params_get_approval_program(application)byte[]"
+    method "verify_app_params_get_clear_state_program(application)byte[]"
+    method "verify_app_params_get_global_num_uint(application)uint64"
+    method "verify_app_params_get_global_num_byte_slice(application)uint64"
+    method "verify_app_params_get_local_num_uint(application)uint64"
+    method "verify_app_params_get_local_num_byte_slice(application)uint64"
+    method "verify_app_params_get_extra_program_pages(application)uint64"
+    method "verify_app_params_get_creator(application)address"
+    method "verify_app_params_get_address(application)address"
+    txna ApplicationArgs 0
+    match main_verify_app_params_get_approval_program_route@2 main_verify_app_params_get_clear_state_program_route@3 main_verify_app_params_get_global_num_uint_route@4 main_verify_app_params_get_global_num_byte_slice_route@5 main_verify_app_params_get_local_num_uint_route@6 main_verify_app_params_get_local_num_byte_slice_route@7 main_verify_app_params_get_extra_program_pages_route@8 main_verify_app_params_get_creator_route@9 main_verify_app_params_get_address_route@10
+    err // reject transaction
+
+main_verify_app_params_get_approval_program_route@2:
+    // tests/artifacts/StateOps/contract.py:250
+    // @arc4.abimethod()
+    txn OnCompletion
+    !
+    assert // OnCompletion is NoOp
+    txn ApplicationID
+    assert // is not creating
+    // tests/artifacts/StateOps/contract.py:248
+    // class StateAppParamsContract(ARC4Contract):
+    txna ApplicationArgs 1
+    btoi
+    txnas Applications
+    // tests/artifacts/StateOps/contract.py:250
+    // @arc4.abimethod()
+    callsub verify_app_params_get_approval_program
+    dup
+    len
+    itob
+    extract 6 2
+    swap
+    concat
+    byte 0x151f7c75
+    swap
+    concat
+    log
+    int 1
+    return
+
+main_verify_app_params_get_clear_state_program_route@3:
+    // tests/artifacts/StateOps/contract.py:258
+    // @arc4.abimethod()
+    txn OnCompletion
+    !
+    assert // OnCompletion is NoOp
+    txn ApplicationID
+    assert // is not creating
+    // tests/artifacts/StateOps/contract.py:248
+    // class StateAppParamsContract(ARC4Contract):
+    txna ApplicationArgs 1
+    btoi
+    txnas Applications
+    // tests/artifacts/StateOps/contract.py:258
+    // @arc4.abimethod()
+    callsub verify_app_params_get_clear_state_program
+    dup
+    len
+    itob
+    extract 6 2
+    swap
+    concat
+    byte 0x151f7c75
+    swap
+    concat
+    log
+    int 1
+    return
+
+main_verify_app_params_get_global_num_uint_route@4:
+    // tests/artifacts/StateOps/contract.py:266
+    // @arc4.abimethod()
+    txn OnCompletion
+    !
+    assert // OnCompletion is NoOp
+    txn ApplicationID
+    assert // is not creating
+    // tests/artifacts/StateOps/contract.py:248
+    // class StateAppParamsContract(ARC4Contract):
+    txna ApplicationArgs 1
+    btoi
+    txnas Applications
+    // tests/artifacts/StateOps/contract.py:266
+    // @arc4.abimethod()
+    callsub verify_app_params_get_global_num_uint
+    itob
+    byte 0x151f7c75
+    swap
+    concat
+    log
+    int 1
+    return
+
+main_verify_app_params_get_global_num_byte_slice_route@5:
+    // tests/artifacts/StateOps/contract.py:274
+    // @arc4.abimethod()
+    txn OnCompletion
+    !
+    assert // OnCompletion is NoOp
+    txn ApplicationID
+    assert // is not creating
+    // tests/artifacts/StateOps/contract.py:248
+    // class StateAppParamsContract(ARC4Contract):
+    txna ApplicationArgs 1
+    btoi
+    txnas Applications
+    // tests/artifacts/StateOps/contract.py:274
+    // @arc4.abimethod()
+    callsub verify_app_params_get_global_num_byte_slice
+    itob
+    byte 0x151f7c75
+    swap
+    concat
+    log
+    int 1
+    return
+
+main_verify_app_params_get_local_num_uint_route@6:
+    // tests/artifacts/StateOps/contract.py:282
+    // @arc4.abimethod()
+    txn OnCompletion
+    !
+    assert // OnCompletion is NoOp
+    txn ApplicationID
+    assert // is not creating
+    // tests/artifacts/StateOps/contract.py:248
+    // class StateAppParamsContract(ARC4Contract):
+    txna ApplicationArgs 1
+    btoi
+    txnas Applications
+    // tests/artifacts/StateOps/contract.py:282
+    // @arc4.abimethod()
+    callsub verify_app_params_get_local_num_uint
+    itob
+    byte 0x151f7c75
+    swap
+    concat
+    log
+    int 1
+    return
+
+main_verify_app_params_get_local_num_byte_slice_route@7:
+    // tests/artifacts/StateOps/contract.py:290
+    // @arc4.abimethod()
+    txn OnCompletion
+    !
+    assert // OnCompletion is NoOp
+    txn ApplicationID
+    assert // is not creating
+    // tests/artifacts/StateOps/contract.py:248
+    // class StateAppParamsContract(ARC4Contract):
+    txna ApplicationArgs 1
+    btoi
+    txnas Applications
+    // tests/artifacts/StateOps/contract.py:290
+    // @arc4.abimethod()
+    callsub verify_app_params_get_local_num_byte_slice
+    itob
+    byte 0x151f7c75
+    swap
+    concat
+    log
+    int 1
+    return
+
+main_verify_app_params_get_extra_program_pages_route@8:
+    // tests/artifacts/StateOps/contract.py:298
+    // @arc4.abimethod()
+    txn OnCompletion
+    !
+    assert // OnCompletion is NoOp
+    txn ApplicationID
+    assert // is not creating
+    // tests/artifacts/StateOps/contract.py:248
+    // class StateAppParamsContract(ARC4Contract):
+    txna ApplicationArgs 1
+    btoi
+    txnas Applications
+    // tests/artifacts/StateOps/contract.py:298
+    // @arc4.abimethod()
+    callsub verify_app_params_get_extra_program_pages
+    itob
+    byte 0x151f7c75
+    swap
+    concat
+    log
+    int 1
+    return
+
+main_verify_app_params_get_creator_route@9:
+    // tests/artifacts/StateOps/contract.py:306
+    // @arc4.abimethod()
+    txn OnCompletion
+    !
+    assert // OnCompletion is NoOp
+    txn ApplicationID
+    assert // is not creating
+    // tests/artifacts/StateOps/contract.py:248
+    // class StateAppParamsContract(ARC4Contract):
+    txna ApplicationArgs 1
+    btoi
+    txnas Applications
+    // tests/artifacts/StateOps/contract.py:306
+    // @arc4.abimethod()
+    callsub verify_app_params_get_creator
+    byte 0x151f7c75
+    swap
+    concat
+    log
+    int 1
+    return
+
+main_verify_app_params_get_address_route@10:
+    // tests/artifacts/StateOps/contract.py:314
+    // @arc4.abimethod()
+    txn OnCompletion
+    !
+    assert // OnCompletion is NoOp
+    txn ApplicationID
+    assert // is not creating
+    // tests/artifacts/StateOps/contract.py:248
+    // class StateAppParamsContract(ARC4Contract):
+    txna ApplicationArgs 1
+    btoi
+    txnas Applications
+    // tests/artifacts/StateOps/contract.py:314
+    // @arc4.abimethod()
+    callsub verify_app_params_get_address
+    byte 0x151f7c75
+    swap
+    concat
+    log
+    int 1
+    return
+
+main_bare_routing@13:
+    // tests/artifacts/StateOps/contract.py:248
+    // class StateAppParamsContract(ARC4Contract):
+    txn OnCompletion
+    !
+    assert // reject transaction
+    txn ApplicationID
+    !
+    assert // is creating
+    int 1
+    return
+
+
+// tests.artifacts.StateOps.contract.StateAppParamsContract.verify_app_params_get_approval_program(a: uint64) -> bytes:
+verify_app_params_get_approval_program:
+    // tests/artifacts/StateOps/contract.py:250-251
+    // @arc4.abimethod()
+    // def verify_app_params_get_approval_program(self, a: Application) -> Bytes:
+    proto 1 1
+    // tests/artifacts/StateOps/contract.py:252
+    // value, exists = op.AppParamsGet.app_approval_program(a)
+    frame_dig -1
+    app_params_get AppApprovalProgram
+    swap
+    // tests/artifacts/StateOps/contract.py:253
+    // value_index, exists_index = op.AppParamsGet.app_approval_program(_get_1st_ref_index())
+    callsub _get_1st_ref_index
+    app_params_get AppApprovalProgram
+    cover 2
+    // tests/artifacts/StateOps/contract.py:254
+    // assert value == value_index, "expected value by index to match"
+    dig 1
+    ==
+    assert // expected value by index to match
+    // tests/artifacts/StateOps/contract.py:255
+    // assert exists == exists_index, "expected exists by index to match"
+    cover 2
+    ==
+    assert // expected exists by index to match
+    // tests/artifacts/StateOps/contract.py:256
+    // return value
+    retsub
+
+
+// tests.artifacts.StateOps.contract._get_1st_ref_index() -> uint64:
+_get_1st_ref_index:
+    // tests/artifacts/StateOps/contract.py:19-20
+    // @subroutine
+    // def _get_1st_ref_index() -> UInt64:
+    proto 0 1
+    // tests/artifacts/StateOps/contract.py:21
+    // return op.btoi(Txn.application_args(1))
+    txna ApplicationArgs 1
+    btoi
+    retsub
+
+
+// tests.artifacts.StateOps.contract.StateAppParamsContract.verify_app_params_get_clear_state_program(a: uint64) -> bytes:
+verify_app_params_get_clear_state_program:
+    // tests/artifacts/StateOps/contract.py:258-259
+    // @arc4.abimethod()
+    // def verify_app_params_get_clear_state_program(self, a: Application) -> Bytes:
+    proto 1 1
+    // tests/artifacts/StateOps/contract.py:260
+    // value, exists = op.AppParamsGet.app_clear_state_program(a)
+    frame_dig -1
+    app_params_get AppClearStateProgram
+    swap
+    // tests/artifacts/StateOps/contract.py:261
+    // value_index, exists_index = op.AppParamsGet.app_clear_state_program(_get_1st_ref_index())
+    callsub _get_1st_ref_index
+    app_params_get AppClearStateProgram
+    cover 2
+    // tests/artifacts/StateOps/contract.py:262
+    // assert value == value_index, "expected value by index to match"
+    dig 1
+    ==
+    assert // expected value by index to match
+    // tests/artifacts/StateOps/contract.py:263
+    // assert exists == exists_index, "expected exists by index to match"
+    cover 2
+    ==
+    assert // expected exists by index to match
+    // tests/artifacts/StateOps/contract.py:264
+    // return value
+    retsub
+
+
+// tests.artifacts.StateOps.contract.StateAppParamsContract.verify_app_params_get_global_num_uint(a: uint64) -> uint64:
+verify_app_params_get_global_num_uint:
+    // tests/artifacts/StateOps/contract.py:266-267
+    // @arc4.abimethod()
+    // def verify_app_params_get_global_num_uint(self, a: Application) -> UInt64:
+    proto 1 1
+    // tests/artifacts/StateOps/contract.py:268
+    // value, exists = op.AppParamsGet.app_global_num_uint(a)
+    frame_dig -1
+    app_params_get AppGlobalNumUint
+    swap
+    // tests/artifacts/StateOps/contract.py:269
+    // value_index, exists_index = op.AppParamsGet.app_global_num_uint(_get_1st_ref_index())
+    callsub _get_1st_ref_index
+    app_params_get AppGlobalNumUint
+    cover 2
+    // tests/artifacts/StateOps/contract.py:270
+    // assert value == value_index, "expected value by index to match"
+    dig 1
+    ==
+    assert // expected value by index to match
+    // tests/artifacts/StateOps/contract.py:271
+    // assert exists == exists_index, "expected exists by index to match"
+    cover 2
+    ==
+    assert // expected exists by index to match
+    // tests/artifacts/StateOps/contract.py:272
+    // return value
+    retsub
+
+
+// tests.artifacts.StateOps.contract.StateAppParamsContract.verify_app_params_get_global_num_byte_slice(a: uint64) -> uint64:
+verify_app_params_get_global_num_byte_slice:
+    // tests/artifacts/StateOps/contract.py:274-275
+    // @arc4.abimethod()
+    // def verify_app_params_get_global_num_byte_slice(self, a: Application) -> UInt64:
+    proto 1 1
+    // tests/artifacts/StateOps/contract.py:276
+    // value, exists = op.AppParamsGet.app_global_num_byte_slice(a)
+    frame_dig -1
+    app_params_get AppGlobalNumByteSlice
+    swap
+    // tests/artifacts/StateOps/contract.py:277
+    // value_index, exists_index = op.AppParamsGet.app_global_num_byte_slice(_get_1st_ref_index())
+    callsub _get_1st_ref_index
+    app_params_get AppGlobalNumByteSlice
+    cover 2
+    // tests/artifacts/StateOps/contract.py:278
+    // assert value == value_index, "expected value by index to match"
+    dig 1
+    ==
+    assert // expected value by index to match
+    // tests/artifacts/StateOps/contract.py:279
+    // assert exists == exists_index, "expected exists by index to match"
+    cover 2
+    ==
+    assert // expected exists by index to match
+    // tests/artifacts/StateOps/contract.py:280
+    // return value
+    retsub
+
+
+// tests.artifacts.StateOps.contract.StateAppParamsContract.verify_app_params_get_local_num_uint(a: uint64) -> uint64:
+verify_app_params_get_local_num_uint:
+    // tests/artifacts/StateOps/contract.py:282-283
+    // @arc4.abimethod()
+    // def verify_app_params_get_local_num_uint(self, a: Application) -> UInt64:
+    proto 1 1
+    // tests/artifacts/StateOps/contract.py:284
+    // value, exists = op.AppParamsGet.app_local_num_uint(a)
+    frame_dig -1
+    app_params_get AppLocalNumUint
+    swap
+    // tests/artifacts/StateOps/contract.py:285
+    // value_index, exists_index = op.AppParamsGet.app_local_num_uint(_get_1st_ref_index())
+    callsub _get_1st_ref_index
+    app_params_get AppLocalNumUint
+    cover 2
+    // tests/artifacts/StateOps/contract.py:286
+    // assert value == value_index, "expected value by index to match"
+    dig 1
+    ==
+    assert // expected value by index to match
+    // tests/artifacts/StateOps/contract.py:287
+    // assert exists == exists_index, "expected exists by index to match"
+    cover 2
+    ==
+    assert // expected exists by index to match
+    // tests/artifacts/StateOps/contract.py:288
+    // return value
+    retsub
+
+
+// tests.artifacts.StateOps.contract.StateAppParamsContract.verify_app_params_get_local_num_byte_slice(a: uint64) -> uint64:
+verify_app_params_get_local_num_byte_slice:
+    // tests/artifacts/StateOps/contract.py:290-291
+    // @arc4.abimethod()
+    // def verify_app_params_get_local_num_byte_slice(self, a: Application) -> UInt64:
+    proto 1 1
+    // tests/artifacts/StateOps/contract.py:292
+    // value, exists = op.AppParamsGet.app_local_num_byte_slice(a)
+    frame_dig -1
+    app_params_get AppLocalNumByteSlice
+    swap
+    // tests/artifacts/StateOps/contract.py:293
+    // value_index, exists_index = op.AppParamsGet.app_local_num_byte_slice(_get_1st_ref_index())
+    callsub _get_1st_ref_index
+    app_params_get AppLocalNumByteSlice
+    cover 2
+    // tests/artifacts/StateOps/contract.py:294
+    // assert value == value_index, "expected value by index to match"
+    dig 1
+    ==
+    assert // expected value by index to match
+    // tests/artifacts/StateOps/contract.py:295
+    // assert exists == exists_index, "expected exists by index to match"
+    cover 2
+    ==
+    assert // expected exists by index to match
+    // tests/artifacts/StateOps/contract.py:296
+    // return value
+    retsub
+
+
+// tests.artifacts.StateOps.contract.StateAppParamsContract.verify_app_params_get_extra_program_pages(a: uint64) -> uint64:
+verify_app_params_get_extra_program_pages:
+    // tests/artifacts/StateOps/contract.py:298-299
+    // @arc4.abimethod()
+    // def verify_app_params_get_extra_program_pages(self, a: Application) -> UInt64:
+    proto 1 1
+    // tests/artifacts/StateOps/contract.py:300
+    // value, exists = op.AppParamsGet.app_extra_program_pages(a)
+    frame_dig -1
+    app_params_get AppExtraProgramPages
+    swap
+    // tests/artifacts/StateOps/contract.py:301
+    // value_index, exists_index = op.AppParamsGet.app_extra_program_pages(_get_1st_ref_index())
+    callsub _get_1st_ref_index
+    app_params_get AppExtraProgramPages
+    cover 2
+    // tests/artifacts/StateOps/contract.py:302
+    // assert value == value_index, "expected value by index to match"
+    dig 1
+    ==
+    assert // expected value by index to match
+    // tests/artifacts/StateOps/contract.py:303
+    // assert exists == exists_index, "expected exists by index to match"
+    cover 2
+    ==
+    assert // expected exists by index to match
+    // tests/artifacts/StateOps/contract.py:304
+    // return value
+    retsub
+
+
+// tests.artifacts.StateOps.contract.StateAppParamsContract.verify_app_params_get_creator(a: uint64) -> bytes:
+verify_app_params_get_creator:
+    // tests/artifacts/StateOps/contract.py:306-307
+    // @arc4.abimethod()
+    // def verify_app_params_get_creator(self, a: Application) -> arc4.Address:
+    proto 1 1
+    // tests/artifacts/StateOps/contract.py:308
+    // value, exists = op.AppParamsGet.app_creator(a)
+    frame_dig -1
+    app_params_get AppCreator
+    swap
+    // tests/artifacts/StateOps/contract.py:309
+    // value_index, exists_index = op.AppParamsGet.app_creator(_get_1st_ref_index())
+    callsub _get_1st_ref_index
+    app_params_get AppCreator
+    cover 2
+    // tests/artifacts/StateOps/contract.py:310
+    // assert value == value_index, "expected value by index to match"
+    dig 1
+    ==
+    assert // expected value by index to match
+    // tests/artifacts/StateOps/contract.py:311
+    // assert exists == exists_index, "expected exists by index to match"
+    cover 2
+    ==
+    assert // expected exists by index to match
+    // tests/artifacts/StateOps/contract.py:312
+    // return arc4.Address(value)
+    retsub
+
+
+// tests.artifacts.StateOps.contract.StateAppParamsContract.verify_app_params_get_address(a: uint64) -> bytes:
+verify_app_params_get_address:
+    // tests/artifacts/StateOps/contract.py:314-315
+    // @arc4.abimethod()
+    // def verify_app_params_get_address(self, a: Application) -> arc4.Address:
+    proto 1 1
+    // tests/artifacts/StateOps/contract.py:316
+    // value, exists = op.AppParamsGet.app_address(a)
+    frame_dig -1
+    app_params_get AppAddress
+    swap
+    // tests/artifacts/StateOps/contract.py:317
+    // value_index, exists_index = op.AppParamsGet.app_address(_get_1st_ref_index())
+    callsub _get_1st_ref_index
+    app_params_get AppAddress
+    cover 2
+    // tests/artifacts/StateOps/contract.py:318
+    // assert value == value_index, "expected value by index to match"
+    dig 1
+    ==
+    assert // expected value by index to match
+    // tests/artifacts/StateOps/contract.py:319
+    // assert exists == exists_index, "expected exists by index to match"
+    cover 2
+    ==
+    assert // expected exists by index to match
+    // tests/artifacts/StateOps/contract.py:320
+    // return arc4.Address(value)
+    retsub

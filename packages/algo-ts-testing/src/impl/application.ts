@@ -1,11 +1,12 @@
-import { Account, Application, bytes, uint64 } from '@algorandfoundation/algo-ts'
+import { Account, Application, Bytes, bytes, uint64 } from '@algorandfoundation/algo-ts'
+import algosdk from 'algosdk'
 import { ALWAYS_APPROVE_TEAL_PROGRAM } from '../constants'
 import { lazyContext } from '../context-helpers/internal-context'
 import { Mutable } from '../typescript-helpers'
-import { asUint64 } from '../util'
+import { asBigInt, asUint64 } from '../util'
 
 export class ApplicationData {
-  application: Mutable<Omit<Application, 'id'>>
+  application: Mutable<Omit<Application, 'id' | 'address'>>
   isCreating: boolean = false
 
   constructor() {
@@ -18,7 +19,6 @@ export class ApplicationData {
       localNumBytes: 0,
       extraProgramPages: 0,
       creator: lazyContext.defaultSender,
-      address: lazyContext.defaultSender,
     }
   }
 }
@@ -58,6 +58,7 @@ export class ApplicationCls implements Application {
     return this.data.application.creator
   }
   get address(): Account {
-    return this.data.application.address
+    const addr = algosdk.getApplicationAddress(asBigInt(this.id))
+    return Account(Bytes(addr))
   }
 }

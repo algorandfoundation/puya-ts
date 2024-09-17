@@ -17,12 +17,17 @@ const algorandClient = Lazy(() => algokit.AlgorandClient.defaultLocalNet())
 
 export const INITIAL_BALANCE_MICRO_ALGOS = Number(20e6)
 
-export const getAlgorandAppClient = async (appSpec: AppSpec): Promise<ApplicationClient> => {
+export const getAlgorandAppClient = async (appSpec: AppSpec) => {
+  const [appClient, _] = await getAlgorandAppClientWithApp(appSpec)
+  return appClient
+}
+
+export const getAlgorandAppClientWithApp = async (appSpec: AppSpec) => {
   const client = algorandClient()
   const defaultSigner = await client.account.kmd.getLocalNetDispenserAccount()
   const appClient = algokit.getAppClient({ app: appSpec, resolveBy: 'id', id: 0, sender: defaultSigner.account }, client.client.algod)
-  await appClient.create({ note: randomUUID() })
-  return appClient
+  const app = await appClient.create({ note: randomUUID() })
+  return [appClient, app] as const
 }
 
 const inovkeMethod = async (appClient: ApplicationClient, method: string, sendParams?: SendTransactionParams, ...methodArgs: ABIAppCallArg[]): Promise<ABIReturn> => {
