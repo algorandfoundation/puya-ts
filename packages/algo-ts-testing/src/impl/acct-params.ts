@@ -16,6 +16,11 @@ export const balance = (a: Account | internal.primitives.StubUint64Compat): uint
   return acct.balance
 }
 
+export const minBalance = (a: Account | internal.primitives.StubUint64Compat): uint64 => {
+  const acct = getAccount(a)
+  return acct.minBalance
+}
+
 export const AcctParams: internal.opTypes.AcctParamsType = {
   acctBalance: function (a: Account | internal.primitives.StubUint64Compat): readonly [uint64, boolean] {
     const acct = getAccount(a)

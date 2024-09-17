@@ -1,4 +1,4 @@
-import { Account, bytes, Bytes, internal, Uint64 } from '@algorandfoundation/algo-ts';
+import { Account, bytes, Bytes, internal, uint64, Uint64 } from '@algorandfoundation/algo-ts';
 import { AppSpec } from '@algorandfoundation/algokit-utils/types/app-spec';
 import { afterEach, describe, expect, test } from 'vitest';
 import { TestExecutionContext } from '../src';
@@ -6,7 +6,7 @@ import { generateTestAccount, generateTestAsset, getAlgorandAppClient, getAvmRes
 
 import { ZERO_ADDRESS } from '../src/constants';
 import { AccountCls } from '../src/impl/account';
-import { asBigInt } from '../src/util';
+import { asBigInt, asNumber } from '../src/util';
 import { StateAcctParamsGetContract, StateAssetParamsContract } from './artifacts/state-ops/contract.algo';
 import acctParamsAppSpecJson from './artifacts/state-ops/data/StateAcctParamsGetContract.arc32.json';
 import assetParamsAppSpecJson from './artifacts/state-ops/data/StateAssetParamsContract.arc32.json';
@@ -22,24 +22,22 @@ describe('State op codes', async () => {
 
   describe('AcctParams', async () => {
     const appClient = await getAlgorandAppClient(acctParamsAppSpecJson as AppSpec)
-    // const dummyAccount = await getLocalNetDefaultAccount()
+    const dummyAccount = await generateTestAccount()
 
     test.each([
       ["verify_acct_balance", INITIAL_BALANCE_MICRO_ALGOS + 100_000],
-      // ["verify_acct_min_balance", 100_000],
-      // ["verify_acct_auth_addr", ZERO_ADDRESS],
-      // ["verify_acct_total_num_uint", 0],
-      // ["verify_acct_total_num_byte_slice", 0],
-      // ["verify_acct_total_extra_app_pages", 0],
-      // ["verify_acct_total_apps_created", 0],
-      // ["verify_acct_total_apps_opted_in", 0],
-      // ["verify_acct_total_assets_created", 0],
-      // ["verify_acct_total_assets", 0],
-      // ["verify_acct_total_boxes", 0],
-      // ["verify_acct_total_box_bytes", 0],
+      ["verify_acct_min_balance", 100_000],
+      ["verify_acct_auth_addr", ZERO_ADDRESS],
+      ["verify_acct_total_num_uint", 0],
+      ["verify_acct_total_num_byte_slice", 0],
+      ["verify_acct_total_extra_app_pages", 0],
+      ["verify_acct_total_apps_created", 0],
+      ["verify_acct_total_apps_opted_in", 0],
+      ["verify_acct_total_assets_created", 0],
+      ["verify_acct_total_assets", 0],
+      ["verify_acct_total_boxes", 0],
+      ["verify_acct_total_box_bytes", 0],
     ])('should return the correct field value of the account', async (methodName, expectedValue) => {
-      const dummyAccount = await generateTestAccount()
-
       const mockAccount = ctx.any.account({
         address: dummyAccount.addr,
         balance: Uint64(INITIAL_BALANCE_MICRO_ALGOS + 100000),
@@ -60,8 +58,13 @@ describe('State op codes', async () => {
 
       const mockContract = ctx.contract.create(StateAcctParamsGetContract)
       const mockResult = mockContract[methodName as keyof StateAcctParamsGetContract](mockAccount)
-
-      expect(mockResult.valueOf()).toEqual(avmResult)
+      if (mockResult instanceof AccountCls) {
+        expect(mockResult.bytes.valueOf()).toEqual(avmResult)
+        expect(mockResult.bytes.valueOf()).toEqual((expectedValue as bytes).valueOf())
+      } else {
+        expect(mockResult.valueOf()).toEqual(avmResult)
+        expect(asNumber(mockResult as uint64)).toEqual(expectedValue)
+      }
     })
   })
   describe('AssetParams', async () => {

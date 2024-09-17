@@ -1,4 +1,4 @@
-export { AcctParams, balance } from './acct-params'
+export { AcctParams, balance, minBalance } from './acct-params'
 export { AssetParams } from './asset-params'
 export * from './crypto'
 export { Global } from './global'
