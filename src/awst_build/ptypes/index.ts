@@ -7,9 +7,9 @@ import { CodeError, InternalError, NotSupported } from '../../errors'
 import { codeInvariant, distinct, sortBy } from '../../util'
 import { PType } from './base'
 
+export * from './base'
 export * from './intrinsic-enum-type'
 export * from './op-ptypes'
-export * from './base'
 
 /**
  * Transient types can appear in expressions but should not be used as variable or return types
