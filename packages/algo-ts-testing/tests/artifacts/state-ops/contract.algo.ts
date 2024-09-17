@@ -120,6 +120,20 @@ export class StateAssetParamsContract extends arc4.Contract {
 
 }
 
+export class StateAssetHoldingContract extends arc4.Contract {
+  @arc4.abimethod()
+  public verify_asset_holding_get(a: Account, b: Asset): uint64 {
+    const [balance, _val] = op.AssetHolding.assetBalance(a, b)
+    return balance
+  }
+
+  @arc4.abimethod()
+  public verify_asset_frozen_get(a: Account, b: Asset): boolean {
+    const [frozen, _val] = op.AssetHolding.assetFrozen(a, b)
+    return frozen
+  }
+}
+
 export class StateAcctParamsGetContract extends arc4.Contract {
   @arc4.abimethod()
   public verify_acct_balance(a: Account): uint64 {

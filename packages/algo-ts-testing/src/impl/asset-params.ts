@@ -11,7 +11,7 @@ const resolveAssetIndex = (assetIdOrIndex: internal.primitives.StubUint64Compat)
   return txn.assets(input).id
 }
 
-const getAsset = (asset: Asset | internal.primitives.StubUint64Compat): Asset | undefined => {
+export const getAsset = (asset: Asset | internal.primitives.StubUint64Compat): Asset | undefined => {
   try {
     const assetId = asMaybeUint64Cls(asset)
     if (assetId !== undefined) {

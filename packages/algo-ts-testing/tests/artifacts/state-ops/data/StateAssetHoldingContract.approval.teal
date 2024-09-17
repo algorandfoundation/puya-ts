@@ -1,0 +1,115 @@
+#pragma version 10
+
+tests.artifacts.StateOps.contract.StateAssetHoldingContract.approval_program:
+    // tests/artifacts/StateOps/contract.py:138
+    // class StateAssetHoldingContract(ARC4Contract):
+    txn NumAppArgs
+    bz main_bare_routing@6
+    method "verify_asset_holding_get(account,asset)uint64"
+    method "verify_asset_frozen_get(account,asset)bool"
+    txna ApplicationArgs 0
+    match main_verify_asset_holding_get_route@2 main_verify_asset_frozen_get_route@3
+    err // reject transaction
+
+main_verify_asset_holding_get_route@2:
+    // tests/artifacts/StateOps/contract.py:139
+    // @arc4.abimethod()
+    txn OnCompletion
+    !
+    assert // OnCompletion is NoOp
+    txn ApplicationID
+    assert // is not creating
+    // tests/artifacts/StateOps/contract.py:138
+    // class StateAssetHoldingContract(ARC4Contract):
+    txna ApplicationArgs 1
+    btoi
+    txnas Accounts
+    txna ApplicationArgs 2
+    btoi
+    txnas Assets
+    // tests/artifacts/StateOps/contract.py:139
+    // @arc4.abimethod()
+    callsub verify_asset_holding_get
+    itob
+    byte 0x151f7c75
+    swap
+    concat
+    log
+    int 1
+    return
+
+main_verify_asset_frozen_get_route@3:
+    // tests/artifacts/StateOps/contract.py:144
+    // @arc4.abimethod()
+    txn OnCompletion
+    !
+    assert // OnCompletion is NoOp
+    txn ApplicationID
+    assert // is not creating
+    // tests/artifacts/StateOps/contract.py:138
+    // class StateAssetHoldingContract(ARC4Contract):
+    txna ApplicationArgs 1
+    btoi
+    txnas Accounts
+    txna ApplicationArgs 2
+    btoi
+    txnas Assets
+    // tests/artifacts/StateOps/contract.py:144
+    // @arc4.abimethod()
+    callsub verify_asset_frozen_get
+    byte 0x00
+    int 0
+    uncover 2
+    setbit
+    byte 0x151f7c75
+    swap
+    concat
+    log
+    int 1
+    return
+
+main_bare_routing@6:
+    // tests/artifacts/StateOps/contract.py:138
+    // class StateAssetHoldingContract(ARC4Contract):
+    txn OnCompletion
+    !
+    assert // reject transaction
+    txn ApplicationID
+    !
+    assert // is creating
+    int 1
+    return
+
+
+// tests.artifacts.StateOps.contract.StateAssetHoldingContract.verify_asset_holding_get(a: bytes, b: uint64) -> uint64:
+verify_asset_holding_get:
+    // tests/artifacts/StateOps/contract.py:139-140
+    // @arc4.abimethod()
+    // def verify_asset_holding_get(self, a: Account, b: Asset) -> UInt64:
+    proto 2 1
+    // tests/artifacts/StateOps/contract.py:141
+    // balance, _val = op.AssetHoldingGet.asset_balance(a, b)
+    frame_dig -2
+    frame_dig -1
+    asset_holding_get AssetBalance
+    pop
+    // tests/artifacts/StateOps/contract.py:142
+    // return balance
+    retsub
+
+
+// tests.artifacts.StateOps.contract.StateAssetHoldingContract.verify_asset_frozen_get(a: bytes, b: uint64) -> uint64:
+verify_asset_frozen_get:
+    // tests/artifacts/StateOps/contract.py:144-145
+    // @arc4.abimethod()
+    // def verify_asset_frozen_get(self, a: Account, b: Asset) -> bool:
+    proto 2 1
+    // tests/artifacts/StateOps/contract.py:146
+    // frozen, _val = op.AssetHoldingGet.asset_frozen(a, b)
+    frame_dig -2
+    frame_dig -1
+    asset_holding_get AssetFrozen
+    pop
+    // tests/artifacts/StateOps/contract.py:147
+    // return frozen
+    retsub

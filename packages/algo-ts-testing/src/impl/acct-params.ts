@@ -2,7 +2,7 @@ import { Account, gtxn, internal, uint64 } from '@algorandfoundation/algo-ts'
 import { lazyContext } from '../context-helpers/internal-context'
 import { asMaybeUint64Cls } from '../util'
 
-const getAccount = (acct: Account | internal.primitives.StubUint64Compat): Account => {
+export const getAccount = (acct: Account | internal.primitives.StubUint64Compat): Account => {
   const acctId = asMaybeUint64Cls(acct)
   if (acctId !== undefined) {
     const activeTxn = lazyContext.activeGroup.activeTransaction

@@ -115,5 +115,6 @@ export const GTxn: GTxnType = createObjectProxy('GTxn')
 export const JsonRef: JsonRefType = createObjectProxy('JsonRef')
 export const Txn: TxnType = createObjectProxy('Txn')
 
-export const AssetParams = createObjectProxy('AssetParams')
 export const AcctParams = createObjectProxy('AcctParams')
+export const AssetHolding = createObjectProxy('AssetHolding')
+export const AssetParams = createObjectProxy('AssetParams')
