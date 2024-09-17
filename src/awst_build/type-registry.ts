@@ -133,12 +133,17 @@ export class TypeRegistry {
   }
 
   resolveGenericPType(symbolName: SymbolName, typeArgs: PType[], sourceLocation: SourceLocation) {
+    const genericType = this.tryResolveGenericPType(symbolName, typeArgs)
+    if (genericType) return genericType
+    throw new CodeError(`${symbolName} could not be resolved to a generic type`, { sourceLocation })
+  }
+  tryResolveGenericPType(symbolName: SymbolName, typeArgs: PType[]): PType | undefined {
     for (const pt of this.genericTypes.values()) {
       if (pt.baseFullName === symbolName.fullName) {
         return pt.parameterise(typeArgs)
       }
     }
-    throw new CodeError(`${symbolName} could not be resolved to a generic type`, { sourceLocation })
+    return undefined
   }
 }
 export const typeRegistry = new TypeRegistry()

@@ -1162,9 +1162,9 @@ export class ContractMethod extends classes(_Function, ContractMemberNode) {
   }
 }
 export enum AppStorageKind {
-  appGlobal,
-  accountLocal,
-  box,
+  appGlobal = 1,
+  accountLocal = 2,
+  box = 3,
 }
 export class AppStorageDefinition extends ContractMemberNode {
   constructor(props: Props<AppStorageDefinition>) {

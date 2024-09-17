@@ -2,6 +2,7 @@ import { Constants } from '../../constants'
 import { wtypes } from '../../awst'
 import { codeInvariant, distinct, sortBy } from '../../util'
 import type { WType } from '../../awst/wtypes'
+import { WInnerTransaction, WInnerTransactionFields } from '../../awst/wtypes'
 import { WEnumeration } from '../../awst/wtypes'
 import { uint64WType, WArray, WGroupTransaction, WTuple } from '../../awst/wtypes'
 import { CodeError, InternalError, NotSupported } from '../../errors'
@@ -934,3 +935,117 @@ export class IterableIteratorType extends TransientType {
     return [this.itemType]
   }
 }
+
+export const paymentItxnFn = new TransactionFunctionType({
+  name: 'payment',
+  module: Constants.itxnModuleName,
+  kind: TransactionKind.Payment,
+})
+export const keyRegistrationItxnFn = new TransactionFunctionType({
+  name: 'keyRegistration',
+  module: Constants.itxnModuleName,
+  kind: TransactionKind.KeyRegistration,
+})
+export const assetConfigItxnFn = new TransactionFunctionType({
+  name: 'assetConfig',
+  module: Constants.itxnModuleName,
+  kind: TransactionKind.AssetConfig,
+})
+export const assetTransferItxnFn = new TransactionFunctionType({
+  name: 'assetTransfer',
+  module: Constants.itxnModuleName,
+  kind: TransactionKind.AssetTransfer,
+})
+export const assetFreezeItxnFn = new TransactionFunctionType({
+  name: 'assetFreeze',
+  module: Constants.itxnModuleName,
+  kind: TransactionKind.AssetFreeze,
+})
+export const applicationCallItxnFn = new TransactionFunctionType({
+  name: 'applicationCall',
+  module: Constants.itxnModuleName,
+  kind: TransactionKind.Application,
+})
+
+export class InnerTransactionPType extends PType {
+  get wtype() {
+    return new WInnerTransaction({
+      transactionType: this.kind,
+    })
+  }
+  readonly name: string
+  readonly kind: TransactionKind | undefined
+  readonly module = Constants.itxnModuleName
+  readonly singleton = false
+
+  constructor({ kind, name }: { kind?: TransactionKind; name: string }) {
+    super()
+    this.name = name
+    this.kind = kind
+  }
+}
+export class InnerTransactionFieldsPType extends PType {
+  get wtype() {
+    return new WInnerTransactionFields({
+      transactionType: this.kind,
+    })
+  }
+  readonly name: string
+  readonly kind: TransactionKind | undefined
+  readonly module = Constants.itxnModuleName
+  readonly singleton = false
+
+  constructor({ kind, name }: { kind?: TransactionKind; name: string }) {
+    super()
+    this.name = name
+    this.kind = kind
+  }
+}
+export const paymentFieldsType = new InnerTransactionFieldsPType({
+  name: 'PaymentFields',
+  kind: TransactionKind.Payment,
+})
+export const paymentItxnType = new InnerTransactionPType({
+  name: 'PaymentInnerTxn',
+  kind: TransactionKind.Payment,
+})
+export const keyRegistrationFieldsType = new InnerTransactionFieldsPType({
+  name: 'KeyRegistrationFields',
+  kind: TransactionKind.KeyRegistration,
+})
+export const keyRegistrationItxnType = new InnerTransactionPType({
+  name: 'KeyRegistrationInnerTxn',
+  kind: TransactionKind.KeyRegistration,
+})
+export const assetConfigFieldsType = new InnerTransactionFieldsPType({
+  name: 'AssetConfigFields',
+  kind: TransactionKind.AssetConfig,
+})
+export const assetConfigItxnType = new InnerTransactionPType({
+  name: 'AssetConfigInnerTxn',
+  kind: TransactionKind.AssetConfig,
+})
+export const assetTransferFieldsType = new InnerTransactionFieldsPType({
+  name: 'AssetTransferFields',
+  kind: TransactionKind.AssetTransfer,
+})
+export const assetTransferItxnType = new InnerTransactionPType({
+  name: 'AssetTransferInnerTxn',
+  kind: TransactionKind.AssetTransfer,
+})
+export const assetFreezeFieldsType = new InnerTransactionFieldsPType({
+  name: 'AssetFreezeFields',
+  kind: TransactionKind.AssetFreeze,
+})
+export const assetFreezeItxnType = new InnerTransactionPType({
+  name: 'AssetFreezeInnerTxn',
+  kind: TransactionKind.AssetFreeze,
+})
+export const applicationCallFieldsType = new InnerTransactionFieldsPType({
+  name: 'ApplicationCallFields',
+  kind: TransactionKind.Application,
+})
+export const applicationCallItxnType = new InnerTransactionPType({
+  name: 'ApplicationCallInnerTxn',
+  kind: TransactionKind.Application,
+})

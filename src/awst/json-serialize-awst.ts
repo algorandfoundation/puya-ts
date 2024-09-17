@@ -43,8 +43,11 @@ export class AwstSerializer extends SnakeCaseSerializer<RootNode[]> {
       return value
     }
     if (value instanceof Map) {
-      // TODO: probably needs to be a plain object map
-      return value
+      if (value.size === 0) return {}
+      if (typeof value.keys().next().value === 'string') {
+        return Object.fromEntries(value.entries())
+      }
+      throw new Error('Cannot serialize map with non-string key')
     }
     if (value instanceof ContractReference || value instanceof LogicSigReference) {
       return value.toString()

@@ -29,19 +29,31 @@ import {
   AccountFunction,
   accountPType,
   anyGroupTransaction,
+  applicationCallFieldsType,
+  applicationCallItxnFn,
+  applicationCallItxnType,
   applicationGroupTransaction,
   ApplicationTxnFunction,
   arc4AbiMethodDecorator,
   arc4BareMethodDecorator,
   assertFunction,
   assertMatchFunction,
+  assetConfigFieldsType,
   assetConfigGroupTransaction,
+  assetConfigItxnFn,
+  assetConfigItxnType,
   AssetConfigTxnFunction,
+  assetFreezeFieldsType,
   assetFreezeGroupTransaction,
+  assetFreezeItxnFn,
+  assetFreezeItxnType,
   AssetFreezeTxnFunction,
   AssetFunction,
   assetPType,
+  assetTransferFieldsType,
   assetTransferGroupTransaction,
+  assetTransferItxnFn,
+  assetTransferItxnType,
   AssetTransferTxnFunction,
   BigUintFunction,
   biguintPType,
@@ -63,7 +75,10 @@ import {
   IntrinsicFunctionGroupType,
   IntrinsicFunctionType,
   IterableIteratorType,
+  keyRegistrationFieldsType,
   keyRegistrationGroupTransaction,
+  keyRegistrationItxnFn,
+  keyRegistrationItxnType,
   KeyRegistrationTxnFunction,
   LocalStateFunction,
   LocalStateType,
@@ -72,7 +87,10 @@ import {
   ObjectPType,
   onCompleteActionType,
   opUpFeeSourceType,
+  paymentFieldsType,
   paymentGroupTransaction,
+  paymentItxnFn,
+  paymentItxnType,
   PayTxnFunction,
   StringFunction,
   stringPType,
@@ -108,6 +126,7 @@ import { EnsureBudgetFunctionBuilder } from '../eb/ensure-budget'
 import { Uint64EnumTypeBuilder } from '../eb/uint64-enum-type-builder'
 import { UrangeFunctionBuilder } from '../eb/urange-function'
 import { IterableIteratorExpressionBuilder } from '../eb/iterable-iterator-expression-builder'
+import { InnerTransactionExpressionBuilder, InnerTransactionFactoryFunctionBuilder } from '../eb/transactions/inner-transactions'
 
 export function registerPTypes(typeRegistry: TypeRegistry) {
   if (typeRegistry.hasRegistrations) {
@@ -199,4 +218,25 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
 
   typeRegistry.register({ ptype: urangeFunction, singletonEb: UrangeFunctionBuilder })
   typeRegistry.registerGeneric({ ptype: IterableIteratorType, instanceEb: IterableIteratorExpressionBuilder })
+
+  typeRegistry.register({ ptype: paymentItxnFn, singletonEb: InnerTransactionFactoryFunctionBuilder })
+  typeRegistry.register({ ptype: keyRegistrationItxnFn, singletonEb: InnerTransactionFactoryFunctionBuilder })
+  typeRegistry.register({ ptype: assetConfigItxnFn, singletonEb: InnerTransactionFactoryFunctionBuilder })
+  typeRegistry.register({ ptype: assetTransferItxnFn, singletonEb: InnerTransactionFactoryFunctionBuilder })
+  typeRegistry.register({ ptype: assetFreezeItxnFn, singletonEb: InnerTransactionFactoryFunctionBuilder })
+  typeRegistry.register({ ptype: applicationCallItxnFn, singletonEb: InnerTransactionFactoryFunctionBuilder })
+
+  typeRegistry.register({ ptype: paymentItxnType, instanceEb: InnerTransactionExpressionBuilder })
+  typeRegistry.register({ ptype: keyRegistrationItxnType, instanceEb: InnerTransactionExpressionBuilder })
+  typeRegistry.register({ ptype: assetConfigItxnType, instanceEb: InnerTransactionExpressionBuilder })
+  typeRegistry.register({ ptype: assetTransferItxnType, instanceEb: InnerTransactionExpressionBuilder })
+  typeRegistry.register({ ptype: assetFreezeItxnType, instanceEb: InnerTransactionExpressionBuilder })
+  typeRegistry.register({ ptype: applicationCallItxnType, instanceEb: InnerTransactionExpressionBuilder })
+  //
+  // typeRegistry.register({ ptype: paymentFieldsType, instanceEb: InnerTransactionFieldsExpressionBuilder })
+  // typeRegistry.register({ ptype: keyRegistrationFieldsType, instanceEb: InnerTransactionFieldsExpressionBuilder })
+  // typeRegistry.register({ ptype: assetConfigFieldsType, instanceEb: InnerTransactionFieldsExpressionBuilder })
+  // typeRegistry.register({ ptype: assetTransferFieldsType, instanceEb: InnerTransactionFieldsExpressionBuilder })
+  // typeRegistry.register({ ptype: assetFreezeFieldsType, instanceEb: InnerTransactionFieldsExpressionBuilder })
+  // typeRegistry.register({ ptype: applicationCallFieldsType, instanceEb: InnerTransactionFieldsExpressionBuilder })
 }

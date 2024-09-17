@@ -5,7 +5,7 @@ import { OnCompleteActionStr } from './arc4'
 /**
  * The different transaction types available in a transaction
  */
-enum TransactionType {
+export enum TransactionType {
   /**
    * A Payment transaction
    */
@@ -74,11 +74,6 @@ interface TransactionBase {
   typeBytes: bytes
 
   /**
-   * Transaction type as integer
-   */
-  type: TransactionType
-
-  /**
    * Position of this transaction within an atomic group
    * A stand-alone transaction is implicitly element 0 in a group of 1
    */
@@ -110,6 +105,11 @@ export interface PayTxn extends TransactionBase {
    * 32 byte address
    */
   closeRemainderTo: Account
+
+  /**
+   * Transaction type as integer
+   */
+  type: TransactionType.Payment
 }
 
 export interface KeyRegistrationTxn extends TransactionBase {
@@ -147,6 +147,10 @@ export interface KeyRegistrationTxn extends TransactionBase {
    * 64 byte state proof public key
    */
   stateProofKey: bytes
+  /**
+   * Transaction type as integer
+   */
+  type: TransactionType.KeyRegistration
 }
 
 export interface AssetConfigTxn extends TransactionBase {
@@ -209,6 +213,10 @@ export interface AssetConfigTxn extends TransactionBase {
    * 32 byte address
    */
   clawback: Account
+  /**
+   * Transaction type as integer
+   */
+  type: TransactionType.AssetConfig
 }
 
 export interface AssetTransferTxn extends TransactionBase {
@@ -236,6 +244,10 @@ export interface AssetTransferTxn extends TransactionBase {
    * 32 byte address
    */
   assetCloseTo: Account
+  /**
+   * Transaction type as integer
+   */
+  type: TransactionType.AssetTransfer
 }
 
 export interface AssetFreezeTxn extends TransactionBase {
@@ -253,6 +265,10 @@ export interface AssetFreezeTxn extends TransactionBase {
    * The new frozen value
    */
   frozen: boolean
+  /**
+   * Transaction type as integer
+   */
+  type: TransactionType.AssetFreeze
 }
 
 export interface ApplicationTxn extends TransactionBase {
@@ -366,6 +382,10 @@ export interface ApplicationTxn extends TransactionBase {
    * Clear State Program as an array of pages
    */
   clearStateProgramPages(index: uint64): bytes
+  /**
+   * Transaction type as integer
+   */
+  type: TransactionType.ApplicationCall
 }
 
 export type Transaction = PayTxn | KeyRegistrationTxn | AssetConfigTxn | AssetTransferTxn | AssetFreezeTxn | ApplicationTxn

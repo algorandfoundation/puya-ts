@@ -1,22 +1,22 @@
-import type { Account, bytes, uint64, gtxn, Asset } from '@algorandfoundation/algo-ts'
+import type { Account, Asset, bytes, gtxn, uint64 } from '@algorandfoundation/algo-ts'
 import {
   abimethod,
   arc4,
   assert,
   assertMatch,
+  BoxMap,
+  BoxRef,
   Bytes,
+  ensureBudget,
   Global,
   GlobalState,
-  Uint64,
-  BoxRef,
-  BoxMap,
-  log,
-  ensureBudget,
-  op,
   itxn,
-  Txn,
-  urange,
+  log,
+  op,
   OpUpFeeSource,
+  Txn,
+  Uint64,
+  urange,
 } from '@algorandfoundation/algo-ts'
 
 type VoteIndexArray = arc4.DynamicArray<arc4.UintN<8>>
@@ -34,9 +34,9 @@ const BOX_BYTE_MIN_BALANCE: uint64 = 400
 const ASSET_MIN_BALANCE: uint64 = 100000
 
 type VotingPreconditions = {
-  is_voting_open: boolean
-  is_allowed_to_vote: boolean
-  has_already_voted: boolean
+  is_voting_open: uint64
+  is_allowed_to_vote: uint64
+  has_already_voted: uint64
   current_time: uint64
 }
 export class VotingRoundApp extends arc4.Contract {
@@ -142,24 +142,26 @@ export class VotingRoundApp extends arc4.Contract {
     }
     note += ']}}'
 
-    this.nftAsset.value = itxn.submitAssetCreate({
-      total: 1,
-      decimals: 0,
-      defaultFrozen: false,
-      name: `[VOTE RESULT] ${this.voteId.value}`,
-      unitName: `VOTERSLT`,
-      url: this.nftImageUrl.value,
-      note: note,
-      fee: Global.minTxnFee,
-    }).configAsset
+    this.nftAsset.value = itxn
+      .assetConfig({
+        configAssetTotal: 1,
+        configAssetDecimals: 0,
+        configAssetDefaultFrozen: false,
+        configAssetName: `[VOTE RESULT] ${this.voteId.value}`,
+        configAssetUnitName: `VOTERSLT`,
+        configAssetUrl: this.nftImageUrl.value,
+        note: note,
+        fee: Global.minTxnFee,
+      })
+      .submit().configAsset
   }
 
   @abimethod({ readonly: true })
   public getPreconditions(signature: bytes): VotingPreconditions {
     return {
-      is_allowed_to_vote: this.allowedToVote(signature),
-      is_voting_open: this.votingOpen(),
-      has_already_voted: this.alreadyVoted(),
+      is_allowed_to_vote: Uint64(this.allowedToVote(signature)),
+      is_voting_open: Uint64(this.votingOpen()),
+      has_already_voted: Uint64(this.alreadyVoted()),
       current_time: Global.latestTimestamp,
     }
   }
@@ -204,7 +206,7 @@ export class VotingRoundApp extends arc4.Contract {
       assert(answerOptionIndex < optionsCount, 'Answer option index invalid')
       this.incrementVoteInBox(cumulativeOffset + answerOptionIndex)
       cumulativeOffset += optionsCount
-      this.votesByAccount.set(Txn.sender, answerIds)
+      this.votesByAccount.set(Txn.sender, answerIds.copy())
       this.voterCount.value += 1
     }
   }
@@ -225,7 +227,7 @@ export class VotingRoundApp extends arc4.Contract {
     for (const item of optionCounts) {
       totalOptions += item.native
     }
-    this.optionCounts.value = optionCounts
+    this.optionCounts.value = optionCounts.copy()
     this.totalOptions.value = totalOptions
   }
 

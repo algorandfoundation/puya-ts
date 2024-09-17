@@ -118,7 +118,6 @@ export abstract class ARC4Type extends WType {
 }
 
 export class WStructType extends WType {}
-export class WInnerTransactionFields extends WType {}
 
 export class WTuple extends WType {
   types: WType[]
@@ -165,6 +164,26 @@ export class WGroupTransaction extends WType {
     super({
       scalarType: AVMType.uint64,
       name: transactionType === undefined ? 'group_transaction' : `group_transaction_${transactionType}`,
+    })
+    this.transactionType = transactionType ?? null
+  }
+}
+export class WInnerTransaction extends WType {
+  transactionType: TransactionKind | null
+  constructor({ transactionType }: { transactionType?: TransactionKind }) {
+    super({
+      scalarType: null,
+      name: transactionType === undefined ? 'inner_transaction' : `inner_transaction_${transactionType}`,
+    })
+    this.transactionType = transactionType ?? null
+  }
+}
+export class WInnerTransactionFields extends WType {
+  transactionType: TransactionKind | null
+  constructor({ transactionType }: { transactionType?: TransactionKind }) {
+    super({
+      scalarType: null,
+      name: transactionType === undefined ? 'inner_transaction_fields' : `inner_transaction_fields_${transactionType}`,
     })
     this.transactionType = transactionType ?? null
   }

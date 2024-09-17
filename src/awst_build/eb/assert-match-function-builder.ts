@@ -28,7 +28,7 @@ export class AssertMatchFunctionBuilder extends NodeBuilder {
       args,
       typeArgs,
       callLocation: sourceLocation,
-      genericTypeArgs: 0,
+      genericTypeArgs: 1,
       funcName: 'assertMatch',
       argSpec: (a) => [a.required(), a.required(), a.optional(stringPType)],
     })
