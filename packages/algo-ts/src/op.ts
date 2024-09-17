@@ -94,6 +94,7 @@ export const getBit: GetBitType = createFunctionProxy('getBit')
 export const getByte: GetByteType = createFunctionProxy('getByte')
 export const itob: ItobType = createFunctionProxy('itob')
 export const keccak256: Keccak256Type = createFunctionProxy('keccak256')
+export const minBalance: BalanceType = createFunctionProxy('minBalance')
 export const mulw: MulwType = createFunctionProxy('mulw')
 export const replace: ReplaceType = createFunctionProxy('replace')
 export const select: SelectType = createFunctionProxy('select') as SelectType

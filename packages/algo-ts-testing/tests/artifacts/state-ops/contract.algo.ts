@@ -74,6 +74,7 @@ export class StateAssetParamsContract extends arc4.Contract {
     const [value_index, exists_index] = op.AssetParams.assetManager(get_1st_ref_index())
     assert(value == value_index, "expected value by index to match")
     assert(exists == exists_index, "expected exists by index to match")
+    // TODO: return arc4.Address(value)
     return value
   }
 
@@ -83,6 +84,7 @@ export class StateAssetParamsContract extends arc4.Contract {
     const [value_index, exists_index] = op.AssetParams.assetReserve(get_1st_ref_index())
     assert(value == value_index, "expected value by index to match")
     assert(exists == exists_index, "expected exists by index to match")
+    // TODO: return arc4.Address(value)
     return value
   }
 
@@ -92,6 +94,7 @@ export class StateAssetParamsContract extends arc4.Contract {
     const [value_index, exists_index] = op.AssetParams.assetFreeze(get_1st_ref_index())
     assert(value == value_index, "expected value by index to match")
     assert(exists == exists_index, "expected exists by index to match")
+    // TODO: return arc4.Address(value)
     return value
   }
 
@@ -101,6 +104,7 @@ export class StateAssetParamsContract extends arc4.Contract {
     const [value_index, exists_index] = op.AssetParams.assetClawback(get_1st_ref_index())
     assert(value == value_index, "expected value by index to match")
     assert(exists == exists_index, "expected exists by index to match")
+    // TODO: return arc4.Address(value)
     return value
   }
 
@@ -110,6 +114,7 @@ export class StateAssetParamsContract extends arc4.Contract {
     const [value_index, exists_index] = op.AssetParams.assetCreator(get_1st_ref_index())
     assert(value == value_index, "expected value by index to match")
     assert(exists == exists_index, "expected exists by index to match")
+    // TODO: return arc4.Address(value)
     return value
   }
 
@@ -125,6 +130,109 @@ export class StateAcctParamsGetContract extends arc4.Contract {
     assert(value == a.balance, "expected Account balance to match")
     assert(value == op.balance(a), "expected op.balance to match")
     assert(value == op.balance(get_1st_ref_index()), "expected op.balance by index to match")
+    return value
+  }
+
+  @arc4.abimethod()
+  public verify_acct_min_balance(a: Account): uint64 {
+    const [value, funded] = op.AcctParams.acctMinBalance(a)
+    const [value_index, funded_index] = op.AcctParams.acctMinBalance(get_1st_ref_index())
+    assert(value == value_index, "expected value by index to match")
+    assert(funded == funded_index, "expected funded by index to match")
+    assert(value == a.minBalance, "expected Account min_balance to match")
+    assert(value == op.minBalance(a), "expected op.min_balance to match")
+    assert(value == op.minBalance(get_1st_ref_index()), "expected op.min_balance by index to match")
+    return value
+  }
+
+  @arc4.abimethod()
+  public verify_acct_auth_addr(a: Account): Account {
+    const [value, funded] = op.AcctParams.acctAuthAddr(a)
+    const [value_index, funded_index] = op.AcctParams.acctAuthAddr(get_1st_ref_index())
+    assert(value == value_index, "expected value by index to match")
+    assert(funded == funded_index, "expected funded by index to match")
+    // TODO: return arc4.Address(value)
+    return value
+  }
+
+  @arc4.abimethod()
+  public verify_acct_total_num_uint(a: Account): uint64 {
+    const [value, funded] = op.AcctParams.acctTotalNumUint(a)
+    const [value_index, funded_index] = op.AcctParams.acctTotalNumUint(get_1st_ref_index())
+    assert(value == value_index, "expected value by index to match")
+    assert(funded == funded_index, "expected funded by index to match")
+    return value
+  }
+
+  @arc4.abimethod()
+  public verify_acct_total_num_byte_slice(a: Account): uint64 {
+    const [value, funded] = op.AcctParams.acctTotalNumByteSlice(a)
+    const [value_index, funded_index] = op.AcctParams.acctTotalNumByteSlice(get_1st_ref_index())
+    assert(value == value_index, "expected value by index to match")
+    assert(funded == funded_index, "expected funded by index to match")
+    return value
+  }
+
+  @arc4.abimethod()
+  public verify_acct_total_extra_app_pages(a: Account): uint64 {
+    const [value, funded] = op.AcctParams.acctTotalExtraAppPages(a)
+    const [value_index, funded_index] = op.AcctParams.acctTotalExtraAppPages(get_1st_ref_index())
+    assert(value == value_index, "expected value by index to match")
+    assert(funded == funded_index, "expected funded by index to match")
+    return value
+  }
+
+  @arc4.abimethod()
+  public verify_acct_total_apps_created(a: Account): uint64 {
+    const [value, funded] = op.AcctParams.acctTotalAppsCreated(a)
+    const [value_index, funded_index] = op.AcctParams.acctTotalAppsCreated(get_1st_ref_index())
+    assert(value == value_index, "expected value by index to match")
+    assert(funded == funded_index, "expected funded by index to match")
+    return value
+  }
+
+  @arc4.abimethod()
+  public verify_acct_total_apps_opted_in(a: Account): uint64 {
+    const [value, funded] = op.AcctParams.acctTotalAppsOptedIn(a)
+    const [value_index, funded_index] = op.AcctParams.acctTotalAppsOptedIn(get_1st_ref_index())
+    assert(value == value_index, "expected value by index to match")
+    assert(funded == funded_index, "expected funded by index to match")
+    return value
+  }
+
+  @arc4.abimethod()
+  public verify_acct_total_assets_created(a: Account): uint64 {
+    const [value, funded] = op.AcctParams.acctTotalAssetsCreated(a)
+    const [value_index, funded_index] = op.AcctParams.acctTotalAssetsCreated(get_1st_ref_index())
+    assert(value == value_index, "expected value by index to match")
+    assert(funded == funded_index, "expected funded by index to match")
+    return value
+  }
+
+  @arc4.abimethod()
+  public verify_acct_total_assets(a: Account): uint64 {
+    const [value, funded] = op.AcctParams.acctTotalAssets(a)
+    const [value_index, funded_index] = op.AcctParams.acctTotalAssets(get_1st_ref_index())
+    assert(value == value_index, "expected value by index to match")
+    assert(funded == funded_index, "expected funded by index to match")
+    return value
+  }
+
+  @arc4.abimethod()
+  public verify_acct_total_boxes(a: Account): uint64 {
+    const [value, funded] = op.AcctParams.acctTotalBoxes(a)
+    const [value_index, funded_index] = op.AcctParams.acctTotalBoxes(get_1st_ref_index())
+    assert(value == value_index, "expected value by index to match")
+    assert(funded == funded_index, "expected funded by index to match")
+    return value
+  }
+
+  @arc4.abimethod()
+  public verify_acct_total_box_bytes(a: Account): uint64 {
+    const [value, funded] = op.AcctParams.acctTotalBoxBytes(a)
+    const [value_index, funded_index] = op.AcctParams.acctTotalBoxBytes(get_1st_ref_index())
+    assert(value == value_index, "expected value by index to match")
+    assert(funded == funded_index, "expected funded by index to match")
     return value
   }
 }
