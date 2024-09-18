@@ -105,17 +105,17 @@ interface AssetTransferFields extends CommonTransactionFields {
 
 interface AssetConfigFields extends CommonTransactionFields {
   configAsset?: Asset
-  configAssetManager?: Account
-  configAssetReserve?: Account
-  configAssetFreeze?: Account
-  configAssetClawback?: Account
-  configAssetName?: string | bytes
-  configAssetUnitName?: string | bytes
-  configAssetTotal?: uint64
-  configAssetDecimals?: uint64
-  configAssetDefaultFrozen?: boolean
-  configAssetUrl?: string | bytes
-  configAssetMetadataHash?: bytes
+  manager?: Account
+  reserve?: Account
+  freeze?: Account
+  clawback?: Account
+  assetName?: string | bytes
+  unitName?: string | bytes
+  total?: uint64
+  decimals?: uint64
+  defaultFrozen?: boolean
+  url?: string | bytes
+  metadataHash?: bytes
 }
 
 interface AssetFreezeFields extends CommonTransactionFields {
@@ -162,21 +162,21 @@ type TxnFor<TFields extends InnerTxnList> = TFields extends [
 export function submitGroup<TFields extends InnerTxnList>(...transactionFields: TFields): TxnFor<TFields> {
   throw new Error()
 }
-export function payment(p: PaymentFields): InnerTransaction<PaymentFields, PaymentInnerTxn> {
+export function payment(fields: PaymentFields): InnerTransaction<PaymentFields, PaymentInnerTxn> {
   throw new Error('Not implemented')
 }
-export function keyRegistration(p: KeyRegistrationFields): InnerTransaction<KeyRegistrationFields, KeyRegistrationInnerTxn> {
+export function keyRegistration(fields: KeyRegistrationFields): InnerTransaction<KeyRegistrationFields, KeyRegistrationInnerTxn> {
   throw new Error('Not implemented')
 }
-export function assetConfig(p: AssetConfigFields): InnerTransaction<AssetConfigFields, AssetConfigInnerTxn> {
+export function assetConfig(fields: AssetConfigFields): InnerTransaction<AssetConfigFields, AssetConfigInnerTxn> {
   throw new Error('Not implemented')
 }
-export function assetTransfer(p: AssetTransferFields): InnerTransaction<AssetTransferFields, AssetTransferInnerTxn> {
+export function assetTransfer(fields: AssetTransferFields): InnerTransaction<AssetTransferFields, AssetTransferInnerTxn> {
   throw new Error('Not implemented')
 }
-export function assetFreeze(p: AssetFreezeFields): InnerTransaction<AssetFreezeFields, AssetFreezeInnerTxn> {
+export function assetFreeze(fields: AssetFreezeFields): InnerTransaction<AssetFreezeFields, AssetFreezeInnerTxn> {
   throw new Error('Not implemented')
 }
-export function applicationCall(p: ApplicationCallFields): InnerTransaction<ApplicationCallFields, ApplicationInnerTxn> {
+export function applicationCall(fields: ApplicationCallFields): InnerTransaction<ApplicationCallFields, ApplicationInnerTxn> {
   throw new Error('Not implemented')
 }

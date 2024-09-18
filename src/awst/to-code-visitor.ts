@@ -123,10 +123,16 @@ export class ToCodeVisitor
     return `${expression.opCode}${immediates}(${stack})`
   }
   visitCreateInnerTransaction(expression: nodes.CreateInnerTransaction): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    const fields = Array.from(expression.fields.entries())
+      .map(([f, v]) => `${f}=${v.accept(this)}`)
+      .join(', ')
+    return `create_inner_transaction(${fields})`
   }
   visitUpdateInnerTransaction(expression: nodes.UpdateInnerTransaction): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    const fields = Array.from(expression.fields.entries())
+      .map(([f, v]) => `${f}=${v.accept(this)}`)
+      .join(', ')
+    return `update_inner_transaction(${expression.itxn.accept(this)}, ${fields})`
   }
   visitCheckedMaybe(expression: nodes.CheckedMaybe): string {
     throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
@@ -141,10 +147,11 @@ export class ToCodeVisitor
     return expression.name
   }
   visitInnerTransactionField(expression: nodes.InnerTransactionField): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    const indexAccess = expression.arrayIndex ? `[${expression.arrayIndex.accept(this)}]` : ''
+    return `${expression.itxn.accept(this)}.${expression.field}${indexAccess}`
   }
   visitSubmitInnerTransaction(expression: nodes.SubmitInnerTransaction): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    return `submit_txn(${expression.itxns.map((i) => i.accept(this)).join(', ')})`
   }
   visitFieldExpression(expression: nodes.FieldExpression): string {
     throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })

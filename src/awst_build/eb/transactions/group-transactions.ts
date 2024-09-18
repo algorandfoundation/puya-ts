@@ -1,15 +1,8 @@
 import type { InstanceBuilder, NodeBuilder } from '../index'
 import { FunctionBuilder, InstanceExpressionBuilder } from '../index'
 import type { PType } from '../../ptypes'
-import {
-  applicationGroupTransaction,
-  assetConfigGroupTransaction,
-  assetFreezeGroupTransaction,
-  assetTransferGroupTransaction,
-  keyRegistrationGroupTransaction,
-  paymentGroupTransaction,
-} from '../../ptypes'
-import { anyGroupTransaction, GroupTransactionPType, TransactionFunctionType, uint64PType } from '../../ptypes'
+
+import { GroupTransactionPType, TransactionFunctionType, uint64PType } from '../../ptypes'
 import type { Expression } from '../../../awst/nodes'
 import { invariant } from '../../../util'
 import type { SourceLocation } from '../../../awst/source-location'
@@ -19,7 +12,7 @@ import { TxnFields } from '../../../awst/txn-fields'
 import { instanceEb } from '../../type-registry'
 import { nodeFactory } from '../../../awst/node-factory'
 import { parseFunctionArgs } from '../util/arg-parsing'
-import { TransactionKind } from '../../../awst/models'
+import { getGroupTransactionType } from './util'
 
 export class GroupTransactionExpressionBuilder extends InstanceExpressionBuilder<GroupTransactionPType> {
   constructor(expr: Expression, ptype: PType) {
@@ -118,24 +111,5 @@ class IndexedTransactionFieldFunctionBuilder extends FunctionBuilder {
       }),
       this.config.returnType,
     )
-  }
-}
-
-function getGroupTransactionType(kind: TransactionKind | undefined): GroupTransactionPType {
-  switch (kind) {
-    case TransactionKind.Payment:
-      return paymentGroupTransaction
-    case TransactionKind.KeyRegistration:
-      return keyRegistrationGroupTransaction
-    case TransactionKind.AssetConfig:
-      return assetConfigGroupTransaction
-    case TransactionKind.AssetTransfer:
-      return assetTransferGroupTransaction
-    case TransactionKind.AssetFreeze:
-      return assetFreezeGroupTransaction
-    case TransactionKind.Application:
-      return applicationGroupTransaction
-    default:
-      return anyGroupTransaction
   }
 }

@@ -144,12 +144,12 @@ export class VotingRoundApp extends arc4.Contract {
 
     this.nftAsset.value = itxn
       .assetConfig({
-        configAssetTotal: 1,
-        configAssetDecimals: 0,
-        configAssetDefaultFrozen: false,
-        configAssetName: `[VOTE RESULT] ${this.voteId.value}`,
-        configAssetUnitName: `VOTERSLT`,
-        configAssetUrl: this.nftImageUrl.value,
+        total: 1,
+        decimals: 0,
+        defaultFrozen: false,
+        assetName: `[VOTE RESULT] ${this.voteId.value}`,
+        unitName: `VOTERSLT`,
+        url: this.nftImageUrl.value,
         note: note,
         fee: Global.minTxnFee,
       })
