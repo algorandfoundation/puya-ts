@@ -40,6 +40,7 @@ export class InnerTransactionFactoryFunctionBuilder extends FunctionBuilder {
     })
     codeInvariant(initialFields.ptype instanceof ObjectPType, 'fields argument must be an object type')
     const mappedFields = new Map<TxnField, Expression>()
+    // TODO: Add default fee option (0)
     const validFields = this.ptype.kind !== undefined ? txnKindToFields[this.ptype.kind] : anyTxnFields
     for (const [prop, propType] of initialFields.ptype.orderedProperties()) {
       if (prop in validFields) {
