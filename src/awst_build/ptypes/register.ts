@@ -126,7 +126,8 @@ import { EnsureBudgetFunctionBuilder } from '../eb/ensure-budget'
 import { Uint64EnumTypeBuilder } from '../eb/uint64-enum-type-builder'
 import { UrangeFunctionBuilder } from '../eb/urange-function'
 import { IterableIteratorExpressionBuilder } from '../eb/iterable-iterator-expression-builder'
-import { InnerTransactionExpressionBuilder, InnerTransactionFactoryFunctionBuilder } from '../eb/transactions/inner-transactions'
+import { InnerTransactionExpressionBuilder } from '../eb/transactions/inner-transactions'
+import { InnerTransactionFactoryFunctionBuilder } from '../eb/transactions/inner-transaction-factory'
 
 export function registerPTypes(typeRegistry: TypeRegistry) {
   if (typeRegistry.hasRegistrations) {
