@@ -37,11 +37,13 @@ export class Auction extends Contract {
     this.asa.value = asset
 
     /// Submit opt-in transaction: 0 asset transfer to self
-    itxn.submitAssetTransfer({
-      assetReceiver: Global.currentApplicationAddress,
-      xferAsset: asset,
-      assetAmount: 0,
-    })
+    itxn
+      .assetTransfer({
+        assetReceiver: Global.currentApplicationAddress,
+        xferAsset: asset,
+        assetAmount: 0,
+      })
+      .submit()
   }
 
   public startAuction(startingPrice: uint64, length: uint64, axfer: gtxn.AssetTransferTxn): void {
@@ -60,10 +62,12 @@ export class Auction extends Contract {
   }
 
   private pay(receiver: Account, amount: uint64): void {
-    itxn.submitPayment({
-      receiver: receiver,
-      amount: amount,
-    })
+    itxn
+      .payment({
+        receiver: receiver,
+        amount: amount,
+      })
+      .submit()
   }
 
   @abimethod({ allowActions: 'OptIn' })
@@ -102,20 +106,24 @@ export class Auction extends Contract {
     assert(Global.latestTimestamp > this.auctionEnd.value)
 
     /// Send ASA to previous bidder
-    itxn.submitAssetTransfer({
-      assetReceiver: this.previousBidder.value,
-      xferAsset: asset,
-      assetAmount: this.asaAmt.value,
-      assetCloseTo: this.previousBidder.value,
-    })
+    itxn
+      .assetTransfer({
+        assetReceiver: this.previousBidder.value,
+        xferAsset: asset,
+        assetAmount: this.asaAmt.value,
+        assetCloseTo: this.previousBidder.value,
+      })
+      .submit()
   }
 
   @abimethod({ allowActions: 'DeleteApplication' })
   public deleteApplication(): void {
-    itxn.submitPayment({
-      receiver: Global.creatorAddress,
-      closeRemainderTo: Global.creatorAddress,
-      amount: 0,
-    })
+    itxn
+      .payment({
+        receiver: Global.creatorAddress,
+        closeRemainderTo: Global.creatorAddress,
+        amount: 0,
+      })
+      .submit()
   }
 }

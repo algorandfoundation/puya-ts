@@ -4,7 +4,7 @@ import { CodeError, NotSupported } from '../../errors'
 import { awst, wtypes } from '../../awst'
 import type { InstanceBuilder, NodeBuilder } from './index'
 import { BuilderBinaryOp, BuilderComparisonOp, FunctionBuilder, InstanceExpressionBuilder } from './index'
-import type { InstanceType, PType } from '../ptypes'
+import type { InstanceType, PType, PTypeOrClass } from '../ptypes'
 import { boolPType, bytesPType, stringPType } from '../ptypes'
 import type { Expression } from '../../awst/nodes'
 import { BytesBinaryOperator, BytesEncoding, EqualityComparison } from '../../awst/nodes'
@@ -77,11 +77,11 @@ export class StringExpressionBuilder extends InstanceExpressionBuilder<InstanceT
     super(expr, stringPType)
   }
 
-  resolvableToPType(ptype: PType): boolean {
+  resolvableToPType(ptype: PTypeOrClass): boolean {
     return ptype.equals(bytesPType) || super.resolvableToPType(ptype)
   }
 
-  resolveToPType(ptype: PType): InstanceBuilder {
+  resolveToPType(ptype: PTypeOrClass): InstanceBuilder {
     if (ptype.equals(bytesPType)) {
       return instanceEb(this.toBytes(this.sourceLocation), bytesPType)
     }

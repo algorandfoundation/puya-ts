@@ -1,6 +1,6 @@
 import type { Expression, LValue } from '../../awst/nodes'
 import { CodeError } from '../../errors'
-import type { PType } from '../ptypes'
+import type { PType, PTypeOrClass } from '../ptypes'
 import { TransientType } from '../ptypes'
 import type { SourceLocation } from '../../awst/source-location'
 import type { BuilderBinaryOp, BuilderComparisonOp, BuilderUnaryOp, NodeBuilder } from './index'
@@ -16,9 +16,9 @@ export abstract class LiteralExpressionBuilder extends InstanceBuilder {
     throw new CodeError('A literal value is not valid here', { sourceLocation: this.sourceLocation })
   }
 
-  abstract resolvableToPType(ptype: PType): boolean
+  abstract resolvableToPType(ptype: PTypeOrClass): boolean
 
-  abstract resolveToPType(ptype: PType): InstanceBuilder
+  abstract resolveToPType(ptype: PTypeOrClass): InstanceBuilder
 
   private throwInvalidExpression(): never {
     if (this.ptype instanceof TransientType) throw new CodeError(this.ptype.expressionMessage, { sourceLocation: this.sourceLocation })

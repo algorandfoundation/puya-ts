@@ -443,10 +443,10 @@ export class TuplePType extends PType {
   readonly items: PType[]
   readonly singleton = false
   readonly immutable: boolean
-  constructor(props: { items: PType[]; immutable: boolean }) {
+  constructor(props: { items: PType[]; immutable?: boolean }) {
     super()
     this.items = props.items
-    this.immutable = props.immutable
+    this.immutable = props.immutable ?? true
   }
 
   get wtype(): WTuple {
@@ -682,6 +682,10 @@ export const applicationPType = new InstanceType({
   wtype: wtypes.applicationWType,
   module: Constants.referenceModuleName,
 })
+export const ApplicationFunctionType = new LibFunctionType({
+  name: 'Application',
+  module: Constants.referenceModuleName,
+})
 export const GlobalStateFunction = new LibFunctionType({
   name: 'GlobalState',
   module: Constants.stateModuleName,
@@ -776,61 +780,61 @@ export class TransactionFunctionType extends LibFunctionType {
   }
 }
 
-export const paymentGroupTransaction = new GroupTransactionPType({
+export const paymentGtxnType = new GroupTransactionPType({
   name: 'PayTxn',
-  kind: TransactionKind.Payment,
+  kind: TransactionKind.pay,
 })
 export const PayTxnFunction = new TransactionFunctionType({
   name: 'PayTxn',
   module: Constants.gtxnModuleName,
-  kind: TransactionKind.Payment,
+  kind: TransactionKind.pay,
 })
-export const keyRegistrationGroupTransaction = new GroupTransactionPType({
+export const keyRegistrationGtxnType = new GroupTransactionPType({
   name: 'KeyRegistrationTxn',
-  kind: TransactionKind.KeyRegistration,
+  kind: TransactionKind.keyreg,
 })
 export const KeyRegistrationTxnFunction = new TransactionFunctionType({
   name: 'KeyRegistrationTxn',
   module: Constants.gtxnModuleName,
-  kind: TransactionKind.KeyRegistration,
+  kind: TransactionKind.keyreg,
 })
-export const assetConfigGroupTransaction = new GroupTransactionPType({
+export const assetConfigGtxnType = new GroupTransactionPType({
   name: 'AssetConfigTxn',
-  kind: TransactionKind.AssetConfig,
+  kind: TransactionKind.acfg,
 })
 export const AssetConfigTxnFunction = new TransactionFunctionType({
   name: 'AssetConfigTxn',
   module: Constants.gtxnModuleName,
-  kind: TransactionKind.AssetConfig,
+  kind: TransactionKind.acfg,
 })
-export const assetTransferGroupTransaction = new GroupTransactionPType({
+export const assetTransferGtxnType = new GroupTransactionPType({
   name: 'AssetTransferTxn',
-  kind: TransactionKind.AssetTransfer,
+  kind: TransactionKind.axfer,
 })
 export const AssetTransferTxnFunction = new TransactionFunctionType({
   name: 'AssetTransferTxn',
   module: Constants.gtxnModuleName,
-  kind: TransactionKind.AssetTransfer,
+  kind: TransactionKind.axfer,
 })
-export const assetFreezeGroupTransaction = new GroupTransactionPType({
+export const assetFreezeGtxnType = new GroupTransactionPType({
   name: 'AssetFreezeTxn',
-  kind: TransactionKind.AssetFreeze,
+  kind: TransactionKind.afrz,
 })
 export const AssetFreezeTxnFunction = new TransactionFunctionType({
   name: 'AssetFreezeTxn',
   module: Constants.gtxnModuleName,
-  kind: TransactionKind.AssetFreeze,
+  kind: TransactionKind.afrz,
 })
-export const applicationGroupTransaction = new GroupTransactionPType({
+export const applicationCallGtxnType = new GroupTransactionPType({
   name: 'ApplicationTxn',
-  kind: TransactionKind.Application,
+  kind: TransactionKind.appl,
 })
 export const ApplicationTxnFunction = new TransactionFunctionType({
   name: 'ApplicationTxn',
   module: Constants.gtxnModuleName,
-  kind: TransactionKind.Application,
+  kind: TransactionKind.appl,
 })
-export const anyGroupTransaction = new GroupTransactionPType({
+export const anyGtxnType = new GroupTransactionPType({
   name: 'Transaction',
   kind: undefined,
 })
@@ -939,32 +943,32 @@ export class IterableIteratorType extends TransientType {
 export const paymentItxnFn = new TransactionFunctionType({
   name: 'payment',
   module: Constants.itxnModuleName,
-  kind: TransactionKind.Payment,
+  kind: TransactionKind.pay,
 })
 export const keyRegistrationItxnFn = new TransactionFunctionType({
   name: 'keyRegistration',
   module: Constants.itxnModuleName,
-  kind: TransactionKind.KeyRegistration,
+  kind: TransactionKind.keyreg,
 })
 export const assetConfigItxnFn = new TransactionFunctionType({
   name: 'assetConfig',
   module: Constants.itxnModuleName,
-  kind: TransactionKind.AssetConfig,
+  kind: TransactionKind.acfg,
 })
 export const assetTransferItxnFn = new TransactionFunctionType({
   name: 'assetTransfer',
   module: Constants.itxnModuleName,
-  kind: TransactionKind.AssetTransfer,
+  kind: TransactionKind.axfer,
 })
 export const assetFreezeItxnFn = new TransactionFunctionType({
   name: 'assetFreeze',
   module: Constants.itxnModuleName,
-  kind: TransactionKind.AssetFreeze,
+  kind: TransactionKind.afrz,
 })
 export const applicationCallItxnFn = new TransactionFunctionType({
   name: 'applicationCall',
   module: Constants.itxnModuleName,
-  kind: TransactionKind.Application,
+  kind: TransactionKind.appl,
 })
 
 export class InnerTransactionPType extends PType {
@@ -984,7 +988,7 @@ export class InnerTransactionPType extends PType {
     this.kind = kind
   }
 }
-export class InnerTransactionFieldsPType extends PType {
+export class ItxnParamsPType extends PType {
   get wtype() {
     return new WInnerTransactionFields({
       transactionType: this.kind,
@@ -1001,51 +1005,56 @@ export class InnerTransactionFieldsPType extends PType {
     this.kind = kind
   }
 }
-export const paymentFieldsType = new InnerTransactionFieldsPType({
-  name: 'PaymentFields',
-  kind: TransactionKind.Payment,
+export const paymentItxnParamsType = new ItxnParamsPType({
+  name: 'PaymentItxnParams',
+  kind: TransactionKind.pay,
 })
 export const paymentItxnType = new InnerTransactionPType({
   name: 'PaymentInnerTxn',
-  kind: TransactionKind.Payment,
+  kind: TransactionKind.pay,
 })
-export const keyRegistrationFieldsType = new InnerTransactionFieldsPType({
-  name: 'KeyRegistrationFields',
-  kind: TransactionKind.KeyRegistration,
+export const keyRegistrationItxnParamsType = new ItxnParamsPType({
+  name: 'KeyRegistrationItxnParams',
+  kind: TransactionKind.keyreg,
 })
 export const keyRegistrationItxnType = new InnerTransactionPType({
   name: 'KeyRegistrationInnerTxn',
-  kind: TransactionKind.KeyRegistration,
+  kind: TransactionKind.keyreg,
 })
-export const assetConfigFieldsType = new InnerTransactionFieldsPType({
-  name: 'AssetConfigFields',
-  kind: TransactionKind.AssetConfig,
+export const assetConfigItxnParamsType = new ItxnParamsPType({
+  name: 'AssetConfigItxnParams',
+  kind: TransactionKind.acfg,
 })
 export const assetConfigItxnType = new InnerTransactionPType({
   name: 'AssetConfigInnerTxn',
-  kind: TransactionKind.AssetConfig,
+  kind: TransactionKind.acfg,
 })
-export const assetTransferFieldsType = new InnerTransactionFieldsPType({
-  name: 'AssetTransferFields',
-  kind: TransactionKind.AssetTransfer,
+export const assetTransferItxnParamsType = new ItxnParamsPType({
+  name: 'AssetTransferItxnParams',
+  kind: TransactionKind.axfer,
 })
 export const assetTransferItxnType = new InnerTransactionPType({
   name: 'AssetTransferInnerTxn',
-  kind: TransactionKind.AssetTransfer,
+  kind: TransactionKind.axfer,
 })
-export const assetFreezeFieldsType = new InnerTransactionFieldsPType({
-  name: 'AssetFreezeFields',
-  kind: TransactionKind.AssetFreeze,
+export const assetFreezeItxnParamsType = new ItxnParamsPType({
+  name: 'AssetFreezeItxnParams',
+  kind: TransactionKind.afrz,
 })
 export const assetFreezeItxnType = new InnerTransactionPType({
   name: 'AssetFreezeInnerTxn',
-  kind: TransactionKind.AssetFreeze,
+  kind: TransactionKind.afrz,
 })
-export const applicationCallFieldsType = new InnerTransactionFieldsPType({
-  name: 'ApplicationCallFields',
-  kind: TransactionKind.Application,
+export const applicationCallItxnParamsType = new ItxnParamsPType({
+  name: 'ApplicationCallItxnParams',
+  kind: TransactionKind.appl,
 })
-export const applicationCallItxnType = new InnerTransactionPType({
-  name: 'ApplicationCallInnerTxn',
-  kind: TransactionKind.Application,
+export const applicationItxnType = new InnerTransactionPType({
+  name: 'ApplicationInnerTxn',
+  kind: TransactionKind.appl,
+})
+
+export const submitGroupItxnFunction = new LibFunctionType({
+  name: 'submitGroup',
+  module: Constants.itxnModuleName,
 })

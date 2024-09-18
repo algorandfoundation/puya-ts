@@ -127,10 +127,10 @@ export class LogicSigReference extends ModelBase {
 export type CompilationSet = ReadonlyArray<ContractReference | LogicSigReference>
 
 export enum TransactionKind {
-  Payment = 1,
-  KeyRegistration = 2,
-  AssetConfig = 3,
-  AssetTransfer = 4,
-  AssetFreeze = 5,
-  Application = 6,
+  pay = 1,
+  keyreg = 2,
+  acfg = 3,
+  axfer = 4,
+  afrz = 5,
+  appl = 6,
 }

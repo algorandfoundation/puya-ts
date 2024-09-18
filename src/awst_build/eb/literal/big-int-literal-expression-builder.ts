@@ -1,7 +1,7 @@
 import type { BuilderBinaryOp, BuilderComparisonOp, InstanceBuilder } from '../index'
 import type { SourceLocation } from '../../../awst/source-location'
 import type { Expression, LValue } from '../../../awst/nodes'
-import type { PType } from '../../ptypes'
+import type { PType, PTypeOrClass } from '../../ptypes'
 import { boolPType } from '../../ptypes'
 import { biguintPType, uint64PType } from '../../ptypes'
 import { nodeFactory } from '../../../awst/node-factory'
@@ -37,7 +37,8 @@ export class BigIntLiteralExpressionBuilder extends LiteralExpressionBuilder {
     super(location)
     this._ptype = ptype
   }
-  resolvableToPType(ptype: PType): boolean {
+
+  resolvableToPType(ptype: PTypeOrClass): boolean {
     return ptype.equals(uint64PType) || ptype.equals(biguintPType) || ptype.equals(this.ptype)
   }
   boolEval(sourceLocation: SourceLocation, negate: boolean = false): Expression {
@@ -49,7 +50,7 @@ export class BigIntLiteralExpressionBuilder extends LiteralExpressionBuilder {
     })
   }
 
-  resolveToPType(ptype: PType): InstanceBuilder {
+  resolveToPType(ptype: PTypeOrClass): InstanceBuilder {
     if (ptype.equals(this.ptype)) return this
     codeInvariant(isValidLiteralForPType(this.value, ptype), `${ptype.name} cannot be converted to type ${ptype.name}`, this.sourceLocation)
     if (ptype.equals(uint64PType)) {

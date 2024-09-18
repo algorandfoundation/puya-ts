@@ -1,6 +1,6 @@
 import type { awst } from '../../awst'
-import type { InstanceBuilder } from './index'
-import { BuilderBinaryOp, BuilderComparisonOp, BuilderUnaryOp, FunctionBuilder, InstanceExpressionBuilder } from './index'
+import type { InstanceBuilder, BuilderComparisonOp } from './index'
+import { BuilderBinaryOp, BuilderUnaryOp, FunctionBuilder, InstanceExpressionBuilder } from './index'
 import type { Expression } from '../../awst/nodes'
 import { BoolConstant } from '../../awst/nodes'
 import { NumericComparison, UInt64BinaryOperator, UInt64PostfixUnaryOperator, UInt64UnaryOperator } from '../../awst/nodes'
@@ -17,6 +17,7 @@ import type { InstanceType, PType } from '../ptypes'
 import { boolWType, uint64WType } from '../../awst/wtypes'
 import { LiteralExpressionBuilder } from './literal-expression-builder'
 import { parseFunctionArgs } from './util/arg-parsing'
+import { compareUint64 } from './util/compare-uint64'
 
 export class UInt64FunctionBuilder extends FunctionBuilder {
   readonly ptype = Uint64Function
@@ -84,20 +85,7 @@ export class UInt64ExpressionBuilder extends InstanceExpressionBuilder<InstanceT
 
   compare(other: InstanceBuilder, op: BuilderComparisonOp, sourceLocation: SourceLocation): InstanceBuilder {
     const otherExpr = requireExpressionOfType(other, uint64PType)
-    const numComOp = tryConvertEnum(op, BuilderComparisonOp, NumericComparison)
-    if (numComOp === undefined) {
-      throw new NotSupported(`Numeric comparison operator ${op}`, {
-        sourceLocation,
-      })
-    }
-    return new BooleanExpressionBuilder(
-      nodeFactory.numericComparisonExpression({
-        lhs: this._expr,
-        rhs: otherExpr,
-        operator: numComOp,
-        sourceLocation,
-      }),
-    )
+    return compareUint64(this._expr, otherExpr, op, sourceLocation, this.typeDescription)
   }
 
   prefixUnaryOp(op: BuilderUnaryOp, sourceLocation: SourceLocation): InstanceBuilder {

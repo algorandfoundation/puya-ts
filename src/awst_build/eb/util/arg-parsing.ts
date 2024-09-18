@@ -1,4 +1,4 @@
-import type { PType } from '../../ptypes'
+import type { PType, PTypeOrClass } from '../../ptypes'
 import type { SourceLocation } from '../../../awst/source-location'
 import type { DeliberateAny, Tuple } from '../../../typescript-helpers'
 import { CodeError } from '../../../errors'
@@ -32,12 +32,12 @@ const ArgSpecDiscriminator = Symbol('_specType')
  * Optional arg spec
  * Will be mapped to `Expression | undefined`
  */
-type OptionalArg = { t: PType[]; required: false; [ArgSpecDiscriminator]: 'arg' }
+type OptionalArg = { t: PTypeOrClass[]; required: false; [ArgSpecDiscriminator]: 'arg' }
 /**
  * Required arg spec
  * Will be mapped to `Expression`
  */
-type RequiredArg = { t: PType[]; required: true; [ArgSpecDiscriminator]: 'arg' }
+type RequiredArg = { t: PTypeOrClass[]; required: true; [ArgSpecDiscriminator]: 'arg' }
 type ArgSpec = OptionalArg | RequiredArg
 
 /**
@@ -126,14 +126,14 @@ const argSpecFactory = {
    * A required arg with one of the specified types
    * @param ptypes
    */
-  required(...ptypes: PType[]): RequiredArg {
+  required(...ptypes: PTypeOrClass[]): RequiredArg {
     return { t: ptypes, required: true, [ArgSpecDiscriminator]: 'arg' }
   },
   /**
    * An optional arg with one of the specified types
    * @param ptypes
    */
-  optional(...ptypes: PType[]): OptionalArg {
+  optional(...ptypes: PTypeOrClass[]): OptionalArg {
     return { t: ptypes, required: false, [ArgSpecDiscriminator]: 'arg' }
   },
   /**

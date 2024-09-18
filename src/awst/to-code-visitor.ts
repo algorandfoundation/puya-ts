@@ -135,7 +135,7 @@ export class ToCodeVisitor
     return `update_inner_transaction(${expression.itxn.accept(this)}, ${fields})`
   }
   visitCheckedMaybe(expression: nodes.CheckedMaybe): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    return `checked_maybe(${expression.expr.accept(this)}, comment=${expression.comment})`
   }
   visitTupleExpression(expression: nodes.TupleExpression): string {
     return `<tuple>[${expression.items.map((i) => i.accept(this)).join(', ')}]`

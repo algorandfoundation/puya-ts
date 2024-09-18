@@ -1,5 +1,5 @@
 import type { SourceLocation } from './awst/source-location'
-import type { PType } from './awst_build/ptypes'
+import type { PType, PTypeOrClass } from './awst_build/ptypes'
 
 type PuyaErrorOptions = {
   cause?: Error
@@ -50,9 +50,10 @@ export class CodeError extends PuyaError {
   }: {
     sourceLocation: SourceLocation
     sourceType: PType
-    targetType: PType
+    targetType: PTypeOrClass
   }) {
-    return new CodeError(`Cannot resolve ${sourceType} to ${targetType}`, { sourceLocation })
+    const targetName = targetType instanceof Function ? targetType.name : targetType.fullName
+    return new CodeError(`Cannot resolve ${sourceType} to ${targetName}`, { sourceLocation })
   }
 }
 export class TodoError extends PuyaError {}

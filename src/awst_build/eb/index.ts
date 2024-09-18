@@ -1,7 +1,7 @@
 import type { SourceLocation } from '../../awst/source-location'
 import { awst } from '../../awst'
 import { CodeError, NotSupported } from '../../errors'
-import type { PType } from '../ptypes'
+import type { PType, PTypeOrClass } from '../ptypes'
 import { logger } from '../../logger'
 import type { Expression } from '../../awst/nodes'
 import { instanceEb } from '../type-registry'
@@ -100,11 +100,11 @@ export abstract class InstanceBuilder<TPType extends PType = PType> extends Node
   abstract resolve(): awst.Expression
   abstract resolveLValue(): awst.LValue
 
-  resolvableToPType(ptype: PType): boolean {
-    return this.ptype.equals(ptype)
+  resolvableToPType(ptype: PTypeOrClass): boolean {
+    return this.ptype.equalsOrInstanceOf(ptype)
   }
 
-  resolveToPType(ptype: PType): InstanceBuilder {
+  resolveToPType(ptype: PTypeOrClass): InstanceBuilder {
     if (this.resolvableToPType(ptype)) {
       return this
     }

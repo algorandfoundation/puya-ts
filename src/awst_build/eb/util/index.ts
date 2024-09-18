@@ -3,7 +3,7 @@ import { InstanceBuilder } from '../index'
 import type { awst, ConstantValue } from '../../../awst'
 import { isConstant } from '../../../awst'
 import { CodeError } from '../../../errors'
-import type { PType } from '../../ptypes'
+import type { PType, PTypeOrClass } from '../../ptypes'
 import { UintNType } from '../../ptypes/arc4-types'
 import { biguintPType, boolPType, bytesPType, stringPType, uint64PType } from '../../ptypes'
 import type { SourceLocation } from '../../../awst/source-location'
@@ -13,7 +13,7 @@ import { BoolConstant, IntegerConstant } from '../../../awst/nodes'
 import { StringConstant } from '../../../awst/nodes'
 import { LiteralExpressionBuilder } from '../literal-expression-builder'
 
-export function requireExpressionOfType(builder: NodeBuilder, ptype: PType): Expression {
+export function requireExpressionOfType(builder: NodeBuilder, ptype: PTypeOrClass): Expression {
   if (builder instanceof InstanceBuilder) {
     if (builder.resolvableToPType(ptype)) {
       return builder.resolveToPType(ptype).resolve()
@@ -23,7 +23,7 @@ export function requireExpressionOfType(builder: NodeBuilder, ptype: PType): Exp
     sourceLocation: builder.sourceLocation,
   })
 }
-export function requireBuilderOfType(builder: NodeBuilder, ptype: PType): InstanceBuilder {
+export function requireBuilderOfType(builder: NodeBuilder, ptype: PTypeOrClass): InstanceBuilder {
   if (builder instanceof InstanceBuilder) {
     if (builder.resolvableToPType(ptype)) {
       return builder.resolveToPType(ptype)
@@ -34,14 +34,14 @@ export function requireBuilderOfType(builder: NodeBuilder, ptype: PType): Instan
   })
 }
 
-export function resolvableToType(builder: NodeBuilder, ptype: PType): builder is InstanceBuilder {
+export function resolvableToType(builder: NodeBuilder, ptype: PTypeOrClass): builder is InstanceBuilder {
   if (builder instanceof InstanceBuilder) {
     return builder.resolvableToPType(ptype)
   }
   return false
 }
 
-export function requestExpressionOfType(builder: NodeBuilder, ptype: PType): Expression | undefined {
+export function requestExpressionOfType(builder: NodeBuilder, ptype: PTypeOrClass): Expression | undefined {
   if (builder instanceof InstanceBuilder) {
     if (builder.resolvableToPType(ptype)) {
       return builder.resolveToPType(ptype).resolve()
@@ -50,7 +50,7 @@ export function requestExpressionOfType(builder: NodeBuilder, ptype: PType): Exp
   }
   return undefined
 }
-export function requestBuilderOfType(builder: NodeBuilder, ptype: PType): InstanceBuilder | undefined {
+export function requestBuilderOfType(builder: NodeBuilder, ptype: PTypeOrClass): InstanceBuilder | undefined {
   if (builder instanceof InstanceBuilder) {
     if (builder.resolvableToPType(ptype)) {
       return builder.resolveToPType(ptype)
@@ -113,7 +113,7 @@ export function requireConstantOfType(builder: NodeBuilder, ptype: PType, messag
   throw new CodeError(messageOverride ?? `Expected constant of type ${ptype}`, { sourceLocation: builder.sourceLocation })
 }
 
-export function isValidLiteralForPType(literalValue: ConstantValue, ptype: PType): boolean {
+export function isValidLiteralForPType(literalValue: ConstantValue, ptype: PTypeOrClass): boolean {
   if (ptype.equals(stringPType)) {
     return typeof literalValue === 'string'
   }
