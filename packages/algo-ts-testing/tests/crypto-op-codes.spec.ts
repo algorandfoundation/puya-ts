@@ -9,8 +9,9 @@ import { TestExecutionContext } from '../src';
 import { MAX_BYTES_SIZE } from '../src/constants';
 import * as op from '../src/impl/crypto';
 import appSpecJson from './artifacts/crypto-ops/data/CryptoOpsContract.arc32.json';
-import { getAlgorandAppClient, getAvmResult, getAvmResultRaw } from './avm-invoker';
+import { getAlgorandAppClient, getAlgorandAppClientWithApp, getAvmResult, getAvmResultRaw } from './avm-invoker';
 import { asUint8Array, getPaddedUint8Array } from './util';
+import algosdk from 'algosdk';
 
 const MAX_ARG_LEN = 2048
 const curveMap = {
@@ -26,7 +27,7 @@ vi.mock('../src/impl/crypto', async (importOriginal) => {
   }
 })
 describe('crypto op codes', async () => {
-  const appClient = await getAlgorandAppClient(appSpecJson as AppSpec)
+  const [appClient, app] = await getAlgorandAppClientWithApp(appSpecJson as AppSpec)
   const ctx = new TestExecutionContext()
 
   afterEach(async () => {
@@ -100,6 +101,30 @@ describe('crypto op codes', async () => {
       const avmResult = await getAvmResult<boolean>({ appClient, sendParams: { fee: AlgoAmount.Algos(2000) } }, 'verify_ed25519verify_bare', asUint8Array(message), signature, keyPair.publicKey)
       const result = op.ed25519verifyBare(message, signature, keyPair.publicKey)
       expect(result).toEqual(avmResult)
+    })
+  })
+
+  describe('ed25519verify', async () => {
+    it('should return true for valid signature', async () => {
+      const approval = app.compiledApproval
+      const appCallTxn = ctx.any.txn.applicationCall({
+        approvalProgram: Bytes(approval.compiledBase64ToBytes),
+      })
+
+      const message = Bytes("Test message for ed25519 verification")
+      const account = algosdk.generateAccount()
+      const publicKey = algosdk.decodeAddress(account.addr).publicKey
+      const signature = algosdk.tealSignFromProgram(account.sk, asUint8Array(message), approval.compiledBase64ToBytes)
+
+      const avmResult = await getAvmResult<boolean>({ appClient, sendParams: { fee: AlgoAmount.Algos(2000) } }, 'verify_ed25519verify', asUint8Array(message), signature, publicKey)
+
+      ctx.txn.createScope([appCallTxn]).execute(() => {
+        const result = op.ed25519verify(message, signature, publicKey)
+        expect(result).toEqual(avmResult)
+      })
+    })
+    it('should throw error when no active txn group', async () => {
+      expect(() => op.ed25519verify(Bytes(""), Bytes(""), Bytes(""))).toThrow('no active txn group')
     })
   })
 

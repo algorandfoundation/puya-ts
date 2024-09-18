@@ -17,3 +17,6 @@ export const ZERO_ADDRESS = Bytes('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 "\x81\x01"  # pushint 1
  */
 export const ALWAYS_APPROVE_TEAL_PROGRAM = Bytes(new Uint8Array([0x09, 0x81, 0x01]))
+
+// bytes: program (logic) prefix when signing
+export const LOGIC_DATA_PREFIX = Bytes('ProgData')
