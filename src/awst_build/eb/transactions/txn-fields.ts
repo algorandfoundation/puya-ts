@@ -364,10 +364,10 @@ export const anyTxnFields = {
 } satisfies Record<string, readonly [TxnField, PType]>
 
 export const txnKindToFields = {
-  [TransactionKind.Payment]: payTxnFields,
-  [TransactionKind.KeyRegistration]: keyRegistrationTxnFields,
-  [TransactionKind.AssetConfig]: assetConfigTxnFields,
-  [TransactionKind.AssetTransfer]: assetTransferTxnFields,
-  [TransactionKind.AssetFreeze]: assetFreezeTxnFields,
-  [TransactionKind.Application]: applicationCallTxnFields,
+  [TransactionKind.pay]: payTxnFields,
+  [TransactionKind.keyreg]: keyRegistrationTxnFields,
+  [TransactionKind.acfg]: assetConfigTxnFields,
+  [TransactionKind.axfer]: assetTransferTxnFields,
+  [TransactionKind.afrz]: assetFreezeTxnFields,
+  [TransactionKind.appl]: applicationCallTxnFields,
 }

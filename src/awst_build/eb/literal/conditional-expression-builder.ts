@@ -1,9 +1,9 @@
 import type { InstanceBuilder } from '../index'
 import type { SourceLocation } from '../../../awst/source-location'
 import type { Expression } from '../../../awst/nodes'
-import type { PType } from '../../ptypes'
+import type { PType, PTypeOrClass } from '../../ptypes'
 import { nodeFactory } from '../../../awst/node-factory'
-import { requireExpressionOfType, resolvableToType } from '../util'
+import { requireBuilderOfType, requireExpressionOfType, resolvableToType } from '../util'
 import { typeRegistry } from '../../type-registry'
 import { boolWType } from '../../../awst/wtypes'
 import { LiteralExpressionBuilder } from '../literal-expression-builder'
@@ -48,20 +48,23 @@ export class ConditionalExpressionBuilder extends LiteralExpressionBuilder {
     this.condition = condition
   }
 
-  resolvableToPType(ptype: PType): boolean {
+  resolvableToPType(ptype: PTypeOrClass): boolean {
     return resolvableToType(this.whenTrue, ptype) && resolvableToType(this.whenFalse, ptype)
   }
 
-  resolveToPType(ptype: PType): InstanceBuilder {
+  resolveToPType(ptype: PTypeOrClass): InstanceBuilder {
+    const falseBuilder = requireBuilderOfType(this.whenFalse, ptype)
+    const trueBuilder = requireBuilderOfType(this.whenTrue, ptype)
+
     return typeRegistry.getInstanceEb(
       nodeFactory.conditionalExpression({
         sourceLocation: this.sourceLocation,
-        falseExpr: requireExpressionOfType(this.whenFalse, ptype),
-        trueExpr: requireExpressionOfType(this.whenTrue, ptype),
+        falseExpr: falseBuilder.resolve(),
+        trueExpr: trueBuilder.resolve(),
         condition: this.condition,
-        wtype: ptype.wtypeOrThrow,
+        wtype: falseBuilder.ptype.wtypeOrThrow,
       }),
-      ptype,
+      falseBuilder.ptype,
     )
   }
 }

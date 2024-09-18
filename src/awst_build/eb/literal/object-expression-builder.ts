@@ -1,5 +1,6 @@
 import type { InstanceBuilder } from '../index'
 import { InstanceExpressionBuilder, type NodeBuilder } from '../index'
+import type { PTypeOrClass } from '../../ptypes'
 import { ObjectPType, type PType } from '../../ptypes'
 import type { Expression } from '../../../awst/nodes'
 import { invariant } from '../../../util'
@@ -36,14 +37,14 @@ export class ObjectExpressionBuilder extends InstanceExpressionBuilder<ObjectPTy
     return this.ptype.orderedProperties().some(([prop]) => prop === name)
   }
 
-  resolvableToPType(ptype: PType): ptype is ObjectPType {
+  resolvableToPType(ptype: PTypeOrClass): ptype is ObjectPType {
     if (ptype instanceof ObjectPType) {
       return ptype.orderedProperties().every(([prop, propType]) => this.ptype.hasPropertyOfType(prop, propType))
     }
     return false
   }
 
-  resolveToPType(ptype: PType): InstanceBuilder {
+  resolveToPType(ptype: PTypeOrClass): InstanceBuilder {
     if (this.resolvableToPType(ptype)) {
       const base = this.singleEvaluation()
       return instanceEb(

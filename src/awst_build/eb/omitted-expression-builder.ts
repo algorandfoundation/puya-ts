@@ -1,5 +1,5 @@
 import type { Expression, LValue } from '../../awst/nodes'
-import type { PType } from '../ptypes'
+import type { PType, PTypeOrClass } from '../ptypes'
 import { anyPType } from '../ptypes'
 import { InstanceBuilder } from './index'
 import { CodeError, InternalError } from '../../errors'
@@ -15,7 +15,7 @@ export class OmittedExpressionBuilder extends InstanceBuilder {
     throw new InternalError('Omitted expression cannot be resolved to an lvalue', { sourceLocation: this.sourceLocation })
   }
 
-  resolvableToPType(ptype: PType): boolean {
+  resolvableToPType(ptype: PTypeOrClass): boolean {
     throw new InternalError('Omitted expression cannot be resolved to any type', { sourceLocation: this.sourceLocation })
   }
 }

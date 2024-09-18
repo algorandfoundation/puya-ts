@@ -1,4 +1,6 @@
 import type { Expression, Statement } from './nodes'
+import { CheckedMaybe } from './nodes'
+import { Copy } from './nodes'
 import { BooleanBinaryOperation } from './nodes'
 import { VoidConstant } from './nodes'
 import { IntrinsicCall } from './nodes'
@@ -190,6 +192,23 @@ const explicitNodeFactory = {
     return new IntrinsicCall({
       ...props,
       comment: props.comment ?? null,
+    })
+  },
+  copy({ value, sourceLocation }: { value: Expression; sourceLocation: SourceLocation }) {
+    return new Copy({
+      value,
+      sourceLocation,
+      wtype: value.wtype,
+    })
+  },
+  checkedMaybe({ expr, comment }: { expr: Expression; comment: string }) {
+    invariant(expr.wtype instanceof WTuple && expr.wtype.types.length === 2, 'expr WType must be WTuple of 2')
+    invariant(expr.wtype.types[1].equals(boolWType), '2nd tuple item type must be bool')
+    return new CheckedMaybe({
+      expr,
+      comment,
+      sourceLocation: expr.sourceLocation,
+      wtype: expr.wtype.types[0],
     })
   },
 } satisfies { [key in keyof ConcreteNodes]?: (...args: DeliberateAny[]) => InstanceType<ConcreteNodes[key]> }

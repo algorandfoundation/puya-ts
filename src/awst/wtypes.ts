@@ -1,6 +1,6 @@
 import { invariant } from '../util'
 import type { SourceLocation } from './source-location'
-import type { TransactionKind } from './models'
+import { TransactionKind } from './models'
 
 export enum AVMType {
   bytes = 1 << 0,
@@ -121,11 +121,11 @@ export class WStructType extends WType {}
 
 export class WTuple extends WType {
   types: WType[]
-  constructor(props: { types: WType[]; immutable: boolean }) {
+  constructor(props: { types: WType[]; immutable?: boolean }) {
     super({
       name: 'WTuple',
       scalarType: null,
-      immutable: props.immutable,
+      immutable: props.immutable ?? true,
     })
     invariant(props.types.length, 'Tuple length cannot be zero')
     this.types = props.types
@@ -163,7 +163,7 @@ export class WGroupTransaction extends WType {
   constructor({ transactionType }: { transactionType?: TransactionKind }) {
     super({
       scalarType: AVMType.uint64,
-      name: transactionType === undefined ? 'group_transaction' : `group_transaction_${transactionType}`,
+      name: transactionType === undefined ? 'group_transaction' : `group_transaction_${TransactionKind[transactionType]}`,
     })
     this.transactionType = transactionType ?? null
   }
@@ -173,7 +173,7 @@ export class WInnerTransaction extends WType {
   constructor({ transactionType }: { transactionType?: TransactionKind }) {
     super({
       scalarType: null,
-      name: transactionType === undefined ? 'inner_transaction' : `inner_transaction_${transactionType}`,
+      name: transactionType === undefined ? 'inner_transaction' : `inner_transaction_${TransactionKind[transactionType]}`,
     })
     this.transactionType = transactionType ?? null
   }
@@ -183,7 +183,7 @@ export class WInnerTransactionFields extends WType {
   constructor({ transactionType }: { transactionType?: TransactionKind }) {
     super({
       scalarType: null,
-      name: transactionType === undefined ? 'inner_transaction_fields' : `inner_transaction_fields_${transactionType}`,
+      name: transactionType === undefined ? 'inner_transaction_fields' : `inner_transaction_fields_${TransactionKind[transactionType]}`,
     })
     this.transactionType = transactionType ?? null
   }

@@ -1,5 +1,6 @@
 import type { wtypes } from '../../awst'
 import { codeInvariant } from '../../util'
+import type { DeliberateAny } from '../../typescript-helpers'
 
 /**
  * Represents a public type visible to a developer of AlgoTS
@@ -35,6 +36,17 @@ export abstract class PType {
     return other instanceof this.constructor && this.fullName === other.fullName
   }
 
+  static equals(other: PType): boolean {
+    return other instanceof this
+  }
+
+  equalsOrInstanceOf(other: PTypeOrClass): boolean {
+    if (other instanceof Function) {
+      return this instanceof other
+    }
+    return this.equals(other)
+  }
+
   toString(): string {
     return this.name
   }
@@ -43,3 +55,5 @@ export abstract class PType {
     return []
   }
 }
+
+export type PTypeOrClass = PType | { new (...args: DeliberateAny[]): PType; equals(other: PType): boolean }

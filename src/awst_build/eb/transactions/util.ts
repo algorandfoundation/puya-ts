@@ -1,60 +1,62 @@
 import { TransactionKind } from '../../../awst/models'
-import type { GroupTransactionPType, InnerTransactionFieldsPType, InnerTransactionPType } from '../../ptypes'
+import type { GroupTransactionPType, ItxnParamsPType, InnerTransactionPType } from '../../ptypes'
 import {
-  anyGroupTransaction,
-  applicationCallFieldsType,
-  applicationCallItxnType,
-  applicationGroupTransaction,
-  assetConfigFieldsType,
-  assetConfigGroupTransaction,
+  paymentItxnParamsType,
+  keyRegistrationItxnParamsType,
+  applicationCallItxnParamsType,
+  assetConfigItxnParamsType,
+  assetTransferItxnParamsType,
+  assetFreezeItxnParamsType,
+} from '../../ptypes'
+import {
+  anyGtxnType,
+  applicationItxnType,
+  applicationCallGtxnType,
+  assetConfigGtxnType,
   assetConfigItxnType,
-  assetFreezeFieldsType,
-  assetFreezeGroupTransaction,
+  assetFreezeGtxnType,
   assetFreezeItxnType,
-  assetTransferFieldsType,
-  assetTransferGroupTransaction,
+  assetTransferGtxnType,
   assetTransferItxnType,
-  keyRegistrationFieldsType,
-  keyRegistrationGroupTransaction,
+  keyRegistrationGtxnType,
   keyRegistrationItxnType,
-  paymentFieldsType,
-  paymentGroupTransaction,
+  paymentGtxnType,
   paymentItxnType,
 } from '../../ptypes'
 
 export function getInnerTransactionType(kind: TransactionKind | undefined): InnerTransactionPType {
   switch (kind) {
-    case TransactionKind.Payment:
+    case TransactionKind.pay:
       return paymentItxnType
-    case TransactionKind.KeyRegistration:
+    case TransactionKind.keyreg:
       return keyRegistrationItxnType
-    case TransactionKind.AssetConfig:
+    case TransactionKind.acfg:
       return assetConfigItxnType
-    case TransactionKind.AssetTransfer:
+    case TransactionKind.axfer:
       return assetTransferItxnType
-    case TransactionKind.AssetFreeze:
+    case TransactionKind.afrz:
       return assetFreezeItxnType
-    case TransactionKind.Application:
-      return applicationCallItxnType
+    case TransactionKind.appl:
+      return applicationItxnType
     default:
       throw new Error('TODO')
     //return anyInnerTransaction
   }
 }
-export function getInnerTransactionFieldsType(kind: TransactionKind | undefined): InnerTransactionFieldsPType {
+export function getItxnParamsType(kind: TransactionKind | undefined): ItxnParamsPType {
   switch (kind) {
-    case TransactionKind.Payment:
-      return paymentFieldsType
-    case TransactionKind.KeyRegistration:
-      return keyRegistrationFieldsType
-    case TransactionKind.AssetConfig:
-      return assetConfigFieldsType
-    case TransactionKind.AssetTransfer:
-      return assetTransferFieldsType
-    case TransactionKind.AssetFreeze:
-      return assetFreezeFieldsType
-    case TransactionKind.Application:
-      return applicationCallFieldsType
+    case TransactionKind.pay:
+      return paymentItxnParamsType
+    case TransactionKind.keyreg:
+      return keyRegistrationItxnParamsType
+    case TransactionKind.acfg:
+      return assetConfigItxnParamsType
+    case TransactionKind.axfer:
+      return assetTransferItxnParamsType
+    case TransactionKind.afrz:
+      return assetFreezeItxnParamsType
+    case TransactionKind.appl:
+      return applicationCallItxnParamsType
     default:
       throw new Error('TODO')
     //return anyInnerTransaction
@@ -62,19 +64,19 @@ export function getInnerTransactionFieldsType(kind: TransactionKind | undefined)
 }
 export function getGroupTransactionType(kind: TransactionKind | undefined): GroupTransactionPType {
   switch (kind) {
-    case TransactionKind.Payment:
-      return paymentGroupTransaction
-    case TransactionKind.KeyRegistration:
-      return keyRegistrationGroupTransaction
-    case TransactionKind.AssetConfig:
-      return assetConfigGroupTransaction
-    case TransactionKind.AssetTransfer:
-      return assetTransferGroupTransaction
-    case TransactionKind.AssetFreeze:
-      return assetFreezeGroupTransaction
-    case TransactionKind.Application:
-      return applicationGroupTransaction
+    case TransactionKind.pay:
+      return paymentGtxnType
+    case TransactionKind.keyreg:
+      return keyRegistrationGtxnType
+    case TransactionKind.acfg:
+      return assetConfigGtxnType
+    case TransactionKind.axfer:
+      return assetTransferGtxnType
+    case TransactionKind.afrz:
+      return assetFreezeGtxnType
+    case TransactionKind.appl:
+      return applicationCallGtxnType
     default:
-      return anyGroupTransaction
+      return anyGtxnType
   }
 }

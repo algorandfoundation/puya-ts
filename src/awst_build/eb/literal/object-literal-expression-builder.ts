@@ -1,5 +1,5 @@
 import type { Expression, LValue } from '../../../awst/nodes'
-import type { PType } from '../../ptypes'
+import type { PType, PTypeOrClass } from '../../ptypes'
 import { ObjectPType } from '../../ptypes'
 import type { InstanceBuilder } from '../index'
 import type { SourceLocation } from '../../../awst/source-location'
@@ -74,7 +74,7 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
     })
   }
 
-  resolvableToPType(ptype: PType): boolean {
+  resolvableToPType(ptype: PTypeOrClass): boolean {
     if (!(ptype instanceof ObjectPType)) return false
     for (const [prop, propPType] of ptype.orderedProperties()) {
       if (!this.hasProperty(prop)) return false
@@ -84,7 +84,7 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
     return true
   }
 
-  resolveToPType(ptype: PType): InstanceBuilder {
+  resolveToPType(ptype: PTypeOrClass): InstanceBuilder {
     codeInvariant(ptype instanceof ObjectPType, `Object literal cannot be resolved to type ${ptype}`, this.sourceLocation)
     return new ObjectExpressionBuilder(this.toTuple(ptype, this.sourceLocation), ptype)
   }

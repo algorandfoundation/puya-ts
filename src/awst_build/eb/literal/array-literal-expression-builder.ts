@@ -2,7 +2,7 @@ import type { NodeBuilder } from '../index'
 import { InstanceBuilder } from '../index'
 import type { SourceLocation } from '../../../awst/source-location'
 import type { Expression, LValue } from '../../../awst/nodes'
-import type { PType } from '../../ptypes'
+import type { PType, PTypeOrClass } from '../../ptypes'
 import { ArrayPType } from '../../ptypes'
 import { TuplePType } from '../../ptypes'
 import { TupleExpressionBuilder } from '../tuple-expression-builder'
@@ -52,7 +52,7 @@ export class ArrayLiteralExpressionBuilder extends InstanceBuilder {
     return this.#ptype
   }
 
-  resolveToPType(ptype: PType): InstanceBuilder {
+  resolveToPType(ptype: PTypeOrClass): InstanceBuilder {
     if (ptype instanceof TuplePType) {
       codeInvariant(
         ptype.items.length === this.items.length,
@@ -75,8 +75,8 @@ export class ArrayLiteralExpressionBuilder extends InstanceBuilder {
     return super.resolveToPType(ptype)
   }
 
-  resolvableToPType(ptype: PType): boolean {
-    if (this.ptype.equals(ptype)) return true
+  resolvableToPType(ptype: PTypeOrClass): boolean {
+    if (ptype.equals(this.ptype)) return true
     if (ptype instanceof TuplePType) {
       return ptype.items.every((itemType, index) => this.items[index].resolvableToPType(itemType))
     }

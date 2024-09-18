@@ -123,7 +123,6 @@ class CopyFunctionBuilder extends FunctionBuilder {
       nodeFactory.copy({
         value: this.arrayBuilder.resolve(),
         sourceLocation,
-        wtype: this.arrayBuilder.ptype.wtype,
       }),
       this.arrayBuilder.ptype,
     )

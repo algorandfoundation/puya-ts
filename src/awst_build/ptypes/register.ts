@@ -28,31 +28,31 @@ import { Arc4AbiMethodDecoratorBuilder, Arc4BareMethodDecoratorBuilder } from '.
 import {
   AccountFunction,
   accountPType,
-  anyGroupTransaction,
-  applicationCallFieldsType,
+  anyGtxnType,
   applicationCallItxnFn,
-  applicationCallItxnType,
-  applicationGroupTransaction,
+  applicationCallItxnParamsType,
+  applicationItxnType,
+  applicationCallGtxnType,
   ApplicationTxnFunction,
   arc4AbiMethodDecorator,
   arc4BareMethodDecorator,
   assertFunction,
   assertMatchFunction,
-  assetConfigFieldsType,
-  assetConfigGroupTransaction,
+  assetConfigGtxnType,
   assetConfigItxnFn,
+  assetConfigItxnParamsType,
   assetConfigItxnType,
   AssetConfigTxnFunction,
-  assetFreezeFieldsType,
-  assetFreezeGroupTransaction,
+  assetFreezeGtxnType,
   assetFreezeItxnFn,
+  assetFreezeItxnParamsType,
   assetFreezeItxnType,
   AssetFreezeTxnFunction,
   AssetFunction,
   assetPType,
-  assetTransferFieldsType,
-  assetTransferGroupTransaction,
+  assetTransferGtxnType,
   assetTransferItxnFn,
+  assetTransferItxnParamsType,
   assetTransferItxnType,
   AssetTransferTxnFunction,
   BigUintFunction,
@@ -75,9 +75,9 @@ import {
   IntrinsicFunctionGroupType,
   IntrinsicFunctionType,
   IterableIteratorType,
-  keyRegistrationFieldsType,
-  keyRegistrationGroupTransaction,
+  keyRegistrationGtxnType,
   keyRegistrationItxnFn,
+  keyRegistrationItxnParamsType,
   keyRegistrationItxnType,
   KeyRegistrationTxnFunction,
   LocalStateFunction,
@@ -87,9 +87,9 @@ import {
   ObjectPType,
   onCompleteActionType,
   opUpFeeSourceType,
-  paymentFieldsType,
-  paymentGroupTransaction,
+  paymentGtxnType,
   paymentItxnFn,
+  paymentItxnParamsType,
   paymentItxnType,
   PayTxnFunction,
   StringFunction,
@@ -101,9 +101,12 @@ import {
   uint64PType,
   urangeFunction,
   voidPType,
+  applicationPType,
+  ApplicationFunctionType,
+  submitGroupItxnFunction,
 } from './index'
 import { ObjectExpressionBuilder } from '../eb/literal/object-expression-builder'
-import { AccountExpressionBuilder, AccountFunctionBuilder } from '../eb/account/account-function-builder'
+import { AccountExpressionBuilder, AccountFunctionBuilder } from '../eb/reference/account'
 import { LocalStateExpressionBuilder, LocalStateFunctionBuilder } from '../eb/storage/local-state'
 import { UintNConstructorBuilder, UintNExpressionBuilder } from '../eb/arc4/uint-n-constructor-builder'
 import { GroupTransactionExpressionBuilder, GroupTransactionFunctionBuilder } from '../eb/transactions/group-transactions'
@@ -127,7 +130,12 @@ import { Uint64EnumTypeBuilder } from '../eb/uint64-enum-type-builder'
 import { UrangeFunctionBuilder } from '../eb/urange-function'
 import { IterableIteratorExpressionBuilder } from '../eb/iterable-iterator-expression-builder'
 import { InnerTransactionExpressionBuilder } from '../eb/transactions/inner-transactions'
-import { InnerTransactionFactoryFunctionBuilder } from '../eb/transactions/inner-transaction-factory'
+import {
+  ItxnParamsExpressionBuilder,
+  ItxnParamsFactoryFunctionBuilder,
+  SubmitItxnGroupFunctionBuilder,
+} from '../eb/transactions/inner-transaction-params'
+import { ApplicationExpressionBuilder, ApplicationFunctionBuilder } from '../eb/reference/application'
 
 export function registerPTypes(typeRegistry: TypeRegistry) {
   if (typeRegistry.hasRegistrations) {
@@ -195,19 +203,22 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: StaticArrayConstructor, singletonEb: StaticArrayConstructorBuilder })
   typeRegistry.registerGeneric({ ptype: StaticArrayType, instanceEb: StaticArrayExpressionBuilder })
 
-  typeRegistry.register({ ptype: paymentGroupTransaction, instanceEb: GroupTransactionExpressionBuilder })
+  typeRegistry.register({ ptype: ApplicationFunctionType, singletonEb: ApplicationFunctionBuilder })
+  typeRegistry.register({ ptype: applicationPType, instanceEb: ApplicationExpressionBuilder })
+
+  typeRegistry.register({ ptype: paymentGtxnType, instanceEb: GroupTransactionExpressionBuilder })
   typeRegistry.register({ ptype: PayTxnFunction, singletonEb: GroupTransactionFunctionBuilder })
-  typeRegistry.register({ ptype: keyRegistrationGroupTransaction, instanceEb: GroupTransactionExpressionBuilder })
+  typeRegistry.register({ ptype: keyRegistrationGtxnType, instanceEb: GroupTransactionExpressionBuilder })
   typeRegistry.register({ ptype: KeyRegistrationTxnFunction, singletonEb: GroupTransactionFunctionBuilder })
-  typeRegistry.register({ ptype: assetConfigGroupTransaction, instanceEb: GroupTransactionExpressionBuilder })
+  typeRegistry.register({ ptype: assetConfigGtxnType, instanceEb: GroupTransactionExpressionBuilder })
   typeRegistry.register({ ptype: AssetConfigTxnFunction, singletonEb: GroupTransactionFunctionBuilder })
-  typeRegistry.register({ ptype: assetTransferGroupTransaction, instanceEb: GroupTransactionExpressionBuilder })
+  typeRegistry.register({ ptype: assetTransferGtxnType, instanceEb: GroupTransactionExpressionBuilder })
   typeRegistry.register({ ptype: AssetTransferTxnFunction, singletonEb: GroupTransactionFunctionBuilder })
-  typeRegistry.register({ ptype: assetFreezeGroupTransaction, instanceEb: GroupTransactionExpressionBuilder })
+  typeRegistry.register({ ptype: assetFreezeGtxnType, instanceEb: GroupTransactionExpressionBuilder })
   typeRegistry.register({ ptype: AssetFreezeTxnFunction, singletonEb: GroupTransactionFunctionBuilder })
-  typeRegistry.register({ ptype: applicationGroupTransaction, instanceEb: GroupTransactionExpressionBuilder })
+  typeRegistry.register({ ptype: applicationCallGtxnType, instanceEb: GroupTransactionExpressionBuilder })
   typeRegistry.register({ ptype: ApplicationTxnFunction, singletonEb: GroupTransactionFunctionBuilder })
-  typeRegistry.register({ ptype: anyGroupTransaction, instanceEb: GroupTransactionExpressionBuilder })
+  typeRegistry.register({ ptype: anyGtxnType, instanceEb: GroupTransactionExpressionBuilder })
   typeRegistry.register({ ptype: TransactionFunction, singletonEb: GroupTransactionFunctionBuilder })
 
   typeRegistry.register({ ptype: assertMatchFunction, singletonEb: AssertMatchFunctionBuilder })
@@ -220,24 +231,25 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: urangeFunction, singletonEb: UrangeFunctionBuilder })
   typeRegistry.registerGeneric({ ptype: IterableIteratorType, instanceEb: IterableIteratorExpressionBuilder })
 
-  typeRegistry.register({ ptype: paymentItxnFn, singletonEb: InnerTransactionFactoryFunctionBuilder })
-  typeRegistry.register({ ptype: keyRegistrationItxnFn, singletonEb: InnerTransactionFactoryFunctionBuilder })
-  typeRegistry.register({ ptype: assetConfigItxnFn, singletonEb: InnerTransactionFactoryFunctionBuilder })
-  typeRegistry.register({ ptype: assetTransferItxnFn, singletonEb: InnerTransactionFactoryFunctionBuilder })
-  typeRegistry.register({ ptype: assetFreezeItxnFn, singletonEb: InnerTransactionFactoryFunctionBuilder })
-  typeRegistry.register({ ptype: applicationCallItxnFn, singletonEb: InnerTransactionFactoryFunctionBuilder })
+  typeRegistry.register({ ptype: paymentItxnFn, singletonEb: ItxnParamsFactoryFunctionBuilder })
+  typeRegistry.register({ ptype: keyRegistrationItxnFn, singletonEb: ItxnParamsFactoryFunctionBuilder })
+  typeRegistry.register({ ptype: assetConfigItxnFn, singletonEb: ItxnParamsFactoryFunctionBuilder })
+  typeRegistry.register({ ptype: assetTransferItxnFn, singletonEb: ItxnParamsFactoryFunctionBuilder })
+  typeRegistry.register({ ptype: assetFreezeItxnFn, singletonEb: ItxnParamsFactoryFunctionBuilder })
+  typeRegistry.register({ ptype: applicationCallItxnFn, singletonEb: ItxnParamsFactoryFunctionBuilder })
+  typeRegistry.register({ ptype: submitGroupItxnFunction, singletonEb: SubmitItxnGroupFunctionBuilder })
 
   typeRegistry.register({ ptype: paymentItxnType, instanceEb: InnerTransactionExpressionBuilder })
   typeRegistry.register({ ptype: keyRegistrationItxnType, instanceEb: InnerTransactionExpressionBuilder })
   typeRegistry.register({ ptype: assetConfigItxnType, instanceEb: InnerTransactionExpressionBuilder })
   typeRegistry.register({ ptype: assetTransferItxnType, instanceEb: InnerTransactionExpressionBuilder })
   typeRegistry.register({ ptype: assetFreezeItxnType, instanceEb: InnerTransactionExpressionBuilder })
-  typeRegistry.register({ ptype: applicationCallItxnType, instanceEb: InnerTransactionExpressionBuilder })
-  //
-  // typeRegistry.register({ ptype: paymentFieldsType, instanceEb: InnerTransactionFieldsExpressionBuilder })
-  // typeRegistry.register({ ptype: keyRegistrationFieldsType, instanceEb: InnerTransactionFieldsExpressionBuilder })
-  // typeRegistry.register({ ptype: assetConfigFieldsType, instanceEb: InnerTransactionFieldsExpressionBuilder })
-  // typeRegistry.register({ ptype: assetTransferFieldsType, instanceEb: InnerTransactionFieldsExpressionBuilder })
-  // typeRegistry.register({ ptype: assetFreezeFieldsType, instanceEb: InnerTransactionFieldsExpressionBuilder })
-  // typeRegistry.register({ ptype: applicationCallFieldsType, instanceEb: InnerTransactionFieldsExpressionBuilder })
+  typeRegistry.register({ ptype: applicationItxnType, instanceEb: InnerTransactionExpressionBuilder })
+
+  typeRegistry.register({ ptype: paymentItxnParamsType, instanceEb: ItxnParamsExpressionBuilder })
+  typeRegistry.register({ ptype: keyRegistrationItxnParamsType, instanceEb: ItxnParamsExpressionBuilder })
+  typeRegistry.register({ ptype: assetConfigItxnParamsType, instanceEb: ItxnParamsExpressionBuilder })
+  typeRegistry.register({ ptype: assetTransferItxnParamsType, instanceEb: ItxnParamsExpressionBuilder })
+  typeRegistry.register({ ptype: assetFreezeItxnParamsType, instanceEb: ItxnParamsExpressionBuilder })
+  typeRegistry.register({ ptype: applicationCallItxnParamsType, instanceEb: ItxnParamsExpressionBuilder })
 }
