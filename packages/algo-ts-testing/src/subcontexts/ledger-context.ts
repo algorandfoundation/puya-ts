@@ -4,6 +4,7 @@ import { AccountData, AssetHolding } from '../impl/account'
 import { ApplicationData } from '../impl/application'
 import { AssetData } from '../impl/asset'
 import { asBigInt, asBytesCls, asMaybeBytesCls, asMaybeUint64Cls, asUint64, asUint64Cls, iterBigInt } from '../util'
+import { GlobalData } from '../impl/global'
 
 export class LedgerContext {
   appIdIter = iterBigInt(1001n, MAX_UINT64)
@@ -12,6 +13,7 @@ export class LedgerContext {
   appIdContractMap = new Map<bigint, BaseContract>()
   accountDataMap = new Map<string, AccountData>()
   assetDataMap = new Map<bigint, AssetData>()
+  globalData = new GlobalData()
 
   addAppIdContractMap(appId: internal.primitives.StubUint64Compat, contract: BaseContract): void {
     this.appIdContractMap.set(asBigInt(appId), contract)
@@ -32,6 +34,7 @@ export class LedgerContext {
     }
     throw internal.errors.internalError('Unknown application, check correct testing context is active')
   }
+
   getApplicationForContract(contract: BaseContract): Application {
     for (const [appId, c] of this.appIdContractMap) {
       if (c === contract) {
@@ -65,5 +68,12 @@ export class LedgerContext {
     if (balance !== undefined) holding.balance = asUint64(balance)
     if (frozen !== undefined) holding.frozen = frozen
     accountData.optedAssets.set(id, holding)
+  }
+
+  patchGlobalData(data: Partial<GlobalData>) {
+    this.globalData = {
+      ...this.globalData,
+      ...data,
+    }
   }
 }
