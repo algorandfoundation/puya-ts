@@ -1,10 +1,14 @@
-import { Bytes, bytes, internal } from '@algorandfoundation/algo-ts'
+import { Bytes, bytes, internal, gtxn, arc4 } from '@algorandfoundation/algo-ts'
 import { ec } from 'elliptic'
 import { sha256 as js_sha256 } from 'js-sha256'
 import { keccak256 as js_keccak256, sha3_256 as js_sha3_256 } from 'js-sha3'
 import { sha512_256 as js_sha512_256 } from 'js-sha512'
 import nacl from 'tweetnacl'
 import { notImplementedError } from '../errors'
+import { lazyContext } from '../context-helpers/internal-context'
+import algosdk from 'algosdk'
+import { asBytes, asBytesCls } from '../util'
+import { LOGIC_DATA_PREFIX } from '../constants'
 
 export const sha256 = (a: internal.primitives.StubBytesCompat): bytes => {
   const bytesA = internal.primitives.BytesCls.fromCompat(a)
@@ -43,6 +47,24 @@ export const ed25519verifyBare = (
   const bytesB = internal.primitives.BytesCls.fromCompat(b)
   const bytesC = internal.primitives.BytesCls.fromCompat(c)
   return nacl.sign.detached.verify(bytesA.asUint8Array(), bytesB.asUint8Array(), bytesC.asUint8Array())
+}
+
+export const ed25519verify = (
+  a: internal.primitives.StubBytesCompat,
+  b: internal.primitives.StubBytesCompat,
+  c: internal.primitives.StubBytesCompat,
+): boolean => {
+  const txn = lazyContext.activeGroup.activeTransaction as gtxn.ApplicationTxn
+  const programBytes = asBytesCls(
+    txn.onCompletion == arc4.OnCompleteAction[arc4.OnCompleteAction.ClearState] ? txn.clearStateProgram : txn.approvalProgram,
+  )
+
+  const logicSig = new algosdk.LogicSig(programBytes.asUint8Array())
+  const decodedAddress = algosdk.decodeAddress(logicSig.address())
+
+  const addressBytes = asBytes(decodedAddress.publicKey)
+  const data = LOGIC_DATA_PREFIX.concat(addressBytes).concat(asBytes(a))
+  return ed25519verifyBare(data, b, c)
 }
 
 export const ecdsaVerify = (

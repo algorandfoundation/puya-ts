@@ -15,6 +15,7 @@ import {
   EcdsaPkRecoverType,
   EcdsaVerifyType,
   Ed25519verifyBareType,
+  Ed25519verifyType,
   EllipticCurveType,
   ExpType,
   ExpwType,
@@ -84,6 +85,7 @@ export const ecdsaPkDecompress: EcdsaPkDecompressType = createFunctionProxy('ecd
 export const ecdsaPkRecover: EcdsaPkRecoverType = createFunctionProxy('ecdsaPkRecover')
 export const ecdsaVerify: EcdsaVerifyType = createFunctionProxy('ecdsaVerify')
 export const ed25519verifyBare: Ed25519verifyBareType = createFunctionProxy('ed25519verifyBare')
+export const ed25519verify: Ed25519verifyType = createFunctionProxy('ed25519verify')
 export const exp: ExpType = createFunctionProxy('exp')
 export const expw: ExpwType = createFunctionProxy('expw')
 export const extract: ExtractType = createFunctionProxy('extract')
