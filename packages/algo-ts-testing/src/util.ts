@@ -1,6 +1,6 @@
 import { internal } from '@algorandfoundation/algo-ts'
 import { randomBytes } from 'crypto'
-import { BITS_IN_BYTE, MAX_UINT8, UINT512_SIZE } from './constants'
+import { BITS_IN_BYTE, MAX_UINT512, MAX_UINT8, UINT512_SIZE } from './constants'
 import { DeliberateAny } from './typescript-helpers'
 
 export const nameOfType = (x: unknown) => {
@@ -97,4 +97,25 @@ export const Lazy = <T>(factory: () => T): LazyInstance<T> => {
     }
     return val
   }
+}
+
+const ObjectReferenceSymbol = Symbol('ObjectReference')
+const objectRefIter = iterBigInt(1001n, MAX_UINT512)
+export const getObjectReference = (obj: DeliberateAny): bigint => {
+  const tryGetReference = (obj: DeliberateAny): bigint | undefined => {
+    const s = Object.getOwnPropertySymbols(obj).find((s) => s.toString() === ObjectReferenceSymbol.toString())
+    return s ? obj[s] : ObjectReferenceSymbol in obj ? obj[ObjectReferenceSymbol] : undefined
+  }
+  const existingRef = tryGetReference(obj)
+  if (existingRef !== undefined) {
+    return existingRef
+  }
+  const ref = objectRefIter.next().value
+  Object.defineProperty(obj, ObjectReferenceSymbol, {
+    value: ref,
+    enumerable: false,
+    writable: false,
+  })
+
+  return ref
 }

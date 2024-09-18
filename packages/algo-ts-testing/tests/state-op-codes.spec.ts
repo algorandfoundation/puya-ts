@@ -1,6 +1,6 @@
-import { Account, bytes, Bytes, internal, uint64, Uint64 } from '@algorandfoundation/algo-ts';
+import { Account, bytes, Bytes, internal, op, uint64, Uint64 } from '@algorandfoundation/algo-ts';
 import { AppSpec } from '@algorandfoundation/algokit-utils/types/app-spec';
-import { afterEach, describe, expect, test } from 'vitest';
+import { afterEach, describe, expect, it, test } from 'vitest';
 import { TestExecutionContext } from '../src';
 import { generateTestAccount, generateTestAsset, getAlgorandAppClient, getAlgorandAppClientWithApp, getAvmResult, getLocalNetDefaultAccount, INITIAL_BALANCE_MICRO_ALGOS } from './avm-invoker';
 
@@ -207,6 +207,46 @@ describe('State op codes', async () => {
         expect(mockResult.valueOf()).toEqual(avmResult)
         expect(mockResult.valueOf()).toEqual(expectedValue)
       }
+    })
+  })
+
+  describe('Global', async () => {
+    it('should return the correct global field value', async () => {
+      const creator = ctx.any.account()
+      const app = ctx.any.application({ creator })
+      const txn1 = ctx.any.txn.applicationCall({ appId: app })
+      let firstGroupId = Bytes()
+      let firstTimestamp = Uint64(0)
+      let secondGroupId = Bytes()
+      let secondTimestamp= Uint64(0)
+      ctx.txn.createScope([txn1]).execute(() => {
+        firstGroupId = op.Global.groupId
+        firstTimestamp = op.Global.latestTimestamp
+        expect(firstGroupId.length.valueOf()).toEqual(32n)
+        expect(firstTimestamp.valueOf()).not.toEqual(0n)
+        expect(op.Global.groupSize.valueOf()).toEqual(1n)
+        expect(op.Global.round.valueOf()).toEqual(1n)
+        expect(op.Global.callerApplicationId.valueOf()).toEqual(0n)
+        expect(op.Global.creatorAddress).toEqual(creator)
+        expect(op.Global.currentApplicationId).toEqual(app)
+        expect(op.Global.currentApplicationAddress).toEqual(app.address)
+      })
+      const txn2 = ctx.any.txn.payment()
+      const txn3 = ctx.any.txn.applicationCall()
+      const caller = ctx.any.application()
+      ctx.ledger.patchGlobalData({callerApplicationId: caller.id})
+      ctx.txn.createScope([txn2, txn3]).execute(() => {
+        secondGroupId = op.Global.groupId
+        secondTimestamp = op.Global.latestTimestamp
+        expect(secondGroupId.length.valueOf()).toEqual(32n)
+        expect(secondTimestamp.valueOf()).not.toEqual(0n)
+        expect(op.Global.groupSize.valueOf()).toEqual(2n)
+        expect(op.Global.round.valueOf()).toEqual(2n)
+        expect(op.Global.callerApplicationId.valueOf()).toEqual(caller.id.valueOf())
+        expect(op.Global.callerApplicationAddress).toEqual(caller.address)
+      })
+      expect(asUint8Array(firstGroupId)).not.toEqual(asUint8Array(secondGroupId))
+      expect(firstTimestamp.valueOf()).not.toEqual(secondTimestamp.valueOf())
     })
   })
 })

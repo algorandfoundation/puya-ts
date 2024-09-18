@@ -24,7 +24,7 @@ interface ExecutionScope {
 }
 
 export class TransactionContext {
-  #groups: TransactionGroup[] = []
+  readonly groups: TransactionGroup[] = []
   #activeGroup: TransactionGroup | undefined
 
   createScope(group: gtxn.Transaction[], activeTransactionIndex?: number): ExecutionScope {
@@ -34,7 +34,7 @@ export class TransactionContext {
 
     const scope = ScopeGenerator(() => {
       if (this.#activeGroup?.transactions?.length) {
-        this.#groups.push(this.#activeGroup)
+        this.groups.push(this.#activeGroup)
       }
       this.#activeGroup = previousGroup
     })
@@ -67,10 +67,10 @@ export class TransactionContext {
   }
 
   get lastGroup(): TransactionGroup {
-    if (this.#groups.length === 0) {
+    if (this.groups.length === 0) {
       internal.errors.internalError('No group transactions found!')
     }
-    return this.#groups.at(-1)!
+    return this.groups.at(-1)!
   }
 
   get lastActive(): gtxn.Transaction {
@@ -80,11 +80,11 @@ export class TransactionContext {
 
 export class TransactionGroup {
   activeTransactionIndex: number
+  latestTimestamp: number
+  transactions: gtxn.Transaction[]
 
-  constructor(
-    public transactions: gtxn.Transaction[],
-    activeTransactionIndex?: number,
-  ) {
+  constructor(transactions: gtxn.Transaction[], activeTransactionIndex?: number) {
+    this.latestTimestamp = Date.now()
     if (transactions.length > algosdk.AtomicTransactionComposer.MAX_GROUP_SIZE) {
       internal.errors.internalError(
         `Transaction group can have at most ${algosdk.AtomicTransactionComposer.MAX_GROUP_SIZE} transactions, as per AVM limits.`,
@@ -94,6 +94,7 @@ export class TransactionGroup {
       txn.groupIndex = asUint64(index)
     })
     this.activeTransactionIndex = activeTransactionIndex === undefined ? transactions.length - 1 : activeTransactionIndex
+    this.transactions = transactions
   }
 
   get activeTransaction() {
@@ -104,8 +105,10 @@ export class TransactionGroup {
     if (this.transactions.length === 0) {
       internal.errors.internalError('No transactions in the group')
     }
-    if ('appId' in this.activeTransaction) {
-      return this.activeTransaction.appId.id
+
+    const appId = (this.activeTransaction as gtxn.ApplicationTxn)?.appId
+    if (appId) {
+      return appId.id
     }
     internal.errors.internalError('No app_id found in the active transaction')
   }
