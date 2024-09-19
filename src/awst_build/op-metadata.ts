@@ -1221,7 +1221,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
     type: 'op-mapping',
     op: 'gaids',
     signatures: [
-      { argNames: ['a'], immediateArgs: [], stackArgs: [{ name: 'a', ptypes: [ptypes.uint64PType] }], returnType: ptypes.applicationPType },
+      { argNames: ['a'], immediateArgs: [], stackArgs: [{ name: 'a', ptypes: [ptypes.uint64PType] }], returnType: ptypes.uint64PType },
     ],
   },
   getBit: {

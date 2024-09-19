@@ -1,4 +1,4 @@
-import { Account, Application, Asset, BaseContract, Bytes, bytes, Contract, internal } from '@algorandfoundation/algo-ts'
+import { Account, Application, Asset, BaseContract, Bytes, bytes, Contract, gtxn, internal } from '@algorandfoundation/algo-ts'
 import { hasAbiMetadata } from '../abi-metadata'
 import { lazyContext } from '../context-helpers/internal-context'
 import { AccountCls } from '../impl/account'
@@ -9,7 +9,7 @@ import { DeliberateAny } from '../typescript-helpers'
 import { extractGenericTypeArgs } from '../util'
 
 interface IConstructor<T> {
-  new (...args: DeliberateAny[]): T
+  new(...args: DeliberateAny[]): T
 }
 
 type StateTotals = Pick<Application, 'globalNumBytes' | 'globalNumUint' | 'localNumBytes' | 'localNumUint'>
@@ -56,11 +56,15 @@ const extractStates = (contract: BaseContract): States => {
 }
 
 const extractArraysFromArgs = (args: DeliberateAny[]) => {
+  const transactions: gtxn.Transaction[] = []
   const accounts: Account[] = []
   const apps: Application[] = []
   const assets: Asset[] = []
   for (const arg of args) {
-    if (arg instanceof AccountCls) {
+    if ((arg as gtxn.Transaction).type in gtxn.TransactionType) {
+      transactions.push(arg as gtxn.Transaction)
+    }
+    else if (arg instanceof AccountCls) {
       accounts.push(arg as Account)
     } else if (arg instanceof ApplicationCls) {
       apps.push(arg as Application)
@@ -68,7 +72,7 @@ const extractArraysFromArgs = (args: DeliberateAny[]) => {
       assets.push(arg as Asset)
     }
   }
-  return { accounts, apps, assets }
+  return { accounts, apps, assets, transactions }
 }
 
 export class ContractContext {
@@ -95,8 +99,8 @@ export class ContractContext {
             if (isArc4 || prop === 'approvalProgram' || prop === 'clearStateProgram') {
               return (...args: DeliberateAny[]): DeliberateAny => {
                 const app = lazyContext.ledger.getApplicationForContract(receiver)
-                const txnArgs = extractArraysFromArgs(args)
-                const txns = [lazyContext.any.txn.applicationCall({ appId: app, ...txnArgs })]
+                const { transactions, ...appCallArgs } = extractArraysFromArgs(args)
+                const txns = [...(transactions ?? []), lazyContext.any.txn.applicationCall({ appId: app, ...appCallArgs })]
                 return lazyContext.txn.ensureScope(txns).execute(() => (orig as DeliberateAny).apply(target, args))
               }
             }

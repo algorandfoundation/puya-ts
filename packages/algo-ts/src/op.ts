@@ -23,6 +23,7 @@ import {
   ExtractUint16Type,
   ExtractUint32Type,
   ExtractUint64Type,
+  GaidType,
   GetBitType,
   GetByteType,
   GlobalType,
@@ -92,6 +93,7 @@ export const extract: ExtractType = createFunctionProxy('extract')
 export const extractUint16: ExtractUint16Type = createFunctionProxy('extractUint16')
 export const extractUint32: ExtractUint32Type = createFunctionProxy('extractUint32')
 export const extractUint64: ExtractUint64Type = createFunctionProxy('extractUint64')
+export const gaid: GaidType = createFunctionProxy('gaid')
 export const getBit: GetBitType = createFunctionProxy('getBit')
 export const getByte: GetByteType = createFunctionProxy('getByte')
 export const itob: ItobType = createFunctionProxy('itob')
