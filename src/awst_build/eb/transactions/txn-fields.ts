@@ -75,7 +75,7 @@ const baseTxnFields = {
   rekeyTo: [TxnField.RekeyTo, accountPType] as const,
 }
 
-export const payTxnFields = {
+export const paymentTxnFields = {
   ...baseTxnFields,
   /**
    * 32 byte address
@@ -355,7 +355,7 @@ export const applicationCallTxnFields = {
 } satisfies Record<string, readonly [TxnField, PType]>
 
 export const anyTxnFields = {
-  ...payTxnFields,
+  ...paymentTxnFields,
   ...keyRegistrationTxnFields,
   ...assetConfigTxnFields,
   ...assetTransferTxnFields,
@@ -364,7 +364,7 @@ export const anyTxnFields = {
 } satisfies Record<string, readonly [TxnField, PType]>
 
 export const txnKindToFields = {
-  [TransactionKind.pay]: payTxnFields,
+  [TransactionKind.pay]: paymentTxnFields,
   [TransactionKind.keyreg]: keyRegistrationTxnFields,
   [TransactionKind.acfg]: assetConfigTxnFields,
   [TransactionKind.axfer]: assetTransferTxnFields,

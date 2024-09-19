@@ -13,7 +13,7 @@ function test(x: gtxn.PaymentTxn) {
 
 export class AssertMatchContract extends BaseContract {
   public approvalProgram(): boolean {
-    const txn = gtxn.PayTxn(1)
+    const txn = gtxn.PaymentTxn(1)
     test(txn)
     return true
   }

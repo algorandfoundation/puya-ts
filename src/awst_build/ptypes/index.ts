@@ -788,7 +788,7 @@ export const paymentGtxnType = new GroupTransactionPType({
   name: 'PaymentTxn',
   kind: TransactionKind.pay,
 })
-export const PayTxnFunction = new TransactionFunctionType({
+export const PaymentTxnFunction = new TransactionFunctionType({
   name: 'PaymentTxn',
   module: Constants.gtxnModuleName,
   kind: TransactionKind.pay,
