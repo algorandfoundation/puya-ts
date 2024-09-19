@@ -14,7 +14,6 @@ import { AppStorageDeclaration } from '../../contract-data'
 import { typeRegistry } from '../../type-registry'
 import { BooleanExpressionBuilder } from '../boolean-expression-builder'
 import { parseFunctionArgs } from '../util/arg-parsing'
-import type { WType } from '../../../awst/wtypes'
 import { stateKeyWType } from '../../../awst/wtypes'
 import { extractKey } from './util'
 

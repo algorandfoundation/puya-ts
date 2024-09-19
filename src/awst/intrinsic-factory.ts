@@ -4,7 +4,6 @@ import { nodeFactory } from './node-factory'
 import type { SourceLocation } from './source-location'
 import type { DeliberateAny } from '../typescript-helpers'
 import type { Expression } from './nodes'
-import { invariant } from '../util'
 
 export const intrinsicFactory = {
   bytesConcat({

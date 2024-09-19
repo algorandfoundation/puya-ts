@@ -1,7 +1,8 @@
 import type { Visitor } from '../visitor/visitor'
 import { accept } from '../visitor/visitor'
 import type { Block } from '../awst/nodes'
-import * as awst from '../awst/nodes'
+import { AssignmentExpression } from '../awst/nodes'
+import type * as awst from '../awst/nodes'
 import { Goto, ReturnStatement } from '../awst/nodes'
 import ts from 'typescript'
 import { codeInvariant, enumerate, instanceOfAny, invariant } from '../util'
@@ -166,6 +167,11 @@ export class FunctionVisitor
     return node.declarations.flatMap((d) => {
       const sourceLocation = this.sourceLocation(d)
       if (!d.initializer) {
+        // Typescript will already error if a destructuring expression is used without an initializer
+        if (ts.isIdentifier(d.name)) {
+          const ptype = this.context.getPTypeForNode(d.name)
+          codeInvariant(ptype.wtype, `${ptype.fullName} is not a valid variable type`)
+        }
         return []
       }
 
@@ -258,11 +264,14 @@ export class FunctionVisitor
     throw new TodoError('EmptyStatement')
   }
   visitExpressionStatement(node: ts.ExpressionStatement): awst.Statement | awst.Statement[] {
-    const sourceLocation = this.sourceLocation(node)
-    const expr = this.accept(node.expression)
-    return new awst.ExpressionStatement({
-      sourceLocation: sourceLocation,
-      expr: requireInstanceBuilder(expr).resolve(),
+    const expr = requireInstanceBuilder(this.accept(node.expression)).resolve()
+    if (expr instanceof AssignmentExpression) {
+      return nodeFactory.assignmentStatement({
+        ...expr,
+      })
+    }
+    return nodeFactory.expressionStatement({
+      expr,
     })
   }
   visitIfStatement(node: ts.IfStatement): awst.Statement | awst.Statement[] {

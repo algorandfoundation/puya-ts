@@ -150,7 +150,7 @@
                     },
                     "body": [
                       {
-                        "_type": "ExpressionStatement",
+                        "_type": "AssignmentStatement",
                         "source_location": {
                           "file": "tests/approvals/do-loops.algo.ts",
                           "line": 7,
@@ -158,8 +158,26 @@
                           "column": 4,
                           "endColumn": 10
                         },
-                        "expr": {
-                          "_type": "AssignmentExpression",
+                        "target": {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/do-loops.algo.ts",
+                            "line": 7,
+                            "endLine": 7,
+                            "column": 4,
+                            "endColumn": 5
+                          },
+                          "wtype": {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true,
+                            "ephemeral": false,
+                            "scalar_type": 2
+                          },
+                          "name": "i"
+                        },
+                        "value": {
+                          "_type": "UInt64BinaryOperation",
                           "source_location": {
                             "file": "tests/approvals/do-loops.algo.ts",
                             "line": 7,
@@ -174,7 +192,7 @@
                             "ephemeral": false,
                             "scalar_type": 2
                           },
-                          "target": {
+                          "left": {
                             "_type": "VarExpression",
                             "source_location": {
                               "file": "tests/approvals/do-loops.algo.ts",
@@ -192,13 +210,14 @@
                             },
                             "name": "i"
                           },
-                          "value": {
-                            "_type": "UInt64BinaryOperation",
+                          "op": "+",
+                          "right": {
+                            "_type": "IntegerConstant",
                             "source_location": {
                               "file": "tests/approvals/do-loops.algo.ts",
                               "line": 7,
                               "endLine": 7,
-                              "column": 4,
+                              "column": 9,
                               "endColumn": 10
                             },
                             "wtype": {
@@ -208,44 +227,8 @@
                               "ephemeral": false,
                               "scalar_type": 2
                             },
-                            "left": {
-                              "_type": "VarExpression",
-                              "source_location": {
-                                "file": "tests/approvals/do-loops.algo.ts",
-                                "line": 7,
-                                "endLine": 7,
-                                "column": 4,
-                                "endColumn": 5
-                              },
-                              "wtype": {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true,
-                                "ephemeral": false,
-                                "scalar_type": 2
-                              },
-                              "name": "i"
-                            },
-                            "op": "+",
-                            "right": {
-                              "_type": "IntegerConstant",
-                              "source_location": {
-                                "file": "tests/approvals/do-loops.algo.ts",
-                                "line": 7,
-                                "endLine": 7,
-                                "column": 9,
-                                "endColumn": 10
-                              },
-                              "wtype": {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true,
-                                "ephemeral": false,
-                                "scalar_type": 2
-                              },
-                              "value": "1",
-                              "teal_alias": null
-                            }
+                            "value": "1",
+                            "teal_alias": null
                           }
                         }
                       }

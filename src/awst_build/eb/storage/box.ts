@@ -23,7 +23,6 @@ import { intrinsicFactory } from '../../../awst/intrinsic-factory'
 import { BooleanExpressionBuilder } from '../boolean-expression-builder'
 import { AppStorageDeclaration } from '../../contract-data'
 import { extractKey } from './util'
-import { undefined } from 'zod'
 
 export class BoxFunctionBuilder extends FunctionBuilder {
   call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {

@@ -5,7 +5,7 @@ import type { ContractClassPType, StorageProxyPType } from './ptypes'
 import { BoxMapPType, BoxPType, BoxRefPType } from './ptypes'
 import { GlobalStateType, LocalStateType } from './ptypes'
 import { invariant, utf8ToUint8Array } from '../util'
-import { CodeError, TodoError } from '../errors'
+import { CodeError } from '../errors'
 import { nodeFactory } from '../awst/node-factory'
 
 export class AppStorageDeclaration {

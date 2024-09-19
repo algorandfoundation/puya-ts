@@ -19,7 +19,8 @@ contract ItxnDemoContract extends @algorandfoundation/algo-ts/base-contract.d.ts
           goto #switch₁ᵇ
         case "test2":
           #switch₁ᶜ₁:
-          goto #switch₁ᶜ₂
+          this.test2()
+          goto #switch₁ᵇ
         case "test3":
           #switch₁ᶜ₂:
           goto #switch₁ᶜ₃
@@ -34,9 +35,9 @@ contract ItxnDemoContract extends @algorandfoundation/algo-ts/base-contract.d.ts
   
   test1(): void
   {
-    (GlobalState["name"] = "AST1")
+    var GlobalState["name"]: bytes = "AST1"
     var assetParams: inner_transaction_fields_acfg = create_inner_transaction(Fee=0, ConfigAssetName=GlobalState["name"], ConfigAssetDecimals=3, ConfigAssetManager=global<CurrentApplicationAddress>(), ConfigAssetReserve=global<CurrentApplicationAddress>(), ConfigAssetTotal=1000, ConfigAssetUnitName="unit")
-    (GlobalState["name"] = "AST2")
+    var GlobalState["name"]: bytes = "AST2"
     var asset1_txn: inner_transaction_acfg = submit_txn(assetParams)
     update_inner_transaction(assetParams, ConfigAssetName=GlobalState["name"])
     var asset2_txn: inner_transaction_acfg = submit_txn(assetParams)
@@ -52,6 +53,20 @@ contract ItxnDemoContract extends @algorandfoundation/algo-ts/base-contract.d.ts
     update_inner_transaction(appCreateParams, Note="3rd")
     update_inner_transaction(assetParams, Note="3rd")
     submit_txn(appCreateParams, assetParams)
+  }
+  
+  test2(): void
+  {
+    if (Boolean(txn<NumAppArgs>())) {
+      var args: readonlytuple[bytes, bytes] = <tuple>["1", "2"]
+      var createAppParams: inner_transaction_fields_appl = create_inner_transaction(Fee=0, ApplicationArgs=<tuple>[args.0, args.1], ApprovalProgram="	", ClearStateProgram="	", Note="with args param set", OnCompletion=0)
+    } else {
+      var createAppParams: inner_transaction_fields_appl = create_inner_transaction(Fee=0, ApplicationArgs=<tuple>["3", "4", "5"], ApprovalProgram="	", ClearStateProgram="	", Note="no args param set")
+    }
+    var createAppTxn: inner_transaction_appl = submit_txn(createAppParams)
+    assert(createAppTxn.ApplicationArgs[0] == "1")
+    assert(createAppTxn.ApplicationArgs[1] == "2")
+    assert(createAppTxn.Note == "with args param set")
   }
   
 }

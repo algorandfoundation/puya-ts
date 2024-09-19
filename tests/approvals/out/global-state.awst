@@ -26,14 +26,14 @@ contract TestContract extends tests/approvals/global-state.algo.ts::BaseTestCont
     var GlobalState["testState"]: uint64 = 2
     var GlobalState["TESTSTATE"]: uint64 = 5
     assert(GlobalState["baseTestState"] == "testing 123")
-    (GlobalState["noInitialInt"] = someValue * GlobalState["testState"])
+    var GlobalState["noInitialInt"]: uint64 = someValue * GlobalState["testState"]
   }
   
   approvalProgram(): bool
   {
     assert(STATE_EXISTS(GlobalState["testState"]))
     assert(GlobalState["testState"] == 2)
-    (GlobalState["testState"] = btoi(txnas<ApplicationArgs>(0)))
+    var GlobalState["testState"]: uint64 = btoi(txnas<ApplicationArgs>(0))
     return True
   }
   

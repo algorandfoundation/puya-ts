@@ -1,5 +1,5 @@
 import type { Expression } from '../../../awst/nodes'
-import { EqualityComparison, NumericComparison } from '../../../awst/nodes'
+import { NumericComparison } from '../../../awst/nodes'
 import { BuilderComparisonOp } from '../index'
 import type { SourceLocation } from '../../../awst/source-location'
 import { logger } from '../../../logger'

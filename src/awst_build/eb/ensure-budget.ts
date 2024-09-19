@@ -1,6 +1,7 @@
 import type { InstanceBuilder, NodeBuilder } from './index'
 import { FunctionBuilder } from './index'
 import type { PType } from '../ptypes'
+import { opUpFeeSourceType } from '../ptypes'
 import { ensureBudgetFunction, uint64PType } from '../ptypes'
 import type { SourceLocation } from '../../awst/source-location'
 import { parseFunctionArgs } from './util/arg-parsing'
@@ -21,7 +22,7 @@ export class EnsureBudgetFunctionBuilder extends FunctionBuilder {
       callLocation: sourceLocation,
       funcName: this.ptype.name,
       genericTypeArgs: 0,
-      argSpec: (a) => [a.required(uint64PType), a.optional(uint64PType)],
+      argSpec: (a) => [a.required(uint64PType), a.optional(opUpFeeSourceType.memberType)],
     })
 
     return new VoidExpressionBuilder(
@@ -34,7 +35,9 @@ export class EnsureBudgetFunctionBuilder extends FunctionBuilder {
           }),
           nodeFactory.callArg({
             name: null,
-            value: feeSource ? requireExpressionOfType(feeSource, uint64PType) : nodeFactory.uInt64Constant({ value: 0n, sourceLocation }),
+            value: feeSource
+              ? requireExpressionOfType(feeSource, opUpFeeSourceType.memberType)
+              : nodeFactory.uInt64Constant({ value: 0n, sourceLocation }),
           }),
         ],
         sourceLocation,

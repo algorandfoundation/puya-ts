@@ -27,7 +27,7 @@ import { voidWType } from '../awst/wtypes'
 import { ContractMethodVisitor } from './contract-method-visitor'
 import { ContractSuperBuilder } from './eb/contract-builder'
 import { ConstructorVisitor } from './constructor-visitor'
-import { BoxExpressionBuilder, BoxProxyExpressionBuilder } from './eb/storage/box'
+import { BoxProxyExpressionBuilder } from './eb/storage/box'
 
 export class ContractVisitor extends BaseVisitor implements Visitor<ClassElements, void> {
   private _ctor?: ContractMethod

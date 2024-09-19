@@ -23,6 +23,7 @@ import type { ObjectLiteralParts } from './eb/literal/object-literal-expression-
 import { ObjectLiteralExpressionBuilder } from './eb/literal/object-literal-expression-builder'
 import { codeInvariant, enumerate, invariant } from '../util'
 import type { PType } from './ptypes'
+import { ArrayPType } from './ptypes'
 import { biguintPType } from './ptypes'
 import { uint64PType, UnionPType } from './ptypes'
 import { NumberPType } from './ptypes'
@@ -461,7 +462,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
         target.ptype,
       )
     } else {
-      const assignmentType = this.buildAssignmentExpressionType(target.ptype, source.ptype)
+      const assignmentType = this.buildAssignmentExpressionType(target.ptype, source.ptype, sourceLocation)
       return instanceEb(
         nodeFactory.assignmentExpression({
           target: this.buildLValue(target, assignmentType, sourceLocation),
@@ -480,11 +481,13 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
    * to be narrowed using the targetType.
    *
    * Eg. a `number` on the rhs should be narrowed to whatever the lhs is for example uint64.
-   * @param targetType
-   * @param sourceType
+   * @param targetType The type of the assignment target
+   * @param sourceType The type of the assignment source
+   * @param sourceLocation
    * @private
    */
-  private buildAssignmentExpressionType(targetType: PType, sourceType: PType): PType {
+  private buildAssignmentExpressionType(targetType: PType, sourceType: PType, sourceLocation: SourceLocation): PType {
+    const errorMessage = `Value of type ${sourceType.name} cannot be assigned to target of type ${targetType.name}`
     if (sourceType.equals(targetType)) {
       return targetType
     }
@@ -492,30 +495,50 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
       sourceType instanceof NumberPType ||
       (sourceType instanceof UnionPType && sourceType.types.every((t) => t.equals(uint64PType) || t instanceof NumberPType))
     ) {
+      // Narrow `uint64 | number` or `number` to target type
       return targetType
     }
     if (
       sourceType instanceof BigIntPType ||
       (sourceType instanceof UnionPType && sourceType.types.every((t) => t.equals(biguintPType) || t instanceof BigIntPType))
     ) {
+      // Narrow `biguint | bigint` or `bigint` to target type
       return targetType
     }
     if (sourceType instanceof TuplePType) {
-      codeInvariant(targetType instanceof TuplePType, 'Target type should match assignment type')
-      return new TuplePType({
-        items: sourceType.items.map((item, index) => this.buildAssignmentExpressionType(targetType.items[index], item)),
-        immutable: sourceType.immutable,
-      })
+      if (targetType instanceof TuplePType) {
+        // Narrow tuple item types recursively
+        codeInvariant(targetType.items.length <= sourceType.items.length, errorMessage, sourceLocation)
+        return new TuplePType({
+          items: sourceType.items.map((item, index) =>
+            index < targetType.items.length ? this.buildAssignmentExpressionType(targetType.items[index], item, sourceLocation) : item,
+          ),
+          immutable: sourceType.immutable,
+        })
+      } else if (targetType instanceof ArrayPType) {
+        // Widen tuple type to array
+        codeInvariant(
+          sourceType.items.every((i) =>
+            this.buildAssignmentExpressionType(targetType.itemType, i, sourceLocation).equals(targetType.itemType),
+          ),
+          errorMessage,
+          sourceLocation,
+        )
+        return targetType
+      }
     }
     if (sourceType instanceof ObjectPType) {
-      codeInvariant(targetType instanceof ObjectPType, 'Target type should match assignment type')
+      // Recursively narrow object properties
+      codeInvariant(targetType instanceof ObjectPType, errorMessage)
       return new ObjectPType({
         properties: Object.fromEntries(
           sourceType
             .orderedProperties()
             .map(([prop, propType]): [string, PType] => [
               prop,
-              prop in targetType.properties ? this.buildAssignmentExpressionType(targetType.getPropertyType(prop), propType) : propType,
+              prop in targetType.properties
+                ? this.buildAssignmentExpressionType(targetType.getPropertyType(prop), propType, sourceLocation)
+                : propType,
             ]),
         ),
       })
@@ -526,7 +549,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   buildLValue(target: InstanceBuilder, assignmentType: PType, sourceLocation: SourceLocation): LValue {
     if (target instanceof ArrayLiteralExpressionBuilder) {
       if (assignmentType instanceof TuplePType) {
-        const targetItems = target.resolveItems()
+        const targetItems = target.getItemBuilders()
 
         const targets: LValue[] = []
         for (const [index, sourceItemType] of enumerate(assignmentType.items)) {

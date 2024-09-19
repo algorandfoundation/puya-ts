@@ -1,5 +1,5 @@
-import { assert, assertMatch, BaseContract, Bytes, Contract, Global, GlobalState, itxn, Txn } from '@algorandfoundation/algo-ts'
-import { undefined } from 'zod'
+import { Application, assert, BaseContract, Bytes, Global, GlobalState, itxn, Txn } from '@algorandfoundation/algo-ts'
+import { OnCompleteAction } from '@algorandfoundation/algo-ts/arc4'
 
 const LOG_1ST_ARG_AND_APPROVE = Bytes('\x09\x36\x1A\x00\xB0\x91\x01')
 const APPROVE = Bytes('\x09\x81\x01')
@@ -14,6 +14,8 @@ export class ItxnDemoContract extends BaseContract {
           this.test1()
           break
         case Bytes('test2'):
+          this.test2()
+          break
         case Bytes('test3'):
         case Bytes('test4'):
           break
@@ -68,5 +70,30 @@ export class ItxnDemoContract extends BaseContract {
       note: '3rd',
     })
     itxn.submitGroup(appCreateParams, assetParams)
+  }
+
+  private test2() {
+    let createAppParams: itxn.ApplicationCallItxnParams
+    if (Txn.numAppArgs) {
+      const args = [Bytes('1'), Bytes('2')] as const
+      createAppParams = itxn.applicationCall({
+        approvalProgram: APPROVE,
+        clearStateProgram: APPROVE,
+        appArgs: args,
+        onCompletion: OnCompleteAction.NoOp,
+        note: 'with args param set',
+      })
+    } else {
+      createAppParams = itxn.applicationCall({
+        approvalProgram: APPROVE,
+        clearStateProgram: APPROVE,
+        appArgs: [Bytes('3'), '4', Bytes('5')],
+        note: 'no args param set',
+      })
+    }
+    const createAppTxn = createAppParams.submit()
+    assert(createAppTxn.appArgs(0) === Bytes('1'), 'correct args used 1')
+    assert(createAppTxn.appArgs(1) === Bytes('2'), 'correct args used 2')
+    assert(createAppTxn.note === Bytes('with args param set'))
   }
 }
