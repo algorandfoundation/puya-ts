@@ -33,4 +33,18 @@ export class TupleExpressionBuilder extends InstanceExpressionBuilder<TuplePType
       itemType,
     )
   }
+
+  getItemBuilders(): InstanceBuilder[] {
+    return this.ptype.items.map((itemType, index) =>
+      instanceEb(
+        nodeFactory.tupleItemExpression({
+          index: BigInt(index),
+          sourceLocation: this.sourceLocation,
+          base: this._expr,
+          wtype: itemType.wtypeOrThrow,
+        }),
+        itemType,
+      ),
+    )
+  }
 }

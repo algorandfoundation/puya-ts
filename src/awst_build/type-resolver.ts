@@ -33,7 +33,6 @@ import { Constants } from '../constants'
 import type { AppStorageType, PType } from './ptypes'
 import { ContractClassPType, FunctionPType, NamespacePType, ObjectPType, UnionPType } from './ptypes'
 import { SymbolName } from './symbol-name'
-import type { DeliberateAny } from '../typescript-helpers'
 
 export class TypeResolver {
   constructor(

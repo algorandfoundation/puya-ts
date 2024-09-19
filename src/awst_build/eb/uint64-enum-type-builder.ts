@@ -1,10 +1,11 @@
-import { NodeBuilder } from './index'
+import { InstanceExpressionBuilder, NodeBuilder } from './index'
 import type { SourceLocation } from '../../awst/source-location'
 import type { PType } from '../ptypes'
+import { Uint64EnumMemberType } from '../ptypes'
 import { Uint64EnumType } from '../ptypes'
 import { invariant } from '../../util'
-import { UInt64ExpressionBuilder } from './uint64-expression-builder'
 import { nodeFactory } from '../../awst/node-factory'
+import type { Expression } from '../../awst/nodes'
 
 export class Uint64EnumTypeBuilder extends NodeBuilder {
   readonly ptype: Uint64EnumType
@@ -16,14 +17,21 @@ export class Uint64EnumTypeBuilder extends NodeBuilder {
 
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
     if (name in this.ptype.members) {
-      // TODO: Should enum members have a specific type?
-      return new UInt64ExpressionBuilder(
+      return new Uint64EnumMemberExpressionBuilder(
         nodeFactory.uInt64Constant({
           value: this.ptype.members[name],
           sourceLocation,
         }),
+        this.ptype.memberType,
       )
     }
     return super.memberAccess(name, sourceLocation)
+  }
+}
+
+export class Uint64EnumMemberExpressionBuilder extends InstanceExpressionBuilder<Uint64EnumMemberType> {
+  constructor(expr: Expression, ptype: PType) {
+    invariant(ptype instanceof Uint64EnumMemberType, 'ptype must be Uint64EnumType')
+    super(expr, ptype)
   }
 }

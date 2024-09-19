@@ -1,5 +1,5 @@
 import type { Expression, LValue } from '../../../awst/nodes'
-import type { PType, PTypeOrClass } from '../../ptypes'
+import type { PTypeOrClass } from '../../ptypes'
 import { ObjectPType } from '../../ptypes'
 import type { InstanceBuilder } from '../index'
 import type { SourceLocation } from '../../../awst/source-location'

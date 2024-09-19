@@ -2,9 +2,7 @@ import type { InstanceBuilder, NodeBuilder } from '../index'
 import { FunctionBuilder, InstanceExpressionBuilder } from '../index'
 import type { SourceLocation } from '../../../awst/source-location'
 import type { PType } from '../../ptypes'
-import { TuplePType } from '../../ptypes'
-import { submitGroupItxnFunction } from '../../ptypes'
-import { ItxnParamsPType, ObjectPType, TransactionFunctionType } from '../../ptypes'
+import { ItxnParamsPType, ObjectPType, submitGroupItxnFunction, TransactionFunctionType, TuplePType } from '../../ptypes'
 import { codeInvariant, invariant } from '../../../util'
 import type { Expression } from '../../../awst/nodes'
 import { nodeFactory } from '../../../awst/node-factory'
@@ -17,6 +15,8 @@ import { getInnerTransactionType, getItxnParamsType } from './util'
 import { InnerTransactionExpressionBuilder } from './inner-transactions'
 import type { TransactionKind } from '../../../awst/models'
 import { instanceEb } from '../../type-registry'
+import { ArrayLiteralExpressionBuilder } from '../literal/array-literal-expression-builder'
+import { TupleExpressionBuilder } from '../tuple-expression-builder'
 
 export class ItxnParamsFactoryFunctionBuilder extends FunctionBuilder {
   readonly ptype: TransactionFunctionType
@@ -63,14 +63,43 @@ function mapTransactionFields(
   sourceLocation: SourceLocation,
 ) {
   codeInvariant(fields.ptype instanceof ObjectPType, 'fields argument must be an object type')
-  const validFields = kind !== undefined ? txnKindToFields[kind] : anyTxnFields
-  for (const [prop, propType] of fields.ptype.orderedProperties()) {
+  const validFields: Record<string, readonly [TxnField, PType]> = kind !== undefined ? txnKindToFields[kind] : anyTxnFields
+  for (const [prop] of fields.ptype.orderedProperties()) {
     if (prop in validFields) {
       const [txnField, fieldType] = validFields[prop as keyof typeof validFields]
       const txnFieldData = TxnFields[txnField]
       const propValue = fields.memberAccess(prop, sourceLocation)
       // TODO: Validate prop value
-      mappedFields.set(txnField, requireExpressionOfType(propValue, fieldType))
+      if (txnField === TxnField.ApplicationArgs) {
+        codeInvariant(
+          propValue instanceof ArrayLiteralExpressionBuilder || propValue instanceof TupleExpressionBuilder,
+          'Unsupported expression for appArgs',
+          propValue.sourceLocation,
+        )
+        mappedFields.set(
+          txnField,
+          nodeFactory.tupleExpression({
+            items: propValue.getItemBuilders().map((i) => i.toBytes(propValue.sourceLocation)),
+            sourceLocation: propValue.sourceLocation,
+          }),
+        )
+      } else if (txnFieldData.numValues > 1) {
+        codeInvariant(
+          propValue instanceof ArrayLiteralExpressionBuilder || propValue instanceof TupleExpressionBuilder,
+          `Unsupported expression for ${prop}`,
+          propValue.sourceLocation,
+        )
+
+        mappedFields.set(
+          txnField,
+          nodeFactory.tupleExpression({
+            items: propValue.getItemBuilders().map((i) => requireExpressionOfType(i, fieldType)),
+            sourceLocation: propValue.sourceLocation,
+          }),
+        )
+      } else {
+        mappedFields.set(txnField, requireExpressionOfType(propValue, fieldType))
+      }
     } else {
       logger.error(sourceLocation, `${prop} not in valid fields `)
     }

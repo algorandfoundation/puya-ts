@@ -458,9 +458,11 @@ export class TuplePType extends PType {
 }
 export class ArrayPType extends PType {
   readonly module: string = 'lib.d.ts'
-  readonly wtype: WType
   readonly itemType: PType
   readonly singleton = false
+  readonly immutable: boolean
+  static typeError =
+    'Native array types are not valid as variable, parameter, return, or property types. Please define a static tuple type or use an `as const` expression'
 
   get name() {
     return `Array<${this.itemType.name}>`
@@ -471,9 +473,13 @@ export class ArrayPType extends PType {
   constructor(props: { itemType: PType; immutable: boolean }) {
     super()
     this.itemType = props.itemType
-    this.wtype = new WArray({
-      itemType: props.itemType.wtypeOrThrow,
-      immutable: props.immutable,
+    this.immutable = props.immutable
+  }
+
+  get wtype() {
+    return new WArray({
+      itemType: this.itemType.wtypeOrThrow,
+      immutable: this.immutable,
     })
   }
 }
@@ -849,7 +855,25 @@ export const assertMatchFunction = new LibFunctionType({
   module: Constants.utilModuleName,
 })
 
+export class Uint64EnumMemberType extends PType {
+  readonly wtype = uint64WType
+  readonly name: string
+  readonly module: string
+  readonly singleton = false
+  readonly enumType: Uint64EnumType
+
+  constructor(enumType: Uint64EnumType) {
+    super()
+    this.name = enumType.name
+    this.module = enumType.module
+    this.enumType = enumType
+  }
+}
+
 export class Uint64EnumType extends PType {
+  get memberType(): Uint64EnumMemberType {
+    return new Uint64EnumMemberType(this)
+  }
   readonly wtype = uint64WType
   readonly name: string
   readonly module: string

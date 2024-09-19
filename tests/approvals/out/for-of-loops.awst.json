@@ -214,7 +214,7 @@
                     },
                     "body": [
                       {
-                        "_type": "ExpressionStatement",
+                        "_type": "AssignmentStatement",
                         "source_location": {
                           "file": "tests/approvals/for-of-loops.algo.ts",
                           "line": 6,
@@ -222,8 +222,26 @@
                           "column": 4,
                           "endColumn": 17
                         },
-                        "expr": {
-                          "_type": "AssignmentExpression",
+                        "target": {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/for-of-loops.algo.ts",
+                            "line": 6,
+                            "endLine": 6,
+                            "column": 4,
+                            "endColumn": 9
+                          },
+                          "wtype": {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true,
+                            "ephemeral": false,
+                            "scalar_type": 2
+                          },
+                          "name": "total"
+                        },
+                        "value": {
+                          "_type": "UInt64BinaryOperation",
                           "source_location": {
                             "file": "tests/approvals/for-of-loops.algo.ts",
                             "line": 6,
@@ -238,7 +256,7 @@
                             "ephemeral": false,
                             "scalar_type": 2
                           },
-                          "target": {
+                          "left": {
                             "_type": "VarExpression",
                             "source_location": {
                               "file": "tests/approvals/for-of-loops.algo.ts",
@@ -256,13 +274,14 @@
                             },
                             "name": "total"
                           },
-                          "value": {
-                            "_type": "UInt64BinaryOperation",
+                          "op": "+",
+                          "right": {
+                            "_type": "VarExpression",
                             "source_location": {
                               "file": "tests/approvals/for-of-loops.algo.ts",
                               "line": 6,
                               "endLine": 6,
-                              "column": 4,
+                              "column": 13,
                               "endColumn": 17
                             },
                             "wtype": {
@@ -272,43 +291,7 @@
                               "ephemeral": false,
                               "scalar_type": 2
                             },
-                            "left": {
-                              "_type": "VarExpression",
-                              "source_location": {
-                                "file": "tests/approvals/for-of-loops.algo.ts",
-                                "line": 6,
-                                "endLine": 6,
-                                "column": 4,
-                                "endColumn": 9
-                              },
-                              "wtype": {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true,
-                                "ephemeral": false,
-                                "scalar_type": 2
-                              },
-                              "name": "total"
-                            },
-                            "op": "+",
-                            "right": {
-                              "_type": "VarExpression",
-                              "source_location": {
-                                "file": "tests/approvals/for-of-loops.algo.ts",
-                                "line": 6,
-                                "endLine": 6,
-                                "column": 13,
-                                "endColumn": 17
-                              },
-                              "wtype": {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true,
-                                "ephemeral": false,
-                                "scalar_type": 2
-                              },
-                              "name": "item"
-                            }
+                            "name": "item"
                           }
                         }
                       }

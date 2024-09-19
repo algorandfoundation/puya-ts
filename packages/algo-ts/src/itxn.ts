@@ -126,18 +126,18 @@ interface AssetFreezeFields extends CommonTransactionFields {
 
 interface ApplicationCallFields extends CommonTransactionFields {
   appId?: Application | uint64
-  approvalProgram?: bytes | [...bytes[]]
-  clearStateProgram?: bytes | [...bytes[]]
+  approvalProgram?: bytes | readonly [...bytes[]]
+  clearStateProgram?: bytes | readonly [...bytes[]]
   onCompletion?: OnCompleteAction | uint64
   globalNumUint?: uint64
   globalNumBytes?: uint64
   localNumUint?: uint64
   localNumBytes?: uint64
   extraProgramPages?: uint64
-  appArgs?: [...unknown[]]
-  accounts?: [...Account[]]
-  assets?: [...Asset[]]
-  apps?: [...Application[]]
+  appArgs?: readonly [...unknown[]]
+  accounts?: readonly [...Account[]]
+  assets?: readonly [...Asset[]]
+  apps?: readonly [...Application[]]
 }
 type InnerTransaction<TFields, TTransaction> = {
   submit(): TTransaction

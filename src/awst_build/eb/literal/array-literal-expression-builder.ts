@@ -2,7 +2,7 @@ import type { NodeBuilder } from '../index'
 import { InstanceBuilder } from '../index'
 import type { SourceLocation } from '../../../awst/source-location'
 import type { Expression, LValue } from '../../../awst/nodes'
-import type { PType, PTypeOrClass } from '../../ptypes'
+import type { PTypeOrClass } from '../../ptypes'
 import { ArrayPType } from '../../ptypes'
 import { TuplePType } from '../../ptypes'
 import { TupleExpressionBuilder } from '../tuple-expression-builder'
@@ -11,13 +11,13 @@ import { requireExpressionOfType, requireIntegerConstant } from '../util'
 import { codeInvariant } from '../../../util'
 
 export class ArrayLiteralExpressionBuilder extends InstanceBuilder {
-  #ptype: TuplePType
+  readonly ptype: TuplePType
   constructor(
     sourceLocation: SourceLocation,
     private readonly items: InstanceBuilder[],
   ) {
     super(sourceLocation)
-    this.#ptype = new TuplePType({ items: items.map((i) => i.ptype), immutable: true })
+    this.ptype = new TuplePType({ items: items.map((i) => i.ptype) })
   }
 
   resolve(): Expression {
@@ -47,9 +47,6 @@ export class ArrayLiteralExpressionBuilder extends InstanceBuilder {
       items: this.items.map((i) => i.resolveLValue()),
       sourceLocation: this.sourceLocation,
     })
-  }
-  get ptype(): TuplePType {
-    return this.#ptype
   }
 
   resolveToPType(ptype: PTypeOrClass): InstanceBuilder {
@@ -86,7 +83,7 @@ export class ArrayLiteralExpressionBuilder extends InstanceBuilder {
     return false
   }
 
-  resolveItems(): InstanceBuilder[] {
+  getItemBuilders(): InstanceBuilder[] {
     return this.items
   }
 }

@@ -250,7 +250,7 @@ export const applicationCallTxnFields = {
   /**
    * ApplicationCall transaction on completion action
    */
-  onCompletion: [TxnField.OnCompletion, onCompleteActionType] as const,
+  onCompletion: [TxnField.OnCompletion, onCompleteActionType.memberType] as const,
 
   /**
    * Number of ApplicationArgs

@@ -65,12 +65,14 @@ describe('Expected output', () => {
         }
       }
       const unmatchedLogs = logs.filter((l) => !matchedLogs.has(l))
-      for (const unmatchedLog of unmatchedLogs) {
-        console.error(`${unmatchedLog.sourceLocation} [${unmatchedLog.level}] ${unmatchedLog.message}`)
-      }
-
       if (unmatchedLogs.length) {
-        expect.fail('There are unmatched logs')
+        const [firstUnmatched] = unmatchedLogs
+        invariant(firstUnmatched.sourceLocation, 'Log must have source location')
+        throw new AdditionalLogError({
+          sourceLocation: firstUnmatched.sourceLocation,
+          message: firstUnmatched.message,
+          level: firstUnmatched.level,
+        })
       }
     })
   })
@@ -94,6 +96,25 @@ class MissingLogError implements Error {
   }
   get name() {
     return 'MissingLogError'
+  }
+}
+
+class AdditionalLogError implements Error {
+  constructor(
+    private expectedLog: {
+      level: LogLevel
+      message: string
+      sourceLocation: SourceLocation
+    },
+  ) {}
+  get message() {
+    return `Additional log: [${this.expectedLog.level}] ${this.expectedLog.message}`
+  }
+  get stack() {
+    return this.expectedLog.sourceLocation.toString()
+  }
+  get name() {
+    return 'AdditionalLogError'
   }
 }
 
