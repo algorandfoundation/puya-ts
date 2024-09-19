@@ -216,6 +216,11 @@ export interface AssetConfigTxn extends TransactionBase {
    * 32 byte address
    */
   clawback: Account
+
+  /**
+   * Asset ID allocated by the creation of an ASA
+   */
+  createdAsset: Asset
 }
 
 export interface AssetTransferTxn extends TransactionBase {
@@ -345,6 +350,21 @@ export interface ApplicationTxn extends TransactionBase {
    * The last message emitted. Empty bytes if none were emitted. Application mode only
    */
   lastLog: bytes
+
+  /**
+   * Log messages emitted by an application call
+   */
+  logs(index: uint64): bytes
+
+  /**
+   * Number of logs
+   */
+  numLogs: uint64
+
+  /**
+   * ApplicationID allocated by the creation of an application
+   */
+  createdApp: Application
 
   /**
    * Number of Approval Program pages

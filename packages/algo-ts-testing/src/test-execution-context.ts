@@ -1,7 +1,7 @@
-import { Account, Application, Asset, Bytes, bytes, gtxn, internal, uint64 } from '@algorandfoundation/algo-ts'
+import { Account, Application, Asset, Bytes, bytes, internal, uint64 } from '@algorandfoundation/algo-ts'
 import algosdk from 'algosdk'
 import { captureMethodConfig } from './abi-metadata'
-import { DecodedLogs, decodeLogs, LogDecoding } from './decode-logs'
+import { DecodedLogs, LogDecoding } from './decode-logs'
 import * as ops from './impl'
 import { AccountCls } from './impl/account'
 import { ApplicationCls } from './impl/application'
@@ -9,7 +9,6 @@ import { AssetCls } from './impl/asset'
 import { ContractContext } from './subcontexts/contract-context'
 import { LedgerContext } from './subcontexts/ledger-context'
 import { TransactionContext } from './subcontexts/transaction-context'
-import { asBigInt } from './util'
 import { ValueGenerator } from './value-generators'
 
 export class TestExecutionContext implements internal.ExecutionContext {
@@ -43,21 +42,11 @@ export class TestExecutionContext implements internal.ExecutionContext {
   }
 
   log(value: bytes): void {
-    const activeTransaction = this.txn.activeTransaction
-    if (activeTransaction.type !== gtxn.TransactionType.ApplicationCall) {
-      throw internal.errors.internalError('Cannot log outside of an application call context')
-    }
-    const applicationId = asBigInt(activeTransaction.appId.id)
-    if (!this.#applicationLogs.has(applicationId)) {
-      this.#applicationLogs.set(applicationId, [])
-    }
-    this.#applicationLogs.get(applicationId)!.push(value)
+    this.txn.appendLog(value)
   }
 
   exportLogs<const T extends [...LogDecoding[]]>(appId: uint64, ...decoding: T): DecodedLogs<T> {
-    const applicationLogs = this.#applicationLogs.get(asBigInt(appId)) ?? []
-    const rawLogs = applicationLogs.map((l) => internal.primitives.toExternalValue(l))
-    return decodeLogs(rawLogs, decoding)
+    return this.txn.exportLogs(appId, ...decoding)
   }
 
   get op() {

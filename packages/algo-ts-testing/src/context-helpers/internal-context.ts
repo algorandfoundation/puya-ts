@@ -40,11 +40,7 @@ class InternalContext {
   }
 
   get activeGroup(): TransactionGroup {
-    const group = this.value.txn.activeGroup
-    if (!group) {
-      throw internal.errors.internalError('no active txn group')
-    }
-    return group
+    return this.value.txn.activeGroup
   }
 
   getAccountData(accountPublicKey: internal.primitives.StubBytesCompat): AccountData {
