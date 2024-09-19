@@ -8,6 +8,7 @@ import { AlgoAmount } from '@algorandfoundation/algokit-utils/types/amount';
 import { ZERO_ADDRESS } from '../src/constants';
 import { AccountCls } from '../src/impl/account';
 import { asBigInt, asNumber } from '../src/util';
+import { AppExpectingEffects } from './artifacts/created-app-asset/contract.algo';
 import { StateAcctParamsGetContract, StateAppParamsContract, StateAssetHoldingContract, StateAssetParamsContract } from './artifacts/state-ops/contract.algo';
 import acctParamsAppSpecJson from './artifacts/state-ops/data/StateAcctParamsGetContract.arc32.json';
 import appParamsAppSpecJson from './artifacts/state-ops/data/StateAppParamsContract.arc32.json';
@@ -218,7 +219,7 @@ describe('State op codes', async () => {
       let firstGroupId = Bytes()
       let firstTimestamp = Uint64(0)
       let secondGroupId = Bytes()
-      let secondTimestamp= Uint64(0)
+      let secondTimestamp = Uint64(0)
       ctx.txn.createScope([txn1]).execute(() => {
         firstGroupId = op.Global.groupId
         firstTimestamp = op.Global.latestTimestamp
@@ -234,7 +235,7 @@ describe('State op codes', async () => {
       const txn2 = ctx.any.txn.payment()
       const txn3 = ctx.any.txn.applicationCall()
       const caller = ctx.any.application()
-      ctx.ledger.patchGlobalData({callerApplicationId: caller.id})
+      ctx.ledger.patchGlobalData({ callerApplicationId: caller.id })
       ctx.txn.createScope([txn2, txn3]).execute(() => {
         secondGroupId = op.Global.groupId
         secondTimestamp = op.Global.latestTimestamp
@@ -248,5 +249,39 @@ describe('State op codes', async () => {
       expect(asUint8Array(firstGroupId)).not.toEqual(asUint8Array(secondGroupId))
       expect(firstTimestamp.valueOf()).not.toEqual(secondTimestamp.valueOf())
     })
+  })
+
+  describe('gaid', async () => {
+    it('should return the correct ID of the asset or application created', async () => {
+      const createdAsset = ctx.any.asset()
+      const createdApp = ctx.any.application()
+      const assetCreateTxn = ctx.any.txn.assetConfig({ createdAsset })
+      const appCreateTxn = ctx.any.txn.applicationCall({ createdApp })
+
+      const contract = ctx.contract.create(AppExpectingEffects)
+      const [assetId, appId] = contract.create_group(assetCreateTxn, appCreateTxn)
+
+      expect(assetId.valueOf()).toEqual(createdAsset.id.valueOf())
+      expect(appId.valueOf()).toEqual(createdApp.id.valueOf())
+    })
+
+    // it('should be able to pass app call txn as app arg', async () => {
+    //   const appCallTxn = ctx.any.txn.applicationCall({
+    //     appArgs: [Bytes("some_value()uint64")],
+    //     logs: [Bytes("this is a log statement")]
+    //   })
+    //   const contract = ctx.contract.create(AppExpectingEffects)
+    //   contract.log_group(appCallTxn)
+    // })
+
+    // TODO: uncomment when arc4 stubs are implemented
+    // it('should be able to pass app call txn as app arg', async () => {
+    //   const appCallTxn = ctx.any.txn.applicationCall({
+    //     appArgs: [arc4.arc4Signature("some_value()uint64")],
+    //     logs: [arc4Prefix.concat(arc4.Uint64(2).bytes)]
+    //   })
+    //   const contract = ctx.contract.create(AppExpectingEffects)
+    //   contract.log_group(appCallTxn)
+    // })
   })
 })

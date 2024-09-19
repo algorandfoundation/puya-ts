@@ -584,7 +584,7 @@ export type ExtractUint64Type = (a: bytes, b: uint64) => uint64
  * `gaids` fails unless the requested transaction created an asset or application and A < GroupIndex.
  * @see Native TEAL opcode: [`gaids`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#gaids)
  */
-export type GaidType = (a: uint64) => Application
+export type GaidType = (a: uint64) => uint64
 
 /**
  * Bth bit of (byte-array or integer) A. If B is greater than or equal to the bit length of the value (8*byte length), the program fails

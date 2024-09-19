@@ -27,6 +27,9 @@ const getTxnProxy = <TTxn extends gtxn.Transaction>(fields: TxnFields<TTxn>, fun
       get<TProperty extends keyof TTxn>(_target: TTxn, property: TProperty): TTxn[TProperty] {
         return ((Reflect.has(funcs, property) ? funcs : fields) as TTxn)[property]
       },
+      set<TProperty extends keyof TTxn>(_target: TTxn, property: TProperty, value: TTxn[TProperty]): boolean {
+        return Reflect.set(fields, property, value)
+      },
     } as ProxyHandler<TTxn>,
   )
 }
