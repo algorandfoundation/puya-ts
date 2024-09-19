@@ -82,6 +82,7 @@ export const AssetConfigTransaction = (txnFields: TxnFields<gtxn.AssetConfigTxn>
     reserve: Account(),
     freeze: Account(),
     clawback: Account(),
+    createdAsset: Asset(),
   }
   const fields = {
     ...defaultFields,
@@ -143,6 +144,7 @@ export const ApplicationTransaction = (txnFields: ApplicationTransactionFields) 
     localNumBytes: Uint64(0),
     extraProgramPages: Uint64(0),
     lastLog: Bytes(),
+    createdApp: Application(),
 
     approvalProgram: Bytes(),
     clearStateProgram: Bytes(),
@@ -152,6 +154,7 @@ export const ApplicationTransaction = (txnFields: ApplicationTransactionFields) 
     numApps: Uint64(0),
     numApprovalProgramPages: Uint64(0),
     numClearStateProgramPages: Uint64(0),
+    numLogs: Uint64(0),
 
     appArgs: [],
     accounts: [],
@@ -186,6 +189,12 @@ export const ApplicationTransaction = (txnFields: ApplicationTransactionFields) 
     get numClearStateProgramPages() {
       return Uint64(this.clearStateProgramPages.length)
     },
+    get numLogs() {
+      return Uint64(lazyContext.txn.logs(this.appId.id).length)
+    },
+    get lastLog() {
+      return lazyContext.txn.logs(this.appId.id).at(-1) ?? Bytes()
+    },
     ...txnFields,
   }
   const funcs: TxnFuncs<gtxn.ApplicationTxn> = {
@@ -206,6 +215,9 @@ export const ApplicationTransaction = (txnFields: ApplicationTransactionFields) 
     },
     clearStateProgramPages(index: internal.primitives.StubUint64Compat): bytes {
       return fields.clearStateProgramPages[asNumber(index)]
+    },
+    logs(index: internal.primitives.StubUint64Compat): bytes {
+      return lazyContext.txn.logs(fields.appId.id)[asNumber(index)] ?? Bytes()
     },
   }
 

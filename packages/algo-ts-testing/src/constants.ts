@@ -6,6 +6,7 @@ export const MAX_UINT8 = 2 ** 8 - 1
 export const MAX_UINT64 = 2n ** 64n - 1n
 export const MAX_UINT512 = 2n ** 512n - 1n
 export const MAX_BYTES_SIZE = 4096
+export const MAX_ITEMS_IN_LOG = 32
 export const BITS_IN_BYTE = 8
 export const DEFAULT_ACCOUNT_MIN_BALANCE = 100_000
 export const DEFAULT_MAX_TXN_LIFE = 1_000

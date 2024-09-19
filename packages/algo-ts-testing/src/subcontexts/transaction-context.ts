@@ -1,6 +1,8 @@
-import { gtxn, internal } from '@algorandfoundation/algo-ts'
+import { bytes, gtxn, internal, uint64 } from '@algorandfoundation/algo-ts'
 import algosdk from 'algosdk'
-import { asUint64 } from '../util'
+import { MAX_ITEMS_IN_LOG } from '../constants'
+import { DecodedLogs, decodeLogs, LogDecoding } from '../decode-logs'
+import { asBigInt, asBytes, asUint64 } from '../util'
 
 function ScopeGenerator(dispose: () => void) {
   function* internal() {
@@ -26,6 +28,7 @@ interface ExecutionScope {
 export class TransactionContext {
   readonly groups: TransactionGroup[] = []
   #activeGroup: TransactionGroup | undefined
+  #applicationLogs: Map<bigint, bytes[]> = new Map()
 
   createScope(group: gtxn.Transaction[], activeTransactionIndex?: number): ExecutionScope {
     const transactionGroup = new TransactionGroup(group, activeTransactionIndex)
@@ -58,12 +61,11 @@ export class TransactionContext {
     }
   }
 
-  get activeGroup(): TransactionGroup | undefined {
-    return this.#activeGroup
-  }
-
-  get activeTransaction(): gtxn.Transaction {
-    return this.#activeGroup ? this.#activeGroup.activeTransaction : ({} as gtxn.Transaction)
+  get activeGroup(): TransactionGroup {
+    if (this.#activeGroup) {
+      return this.#activeGroup
+    }
+    throw internal.errors.internalError('no active txn group')
   }
 
   get lastGroup(): TransactionGroup {
@@ -75,6 +77,32 @@ export class TransactionContext {
 
   get lastActive(): gtxn.Transaction {
     return this.lastGroup.activeTransaction
+  }
+
+  appendLog(value: internal.primitives.StubBytesCompat): void {
+    const activeTransaction = this.activeGroup.activeTransaction
+    if (activeTransaction.type !== gtxn.TransactionType.ApplicationCall) {
+      throw internal.errors.internalError('Can only add logs to ApplicationCallTransaction!')
+    }
+    const applicationId = asBigInt(activeTransaction.appId.id)
+    if (!this.#applicationLogs.has(applicationId)) {
+      this.#applicationLogs.set(applicationId, [])
+    }
+    const logs = this.#applicationLogs.get(applicationId)!
+    if (logs.length + 1 > MAX_ITEMS_IN_LOG) {
+      throw internal.errors.internalError(`Too many log calls in program, up to ${MAX_ITEMS_IN_LOG} is allowed`)
+    }
+    logs.push(asBytes(value))
+  }
+
+  logs(appId: internal.primitives.StubUint64Compat): bytes[] {
+    return this.#applicationLogs.get(asBigInt(appId)) ?? []
+  }
+
+  exportLogs<const T extends [...LogDecoding[]]>(appId: uint64, ...decoding: T): DecodedLogs<T> {
+    const applicationLogs = this.#applicationLogs.get(asBigInt(appId)) ?? []
+    const rawLogs = applicationLogs.map((l) => internal.primitives.toExternalValue(l))
+    return decodeLogs(rawLogs, decoding)
   }
 }
 
