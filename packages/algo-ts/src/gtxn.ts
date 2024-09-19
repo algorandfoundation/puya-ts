@@ -14,7 +14,7 @@ export type Transaction = PaymentTxn | KeyRegistrationTxn | AssetConfigTxn | Ass
 export function Transaction(groupIndex: uint64): Transaction {
   throw new Error('Not implemented')
 }
-export function PayTxn(groupIndex: uint64): PaymentTxn {
+export function PaymentTxn(groupIndex: uint64): PaymentTxn {
   throw new Error('Not implemented')
 }
 export function KeyRegistrationTxn(groupIndex: uint64): KeyRegistrationTxn {

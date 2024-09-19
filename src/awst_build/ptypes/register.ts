@@ -125,7 +125,7 @@ import {
   paymentItxnFn,
   paymentItxnParamsType,
   paymentItxnType,
-  PayTxnFunction,
+  PaymentTxnFunction,
   StringFunction,
   stringPType,
   submitGroupItxnFunction,
@@ -211,7 +211,7 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: applicationPType, instanceEb: ApplicationExpressionBuilder })
 
   typeRegistry.register({ ptype: paymentGtxnType, instanceEb: GroupTransactionExpressionBuilder })
-  typeRegistry.register({ ptype: PayTxnFunction, singletonEb: GroupTransactionFunctionBuilder })
+  typeRegistry.register({ ptype: PaymentTxnFunction, singletonEb: GroupTransactionFunctionBuilder })
   typeRegistry.register({ ptype: keyRegistrationGtxnType, instanceEb: GroupTransactionExpressionBuilder })
   typeRegistry.register({ ptype: KeyRegistrationTxnFunction, singletonEb: GroupTransactionFunctionBuilder })
   typeRegistry.register({ ptype: assetConfigGtxnType, instanceEb: GroupTransactionExpressionBuilder })
