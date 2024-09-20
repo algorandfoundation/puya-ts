@@ -1,13 +1,13 @@
-import type { NodeBuilder, InstanceBuilder } from './index'
-import { FunctionBuilder } from './index'
-import type { PType } from '../ptypes'
-import { IterableIteratorType, uint64PType } from '../ptypes'
-import type { SourceLocation } from '../../awst/source-location'
-import { parseFunctionArgs } from './util/arg-parsing'
 import type { awst } from '../../awst'
 import { nodeFactory } from '../../awst/node-factory'
+import type { SourceLocation } from '../../awst/source-location'
 import { uint64RangeWType } from '../../awst/wtypes'
+import type { PType } from '../ptypes'
+import { IterableIteratorType, uint64PType } from '../ptypes'
+import type { InstanceBuilder, NodeBuilder } from './index'
+import { FunctionBuilder } from './index'
 import { IterableIteratorExpressionBuilder } from './iterable-iterator-expression-builder'
+import { parseFunctionArgs } from './util/arg-parsing'
 
 export class UrangeFunctionBuilder extends FunctionBuilder {
   call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {

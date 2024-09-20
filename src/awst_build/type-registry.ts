@@ -1,9 +1,9 @@
-import type { InstanceBuilder, InstanceExpressionBuilder, NodeBuilder } from './eb'
-import type { SourceLocation } from '../awst/source-location'
-import type { DeliberateAny } from '../typescript-helpers'
-import { CodeError, InternalError, throwError } from '../errors'
-import { PType } from './ptypes'
 import type { awst } from '../awst'
+import type { SourceLocation } from '../awst/source-location'
+import { CodeError, InternalError, throwError } from '../errors'
+import type { DeliberateAny } from '../typescript-helpers'
+import type { InstanceBuilder, InstanceExpressionBuilder, NodeBuilder } from './eb'
+import { PType } from './ptypes'
 import type { SymbolName } from './symbol-name'
 
 type ValueExpressionBuilderCtor<TPType extends PType> = { new (expr: awst.Expression, ptype: PType): InstanceExpressionBuilder<TPType> }

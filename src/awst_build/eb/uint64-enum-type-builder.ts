@@ -1,11 +1,10 @@
-import { InstanceExpressionBuilder, NodeBuilder } from './index'
-import type { SourceLocation } from '../../awst/source-location'
-import type { PType } from '../ptypes'
-import { Uint64EnumMemberType } from '../ptypes'
-import { Uint64EnumType } from '../ptypes'
-import { invariant } from '../../util'
 import { nodeFactory } from '../../awst/node-factory'
 import type { Expression } from '../../awst/nodes'
+import type { SourceLocation } from '../../awst/source-location'
+import { invariant } from '../../util'
+import type { PType } from '../ptypes'
+import { Uint64EnumMemberType, Uint64EnumType } from '../ptypes'
+import { InstanceExpressionBuilder, NodeBuilder } from './index'
 
 export class Uint64EnumTypeBuilder extends NodeBuilder {
   readonly ptype: Uint64EnumType

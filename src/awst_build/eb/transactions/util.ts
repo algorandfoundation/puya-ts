@@ -1,26 +1,24 @@
 import { TransactionKind } from '../../../awst/models'
-import type { GroupTransactionPType, ItxnParamsPType, InnerTransactionPType } from '../../ptypes'
-import {
-  paymentItxnParamsType,
-  keyRegistrationItxnParamsType,
-  applicationCallItxnParamsType,
-  assetConfigItxnParamsType,
-  assetTransferItxnParamsType,
-  assetFreezeItxnParamsType,
-} from '../../ptypes'
+import type { GroupTransactionPType, InnerTransactionPType, ItxnParamsPType } from '../../ptypes'
 import {
   anyGtxnType,
-  applicationItxnType,
   applicationCallGtxnType,
+  applicationCallItxnParamsType,
+  applicationItxnType,
   assetConfigGtxnType,
+  assetConfigItxnParamsType,
   assetConfigItxnType,
   assetFreezeGtxnType,
+  assetFreezeItxnParamsType,
   assetFreezeItxnType,
   assetTransferGtxnType,
+  assetTransferItxnParamsType,
   assetTransferItxnType,
   keyRegistrationGtxnType,
+  keyRegistrationItxnParamsType,
   keyRegistrationItxnType,
   paymentGtxnType,
+  paymentItxnParamsType,
   paymentItxnType,
 } from '../../ptypes'
 

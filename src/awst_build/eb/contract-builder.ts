@@ -1,22 +1,21 @@
-import type { NodeBuilder } from './index'
-import { InstanceBuilder } from './index'
-import type { SourceLocation } from '../../awst/source-location'
-import type { ContractClassPType, PType } from '../ptypes'
-import { StorageProxyPType } from '../ptypes'
-import { arc4BaseContractType, baseContractType } from '../ptypes'
-
-import { ContractMethodExpressionBuilder } from './free-subroutine-expression-builder'
+import { nodeFactory } from '../../awst/node-factory'
 
 import type { Expression, LValue } from '../../awst/nodes'
-import type { AwstBuildContext } from '../context/awst-build-context'
-import { codeInvariant } from '../../util'
-import { CodeError } from '../../errors'
-import { VoidExpressionBuilder } from './void-expression-builder'
-import { nodeFactory } from '../../awst/node-factory'
-import { Constants } from '../../constants'
+import type { SourceLocation } from '../../awst/source-location'
 import { voidWType } from '../../awst/wtypes'
+import { Constants } from '../../constants'
+import { CodeError } from '../../errors'
+import { codeInvariant } from '../../util'
+import type { AwstBuildContext } from '../context/awst-build-context'
+import type { ContractClassPType, PType } from '../ptypes'
+import { arc4BaseContractType, baseContractType, StorageProxyPType } from '../ptypes'
 
 import { instanceEb } from '../type-registry'
+
+import { ContractMethodExpressionBuilder } from './free-subroutine-expression-builder'
+import type { NodeBuilder } from './index'
+import { InstanceBuilder } from './index'
+import { VoidExpressionBuilder } from './void-expression-builder'
 
 export class ContractThisBuilder extends InstanceBuilder<ContractClassPType> {
   resolve(): Expression {

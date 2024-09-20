@@ -1,8 +1,8 @@
+import { OnCompleteAction } from './arc4'
 import { bytes, uint64 } from './primitives'
 import type { Account, Application, Asset } from './reference'
 
 import type * as txnTypes from './transactions'
-import { OnCompleteAction } from './arc4'
 import { DeliberateAny } from './typescript-helpers'
 
 export interface PaymentInnerTxn extends txnTypes.PayTxn {}

@@ -1,5 +1,5 @@
-import { expect, it, describe, afterEach } from 'vitest'
 import { TestHarness } from '@algorandfoundation/algo-ts-testing'
+import { describe, expect, it } from 'vitest'
 
 describe('Calculator', () => {
   const harness = TestHarness.for(() => import('./contract.algo'))

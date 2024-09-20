@@ -1,5 +1,5 @@
-import { uint64, bytes, BytesBacked, BytesCompat, Bytes } from './primitives'
 import { ctxMgr } from './execution-context'
+import { bytes, uint64 } from './primitives'
 
 export type Account = {
   readonly bytes: bytes

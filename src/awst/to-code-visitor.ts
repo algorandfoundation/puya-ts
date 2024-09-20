@@ -1,10 +1,10 @@
-import type { AppStorageDefinition, ContractMemberNodeVisitor, ExpressionVisitor, RootNodeVisitor, StatementVisitor } from './nodes'
-import * as nodes from './nodes'
-import { AppStorageKind, BytesEncoding, ContractMethodTarget, InstanceMethodTarget, InstanceSuperMethodTarget, SubroutineID } from './nodes'
+import { Buffer } from 'node:buffer'
 import { TodoError } from '../errors'
 import { logger } from '../logger'
 import { uint8ArrayToBase32, uint8ArrayToUtf8 } from '../util'
-import { Buffer } from 'node:buffer'
+import type { AppStorageDefinition, ContractMemberNodeVisitor, ExpressionVisitor, RootNodeVisitor, StatementVisitor } from './nodes'
+import * as nodes from './nodes'
+import { AppStorageKind, BytesEncoding, ContractMethodTarget, InstanceMethodTarget, InstanceSuperMethodTarget, SubroutineID } from './nodes'
 import { boolWType } from './wtypes'
 
 function printBytes(value: Uint8Array, encoding: BytesEncoding) {

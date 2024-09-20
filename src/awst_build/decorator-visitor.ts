@@ -1,12 +1,12 @@
-import { BaseVisitor } from './base-visitor'
 import type ts from 'typescript'
 import type { ARC4CreateOption, OnCompletionAction } from '../awst/models'
-import { accept } from '../visitor/visitor'
-import { invariant } from '../util'
-import { DecoratorDataBuilder } from './eb/arc4-bare-method-decorator-builder'
 import type { SourceLocation } from '../awst/source-location'
 import type { Constants } from '../constants'
+import { invariant } from '../util'
+import { accept } from '../visitor/visitor'
+import { BaseVisitor } from './base-visitor'
 import type { AwstBuildContext } from './context/awst-build-context'
+import { DecoratorDataBuilder } from './eb/arc4-bare-method-decorator-builder'
 
 export type Arc4AbiDecoratorData = {
   type: typeof Constants.arc4AbiDecoratorName

@@ -1,13 +1,13 @@
-import * as awst from '../awst/nodes'
-import type { AwstBuildContext } from './context/awst-build-context'
 import type ts from 'typescript'
-import { FunctionVisitor } from './function-visitor'
-import { invariant } from '../util'
-import type { NodeBuilder } from './eb'
-import { ContractClassPType } from './ptypes'
-import { ContractSuperBuilder, ContractThisBuilder } from './eb/contract-builder'
-import { CodeError } from '../errors'
 import type { ContractReference } from '../awst/models'
+import * as awst from '../awst/nodes'
+import { CodeError } from '../errors'
+import { invariant } from '../util'
+import type { AwstBuildContext } from './context/awst-build-context'
+import type { NodeBuilder } from './eb'
+import { ContractSuperBuilder, ContractThisBuilder } from './eb/contract-builder'
+import { FunctionVisitor } from './function-visitor'
+import { ContractClassPType } from './ptypes'
 
 export type ContractMethodInfo = {
   cref: ContractReference

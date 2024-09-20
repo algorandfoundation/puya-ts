@@ -1,5 +1,5 @@
-import { Account } from './reference'
 import { bytes } from './primitives'
+import { Account } from './reference'
 
 /** A value saved in global state */
 export type GlobalState<ValueType> = {

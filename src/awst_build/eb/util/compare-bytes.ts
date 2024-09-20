@@ -1,10 +1,10 @@
+import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
 import { EqualityComparison } from '../../../awst/nodes'
-import { BuilderComparisonOp } from '../index'
-import { BooleanExpressionBuilder } from '../boolean-expression-builder'
-import { nodeFactory } from '../../../awst/node-factory'
 import type { SourceLocation } from '../../../awst/source-location'
 import { logger } from '../../../logger'
+import { BooleanExpressionBuilder } from '../boolean-expression-builder'
+import { BuilderComparisonOp } from '../index'
 
 const builderCompareToBytesCompare: Record<BuilderComparisonOp, EqualityComparison | undefined> = {
   [BuilderComparisonOp.ne]: EqualityComparison.ne,

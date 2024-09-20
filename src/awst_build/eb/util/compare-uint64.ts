@@ -1,11 +1,11 @@
+import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
 import { NumericComparison } from '../../../awst/nodes'
-import { BuilderComparisonOp } from '../index'
 import type { SourceLocation } from '../../../awst/source-location'
 import { logger } from '../../../logger'
-import { BooleanExpressionBuilder } from '../boolean-expression-builder'
-import { nodeFactory } from '../../../awst/node-factory'
 import { tryConvertEnum } from '../../../util'
+import { BooleanExpressionBuilder } from '../boolean-expression-builder'
+import { BuilderComparisonOp } from '../index'
 
 export function compareUint64(
   left: Expression,

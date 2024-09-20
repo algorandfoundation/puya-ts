@@ -1,3 +1,5 @@
+import { TransactionKind } from '../../../awst/models'
+import { TxnField } from '../../../awst/txn-fields'
 import type { PType } from '../../ptypes'
 import {
   accountPType,
@@ -9,8 +11,6 @@ import {
   transactionTypeType,
   uint64PType,
 } from '../../ptypes'
-import { TxnField } from '../../../awst/txn-fields'
-import { TransactionKind } from '../../../awst/models'
 
 const baseTxnFields = {
   /**

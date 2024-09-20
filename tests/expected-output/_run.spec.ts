@@ -1,12 +1,12 @@
-import { describe, expect, it } from 'vitest'
-import { compile } from '../../src'
 import ts from 'typescript'
+import { describe, it } from 'vitest'
+import { compile } from '../../src'
 import { SourceLocation } from '../../src/awst/source-location'
+import { buildCompileOptions } from '../../src/compile-options'
 import type { LogEvent } from '../../src/logger'
 import { logger, LogLevel } from '../../src/logger'
-import { buildCompileOptions } from '../../src/compile-options'
-import { invariant } from '../../src/util'
 import { defaultPuyaOptions } from '../../src/puya/options'
+import { invariant } from '../../src/util'
 
 /**
  * Verify that specific code produces specific compiler output.

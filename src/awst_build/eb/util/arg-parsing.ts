@@ -1,9 +1,9 @@
-import type { PType, PTypeOrClass } from '../../ptypes'
+import type { Expression } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
-import type { DeliberateAny, Tuple } from '../../../typescript-helpers'
 import { CodeError } from '../../../errors'
 import { logger } from '../../../logger'
-import type { Expression } from '../../../awst/nodes'
+import type { DeliberateAny, Tuple } from '../../../typescript-helpers'
+import type { PType, PTypeOrClass } from '../../ptypes'
 import type { InstanceBuilder } from '../index'
 import { requestBuilderOfType, requireInstanceBuilder } from './index'
 

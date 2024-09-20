@@ -1,9 +1,9 @@
-import { InstanceExpressionBuilder } from './index'
+import type { Expression, LValue } from '../../awst/nodes'
+import { CodeError } from '../../errors'
+import { invariant } from '../../util'
 import type { PType } from '../ptypes'
 import { ArrayPType } from '../ptypes'
-import type { Expression, LValue } from '../../awst/nodes'
-import { invariant } from '../../util'
-import { CodeError } from '../../errors'
+import { InstanceExpressionBuilder } from './index'
 
 export class NativeArrayExpressionBuilder extends InstanceExpressionBuilder<ArrayPType> {
   resolveLValue(): LValue {

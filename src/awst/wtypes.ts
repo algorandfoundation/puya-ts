@@ -1,6 +1,6 @@
 import { invariant } from '../util'
-import type { SourceLocation } from './source-location'
 import { TransactionKind } from './models'
+import type { SourceLocation } from './source-location'
 
 export enum AVMType {
   bytes = 1 << 0,

@@ -1,13 +1,11 @@
+import { nodeFactory } from '../../../awst/node-factory'
+import type { Expression } from '../../../awst/nodes'
+import type { SourceLocation } from '../../../awst/source-location'
+import type { PType } from '../../ptypes'
+import { accountPType, applicationPType, bytesPType, uint64PType } from '../../ptypes'
 import type { InstanceBuilder, NodeBuilder } from '../index'
 import { FunctionBuilder } from '../index'
-import type { PType } from '../../ptypes'
-import { bytesPType, accountPType } from '../../ptypes'
-import { uint64PType } from '../../ptypes'
-import { applicationPType } from '../../ptypes'
-import type { SourceLocation } from '../../../awst/source-location'
-import type { Expression } from '../../../awst/nodes'
 import { parseFunctionArgs } from '../util/arg-parsing'
-import { nodeFactory } from '../../../awst/node-factory'
 import { Uint64BackedReferenceTypeExpressionBuilder } from './base'
 
 export class ApplicationFunctionBuilder extends FunctionBuilder {

@@ -1,6 +1,5 @@
-import type { uint64, bytes } from '@algorandfoundation/algo-ts'
-import { Txn } from '@algorandfoundation/algo-ts'
-import { Contract, LocalState } from '@algorandfoundation/algo-ts'
+import type { bytes, uint64 } from '@algorandfoundation/algo-ts'
+import { Contract, LocalState, Txn } from '@algorandfoundation/algo-ts'
 import type { StaticArray, UintN } from '@algorandfoundation/algo-ts/arc4'
 
 type SampleArray = StaticArray<UintN<64>, 10>

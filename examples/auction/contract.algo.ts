@@ -1,6 +1,17 @@
-import type { uint64, gtxn } from '@algorandfoundation/algo-ts'
-import { abimethod } from '@algorandfoundation/algo-ts'
-import { Contract, GlobalState, Asset, LocalState, Account, assert, Txn, Global, itxn, assertMatch } from '@algorandfoundation/algo-ts'
+import type { gtxn, uint64 } from '@algorandfoundation/algo-ts'
+import {
+  abimethod,
+  Account,
+  assert,
+  assertMatch,
+  Asset,
+  Contract,
+  Global,
+  GlobalState,
+  itxn,
+  LocalState,
+  Txn,
+} from '@algorandfoundation/algo-ts'
 
 export class Auction extends Contract {
   previousBidder = GlobalState<Account>()

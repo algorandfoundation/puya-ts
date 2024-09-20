@@ -1,11 +1,10 @@
-import { compile } from './index'
 import { Command, Option } from 'commander'
-import { buildCompileOptions } from './compile-options'
-import { logger, LogLevel } from './logger'
 import { z } from 'zod'
+import { buildCompileOptions } from './compile-options'
+import { compile } from './index'
+import { logger, LogLevel } from './logger'
 import type { PuyaPassThroughOptions } from './puya/options'
-import { defaultPuyaOptions } from './puya/options'
-import { LocalsCoalescingStrategy } from './puya/options'
+import { defaultPuyaOptions, LocalsCoalescingStrategy } from './puya/options'
 
 const cliOptionsSchema = z.object({
   outputAwst: z.boolean(),

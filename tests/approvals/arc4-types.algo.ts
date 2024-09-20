@@ -1,7 +1,6 @@
-import { DynamicArray, StaticArray, UintN } from '@algorandfoundation/algo-ts/arc4'
 import type { biguint, uint64 } from '@algorandfoundation/algo-ts'
 import { BaseContract } from '@algorandfoundation/algo-ts'
-import { undefined } from 'zod'
+import { DynamicArray, StaticArray, UintN } from '@algorandfoundation/algo-ts/arc4'
 
 function test(n: uint64, b: biguint, c: UintN<256>) {
   const x = new UintN<8>(4)

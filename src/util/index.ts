@@ -1,9 +1,10 @@
-import { CodeError, InternalError } from '../errors'
-import type { SourceLocation } from '../awst/source-location'
-import { TextDecoder } from 'node:util'
 import { Buffer } from 'node:buffer'
-import type { DeliberateAny } from '../typescript-helpers'
 import path from 'node:path'
+import { TextDecoder } from 'node:util'
+import type { SourceLocation } from '../awst/source-location'
+import { CodeError, InternalError } from '../errors'
+import type { DeliberateAny } from '../typescript-helpers'
+
 export { base32ToUint8Array, uint8ArrayToBase32 } from './base-32'
 
 class InvariantError extends Error {}

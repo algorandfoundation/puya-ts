@@ -1,11 +1,11 @@
-import type { SourceLocation } from '../../awst/source-location'
 import { awst } from '../../awst'
-import { CodeError, NotSupported } from '../../errors'
-import type { PType, PTypeOrClass } from '../ptypes'
-import { logger } from '../../logger'
-import type { Expression } from '../../awst/nodes'
-import { instanceEb } from '../type-registry'
 import { nodeFactory } from '../../awst/node-factory'
+import type { Expression } from '../../awst/nodes'
+import type { SourceLocation } from '../../awst/source-location'
+import { CodeError, NotSupported } from '../../errors'
+import { logger } from '../../logger'
+import type { PType, PTypeOrClass } from '../ptypes'
+import { instanceEb } from '../type-registry'
 
 export enum BuilderComparisonOp {
   eq = '===',

@@ -1,5 +1,5 @@
 import type { bytes, uint64 } from '@algorandfoundation/algo-ts'
-import { Contract, GlobalState, Txn, Uint64, assert, op, Bytes } from '@algorandfoundation/algo-ts'
+import { assert, Bytes, Contract, GlobalState, op, Txn, Uint64 } from '@algorandfoundation/algo-ts'
 
 export class BaseTestContract extends Contract {
   baseTestState = GlobalState({ initialValue: 'testing 123' })

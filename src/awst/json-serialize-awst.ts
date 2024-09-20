@@ -1,11 +1,12 @@
 import { snakeCase } from 'change-case'
-import type { RootNode } from './nodes'
-import { ContractReference, LogicSigReference } from './models'
-import { buildBase85Encoder } from '../util/base-85'
-import { SourceLocation } from './source-location'
-import { invariant } from '../util'
 import path from 'node:path'
 import { Constants } from '../constants'
+import { invariant } from '../util'
+import { buildBase85Encoder } from '../util/base-85'
+import { ContractReference, LogicSigReference } from './models'
+import type { RootNode } from './nodes'
+import { SourceLocation } from './source-location'
+
 export class SnakeCaseSerializer<T> {
   constructor(private readonly spaces = 2) {}
   public serialize(obj: T): string {

@@ -1,9 +1,9 @@
-import type { NodeBuilder } from '../index'
-import type { SourceLocation } from '../../../awst/source-location'
 import type { ConstantValue } from '../../../awst'
 import { isConstant } from '../../../awst'
-import { BigIntLiteralExpressionBuilder } from '../literal/big-int-literal-expression-builder'
+import type { SourceLocation } from '../../../awst/source-location'
 import { codeInvariant } from '../../../util'
+import type { NodeBuilder } from '../index'
+import { BigIntLiteralExpressionBuilder } from '../literal/big-int-literal-expression-builder'
 import { requireInstanceBuilder } from './index'
 
 export function requireConstantValue(builder: NodeBuilder, sourceLocation: SourceLocation): ConstantValue {

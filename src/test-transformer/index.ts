@@ -1,8 +1,8 @@
 import type ts from 'typescript'
 import type { DeliberateAny } from '../../packages/algo-ts-testing/src/typescript-helpers'
-import { SourceFileVisitor } from './visitors'
 import { registerPTypes } from '../awst_build/ptypes/register'
 import { typeRegistry } from '../awst_build/type-registry'
+import { SourceFileVisitor } from './visitors'
 
 const programTransformer = {
   type: 'program',

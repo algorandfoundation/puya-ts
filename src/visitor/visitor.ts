@@ -1,10 +1,10 @@
 import type ts from 'typescript'
-import type { DeliberateAny } from '../typescript-helpers'
+import type { AwstBuildContext } from '../awst_build/context/awst-build-context'
+import { AwstBuildFailureError } from '../errors'
 import { logger, logPuyaExceptions } from '../logger'
+import type { DeliberateAny } from '../typescript-helpers'
 import type { MapBaseType, SyntaxKindNameType } from './syntax-names'
 import { getNodeName, SyntaxKindName } from './syntax-names'
-import { AwstBuildFailureError } from '../errors'
-import type { AwstBuildContext } from '../awst_build/context/awst-build-context'
 
 type UnionToIntersection<T> = (T extends DeliberateAny ? (x: T) => void : never) extends (x: infer TIntersection) => void
   ? TIntersection

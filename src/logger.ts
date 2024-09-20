@@ -1,5 +1,5 @@
-import { SourceLocation } from './awst/source-location'
 import chalk from 'chalk'
+import { SourceLocation } from './awst/source-location'
 import { AwstBuildFailureError, CodeError, PuyaError, TodoError } from './errors'
 
 type ColorFn = (text: string) => string

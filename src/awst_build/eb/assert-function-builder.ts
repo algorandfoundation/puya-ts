@@ -1,15 +1,15 @@
-import type { InstanceBuilder } from './index'
-import { FunctionBuilder } from './index'
+import { intrinsicFactory } from '../../awst/intrinsic-factory'
+import { StringConstant } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
-import { VoidExpressionBuilder } from './void-expression-builder'
 import { CodeError } from '../../errors'
+import { invariant } from '../../util'
 import type { PType } from '../ptypes'
 import { stringPType } from '../ptypes'
+import type { InstanceBuilder } from './index'
+import { FunctionBuilder } from './index'
 import { requireConstantOfType, requireStringConstant } from './util'
-import { invariant } from '../../util'
-import { StringConstant } from '../../awst/nodes'
-import { intrinsicFactory } from '../../awst/intrinsic-factory'
 import { parseFunctionArgs } from './util/arg-parsing'
+import { VoidExpressionBuilder } from './void-expression-builder'
 
 export class AssertFunctionBuilder extends FunctionBuilder {
   call(args: Array<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
