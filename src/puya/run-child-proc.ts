@@ -10,7 +10,11 @@ export function runChildProc({ command, args, cwd }: { command: string; args: st
 
   if (proc.error) {
     // only happens during invocation error, not error return status
-    throw proc.error
+    if ('code' in proc.error && proc.error.code === 'ENOENT') {
+      logger.fatal(undefined, `Could not find ${command}. Please ensure it is installed and available on your PATH`)
+    } else {
+      throw proc.error
+    }
   }
   if (proc.status !== 0) {
     logger.fatal(undefined, `Compilation exited with status ${proc.status}`)
