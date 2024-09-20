@@ -1,8 +1,8 @@
 import type { Expression, LValue } from '../../awst/nodes'
+import { CodeError, InternalError } from '../../errors'
 import type { PType, PTypeOrClass } from '../ptypes'
 import { anyPType } from '../ptypes'
 import { InstanceBuilder } from './index'
-import { CodeError, InternalError } from '../../errors'
 
 export class OmittedExpressionBuilder extends InstanceBuilder {
   get ptype(): PType {

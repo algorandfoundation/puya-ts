@@ -1,8 +1,8 @@
-import { BuilderBinaryOp, BuilderComparisonOp } from './index'
-import type { SourceLocation } from '../../awst/source-location'
 import { nodeFactory } from '../../awst/node-factory'
-import { CodeError } from '../../errors'
 import type { Expression } from '../../awst/nodes'
+import type { SourceLocation } from '../../awst/source-location'
+import { CodeError } from '../../errors'
+import { BuilderBinaryOp, BuilderComparisonOp } from './index'
 
 const binaryOpFolding: Record<BuilderBinaryOp, undefined | ((left: bigint, right: bigint) => bigint)> = {
   [BuilderBinaryOp.div]: (l, r) => l / r,

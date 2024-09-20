@@ -1,5 +1,5 @@
-import ts from 'typescript'
 import path from 'node:path'
+import ts from 'typescript'
 import type { SourceFileMapping } from './index'
 
 export function jsonSerializeSourceFiles(sourceFiles: SourceFileMapping, programDirectory: string) {

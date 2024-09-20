@@ -1,11 +1,11 @@
-import type { AWST } from '../../awst/nodes'
-import { nodeFactory } from '../../awst/node-factory'
-import { arc4BaseContractType, baseContractType } from '../ptypes'
-import { ContractReference } from '../../awst/models'
-import { Constants } from '../../constants'
-import { boolWType } from '../../awst/wtypes'
-import { SourceLocation } from '../../awst/source-location'
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
+import { ContractReference } from '../../awst/models'
+import { nodeFactory } from '../../awst/node-factory'
+import type { AWST } from '../../awst/nodes'
+import { SourceLocation } from '../../awst/source-location'
+import { boolWType } from '../../awst/wtypes'
+import { Constants } from '../../constants'
+import { arc4BaseContractType, baseContractType } from '../ptypes'
 
 export function buildLibAwst(): AWST[] {
   const sourceLocationArc4 = new SourceLocation({

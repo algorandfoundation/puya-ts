@@ -1,10 +1,10 @@
-import { InstanceExpressionBuilder } from './index'
-import { CodeError } from '../../errors'
-import { IterableIteratorType, type PType } from '../ptypes'
-import type { Expression } from '../../awst/nodes'
-import { invariant } from '../../util'
-import type { SourceLocation } from '../../awst/source-location'
 import type { awst } from '../../awst'
+import type { Expression } from '../../awst/nodes'
+import type { SourceLocation } from '../../awst/source-location'
+import { CodeError } from '../../errors'
+import { invariant } from '../../util'
+import { IterableIteratorType, type PType } from '../ptypes'
+import { InstanceExpressionBuilder } from './index'
 
 export class IterableIteratorExpressionBuilder extends InstanceExpressionBuilder<IterableIteratorType> {
   resolve(): awst.Expression {

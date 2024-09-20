@@ -1,11 +1,11 @@
+import type { awst } from '../../awst'
 import type { Expression, LValue } from '../../awst/nodes'
+import type { SourceLocation } from '../../awst/source-location'
 import { CodeError } from '../../errors'
 import type { PType, PTypeOrClass } from '../ptypes'
 import { TransientType } from '../ptypes'
-import type { SourceLocation } from '../../awst/source-location'
 import type { BuilderBinaryOp, BuilderComparisonOp, BuilderUnaryOp, NodeBuilder } from './index'
 import { InstanceBuilder } from './index'
-import type { awst } from '../../awst'
 
 export abstract class LiteralExpressionBuilder extends InstanceBuilder {
   resolve(): Expression {

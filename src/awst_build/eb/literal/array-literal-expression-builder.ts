@@ -1,14 +1,13 @@
+import { nodeFactory } from '../../../awst/node-factory'
+import type { Expression, LValue } from '../../../awst/nodes'
+import type { SourceLocation } from '../../../awst/source-location'
+import { codeInvariant } from '../../../util'
+import type { PTypeOrClass } from '../../ptypes'
+import { ArrayPType, TuplePType } from '../../ptypes'
 import type { NodeBuilder } from '../index'
 import { InstanceBuilder } from '../index'
-import type { SourceLocation } from '../../../awst/source-location'
-import type { Expression, LValue } from '../../../awst/nodes'
-import type { PTypeOrClass } from '../../ptypes'
-import { ArrayPType } from '../../ptypes'
-import { TuplePType } from '../../ptypes'
 import { TupleExpressionBuilder } from '../tuple-expression-builder'
-import { nodeFactory } from '../../../awst/node-factory'
 import { requireExpressionOfType, requireIntegerConstant } from '../util'
-import { codeInvariant } from '../../../util'
 
 export class ArrayLiteralExpressionBuilder extends InstanceBuilder {
   readonly ptype: TuplePType

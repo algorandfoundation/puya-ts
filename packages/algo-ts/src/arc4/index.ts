@@ -1,6 +1,7 @@
-import { AnyFunction, DeliberateAny } from '../typescript-helpers'
 import { BaseContract } from '../base-contract'
 import { Uint64 } from '../primitives'
+import { DeliberateAny } from '../typescript-helpers'
+
 export * from './encoded-types'
 
 export class Contract extends BaseContract {

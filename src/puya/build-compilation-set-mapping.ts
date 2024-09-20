@@ -1,7 +1,7 @@
+import path from 'node:path'
+import type { CompilationSet } from '../awst/models'
 import type { AWST } from '../awst/nodes'
 import type { CompilationSetMapping } from './options'
-import type { CompilationSet } from '../awst/models'
-import path from 'node:path'
 
 export function buildCompilationSetMapping({
   awst,

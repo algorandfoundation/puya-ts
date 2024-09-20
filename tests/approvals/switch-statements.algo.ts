@@ -1,5 +1,5 @@
-import type { uint64, bytes } from '@algorandfoundation/algo-ts'
-import { Uint64, Bytes } from '@algorandfoundation/algo-ts'
+import type { bytes, uint64 } from '@algorandfoundation/algo-ts'
+import { Bytes, Uint64 } from '@algorandfoundation/algo-ts'
 
 function test_uint64(x: uint64): uint64 {
   switch (x) {

@@ -1,11 +1,11 @@
-import { NodeBuilder } from './index'
+import { nodeFactory } from '../../awst/node-factory'
 import type { SourceLocation } from '../../awst/source-location'
-import type { PType } from '../ptypes'
-import { IntrinsicEnumType } from '../ptypes'
 import { CodeError } from '../../errors'
 import { invariant } from '../../util'
+import type { PType } from '../ptypes'
+import { IntrinsicEnumType } from '../ptypes'
+import { NodeBuilder } from './index'
 import { StringExpressionBuilder } from './string-expression-builder'
-import { nodeFactory } from '../../awst/node-factory'
 
 export class IntrinsicEnumBuilder extends NodeBuilder {
   public readonly ptype: IntrinsicEnumType

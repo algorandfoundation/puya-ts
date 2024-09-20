@@ -1,6 +1,6 @@
 import type { wtypes } from '../../awst'
-import { codeInvariant } from '../../util'
 import type { DeliberateAny } from '../../typescript-helpers'
+import { codeInvariant } from '../../util'
 
 /**
  * Represents a public type visible to a developer of AlgoTS

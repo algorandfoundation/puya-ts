@@ -1,38 +1,40 @@
 import ts from 'typescript'
-import {
-  ArrayPType,
-  BigIntPType,
-  ClassMethodDecoratorContext,
-  neverPType,
-  NumberPType,
-  StorageProxyPType,
-  TypeParameterType,
-  undefinedPType,
-  unknownPType,
-} from './ptypes'
+import type { SourceLocation } from '../awst/source-location'
+import { Constants } from '../constants'
+import { CodeError, InternalError } from '../errors'
+import { logger } from '../logger'
+import { codeInvariant, hasFlags, intersectsFlags, invariant, normalisePath } from '../util'
+import type { AppStorageType, PType } from './ptypes'
 import {
   anyPType,
   ApprovalProgram,
+  arc4BaseContractType,
+  ArrayPType,
   baseContractType,
+  BigIntPType,
   BooleanFunction,
   boolPType,
+  ClassMethodDecoratorContext,
   ClearStateProgram,
-  arc4BaseContractType,
+  ContractClassPType,
+  FunctionPType,
+  NamespacePType,
+  neverPType,
   nullPType,
+  NumberPType,
+  ObjectPType,
+  StorageProxyPType,
   StringFunction,
   stringPType,
   TuplePType,
+  TypeParameterType,
+  undefinedPType,
+  UnionPType,
+  unknownPType,
   voidPType,
 } from './ptypes'
-import type { SourceLocation } from '../awst/source-location'
-import { codeInvariant, intersectsFlags, hasFlags, invariant, normalisePath } from '../util'
-import { CodeError, InternalError } from '../errors'
-import { typeRegistry } from './type-registry'
-import { logger } from '../logger'
-import { Constants } from '../constants'
-import type { AppStorageType, PType } from './ptypes'
-import { ContractClassPType, FunctionPType, NamespacePType, ObjectPType, UnionPType } from './ptypes'
 import { SymbolName } from './symbol-name'
+import { typeRegistry } from './type-registry'
 
 export class TypeResolver {
   constructor(

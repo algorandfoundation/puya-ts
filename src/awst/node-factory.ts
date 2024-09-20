@@ -1,38 +1,36 @@
+import type { DeliberateAny, Props } from '../typescript-helpers'
+import { codeInvariant, invariant } from '../util'
 import type { Expression, Statement } from './nodes'
-import { TupleItemExpression } from './nodes'
-import { CheckedMaybe } from './nodes'
-import { Copy } from './nodes'
-import { BooleanBinaryOperation } from './nodes'
-import { VoidConstant } from './nodes'
-import { IntrinsicCall } from './nodes'
-import { MethodDocumentation } from './nodes'
-import { TupleExpression } from './nodes'
-import { AssignmentStatement } from './nodes'
-import { AssignmentExpression } from './nodes'
 import {
+  AssignmentExpression,
+  AssignmentStatement,
   BigUIntBinaryOperation,
   Block,
   BoolConstant,
+  BooleanBinaryOperation,
   BytesComparisonExpression,
   BytesConstant,
   BytesEncoding,
+  CheckedMaybe,
   concreteNodes,
+  Copy,
   ExpressionStatement,
   IntegerConstant,
+  IntrinsicCall,
+  MethodDocumentation,
   Not,
   NumericComparisonExpression,
   SingleEvaluation,
   StringConstant,
+  TupleExpression,
+  TupleItemExpression,
   UInt64BinaryOperation,
+  VoidConstant,
 } from './nodes'
-import type { DeliberateAny, Props } from '../typescript-helpers'
 import type { SourceLocation } from './source-location'
-import * as wtypes from './wtypes'
-import { codeInvariant, invariant } from '../util'
 import type { WType } from './wtypes'
-import { voidWType } from './wtypes'
-import { WTuple } from './wtypes'
-import { boolWType } from './wtypes'
+import * as wtypes from './wtypes'
+import { boolWType, voidWType, WTuple } from './wtypes'
 
 type ConcreteNodes = typeof concreteNodes
 

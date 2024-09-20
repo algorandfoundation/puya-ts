@@ -1,10 +1,10 @@
-import { NodeBuilder } from './index'
-import type { PType } from '../ptypes'
 import type { SourceLocation } from '../../awst/source-location'
-import { NamespacePType } from '../ptypes'
 import { codeInvariant, invariant } from '../../util'
+import type { PType } from '../ptypes'
+import { NamespacePType } from '../ptypes'
 import { SymbolName } from '../symbol-name'
 import { typeRegistry } from '../type-registry'
+import { NodeBuilder } from './index'
 
 export class NamespaceBuilder extends NodeBuilder {
   private readonly _ptype: NamespacePType

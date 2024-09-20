@@ -1,6 +1,6 @@
-import { Account, Application, Asset } from './reference'
-import { bytes, Uint64, uint64 } from './primitives'
 import { OnCompleteActionStr } from './arc4'
+import { bytes, uint64 } from './primitives'
+import { Account, Application, Asset } from './reference'
 
 /**
  * The different transaction types available in a transaction

@@ -1,6 +1,6 @@
+import { ArgumentsType } from 'vitest'
 import { ctxMgr } from './execution-context'
 import { OpsNamespace, SetbitType } from './op-types'
-import { ArgumentsType } from 'vitest'
 import { DeliberateAny } from './typescript-helpers'
 
 type AnyFunction = (...args: DeliberateAny[]) => DeliberateAny

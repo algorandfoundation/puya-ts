@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import { compile } from '../../src'
 import { buildCompileOptions } from '../../src/compile-options'
-import { invariant } from '../../src/util'
 import { LogLevel } from '../../src/logger'
 import { defaultPuyaOptions } from '../../src/puya/options'
+import { invariant } from '../../src/util'
 
 describe('Approvals', () => {
   const result = compile(

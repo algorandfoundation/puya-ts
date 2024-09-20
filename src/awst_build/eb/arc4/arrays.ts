@@ -1,10 +1,11 @@
-import type { InstanceBuilder } from '../index'
-import { BuilderBinaryOp, FunctionBuilder, InstanceExpressionBuilder, NodeBuilder } from '../index'
-import type { PType } from '../../ptypes'
-import { IterableIteratorType, TuplePType } from '../../ptypes'
-import { uint64PType } from '../../ptypes'
-import { NumberPType } from '../../ptypes'
+import { nodeFactory } from '../../../awst/node-factory'
+import type { Expression } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
+import { uint64WType } from '../../../awst/wtypes'
+import { logger } from '../../../logger'
+import { codeInvariant, invariant } from '../../../util'
+import type { PType } from '../../ptypes'
+import { IterableIteratorType, NumberPType, TuplePType, uint64PType } from '../../ptypes'
 import {
   ARC4EncodedType,
   DynamicArrayConstructor,
@@ -12,17 +13,14 @@ import {
   StaticArrayConstructor,
   StaticArrayType,
 } from '../../ptypes/arc4-types'
-import type { Expression } from '../../../awst/nodes'
-import { codeInvariant, invariant } from '../../../util'
-import { parseFunctionArgs } from '../util/arg-parsing'
-import { requireExpressionOfType, requireInstanceBuilder } from '../util'
-import { nodeFactory } from '../../../awst/node-factory'
-import { UInt64ExpressionBuilder } from '../uint64-expression-builder'
-import { uint64WType } from '../../../awst/wtypes'
-import { BigIntLiteralExpressionBuilder } from '../literal/big-int-literal-expression-builder'
-import { logger } from '../../../logger'
 import { instanceEb } from '../../type-registry'
+import type { InstanceBuilder } from '../index'
+import { BuilderBinaryOp, FunctionBuilder, InstanceExpressionBuilder, NodeBuilder } from '../index'
 import { IterableIteratorExpressionBuilder } from '../iterable-iterator-expression-builder'
+import { BigIntLiteralExpressionBuilder } from '../literal/big-int-literal-expression-builder'
+import { UInt64ExpressionBuilder } from '../uint64-expression-builder'
+import { requireExpressionOfType, requireInstanceBuilder } from '../util'
+import { parseFunctionArgs } from '../util/arg-parsing'
 
 export class DynamicArrayConstructorBuilder extends NodeBuilder {
   readonly ptype = DynamicArrayConstructor

@@ -1,6 +1,6 @@
-import type { SourceLocation } from './source-location'
-import type { Props } from '../typescript-helpers'
 import type { ContractClassPType } from '../awst_build/ptypes'
+import type { Props } from '../typescript-helpers'
+import type { SourceLocation } from './source-location'
 
 export enum OnCompletionAction {
   NoOp = 0,

@@ -1,20 +1,28 @@
-import type { TypeRegistry } from '../type-registry'
-import { BooleanExpressionBuilder, BooleanFunctionBuilder } from '../eb/boolean-expression-builder'
-import { UInt64ExpressionBuilder, UInt64FunctionBuilder } from '../eb/uint64-expression-builder'
-import { BigUintExpressionBuilder, BigUintFunctionBuilder } from '../eb/biguint-expression-builder'
-import { BytesExpressionBuilder, BytesFunctionBuilder } from '../eb/bytes-expression-builder'
-import { StringExpressionBuilder, StringFunctionBuilder } from '../eb/string-expression-builder'
-import { LogFunctionBuilder } from '../eb/log-function-builder'
+import { Arc4AbiMethodDecoratorBuilder, Arc4BareMethodDecoratorBuilder } from '../eb/arc4-bare-method-decorator-builder'
+import {
+  DynamicArrayConstructorBuilder,
+  DynamicArrayExpressionBuilder,
+  StaticArrayConstructorBuilder,
+  StaticArrayExpressionBuilder,
+} from '../eb/arc4/arrays'
+import { UintNConstructorBuilder, UintNExpressionBuilder } from '../eb/arc4/uint-n-constructor-builder'
 import { AssertFunctionBuilder, ErrFunctionBuilder } from '../eb/assert-function-builder'
-import { AssetExpressionBuilder, AssetFunctionBuilder } from '../eb/reference/asset'
+import { AssertMatchFunctionBuilder } from '../eb/assert-match-function-builder'
+import { BigUintExpressionBuilder, BigUintFunctionBuilder } from '../eb/biguint-expression-builder'
+import { BooleanExpressionBuilder, BooleanFunctionBuilder } from '../eb/boolean-expression-builder'
+import { BytesExpressionBuilder, BytesFunctionBuilder } from '../eb/bytes-expression-builder'
+import { EnsureBudgetFunctionBuilder } from '../eb/ensure-budget'
 import { FreeSubroutineExpressionBuilder } from '../eb/free-subroutine-expression-builder'
-import { NamespaceBuilder } from '../eb/namespace-builder'
-import { VoidExpressionBuilder } from '../eb/void-expression-builder'
-import { ALL_OP_ENUMS } from './op-ptypes'
 import { IntrinsicEnumBuilder } from '../eb/intrinsic-enum-builder'
-import { OP_METADATA } from '../op-metadata'
+import { IterableIteratorExpressionBuilder } from '../eb/iterable-iterator-expression-builder'
+import { ObjectExpressionBuilder } from '../eb/literal/object-expression-builder'
+import { LogFunctionBuilder } from '../eb/log-function-builder'
+import { NamespaceBuilder } from '../eb/namespace-builder'
+import { NativeArrayExpressionBuilder } from '../eb/native-array-expression-builder'
 import { FreeIntrinsicOpBuilder, IntrinsicOpGroupBuilder } from '../eb/op-module-builder'
-import { GlobalStateExpressionBuilder, GlobalStateFunctionBuilder } from '../eb/storage/global-state'
+import { AccountExpressionBuilder, AccountFunctionBuilder } from '../eb/reference/account'
+import { ApplicationExpressionBuilder, ApplicationFunctionBuilder } from '../eb/reference/application'
+import { AssetExpressionBuilder, AssetFunctionBuilder } from '../eb/reference/asset'
 import {
   BoxExpressionBuilder,
   BoxFunctionBuilder,
@@ -23,19 +31,45 @@ import {
   BoxRefExpressionBuilder,
   BoxRefFunctionBuilder,
 } from '../eb/storage/box'
+import { GlobalStateExpressionBuilder, GlobalStateFunctionBuilder } from '../eb/storage/global-state'
+import { LocalStateExpressionBuilder, LocalStateFunctionBuilder } from '../eb/storage/local-state'
+import { StringExpressionBuilder, StringFunctionBuilder } from '../eb/string-expression-builder'
+import { GroupTransactionExpressionBuilder, GroupTransactionFunctionBuilder } from '../eb/transactions/group-transactions'
+import {
+  ItxnParamsExpressionBuilder,
+  ItxnParamsFactoryFunctionBuilder,
+  SubmitItxnGroupFunctionBuilder,
+} from '../eb/transactions/inner-transaction-params'
+import { InnerTransactionExpressionBuilder } from '../eb/transactions/inner-transactions'
 import { TupleExpressionBuilder } from '../eb/tuple-expression-builder'
-import { Arc4AbiMethodDecoratorBuilder, Arc4BareMethodDecoratorBuilder } from '../eb/arc4-bare-method-decorator-builder'
+import { Uint64EnumMemberExpressionBuilder, Uint64EnumTypeBuilder } from '../eb/uint64-enum-type-builder'
+import { UInt64ExpressionBuilder, UInt64FunctionBuilder } from '../eb/uint64-expression-builder'
+import { UrangeFunctionBuilder } from '../eb/urange-function'
+import { VoidExpressionBuilder } from '../eb/void-expression-builder'
+import { OP_METADATA } from '../op-metadata'
+import type { TypeRegistry } from '../type-registry'
+import {
+  DynamicArrayConstructor,
+  DynamicArrayType,
+  StaticArrayConstructor,
+  StaticArrayType,
+  UintNConstructor,
+  UintNType,
+} from './arc4-types'
 import {
   AccountFunction,
   accountPType,
   anyGtxnType,
+  applicationCallGtxnType,
   applicationCallItxnFn,
   applicationCallItxnParamsType,
+  ApplicationFunctionType,
   applicationItxnType,
-  applicationCallGtxnType,
+  applicationPType,
   ApplicationTxnFunction,
   arc4AbiMethodDecorator,
   arc4BareMethodDecorator,
+  ArrayPType,
   assertFunction,
   assertMatchFunction,
   assetConfigGtxnType,
@@ -94,6 +128,7 @@ import {
   PayTxnFunction,
   StringFunction,
   stringPType,
+  submitGroupItxnFunction,
   TransactionFunction,
   transactionTypeType,
   TuplePType,
@@ -101,43 +136,8 @@ import {
   uint64PType,
   urangeFunction,
   voidPType,
-  applicationPType,
-  ApplicationFunctionType,
-  submitGroupItxnFunction,
-  ArrayPType,
 } from './index'
-import { ObjectExpressionBuilder } from '../eb/literal/object-expression-builder'
-import { AccountExpressionBuilder, AccountFunctionBuilder } from '../eb/reference/account'
-import { LocalStateExpressionBuilder, LocalStateFunctionBuilder } from '../eb/storage/local-state'
-import { UintNConstructorBuilder, UintNExpressionBuilder } from '../eb/arc4/uint-n-constructor-builder'
-import { GroupTransactionExpressionBuilder, GroupTransactionFunctionBuilder } from '../eb/transactions/group-transactions'
-import {
-  DynamicArrayConstructor,
-  DynamicArrayType,
-  StaticArrayConstructor,
-  StaticArrayType,
-  UintNConstructor,
-  UintNType,
-} from './arc4-types'
-import {
-  DynamicArrayConstructorBuilder,
-  DynamicArrayExpressionBuilder,
-  StaticArrayConstructorBuilder,
-  StaticArrayExpressionBuilder,
-} from '../eb/arc4/arrays'
-import { AssertMatchFunctionBuilder } from '../eb/assert-match-function-builder'
-import { EnsureBudgetFunctionBuilder } from '../eb/ensure-budget'
-import { Uint64EnumMemberExpressionBuilder, Uint64EnumTypeBuilder } from '../eb/uint64-enum-type-builder'
-import { UrangeFunctionBuilder } from '../eb/urange-function'
-import { IterableIteratorExpressionBuilder } from '../eb/iterable-iterator-expression-builder'
-import { InnerTransactionExpressionBuilder } from '../eb/transactions/inner-transactions'
-import {
-  ItxnParamsExpressionBuilder,
-  ItxnParamsFactoryFunctionBuilder,
-  SubmitItxnGroupFunctionBuilder,
-} from '../eb/transactions/inner-transaction-params'
-import { ApplicationExpressionBuilder, ApplicationFunctionBuilder } from '../eb/reference/application'
-import { NativeArrayExpressionBuilder } from '../eb/native-array-expression-builder'
+import { ALL_OP_ENUMS } from './op-ptypes'
 
 export function registerPTypes(typeRegistry: TypeRegistry) {
   if (typeRegistry.hasRegistrations) {

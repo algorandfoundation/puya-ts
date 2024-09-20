@@ -1,11 +1,10 @@
-import { Constants } from '../../constants'
-import { PType } from './base'
-import type { ARC4Type } from '../../awst/wtypes'
-import { ARC4StaticArray } from '../../awst/wtypes'
-import { ARC4DynamicArray, ARC4UIntN } from '../../awst/wtypes'
-import { codeInvariant } from '../../util'
-import { LibFunctionType, NumberPType } from './index'
 import type { SourceLocation } from '../../awst/source-location'
+import type { ARC4Type } from '../../awst/wtypes'
+import { ARC4DynamicArray, ARC4StaticArray, ARC4UIntN } from '../../awst/wtypes'
+import { Constants } from '../../constants'
+import { codeInvariant } from '../../util'
+import { PType } from './base'
+import { LibFunctionType, NumberPType } from './index'
 
 export const UintNConstructor = new LibFunctionType({
   name: 'UintN',

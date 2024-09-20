@@ -1,12 +1,12 @@
-import type { PType } from '../ptypes'
-import { TuplePType } from '../ptypes'
-import type { InstanceBuilder, NodeBuilder } from './index'
-import { InstanceExpressionBuilder } from './index'
-import { invariant } from '../../util'
+import { nodeFactory } from '../../awst/node-factory'
 import type { Expression } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
+import { invariant } from '../../util'
+import type { PType } from '../ptypes'
+import { TuplePType } from '../ptypes'
 import { instanceEb } from '../type-registry'
-import { nodeFactory } from '../../awst/node-factory'
+import type { InstanceBuilder, NodeBuilder } from './index'
+import { InstanceExpressionBuilder } from './index'
 import { requireIntegerConstant } from './util'
 
 export class TupleExpressionBuilder extends InstanceExpressionBuilder<TuplePType> {

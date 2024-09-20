@@ -1,20 +1,10 @@
-import type {
-  ComputedPropertyName,
-  Identifier,
-  NoSubstitutionTemplateLiteral,
-  NumericLiteral,
-  PrivateIdentifier,
-  PropertyName,
-  PseudoLiteralToken,
-  StringLiteral,
-} from 'typescript'
-import type ts from 'typescript'
+import type * as ts from 'typescript'
+import { NotSupported } from '../errors'
 import type { Visitor } from '../visitor/visitor'
 import { accept } from '../visitor/visitor'
-import { NotSupported } from '../errors'
 import type { AwstBuildContext } from './context/awst-build-context'
 
-type ObjectNames = PropertyName | PseudoLiteralToken
+type ObjectNames = ts.PropertyName | ts.PseudoLiteralToken
 
 export class TextVisitor implements Visitor<ObjectNames, string> {
   constructor(public context: AwstBuildContext) {}
@@ -30,24 +20,24 @@ export class TextVisitor implements Visitor<ObjectNames, string> {
   }
   public accept = <TNode extends ts.Node>(node: TNode) => accept<TextVisitor, TNode>(this, node)
 
-  visitIdentifier(node: Identifier): string {
+  visitIdentifier(node: ts.Identifier): string {
     return node.text
   }
-  visitNoSubstitutionTemplateLiteral(node: NoSubstitutionTemplateLiteral): string {
+  visitNoSubstitutionTemplateLiteral(node: ts.NoSubstitutionTemplateLiteral): string {
     return node.text
   }
-  visitNumericLiteral(node: NumericLiteral): string {
+  visitNumericLiteral(node: ts.NumericLiteral): string {
     return node.text
   }
-  visitComputedPropertyName(node: ComputedPropertyName): string {
+  visitComputedPropertyName(node: ts.ComputedPropertyName): string {
     throw new NotSupported('Computed property names', {
       sourceLocation: this.context.getSourceLocation(node),
     })
   }
-  visitPrivateIdentifier(node: PrivateIdentifier): string {
+  visitPrivateIdentifier(node: ts.PrivateIdentifier): string {
     return node.text
   }
-  visitStringLiteral(node: StringLiteral): string {
+  visitStringLiteral(node: ts.StringLiteral): string {
     return node.text
   }
 }

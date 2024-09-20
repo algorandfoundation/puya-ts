@@ -1,15 +1,15 @@
-import type { BuilderComparisonOp, InstanceBuilder, NodeBuilder } from '../index'
-import { InstanceExpressionBuilder } from '../index'
-import type { PType } from '../../ptypes'
-import { uint64PType } from '../../ptypes'
+import { intrinsicFactory } from '../../../awst/intrinsic-factory'
+import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
-import { instanceEb } from '../../type-registry'
-import { nodeFactory } from '../../../awst/node-factory'
 import { boolWType, WTuple } from '../../../awst/wtypes'
+import type { PType } from '../../ptypes'
+import { uint64PType } from '../../ptypes'
+import { instanceEb } from '../../type-registry'
+import type { BuilderComparisonOp, InstanceBuilder, NodeBuilder } from '../index'
+import { InstanceExpressionBuilder } from '../index'
 import { requireExpressionOfType } from '../util'
 import { compareUint64 } from '../util/compare-uint64'
-import { intrinsicFactory } from '../../../awst/intrinsic-factory'
 
 export type FieldMapping = Record<string, [string, PType]>
 

@@ -1,5 +1,5 @@
-import { biguint, BigUintCompat, bytes, BytesCompat, StringCompat, uint64, Uint64Compat } from './primitives'
 import { OpsNamespace } from './op-types'
+import { biguint, BigUintCompat, bytes, BytesCompat, StringCompat, uint64, Uint64Compat } from './primitives'
 import { Account, Application, Asset } from './reference'
 
 export type ExecutionContext = {

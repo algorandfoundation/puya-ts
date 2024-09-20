@@ -1,10 +1,10 @@
 import ts from 'typescript'
-import { resolveModuleNameLiterals } from './resolve-module-name-literals'
-import type { CompileOptions } from '../compile-options'
 import { SourceLocation } from '../awst/source-location'
+import type { CompileOptions } from '../compile-options'
 import { logger } from '../logger'
-import { normalisePath } from '../util'
 import type { DeliberateAny } from '../typescript-helpers'
+import { normalisePath } from '../util'
+import { resolveModuleNameLiterals } from './resolve-module-name-literals'
 
 export type SourceFileMapping = Record<string, ts.SourceFile>
 export type CreateProgramResult = {

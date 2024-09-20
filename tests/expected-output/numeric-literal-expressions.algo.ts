@@ -1,5 +1,4 @@
 import type { biguint } from '@algorandfoundation/algo-ts'
-import { uint64 } from '@algorandfoundation/algo-ts'
 
 function test_uint64() {
   // @expect-error `number` is not valid as a variable, parameter, return, or property type. Please use an algo-ts type such as `uint64` or `biguint`
