@@ -28,7 +28,6 @@ export class TupleExpressionBuilder extends InstanceExpressionBuilder<TuplePType
         index: indexNum,
         sourceLocation,
         base: this._expr,
-        wtype: itemType.wtypeOrThrow,
       }),
       itemType,
     )
@@ -41,7 +40,6 @@ export class TupleExpressionBuilder extends InstanceExpressionBuilder<TuplePType
           index: BigInt(index),
           sourceLocation: this.sourceLocation,
           base: this._expr,
-          wtype: itemType.wtypeOrThrow,
         }),
         itemType,
       ),

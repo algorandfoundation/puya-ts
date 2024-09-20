@@ -1,4 +1,5 @@
 import type { Expression, Statement } from './nodes'
+import { TupleItemExpression } from './nodes'
 import { CheckedMaybe } from './nodes'
 import { Copy } from './nodes'
 import { BooleanBinaryOperation } from './nodes'
@@ -209,6 +210,16 @@ const explicitNodeFactory = {
       comment,
       sourceLocation: expr.sourceLocation,
       wtype: expr.wtype.types[0],
+    })
+  },
+  tupleItemExpression(props: Omit<Props<TupleItemExpression>, 'wtype'>) {
+    invariant(
+      props.base.wtype instanceof WTuple && props.base.wtype.types.length > Number(props.index),
+      'expr.base must be WTuple with length greater than index',
+    )
+    return new TupleItemExpression({
+      ...props,
+      wtype: props.base.wtype.types[Number(props.index)],
     })
   },
 } satisfies { [key in keyof ConcreteNodes]?: (...args: DeliberateAny[]) => InstanceType<ConcreteNodes[key]> }

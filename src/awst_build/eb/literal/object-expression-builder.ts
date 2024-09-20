@@ -26,7 +26,6 @@ export class ObjectExpressionBuilder extends InstanceExpressionBuilder<ObjectPTy
       nodeFactory.tupleItemExpression({
         index: BigInt(propertyIndex),
         sourceLocation,
-        wtype: propertyPtype.wtypeOrThrow,
         base: this._expr,
       }),
       propertyPtype,

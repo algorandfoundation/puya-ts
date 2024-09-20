@@ -90,6 +90,7 @@ export class AssetExpressionBuilder extends Uint64BackedReferenceTypeExpressionB
         clawback: ['AssetClawback', accountPType],
         creator: ['AssetCreator', accountPType],
       },
+      fieldBoolComment: 'asset exists',
     })
   }
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {

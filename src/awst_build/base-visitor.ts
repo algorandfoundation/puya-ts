@@ -524,6 +524,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
           errorMessage,
           sourceLocation,
         )
+        // TODO: Tuples should widen to an immutable array only, but array literals are represented as tuples currently. They should have their own type
         return targetType
       }
     }
