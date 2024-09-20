@@ -1,5 +1,5 @@
 import { Contract } from '@algorandfoundation/algo-ts'
-import { AbiMethodConfig, BareMethodConfig, CreateOptions } from '@algorandfoundation/algo-ts/arc4'
+import { AbiMethodConfig, BareMethodConfig, CreateOptions, OnCompleteActionStr } from '@algorandfoundation/algo-ts/arc4'
 import { DeliberateAny } from './typescript-helpers'
 
 export interface AbiMetadata {
@@ -8,6 +8,7 @@ export interface AbiMetadata {
   argTypes: string[]
   returnType: string
   onCreate?: CreateOptions
+  allowActions?: OnCompleteActionStr[]
 }
 const AbiMetaSymbol = Symbol('AbiMetadata')
 export const attachAbiMetadata = (contract: { new (): Contract }, methodName: string, metadata: AbiMetadata): void => {
@@ -29,6 +30,7 @@ export const captureMethodConfig = <T extends Contract>(
 ): void => {
   const metadata = getAbiMetadata(contract, methodName)
   metadata.onCreate = config?.onCreate ?? 'disallow'
+  metadata.allowActions = ([] as OnCompleteActionStr[]).concat(config?.allowActions ?? 'NoOp')
 }
 
 export const hasAbiMetadata = <T extends Contract>(contract: T): boolean => {

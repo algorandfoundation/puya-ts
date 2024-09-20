@@ -2,8 +2,8 @@ import { gtxn, internal, uint64 } from '@algorandfoundation/algo-ts'
 import algosdk from 'algosdk'
 import { lazyContext } from '../context-helpers/internal-context'
 import { DecodedLogs, decodeLogs, LogDecoding } from '../decode-logs'
-import { ApplicationTransactionFields, TransactionWithLogFunc } from '../impl/transactions'
-import { asUint64 } from '../util'
+import { AllTransactionFields, ApplicationTransactionFields, TransactionWithLogFunc } from '../impl/transactions'
+import { asBigInt, asUint64 } from '../util'
 
 function ScopeGenerator(dispose: () => void) {
   function* internal() {
@@ -90,7 +90,7 @@ export class TransactionContext {
   exportLogs<const T extends [...LogDecoding[]]>(appId: uint64, ...decoding: T): DecodedLogs<T> {
     const transaction = this.groups
       .flatMap((g) => g.transactions)
-      .find((t) => t.type === gtxn.TransactionType.ApplicationCall && t.appId.id === appId)
+      .find((t) => t.type === gtxn.TransactionType.ApplicationCall && asBigInt(t.appId.id) === asBigInt(appId))
     let logs = []
     if (transaction) {
       logs = (transaction as unknown as ApplicationTransactionFields).appLogs ?? []
@@ -135,5 +135,11 @@ export class TransactionGroup {
       return appId.id
     }
     internal.errors.internalError('No app_id found in the active transaction')
+  }
+
+  patchActiveTransactionFields(fields: AllTransactionFields) {
+    const activeTransaction = this.activeTransaction as unknown as AllTransactionFields
+    const filteredFields = Object.fromEntries(Object.entries(fields).filter(([_, value]) => value !== undefined))
+    Object.assign(activeTransaction, filteredFields)
   }
 }

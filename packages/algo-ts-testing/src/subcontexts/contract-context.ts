@@ -1,5 +1,5 @@
 import { Account, Application, Asset, BaseContract, Bytes, bytes, Contract, gtxn, internal } from '@algorandfoundation/algo-ts'
-import { hasAbiMetadata } from '../abi-metadata'
+import { getAbiMetadata, hasAbiMetadata } from '../abi-metadata'
 import { lazyContext } from '../context-helpers/internal-context'
 import { AccountCls } from '../impl/account'
 import { ApplicationCls } from '../impl/application'
@@ -9,7 +9,7 @@ import { DeliberateAny } from '../typescript-helpers'
 import { extractGenericTypeArgs } from '../util'
 
 interface IConstructor<T> {
-  new (...args: DeliberateAny[]): T
+  new(...args: DeliberateAny[]): T
 }
 
 type StateTotals = Pick<Application, 'globalNumBytes' | 'globalNumUint' | 'localNumBytes' | 'localNumUint'>
@@ -99,7 +99,12 @@ export class ContractContext {
               return (...args: DeliberateAny[]): DeliberateAny => {
                 const app = lazyContext.ledger.getApplicationForContract(receiver)
                 const { transactions, ...appCallArgs } = extractArraysFromArgs(args)
-                const txns = [...(transactions ?? []), lazyContext.any.txn.applicationCall({ appId: app, ...appCallArgs })]
+                const abiMetadata = getAbiMetadata(receiver, prop as string)
+                const txns = [...(transactions ?? []), lazyContext.any.txn.applicationCall({
+                  appId: app,
+                  ...appCallArgs,
+                  onCompletion: (abiMetadata?.allowActions ?? [])[0],
+                })]
                 return lazyContext.txn.ensureScope(txns).execute(() => (orig as DeliberateAny).apply(target, args))
               }
             }
