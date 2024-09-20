@@ -29,7 +29,11 @@ const getTxnProxy = <TTxn extends gtxn.Transaction>(fields: TxnFields<TTxn>, fun
         return ((Reflect.has(funcs, property) ? funcs : fields) as TTxn)[property]
       },
       set<TProperty extends keyof TTxn>(_target: TTxn, property: TProperty, value: TTxn[TProperty]): boolean {
-        return Reflect.set(fields, property, value)
+        if (Reflect.has(fields, property)) {
+          ;(fields as TTxn)[property] = value
+          return true
+        }
+        return false
       },
     } as ProxyHandler<TTxn>,
   )
@@ -239,3 +243,10 @@ export const ApplicationTransaction = (txnFields: ApplicationTransactionFields):
 
   return getTxnProxy(fields, funcs)
 }
+
+export type AllTransactionFields = TxnFields<gtxn.PaymentTxn> &
+  TxnFields<gtxn.KeyRegistrationTxn> &
+  TxnFields<gtxn.AssetConfigTxn> &
+  TxnFields<gtxn.AssetTransferTxn> &
+  TxnFields<gtxn.AssetFreezeTxn> &
+  ApplicationTransactionFields
