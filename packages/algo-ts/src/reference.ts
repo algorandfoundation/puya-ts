@@ -3,6 +3,98 @@ import { ctxMgr } from './execution-context'
 
 export type Account = {
   readonly bytes: bytes
+
+  /**
+   * Account balance in microalgos
+   *
+   * Account must be an available resource
+   */
+  readonly balance: uint64
+
+  /**
+   * Minimum required balance for account, in microalgos
+   *
+   * Account must be an available resource
+   */
+  readonly minBalance: uint64
+
+  /**
+   * Address the account is rekeyed to
+   *
+   * Account must be an available resource
+   */
+  readonly authAddress: Account
+
+  /**
+   * The total number of uint64 values allocated by this account in Global and Local States.
+   *
+   * Account must be an available resource
+   */
+  readonly totalNumUint: uint64
+
+  /**
+   * The total number of byte array values allocated by this account in Global and Local States.
+   *
+   * Account must be an available resource
+   */
+  readonly totalNumByteSlice: uint64
+
+  /**
+   * The number of extra app code pages used by this account.
+   *
+   * Account must be an available resource
+   */
+  readonly totalExtraAppPages: uint64
+
+  /**
+   * The number of existing apps created by this account.
+   *
+   * Account must be an available resource
+   */
+  readonly totalAppsCreated: uint64
+
+  /**
+   * The number of apps this account is opted into.
+   *
+   * Account must be an available resource
+   */
+  readonly totalAppsOptedIn: uint64
+
+  /**
+   * The number of existing ASAs created by this account.
+   *
+   * Account must be an available resource
+   */
+  readonly totalAssetsCreated: uint64
+
+  /**
+   * The numbers of ASAs held by this account (including ASAs this account created).
+   *
+   * Account must be an available resource
+   */
+  readonly totalAssets: uint64
+
+  /**
+   * The number of existing boxes created by this account's app.
+   *
+   * Account must be an available resource
+   */
+  readonly totalBoxes: uint64
+
+  /**
+   * The total number of bytes used by this account's app's box keys and values.
+   *
+   * Account must be an available resource
+   */
+  readonly totalBoxBytes: uint64
+
+  /**
+   * Returns true if this account is opted in to the specified Asset or Application.
+   * Note: Account and Asset/Application must be an available resource
+   *
+   * @param assetOrApp
+   */
+  isOptedIn(assetOrApp: Asset | Application): boolean
 }
 export function Account(): Account
 export function Account(address: bytes): Account

@@ -1,17 +1,20 @@
 import type { SourceLocation } from '../../../awst/source-location'
 import type { PType } from '../../ptypes'
+import { assetPType } from '../../ptypes'
+import { applicationPType } from '../../ptypes'
+import { uint64PType } from '../../ptypes'
 import { accountPType } from '../../ptypes'
 import { bytesPType } from '../../ptypes'
 import type { BuilderComparisonOp, InstanceBuilder, NodeBuilder } from '../index'
-import { InstanceExpressionBuilder } from '../index'
 import { FunctionBuilder } from '../index'
 import { parseFunctionArgs } from '../util/arg-parsing'
 import { nodeFactory } from '../../../awst/node-factory'
 import { compareBytes } from '../util/compare-bytes'
 import { requireExpressionOfType } from '../util'
-import { BytesExpressionBuilder } from '../bytes-expression-builder'
-import { bytesWType } from '../../../awst/wtypes'
+import { boolWType, bytesWType, uint64WType, WTuple } from '../../../awst/wtypes'
 import type { Expression } from '../../../awst/nodes'
+import { ReferenceTypeExpressionBuilder } from './base'
+import { BooleanExpressionBuilder } from '../boolean-expression-builder'
 
 export class AccountFunctionBuilder extends FunctionBuilder {
   call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
@@ -33,7 +36,6 @@ export class AccountFunctionBuilder extends FunctionBuilder {
           wtype: accountPType.wtype,
           sourceLocation,
         }),
-        accountPType,
       )
     } else {
       return new AccountExpressionBuilder(
@@ -44,20 +46,43 @@ export class AccountFunctionBuilder extends FunctionBuilder {
           sourceLocation,
           wtype: accountPType.wtype,
         }),
-        accountPType,
       )
     }
   }
 }
-export class AccountExpressionBuilder extends InstanceExpressionBuilder<PType> {
+export class AccountExpressionBuilder extends ReferenceTypeExpressionBuilder {
+  constructor(expr: Expression) {
+    super(expr, {
+      backingType: bytesPType,
+      backingMember: 'bytes',
+      fieldMapping: {
+        balance: ['AcctBalance', uint64PType],
+        minBalance: ['AcctMinBalance', uint64PType],
+        authAddress: ['AcctAuthAddr', accountPType],
+        totalNumUint: ['AcctTotalNumUint', uint64PType],
+        totalNumByteSlice: ['AcctTotalNumByteSlice', uint64PType],
+        totalExtraAppPages: ['AcctTotalExtraAppPages', uint64PType],
+        totalAppsCreated: ['AcctTotalAppsCreated', uint64PType],
+        totalAppsOptedIn: ['AcctTotalAppsOptedIn', uint64PType],
+        totalAssetsCreated: ['AcctTotalAssetsCreated', uint64PType],
+        totalAssets: ['AcctTotalAssets', uint64PType],
+        totalBoxes: ['AcctTotalBoxes', uint64PType],
+        totalBoxBytes: ['AcctTotalBoxBytes', uint64PType],
+      },
+      fieldOpCode: 'acct_params_get',
+      ptype: accountPType,
+      fieldBoolComment: 'account funded',
+    })
+  }
+
   compare(other: InstanceBuilder, op: BuilderComparisonOp, sourceLocation: SourceLocation): InstanceBuilder {
     return compareBytes(this._expr, requireExpressionOfType(other, accountPType), op, sourceLocation, this.typeDescription)
   }
 
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
     switch (name) {
-      case 'bytes':
-        return new BytesExpressionBuilder(this.toBytes(sourceLocation))
+      case 'isOptedIn':
+        return new IsOptedInFunctionBuilder(this._expr, sourceLocation)
     }
     return super.memberAccess(name, sourceLocation)
   }
@@ -68,5 +93,53 @@ export class AccountExpressionBuilder extends InstanceExpressionBuilder<PType> {
       wtype: bytesWType,
       sourceLocation,
     })
+  }
+}
+
+class IsOptedInFunctionBuilder extends FunctionBuilder {
+  constructor(
+    private expr: Expression,
+    sourceLocation: SourceLocation,
+  ) {
+    super(sourceLocation)
+  }
+
+  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    const {
+      args: [applicationOrAsset],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 0,
+      callLocation: sourceLocation,
+      funcName: 'isOptedIn',
+      argSpec: (a) => [a.required(applicationPType, assetPType)],
+    })
+
+    if (applicationOrAsset.ptype.equals(assetPType)) {
+      return new BooleanExpressionBuilder(
+        nodeFactory.tupleItemExpression({
+          base: nodeFactory.intrinsicCall({
+            opCode: 'asset_holding_get',
+            immediates: ['AssetBalance'],
+            stackArgs: [this.expr, applicationOrAsset.resolve()],
+            wtype: new WTuple({ types: [uint64WType, boolWType], immutable: true }),
+            sourceLocation,
+          }),
+          index: 1n,
+          sourceLocation,
+        }),
+      )
+    } else {
+      return new BooleanExpressionBuilder(
+        nodeFactory.intrinsicCall({
+          opCode: 'app_opted_in',
+          stackArgs: [this.expr, applicationOrAsset.resolve()],
+          sourceLocation,
+          wtype: boolWType,
+          immediates: [],
+        }),
+      )
+    }
   }
 }

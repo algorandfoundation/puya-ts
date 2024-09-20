@@ -22,6 +22,7 @@ export abstract class ReferenceTypeExpressionBuilder extends InstanceExpressionB
       backingMember: string
       fieldMapping: FieldMapping
       fieldOpCode: string
+      fieldBoolComment: string
     },
   ) {
     super(expr, options.ptype)
@@ -47,7 +48,7 @@ export abstract class ReferenceTypeExpressionBuilder extends InstanceExpressionB
         wtype: new WTuple({ types: [resultType.wtypeOrThrow, boolWType], immutable: true }),
         sourceLocation,
       })
-      return instanceEb(nodeFactory.checkedMaybe({ expr: op, comment: `${this.ptype.name} exists` }), resultType)
+      return instanceEb(nodeFactory.checkedMaybe({ expr: op, comment: this.options.fieldBoolComment }), resultType)
     }
     return super.memberAccess(name, sourceLocation)
   }
@@ -61,6 +62,7 @@ export abstract class Uint64BackedReferenceTypeExpressionBuilder extends Referen
       backingMember: string
       fieldMapping: FieldMapping
       fieldOpCode: string
+      fieldBoolComment: string
     },
   ) {
     super(expr, {

@@ -50,6 +50,7 @@ export class ApplicationExpressionBuilder extends Uint64BackedReferenceTypeExpre
         creator: ['AppCreator', accountPType],
         address: ['AppAddress', accountPType],
       },
+      fieldBoolComment: 'application exists',
     })
   }
 }
