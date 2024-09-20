@@ -265,14 +265,14 @@ describe('State op codes', async () => {
       expect(appId.valueOf()).toEqual(createdApp.id.valueOf())
     })
 
-    // it('should be able to pass app call txn as app arg', async () => {
-    //   const appCallTxn = ctx.any.txn.applicationCall({
-    //     appArgs: [Bytes("some_value()uint64")],
-    //     logs: [Bytes("this is a log statement")]
-    //   })
-    //   const contract = ctx.contract.create(AppExpectingEffects)
-    //   contract.log_group(appCallTxn)
-    // })
+    it('should be able to pass app call txn as app arg', async () => {
+      const appCallTxn = ctx.any.txn.applicationCall({
+        appArgs: [Bytes("some_value()uint64")],
+        appLogs: [Bytes("this is a log statement")]
+      })
+      const contract = ctx.contract.create(AppExpectingEffects)
+      contract.log_group(appCallTxn)
+    })
 
     // TODO: uncomment when arc4 stubs are implemented
     // it('should be able to pass app call txn as app arg', async () => {

@@ -6,8 +6,12 @@ import { Mutable } from '../typescript-helpers'
 import { asBigInt, asUint64 } from '../util'
 
 export class ApplicationData {
-  application: Mutable<Omit<Application, 'id' | 'address'>>
+  application: Mutable<Omit<Application, 'id' | 'address'>> & { appLogs: bytes[] }
   isCreating: boolean = false
+
+  get appLogs() {
+    return this.application.appLogs
+  }
 
   constructor() {
     this.application = {
@@ -19,6 +23,7 @@ export class ApplicationData {
       localNumBytes: 0,
       extraProgramPages: 0,
       creator: lazyContext.defaultSender,
+      appLogs: [],
     }
   }
 }

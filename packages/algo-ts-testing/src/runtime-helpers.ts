@@ -36,6 +36,9 @@ export function binaryOp(left: unknown, right: unknown, op: BinaryOps) {
   if (left instanceof internal.primitives.Uint64Cls || right instanceof internal.primitives.Uint64Cls) {
     return uint64BinaryOp(left, right, op)
   }
+  if (left instanceof internal.primitives.BytesCls || right instanceof internal.primitives.BytesCls) {
+    return bytesBinaryOp(left, right, op)
+  }
   const lbi = tryGetBigInt(left)
   const rbi = tryGetBigInt(right)
   if (lbi !== undefined && rbi !== undefined) {
@@ -170,6 +173,33 @@ function bigUintBinaryOp(left: DeliberateAny, right: DeliberateAny, op: BinaryOp
     internal.errors.avmError('BigUint underflow')
   }
   return new internal.primitives.BigUintCls(result)
+}
+
+function bytesBinaryOp(left: DeliberateAny, right: DeliberateAny, op: BinaryOps): DeliberateAny {
+  const lbb = internal.primitives.checkBytes(internal.primitives.BytesCls.fromCompat(left).asUint8Array())
+  const rbb = internal.primitives.checkBytes(internal.primitives.BytesCls.fromCompat(right).asUint8Array())
+  const lbi = internal.encodingUtil.uint8ArrayToBigInt(lbb)
+  const rbi = internal.encodingUtil.uint8ArrayToBigInt(rbb)
+
+  const result = (function () {
+    switch (op) {
+      case '>':
+        return lbi > rbi
+      case '<':
+        return lbi < rbi
+      case '>=':
+        return lbi >= rbi
+      case '<=':
+        return lbi <= rbi
+      case '===':
+        return lbi === rbi
+      case '!==':
+        return lbi !== rbi
+      default:
+        internal.errors.internalError(`Unsupported operator ${op}`)
+    }
+  })()
+  return result
 }
 
 function defaultBinaryOp(left: DeliberateAny, right: DeliberateAny, op: BinaryOps): DeliberateAny {

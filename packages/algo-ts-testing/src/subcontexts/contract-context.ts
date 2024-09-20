@@ -9,7 +9,7 @@ import { DeliberateAny } from '../typescript-helpers'
 import { extractGenericTypeArgs } from '../util'
 
 interface IConstructor<T> {
-  new(...args: DeliberateAny[]): T
+  new (...args: DeliberateAny[]): T
 }
 
 type StateTotals = Pick<Application, 'globalNumBytes' | 'globalNumUint' | 'localNumBytes' | 'localNumUint'>
@@ -63,8 +63,7 @@ const extractArraysFromArgs = (args: DeliberateAny[]) => {
   for (const arg of args) {
     if ((arg as gtxn.Transaction).type in gtxn.TransactionType) {
       transactions.push(arg as gtxn.Transaction)
-    }
-    else if (arg instanceof AccountCls) {
+    } else if (arg instanceof AccountCls) {
       accounts.push(arg as Account)
     } else if (arg instanceof ApplicationCls) {
       apps.push(arg as Application)

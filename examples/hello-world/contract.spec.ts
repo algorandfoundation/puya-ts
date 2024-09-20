@@ -1,7 +1,7 @@
 import { Bytes } from '@algorandfoundation/algo-ts'
+import { TestExecutionContext } from '@algorandfoundation/algo-ts-testing'
 import { afterEach, describe, expect, it } from 'vitest'
 import HelloWorldContract from './contract.algo'
-import { TestExecutionContext } from '@algorandfoundation/algo-ts-testing'
 
 describe('When calling the HelloWorldContract', () => {
   const ctx = new TestExecutionContext()
