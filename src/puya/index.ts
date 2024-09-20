@@ -56,10 +56,8 @@ export function invokePuya({
   optionsFile.writeFileSync(new SnakeCaseSerializer().serialize(puyaOptions))
 
   runChildProc({
-    command: 'poetry.exe',
+    command: 'puya.exe',
     args: [
-      'run',
-      'puya',
       '--options',
       optionsFile.filePath,
       `--awst`,
@@ -69,7 +67,6 @@ export function invokePuya({
       '--log-level',
       getPuyaLogLevel(compileOptions.logLevel),
     ],
-    cwd: 'c:\\source\\algorand\\puya\\',
   })
 }
 
