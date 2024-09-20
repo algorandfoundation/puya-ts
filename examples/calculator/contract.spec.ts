@@ -1,8 +1,8 @@
 import { internal, op, Uint64 } from '@algorandfoundation/algo-ts'
 import { afterEach, describe, expect, it } from 'vitest'
 
-import MyContract from './contract.algo'
 import { TestExecutionContext } from '@algorandfoundation/algo-ts-testing'
+import MyContract from './contract.algo'
 
 describe('Calculator', () => {
   const ctx = new TestExecutionContext()

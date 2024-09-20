@@ -1,10 +1,8 @@
 import { Account, Application, Asset, bytes, Bytes, gtxn, internal, Uint64 } from '@algorandfoundation/algo-ts'
+import { MAX_ITEMS_IN_LOG } from '../constants'
 import { lazyContext } from '../context-helpers/internal-context'
 import { FunctionKeys, Mutable, ObjectKeys } from '../typescript-helpers'
-import { asNumber, getRandomBytes } from '../util'
-
-export type TxnFields<TTxn> = Partial<Mutable<Pick<TTxn, ObjectKeys<TTxn>>>>
-export type TxnFuncs<TTxn> = Pick<TTxn, FunctionKeys<TTxn>>
+import { asBytes, asNumber, getRandomBytes } from '../util'
 
 const baseDefaultFields = () => ({
   sender: lazyContext.defaultSender,
@@ -19,6 +17,9 @@ const baseDefaultFields = () => ({
   txnId: getRandomBytes(32).asAlgoTs(),
   rekeyTo: Account(),
 })
+
+export type TxnFields<TTxn> = Partial<Mutable<Pick<TTxn, ObjectKeys<TTxn>>>>
+export type TxnFuncs<TTxn> = Pick<TTxn, FunctionKeys<TTxn>>
 
 const getTxnProxy = <TTxn extends gtxn.Transaction>(fields: TxnFields<TTxn>, funcs: TxnFuncs<TTxn>) => {
   return new Proxy(
@@ -126,6 +127,9 @@ export const AssetFreezeTransaction = (txnFields: TxnFields<gtxn.AssetFreezeTxn>
   return getTxnProxy(fields, {} as TxnFuncs<gtxn.AssetFreezeTxn>)
 }
 
+export type TransactionWithLogFunc = {
+  appendLog: (value: internal.primitives.StubBytesCompat) => void
+}
 export type ApplicationTransactionFields = TxnFields<gtxn.ApplicationTxn> &
   Partial<{
     appArgs: Array<bytes>
@@ -134,8 +138,9 @@ export type ApplicationTransactionFields = TxnFields<gtxn.ApplicationTxn> &
     apps: Array<Application>
     approvalProgramPages: Array<bytes>
     clearStateProgramPages: Array<bytes>
+    appLogs: Array<bytes>
   }>
-export const ApplicationTransaction = (txnFields: ApplicationTransactionFields) => {
+export const ApplicationTransaction = (txnFields: ApplicationTransactionFields): gtxn.ApplicationTxn & TransactionWithLogFunc => {
   const defaultFields: Required<typeof txnFields> = {
     ...baseDefaultFields(),
     type: gtxn.TransactionType.ApplicationCall,
@@ -165,6 +170,7 @@ export const ApplicationTransaction = (txnFields: ApplicationTransactionFields) 
     apps: [],
     approvalProgramPages: [],
     clearStateProgramPages: [],
+    appLogs: [],
   }
   const fields: Required<typeof txnFields> = {
     ...defaultFields,
@@ -193,14 +199,14 @@ export const ApplicationTransaction = (txnFields: ApplicationTransactionFields) 
       return Uint64(this.clearStateProgramPages.length)
     },
     get numLogs() {
-      return Uint64(lazyContext.txn.logs(this.appId.id).length)
+      return Uint64(this.appLogs.length || lazyContext.getApplicationData(this.appId.id).appLogs.length)
     },
     get lastLog() {
-      return lazyContext.txn.logs(this.appId.id).at(-1) ?? Bytes()
+      return this.appLogs.at(-1) ?? lazyContext.getApplicationData(this.appId.id).appLogs.at(-1) ?? Bytes()
     },
     ...txnFields,
   }
-  const funcs: TxnFuncs<gtxn.ApplicationTxn> = {
+  const funcs: TxnFuncs<gtxn.ApplicationTxn> & TransactionWithLogFunc = {
     appArgs(index: internal.primitives.StubUint64Compat): bytes {
       return fields.appArgs[asNumber(index)]
     },
@@ -220,7 +226,14 @@ export const ApplicationTransaction = (txnFields: ApplicationTransactionFields) 
       return fields.clearStateProgramPages[asNumber(index)]
     },
     logs(index: internal.primitives.StubUint64Compat): bytes {
-      return lazyContext.txn.logs(fields.appId.id)[asNumber(index)] ?? Bytes()
+      const i = asNumber(index)
+      return fields.appLogs[i] ?? lazyContext.getApplicationData(fields.appId.id).appLogs ?? Bytes()
+    },
+    appendLog(value: internal.primitives.StubBytesCompat): void {
+      if (fields.appLogs.length + 1 > MAX_ITEMS_IN_LOG) {
+        throw internal.errors.internalError(`Too many log calls in program, up to ${MAX_ITEMS_IN_LOG} is allowed`)
+      }
+      fields.appLogs.push(asBytes(value))
     },
   }
 

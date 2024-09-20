@@ -1,8 +1,9 @@
-import { bytes, gtxn, internal, uint64 } from '@algorandfoundation/algo-ts'
+import { gtxn, internal, uint64 } from '@algorandfoundation/algo-ts'
 import algosdk from 'algosdk'
-import { MAX_ITEMS_IN_LOG } from '../constants'
+import { lazyContext } from '../context-helpers/internal-context'
 import { DecodedLogs, decodeLogs, LogDecoding } from '../decode-logs'
-import { asBigInt, asBytes, asUint64 } from '../util'
+import { ApplicationTransactionFields, TransactionWithLogFunc } from '../impl/transactions'
+import { asUint64 } from '../util'
 
 function ScopeGenerator(dispose: () => void) {
   function* internal() {
@@ -28,7 +29,6 @@ interface ExecutionScope {
 export class TransactionContext {
   readonly groups: TransactionGroup[] = []
   #activeGroup: TransactionGroup | undefined
-  #applicationLogs: Map<bigint, bytes[]> = new Map()
 
   createScope(group: gtxn.Transaction[], activeTransactionIndex?: number): ExecutionScope {
     const transactionGroup = new TransactionGroup(group, activeTransactionIndex)
@@ -84,24 +84,20 @@ export class TransactionContext {
     if (activeTransaction.type !== gtxn.TransactionType.ApplicationCall) {
       throw internal.errors.internalError('Can only add logs to ApplicationCallTransaction!')
     }
-    const applicationId = asBigInt(activeTransaction.appId.id)
-    if (!this.#applicationLogs.has(applicationId)) {
-      this.#applicationLogs.set(applicationId, [])
-    }
-    const logs = this.#applicationLogs.get(applicationId)!
-    if (logs.length + 1 > MAX_ITEMS_IN_LOG) {
-      throw internal.errors.internalError(`Too many log calls in program, up to ${MAX_ITEMS_IN_LOG} is allowed`)
-    }
-    logs.push(asBytes(value))
-  }
-
-  logs(appId: internal.primitives.StubUint64Compat): bytes[] {
-    return this.#applicationLogs.get(asBigInt(appId)) ?? []
+    ;(activeTransaction as unknown as TransactionWithLogFunc).appendLog(value)
   }
 
   exportLogs<const T extends [...LogDecoding[]]>(appId: uint64, ...decoding: T): DecodedLogs<T> {
-    const applicationLogs = this.#applicationLogs.get(asBigInt(appId)) ?? []
-    const rawLogs = applicationLogs.map((l) => internal.primitives.toExternalValue(l))
+    const transaction = this.groups
+      .flatMap((g) => g.transactions)
+      .find((t) => t.type === gtxn.TransactionType.ApplicationCall && t.appId.id === appId)
+    let logs = []
+    if (transaction) {
+      logs = (transaction as unknown as ApplicationTransactionFields).appLogs ?? []
+    } else {
+      logs = lazyContext.getApplicationData(appId).appLogs
+    }
+    const rawLogs = logs.map((l) => internal.primitives.toExternalValue(l))
     return decodeLogs(rawLogs, decoding)
   }
 }
