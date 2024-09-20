@@ -13,14 +13,14 @@ export function buildLibAwst(): AWST[] {
     line: 1,
     endLine: 1,
     column: 0,
-    endColumn: 0,
+    endColumn: 1,
   })
   const sourceLocationBase = new SourceLocation({
     file: Constants.baseContractModuleName,
     line: 1,
     endLine: 1,
     column: 0,
-    endColumn: 0,
+    endColumn: 1,
   })
   const contractCref = ContractReference.fromPType(arc4BaseContractType)
   const baseContractCref = ContractReference.fromPType(baseContractType)

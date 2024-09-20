@@ -28,6 +28,7 @@ import { ContractMethodVisitor } from './contract-method-visitor'
 import { ContractSuperBuilder } from './eb/contract-builder'
 import { ConstructorVisitor } from './constructor-visitor'
 import { BoxProxyExpressionBuilder } from './eb/storage/box'
+import { LocalStateExpressionBuilder, LocalStateFunctionResultBuilder } from './eb/storage/local-state'
 
 export class ContractVisitor extends BaseVisitor implements Visitor<ClassElements, void> {
   private _ctor?: ContractMethod
@@ -330,13 +331,13 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
           }),
         )
       }
-    } else if (initializer instanceof BoxProxyExpressionBuilder) {
+    } else if (initializer instanceof BoxProxyExpressionBuilder || initializer instanceof LocalStateFunctionResultBuilder) {
       this.context.addStorageDeclaration(
         initializer.buildStorageDeclaration(propertyName, this.sourceLocation(node.name), this._contractPType),
       )
+    } else {
+      logger.error(initializer.sourceLocation, `Unsupported property type ${initializer.typeDescription}`)
     }
-
-    return
   }
   visitSemicolonClassElement(node: ts.SemicolonClassElement): void {
     // Ignore

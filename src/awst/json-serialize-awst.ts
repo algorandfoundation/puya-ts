@@ -5,6 +5,7 @@ import { buildBase85Encoder } from '../util/base-85'
 import { SourceLocation } from './source-location'
 import { invariant } from '../util'
 import path from 'node:path'
+import { Constants } from '../constants'
 export class SnakeCaseSerializer<T> {
   constructor(private readonly spaces = 2) {}
   public serialize(obj: T): string {
@@ -57,14 +58,19 @@ export class AwstSerializer extends SnakeCaseSerializer<RootNode[]> {
       return value.toString()
     }
     if (value instanceof SourceLocation) {
+      let filePath: string = value.file
       if (this.options?.sourcePaths === 'absolute') {
-        invariant(this.options.programDirectory, 'Program directory must be supplied for absoluate paths')
-        return {
-          ...value,
-          file: path.join(this.options.programDirectory, value.file),
-        } satisfies SourceLocation
+        invariant(this.options.programDirectory, 'Program directory must be supplied for absolute paths')
+        if (value.file.startsWith(Constants.algoTsPackage)) {
+          filePath = path.join(this.options.programDirectory, 'node_modules', value.file)
+        } else {
+          filePath = path.join(this.options.programDirectory, value.file)
+        }
       }
-      return value
+      return {
+        ...(super.serializerFunction(key, value) as object),
+        file: filePath,
+      }
     }
     if (value instanceof Uint8Array) {
       return this.b85.encode(value)

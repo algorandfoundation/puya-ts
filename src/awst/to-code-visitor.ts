@@ -1,13 +1,10 @@
-import * as nodes from './nodes'
 import type { AppStorageDefinition, ContractMemberNodeVisitor, ExpressionVisitor, RootNodeVisitor, StatementVisitor } from './nodes'
-import { InstanceSuperMethodTarget } from './nodes'
-import { ContractMethodTarget, InstanceMethodTarget, SubroutineID } from './nodes'
-import { AppStorageKind, BytesEncoding } from './nodes'
+import * as nodes from './nodes'
+import { AppStorageKind, BytesEncoding, ContractMethodTarget, InstanceMethodTarget, InstanceSuperMethodTarget, SubroutineID } from './nodes'
 import { TodoError } from '../errors'
 import { logger } from '../logger'
-import { uint8ArrayToUtf8 } from '../util'
+import { uint8ArrayToBase32, uint8ArrayToUtf8 } from '../util'
 import { Buffer } from 'node:buffer'
-import { uint8ArrayToBase32 } from '../util'
 import { boolWType } from './wtypes'
 
 function printBytes(value: Uint8Array, encoding: BytesEncoding) {
@@ -166,7 +163,7 @@ export class ToCodeVisitor
     return `GlobalState[${expression.key.accept(this)}]`
   }
   visitAppAccountStateExpression(expression: nodes.AppAccountStateExpression): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    return `LocalState[${expression.account.accept(this)}][${expression.key.accept(this)}]`
   }
   visitSingleEvaluation(expression: nodes.SingleEvaluation): string {
     if (this.#singleEval.has(expression.id)) {

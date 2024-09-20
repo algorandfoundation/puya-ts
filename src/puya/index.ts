@@ -55,6 +55,10 @@ export function invokePuya({
   logger.debug(undefined, `Write options to ${optionsFile.filePath}`)
   optionsFile.writeFileSync(new SnakeCaseSerializer().serialize(puyaOptions))
 
+  logger.debug(
+    undefined,
+    `Invoking puya: puya.exe --options ${optionsFile.filePath} --awst ${moduleAwstFile.filePath} --source-annotations ${moduleSourceFile.filePath}`,
+  )
   runChildProc({
     command: 'puya.exe',
     args: [
@@ -67,6 +71,7 @@ export function invokePuya({
       '--log-level',
       getPuyaLogLevel(compileOptions.logLevel),
     ],
+    cwd: programDirectory,
   })
 }
 
