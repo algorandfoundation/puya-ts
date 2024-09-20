@@ -8,10 +8,10 @@ import { defaultPuyaOptions } from '../../src/puya/options'
 describe('Approvals', () => {
   const result = compile(
     buildCompileOptions({
-      outputAwstJson: true,
-      outputAwst: true,
+      outputAwstJson: false,
+      outputAwst: false,
       paths: ['tests/approvals'],
-      outDir: '',
+      outDir: 'out',
       dryRun: true,
       logLevel: LogLevel.Debug,
     }),

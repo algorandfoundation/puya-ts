@@ -36,10 +36,9 @@ export class GlobalStateFunctionBuilder extends FunctionBuilder {
           key: a.optional(stringPType, bytesPType),
         }),
       ],
-      funcName: 'GlobalState function',
+      funcName: this.typeDescription,
       callLocation: sourceLocation,
     })
-    codeInvariant(contentPType, `Generic type 'ValueType' is required if not providing an initial value`)
     const ptype = new GlobalStateType({ content: contentPType })
 
     return new GlobalStateFunctionResultBuilder(extractKey(key, stateKeyWType), ptype, {

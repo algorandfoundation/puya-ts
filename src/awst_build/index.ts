@@ -50,6 +50,8 @@ export function buildAwst({ program, sourceFiles }: CreateProgramResult, options
         logger.error(SourceLocation.fromFile(sourceFile, program.getCurrentDirectory()), e.message)
       } else if (e instanceof Error) {
         logger.error(e)
+      } else {
+        logger.error(undefined, `Unknown error: ${e}`)
       }
     }
   }

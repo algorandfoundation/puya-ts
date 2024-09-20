@@ -17,6 +17,7 @@ export function GlobalState<ValueType>(options?: { key?: bytes | string; initial
 export type LocalStateForAccount<ValueType> = {
   value: ValueType
   hasValue: boolean
+  delete: () => void
 }
 
 export type LocalState<ValueType> = {

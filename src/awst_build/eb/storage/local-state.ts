@@ -1,19 +1,18 @@
-import type { NodeBuilder } from '../index'
-import { FunctionBuilder, InstanceBuilder, InstanceExpressionBuilder } from '../index'
+import { FunctionBuilder, InstanceBuilder, InstanceExpressionBuilder, NodeBuilder } from '../index'
 import type { SourceLocation } from '../../../awst/source-location'
-import type { PType } from '../../ptypes'
-import { bytesPType } from '../../ptypes'
+import type { ContractClassPType, PType } from '../../ptypes'
+import { accountPType, bytesPType, LocalStateType, stringPType } from '../../ptypes'
 import type { AppStateExpression, Expression, LValue } from '../../../awst/nodes'
 import { BytesConstant } from '../../../awst/nodes'
-import type { ContractClassPType } from '../../ptypes'
-import { LocalStateType } from '../../ptypes'
 import { codeInvariant, invariant } from '../../../util'
 import { CodeError } from '../../../errors'
-import { ObjectLiteralExpressionBuilder } from '../literal/object-literal-expression-builder'
-import { requireExpressionOfType } from '../util'
 import { nodeFactory } from '../../../awst/node-factory'
 import { AppStorageDeclaration } from '../../contract-data'
-import { typeRegistry } from '../../type-registry'
+import { instanceEb } from '../../type-registry'
+import { extractKey } from './util'
+import { stateKeyWType, voidWType } from '../../../awst/wtypes'
+import { parseFunctionArgs } from '../util/arg-parsing'
+import { VoidExpressionBuilder } from '../void-expression-builder'
 
 export class LocalStateFunctionBuilder extends FunctionBuilder {
   constructor(sourceLocation: SourceLocation) {
@@ -22,25 +21,22 @@ export class LocalStateFunctionBuilder extends FunctionBuilder {
 
   call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
     const [contentPType] = typeArgs
-    let key: Expression | undefined = undefined
-    switch (args.length) {
-      case 0:
-        break
-      case 1: {
-        const [arg0] = args
-        codeInvariant(arg0 instanceof ObjectLiteralExpressionBuilder, 'Expected object literal')
-
-        if (arg0.hasProperty('key')) {
-          key = requireExpressionOfType(arg0.memberAccess('key', sourceLocation), bytesPType)
-        }
-        break
-      }
-      default:
-        throw CodeError.unexpectedUnhandledArgs({ sourceLocation })
-    }
-    codeInvariant(contentPType, `Generic type 'ValueType' is required if not providing an initial value`)
+    const {
+      args: [{ key }],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 1,
+      argSpec: (a) => [
+        a.obj({
+          key: a.optional(stringPType, bytesPType),
+        }),
+      ],
+      funcName: this.typeDescription,
+      callLocation: sourceLocation,
+    })
     const ptype = new LocalStateType({ content: contentPType })
-    return new LocalStateFunctionResultBuilder(key, ptype, { sourceLocation })
+    return new LocalStateFunctionResultBuilder(extractKey(key, stateKeyWType), ptype, { sourceLocation })
   }
 }
 
@@ -50,22 +46,84 @@ export class LocalStateExpressionBuilder extends InstanceExpressionBuilder<Local
     super(expr, ptype)
   }
 
-  memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
-    switch (name) {
-      case 'value':
-        // TODO: use value proxy
-        return typeRegistry.getInstanceEb(this.buildField(sourceLocation), this.ptype.contentType)
-    }
-    return super.memberAccess(name, sourceLocation)
+  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    const {
+      args: [account],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 0,
+      callLocation: sourceLocation,
+      funcName: 'LocalState',
+      argSpec: (a) => [a.required(accountPType)],
+    })
+
+    return new LocalStateForAccountExpressionBuilder(this.buildField(account.resolve(), sourceLocation), this.ptype.contentType)
   }
 
-  private buildField(sourceLocation: SourceLocation): AppStateExpression {
-    return nodeFactory.appStateExpression({
+  private buildField(account: Expression, sourceLocation: SourceLocation): AppStateExpression {
+    return nodeFactory.appAccountStateExpression({
       key: this._expr,
+      account,
       wtype: this.ptype.contentType.wtypeOrThrow,
       existsAssertionMessage: 'check LocalState exists',
       sourceLocation,
     })
+  }
+}
+
+export class LocalStateForAccountExpressionBuilder extends NodeBuilder {
+  ptype: undefined
+
+  constructor(
+    private key: AppStateExpression,
+    private contentType: PType,
+  ) {
+    super(key.sourceLocation)
+  }
+
+  memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
+    switch (name) {
+      case 'value':
+        // TODO: use value proxy
+        return instanceEb(
+          nodeFactory.appStateExpression({
+            ...this.key,
+            sourceLocation,
+          }),
+          this.contentType,
+        )
+      case 'delete':
+        return new LocalStateDeleteFunctionBuilder(this.key, sourceLocation)
+    }
+    return super.memberAccess(name, sourceLocation)
+  }
+}
+
+class LocalStateDeleteFunctionBuilder extends FunctionBuilder {
+  constructor(
+    private key: AppStateExpression,
+    sourceLocation: SourceLocation,
+  ) {
+    super(sourceLocation)
+  }
+
+  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 0,
+      callLocation: sourceLocation,
+      funcName: 'LocalState.delete',
+      argSpec: () => [],
+    })
+    return new VoidExpressionBuilder(
+      nodeFactory.stateDelete({
+        field: this.key,
+        sourceLocation,
+        wtype: voidWType,
+      }),
+    )
   }
 }
 
@@ -81,22 +139,19 @@ export class LocalStateFunctionResultBuilder extends InstanceBuilder<LocalStateT
   resolveLValue(): LValue {
     throw CodeError.invalidAssignmentTarget({ name: this.typeDescription, sourceLocation: this.sourceLocation })
   }
-  private _ptype: LocalStateType
+
   private _expr: Expression | undefined
   constructor(expr: Expression | undefined, ptype: PType, config: { sourceLocation: SourceLocation }) {
     const sourceLocation = expr?.sourceLocation ?? config?.sourceLocation
     invariant(sourceLocation, 'Must have expression or config')
     super(sourceLocation)
     invariant(ptype instanceof LocalStateType, 'ptype must be LocalStateType')
-    this._ptype = ptype
     this._expr = expr
+    this.ptype = ptype
   }
+  readonly ptype: LocalStateType
 
-  get ptype(): LocalStateType {
-    return this._ptype
-  }
-
-  buildStorageDefinition(memberName: string, memberLocation: SourceLocation, contractType: ContractClassPType): AppStorageDeclaration {
+  buildStorageDeclaration(memberName: string, memberLocation: SourceLocation, contractType: ContractClassPType): AppStorageDeclaration {
     if (this._expr)
       codeInvariant(
         this._expr instanceof BytesConstant,
@@ -104,7 +159,7 @@ export class LocalStateFunctionResultBuilder extends InstanceBuilder<LocalStateT
       )
     return new AppStorageDeclaration({
       sourceLocation: memberLocation,
-      ptype: this._ptype,
+      ptype: this.ptype,
       memberName: memberName,
       keyOverride: this._expr ?? null,
       description: null,
