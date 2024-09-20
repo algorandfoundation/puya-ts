@@ -1,213 +1,219 @@
-import { Account, Application, Asset, bytes, gtxn, internal, uint64 } from '@algorandfoundation/algo-ts'
+import { Account, Application, arc4, Asset, bytes, gtxn, internal, uint64 } from '@algorandfoundation/algo-ts'
 import { lazyContext } from '../context-helpers/internal-context'
+import { asNumber, asUint64, asUint64Cls } from '../util'
 
+const getTransaction = <T extends gtxn.Transaction>(t: internal.primitives.StubUint64Compat): T => {
+  const transactions = lazyContext.activeGroup.transactions
+  const index = asNumber(t)
+  if (index >= transactions.length) {
+    throw new internal.errors.InternalError('invalid group index')
+  }
+  return transactions[index] as T
+}
 export const GTxn: internal.opTypes.GTxnType = {
-  sender(_t: uint64): Account {
-    throw new Error('TODO')
+  sender(t: internal.primitives.StubUint64Compat): Account {
+    return getTransaction(t).sender
   },
-  fee(_t: uint64): uint64 {
-    throw new Error('TODO')
+  fee(t: internal.primitives.StubUint64Compat): uint64 {
+    return getTransaction(t).fee
   },
-  firstValid(_t: uint64): uint64 {
-    throw new Error('TODO')
+  firstValid(t: internal.primitives.StubUint64Compat): uint64 {
+    return getTransaction(t).firstValid
   },
-  firstValidTime(_t: uint64): uint64 {
-    throw new Error('TODO')
+  firstValidTime(t: internal.primitives.StubUint64Compat): uint64 {
+    return getTransaction(t).firstValidTime
   },
-  lastValid(_t: uint64): uint64 {
-    throw new Error('TODO')
+  lastValid(t: internal.primitives.StubUint64Compat): uint64 {
+    return getTransaction(t).lastValid
   },
-  note(_t: uint64): bytes {
-    throw new Error('TODO')
+  note(t: internal.primitives.StubUint64Compat): bytes {
+    return getTransaction(t).note
   },
-  lease(_t: uint64): bytes {
-    throw new Error('TODO')
+  lease(t: internal.primitives.StubUint64Compat): bytes {
+    return getTransaction(t).lease
   },
-  receiver(_t: uint64): Account {
-    throw new Error('TODO')
+  receiver(t: internal.primitives.StubUint64Compat): Account {
+    return getTransaction<gtxn.PaymentTxn>(t).receiver
   },
   amount(t: uint64): uint64 {
-    const i = internal.primitives.Uint64Cls.getNumber(t)
-    const currentTransactionGroup = lazyContext.activeGroup.transactions
-    return (currentTransactionGroup[i] as gtxn.PaymentTxn).amount
+    return getTransaction<gtxn.PaymentTxn>(t).amount
   },
-  closeRemainderTo(_t: uint64): Account {
-    throw new Error('TODO')
+  closeRemainderTo(t: internal.primitives.StubUint64Compat): Account {
+    return getTransaction<gtxn.PaymentTxn>(t).closeRemainderTo
   },
-  votePk(_t: uint64): bytes {
-    throw new Error('TODO')
+  votePk(t: internal.primitives.StubUint64Compat): bytes {
+    return getTransaction<gtxn.KeyRegistrationTxn>(t).voteKey
   },
-  selectionPk(_t: uint64): bytes {
-    throw new Error('TODO')
+  selectionPk(t: internal.primitives.StubUint64Compat): bytes {
+    return getTransaction<gtxn.KeyRegistrationTxn>(t).selectionKey
   },
-  voteFirst(_t: uint64): uint64 {
-    throw new Error('TODO')
+  voteFirst(t: internal.primitives.StubUint64Compat): uint64 {
+    return getTransaction<gtxn.KeyRegistrationTxn>(t).voteFirst
   },
-  voteLast(_t: uint64): uint64 {
-    throw new Error('TODO')
+  voteLast(t: internal.primitives.StubUint64Compat): uint64 {
+    return getTransaction<gtxn.KeyRegistrationTxn>(t).voteLast
   },
-  voteKeyDilution(_t: uint64): uint64 {
-    throw new Error('TODO')
+  voteKeyDilution(t: internal.primitives.StubUint64Compat): uint64 {
+    return getTransaction<gtxn.KeyRegistrationTxn>(t).voteKeyDilution
   },
-  type(_t: uint64): bytes {
-    throw new Error('TODO')
+  type(t: internal.primitives.StubUint64Compat): bytes {
+    return asUint64Cls(getTransaction(t).type).toBytes().asAlgoTs()
   },
   typeEnum(t: uint64): uint64 {
-    const i = internal.primitives.Uint64Cls.getNumber(t)
-    const currentTransactionGroup = lazyContext.activeGroup.transactions
-    return currentTransactionGroup[i].type
+    return asUint64(getTransaction(t).type)
   },
-  xferAsset(_t: uint64): Asset {
-    throw new Error('TODO')
+  xferAsset(t: internal.primitives.StubUint64Compat): Asset {
+    return getTransaction<gtxn.AssetTransferTxn>(t).xferAsset
   },
-  assetAmount(_t: uint64): uint64 {
-    throw new Error('TODO')
+  assetAmount(t: internal.primitives.StubUint64Compat): uint64 {
+    return getTransaction<gtxn.AssetTransferTxn>(t).assetAmount
   },
-  assetSender(_t: uint64): Account {
-    throw new Error('TODO')
+  assetSender(t: internal.primitives.StubUint64Compat): Account {
+    return getTransaction<gtxn.AssetTransferTxn>(t).assetSender
   },
-  assetReceiver(_t: uint64): Account {
-    throw new Error('TODO')
+  assetReceiver(t: internal.primitives.StubUint64Compat): Account {
+    return getTransaction<gtxn.AssetTransferTxn>(t).assetReceiver
   },
-  assetCloseTo(_t: uint64): Account {
-    throw new Error('TODO')
+  assetCloseTo(t: internal.primitives.StubUint64Compat): Account {
+    return getTransaction<gtxn.AssetTransferTxn>(t).assetCloseTo
   },
-  groupIndex(_t: uint64): uint64 {
-    throw new Error('TODO')
+  groupIndex(t: internal.primitives.StubUint64Compat): uint64 {
+    return getTransaction(t).groupIndex
   },
-  txId(_t: uint64): bytes {
-    throw new Error('TODO')
+  txId(t: internal.primitives.StubUint64Compat): bytes {
+    return getTransaction(t).txnId
   },
-  applicationId(_t: uint64): Application {
-    throw new Error('TODO')
+  applicationId(t: internal.primitives.StubUint64Compat): Application {
+    return getTransaction<gtxn.ApplicationTxn>(t).appId
   },
-  onCompletion(_t: uint64): uint64 {
-    throw new Error('TODO')
+  onCompletion(t: internal.primitives.StubUint64Compat): uint64 {
+    const onCompletionStr = getTransaction<gtxn.ApplicationTxn>(t).onCompletion
+    return asUint64(arc4.OnCompleteAction[onCompletionStr])
   },
-  applicationArgs(_a: uint64, _b: uint64): bytes {
-    throw new Error('TODO')
+  applicationArgs(a: internal.primitives.StubUint64Compat, b: internal.primitives.StubUint64Compat): bytes {
+    return getTransaction<gtxn.ApplicationTxn>(a).appArgs(asUint64(b))
   },
-  numAppArgs(_t: uint64): uint64 {
-    throw new Error('TODO')
+  numAppArgs(t: internal.primitives.StubUint64Compat): uint64 {
+    return getTransaction<gtxn.ApplicationTxn>(t).numAppArgs
   },
-  accounts(_a: uint64, _b: uint64): Account {
-    throw new Error('TODO')
+  accounts(a: internal.primitives.StubUint64Compat, b: internal.primitives.StubUint64Compat): Account {
+    return getTransaction<gtxn.ApplicationTxn>(a).accounts(asUint64(b))
   },
-  numAccounts(_t: uint64): uint64 {
-    throw new Error('TODO')
+  numAccounts(t: internal.primitives.StubUint64Compat): uint64 {
+    return getTransaction<gtxn.ApplicationTxn>(t).numAccounts
   },
-  approvalProgram(_t: uint64): bytes {
-    throw new Error('TODO')
+  approvalProgram(t: internal.primitives.StubUint64Compat): bytes {
+    return getTransaction<gtxn.ApplicationTxn>(t).approvalProgram
   },
-  clearStateProgram(_t: uint64): bytes {
-    throw new Error('TODO')
+  clearStateProgram(t: internal.primitives.StubUint64Compat): bytes {
+    return getTransaction<gtxn.ApplicationTxn>(t).clearStateProgram
   },
-  rekeyTo(_t: uint64): Account {
-    throw new Error('TODO')
+  rekeyTo(t: internal.primitives.StubUint64Compat): Account {
+    return getTransaction(t).rekeyTo
   },
-  configAsset(_t: uint64): Asset {
-    throw new Error('TODO')
+  configAsset(t: internal.primitives.StubUint64Compat): Asset {
+    return getTransaction<gtxn.AssetConfigTxn>(t).configAsset
   },
-  configAssetTotal(_t: uint64): uint64 {
-    throw new Error('TODO')
+  configAssetTotal(t: internal.primitives.StubUint64Compat): uint64 {
+    return getTransaction<gtxn.AssetConfigTxn>(t).total
   },
-  configAssetDecimals(_t: uint64): uint64 {
-    throw new Error('TODO')
+  configAssetDecimals(t: internal.primitives.StubUint64Compat): uint64 {
+    return getTransaction<gtxn.AssetConfigTxn>(t).decimals
   },
-  configAssetDefaultFrozen(_t: uint64): boolean {
-    throw new Error('TODO')
+  configAssetDefaultFrozen(t: internal.primitives.StubUint64Compat): boolean {
+    return getTransaction<gtxn.AssetConfigTxn>(t).defaultFrozen
   },
-  configAssetUnitName(_t: uint64): bytes {
-    throw new Error('TODO')
+  configAssetUnitName(t: internal.primitives.StubUint64Compat): bytes {
+    return getTransaction<gtxn.AssetConfigTxn>(t).unitName
   },
-  configAssetName(_t: uint64): bytes {
-    throw new Error('TODO')
+  configAssetName(t: internal.primitives.StubUint64Compat): bytes {
+    return getTransaction<gtxn.AssetConfigTxn>(t).assetName
   },
-  configAssetUrl(_t: uint64): bytes {
-    throw new Error('TODO')
+  configAssetUrl(t: internal.primitives.StubUint64Compat): bytes {
+    return getTransaction<gtxn.AssetConfigTxn>(t).url
   },
-  configAssetMetadataHash(_t: uint64): bytes {
-    throw new Error('TODO')
+  configAssetMetadataHash(t: internal.primitives.StubUint64Compat): bytes {
+    return getTransaction<gtxn.AssetConfigTxn>(t).metadataHash
   },
-  configAssetManager(_t: uint64): Account {
-    throw new Error('TODO')
+  configAssetManager(t: internal.primitives.StubUint64Compat): Account {
+    return getTransaction<gtxn.AssetConfigTxn>(t).manager
   },
-  configAssetReserve(_t: uint64): Account {
-    throw new Error('TODO')
+  configAssetReserve(t: internal.primitives.StubUint64Compat): Account {
+    return getTransaction<gtxn.AssetConfigTxn>(t).reserve
   },
-  configAssetFreeze(_t: uint64): Account {
-    throw new Error('TODO')
+  configAssetFreeze(t: internal.primitives.StubUint64Compat): Account {
+    return getTransaction<gtxn.AssetConfigTxn>(t).freeze
   },
-  configAssetClawback(_t: uint64): Account {
-    throw new Error('TODO')
+  configAssetClawback(t: internal.primitives.StubUint64Compat): Account {
+    return getTransaction<gtxn.AssetConfigTxn>(t).clawback
   },
-  freezeAsset(_t: uint64): Asset {
-    throw new Error('TODO')
+  freezeAsset(t: internal.primitives.StubUint64Compat): Asset {
+    return getTransaction<gtxn.AssetFreezeTxn>(t).freezeAsset
   },
-  freezeAssetAccount(_t: uint64): Account {
-    throw new Error('TODO')
+  freezeAssetAccount(t: internal.primitives.StubUint64Compat): Account {
+    return getTransaction<gtxn.AssetFreezeTxn>(t).freezeAccount
   },
-  freezeAssetFrozen(_t: uint64): boolean {
-    throw new Error('TODO')
+  freezeAssetFrozen(t: internal.primitives.StubUint64Compat): boolean {
+    return getTransaction<gtxn.AssetFreezeTxn>(t).frozen
   },
-  assets(_a: uint64, _b: uint64): Asset {
-    throw new Error('TODO')
+  assets(a: internal.primitives.StubUint64Compat, b: internal.primitives.StubUint64Compat): Asset {
+    return getTransaction<gtxn.ApplicationTxn>(a).assets(asUint64(b))
   },
-  numAssets(_t: uint64): uint64 {
-    throw new Error('TODO')
+  numAssets(t: internal.primitives.StubUint64Compat): uint64 {
+    return getTransaction<gtxn.ApplicationTxn>(t).numAssets
   },
-  applications(_a: uint64, _b: uint64): Application {
-    throw new Error('TODO')
+  applications(a: internal.primitives.StubUint64Compat, b: internal.primitives.StubUint64Compat): Application {
+    return getTransaction<gtxn.ApplicationTxn>(a).apps(asUint64(b))
   },
-  numApplications(_t: uint64): uint64 {
-    throw new Error('TODO')
+  numApplications(t: internal.primitives.StubUint64Compat): uint64 {
+    return getTransaction<gtxn.ApplicationTxn>(t).numApps
   },
-  globalNumUint(_t: uint64): uint64 {
-    throw new Error('TODO')
+  globalNumUint(t: internal.primitives.StubUint64Compat): uint64 {
+    return getTransaction<gtxn.ApplicationTxn>(t).globalNumUint
   },
-  globalNumByteSlice(_t: uint64): uint64 {
-    throw new Error('TODO')
+  globalNumByteSlice(t: internal.primitives.StubUint64Compat): uint64 {
+    return getTransaction<gtxn.ApplicationTxn>(t).globalNumBytes
   },
-  localNumUint(_t: uint64): uint64 {
-    throw new Error('TODO')
+  localNumUint(t: internal.primitives.StubUint64Compat): uint64 {
+    return getTransaction<gtxn.ApplicationTxn>(t).localNumUint
   },
-  localNumByteSlice(_t: uint64): uint64 {
-    throw new Error('TODO')
+  localNumByteSlice(t: internal.primitives.StubUint64Compat): uint64 {
+    return getTransaction<gtxn.ApplicationTxn>(t).localNumBytes
   },
-  extraProgramPages(_t: uint64): uint64 {
-    throw new Error('TODO')
+  extraProgramPages(t: internal.primitives.StubUint64Compat): uint64 {
+    return getTransaction<gtxn.ApplicationTxn>(t).extraProgramPages
   },
-  nonparticipation(_t: uint64): boolean {
-    throw new Error('TODO')
+  nonparticipation(t: internal.primitives.StubUint64Compat): boolean {
+    return getTransaction<gtxn.KeyRegistrationTxn>(t).nonParticipation
   },
-  logs(_a: uint64, _b: uint64): bytes {
-    throw new Error('TODO')
+  logs(a: internal.primitives.StubUint64Compat, b: internal.primitives.StubUint64Compat): bytes {
+    return getTransaction<gtxn.ApplicationTxn>(a).logs(asUint64(b))
   },
-  numLogs(_t: uint64): uint64 {
-    throw new Error('TODO')
+  numLogs(t: internal.primitives.StubUint64Compat): uint64 {
+    return getTransaction<gtxn.ApplicationTxn>(t).numLogs
   },
-  createdAssetId(_t: uint64): Asset {
-    throw new Error('TODO')
+  createdAssetId(t: internal.primitives.StubUint64Compat): Asset {
+    return getTransaction<gtxn.AssetConfigTxn>(t).createdAsset
   },
-  createdApplicationId(_t: uint64): Application {
-    throw new Error('TODO')
+  createdApplicationId(t: internal.primitives.StubUint64Compat): Application {
+    return getTransaction<gtxn.ApplicationTxn>(t).createdApp
   },
-  lastLog(_t: uint64): bytes {
-    throw new Error('TODO')
+  lastLog(t: internal.primitives.StubUint64Compat): bytes {
+    return getTransaction<gtxn.ApplicationTxn>(t).lastLog
   },
-  stateProofPk(_t: uint64): bytes {
-    throw new Error('TODO')
+  stateProofPk(t: internal.primitives.StubUint64Compat): bytes {
+    return getTransaction<gtxn.KeyRegistrationTxn>(t).stateProofKey
   },
-  approvalProgramPages(_a: uint64, _b: uint64): bytes {
-    throw new Error('TODO')
+  approvalProgramPages(a: internal.primitives.StubUint64Compat, b: internal.primitives.StubUint64Compat): bytes {
+    return getTransaction<gtxn.ApplicationTxn>(a).approvalProgramPages(asUint64(b))
   },
-  numApprovalProgramPages(_t: uint64): uint64 {
-    throw new Error('TODO')
+  numApprovalProgramPages(t: internal.primitives.StubUint64Compat): uint64 {
+    return getTransaction<gtxn.ApplicationTxn>(t).numApprovalProgramPages
   },
-  clearStateProgramPages(_a: uint64, _b: uint64): bytes {
-    throw new Error('TODO')
+  clearStateProgramPages(a: internal.primitives.StubUint64Compat, b: internal.primitives.StubUint64Compat): bytes {
+    return getTransaction<gtxn.ApplicationTxn>(a).clearStateProgramPages(asUint64(b))
   },
-  numClearStateProgramPages(_t: uint64): uint64 {
-    throw new Error('TODO')
+  numClearStateProgramPages(t: internal.primitives.StubUint64Compat): uint64 {
+    return getTransaction<gtxn.ApplicationTxn>(t).numClearStateProgramPages
   },
 }
