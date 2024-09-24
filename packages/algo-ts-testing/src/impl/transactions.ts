@@ -151,8 +151,8 @@ export const ApplicationTransaction = (txnFields: ApplicationTransactionFields):
     accounts: txnFields.accounts ?? [],
     assets: txnFields.assets ?? [],
     apps: txnFields.apps ?? [],
-    approvalProgramPages: txnFields.approvalProgramPages ?? [],
-    clearStateProgramPages: txnFields.clearStateProgramPages ?? [],
+    approvalProgramPages: txnFields.approvalProgramPages ?? (txnFields.approvalProgram ? [txnFields.approvalProgram] : []),
+    clearStateProgramPages: txnFields.clearStateProgramPages ?? (txnFields.clearStateProgram ? [txnFields.clearStateProgram] : []),
   }
   const txn: gtxn.ApplicationTxn & TransactionWithLogFunc = {
     ...baseDefaultFields(),

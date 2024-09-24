@@ -114,10 +114,7 @@ export class TransactionGroup {
         `Transaction group can have at most ${algosdk.AtomicTransactionComposer.MAX_GROUP_SIZE} transactions, as per AVM limits.`,
       )
     }
-    transactions = transactions.map((txn, index) => ({
-      ...txn,
-      groupIndex: asUint64(index),
-    }))
+    transactions.forEach((txn, index) => Object.assign(txn, { groupIndex: asUint64(index) }))
     this.activeTransactionIndex = activeTransactionIndex === undefined ? transactions.length - 1 : activeTransactionIndex
     this.transactions = transactions
   }
