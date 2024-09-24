@@ -1,6 +1,6 @@
-import * as base32 from 'hi-base32'
 import type { biguint, BigUintCompat, bytes, BytesCompat, uint64, Uint64Compat } from '../index'
 import { DeliberateAny } from '../typescript-helpers'
+import { base32ToUint8Array } from './base-32'
 import { bigIntToUint8Array, uint8ArrayToBigInt, uint8ArrayToUtf8, utf8ToUint8Array } from './encoding-util'
 import { avmError, AvmError, internalError } from './errors'
 import { nameOfType } from './name-of-type'
@@ -283,7 +283,7 @@ export class BytesCls extends AlgoTsPrimitiveCls {
   }
 
   static fromBase32(b32: string): BytesCls {
-    return new BytesCls(Uint8Array.from(base32.decode.asBytes(b32)))
+    return new BytesCls(base32ToUint8Array(b32))
   }
 
   toUint64(): Uint64Cls {

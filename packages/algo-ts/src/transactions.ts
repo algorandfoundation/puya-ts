@@ -92,10 +92,6 @@ interface TransactionBase {
 
 export interface PaymentTxn extends TransactionBase {
   /**
-   * Transaction type as integer
-   */
-  type: TransactionType.Payment
-  /**
    * 32 byte address
    */
   readonly receiver: Account
@@ -117,10 +113,6 @@ export interface PaymentTxn extends TransactionBase {
 }
 
 export interface KeyRegistrationTxn extends TransactionBase {
-  /**
-   * Transaction type as integer
-   */
-  type: TransactionType.KeyRegistration
   /**
    * 32 byte address
    */
@@ -162,10 +154,6 @@ export interface KeyRegistrationTxn extends TransactionBase {
 }
 
 export interface AssetConfigTxn extends TransactionBase {
-  /**
-   * Transaction type as integer
-   */
-  type: TransactionType.AssetConfig
   /**
    * Asset ID in asset config transaction
    */
@@ -238,10 +226,6 @@ export interface AssetConfigTxn extends TransactionBase {
 
 export interface AssetTransferTxn extends TransactionBase {
   /**
-   * Transaction type as integer
-   */
-  type: TransactionType.AssetTransfer
-  /**
    * Asset ID
    */
   readonly xferAsset: Asset
@@ -273,10 +257,6 @@ export interface AssetTransferTxn extends TransactionBase {
 
 export interface AssetFreezeTxn extends TransactionBase {
   /**
-   * Transaction type as integer
-   */
-  type: TransactionType.AssetFreeze
-  /**
    * Asset ID being frozen or un-frozen
    */
   readonly freezeAsset: Asset
@@ -297,11 +277,6 @@ export interface AssetFreezeTxn extends TransactionBase {
 }
 
 export interface ApplicationTxn extends TransactionBase {
-  /**
-   * Transaction type as integer
-   */
-  type: TransactionType.ApplicationCall
-
   /**
    * ApplicationID from ApplicationCall transaction
    */
@@ -380,12 +355,12 @@ export interface ApplicationTxn extends TransactionBase {
   /**
    * Number of logs
    */
-  numLogs: uint64
+  readonly numLogs: uint64
 
   /**
    * ApplicationID allocated by the creation of an application
    */
-  createdApp: Application
+  readonly createdApp: Application
 
   /**
    * Number of Approval Program pages

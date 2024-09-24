@@ -1,4 +1,3 @@
-import * as base32 from 'hi-base32'
 import { TextDecoder } from 'node:util'
 import { AvmError } from './errors'
 
@@ -51,4 +50,4 @@ export const uint8ArrayToBase64 = (value: Uint8Array): string => Buffer.from(val
 
 export const uint8ArrayToBase64Url = (value: Uint8Array): string => Buffer.from(value).toString('base64url')
 
-export const uint8ArrayToBase32 = (value: Uint8Array): string => base32.encode(value)
+export { uint8ArrayToBase32 } from './base-32'
