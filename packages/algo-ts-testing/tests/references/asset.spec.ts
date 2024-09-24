@@ -1,9 +1,9 @@
-import { describe, expect, it, test, afterEach } from "vitest";
-import { TestExecutionContext } from "../../src";
-import { AssetCls } from "../../src/impl/asset";
-import { Account, Asset, Bytes, Uint64 } from "@algorandfoundation/algo-ts";
-import { asBytes, asUint64 } from "../../src/util";
-import { asUint8Array } from "../util";
+import { Account, Bytes, Uint64 } from '@algorandfoundation/algo-ts'
+import { afterEach, describe, expect, it, test } from 'vitest'
+import { TestExecutionContext } from '../../src'
+import { AssetCls } from '../../src/impl/asset'
+import { asBytes, asUint64 } from '../../src/util'
+import { asUint8Array } from '../util'
 
 describe('Asset', () => {
   const ctx = new TestExecutionContext()
@@ -41,10 +41,7 @@ describe('Asset', () => {
     expect(() => asset.balance(account)).toThrowError('The asset is not opted into the account!')
   })
 
-  test.each([
-    true,
-    false
-  ])('can have frozen status set and retrieved', (defaultFrozen) => {
+  test.each([true, false])('can have frozen status set and retrieved', (defaultFrozen) => {
     const asset = ctx.any.asset({ defaultFrozen })
     const account = ctx.any.account({ optedAssetBalances: new Map([[asset.id, 0n]]) })
 
@@ -56,9 +53,9 @@ describe('Asset', () => {
       total: asUint64(1000000),
       decimals: asUint64(6),
       defaultFrozen: false,
-      unitName: asBytes("TEST"),
-      name: asBytes("Test Asset"),
-      url: asBytes("https://test.com"),
+      unitName: asBytes('TEST'),
+      name: asBytes('Test Asset'),
+      url: asBytes('https://test.com'),
       metadataHash: Bytes(new Uint8Array(Array(32).fill(0x00))),
       manager: Account(),
       freeze: Account(),

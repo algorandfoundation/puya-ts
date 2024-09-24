@@ -3,11 +3,12 @@ import { createHash } from 'crypto'
 
 export const padUint8Array = (arr: Uint8Array, padSize: number): Uint8Array => {
   const paddedUint8Array = new Uint8Array(arr.length + padSize).fill(0)
-  arr.forEach((v, i) => paddedUint8Array[padSize + i] = v)
+  arr.forEach((v, i) => (paddedUint8Array[padSize + i] = v))
   return paddedUint8Array
 }
 
-export const asUint8Array = (value: internal.primitives.StubBytesCompat): Uint8Array => internal.primitives.BytesCls.fromCompat(value).asUint8Array()
+export const asUint8Array = (value: internal.primitives.StubBytesCompat): Uint8Array =>
+  internal.primitives.BytesCls.fromCompat(value).asUint8Array()
 
 export const base64Encode = (value: Uint8Array | string): bytes => Bytes(Buffer.from(value).toString('base64'))
 
@@ -22,4 +23,5 @@ export const getPaddedUint8Array = (padSize: number, value: internal.primitives.
   return result
 }
 
-export const intToBytes = (value: internal.primitives.StubBigUintCompat): internal.primitives.BytesCls => internal.primitives.BigUintCls.fromCompat(value).toBytes()
+export const intToBytes = (value: internal.primitives.StubBigUintCompat): internal.primitives.BytesCls =>
+  internal.primitives.BigUintCls.fromCompat(value).toBytes()

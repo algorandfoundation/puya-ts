@@ -1,21 +1,33 @@
-import { Account, bytes, Bytes, internal, op, uint64, Uint64 } from '@algorandfoundation/algo-ts';
-import { AppSpec } from '@algorandfoundation/algokit-utils/types/app-spec';
-import { afterEach, describe, expect, it, test } from 'vitest';
-import { TestExecutionContext } from '../src';
-import { generateTestAccount, generateTestAsset, getAlgorandAppClient, getAlgorandAppClientWithApp, getAvmResult, getLocalNetDefaultAccount, INITIAL_BALANCE_MICRO_ALGOS } from './avm-invoker';
+import { Account, bytes, Bytes, internal, op, uint64, Uint64 } from '@algorandfoundation/algo-ts'
+import { AppSpec } from '@algorandfoundation/algokit-utils/types/app-spec'
+import { afterEach, describe, expect, it, test } from 'vitest'
+import { TestExecutionContext } from '../src'
+import {
+  generateTestAccount,
+  generateTestAsset,
+  getAlgorandAppClient,
+  getAlgorandAppClientWithApp,
+  getAvmResult,
+  getLocalNetDefaultAccount,
+  INITIAL_BALANCE_MICRO_ALGOS,
+} from './avm-invoker'
 
-import { AlgoAmount } from '@algorandfoundation/algokit-utils/types/amount';
-import { ZERO_ADDRESS } from '../src/constants';
-import { AccountCls } from '../src/impl/account';
-import { asBigInt, asNumber } from '../src/util';
-import { AppExpectingEffects } from './artifacts/created-app-asset/contract.algo';
-import { StateAcctParamsGetContract, StateAppParamsContract, StateAssetHoldingContract, StateAssetParamsContract } from './artifacts/state-ops/contract.algo';
-import acctParamsAppSpecJson from './artifacts/state-ops/data/StateAcctParamsGetContract.arc32.json';
-import appParamsAppSpecJson from './artifacts/state-ops/data/StateAppParamsContract.arc32.json';
-import assetHoldingAppSpecJson from './artifacts/state-ops/data/StateAssetHoldingContract.arc32.json';
-import assetParamsAppSpecJson from './artifacts/state-ops/data/StateAssetParamsContract.arc32.json';
-import { asUint8Array } from './util';
-
+import { AlgoAmount } from '@algorandfoundation/algokit-utils/types/amount'
+import { ZERO_ADDRESS } from '../src/constants'
+import { AccountCls } from '../src/impl/account'
+import { asBigInt, asNumber } from '../src/util'
+import { AppExpectingEffects } from './artifacts/created-app-asset/contract.algo'
+import {
+  StateAcctParamsGetContract,
+  StateAppParamsContract,
+  StateAssetHoldingContract,
+  StateAssetParamsContract,
+} from './artifacts/state-ops/contract.algo'
+import acctParamsAppSpecJson from './artifacts/state-ops/data/StateAcctParamsGetContract.arc32.json'
+import appParamsAppSpecJson from './artifacts/state-ops/data/StateAppParamsContract.arc32.json'
+import assetHoldingAppSpecJson from './artifacts/state-ops/data/StateAssetHoldingContract.arc32.json'
+import assetParamsAppSpecJson from './artifacts/state-ops/data/StateAssetParamsContract.arc32.json'
+import { asUint8Array } from './util'
 
 describe('State op codes', async () => {
   const ctx = new TestExecutionContext()
@@ -29,18 +41,18 @@ describe('State op codes', async () => {
     const dummyAccount = await generateTestAccount()
 
     test.each([
-      ["verify_acct_balance", INITIAL_BALANCE_MICRO_ALGOS + 100_000],
-      ["verify_acct_min_balance", 100_000],
-      ["verify_acct_auth_addr", ZERO_ADDRESS],
-      ["verify_acct_total_num_uint", 0],
-      ["verify_acct_total_num_byte_slice", 0],
-      ["verify_acct_total_extra_app_pages", 0],
-      ["verify_acct_total_apps_created", 0],
-      ["verify_acct_total_apps_opted_in", 0],
-      ["verify_acct_total_assets_created", 0],
-      ["verify_acct_total_assets", 0],
-      ["verify_acct_total_boxes", 0],
-      ["verify_acct_total_box_bytes", 0],
+      ['verify_acct_balance', INITIAL_BALANCE_MICRO_ALGOS + 100_000],
+      ['verify_acct_min_balance', 100_000],
+      ['verify_acct_auth_addr', ZERO_ADDRESS],
+      ['verify_acct_total_num_uint', 0],
+      ['verify_acct_total_num_byte_slice', 0],
+      ['verify_acct_total_extra_app_pages', 0],
+      ['verify_acct_total_apps_created', 0],
+      ['verify_acct_total_apps_opted_in', 0],
+      ['verify_acct_total_assets_created', 0],
+      ['verify_acct_total_assets', 0],
+      ['verify_acct_total_boxes', 0],
+      ['verify_acct_total_box_bytes', 0],
     ])('should return the correct field value of the account', async (methodName, expectedValue) => {
       const mockAccount = ctx.any.account({
         address: dummyAccount.addr,
@@ -76,15 +88,15 @@ describe('State op codes', async () => {
     const [appClient, app] = await getAlgorandAppClientWithApp(appParamsAppSpecJson as AppSpec)
     const dummyAccount = await getLocalNetDefaultAccount()
     test.each([
-      ["verify_app_params_get_approval_program", undefined],
-      ["verify_app_params_get_clear_state_program", undefined],
-      ["verify_app_params_get_global_num_uint", 0],
-      ["verify_app_params_get_global_num_byte_slice", 0],
-      ["verify_app_params_get_local_num_uint", 0],
-      ["verify_app_params_get_local_num_byte_slice", 0],
-      ["verify_app_params_get_extra_program_pages", 0],
-      ["verify_app_params_get_creator", "app.creator"],
-      ["verify_app_params_get_address", "app.address"],
+      ['verify_app_params_get_approval_program', undefined],
+      ['verify_app_params_get_clear_state_program', undefined],
+      ['verify_app_params_get_global_num_uint', 0],
+      ['verify_app_params_get_global_num_byte_slice', 0],
+      ['verify_app_params_get_local_num_uint', 0],
+      ['verify_app_params_get_local_num_byte_slice', 0],
+      ['verify_app_params_get_extra_program_pages', 0],
+      ['verify_app_params_get_creator', 'app.creator'],
+      ['verify_app_params_get_address', 'app.address'],
     ])('should return the correct field value of the application', async (methodName, expectedValue) => {
       const application = ctx.any.application({
         applicationId: app.appId,
@@ -106,7 +118,8 @@ describe('State op codes', async () => {
         expect([...asUint8Array(mockResult)]).toEqual(avmResult)
       } else if (mockResult instanceof AccountCls) {
         expect(mockResult.bytes.valueOf()).toEqual(avmResult)
-        const expected = expectedValue === 'app.creator' ? application.creator : expectedValue === 'app.address' ? application.address : undefined
+        const expected =
+          expectedValue === 'app.creator' ? application.creator : expectedValue === 'app.address' ? application.address : undefined
         if (expected) {
           expect(mockResult.bytes.valueOf()).toEqual(expected.bytes.valueOf())
         }
@@ -128,13 +141,13 @@ describe('State op codes', async () => {
         creator: dummyAccount,
         total: 100,
         decimals: 0,
-        frozenByDefault: false
+        frozenByDefault: false,
       })
       const avmResult = await getAvmResult({ appClient }, methodName, dummyAccount.addr, asBigInt(dummyAsset))
 
       const mockAsset = ctx.any.asset()
       const mockAccount = ctx.any.account({
-        optedAssetBalances: new Map([[mockAsset.id, 100]])
+        optedAssetBalances: new Map([[mockAsset.id, 100]]),
       })
       const mockContract = ctx.contract.create(StateAssetHoldingContract)
       const mockResult = mockContract[methodName as keyof StateAssetHoldingContract](mockAccount, mockAsset)
@@ -154,27 +167,27 @@ describe('State op codes', async () => {
     const dummyAccount = await getLocalNetDefaultAccount()
 
     test.each([
-      ["verify_asset_params_get_total", 100n],
-      ["verify_asset_params_get_decimals", 0n],
-      ["verify_asset_params_get_default_frozen", false],
-      ["verify_asset_params_get_unit_name", Bytes("UNIT")],
-      ["verify_asset_params_get_name", Bytes("TEST")],
-      ["verify_asset_params_get_url", Bytes("https://algorand.co")],
-      ["verify_asset_params_get_metadata_hash", Bytes("test" + " ".repeat(28))],
-      ["verify_asset_params_get_manager", ZERO_ADDRESS],
-      ["verify_asset_params_get_reserve", ZERO_ADDRESS],
-      ["verify_asset_params_get_freeze", ZERO_ADDRESS],
-      ["verify_asset_params_get_clawback", ZERO_ADDRESS],
-      ["verify_asset_params_get_creator", "creator"],
+      ['verify_asset_params_get_total', 100n],
+      ['verify_asset_params_get_decimals', 0n],
+      ['verify_asset_params_get_default_frozen', false],
+      ['verify_asset_params_get_unit_name', Bytes('UNIT')],
+      ['verify_asset_params_get_name', Bytes('TEST')],
+      ['verify_asset_params_get_url', Bytes('https://algorand.co')],
+      ['verify_asset_params_get_metadata_hash', Bytes(`test${' '.repeat(28)}`)],
+      ['verify_asset_params_get_manager', ZERO_ADDRESS],
+      ['verify_asset_params_get_reserve', ZERO_ADDRESS],
+      ['verify_asset_params_get_freeze', ZERO_ADDRESS],
+      ['verify_asset_params_get_clawback', ZERO_ADDRESS],
+      ['verify_asset_params_get_creator', 'creator'],
     ])('should return the correct field value of the asset', async (methodName, expectedValue) => {
       const creator = dummyAccount.addr
-      const metadataHash = Bytes("test" + " ".repeat(28))
+      const metadataHash = Bytes(`test${' '.repeat(28)}`)
       const mockAsset = ctx.any.asset({
         total: Uint64(100),
         decimals: Uint64(0),
-        name: Bytes("TEST"),
-        unitName: Bytes("UNIT"),
-        url: Bytes("https://algorand.co"),
+        name: Bytes('TEST'),
+        unitName: Bytes('UNIT'),
+        url: Bytes('https://algorand.co'),
         metadataHash: metadataHash,
         creator: Account(Bytes(creator)),
       })
@@ -184,9 +197,9 @@ describe('State op codes', async () => {
         total: 100,
         decimals: 0,
         frozenByDefault: false,
-        name: "TEST",
-        unit: "UNIT",
-        url: "https://algorand.co",
+        name: 'TEST',
+        unit: 'UNIT',
+        url: 'https://algorand.co',
         metadataHash: metadataHash.toString(),
       })
 
@@ -203,8 +216,7 @@ describe('State op codes', async () => {
 
         const expectedString = expectedValue === 'creator' ? creator : (expectedValue as bytes).valueOf()
         expect(mockResult.bytes.valueOf()).toEqual(expectedString)
-      }
-      else {
+      } else {
         expect(mockResult.valueOf()).toEqual(avmResult)
         expect(mockResult.valueOf()).toEqual(expectedValue)
       }
@@ -267,8 +279,8 @@ describe('State op codes', async () => {
 
     it('should be able to pass app call txn as app arg', async () => {
       const appCallTxn = ctx.any.txn.applicationCall({
-        appArgs: [Bytes("some_value()uint64")],
-        appLogs: [Bytes("this is a log statement")]
+        appArgs: [Bytes('some_value()uint64')],
+        appLogs: [Bytes('this is a log statement')],
       })
       const contract = ctx.contract.create(AppExpectingEffects)
       contract.log_group(appCallTxn)

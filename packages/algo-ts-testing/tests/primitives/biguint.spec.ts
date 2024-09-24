@@ -1,43 +1,50 @@
-import { biguint, BigUint, Bytes, internal, Uint64 } from '@algorandfoundation/algo-ts';
-import { AppSpec } from '@algorandfoundation/algokit-utils/types/app-spec';
-import { describe, expect, it } from 'vitest';
-import { MAX_UINT512, MAX_UINT64 } from '../../src/constants';
-import appSpecJson from '../artifacts/primitive-ops/data/PrimitiveOpsContract.arc32.json';
-import { getAlgorandAppClient, getAvmResult, getAvmResultRaw } from '../avm-invoker';
+import { biguint, BigUint, Bytes, internal, Uint64 } from '@algorandfoundation/algo-ts'
+import { AppSpec } from '@algorandfoundation/algokit-utils/types/app-spec'
+import { describe, expect, it } from 'vitest'
+import { MAX_UINT512, MAX_UINT64 } from '../../src/constants'
+import appSpecJson from '../artifacts/primitive-ops/data/PrimitiveOpsContract.arc32.json'
+import { getAlgorandAppClient, getAvmResult, getAvmResultRaw } from '../avm-invoker'
 
 const asBigUint = (val: bigint | number) => (typeof val === 'bigint' ? BigUint(val) : BigUint(val))
 
 describe('BigUint', async () => {
   const appClient = await getAlgorandAppClient(appSpecJson as AppSpec)
 
-  describe.each([
-    'eq',
-    'ne',
-    'lt',
-    'le',
-    'gt',
-    'ge',
-  ])('logical operators', async (op) => {
+  describe.each(['eq', 'ne', 'lt', 'le', 'gt', 'ge'])('logical operators', async (op) => {
     const operator = (function () {
       switch (op) {
-        case 'eq': return '==='
-        case 'ne': return '!=='
-        case 'lt': return '<'
-        case 'le': return '<='
-        case 'gt': return '>'
-        case 'ge': return '>='
-        default: throw new Error(`Unknown operator: ${op}`)
+        case 'eq':
+          return '==='
+        case 'ne':
+          return '!=='
+        case 'lt':
+          return '<'
+        case 'le':
+          return '<='
+        case 'gt':
+          return '>'
+        case 'ge':
+          return '>='
+        default:
+          throw new Error(`Unknown operator: ${op}`)
       }
     })()
     const getStubResult = (a: number | bigint | biguint, b: number | bigint | biguint) => {
       switch (operator) {
-        case '===': return a === b
-        case '!==': return a !== b
-        case '<': return a < b
-        case '<=': return a <= b
-        case '>': return a > b
-        case '>=': return a >= b
-        default: throw new Error(`Unknown operator: ${op}`)
+        case '===':
+          return a === b
+        case '!==':
+          return a !== b
+        case '<':
+          return a < b
+        case '<=':
+          return a <= b
+        case '>':
+          return a > b
+        case '>=':
+          return a >= b
+        default:
+          throw new Error(`Unknown operator: ${op}`)
       }
     }
     describe.each([
@@ -113,11 +120,11 @@ describe('BigUint', async () => {
     ])(`${operator} with uint64`, async (a, b) => {
       const bigUintA = asBigUint(a)
       const bytesA = internal.encodingUtil.bigIntToUint8Array(bigUintA.valueOf())
-      const uintB = (typeof b === 'bigint') ? Uint64(b) : Uint64(b)
+      const uintB = typeof b === 'bigint' ? Uint64(b) : Uint64(b)
 
       it(`${a} ${operator} ${b}`, async () => {
-        let avmResult = await getAvmResult<boolean>({ appClient }, `verify_biguint_${op}_uint64`, bytesA, b)
-        let result = getStubResult(bigUintA, uintB)
+        const avmResult = await getAvmResult<boolean>({ appClient }, `verify_biguint_${op}_uint64`, bytesA, b)
+        const result = getStubResult(bigUintA, uintB)
         expect(result, `for values: ${a}, ${b}`).toBe(avmResult)
       })
     })
@@ -135,14 +142,15 @@ describe('BigUint', async () => {
       const bigUintB = BigUint(Bytes(bytesB))
 
       it(`${a} ${operator} ${b}`, async () => {
-        await expect(getAvmResult<boolean>({ appClient }, `verify_biguint_${op}`, bytesA, bytesB)).rejects.toThrow('math attempted on large byte-array')
+        await expect(getAvmResult<boolean>({ appClient }, `verify_biguint_${op}`, bytesA, bytesB)).rejects.toThrow(
+          'math attempted on large byte-array',
+        )
         expect(() => getStubResult(bigUintA, bigUintB)).toThrow('BigUint over or underflow')
 
         expect(() => getStubResult(a, bigUintB)).toThrow('BigUint over or underflow')
 
         expect(() => getStubResult(bigUintA, b)).toThrow('BigUint over or underflow')
       })
-
     })
   })
 
@@ -184,7 +192,6 @@ describe('BigUint', async () => {
     [MAX_UINT512, 1],
     [1, MAX_UINT512],
     [MAX_UINT512, MAX_UINT512],
-
   ])('addition result overflow', async (a, b) => {
     it(`${a} + ${b}`, async () => {
       const bigUintA = asBigUint(a)
@@ -220,7 +227,9 @@ describe('BigUint', async () => {
     const bigUintB = BigUint(Bytes(bytesB))
 
     it(`${a} + ${b}`, async () => {
-      await expect(getAvmResultRaw({ appClient }, 'verify_biguint_add', bytesA, bytesB)).rejects.toThrow('math attempted on large byte-array')
+      await expect(getAvmResultRaw({ appClient }, 'verify_biguint_add', bytesA, bytesB)).rejects.toThrow(
+        'math attempted on large byte-array',
+      )
       expect(() => bigUintA + bigUintB).toThrow('BigUint over or underflow')
 
       if (typeof a === 'bigint') {
@@ -302,7 +311,9 @@ describe('BigUint', async () => {
     const bigUintB = BigUint(Bytes(bytesB))
 
     it(`${a} - ${b}`, async () => {
-      await expect(getAvmResultRaw({ appClient }, 'verify_biguint_sub', bytesA, bytesB)).rejects.toThrow('math attempted on large byte-array')
+      await expect(getAvmResultRaw({ appClient }, 'verify_biguint_sub', bytesA, bytesB)).rejects.toThrow(
+        'math attempted on large byte-array',
+      )
       expect(() => bigUintA - bigUintB).toThrow('BigUint over or underflow')
 
       if (typeof a === 'bigint') {
@@ -349,7 +360,7 @@ describe('BigUint', async () => {
   describe.each([
     [MAX_UINT512, 2],
     [MAX_UINT512, MAX_UINT512],
-    [MAX_UINT512 / 2n, 3]
+    [MAX_UINT512 / 2n, 3],
   ])(`multiplication result overflow`, async (a, b) => {
     it(`${a} * ${b}`, async () => {
       const bigUintA = asBigUint(a)
@@ -385,7 +396,9 @@ describe('BigUint', async () => {
       const bigUintA = BigUint(Bytes(bytesA))
       const bigUintB = BigUint(Bytes(bytesB))
 
-      await expect(getAvmResultRaw({ appClient }, 'verify_biguint_mul', bytesA, bytesB)).rejects.toThrow('math attempted on large byte-array')
+      await expect(getAvmResultRaw({ appClient }, 'verify_biguint_mul', bytesA, bytesB)).rejects.toThrow(
+        'math attempted on large byte-array',
+      )
       expect(() => bigUintA * bigUintB).toThrow('BigUint over or underflow')
 
       if (typeof a === 'bigint') {
@@ -429,11 +442,7 @@ describe('BigUint', async () => {
     })
   })
 
-  describe.each([
-    0,
-    1,
-    MAX_UINT512,
-  ])(`division by zero`, async (a) => {
+  describe.each([0, 1, MAX_UINT512])(`division by zero`, async (a) => {
     it(`${a} / 0`, async () => {
       const bigUintA = asBigUint(a)
       const bigUintB = asBigUint(0)
@@ -461,7 +470,9 @@ describe('BigUint', async () => {
       const bigUintA = BigUint(Bytes(bytesA))
       const bigUintB = BigUint(Bytes(bytesB))
 
-      await expect(getAvmResultRaw({ appClient }, 'verify_biguint_div', bytesA, bytesB)).rejects.toThrow('math attempted on large byte-array')
+      await expect(getAvmResultRaw({ appClient }, 'verify_biguint_div', bytesA, bytesB)).rejects.toThrow(
+        'math attempted on large byte-array',
+      )
       expect(() => bigUintA / bigUintB).toThrow('BigUint over or underflow')
 
       if (typeof a === 'bigint') {
@@ -505,11 +516,7 @@ describe('BigUint', async () => {
     })
   })
 
-  describe.each([
-    0,
-    1,
-    MAX_UINT512,
-  ])(`modulo by zero`, async (a) => {
+  describe.each([0, 1, MAX_UINT512])(`modulo by zero`, async (a) => {
     it(`${a} % 0`, async () => {
       const bigUintA = asBigUint(a)
       const bigUintB = asBigUint(0)
@@ -537,7 +544,9 @@ describe('BigUint', async () => {
       const bigUintA = BigUint(Bytes(bytesA))
       const bigUintB = BigUint(Bytes(bytesB))
 
-      await expect(getAvmResultRaw({ appClient }, 'verify_biguint_mod', bytesA, bytesB)).rejects.toThrow('math attempted on large byte-array')
+      await expect(getAvmResultRaw({ appClient }, 'verify_biguint_mod', bytesA, bytesB)).rejects.toThrow(
+        'math attempted on large byte-array',
+      )
       expect(() => bigUintA % bigUintB).toThrow('BigUint over or underflow')
 
       if (typeof a === 'bigint') {
@@ -550,26 +559,29 @@ describe('BigUint', async () => {
     })
   })
 
-  describe.each([
-    'and',
-    'or',
-    'xor',
-  ])('bitwise operators', async (op) => {
-
+  describe.each(['and', 'or', 'xor'])('bitwise operators', async (op) => {
     const operator = (function () {
       switch (op) {
-        case 'and': return '&'
-        case 'or': return '|'
-        case 'xor': return '^'
-        default: throw new Error(`Unknown operator: ${op}`)
+        case 'and':
+          return '&'
+        case 'or':
+          return '|'
+        case 'xor':
+          return '^'
+        default:
+          throw new Error(`Unknown operator: ${op}`)
       }
     })()
     const getStubResult = (a: bigint | biguint, b: bigint | biguint) => {
       switch (operator) {
-        case '&': return a & b
-        case '|': return a | b
-        case '^': return a ^ b
-        default: throw new Error(`Unknown operator: ${op}`)
+        case '&':
+          return a & b
+        case '|':
+          return a | b
+        case '^':
+          return a ^ b
+        default:
+          throw new Error(`Unknown operator: ${op}`)
       }
     }
     describe.each([
@@ -604,21 +616,14 @@ describe('BigUint', async () => {
     })
   })
 
-  describe.each([
-    MAX_UINT512 + 1n,
-    MAX_UINT512 * 2n,
-  ])('value too big', (a) => {
+  describe.each([MAX_UINT512 + 1n, MAX_UINT512 * 2n])('value too big', (a) => {
     it(`${a}`, () => {
       const bigUintA = asBigUint(a)
       expect(() => bigUintA === a).toThrow('BigUint over or underflow')
     })
   })
 
-  describe.each([
-    -1,
-    -MAX_UINT512,
-    -MAX_UINT512 * 2n
-  ])('value too small', (a) => {
+  describe.each([-1, -MAX_UINT512, -MAX_UINT512 * 2n])('value too small', (a) => {
     it(`${a}`, () => {
       const bigUintA = asBigUint(a)
       expect(() => bigUintA === asBigUint(a)).toThrow('BigUint over or underflow')
@@ -636,10 +641,10 @@ describe('BigUint', async () => {
     [42n, 42n],
     [MAX_UINT512, MAX_UINT512],
     [MAX_UINT512 * 2n, MAX_UINT512 * 2n],
-    [Bytes('hello'), 448378203247n]
+    [Bytes('hello'), 448378203247n],
   ])('fromCompat', async (a, b) => {
     it(`${a}`, async () => {
-      let result = internal.primitives.BigUintCls.fromCompat(a)
+      const result = internal.primitives.BigUintCls.fromCompat(a)
       expect(result.valueOf(), `for value: ${a}`).toBe(b)
     })
   })

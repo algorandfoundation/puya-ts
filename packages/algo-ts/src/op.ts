@@ -123,3 +123,5 @@ export const AcctParams = createObjectProxy('AcctParams')
 export const AppParams = createObjectProxy('AppParams')
 export const AssetHolding = createObjectProxy('AssetHolding')
 export const AssetParams = createObjectProxy('AssetParams')
+
+export { VrfVerify } from './op-types'

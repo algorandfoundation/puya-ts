@@ -30,7 +30,12 @@ export const getAlgorandAppClientWithApp = async (appSpec: AppSpec) => {
   return [appClient, app] as const
 }
 
-const inovkeMethod = async (appClient: ApplicationClient, method: string, sendParams?: SendTransactionParams, ...methodArgs: ABIAppCallArg[]): Promise<ABIReturn> => {
+const inovkeMethod = async (
+  appClient: ApplicationClient,
+  method: string,
+  sendParams?: SendTransactionParams,
+  ...methodArgs: ABIAppCallArg[]
+): Promise<ABIReturn> => {
   const response = await appClient.call({ method, methodArgs, note: randomUUID(), sendParams })
   if (!response.return) {
     throw new Error(`${method} did not return a value`)
@@ -41,12 +46,20 @@ const inovkeMethod = async (appClient: ApplicationClient, method: string, sendPa
   return response.return
 }
 
-export const getAvmResult = async <TResult extends ABIValue>({ appClient, sendParams }: { appClient: ApplicationClient, sendParams?: SendTransactionParams }, method: string, ...methodArgs: ABIAppCallArg[]): Promise<TResult> => {
+export const getAvmResult = async <TResult extends ABIValue>(
+  { appClient, sendParams }: { appClient: ApplicationClient; sendParams?: SendTransactionParams },
+  method: string,
+  ...methodArgs: ABIAppCallArg[]
+): Promise<TResult> => {
   const result = await inovkeMethod(appClient, method, sendParams, ...methodArgs)
   return result.returnValue as TResult
 }
 
-export const getAvmResultRaw = async ({ appClient, sendParams }: { appClient: ApplicationClient, sendParams?: SendTransactionParams }, method: string, ...methodArgs: ABIAppCallArg[]): Promise<Uint8Array | undefined> => {
+export const getAvmResultRaw = async (
+  { appClient, sendParams }: { appClient: ApplicationClient; sendParams?: SendTransactionParams },
+  method: string,
+  ...methodArgs: ABIAppCallArg[]
+): Promise<Uint8Array | undefined> => {
   const result = await inovkeMethod(appClient, method, sendParams, ...methodArgs)
   return result.rawReturnValue?.slice(ARC4_PREFIX_LENGTH)
 }
@@ -64,24 +77,25 @@ export const generateTestAccount = async (): Promise<algoSdkAccount> => {
     {
       accountToFund: account,
       minSpendingBalance: AlgoAmount.MicroAlgos(INITIAL_BALANCE_MICRO_ALGOS),
-    }, algorandClient().client.algod
+    },
+    algorandClient().client.algod,
   )
   return account
 }
 
 export const generateTestAsset = async (fields: {
-  creator: SendTransactionFrom,
-  total?: number | bigint,
-  decimals?: number,
-  name?: string,
-  unit?: string,
-  url?: string,
-  metadataHash?: string,
-  manager?: SendTransactionFrom,
-  reserveAccount?: SendTransactionFrom,
-  freezeAccount?: SendTransactionFrom,
-  clawbackAccount?: SendTransactionFrom,
-  frozenByDefault?: boolean,
+  creator: SendTransactionFrom
+  total?: number | bigint
+  decimals?: number
+  name?: string
+  unit?: string
+  url?: string
+  metadataHash?: string
+  manager?: SendTransactionFrom
+  reserveAccount?: SendTransactionFrom
+  freezeAccount?: SendTransactionFrom
+  clawbackAccount?: SendTransactionFrom
+  frozenByDefault?: boolean
 }): Promise<uint64> => {
   const client = algorandClient()
   if (fields.total === undefined) {
@@ -96,26 +110,27 @@ export const generateTestAsset = async (fields: {
     fields.decimals = 0
   }
   const params = await client.getSuggestedParams()
-  const x = await algokit.createAsset({
-    creator: fields.creator,
-    total: BigInt(fields.total) * 10n ** BigInt(fields.decimals),
-    decimals: fields.decimals,
-    name: fields.name,
-    unit: fields.unit ?? "",
-    url: fields.url ?? 'https://algorand.co',
-    metadataHash: fields.metadataHash,
-    manager: fields.manager,
-    reserveAccount: fields.reserveAccount,
-    freezeAccount: fields.freezeAccount,
-    clawbackAccount: fields.clawbackAccount,
-    frozenByDefault: fields.frozenByDefault ?? false,
-    transactionParams: params,
-    note: randomUUID(),
-  }, client.client.algod)
+  const x = await algokit.createAsset(
+    {
+      creator: fields.creator,
+      total: BigInt(fields.total) * 10n ** BigInt(fields.decimals),
+      decimals: fields.decimals,
+      name: fields.name,
+      unit: fields.unit ?? '',
+      url: fields.url ?? 'https://algorand.co',
+      metadataHash: fields.metadataHash,
+      manager: fields.manager,
+      reserveAccount: fields.reserveAccount,
+      freezeAccount: fields.freezeAccount,
+      clawbackAccount: fields.clawbackAccount,
+      frozenByDefault: fields.frozenByDefault ?? false,
+      transactionParams: params,
+      note: randomUUID(),
+    },
+    client.client.algod,
+  )
   if (x.confirmation === undefined) {
     internal.errors.internalError('Failed to create asset')
   }
   return asUint64(x.confirmation.assetIndex)
 }
-
-
