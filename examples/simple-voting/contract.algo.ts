@@ -1,5 +1,5 @@
 import type { Account, bytes, uint64 } from '@algorandfoundation/algo-ts'
-import { assert, BaseContract, Bytes, GlobalState, gtxn, LocalState, op, Uint64 } from '@algorandfoundation/algo-ts'
+import { assert, BaseContract, Bytes, GlobalState, LocalState, op, TransactionType, Uint64 } from '@algorandfoundation/algo-ts'
 
 const VOTE_PRICE = Uint64(10_000)
 export default class SimpleVotingContract extends BaseContract {
@@ -35,7 +35,7 @@ export default class SimpleVotingContract extends BaseContract {
   private vote(voter: Account): boolean {
     assert(op.Global.groupSize === Uint64(2))
     assert(op.GTxn.amount(1) === VOTE_PRICE)
-    assert(op.GTxn.typeEnum(1) === gtxn.TransactionType.Payment)
+    assert(op.GTxn.typeEnum(1) === TransactionType.Payment)
 
     if (this.voted(voter).hasValue) {
       return false

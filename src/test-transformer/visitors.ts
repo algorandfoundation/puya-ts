@@ -29,7 +29,7 @@ export class SourceFileVisitor {
       resolveType(node: ts.Node): PType {
         try {
           return typeResolver.resolve(node, this.sourceLocation(node))
-        } catch (e) {
+        } catch (_e) {
           return anyPType
         }
       },
@@ -62,7 +62,7 @@ export class SourceFileVisitor {
 }
 
 class FunctionOrMethodVisitor {
-  constructor(protected context: ts.TransformationContext) { }
+  constructor(protected context: ts.TransformationContext) {}
   protected visit = (node: ts.Node): ts.Node => {
     return ts.visitEachChild(this.updateNode(node), this.visit, this.context)
   }

@@ -1,8 +1,8 @@
 diff --git a/node_modules/typescript/lib/typescript.d.ts b/node_modules/typescript/lib/typescript.d.ts
-index fbb3e49..7de1e6a 100644
+index 963c573..299a8a4 100644
 --- a/node_modules/typescript/lib/typescript.d.ts
 +++ b/node_modules/typescript/lib/typescript.d.ts
-@@ -6088,6 +6088,7 @@ declare namespace ts {
+@@ -6116,6 +6116,7 @@ declare namespace ts {
          getIndexInfoOfType(type: Type, kind: IndexKind): IndexInfo | undefined;
          getIndexInfosOfType(type: Type): readonly IndexInfo[];
          getIndexInfosOfIndexSymbol: (indexSymbol: Symbol) => IndexInfo[];
@@ -11,10 +11,10 @@ index fbb3e49..7de1e6a 100644
          getIndexTypeOfType(type: Type, kind: IndexKind): Type | undefined;
          getBaseTypes(type: InterfaceType): BaseType[];
 diff --git a/node_modules/typescript/lib/typescript.js b/node_modules/typescript/lib/typescript.js
-index 714953f..17c90b5 100644
+index 90f3266..9daa319 100644
 --- a/node_modules/typescript/lib/typescript.js
 +++ b/node_modules/typescript/lib/typescript.js
-@@ -49956,6 +49956,7 @@ function createTypeChecker(host) {
+@@ -50171,6 +50171,7 @@ function createTypeChecker(host) {
      getGlobalDiagnostics,
      getRecursionIdentity,
      getUnmatchedProperties,
@@ -22,7 +22,7 @@ index 714953f..17c90b5 100644
      getTypeOfSymbolAtLocation: (symbol, locationIn) => {
        const location = getParseTreeNode(locationIn);
        return location ? getTypeOfSymbolAtLocation(symbol, location) : errorType;
-@@ -92217,6 +92218,9 @@ function createTypeChecker(host) {
+@@ -92895,6 +92896,9 @@ function createTypeChecker(host) {
      Debug.assert(specifier && nodeIsSynthesized(specifier) && specifier.text === "tslib", `Expected sourceFile.imports[0] to be the synthesized tslib import`);
      return specifier;
    }

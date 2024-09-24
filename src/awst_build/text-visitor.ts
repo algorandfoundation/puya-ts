@@ -9,6 +9,10 @@ type ObjectNames = ts.PropertyName | ts.PseudoLiteralToken
 export class TextVisitor implements Visitor<ObjectNames, string> {
   constructor(public context: AwstBuildContext) {}
 
+  visitBigIntLiteral(node: ts.BigIntLiteral): string {
+    return node.text
+  }
+
   visitTemplateHead(node: ts.TemplateHead): string {
     return node.text
   }

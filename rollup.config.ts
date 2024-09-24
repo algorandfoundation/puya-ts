@@ -1,18 +1,22 @@
-import nodeResolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
-import typescript from '@rollup/plugin-typescript'
 import json from '@rollup/plugin-json'
+import nodeResolve from '@rollup/plugin-node-resolve'
+import typescript from '@rollup/plugin-typescript'
 import type { RollupOptions } from 'rollup'
 
 const config: RollupOptions = {
-  input: ['src/index.ts', 'src/cli.ts'],
+  input: {
+    index: 'src/index.ts',
+    cli: 'src/cli.ts',
+    'test-transformer': 'src/test-transformer/index.ts',
+  },
   output: [
     {
       dir: 'dist',
       format: 'es',
       exports: 'named',
       entryFileNames: '[name].mjs',
-      preserveModules: true,
+      preserveModules: false,
       sourcemap: true,
     },
   ],
@@ -20,12 +24,11 @@ const config: RollupOptions = {
     moduleSideEffects: false,
     propertyReadSideEffects: false,
   },
-  external: [/node_modules/],
   plugins: [
     typescript({
-      tsconfig: 'tsconfig.build.json',
+      tsconfig: './tsconfig.build.json',
     }),
-    commonjs(),
+    commonjs({ extensions: ['.js'] }),
     nodeResolve(),
     json(),
   ],

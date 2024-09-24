@@ -10,6 +10,7 @@ function test_truthyness(a: uint64, b: uint64, c: string, d: bytes, e: uint64) {
   assert(BigUint(1), 'Non zero is truthy')
   assert(!Bytes(), 'Empty is falsy')
   assert(Bytes('abc'), 'Non empty is truthy')
+  // @ts-expect-error 2873
   assert(!'', 'Empty is falsy')
   assert('abc', 'Non empty is truthy')
   assert(!false, 'False is falsy')
@@ -17,9 +18,11 @@ function test_truthyness(a: uint64, b: uint64, c: string, d: bytes, e: uint64) {
 }
 
 function test_booleans_are_equal() {
+  // eslint-disable-next-line no-constant-binary-expression
   assert(Boolean(1) === Boolean(5))
   assert(Boolean(Uint64(1)) === Boolean(Uint64(5)))
   assert(Boolean(BigUint(1)) === Boolean(BigUint(5)))
   assert(Boolean(Bytes('abc')) === Boolean(Bytes('abcdef')))
+  // eslint-disable-next-line no-constant-binary-expression
   assert(Boolean('abc') === Boolean('abcdef'))
 }

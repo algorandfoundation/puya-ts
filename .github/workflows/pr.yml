@@ -30,3 +30,13 @@ jobs:
       pre-run-script: npm run algo-ts:install
       audit-script: npm run audit
       working-directory: packages/algo-ts-testing
+  ci-puya-ts:
+    uses: makerxstudio/shared-config/.github/workflows/node-ci.yml@main
+    needs:
+      - ci-algo-ts
+      - ci-algo-ts-testing
+    with:
+      node-version: 20.x
+      run-build: true
+      pre-run-script: npm run algo-ts:install && npm run alg-ts-testing:install
+      audit-script: npm run audit

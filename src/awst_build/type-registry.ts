@@ -6,11 +6,11 @@ import type { InstanceBuilder, InstanceExpressionBuilder, NodeBuilder } from './
 import { PType } from './ptypes'
 import type { SymbolName } from './symbol-name'
 
-type ValueExpressionBuilderCtor<TPType extends PType> = { new(expr: awst.Expression, ptype: PType): InstanceExpressionBuilder<TPType> }
-type SingletonExpressionBuilderCtor = { new(sourceLocation: SourceLocation, ptype: PType): NodeBuilder }
+type ValueExpressionBuilderCtor<TPType extends PType> = { new (expr: awst.Expression, ptype: PType): InstanceExpressionBuilder<TPType> }
+type SingletonExpressionBuilderCtor = { new (sourceLocation: SourceLocation, ptype: PType): NodeBuilder }
 
-type PTypeClass = { new(...args: DeliberateAny): PType }
-type GenericPTypeClass = { new(...args: DeliberateAny): PType; get baseFullName(): string; parameterise(typeArgs: PType[]): PType }
+type PTypeClass = { new (...args: DeliberateAny): PType }
+type GenericPTypeClass = { new (...args: DeliberateAny): PType; get baseFullName(): string; parameterise(typeArgs: PType[]): PType }
 export class TypeRegistry {
   get hasRegistrations() {
     return this.types.size > 0 || this.genericTypes.size > 0
@@ -27,15 +27,15 @@ export class TypeRegistry {
     instanceEb,
   }:
     | {
-      ptype: PType | PTypeClass
-      singletonEb: SingletonExpressionBuilderCtor
-      instanceEb?: undefined
-    }
+        ptype: PType | PTypeClass
+        singletonEb: SingletonExpressionBuilderCtor
+        instanceEb?: undefined
+      }
     | {
-      ptype: PType | PTypeClass
-      singletonEb?: undefined
-      instanceEb: ValueExpressionBuilderCtor<PType>
-    }) {
+        ptype: PType | PTypeClass
+        singletonEb?: undefined
+        instanceEb: ValueExpressionBuilderCtor<PType>
+      }) {
     if (this.types.has(ptype) || this.genericTypes.has(ptype as GenericPTypeClass))
       throw new InternalError(`${ptype} has already been registered`)
     this.types.add(ptype)

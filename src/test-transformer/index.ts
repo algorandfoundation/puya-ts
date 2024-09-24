@@ -1,7 +1,7 @@
 import type ts from 'typescript'
-import type { DeliberateAny } from '../../packages/algo-ts-testing/src/typescript-helpers'
 import { registerPTypes } from '../awst_build/ptypes/register'
 import { typeRegistry } from '../awst_build/type-registry'
+import type { DeliberateAny } from '../typescript-helpers'
 import { SourceFileVisitor } from './visitors'
 
 const includes: string[] = ['.algo.ts', '.spec.ts']
