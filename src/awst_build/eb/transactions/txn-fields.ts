@@ -139,6 +139,11 @@ export const assetConfigTxnFields = {
   configAsset: [TxnField.ConfigAsset, assetPType] as const,
 
   /**
+   * The asset created by this transaction
+   */
+  createdAsset: [TxnField.CreatedAssetID, assetPType] as const,
+
+  /**
    * Total number of units of this asset created
    */
   total: [TxnField.ConfigAssetTotal, uint64PType] as const,
@@ -246,6 +251,11 @@ export const applicationCallTxnFields = {
    * ApplicationID from ApplicationCall transaction
    */
   appId: [TxnField.ApplicationID, applicationPType] as const,
+
+  /**
+   * The application created by this transaction
+   */
+  createdApplication: [TxnField.CreatedApplicationID, applicationPType] as const,
 
   /**
    * ApplicationCall transaction on completion action

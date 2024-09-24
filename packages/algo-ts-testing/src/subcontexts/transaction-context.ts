@@ -1,4 +1,4 @@
-import { gtxn, internal, uint64 } from '@algorandfoundation/algo-ts'
+import { gtxn, internal, TransactionType, uint64 } from '@algorandfoundation/algo-ts'
 import algosdk from 'algosdk'
 import { lazyContext } from '../context-helpers/internal-context'
 import { DecodedLogs, decodeLogs, LogDecoding } from '../decode-logs'
@@ -81,7 +81,7 @@ export class TransactionContext {
 
   appendLog(value: internal.primitives.StubBytesCompat): void {
     const activeTransaction = this.activeGroup.activeTransaction
-    if (activeTransaction.type !== gtxn.TransactionType.ApplicationCall) {
+    if (activeTransaction.type !== TransactionType.ApplicationCall) {
       throw internal.errors.internalError('Can only add logs to ApplicationCallTransaction!')
     }
     ;(activeTransaction as unknown as TransactionWithLogFunc).appendLog(value)
@@ -90,7 +90,7 @@ export class TransactionContext {
   exportLogs<const T extends [...LogDecoding[]]>(appId: uint64, ...decoding: T): DecodedLogs<T> {
     const transaction = this.groups
       .flatMap((g) => g.transactions)
-      .find((t) => t.type === gtxn.TransactionType.ApplicationCall && asBigInt(t.appId.id) === asBigInt(appId))
+      .find((t) => t.type === TransactionType.ApplicationCall && asBigInt(t.appId.id) === asBigInt(appId))
     let logs = []
     if (transaction) {
       logs = (transaction as unknown as ApplicationTransactionFields).appLogs ?? []
@@ -114,9 +114,10 @@ export class TransactionGroup {
         `Transaction group can have at most ${algosdk.AtomicTransactionComposer.MAX_GROUP_SIZE} transactions, as per AVM limits.`,
       )
     }
-    transactions.forEach((txn, index) => {
-      txn.groupIndex = asUint64(index)
-    })
+    transactions = transactions.map((txn, index) => ({
+      ...txn,
+      groupIndex: asUint64(index),
+    }))
     this.activeTransactionIndex = activeTransactionIndex === undefined ? transactions.length - 1 : activeTransactionIndex
     this.transactions = transactions
   }

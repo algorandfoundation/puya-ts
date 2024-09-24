@@ -1,4 +1,15 @@
-import { Account, Application, Asset, BaseContract, Bytes, bytes, Contract, gtxn, internal } from '@algorandfoundation/algo-ts'
+import {
+  Account,
+  Application,
+  Asset,
+  BaseContract,
+  Bytes,
+  bytes,
+  Contract,
+  gtxn,
+  internal,
+  TransactionType,
+} from '@algorandfoundation/algo-ts'
 import { getAbiMetadata, hasAbiMetadata } from '../abi-metadata'
 import { lazyContext } from '../context-helpers/internal-context'
 import { AccountCls } from '../impl/account'
@@ -61,7 +72,7 @@ const extractArraysFromArgs = (args: DeliberateAny[]) => {
   const apps: Application[] = []
   const assets: Asset[] = []
   for (const arg of args) {
-    if ((arg as gtxn.Transaction).type in gtxn.TransactionType) {
+    if ((arg as gtxn.Transaction).type in TransactionType) {
       transactions.push(arg as gtxn.Transaction)
     } else if (arg instanceof AccountCls) {
       accounts.push(arg as Account)

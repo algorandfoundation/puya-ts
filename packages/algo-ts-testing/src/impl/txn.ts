@@ -1,4 +1,4 @@
-import { Account, Application, arc4, Asset, bytes, gtxn, internal, uint64 } from '@algorandfoundation/algo-ts'
+import { Account, Application, arc4, Asset, bytes, gtxn, internal, TransactionType, uint64 } from '@algorandfoundation/algo-ts'
 import { lazyContext } from '../context-helpers/internal-context'
 import { asNumber, asUint64, asUint64Cls } from '../util'
 
@@ -9,9 +9,9 @@ const getActiveTransaction = <T extends gtxn.Transaction>(): T => {
 export const gaid = (a: internal.primitives.StubUint64Compat): uint64 => {
   const group = lazyContext.activeGroup
   const transaction = group.transactions[asNumber(a)]
-  if (transaction.type === gtxn.TransactionType.ApplicationCall) {
+  if (transaction.type === TransactionType.ApplicationCall) {
     return transaction.createdApp.id
-  } else if (transaction.type === gtxn.TransactionType.AssetConfig) {
+  } else if (transaction.type === TransactionType.AssetConfig) {
     return transaction.createdAsset.id
   } else {
     throw new internal.errors.InternalError(`transaction at index ${asNumber(a)} is not an Application Call or Asset Config`)
@@ -420,7 +420,7 @@ export const Txn: internal.opTypes.TxnType = {
    * Marks an account nonparticipating for rewards
    */
   get nonparticipation(): boolean {
-    return getActiveTransaction<gtxn.KeyRegistrationTxn>().nonParticipation
+    return getActiveTransaction<gtxn.KeyRegistrationTxn>().nonparticipation
   },
 
   /**

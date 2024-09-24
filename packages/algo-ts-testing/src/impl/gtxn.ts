@@ -184,7 +184,7 @@ export const GTxn: internal.opTypes.GTxnType = {
     return getTransaction<gtxn.ApplicationTxn>(t).extraProgramPages
   },
   nonparticipation(t: internal.primitives.StubUint64Compat): boolean {
-    return getTransaction<gtxn.KeyRegistrationTxn>(t).nonParticipation
+    return getTransaction<gtxn.KeyRegistrationTxn>(t).nonparticipation
   },
   logs(a: internal.primitives.StubUint64Compat, b: internal.primitives.StubUint64Compat): bytes {
     return getTransaction<gtxn.ApplicationTxn>(a).logs(asUint64(b))
