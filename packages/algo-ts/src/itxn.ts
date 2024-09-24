@@ -1,16 +1,29 @@
 import { OnCompleteAction } from './arc4'
 import { bytes, uint64 } from './primitives'
 import type { Account, Application, Asset } from './reference'
-
 import type * as txnTypes from './transactions'
 import { DeliberateAny } from './typescript-helpers'
 
-export interface PaymentInnerTxn extends txnTypes.PaymentTxn {}
-export interface KeyRegistrationInnerTxn extends txnTypes.KeyRegistrationTxn {}
-export interface AssetConfigInnerTxn extends txnTypes.AssetConfigTxn {}
-export interface AssetTransferInnerTxn extends txnTypes.AssetTransferTxn {}
-export interface AssetFreezeInnerTxn extends txnTypes.AssetFreezeTxn {}
-export interface ApplicationInnerTxn extends txnTypes.ApplicationTxn {}
+const isItxn = Symbol('isItxn')
+
+export interface PaymentInnerTxn extends txnTypes.PaymentTxn {
+  [isItxn]?: true
+}
+export interface KeyRegistrationInnerTxn extends txnTypes.KeyRegistrationTxn {
+  [isItxn]?: true
+}
+export interface AssetConfigInnerTxn extends txnTypes.AssetConfigTxn {
+  [isItxn]?: true
+}
+export interface AssetTransferInnerTxn extends txnTypes.AssetTransferTxn {
+  [isItxn]?: true
+}
+export interface AssetFreezeInnerTxn extends txnTypes.AssetFreezeTxn {
+  [isItxn]?: true
+}
+export interface ApplicationInnerTxn extends txnTypes.ApplicationTxn {
+  [isItxn]?: true
+}
 
 interface CommonTransactionFields {
   /**
@@ -154,12 +167,12 @@ type TxnFor<TFields extends InnerTxnList> = TFields extends [
   ? [TTxn, ...TxnFor<TRest>]
   : []
 
-export interface PaymentItxnParams extends InnerTransaction<PaymentFields, PaymentInnerTxn> {}
-export interface KeyRegistrationItxnParams extends InnerTransaction<KeyRegistrationFields, KeyRegistrationInnerTxn> {}
-export interface AssetConfigItxnParams extends InnerTransaction<AssetConfigFields, AssetConfigInnerTxn> {}
-export interface AssetTransferItxnParams extends InnerTransaction<AssetTransferFields, AssetTransferInnerTxn> {}
-export interface AssetFreezeItxnParams extends InnerTransaction<AssetFreezeFields, AssetFreezeInnerTxn> {}
-export interface ApplicationCallItxnParams extends InnerTransaction<ApplicationCallFields, ApplicationInnerTxn> {}
+export type PaymentItxnParams = InnerTransaction<PaymentFields, PaymentInnerTxn>
+export type KeyRegistrationItxnParams = InnerTransaction<KeyRegistrationFields, KeyRegistrationInnerTxn>
+export type AssetConfigItxnParams = InnerTransaction<AssetConfigFields, AssetConfigInnerTxn>
+export type AssetTransferItxnParams = InnerTransaction<AssetTransferFields, AssetTransferInnerTxn>
+export type AssetFreezeItxnParams = InnerTransaction<AssetFreezeFields, AssetFreezeInnerTxn>
+export type ApplicationCallItxnParams = InnerTransaction<ApplicationCallFields, ApplicationInnerTxn>
 
 export function submitGroup<TFields extends InnerTxnList>(...transactionFields: TFields): TxnFor<TFields> {
   throw new Error('Not implemented')
