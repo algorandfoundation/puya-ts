@@ -35,7 +35,7 @@ import {
   OpsNamespace,
   ReplaceType,
   SelectType,
-  SetbitType,
+  SetBitType,
   SetByteType,
   Sha256Type,
   Sha3_256Type,
@@ -102,7 +102,7 @@ export const minBalance: BalanceType = createFunctionProxy('minBalance')
 export const mulw: MulwType = createFunctionProxy('mulw')
 export const replace: ReplaceType = createFunctionProxy('replace')
 export const select: SelectType = createFunctionProxy('select') as SelectType
-export const setbit: SetbitType = createFunctionProxy('setbit') as SetbitType
+export const setBit: SetBitType = createFunctionProxy('setBit') as SetBitType
 export const setByte: SetByteType = createFunctionProxy('setByte')
 export const sha256: Sha256Type = createFunctionProxy('sha256')
 export const sha3_256: Sha3_256Type = createFunctionProxy('sha3_256')

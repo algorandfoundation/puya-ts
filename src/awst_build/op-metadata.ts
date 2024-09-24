@@ -4715,7 +4715,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
       },
     ],
   },
-  setbit: {
+  setBit: {
     type: 'op-mapping',
     op: 'setbit',
     signatures: [

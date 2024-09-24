@@ -1,6 +1,7 @@
 import { bytes } from '../primitives'
 import { Account } from '../reference'
 import { AssertError } from './errors'
+import { BytesCls } from './primitives'
 
 export class GlobalStateCls<ValueType> {
   private readonly _type: string = GlobalStateCls.name
@@ -31,8 +32,8 @@ export class GlobalStateCls<ValueType> {
     return this.#value !== undefined
   }
 
-  constructor(key?: bytes, value?: ValueType) {
-    this.key = key
+  constructor(key?: bytes | string, value?: ValueType) {
+    this.key = BytesCls.fromCompat(key).asAlgoTs()
     this.#value = value
   }
 }

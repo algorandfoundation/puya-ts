@@ -9,7 +9,7 @@ import { DeliberateAny } from '../typescript-helpers'
 import { extractGenericTypeArgs } from '../util'
 
 interface IConstructor<T> {
-  new(...args: DeliberateAny[]): T
+  new (...args: DeliberateAny[]): T
 }
 
 type StateTotals = Pick<Application, 'globalNumBytes' | 'globalNumUint' | 'localNumBytes' | 'localNumUint'>
@@ -100,11 +100,14 @@ export class ContractContext {
                 const app = lazyContext.ledger.getApplicationForContract(receiver)
                 const { transactions, ...appCallArgs } = extractArraysFromArgs(args)
                 const abiMetadata = getAbiMetadata(receiver, prop as string)
-                const txns = [...(transactions ?? []), lazyContext.any.txn.applicationCall({
-                  appId: app,
-                  ...appCallArgs,
-                  onCompletion: (abiMetadata?.allowActions ?? [])[0],
-                })]
+                const txns = [
+                  ...(transactions ?? []),
+                  lazyContext.any.txn.applicationCall({
+                    appId: app,
+                    ...appCallArgs,
+                    onCompletion: (abiMetadata?.allowActions ?? [])[0],
+                  }),
+                ]
                 return lazyContext.txn.ensureScope(txns).execute(() => (orig as DeliberateAny).apply(target, args))
               }
             }

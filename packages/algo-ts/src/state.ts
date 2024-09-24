@@ -9,7 +9,7 @@ export type GlobalState<ValueType> = {
   hasValue: boolean
 }
 
-type GlobalStateOptions<ValueType> = { key?: bytes; initialValue?: ValueType }
+type GlobalStateOptions<ValueType> = { key?: bytes | string; initialValue?: ValueType }
 
 /** A single key in global state */
 export function GlobalState<ValueType>(options?: GlobalStateOptions<ValueType>): GlobalState<ValueType> {
@@ -17,15 +17,19 @@ export function GlobalState<ValueType>(options?: GlobalStateOptions<ValueType>):
 }
 
 /** A value saved in local state */
-declare type LocalState<ValueType> = {
+export type LocalStateForAccount<ValueType> = {
   value: ValueType
   hasValue: boolean
   delete: () => void
 }
 
+export type LocalState<ValueType> = {
+  (account: Account): LocalStateForAccount<ValueType>
+}
+
 /** A single key in local state */
-export function LocalState<ValueType>(options?: { key?: bytes }): (account: Account) => LocalState<ValueType> {
-  function localStateInternal(account: Account): LocalState<ValueType> {
+export function LocalState<ValueType>(options?: { key?: bytes | string }): LocalState<ValueType> {
+  function localStateInternal(account: Account): LocalStateForAccount<ValueType> {
     return localStateInternal.map.getValue(account)
   }
   localStateInternal.key = options?.key
