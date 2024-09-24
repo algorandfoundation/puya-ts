@@ -36,321 +36,321 @@ interface TransactionBase {
   /**
    * 32 byte address
    */
-  sender: Account
+  readonly sender: Account
 
   /**
    * microalgos
    */
-  fee: uint64
+  readonly fee: uint64
 
   /**
    * round number
    */
-  firstValid: uint64
+  readonly firstValid: uint64
 
   /**
    * UNIX timestamp of block before txn.FirstValid. Fails if negative
    */
-  firstValidTime: uint64
+  readonly firstValidTime: uint64
 
   /**
    * round number
    */
-  lastValid: uint64
+  readonly lastValid: uint64
 
   /**
    * Any data up to 1024 bytes
    */
-  note: bytes
+  readonly note: bytes
 
   /**
    * 32 byte lease value
    */
-  lease: bytes
+  readonly lease: bytes
 
   /**
    * Transaction type as bytes
    */
-  typeBytes: bytes
+  readonly typeBytes: bytes
 
   /**
    * Position of this transaction within an atomic group
    * A stand-alone transaction is implicitly element 0 in a group of 1
    */
-  groupIndex: uint64
+  readonly groupIndex: uint64
 
   /**
    * The computed ID for this transaction. 32 bytes.
    */
-  txnId: bytes
+  readonly txnId: bytes
 
   /**
    * 32 byte Sender's new AuthAddr
    */
-  rekeyTo: Account
+  readonly rekeyTo: Account
 }
 
 export interface PayTxn extends TransactionBase {
   /**
    * 32 byte address
    */
-  receiver: Account
+  readonly receiver: Account
 
   /**
    * microalgos
    */
-  amount: uint64
+  readonly amount: uint64
 
   /**
    * 32 byte address
    */
-  closeRemainderTo: Account
+  readonly closeRemainderTo: Account
 
   /**
    * Transaction type as integer
    */
-  type: TransactionType.Payment
+  readonly type: TransactionType.Payment
 }
 
 export interface KeyRegistrationTxn extends TransactionBase {
   /**
    * 32 byte address
    */
-  voteKey: bytes
+  readonly voteKey: bytes
 
   /**
    * 32 byte address
    */
-  selectionKey: bytes
+  readonly selectionKey: bytes
 
   /**
    * The first round that the participation key is valid.
    */
-  voteFirst: uint64
+  readonly voteFirst: uint64
 
   /**
    * The last round that the participation key is valid.
    */
-  voteLast: uint64
+  readonly voteLast: uint64
 
   /**
    * Dilution for the 2-level participation key
    */
-  voteKeyDilution: uint64
+  readonly voteKeyDilution: uint64
 
   /**
    * Marks an account nonparticipating for rewards
    */
-  nonparticipation: boolean
+  readonly nonparticipation: boolean
 
   /**
    * 64 byte state proof public key
    */
-  stateProofKey: bytes
+  readonly stateProofKey: bytes
   /**
    * Transaction type as integer
    */
-  type: TransactionType.KeyRegistration
+  readonly type: TransactionType.KeyRegistration
 }
 
 export interface AssetConfigTxn extends TransactionBase {
   /**
    * Asset ID in asset config transaction
    */
-  configAsset: Asset
+  readonly configAsset: Asset
 
   /**
    * Total number of units of this asset created
    */
-  total: uint64
+  readonly total: uint64
 
   /**
    * Number of digits to display after the decimal place when displaying the asset
    */
-  decimals: uint64
+  readonly decimals: uint64
 
   /**
    * Whether the asset's slots are frozen by default or not, 0 or 1
    */
-  defaultFrozen: boolean
+  readonly defaultFrozen: boolean
 
   /**
    * Unit name of the asset
    */
-  unitName: bytes
+  readonly unitName: bytes
 
   /**
    * The asset name
    */
-  assetName: bytes
+  readonly assetName: bytes
 
   /**
    * URL
    */
-  url: bytes
+  readonly url: bytes
 
   /**
    * 32 byte commitment to unspecified asset metadata
    */
-  metadataHash: bytes
+  readonly metadataHash: bytes
 
   /**
    * 32 byte address
    */
-  manager: Account
+  readonly manager: Account
 
   /**
    * 32 byte address
    */
-  reserve: Account
+  readonly reserve: Account
 
   /**
    * 32 byte address
    */
-  freeze: Account
+  readonly freeze: Account
 
   /**
    * 32 byte address
    */
-  clawback: Account
+  readonly clawback: Account
   /**
    * Transaction type as integer
    */
-  type: TransactionType.AssetConfig
+  readonly type: TransactionType.AssetConfig
 }
 
 export interface AssetTransferTxn extends TransactionBase {
   /**
    * Asset ID
    */
-  xferAsset: Asset
+  readonly xferAsset: Asset
 
   /**
    * value in Asset's units
    */
-  assetAmount: uint64
+  readonly assetAmount: uint64
 
   /**
    * 32 byte address. Source of assets if Sender is the Asset's Clawback address.
    */
-  assetSender: Account
+  readonly assetSender: Account
 
   /**
    * 32 byte address
    */
-  assetReceiver: Account
+  readonly assetReceiver: Account
 
   /**
    * 32 byte address
    */
-  assetCloseTo: Account
+  readonly assetCloseTo: Account
   /**
    * Transaction type as integer
    */
-  type: TransactionType.AssetTransfer
+  readonly type: TransactionType.AssetTransfer
 }
 
 export interface AssetFreezeTxn extends TransactionBase {
   /**
    * Asset ID being frozen or un-frozen
    */
-  freezeAsset: Asset
+  readonly freezeAsset: Asset
 
   /**
    * 32 byte address of the account whose asset slot is being frozen or un-frozen
    */
-  freezeAccount: Account
+  readonly freezeAccount: Account
 
   /**
    * The new frozen value
    */
-  frozen: boolean
+  readonly frozen: boolean
   /**
    * Transaction type as integer
    */
-  type: TransactionType.AssetFreeze
+  readonly type: TransactionType.AssetFreeze
 }
 
 export interface ApplicationTxn extends TransactionBase {
   /**
    * ApplicationID from ApplicationCall transaction
    */
-  appId: Application
+  readonly appId: Application
 
   /**
    * ApplicationCall transaction on completion action
    */
-  onCompletion: OnCompleteActionStr
+  readonly onCompletion: OnCompleteActionStr
 
   /**
    * Number of ApplicationArgs
    */
-  numAppArgs: uint64
+  readonly numAppArgs: uint64
 
   /**
    * Number of ApplicationArgs
    */
-  numAccounts: uint64
+  readonly numAccounts: uint64
 
   /**
    * Approval program
    */
-  approvalProgram: bytes
+  readonly approvalProgram: bytes
 
   /**
    * Clear State program
    */
-  clearStateProgram: bytes
+  readonly clearStateProgram: bytes
 
   /**
    * Number of Assets
    */
-  numAssets: uint64
+  readonly numAssets: uint64
 
   /**
    * Number of Applications
    */
-  numApps: uint64
+  readonly numApps: uint64
 
   /**
    * Number of global state integers in ApplicationCall
    */
-  globalNumUint: uint64
+  readonly globalNumUint: uint64
 
   /**
    * Number of global state byteslices in ApplicationCall
    */
-  globalNumBytes: uint64
+  readonly globalNumBytes: uint64
 
   /**
    * Number of local state integers in ApplicationCall
    */
-  localNumUint: uint64
+  readonly localNumUint: uint64
 
   /**
    * Number of local state byteslices in ApplicationCall
    */
-  localNumBytes: uint64
+  readonly localNumBytes: uint64
 
   /**
    * Number of additional pages for each of the application's approval and clear state programs. An ExtraProgramPages of 1 means 2048 more total bytes, or 1024 for each program.
    */
-  extraProgramPages: uint64
+  readonly extraProgramPages: uint64
 
   /**
    * The last message emitted. Empty bytes if none were emitted. Application mode only
    */
-  lastLog: bytes
+  readonly lastLog: bytes
 
   /**
    * Number of Approval Program pages
    */
-  numApprovalProgramPages: uint64
+  readonly numApprovalProgramPages: uint64
 
   /**
    * Number of Clear State Program pages
    */
-  numClearStateProgramPages: uint64
+  readonly numClearStateProgramPages: uint64
 
   /**
    * Arguments passed to the application in the ApplicationCall transaction
@@ -385,7 +385,7 @@ export interface ApplicationTxn extends TransactionBase {
   /**
    * Transaction type as integer
    */
-  type: TransactionType.ApplicationCall
+  readonly type: TransactionType.ApplicationCall
 }
 
 export type Transaction = PayTxn | KeyRegistrationTxn | AssetConfigTxn | AssetTransferTxn | AssetFreezeTxn | ApplicationTxn
