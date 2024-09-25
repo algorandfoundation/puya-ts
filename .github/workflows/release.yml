@@ -37,3 +37,13 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: artifacts
+
+      - name: Prepare @algorandfoundation/algo-ts
+        run: cp .releaserc.json artifacts/algo-ts/.releaserc.json
+
+      - name: Publish @algorandfoundation/algo-ts
+        run: npx semantic-release
+        working-directory: artifacts/algo-ts/
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
