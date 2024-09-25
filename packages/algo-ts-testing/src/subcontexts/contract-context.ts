@@ -1,20 +1,18 @@
-import {
-  Account,
-  Application,
-  Asset,
-  BaseContract,
-  Bytes,
-  bytes,
-  Contract,
-  gtxn,
-  internal,
-  TransactionType,
-} from '@algorandfoundation/algo-ts'
+import { Account, Application, Asset, BaseContract, Bytes, bytes, Contract, internal } from '@algorandfoundation/algo-ts'
 import { getAbiMetadata, hasAbiMetadata } from '../abi-metadata'
 import { lazyContext } from '../context-helpers/internal-context'
 import { AccountCls } from '../impl/account'
 import { ApplicationCls } from '../impl/application'
 import { AssetCls } from '../impl/asset'
+import {
+  ApplicationTransaction,
+  AssetConfigTransaction,
+  AssetFreezeTransaction,
+  AssetTransferTransaction,
+  KeyRegistrationTransaction,
+  PaymentTransaction,
+  Transaction,
+} from '../impl/transactions'
 import { getGenericTypeInfo } from '../runtime-helpers'
 import { DeliberateAny } from '../typescript-helpers'
 import { extractGenericTypeArgs } from '../util'
@@ -67,13 +65,13 @@ const extractStates = (contract: BaseContract): States => {
 }
 
 const extractArraysFromArgs = (args: DeliberateAny[]) => {
-  const transactions: gtxn.Transaction[] = []
+  const transactions: Transaction[] = []
   const accounts: Account[] = []
   const apps: Application[] = []
   const assets: Asset[] = []
   for (const arg of args) {
-    if ((arg as gtxn.Transaction).type in TransactionType) {
-      transactions.push(arg as gtxn.Transaction)
+    if (isTransaction(arg)) {
+      transactions.push(arg)
     } else if (arg instanceof AccountCls) {
       accounts.push(arg as Account)
     } else if (arg instanceof ApplicationCls) {
@@ -83,6 +81,17 @@ const extractArraysFromArgs = (args: DeliberateAny[]) => {
     }
   }
   return { accounts, apps, assets, transactions }
+}
+
+function isTransaction(obj: unknown): obj is Transaction {
+  return (
+    obj instanceof PaymentTransaction ||
+    obj instanceof KeyRegistrationTransaction ||
+    obj instanceof AssetConfigTransaction ||
+    obj instanceof AssetTransferTransaction ||
+    obj instanceof AssetFreezeTransaction ||
+    obj instanceof ApplicationTransaction
+  )
 }
 
 export class ContractContext {

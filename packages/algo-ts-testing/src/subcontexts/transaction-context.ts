@@ -1,8 +1,9 @@
-import { gtxn, internal, TransactionType, uint64 } from '@algorandfoundation/algo-ts'
+import { internal, TransactionType, uint64 } from '@algorandfoundation/algo-ts'
 import algosdk from 'algosdk'
 import { lazyContext } from '../context-helpers/internal-context'
 import { DecodedLogs, decodeLogs, LogDecoding } from '../decode-logs'
-import { AllTransactionFields, ApplicationTransactionFields, TransactionWithLogFunc } from '../impl/transactions'
+import { testInvariant } from '../errors'
+import { AllTransactionFields, Transaction } from '../impl/transactions'
 import { asBigInt, asUint64 } from '../util'
 
 function ScopeGenerator(dispose: () => void) {
@@ -30,7 +31,7 @@ export class TransactionContext {
   readonly groups: TransactionGroup[] = []
   #activeGroup: TransactionGroup | undefined
 
-  createScope(group: gtxn.Transaction[], activeTransactionIndex?: number): ExecutionScope {
+  createScope(group: Transaction[], activeTransactionIndex?: number): ExecutionScope {
     const transactionGroup = new TransactionGroup(group, activeTransactionIndex)
     const previousGroup = this.#activeGroup
     this.#activeGroup = transactionGroup
@@ -50,7 +51,7 @@ export class TransactionContext {
     }
   }
 
-  ensureScope(group: gtxn.Transaction[], activeTransactionIndex?: number): ExecutionScope {
+  ensureScope(group: Transaction[], activeTransactionIndex?: number): ExecutionScope {
     if (!this.#activeGroup || !this.#activeGroup.transactions.length) {
       return this.createScope(group, activeTransactionIndex)
     }
@@ -75,25 +76,27 @@ export class TransactionContext {
     return this.groups.at(-1)!
   }
 
-  get lastActive(): gtxn.Transaction {
+  get lastActive(): Transaction {
     return this.lastGroup.activeTransaction
   }
 
+  /* internal */
   appendLog(value: internal.primitives.StubBytesCompat): void {
     const activeTransaction = this.activeGroup.activeTransaction
     if (activeTransaction.type !== TransactionType.ApplicationCall) {
       throw internal.errors.internalError('Can only add logs to ApplicationCallTransaction!')
     }
-    ;(activeTransaction as unknown as TransactionWithLogFunc).appendLog(value)
+    activeTransaction.appendLog(value)
   }
 
   exportLogs<const T extends [...LogDecoding[]]>(appId: uint64, ...decoding: T): DecodedLogs<T> {
     const transaction = this.groups
       .flatMap((g) => g.transactions)
-      .find((t) => t.type === TransactionType.ApplicationCall && asBigInt(t.appId.id) === asBigInt(appId))
+      .filter((t) => t.type === TransactionType.ApplicationCall)
+      .find((t) => asBigInt(t.appId.id) === asBigInt(appId))
     let logs = []
     if (transaction) {
-      logs = (transaction as unknown as ApplicationTransactionFields).appLogs ?? []
+      logs = transaction.appLogs
     } else {
       logs = lazyContext.getApplicationData(appId).appLogs
     }
@@ -105,9 +108,9 @@ export class TransactionContext {
 export class TransactionGroup {
   activeTransactionIndex: number
   latestTimestamp: number
-  transactions: gtxn.Transaction[]
+  transactions: Transaction[]
 
-  constructor(transactions: gtxn.Transaction[], activeTransactionIndex?: number) {
+  constructor(transactions: Transaction[], activeTransactionIndex?: number) {
     this.latestTimestamp = Date.now()
     if (transactions.length > algosdk.AtomicTransactionComposer.MAX_GROUP_SIZE) {
       internal.errors.internalError(
@@ -127,12 +130,8 @@ export class TransactionGroup {
     if (this.transactions.length === 0) {
       internal.errors.internalError('No transactions in the group')
     }
-
-    const appId = (this.activeTransaction as gtxn.ApplicationTxn)?.appId
-    if (appId) {
-      return appId.id
-    }
-    internal.errors.internalError('No app_id found in the active transaction')
+    testInvariant(this.activeTransaction.type === TransactionType.ApplicationCall, 'No app_id found in the active transaction')
+    return this.activeTransaction.appId.id
   }
 
   patchActiveTransactionFields(fields: AllTransactionFields) {

@@ -63,7 +63,7 @@ export class TypeResolver {
     /*
       The method getTypeArgumentsForResolvedSignature has not made it into typescript yet, but it has been
       proposed here: https://github.com/microsoft/TypeScript/issues/59637 and added to the backlog. For now
-      the method has been patched into the TypeScript 5.5.2 using patch-package
+      the method has been patched into the TypeScript 5.6.2 using patch-package
      */
     const tps = this.checker.getTypeArgumentsForResolvedSignature(sig)
     return tps?.map((t) => this.resolveType(t, sourceLocation)) ?? []

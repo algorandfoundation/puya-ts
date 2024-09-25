@@ -13,7 +13,7 @@ import {
 import { asBigInt } from '../util'
 
 export class TxnValueGenerator {
-  applicationCall(fields?: ApplicationTransactionFields): gtxn.ApplicationTxn {
+  applicationCall(fields?: ApplicationTransactionFields): ApplicationTransaction {
     const params = fields ?? {}
     if (params.appId && !lazyContext.ledger.applicationDataMap.has(asBigInt(params.appId.id))) {
       internal.errors.internalError(`Application ID ${params.appId.id} not found in test context`)
@@ -22,26 +22,26 @@ export class TxnValueGenerator {
       params.appId = lazyContext.any.application()
     }
 
-    return ApplicationTransaction(params)
+    return ApplicationTransaction.create(params)
   }
 
-  payment(fields?: TxnFields<gtxn.PaymentTxn>): gtxn.PaymentTxn {
-    return PaymentTransaction(fields ?? {})
+  payment(fields?: TxnFields<gtxn.PaymentTxn>): PaymentTransaction {
+    return PaymentTransaction.create(fields ?? {})
   }
 
-  keyRegistration(fields?: TxnFields<gtxn.KeyRegistrationTxn>): gtxn.KeyRegistrationTxn {
-    return KeyRegistrationTransaction(fields ?? {})
+  keyRegistration(fields?: TxnFields<gtxn.KeyRegistrationTxn>): KeyRegistrationTransaction {
+    return KeyRegistrationTransaction.create(fields ?? {})
   }
 
-  assetConfig(fields?: TxnFields<gtxn.AssetConfigTxn>): gtxn.AssetConfigTxn {
-    return AssetConfigTransaction(fields ?? {})
+  assetConfig(fields?: TxnFields<gtxn.AssetConfigTxn>): AssetConfigTransaction {
+    return AssetConfigTransaction.create(fields ?? {})
   }
 
-  assetTransfer(fields?: TxnFields<gtxn.AssetTransferTxn>): gtxn.AssetTransferTxn {
-    return AssetTransferTransaction(fields ?? {})
+  assetTransfer(fields?: TxnFields<gtxn.AssetTransferTxn>): AssetTransferTransaction {
+    return AssetTransferTransaction.create(fields ?? {})
   }
 
-  assetFreeze(fields?: TxnFields<gtxn.AssetFreezeTxn>): gtxn.AssetFreezeTxn {
-    return AssetFreezeTransaction(fields ?? {})
+  assetFreeze(fields?: TxnFields<gtxn.AssetFreezeTxn>): AssetFreezeTransaction {
+    return AssetFreezeTransaction.create(fields ?? {})
   }
 }

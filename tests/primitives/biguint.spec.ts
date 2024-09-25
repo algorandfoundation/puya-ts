@@ -1,7 +1,7 @@
-import { biguint, BigUint, Bytes, internal, Uint64 } from '@algorandfoundation/algo-ts'
-import { AppSpec } from '@algorandfoundation/algokit-utils/types/app-spec'
+import type { biguint } from '@algorandfoundation/algo-ts'
+import { BigUint, Bytes, internal, Uint64 } from '@algorandfoundation/algo-ts'
+import type { AppSpec } from '@algorandfoundation/algokit-utils/types/app-spec'
 import { describe, expect, it } from 'vitest'
-
 import appSpecJson from './artifacts/data/PrimitiveOpsContract.arc32.json'
 import { getAlgorandAppClient, getAvmResult, getAvmResultRaw } from './avm-invoker'
 
