@@ -1,0 +1,179 @@
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        required: false
+        type: string
+        default: 18.x
+      working-directory:
+        required: false
+        type: string
+        default: '.'
+      lint-script:
+        required: false
+        type: string
+        default: npm run lint --if-present
+      compile-script:
+        required: false
+        type: string
+        default: npm run check-types --if-present
+      pre-test-script:
+        required: false
+        type: string
+      test-script:
+        required: false
+        type: string
+        default: npm run test --if-present
+      test-environment-variables:
+        required: false
+        type: string
+        default: '{}'
+      output-test-results:
+        required: false
+        type: boolean
+        default: false
+      test-results-file-pattern:
+        required: false
+        type: string
+        default: '**/test-results.xml'
+      audit-script:
+        required: false
+        type: string
+        default: npm audit
+      build-script:
+        required: false
+        type: string
+        default: npm run build
+      run-build:
+        required: false
+        type: boolean
+        default: false
+      run-commit-lint:
+        required: false
+        type: boolean
+        default: false
+      commit-lint-script:
+        required: false
+        type: string
+        default: npx commitlint --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }} --verbose
+      pre-run-script:
+        required: false
+        type: string
+      upload-artifact-name:
+        required: false
+        type: string
+      upload-artifact-path:
+        required: false
+        description: The full path to the artifact directory, this path does not take working-directory into account
+        type: string
+        default: .
+
+      download-artifact-name:
+        required: false
+        type: string
+      download-artifact-pattern:
+        required: false
+        type: string
+      download-artifact-path:
+        required: false
+        description: The full path to the artifact directory, this path does not take working-directory into account
+        type: string
+        default: .
+
+    secrets:
+      npm-auth-token:
+        description: NPM auth token (don't pass in on a PR build on a public repository)
+        required: false
+
+jobs:
+  node-ci:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: ${{ inputs.working-directory }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # setup node + private repo access
+      - name: Use Node.js ${{ inputs.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@makerxstudio'
+          cache: 'npm'
+          cache-dependency-path: ${{ inputs.working-directory }}/package-lock.json
+
+      - name: Download artifacts
+        if: ${{ inputs.download-artifact-name || inputs.download-artifact-pattern }}
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.download-artifact-name }}
+          pattern: ${{ inputs.download-artifact-pattern }}
+          path: ${{ inputs.download-artifact-path }}
+
+      - name: Pre-run
+        if: ${{ inputs.pre-run-script }}
+        run: ${{ inputs.pre-run-script }}
+
+      # run npm ci preventing script access to npm auth token
+      - run: npm ci --ignore-scripts
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.npm-auth-token || secrets.GITHUB_TOKEN }}
+      # allow scripts to run without npm auth token
+      - run: npm rebuild && npm run prepare --if-present
+
+      # run all the CI scripts
+      - name: 'Commit lint'
+        if: ${{ inputs.run-commit-lint }}
+        run: ${{ inputs.commit-lint-script }}
+
+      - name: Lint
+        run: ${{ inputs.lint-script }}
+
+      - name: Compile
+        run: ${{ inputs.compile-script }}
+
+      - name: Pre-test
+        if: ${{ inputs.pre-test-script }}
+        run: ${{ inputs.pre-test-script }}
+
+      - name: Test
+        run: ${{ inputs.test-script }}
+        env: ${{ fromJson(inputs.test-environment-variables) }}
+
+        #Requires permissions.checks: write
+      - name: Publish test results
+        if: ${{ inputs.output-test-results }}
+        uses: phoenix-actions/test-reporting@v10
+        with:
+          name: Test results
+          path: ${{ inputs.test-results-file-pattern }}
+          reporter: jest-junit
+          output-to: checks
+          fail-on-error: false
+
+      - name: Audit
+        run: ${{ inputs.audit-script }}
+
+      - name: Build
+        if: ${{ inputs.run-build }}
+        run: ${{ inputs.build-script }}
+        # CDK infrastructure build calls npm ci on /infrastructure/build, which may fail without NODE_AUTH_TOKEN
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.npm-auth-token || secrets.GITHUB_TOKEN }}
+
+      - name: Publish artifact
+        if: ${{ inputs.upload-artifact-name }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.upload-artifact-name }}
+          path: ${{ inputs.upload-artifact-path }}
+
+
