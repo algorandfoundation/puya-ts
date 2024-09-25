@@ -13,9 +13,9 @@ export class AppExpectingEffects extends arc4.Contract {
 
   @arc4.abimethod()
   public log_group(appCall: gtxn.ApplicationTxn): void {
-    assert(appCall.appArgs(0) === Bytes('some_value()uint64'), 'expected correct method called')
-    assert(appCall.numLogs === 1, 'expected logs')
-    assert(appCall.lastLog === Bytes('this is a log statement'))
+    assert(appCall.appArgs(0).equals(Bytes('some_value()uint64')), 'expected correct method called')
+    assert(appCall.numLogs.valueOf().toString() === '1', 'expected logs')
+    assert(appCall.lastLog.equals(Bytes('this is a log statement')))
   }
 
   // TODO: uncomment when arc4 stubs are implemented

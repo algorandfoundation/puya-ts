@@ -28,9 +28,19 @@ export const captureMethodConfig = <T extends Contract>(
   methodName: string,
   config?: AbiMethodConfig<T> | BareMethodConfig,
 ): void => {
-  const metadata = getAbiMetadata(contract, methodName)
+  const metadata = ensureMetadata(contract, methodName)
   metadata.onCreate = config?.onCreate ?? 'disallow'
   metadata.allowActions = ([] as OnCompleteActionStr[]).concat(config?.allowActions ?? 'NoOp')
+}
+
+const ensureMetadata = <T extends Contract>(contract: T, methodName: string): AbiMetadata => {
+  if (!hasAbiMetadata(contract)) {
+    const contractClass = contract.constructor as { new (): T }
+    Object.getOwnPropertyNames(Object.getPrototypeOf(contract)).forEach((name) => {
+      attachAbiMetadata(contractClass, name, { methodName: name, methodSelector: name, argTypes: [], returnType: '' })
+    })
+  }
+  return getAbiMetadata(contract, methodName)
 }
 
 export const hasAbiMetadata = <T extends Contract>(contract: T): boolean => {
