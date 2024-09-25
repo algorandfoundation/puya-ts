@@ -1,0 +1,60 @@
+{
+  "branches": [
+    {
+      "name": "main",
+      "prerelease": "beta"
+    },
+    {
+      "name": "release"
+    }
+  ],
+  "plugins": [
+    [
+      "@semantic-release/commit-analyzer",
+      {
+        "preset": "conventionalcommits",
+        "releaseRules": [
+          {
+            "type": "build",
+            "release": "patch"
+          },
+          {
+            "type": "chore",
+            "release": "patch"
+          }
+        ]
+      }
+    ],
+    [
+      "@semantic-release/release-notes-generator",
+      {
+        "preset": "conventionalcommits",
+        "presetConfig": {
+          "types": [
+            {
+              "type": "feat",
+              "section": "Features"
+            },
+            {
+              "type": "fix",
+              "section": "Bug Fixes"
+            },
+            {
+              "type": "build",
+              "section": "Dependencies and Other Build Updates",
+              "hidden": false
+            }
+          ]
+        }
+      }
+    ],
+    [
+      "@semantic-release/npm",
+      {
+        "npmPublish": true,
+        "pkgRoot": "."
+      }
+    ],
+    "@semantic-release/github"
+  ]
+}

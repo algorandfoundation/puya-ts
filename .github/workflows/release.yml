@@ -1,0 +1,39 @@
+name: Publish
+
+on:
+  push:
+    branches:
+      - compiler-alpha
+      - main
+      - release
+  workflow_dispatch:
+
+concurrency: release
+
+permissions:
+  contents: write
+
+jobs:
+  ci:
+    name: Build and test
+    uses: ./.github/workflows/ci-all.yml
+
+  release:
+    name: Release
+    needs: ci
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+
+      - name: Download package artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
