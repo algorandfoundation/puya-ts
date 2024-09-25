@@ -132,6 +132,7 @@ export const AssetFreezeTransaction = (txnFields: TxnFields<gtxn.AssetFreezeTxn>
 }
 
 export type TransactionWithLogFunc = {
+  appLogs: Array<bytes>
   appendLog: (value: internal.primitives.StubBytesCompat) => void
 }
 export type ApplicationTransactionFields = TxnFields<gtxn.ApplicationTxn> &
@@ -166,6 +167,9 @@ export const ApplicationTransaction = (txnFields: ApplicationTransactionFields):
     extraProgramPages: Uint64(0),
     createdApp: Application(),
     ...txnFields,
+    get appLogs() {
+      return arrayData.appLogs
+    },
     get approvalProgram() {
       return this.approvalProgramPages(0)
     },
