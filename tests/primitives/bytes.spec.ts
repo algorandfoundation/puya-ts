@@ -1,10 +1,11 @@
 import { bytes, Bytes, internal } from '@algorandfoundation/algo-ts'
 import { AppSpec } from '@algorandfoundation/algokit-utils/types/app-spec'
 import { describe, expect, it } from 'vitest'
-import { MAX_BYTES_SIZE } from '../../src/constants'
-import appSpecJson from '../artifacts/primitive-ops/data/PrimitiveOpsContract.arc32.json'
-import { getAlgorandAppClient, getAvmResult, getAvmResultRaw } from '../avm-invoker'
-import { asUint8Array, getSha256Hash, padUint8Array } from '../util'
+import appSpecJson from './artifacts/data/PrimitiveOpsContract.arc32.json'
+import { getAlgorandAppClient, getAvmResult, getAvmResultRaw } from './avm-invoker'
+import { asUint8Array, getSha256Hash, padUint8Array } from './util'
+
+const MAX_BYTES_SIZE = 4096
 
 describe('Bytes', async () => {
   const appClient = await getAlgorandAppClient(appSpecJson as AppSpec)

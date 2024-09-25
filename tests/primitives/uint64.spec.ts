@@ -1,10 +1,10 @@
 import { internal, uint64, Uint64 } from '@algorandfoundation/algo-ts'
 import { AppSpec } from '@algorandfoundation/algokit-utils/types/app-spec'
 import { describe, expect, it } from 'vitest'
-import { MAX_UINT64 } from '../../src/constants'
-import appSpecJson from '../artifacts/primitive-ops/data/PrimitiveOpsContract.arc32.json'
-import { getAlgorandAppClient, getAvmResult } from '../avm-invoker'
+import appSpecJson from './artifacts/data/PrimitiveOpsContract.arc32.json'
+import { getAlgorandAppClient, getAvmResult } from './avm-invoker'
 
+const MAX_UINT64 = 2n ** 64n - 1n
 const asUint64 = (val: bigint | number) => (typeof val === 'bigint' ? Uint64(val) : Uint64(val))
 
 describe('Unit64', async () => {
