@@ -8,7 +8,7 @@ const config: RollupOptions = {
   input: {
     index: 'src/index.ts',
     cli: 'src/cli.ts',
-    'test-transformer': 'src/test-transformer/index.ts',
+    internal: 'src/internal.ts',
   },
   output: [
     {
@@ -24,11 +24,12 @@ const config: RollupOptions = {
     moduleSideEffects: false,
     propertyReadSideEffects: false,
   },
+  external: [/node_modules/, /tslib/],
   plugins: [
     typescript({
       tsconfig: './tsconfig.build.json',
     }),
-    commonjs({ extensions: ['.js'] }),
+    commonjs(),
     nodeResolve(),
     json(),
   ],

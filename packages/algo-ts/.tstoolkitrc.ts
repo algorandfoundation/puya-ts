@@ -9,7 +9,7 @@ const config: TsToolkitConfig = {
     exports: {
       '.': "index.ts",
       './arc4': "arc4/index.ts"
-    }
+    },
   }
 }
 export default config

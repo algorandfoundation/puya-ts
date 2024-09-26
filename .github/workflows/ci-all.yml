@@ -1,7 +1,6 @@
 on:
   workflow_call:
 
-
 jobs:
   ci-algo-ts:
     name: 'CI: algo-ts'
@@ -13,31 +12,15 @@ jobs:
       working-directory: packages/algo-ts
       upload-artifact-name: algo-ts
       upload-artifact-path: ./packages/algo-ts/dist
-  ci-algo-ts-testing:
-    name: 'CI: algo-ts-testing'
-    uses: ./.github/workflows/node-ci.yml
-    needs:
-      - ci-algo-ts
-    with:
-      download-artifact-name: algo-ts
-      download-artifact-path: ./packages/algo-ts/dist
-      node-version: 20.x
-      run-build: true
-      build-script: npm run build
-      audit-script: npm run audit
-      working-directory: packages/algo-ts-testing
-      upload-artifact-name: algo-ts-testing
-      upload-artifact-path: ./packages/algo-ts-testing/dist
   ci-puya-ts:
     name: 'CI: puya-ts'
     uses: ./.github/workflows/node-ci.yml
     needs:
       - ci-algo-ts
-      - ci-algo-ts-testing
     with:
       download-artifact-pattern: algo-*
       download-artifact-path: ./packages-temp
-      pre-run-script: mv packages-temp/algo-ts packages/algo-ts/dist && mv packages-temp/algo-ts-testing packages/algo-ts-testing/dist
+      pre-run-script: mv packages-temp/algo-ts packages/algo-ts/dist
       node-version: 20.x
       run-build: true
       run-commit-lint: true

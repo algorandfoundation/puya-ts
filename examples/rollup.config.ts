@@ -1,6 +1,5 @@
 import typescript from '@rollup/plugin-typescript'
 import type { RollupOptions } from 'rollup'
-import { puyaTsTransformer } from '../src/test-transformer'
 
 const config: RollupOptions = {
   input: [
@@ -30,9 +29,6 @@ const config: RollupOptions = {
       target: 'ES2022',
       compilerOptions: {
         lib: ['es2023'],
-      },
-      transformers: {
-        before: [puyaTsTransformer],
       },
     }),
   ],

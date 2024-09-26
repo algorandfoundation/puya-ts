@@ -1,4 +1,4 @@
-import type {TsToolkitConfig} from "@makerx/ts-toolkit";
+import type { TsToolkitConfig } from "@makerx/ts-toolkit";
 
 const config: TsToolkitConfig = {
   packageConfig: {
@@ -6,9 +6,9 @@ const config: TsToolkitConfig = {
     outDir: 'dist',
     moduleType: 'module',
     exports: {
-      '.': 'index',
-      './cli': 'cli',
-      './test-transformer': 'test-transformer'
+      '.': 'index.ts',
+      './cli': 'cli.ts',
+      './internal': 'internal.ts'
     }
   }
 }
