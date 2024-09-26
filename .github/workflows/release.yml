@@ -33,17 +33,31 @@ jobs:
         with:
           node-version: 20.x
 
+      - run: npm ci --ignore-scripts
+
       - name: Download package artifacts
         uses: actions/download-artifact@v4
         with:
           path: artifacts
 
-      - name: Prepare @algorandfoundation/algo-ts
-        run: cp .releaserc.json artifacts/algo-ts/.releaserc.json
-
       - name: Publish @algorandfoundation/algo-ts
+        uses: JS-DevTools/npm-publish@v3
+        id: publish-algo-ts
+        with:
+          token: ${{ secrets.NPM_SECRET }}
+          package: artifacts/algo-ts/package.json
+          access: 'public'
+          dry-run: true
+
+      - run: echo "type ${{ steps.publish-algo-ts.outputs.type }} name ${{ steps.publish-algo-ts.outputs.name }} version ${{ steps.publish-algo-ts.outputs.version }}"
+
+      - name: Update puya-ts' peer dependency on algo-ts
+        run: npx tsx ../../scripts/update-algo-ts-peer-dep.ts ${{ steps.publish-algo-ts.outputs.version }}
+        working-directory: artifacts/puya-ts
+
+      - name: Publish @algorandfoundation/puya-ts
         run: npx semantic-release
-        working-directory: artifacts/algo-ts/
+
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_SECRET }}

@@ -35,6 +35,8 @@ const cliArgumentsSchema = z.array(z.string())
 function cli() {
   const commander = new Command().name('puya-ts').description('Algo-TS to Algorand smart contract compiler')
 
+  commander.helpCommand(true)
+
   commander
     .command('build')
     .argument('<paths...>', 'The path, or paths to search for compatible .algo.ts files')
@@ -122,7 +124,10 @@ function cli() {
       }
     })
 
-  commander.parse(process.argv)
+  if (process.argv.length < 3) {
+    commander.help()
+  } else {
+    commander.parse(process.argv)
+  }
 }
-
 cli()

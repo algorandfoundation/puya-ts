@@ -9,6 +9,7 @@ const config: RollupOptions = {
     index: 'src/index.ts',
     cli: 'src/cli.ts',
     internal: 'src/internal.ts',
+    'bin/run-cli': 'src/bin/run-cli.ts',
   },
   output: [
     {
@@ -21,7 +22,7 @@ const config: RollupOptions = {
     },
   ],
   treeshake: {
-    moduleSideEffects: false,
+    moduleSideEffects: true,
     propertyReadSideEffects: false,
   },
   external: [/node_modules/, /tslib/],
