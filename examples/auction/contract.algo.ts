@@ -1,4 +1,4 @@
-import type { gtxn, uint64 } from '@algorandfoundation/algo-ts'
+import type { gtxn, uint64 } from '@algorandfoundation/algorand-typescript'
 import {
   abimethod,
   Account,
@@ -11,7 +11,7 @@ import {
   itxn,
   LocalState,
   Txn,
-} from '@algorandfoundation/algo-ts'
+} from '@algorandfoundation/algorand-typescript'
 
 export class Auction extends Contract {
   previousBidder = GlobalState<Account>()

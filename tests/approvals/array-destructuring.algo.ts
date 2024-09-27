@@ -1,5 +1,5 @@
-import type { biguint, bytes, uint64 } from '@algorandfoundation/algo-ts'
-import { assert, Bytes, Uint64 } from '@algorandfoundation/algo-ts'
+import type { biguint, bytes, uint64 } from '@algorandfoundation/algorand-typescript'
+import { assert, Bytes, Uint64 } from '@algorandfoundation/algorand-typescript'
 
 function test() {
   const [a, b, c, d] = produceItems()

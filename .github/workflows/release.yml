@@ -40,14 +40,13 @@ jobs:
         with:
           path: artifacts
 
-      - name: Publish @algorandfoundation/algo-ts
+      - name: Publish @algorandfoundation/algorand-typescript
         uses: JS-DevTools/npm-publish@v3
         id: publish-algo-ts
         with:
-          token: ${{ secrets.NPM_SECRET }}
+          token: ${{ secrets.NPM_TOKEN }}
           package: artifacts/algo-ts/package.json
           access: 'public'
-          dry-run: true
 
       - run: echo "type ${{ steps.publish-algo-ts.outputs.type }} name ${{ steps.publish-algo-ts.outputs.name }} version ${{ steps.publish-algo-ts.outputs.version }}"
 
@@ -60,4 +59,4 @@ jobs:
 
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_SECRET }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

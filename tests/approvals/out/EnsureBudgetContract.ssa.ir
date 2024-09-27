@@ -13,11 +13,11 @@ contract tests/approvals/ensure-budget.algo.ts::EnsureBudgetContract:
                 _puya_lib.util.ensure_budget(100u, 1u)
                 _puya_lib.util.ensure_budget(100u, 2u)
                 return 1u
-        
+
         subroutine tests/approvals/ensure-budget.algo.ts::EnsureBudgetContract.constructor() -> void:
             block@0: // L3
-                return 
-        
+                return
+
         subroutine _puya_lib.util.ensure_budget(required_budget: uint64, fee_source: uint64) -> void:
             block@0: // L12
                 let required_budget_with_buffer#0: uint64 = (+ required_budget#0 10u)
@@ -46,9 +46,9 @@ contract tests/approvals/ensure-budget.algo.ts::EnsureBudgetContract:
                 itxn_submit
                 goto block@1
             block@7: // after_while_L20
-                return 
-    
+                return
+
     program clear-state:
-        subroutine @algorandfoundation/algo-ts/base-contract.d.ts::BaseContract.clearStateProgram() -> bool:
+        subroutine @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.clearStateProgram() -> bool:
             block@0: // L1
                 return 1u

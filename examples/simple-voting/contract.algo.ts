@@ -1,5 +1,5 @@
-import type { Account, bytes, uint64 } from '@algorandfoundation/algo-ts'
-import { assert, BaseContract, Bytes, GlobalState, LocalState, op, TransactionType, Uint64 } from '@algorandfoundation/algo-ts'
+import type { Account, bytes, uint64 } from '@algorandfoundation/algorand-typescript'
+import { assert, BaseContract, Bytes, GlobalState, LocalState, op, TransactionType, Uint64 } from '@algorandfoundation/algorand-typescript'
 
 const VOTE_PRICE = Uint64(10_000)
 export default class SimpleVotingContract extends BaseContract {

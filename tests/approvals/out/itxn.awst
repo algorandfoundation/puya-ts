@@ -1,4 +1,4 @@
-contract ItxnDemoContract extends @algorandfoundation/algo-ts/base-contract.d.ts::BaseContract
+contract ItxnDemoContract extends @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract
 {
   globals {
     ["name"]: bytes
@@ -8,7 +8,7 @@ contract ItxnDemoContract extends @algorandfoundation/algo-ts/base-contract.d.ts
     void
     var GlobalState["name"]: bytes = 0x
   }
-  
+
   approvalProgram(): bool
   {
     if (Boolean(txn<NumAppArgs>())) {
@@ -32,7 +32,7 @@ contract ItxnDemoContract extends @algorandfoundation/algo-ts/base-contract.d.ts
     }
     return True
   }
-  
+
   test1(): void
   {
     var GlobalState["name"]: bytes = "AST1"
@@ -54,7 +54,7 @@ contract ItxnDemoContract extends @algorandfoundation/algo-ts/base-contract.d.ts
     update_inner_transaction(assetParams, Note="3rd")
     submit_txn(appCreateParams, assetParams)
   }
-  
+
   test2(): void
   {
     if (Boolean(txn<NumAppArgs>())) {
@@ -68,5 +68,5 @@ contract ItxnDemoContract extends @algorandfoundation/algo-ts/base-contract.d.ts
     assert(createAppTxn.ApplicationArgs[1] == "2")
     assert(createAppTxn.Note == "with args param set")
   }
-  
+
 }

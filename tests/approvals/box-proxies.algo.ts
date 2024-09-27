@@ -1,5 +1,5 @@
-import type { bytes } from '@algorandfoundation/algo-ts'
-import { assert, Box, BoxMap, BoxRef, Bytes } from '@algorandfoundation/algo-ts'
+import type { bytes } from '@algorandfoundation/algorand-typescript'
+import { assert, Box, BoxMap, BoxRef, Bytes } from '@algorandfoundation/algorand-typescript'
 
 const boxA = Box<string>({ key: Bytes('A') })
 function testBox(box: Box<string>, value: string) {

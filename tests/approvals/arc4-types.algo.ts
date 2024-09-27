@@ -1,6 +1,6 @@
-import type { biguint, uint64 } from '@algorandfoundation/algo-ts'
-import { BaseContract } from '@algorandfoundation/algo-ts'
-import { DynamicArray, StaticArray, UintN } from '@algorandfoundation/algo-ts/arc4'
+import type { biguint, uint64 } from '@algorandfoundation/algorand-typescript'
+import { BaseContract } from '@algorandfoundation/algorand-typescript'
+import { DynamicArray, StaticArray, UintN } from '@algorandfoundation/algorand-typescript/arc4'
 
 function test(n: uint64, b: biguint, c: UintN<256>) {
   const x = new UintN<8>(4)

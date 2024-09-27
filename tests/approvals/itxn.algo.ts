@@ -1,5 +1,5 @@
-import { assert, BaseContract, Bytes, Global, GlobalState, itxn, Txn } from '@algorandfoundation/algo-ts'
-import { OnCompleteAction } from '@algorandfoundation/algo-ts/arc4'
+import { assert, BaseContract, Bytes, Global, GlobalState, itxn, Txn } from '@algorandfoundation/algorand-typescript'
+import { OnCompleteAction } from '@algorandfoundation/algorand-typescript/arc4'
 
 const LOG_1ST_ARG_AND_APPROVE = Bytes('\x09\x36\x1A\x00\xB0\x91\x01')
 const APPROVE = Bytes('\x09\x81\x01')

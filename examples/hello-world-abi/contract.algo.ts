@@ -1,4 +1,4 @@
-import { arc4, log } from '@algorandfoundation/algo-ts'
+import { arc4, log } from '@algorandfoundation/algorand-typescript'
 
 abstract class Intermediate extends arc4.Contract {
   @arc4.abimethod({ allowActions: ['NoOp'], readonly: true })

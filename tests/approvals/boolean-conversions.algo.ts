@@ -1,5 +1,5 @@
-import type { bytes, uint64 } from '@algorandfoundation/algo-ts'
-import { assert, BigUint, Bytes, Uint64 } from '@algorandfoundation/algo-ts'
+import type { bytes, uint64 } from '@algorandfoundation/algorand-typescript'
+import { assert, BigUint, Bytes, Uint64 } from '@algorandfoundation/algorand-typescript'
 
 function test_truthyness(a: uint64, b: uint64, c: string, d: bytes, e: uint64) {
   assert(!0, 'Zero is falsy')

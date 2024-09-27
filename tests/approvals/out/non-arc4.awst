@@ -1,20 +1,20 @@
-contract HelloWorldContract extends @algorandfoundation/algo-ts/base-contract.d.ts::BaseContract
+contract HelloWorldContract extends @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract
 {
   constructor(): void
   {
     void
   }
-  
+
   approvalProgram(): bool
   {
     var name: string = reinterpret_cast<string>(txnas<ApplicationArgs>(0))
     log(reinterpret_cast<bytes>("Hello, " + name))
     return True
   }
-  
+
   clearState(): bool
   {
     return True
   }
-  
+
 }

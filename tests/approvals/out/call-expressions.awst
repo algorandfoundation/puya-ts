@@ -1,38 +1,38 @@
-contract ExampleBase extends @algorandfoundation/algo-ts/arc4/index.d.ts::Contract, @algorandfoundation/algo-ts/base-contract.d.ts::BaseContract
+contract ExampleBase extends @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract, @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract
 {
   constructor(): void
   {
     void
   }
-  
+
   baseMethod(): uint64
   {
     return 2
   }
-  
+
 }
-contract Example extends tests/approvals/call-expressions.algo.ts::ExampleBase, @algorandfoundation/algo-ts/arc4/index.d.ts::Contract, @algorandfoundation/algo-ts/base-contract.d.ts::BaseContract
+contract Example extends tests/approvals/call-expressions.algo.ts::ExampleBase, @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract, @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract
 {
   constructor(): void
   {
     super.constructor()
   }
-  
+
   approvalProgram(): bool
   {
     return this.localMethod() + this.baseMethod() == tests/approvals/call-expressions.algo.ts::freeMethod() - this.baseMethod()
   }
-  
+
   baseMethod(): uint64
   {
     return 1
   }
-  
+
   localMethod(): uint64
   {
     return 5
   }
-  
+
 }
 subroutine freeMethod(): uint64
 {

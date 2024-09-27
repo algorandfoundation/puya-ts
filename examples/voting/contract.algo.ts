@@ -1,4 +1,4 @@
-import type { Account, Asset, bytes, gtxn, uint64 } from '@algorandfoundation/algo-ts'
+import type { Account, Asset, bytes, gtxn, uint64 } from '@algorandfoundation/algorand-typescript'
 import {
   abimethod,
   arc4,
@@ -17,7 +17,7 @@ import {
   Txn,
   Uint64,
   urange,
-} from '@algorandfoundation/algo-ts'
+} from '@algorandfoundation/algorand-typescript'
 
 type VoteIndexArray = arc4.DynamicArray<arc4.UintN<8>>
 

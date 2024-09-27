@@ -1,4 +1,4 @@
-import { Uint64 } from '@algorandfoundation/algo-ts'
+import { Uint64 } from '@algorandfoundation/algorand-typescript'
 
 function test() {
   // @expect-error Native array types are not valid as variable, parameter, return, or property types...

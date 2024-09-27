@@ -1,13 +1,13 @@
-contract AccountsContract extends @algorandfoundation/algo-ts/arc4/index.d.ts::Contract, @algorandfoundation/algo-ts/base-contract.d.ts::BaseContract
+contract AccountsContract extends @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract, @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract
 {
   constructor(): void
   {
     void
   }
-  
+
   getAccountInfo(): tuple[bytes, uint64, bytes, bool, bool, uint64, uint64, uint64, uint64, uint64, uint64, uint64, uint64, uint64, uint64]
   {
     return <tuple>[reinterpret_cast<bytes>(checked_maybe(acct_params_get<AcctAuthAddr>(account), comment=account funded)), checked_maybe(acct_params_get<AcctBalance>(account), comment=account funded), reinterpret_cast<bytes>(account), app_opted_in(account, global<CurrentApplicationID>()), asset_holding_get<AssetBalance>(account, asset).1, checked_maybe(acct_params_get<AcctMinBalance>(account), comment=account funded), checked_maybe(acct_params_get<AcctTotalAppsCreated>(account), comment=account funded), checked_maybe(acct_params_get<AcctTotalAppsOptedIn>(account), comment=account funded), checked_maybe(acct_params_get<AcctTotalAssets>(account), comment=account funded), checked_maybe(acct_params_get<AcctTotalAssetsCreated>(account), comment=account funded), checked_maybe(acct_params_get<AcctTotalBoxBytes>(account), comment=account funded), checked_maybe(acct_params_get<AcctTotalBoxes>(account), comment=account funded), checked_maybe(acct_params_get<AcctTotalExtraAppPages>(account), comment=account funded), checked_maybe(acct_params_get<AcctTotalNumByteSlice>(account), comment=account funded), checked_maybe(acct_params_get<AcctTotalNumUint>(account), comment=account funded)]
   }
-  
+
 }

@@ -1,4 +1,4 @@
-import { BaseContract, ensureBudget, OpUpFeeSource } from '@algorandfoundation/algo-ts'
+import { BaseContract, ensureBudget, OpUpFeeSource } from '@algorandfoundation/algorand-typescript'
 
 export class EnsureBudgetContract extends BaseContract {
   public approvalProgram(): boolean {

@@ -1,5 +1,5 @@
-import type { Account, Asset } from '@algorandfoundation/algo-ts'
-import { Contract, Global } from '@algorandfoundation/algo-ts'
+import type { Account, Asset } from '@algorandfoundation/algorand-typescript'
+import { Contract, Global } from '@algorandfoundation/algorand-typescript'
 
 export class AccountsContract extends Contract {
   public getAccountInfo(account: Account, asset: Asset) {

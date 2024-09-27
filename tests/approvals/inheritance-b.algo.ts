@@ -1,5 +1,5 @@
-import type { uint64 } from '@algorandfoundation/algo-ts'
-import { Contract, op, Txn } from '@algorandfoundation/algo-ts'
+import type { uint64 } from '@algorandfoundation/algorand-typescript'
+import { Contract, op, Txn } from '@algorandfoundation/algorand-typescript'
 import { SimpleContract } from './inheritance-a.algo'
 
 export class ConcreteSimpleContract extends SimpleContract {

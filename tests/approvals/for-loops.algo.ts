@@ -1,5 +1,5 @@
-import type { uint64 } from '@algorandfoundation/algo-ts'
-import { Uint64 } from '@algorandfoundation/algo-ts'
+import type { uint64 } from '@algorandfoundation/algorand-typescript'
+import { Uint64 } from '@algorandfoundation/algorand-typescript'
 
 function test_for_loop(start: uint64, stop: uint64, step: uint64) {
   let total = Uint64(0)

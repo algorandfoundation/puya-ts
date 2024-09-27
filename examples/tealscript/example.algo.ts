@@ -1,5 +1,5 @@
-import type { bytes } from '@algorandfoundation/algo-ts'
-import { abimethod, Bytes, log, Uint64 } from '@algorandfoundation/algo-ts'
+import type { bytes } from '@algorandfoundation/algorand-typescript'
+import { abimethod, Bytes, log, Uint64 } from '@algorandfoundation/algorand-typescript'
 import { TealScriptBase } from './teal-script-base.algo'
 
 export default class ExampleTealScript extends TealScriptBase {

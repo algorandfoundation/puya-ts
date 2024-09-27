@@ -1,5 +1,5 @@
-import type { uint64 } from '@algorandfoundation/algo-ts'
-import { BaseContract, Contract, GlobalState } from '@algorandfoundation/algo-ts'
+import type { uint64 } from '@algorandfoundation/algorand-typescript'
+import { BaseContract, Contract, GlobalState } from '@algorandfoundation/algorand-typescript'
 
 export abstract class SimpleContract extends BaseContract {
   someState = GlobalState<uint64>()

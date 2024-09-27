@@ -1,4 +1,4 @@
-import type { biguint, uint64 } from '@algorandfoundation/algo-ts'
+import type { biguint, uint64 } from '@algorandfoundation/algorand-typescript'
 
 function test_uint64() {
   const x: uint64 = 4 * 100 + 10

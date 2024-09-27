@@ -2,18 +2,18 @@ subroutine test(x: group_transaction_pay): void
 {
   assert(gtxns<Amount>(x) <= 50000 and gtxns<Amount>(x) >= 0 and gtxns<CloseRemainderTo>(x) == global<ZeroAddress>() and gtxns<FirstValid>(x) > 1 and gtxns<LastValid>(x) < 1099511627776 and gtxns<Receiver>(x) == global<CurrentApplicationAddress>() and gtxns<Sender>(x) == txn<Sender>())
 }
-contract AssertMatchContract extends @algorandfoundation/algo-ts/base-contract.d.ts::BaseContract
+contract AssertMatchContract extends @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract
 {
   constructor(): void
   {
     void
   }
-  
+
   approvalProgram(): bool
   {
     var txn: group_transaction_pay = reinterpret_cast<group_transaction_pay>(1)
     tests/approvals/assert-match.algo.ts::test(txn)
     return True
   }
-  
+
 }

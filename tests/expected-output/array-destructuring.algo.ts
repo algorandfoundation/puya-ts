@@ -1,5 +1,5 @@
-import type { biguint, bytes, uint64 } from '@algorandfoundation/algo-ts'
-import { Bytes } from '@algorandfoundation/algo-ts'
+import type { biguint, bytes, uint64 } from '@algorandfoundation/algorand-typescript'
+import { Bytes } from '@algorandfoundation/algorand-typescript'
 
 function test() {
   // @expect-error Spread operator is not supported

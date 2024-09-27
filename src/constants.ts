@@ -1,4 +1,4 @@
-const algoTsPackage = '@algorandfoundation/algo-ts'
+const algoTsPackage = '@algorandfoundation/algorand-typescript'
 
 export const Constants = {
   approvalProgramMethodName: 'approvalProgram',

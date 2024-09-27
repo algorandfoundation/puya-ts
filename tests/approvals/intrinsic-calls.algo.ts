@@ -1,5 +1,5 @@
-import type { bytes, uint64 } from '@algorandfoundation/algo-ts'
-import { op } from '@algorandfoundation/algo-ts'
+import type { bytes, uint64 } from '@algorandfoundation/algorand-typescript'
+import { op } from '@algorandfoundation/algorand-typescript'
 
 function test(a: uint64, b: bytes) {
   const x = op.setBit(a, 8, 1)

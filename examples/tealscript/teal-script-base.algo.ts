@@ -1,4 +1,4 @@
-import { arc4, Contract, err } from '@algorandfoundation/algo-ts'
+import { arc4, Contract, err } from '@algorandfoundation/algorand-typescript'
 
 export abstract class TealScriptBase extends Contract {
   @arc4.abimethod({ allowActions: 'DeleteApplication' })

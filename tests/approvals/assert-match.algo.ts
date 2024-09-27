@@ -1,4 +1,4 @@
-import { assertMatch, BaseContract, Global, gtxn, Txn } from '@algorandfoundation/algo-ts'
+import { assertMatch, BaseContract, Global, gtxn, Txn } from '@algorandfoundation/algorand-typescript'
 
 function test(x: gtxn.PaymentTxn) {
   assertMatch(x, {

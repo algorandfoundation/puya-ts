@@ -1,4 +1,4 @@
-import { BaseContract, log, op } from '@algorandfoundation/algo-ts'
+import { BaseContract, log, op } from '@algorandfoundation/algorand-typescript'
 
 export default class HelloWorldContract extends BaseContract {
   public approvalProgram(): boolean {

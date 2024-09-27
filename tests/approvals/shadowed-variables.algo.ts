@@ -1,5 +1,5 @@
-import type { bytes } from '@algorandfoundation/algo-ts'
-import { Bytes } from '@algorandfoundation/algo-ts'
+import type { bytes } from '@algorandfoundation/algorand-typescript'
+import { Bytes } from '@algorandfoundation/algorand-typescript'
 
 const a = Bytes('123')
 

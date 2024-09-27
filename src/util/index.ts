@@ -4,6 +4,7 @@ import { TextDecoder } from 'node:util'
 import type { SourceLocation } from '../awst/source-location'
 import { CodeError, InternalError } from '../errors'
 import type { DeliberateAny } from '../typescript-helpers'
+import { Constants } from '../constants'
 
 export { base32ToUint8Array, uint8ArrayToBase32 } from './base-32'
 
@@ -130,7 +131,7 @@ export function instanceOfAny<T extends Array<{ new (...args: DeliberateAny[]): 
 export function normalisePath(filePath: string, workingDirectory: string): string {
   const localPackageName = /packages\/algo-ts\/dist\/(.*)$/.exec(filePath)
   if (localPackageName) {
-    return `@algorandfoundation/algo-ts/${localPackageName[1]}`
+    return `${Constants.algoTsPackage}/${localPackageName[1]}`
   }
   const nodeModuleName = /node_modules\/(.*)$/.exec(filePath)
   if (nodeModuleName) {

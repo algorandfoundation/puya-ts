@@ -1,4 +1,4 @@
-import type { uint64 } from '@algorandfoundation/algo-ts'
+import type { uint64 } from '@algorandfoundation/algorand-typescript'
 
 function test(x: uint64, y: uint64) {
   // @expect-error Expression of type `number` must be explicitly converted to an algo-ts type...

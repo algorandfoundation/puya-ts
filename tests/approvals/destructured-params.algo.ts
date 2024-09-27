@@ -1,5 +1,5 @@
-import type { bytes, uint64 } from '@algorandfoundation/algo-ts'
-import { Bytes, log, Uint64 } from '@algorandfoundation/algo-ts'
+import type { bytes, uint64 } from '@algorandfoundation/algorand-typescript'
+import { Bytes, log, Uint64 } from '@algorandfoundation/algorand-typescript'
 
 function test({ a, b, c }: { a: uint64; b: bytes; c: boolean }): void {
   log(a, b, c)

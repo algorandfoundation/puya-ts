@@ -1,4 +1,4 @@
-contract ConcreteSimpleContract extends tests/approvals/inheritance-a.algo.ts::SimpleContract, @algorandfoundation/algo-ts/base-contract.d.ts::BaseContract
+contract ConcreteSimpleContract extends tests/approvals/inheritance-a.algo.ts::SimpleContract, @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract
 {
   globals {
     ["someState"]: uint64
@@ -7,20 +7,20 @@ contract ConcreteSimpleContract extends tests/approvals/inheritance-a.algo.ts::S
   {
     super.constructor()
   }
-  
+
   approvalProgram(): uint64
   {
     var a: uint64 = btoi(txnas<ApplicationArgs>(0))
     var b: uint64 = btoi(txnas<ApplicationArgs>(1))
     return this.simpleMethod(a, b)
   }
-  
+
 }
-contract ConcreteArc4Contract extends @algorandfoundation/algo-ts/arc4/index.d.ts::Contract, @algorandfoundation/algo-ts/base-contract.d.ts::BaseContract
+contract ConcreteArc4Contract extends @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract, @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract
 {
   constructor(): void
   {
     void
   }
-  
+
 }

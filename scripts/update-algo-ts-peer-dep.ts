@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import fs from 'fs'
 
-const AlgoTsPackageName = '@algorandfoundation/algo-ts'
+const AlgoTsPackageName = '@algorandfoundation/algorand-typescript'
 const newVersion = process.argv[2]
 
 const SemVersionReg = /^\d+\.\d+\.\d+(-((beta)|(alpha))(\.\d+)?)?$/
