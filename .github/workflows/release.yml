@@ -47,8 +47,7 @@ jobs:
           token: ${{ secrets.NPM_TOKEN }}
           package: artifacts/algo-ts/package.json
           access: 'public'
-
-      - run: echo "type ${{ steps.publish-algo-ts.outputs.type }} name ${{ steps.publish-algo-ts.outputs.name }} version ${{ steps.publish-algo-ts.outputs.version }}"
+          dry-run: true
 
       - name: Update puya-ts' peer dependency on algo-ts
         run: npx tsx ../../scripts/update-algo-ts-peer-dep.ts ${{ steps.publish-algo-ts.outputs.version }}
@@ -56,7 +55,6 @@ jobs:
 
       - name: Publish @algorandfoundation/puya-ts
         run: npx semantic-release
-
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
