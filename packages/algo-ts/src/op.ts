@@ -29,6 +29,8 @@ import {
   GlobalType,
   GTxnType,
   ItobType,
+  ITxnCreateType,
+  ITxnType,
   JsonRefType,
   Keccak256Type,
   MulwType,
@@ -118,6 +120,8 @@ export const Global: GlobalType = createObjectProxy('Global')
 export const GTxn: GTxnType = createObjectProxy('GTxn')
 export const JsonRef: JsonRefType = createObjectProxy('JsonRef')
 export const Txn: TxnType = createObjectProxy('Txn')
+export const ITxn: ITxnType = createObjectProxy('ITxn')
+export const ITxnCreate: ITxnCreateType = createObjectProxy('ITxnCreate')
 
 export const AcctParams = createObjectProxy('AcctParams')
 export const AppParams = createObjectProxy('AppParams')

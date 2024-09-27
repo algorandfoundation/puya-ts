@@ -25,7 +25,7 @@ export interface ApplicationInnerTxn extends txnTypes.ApplicationTxn {
   [isItxn]?: true
 }
 
-interface CommonTransactionFields {
+export interface CommonTransactionFields {
   /**
    * 32 byte address
    */
@@ -52,7 +52,7 @@ interface CommonTransactionFields {
   rekeyTo?: Account | string
 }
 
-interface PaymentFields extends CommonTransactionFields {
+export interface PaymentFields extends CommonTransactionFields {
   /**
    * The amount, in microALGO, to transfer
    *
@@ -67,7 +67,7 @@ interface PaymentFields extends CommonTransactionFields {
    */
   closeRemainderTo?: Account
 }
-interface KeyRegistrationFields extends CommonTransactionFields {
+export interface KeyRegistrationFields extends CommonTransactionFields {
   /**
    * 32 byte address
    */
@@ -103,7 +103,7 @@ interface KeyRegistrationFields extends CommonTransactionFields {
    */
   stateProofKey?: bytes
 }
-interface AssetTransferFields extends CommonTransactionFields {
+export interface AssetTransferFields extends CommonTransactionFields {
   /** The asset being transferred */
   xferAsset: Asset
   /** The amount of the asset being transferred */
@@ -115,8 +115,7 @@ interface AssetTransferFields extends CommonTransactionFields {
   /** The address to close the asset to */
   assetCloseTo?: Account
 }
-
-interface AssetConfigFields extends CommonTransactionFields {
+export interface AssetConfigFields extends CommonTransactionFields {
   configAsset?: Asset
   manager?: Account
   reserve?: Account
@@ -130,14 +129,12 @@ interface AssetConfigFields extends CommonTransactionFields {
   url?: string | bytes
   metadataHash?: bytes
 }
-
-interface AssetFreezeFields extends CommonTransactionFields {
+export interface AssetFreezeFields extends CommonTransactionFields {
   freezeAsset: Asset | uint64
   freezeAccount?: Account | string
   frozen?: boolean
 }
-
-interface ApplicationCallFields extends CommonTransactionFields {
+export interface ApplicationCallFields extends CommonTransactionFields {
   appId?: Application | uint64
   approvalProgram?: bytes | readonly [...bytes[]]
   clearStateProgram?: bytes | readonly [...bytes[]]
@@ -152,6 +149,7 @@ interface ApplicationCallFields extends CommonTransactionFields {
   assets?: readonly [...Asset[]]
   apps?: readonly [...Application[]]
 }
+
 type InnerTransaction<TFields, TTransaction> = {
   submit(): TTransaction
   set(p: Partial<TFields>): void

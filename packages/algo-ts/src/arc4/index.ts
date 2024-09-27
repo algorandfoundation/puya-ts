@@ -12,7 +12,7 @@ export class Contract extends BaseContract {
 }
 
 export type CreateOptions = 'allow' | 'disallow' | 'require'
-export type OnCompleteActionStr = 'NoOp' | 'OptIn' | 'CloseOut' | 'UpdateApplication' | 'DeleteApplication'
+export type OnCompleteActionStr = 'NoOp' | 'OptIn' | 'ClearState' | 'CloseOut' | 'UpdateApplication' | 'DeleteApplication'
 
 export enum OnCompleteAction {
   NoOp = Uint64(0),
