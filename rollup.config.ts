@@ -8,7 +8,6 @@ const config: RollupOptions = {
   input: {
     index: 'src/index.ts',
     cli: 'src/cli.ts',
-    internal: 'src/internal.ts',
     'bin/run-cli': 'src/bin/run-cli.ts',
   },
   output: [

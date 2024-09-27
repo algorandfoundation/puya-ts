@@ -9,7 +9,6 @@ const config: TsToolkitConfig = {
     exports: {
       '.': 'index.ts',
       './cli': 'cli.ts',
-      './internal': 'internal.ts',
     },
     bin: {
       'puya-ts': 'bin/run-cli.ts',

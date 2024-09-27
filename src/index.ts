@@ -12,6 +12,12 @@ import { createTsProgram } from './parser'
 import { invokePuya } from './puya'
 import type { PuyaPassThroughOptions } from './puya/options'
 
+export { SourceLocation } from './awst/source-location'
+export { anyPType, ContractClassPType, FunctionPType, PType } from './awst_build/ptypes'
+export { registerPTypes } from './awst_build/ptypes/register'
+export { typeRegistry } from './awst_build/type-registry'
+export { TypeResolver } from './awst_build/type-resolver'
+
 export type CompileResult = {
   logs: LogEvent[]
   programDirectory: string
