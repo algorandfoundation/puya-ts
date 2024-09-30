@@ -1,4 +1,4 @@
-import { Contract } from '.'
+import { Contract, gtxn } from '.'
 import { AbiMethodConfig, BareMethodConfig } from './arc4'
 import { OpsNamespace } from './op-types'
 import { bytes, uint64 } from './primitives'
@@ -12,6 +12,15 @@ export type ExecutionContext = {
   op: Partial<OpsNamespace>
   abiMetadata: {
     captureMethodConfig<T extends Contract>(contract: T, methodName: string, config?: AbiMethodConfig<T> | BareMethodConfig): void
+  }
+  gtxn: {
+    Transaction: typeof gtxn.Transaction
+    PaymentTxn: typeof gtxn.PaymentTxn
+    KeyRegistrationTxn: typeof gtxn.KeyRegistrationTxn
+    AssetConfigTxn: typeof gtxn.AssetConfigTxn
+    AssetTransferTxn: typeof gtxn.AssetTransferTxn
+    AssetFreezeTxn: typeof gtxn.AssetFreezeTxn
+    ApplicationTxn: typeof gtxn.ApplicationTxn
   }
 }
 
