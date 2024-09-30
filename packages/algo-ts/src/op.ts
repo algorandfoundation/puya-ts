@@ -26,6 +26,7 @@ import {
   GaidType,
   GetBitType,
   GetByteType,
+  GITxnType,
   GlobalType,
   GTxnType,
   ItobType,
@@ -120,6 +121,7 @@ export const Global: GlobalType = createObjectProxy('Global')
 export const GTxn: GTxnType = createObjectProxy('GTxn')
 export const JsonRef: JsonRefType = createObjectProxy('JsonRef')
 export const Txn: TxnType = createObjectProxy('Txn')
+export const GITxn: GITxnType = createObjectProxy('GITxn')
 export const ITxn: ITxnType = createObjectProxy('ITxn')
 export const ITxnCreate: ITxnCreateType = createObjectProxy('ITxnCreate')
 
