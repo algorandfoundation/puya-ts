@@ -47,7 +47,6 @@ jobs:
           token: ${{ secrets.NPM_TOKEN }}
           package: artifacts/algo-ts/package.json
           access: 'public'
-          dry-run: true
 
       - name: Update puya-ts' peer dependency on algo-ts
         run: npx tsx ../../scripts/update-algo-ts-peer-dep.ts ${{ steps.publish-algo-ts.outputs.version }}
