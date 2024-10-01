@@ -43,9 +43,7 @@ const EXCLUDED_OPCODES = new Set([
   'uncover',
   // program scratch slot read/modification (for current program)
   'load',
-  'loads',
   'store',
-  'stores',
   // maninuplates what other low level ops point to
   'intcblock',
   'bytecblock',

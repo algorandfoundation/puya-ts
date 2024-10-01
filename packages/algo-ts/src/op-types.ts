@@ -2046,6 +2046,29 @@ export type Keccak256Type = (a: bytes) => bytes
 export type LenType = (a: bytes) => uint64
 
 /**
+ * Load or store scratch values
+ */
+export type ScratchType = {
+  /**
+   * Ath scratch space value.  All scratch spaces are 0 at program start.
+   * @see Native TEAL opcode: [`loads`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#loads)
+   */
+  loadBytes(a: uint64): bytes
+
+  /**
+   * Ath scratch space value.  All scratch spaces are 0 at program start.
+   * @see Native TEAL opcode: [`loads`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#loads)
+   */
+  loadUint64(a: uint64): uint64
+
+  /**
+   * store B to the Ath scratch space
+   * @see Native TEAL opcode: [`stores`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#stores)
+   */
+  store(a: uint64, b: uint64 | bytes): void
+}
+
+/**
  * minimum required balance for account A, in microalgos. Required balance is affected by ASA, App, and Box usage. When creating or opting into an app, the minimum balance grows before the app code runs, therefore the increase is visible there. When deleting or closing out, the minimum balance decreases after the app executes. Changes caused by inner transactions or box usage are observable immediately following the opcode effecting the change.
  * @param Txn.Accounts offset (or, since v4, an _available_ account address), _available_ application id (or, since v4, a Txn.ForeignApps offset).
  *  * @return value.
@@ -2518,6 +2541,7 @@ export type OpsNamespace = {
   JsonRef: JsonRefType
   keccak256: Keccak256Type
   len: LenType
+  Scratch: ScratchType
   minBalance: MinBalanceType
   mulw: MulwType
   replace: ReplaceType

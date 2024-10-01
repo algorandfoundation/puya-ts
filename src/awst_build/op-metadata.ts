@@ -4145,6 +4145,41 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
       { argNames: ['a'], immediateArgs: [], stackArgs: [{ name: 'a', ptypes: [ptypes.bytesPType] }], returnType: ptypes.uint64PType },
     ],
   },
+  Scratch: {
+    type: 'op-grouping',
+    name: 'Scratch',
+    ops: {
+      loadBytes: {
+        type: 'op-mapping',
+        op: 'loads',
+        signatures: [
+          { argNames: ['a'], immediateArgs: [], stackArgs: [{ name: 'a', ptypes: [ptypes.uint64PType] }], returnType: ptypes.bytesPType },
+        ],
+      },
+      loadUint64: {
+        type: 'op-mapping',
+        op: 'loads',
+        signatures: [
+          { argNames: ['a'], immediateArgs: [], stackArgs: [{ name: 'a', ptypes: [ptypes.uint64PType] }], returnType: ptypes.uint64PType },
+        ],
+      },
+      store: {
+        type: 'op-mapping',
+        op: 'stores',
+        signatures: [
+          {
+            argNames: ['a', 'b'],
+            immediateArgs: [],
+            stackArgs: [
+              { name: 'a', ptypes: [ptypes.uint64PType] },
+              { name: 'b', ptypes: [ptypes.uint64PType, ptypes.bytesPType] },
+            ],
+            returnType: ptypes.voidPType,
+          },
+        ],
+      },
+    },
+  },
   minBalance: {
     type: 'op-mapping',
     op: 'min_balance',
