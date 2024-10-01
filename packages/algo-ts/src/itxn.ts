@@ -1,4 +1,5 @@
 import { OnCompleteAction } from './arc4'
+import { ctxMgr } from './execution-context'
 import { bytes, uint64 } from './primitives'
 import type { Account, Application, Asset } from './reference'
 import type * as txnTypes from './transactions'
@@ -150,15 +151,15 @@ export interface ApplicationCallFields extends CommonTransactionFields {
   apps?: readonly [...Application[]]
 }
 
-type InnerTransaction<TFields, TTransaction> = {
+export type InnerTransaction<TFields, TTransaction> = {
   submit(): TTransaction
   set(p: Partial<TFields>): void
   copy(): InnerTransaction<TFields, TTransaction>
 }
 
-type InnerTxnList = [...InnerTransaction<DeliberateAny, DeliberateAny>[]]
+export type InnerTxnList = [...InnerTransaction<DeliberateAny, DeliberateAny>[]]
 
-type TxnFor<TFields extends InnerTxnList> = TFields extends [
+export type TxnFor<TFields extends InnerTxnList> = TFields extends [
   InnerTransaction<DeliberateAny, infer TTxn>,
   ...infer TRest extends InnerTxnList,
 ]
@@ -173,23 +174,23 @@ export type AssetFreezeItxnParams = InnerTransaction<AssetFreezeFields, AssetFre
 export type ApplicationCallItxnParams = InnerTransaction<ApplicationCallFields, ApplicationInnerTxn>
 
 export function submitGroup<TFields extends InnerTxnList>(...transactionFields: TFields): TxnFor<TFields> {
-  throw new Error('Not implemented')
+  return ctxMgr.instance.itxn.submitGroup(...transactionFields)
 }
 export function payment(fields: PaymentFields): PaymentItxnParams {
-  throw new Error('Not implemented')
+  return ctxMgr.instance.itxn.payment(fields)
 }
 export function keyRegistration(fields: KeyRegistrationFields): KeyRegistrationItxnParams {
-  throw new Error('Not implemented')
+  return ctxMgr.instance.itxn.keyRegistration(fields)
 }
 export function assetConfig(fields: AssetConfigFields): AssetConfigItxnParams {
-  throw new Error('Not implemented')
+  return ctxMgr.instance.itxn.assetConfig(fields)
 }
 export function assetTransfer(fields: AssetTransferFields): AssetTransferItxnParams {
-  throw new Error('Not implemented')
+  return ctxMgr.instance.itxn.assetTransfer(fields)
 }
 export function assetFreeze(fields: AssetFreezeFields): AssetFreezeItxnParams {
-  throw new Error('Not implemented')
+  return ctxMgr.instance.itxn.assetFreeze(fields)
 }
 export function applicationCall(fields: ApplicationCallFields): ApplicationCallItxnParams {
-  throw new Error('Not implemented')
+  return ctxMgr.instance.itxn.applicationCall(fields)
 }

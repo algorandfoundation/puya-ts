@@ -1,4 +1,4 @@
-import { Contract, gtxn } from '.'
+import { Contract, gtxn, itxn } from '.'
 import { AbiMethodConfig, BareMethodConfig } from './arc4'
 import { OpsNamespace } from './op-types'
 import { bytes, uint64 } from './primitives'
@@ -21,6 +21,15 @@ export type ExecutionContext = {
     AssetTransferTxn: typeof gtxn.AssetTransferTxn
     AssetFreezeTxn: typeof gtxn.AssetFreezeTxn
     ApplicationTxn: typeof gtxn.ApplicationTxn
+  }
+  itxn: {
+    submitGroup: typeof itxn.submitGroup
+    payment: typeof itxn.payment
+    keyRegistration: typeof itxn.keyRegistration
+    assetConfig: typeof itxn.assetConfig
+    assetTransfer: typeof itxn.assetTransfer
+    assetFreeze: typeof itxn.assetFreeze
+    applicationCall: typeof itxn.applicationCall
   }
 }
 

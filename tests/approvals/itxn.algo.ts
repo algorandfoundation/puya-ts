@@ -45,8 +45,8 @@ export class ItxnDemoContract extends BaseContract {
 
     assert(asset1_txn.assetName === Bytes('AST1'), 'asset1_txn is correct')
     assert(asset2_txn.assetName === Bytes('AST2'), 'asset2_txn is correct')
-    assert(asset1_txn.configAsset.name === Bytes('AST1'), 'created asset 1 is correct')
-    assert(asset1_txn.configAsset.name === Bytes('AST2'), 'created asset 2 is correct')
+    assert(asset1_txn.createdAsset.name === Bytes('AST1'), 'created asset 1 is correct')
+    assert(asset2_txn.createdAsset.name === Bytes('AST2'), 'created asset 2 is correct')
 
     const appCreateParams = itxn.applicationCall({
       approvalProgram: Bytes.fromHex('098101'),
