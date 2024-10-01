@@ -37,6 +37,7 @@ import {
   MulwType,
   OpsNamespace,
   ReplaceType,
+  ScratchType,
   SelectType,
   SetBitType,
   SetByteType,
@@ -124,6 +125,7 @@ export const Txn: TxnType = createObjectProxy('Txn')
 export const GITxn: GITxnType = createObjectProxy('GITxn')
 export const ITxn: ITxnType = createObjectProxy('ITxn')
 export const ITxnCreate: ITxnCreateType = createObjectProxy('ITxnCreate')
+export const Scratch: ScratchType = createObjectProxy('Scratch')
 
 export const AcctParams = createObjectProxy('AcctParams')
 export const AppParams = createObjectProxy('AppParams')
