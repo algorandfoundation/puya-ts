@@ -1,7 +1,7 @@
 {
   "name": "@algorandfoundation/puya-ts",
   "version": "1.0.0",
-  "description": "",
+  "description": "Compiles Algorand TypeScript into byte code which runs on the Algorand Virtual Machine (AVM)",
   "private": false,
   "types": "src/index.ts",
   "scripts": {
@@ -10,7 +10,7 @@
     "dev:auction": "tsx src/cli.ts build examples/auction --dry-run",
     "dev:voting": "tsx src/cli.ts build examples/voting/contract.algo.ts --output-awst --output-awst-json",
     "dev:hello": "tsx src/cli.ts build examples/hello-world/contract.algo.ts --output-awst --output-awst-json",
-    "dev:hello-abi": "tsx src/cli.ts build examples/hello-world-abi/contract.algo.ts",
+    "dev:hello-abi": "tsx src/cli.ts build examples/hello-world-abi",
     "dev:calculator": "tsx src/cli.ts build examples/calculator/contract.algo.ts",
     "dev:tealscript": "tsx src/cli.ts build examples/tealscript/example.algo.ts",
     "dev:approvals": "tsx src/cli.ts build tests/approvals --output-awst --output-awst-json --dry-run",
@@ -44,7 +44,7 @@
     "script:op-metadata": "tsx ./scripts/generate-op-metadata.ts src/awst_build/op-metadata.ts && eslint src/awst_build/op-metadata.ts --fix",
     "script:op-ptypes": "tsx ./scripts/generate-op-ptypes.ts src/awst_build/ptypes/op-ptypes.ts && eslint src/awst_build/ptypes/op-ptypes.ts --fix"
   },
-  "author": "",
+  "author": "Algorand foundation",
   "license": "MIT",
   "devDependencies": {
     "@algorandfoundation/algorand-typescript": "file:packages/algo-ts/dist",
@@ -75,7 +75,6 @@
     "rollup": "^4.22.4",
     "semantic-release": "^24.1.1",
     "tsx": "4.19.1",
-    "typescript": "^5.6.2",
     "vitest": "2.1.1"
   },
   "dependencies": {
@@ -85,9 +84,10 @@
     "cross-spawn": "^7.0.3",
     "glob": "^11.0.0",
     "polytype": "^0.17.0",
+    "typescript": "^5.6.2",
     "zod": "^3.23.8"
   },
-  "peerDependencies": {
-    "@algorandfoundation/algorand-typescript": "0.0.1-alpha.1"
-  }
+  "bundledDependencies": [
+    "typescript"
+  ]
 }
