@@ -1,50 +1,72 @@
-import path from 'node:path'
-import * as fs from 'node:fs'
 import { globSync } from 'glob'
+import * as fs from 'node:fs'
+import upath from 'upath'
+import { PuyaError } from './errors'
 import type { LogLevel } from './logger'
 import { logger } from './logger'
-import { PuyaError } from './errors'
+import { normalisePath } from './util'
+
+export interface AlgoFile {
+  matchedInput: string
+  sourceFile: string
+  outDir: string
+}
 
 export interface CompileOptions {
-  filePaths: string[]
+  filePaths: AlgoFile[]
   logLevel: LogLevel
   outputAwst: boolean
   outputAwstJson: boolean
-  outDir: string
   /*
   Don't generate artifacts for puya, or invoke puya
    */
   dryRun: boolean
+
+  getFileFromSource(sourceFile: string): AlgoFile | undefined
 }
 
 export const buildCompileOptions = ({
   paths,
+  workingDirectory = process.cwd(),
+  outDir,
   ...rest
 }: {
   paths: string[]
   outputAwst: boolean
   outDir: string
   outputAwstJson: boolean
+  workingDirectory?: string
   dryRun: boolean
   logLevel: LogLevel
 }): CompileOptions => {
-  const filePaths = []
+  const filePaths: AlgoFile[] = []
 
   for (const p of paths) {
     if (p.endsWith('.algo.ts')) {
       if (fs.existsSync(p)) {
-        filePaths.push(p)
+        const actualPath = normalisePath(p, workingDirectory)
+        filePaths.push({
+          matchedInput: p,
+          sourceFile: actualPath,
+          outDir: upath.isAbsolute(outDir) ? upath.normalize(outDir) : upath.join(upath.dirname(actualPath), outDir),
+        })
       } else {
         logger.warn(undefined, `File ${p} could not be found`)
       }
     } else if (p.endsWith('.ts')) {
       logger.warn(undefined, `Ignoring path ${p} as it does use the .algo.ts extension`)
     } else {
-      const matches = globSync(path.join(p, '**/*.algo.ts').replaceAll('\\', '/'))
+      const matches = globSync(upath.join(p, '**/*.algo.ts'))
       if (matches.length) {
-        filePaths.push(...matches)
+        for (const match of matches) {
+          filePaths.push({
+            matchedInput: p,
+            sourceFile: normalisePath(match, workingDirectory),
+            outDir: upath.join(upath.isAbsolute(outDir) ? outDir : upath.join(p, outDir), upath.relative(p, upath.dirname(match))),
+          })
+        }
       } else {
-        logger.warn(undefined, `Path ${p} did not match any .algo.ts files`)
+        logger.warn(undefined, `Path '${p}' did not match any .algo.ts files`)
       }
     }
   }
@@ -55,5 +77,8 @@ export const buildCompileOptions = ({
   return {
     filePaths,
     ...rest,
+    getFileFromSource(sourceFile: string): AlgoFile | undefined {
+      return filePaths.find((p) => p.sourceFile === sourceFile)
+    },
   }
 }

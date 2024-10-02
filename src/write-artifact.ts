@@ -1,16 +1,10 @@
-import path from 'node:path'
 import * as fs from 'node:fs'
+import upath from 'upath'
 import { logger } from './logger'
 
 export enum ArtifactKind {
   Awst,
   AwstJson,
-}
-
-function mkDirIfNotExists(dir: string) {
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true })
-  }
 }
 
 export function writeArtifact<TObj>({
@@ -27,19 +21,17 @@ export function writeArtifact<TObj>({
   buildArtifact(obj: TObj): string
   obj: TObj
 }) {
-  const outDirectory = path.resolve(path.dirname(sourceFile), outDir)
   let outFilePath: string
   switch (kind) {
     case ArtifactKind.Awst:
-      outFilePath = path.join(outDirectory, `${path.basename(sourceFile, '.algo.ts')}.awst`)
+      outFilePath = upath.join(outDir, `${upath.basename(sourceFile, '.algo.ts')}.awst`)
       break
     case ArtifactKind.AwstJson:
-      outFilePath = path.join(outDirectory, `${path.basename(sourceFile, '.algo.ts')}.awst.json`)
+      outFilePath = upath.join(outDir, `${upath.basename(sourceFile, '.algo.ts')}.awst.json`)
       break
   }
 
   const content = buildArtifact(obj)
   logger.info(undefined, `Writing ${outFilePath}`)
-  mkDirIfNotExists(path.dirname(outFilePath))
   fs.writeFileSync(outFilePath, content, 'utf-8')
 }

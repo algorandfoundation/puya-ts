@@ -47,8 +47,6 @@ export function invokePuya({
       awst: moduleAwst,
       inputPaths: compileOptions.filePaths,
       compilationSet,
-      outDir: compileOptions.outDir,
-      programDirectory,
     }),
   })
   using optionsFile = generateTempFile()

@@ -50,8 +50,13 @@ function cli() {
     .addOption(new Option('--out-dir [outDir]').default('out'))
     .addOption(new Option('--dry-run').default(false))
 
-    .addOption(new Option('--output-teal', 'Output TEAL code').default(defaultPuyaOptions.outputTeal))
-    .addOption(new Option('--output-arc32', 'Output {contract}.arc32.json ARC-32 app spec file').default(defaultPuyaOptions.outputArc32))
+    .addOption(new Option('--no-output-teal', 'Do not output TEAL code').default(defaultPuyaOptions.outputTeal))
+    .addOption(
+      new Option(
+        '--no-output-arc32',
+        'Do not output {contract}.arc32.json ARC-32 app spec file. Only applicable to ARC4 contracts',
+      ).default(defaultPuyaOptions.outputArc32),
+    )
     .addOption(new Option('--output-ssa-ir', 'Output IR (in SSA form) before optimisations').default(defaultPuyaOptions.outputSsaIr))
     .addOption(new Option('--output-optimization-ir', 'Output IR after each optimization').default(defaultPuyaOptions.outputOptimizationIr))
     .addOption(

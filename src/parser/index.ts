@@ -22,10 +22,14 @@ export function createTsProgram(options: CompileOptions) {
   }
 
   const host = ts.createCompilerHost(compilerOptions)
-  const program = ts.createProgram(options.filePaths, compilerOptions, {
-    ...host,
-    resolveModuleNameLiterals,
-  })
+  const program = ts.createProgram(
+    options.filePaths.map((p) => p.sourceFile),
+    compilerOptions,
+    {
+      ...host,
+      resolveModuleNameLiterals,
+    },
+  )
   const programDirectory = program.getCurrentDirectory()
 
   reportDiagnostics(program)

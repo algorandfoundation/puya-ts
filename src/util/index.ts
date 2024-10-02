@@ -1,10 +1,11 @@
 import { Buffer } from 'node:buffer'
-import path from 'node:path'
+import fs from 'node:fs'
 import { TextDecoder } from 'node:util'
+import upath from 'upath'
 import type { SourceLocation } from '../awst/source-location'
+import { Constants } from '../constants'
 import { CodeError, InternalError } from '../errors'
 import type { DeliberateAny } from '../typescript-helpers'
-import { Constants } from '../constants'
 
 export { base32ToUint8Array, uint8ArrayToBase32 } from './base-32'
 
@@ -137,8 +138,8 @@ export function normalisePath(filePath: string, workingDirectory: string): strin
   if (nodeModuleName) {
     return nodeModuleName[1]
   }
-  const cwd = path.normalize(`${workingDirectory}/`)
-  const normalizedPath = path.normalize(filePath)
+  const cwd = upath.normalize(`${workingDirectory}/`)
+  const normalizedPath = upath.normalize(filePath)
   const moduleName = normalizedPath.startsWith(cwd) ? normalizedPath.slice(cwd.length) : normalizedPath
   return moduleName.replaceAll('\\', '/')
 }
@@ -171,5 +172,11 @@ export const distinct = <T>(keySelector?: (item: T) => unknown) => {
 
     set.add(ks(item))
     return true
+  }
+}
+
+export function mkDirIfNotExists(dir: string) {
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true })
   }
 }

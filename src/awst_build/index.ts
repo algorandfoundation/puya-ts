@@ -15,16 +15,17 @@ import { SourceFileVisitor } from './source-file-visitor'
 export function buildAwst({ program, sourceFiles }: CreateProgramResult, options: CompileOptions): [AWST[], CompilationSet] {
   const awstBuildContext = buildContextForProgram(program)
   const moduleAwst: AWST[] = [...buildLibAwst()]
-  for (const sourceFile of Object.values(sourceFiles)) {
+  for (const [sourcePath, sourceFile] of Object.entries(sourceFiles)) {
     try {
       const visitor = new SourceFileVisitor(awstBuildContext.createChildContext(), sourceFile)
+      const algoFile = options.getFileFromSource(sourcePath)
 
       const module = visitor.buildModule()
 
-      if (options.outputAwst) {
+      if (options.outputAwst && algoFile) {
         writeArtifact({
           sourceFile: sourceFile.fileName,
-          outDir: options.outDir,
+          outDir: algoFile.outDir,
           kind: ArtifactKind.Awst,
           obj: module,
           buildArtifact(module): string {
@@ -33,10 +34,10 @@ export function buildAwst({ program, sourceFiles }: CreateProgramResult, options
           },
         })
       }
-      if (options.outputAwstJson) {
+      if (options.outputAwstJson && algoFile) {
         writeArtifact({
           sourceFile: sourceFile.fileName,
-          outDir: options.outDir,
+          outDir: algoFile.outDir,
           kind: ArtifactKind.AwstJson,
           obj: module,
           buildArtifact(module): string {

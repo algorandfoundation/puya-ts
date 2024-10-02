@@ -129,7 +129,7 @@ function extractExpectLogs(sourceFile: ts.SourceFile, programDirectory: string) 
   const expectedLogs: ExpectedLog[] = []
 
   ts.visitNode(sourceFile, visit)
-  // eslint-disable-next-line no-inner-declarations
+
   function visit(node: ts.Node): ts.Node {
     const commentRanges = ts.getLeadingCommentRanges(sourceFile.getFullText(), node.getFullStart())
     if (commentRanges?.length) {
