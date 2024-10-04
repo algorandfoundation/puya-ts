@@ -57,9 +57,7 @@ describe('Expected output', () => {
           const potentialCandidate = logs.find(
             (l) => l.sourceLocation?.file === expectedLog.sourceLocation.file && l.sourceLocation.line === expectedLog.sourceLocation.line,
           )
-
           throw new MissingLogError(expectedLog, potentialCandidate)
-          //expect.fail(`${expectedLog.sourceLocation} Missing log: [${expectedLog.level}] ${expectedLog.message}`)
         } else {
           matchedLogs.add(matchedLog)
         }
