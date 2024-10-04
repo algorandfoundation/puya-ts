@@ -8,7 +8,7 @@ contract BaseTestContract extends @algorandfoundation/algorand-typescript/arc4/i
     void
     var GlobalState["baseTestState"]: string = "testing 123"
   }
-
+  
 }
 contract TestContract extends tests/approvals/global-state.algo.ts::BaseTestContract, @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract, @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract
 {
@@ -28,7 +28,7 @@ contract TestContract extends tests/approvals/global-state.algo.ts::BaseTestCont
     assert(GlobalState["baseTestState"] == "testing 123")
     var GlobalState["noInitialInt"]: uint64 = someValue * GlobalState["testState"]
   }
-
+  
   approvalProgram(): bool
   {
     assert(STATE_EXISTS(GlobalState["testState"]))
@@ -36,5 +36,5 @@ contract TestContract extends tests/approvals/global-state.algo.ts::BaseTestCont
     var GlobalState["testState"]: uint64 = btoi(txnas<ApplicationArgs>(0))
     return True
   }
-
+  
 }

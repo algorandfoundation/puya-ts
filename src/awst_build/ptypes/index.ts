@@ -429,6 +429,42 @@ export class FunctionPType extends PType {
     this.parameters = props.parameters
   }
 }
+export class ArrayLiteralPType extends TransientType {
+  get fullName() {
+    return `${this.module}::[${this.items.map((i) => i.fullName).join(', ')}]`
+  }
+
+  readonly items: PType[]
+  readonly immutable = true
+  constructor(props: { items: PType[] }) {
+    super({
+      module: 'lib.d.ts',
+      name: `[${props.items.map((i) => i.name).join(', ')}]`,
+      typeMessage:
+        'Native array types are not valid as variable, parameter, return, or property types. Please define a static tuple type or use an `as const` expression',
+      singleton: false,
+      expressionMessage: '',
+    })
+    this.items = props.items
+  }
+
+  getArrayType(): ArrayPType {
+    const itemType = UnionPType.fromTypes(this.items)
+
+    return new ArrayPType({
+      immutable: false,
+      itemType,
+    })
+  }
+
+  getTupleType(): TuplePType {
+    return new TuplePType({
+      immutable: false,
+      items: this.items,
+    })
+  }
+}
+
 export class TuplePType extends PType {
   readonly module: string = 'lib.d.ts'
   get name() {

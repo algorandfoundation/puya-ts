@@ -8,7 +8,7 @@ contract ItxnDemoContract extends @algorandfoundation/algorand-typescript/base-c
     void
     var GlobalState["name"]: bytes = 0x
   }
-
+  
   approvalProgram(): bool
   {
     if (Boolean(txn<NumAppArgs>())) {
@@ -32,7 +32,7 @@ contract ItxnDemoContract extends @algorandfoundation/algorand-typescript/base-c
     }
     return True
   }
-
+  
   test1(): void
   {
     var GlobalState["name"]: bytes = "AST1"
@@ -43,18 +43,18 @@ contract ItxnDemoContract extends @algorandfoundation/algorand-typescript/base-c
     var asset2_txn: inner_transaction_acfg = submit_txn(assetParams)
     assert(asset1_txn.ConfigAssetName == "AST1")
     assert(asset2_txn.ConfigAssetName == "AST2")
-    assert(checked_maybe(asset_params_get<AssetName>(asset1_txn.ConfigAsset), comment=asset exists) == "AST1")
-    assert(checked_maybe(asset_params_get<AssetName>(asset1_txn.ConfigAsset), comment=asset exists) == "AST2")
+    assert(checked_maybe(asset_params_get<AssetName>(asset1_txn.CreatedAssetID), comment=asset exists) == "AST1")
+    assert(checked_maybe(asset_params_get<AssetName>(asset2_txn.CreatedAssetID), comment=asset exists) == "AST2")
     var appCreateParams: inner_transaction_fields_appl = create_inner_transaction(Fee=0, ApprovalProgram=0x000800, ClearStateProgram=0x000800)
     update_inner_transaction(assetParams, ConfigAssetName="AST3")
-    var <tuple>[appCreateTxn, asset3_txn]: readonlytuple[inner_transaction_appl, inner_transaction_acfg] = submit_txn(appCreateParams, assetParams)
+    var <tuple>[appCreateTxn, asset3_txn]: tuple[inner_transaction_appl, inner_transaction_acfg] = submit_txn(appCreateParams, assetParams)
     assert(Boolean(appCreateTxn.ApplicationID))
     assert(asset3_txn.ConfigAssetName == "AST3")
     update_inner_transaction(appCreateParams, Note="3rd")
     update_inner_transaction(assetParams, Note="3rd")
     submit_txn(appCreateParams, assetParams)
   }
-
+  
   test2(): void
   {
     if (Boolean(txn<NumAppArgs>())) {
@@ -68,5 +68,5 @@ contract ItxnDemoContract extends @algorandfoundation/algorand-typescript/base-c
     assert(createAppTxn.ApplicationArgs[1] == "2")
     assert(createAppTxn.Note == "with args param set")
   }
-
+  
 }

@@ -9,10 +9,10 @@ subroutine testBox(box: box_key, value: string): void
   assert(!STATE_EXISTS(box.value) and !STATE_EXISTS(Box["A"].value))
   var defaultVal: string = "O"
   assert(STATE_GET(Box["A"].value, default=defaultVal) == STATE_GET(box.value, default=defaultVal))
-  var <tuple>[_, e]: readonlytuple[string, bool] = STATE_GET_EX(box.value)
+  var <tuple>[_, e]: tuple[string, bool] = STATE_GET_EX(box.value)
   assert(!e)
   var box.value: string = value
-  var <tuple>[_₁, e]: readonlytuple[string, bool] = STATE_GET_EX(box.value)
+  var <tuple>[_₁, e]: tuple[string, bool] = STATE_GET_EX(box.value)
   assert(e)
 }
 subroutine testBoxMap(box: box_key, key: string, value: bytes): void
