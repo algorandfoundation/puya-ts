@@ -11,22 +11,22 @@ contract LocalStateDemo extends @algorandfoundation/algorand-typescript/arc4/ind
   {
     void
   }
-
+  
   setState(): void
   {
-    var <tuple>[a, b, c]: readonlytuple[uint64, bytes, arc4.static_array<arc4.uint64>] = p
+    var <tuple>[a, b, c]: tuple[uint64, bytes, arc4.static_array<arc4.uint64>] = <tuple>[p.0, p.1, p.2]
     var GlobalState["l1"]: uint64 = a
     var GlobalState["localUint2"]: uint64 = a
     var GlobalState["b1"]: bytes = b
     var GlobalState["localBytes2"]: bytes = b
     var GlobalState["localEncoded"]: arc4.static_array<arc4.uint64> = copy(c)
   }
-
+  
   getState(): tuple[bytes, bytes, arc4.static_array<arc4.uint64>, uint64, uint64]
   {
     return <tuple>[GlobalState["b1"], GlobalState["localBytes2"], copy(GlobalState["localEncoded"]), GlobalState["l1"], GlobalState["localUint2"]]
   }
-
+  
   clearState(): void
   {
     STATE_DEL(LocalState[txn<Sender>()]["l1"])
@@ -35,5 +35,5 @@ contract LocalStateDemo extends @algorandfoundation/algorand-typescript/arc4/ind
     STATE_DEL(LocalState[txn<Sender>()]["localBytes2"])
     STATE_DEL(LocalState[txn<Sender>()]["localEncoded"])
   }
-
+  
 }

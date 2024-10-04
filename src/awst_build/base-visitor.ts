@@ -33,7 +33,19 @@ import { OmittedExpressionBuilder } from './eb/omitted-expression-builder'
 import { StringExpressionBuilder, StringFunctionBuilder } from './eb/string-expression-builder'
 import { requireExpressionOfType, requireInstanceBuilder } from './eb/util'
 import type { PType } from './ptypes'
-import { ArrayPType, BigIntPType, biguintPType, boolPType, NumberPType, ObjectPType, TuplePType, uint64PType, UnionPType } from './ptypes'
+import {
+  ArrayLiteralPType,
+  ArrayPType,
+  BigIntPType,
+  biguintPType,
+  boolPType,
+  NumberPType,
+  ObjectPType,
+  TransientType,
+  TuplePType,
+  uint64PType,
+  UnionPType,
+} from './ptypes'
 import { TextVisitor } from './text-visitor'
 import { instanceEb, typeRegistry } from './type-registry'
 
@@ -379,7 +391,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   }): InstanceBuilder {
     // If the expression has a wtype, we can resolve it immediately - if not, we defer the resolution until we have more context
     // (eg. the type of the assignment target)
-    if (ptype.wtype) {
+    if (!(ptype instanceof TransientType) && ptype.wtype) {
       return typeRegistry.getInstanceEb(
         nodeFactory.conditionalExpression({
           sourceLocation: sourceLocation,
@@ -445,26 +457,15 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   }
 
   handleAssignment(target: InstanceBuilder, source: InstanceBuilder, sourceLocation: SourceLocation): InstanceBuilder {
-    if (source.ptype.equals(target.ptype)) {
-      return instanceEb(
-        nodeFactory.assignmentExpression({
-          target: target.resolveLValue(),
-          sourceLocation,
-          value: source.resolve(),
-        }),
-        target.ptype,
-      )
-    } else {
-      const assignmentType = this.buildAssignmentExpressionType(target.ptype, source.ptype, sourceLocation)
-      return instanceEb(
-        nodeFactory.assignmentExpression({
-          target: this.buildLValue(target, assignmentType, sourceLocation),
-          sourceLocation,
-          value: source.resolveToPType(assignmentType).resolve(),
-        }),
-        assignmentType,
-      )
-    }
+    const assignmentType = this.buildAssignmentExpressionType(target.ptype, source.ptype, sourceLocation)
+    return instanceEb(
+      nodeFactory.assignmentExpression({
+        target: this.buildLValue(target, assignmentType, sourceLocation),
+        sourceLocation,
+        value: source.resolveToPType(assignmentType).resolve(),
+      }),
+      assignmentType,
+    )
   }
 
   /**
@@ -480,6 +481,10 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
    * @private
    */
   private buildAssignmentExpressionType(targetType: PType, sourceType: PType, sourceLocation: SourceLocation): PType {
+    if (targetType instanceof ArrayLiteralPType)
+      // Puya does not support assigning to array targets, but we can treat array literals as tuples
+      return this.buildAssignmentExpressionType(targetType.getTupleType(), sourceType, sourceLocation)
+
     const errorMessage = `Value of type ${sourceType.name} cannot be assigned to target of type ${targetType.name}`
     if (sourceType.equals(targetType)) {
       return targetType
@@ -498,9 +503,9 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
       // Narrow `biguint | bigint` or `bigint` to target type
       return targetType
     }
-    if (sourceType instanceof TuplePType) {
+    if (sourceType instanceof ArrayLiteralPType) {
       if (targetType instanceof TuplePType) {
-        // Narrow tuple item types recursively
+        // Narrow array literal types to tuple item types
         codeInvariant(targetType.items.length <= sourceType.items.length, errorMessage, sourceLocation)
         return new TuplePType({
           items: sourceType.items.map((item, index) =>
@@ -509,7 +514,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
           immutable: sourceType.immutable,
         })
       } else if (targetType instanceof ArrayPType) {
-        // Widen tuple type to array
+        // Narrow array literal types to array type
         codeInvariant(
           sourceType.items.every((i) =>
             this.buildAssignmentExpressionType(targetType.itemType, i, sourceLocation).equals(targetType.itemType),
@@ -517,7 +522,6 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
           errorMessage,
           sourceLocation,
         )
-        // TODO: Tuples should widen to an immutable array only, but array literals are represented as tuples currently. They should have their own type
         return targetType
       }
     }

@@ -1,6 +1,6 @@
 import { ARC4CreateOption, OnCompletionAction } from '../../awst/models'
 import type { Expression } from '../../awst/nodes'
-import { StringConstant, TupleExpression } from '../../awst/nodes'
+import { NewArray, StringConstant, TupleExpression } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { Constants } from '../../constants'
 import { CodeError } from '../../errors'
@@ -109,18 +109,23 @@ function mapStringConstant<T>(map: Record<string, T>, expr: Expression) {
 function resolveOnCompletionActions(oca: InstanceBuilder | undefined): OnCompletionAction[] {
   if (!oca) return [OnCompletionAction.NoOp]
   const value = oca.resolve()
+  let ocaRawExpr: Expression[]
   if (value instanceof StringConstant) {
-    return [mapStringConstant(ocaMap, value)]
+    ocaRawExpr = [value]
   } else if (value instanceof TupleExpression) {
-    const ocas = value.items.map((item) => mapStringConstant(ocaMap, item))
-    const distinctOcas = Array.from(new Set(ocas))
-    if (distinctOcas.length !== ocas.length) {
-      logger.warn(oca.sourceLocation, 'Duplicate on completion actions')
-    }
-    return ocas
+    ocaRawExpr = value.items
+  } else if (value instanceof NewArray) {
+    ocaRawExpr = value.values
   } else {
     throw new CodeError('Unexpected value for onComplete', { sourceLocation: oca.sourceLocation })
   }
+
+  const ocas = ocaRawExpr.map((item) => mapStringConstant(ocaMap, item))
+  const distinctOcas = Array.from(new Set(ocas))
+  if (distinctOcas.length !== ocas.length) {
+    logger.warn(oca.sourceLocation, 'Duplicate on completion actions')
+  }
+  return ocas
 }
 
 function resolveDefaultArguments(

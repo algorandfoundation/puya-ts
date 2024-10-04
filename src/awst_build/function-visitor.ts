@@ -16,7 +16,9 @@ import type { AwstBuildContext } from './context/awst-build-context'
 import type { InstanceBuilder } from './eb'
 import { ArrayLiteralExpressionBuilder } from './eb/literal/array-literal-expression-builder'
 import { ObjectLiteralExpressionBuilder } from './eb/literal/object-literal-expression-builder'
+import { NativeArrayExpressionBuilder } from './eb/native-array-expression-builder'
 import { OmittedExpressionBuilder } from './eb/omitted-expression-builder'
+import { TupleExpressionBuilder } from './eb/tuple-expression-builder'
 import { requireExpressionOfType, requireInstanceBuilder } from './eb/util'
 import type { PType } from './ptypes'
 import { FunctionPType, ObjectPType, TransientType } from './ptypes'
@@ -103,10 +105,25 @@ export class FunctionVisitor
           if (ts.isOmittedExpression(element)) {
             items.push(new OmittedExpressionBuilder(sourceLocation))
           } else {
-            codeInvariant(!element.dotDotDotToken, 'Spread operator is not supported', sourceLocation)
             codeInvariant(!element.initializer, 'Initializer on array binding expression is not supported', sourceLocation)
             codeInvariant(!element.propertyName, 'Property name on array binding expression is not supported', sourceLocation)
-            items.push(this.buildAssignmentTarget(element.name, sourceLocation))
+
+            if (element.dotDotDotToken) {
+              const spreadResult = this.buildAssignmentTarget(element.name, sourceLocation)
+              if (spreadResult instanceof NativeArrayExpressionBuilder) {
+                throw new CodeError(
+                  'Spread operator is not supported in assignment expressions where the resulting type is a variadic array',
+                  { sourceLocation },
+                )
+              } else if (spreadResult instanceof TupleExpressionBuilder) {
+                throw new CodeError('Spread operator is not currently supported with tuple expressions', { sourceLocation })
+              } else {
+                // TODO: What would this context be?
+                throw new CodeError('The spread operator is not supported in this context', { sourceLocation })
+              }
+            } else {
+              items.push(this.buildAssignmentTarget(element.name, sourceLocation))
+            }
           }
         }
         return new ArrayLiteralExpressionBuilder(sourceLocation, items)

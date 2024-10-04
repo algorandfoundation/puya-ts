@@ -1,31 +1,48 @@
 import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression, LValue } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
+import { CodeError } from '../../../errors'
 import { codeInvariant } from '../../../util'
 import type { PTypeOrClass } from '../../ptypes'
-import { ArrayPType, TuplePType } from '../../ptypes'
+import { ArrayLiteralPType, ArrayPType, TuplePType } from '../../ptypes'
 import type { NodeBuilder } from '../index'
 import { InstanceBuilder } from '../index'
 import { TupleExpressionBuilder } from '../tuple-expression-builder'
-import { requireExpressionOfType, requireIntegerConstant } from '../util'
+import { requireIntegerConstant } from '../util'
 
 export class ArrayLiteralExpressionBuilder extends InstanceBuilder {
-  readonly ptype: TuplePType
+  readonly ptype: ArrayLiteralPType
   constructor(
     sourceLocation: SourceLocation,
     private readonly items: InstanceBuilder[],
   ) {
     super(sourceLocation)
-    this.ptype = new TuplePType({ items: items.map((i) => i.ptype) })
+    this.ptype = new ArrayLiteralPType({ items: items.map((i) => i.ptype) })
   }
 
   resolve(): Expression {
-    // Resolve object to a tuple using its own inferred types
-    return this.toTuple(this.ptype, this.sourceLocation)
+    const arrayType = this.ptype.getArrayType()
+
+    return nodeFactory.newArray({
+      sourceLocation: this.sourceLocation,
+      values: this.items.map((i) => i.resolve()),
+      wtype: arrayType.wtype,
+    })
+  }
+
+  resolveLValue(): LValue {
+    throw new CodeError('Array literal is not a valid lvalue')
+    // return nodeFactory.tupleExpression({
+    //   items: this.items.map((i) => i.resolveLValue()),
+    //   sourceLocation: this.sourceLocation,
+    // })
   }
 
   singleEvaluation(): InstanceBuilder {
-    return this
+    return new ArrayLiteralExpressionBuilder(
+      this.sourceLocation,
+      this.items.map((i) => i.singleEvaluation()),
+    )
   }
 
   indexAccess(index: InstanceBuilder, sourceLocation: SourceLocation): NodeBuilder {
@@ -34,24 +51,10 @@ export class ArrayLiteralExpressionBuilder extends InstanceBuilder {
     return this.items[indexNum]
   }
 
-  private toTuple(ptype: TuplePType, sourceLocation: SourceLocation): Expression {
-    return nodeFactory.tupleExpression({
-      items: this.items.map((item, index) => requireExpressionOfType(item, ptype.items[index])),
-      sourceLocation,
-    })
-  }
-
-  resolveLValue(): LValue {
-    return nodeFactory.tupleExpression({
-      items: this.items.map((i) => i.resolveLValue()),
-      sourceLocation: this.sourceLocation,
-    })
-  }
-
   resolveToPType(ptype: PTypeOrClass): InstanceBuilder {
     if (ptype instanceof TuplePType) {
       codeInvariant(
-        ptype.items.length === this.items.length,
+        ptype.items.length <= this.items.length,
         `Value of length ${this.items.length} cannot be resolved to type of length ${ptype.items.length}`,
       )
       return new TupleExpressionBuilder(

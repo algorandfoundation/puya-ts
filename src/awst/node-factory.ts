@@ -177,7 +177,7 @@ const explicitNodeFactory = {
   tupleExpression(props: Omit<Props<TupleExpression>, 'wtype'>) {
     return new TupleExpression({
       ...props,
-      wtype: new WTuple({ types: props.items.map((i) => i.wtype), immutable: true }),
+      wtype: new WTuple({ types: props.items.map((i) => i.wtype), immutable: false }),
     })
   },
   methodDocumentation(props?: { description?: string | null; args?: Map<string, string>; returns?: string | null }) {
