@@ -1,7 +1,7 @@
 import type { biguint, BigUintCompat, bytes, BytesCompat, uint64, Uint64Compat } from '../index'
 import { DeliberateAny } from '../typescript-helpers'
 import { base32ToUint8Array } from './base-32'
-import { bigIntToUint8Array, uint8ArrayToBigInt, uint8ArrayToUtf8, utf8ToUint8Array } from './encoding-util'
+import { bigIntToUint8Array, uint8ArrayToBigInt, uint8ArrayToHex, uint8ArrayToUtf8, utf8ToUint8Array } from './encoding-util'
 import { avmError, AvmError, internalError } from './errors'
 import { nameOfType } from './name-of-type'
 
@@ -71,30 +71,49 @@ export const checkBytes = (v: Uint8Array): Uint8Array => {
   return v
 }
 
+/**
+ * Verifies that an object is an instance of a type based on its name rather than reference equality.
+ *
+ * This is useful in scenarios where a module loader has loaded a module twice and hence two instances of a
+ * type do not have reference equality on their constructors.
+ * @param subject The object to check
+ * @param typeCtor The ctor of the type
+ */
+function isInstanceOfTypeByName(subject: unknown, typeCtor: { name: string }): boolean {
+  if (subject === null || typeof subject !== 'object') return false
+
+  let ctor = subject.constructor
+  while (typeof ctor === 'function') {
+    if (ctor.name === typeCtor.name) return true
+    ctor = Object.getPrototypeOf(ctor)
+  }
+  return false
+}
+
 export abstract class AlgoTsPrimitiveCls {
-  private readonly _type: string = AlgoTsPrimitiveCls.name
-
-  constructor(t: string) {
-    this._type = `${AlgoTsPrimitiveCls.name}.${t}`
-  }
-
   static [Symbol.hasInstance](x: unknown): x is AlgoTsPrimitiveCls {
-    return x instanceof Object && '_type' in x && (x as { _type: string })['_type'].startsWith(AlgoTsPrimitiveCls.name)
+    return isInstanceOfTypeByName(x, AlgoTsPrimitiveCls)
   }
 
-  abstract valueOf(): bigint | string | boolean
+  abstract valueOf(): bigint | string
   abstract toBytes(): BytesCls
 }
 
 export class Uint64Cls extends AlgoTsPrimitiveCls {
-  public readonly value: bigint
+  readonly #value: bigint
   constructor(value: bigint | number | string) {
-    super(Uint64Cls.name)
-    this.value = BigInt(value)
-    checkUint64(this.value)
+    super()
+    this.#value = BigInt(value)
+    checkUint64(this.#value)
+
+    Object.defineProperty(this, 'uint64', {
+      value: this.#value.toString(),
+      writable: false,
+      enumerable: true,
+    })
   }
   static [Symbol.hasInstance](x: unknown): x is Uint64Cls {
-    return x instanceof Object && '_type' in x && (x as { _type: string })['_type'].endsWith(Uint64Cls.name)
+    return isInstanceOfTypeByName(x, Uint64Cls)
   }
   static fromCompat(v: StubUint64Compat): Uint64Cls {
     if (typeof v == 'boolean') return new Uint64Cls(v ? 1n : 0n)
@@ -109,11 +128,11 @@ export class Uint64Cls extends AlgoTsPrimitiveCls {
   }
 
   valueOf(): bigint {
-    return this.value
+    return this.#value
   }
 
   toBytes(isDynamic: boolean = false): BytesCls {
-    return new BytesCls(bigIntToUint8Array(this.value, isDynamic ? 'dynamic' : 8))
+    return new BytesCls(bigIntToUint8Array(this.#value, isDynamic ? 'dynamic' : 8))
   }
 
   asAlgoTs(): uint64 {
@@ -121,26 +140,33 @@ export class Uint64Cls extends AlgoTsPrimitiveCls {
   }
 
   asBigInt(): bigint {
-    return this.value
+    return this.#value
   }
   asNumber(): number {
-    if (this.value > Number.MAX_SAFE_INTEGER) {
+    if (this.#value > Number.MAX_SAFE_INTEGER) {
       throw new AvmError('value cannot be safely converted to a number')
     }
-    return Number(this.value)
+    return Number(this.#value)
   }
 }
 
 export class BigUintCls extends AlgoTsPrimitiveCls {
-  constructor(public readonly value: bigint) {
-    super(BigUintCls.name)
+  readonly #value: bigint
+  constructor(value: bigint) {
+    super()
+    this.#value = value
+    Object.defineProperty(this, 'biguint', {
+      value: value.toString(),
+      writable: false,
+      enumerable: true,
+    })
   }
   valueOf(): bigint {
-    return this.value
+    return this.#value
   }
 
   toBytes(): BytesCls {
-    return new BytesCls(bigIntToUint8Array(this.value))
+    return new BytesCls(bigIntToUint8Array(this.#value))
   }
 
   asAlgoTs(): biguint {
@@ -148,22 +174,22 @@ export class BigUintCls extends AlgoTsPrimitiveCls {
   }
 
   asBigInt(): bigint {
-    return this.value
+    return this.#value
   }
   asNumber(): number {
-    if (this.value > Number.MAX_SAFE_INTEGER) {
+    if (this.#value > Number.MAX_SAFE_INTEGER) {
       throw new AvmError('value cannot be safely converted to a number')
     }
-    return Number(this.value)
+    return Number(this.#value)
   }
   static [Symbol.hasInstance](x: unknown): x is BigUintCls {
-    return x instanceof Object && '_type' in x && (x as { _type: string })['_type'].endsWith(BigUintCls.name)
+    return isInstanceOfTypeByName(x, BigUintCls)
   }
   static fromCompat(v: StubBigUintCompat): BigUintCls {
     if (typeof v == 'boolean') return new BigUintCls(v ? 1n : 0n)
     if (typeof v == 'number') return new BigUintCls(BigInt(v))
     if (typeof v == 'bigint') return new BigUintCls(v)
-    if (v instanceof Uint64Cls) return new BigUintCls(v.value)
+    if (v instanceof Uint64Cls) return new BigUintCls(v.valueOf())
     if (v instanceof BytesCls) return v.toBigUint()
     if (v instanceof BigUintCls) return v
     internalError(`Cannot convert ${nameOfType(v)} to BigUint`)
@@ -171,11 +197,17 @@ export class BigUintCls extends AlgoTsPrimitiveCls {
 }
 
 export class BytesCls extends AlgoTsPrimitiveCls {
-  #v: Uint8Array
+  readonly #v: Uint8Array
   constructor(v: Uint8Array) {
-    super(BytesCls.name)
+    super()
     this.#v = v
     checkBytes(this.#v)
+    // Add an enumerable property for debugging code to show
+    Object.defineProperty(this, 'bytes', {
+      value: uint8ArrayToHex(this.#v),
+      writable: false,
+      enumerable: true,
+    })
   }
 
   get length() {
@@ -247,11 +279,11 @@ export class BytesCls extends AlgoTsPrimitiveCls {
   }
 
   valueOf(): string {
-    return uint8ArrayToUtf8(this.#v)
+    return uint8ArrayToHex(this.#v)
   }
 
   static [Symbol.hasInstance](x: unknown): x is BytesCls {
-    return x instanceof Object && '_type' in x && (x as { _type: string })['_type'].endsWith(BytesCls.name)
+    return isInstanceOfTypeByName(x, BytesCls)
   }
 
   static fromCompat(v: StubBytesCompat | undefined): BytesCls {
@@ -293,7 +325,7 @@ export class BytesCls extends AlgoTsPrimitiveCls {
     return new BigUintCls(uint8ArrayToBigInt(this.#v))
   }
   toString(): string {
-    return this.valueOf()
+    return uint8ArrayToUtf8(this.#v)
   }
 
   asAlgoTs(): bytes {
