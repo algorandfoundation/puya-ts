@@ -53,10 +53,13 @@ export const expandMaybeArray = <T>(maybeArray: T | T[]): T[] => {
   return Array.isArray(maybeArray) ? maybeArray : [maybeArray]
 }
 
+export const uint8ArrayToBase64 = (value: Uint8Array): string => Buffer.from(value).toString('base64')
+
 export const hexToUint8Array = (value: string): Uint8Array => {
   invariant(value.length % 2 === 0, 'Hex string must have even number of characters')
   return new Uint8Array(new Array(value.length / 2).fill(0).map((_, i) => parseInt(value.slice(i * 2, i * 2 + 1), 16)))
 }
+
 export const base64ToUint8Array = (value: string): Uint8Array => {
   return new Uint8Array(Buffer.from(value, 'base64'))
 }
@@ -65,6 +68,16 @@ export const utf8ToUint8Array = (value: string): Uint8Array => {
   const encoder = new TextEncoder()
   return encoder.encode(value)
 }
+
+export const uint8ArrayToBigInt = (v: Uint8Array): bigint => {
+  // Assume big-endian
+  return Array.from(v)
+    .toReversed()
+    .map((byte_value, i): bigint => BigInt(byte_value) << BigInt(i * 8))
+    .reduce((a, b) => a + b, 0n)
+}
+
+export const uint8ArrayToHex = (value: Uint8Array): string => Buffer.from(value).toString('hex')
 
 export const uint8ArrayToUtf8 = (value: Uint8Array): string => {
   const decoder = new TextDecoder()
