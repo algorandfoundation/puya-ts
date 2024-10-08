@@ -117,7 +117,18 @@ export abstract class ARC4Type extends WType {
   }
 }
 
-export class WStructType extends WType {}
+export class WStructType extends WType {
+  fields: Record<string, WType>
+
+  constructor({ fields, name }: { fields: Record<string, WType>; name: string }) {
+    super({
+      name,
+      scalarType: null,
+      immutable: true,
+    })
+    this.fields = fields
+  }
+}
 
 export class WTuple extends WType {
   types: WType[]
@@ -136,14 +147,14 @@ export class WTuple extends WType {
   }
 }
 export class WArray extends WType {
-  readonly itemType: WType
+  readonly elementType: WType
   constructor(props: { itemType: WType; immutable: boolean }) {
     super({
       name: 'WArray',
       scalarType: null,
       immutable: props.immutable,
     })
-    this.itemType = props.itemType
+    this.elementType = props.itemType
   }
 }
 

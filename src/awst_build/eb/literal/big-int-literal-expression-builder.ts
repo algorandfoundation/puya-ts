@@ -3,8 +3,17 @@ import type { Expression, LValue } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { CodeError } from '../../../errors'
 import { codeInvariant } from '../../../util'
-import type { PType, PTypeOrClass } from '../../ptypes'
-import { biguintPType, boolPType, uint64PType } from '../../ptypes'
+import type { PTypeOrClass } from '../../ptypes'
+import {
+  BigIntLiteralPType,
+  bigIntPType,
+  biguintPType,
+  boolPType,
+  numberPType,
+  NumericLiteralPType,
+  TransientType,
+  uint64PType,
+} from '../../ptypes'
 import { typeRegistry } from '../../type-registry'
 import { BigUintExpressionBuilder } from '../biguint-expression-builder'
 import { foldBinaryOp, foldComparisonOp } from '../folding'
@@ -15,30 +24,31 @@ import { isValidLiteralForPType } from '../util'
 
 export class BigIntLiteralExpressionBuilder extends LiteralExpressionBuilder {
   resolve(): Expression {
-    throw new CodeError('A literal is not valid at this point.', { sourceLocation: this.sourceLocation })
+    throw new CodeError(this.ptype.expressionMessage, { sourceLocation: this.sourceLocation })
   }
   resolveLValue(): LValue {
-    throw new CodeError('A literal is not valid at this point.', { sourceLocation: this.sourceLocation })
+    throw new CodeError('A literal value is not a valid assignment target', { sourceLocation: this.sourceLocation })
   }
-  get ptype(): PType {
-    return this._ptype
-  }
+
   singleEvaluation(): InstanceBuilder {
     return this
   }
 
-  private readonly _ptype: PType
   constructor(
     public readonly value: bigint,
-    ptype: PType,
+    public readonly ptype: TransientType,
     location: SourceLocation,
   ) {
     super(location)
-    this._ptype = ptype
   }
 
   resolvableToPType(ptype: PTypeOrClass): boolean {
-    return ptype.equals(uint64PType) || ptype.equals(biguintPType) || ptype.equals(this.ptype)
+    if (this.ptype instanceof NumericLiteralPType || this.ptype.equals(numberPType)) {
+      return ptype.equals(uint64PType) || ptype.equals(numberPType) || ptype.equals(this.ptype)
+    } else if (this.ptype instanceof BigIntLiteralPType || this.ptype.equals(bigIntPType)) {
+      return ptype.equals(biguintPType) || ptype.equals(bigIntPType) || ptype.equals(this.ptype)
+    }
+    return false
   }
   boolEval(sourceLocation: SourceLocation, negate: boolean = false): Expression {
     const value = negate ? !this.value : Boolean(this.value)
@@ -50,7 +60,13 @@ export class BigIntLiteralExpressionBuilder extends LiteralExpressionBuilder {
   }
 
   resolveToPType(ptype: PTypeOrClass): InstanceBuilder {
+    codeInvariant(this.resolvableToPType(ptype), `${ptype.name} cannot be converted to type ${ptype.name}`, this.sourceLocation)
+
     if (ptype.equals(this.ptype)) return this
+    if (ptype instanceof TransientType && (ptype.equals(numberPType) || ptype.equals(bigIntPType))) {
+      return new BigIntLiteralExpressionBuilder(this.value, ptype, this.sourceLocation)
+    }
+
     codeInvariant(isValidLiteralForPType(this.value, ptype), `${ptype.name} cannot be converted to type ${ptype.name}`, this.sourceLocation)
     if (ptype.equals(uint64PType)) {
       return new UInt64ExpressionBuilder(nodeFactory.uInt64Constant({ value: this.value, sourceLocation: this.sourceLocation }))

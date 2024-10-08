@@ -21,7 +21,7 @@ import { OmittedExpressionBuilder } from './eb/omitted-expression-builder'
 import { TupleExpressionBuilder } from './eb/tuple-expression-builder'
 import { requireExpressionOfType, requireInstanceBuilder } from './eb/util'
 import type { PType } from './ptypes'
-import { FunctionPType, ObjectPType, TransientType } from './ptypes'
+import { FunctionPType, ObjectPType } from './ptypes'
 import { typeRegistry } from './type-registry'
 
 // noinspection JSUnusedGlobalSymbols
@@ -38,14 +38,9 @@ export class FunctionVisitor
 
   constructor(ctx: AwstBuildContext, node: ts.MethodDeclaration | ts.FunctionDeclaration | ts.ConstructorDeclaration) {
     super(ctx)
-    const sourceLocation = this.sourceLocation(node)
-
     const type = ctx.getPTypeForNode(node)
     invariant(type instanceof FunctionPType, 'type of function must be FunctionPType')
     this._functionType = type
-    if (this._functionType.returnType instanceof TransientType) {
-      logger.error(sourceLocation, this._functionType.returnType.typeMessage)
-    }
   }
 
   protected buildFunctionAwst(node: ts.MethodDeclaration | ts.FunctionDeclaration | ts.ConstructorDeclaration): {
@@ -89,7 +84,7 @@ export class FunctionVisitor
 
           props.push([propertyName, this.buildAssignmentTarget(element.name, sourceLocation)])
         }
-        const ptype = ObjectPType.literal(props.map(([name, builder]): [string, PType] => [name, builder.ptype]))
+        const ptype = ObjectPType.anonymous(props.map(([name, builder]): [string, PType] => [name, builder.ptype]))
         return new ObjectLiteralExpressionBuilder(
           sourceLocation,
           ptype,

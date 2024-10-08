@@ -1,7 +1,9 @@
 import type { DeliberateAny } from '../typescript-helpers'
+import { bigIntToUint8Array } from '../util'
 import { nodeFactory } from './node-factory'
-import type * as awst from './nodes'
+import * as awst from './nodes'
 import type { Expression } from './nodes'
+import { BytesEncoding } from './nodes'
 import type { SourceLocation } from './source-location'
 import * as wtypes from './wtypes'
 
@@ -62,7 +64,14 @@ export const intrinsicFactory = {
       wtype: wtypes.uint64WType,
     })
   },
-  itob({ value, sourceLocation }: { value: awst.Expression; sourceLocation: SourceLocation }): awst.IntrinsicCall {
+  itob({ value, sourceLocation }: { value: awst.Expression; sourceLocation: SourceLocation }): awst.Expression {
+    if (value instanceof awst.IntegerConstant) {
+      return nodeFactory.bytesConstant({
+        sourceLocation,
+        value: bigIntToUint8Array(value.value),
+        encoding: BytesEncoding.base16,
+      })
+    }
     return nodeFactory.intrinsicCall({
       sourceLocation,
       stackArgs: [value],
@@ -80,4 +89,4 @@ export const intrinsicFactory = {
       opCode: 'btoi',
     })
   },
-} satisfies Record<string, (args: DeliberateAny) => awst.IntrinsicCall>
+} satisfies Record<string, (args: DeliberateAny) => awst.Expression>

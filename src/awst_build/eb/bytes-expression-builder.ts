@@ -10,7 +10,7 @@ import { CodeError, wrapInCodeError } from '../../errors'
 import { logger } from '../../logger'
 import { base32ToUint8Array, base64ToUint8Array, hexToUint8Array, uint8ArrayToUtf8, utf8ToUint8Array } from '../../util'
 import type { InstanceType, PType } from '../ptypes'
-import { BytesFunction, bytesPType, NumberPType, stringPType, uint64PType } from '../ptypes'
+import { BytesFunction, bytesPType, NumericLiteralPType, stringPType, uint64PType } from '../ptypes'
 import { instanceEb } from '../type-registry'
 import type { BuilderComparisonOp, InstanceBuilder, NodeBuilder } from './index'
 import { BuilderUnaryOp, FunctionBuilder, InstanceExpressionBuilder, ParameterlessFunctionBuilder } from './index'
@@ -129,7 +129,7 @@ export class BytesExpressionBuilder extends InstanceExpressionBuilder<InstanceTy
           sourceLocation,
           `The '~' ${this.typeDescription} operator coerces the target value to a number type. Use {bytes expression}.bitwiseInvert() instead`,
         )
-        return new BigIntLiteralExpressionBuilder(0n, new NumberPType({ literalValue: 0n }), sourceLocation)
+        return new BigIntLiteralExpressionBuilder(0n, new NumericLiteralPType({ literalValue: 0n }), sourceLocation)
     }
     return super.prefixUnaryOp(op, sourceLocation)
   }
