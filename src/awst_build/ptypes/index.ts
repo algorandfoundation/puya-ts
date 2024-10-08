@@ -6,6 +6,7 @@ import { Constants } from '../../constants'
 import { CodeError, InternalError, NotSupported } from '../../errors'
 import { codeInvariant, distinct, sortBy } from '../../util'
 import { PType } from './base'
+import { transientTypeErrors } from './transient-type-errors'
 
 export * from './base'
 export * from './intrinsic-enum-type'
@@ -14,7 +15,7 @@ export * from './op-ptypes'
 /**
  * Transient types can appear in expressions but should not be used as variable or return types
  */
-export class TransientType extends PType {
+export abstract class TransientType extends PType {
   readonly name: string
   readonly module: string
   readonly singleton: boolean
@@ -135,21 +136,26 @@ export class UnionPType extends TransientType {
   private constructor({ types }: { types: PType[] }) {
     let typeMessage: string
     let expressionMessage: string
+    const name = types.map((t) => t.name).join(' | ')
     const transientType = types.find((t) => t instanceof TransientType)
     if (transientType) {
-      typeMessage = transientType.typeMessage
-      expressionMessage = transientType.expressionMessage
+      if (transientType instanceof NativeNumericType) {
+        typeMessage = transientTypeErrors.nativeNumeric(name).usedAsType
+        expressionMessage = transientTypeErrors.nativeNumeric(name).usedInExpression
+      } else {
+        typeMessage = transientType.typeMessage
+        expressionMessage = transientType.expressionMessage
+      }
     } else {
-      typeMessage = 'Union types are not valid as a variable, parameter, return, or property type.'
-      expressionMessage = 'Union types are only valid in boolean expressions.'
+      typeMessage = transientTypeErrors.unionTypes(name).usedAsType
+      expressionMessage = transientTypeErrors.unionTypes(name).usedInExpression
     }
-    const name = types.map((t) => t.name).join(' | ')
     super({
       name,
       module: 'lib.d.ts',
       singleton: false,
-      typeMessage: `${typeMessage} Expression type is ${name}`,
-      expressionMessage: `${expressionMessage} Expression type is ${name}`,
+      typeMessage,
+      expressionMessage,
     })
     this.types = types
   }
@@ -440,13 +446,13 @@ export class ArrayLiteralPType extends TransientType {
   readonly items: PType[]
   readonly immutable = true
   constructor(props: { items: PType[] }) {
+    const name = `[${props.items.map((i) => i.name).join(', ')}]`
     super({
       module: 'lib.d.ts',
-      name: `[${props.items.map((i) => i.name).join(', ')}]`,
-      typeMessage:
-        'Native array types are not valid as variable, parameter, return, or property types. Please define a static tuple type or use an `as const` expression',
+      name,
+      typeMessage: transientTypeErrors.arrays(name).usedAsType,
+      expressionMessage: transientTypeErrors.arrays(name).usedInExpression,
       singleton: false,
-      expressionMessage: '',
     })
     this.items = props.items
   }
@@ -504,11 +510,11 @@ export class ArrayPType extends TransientType {
     return `${this.module}::Array<${this.itemType.fullName}>`
   }
   constructor(props: { itemType: PType; immutable: boolean }) {
+    const name = `Array<${props.itemType.name}>`
     super({
-      name: `Array<${props.itemType.name}>`,
-      typeMessage:
-        'Native array types are not valid as variable, parameter, return, or property types. Please define a static tuple type or use an `as const` expression',
-      expressionMessage: '',
+      name,
+      typeMessage: transientTypeErrors.arrays(name).usedAsType,
+      expressionMessage: transientTypeErrors.arrays(name).usedInExpression,
       module: 'lib.d.ts',
       singleton: false,
     })
@@ -633,14 +639,14 @@ export const BooleanFunction = new LibFunctionType({
   module: 'typescript/lib/lib.es5.d.ts',
 })
 
-export const bigIntPType = new TransientType({
+export class NativeNumericType extends TransientType {}
+
+export const bigIntPType = new NativeNumericType({
   name: 'bigint',
   module: 'lib.d.ts',
   singleton: false,
-  typeMessage:
-    '`bigint` is not valid as a variable, parameter, return, or property type. Please use an algo-ts type such as `biguint` or `uint64`',
-  expressionMessage:
-    'Expression of type `bigint` must be explicitly converted to an algo-ts type, for example by wrapping the expression in `BigUint(...)`',
+  typeMessage: transientTypeErrors.nativeNumeric('bigint').usedAsType,
+  expressionMessage: transientTypeErrors.nativeNumeric('bigint').usedInExpression,
 })
 export const stringPType = new InstanceType({
   name: 'string',
@@ -662,38 +668,38 @@ export const biguintPType = new InstanceType({
   module: Constants.primitivesModuleName,
   wtype: wtypes.biguintWType,
 })
-export class NumericLiteralPType extends TransientType {
+export class NumericLiteralPType extends NativeNumericType {
   readonly literalValue: bigint
   constructor({ literalValue }: { literalValue: bigint }) {
     super({
       name: `${literalValue}`,
       module: 'lib.d.ts',
       singleton: false,
-      typeMessage: `\`${literalValue}\` is not valid as a variable, parameter, return, or property type. Please use an algo-ts type such as \`uint64\` or \`biguint\``,
-      expressionMessage: `Expression of type \`${literalValue}\` must be explicitly converted to an algo-ts type, for example by wrapping the expression in \`Uint64(...)\``,
+      typeMessage: transientTypeErrors.nativeNumeric(literalValue.toString()).usedAsType,
+      expressionMessage: transientTypeErrors.nativeNumeric(literalValue.toString()).usedInExpression,
     })
     this.literalValue = literalValue
   }
 }
-export class BigIntLiteralPType extends TransientType {
+export class BigIntLiteralPType extends NativeNumericType {
   readonly literalValue: bigint
   constructor({ literalValue }: { literalValue: bigint }) {
     super({
       name: `${literalValue}n`,
       module: 'lib.d.ts',
       singleton: false,
-      typeMessage: `\`${literalValue}n\` is not valid as a variable, parameter, return, or property type. Please use an algo-ts type such as \`uint64\` or \`biguint\``,
-      expressionMessage: `Expression of type \`${literalValue}n\` must be explicitly converted to an algo-ts type, for example by wrapping the expression in \`BigUint(...)\``,
+      typeMessage: transientTypeErrors.nativeNumeric(`${literalValue}n`).usedAsType,
+      expressionMessage: transientTypeErrors.nativeNumeric(`${literalValue}n`).usedInExpression,
     })
     this.literalValue = literalValue
   }
 }
-export const numberPType = new TransientType({
+export const numberPType = new NativeNumericType({
   name: 'number',
   module: 'lib.d.ts',
   singleton: false,
-  typeMessage: `\`number\` is not valid as a variable, parameter, return, or property type. Please use an algo-ts type such as \`uint64\` or \`biguint\``,
-  expressionMessage: `Expression of type \`number\` must be explicitly converted to an algo-ts type, for example by wrapping the expression in \`Uint64(...)\``,
+  typeMessage: transientTypeErrors.nativeNumeric('number').usedAsType,
+  expressionMessage: transientTypeErrors.nativeNumeric('number').usedInExpression,
 })
 export const Uint64Function = new LibFunctionType({
   name: 'Uint64',

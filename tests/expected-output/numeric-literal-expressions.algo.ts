@@ -1,7 +1,7 @@
 import type { biguint } from '@algorandfoundation/algorand-typescript'
 
 function test_uint64() {
-  // @expect-error `number` is not valid as a variable, parameter, return, or property type. Please use an algo-ts type such as `uint64` or `biguint`
+  // @expect-error `number` is not valid as a variable, parameter, return, or property type. Please use an algo-ts type such as `biguint` or `uint64`
   const x = 4 * 100 + 10
 }
 

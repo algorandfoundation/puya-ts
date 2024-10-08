@@ -9,11 +9,11 @@ import { InstanceBuilder } from './index'
 
 export abstract class LiteralExpressionBuilder extends InstanceBuilder {
   resolve(): Expression {
-    throw new CodeError('A literal value is not valid here', { sourceLocation: this.sourceLocation })
+    this.throwInvalidExpression()
   }
 
   resolveLValue(): LValue {
-    throw new CodeError('A literal value is not valid here', { sourceLocation: this.sourceLocation })
+    throw new CodeError('A literal value is not a valid assignment target', { sourceLocation: this.sourceLocation })
   }
 
   abstract resolvableToPType(ptype: PTypeOrClass): boolean

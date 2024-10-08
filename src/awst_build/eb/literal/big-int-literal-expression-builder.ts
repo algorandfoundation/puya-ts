@@ -1,5 +1,5 @@
 import { nodeFactory } from '../../../awst/node-factory'
-import type { Expression, LValue } from '../../../awst/nodes'
+import type { Expression } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { CodeError } from '../../../errors'
 import { codeInvariant } from '../../../util'
@@ -23,13 +23,6 @@ import { UInt64ExpressionBuilder } from '../uint64-expression-builder'
 import { isValidLiteralForPType } from '../util'
 
 export class BigIntLiteralExpressionBuilder extends LiteralExpressionBuilder {
-  resolve(): Expression {
-    throw new CodeError(this.ptype.expressionMessage, { sourceLocation: this.sourceLocation })
-  }
-  resolveLValue(): LValue {
-    throw new CodeError('A literal value is not a valid assignment target', { sourceLocation: this.sourceLocation })
-  }
-
   singleEvaluation(): InstanceBuilder {
     return this
   }
