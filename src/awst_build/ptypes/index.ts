@@ -15,7 +15,6 @@ export * from './op-ptypes'
  * Transient types can appear in expressions but should not be used as variable or return types
  */
 export class TransientType extends PType {
-  readonly wtype: WType | undefined = undefined
   readonly name: string
   readonly module: string
   readonly singleton: boolean
@@ -41,6 +40,10 @@ export class TransientType extends PType {
     this.singleton = singleton
     this.typeMessage = typeMessage
     this.expressionMessage = expressionMessage
+  }
+
+  get wtype(): WType | undefined {
+    return undefined
   }
 
   get wtypeOrThrow(): WType {
@@ -128,7 +131,7 @@ export class UnionPType extends TransientType {
   }
   readonly singleton = false
   readonly types: PType[]
-  readonly wtype = undefined
+
   private constructor({ types }: { types: PType[] }) {
     let typeMessage: string
     let expressionMessage: string
@@ -490,22 +493,25 @@ export class TuplePType extends PType {
     })
   }
 }
-export class ArrayPType extends PType {
-  readonly module: string = 'lib.d.ts'
+export class ArrayPType extends TransientType {
   readonly itemType: PType
-  readonly singleton = false
   readonly immutable: boolean
-  static typeError =
-    'Native array types are not valid as variable, parameter, return, or property types. Please define a static tuple type or use an `as const` expression'
 
-  get name() {
-    return `Array<${this.itemType.name}>`
-  }
+  // get name() {
+  //   return
+  // }
   get fullName() {
     return `${this.module}::Array<${this.itemType.fullName}>`
   }
   constructor(props: { itemType: PType; immutable: boolean }) {
-    super()
+    super({
+      name: `Array<${props.itemType.name}>`,
+      typeMessage:
+        'Native array types are not valid as variable, parameter, return, or property types. Please define a static tuple type or use an `as const` expression',
+      expressionMessage: '',
+      module: 'lib.d.ts',
+      singleton: false,
+    })
     this.itemType = props.itemType
     this.immutable = props.immutable
   }
@@ -531,7 +537,7 @@ export class ObjectPType extends PType {
     this.properties = props.properties
   }
 
-  static literal(props: Record<string, PType> | Array<[string, PType]>) {
+  static anonymous(props: Record<string, PType> | Array<[string, PType]>) {
     const properties = Array.isArray(props) ? Object.fromEntries(props) : props
     return new ObjectPType({
       properties,
@@ -539,13 +545,21 @@ export class ObjectPType extends PType {
   }
 
   get wtype(): WTuple {
+    const tupleTypes: WType[] = []
+    for (const [propName, propType] of this.orderedProperties()) {
+      if (propType instanceof TransientType) {
+        throw new CodeError(`Property '${propName}' of ${this.name} has an unsupported type: ${propType.typeMessage}`)
+      }
+      tupleTypes.push(propType.wtypeOrThrow)
+    }
     return new WTuple({
-      types: this.orderedProperties().map(([_, ptype]) => ptype.wtypeOrThrow),
+      types: tupleTypes,
       immutable: false,
     })
   }
 
   orderedProperties() {
+    // TODO: Respect declaration order
     return Object.entries(this.properties).toSorted(sortBy(([key]) => key))
   }
 
@@ -565,14 +579,16 @@ export class ObjectPType extends PType {
   }
 
   get name(): string {
-    return `${this.#name}{${this.orderedProperties()
+    // TODO: Include name in identity
+    return `{${this.orderedProperties()
       .map((p) => `${p[0]}:${p[1].name}`)
       .join(',')}}`
   }
 
   get fullName(): string {
-    const alias = [this.module, this.#name].filter(Boolean).join('::')
-    return `${alias}{${this.orderedProperties()
+    //const alias = [this.module, this.#name].filter(Boolean).join('::')
+    // TODO: include name in identity
+    return `{${this.orderedProperties()
       .map((p) => `${p[0]}:${p[1].fullName}`)
       .join(',')}}`
   }
@@ -617,21 +633,15 @@ export const BooleanFunction = new LibFunctionType({
   module: 'typescript/lib/lib.es5.d.ts',
 })
 
-export class BigIntPType extends TransientType {
-  readonly literalValue: bigint | undefined
-  constructor(props?: { literalValue: bigint }) {
-    super({
-      name: 'bigint',
-      module: 'lib.d.ts',
-      singleton: false,
-      typeMessage:
-        '`bigint` is not valid as a variable, parameter, return, or property type. Please use an algo-ts type such as `biguint` or `uint64`',
-      expressionMessage:
-        'Expression of type `bigint` must be explicitly converted to an algo-ts type, for example by wrapping the expression in `Uint64(...)`',
-    })
-    this.literalValue = props?.literalValue
-  }
-}
+export const bigIntPType = new TransientType({
+  name: 'bigint',
+  module: 'lib.d.ts',
+  singleton: false,
+  typeMessage:
+    '`bigint` is not valid as a variable, parameter, return, or property type. Please use an algo-ts type such as `biguint` or `uint64`',
+  expressionMessage:
+    'Expression of type `bigint` must be explicitly converted to an algo-ts type, for example by wrapping the expression in `BigUint(...)`',
+})
 export const stringPType = new InstanceType({
   name: 'string',
   module: 'lib.d.ts',
@@ -652,20 +662,39 @@ export const biguintPType = new InstanceType({
   module: Constants.primitivesModuleName,
   wtype: wtypes.biguintWType,
 })
-export class NumberPType extends TransientType {
-  readonly literalValue: bigint | undefined
-  constructor(props?: { literalValue: bigint }) {
-    const typeName = props?.literalValue.toString() ?? 'number'
+export class NumericLiteralPType extends TransientType {
+  readonly literalValue: bigint
+  constructor({ literalValue }: { literalValue: bigint }) {
     super({
-      name: `${typeName}`,
+      name: `${literalValue}`,
       module: 'lib.d.ts',
       singleton: false,
-      typeMessage: `\`${typeName}\` is not valid as a variable, parameter, return, or property type. Please use an algo-ts type such as \`uint64\` or \`biguint\``,
-      expressionMessage: `Expression of type \`number\` must be explicitly converted to an algo-ts type, for example by wrapping the expression in \`Uint64(...)\``,
+      typeMessage: `\`${literalValue}\` is not valid as a variable, parameter, return, or property type. Please use an algo-ts type such as \`uint64\` or \`biguint\``,
+      expressionMessage: `Expression of type \`${literalValue}\` must be explicitly converted to an algo-ts type, for example by wrapping the expression in \`Uint64(...)\``,
     })
-    this.literalValue = props?.literalValue
+    this.literalValue = literalValue
   }
 }
+export class BigIntLiteralPType extends TransientType {
+  readonly literalValue: bigint
+  constructor({ literalValue }: { literalValue: bigint }) {
+    super({
+      name: `${literalValue}n`,
+      module: 'lib.d.ts',
+      singleton: false,
+      typeMessage: `\`${literalValue}n\` is not valid as a variable, parameter, return, or property type. Please use an algo-ts type such as \`uint64\` or \`biguint\``,
+      expressionMessage: `Expression of type \`${literalValue}n\` must be explicitly converted to an algo-ts type, for example by wrapping the expression in \`BigUint(...)\``,
+    })
+    this.literalValue = literalValue
+  }
+}
+export const numberPType = new TransientType({
+  name: 'number',
+  module: 'lib.d.ts',
+  singleton: false,
+  typeMessage: `\`number\` is not valid as a variable, parameter, return, or property type. Please use an algo-ts type such as \`uint64\` or \`biguint\``,
+  expressionMessage: `Expression of type \`number\` must be explicitly converted to an algo-ts type, for example by wrapping the expression in \`Uint64(...)\``,
+})
 export const Uint64Function = new LibFunctionType({
   name: 'Uint64',
   module: Constants.primitivesModuleName,
@@ -966,7 +995,6 @@ export const urangeFunction = new LibFunctionType({
 })
 
 export class IterableIteratorType extends TransientType {
-  readonly wtype: WEnumeration
   readonly itemType: PType
   constructor({ itemType }: { itemType: PType }) {
     super({
@@ -977,7 +1005,6 @@ export class IterableIteratorType extends TransientType {
       singleton: false,
     })
     this.itemType = itemType
-    this.wtype = new WEnumeration({ sequenceType: this.itemType.wtypeOrThrow })
   }
   static readonly baseName = 'IterableIterator'
   static readonly moduleName = 'typescript/lib/lib.es2015.iterable.d.ts'
@@ -991,6 +1018,10 @@ export class IterableIteratorType extends TransientType {
     return new IterableIteratorType({
       itemType: typeArgs[0],
     })
+  }
+
+  get wtype(): WEnumeration {
+    return new WEnumeration({ sequenceType: this.itemType.wtypeOrThrow })
   }
 
   getGenericArgs(): PType[] {

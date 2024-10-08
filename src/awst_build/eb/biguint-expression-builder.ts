@@ -2,25 +2,35 @@ import type { awst } from '../../awst'
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
 import { nodeFactory } from '../../awst/node-factory'
 import type { Expression } from '../../awst/nodes'
-import { BigUIntBinaryOperator, BigUIntPostfixUnaryOperator, NumericComparison } from '../../awst/nodes'
+import { BigUIntBinaryOperator, BigUIntPostfixUnaryOperator, IntegerConstant, NumericComparison } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
-import { CodeError, NotSupported } from '../../errors'
+import { NotSupported } from '../../errors'
 import { logger } from '../../logger'
 import { tryConvertEnum } from '../../util'
 import type { InstanceType, PType } from '../ptypes'
-import { BigUintFunction, biguintPType } from '../ptypes'
+import { BigUintFunction, biguintPType, uint64PType } from '../ptypes'
 import { BooleanExpressionBuilder } from './boolean-expression-builder'
 import type { InstanceBuilder } from './index'
 import { BuilderBinaryOp, BuilderComparisonOp, BuilderUnaryOp, FunctionBuilder, InstanceExpressionBuilder } from './index'
-import { LiteralExpressionBuilder } from './literal-expression-builder'
 import { UInt64ExpressionBuilder } from './uint64-expression-builder'
 import { requireExpressionOfType } from './util'
+import { parseFunctionArgs } from './util/arg-parsing'
 
 export class BigUintFunctionBuilder extends FunctionBuilder {
   readonly ptype = BigUintFunction
 
   call(args: Array<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
-    if (args.length === 0) {
+    const {
+      args: [initialValue],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 0,
+      callLocation: sourceLocation,
+      funcName: 'BigUInt',
+      argSpec: (a) => [a.optional(uint64PType, biguintPType)],
+    })
+    if (!initialValue) {
       return new BigUintExpressionBuilder(
         nodeFactory.bigUIntConstant({
           sourceLocation,
@@ -28,13 +38,24 @@ export class BigUintFunctionBuilder extends FunctionBuilder {
         }),
       )
     }
-    if (args.length === 1) {
-      const [arg0] = args
-      if (arg0 instanceof LiteralExpressionBuilder) {
-        return arg0.resolveToPType(biguintPType)
+    if (initialValue.ptype.equals(uint64PType)) {
+      const expr = initialValue.resolve()
+      if (expr instanceof IntegerConstant) {
+        return new BigUintExpressionBuilder(
+          nodeFactory.bigUIntConstant({
+            ...expr,
+          }),
+        )
       }
+      return new BigUintExpressionBuilder(
+        nodeFactory.reinterpretCast({
+          expr: initialValue.toBytes(sourceLocation),
+          sourceLocation,
+          wtype: biguintPType.wtype,
+        }),
+      )
     }
-    throw CodeError.unexpectedUnhandledArgs({ sourceLocation })
+    return initialValue
   }
 }
 

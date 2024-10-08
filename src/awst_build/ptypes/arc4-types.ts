@@ -4,7 +4,7 @@ import { ARC4DynamicArray, ARC4StaticArray, ARC4UIntN } from '../../awst/wtypes'
 import { Constants } from '../../constants'
 import { codeInvariant } from '../../util'
 import { PType } from './base'
-import { LibFunctionType, NumberPType } from './index'
+import { LibFunctionType, NumericLiteralPType } from './index'
 
 export const UintNConstructor = new LibFunctionType({
   name: 'UintN',
@@ -36,7 +36,7 @@ export class UintNType extends ARC4EncodedType {
     codeInvariant(typeArgs.length === 1, 'UintNType type expects exactly one type parameter')
     const [size] = typeArgs
     codeInvariant(
-      size instanceof NumberPType && size.literalValue,
+      size instanceof NumericLiteralPType && size.literalValue,
       `Generic type param for UintNType must be a literal number. Inferred type is ${size.name}`,
     )
 
@@ -44,7 +44,7 @@ export class UintNType extends ARC4EncodedType {
   }
 
   getGenericArgs(): PType[] {
-    return [new NumberPType({ literalValue: this.n })]
+    return [new NumericLiteralPType({ literalValue: this.n })]
   }
 }
 
@@ -126,7 +126,7 @@ export class StaticArrayType extends ARC4EncodedType {
       `Element type generic type param for DynamicArray must be an ARC4 encoded type. Inferred type is ${elementType.name}`,
     )
     codeInvariant(
-      arraySize instanceof NumberPType && arraySize.literalValue,
+      arraySize instanceof NumericLiteralPType,
       `Array size generic type param for StaticArray must be a literal number. Inferred type is ${arraySize.name}`,
     )
 
@@ -134,6 +134,6 @@ export class StaticArrayType extends ARC4EncodedType {
   }
 
   getGenericArgs(): PType[] {
-    return [this.elementType, new NumberPType({ literalValue: this.arraySize })]
+    return [this.elementType, new NumericLiteralPType({ literalValue: this.arraySize })]
   }
 }

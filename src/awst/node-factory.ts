@@ -57,40 +57,40 @@ const explicitNodeFactory = {
   },
   uInt64Constant(props: { value: bigint; tealAlias?: string; sourceLocation: SourceLocation }): IntegerConstant {
     return new IntegerConstant({
-      wtype: wtypes.uint64WType,
       ...props,
+      wtype: wtypes.uint64WType,
       tealAlias: props.tealAlias ?? null,
     })
   },
   bigUIntConstant(props: { value: bigint; sourceLocation: SourceLocation }): IntegerConstant {
     return new IntegerConstant({
-      wtype: wtypes.biguintWType,
       ...props,
+      wtype: wtypes.biguintWType,
       tealAlias: null,
     })
   },
   not(props: { expr: Expression; sourceLocation: SourceLocation }): Not {
     return new Not({
-      wtype: boolWType,
       ...props,
+      wtype: boolWType,
     })
   },
   uInt64BinaryOperation(props: Omit<Props<UInt64BinaryOperation>, 'wtype'>): UInt64BinaryOperation {
     return new UInt64BinaryOperation({
-      wtype: wtypes.uint64WType,
       ...props,
+      wtype: wtypes.uint64WType,
     })
   },
   bigUIntBinaryOperation(props: Omit<Props<BigUIntBinaryOperation>, 'wtype'>): BigUIntBinaryOperation {
     return new BigUIntBinaryOperation({
-      wtype: wtypes.biguintWType,
       ...props,
+      wtype: wtypes.biguintWType,
     })
   },
   numericComparisonExpression(props: Omit<Props<NumericComparisonExpression>, 'wtype'>): NumericComparisonExpression {
     return new NumericComparisonExpression({
-      wtype: boolWType,
       ...props,
+      wtype: boolWType,
     })
   },
   bytesComparisonExpression(props: Omit<Props<BytesComparisonExpression>, 'wtype'>): BytesComparisonExpression {
@@ -100,14 +100,14 @@ const explicitNodeFactory = {
       props.sourceLocation,
     )
     return new BytesComparisonExpression({
-      wtype: boolWType,
       ...props,
+      wtype: boolWType,
     })
   },
   boolConstant(props: { value: boolean; sourceLocation: SourceLocation }): BoolConstant {
     return new BoolConstant({
-      wtype: wtypes.boolWType,
       ...props,
+      wtype: wtypes.boolWType,
     })
   },
   singleEvaluation({ source }: { source: Expression }) {

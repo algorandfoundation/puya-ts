@@ -36,10 +36,12 @@ import type { PType } from './ptypes'
 import {
   ArrayLiteralPType,
   ArrayPType,
-  BigIntPType,
+  BigIntLiteralPType,
+  bigIntPType,
   biguintPType,
   boolPType,
-  NumberPType,
+  numberPType,
+  NumericLiteralPType,
   ObjectPType,
   TransientType,
   TuplePType,
@@ -68,7 +70,9 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
 
   visitBigIntLiteral(node: ts.BigIntLiteral): InstanceBuilder {
     const literalValue = BigInt(node.text.slice(0, -1))
-    return new BigIntLiteralExpressionBuilder(literalValue, new BigIntPType({ literalValue }), this.sourceLocation(node))
+    const ptype = this.context.getPTypeForNode(node)
+    invariant(ptype instanceof TransientType, 'Literals should resolve to transient PTypes')
+    return new BigIntLiteralExpressionBuilder(literalValue, ptype, this.sourceLocation(node))
   }
 
   visitRegularExpressionLiteral(node: ts.RegularExpressionLiteral): InstanceBuilder {
@@ -97,7 +101,9 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
 
   visitNumericLiteral(node: ts.NumericLiteral): InstanceBuilder {
     const literalValue = BigInt(node.text)
-    return new BigIntLiteralExpressionBuilder(literalValue, new NumberPType({ literalValue }), this.sourceLocation(node))
+    const ptype = this.context.getPTypeForNode(node)
+    invariant(ptype instanceof TransientType, 'Literals should resolve to transient PTypes')
+    return new BigIntLiteralExpressionBuilder(literalValue, ptype, this.sourceLocation(node))
   }
 
   visitIdentifier(node: ts.Identifier): NodeBuilder {
@@ -490,15 +496,19 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
       return targetType
     }
     if (
-      sourceType instanceof NumberPType ||
-      (sourceType instanceof UnionPType && sourceType.types.every((t) => t.equals(uint64PType) || t instanceof NumberPType))
+      sourceType instanceof NumericLiteralPType ||
+      sourceType.equals(numberPType) ||
+      (sourceType instanceof UnionPType &&
+        sourceType.types.every((t) => t.equals(uint64PType) || t instanceof NumericLiteralPType || sourceType.equals(numberPType)))
     ) {
       // Narrow `uint64 | number` or `number` to target type
       return targetType
     }
     if (
-      sourceType instanceof BigIntPType ||
-      (sourceType instanceof UnionPType && sourceType.types.every((t) => t.equals(biguintPType) || t instanceof BigIntPType))
+      sourceType.equals(bigIntPType) ||
+      sourceType instanceof BigIntLiteralPType ||
+      (sourceType instanceof UnionPType &&
+        sourceType.types.every((t) => t.equals(biguintPType) || t instanceof BigIntLiteralPType || t.equals(bigIntPType)))
     ) {
       // Narrow `biguint | bigint` or `bigint` to target type
       return targetType

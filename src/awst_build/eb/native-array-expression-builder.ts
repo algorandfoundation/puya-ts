@@ -7,7 +7,7 @@ import { InstanceExpressionBuilder } from './index'
 
 export class NativeArrayExpressionBuilder extends InstanceExpressionBuilder<ArrayPType> {
   resolveLValue(): LValue {
-    throw new CodeError(ArrayPType.typeError, { sourceLocation: this.sourceLocation })
+    throw new CodeError(this.ptype.typeMessage, { sourceLocation: this.sourceLocation })
   }
 
   constructor(expr: Expression, ptype: PType) {

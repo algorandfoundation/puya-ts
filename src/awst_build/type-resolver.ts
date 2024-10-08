@@ -11,7 +11,8 @@ import {
   arc4BaseContractType,
   ArrayPType,
   baseContractType,
-  BigIntPType,
+  BigIntLiteralPType,
+  bigIntPType,
   BooleanFunction,
   boolPType,
   ClassMethodDecoratorContext,
@@ -21,7 +22,8 @@ import {
   NamespacePType,
   neverPType,
   nullPType,
-  NumberPType,
+  numberPType,
+  NumericLiteralPType,
   ObjectPType,
   StorageProxyPType,
   StringFunction,
@@ -146,15 +148,15 @@ export class TypeResolver {
     }
     if (intersectsFlags(tsType.flags, ts.TypeFlags.Number | ts.TypeFlags.NumberLiteral) && tsType.getSymbol() === undefined) {
       if (tsType.isNumberLiteral()) {
-        return new NumberPType({ literalValue: BigInt(tsType.value) })
+        return new NumericLiteralPType({ literalValue: BigInt(tsType.value) })
       }
-      return new NumberPType()
+      return numberPType
     }
     if (intersectsFlags(tsType.flags, ts.TypeFlags.BigInt | ts.TypeFlags.BigIntLiteral) && tsType.getSymbol() === undefined) {
       if (tsType.isLiteral() && typeof tsType.value === 'object') {
-        return new BigIntPType({ literalValue: BigInt(tsType.value.base10Value) * (tsType.value.negative ? -1n : 1n) })
+        return new BigIntLiteralPType({ literalValue: BigInt(tsType.value.base10Value) * (tsType.value.negative ? -1n : 1n) })
       }
-      return new BigIntPType()
+      return bigIntPType
     }
     if (isTupleReference(tsType)) {
       //codeInvariant(tsType.readonly, 'Tuple types should be declared as readonly', sourceLocation)
@@ -226,6 +228,8 @@ export class TypeResolver {
   }
 
   private reflectObjectType(tsType: ts.Type, sourceLocation: SourceLocation): ObjectPType {
+    const typeAlias = tsType.aliasSymbol ? this.getSymbolFullName(tsType.aliasSymbol, sourceLocation) : undefined
+
     const properties: Record<string, PType> = {}
     for (const prop of tsType.getProperties()) {
       const type = this.checker.getTypeOfSymbol(prop)
@@ -236,7 +240,10 @@ export class TypeResolver {
         properties[prop.name] = ptype
       }
     }
-    return ObjectPType.literal(properties)
+    if (typeAlias) {
+      return new ObjectPType({ ...typeAlias, properties })
+    }
+    return ObjectPType.anonymous(properties)
   }
 
   private reflectFunctionType(

@@ -5,7 +5,7 @@ import { IntegerConstant } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { bigIntToUint8Array, codeInvariant, invariant } from '../../../util'
 import type { PType } from '../../ptypes'
-import { biguintPType, NumberPType, uint64PType } from '../../ptypes'
+import { biguintPType, NumericLiteralPType, uint64PType } from '../../ptypes'
 import { UintNType } from '../../ptypes/arc4-types'
 import { instanceEb } from '../../type-registry'
 import type { InstanceBuilder } from '../index'
@@ -30,7 +30,7 @@ export class UintNConstructorBuilder extends NodeBuilder {
       callLocation: sourceLocation,
     })
     codeInvariant(
-      size instanceof NumberPType && size.literalValue !== undefined,
+      size instanceof NumericLiteralPType,
       `Generic type of ${this.typeDescription} must be a literal number. Inferred type is ${size.name}`,
       sourceLocation,
     )

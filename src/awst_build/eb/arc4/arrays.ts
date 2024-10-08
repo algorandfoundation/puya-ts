@@ -5,7 +5,7 @@ import { uint64WType } from '../../../awst/wtypes'
 import { logger } from '../../../logger'
 import { codeInvariant, invariant } from '../../../util'
 import type { PType } from '../../ptypes'
-import { IterableIteratorType, NumberPType, TuplePType, uint64PType } from '../../ptypes'
+import { IterableIteratorType, NumericLiteralPType, TuplePType, uint64PType } from '../../ptypes'
 import {
   ARC4EncodedType,
   DynamicArrayConstructor,
@@ -65,7 +65,7 @@ export class StaticArrayConstructorBuilder extends NodeBuilder {
     })
     codeInvariant(elementType instanceof ARC4EncodedType, 'Element type must be an ARC4 encoded type', sourceLocation)
     codeInvariant(
-      arraySize instanceof NumberPType && arraySize.literalValue !== undefined,
+      arraySize instanceof NumericLiteralPType,
       `Array size type parameter of ${this.typeDescription} must be a literal number. Inferred type is ${arraySize.name}`,
       sourceLocation,
     )
