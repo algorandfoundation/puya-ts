@@ -37,7 +37,7 @@ export const uint8ArrayToBase32 = (value: Uint8Array): string => {
 
     if (allBytes.length < 1) break
     base32str += BASE32_ALPHABET[a >>> 3]
-    base32str += BASE32_ALPHABET[((a << 2) | ((b || 0) >>> 6)) & 32]
+    base32str += BASE32_ALPHABET[((a << 2) | ((b || 0) >>> 6)) & 31]
     if (allBytes.length < 2) break
     base32str += BASE32_ALPHABET[(b >>> 1) & 31]
     base32str += BASE32_ALPHABET[((b << 4) | (c >>> 4)) & 31]

@@ -1,7 +1,15 @@
 import type { biguint, BigUintCompat, bytes, BytesCompat, uint64, Uint64Compat } from '../index'
 import { DeliberateAny } from '../typescript-helpers'
 import { base32ToUint8Array } from './base-32'
-import { bigIntToUint8Array, uint8ArrayToBigInt, uint8ArrayToHex, uint8ArrayToUtf8, utf8ToUint8Array } from './encoding-util'
+import {
+  base64ToUint8Array,
+  bigIntToUint8Array,
+  hexToUint8Array,
+  uint8ArrayToBigInt,
+  uint8ArrayToHex,
+  uint8ArrayToUtf8,
+  utf8ToUint8Array,
+} from './encoding-util'
 import { avmError, AvmError, internalError } from './errors'
 import { nameOfType } from './name-of-type'
 
@@ -307,11 +315,11 @@ export class BytesCls extends AlgoTsPrimitiveCls {
   }
 
   static fromHex(hex: string): BytesCls {
-    return new BytesCls(Uint8Array.from(Buffer.from(hex, 'hex')))
+    return new BytesCls(hexToUint8Array(hex))
   }
 
   static fromBase64(b64: string): BytesCls {
-    return new BytesCls(Uint8Array.from(Buffer.from(b64, 'base64')))
+    return new BytesCls(base64ToUint8Array(b64))
   }
 
   static fromBase32(b32: string): BytesCls {
