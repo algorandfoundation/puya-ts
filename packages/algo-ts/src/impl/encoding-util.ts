@@ -1,3 +1,4 @@
+import { Buffer } from 'node:buffer'
 import { TextDecoder } from 'node:util'
 import { AvmError } from './errors'
 
@@ -7,6 +8,18 @@ export const uint8ArrayToBigInt = (v: Uint8Array): bigint => {
     .toReversed()
     .map((byte_value, i): bigint => BigInt(byte_value) << BigInt(i * 8))
     .reduce((a, b) => a + b, 0n)
+}
+
+export const hexToUint8Array = (value: string): Uint8Array => {
+  if (value.length % 2 !== 0) {
+    // TODO: Verify AVM behaviour is to fail
+    throw new AvmError('Hex string must have even number of characters')
+  }
+  return Uint8Array.from(Buffer.from(value, 'hex'))
+}
+
+export const base64ToUint8Array = (value: string): Uint8Array => {
+  return Uint8Array.from(Buffer.from(value, 'base64'))
 }
 
 export const bigIntToUint8Array = (val: bigint, fixedSize: number | 'dynamic' = 'dynamic'): Uint8Array => {

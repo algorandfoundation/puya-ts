@@ -57,11 +57,11 @@ export const uint8ArrayToBase64 = (value: Uint8Array): string => Buffer.from(val
 
 export const hexToUint8Array = (value: string): Uint8Array => {
   invariant(value.length % 2 === 0, 'Hex string must have even number of characters')
-  return new Uint8Array(new Array(value.length / 2).fill(0).map((_, i) => parseInt(value.slice(i * 2, i * 2 + 1), 16)))
+  return Uint8Array.from(Buffer.from(value, 'hex'))
 }
 
 export const base64ToUint8Array = (value: string): Uint8Array => {
-  return new Uint8Array(Buffer.from(value, 'base64'))
+  return Uint8Array.from(Buffer.from(value, 'base64'))
 }
 
 export const utf8ToUint8Array = (value: string): Uint8Array => {
