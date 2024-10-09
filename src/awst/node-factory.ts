@@ -1,3 +1,4 @@
+import { CodeError } from '../errors'
 import type { DeliberateAny, Props } from '../typescript-helpers'
 import { codeInvariant, invariant } from '../util'
 import type { Expression, Statement } from './nodes'
@@ -55,16 +56,32 @@ const explicitNodeFactory = {
       wtype: wtypes.stringWType,
     })
   },
-  uInt64Constant(props: { value: bigint; tealAlias?: string; sourceLocation: SourceLocation }): IntegerConstant {
+  uInt64Constant({
+    value,
+    tealAlias,
+    sourceLocation,
+  }: {
+    value: bigint
+    tealAlias?: string
+    sourceLocation: SourceLocation
+  }): IntegerConstant {
+    if (value < 0n || value >= 2n ** 64n) {
+      throw new CodeError(`uint64 overflow or underflow: ${value}`, { sourceLocation })
+    }
     return new IntegerConstant({
-      ...props,
+      value,
+      sourceLocation,
       wtype: wtypes.uint64WType,
-      tealAlias: props.tealAlias ?? null,
+      tealAlias: tealAlias ?? null,
     })
   },
-  bigUIntConstant(props: { value: bigint; sourceLocation: SourceLocation }): IntegerConstant {
+  bigUIntConstant({ value, sourceLocation }: { value: bigint; sourceLocation: SourceLocation }): IntegerConstant {
+    if (value < 0n || value >= 2n ** 512n) {
+      throw new CodeError(`biguint overflow or underflow: ${value}`, { sourceLocation })
+    }
     return new IntegerConstant({
-      ...props,
+      value,
+      sourceLocation,
       wtype: wtypes.biguintWType,
       tealAlias: null,
     })

@@ -1,4 +1,4 @@
-import type { awst } from '../../awst'
+import { awst } from '../../awst'
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
 import { nodeFactory } from '../../awst/node-factory'
 import type { Expression } from '../../awst/nodes'
@@ -8,10 +8,11 @@ import { NotSupported } from '../../errors'
 import { logger } from '../../logger'
 import { tryConvertEnum } from '../../util'
 import type { InstanceType, PType } from '../ptypes'
-import { BigUintFunction, biguintPType, uint64PType } from '../ptypes'
+import { BigUintFunction, biguintPType, boolPType, bytesPType, numberPType, stringPType, uint64PType } from '../ptypes'
 import { BooleanExpressionBuilder } from './boolean-expression-builder'
 import type { InstanceBuilder } from './index'
 import { BuilderBinaryOp, BuilderComparisonOp, BuilderUnaryOp, FunctionBuilder, InstanceExpressionBuilder } from './index'
+import { BigIntLiteralExpressionBuilder } from './literal/big-int-literal-expression-builder'
 import { UInt64ExpressionBuilder } from './uint64-expression-builder'
 import { requireExpressionOfType } from './util'
 import { parseFunctionArgs } from './util/arg-parsing'
@@ -28,34 +29,64 @@ export class BigUintFunctionBuilder extends FunctionBuilder {
       genericTypeArgs: 0,
       callLocation: sourceLocation,
       funcName: 'BigUInt',
-      argSpec: (a) => [a.optional(uint64PType, biguintPType)],
+      argSpec: (a) => [a.optional(boolPType, stringPType, bytesPType, biguintPType, numberPType, uint64PType)],
     })
+    let biguint: Expression
+
     if (!initialValue) {
-      return new BigUintExpressionBuilder(
-        nodeFactory.bigUIntConstant({
+      biguint = nodeFactory.bigUIntConstant({
+        sourceLocation,
+        value: 0n,
+      })
+    } else if (initialValue.ptype.equals(boolPType)) {
+      biguint = nodeFactory.reinterpretCast({
+        expr: initialValue.toBytes(sourceLocation),
+        sourceLocation,
+        wtype: biguintPType.wtype,
+      })
+    } else if (initialValue.ptype.equals(stringPType)) {
+      const expr = initialValue.resolve()
+      if (expr instanceof awst.StringConstant) {
+        biguint = nodeFactory.bigUIntConstant({
+          value: BigInt(expr.value),
           sourceLocation,
-          value: 0n,
-        }),
-      )
-    }
-    if (initialValue.ptype.equals(uint64PType)) {
+        })
+      } else {
+        logger.error(initialValue.sourceLocation, 'Only compile time constant string values are supported')
+        biguint = nodeFactory.bigUIntConstant({ value: 0n, sourceLocation })
+      }
+    } else if (initialValue.ptype.equals(bytesPType)) {
+      biguint = nodeFactory.reinterpretCast({
+        expr: initialValue.resolve(),
+        sourceLocation,
+        wtype: biguintPType.wtype,
+      })
+    } else if (initialValue.ptype.equals(numberPType)) {
+      if (initialValue instanceof BigIntLiteralExpressionBuilder) {
+        biguint = nodeFactory.bigUIntConstant({
+          value: initialValue.value,
+          sourceLocation,
+        })
+      } else {
+        logger.error(initialValue.sourceLocation, 'Only compile time numeric values are supported')
+        biguint = nodeFactory.bigUIntConstant({ value: 0n, sourceLocation })
+      }
+    } else if (initialValue.ptype.equals(uint64PType)) {
       const expr = initialValue.resolve()
       if (expr instanceof IntegerConstant) {
-        return new BigUintExpressionBuilder(
-          nodeFactory.bigUIntConstant({
-            ...expr,
-          }),
-        )
+        biguint = nodeFactory.bigUIntConstant({
+          ...expr,
+        })
       }
-      return new BigUintExpressionBuilder(
-        nodeFactory.reinterpretCast({
-          expr: initialValue.toBytes(sourceLocation),
-          sourceLocation,
-          wtype: biguintPType.wtype,
-        }),
-      )
+      biguint = nodeFactory.reinterpretCast({
+        expr: initialValue.toBytes(sourceLocation),
+        sourceLocation,
+        wtype: biguintPType.wtype,
+      })
+    } else {
+      return initialValue
     }
-    return initialValue
+    return new BigUintExpressionBuilder(biguint)
   }
 }
 

@@ -10,6 +10,12 @@ export class AvmError extends Error {
 export function avmError(message: string): never {
   throw new AvmError(message)
 }
+
+export function avmInvariant(condition: unknown, message: string): asserts condition {
+  if (!condition) {
+    throw new AvmError(message)
+  }
+}
 /**
  * Raised when an assertion fails
  */
