@@ -1,4 +1,5 @@
-import { BigUintCls, BytesCls, Uint64Cls } from './impl/primitives'
+import { CodeError } from './impl/errors'
+import { BigUintCls, BytesCls, getNumber, Uint64Cls } from './impl/primitives'
 
 export type Uint64Compat = uint64 | bigint | boolean | number
 export type BigUintCompat = bigint | bytes | number | boolean
@@ -116,16 +117,30 @@ export function Bytes(value: biguint): bytes
  */
 export function Bytes(value: uint64): bytes
 /**
+ * Create a byte array from an Iterable<uint64> where each item is interpreted as a single byte and must be between 0 and 255 inclusively
+ */
+export function Bytes(value: Iterable<uint64>): bytes
+/**
  * Create an empty byte array
  */
 export function Bytes(): bytes
-export function Bytes(value?: BytesCompat | TemplateStringsArray | biguint | uint64, ...replacements: BytesCompat[]): bytes {
+export function Bytes(
+  value?: BytesCompat | TemplateStringsArray | biguint | uint64 | Iterable<number>,
+  ...replacements: BytesCompat[]
+): bytes {
   if (isTemplateStringsArray(value)) {
     return BytesCls.fromInterpolation(value, replacements).asAlgoTs()
   } else if (typeof value === 'bigint' || value instanceof BigUintCls) {
     return BigUintCls.fromCompat(value).toBytes().asAlgoTs()
   } else if (typeof value === 'number' || value instanceof Uint64Cls) {
     return Uint64Cls.fromCompat(value).toBytes().asAlgoTs()
+  } else if (typeof value === 'object' && Symbol.iterator in value) {
+    const valueItems = Array.from(value).map((v) => getNumber(v))
+    const invalidValue = valueItems.find((v) => v < 0 && v > 255)
+    if (invalidValue) {
+      throw new CodeError(`Cannot convert ${invalidValue} to a byte`)
+    }
+    return new BytesCls(new Uint8Array(value)).asAlgoTs()
   } else {
     return BytesCls.fromCompat(value).asAlgoTs()
   }

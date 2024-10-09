@@ -3,17 +3,36 @@ import { wtypes } from '../../awst'
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
 import { nodeFactory } from '../../awst/node-factory'
 import type { Expression } from '../../awst/nodes'
-import { BytesBinaryOperator, BytesConstant, BytesEncoding, BytesUnaryOperator, StringConstant } from '../../awst/nodes'
+import {
+  BytesBinaryOperator,
+  BytesConstant,
+  BytesEncoding,
+  BytesUnaryOperator,
+  IntegerConstant,
+  StringConstant,
+  UInt64BinaryOperator,
+} from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { stringWType } from '../../awst/wtypes'
 import { CodeError, wrapInCodeError } from '../../errors'
 import { logger } from '../../logger'
-import { base32ToUint8Array, base64ToUint8Array, hexToUint8Array, uint8ArrayToUtf8, utf8ToUint8Array } from '../../util'
+import { base32ToUint8Array, base64ToUint8Array, hexToUint8Array, invariant, uint8ArrayToUtf8, utf8ToUint8Array } from '../../util'
 import type { InstanceType, PType } from '../ptypes'
-import { bigIntPType, biguintPType, BytesFunction, bytesPType, numberPType, NumericLiteralPType, stringPType, uint64PType } from '../ptypes'
+import {
+  ArrayPType,
+  bigIntPType,
+  biguintPType,
+  BytesFunction,
+  bytesPType,
+  numberPType,
+  NumericLiteralPType,
+  stringPType,
+  uint64PType,
+} from '../ptypes'
 import { instanceEb } from '../type-registry'
 import type { BuilderComparisonOp, InstanceBuilder, NodeBuilder } from './index'
 import { BuilderUnaryOp, FunctionBuilder, InstanceExpressionBuilder, ParameterlessFunctionBuilder } from './index'
+import { ArrayLiteralExpressionBuilder } from './literal/array-literal-expression-builder'
 import { BigIntLiteralExpressionBuilder } from './literal/big-int-literal-expression-builder'
 import { StringExpressionBuilder } from './string-expression-builder'
 import { UInt64ExpressionBuilder } from './uint64-expression-builder'
@@ -66,7 +85,9 @@ export class BytesFunctionBuilder extends FunctionBuilder {
       genericTypeArgs: 0,
       callLocation: sourceLocation,
       funcName: 'Bytes',
-      argSpec: (a) => [a.optional(numberPType, bigIntPType, uint64PType, biguintPType, stringPType, bytesPType)],
+      argSpec: (a) => [
+        a.optional(numberPType, bigIntPType, uint64PType, biguintPType, stringPType, bytesPType, new ArrayPType({ itemType: uint64PType })),
+      ],
     })
     const empty = nodeFactory.bytesConstant({
       sourceLocation,
@@ -86,8 +107,29 @@ export class BytesFunctionBuilder extends FunctionBuilder {
       bytesExpr = initialValue.toBytes(sourceLocation)
     } else if (initialValue.ptype.equals(stringPType)) {
       bytesExpr = initialValue.toBytes(sourceLocation)
-    } else {
+    } else if (initialValue.ptype.equals(bytesPType)) {
       return initialValue
+    } else {
+      // Array
+      if (initialValue instanceof ArrayLiteralExpressionBuilder) {
+        const bytes: number[] = []
+        for (const item of initialValue.getItemBuilders()) {
+          const byte = item.resolve()
+          if (byte instanceof IntegerConstant && byte.value < 256n) {
+            bytes.push(Number(byte.value))
+          } else {
+            logger.error(item.sourceLocation, 'A compile time constant value between 0 and 255 is expected here')
+            break
+          }
+        }
+        bytesExpr = nodeFactory.bytesConstant({
+          value: Uint8Array.from(bytes),
+          sourceLocation: initialValue.sourceLocation,
+        })
+      } else {
+        logger.error(initialValue.sourceLocation, 'Only array literals are supported here')
+        bytesExpr = empty
+      }
     }
     return new BytesExpressionBuilder(bytesExpr)
   }
@@ -235,18 +277,36 @@ export class BytesSliceBuilder extends FunctionBuilder {
     super(expr.sourceLocation)
   }
   call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation) {
-    // TODO: Needs to do range check on target and handle negative values
-    // TODO: Also handle single arg
-    const [start, stop] = requireExpressionsOfType(args, [uint64PType, uint64PType], sourceLocation)
+    const {
+      args: [start, stop],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 0,
+      callLocation: sourceLocation,
+      funcName: 'slice',
+      argSpec: (a) => [a.optional(uint64PType, numberPType), a.optional(uint64PType, numberPType)],
+    })
+
     return new BytesExpressionBuilder(
-      nodeFactory.sliceExpression({
+      nodeFactory.intersectionSliceExpression({
         base: this.expr,
         sourceLocation: sourceLocation,
-        beginIndex: start,
-        endIndex: stop,
+        beginIndex: start ? getBigIntOrUint64Expr(start) : null,
+        endIndex: stop ? getBigIntOrUint64Expr(stop) : null,
         wtype: wtypes.bytesWType,
       }),
     )
+  }
+}
+
+function getBigIntOrUint64Expr(builder: InstanceBuilder) {
+  if (builder.ptype.equals(numberPType)) {
+    invariant(builder instanceof BigIntLiteralExpressionBuilder, 'Builder for number type must be BigIntLiteral')
+    return builder.value
+  } else {
+    invariant(builder.ptype.equals(uint64PType), 'Builder must be uint64 if not number')
+    return builder.resolve()
   }
 }
 
@@ -272,14 +332,47 @@ export class BytesAtBuilder extends FunctionBuilder {
   }
 
   call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation) {
-    const [index] = requireExpressionsOfType(args, [uint64PType], sourceLocation)
-    // TODO: Needs to do range check on target and handle negative values
+    const {
+      args: [index],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 0,
+      callLocation: sourceLocation,
+      funcName: 'at',
+      argSpec: (a) => [a.required(uint64PType, numberPType)],
+    })
+
+    let indexExpr: Expression
+
+    if (index.ptype.equals(numberPType)) {
+      invariant(index instanceof BigIntLiteralExpressionBuilder, 'Builder for number type must be BigIntLiteral')
+
+      if (index.value < 0) {
+        indexExpr = nodeFactory.uInt64BinaryOperation({
+          op: UInt64BinaryOperator.sub,
+          left: intrinsicFactory.bytesLen({
+            value: this.expr,
+            sourceLocation,
+          }),
+          right: nodeFactory.uInt64Constant({
+            value: index.value * -1n,
+            sourceLocation,
+          }),
+          sourceLocation,
+        })
+      } else {
+        indexExpr = index.resolveToPType(uint64PType).resolve()
+      }
+    } else {
+      indexExpr = index.resolve()
+    }
+
     return instanceEb(
-      nodeFactory.sliceExpression({
+      nodeFactory.indexExpression({
         base: this.expr,
         sourceLocation: sourceLocation,
-        beginIndex: index,
-        endIndex: nodeFactory.uInt64Constant({ value: 1n, sourceLocation }),
+        index: indexExpr,
         wtype: wtypes.bytesWType,
       }),
       bytesPType,

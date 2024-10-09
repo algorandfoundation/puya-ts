@@ -304,7 +304,7 @@ export class BytesCls extends AlgoTsPrimitiveCls {
     return isInstanceOfTypeByName(x, BytesCls)
   }
 
-  static fromCompat(v: StubBytesCompat | undefined): BytesCls {
+  static fromCompat(v: StubBytesCompat | Uint8Array | undefined): BytesCls {
     if (v === undefined) return new BytesCls(new Uint8Array())
     if (typeof v === 'string') return new BytesCls(utf8ToUint8Array(v))
     if (v instanceof BytesCls) return v

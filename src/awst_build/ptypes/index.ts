@@ -509,7 +509,7 @@ export class ArrayPType extends TransientType {
   get fullName() {
     return `${this.module}::Array<${this.itemType.fullName}>`
   }
-  constructor(props: { itemType: PType; immutable: boolean }) {
+  constructor(props: { itemType: PType; immutable?: boolean }) {
     const name = `Array<${props.itemType.name}>`
     super({
       name,
@@ -519,7 +519,7 @@ export class ArrayPType extends TransientType {
       singleton: false,
     })
     this.itemType = props.itemType
-    this.immutable = props.immutable
+    this.immutable = props.immutable ?? true
   }
 
   get wtype() {

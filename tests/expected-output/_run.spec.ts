@@ -90,7 +90,7 @@ class MissingLogError implements Error {
     return `Expected log: [${this.expectedLog.level}] ${this.expectedLog.message}\n${foundLog}`
   }
   get stack() {
-    return this.expectedLog.sourceLocation.toString()
+    return this.potentialMatch?.sourceLocation?.toString() ?? this.expectedLog.sourceLocation.toString()
   }
   get name() {
     return 'MissingLogError'

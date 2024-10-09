@@ -9,4 +9,5 @@ function test(a: uint64, b: biguint, c: string) {
   assert(BigUint(Bytes(b)) === b)
   assert(String(Bytes(c)) === c)
   assert(Bytes(Bytes('123')) === Bytes('123'))
+  assert(Bytes([1, 2, 3, 4]) === Bytes.fromHex('01020304'))
 }

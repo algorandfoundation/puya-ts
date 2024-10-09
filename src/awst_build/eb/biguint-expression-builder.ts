@@ -8,11 +8,10 @@ import { NotSupported } from '../../errors'
 import { logger } from '../../logger'
 import { tryConvertEnum } from '../../util'
 import type { InstanceType, PType } from '../ptypes'
-import { BigUintFunction, biguintPType, boolPType, bytesPType, numberPType, stringPType, uint64PType } from '../ptypes'
+import { BigUintFunction, biguintPType, boolPType, bytesPType, stringPType, uint64PType } from '../ptypes'
 import { BooleanExpressionBuilder } from './boolean-expression-builder'
 import type { InstanceBuilder } from './index'
 import { BuilderBinaryOp, BuilderComparisonOp, BuilderUnaryOp, FunctionBuilder, InstanceExpressionBuilder } from './index'
-import { BigIntLiteralExpressionBuilder } from './literal/big-int-literal-expression-builder'
 import { UInt64ExpressionBuilder } from './uint64-expression-builder'
 import { requireExpressionOfType } from './util'
 import { parseFunctionArgs } from './util/arg-parsing'
@@ -29,7 +28,7 @@ export class BigUintFunctionBuilder extends FunctionBuilder {
       genericTypeArgs: 0,
       callLocation: sourceLocation,
       funcName: 'BigUInt',
-      argSpec: (a) => [a.optional(boolPType, stringPType, bytesPType, biguintPType, numberPType, uint64PType)],
+      argSpec: (a) => [a.optional(boolPType, stringPType, bytesPType, biguintPType, uint64PType)],
     })
     let biguint: Expression
 
@@ -61,16 +60,6 @@ export class BigUintFunctionBuilder extends FunctionBuilder {
         sourceLocation,
         wtype: biguintPType.wtype,
       })
-    } else if (initialValue.ptype.equals(numberPType)) {
-      if (initialValue instanceof BigIntLiteralExpressionBuilder) {
-        biguint = nodeFactory.bigUIntConstant({
-          value: initialValue.value,
-          sourceLocation,
-        })
-      } else {
-        logger.error(initialValue.sourceLocation, 'Only compile time numeric values are supported')
-        biguint = nodeFactory.bigUIntConstant({ value: 0n, sourceLocation })
-      }
     } else if (initialValue.ptype.equals(uint64PType)) {
       const expr = initialValue.resolve()
       if (expr instanceof IntegerConstant) {
