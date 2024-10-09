@@ -6,7 +6,7 @@ import type { SourceLocation } from '../../../awst/source-location'
 import { CodeError } from '../../../errors'
 import { codeInvariant } from '../../../util'
 import type { PType, PTypeOrClass } from '../../ptypes'
-import { biguintPType, boolPType, bytesPType, stringPType, uint64PType } from '../../ptypes'
+import { bigIntPType, biguintPType, boolPType, bytesPType, numberPType, stringPType, uint64PType } from '../../ptypes'
 import { UintNType } from '../../ptypes/arc4-types'
 import type { NodeBuilder } from '../index'
 import { InstanceBuilder } from '../index'
@@ -115,6 +115,14 @@ export function requireConstantOfType(builder: NodeBuilder, ptype: PType, messag
 export function isValidLiteralForPType(literalValue: ConstantValue, ptype: PTypeOrClass): boolean {
   if (ptype.equals(stringPType)) {
     return typeof literalValue === 'string'
+  }
+  if (ptype.equals(numberPType)) {
+    return (
+      typeof literalValue === 'bigint' && BigInt(Number.MIN_SAFE_INTEGER) <= literalValue && literalValue <= BigInt(Number.MAX_SAFE_INTEGER)
+    )
+  }
+  if (ptype.equals(bigIntPType)) {
+    return typeof literalValue === 'bigint'
   }
   if (ptype.equals(uint64PType)) {
     return typeof literalValue === 'bigint' && 0 <= literalValue && literalValue < 2n ** 64n

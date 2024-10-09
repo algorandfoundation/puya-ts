@@ -37,6 +37,7 @@ export class BigIntLiteralExpressionBuilder extends LiteralExpressionBuilder {
   }
 
   resolvableToPType(ptype: PTypeOrClass): boolean {
+    if (!isValidLiteralForPType(this.value, ptype)) return false
     if (this.ptype instanceof NumericLiteralPType || this.ptype.equals(numberPType)) {
       return ptype.equals(uint64PType) || ptype.equals(numberPType) || ptype.equals(this.ptype)
     } else if (this.ptype instanceof BigIntLiteralPType || this.ptype.equals(bigIntPType)) {
@@ -75,7 +76,8 @@ export class BigIntLiteralExpressionBuilder extends LiteralExpressionBuilder {
       return this.resolveToPType(other.ptype).binaryOp(other, op, sourceLocation)
     }
     if (other instanceof BigIntLiteralExpressionBuilder) {
-      return new BigIntLiteralExpressionBuilder(foldBinaryOp(this.value, other.value, op, sourceLocation), this.ptype, sourceLocation)
+      const folded = foldBinaryOp(this.value, other.value, op, sourceLocation)
+      return new BigIntLiteralExpressionBuilder(folded, this.getUpdatedPType(folded), sourceLocation)
     }
     return super.binaryOp(other, op, sourceLocation)
   }
@@ -91,10 +93,20 @@ export class BigIntLiteralExpressionBuilder extends LiteralExpressionBuilder {
   prefixUnaryOp(op: BuilderUnaryOp, sourceLocation: SourceLocation): InstanceBuilder {
     switch (op) {
       case BuilderUnaryOp.neg:
-        return new BigIntLiteralExpressionBuilder(-this.value, this.ptype, sourceLocation)
+        return new BigIntLiteralExpressionBuilder(-this.value, this.getUpdatedPType(-this.value), sourceLocation)
       case BuilderUnaryOp.pos:
         return new BigIntLiteralExpressionBuilder(this.value, this.ptype, sourceLocation)
     }
     return super.prefixUnaryOp(op, sourceLocation)
+  }
+
+  private getUpdatedPType(value: bigint) {
+    if (this.ptype instanceof BigIntLiteralPType) {
+      return new BigIntLiteralPType({ literalValue: value })
+    }
+    if (this.ptype instanceof NumericLiteralPType) {
+      return new NumericLiteralPType({ literalValue: value })
+    }
+    return this.ptype
   }
 }

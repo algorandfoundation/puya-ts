@@ -209,8 +209,8 @@ export function parseFunctionArgs<const TGenericCount extends number, const TArg
                 return builder
               }
             }
-            throw new CodeError(`Arg ${i} of ${funcName} has an incorrect type of ${source.ptype}. Expected ${a.t.join(' or ')}`, {
-              sourceLocation: callLocation,
+            throw new CodeError(`Arg ${i} of ${funcName} has an incorrect type of ${source.ptype}. Expected ${a.t.join(' | ')}`, {
+              sourceLocation: source.sourceLocation,
             })
           }
         }
