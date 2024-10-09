@@ -10,15 +10,15 @@ import { CodeError, wrapInCodeError } from '../../errors'
 import { logger } from '../../logger'
 import { base32ToUint8Array, base64ToUint8Array, hexToUint8Array, uint8ArrayToUtf8, utf8ToUint8Array } from '../../util'
 import type { InstanceType, PType } from '../ptypes'
-import { BytesFunction, bytesPType, NumericLiteralPType, stringPType, uint64PType } from '../ptypes'
+import { bigIntPType, biguintPType, BytesFunction, bytesPType, numberPType, NumericLiteralPType, stringPType, uint64PType } from '../ptypes'
 import { instanceEb } from '../type-registry'
 import type { BuilderComparisonOp, InstanceBuilder, NodeBuilder } from './index'
 import { BuilderUnaryOp, FunctionBuilder, InstanceExpressionBuilder, ParameterlessFunctionBuilder } from './index'
-import { LiteralExpressionBuilder } from './literal-expression-builder'
 import { BigIntLiteralExpressionBuilder } from './literal/big-int-literal-expression-builder'
 import { StringExpressionBuilder } from './string-expression-builder'
 import { UInt64ExpressionBuilder } from './uint64-expression-builder'
 import { requireExpressionOfType, requireExpressionsOfType } from './util'
+import { parseFunctionArgs } from './util/arg-parsing'
 import { compareBytes } from './util/compare-bytes'
 
 export class BytesFunctionBuilder extends FunctionBuilder {
@@ -58,27 +58,38 @@ export class BytesFunctionBuilder extends FunctionBuilder {
   }
 
   call(args: Array<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
-    if (args.length === 0) {
-      return new BytesExpressionBuilder(
-        nodeFactory.bytesConstant({
-          sourceLocation,
-          value: new Uint8Array(),
-        }),
-      )
-    }
+    const {
+      args: [initialValue],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 0,
+      callLocation: sourceLocation,
+      funcName: 'Bytes',
+      argSpec: (a) => [a.optional(numberPType, bigIntPType, uint64PType, biguintPType, stringPType, bytesPType)],
+    })
+    const empty = nodeFactory.bytesConstant({
+      sourceLocation,
+      value: new Uint8Array(),
+    })
 
-    const [arg0, ...rest] = args
-    if (rest.length) {
-      throw CodeError.unexpectedUnhandledArgs({ sourceLocation })
-    }
-    if (arg0 instanceof LiteralExpressionBuilder) {
-      return arg0.resolveToPType(bytesPType)
+    let bytesExpr
+
+    if (!initialValue) {
+      bytesExpr = empty
+    } else if (initialValue instanceof BigIntLiteralExpressionBuilder) {
+      logger.error(initialValue.sourceLocation, initialValue.ptype.expressionMessage)
+      bytesExpr = empty
+    } else if (initialValue.ptype.equals(uint64PType)) {
+      bytesExpr = initialValue.toBytes(sourceLocation)
+    } else if (initialValue.ptype.equals(biguintPType)) {
+      bytesExpr = initialValue.toBytes(sourceLocation)
+    } else if (initialValue.ptype.equals(stringPType)) {
+      bytesExpr = initialValue.toBytes(sourceLocation)
     } else {
-      if (arg0.ptype?.equals(stringPType)) {
-        return new BytesExpressionBuilder(arg0.toBytes(sourceLocation))
-      }
-      throw CodeError.unexpectedUnhandledArgs({ sourceLocation })
+      return initialValue
     }
+    return new BytesExpressionBuilder(bytesExpr)
   }
 
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {

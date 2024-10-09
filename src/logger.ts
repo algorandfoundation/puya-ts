@@ -78,8 +78,8 @@ class PuyaLogger {
   error(source: NodeOrSourceLocation | undefined, message: string): void
   error(source: NodeOrSourceLocation | undefined | Error, message?: string): void {
     if (source instanceof Error) {
-      const stack = source instanceof CodeError ? '' : source.stack
-      this.addLog(LogLevel.Error, tryGetSourceLocationFromError(source), `${source.message} \n${stack}`)
+      const stack = source instanceof CodeError ? '' : `\n ${source.stack}`
+      this.addLog(LogLevel.Error, tryGetSourceLocationFromError(source), `${source.message}${stack}`)
       if (source.cause) {
         this.addLog(LogLevel.Error, tryGetSourceLocationFromError(source.cause), `Caused by: ${source.cause}`)
       }

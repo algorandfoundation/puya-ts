@@ -1,5 +1,4 @@
 import type { biguint, BigUintCompat, bytes, BytesCompat, uint64, Uint64Compat } from '../index'
-import { DeliberateAny } from '../typescript-helpers'
 import { base32ToUint8Array } from './base-32'
 import {
   base64ToUint8Array,
@@ -10,7 +9,7 @@ import {
   uint8ArrayToUtf8,
   utf8ToUint8Array,
 } from './encoding-util'
-import { avmError, AvmError, internalError } from './errors'
+import { avmError, AvmError, avmInvariant, internalError } from './errors'
 import { nameOfType } from './name-of-type'
 
 const MAX_UINT8 = 2 ** 8 - 1
@@ -46,6 +45,25 @@ export const toBytes = (val: unknown): bytes => {
   }
 }
 
+/**
+ * Convert a StubUint64Compat value into a 'number' if possible.
+ * This value may be negative
+ * @param v
+ */
+export const getNumber = (v: StubUint64Compat): number => {
+  if (typeof v == 'boolean') return v ? 1 : 0
+  if (typeof v == 'number') return v
+  if (typeof v == 'bigint') {
+    avmInvariant(
+      v <= BigInt(Number.MAX_SAFE_INTEGER) && v >= BigInt(Number.MIN_SAFE_INTEGER),
+      'value cannot be safely converted to a number',
+    )
+    return Number(v)
+  }
+  if (v instanceof Uint64Cls) return v.asNumber()
+  internalError(`Cannot convert ${v} to number`)
+}
+
 export const isBytes = (v: unknown): v is StubBytesCompat => {
   if (typeof v === 'string') return true
   if (v instanceof BytesCls) return true
@@ -59,18 +77,14 @@ export const isUint64 = (v: unknown): v is StubUint64Compat => {
   return v instanceof Uint64Cls
 }
 
-export const isBigUint = (v: unknown): v is biguint => {
-  return v instanceof BigUintCls
-}
-
 export const checkUint64 = (v: bigint): bigint => {
   const u64 = BigInt.asUintN(64, v)
-  if (u64 !== v) throw new AvmError(`Uint64 over or underflow`)
+  if (u64 !== v) throw new AvmError(`Uint64 overflow or underflow`)
   return u64
 }
 export const checkBigUint = (v: bigint): bigint => {
   const uBig = BigInt.asUintN(64 * 8, v)
-  if (uBig !== v) throw new AvmError(`BigUint over or underflow`)
+  if (uBig !== v) throw new AvmError(`BigUint overflow or underflow`)
   return uBig
 }
 
@@ -129,10 +143,6 @@ export class Uint64Cls extends AlgoTsPrimitiveCls {
     if (typeof v == 'bigint') return new Uint64Cls(v)
     if (v instanceof Uint64Cls) return v
     internalError(`Cannot convert ${v} to uint64`)
-  }
-
-  static getNumber(v: StubUint64Compat): number {
-    return Uint64Cls.fromCompat(v).asNumber()
   }
 
   valueOf(): bigint {
@@ -228,7 +238,7 @@ export class BytesCls extends AlgoTsPrimitiveCls {
 
   at(i: StubUint64Compat): BytesCls {
     const start = Uint64Cls.fromCompat(i).asNumber()
-    return new BytesCls(this.#v.slice(start, start + 1))
+    return new BytesCls(arrayUtil.arrayAt(this.#v, i))
   }
 
   slice(start: StubUint64Compat, end: StubUint64Compat): BytesCls {
@@ -348,12 +358,26 @@ export class BytesCls extends AlgoTsPrimitiveCls {
 }
 
 export const arrayUtil = new (class {
-  arrayAt<T>(arrayLike: T[], index: StubUint64Compat): T {
-    return arrayLike.at(Uint64Cls.fromCompat(index).asNumber()) ?? avmError('Index out of bounds')
+  arrayAt(arrayLike: Uint8Array, index: StubUint64Compat): Uint8Array
+  arrayAt<T>(arrayLike: T[], index: StubUint64Compat): T
+  arrayAt<T>(arrayLike: T[] | Uint8Array, index: StubUint64Compat): T | Uint8Array {
+    const indexNum = getNumber(index)
+    if (arrayLike instanceof Uint8Array) {
+      const res = arrayLike.slice(indexNum, indexNum + 1)
+      avmInvariant(res.length, 'Index out of bounds')
+      return res
+    }
+    return arrayLike.at(indexNum) ?? avmError('Index out of bounds')
   }
   arraySlice(arrayLike: Uint8Array, start: StubUint64Compat, end: StubUint64Compat): Uint8Array
   arraySlice<T>(arrayLike: T[], start: StubUint64Compat, end: StubUint64Compat): T[]
   arraySlice<T>(arrayLike: T[] | Uint8Array, start: StubUint64Compat, end: StubUint64Compat) {
-    return arrayLike.slice(Uint64Cls.getNumber(start), Uint64Cls.getNumber(end)) as DeliberateAny
+    const startNum = getNumber(start)
+    const endNum = getNumber(end)
+    if (arrayLike instanceof Uint8Array) {
+      return arrayLike.slice(startNum, endNum)
+    } else {
+      return arrayLike.slice(startNum, endNum)
+    }
   }
 })()

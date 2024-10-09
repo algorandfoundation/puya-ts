@@ -1,9 +1,9 @@
 import { BigUintCls, BytesCls, Uint64Cls } from './impl/primitives'
 
 export type Uint64Compat = uint64 | bigint | boolean | number
-export type BigUintCompat = Uint64Compat | bigint | bytes | number
+export type BigUintCompat = bigint | bytes | number | boolean
 export type StringCompat = string
-export type BytesCompat = bytes | string | Uint8Array
+export type BytesCompat = bytes | string
 
 /**
  * An unsigned integer of exactly 64 bits
@@ -13,11 +13,16 @@ export type uint64 = {
 } & number
 
 /**
- * Create a uint64 value
- * @param v The value to use
+ * Create a uint64 from a bigint literal
  */
 export function Uint64(v: bigint): uint64
+/**
+ * Create a uint64 from a number literal
+ */
 export function Uint64(v: number): uint64
+/**
+ * Create a uint64 from a boolean value. True is 1, False is 0
+ */
 export function Uint64(v: boolean): uint64
 export function Uint64(v: Uint64Compat): uint64 {
   return Uint64Cls.fromCompat(v).asAlgoTs()
@@ -33,14 +38,36 @@ export type biguint = {
 } & bigint
 
 /**
- * Create a biguint value
- * @param v The value to use
+ * Create a biguint from a bigint literal
  */
 export function BigUint(v: bigint): biguint
+/**
+ * Create a biguint from a boolean value (true = 1, false = 0)
+ */
 export function BigUint(v: boolean): biguint
+/**
+ * Create a biguint from a uint64 value
+ */
+export function BigUint(v: uint64): biguint
+/**
+ * Create a biguint from a number literal
+ */
 export function BigUint(v: number): biguint
+/**
+ * Create a biguint from a byte array interpreted as a big-endian number
+ */
 export function BigUint(v: bytes): biguint
-export function BigUint(v: BigUintCompat): biguint {
+/**
+ * Create a biguint from a string literal containing the decimal digits
+ */
+export function BigUint(v: string): biguint
+/**
+ * Create a biguint with the default value of 0
+ */
+export function BigUint(): biguint
+export function BigUint(v?: BigUintCompat | string): biguint {
+  if (typeof v === 'string') v = BigInt(v)
+  else if (v === undefined) v = 0n
   return BigUintCls.fromCompat(v).asAlgoTs()
 }
 
@@ -66,12 +93,39 @@ export type bytes = {
   toString(): string
 }
 
+/**
+ * Create a byte array from a string interpolation template and compatible replacements
+ * @param value
+ * @param replacements
+ */
 export function Bytes(value: TemplateStringsArray, ...replacements: BytesCompat[]): bytes
-export function Bytes(value: BytesCompat): bytes
+/**
+ * Create a byte array from a utf8 string
+ */
+export function Bytes(value: string): bytes
+/**
+ * No op, returns the provided byte array.
+ */
+export function Bytes(value: bytes): bytes
+/**
+ * Create a byte array from a biguint value encoded as a variable length big-endian number
+ */
+export function Bytes(value: biguint): bytes
+/**
+ * Create a byte array from a uint64 value encoded as a fixed length 64-bit number
+ */
+export function Bytes(value: uint64): bytes
+/**
+ * Create an empty byte array
+ */
 export function Bytes(): bytes
-export function Bytes(value?: BytesCompat | TemplateStringsArray, ...replacements: BytesCompat[]): bytes {
+export function Bytes(value?: BytesCompat | TemplateStringsArray | biguint | uint64, ...replacements: BytesCompat[]): bytes {
   if (isTemplateStringsArray(value)) {
     return BytesCls.fromInterpolation(value, replacements).asAlgoTs()
+  } else if (typeof value === 'bigint' || value instanceof BigUintCls) {
+    return BigUintCls.fromCompat(value).toBytes().asAlgoTs()
+  } else if (typeof value === 'number' || value instanceof Uint64Cls) {
+    return Uint64Cls.fromCompat(value).toBytes().asAlgoTs()
   } else {
     return BytesCls.fromCompat(value).asAlgoTs()
   }

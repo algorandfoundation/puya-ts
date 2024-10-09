@@ -57,7 +57,11 @@ export class CodeError extends PuyaError {
   }
 }
 export class TodoError extends PuyaError {}
-export class InternalError extends PuyaError {}
+export class InternalError extends PuyaError {
+  static shouldBeUnreachable() {
+    return new InternalError('Code should be unreachable')
+  }
+}
 export class NotSupported extends CodeError {
   constructor(featureName: string, options?: PuyaErrorOptions) {
     super(`Not Supported: ${featureName}`, options)

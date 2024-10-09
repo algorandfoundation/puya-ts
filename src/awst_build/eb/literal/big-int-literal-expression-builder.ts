@@ -18,6 +18,7 @@ import { typeRegistry } from '../../type-registry'
 import { BigUintExpressionBuilder } from '../biguint-expression-builder'
 import { foldBinaryOp, foldComparisonOp } from '../folding'
 import type { BuilderBinaryOp, BuilderComparisonOp, InstanceBuilder } from '../index'
+import { BuilderUnaryOp } from '../index'
 import { LiteralExpressionBuilder } from '../literal-expression-builder'
 import { UInt64ExpressionBuilder } from '../uint64-expression-builder'
 import { isValidLiteralForPType } from '../util'
@@ -53,20 +54,20 @@ export class BigIntLiteralExpressionBuilder extends LiteralExpressionBuilder {
   }
 
   resolveToPType(ptype: PTypeOrClass): InstanceBuilder {
-    codeInvariant(this.resolvableToPType(ptype), `${ptype.name} cannot be converted to type ${ptype.name}`, this.sourceLocation)
+    codeInvariant(this.resolvableToPType(ptype), `${this.value} cannot be converted to type ${ptype.name}`, this.sourceLocation)
 
     if (ptype.equals(this.ptype)) return this
     if (ptype instanceof TransientType && (ptype.equals(numberPType) || ptype.equals(bigIntPType))) {
       return new BigIntLiteralExpressionBuilder(this.value, ptype, this.sourceLocation)
     }
 
-    codeInvariant(isValidLiteralForPType(this.value, ptype), `${ptype.name} cannot be converted to type ${ptype.name}`, this.sourceLocation)
+    codeInvariant(isValidLiteralForPType(this.value, ptype), `${ptype.name} overflow or underflow: ${this.value}`, this.sourceLocation)
     if (ptype.equals(uint64PType)) {
       return new UInt64ExpressionBuilder(nodeFactory.uInt64Constant({ value: this.value, sourceLocation: this.sourceLocation }))
     } else if (ptype.equals(biguintPType)) {
       return new BigUintExpressionBuilder(nodeFactory.bigUIntConstant({ value: this.value, sourceLocation: this.sourceLocation }))
     }
-    throw new CodeError(`${ptype.name} cannot be converted to type ${ptype.name}`, { sourceLocation: this.sourceLocation })
+    throw new CodeError(`${this.value} cannot be converted to type ${ptype.name}`, { sourceLocation: this.sourceLocation })
   }
 
   binaryOp(other: InstanceBuilder, op: BuilderBinaryOp, sourceLocation: SourceLocation): InstanceBuilder {
@@ -86,5 +87,14 @@ export class BigIntLiteralExpressionBuilder extends LiteralExpressionBuilder {
       return typeRegistry.getInstanceEb(foldComparisonOp(this.value, other.value, op, sourceLocation), boolPType)
     }
     return super.compare(other, op, sourceLocation)
+  }
+  prefixUnaryOp(op: BuilderUnaryOp, sourceLocation: SourceLocation): InstanceBuilder {
+    switch (op) {
+      case BuilderUnaryOp.neg:
+        return new BigIntLiteralExpressionBuilder(-this.value, this.ptype, sourceLocation)
+      case BuilderUnaryOp.pos:
+        return new BigIntLiteralExpressionBuilder(this.value, this.ptype, sourceLocation)
+    }
+    return super.prefixUnaryOp(op, sourceLocation)
   }
 }
