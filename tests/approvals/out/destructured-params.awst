@@ -1,16 +1,16 @@
 subroutine test(p: tuple[uint64, bytes, bool]): void
 {
-  var <tuple>[a, b, c]: tuple[uint64, bytes, bool] = <tuple>[p.0, p.1, p.2]
+  <tuple>[a, b, c]: tuple[uint64, bytes, bool] = <tuple>[p.0, p.1, p.2]
   log(concat(concat(itob(a), b), itob(c)))
 }
 subroutine init(): void
 {
   tests/approvals/destructured-params.algo.ts::test(<tuple>[1, "", False])
-  var temp: tuple[uint64, bytes, bool] = <tuple>[2, "Hello", True]
+  temp: tuple[uint64, bytes, bool] = <tuple>[2, "Hello", True]
   tests/approvals/destructured-params.algo.ts::test(<tuple>[temp.0, temp.1, temp.2])
 }
 subroutine test2(args: tuple[bool, bool, readonlytuple[string, string]]): void
 {
-  var <tuple>[a, <tuple>[x, y], b]: tuple[bool, tuple[bool, bool], bool] = <tuple>[True, <tuple>[args.0, args.1, args.2], False]
-  var args2: tuple[bool, bool, readonlytuple[string, string]] = <tuple>[True, True, args.2]
+  <tuple>[a, <tuple>[x, y], b]: tuple[bool, tuple[bool, bool], bool] = <tuple>[True, <tuple>[args.0, args.1, args.2], False]
+  args2: tuple[bool, bool, readonlytuple[string, string]] = <tuple>[True, True, args.2]
 }

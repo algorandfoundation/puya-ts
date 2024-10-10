@@ -1,18 +1,18 @@
 subroutine test(n: uint64, b: biguint, c: arc4.uint256): void
 {
-  var x: arc4.uint8 = 0x04
-  var x2: arc4.uint8 = 0xff
-  var y: arc4.uint16 = 0x00
-  var z: arc4.uint8 = ARC4_ENCODE(n, wtype=arc4.uint8)
-  var z_native: uint64 = btoi(z)
-  var a: arc4.uint128 = ARC4_ENCODE(b, wtype=arc4.uint128)
-  var a_native: biguint = reinterpret_cast<biguint>(a)
+  x: arc4.uint8 = 0x04
+  x2: arc4.uint8 = 0xff
+  y: arc4.uint16 = 0x00
+  z: arc4.uint8 = ARC4_ENCODE(n, wtype=arc4.uint8)
+  z_native: uint64 = btoi(z)
+  a: arc4.uint128 = ARC4_ENCODE(b, wtype=arc4.uint128)
+  a_native: biguint = reinterpret_cast<biguint>(a)
 }
 subroutine test_arrays(n: arc4.uint64): void
 {
-  var myArray: arc4.dynamic_array<arc4.uint64> = new arc4.dynamic_array<arc4.uint64>(n, n, n)
-  var myStatic: arc4.static_array<arc4.uint64> = new arc4.static_array<arc4.uint64>(n, n)
-  var myStatic2: arc4.static_array<arc4.uint64> = new arc4.static_array<arc4.uint64>(n, n, n)
+  myArray: arc4.dynamic_array<arc4.uint64> = new arc4.dynamic_array<arc4.uint64>(n, n, n)
+  myStatic: arc4.static_array<arc4.uint64> = new arc4.static_array<arc4.uint64>(n, n)
+  myStatic2: arc4.static_array<arc4.uint64> = new arc4.static_array<arc4.uint64>(n, n, n)
 }
 contract Arc4TypesTestContract extends @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract
 {

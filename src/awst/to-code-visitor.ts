@@ -243,8 +243,6 @@ export class ToCodeVisitor
   }
   visitStateGetEx(expression: nodes.StateGetEx): string {
     return `STATE_GET_EX(${expression.field.accept(this)})`
-
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
   }
   visitStateExists(expression: nodes.StateExists): string {
     return `STATE_EXISTS(${expression.field.accept(this)})`
@@ -282,7 +280,7 @@ export class ToCodeVisitor
     return [`return ${statement.value?.accept(this) ?? ''}`]
   }
   visitAssignmentStatement(statement: nodes.AssignmentStatement): string[] {
-    return [`var ${statement.target.accept(this)}: ${statement.target.wtype} = ${statement.value.accept(this)}`]
+    return [`${statement.target.accept(this)}: ${statement.target.wtype} = ${statement.value.accept(this)}`]
   }
   visitUInt64AugmentedAssignment(statement: nodes.UInt64AugmentedAssignment): string[] {
     throw new TodoError('Method not implemented.', { sourceLocation: statement.sourceLocation })

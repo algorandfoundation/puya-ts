@@ -1,8 +1,8 @@
 subroutine test(): void
 {
-  var <tuple>[a, b, c, d]: tuple[uint64, bytes, bool, biguint] = <tuple>[(#0 = tests/approvals/object-destructuring.algo.ts::produceItems()).0, #0.1, #0.2, #0.3]
-  var <tuple>[_, _₁, _₂, e]: tuple[uint64, bytes, bool, biguint] = <tuple>[(#1 = tests/approvals/object-destructuring.algo.ts::produceItems()).0, #1.1, #1.2, #1.3]
-  var f: tuple[uint64, bytes, bool, biguint] = <tuple>[(#3 = (<tuple>[g, _₃, _₄, i] = <tuple>[(#2 = tests/approvals/object-destructuring.algo.ts::produceItems()).0, #2.1, #2.2, #2.3])).0, #3.1, #3.2, #3.3]
+  <tuple>[a, b, c, d]: tuple[uint64, bytes, bool, biguint] = <tuple>[(#0 = tests/approvals/object-destructuring.algo.ts::produceItems()).0, #0.1, #0.2, #0.3]
+  <tuple>[_, _₁, _₂, e]: tuple[uint64, bytes, bool, biguint] = <tuple>[(#1 = tests/approvals/object-destructuring.algo.ts::produceItems()).0, #1.1, #1.2, #1.3]
+  f: tuple[uint64, bytes, bool, biguint] = <tuple>[(#3 = (<tuple>[g, _₃, _₄, i] = <tuple>[(#2 = tests/approvals/object-destructuring.algo.ts::produceItems()).0, #2.1, #2.2, #2.3])).0, #3.1, #3.2, #3.3]
   tests/approvals/object-destructuring.algo.ts::receivePartial(<tuple>[(#4 = tests/approvals/object-destructuring.algo.ts::produceItems()).0, #4.3])
 }
 subroutine produceItems(): tuple[uint64, bytes, bool, biguint]
@@ -14,11 +14,11 @@ subroutine receivePartial(x: tuple[uint64, biguint]): void
 }
 subroutine testLiteralToLiteral(): void
 {
-  var a: uint64 = 4
-  var b: uint64 = 1
-  var <tuple>[e, f]: tuple[uint64, uint64] = <tuple>[(#5 = (<tuple>[c, d] = <tuple>[a, b])).0, #5.1]
+  a: uint64 = 4
+  b: uint64 = 1
+  <tuple>[e, f]: tuple[uint64, uint64] = <tuple>[(#5 = (<tuple>[c, d] = <tuple>[a, b])).0, #5.1]
 }
 subroutine testNumericResolution(): void
 {
-  var x: tuple[uint64] = <tuple>[(#6 = (y = <tuple>[434])).0]
+  x: tuple[uint64] = <tuple>[(#6 = (y = <tuple>[434])).0]
 }
