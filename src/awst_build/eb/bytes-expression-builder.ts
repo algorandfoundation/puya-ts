@@ -3,20 +3,12 @@ import { wtypes } from '../../awst'
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
 import { nodeFactory } from '../../awst/node-factory'
 import type { Expression } from '../../awst/nodes'
-import {
-  BytesBinaryOperator,
-  BytesConstant,
-  BytesEncoding,
-  BytesUnaryOperator,
-  IntegerConstant,
-  StringConstant,
-  UInt64BinaryOperator,
-} from '../../awst/nodes'
+import { BytesBinaryOperator, BytesConstant, BytesEncoding, BytesUnaryOperator, IntegerConstant, StringConstant } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { stringWType } from '../../awst/wtypes'
 import { CodeError, wrapInCodeError } from '../../errors'
 import { logger } from '../../logger'
-import { base32ToUint8Array, base64ToUint8Array, hexToUint8Array, invariant, uint8ArrayToUtf8, utf8ToUint8Array } from '../../util'
+import { base32ToUint8Array, base64ToUint8Array, hexToUint8Array, uint8ArrayToUtf8, utf8ToUint8Array } from '../../util'
 import type { InstanceType, PType } from '../ptypes'
 import {
   ArrayPType,
@@ -29,11 +21,12 @@ import {
   stringPType,
   uint64PType,
 } from '../ptypes'
-import { instanceEb } from '../type-registry'
 import type { BuilderComparisonOp, InstanceBuilder, NodeBuilder } from './index'
 import { BuilderUnaryOp, FunctionBuilder, InstanceExpressionBuilder, ParameterlessFunctionBuilder } from './index'
 import { ArrayLiteralExpressionBuilder } from './literal/array-literal-expression-builder'
 import { BigIntLiteralExpressionBuilder } from './literal/big-int-literal-expression-builder'
+import { AtFunctionBuilder } from './shared/at-function-builder'
+import { SliceFunctionBuilder } from './shared/slice-function-builder'
 import { StringExpressionBuilder } from './string-expression-builder'
 import { UInt64ExpressionBuilder } from './uint64-expression-builder'
 import { requireExpressionOfType, requireExpressionsOfType } from './util'
@@ -203,7 +196,13 @@ export class BytesExpressionBuilder extends InstanceExpressionBuilder<InstanceTy
       case 'concat':
         return new ConcatExpressionBuilder(this._expr)
       case 'at':
-        return new BytesAtBuilder(this._expr)
+        return new AtFunctionBuilder(
+          this._expr,
+          bytesPType,
+          requireExpressionOfType(this.memberAccess('length', sourceLocation), uint64PType),
+        )
+      case 'slice':
+        return new SliceFunctionBuilder(this._expr, bytesPType)
     }
     return super.memberAccess(name, sourceLocation)
   }
@@ -272,44 +271,6 @@ export class BytesInvertBuilder extends ParameterlessFunctionBuilder {
   }
 }
 
-export class BytesSliceBuilder extends FunctionBuilder {
-  constructor(private expr: awst.Expression) {
-    super(expr.sourceLocation)
-  }
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation) {
-    const {
-      args: [start, stop],
-    } = parseFunctionArgs({
-      args,
-      typeArgs,
-      genericTypeArgs: 0,
-      callLocation: sourceLocation,
-      funcName: 'slice',
-      argSpec: (a) => [a.optional(uint64PType, numberPType), a.optional(uint64PType, numberPType)],
-    })
-
-    return new BytesExpressionBuilder(
-      nodeFactory.intersectionSliceExpression({
-        base: this.expr,
-        sourceLocation: sourceLocation,
-        beginIndex: start ? getBigIntOrUint64Expr(start) : null,
-        endIndex: stop ? getBigIntOrUint64Expr(stop) : null,
-        wtype: wtypes.bytesWType,
-      }),
-    )
-  }
-}
-
-function getBigIntOrUint64Expr(builder: InstanceBuilder) {
-  if (builder.ptype.equals(numberPType)) {
-    invariant(builder instanceof BigIntLiteralExpressionBuilder, 'Builder for number type must be BigIntLiteral')
-    return builder.value
-  } else {
-    invariant(builder.ptype.equals(uint64PType), 'Builder must be uint64 if not number')
-    return builder.resolve()
-  }
-}
-
 export class ToStringBuilder extends ParameterlessFunctionBuilder {
   constructor(private expr: awst.Expression) {
     super(
@@ -322,60 +283,6 @@ export class ToStringBuilder extends ParameterlessFunctionBuilder {
             sourceLocation,
           }),
         ),
-    )
-  }
-}
-
-export class BytesAtBuilder extends FunctionBuilder {
-  constructor(private expr: awst.Expression) {
-    super(expr.sourceLocation)
-  }
-
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation) {
-    const {
-      args: [index],
-    } = parseFunctionArgs({
-      args,
-      typeArgs,
-      genericTypeArgs: 0,
-      callLocation: sourceLocation,
-      funcName: 'at',
-      argSpec: (a) => [a.required(uint64PType, numberPType)],
-    })
-
-    let indexExpr: Expression
-
-    if (index.ptype.equals(numberPType)) {
-      invariant(index instanceof BigIntLiteralExpressionBuilder, 'Builder for number type must be BigIntLiteral')
-
-      if (index.value < 0) {
-        indexExpr = nodeFactory.uInt64BinaryOperation({
-          op: UInt64BinaryOperator.sub,
-          left: intrinsicFactory.bytesLen({
-            value: this.expr,
-            sourceLocation,
-          }),
-          right: nodeFactory.uInt64Constant({
-            value: index.value * -1n,
-            sourceLocation,
-          }),
-          sourceLocation,
-        })
-      } else {
-        indexExpr = index.resolveToPType(uint64PType).resolve()
-      }
-    } else {
-      indexExpr = index.resolve()
-    }
-
-    return instanceEb(
-      nodeFactory.indexExpression({
-        base: this.expr,
-        sourceLocation: sourceLocation,
-        index: indexExpr,
-        wtype: wtypes.bytesWType,
-      }),
-      bytesPType,
     )
   }
 }
