@@ -45,7 +45,7 @@ contract ItxnDemoContract extends @algorandfoundation/algorand-typescript/base-c
     assert(asset2_txn.ConfigAssetName == "AST2")
     assert(checked_maybe(asset_params_get<AssetName>(asset1_txn.CreatedAssetID), comment=asset exists) == "AST1")
     assert(checked_maybe(asset_params_get<AssetName>(asset2_txn.CreatedAssetID), comment=asset exists) == "AST2")
-    var appCreateParams: inner_transaction_fields_appl = create_inner_transaction(Fee=0, ApprovalProgram=0x000800, ClearStateProgram=0x000800)
+    var appCreateParams: inner_transaction_fields_appl = create_inner_transaction(Fee=0, ApprovalProgram=0x098101, ClearStateProgram=0x098101)
     update_inner_transaction(assetParams, ConfigAssetName="AST3")
     var <tuple>[appCreateTxn, asset3_txn]: tuple[inner_transaction_appl, inner_transaction_acfg] = submit_txn(appCreateParams, assetParams)
     assert(Boolean(appCreateTxn.ApplicationID))

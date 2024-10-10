@@ -4,6 +4,7 @@ import { nodeFactory } from '../../awst/node-factory'
 import type { Expression } from '../../awst/nodes'
 import { BigUIntBinaryOperator, BigUIntPostfixUnaryOperator, IntegerConstant, NumericComparison } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
+import { bytesWType } from '../../awst/wtypes'
 import { NotSupported } from '../../errors'
 import { logger } from '../../logger'
 import { tryConvertEnum } from '../../util'
@@ -65,13 +66,15 @@ export class BigUintFunctionBuilder extends FunctionBuilder {
       if (expr instanceof IntegerConstant) {
         biguint = nodeFactory.bigUIntConstant({
           ...expr,
+          sourceLocation,
+        })
+      } else {
+        biguint = nodeFactory.reinterpretCast({
+          expr: initialValue.toBytes(sourceLocation),
+          sourceLocation,
+          wtype: biguintPType.wtype,
         })
       }
-      biguint = nodeFactory.reinterpretCast({
-        expr: initialValue.toBytes(sourceLocation),
-        sourceLocation,
-        wtype: biguintPType.wtype,
-      })
     } else {
       return initialValue
     }
@@ -204,6 +207,6 @@ export class BigUintExpressionBuilder extends InstanceExpressionBuilder<Instance
   }
 
   toBytes(sourceLocation: SourceLocation): awst.Expression {
-    return intrinsicFactory.itob({ value: this.resolve(), sourceLocation })
+    return nodeFactory.reinterpretCast({ expr: this.resolve(), sourceLocation, wtype: bytesWType })
   }
 }
