@@ -204,16 +204,21 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
   private buildArc4Config({
     decorator,
     methodName,
-    isPublic,
+    modifiers: { isPublic, isStatic },
     methodLocation,
   }: {
     methodName: string
     decorator: DecoratorData | undefined
-    isPublic: boolean
+    modifiers: { isPublic: boolean; isStatic: boolean }
     methodLocation: SourceLocation
   }): awst.ContractMethod['arc4MethodConfig'] {
-    if (!isPublic && decorator && [Constants.arc4BareDecoratorName, Constants.arc4AbiDecoratorName].includes(decorator.type)) {
-      logger.error(methodLocation, 'Private method cannot be exposed as an abi method')
+    if (decorator && [Constants.arc4BareDecoratorName, Constants.arc4AbiDecoratorName].includes(decorator.type)) {
+      if (!isPublic) {
+        logger.error(methodLocation, 'Private or protected methods cannot be exposed as an abi method')
+      }
+      if (isStatic) {
+        logger.error(methodLocation, 'Static methods cannot be exposed as an abi method')
+      }
     }
 
     if (decorator?.type === 'arc4.baremethod') {
@@ -257,6 +262,54 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
     return null
   }
 
+  private parseMemberModifiers(node: { modifiers?: readonly ts.ModifierLike[] }) {
+    let isPublic = true
+    let isStatic = false
+    if (node.modifiers)
+      for (const m of node.modifiers) {
+        switch (m.kind) {
+          case ts.SyntaxKind.StaticKeyword:
+            isStatic = true
+            continue
+          case ts.SyntaxKind.PublicKeyword:
+            isPublic = true
+            continue
+          case ts.SyntaxKind.ProtectedKeyword:
+            isPublic = false
+            continue
+          case ts.SyntaxKind.PrivateKeyword:
+            isPublic = false
+            continue
+          case ts.SyntaxKind.AbstractKeyword:
+            // TODO: Do we need to do anything here?
+            continue
+          case ts.SyntaxKind.AccessorKeyword:
+            logger.error(this.sourceLocation(m), 'properties are not supported')
+            continue
+          case ts.SyntaxKind.AsyncKeyword:
+            logger.error(this.sourceLocation(m), 'async keyword is not supported')
+            continue
+          case ts.SyntaxKind.DeclareKeyword:
+            logger.error(this.sourceLocation(m), 'declare keyword is not supported')
+            continue
+          case ts.SyntaxKind.ExportKeyword:
+          case ts.SyntaxKind.ConstKeyword:
+          case ts.SyntaxKind.DefaultKeyword:
+          case ts.SyntaxKind.ReadonlyKeyword:
+          case ts.SyntaxKind.OverrideKeyword:
+          case ts.SyntaxKind.InKeyword:
+          case ts.SyntaxKind.OutKeyword:
+          case ts.SyntaxKind.Decorator:
+            // Ignore for now
+            continue
+        }
+      }
+    return {
+      isStatic,
+      isPublic,
+    }
+  }
+
   visitMethodDeclaration(node: ts.MethodDeclaration): void {
     const sourceLocation = this.sourceLocation(node)
     const methodName = this.textVisitor.accept(node.name)
@@ -266,7 +319,8 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
 
       return DecoratorVisitor.buildDecoratorData(this.context, modifier)
     })
-    const isPublic = node.modifiers?.some((m) => m.kind === ts.SyntaxKind.PublicKeyword) === true
+
+    const modifiers = this.parseMemberModifiers(node)
 
     if (decorators.length > 1) {
       logger.error(
@@ -291,7 +345,7 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
             arc4MethodConfig: this.buildArc4Config({
               decorator: decorators[0],
               methodName,
-              isPublic,
+              modifiers,
               methodLocation: sourceLocation,
             }),
           }),
