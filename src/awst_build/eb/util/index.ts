@@ -4,13 +4,14 @@ import type { Expression } from '../../../awst/nodes'
 import { BoolConstant, IntegerConstant, StringConstant } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { CodeError } from '../../../errors'
-import { codeInvariant } from '../../../util'
+import { codeInvariant, invariant } from '../../../util'
 import type { PType, PTypeOrClass } from '../../ptypes'
 import { bigIntPType, biguintPType, boolPType, bytesPType, numberPType, stringPType, uint64PType } from '../../ptypes'
 import { UintNType } from '../../ptypes/arc4-types'
 import type { NodeBuilder } from '../index'
 import { InstanceBuilder } from '../index'
 import { LiteralExpressionBuilder } from '../literal-expression-builder'
+import { BigIntLiteralExpressionBuilder } from '../literal/big-int-literal-expression-builder'
 
 export function requireExpressionOfType(builder: NodeBuilder, ptype: PTypeOrClass): Expression {
   if (builder instanceof InstanceBuilder) {
@@ -140,4 +141,14 @@ export function isValidLiteralForPType(literalValue: ConstantValue, ptype: PType
     return literalValue instanceof Uint8Array
   }
   return false
+}
+
+export function getBigIntOrUint64Expr(builder: InstanceBuilder) {
+  if (builder.ptype.equals(numberPType)) {
+    invariant(builder instanceof BigIntLiteralExpressionBuilder, 'Builder for number type must be BigIntLiteral')
+    return builder.value
+  } else {
+    invariant(builder.ptype.equals(uint64PType), 'Builder must be uint64 if not number')
+    return builder.resolve()
+  }
 }
