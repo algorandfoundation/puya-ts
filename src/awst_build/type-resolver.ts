@@ -74,7 +74,7 @@ export class TypeResolver {
 
   resolve(node: ts.Node, sourceLocation: SourceLocation): PType {
     const symbol = this.getUnaliasedSymbolForNode(node)
-    if (symbol !== undefined) {
+    if (symbol !== undefined && symbol.declarations?.length) {
       const symbolName = symbol && this.getSymbolFullName(symbol, sourceLocation)
       if (symbolName.name === '*') {
         return new NamespacePType(symbolName)

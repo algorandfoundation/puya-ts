@@ -4,6 +4,7 @@ subroutine testBox(box: box_key, value: string): void
   var Box["A"].value: string = value
   assert(box.value == Box["A"].value)
   assert(STATE_EXISTS(box.value) and STATE_EXISTS(Box["A"].value))
+  assert(Boolean(checked_maybe(box_length(box.value), comment=Box must exist)))
   STATE_DEL(box.value)
   STATE_DEL(Box["A"].value)
   assert(!STATE_EXISTS(box.value) and !STATE_EXISTS(Box["A"].value))
@@ -19,16 +20,21 @@ subroutine testBoxMap(box: box_key, key: string, value: bytes): void
 {
   var concat(box, reinterpret_cast<bytes>(key)).value: bytes = value
   var concat("", reinterpret_cast<bytes>(key)).value: bytes = value
+  assert(Boolean(checked_maybe(box_length(concat(box, reinterpret_cast<bytes>(key)).value), comment=Box must exist)))
+  assert(STATE_GET_EX(concat(box, reinterpret_cast<bytes>(key)).value).1)
   assert(concat(box, reinterpret_cast<bytes>(key)).value == concat("", reinterpret_cast<bytes>(key)).value)
   STATE_DEL(concat(box, reinterpret_cast<bytes>(key)).value)
   assert(STATE_GET(concat(box, reinterpret_cast<bytes>("" + key + "x")).value, default="b") == STATE_GET(concat("", reinterpret_cast<bytes>("" + key + "x")).value, default="b"))
 }
-subroutine testBoxRef(box: box_key): void
+subroutine testBoxRef(box: box_key, length: uint64): void
 {
-  var someBytes: bytes = 0x0f0f0f0f
+  if (!box_length(Box["abc"].value).1 and checked_maybe(box_length(Box["abc"].value), comment=Box must exist) != length) {
+    box_create(Box["abc"].value, 1000)
+  }
+  var someBytes: bytes = 0xffffffff
   box_put(box.value, someBytes)
   box_put(Box["abc"].value, someBytes)
   box_splice(box.value, 1, 2, 0x00)
   box_splice(Box["abc"].value, 1, 2, 0x00)
-  assert(box.value == 0x0f000f0f)
+  assert(box.value == 0xff00ffff)
 }
