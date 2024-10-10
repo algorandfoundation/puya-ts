@@ -1,5 +1,4 @@
 import ts from 'typescript'
-import { awst } from '../awst'
 import { nodeFactory } from '../awst/node-factory'
 import type { Expression, LValue, Statement } from '../awst/nodes'
 import type { SourceLocation } from '../awst/source-location'
@@ -453,13 +452,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   }
 
   handleAssignmentStatement(target: InstanceBuilder, source: InstanceBuilder, sourceLocation: SourceLocation): Statement {
-    const expr = this.handleAssignment(target, source, sourceLocation).resolve()
-    if (expr instanceof awst.AssignmentExpression) {
-      return nodeFactory.assignmentStatement({
-        ...expr,
-      })
-    }
-    return nodeFactory.expressionStatement({ expr })
+    return nodeFactory.expressionStatement({ expr: this.handleAssignment(target, source, sourceLocation).resolve() })
   }
 
   handleAssignment(target: InstanceBuilder, source: InstanceBuilder, sourceLocation: SourceLocation): InstanceBuilder {
