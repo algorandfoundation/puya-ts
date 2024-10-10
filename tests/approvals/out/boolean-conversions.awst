@@ -8,7 +8,8 @@ subroutine test_truthyness(a: uint64, b: uint64, c: string, d: bytes, e: uint64)
   assert(Boolean(bitlen(1)))
   assert(!len(0x))
   assert(Boolean(len("abc")))
-  assert(!len(""))
+  empty: string = ""
+  assert(!len(empty))
   assert(Boolean(len("abc")))
   assert(!False)
   assert(True)
@@ -20,4 +21,6 @@ subroutine test_booleans_are_equal(): void
   assert(!!Boolean(bitlen(1)) == !!Boolean(bitlen(5)))
   assert("abc" != 0x == "abcdef" != 0x)
   assert("abc" != 0x == "abcdef" != 0x)
+  boolNoArgs: bool = False
+  assert(!boolNoArgs)
 }

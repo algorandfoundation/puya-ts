@@ -1,60 +1,60 @@
 subroutine test_for_loop(start: uint64, stop: uint64, step: uint64): uint64
 {
-  var total: uint64 = 0
-  var i: uint64 = start
+  total: uint64 = 0
+  i: uint64 = start
   while (i < stop) {
-    var total: uint64 = total + i
+    total: uint64 = total + i
     #loop₁ᶜ:
-    (i = i + step)
+    i: uint64 = i + step
   }
   #loop₁ᵇ:
   return total
 }
 subroutine test_for_loop_break(start: uint64, stop: uint64, step: uint64): uint64
 {
-  var total: uint64 = 0
-  var i: uint64 = start
+  total: uint64 = 0
+  i: uint64 = start
   while (i < stop) {
-    var total: uint64 = total + i
+    total: uint64 = total + i
     if (total > 10) {
       goto #loop₁ᵇ
     }
     #loop₁ᶜ:
-    (i = i + step)
+    i: uint64 = i + step
   }
   #loop₁ᵇ:
   return total
 }
 subroutine test_for_loop_continue(start: uint64, stop: uint64, step: uint64): uint64
 {
-  var total: uint64 = 0
-  var i: uint64 = start
+  total: uint64 = 0
+  i: uint64 = start
   while (i < stop) {
     if (i % 5 == 0) {
       goto #loop₁ᶜ
     }
-    var total: uint64 = total + i
+    total: uint64 = total + i
     #loop₁ᶜ:
-    (i = i + step)
+    i: uint64 = i + step
   }
   #loop₁ᵇ:
   return total
 }
 subroutine test_for_loop_labelled(start: uint64, stop: uint64, step: uint64): uint64
 {
-  var total: uint64 = 0
-  var i: uint64 = start
+  total: uint64 = 0
+  i: uint64 = start
   while (i < stop) {
-    var j: uint64 = start
+    j: uint64 = start
     while (j < stop) {
-      var total: uint64 = total + j + j
+      total: uint64 = total + j + j
       goto outer₁ᵇ
       #loop₁ᶜ:
-      (j = j + step)
+      j: uint64 = j + step
     }
     #loop₁ᵇ:
     outer₁ᶜ:
-    (i = i + step)
+    i: uint64 = i + step
   }
   outer₁ᵇ:
   return total
