@@ -1,4 +1,4 @@
-import type { bytes } from '@algorandfoundation/algorand-typescript'
+import type { bytes, uint64 } from '@algorandfoundation/algorand-typescript'
 import { assert, Box, BoxMap, BoxRef, Bytes } from '@algorandfoundation/algorand-typescript'
 
 const boxA = Box<string>({ key: Bytes('A') })
@@ -9,6 +9,8 @@ function testBox(box: Box<string>, value: string) {
   assert(box.value === boxA.value)
 
   assert(box.exists && boxA.exists)
+
+  assert(box.length)
 
   box.delete()
   boxA.delete()
@@ -30,6 +32,10 @@ function testBoxMap(box: BoxMap<string, bytes>, key: string, value: bytes) {
   box.set(key, value)
   boxMap.set(key, value)
 
+  assert(box.length(key))
+
+  assert(box.maybe(key)[1])
+
   assert(box.get(key) === boxMap.get(key))
 
   box.delete(key)
@@ -39,7 +45,10 @@ function testBoxMap(box: BoxMap<string, bytes>, key: string, value: bytes) {
 
 const boxRef = BoxRef({ key: 'abc' })
 
-function testBoxRef(box: BoxRef) {
+function testBoxRef(box: BoxRef, length: uint64) {
+  if (!boxRef.exists && boxRef.length !== length) {
+    boxRef.create({ size: 1000 })
+  }
   const someBytes = Bytes.fromHex('FFFFFFFF')
   box.put(someBytes)
   boxRef.put(someBytes)
