@@ -240,10 +240,8 @@ export class BytesCls extends AlgoTsPrimitiveCls {
     return new BytesCls(arrayUtil.arrayAt(this.#v, i))
   }
 
-  slice(start: StubUint64Compat, end: StubUint64Compat): BytesCls {
-    const startNumber = start instanceof Uint64Cls ? start.asNumber() : start
-    const endNumber = end instanceof Uint64Cls ? end.asNumber() : end
-    const sliced = arrayUtil.arraySlice(this.#v, startNumber, endNumber)
+  slice(start: undefined | StubUint64Compat, end: undefined | StubUint64Compat): BytesCls {
+    const sliced = arrayUtil.arraySlice(this.#v, start, end)
     return new BytesCls(sliced)
   }
 
@@ -356,23 +354,25 @@ export class BytesCls extends AlgoTsPrimitiveCls {
   }
 }
 
-export const arrayUtil = new (class {
+export const arrayUtil = new (class ArrayUtil {
   arrayAt(arrayLike: Uint8Array, index: StubUint64Compat): Uint8Array
   arrayAt<T>(arrayLike: T[], index: StubUint64Compat): T
+  arrayAt<T>(arrayLike: T[] | Uint8Array, index: StubUint64Compat): T | Uint8Array
   arrayAt<T>(arrayLike: T[] | Uint8Array, index: StubUint64Compat): T | Uint8Array {
     const indexNum = getNumber(index)
     if (arrayLike instanceof Uint8Array) {
-      const res = arrayLike.slice(indexNum, indexNum + 1)
+      const res = arrayLike.slice(indexNum, indexNum === -1 ? undefined : indexNum + 1)
       avmInvariant(res.length, 'Index out of bounds')
       return res
     }
     return arrayLike.at(indexNum) ?? avmError('Index out of bounds')
   }
-  arraySlice(arrayLike: Uint8Array, start: StubUint64Compat, end: StubUint64Compat): Uint8Array
-  arraySlice<T>(arrayLike: T[], start: StubUint64Compat, end: StubUint64Compat): T[]
-  arraySlice<T>(arrayLike: T[] | Uint8Array, start: StubUint64Compat, end: StubUint64Compat) {
-    const startNum = getNumber(start)
-    const endNum = getNumber(end)
+  arraySlice(arrayLike: Uint8Array, start: undefined | StubUint64Compat, end: undefined | StubUint64Compat): Uint8Array
+  arraySlice<T>(arrayLike: T[], start: undefined | StubUint64Compat, end: undefined | StubUint64Compat): T[]
+  arraySlice<T>(arrayLike: T[] | Uint8Array, start: undefined | StubUint64Compat, end: undefined | StubUint64Compat): Uint8Array | T[]
+  arraySlice<T>(arrayLike: T[] | Uint8Array, start: undefined | StubUint64Compat, end: undefined | StubUint64Compat) {
+    const startNum = start === undefined ? undefined : getNumber(start)
+    const endNum = end === undefined ? undefined : getNumber(end)
     if (arrayLike instanceof Uint8Array) {
       return arrayLike.slice(startNum, endNum)
     } else {

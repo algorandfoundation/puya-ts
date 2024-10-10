@@ -89,6 +89,9 @@ export type bytes = {
 
   equals(other: BytesCompat): boolean
 
+  slice(): bytes
+  slice(start: Uint64Compat): bytes
+  slice(start: Uint64Compat, end: Uint64Compat): bytes
   slice(start?: Uint64Compat, end?: Uint64Compat): bytes
 
   toString(): string
