@@ -626,6 +626,10 @@ export const undefinedPType = new UnsupportedType({
   module: 'lib.d.ts',
   fullName: 'undefined',
 })
+export const promisePType = new UnsupportedType({
+  name: 'Promise',
+  module: 'typescript/lib/lib.es5.d.ts',
+})
 export const anyPType = new AnyPType()
 
 export const boolPType = new InstanceType({

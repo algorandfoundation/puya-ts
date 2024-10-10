@@ -25,6 +25,7 @@ import {
   numberPType,
   NumericLiteralPType,
   ObjectPType,
+  promisePType,
   StorageProxyPType,
   StringFunction,
   stringPType,
@@ -171,6 +172,7 @@ export class TypeResolver {
     }
 
     const typeName = this.getTypeName(tsType, sourceLocation)
+    if (typeName.fullName === promisePType.fullName) return promisePType
     if (tsType.flags === ts.TypeFlags.TypeParameter) {
       return new TypeParameterType(typeName)
     }
@@ -284,8 +286,6 @@ export class TypeResolver {
         properties[prop.name] = ptype
       } else if (ptype instanceof FunctionPType) {
         methods[prop.name] = ptype
-      } else {
-        throw new InternalError(`Unhandled property type ${ptype}`, { sourceLocation })
       }
     }
     return new ContractClassPType({
