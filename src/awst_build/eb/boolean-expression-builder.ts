@@ -18,7 +18,7 @@ export class BooleanFunctionBuilder extends FunctionBuilder {
     } = parseFunctionArgs({
       args,
       typeArgs,
-      genericTypeArgs: 0,
+      genericTypeArgs: 1,
       callLocation: sourceLocation,
       funcName: 'Boolean',
       argSpec: (a) => [a.optional()],
