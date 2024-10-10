@@ -4,18 +4,29 @@ import { nodeFactory } from '../../awst/node-factory'
 import type { Expression } from '../../awst/nodes'
 import { EqualityComparison, NumericComparison } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
-import { CodeError } from '../../errors'
 import { codeInvariant, tryConvertEnum } from '../../util'
 import type { InstanceType, PType } from '../ptypes'
 import { boolPType, bytesPType, stringPType } from '../ptypes'
 import type { InstanceBuilder, NodeBuilder } from './index'
 import { BuilderComparisonOp, FunctionBuilder, InstanceExpressionBuilder } from './index'
+import { parseFunctionArgs } from './util/arg-parsing'
 
 export class BooleanFunctionBuilder extends FunctionBuilder {
   call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
-    if (args.length !== 1) throw CodeError.unexpectedUnhandledArgs({ sourceLocation })
+    const {
+      args: [value],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 0,
+      callLocation: sourceLocation,
+      funcName: 'Boolean',
+      argSpec: (a) => [a.optional()],
+    })
+    if (!value) {
+      return new BooleanExpressionBuilder(nodeFactory.boolConstant({ value: false, sourceLocation }))
+    }
 
-    const [value] = args
     if (value.ptype.equals(boolPType)) {
       return value
     }
@@ -38,9 +49,6 @@ export class BooleanFunctionBuilder extends FunctionBuilder {
         }),
       )
     } else {
-      // TODO: See if there's a better way to do this. boolEval only returns a truthy/falsy value
-      // Whilst 1 and 5 for example are both truthy, they are not equal
-      // and we expect Boolean(1) to equal Boolean(5)
       return new BooleanExpressionBuilder(
         nodeFactory.not({
           sourceLocation,
