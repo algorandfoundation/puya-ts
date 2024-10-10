@@ -454,7 +454,7 @@
                   "scalar_type": 2
                 },
                 "lhs": {
-                  "_type": "BytesConstant",
+                  "_type": "ReinterpretCast",
                   "source_location": {
                     "file": "tests/approvals/byte-expressions.algo.ts",
                     "line": 8,
@@ -469,8 +469,25 @@
                     "ephemeral": false,
                     "scalar_type": 1
                   },
-                  "value": "0RR",
-                  "encoding": "base16"
+                  "expr": {
+                    "_type": "IntegerConstant",
+                    "source_location": {
+                      "file": "tests/approvals/byte-expressions.algo.ts",
+                      "line": 8,
+                      "end_line": 8,
+                      "column": 15,
+                      "end_column": 27
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "biguint",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 1
+                    },
+                    "value": "256",
+                    "teal_alias": null
+                  }
                 },
                 "operator": "==",
                 "rhs": {
@@ -558,7 +575,7 @@
                     "scalar_type": 1
                   },
                   "expr": {
-                    "_type": "IntrinsicCall",
+                    "_type": "ReinterpretCast",
                     "source_location": {
                       "file": "tests/approvals/byte-expressions.algo.ts",
                       "line": 9,
@@ -573,29 +590,24 @@
                       "ephemeral": false,
                       "scalar_type": 1
                     },
-                    "op_code": "itob",
-                    "immediates": [],
-                    "stack_args": [
-                      {
-                        "_type": "VarExpression",
-                        "source_location": {
-                          "file": "tests/approvals/byte-expressions.algo.ts",
-                          "line": 9,
-                          "end_line": 9,
-                          "column": 23,
-                          "end_column": 24
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "biguint",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": 1
-                        },
-                        "name": "b"
-                      }
-                    ],
-                    "comment": null
+                    "expr": {
+                      "_type": "VarExpression",
+                      "source_location": {
+                        "file": "tests/approvals/byte-expressions.algo.ts",
+                        "line": 9,
+                        "end_line": 9,
+                        "column": 23,
+                        "end_column": 24
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "biguint",
+                        "immutable": true,
+                        "ephemeral": false,
+                        "scalar_type": 1
+                      },
+                      "name": "b"
+                    }
                   }
                 },
                 "operator": "==",
