@@ -21,6 +21,7 @@ import {
   MethodDocumentation,
   Not,
   NumericComparisonExpression,
+  ReinterpretCast,
   SingleEvaluation,
   StringConstant,
   TupleExpression,
@@ -237,7 +238,29 @@ const explicitNodeFactory = {
       wtype: props.base.wtype.types[Number(props.index)],
     })
   },
-} satisfies { [key in keyof ConcreteNodes]?: (...args: DeliberateAny[]) => InstanceType<ConcreteNodes[key]> }
+  reinterpretCast({ expr, wtype, sourceLocation }: { expr: Expression; wtype: WType; sourceLocation: SourceLocation }) {
+    if (expr instanceof BytesConstant) {
+      return new BytesConstant({
+        ...expr,
+        wtype,
+        sourceLocation,
+      })
+    }
+    if (expr instanceof IntegerConstant) {
+      return new IntegerConstant({
+        ...expr,
+        wtype,
+        sourceLocation,
+      })
+    }
+
+    return new ReinterpretCast({
+      expr,
+      wtype,
+      sourceLocation,
+    })
+  },
+} satisfies { [key in keyof ConcreteNodes]?: (...args: DeliberateAny[]) => DeliberateAny }
 
 type ExplicitNodeFactory = typeof explicitNodeFactory
 
