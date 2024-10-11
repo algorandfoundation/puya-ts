@@ -199,7 +199,7 @@ class BoxMapLengthFunctionBuilder extends BoxMapFunctionBuilderBase {
     return instanceEb(
       nodeFactory.checkedMaybe({
         expr: nodeFactory.intrinsicCall({
-          opCode: 'box_length',
+          opCode: 'box_len',
           stackArgs: [this.boxValueExpression(key.resolve())],
           wtype: new WTuple({ types: [uint64WType, boolWType], immutable: true }),
           immediates: [],
