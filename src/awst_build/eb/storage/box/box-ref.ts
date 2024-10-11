@@ -47,6 +47,8 @@ export class BoxRefExpressionBuilder extends BoxProxyExpressionBuilder<BoxRefPTy
         return new BoxRefSpliceFunctionBuilder(boxValueExpr)
       case 'create':
         return new BoxRefCreateFunctionBuilder(boxValueExpr)
+      case 'resize':
+        return new BoxRefResizeFunctionBuilder(boxValueExpr)
       case 'extract':
         return new BoxRefExtractFunctionBuilder(boxValueExpr)
       case 'replace':
@@ -107,6 +109,30 @@ export class BoxRefCreateFunctionBuilder extends BoxRefBaseFunctionBuilder {
     return instanceEb(
       nodeFactory.intrinsicCall({
         opCode: 'box_create',
+        stackArgs: [this.boxValue, size.resolve()],
+        wtype: boolWType,
+        immediates: [],
+        sourceLocation,
+      }),
+      boolPType,
+    )
+  }
+}
+export class BoxRefResizeFunctionBuilder extends BoxRefBaseFunctionBuilder {
+  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    const {
+      args: [size],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 0,
+      funcName: 'BoxRef.resize',
+      callLocation: sourceLocation,
+      argSpec: (a) => [a.required(uint64PType)],
+    })
+    return instanceEb(
+      nodeFactory.intrinsicCall({
+        opCode: 'box_resize',
         stackArgs: [this.boxValue, size.resolve()],
         wtype: boolWType,
         immediates: [],
