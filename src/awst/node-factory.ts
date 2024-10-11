@@ -252,13 +252,6 @@ const explicitNodeFactory = {
         sourceLocation,
       })
     }
-    if (expr instanceof IntegerConstant) {
-      return new IntegerConstant({
-        ...expr,
-        wtype,
-        sourceLocation,
-      })
-    }
 
     return new ReinterpretCast({
       expr,
