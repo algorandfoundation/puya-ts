@@ -20,7 +20,7 @@ subroutine testBoxMap(box: box_key, key: string, value: bytes): void
 {
   concat(box, reinterpret_cast<bytes>(key)).value: bytes = value
   concat("", reinterpret_cast<bytes>(key)).value: bytes = value
-  assert(Boolean(checked_maybe(box_length(concat(box, reinterpret_cast<bytes>(key)).value), comment=Box must exist)))
+  assert(Boolean(checked_maybe(box_len(concat(box, reinterpret_cast<bytes>(key)).value), comment=Box must exist)))
   assert(STATE_GET_EX(concat(box, reinterpret_cast<bytes>(key)).value).1)
   assert(concat(box, reinterpret_cast<bytes>(key)).value == concat("", reinterpret_cast<bytes>(key)).value)
   STATE_DEL(concat(box, reinterpret_cast<bytes>(key)).value)
@@ -28,8 +28,12 @@ subroutine testBoxMap(box: box_key, key: string, value: bytes): void
 }
 subroutine testBoxRef(box: box_key, length: uint64): void
 {
-  if (!box_length(Box["abc"].value).1 and checked_maybe(box_length(Box["abc"].value), comment=Box must exist) != length) {
+  if (!box_length(Box["abc"].value).1) {
     box_create(Box["abc"].value, 1000)
+  } else {
+    if (checked_maybe(box_length(Box["abc"].value), comment=Box must exist) != length) {
+      box_resize(Box["abc"].value, length)
+    }
   }
   someBytes: bytes = 0xffffffff
   box_put(box.value, someBytes)

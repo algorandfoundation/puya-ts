@@ -46,8 +46,10 @@ function testBoxMap(box: BoxMap<string, bytes>, key: string, value: bytes) {
 const boxRef = BoxRef({ key: 'abc' })
 
 function testBoxRef(box: BoxRef, length: uint64) {
-  if (!boxRef.exists && boxRef.length !== length) {
+  if (!boxRef.exists) {
     boxRef.create({ size: 1000 })
+  } else if (boxRef.length !== length) {
+    boxRef.resize(length)
   }
   const someBytes = Bytes.fromHex('FFFFFFFF')
   box.put(someBytes)

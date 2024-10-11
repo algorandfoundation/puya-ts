@@ -2081,7 +2081,7 @@
                         }
                       ]
                     },
-                    "op_code": "box_length",
+                    "op_code": "box_len",
                     "immediates": [],
                     "stack_args": [
                       {
@@ -3191,7 +3191,7 @@
     "source_location": {
       "file": "tests/approvals/box-proxies.algo.ts",
       "line": 48,
-      "end_line": 58,
+      "end_line": 60,
       "column": 0,
       "end_column": 1
     },
@@ -3245,7 +3245,7 @@
       "source_location": {
         "file": "tests/approvals/box-proxies.algo.ts",
         "line": 48,
-        "end_line": 58,
+        "end_line": 60,
         "column": 49,
         "end_column": 1
       },
@@ -3255,18 +3255,18 @@
           "source_location": {
             "file": "tests/approvals/box-proxies.algo.ts",
             "line": 49,
-            "end_line": 51,
+            "end_line": 53,
             "column": 2,
             "end_column": 3
           },
           "condition": {
-            "_type": "BooleanBinaryOperation",
+            "_type": "Not",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
               "line": 49,
               "end_line": 49,
               "column": 6,
-              "end_column": 48
+              "end_column": 20
             },
             "wtype": {
               "_type": "WType",
@@ -3275,13 +3275,13 @@
               "ephemeral": false,
               "scalar_type": 2
             },
-            "left": {
-              "_type": "Not",
+            "expr": {
+              "_type": "TupleItemExpression",
               "source_location": {
                 "file": "tests/approvals/box-proxies.algo.ts",
                 "line": 49,
                 "end_line": 49,
-                "column": 6,
+                "column": 7,
                 "end_column": 20
               },
               "wtype": {
@@ -3291,8 +3291,8 @@
                 "ephemeral": false,
                 "scalar_type": 2
               },
-              "expr": {
-                "_type": "TupleItemExpression",
+              "base": {
+                "_type": "IntrinsicCall",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
                   "line": 49,
@@ -3301,219 +3301,72 @@
                   "end_column": 20
                 },
                 "wtype": {
-                  "_type": "WType",
-                  "name": "bool",
+                  "_type": "WTuple",
+                  "name": "WTuple",
                   "immutable": true,
                   "ephemeral": false,
-                  "scalar_type": 2
-                },
-                "base": {
-                  "_type": "IntrinsicCall",
-                  "source_location": {
-                    "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 49,
-                    "end_line": 49,
-                    "column": 7,
-                    "end_column": 20
-                  },
-                  "wtype": {
-                    "_type": "WTuple",
-                    "name": "WTuple",
-                    "immutable": true,
-                    "ephemeral": false,
-                    "scalar_type": null,
-                    "types": [
-                      {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 2
-                      },
-                      {
-                        "_type": "WType",
-                        "name": "bool",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 2
-                      }
-                    ]
-                  },
-                  "op_code": "box_length",
-                  "immediates": [],
-                  "stack_args": [
+                  "scalar_type": null,
+                  "types": [
                     {
-                      "_type": "BoxValueExpression",
+                      "_type": "WType",
+                      "name": "uint64",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 2
+                    },
+                    {
+                      "_type": "WType",
+                      "name": "bool",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 2
+                    }
+                  ]
+                },
+                "op_code": "box_length",
+                "immediates": [],
+                "stack_args": [
+                  {
+                    "_type": "BoxValueExpression",
+                    "source_location": {
+                      "file": "tests/approvals/box-proxies.algo.ts",
+                      "line": 49,
+                      "end_line": 49,
+                      "column": 7,
+                      "end_column": 20
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "bytes",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 1
+                    },
+                    "key": {
+                      "_type": "BytesConstant",
                       "source_location": {
                         "file": "tests/approvals/box-proxies.algo.ts",
-                        "line": 49,
-                        "end_line": 49,
-                        "column": 7,
-                        "end_column": 20
+                        "line": 46,
+                        "end_line": 46,
+                        "column": 29,
+                        "end_column": 34
                       },
                       "wtype": {
                         "_type": "WType",
-                        "name": "bytes",
+                        "name": "box_key",
                         "immutable": true,
                         "ephemeral": false,
                         "scalar_type": 1
                       },
-                      "key": {
-                        "_type": "BytesConstant",
-                        "source_location": {
-                          "file": "tests/approvals/box-proxies.algo.ts",
-                          "line": 46,
-                          "end_line": 46,
-                          "column": 29,
-                          "end_column": 34
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "box_key",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": 1
-                        },
-                        "value": "VPaz",
-                        "encoding": "utf8"
-                      },
-                      "exists_assertion_message": "Box must have value"
-                    }
-                  ],
-                  "comment": null
-                },
-                "index": "1"
-              }
-            },
-            "op": "and",
-            "right": {
-              "_type": "NumericComparisonExpression",
-              "source_location": {
-                "file": "tests/approvals/box-proxies.algo.ts",
-                "line": 49,
-                "end_line": 49,
-                "column": 24,
-                "end_column": 48
+                      "value": "VPaz",
+                      "encoding": "utf8"
+                    },
+                    "exists_assertion_message": "Box must have value"
+                  }
+                ],
+                "comment": null
               },
-              "wtype": {
-                "_type": "WType",
-                "name": "bool",
-                "immutable": true,
-                "ephemeral": false,
-                "scalar_type": 2
-              },
-              "lhs": {
-                "_type": "CheckedMaybe",
-                "source_location": {
-                  "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 49,
-                  "end_line": 49,
-                  "column": 24,
-                  "end_column": 37
-                },
-                "wtype": {
-                  "_type": "WType",
-                  "name": "uint64",
-                  "immutable": true,
-                  "ephemeral": false,
-                  "scalar_type": 2
-                },
-                "expr": {
-                  "_type": "IntrinsicCall",
-                  "source_location": {
-                    "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 49,
-                    "end_line": 49,
-                    "column": 24,
-                    "end_column": 37
-                  },
-                  "wtype": {
-                    "_type": "WTuple",
-                    "name": "WTuple",
-                    "immutable": true,
-                    "ephemeral": false,
-                    "scalar_type": null,
-                    "types": [
-                      {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 2
-                      },
-                      {
-                        "_type": "WType",
-                        "name": "bool",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 2
-                      }
-                    ]
-                  },
-                  "op_code": "box_length",
-                  "immediates": [],
-                  "stack_args": [
-                    {
-                      "_type": "BoxValueExpression",
-                      "source_location": {
-                        "file": "tests/approvals/box-proxies.algo.ts",
-                        "line": 49,
-                        "end_line": 49,
-                        "column": 24,
-                        "end_column": 37
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "bytes",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 1
-                      },
-                      "key": {
-                        "_type": "BytesConstant",
-                        "source_location": {
-                          "file": "tests/approvals/box-proxies.algo.ts",
-                          "line": 46,
-                          "end_line": 46,
-                          "column": 29,
-                          "end_column": 34
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "box_key",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": 1
-                        },
-                        "value": "VPaz",
-                        "encoding": "utf8"
-                      },
-                      "exists_assertion_message": "Box must have value"
-                    }
-                  ],
-                  "comment": null
-                },
-                "comment": "Box must exist"
-              },
-              "operator": "!=",
-              "rhs": {
-                "_type": "VarExpression",
-                "source_location": {
-                  "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 49,
-                  "end_line": 49,
-                  "column": 42,
-                  "end_column": 48
-                },
-                "wtype": {
-                  "_type": "WType",
-                  "name": "uint64",
-                  "immutable": true,
-                  "ephemeral": false,
-                  "scalar_type": 2
-                },
-                "name": "length"
-              }
+              "index": "1"
             }
           },
           "if_branch": {
@@ -3522,7 +3375,7 @@
               "file": "tests/approvals/box-proxies.algo.ts",
               "line": 49,
               "end_line": 51,
-              "column": 50,
+              "column": 22,
               "end_column": 3
             },
             "body": [
@@ -3532,7 +3385,7 @@
                   "file": "tests/approvals/box-proxies.algo.ts",
                   "line": 49,
                   "end_line": 51,
-                  "column": 50,
+                  "column": 22,
                   "end_column": 3
                 },
                 "body": [
@@ -3632,14 +3485,282 @@
             "label": null,
             "comment": null
           },
-          "else_branch": null
+          "else_branch": {
+            "_type": "Block",
+            "source_location": {
+              "file": "tests/approvals/box-proxies.algo.ts",
+              "line": 51,
+              "end_line": 53,
+              "column": 9,
+              "end_column": 3
+            },
+            "body": [
+              {
+                "_type": "IfElse",
+                "source_location": {
+                  "file": "tests/approvals/box-proxies.algo.ts",
+                  "line": 51,
+                  "end_line": 53,
+                  "column": 9,
+                  "end_column": 3
+                },
+                "condition": {
+                  "_type": "NumericComparisonExpression",
+                  "source_location": {
+                    "file": "tests/approvals/box-proxies.algo.ts",
+                    "line": 51,
+                    "end_line": 51,
+                    "column": 13,
+                    "end_column": 37
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "bool",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 2
+                  },
+                  "lhs": {
+                    "_type": "CheckedMaybe",
+                    "source_location": {
+                      "file": "tests/approvals/box-proxies.algo.ts",
+                      "line": 51,
+                      "end_line": 51,
+                      "column": 13,
+                      "end_column": 26
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "uint64",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 2
+                    },
+                    "expr": {
+                      "_type": "IntrinsicCall",
+                      "source_location": {
+                        "file": "tests/approvals/box-proxies.algo.ts",
+                        "line": 51,
+                        "end_line": 51,
+                        "column": 13,
+                        "end_column": 26
+                      },
+                      "wtype": {
+                        "_type": "WTuple",
+                        "name": "WTuple",
+                        "immutable": true,
+                        "ephemeral": false,
+                        "scalar_type": null,
+                        "types": [
+                          {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true,
+                            "ephemeral": false,
+                            "scalar_type": 2
+                          },
+                          {
+                            "_type": "WType",
+                            "name": "bool",
+                            "immutable": true,
+                            "ephemeral": false,
+                            "scalar_type": 2
+                          }
+                        ]
+                      },
+                      "op_code": "box_length",
+                      "immediates": [],
+                      "stack_args": [
+                        {
+                          "_type": "BoxValueExpression",
+                          "source_location": {
+                            "file": "tests/approvals/box-proxies.algo.ts",
+                            "line": 51,
+                            "end_line": 51,
+                            "column": 13,
+                            "end_column": 26
+                          },
+                          "wtype": {
+                            "_type": "WType",
+                            "name": "bytes",
+                            "immutable": true,
+                            "ephemeral": false,
+                            "scalar_type": 1
+                          },
+                          "key": {
+                            "_type": "BytesConstant",
+                            "source_location": {
+                              "file": "tests/approvals/box-proxies.algo.ts",
+                              "line": 46,
+                              "end_line": 46,
+                              "column": 29,
+                              "end_column": 34
+                            },
+                            "wtype": {
+                              "_type": "WType",
+                              "name": "box_key",
+                              "immutable": true,
+                              "ephemeral": false,
+                              "scalar_type": 1
+                            },
+                            "value": "VPaz",
+                            "encoding": "utf8"
+                          },
+                          "exists_assertion_message": "Box must have value"
+                        }
+                      ],
+                      "comment": null
+                    },
+                    "comment": "Box must exist"
+                  },
+                  "operator": "!=",
+                  "rhs": {
+                    "_type": "VarExpression",
+                    "source_location": {
+                      "file": "tests/approvals/box-proxies.algo.ts",
+                      "line": 51,
+                      "end_line": 51,
+                      "column": 31,
+                      "end_column": 37
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "uint64",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 2
+                    },
+                    "name": "length"
+                  }
+                },
+                "if_branch": {
+                  "_type": "Block",
+                  "source_location": {
+                    "file": "tests/approvals/box-proxies.algo.ts",
+                    "line": 51,
+                    "end_line": 53,
+                    "column": 39,
+                    "end_column": 3
+                  },
+                  "body": [
+                    {
+                      "_type": "Block",
+                      "source_location": {
+                        "file": "tests/approvals/box-proxies.algo.ts",
+                        "line": 51,
+                        "end_line": 53,
+                        "column": 39,
+                        "end_column": 3
+                      },
+                      "body": [
+                        {
+                          "_type": "ExpressionStatement",
+                          "source_location": {
+                            "file": "tests/approvals/box-proxies.algo.ts",
+                            "line": 52,
+                            "end_line": 52,
+                            "column": 4,
+                            "end_column": 25
+                          },
+                          "expr": {
+                            "_type": "IntrinsicCall",
+                            "source_location": {
+                              "file": "tests/approvals/box-proxies.algo.ts",
+                              "line": 52,
+                              "end_line": 52,
+                              "column": 4,
+                              "end_column": 25
+                            },
+                            "wtype": {
+                              "_type": "WType",
+                              "name": "bool",
+                              "immutable": true,
+                              "ephemeral": false,
+                              "scalar_type": 2
+                            },
+                            "op_code": "box_resize",
+                            "immediates": [],
+                            "stack_args": [
+                              {
+                                "_type": "BoxValueExpression",
+                                "source_location": {
+                                  "file": "tests/approvals/box-proxies.algo.ts",
+                                  "line": 52,
+                                  "end_line": 52,
+                                  "column": 4,
+                                  "end_column": 17
+                                },
+                                "wtype": {
+                                  "_type": "WType",
+                                  "name": "bytes",
+                                  "immutable": true,
+                                  "ephemeral": false,
+                                  "scalar_type": 1
+                                },
+                                "key": {
+                                  "_type": "BytesConstant",
+                                  "source_location": {
+                                    "file": "tests/approvals/box-proxies.algo.ts",
+                                    "line": 46,
+                                    "end_line": 46,
+                                    "column": 29,
+                                    "end_column": 34
+                                  },
+                                  "wtype": {
+                                    "_type": "WType",
+                                    "name": "box_key",
+                                    "immutable": true,
+                                    "ephemeral": false,
+                                    "scalar_type": 1
+                                  },
+                                  "value": "VPaz",
+                                  "encoding": "utf8"
+                                },
+                                "exists_assertion_message": "Box must have value"
+                              },
+                              {
+                                "_type": "VarExpression",
+                                "source_location": {
+                                  "file": "tests/approvals/box-proxies.algo.ts",
+                                  "line": 52,
+                                  "end_line": 52,
+                                  "column": 18,
+                                  "end_column": 24
+                                },
+                                "wtype": {
+                                  "_type": "WType",
+                                  "name": "uint64",
+                                  "immutable": true,
+                                  "ephemeral": false,
+                                  "scalar_type": 2
+                                },
+                                "name": "length"
+                              }
+                            ],
+                            "comment": null
+                          }
+                        }
+                      ],
+                      "label": null,
+                      "comment": null
+                    }
+                  ],
+                  "label": null,
+                  "comment": null
+                },
+                "else_branch": null
+              }
+            ],
+            "label": null,
+            "comment": null
+          }
         },
         {
           "_type": "AssignmentStatement",
           "source_location": {
             "file": "tests/approvals/box-proxies.algo.ts",
-            "line": 52,
-            "end_line": 52,
+            "line": 54,
+            "end_line": 54,
             "column": 8,
             "end_column": 45
           },
@@ -3647,8 +3768,8 @@
             "_type": "VarExpression",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 52,
-              "end_line": 52,
+              "line": 54,
+              "end_line": 54,
               "column": 8,
               "end_column": 17
             },
@@ -3665,8 +3786,8 @@
             "_type": "BytesConstant",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 52,
-              "end_line": 52,
+              "line": 54,
+              "end_line": 54,
               "column": 20,
               "end_column": 45
             },
@@ -3685,8 +3806,8 @@
           "_type": "ExpressionStatement",
           "source_location": {
             "file": "tests/approvals/box-proxies.algo.ts",
-            "line": 53,
-            "end_line": 53,
+            "line": 55,
+            "end_line": 55,
             "column": 2,
             "end_column": 20
           },
@@ -3694,8 +3815,8 @@
             "_type": "IntrinsicCall",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 53,
-              "end_line": 53,
+              "line": 55,
+              "end_line": 55,
               "column": 2,
               "end_column": 20
             },
@@ -3713,8 +3834,8 @@
                 "_type": "BoxValueExpression",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 53,
-                  "end_line": 53,
+                  "line": 55,
+                  "end_line": 55,
                   "column": 2,
                   "end_column": 9
                 },
@@ -3729,8 +3850,8 @@
                   "_type": "VarExpression",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 53,
-                    "end_line": 53,
+                    "line": 55,
+                    "end_line": 55,
                     "column": 2,
                     "end_column": 5
                   },
@@ -3749,8 +3870,8 @@
                 "_type": "VarExpression",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 53,
-                  "end_line": 53,
+                  "line": 55,
+                  "end_line": 55,
                   "column": 10,
                   "end_column": 19
                 },
@@ -3771,8 +3892,8 @@
           "_type": "ExpressionStatement",
           "source_location": {
             "file": "tests/approvals/box-proxies.algo.ts",
-            "line": 54,
-            "end_line": 54,
+            "line": 56,
+            "end_line": 56,
             "column": 2,
             "end_column": 23
           },
@@ -3780,8 +3901,8 @@
             "_type": "IntrinsicCall",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 54,
-              "end_line": 54,
+              "line": 56,
+              "end_line": 56,
               "column": 2,
               "end_column": 23
             },
@@ -3799,8 +3920,8 @@
                 "_type": "BoxValueExpression",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 54,
-                  "end_line": 54,
+                  "line": 56,
+                  "end_line": 56,
                   "column": 2,
                   "end_column": 12
                 },
@@ -3836,8 +3957,8 @@
                 "_type": "VarExpression",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 54,
-                  "end_line": 54,
+                  "line": 56,
+                  "end_line": 56,
                   "column": 13,
                   "end_column": 22
                 },
@@ -3858,8 +3979,8 @@
           "_type": "ExpressionStatement",
           "source_location": {
             "file": "tests/approvals/box-proxies.algo.ts",
-            "line": 55,
-            "end_line": 55,
+            "line": 57,
+            "end_line": 57,
             "column": 2,
             "end_column": 39
           },
@@ -3867,8 +3988,8 @@
             "_type": "IntrinsicCall",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 55,
-              "end_line": 55,
+              "line": 57,
+              "end_line": 57,
               "column": 2,
               "end_column": 39
             },
@@ -3886,8 +4007,8 @@
                 "_type": "BoxValueExpression",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 55,
-                  "end_line": 55,
+                  "line": 57,
+                  "end_line": 57,
                   "column": 2,
                   "end_column": 12
                 },
@@ -3902,8 +4023,8 @@
                   "_type": "VarExpression",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 55,
-                    "end_line": 55,
+                    "line": 57,
+                    "end_line": 57,
                     "column": 2,
                     "end_column": 5
                   },
@@ -3922,8 +4043,8 @@
                 "_type": "IntegerConstant",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 55,
-                  "end_line": 55,
+                  "line": 57,
+                  "end_line": 57,
                   "column": 13,
                   "end_column": 14
                 },
@@ -3941,8 +4062,8 @@
                 "_type": "IntegerConstant",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 55,
-                  "end_line": 55,
+                  "line": 57,
+                  "end_line": 57,
                   "column": 16,
                   "end_column": 17
                 },
@@ -3960,8 +4081,8 @@
                 "_type": "BytesConstant",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 55,
-                  "end_line": 55,
+                  "line": 57,
+                  "end_line": 57,
                   "column": 19,
                   "end_column": 38
                 },
@@ -3983,8 +4104,8 @@
           "_type": "ExpressionStatement",
           "source_location": {
             "file": "tests/approvals/box-proxies.algo.ts",
-            "line": 56,
-            "end_line": 56,
+            "line": 58,
+            "end_line": 58,
             "column": 2,
             "end_column": 42
           },
@@ -3992,8 +4113,8 @@
             "_type": "IntrinsicCall",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 56,
-              "end_line": 56,
+              "line": 58,
+              "end_line": 58,
               "column": 2,
               "end_column": 42
             },
@@ -4011,8 +4132,8 @@
                 "_type": "BoxValueExpression",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 56,
-                  "end_line": 56,
+                  "line": 58,
+                  "end_line": 58,
                   "column": 2,
                   "end_column": 15
                 },
@@ -4048,8 +4169,8 @@
                 "_type": "IntegerConstant",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 56,
-                  "end_line": 56,
+                  "line": 58,
+                  "end_line": 58,
                   "column": 16,
                   "end_column": 17
                 },
@@ -4067,8 +4188,8 @@
                 "_type": "IntegerConstant",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 56,
-                  "end_line": 56,
+                  "line": 58,
+                  "end_line": 58,
                   "column": 19,
                   "end_column": 20
                 },
@@ -4086,8 +4207,8 @@
                 "_type": "BytesConstant",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 56,
-                  "end_line": 56,
+                  "line": 58,
+                  "end_line": 58,
                   "column": 22,
                   "end_column": 41
                 },
@@ -4109,8 +4230,8 @@
           "_type": "ExpressionStatement",
           "source_location": {
             "file": "tests/approvals/box-proxies.algo.ts",
-            "line": 57,
-            "end_line": 57,
+            "line": 59,
+            "end_line": 59,
             "column": 2,
             "end_column": 49
           },
@@ -4118,8 +4239,8 @@
             "_type": "IntrinsicCall",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 57,
-              "end_line": 57,
+              "line": 59,
+              "end_line": 59,
               "column": 2,
               "end_column": 49
             },
@@ -4137,8 +4258,8 @@
                 "_type": "BytesComparisonExpression",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 57,
-                  "end_line": 57,
+                  "line": 59,
+                  "end_line": 59,
                   "column": 9,
                   "end_column": 48
                 },
@@ -4153,8 +4274,8 @@
                   "_type": "BoxValueExpression",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 57,
-                    "end_line": 57,
+                    "line": 59,
+                    "end_line": 59,
                     "column": 9,
                     "end_column": 18
                   },
@@ -4169,8 +4290,8 @@
                     "_type": "VarExpression",
                     "source_location": {
                       "file": "tests/approvals/box-proxies.algo.ts",
-                      "line": 57,
-                      "end_line": 57,
+                      "line": 59,
+                      "end_line": 59,
                       "column": 9,
                       "end_column": 12
                     },
@@ -4190,8 +4311,8 @@
                   "_type": "BytesConstant",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 57,
-                    "end_line": 57,
+                    "line": 59,
+                    "end_line": 59,
                     "column": 23,
                     "end_column": 48
                   },
