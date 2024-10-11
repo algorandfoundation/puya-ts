@@ -59,7 +59,7 @@ export class BoxExpressionBuilder extends BoxProxyExpressionBuilder<BoxPType> {
         return instanceEb(
           nodeFactory.checkedMaybe({
             expr: nodeFactory.intrinsicCall({
-              opCode: 'box_length',
+              opCode: 'box_len',
               stackArgs: [boxValueExpr],
               wtype: new WTuple({ types: [uint64WType, boolWType], immutable: true }),
               immediates: [],
