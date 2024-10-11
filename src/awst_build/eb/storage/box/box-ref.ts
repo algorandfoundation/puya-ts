@@ -56,7 +56,7 @@ export class BoxRefExpressionBuilder extends BoxProxyExpressionBuilder<BoxRefPTy
       case 'exists':
       case 'length': {
         const boxLength = nodeFactory.intrinsicCall({
-          opCode: 'box_length',
+          opCode: 'box_len',
           stackArgs: [boxValueExpr],
           wtype: new WTuple({ types: [uint64WType, boolWType], immutable: true }),
           immediates: [],
