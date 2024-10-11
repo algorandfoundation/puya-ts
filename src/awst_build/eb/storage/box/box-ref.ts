@@ -134,11 +134,11 @@ export class BoxRefResizeFunctionBuilder extends BoxRefBaseFunctionBuilder {
       nodeFactory.intrinsicCall({
         opCode: 'box_resize',
         stackArgs: [this.boxValue, size.resolve()],
-        wtype: boolWType,
+        wtype: voidWType,
         immediates: [],
         sourceLocation,
       }),
-      boolPType,
+      voidPType,
     )
   }
 }
