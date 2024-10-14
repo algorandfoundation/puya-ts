@@ -27,6 +27,8 @@ import {
   GetBitType,
   GetByteType,
   GITxnType,
+  GloadBytesType,
+  GloadUint64Type,
   GlobalType,
   GTxnType,
   ItobType,
@@ -100,6 +102,8 @@ export const extractUint64: ExtractUint64Type = createFunctionProxy('extractUint
 export const gaid: GaidType = createFunctionProxy('gaid')
 export const getBit: GetBitType = createFunctionProxy('getBit')
 export const getByte: GetByteType = createFunctionProxy('getByte')
+export const gloadBytes: GloadBytesType = createFunctionProxy('gloadBytes')
+export const gloadUint64: GloadUint64Type = createFunctionProxy('gloadUint64')
 export const itob: ItobType = createFunctionProxy('itob')
 export const keccak256: Keccak256Type = createFunctionProxy('keccak256')
 export const minBalance: BalanceType = createFunctionProxy('minBalance')
@@ -131,5 +135,6 @@ export const AcctParams = createObjectProxy('AcctParams')
 export const AppParams = createObjectProxy('AppParams')
 export const AssetHolding = createObjectProxy('AssetHolding')
 export const AssetParams = createObjectProxy('AssetParams')
+export const Block = createObjectProxy('Block')
 
 export { VrfVerify } from './op-types'
