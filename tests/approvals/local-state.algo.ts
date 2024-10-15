@@ -11,7 +11,7 @@ export class LocalStateDemo extends Contract {
   localBytes2 = LocalState<bytes>()
   localEncoded = LocalState<SampleArray>()
 
-  public setState({ a, b, c }: { a: uint64; b: bytes; c: SampleArray }) {
+  public setState({ a, b }: { a: uint64; b: bytes }, c: SampleArray) {
     this.localUint(Txn.sender).value = a
     this.localUint2(Txn.sender).value = a
     this.localBytes(Txn.sender).value = b

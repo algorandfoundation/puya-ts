@@ -5,7 +5,7 @@ subroutine test_uint64(x: uint64, y: uint64): bool
   x: uint64 = (y = y - 1)
   x: uint64 = (y = y + 1)
   y: uint64 = ~y
-  return !y
+  return !Boolean(y)
 }
 subroutine test_biguint(x: biguint, y: biguint): bool
 {
@@ -13,7 +13,7 @@ subroutine test_biguint(x: biguint, y: biguint): bool
   x--
   x: biguint = (y = y - 1)
   x: biguint = (y = y + 1)
-  return !bitlen(y)
+  return !Boolean(bitlen(y))
 }
 subroutine test_bytes(x: bytes): void
 {

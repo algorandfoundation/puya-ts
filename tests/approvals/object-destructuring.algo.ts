@@ -1,6 +1,13 @@
 import type { biguint, bytes, uint64 } from '@algorandfoundation/algorand-typescript'
 import { Bytes } from '@algorandfoundation/algorand-typescript'
 
+function testPartialDestructure(arg: { x: uint64; y: uint64; z: uint64 }) {
+  const { x } = arg
+  const {
+    nested: { y },
+  } = { nested: arg }
+}
+
 function test() {
   const { a, b, c, d } = produceItems()
   const { d: e } = produceItems()
@@ -32,4 +39,14 @@ function testLiteralToLiteral() {
 function testNumericResolution() {
   let y: { a: uint64 }
   const x: { a: uint64 } = (y = { a: 434 })
+}
+
+function test2(args: { x: boolean; y: boolean; z: readonly [string, string] }) {
+  const {
+    a,
+    b,
+    args: { x, y },
+  } = { a: true, b: false, args }
+
+  const args2 = { ...args, x: true, y: true }
 }
