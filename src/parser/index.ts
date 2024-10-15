@@ -10,9 +10,10 @@ export type SourceFileMapping = Record<string, ts.SourceFile>
 export type CreateProgramResult = {
   sourceFiles: SourceFileMapping
   program: ts.Program
+  programDirectory: string
 }
 
-export function createTsProgram(options: CompileOptions) {
+export function createTsProgram(options: CompileOptions): CreateProgramResult {
   const compilerOptions: ts.CompilerOptions = {
     allowJs: false,
     noImplicitAny: true,
@@ -52,6 +53,7 @@ export function createTsProgram(options: CompileOptions) {
   return {
     sourceFiles,
     program,
+    programDirectory: program.getCurrentDirectory(),
   }
 }
 
