@@ -24,6 +24,14 @@ describe('Approvals', () => {
     logs: result.logs.filter((l) => l.sourceLocation?.file === path && isErrorOrCritical(l.level)),
   }))
 
+  const generalErrorLogs = result.logs.filter((l) => !l.sourceLocation && isErrorOrCritical(l.level))
+
+  it('There should be no general error logs', () => {
+    if (generalErrorLogs.length) {
+      expect.fail(`${generalErrorLogs.length} general errors during compilation`)
+    }
+  })
+
   describe.each(paths)('$path', ({ logs }) => {
     it('compiles without errors', () => {
       if (logs.length) {
