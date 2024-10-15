@@ -1,9 +1,10 @@
 import { snakeCase } from 'change-case'
 import path from 'node:path'
 import { Constants } from '../constants'
+import { logger } from '../logger'
 import { invariant } from '../util'
 import { buildBase85Encoder } from '../util/base-85'
-import { ContractReference, LogicSigReference } from './models'
+import { ARC4ABIMethodConfig, ContractReference, LogicSigReference } from './models'
 import type { RootNode } from './nodes'
 import { SourceLocation } from './source-location'
 
@@ -71,6 +72,23 @@ export class AwstSerializer extends SnakeCaseSerializer<RootNode[]> {
       return {
         ...(super.serializerFunction(key, value) as object),
         file: filePath,
+      }
+    }
+    if (value instanceof ARC4ABIMethodConfig) {
+      // TODO: This can be removed once puya has been updated to support a more advanced default args schema
+      return {
+        _type: value.constructor.name,
+        ...(super.serializerFunction(key, value) as object),
+        default_args: Object.fromEntries(
+          Object.entries(value.defaultArgs).flatMap(([key, v]) => {
+            if (v.source === 'constant') {
+              logger.warn(value.sourceLocation, `Ignoring constant default value for ${key} as puya does not support this yet`)
+              return []
+            } else {
+              return [[key, v.memberName]]
+            }
+          }),
+        ),
       }
     }
     if (value instanceof Uint8Array) {
