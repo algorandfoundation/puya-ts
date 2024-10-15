@@ -8,6 +8,7 @@ import type { CompileOptions } from './compile-options'
 import { AwstBuildFailureError } from './errors'
 import type { LogEvent } from './logger'
 import { logger } from './logger'
+import type { CreateProgramResult } from './parser'
 import { createTsProgram } from './parser'
 import { invokePuya } from './puya'
 import type { PuyaPassThroughOptions } from './puya/options'
@@ -52,10 +53,30 @@ export type CompileResult = {
   compilationSet: CompilationSet
 }
 
-export function compile(options: CompileOptions, passThroughOptions: PuyaPassThroughOptions): CompileResult {
+type Hooks = {
+  /**
+   * Called after TypeScript parsing, but before AWST build. Use this hook to add or remove TS AST nodes before AWST build
+   *
+   * If implemented, this method should return true to continue compilation or false to stop
+   * @param createProgramResult The result of TypeScript compilation
+   */
+  onProgramCreated(createProgramResult: CreateProgramResult): boolean
+  /**
+   * Called after AWST build, but before invocation of puya. Use this hook to add or remove AWST nodes before puya build
+   *
+   * If implemented, this method should return true to continue compilation or false to stop
+   * @param moduleAwst All AWST nodes of the build
+   * @param compilationSet An array of references to AWST nodes which should result in compilation output.
+   */
+  onAwstBuilt(moduleAwst: AWST[], compilationSet: CompilationSet): boolean
+}
+
+export function compile(options: CompileOptions, passThroughOptions: PuyaPassThroughOptions, hooks?: Partial<Hooks>): CompileResult {
   registerPTypes(typeRegistry)
   const programResult = createTsProgram(options)
-  const programDirectory = programResult.program.getCurrentDirectory()
+  if (hooks?.onProgramCreated?.(programResult) === false) {
+    throw new Error('Compilation halted by onProgramCreated hook')
+  }
   let moduleAwst: AWST[] = []
   let compilationSet: CompilationSet = []
   try {
@@ -63,7 +84,7 @@ export function compile(options: CompileOptions, passThroughOptions: PuyaPassThr
   } catch (e) {
     if (e instanceof AwstBuildFailureError) {
       return {
-        programDirectory,
+        programDirectory: programResult.programDirectory,
         logs: logger.export(),
         ast: programResult.sourceFiles,
         compilationSet,
@@ -71,19 +92,22 @@ export function compile(options: CompileOptions, passThroughOptions: PuyaPassThr
     }
     throw e
   }
+  if (hooks?.onAwstBuilt?.(moduleAwst, compilationSet) === false) {
+    throw new Error('Compilation halted by onAwstBuilt hook')
+  }
   if (!options.dryRun) {
     invokePuya({
       passThroughOptions,
       compileOptions: options,
       moduleAwst,
-      programDirectory,
+      programDirectory: programResult.programDirectory,
       compilationSet,
       sourceFiles: programResult.sourceFiles,
     })
   }
 
   return {
-    programDirectory,
+    programDirectory: programResult.programDirectory,
     awst: moduleAwst,
     logs: logger.export(),
     ast: programResult.sourceFiles,
