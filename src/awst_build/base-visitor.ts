@@ -555,7 +555,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
         for (const [index, sourceItemType] of enumerate(assignmentType.items)) {
           const targetItem = targetItems[index]
           if (targetItem && !(targetItem instanceof OmittedExpressionBuilder)) {
-            targets.push(targetItem.resolveToPType(sourceItemType).resolveLValue())
+            targets.push(this.buildLValue(targetItem, sourceItemType, sourceLocation))
           } else {
             targets.push(
               nodeFactory.varExpression({
@@ -574,7 +574,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
         const targets: LValue[] = []
         for (const [propName, propType] of assignmentType.orderedProperties()) {
           if (target.hasProperty(propName)) {
-            targets.push(target.memberAccess(propName, sourceLocation).resolveLValue())
+            targets.push(this.buildLValue(target.memberAccess(propName, sourceLocation), propType, sourceLocation))
           } else {
             targets.push(
               nodeFactory.varExpression({
