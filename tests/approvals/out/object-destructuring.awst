@@ -1,9 +1,14 @@
+subroutine testPartialDestructure(arg: tuple[uint64, uint64, uint64]): void
+{
+  <tuple>[x, _, _₁]: readonlytuple[uint64, uint64, uint64] = arg
+  <tuple>[<tuple>[_₂, y, _₃]]: readonlytuple[readonlytuple[uint64, uint64, uint64]] = <tuple>[arg]
+}
 subroutine test(): void
 {
-  <tuple>[a, b, c, d]: tuple[uint64, bytes, bool, biguint] = <tuple>[(#0 = tests/approvals/object-destructuring.algo.ts::produceItems()).0, #0.1, #0.2, #0.3]
-  <tuple>[_, _₁, _₂, e]: tuple[uint64, bytes, bool, biguint] = <tuple>[(#1 = tests/approvals/object-destructuring.algo.ts::produceItems()).0, #1.1, #1.2, #1.3]
-  f: tuple[uint64, bytes, bool, biguint] = <tuple>[(#3 = (<tuple>[g, _₃, _₄, i] = <tuple>[(#2 = tests/approvals/object-destructuring.algo.ts::produceItems()).0, #2.1, #2.2, #2.3])).0, #3.1, #3.2, #3.3]
-  tests/approvals/object-destructuring.algo.ts::receivePartial(<tuple>[(#4 = tests/approvals/object-destructuring.algo.ts::produceItems()).0, #4.3])
+  <tuple>[a, b, c, d]: readonlytuple[uint64, bytes, bool, biguint] = tests/approvals/object-destructuring.algo.ts::produceItems()
+  <tuple>[_, _₁, _₂, e]: readonlytuple[uint64, bytes, bool, biguint] = tests/approvals/object-destructuring.algo.ts::produceItems()
+  f: tuple[uint64, bytes, bool, biguint] = (<tuple>[g, _₃, _₄, i] = tests/approvals/object-destructuring.algo.ts::produceItems())
+  tests/approvals/object-destructuring.algo.ts::receivePartial(<tuple>[(#0 = tests/approvals/object-destructuring.algo.ts::produceItems()).0, #0.3])
 }
 subroutine produceItems(): tuple[uint64, bytes, bool, biguint]
 {
@@ -16,9 +21,14 @@ subroutine testLiteralToLiteral(): void
 {
   a: uint64 = 4
   b: uint64 = 1
-  <tuple>[e, f]: tuple[uint64, uint64] = <tuple>[(#5 = (<tuple>[c, d] = <tuple>[a, b])).0, #5.1]
+  <tuple>[e, f]: readonlytuple[uint64, uint64] = (<tuple>[c, d] = <tuple>[a, b])
 }
 subroutine testNumericResolution(): void
 {
-  x: tuple[uint64] = <tuple>[(#6 = (y = <tuple>[434])).0]
+  x: tuple[uint64] = (y = <tuple>[434])
+}
+subroutine test2(args: tuple[bool, bool, readonlytuple[string, string]]): void
+{
+  <tuple>[a, <tuple>[x, y, _], b]: readonlytuple[bool, readonlytuple[bool, bool, readonlytuple[string, string]], bool] = <tuple>[True, args, False]
+  args2: tuple[bool, bool, readonlytuple[string, string]] = <tuple>[True, True, args.2]
 }
