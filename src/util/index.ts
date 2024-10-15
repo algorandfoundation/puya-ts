@@ -24,6 +24,17 @@ export function codeInvariant(condition: unknown, message: string, sourceLocatio
   }
 }
 
+export const enumFromValue = <TValue, TEnum extends TValue>(
+  value: TValue,
+  enumType: Record<string, TEnum>,
+  message: string = 'Invalid enum value: ',
+) => {
+  if (Object.values(enumType).some((v) => v === value)) {
+    return value as TEnum
+  }
+  throw new Error(`${message} ${value}`)
+}
+
 export const convertEnum = <TEnumIn, TEnumOut, TKeys extends string>(
   value: TEnumIn,
   fromEnum: Record<TKeys, TEnumIn>,
