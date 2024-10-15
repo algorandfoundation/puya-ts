@@ -12,10 +12,14 @@ describe('Approvals', () => {
       outputAwst: false,
       paths: ['tests/approvals'],
       outDir: 'out',
-      dryRun: true,
+      dryRun: false,
       logLevel: LogLevel.Debug,
     }),
-    defaultPuyaOptions,
+    {
+      ...defaultPuyaOptions,
+      outputTeal: false,
+      outputArc32: false,
+    },
   )
   invariant(result.ast, 'Compilation must result in ast')
   const paths = Object.entries(result.ast ?? {}).map(([path, ast]) => ({
