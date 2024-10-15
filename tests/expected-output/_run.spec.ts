@@ -6,7 +6,7 @@ import { buildCompileOptions } from '../../src/compile-options'
 import type { LogEvent } from '../../src/logger'
 import { logger, LogLevel } from '../../src/logger'
 import { defaultPuyaOptions } from '../../src/puya/options'
-import { invariant } from '../../src/util'
+import { enumFromValue, invariant } from '../../src/util'
 
 /**
  * Verify that specific code produces specific compiler output.
@@ -135,14 +135,11 @@ function extractExpectLogs(sourceFile: ts.SourceFile, programDirectory: string) 
         const comment = sourceFile.getFullText().slice(commentRange.pos, commentRange.end)
         const match = /^\/\/ @expect-(\w+)\s+(.*)$/.exec(comment)
         if (match) {
-          const level = match[1]
+          const level = enumFromValue(match[1], LogLevel, 'Unexpected log level in @expect-* comment: ')
           const message = match[2]
-          if (!['error', 'info', 'warn', 'debug', 'fatal'].includes(level)) {
-            throw new Error(`Unexpected log level ${level} in @expect-* comment`)
-          }
           const commentLocation = SourceLocation.fromTextRange(sourceFile, commentRange, programDirectory)
           expectedLogs.push({
-            level: level as LogEvent['level'],
+            level,
             message,
             sourceLocation: new SourceLocation({
               ...commentLocation,

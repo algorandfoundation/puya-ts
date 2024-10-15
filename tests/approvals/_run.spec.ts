@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { compile } from '../../src'
 import { buildCompileOptions } from '../../src/compile-options'
-import { LogLevel } from '../../src/logger'
+import { isErrorOrCritical, LogLevel } from '../../src/logger'
 import { defaultPuyaOptions } from '../../src/puya/options'
 import { invariant } from '../../src/util'
 
@@ -21,7 +21,7 @@ describe('Approvals', () => {
   const paths = Object.entries(result.ast ?? {}).map(([path, ast]) => ({
     path,
     ast,
-    logs: result.logs.filter((l) => l.sourceLocation?.file === path && ['error', 'fatal'].includes(l.level)),
+    logs: result.logs.filter((l) => l.sourceLocation?.file === path && isErrorOrCritical(l.level)),
   }))
 
   describe.each(paths)('$path', ({ logs }) => {

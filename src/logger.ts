@@ -22,6 +22,9 @@ export enum LogLevel {
   Debug = 'debug',
   Critical = 'critical',
 }
+const errorOrCritical = new Set([LogLevel.Error, LogLevel.Critical])
+
+export const isErrorOrCritical = (l: LogLevel) => errorOrCritical.has(l)
 
 export type LogEvent = {
   level: LogLevel
@@ -96,7 +99,7 @@ class PuyaLogger {
   warn(source: NodeOrSourceLocation | undefined, message: string): void {
     this.addLog(LogLevel.Warn, source, message)
   }
-  fatal(source: NodeOrSourceLocation | undefined, message: string): void {
+  critical(source: NodeOrSourceLocation | undefined, message: string): void {
     this.addLog(LogLevel.Critical, source, message)
   }
 }
