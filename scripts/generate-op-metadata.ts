@@ -1,9 +1,8 @@
-import * as fs from 'fs'
 import { camelCase } from 'change-case'
+import * as fs from 'fs'
+import { enumerate, hasFlags } from '../src/util'
 import type { OpFunction, OpGrouping, OpOverloadedFunction } from './build-op-module'
 import { AlgoTsType, buildOpModule } from './build-op-module'
-import { enumerate, hasFlags } from '../src/util'
-import { it } from 'vitest'
 
 const opModule = buildOpModule()
 
@@ -120,7 +119,7 @@ function mapReturnType(returnTypes: AlgoTsType[]) {
   if (ptypes.length === 1) {
     return ptypes[0]
   }
-  return `new ptypes.TuplePType({items: [${ptypes.join(', ')}], immutable: true})`
+  return `new ptypes.TuplePType({items: [${ptypes.join(', ')}]})`
 }
 
 function* emitTypes() {

@@ -514,7 +514,6 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
           items: sourceType.items.map((item, index) =>
             index < targetType.items.length ? this.buildAssignmentExpressionType(targetType.items[index], item, sourceLocation) : item,
           ),
-          immutable: sourceType.immutable,
         })
       } else if (targetType instanceof ArrayPType) {
         // Narrow array literal types to array type
