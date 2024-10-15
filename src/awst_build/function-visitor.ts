@@ -113,8 +113,7 @@ export class FunctionVisitor
               } else if (spreadResult instanceof TupleExpressionBuilder) {
                 throw new CodeError('Spread operator is not currently supported with tuple expressions', { sourceLocation })
               } else {
-                // TODO: What would this context be?
-                throw new CodeError('The spread operator is not supported in this context', { sourceLocation })
+                throw InternalError.shouldBeUnreachable()
               }
             } else {
               items.push(this.buildAssignmentTarget(element.name, sourceLocation))
