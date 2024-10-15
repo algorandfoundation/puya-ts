@@ -12,6 +12,7 @@ const cliOptionsSchema = z.object({
   outDir: z.string(),
   dryRun: z.boolean(),
   logLevel: z.nativeEnum(LogLevel),
+  isolatedFiles: z.boolean(),
 
   // Puya options
   outputTeal: z.boolean(),
@@ -48,8 +49,8 @@ function cli() {
     .addOption(new Option('--output-awst', 'Output debugging awst file per parsed file').default(false))
     .addOption(new Option('--output-awst-json', 'Output debugging awst json file per parsed file').default(false))
     .addOption(new Option('--out-dir [outDir]').default('out'))
-    .addOption(new Option('--dry-run').default(false))
-
+    .addOption(new Option('--dry-run', "Just parse typescript files, don't invoke puya compiler").default(false))
+    .addOption(new Option('--isolated-files', 'Invoke compilation on each input file individually').default(false))
     .addOption(new Option('--no-output-teal', 'Do not output TEAL code').default(defaultPuyaOptions.outputTeal))
     .addOption(
       new Option(
@@ -110,15 +111,34 @@ function cli() {
         logger.configure({
           minLogLevel: cliOptions.logLevel,
         })
-
         const compileOptions = buildCompileOptions({
           paths,
           ...cliOptions,
         })
         const passThroughOptions: PuyaPassThroughOptions = cliOptions
-        const result = compile(compileOptions, passThroughOptions)
-        if (result.logs.some((l) => l.level === LogLevel.Error || l.level === LogLevel.Critical)) {
-          process.exit(-1)
+
+        if (cliOptions.isolatedFiles) {
+          for (const file of compileOptions.filePaths) {
+            try {
+              compile(
+                {
+                  ...compileOptions,
+                  filePaths: [file],
+                },
+                passThroughOptions,
+              )
+            } catch (e) {
+              logger.critical(undefined, `Compilation failure: ${e}`)
+            }
+          }
+          if (logger.export().some((l) => l.level === LogLevel.Error || l.level === LogLevel.Critical)) {
+            process.exit(-1)
+          }
+        } else {
+          const result = compile(compileOptions, passThroughOptions)
+          if (result.logs.some((l) => l.level === LogLevel.Error || l.level === LogLevel.Critical)) {
+            process.exit(-1)
+          }
         }
       } catch (e) {
         if (e instanceof Error) {
