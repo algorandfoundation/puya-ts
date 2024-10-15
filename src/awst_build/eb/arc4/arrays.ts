@@ -142,9 +142,7 @@ class EntriesFunctionBuilder extends FunctionBuilder {
 
   call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     parseFunctionArgs({ args, typeArgs, callLocation: sourceLocation, argSpec: (_) => [], genericTypeArgs: 0, funcName: 'entries' })
-    const iteratorType = IterableIteratorType.parameterise([
-      new TuplePType({ items: [uint64PType, this.arrayBuilder.ptype.elementType], immutable: true }),
-    ])
+    const iteratorType = IterableIteratorType.parameterise([new TuplePType({ items: [uint64PType, this.arrayBuilder.ptype.elementType] })])
     return new IterableIteratorExpressionBuilder(
       nodeFactory.enumeration({
         expr: this.arrayBuilder.iterate(sourceLocation),
