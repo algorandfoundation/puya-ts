@@ -38,7 +38,7 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
 
   resolve(): Expression {
     // Resolve object to a tuple using its own inferred types
-    return this.toTuple(this.ptype, this.sourceLocation)
+    return this.toTuple(this.ptype)
   }
   resolveLValue(): LValue {
     return nodeFactory.tupleExpression({
@@ -65,7 +65,7 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
     return this.parts.some((part) => (part.type === 'properties' ? Object.hasOwn(part.properties, name) : part.obj.hasProperty(name)))
   }
 
-  private toTuple(ptype: ObjectPType, sourceLocation: SourceLocation): Expression {
+  private toTuple(ptype: ObjectPType): Expression {
     return nodeFactory.tupleExpression({
       items: ptype
         .orderedProperties()
@@ -86,7 +86,7 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
 
   resolveToPType(ptype: PTypeOrClass): InstanceBuilder {
     codeInvariant(ptype instanceof ObjectPType, `Object literal cannot be resolved to type ${ptype}`, this.sourceLocation)
-    return new ObjectExpressionBuilder(this.toTuple(ptype, this.sourceLocation), ptype)
+    return new ObjectExpressionBuilder(this.toTuple(ptype), ptype)
   }
 
   assign(other: InstanceBuilder, sourceLocation: SourceLocation): InstanceBuilder {
