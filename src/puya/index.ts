@@ -55,10 +55,10 @@ export function invokePuya({
 
   logger.debug(
     undefined,
-    `Invoking puya: puya.exe --options ${optionsFile.filePath} --awst ${moduleAwstFile.filePath} --source-annotations ${moduleSourceFile.filePath}`,
+    `Invoking puya: puya --options ${optionsFile.filePath} --awst ${moduleAwstFile.filePath} --source-annotations ${moduleSourceFile.filePath}`,
   )
   runChildProc({
-    command: 'puya.exe',
+    command: 'puya',
     args: [
       '--options',
       optionsFile.filePath,
