@@ -5,7 +5,11 @@ import typescript from '@rollup/plugin-typescript'
 import type { RollupOptions } from 'rollup'
 
 const config: RollupOptions = {
-  input: ['src/index.ts', 'src/arc4/index.ts'],
+  input: {
+    index: 'src/index.ts',
+    'arc4/index': 'src/arc4/index.ts',
+    op: 'src/op.ts',
+  },
   output: [
     {
       dir: 'dist',

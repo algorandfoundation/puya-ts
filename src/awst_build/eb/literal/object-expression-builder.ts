@@ -44,6 +44,9 @@ export class ObjectExpressionBuilder extends InstanceExpressionBuilder<ObjectPTy
   }
 
   resolveToPType(ptype: PTypeOrClass): InstanceBuilder {
+    if (ptype.equals(this.ptype)) {
+      return this
+    }
     if (this.resolvableToPType(ptype)) {
       const base = this.singleEvaluation()
       return instanceEb(

@@ -1,6 +1,11 @@
 import type { biguint, bytes, uint64 } from '@algorandfoundation/algorand-typescript'
 import { assert, Bytes, Uint64 } from '@algorandfoundation/algorand-typescript'
 
+function testNested(arg: [uint64, [biguint, biguint]]) {
+  const [a, b] = arg
+  const [c, [d]] = arg
+}
+
 function test() {
   const [a, b, c, d] = produceItems()
   const [, , e] = produceItems()

@@ -1,28 +1,43 @@
 import { describe, expect, it } from 'vitest'
 import { compile } from '../../src'
 import { buildCompileOptions } from '../../src/compile-options'
-import { LogLevel } from '../../src/logger'
+import { isErrorOrCritical, LoggingContext, LogLevel } from '../../src/logger'
 import { defaultPuyaOptions } from '../../src/puya/options'
 import { invariant } from '../../src/util'
 
 describe('Approvals', () => {
+  using logCtx = LoggingContext.create()
   const result = compile(
     buildCompileOptions({
       outputAwstJson: false,
       outputAwst: false,
       paths: ['tests/approvals'],
       outDir: 'out',
-      dryRun: true,
-      logLevel: LogLevel.Debug,
+      dryRun: false,
+      logLevel: LogLevel.Warn,
     }),
-    defaultPuyaOptions,
+    {
+      ...defaultPuyaOptions,
+      outputTeal: false,
+      outputArc32: false,
+    },
   )
   invariant(result.ast, 'Compilation must result in ast')
   const paths = Object.entries(result.ast ?? {}).map(([path, ast]) => ({
     path,
     ast,
-    logs: result.logs.filter((l) => l.sourceLocation?.file === path && ['error', 'fatal'].includes(l.level)),
+    logs: logCtx.logEvents.filter((l) => l.sourceLocation?.file === path && isErrorOrCritical(l.level)),
   }))
+
+  const generalErrorLogs = logCtx.logEvents.filter((l) => !l.sourceLocation && isErrorOrCritical(l.level))
+
+  it('There should be no general error logs', () => {
+    if (generalErrorLogs.length) {
+      expect.fail(
+        `${generalErrorLogs.length} general errors during compilation. \nLogs: \n${generalErrorLogs.map((l) => `${l.level}: ${l.message}`).join('\n')}`,
+      )
+    }
+  })
 
   describe.each(paths)('$path', ({ logs }) => {
     it('compiles without errors', () => {

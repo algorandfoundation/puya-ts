@@ -7,7 +7,7 @@ export function jsonSerializeSourceFiles(sourceFiles: SourceFileMapping, program
     Object.fromEntries(Object.entries(sourceFiles).map(([key, value]) => [path.join(programDirectory, key), value] as const)),
     (key, value) => {
       if (ts.isSourceFile(value)) {
-        return value.getFullText().split(/\n/g)
+        return value.getFullText().replace(/\r\n/g, '\n').split(/\n/g)
       }
       return value
     },

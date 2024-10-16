@@ -1,9 +1,9 @@
 subroutine test(a: uint64, b: uint64): void
 {
   inferTuple: readonlytuple[uint64, uint64] = <tuple>[a, b]
-  explicitTuple: tuple[uint64, uint64] = <tuple>[a, b]
-  conditionalExplicitTuple: tuple[uint64, uint64] = (a < b ? <tuple>[a, b] : <tuple>[b, a])
-  <tuple>[c, d]: tuple[uint64, uint64] = <tuple>[a, b]
-  <tuple>[_, g]: tuple[uint64, uint64] = <tuple>[a, b]
-  <tuple>[h, _₁]: tuple[uint64, uint64] = <tuple>[a, b]
+  explicitTuple: readonlytuple[uint64, uint64] = <tuple>[a, b]
+  conditionalExplicitTuple: readonlytuple[uint64, uint64] = (a < b ? <tuple>[a, b] : <tuple>[b, a])
+  <tuple>[c, d]: readonlytuple[uint64, uint64] = <tuple>[a, b]
+  <tuple>[_, g]: readonlytuple[uint64, uint64] = <tuple>[a, b]
+  <tuple>[h, _₁]: readonlytuple[uint64, uint64] = <tuple>[a, b]
 }

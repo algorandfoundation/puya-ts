@@ -167,7 +167,6 @@ export class TypeResolver {
 
       return new TuplePType({
         items: tsType.typeArguments.map((t) => this.resolveType(t, sourceLocation)),
-        immutable: tsType.target.readonly,
       })
     }
 

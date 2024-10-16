@@ -46,7 +46,7 @@ export class AssertMatchFunctionBuilder extends NodeBuilder {
           )
         } else if (testProperty.hasProperty('between')) {
           const range = requireInstanceBuilder(testProperty.memberAccess('between', sourceLocation)).singleEvaluation()
-          const rangePType = new TuplePType({ items: [subjectType, subjectType], immutable: true })
+          const rangePType = new TuplePType({ items: [subjectType, subjectType] })
           codeInvariant(range.resolvableToPType(rangePType), 'Between range must be of type $')
           const zeroIndex = instanceEb(nodeFactory.uInt64Constant({ value: 0n, sourceLocation }), uint64PType)
           const gte = subjectProperty

@@ -468,7 +468,6 @@ export class ArrayLiteralPType extends TransientType {
 
   getTupleType(): TuplePType {
     return new TuplePType({
-      immutable: false,
       items: this.items,
     })
   }
@@ -486,10 +485,10 @@ export class TuplePType extends PType {
   readonly items: PType[]
   readonly singleton = false
   readonly immutable: boolean
-  constructor(props: { items: PType[]; immutable?: boolean }) {
+  constructor(props: { items: PType[] }) {
     super()
     this.items = props.items
-    this.immutable = props.immutable ?? true
+    this.immutable = true
   }
 
   get wtype(): WTuple {

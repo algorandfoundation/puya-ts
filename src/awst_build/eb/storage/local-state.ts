@@ -1,5 +1,5 @@
 import { nodeFactory } from '../../../awst/node-factory'
-import type { AppStateExpression, Expression, LValue } from '../../../awst/nodes'
+import type { AppAccountStateExpression, AppStateExpression, Expression, LValue } from '../../../awst/nodes'
 import { BytesConstant } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { stateKeyWType, voidWType } from '../../../awst/wtypes'
@@ -61,7 +61,7 @@ export class LocalStateExpressionBuilder extends InstanceExpressionBuilder<Local
     return new LocalStateForAccountExpressionBuilder(this.buildField(account.resolve(), sourceLocation), this.ptype.contentType)
   }
 
-  private buildField(account: Expression, sourceLocation: SourceLocation): AppStateExpression {
+  private buildField(account: Expression, sourceLocation: SourceLocation): AppAccountStateExpression {
     return nodeFactory.appAccountStateExpression({
       key: this._expr,
       account,
@@ -76,7 +76,7 @@ export class LocalStateForAccountExpressionBuilder extends NodeBuilder {
   ptype: undefined
 
   constructor(
-    private key: AppStateExpression,
+    private key: AppAccountStateExpression,
     private contentType: PType,
   ) {
     super(key.sourceLocation)
@@ -87,7 +87,7 @@ export class LocalStateForAccountExpressionBuilder extends NodeBuilder {
       case 'value':
         // TODO: use value proxy
         return instanceEb(
-          nodeFactory.appStateExpression({
+          nodeFactory.appAccountStateExpression({
             ...this.key,
             sourceLocation,
           }),

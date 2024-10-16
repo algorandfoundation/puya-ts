@@ -149,7 +149,7 @@ class BoxMaybeFunctionBuilder extends FunctionBuilder {
       genericTypeArgs: 0,
       argSpec: () => [],
     })
-    const type = new TuplePType({ items: [this.contentType, boolPType], immutable: true })
+    const type = new TuplePType({ items: [this.contentType, boolPType] })
 
     return instanceEb(
       nodeFactory.stateGetEx({

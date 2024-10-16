@@ -66,17 +66,18 @@ export class UInt64ExpressionBuilder extends InstanceExpressionBuilder<InstanceT
     super(expr, uint64PType)
   }
   boolEval(sourceLocation: SourceLocation, negate: boolean): Expression {
-    if (negate) {
-      return nodeFactory.not({
-        expr: this.resolve(),
-        sourceLocation,
-      })
-    }
-    return nodeFactory.reinterpretCast({
+    const asBool = nodeFactory.reinterpretCast({
       sourceLocation,
       expr: this.resolve(),
       wtype: boolWType,
     })
+    if (negate) {
+      return nodeFactory.not({
+        expr: asBool,
+        sourceLocation,
+      })
+    }
+    return asBool
   }
 
   compare(other: InstanceBuilder, op: BuilderComparisonOp, sourceLocation: SourceLocation): InstanceBuilder {

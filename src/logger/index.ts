@@ -1,17 +1,6 @@
-import chalk from 'chalk'
-import { SourceLocation } from './awst/source-location'
-import { AwstBuildFailureError, CodeError, PuyaError, TodoError } from './errors'
-
-type ColorFn = (text: string) => string
-const levelConfig: Record<LogEvent['level'], { colorFn: ColorFn; writeFn: (...args: unknown[]) => void; order: number }> = {
-  /* eslint-disable no-console */
-  debug: { colorFn: chalk.green, writeFn: console.debug, order: 0 },
-  info: { colorFn: chalk.green, writeFn: console.info, order: 1 },
-  warn: { colorFn: chalk.yellow, writeFn: console.warn, order: 2 },
-  error: { colorFn: chalk.red, writeFn: console.error, order: 3 },
-  critical: { colorFn: chalk.red, writeFn: console.error, order: 4 },
-  /* eslint-enable no-console */
-}
+import { SourceLocation } from '../awst/source-location'
+import { AwstBuildFailureError, CodeError, PuyaError, TodoError } from '../errors'
+import type { LogSink } from './sinks'
 
 type NodeOrSourceLocation = SourceLocation | { sourceLocation: SourceLocation }
 
@@ -22,6 +11,21 @@ export enum LogLevel {
   Debug = 'debug',
   Critical = 'critical',
 }
+const logLevelToInt = {
+  [LogLevel.Critical]: 4,
+  [LogLevel.Error]: 3,
+  [LogLevel.Info]: 1,
+  [LogLevel.Warn]: 2,
+  [LogLevel.Debug]: 0,
+}
+
+export const isMinLevel = (logLevel: LogLevel, minLevel: LogLevel): boolean => {
+  return logLevelToInt[minLevel] <= logLevelToInt[logLevel]
+}
+
+const errorOrCritical = new Set([LogLevel.Error, LogLevel.Critical])
+
+export const isErrorOrCritical = (l: LogLevel) => errorOrCritical.has(l)
 
 export type LogEvent = {
   level: LogLevel
@@ -30,48 +34,21 @@ export type LogEvent = {
 }
 
 class PuyaLogger {
-  private logEvents: LogEvent[] = []
-  private minLogLevel: LogLevel = LogLevel.Debug
-
-  public configure(options?: { outputToConsole?: boolean; minLogLevel?: LogLevel }) {
-    if (options?.outputToConsole !== undefined) this.outputToConsole = options.outputToConsole
-    if (options?.minLogLevel !== undefined) {
-      this.minLogLevel = options.minLogLevel
-    }
+  private logSinks: LogSink[] = []
+  public configure(sinks: LogSink[]) {
+    this.logSinks = sinks
   }
 
-  outputToConsole: boolean = true
-  constructor() {}
-
   private addLog(level: LogEvent['level'], source: NodeOrSourceLocation | undefined, message: string) {
-    const config = levelConfig[level]
-    if (config.order < levelConfig[this.minLogLevel].order) return
-
     const logEvent: LogEvent = {
       sourceLocation: source ? (source instanceof SourceLocation ? source : source.sourceLocation) : undefined,
       message,
       level,
     }
-    this.logEvents.push(logEvent)
-    if (!this.outputToConsole) return
-
-    let logText = `${config.colorFn(logEvent.level)}: ${logEvent.message}`
-    if (logEvent.sourceLocation) {
-      logText = `${logEvent.sourceLocation} ${logText}`
+    LoggingContext.current.logEvents.push(logEvent)
+    for (const sink of this.logSinks) {
+      if (isMinLevel(logEvent.level, sink.minLogLevel)) sink.add(logEvent)
     }
-    config.writeFn(logText)
-  }
-
-  reset(): void {
-    this.logEvents = []
-  }
-
-  hasErrors(): boolean {
-    return this.logEvents.some((e) => e.level === 'error')
-  }
-
-  export(): LogEvent[] {
-    return this.logEvents.slice()
   }
 
   error(error: Error): void
@@ -96,7 +73,7 @@ class PuyaLogger {
   warn(source: NodeOrSourceLocation | undefined, message: string): void {
     this.addLog(LogLevel.Warn, source, message)
   }
-  fatal(source: NodeOrSourceLocation | undefined, message: string): void {
+  critical(source: NodeOrSourceLocation | undefined, message: string): void {
     this.addLog(LogLevel.Critical, source, message)
   }
 }
@@ -122,5 +99,40 @@ export const logPuyaExceptions = <T>(action: () => T, sourceLocation: SourceLoca
       throw e
     }
     throw new AwstBuildFailureError()
+  }
+}
+
+export class LoggingContext implements Disposable {
+  logEvents: LogEvent[] = []
+  sourcesByPath: Record<string, string[]> = {}
+
+  private constructor() {}
+
+  hasErrors(): boolean {
+    return this.logEvents.some((e) => isErrorOrCritical(e.level))
+  }
+
+  exitIfErrors(): void {
+    if (this.hasErrors()) process.exit(1)
+  }
+
+  private static contexts: LoggingContext[] = []
+
+  static create(): Disposable & LoggingContext {
+    const ctx = new LoggingContext()
+    this.contexts.push(ctx)
+    return ctx
+  }
+  static get current() {
+    const top = LoggingContext.contexts.at(-1)
+    if (!top) {
+      throw new Error('There is no current context')
+    }
+    return top
+  }
+
+  [Symbol.dispose]() {
+    const top = LoggingContext.contexts.pop()
+    if (top !== this) throw new Error('Parent context is being disposed before a child context')
   }
 }

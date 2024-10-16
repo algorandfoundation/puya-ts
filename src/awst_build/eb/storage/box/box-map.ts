@@ -171,7 +171,7 @@ class BoxMapMaybeFunctionBuilder extends BoxMapFunctionBuilderBase {
       genericTypeArgs: 0,
       argSpec: (a) => [a.required(this.keyType)],
     })
-    const type = new TuplePType({ items: [this.contentType, boolPType], immutable: true })
+    const type = new TuplePType({ items: [this.contentType, boolPType] })
 
     return instanceEb(
       nodeFactory.stateGetEx({

@@ -124,7 +124,7 @@ export class LogicSigReference extends ModelBase {
     return this.id
   }
 }
-export type CompilationSet = ReadonlyArray<ContractReference | LogicSigReference>
+export type CompilationSet = Array<ContractReference | LogicSigReference>
 
 export enum TransactionKind {
   pay = 1,
