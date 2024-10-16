@@ -14,7 +14,7 @@ describe('Approvals', () => {
       paths: ['tests/approvals'],
       outDir: 'out',
       dryRun: false,
-      logLevel: LogLevel.Debug,
+      logLevel: LogLevel.Warn,
     }),
     {
       ...defaultPuyaOptions,
@@ -33,7 +33,9 @@ describe('Approvals', () => {
 
   it('There should be no general error logs', () => {
     if (generalErrorLogs.length) {
-      expect.fail(`${generalErrorLogs.length} general errors during compilation`)
+      expect.fail(
+        `${generalErrorLogs.length} general errors during compilation. \nLogs: \n${generalErrorLogs.map((l) => `${l.level}: ${l.message}`).join('\n')}`,
+      )
     }
   })
 
