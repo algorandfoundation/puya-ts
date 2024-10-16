@@ -14,13 +14,11 @@ import {
   TransientType,
   uint64PType,
 } from '../../ptypes'
-import { typeRegistry } from '../../type-registry'
-import { BigUintExpressionBuilder } from '../biguint-expression-builder'
+import { instanceEb, typeRegistry } from '../../type-registry'
 import { foldBinaryOp, foldComparisonOp } from '../folding'
 import type { BuilderBinaryOp, BuilderComparisonOp, InstanceBuilder } from '../index'
 import { BuilderUnaryOp } from '../index'
 import { LiteralExpressionBuilder } from '../literal-expression-builder'
-import { UInt64ExpressionBuilder } from '../uint64-expression-builder'
 import { isValidLiteralForPType } from '../util'
 
 export class BigIntLiteralExpressionBuilder extends LiteralExpressionBuilder {
@@ -64,9 +62,9 @@ export class BigIntLiteralExpressionBuilder extends LiteralExpressionBuilder {
 
     codeInvariant(isValidLiteralForPType(this.value, ptype), `${ptype.name} overflow or underflow: ${this.value}`, this.sourceLocation)
     if (ptype.equals(uint64PType)) {
-      return new UInt64ExpressionBuilder(nodeFactory.uInt64Constant({ value: this.value, sourceLocation: this.sourceLocation }))
+      return instanceEb(nodeFactory.uInt64Constant({ value: this.value, sourceLocation: this.sourceLocation }), uint64PType)
     } else if (ptype.equals(biguintPType)) {
-      return new BigUintExpressionBuilder(nodeFactory.bigUIntConstant({ value: this.value, sourceLocation: this.sourceLocation }))
+      return instanceEb(nodeFactory.bigUIntConstant({ value: this.value, sourceLocation: this.sourceLocation }), biguintPType)
     }
     throw new CodeError(`${this.value} cannot be converted to type ${ptype.name}`, { sourceLocation: this.sourceLocation })
   }

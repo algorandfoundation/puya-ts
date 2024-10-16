@@ -33,6 +33,13 @@ const config: RollupOptions = {
     nodeResolve(),
     json(),
   ],
+  onwarn(log, defaultHandler) {
+    if (log.code === 'CIRCULAR_DEPENDENCY') {
+      throw new Error(log.message)
+    } else {
+      defaultHandler(log)
+    }
+  },
 }
 
 export default config

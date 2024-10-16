@@ -8,8 +8,8 @@ import type { PType } from '../../ptypes'
 import { numberPType, uint64PType } from '../../ptypes'
 import { instanceEb } from '../../type-registry'
 import { FunctionBuilder, type InstanceBuilder } from '../index'
-import { getBigIntOrUint64Expr } from '../util'
 import { parseFunctionArgs } from '../util/arg-parsing'
+import { getBigIntOrUint64Expr } from '../util/get-bigint-or-uint64-expr'
 
 export class AtFunctionBuilder extends FunctionBuilder {
   constructor(

@@ -10,7 +10,7 @@ import { logger } from '../../logger'
 import { tryConvertEnum } from '../../util'
 import type { InstanceType, PType } from '../ptypes'
 import { BigUintFunction, biguintPType, boolPType, bytesPType, stringPType, uint64PType } from '../ptypes'
-import { BooleanExpressionBuilder } from './boolean-expression-builder'
+import { instanceEb } from '../type-registry'
 import type { InstanceBuilder } from './index'
 import { BuilderBinaryOp, BuilderComparisonOp, BuilderUnaryOp, FunctionBuilder, InstanceExpressionBuilder } from './index'
 import { UInt64ExpressionBuilder } from './uint64-expression-builder'
@@ -94,13 +94,14 @@ export class BigUintExpressionBuilder extends InstanceExpressionBuilder<Instance
         sourceLocation,
       })
     }
-    return new BooleanExpressionBuilder(
+    return instanceEb(
       nodeFactory.numericComparisonExpression({
         lhs: this._expr,
         rhs: otherExpr,
         operator: numComOp,
         sourceLocation,
       }),
+      boolPType,
     )
   }
   boolEval(sourceLocation: SourceLocation, negate: boolean = false): Expression {
