@@ -1,7 +1,8 @@
-import { bytes } from '../primitives'
+import { bytes, Uint64 } from '../primitives'
 import { Account } from '../reference'
+import { uint8ArrayToHex } from './encoding-util'
 import { AssertError } from './errors'
-import { BytesCls } from './primitives'
+import { BytesCls, Uint64Cls } from './primitives'
 
 export class GlobalStateCls<ValueType> {
   private readonly _type: string = GlobalStateCls.name
@@ -10,7 +11,11 @@ export class GlobalStateCls<ValueType> {
   key: bytes | undefined
 
   delete: () => void = () => {
-    this.#value = undefined
+    if (this.#value instanceof Uint64Cls) {
+      this.#value = Uint64(0) as ValueType
+    } else {
+      this.#value = undefined
+    }
   }
 
   static [Symbol.hasInstance](x: unknown): x is GlobalStateCls<unknown> {
@@ -33,7 +38,7 @@ export class GlobalStateCls<ValueType> {
   }
 
   constructor(key?: bytes | string, value?: ValueType) {
-    this.key = BytesCls.fromCompat(key).asAlgoTs()
+    this.key = key !== undefined ? BytesCls.fromCompat(key).asAlgoTs() : undefined
     this.#value = value
   }
 }
@@ -41,7 +46,11 @@ export class GlobalStateCls<ValueType> {
 export class LocalStateCls<ValueType> {
   #value: ValueType | undefined
   delete: () => void = () => {
-    this.#value = undefined
+    if (this.#value instanceof Uint64Cls) {
+      this.#value = Uint64(0) as ValueType
+    } else {
+      this.#value = undefined
+    }
   }
   get value(): ValueType {
     if (this.#value === undefined) {
@@ -60,12 +69,13 @@ export class LocalStateCls<ValueType> {
 }
 
 export class LocalStateMapCls<ValueType> {
-  #value = new Map<bytes, LocalStateCls<ValueType>>()
+  #value = new Map<string, LocalStateCls<ValueType>>()
 
   getValue(account: Account): LocalStateCls<ValueType> {
-    if (!this.#value.has(account.bytes)) {
-      this.#value.set(account.bytes, new LocalStateCls<ValueType>())
+    const accountString = uint8ArrayToHex(BytesCls.fromCompat(account.bytes).asUint8Array())
+    if (!this.#value.has(accountString)) {
+      this.#value.set(accountString, new LocalStateCls<ValueType>())
     }
-    return this.#value.get(account.bytes)!
+    return this.#value.get(accountString)!
   }
 }
