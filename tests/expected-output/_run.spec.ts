@@ -4,7 +4,7 @@ import { compile } from '../../src'
 import { SourceLocation } from '../../src/awst/source-location'
 import { buildCompileOptions } from '../../src/compile-options'
 import type { LogEvent } from '../../src/logger'
-import { logger, LogLevel } from '../../src/logger'
+import { LoggingContext, LogLevel } from '../../src/logger'
 import { defaultPuyaOptions } from '../../src/puya/options'
 import { enumFromValue, invariant } from '../../src/util'
 
@@ -27,8 +27,7 @@ import { enumFromValue, invariant } from '../../src/util'
  *
  */
 describe('Expected output', () => {
-  logger.outputToConsole = false
-
+  using logCtx = LoggingContext.create()
   const result = compile(
     buildCompileOptions({
       outputAwstJson: false,
@@ -44,7 +43,7 @@ describe('Expected output', () => {
   const paths = Object.entries(result.ast ?? {}).map(([path, ast]) => ({
     path,
     ast,
-    logs: result.logs.filter((l) => l.sourceLocation?.file === path && l.message !== 'AWST build failure. See previous errors'),
+    logs: logCtx.logEvents.filter((l) => l.sourceLocation?.file === path && l.message !== 'AWST build failure. See previous errors'),
   }))
 
   describe.each(paths)('$path', ({ logs, ast }) => {

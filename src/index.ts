@@ -5,9 +5,7 @@ import { buildAwst } from './awst_build'
 import { registerPTypes } from './awst_build/ptypes/register'
 import { typeRegistry } from './awst_build/type-registry'
 import type { CompileOptions } from './compile-options'
-import { AwstBuildFailureError } from './errors'
-import type { LogEvent } from './logger'
-import { logger } from './logger'
+import { logger, LoggingContext } from './logger'
 import type { CreateProgramResult } from './parser'
 import { createTsProgram } from './parser'
 import { invokePuya } from './puya'
@@ -46,11 +44,10 @@ export const encodingUtil = {
 }
 
 export type CompileResult = {
-  logs: LogEvent[]
   programDirectory: string
   awst?: AWST[]
   ast?: Record<string, ts.SourceFile>
-  compilationSet: CompilationSet
+  compilationSet?: CompilationSet
 }
 
 type Hooks = {
@@ -72,25 +69,28 @@ type Hooks = {
 }
 
 export function compile(options: CompileOptions, passThroughOptions: PuyaPassThroughOptions, hooks?: Partial<Hooks>): CompileResult {
+  const loggerCtx = LoggingContext.current
   registerPTypes(typeRegistry)
   const programResult = createTsProgram(options)
+  if (loggerCtx.hasErrors()) {
+    logger.critical(undefined, 'TypeScript parse failure')
+    return {
+      programDirectory: programResult.programDirectory,
+      ast: programResult.sourceFiles,
+    }
+  }
   if (hooks?.onProgramCreated?.(programResult) === false) {
     throw new Error('Compilation halted by onProgramCreated hook')
   }
-  let moduleAwst: AWST[] = []
-  let compilationSet: CompilationSet = []
-  try {
-    ;[moduleAwst, compilationSet] = buildAwst(programResult, options)
-  } catch (e) {
-    if (e instanceof AwstBuildFailureError) {
-      return {
-        programDirectory: programResult.programDirectory,
-        logs: logger.export(),
-        ast: programResult.sourceFiles,
-        compilationSet,
-      }
+  const [moduleAwst, compilationSet] = buildAwst(programResult, options)
+  if (loggerCtx.hasErrors()) {
+    logger.critical(undefined, 'AWST build failure')
+    return {
+      programDirectory: programResult.programDirectory,
+      awst: moduleAwst,
+      ast: programResult.sourceFiles,
+      compilationSet,
     }
-    throw e
   }
   if (hooks?.onAwstBuilt?.(moduleAwst, compilationSet) === false) {
     throw new Error('Compilation halted by onAwstBuilt hook')
@@ -109,7 +109,6 @@ export function compile(options: CompileOptions, passThroughOptions: PuyaPassThr
   return {
     programDirectory: programResult.programDirectory,
     awst: moduleAwst,
-    logs: logger.export(),
     ast: programResult.sourceFiles,
     compilationSet,
   }

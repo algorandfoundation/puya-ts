@@ -2,7 +2,8 @@ import { Command, Option } from 'commander'
 import { z } from 'zod'
 import { buildCompileOptions } from './compile-options'
 import { compile } from './index'
-import { logger, LogLevel } from './logger'
+import { logger, LoggingContext, LogLevel } from './logger'
+import { ConsoleLogSink } from './logger/sinks/console-log-sink'
 import type { PuyaPassThroughOptions } from './puya/options'
 import { defaultPuyaOptions, LocalsCoalescingStrategy } from './puya/options'
 
@@ -105,12 +106,11 @@ function cli() {
     )
 
     .action((a, o) => {
+      using logCtx = LoggingContext.create()
       try {
         const paths = cliArgumentsSchema.parse(a)
         const cliOptions = cliOptionsSchema.parse(o)
-        logger.configure({
-          minLogLevel: cliOptions.logLevel,
-        })
+        logger.configure([new ConsoleLogSink(cliOptions.logLevel)])
         const compileOptions = buildCompileOptions({
           paths,
           ...cliOptions,
@@ -118,7 +118,9 @@ function cli() {
         const passThroughOptions: PuyaPassThroughOptions = cliOptions
 
         if (cliOptions.isolatedFiles) {
+          let anyHasErrors = false
           for (const file of compileOptions.filePaths) {
+            using logCtx = LoggingContext.create()
             try {
               compile(
                 {
@@ -130,15 +132,14 @@ function cli() {
             } catch (e) {
               logger.critical(undefined, `Compilation failure: ${e}`)
             }
+            anyHasErrors ||= logCtx.hasErrors()
           }
-          if (logger.export().some((l) => l.level === LogLevel.Error || l.level === LogLevel.Critical)) {
+          if (anyHasErrors) {
             process.exit(-1)
           }
         } else {
-          const result = compile(compileOptions, passThroughOptions)
-          if (result.logs.some((l) => l.level === LogLevel.Error || l.level === LogLevel.Critical)) {
-            process.exit(-1)
-          }
+          compile(compileOptions, passThroughOptions)
+          logCtx.exitIfErrors()
         }
       } catch (e) {
         if (e instanceof Error) {
