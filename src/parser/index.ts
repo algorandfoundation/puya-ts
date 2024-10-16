@@ -1,7 +1,7 @@
 import ts from 'typescript'
 import { SourceLocation } from '../awst/source-location'
 import type { CompileOptions } from '../compile-options'
-import { logger } from '../logger'
+import { logger, LoggingContext } from '../logger'
 import type { DeliberateAny } from '../typescript-helpers'
 import { normalisePath } from '../util'
 import { resolveModuleNameLiterals } from './resolve-module-name-literals'
@@ -33,8 +33,6 @@ export function createTsProgram(options: CompileOptions): CreateProgramResult {
   )
   const programDirectory = program.getCurrentDirectory()
 
-  reportDiagnostics(program)
-
   const sourceFiles = Object.fromEntries(
     program
       .getSourceFiles()
@@ -49,6 +47,14 @@ export function createTsProgram(options: CompileOptions): CreateProgramResult {
         return [normalisePath(f.fileName, programDirectory), f]
       }),
   )
+
+  LoggingContext.current.sourcesByPath = Object.fromEntries(
+    Object.entries(sourceFiles).map(([path, file]) => {
+      return [path, file.getFullText().replace(/\r\n/g, '\n').split(/\n/g)]
+    }),
+  )
+
+  reportDiagnostics(program)
 
   return {
     sourceFiles,
