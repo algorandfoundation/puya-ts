@@ -4,11 +4,11 @@ import type { SourceLocation } from '../../../awst/source-location'
 import type { WType } from '../../../awst/wtypes'
 import type { PType } from '../../ptypes'
 import { numberPType, uint64PType } from '../../ptypes'
-import { BytesExpressionBuilder } from '../bytes-expression-builder'
+import { instanceEb } from '../../type-registry'
 import type { NodeBuilder } from '../index'
 import { FunctionBuilder, type InstanceBuilder } from '../index'
-import { getBigIntOrUint64Expr } from '../util'
 import { parseFunctionArgs } from '../util/arg-parsing'
+import { getBigIntOrUint64Expr } from '../util/get-bigint-or-uint64-expr'
 
 export class SliceFunctionBuilder extends FunctionBuilder {
   constructor(
@@ -29,8 +29,7 @@ export class SliceFunctionBuilder extends FunctionBuilder {
       funcName: 'slice',
       argSpec: (a) => [a.optional(uint64PType, numberPType), a.optional(uint64PType, numberPType)],
     })
-
-    return new BytesExpressionBuilder(
+    return instanceEb(
       nodeFactory.intersectionSliceExpression({
         base: this.base,
         sourceLocation: sourceLocation,
@@ -38,6 +37,7 @@ export class SliceFunctionBuilder extends FunctionBuilder {
         endIndex: stop ? getBigIntOrUint64Expr(stop) : null,
         wtype: this.resultPType.wtype,
       }),
+      this.resultPType,
     )
   }
 }
