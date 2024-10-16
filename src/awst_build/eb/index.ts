@@ -1,6 +1,7 @@
 import { awst } from '../../awst'
 import { nodeFactory } from '../../awst/node-factory'
 import type { Expression } from '../../awst/nodes'
+import { TupleItemExpression } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { CodeError, NotSupported } from '../../errors'
 import { logger } from '../../logger'
@@ -236,6 +237,9 @@ export function requireLValue(expr: awst.Expression): awst.LValue {
     awst.AppAccountStateExpression,
     awst.BoxValueExpression,
   ]
+  if (expr instanceof TupleItemExpression) {
+    throw new CodeError('Expression is not a valid assignment target - object is immutable', { sourceLocation: expr.sourceLocation })
+  }
   if (!lValueNodes.some((l) => expr instanceof l)) {
     throw new CodeError(`Expression is not a valid assignment target`, {
       sourceLocation: expr.sourceLocation,
@@ -243,7 +247,7 @@ export function requireLValue(expr: awst.Expression): awst.LValue {
   }
   if (expr instanceof awst.IndexExpression || expr instanceof awst.FieldExpression) {
     if (expr.base.wtype.immutable) {
-      throw new CodeError(`${expr.wtype} is not a valid assignment target as it is immutable`, {
+      throw new CodeError(`Expression is not a valid assignment target - object is immutable`, {
         sourceLocation: expr.sourceLocation,
       })
     }
