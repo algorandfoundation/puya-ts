@@ -1,4 +1,4 @@
-import { GlobalStateCls, LocalStateMapCls } from './impl/state'
+import { ctxMgr } from './execution-context'
 import { bytes } from './primitives'
 import { Account } from './reference'
 
@@ -9,11 +9,11 @@ export type GlobalState<ValueType> = {
   hasValue: boolean
 }
 
-type GlobalStateOptions<ValueType> = { key?: bytes | string; initialValue?: ValueType }
+export type GlobalStateOptions<ValueType> = { key?: bytes | string; initialValue?: ValueType }
 
 /** A single key in global state */
 export function GlobalState<ValueType>(options?: GlobalStateOptions<ValueType>): GlobalState<ValueType> {
-  return new GlobalStateCls(options?.key, options?.initialValue)
+  return ctxMgr.instance.state.createGlobalState(options)
 }
 
 /** A value saved in local state */
@@ -29,10 +29,5 @@ export type LocalState<ValueType> = {
 
 /** A single key in local state */
 export function LocalState<ValueType>(options?: { key?: bytes | string }): LocalState<ValueType> {
-  function localStateInternal(account: Account): LocalStateForAccount<ValueType> {
-    return localStateInternal.map.getValue(account)
-  }
-  localStateInternal.key = options?.key
-  localStateInternal.map = new LocalStateMapCls<ValueType>()
-  return localStateInternal
+  return ctxMgr.instance.state.createLocalState(options)
 }
