@@ -1,4 +1,4 @@
-import { Contract, gtxn, itxn } from '.'
+import { Contract, GlobalState, gtxn, itxn, LocalState } from '.'
 import { AbiMethodConfig, BareMethodConfig } from './arc4'
 import { OpsNamespace } from './op-types'
 import { bytes, uint64 } from './primitives'
@@ -30,6 +30,10 @@ export type ExecutionContext = {
     assetTransfer: typeof itxn.assetTransfer
     assetFreeze: typeof itxn.assetFreeze
     applicationCall: typeof itxn.applicationCall
+  }
+  state: {
+    createGlobalState: typeof GlobalState
+    createLocalState: typeof LocalState
   }
 }
 
