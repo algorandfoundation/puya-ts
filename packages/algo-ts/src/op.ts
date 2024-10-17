@@ -133,6 +133,7 @@ export const Scratch: ScratchType = createObjectProxy('Scratch')
 
 export const AcctParams = createObjectProxy('AcctParams')
 export const AppGlobal = createObjectProxy('AppGlobal')
+export const AppLocal = createObjectProxy('AppLocal')
 export const AppParams = createObjectProxy('AppParams')
 export const AssetHolding = createObjectProxy('AssetHolding')
 export const AssetParams = createObjectProxy('AssetParams')
