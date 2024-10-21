@@ -1,3 +1,4 @@
+import { ctxMgr } from './execution-context'
 import { bytes, uint64 } from './primitives'
 
 export type Box<TValue> = {
@@ -24,12 +25,11 @@ export type BoxMap<TKey, TValue> = {
 
 export type BoxRef = {
   readonly key: bytes
-
   readonly exists: boolean
   value: bytes
   get(options: { default: bytes }): bytes
-  put(value: bytes): bytes
-  splice(start: uint64, end: uint64, value: bytes): void
+  put(value: bytes): void
+  splice(start: uint64, length: uint64, value: bytes): void
   replace(start: uint64, value: bytes): void
   extract(start: uint64, length: uint64): bytes
   delete(): boolean
@@ -40,13 +40,13 @@ export type BoxRef = {
 }
 
 export function Box<TValue>(options: { key: bytes | string }): Box<TValue> {
-  throw new Error('Not implemented')
+  return ctxMgr.instance.state.Box(options)
 }
 
 export function BoxMap<TKey, TValue>(options: { keyPrefix: bytes | string }): BoxMap<TKey, TValue> {
-  throw new Error('Not implemented')
+  return ctxMgr.instance.state.BoxMap(options)
 }
 
 export function BoxRef(options: { key: bytes | string }): BoxRef {
-  throw new Error('Not implemented')
+  return ctxMgr.instance.state.BoxRef(options)
 }
