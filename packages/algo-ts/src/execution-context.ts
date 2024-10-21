@@ -1,4 +1,4 @@
-import { Contract, GlobalState, gtxn, itxn, LocalState } from '.'
+import { Box, BoxMap, BoxRef, Contract, GlobalState, gtxn, itxn, LocalState } from '.'
 import { AbiMethodConfig, BareMethodConfig } from './arc4'
 import { OpsNamespace } from './op-types'
 import { bytes, uint64 } from './primitives'
@@ -32,8 +32,11 @@ export type ExecutionContext = {
     applicationCall: typeof itxn.applicationCall
   }
   state: {
-    createGlobalState: typeof GlobalState
-    createLocalState: typeof LocalState
+    GlobalState: typeof GlobalState
+    LocalState: typeof LocalState
+    Box: typeof Box
+    BoxMap: typeof BoxMap
+    BoxRef: typeof BoxRef
   }
 }
 

@@ -13,7 +13,7 @@ export type GlobalStateOptions<ValueType> = { key?: bytes | string; initialValue
 
 /** A single key in global state */
 export function GlobalState<ValueType>(options?: GlobalStateOptions<ValueType>): GlobalState<ValueType> {
-  return ctxMgr.instance.state.createGlobalState(options)
+  return ctxMgr.instance.state.GlobalState(options)
 }
 
 /** A value saved in local state */
@@ -29,5 +29,5 @@ export type LocalState<ValueType> = {
 
 /** A single key in local state */
 export function LocalState<ValueType>(options?: { key?: bytes | string }): LocalState<ValueType> {
-  return ctxMgr.instance.state.createLocalState(options)
+  return ctxMgr.instance.state.LocalState(options)
 }
