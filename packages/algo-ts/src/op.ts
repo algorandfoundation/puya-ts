@@ -138,5 +138,6 @@ export const AppParams = createObjectProxy('AppParams')
 export const AssetHolding = createObjectProxy('AssetHolding')
 export const AssetParams = createObjectProxy('AssetParams')
 export const Block = createObjectProxy('Block')
+export const Box = createObjectProxy('Box')
 
 export { VrfVerify } from './op-types'
