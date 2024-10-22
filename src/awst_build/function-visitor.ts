@@ -275,7 +275,7 @@ export class FunctionVisitor
     })
   }
   visitEmptyStatement(node: ts.EmptyStatement): awst.Statement | awst.Statement[] {
-    throw new TodoError('EmptyStatement')
+    return nodeFactory.block({ sourceLocation: this.sourceLocation(node), comment: 'Empty statement' })
   }
   visitExpressionStatement(node: ts.ExpressionStatement): awst.Statement | awst.Statement[] {
     const expr = requireInstanceBuilder(this.accept(node.expression)).resolve()
