@@ -199,6 +199,15 @@ export const distinct = <T>(keySelector?: (item: T) => unknown) => {
   }
 }
 
+export const distinctByEquality = <T>(areEqual: (a: T, b: T) => boolean) => {
+  const set: T[] = []
+  return (item: T) => {
+    if (set.some((s) => areEqual(s, item))) return false
+    set.push(item)
+    return true
+  }
+}
+
 export function mkDirIfNotExists(dir: string) {
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true })
