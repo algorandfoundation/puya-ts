@@ -4,7 +4,7 @@ import type * as awst from '../awst/nodes'
 import type { Block } from '../awst/nodes'
 import { AssignmentExpression, Goto, ReturnStatement } from '../awst/nodes'
 import type { SourceLocation } from '../awst/source-location'
-import { AwstBuildFailureError, CodeError, InternalError, NotSupported, TodoError } from '../errors'
+import { AwstBuildFailureError, CodeError, InternalError, NotSupported } from '../errors'
 import { logger } from '../logger'
 import { codeInvariant, enumerate, instanceOfAny, invariant } from '../util'
 import type { Statements } from '../visitor/syntax-names'
@@ -22,6 +22,7 @@ import { TupleExpressionBuilder } from './eb/tuple-expression-builder'
 import { requireExpressionOfType, requireInstanceBuilder } from './eb/util'
 import type { PType } from './ptypes'
 import { FunctionPType, ObjectPType } from './ptypes'
+import { getSequenceItemType } from './ptypes/util'
 import { typeRegistry } from './type-registry'
 
 // noinspection JSUnusedGlobalSymbols
@@ -68,7 +69,7 @@ export class FunctionVisitor
     }
   }
 
-  buildAssignmentTarget(bindingName: ts.BindingName, sourceLocation: SourceLocation): InstanceBuilder {
+  visitBindingName(bindingName: ts.BindingName, sourceLocation: SourceLocation): InstanceBuilder {
     switch (bindingName.kind) {
       case ts.SyntaxKind.ObjectBindingPattern: {
         const props = Array<[string, InstanceBuilder]>()
@@ -82,7 +83,7 @@ export class FunctionVisitor
           codeInvariant(!element.dotDotDotToken, 'Spread operator is not supported', sourceLocation)
           codeInvariant(!element.initializer, 'Initializer on object binding pattern is not supported', sourceLocation)
 
-          props.push([propertyName, this.buildAssignmentTarget(element.name, sourceLocation)])
+          props.push([propertyName, this.visitBindingName(element.name, sourceLocation)])
         }
         const ptype = ObjectPType.anonymous(props.map(([name, builder]): [string, PType] => [name, builder.ptype]))
         return new ObjectLiteralExpressionBuilder(
@@ -104,7 +105,7 @@ export class FunctionVisitor
             codeInvariant(!element.propertyName, 'Property name on array binding expression is not supported', sourceLocation)
 
             if (element.dotDotDotToken) {
-              const spreadResult = this.buildAssignmentTarget(element.name, sourceLocation)
+              const spreadResult = this.visitBindingName(element.name, sourceLocation)
               if (spreadResult instanceof NativeArrayExpressionBuilder) {
                 throw new CodeError(
                   'Spread operator is not supported in assignment expressions where the resulting type is a variadic array',
@@ -116,7 +117,7 @@ export class FunctionVisitor
                 throw InternalError.shouldBeUnreachable()
               }
             } else {
-              items.push(this.buildAssignmentTarget(element.name, sourceLocation))
+              items.push(this.visitBindingName(element.name, sourceLocation))
             }
           }
         }
@@ -146,7 +147,7 @@ export class FunctionVisitor
           paramPType,
         )
 
-        assignments.push(this.handleAssignmentStatement(this.buildAssignmentTarget(p.name, sourceLocation), paramBuilder, sourceLocation))
+        assignments.push(this.handleAssignmentStatement(this.visitBindingName(p.name, sourceLocation), paramBuilder, sourceLocation))
       }
     }
 
@@ -187,7 +188,7 @@ export class FunctionVisitor
 
       const source = requireInstanceBuilder(this.accept(d.initializer))
 
-      return this.handleAssignmentStatement(this.buildAssignmentTarget(d.name, sourceLocation), source, sourceLocation)
+      return this.handleAssignmentStatement(this.visitBindingName(d.name, sourceLocation), source, sourceLocation)
     })
   }
 
@@ -238,15 +239,18 @@ export class FunctionVisitor
 
   visitForOfStatement(node: ts.ForOfStatement): awst.Statement | awst.Statement[] {
     const sourceLocation = this.sourceLocation(node)
+    const sequenceLocation = this.sourceLocation(node.expression)
+    const initializerLocation = this.sourceLocation(node.initializer)
+    const sequenceType = this.context.getPTypeForNode(node.expression)
+    const itemType = getSequenceItemType(sequenceType, sequenceLocation)
 
     let items: awst.LValue
     if (ts.isExpression(node.initializer)) {
       items = requireInstanceBuilder(this.accept(node.initializer)).resolveLValue()
     } else {
-      const initializerSource = this.sourceLocation(node.initializer)
-      codeInvariant(node.initializer.declarations.length === 1, 'For of loops can only declare a single loop variable', initializerSource)
+      codeInvariant(node.initializer.declarations.length === 1, 'For of loops can only declare a single loop variable', initializerLocation)
       const [declaration] = node.initializer.declarations
-      items = this.buildAssignmentTarget(declaration.name, initializerSource).resolveLValue()
+      items = this.buildLValue(this.visitBindingName(declaration.name, initializerLocation), itemType, initializerLocation)
     }
     using ctx = this.context.switchLoopCtx.enterLoop(node, sourceLocation)
     return nodeFactory.block(

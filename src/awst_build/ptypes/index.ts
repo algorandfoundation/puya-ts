@@ -4,7 +4,7 @@ import type { WType } from '../../awst/wtypes'
 import { uint64WType, WArray, WEnumeration, WGroupTransaction, WInnerTransaction, WInnerTransactionFields, WTuple } from '../../awst/wtypes'
 import { Constants } from '../../constants'
 import { CodeError, InternalError, NotSupported } from '../../errors'
-import { codeInvariant, distinct, sortBy, zipStrict } from '../../util'
+import { codeInvariant, distinctByEquality, sortBy, zipStrict } from '../../util'
 import { PType } from './base'
 import { transientTypeErrors } from './transient-type-errors'
 
@@ -128,7 +128,7 @@ export class BaseContractClassType extends ContractClassPType {
 
 export class UnionPType extends TransientType {
   get fullName() {
-    return this.types.map((t) => t.fullName).join(' | ')
+    return this.types.map((t) => t).join(' | ')
   }
   readonly singleton = false
   readonly types: PType[]
@@ -136,7 +136,7 @@ export class UnionPType extends TransientType {
   private constructor({ types }: { types: PType[] }) {
     let typeMessage: string
     let expressionMessage: string
-    const name = types.map((t) => t.name).join(' | ')
+    const name = types.map((t) => t).join(' | ')
     const transientType = types.find((t) => t instanceof TransientType)
     if (transientType) {
       if (transientType instanceof NativeNumericType) {
@@ -164,7 +164,7 @@ export class UnionPType extends TransientType {
     if (types.length === 0) {
       throw new InternalError('Cannot create union of zero types')
     }
-    const distinctTypes = types.filter(distinct((t) => t.fullName)).toSorted(sortBy((t) => t.fullName))
+    const distinctTypes = types.filter(distinctByEquality((a, b) => a.equals(b))).toSorted(sortBy((t) => t.fullName))
     if (distinctTypes.length === 1) {
       return distinctTypes[0]
     }
@@ -440,7 +440,7 @@ export class FunctionPType extends PType {
 }
 export class ArrayLiteralPType extends TransientType {
   get fullName() {
-    return `${this.module}::[${this.items.map((i) => i.fullName).join(', ')}]`
+    return `${this.module}::[${this.items.map((i) => i).join(', ')}]`
   }
 
   readonly items: PType[]
@@ -1047,9 +1047,11 @@ export class IterableIteratorType extends TransientType {
     return `${GlobalStateType.baseFullName}<${this.itemType.fullName}>`
   }
   static parameterise(typeArgs: PType[]): IterableIteratorType {
-    codeInvariant(typeArgs.length === 1, 'IterableIterator type expects exactly one type parameter')
+    codeInvariant(typeArgs.length >= 1 && typeArgs.length <= 3, 'IterableIterator type expects 1-3 type parameters')
+    // Currently ignoring return and next types
+    const [yieldType, _returnType, _nextType] = typeArgs
     return new IterableIteratorType({
-      itemType: typeArgs[0],
+      itemType: yieldType,
     })
   }
 
