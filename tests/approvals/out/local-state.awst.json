@@ -102,8 +102,8 @@
             "name": "p",
             "wtype": {
               "_type": "WTuple",
-              "name": "WTuple",
-              "immutable": false,
+              "name": "",
+              "immutable": true,
               "ephemeral": false,
               "scalar_type": null,
               "types": [
@@ -121,6 +121,10 @@
                   "ephemeral": false,
                   "scalar_type": 1
                 }
+              ],
+              "names": [
+                "a",
+                "b"
               ]
             },
             "source_location": {
@@ -241,7 +245,7 @@
                     },
                     "wtype": {
                       "_type": "WTuple",
-                      "name": "WTuple",
+                      "name": "",
                       "immutable": true,
                       "ephemeral": false,
                       "scalar_type": null,
@@ -260,6 +264,10 @@
                           "ephemeral": false,
                           "scalar_type": 1
                         }
+                      ],
+                      "names": [
+                        "a",
+                        "b"
                       ]
                     },
                     "items": [
@@ -312,8 +320,8 @@
                     },
                     "wtype": {
                       "_type": "WTuple",
-                      "name": "WTuple",
-                      "immutable": false,
+                      "name": "",
+                      "immutable": true,
                       "ephemeral": false,
                       "scalar_type": null,
                       "types": [
@@ -331,6 +339,10 @@
                           "ephemeral": false,
                           "scalar_type": 1
                         }
+                      ],
+                      "names": [
+                        "a",
+                        "b"
                       ]
                     },
                     "name": "p"
@@ -989,11 +1001,25 @@
         "args": [],
         "return_type": {
           "_type": "WTuple",
-          "name": "WTuple",
-          "immutable": false,
+          "name": "",
+          "immutable": true,
           "ephemeral": false,
           "scalar_type": null,
           "types": [
+            {
+              "_type": "WType",
+              "name": "uint64",
+              "immutable": true,
+              "ephemeral": false,
+              "scalar_type": 2
+            },
+            {
+              "_type": "WType",
+              "name": "uint64",
+              "immutable": true,
+              "ephemeral": false,
+              "scalar_type": 2
+            },
             {
               "_type": "WType",
               "name": "bytes",
@@ -1058,21 +1084,14 @@
               },
               "source_location": null,
               "array_size": "10"
-            },
-            {
-              "_type": "WType",
-              "name": "uint64",
-              "immutable": true,
-              "ephemeral": false,
-              "scalar_type": 2
-            },
-            {
-              "_type": "WType",
-              "name": "uint64",
-              "immutable": true,
-              "ephemeral": false,
-              "scalar_type": 2
             }
+          ],
+          "names": [
+            "localUint",
+            "localUint2",
+            "localBytes",
+            "localBytes2",
+            "localEncoded"
           ]
         },
         "body": {
@@ -1105,11 +1124,25 @@
                 },
                 "wtype": {
                   "_type": "WTuple",
-                  "name": "WTuple",
+                  "name": "",
                   "immutable": true,
                   "ephemeral": false,
                   "scalar_type": null,
                   "types": [
+                    {
+                      "_type": "WType",
+                      "name": "uint64",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 2
+                    },
+                    {
+                      "_type": "WType",
+                      "name": "uint64",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 2
+                    },
                     {
                       "_type": "WType",
                       "name": "bytes",
@@ -1174,24 +1207,137 @@
                       },
                       "source_location": null,
                       "array_size": "10"
-                    },
-                    {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true,
-                      "ephemeral": false,
-                      "scalar_type": 2
-                    },
-                    {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true,
-                      "ephemeral": false,
-                      "scalar_type": 2
                     }
+                  ],
+                  "names": [
+                    "localUint",
+                    "localUint2",
+                    "localBytes",
+                    "localBytes2",
+                    "localEncoded"
                   ]
                 },
                 "items": [
+                  {
+                    "_type": "AppAccountStateExpression",
+                    "source_location": {
+                      "file": "tests/approvals/local-state.algo.ts",
+                      "line": 24,
+                      "end_line": 24,
+                      "column": 17,
+                      "end_column": 49
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "uint64",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 2
+                    },
+                    "key": {
+                      "_type": "BytesConstant",
+                      "source_location": {
+                        "file": "tests/approvals/local-state.algo.ts",
+                        "line": 8,
+                        "end_line": 8,
+                        "column": 40,
+                        "end_column": 44
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "state_key",
+                        "immutable": true,
+                        "ephemeral": false,
+                        "scalar_type": 1
+                      },
+                      "value": "Y%u",
+                      "encoding": "utf8"
+                    },
+                    "exists_assertion_message": "check LocalState exists",
+                    "account": {
+                      "_type": "IntrinsicCall",
+                      "source_location": {
+                        "file": "tests/approvals/local-state.algo.ts",
+                        "line": 24,
+                        "end_line": 24,
+                        "column": 32,
+                        "end_column": 42
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "account",
+                        "immutable": true,
+                        "ephemeral": false,
+                        "scalar_type": 1
+                      },
+                      "op_code": "txn",
+                      "immediates": [
+                        "Sender"
+                      ],
+                      "stack_args": [],
+                      "comment": null
+                    }
+                  },
+                  {
+                    "_type": "AppAccountStateExpression",
+                    "source_location": {
+                      "file": "tests/approvals/local-state.algo.ts",
+                      "line": 25,
+                      "end_line": 25,
+                      "column": 18,
+                      "end_column": 51
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "uint64",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 2
+                    },
+                    "key": {
+                      "_type": "BytesConstant",
+                      "source_location": {
+                        "file": "tests/approvals/local-state.algo.ts",
+                        "line": 9,
+                        "end_line": 9,
+                        "column": 2,
+                        "end_column": 12
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "state_key",
+                        "immutable": true,
+                        "ephemeral": false,
+                        "scalar_type": 1
+                      },
+                      "value": "Y;R*>Y*lG)bTR",
+                      "encoding": "utf8"
+                    },
+                    "exists_assertion_message": "check LocalState exists",
+                    "account": {
+                      "_type": "IntrinsicCall",
+                      "source_location": {
+                        "file": "tests/approvals/local-state.algo.ts",
+                        "line": 25,
+                        "end_line": 25,
+                        "column": 34,
+                        "end_column": 44
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "account",
+                        "immutable": true,
+                        "ephemeral": false,
+                        "scalar_type": 1
+                      },
+                      "op_code": "txn",
+                      "immediates": [
+                        "Sender"
+                      ],
+                      "stack_args": [],
+                      "comment": null
+                    }
+                  },
                   {
                     "_type": "AppAccountStateExpression",
                     "source_location": {
@@ -1475,126 +1621,6 @@
                         "stack_args": [],
                         "comment": null
                       }
-                    }
-                  },
-                  {
-                    "_type": "AppAccountStateExpression",
-                    "source_location": {
-                      "file": "tests/approvals/local-state.algo.ts",
-                      "line": 24,
-                      "end_line": 24,
-                      "column": 17,
-                      "end_column": 49
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true,
-                      "ephemeral": false,
-                      "scalar_type": 2
-                    },
-                    "key": {
-                      "_type": "BytesConstant",
-                      "source_location": {
-                        "file": "tests/approvals/local-state.algo.ts",
-                        "line": 8,
-                        "end_line": 8,
-                        "column": 40,
-                        "end_column": 44
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "state_key",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 1
-                      },
-                      "value": "Y%u",
-                      "encoding": "utf8"
-                    },
-                    "exists_assertion_message": "check LocalState exists",
-                    "account": {
-                      "_type": "IntrinsicCall",
-                      "source_location": {
-                        "file": "tests/approvals/local-state.algo.ts",
-                        "line": 24,
-                        "end_line": 24,
-                        "column": 32,
-                        "end_column": 42
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "account",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 1
-                      },
-                      "op_code": "txn",
-                      "immediates": [
-                        "Sender"
-                      ],
-                      "stack_args": [],
-                      "comment": null
-                    }
-                  },
-                  {
-                    "_type": "AppAccountStateExpression",
-                    "source_location": {
-                      "file": "tests/approvals/local-state.algo.ts",
-                      "line": 25,
-                      "end_line": 25,
-                      "column": 18,
-                      "end_column": 51
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true,
-                      "ephemeral": false,
-                      "scalar_type": 2
-                    },
-                    "key": {
-                      "_type": "BytesConstant",
-                      "source_location": {
-                        "file": "tests/approvals/local-state.algo.ts",
-                        "line": 9,
-                        "end_line": 9,
-                        "column": 2,
-                        "end_column": 12
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "state_key",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 1
-                      },
-                      "value": "Y;R*>Y*lG)bTR",
-                      "encoding": "utf8"
-                    },
-                    "exists_assertion_message": "check LocalState exists",
-                    "account": {
-                      "_type": "IntrinsicCall",
-                      "source_location": {
-                        "file": "tests/approvals/local-state.algo.ts",
-                        "line": 25,
-                        "end_line": 25,
-                        "column": 34,
-                        "end_column": 44
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "account",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 1
-                      },
-                      "op_code": "txn",
-                      "immediates": [
-                        "Sender"
-                      ],
-                      "stack_args": [],
-                      "comment": null
                     }
                   }
                 ]

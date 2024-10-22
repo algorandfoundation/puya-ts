@@ -367,7 +367,7 @@
                             },
                             "op_code": "gtxns",
                             "immediates": [
-                              "CloseRemainderTo"
+                              "Sender"
                             ],
                             "stack_args": [
                               {
@@ -397,10 +397,10 @@
                             "_type": "IntrinsicCall",
                             "source_location": {
                               "file": "tests/approvals/assert-match.algo.ts",
-                              "line": 8,
-                              "end_line": 8,
-                              "column": 22,
-                              "end_column": 40
+                              "line": 6,
+                              "end_line": 6,
+                              "column": 12,
+                              "end_column": 22
                             },
                             "wtype": {
                               "_type": "WType",
@@ -409,9 +409,9 @@
                               "ephemeral": false,
                               "scalar_type": 1
                             },
-                            "op_code": "global",
+                            "op_code": "txn",
                             "immediates": [
-                              "ZeroAddress"
+                              "Sender"
                             ],
                             "stack_args": [],
                             "comment": null
@@ -420,7 +420,7 @@
                       },
                       "op": "and",
                       "right": {
-                        "_type": "NumericComparisonExpression",
+                        "_type": "BytesComparisonExpression",
                         "source_location": {
                           "file": "tests/approvals/assert-match.algo.ts",
                           "line": 4,
@@ -446,14 +446,14 @@
                           },
                           "wtype": {
                             "_type": "WType",
-                            "name": "uint64",
+                            "name": "account",
                             "immutable": true,
                             "ephemeral": false,
-                            "scalar_type": 2
+                            "scalar_type": 1
                           },
                           "op_code": "gtxns",
                           "immediates": [
-                            "FirstValid"
+                            "Receiver"
                           ],
                           "stack_args": [
                             {
@@ -478,31 +478,35 @@
                           ],
                           "comment": null
                         },
-                        "operator": ">",
+                        "operator": "==",
                         "rhs": {
-                          "_type": "IntegerConstant",
+                          "_type": "IntrinsicCall",
                           "source_location": {
                             "file": "tests/approvals/assert-match.algo.ts",
-                            "line": 9,
-                            "end_line": 9,
-                            "column": 31,
-                            "end_column": 32
+                            "line": 7,
+                            "end_line": 7,
+                            "column": 14,
+                            "end_column": 46
                           },
                           "wtype": {
                             "_type": "WType",
-                            "name": "uint64",
+                            "name": "account",
                             "immutable": true,
                             "ephemeral": false,
-                            "scalar_type": 2
+                            "scalar_type": 1
                           },
-                          "value": "1",
-                          "teal_alias": null
+                          "op_code": "global",
+                          "immediates": [
+                            "CurrentApplicationAddress"
+                          ],
+                          "stack_args": [],
+                          "comment": null
                         }
                       }
                     },
                     "op": "and",
                     "right": {
-                      "_type": "NumericComparisonExpression",
+                      "_type": "BytesComparisonExpression",
                       "source_location": {
                         "file": "tests/approvals/assert-match.algo.ts",
                         "line": 4,
@@ -528,14 +532,14 @@
                         },
                         "wtype": {
                           "_type": "WType",
-                          "name": "uint64",
+                          "name": "account",
                           "immutable": true,
                           "ephemeral": false,
-                          "scalar_type": 2
+                          "scalar_type": 1
                         },
                         "op_code": "gtxns",
                         "immediates": [
-                          "LastValid"
+                          "CloseRemainderTo"
                         ],
                         "stack_args": [
                           {
@@ -560,31 +564,35 @@
                         ],
                         "comment": null
                       },
-                      "operator": "<",
+                      "operator": "==",
                       "rhs": {
-                        "_type": "IntegerConstant",
+                        "_type": "IntrinsicCall",
                         "source_location": {
                           "file": "tests/approvals/assert-match.algo.ts",
-                          "line": 10,
-                          "end_line": 10,
-                          "column": 27,
-                          "end_column": 34
+                          "line": 8,
+                          "end_line": 8,
+                          "column": 22,
+                          "end_column": 40
                         },
                         "wtype": {
                           "_type": "WType",
-                          "name": "uint64",
+                          "name": "account",
                           "immutable": true,
                           "ephemeral": false,
-                          "scalar_type": 2
+                          "scalar_type": 1
                         },
-                        "value": "1099511627776",
-                        "teal_alias": null
+                        "op_code": "global",
+                        "immediates": [
+                          "ZeroAddress"
+                        ],
+                        "stack_args": [],
+                        "comment": null
                       }
                     }
                   },
                   "op": "and",
                   "right": {
-                    "_type": "BytesComparisonExpression",
+                    "_type": "NumericComparisonExpression",
                     "source_location": {
                       "file": "tests/approvals/assert-match.algo.ts",
                       "line": 4,
@@ -610,14 +618,14 @@
                       },
                       "wtype": {
                         "_type": "WType",
-                        "name": "account",
+                        "name": "uint64",
                         "immutable": true,
                         "ephemeral": false,
-                        "scalar_type": 1
+                        "scalar_type": 2
                       },
                       "op_code": "gtxns",
                       "immediates": [
-                        "Receiver"
+                        "FirstValid"
                       ],
                       "stack_args": [
                         {
@@ -642,35 +650,31 @@
                       ],
                       "comment": null
                     },
-                    "operator": "==",
+                    "operator": ">",
                     "rhs": {
-                      "_type": "IntrinsicCall",
+                      "_type": "IntegerConstant",
                       "source_location": {
                         "file": "tests/approvals/assert-match.algo.ts",
-                        "line": 7,
-                        "end_line": 7,
-                        "column": 14,
-                        "end_column": 46
+                        "line": 9,
+                        "end_line": 9,
+                        "column": 31,
+                        "end_column": 32
                       },
                       "wtype": {
                         "_type": "WType",
-                        "name": "account",
+                        "name": "uint64",
                         "immutable": true,
                         "ephemeral": false,
-                        "scalar_type": 1
+                        "scalar_type": 2
                       },
-                      "op_code": "global",
-                      "immediates": [
-                        "CurrentApplicationAddress"
-                      ],
-                      "stack_args": [],
-                      "comment": null
+                      "value": "1",
+                      "teal_alias": null
                     }
                   }
                 },
                 "op": "and",
                 "right": {
-                  "_type": "BytesComparisonExpression",
+                  "_type": "NumericComparisonExpression",
                   "source_location": {
                     "file": "tests/approvals/assert-match.algo.ts",
                     "line": 4,
@@ -696,14 +700,14 @@
                     },
                     "wtype": {
                       "_type": "WType",
-                      "name": "account",
+                      "name": "uint64",
                       "immutable": true,
                       "ephemeral": false,
-                      "scalar_type": 1
+                      "scalar_type": 2
                     },
                     "op_code": "gtxns",
                     "immediates": [
-                      "Sender"
+                      "LastValid"
                     ],
                     "stack_args": [
                       {
@@ -728,29 +732,25 @@
                     ],
                     "comment": null
                   },
-                  "operator": "==",
+                  "operator": "<",
                   "rhs": {
-                    "_type": "IntrinsicCall",
+                    "_type": "IntegerConstant",
                     "source_location": {
                       "file": "tests/approvals/assert-match.algo.ts",
-                      "line": 6,
-                      "end_line": 6,
-                      "column": 12,
-                      "end_column": 22
+                      "line": 10,
+                      "end_line": 10,
+                      "column": 27,
+                      "end_column": 34
                     },
                     "wtype": {
                       "_type": "WType",
-                      "name": "account",
+                      "name": "uint64",
                       "immutable": true,
                       "ephemeral": false,
-                      "scalar_type": 1
+                      "scalar_type": 2
                     },
-                    "op_code": "txn",
-                    "immediates": [
-                      "Sender"
-                    ],
-                    "stack_args": [],
-                    "comment": null
+                    "value": "1099511627776",
+                    "teal_alias": null
                   }
                 }
               }

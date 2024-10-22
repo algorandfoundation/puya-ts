@@ -36,7 +36,7 @@ contract ItxnDemoContract extends @algorandfoundation/algorand-typescript/base-c
   test1(): void
   {
     GlobalState["name"]: bytes = "AST1"
-    assetParams: inner_transaction_fields_acfg = create_inner_transaction(Fee=0, ConfigAssetName=GlobalState["name"], ConfigAssetDecimals=3, ConfigAssetManager=global<CurrentApplicationAddress>(), ConfigAssetReserve=global<CurrentApplicationAddress>(), ConfigAssetTotal=1000, ConfigAssetUnitName="unit")
+    assetParams: inner_transaction_fields_acfg = create_inner_transaction(Fee=0, ConfigAssetTotal=1000, ConfigAssetName=GlobalState["name"], ConfigAssetUnitName="unit", ConfigAssetDecimals=3, ConfigAssetManager=global<CurrentApplicationAddress>(), ConfigAssetReserve=global<CurrentApplicationAddress>())
     GlobalState["name"]: bytes = "AST2"
     asset1_txn: inner_transaction_acfg = submit_txn(assetParams)
     update_inner_transaction(assetParams, ConfigAssetName=GlobalState["name"])
@@ -59,9 +59,9 @@ contract ItxnDemoContract extends @algorandfoundation/algorand-typescript/base-c
   {
     if (Boolean(txn<NumAppArgs>())) {
       args: readonlytuple[bytes, bytes] = <tuple>["1", "2"]
-      createAppParams: inner_transaction_fields_appl = create_inner_transaction(Fee=0, ApplicationArgs=<tuple>[args.0, args.1], ApprovalProgram="	", ClearStateProgram="	", Note="with args param set", OnCompletion=0)
+      createAppParams: inner_transaction_fields_appl = create_inner_transaction(Fee=0, ApprovalProgram="	", ClearStateProgram="	", ApplicationArgs=<tuple>[args.0, args.1], OnCompletion=0, Note="with args param set")
     } else {
-      createAppParams: inner_transaction_fields_appl = create_inner_transaction(Fee=0, ApplicationArgs=<tuple>["3", "4", "5"], ApprovalProgram="	", ClearStateProgram="	", Note="no args param set")
+      createAppParams: inner_transaction_fields_appl = create_inner_transaction(Fee=0, ApprovalProgram="	", ClearStateProgram="	", ApplicationArgs=<tuple>["3", "4", "5"], Note="no args param set")
     }
     createAppTxn: inner_transaction_appl = submit_txn(createAppParams)
     assert(createAppTxn.ApplicationArgs[0] == "1")

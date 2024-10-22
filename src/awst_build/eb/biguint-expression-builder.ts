@@ -197,16 +197,6 @@ export class BigUintExpressionBuilder extends InstanceExpressionBuilder<Instance
     )
   }
 
-  assign(other: InstanceBuilder, sourceLocation: SourceLocation): InstanceBuilder {
-    return new BigUintExpressionBuilder(
-      nodeFactory.assignmentExpression({
-        target: this.resolveLValue(),
-        sourceLocation,
-        value: requireExpressionOfType(other, biguintPType),
-      }),
-    )
-  }
-
   toBytes(sourceLocation: SourceLocation): awst.Expression {
     return nodeFactory.reinterpretCast({ expr: this.resolve(), sourceLocation, wtype: bytesWType })
   }

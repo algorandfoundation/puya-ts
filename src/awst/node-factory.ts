@@ -198,10 +198,10 @@ const explicitNodeFactory = {
       sourceLocation,
     })
   },
-  tupleExpression(props: Omit<Props<TupleExpression>, 'wtype'>) {
+  tupleExpression(props: Omit<Props<TupleExpression>, 'wtype'> & { wtype?: WTuple }) {
     return new TupleExpression({
       ...props,
-      wtype: new WTuple({ types: props.items.map((i) => i.wtype), immutable: true }),
+      wtype: props.wtype ?? new WTuple({ types: props.items.map((i) => i.wtype), immutable: true }),
     })
   },
   methodDocumentation(props?: { description?: string | null; args?: Map<string, string>; returns?: string | null }) {

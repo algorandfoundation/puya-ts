@@ -29,10 +29,6 @@ export abstract class LiteralExpressionBuilder extends InstanceBuilder {
     this.throwInvalidExpression()
   }
 
-  assign(other: InstanceBuilder, sourceLocation: SourceLocation): InstanceBuilder {
-    this.throwInvalidExpression()
-  }
-
   binaryOp(other: InstanceBuilder, op: BuilderBinaryOp, sourceLocation: SourceLocation): InstanceBuilder {
     this.throwInvalidExpression()
   }
