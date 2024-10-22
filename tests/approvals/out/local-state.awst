@@ -14,7 +14,7 @@ contract LocalStateDemo extends @algorandfoundation/algorand-typescript/arc4/ind
   
   setState(): void
   {
-    <tuple>[a, b]: readonlytuple[uint64, bytes] = p
+    { a: a, b: b }: { a: uint64, b: bytes } = p
     LocalState[txn<Sender>()]["l1"]: uint64 = a
     LocalState[txn<Sender>()]["localUint2"]: uint64 = a
     LocalState[txn<Sender>()]["b1"]: bytes = b
@@ -22,9 +22,9 @@ contract LocalStateDemo extends @algorandfoundation/algorand-typescript/arc4/ind
     LocalState[txn<Sender>()]["localEncoded"]: arc4.static_array<arc4.uint64> = copy(c)
   }
   
-  getState(): tuple[bytes, bytes, arc4.static_array<arc4.uint64>, uint64, uint64]
+  getState(): { localUint: uint64, localUint2: uint64, localBytes: bytes, localBytes2: bytes, localEncoded: arc4.static_array<arc4.uint64> }
   {
-    return <tuple>[LocalState[txn<Sender>()]["b1"], LocalState[txn<Sender>()]["localBytes2"], copy(LocalState[txn<Sender>()]["localEncoded"]), LocalState[txn<Sender>()]["l1"], LocalState[txn<Sender>()]["localUint2"]]
+    return { localUint: LocalState[txn<Sender>()]["l1"], localUint2: LocalState[txn<Sender>()]["localUint2"], localBytes: LocalState[txn<Sender>()]["b1"], localBytes2: LocalState[txn<Sender>()]["localBytes2"], localEncoded: copy(LocalState[txn<Sender>()]["localEncoded"]) }
   }
   
   clearState(): void

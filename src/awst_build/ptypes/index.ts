@@ -4,7 +4,7 @@ import type { WType } from '../../awst/wtypes'
 import { uint64WType, WArray, WEnumeration, WGroupTransaction, WInnerTransaction, WInnerTransactionFields, WTuple } from '../../awst/wtypes'
 import { Constants } from '../../constants'
 import { CodeError, InternalError, NotSupported } from '../../errors'
-import { codeInvariant, distinct, sortBy } from '../../util'
+import { codeInvariant, distinct, sortBy, zipStrict } from '../../util'
 import { PType } from './base'
 import { transientTypeErrors } from './transient-type-errors'
 
@@ -471,6 +471,14 @@ export class ArrayLiteralPType extends TransientType {
       items: this.items,
     })
   }
+
+  equals(other: PType): boolean {
+    return (
+      other instanceof ArrayLiteralPType &&
+      this.items.length === other.items.length &&
+      zipStrict(this.items, other.items).every(([a, b]) => a.equals(b))
+    )
+  }
 }
 
 export class TuplePType extends PType {
@@ -497,14 +505,19 @@ export class TuplePType extends PType {
       immutable: this.immutable,
     })
   }
+
+  equals(other: PType): boolean {
+    return (
+      other instanceof TuplePType &&
+      this.items.length === other.items.length &&
+      zipStrict(this.items, other.items).every(([a, b]) => a.equals(b))
+    )
+  }
 }
 export class ArrayPType extends TransientType {
   readonly itemType: PType
   readonly immutable: boolean
 
-  // get name() {
-  //   return
-  // }
   get fullName() {
     return `${this.module}::Array<${this.itemType.fullName}>`
   }
@@ -527,17 +540,21 @@ export class ArrayPType extends TransientType {
       immutable: this.immutable,
     })
   }
+
+  equals(other: PType): boolean {
+    return other instanceof ArrayPType && this.immutable === other.immutable && this.itemType.equals(other.itemType)
+  }
 }
 
 export class ObjectPType extends PType {
-  #name: string
+  readonly name: string
   readonly module: string
   readonly properties: Record<string, PType>
   readonly singleton = false
 
   constructor(props: { module?: string; name?: string; properties: Record<string, PType> }) {
     super()
-    this.#name = props.name ?? ''
+    this.name = props.name ?? ''
     this.module = props.module ?? ''
     this.properties = props.properties
   }
@@ -551,21 +568,24 @@ export class ObjectPType extends PType {
 
   get wtype(): WTuple {
     const tupleTypes: WType[] = []
+    const tupleNames: string[] = []
     for (const [propName, propType] of this.orderedProperties()) {
       if (propType instanceof TransientType) {
         throw new CodeError(`Property '${propName}' of ${this.name} has an unsupported type: ${propType.typeMessage}`)
       }
       tupleTypes.push(propType.wtypeOrThrow)
+      tupleNames.push(propName)
     }
     return new WTuple({
+      name: this.name,
+      names: tupleNames,
       types: tupleTypes,
-      immutable: false,
+      immutable: true,
     })
   }
 
   orderedProperties() {
-    // TODO: Respect declaration order
-    return Object.entries(this.properties).toSorted(sortBy(([key]) => key))
+    return Object.entries(this.properties) //.toSorted(sortBy(([key]) => key))
   }
 
   getPropertyType(name: string): PType {
@@ -583,18 +603,22 @@ export class ObjectPType extends PType {
     return this.hasProperty(name) && this.properties[name].equals(type)
   }
 
-  get name(): string {
-    // TODO: Include name in identity
-    return `{${this.orderedProperties()
-      .map((p) => `${p[0]}:${p[1].name}`)
-      .join(',')}}`
+  equals(other: PType): boolean {
+    if (!(other instanceof ObjectPType)) return false
+    const thisProps = this.orderedProperties()
+    const otherProps = other.orderedProperties()
+    return (
+      this.name === other.name &&
+      thisProps.length === otherProps.length &&
+      zipStrict(this.orderedProperties(), other.orderedProperties()).every(
+        ([[left_prop, left_type], [right_prop, right_type]]) => left_prop === right_prop && left_type.equals(right_type),
+      )
+    )
   }
 
-  get fullName(): string {
-    //const alias = [this.module, this.#name].filter(Boolean).join('::')
-    // TODO: include name in identity
+  toString(): string {
     return `{${this.orderedProperties()
-      .map((p) => `${p[0]}:${p[1].fullName}`)
+      .map((p) => `${p[0]}:${p[1].name}`)
       .join(',')}}`
   }
 }

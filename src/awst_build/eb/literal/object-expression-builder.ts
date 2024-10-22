@@ -23,10 +23,11 @@ export class ObjectExpressionBuilder extends InstanceExpressionBuilder<ObjectPTy
     }
     const propertyPtype = this.ptype.getPropertyType(name)
     return instanceEb(
-      nodeFactory.tupleItemExpression({
-        index: BigInt(propertyIndex),
+      nodeFactory.fieldExpression({
+        name,
         sourceLocation,
         base: this._expr,
+        wtype: propertyPtype.wtypeOrThrow,
       }),
       propertyPtype,
     )
@@ -55,6 +56,7 @@ export class ObjectExpressionBuilder extends InstanceExpressionBuilder<ObjectPTy
           items: ptype
             .orderedProperties()
             .map(([prop, propType]) => requireExpressionOfType(base.memberAccess(prop, this.sourceLocation), propType)),
+          wtype: ptype.wtype,
         }),
         ptype,
       )

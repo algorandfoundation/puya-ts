@@ -174,16 +174,6 @@ export class UInt64ExpressionBuilder extends InstanceExpressionBuilder<InstanceT
     )
   }
 
-  assign(other: InstanceBuilder, sourceLocation: SourceLocation): InstanceBuilder {
-    return new UInt64ExpressionBuilder(
-      nodeFactory.assignmentExpression({
-        target: this.resolveLValue(),
-        sourceLocation,
-        value: requireExpressionOfType(other, uint64PType),
-      }),
-    )
-  }
-
   toBytes(sourceLocation: SourceLocation): awst.Expression {
     return intrinsicFactory.itob({ value: this.resolve(), sourceLocation })
   }
