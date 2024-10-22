@@ -5,9 +5,7 @@ import { codeInvariant } from '../../../../util'
 import { AppStorageDeclaration } from '../../../contract-data'
 import type { BoxPType, BoxRefPType } from '../../../ptypes'
 import { BoxMapPType, type ContractClassPType, type PType } from '../../../ptypes'
-import { typeRegistry } from '../../../type-registry'
-import { type InstanceBuilder, InstanceExpressionBuilder } from '../../index'
-import { requireExpressionOfType } from '../../util'
+import { InstanceExpressionBuilder } from '../../index'
 import { ValueProxy } from '../value-proxy'
 
 export abstract class BoxProxyExpressionBuilder<
@@ -39,17 +37,6 @@ export abstract class BoxProxyExpressionBuilder<
 export class BoxValueExpressionBuilder extends ValueProxy<PType> {
   constructor(boxValue: BoxValueExpression, ptype: PType) {
     super(boxValue, ptype)
-  }
-  assign(other: InstanceBuilder, sourceLocation: SourceLocation): InstanceBuilder {
-    const value = requireExpressionOfType(other, this.ptype)
-    return typeRegistry.getInstanceEb(
-      nodeFactory.assignmentExpression({
-        target: this.resolveLValue(),
-        value,
-        sourceLocation,
-      }),
-      this.ptype,
-    )
   }
 }
 

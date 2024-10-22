@@ -2,7 +2,6 @@ import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression, LValue } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { CodeError } from '../../../errors'
-import { codeInvariant } from '../../../util'
 import type { PTypeOrClass } from '../../ptypes'
 import { ObjectPType } from '../../ptypes'
 import type { InstanceBuilder } from '../index'
@@ -44,6 +43,7 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
     return nodeFactory.tupleExpression({
       items: this.ptype.orderedProperties().map(([p, propPType]) => this.memberAccess(p, this.sourceLocation).resolveLValue()),
       sourceLocation: this.sourceLocation,
+      wtype: this.ptype.wtype,
     })
   }
   memberAccess(name: string, sourceLocation: SourceLocation): InstanceBuilder {
@@ -66,15 +66,40 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
   }
 
   private toTuple(ptype: ObjectPType): Expression {
+    let base: InstanceBuilder
+    if (this.ptype.equals(ptype)) {
+      // eslint-disable-next-line @typescript-eslint/no-this-alias
+      base = this
+    } else {
+      // Resolve this object to a tuple using declared order but using the target property types.
+      // This will resolve numeric literals to algo-ts types if available
+      const tempType = new ObjectPType({
+        name: undefined,
+        properties: Object.fromEntries(this.ptype.orderedProperties().map(([p]) => [p, ptype.getPropertyType(p)] as const)),
+      })
+
+      base = new ObjectExpressionBuilder(
+        nodeFactory.tupleExpression({
+          items: tempType
+            .orderedProperties()
+            .map(([p, propType]) => requireExpressionOfType(this.memberAccess(p, this.sourceLocation), propType)),
+          sourceLocation: this.sourceLocation,
+          wtype: tempType.wtype,
+        }),
+        tempType,
+      ).singleEvaluation()
+    }
+    // Reorder properties to the target type
     return nodeFactory.tupleExpression({
       items: ptype
         .orderedProperties()
-        .map(([p, propPType]) => requireExpressionOfType(this.memberAccess(p, this.sourceLocation), propPType)),
+        .map(([p, propPType]) => requireExpressionOfType(base.memberAccess(p, this.sourceLocation), propPType)),
       sourceLocation: this.sourceLocation,
+      wtype: ptype.wtype,
     })
   }
 
-  resolvableToPType(ptype: PTypeOrClass): boolean {
+  resolvableToPType(ptype: PTypeOrClass): ptype is ObjectPType {
     if (!(ptype instanceof ObjectPType)) return false
     for (const [prop, propPType] of ptype.orderedProperties()) {
       if (!this.hasProperty(prop)) return false
@@ -85,32 +110,8 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
   }
 
   resolveToPType(ptype: PTypeOrClass): InstanceBuilder {
-    codeInvariant(ptype instanceof ObjectPType, `Object literal cannot be resolved to type ${ptype}`, this.sourceLocation)
+    if (!this.resolvableToPType(ptype))
+      throw new CodeError(`${this.typeDescription} cannot be resolved to ${ptype}`, { sourceLocation: this.sourceLocation })
     return new ObjectExpressionBuilder(this.toTuple(ptype), ptype)
-  }
-
-  assign(other: InstanceBuilder, sourceLocation: SourceLocation): InstanceBuilder {
-    const sourceType = other.ptype
-    codeInvariant(sourceType instanceof ObjectPType, 'Assignment source must be an object type')
-    const source = other.resolve()
-
-    const targets: LValue[] = []
-    for (const [sourceProp, sourcePropType] of sourceType.orderedProperties()) {
-      if (this.hasProperty(sourceProp)) {
-        targets.push(this.memberAccess(sourceProp, sourceLocation).resolveLValue())
-      } else {
-        targets.push(
-          nodeFactory.varExpression({ name: this.generateDiscardedVarName(), sourceLocation, wtype: sourcePropType.wtypeOrThrow }),
-        )
-      }
-    }
-    return new ObjectExpressionBuilder(
-      nodeFactory.assignmentExpression({
-        target: nodeFactory.tupleExpression({ items: targets, sourceLocation }),
-        value: source,
-        sourceLocation,
-      }),
-      sourceType,
-    )
   }
 }

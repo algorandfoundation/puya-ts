@@ -29,7 +29,7 @@ export class WType {
   readonly scalarType: AVMType | null
 
   equals(other: WType): boolean {
-    return other.name === this.name
+    return other instanceof this.constructor && other.name === this.name
   }
 
   toString(): string {
@@ -132,18 +132,37 @@ export class WStructType extends WType {
 
 export class WTuple extends WType {
   types: WType[]
-  constructor(props: { types: WType[]; immutable?: boolean }) {
+  names: string[] | undefined
+  constructor(props: { names?: string[]; types: WType[]; immutable?: boolean; name?: string }) {
     super({
-      name: 'WTuple',
+      name: props.name ?? 'tuple',
       scalarType: null,
       immutable: props.immutable ?? true,
     })
     invariant(props.types.length, 'Tuple length cannot be zero')
     this.types = props.types
+    if (props.names) {
+      invariant(props.names.length === props.types.length, 'If names is provided, length must match types')
+      this.names = props.names
+    }
+  }
+
+  equals(other: WType): boolean {
+    if (other instanceof WTuple) {
+      return (
+        this.name === other.name &&
+        this.types.every((t, i) => t.equals(other.types[i])) &&
+        (this.names?.every((n, i) => n === other.names?.[i]) ?? this.names === other.names)
+      )
+    }
+    return false
   }
 
   toString(): string {
-    return `${this.immutable ? 'readonly' : ''}tuple[${this.types.join(', ')}]`
+    if (this.names) {
+      return `${this.name ?? ''}{ ${this.names.map((n, i) => `${n}: ${this.types[i]}`).join(', ')} }`
+    }
+    return `${this.immutable ? 'readonly' : ''}${this.name ?? ''}[${this.types.join(', ')}]`
   }
 }
 export class WArray extends WType {

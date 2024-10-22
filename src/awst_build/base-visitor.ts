@@ -4,7 +4,7 @@ import type { Expression, LValue, Statement } from '../awst/nodes'
 import type { SourceLocation } from '../awst/source-location'
 import { CodeError, NotSupported, TodoError } from '../errors'
 import { logger } from '../logger'
-import { codeInvariant, enumerate, invariant } from '../util'
+import { codeInvariant, enumerate, invariant, sortBy } from '../util'
 import type { Expressions } from '../visitor/syntax-names'
 import {
   AugmentedAssignmentBinaryOp,
@@ -530,7 +530,12 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
     if (sourceType instanceof ObjectPType) {
       // Recursively narrow object properties
       codeInvariant(targetType instanceof ObjectPType, errorMessage)
+      const targetPropertyOrder = targetType
+        .orderedProperties()
+        .reduce((acc, [prop], index) => acc.set(prop, index), new Map<string, number>())
       return new ObjectPType({
+        name: targetType.name,
+        module: targetType.module,
         properties: Object.fromEntries(
           sourceType
             .orderedProperties()
@@ -539,7 +544,8 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
               prop in targetType.properties
                 ? this.buildAssignmentExpressionType(targetType.getPropertyType(prop), propType, sourceLocation)
                 : propType,
-            ]),
+            ])
+            .toSorted(sortBy(([prop]) => targetPropertyOrder.get(prop) ?? Number.MAX_SAFE_INTEGER)),
         ),
       })
     }
@@ -585,7 +591,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
             )
           }
         }
-        return nodeFactory.tupleExpression({ items: targets, sourceLocation })
+        return nodeFactory.tupleExpression({ items: targets, sourceLocation, wtype: assignmentType.wtype })
       }
     }
     if (target.ptype.equals(assignmentType)) {
