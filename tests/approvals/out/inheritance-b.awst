@@ -16,11 +16,14 @@ contract ConcreteSimpleContract extends tests/approvals/inheritance-a.algo.ts::S
   }
   
 }
-contract ConcreteArc4Contract extends @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract, @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract
+contract ConcreteArc4Contract extends tests/approvals/inheritance-a.algo.ts::Arc4Contract, @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract, @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract
 {
+  globals {
+    ["someState"]: uint64
+  }
   constructor(): void
   {
-    void
+    super.constructor()
   }
   
 }

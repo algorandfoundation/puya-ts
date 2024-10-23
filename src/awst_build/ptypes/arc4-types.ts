@@ -1,8 +1,17 @@
 import type { SourceLocation } from '../../awst/source-location'
-import type { ARC4Type } from '../../awst/wtypes'
-import { ARC4DynamicArray, ARC4StaticArray, ARC4UIntN } from '../../awst/wtypes'
+import type { ARC4WType } from '../../awst/wtypes'
+import {
+  arc4BooleanWType,
+  arc4ByteAliasWType,
+  ARC4DynamicArrayWType,
+  ARC4StaticArrayWType,
+  arc4StringAliasWType,
+  ARC4StructWType,
+  ARC4TupleWType,
+  ARC4UIntNWType,
+} from '../../awst/wtypes'
 import { Constants } from '../../constants'
-import { codeInvariant } from '../../util'
+import { codeInvariant, zipStrict } from '../../util'
 import { PType } from './base'
 import { LibFunctionType, NumericLiteralPType } from './index'
 
@@ -11,7 +20,103 @@ export const UintNConstructor = new LibFunctionType({
   module: Constants.arc4EncodedTypesModuleName,
 })
 export abstract class ARC4EncodedType extends PType {
-  abstract get wtype(): ARC4Type
+  abstract readonly wtype: ARC4WType
+}
+
+export class ARC4InstanceType extends ARC4EncodedType {
+  readonly wtype: ARC4WType
+  readonly name: string
+  readonly module = Constants.arc4ModuleName
+  readonly singleton = false
+  constructor({ wtype, name }: { wtype: ARC4WType; name: string }) {
+    super()
+    this.wtype = wtype
+    this.name = name
+  }
+}
+
+export const ARC4BooleanType = new ARC4InstanceType({
+  name: 'ARC4Boolean',
+  wtype: arc4BooleanWType,
+})
+
+export const ARC4StringType = new ARC4InstanceType({
+  name: 'ARC4String',
+  wtype: arc4StringAliasWType,
+})
+
+export class ARC4StructType extends ARC4EncodedType {
+  readonly name: string
+  readonly module: string
+  readonly singleton = false
+  readonly fields: Record<string, ARC4EncodedType>
+  readonly sourceLocation: SourceLocation | undefined
+  constructor({
+    name,
+    module,
+    fields,
+    sourceLocation,
+  }: {
+    name: string
+    module: string
+    fields: Record<string, ARC4EncodedType>
+    sourceLocation?: SourceLocation
+  }) {
+    super()
+    this.name = name
+    this.module = module
+    this.fields = fields
+    this.sourceLocation = sourceLocation
+  }
+
+  get wtype(): ARC4StructWType {
+    return new ARC4StructWType({
+      name: this.name,
+      fields: Object.fromEntries(Object.entries(this.fields).map(([f, t]) => [f, t.wtype])),
+      sourceLocation: this.sourceLocation,
+    })
+  }
+
+  equals(other: PType): boolean {
+    if (!(other instanceof ARC4StructType)) return false
+    const thisProps = Object.entries(this.fields)
+    const otherProps = Object.entries(other.fields)
+    return (
+      this.name === other.name &&
+      thisProps.length === otherProps.length &&
+      zipStrict(thisProps, otherProps).every(
+        ([[left_prop, left_type], [right_prop, right_type]]) => left_prop === right_prop && left_type.equals(right_type),
+      )
+    )
+  }
+}
+
+export class ARC4TupleType extends ARC4EncodedType {
+  readonly name = 'Tuple'
+  readonly module = Constants.arc4ModuleName
+  readonly singleton = false
+  readonly types: ARC4EncodedType[]
+  readonly sourceLocation: SourceLocation | undefined
+  constructor({ types, sourceLocation }: { types: ARC4EncodedType[]; sourceLocation?: SourceLocation }) {
+    super()
+    this.types = types
+    this.sourceLocation = sourceLocation
+  }
+
+  get wtype(): ARC4TupleWType {
+    return new ARC4TupleWType({
+      types: this.types.map((t) => t.wtype),
+      sourceLocation: this.sourceLocation,
+    })
+  }
+
+  equals(other: PType): boolean {
+    return (
+      other instanceof ARC4TupleType &&
+      this.types.length === other.types.length &&
+      zipStrict(this.types, other.types).every(([a, b]) => a.equals(b))
+    )
+  }
 }
 
 export class UintNType extends ARC4EncodedType {
@@ -21,15 +126,14 @@ export class UintNType extends ARC4EncodedType {
   readonly name: string
   readonly singleton = false
 
-  get wtype(): ARC4UIntN {
-    return new ARC4UIntN({ n: this.n })
-  }
+  readonly wtype: ARC4UIntNWType
 
-  constructor({ n }: { n: bigint }) {
+  constructor({ n, wtype }: { n: bigint; wtype?: ARC4UIntNWType }) {
     super()
     codeInvariant(n >= 8n && n <= 512n && n % 8n === 0n, 'n must be between 8 and 512, and a multiple of 8')
     this.n = n
     this.name = `UIntN<${n}>`
+    this.wtype = wtype ?? new ARC4UIntNWType({ n: this.n })
   }
 
   static parameterise(typeArgs: PType[]): UintNType {
@@ -48,6 +152,8 @@ export class UintNType extends ARC4EncodedType {
   }
 }
 
+export const arc4ByteAlias = new UintNType({ n: 8n, wtype: arc4ByteAliasWType })
+
 export const DynamicArrayConstructor = new LibFunctionType({
   name: 'DynamicArray',
   module: Constants.arc4EncodedTypesModuleName,
@@ -60,8 +166,8 @@ export class DynamicArrayType extends ARC4EncodedType {
   readonly singleton = false
   readonly sourceLocation: SourceLocation | undefined
 
-  get wtype(): ARC4DynamicArray {
-    return new ARC4DynamicArray({ elementType: this.elementType.wtype, sourceLocation: this.sourceLocation })
+  get wtype(): ARC4DynamicArrayWType {
+    return new ARC4DynamicArrayWType({ elementType: this.elementType.wtype, sourceLocation: this.sourceLocation })
   }
 
   constructor({ elementType, sourceLocation }: { elementType: ARC4EncodedType; sourceLocation?: SourceLocation }) {
@@ -98,8 +204,8 @@ export class StaticArrayType extends ARC4EncodedType {
   readonly name: string
   readonly singleton = false
   readonly sourceLocation: SourceLocation | undefined
-  get wtype(): ARC4StaticArray {
-    return new ARC4StaticArray({ elementType: this.elementType.wtype, arraySize: this.arraySize })
+  get wtype(): ARC4StaticArrayWType {
+    return new ARC4StaticArrayWType({ elementType: this.elementType.wtype, arraySize: this.arraySize })
   }
 
   constructor({

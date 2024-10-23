@@ -9,11 +9,13 @@ export enum AVMType {
 }
 
 export class WType {
+  readonly puyaTypeName: string
   constructor(props: { name: string; immutable?: boolean; scalarType: AVMType | null; ephemeral?: boolean }) {
     this.name = props.name
     this.immutable = props.immutable ?? true
     this.scalarType = props.scalarType
     this.ephemeral = props.ephemeral ?? false
+    this.puyaTypeName = this.constructor.name
   }
 
   readonly name: string
@@ -92,7 +94,8 @@ export const applicationWType = new WType({
   scalarType: AVMType.uint64,
 })
 
-export abstract class ARC4Type extends WType {
+export class ARC4WType extends WType {
+  readonly puyaTypeName: string = 'ARC4Type'
   readonly decodeType: WType | null
   readonly arc4Name: string
   readonly otherEncodeableTypes: WType[]
@@ -104,16 +107,16 @@ export abstract class ARC4Type extends WType {
   }: {
     decodeType: WType | null
     arc4Name: string
-    otherEncodeableTypes: WType[]
+    otherEncodeableTypes?: WType[]
     name: string
     immutable?: boolean
-    scalarType: AVMType | null
+    scalarType?: AVMType | null
     ephemeral?: boolean
   }) {
-    super(rest)
+    super({ ...rest, scalarType: rest.scalarType ?? AVMType.bytes })
     this.arc4Name = arc4Name
     this.decodeType = decodeType
-    this.otherEncodeableTypes = otherEncodeableTypes
+    this.otherEncodeableTypes = otherEncodeableTypes ?? []
   }
 }
 
@@ -219,49 +222,148 @@ export class WInnerTransactionFields extends WType {
   }
 }
 
-export class ARC4UIntN extends ARC4Type {
+export class ARC4UIntNWType extends ARC4WType {
+  readonly puyaTypeName = 'ARC4UIntN'
   readonly n: bigint
-  constructor({ n }: { n: bigint }) {
+  constructor({ n, arc4Name }: { n: bigint; arc4Name?: string }) {
     super({
-      name: `arc4.uint${n}`,
+      name: arc4Name ? `arc4.${arc4Name}` : `arc4.uint${n}`,
       scalarType: AVMType.bytes,
       decodeType: n <= 64 ? uint64WType : biguintWType,
-      arc4Name: `uint${n}`,
+      arc4Name: arc4Name ?? `uint${n}`,
       otherEncodeableTypes: [uint64WType, biguintWType, boolWType],
     })
     this.n = n
   }
 }
-export class ARC4UFixedNxM extends ARC4Type {}
 
-export class ARC4Struct extends ARC4Type {}
+export class ARC4UFixedNxM extends ARC4WType {}
 
-export abstract class ARC4Array extends ARC4Type {
-  readonly elementType: ARC4Type
-  protected constructor(props: { arc4Name: string; otherEncodeableTypes: WType[]; name: string; elementType: ARC4Type }) {
-    super({ decodeType: null, scalarType: AVMType.bytes, immutable: false, ...props })
+export class ARC4StructWType extends ARC4WType {
+  readonly puyaTypeName = 'ARC4Struct'
+
+  fields: Record<string, ARC4WType>
+  sourceLocation: SourceLocation | null
+
+  constructor({ fields, sourceLocation, name }: { name: string; fields: Record<string, ARC4WType>; sourceLocation?: SourceLocation }) {
+    super({
+      arc4Name: Object.values(fields)
+        .map((f) => f.arc4Name)
+        .join(','),
+      name,
+      decodeType: null,
+    })
+    this.sourceLocation = sourceLocation ?? null
+    this.fields = fields
+  }
+}
+export class ARC4TupleWType extends ARC4WType {
+  readonly puyaTypeName = 'ARC4Tuple'
+  readonly types: ARC4WType[]
+  readonly sourceLocation: SourceLocation | null
+
+  constructor({ types, sourceLocation }: { types: ARC4WType[]; sourceLocation?: SourceLocation }) {
+    const typesStr = types.map((t) => t.arc4Name).join(',')
+    super({
+      name: `arc4.tuple<${typesStr}>`,
+      arc4Name: `(${typesStr})`,
+      decodeType: null,
+    })
+    this.sourceLocation = sourceLocation ?? null
+    this.types = types
+  }
+}
+
+export abstract class ARC4ArrayWType extends ARC4WType {
+  readonly elementType: ARC4WType
+  protected constructor(props: {
+    arc4Name: string
+    otherEncodeableTypes: WType[]
+    name: string
+    elementType: ARC4WType
+    decodeType?: WType
+    immutable?: boolean
+  }) {
+    super({ ...props, scalarType: AVMType.bytes, immutable: props.immutable ?? false, decodeType: props.decodeType ?? null })
     this.elementType = props.elementType
   }
 }
 
-export class ARC4DynamicArray extends ARC4Array {
+export class ARC4DynamicArrayWType extends ARC4ArrayWType {
+  readonly puyaTypeName = 'ARC4DynamicArray'
+
   readonly sourceLocation: SourceLocation | null
-  constructor({ elementType, sourceLocation }: { elementType: ARC4Type; sourceLocation?: SourceLocation }) {
-    super({ elementType, name: `arc4.dynamic_array<${elementType.name}>`, arc4Name: `${elementType.arc4Name}[]`, otherEncodeableTypes: [] })
+  constructor({
+    elementType,
+    sourceLocation,
+    arc4Name,
+    decodeType,
+    immutable,
+  }: {
+    elementType: ARC4WType
+    sourceLocation?: SourceLocation
+    arc4Name?: string
+    decodeType?: WType
+    immutable?: boolean
+  }) {
+    super({
+      elementType,
+      name: `arc4.dynamic_array<${elementType.name}>`,
+      arc4Name: arc4Name ?? `${elementType.arc4Name}[]`,
+      otherEncodeableTypes: [],
+      decodeType,
+      immutable,
+    })
     this.sourceLocation = sourceLocation ?? null
   }
 }
-export class ARC4StaticArray extends ARC4Array {
+export class ARC4StaticArrayWType extends ARC4ArrayWType {
+  readonly puyaTypeName = 'ARC4StaticArray'
   readonly sourceLocation: SourceLocation | null
   readonly arraySize: bigint
-  constructor({ elementType, sourceLocation, arraySize }: { arraySize: bigint; elementType: ARC4Type; sourceLocation?: SourceLocation }) {
+  constructor({
+    elementType,
+    sourceLocation,
+    arraySize,
+    arc4Name,
+    decodeType,
+    immutable,
+  }: {
+    arraySize: bigint
+    elementType: ARC4WType
+    sourceLocation?: SourceLocation
+    arc4Name?: string
+    decodeType?: WType
+    immutable?: boolean
+  }) {
     super({
       elementType,
       name: `arc4.static_array<${elementType.name}>`,
-      arc4Name: `${elementType.arc4Name}[${arraySize}]`,
+      arc4Name: arc4Name ?? `${elementType.arc4Name}[${arraySize}]`,
+      decodeType,
       otherEncodeableTypes: [],
+      immutable,
     })
     this.sourceLocation = sourceLocation ?? null
     this.arraySize = arraySize
   }
 }
+
+export const arc4ByteAliasWType = new ARC4UIntNWType({
+  n: 8n,
+  arc4Name: 'byte',
+})
+
+export const arc4BooleanWType = new ARC4WType({
+  name: 'arc4.bool',
+  arc4Name: 'bool',
+  immutable: true,
+  decodeType: boolWType,
+})
+
+export const arc4StringAliasWType = new ARC4DynamicArrayWType({
+  arc4Name: 'string',
+  elementType: arc4ByteAliasWType,
+  decodeType: stringWType,
+  immutable: true,
+})

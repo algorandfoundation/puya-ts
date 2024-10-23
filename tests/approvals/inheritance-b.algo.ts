@@ -1,6 +1,6 @@
 import type { uint64 } from '@algorandfoundation/algorand-typescript'
-import { Contract, op, Txn } from '@algorandfoundation/algorand-typescript'
-import { SimpleContract } from './inheritance-a.algo'
+import { op, Txn } from '@algorandfoundation/algorand-typescript'
+import { Arc4Contract, SimpleContract } from './inheritance-a.algo'
 
 export class ConcreteSimpleContract extends SimpleContract {
   public approvalProgram(): uint64 {
@@ -10,4 +10,4 @@ export class ConcreteSimpleContract extends SimpleContract {
   }
 }
 
-export class ConcreteArc4Contract extends Contract {}
+export class ConcreteArc4Contract extends Arc4Contract {}

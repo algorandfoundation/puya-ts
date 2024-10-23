@@ -604,4 +604,52 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
       },
     )
   }
+
+  protected parseMemberModifiers(node: { modifiers?: readonly ts.ModifierLike[] }) {
+    let isPublic = true
+    let isStatic = false
+    if (node.modifiers)
+      for (const m of node.modifiers) {
+        switch (m.kind) {
+          case ts.SyntaxKind.StaticKeyword:
+            isStatic = true
+            continue
+          case ts.SyntaxKind.PublicKeyword:
+            isPublic = true
+            continue
+          case ts.SyntaxKind.ProtectedKeyword:
+            isPublic = false
+            continue
+          case ts.SyntaxKind.PrivateKeyword:
+            isPublic = false
+            continue
+          case ts.SyntaxKind.AbstractKeyword:
+            // TODO: Do we need to do anything here?
+            continue
+          case ts.SyntaxKind.AccessorKeyword:
+            logger.error(this.sourceLocation(m), 'properties are not supported')
+            continue
+          case ts.SyntaxKind.AsyncKeyword:
+            logger.error(this.sourceLocation(m), 'async keyword is not supported')
+            continue
+          case ts.SyntaxKind.DeclareKeyword:
+            logger.error(this.sourceLocation(m), 'declare keyword is not supported')
+            continue
+          case ts.SyntaxKind.ExportKeyword:
+          case ts.SyntaxKind.ConstKeyword:
+          case ts.SyntaxKind.DefaultKeyword:
+          case ts.SyntaxKind.ReadonlyKeyword:
+          case ts.SyntaxKind.OverrideKeyword:
+          case ts.SyntaxKind.InKeyword:
+          case ts.SyntaxKind.OutKeyword:
+          case ts.SyntaxKind.Decorator:
+            // Ignore for now
+            continue
+        }
+      }
+    return {
+      isStatic,
+      isPublic,
+    }
+  }
 }

@@ -1,6 +1,5 @@
 import ts from 'typescript'
-import type { DefaultArgumentSource } from '../awst/models'
-import { ARC4ABIMethodConfig, ARC4BareMethodConfig, ARC4CreateOption, ContractReference, OnCompletionAction } from '../awst/models'
+import { ContractReference } from '../awst/models'
 import { nodeFactory } from '../awst/node-factory'
 import type * as awst from '../awst/nodes'
 import type { ContractMethod } from '../awst/nodes'
@@ -18,14 +17,12 @@ import { BaseVisitor } from './base-visitor'
 import { ConstructorVisitor } from './constructor-visitor'
 import type { AwstBuildContext } from './context/awst-build-context'
 import { ContractMethodVisitor } from './contract-method-visitor'
-import type { Arc4AbiDecoratorData, DecoratorData } from './decorator-visitor'
-import { DecoratorVisitor } from './decorator-visitor'
 import { ContractSuperBuilder } from './eb/contract-builder'
 import { BoxProxyExpressionBuilder } from './eb/storage/box'
 import { GlobalStateFunctionResultBuilder } from './eb/storage/global-state'
 import { LocalStateFunctionResultBuilder } from './eb/storage/local-state'
-import { isValidLiteralForPType, requireInstanceBuilder } from './eb/util'
-import { ContractClassPType, GlobalStateType } from './ptypes'
+import { requireInstanceBuilder } from './eb/util'
+import { ContractClassPType } from './ptypes'
 
 export class ContractVisitor extends BaseVisitor implements Visitor<ClassElements, void> {
   private _ctor?: ContractMethod
@@ -149,207 +146,17 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
     throw new NotSupported('Index signatures')
   }
 
-  private buildDefaultArgument({
-    methodName,
-    parameterName,
-    config,
-    decoratorLocation,
-  }: {
-    methodName: string
-    parameterName: string
-    config: Arc4AbiDecoratorData['defaultArguments'][string]
-    decoratorLocation: SourceLocation
-  }): DefaultArgumentSource {
-    const [, paramType] = this._contractPType.methods[methodName].parameters.find(([p]) => p === parameterName) ?? [undefined, undefined]
-    codeInvariant(
-      paramType,
-      `Default argument specification '${parameterName}' does not match any parameters on the target method`,
-      decoratorLocation,
-    )
-    if (config.type === 'constant') {
-      codeInvariant(isValidLiteralForPType(config.value, paramType), `Literal cannot be converted to type ${paramType}`, decoratorLocation)
-
-      return {
-        source: 'constant',
-        value: config.value,
-      }
-    }
-    const methodType = this._contractPType.methods[config.name]
-    if (methodType) {
-      codeInvariant(
-        methodType.returnType.equals(paramType),
-        `Default argument specification for '${parameterName}' does not match parameter type`,
-        decoratorLocation,
-      )
-      return {
-        source: 'abi-method',
-        memberName: config.name,
-      }
-    }
-    const propertyType = this._contractPType.properties[config.name]
-    if (propertyType instanceof GlobalStateType) {
-      codeInvariant(
-        propertyType.contentType.equals(paramType),
-        `Default argument specification for '${parameterName}' does not match parameter type`,
-        decoratorLocation,
-      )
-      return {
-        source: 'global-state',
-        memberName: config.name,
-      }
-    }
-    throw new TodoError('Unsupported default argument config')
-  }
-
-  private buildArc4Config({
-    decorator,
-    methodName,
-    modifiers: { isPublic, isStatic },
-    methodLocation,
-  }: {
-    methodName: string
-    decorator: DecoratorData | undefined
-    modifiers: { isPublic: boolean; isStatic: boolean }
-    methodLocation: SourceLocation
-  }): awst.ContractMethod['arc4MethodConfig'] {
-    if (decorator && [Constants.arc4BareDecoratorName, Constants.arc4AbiDecoratorName].includes(decorator.type)) {
-      if (!isPublic) {
-        logger.error(methodLocation, 'Private or protected methods cannot be exposed as an abi method')
-      }
-      if (isStatic) {
-        logger.error(methodLocation, 'Static methods cannot be exposed as an abi method')
-      }
-    }
-
-    if (decorator?.type === 'arc4.baremethod') {
-      return new ARC4BareMethodConfig({
-        sourceLocation: decorator.sourceLocation,
-        allowedCompletionTypes: decorator.ocas,
-        create: decorator.create,
-      })
-    } else if (decorator?.type === 'arc4.abimethod') {
-      return new ARC4ABIMethodConfig({
-        sourceLocation: decorator.sourceLocation,
-        allowedCompletionTypes: decorator.ocas,
-        create: decorator.create,
-        name: decorator.nameOverride ?? methodName,
-        readonly: decorator.readonly,
-        defaultArgs: Object.fromEntries(
-          Object.entries(decorator.defaultArguments).map(([parameterName, argConfig]) => [
-            parameterName,
-            this.buildDefaultArgument({
-              methodName,
-              parameterName,
-              config: argConfig,
-              decoratorLocation: decorator.sourceLocation,
-            }),
-          ]),
-        ),
-        structs: {}, // TODO
-      })
-    } else if (isPublic && this._contractPType.isARC4) {
-      return new ARC4ABIMethodConfig({
-        sourceLocation: methodLocation,
-        allowedCompletionTypes: [OnCompletionAction.NoOp],
-
-        create: ARC4CreateOption.Disallow,
-        name: methodName,
-        readonly: false,
-        defaultArgs: {},
-        structs: {}, // TODO
-      })
-    }
-    return null
-  }
-
-  private parseMemberModifiers(node: { modifiers?: readonly ts.ModifierLike[] }) {
-    let isPublic = true
-    let isStatic = false
-    if (node.modifiers)
-      for (const m of node.modifiers) {
-        switch (m.kind) {
-          case ts.SyntaxKind.StaticKeyword:
-            isStatic = true
-            continue
-          case ts.SyntaxKind.PublicKeyword:
-            isPublic = true
-            continue
-          case ts.SyntaxKind.ProtectedKeyword:
-            isPublic = false
-            continue
-          case ts.SyntaxKind.PrivateKeyword:
-            isPublic = false
-            continue
-          case ts.SyntaxKind.AbstractKeyword:
-            // TODO: Do we need to do anything here?
-            continue
-          case ts.SyntaxKind.AccessorKeyword:
-            logger.error(this.sourceLocation(m), 'properties are not supported')
-            continue
-          case ts.SyntaxKind.AsyncKeyword:
-            logger.error(this.sourceLocation(m), 'async keyword is not supported')
-            continue
-          case ts.SyntaxKind.DeclareKeyword:
-            logger.error(this.sourceLocation(m), 'declare keyword is not supported')
-            continue
-          case ts.SyntaxKind.ExportKeyword:
-          case ts.SyntaxKind.ConstKeyword:
-          case ts.SyntaxKind.DefaultKeyword:
-          case ts.SyntaxKind.ReadonlyKeyword:
-          case ts.SyntaxKind.OverrideKeyword:
-          case ts.SyntaxKind.InKeyword:
-          case ts.SyntaxKind.OutKeyword:
-          case ts.SyntaxKind.Decorator:
-            // Ignore for now
-            continue
-        }
-      }
-    return {
-      isStatic,
-      isPublic,
-    }
-  }
-
   visitMethodDeclaration(node: ts.MethodDeclaration): void {
-    const sourceLocation = this.sourceLocation(node)
-    const methodName = this.textVisitor.accept(node.name)
-
-    const decorators = (node.modifiers ?? []).flatMap((modifier) => {
-      if (!ts.isDecorator(modifier)) return []
-
-      return DecoratorVisitor.buildDecoratorData(this.context, modifier)
-    })
-
-    const modifiers = this.parseMemberModifiers(node)
-
-    if (decorators.length > 1) {
-      logger.error(
-        sourceLocation,
-        'Only one decorator is allowed per method. Multiple on complete actions can be provided in a single decorator',
-      )
-    }
-    const cref = ContractReference.fromPType(this._contractPType)
-    switch (methodName) {
+    const contractMethod = ContractMethodVisitor.buildContractMethod(this.context, node, this._contractPType)
+    switch (contractMethod.memberName) {
       case Constants.approvalProgramMethodName:
-        if (decorators.length) logger.error(sourceLocation, `${Constants.approvalProgramMethodName} should not have a decorator`)
-        this._approvalProgram = ContractMethodVisitor.buildContractMethod(this.context, node, { cref })
+        this._approvalProgram = contractMethod
         break
       case Constants.clearStateProgramMethodName:
-        if (decorators.length) logger.error(sourceLocation, `${Constants.clearStateProgramMethodName} should not have a decorator`)
-        this._clearStateProgram = ContractMethodVisitor.buildContractMethod(this.context, node, { cref })
+        this._clearStateProgram = contractMethod
         break
       default:
-        this._subroutines.push(
-          ContractMethodVisitor.buildContractMethod(this.context, node, {
-            cref,
-            arc4MethodConfig: this.buildArc4Config({
-              decorator: decorators[0],
-              methodName,
-              modifiers,
-              methodLocation: sourceLocation,
-            }),
-          }),
-        )
+        this._subroutines.push(contractMethod)
     }
   }
   visitPropertyDeclaration(node: ts.PropertyDeclaration): void {
