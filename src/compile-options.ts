@@ -45,6 +45,7 @@ export const buildCompileOptions = ({
     if (p.endsWith('.algo.ts')) {
       if (fs.existsSync(p)) {
         const actualPath = normalisePath(p, workingDirectory)
+
         filePaths.push({
           matchedInput: p,
           sourceFile: actualPath,
@@ -75,10 +76,21 @@ export const buildCompileOptions = ({
   }
 
   return {
-    filePaths,
+    filePaths: filePaths.map(replaceOutDirTokens),
     ...rest,
     getFileFromSource(sourceFile: string): AlgoFile | undefined {
-      return filePaths.find((p) => p.sourceFile === sourceFile)
+      return this.filePaths.find((p) => p.sourceFile === sourceFile)
     },
+  }
+}
+
+function replaceOutDirTokens(algoFile: AlgoFile): AlgoFile {
+  const replacements = {
+    name: upath.basename(algoFile.sourceFile).replace('.algo.ts', ''),
+  }
+
+  return {
+    ...algoFile,
+    outDir: algoFile.outDir.replaceAll('[name]', replacements.name),
   }
 }
