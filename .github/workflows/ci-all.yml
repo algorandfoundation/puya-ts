@@ -15,8 +15,8 @@ jobs:
       post-build-script: |
         cd dist
         set +e # Continue on error
-        thisVersion=$(npm view . version)
-        diffText=$(npm diff --diff=. --diff=@algorandfoundation/algorand-typescript@$thisVersion)
+        thisVersion=$(npm view ./ version)
+        diffText=$(npm diff --diff=./ --diff=@algorandfoundation/algorand-typescript@$thisVersion)
         diffExitCode=$?
         set -e # Exit on error
         [ $diffExitCode -ne 0 ] && (echo "$thisVersion has not been published yet"; exit 0;) || echo "$thisVersion already published, checking diff against local build"
