@@ -610,7 +610,7 @@ export class ObjectPType extends PType {
     return (
       this.name === other.name &&
       thisProps.length === otherProps.length &&
-      zipStrict(this.orderedProperties(), other.orderedProperties()).every(
+      zipStrict(thisProps, otherProps).every(
         ([[left_prop, left_type], [right_prop, right_type]]) => left_prop === right_prop && left_type.equals(right_type),
       )
     )
