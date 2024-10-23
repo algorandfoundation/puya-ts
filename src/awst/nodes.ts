@@ -250,7 +250,7 @@ export class ARC4Encode extends Expression {
     this.wtype = props.wtype
   }
   value: Expression
-  declare wtype: wtypes.ARC4Type
+  declare wtype: wtypes.ARC4WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitARC4Encode(this)
   }
@@ -560,7 +560,7 @@ export class NewArray extends Expression {
     this.wtype = props.wtype
     this.values = props.values
   }
-  declare wtype: wtypes.WArray | wtypes.ARC4Array
+  declare wtype: wtypes.WArray | wtypes.ARC4ArrayWType
   values: Array<Expression>
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitNewArray(this)
@@ -1081,7 +1081,7 @@ export class NewStruct extends Expression {
     this.wtype = props.wtype
     this.values = props.values
   }
-  declare wtype: wtypes.WStructType | wtypes.ARC4Struct
+  declare wtype: wtypes.WStructType | wtypes.ARC4StructWType
   values: Map<string, Expression>
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitNewStruct(this)

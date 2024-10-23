@@ -218,3 +218,7 @@ export const zipStrict = <T1, T2>(array1: T1[], array2: T2[]): [T1, T2][] => {
   invariant(array1.length === array2.length, 'Array lengths must match')
   return array1.map((t1, idx) => [t1, array2[idx]])
 }
+
+export function isIn<TSubject, TItem extends TSubject>(subject: TSubject, items: TItem[]): subject is TItem {
+  return items.some((i) => i === subject)
+}

@@ -455,11 +455,12 @@
       "line": 13,
       "end_line": 13,
       "column": 0,
-      "end_column": 53
+      "end_column": 57
     },
     "id": "tests/approvals/inheritance-b.algo.ts::ConcreteArc4Contract",
     "name": "ConcreteArc4Contract",
     "bases": [
+      "tests/approvals/inheritance-a.algo.ts::Arc4Contract",
       "@algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract",
       "@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract"
     ],
@@ -470,7 +471,7 @@
         "line": 13,
         "end_line": 13,
         "column": 0,
-        "end_column": 53
+        "end_column": 57
       },
       "args": [],
       "return_type": {
@@ -487,7 +488,7 @@
           "line": 13,
           "end_line": 13,
           "column": 0,
-          "end_column": 53
+          "end_column": 57
         },
         "body": [
           {
@@ -497,16 +498,16 @@
               "line": 13,
               "end_line": 13,
               "column": 0,
-              "end_column": 53
+              "end_column": 57
             },
             "expr": {
-              "_type": "VoidConstant",
+              "_type": "SubroutineCallExpression",
               "source_location": {
                 "file": "tests/approvals/inheritance-b.algo.ts",
                 "line": 13,
                 "end_line": 13,
                 "column": 0,
-                "end_column": 53
+                "end_column": 57
               },
               "wtype": {
                 "_type": "WType",
@@ -514,7 +515,12 @@
                 "immutable": true,
                 "ephemeral": false,
                 "scalar_type": null
-              }
+              },
+              "target": {
+                "_type": "InstanceSuperMethodTarget",
+                "member_name": "constructor"
+              },
+              "args": []
             }
           }
         ],
@@ -536,7 +542,48 @@
     "approval_program": null,
     "clear_program": null,
     "subroutines": [],
-    "app_state": {},
+    "app_state": {
+      "someState": {
+        "_type": "AppStorageDefinition",
+        "source_location": {
+          "file": "tests/approvals/inheritance-a.algo.ts",
+          "line": 12,
+          "end_line": 12,
+          "column": 2,
+          "end_column": 11
+        },
+        "member_name": "someState",
+        "kind": 1,
+        "storage_wtype": {
+          "_type": "WType",
+          "name": "uint64",
+          "immutable": true,
+          "ephemeral": false,
+          "scalar_type": 2
+        },
+        "key_wtype": null,
+        "key": {
+          "_type": "BytesConstant",
+          "source_location": {
+            "file": "tests/approvals/inheritance-a.algo.ts",
+            "line": 12,
+            "end_line": 12,
+            "column": 2,
+            "end_column": 11
+          },
+          "wtype": {
+            "_type": "WType",
+            "name": "state_key",
+            "immutable": true,
+            "ephemeral": false,
+            "scalar_type": 1
+          },
+          "value": "b8l^BQ*>c;Wd",
+          "encoding": "utf8"
+        },
+        "description": null
+      }
+    },
     "reserved_scratch_space": [],
     "state_totals": {
       "globalBytes": null,
