@@ -1,19 +1,19 @@
 contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
     program approval:
         subroutine tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract.approvalProgram() -> bool:
-            block@0: // L27
+            block@0: // L26
                 let app_id%0#0: uint64 = (txn ApplicationID)
                 goto app_id%0#0 ? block@2 : block@1
-            block@1: // on_create_L26
+            block@1: // on_create_L25
                 tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract.constructor()
                 goto block@2
-            block@2: // entrypoint_L26
+            block@2: // entrypoint_L25
                 tests/approvals/arc4-types.algo.ts::test(1u, 2b, 0x04)
                 tests/approvals/arc4-types.algo.ts::test_arrays(0x41)
                 return 1u
-
+        
         subroutine tests/approvals/arc4-types.algo.ts::test(n: uint64, b: biguint, c: bytes) -> void:
-            block@0: // L6
+            block@0: // L5
                 let x#0: bytes = 0x04
                 let x2#0: bytes = 0xff
                 let y#0: bytes = 0x00
@@ -27,10 +27,10 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
                 let a#0: bytes = (b| b#0 b_zeros%0#0)
                 let reinterpret_biguint%0#0: biguint = a#0
                 let a_native#0: biguint = reinterpret_biguint%0#0
-                return
-
+                return 
+        
         subroutine tests/approvals/arc4-types.algo.ts::test_arrays(n: bytes) -> void:
-            block@0: // L18
+            block@0: // L17
                 let result%0#0: bytes = (concat 0x n#0)
                 let result%1#0: bytes = (concat result%0#0 n#0)
                 let result%2#0: bytes = (concat result%1#0 n#0)
@@ -45,12 +45,12 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
                 let result%7#0: bytes = (concat result%6#0 n#0)
                 let array_data%2#0: bytes = (concat 0x result%7#0)
                 let myStatic2#0: bytes = array_data%2#0
-                return
-
+                return 
+        
         subroutine tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract.constructor() -> void:
-            block@0: // L26
-                return
-
+            block@0: // L25
+                return 
+    
     program clear-state:
         subroutine @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.clearStateProgram() -> bool:
             block@0: // L1
