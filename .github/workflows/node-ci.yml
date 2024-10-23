@@ -47,6 +47,9 @@ on:
         required: false
         type: string
         default: npm run build
+      post-build-script:
+        required: false
+        type: string
       run-build:
         required: false
         type: boolean
@@ -177,6 +180,10 @@ jobs:
         # CDK infrastructure build calls npm ci on /infrastructure/build, which may fail without NODE_AUTH_TOKEN
         env:
           NODE_AUTH_TOKEN: ${{ secrets.npm-auth-token || secrets.GITHUB_TOKEN }}
+
+      - name: Post build
+        if: ${{ inputs.post-build-script }}
+        run: ${{ inputs.post-build-script }}
 
       - name: Publish artifact
         if: ${{ inputs.upload-artifact-name }}
