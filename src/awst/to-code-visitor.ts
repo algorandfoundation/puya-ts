@@ -135,6 +135,11 @@ export class ToCodeVisitor
     return `checked_maybe(${expression.expr.accept(this)}, comment=${expression.comment})`
   }
   visitTupleExpression(expression: nodes.TupleExpression): string {
+    const names = expression.wtype.names
+    if (names) {
+      return `{ ${expression.items.map((item, i) => `${names[i]}: ${item.accept(this)}`).join(', ')} }`
+    }
+
     return `<tuple>[${expression.items.map((i) => i.accept(this)).join(', ')}]`
   }
   visitTupleItemExpression(expression: nodes.TupleItemExpression): string {
@@ -151,7 +156,7 @@ export class ToCodeVisitor
     return `submit_txn(${expression.itxns.map((i) => i.accept(this)).join(', ')})`
   }
   visitFieldExpression(expression: nodes.FieldExpression): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    return `${expression.base.accept(this)}.${expression.name}`
   }
   visitIndexExpression(expression: nodes.IndexExpression): string {
     return `${expression.base.accept(this)}[${expression.index.accept(this)}]`

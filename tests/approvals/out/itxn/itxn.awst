@@ -1,0 +1,72 @@
+contract ItxnDemoContract extends @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract
+{
+  globals {
+    ["name"]: bytes
+  }
+  constructor(): void
+  {
+    void
+    GlobalState["name"]: bytes = 0x
+  }
+  
+  approvalProgram(): bool
+  {
+    if (Boolean(txn<NumAppArgs>())) {
+      switch (txnas<ApplicationArgs>(0)) {
+        case "test1":
+          #switch₁ᶜ₀:
+          this.test1()
+          goto #switch₁ᵇ
+        case "test2":
+          #switch₁ᶜ₁:
+          this.test2()
+          goto #switch₁ᵇ
+        case "test3":
+          #switch₁ᶜ₂:
+          goto #switch₁ᶜ₃
+        case "test4":
+          #switch₁ᶜ₃:
+          goto #switch₁ᵇ
+      }
+      #switch₁ᵇ:
+    }
+    return True
+  }
+  
+  test1(): void
+  {
+    GlobalState["name"]: bytes = "AST1"
+    assetParams: inner_transaction_fields_acfg = create_inner_transaction(Fee=0, ConfigAssetTotal=1000, ConfigAssetName=GlobalState["name"], ConfigAssetUnitName="unit", ConfigAssetDecimals=3, ConfigAssetManager=global<CurrentApplicationAddress>(), ConfigAssetReserve=global<CurrentApplicationAddress>())
+    GlobalState["name"]: bytes = "AST2"
+    asset1_txn: inner_transaction_acfg = submit_txn(assetParams)
+    update_inner_transaction(assetParams, ConfigAssetName=GlobalState["name"])
+    asset2_txn: inner_transaction_acfg = submit_txn(assetParams)
+    assert(asset1_txn.ConfigAssetName == "AST1")
+    assert(asset2_txn.ConfigAssetName == "AST2")
+    assert(checked_maybe(asset_params_get<AssetName>(asset1_txn.CreatedAssetID), comment=asset exists) == "AST1")
+    assert(checked_maybe(asset_params_get<AssetName>(asset2_txn.CreatedAssetID), comment=asset exists) == "AST2")
+    appCreateParams: inner_transaction_fields_appl = create_inner_transaction(Fee=0, ApprovalProgram=0x098101, ClearStateProgram=0x098101)
+    update_inner_transaction(assetParams, ConfigAssetName="AST3")
+    <tuple>[appCreateTxn, asset3_txn]: readonlytuple[inner_transaction_appl, inner_transaction_acfg] = submit_txn(appCreateParams, assetParams)
+    assert(Boolean(appCreateTxn.ApplicationID))
+    assert(asset3_txn.ConfigAssetName == "AST3")
+    update_inner_transaction(appCreateParams, Note="3rd")
+    update_inner_transaction(assetParams, Note="3rd")
+    submit_txn(appCreateParams, assetParams)
+  }
+  
+  test2(): void
+  {
+    if (Boolean(txn<NumAppArgs>())) {
+      args: readonlytuple[bytes, bytes] = <tuple>["1", "2"]
+      createAppParams: inner_transaction_fields_appl = create_inner_transaction(Fee=0, ApprovalProgram="	", ClearStateProgram="	", ApplicationArgs=<tuple>[args.0, args.1], OnCompletion=0, Note="with args param set")
+    } else {
+      createAppParams: inner_transaction_fields_appl = create_inner_transaction(Fee=0, ApprovalProgram="	", ClearStateProgram="	", ApplicationArgs=<tuple>["3", "4", "5"], Note="no args param set")
+    }
+    createAppTxn: inner_transaction_appl = submit_txn(createAppParams)
+    assert(createAppTxn.ApplicationArgs[0] == "1")
+    assert(createAppTxn.ApplicationArgs[1] == "2")
+    assert(createAppTxn.Note == "with args param set")
+  }
+  
+}

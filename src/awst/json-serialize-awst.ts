@@ -7,6 +7,7 @@ import { buildBase85Encoder } from '../util/base-85'
 import { ARC4ABIMethodConfig, ContractReference, LogicSigReference } from './models'
 import type { RootNode } from './nodes'
 import { SourceLocation } from './source-location'
+import { WType } from './wtypes'
 
 export class SnakeCaseSerializer<T> {
   constructor(private readonly spaces = 2) {}
@@ -72,6 +73,13 @@ export class AwstSerializer extends SnakeCaseSerializer<RootNode[]> {
       return {
         ...(super.serializerFunction(key, value) as object),
         file: filePath,
+      }
+    }
+    if (value instanceof WType) {
+      return {
+        _type: value.puyaTypeName,
+        ...(super.serializerFunction(key, value) as object),
+        puya_type_name: undefined,
       }
     }
     if (value instanceof ARC4ABIMethodConfig) {

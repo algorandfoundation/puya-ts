@@ -4,7 +4,7 @@ import type { Expression, LValue, Statement } from '../awst/nodes'
 import type { SourceLocation } from '../awst/source-location'
 import { CodeError, NotSupported, TodoError } from '../errors'
 import { logger } from '../logger'
-import { codeInvariant, enumerate, invariant } from '../util'
+import { codeInvariant, enumerate, invariant, sortBy } from '../util'
 import type { Expressions } from '../visitor/syntax-names'
 import {
   AugmentedAssignmentBinaryOp,
@@ -530,7 +530,12 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
     if (sourceType instanceof ObjectPType) {
       // Recursively narrow object properties
       codeInvariant(targetType instanceof ObjectPType, errorMessage)
+      const targetPropertyOrder = targetType
+        .orderedProperties()
+        .reduce((acc, [prop], index) => acc.set(prop, index), new Map<string, number>())
       return new ObjectPType({
+        name: targetType.name,
+        module: targetType.module,
         properties: Object.fromEntries(
           sourceType
             .orderedProperties()
@@ -539,7 +544,8 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
               prop in targetType.properties
                 ? this.buildAssignmentExpressionType(targetType.getPropertyType(prop), propType, sourceLocation)
                 : propType,
-            ]),
+            ])
+            .toSorted(sortBy(([prop]) => targetPropertyOrder.get(prop) ?? Number.MAX_SAFE_INTEGER)),
         ),
       })
     }
@@ -585,7 +591,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
             )
           }
         }
-        return nodeFactory.tupleExpression({ items: targets, sourceLocation })
+        return nodeFactory.tupleExpression({ items: targets, sourceLocation, wtype: assignmentType.wtype })
       }
     }
     if (target.ptype.equals(assignmentType)) {
@@ -597,5 +603,53 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
         sourceLocation,
       },
     )
+  }
+
+  protected parseMemberModifiers(node: { modifiers?: readonly ts.ModifierLike[] }) {
+    let isPublic = true
+    let isStatic = false
+    if (node.modifiers)
+      for (const m of node.modifiers) {
+        switch (m.kind) {
+          case ts.SyntaxKind.StaticKeyword:
+            isStatic = true
+            continue
+          case ts.SyntaxKind.PublicKeyword:
+            isPublic = true
+            continue
+          case ts.SyntaxKind.ProtectedKeyword:
+            isPublic = false
+            continue
+          case ts.SyntaxKind.PrivateKeyword:
+            isPublic = false
+            continue
+          case ts.SyntaxKind.AbstractKeyword:
+            // TODO: Do we need to do anything here?
+            continue
+          case ts.SyntaxKind.AccessorKeyword:
+            logger.error(this.sourceLocation(m), 'properties are not supported')
+            continue
+          case ts.SyntaxKind.AsyncKeyword:
+            logger.error(this.sourceLocation(m), 'async keyword is not supported')
+            continue
+          case ts.SyntaxKind.DeclareKeyword:
+            logger.error(this.sourceLocation(m), 'declare keyword is not supported')
+            continue
+          case ts.SyntaxKind.ExportKeyword:
+          case ts.SyntaxKind.ConstKeyword:
+          case ts.SyntaxKind.DefaultKeyword:
+          case ts.SyntaxKind.ReadonlyKeyword:
+          case ts.SyntaxKind.OverrideKeyword:
+          case ts.SyntaxKind.InKeyword:
+          case ts.SyntaxKind.OutKeyword:
+          case ts.SyntaxKind.Decorator:
+            // Ignore for now
+            continue
+        }
+      }
+    return {
+      isStatic,
+      isPublic,
+    }
   }
 }
