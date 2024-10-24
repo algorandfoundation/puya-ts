@@ -33,7 +33,6 @@ const BOX_BYTE_MIN_BALANCE: uint64 = 400
 // The min balance increase for each asset opted into
 const ASSET_MIN_BALANCE: uint64 = 100000
 
-// TODO: ObjectPType should hopefully respect this ordering of properties
 type VotingPreconditions = {
   is_voting_open: uint64
   is_allowed_to_vote: uint64
