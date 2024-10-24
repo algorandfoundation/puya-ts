@@ -1,5 +1,5 @@
 import ts from 'typescript'
-import { ContractReference } from '../awst/models'
+import { ARC4BareMethodConfig, ARC4CreateOption, ContractReference, OnCompletionAction } from '../awst/models'
 import { nodeFactory } from '../awst/node-factory'
 import type * as awst from '../awst/nodes'
 import type { ContractMethod } from '../awst/nodes'
@@ -9,7 +9,7 @@ import { voidWType } from '../awst/wtypes'
 import { Constants } from '../constants'
 import { AwstBuildFailureError, NotSupported, TodoError } from '../errors'
 import { logger } from '../logger'
-import { codeInvariant, invariant } from '../util'
+import { codeInvariant, invariant, isIn } from '../util'
 import type { ClassElements } from '../visitor/syntax-names'
 import type { Visitor } from '../visitor/visitor'
 import { accept } from '../visitor/visitor'
@@ -56,6 +56,25 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
     for (const member of classDec.members) {
       if (!ts.isConstructorDeclaration(member) && !ts.isPropertyDeclaration(member)) {
         this.acceptAndIgnoreBuildErrors(member)
+      }
+    }
+    const hasCreateMethod = this._subroutines.some((s) =>
+      isIn(s.arc4MethodConfig?.create, [ARC4CreateOption.Require, ARC4CreateOption.Allow]),
+    )
+    const hasBareNoopMethod = this._subroutines.some(
+      (s) => s.arc4MethodConfig?.isBare && isIn(OnCompletionAction.NoOp, s.arc4MethodConfig.allowedCompletionTypes),
+    )
+    if (!isAbstract && !hasCreateMethod) {
+      if (hasBareNoopMethod) {
+        logger.error(
+          sourceLocation,
+          `Non-abstract ARC4 contract has no methods which can be called to create the contract. ` +
+            `An implicit one could not be inserted as there is already a bare method handling the NoOp on completion action. ` +
+            `In order to allow creating the contract specify { onCreate: 'allow' } or { onCreate: 'require' } in an @abimethod or @baremethod decorator above the chosen method.`,
+        )
+      } else {
+        // TODO: This should check base classes
+        this._subroutines.push(this.makeDefaultCreate(sourceLocation))
       }
     }
     const cref = ContractReference.fromPType(this._contractPType)
@@ -115,6 +134,27 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
         }),
         ...this._propertyInitialization,
       ),
+    })
+  }
+
+  private makeDefaultCreate(sourceLocation: SourceLocation) {
+    return nodeFactory.contractMethod({
+      memberName: '__algots__.defaultCreate',
+      cref: ContractReference.fromPType(this._contractPType),
+      args: [],
+      arc4MethodConfig: new ARC4BareMethodConfig({
+        allowedCompletionTypes: [OnCompletionAction.NoOp],
+        create: ARC4CreateOption.Require,
+        sourceLocation,
+      }),
+      synthetic: true,
+      returnType: voidWType,
+      inheritable: false,
+      documentation: nodeFactory.methodDocumentation(),
+      sourceLocation,
+      body: nodeFactory.block({
+        sourceLocation,
+      }),
     })
   }
 
