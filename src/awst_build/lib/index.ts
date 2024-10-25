@@ -5,9 +5,10 @@ import type { AWST } from '../../awst/nodes'
 import { SourceLocation } from '../../awst/source-location'
 import { boolWType } from '../../awst/wtypes'
 import { Constants } from '../../constants'
+import type { AwstBuildContext } from '../context/awst-build-context'
 import { arc4BaseContractType, baseContractType } from '../ptypes'
 
-export function buildLibAwst(): AWST[] {
+export function buildLibAwst(context: AwstBuildContext): AWST[] {
   const sourceLocationArc4 = new SourceLocation({
     file: Constants.arc4ModuleName,
     line: 1,
@@ -79,6 +80,7 @@ export function buildLibAwst(): AWST[] {
       ),
     }),
   })
+  context.addToCompilationSet(baseContractCref, baseContract, false)
   const contract = nodeFactory.contractFragment({
     id: contractCref,
     name: arc4BaseContractType.name,
@@ -112,6 +114,7 @@ export function buildLibAwst(): AWST[] {
     }),
     clearProgram: null,
   })
+  context.addToCompilationSet(contractCref, contract, false)
 
   return [baseContract, contract]
 }

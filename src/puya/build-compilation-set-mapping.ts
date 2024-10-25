@@ -13,7 +13,7 @@ export function buildCompilationSetMapping({
   inputPaths: AlgoFile[]
   compilationSet: CompilationSet
 }): CompilationSetMapping {
-  const setIds = new Set(compilationSet.map((s) => s.id))
+  const setIds = new Set(compilationSet.compilationOutputSet.map((s) => s.id))
 
   return awst.reduce((acc, cur) => {
     if (setIds.has(cur.id.toString())) {

@@ -58,25 +58,47 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
         this.acceptAndIgnoreBuildErrors(member)
       }
     }
-    const hasCreateMethod = this._subroutines.some((s) =>
-      isIn(s.arc4MethodConfig?.create, [ARC4CreateOption.Require, ARC4CreateOption.Allow]),
-    )
-    const hasBareNoopMethod = this._subroutines.some(
-      (s) => s.arc4MethodConfig?.isBare && isIn(OnCompletionAction.NoOp, s.arc4MethodConfig.allowedCompletionTypes),
-    )
-    if (!isAbstract && !hasCreateMethod) {
-      if (hasBareNoopMethod) {
-        logger.error(
-          sourceLocation,
-          `Non-abstract ARC4 contract has no methods which can be called to create the contract. ` +
-            `An implicit one could not be inserted as there is already a bare method handling the NoOp on completion action. ` +
-            `In order to allow creating the contract specify { onCreate: 'allow' } or { onCreate: 'require' } in an @abimethod or @baremethod decorator above the chosen method.`,
+    const baseContracts = this.getBaseContracts(contractPtype)
+
+    if (this._contractPType.isARC4) {
+      const hasCreateMethod = this._subroutines.some((s) =>
+        isIn(s.arc4MethodConfig?.create, [ARC4CreateOption.Require, ARC4CreateOption.Allow]),
+      )
+      const baseHasCreateMethod = baseContracts.some((b) => {
+        const c = this.context.compilationSet.get(b)?.contract
+        if (!c) {
+          logger.error(sourceLocation, `Cannot find compilation data for base contract ${b}`)
+          return false
+        }
+        return c.subroutines.some((s) => isIn(s.arc4MethodConfig?.create, [ARC4CreateOption.Require, ARC4CreateOption.Allow]))
+      })
+      const hasBareNoopMethod = this._subroutines.some(
+        (s) => s.arc4MethodConfig?.isBare && isIn(OnCompletionAction.NoOp, s.arc4MethodConfig.allowedCompletionTypes),
+      )
+      const baseHasNoopMethod = baseContracts.some((b) => {
+        const c = this.context.compilationSet.get(b)?.contract
+        if (!c) {
+          logger.error(sourceLocation, `Cannot find compilation data for base contract ${b}`)
+          return false
+        }
+        return c.subroutines.some(
+          (s) => s.arc4MethodConfig?.isBare && isIn(OnCompletionAction.NoOp, s.arc4MethodConfig.allowedCompletionTypes),
         )
-      } else {
-        // TODO: This should check base classes
-        this._subroutines.push(this.makeDefaultCreate(sourceLocation))
+      })
+      if (!isAbstract && !hasCreateMethod && !baseHasCreateMethod) {
+        if (hasBareNoopMethod || baseHasNoopMethod) {
+          logger.error(
+            sourceLocation,
+            `Non-abstract ARC4 contract has no methods which can be called to create the contract. ` +
+              `An implicit one could not be inserted as there is already a bare method handling the NoOp on completion action. ` +
+              `In order to allow creating the contract specify { onCreate: 'allow' } or { onCreate: 'require' } in an @abimethod or @baremethod decorator above the chosen method.`,
+          )
+        } else {
+          this._subroutines.push(this.makeDefaultCreate(sourceLocation))
+        }
       }
     }
+
     const cref = ContractReference.fromPType(this._contractPType)
     this.result = new ContractFragment({
       name: this._className,
@@ -86,7 +108,7 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
       docstring: null,
       approvalProgram: this._approvalProgram,
       clearProgram: this._clearStateProgram,
-      bases: this.getBaseContracts(contractPtype),
+      bases: baseContracts,
       id: cref,
       reservedScratchSpace: new Set(),
       sourceLocation: sourceLocation,
@@ -97,9 +119,7 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
         localUints: null,
       },
     })
-    if (!isAbstract) {
-      this.context.addToCompilationSet(cref)
-    }
+    this.context.addToCompilationSet(cref, this.result, !isAbstract)
   }
 
   private acceptAndIgnoreBuildErrors(node: ts.ClassElement) {

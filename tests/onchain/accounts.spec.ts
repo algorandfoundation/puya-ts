@@ -2,9 +2,9 @@ import { describe } from 'vitest'
 import { createTestFixture } from './util/test-fixture'
 
 describe('accounts', () => {
-  const test = createTestFixture('tests/approvals/accounts.algo.ts')
+  const test = createTestFixture('tests/approvals/accounts.algo.ts', { AccountsContract: {} })
 
-  test('returns account data', async ({ appClient, expect, assetFactory, testAccount }) => {
+  test('returns account data', async ({ appClientAccountsContract: appClient, expect, assetFactory, testAccount }) => {
     const asset = await assetFactory({ assetName: 'Asset 1', sender: testAccount.addr, total: 1n })
 
     const result = await appClient.send.call({ method: 'getAccountInfo', args: [testAccount.addr, asset] })

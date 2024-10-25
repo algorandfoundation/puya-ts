@@ -107,10 +107,21 @@ contract tests/approvals/named-types.algo.ts::MyContract:
             block@6: // switch_case_default_L21
                 goto block@7
             block@7: // switch_case_next_L21
-                goto block@9
+                goto block@12
             block@8: // bare_routing_L21
-                goto block@9
-            block@9: // after_if_else_L21
+                let tmp%23#0: uint64 = (txn OnCompletion)
+                switch tmp%23#0 {0u => block@9, * => block@10}
+            block@9: // __algots__.defaultCreate_L21
+                let tmp%24#0: uint64 = (txn ApplicationID)
+                let tmp%25#0: bool = (== tmp%24#0 0u)
+                (assert tmp%25#0) // is creating
+                tests/approvals/named-types.algo.ts::MyContract.__algots__.defaultCreate()
+                return 1u
+            block@10: // switch_case_default_L21
+                goto block@11
+            block@11: // switch_case_next_L21
+                goto block@12
+            block@12: // after_if_else_L21
                 return 0u
         
         subroutine tests/approvals/named-types.algo.ts::MyContract.getXY() -> <uint64, uint64>:
@@ -131,6 +142,10 @@ contract tests/approvals/named-types.algo.ts::MyContract:
                 let (b.y#0: uint64, b.x#0: uint64) = tests/approvals/named-types.algo.ts::MyContract.getYX()
                 let (c.x#0: uint64, c.y#0: uint64) = tests/approvals/named-types.algo.ts::MyContract.getAnon()
                 return a.x#0 a.y#0 b.y#0 b.x#0 c.x#0 c.y#0
+        
+        subroutine tests/approvals/named-types.algo.ts::MyContract.__algots__.defaultCreate() -> void:
+            block@0: // L21
+                return 
         
         subroutine tests/approvals/named-types.algo.ts::MyContract.constructor() -> void:
             block@0: // L21
