@@ -5,44 +5,26 @@ import type { AppFactory, AppFactoryDeployParams } from '@algorandfoundation/alg
 import type { AppSpec } from '@algorandfoundation/algokit-utils/types/app-spec'
 import type { AssetCreateParams } from '@algorandfoundation/algokit-utils/types/composer'
 import type { AlgorandFixture } from '@algorandfoundation/algokit-utils/types/testing'
+import type { Use } from '@vitest/runner/types'
 import fs from 'fs'
+import type { ExpectStatic } from 'vitest'
 import { test } from 'vitest'
 import { compile } from '../../../src'
 import { buildCompileOptions } from '../../../src/compile-options'
 import { LoggingContext, LogLevel } from '../../../src/logger'
 import { defaultPuyaOptions } from '../../../src/puya/options'
+import type { DeliberateAny } from '../../../src/typescript-helpers'
 import { generateTempDir } from '../../../src/util/generate-temp-file'
 
-export function createTestFixture(path: string, defaultDeployParams?: AppFactoryDeployParams) {
-  const _localnet = algorandFixture({
-    testAccountFunding: microAlgos(100_000_000_000),
-  })
-
-  return test.extend<{
-    appFactory: AppFactory
-    appClient: AppClient
+const algorandTestFixture = (localnetFixture: AlgorandFixture) =>
+  test.extend<{
     localnet: AlgorandFixture
-    testAccount: typeof _localnet.context.testAccount
+    testAccount: AlgorandFixture['context']['testAccount']
     assetFactory: (assetCreateParams: AssetCreateParams) => Promise<bigint>
   }>({
     localnet: async ({ expect }, use) => {
-      await _localnet.beforeEach()
-      await use(_localnet)
-    },
-    appFactory: async ({ expect, localnet }, use) => {
-      const { appSpecs } = compilePath(path)
-      if (appSpecs.length === 0) {
-        expect.fail(`${path} does not contain any ARC4 contracts`)
-      }
-      if (appSpecs.length > 1) {
-        expect.fail(`${path} contains multiple ARC4 contracts, please specify a contract name in the options`)
-      }
-      const appFactory = localnet.algorand.client.getAppFactory({ defaultSender: localnet.context.testAccount.addr, appSpec: appSpecs[0] })
-      await use(appFactory)
-    },
-    appClient: async ({ appFactory }, use) => {
-      const { appClient } = await appFactory.deploy(defaultDeployParams ?? {})
-      await use(appClient)
+      await localnetFixture.beforeEach()
+      await use(localnetFixture)
     },
     testAccount: async ({ localnet }, use) => {
       await use(localnet.context.testAccount)
@@ -54,6 +36,65 @@ export function createTestFixture(path: string, defaultDeployParams?: AppFactory
       })
     },
   })
+
+type FixtureContextFor<T extends string> = {
+  [key in T as `appFactory${key}`]: AppFactory
+} & {
+  [key in T as `appClient${key}`]: AppClient
+}
+
+type ContractConfig = {
+  deployParams?: AppFactoryDeployParams
+}
+
+export function createTestFixture<TContracts extends string = ''>(path: string, contracts: Record<TContracts, ContractConfig>) {
+  const lazyCompile = (() => {
+    let result: CompilationArtifacts | undefined = undefined
+    return {
+      get compileResult() {
+        if (!result) result = compilePath(path)
+        return result
+      },
+    }
+  })()
+  const localnet = algorandFixture({
+    testAccountFunding: microAlgos(100_000_000_000),
+  })
+
+  const ctx: DeliberateAny = {}
+  for (const [contractName, config] of Object.entries(contracts) as Array<[TContracts, ContractConfig]>) {
+    ctx[`appFactory${contractName}`] = async (
+      { expect, localnet }: { expect: ExpectStatic; localnet: AlgorandFixture },
+      use: Use<AppFactory>,
+    ) => {
+      const appSpec = lazyCompile.compileResult.appSpecs.find((s) => s.contract.name === contractName)
+      if (appSpec === undefined) {
+        expect.fail(`${path} does not contain an ARC4 contract "${contractName}"`)
+      }
+      await use(
+        localnet.algorand.client.getAppFactory({
+          defaultSender: localnet.context.testAccount.addr,
+          appSpec: appSpec!,
+        }),
+      )
+    }
+    ctx[`appClient${contractName}`] = async (
+      { expect, localnet }: { expect: ExpectStatic; localnet: AlgorandFixture },
+      use: Use<AppClient>,
+    ) => {
+      const appSpec = lazyCompile.compileResult.appSpecs.find((s) => s.contract.name === contractName)
+      if (appSpec === undefined) {
+        expect.fail(`${path} does not contain an ARC4 contract "${contractName}"`)
+      }
+      const appFactory = localnet.algorand.client.getAppFactory({
+        defaultSender: localnet.context.testAccount.addr,
+        appSpec: appSpec!,
+      })
+      const { appClient } = await appFactory.deploy(config.deployParams ?? {})
+      await use(appClient)
+    }
+  }
+  return algorandTestFixture(localnet).extend<FixtureContextFor<TContracts>>(ctx)
 }
 
 type CompilationArtifacts = {

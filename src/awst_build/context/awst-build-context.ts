@@ -1,8 +1,9 @@
 import ts from 'typescript'
 import type { awst } from '../../awst'
-import type { CompilationSet, ContractReference, LogicSigReference } from '../../awst/models'
+import type { ContractReference, LogicSigReference } from '../../awst/models'
+import { CompilationSet } from '../../awst/models'
 import { nodeFactory } from '../../awst/node-factory'
-import type { AppStorageDefinition, Constant } from '../../awst/nodes'
+import type { AppStorageDefinition, Constant, ContractFragment } from '../../awst/nodes'
 import { SourceLocation } from '../../awst/source-location'
 import { CodeError } from '../../errors'
 import { logger } from '../../logger'
@@ -88,7 +89,8 @@ export interface AwstBuildContext {
 
   getStorageDefinitionsForContract(contractType: ContractClassPType): Map<string, AppStorageDefinition>
 
-  addToCompilationSet(compilationTarget: ContractReference | LogicSigReference): void
+  addToCompilationSet(compilationTarget: ContractReference, contract: ContractFragment, includeInOutput: boolean): void
+  addToCompilationSet(compilationTarget: LogicSigReference): void
 
   get compilationSet(): CompilationSet
 }
@@ -102,13 +104,13 @@ class AwstBuildContextImpl implements AwstBuildContext {
   readonly switchLoopCtx = new SwitchLoopContext()
   readonly typeResolver: TypeResolver
   readonly typeChecker: ts.TypeChecker
-  readonly #compilationSet: Array<ContractReference | LogicSigReference>
+  readonly #compilationSet: CompilationSet
   private constructor(
     public readonly program: ts.Program,
     private readonly constants: Map<string, awst.Constant>,
     private readonly nameResolver: UniqueNameResolver,
     private readonly storageDeclarations: Map<string, Map<string, AppStorageDeclaration>>,
-    compilationSet: Array<ContractReference | LogicSigReference>,
+    compilationSet: CompilationSet,
   ) {
     this.typeChecker = program.getTypeChecker()
     this.typeResolver = new TypeResolver(this.typeChecker, this.program.getCurrentDirectory())
@@ -116,7 +118,7 @@ class AwstBuildContextImpl implements AwstBuildContext {
   }
 
   static forProgram(program: ts.Program): AwstBuildContext {
-    return new AwstBuildContextImpl(program, new Map(), new UniqueNameResolver(), new Map(), [])
+    return new AwstBuildContextImpl(program, new Map(), new UniqueNameResolver(), new Map(), new CompilationSet())
   }
 
   addConstant(name: string, value: Constant) {
@@ -241,15 +243,20 @@ class AwstBuildContextImpl implements AwstBuildContext {
     return result
   }
 
-  addToCompilationSet(compilationTarget: ContractReference | LogicSigReference) {
-    if (this.#compilationSet.some((s) => s.id === compilationTarget.id)) {
+  addToCompilationSet(compilationTarget: ContractReference, contract: ContractFragment, includeInOutput: boolean): void
+  addToCompilationSet(compilationTarget: LogicSigReference): void
+  addToCompilationSet(compilationTarget: ContractReference | LogicSigReference, contract?: ContractFragment, includeInOutput?: boolean) {
+    if (this.#compilationSet.has(compilationTarget)) {
       logger.debug(undefined, `${compilationTarget.id} already exists in compilation set`)
       return
     }
-    this.#compilationSet.push(compilationTarget)
+    this.#compilationSet.set(compilationTarget, {
+      contract,
+      includeInOutput: includeInOutput ?? true,
+    })
   }
 
   get compilationSet() {
-    return this.#compilationSet.slice()
+    return this.#compilationSet
   }
 }

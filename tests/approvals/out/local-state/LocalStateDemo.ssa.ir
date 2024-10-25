@@ -86,10 +86,21 @@ contract tests/approvals/local-state.algo.ts::LocalStateDemo:
             block@5: // switch_case_default_L7
                 goto block@6
             block@6: // switch_case_next_L7
-                goto block@8
+                goto block@11
             block@7: // bare_routing_L7
-                goto block@8
-            block@8: // after_if_else_L7
+                let tmp%18#0: uint64 = (txn OnCompletion)
+                switch tmp%18#0 {0u => block@8, * => block@9}
+            block@8: // __algots__.defaultCreate_L7
+                let tmp%19#0: uint64 = (txn ApplicationID)
+                let tmp%20#0: bool = (== tmp%19#0 0u)
+                (assert tmp%20#0) // is creating
+                tests/approvals/local-state.algo.ts::LocalStateDemo.__algots__.defaultCreate()
+                return 1u
+            block@9: // switch_case_default_L7
+                goto block@10
+            block@10: // switch_case_next_L7
+                goto block@11
+            block@11: // after_if_else_L7
                 return 0u
         
         subroutine tests/approvals/local-state.algo.ts::LocalStateDemo.setState(p.a: uint64, p.b: bytes, c: bytes) -> void:
@@ -141,6 +152,10 @@ contract tests/approvals/local-state.algo.ts::LocalStateDemo:
                 (app_local_del tmp%3#0 "localBytes2")
                 let tmp%4#0: bytes = (txn Sender)
                 (app_local_del tmp%4#0 "localEncoded")
+                return 
+        
+        subroutine tests/approvals/local-state.algo.ts::LocalStateDemo.__algots__.defaultCreate() -> void:
+            block@0: // L7
                 return 
         
         subroutine tests/approvals/local-state.algo.ts::LocalStateDemo.constructor() -> void:

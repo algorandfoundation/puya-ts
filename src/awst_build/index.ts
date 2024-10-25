@@ -14,7 +14,7 @@ import { SourceFileVisitor } from './source-file-visitor'
 
 export function buildAwst({ program, sourceFiles }: CreateProgramResult, options: CompileOptions): [AWST[], CompilationSet] {
   const awstBuildContext = buildContextForProgram(program)
-  const moduleAwst: AWST[] = [...buildLibAwst()]
+  const moduleAwst: AWST[] = [...buildLibAwst(awstBuildContext)]
   for (const [sourcePath, sourceFile] of Object.entries(sourceFiles)) {
     try {
       const visitor = new SourceFileVisitor(awstBuildContext.createChildContext(), sourceFile)

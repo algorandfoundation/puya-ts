@@ -1,5 +1,7 @@
 import type { ContractClassPType } from '../awst_build/ptypes'
 import type { Props } from '../typescript-helpers'
+import { CustomKeyMap } from '../util/custom-key-map'
+import type { ContractFragment } from './nodes'
 import type { SourceLocation } from './source-location'
 
 export enum OnCompletionAction {
@@ -124,7 +126,6 @@ export class LogicSigReference extends ModelBase {
     return this.id
   }
 }
-export type CompilationSet = Array<ContractReference | LogicSigReference>
 
 export enum TransactionKind {
   pay = 1,
@@ -133,4 +134,19 @@ export enum TransactionKind {
   axfer = 4,
   afrz = 5,
   appl = 6,
+}
+
+export class CompilationSet extends CustomKeyMap<
+  ContractReference | LogicSigReference,
+  { contract?: ContractFragment; includeInOutput: boolean }
+> {
+  constructor() {
+    super((x) => x.toString())
+  }
+
+  get compilationOutputSet() {
+    return Array.from(this.entries())
+      .filter(([, meta]) => meta.includeInOutput)
+      .map(([ref]) => ref)
+  }
 }

@@ -1,0 +1,72 @@
+contract NoBare extends @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract, @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract
+{
+  constructor(): void
+  {
+    void
+  }
+  
+  handleNoop(): void
+  {
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+contract NoNoOp extends @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract, @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract
+{
+  constructor(): void
+  {
+    void
+  }
+  
+  handleUpdate(): void
+  {
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+contract BaseWithBareCreate extends @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract, @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract
+{
+  constructor(): void
+  {
+    void
+  }
+  
+  create(): void
+  {
+  }
+  
+}
+contract BaseWithAbiCreate extends @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract, @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract
+{
+  constructor(): void
+  {
+    void
+  }
+  
+  create(): void
+  {
+  }
+  
+}
+contract ExplicitBareCreateFromBase extends tests/approvals/implicit-create.algo.ts::BaseWithBareCreate, @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract, @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract
+{
+  constructor(): void
+  {
+    super.constructor()
+  }
+  
+}
+contract ExplicitAbiCreateFromBase extends tests/approvals/implicit-create.algo.ts::BaseWithAbiCreate, @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract, @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract
+{
+  constructor(): void
+  {
+    super.constructor()
+  }
+  
+}

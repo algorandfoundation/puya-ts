@@ -88,10 +88,21 @@ contract tests/approvals/accounts.algo.ts::AccountsContract:
             block@3: // switch_case_default_L4
                 goto block@4
             block@4: // switch_case_next_L4
-                goto block@6
+                goto block@9
             block@5: // bare_routing_L4
-                goto block@6
-            block@6: // after_if_else_L4
+                let tmp%14#0: uint64 = (txn OnCompletion)
+                switch tmp%14#0 {0u => block@6, * => block@7}
+            block@6: // __algots__.defaultCreate_L4
+                let tmp%15#0: uint64 = (txn ApplicationID)
+                let tmp%16#0: bool = (== tmp%15#0 0u)
+                (assert tmp%16#0) // is creating
+                tests/approvals/accounts.algo.ts::AccountsContract.__algots__.defaultCreate()
+                return 1u
+            block@7: // switch_case_default_L4
+                goto block@8
+            block@8: // switch_case_next_L4
+                goto block@9
+            block@9: // after_if_else_L4
                 return 0u
         
         subroutine tests/approvals/accounts.algo.ts::AccountsContract.getAccountInfo(account: bytes, asset: uint64) -> <bytes, uint64, uint64, bytes, uint64, uint64, uint64, uint64, uint64, uint64, uint64, uint64, uint64, bool, bool>:
@@ -124,6 +135,10 @@ contract tests/approvals/accounts.algo.ts::AccountsContract:
                 let tmp%1#0: bool = (app_opted_in account#0 tmp%0#0)
                 let (tmp%2#0: uint64, tmp%3#0: bool) = ((asset_holding_get AssetBalance) account#0 asset#0)
                 return account#0 value%0#0 value%1#0 value%2#0 value%3#0 value%4#0 value%5#0 value%6#0 value%7#0 value%8#0 value%9#0 value%10#0 value%11#0 tmp%1#0 tmp%3#0
+        
+        subroutine tests/approvals/accounts.algo.ts::AccountsContract.__algots__.defaultCreate() -> void:
+            block@0: // L4
+                return 
         
         subroutine tests/approvals/accounts.algo.ts::AccountsContract.constructor() -> void:
             block@0: // L4
