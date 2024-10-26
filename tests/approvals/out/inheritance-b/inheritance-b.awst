@@ -1,29 +1,89 @@
-contract ConcreteSimpleContract extends tests/approvals/inheritance-a.algo.ts::SimpleContract, @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract
+contract ConcreteSimpleContract
 {
   globals {
     ["someState"]: uint64
   }
-  constructor(): void
-  {
-    super.constructor()
-  }
-  
   approvalProgram(): uint64
   {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
     a: uint64 = btoi(txnas<ApplicationArgs>(0))
     b: uint64 = btoi(txnas<ApplicationArgs>(1))
     return this.simpleMethod(a, b)
   }
   
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  constructor(): void
+  {
+    super.constructor()
+  }
+  
+  SimpleContract::simpleMethod(): uint64
+  {
+    return a * b
+  }
+  
+  SimpleContract::constructor(): void
+  {
+    void
+  }
+  
+  Contract::constructor(): void
+  {
+    this.constructor()
+  }
+  
 }
-contract ConcreteArc4Contract extends tests/approvals/inheritance-a.algo.ts::Arc4Contract, @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract, @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract
+contract ConcreteArc4Contract
 {
   globals {
     ["someState"]: uint64
   }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
   constructor(): void
   {
     super.constructor()
+  }
+  
+  Arc4Contract::simpleMethod(): uint64
+  {
+    return a * b
+  }
+  
+  Arc4Contract::simpleAbiMethod(): uint64
+  {
+    return a + b
+  }
+  
+  Arc4Contract::constructor(): void
+  {
+    void
+  }
+  
+  Contract::constructor(): void
+  {
+  }
+  
+  Contract::constructor(): void
+  {
+    this.constructor()
   }
   
   __algots__.defaultCreate(): void

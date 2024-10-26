@@ -2,14 +2,23 @@ contract tests/approvals/inheritance-b.algo.ts::ConcreteArc4Contract:
     program approval:
         subroutine @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> bool:
             block@0: // L1
-                let app_id%0#0: uint64 = (txn ApplicationID)
-                goto app_id%0#0 ? block@2 : block@1
-            block@1: // on_create_L13
+                let reinterpret_bool%0#0: bool = (txn ApplicationID)
+                goto reinterpret_bool%0#0 ? block@2 : block@1
+            block@1: // if_body_L1
                 tests/approvals/inheritance-b.algo.ts::ConcreteArc4Contract.constructor()
                 goto block@2
-            block@2: // entrypoint_L13
+            block@2: // after_if_else_L1
                 let tmp%0#0: bool = tests/approvals/inheritance-b.algo.ts::ConcreteArc4Contract.__puya_arc4_router__()
                 return tmp%0#0
+        
+        subroutine tests/approvals/inheritance-b.algo.ts::ConcreteArc4Contract.constructor() -> void:
+            block@0: // L13
+                tests/approvals/inheritance-a.algo.ts::Arc4Contract.constructor()
+                return 
+        
+        subroutine tests/approvals/inheritance-a.algo.ts::Arc4Contract.constructor() -> void:
+            block@0: // L11
+                return 
         
         subroutine tests/approvals/inheritance-b.algo.ts::ConcreteArc4Contract.__puya_arc4_router__() -> bool:
             block@0: // L13
@@ -62,15 +71,6 @@ contract tests/approvals/inheritance-b.algo.ts::ConcreteArc4Contract:
         
         subroutine tests/approvals/inheritance-b.algo.ts::ConcreteArc4Contract.__algots__.defaultCreate() -> void:
             block@0: // L13
-                return 
-        
-        subroutine tests/approvals/inheritance-b.algo.ts::ConcreteArc4Contract.constructor() -> void:
-            block@0: // L13
-                tests/approvals/inheritance-a.algo.ts::Arc4Contract.constructor()
-                return 
-        
-        subroutine tests/approvals/inheritance-a.algo.ts::Arc4Contract.constructor() -> void:
-            block@0: // L11
                 return 
     
     program clear-state:

@@ -1,4 +1,4 @@
-import type { wtypes } from '../../awst'
+import type { wtypes } from '../../awst/wtypes'
 import type { DeliberateAny } from '../../typescript-helpers'
 import { codeInvariant } from '../../util'
 

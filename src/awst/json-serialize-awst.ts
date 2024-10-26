@@ -1,13 +1,14 @@
 import { snakeCase } from 'change-case'
 import path from 'node:path'
 import { Constants } from '../constants'
+import { InternalError } from '../errors'
 import { logger } from '../logger'
 import { invariant } from '../util'
 import { buildBase85Encoder } from '../util/base-85'
 import { ARC4ABIMethodConfig, ContractReference, LogicSigReference } from './models'
 import type { RootNode } from './nodes'
+import { IntrinsicCall } from './nodes'
 import { SourceLocation } from './source-location'
-import { WType } from './wtypes'
 
 export class SnakeCaseSerializer<T> {
   constructor(private readonly spaces = 2) {}
@@ -60,7 +61,27 @@ export class AwstSerializer extends SnakeCaseSerializer<RootNode[]> {
     if (value instanceof ContractReference || value instanceof LogicSigReference) {
       return value.toString()
     }
-    if (value instanceof SourceLocation) {
+    if (value instanceof IntrinsicCall) {
+      // Convert bigint immediates to number so they serialize without quotes and can be disambiguated from string immediates
+      return {
+        _type: IntrinsicCall.name,
+        ...(super.serializerFunction(key, value) as object),
+        immediates: value.immediates.map((i) => {
+          if (typeof i === 'bigint') {
+            if (i <= Number.MAX_SAFE_INTEGER) {
+              return Number(i)
+            } else {
+              throw new InternalError(
+                'Intrinsic call with integer immediate arg cannot be serialized as it is larger than Number.MAX_SAFE_INTEGER',
+                { sourceLocation: value.sourceLocation },
+              )
+            }
+          }
+          return i
+        }),
+      }
+    }
+    if (value instanceof SourceLocation && value.file) {
       let filePath: string = value.file
       if (this.options?.sourcePaths === 'absolute') {
         invariant(this.options.programDirectory, 'Program directory must be supplied for absolute paths')
@@ -73,13 +94,6 @@ export class AwstSerializer extends SnakeCaseSerializer<RootNode[]> {
       return {
         ...(super.serializerFunction(key, value) as object),
         file: filePath,
-      }
-    }
-    if (value instanceof WType) {
-      return {
-        _type: value.puyaTypeName,
-        ...(super.serializerFunction(key, value) as object),
-        puya_type_name: undefined,
       }
     }
     if (value instanceof ARC4ABIMethodConfig) {

@@ -1,7 +1,7 @@
-import { wtypes } from '../../awst'
 import { TransactionKind } from '../../awst/models'
-import type { WType } from '../../awst/wtypes'
-import { uint64WType, WArray, WEnumeration, WGroupTransaction, WInnerTransaction, WInnerTransactionFields, WTuple } from '../../awst/wtypes'
+import { SourceLocation } from '../../awst/source-location'
+import { wtypes } from '../../awst/wtypes'
+
 import { Constants } from '../../constants'
 import { CodeError, InternalError, NotSupported } from '../../errors'
 import { codeInvariant, distinctByEquality, sortBy, zipStrict } from '../../util'
@@ -43,11 +43,11 @@ export abstract class TransientType extends PType {
     this.expressionMessage = expressionMessage
   }
 
-  get wtype(): WType | undefined {
+  get wtype(): wtypes.WType | undefined {
     return undefined
   }
 
-  get wtypeOrThrow(): WType {
+  get wtypeOrThrow(): wtypes.WType {
     throw new CodeError(this.typeMessage)
   }
 }
@@ -70,7 +70,7 @@ export class UnsupportedType extends PType {
     return this.#fullName ?? super.fullName
   }
 
-  get wtypeOrThrow(): WType {
+  get wtypeOrThrow(): wtypes.WType {
     throw new NotSupported(`The type ${this.fullName} is not supported`)
   }
 }
@@ -83,6 +83,7 @@ export class ContractClassPType extends PType {
   readonly methods: Record<string, FunctionPType>
   readonly singleton = true
   readonly baseTypes: ContractClassPType[]
+  readonly sourceLocation: SourceLocation
 
   constructor(props: {
     module: string
@@ -90,6 +91,7 @@ export class ContractClassPType extends PType {
     properties: Record<string, AppStorageType>
     methods: Record<string, FunctionPType>
     baseTypes: ContractClassPType[]
+    sourceLocation: SourceLocation
   }) {
     super()
     this.name = props.name
@@ -97,10 +99,18 @@ export class ContractClassPType extends PType {
     this.properties = props.properties
     this.methods = props.methods
     this.baseTypes = props.baseTypes
+    this.sourceLocation = props.sourceLocation
   }
 
   get isARC4(): boolean {
     return this.baseTypes.some((b) => b.isARC4)
+  }
+
+  *allBases(): IterableIterator<ContractClassPType> {
+    for (const b of this.baseTypes) {
+      yield b
+      yield* b.allBases()
+    }
   }
 }
 
@@ -120,6 +130,7 @@ export class BaseContractClassType extends ContractClassPType {
     properties: Record<string, AppStorageType>
     methods: Record<string, FunctionPType>
     baseTypes: ContractClassPType[]
+    sourceLocation: SourceLocation
   }) {
     super(rest)
     this._isArc4 = isArc4
@@ -175,11 +186,11 @@ export class UnionPType extends TransientType {
 }
 
 export abstract class StorageProxyPType extends PType {
-  readonly wtype: WType
+  readonly wtype: wtypes.WType
   readonly contentType: PType
   readonly singleton = false
 
-  protected constructor(props: { content: PType; keyWType: WType }) {
+  protected constructor(props: { content: PType; keyWType: wtypes.WType }) {
     super()
     this.wtype = props.keyWType
     this.contentType = props.content
@@ -388,11 +399,33 @@ export class IntrinsicFunctionGroupType extends PType {
     this.name = name
   }
 }
+export class IntrinsicFunctionGroupTypeType extends PType {
+  readonly wtype: undefined
+  readonly name: string
+  readonly module: string = Constants.opTypesModuleName
+  readonly singleton = false
+
+  constructor({ name }: { name: string }) {
+    super()
+    this.name = name
+  }
+}
 export class IntrinsicFunctionType extends PType {
   readonly wtype: undefined
   readonly name: string
   readonly module: string = Constants.opModuleName
   readonly singleton = true
+
+  constructor({ name }: { name: string }) {
+    super()
+    this.name = name
+  }
+}
+export class IntrinsicFunctionTypeType extends PType {
+  readonly wtype: undefined
+  readonly name: string
+  readonly module: string = Constants.opTypesModuleName
+  readonly singleton = false
 
   constructor({ name }: { name: string }) {
     super()
@@ -499,8 +532,8 @@ export class TuplePType extends PType {
     this.immutable = true
   }
 
-  get wtype(): WTuple {
-    return new WTuple({
+  get wtype(): wtypes.WTuple {
+    return new wtypes.WTuple({
       types: this.items.map((i) => i.wtypeOrThrow),
       immutable: this.immutable,
     })
@@ -535,7 +568,7 @@ export class ArrayPType extends TransientType {
   }
 
   get wtype() {
-    return new WArray({
+    return new wtypes.WArray({
       itemType: this.itemType.wtypeOrThrow,
       immutable: this.immutable,
     })
@@ -566,8 +599,8 @@ export class ObjectPType extends PType {
     })
   }
 
-  get wtype(): WTuple {
-    const tupleTypes: WType[] = []
+  get wtype(): wtypes.WTuple {
+    const tupleTypes: wtypes.WType[] = []
     const tupleNames: string[] = []
     for (const [propName, propType] of this.orderedProperties()) {
       if (propType instanceof TransientType) {
@@ -576,7 +609,7 @@ export class ObjectPType extends PType {
       tupleTypes.push(propType.wtypeOrThrow)
       tupleNames.push(propName)
     }
-    return new WTuple({
+    return new wtypes.WTuple({
       name: this.name,
       names: tupleNames,
       types: tupleTypes,
@@ -833,6 +866,7 @@ export const baseContractType = new BaseContractClassType({
   properties: {},
   baseTypes: [],
   isArc4: false,
+  sourceLocation: SourceLocation.None,
 })
 export const arc4BaseContractType = new BaseContractClassType({
   module: Constants.arc4ModuleName,
@@ -844,6 +878,7 @@ export const arc4BaseContractType = new BaseContractClassType({
   properties: {},
   baseTypes: [baseContractType],
   isArc4: true,
+  sourceLocation: SourceLocation.None,
 })
 
 export const arc4BareMethodDecorator = new LibFunctionType({
@@ -857,7 +892,7 @@ export const arc4AbiMethodDecorator = new LibFunctionType({
 
 export class GroupTransactionPType extends PType {
   get wtype() {
-    return new WGroupTransaction({
+    return new wtypes.WGroupTransaction({
       transactionType: this.kind,
     })
   }
@@ -952,7 +987,7 @@ export const assertMatchFunction = new LibFunctionType({
 })
 
 export class Uint64EnumMemberType extends PType {
-  readonly wtype = uint64WType
+  readonly wtype = wtypes.uint64WType
   readonly name: string
   readonly module: string
   readonly singleton = false
@@ -970,7 +1005,7 @@ export class Uint64EnumType extends PType {
   get memberType(): Uint64EnumMemberType {
     return new Uint64EnumMemberType(this)
   }
-  readonly wtype = uint64WType
+  readonly wtype = wtypes.uint64WType
   readonly name: string
   readonly module: string
   readonly singleton = true
@@ -1055,8 +1090,8 @@ export class IterableIteratorType extends TransientType {
     })
   }
 
-  get wtype(): WEnumeration {
-    return new WEnumeration({ sequenceType: this.itemType.wtypeOrThrow })
+  get wtype(): wtypes.WEnumeration {
+    return new wtypes.WEnumeration({ sequenceType: this.itemType.wtypeOrThrow })
   }
 
   getGenericArgs(): PType[] {
@@ -1097,7 +1132,7 @@ export const applicationCallItxnFn = new TransactionFunctionType({
 
 export class InnerTransactionPType extends PType {
   get wtype() {
-    return new WInnerTransaction({
+    return new wtypes.WInnerTransaction({
       transactionType: this.kind,
     })
   }
@@ -1114,7 +1149,7 @@ export class InnerTransactionPType extends PType {
 }
 export class ItxnParamsPType extends PType {
   get wtype() {
-    return new WInnerTransactionFields({
+    return new wtypes.WInnerTransactionFields({
       transactionType: this.kind,
     })
   }

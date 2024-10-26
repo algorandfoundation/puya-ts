@@ -5,7 +5,7 @@ import { InternalError } from '../../errors'
 import type { ContractClassPType, PType } from '../ptypes'
 import { FunctionPType } from '../ptypes'
 import { typeRegistry } from '../type-registry'
-import type { InstanceBuilder } from './index'
+import type { NodeBuilder } from './index'
 import { FunctionBuilder } from './index'
 import { parseFunctionArgs } from './util/arg-parsing'
 
@@ -18,7 +18,7 @@ abstract class SubroutineExpressionBuilder extends FunctionBuilder {
     super(sourceLocation)
   }
 
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const { args: mappedArgs } = parseFunctionArgs({
       args,
       typeArgs,

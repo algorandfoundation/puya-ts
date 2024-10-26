@@ -2,7 +2,7 @@ import { intrinsicFactory } from '../../../awst/intrinsic-factory'
 import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
-import { boolWType, WTuple } from '../../../awst/wtypes'
+import { wtypes } from '../../../awst/wtypes'
 import type { PType } from '../../ptypes'
 import { uint64PType } from '../../ptypes'
 import { instanceEb } from '../../type-registry'
@@ -45,7 +45,7 @@ export abstract class ReferenceTypeExpressionBuilder extends InstanceExpressionB
         opCode: this.options.fieldOpCode,
         immediates: [immediate],
         stackArgs: [this.resolve()],
-        wtype: new WTuple({ types: [resultType.wtypeOrThrow, boolWType], immutable: true }),
+        wtype: new wtypes.WTuple({ types: [resultType.wtypeOrThrow, wtypes.boolWType], immutable: true }),
         sourceLocation,
       })
       return instanceEb(nodeFactory.checkedMaybe({ expr: op, comment: this.options.fieldBoolComment }), resultType)
@@ -84,7 +84,7 @@ export abstract class Uint64BackedReferenceTypeExpressionBuilder extends Referen
     return nodeFactory.reinterpretCast({
       sourceLocation,
       expr: this.resolve(),
-      wtype: boolWType,
+      wtype: wtypes.boolWType,
     })
   }
 

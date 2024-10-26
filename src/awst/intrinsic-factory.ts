@@ -1,11 +1,11 @@
 import type { DeliberateAny } from '../typescript-helpers'
 import { bigIntToUint8Array } from '../util'
 import { nodeFactory } from './node-factory'
-import * as awst from './nodes'
 import type { Expression } from './nodes'
+import * as awst from './nodes'
 import { BytesEncoding } from './nodes'
 import type { SourceLocation } from './source-location'
-import * as wtypes from './wtypes'
+import { wtypes } from './wtypes'
 
 export const intrinsicFactory = {
   bytesConcat({

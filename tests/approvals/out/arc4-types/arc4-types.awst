@@ -14,18 +14,31 @@ subroutine test_arrays(n: arc4.uint64): void
   myStatic: arc4.static_array<arc4.uint64> = new arc4.static_array<arc4.uint64>(n, n)
   myStatic2: arc4.static_array<arc4.uint64> = new arc4.static_array<arc4.uint64>(n, n, n)
 }
-contract Arc4TypesTestContract extends @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract
+contract Arc4TypesTestContract
 {
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    tests/approvals/arc4-types.algo.ts::test(1, 2, 0x04)
+    tests/approvals/arc4-types.algo.ts::test_arrays(0x41)
+    return True
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
   constructor(): void
   {
     void
   }
   
-  approvalProgram(): bool
+  Contract::constructor(): void
   {
-    tests/approvals/arc4-types.algo.ts::test(1, 2, 0x04)
-    tests/approvals/arc4-types.algo.ts::test_arrays(0x41)
-    return True
+    this.constructor()
   }
   
 }

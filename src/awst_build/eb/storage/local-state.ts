@@ -2,12 +2,12 @@ import { nodeFactory } from '../../../awst/node-factory'
 import type { AppAccountStateExpression, AppStateExpression, Expression, LValue } from '../../../awst/nodes'
 import { BytesConstant } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
-import { stateKeyWType, voidWType } from '../../../awst/wtypes'
+import { wtypes } from '../../../awst/wtypes'
 import { CodeError } from '../../../errors'
 import { codeInvariant, invariant } from '../../../util'
 import { AppStorageDeclaration } from '../../contract-data'
 import type { ContractClassPType, PType } from '../../ptypes'
-import { accountPType, bytesPType, LocalStateType, stringPType } from '../../ptypes'
+import { accountPType, boolPType, bytesPType, LocalStateType, stringPType } from '../../ptypes'
 import { instanceEb } from '../../type-registry'
 import { FunctionBuilder, InstanceBuilder, InstanceExpressionBuilder, NodeBuilder } from '../index'
 import { parseFunctionArgs } from '../util/arg-parsing'
@@ -19,7 +19,7 @@ export class LocalStateFunctionBuilder extends FunctionBuilder {
     super(sourceLocation)
   }
 
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const [contentPType] = typeArgs
     const {
       args: [{ key }],
@@ -36,7 +36,7 @@ export class LocalStateFunctionBuilder extends FunctionBuilder {
       callLocation: sourceLocation,
     })
     const ptype = new LocalStateType({ content: contentPType })
-    return new LocalStateFunctionResultBuilder(extractKey(key, stateKeyWType), ptype, { sourceLocation })
+    return new LocalStateFunctionResultBuilder(extractKey(key, wtypes.stateKeyWType), ptype, { sourceLocation })
   }
 }
 
@@ -46,7 +46,7 @@ export class LocalStateExpressionBuilder extends InstanceExpressionBuilder<Local
     super(expr, ptype)
   }
 
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [account],
     } = parseFunctionArgs({
@@ -85,13 +85,21 @@ export class LocalStateForAccountExpressionBuilder extends NodeBuilder {
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
     switch (name) {
       case 'value':
-        // TODO: use value proxy
         return instanceEb(
           nodeFactory.appAccountStateExpression({
             ...this.key,
             sourceLocation,
           }),
           this.contentType,
+        )
+      case 'hasValue':
+        return instanceEb(
+          nodeFactory.stateExists({
+            field: this.key,
+            sourceLocation,
+            wtype: wtypes.boolWType,
+          }),
+          boolPType,
         )
       case 'delete':
         return new LocalStateDeleteFunctionBuilder(this.key, sourceLocation)
@@ -108,7 +116,7 @@ class LocalStateDeleteFunctionBuilder extends FunctionBuilder {
     super(sourceLocation)
   }
 
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     parseFunctionArgs({
       args,
       typeArgs,
@@ -121,7 +129,7 @@ class LocalStateDeleteFunctionBuilder extends FunctionBuilder {
       nodeFactory.stateDelete({
         field: this.key,
         sourceLocation,
-        wtype: voidWType,
+        wtype: wtypes.voidWType,
       }),
     )
   }

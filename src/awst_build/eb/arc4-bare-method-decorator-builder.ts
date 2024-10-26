@@ -36,7 +36,7 @@ export class Arc4BareMethodDecoratorBuilder extends NodeBuilder {
     return arc4BareMethodDecorator
   }
 
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [{ allowActions, onCreate }],
     } = parseFunctionArgs({
@@ -66,7 +66,7 @@ export class Arc4AbiMethodDecoratorBuilder extends NodeBuilder {
     return arc4AbiMethodDecorator
   }
 
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [{ allowActions, onCreate, readonly, name, defaultArguments }],
     } = parseFunctionArgs({

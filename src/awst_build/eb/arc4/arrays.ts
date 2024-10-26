@@ -1,7 +1,8 @@
 import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
-import { uint64WType } from '../../../awst/wtypes'
+import { wtypes } from '../../../awst/wtypes'
+
 import { codeInvariant, invariant } from '../../../util'
 import type { PType } from '../../ptypes'
 import { IterableIteratorType, NumericLiteralPType, TuplePType, uint64PType } from '../../ptypes'
@@ -24,7 +25,8 @@ import { parseFunctionArgs } from '../util/arg-parsing'
 
 export class DynamicArrayConstructorBuilder extends NodeBuilder {
   readonly ptype = DynamicArrayConstructor
-  newCall(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
+
+  newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
     const {
       args: [...initialItems],
       ptypes: [elementType],
@@ -51,7 +53,8 @@ export class DynamicArrayConstructorBuilder extends NodeBuilder {
 }
 export class StaticArrayConstructorBuilder extends NodeBuilder {
   readonly ptype = StaticArrayConstructor
-  newCall(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
+
+  newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
     const {
       args: [...initialItems],
       ptypes: [elementType, arraySize],
@@ -124,7 +127,7 @@ class CopyFunctionBuilder extends FunctionBuilder {
     super(arrayBuilder.sourceLocation)
   }
 
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     parseFunctionArgs({ args, typeArgs, genericTypeArgs: 0, argSpec: (a) => [], funcName: 'copy', callLocation: sourceLocation })
     return instanceEb(
       nodeFactory.copy({
@@ -140,7 +143,7 @@ class EntriesFunctionBuilder extends FunctionBuilder {
     super(arrayBuilder.sourceLocation)
   }
 
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     parseFunctionArgs({ args, typeArgs, callLocation: sourceLocation, argSpec: (_) => [], genericTypeArgs: 0, funcName: 'entries' })
     const iteratorType = IterableIteratorType.parameterise([new TuplePType({ items: [uint64PType, this.arrayBuilder.ptype.elementType] })])
     return new IterableIteratorExpressionBuilder(
@@ -168,7 +171,7 @@ export class DynamicArrayExpressionBuilder extends ArrayExpressionBuilder<Dynami
             immediates: [],
             stackArgs: [this._expr, nodeFactory.uInt64Constant({ value: 0n, sourceLocation })],
             sourceLocation,
-            wtype: uint64WType,
+            wtype: wtypes.uint64WType,
           }),
         )
       case 'push':
@@ -200,7 +203,7 @@ export class ArrayPushFunctionBuilder extends FunctionBuilder {
     super(arrayBuilder.sourceLocation)
   }
 
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const elementType = this.arrayBuilder.ptype.elementType
     const {
       args: [...items],
@@ -232,7 +235,7 @@ export class ArrayPopFunctionBuilder extends FunctionBuilder {
     super(arrayBuilder.sourceLocation)
   }
 
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const elementType = this.arrayBuilder.ptype.elementType
     parseFunctionArgs({
       args,

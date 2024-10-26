@@ -1,27 +1,50 @@
-import type ts from 'typescript'
+import ts from 'typescript'
 import { invariant, normalisePath } from '../util'
 
 export class SourceLocation {
-  file: string
+  file: string | null
   line: number
   endLine: number
   column: number
   endColumn: number
 
-  constructor(props: { file: string; line: number; endLine: number; column: number; endColumn: number }) {
-    this.file = props.file
+  constructor(props: { file?: string | null; line: number; endLine: number; column: number; endColumn: number }) {
+    invariant(props.line <= props.endLine, 'Start line must be before end line')
+    if (props.line === props.endLine) invariant(props.column <= props.endColumn, 'Start column must be before end column')
+    this.file = props.file ?? null
     this.line = props.line
     this.endLine = props.endLine
     this.column = props.column
     this.endColumn = props.endColumn
   }
 
-  static fromNode(sourceFile: ts.SourceFile, node: ts.Node, programDirectory: string): SourceLocation {
-    const startPos = node.getStart(sourceFile)
-    const width = node.getWidth(sourceFile)
+  private static getStartAndEnd(node: ts.Node): { start: number; end: number } {
+    if (ts.isClassDeclaration(node)) {
+      return fromNodeTillStartOfNode(node, node.members.at(0))
+    }
+    if (ts.isMethodDeclaration(node) || ts.isFunctionDeclaration(node)) {
+      return fromNodeTillStartOfNode(node, node.body)
+    }
+    if (ts.isForStatement(node) || ts.isForInStatement(node) || ts.isForOfStatement(node)) {
+      return fromNodeTillStartOfNode(node, node.statement)
+    }
+    if (ts.isIfStatement(node)) {
+      return fromNodeTillStartOfNode(node, node.thenStatement)
+    }
 
-    const startLoc = sourceFile.getLineAndCharacterOfPosition(startPos)
-    const endLoc = sourceFile.getLineAndCharacterOfPosition(startPos + width)
+    return {
+      start: node.getStart(),
+      end: node.getEnd(),
+    }
+  }
+
+  static fromNode(node: ts.Node, programDirectory: string): SourceLocation {
+    const sourceFile = node.getSourceFile()
+
+    const { start, end } = SourceLocation.getStartAndEnd(node)
+
+    const startLoc = sourceFile.getLineAndCharacterOfPosition(start)
+    const endLoc = sourceFile.getLineAndCharacterOfPosition(end)
 
     return new SourceLocation({
       file: normalisePath(sourceFile.fileName, programDirectory),
@@ -85,5 +108,19 @@ export class SourceLocation {
           acc.endLine === cur.endLine ? Math.max(acc.endColumn, cur.endColumn) : acc.endLine > cur.endLine ? acc.endColumn : cur.endColumn,
       })
     })
+  }
+
+  static None = new SourceLocation({
+    line: 1,
+    endLine: 1,
+    column: 0,
+    endColumn: 1,
+  })
+}
+
+function fromNodeTillStartOfNode(n1: ts.Node, n2?: ts.Node): { start: number; end: number } {
+  return {
+    start: n1.getStart(),
+    end: n2 ? n2.getStart() - n2.getLeadingTriviaWidth() : n1.getEnd(),
   }
 }

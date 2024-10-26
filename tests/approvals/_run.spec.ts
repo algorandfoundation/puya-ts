@@ -12,7 +12,7 @@ describe('Approvals', () => {
       outputAwstJson: false,
       outputAwst: false,
       paths: ['tests/approvals'],
-      outDir: '[name]',
+      outDir: 'out/[name]',
       dryRun: false,
       logLevel: LogLevel.Warn,
     }),

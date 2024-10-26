@@ -6,6 +6,7 @@ export const Constants = {
   algoTsPackage,
   arc4ModuleName: `${algoTsPackage}/arc4/index.d.ts`,
   opModuleName: `${algoTsPackage}/op.d.ts`,
+  opTypesModuleName: `${algoTsPackage}/op-types.d.ts`,
   baseContractModuleName: `${algoTsPackage}/base-contract.d.ts`,
   utilModuleName: `${algoTsPackage}/util.d.ts`,
   referenceModuleName: `${algoTsPackage}/reference.d.ts`,
@@ -18,6 +19,6 @@ export const Constants = {
   arc4EncodedTypesModuleName: `${algoTsPackage}/arc4/encoded-types.d.ts`,
   arc4BareDecoratorName: 'arc4.baremethod',
   arc4AbiDecoratorName: 'arc4.abimethod',
-
   constructorMethodName: 'constructor',
+  defaultCreateMethodName: '__algots__.defaultCreate',
 } as const

@@ -12,7 +12,7 @@ import { BuilderComparisonOp, FunctionBuilder, InstanceExpressionBuilder } from 
 import { parseFunctionArgs } from './util/arg-parsing'
 
 export class BooleanFunctionBuilder extends FunctionBuilder {
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [value],
     } = parseFunctionArgs({

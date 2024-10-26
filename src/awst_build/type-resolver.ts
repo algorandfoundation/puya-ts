@@ -1,5 +1,5 @@
 import ts from 'typescript'
-import type { SourceLocation } from '../awst/source-location'
+import { SourceLocation } from '../awst/source-location'
 import { Constants } from '../constants'
 import { CodeError, InternalError } from '../errors'
 import { logger } from '../logger'
@@ -260,7 +260,7 @@ export class TypeResolver {
     const returnType = this.resolveType(sig.getReturnType(), sourceLocation)
     const parameters = sig.getParameters().map((p) => {
       const paramType = this.checker.getTypeOfSymbol(p)
-      return [p.name, this.resolveType(paramType, sourceLocation)] as const
+      return [p.name, this.resolveType(paramType, this.getLocationOfSymbol(p) ?? sourceLocation)] as const
     })
     return new FunctionPType({
       returnType,
@@ -280,7 +280,7 @@ export class TypeResolver {
     const methods: Record<string, FunctionPType> = {}
     for (const prop of tsType.getProperties()) {
       const type = this.checker.getTypeOfSymbol(prop)
-      const ptype = this.resolveType(type, sourceLocation)
+      const ptype = this.resolveType(type, this.getLocationOfSymbol(prop) ?? sourceLocation)
       if (ptype instanceof StorageProxyPType) {
         properties[prop.name] = ptype
       } else if (ptype instanceof FunctionPType) {
@@ -293,6 +293,7 @@ export class TypeResolver {
       name: typeName.name,
       module: typeName.module,
       baseTypes: [baseType],
+      sourceLocation,
     })
   }
 
@@ -307,7 +308,19 @@ export class TypeResolver {
     return this.getSymbolFullName(type.symbol, sourceLocation)
   }
 
+  private getLocationOfSymbol(symbol: ts.Symbol): SourceLocation | undefined {
+    const sf = symbol.getDeclarations()?.map((d) => d.getSourceFile())?.[0]
+    return sf && SourceLocation.fromFile(sf, this.programDirectory)
+  }
+
+  private tryGetLocalSymbolName(symbol: ts.Symbol): string | undefined {
+    const dec = symbol.getDeclarations()?.[0] as undefined | { localSymbol?: ts.Symbol }
+    return dec?.localSymbol?.name
+  }
+
   private getSymbolFullName(symbol: ts.Symbol, sourceLocation: SourceLocation): SymbolName {
+    const symbolName = symbol.name === 'default' ? (this.tryGetLocalSymbolName(symbol) ?? symbol.name) : symbol.name
+
     const declaration = symbol?.declarations?.[0]
     if (declaration) {
       if (
@@ -319,7 +332,7 @@ export class TypeResolver {
           name: '*',
         })
       }
-      return new SymbolName({ module: normalisePath(declaration.getSourceFile().fileName, this.programDirectory), name: symbol.name })
+      return new SymbolName({ module: normalisePath(declaration.getSourceFile().fileName, this.programDirectory), name: symbolName })
     }
     throw new InternalError(`Symbol does not have a declaration`, { sourceLocation })
   }

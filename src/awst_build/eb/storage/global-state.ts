@@ -2,7 +2,8 @@ import { nodeFactory } from '../../../awst/node-factory'
 import type { AppStateExpression, Expression, LValue } from '../../../awst/nodes'
 import { BytesConstant } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
-import { stateKeyWType } from '../../../awst/wtypes'
+import { wtypes } from '../../../awst/wtypes'
+
 import { CodeError } from '../../../errors'
 import { codeInvariant, invariant } from '../../../util'
 import { AppStorageDeclaration } from '../../contract-data'
@@ -20,7 +21,7 @@ export class GlobalStateFunctionBuilder extends FunctionBuilder {
     super(sourceLocation)
   }
 
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const [contentPType] = typeArgs
     const {
       args: [{ initialValue, key }],
@@ -39,7 +40,7 @@ export class GlobalStateFunctionBuilder extends FunctionBuilder {
     })
     const ptype = new GlobalStateType({ content: contentPType })
 
-    return new GlobalStateFunctionResultBuilder(extractKey(key, stateKeyWType), ptype, {
+    return new GlobalStateFunctionResultBuilder(extractKey(key, wtypes.stateKeyWType), ptype, {
       initialValue: initialValue?.resolve(),
       sourceLocation,
     })

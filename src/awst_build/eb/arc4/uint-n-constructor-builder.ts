@@ -17,7 +17,8 @@ export class UintNConstructorBuilder extends NodeBuilder {
   get ptype(): undefined {
     return undefined
   }
-  newCall(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
+
+  newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
     const {
       ptypes: [size],
       args: [initialValueBuilder],

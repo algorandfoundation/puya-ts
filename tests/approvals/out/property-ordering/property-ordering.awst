@@ -6,18 +6,31 @@ subroutine test_assign_from_literal(x: uint64): void
 {
   obj: { a: uint64, z: uint64 } = { a: (#0 = { z: (b = x * 2), a: b }).a, z: #0.z }
 }
-contract Demo extends @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract
+contract Demo
 {
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    tests/approvals/property-ordering.algo.ts::test_assign_from_literal(4)
+    tests/approvals/property-ordering.algo.ts::test_assign_from_var({ a: (#1 = { a: 3, b: 4 }).a, b: #1.b })
+    return True
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
   constructor(): void
   {
     void
   }
   
-  approvalProgram(): bool
+  Contract::constructor(): void
   {
-    tests/approvals/property-ordering.algo.ts::test_assign_from_literal(4)
-    tests/approvals/property-ordering.algo.ts::test_assign_from_var({ a: (#1 = { a: 3, b: 4 }).a, b: #1.b })
-    return True
+    this.constructor()
   }
   
 }

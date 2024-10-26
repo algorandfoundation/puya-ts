@@ -1,4 +1,4 @@
-import { wtypes } from './index'
+import { wtypes } from './wtypes'
 
 export class TxnFieldData {
   readonly immediate: string

@@ -1,18 +1,19 @@
 import { nodeFactory } from '../../../../awst/node-factory'
 import type { BoxValueExpression, Expression } from '../../../../awst/nodes'
 import type { SourceLocation } from '../../../../awst/source-location'
-import { boolWType, boxKeyWType, bytesWType, uint64WType, voidWType, WTuple } from '../../../../awst/wtypes'
+import { wtypes } from '../../../../awst/wtypes'
+
 import { invariant } from '../../../../util'
 import type { PType } from '../../../ptypes'
 import { boolPType, BoxRefPType, boxRefType, bytesPType, stringPType, uint64PType, voidPType } from '../../../ptypes'
 import { instanceEb } from '../../../type-registry'
-import { FunctionBuilder, type InstanceBuilder, type NodeBuilder } from '../../index'
+import { FunctionBuilder, type NodeBuilder } from '../../index'
 import { parseFunctionArgs } from '../../util/arg-parsing'
 import { extractKey } from '../util'
 import { BoxProxyExpressionBuilder, boxValue, BoxValueExpressionBuilder } from './base'
 
 export class BoxRefFunctionBuilder extends FunctionBuilder {
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [{ key }],
     } = parseFunctionArgs({
@@ -24,7 +25,7 @@ export class BoxRefFunctionBuilder extends FunctionBuilder {
       argSpec: (a) => [a.obj({ key: a.required(bytesPType, stringPType) })],
     })
 
-    return new BoxRefExpressionBuilder(extractKey(key, boxKeyWType), boxRefType)
+    return new BoxRefExpressionBuilder(extractKey(key, wtypes.boxKeyWType), boxRefType)
   }
 }
 
@@ -58,7 +59,7 @@ export class BoxRefExpressionBuilder extends BoxProxyExpressionBuilder<BoxRefPTy
         const boxLength = nodeFactory.intrinsicCall({
           opCode: 'box_len',
           stackArgs: [boxValueExpr],
-          wtype: new WTuple({ types: [uint64WType, boolWType], immutable: true }),
+          wtype: new wtypes.WTuple({ types: [wtypes.uint64WType, wtypes.boolWType], immutable: true }),
           immediates: [],
           sourceLocation,
         })
@@ -95,7 +96,7 @@ export abstract class BoxRefBaseFunctionBuilder extends FunctionBuilder {
 }
 
 export class BoxRefCreateFunctionBuilder extends BoxRefBaseFunctionBuilder {
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [{ size }],
     } = parseFunctionArgs({
@@ -110,7 +111,7 @@ export class BoxRefCreateFunctionBuilder extends BoxRefBaseFunctionBuilder {
       nodeFactory.intrinsicCall({
         opCode: 'box_create',
         stackArgs: [this.boxValue, size.resolve()],
-        wtype: boolWType,
+        wtype: wtypes.boolWType,
         immediates: [],
         sourceLocation,
       }),
@@ -119,7 +120,7 @@ export class BoxRefCreateFunctionBuilder extends BoxRefBaseFunctionBuilder {
   }
 }
 export class BoxRefResizeFunctionBuilder extends BoxRefBaseFunctionBuilder {
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [size],
     } = parseFunctionArgs({
@@ -134,7 +135,7 @@ export class BoxRefResizeFunctionBuilder extends BoxRefBaseFunctionBuilder {
       nodeFactory.intrinsicCall({
         opCode: 'box_resize',
         stackArgs: [this.boxValue, size.resolve()],
-        wtype: voidWType,
+        wtype: wtypes.voidWType,
         immediates: [],
         sourceLocation,
       }),
@@ -143,7 +144,7 @@ export class BoxRefResizeFunctionBuilder extends BoxRefBaseFunctionBuilder {
   }
 }
 export class BoxRefExtractFunctionBuilder extends BoxRefBaseFunctionBuilder {
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [start, length],
     } = parseFunctionArgs({
@@ -158,7 +159,7 @@ export class BoxRefExtractFunctionBuilder extends BoxRefBaseFunctionBuilder {
       nodeFactory.intrinsicCall({
         opCode: 'box_extract',
         stackArgs: [this.boxValue, start.resolve(), length.resolve()],
-        wtype: bytesWType,
+        wtype: wtypes.bytesWType,
         immediates: [],
         sourceLocation,
       }),
@@ -167,7 +168,7 @@ export class BoxRefExtractFunctionBuilder extends BoxRefBaseFunctionBuilder {
   }
 }
 export class BoxRefReplaceFunctionBuilder extends BoxRefBaseFunctionBuilder {
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [start, value],
     } = parseFunctionArgs({
@@ -182,7 +183,7 @@ export class BoxRefReplaceFunctionBuilder extends BoxRefBaseFunctionBuilder {
       nodeFactory.intrinsicCall({
         opCode: 'box_replace',
         stackArgs: [this.boxValue, start.resolve(), value.resolve()],
-        wtype: voidWType,
+        wtype: wtypes.voidWType,
         immediates: [],
         sourceLocation,
       }),
@@ -192,7 +193,7 @@ export class BoxRefReplaceFunctionBuilder extends BoxRefBaseFunctionBuilder {
 }
 
 export class BoxRefPutFunctionBuilder extends BoxRefBaseFunctionBuilder {
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [value],
     } = parseFunctionArgs({
@@ -207,7 +208,7 @@ export class BoxRefPutFunctionBuilder extends BoxRefBaseFunctionBuilder {
       nodeFactory.intrinsicCall({
         opCode: 'box_put',
         stackArgs: [this.boxValue, value.resolve()],
-        wtype: voidWType,
+        wtype: wtypes.voidWType,
         immediates: [],
         sourceLocation,
       }),
@@ -216,7 +217,7 @@ export class BoxRefPutFunctionBuilder extends BoxRefBaseFunctionBuilder {
   }
 }
 export class BoxRefSpliceFunctionBuilder extends BoxRefBaseFunctionBuilder {
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [start, stop, value],
     } = parseFunctionArgs({
@@ -231,7 +232,7 @@ export class BoxRefSpliceFunctionBuilder extends BoxRefBaseFunctionBuilder {
       nodeFactory.intrinsicCall({
         opCode: 'box_splice',
         stackArgs: [this.boxValue, start.resolve(), stop.resolve(), value.resolve()],
-        wtype: voidWType,
+        wtype: wtypes.voidWType,
         immediates: [],
         sourceLocation,
       }),

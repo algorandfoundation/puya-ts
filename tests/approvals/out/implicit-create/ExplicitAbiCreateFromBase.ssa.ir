@@ -2,14 +2,23 @@ contract tests/approvals/implicit-create.algo.ts::ExplicitAbiCreateFromBase:
     program approval:
         subroutine @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> bool:
             block@0: // L1
-                let app_id%0#0: uint64 = (txn ApplicationID)
-                goto app_id%0#0 ? block@2 : block@1
-            block@1: // on_create_L23
+                let reinterpret_bool%0#0: bool = (txn ApplicationID)
+                goto reinterpret_bool%0#0 ? block@2 : block@1
+            block@1: // if_body_L1
                 tests/approvals/implicit-create.algo.ts::ExplicitAbiCreateFromBase.constructor()
                 goto block@2
-            block@2: // entrypoint_L23
+            block@2: // after_if_else_L1
                 let tmp%0#0: bool = tests/approvals/implicit-create.algo.ts::ExplicitAbiCreateFromBase.__puya_arc4_router__()
                 return tmp%0#0
+        
+        subroutine tests/approvals/implicit-create.algo.ts::ExplicitAbiCreateFromBase.constructor() -> void:
+            block@0: // L23
+                tests/approvals/implicit-create.algo.ts::BaseWithAbiCreate.constructor()
+                return 
+        
+        subroutine tests/approvals/implicit-create.algo.ts::BaseWithAbiCreate.constructor() -> void:
+            block@0: // L17
+                return 
         
         subroutine tests/approvals/implicit-create.algo.ts::ExplicitAbiCreateFromBase.__puya_arc4_router__() -> bool:
             block@0: // L23
@@ -39,15 +48,6 @@ contract tests/approvals/implicit-create.algo.ts::ExplicitAbiCreateFromBase:
         
         subroutine tests/approvals/implicit-create.algo.ts::BaseWithAbiCreate.create() -> void:
             block@0: // L18
-                return 
-        
-        subroutine tests/approvals/implicit-create.algo.ts::ExplicitAbiCreateFromBase.constructor() -> void:
-            block@0: // L23
-                tests/approvals/implicit-create.algo.ts::BaseWithAbiCreate.constructor()
-                return 
-        
-        subroutine tests/approvals/implicit-create.algo.ts::BaseWithAbiCreate.constructor() -> void:
-            block@0: // L17
                 return 
     
     program clear-state:

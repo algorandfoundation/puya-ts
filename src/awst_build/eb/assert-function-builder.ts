@@ -5,14 +5,14 @@ import { CodeError } from '../../errors'
 import { invariant } from '../../util'
 import type { PType } from '../ptypes'
 import { stringPType } from '../ptypes'
-import type { InstanceBuilder } from './index'
+import type { NodeBuilder } from './index'
 import { FunctionBuilder } from './index'
 import { requireConstantOfType, requireStringConstant } from './util'
 import { parseFunctionArgs } from './util/arg-parsing'
 import { VoidExpressionBuilder } from './void-expression-builder'
 
 export class AssertFunctionBuilder extends FunctionBuilder {
-  call(args: Array<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const [condition, message, ...rest] = args
     if (rest.length !== 0) {
       throw CodeError.unexpectedUnhandledArgs({ sourceLocation })
@@ -39,7 +39,7 @@ export class AssertFunctionBuilder extends FunctionBuilder {
 }
 
 export class ErrFunctionBuilder extends FunctionBuilder {
-  call(args: Array<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [message],
     } = parseFunctionArgs({

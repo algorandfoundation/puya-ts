@@ -1,72 +1,222 @@
-contract NoBare extends @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract, @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract
+contract NoBare
 {
-  constructor(): void
+  approvalProgram(): bool
   {
-    void
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
   }
   
   handleNoop(): void
   {
   }
   
+  constructor(): void
+  {
+    void
+  }
+  
+  Contract::constructor(): void
+  {
+  }
+  
+  Contract::constructor(): void
+  {
+    this.constructor()
+  }
+  
   __algots__.defaultCreate(): void
   {
   }
   
 }
-contract NoNoOp extends @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract, @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract
+contract NoNoOp
 {
-  constructor(): void
+  approvalProgram(): bool
   {
-    void
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
   }
   
   handleUpdate(): void
   {
   }
   
+  constructor(): void
+  {
+    void
+  }
+  
+  Contract::constructor(): void
+  {
+  }
+  
+  Contract::constructor(): void
+  {
+    this.constructor()
+  }
+  
   __algots__.defaultCreate(): void
   {
   }
   
 }
-contract BaseWithBareCreate extends @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract, @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract
+contract BaseWithBareCreate
 {
-  constructor(): void
+  approvalProgram(): bool
   {
-    void
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
   }
   
   create(): void
   {
   }
   
-}
-contract BaseWithAbiCreate extends @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract, @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract
-{
   constructor(): void
   {
     void
+  }
+  
+  Contract::constructor(): void
+  {
+  }
+  
+  Contract::constructor(): void
+  {
+    this.constructor()
+  }
+  
+}
+contract BaseWithAbiCreate
+{
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
   }
   
   create(): void
   {
   }
   
+  constructor(): void
+  {
+    void
+  }
+  
+  Contract::constructor(): void
+  {
+  }
+  
+  Contract::constructor(): void
+  {
+    this.constructor()
+  }
+  
 }
-contract ExplicitBareCreateFromBase extends tests/approvals/implicit-create.algo.ts::BaseWithBareCreate, @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract, @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract
+contract ExplicitBareCreateFromBase
 {
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
   constructor(): void
   {
     super.constructor()
   }
   
+  BaseWithBareCreate::create(): void
+  {
+  }
+  
+  BaseWithBareCreate::constructor(): void
+  {
+    void
+  }
+  
+  Contract::constructor(): void
+  {
+  }
+  
+  Contract::constructor(): void
+  {
+    this.constructor()
+  }
+  
 }
-contract ExplicitAbiCreateFromBase extends tests/approvals/implicit-create.algo.ts::BaseWithAbiCreate, @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract, @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract
+contract ExplicitAbiCreateFromBase
 {
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
   constructor(): void
   {
     super.constructor()
+  }
+  
+  BaseWithAbiCreate::create(): void
+  {
+  }
+  
+  BaseWithAbiCreate::constructor(): void
+  {
+    void
+  }
+  
+  Contract::constructor(): void
+  {
+  }
+  
+  Contract::constructor(): void
+  {
+    this.constructor()
   }
   
 }

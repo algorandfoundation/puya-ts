@@ -1,120 +1,110 @@
-import { intrinsicFactory } from '../../awst/intrinsic-factory'
 import { ContractReference } from '../../awst/models'
 import { nodeFactory } from '../../awst/node-factory'
-import type { AWST } from '../../awst/nodes'
 import { SourceLocation } from '../../awst/source-location'
-import { boolWType } from '../../awst/wtypes'
+import { wtypes } from '../../awst/wtypes'
 import { Constants } from '../../constants'
 import type { AwstBuildContext } from '../context/awst-build-context'
+import { ContractClass } from '../models/contract-class'
 import { arc4BaseContractType, baseContractType } from '../ptypes'
 
-export function buildLibAwst(context: AwstBuildContext): AWST[] {
-  const sourceLocationArc4 = new SourceLocation({
-    file: Constants.arc4ModuleName,
-    line: 1,
-    endLine: 1,
-    column: 0,
-    endColumn: 1,
-  })
-  const sourceLocationBase = new SourceLocation({
-    file: Constants.baseContractModuleName,
-    line: 1,
-    endLine: 1,
-    column: 0,
-    endColumn: 1,
-  })
+export function buildLibAwst(context: AwstBuildContext) {
   const contractCref = ContractReference.fromPType(arc4BaseContractType)
   const baseContractCref = ContractReference.fromPType(baseContractType)
 
-  const baseContract = nodeFactory.contractFragment({
-    id: baseContractCref,
-    name: baseContractType.name,
-    bases: [],
-    init: null,
-    subroutines: [],
-    appState: new Map(),
-    stateTotals: null,
-    docstring: null,
-    sourceLocation: sourceLocationBase,
-    reservedScratchSpace: new Set(),
-    approvalProgram: nodeFactory.contractMethod({
-      memberName: Constants.approvalProgramMethodName,
-      cref: baseContractCref,
+  const baseContract = new ContractClass({
+    type: baseContractType,
+    isAbstract: true,
+    propertyInitialization: [],
+    ctor: nodeFactory.contractMethod({
+      memberName: Constants.constructorMethodName,
+      cref: contractCref,
       args: [],
-      arc4MethodConfig: null,
-      sourceLocation: sourceLocationBase,
-      returnType: boolWType,
-      synthetic: true,
-      inheritable: true,
+      sourceLocation: SourceLocation.None,
       documentation: nodeFactory.methodDocumentation(),
       body: nodeFactory.block(
-        {
-          sourceLocation: sourceLocationBase,
-        },
+        { sourceLocation: SourceLocation.None },
         nodeFactory.expressionStatement({
-          expr: intrinsicFactory.err({
-            comment: 'Approval program not implemented',
-            sourceLocation: sourceLocationBase,
+          expr: nodeFactory.subroutineCallExpression({
+            args: [],
+            wtype: wtypes.voidWType,
+            target: nodeFactory.instanceMethodTarget({
+              memberName: Constants.constructorMethodName,
+            }),
+            sourceLocation: SourceLocation.None,
           }),
         }),
       ),
+      returnType: wtypes.voidWType,
+      arc4MethodConfig: null,
     }),
+    bases: [],
+    methods: [],
+    appState: [],
+    stateTotals: null,
+    description: null,
+    sourceLocation: SourceLocation.None,
+    reservedScratchSpace: new Set(),
+    approvalProgram: null,
     clearProgram: nodeFactory.contractMethod({
       memberName: Constants.clearStateProgramMethodName,
       cref: baseContractCref,
       args: [],
       arc4MethodConfig: null,
-      sourceLocation: sourceLocationBase,
-      returnType: boolWType,
-      synthetic: true,
-      inheritable: true,
+      sourceLocation: SourceLocation.None,
+      returnType: wtypes.boolWType,
       documentation: nodeFactory.methodDocumentation(),
       body: nodeFactory.block(
         {
-          sourceLocation: sourceLocationBase,
+          sourceLocation: SourceLocation.None,
         },
         nodeFactory.returnStatement({
-          sourceLocation: sourceLocationBase,
-          value: nodeFactory.boolConstant({ value: true, sourceLocation: sourceLocationBase }),
+          sourceLocation: SourceLocation.None,
+          value: nodeFactory.boolConstant({ value: true, sourceLocation: SourceLocation.None }),
         }),
       ),
     }),
   })
-  context.addToCompilationSet(baseContractCref, baseContract, false)
-  const contract = nodeFactory.contractFragment({
-    id: contractCref,
-    name: arc4BaseContractType.name,
-    bases: [baseContractCref],
-    init: null,
-    subroutines: [],
-    appState: new Map(),
+  context.addToCompilationSet(baseContractCref, baseContract)
+  const contract = new ContractClass({
+    type: arc4BaseContractType,
+    isAbstract: true,
+    propertyInitialization: [],
+    ctor: nodeFactory.contractMethod({
+      memberName: Constants.constructorMethodName,
+      cref: contractCref,
+      args: [],
+      sourceLocation: SourceLocation.None,
+      documentation: nodeFactory.methodDocumentation(),
+      body: nodeFactory.block({ sourceLocation: SourceLocation.None }),
+      returnType: wtypes.voidWType,
+      arc4MethodConfig: null,
+    }),
+    methods: [],
+    appState: [],
     stateTotals: null,
-    docstring: null,
-    sourceLocation: sourceLocationArc4,
+    description: null,
+    bases: [baseContractCref],
+    clearProgram: null,
+    sourceLocation: SourceLocation.None,
     reservedScratchSpace: new Set(),
     approvalProgram: nodeFactory.contractMethod({
       memberName: Constants.approvalProgramMethodName,
       cref: contractCref,
       args: [],
       arc4MethodConfig: null,
-      sourceLocation: sourceLocationArc4,
-      returnType: boolWType,
-      synthetic: true,
-      inheritable: true,
+      sourceLocation: SourceLocation.None,
+      returnType: wtypes.boolWType,
       documentation: nodeFactory.methodDocumentation(),
       body: nodeFactory.block(
         {
-          sourceLocation: sourceLocationArc4,
+          sourceLocation: SourceLocation.None,
         },
         nodeFactory.returnStatement({
-          sourceLocation: sourceLocationArc4,
-          value: nodeFactory.aRC4Router({ sourceLocation: sourceLocationArc4, wtype: boolWType }),
+          sourceLocation: SourceLocation.None,
+          value: nodeFactory.aRC4Router({ sourceLocation: SourceLocation.None, wtype: wtypes.boolWType }),
         }),
       ),
     }),
-    clearProgram: null,
   })
-  context.addToCompilationSet(contractCref, contract, false)
-
-  return [baseContract, contract]
+  context.addToCompilationSet(contractCref, contract)
 }

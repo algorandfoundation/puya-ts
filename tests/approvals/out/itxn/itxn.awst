@@ -1,16 +1,13 @@
-contract ItxnDemoContract extends @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract
+contract ItxnDemoContract
 {
   globals {
     ["name"]: bytes
   }
-  constructor(): void
-  {
-    void
-    GlobalState["name"]: bytes = 0x
-  }
-  
   approvalProgram(): bool
   {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
     if (Boolean(txn<NumAppArgs>())) {
       switch (txnas<ApplicationArgs>(0)) {
         case "test1":
@@ -30,6 +27,11 @@ contract ItxnDemoContract extends @algorandfoundation/algorand-typescript/base-c
       }
       #switch₁ᵇ:
     }
+    return True
+  }
+  
+  clearProgram(): bool
+  {
     return True
   }
   
@@ -67,6 +69,17 @@ contract ItxnDemoContract extends @algorandfoundation/algorand-typescript/base-c
     assert(createAppTxn.ApplicationArgs[0] == "1")
     assert(createAppTxn.ApplicationArgs[1] == "2")
     assert(createAppTxn.Note == "with args param set")
+  }
+  
+  constructor(): void
+  {
+    void
+    GlobalState["name"]: bytes = 0x
+  }
+  
+  Contract::constructor(): void
+  {
+    this.constructor()
   }
   
 }

@@ -1,20 +1,20 @@
 import { nodeFactory } from '../../../../awst/node-factory'
 import type { BoxValueExpression, Expression } from '../../../../awst/nodes'
 import type { SourceLocation } from '../../../../awst/source-location'
-import { boolWType, boxKeyWType, uint64WType, voidWType, WTuple } from '../../../../awst/wtypes'
+import { wtypes } from '../../../../awst/wtypes'
 import { invariant } from '../../../../util'
 import type { PType } from '../../../ptypes'
 import { boolPType, BoxPType, bytesPType, stringPType, TuplePType, uint64PType } from '../../../ptypes'
 import { instanceEb } from '../../../type-registry'
 import { BooleanExpressionBuilder } from '../../boolean-expression-builder'
-import { FunctionBuilder, type InstanceBuilder, type NodeBuilder, ParameterlessFunctionBuilder } from '../../index'
+import { FunctionBuilder, type NodeBuilder, ParameterlessFunctionBuilder } from '../../index'
 import { parseFunctionArgs } from '../../util/arg-parsing'
 import { VoidExpressionBuilder } from '../../void-expression-builder'
 import { extractKey } from '../util'
 import { BoxProxyExpressionBuilder, boxValue, BoxValueExpressionBuilder } from './base'
 
 export class BoxFunctionBuilder extends FunctionBuilder {
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       ptypes: [contentPType],
       args: [{ key }],
@@ -28,7 +28,7 @@ export class BoxFunctionBuilder extends FunctionBuilder {
     })
 
     const ptype = new BoxPType({ content: contentPType })
-    return new BoxExpressionBuilder(extractKey(key, boxKeyWType), ptype)
+    return new BoxExpressionBuilder(extractKey(key, wtypes.boxKeyWType), ptype)
   }
 }
 
@@ -52,7 +52,7 @@ export class BoxExpressionBuilder extends BoxProxyExpressionBuilder<BoxPType> {
           nodeFactory.stateExists({
             field: boxValueExpr,
             sourceLocation,
-            wtype: boolWType,
+            wtype: wtypes.boolWType,
           }),
         )
       case 'length':
@@ -61,7 +61,7 @@ export class BoxExpressionBuilder extends BoxProxyExpressionBuilder<BoxPType> {
             expr: nodeFactory.intrinsicCall({
               opCode: 'box_len',
               stackArgs: [boxValueExpr],
-              wtype: new WTuple({ types: [uint64WType, boolWType], immutable: true }),
+              wtype: new wtypes.WTuple({ types: [wtypes.uint64WType, wtypes.boolWType], immutable: true }),
               immediates: [],
               sourceLocation,
             }),
@@ -89,7 +89,7 @@ class BoxDeleteFunctionBuilder extends ParameterlessFunctionBuilder {
           nodeFactory.stateDelete({
             sourceLocation,
             field: boxValue,
-            wtype: voidWType,
+            wtype: wtypes.voidWType,
           }),
         ),
     )
@@ -105,7 +105,7 @@ class BoxGetFunctionBuilder extends FunctionBuilder {
     super(sourceLocation)
   }
 
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [{ default: defaultValue }],
     } = parseFunctionArgs({
@@ -140,7 +140,8 @@ class BoxMaybeFunctionBuilder extends FunctionBuilder {
   ) {
     super(sourceLocation)
   }
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     parseFunctionArgs({
       args,
       typeArgs,

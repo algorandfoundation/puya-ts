@@ -2,15 +2,19 @@ contract tests/approvals/property-ordering.algo.ts::Demo:
     program approval:
         subroutine tests/approvals/property-ordering.algo.ts::Demo.approvalProgram() -> bool:
             block@0: // L19
-                let app_id%0#0: uint64 = (txn ApplicationID)
-                goto app_id%0#0 ? block@2 : block@1
-            block@1: // on_create_L18
+                let reinterpret_bool%0#0: bool = (txn ApplicationID)
+                goto reinterpret_bool%0#0 ? block@2 : block@1
+            block@1: // if_body_L1
                 tests/approvals/property-ordering.algo.ts::Demo.constructor()
                 goto block@2
-            block@2: // entrypoint_L18
+            block@2: // after_if_else_L1
                 tests/approvals/property-ordering.algo.ts::test_assign_from_literal(4u)
                 tests/approvals/property-ordering.algo.ts::test_assign_from_var(3u, 4u)
                 return 1u
+        
+        subroutine tests/approvals/property-ordering.algo.ts::Demo.constructor() -> void:
+            block@0: // L18
+                return 
         
         subroutine tests/approvals/property-ordering.algo.ts::test_assign_from_literal(x: uint64) -> void:
             block@0: // L10
@@ -22,10 +26,6 @@ contract tests/approvals/property-ordering.algo.ts::Demo:
         subroutine tests/approvals/property-ordering.algo.ts::test_assign_from_var(x.a: uint64, x.b: uint64) -> void:
             block@0: // L6
                 let (obj.b#0: uint64, obj.a#0: uint64) = (x.b#0, x.a#0)
-                return 
-        
-        subroutine tests/approvals/property-ordering.algo.ts::Demo.constructor() -> void:
-            block@0: // L18
                 return 
     
     program clear-state:

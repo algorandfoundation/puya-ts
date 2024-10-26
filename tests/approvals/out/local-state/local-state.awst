@@ -1,4 +1,4 @@
-contract LocalStateDemo extends @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract, @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract
+contract LocalStateDemo
 {
   globals {
     ["l1"]: uint64
@@ -7,9 +7,17 @@ contract LocalStateDemo extends @algorandfoundation/algorand-typescript/arc4/ind
     ["localBytes2"]: bytes
     ["localEncoded"]: arc4.static_array<arc4.uint64>
   }
-  constructor(): void
+  approvalProgram(): bool
   {
-    void
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
   }
   
   setState(): void
@@ -34,6 +42,20 @@ contract LocalStateDemo extends @algorandfoundation/algorand-typescript/arc4/ind
     STATE_DEL(LocalState[txn<Sender>()]["b1"])
     STATE_DEL(LocalState[txn<Sender>()]["localBytes2"])
     STATE_DEL(LocalState[txn<Sender>()]["localEncoded"])
+  }
+  
+  constructor(): void
+  {
+    void
+  }
+  
+  Contract::constructor(): void
+  {
+  }
+  
+  Contract::constructor(): void
+  {
+    this.constructor()
   }
   
   __algots__.defaultCreate(): void

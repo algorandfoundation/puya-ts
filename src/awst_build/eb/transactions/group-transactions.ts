@@ -7,7 +7,7 @@ import { invariant } from '../../../util'
 import type { PType } from '../../ptypes'
 import { GroupTransactionPType, TransactionFunctionType, uint64PType } from '../../ptypes'
 import { instanceEb } from '../../type-registry'
-import type { InstanceBuilder, NodeBuilder } from '../index'
+import type { NodeBuilder } from '../index'
 import { FunctionBuilder, InstanceExpressionBuilder } from '../index'
 import { parseFunctionArgs } from '../util/arg-parsing'
 import { anyTxnFields, txnKindToFields } from './txn-fields'
@@ -57,7 +57,8 @@ export class GroupTransactionFunctionBuilder extends FunctionBuilder {
     invariant(ptype instanceof TransactionFunctionType, 'ptype must be instance of TransactionFunctionType')
     this.ptype = ptype
   }
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [groupIndex],
     } = parseFunctionArgs({
@@ -88,7 +89,8 @@ class IndexedTransactionFieldFunctionBuilder extends FunctionBuilder {
   ) {
     super(gtxn.sourceLocation)
   }
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [index],
     } = parseFunctionArgs({

@@ -1,11 +1,12 @@
 import type { awst } from '../../awst'
-import { wtypes } from '../../awst'
+
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
 import { nodeFactory } from '../../awst/node-factory'
 import type { Expression } from '../../awst/nodes'
 import { BytesBinaryOperator, BytesConstant, BytesEncoding, BytesUnaryOperator, IntegerConstant, StringConstant } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
-import { stringWType } from '../../awst/wtypes'
+import { wtypes } from '../../awst/wtypes'
+
 import { CodeError, wrapInCodeError } from '../../errors'
 import { logger } from '../../logger'
 import { base32ToUint8Array, base64ToUint8Array, hexToUint8Array, uint8ArrayToUtf8, utf8ToUint8Array } from '../../util'
@@ -69,7 +70,7 @@ export class BytesFunctionBuilder extends FunctionBuilder {
     return new BytesExpressionBuilder(result)
   }
 
-  call(args: Array<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [initialValue],
     } = parseFunctionArgs({
@@ -148,7 +149,8 @@ class FromEncodingBuilder extends FunctionBuilder {
   ) {
     super(sourceLocation)
   }
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const [value] = requireExpressionsOfType(args, [stringPType], sourceLocation)
 
     if (value instanceof StringConstant) {
@@ -232,7 +234,7 @@ export class BytesExpressionBuilder extends InstanceExpressionBuilder<InstanceTy
     return nodeFactory.reinterpretCast({
       expr: this._expr,
       sourceLocation,
-      wtype: stringWType,
+      wtype: wtypes.stringWType,
     })
   }
 }
@@ -242,7 +244,7 @@ export class ConcatExpressionBuilder extends FunctionBuilder {
     super(expr.sourceLocation)
   }
 
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation) {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const [other] = requireExpressionsOfType(args, [bytesPType], sourceLocation)
     return new BytesExpressionBuilder(
       intrinsicFactory.bytesConcat({

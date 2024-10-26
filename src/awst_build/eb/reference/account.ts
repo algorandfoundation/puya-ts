@@ -1,7 +1,7 @@
 import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
-import { boolWType, bytesWType, uint64WType, WTuple } from '../../../awst/wtypes'
+import { wtypes } from '../../../awst/wtypes'
 import type { PType } from '../../ptypes'
 import { accountPType, applicationPType, assetPType, bytesPType, uint64PType } from '../../ptypes'
 import { BooleanExpressionBuilder } from '../boolean-expression-builder'
@@ -13,7 +13,7 @@ import { compareBytes } from '../util/compare-bytes'
 import { ReferenceTypeExpressionBuilder } from './base'
 
 export class AccountFunctionBuilder extends FunctionBuilder {
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [addressBytes],
     } = parseFunctionArgs({
@@ -86,7 +86,7 @@ export class AccountExpressionBuilder extends ReferenceTypeExpressionBuilder {
   toBytes(sourceLocation: SourceLocation): Expression {
     return nodeFactory.reinterpretCast({
       expr: this._expr,
-      wtype: bytesWType,
+      wtype: wtypes.bytesWType,
       sourceLocation,
     })
   }
@@ -100,7 +100,7 @@ class IsOptedInFunctionBuilder extends FunctionBuilder {
     super(sourceLocation)
   }
 
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [applicationOrAsset],
     } = parseFunctionArgs({
@@ -119,7 +119,7 @@ class IsOptedInFunctionBuilder extends FunctionBuilder {
             opCode: 'asset_holding_get',
             immediates: ['AssetBalance'],
             stackArgs: [this.expr, applicationOrAsset.resolve()],
-            wtype: new WTuple({ types: [uint64WType, boolWType], immutable: true }),
+            wtype: new wtypes.WTuple({ types: [wtypes.uint64WType, wtypes.boolWType], immutable: true }),
             sourceLocation,
           }),
           index: 1n,
@@ -132,7 +132,7 @@ class IsOptedInFunctionBuilder extends FunctionBuilder {
           opCode: 'app_opted_in',
           stackArgs: [this.expr, applicationOrAsset.resolve()],
           sourceLocation,
-          wtype: boolWType,
+          wtype: wtypes.boolWType,
           immediates: [],
         }),
       )

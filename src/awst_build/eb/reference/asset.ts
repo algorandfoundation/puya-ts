@@ -1,18 +1,18 @@
 import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
-import { boolWType, WTuple } from '../../../awst/wtypes'
+import { wtypes } from '../../../awst/wtypes'
 import type { PType } from '../../ptypes'
 import { accountPType, assetPType, boolPType, bytesPType, uint64PType } from '../../ptypes'
 import { instanceEb } from '../../type-registry'
-import type { InstanceBuilder, NodeBuilder } from '../index'
+import type { NodeBuilder } from '../index'
 import { FunctionBuilder } from '../index'
 import { parseFunctionArgs } from '../util/arg-parsing'
 import type { FieldMapping } from './base'
 import { Uint64BackedReferenceTypeExpressionBuilder } from './base'
 
 export class AssetFunctionBuilder extends FunctionBuilder {
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [assetId],
     } = parseFunctionArgs({
@@ -47,7 +47,7 @@ class AssetHoldingExpressionBuilder extends FunctionBuilder {
     super(sourceLocation)
   }
 
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [holder],
     } = parseFunctionArgs({
@@ -63,7 +63,7 @@ class AssetHoldingExpressionBuilder extends FunctionBuilder {
       opCode: 'asset_holding_get',
       immediates: [immediate],
       stackArgs: [holder.resolve(), this.asset],
-      wtype: new WTuple({ types: [resultType.wtypeOrThrow, boolWType], immutable: true }),
+      wtype: new wtypes.WTuple({ types: [resultType.wtypeOrThrow, wtypes.boolWType], immutable: true }),
       sourceLocation,
     })
     return instanceEb(nodeFactory.checkedMaybe({ expr: op, comment: `account opted into asset` }), resultType)
