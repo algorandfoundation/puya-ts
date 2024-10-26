@@ -3,13 +3,14 @@ import type { awst } from '../../awst'
 import type { ContractReference, LogicSigReference } from '../../awst/models'
 import { CompilationSet } from '../../awst/models'
 import { nodeFactory } from '../../awst/node-factory'
-import type { AppStorageDefinition, Constant, ContractFragment } from '../../awst/nodes'
+import type { AppStorageDefinition, Constant } from '../../awst/nodes'
 import { SourceLocation } from '../../awst/source-location'
 import { CodeError } from '../../errors'
 import { logger } from '../../logger'
 import { codeInvariant, invariant } from '../../util'
 import type { AppStorageDeclaration } from '../contract-data'
 import type { NodeBuilder } from '../eb'
+import type { ContractClass, LogicSig } from '../models/contract-class'
 import type { ContractClassPType, PType } from '../ptypes'
 import { typeRegistry } from '../type-registry'
 import { TypeResolver } from '../type-resolver'
@@ -87,10 +88,10 @@ export interface AwstBuildContext {
 
   getStorageDeclaration(contractType: ContractClassPType, memberName: string): AppStorageDeclaration | undefined
 
-  getStorageDefinitionsForContract(contractType: ContractClassPType): Map<string, AppStorageDefinition>
+  getStorageDefinitionsForContract(contractType: ContractClassPType): AppStorageDefinition[]
 
-  addToCompilationSet(compilationTarget: ContractReference, contract: ContractFragment, includeInOutput: boolean): void
-  addToCompilationSet(compilationTarget: LogicSigReference): void
+  addToCompilationSet(compilationTarget: ContractReference, contract: ContractClass): void
+  addToCompilationSet(compilationTarget: LogicSigReference, logicSig: LogicSig): void
 
   get compilationSet(): CompilationSet
 }
@@ -189,8 +190,7 @@ class AwstBuildContextImpl implements AwstBuildContext {
   }
 
   getSourceLocation(node: ts.Node) {
-    const sourceFile = node.getSourceFile()
-    return SourceLocation.fromNode(sourceFile, node, this.program.getCurrentDirectory())
+    return SourceLocation.fromNode(node, this.program.getCurrentDirectory())
   }
 
   addStorageDeclaration(declaration: AppStorageDeclaration): void {
@@ -215,17 +215,17 @@ class AwstBuildContextImpl implements AwstBuildContext {
     return undefined
   }
 
-  getStorageDefinitionsForContract(contractType: ContractClassPType): Map<string, AppStorageDefinition> {
+  getStorageDefinitionsForContract(contractType: ContractClassPType): AppStorageDefinition[] {
     const result = new Map<string, AppStorageDefinition>()
     for (const baseType of contractType.baseTypes) {
-      for (const [member, definition] of this.getStorageDefinitionsForContract(baseType)) {
-        if (result.has(member)) {
+      for (const definition of this.getStorageDefinitionsForContract(baseType)) {
+        if (result.has(definition.memberName)) {
           logger.error(
             definition.sourceLocation,
-            `Redefinition of app storage member, original declared in ${result.get(member)?.sourceLocation}`,
+            `Redefinition of app storage member, original declared in ${result.get(definition.memberName)?.sourceLocation}`,
           )
         }
-        result.set(member, definition)
+        result.set(definition.memberName, definition)
       }
     }
     const localDeclarations = this.storageDeclarations.get(contractType.fullName)
@@ -240,20 +240,17 @@ class AwstBuildContextImpl implements AwstBuildContext {
         result.set(member, declaration.definition)
       }
     }
-    return result
+    return Array.from(result.values())
   }
 
-  addToCompilationSet(compilationTarget: ContractReference, contract: ContractFragment, includeInOutput: boolean): void
-  addToCompilationSet(compilationTarget: LogicSigReference): void
-  addToCompilationSet(compilationTarget: ContractReference | LogicSigReference, contract?: ContractFragment, includeInOutput?: boolean) {
+  addToCompilationSet(compilationTarget: ContractReference, contract: ContractClass): void
+  addToCompilationSet(compilationTarget: LogicSigReference, logicSig: LogicSig): void
+  addToCompilationSet(compilationTarget: ContractReference | LogicSigReference, contractOrSig: ContractClass | LogicSig) {
     if (this.#compilationSet.has(compilationTarget)) {
       logger.debug(undefined, `${compilationTarget.id} already exists in compilation set`)
       return
     }
-    this.#compilationSet.set(compilationTarget, {
-      contract,
-      includeInOutput: includeInOutput ?? true,
-    })
+    this.#compilationSet.set(compilationTarget, contractOrSig)
   }
 
   get compilationSet() {

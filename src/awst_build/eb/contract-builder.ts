@@ -2,7 +2,7 @@ import { nodeFactory } from '../../awst/node-factory'
 
 import type { Expression, LValue } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
-import { voidWType } from '../../awst/wtypes'
+import { wtypes } from '../../awst/wtypes'
 import { Constants } from '../../constants'
 import { CodeError } from '../../errors'
 import { codeInvariant } from '../../util'
@@ -12,7 +12,7 @@ import { arc4BaseContractType, baseContractType, StorageProxyPType } from '../pt
 
 import { instanceEb } from '../type-registry'
 
-import { ContractMethodExpressionBuilder } from './free-subroutine-expression-builder'
+import { BaseContractMethodExpressionBuilder, ContractMethodExpressionBuilder } from './free-subroutine-expression-builder'
 import type { NodeBuilder } from './index'
 import { InstanceBuilder } from './index'
 import { VoidExpressionBuilder } from './void-expression-builder'
@@ -28,7 +28,7 @@ export class ContractThisBuilder extends InstanceBuilder<ContractClassPType> {
   constructor(
     ptype: ContractClassPType,
     sourceLocation: SourceLocation,
-    private context: AwstBuildContext,
+    protected context: AwstBuildContext,
   ) {
     super(sourceLocation)
     this.#ptype = ptype
@@ -60,7 +60,7 @@ export class ContractSuperBuilder extends ContractThisBuilder {
     super(ptype, sourceLocation, context)
   }
 
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     if (this.ptype.equals(baseContractType) || this.ptype.equals(arc4BaseContractType)) {
       // Contract base types have no code to execute so we can just return void
       return new VoidExpressionBuilder(nodeFactory.voidConstant({ sourceLocation }))
@@ -74,8 +74,16 @@ export class ContractSuperBuilder extends ContractThisBuilder {
         }),
         args: [],
         sourceLocation,
-        wtype: voidWType,
+        wtype: wtypes.voidWType,
       }),
     )
+  }
+
+  memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
+    const method = this.ptype.methods[name]
+    if (method) {
+      return new BaseContractMethodExpressionBuilder(sourceLocation, method, this.ptype)
+    }
+    return super.memberAccess(name, sourceLocation)
   }
 }

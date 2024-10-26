@@ -1,15 +1,14 @@
 import ts from 'typescript'
-import { ARC4BareMethodConfig, ARC4CreateOption, ContractReference, OnCompletionAction } from '../awst/models'
+import { ContractReference } from '../awst/models'
 import { nodeFactory } from '../awst/node-factory'
 import type * as awst from '../awst/nodes'
 import type { ContractMethod } from '../awst/nodes'
-import { ContractFragment } from '../awst/nodes'
 import type { SourceLocation } from '../awst/source-location'
-import { voidWType } from '../awst/wtypes'
+import { wtypes } from '../awst/wtypes'
 import { Constants } from '../constants'
 import { AwstBuildFailureError, NotSupported, TodoError } from '../errors'
 import { logger } from '../logger'
-import { codeInvariant, invariant, isIn } from '../util'
+import { codeInvariant, invariant } from '../util'
 import type { ClassElements } from '../visitor/syntax-names'
 import type { Visitor } from '../visitor/visitor'
 import { accept } from '../visitor/visitor'
@@ -22,28 +21,24 @@ import { BoxProxyExpressionBuilder } from './eb/storage/box'
 import { GlobalStateFunctionResultBuilder } from './eb/storage/global-state'
 import { LocalStateFunctionResultBuilder } from './eb/storage/local-state'
 import { requireInstanceBuilder } from './eb/util'
-import { ContractClassPType } from './ptypes'
+import { ContractClass } from './models/contract-class'
+import type { ContractClassPType } from './ptypes'
 
 export class ContractVisitor extends BaseVisitor implements Visitor<ClassElements, void> {
   private _ctor?: ContractMethod
-  private _subroutines: ContractMethod[] = []
+  private _methods: ContractMethod[] = []
   private _approvalProgram: ContractMethod | null = null
   private _clearStateProgram: ContractMethod | null = null
-  private _className: string
-  private _contractPType: ContractClassPType
+  private readonly _contractPType: ContractClassPType
   private readonly _propertyInitialization: awst.Statement[] = []
-  public readonly result: ContractFragment
   public accept = <TNode extends ts.Node>(node: TNode) => accept<ContractVisitor, TNode>(this, node)
 
-  constructor(ctx: AwstBuildContext, classDec: ts.ClassDeclaration) {
+  constructor(ctx: AwstBuildContext, classDec: ts.ClassDeclaration, ptype: ContractClassPType) {
     super(ctx)
     const sourceLocation = this.context.getSourceLocation(classDec)
     codeInvariant(classDec.name, 'Anonymous classes are not supported for contracts', sourceLocation)
-    this._className = this.textVisitor.accept(classDec.name)
 
-    const contractPtype = this.context.getPTypeForNode(classDec)
-    invariant(contractPtype instanceof ContractClassPType, 'Contract PType must be ContractClassType')
-    this._contractPType = contractPtype
+    this._contractPType = ptype
 
     const isAbstract = Boolean(classDec.modifiers?.some((m) => m.kind === ts.SyntaxKind.AbstractKeyword))
 
@@ -58,58 +53,21 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
         this.acceptAndIgnoreBuildErrors(member)
       }
     }
-    const baseContracts = this.getBaseContracts(contractPtype)
-
-    if (this._contractPType.isARC4) {
-      const hasCreateMethod = this._subroutines.some((s) =>
-        isIn(s.arc4MethodConfig?.create, [ARC4CreateOption.Require, ARC4CreateOption.Allow]),
-      )
-      const baseHasCreateMethod = baseContracts.some((b) => {
-        const c = this.context.compilationSet.get(b)?.contract
-        if (!c) {
-          logger.error(sourceLocation, `Cannot find compilation data for base contract ${b}`)
-          return false
-        }
-        return c.subroutines.some((s) => isIn(s.arc4MethodConfig?.create, [ARC4CreateOption.Require, ARC4CreateOption.Allow]))
-      })
-      const hasBareNoopMethod = this._subroutines.some(
-        (s) => s.arc4MethodConfig?.isBare && isIn(OnCompletionAction.NoOp, s.arc4MethodConfig.allowedCompletionTypes),
-      )
-      const baseHasNoopMethod = baseContracts.some((b) => {
-        const c = this.context.compilationSet.get(b)?.contract
-        if (!c) {
-          logger.error(sourceLocation, `Cannot find compilation data for base contract ${b}`)
-          return false
-        }
-        return c.subroutines.some(
-          (s) => s.arc4MethodConfig?.isBare && isIn(OnCompletionAction.NoOp, s.arc4MethodConfig.allowedCompletionTypes),
-        )
-      })
-      if (!isAbstract && !hasCreateMethod && !baseHasCreateMethod) {
-        if (hasBareNoopMethod || baseHasNoopMethod) {
-          logger.error(
-            sourceLocation,
-            `Non-abstract ARC4 contract has no methods which can be called to create the contract. ` +
-              `An implicit one could not be inserted as there is already a bare method handling the NoOp on completion action. ` +
-              `In order to allow creating the contract specify { onCreate: 'allow' } or { onCreate: 'require' } in an @abimethod or @baremethod decorator above the chosen method.`,
-          )
-        } else {
-          this._subroutines.push(this.makeDefaultCreate(sourceLocation))
-        }
-      }
+    if (this._approvalProgram && this._contractPType.isARC4) {
+      logger.error(this._approvalProgram.sourceLocation, 'ARC4 contracts cannot define their own approval methods.')
     }
 
-    const cref = ContractReference.fromPType(this._contractPType)
-    this.result = new ContractFragment({
-      name: this._className,
+    const contract = new ContractClass({
+      type: this._contractPType,
+      propertyInitialization: this._propertyInitialization,
+      isAbstract: isAbstract,
       appState: this.context.getStorageDefinitionsForContract(this._contractPType),
-      init: this._ctor ?? this.makeDefaultConstructor(sourceLocation),
-      subroutines: this._subroutines,
-      docstring: null,
-      approvalProgram: this._approvalProgram,
+      ctor: this._ctor ?? this.makeDefaultConstructor(sourceLocation),
+      methods: this._methods,
+      bases: this._contractPType.baseTypes.map((bt) => ContractReference.fromPType(bt)),
+      description: null,
+      approvalProgram: this._contractPType.isARC4 ? null : this._approvalProgram,
       clearProgram: this._clearStateProgram,
-      bases: baseContracts,
-      id: cref,
       reservedScratchSpace: new Set(),
       sourceLocation: sourceLocation,
       stateTotals: {
@@ -119,7 +77,15 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
         localUints: null,
       },
     })
-    this.context.addToCompilationSet(cref, this.result, !isAbstract)
+    this.context.addToCompilationSet(contract.id, contract)
+  }
+
+  private getContract(): [] | [awst.Contract] {
+    const contractClass = this.context.compilationSet.getContractClass(ContractReference.fromPType(this._contractPType))
+    if (!contractClass.isAbstract) {
+      return [contractClass.buildContract(this.context.compilationSet)]
+    }
+    return []
   }
 
   private acceptAndIgnoreBuildErrors(node: ts.ClassElement) {
@@ -141,9 +107,8 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
       args: [],
       arc4MethodConfig: null,
       sourceLocation,
-      returnType: voidWType,
-      synthetic: true,
-      inheritable: true,
+      returnType: wtypes.voidWType,
+
       documentation: nodeFactory.methodDocumentation(),
       body: nodeFactory.block(
         { sourceLocation },
@@ -154,39 +119,6 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
         }),
         ...this._propertyInitialization,
       ),
-    })
-  }
-
-  private makeDefaultCreate(sourceLocation: SourceLocation) {
-    return nodeFactory.contractMethod({
-      memberName: '__algots__.defaultCreate',
-      cref: ContractReference.fromPType(this._contractPType),
-      args: [],
-      arc4MethodConfig: new ARC4BareMethodConfig({
-        allowedCompletionTypes: [OnCompletionAction.NoOp],
-        create: ARC4CreateOption.Require,
-        sourceLocation,
-      }),
-      synthetic: true,
-      returnType: voidWType,
-      inheritable: false,
-      documentation: nodeFactory.methodDocumentation(),
-      sourceLocation,
-      body: nodeFactory.block({
-        sourceLocation,
-      }),
-    })
-  }
-
-  private getBaseContracts(contractType: ContractClassPType): ContractReference[] {
-    return contractType.baseTypes.flatMap((baseType) => {
-      return [
-        new ContractReference({
-          className: baseType.name,
-          moduleName: baseType.module,
-        }),
-        ...this.getBaseContracts(baseType),
-      ]
     })
   }
 
@@ -216,7 +148,7 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
         this._clearStateProgram = contractMethod
         break
       default:
-        this._subroutines.push(contractMethod)
+        this._methods.push(contractMethod)
     }
   }
   visitPropertyDeclaration(node: ts.PropertyDeclaration): void {
@@ -264,7 +196,7 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
     throw new TodoError('visitSetAccessor')
   }
 
-  public static buildContract(ctx: AwstBuildContext, classDec: ts.ClassDeclaration): awst.ContractFragment {
-    return new ContractVisitor(ctx.createChildContext(), classDec).result
+  public static buildContract(ctx: AwstBuildContext, classDec: ts.ClassDeclaration, ptype: ContractClassPType): [] | [awst.Contract] {
+    return new ContractVisitor(ctx.createChildContext(), classDec, ptype).getContract()
   }
 }

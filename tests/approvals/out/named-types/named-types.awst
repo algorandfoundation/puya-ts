@@ -1,8 +1,16 @@
-contract MyContract extends @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract, @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract
+contract MyContract
 {
-  constructor(): void
+  approvalProgram(): bool
   {
-    void
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
   }
   
   getXY(): XY{ x: uint64, y: uint64 }
@@ -26,6 +34,20 @@ contract MyContract extends @algorandfoundation/algorand-typescript/arc4/index.d
     b: YX{ y: uint64, x: uint64 } = this.getYX()
     c: { x: uint64, y: uint64 } = this.getAnon()
     return <tuple>[a, b, c]
+  }
+  
+  constructor(): void
+  {
+    void
+  }
+  
+  Contract::constructor(): void
+  {
+  }
+  
+  Contract::constructor(): void
+  {
+    this.constructor()
   }
   
   __algots__.defaultCreate(): void

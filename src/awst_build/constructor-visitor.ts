@@ -31,8 +31,6 @@ export class ConstructorVisitor extends ContractMethodBaseVisitor {
       args,
       returnType: voidPType.wtype,
       body,
-      inheritable: true,
-      synthetic: false,
       cref: contractInfo.cref,
       documentation,
     })

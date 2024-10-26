@@ -4,14 +4,15 @@ import { nodeFactory } from '../../awst/node-factory'
 import type { Expression } from '../../awst/nodes'
 import { BigUIntBinaryOperator, BigUIntPostfixUnaryOperator, IntegerConstant, NumericComparison } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
-import { bytesWType } from '../../awst/wtypes'
+import { wtypes } from '../../awst/wtypes'
+
 import { NotSupported } from '../../errors'
 import { logger } from '../../logger'
 import { tryConvertEnum } from '../../util'
 import type { InstanceType, PType } from '../ptypes'
 import { BigUintFunction, biguintPType, boolPType, bytesPType, stringPType, uint64PType } from '../ptypes'
 import { instanceEb } from '../type-registry'
-import type { InstanceBuilder } from './index'
+import type { InstanceBuilder, NodeBuilder } from './index'
 import { BuilderBinaryOp, BuilderComparisonOp, BuilderUnaryOp, FunctionBuilder, InstanceExpressionBuilder } from './index'
 import { UInt64ExpressionBuilder } from './uint64-expression-builder'
 import { requireExpressionOfType } from './util'
@@ -20,7 +21,7 @@ import { parseFunctionArgs } from './util/arg-parsing'
 export class BigUintFunctionBuilder extends FunctionBuilder {
   readonly ptype = BigUintFunction
 
-  call(args: Array<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [initialValue],
     } = parseFunctionArgs({
@@ -198,6 +199,6 @@ export class BigUintExpressionBuilder extends InstanceExpressionBuilder<Instance
   }
 
   toBytes(sourceLocation: SourceLocation): awst.Expression {
-    return nodeFactory.reinterpretCast({ expr: this.resolve(), sourceLocation, wtype: bytesWType })
+    return nodeFactory.reinterpretCast({ expr: this.resolve(), sourceLocation, wtype: wtypes.bytesWType })
   }
 }

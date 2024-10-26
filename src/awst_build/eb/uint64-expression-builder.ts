@@ -4,12 +4,13 @@ import { nodeFactory } from '../../awst/node-factory'
 import type { Expression } from '../../awst/nodes'
 import { BoolConstant, UInt64BinaryOperator, UInt64PostfixUnaryOperator, UInt64UnaryOperator } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
-import { boolWType, uint64WType } from '../../awst/wtypes'
+import { wtypes } from '../../awst/wtypes'
+
 import { NotSupported } from '../../errors'
 import { tryConvertEnum } from '../../util'
 import type { InstanceType, PType } from '../ptypes'
 import { boolPType, Uint64Function, uint64PType } from '../ptypes'
-import type { BuilderComparisonOp, InstanceBuilder } from './index'
+import type { BuilderComparisonOp, InstanceBuilder, NodeBuilder } from './index'
 import { BuilderBinaryOp, BuilderUnaryOp, FunctionBuilder, InstanceExpressionBuilder } from './index'
 import { requireExpressionOfType } from './util'
 import { parseFunctionArgs } from './util/arg-parsing'
@@ -18,7 +19,7 @@ import { compareUint64 } from './util/compare-uint64'
 export class UInt64FunctionBuilder extends FunctionBuilder {
   readonly ptype = Uint64Function
 
-  call(args: Array<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [value],
     } = parseFunctionArgs({
@@ -51,7 +52,7 @@ export class UInt64FunctionBuilder extends FunctionBuilder {
         return new UInt64ExpressionBuilder(
           nodeFactory.reinterpretCast({
             expr,
-            wtype: uint64WType,
+            wtype: wtypes.uint64WType,
             sourceLocation,
           }),
         )
@@ -69,7 +70,7 @@ export class UInt64ExpressionBuilder extends InstanceExpressionBuilder<InstanceT
     const asBool = nodeFactory.reinterpretCast({
       sourceLocation,
       expr: this.resolve(),
-      wtype: boolWType,
+      wtype: wtypes.boolWType,
     })
     if (negate) {
       return nodeFactory.not({

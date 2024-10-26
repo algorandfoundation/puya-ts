@@ -2,12 +2,12 @@ contract tests/approvals/ensure-budget.algo.ts::EnsureBudgetContract:
     program approval:
         subroutine tests/approvals/ensure-budget.algo.ts::EnsureBudgetContract.approvalProgram() -> bool:
             block@0: // L4
-                let app_id%0#0: uint64 = (txn ApplicationID)
-                goto app_id%0#0 ? block@2 : block@1
-            block@1: // on_create_L3
+                let reinterpret_bool%0#0: bool = (txn ApplicationID)
+                goto reinterpret_bool%0#0 ? block@2 : block@1
+            block@1: // if_body_L1
                 tests/approvals/ensure-budget.algo.ts::EnsureBudgetContract.constructor()
                 goto block@2
-            block@2: // entrypoint_L3
+            block@2: // after_if_else_L1
                 _puya_lib.util.ensure_budget(100u, 0u)
                 _puya_lib.util.ensure_budget(100u, 0u)
                 _puya_lib.util.ensure_budget(100u, 1u)

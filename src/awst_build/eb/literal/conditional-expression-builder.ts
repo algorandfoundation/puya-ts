@@ -1,7 +1,8 @@
 import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
-import { boolWType } from '../../../awst/wtypes'
+import { wtypes } from '../../../awst/wtypes'
+
 import type { PType, PTypeOrClass } from '../../ptypes'
 import { typeRegistry } from '../../type-registry'
 import type { InstanceBuilder } from '../index'
@@ -24,7 +25,7 @@ export class ConditionalExpressionBuilder extends LiteralExpressionBuilder {
       falseExpr: this.whenFalse.boolEval(sourceLocation, negate),
       trueExpr: this.whenTrue.boolEval(sourceLocation, negate),
       condition: this.condition,
-      wtype: boolWType,
+      wtype: wtypes.boolWType,
     })
   }
 

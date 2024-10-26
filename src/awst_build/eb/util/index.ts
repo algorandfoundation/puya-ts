@@ -65,7 +65,7 @@ export function requireInstanceBuilder(builder: NodeBuilder): InstanceBuilder {
 }
 
 export function requireExpressionsOfType<const TPTypes extends [...PType[]]>(
-  builders: ReadonlyArray<InstanceBuilder>,
+  builders: ReadonlyArray<NodeBuilder>,
   ptypes: TPTypes,
   sourceLocation: SourceLocation,
 ): Array<awst.Expression> {

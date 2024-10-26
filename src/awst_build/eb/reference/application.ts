@@ -3,13 +3,13 @@ import type { Expression } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import type { PType } from '../../ptypes'
 import { accountPType, applicationPType, bytesPType, uint64PType } from '../../ptypes'
-import type { InstanceBuilder, NodeBuilder } from '../index'
+import type { NodeBuilder } from '../index'
 import { FunctionBuilder } from '../index'
 import { parseFunctionArgs } from '../util/arg-parsing'
 import { Uint64BackedReferenceTypeExpressionBuilder } from './base'
 
 export class ApplicationFunctionBuilder extends FunctionBuilder {
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [applicationId],
     } = parseFunctionArgs({

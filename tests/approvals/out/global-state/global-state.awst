@@ -1,20 +1,4 @@
-contract BaseTestContract extends @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract, @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract
-{
-  globals {
-    ["baseTestState"]: string
-  }
-  constructor(): void
-  {
-    void
-    GlobalState["baseTestState"]: string = "testing 123"
-  }
-  
-  __algots__.defaultCreate(): void
-  {
-  }
-  
-}
-contract TestContract extends tests/approvals/global-state.algo.ts::BaseTestContract, @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract, @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract
+contract TestContract
 {
   globals {
     ["baseTestState"]: string
@@ -23,6 +7,22 @@ contract TestContract extends tests/approvals/global-state.algo.ts::BaseTestCont
     ["testState"]: uint64
     ["TESTSTATE"]: uint64
   }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    assert(STATE_EXISTS(GlobalState["testState"]))
+    assert(GlobalState["testState"] == 2)
+    GlobalState["testState"]: uint64 = btoi(txnas<ApplicationArgs>(0))
+    return True
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
   constructor(): void
   {
     someValue: uint64 = 72057594037927936
@@ -33,12 +33,15 @@ contract TestContract extends tests/approvals/global-state.algo.ts::BaseTestCont
     GlobalState["noInitialInt"]: uint64 = someValue * GlobalState["testState"]
   }
   
-  approvalProgram(): bool
+  BaseTestContract::constructor(): void
   {
-    assert(STATE_EXISTS(GlobalState["testState"]))
-    assert(GlobalState["testState"] == 2)
-    GlobalState["testState"]: uint64 = btoi(txnas<ApplicationArgs>(0))
-    return True
+    void
+    GlobalState["baseTestState"]: string = "testing 123"
+  }
+  
+  Contract::constructor(): void
+  {
+    this.constructor()
   }
   
 }

@@ -4,7 +4,7 @@ import type { Props } from '../typescript-helpers'
 import type { ARC4ABIMethodConfig, ARC4BareMethodConfig, ContractReference, LogicSigReference } from './models'
 import type { SourceLocation } from './source-location'
 import type { TxnField } from './txn-fields'
-import type * as wtypes from './wtypes'
+import type { wtypes } from './wtypes'
 
 export class SubroutineID {
   constructor(props: Props<SubroutineID>) {
@@ -250,7 +250,7 @@ export class ARC4Encode extends Expression {
     this.wtype = props.wtype
   }
   value: Expression
-  declare wtype: wtypes.ARC4WType
+  declare wtype: wtypes.ARC4Type
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitARC4Encode(this)
   }
@@ -560,7 +560,7 @@ export class NewArray extends Expression {
     this.wtype = props.wtype
     this.values = props.values
   }
-  declare wtype: wtypes.WArray | wtypes.ARC4ArrayWType
+  declare wtype: wtypes.WArray | wtypes.ARC4Array
   values: Array<Expression>
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitNewArray(this)
@@ -1081,7 +1081,7 @@ export class NewStruct extends Expression {
     this.wtype = props.wtype
     this.values = props.values
   }
-  declare wtype: wtypes.WStructType | wtypes.ARC4StructWType
+  declare wtype: wtypes.WStructType | wtypes.ARC4Struct
   values: Map<string, Expression>
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitNewStruct(this)
@@ -1150,14 +1150,10 @@ export class ContractMethod extends classes(_Function, ContractMemberNode) {
     this.cref = props.cref
     this.memberName = props.memberName
     this.arc4MethodConfig = props.arc4MethodConfig
-    this.synthetic = props.synthetic
-    this.inheritable = props.inheritable
   }
   cref: ContractReference
   memberName: string
   arc4MethodConfig: ARC4BareMethodConfig | ARC4ABIMethodConfig | null
-  synthetic: boolean
-  inheritable: boolean
   accept<T>(visitor: ContractMemberNodeVisitor<T>): T {
     return visitor.visitContractMethod(this)
   }
@@ -1254,39 +1250,37 @@ export class ARC4Router extends Expression {
     return visitor.visitARC4Router(this)
   }
 }
-export class ContractFragment extends RootNode {
-  constructor(props: Props<ContractFragment>) {
+export class Contract extends RootNode {
+  constructor(props: Props<Contract>) {
     super(props)
     this.id = props.id
     this.name = props.name
-    this.bases = props.bases
-    this.init = props.init
+    this.description = props.description
+    this.methodResolutionOrder = props.methodResolutionOrder
     this.approvalProgram = props.approvalProgram
     this.clearProgram = props.clearProgram
-    this.subroutines = props.subroutines
+    this.methods = props.methods
     this.appState = props.appState
-    this.reservedScratchSpace = props.reservedScratchSpace
     this.stateTotals = props.stateTotals
-    this.docstring = props.docstring
+    this.reservedScratchSpace = props.reservedScratchSpace
   }
   id: ContractReference
   name: string
-  bases: Array<ContractReference>
-  init: ContractMethod | null
-  approvalProgram: ContractMethod | null
-  clearProgram: ContractMethod | null
-  subroutines: Array<ContractMethod>
-  appState: Map<string, AppStorageDefinition>
-  reservedScratchSpace: Set<bigint>
+  description: string | null
+  methodResolutionOrder: Array<ContractReference>
+  approvalProgram: ContractMethod
+  clearProgram: ContractMethod
+  methods: Array<ContractMethod>
+  appState: Array<AppStorageDefinition>
   stateTotals: StateTotals | null
-  docstring: string | null
+  reservedScratchSpace: Set<bigint>
   accept<T>(visitor: RootNodeVisitor<T>): T {
-    return visitor.visitContractFragment(this)
+    return visitor.visitContract(this)
   }
 }
 export type LValue = VarExpression | FieldExpression | IndexExpression | TupleExpression | AppStateExpression | AppAccountStateExpression
 export type Constant = IntegerConstant | BoolConstant | BytesConstant | StringConstant
-export type AWST = ContractFragment | LogicSignature | Subroutine
+export type AWST = Contract | LogicSignature | Subroutine
 export const concreteNodes = {
   subroutineID: SubroutineID,
   expressionStatement: ExpressionStatement,
@@ -1376,7 +1370,7 @@ export const concreteNodes = {
   compiledLogicSig: CompiledLogicSig,
   stateTotals: StateTotals,
   aRC4Router: ARC4Router,
-  contractFragment: ContractFragment,
+  contract: Contract,
   uInt64Constant: IntegerConstant,
   bigUIntConstant: IntegerConstant,
 } as const
@@ -1466,5 +1460,5 @@ export interface ContractMemberNodeVisitor<T> {
 export interface RootNodeVisitor<T> {
   visitSubroutine(rootNode: Subroutine): T
   visitLogicSignature(rootNode: LogicSignature): T
-  visitContractFragment(rootNode: ContractFragment): T
+  visitContract(rootNode: Contract): T
 }

@@ -58,13 +58,13 @@ export abstract class NodeBuilder {
     return this.constructor.name
   }
 
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     throw new NotSupported(`Calling ${this.typeDescription}`, {
       sourceLocation,
     })
   }
 
-  newCall(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
+  newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
     throw new NotSupported(`Calling ${this.typeDescription} with the new keyword`, { sourceLocation })
   }
 
@@ -72,6 +72,10 @@ export abstract class NodeBuilder {
     throw new NotSupported(`Tagged templates on ${this.typeDescription}`, {
       sourceLocation,
     })
+  }
+
+  hasProperty(_name: string): boolean {
+    throw new NotSupported(`Has property checks on ${this.typeDescription}`)
   }
 
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
@@ -106,7 +110,7 @@ export abstract class InstanceBuilder<TPType extends PType = PType> extends Node
   }
 
   resolveToPType(ptype: PTypeOrClass): InstanceBuilder {
-    if (this.resolvableToPType(ptype)) {
+    if (this.ptype.equalsOrInstanceOf(ptype)) {
       return this
     }
     throw CodeError.cannotResolveToType({ sourceType: this.ptype, targetType: ptype, sourceLocation: this.sourceLocation })
@@ -172,10 +176,6 @@ export abstract class InstanceBuilder<TPType extends PType = PType> extends Node
       sourceLocation,
     })
   }
-
-  hasProperty(_name: string): boolean {
-    throw new NotSupported(`Has property checks on ${this.typeDescription}`)
-  }
 }
 
 export abstract class FunctionBuilder extends NodeBuilder {
@@ -185,7 +185,7 @@ export abstract class FunctionBuilder extends NodeBuilder {
     super(location)
   }
 
-  abstract call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder
+  abstract call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder
 }
 
 export abstract class ParameterlessFunctionBuilder extends FunctionBuilder {
@@ -196,7 +196,7 @@ export abstract class ParameterlessFunctionBuilder extends FunctionBuilder {
     super(expression.sourceLocation)
   }
 
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     if (args.length) logger.error(sourceLocation, 'Function expects no arguments')
     if (typeArgs.length) logger.error(sourceLocation, 'Function expects type arguments')
     return this.definition(this.expression, sourceLocation)

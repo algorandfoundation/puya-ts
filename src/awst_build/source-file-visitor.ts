@@ -82,7 +82,6 @@ export class SourceFileVisitor extends BaseVisitor implements Visitor<ModuleStat
       }
       const ptype = this.context.getPTypeForNode(dec.name)
 
-      //const value = CompileTimeConstantVisitor.getCompileTimeConstant(this.context, dec.initializer, ptype)
       const value = requireConstantOfType(this.accept(dec.initializer), ptype, 'Module level assignments must be compile time constants')
       const constantName = this.context.resolveVariableName(dec.name)
       this.context.addConstant(constantName, value)
@@ -97,7 +96,7 @@ export class SourceFileVisitor extends BaseVisitor implements Visitor<ModuleStat
     const sourceLocation = this.sourceLocation(node)
     const ptype = this.context.getPTypeForNode(node)
     if (ptype instanceof ContractClassPType) {
-      return () => logPuyaExceptions(() => ContractVisitor.buildContract(this.context, node), sourceLocation)
+      return () => logPuyaExceptions(() => ContractVisitor.buildContract(this.context, node, ptype), sourceLocation)
     } else {
       logger.warn(sourceLocation, `Ignoring class declaration ${ptype.fullName}`)
       return []

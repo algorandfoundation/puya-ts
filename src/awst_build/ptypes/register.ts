@@ -19,7 +19,7 @@ import { ObjectExpressionBuilder } from '../eb/literal/object-expression-builder
 import { LogFunctionBuilder } from '../eb/log-function-builder'
 import { NamespaceBuilder } from '../eb/namespace-builder'
 import { NativeArrayExpressionBuilder } from '../eb/native-array-expression-builder'
-import { FreeIntrinsicOpBuilder, IntrinsicOpGroupBuilder } from '../eb/op-module-builder'
+import { FreeIntrinsicOpBuilder, IntrinsicOpGroupBuilder, IntrinsicOpGroupOrFunctionTypeBuilder } from '../eb/op-module-builder'
 import { AccountExpressionBuilder, AccountFunctionBuilder } from '../eb/reference/account'
 import { ApplicationExpressionBuilder, ApplicationFunctionBuilder } from '../eb/reference/application'
 import { AssetExpressionBuilder, AssetFunctionBuilder } from '../eb/reference/asset'
@@ -107,7 +107,9 @@ import {
   GlobalStateFunction,
   GlobalStateType,
   IntrinsicFunctionGroupType,
+  IntrinsicFunctionGroupTypeType,
   IntrinsicFunctionType,
+  IntrinsicFunctionTypeType,
   IterableIteratorType,
   keyRegistrationGtxnType,
   keyRegistrationItxnFn,
@@ -172,12 +174,24 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
         }),
         singletonEb: IntrinsicOpGroupBuilder,
       })
+      typeRegistry.register({
+        ptype: new IntrinsicFunctionGroupTypeType({
+          name: `${name}Type`,
+        }),
+        instanceEb: IntrinsicOpGroupOrFunctionTypeBuilder,
+      })
     } else {
       typeRegistry.register({
         ptype: new IntrinsicFunctionType({
           name,
         }),
         singletonEb: FreeIntrinsicOpBuilder,
+      })
+      typeRegistry.register({
+        ptype: new IntrinsicFunctionTypeType({
+          name: `${name}Type`,
+        }),
+        instanceEb: IntrinsicOpGroupOrFunctionTypeBuilder,
       })
     }
   }

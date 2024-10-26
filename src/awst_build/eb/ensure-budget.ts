@@ -1,10 +1,10 @@
 import { nodeFactory } from '../../awst/node-factory'
 import { PuyaLibFunction } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
-import { voidWType } from '../../awst/wtypes'
+import { wtypes } from '../../awst/wtypes'
 import type { PType } from '../ptypes'
 import { ensureBudgetFunction, opUpFeeSourceType, uint64PType } from '../ptypes'
-import type { InstanceBuilder, NodeBuilder } from './index'
+import type { NodeBuilder } from './index'
 import { FunctionBuilder } from './index'
 import { requireExpressionOfType } from './util'
 import { parseFunctionArgs } from './util/arg-parsing'
@@ -12,7 +12,8 @@ import { VoidExpressionBuilder } from './void-expression-builder'
 
 export class EnsureBudgetFunctionBuilder extends FunctionBuilder {
   readonly ptype = ensureBudgetFunction
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [budget, feeSource],
     } = parseFunctionArgs({
@@ -40,7 +41,7 @@ export class EnsureBudgetFunctionBuilder extends FunctionBuilder {
           }),
         ],
         sourceLocation,
-        wtype: voidWType,
+        wtype: wtypes.voidWType,
       }),
     )
   }

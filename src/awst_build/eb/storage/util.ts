@@ -1,12 +1,12 @@
 import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
 import { BytesConstant } from '../../../awst/nodes'
-import type { WType } from '../../../awst/wtypes'
+import type { wtypes } from '../../../awst/wtypes'
 import type { InstanceBuilder } from '../index'
 
-export function extractKey(key: InstanceBuilder, keyWType: WType): Expression
-export function extractKey(key: InstanceBuilder | undefined, keyWType: WType): Expression | undefined
-export function extractKey(key: InstanceBuilder | undefined, keyWType: WType): Expression | undefined {
+export function extractKey(key: InstanceBuilder, keyWType: wtypes.WType): Expression
+export function extractKey(key: InstanceBuilder | undefined, keyWType: wtypes.WType): Expression | undefined
+export function extractKey(key: InstanceBuilder | undefined, keyWType: wtypes.WType): Expression | undefined {
   if (!key) return undefined
 
   const keyBytes = key.toBytes(key.sourceLocation)

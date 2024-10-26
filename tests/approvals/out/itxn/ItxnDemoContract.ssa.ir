@@ -2,14 +2,14 @@ contract tests/approvals/itxn.algo.ts::ItxnDemoContract:
     program approval:
         subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.approvalProgram() -> bool:
             block@0: // L10
-                let app_id%0#0: uint64 = (txn ApplicationID)
-                goto app_id%0#0 ? block@2 : block@1
-            block@1: // on_create_L7
+                let reinterpret_bool%0#0: bool = (txn ApplicationID)
+                goto reinterpret_bool%0#0 ? block@2 : block@1
+            block@1: // if_body_L1
                 tests/approvals/itxn.algo.ts::ItxnDemoContract.constructor()
                 goto block@2
-            block@2: // entrypoint_L7
-                let reinterpret_bool%0#0: bool = (txn NumAppArgs)
-                goto reinterpret_bool%0#0 ? block@3 : block@15
+            block@2: // after_if_else_L1
+                let reinterpret_bool%1#0: bool = (txn NumAppArgs)
+                goto reinterpret_bool%1#0 ? block@3 : block@15
             block@3: // if_body_L11
                 let tmp%0#0: bytes = ((txnas ApplicationArgs) 0u)
                 switch tmp%0#0 {"test1" => block@4, "test2" => block@6, "test3" => block@8, "test4" => block@10, * => block@12}
@@ -39,6 +39,11 @@ contract tests/approvals/itxn.algo.ts::ItxnDemoContract:
                 goto block@15
             block@15: // after_if_else_L11
                 return 1u
+        
+        subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.constructor() -> void:
+            block@0: // L7
+                (app_global_put "name" 0x)
+                return 
         
         subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test1() -> void:
             block@0: // L27
@@ -745,11 +750,6 @@ contract tests/approvals/itxn.algo.ts::ItxnDemoContract:
                 (assert tmp%3#0) // correct args used 2
                 let tmp%4#0: bool = (== createAppTxn.Note#0 "with args param set")
                 (assert tmp%4#0)
-                return 
-        
-        subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.constructor() -> void:
-            block@0: // L7
-                (app_global_put "name" 0x)
                 return 
     
     program clear-state:

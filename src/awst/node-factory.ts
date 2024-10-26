@@ -30,9 +30,7 @@ import {
   VoidConstant,
 } from './nodes'
 import type { SourceLocation } from './source-location'
-import type { WType } from './wtypes'
-import * as wtypes from './wtypes'
-import { boolWType, voidWType, WTuple } from './wtypes'
+import { wtypes } from './wtypes'
 
 type ConcreteNodes = typeof concreteNodes
 
@@ -41,10 +39,15 @@ const explicitNodeFactory = {
   voidConstant(props: { sourceLocation: SourceLocation }): VoidConstant {
     return new VoidConstant({
       ...props,
-      wtype: voidWType,
+      wtype: wtypes.voidWType,
     })
   },
-  bytesConstant(props: { value: Uint8Array; encoding?: BytesEncoding; sourceLocation: SourceLocation; wtype?: WType }): BytesConstant {
+  bytesConstant(props: {
+    value: Uint8Array
+    encoding?: BytesEncoding
+    sourceLocation: SourceLocation
+    wtype?: wtypes.WType
+  }): BytesConstant {
     return new BytesConstant({
       encoding: BytesEncoding.unknown,
       wtype: wtypes.bytesWType,
@@ -90,7 +93,7 @@ const explicitNodeFactory = {
   not(props: { expr: Expression; sourceLocation: SourceLocation }): Not {
     return new Not({
       ...props,
-      wtype: boolWType,
+      wtype: wtypes.boolWType,
     })
   },
   uInt64BinaryOperation(props: Omit<Props<UInt64BinaryOperation>, 'wtype'>): UInt64BinaryOperation {
@@ -108,7 +111,7 @@ const explicitNodeFactory = {
   numericComparisonExpression(props: Omit<Props<NumericComparisonExpression>, 'wtype'>): NumericComparisonExpression {
     return new NumericComparisonExpression({
       ...props,
-      wtype: boolWType,
+      wtype: wtypes.boolWType,
     })
   },
   bytesComparisonExpression(props: Omit<Props<BytesComparisonExpression>, 'wtype'>): BytesComparisonExpression {
@@ -119,7 +122,7 @@ const explicitNodeFactory = {
     )
     return new BytesComparisonExpression({
       ...props,
-      wtype: boolWType,
+      wtype: wtypes.boolWType,
     })
   },
   boolConstant(props: { value: boolean; sourceLocation: SourceLocation }): BoolConstant {
@@ -162,7 +165,7 @@ const explicitNodeFactory = {
   booleanBinaryOperation(props: Omit<Props<BooleanBinaryOperation>, 'wtype'>) {
     return new BooleanBinaryOperation({
       ...props,
-      wtype: boolWType,
+      wtype: wtypes.boolWType,
     })
   },
   assignmentExpression({
@@ -198,10 +201,10 @@ const explicitNodeFactory = {
       sourceLocation,
     })
   },
-  tupleExpression(props: Omit<Props<TupleExpression>, 'wtype'> & { wtype?: WTuple }) {
+  tupleExpression(props: Omit<Props<TupleExpression>, 'wtype'> & { wtype?: wtypes.WTuple }) {
     return new TupleExpression({
       ...props,
-      wtype: props.wtype ?? new WTuple({ types: props.items.map((i) => i.wtype), immutable: true }),
+      wtype: props.wtype ?? new wtypes.WTuple({ types: props.items.map((i) => i.wtype), immutable: true }),
     })
   },
   methodDocumentation(props?: { description?: string | null; args?: Map<string, string>; returns?: string | null }) {
@@ -225,8 +228,8 @@ const explicitNodeFactory = {
     })
   },
   checkedMaybe({ expr, comment }: { expr: Expression; comment: string }) {
-    invariant(expr.wtype instanceof WTuple && expr.wtype.types.length === 2, 'expr WType must be WTuple of 2')
-    invariant(expr.wtype.types[1].equals(boolWType), '2nd tuple item type must be bool')
+    invariant(expr.wtype instanceof wtypes.WTuple && expr.wtype.types.length === 2, 'expr WType must be WTuple of 2')
+    invariant(expr.wtype.types[1].equals(wtypes.boolWType), '2nd tuple item type must be bool')
     return new CheckedMaybe({
       expr,
       comment,
@@ -236,7 +239,7 @@ const explicitNodeFactory = {
   },
   tupleItemExpression(props: Omit<Props<TupleItemExpression>, 'wtype'>) {
     invariant(
-      props.base.wtype instanceof WTuple && props.base.wtype.types.length > Number(props.index),
+      props.base.wtype instanceof wtypes.WTuple && props.base.wtype.types.length > Number(props.index),
       'expr.base must be WTuple with length greater than index',
     )
     return new TupleItemExpression({
@@ -244,7 +247,7 @@ const explicitNodeFactory = {
       wtype: props.base.wtype.types[Number(props.index)],
     })
   },
-  reinterpretCast({ expr, wtype, sourceLocation }: { expr: Expression; wtype: WType; sourceLocation: SourceLocation }) {
+  reinterpretCast({ expr, wtype, sourceLocation }: { expr: Expression; wtype: wtypes.WType; sourceLocation: SourceLocation }) {
     if (expr instanceof BytesConstant) {
       return new BytesConstant({
         ...expr,

@@ -18,7 +18,7 @@ import { VoidExpressionBuilder } from './void-expression-builder'
 export class AssertMatchFunctionBuilder extends NodeBuilder {
   readonly ptype = assertMatchFunction
 
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [subject, tests, comment],
     } = parseFunctionArgs({
@@ -27,8 +27,9 @@ export class AssertMatchFunctionBuilder extends NodeBuilder {
       callLocation: sourceLocation,
       genericTypeArgs: 1,
       funcName: 'assertMatch',
-      argSpec: (a) => [a.required(), a.required(), a.optional(stringPType)],
+      argSpec: (a) => [a.passthrough(), a.required(), a.optional(stringPType)],
     })
+    codeInvariant(subject, 'subject parameter is missing', sourceLocation)
 
     codeInvariant(tests instanceof ObjectLiteralExpressionBuilder, 'Test conditions must be an object literal', tests.sourceLocation)
 

@@ -1,10 +1,11 @@
-import { awst, wtypes } from '../../awst'
+import { awst } from '../../awst'
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
 import { nodeFactory } from '../../awst/node-factory'
 import type { Expression } from '../../awst/nodes'
 import { BytesBinaryOperator, BytesEncoding, EqualityComparison } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
-import { CodeError, NotSupported } from '../../errors'
+import { wtypes } from '../../awst/wtypes'
+import { NotSupported } from '../../errors'
 import { tryConvertEnum, utf8ToUint8Array } from '../../util'
 import type { InstanceType, PType, PTypeOrClass } from '../ptypes'
 import { boolPType, bytesPType, stringPType } from '../ptypes'
@@ -46,8 +47,19 @@ export class StringFunctionBuilder extends FunctionBuilder {
     return new StringExpressionBuilder(result)
   }
 
-  call(args: Array<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
-    if (args.length === 0) {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    const {
+      args: [value],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      callLocation: sourceLocation,
+      funcName: 'String',
+      genericTypeArgs: 0,
+      argSpec: (a) => [a.optional(bytesPType)],
+    })
+
+    if (!value) {
       return new StringExpressionBuilder(
         nodeFactory.stringConstant({
           sourceLocation,
@@ -55,20 +67,14 @@ export class StringFunctionBuilder extends FunctionBuilder {
         }),
       )
     }
-    if (args.length === 1) {
-      const [arg0] = args
 
-      if (arg0.ptype.equals(bytesPType)) {
-        return new StringExpressionBuilder(
-          nodeFactory.reinterpretCast({
-            expr: arg0.resolve(),
-            sourceLocation,
-            wtype: wtypes.stringWType,
-          }),
-        )
-      }
-    }
-    throw CodeError.unexpectedUnhandledArgs({ sourceLocation })
+    return new StringExpressionBuilder(
+      nodeFactory.reinterpretCast({
+        expr: value.resolve(),
+        sourceLocation,
+        wtype: wtypes.stringWType,
+      }),
+    )
   }
 }
 
@@ -173,7 +179,7 @@ export class ConcatExpressionBuilder extends FunctionBuilder {
     super(expr.sourceLocation)
   }
 
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation) {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const { args: others } = parseFunctionArgs({
       args,
       typeArgs,

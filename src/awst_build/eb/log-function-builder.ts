@@ -1,18 +1,19 @@
 import type { awst } from '../../awst'
-import { wtypes } from '../../awst'
+
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
 import { nodeFactory } from '../../awst/node-factory'
 import type { Expression } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
+import { wtypes } from '../../awst/wtypes'
 import { CodeError, InternalError, throwError } from '../../errors'
 import type { PType } from '../ptypes'
-import type { InstanceBuilder } from './index'
+import type { NodeBuilder } from './index'
 import { FunctionBuilder } from './index'
 import { requireInstanceBuilder } from './util'
 import { VoidExpressionBuilder } from './void-expression-builder'
 
 export class LogFunctionBuilder extends FunctionBuilder {
-  call(args: Array<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const argsExps = args.map((a) => requireInstanceBuilder(a))
 
     let logBytes: awst.Expression

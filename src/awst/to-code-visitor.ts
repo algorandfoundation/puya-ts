@@ -2,10 +2,11 @@ import { Buffer } from 'node:buffer'
 import { TodoError } from '../errors'
 import { logger } from '../logger'
 import { uint8ArrayToBase32, uint8ArrayToUtf8 } from '../util'
+import type { ContractReference } from './models'
 import type { AppStorageDefinition, ContractMemberNodeVisitor, ExpressionVisitor, RootNodeVisitor, StatementVisitor } from './nodes'
 import * as nodes from './nodes'
 import { AppStorageKind, BytesEncoding, ContractMethodTarget, InstanceMethodTarget, InstanceSuperMethodTarget, SubroutineID } from './nodes'
-import { boolWType } from './wtypes'
+import { wtypes } from './wtypes'
 
 function printBytes(value: Uint8Array, encoding: BytesEncoding) {
   switch (encoding) {
@@ -35,7 +36,7 @@ export class ToCodeVisitor
     return `${expression.func}(${expression.args.map((a) => a.value.accept(this)).join(', ')})`
   }
   visitARC4Router(expression: nodes.ARC4Router): string {
-    throw new Error('Method not implemented.')
+    return `arc4Router()`
   }
   visitAppStorageDefinition(contractMemberNode: AppStorageDefinition): string[] {
     throw new Error('Method not implemented.')
@@ -179,7 +180,7 @@ export class ToCodeVisitor
   }
   visitReinterpretCast(expression: nodes.ReinterpretCast): string {
     const target = expression.expr.accept(this)
-    if (expression.wtype.equals(boolWType)) {
+    if (expression.wtype.equals(wtypes.boolWType)) {
       return `Boolean(${target})`
     }
     return `reinterpret_cast<${expression.wtype}>(${target})`
@@ -313,14 +314,24 @@ export class ToCodeVisitor
     ]
   }
   visitContractMethod(statement: nodes.ContractMethod): string[] {
-    return [`${statement.memberName}(): ${statement.returnType}`, '{', ...indent(statement.body.accept(this)), '}', '']
+    const prefix = statement.cref.id === this.currentContract.at(-1)?.id ? '' : `${statement.cref.className}::`
+    return [`${prefix}${statement.memberName}(): ${statement.returnType}`, '{', ...indent(statement.body.accept(this)), '}', '']
   }
   visitLogicSignature(moduleStatement: nodes.LogicSignature): string[] {
     throw new TodoError('Method not implemented.', { sourceLocation: moduleStatement.sourceLocation })
   }
-  visitContractFragment(c: nodes.ContractFragment): string[] {
+
+  private currentContract: ContractReference[] = []
+  visitContract(c: nodes.Contract): string[] {
+    this.currentContract.push(c.id)
+
+    using _ = {
+      [Symbol.dispose]: () => {
+        this.currentContract.pop()
+      },
+    }
     const body: string[] = []
-    if (c.appState.size) {
+    if (c.appState.length) {
       const storageByKind = Array.from(c.appState.values()).reduce(
         (acc, cur) => acc.set(cur.kind, [...(acc.get(cur.kind) ?? []), cur]),
         new Map<AppStorageKind, AppStorageDefinition[]>(),
@@ -347,23 +358,17 @@ export class ToCodeVisitor
     if (c.reservedScratchSpace.size) {
       logger.warn(c.sourceLocation, 'Handle reservedScratchSpace to-code')
     }
-    if (c.init) {
-      body.push(...this.visitSpecialMethod(c.init, 'constructor'))
-    }
     if (c.approvalProgram) {
       body.push(...this.visitSpecialMethod(c.approvalProgram, 'approvalProgram'))
     }
     if (c.clearProgram) {
       body.push(...this.visitSpecialMethod(c.clearProgram, 'clearProgram'))
     }
-    for (const method of c.subroutines) {
+    for (const method of c.methods) {
       body.push(...method.accept(this))
     }
 
     const header = ['contract', c.name]
-    if (c.bases.length) {
-      header.push('extends', c.bases.map((b) => `${b.moduleName}::${b.className}`).join(', '))
-    }
 
     return [header.join(' '), '{', ...indent(body), '}']
   }

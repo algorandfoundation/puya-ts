@@ -1,9 +1,10 @@
-import { microAlgos } from '@algorandfoundation/algokit-utils'
+import { Config, microAlgos } from '@algorandfoundation/algokit-utils'
 import { algorandFixture } from '@algorandfoundation/algokit-utils/testing'
 import type { AppClient } from '@algorandfoundation/algokit-utils/types/app-client'
 import type { AppFactory, AppFactoryDeployParams } from '@algorandfoundation/algokit-utils/types/app-factory'
 import type { AppSpec } from '@algorandfoundation/algokit-utils/types/app-spec'
 import type { AssetCreateParams } from '@algorandfoundation/algokit-utils/types/composer'
+import { nullLogger } from '@algorandfoundation/algokit-utils/types/logging'
 import type { AlgorandFixture } from '@algorandfoundation/algokit-utils/types/testing'
 import type { Use } from '@vitest/runner/types'
 import fs from 'fs'
@@ -59,6 +60,10 @@ export function createTestFixture<TContracts extends string = ''>(path: string, 
   })()
   const localnet = algorandFixture({
     testAccountFunding: microAlgos(100_000_000_000),
+  })
+
+  Config.configure({
+    logger: nullLogger,
   })
 
   const ctx: DeliberateAny = {}

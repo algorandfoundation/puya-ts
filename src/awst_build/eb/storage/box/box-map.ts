@@ -2,20 +2,21 @@ import { intrinsicFactory } from '../../../../awst/intrinsic-factory'
 import { nodeFactory } from '../../../../awst/node-factory'
 import type { BoxValueExpression, Expression } from '../../../../awst/nodes'
 import type { SourceLocation } from '../../../../awst/source-location'
-import { boolWType, boxKeyWType, uint64WType, voidWType, WTuple } from '../../../../awst/wtypes'
+import { wtypes } from '../../../../awst/wtypes'
+
 import { invariant } from '../../../../util'
 import type { PType } from '../../../ptypes'
 import { boolPType, BoxMapPType, bytesPType, stringPType, TuplePType, uint64PType } from '../../../ptypes'
 import { instanceEb } from '../../../type-registry'
 import { BooleanExpressionBuilder } from '../../boolean-expression-builder'
-import { FunctionBuilder, type InstanceBuilder, type NodeBuilder } from '../../index'
+import { FunctionBuilder, type NodeBuilder } from '../../index'
 import { parseFunctionArgs } from '../../util/arg-parsing'
 import { VoidExpressionBuilder } from '../../void-expression-builder'
 import { extractKey } from '../util'
 import { BoxProxyExpressionBuilder, BoxValueExpressionBuilder } from './base'
 
 export class BoxMapFunctionBuilder extends FunctionBuilder {
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       ptypes: [keySuffixType, contentPType],
       args: [{ keyPrefix }],
@@ -29,7 +30,7 @@ export class BoxMapFunctionBuilder extends FunctionBuilder {
     })
 
     const ptype = new BoxMapPType({ content: contentPType, keyType: keySuffixType })
-    return new BoxMapExpressionBuilder(extractKey(keyPrefix, boxKeyWType), ptype)
+    return new BoxMapExpressionBuilder(extractKey(keyPrefix, wtypes.boxKeyWType), ptype)
   }
 }
 
@@ -87,7 +88,7 @@ abstract class BoxMapFunctionBuilderBase extends FunctionBuilder {
   }
 }
 class BoxMapHasFunctionBuilder extends BoxMapFunctionBuilderBase {
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [key],
     } = parseFunctionArgs({
@@ -100,7 +101,7 @@ class BoxMapHasFunctionBuilder extends BoxMapFunctionBuilderBase {
     })
     return new BooleanExpressionBuilder(
       nodeFactory.stateExists({
-        wtype: boolWType,
+        wtype: wtypes.boolWType,
         field: this.boxValueExpression(key.resolve()),
         sourceLocation,
       }),
@@ -109,7 +110,7 @@ class BoxMapHasFunctionBuilder extends BoxMapFunctionBuilderBase {
 }
 
 class BoxMapGetFunctionBuilder extends BoxMapFunctionBuilderBase {
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [key, { default: defaultValue }],
     } = parseFunctionArgs({
@@ -137,7 +138,7 @@ class BoxMapGetFunctionBuilder extends BoxMapFunctionBuilderBase {
   }
 }
 class BoxMapSetFunctionBuilder extends BoxMapFunctionBuilderBase {
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [key, value],
     } = parseFunctionArgs({
@@ -160,7 +161,7 @@ class BoxMapSetFunctionBuilder extends BoxMapFunctionBuilderBase {
   }
 }
 class BoxMapMaybeFunctionBuilder extends BoxMapFunctionBuilderBase {
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [key],
     } = parseFunctionArgs({
@@ -184,7 +185,7 @@ class BoxMapMaybeFunctionBuilder extends BoxMapFunctionBuilderBase {
   }
 }
 class BoxMapLengthFunctionBuilder extends BoxMapFunctionBuilderBase {
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [key],
     } = parseFunctionArgs({
@@ -201,7 +202,7 @@ class BoxMapLengthFunctionBuilder extends BoxMapFunctionBuilderBase {
         expr: nodeFactory.intrinsicCall({
           opCode: 'box_len',
           stackArgs: [this.boxValueExpression(key.resolve())],
-          wtype: new WTuple({ types: [uint64WType, boolWType], immutable: true }),
+          wtype: new wtypes.WTuple({ types: [wtypes.uint64WType, wtypes.boolWType], immutable: true }),
           immediates: [],
           sourceLocation,
         }),
@@ -212,7 +213,7 @@ class BoxMapLengthFunctionBuilder extends BoxMapFunctionBuilderBase {
   }
 }
 class BoxMapDeleteFunctionBuilder extends BoxMapFunctionBuilderBase {
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [key],
     } = parseFunctionArgs({
@@ -228,7 +229,7 @@ class BoxMapDeleteFunctionBuilder extends BoxMapFunctionBuilderBase {
       nodeFactory.stateDelete({
         field: this.boxValueExpression(key.resolve()),
         sourceLocation,
-        wtype: voidWType,
+        wtype: wtypes.voidWType,
       }),
     )
   }

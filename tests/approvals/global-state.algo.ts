@@ -1,7 +1,7 @@
 import type { bytes, uint64 } from '@algorandfoundation/algorand-typescript'
-import { assert, Bytes, Contract, GlobalState, op, Txn, Uint64 } from '@algorandfoundation/algorand-typescript'
+import { assert, BaseContract, Bytes, GlobalState, op, Txn, Uint64 } from '@algorandfoundation/algorand-typescript'
 
-export class BaseTestContract extends Contract {
+export abstract class BaseTestContract extends BaseContract {
   baseTestState = GlobalState({ initialValue: 'testing 123' })
 }
 

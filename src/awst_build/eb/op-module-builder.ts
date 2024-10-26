@@ -8,8 +8,7 @@ import { OP_METADATA } from '../op-metadata'
 import type { PType } from '../ptypes'
 import { IntrinsicEnumType, IntrinsicFunctionGroupType, IntrinsicFunctionType, stringPType } from '../ptypes'
 import { typeRegistry } from '../type-registry'
-import type { InstanceBuilder } from './index'
-import { FunctionBuilder, NodeBuilder } from './index'
+import { FunctionBuilder, InstanceExpressionBuilder, NodeBuilder } from './index'
 import { requestConstantOfType, requestExpressionOfType } from './util'
 
 export class IntrinsicOpGroupBuilder extends NodeBuilder {
@@ -23,6 +22,11 @@ export class IntrinsicOpGroupBuilder extends NodeBuilder {
     invariant(metaData.type === 'op-grouping', 'ptype must map to op-grouping')
     this.opGrouping = metaData
   }
+
+  hasProperty(name: string): boolean {
+    return Object.hasOwn(this.opGrouping.ops, name)
+  }
+
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
     if (!Object.hasOwn(this.opGrouping.ops, name)) {
       return super.memberAccess(name, sourceLocation)
@@ -68,7 +72,7 @@ abstract class IntrinsicOpBuilderBase extends FunctionBuilder {
     super(sourceLocation)
   }
 
-  call(args: Array<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     signatureLoop: for (const [index, sig] of enumerate(this.opMapping.signatures)) {
       const isLastSig = index + 1 >= this.opMapping.signatures.length
       if (args.length !== sig.argNames.length) {
@@ -156,5 +160,16 @@ export class FreeIntrinsicOpBuilder extends IntrinsicOpBuilderBase {
 export class GroupedIntrinsicOpBuilder extends IntrinsicOpBuilderBase {
   constructor(sourceLocation: SourceLocation, opMapping: IntrinsicOpMapping) {
     super(sourceLocation, opMapping)
+  }
+}
+
+/**
+ * Builder for expressions which have the 'type' of an intrinsic function or group but are not the singleton instance
+ * imported from @algorandfoundat/algorand-typescript. This is not supported.
+ */
+export class IntrinsicOpGroupOrFunctionTypeBuilder extends InstanceExpressionBuilder<PType> {
+  constructor(expr: Expression, ptype: PType) {
+    super(expr, ptype)
+    throw new CodeError('Invalid alias of op function or group type', { sourceLocation: expr.sourceLocation })
   }
 }

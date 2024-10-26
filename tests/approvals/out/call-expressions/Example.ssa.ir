@@ -1,35 +1,23 @@
-contract tests/approvals/call-expressions.algo.ts::default:
+contract tests/approvals/call-expressions.algo.ts::Example:
     program approval:
-        subroutine tests/approvals/call-expressions.algo.ts::default.approvalProgram() -> bool:
+        subroutine tests/approvals/call-expressions.algo.ts::Example.approvalProgram() -> bool:
             block@0: // L11
-                let app_id%0#0: uint64 = (txn ApplicationID)
-                goto app_id%0#0 ? block@2 : block@1
-            block@1: // on_create_L10
-                tests/approvals/call-expressions.algo.ts::default.constructor()
+                let reinterpret_bool%0#0: bool = (txn ApplicationID)
+                goto reinterpret_bool%0#0 ? block@2 : block@1
+            block@1: // if_body_L1
+                tests/approvals/call-expressions.algo.ts::Example.constructor()
                 goto block@2
-            block@2: // entrypoint_L10
-                let tmp%0#0: uint64 = tests/approvals/call-expressions.algo.ts::default.localMethod()
-                let tmp%1#0: uint64 = tests/approvals/call-expressions.algo.ts::default.baseMethod()
+            block@2: // after_if_else_L1
+                let tmp%0#0: uint64 = tests/approvals/call-expressions.algo.ts::Example.localMethod()
+                let tmp%1#0: uint64 = tests/approvals/call-expressions.algo.ts::ExampleBase.baseMethod()
                 let tmp%2#0: uint64 = (+ tmp%0#0 tmp%1#0)
                 let tmp%3#0: uint64 = tests/approvals/call-expressions.algo.ts::freeMethod()
-                let tmp%4#0: uint64 = tests/approvals/call-expressions.algo.ts::default.baseMethod()
+                let tmp%4#0: uint64 = tests/approvals/call-expressions.algo.ts::Example.baseMethod()
                 let tmp%5#0: uint64 = (- tmp%3#0 tmp%4#0)
                 let tmp%6#0: bool = (== tmp%2#0 tmp%5#0)
                 return tmp%6#0
         
-        subroutine tests/approvals/call-expressions.algo.ts::default.localMethod() -> uint64:
-            block@0: // L17
-                return 5u
-        
-        subroutine tests/approvals/call-expressions.algo.ts::default.baseMethod() -> uint64:
-            block@0: // L14
-                return 1u
-        
-        subroutine tests/approvals/call-expressions.algo.ts::freeMethod() -> uint64:
-            block@0: // L22
-                return 7u
-        
-        subroutine tests/approvals/call-expressions.algo.ts::default.constructor() -> void:
+        subroutine tests/approvals/call-expressions.algo.ts::Example.constructor() -> void:
             block@0: // L10
                 tests/approvals/call-expressions.algo.ts::ExampleBase.constructor()
                 return 
@@ -37,6 +25,22 @@ contract tests/approvals/call-expressions.algo.ts::default:
         subroutine tests/approvals/call-expressions.algo.ts::ExampleBase.constructor() -> void:
             block@0: // L4
                 return 
+        
+        subroutine tests/approvals/call-expressions.algo.ts::Example.localMethod() -> uint64:
+            block@0: // L17
+                return 5u
+        
+        subroutine tests/approvals/call-expressions.algo.ts::ExampleBase.baseMethod() -> uint64:
+            block@0: // L5
+                return 2u
+        
+        subroutine tests/approvals/call-expressions.algo.ts::freeMethod() -> uint64:
+            block@0: // L22
+                return 7u
+        
+        subroutine tests/approvals/call-expressions.algo.ts::Example.baseMethod() -> uint64:
+            block@0: // L14
+                return 1u
     
     program clear-state:
         subroutine @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.clearStateProgram() -> bool:

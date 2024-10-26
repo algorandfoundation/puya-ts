@@ -1,7 +1,9 @@
+import type { LogicSig } from '../awst_build/models/contract-class'
+import { ContractClass } from '../awst_build/models/contract-class'
 import type { ContractClassPType } from '../awst_build/ptypes'
 import type { Props } from '../typescript-helpers'
+import { invariant } from '../util'
 import { CustomKeyMap } from '../util/custom-key-map'
-import type { ContractFragment } from './nodes'
 import type { SourceLocation } from './source-location'
 
 export enum OnCompletionAction {
@@ -32,7 +34,7 @@ export class ARC4BareMethodConfig extends ModelBase {
   readonly sourceLocation: SourceLocation | undefined
   readonly allowedCompletionTypes: OnCompletionAction[]
   readonly create: ARC4CreateOption
-  readonly isBare = true as const
+  readonly isBare = true
   constructor(props: Omit<Props<ARC4BareMethodConfig>, 'isBare'>) {
     super()
     this.sourceLocation = props.sourceLocation
@@ -62,7 +64,7 @@ export type DefaultArgumentSource =
 export class ARC4ABIMethodConfig extends ModelBase {
   readonly sourceLocation: SourceLocation | undefined
   readonly name: string
-  readonly isBare = false as const
+  readonly isBare = false
   readonly create: ARC4CreateOption
   readonly readonly: boolean
   readonly allowedCompletionTypes: OnCompletionAction[]
@@ -136,17 +138,20 @@ export enum TransactionKind {
   appl = 6,
 }
 
-export class CompilationSet extends CustomKeyMap<
-  ContractReference | LogicSigReference,
-  { contract?: ContractFragment; includeInOutput: boolean }
-> {
+export class CompilationSet extends CustomKeyMap<ContractReference | LogicSigReference, ContractClass | LogicSig> {
   constructor() {
     super((x) => x.toString())
   }
 
   get compilationOutputSet() {
     return Array.from(this.entries())
-      .filter(([, meta]) => meta.includeInOutput)
+      .filter(([, meta]) => (meta instanceof ContractClass ? !meta.isAbstract : false))
       .map(([ref]) => ref)
+  }
+
+  getContractClass(cref: ContractReference) {
+    const maybeClass = this.get(cref)
+    invariant(maybeClass instanceof ContractClass, 'Contract reference must resolve to a contract class')
+    return maybeClass
   }
 }

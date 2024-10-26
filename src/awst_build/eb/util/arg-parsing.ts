@@ -1,10 +1,9 @@
-import type { Expression } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { CodeError } from '../../../errors'
 import { logger } from '../../../logger'
 import type { DeliberateAny, Tuple } from '../../../typescript-helpers'
 import type { PType, PTypeOrClass } from '../../ptypes'
-import type { InstanceBuilder } from '../index'
+import type { InstanceBuilder, NodeBuilder } from '../index'
 import { requestBuilderOfType, requireInstanceBuilder } from './index'
 
 function parseTypeArgs<T extends number>(
@@ -30,15 +29,21 @@ const ArgSpecDiscriminator = Symbol('_specType')
 
 /**
  * Optional arg spec
- * Will be mapped to `Expression | undefined`
+ * Will be mapped to `InstanceBuilder | undefined`
  */
-type OptionalArg = { t: PTypeOrClass[]; required: false; [ArgSpecDiscriminator]: 'arg' }
+type OptionalArg = { t: PTypeOrClass[]; [ArgSpecDiscriminator]: 'arg'; type: 'optional' }
 /**
  * Required arg spec
- * Will be mapped to `Expression`
+ * Will be mapped to `InstanceBuilder`
  */
-type RequiredArg = { t: PTypeOrClass[]; required: true; [ArgSpecDiscriminator]: 'arg' }
-type ArgSpec = OptionalArg | RequiredArg
+type RequiredArg = { t: PTypeOrClass[]; type: 'required'; [ArgSpecDiscriminator]: 'arg' }
+
+/**
+ * Passthrough arg spec
+ * Will be mapped to NodeBuilder | undefined
+ */
+type PassthroughArg = { type: 'passthrough'; [ArgSpecDiscriminator]: 'arg' }
+type ArgSpec = OptionalArg | RequiredArg | PassthroughArg
 
 /**
  * Object arg spec
@@ -65,11 +70,13 @@ type ArgMap = ArgSpec | ObjArgSpec
  */
 type ArgFor<T extends ObjArgSpec | ArgSpec> = T extends ObjArgSpec
   ? ArgsForObjSpec<T>
-  : T extends OptionalArg
-    ? InstanceBuilder | undefined
-    : T extends RequiredArg
-      ? InstanceBuilder
-      : never
+  : T extends PassthroughArg
+    ? NodeBuilder | undefined
+    : T extends OptionalArg
+      ? InstanceBuilder | undefined
+      : T extends RequiredArg
+        ? InstanceBuilder
+        : never
 /**
  * Maps each arg to an expected output type
  */
@@ -82,7 +89,7 @@ type ParsedArgs<T extends [...DeliberateAny[]]> = T extends [infer T1 extends Ar
       : never
 
 function parseObjArg<T extends ObjArgSpec>(
-  arg: InstanceBuilder | undefined,
+  arg: NodeBuilder | undefined,
   sourceLocation: SourceLocation,
   subject: string,
   argMap: T,
@@ -91,6 +98,10 @@ function parseObjArg<T extends ObjArgSpec>(
     (acc, [property, spec]) => {
       if (arg?.hasProperty(property)) {
         const builder = arg.memberAccess(property, sourceLocation)
+        if (spec.type === 'passthrough') {
+          acc[property] = builder
+          return acc
+        }
         if (spec.t.length === 0) {
           acc[property] = requireInstanceBuilder(builder)
         } else {
@@ -110,14 +121,14 @@ function parseObjArg<T extends ObjArgSpec>(
         }
         return acc
       }
-      if (spec.required) {
+      if (spec.type === 'required') {
         throw new CodeError(`${subject} is missing required property ${property}`, {
           sourceLocation: arg?.sourceLocation ?? sourceLocation,
         })
       }
       return acc
     },
-    {} as Record<string, Expression | InstanceBuilder>,
+    {} as Record<string, InstanceBuilder | NodeBuilder>,
   ) as ArgsForObjSpec<T>
 }
 
@@ -127,14 +138,14 @@ const argSpecFactory = {
    * @param ptypes
    */
   required(...ptypes: PTypeOrClass[]): RequiredArg {
-    return { t: ptypes, required: true, [ArgSpecDiscriminator]: 'arg' }
+    return { t: ptypes, type: 'required', [ArgSpecDiscriminator]: 'arg' }
   },
   /**
    * An optional arg with one of the specified types
    * @param ptypes
    */
   optional(...ptypes: PTypeOrClass[]): OptionalArg {
-    return { t: ptypes, required: false, [ArgSpecDiscriminator]: 'arg' }
+    return { t: ptypes, type: 'optional', [ArgSpecDiscriminator]: 'arg' }
   },
   /**
    * An object map arg, if all properties are optional - the arg itself becomes optional
@@ -144,6 +155,12 @@ const argSpecFactory = {
     return {
       ...props,
       [ArgSpecDiscriminator]: 'obj',
+    }
+  },
+  passthrough(): PassthroughArg {
+    return {
+      type: 'passthrough',
+      [ArgSpecDiscriminator]: 'arg',
     }
   },
 }
@@ -161,7 +178,7 @@ export function parseFunctionArgs<const TGenericCount extends number, const TArg
   /**
    * Raw args array passed to call function
    */
-  args: ReadonlyArray<InstanceBuilder>
+  args: ReadonlyArray<NodeBuilder>
   /**
    * Raw typeArgs array passed to call function
    */
@@ -197,8 +214,11 @@ export function parseFunctionArgs<const TGenericCount extends number, const TArg
   return {
     ptypes: parseTypeArgs(typeArgs, callLocation, funcName, genericTypeArgs),
     args: argMap.map((a, i) => {
-      const source: InstanceBuilder<PType> | undefined = args[i]
+      const source: NodeBuilder | undefined = args[i]
       if (a[ArgSpecDiscriminator] === 'arg') {
+        if (a.type === 'passthrough') {
+          return source
+        }
         if (source) {
           if (a.t.length === 0) {
             return source
@@ -214,7 +234,7 @@ export function parseFunctionArgs<const TGenericCount extends number, const TArg
             })
           }
         }
-        if (a.required) {
+        if (a.type === 'required') {
           throw new CodeError(`Arg ${i} of ${funcName} is missing`, { sourceLocation: callLocation })
         }
       } else {

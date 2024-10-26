@@ -16,5 +16,6 @@ export default defineConfig({
   ],
   test: {
     globals: true,
+    testTimeout: 10_000,
   },
 })

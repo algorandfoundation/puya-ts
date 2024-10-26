@@ -79,8 +79,6 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
       args,
       returnType: this._functionType.returnType.wtypeOrThrow,
       body,
-      inheritable: true,
-      synthetic: false,
       cref,
       documentation,
     })

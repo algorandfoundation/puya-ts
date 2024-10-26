@@ -1,12 +1,19 @@
-contract AbiDecorators extends @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract, @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract
+contract AbiDecorators
 {
   globals {
     ["globalValue"]: uint64
   }
-  constructor(): void
+  approvalProgram(): bool
   {
-    void
-    GlobalState["globalValue"]: uint64 = 123
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
   }
   
   justNoop(): void
@@ -29,6 +36,21 @@ contract AbiDecorators extends @algorandfoundation/algorand-typescript/arc4/inde
   methodWithDefaults(): uint64
   {
     return a * b + c
+  }
+  
+  constructor(): void
+  {
+    void
+    GlobalState["globalValue"]: uint64 = 123
+  }
+  
+  Contract::constructor(): void
+  {
+  }
+  
+  Contract::constructor(): void
+  {
+    this.constructor()
   }
   
 }

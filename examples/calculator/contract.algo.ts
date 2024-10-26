@@ -1,5 +1,5 @@
 import type { uint64 } from '@algorandfoundation/algorand-typescript'
-import { assert, Bytes, Contract, err, log, op, Txn, Uint64 } from '@algorandfoundation/algorand-typescript'
+import { assert, BaseContract, Bytes, err, log, op, Txn, Uint64 } from '@algorandfoundation/algorand-typescript'
 
 const ADD = Uint64(1)
 const SUB = Uint64(2)
@@ -13,7 +13,7 @@ function itoa(i: uint64): string {
   }
   return itoa(i / radix).concat(digits.at(i % radix).toString())
 }
-export default class MyContract extends Contract {
+export default class MyContract extends BaseContract {
   public approvalProgram(): boolean {
     const numArgs = Txn.numAppArgs
     let a: uint64, b: uint64, action: uint64

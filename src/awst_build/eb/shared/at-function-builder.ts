@@ -2,25 +2,27 @@ import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
 import { UInt64BinaryOperator } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
-import type { WType } from '../../../awst/wtypes'
+import type { wtypes } from '../../../awst/wtypes'
+
 import { logger } from '../../../logger'
 import type { PType } from '../../ptypes'
 import { numberPType, uint64PType } from '../../ptypes'
 import { instanceEb } from '../../type-registry'
-import { FunctionBuilder, type InstanceBuilder } from '../index'
+import type { NodeBuilder } from '../index'
+import { FunctionBuilder } from '../index'
 import { parseFunctionArgs } from '../util/arg-parsing'
 import { getBigIntOrUint64Expr } from '../util/get-bigint-or-uint64-expr'
 
 export class AtFunctionBuilder extends FunctionBuilder {
   constructor(
     private expr: Expression,
-    private itemPType: PType & { wtype: WType },
+    private itemPType: PType & { wtype: wtypes.WType },
     private exprLength: Expression | bigint,
   ) {
     super(expr.sourceLocation)
   }
 
-  call(args: ReadonlyArray<InstanceBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation) {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [index],
     } = parseFunctionArgs({

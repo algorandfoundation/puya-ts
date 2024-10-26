@@ -1,5 +1,11 @@
 import { assertMatch, BaseContract, Global, gtxn, Txn } from '@algorandfoundation/algorand-typescript'
 
+function testSelf() {
+  assertMatch(Txn, {
+    receiver: Global.currentApplicationAddress,
+  })
+}
+
 function test(x: gtxn.PaymentTxn) {
   assertMatch(x, {
     amount: { between: [0, 50000] },
