@@ -64,6 +64,10 @@ export const getNumber = (v: StubUint64Compat): number => {
   internalError(`Cannot convert ${v} to number`)
 }
 
+export const getUint8Array = (v: StubBytesCompat): Uint8Array => {
+  return BytesCls.fromCompat(v).asUint8Array()
+}
+
 export const isBytes = (v: unknown): v is StubBytesCompat => {
   if (typeof v === 'string') return true
   if (v instanceof BytesCls) return true
@@ -71,7 +75,6 @@ export const isBytes = (v: unknown): v is StubBytesCompat => {
 }
 
 export const isUint64 = (v: unknown): v is StubUint64Compat => {
-  if (typeof v == 'boolean') return true
   if (typeof v == 'number') return true
   if (typeof v == 'bigint') return true
   return v instanceof Uint64Cls

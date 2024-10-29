@@ -96,16 +96,16 @@ export namespace wtypes {
 
   export class ARC4Type extends WType {
     readonly puyaTypeName: string = 'ARC4Type'
-    readonly decodeType: WType | null
+    readonly nativeType: WType | null
     readonly arc4Name: string
     readonly otherEncodeableTypes: WType[]
     constructor({
-      decodeType,
+      nativeType,
       arc4Name,
       otherEncodeableTypes,
       ...rest
     }: {
-      decodeType: WType | null
+      nativeType: WType | null
       arc4Name: string
       otherEncodeableTypes?: WType[]
       name: string
@@ -115,7 +115,7 @@ export namespace wtypes {
     }) {
       super({ ...rest, scalarType: rest.scalarType ?? AVMType.bytes })
       this.arc4Name = arc4Name
-      this.decodeType = decodeType
+      this.nativeType = nativeType
       this.otherEncodeableTypes = otherEncodeableTypes ?? []
     }
   }
@@ -228,7 +228,7 @@ export namespace wtypes {
       super({
         name: arc4Name ? `arc4.${arc4Name}` : `arc4.uint${n}`,
         scalarType: AVMType.bytes,
-        decodeType: n <= 64 ? uint64WType : biguintWType,
+        nativeType: n <= 64 ? uint64WType : biguintWType,
         arc4Name: arc4Name ?? `uint${n}`,
         otherEncodeableTypes: [uint64WType, biguintWType, boolWType],
       })
@@ -248,7 +248,7 @@ export namespace wtypes {
           .map((f) => f.arc4Name)
           .join(','),
         name,
-        decodeType: null,
+        nativeType: null,
       })
       this.sourceLocation = sourceLocation ?? null
       this.fields = fields
@@ -263,7 +263,7 @@ export namespace wtypes {
       super({
         name: `arc4.tuple<${typesStr}>`,
         arc4Name: `(${typesStr})`,
-        decodeType: null,
+        nativeType: null,
       })
       this.sourceLocation = sourceLocation ?? null
       this.types = types
@@ -277,10 +277,10 @@ export namespace wtypes {
       otherEncodeableTypes: WType[]
       name: string
       elementType: ARC4Type
-      decodeType?: WType
+      nativeType?: WType
       immutable?: boolean
     }) {
-      super({ ...props, scalarType: AVMType.bytes, immutable: props.immutable ?? false, decodeType: props.decodeType ?? null })
+      super({ ...props, scalarType: AVMType.bytes, immutable: props.immutable ?? false, nativeType: props.nativeType ?? null })
       this.elementType = props.elementType
     }
   }
@@ -291,13 +291,13 @@ export namespace wtypes {
       elementType,
       sourceLocation,
       arc4Name,
-      decodeType,
+      nativeType,
       immutable,
     }: {
       elementType: ARC4Type
       sourceLocation?: SourceLocation
       arc4Name?: string
-      decodeType?: WType
+      nativeType?: WType
       immutable?: boolean
     }) {
       super({
@@ -305,7 +305,7 @@ export namespace wtypes {
         name: `arc4.dynamic_array<${elementType.name}>`,
         arc4Name: arc4Name ?? `${elementType.arc4Name}[]`,
         otherEncodeableTypes: [],
-        decodeType,
+        nativeType,
         immutable,
       })
       this.sourceLocation = sourceLocation ?? null
@@ -319,21 +319,21 @@ export namespace wtypes {
       sourceLocation,
       arraySize,
       arc4Name,
-      decodeType,
+      nativeType,
       immutable,
     }: {
       arraySize: bigint
       elementType: ARC4Type
       sourceLocation?: SourceLocation
       arc4Name?: string
-      decodeType?: WType
+      nativeType?: WType
       immutable?: boolean
     }) {
       super({
         elementType,
         name: `arc4.static_array<${elementType.name}>`,
         arc4Name: arc4Name ?? `${elementType.arc4Name}[${arraySize}]`,
-        decodeType,
+        nativeType: nativeType,
         otherEncodeableTypes: [],
         immutable,
       })
@@ -346,18 +346,25 @@ export namespace wtypes {
     n: 8n,
     arc4Name: 'byte',
   })
+  export const arc4AddressAliasWType = new ARC4StaticArray({
+    arraySize: 32n,
+    immutable: true,
+    elementType: arc4ByteAliasWType,
+    nativeType: accountWType,
+    arc4Name: 'address',
+  })
 
   export const arc4BooleanWType = new ARC4Type({
     name: 'arc4.bool',
     arc4Name: 'bool',
     immutable: true,
-    decodeType: boolWType,
+    nativeType: boolWType,
   })
 
   export const arc4StringAliasWType = new ARC4DynamicArray({
     arc4Name: 'string',
     elementType: arc4ByteAliasWType,
-    decodeType: stringWType,
+    nativeType: stringWType,
     immutable: true,
   })
 }

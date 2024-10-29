@@ -8,11 +8,24 @@ subroutine test(n: uint64, b: biguint, c: arc4.uint256): void
   a: arc4.uint128 = ARC4_ENCODE(b, wtype=arc4.uint128)
   a_native: biguint = reinterpret_cast<biguint>(a)
 }
-subroutine test_arrays(n: arc4.uint64): void
+subroutine testArrays(n: arc4.uint64): void
 {
   myArray: arc4.dynamic_array<arc4.uint64> = new arc4.dynamic_array<arc4.uint64>(n, n, n)
   myStatic: arc4.static_array<arc4.uint64> = new arc4.static_array<arc4.uint64>(n, n)
   myStatic2: arc4.static_array<arc4.uint64> = new arc4.static_array<arc4.uint64>(n, n, n)
+}
+subroutine test_bytes(): void
+{
+  b: arc4.byte = 0x00
+  b2: arc4.byte = 0x00
+  assert(reinterpret_cast<bytes>(b) == reinterpret_cast<bytes>(b2))
+}
+subroutine testAddress(): void
+{
+  a: arc4.static_array<arc4.byte> = Address("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ")
+  b: arc4.static_array<arc4.byte> = reinterpret_cast<arc4.static_array<arc4.byte>>(txn<Sender>())
+  assert(!reinterpret_cast<bytes>(a) == reinterpret_cast<bytes>(b))
+  assert(reinterpret_cast<bytes>(a) == reinterpret_cast<bytes>(Address("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ")))
 }
 contract Arc4TypesTestContract
 {
@@ -22,13 +35,19 @@ contract Arc4TypesTestContract
       this.constructor()
     }
     tests/approvals/arc4-types.algo.ts::test(1, 2, 0x04)
-    tests/approvals/arc4-types.algo.ts::test_arrays(0x41)
+    tests/approvals/arc4-types.algo.ts::testArrays(0x41)
+    tests/approvals/arc4-types.algo.ts::testAddress()
     return True
   }
   
   clearProgram(): bool
   {
     return True
+  }
+  
+  getArc4Values(): readonlytuple[arc4.byte, arc4.uint8, arc4.static_array<arc4.byte>]
+  {
+    return <tuple>[0x00, 0xff, Address("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ")]
   }
   
   constructor(): void

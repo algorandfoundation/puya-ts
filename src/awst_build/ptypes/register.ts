@@ -1,11 +1,13 @@
 import { Arc4AbiMethodDecoratorBuilder, Arc4BareMethodDecoratorBuilder } from '../eb/arc4-bare-method-decorator-builder'
 import {
+  AddressConstructorBuilder,
+  AddressExpressionBuilder,
   DynamicArrayConstructorBuilder,
   DynamicArrayExpressionBuilder,
   StaticArrayConstructorBuilder,
   StaticArrayExpressionBuilder,
 } from '../eb/arc4/arrays'
-import { UintNConstructorBuilder, UintNExpressionBuilder } from '../eb/arc4/uint-n-constructor-builder'
+import { ByteConstructorBuilder, UintNConstructorBuilder, UintNExpressionBuilder } from '../eb/arc4/uint-n-constructor-builder'
 import { AssertFunctionBuilder, ErrFunctionBuilder } from '../eb/assert-function-builder'
 import { AssertMatchFunctionBuilder } from '../eb/assert-match-function-builder'
 import { BigUintExpressionBuilder, BigUintFunctionBuilder } from '../eb/biguint-expression-builder'
@@ -49,6 +51,10 @@ import { VoidExpressionBuilder } from '../eb/void-expression-builder'
 import { OP_METADATA } from '../op-metadata'
 import type { TypeRegistry } from '../type-registry'
 import {
+  AddressConstructor,
+  arc4AddressAlias,
+  arc4ByteAlias,
+  ByteConstructor,
   DynamicArrayConstructor,
   DynamicArrayType,
   StaticArrayConstructor,
@@ -215,11 +221,15 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: AccountFunction, singletonEb: AccountFunctionBuilder })
   typeRegistry.register({ ptype: accountPType, instanceEb: AccountExpressionBuilder })
   typeRegistry.register({ ptype: UintNConstructor, singletonEb: UintNConstructorBuilder })
+  typeRegistry.register({ ptype: ByteConstructor, singletonEb: ByteConstructorBuilder })
   typeRegistry.registerGeneric({ ptype: UintNType, instanceEb: UintNExpressionBuilder })
+  typeRegistry.register({ ptype: arc4ByteAlias, instanceEb: UintNExpressionBuilder })
   typeRegistry.register({ ptype: DynamicArrayConstructor, singletonEb: DynamicArrayConstructorBuilder })
   typeRegistry.registerGeneric({ ptype: DynamicArrayType, instanceEb: DynamicArrayExpressionBuilder })
   typeRegistry.register({ ptype: StaticArrayConstructor, singletonEb: StaticArrayConstructorBuilder })
   typeRegistry.registerGeneric({ ptype: StaticArrayType, instanceEb: StaticArrayExpressionBuilder })
+  typeRegistry.register({ ptype: arc4AddressAlias, instanceEb: AddressExpressionBuilder })
+  typeRegistry.register({ ptype: AddressConstructor, singletonEb: AddressConstructorBuilder })
 
   typeRegistry.register({ ptype: ApplicationFunctionType, singletonEb: ApplicationFunctionBuilder })
   typeRegistry.register({ ptype: applicationPType, instanceEb: ApplicationExpressionBuilder })

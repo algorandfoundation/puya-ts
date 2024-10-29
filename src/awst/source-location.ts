@@ -7,8 +7,16 @@ export class SourceLocation {
   endLine: number
   column: number
   endColumn: number
+  scope: 'file' | 'range'
 
-  constructor(props: { file?: string | null; line: number; endLine: number; column: number; endColumn: number }) {
+  constructor(props: {
+    file?: string | null
+    line: number
+    endLine: number
+    column: number
+    endColumn: number
+    scope: SourceLocation['scope']
+  }) {
     invariant(props.line <= props.endLine, 'Start line must be before end line')
     if (props.line === props.endLine) invariant(props.column <= props.endColumn, 'Start column must be before end column')
     this.file = props.file ?? null
@@ -16,6 +24,7 @@ export class SourceLocation {
     this.endLine = props.endLine
     this.column = props.column
     this.endColumn = props.endColumn
+    this.scope = props.scope
   }
 
   private static getStartAndEnd(node: ts.Node): { start: number; end: number } {
@@ -52,16 +61,20 @@ export class SourceLocation {
       endLine: endLoc.line + 1,
       column: startLoc.character,
       endColumn: endLoc.character,
+      scope: 'range',
     })
   }
 
   static fromFile(sourceFile: ts.SourceFile, programDirectory: string): SourceLocation {
+    const endPos = sourceFile.getEnd()
+    const endLoc = sourceFile.getLineAndCharacterOfPosition(endPos)
     return new SourceLocation({
       file: normalisePath(sourceFile.fileName, programDirectory),
       line: 1,
-      endLine: 1,
+      endLine: endLoc.line + 1,
       column: 1,
-      endColumn: 1,
+      endColumn: endLoc.character,
+      scope: 'file',
     })
   }
 
@@ -75,6 +88,7 @@ export class SourceLocation {
       endLine: endLoc.line + 1,
       column: startLoc.character,
       endColumn: endLoc.character,
+      scope: 'range',
     })
   }
 
@@ -87,6 +101,7 @@ export class SourceLocation {
       endLine: startLoc.line + 1,
       column: startLoc.character,
       endColumn: startLoc.character,
+      scope: 'range',
     })
   }
 
@@ -106,6 +121,7 @@ export class SourceLocation {
         column: acc.line === cur.line ? Math.min(acc.column, cur.column) : acc.line < cur.line ? acc.column : cur.column,
         endColumn:
           acc.endLine === cur.endLine ? Math.max(acc.endColumn, cur.endColumn) : acc.endLine > cur.endLine ? acc.endColumn : cur.endColumn,
+        scope: 'range',
       })
     })
   }
@@ -115,6 +131,7 @@ export class SourceLocation {
     endLine: 1,
     column: 0,
     endColumn: 1,
+    scope: 'file',
   })
 }
 

@@ -1,12 +1,17 @@
 import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
+import { StringConstant } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { wtypes } from '../../../awst/wtypes'
+import { Constants } from '../../../constants'
+import { wrapInCodeError } from '../../../errors'
+import { logger } from '../../../logger'
 
-import { codeInvariant, invariant } from '../../../util'
+import { base32ToUint8Array, codeInvariant, invariant } from '../../../util'
 import type { PType } from '../../ptypes'
-import { IterableIteratorType, NumericLiteralPType, TuplePType, uint64PType } from '../../ptypes'
+import { accountPType, bytesPType, IterableIteratorType, NumericLiteralPType, stringPType, TuplePType, uint64PType } from '../../ptypes'
 import {
+  arc4AddressAlias,
   ARC4EncodedType,
   DynamicArrayConstructor,
   DynamicArrayType,
@@ -15,13 +20,15 @@ import {
 } from '../../ptypes/arc4-types'
 import { instanceEb } from '../../type-registry'
 import type { InstanceBuilder } from '../index'
-import { FunctionBuilder, InstanceExpressionBuilder, NodeBuilder } from '../index'
+import { FunctionBuilder, NodeBuilder } from '../index'
 import { IterableIteratorExpressionBuilder } from '../iterable-iterator-expression-builder'
+import { AccountExpressionBuilder } from '../reference/account'
 import { AtFunctionBuilder } from '../shared/at-function-builder'
 import { SliceFunctionBuilder } from '../shared/slice-function-builder'
 import { UInt64ExpressionBuilder } from '../uint64-expression-builder'
 import { requireExpressionOfType } from '../util'
 import { parseFunctionArgs } from '../util/arg-parsing'
+import { Arc4EncodedBaseExpressionBuilder } from './base'
 
 export class DynamicArrayConstructorBuilder extends NodeBuilder {
   readonly ptype = DynamicArrayConstructor
@@ -93,12 +100,79 @@ export class StaticArrayConstructorBuilder extends NodeBuilder {
     )
   }
 }
+export class AddressConstructorBuilder extends NodeBuilder {
+  readonly ptype = DynamicArrayConstructor
+
+  newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
+    const {
+      args: [accountOrAddressOrBytes],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      callLocation: sourceLocation,
+      funcName: 'Address constructor',
+      genericTypeArgs: 2,
+      argSpec: (a) => [a.optional(accountPType, stringPType, bytesPType)],
+    })
+    if (!accountOrAddressOrBytes) {
+      return new AddressExpressionBuilder(
+        nodeFactory.addressConstant({
+          value: Constants.zeroAddressEncoded,
+          sourceLocation,
+          wtype: arc4AddressAlias.wtype,
+        }),
+        arc4AddressAlias,
+      )
+    }
+
+    if (accountOrAddressOrBytes.ptype.equals(accountPType)) {
+      return new AddressExpressionBuilder(
+        nodeFactory.reinterpretCast({
+          expr: accountOrAddressOrBytes.resolve(),
+          sourceLocation,
+          wtype: arc4AddressAlias.wtype,
+        }),
+        arc4AddressAlias,
+      )
+    } else if (accountOrAddressOrBytes.ptype.equals(stringPType)) {
+      const value = accountOrAddressOrBytes.resolve()
+      if (value instanceof StringConstant) {
+        wrapInCodeError(() => base32ToUint8Array(value.value), value.sourceLocation)
+        return new AddressExpressionBuilder(
+          nodeFactory.addressConstant({
+            value: value.value,
+            sourceLocation,
+            wtype: arc4AddressAlias.wtype,
+          }),
+          arc4AddressAlias,
+        )
+      }
+      logger.error(
+        value.sourceLocation,
+        `Invalid address literal. Addresses should be ${Constants.encodedAddressLength} characters and not include base32 padding`,
+      )
+    }
+    return new AddressExpressionBuilder(
+      nodeFactory.reinterpretCast({
+        expr: accountOrAddressOrBytes.resolve(),
+        sourceLocation,
+        wtype: arc4AddressAlias.wtype,
+      }),
+      arc4AddressAlias,
+    )
+  }
+}
 
 export abstract class ArrayExpressionBuilder<
   TArrayType extends DynamicArrayType | StaticArrayType,
-> extends InstanceExpressionBuilder<TArrayType> {
+> extends Arc4EncodedBaseExpressionBuilder<TArrayType> {
   iterate(sourceLocation: SourceLocation): Expression {
     return this.resolve()
+  }
+
+  indexAccess(index: InstanceBuilder, sourceLocation: SourceLocation): NodeBuilder {
+    // TODO
+    return super.indexAccess(index, sourceLocation)
   }
 
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
@@ -193,6 +267,23 @@ export class StaticArrayExpressionBuilder extends ArrayExpressionBuilder<StaticA
     switch (name) {
       case 'length':
         return new UInt64ExpressionBuilder(nodeFactory.uInt64Constant({ value: this.ptype.arraySize, sourceLocation }))
+    }
+    return super.memberAccess(name, sourceLocation)
+  }
+}
+export class AddressExpressionBuilder extends ArrayExpressionBuilder<StaticArrayType> {
+  constructor(expr: Expression, ptype: PType) {
+    invariant(ptype instanceof StaticArrayType, 'ptype must be instance of StaticArrayType')
+    invariant(ptype.equals(arc4AddressAlias), 'ptype must be arc4AddressAlias')
+    super(expr, ptype)
+  }
+
+  memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
+    switch (name) {
+      case 'length':
+        return new UInt64ExpressionBuilder(nodeFactory.uInt64Constant({ value: this.ptype.arraySize, sourceLocation }))
+      case 'native':
+        return new AccountExpressionBuilder(this.toBytes(sourceLocation))
     }
     return super.memberAccess(name, sourceLocation)
   }

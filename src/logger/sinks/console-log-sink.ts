@@ -33,7 +33,7 @@ export class ConsoleLogSink implements LogSink {
 
   getSourceSummary(sourceLocation: SourceLocation, indent: number): string {
     const sourceFile = sourceLocation.file && LoggingContext.current.sourcesByPath[sourceLocation.file]
-    if (!sourceFile) return ''
+    if (!sourceFile || sourceLocation.scope === 'file') return ''
 
     const line = sourceFile[sourceLocation.line - 1]
     const trimmedLine = line.trimStart()
