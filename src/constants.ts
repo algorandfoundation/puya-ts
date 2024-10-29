@@ -21,4 +21,7 @@ export const Constants = {
   arc4AbiDecoratorName: 'arc4.abimethod',
   constructorMethodName: 'constructor',
   defaultCreateMethodName: '__algots__.defaultCreate',
+  addressLength: 32,
+  encodedAddressLength: 58,
+  zeroAddressEncoded: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ',
 } as const

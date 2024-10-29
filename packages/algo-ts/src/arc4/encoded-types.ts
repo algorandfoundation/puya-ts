@@ -1,7 +1,8 @@
-import { biguint, BigUintCompat, Bytes, bytes, BytesBacked, StringCompat, uint64, Uint64Compat } from '../primitives'
-import { err } from '../util'
+import { avmError, avmInvariant } from '../impl/errors'
+import { arrayUtil, BytesCls, getNumber, getUint8Array, isBytes, isUint64 } from '../impl/primitives'
+import { biguint, BigUintCompat, Bytes, bytes, BytesBacked, StringCompat, Uint64, uint64, Uint64Compat } from '../primitives'
 import { Account } from '../reference'
-import { arrayUtil } from '../impl/primitives'
+import { err } from '../util'
 
 export type BitSize = 8 | 16 | 32 | 64 | 128 | 256 | 512
 type NativeForArc4Int<N extends BitSize> = N extends 8 | 16 | 32 | 64 ? uint64 : biguint
@@ -10,6 +11,10 @@ type CompatForArc4Int<N extends BitSize> = N extends 8 | 16 | 32 | 64 ? Uint64Co
 abstract class AbiEncoded implements BytesBacked {
   get bytes(): bytes {
     throw new Error('todo')
+  }
+
+  equals(other: this): boolean {
+    return this.bytes.equals(other.bytes)
   }
 }
 
@@ -38,17 +43,14 @@ export class UFixedNxM<N extends BitSize, M extends number> {
 }
 
 export class Byte extends UintN<8> {
-  constructor(v: Uint64Compat) {
+  constructor(v?: Uint64Compat) {
     super(v)
-  }
-  get native(): uint64 {
-    throw new Error('TODO')
   }
 }
 export class Bool {
   #v: boolean
-  constructor(v: boolean) {
-    this.#v = v
+  constructor(v?: boolean) {
+    this.#v = v ?? false
   }
 
   get native(): boolean {
@@ -56,12 +58,35 @@ export class Bool {
   }
 }
 
-abstract class Arc4Array<TItem> extends AbiEncoded {
-  protected constructor(protected items: TItem[]) {
+abstract class Arc4ReadonlyArray<TItem> extends AbiEncoded {
+  protected items: TItem[]
+  protected constructor(items: TItem[]) {
     super()
+    this.items = items.slice()
+    return new Proxy(this, {
+      get(target, prop) {
+        if (isUint64(prop)) {
+          const idx = getNumber(prop)
+          if (idx < target.items.length) return target.items[idx]
+          avmError('Index out of bounds')
+        }
+        return Reflect.get(target, prop)
+      },
+      set(target, prop, value) {
+        if (isUint64(prop)) {
+          const idx = getNumber(prop)
+          if (idx < target.items.length) {
+            target.items[idx] = value
+            return true
+          }
+          avmError('Index out of bounds')
+        }
+        avmError('Property is not writable')
+      },
+    })
   }
   get length(): uint64 {
-    throw new Error('TODO')
+    return Uint64(this.items.length)
   }
   at(index: Uint64Compat): TItem {
     return arrayUtil.arrayAt(this.items, index)
@@ -72,15 +97,19 @@ abstract class Arc4Array<TItem> extends AbiEncoded {
   [Symbol.iterator](): IterableIterator<TItem> {
     return this.items[Symbol.iterator]()
   }
-  entries(): IterableIterator<readonly [uint64, TItem]> {
-    throw new Error('TODO')
+  *entries(): IterableIterator<readonly [uint64, TItem]> {
+    for (const [idx, item] of this.items.entries()) {
+      yield [Uint64(idx), item]
+    }
   }
-  keys(): IterableIterator<uint64> {
-    throw new Error('TODO')
+  *keys(): IterableIterator<uint64> {
+    for (const idx of this.items.keys()) {
+      yield Uint64(idx)
+    }
   }
 }
 
-export class StaticArray<TItem, TLength extends number> extends Arc4Array<TItem> {
+export class StaticArray<TItem, TLength extends number> extends Arc4ReadonlyArray<TItem> {
   constructor()
   constructor(...items: TItem[] & { length: TLength })
   constructor(...items: TItem[])
@@ -93,7 +122,7 @@ export class StaticArray<TItem, TLength extends number> extends Arc4Array<TItem>
   }
 }
 
-export class DynamicArray<TItem> extends Arc4Array<TItem> {
+export class DynamicArray<TItem> extends Arc4ReadonlyArray<TItem> {
   constructor(...items: TItem[]) {
     super(items)
   }
@@ -124,12 +153,24 @@ export class Tuple<TTuple extends unknown[]> {
   }
 }
 
-export class Address extends StaticArray<Byte, 32> {
-  constructor(value: Account | string | bytes) {
-    super()
+export class Address extends Arc4ReadonlyArray<Byte> {
+  constructor(value?: Account | string | bytes) {
+    let byteValues: Uint8Array
+    if (value === undefined) {
+      byteValues = new Uint8Array(32)
+    } else if (typeof value === 'string') {
+      // Interpret as base 32
+      byteValues = BytesCls.fromBase32(value).asUint8Array()
+    } else if (isBytes(value)) {
+      byteValues = getUint8Array(value)
+    } else {
+      byteValues = getUint8Array(value.bytes)
+    }
+    avmInvariant(byteValues.length === 32, 'Addresses should be 32 bytes')
+    super(Array.from(byteValues).map((b) => new Byte(b)))
   }
 
   get native(): Account {
-    throw new Error('TODO')
+    return Account(Bytes(this.items.map((i) => i.native)))
   }
 }

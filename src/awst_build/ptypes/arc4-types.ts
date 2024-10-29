@@ -4,9 +4,14 @@ import { Constants } from '../../constants'
 import { codeInvariant, zipStrict } from '../../util'
 import { PType } from './base'
 import { LibFunctionType, NumericLiteralPType } from './index'
+import ARC4StaticArray = wtypes.ARC4StaticArray
 
 export const UintNConstructor = new LibFunctionType({
   name: 'UintN',
+  module: Constants.arc4EncodedTypesModuleName,
+})
+export const ByteConstructor = new LibFunctionType({
+  name: 'Byte',
   module: Constants.arc4EncodedTypesModuleName,
 })
 export abstract class ARC4EncodedType extends PType {
@@ -26,12 +31,12 @@ export class ARC4InstanceType extends ARC4EncodedType {
 }
 
 export const ARC4BooleanType = new ARC4InstanceType({
-  name: 'ARC4Boolean',
+  name: 'Boolean',
   wtype: wtypes.arc4BooleanWType,
 })
 
 export const ARC4StringType = new ARC4InstanceType({
-  name: 'ARC4String',
+  name: 'String',
   wtype: wtypes.arc4StringAliasWType,
 })
 
@@ -118,11 +123,11 @@ export class UintNType extends ARC4EncodedType {
 
   readonly wtype: wtypes.ARC4UIntN
 
-  constructor({ n, wtype }: { n: bigint; wtype?: wtypes.ARC4UIntN }) {
+  constructor({ n, wtype, name }: { n: bigint; wtype?: wtypes.ARC4UIntN; name?: string }) {
     super()
     codeInvariant(n >= 8n && n <= 512n && n % 8n === 0n, 'n must be between 8 and 512, and a multiple of 8')
     this.n = n
-    this.name = `UIntN<${n}>`
+    this.name = name ?? `UIntN<${n}>`
     this.wtype = wtype ?? new wtypes.ARC4UIntN({ n: this.n })
   }
 
@@ -142,7 +147,7 @@ export class UintNType extends ARC4EncodedType {
   }
 }
 
-export const arc4ByteAlias = new UintNType({ n: 8n, wtype: wtypes.arc4ByteAliasWType })
+export const arc4ByteAlias = new UintNType({ n: 8n, wtype: wtypes.arc4ByteAliasWType, name: 'Byte' })
 
 export const DynamicArrayConstructor = new LibFunctionType({
   name: 'DynamicArray',
@@ -152,16 +157,22 @@ export class DynamicArrayType extends ARC4EncodedType {
   static baseFullName = `${Constants.arc4EncodedTypesModuleName}::DynamicArray`
   readonly module = Constants.arc4EncodedTypesModuleName
   readonly elementType: ARC4EncodedType
+  readonly immutable: boolean
   readonly name: string
   readonly singleton = false
   readonly sourceLocation: SourceLocation | undefined
 
   get wtype(): wtypes.ARC4DynamicArray {
-    return new wtypes.ARC4DynamicArray({ elementType: this.elementType.wtype, sourceLocation: this.sourceLocation })
+    return new wtypes.ARC4DynamicArray({
+      elementType: this.elementType.wtype,
+      sourceLocation: this.sourceLocation,
+      immutable: this.immutable,
+    })
   }
 
   constructor({ elementType, sourceLocation }: { elementType: ARC4EncodedType; sourceLocation?: SourceLocation }) {
     super()
+    this.immutable = false
     this.elementType = elementType
     this.name = `DynamicArray<${elementType}>`
     this.sourceLocation = sourceLocation
@@ -191,27 +202,34 @@ export class StaticArrayType extends ARC4EncodedType {
   readonly module = Constants.arc4EncodedTypesModuleName
   readonly elementType: ARC4EncodedType
   readonly arraySize: bigint
+  readonly immutable: boolean
   readonly name: string
   readonly singleton = false
   readonly sourceLocation: SourceLocation | undefined
-  get wtype(): wtypes.ARC4StaticArray {
-    return new wtypes.ARC4StaticArray({ elementType: this.elementType.wtype, arraySize: this.arraySize })
-  }
+  readonly wtype: wtypes.ARC4StaticArray
 
   constructor({
     elementType,
     arraySize,
     sourceLocation,
+    wtype,
+    name,
+    immutable,
   }: {
+    immutable?: boolean
     elementType: ARC4EncodedType
     arraySize: bigint
     sourceLocation?: SourceLocation
+    wtype?: ARC4StaticArray
+    name?: string
   }) {
     super()
-    this.elementType = elementType
+    ;(this.immutable = immutable ?? false), (this.elementType = elementType)
     this.arraySize = arraySize
-    this.name = `StaticArray<${elementType}>`
+    this.name = name ?? `StaticArray<${elementType}>`
     this.sourceLocation = sourceLocation
+    this.wtype =
+      wtype ?? new wtypes.ARC4StaticArray({ elementType: this.elementType.wtype, arraySize: this.arraySize, immutable: this.immutable })
   }
 
   static parameterise(typeArgs: PType[]): StaticArrayType {
@@ -233,3 +251,15 @@ export class StaticArrayType extends ARC4EncodedType {
     return [this.elementType, new NumericLiteralPType({ literalValue: this.arraySize })]
   }
 }
+export const arc4AddressAlias = new StaticArrayType({
+  arraySize: BigInt(Constants.encodedAddressLength),
+  elementType: arc4ByteAlias,
+  wtype: wtypes.arc4AddressAliasWType,
+  immutable: true,
+  name: 'Address',
+})
+
+export const AddressConstructor = new LibFunctionType({
+  name: 'Address',
+  module: Constants.arc4EncodedTypesModuleName,
+})

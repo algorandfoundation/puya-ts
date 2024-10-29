@@ -1,8 +1,8 @@
 import { describe } from 'vitest'
-import { createTestFixture } from './util/test-fixture'
+import { createArc4TestFixture } from './util/test-fixture'
 
 describe('abi-decorators', () => {
-  const test = createTestFixture('tests/approvals/abi-decorators.algo.ts', {
+  const test = createArc4TestFixture('tests/approvals/abi-decorators.algo.ts', {
     AbiDecorators: { deployParams: { createParams: { method: 'createMethod' } } },
   })
   test('can be created', async ({ appFactoryAbiDecorators }) => {

@@ -123,7 +123,7 @@ export type Asset = {
   readonly total: uint64
 
   /**
-   * @see AssetParams.Decimals
+   * @see AssetParams.decimals
    */
   readonly decimals: uint64
 

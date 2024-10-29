@@ -204,7 +204,10 @@ export class TypeResolver {
       if (baseType instanceof ContractClassPType) {
         return this.reflectContractType(typeName, tsType, baseType, sourceLocation)
       }
-      throw new CodeError('Classes must extend "Contract" or "BaseContract" base classes to be considered a contract', { sourceLocation })
+      throw new CodeError(
+        `${typeName.fullName} cannot be mapped to an algo ts type. Classes must extend "Contract" or "BaseContract" base classes to be considered a contract`,
+        { sourceLocation },
+      )
     }
     const callSignatures = this.checker.getSignaturesOfType(tsType, ts.SignatureKind.Call)
     if (callSignatures.length) {
@@ -309,8 +312,9 @@ export class TypeResolver {
   }
 
   private getLocationOfSymbol(symbol: ts.Symbol): SourceLocation | undefined {
-    const sf = symbol.getDeclarations()?.map((d) => d.getSourceFile())?.[0]
-    return sf && SourceLocation.fromFile(sf, this.programDirectory)
+    const declaration = symbol.getDeclarations()?.[0]
+
+    return declaration && SourceLocation.fromNode(declaration, this.programDirectory)
   }
 
   private tryGetLocalSymbolName(symbol: ts.Symbol): string | undefined {

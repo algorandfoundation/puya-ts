@@ -1,7 +1,7 @@
 contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
     program approval:
         subroutine tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract.approvalProgram() -> bool:
-            block@0: // L26
+            block@0: // L44
                 let reinterpret_bool%0#0: bool = (txn ApplicationID)
                 goto reinterpret_bool%0#0 ? block@2 : block@1
             block@1: // if_body_L1
@@ -9,11 +9,12 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
                 goto block@2
             block@2: // after_if_else_L1
                 tests/approvals/arc4-types.algo.ts::test(1u, 2b, 0x04)
-                tests/approvals/arc4-types.algo.ts::test_arrays(0x41)
+                tests/approvals/arc4-types.algo.ts::testArrays(0x41)
+                tests/approvals/arc4-types.algo.ts::testAddress()
                 return 1u
         
         subroutine tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract.constructor() -> void:
-            block@0: // L25
+            block@0: // L39
                 return 
         
         subroutine tests/approvals/arc4-types.algo.ts::test(n: uint64, b: biguint, c: bytes) -> void:
@@ -33,7 +34,7 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
                 let a_native#0: biguint = reinterpret_biguint%0#0
                 return 
         
-        subroutine tests/approvals/arc4-types.algo.ts::test_arrays(n: bytes) -> void:
+        subroutine tests/approvals/arc4-types.algo.ts::testArrays(n: bytes) -> void:
             block@0: // L17
                 let result%0#0: bytes = (concat 0x n#0)
                 let result%1#0: bytes = (concat result%0#0 n#0)
@@ -49,6 +50,17 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
                 let result%7#0: bytes = (concat result%6#0 n#0)
                 let array_data%2#0: bytes = (concat 0x result%7#0)
                 let myStatic2#0: bytes = array_data%2#0
+                return 
+        
+        subroutine tests/approvals/arc4-types.algo.ts::testAddress() -> void:
+            block@0: // L31
+                let a#0: bytes = addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ
+                let b#0: bytes = (txn Sender)
+                let tmp%0#0: bool = (== a#0 b#0)
+                let tmp%1#0: bool = (! tmp%0#0)
+                (assert tmp%1#0) // Zero address should not match sender
+                let tmp%2#0: bool = (== a#0 addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ)
+                (assert tmp%2#0) // Two zero addresses should match
                 return 
     
     program clear-state:

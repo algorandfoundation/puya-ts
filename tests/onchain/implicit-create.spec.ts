@@ -1,8 +1,8 @@
 import { describe, expect } from 'vitest'
-import { createTestFixture } from './util/test-fixture'
+import { createArc4TestFixture } from './util/test-fixture'
 
 describe('implicit-create', () => {
-  const test = createTestFixture('tests/approvals/implicit-create.algo.ts', {
+  const test = createArc4TestFixture('tests/approvals/implicit-create.algo.ts', {
     NoBare: {},
     NoNoOp: {},
     ExplicitBareCreateFromBase: {},

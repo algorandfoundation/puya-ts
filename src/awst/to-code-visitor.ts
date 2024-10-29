@@ -92,10 +92,10 @@ export class ToCodeVisitor
     throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
   }
   visitMethodConstant(expression: nodes.MethodConstant): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    return `Method("${expression.value}")`
   }
   visitAddressConstant(expression: nodes.AddressConstant): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    return `Address("${expression.value}")`
   }
   visitARC4Encode(expression: nodes.ARC4Encode): string {
     return `ARC4_ENCODE(${expression.value.accept(this)}, wtype=${expression.wtype})`
