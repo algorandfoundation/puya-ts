@@ -1,5 +1,10 @@
 on:
   workflow_call:
+    inputs:
+      run-commit-lint:
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   ci-algo-ts:
@@ -35,7 +40,7 @@ jobs:
       pre-run-script: mv packages-temp/algo-ts packages/algo-ts/dist
       node-version: 20.x
       run-build: true
-      run-commit-lint: true
+      run-commit-lint: ${{ inputs.run-commit-lint }}
       build-script: npm run build
       audit-script: npm run audit
       upload-artifact-name: puya-ts
