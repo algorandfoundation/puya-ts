@@ -21,7 +21,7 @@ import { BoxProxyExpressionBuilder } from './eb/storage/box'
 import { GlobalStateFunctionResultBuilder } from './eb/storage/global-state'
 import { LocalStateFunctionResultBuilder } from './eb/storage/local-state'
 import { requireInstanceBuilder } from './eb/util'
-import { ContractClass } from './models/contract-class'
+import { Index } from './models'
 import type { ContractClassPType } from './ptypes'
 
 export class ContractVisitor extends BaseVisitor implements Visitor<ClassElements, void> {
@@ -57,7 +57,7 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
       logger.error(this._approvalProgram.sourceLocation, 'ARC4 contracts cannot define their own approval methods.')
     }
 
-    const contract = new ContractClass({
+    const contract = new Index({
       type: this._contractPType,
       propertyInitialization: this._propertyInitialization,
       isAbstract: isAbstract,

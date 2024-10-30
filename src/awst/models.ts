@@ -1,9 +1,5 @@
-import type { LogicSig } from '../awst_build/models/contract-class'
-import { ContractClass } from '../awst_build/models/contract-class'
 import type { ContractClassPType } from '../awst_build/ptypes'
 import type { Props } from '../typescript-helpers'
-import { invariant } from '../util'
-import { CustomKeyMap } from '../util/custom-key-map'
 import type { SourceLocation } from './source-location'
 
 export enum OnCompletionAction {
@@ -136,22 +132,4 @@ export enum TransactionKind {
   axfer = 4,
   afrz = 5,
   appl = 6,
-}
-
-export class CompilationSet extends CustomKeyMap<ContractReference | LogicSigReference, ContractClass | LogicSig> {
-  constructor() {
-    super((x) => x.toString())
-  }
-
-  get compilationOutputSet() {
-    return Array.from(this.entries())
-      .filter(([, meta]) => (meta instanceof ContractClass ? !meta.isAbstract : false))
-      .map(([ref]) => ref)
-  }
-
-  getContractClass(cref: ContractReference) {
-    const maybeClass = this.get(cref)
-    invariant(maybeClass instanceof ContractClass, 'Contract reference must resolve to a contract class')
-    return maybeClass
-  }
 }

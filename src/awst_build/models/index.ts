@@ -1,5 +1,5 @@
 import type { awst } from '../../awst'
-import type { CompilationSet } from '../../awst/models'
+import type { LogicSigReference } from '../../awst/models'
 import { ARC4BareMethodConfig, ARC4CreateOption, ContractReference, OnCompletionAction } from '../../awst/models'
 import { nodeFactory } from '../../awst/node-factory'
 import type { AppStorageDefinition, ContractMethod, Statement, StateTotals } from '../../awst/nodes'
@@ -8,10 +8,11 @@ import { wtypes } from '../../awst/wtypes'
 import { Constants } from '../../constants'
 import { logger } from '../../logger'
 import type { Props } from '../../typescript-helpers'
-import { codeInvariant, isIn } from '../../util'
+import { codeInvariant, invariant, isIn } from '../../util'
+import { CustomKeyMap } from '../../util/custom-key-map'
 import type { ContractClassPType } from '../ptypes'
 
-export class ContractClass {
+export class Index {
   public readonly isAbstract: boolean
   public get id(): ContractReference {
     return ContractReference.fromPType(this.type)
@@ -31,7 +32,7 @@ export class ContractClass {
   public readonly stateTotals: StateTotals | null
   public readonly reservedScratchSpace: Set<bigint>
   public readonly sourceLocation: SourceLocation
-  constructor(props: Props<Omit<ContractClass, 'name' | 'id'>>) {
+  constructor(props: Props<Omit<Index, 'name' | 'id'>>) {
     this.isAbstract = props.isAbstract
     this.type = props.type
     this.description = props.description
@@ -166,4 +167,22 @@ export class ContractClass {
 
 export class LogicSig {
   public readonly isForOutput: boolean = true
+}
+
+export class CompilationSet extends CustomKeyMap<ContractReference | LogicSigReference, Index | LogicSig> {
+  constructor() {
+    super((x) => x.toString())
+  }
+
+  get compilationOutputSet() {
+    return Array.from(this.entries())
+      .filter(([, meta]) => (meta instanceof Index ? !meta.isAbstract : false))
+      .map(([ref]) => ref)
+  }
+
+  getContractClass(cref: ContractReference) {
+    const maybeClass = this.get(cref)
+    invariant(maybeClass instanceof Index, 'Contract reference must resolve to a contract class')
+    return maybeClass
+  }
 }

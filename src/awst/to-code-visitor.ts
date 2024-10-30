@@ -64,7 +64,10 @@ export class ToCodeVisitor
     return [`goto ${statement.target}`]
   }
   visitIntersectionSliceExpression(expression: nodes.IntersectionSliceExpression): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    const args = [expression.beginIndex, expression.endIndex]
+      .flatMap((f) => (typeof f === 'bigint' ? f : (f?.accept(this) ?? [])))
+      .join(', ')
+    return `${expression.base.accept(this)}.slice(${args})`
   }
   visitBoxValueExpression(expression: nodes.BoxValueExpression): string {
     if (expression.key instanceof nodes.BytesConstant) {
@@ -104,16 +107,16 @@ export class ToCodeVisitor
     return `copy(${expression.value.accept(this)})`
   }
   visitArrayConcat(expression: nodes.ArrayConcat): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    return `${expression.left.accept(this)}.concat(${expression.right.accept(this)}`
   }
   visitArrayPop(expression: nodes.ArrayPop): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    return `${expression.base.accept(this)}.pop()`
   }
   visitArrayExtend(expression: nodes.ArrayExtend): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    return `${expression.base.accept(this)}.push(...${expression.other.accept(this)}`
   }
   visitARC4Decode(expression: nodes.ARC4Decode): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    return `ARC4_DECODE(${expression.value})`
   }
   visitIntrinsicCall(expression: nodes.IntrinsicCall): string {
     const immediates = expression.immediates.length ? `<${expression.immediates.map((i) => i).join(', ')}>` : ''

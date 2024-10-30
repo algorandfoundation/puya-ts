@@ -93,6 +93,7 @@ export class AwstSerializer extends SnakeCaseSerializer<RootNode[]> {
       }
       return {
         ...(super.serializerFunction(key, value) as object),
+        scope: undefined,
         file: filePath,
       }
     }

@@ -1,7 +1,6 @@
 import ts from 'typescript'
 import type { awst } from '../../awst'
 import type { ContractReference, LogicSigReference } from '../../awst/models'
-import { CompilationSet } from '../../awst/models'
 import { nodeFactory } from '../../awst/node-factory'
 import type { AppStorageDefinition, Constant } from '../../awst/nodes'
 import { SourceLocation } from '../../awst/source-location'
@@ -10,7 +9,8 @@ import { logger } from '../../logger'
 import { codeInvariant, invariant } from '../../util'
 import type { AppStorageDeclaration } from '../contract-data'
 import type { NodeBuilder } from '../eb'
-import type { ContractClass, LogicSig } from '../models/contract-class'
+import type { Index, LogicSig } from '../models'
+import { CompilationSet } from '../models'
 import type { ContractClassPType, PType } from '../ptypes'
 import { typeRegistry } from '../type-registry'
 import { TypeResolver } from '../type-resolver'
@@ -90,7 +90,7 @@ export interface AwstBuildContext {
 
   getStorageDefinitionsForContract(contractType: ContractClassPType): AppStorageDefinition[]
 
-  addToCompilationSet(compilationTarget: ContractReference, contract: ContractClass): void
+  addToCompilationSet(compilationTarget: ContractReference, contract: Index): void
   addToCompilationSet(compilationTarget: LogicSigReference, logicSig: LogicSig): void
 
   get compilationSet(): CompilationSet
@@ -243,9 +243,9 @@ class AwstBuildContextImpl implements AwstBuildContext {
     return Array.from(result.values())
   }
 
-  addToCompilationSet(compilationTarget: ContractReference, contract: ContractClass): void
+  addToCompilationSet(compilationTarget: ContractReference, contract: Index): void
   addToCompilationSet(compilationTarget: LogicSigReference, logicSig: LogicSig): void
-  addToCompilationSet(compilationTarget: ContractReference | LogicSigReference, contractOrSig: ContractClass | LogicSig) {
+  addToCompilationSet(compilationTarget: ContractReference | LogicSigReference, contractOrSig: Index | LogicSig) {
     if (this.#compilationSet.has(compilationTarget)) {
       logger.debug(undefined, `${compilationTarget.id} already exists in compilation set`)
       return
