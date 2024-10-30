@@ -41,7 +41,7 @@ export class AtFunctionBuilder extends FunctionBuilder {
       if (typeof this.exprLength === 'bigint') {
         let indexValue = indexParam < 0 ? this.exprLength + indexParam : indexParam
         if (indexValue < 0n || indexValue >= this.exprLength) {
-          logger.warn(index.sourceLocation, 'Index access out of bounds')
+          logger.error(index.sourceLocation, 'Index access out of bounds')
           indexValue = 0n
         }
         indexExpr = nodeFactory.uInt64Constant({

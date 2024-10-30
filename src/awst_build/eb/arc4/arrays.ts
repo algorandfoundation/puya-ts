@@ -1,6 +1,6 @@
 import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
-import { StringConstant } from '../../../awst/nodes'
+import { IntegerConstant, StringConstant } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { wtypes } from '../../../awst/wtypes'
 import { Constants } from '../../../constants'
@@ -166,13 +166,24 @@ export class AddressConstructorBuilder extends NodeBuilder {
 export abstract class ArrayExpressionBuilder<
   TArrayType extends DynamicArrayType | StaticArrayType,
 > extends Arc4EncodedBaseExpressionBuilder<TArrayType> {
-  iterate(sourceLocation: SourceLocation): Expression {
+  iterate(): Expression {
     return this.resolve()
   }
 
   indexAccess(index: InstanceBuilder, sourceLocation: SourceLocation): NodeBuilder {
-    // TODO
-    return super.indexAccess(index, sourceLocation)
+    const indexExpr = requireExpressionOfType(index, uint64PType)
+    if (indexExpr instanceof IntegerConstant && this.ptype instanceof StaticArrayType && indexExpr.value >= this.ptype.arraySize) {
+      logger.error(index.sourceLocation, 'Index access out of bounds')
+    }
+    return instanceEb(
+      nodeFactory.indexExpression({
+        base: this.resolve(),
+        sourceLocation: sourceLocation,
+        index: indexExpr,
+        wtype: this.ptype.elementType.wtype,
+      }),
+      this.ptype.elementType,
+    )
   }
 
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
@@ -189,8 +200,11 @@ export abstract class ArrayExpressionBuilder<
         return new EntriesFunctionBuilder(this)
       case 'copy':
         return new CopyFunctionBuilder(this)
-      case 'slice':
-        return new SliceFunctionBuilder(this.resolve(), this.ptype)
+      case 'slice': {
+        const sliceResult =
+          this.ptype instanceof StaticArrayType ? new DynamicArrayType({ elementType: this.ptype.elementType }) : this.ptype
+        return new SliceFunctionBuilder(this.resolve(), sliceResult)
+      }
     }
     return super.memberAccess(name, sourceLocation)
   }
@@ -222,7 +236,7 @@ class EntriesFunctionBuilder extends FunctionBuilder {
     const iteratorType = IterableIteratorType.parameterise([new TuplePType({ items: [uint64PType, this.arrayBuilder.ptype.elementType] })])
     return new IterableIteratorExpressionBuilder(
       nodeFactory.enumeration({
-        expr: this.arrayBuilder.iterate(sourceLocation),
+        expr: this.arrayBuilder.iterate(),
         sourceLocation,
         wtype: iteratorType.wtype,
       }),
@@ -301,7 +315,7 @@ export class ArrayPushFunctionBuilder extends FunctionBuilder {
     } = parseFunctionArgs({
       args,
       typeArgs,
-      funcName: 'at',
+      funcName: 'push',
       callLocation: sourceLocation,
       genericTypeArgs: 0,
       argSpec: (a) => [a.required(elementType), ...args.slice(1).map(() => a.required(elementType))],

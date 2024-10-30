@@ -58,7 +58,7 @@ export class Bool {
   }
 }
 
-abstract class Arc4ReadonlyArray<TItem> extends AbiEncoded {
+abstract class Arc4ReadonlyArray<TItem extends AbiEncoded> extends AbiEncoded {
   protected items: TItem[]
   protected constructor(items: TItem[]) {
     super()
@@ -85,31 +85,77 @@ abstract class Arc4ReadonlyArray<TItem> extends AbiEncoded {
       },
     })
   }
+
+  /**
+   * Returns the current length of this array
+   */
   get length(): uint64 {
     return Uint64(this.items.length)
   }
+
+  /**
+   * Returns the item at the given index.
+   * Negative indexes are taken from the end.
+   * @param index The index of the item to retrieve
+   */
   at(index: Uint64Compat): TItem {
     return arrayUtil.arrayAt(this.items, index)
   }
-  slice(start: Uint64Compat, end: Uint64Compat): DynamicArray<TItem> {
+
+  /** @internal
+   * Create a new Dynamic array with all items from this array
+   */
+  slice(): DynamicArray<TItem>
+  /** @internal
+   * Create a new DynamicArray with all items up till `end`.
+   * Negative indexes are taken from the end.
+   * @param end An index in which to stop copying items.
+   */
+  slice(end: Uint64Compat): DynamicArray<TItem>
+  /** @internal
+   * Create a new DynamicArray with items from `start`, up until `end`
+   * Negative indexes are taken from the end.
+   * @param start An index in which to start copying items.
+   * @param end An index in which to stop copying items
+   */
+  slice(start: Uint64Compat, end: Uint64Compat): DynamicArray<TItem>
+  slice(start?: Uint64Compat, end?: Uint64Compat): DynamicArray<TItem> {
     return new DynamicArray(...arrayUtil.arraySlice(this.items, start, end))
   }
+
+  /**
+   * Returns an iterator for the items in this array
+   */
   [Symbol.iterator](): IterableIterator<TItem> {
     return this.items[Symbol.iterator]()
   }
+
+  /**
+   * Returns an iterator for a tuple of the indexes and items in this array
+   */
   *entries(): IterableIterator<readonly [uint64, TItem]> {
     for (const [idx, item] of this.items.entries()) {
       yield [Uint64(idx), item]
     }
   }
+
+  /**
+   * Returns an iterator for the indexes in this array
+   */
   *keys(): IterableIterator<uint64> {
     for (const idx of this.items.keys()) {
       yield Uint64(idx)
     }
   }
+
+  /**
+   * Get or set the item at the specified index.
+   * Negative indexes are not supported
+   */
+  [index: uint64]: TItem
 }
 
-export class StaticArray<TItem, TLength extends number> extends Arc4ReadonlyArray<TItem> {
+export class StaticArray<TItem extends AbiEncoded, TLength extends number> extends Arc4ReadonlyArray<TItem> {
   constructor()
   constructor(...items: TItem[] & { length: TLength })
   constructor(...items: TItem[])
@@ -122,13 +168,26 @@ export class StaticArray<TItem, TLength extends number> extends Arc4ReadonlyArra
   }
 }
 
-export class DynamicArray<TItem> extends Arc4ReadonlyArray<TItem> {
+export class DynamicArray<TItem extends AbiEncoded> extends Arc4ReadonlyArray<TItem> {
   constructor(...items: TItem[]) {
     super(items)
   }
-  push(...items: TItem[]): void {}
+
+  /**
+   * Push a number of items into this array
+   * @param items The items to be added to this array
+   */
+  push(...items: TItem[]): void {
+    this.items.push(...items)
+  }
+
+  /**
+   * Pop a single item from this array
+   */
   pop(): TItem {
-    throw new Error('Not implemented')
+    const item = this.items.pop()
+    if (item === undefined) avmError('The array is empty')
+    return item
   }
 
   copy(): DynamicArray<TItem> {

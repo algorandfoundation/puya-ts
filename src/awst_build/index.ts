@@ -1,5 +1,4 @@
 import { jsonSerializeAwst } from '../awst/json-serialize-awst'
-import type { CompilationSet } from '../awst/models'
 import type { AWST } from '../awst/nodes'
 import { SourceLocation } from '../awst/source-location'
 import { ToCodeVisitor } from '../awst/to-code-visitor'
@@ -10,6 +9,7 @@ import type { CreateProgramResult } from '../parser'
 import { ArtifactKind, writeArtifact } from '../write-artifact'
 import { buildContextForProgram } from './context/awst-build-context'
 import { buildLibAwst } from './lib'
+import type { CompilationSet } from './models'
 import { SourceFileVisitor } from './source-file-visitor'
 
 export function buildAwst({ program, sourceFiles }: CreateProgramResult, options: CompileOptions): [AWST[], CompilationSet] {

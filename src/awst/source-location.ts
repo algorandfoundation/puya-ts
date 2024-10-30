@@ -25,6 +25,11 @@ export class SourceLocation {
     this.column = props.column
     this.endColumn = props.endColumn
     this.scope = props.scope
+
+    // Exclude scope from enumerable properties so it doesn't end up being serialized
+    Object.defineProperty(this, 'scope', {
+      enumerable: false,
+    })
   }
 
   private static getStartAndEnd(node: ts.Node): { start: number; end: number } {

@@ -67,9 +67,10 @@ export class ByteConstructorBuilder extends NodeBuilder {
 function newUintN(initialValueBuilder: InstanceBuilder | undefined, ptype: UintNType, sourceLocation: SourceLocation) {
   if (initialValueBuilder === undefined) {
     return new UintNExpressionBuilder(
-      nodeFactory.bytesConstant({
-        value: new Uint8Array([0]),
-        wtype: ptype.wtypeOrThrow,
+      nodeFactory.integerConstant({
+        value: 0n,
+        tealAlias: null,
+        wtype: ptype.wtype,
         sourceLocation: sourceLocation,
       }),
       ptype,
@@ -80,9 +81,10 @@ function newUintN(initialValueBuilder: InstanceBuilder | undefined, ptype: UintN
     if (initialValue instanceof IntegerConstant) {
       codeInvariant(isValidLiteralForPType(initialValue.value, ptype), `${initialValue.value} cannot be converted to ${ptype}`)
       return new UintNExpressionBuilder(
-        nodeFactory.bytesConstant({
-          value: bigIntToUint8Array(initialValue.value),
-          wtype: ptype.wtypeOrThrow,
+        nodeFactory.integerConstant({
+          value: initialValue.value,
+          wtype: ptype.wtype,
+          tealAlias: null,
           sourceLocation: sourceLocation,
         }),
         ptype,

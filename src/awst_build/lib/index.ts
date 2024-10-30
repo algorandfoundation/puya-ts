@@ -4,14 +4,14 @@ import { SourceLocation } from '../../awst/source-location'
 import { wtypes } from '../../awst/wtypes'
 import { Constants } from '../../constants'
 import type { AwstBuildContext } from '../context/awst-build-context'
-import { ContractClass } from '../models/contract-class'
+import { Index } from '../models'
 import { arc4BaseContractType, baseContractType } from '../ptypes'
 
 export function buildLibAwst(context: AwstBuildContext) {
   const contractCref = ContractReference.fromPType(arc4BaseContractType)
   const baseContractCref = ContractReference.fromPType(baseContractType)
 
-  const baseContract = new ContractClass({
+  const baseContract = new Index({
     type: baseContractType,
     isAbstract: true,
     propertyInitialization: [],
@@ -65,7 +65,7 @@ export function buildLibAwst(context: AwstBuildContext) {
     }),
   })
   context.addToCompilationSet(baseContractCref, baseContract)
-  const contract = new ContractClass({
+  const contract = new Index({
     type: arc4BaseContractType,
     isAbstract: true,
     propertyInitialization: [],
