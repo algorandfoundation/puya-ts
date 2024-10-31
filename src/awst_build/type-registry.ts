@@ -3,6 +3,7 @@ import type { SourceLocation } from '../awst/source-location'
 import { CodeError, InternalError, throwError } from '../errors'
 import type { DeliberateAny } from '../typescript-helpers'
 import type { InstanceBuilder, InstanceExpressionBuilder, NodeBuilder } from './eb'
+
 import { PType } from './ptypes'
 import type { SymbolName } from './symbol-name'
 
@@ -10,7 +11,11 @@ type ValueExpressionBuilderCtor<TPType extends PType> = { new (expr: awst.Expres
 type SingletonExpressionBuilderCtor = { new (sourceLocation: SourceLocation, ptype: PType): NodeBuilder }
 
 type PTypeClass = { new (...args: DeliberateAny): PType }
-type GenericPTypeClass = { new (...args: DeliberateAny): PType; get baseFullName(): string; parameterise(typeArgs: PType[]): PType }
+type GenericPTypeClass = {
+  new (...args: DeliberateAny): PType
+  get baseFullName(): string
+  parameterise(typeArgs: PType[]): PType
+}
 export class TypeRegistry {
   get hasRegistrations() {
     return this.types.size > 0 || this.genericTypes.size > 0

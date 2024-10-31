@@ -5,7 +5,7 @@ import { TupleItemExpression } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { CodeError, NotSupported } from '../../errors'
 import { logger } from '../../logger'
-import type { PType, PTypeOrClass } from '../ptypes'
+import type { LibClassType, PType, PTypeOrClass } from '../ptypes'
 import { instanceEb } from '../type-registry'
 
 export enum BuilderComparisonOp {
@@ -175,6 +175,16 @@ export abstract class InstanceBuilder<TPType extends PType = PType> extends Node
     throw new NotSupported(`Augmented assignment to ${this.typeDescription} with ${op}`, {
       sourceLocation,
     })
+  }
+}
+
+export abstract class ClassBuilder extends NodeBuilder {
+  abstract readonly ptype: LibClassType
+
+  abstract newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    throw new CodeError(`${this.typeDescription} should be called with the \`new\` keyword`, { sourceLocation })
   }
 }
 

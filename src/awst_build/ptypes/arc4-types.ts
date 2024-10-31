@@ -3,41 +3,56 @@ import { wtypes } from '../../awst/wtypes'
 import { Constants } from '../../constants'
 import { codeInvariant, zipStrict } from '../../util'
 import { PType } from './base'
-import { LibFunctionType, NumericLiteralPType } from './index'
+import { biguintPType, boolPType, LibClassType, NumericLiteralPType, ObjectPType, stringPType, TuplePType, uint64PType } from './index'
 import ARC4StaticArray = wtypes.ARC4StaticArray
 
-export const UintNConstructor = new LibFunctionType({
+export const UintNClass = new LibClassType({
   name: 'UintN',
   module: Constants.arc4EncodedTypesModuleName,
 })
-export const ByteConstructor = new LibFunctionType({
+export const ByteClass = new LibClassType({
   name: 'Byte',
   module: Constants.arc4EncodedTypesModuleName,
 })
 export abstract class ARC4EncodedType extends PType {
   abstract readonly wtype: wtypes.ARC4Type
+  abstract readonly nativeType: PType | undefined
 }
 
 export class ARC4InstanceType extends ARC4EncodedType {
   readonly wtype: wtypes.ARC4Type
   readonly name: string
-  readonly module = Constants.arc4ModuleName
+  readonly module = Constants.arc4EncodedTypesModuleName
   readonly singleton = false
-  constructor({ wtype, name }: { wtype: wtypes.ARC4Type; name: string }) {
+  readonly nativeType: PType
+  constructor({ wtype, nativeType, name }: { wtype: wtypes.ARC4Type; name: string; nativeType: PType }) {
     super()
     this.wtype = wtype
     this.name = name
+    this.nativeType = nativeType
   }
 }
 
+export const ARC4BoolClass = new LibClassType({
+  name: 'Bool',
+  module: Constants.arc4EncodedTypesModuleName,
+})
+
+export const ARC4StrClass = new LibClassType({
+  name: 'Str',
+  module: Constants.arc4EncodedTypesModuleName,
+})
+
 export const ARC4BooleanType = new ARC4InstanceType({
-  name: 'Boolean',
+  name: 'Bool',
   wtype: wtypes.arc4BooleanWType,
+  nativeType: boolPType,
 })
 
 export const ARC4StringType = new ARC4InstanceType({
-  name: 'String',
+  name: 'Str',
   wtype: wtypes.arc4StringAliasWType,
+  nativeType: stringPType,
 })
 
 export class ARC4StructType extends ARC4EncodedType {
@@ -62,6 +77,11 @@ export class ARC4StructType extends ARC4EncodedType {
     this.module = module
     this.fields = fields
     this.sourceLocation = sourceLocation
+  }
+
+  get nativeType(): ObjectPType {
+    // TODO: Refine this - probably recursively 'unwrap' arc4 types
+    return ObjectPType.anonymous(this.fields)
   }
 
   get wtype(): wtypes.ARC4Struct {
@@ -92,10 +112,15 @@ export class ARC4TupleType extends ARC4EncodedType {
   readonly singleton = false
   readonly types: ARC4EncodedType[]
   readonly sourceLocation: SourceLocation | undefined
+
+  readonly nativeType: TuplePType
+
   constructor({ types, sourceLocation }: { types: ARC4EncodedType[]; sourceLocation?: SourceLocation }) {
     super()
     this.types = types
     this.sourceLocation = sourceLocation
+    // TODO: Refine this - probably unwrap arc4 types
+    this.nativeType = new TuplePType({ items: this.types })
   }
 
   get wtype(): wtypes.ARC4Tuple {
@@ -123,6 +148,10 @@ export class UintNType extends ARC4EncodedType {
 
   readonly wtype: wtypes.ARC4UIntN
 
+  get nativeType() {
+    return this.n <= 64n ? uint64PType : biguintPType
+  }
+
   constructor({ n, wtype, name }: { n: bigint; wtype?: wtypes.ARC4UIntN; name?: string }) {
     super()
     codeInvariant(n >= 8n && n <= 512n && n % 8n === 0n, 'n must be between 8 and 512, and a multiple of 8')
@@ -141,15 +170,11 @@ export class UintNType extends ARC4EncodedType {
 
     return new UintNType({ n: size.literalValue })
   }
-
-  getGenericArgs(): PType[] {
-    return [new NumericLiteralPType({ literalValue: this.n })]
-  }
 }
 
 export const arc4ByteAlias = new UintNType({ n: 8n, wtype: wtypes.arc4ByteAliasWType, name: 'Byte' })
 
-export const DynamicArrayConstructor = new LibFunctionType({
+export const DynamicArrayConstructor = new LibClassType({
   name: 'DynamicArray',
   module: Constants.arc4EncodedTypesModuleName,
 })
@@ -161,6 +186,7 @@ export class DynamicArrayType extends ARC4EncodedType {
   readonly name: string
   readonly singleton = false
   readonly sourceLocation: SourceLocation | undefined
+  readonly nativeType = undefined
 
   get wtype(): wtypes.ARC4DynamicArray {
     return new wtypes.ARC4DynamicArray({
@@ -188,12 +214,8 @@ export class DynamicArrayType extends ARC4EncodedType {
 
     return new DynamicArrayType({ elementType: elementType })
   }
-
-  getGenericArgs(): PType[] {
-    return [this.elementType]
-  }
 }
-export const StaticArrayConstructor = new LibFunctionType({
+export const StaticArrayConstructor = new LibClassType({
   name: 'StaticArray',
   module: Constants.arc4EncodedTypesModuleName,
 })
@@ -207,6 +229,7 @@ export class StaticArrayType extends ARC4EncodedType {
   readonly singleton = false
   readonly sourceLocation: SourceLocation | undefined
   readonly wtype: wtypes.ARC4StaticArray
+  readonly nativeType = undefined
 
   constructor({
     elementType,
@@ -246,10 +269,6 @@ export class StaticArrayType extends ARC4EncodedType {
 
     return new StaticArrayType({ arraySize: arraySize.literalValue, elementType })
   }
-
-  getGenericArgs(): PType[] {
-    return [this.elementType, new NumericLiteralPType({ literalValue: this.arraySize })]
-  }
 }
 export const arc4AddressAlias = new StaticArrayType({
   arraySize: BigInt(Constants.encodedAddressLength),
@@ -259,7 +278,7 @@ export const arc4AddressAlias = new StaticArrayType({
   name: 'Address',
 })
 
-export const AddressConstructor = new LibFunctionType({
+export const AddressClass = new LibClassType({
   name: 'Address',
   module: Constants.arc4EncodedTypesModuleName,
 })

@@ -2,7 +2,7 @@ import ts from 'typescript'
 import type * as awst from '../awst/nodes'
 import { AwstBuildFailureError, CodeError } from '../errors'
 import { logger, logPuyaExceptions } from '../logger'
-import { expandMaybeArray } from '../util'
+import { expandMaybeArray, invariant } from '../util'
 import type { ModuleStatements } from '../visitor/syntax-names'
 import type { Visitor } from '../visitor/visitor'
 import { accept } from '../visitor/visitor'
@@ -11,7 +11,7 @@ import { BaseVisitor } from './base-visitor'
 import type { AwstBuildContext } from './context/awst-build-context'
 import { ContractVisitor } from './contract-visitor'
 import { requireConstantOfType } from './eb/util'
-import { ContractClassPType } from './ptypes'
+import { ContractClassPType, LibClassType } from './ptypes'
 import { SubroutineVisitor } from './subroutine-visitor'
 
 type NodeOrDeferred = awst.AWST[] | awst.AWST | (() => awst.AWST[] | awst.AWST)
@@ -82,7 +82,14 @@ export class SourceFileVisitor extends BaseVisitor implements Visitor<ModuleStat
       }
       const ptype = this.context.getPTypeForNode(dec.name)
 
-      const value = requireConstantOfType(this.accept(dec.initializer), ptype, 'Module level assignments must be compile time constants')
+      const initializerBuilder = this.accept(dec.initializer)
+
+      if (ptype instanceof LibClassType) {
+        invariant(initializerBuilder.ptype?.equals(ptype), 'Initializer type must match target type')
+        return []
+      }
+
+      const value = requireConstantOfType(initializerBuilder, ptype, 'Module level assignments must be compile time constants')
       const constantName = this.context.resolveVariableName(dec.name)
       this.context.addConstant(constantName, value)
 

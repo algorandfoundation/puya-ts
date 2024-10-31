@@ -41,7 +41,7 @@ export interface AwstBuildContext {
    * Reflect generic type parameters for a call expression
    * @param node
    */
-  getTypeParameters(node: ts.CallExpression): PType[]
+  getTypeParameters(node: ts.CallExpression | ts.NewExpression): PType[]
 
   /**
    * Resolve the given identifier to a unique variable name that accounts
@@ -155,7 +155,7 @@ class AwstBuildContextImpl implements AwstBuildContext {
     return this.nameResolver.resolveUniqueName(node.text, symbol)
   }
 
-  getTypeParameters(node: ts.CallExpression): PType[] {
+  getTypeParameters(node: ts.CallExpression | ts.NewExpression): PType[] {
     return this.typeResolver.resolveTypeParameters(node, this.getSourceLocation(node))
   }
 

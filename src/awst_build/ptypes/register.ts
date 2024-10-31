@@ -1,13 +1,15 @@
 import { Arc4AbiMethodDecoratorBuilder, Arc4BareMethodDecoratorBuilder } from '../eb/arc4-bare-method-decorator-builder'
 import {
-  AddressConstructorBuilder,
+  AddressClassBuilder,
   AddressExpressionBuilder,
-  DynamicArrayConstructorBuilder,
+  DynamicArrayClassBuilder,
   DynamicArrayExpressionBuilder,
-  StaticArrayConstructorBuilder,
+  StaticArrayClassBuilder,
   StaticArrayExpressionBuilder,
 } from '../eb/arc4/arrays'
-import { ByteConstructorBuilder, UintNConstructorBuilder, UintNExpressionBuilder } from '../eb/arc4/uint-n-constructor-builder'
+import { BoolClassBuilder, BoolExpressionBuilder } from '../eb/arc4/bool'
+import { StrClassBuilder, StrExpressionBuilder } from '../eb/arc4/string'
+import { ByteClassBuilder, UintNClassBuilder, UintNExpressionBuilder } from '../eb/arc4/uintn'
 import { AssertFunctionBuilder, ErrFunctionBuilder } from '../eb/assert-function-builder'
 import { AssertMatchFunctionBuilder } from '../eb/assert-match-function-builder'
 import { BigUintExpressionBuilder, BigUintFunctionBuilder } from '../eb/biguint-expression-builder'
@@ -51,15 +53,19 @@ import { VoidExpressionBuilder } from '../eb/void-expression-builder'
 import { OP_METADATA } from '../op-metadata'
 import type { TypeRegistry } from '../type-registry'
 import {
-  AddressConstructor,
+  AddressClass,
   arc4AddressAlias,
+  ARC4BoolClass,
+  ARC4BooleanType,
   arc4ByteAlias,
-  ByteConstructor,
+  ARC4StrClass,
+  ARC4StringType,
+  ByteClass,
   DynamicArrayConstructor,
   DynamicArrayType,
   StaticArrayConstructor,
   StaticArrayType,
-  UintNConstructor,
+  UintNClass,
   UintNType,
 } from './arc4-types'
 import {
@@ -220,16 +226,20 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: ObjectPType, instanceEb: ObjectExpressionBuilder })
   typeRegistry.register({ ptype: AccountFunction, singletonEb: AccountFunctionBuilder })
   typeRegistry.register({ ptype: accountPType, instanceEb: AccountExpressionBuilder })
-  typeRegistry.register({ ptype: UintNConstructor, singletonEb: UintNConstructorBuilder })
-  typeRegistry.register({ ptype: ByteConstructor, singletonEb: ByteConstructorBuilder })
+  typeRegistry.register({ ptype: UintNClass, singletonEb: UintNClassBuilder })
+  typeRegistry.register({ ptype: ByteClass, singletonEb: ByteClassBuilder })
   typeRegistry.registerGeneric({ ptype: UintNType, instanceEb: UintNExpressionBuilder })
   typeRegistry.register({ ptype: arc4ByteAlias, instanceEb: UintNExpressionBuilder })
-  typeRegistry.register({ ptype: DynamicArrayConstructor, singletonEb: DynamicArrayConstructorBuilder })
+  typeRegistry.register({ ptype: DynamicArrayConstructor, singletonEb: DynamicArrayClassBuilder })
   typeRegistry.registerGeneric({ ptype: DynamicArrayType, instanceEb: DynamicArrayExpressionBuilder })
-  typeRegistry.register({ ptype: StaticArrayConstructor, singletonEb: StaticArrayConstructorBuilder })
+  typeRegistry.register({ ptype: StaticArrayConstructor, singletonEb: StaticArrayClassBuilder })
   typeRegistry.registerGeneric({ ptype: StaticArrayType, instanceEb: StaticArrayExpressionBuilder })
   typeRegistry.register({ ptype: arc4AddressAlias, instanceEb: AddressExpressionBuilder })
-  typeRegistry.register({ ptype: AddressConstructor, singletonEb: AddressConstructorBuilder })
+  typeRegistry.register({ ptype: AddressClass, singletonEb: AddressClassBuilder })
+  typeRegistry.register({ ptype: ARC4BoolClass, singletonEb: BoolClassBuilder })
+  typeRegistry.register({ ptype: ARC4BooleanType, instanceEb: BoolExpressionBuilder })
+  typeRegistry.register({ ptype: ARC4StringType, instanceEb: StrExpressionBuilder })
+  typeRegistry.register({ ptype: ARC4StrClass, singletonEb: StrClassBuilder })
 
   typeRegistry.register({ ptype: ApplicationFunctionType, singletonEb: ApplicationFunctionBuilder })
   typeRegistry.register({ ptype: applicationPType, instanceEb: ApplicationExpressionBuilder })
