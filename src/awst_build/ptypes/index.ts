@@ -5,7 +5,7 @@ import { wtypes } from '../../awst/wtypes'
 import { Constants } from '../../constants'
 import { CodeError, InternalError, NotSupported } from '../../errors'
 import { codeInvariant, distinctByEquality, sortBy, zipStrict } from '../../util'
-import { PType } from './base'
+import { GenericPType, PType } from './base'
 import { transientTypeErrors } from './transient-type-errors'
 
 export * from './base'
@@ -196,7 +196,16 @@ export abstract class StorageProxyPType extends PType {
     this.contentType = props.content
   }
 }
-
+export const GlobalStateGeneric = new GenericPType({
+  name: 'GlobalState',
+  module: Constants.stateModuleName,
+  parameterise(typeArgs: PType[]): GlobalStateType {
+    codeInvariant(typeArgs.length === 1, 'GlobalState type expects exactly one type parameter')
+    return new GlobalStateType({
+      content: typeArgs[0],
+    })
+  },
+})
 export class GlobalStateType extends StorageProxyPType {
   static readonly baseName = 'GlobalState'
   static readonly baseFullName = `${Constants.stateModuleName}::${GlobalStateType.baseName}`
@@ -210,13 +219,17 @@ export class GlobalStateType extends StorageProxyPType {
   constructor(props: { content: PType }) {
     super({ ...props, keyWType: wtypes.stateKeyWType })
   }
-  static parameterise(typeArgs: PType[]): GlobalStateType {
-    codeInvariant(typeArgs.length === 1, 'GlobalState type expects exactly one type parameter')
-    return new GlobalStateType({
+}
+export const LocalStateGeneric = new GenericPType({
+  name: 'LocalState',
+  module: Constants.stateModuleName,
+  parameterise(typeArgs: PType[]): LocalStateType {
+    codeInvariant(typeArgs.length === 1, 'LocalState type expects exactly one type parameter')
+    return new LocalStateType({
       content: typeArgs[0],
     })
-  }
-}
+  },
+})
 export class LocalStateType extends StorageProxyPType {
   static readonly baseName = 'LocalState'
   static readonly baseFullName = `${Constants.stateModuleName}::${LocalStateType.baseName}`
@@ -237,47 +250,51 @@ export class LocalStateType extends StorageProxyPType {
     })
   }
 }
+export const BoxGeneric = new GenericPType({
+  name: 'Box',
+  module: Constants.boxModuleName,
+  parameterise(typeArgs: PType[]): BoxPType {
+    codeInvariant(typeArgs.length === 1, `${this.name} type expects exactly one type parameter`)
+    return new BoxPType({
+      content: typeArgs[0],
+    })
+  },
+})
 export class BoxPType extends StorageProxyPType {
-  static readonly baseName = 'Box'
-  static readonly baseFullName = `${Constants.boxModuleName}::${BoxPType.baseName}`
   readonly module: string = Constants.boxModuleName
   get name() {
-    return `${BoxPType.baseName}<${this.contentType.name}>`
+    return `Box<${this.contentType.name}>`
   }
   get fullName() {
-    return `${BoxPType.baseFullName}<${this.contentType.fullName}>`
+    return `${this.module}::${this.name}<${this.contentType.fullName}>`
   }
   constructor(props: { content: PType }) {
     super({ ...props, keyWType: wtypes.boxKeyWType })
   }
-  static parameterise(typeArgs: PType[]): BoxPType {
-    codeInvariant(typeArgs.length === 1, `${BoxPType.baseName} type expects exactly one type parameter`)
-    return new BoxPType({
-      content: typeArgs[0],
-    })
-  }
 }
+export const BoxMapGeneric = new GenericPType({
+  name: 'BoxMap',
+  module: Constants.boxModuleName,
+  parameterise(typeArgs: PType[]): BoxMapPType {
+    codeInvariant(typeArgs.length === 2, `${this.name} type expects exactly two type parameters`)
+    return new BoxMapPType({
+      keyType: typeArgs[0],
+      content: typeArgs[1],
+    })
+  },
+})
 export class BoxMapPType extends StorageProxyPType {
-  static readonly baseName = 'BoxMap'
-  static readonly baseFullName = `${Constants.boxModuleName}::${BoxMapPType.baseName}`
   readonly module: string = Constants.boxModuleName
   get name() {
-    return `${BoxMapPType.baseName}<${this.keyType.name}, ${this.contentType.name}>`
+    return `BoxMap<${this.keyType.name}, ${this.contentType.name}>`
   }
   get fullName() {
-    return `${BoxMapPType.baseFullName}<${this.keyType.name}, ${this.contentType.fullName}>`
+    return `${this.module}::${this.name}<${this.keyType.name}, ${this.contentType.fullName}>`
   }
   readonly keyType: PType
   constructor(props: { content: PType; keyType: PType }) {
     super({ ...props, keyWType: wtypes.boxKeyWType })
     this.keyType = props.keyType
-  }
-  static parameterise(typeArgs: PType[]): BoxMapPType {
-    codeInvariant(typeArgs.length === 2, `${BoxMapPType.baseName} type expects exactly two type parameters`)
-    return new BoxMapPType({
-      keyType: typeArgs[0],
-      content: typeArgs[1],
-    })
   }
 }
 export class BoxRefPType extends StorageProxyPType {
@@ -820,11 +837,11 @@ export const LocalStateFunction = new LibFunctionType({
   module: Constants.stateModuleName,
 })
 export const BoxFunction = new LibFunctionType({
-  name: BoxPType.baseName,
+  name: BoxGeneric.name,
   module: Constants.boxModuleName,
 })
 export const BoxMapFunction = new LibFunctionType({
-  name: BoxMapPType.baseName,
+  name: BoxMapGeneric.name,
   module: Constants.boxModuleName,
 })
 export const BoxRefFunction = new LibFunctionType({
@@ -1051,33 +1068,29 @@ export const urangeFunction = new LibFunctionType({
   name: 'urange',
   module: Constants.utilModuleName,
 })
-
-export class IterableIteratorType extends TransientType {
-  readonly itemType: PType
-  constructor({ itemType }: { itemType: PType }) {
-    super({
-      name: `${IterableIteratorType.baseName}<${itemType.name}>`,
-      module: 'typescript/lib/lib.es2015.iterable.d.ts',
-      typeMessage: '`IterableIterator` is not valid as a variable, parameter, return, or property type. ',
-      expressionMessage: 'IterableIterator expressions can only be used in for loops',
-      singleton: false,
-    })
-    this.itemType = itemType
-  }
-  static readonly baseName = 'IterableIterator'
-  static readonly moduleName = 'typescript/lib/lib.es2015.iterable.d.ts'
-  static readonly baseFullName = `${IterableIteratorType.moduleName}::${IterableIteratorType.baseName}`
-
-  get fullName() {
-    return `${GlobalStateType.baseFullName}<${this.itemType.fullName}>`
-  }
-  static parameterise(typeArgs: PType[]): IterableIteratorType {
+export const IterableIteratorGeneric = new GenericPType({
+  name: 'IterableIterator',
+  module: 'typescript/lib/lib.es2015.iterable.d.ts',
+  parameterise(typeArgs: PType[]): IterableIteratorType {
     codeInvariant(typeArgs.length >= 1 && typeArgs.length <= 3, 'IterableIterator type expects 1-3 type parameters')
     // Currently ignoring return and next types
     const [yieldType, _returnType, _nextType] = typeArgs
     return new IterableIteratorType({
       itemType: yieldType,
     })
+  },
+})
+export class IterableIteratorType extends TransientType {
+  readonly itemType: PType
+  constructor({ itemType }: { itemType: PType }) {
+    super({
+      name: `IterableIterator<${itemType.name}>`,
+      module: 'typescript/lib/lib.es2015.iterable.d.ts',
+      typeMessage: '`IterableIterator` is not valid as a variable, parameter, return, or property type. ',
+      expressionMessage: 'IterableIterator expressions can only be used in for loops',
+      singleton: false,
+    })
+    this.itemType = itemType
   }
 
   get wtype(): wtypes.WEnumeration {

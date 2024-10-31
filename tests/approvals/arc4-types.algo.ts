@@ -1,6 +1,13 @@
 import type { biguint, uint64 } from '@algorandfoundation/algorand-typescript'
 import { assert, BaseContract, Bytes, Txn } from '@algorandfoundation/algorand-typescript'
-import { Address, Byte, DynamicArray, StaticArray, Str, UintN } from '@algorandfoundation/algorand-typescript/arc4'
+import { Address, Byte, DynamicArray, StaticArray, Str, Tuple, UFixedNxM, UintN } from '@algorandfoundation/algorand-typescript/arc4'
+
+function testUFixed() {
+  const a = new UFixedNxM('1.244', 32, 4)
+  const c = new UFixedNxM<32, 4>('1.244')
+
+  assert(a.equals(c))
+}
 
 function test(n: uint64, b: biguint, c: UintN<256>) {
   const x = new UintN<8>(4)
@@ -58,11 +65,15 @@ function testAddress() {
   assert(a.equals(new Address()), 'Two zero addresses should match')
   assert(a[0].equals(new Byte()), 'Zero address should start with zero byte')
 }
-//
-// function testTuple() {
-//   const t = new Tuple()
-//   const t1 = new Tuple([new Address(), new Byte()])
-// }
+
+function testTuple() {
+  const t = new Tuple(new ARC4Uint64(34))
+  const firstItem = t.at(0)
+  const firstItemIndexer = t.native[0]
+  assert(firstItem.equals(firstItemIndexer))
+  const t1 = new Tuple(new Address(), new Byte())
+  assert(t1.length === 2)
+}
 
 export class Arc4TypesTestContract extends BaseContract {
   public getArc4Values(): [Byte, UintN<8>, Address] {
@@ -76,7 +87,7 @@ export class Arc4TypesTestContract extends BaseContract {
     testByte()
     testArrays(new UintN<64>(65))
     testAddress()
-    // testTuple()
+    testTuple()
     return true
   }
 }

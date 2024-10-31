@@ -7,7 +7,7 @@ import { CodeError } from '../../../errors'
 import { codeInvariant } from '../../../util'
 import type { PType, PTypeOrClass } from '../../ptypes'
 import { bigIntPType, biguintPType, boolPType, bytesPType, numberPType, stringPType, uint64PType } from '../../ptypes'
-import { UintNType } from '../../ptypes/arc4-types'
+import { UFixedNxMType, UintNType } from '../../ptypes/arc4-types'
 import type { NodeBuilder } from '../index'
 import { InstanceBuilder } from '../index'
 import { LiteralExpressionBuilder } from '../literal-expression-builder'
@@ -130,7 +130,7 @@ export function isValidLiteralForPType(literalValue: ConstantValue, ptype: PType
   if (ptype.equals(biguintPType)) {
     return typeof literalValue === 'bigint' && 0 <= literalValue && literalValue < 2n ** 512n
   }
-  if (ptype instanceof UintNType) {
+  if (ptype instanceof UintNType || ptype instanceof UFixedNxMType) {
     return typeof literalValue === 'bigint' && 0 <= literalValue && literalValue < 2n ** ptype.n
   }
   if (ptype.equals(boolPType)) {

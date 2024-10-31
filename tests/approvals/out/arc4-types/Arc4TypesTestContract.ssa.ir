@@ -1,7 +1,7 @@
 contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
     program approval:
         subroutine tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract.approvalProgram() -> bool:
-            block@0: // L72
+            block@0: // L83
                 let reinterpret_bool%0#0: bool = (txn ApplicationID)
                 goto reinterpret_bool%0#0 ? block@2 : block@1
             block@1: // if_body_L1
@@ -14,14 +14,15 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
                 tests/approvals/arc4-types.algo.ts::testByte()
                 tests/approvals/arc4-types.algo.ts::testArrays(0x0000000000000041)
                 tests/approvals/arc4-types.algo.ts::testAddress()
+                tests/approvals/arc4-types.algo.ts::testTuple()
                 return 1u
         
         subroutine tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract.constructor() -> void:
-            block@0: // L67
+            block@0: // L78
                 return 
         
         subroutine tests/approvals/arc4-types.algo.ts::testStr() -> void:
-            block@0: // L23
+            block@0: // L30
                 let s1#0: bytes = "\x00\x00"
                 let tmp%0#0: bool = (== s1#0 0x0000)
                 (assert tmp%0#0) // Empty string should equal the uint16 length prefix
@@ -32,7 +33,7 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
                 return 
         
         subroutine tests/approvals/arc4-types.algo.ts::test(n: uint64, b: biguint, c: bytes) -> void:
-            block@0: // L5
+            block@0: // L12
                 let x#0: bytes = 0x04
                 let tmp%0#0: uint64 = (len x#0)
                 let tmp%1#0: bool = (== tmp%0#0 1u)
@@ -63,7 +64,7 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
                 return 
         
         subroutine tests/approvals/arc4-types.algo.ts::testByte() -> void:
-            block@0: // L47
+            block@0: // L54
                 let b#0: bytes = 0x00
                 let b2#0: bytes = 0x00
                 let tmp%0#0: bool = (== b#0 b2#0)
@@ -71,7 +72,7 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
                 return 
         
         subroutine tests/approvals/arc4-types.algo.ts::testArrays(n: bytes) -> void:
-            block@0: // L33
+            block@0: // L40
                 let result%0#0: bytes = (concat 0x n#0)
                 let result%1#0: bytes = (concat result%0#0 n#0)
                 let result%2#0: bytes = (concat result%1#0 n#0)
@@ -103,7 +104,7 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
                 return 
         
         subroutine tests/approvals/arc4-types.algo.ts::testAddress() -> void:
-            block@0: // L53
+            block@0: // L60
                 let a#0: bytes = addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ
                 let b#0: bytes = (txn Sender)
                 let tmp%0#0: bool = (== a#0 b#0)
@@ -116,6 +117,26 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
                 let tmp%3#0: bytes = (extract3 array_head_and_tail%0#0 item_offset%0#0 1u) // on error: Index access is out of bounds
                 let tmp%4#0: bool = (== tmp%3#0 0x00)
                 (assert tmp%4#0) // Zero address should start with zero byte
+                return 
+        
+        subroutine tests/approvals/arc4-types.algo.ts::testTuple() -> void:
+            block@0: // L69
+                let current_tail_offset%0#0: uint64 = 8u
+                let encoded_tuple_buffer%0#0: bytes = 0x
+                let encoded_tuple_buffer%1#0: bytes = (concat encoded_tuple_buffer%0#0 0x0000000000000022)
+                let t#0: bytes = encoded_tuple_buffer%1#0
+                let firstItem#0: bytes = (extract3 t#0 0u 8u) // on error: Index access is out of bounds
+                let item0%0#0: bytes = (extract3 t#0 0u 8u) // on error: Index access is out of bounds
+                let firstItemIndexer#0: bytes = item0%0#0
+                let tmp%0#0: bool = (== firstItem#0 firstItemIndexer#0)
+                (assert tmp%0#0)
+                let current_tail_offset%1#0: uint64 = 33u
+                let encoded_tuple_buffer%2#0: bytes = 0x
+                let encoded_tuple_buffer%3#0: bytes = (concat encoded_tuple_buffer%2#0 addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ)
+                let encoded_tuple_buffer%4#0: bytes = (concat encoded_tuple_buffer%3#0 0x00)
+                let t1#0: bytes = encoded_tuple_buffer%4#0
+                let tmp%1#0: bool = (== 2u 2u)
+                (assert tmp%1#0)
                 return 
         
         subroutine _puya_lib.arc4.dynamic_array_pop_fixed_size(array: bytes, fixed_byte_size: uint64) -> <bytes, bytes>:

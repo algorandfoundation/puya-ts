@@ -4,18 +4,15 @@ import { CodeError, InternalError, throwError } from '../errors'
 import type { DeliberateAny } from '../typescript-helpers'
 import type { InstanceBuilder, InstanceExpressionBuilder, NodeBuilder } from './eb'
 
+import type { GenericPType } from './ptypes'
 import { PType } from './ptypes'
 import type { SymbolName } from './symbol-name'
 
 type ValueExpressionBuilderCtor<TPType extends PType> = { new (expr: awst.Expression, ptype: PType): InstanceExpressionBuilder<TPType> }
 type SingletonExpressionBuilderCtor = { new (sourceLocation: SourceLocation, ptype: PType): NodeBuilder }
 
-type PTypeClass = { new (...args: DeliberateAny): PType }
-type GenericPTypeClass = {
-  new (...args: DeliberateAny): PType
-  get baseFullName(): string
-  parameterise(typeArgs: PType[]): PType
-}
+type PTypeClass<T extends PType = PType> = { new (...args: DeliberateAny): T }
+
 export class TypeRegistry {
   get hasRegistrations() {
     return this.types.size > 0 || this.genericTypes.size > 0
@@ -24,7 +21,7 @@ export class TypeRegistry {
   private readonly singletonEbs: Map<PType | PTypeClass, SingletonExpressionBuilderCtor> = new Map()
   private readonly instanceEbs: Map<PType | PTypeClass, ValueExpressionBuilderCtor<PType>> = new Map()
   private readonly types: Set<PType | PTypeClass> = new Set()
-  private readonly genericTypes: Set<GenericPTypeClass> = new Set()
+  private readonly genericTypes: Set<GenericPType<PType>> = new Set()
 
   register({
     ptype,
@@ -41,7 +38,7 @@ export class TypeRegistry {
         singletonEb?: undefined
         instanceEb: ValueExpressionBuilderCtor<PType>
       }) {
-    if (this.types.has(ptype) || this.genericTypes.has(ptype as GenericPTypeClass))
+    if (this.types.has(ptype) || this.genericTypes.has(ptype as GenericPType))
       throw new InternalError(`${ptype} has already been registered`)
     this.types.add(ptype)
     if (singletonEb) {
@@ -51,13 +48,18 @@ export class TypeRegistry {
       this.instanceEbs.set(ptype, instanceEb)
     }
   }
-  registerGeneric({ ptype, instanceEb }: { ptype: GenericPTypeClass; instanceEb: ValueExpressionBuilderCtor<PType> }) {
-    if (this.genericTypes.has(ptype) || this.types.has(ptype)) throw new InternalError(`${ptype} has already been registered`)
-    this.genericTypes.add(ptype)
+  registerGeneric<T extends PType>({
+    generic,
+    ptype,
+    instanceEb,
+  }: {
+    generic: GenericPType<T>
+    ptype: PTypeClass<T>
+    instanceEb: ValueExpressionBuilderCtor<PType>
+  }) {
+    if (this.genericTypes.has(generic) || this.types.has(ptype)) throw new InternalError(`${ptype} has already been registered`)
+    this.genericTypes.add(generic)
     this.instanceEbs.set(ptype, instanceEb)
-  }
-  isGeneric(ptype: PType) {
-    return this.genericTypes.has(ptype.constructor as GenericPTypeClass)
   }
 
   /**
@@ -147,7 +149,7 @@ export class TypeRegistry {
   }
   tryResolveGenericPType(symbolName: SymbolName, typeArgs: PType[]): PType | undefined {
     for (const pt of this.genericTypes.values()) {
-      if (pt.baseFullName === symbolName.fullName) {
+      if (pt.fullName === symbolName.fullName) {
         return pt.parameterise(typeArgs)
       }
     }

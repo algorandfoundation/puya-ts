@@ -3,7 +3,7 @@ import { nodeFactory } from '../../awst/node-factory'
 import type { SourceLocation } from '../../awst/source-location'
 import { wtypes } from '../../awst/wtypes'
 import type { PType } from '../ptypes'
-import { IterableIteratorType, uint64PType } from '../ptypes'
+import { IterableIteratorGeneric, uint64PType } from '../ptypes'
 import type { NodeBuilder } from './index'
 import { FunctionBuilder } from './index'
 import { IterableIteratorExpressionBuilder } from './iterable-iterator-expression-builder'
@@ -45,6 +45,6 @@ export class UrangeFunctionBuilder extends FunctionBuilder {
         wtype: wtypes.uint64RangeWType,
       })
     }
-    return new IterableIteratorExpressionBuilder(expr, IterableIteratorType.parameterise([uint64PType]))
+    return new IterableIteratorExpressionBuilder(expr, IterableIteratorGeneric.parameterise([uint64PType]))
   }
 }

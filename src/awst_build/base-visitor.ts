@@ -99,6 +99,10 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   }
 
   visitNumericLiteral(node: ts.NumericLiteral): InstanceBuilder {
+    codeInvariant(
+      !node.text.includes('.'),
+      'Literals with decimal points are not supported. Use a string literal to capture decimal values',
+    )
     const literalValue = BigInt(node.text)
     const ptype = this.context.getPTypeForNode(node)
     invariant(ptype instanceof TransientType, 'Literals should resolve to transient PTypes')

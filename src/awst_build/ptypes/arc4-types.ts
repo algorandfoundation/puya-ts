@@ -2,7 +2,7 @@ import type { SourceLocation } from '../../awst/source-location'
 import { wtypes } from '../../awst/wtypes'
 import { Constants } from '../../constants'
 import { codeInvariant, zipStrict } from '../../util'
-import { PType } from './base'
+import { GenericPType, PType } from './base'
 import { biguintPType, boolPType, LibClassType, NumericLiteralPType, ObjectPType, stringPType, TuplePType, uint64PType } from './index'
 import ARC4StaticArray = wtypes.ARC4StaticArray
 
@@ -10,6 +10,7 @@ export const UintNClass = new LibClassType({
   name: 'UintN',
   module: Constants.arc4EncodedTypesModuleName,
 })
+
 export const ByteClass = new LibClassType({
   name: 'Byte',
   module: Constants.arc4EncodedTypesModuleName,
@@ -80,7 +81,6 @@ export class ARC4StructType extends ARC4EncodedType {
   }
 
   get nativeType(): ObjectPType {
-    // TODO: Refine this - probably recursively 'unwrap' arc4 types
     return ObjectPType.anonymous(this.fields)
   }
 
@@ -106,26 +106,46 @@ export class ARC4StructType extends ARC4EncodedType {
   }
 }
 
+export const Arc4TupleClass = new LibClassType({
+  name: 'Tuple',
+  module: Constants.arc4EncodedTypesModuleName,
+})
+
+export const Arc4TupleGeneric = new GenericPType({
+  name: 'Tuple',
+  module: Constants.arc4EncodedTypesModuleName,
+  parameterise(ptypes: PType[]) {
+    codeInvariant(ptypes.length, `${this.name} expects 1 generic parameter`)
+    codeInvariant(ptypes[0] instanceof TuplePType, `${this.name} generic parameter must be a native tuple type`)
+    const encodedTypes = ptypes[0].items.map((itemType, index) => {
+      codeInvariant(itemType instanceof ARC4EncodedType, `Item ${index} of ARC4 Tuple must be an ARC4 encoded type`)
+      return itemType
+    })
+    return new ARC4TupleType({
+      types: encodedTypes,
+    })
+  },
+})
+
 export class ARC4TupleType extends ARC4EncodedType {
   readonly name = 'Tuple'
-  readonly module = Constants.arc4ModuleName
+  readonly module = Constants.arc4EncodedTypesModuleName
   readonly singleton = false
-  readonly types: ARC4EncodedType[]
+  readonly items: ARC4EncodedType[]
   readonly sourceLocation: SourceLocation | undefined
 
   readonly nativeType: TuplePType
 
   constructor({ types, sourceLocation }: { types: ARC4EncodedType[]; sourceLocation?: SourceLocation }) {
     super()
-    this.types = types
+    this.items = types
     this.sourceLocation = sourceLocation
-    // TODO: Refine this - probably unwrap arc4 types
-    this.nativeType = new TuplePType({ items: this.types })
+    this.nativeType = new TuplePType({ items: this.items })
   }
 
   get wtype(): wtypes.ARC4Tuple {
     return new wtypes.ARC4Tuple({
-      types: this.types.map((t) => t.wtype),
+      types: this.items.map((t) => t.wtype),
       sourceLocation: this.sourceLocation,
     })
   }
@@ -133,19 +153,30 @@ export class ARC4TupleType extends ARC4EncodedType {
   equals(other: PType): boolean {
     return (
       other instanceof ARC4TupleType &&
-      this.types.length === other.types.length &&
-      zipStrict(this.types, other.types).every(([a, b]) => a.equals(b))
+      this.items.length === other.items.length &&
+      zipStrict(this.items, other.items).every(([a, b]) => a.equals(b))
     )
   }
 }
+export const UintNGeneric = new GenericPType({
+  name: 'UintN',
+  module: Constants.arc4EncodedTypesModuleName,
+  parameterise(typeArgs: PType[]): UintNType {
+    codeInvariant(typeArgs.length === 1, 'UintNType type expects exactly one type parameter')
+    const [size] = typeArgs
+    codeInvariant(
+      size instanceof NumericLiteralPType && size.literalValue,
+      `Generic type param for UintNType must be a literal number. Inferred type is ${size.name}`,
+    )
 
+    return new UintNType({ n: size.literalValue })
+  },
+})
 export class UintNType extends ARC4EncodedType {
-  static baseFullName = `${Constants.arc4EncodedTypesModuleName}::UintN`
   readonly module = Constants.arc4EncodedTypesModuleName
   readonly n: bigint
   readonly name: string
   readonly singleton = false
-
   readonly wtype: wtypes.ARC4UIntN
 
   get nativeType() {
@@ -159,16 +190,51 @@ export class UintNType extends ARC4EncodedType {
     this.name = name ?? `UIntN<${n}>`
     this.wtype = wtype ?? new wtypes.ARC4UIntN({ n: this.n })
   }
-
-  static parameterise(typeArgs: PType[]): UintNType {
-    codeInvariant(typeArgs.length === 1, 'UintNType type expects exactly one type parameter')
-    const [size] = typeArgs
+}
+export const UFixedNxMClass = new LibClassType({
+  name: 'UFixedNxM',
+  module: Constants.arc4EncodedTypesModuleName,
+})
+export const UFixedNxMGeneric = new GenericPType({
+  name: UFixedNxMClass.name,
+  module: UFixedNxMClass.module,
+  parameterise(typeArgs: PType[]) {
+    codeInvariant(typeArgs.length === 2, `${this.name} expects exactly 2 generic type parameters`)
+    const [n, m] = typeArgs
     codeInvariant(
-      size instanceof NumericLiteralPType && size.literalValue,
-      `Generic type param for UintNType must be a literal number. Inferred type is ${size.name}`,
+      n instanceof NumericLiteralPType && n.literalValue,
+      `Generic type param 'N' for ${this.name}  must be a literal number. Inferred type is ${n.name}`,
     )
+    codeInvariant(
+      m instanceof NumericLiteralPType && m.literalValue,
+      `Generic type param 'M' for UintNType must be a literal number. Inferred type is ${m.name}`,
+    )
+    return new UFixedNxMType({
+      n: n.literalValue,
+      m: m.literalValue,
+    })
+  },
+})
+export class UFixedNxMType extends ARC4EncodedType {
+  readonly module = Constants.arc4EncodedTypesModuleName
+  readonly n: bigint
+  readonly m: bigint
+  readonly name: string
+  readonly singleton = false
+  readonly wtype: wtypes.ARC4UFixedNxM
 
-    return new UintNType({ n: size.literalValue })
+  get nativeType() {
+    return this.n <= 64n ? uint64PType : biguintPType
+  }
+
+  constructor({ n, m }: { n: bigint; m: bigint }) {
+    super()
+    codeInvariant(n >= 8n && n <= 512n && n % 8n === 0n, 'n must be between 8 and 512, and a multiple of 8')
+    codeInvariant(m >= 1n && m <= 160n, 'm must be between 1 and 160')
+    this.n = n
+    this.m = m
+    this.name = `${UFixedNxMClass.name}<${n}, ${m}>`
+    this.wtype = new wtypes.ARC4UFixedNxM({ n: this.n, m: this.m })
   }
 }
 
@@ -178,8 +244,21 @@ export const DynamicArrayConstructor = new LibClassType({
   name: 'DynamicArray',
   module: Constants.arc4EncodedTypesModuleName,
 })
+export const DynamicArrayGeneric = new GenericPType({
+  name: 'DynamicArray',
+  module: Constants.arc4EncodedTypesModuleName,
+  parameterise: (typeArgs: PType[]): DynamicArrayType => {
+    codeInvariant(typeArgs.length === 1, 'DynamicArray type expects exactly one type parameter')
+    const [elementType] = typeArgs
+    codeInvariant(
+      elementType instanceof ARC4EncodedType,
+      `Generic type param for DynamicArray must be an ARC4 encoded type. Inferred type is ${elementType.name}`,
+    )
+
+    return new DynamicArrayType({ elementType: elementType })
+  },
+})
 export class DynamicArrayType extends ARC4EncodedType {
-  static baseFullName = `${Constants.arc4EncodedTypesModuleName}::DynamicArray`
   readonly module = Constants.arc4EncodedTypesModuleName
   readonly elementType: ARC4EncodedType
   readonly immutable: boolean
@@ -203,21 +282,28 @@ export class DynamicArrayType extends ARC4EncodedType {
     this.name = `DynamicArray<${elementType}>`
     this.sourceLocation = sourceLocation
   }
-
-  static parameterise(typeArgs: PType[]): DynamicArrayType {
-    codeInvariant(typeArgs.length === 1, 'DynamicArray type expects exactly one type parameter')
-    const [elementType] = typeArgs
-    codeInvariant(
-      elementType instanceof ARC4EncodedType,
-      `Generic type param for DynamicArray must be an ARC4 encoded type. Inferred type is ${elementType.name}`,
-    )
-
-    return new DynamicArrayType({ elementType: elementType })
-  }
 }
 export const StaticArrayConstructor = new LibClassType({
   name: 'StaticArray',
   module: Constants.arc4EncodedTypesModuleName,
+})
+export const StaticArrayGeneric = new GenericPType({
+  name: 'StaticArray',
+  module: Constants.arc4EncodedTypesModuleName,
+  parameterise: (typeArgs: PType[]): StaticArrayType => {
+    codeInvariant(typeArgs.length === 2, 'StaticArray type expects exactly one type parameters')
+    const [elementType, arraySize] = typeArgs
+    codeInvariant(
+      elementType instanceof ARC4EncodedType,
+      `Element type generic type param for StaticArray must be an ARC4 encoded type. Inferred type is ${elementType.name}`,
+    )
+    codeInvariant(
+      arraySize instanceof NumericLiteralPType,
+      `Array size generic type param for StaticArray must be a literal number. Inferred type is ${arraySize.name}`,
+    )
+
+    return new StaticArrayType({ arraySize: arraySize.literalValue, elementType })
+  },
 })
 export class StaticArrayType extends ARC4EncodedType {
   static baseFullName = `${Constants.arc4EncodedTypesModuleName}::StaticArray`
@@ -247,27 +333,13 @@ export class StaticArrayType extends ARC4EncodedType {
     name?: string
   }) {
     super()
-    ;(this.immutable = immutable ?? false), (this.elementType = elementType)
+    this.immutable = immutable ?? false
+    this.elementType = elementType
     this.arraySize = arraySize
     this.name = name ?? `StaticArray<${elementType}>`
     this.sourceLocation = sourceLocation
     this.wtype =
       wtype ?? new wtypes.ARC4StaticArray({ elementType: this.elementType.wtype, arraySize: this.arraySize, immutable: this.immutable })
-  }
-
-  static parameterise(typeArgs: PType[]): StaticArrayType {
-    codeInvariant(typeArgs.length === 2, 'StaticArray type expects exactly one type parameters')
-    const [elementType, arraySize] = typeArgs
-    codeInvariant(
-      elementType instanceof ARC4EncodedType,
-      `Element type generic type param for DynamicArray must be an ARC4 encoded type. Inferred type is ${elementType.name}`,
-    )
-    codeInvariant(
-      arraySize instanceof NumericLiteralPType,
-      `Array size generic type param for StaticArray must be a literal number. Inferred type is ${arraySize.name}`,
-    )
-
-    return new StaticArrayType({ arraySize: arraySize.literalValue, elementType })
   }
 }
 export const arc4AddressAlias = new StaticArrayType({

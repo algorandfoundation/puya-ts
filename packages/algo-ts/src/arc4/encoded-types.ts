@@ -9,6 +9,7 @@ type NativeForArc4Int<N extends BitSize> = N extends 8 | 16 | 32 | 64 ? uint64 :
 type CompatForArc4Int<N extends BitSize> = N extends 8 | 16 | 32 | 64 ? Uint64Compat : BigUintCompat
 
 abstract class AbiEncoded implements BytesBacked {
+  abstract __type?: string
   get bytes(): bytes {
     throw new Error('todo')
   }
@@ -19,14 +20,19 @@ abstract class AbiEncoded implements BytesBacked {
 }
 
 export class Str extends AbiEncoded {
+  __type?: 'arc4.Str'
+  #value: string
   constructor(s?: StringCompat) {
     super()
+    this.#value = s ?? ''
   }
   get native(): string {
-    throw new Error('TODO')
+    return this.#value
   }
 }
 export class UintN<N extends BitSize> extends AbiEncoded {
+  __type?: `arc4.UintN<${N}>`
+
   constructor(v?: CompatForArc4Int<N>) {
     super()
   }
@@ -34,8 +40,11 @@ export class UintN<N extends BitSize> extends AbiEncoded {
     throw new Error('TODO')
   }
 }
-export class UFixedNxM<N extends BitSize, M extends number> {
-  constructor(v: `${number}:${number}`, n?: N, m?: M) {}
+export class UFixedNxM<N extends BitSize, M extends number> extends AbiEncoded {
+  __type?: `arc4.UFixedNxM<${N}x${M}>`
+  constructor(v: `${number}.${number}`, n?: N, m?: M) {
+    super()
+  }
 
   get native(): NativeForArc4Int<N> {
     throw new Error('TODO')
@@ -48,6 +57,7 @@ export class Byte extends UintN<8> {
   }
 }
 export class Bool {
+  __type?: `arc4.Bool`
   #v: boolean
   constructor(v?: boolean) {
     this.#v = v ?? false
@@ -156,6 +166,7 @@ abstract class Arc4ReadonlyArray<TItem extends AbiEncoded> extends AbiEncoded {
 }
 
 export class StaticArray<TItem extends AbiEncoded, TLength extends number> extends Arc4ReadonlyArray<TItem> {
+  __type?: `arc4.StaticArray<${TItem['__type']}, ${TLength}>`
   constructor()
   constructor(...items: TItem[] & { length: TLength })
   constructor(...items: TItem[])
@@ -169,6 +180,7 @@ export class StaticArray<TItem extends AbiEncoded, TLength extends number> exten
 }
 
 export class DynamicArray<TItem extends AbiEncoded> extends Arc4ReadonlyArray<TItem> {
+  __type?: `arc4.DynamicArray<${TItem['__type']}>`
   constructor(...items: TItem[]) {
     super(items)
   }
@@ -194,17 +206,26 @@ export class DynamicArray<TItem extends AbiEncoded> extends Arc4ReadonlyArray<TI
     return new DynamicArray<TItem>(...this.items)
   }
 }
+type ExpandTupleType<T extends AbiEncoded[]> = T extends [infer T1 extends AbiEncoded, ...infer TRest extends AbiEncoded[]]
+  ? TRest extends []
+    ? `${T1['__type']}`
+    : `${T1['__type']},${ExpandTupleType<TRest>}`
+  : ''
 
-type ItemAt<TTuple extends unknown[], TIndex extends number> = undefined extends TTuple[TIndex] ? never : TTuple[TIndex]
-
-export class Tuple<TTuple extends unknown[]> {
+export class Tuple<TTuple extends [AbiEncoded, ...AbiEncoded[]]> extends AbiEncoded {
+  __type?: `arc4.Tuple<${ExpandTupleType<TTuple>}>`
   #items: TTuple
   constructor(...items: TTuple) {
+    super()
     this.#items = items
   }
 
-  at<TIndex extends number>(index: TIndex): ItemAt<TTuple, TIndex> {
-    return (this.#items[index] ?? err('Index out of bounds')) as ItemAt<TTuple, TIndex>
+  at<TIndex extends keyof TTuple>(index: TIndex): TTuple[TIndex] {
+    return this.#items[index] ?? err('Index out of bounds')
+  }
+
+  get length(): TTuple['length'] & uint64 {
+    return this.#items.length
   }
 
   get native(): TTuple {
@@ -213,6 +234,7 @@ export class Tuple<TTuple extends unknown[]> {
 }
 
 export class Address extends Arc4ReadonlyArray<Byte> {
+  __type?: `arc4.Address`
   constructor(value?: Account | string | bytes) {
     let byteValues: Uint8Array
     if (value === undefined) {

@@ -52,4 +52,18 @@ export abstract class PType {
   }
 }
 
+export class GenericPType<T extends PType = PType> extends PType {
+  readonly name: string
+  readonly module: string
+  readonly singleton = false
+  readonly wtype = undefined
+  readonly parameterise: (typeArgs: PType[]) => T
+  constructor(props: { name: string; module: string; parameterise: (typeArgs: PType[]) => T }) {
+    super()
+    this.name = props.name
+    this.module = props.module
+    this.parameterise = props.parameterise
+  }
+}
+
 export type PTypeOrClass = PType | { new (...args: DeliberateAny[]): PType; equals(other: PType): boolean }
