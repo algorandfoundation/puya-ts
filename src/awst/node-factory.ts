@@ -1,6 +1,6 @@
 import { CodeError } from '../errors'
 import type { DeliberateAny, Props } from '../typescript-helpers'
-import { codeInvariant, invariant } from '../util'
+import { codeInvariant, instanceOfAny, invariant } from '../util'
 import type { Expression, Statement } from './nodes'
 import {
   AssignmentExpression,
@@ -239,8 +239,8 @@ const explicitNodeFactory = {
   },
   tupleItemExpression(props: Omit<Props<TupleItemExpression>, 'wtype'>) {
     invariant(
-      props.base.wtype instanceof wtypes.WTuple && props.base.wtype.types.length > Number(props.index),
-      'expr.base must be WTuple with length greater than index',
+      instanceOfAny(props.base.wtype, wtypes.WTuple, wtypes.ARC4Tuple) && props.base.wtype.types.length > Number(props.index),
+      'expr.base must be tuple type with length greater than index',
     )
     return new TupleItemExpression({
       ...props,

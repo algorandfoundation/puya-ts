@@ -154,7 +154,7 @@ export class DecimalConstant extends Expression {
     this.value = props.value
   }
   declare wtype: wtypes.ARC4UFixedNxM
-  value: number
+  value: string
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitDecimalConstant(this)
   }

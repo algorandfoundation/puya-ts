@@ -95,19 +95,15 @@ export namespace wtypes {
   })
 
   export class ARC4Type extends WType {
-    readonly puyaTypeName: string = 'ARC4Type'
     readonly nativeType: WType | null
     readonly arc4Name: string
-    readonly otherEncodeableTypes: WType[]
     constructor({
       nativeType,
       arc4Name,
-      otherEncodeableTypes,
       ...rest
     }: {
       nativeType: WType | null
       arc4Name: string
-      otherEncodeableTypes?: WType[]
       name: string
       immutable?: boolean
       scalarType?: AVMType | null
@@ -116,7 +112,6 @@ export namespace wtypes {
       super({ ...rest, scalarType: rest.scalarType ?? AVMType.bytes })
       this.arc4Name = arc4Name
       this.nativeType = nativeType
-      this.otherEncodeableTypes = otherEncodeableTypes ?? []
     }
   }
 
@@ -230,13 +225,25 @@ export namespace wtypes {
         scalarType: AVMType.bytes,
         nativeType: n <= 64 ? uint64WType : biguintWType,
         arc4Name: arc4Name ?? `uint${n}`,
-        otherEncodeableTypes: [uint64WType, biguintWType, boolWType],
       })
       this.n = n
     }
   }
 
-  export class ARC4UFixedNxM extends ARC4Type {}
+  export class ARC4UFixedNxM extends ARC4Type {
+    readonly n: bigint
+    readonly m: bigint
+    constructor({ n, m }: { n: bigint; m: bigint }) {
+      super({
+        name: `arc4.ufixed${n}x${m}`,
+        scalarType: AVMType.bytes,
+        nativeType: n <= 64 ? uint64WType : biguintWType,
+        arc4Name: `ufixed${n}x${m}`,
+      })
+      this.n = n
+      this.m = m
+    }
+  }
 
   export class ARC4Struct extends ARC4Type {
     fields: Record<string, ARC4Type>

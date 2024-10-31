@@ -1,3 +1,9 @@
+subroutine testUFixed(): void
+{
+  a: arc4.ufixed32x4 = 1.244m
+  c: arc4.ufixed32x4 = 1.244m
+  assert(reinterpret_cast<bytes>(a) == reinterpret_cast<bytes>(c))
+}
 subroutine test(n: uint64, b: biguint, c: arc4.uint256): void
 {
   x: arc4.uint8 = 4
@@ -43,6 +49,15 @@ subroutine testAddress(): void
   assert(reinterpret_cast<bytes>(a) == reinterpret_cast<bytes>(Address("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ")))
   assert(reinterpret_cast<bytes>(a[0]) == reinterpret_cast<bytes>(0))
 }
+subroutine testTuple(): void
+{
+  t: arc4.tuple<uint64> = ARC4_ENCODE(<tuple>[34], wtype=arc4.tuple<uint64>)
+  firstItem: arc4.uint64 = t.0
+  firstItemIndexer: arc4.uint64 = ARC4_DECODE(t).0
+  assert(reinterpret_cast<bytes>(firstItem) == reinterpret_cast<bytes>(firstItemIndexer))
+  t1: arc4.tuple<address,byte> = ARC4_ENCODE(<tuple>[Address("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ"), 0], wtype=arc4.tuple<address,byte>)
+  assert(2 == 2)
+}
 contract Arc4TypesTestContract
 {
   approvalProgram(): bool
@@ -56,6 +71,7 @@ contract Arc4TypesTestContract
     tests/approvals/arc4-types.algo.ts::testByte()
     tests/approvals/arc4-types.algo.ts::testArrays(65)
     tests/approvals/arc4-types.algo.ts::testAddress()
+    tests/approvals/arc4-types.algo.ts::testTuple()
     return True
   }
   

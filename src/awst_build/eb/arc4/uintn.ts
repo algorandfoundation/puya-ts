@@ -24,7 +24,7 @@ export class UintNClassBuilder extends ClassBuilder {
       args,
       typeArgs,
       genericTypeArgs: 1,
-      funcName: 'UintN constructor',
+      funcName: this.typeDescription,
       argSpec: (a) => [a.optional()],
       callLocation: sourceLocation,
     })

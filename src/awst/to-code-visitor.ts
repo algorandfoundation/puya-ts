@@ -80,7 +80,7 @@ export class ToCodeVisitor
     return `${expression.value}`
   }
   visitDecimalConstant(expression: nodes.DecimalConstant): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    return `${expression.value}m`
   }
   visitBoolConstant(expression: nodes.BoolConstant): string {
     return expression.value ? 'True' : 'False'

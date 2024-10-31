@@ -9,7 +9,7 @@ import { logger } from '../../../logger'
 
 import { base32ToUint8Array, codeInvariant, invariant } from '../../../util'
 import type { PType } from '../../ptypes'
-import { accountPType, bytesPType, IterableIteratorType, NumericLiteralPType, stringPType, TuplePType, uint64PType } from '../../ptypes'
+import { accountPType, bytesPType, IterableIteratorGeneric, NumericLiteralPType, stringPType, TuplePType, uint64PType } from '../../ptypes'
 import {
   AddressClass,
   arc4AddressAlias,
@@ -234,7 +234,9 @@ class EntriesFunctionBuilder extends FunctionBuilder {
 
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     parseFunctionArgs({ args, typeArgs, callLocation: sourceLocation, argSpec: (_) => [], genericTypeArgs: 0, funcName: 'entries' })
-    const iteratorType = IterableIteratorType.parameterise([new TuplePType({ items: [uint64PType, this.arrayBuilder.ptype.elementType] })])
+    const iteratorType = IterableIteratorGeneric.parameterise([
+      new TuplePType({ items: [uint64PType, this.arrayBuilder.ptype.elementType] }),
+    ])
     return new IterableIteratorExpressionBuilder(
       nodeFactory.enumeration({
         expr: this.arrayBuilder.iterate(),

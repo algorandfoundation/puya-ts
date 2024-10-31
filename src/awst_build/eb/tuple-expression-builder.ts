@@ -1,7 +1,7 @@
 import { nodeFactory } from '../../awst/node-factory'
 import type { Expression } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
-import { invariant } from '../../util'
+import { codeInvariant, invariant } from '../../util'
 import type { PType } from '../ptypes'
 import { TuplePType } from '../ptypes'
 import { instanceEb } from '../type-registry'
@@ -22,7 +22,10 @@ export class TupleExpressionBuilder extends InstanceExpressionBuilder<TuplePType
   indexAccess(index: InstanceBuilder, sourceLocation: SourceLocation): NodeBuilder {
     const indexNum = requireIntegerConstant(index).value
     const itemType = this.ptype.items[Number(indexNum)]
-
+    codeInvariant(
+      indexNum < this.ptype.items.length && indexNum >= 0,
+      "Index arg must be a numeric literal between 0 and the tuple's length",
+    )
     return instanceEb(
       nodeFactory.tupleItemExpression({
         index: indexNum,
