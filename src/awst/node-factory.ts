@@ -54,10 +54,10 @@ const explicitNodeFactory = {
       ...props,
     })
   },
-  stringConstant(props: { value: string; sourceLocation: SourceLocation }): StringConstant {
+  stringConstant(props: { value: string; sourceLocation: SourceLocation; wtype?: wtypes.WType }): StringConstant {
     return new StringConstant({
       ...props,
-      wtype: wtypes.stringWType,
+      wtype: props.wtype ?? wtypes.stringWType,
     })
   },
   uInt64Constant({

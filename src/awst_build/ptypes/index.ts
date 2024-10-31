@@ -195,8 +195,6 @@ export abstract class StorageProxyPType extends PType {
     this.wtype = props.keyWType
     this.contentType = props.content
   }
-
-  abstract getGenericArgs(): PType[]
 }
 
 export class GlobalStateType extends StorageProxyPType {
@@ -218,10 +216,6 @@ export class GlobalStateType extends StorageProxyPType {
       content: typeArgs[0],
     })
   }
-
-  getGenericArgs(): PType[] {
-    return [this.contentType]
-  }
 }
 export class LocalStateType extends StorageProxyPType {
   static readonly baseName = 'LocalState'
@@ -242,10 +236,6 @@ export class LocalStateType extends StorageProxyPType {
       content: typeArgs[0],
     })
   }
-
-  getGenericArgs(): PType[] {
-    return [this.contentType]
-  }
 }
 export class BoxPType extends StorageProxyPType {
   static readonly baseName = 'Box'
@@ -265,10 +255,6 @@ export class BoxPType extends StorageProxyPType {
     return new BoxPType({
       content: typeArgs[0],
     })
-  }
-
-  getGenericArgs(): PType[] {
-    return [this.contentType]
   }
 }
 export class BoxMapPType extends StorageProxyPType {
@@ -293,10 +279,6 @@ export class BoxMapPType extends StorageProxyPType {
       content: typeArgs[1],
     })
   }
-
-  getGenericArgs(): PType[] {
-    return [this.keyType, this.contentType]
-  }
 }
 export class BoxRefPType extends StorageProxyPType {
   readonly module = Constants.boxModuleName
@@ -305,10 +287,6 @@ export class BoxRefPType extends StorageProxyPType {
   }
   constructor() {
     super({ keyWType: wtypes.boxKeyWType, content: bytesPType })
-  }
-
-  getGenericArgs(): PType[] {
-    return []
   }
 }
 export type AppStorageType = GlobalStateType | LocalStateType
@@ -376,6 +354,18 @@ export class InstanceType extends PType {
 }
 
 export class LibFunctionType extends PType {
+  readonly wtype: undefined
+  readonly name: string
+  readonly module: string
+  readonly singleton = true
+
+  constructor({ name, module }: { name: string; module: string }) {
+    super()
+    this.name = name
+    this.module = module
+  }
+}
+export class LibClassType extends PType {
   readonly wtype: undefined
   readonly name: string
   readonly module: string
@@ -1092,10 +1082,6 @@ export class IterableIteratorType extends TransientType {
 
   get wtype(): wtypes.WEnumeration {
     return new wtypes.WEnumeration({ sequenceType: this.itemType.wtypeOrThrow })
-  }
-
-  getGenericArgs(): PType[] {
-    return [this.itemType]
   }
 }
 

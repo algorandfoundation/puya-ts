@@ -19,7 +19,7 @@ abstract class AbiEncoded implements BytesBacked {
 }
 
 export class Str extends AbiEncoded {
-  constructor(s: StringCompat) {
+  constructor(s?: StringCompat) {
     super()
   }
   get native(): string {

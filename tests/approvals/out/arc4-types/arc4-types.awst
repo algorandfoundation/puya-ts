@@ -7,11 +7,19 @@ subroutine test(n: uint64, b: biguint, c: arc4.uint256): void
   y: arc4.uint16 = 0
   assert(len(reinterpret_cast<bytes>(y)) == 2)
   z: arc4.uint8 = ARC4_ENCODE(n, wtype=arc4.uint8)
-  z_native: uint64 = btoi(z)
+  z_native: uint64 = ARC4_DECODE(z)
   assert(z_native == n)
   a: arc4.uint128 = ARC4_ENCODE(b, wtype=arc4.uint128)
-  a_native: biguint = reinterpret_cast<biguint>(a)
+  a_native: biguint = ARC4_DECODE(a)
   assert(a_native == b)
+  assert(len(reinterpret_cast<bytes>(c)) == 32)
+}
+subroutine testStr(): void
+{
+  s1: arc4.dynamic_array<arc4.byte> = ""
+  assert(reinterpret_cast<bytes>(s1) == reinterpret_cast<bytes>(0))
+  s2: arc4.dynamic_array<arc4.byte> = "Hello"
+  assert(ARC4_DECODE(s2) == "Hello")
 }
 subroutine testArrays(n: arc4.uint64): void
 {
@@ -42,6 +50,8 @@ contract Arc4TypesTestContract
     if (!Boolean(txn<ApplicationID>())) {
       this.constructor()
     }
+    x: arc4.uint64 = 0
+    tests/approvals/arc4-types.algo.ts::testStr()
     tests/approvals/arc4-types.algo.ts::test(1, 2, 4)
     tests/approvals/arc4-types.algo.ts::testByte()
     tests/approvals/arc4-types.algo.ts::testArrays(65)

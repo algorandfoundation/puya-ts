@@ -116,7 +116,7 @@ export class ToCodeVisitor
     return `${expression.base.accept(this)}.push(...${expression.other.accept(this)}`
   }
   visitARC4Decode(expression: nodes.ARC4Decode): string {
-    return `ARC4_DECODE(${expression.value})`
+    return `ARC4_DECODE(${expression.value.accept(this)})`
   }
   visitIntrinsicCall(expression: nodes.IntrinsicCall): string {
     const immediates = expression.immediates.length ? `<${expression.immediates.map((i) => i).join(', ')}>` : ''

@@ -1,6 +1,6 @@
 import type { biguint, uint64 } from '@algorandfoundation/algorand-typescript'
 import { assert, BaseContract, Bytes, Txn } from '@algorandfoundation/algorand-typescript'
-import { Address, Byte, DynamicArray, StaticArray, UintN } from '@algorandfoundation/algorand-typescript/arc4'
+import { Address, Byte, DynamicArray, StaticArray, Str, UintN } from '@algorandfoundation/algorand-typescript/arc4'
 
 function test(n: uint64, b: biguint, c: UintN<256>) {
   const x = new UintN<8>(4)
@@ -16,9 +16,19 @@ function test(n: uint64, b: biguint, c: UintN<256>) {
   const a = new UintN<128>(b)
   const a_native = a.native
   assert(a_native === b)
+
+  assert(c.bytes.length === 256 / 8)
+}
+
+function testStr() {
+  const s1 = new Str()
+  assert(s1.bytes === new UintN<16>(0).bytes, 'Empty string should equal the uint16 length prefix')
+  const s2 = new Str('Hello')
+  assert(s2.native === 'Hello')
 }
 
 type ARC4Uint64 = UintN<64>
+const ARC4Uint64 = UintN<64>
 
 function testArrays(n: ARC4Uint64) {
   const myArray = new DynamicArray(n, n, n)
@@ -48,6 +58,11 @@ function testAddress() {
   assert(a.equals(new Address()), 'Two zero addresses should match')
   assert(a[0].equals(new Byte()), 'Zero address should start with zero byte')
 }
+//
+// function testTuple() {
+//   const t = new Tuple()
+//   const t1 = new Tuple([new Address(), new Byte()])
+// }
 
 export class Arc4TypesTestContract extends BaseContract {
   public getArc4Values(): [Byte, UintN<8>, Address] {
@@ -55,11 +70,13 @@ export class Arc4TypesTestContract extends BaseContract {
   }
 
   public approvalProgram(): boolean {
+    const x = new ARC4Uint64()
+    testStr()
     test(1, 2n, new UintN<256>(4))
     testByte()
     testArrays(new UintN<64>(65))
     testAddress()
-
+    // testTuple()
     return true
   }
 }

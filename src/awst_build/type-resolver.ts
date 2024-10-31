@@ -56,7 +56,7 @@ export class TypeResolver {
     return undefined
   }
 
-  resolveTypeParameters(node: ts.CallExpression, sourceLocation: SourceLocation) {
+  resolveTypeParameters(node: ts.CallExpression | ts.NewExpression, sourceLocation: SourceLocation) {
     if (node.typeArguments) {
       // Explicit type arguments
       return node.typeArguments.map((t) => this.resolveTypeNode(t, sourceLocation))
@@ -169,6 +169,10 @@ export class TypeResolver {
         items: tsType.typeArguments.map((t) => this.resolveType(t, sourceLocation)),
       })
     }
+    const constructSignatures = tsType.getConstructSignatures()
+    if (constructSignatures.length) {
+      return this.reflectConstructorType(constructSignatures, sourceLocation)
+    }
 
     const typeName = this.getTypeName(tsType, sourceLocation)
     if (typeName.fullName === promisePType.fullName) return promisePType
@@ -248,6 +252,21 @@ export class TypeResolver {
       return new ObjectPType({ ...typeAlias, properties })
     }
     return ObjectPType.anonymous(properties)
+  }
+
+  private reflectConstructorType(constructorSignatures: readonly ts.Signature[], sourceLocation: SourceLocation): PType {
+    invariant(constructorSignatures.length, 'Must have at least one signature')
+    const constructorParentNode = constructorSignatures[0].declaration?.parent
+    invariant(constructorParentNode && ts.isClassDeclaration(constructorParentNode), 'Constructor parent node must be a class declaration')
+    invariant(constructorParentNode.name, 'Class must have a name')
+    const sym = this.checker.getSymbolAtLocation(constructorParentNode.name)
+    invariant(sym, 'Name must have a symbol')
+    const symbolName = this.getSymbolFullName(sym, sourceLocation)
+    const constructorType = typeRegistry.tryResolveSingletonName(symbolName)
+    if (constructorType) {
+      return constructorType
+    }
+    throw new CodeError('Cannot determine type of node', { sourceLocation })
   }
 
   private reflectFunctionType(

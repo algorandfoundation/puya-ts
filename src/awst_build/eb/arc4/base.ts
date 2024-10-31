@@ -6,6 +6,7 @@ import { wtypes } from '../../../awst/wtypes'
 import { CodeError } from '../../../errors'
 import type { PType } from '../../ptypes'
 import type { ARC4EncodedType } from '../../ptypes/arc4-types'
+import { instanceEb } from '../../type-registry'
 import { BooleanExpressionBuilder } from '../boolean-expression-builder'
 import { BytesExpressionBuilder } from '../bytes-expression-builder'
 import type { InstanceBuilder, NodeBuilder } from '../index'
@@ -26,20 +27,22 @@ export class Arc4EncodedBaseExpressionBuilder<T extends ARC4EncodedType> extends
     return super.compare(other, op, sourceLocation)
   }
 
-  //
-  // compare(other: InstanceBuilder, op: BuilderBinaryOp, sourceLocation: SourceLocation): InstanceBuilder {
-  //   switch (op) {
-  //     case Bu
-  //   }
-  //   return super.binaryOp(other, op, sourceLocation);
-  // }
-
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
     switch (name) {
       case 'bytes':
         return new BytesExpressionBuilder(this.toBytes(sourceLocation))
       case 'equals':
         return new Arc4EqualsFunctionBuilder(this, sourceLocation)
+      case 'native':
+        if (this.ptype.nativeType === undefined) break
+        return instanceEb(
+          nodeFactory.aRC4Decode({
+            value: this.resolve(),
+            sourceLocation,
+            wtype: this.ptype.nativeType.wtypeOrThrow,
+          }),
+          this.ptype.nativeType,
+        )
     }
     return super.memberAccess(name, sourceLocation)
   }

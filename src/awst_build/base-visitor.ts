@@ -214,7 +214,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
     const sourceLocation = this.sourceLocation(node)
     const eb = this.baseAccept(node.expression)
     const args = node.arguments?.map((a) => this.baseAccept(a)) ?? []
-    const typeArgs = node.typeArguments?.map((t) => this.context.getPTypeForNode(t)) ?? this.context.getPTypeForNode(node).getGenericArgs()
+    const typeArgs = this.context.getTypeParameters(node)
     return eb.newCall(args, typeArgs, sourceLocation)
   }
 
@@ -431,7 +431,8 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   }
 
   visitExpressionWithTypeArguments(node: ts.ExpressionWithTypeArguments): NodeBuilder {
-    throw new TodoError('ExpressionWithTypeArguments')
+    // Should be fine to ignore the type parameters as these can be inferred by the type checker
+    return this.baseAccept(node.expression)
   }
 
   visitAsExpression(node: ts.AsExpression): NodeBuilder {

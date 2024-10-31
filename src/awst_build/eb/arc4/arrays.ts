@@ -11,6 +11,7 @@ import { base32ToUint8Array, codeInvariant, invariant } from '../../../util'
 import type { PType } from '../../ptypes'
 import { accountPType, bytesPType, IterableIteratorType, NumericLiteralPType, stringPType, TuplePType, uint64PType } from '../../ptypes'
 import {
+  AddressClass,
   arc4AddressAlias,
   ARC4EncodedType,
   DynamicArrayConstructor,
@@ -19,8 +20,8 @@ import {
   StaticArrayType,
 } from '../../ptypes/arc4-types'
 import { instanceEb } from '../../type-registry'
-import type { InstanceBuilder } from '../index'
-import { FunctionBuilder, NodeBuilder } from '../index'
+import type { InstanceBuilder, NodeBuilder } from '../index'
+import { ClassBuilder, FunctionBuilder } from '../index'
 import { IterableIteratorExpressionBuilder } from '../iterable-iterator-expression-builder'
 import { AccountExpressionBuilder } from '../reference/account'
 import { AtFunctionBuilder } from '../shared/at-function-builder'
@@ -30,7 +31,7 @@ import { requireExpressionOfType } from '../util'
 import { parseFunctionArgs } from '../util/arg-parsing'
 import { Arc4EncodedBaseExpressionBuilder } from './base'
 
-export class DynamicArrayConstructorBuilder extends NodeBuilder {
+export class DynamicArrayClassBuilder extends ClassBuilder {
   readonly ptype = DynamicArrayConstructor
 
   newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
@@ -58,7 +59,7 @@ export class DynamicArrayConstructorBuilder extends NodeBuilder {
     )
   }
 }
-export class StaticArrayConstructorBuilder extends NodeBuilder {
+export class StaticArrayClassBuilder extends ClassBuilder {
   readonly ptype = StaticArrayConstructor
 
   newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
@@ -100,8 +101,8 @@ export class StaticArrayConstructorBuilder extends NodeBuilder {
     )
   }
 }
-export class AddressConstructorBuilder extends NodeBuilder {
-  readonly ptype = DynamicArrayConstructor
+export class AddressClassBuilder extends ClassBuilder {
+  readonly ptype = AddressClass
 
   newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
     const {
@@ -111,7 +112,7 @@ export class AddressConstructorBuilder extends NodeBuilder {
       typeArgs,
       callLocation: sourceLocation,
       funcName: 'Address constructor',
-      genericTypeArgs: 2,
+      genericTypeArgs: 0,
       argSpec: (a) => [a.optional(accountPType, stringPType, bytesPType)],
     })
     if (!accountOrAddressOrBytes) {

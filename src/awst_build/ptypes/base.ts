@@ -50,10 +50,6 @@ export abstract class PType {
   toString(): string {
     return this.name
   }
-
-  getGenericArgs(): PType[] {
-    return []
-  }
 }
 
 export type PTypeOrClass = PType | { new (...args: DeliberateAny[]): PType; equals(other: PType): boolean }

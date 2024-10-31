@@ -109,7 +109,7 @@
       "source_location": {
         "file": "tests/approvals/arc4-types.algo.ts",
         "line": 5,
-        "end_line": 19,
+        "end_line": 21,
         "column": 52,
         "end_column": 1
       },
@@ -1065,7 +1065,7 @@
             "name": "z_native"
           },
           "value": {
-            "_type": "IntrinsicCall",
+            "_type": "ARC4Decode",
             "source_location": {
               "file": "tests/approvals/arc4-types.algo.ts",
               "line": 14,
@@ -1080,62 +1080,57 @@
               "ephemeral": false,
               "scalar_type": 2
             },
-            "op_code": "btoi",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "VarExpression",
-                "source_location": {
-                  "file": "tests/approvals/arc4-types.algo.ts",
-                  "line": 14,
-                  "end_line": 14,
-                  "column": 19,
-                  "end_column": 20
-                },
-                "wtype": {
-                  "_type": "ARC4UIntN",
-                  "name": "arc4.uint8",
+            "value": {
+              "_type": "VarExpression",
+              "source_location": {
+                "file": "tests/approvals/arc4-types.algo.ts",
+                "line": 14,
+                "end_line": 14,
+                "column": 19,
+                "end_column": 20
+              },
+              "wtype": {
+                "_type": "ARC4UIntN",
+                "name": "arc4.uint8",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 1,
+                "puya_type_name": "ARC4Type",
+                "native_type": {
+                  "_type": "WType",
+                  "name": "uint64",
                   "immutable": true,
                   "ephemeral": false,
-                  "scalar_type": 1,
-                  "puya_type_name": "ARC4Type",
-                  "native_type": {
+                  "scalar_type": 2
+                },
+                "arc4_name": "uint8",
+                "other_encodeable_types": [
+                  {
                     "_type": "WType",
                     "name": "uint64",
                     "immutable": true,
                     "ephemeral": false,
                     "scalar_type": 2
                   },
-                  "arc4_name": "uint8",
-                  "other_encodeable_types": [
-                    {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true,
-                      "ephemeral": false,
-                      "scalar_type": 2
-                    },
-                    {
-                      "_type": "WType",
-                      "name": "biguint",
-                      "immutable": true,
-                      "ephemeral": false,
-                      "scalar_type": 1
-                    },
-                    {
-                      "_type": "WType",
-                      "name": "bool",
-                      "immutable": true,
-                      "ephemeral": false,
-                      "scalar_type": 2
-                    }
-                  ],
-                  "n": "8"
-                },
-                "name": "z"
-              }
-            ],
-            "comment": null
+                  {
+                    "_type": "WType",
+                    "name": "biguint",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 1
+                  },
+                  {
+                    "_type": "WType",
+                    "name": "bool",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 2
+                  }
+                ],
+                "n": "8"
+              },
+              "name": "z"
+            }
           }
         },
         {
@@ -1381,7 +1376,7 @@
             "name": "a_native"
           },
           "value": {
-            "_type": "ReinterpretCast",
+            "_type": "ARC4Decode",
             "source_location": {
               "file": "tests/approvals/arc4-types.algo.ts",
               "line": 17,
@@ -1396,7 +1391,7 @@
               "ephemeral": false,
               "scalar_type": 1
             },
-            "expr": {
+            "value": {
               "_type": "VarExpression",
               "source_location": {
                 "file": "tests/approvals/arc4-types.algo.ts",
@@ -1534,6 +1529,165 @@
             ],
             "comment": null
           }
+        },
+        {
+          "_type": "ExpressionStatement",
+          "source_location": {
+            "file": "tests/approvals/arc4-types.algo.ts",
+            "line": 20,
+            "end_line": 20,
+            "column": 2,
+            "end_column": 36
+          },
+          "expr": {
+            "_type": "IntrinsicCall",
+            "source_location": {
+              "file": "tests/approvals/arc4-types.algo.ts",
+              "line": 20,
+              "end_line": 20,
+              "column": 2,
+              "end_column": 36
+            },
+            "wtype": {
+              "_type": "WType",
+              "name": "void",
+              "immutable": true,
+              "ephemeral": false,
+              "scalar_type": null
+            },
+            "op_code": "assert",
+            "immediates": [],
+            "stack_args": [
+              {
+                "_type": "NumericComparisonExpression",
+                "source_location": {
+                  "file": "tests/approvals/arc4-types.algo.ts",
+                  "line": 20,
+                  "end_line": 20,
+                  "column": 9,
+                  "end_column": 35
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "bool",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 2
+                },
+                "lhs": {
+                  "_type": "IntrinsicCall",
+                  "source_location": {
+                    "file": "tests/approvals/arc4-types.algo.ts",
+                    "line": 20,
+                    "end_line": 20,
+                    "column": 9,
+                    "end_column": 23
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "uint64",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 2
+                  },
+                  "op_code": "len",
+                  "immediates": [],
+                  "stack_args": [
+                    {
+                      "_type": "ReinterpretCast",
+                      "source_location": {
+                        "file": "tests/approvals/arc4-types.algo.ts",
+                        "line": 20,
+                        "end_line": 20,
+                        "column": 9,
+                        "end_column": 16
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "bytes",
+                        "immutable": true,
+                        "ephemeral": false,
+                        "scalar_type": 1
+                      },
+                      "expr": {
+                        "_type": "VarExpression",
+                        "source_location": {
+                          "file": "tests/approvals/arc4-types.algo.ts",
+                          "line": 20,
+                          "end_line": 20,
+                          "column": 9,
+                          "end_column": 10
+                        },
+                        "wtype": {
+                          "_type": "ARC4UIntN",
+                          "name": "arc4.uint256",
+                          "immutable": true,
+                          "ephemeral": false,
+                          "scalar_type": 1,
+                          "puya_type_name": "ARC4Type",
+                          "native_type": {
+                            "_type": "WType",
+                            "name": "biguint",
+                            "immutable": true,
+                            "ephemeral": false,
+                            "scalar_type": 1
+                          },
+                          "arc4_name": "uint256",
+                          "other_encodeable_types": [
+                            {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true,
+                              "ephemeral": false,
+                              "scalar_type": 2
+                            },
+                            {
+                              "_type": "WType",
+                              "name": "biguint",
+                              "immutable": true,
+                              "ephemeral": false,
+                              "scalar_type": 1
+                            },
+                            {
+                              "_type": "WType",
+                              "name": "bool",
+                              "immutable": true,
+                              "ephemeral": false,
+                              "scalar_type": 2
+                            }
+                          ],
+                          "n": "256"
+                        },
+                        "name": "c"
+                      }
+                    }
+                  ],
+                  "comment": null
+                },
+                "operator": "==",
+                "rhs": {
+                  "_type": "IntegerConstant",
+                  "source_location": {
+                    "file": "tests/approvals/arc4-types.algo.ts",
+                    "line": 20,
+                    "end_line": 20,
+                    "column": 28,
+                    "end_column": 35
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "uint64",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 2
+                  },
+                  "value": "32",
+                  "teal_alias": null
+                }
+              }
+            ],
+            "comment": null
+          }
         }
       ],
       "label": null,
@@ -1554,6 +1708,701 @@
       "file": "tests/approvals/arc4-types.algo.ts",
       "line": 23,
       "end_line": 23,
+      "column": 0,
+      "end_column": 18
+    },
+    "args": [],
+    "return_type": {
+      "_type": "WType",
+      "name": "void",
+      "immutable": true,
+      "ephemeral": false,
+      "scalar_type": null
+    },
+    "body": {
+      "_type": "Block",
+      "source_location": {
+        "file": "tests/approvals/arc4-types.algo.ts",
+        "line": 23,
+        "end_line": 28,
+        "column": 19,
+        "end_column": 1
+      },
+      "body": [
+        {
+          "_type": "AssignmentStatement",
+          "source_location": {
+            "file": "tests/approvals/arc4-types.algo.ts",
+            "line": 24,
+            "end_line": 24,
+            "column": 8,
+            "end_column": 22
+          },
+          "target": {
+            "_type": "VarExpression",
+            "source_location": {
+              "file": "tests/approvals/arc4-types.algo.ts",
+              "line": 24,
+              "end_line": 24,
+              "column": 8,
+              "end_column": 10
+            },
+            "wtype": {
+              "_type": "ARC4DynamicArray",
+              "name": "arc4.dynamic_array<arc4.byte>",
+              "immutable": true,
+              "ephemeral": false,
+              "scalar_type": 1,
+              "puya_type_name": "ARC4Type",
+              "native_type": {
+                "_type": "WType",
+                "name": "string",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 1
+              },
+              "arc4_name": "string",
+              "other_encodeable_types": [],
+              "element_type": {
+                "_type": "ARC4UIntN",
+                "name": "arc4.byte",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 1,
+                "puya_type_name": "ARC4Type",
+                "native_type": {
+                  "_type": "WType",
+                  "name": "uint64",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 2
+                },
+                "arc4_name": "byte",
+                "other_encodeable_types": [
+                  {
+                    "_type": "WType",
+                    "name": "uint64",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 2
+                  },
+                  {
+                    "_type": "WType",
+                    "name": "biguint",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 1
+                  },
+                  {
+                    "_type": "WType",
+                    "name": "bool",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 2
+                  }
+                ],
+                "n": "8"
+              },
+              "source_location": null
+            },
+            "name": "s1"
+          },
+          "value": {
+            "_type": "StringConstant",
+            "source_location": {
+              "file": "tests/approvals/arc4-types.algo.ts",
+              "line": 24,
+              "end_line": 24,
+              "column": 13,
+              "end_column": 22
+            },
+            "wtype": {
+              "_type": "ARC4DynamicArray",
+              "name": "arc4.dynamic_array<arc4.byte>",
+              "immutable": true,
+              "ephemeral": false,
+              "scalar_type": 1,
+              "puya_type_name": "ARC4Type",
+              "native_type": {
+                "_type": "WType",
+                "name": "string",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 1
+              },
+              "arc4_name": "string",
+              "other_encodeable_types": [],
+              "element_type": {
+                "_type": "ARC4UIntN",
+                "name": "arc4.byte",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 1,
+                "puya_type_name": "ARC4Type",
+                "native_type": {
+                  "_type": "WType",
+                  "name": "uint64",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 2
+                },
+                "arc4_name": "byte",
+                "other_encodeable_types": [
+                  {
+                    "_type": "WType",
+                    "name": "uint64",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 2
+                  },
+                  {
+                    "_type": "WType",
+                    "name": "biguint",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 1
+                  },
+                  {
+                    "_type": "WType",
+                    "name": "bool",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 2
+                  }
+                ],
+                "n": "8"
+              },
+              "source_location": null
+            },
+            "value": ""
+          }
+        },
+        {
+          "_type": "ExpressionStatement",
+          "source_location": {
+            "file": "tests/approvals/arc4-types.algo.ts",
+            "line": 25,
+            "end_line": 25,
+            "column": 2,
+            "end_column": 99
+          },
+          "expr": {
+            "_type": "IntrinsicCall",
+            "source_location": {
+              "file": "tests/approvals/arc4-types.algo.ts",
+              "line": 25,
+              "end_line": 25,
+              "column": 2,
+              "end_column": 99
+            },
+            "wtype": {
+              "_type": "WType",
+              "name": "void",
+              "immutable": true,
+              "ephemeral": false,
+              "scalar_type": null
+            },
+            "op_code": "assert",
+            "immediates": [],
+            "stack_args": [
+              {
+                "_type": "BytesComparisonExpression",
+                "source_location": {
+                  "file": "tests/approvals/arc4-types.algo.ts",
+                  "line": 25,
+                  "end_line": 25,
+                  "column": 9,
+                  "end_column": 44
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "bool",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 2
+                },
+                "lhs": {
+                  "_type": "ReinterpretCast",
+                  "source_location": {
+                    "file": "tests/approvals/arc4-types.algo.ts",
+                    "line": 25,
+                    "end_line": 25,
+                    "column": 9,
+                    "end_column": 17
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "bytes",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 1
+                  },
+                  "expr": {
+                    "_type": "VarExpression",
+                    "source_location": {
+                      "file": "tests/approvals/arc4-types.algo.ts",
+                      "line": 25,
+                      "end_line": 25,
+                      "column": 9,
+                      "end_column": 11
+                    },
+                    "wtype": {
+                      "_type": "ARC4DynamicArray",
+                      "name": "arc4.dynamic_array<arc4.byte>",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 1,
+                      "puya_type_name": "ARC4Type",
+                      "native_type": {
+                        "_type": "WType",
+                        "name": "string",
+                        "immutable": true,
+                        "ephemeral": false,
+                        "scalar_type": 1
+                      },
+                      "arc4_name": "string",
+                      "other_encodeable_types": [],
+                      "element_type": {
+                        "_type": "ARC4UIntN",
+                        "name": "arc4.byte",
+                        "immutable": true,
+                        "ephemeral": false,
+                        "scalar_type": 1,
+                        "puya_type_name": "ARC4Type",
+                        "native_type": {
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true,
+                          "ephemeral": false,
+                          "scalar_type": 2
+                        },
+                        "arc4_name": "byte",
+                        "other_encodeable_types": [
+                          {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true,
+                            "ephemeral": false,
+                            "scalar_type": 2
+                          },
+                          {
+                            "_type": "WType",
+                            "name": "biguint",
+                            "immutable": true,
+                            "ephemeral": false,
+                            "scalar_type": 1
+                          },
+                          {
+                            "_type": "WType",
+                            "name": "bool",
+                            "immutable": true,
+                            "ephemeral": false,
+                            "scalar_type": 2
+                          }
+                        ],
+                        "n": "8"
+                      },
+                      "source_location": null
+                    },
+                    "name": "s1"
+                  }
+                },
+                "operator": "==",
+                "rhs": {
+                  "_type": "ReinterpretCast",
+                  "source_location": {
+                    "file": "tests/approvals/arc4-types.algo.ts",
+                    "line": 25,
+                    "end_line": 25,
+                    "column": 22,
+                    "end_column": 44
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "bytes",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 1
+                  },
+                  "expr": {
+                    "_type": "IntegerConstant",
+                    "source_location": {
+                      "file": "tests/approvals/arc4-types.algo.ts",
+                      "line": 25,
+                      "end_line": 25,
+                      "column": 22,
+                      "end_column": 38
+                    },
+                    "wtype": {
+                      "_type": "ARC4UIntN",
+                      "name": "arc4.uint16",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 1,
+                      "puya_type_name": "ARC4Type",
+                      "native_type": {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true,
+                        "ephemeral": false,
+                        "scalar_type": 2
+                      },
+                      "arc4_name": "uint16",
+                      "other_encodeable_types": [
+                        {
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true,
+                          "ephemeral": false,
+                          "scalar_type": 2
+                        },
+                        {
+                          "_type": "WType",
+                          "name": "biguint",
+                          "immutable": true,
+                          "ephemeral": false,
+                          "scalar_type": 1
+                        },
+                        {
+                          "_type": "WType",
+                          "name": "bool",
+                          "immutable": true,
+                          "ephemeral": false,
+                          "scalar_type": 2
+                        }
+                      ],
+                      "n": "16"
+                    },
+                    "value": "0",
+                    "teal_alias": null
+                  }
+                }
+              }
+            ],
+            "comment": "Empty string should equal the uint16 length prefix"
+          }
+        },
+        {
+          "_type": "AssignmentStatement",
+          "source_location": {
+            "file": "tests/approvals/arc4-types.algo.ts",
+            "line": 26,
+            "end_line": 26,
+            "column": 8,
+            "end_column": 29
+          },
+          "target": {
+            "_type": "VarExpression",
+            "source_location": {
+              "file": "tests/approvals/arc4-types.algo.ts",
+              "line": 26,
+              "end_line": 26,
+              "column": 8,
+              "end_column": 10
+            },
+            "wtype": {
+              "_type": "ARC4DynamicArray",
+              "name": "arc4.dynamic_array<arc4.byte>",
+              "immutable": true,
+              "ephemeral": false,
+              "scalar_type": 1,
+              "puya_type_name": "ARC4Type",
+              "native_type": {
+                "_type": "WType",
+                "name": "string",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 1
+              },
+              "arc4_name": "string",
+              "other_encodeable_types": [],
+              "element_type": {
+                "_type": "ARC4UIntN",
+                "name": "arc4.byte",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 1,
+                "puya_type_name": "ARC4Type",
+                "native_type": {
+                  "_type": "WType",
+                  "name": "uint64",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 2
+                },
+                "arc4_name": "byte",
+                "other_encodeable_types": [
+                  {
+                    "_type": "WType",
+                    "name": "uint64",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 2
+                  },
+                  {
+                    "_type": "WType",
+                    "name": "biguint",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 1
+                  },
+                  {
+                    "_type": "WType",
+                    "name": "bool",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 2
+                  }
+                ],
+                "n": "8"
+              },
+              "source_location": null
+            },
+            "name": "s2"
+          },
+          "value": {
+            "_type": "StringConstant",
+            "source_location": {
+              "file": "tests/approvals/arc4-types.algo.ts",
+              "line": 26,
+              "end_line": 26,
+              "column": 13,
+              "end_column": 29
+            },
+            "wtype": {
+              "_type": "ARC4DynamicArray",
+              "name": "arc4.dynamic_array<arc4.byte>",
+              "immutable": true,
+              "ephemeral": false,
+              "scalar_type": 1,
+              "puya_type_name": "ARC4Type",
+              "native_type": {
+                "_type": "WType",
+                "name": "string",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 1
+              },
+              "arc4_name": "string",
+              "other_encodeable_types": [],
+              "element_type": {
+                "_type": "ARC4UIntN",
+                "name": "arc4.byte",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 1,
+                "puya_type_name": "ARC4Type",
+                "native_type": {
+                  "_type": "WType",
+                  "name": "uint64",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 2
+                },
+                "arc4_name": "byte",
+                "other_encodeable_types": [
+                  {
+                    "_type": "WType",
+                    "name": "uint64",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 2
+                  },
+                  {
+                    "_type": "WType",
+                    "name": "biguint",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 1
+                  },
+                  {
+                    "_type": "WType",
+                    "name": "bool",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 2
+                  }
+                ],
+                "n": "8"
+              },
+              "source_location": null
+            },
+            "value": "Hello"
+          }
+        },
+        {
+          "_type": "ExpressionStatement",
+          "source_location": {
+            "file": "tests/approvals/arc4-types.algo.ts",
+            "line": 27,
+            "end_line": 27,
+            "column": 2,
+            "end_column": 31
+          },
+          "expr": {
+            "_type": "IntrinsicCall",
+            "source_location": {
+              "file": "tests/approvals/arc4-types.algo.ts",
+              "line": 27,
+              "end_line": 27,
+              "column": 2,
+              "end_column": 31
+            },
+            "wtype": {
+              "_type": "WType",
+              "name": "void",
+              "immutable": true,
+              "ephemeral": false,
+              "scalar_type": null
+            },
+            "op_code": "assert",
+            "immediates": [],
+            "stack_args": [
+              {
+                "_type": "BytesComparisonExpression",
+                "source_location": {
+                  "file": "tests/approvals/arc4-types.algo.ts",
+                  "line": 27,
+                  "end_line": 27,
+                  "column": 9,
+                  "end_column": 30
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "bool",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 2
+                },
+                "lhs": {
+                  "_type": "ARC4Decode",
+                  "source_location": {
+                    "file": "tests/approvals/arc4-types.algo.ts",
+                    "line": 27,
+                    "end_line": 27,
+                    "column": 9,
+                    "end_column": 18
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "string",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 1
+                  },
+                  "value": {
+                    "_type": "VarExpression",
+                    "source_location": {
+                      "file": "tests/approvals/arc4-types.algo.ts",
+                      "line": 27,
+                      "end_line": 27,
+                      "column": 9,
+                      "end_column": 11
+                    },
+                    "wtype": {
+                      "_type": "ARC4DynamicArray",
+                      "name": "arc4.dynamic_array<arc4.byte>",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 1,
+                      "puya_type_name": "ARC4Type",
+                      "native_type": {
+                        "_type": "WType",
+                        "name": "string",
+                        "immutable": true,
+                        "ephemeral": false,
+                        "scalar_type": 1
+                      },
+                      "arc4_name": "string",
+                      "other_encodeable_types": [],
+                      "element_type": {
+                        "_type": "ARC4UIntN",
+                        "name": "arc4.byte",
+                        "immutable": true,
+                        "ephemeral": false,
+                        "scalar_type": 1,
+                        "puya_type_name": "ARC4Type",
+                        "native_type": {
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true,
+                          "ephemeral": false,
+                          "scalar_type": 2
+                        },
+                        "arc4_name": "byte",
+                        "other_encodeable_types": [
+                          {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true,
+                            "ephemeral": false,
+                            "scalar_type": 2
+                          },
+                          {
+                            "_type": "WType",
+                            "name": "biguint",
+                            "immutable": true,
+                            "ephemeral": false,
+                            "scalar_type": 1
+                          },
+                          {
+                            "_type": "WType",
+                            "name": "bool",
+                            "immutable": true,
+                            "ephemeral": false,
+                            "scalar_type": 2
+                          }
+                        ],
+                        "n": "8"
+                      },
+                      "source_location": null
+                    },
+                    "name": "s2"
+                  }
+                },
+                "operator": "==",
+                "rhs": {
+                  "_type": "StringConstant",
+                  "source_location": {
+                    "file": "tests/approvals/arc4-types.algo.ts",
+                    "line": 27,
+                    "end_line": 27,
+                    "column": 23,
+                    "end_column": 30
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "string",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 1
+                  },
+                  "value": "Hello"
+                }
+              }
+            ],
+            "comment": null
+          }
+        }
+      ],
+      "label": null,
+      "comment": null
+    },
+    "documentation": {
+      "_type": "MethodDocumentation",
+      "description": null,
+      "args": {},
+      "returns": null
+    },
+    "id": "tests/approvals/arc4-types.algo.ts::testStr",
+    "name": "testStr"
+  },
+  {
+    "_type": "Subroutine",
+    "source_location": {
+      "file": "tests/approvals/arc4-types.algo.ts",
+      "line": 33,
+      "end_line": 33,
       "column": 0,
       "end_column": 34
     },
@@ -1603,8 +2452,8 @@
         },
         "source_location": {
           "file": "tests/approvals/arc4-types.algo.ts",
-          "line": 23,
-          "end_line": 23,
+          "line": 33,
+          "end_line": 33,
           "column": 20,
           "end_column": 33
         }
@@ -1621,8 +2470,8 @@
       "_type": "Block",
       "source_location": {
         "file": "tests/approvals/arc4-types.algo.ts",
-        "line": 23,
-        "end_line": 35,
+        "line": 33,
+        "end_line": 45,
         "column": 35,
         "end_column": 1
       },
@@ -1631,8 +2480,8 @@
           "_type": "AssignmentStatement",
           "source_location": {
             "file": "tests/approvals/arc4-types.algo.ts",
-            "line": 24,
-            "end_line": 24,
+            "line": 34,
+            "end_line": 34,
             "column": 8,
             "end_column": 43
           },
@@ -1640,8 +2489,8 @@
             "_type": "VarExpression",
             "source_location": {
               "file": "tests/approvals/arc4-types.algo.ts",
-              "line": 24,
-              "end_line": 24,
+              "line": 34,
+              "end_line": 34,
               "column": 8,
               "end_column": 15
             },
@@ -1703,8 +2552,8 @@
             "_type": "NewArray",
             "source_location": {
               "file": "tests/approvals/arc4-types.algo.ts",
-              "line": 24,
-              "end_line": 24,
+              "line": 34,
+              "end_line": 34,
               "column": 18,
               "end_column": 43
             },
@@ -1760,8 +2609,8 @@
               },
               "source_location": {
                 "file": "tests/approvals/arc4-types.algo.ts",
-                "line": 24,
-                "end_line": 24,
+                "line": 34,
+                "end_line": 34,
                 "column": 18,
                 "end_column": 43
               }
@@ -1771,8 +2620,8 @@
                 "_type": "VarExpression",
                 "source_location": {
                   "file": "tests/approvals/arc4-types.algo.ts",
-                  "line": 24,
-                  "end_line": 24,
+                  "line": 34,
+                  "end_line": 34,
                   "column": 35,
                   "end_column": 36
                 },
@@ -1822,8 +2671,8 @@
                 "_type": "VarExpression",
                 "source_location": {
                   "file": "tests/approvals/arc4-types.algo.ts",
-                  "line": 24,
-                  "end_line": 24,
+                  "line": 34,
+                  "end_line": 34,
                   "column": 38,
                   "end_column": 39
                 },
@@ -1873,8 +2722,8 @@
                 "_type": "VarExpression",
                 "source_location": {
                   "file": "tests/approvals/arc4-types.algo.ts",
-                  "line": 24,
-                  "end_line": 24,
+                  "line": 34,
+                  "end_line": 34,
                   "column": 41,
                   "end_column": 42
                 },
@@ -1927,8 +2776,8 @@
           "_type": "ExpressionStatement",
           "source_location": {
             "file": "tests/approvals/arc4-types.algo.ts",
-            "line": 26,
-            "end_line": 26,
+            "line": 36,
+            "end_line": 36,
             "column": 2,
             "end_column": 17
           },
@@ -1936,8 +2785,8 @@
             "_type": "ArrayExtend",
             "source_location": {
               "file": "tests/approvals/arc4-types.algo.ts",
-              "line": 26,
-              "end_line": 26,
+              "line": 36,
+              "end_line": 36,
               "column": 2,
               "end_column": 17
             },
@@ -1997,8 +2846,8 @@
               "_type": "VarExpression",
               "source_location": {
                 "file": "tests/approvals/arc4-types.algo.ts",
-                "line": 26,
-                "end_line": 26,
+                "line": 36,
+                "end_line": 36,
                 "column": 2,
                 "end_column": 9
               },
@@ -2060,8 +2909,8 @@
               "_type": "TupleExpression",
               "source_location": {
                 "file": "tests/approvals/arc4-types.algo.ts",
-                "line": 26,
-                "end_line": 26,
+                "line": 36,
+                "end_line": 36,
                 "column": 2,
                 "end_column": 17
               },
@@ -2119,8 +2968,8 @@
                   "_type": "VarExpression",
                   "source_location": {
                     "file": "tests/approvals/arc4-types.algo.ts",
-                    "line": 26,
-                    "end_line": 26,
+                    "line": 36,
+                    "end_line": 36,
                     "column": 15,
                     "end_column": 16
                   },
@@ -2174,8 +3023,8 @@
           "_type": "AssignmentStatement",
           "source_location": {
             "file": "tests/approvals/arc4-types.algo.ts",
-            "line": 28,
-            "end_line": 28,
+            "line": 38,
+            "end_line": 38,
             "column": 8,
             "end_column": 40
           },
@@ -2183,8 +3032,8 @@
             "_type": "VarExpression",
             "source_location": {
               "file": "tests/approvals/arc4-types.algo.ts",
-              "line": 28,
-              "end_line": 28,
+              "line": 38,
+              "end_line": 38,
               "column": 8,
               "end_column": 16
             },
@@ -2247,8 +3096,8 @@
             "_type": "NewArray",
             "source_location": {
               "file": "tests/approvals/arc4-types.algo.ts",
-              "line": 28,
-              "end_line": 28,
+              "line": 38,
+              "end_line": 38,
               "column": 19,
               "end_column": 40
             },
@@ -2310,8 +3159,8 @@
                 "_type": "VarExpression",
                 "source_location": {
                   "file": "tests/approvals/arc4-types.algo.ts",
-                  "line": 28,
-                  "end_line": 28,
+                  "line": 38,
+                  "end_line": 38,
                   "column": 35,
                   "end_column": 36
                 },
@@ -2361,8 +3210,8 @@
                 "_type": "VarExpression",
                 "source_location": {
                   "file": "tests/approvals/arc4-types.algo.ts",
-                  "line": 28,
-                  "end_line": 28,
+                  "line": 38,
+                  "end_line": 38,
                   "column": 38,
                   "end_column": 39
                 },
@@ -2415,8 +3264,8 @@
           "_type": "ExpressionStatement",
           "source_location": {
             "file": "tests/approvals/arc4-types.algo.ts",
-            "line": 30,
-            "end_line": 30,
+            "line": 40,
+            "end_line": 40,
             "column": 2,
             "end_column": 43
           },
@@ -2424,8 +3273,8 @@
             "_type": "IntrinsicCall",
             "source_location": {
               "file": "tests/approvals/arc4-types.algo.ts",
-              "line": 30,
-              "end_line": 30,
+              "line": 40,
+              "end_line": 40,
               "column": 2,
               "end_column": 43
             },
@@ -2443,8 +3292,8 @@
                 "_type": "BytesComparisonExpression",
                 "source_location": {
                   "file": "tests/approvals/arc4-types.algo.ts",
-                  "line": 30,
-                  "end_line": 30,
+                  "line": 40,
+                  "end_line": 40,
                   "column": 9,
                   "end_column": 42
                 },
@@ -2459,8 +3308,8 @@
                   "_type": "ReinterpretCast",
                   "source_location": {
                     "file": "tests/approvals/arc4-types.algo.ts",
-                    "line": 30,
-                    "end_line": 30,
+                    "line": 40,
+                    "end_line": 40,
                     "column": 9,
                     "end_column": 42
                   },
@@ -2475,8 +3324,8 @@
                     "_type": "IndexExpression",
                     "source_location": {
                       "file": "tests/approvals/arc4-types.algo.ts",
-                      "line": 30,
-                      "end_line": 30,
+                      "line": 40,
+                      "end_line": 40,
                       "column": 9,
                       "end_column": 20
                     },
@@ -2524,8 +3373,8 @@
                       "_type": "VarExpression",
                       "source_location": {
                         "file": "tests/approvals/arc4-types.algo.ts",
-                        "line": 30,
-                        "end_line": 30,
+                        "line": 40,
+                        "end_line": 40,
                         "column": 9,
                         "end_column": 17
                       },
@@ -2588,8 +3437,8 @@
                       "_type": "IntegerConstant",
                       "source_location": {
                         "file": "tests/approvals/arc4-types.algo.ts",
-                        "line": 30,
-                        "end_line": 30,
+                        "line": 40,
+                        "end_line": 40,
                         "column": 18,
                         "end_column": 19
                       },
@@ -2610,8 +3459,8 @@
                   "_type": "ReinterpretCast",
                   "source_location": {
                     "file": "tests/approvals/arc4-types.algo.ts",
-                    "line": 30,
-                    "end_line": 30,
+                    "line": 40,
+                    "end_line": 40,
                     "column": 9,
                     "end_column": 42
                   },
@@ -2626,8 +3475,8 @@
                     "_type": "ArrayPop",
                     "source_location": {
                       "file": "tests/approvals/arc4-types.algo.ts",
-                      "line": 30,
-                      "end_line": 30,
+                      "line": 40,
+                      "end_line": 40,
                       "column": 28,
                       "end_column": 41
                     },
@@ -2675,8 +3524,8 @@
                       "_type": "VarExpression",
                       "source_location": {
                         "file": "tests/approvals/arc4-types.algo.ts",
-                        "line": 30,
-                        "end_line": 30,
+                        "line": 40,
+                        "end_line": 40,
                         "column": 28,
                         "end_column": 35
                       },
@@ -2745,8 +3594,8 @@
           "_type": "AssignmentStatement",
           "source_location": {
             "file": "tests/approvals/arc4-types.algo.ts",
-            "line": 32,
-            "end_line": 32,
+            "line": 42,
+            "end_line": 42,
             "column": 2,
             "end_column": 33
           },
@@ -2754,8 +3603,8 @@
             "_type": "IndexExpression",
             "source_location": {
               "file": "tests/approvals/arc4-types.algo.ts",
-              "line": 32,
-              "end_line": 32,
+              "line": 42,
+              "end_line": 42,
               "column": 2,
               "end_column": 13
             },
@@ -2803,8 +3652,8 @@
               "_type": "VarExpression",
               "source_location": {
                 "file": "tests/approvals/arc4-types.algo.ts",
-                "line": 32,
-                "end_line": 32,
+                "line": 42,
+                "end_line": 42,
                 "column": 2,
                 "end_column": 10
               },
@@ -2867,8 +3716,8 @@
               "_type": "IntegerConstant",
               "source_location": {
                 "file": "tests/approvals/arc4-types.algo.ts",
-                "line": 32,
-                "end_line": 32,
+                "line": 42,
+                "end_line": 42,
                 "column": 11,
                 "end_column": 12
               },
@@ -2887,8 +3736,8 @@
             "_type": "IntegerConstant",
             "source_location": {
               "file": "tests/approvals/arc4-types.algo.ts",
-              "line": 32,
-              "end_line": 32,
+              "line": 42,
+              "end_line": 42,
               "column": 16,
               "end_column": 33
             },
@@ -2953,8 +3802,8 @@
     "_type": "Subroutine",
     "source_location": {
       "file": "tests/approvals/arc4-types.algo.ts",
-      "line": 37,
-      "end_line": 37,
+      "line": 47,
+      "end_line": 47,
       "column": 0,
       "end_column": 19
     },
@@ -2970,8 +3819,8 @@
       "_type": "Block",
       "source_location": {
         "file": "tests/approvals/arc4-types.algo.ts",
-        "line": 37,
-        "end_line": 41,
+        "line": 47,
+        "end_line": 51,
         "column": 20,
         "end_column": 1
       },
@@ -2980,8 +3829,8 @@
           "_type": "AssignmentStatement",
           "source_location": {
             "file": "tests/approvals/arc4-types.algo.ts",
-            "line": 38,
-            "end_line": 38,
+            "line": 48,
+            "end_line": 48,
             "column": 8,
             "end_column": 22
           },
@@ -2989,8 +3838,8 @@
             "_type": "VarExpression",
             "source_location": {
               "file": "tests/approvals/arc4-types.algo.ts",
-              "line": 38,
-              "end_line": 38,
+              "line": 48,
+              "end_line": 48,
               "column": 8,
               "end_column": 9
             },
@@ -3040,8 +3889,8 @@
             "_type": "IntegerConstant",
             "source_location": {
               "file": "tests/approvals/arc4-types.algo.ts",
-              "line": 38,
-              "end_line": 38,
+              "line": 48,
+              "end_line": 48,
               "column": 12,
               "end_column": 22
             },
@@ -3093,8 +3942,8 @@
           "_type": "AssignmentStatement",
           "source_location": {
             "file": "tests/approvals/arc4-types.algo.ts",
-            "line": 39,
-            "end_line": 39,
+            "line": 49,
+            "end_line": 49,
             "column": 8,
             "end_column": 24
           },
@@ -3102,8 +3951,8 @@
             "_type": "VarExpression",
             "source_location": {
               "file": "tests/approvals/arc4-types.algo.ts",
-              "line": 39,
-              "end_line": 39,
+              "line": 49,
+              "end_line": 49,
               "column": 8,
               "end_column": 10
             },
@@ -3153,8 +4002,8 @@
             "_type": "IntegerConstant",
             "source_location": {
               "file": "tests/approvals/arc4-types.algo.ts",
-              "line": 39,
-              "end_line": 39,
+              "line": 49,
+              "end_line": 49,
               "column": 13,
               "end_column": 24
             },
@@ -3206,8 +4055,8 @@
           "_type": "ExpressionStatement",
           "source_location": {
             "file": "tests/approvals/arc4-types.algo.ts",
-            "line": 40,
-            "end_line": 40,
+            "line": 50,
+            "end_line": 50,
             "column": 2,
             "end_column": 22
           },
@@ -3215,8 +4064,8 @@
             "_type": "IntrinsicCall",
             "source_location": {
               "file": "tests/approvals/arc4-types.algo.ts",
-              "line": 40,
-              "end_line": 40,
+              "line": 50,
+              "end_line": 50,
               "column": 2,
               "end_column": 22
             },
@@ -3234,8 +4083,8 @@
                 "_type": "BytesComparisonExpression",
                 "source_location": {
                   "file": "tests/approvals/arc4-types.algo.ts",
-                  "line": 40,
-                  "end_line": 40,
+                  "line": 50,
+                  "end_line": 50,
                   "column": 9,
                   "end_column": 21
                 },
@@ -3250,8 +4099,8 @@
                   "_type": "ReinterpretCast",
                   "source_location": {
                     "file": "tests/approvals/arc4-types.algo.ts",
-                    "line": 40,
-                    "end_line": 40,
+                    "line": 50,
+                    "end_line": 50,
                     "column": 9,
                     "end_column": 21
                   },
@@ -3266,8 +4115,8 @@
                     "_type": "VarExpression",
                     "source_location": {
                       "file": "tests/approvals/arc4-types.algo.ts",
-                      "line": 40,
-                      "end_line": 40,
+                      "line": 50,
+                      "end_line": 50,
                       "column": 9,
                       "end_column": 10
                     },
@@ -3319,8 +4168,8 @@
                   "_type": "ReinterpretCast",
                   "source_location": {
                     "file": "tests/approvals/arc4-types.algo.ts",
-                    "line": 40,
-                    "end_line": 40,
+                    "line": 50,
+                    "end_line": 50,
                     "column": 9,
                     "end_column": 21
                   },
@@ -3335,8 +4184,8 @@
                     "_type": "VarExpression",
                     "source_location": {
                       "file": "tests/approvals/arc4-types.algo.ts",
-                      "line": 40,
-                      "end_line": 40,
+                      "line": 50,
+                      "end_line": 50,
                       "column": 18,
                       "end_column": 20
                     },
@@ -3405,8 +4254,8 @@
     "_type": "Subroutine",
     "source_location": {
       "file": "tests/approvals/arc4-types.algo.ts",
-      "line": 43,
-      "end_line": 43,
+      "line": 53,
+      "end_line": 53,
       "column": 0,
       "end_column": 22
     },
@@ -3422,8 +4271,8 @@
       "_type": "Block",
       "source_location": {
         "file": "tests/approvals/arc4-types.algo.ts",
-        "line": 43,
-        "end_line": 50,
+        "line": 53,
+        "end_line": 60,
         "column": 23,
         "end_column": 1
       },
@@ -3432,8 +4281,8 @@
           "_type": "AssignmentStatement",
           "source_location": {
             "file": "tests/approvals/arc4-types.algo.ts",
-            "line": 44,
-            "end_line": 44,
+            "line": 54,
+            "end_line": 54,
             "column": 8,
             "end_column": 25
           },
@@ -3441,8 +4290,8 @@
             "_type": "VarExpression",
             "source_location": {
               "file": "tests/approvals/arc4-types.algo.ts",
-              "line": 44,
-              "end_line": 44,
+              "line": 54,
+              "end_line": 54,
               "column": 8,
               "end_column": 9
             },
@@ -3511,8 +4360,8 @@
             "_type": "AddressConstant",
             "source_location": {
               "file": "tests/approvals/arc4-types.algo.ts",
-              "line": 44,
-              "end_line": 44,
+              "line": 54,
+              "end_line": 54,
               "column": 12,
               "end_column": 25
             },
@@ -3582,8 +4431,8 @@
           "_type": "AssignmentStatement",
           "source_location": {
             "file": "tests/approvals/arc4-types.algo.ts",
-            "line": 45,
-            "end_line": 45,
+            "line": 55,
+            "end_line": 55,
             "column": 8,
             "end_column": 35
           },
@@ -3591,8 +4440,8 @@
             "_type": "VarExpression",
             "source_location": {
               "file": "tests/approvals/arc4-types.algo.ts",
-              "line": 45,
-              "end_line": 45,
+              "line": 55,
+              "end_line": 55,
               "column": 8,
               "end_column": 9
             },
@@ -3661,8 +4510,8 @@
             "_type": "ReinterpretCast",
             "source_location": {
               "file": "tests/approvals/arc4-types.algo.ts",
-              "line": 45,
-              "end_line": 45,
+              "line": 55,
+              "end_line": 55,
               "column": 12,
               "end_column": 35
             },
@@ -3729,8 +4578,8 @@
               "_type": "IntrinsicCall",
               "source_location": {
                 "file": "tests/approvals/arc4-types.algo.ts",
-                "line": 45,
-                "end_line": 45,
+                "line": 55,
+                "end_line": 55,
                 "column": 24,
                 "end_column": 34
               },
@@ -3754,8 +4603,8 @@
           "_type": "ExpressionStatement",
           "source_location": {
             "file": "tests/approvals/arc4-types.algo.ts",
-            "line": 47,
-            "end_line": 47,
+            "line": 57,
+            "end_line": 57,
             "column": 2,
             "end_column": 62
           },
@@ -3763,8 +4612,8 @@
             "_type": "IntrinsicCall",
             "source_location": {
               "file": "tests/approvals/arc4-types.algo.ts",
-              "line": 47,
-              "end_line": 47,
+              "line": 57,
+              "end_line": 57,
               "column": 2,
               "end_column": 62
             },
@@ -3782,8 +4631,8 @@
                 "_type": "Not",
                 "source_location": {
                   "file": "tests/approvals/arc4-types.algo.ts",
-                  "line": 47,
-                  "end_line": 47,
+                  "line": 57,
+                  "end_line": 57,
                   "column": 9,
                   "end_column": 21
                 },
@@ -3798,8 +4647,8 @@
                   "_type": "BytesComparisonExpression",
                   "source_location": {
                     "file": "tests/approvals/arc4-types.algo.ts",
-                    "line": 47,
-                    "end_line": 47,
+                    "line": 57,
+                    "end_line": 57,
                     "column": 10,
                     "end_column": 21
                   },
@@ -3814,8 +4663,8 @@
                     "_type": "ReinterpretCast",
                     "source_location": {
                       "file": "tests/approvals/arc4-types.algo.ts",
-                      "line": 47,
-                      "end_line": 47,
+                      "line": 57,
+                      "end_line": 57,
                       "column": 10,
                       "end_column": 21
                     },
@@ -3830,8 +4679,8 @@
                       "_type": "VarExpression",
                       "source_location": {
                         "file": "tests/approvals/arc4-types.algo.ts",
-                        "line": 47,
-                        "end_line": 47,
+                        "line": 57,
+                        "end_line": 57,
                         "column": 10,
                         "end_column": 11
                       },
@@ -3902,8 +4751,8 @@
                     "_type": "ReinterpretCast",
                     "source_location": {
                       "file": "tests/approvals/arc4-types.algo.ts",
-                      "line": 47,
-                      "end_line": 47,
+                      "line": 57,
+                      "end_line": 57,
                       "column": 10,
                       "end_column": 21
                     },
@@ -3918,8 +4767,8 @@
                       "_type": "VarExpression",
                       "source_location": {
                         "file": "tests/approvals/arc4-types.algo.ts",
-                        "line": 47,
-                        "end_line": 47,
+                        "line": 57,
+                        "end_line": 57,
                         "column": 19,
                         "end_column": 20
                       },
@@ -3995,8 +4844,8 @@
           "_type": "ExpressionStatement",
           "source_location": {
             "file": "tests/approvals/arc4-types.algo.ts",
-            "line": 48,
-            "end_line": 48,
+            "line": 58,
+            "end_line": 58,
             "column": 2,
             "end_column": 68
           },
@@ -4004,8 +4853,8 @@
             "_type": "IntrinsicCall",
             "source_location": {
               "file": "tests/approvals/arc4-types.algo.ts",
-              "line": 48,
-              "end_line": 48,
+              "line": 58,
+              "end_line": 58,
               "column": 2,
               "end_column": 68
             },
@@ -4023,8 +4872,8 @@
                 "_type": "BytesComparisonExpression",
                 "source_location": {
                   "file": "tests/approvals/arc4-types.algo.ts",
-                  "line": 48,
-                  "end_line": 48,
+                  "line": 58,
+                  "end_line": 58,
                   "column": 9,
                   "end_column": 32
                 },
@@ -4039,8 +4888,8 @@
                   "_type": "ReinterpretCast",
                   "source_location": {
                     "file": "tests/approvals/arc4-types.algo.ts",
-                    "line": 48,
-                    "end_line": 48,
+                    "line": 58,
+                    "end_line": 58,
                     "column": 9,
                     "end_column": 32
                   },
@@ -4055,8 +4904,8 @@
                     "_type": "VarExpression",
                     "source_location": {
                       "file": "tests/approvals/arc4-types.algo.ts",
-                      "line": 48,
-                      "end_line": 48,
+                      "line": 58,
+                      "end_line": 58,
                       "column": 9,
                       "end_column": 10
                     },
@@ -4127,8 +4976,8 @@
                   "_type": "ReinterpretCast",
                   "source_location": {
                     "file": "tests/approvals/arc4-types.algo.ts",
-                    "line": 48,
-                    "end_line": 48,
+                    "line": 58,
+                    "end_line": 58,
                     "column": 9,
                     "end_column": 32
                   },
@@ -4143,8 +4992,8 @@
                     "_type": "AddressConstant",
                     "source_location": {
                       "file": "tests/approvals/arc4-types.algo.ts",
-                      "line": 48,
-                      "end_line": 48,
+                      "line": 58,
+                      "end_line": 58,
                       "column": 18,
                       "end_column": 31
                     },
@@ -4219,8 +5068,8 @@
           "_type": "ExpressionStatement",
           "source_location": {
             "file": "tests/approvals/arc4-types.algo.ts",
-            "line": 49,
-            "end_line": 49,
+            "line": 59,
+            "end_line": 59,
             "column": 2,
             "end_column": 77
           },
@@ -4228,8 +5077,8 @@
             "_type": "IntrinsicCall",
             "source_location": {
               "file": "tests/approvals/arc4-types.algo.ts",
-              "line": 49,
-              "end_line": 49,
+              "line": 59,
+              "end_line": 59,
               "column": 2,
               "end_column": 77
             },
@@ -4247,8 +5096,8 @@
                 "_type": "BytesComparisonExpression",
                 "source_location": {
                   "file": "tests/approvals/arc4-types.algo.ts",
-                  "line": 49,
-                  "end_line": 49,
+                  "line": 59,
+                  "end_line": 59,
                   "column": 9,
                   "end_column": 32
                 },
@@ -4263,8 +5112,8 @@
                   "_type": "ReinterpretCast",
                   "source_location": {
                     "file": "tests/approvals/arc4-types.algo.ts",
-                    "line": 49,
-                    "end_line": 49,
+                    "line": 59,
+                    "end_line": 59,
                     "column": 9,
                     "end_column": 32
                   },
@@ -4279,8 +5128,8 @@
                     "_type": "IndexExpression",
                     "source_location": {
                       "file": "tests/approvals/arc4-types.algo.ts",
-                      "line": 49,
-                      "end_line": 49,
+                      "line": 59,
+                      "end_line": 59,
                       "column": 9,
                       "end_column": 13
                     },
@@ -4328,8 +5177,8 @@
                       "_type": "VarExpression",
                       "source_location": {
                         "file": "tests/approvals/arc4-types.algo.ts",
-                        "line": 49,
-                        "end_line": 49,
+                        "line": 59,
+                        "end_line": 59,
                         "column": 9,
                         "end_column": 10
                       },
@@ -4398,8 +5247,8 @@
                       "_type": "IntegerConstant",
                       "source_location": {
                         "file": "tests/approvals/arc4-types.algo.ts",
-                        "line": 49,
-                        "end_line": 49,
+                        "line": 59,
+                        "end_line": 59,
                         "column": 11,
                         "end_column": 12
                       },
@@ -4420,8 +5269,8 @@
                   "_type": "ReinterpretCast",
                   "source_location": {
                     "file": "tests/approvals/arc4-types.algo.ts",
-                    "line": 49,
-                    "end_line": 49,
+                    "line": 59,
+                    "end_line": 59,
                     "column": 9,
                     "end_column": 32
                   },
@@ -4436,8 +5285,8 @@
                     "_type": "IntegerConstant",
                     "source_location": {
                       "file": "tests/approvals/arc4-types.algo.ts",
-                      "line": 49,
-                      "end_line": 49,
+                      "line": 59,
+                      "end_line": 59,
                       "column": 21,
                       "end_column": 31
                     },
@@ -4507,8 +5356,8 @@
     "_type": "Contract",
     "source_location": {
       "file": "tests/approvals/arc4-types.algo.ts",
-      "line": 52,
-      "end_line": 52,
+      "line": 67,
+      "end_line": 67,
       "column": 0,
       "end_column": 57
     },
@@ -4522,8 +5371,8 @@
       "_type": "ContractMethod",
       "source_location": {
         "file": "tests/approvals/arc4-types.algo.ts",
-        "line": 57,
-        "end_line": 57,
+        "line": 72,
+        "end_line": 72,
         "column": 2,
         "end_column": 35
       },
@@ -4671,18 +5520,163 @@
             "_type": "Block",
             "source_location": {
               "file": "tests/approvals/arc4-types.algo.ts",
-              "line": 57,
-              "end_line": 64,
+              "line": 72,
+              "end_line": 81,
               "column": 36,
               "end_column": 3
             },
             "body": [
               {
+                "_type": "AssignmentStatement",
+                "source_location": {
+                  "file": "tests/approvals/arc4-types.algo.ts",
+                  "line": 73,
+                  "end_line": 73,
+                  "column": 10,
+                  "end_column": 30
+                },
+                "target": {
+                  "_type": "VarExpression",
+                  "source_location": {
+                    "file": "tests/approvals/arc4-types.algo.ts",
+                    "line": 73,
+                    "end_line": 73,
+                    "column": 10,
+                    "end_column": 11
+                  },
+                  "wtype": {
+                    "_type": "ARC4UIntN",
+                    "name": "arc4.uint64",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 1,
+                    "puya_type_name": "ARC4Type",
+                    "native_type": {
+                      "_type": "WType",
+                      "name": "uint64",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 2
+                    },
+                    "arc4_name": "uint64",
+                    "other_encodeable_types": [
+                      {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true,
+                        "ephemeral": false,
+                        "scalar_type": 2
+                      },
+                      {
+                        "_type": "WType",
+                        "name": "biguint",
+                        "immutable": true,
+                        "ephemeral": false,
+                        "scalar_type": 1
+                      },
+                      {
+                        "_type": "WType",
+                        "name": "bool",
+                        "immutable": true,
+                        "ephemeral": false,
+                        "scalar_type": 2
+                      }
+                    ],
+                    "n": "64"
+                  },
+                  "name": "x"
+                },
+                "value": {
+                  "_type": "IntegerConstant",
+                  "source_location": {
+                    "file": "tests/approvals/arc4-types.algo.ts",
+                    "line": 73,
+                    "end_line": 73,
+                    "column": 14,
+                    "end_column": 30
+                  },
+                  "wtype": {
+                    "_type": "ARC4UIntN",
+                    "name": "arc4.uint64",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 1,
+                    "puya_type_name": "ARC4Type",
+                    "native_type": {
+                      "_type": "WType",
+                      "name": "uint64",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 2
+                    },
+                    "arc4_name": "uint64",
+                    "other_encodeable_types": [
+                      {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true,
+                        "ephemeral": false,
+                        "scalar_type": 2
+                      },
+                      {
+                        "_type": "WType",
+                        "name": "biguint",
+                        "immutable": true,
+                        "ephemeral": false,
+                        "scalar_type": 1
+                      },
+                      {
+                        "_type": "WType",
+                        "name": "bool",
+                        "immutable": true,
+                        "ephemeral": false,
+                        "scalar_type": 2
+                      }
+                    ],
+                    "n": "64"
+                  },
+                  "value": "0",
+                  "teal_alias": null
+                }
+              },
+              {
                 "_type": "ExpressionStatement",
                 "source_location": {
                   "file": "tests/approvals/arc4-types.algo.ts",
-                  "line": 58,
-                  "end_line": 58,
+                  "line": 74,
+                  "end_line": 74,
+                  "column": 4,
+                  "end_column": 13
+                },
+                "expr": {
+                  "_type": "SubroutineCallExpression",
+                  "source_location": {
+                    "file": "tests/approvals/arc4-types.algo.ts",
+                    "line": 74,
+                    "end_line": 74,
+                    "column": 4,
+                    "end_column": 13
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "void",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": null
+                  },
+                  "target": {
+                    "_type": "SubroutineID",
+                    "target": "tests/approvals/arc4-types.algo.ts::testStr"
+                  },
+                  "args": []
+                }
+              },
+              {
+                "_type": "ExpressionStatement",
+                "source_location": {
+                  "file": "tests/approvals/arc4-types.algo.ts",
+                  "line": 75,
+                  "end_line": 75,
                   "column": 4,
                   "end_column": 34
                 },
@@ -4690,8 +5684,8 @@
                   "_type": "SubroutineCallExpression",
                   "source_location": {
                     "file": "tests/approvals/arc4-types.algo.ts",
-                    "line": 58,
-                    "end_line": 58,
+                    "line": 75,
+                    "end_line": 75,
                     "column": 4,
                     "end_column": 34
                   },
@@ -4714,8 +5708,8 @@
                         "_type": "IntegerConstant",
                         "source_location": {
                           "file": "tests/approvals/arc4-types.algo.ts",
-                          "line": 58,
-                          "end_line": 58,
+                          "line": 75,
+                          "end_line": 75,
                           "column": 9,
                           "end_column": 10
                         },
@@ -4737,8 +5731,8 @@
                         "_type": "IntegerConstant",
                         "source_location": {
                           "file": "tests/approvals/arc4-types.algo.ts",
-                          "line": 58,
-                          "end_line": 58,
+                          "line": 75,
+                          "end_line": 75,
                           "column": 12,
                           "end_column": 14
                         },
@@ -4760,8 +5754,8 @@
                         "_type": "IntegerConstant",
                         "source_location": {
                           "file": "tests/approvals/arc4-types.algo.ts",
-                          "line": 58,
-                          "end_line": 58,
+                          "line": 75,
+                          "end_line": 75,
                           "column": 16,
                           "end_column": 33
                         },
@@ -4816,8 +5810,8 @@
                 "_type": "ExpressionStatement",
                 "source_location": {
                   "file": "tests/approvals/arc4-types.algo.ts",
-                  "line": 59,
-                  "end_line": 59,
+                  "line": 76,
+                  "end_line": 76,
                   "column": 4,
                   "end_column": 14
                 },
@@ -4825,8 +5819,8 @@
                   "_type": "SubroutineCallExpression",
                   "source_location": {
                     "file": "tests/approvals/arc4-types.algo.ts",
-                    "line": 59,
-                    "end_line": 59,
+                    "line": 76,
+                    "end_line": 76,
                     "column": 4,
                     "end_column": 14
                   },
@@ -4848,8 +5842,8 @@
                 "_type": "ExpressionStatement",
                 "source_location": {
                   "file": "tests/approvals/arc4-types.algo.ts",
-                  "line": 60,
-                  "end_line": 60,
+                  "line": 77,
+                  "end_line": 77,
                   "column": 4,
                   "end_column": 33
                 },
@@ -4857,8 +5851,8 @@
                   "_type": "SubroutineCallExpression",
                   "source_location": {
                     "file": "tests/approvals/arc4-types.algo.ts",
-                    "line": 60,
-                    "end_line": 60,
+                    "line": 77,
+                    "end_line": 77,
                     "column": 4,
                     "end_column": 33
                   },
@@ -4881,8 +5875,8 @@
                         "_type": "IntegerConstant",
                         "source_location": {
                           "file": "tests/approvals/arc4-types.algo.ts",
-                          "line": 60,
-                          "end_line": 60,
+                          "line": 77,
+                          "end_line": 77,
                           "column": 15,
                           "end_column": 32
                         },
@@ -4937,8 +5931,8 @@
                 "_type": "ExpressionStatement",
                 "source_location": {
                   "file": "tests/approvals/arc4-types.algo.ts",
-                  "line": 61,
-                  "end_line": 61,
+                  "line": 78,
+                  "end_line": 78,
                   "column": 4,
                   "end_column": 17
                 },
@@ -4946,8 +5940,8 @@
                   "_type": "SubroutineCallExpression",
                   "source_location": {
                     "file": "tests/approvals/arc4-types.algo.ts",
-                    "line": 61,
-                    "end_line": 61,
+                    "line": 78,
+                    "end_line": 78,
                     "column": 4,
                     "end_column": 17
                   },
@@ -4969,8 +5963,8 @@
                 "_type": "ReturnStatement",
                 "source_location": {
                   "file": "tests/approvals/arc4-types.algo.ts",
-                  "line": 63,
-                  "end_line": 63,
+                  "line": 80,
+                  "end_line": 80,
                   "column": 4,
                   "end_column": 15
                 },
@@ -4978,8 +5972,8 @@
                   "_type": "BoolConstant",
                   "source_location": {
                     "file": "tests/approvals/arc4-types.algo.ts",
-                    "line": 63,
-                    "end_line": 63,
+                    "line": 80,
+                    "end_line": 80,
                     "column": 11,
                     "end_column": 15
                   },
@@ -5089,8 +6083,8 @@
         "_type": "ContractMethod",
         "source_location": {
           "file": "tests/approvals/arc4-types.algo.ts",
-          "line": 53,
-          "end_line": 53,
+          "line": 68,
+          "end_line": 68,
           "column": 2,
           "end_column": 51
         },
@@ -5247,8 +6241,8 @@
           "_type": "Block",
           "source_location": {
             "file": "tests/approvals/arc4-types.algo.ts",
-            "line": 53,
-            "end_line": 55,
+            "line": 68,
+            "end_line": 70,
             "column": 52,
             "end_column": 3
           },
@@ -5257,8 +6251,8 @@
               "_type": "ReturnStatement",
               "source_location": {
                 "file": "tests/approvals/arc4-types.algo.ts",
-                "line": 54,
-                "end_line": 54,
+                "line": 69,
+                "end_line": 69,
                 "column": 4,
                 "end_column": 54
               },
@@ -5266,8 +6260,8 @@
                 "_type": "TupleExpression",
                 "source_location": {
                   "file": "tests/approvals/arc4-types.algo.ts",
-                  "line": 54,
-                  "end_line": 54,
+                  "line": 69,
+                  "end_line": 69,
                   "column": 11,
                   "end_column": 54
                 },
@@ -5424,8 +6418,8 @@
                     "_type": "IntegerConstant",
                     "source_location": {
                       "file": "tests/approvals/arc4-types.algo.ts",
-                      "line": 54,
-                      "end_line": 54,
+                      "line": 69,
+                      "end_line": 69,
                       "column": 12,
                       "end_column": 22
                     },
@@ -5476,8 +6470,8 @@
                     "_type": "IntegerConstant",
                     "source_location": {
                       "file": "tests/approvals/arc4-types.algo.ts",
-                      "line": 54,
-                      "end_line": 54,
+                      "line": 69,
+                      "end_line": 69,
                       "column": 24,
                       "end_column": 38
                     },
@@ -5528,8 +6522,8 @@
                     "_type": "AddressConstant",
                     "source_location": {
                       "file": "tests/approvals/arc4-types.algo.ts",
-                      "line": 54,
-                      "end_line": 54,
+                      "line": 69,
+                      "end_line": 69,
                       "column": 40,
                       "end_column": 53
                     },
@@ -5615,8 +6609,8 @@
         "_type": "ContractMethod",
         "source_location": {
           "file": "tests/approvals/arc4-types.algo.ts",
-          "line": 52,
-          "end_line": 52,
+          "line": 67,
+          "end_line": 67,
           "column": 0,
           "end_column": 57
         },
@@ -5632,8 +6626,8 @@
           "_type": "Block",
           "source_location": {
             "file": "tests/approvals/arc4-types.algo.ts",
-            "line": 52,
-            "end_line": 52,
+            "line": 67,
+            "end_line": 67,
             "column": 0,
             "end_column": 57
           },
@@ -5642,8 +6636,8 @@
               "_type": "ExpressionStatement",
               "source_location": {
                 "file": "tests/approvals/arc4-types.algo.ts",
-                "line": 52,
-                "end_line": 52,
+                "line": 67,
+                "end_line": 67,
                 "column": 0,
                 "end_column": 57
               },
@@ -5651,8 +6645,8 @@
                 "_type": "VoidConstant",
                 "source_location": {
                   "file": "tests/approvals/arc4-types.algo.ts",
-                  "line": 52,
-                  "end_line": 52,
+                  "line": 67,
+                  "end_line": 67,
                   "column": 0,
                   "end_column": 57
                 },
