@@ -90,8 +90,7 @@ export class SourceFileVisitor extends BaseVisitor implements Visitor<ModuleStat
       }
 
       const value = requireConstantOfType(initializerBuilder, ptype, 'Module level assignments must be compile time constants')
-      const constantName = this.context.resolveVariableName(dec.name)
-      this.context.addConstant(constantName, value)
+      this.context.addConstant(dec.name, value)
 
       return []
     })

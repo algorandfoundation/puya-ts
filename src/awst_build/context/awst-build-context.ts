@@ -4,9 +4,9 @@ import type { ContractReference, LogicSigReference } from '../../awst/models'
 import { nodeFactory } from '../../awst/node-factory'
 import type { AppStorageDefinition, Constant } from '../../awst/nodes'
 import { SourceLocation } from '../../awst/source-location'
-import { CodeError } from '../../errors'
 import { logger } from '../../logger'
-import { codeInvariant, invariant } from '../../util'
+import { invariant } from '../../util'
+import { ConstantStore } from '../constant-store'
 import type { AppStorageDeclaration } from '../contract-data'
 import type { NodeBuilder } from '../eb'
 import type { Index, LogicSig } from '../models'
@@ -64,10 +64,10 @@ export interface AwstBuildContext {
 
   /**
    * Add a named constant to the current context
-   * @param name The unique name of the constant declaration in this source file
+   * @param identifier The identifier of the constant declaration in this source file
    * @param value The compile time constant value
    */
-  addConstant(name: string, value: awst.Constant): void
+  addConstant(identifier: ts.Identifier, value: awst.Constant): void
 
   /**
    * Retrieve the evaluation context
@@ -108,7 +108,7 @@ class AwstBuildContextImpl implements AwstBuildContext {
   readonly #compilationSet: CompilationSet
   private constructor(
     public readonly program: ts.Program,
-    private readonly constants: Map<string, awst.Constant>,
+    private readonly constants: ConstantStore,
     private readonly nameResolver: UniqueNameResolver,
     private readonly storageDeclarations: Map<string, Map<string, AppStorageDeclaration>>,
     compilationSet: CompilationSet,
@@ -119,21 +119,17 @@ class AwstBuildContextImpl implements AwstBuildContext {
   }
 
   static forProgram(program: ts.Program): AwstBuildContext {
-    return new AwstBuildContextImpl(program, new Map(), new UniqueNameResolver(), new Map(), new CompilationSet())
+    return new AwstBuildContextImpl(program, new ConstantStore(program), new UniqueNameResolver(), new Map(), new CompilationSet())
   }
 
-  addConstant(name: string, value: Constant) {
-    if (this.constants.has(name)) {
-      logger.error(new CodeError(`Duplicate definitions found for constant ${name}`, { sourceLocation: value.sourceLocation }))
-      return
-    }
-    this.constants.set(name, value)
+  addConstant(identifier: ts.Identifier, value: Constant) {
+    this.constants.addConstant(identifier, value, this.getSourceLocation(identifier))
   }
 
   createChildContext(): AwstBuildContext {
     return new AwstBuildContextImpl(
       this.program,
-      new Map(this.constants),
+      this.constants,
       this.nameResolver.createChild(),
       this.storageDeclarations,
       this.#compilationSet,
@@ -149,7 +145,6 @@ class AwstBuildContextImpl implements AwstBuildContext {
     return this.nameResolver.resolveUniqueName('_', undefined)
   }
   resolveVariableName(node: ts.Identifier) {
-    codeInvariant(ts.isIdentifier(node), 'Only basic identifiers supported for now')
     const symbol = this.typeChecker.resolveName(node.text, node, ts.SymbolFlags.All, false)
     invariant(symbol, 'There must be a symbol for an identifier node')
     return this.nameResolver.resolveUniqueName(node.text, symbol)
@@ -170,15 +165,14 @@ class AwstBuildContextImpl implements AwstBuildContext {
   getBuilderForNode(node: ts.Identifier): NodeBuilder {
     const sourceLocation = this.getSourceLocation(node)
     const ptype = this.typeResolver.resolve(node, sourceLocation)
-
     if (ptype.singleton) {
       return typeRegistry.getSingletonEb(ptype, sourceLocation)
     }
-    const variableName = this.resolveVariableName(node)
-    const constantValue = this.constants.get(variableName)
+    const constantValue = this.constants.tryResolveConstant(node)
     if (constantValue) {
       return typeRegistry.getInstanceEb(constantValue, ptype)
     }
+    const variableName = this.resolveVariableName(node)
     return typeRegistry.getInstanceEb(
       nodeFactory.varExpression({
         sourceLocation,

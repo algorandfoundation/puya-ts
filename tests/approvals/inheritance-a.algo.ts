@@ -18,3 +18,5 @@ export abstract class Arc4Contract extends Contract {
     return a + b
   }
 }
+
+export const VERY_IMPORTANT_VALUE = '42'

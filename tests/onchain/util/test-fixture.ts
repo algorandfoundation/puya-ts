@@ -52,15 +52,15 @@ function createLazyCompiler(path: string) {
 }
 type ProgramInvokeOptions = {
   appId?: bigint
-  onComplete:
+  onComplete?:
     | OnApplicationComplete.NoOpOC
     | OnApplicationComplete.OptInOC
     | OnApplicationComplete.CloseOutOC
     | OnApplicationComplete.ClearStateOC
     | OnApplicationComplete.UpdateApplicationOC
     | OnApplicationComplete.DeleteApplicationOC
-  senderAddr: string
-  args: Uint8Array[]
+  senderAddr?: string
+  args?: Uint8Array[]
 }
 
 type ProgramInvoker = {
