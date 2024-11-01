@@ -10,7 +10,8 @@ contract ConcreteSimpleContract
     }
     a: uint64 = btoi(txnas<ApplicationArgs>(0))
     b: uint64 = btoi(txnas<ApplicationArgs>(1))
-    return this.simpleMethod(a, b)
+    log(itob(this.simpleMethod(a, b)))
+    return 1
   }
   
   clearProgram(): bool
@@ -55,6 +56,11 @@ contract ConcreteArc4Contract
   clearProgram(): bool
   {
     return True
+  }
+  
+  getVeryImportantValue(): string
+  {
+    return "42"
   }
   
   constructor(): void
