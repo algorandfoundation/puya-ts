@@ -1,9 +1,9 @@
-import ts from 'typescript'
+import ts, { ObjectFlags } from 'typescript'
 import { SourceLocation } from '../awst/source-location'
 import { Constants } from '../constants'
 import { CodeError, InternalError } from '../errors'
 import { logger } from '../logger'
-import { codeInvariant, hasFlags, intersectsFlags, invariant, normalisePath } from '../util'
+import { codeInvariant, hasFlags, intersectsFlags, invariant, isIn, normalisePath } from '../util'
 import type { AppStorageType, PType } from './ptypes'
 import {
   anyPType,
@@ -36,6 +36,7 @@ import {
   unknownPType,
   voidPType,
 } from './ptypes'
+import { ARC4EncodedType, arc4StructBaseType, ARC4StructClass, ARC4StructType } from './ptypes/arc4-types'
 import { SymbolName } from './symbol-name'
 import { typeRegistry } from './type-registry'
 
@@ -120,6 +121,13 @@ export class TypeResolver {
   }
 
   resolveType(tsType: ts.Type, sourceLocation: SourceLocation): PType {
+    if (isIntersectionType(tsType)) {
+      // Special handling of struct base types which are an intersection of `StructBase` and the generic `T` type
+      const parts = tsType.types.map((t) => this.resolveType(t, sourceLocation))
+      if (parts.some((p) => p.fullName === arc4StructBaseType.fullName)) {
+        return arc4StructBaseType
+      }
+    }
     if (isUnionType(tsType)) {
       return UnionPType.fromTypes(tsType.types.map((t) => this.resolveType(t, sourceLocation)))
     }
@@ -169,9 +177,9 @@ export class TypeResolver {
         items: tsType.typeArguments.map((t) => this.resolveType(t, sourceLocation)),
       })
     }
-    const constructSignatures = tsType.getConstructSignatures()
-    if (constructSignatures.length) {
-      return this.reflectConstructorType(constructSignatures, sourceLocation)
+    if (isInstantiationExpression(tsType)) {
+      // TODO: We have generic type args available here but maybe they're not required
+      return this.resolve(tsType.node.expression, sourceLocation)
     }
 
     const typeName = this.getTypeName(tsType, sourceLocation)
@@ -198,15 +206,23 @@ export class TypeResolver {
     if (typeName.fullName === BooleanFunction.fullName) return BooleanFunction
     if (typeName.fullName === ClassMethodDecoratorContext.fullName) return ClassMethodDecoratorContext
 
+    if (tsType.getConstructSignatures().length) {
+      return this.reflectConstructorType(tsType, sourceLocation)
+    }
+
     if (tsType.isClass()) {
       if (typeName.fullName === arc4BaseContractType.fullName) return arc4BaseContractType
       if (typeName.fullName === baseContractType.fullName) return baseContractType
+      if (typeName.fullName === arc4StructBaseType.fullName) return arc4StructBaseType
       const [baseType, ...rest] = tsType.getBaseTypes()?.map((t) => this.resolveType(t, sourceLocation)) ?? []
 
       invariant(rest.length === 0, 'Class can have at most one base type')
 
       if (baseType instanceof ContractClassPType) {
         return this.reflectContractType(typeName, tsType, baseType, sourceLocation)
+      }
+      if (baseType instanceof ARC4StructType) {
+        return this.reflectStructType(typeName, tsType, baseType, sourceLocation)
       }
       throw new CodeError(
         `${typeName.fullName} cannot be mapped to an algo ts type. Classes must extend "Contract" or "BaseContract" base classes to be considered a contract`,
@@ -254,19 +270,19 @@ export class TypeResolver {
     return ObjectPType.anonymous(properties)
   }
 
-  private reflectConstructorType(constructorSignatures: readonly ts.Signature[], sourceLocation: SourceLocation): PType {
+  private reflectConstructorType(tsType: ts.Type, sourceLocation: SourceLocation): PType {
+    const constructorSignatures = tsType.getConstructSignatures()
     invariant(constructorSignatures.length, 'Must have at least one signature')
-    const constructorParentNode = constructorSignatures[0].declaration?.parent
-    invariant(constructorParentNode && ts.isClassDeclaration(constructorParentNode), 'Constructor parent node must be a class declaration')
-    invariant(constructorParentNode.name, 'Class must have a name')
-    const sym = this.checker.getSymbolAtLocation(constructorParentNode.name)
-    invariant(sym, 'Name must have a symbol')
-    const symbolName = this.getSymbolFullName(sym, sourceLocation)
-    const constructorType = typeRegistry.tryResolveSingletonName(symbolName)
-    if (constructorType) {
-      return constructorType
+    const typeDeclaration = tsType.getSymbol()?.declarations?.[0]
+    if (typeDeclaration && ts.isClassDeclaration(typeDeclaration)) {
+      const ptype = this.resolve(typeDeclaration, sourceLocation)
+      if (ptype instanceof ARC4StructType) {
+        return ARC4StructClass.fromStructType(ptype)
+      } else if (ptype instanceof ContractClassPType) {
+        throw new CodeError('Contract classes cannot be explicitly instantiated', { sourceLocation })
+      }
     }
-    throw new CodeError('Cannot determine type of node', { sourceLocation })
+    throw new CodeError('Unable to reflect constructor type', { sourceLocation })
   }
 
   private reflectFunctionType(
@@ -289,6 +305,31 @@ export class TypeResolver {
       parameters,
       name: typeName.name,
       module: typeName.module,
+    })
+  }
+  private reflectStructType(
+    typeName: SymbolName,
+    tsType: ts.Type,
+    baseType: ARC4StructType,
+    sourceLocation: SourceLocation,
+  ): ARC4StructType {
+    const ignoredProps = ['bytes', '__type', 'equals', Constants.constructorMethodName]
+    const fields: Record<string, ARC4EncodedType> = {}
+    for (const prop of tsType.getProperties()) {
+      if (isIn(prop.name, ignoredProps)) continue
+      const type = this.checker.getTypeOfSymbol(prop)
+      const propLocation = this.getLocationOfSymbol(prop) ?? sourceLocation
+      const ptype = this.resolveType(type, propLocation)
+      if (ptype instanceof ARC4EncodedType) {
+        fields[prop.name] = ptype
+      } else {
+        // Ignore
+      }
+    }
+    return new ARC4StructType({
+      ...typeName,
+      fields: fields,
+      sourceLocation: sourceLocation,
     })
   }
 
@@ -377,4 +418,12 @@ function isTupleReference(tsType: ts.Type): tsType is ts.TypeReference & { targe
 
 function isUnionType(tsType: ts.Type): tsType is ts.UnionType {
   return tsType.flags === ts.TypeFlags.Union
+}
+
+function isIntersectionType(tsType: ts.Type): tsType is ts.IntersectionType {
+  return tsType.flags === ts.TypeFlags.Intersection
+}
+
+function isInstantiationExpression(tsType: ts.Type): tsType is ts.Type & { node: ts.ExpressionWithTypeArguments } {
+  return isObjectType(tsType) && hasFlags(tsType.objectFlags, ObjectFlags.InstantiationExpressionType)
 }

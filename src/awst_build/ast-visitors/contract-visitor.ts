@@ -1,28 +1,28 @@
 import ts from 'typescript'
-import { ContractReference } from '../awst/models'
-import { nodeFactory } from '../awst/node-factory'
-import type * as awst from '../awst/nodes'
-import type { ContractMethod } from '../awst/nodes'
-import type { SourceLocation } from '../awst/source-location'
-import { wtypes } from '../awst/wtypes'
-import { Constants } from '../constants'
-import { AwstBuildFailureError, NotSupported, TodoError } from '../errors'
-import { logger } from '../logger'
-import { codeInvariant, invariant } from '../util'
-import type { ClassElements } from '../visitor/syntax-names'
-import type { Visitor } from '../visitor/visitor'
-import { accept } from '../visitor/visitor'
+import { ContractReference } from '../../awst/models'
+import { nodeFactory } from '../../awst/node-factory'
+import type * as awst from '../../awst/nodes'
+import type { ContractMethod } from '../../awst/nodes'
+import type { SourceLocation } from '../../awst/source-location'
+import { wtypes } from '../../awst/wtypes'
+import { Constants } from '../../constants'
+import { AwstBuildFailureError, NotSupported, TodoError } from '../../errors'
+import { logger } from '../../logger'
+import { codeInvariant, invariant } from '../../util'
+import type { ClassElements } from '../../visitor/syntax-names'
+import type { Visitor } from '../../visitor/visitor'
+import { accept } from '../../visitor/visitor'
+import type { AwstBuildContext } from '../context/awst-build-context'
+import { ContractSuperBuilder } from '../eb/contract-builder'
+import { BoxProxyExpressionBuilder } from '../eb/storage/box'
+import { GlobalStateFunctionResultBuilder } from '../eb/storage/global-state'
+import { LocalStateFunctionResultBuilder } from '../eb/storage/local-state'
+import { requireInstanceBuilder } from '../eb/util'
+import { ContractClassModel } from '../models/contract-class-model'
+import type { ContractClassPType } from '../ptypes'
 import { BaseVisitor } from './base-visitor'
 import { ConstructorVisitor } from './constructor-visitor'
-import type { AwstBuildContext } from './context/awst-build-context'
 import { ContractMethodVisitor } from './contract-method-visitor'
-import { ContractSuperBuilder } from './eb/contract-builder'
-import { BoxProxyExpressionBuilder } from './eb/storage/box'
-import { GlobalStateFunctionResultBuilder } from './eb/storage/global-state'
-import { LocalStateFunctionResultBuilder } from './eb/storage/local-state'
-import { requireInstanceBuilder } from './eb/util'
-import { Index } from './models'
-import type { ContractClassPType } from './ptypes'
 
 export class ContractVisitor extends BaseVisitor implements Visitor<ClassElements, void> {
   private _ctor?: ContractMethod
@@ -57,7 +57,7 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
       logger.error(this._approvalProgram.sourceLocation, 'ARC4 contracts cannot define their own approval methods.')
     }
 
-    const contract = new Index({
+    const contract = new ContractClassModel({
       type: this._contractPType,
       propertyInitialization: this._propertyInitialization,
       isAbstract: isAbstract,
@@ -197,6 +197,6 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
   }
 
   public static buildContract(ctx: AwstBuildContext, classDec: ts.ClassDeclaration, ptype: ContractClassPType): [] | [awst.Contract] {
-    return new ContractVisitor(ctx.createChildContext(), classDec, ptype).getContract()
+    return new ContractVisitor(ctx, classDec, ptype).getContract()
   }
 }

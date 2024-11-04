@@ -1,5 +1,5 @@
 import type { AWST } from '../awst/nodes'
-import type { CompilationSet } from '../awst_build/models'
+import type { CompilationSet } from '../awst_build/models/contract-class-model'
 import type { AlgoFile } from '../compile-options'
 import { mkDirIfNotExists } from '../util'
 import type { CompilationSetMapping } from './options'

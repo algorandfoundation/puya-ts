@@ -7,10 +7,10 @@ import { SourceLocation } from '../../awst/source-location'
 import { logger } from '../../logger'
 import { invariant } from '../../util'
 import { ConstantStore } from '../constant-store'
-import type { AppStorageDeclaration } from '../contract-data'
 import type { NodeBuilder } from '../eb'
-import type { Index, LogicSig } from '../models'
-import { CompilationSet } from '../models'
+import type { AppStorageDeclaration } from '../models/app-storage-declaration'
+import type { ContractClassModel, LogicSig } from '../models/contract-class-model'
+import { CompilationSet } from '../models/contract-class-model'
 import type { ContractClassPType, PType } from '../ptypes'
 import { typeRegistry } from '../type-registry'
 import { TypeResolver } from '../type-resolver'
@@ -90,7 +90,7 @@ export interface AwstBuildContext {
 
   getStorageDefinitionsForContract(contractType: ContractClassPType): AppStorageDefinition[]
 
-  addToCompilationSet(compilationTarget: ContractReference, contract: Index): void
+  addToCompilationSet(compilationTarget: ContractReference, contract: ContractClassModel): void
   addToCompilationSet(compilationTarget: LogicSigReference, logicSig: LogicSig): void
 
   get compilationSet(): CompilationSet
@@ -237,9 +237,9 @@ class AwstBuildContextImpl implements AwstBuildContext {
     return Array.from(result.values())
   }
 
-  addToCompilationSet(compilationTarget: ContractReference, contract: Index): void
+  addToCompilationSet(compilationTarget: ContractReference, contract: ContractClassModel): void
   addToCompilationSet(compilationTarget: LogicSigReference, logicSig: LogicSig): void
-  addToCompilationSet(compilationTarget: ContractReference | LogicSigReference, contractOrSig: Index | LogicSig) {
+  addToCompilationSet(compilationTarget: ContractReference | LogicSigReference, contractOrSig: ContractClassModel | LogicSig) {
     if (this.#compilationSet.has(compilationTarget)) {
       logger.debug(undefined, `${compilationTarget.id} already exists in compilation set`)
       return

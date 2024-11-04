@@ -1,11 +1,11 @@
 import ts from 'typescript'
-import { nodeFactory } from '../awst/node-factory'
-import type { Expression, LValue, Statement } from '../awst/nodes'
-import type { SourceLocation } from '../awst/source-location'
-import { CodeError, NotSupported, TodoError } from '../errors'
-import { logger } from '../logger'
-import { codeInvariant, enumerate, invariant, sortBy } from '../util'
-import type { Expressions } from '../visitor/syntax-names'
+import { nodeFactory } from '../../awst/node-factory'
+import type { Expression, LValue, Statement } from '../../awst/nodes'
+import type { SourceLocation } from '../../awst/source-location'
+import { CodeError, NotSupported, TodoError } from '../../errors'
+import { logger } from '../../logger'
+import { codeInvariant, enumerate, invariant, sortBy } from '../../util'
+import type { Expressions } from '../../visitor/syntax-names'
 import {
   AugmentedAssignmentBinaryOp,
   AugmentedAssignmentLogicalOpSyntaxes,
@@ -16,22 +16,22 @@ import {
   isKeyOf,
   LogicalOpSyntaxes,
   UnaryExpressionUnaryOps,
-} from '../visitor/syntax-names'
-import type { Visitor } from '../visitor/visitor'
-import { accept } from '../visitor/visitor'
-import type { AwstBuildContext } from './context/awst-build-context'
-import type { InstanceBuilder } from './eb'
-import { NodeBuilder } from './eb'
-import { BooleanExpressionBuilder } from './eb/boolean-expression-builder'
-import { ArrayLiteralExpressionBuilder } from './eb/literal/array-literal-expression-builder'
-import { BigIntLiteralExpressionBuilder } from './eb/literal/big-int-literal-expression-builder'
-import { ConditionalExpressionBuilder } from './eb/literal/conditional-expression-builder'
-import type { ObjectLiteralParts } from './eb/literal/object-literal-expression-builder'
-import { ObjectLiteralExpressionBuilder } from './eb/literal/object-literal-expression-builder'
-import { OmittedExpressionBuilder } from './eb/omitted-expression-builder'
-import { StringExpressionBuilder, StringFunctionBuilder } from './eb/string-expression-builder'
-import { requireExpressionOfType, requireInstanceBuilder } from './eb/util'
-import type { PType } from './ptypes'
+} from '../../visitor/syntax-names'
+import type { Visitor } from '../../visitor/visitor'
+import { accept } from '../../visitor/visitor'
+import type { AwstBuildContext } from '../context/awst-build-context'
+import type { InstanceBuilder } from '../eb'
+import { NodeBuilder } from '../eb'
+import { BooleanExpressionBuilder } from '../eb/boolean-expression-builder'
+import { ArrayLiteralExpressionBuilder } from '../eb/literal/array-literal-expression-builder'
+import { BigIntLiteralExpressionBuilder } from '../eb/literal/big-int-literal-expression-builder'
+import { ConditionalExpressionBuilder } from '../eb/literal/conditional-expression-builder'
+import type { ObjectLiteralParts } from '../eb/literal/object-literal-expression-builder'
+import { ObjectLiteralExpressionBuilder } from '../eb/literal/object-literal-expression-builder'
+import { OmittedExpressionBuilder } from '../eb/omitted-expression-builder'
+import { StringExpressionBuilder, StringFunctionBuilder } from '../eb/string-expression-builder'
+import { requireExpressionOfType, requireInstanceBuilder } from '../eb/util'
+import type { PType } from '../ptypes'
 import {
   ArrayLiteralPType,
   ArrayPType,
@@ -46,9 +46,9 @@ import {
   TuplePType,
   uint64PType,
   UnionPType,
-} from './ptypes'
+} from '../ptypes'
+import { instanceEb, typeRegistry } from '../type-registry'
 import { TextVisitor } from './text-visitor'
-import { instanceEb, typeRegistry } from './type-registry'
 
 export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   private baseAccept = <TNode extends ts.Node>(node: TNode) => accept<BaseVisitor, TNode>(this, node)

@@ -1,6 +1,6 @@
 import { AwstSerializer, SnakeCaseSerializer } from '../awst/json-serialize-awst'
 import type { AWST } from '../awst/nodes'
-import type { CompilationSet } from '../awst_build/models'
+import type { CompilationSet } from '../awst_build/models/contract-class-model'
 import type { CompileOptions } from '../compile-options'
 import { logger, LogLevel } from '../logger'
 import type { SourceFileMapping } from '../parser'

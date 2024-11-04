@@ -9,6 +9,7 @@ import {
 } from '../eb/arc4/arrays'
 import { BoolClassBuilder, BoolExpressionBuilder } from '../eb/arc4/bool'
 import { StrClassBuilder, StrExpressionBuilder } from '../eb/arc4/string'
+import { StructClassBuilder, StructExpressionBuilder } from '../eb/arc4/struct'
 import { Arc4TupleClassBuilder, Arc4TupleExpressionBuilder } from '../eb/arc4/tuple'
 import { UFixedNxMClassBuilder, UFixedNxMExpressionBuilder } from '../eb/arc4/ufixed'
 import { ByteClassBuilder, UintNClassBuilder, UintNExpressionBuilder } from '../eb/arc4/uintn'
@@ -62,6 +63,8 @@ import {
   arc4ByteAlias,
   ARC4StrClass,
   ARC4StringType,
+  ARC4StructClass,
+  ARC4StructType,
   Arc4TupleClass,
   Arc4TupleGeneric,
   ARC4TupleType,
@@ -288,6 +291,8 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: ARC4StrClass, singletonEb: StrClassBuilder })
   typeRegistry.register({ ptype: Arc4TupleClass, singletonEb: Arc4TupleClassBuilder })
   typeRegistry.registerGeneric({ generic: Arc4TupleGeneric, ptype: ARC4TupleType, instanceEb: Arc4TupleExpressionBuilder })
+  typeRegistry.register({ ptype: ARC4StructType, instanceEb: StructExpressionBuilder })
+  typeRegistry.register({ ptype: ARC4StructClass, singletonEb: StructClassBuilder })
 
   // GTXN types
   typeRegistry.register({ ptype: paymentGtxnType, instanceEb: GroupTransactionExpressionBuilder })

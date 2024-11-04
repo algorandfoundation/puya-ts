@@ -1,7 +1,7 @@
 import type ts from 'typescript'
-import * as awst from '../awst/nodes'
-import { invariant } from '../util'
-import type { AwstBuildContext } from './context/awst-build-context'
+import * as awst from '../../awst/nodes'
+import { invariant } from '../../util'
+import type { AwstBuildContext } from '../context/awst-build-context'
 import { FunctionVisitor } from './function-visitor'
 
 export class SubroutineVisitor extends FunctionVisitor {

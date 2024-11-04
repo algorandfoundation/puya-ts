@@ -1,7 +1,7 @@
 import type ts from 'typescript'
 import type { AWST } from './awst/nodes'
 import { buildAwst } from './awst_build'
-import type { CompilationSet } from './awst_build/models'
+import type { CompilationSet } from './awst_build/models/contract-class-model'
 import { registerPTypes } from './awst_build/ptypes/register'
 import { typeRegistry } from './awst_build/type-registry'
 import type { CompileOptions } from './compile-options'

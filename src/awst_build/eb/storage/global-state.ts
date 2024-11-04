@@ -6,7 +6,7 @@ import { wtypes } from '../../../awst/wtypes'
 
 import { CodeError } from '../../../errors'
 import { codeInvariant, invariant } from '../../../util'
-import { AppStorageDeclaration } from '../../contract-data'
+import { AppStorageDeclaration } from '../../models/app-storage-declaration'
 import type { ContractClassPType, PType } from '../../ptypes'
 import { boolPType, bytesPType, GlobalStateType, stringPType } from '../../ptypes'
 import { typeRegistry } from '../../type-registry'

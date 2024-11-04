@@ -1,0 +1,8 @@
+subroutine test(): void
+{
+  v1: Vector = new Vector(x=(#14 = { x: 0, y: 0 }).x, y=#14.y)
+  log(reinterpret_cast<bytes>(v1.x))
+  log(reinterpret_cast<bytes>(v1.y))
+  v2: Vector = new Vector(x=(#16 = { x: (#15 = { y: 0, x: 0 }).x, y: #15.y }).x, y=#16.y)
+  assert(reinterpret_cast<bytes>(v1) == reinterpret_cast<bytes>(v2))
+}

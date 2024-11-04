@@ -56,6 +56,39 @@ export const ARC4StringType = new ARC4InstanceType({
   nativeType: stringPType,
 })
 
+export class ARC4StructClass extends PType {
+  readonly name: string
+  readonly module: string
+  readonly singleton = true
+  readonly instanceType: ARC4StructType
+  readonly sourceLocation: SourceLocation | undefined
+  readonly wtype = undefined
+  constructor({
+    name,
+    module,
+    instanceType,
+    sourceLocation,
+  }: {
+    name: string
+    module: string
+    instanceType: ARC4StructType
+    sourceLocation?: SourceLocation
+  }) {
+    super()
+    this.name = name
+    this.module = module
+    this.sourceLocation = sourceLocation
+    this.instanceType = instanceType
+  }
+
+  static fromStructType(ptype: ARC4StructType) {
+    return new ARC4StructClass({
+      ...ptype,
+      instanceType: ptype,
+    })
+  }
+}
+
 export class ARC4StructType extends ARC4EncodedType {
   readonly name: string
   readonly module: string
@@ -105,6 +138,22 @@ export class ARC4StructType extends ARC4EncodedType {
     )
   }
 }
+
+// export const arc4StructBaseClass = new ARC4StructClass({
+//   name: 'Struct',
+//   module: Constants.arc4EncodedTypesModuleName,
+//   instanceType: new ARC4StructType({
+//     name: 'Struct',
+//     module: Constants.arc4EncodedTypesModuleName,
+//     fields: {},
+//   }),
+// })
+
+export const arc4StructBaseType = new ARC4StructType({
+  name: 'StructBase',
+  module: Constants.arc4EncodedTypesModuleName,
+  fields: {},
+})
 
 export const Arc4TupleClass = new LibClassType({
   name: 'Tuple',
