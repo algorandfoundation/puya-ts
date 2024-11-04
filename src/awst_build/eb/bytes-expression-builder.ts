@@ -193,6 +193,12 @@ export class BytesExpressionBuilder extends InstanceExpressionBuilder<InstanceTy
         )
       case 'bitwiseInvert':
         return new BytesInvertBuilder(this._expr)
+      case 'bitwiseAnd':
+        return new BitwiseAndExpressionBuilder(this._expr)
+      case 'bitwiseOr':
+        return new BitwiseOrExpressionBuilder(this._expr)
+      case 'bitwiseXor':
+        return new BitwiseXorExpressionBuilder(this._expr)
       case 'toString':
         return new ToStringBuilder(this._expr)
       case 'concat':
@@ -269,6 +275,63 @@ export class BytesInvertBuilder extends ParameterlessFunctionBuilder {
             sourceLocation,
           }),
         ),
+    )
+  }
+}
+
+export class BitwiseAndExpressionBuilder extends FunctionBuilder {
+  constructor(private expr: awst.Expression) {
+    super(expr.sourceLocation)
+  }
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    const [other] = requireExpressionsOfType(args, [bytesPType], sourceLocation)
+    return new BytesExpressionBuilder(
+      nodeFactory.bytesBinaryOperation({
+        wtype: wtypes.bytesWType,
+        left: this.expr,
+        right: other,
+        op: BytesBinaryOperator.bitAnd,
+        sourceLocation,
+      }),
+    )
+  }
+}
+
+export class BitwiseOrExpressionBuilder extends FunctionBuilder {
+  constructor(private expr: awst.Expression) {
+    super(expr.sourceLocation)
+  }
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    const [other] = requireExpressionsOfType(args, [bytesPType], sourceLocation)
+    return new BytesExpressionBuilder(
+      nodeFactory.bytesBinaryOperation({
+        wtype: wtypes.bytesWType,
+        left: this.expr,
+        right: other,
+        op: BytesBinaryOperator.bitOr,
+        sourceLocation,
+      }),
+    )
+  }
+}
+
+export class BitwiseXorExpressionBuilder extends FunctionBuilder {
+  constructor(private expr: awst.Expression) {
+    super(expr.sourceLocation)
+  }
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    const [other] = requireExpressionsOfType(args, [bytesPType], sourceLocation)
+    return new BytesExpressionBuilder(
+      nodeFactory.bytesBinaryOperation({
+        wtype: wtypes.bytesWType,
+        left: this.expr,
+        right: other,
+        op: BytesBinaryOperator.bitXor,
+        sourceLocation,
+      }),
     )
   }
 }
