@@ -173,6 +173,7 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   if (typeRegistry.hasRegistrations) {
     return
   }
+  // Primitives
   typeRegistry.register({ ptype: boolPType, instanceEb: BooleanExpressionBuilder })
   typeRegistry.register({ ptype: BooleanFunction, singletonEb: BooleanFunctionBuilder })
   typeRegistry.register({ ptype: uint64PType, instanceEb: UInt64ExpressionBuilder })
@@ -182,15 +183,37 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: bytesPType, instanceEb: BytesExpressionBuilder })
   typeRegistry.register({ ptype: BytesFunction, singletonEb: BytesFunctionBuilder })
   typeRegistry.register({ ptype: stringPType, instanceEb: StringExpressionBuilder })
+  typeRegistry.register({ ptype: voidPType, instanceEb: VoidExpressionBuilder })
   typeRegistry.register({ ptype: StringFunction, singletonEb: StringFunctionBuilder })
+
+  // Compound
+  typeRegistry.register({ ptype: ArrayPType, instanceEb: NativeArrayExpressionBuilder })
+  typeRegistry.register({ ptype: TuplePType, instanceEb: TupleExpressionBuilder })
+  typeRegistry.register({ ptype: ObjectPType, instanceEb: ObjectExpressionBuilder })
+
+  // Lib functions
   typeRegistry.register({ ptype: logFunction, singletonEb: LogFunctionBuilder })
   typeRegistry.register({ ptype: assertFunction, singletonEb: AssertFunctionBuilder })
   typeRegistry.register({ ptype: errFunction, singletonEb: ErrFunctionBuilder })
-  typeRegistry.register({ ptype: AssetFunction, singletonEb: AssetFunctionBuilder })
-  typeRegistry.register({ ptype: assetPType, instanceEb: AssetExpressionBuilder })
+  typeRegistry.register({ ptype: assertMatchFunction, singletonEb: AssertMatchFunctionBuilder })
+  typeRegistry.register({ ptype: ensureBudgetFunction, singletonEb: EnsureBudgetFunctionBuilder })
+  typeRegistry.register({ ptype: urangeFunction, singletonEb: UrangeFunctionBuilder })
+
+  for (const enumType of [opUpFeeSourceType, onCompleteActionType, transactionTypeType]) {
+    typeRegistry.register({ ptype: enumType, singletonEb: Uint64EnumTypeBuilder })
+    typeRegistry.register({ ptype: enumType.memberType, instanceEb: Uint64EnumMemberExpressionBuilder })
+  }
+
+  typeRegistry.registerGeneric({
+    generic: IterableIteratorGeneric,
+    ptype: IterableIteratorType,
+    instanceEb: IterableIteratorExpressionBuilder,
+  })
+
   typeRegistry.register({ ptype: FunctionPType, singletonEb: FreeSubroutineExpressionBuilder })
+
+  // Op types
   typeRegistry.register({ ptype: NamespacePType, singletonEb: NamespaceBuilder })
-  typeRegistry.register({ ptype: voidPType, instanceEb: VoidExpressionBuilder })
   for (const enumPType of ALL_OP_ENUMS) {
     typeRegistry.register({ ptype: enumPType, singletonEb: IntrinsicEnumBuilder })
   }
@@ -224,8 +247,7 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
     }
   }
 
-  typeRegistry.register({ ptype: ArrayPType, instanceEb: NativeArrayExpressionBuilder })
-
+  // State
   typeRegistry.register({ ptype: GlobalStateFunction, singletonEb: GlobalStateFunctionBuilder })
   typeRegistry.registerGeneric({ generic: GlobalStateGeneric, ptype: GlobalStateType, instanceEb: GlobalStateExpressionBuilder })
   typeRegistry.register({ ptype: LocalStateFunction, singletonEb: LocalStateFunctionBuilder })
@@ -236,13 +258,19 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.registerGeneric({ generic: BoxMapGeneric, ptype: BoxMapPType, instanceEb: BoxMapExpressionBuilder })
   typeRegistry.register({ ptype: BoxRefFunction, singletonEb: BoxRefFunctionBuilder })
   typeRegistry.register({ ptype: boxRefType, instanceEb: BoxRefExpressionBuilder })
-  typeRegistry.register({ ptype: TuplePType, instanceEb: TupleExpressionBuilder })
-  typeRegistry.register({ ptype: arc4AbiMethodDecorator, singletonEb: Arc4AbiMethodDecoratorBuilder })
-  typeRegistry.register({ ptype: arc4BareMethodDecorator, singletonEb: Arc4BareMethodDecoratorBuilder })
-  typeRegistry.register({ ptype: ObjectPType, instanceEb: ObjectExpressionBuilder })
+
+  // Reference types
+  typeRegistry.register({ ptype: ApplicationFunctionType, singletonEb: ApplicationFunctionBuilder })
+  typeRegistry.register({ ptype: applicationPType, instanceEb: ApplicationExpressionBuilder })
   typeRegistry.register({ ptype: AccountFunction, singletonEb: AccountFunctionBuilder })
   typeRegistry.register({ ptype: accountPType, instanceEb: AccountExpressionBuilder })
+  typeRegistry.register({ ptype: AssetFunction, singletonEb: AssetFunctionBuilder })
+  typeRegistry.register({ ptype: assetPType, instanceEb: AssetExpressionBuilder })
+
+  // ARC4 encoded
   typeRegistry.register({ ptype: UintNClass, singletonEb: UintNClassBuilder })
+  typeRegistry.register({ ptype: arc4AbiMethodDecorator, singletonEb: Arc4AbiMethodDecoratorBuilder })
+  typeRegistry.register({ ptype: arc4BareMethodDecorator, singletonEb: Arc4BareMethodDecoratorBuilder })
   typeRegistry.register({ ptype: ByteClass, singletonEb: ByteClassBuilder })
   typeRegistry.registerGeneric({ generic: UintNGeneric, ptype: UintNType, instanceEb: UintNExpressionBuilder })
   typeRegistry.register({ ptype: UFixedNxMClass, singletonEb: UFixedNxMClassBuilder })
@@ -261,9 +289,7 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: Arc4TupleClass, singletonEb: Arc4TupleClassBuilder })
   typeRegistry.registerGeneric({ generic: Arc4TupleGeneric, ptype: ARC4TupleType, instanceEb: Arc4TupleExpressionBuilder })
 
-  typeRegistry.register({ ptype: ApplicationFunctionType, singletonEb: ApplicationFunctionBuilder })
-  typeRegistry.register({ ptype: applicationPType, instanceEb: ApplicationExpressionBuilder })
-
+  // GTXN types
   typeRegistry.register({ ptype: paymentGtxnType, instanceEb: GroupTransactionExpressionBuilder })
   typeRegistry.register({ ptype: PaymentTxnFunction, singletonEb: GroupTransactionFunctionBuilder })
   typeRegistry.register({ ptype: keyRegistrationGtxnType, instanceEb: GroupTransactionExpressionBuilder })
@@ -279,21 +305,7 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: anyGtxnType, instanceEb: GroupTransactionExpressionBuilder })
   typeRegistry.register({ ptype: TransactionFunction, singletonEb: GroupTransactionFunctionBuilder })
 
-  typeRegistry.register({ ptype: assertMatchFunction, singletonEb: AssertMatchFunctionBuilder })
-  typeRegistry.register({ ptype: ensureBudgetFunction, singletonEb: EnsureBudgetFunctionBuilder })
-
-  for (const enumType of [opUpFeeSourceType, onCompleteActionType, transactionTypeType]) {
-    typeRegistry.register({ ptype: enumType, singletonEb: Uint64EnumTypeBuilder })
-    typeRegistry.register({ ptype: enumType.memberType, instanceEb: Uint64EnumMemberExpressionBuilder })
-  }
-
-  typeRegistry.register({ ptype: urangeFunction, singletonEb: UrangeFunctionBuilder })
-  typeRegistry.registerGeneric({
-    generic: IterableIteratorGeneric,
-    ptype: IterableIteratorType,
-    instanceEb: IterableIteratorExpressionBuilder,
-  })
-
+  // ITXN Types
   typeRegistry.register({ ptype: paymentItxnFn, singletonEb: ItxnParamsFactoryFunctionBuilder })
   typeRegistry.register({ ptype: keyRegistrationItxnFn, singletonEb: ItxnParamsFactoryFunctionBuilder })
   typeRegistry.register({ ptype: assetConfigItxnFn, singletonEb: ItxnParamsFactoryFunctionBuilder })
