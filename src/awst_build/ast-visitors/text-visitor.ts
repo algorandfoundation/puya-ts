@@ -1,8 +1,8 @@
 import type * as ts from 'typescript'
-import { NotSupported } from '../errors'
-import type { Visitor } from '../visitor/visitor'
-import { accept } from '../visitor/visitor'
-import type { AwstBuildContext } from './context/awst-build-context'
+import { NotSupported } from '../../errors'
+import type { Visitor } from '../../visitor/visitor'
+import { accept } from '../../visitor/visitor'
+import type { AwstBuildContext } from '../context/awst-build-context'
 
 type ObjectNames = ts.PropertyName | ts.PseudoLiteralToken
 

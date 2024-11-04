@@ -1,12 +1,12 @@
 import ts from 'typescript'
-import type { ContractReference } from '../awst/models'
-import { nodeFactory } from '../awst/node-factory'
-import * as awst from '../awst/nodes'
-import { AwstBuildFailureError } from '../errors'
-import { codeInvariant, invariant } from '../util'
-import type { AwstBuildContext } from './context/awst-build-context'
+import type { ContractReference } from '../../awst/models'
+import { nodeFactory } from '../../awst/node-factory'
+import * as awst from '../../awst/nodes'
+import { AwstBuildFailureError } from '../../errors'
+import { codeInvariant, invariant } from '../../util'
+import type { AwstBuildContext } from '../context/awst-build-context'
+import { voidPType } from '../ptypes'
 import { ContractMethodBaseVisitor } from './contract-method-visitor'
-import { voidPType } from './ptypes'
 
 export interface ConstructorInfo {
   propertyInitializerStatements: awst.Statement[]

@@ -257,7 +257,10 @@ export class ToCodeVisitor
     return `STATE_EXISTS(${expression.field.accept(this)})`
   }
   visitNewStruct(expression: nodes.NewStruct): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    const props = Array.from(expression.values)
+      .map(([k, v]) => `${k}=${v.accept(this)}`)
+      .join(', ')
+    return `new ${expression.wtype.name}(${props})`
   }
   visitExpressionStatement(statement: nodes.ExpressionStatement): string[] {
     return [statement.expr.accept(this)]

@@ -62,19 +62,4 @@ export default [
       'no-unused-private-class-members': 'off',
     },
   },
-  {
-    files: ['**/*.algo.ts'],
-    rules: {
-      '@typescript-eslint/explicit-member-accessibility': [
-        'error',
-        {
-          accessibility: 'off',
-
-          overrides: {
-            methods: 'explicit',
-          },
-        },
-      ],
-    },
-  },
 ]

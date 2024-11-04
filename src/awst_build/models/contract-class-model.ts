@@ -12,7 +12,7 @@ import { codeInvariant, invariant, isIn } from '../../util'
 import { CustomKeyMap } from '../../util/custom-key-map'
 import type { ContractClassPType } from '../ptypes'
 
-export class Index {
+export class ContractClassModel {
   public readonly isAbstract: boolean
   public get id(): ContractReference {
     return ContractReference.fromPType(this.type)
@@ -32,7 +32,7 @@ export class Index {
   public readonly stateTotals: StateTotals | null
   public readonly reservedScratchSpace: Set<bigint>
   public readonly sourceLocation: SourceLocation
-  constructor(props: Props<Omit<Index, 'name' | 'id'>>) {
+  constructor(props: Props<Omit<ContractClassModel, 'name' | 'id'>>) {
     this.isAbstract = props.isAbstract
     this.type = props.type
     this.description = props.description
@@ -169,20 +169,20 @@ export class LogicSig {
   public readonly isForOutput: boolean = true
 }
 
-export class CompilationSet extends CustomKeyMap<ContractReference | LogicSigReference, Index | LogicSig> {
+export class CompilationSet extends CustomKeyMap<ContractReference | LogicSigReference, ContractClassModel | LogicSig> {
   constructor() {
     super((x) => x.toString())
   }
 
   get compilationOutputSet() {
     return Array.from(this.entries())
-      .filter(([, meta]) => (meta instanceof Index ? !meta.isAbstract : false))
+      .filter(([, meta]) => (meta instanceof ContractClassModel ? !meta.isAbstract : false))
       .map(([ref]) => ref)
   }
 
   getContractClass(cref: ContractReference) {
     const maybeClass = this.get(cref)
-    invariant(maybeClass instanceof Index, 'Contract reference must resolve to a contract class')
+    invariant(maybeClass instanceof ContractClassModel, 'Contract reference must resolve to a contract class')
     return maybeClass
   }
 }

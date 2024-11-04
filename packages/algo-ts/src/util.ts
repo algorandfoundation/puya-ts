@@ -1,9 +1,9 @@
 import { ctxMgr } from './execution-context'
 import { AssertError, AvmError } from './impl/errors'
 import { toBytes } from './impl/primitives'
-import { biguint, BigUintCompat, BytesCompat, StringCompat, uint64, Uint64Compat } from './primitives'
+import { biguint, BigUintCompat, BytesBacked, BytesCompat, StringCompat, uint64, Uint64Compat } from './primitives'
 
-export function log(...args: Array<Uint64Compat | BytesCompat | BigUintCompat | StringCompat>): void {
+export function log(...args: Array<Uint64Compat | BytesCompat | BigUintCompat | StringCompat | BytesBacked>): void {
   ctxMgr.instance.log(args.map(toBytes).reduce((left, right) => left.concat(right)))
 }
 
