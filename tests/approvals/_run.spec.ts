@@ -1,3 +1,4 @@
+import { sync } from 'cross-spawn'
 import { describe, expect, it } from 'vitest'
 import { compile } from '../../src'
 import { buildCompileOptions } from '../../src/compile-options'
@@ -19,7 +20,7 @@ describe('Approvals', () => {
     {
       ...defaultPuyaOptions,
       outputTeal: false,
-      outputArc32: false,
+      outputArc32: true,
     },
   )
   invariant(result.ast, 'Compilation must result in ast')
@@ -45,5 +46,36 @@ describe('Approvals', () => {
         expect.fail(`${logs.length} errors during compilation`)
       }
     })
+  })
+
+  it('There should be no differences to committed changes', () => {
+    // Run git add to force line ending changes
+    sync('git', ['add', '.'], {
+      stdio: 'inherit',
+    })
+    const result = sync('git', ['status', '--porcelain'], {
+      stdio: 'pipe',
+    })
+
+    expect(result.status).toBe(0)
+    const diffs = []
+    let line = ''
+    for (const chunk of result.output) {
+      if (chunk === undefined || chunk === null) continue
+      const text = chunk.toString('utf-8')
+      for (const c of text) {
+        if (c === '\n') {
+          diffs.push(line)
+          line = ''
+        } else {
+          line += c
+        }
+      }
+      if (line) diffs.push(line)
+
+      if (diffs.length) {
+        expect.fail(`There are uncommitted changes: \n\n${diffs.join('\n')}`)
+      }
+    }
   })
 })
