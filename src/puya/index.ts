@@ -9,7 +9,7 @@ import { generateTempFile } from '../util/generate-temp-file'
 import { buildCompilationSetMapping } from './build-compilation-set-mapping'
 import type { PuyaPassThroughOptions } from './options'
 import { PuyaOptions } from './options'
-import { runChildProc } from './run-child-proc'
+import { runPuya } from './run-puya'
 
 export function invokePuya({
   moduleAwst,
@@ -57,7 +57,7 @@ export function invokePuya({
     undefined,
     `Invoking puya: puya --options ${optionsFile.filePath} --awst ${moduleAwstFile.filePath} --source-annotations ${moduleSourceFile.filePath}`,
   )
-  runChildProc({
+  runPuya({
     command: 'puya',
     args: [
       '--options',

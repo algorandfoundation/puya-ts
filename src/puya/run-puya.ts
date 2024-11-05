@@ -1,7 +1,7 @@
 import { sync } from 'cross-spawn'
 import { logger } from '../logger'
 
-export function runChildProc({ command, args, cwd }: { command: string; args: string[]; cwd?: string }) {
+export function runPuya({ command, args, cwd }: { command: string; args: string[]; cwd?: string }) {
   const proc = sync(command, args, {
     // forward all stdin/stdout/stderr to current handlers, with correct interleaving
     stdio: 'inherit',
