@@ -4774,3 +4774,5 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
     ],
   },
 }
+
+export const VOID_OPS = ['itxn_begin', 'itxn_next', 'itxn_submit']

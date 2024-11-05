@@ -4,7 +4,7 @@ import type { SourceLocation } from '../../awst/source-location'
 import { CodeError, InternalError } from '../../errors'
 import { enumerate, invariant } from '../../util'
 import type { IntrinsicOpGrouping, IntrinsicOpMapping } from '../op-metadata'
-import { OP_METADATA } from '../op-metadata'
+import { OP_METADATA, VOID_OPS } from '../op-metadata'
 import type { PType } from '../ptypes'
 import { IntrinsicEnumType, IntrinsicFunctionGroupType, IntrinsicFunctionType, stringPType } from '../ptypes'
 import { typeRegistry } from '../type-registry'
@@ -33,7 +33,7 @@ export class IntrinsicOpGroupBuilder extends NodeBuilder {
     }
     const metaData = this.opGrouping.ops[name]
 
-    if (metaData.signatures.some((s) => s.argNames.length)) {
+    if (VOID_OPS.includes(metaData.op) || metaData.signatures.some((s) => s.argNames.length)) {
       return new GroupedIntrinsicOpBuilder(sourceLocation, metaData)
     }
 
