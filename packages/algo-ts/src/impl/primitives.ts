@@ -1,5 +1,4 @@
 import type { biguint, BigUintCompat, bytes, BytesCompat, uint64, Uint64Compat } from '../index'
-import { encodingUtil } from '../internal'
 import { base32ToUint8Array } from './base-32'
 import {
   base64ToUint8Array,
@@ -308,7 +307,7 @@ export class BytesCls extends AlgoTsPrimitiveCls {
   static fromCompat(v: StubBytesCompat | Uint8Array | undefined): BytesCls {
     if (v === undefined) return new BytesCls(new Uint8Array())
     if (typeof v === 'string') return new BytesCls(utf8ToUint8Array(v))
-    if (typeof v == 'bigint') return new BytesCls(encodingUtil.bigIntToUint8Array(v))
+    if (typeof v == 'bigint') return new BytesCls(bigIntToUint8Array(v))
     if (v instanceof BytesCls) return v
     if (v instanceof Uint8Array) return new BytesCls(v)
     internalError(`Cannot convert ${nameOfType(v)} to bytes`)
