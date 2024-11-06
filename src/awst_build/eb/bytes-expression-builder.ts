@@ -9,7 +9,7 @@ import { wtypes } from '../../awst/wtypes'
 
 import { CodeError, wrapInCodeError } from '../../errors'
 import { logger } from '../../logger'
-import { base32ToUint8Array, base64ToUint8Array, hexToUint8Array, uint8ArrayToUtf8, utf8ToUint8Array } from '../../util'
+import { base32ToUint8Array, base64ToUint8Array, enumKeyFromValue, hexToUint8Array, uint8ArrayToUtf8, utf8ToUint8Array } from '../../util'
 import type { InstanceType, PType } from '../ptypes'
 import {
   ArrayPType,
@@ -194,11 +194,11 @@ export class BytesExpressionBuilder extends InstanceExpressionBuilder<InstanceTy
       case 'bitwiseInvert':
         return new BytesInvertBuilder(this._expr)
       case 'bitwiseAnd':
-        return new BitwiseOpExpressionBuilder(this._expr, BytesBinaryOperator.bitAnd)
+        return new BitwiseOpFunctionBuilder(this._expr, BytesBinaryOperator.bitAnd)
       case 'bitwiseOr':
-        return new BitwiseOpExpressionBuilder(this._expr, BytesBinaryOperator.bitOr)
+        return new BitwiseOpFunctionBuilder(this._expr, BytesBinaryOperator.bitOr)
       case 'bitwiseXor':
-        return new BitwiseOpExpressionBuilder(this._expr, BytesBinaryOperator.bitXor)
+        return new BitwiseOpFunctionBuilder(this._expr, BytesBinaryOperator.bitXor)
       case 'toString':
         return new ToStringBuilder(this._expr)
       case 'concat':
@@ -279,7 +279,7 @@ export class BytesInvertBuilder extends ParameterlessFunctionBuilder {
   }
 }
 
-export class BitwiseOpExpressionBuilder extends FunctionBuilder {
+export class BitwiseOpFunctionBuilder extends FunctionBuilder {
   constructor(
     private expr: awst.Expression,
     private op: BytesBinaryOperator,
@@ -288,12 +288,21 @@ export class BitwiseOpExpressionBuilder extends FunctionBuilder {
   }
 
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
-    const [other] = requireExpressionsOfType(args, [bytesPType], sourceLocation)
+    const {
+      args: [other],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 0,
+      callLocation: sourceLocation,
+      funcName: enumKeyFromValue(this.op, BytesBinaryOperator),
+      argSpec: (a) => [a.required(bytesPType)],
+    })
     return new BytesExpressionBuilder(
       nodeFactory.bytesBinaryOperation({
         wtype: wtypes.bytesWType,
         left: this.expr,
-        right: other,
+        right: other.resolve(),
         op: this.op,
         sourceLocation,
       }),
