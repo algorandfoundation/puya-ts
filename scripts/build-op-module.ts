@@ -162,6 +162,23 @@ const TYPE_MAP: Record<string, AlgoTsType> = {
   any: AlgoTsType.Uint64 | AlgoTsType.Bytes,
 }
 
+const INPUT_TYPE_MAP: Record<string, AlgoTsType> = {
+  application: AlgoTsType.Application | AlgoTsType.Uint64,
+  asset: AlgoTsType.Asset | AlgoTsType.Uint64,
+}
+
+const INPUT_ALGOTS_TYPE_MAP: Record<AlgoTsType, AlgoTsType> = {
+  [AlgoTsType.Asset]: AlgoTsType.Asset | AlgoTsType.Uint64,
+  [AlgoTsType.Application]: AlgoTsType.Application | AlgoTsType.Uint64,
+  [AlgoTsType.Bytes]: AlgoTsType.Bytes,
+  [AlgoTsType.Uint64]: AlgoTsType.Uint64,
+  [AlgoTsType.Boolean]: AlgoTsType.Boolean,
+  [AlgoTsType.Account]: AlgoTsType.Account,
+  [AlgoTsType.Void]: AlgoTsType.Void,
+  [AlgoTsType.BigUint]: AlgoTsType.BigUint,
+  [AlgoTsType.Enum]: AlgoTsType.Enum
+}
+
 const ARG_ENUMS = Object.entries(langSpec.arg_enums).map(([name, values], index): EnumDef => {
   const enumValues = values.map(
     (v): EnumValue => ({
@@ -398,13 +415,13 @@ export function buildOpModule() {
           },
           docs: member.doc,
           name: getEnumOpName(member.name, opNameConfig),
-          immediateArgs: def.immediate_args.map((i) => ({ name: camelCase(i.name), type: getMappedType(i.immediate_type, i.arg_enum) })),
+          immediateArgs: def.immediate_args.map((i) => ({ name: camelCase(i.name), type: getMappedType(i.immediate_type, i.arg_enum, true) })),
           stackArgs: def.stack_inputs.map((sa, i) => {
             if (i === enumArg.modifies_stack_input) {
               invariant(member.stackType, 'Member must have stack type')
-              return { name: camelCase(sa.name), type: member.stackType }
+              return { name: camelCase(sa.name), type: INPUT_ALGOTS_TYPE_MAP[member.stackType] ?? member.stackType }
             }
-            return { name: camelCase(sa.name), type: getMappedType(sa.stack_type, null) }
+            return { name: camelCase(sa.name), type: getMappedType(sa.stack_type, null, true) }
           }),
           returnTypes: def.stack_outputs.map((o, i) => {
             if (i === enumArg.modifies_stack_output) {
@@ -421,8 +438,8 @@ export function buildOpModule() {
           type: 'op-function',
           opCode: opCode,
           name: getOpName(def.name, opNameConfig),
-          immediateArgs: def.immediate_args.map((i) => ({ name: camelCase(i.name), type: getMappedType(i.immediate_type, i.arg_enum) })),
-          stackArgs: def.stack_inputs.map((i) => ({ name: camelCase(i.name), type: getMappedType(i.stack_type, null) })),
+          immediateArgs: def.immediate_args.map((i) => ({ name: camelCase(i.name), type: getMappedType(i.immediate_type, i.arg_enum, true) })),
+          stackArgs: def.stack_inputs.map((i) => ({ name: camelCase(i.name), type: getMappedType(i.stack_type, null, true) })),
           returnTypes: def.stack_outputs.map((o) => getMappedType(o.stack_type, null)),
           docs: getOpDocs(def),
         }),
@@ -542,7 +559,7 @@ function getEnumOpName(enumMember: string, config: OpNameConfig): string {
   return camelCase([config.prefix, enumMember].filter(Boolean).join('_'))
 }
 
-function getMappedType(t: string | null, enumName: string | null): AlgoTsType {
+function getMappedType(t: string | null, enumName: string | null, isInput: boolean = false): AlgoTsType {
   invariant(t !== 'arg_enum' || enumName !== undefined, 'Must provide enumName for arg_enum types')
   if (t === null || t === undefined) {
     throw new Error('Missing type')
@@ -552,7 +569,7 @@ function getMappedType(t: string | null, enumName: string | null): AlgoTsType {
     invariant(enumDef, `Definition must exist for ${enumName}`)
     return enumDef.typeFlag
   }
-  const mappedType = TYPE_MAP[t ?? '']
+  const mappedType = isInput ? INPUT_TYPE_MAP[t ?? ''] ?? TYPE_MAP[t ?? ''] : TYPE_MAP[t ?? '']
   invariant(mappedType, `Mapped type must exist for ${t}`)
   return mappedType
 }

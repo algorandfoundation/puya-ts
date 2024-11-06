@@ -4,12 +4,14 @@ import type { SourceLocation } from '../../awst/source-location'
 import { CodeError, InternalError } from '../../errors'
 import { enumerate, invariant } from '../../util'
 import type { IntrinsicOpGrouping, IntrinsicOpMapping } from '../op-metadata'
-import { OP_METADATA, VOID_OPS } from '../op-metadata'
+import { OP_METADATA } from '../op-metadata'
 import type { PType } from '../ptypes'
 import { IntrinsicEnumType, IntrinsicFunctionGroupType, IntrinsicFunctionType, stringPType } from '../ptypes'
 import { typeRegistry } from '../type-registry'
 import { FunctionBuilder, InstanceExpressionBuilder, NodeBuilder } from './index'
 import { requestConstantOfType, requestExpressionOfType } from './util'
+
+const VOID_OPS = ['itxn_begin', 'itxn_next', 'itxn_submit']
 
 export class IntrinsicOpGroupBuilder extends NodeBuilder {
   private opGrouping: IntrinsicOpGrouping
