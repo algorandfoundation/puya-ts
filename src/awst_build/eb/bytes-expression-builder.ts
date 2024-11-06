@@ -194,11 +194,11 @@ export class BytesExpressionBuilder extends InstanceExpressionBuilder<InstanceTy
       case 'bitwiseInvert':
         return new BytesInvertBuilder(this._expr)
       case 'bitwiseAnd':
-        return new BitwiseAndExpressionBuilder(this._expr)
+        return new BitwiseOpExpressionBuilder(this._expr, BytesBinaryOperator.bitAnd)
       case 'bitwiseOr':
-        return new BitwiseOrExpressionBuilder(this._expr)
+        return new BitwiseOpExpressionBuilder(this._expr, BytesBinaryOperator.bitOr)
       case 'bitwiseXor':
-        return new BitwiseXorExpressionBuilder(this._expr)
+        return new BitwiseOpExpressionBuilder(this._expr, BytesBinaryOperator.bitXor)
       case 'toString':
         return new ToStringBuilder(this._expr)
       case 'concat':
@@ -279,8 +279,11 @@ export class BytesInvertBuilder extends ParameterlessFunctionBuilder {
   }
 }
 
-export class BitwiseAndExpressionBuilder extends FunctionBuilder {
-  constructor(private expr: awst.Expression) {
+export class BitwiseOpExpressionBuilder extends FunctionBuilder {
+  constructor(
+    private expr: awst.Expression,
+    private op: BytesBinaryOperator,
+  ) {
     super(expr.sourceLocation)
   }
 
@@ -291,45 +294,7 @@ export class BitwiseAndExpressionBuilder extends FunctionBuilder {
         wtype: wtypes.bytesWType,
         left: this.expr,
         right: other,
-        op: BytesBinaryOperator.bitAnd,
-        sourceLocation,
-      }),
-    )
-  }
-}
-
-export class BitwiseOrExpressionBuilder extends FunctionBuilder {
-  constructor(private expr: awst.Expression) {
-    super(expr.sourceLocation)
-  }
-
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
-    const [other] = requireExpressionsOfType(args, [bytesPType], sourceLocation)
-    return new BytesExpressionBuilder(
-      nodeFactory.bytesBinaryOperation({
-        wtype: wtypes.bytesWType,
-        left: this.expr,
-        right: other,
-        op: BytesBinaryOperator.bitOr,
-        sourceLocation,
-      }),
-    )
-  }
-}
-
-export class BitwiseXorExpressionBuilder extends FunctionBuilder {
-  constructor(private expr: awst.Expression) {
-    super(expr.sourceLocation)
-  }
-
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
-    const [other] = requireExpressionsOfType(args, [bytesPType], sourceLocation)
-    return new BytesExpressionBuilder(
-      nodeFactory.bytesBinaryOperation({
-        wtype: wtypes.bytesWType,
-        left: this.expr,
-        right: other,
-        op: BytesBinaryOperator.bitXor,
+        op: this.op,
         sourceLocation,
       }),
     )
