@@ -75,6 +75,28 @@ export class UnsupportedType extends PType {
   }
 }
 
+export class LogicSigPType extends PType {
+  readonly wtype = undefined
+  readonly name: string
+  readonly module: string
+  readonly singleton = false
+  readonly sourceLocation: SourceLocation
+  readonly baseType: LogicSigPType | undefined
+  constructor(props: { module: string; name: string; baseType?: LogicSigPType; sourceLocation: SourceLocation }) {
+    super()
+    this.name = props.name
+    this.module = props.module
+    this.baseType = props.baseType
+    this.sourceLocation = props.sourceLocation
+  }
+}
+
+export const logicSigBaseType = new LogicSigPType({
+  name: 'LogicSig',
+  module: Constants.logicSigModuleName,
+  sourceLocation: SourceLocation.None,
+})
+
 export class ContractClassPType extends PType {
   readonly wtype = undefined
   readonly name: string
@@ -1215,4 +1237,9 @@ export const applicationItxnType = new InnerTransactionPType({
 export const submitGroupItxnFunction = new LibFunctionType({
   name: 'submitGroup',
   module: Constants.itxnModuleName,
+})
+
+export const TemplateVarFunction = new LibFunctionType({
+  name: 'TemplateVar',
+  module: Constants.templateVarModuleName,
 })

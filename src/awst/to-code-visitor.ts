@@ -92,7 +92,7 @@ export class ToCodeVisitor
     return `"${expression.value}"`
   }
   visitTemplateVar(expression: nodes.TemplateVar): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    return `TemplateVar[${expression.wtype}](${expression.name})`
   }
   visitMethodConstant(expression: nodes.MethodConstant): string {
     return `Method("${expression.value}")`
@@ -324,7 +324,7 @@ export class ToCodeVisitor
     return [`${prefix}${statement.memberName}(): ${statement.returnType}`, '{', ...indent(statement.body.accept(this)), '}', '']
   }
   visitLogicSignature(moduleStatement: nodes.LogicSignature): string[] {
-    throw new TodoError('Method not implemented.', { sourceLocation: moduleStatement.sourceLocation })
+    return ['', `logicsig ${moduleStatement.id} {`, ...indent(moduleStatement.program.body.accept(this)), '}']
   }
 
   private currentContract: ContractReference[] = []

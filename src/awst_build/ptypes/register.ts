@@ -41,6 +41,7 @@ import {
 import { GlobalStateExpressionBuilder, GlobalStateFunctionBuilder } from '../eb/storage/global-state'
 import { LocalStateExpressionBuilder, LocalStateFunctionBuilder } from '../eb/storage/local-state'
 import { StringExpressionBuilder, StringFunctionBuilder } from '../eb/string-expression-builder'
+import { TemplateVarFunctionBuilder } from '../eb/template-var'
 import { GroupTransactionExpressionBuilder, GroupTransactionFunctionBuilder } from '../eb/transactions/group-transactions'
 import {
   ItxnParamsExpressionBuilder,
@@ -162,6 +163,7 @@ import {
   StringFunction,
   stringPType,
   submitGroupItxnFunction,
+  TemplateVarFunction,
   TransactionFunction,
   transactionTypeType,
   TuplePType,
@@ -201,6 +203,7 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: assertMatchFunction, singletonEb: AssertMatchFunctionBuilder })
   typeRegistry.register({ ptype: ensureBudgetFunction, singletonEb: EnsureBudgetFunctionBuilder })
   typeRegistry.register({ ptype: urangeFunction, singletonEb: UrangeFunctionBuilder })
+  typeRegistry.register({ ptype: TemplateVarFunction, singletonEb: TemplateVarFunctionBuilder })
 
   for (const enumType of [opUpFeeSourceType, onCompleteActionType, transactionTypeType]) {
     typeRegistry.register({ ptype: enumType, singletonEb: Uint64EnumTypeBuilder })

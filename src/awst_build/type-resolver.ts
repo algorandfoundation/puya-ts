@@ -19,6 +19,8 @@ import {
   ClearStateProgram,
   ContractClassPType,
   FunctionPType,
+  logicSigBaseType,
+  LogicSigPType,
   NamespacePType,
   neverPType,
   nullPType,
@@ -214,6 +216,7 @@ export class TypeResolver {
       if (typeName.fullName === arc4BaseContractType.fullName) return arc4BaseContractType
       if (typeName.fullName === baseContractType.fullName) return baseContractType
       if (typeName.fullName === arc4StructBaseType.fullName) return arc4StructBaseType
+      if (typeName.fullName === logicSigBaseType.fullName) return logicSigBaseType
       const [baseType, ...rest] = tsType.getBaseTypes()?.map((t) => this.resolveType(t, sourceLocation)) ?? []
 
       invariant(rest.length === 0, 'Class can have at most one base type')
@@ -223,6 +226,13 @@ export class TypeResolver {
       }
       if (baseType instanceof ARC4StructType) {
         return this.reflectStructType(typeName, tsType, baseType, sourceLocation)
+      }
+      if (baseType instanceof LogicSigPType) {
+        return new LogicSigPType({
+          ...typeName,
+          sourceLocation,
+          baseType,
+        })
       }
       throw new CodeError(
         `${typeName.fullName} cannot be mapped to an algo ts type. Classes must extend "Contract" or "BaseContract" base classes to be considered a contract`,
