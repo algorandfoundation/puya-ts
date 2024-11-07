@@ -307,7 +307,6 @@ export class BytesCls extends AlgoTsPrimitiveCls {
   static fromCompat(v: StubBytesCompat | Uint8Array | undefined): BytesCls {
     if (v === undefined) return new BytesCls(new Uint8Array())
     if (typeof v === 'string') return new BytesCls(utf8ToUint8Array(v))
-    if (typeof v == 'bigint') return new BytesCls(bigIntToUint8Array(v))
     if (v instanceof BytesCls) return v
     if (v instanceof Uint8Array) return new BytesCls(v)
     internalError(`Cannot convert ${nameOfType(v)} to bytes`)

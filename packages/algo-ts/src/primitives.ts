@@ -4,7 +4,7 @@ import { BigUintCls, BytesCls, getNumber, Uint64Cls } from './impl/primitives'
 export type Uint64Compat = uint64 | bigint | boolean | number
 export type BigUintCompat = bigint | bytes | number | boolean
 export type StringCompat = string
-export type BytesCompat = bigint | bytes | string
+export type BytesCompat = bytes | string
 
 /**
  * An unsigned integer of exactly 64 bits
