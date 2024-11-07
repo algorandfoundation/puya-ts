@@ -1,4 +1,4 @@
-import type { ContractClassPType } from '../awst_build/ptypes'
+import type { ContractClassPType, LogicSigPType } from '../awst_build/ptypes'
 import type { Props } from '../typescript-helpers'
 import type { SourceLocation } from './source-location'
 
@@ -122,6 +122,13 @@ export class LogicSigReference extends ModelBase {
 
   toString(): string {
     return this.id
+  }
+
+  static fromPType(logicSigPType: LogicSigPType): LogicSigReference {
+    return new LogicSigReference({
+      name: logicSigPType.name,
+      moduleName: logicSigPType.module,
+    })
   }
 }
 

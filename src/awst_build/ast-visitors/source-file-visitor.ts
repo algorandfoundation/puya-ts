@@ -9,10 +9,11 @@ import { accept } from '../../visitor/visitor'
 
 import type { AwstBuildContext } from '../context/awst-build-context'
 import { requireConstantOfType } from '../eb/util'
-import { ContractClassPType, LibClassType } from '../ptypes'
+import { ContractClassPType, LibClassType, LogicSigPType } from '../ptypes'
 import { ARC4StructType } from '../ptypes/arc4-types'
 import { BaseVisitor } from './base-visitor'
 import { ContractVisitor } from './contract-visitor'
+import { LogicSigVisitor } from './logic-sig-visitor'
 import { StructVisitor } from './struct-visitor'
 import { SubroutineVisitor } from './subroutine-visitor'
 
@@ -107,6 +108,8 @@ export class SourceFileVisitor extends BaseVisitor implements Visitor<ModuleStat
       return () => logPuyaExceptions(() => ContractVisitor.buildContract(this.context.createChildContext(), node, ptype), sourceLocation)
     } else if (ptype instanceof ARC4StructType) {
       return () => logPuyaExceptions(() => StructVisitor.buildStructDef(this.context.createChildContext(), node, ptype), sourceLocation)
+    } else if (ptype instanceof LogicSigPType) {
+      return () => logPuyaExceptions(() => LogicSigVisitor.buildLogicSig(this.context.createChildContext(), node, ptype), sourceLocation)
     } else {
       logger.warn(sourceLocation, `Ignoring class declaration ${ptype.fullName}`)
       return []

@@ -11,6 +11,7 @@ import type { Props } from '../../typescript-helpers'
 import { codeInvariant, invariant, isIn } from '../../util'
 import { CustomKeyMap } from '../../util/custom-key-map'
 import type { ContractClassPType } from '../ptypes'
+import { LogicSigClassModel } from './logic-sig-class-model'
 
 export class ContractClassModel {
   public readonly isAbstract: boolean
@@ -165,18 +166,14 @@ export class ContractClassModel {
   }
 }
 
-export class LogicSig {
-  public readonly isForOutput: boolean = true
-}
-
-export class CompilationSet extends CustomKeyMap<ContractReference | LogicSigReference, ContractClassModel | LogicSig> {
+export class CompilationSet extends CustomKeyMap<ContractReference | LogicSigReference, ContractClassModel | LogicSigClassModel> {
   constructor() {
     super((x) => x.toString())
   }
 
   get compilationOutputSet() {
     return Array.from(this.entries())
-      .filter(([, meta]) => (meta instanceof ContractClassModel ? !meta.isAbstract : false))
+      .filter(([, meta]) => !meta.isAbstract)
       .map(([ref]) => ref)
   }
 
@@ -184,5 +181,11 @@ export class CompilationSet extends CustomKeyMap<ContractReference | LogicSigRef
     const maybeClass = this.get(cref)
     invariant(maybeClass instanceof ContractClassModel, 'Contract reference must resolve to a contract class')
     return maybeClass
+  }
+
+  getLogicSig(lref: LogicSigReference) {
+    const maybeLogicSig = this.get(lref)
+    invariant(maybeLogicSig instanceof LogicSigClassModel, 'Logic sig reference must resolve to a logic signature class')
+    return maybeLogicSig
   }
 }

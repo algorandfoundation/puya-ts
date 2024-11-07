@@ -21,3 +21,7 @@ export const getSequenceItemType = (sequence: PType, sequenceLocation: SourceLoc
   }
   throw new CodeError('Target is not iterable', { sourceLocation: sequenceLocation })
 }
+
+export const ptypeIn = (target: PType, ...ptypes: [PType, ...PType[]]): boolean => {
+  return ptypes.some((t) => t.equals(target))
+}

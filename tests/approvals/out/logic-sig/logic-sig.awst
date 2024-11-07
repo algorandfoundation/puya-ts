@@ -1,0 +1,13 @@
+
+logicsig tests/approvals/logic-sig.algo.ts::AlwaysAllow {
+  return True
+}
+subroutine feeIsZero(): void
+{
+  assert(txn<Fee>() == 0)
+}
+
+logicsig tests/approvals/logic-sig.algo.ts::AllowNoFee {
+  tests/approvals/logic-sig.algo.ts::feeIsZero()
+  return 1
+}
