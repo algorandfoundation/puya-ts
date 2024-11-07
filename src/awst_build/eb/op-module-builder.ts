@@ -6,12 +6,10 @@ import { enumerate, invariant } from '../../util'
 import type { IntrinsicOpGrouping, IntrinsicOpMapping } from '../op-metadata'
 import { OP_METADATA } from '../op-metadata'
 import type { PType } from '../ptypes'
-import { IntrinsicEnumType, IntrinsicFunctionGroupType, IntrinsicFunctionType, stringPType } from '../ptypes'
+import { IntrinsicEnumType, IntrinsicFunctionGroupType, IntrinsicFunctionType, stringPType, voidPType } from '../ptypes'
 import { typeRegistry } from '../type-registry'
 import { FunctionBuilder, InstanceExpressionBuilder, NodeBuilder } from './index'
 import { requestConstantOfType, requestExpressionOfType } from './util'
-
-const VOID_OPS = ['itxn_begin', 'itxn_next', 'itxn_submit']
 
 export class IntrinsicOpGroupBuilder extends NodeBuilder {
   private opGrouping: IntrinsicOpGrouping
@@ -35,7 +33,7 @@ export class IntrinsicOpGroupBuilder extends NodeBuilder {
     }
     const metaData = this.opGrouping.ops[name]
 
-    if (VOID_OPS.includes(metaData.op) || metaData.signatures.some((s) => s.argNames.length)) {
+    if (metaData.signatures.some((s) => s.argNames.length || s.returnType.equals(voidPType))) {
       return new GroupedIntrinsicOpBuilder(sourceLocation, metaData)
     }
 
