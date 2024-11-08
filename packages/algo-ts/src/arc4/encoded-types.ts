@@ -8,7 +8,7 @@ export type BitSize = 8 | 16 | 32 | 64 | 128 | 256 | 512
 type NativeForArc4Int<N extends BitSize> = N extends 8 | 16 | 32 | 64 ? uint64 : biguint
 type CompatForArc4Int<N extends BitSize> = N extends 8 | 16 | 32 | 64 ? Uint64Compat : BigUintCompat
 
-abstract class ARC4Encoded implements BytesBacked {
+export abstract class ARC4Encoded implements BytesBacked {
   abstract __type?: string
   get bytes(): bytes {
     throw new Error('todo')
