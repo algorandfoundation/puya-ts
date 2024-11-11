@@ -34,7 +34,16 @@ export {
   LocalStateType,
   PType,
 } from './awst_build/ptypes'
-export { ARC4StructType, ARC4TupleType, DynamicArrayType, StaticArrayType, UFixedNxMType, UintNType } from './awst_build/ptypes/arc4-types'
+export {
+  ARC4BooleanType,
+  ARC4StringType,
+  ARC4StructType,
+  ARC4TupleType,
+  DynamicArrayType,
+  StaticArrayType,
+  UFixedNxMType,
+  UintNType,
+} from './awst_build/ptypes/arc4-types'
 export { registerPTypes } from './awst_build/ptypes/register'
 export { typeRegistry } from './awst_build/type-registry'
 export { TypeResolver } from './awst_build/type-resolver'
