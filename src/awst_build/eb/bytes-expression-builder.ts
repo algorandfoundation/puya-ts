@@ -9,7 +9,7 @@ import { wtypes } from '../../awst/wtypes'
 
 import { CodeError, wrapInCodeError } from '../../errors'
 import { logger } from '../../logger'
-import { base32ToUint8Array, base64ToUint8Array, hexToUint8Array, uint8ArrayToUtf8, utf8ToUint8Array } from '../../util'
+import { base32ToUint8Array, base64ToUint8Array, enumKeyFromValue, hexToUint8Array, uint8ArrayToUtf8, utf8ToUint8Array } from '../../util'
 import type { InstanceType, PType } from '../ptypes'
 import {
   ArrayPType,
@@ -193,6 +193,12 @@ export class BytesExpressionBuilder extends InstanceExpressionBuilder<InstanceTy
         )
       case 'bitwiseInvert':
         return new BytesInvertBuilder(this._expr)
+      case 'bitwiseAnd':
+        return new BitwiseOpFunctionBuilder(this._expr, BytesBinaryOperator.bitAnd)
+      case 'bitwiseOr':
+        return new BitwiseOpFunctionBuilder(this._expr, BytesBinaryOperator.bitOr)
+      case 'bitwiseXor':
+        return new BitwiseOpFunctionBuilder(this._expr, BytesBinaryOperator.bitXor)
       case 'toString':
         return new ToStringBuilder(this._expr)
       case 'concat':
@@ -269,6 +275,37 @@ export class BytesInvertBuilder extends ParameterlessFunctionBuilder {
             sourceLocation,
           }),
         ),
+    )
+  }
+}
+
+export class BitwiseOpFunctionBuilder extends FunctionBuilder {
+  constructor(
+    private expr: awst.Expression,
+    private op: BytesBinaryOperator,
+  ) {
+    super(expr.sourceLocation)
+  }
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    const {
+      args: [other],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 0,
+      callLocation: sourceLocation,
+      funcName: enumKeyFromValue(this.op, BytesBinaryOperator),
+      argSpec: (a) => [a.required(bytesPType)],
+    })
+    return new BytesExpressionBuilder(
+      nodeFactory.bytesBinaryOperation({
+        wtype: wtypes.bytesWType,
+        left: this.expr,
+        right: other.resolve(),
+        op: this.op,
+        sourceLocation,
+      }),
     )
   }
 }

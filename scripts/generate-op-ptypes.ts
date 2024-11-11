@@ -1,5 +1,5 @@
+import { camelCase, pascalCase } from 'change-case'
 import * as fs from 'fs'
-import { camelCase } from 'change-case'
 import type { EnumDef, OpModule } from './build-op-module'
 import { buildOpModule, ENUMS_TO_EXPOSE } from './build-op-module'
 
@@ -16,7 +16,7 @@ function* emitHeader() {
 function* emitTypes(module: OpModule) {
   function* emitEnumPType(enumDef: EnumDef) {
     yield `export const ${camelCase(enumDef.tsName)}PType = new IntrinsicEnumType({
-      name: '${enumDef.name}',
+      name: '${pascalCase(enumDef.name)}',
       module: \`\${Constants.algoTsPackage}/op-types.d.ts\`,
       members: [`
     for (const member of enumDef.members) {

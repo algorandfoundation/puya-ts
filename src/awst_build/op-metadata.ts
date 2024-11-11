@@ -228,7 +228,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
             argNames: ['a', 'b'],
             immediateArgs: [],
             stackArgs: [
-              { name: 'a', ptypes: [ptypes.applicationPType] },
+              { name: 'a', ptypes: [ptypes.applicationPType, ptypes.uint64PType] },
               { name: 'b', ptypes: [ptypes.bytesPType] },
             ],
             returnType: new ptypes.TuplePType({ items: [ptypes.bytesPType, ptypes.boolPType] }),
@@ -243,7 +243,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
             argNames: ['a', 'b'],
             immediateArgs: [],
             stackArgs: [
-              { name: 'a', ptypes: [ptypes.applicationPType] },
+              { name: 'a', ptypes: [ptypes.applicationPType, ptypes.uint64PType] },
               { name: 'b', ptypes: [ptypes.bytesPType] },
             ],
             returnType: new ptypes.TuplePType({ items: [ptypes.uint64PType, ptypes.boolPType] }),
@@ -325,7 +325,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
             immediateArgs: [],
             stackArgs: [
               { name: 'a', ptypes: [ptypes.accountPType, ptypes.uint64PType] },
-              { name: 'b', ptypes: [ptypes.applicationPType] },
+              { name: 'b', ptypes: [ptypes.applicationPType, ptypes.uint64PType] },
               { name: 'c', ptypes: [ptypes.bytesPType] },
             ],
             returnType: new ptypes.TuplePType({ items: [ptypes.bytesPType, ptypes.boolPType] }),
@@ -341,7 +341,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
             immediateArgs: [],
             stackArgs: [
               { name: 'a', ptypes: [ptypes.accountPType, ptypes.uint64PType] },
-              { name: 'b', ptypes: [ptypes.applicationPType] },
+              { name: 'b', ptypes: [ptypes.applicationPType, ptypes.uint64PType] },
               { name: 'c', ptypes: [ptypes.bytesPType] },
             ],
             returnType: new ptypes.TuplePType({ items: [ptypes.uint64PType, ptypes.boolPType] }),
@@ -375,7 +375,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
         immediateArgs: [],
         stackArgs: [
           { name: 'a', ptypes: [ptypes.accountPType, ptypes.uint64PType] },
-          { name: 'b', ptypes: [ptypes.applicationPType] },
+          { name: 'b', ptypes: [ptypes.applicationPType, ptypes.uint64PType] },
         ],
         returnType: ptypes.boolPType,
       },
@@ -392,7 +392,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           {
             argNames: ['a'],
             immediateArgs: ['AppApprovalProgram'],
-            stackArgs: [{ name: 'a', ptypes: [ptypes.applicationPType] }],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.applicationPType, ptypes.uint64PType] }],
             returnType: new ptypes.TuplePType({ items: [ptypes.bytesPType, ptypes.boolPType] }),
           },
         ],
@@ -404,7 +404,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           {
             argNames: ['a'],
             immediateArgs: ['AppClearStateProgram'],
-            stackArgs: [{ name: 'a', ptypes: [ptypes.applicationPType] }],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.applicationPType, ptypes.uint64PType] }],
             returnType: new ptypes.TuplePType({ items: [ptypes.bytesPType, ptypes.boolPType] }),
           },
         ],
@@ -416,7 +416,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           {
             argNames: ['a'],
             immediateArgs: ['AppGlobalNumUint'],
-            stackArgs: [{ name: 'a', ptypes: [ptypes.applicationPType] }],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.applicationPType, ptypes.uint64PType] }],
             returnType: new ptypes.TuplePType({ items: [ptypes.uint64PType, ptypes.boolPType] }),
           },
         ],
@@ -428,7 +428,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           {
             argNames: ['a'],
             immediateArgs: ['AppGlobalNumByteSlice'],
-            stackArgs: [{ name: 'a', ptypes: [ptypes.applicationPType] }],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.applicationPType, ptypes.uint64PType] }],
             returnType: new ptypes.TuplePType({ items: [ptypes.uint64PType, ptypes.boolPType] }),
           },
         ],
@@ -440,7 +440,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           {
             argNames: ['a'],
             immediateArgs: ['AppLocalNumUint'],
-            stackArgs: [{ name: 'a', ptypes: [ptypes.applicationPType] }],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.applicationPType, ptypes.uint64PType] }],
             returnType: new ptypes.TuplePType({ items: [ptypes.uint64PType, ptypes.boolPType] }),
           },
         ],
@@ -452,7 +452,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           {
             argNames: ['a'],
             immediateArgs: ['AppLocalNumByteSlice'],
-            stackArgs: [{ name: 'a', ptypes: [ptypes.applicationPType] }],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.applicationPType, ptypes.uint64PType] }],
             returnType: new ptypes.TuplePType({ items: [ptypes.uint64PType, ptypes.boolPType] }),
           },
         ],
@@ -464,7 +464,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           {
             argNames: ['a'],
             immediateArgs: ['AppExtraProgramPages'],
-            stackArgs: [{ name: 'a', ptypes: [ptypes.applicationPType] }],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.applicationPType, ptypes.uint64PType] }],
             returnType: new ptypes.TuplePType({ items: [ptypes.uint64PType, ptypes.boolPType] }),
           },
         ],
@@ -476,7 +476,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           {
             argNames: ['a'],
             immediateArgs: ['AppCreator'],
-            stackArgs: [{ name: 'a', ptypes: [ptypes.applicationPType] }],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.applicationPType, ptypes.uint64PType] }],
             returnType: new ptypes.TuplePType({ items: [ptypes.accountPType, ptypes.boolPType] }),
           },
         ],
@@ -488,7 +488,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           {
             argNames: ['a'],
             immediateArgs: ['AppAddress'],
-            stackArgs: [{ name: 'a', ptypes: [ptypes.applicationPType] }],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.applicationPType, ptypes.uint64PType] }],
             returnType: new ptypes.TuplePType({ items: [ptypes.accountPType, ptypes.boolPType] }),
           },
         ],
@@ -515,7 +515,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
             immediateArgs: ['AssetBalance'],
             stackArgs: [
               { name: 'a', ptypes: [ptypes.accountPType, ptypes.uint64PType] },
-              { name: 'b', ptypes: [ptypes.assetPType] },
+              { name: 'b', ptypes: [ptypes.assetPType, ptypes.uint64PType] },
             ],
             returnType: new ptypes.TuplePType({ items: [ptypes.uint64PType, ptypes.boolPType] }),
           },
@@ -530,7 +530,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
             immediateArgs: ['AssetFrozen'],
             stackArgs: [
               { name: 'a', ptypes: [ptypes.accountPType, ptypes.uint64PType] },
-              { name: 'b', ptypes: [ptypes.assetPType] },
+              { name: 'b', ptypes: [ptypes.assetPType, ptypes.uint64PType] },
             ],
             returnType: new ptypes.TuplePType({ items: [ptypes.boolPType, ptypes.boolPType] }),
           },
@@ -549,7 +549,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           {
             argNames: ['a'],
             immediateArgs: ['AssetTotal'],
-            stackArgs: [{ name: 'a', ptypes: [ptypes.assetPType] }],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.assetPType, ptypes.uint64PType] }],
             returnType: new ptypes.TuplePType({ items: [ptypes.uint64PType, ptypes.boolPType] }),
           },
         ],
@@ -561,7 +561,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           {
             argNames: ['a'],
             immediateArgs: ['AssetDecimals'],
-            stackArgs: [{ name: 'a', ptypes: [ptypes.assetPType] }],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.assetPType, ptypes.uint64PType] }],
             returnType: new ptypes.TuplePType({ items: [ptypes.uint64PType, ptypes.boolPType] }),
           },
         ],
@@ -573,7 +573,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           {
             argNames: ['a'],
             immediateArgs: ['AssetDefaultFrozen'],
-            stackArgs: [{ name: 'a', ptypes: [ptypes.assetPType] }],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.assetPType, ptypes.uint64PType] }],
             returnType: new ptypes.TuplePType({ items: [ptypes.boolPType, ptypes.boolPType] }),
           },
         ],
@@ -585,7 +585,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           {
             argNames: ['a'],
             immediateArgs: ['AssetUnitName'],
-            stackArgs: [{ name: 'a', ptypes: [ptypes.assetPType] }],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.assetPType, ptypes.uint64PType] }],
             returnType: new ptypes.TuplePType({ items: [ptypes.bytesPType, ptypes.boolPType] }),
           },
         ],
@@ -597,7 +597,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           {
             argNames: ['a'],
             immediateArgs: ['AssetName'],
-            stackArgs: [{ name: 'a', ptypes: [ptypes.assetPType] }],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.assetPType, ptypes.uint64PType] }],
             returnType: new ptypes.TuplePType({ items: [ptypes.bytesPType, ptypes.boolPType] }),
           },
         ],
@@ -609,7 +609,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           {
             argNames: ['a'],
             immediateArgs: ['AssetURL'],
-            stackArgs: [{ name: 'a', ptypes: [ptypes.assetPType] }],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.assetPType, ptypes.uint64PType] }],
             returnType: new ptypes.TuplePType({ items: [ptypes.bytesPType, ptypes.boolPType] }),
           },
         ],
@@ -621,7 +621,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           {
             argNames: ['a'],
             immediateArgs: ['AssetMetadataHash'],
-            stackArgs: [{ name: 'a', ptypes: [ptypes.assetPType] }],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.assetPType, ptypes.uint64PType] }],
             returnType: new ptypes.TuplePType({ items: [ptypes.bytesPType, ptypes.boolPType] }),
           },
         ],
@@ -633,7 +633,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           {
             argNames: ['a'],
             immediateArgs: ['AssetManager'],
-            stackArgs: [{ name: 'a', ptypes: [ptypes.assetPType] }],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.assetPType, ptypes.uint64PType] }],
             returnType: new ptypes.TuplePType({ items: [ptypes.accountPType, ptypes.boolPType] }),
           },
         ],
@@ -645,7 +645,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           {
             argNames: ['a'],
             immediateArgs: ['AssetReserve'],
-            stackArgs: [{ name: 'a', ptypes: [ptypes.assetPType] }],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.assetPType, ptypes.uint64PType] }],
             returnType: new ptypes.TuplePType({ items: [ptypes.accountPType, ptypes.boolPType] }),
           },
         ],
@@ -657,7 +657,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           {
             argNames: ['a'],
             immediateArgs: ['AssetFreeze'],
-            stackArgs: [{ name: 'a', ptypes: [ptypes.assetPType] }],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.assetPType, ptypes.uint64PType] }],
             returnType: new ptypes.TuplePType({ items: [ptypes.accountPType, ptypes.boolPType] }),
           },
         ],
@@ -669,7 +669,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           {
             argNames: ['a'],
             immediateArgs: ['AssetClawback'],
-            stackArgs: [{ name: 'a', ptypes: [ptypes.assetPType] }],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.assetPType, ptypes.uint64PType] }],
             returnType: new ptypes.TuplePType({ items: [ptypes.accountPType, ptypes.boolPType] }),
           },
         ],
@@ -681,7 +681,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           {
             argNames: ['a'],
             immediateArgs: ['AssetCreator'],
-            stackArgs: [{ name: 'a', ptypes: [ptypes.assetPType] }],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.assetPType, ptypes.uint64PType] }],
             returnType: new ptypes.TuplePType({ items: [ptypes.accountPType, ptypes.boolPType] }),
           },
         ],
@@ -3616,7 +3616,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           {
             argNames: ['a'],
             immediateArgs: ['XferAsset'],
-            stackArgs: [{ name: 'a', ptypes: [ptypes.assetPType] }],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.assetPType, ptypes.uint64PType] }],
             returnType: ptypes.voidPType,
           },
         ],
@@ -3676,7 +3676,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           {
             argNames: ['a'],
             immediateArgs: ['ApplicationID'],
-            stackArgs: [{ name: 'a', ptypes: [ptypes.applicationPType] }],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.applicationPType, ptypes.uint64PType] }],
             returnType: ptypes.voidPType,
           },
         ],
@@ -3760,7 +3760,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           {
             argNames: ['a'],
             immediateArgs: ['ConfigAsset'],
-            stackArgs: [{ name: 'a', ptypes: [ptypes.assetPType] }],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.assetPType, ptypes.uint64PType] }],
             returnType: ptypes.voidPType,
           },
         ],
@@ -3904,7 +3904,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           {
             argNames: ['a'],
             immediateArgs: ['FreezeAsset'],
-            stackArgs: [{ name: 'a', ptypes: [ptypes.assetPType] }],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.assetPType, ptypes.uint64PType] }],
             returnType: ptypes.voidPType,
           },
         ],

@@ -3,7 +3,7 @@ import { IntrinsicEnumType } from './intrinsic-enum-type'
 import { Constants } from '../../constants'
 
 export const base64PType = new IntrinsicEnumType({
-  name: 'base64',
+  name: 'Base64',
   module: `${Constants.algoTsPackage}/op-types.d.ts`,
   members: [
     ['URLEncoding', 'URLEncoding'],
@@ -11,7 +11,7 @@ export const base64PType = new IntrinsicEnumType({
   ],
 })
 export const ecPType = new IntrinsicEnumType({
-  name: 'EC',
+  name: 'Ec',
   module: `${Constants.algoTsPackage}/op-types.d.ts`,
   members: [
     ['BN254g1', 'BN254g1'],
@@ -21,7 +21,7 @@ export const ecPType = new IntrinsicEnumType({
   ],
 })
 export const ecdsaPType = new IntrinsicEnumType({
-  name: 'ECDSA',
+  name: 'Ecdsa',
   module: `${Constants.algoTsPackage}/op-types.d.ts`,
   members: [
     ['Secp256k1', 'Secp256k1'],
@@ -29,7 +29,7 @@ export const ecdsaPType = new IntrinsicEnumType({
   ],
 })
 export const vrfVerifyPType = new IntrinsicEnumType({
-  name: 'vrf_verify',
+  name: 'VrfVerify',
   module: `${Constants.algoTsPackage}/op-types.d.ts`,
   members: [['VrfAlgorand', 'VrfAlgorand']],
 })

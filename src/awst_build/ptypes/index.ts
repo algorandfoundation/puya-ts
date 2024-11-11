@@ -1028,7 +1028,7 @@ export const transactionTypeType = new Uint64EnumType({
     AssetConfig: 3n,
     AssetTransfer: 4n,
     AssetFreeze: 5n,
-    Application: 6n,
+    ApplicationCall: 6n,
   },
 })
 export const onCompleteActionType = new Uint64EnumType({

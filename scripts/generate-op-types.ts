@@ -76,9 +76,9 @@ import { Account, Application, Asset } from './reference'
     }
   }
   function* emitArgType(argType: AlgoTsType) {
-    if (hasFlags(argType, AlgoTsType.Application)) yield 'Application | uint64'
+    if (hasFlags(argType, AlgoTsType.Application)) yield 'Application'
     if (hasFlags(argType, AlgoTsType.Account)) yield 'Account'
-    if (hasFlags(argType, AlgoTsType.Asset)) yield 'Asset | uint64'
+    if (hasFlags(argType, AlgoTsType.Asset)) yield 'Asset'
     if (hasFlags(argType, AlgoTsType.Uint64)) yield 'uint64'
     if (hasFlags(argType, AlgoTsType.Bytes)) yield 'bytes'
     if (hasFlags(argType, AlgoTsType.Boolean)) yield 'boolean'

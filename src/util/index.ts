@@ -35,6 +35,18 @@ export const enumFromValue = <TValue, TEnum extends TValue>(
   throw new Error(`${message} ${value}`)
 }
 
+export const enumKeyFromValue = <TValue, TEnum extends TValue>(
+  value: TValue,
+  enumType: Record<string, TEnum>,
+  message: string = 'Invalid enum value: ',
+) => {
+  const key = Object.entries(enumType).find(([_, v]) => v === value)?.[0]
+  if (key) {
+    return key
+  }
+  throw new Error(`${message} ${value}`)
+}
+
 export const convertEnum = <TEnumIn, TEnumOut, TKeys extends string>(
   value: TEnumIn,
   fromEnum: Record<TKeys, TEnumIn>,
