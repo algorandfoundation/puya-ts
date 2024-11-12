@@ -9,7 +9,7 @@ import { invariant } from '../../util'
 import { ConstantStore } from '../constant-store'
 import type { NodeBuilder } from '../eb'
 import type { AppStorageDeclaration } from '../models/app-storage-declaration'
-import type { ContractClassModel, LogicSig } from '../models/contract-class-model'
+import type { ContractClassModel } from '../models/contract-class-model'
 import { CompilationSet } from '../models/contract-class-model'
 import type { ContractClassPType, PType } from '../ptypes'
 import { typeRegistry } from '../type-registry'
@@ -17,6 +17,7 @@ import { TypeResolver } from '../type-resolver'
 import { EvaluationContext } from './evaluation-context'
 import { SwitchLoopContext } from './switch-loop-context'
 import { UniqueNameResolver } from './unique-name-resolver'
+import type { LogicSigClassModel } from '../models/logic-sig-class-model'
 
 export interface AwstBuildContext {
   /**
@@ -91,7 +92,7 @@ export interface AwstBuildContext {
   getStorageDefinitionsForContract(contractType: ContractClassPType): AppStorageDefinition[]
 
   addToCompilationSet(compilationTarget: ContractReference, contract: ContractClassModel): void
-  addToCompilationSet(compilationTarget: LogicSigReference, logicSig: LogicSig): void
+  addToCompilationSet(compilationTarget: LogicSigReference, logicSig: LogicSigClassModel): void
 
   get compilationSet(): CompilationSet
 }
@@ -238,8 +239,8 @@ class AwstBuildContextImpl implements AwstBuildContext {
   }
 
   addToCompilationSet(compilationTarget: ContractReference, contract: ContractClassModel): void
-  addToCompilationSet(compilationTarget: LogicSigReference, logicSig: LogicSig): void
-  addToCompilationSet(compilationTarget: ContractReference | LogicSigReference, contractOrSig: ContractClassModel | LogicSig) {
+  addToCompilationSet(compilationTarget: LogicSigReference, logicSig: LogicSigClassModel): void
+  addToCompilationSet(compilationTarget: ContractReference | LogicSigReference, contractOrSig: ContractClassModel | LogicSigClassModel) {
     if (this.#compilationSet.has(compilationTarget)) {
       logger.debug(undefined, `${compilationTarget.id} already exists in compilation set`)
       return

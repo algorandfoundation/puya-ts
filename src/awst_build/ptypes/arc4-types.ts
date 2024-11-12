@@ -122,6 +122,7 @@ export class ARC4StructType extends ARC4EncodedType {
       name: this.name,
       fields: Object.fromEntries(Object.entries(this.fields).map(([f, t]) => [f, t.wtype])),
       sourceLocation: this.sourceLocation,
+      frozen: false,
     })
   }
 

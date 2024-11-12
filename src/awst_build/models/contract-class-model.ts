@@ -102,6 +102,7 @@ export class ContractClassModel {
       stateTotals: this.stateTotals, // TODO: Tally
       reservedScratchSpace: this.reservedScratchSpace,
       sourceLocation: this.sourceLocation,
+      avmVersion: null, // TODO: Allow this to be set with class decorator
     })
   }
 

@@ -1190,11 +1190,13 @@ export class LogicSignature extends RootNode {
     this.shortName = props.shortName
     this.program = props.program
     this.docstring = props.docstring
+    this.avmVersion = props.avmVersion
   }
   id: LogicSigReference
   shortName: string
   program: Subroutine
   docstring: string | null
+  avmVersion: bigint | null
   accept<T>(visitor: RootNodeVisitor<T>): T {
     return visitor.visitLogicSignature(this)
   }
@@ -1263,6 +1265,7 @@ export class Contract extends RootNode {
     this.appState = props.appState
     this.stateTotals = props.stateTotals
     this.reservedScratchSpace = props.reservedScratchSpace
+    this.avmVersion = props.avmVersion
   }
   id: ContractReference
   name: string
@@ -1274,6 +1277,7 @@ export class Contract extends RootNode {
   appState: Array<AppStorageDefinition>
   stateTotals: StateTotals | null
   reservedScratchSpace: Set<bigint>
+  avmVersion: bigint | null
   accept<T>(visitor: RootNodeVisitor<T>): T {
     return visitor.visitContract(this)
   }
