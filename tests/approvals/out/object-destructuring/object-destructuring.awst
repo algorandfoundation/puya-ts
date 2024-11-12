@@ -1,0 +1,34 @@
+subroutine testPartialDestructure(arg: { x: uint64, y: uint64, z: uint64 }): void
+{
+  { x: x, y: _, z: _₁ }: { x: uint64, y: uint64, z: uint64 } = arg
+  { nested: { y: y, x: _₂, z: _₃ } }: { nested: { y: uint64, x: uint64, z: uint64 } } = { nested: (#2 = { nested: { y: arg.y, x: arg.x, z: arg.z } }).nested }
+}
+subroutine test(): void
+{
+  { a: a, b: b, c: c, d: d }: { a: uint64, b: bytes, c: bool, d: biguint } = tests/approvals/object-destructuring.algo.ts::produceItems()
+  { d: e, a: _, b: _₁, c: _₂ }: { d: biguint, a: uint64, b: bytes, c: bool } = { d: (#3 = tests/approvals/object-destructuring.algo.ts::produceItems()).d, a: #3.a, b: #3.b, c: #3.c }
+  f: { a: uint64, b: bytes, c: bool, d: biguint } = { a: (#5 = ({ a: g, d: i, b: _₃, c: _₄ } = { a: (#4 = tests/approvals/object-destructuring.algo.ts::produceItems()).a, d: #4.d, b: #4.b, c: #4.c })).a, b: #5.b, c: #5.c, d: #5.d }
+  tests/approvals/object-destructuring.algo.ts::receivePartial({ a: (#6 = tests/approvals/object-destructuring.algo.ts::produceItems()).a, d: #6.d })
+}
+subroutine produceItems(): { a: uint64, b: bytes, c: bool, d: biguint }
+{
+  return { a: (#7 = { a: 1, b: "", c: False, d: 999 }).a, b: #7.b, c: #7.c, d: #7.d }
+}
+subroutine receivePartial(x: { a: uint64, d: biguint }): void
+{
+}
+subroutine testLiteralToLiteral(): void
+{
+  a: uint64 = 4
+  b: uint64 = 1
+  { a: e, b: f }: { a: uint64, b: uint64 } = ({ a: c, b: d } = { a: a, b: b })
+}
+subroutine testNumericResolution(): void
+{
+  x: { a: uint64 } = (y = { a: (#8 = { a: 434 }).a })
+}
+subroutine test2(args: { x: bool, y: bool, z: readonlytuple[string, string] }): void
+{
+  { a: a, b: b, args: { x: x, y: y, z: _ } }: { a: bool, b: bool, args: { x: bool, y: bool, z: readonlytuple[string, string] } } = { a: True, b: False, args: args }
+  args2: { x: bool, y: bool, z: readonlytuple[string, string] } = { x: True, y: True, z: args.z }
+}

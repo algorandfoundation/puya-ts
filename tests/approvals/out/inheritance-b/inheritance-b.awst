@@ -1,0 +1,99 @@
+contract ConcreteSimpleContract
+{
+  globals {
+    ["someState"]: uint64
+  }
+  approvalProgram(): uint64
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    a: uint64 = btoi(txnas<ApplicationArgs>(0))
+    b: uint64 = btoi(txnas<ApplicationArgs>(1))
+    log(itob(this.simpleMethod(a, b)))
+    return 1
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  constructor(): void
+  {
+    super.constructor()
+  }
+  
+  SimpleContract::simpleMethod(): uint64
+  {
+    return a * b
+  }
+  
+  SimpleContract::constructor(): void
+  {
+    void
+  }
+  
+  Contract::constructor(): void
+  {
+    this.constructor()
+  }
+  
+}
+contract ConcreteArc4Contract
+{
+  globals {
+    ["someState"]: uint64
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  getVeryImportantValue(): string
+  {
+    return "42"
+  }
+  
+  constructor(): void
+  {
+    super.constructor()
+  }
+  
+  Arc4Contract::simpleMethod(): uint64
+  {
+    return a * b
+  }
+  
+  Arc4Contract::simpleAbiMethod(): uint64
+  {
+    return a + b
+  }
+  
+  Arc4Contract::constructor(): void
+  {
+    void
+  }
+  
+  Contract::constructor(): void
+  {
+  }
+  
+  Contract::constructor(): void
+  {
+    this.constructor()
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

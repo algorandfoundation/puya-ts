@@ -7,7 +7,7 @@
   "scripts": {
     "postinstall": "npx patch-package",
     "dev:examples": "tsx src/cli.ts build examples --output-awst --output-awst-json",
-    "dev:approvals": "rimraf tests/approvals/out && tsx src/cli.ts build tests/approvals --output-awst --output-awst-json --no-output-teal --output-ssa-ir --out-dir out/[name]",
+    "dev:approvals": "rimraf tests/approvals/out && tsx src/cli.ts build tests/approvals --output-awst --output-awst-json --output-ssa-ir --out-dir out/[name] --optimization-level 0",
     "dev:expected-output": "tsx src/cli.ts build tests/expected-output --dry-run",
     "dev:testing": "tsx src/cli.ts build tests/approvals/arc4-struct.algo.ts --output-awst --output-awst-json --output-ssa-ir --log-level=info --log-level info --out-dir out/[name]",
     "audit": "better-npm-audit audit",

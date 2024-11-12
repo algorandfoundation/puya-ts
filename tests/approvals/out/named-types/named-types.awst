@@ -1,0 +1,61 @@
+contract MyContract
+{
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  getXY(): XY{ x: uint64, y: uint64 }
+  {
+    return { x: (#9 = { x: 1, y: 2 }).x, y: #9.y }
+  }
+  
+  getYX(): YX{ y: uint64, x: uint64 }
+  {
+    return { y: (#10 = { x: 222, y: 111 }).y, x: #10.x }
+  }
+  
+  getAnon(): { x: uint64, y: uint64 }
+  {
+    return { x: 3, y: 4 }
+  }
+  
+  test(): void
+  {
+  }
+  
+  testing(): readonlytuple[XY{ x: uint64, y: uint64 }, YX{ y: uint64, x: uint64 }, { x: uint64, y: uint64 }]
+  {
+    a: XY{ x: uint64, y: uint64 } = this.getXY()
+    b: YX{ y: uint64, x: uint64 } = this.getYX()
+    c: { x: uint64, y: uint64 } = this.getAnon()
+    return <tuple>[a, b, c]
+  }
+  
+  constructor(): void
+  {
+    void
+  }
+  
+  Contract::constructor(): void
+  {
+  }
+  
+  Contract::constructor(): void
+  {
+    this.constructor()
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

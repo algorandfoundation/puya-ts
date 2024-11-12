@@ -1,0 +1,33 @@
+contract HelloWorldContract
+{
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    name: string = reinterpret_cast<string>(txnas<ApplicationArgs>(0))
+    log(reinterpret_cast<bytes>("Hello, " + name))
+    return True
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  clearState(): bool
+  {
+    return True
+  }
+  
+  constructor(): void
+  {
+    void
+  }
+  
+  Contract::constructor(): void
+  {
+    this.constructor()
+  }
+  
+}

@@ -1,0 +1,98 @@
+subroutine testUFixed(): void
+{
+  a: arc4.ufixed32x4 = 1.244m
+  c: arc4.ufixed32x4 = 1.244m
+  assert(reinterpret_cast<bytes>(a) == reinterpret_cast<bytes>(c))
+}
+subroutine test(n: uint64, b: biguint, c: arc4.uint256): void
+{
+  x: arc4.uint8 = 4
+  assert(len(reinterpret_cast<bytes>(x)) == 1)
+  x2: arc4.uint8 = 0xff
+  assert(reinterpret_cast<bytes>(x2) == 0xff)
+  y: arc4.uint16 = 0
+  assert(len(reinterpret_cast<bytes>(y)) == 2)
+  z: arc4.uint8 = ARC4_ENCODE(n, wtype=arc4.uint8)
+  z_native: uint64 = ARC4_DECODE(z)
+  assert(z_native == n)
+  a: arc4.uint128 = ARC4_ENCODE(b, wtype=arc4.uint128)
+  a_native: biguint = ARC4_DECODE(a)
+  assert(a_native == b)
+  assert(len(reinterpret_cast<bytes>(c)) == 32)
+}
+subroutine testStr(): void
+{
+  s1: arc4.dynamic_array<arc4.byte> = ""
+  assert(reinterpret_cast<bytes>(s1) == reinterpret_cast<bytes>(0))
+  s2: arc4.dynamic_array<arc4.byte> = "Hello"
+  assert(ARC4_DECODE(s2) == "Hello")
+}
+subroutine testArrays(n: arc4.uint64): void
+{
+  myArray: arc4.dynamic_array<arc4.uint64> = new arc4.dynamic_array<arc4.uint64>(n, n, n)
+  myArray.push(...<tuple>[n]
+  myStatic: arc4.static_array<arc4.uint64> = new arc4.static_array<arc4.uint64>(n, n)
+  assert(reinterpret_cast<bytes>(myStatic[0]) == reinterpret_cast<bytes>(myArray.pop()))
+  myStatic[1]: arc4.uint64 = 50
+}
+subroutine testByte(): void
+{
+  b: arc4.byte = 0
+  b2: arc4.byte = 0
+  assert(reinterpret_cast<bytes>(b) == reinterpret_cast<bytes>(b2))
+}
+subroutine testAddress(): void
+{
+  a: arc4.static_array<arc4.byte> = Address("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ")
+  b: arc4.static_array<arc4.byte> = reinterpret_cast<arc4.static_array<arc4.byte>>(txn<Sender>())
+  assert(!reinterpret_cast<bytes>(a) == reinterpret_cast<bytes>(b))
+  assert(reinterpret_cast<bytes>(a) == reinterpret_cast<bytes>(Address("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ")))
+  assert(reinterpret_cast<bytes>(a[0]) == reinterpret_cast<bytes>(0))
+}
+subroutine testTuple(): void
+{
+  t: arc4.tuple<uint64> = ARC4_ENCODE(<tuple>[34], wtype=arc4.tuple<uint64>)
+  firstItem: arc4.uint64 = t.0
+  firstItemIndexer: arc4.uint64 = ARC4_DECODE(t).0
+  assert(reinterpret_cast<bytes>(firstItem) == reinterpret_cast<bytes>(firstItemIndexer))
+  t1: arc4.tuple<address,byte> = ARC4_ENCODE(<tuple>[Address("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ"), 0], wtype=arc4.tuple<address,byte>)
+  assert(2 == 2)
+}
+contract Arc4TypesTestContract
+{
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    x: arc4.uint64 = 0
+    tests/approvals/arc4-types.algo.ts::testStr()
+    tests/approvals/arc4-types.algo.ts::test(1, 2, 4)
+    tests/approvals/arc4-types.algo.ts::testByte()
+    tests/approvals/arc4-types.algo.ts::testArrays(65)
+    tests/approvals/arc4-types.algo.ts::testAddress()
+    tests/approvals/arc4-types.algo.ts::testTuple()
+    return True
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  getArc4Values(): readonlytuple[arc4.byte, arc4.uint8, arc4.static_array<arc4.byte>]
+  {
+    return <tuple>[0, 255, Address("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ")]
+  }
+  
+  constructor(): void
+  {
+    void
+  }
+  
+  Contract::constructor(): void
+  {
+    this.constructor()
+  }
+  
+}

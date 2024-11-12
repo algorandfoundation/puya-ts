@@ -1,0 +1,42 @@
+contract ShadowedVariablesAlgo
+{
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    <tuple>[b, u, f]: readonlytuple[bytes, uint64, bool] = this.getValues()
+    assert("123" == b)
+    a: uint64 = u
+    assert(a == 123)
+    a₁: bool = f
+    assert(!a₁)
+    a₁: bool = !a₁
+    assert(a₁)
+    assert(a₁)
+    assert(a == 123)
+    assert("123" == "123")
+    return True
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  getValues(): readonlytuple[bytes, uint64, bool]
+  {
+    return <tuple>["123", 123, False]
+  }
+  
+  constructor(): void
+  {
+    void
+  }
+  
+  Contract::constructor(): void
+  {
+    this.constructor()
+  }
+  
+}

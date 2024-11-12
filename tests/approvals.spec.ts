@@ -11,7 +11,7 @@ describe('Approvals', () => {
   const result = compile(
     buildCompileOptions({
       outputAwstJson: true,
-      outputAwst: false,
+      outputAwst: true,
       paths: ['tests/approvals'],
       outDir: 'out/[name]',
       dryRun: false,

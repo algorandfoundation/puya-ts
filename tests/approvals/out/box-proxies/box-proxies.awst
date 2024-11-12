@@ -1,0 +1,44 @@
+subroutine testBox(box: box_key, value: string): void
+{
+  box.value: string = value
+  Box["A"].value: string = value
+  assert(box.value == Box["A"].value)
+  assert(STATE_EXISTS(box.value) and STATE_EXISTS(Box["A"].value))
+  assert(Boolean(checked_maybe(box_len(box.value), comment=Box must exist)))
+  STATE_DEL(box.value)
+  STATE_DEL(Box["A"].value)
+  assert(!STATE_EXISTS(box.value) and !STATE_EXISTS(Box["A"].value))
+  defaultVal: string = "O"
+  assert(STATE_GET(Box["A"].value, default=defaultVal) == STATE_GET(box.value, default=defaultVal))
+  <tuple>[_, e]: readonlytuple[string, bool] = STATE_GET_EX(box.value)
+  assert(!e)
+  box.value: string = value
+  <tuple>[_₁, e]: readonlytuple[string, bool] = STATE_GET_EX(box.value)
+  assert(e)
+}
+subroutine testBoxMap(box: box_key, key: string, value: bytes): void
+{
+  concat(box, reinterpret_cast<bytes>(key)).value: bytes = value
+  concat("", reinterpret_cast<bytes>(key)).value: bytes = value
+  assert(Boolean(checked_maybe(box_len(concat(box, reinterpret_cast<bytes>(key)).value), comment=Box must exist)))
+  assert(STATE_GET_EX(concat(box, reinterpret_cast<bytes>(key)).value).1)
+  assert(concat(box, reinterpret_cast<bytes>(key)).value == concat("", reinterpret_cast<bytes>(key)).value)
+  STATE_DEL(concat(box, reinterpret_cast<bytes>(key)).value)
+  assert(STATE_GET(concat(box, reinterpret_cast<bytes>("" + key + "x")).value, default="b") == STATE_GET(concat("", reinterpret_cast<bytes>("" + key + "x")).value, default="b"))
+}
+subroutine testBoxRef(box: box_key, length: uint64): void
+{
+  if (!box_len(Box["abc"].value).1) {
+    box_create(Box["abc"].value, 1000)
+  } else {
+    if (checked_maybe(box_len(Box["abc"].value), comment=Box must exist) != length) {
+      box_resize(Box["abc"].value, length)
+    }
+  }
+  someBytes: bytes = 0xffffffff
+  box_put(box.value, someBytes)
+  box_put(Box["abc"].value, someBytes)
+  box_splice(box.value, 1, 2, 0x00)
+  box_splice(Box["abc"].value, 1, 2, 0x00)
+  assert(box.value == 0xff00ffff)
+}
