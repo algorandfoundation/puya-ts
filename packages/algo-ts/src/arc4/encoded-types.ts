@@ -19,11 +19,11 @@ export abstract class ARC4Encoded implements BytesBacked {
     return this.bytes.equals(other.bytes)
   }
 
-  static fromBytes<T extends ARC4Encoded>(this: { new(...args: DeliberateAny): T }, bytes: BytesCompat): T {
+  static fromBytes<T extends ARC4Encoded>(this: { new (...args: DeliberateAny): T }, bytes: BytesCompat): T {
     throw new Error('todo')
   }
 
-  static fromLog<T extends ARC4Encoded>(this: { new(...args: DeliberateAny): T }, log: BytesCompat): T {
+  static fromLog<T extends ARC4Encoded>(this: { new (...args: DeliberateAny): T }, log: BytesCompat): T {
     throw new Error('todo')
   }
 }
@@ -51,7 +51,7 @@ export class UintN<N extends BitSize> extends ARC4Encoded {
 }
 export class UFixedNxM<N extends BitSize, M extends number> extends ARC4Encoded {
   __type?: `arc4.UFixedNxM<${N}x${M}>`
-  constructor(v: `${number}.${number}`, n?: N, m?: M) {
+  constructor(v: `${number}.${number}`) {
     super()
   }
 
@@ -218,8 +218,8 @@ export class DynamicArray<TItem extends ARC4Encoded> extends Arc4ReadonlyArray<T
 }
 type ExpandTupleType<T extends ARC4Encoded[]> = T extends [infer T1 extends ARC4Encoded, ...infer TRest extends ARC4Encoded[]]
   ? TRest extends []
-  ? `${T1['__type']}`
-  : `${T1['__type']},${ExpandTupleType<TRest>}`
+    ? `${T1['__type']}`
+    : `${T1['__type']},${ExpandTupleType<TRest>}`
   : ''
 
 export class Tuple<TTuple extends [ARC4Encoded, ...ARC4Encoded[]]> extends ARC4Encoded {

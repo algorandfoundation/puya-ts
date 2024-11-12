@@ -18,7 +18,6 @@ import { TypeResolver } from '../type-resolver'
 import { EvaluationContext } from './evaluation-context'
 import { SwitchLoopContext } from './switch-loop-context'
 import { UniqueNameResolver } from './unique-name-resolver'
-import type { LogicSigClassModel } from '../models/logic-sig-class-model'
 
 export interface AwstBuildContext {
   /**

@@ -243,7 +243,7 @@ export class BytesCls extends AlgoTsPrimitiveCls {
     return new BytesCls(arrayUtil.arrayAt(this.#v, i))
   }
 
-  slice(start: undefined | StubUint64Compat, end: undefined | StubUint64Compat): BytesCls {
+  slice(start?: StubUint64Compat, end?: StubUint64Compat): BytesCls {
     const sliced = arrayUtil.arraySlice(this.#v, start, end)
     return new BytesCls(sliced)
   }
