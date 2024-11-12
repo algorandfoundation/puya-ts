@@ -8,8 +8,10 @@ export type BitSize = 8 | 16 | 32 | 64 | 128 | 256 | 512
 type NativeForArc4Int<N extends BitSize> = N extends 8 | 16 | 32 | 64 ? uint64 : biguint
 type CompatForArc4Int<N extends BitSize> = N extends 8 | 16 | 32 | 64 ? Uint64Compat : BigUintCompat
 
+const TypeProperty = Symbol('ARC4Type')
+
 abstract class ARC4Encoded implements BytesBacked {
-  abstract __type?: string
+  abstract [TypeProperty]?: string
   get bytes(): bytes {
     throw new Error('todo')
   }
@@ -20,7 +22,7 @@ abstract class ARC4Encoded implements BytesBacked {
 }
 
 export class Str extends ARC4Encoded {
-  __type?: 'arc4.Str'
+  [TypeProperty]?: 'arc4.Str'
   #value: string
   constructor(s?: StringCompat) {
     super()
@@ -31,7 +33,7 @@ export class Str extends ARC4Encoded {
   }
 }
 export class UintN<N extends BitSize> extends ARC4Encoded {
-  __type?: `arc4.UintN<${N}>`
+  [TypeProperty]?: `arc4.UintN<${N}>`
 
   constructor(v?: CompatForArc4Int<N>) {
     super()
@@ -41,7 +43,7 @@ export class UintN<N extends BitSize> extends ARC4Encoded {
   }
 }
 export class UFixedNxM<N extends BitSize, M extends number> extends ARC4Encoded {
-  __type?: `arc4.UFixedNxM<${N}x${M}>`
+  [TypeProperty]?: `arc4.UFixedNxM<${N}x${M}>`
   constructor(v: `${number}.${number}`, n?: N, m?: M) {
     super()
   }
@@ -57,7 +59,7 @@ export class Byte extends UintN<8> {
   }
 }
 export class Bool {
-  __type?: `arc4.Bool`
+  [TypeProperty]?: `arc4.Bool`
   #v: boolean
   constructor(v?: boolean) {
     this.#v = v ?? false
@@ -166,7 +168,7 @@ abstract class Arc4ReadonlyArray<TItem extends ARC4Encoded> extends ARC4Encoded 
 }
 
 export class StaticArray<TItem extends ARC4Encoded, TLength extends number> extends Arc4ReadonlyArray<TItem> {
-  __type?: `arc4.StaticArray<${TItem['__type']}, ${TLength}>`
+  [TypeProperty]?: `arc4.StaticArray<${TItem[typeof TypeProperty]}, ${TLength}>`
   constructor()
   constructor(...items: TItem[] & { length: TLength })
   constructor(...items: TItem[])
@@ -180,7 +182,7 @@ export class StaticArray<TItem extends ARC4Encoded, TLength extends number> exte
 }
 
 export class DynamicArray<TItem extends ARC4Encoded> extends Arc4ReadonlyArray<TItem> {
-  __type?: `arc4.DynamicArray<${TItem['__type']}>`
+  [TypeProperty]?: `arc4.DynamicArray<${TItem[typeof TypeProperty]}>`
   constructor(...items: TItem[]) {
     super(items)
   }
@@ -208,12 +210,12 @@ export class DynamicArray<TItem extends ARC4Encoded> extends Arc4ReadonlyArray<T
 }
 type ExpandTupleType<T extends ARC4Encoded[]> = T extends [infer T1 extends ARC4Encoded, ...infer TRest extends ARC4Encoded[]]
   ? TRest extends []
-    ? `${T1['__type']}`
-    : `${T1['__type']},${ExpandTupleType<TRest>}`
+    ? `${T1[typeof TypeProperty]}`
+    : `${T1[typeof TypeProperty]},${ExpandTupleType<TRest>}`
   : ''
 
 export class Tuple<TTuple extends [ARC4Encoded, ...ARC4Encoded[]]> extends ARC4Encoded {
-  __type?: `arc4.Tuple<${ExpandTupleType<TTuple>}>`
+  [TypeProperty]?: `arc4.Tuple<${ExpandTupleType<TTuple>}>`
   #items: TTuple
   constructor(...items: TTuple) {
     super()
@@ -234,7 +236,7 @@ export class Tuple<TTuple extends [ARC4Encoded, ...ARC4Encoded[]]> extends ARC4E
 }
 
 export class Address extends Arc4ReadonlyArray<Byte> {
-  __type?: `arc4.Address`
+  [TypeProperty]?: `arc4.Address`
   constructor(value?: Account | string | bytes) {
     let byteValues: Uint8Array
     if (value === undefined) {
@@ -259,7 +261,7 @@ export class Address extends Arc4ReadonlyArray<Byte> {
 type StructConstraint = Record<string, ARC4Encoded>
 
 class StructBase extends ARC4Encoded {
-  __type = 'arc4.Struct'
+  [TypeProperty] = 'arc4.Struct'
 }
 class StructImpl<T extends StructConstraint> extends StructBase {
   constructor(initial: T) {

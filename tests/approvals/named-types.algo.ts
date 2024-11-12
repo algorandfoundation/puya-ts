@@ -40,6 +40,8 @@ export class MyContract extends Contract {
     }
   }
 
+  public test(x: XY, y: YX) {}
+
   public testing() {
     const a = this.getXY()
     const b = this.getYX()

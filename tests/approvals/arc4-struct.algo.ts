@@ -21,4 +21,10 @@ class StructDemo extends Contract {
       y: new ARC4Uint64(v1.y.native + v2.y.native),
     })
   }
+
+  // TODO: Uncomment once puya supports ARC4Decode() on structs
+  // public implicitCastingAndSpreading(v1: Vector) {
+  //   const v2 = new Vector(v1)
+  //   const v3 = new Vector({ ...v2 })
+  // }
 }

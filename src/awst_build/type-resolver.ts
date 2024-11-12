@@ -266,6 +266,11 @@ export class TypeResolver {
 
     const properties: Record<string, PType> = {}
     for (const prop of tsType.getProperties()) {
+      if (prop.name.startsWith('__@')) {
+        // Symbol property - ignore
+        // TODO: Check AST nodes to confirm?
+        continue
+      }
       const type = this.checker.getTypeOfSymbol(prop)
       const ptype = this.resolveType(type, sourceLocation)
       if (ptype.singleton) {
