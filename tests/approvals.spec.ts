@@ -1,10 +1,10 @@
 import { sync } from 'cross-spawn'
 import { describe, expect, it } from 'vitest'
-import { compile } from '../../src'
-import { buildCompileOptions } from '../../src/compile-options'
-import { isErrorOrCritical, LoggingContext, LogLevel } from '../../src/logger'
-import { defaultPuyaOptions } from '../../src/puya/options'
-import { invariant } from '../../src/util'
+import { compile } from '../src'
+import { buildCompileOptions } from '../src/compile-options'
+import { isErrorOrCritical, LoggingContext, LogLevel } from '../src/logger'
+import { defaultPuyaOptions } from '../src/puya/options'
+import { invariant } from '../src/util'
 
 describe('Approvals', () => {
   using logCtx = LoggingContext.create()
@@ -19,7 +19,7 @@ describe('Approvals', () => {
     }),
     {
       ...defaultPuyaOptions,
-      outputTeal: false,
+      outputTeal: true,
       outputArc32: true,
     },
   )

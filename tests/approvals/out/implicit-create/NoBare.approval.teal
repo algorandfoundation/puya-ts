@@ -1,0 +1,48 @@
+#pragma version 10
+
+tests/approvals/implicit-create.algo.ts::NoBare.approvalProgram:
+    intcblock 0 1
+    callsub __puya_arc4_router__
+    return
+
+
+// tests/approvals/implicit-create.algo.ts::NoBare.__puya_arc4_router__() -> uint64:
+__puya_arc4_router__:
+    // tests/approvals/implicit-create.algo.ts:4
+    // export class NoBare extends Contract {
+    proto 0 1
+    txn NumAppArgs
+    bz __puya_arc4_router___bare_routing@5
+    pushbytes 0xb8b5e4b9 // method "handleNoop()void"
+    txna ApplicationArgs 0
+    match __puya_arc4_router___handleNoop_route@2
+    intc_0 // 0
+    retsub
+
+__puya_arc4_router___handleNoop_route@2:
+    // tests/approvals/implicit-create.algo.ts:5
+    // @abimethod({ allowActions: 'NoOp' })
+    txn OnCompletion
+    !
+    assert // OnCompletion is NoOp
+    txn ApplicationID
+    assert // is not creating
+    intc_1 // 1
+    retsub
+
+__puya_arc4_router___bare_routing@5:
+    // tests/approvals/implicit-create.algo.ts:4
+    // export class NoBare extends Contract {
+    txn OnCompletion
+    bnz __puya_arc4_router___after_if_else@9
+    txn ApplicationID
+    !
+    assert // is creating
+    intc_1 // 1
+    retsub
+
+__puya_arc4_router___after_if_else@9:
+    // tests/approvals/implicit-create.algo.ts:4
+    // export class NoBare extends Contract {
+    intc_0 // 0
+    retsub

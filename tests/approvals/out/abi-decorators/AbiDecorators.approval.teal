@@ -1,0 +1,148 @@
+#pragma version 10
+
+tests/approvals/abi-decorators.algo.ts::AbiDecorators.approvalProgram:
+    intcblock 1 0
+    bytecblock 0x151f7c75
+    txn ApplicationID
+    bnz main_after_if_else@2
+    callsub constructor
+
+main_after_if_else@2:
+    callsub __puya_arc4_router__
+    return
+
+
+// tests/approvals/abi-decorators.algo.ts::AbiDecorators.constructor() -> void:
+constructor:
+    // tests/approvals/abi-decorators.algo.ts:4
+    // export default class AbiDecorators extends Contract {
+    proto 0 0
+    // tests/approvals/abi-decorators.algo.ts:16
+    // globalValue = GlobalState({ initialValue: Uint64(123) })
+    pushbytes "globalValue"
+    pushint 123 // 123
+    app_global_put
+    retsub
+
+
+// tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__() -> uint64:
+__puya_arc4_router__:
+    // tests/approvals/abi-decorators.algo.ts:4
+    // export default class AbiDecorators extends Contract {
+    proto 0 1
+    txn NumAppArgs
+    bz __puya_arc4_router___after_if_else@10
+    pushbytess 0xf9020d5a 0xe179f9d4 0x63c27aba 0x14d1b6ea 0xc1367374 // method "justNoop()void", method "createMethod()void", method "allActions()void", method "overrideReadonlyName()uint64", method "methodWithDefaults(uint64,uint64,uint64)uint64"
+    txna ApplicationArgs 0
+    match __puya_arc4_router___justNoop_route@2 __puya_arc4_router___createMethod_route@3 __puya_arc4_router___allActions_route@4 __puya_arc4_router___overrideReadonlyName_route@5 __puya_arc4_router___methodWithDefaults_route@6
+    intc_1 // 0
+    retsub
+
+__puya_arc4_router___justNoop_route@2:
+    // tests/approvals/abi-decorators.algo.ts:5
+    // @abimethod({ allowActions: 'NoOp' })
+    txn OnCompletion
+    !
+    assert // OnCompletion is NoOp
+    txn ApplicationID
+    assert // is not creating
+    intc_0 // 1
+    retsub
+
+__puya_arc4_router___createMethod_route@3:
+    // tests/approvals/abi-decorators.algo.ts:7
+    // @abimethod({ onCreate: 'require' })
+    txn OnCompletion
+    !
+    assert // OnCompletion is NoOp
+    txn ApplicationID
+    !
+    assert // is creating
+    intc_0 // 1
+    retsub
+
+__puya_arc4_router___allActions_route@4:
+    // tests/approvals/abi-decorators.algo.ts:9
+    // @abimethod({ allowActions: ['NoOp', 'OptIn', 'CloseOut', 'DeleteApplication', 'UpdateApplication'] })
+    txn ApplicationID
+    assert // is not creating
+    intc_0 // 1
+    retsub
+
+__puya_arc4_router___overrideReadonlyName_route@5:
+    // tests/approvals/abi-decorators.algo.ts:11
+    // @abimethod({ readonly: true, name: 'overrideReadonlyName' })
+    txn OnCompletion
+    !
+    assert // OnCompletion is NoOp
+    txn ApplicationID
+    assert // is not creating
+    callsub readonly
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    retsub
+
+__puya_arc4_router___methodWithDefaults_route@6:
+    // tests/approvals/abi-decorators.algo.ts:18
+    // @abimethod({ defaultArguments: { a: { from: 'globalValue' }, b: { from: 'readonly' }, c: { constant: 145 } } })
+    txn OnCompletion
+    !
+    assert // OnCompletion is NoOp
+    txn ApplicationID
+    assert // is not creating
+    // tests/approvals/abi-decorators.algo.ts:4
+    // export default class AbiDecorators extends Contract {
+    txna ApplicationArgs 1
+    btoi
+    txna ApplicationArgs 2
+    btoi
+    txna ApplicationArgs 3
+    btoi
+    // tests/approvals/abi-decorators.algo.ts:18
+    // @abimethod({ defaultArguments: { a: { from: 'globalValue' }, b: { from: 'readonly' }, c: { constant: 145 } } })
+    callsub methodWithDefaults
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    retsub
+
+__puya_arc4_router___after_if_else@10:
+    // tests/approvals/abi-decorators.algo.ts:4
+    // export default class AbiDecorators extends Contract {
+    intc_1 // 0
+    retsub
+
+
+// tests/approvals/abi-decorators.algo.ts::AbiDecorators.readonly() -> uint64:
+readonly:
+    // tests/approvals/abi-decorators.algo.ts:11-12
+    // @abimethod({ readonly: true, name: 'overrideReadonlyName' })
+    // public readonly(): uint64 {
+    proto 0 1
+    // tests/approvals/abi-decorators.algo.ts:13
+    // return 5
+    pushint 5 // 5
+    retsub
+
+
+// tests/approvals/abi-decorators.algo.ts::AbiDecorators.methodWithDefaults(a: uint64, b: uint64, c: uint64) -> uint64:
+methodWithDefaults:
+    // tests/approvals/abi-decorators.algo.ts:18-19
+    // @abimethod({ defaultArguments: { a: { from: 'globalValue' }, b: { from: 'readonly' }, c: { constant: 145 } } })
+    // public methodWithDefaults(a: uint64, b: uint64, c: uint64): uint64 {
+    proto 3 1
+    // tests/approvals/abi-decorators.algo.ts:20
+    // return a * b + c
+    frame_dig -3
+    frame_dig -2
+    *
+    frame_dig -1
+    +
+    retsub

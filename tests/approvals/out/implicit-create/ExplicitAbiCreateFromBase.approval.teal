@@ -1,0 +1,37 @@
+#pragma version 10
+
+tests/approvals/implicit-create.algo.ts::ExplicitAbiCreateFromBase.approvalProgram:
+    callsub __puya_arc4_router__
+    return
+
+
+// tests/approvals/implicit-create.algo.ts::ExplicitAbiCreateFromBase.__puya_arc4_router__() -> uint64:
+__puya_arc4_router__:
+    // tests/approvals/implicit-create.algo.ts:23
+    // export class ExplicitAbiCreateFromBase extends BaseWithAbiCreate {}
+    proto 0 1
+    txn NumAppArgs
+    bz __puya_arc4_router___after_if_else@6
+    pushbytes 0x4c5c61ba // method "create()void"
+    txna ApplicationArgs 0
+    match __puya_arc4_router___create_route@2
+    pushint 0 // 0
+    retsub
+
+__puya_arc4_router___create_route@2:
+    // tests/approvals/implicit-create.algo.ts:18
+    // @abimethod({ onCreate: 'require' })
+    txn OnCompletion
+    !
+    assert // OnCompletion is NoOp
+    txn ApplicationID
+    !
+    assert // is creating
+    pushint 1 // 1
+    retsub
+
+__puya_arc4_router___after_if_else@6:
+    // tests/approvals/implicit-create.algo.ts:23
+    // export class ExplicitAbiCreateFromBase extends BaseWithAbiCreate {}
+    pushint 0 // 0
+    retsub

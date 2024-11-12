@@ -1,0 +1,43 @@
+#pragma version 10
+
+tests/approvals/shadowed-variables.algo.ts::ShadowedVariablesAlgo.approvalProgram:
+    bytecblock "123"
+    // tests/approvals/shadowed-variables.algo.ts:8
+    // const [b, u, f] = this.getValues()
+    callsub getValues
+    // tests/approvals/shadowed-variables.algo.ts:4
+    // const a = Bytes('123')
+    bytec_0 // "123"
+    // tests/approvals/shadowed-variables.algo.ts:9
+    // assert(a === b, 'a should be module const (bytes)')
+    uncover 3
+    ==
+    assert // a should be module const (bytes)
+    // tests/approvals/shadowed-variables.algo.ts:12
+    // assert(a === 123, 'a should be local const (uint)')
+    swap
+    pushint 123 // 123
+    ==
+    assert // a should be local const (uint)
+    // tests/approvals/shadowed-variables.algo.ts:15
+    // assert(!a, 'a should be local let (bool)')
+    !
+    assert // a should be local let (bool)
+    // tests/approvals/shadowed-variables.algo.ts:25
+    // return true
+    pushint 1 // 1
+    return
+
+
+// tests/approvals/shadowed-variables.algo.ts::ShadowedVariablesAlgo.getValues() -> bytes, uint64, uint64:
+getValues:
+    // tests/approvals/shadowed-variables.algo.ts:28
+    // private getValues(): [bytes, uint64, boolean] {
+    proto 0 3
+    // tests/approvals/shadowed-variables.algo.ts:4
+    // const a = Bytes('123')
+    bytec_0 // "123"
+    // tests/approvals/shadowed-variables.algo.ts:29
+    // return [a, Uint64(123), false]
+    pushints 123 0 // 123, 0
+    retsub

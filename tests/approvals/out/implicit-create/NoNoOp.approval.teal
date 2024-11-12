@@ -1,0 +1,47 @@
+#pragma version 10
+
+tests/approvals/implicit-create.algo.ts::NoNoOp.approvalProgram:
+    intcblock 0 1
+    callsub __puya_arc4_router__
+    return
+
+
+// tests/approvals/implicit-create.algo.ts::NoNoOp.__puya_arc4_router__() -> uint64:
+__puya_arc4_router__:
+    // tests/approvals/implicit-create.algo.ts:8
+    // export class NoNoOp extends Contract {
+    proto 0 1
+    txn NumAppArgs
+    bnz __puya_arc4_router___after_if_else@7
+    pushint 4 // 4
+    intc_0 // 0
+    txn OnCompletion
+    match __puya_arc4_router___handleUpdate@3 __puya_arc4_router_____algots__.defaultCreate@4
+    intc_0 // 0
+    retsub
+
+__puya_arc4_router___handleUpdate@3:
+    // tests/approvals/implicit-create.algo.ts:9
+    // @baremethod({ allowActions: 'UpdateApplication' })
+    txn ApplicationID
+    assert // is not creating
+    // tests/approvals/implicit-create.algo.ts:9-10
+    // @baremethod({ allowActions: 'UpdateApplication' })
+    // public handleUpdate() {}
+    intc_1 // 1
+    retsub
+
+__puya_arc4_router_____algots__.defaultCreate@4:
+    // tests/approvals/implicit-create.algo.ts:8
+    // export class NoNoOp extends Contract {
+    txn ApplicationID
+    !
+    assert // is creating
+    intc_1 // 1
+    retsub
+
+__puya_arc4_router___after_if_else@7:
+    // tests/approvals/implicit-create.algo.ts:8
+    // export class NoNoOp extends Contract {
+    intc_0 // 0
+    retsub

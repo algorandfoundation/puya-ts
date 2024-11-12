@@ -1,0 +1,152 @@
+#pragma version 10
+
+tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract.approvalProgram:
+    intcblock 1 16 8 0
+    // tests/approvals/arc4-types.algo.ts:86
+    // test(1, 2n, new UintN<256>(4))
+    intc_0 // 1
+    pushbytess 0x02 0x0000000000000000000000000000000000000000000000000000000000000004 // 0x02, 0x0000000000000000000000000000000000000000000000000000000000000004
+    callsub test
+    // tests/approvals/arc4-types.algo.ts:88
+    // testArrays(new UintN<64>(65))
+    pushbytes 0x0000000000000041
+    callsub testArrays
+    // tests/approvals/arc4-types.algo.ts:89
+    // testAddress()
+    callsub testAddress
+    // tests/approvals/arc4-types.algo.ts:91
+    // return true
+    intc_0 // 1
+    return
+
+
+// tests/approvals/arc4-types.algo.ts::test(n: uint64, b: bytes, c: bytes) -> void:
+test:
+    // tests/approvals/arc4-types.algo.ts:12
+    // function test(n: uint64, b: biguint, c: UintN<256>) {
+    proto 3 0
+    // tests/approvals/arc4-types.algo.ts:20
+    // const z = new UintN<8>(n)
+    frame_dig -3
+    itob
+    extract 7 1
+    // tests/approvals/arc4-types.algo.ts:21
+    // const z_native = z.native
+    btoi
+    // tests/approvals/arc4-types.algo.ts:22
+    // assert(z_native === n)
+    frame_dig -3
+    ==
+    assert
+    // tests/approvals/arc4-types.algo.ts:23
+    // const a = new UintN<128>(b)
+    frame_dig -2
+    len
+    intc_1 // 16
+    <=
+    assert // overflow
+    intc_1 // 16
+    bzero
+    frame_dig -2
+    b|
+    // tests/approvals/arc4-types.algo.ts:25
+    // assert(a_native === b)
+    frame_dig -2
+    b==
+    assert
+    // tests/approvals/arc4-types.algo.ts:27
+    // assert(c.bytes.length === 256 / 8)
+    frame_dig -1
+    len
+    pushint 32 // 32
+    ==
+    assert
+    retsub
+
+
+// tests/approvals/arc4-types.algo.ts::testArrays(n: bytes) -> void:
+testArrays:
+    // tests/approvals/arc4-types.algo.ts:40
+    // function testArrays(n: ARC4Uint64) {
+    proto 1 0
+    // tests/approvals/arc4-types.algo.ts:41
+    // const myArray = new DynamicArray(n, n, n)
+    frame_dig -1
+    dup
+    concat
+    dup
+    frame_dig -1
+    concat
+    pushbytes 0x0003
+    swap
+    concat
+    // tests/approvals/arc4-types.algo.ts:43
+    // myArray.push(n)
+    extract 2 0
+    frame_dig -1
+    concat
+    dup
+    len
+    intc_2 // 8
+    /
+    itob
+    extract 6 2
+    swap
+    concat
+    // tests/approvals/arc4-types.algo.ts:47
+    // assert(myStatic[0].equals(myArray.pop()))
+    swap
+    extract 0 8 // on error: Index access is out of bounds
+    swap
+    intc_2 // 8
+    callsub dynamic_array_pop_fixed_size
+    pop
+    ==
+    assert
+    retsub
+
+
+// tests/approvals/arc4-types.algo.ts::testAddress() -> void:
+testAddress:
+    // tests/approvals/arc4-types.algo.ts:60
+    // function testAddress() {
+    proto 0 0
+    // tests/approvals/arc4-types.algo.ts:61
+    // const a = new Address()
+    pushbytes base32(AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA) // addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ
+    // tests/approvals/arc4-types.algo.ts:62
+    // const b = new Address(Txn.sender)
+    txn Sender
+    // tests/approvals/arc4-types.algo.ts:64
+    // assert(!a.equals(b), 'Zero address should not match sender')
+    ==
+    !
+    assert // Zero address should not match sender
+    retsub
+
+
+// _puya_lib.arc4.dynamic_array_pop_fixed_size(array: bytes, fixed_byte_size: uint64) -> bytes, bytes:
+dynamic_array_pop_fixed_size:
+    proto 2 2
+    frame_dig -2
+    intc_3 // 0
+    extract_uint16
+    intc_0 // 1
+    -
+    itob
+    extract 6 0
+    frame_dig -2
+    swap
+    replace2 0
+    dup
+    len
+    frame_dig -1
+    -
+    dup2
+    frame_dig -1
+    extract3
+    uncover 2
+    intc_3 // 0
+    uncover 3
+    substring3
+    retsub

@@ -3,22 +3,22 @@
 tests/approvals/pre-approved-sale.algo.ts::PreApprovedSale:
     intcblock 1 0 TMPL_PRICE TMPL_ASSET
     bytecblock TMPL_SELLER
-    // tests/approvals/pre-approved-sale.algo.ts:6
+    // tests/approvals/pre-approved-sale.algo.ts:12
     // const seller = TemplateVar<Account>('SELLER')
     bytec_0 // TMPL_SELLER
-    // tests/approvals/pre-approved-sale.algo.ts:7
+    // tests/approvals/pre-approved-sale.algo.ts:13
     // const price = TemplateVar<uint64>('PRICE')
     intc_2 // TMPL_PRICE
-    // tests/approvals/pre-approved-sale.algo.ts:8
+    // tests/approvals/pre-approved-sale.algo.ts:14
     // const asset = TemplateVar<Asset>('ASSET')
     intc_3 // TMPL_ASSET
-    // tests/approvals/pre-approved-sale.algo.ts:6
+    // tests/approvals/pre-approved-sale.algo.ts:12
     // const seller = TemplateVar<Account>('SELLER')
     bytec_0 // TMPL_SELLER
-    // tests/approvals/pre-approved-sale.algo.ts:10
+    // tests/approvals/pre-approved-sale.algo.ts:16
     // const payTxn = gtxn.PaymentTxn(0)
     intc_1 // 0
-    // tests/approvals/pre-approved-sale.algo.ts:12-15
+    // tests/approvals/pre-approved-sale.algo.ts:18-21
     // assertMatch(payTxn, {
     //   receiver: seller,
     //   amount: price,
@@ -26,10 +26,10 @@ tests/approvals/pre-approved-sale.algo.ts::PreApprovedSale:
     gtxns Receiver
     ==
     bz main_bool_false@3
-    // tests/approvals/pre-approved-sale.algo.ts:10
+    // tests/approvals/pre-approved-sale.algo.ts:16
     // const payTxn = gtxn.PaymentTxn(0)
     intc_1 // 0
-    // tests/approvals/pre-approved-sale.algo.ts:12-15
+    // tests/approvals/pre-approved-sale.algo.ts:18-21
     // assertMatch(payTxn, {
     //   receiver: seller,
     //   amount: price,
@@ -45,16 +45,16 @@ main_bool_false@3:
     intc_1 // 0
 
 main_bool_merge@4:
-    // tests/approvals/pre-approved-sale.algo.ts:12-15
+    // tests/approvals/pre-approved-sale.algo.ts:18-21
     // assertMatch(payTxn, {
     //   receiver: seller,
     //   amount: price,
     // })
     assert // assert target is match for conditions
-    // tests/approvals/pre-approved-sale.algo.ts:11
+    // tests/approvals/pre-approved-sale.algo.ts:17
     // const assetTxn = gtxn.AssetTransferTxn(1)
     intc_0 // 1
-    // tests/approvals/pre-approved-sale.algo.ts:17-23
+    // tests/approvals/pre-approved-sale.algo.ts:23-29
     // assertMatch(assetTxn, {
     //   assetAmount: Uint64(1),
     //   sender: seller,
@@ -63,10 +63,10 @@ main_bool_merge@4:
     //   rekeyTo: Global.zeroAddress,
     // })
     gtxns AssetAmount
-    // tests/approvals/pre-approved-sale.algo.ts:18
+    // tests/approvals/pre-approved-sale.algo.ts:24
     // assetAmount: Uint64(1),
     intc_0 // 1
-    // tests/approvals/pre-approved-sale.algo.ts:17-23
+    // tests/approvals/pre-approved-sale.algo.ts:23-29
     // assertMatch(assetTxn, {
     //   assetAmount: Uint64(1),
     //   sender: seller,
@@ -76,10 +76,10 @@ main_bool_merge@4:
     // })
     ==
     bz main_bool_false@10
-    // tests/approvals/pre-approved-sale.algo.ts:11
+    // tests/approvals/pre-approved-sale.algo.ts:17
     // const assetTxn = gtxn.AssetTransferTxn(1)
     intc_0 // 1
-    // tests/approvals/pre-approved-sale.algo.ts:17-23
+    // tests/approvals/pre-approved-sale.algo.ts:23-29
     // assertMatch(assetTxn, {
     //   assetAmount: Uint64(1),
     //   sender: seller,
@@ -91,10 +91,10 @@ main_bool_merge@4:
     dig 3
     ==
     bz main_bool_false@10
-    // tests/approvals/pre-approved-sale.algo.ts:11
+    // tests/approvals/pre-approved-sale.algo.ts:17
     // const assetTxn = gtxn.AssetTransferTxn(1)
     intc_0 // 1
-    // tests/approvals/pre-approved-sale.algo.ts:17-23
+    // tests/approvals/pre-approved-sale.algo.ts:23-29
     // assertMatch(assetTxn, {
     //   assetAmount: Uint64(1),
     //   sender: seller,
@@ -106,10 +106,10 @@ main_bool_merge@4:
     dig 1
     ==
     bz main_bool_false@10
-    // tests/approvals/pre-approved-sale.algo.ts:11
+    // tests/approvals/pre-approved-sale.algo.ts:17
     // const assetTxn = gtxn.AssetTransferTxn(1)
     intc_0 // 1
-    // tests/approvals/pre-approved-sale.algo.ts:17-23
+    // tests/approvals/pre-approved-sale.algo.ts:23-29
     // assertMatch(assetTxn, {
     //   assetAmount: Uint64(1),
     //   sender: seller,
@@ -118,10 +118,10 @@ main_bool_merge@4:
     //   rekeyTo: Global.zeroAddress,
     // })
     gtxns AssetCloseTo
-    // tests/approvals/pre-approved-sale.algo.ts:21
+    // tests/approvals/pre-approved-sale.algo.ts:27
     // assetCloseTo: Global.zeroAddress,
     global ZeroAddress
-    // tests/approvals/pre-approved-sale.algo.ts:17-23
+    // tests/approvals/pre-approved-sale.algo.ts:23-29
     // assertMatch(assetTxn, {
     //   assetAmount: Uint64(1),
     //   sender: seller,
@@ -131,10 +131,10 @@ main_bool_merge@4:
     // })
     ==
     bz main_bool_false@10
-    // tests/approvals/pre-approved-sale.algo.ts:11
+    // tests/approvals/pre-approved-sale.algo.ts:17
     // const assetTxn = gtxn.AssetTransferTxn(1)
     intc_0 // 1
-    // tests/approvals/pre-approved-sale.algo.ts:17-23
+    // tests/approvals/pre-approved-sale.algo.ts:23-29
     // assertMatch(assetTxn, {
     //   assetAmount: Uint64(1),
     //   sender: seller,
@@ -143,10 +143,10 @@ main_bool_merge@4:
     //   rekeyTo: Global.zeroAddress,
     // })
     gtxns RekeyTo
-    // tests/approvals/pre-approved-sale.algo.ts:22
+    // tests/approvals/pre-approved-sale.algo.ts:28
     // rekeyTo: Global.zeroAddress,
     global ZeroAddress
-    // tests/approvals/pre-approved-sale.algo.ts:17-23
+    // tests/approvals/pre-approved-sale.algo.ts:23-29
     // assertMatch(assetTxn, {
     //   assetAmount: Uint64(1),
     //   sender: seller,
@@ -163,7 +163,7 @@ main_bool_false@10:
     intc_1 // 0
 
 main_bool_merge@11:
-    // tests/approvals/pre-approved-sale.algo.ts:17-23
+    // tests/approvals/pre-approved-sale.algo.ts:23-29
     // assertMatch(assetTxn, {
     //   assetAmount: Uint64(1),
     //   sender: seller,
@@ -172,7 +172,7 @@ main_bool_merge@11:
     //   rekeyTo: Global.zeroAddress,
     // })
     assert // assert target is match for conditions
-    // tests/approvals/pre-approved-sale.algo.ts:25
+    // tests/approvals/pre-approved-sale.algo.ts:31
     // return true
     intc_0 // 1
     return

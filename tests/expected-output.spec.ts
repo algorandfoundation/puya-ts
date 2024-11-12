@@ -1,12 +1,12 @@
 import ts from 'typescript'
 import { describe, it } from 'vitest'
-import { compile } from '../../src'
-import { SourceLocation } from '../../src/awst/source-location'
-import { buildCompileOptions } from '../../src/compile-options'
-import type { LogEvent } from '../../src/logger'
-import { LoggingContext, LogLevel } from '../../src/logger'
-import { defaultPuyaOptions } from '../../src/puya/options'
-import { enumFromValue, invariant } from '../../src/util'
+import { compile } from '../src'
+import { SourceLocation } from '../src/awst/source-location'
+import { buildCompileOptions } from '../src/compile-options'
+import type { LogEvent } from '../src/logger'
+import { LoggingContext, LogLevel } from '../src/logger'
+import { defaultPuyaOptions } from '../src/puya/options'
+import { enumFromValue, invariant } from '../src/util'
 
 /**
  * Verify that specific code produces specific compiler output.
