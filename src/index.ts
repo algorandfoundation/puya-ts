@@ -24,7 +24,17 @@ import {
 } from './util'
 
 export { SourceLocation } from './awst/source-location'
-export { anyPType, ContractClassPType, FunctionPType, PType } from './awst_build/ptypes'
+export {
+  anyPType,
+  BoxMapPType,
+  BoxPType,
+  ContractClassPType,
+  FunctionPType,
+  GlobalStateType,
+  LocalStateType,
+  PType,
+} from './awst_build/ptypes'
+export { ARC4StructType, ARC4TupleType, DynamicArrayType, StaticArrayType, UFixedNxMType, UintNType } from './awst_build/ptypes/arc4-types'
 export { registerPTypes } from './awst_build/ptypes/register'
 export { typeRegistry } from './awst_build/type-registry'
 export { TypeResolver } from './awst_build/type-resolver'
