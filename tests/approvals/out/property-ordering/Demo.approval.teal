@@ -1,7 +1,45 @@
 #pragma version 10
 
 tests/approvals/property-ordering.algo.ts::Demo.approvalProgram:
+    txn ApplicationID
+    bnz main_after_if_else@2
+    callsub constructor
+
+main_after_if_else@2:
+    // tests/approvals/property-ordering.algo.ts:20
+    // test_assign_from_literal(4)
+    pushint 4 // 4
+    callsub test_assign_from_literal
+    // tests/approvals/property-ordering.algo.ts:22
+    // test_assign_from_var({ a: 3, b: 4 })
+    pushint 3 // 3
+    pushint 4 // 4
+    callsub test_assign_from_var
     // tests/approvals/property-ordering.algo.ts:24
     // return true
     pushint 1 // 1
     return
+
+
+// tests/approvals/property-ordering.algo.ts::Demo.constructor() -> void:
+constructor:
+    // tests/approvals/property-ordering.algo.ts:18
+    // export class Demo extends BaseContract {
+    proto 0 0
+    retsub
+
+
+// tests/approvals/property-ordering.algo.ts::test_assign_from_literal(x: uint64) -> void:
+test_assign_from_literal:
+    // tests/approvals/property-ordering.algo.ts:10
+    // function test_assign_from_literal(x: uint64) {
+    proto 1 0
+    retsub
+
+
+// tests/approvals/property-ordering.algo.ts::test_assign_from_var(x.a: uint64, x.b: uint64) -> void:
+test_assign_from_var:
+    // tests/approvals/property-ordering.algo.ts:6
+    // function test_assign_from_var(x: { a: uint64; b: uint64 }) {
+    proto 2 0
+    retsub

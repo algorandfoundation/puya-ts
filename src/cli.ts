@@ -7,6 +7,8 @@ import { ConsoleLogSink } from './logger/sinks/console-log-sink'
 import type { PuyaPassThroughOptions } from './puya/options'
 import { defaultPuyaOptions, LocalsCoalescingStrategy } from './puya/options'
 
+const cmdInteger = () => z.preprocess((x) => (typeof x === 'string' && x.length > 0 ? Number(x) : x), z.number().int())
+
 const cliOptionsSchema = z.object({
   outputAwst: z.boolean(),
   outputAwstJson: z.boolean(),
@@ -24,9 +26,9 @@ const cliOptionsSchema = z.object({
   outputMemoryIr: z.boolean(),
   outputBytecode: z.boolean(),
   matchAlgodBytecode: z.boolean(),
-  debugLevel: z.number().int(),
-  optimizationLevel: z.number().int(),
-  targetAvmVersion: z.number().int(),
+  debugLevel: cmdInteger(),
+  optimizationLevel: cmdInteger(),
+  targetAvmVersion: cmdInteger(),
   cliTemplateDefinitions: z.preprocess((x) => x ?? [], z.array(z.string())),
   templateVarsPrefix: z.string(),
   localsCoalescingStrategy: z.nativeEnum(LocalsCoalescingStrategy),
@@ -107,6 +109,7 @@ function cli() {
 
     .action((a, o) => {
       using logCtx = LoggingContext.create()
+      logger.configure([new ConsoleLogSink(LogLevel.Warn)])
       try {
         const paths = cliArgumentsSchema.parse(a)
         const cliOptions = cliOptionsSchema.parse(o)

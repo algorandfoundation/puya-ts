@@ -21,4 +21,8 @@ describe('arc4-struct', () => {
     const result = await appClientStructDemo.send.call({ method: 'addVectors', args: [v1, v2] })
     expect(result.return).toStrictEqual({ x: 150n, y: 150n })
   })
+  test('implicit casting and spreading', async ({ appClientStructDemo, expect }) => {
+    const v1 = { x: 123, y: 456 }
+    await appClientStructDemo.send.call({ method: 'implicitCastingAndSpreading', args: [v1] })
+  })
 })

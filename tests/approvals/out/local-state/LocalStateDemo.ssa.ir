@@ -26,10 +26,10 @@ contract tests/approvals/local-state.algo.ts::LocalStateDemo:
             block@2: // setState_route_L14
                 let tmp%3#0: uint64 = (txn OnCompletion)
                 let tmp%4#0: bool = (== tmp%3#0 NoOp)
-                (assert tmp%4#0) // OnCompletion is NoOp
+                (assert tmp%4#0) // OnCompletion is not NoOp
                 let tmp%5#0: uint64 = (txn ApplicationID)
                 let tmp%6#0: bool = (!= tmp%5#0 0u)
-                (assert tmp%6#0) // is not creating
+                (assert tmp%6#0) // can only call when not creating
                 let tmp%7#0: bytes = (txna ApplicationArgs 1)
                 let item0%0#0: bytes = (extract3 tmp%7#0 0u 8u) // on error: Index access is out of bounds
                 let item0%0%0#0: uint64 = (btoi item0%0#0)
@@ -43,10 +43,10 @@ contract tests/approvals/local-state.algo.ts::LocalStateDemo:
             block@3: // getState_route_L22
                 let tmp%9#0: uint64 = (txn OnCompletion)
                 let tmp%10#0: bool = (== tmp%9#0 NoOp)
-                (assert tmp%10#0) // OnCompletion is NoOp
+                (assert tmp%10#0) // OnCompletion is not NoOp
                 let tmp%11#0: uint64 = (txn ApplicationID)
                 let tmp%12#0: bool = (!= tmp%11#0 0u)
-                (assert tmp%12#0) // is not creating
+                (assert tmp%12#0) // can only call when not creating
                 let (elements_to_encode%0#0: uint64, elements_to_encode%1#0: uint64, elements_to_encode%2#0: bytes, elements_to_encode%3#0: bytes, elements_to_encode%4#0: bytes) = tests/approvals/local-state.algo.ts::LocalStateDemo.getState()
                 let val_as_bytes%0#0: bytes = (itob elements_to_encode%0#0)
                 let val_as_bytes%1#0: bytes = (itob elements_to_encode%1#0)
@@ -81,10 +81,10 @@ contract tests/approvals/local-state.algo.ts::LocalStateDemo:
             block@4: // clearState_route_L32
                 let tmp%14#0: uint64 = (txn OnCompletion)
                 let tmp%15#0: bool = (== tmp%14#0 NoOp)
-                (assert tmp%15#0) // OnCompletion is NoOp
+                (assert tmp%15#0) // OnCompletion is not NoOp
                 let tmp%16#0: uint64 = (txn ApplicationID)
                 let tmp%17#0: bool = (!= tmp%16#0 0u)
-                (assert tmp%17#0) // is not creating
+                (assert tmp%17#0) // can only call when not creating
                 tests/approvals/local-state.algo.ts::LocalStateDemo.clearState()
                 return 1u
             block@5: // switch_case_default_L7
@@ -97,7 +97,7 @@ contract tests/approvals/local-state.algo.ts::LocalStateDemo:
             block@8: // __algots__.defaultCreate_L7
                 let tmp%19#0: uint64 = (txn ApplicationID)
                 let tmp%20#0: bool = (== tmp%19#0 0u)
-                (assert tmp%20#0) // is creating
+                (assert tmp%20#0) // can only call when creating
                 tests/approvals/local-state.algo.ts::LocalStateDemo.__algots__.defaultCreate()
                 return 1u
             block@9: // switch_case_default_L7

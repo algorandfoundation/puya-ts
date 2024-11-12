@@ -1,8 +1,22 @@
 #pragma version 10
 
 tests/approvals/implicit-create.algo.ts::BaseWithBareCreate.approvalProgram:
+    intcblock 0
+    txn ApplicationID
+    bnz main_after_if_else@2
+    callsub constructor
+
+main_after_if_else@2:
     callsub __puya_arc4_router__
     return
+
+
+// tests/approvals/implicit-create.algo.ts::BaseWithBareCreate.constructor() -> void:
+constructor:
+    // tests/approvals/implicit-create.algo.ts:13
+    // class BaseWithBareCreate extends Contract {
+    proto 0 0
+    retsub
 
 
 // tests/approvals/implicit-create.algo.ts::BaseWithBareCreate.__puya_arc4_router__() -> uint64:
@@ -11,22 +25,47 @@ __puya_arc4_router__:
     // class BaseWithBareCreate extends Contract {
     proto 0 1
     txn NumAppArgs
-    bnz __puya_arc4_router___after_if_else@6
+    intc_0 // 0
+    !=
+    bz __puya_arc4_router___bare_routing@2
+    b __puya_arc4_router___after_if_else@6
+
+__puya_arc4_router___bare_routing@2:
+    // tests/approvals/implicit-create.algo.ts:13
+    // class BaseWithBareCreate extends Contract {
     txn OnCompletion
-    bnz __puya_arc4_router___after_if_else@6
+    intc_0 // 0
+    swap
+    match __puya_arc4_router___create@3
+    b __puya_arc4_router___switch_case_default@4
+
+__puya_arc4_router___create@3:
     // tests/approvals/implicit-create.algo.ts:14
     // @baremethod({ onCreate: 'require' })
     txn ApplicationID
-    !
-    assert // is creating
+    intc_0 // 0
+    ==
+    assert // can only call when creating
     // tests/approvals/implicit-create.algo.ts:14-15
     // @baremethod({ onCreate: 'require' })
     // public create() {}
+    callsub create
     pushint 1 // 1
     retsub
+
+__puya_arc4_router___switch_case_default@4:
 
 __puya_arc4_router___after_if_else@6:
     // tests/approvals/implicit-create.algo.ts:13
     // class BaseWithBareCreate extends Contract {
-    pushint 0 // 0
+    intc_0 // 0
+    retsub
+
+
+// tests/approvals/implicit-create.algo.ts::BaseWithBareCreate.create() -> void:
+create:
+    // tests/approvals/implicit-create.algo.ts:14-15
+    // @baremethod({ onCreate: 'require' })
+    // public create() {}
+    proto 0 0
     retsub

@@ -10,7 +10,7 @@ describe('Approvals', () => {
   using logCtx = LoggingContext.create()
   const result = compile(
     buildCompileOptions({
-      outputAwstJson: false,
+      outputAwstJson: true,
       outputAwst: false,
       paths: ['tests/approvals'],
       outDir: 'out/[name]',
@@ -19,6 +19,7 @@ describe('Approvals', () => {
     }),
     {
       ...defaultPuyaOptions,
+      optimizationLevel: 0,
       outputTeal: true,
       outputArc32: true,
     },

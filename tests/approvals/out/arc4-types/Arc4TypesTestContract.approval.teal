@@ -1,12 +1,25 @@
 #pragma version 10
 
 tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract.approvalProgram:
-    intcblock 1 16 8 0
+    intcblock 1 8 0 2
+    bytecblock 0x base32(AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA) 0x0000 0x00
+    txn ApplicationID
+    bnz main_after_if_else@2
+    callsub constructor
+
+main_after_if_else@2:
+    // tests/approvals/arc4-types.algo.ts:85
+    // testStr()
+    callsub testStr
     // tests/approvals/arc4-types.algo.ts:86
     // test(1, 2n, new UintN<256>(4))
     intc_0 // 1
-    pushbytess 0x02 0x0000000000000000000000000000000000000000000000000000000000000004 // 0x02, 0x0000000000000000000000000000000000000000000000000000000000000004
+    pushbytes 0x02
+    pushbytes 0x0000000000000000000000000000000000000000000000000000000000000004
     callsub test
+    // tests/approvals/arc4-types.algo.ts:87
+    // testByte()
+    callsub testByte
     // tests/approvals/arc4-types.algo.ts:88
     // testArrays(new UintN<64>(65))
     pushbytes 0x0000000000000041
@@ -14,10 +27,46 @@ tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract.approvalProgram:
     // tests/approvals/arc4-types.algo.ts:89
     // testAddress()
     callsub testAddress
+    // tests/approvals/arc4-types.algo.ts:90
+    // testTuple()
+    callsub testTuple
     // tests/approvals/arc4-types.algo.ts:91
     // return true
     intc_0 // 1
     return
+
+
+// tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract.constructor() -> void:
+constructor:
+    // tests/approvals/arc4-types.algo.ts:78
+    // export class Arc4TypesTestContract extends BaseContract {
+    proto 0 0
+    retsub
+
+
+// tests/approvals/arc4-types.algo.ts::testStr() -> void:
+testStr:
+    // tests/approvals/arc4-types.algo.ts:30
+    // function testStr() {
+    proto 0 0
+    // tests/approvals/arc4-types.algo.ts:31
+    // const s1 = new Str()
+    bytec_2 // 0x0000
+    // tests/approvals/arc4-types.algo.ts:32
+    // assert(s1.bytes === new UintN<16>(0).bytes, 'Empty string should equal the uint16 length prefix')
+    dup
+    ==
+    assert // Empty string should equal the uint16 length prefix
+    // tests/approvals/arc4-types.algo.ts:33
+    // const s2 = new Str('Hello')
+    pushbytes 0x000548656c6c6f
+    // tests/approvals/arc4-types.algo.ts:34
+    // assert(s2.native === 'Hello')
+    extract 2 0
+    pushbytes "Hello"
+    ==
+    assert
+    retsub
 
 
 // tests/approvals/arc4-types.algo.ts::test(n: uint64, b: bytes, c: bytes) -> void:
@@ -25,6 +74,32 @@ test:
     // tests/approvals/arc4-types.algo.ts:12
     // function test(n: uint64, b: biguint, c: UintN<256>) {
     proto 3 0
+    // tests/approvals/arc4-types.algo.ts:13
+    // const x = new UintN<8>(4)
+    pushbytes 0x04
+    // tests/approvals/arc4-types.algo.ts:14
+    // assert(x.bytes.length === 1)
+    len
+    intc_0 // 1
+    ==
+    assert
+    // tests/approvals/arc4-types.algo.ts:15
+    // const x2 = new UintN<8>(255n)
+    pushbytes 0xff
+    // tests/approvals/arc4-types.algo.ts:16
+    // assert(x2.bytes === Bytes.fromHex('ff'))
+    dup
+    ==
+    assert
+    // tests/approvals/arc4-types.algo.ts:18
+    // const y = new UintN<16>()
+    bytec_2 // 0x0000
+    // tests/approvals/arc4-types.algo.ts:19
+    // assert(y.bytes.length === 2)
+    len
+    intc_3 // 2
+    ==
+    assert
     // tests/approvals/arc4-types.algo.ts:20
     // const z = new UintN<8>(n)
     frame_dig -3
@@ -42,10 +117,10 @@ test:
     // const a = new UintN<128>(b)
     frame_dig -2
     len
-    intc_1 // 16
+    pushint 16 // 16
     <=
     assert // overflow
-    intc_1 // 16
+    pushint 16 // 16
     bzero
     frame_dig -2
     b|
@@ -64,6 +139,24 @@ test:
     retsub
 
 
+// tests/approvals/arc4-types.algo.ts::testByte() -> void:
+testByte:
+    // tests/approvals/arc4-types.algo.ts:54
+    // function testByte() {
+    proto 0 0
+    // tests/approvals/arc4-types.algo.ts:55
+    // const b = new Byte()
+    bytec_3 // 0x00
+    // tests/approvals/arc4-types.algo.ts:56
+    // const b2 = new Byte(0)
+    dup
+    // tests/approvals/arc4-types.algo.ts:57
+    // assert(b.equals(b2))
+    ==
+    assert
+    retsub
+
+
 // tests/approvals/arc4-types.algo.ts::testArrays(n: bytes) -> void:
 testArrays:
     // tests/approvals/arc4-types.algo.ts:40
@@ -71,10 +164,11 @@ testArrays:
     proto 1 0
     // tests/approvals/arc4-types.algo.ts:41
     // const myArray = new DynamicArray(n, n, n)
+    bytec_0 // 0x
     frame_dig -1
-    dup
     concat
-    dup
+    frame_dig -1
+    concat
     frame_dig -1
     concat
     pushbytes 0x0003
@@ -83,22 +177,37 @@ testArrays:
     // tests/approvals/arc4-types.algo.ts:43
     // myArray.push(n)
     extract 2 0
+    bytec_0 // 0x
     frame_dig -1
+    concat
     concat
     dup
     len
-    intc_2 // 8
+    intc_1 // 8
     /
     itob
     extract 6 2
     swap
     concat
+    // tests/approvals/arc4-types.algo.ts:45
+    // const myStatic = new StaticArray(n, n)
+    bytec_0 // 0x
+    frame_dig -1
+    concat
+    frame_dig -1
+    concat
+    bytec_0 // 0x
+    swap
+    concat
     // tests/approvals/arc4-types.algo.ts:47
     // assert(myStatic[0].equals(myArray.pop()))
+    intc_2 // 0
+    intc_1 // 8
+    *
+    intc_1 // 8
+    extract3 // on error: Index access is out of bounds
     swap
-    extract 0 8 // on error: Index access is out of bounds
-    swap
-    intc_2 // 8
+    intc_1 // 8
     callsub dynamic_array_pop_fixed_size
     pop
     ==
@@ -111,17 +220,76 @@ testAddress:
     // tests/approvals/arc4-types.algo.ts:60
     // function testAddress() {
     proto 0 0
-    // tests/approvals/arc4-types.algo.ts:61
-    // const a = new Address()
-    pushbytes base32(AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA) // addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ
     // tests/approvals/arc4-types.algo.ts:62
     // const b = new Address(Txn.sender)
     txn Sender
+    // tests/approvals/arc4-types.algo.ts:61
+    // const a = new Address()
+    bytec_1 // addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ
     // tests/approvals/arc4-types.algo.ts:64
     // assert(!a.equals(b), 'Zero address should not match sender')
     ==
     !
     assert // Zero address should not match sender
+    // tests/approvals/arc4-types.algo.ts:61
+    // const a = new Address()
+    bytec_1 // addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ
+    // tests/approvals/arc4-types.algo.ts:65
+    // assert(a.equals(new Address()), 'Two zero addresses should match')
+    dup
+    ==
+    assert // Two zero addresses should match
+    // tests/approvals/arc4-types.algo.ts:66
+    // assert(a[0].equals(new Byte()), 'Zero address should start with zero byte')
+    intc_2 // 0
+    intc_0 // 1
+    *
+    // tests/approvals/arc4-types.algo.ts:61
+    // const a = new Address()
+    bytec_1 // addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ
+    // tests/approvals/arc4-types.algo.ts:66
+    // assert(a[0].equals(new Byte()), 'Zero address should start with zero byte')
+    swap
+    intc_0 // 1
+    extract3 // on error: Index access is out of bounds
+    bytec_3 // 0x00
+    ==
+    assert // Zero address should start with zero byte
+    retsub
+
+
+// tests/approvals/arc4-types.algo.ts::testTuple() -> void:
+testTuple:
+    // tests/approvals/arc4-types.algo.ts:69
+    // function testTuple() {
+    proto 0 0
+    // tests/approvals/arc4-types.algo.ts:70
+    // const t = new Tuple(new ARC4Uint64(34))
+    bytec_0 // 0x
+    pushbytes 0x0000000000000022
+    concat
+    // tests/approvals/arc4-types.algo.ts:71
+    // const firstItem = t.at(0)
+    dup
+    intc_2 // 0
+    intc_1 // 8
+    extract3 // on error: Index access is out of bounds
+    swap
+    // tests/approvals/arc4-types.algo.ts:72
+    // const firstItemIndexer = t.native[0]
+    intc_2 // 0
+    intc_1 // 8
+    extract3 // on error: Index access is out of bounds
+    // tests/approvals/arc4-types.algo.ts:73
+    // assert(firstItem.equals(firstItemIndexer))
+    ==
+    assert
+    // tests/approvals/arc4-types.algo.ts:75
+    // assert(t1.length === 2)
+    intc_3 // 2
+    dup
+    ==
+    assert
     retsub
 
 
@@ -129,7 +297,7 @@ testAddress:
 dynamic_array_pop_fixed_size:
     proto 2 2
     frame_dig -2
-    intc_3 // 0
+    intc_2 // 0
     extract_uint16
     intc_0 // 1
     -
@@ -145,8 +313,9 @@ dynamic_array_pop_fixed_size:
     dup2
     frame_dig -1
     extract3
+    cover 2
+    swap
+    intc_2 // 0
     uncover 2
-    intc_3 // 0
-    uncover 3
     substring3
     retsub

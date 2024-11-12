@@ -1,7 +1,12 @@
 #pragma version 10
 
 tests/approvals/assert-match.algo.ts::AssertMatchContract.approvalProgram:
-    intcblock 1
+    intcblock 1 0
+    txn ApplicationID
+    bnz main_after_if_else@2
+    callsub constructor
+
+main_after_if_else@2:
     // tests/approvals/assert-match.algo.ts:22
     // const txn = gtxn.PaymentTxn(1)
     intc_0 // 1
@@ -12,6 +17,14 @@ tests/approvals/assert-match.algo.ts::AssertMatchContract.approvalProgram:
     // return true
     intc_0 // 1
     return
+
+
+// tests/approvals/assert-match.algo.ts::AssertMatchContract.constructor() -> void:
+constructor:
+    // tests/approvals/assert-match.algo.ts:20
+    // export class AssertMatchContract extends BaseContract {
+    proto 0 0
+    retsub
 
 
 // tests/approvals/assert-match.algo.ts::test(x: uint64) -> void:
@@ -43,6 +56,22 @@ test:
     //   lastValid: { lessThan: 2 ** 40 },
     // })
     <=
+    bz test_bool_false@8
+    frame_dig -1
+    gtxns Amount
+    // tests/approvals/assert-match.algo.ts:11
+    // amount: { between: [0, 50000] },
+    intc_1 // 0
+    // tests/approvals/assert-match.algo.ts:10-17
+    // assertMatch(x, {
+    //   amount: { between: [0, 50000] },
+    //   sender: Txn.sender,
+    //   receiver: Global.currentApplicationAddress,
+    //   closeRemainderTo: Global.zeroAddress,
+    //   firstValid: { greaterThan: 1 },
+    //   lastValid: { lessThan: 2 ** 40 },
+    // })
+    >=
     bz test_bool_false@8
     frame_dig -1
     gtxns Sender
@@ -128,7 +157,7 @@ test:
     b test_bool_merge@9
 
 test_bool_false@8:
-    pushint 0 // 0
+    intc_1 // 0
 
 test_bool_merge@9:
     // tests/approvals/assert-match.algo.ts:10-17

@@ -1,6 +1,11 @@
 #pragma version 10
 
 tests/approvals/inheritance-b.algo.ts::ConcreteSimpleContract.approvalProgram:
+    txn ApplicationID
+    bnz main_after_if_else@2
+    callsub constructor
+
+main_after_if_else@2:
     // tests/approvals/inheritance-b.algo.ts:7
     // const a = op.btoi(Txn.applicationArgs(0))
     pushint 0 // 0
@@ -20,6 +25,23 @@ tests/approvals/inheritance-b.algo.ts::ConcreteSimpleContract.approvalProgram:
     // return 1
     pushint 1 // 1
     return
+
+
+// tests/approvals/inheritance-b.algo.ts::ConcreteSimpleContract.constructor() -> void:
+constructor:
+    // tests/approvals/inheritance-b.algo.ts:5
+    // export class ConcreteSimpleContract extends SimpleContract {
+    proto 0 0
+    callsub tests/approvals/inheritance-a.algo.ts::SimpleContract.constructor
+    retsub
+
+
+// tests/approvals/inheritance-a.algo.ts::SimpleContract.constructor() -> void:
+tests/approvals/inheritance-a.algo.ts::SimpleContract.constructor:
+    // tests/approvals/inheritance-a.algo.ts:4
+    // export abstract class SimpleContract extends BaseContract {
+    proto 0 0
+    retsub
 
 
 // tests/approvals/inheritance-a.algo.ts::SimpleContract.simpleMethod(a: uint64, b: uint64) -> uint64:

@@ -2,8 +2,21 @@
 
 tests/approvals/implicit-create.algo.ts::NoNoOp.approvalProgram:
     intcblock 0 1
+    txn ApplicationID
+    bnz main_after_if_else@2
+    callsub constructor
+
+main_after_if_else@2:
     callsub __puya_arc4_router__
     return
+
+
+// tests/approvals/implicit-create.algo.ts::NoNoOp.constructor() -> void:
+constructor:
+    // tests/approvals/implicit-create.algo.ts:8
+    // export class NoNoOp extends Contract {
+    proto 0 0
+    retsub
 
 
 // tests/approvals/implicit-create.algo.ts::NoNoOp.__puya_arc4_router__() -> uint64:
@@ -12,22 +25,32 @@ __puya_arc4_router__:
     // export class NoNoOp extends Contract {
     proto 0 1
     txn NumAppArgs
-    bnz __puya_arc4_router___after_if_else@7
+    intc_0 // 0
+    !=
+    bz __puya_arc4_router___bare_routing@2
+    b __puya_arc4_router___after_if_else@7
+
+__puya_arc4_router___bare_routing@2:
+    // tests/approvals/implicit-create.algo.ts:8
+    // export class NoNoOp extends Contract {
+    txn OnCompletion
     pushint 4 // 4
     intc_0 // 0
-    txn OnCompletion
+    uncover 2
     match __puya_arc4_router___handleUpdate@3 __puya_arc4_router_____algots__.defaultCreate@4
-    intc_0 // 0
-    retsub
+    b __puya_arc4_router___switch_case_default@5
 
 __puya_arc4_router___handleUpdate@3:
     // tests/approvals/implicit-create.algo.ts:9
     // @baremethod({ allowActions: 'UpdateApplication' })
     txn ApplicationID
-    assert // is not creating
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
     // tests/approvals/implicit-create.algo.ts:9-10
     // @baremethod({ allowActions: 'UpdateApplication' })
     // public handleUpdate() {}
+    callsub handleUpdate
     intc_1 // 1
     retsub
 
@@ -35,13 +58,34 @@ __puya_arc4_router_____algots__.defaultCreate@4:
     // tests/approvals/implicit-create.algo.ts:8
     // export class NoNoOp extends Contract {
     txn ApplicationID
-    !
-    assert // is creating
+    intc_0 // 0
+    ==
+    assert // can only call when creating
+    callsub __algots__.defaultCreate
     intc_1 // 1
     retsub
+
+__puya_arc4_router___switch_case_default@5:
 
 __puya_arc4_router___after_if_else@7:
     // tests/approvals/implicit-create.algo.ts:8
     // export class NoNoOp extends Contract {
     intc_0 // 0
+    retsub
+
+
+// tests/approvals/implicit-create.algo.ts::NoNoOp.handleUpdate() -> void:
+handleUpdate:
+    // tests/approvals/implicit-create.algo.ts:9-10
+    // @baremethod({ allowActions: 'UpdateApplication' })
+    // public handleUpdate() {}
+    proto 0 0
+    retsub
+
+
+// tests/approvals/implicit-create.algo.ts::NoNoOp.__algots__.defaultCreate() -> void:
+__algots__.defaultCreate:
+    // tests/approvals/implicit-create.algo.ts:8
+    // export class NoNoOp extends Contract {
+    proto 0 0
     retsub

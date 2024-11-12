@@ -3,6 +3,11 @@
 tests/approvals/ensure-budget.algo.ts::EnsureBudgetContract.approvalProgram:
     intcblock 100 0 1
     bytecblock 0x068101
+    txn ApplicationID
+    bnz main_after_if_else@2
+    callsub constructor
+
+main_after_if_else@2:
     // tests/approvals/ensure-budget.algo.ts:5
     // ensureBudget(100)
     intc_0 // 100
@@ -29,6 +34,14 @@ tests/approvals/ensure-budget.algo.ts::EnsureBudgetContract.approvalProgram:
     return
 
 
+// tests/approvals/ensure-budget.algo.ts::EnsureBudgetContract.constructor() -> void:
+constructor:
+    // tests/approvals/ensure-budget.algo.ts:3
+    // export class EnsureBudgetContract extends BaseContract {
+    proto 0 0
+    retsub
+
+
 // _puya_lib.util.ensure_budget(required_budget: uint64, fee_source: uint64) -> void:
 ensure_budget:
     proto 2 0
@@ -37,9 +50,9 @@ ensure_budget:
     +
 
 ensure_budget_while_top@1:
-    frame_dig 0
     global OpcodeBudget
-    >
+    frame_dig 0
+    <
     bz ensure_budget_after_while@7
     itxn_begin
     pushint 6 // appl
@@ -50,9 +63,11 @@ ensure_budget_while_top@1:
     itxn_field ApprovalProgram
     bytec_0 // 0x068101
     itxn_field ClearStateProgram
+    intc_1 // 0
+    intc_2 // 1
     frame_dig -1
-    switch ensure_budget_switch_case_0@3 ensure_budget_switch_case_1@4
-    b ensure_budget_switch_case_next@6
+    match ensure_budget_switch_case_0@3 ensure_budget_switch_case_1@4
+    b ensure_budget_switch_case_default@5
 
 ensure_budget_switch_case_0@3:
     intc_1 // 0
@@ -62,6 +77,9 @@ ensure_budget_switch_case_0@3:
 ensure_budget_switch_case_1@4:
     global MinTxnFee
     itxn_field Fee
+    b ensure_budget_switch_case_next@6
+
+ensure_budget_switch_case_default@5:
 
 ensure_budget_switch_case_next@6:
     itxn_submit

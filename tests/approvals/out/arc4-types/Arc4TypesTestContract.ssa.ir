@@ -23,10 +23,10 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
         
         subroutine tests/approvals/arc4-types.algo.ts::testStr() -> void:
             block@0: // L30
-                let s1#0: bytes = "\x00\x00"
+                let s1#0: bytes = 0x0000
                 let tmp%0#0: bool = (== s1#0 0x0000)
                 (assert tmp%0#0) // Empty string should equal the uint16 length prefix
-                let s2#0: bytes = "\x00\x05Hello"
+                let s2#0: bytes = 0x000548656c6c6f
                 let tmp%1#0: bytes = ((extract 2 0) s2#0)
                 let tmp%2#0: bool = (== tmp%1#0 "Hello")
                 (assert tmp%2#0)

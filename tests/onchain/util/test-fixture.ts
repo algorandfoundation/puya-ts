@@ -191,6 +191,7 @@ function compilePath(path: string, expect: ExpectStatic): CompilationArtifacts {
       outputTeal: false,
       outputArc32: true,
       outputBytecode: true,
+      optimizationLevel: 0,
     },
   )
   for (const log of logCtx.logEvents) {

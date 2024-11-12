@@ -26,10 +26,10 @@ contract tests/approvals/implicit-create.algo.ts::NoBare:
             block@2: // handleNoop_route_L5
                 let tmp%3#0: uint64 = (txn OnCompletion)
                 let tmp%4#0: bool = (== tmp%3#0 NoOp)
-                (assert tmp%4#0) // OnCompletion is NoOp
+                (assert tmp%4#0) // OnCompletion is not NoOp
                 let tmp%5#0: uint64 = (txn ApplicationID)
                 let tmp%6#0: bool = (!= tmp%5#0 0u)
-                (assert tmp%6#0) // is not creating
+                (assert tmp%6#0) // can only call when not creating
                 tests/approvals/implicit-create.algo.ts::NoBare.handleNoop()
                 return 1u
             block@3: // switch_case_default_L4
@@ -42,7 +42,7 @@ contract tests/approvals/implicit-create.algo.ts::NoBare:
             block@6: // __algots__.defaultCreate_L4
                 let tmp%8#0: uint64 = (txn ApplicationID)
                 let tmp%9#0: bool = (== tmp%8#0 0u)
-                (assert tmp%9#0) // is creating
+                (assert tmp%9#0) // can only call when creating
                 tests/approvals/implicit-create.algo.ts::NoBare.__algots__.defaultCreate()
                 return 1u
             block@7: // switch_case_default_L4
