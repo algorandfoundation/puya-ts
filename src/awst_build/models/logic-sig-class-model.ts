@@ -33,6 +33,7 @@ export class LogicSigClassModel {
       program: this.program,
       sourceLocation: this.sourceLocation,
       docstring: this.description,
+      avmVersion: null, // TODO: Allow this to be set from class decorator
     })
   }
 }
