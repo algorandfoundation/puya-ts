@@ -28,6 +28,7 @@ import { BigIntLiteralExpressionBuilder } from '../eb/literal/big-int-literal-ex
 import { ConditionalExpressionBuilder } from '../eb/literal/conditional-expression-builder'
 import type { ObjectLiteralParts } from '../eb/literal/object-literal-expression-builder'
 import { ObjectLiteralExpressionBuilder } from '../eb/literal/object-literal-expression-builder'
+import { NamespaceBuilder } from '../eb/namespace-builder'
 import { OmittedExpressionBuilder } from '../eb/omitted-expression-builder'
 import { StringExpressionBuilder, StringFunctionBuilder } from '../eb/string-expression-builder'
 import { requireExpressionOfType, requireInstanceBuilder } from '../eb/util'
@@ -192,6 +193,10 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   visitPropertyAccessExpression(node: ts.PropertyAccessExpression): NodeBuilder {
     this.logNotSupported(node.questionDotToken, 'The optional chaining (?.) operator is not supported')
     const target = this.baseAccept(node.expression)
+    if (target instanceof NamespaceBuilder) {
+      codeInvariant(!ts.isPrivateIdentifier(node.name), 'Private identifiers are not supported here', this.sourceLocation(node.name))
+      return this.context.getBuilderForNode(node.name)
+    }
     const property = this.textVisitor.accept(node.name)
     return target.memberAccess(property, this.sourceLocation(node))
   }

@@ -15,6 +15,11 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
                 tests/approvals/arc4-types.algo.ts::testArrays(0x0000000000000041)
                 tests/approvals/arc4-types.algo.ts::testAddress()
                 tests/approvals/arc4-types.algo.ts::testTuple()
+                let array_data%0#0: bytes = (concat 0x0000 0x)
+                let result#0: bytes = array_data%0#0
+                let tmp%0#0: uint64 = (extract_uint16 result#0 0u)
+                let tmp%1#0: bool = (== tmp%0#0 0u)
+                (assert tmp%1#0)
                 return 1u
         
         subroutine tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract.constructor() -> void:

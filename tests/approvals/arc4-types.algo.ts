@@ -1,5 +1,5 @@
 import type { biguint, uint64 } from '@algorandfoundation/algorand-typescript'
-import { assert, BaseContract, Bytes, Txn } from '@algorandfoundation/algorand-typescript'
+import { arc4, assert, BaseContract, Bytes, Txn } from '@algorandfoundation/algorand-typescript'
 import { Address, Byte, DynamicArray, StaticArray, Str, Tuple, UFixedNxM, UintN } from '@algorandfoundation/algorand-typescript/arc4'
 
 function testUFixed() {
@@ -88,6 +88,9 @@ export class Arc4TypesTestContract extends BaseContract {
     testArrays(new UintN<64>(65))
     testAddress()
     testTuple()
+
+    const result = new arc4.DynamicArray<arc4.UintN<64>>()
+    assert(result.length === 0)
     return true
   }
 }
