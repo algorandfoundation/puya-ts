@@ -3,7 +3,15 @@ import type { awst } from '../../awst'
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
 import { nodeFactory } from '../../awst/node-factory'
 import type { Expression } from '../../awst/nodes'
-import { BytesBinaryOperator, BytesConstant, BytesEncoding, BytesUnaryOperator, IntegerConstant, StringConstant } from '../../awst/nodes'
+import {
+  BytesBinaryOperator,
+  BytesConstant,
+  BytesEncoding,
+  BytesUnaryOperator,
+  EqualityComparison,
+  IntegerConstant,
+  StringConstant,
+} from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { wtypes } from '../../awst/wtypes'
 
@@ -22,6 +30,7 @@ import {
   stringPType,
   uint64PType,
 } from '../ptypes'
+import { BooleanExpressionBuilder } from './boolean-expression-builder'
 import type { BuilderComparisonOp, InstanceBuilder, NodeBuilder } from './index'
 import { BuilderUnaryOp, FunctionBuilder, InstanceExpressionBuilder, ParameterlessFunctionBuilder } from './index'
 import { ArrayLiteralExpressionBuilder } from './literal/array-literal-expression-builder'
@@ -211,6 +220,8 @@ export class BytesExpressionBuilder extends InstanceExpressionBuilder<InstanceTy
         )
       case 'slice':
         return new SliceFunctionBuilder(this._expr, bytesPType)
+      case 'equals':
+        return new EqualsFunctionBuilder(this._expr)
     }
     return super.memberAccess(name, sourceLocation)
   }
@@ -322,6 +333,33 @@ export class ToStringBuilder extends ParameterlessFunctionBuilder {
             sourceLocation,
           }),
         ),
+    )
+  }
+}
+
+class EqualsFunctionBuilder extends FunctionBuilder {
+  constructor(private expr: awst.Expression) {
+    super(expr.sourceLocation)
+  }
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    const {
+      args: [right],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 0,
+      callLocation: sourceLocation,
+      funcName: 'equals',
+      argSpec: (a) => [a.required(bytesPType)],
+    })
+    return new BooleanExpressionBuilder(
+      nodeFactory.bytesComparisonExpression({
+        operator: EqualityComparison.eq,
+        lhs: this.expr,
+        rhs: right.toBytes(sourceLocation),
+        sourceLocation,
+      }),
     )
   }
 }
