@@ -6,12 +6,12 @@ import { codeInvariant, invariant } from '../../../util'
 import type { PType } from '../../ptypes'
 import { numberPType, NumericLiteralPType, stringPType } from '../../ptypes'
 import { UFixedNxMClass, UFixedNxMType } from '../../ptypes/arc4-types'
-import { ClassBuilder, type InstanceBuilder, type NodeBuilder } from '../index'
+import { type InstanceBuilder, type NodeBuilder } from '../index'
 import { isValidLiteralForPType, requireStringConstant } from '../util'
 import { parseFunctionArgs } from '../util/arg-parsing'
-import { Arc4EncodedBaseExpressionBuilder } from './base'
+import { Arc4EncodedBaseClassBuilder, Arc4EncodedBaseExpressionBuilder } from './base'
 
-export class UFixedNxMClassBuilder extends ClassBuilder {
+export class UFixedNxMClassBuilder extends Arc4EncodedBaseClassBuilder {
   readonly ptype = UFixedNxMClass
 
   newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {

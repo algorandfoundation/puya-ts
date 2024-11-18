@@ -1,7 +1,8 @@
 import { avmError, avmInvariant } from '../impl/errors'
 import { arrayUtil, BytesCls, getNumber, getUint8Array, isBytes, isUint64 } from '../impl/primitives'
-import { biguint, BigUintCompat, Bytes, bytes, BytesBacked, StringCompat, Uint64, uint64, Uint64Compat } from '../primitives'
+import { biguint, BigUintCompat, Bytes, bytes, BytesBacked, BytesCompat, StringCompat, Uint64, uint64, Uint64Compat } from '../primitives'
 import { Account } from '../reference'
+import { DeliberateAny } from '../typescript-helpers'
 import { err } from '../util'
 
 export type BitSize = 8 | 16 | 32 | 64 | 128 | 256 | 512
@@ -16,6 +17,14 @@ export abstract class ARC4Encoded implements BytesBacked {
 
   equals(other: this): boolean {
     return this.bytes.equals(other.bytes)
+  }
+
+  static fromBytes<T extends ARC4Encoded>(this: { new(...args: DeliberateAny): T }, bytes: BytesCompat): T {
+    throw new Error('todo')
+  }
+
+  static fromLog<T extends ARC4Encoded>(this: { new(...args: DeliberateAny): T }, log: BytesCompat): T {
+    throw new Error('todo')
   }
 }
 
@@ -56,10 +65,11 @@ export class Byte extends UintN<8> {
     super(v)
   }
 }
-export class Bool {
+export class Bool extends ARC4Encoded {
   __type?: `arc4.Bool`
   #v: boolean
   constructor(v?: boolean) {
+    super()
     this.#v = v ?? false
   }
 
@@ -208,8 +218,8 @@ export class DynamicArray<TItem extends ARC4Encoded> extends Arc4ReadonlyArray<T
 }
 type ExpandTupleType<T extends ARC4Encoded[]> = T extends [infer T1 extends ARC4Encoded, ...infer TRest extends ARC4Encoded[]]
   ? TRest extends []
-    ? `${T1['__type']}`
-    : `${T1['__type']},${ExpandTupleType<TRest>}`
+  ? `${T1['__type']}`
+  : `${T1['__type']},${ExpandTupleType<TRest>}`
   : ''
 
 export class Tuple<TTuple extends [ARC4Encoded, ...ARC4Encoded[]]> extends ARC4Encoded {
