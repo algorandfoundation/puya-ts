@@ -1,5 +1,6 @@
 import type { bytes, uint64 } from '@algorandfoundation/algorand-typescript'
-import { BigUint } from '@algorandfoundation/algorand-typescript'
+import { BaseContract, BigUint } from '@algorandfoundation/algorand-typescript'
+import { itob } from '@algorandfoundation/algorand-typescript/op'
 
 function test(a: uint64, b: boolean, c: bytes) {
   BigUint()
@@ -15,4 +16,11 @@ function test(a: uint64, b: boolean, c: bytes) {
   BigUint(a * a)
   BigUint(b)
   BigUint(c)
+}
+
+class DemoContract extends BaseContract {
+  public approvalProgram() {
+    test(1, false, itob(4))
+    return true
+  }
 }

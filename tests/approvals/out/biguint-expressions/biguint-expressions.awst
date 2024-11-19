@@ -14,3 +14,30 @@ subroutine test(a: uint64, b: bool, c: bytes): void
   reinterpret_cast<biguint>(itob(b))
   reinterpret_cast<biguint>(c)
 }
+contract DemoContract
+{
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    tests/approvals/biguint-expressions.algo.ts::test(1, False, itob(4))
+    return True
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  constructor(): void
+  {
+    void
+  }
+  
+  Contract::constructor(): void
+  {
+    this.constructor()
+  }
+  
+}

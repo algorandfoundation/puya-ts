@@ -1,0 +1,20 @@
+#pragma version 10
+
+tests/approvals/uint64-expressions.algo.ts::DemoContract.approvalProgram:
+    txn ApplicationID
+    bnz main_after_if_else@2
+    callsub constructor
+
+main_after_if_else@2:
+    // tests/approvals/uint64-expressions.algo.ts:10
+    // return test().length
+    pushint 5 // 5
+    return
+
+
+// tests/approvals/uint64-expressions.algo.ts::DemoContract.constructor() -> void:
+constructor:
+    // tests/approvals/uint64-expressions.algo.ts:8
+    // class DemoContract extends BaseContract {
+    proto 0 0
+    retsub

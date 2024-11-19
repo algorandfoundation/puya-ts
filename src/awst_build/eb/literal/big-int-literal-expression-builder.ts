@@ -35,11 +35,10 @@ export class BigIntLiteralExpressionBuilder extends LiteralExpressionBuilder {
   }
 
   resolvableToPType(ptype: PTypeOrClass): boolean {
-    if (!isValidLiteralForPType(this.value, ptype)) return false
     if (this.ptype instanceof NumericLiteralPType || this.ptype.equals(numberPType)) {
-      return ptype.equals(uint64PType) || ptype.equals(numberPType) || ptype.equals(this.ptype)
+      return ptype.equals(biguintPType) || ptype.equals(uint64PType) || ptype.equals(numberPType) || ptype.equals(this.ptype)
     } else if (this.ptype instanceof BigIntLiteralPType || this.ptype.equals(bigIntPType)) {
-      return ptype.equals(biguintPType) || ptype.equals(bigIntPType) || ptype.equals(this.ptype)
+      return ptype.equals(biguintPType) || ptype.equals(uint64PType) || ptype.equals(bigIntPType) || ptype.equals(this.ptype)
     }
     return false
   }

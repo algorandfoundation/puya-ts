@@ -3,7 +3,7 @@ import type { Expression } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { codeInvariant, invariant } from '../../util'
 import type { PType } from '../ptypes'
-import { TuplePType } from '../ptypes'
+import { TuplePType, uint64PType } from '../ptypes'
 import { instanceEb } from '../type-registry'
 import type { InstanceBuilder, NodeBuilder } from './index'
 import { InstanceExpressionBuilder } from './index'
@@ -17,6 +17,20 @@ export class TupleExpressionBuilder extends InstanceExpressionBuilder<TuplePType
 
   iterate(): Expression {
     return this.resolve()
+  }
+
+  memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
+    switch (name) {
+      case 'length':
+        return instanceEb(
+          nodeFactory.uInt64Constant({
+            value: BigInt(this.ptype.items.length),
+            sourceLocation,
+          }),
+          uint64PType,
+        )
+    }
+    return super.memberAccess(name, sourceLocation)
   }
 
   indexAccess(index: InstanceBuilder, sourceLocation: SourceLocation): NodeBuilder {
