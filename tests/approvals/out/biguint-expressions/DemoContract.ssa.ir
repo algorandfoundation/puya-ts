@@ -1,0 +1,33 @@
+contract tests/approvals/biguint-expressions.algo.ts::DemoContract:
+    program approval:
+        subroutine tests/approvals/biguint-expressions.algo.ts::DemoContract.approvalProgram() -> bool:
+            block@0: // L22
+                let reinterpret_bool%0#0: bool = (txn ApplicationID)
+                goto reinterpret_bool%0#0 ? block@2 : block@1
+            block@1: // if_body_L1
+                tests/approvals/biguint-expressions.algo.ts::DemoContract.constructor()
+                goto block@2
+            block@2: // after_if_else_L1
+                let tmp%0#0: bytes = (itob 4u)
+                tests/approvals/biguint-expressions.algo.ts::test(1u, 0u, tmp%0#0)
+                return 1u
+        
+        subroutine tests/approvals/biguint-expressions.algo.ts::DemoContract.constructor() -> void:
+            block@0: // L21
+                return 
+        
+        subroutine tests/approvals/biguint-expressions.algo.ts::test(a: uint64, b: bool, c: bytes) -> void:
+            block@0: // L5
+                let reinterpret_biguint%0#0: biguint = (itob 1u)
+                let reinterpret_biguint%1#0: biguint = (itob 0u)
+                let reinterpret_biguint%2#0: biguint = (itob a#0)
+                let tmp%0#0: uint64 = (* a#0 a#0)
+                let reinterpret_biguint%3#0: biguint = (itob tmp%0#0)
+                let reinterpret_biguint%4#0: biguint = (itob b#0)
+                let reinterpret_biguint%5#0: biguint = c#0
+                return 
+    
+    program clear-state:
+        subroutine @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.clearStateProgram() -> bool:
+            block@0: // L1
+                return 1u
