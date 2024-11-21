@@ -68,7 +68,7 @@ export const intrinsicFactory = {
     if (value instanceof awst.IntegerConstant) {
       return nodeFactory.bytesConstant({
         sourceLocation,
-        value: bigIntToUint8Array(value.value),
+        value: bigIntToUint8Array(value.value, value.wtype.equals(wtypes.uint64WType) ? 8 : 'dynamic'),
         encoding: BytesEncoding.base16,
       })
     }
