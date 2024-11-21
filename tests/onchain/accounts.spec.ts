@@ -28,5 +28,6 @@ describe('accounts', () => {
     }
 
     expect(returnValue.authAddress).toStrictEqual(new Array(32).fill(0))
+    expect(returnValue.totalAppsCreated).toBeGreaterThan(0n)
   })
 })

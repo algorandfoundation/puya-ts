@@ -624,6 +624,7 @@ export class ObjectPType extends PType {
   static anonymous(props: Record<string, PType> | Array<[string, PType]>) {
     const properties = Array.isArray(props) ? Object.fromEntries(props) : props
     return new ObjectPType({
+      name: 'Anonymous',
       properties,
     })
   }
