@@ -159,7 +159,7 @@ export namespace wtypes {
 
     toString(): string {
       if (this.names) {
-        return `${this.name ?? ''}{ ${this.names.map((n, i) => `${n}: ${this.types[i]}`).join(', ')} }`
+        return `${this.name === 'Anonymous' ? '' : this.name}{ ${this.names.map((n, i) => `${n}: ${this.types[i]}`).join(', ')} }`
       }
       return `${this.immutable ? 'readonly' : ''}${this.name ?? ''}[${this.types.join(', ')}]`
     }

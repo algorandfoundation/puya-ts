@@ -2,10 +2,37 @@ subroutine test(a: uint64, b: biguint, c: string): void
 {
   assert(len(0x) == 0)
   assert(itob(a) == itob(a))
-  assert(0x01 == 0x0000000000000001)
+  assert(0x0000000000000001 == 0x0000000000000001)
   assert(reinterpret_cast<bytes>(256) == 0x0100)
   assert(reinterpret_cast<biguint>(reinterpret_cast<bytes>(b)) == b)
   assert(reinterpret_cast<string>(reinterpret_cast<bytes>(c)) == c)
   assert("123" == "123")
   assert(0x01020304 == 0x01020304)
+}
+contract DemoContract
+{
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    tests/approvals/byte-expressions.algo.ts::test(1, 50, "things")
+    return True
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  constructor(): void
+  {
+    void
+  }
+  
+  Contract::constructor(): void
+  {
+    this.constructor()
+  }
+  
 }

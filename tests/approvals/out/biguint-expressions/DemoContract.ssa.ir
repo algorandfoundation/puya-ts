@@ -1,7 +1,7 @@
 contract tests/approvals/biguint-expressions.algo.ts::DemoContract:
     program approval:
         subroutine tests/approvals/biguint-expressions.algo.ts::DemoContract.approvalProgram() -> bool:
-            block@0: // L22
+            block@0: // L31
                 let reinterpret_bool%0#0: bool = (txn ApplicationID)
                 goto reinterpret_bool%0#0 ? block@2 : block@1
             block@1: // if_body_L1
@@ -9,14 +9,15 @@ contract tests/approvals/biguint-expressions.algo.ts::DemoContract:
                 goto block@2
             block@2: // after_if_else_L1
                 let tmp%0#0: bytes = (itob 4u)
-                tests/approvals/biguint-expressions.algo.ts::test(1u, 0u, tmp%0#0)
+                tests/approvals/biguint-expressions.algo.ts::testConstructor(1u, 0u, tmp%0#0)
+                tests/approvals/biguint-expressions.algo.ts::testOps(500b, 1000b)
                 return 1u
         
         subroutine tests/approvals/biguint-expressions.algo.ts::DemoContract.constructor() -> void:
-            block@0: // L21
+            block@0: // L30
                 return 
         
-        subroutine tests/approvals/biguint-expressions.algo.ts::test(a: uint64, b: bool, c: bytes) -> void:
+        subroutine tests/approvals/biguint-expressions.algo.ts::testConstructor(a: uint64, b: bool, c: bytes) -> void:
             block@0: // L5
                 let reinterpret_biguint%0#0: biguint = (itob 1u)
                 let reinterpret_biguint%1#0: biguint = (itob 0u)
@@ -25,6 +26,25 @@ contract tests/approvals/biguint-expressions.algo.ts::DemoContract:
                 let reinterpret_biguint%3#0: biguint = (itob tmp%0#0)
                 let reinterpret_biguint%4#0: biguint = (itob b#0)
                 let reinterpret_biguint%5#0: biguint = c#0
+                return 
+        
+        subroutine tests/approvals/biguint-expressions.algo.ts::testOps(smaller: biguint, larger: biguint) -> void:
+            block@0: // L21
+                let tmp%0#0: bool = (b< smaller#0 larger#0)
+                (assert tmp%0#0)
+                let tmp%1#0: bool = (b<= smaller#0 smaller#0)
+                (assert tmp%1#0)
+                let tmp%2#0: bool = (b> smaller#0 larger#0)
+                (assert tmp%2#0)
+                let tmp%3#0: bool = (b>= larger#0 larger#0)
+                (assert tmp%3#0)
+                let tmp%4#0: bool = (b== smaller#0 smaller#0)
+                (assert tmp%4#0)
+                let tmp%5#0: bytes = (bzero 4u)
+                let reinterpret_bytes%0#0: bytes = smaller#0
+                let reinterpret_biguint%0#0: biguint = (concat tmp%5#0 reinterpret_bytes%0#0)
+                let tmp%6#0: bool = (b== smaller#0 reinterpret_biguint%0#0)
+                (assert tmp%6#0) // Leading zeros should be ignored in equality
                 return 
     
     program clear-state:

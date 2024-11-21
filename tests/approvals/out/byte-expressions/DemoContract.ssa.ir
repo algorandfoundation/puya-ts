@@ -1,0 +1,47 @@
+contract tests/approvals/byte-expressions.algo.ts::DemoContract:
+    program approval:
+        subroutine tests/approvals/byte-expressions.algo.ts::DemoContract.approvalProgram() -> bool:
+            block@0: // L16
+                let reinterpret_bool%0#0: bool = (txn ApplicationID)
+                goto reinterpret_bool%0#0 ? block@2 : block@1
+            block@1: // if_body_L1
+                tests/approvals/byte-expressions.algo.ts::DemoContract.constructor()
+                goto block@2
+            block@2: // after_if_else_L1
+                tests/approvals/byte-expressions.algo.ts::test(1u, 50b, "things")
+                return 1u
+        
+        subroutine tests/approvals/byte-expressions.algo.ts::DemoContract.constructor() -> void:
+            block@0: // L15
+                return 
+        
+        subroutine tests/approvals/byte-expressions.algo.ts::test(a: uint64, b: biguint, c: bytes) -> void:
+            block@0: // L4
+                let tmp%0#0: uint64 = (len 0x)
+                let tmp%1#0: bool = (== tmp%0#0 0u)
+                (assert tmp%1#0) // Empty bytes has length of 0
+                let tmp%2#0: bytes = (itob a#0)
+                let tmp%3#0: bytes = (itob a#0)
+                let tmp%4#0: bool = (== tmp%2#0 tmp%3#0)
+                (assert tmp%4#0) // Bytes(uint64) is equivalent to itob
+                let tmp%5#0: bool = (== 0x0000000000000001 0x0000000000000001)
+                (assert tmp%5#0) // Bytes(uint64) returns an 8 byte encoding
+                let reinterpret_bytes%0#0: bytes = 256b
+                let tmp%6#0: bool = (== reinterpret_bytes%0#0 0x0100)
+                (assert tmp%6#0)
+                let reinterpret_bytes%1#0: bytes = b#0
+                let reinterpret_biguint%0#0: biguint = reinterpret_bytes%1#0
+                let tmp%7#0: bool = (b== reinterpret_biguint%0#0 b#0)
+                (assert tmp%7#0) // Round trip of biguint to bytes and back results in the same value
+                let tmp%8#0: bool = (== c#0 c#0)
+                (assert tmp%8#0)
+                let tmp%9#0: bool = (== "123" "123")
+                (assert tmp%9#0)
+                let tmp%10#0: bool = (== 0x01020304 0x01020304)
+                (assert tmp%10#0)
+                return 
+    
+    program clear-state:
+        subroutine @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.clearStateProgram() -> bool:
+            block@0: // L1
+                return 1u

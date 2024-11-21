@@ -1,36 +1,40 @@
 #pragma version 10
 
 tests/approvals/biguint-expressions.algo.ts::DemoContract.approvalProgram:
-    txn ApplicationID
-    bnz main_after_if_else@2
-    callsub constructor
-
-main_after_if_else@2:
-    // tests/approvals/biguint-expressions.algo.ts:23
-    // test(1, false, itob(4))
-    pushint 4 // 4
-    itob
-    pushint 1 // 1
-    pushint 0 // 0
-    uncover 2
-    callsub test
-    // tests/approvals/biguint-expressions.algo.ts:24
+    // tests/approvals/biguint-expressions.algo.ts:33
+    // testOps(500n, 1000n)
+    pushbytess 0x01f4 0x03e8 // 0x01f4, 0x03e8
+    callsub testOps
+    // tests/approvals/biguint-expressions.algo.ts:34
     // return true
     pushint 1 // 1
     return
 
 
-// tests/approvals/biguint-expressions.algo.ts::DemoContract.constructor() -> void:
-constructor:
+// tests/approvals/biguint-expressions.algo.ts::testOps(smaller: bytes, larger: bytes) -> void:
+testOps:
     // tests/approvals/biguint-expressions.algo.ts:21
-    // class DemoContract extends BaseContract {
-    proto 0 0
-    retsub
-
-
-// tests/approvals/biguint-expressions.algo.ts::test(a: uint64, b: uint64, c: bytes) -> void:
-test:
-    // tests/approvals/biguint-expressions.algo.ts:5
-    // function test(a: uint64, b: boolean, c: bytes) {
-    proto 3 0
+    // function testOps(smaller: biguint, larger: biguint) {
+    proto 2 0
+    // tests/approvals/biguint-expressions.algo.ts:22
+    // assert(smaller < larger)
+    frame_dig -2
+    frame_dig -1
+    b<
+    assert
+    // tests/approvals/biguint-expressions.algo.ts:24
+    // assert(smaller > larger)
+    frame_dig -2
+    frame_dig -1
+    b>
+    assert
+    // tests/approvals/biguint-expressions.algo.ts:27
+    // assert(smaller === BigUint(op.bzero(4).concat(Bytes(smaller))), 'Leading zeros should be ignored in equality')
+    pushint 4 // 4
+    bzero
+    frame_dig -2
+    concat
+    frame_dig -2
+    b==
+    assert // Leading zeros should be ignored in equality
     retsub
