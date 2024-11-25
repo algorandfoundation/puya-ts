@@ -1,10 +1,23 @@
 #pragma version 10
 
 tests/approvals/arc4-struct.algo.ts::StructDemo.approvalProgram:
-    intcblock 1 0
-    bytecblock 0x0000000000000000
+    intcblock 0 8 1
+    bytecblock 0x 0x0000000000000000
+    txn ApplicationID
+    bnz main_after_if_else@2
+    callsub constructor
+
+main_after_if_else@2:
     callsub __puya_arc4_router__
     return
+
+
+// tests/approvals/arc4-struct.algo.ts::StructDemo.constructor() -> void:
+constructor:
+    // tests/approvals/arc4-struct.algo.ts:9
+    // class StructDemo extends Contract {
+    proto 0 0
+    retsub
 
 
 // tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__() -> uint64:
@@ -13,32 +26,42 @@ __puya_arc4_router__:
     // class StructDemo extends Contract {
     proto 0 1
     txn NumAppArgs
+    intc_0 // 0
+    !=
     bz __puya_arc4_router___bare_routing@7
-    pushbytess 0x89388ddd 0xef322d6d 0xcb81deb8 // method "testVectorCreationAndEquality()void", method "addVectors((uint64,uint64),(uint64,uint64))(uint64,uint64)", method "implicitCastingAndSpreading((uint64,uint64))void"
     txna ApplicationArgs 0
+    pushbytes 0x89388ddd // method "testVectorCreationAndEquality()void"
+    pushbytes 0xef322d6d // method "addVectors((uint64,uint64),(uint64,uint64))(uint64,uint64)"
+    pushbytes 0xcb81deb8 // method "implicitCastingAndSpreading((uint64,uint64))void"
+    uncover 3
     match __puya_arc4_router___testVectorCreationAndEquality_route@2 __puya_arc4_router___addVectors_route@3 __puya_arc4_router___implicitCastingAndSpreading_route@4
-    intc_1 // 0
-    retsub
+    b __puya_arc4_router___switch_case_default@5
 
 __puya_arc4_router___testVectorCreationAndEquality_route@2:
     // tests/approvals/arc4-struct.algo.ts:10
     // public testVectorCreationAndEquality() {
     txn OnCompletion
-    !
+    intc_0 // NoOp
+    ==
     assert // OnCompletion is not NoOp
     txn ApplicationID
+    intc_0 // 0
+    !=
     assert // can only call when not creating
     callsub testVectorCreationAndEquality
-    intc_0 // 1
+    intc_2 // 1
     retsub
 
 __puya_arc4_router___addVectors_route@3:
     // tests/approvals/arc4-struct.algo.ts:18
     // public addVectors(v1: Vector, v2: Vector) {
     txn OnCompletion
-    !
+    intc_0 // NoOp
+    ==
     assert // OnCompletion is not NoOp
     txn ApplicationID
+    intc_0 // 0
+    !=
     assert // can only call when not creating
     // tests/approvals/arc4-struct.algo.ts:9
     // class StructDemo extends Contract {
@@ -51,16 +74,19 @@ __puya_arc4_router___addVectors_route@3:
     swap
     concat
     log
-    intc_0 // 1
+    intc_2 // 1
     retsub
 
 __puya_arc4_router___implicitCastingAndSpreading_route@4:
     // tests/approvals/arc4-struct.algo.ts:25
     // public implicitCastingAndSpreading(v1: Vector) {
     txn OnCompletion
-    !
+    intc_0 // NoOp
+    ==
     assert // OnCompletion is not NoOp
     txn ApplicationID
+    intc_0 // 0
+    !=
     assert // can only call when not creating
     // tests/approvals/arc4-struct.algo.ts:9
     // class StructDemo extends Contract {
@@ -68,24 +94,38 @@ __puya_arc4_router___implicitCastingAndSpreading_route@4:
     // tests/approvals/arc4-struct.algo.ts:25
     // public implicitCastingAndSpreading(v1: Vector) {
     callsub implicitCastingAndSpreading
-    intc_0 // 1
+    intc_2 // 1
     retsub
+
+__puya_arc4_router___switch_case_default@5:
+    b __puya_arc4_router___after_if_else@11
 
 __puya_arc4_router___bare_routing@7:
     // tests/approvals/arc4-struct.algo.ts:9
     // class StructDemo extends Contract {
     txn OnCompletion
-    bnz __puya_arc4_router___after_if_else@11
+    intc_0 // 0
+    swap
+    match __puya_arc4_router_____algots__.defaultCreate@8
+    b __puya_arc4_router___switch_case_default@9
+
+__puya_arc4_router_____algots__.defaultCreate@8:
+    // tests/approvals/arc4-struct.algo.ts:9
+    // class StructDemo extends Contract {
     txn ApplicationID
-    !
+    intc_0 // 0
+    ==
     assert // can only call when creating
-    intc_0 // 1
+    callsub __algots__.defaultCreate
+    intc_2 // 1
     retsub
+
+__puya_arc4_router___switch_case_default@9:
 
 __puya_arc4_router___after_if_else@11:
     // tests/approvals/arc4-struct.algo.ts:9
     // class StructDemo extends Contract {
-    intc_1 // 0
+    intc_0 // 0
     retsub
 
 
@@ -94,14 +134,38 @@ testVectorCreationAndEquality:
     // tests/approvals/arc4-struct.algo.ts:10
     // public testVectorCreationAndEquality() {
     proto 0 0
+    // tests/approvals/arc4-struct.algo.ts:11
+    // const v1 = new Vector({ x: new ARC4Uint64(0), y: new ARC4Uint64(0) })
+    bytec_0 // 0x
+    bytec_1 // 0x0000000000000000
+    concat
+    bytec_1 // 0x0000000000000000
+    concat
     // tests/approvals/arc4-struct.algo.ts:12
     // log(v1.x)
-    bytec_0 // 0x0000000000000000
+    dup
+    intc_0 // 0
+    intc_1 // 8
+    extract3 // on error: Index access is out of bounds
     log
     // tests/approvals/arc4-struct.algo.ts:13
     // log(v1.y)
-    bytec_0 // 0x0000000000000000
+    dup
+    intc_1 // 8
+    dup
+    extract3 // on error: Index access is out of bounds
     log
+    // tests/approvals/arc4-struct.algo.ts:14
+    // const v2 = new Vector({ y: new ARC4Uint64(0), x: new ARC4Uint64(0) })
+    bytec_0 // 0x
+    bytec_1 // 0x0000000000000000
+    concat
+    bytec_1 // 0x0000000000000000
+    concat
+    // tests/approvals/arc4-struct.algo.ts:15
+    // assert(v1.equals(v2))
+    ==
+    assert
     retsub
 
 
@@ -113,20 +177,28 @@ addVectors:
     // tests/approvals/arc4-struct.algo.ts:20
     // x: new ARC4Uint64(v1.x.native + v2.x.native),
     frame_dig -2
-    extract 0 8 // on error: Index access is out of bounds
+    intc_0 // 0
+    intc_1 // 8
+    extract3 // on error: Index access is out of bounds
     btoi
     frame_dig -1
-    extract 0 8 // on error: Index access is out of bounds
+    intc_0 // 0
+    intc_1 // 8
+    extract3 // on error: Index access is out of bounds
     btoi
     +
     itob
     // tests/approvals/arc4-struct.algo.ts:21
     // y: new ARC4Uint64(v1.y.native + v2.y.native),
     frame_dig -2
-    extract 8 8 // on error: Index access is out of bounds
+    intc_1 // 8
+    dup
+    extract3 // on error: Index access is out of bounds
     btoi
     frame_dig -1
-    extract 8 8 // on error: Index access is out of bounds
+    intc_1 // 8
+    dup
+    extract3 // on error: Index access is out of bounds
     btoi
     +
     itob
@@ -135,6 +207,10 @@ addVectors:
     //   x: new ARC4Uint64(v1.x.native + v2.x.native),
     //   y: new ARC4Uint64(v1.y.native + v2.y.native),
     // })
+    bytec_0 // 0x
+    uncover 2
+    concat
+    swap
     concat
     retsub
 
@@ -147,16 +223,33 @@ implicitCastingAndSpreading:
     // tests/approvals/arc4-struct.algo.ts:26
     // const v2 = new Vector(v1)
     frame_dig -1
-    extract 0 8 // on error: Index access is out of bounds
+    intc_0 // 0
+    intc_1 // 8
+    extract3 // on error: Index access is out of bounds
     frame_dig -1
-    extract 8 8 // on error: Index access is out of bounds
+    intc_1 // 8
+    dup
+    extract3 // on error: Index access is out of bounds
+    bytec_0 // 0x
+    uncover 2
+    concat
+    swap
     concat
     // tests/approvals/arc4-struct.algo.ts:27
     // const v3 = new Vector({ ...v2 })
     dup
-    extract 0 8 // on error: Index access is out of bounds
-    dig 1
-    extract 8 8 // on error: Index access is out of bounds
+    intc_0 // 0
+    intc_1 // 8
+    extract3 // on error: Index access is out of bounds
+    swap
+    dup
+    intc_1 // 8
+    dup
+    extract3 // on error: Index access is out of bounds
+    bytec_0 // 0x
+    uncover 3
+    concat
+    swap
     concat
     // tests/approvals/arc4-struct.algo.ts:28
     // assert(v1.bytes === v2.bytes)
@@ -169,4 +262,12 @@ implicitCastingAndSpreading:
     frame_dig -1
     ==
     assert
+    retsub
+
+
+// tests/approvals/arc4-struct.algo.ts::StructDemo.__algots__.defaultCreate() -> void:
+__algots__.defaultCreate:
+    // tests/approvals/arc4-struct.algo.ts:9
+    // class StructDemo extends Contract {
+    proto 0 0
     retsub

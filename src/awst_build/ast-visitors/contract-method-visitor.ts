@@ -167,7 +167,6 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
       return new ARC4ABIMethodConfig({
         sourceLocation: methodLocation,
         allowedCompletionTypes: [OnCompletionAction.NoOp],
-
         create: ARC4CreateOption.Disallow,
         name: functionType.name,
         readonly: false,

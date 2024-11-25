@@ -34,7 +34,6 @@ import { wtypes } from './wtypes'
 
 type ConcreteNodes = typeof concreteNodes
 
-let singleEval = 0n
 const explicitNodeFactory = {
   voidConstant(props: { sourceLocation: SourceLocation }): VoidConstant {
     return new VoidConstant({
@@ -133,7 +132,7 @@ const explicitNodeFactory = {
   },
   singleEvaluation({ source }: { source: Expression }) {
     return new SingleEvaluation({
-      id: singleEval++,
+      id: Symbol(),
       sourceLocation: source.sourceLocation,
       wtype: source.wtype,
       source,

@@ -50,10 +50,10 @@ describe('Approvals', () => {
   })
 
   it('There should be no differences to committed changes', () => {
-    // Run git add to force line ending changes
-    sync('git', ['add', '.'], {
-      stdio: 'inherit',
-    })
+    // // Run git add to force line ending changes
+    // sync('git', ['add', '.'], {
+    //   stdio: 'inherit',
+    // })
     const result = sync('git', ['status', '--porcelain'], {
       stdio: 'pipe',
     })

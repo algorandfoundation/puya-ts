@@ -158,10 +158,11 @@ export namespace wtypes {
     }
 
     toString(): string {
+      const displayName = this.name.split('::').at(-1) ?? this.name
       if (this.names) {
-        return `${this.name === 'Anonymous' ? '' : this.name}{ ${this.names.map((n, i) => `${n}: ${this.types[i]}`).join(', ')} }`
+        return `${displayName}{ ${this.names.map((n, i) => `${n}: ${this.types[i]}`).join(', ')} }`
       }
-      return `${this.immutable ? 'readonly' : ''}${this.name ?? ''}[${this.types.join(', ')}]`
+      return `${this.immutable ? 'readonly' : ''}${displayName}[${this.types.join(', ')}]`
     }
   }
   export class WArray extends WType {

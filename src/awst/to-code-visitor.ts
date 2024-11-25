@@ -3,9 +3,10 @@ import { TodoError } from '../errors'
 import { logger } from '../logger'
 import { uint8ArrayToBase32, uint8ArrayToUtf8 } from '../util'
 import type { ContractReference } from './models'
-import type { AppStorageDefinition, ContractMemberNodeVisitor, ExpressionVisitor, RootNodeVisitor, StatementVisitor } from './nodes'
+import type { AppStorageDefinition, ContractMemberNodeVisitor, Emit, ExpressionVisitor, RootNodeVisitor, StatementVisitor } from './nodes'
 import * as nodes from './nodes'
 import { AppStorageKind, BytesEncoding, ContractMethodTarget, InstanceMethodTarget, InstanceSuperMethodTarget, SubroutineID } from './nodes'
+import { SymbolToNumber } from './util'
 import { wtypes } from './wtypes'
 
 function printBytes(value: Uint8Array, encoding: BytesEncoding) {
@@ -41,7 +42,7 @@ export class ToCodeVisitor
   visitAppStorageDefinition(contractMemberNode: AppStorageDefinition): string[] {
     throw new Error('Method not implemented.')
   }
-  #singleEval = new Set<bigint>()
+  #singleEval = new SymbolToNumber()
   visitUInt64PostfixUnaryOperation(expression: nodes.UInt64PostfixUnaryOperation): string {
     return `${expression.target.accept(this)}${expression.op}`
   }
@@ -175,11 +176,11 @@ export class ToCodeVisitor
     return `LocalState[${expression.account.accept(this)}][${expression.key.accept(this)}]`
   }
   visitSingleEvaluation(expression: nodes.SingleEvaluation): string {
-    if (this.#singleEval.has(expression.id)) {
-      return `#${expression.id}`
+    const [id, isNew] = this.#singleEval.forSymbol(expression.id)
+    if (!isNew) {
+      return `#${id}`
     }
-    this.#singleEval.add(expression.id)
-    return `(#${expression.id} = ${expression.source.accept(this)})`
+    return `(#${id} = ${expression.source.accept(this)})`
   }
   visitReinterpretCast(expression: nodes.ReinterpretCast): string {
     const target = expression.expr.accept(this)
@@ -319,6 +320,10 @@ export class ToCodeVisitor
       '}',
     ]
   }
+  visitEmit(expression: Emit): string {
+    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+  }
+
   visitContractMethod(statement: nodes.ContractMethod): string[] {
     const prefix = statement.cref.id === this.currentContract.at(-1)?.id ? '' : `${statement.cref.className}::`
     return [`${prefix}${statement.memberName}(): ${statement.returnType}`, '{', ...indent(statement.body.accept(this)), '}', '']

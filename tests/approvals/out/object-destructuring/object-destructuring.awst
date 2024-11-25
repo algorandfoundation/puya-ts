@@ -1,18 +1,18 @@
 subroutine testPartialDestructure(arg: { x: uint64, y: uint64, z: uint64 }): void
 {
   { x: x, y: _, z: _₁ }: { x: uint64, y: uint64, z: uint64 } = arg
-  { nested: { y: y, x: _₂, z: _₃ } }: { nested: { y: uint64, x: uint64, z: uint64 } } = { nested: (#2 = { nested: { y: arg.y, x: arg.x, z: arg.z } }).nested }
+  { nested: { y: y, x: _₂, z: _₃ } }: { nested: { y: uint64, x: uint64, z: uint64 } } = { nested: (#0 = { nested: { y: arg.y, x: arg.x, z: arg.z } }).nested }
 }
 subroutine test(): void
 {
-  { a: a, b: b, c: c, d: d }: { a: uint64, b: bytes, c: bool, d: biguint } = tests/approvals/object-destructuring.algo.ts::produceItems()
-  { d: e, a: _, b: _₁, c: _₂ }: { d: biguint, a: uint64, b: bytes, c: bool } = { d: (#3 = tests/approvals/object-destructuring.algo.ts::produceItems()).d, a: #3.a, b: #3.b, c: #3.c }
-  f: { a: uint64, b: bytes, c: bool, d: biguint } = { a: (#5 = ({ a: g, d: i, b: _₃, c: _₄ } = { a: (#4 = tests/approvals/object-destructuring.algo.ts::produceItems()).a, d: #4.d, b: #4.b, c: #4.c })).a, b: #5.b, c: #5.c, d: #5.d }
-  tests/approvals/object-destructuring.algo.ts::receivePartial({ a: (#6 = tests/approvals/object-destructuring.algo.ts::produceItems()).a, d: #6.d })
+  { a: a, b: b, c: c, d: d }: { a: uint64, b: bytes, c: bool, d: biguint } = { a: (#1 = tests/approvals/object-destructuring.algo.ts::produceItems()).a, b: #1.b, c: #1.c, d: #1.d }
+  { d: e, a: _, b: _₁, c: _₂ }: { d: biguint, a: uint64, b: bytes, c: bool } = { d: (#2 = tests/approvals/object-destructuring.algo.ts::produceItems()).d, a: #2.a, b: #2.b, c: #2.c }
+  f: { a: uint64, b: bytes, c: bool, d: biguint } = { a: (#3 = ({ a: g, d: i, b: _₃, c: _₄ } = { a: (#4 = tests/approvals/object-destructuring.algo.ts::produceItems()).a, d: #4.d, b: #4.b, c: #4.c })).a, b: #3.b, c: #3.c, d: #3.d }
+  tests/approvals/object-destructuring.algo.ts::receivePartial({ a: (#5 = tests/approvals/object-destructuring.algo.ts::produceItems()).a, d: #5.d })
 }
-subroutine produceItems(): { a: uint64, b: bytes, c: bool, d: biguint }
+subroutine produceItems(): produceItemsResult{ a: uint64, b: bytes, c: bool, d: biguint }
 {
-  return { a: (#7 = { a: 1, b: "", c: False, d: 999 }).a, b: #7.b, c: #7.c, d: #7.d }
+  return { a: (#6 = { a: 1, b: "", c: False, d: 999 }).a, b: #6.b, c: #6.c, d: #6.d }
 }
 subroutine receivePartial(x: { a: uint64, d: biguint }): void
 {
@@ -25,7 +25,7 @@ subroutine testLiteralToLiteral(): void
 }
 subroutine testNumericResolution(): void
 {
-  x: { a: uint64 } = (y = { a: (#8 = { a: 434 }).a })
+  x: { a: uint64 } = (y = { a: (#7 = { a: 434 }).a })
 }
 subroutine test2(args: { x: bool, y: bool, z: readonlytuple[string, string] }): void
 {

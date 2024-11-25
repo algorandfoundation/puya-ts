@@ -496,7 +496,15 @@ export class FunctionPType extends PType {
     super()
     this.name = props.name
     this.module = props.module
-    this.returnType = props.returnType
+    if (props.returnType instanceof ObjectPType && props.returnType.isAnonymous) {
+      this.returnType = new ObjectPType({
+        name: `${props.name}Result`,
+        module: props.module,
+        properties: props.returnType.properties,
+      })
+    } else {
+      this.returnType = props.returnType
+    }
     this.parameters = props.parameters
   }
 }
@@ -608,24 +616,30 @@ export class ArrayPType extends TransientType {
   }
 }
 
+type ObjectPTypeArgs =
+  | { module: string; name: string; properties: Record<string, PType>; isAnonymous?: false }
+  | { module?: undefined; name?: undefined; properties: Record<string, PType>; isAnonymous: true }
+
 export class ObjectPType extends PType {
   readonly name: string
   readonly module: string
   readonly properties: Record<string, PType>
   readonly singleton = false
+  readonly isAnonymous: boolean
 
-  constructor(props: { module?: string; name?: string; properties: Record<string, PType> }) {
+  constructor(props: ObjectPTypeArgs) {
     super()
     this.name = props.name ?? ''
     this.module = props.module ?? ''
     this.properties = props.properties
+    this.isAnonymous = props.isAnonymous ?? false
   }
 
   static anonymous(props: Record<string, PType> | Array<[string, PType]>) {
     const properties = Array.isArray(props) ? Object.fromEntries(props) : props
     return new ObjectPType({
-      name: 'Anonymous',
       properties,
+      isAnonymous: true,
     })
   }
 
@@ -640,7 +654,7 @@ export class ObjectPType extends PType {
       tupleNames.push(propName)
     }
     return new wtypes.WTuple({
-      name: this.name,
+      name: this.fullName,
       names: tupleNames,
       types: tupleTypes,
       immutable: true,
@@ -648,7 +662,7 @@ export class ObjectPType extends PType {
   }
 
   orderedProperties() {
-    return Object.entries(this.properties) //.toSorted(sortBy(([key]) => key))
+    return Object.entries(this.properties)
   }
 
   getPropertyType(name: string): PType {

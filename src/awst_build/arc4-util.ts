@@ -75,7 +75,9 @@ export function getFunctionTypes(ptype: FunctionPType, sourceLocation: SourceLoc
   if ('output' in result) {
     logger.error(sourceLocation, 'for compatibility with ARC-32, ARC-4 methods cannot have an argument named output')
   }
+
   result['output'] = ptype.returnType
+
   return result
 }
 

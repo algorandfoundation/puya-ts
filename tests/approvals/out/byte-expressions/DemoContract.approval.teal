@@ -1,7 +1,85 @@
 #pragma version 10
 
 tests/approvals/byte-expressions.algo.ts::DemoContract.approvalProgram:
+    txn ApplicationID
+    bnz main_after_if_else@2
+    callsub constructor
+
+main_after_if_else@2:
+    // tests/approvals/byte-expressions.algo.ts:17
+    // test(1, 50n, 'things')
+    pushint 1 // 1
+    pushbytes 0x32
+    pushbytes "things"
+    callsub test
     // tests/approvals/byte-expressions.algo.ts:18
     // return true
     pushint 1 // 1
     return
+
+
+// tests/approvals/byte-expressions.algo.ts::DemoContract.constructor() -> void:
+constructor:
+    // tests/approvals/byte-expressions.algo.ts:15
+    // class DemoContract extends BaseContract {
+    proto 0 0
+    retsub
+
+
+// tests/approvals/byte-expressions.algo.ts::test(a: uint64, b: bytes, c: bytes) -> void:
+test:
+    // tests/approvals/byte-expressions.algo.ts:4
+    // function test(a: uint64, b: biguint, c: string) {
+    proto 3 0
+    // tests/approvals/byte-expressions.algo.ts:5
+    // assert(Bytes().length === 0, 'Empty bytes has length of 0')
+    pushbytes 0x
+    len
+    pushint 0 // 0
+    ==
+    assert // Empty bytes has length of 0
+    // tests/approvals/byte-expressions.algo.ts:6
+    // assert(Bytes(a) === op.itob(a), 'Bytes(uint64) is equivalent to itob')
+    frame_dig -3
+    itob
+    frame_dig -3
+    itob
+    ==
+    assert // Bytes(uint64) is equivalent to itob
+    // tests/approvals/byte-expressions.algo.ts:7
+    // assert(Bytes(Uint64(1)) === Bytes.fromHex('0000000000000001'), 'Bytes(uint64) returns an 8 byte encoding')
+    pushbytes 0x0000000000000001
+    dup
+    ==
+    assert // Bytes(uint64) returns an 8 byte encoding
+    // tests/approvals/byte-expressions.algo.ts:8
+    // assert(Bytes(BigUint(256)) === Bytes.fromHex('0100'))
+    pushbytes 0x0100
+    dup
+    ==
+    assert
+    // tests/approvals/byte-expressions.algo.ts:9
+    // assert(BigUint(Bytes(b)) === b, 'Round trip of biguint to bytes and back results in the same value')
+    frame_dig -2
+    dup
+    b==
+    assert // Round trip of biguint to bytes and back results in the same value
+    // tests/approvals/byte-expressions.algo.ts:10
+    // assert(String(Bytes(c)) === c)
+    frame_dig -1
+    dup
+    ==
+    assert
+    // tests/approvals/byte-expressions.algo.ts:11
+    // assert(Bytes(Bytes('123')) === Bytes('123'))
+    pushbytes "123"
+    dup
+    ==
+    assert
+    // tests/approvals/byte-expressions.algo.ts:12
+    // assert(Bytes([1, 2, 3, 4]) === Bytes.fromHex('01020304'))
+    pushbytes 0x01020304
+    dup
+    ==
+    assert
+    retsub

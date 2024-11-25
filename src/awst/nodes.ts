@@ -162,8 +162,8 @@ export class DecimalConstant extends Expression {
 export class BoolConstant extends Expression {
   constructor(props: Props<BoolConstant>) {
     super(props)
-    this.wtype = props.wtype
     this.value = props.value
+    this.wtype = props.wtype
   }
   value: boolean
   accept<T>(visitor: ExpressionVisitor<T>): T {
@@ -193,8 +193,8 @@ export class BytesConstant extends Expression {
 export class StringConstant extends Expression {
   constructor(props: Props<StringConstant>) {
     super(props)
-    this.wtype = props.wtype
     this.value = props.value
+    this.wtype = props.wtype
   }
   value: string
   accept<T>(visitor: ExpressionVisitor<T>): T {
@@ -538,7 +538,7 @@ export class SingleEvaluation extends Expression {
     this.sourceLocation = props.sourceLocation
   }
   source: Expression
-  id: bigint
+  id: symbol
   sourceLocation: SourceLocation
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitSingleEvaluation(this)
@@ -969,6 +969,19 @@ export class BytesAugmentedAssignment extends Statement {
     return visitor.visitBytesAugmentedAssignment(this)
   }
 }
+export class Emit extends Expression {
+  constructor(props: Props<Emit>) {
+    super(props)
+    this.signature = props.signature
+    this.value = props.value
+    this.wtype = props.wtype
+  }
+  signature: string
+  value: Expression
+  accept<T>(visitor: ExpressionVisitor<T>): T {
+    return visitor.visitEmit(this)
+  }
+}
 export class Range extends Expression {
   constructor(props: Props<Range>) {
     super(props)
@@ -1355,6 +1368,7 @@ export const concreteNodes = {
   uInt64AugmentedAssignment: UInt64AugmentedAssignment,
   bigUIntAugmentedAssignment: BigUIntAugmentedAssignment,
   bytesAugmentedAssignment: BytesAugmentedAssignment,
+  emit: Emit,
   range: Range,
   enumeration: Enumeration,
   reversed: Reversed,
@@ -1429,6 +1443,7 @@ export interface ExpressionVisitor<T> {
   visitBytesBinaryOperation(expression: BytesBinaryOperation): T
   visitBooleanBinaryOperation(expression: BooleanBinaryOperation): T
   visitNot(expression: Not): T
+  visitEmit(expression: Emit): T
   visitRange(expression: Range): T
   visitEnumeration(expression: Enumeration): T
   visitReversed(expression: Reversed): T
