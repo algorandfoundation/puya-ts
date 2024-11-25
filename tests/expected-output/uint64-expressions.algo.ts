@@ -1,5 +1,7 @@
 import { Uint64 } from '@algorandfoundation/algorand-typescript'
 
+/* eslint-disable no-loss-of-precision */
+
 function test() {
   // @expect-error uint64 overflow or underflow...
   Uint64(-1)
@@ -13,6 +15,8 @@ function test() {
   Uint64('-1')
   // @expect-error uint64 overflow or underflow...
   Uint64(18446744073709551617n)
+  // @expect-error This number will lose precision...
+  Uint64(1844674407370955161)
   // @expect-error uint64 overflow or underflow...
   Uint64('18446744073709551616')
   const varStr = '123'

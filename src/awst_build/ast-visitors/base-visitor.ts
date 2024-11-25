@@ -100,11 +100,19 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   }
 
   visitNumericLiteral(node: ts.NumericLiteral): InstanceBuilder {
+    const sourceLocation = this.sourceLocation(node)
     codeInvariant(
       !node.text.includes('.'),
       'Literals with decimal points are not supported. Use a string literal to capture decimal values',
+      sourceLocation,
     )
     const literalValue = BigInt(node.text)
+    if (literalValue > Number.MAX_SAFE_INTEGER || literalValue < Number.MIN_SAFE_INTEGER) {
+      logger.error(
+        sourceLocation,
+        `This number will lose precision at runtime. Use the Uint64 constructor with a bigint or string literal for very large integers.`,
+      )
+    }
     const ptype = this.context.getPTypeForNode(node)
     invariant(ptype instanceof TransientType, 'Literals should resolve to transient PTypes')
     return new BigIntLiteralExpressionBuilder(literalValue, ptype, this.sourceLocation(node))
