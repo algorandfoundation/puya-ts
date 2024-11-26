@@ -48,6 +48,14 @@ export class UintN<N extends BitSize> extends ARC4Encoded {
   get native(): NativeForArc4Int<N> {
     throw new Error('TODO')
   }
+
+  static fromBytes<N extends BitSize, I = UintN<N>>(this: { new (...args: DeliberateAny): I }, bytes: BytesCompat): I {
+    throw new Error('todo')
+  }
+
+  static fromLog<N extends BitSize, I = UintN<N>>(this: { new (...args: DeliberateAny): I }, log: BytesCompat): I {
+    throw new Error('todo')
+  }
 }
 export class UFixedNxM<N extends BitSize, M extends number> extends ARC4Encoded {
   __type?: `arc4.UFixedNxM<${N}x${M}>`
@@ -58,11 +66,29 @@ export class UFixedNxM<N extends BitSize, M extends number> extends ARC4Encoded 
   get native(): NativeForArc4Int<N> {
     throw new Error('TODO')
   }
-}
 
+  static fromBytes<N extends BitSize, M extends number, I = UFixedNxM<N, M>>(
+    this: { new (...args: DeliberateAny): I },
+    bytes: BytesCompat,
+  ): I {
+    throw new Error('todo')
+  }
+
+  static fromLog<N extends BitSize, M extends number, I = UFixedNxM<N, M>>(this: { new (...args: DeliberateAny): I }, log: BytesCompat): I {
+    throw new Error('todo')
+  }
+}
 export class Byte extends UintN<8> {
   constructor(v?: Uint64Compat) {
     super(v)
+  }
+
+  static fromBytes<I = Byte>(this: { new (...args: DeliberateAny): I }, bytes: BytesCompat): I {
+    throw new Error('todo')
+  }
+
+  static fromLog<I = Byte>(this: { new (...args: DeliberateAny): I }, log: BytesCompat): I {
+    throw new Error('todo')
   }
 }
 export class Bool extends ARC4Encoded {
@@ -187,8 +213,21 @@ export class StaticArray<TItem extends ARC4Encoded, TLength extends number> exte
   copy(): StaticArray<TItem, TLength> {
     return new StaticArray<TItem, TLength>(...this.items)
   }
-}
 
+  static fromBytes<TItem extends ARC4Encoded, TLength extends number, I = StaticArray<TItem, TLength>>(
+    this: { new (...args: DeliberateAny): I },
+    bytes: BytesCompat,
+  ): I {
+    throw new Error('todo')
+  }
+
+  static fromLog<TItem extends ARC4Encoded, TLength extends number, I = StaticArray<TItem, TLength>>(
+    this: { new (...args: DeliberateAny): I },
+    log: BytesCompat,
+  ): I {
+    throw new Error('todo')
+  }
+}
 export class DynamicArray<TItem extends ARC4Encoded> extends Arc4ReadonlyArray<TItem> {
   __type?: `arc4.DynamicArray<${TItem['__type']}>`
   constructor(...items: TItem[]) {
@@ -215,6 +254,14 @@ export class DynamicArray<TItem extends ARC4Encoded> extends Arc4ReadonlyArray<T
   copy(): DynamicArray<TItem> {
     return new DynamicArray<TItem>(...this.items)
   }
+
+  static fromBytes<TItem extends ARC4Encoded, I = DynamicArray<TItem>>(this: { new (...args: DeliberateAny): I }, bytes: BytesCompat): I {
+    throw new Error('todo')
+  }
+
+  static fromLog<TItem extends ARC4Encoded, I = DynamicArray<TItem>>(this: { new (...args: DeliberateAny): I }, log: BytesCompat): I {
+    throw new Error('todo')
+  }
 }
 type ExpandTupleType<T extends ARC4Encoded[]> = T extends [infer T1 extends ARC4Encoded, ...infer TRest extends ARC4Encoded[]]
   ? TRest extends []
@@ -240,6 +287,20 @@ export class Tuple<TTuple extends [ARC4Encoded, ...ARC4Encoded[]]> extends ARC4E
 
   get native(): TTuple {
     return this.#items
+  }
+
+  static fromBytes<TTuple extends [ARC4Encoded, ...ARC4Encoded[]], I = Tuple<TTuple>>(
+    this: { new (...args: TTuple): I },
+    bytes: BytesCompat,
+  ): I {
+    throw new Error('todo')
+  }
+
+  static fromLog<TTuple extends [ARC4Encoded, ...ARC4Encoded[]], I = Tuple<TTuple>>(
+    this: { new (...args: TTuple): I },
+    log: BytesCompat,
+  ): I {
+    throw new Error('todo')
   }
 }
 
@@ -282,8 +343,19 @@ class StructImpl<T extends StructConstraint> extends StructBase {
       })
     }
   }
+  static fromBytes<T extends StructConstraint, I = StructBase & T>(this: { new (args: T): I }, bytes: BytesCompat): I {
+    throw new Error('todo')
+  }
+
+  static fromLog<T extends StructConstraint, I = StructBase & T>(this: { new (args: T): I }, log: BytesCompat): I {
+    throw new Error('todo')
+  }
 }
 
-type StructConstructor = new <T extends StructConstraint>(initial: T) => StructBase & T
+type StructConstructor = {
+  new <T extends StructConstraint>(initial: T): StructBase & T
+  fromBytes: <T extends StructConstraint>(bytes: BytesCompat) => StructBase & T
+  fromLog: <T extends StructConstraint>(log: BytesCompat) => StructBase & T
+}
 
 export const Struct = StructImpl as StructConstructor

@@ -10,7 +10,12 @@ import { arc4ByteAlias, ByteClass, UintNClass, UintNType } from '../../ptypes/ar
 import type { InstanceBuilder, NodeBuilder } from '../index'
 import { isValidLiteralForPType } from '../util'
 import { parseFunctionArgs } from '../util/arg-parsing'
-import { Arc4EncodedBaseClassBuilder, Arc4EncodedBaseExpressionBuilder } from './base'
+import {
+  Arc4EncodedBaseClassBuilder,
+  Arc4EncodedBaseExpressionBuilder,
+  Arc4EncodedFromBytesFunctionBuilder,
+  Arc4EncodedFromLogFunctionBuilder,
+} from './base'
 
 export class UintNClassBuilder extends Arc4EncodedBaseClassBuilder {
   readonly ptype = UintNClass
@@ -35,6 +40,17 @@ export class UintNClassBuilder extends Arc4EncodedBaseClassBuilder {
     const ptype = new UintNType({ n: size.literalValue })
 
     return newUintN(initialValueBuilder, ptype, sourceLocation)
+  }
+
+  memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
+    const ptypeFactory = (args: PType[]) => new UintNType({ n: (args[0] as NumericLiteralPType).literalValue })
+    switch (name) {
+      case 'fromBytes':
+        return new Arc4EncodedFromBytesFunctionBuilder(sourceLocation, ptypeFactory)
+      case 'fromLog':
+        return new Arc4EncodedFromLogFunctionBuilder(sourceLocation, ptypeFactory)
+    }
+    return super.memberAccess(name, sourceLocation)
   }
 }
 

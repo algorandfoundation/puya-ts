@@ -9,7 +9,12 @@ import { UFixedNxMClass, UFixedNxMType } from '../../ptypes/arc4-types'
 import { type InstanceBuilder, type NodeBuilder } from '../index'
 import { isValidLiteralForPType, requireStringConstant } from '../util'
 import { parseFunctionArgs } from '../util/arg-parsing'
-import { Arc4EncodedBaseClassBuilder, Arc4EncodedBaseExpressionBuilder } from './base'
+import {
+  Arc4EncodedBaseClassBuilder,
+  Arc4EncodedBaseExpressionBuilder,
+  Arc4EncodedFromBytesFunctionBuilder,
+  Arc4EncodedFromLogFunctionBuilder,
+} from './base'
 
 export class UFixedNxMClassBuilder extends Arc4EncodedBaseClassBuilder {
   readonly ptype = UFixedNxMClass
@@ -39,6 +44,18 @@ export class UFixedNxMClassBuilder extends Arc4EncodedBaseClassBuilder {
     const ptype = new UFixedNxMType({ n: size.literalValue, m: decimals.literalValue })
 
     return newUFixedNxM(initialValueBuilder, ptype, sourceLocation)
+  }
+
+  memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
+    const ptypeFactory = (args: PType[]) =>
+      new UFixedNxMType({ n: (args[0] as NumericLiteralPType).literalValue, m: (args[1] as NumericLiteralPType).literalValue })
+    switch (name) {
+      case 'fromBytes':
+        return new Arc4EncodedFromBytesFunctionBuilder(sourceLocation, ptypeFactory, 2)
+      case 'fromLog':
+        return new Arc4EncodedFromLogFunctionBuilder(sourceLocation, ptypeFactory, 2)
+    }
+    return super.memberAccess(name, sourceLocation)
   }
 }
 

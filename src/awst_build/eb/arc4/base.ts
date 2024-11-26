@@ -1,6 +1,6 @@
 import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
-import { EqualityComparison } from '../../../awst/nodes'
+import { BytesConstant, EqualityComparison } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { wtypes } from '../../../awst/wtypes'
 import { CodeError } from '../../../errors'
@@ -103,40 +103,70 @@ class Arc4EqualsFunctionBuilder extends FunctionBuilder {
 }
 
 export class Arc4EncodedFromBytesFunctionBuilder extends FunctionBuilder {
+  constructor(
+    sourceLocation: SourceLocation,
+    private ptypeFactory?: (args: PType[]) => ARC4EncodedType,
+    private genericArgsCount?: number,
+  ) {
+    super(sourceLocation)
+  }
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const funcName = 'fromBytes'
     const {
-      ptypes: [ptype],
+      ptypes,
       args: [initialValueBuilder],
     } = parseFunctionArgs({
       args,
       typeArgs,
-      genericTypeArgs: 1,
+      genericTypeArgs: this.genericArgsCount ?? 1,
       funcName,
       argSpec: (a) => [a.required(bytesPType)],
       callLocation: sourceLocation,
     })
 
+    const ptype = (this.ptypeFactory ? this.ptypeFactory(ptypes) : ptypes[0]) as ARC4EncodedType
     const initialValue = initialValueBuilder.resolveToPType(bytesPType).resolve()
-    return typeRegistry.getInstanceEb(initialValue, ptype)
+    const initialValueExpr =
+      initialValue instanceof BytesConstant
+        ? nodeFactory.bytesConstant({
+            value: initialValue.value,
+            wtype: ptype.wtypeOrThrow,
+            sourceLocation: sourceLocation,
+          })
+        : nodeFactory.reinterpretCast({
+            wtype: ptype.wtype,
+            sourceLocation,
+            expr: initialValue,
+          })
+
+    return typeRegistry.getInstanceEb(initialValueExpr, ptype)
   }
 }
 
 export class Arc4EncodedFromLogFunctionBuilder extends FunctionBuilder {
+  constructor(
+    sourceLocation: SourceLocation,
+    private ptypeFactory?: (args: PType[]) => ARC4EncodedType,
+    private genericArgsCount?: number,
+  ) {
+    super(sourceLocation)
+  }
+
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const funcName = 'fromLog'
     const {
-      ptypes: [ptype],
+      ptypes,
       args: [initialValueBuilder],
     } = parseFunctionArgs({
       args,
       typeArgs,
-      genericTypeArgs: 1,
+      genericTypeArgs: this.genericArgsCount ?? 1,
       funcName,
       argSpec: (a) => [a.required(bytesPType)],
       callLocation: sourceLocation,
     })
 
+    const ptype = (this.ptypeFactory ? this.ptypeFactory(ptypes) : ptypes[0]) as ARC4EncodedType
     const initialValue = initialValueBuilder.resolveToPType(bytesPType).resolve()
     const arc4Value = nodeFactory.intrinsicCall({
       opCode: 'extract',
@@ -144,6 +174,11 @@ export class Arc4EncodedFromLogFunctionBuilder extends FunctionBuilder {
       wtype: bytesPType.wtype,
       stackArgs: [initialValue],
       sourceLocation,
+    })
+    const arc4ValueExpr = nodeFactory.reinterpretCast({
+      wtype: ptype.wtype,
+      sourceLocation,
+      expr: arc4Value,
     })
     const arc4Prefix = nodeFactory.intrinsicCall({
       opCode: 'extract',
@@ -160,7 +195,7 @@ export class Arc4EncodedFromLogFunctionBuilder extends FunctionBuilder {
     })
 
     const fromLogExpr = nodeFactory.checkedMaybe({
-      expr: nodeFactory.tupleExpression({ items: [arc4Value, arc4PrefixIsValid], sourceLocation }),
+      expr: nodeFactory.tupleExpression({ items: [arc4ValueExpr, arc4PrefixIsValid], sourceLocation }),
       comment: 'ARC4 prefix is valid',
     })
     return typeRegistry.getInstanceEb(fromLogExpr, ptype)
