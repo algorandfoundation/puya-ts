@@ -11,6 +11,7 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
                 let x#0: bytes = 0x0000000000000000
                 tests/approvals/arc4-types.algo.ts::testStr()
                 tests/approvals/arc4-types.algo.ts::test(1u, 2b, 0x0000000000000000000000000000000000000000000000000000000000000004)
+                tests/approvals/arc4-types.algo.ts::testUFixed()
                 tests/approvals/arc4-types.algo.ts::testByte()
                 tests/approvals/arc4-types.algo.ts::testArrays(0x0000000000000041)
                 tests/approvals/arc4-types.algo.ts::testAddress()
@@ -69,6 +70,14 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
                 let tmp%7#0: uint64 = (len c#0)
                 let tmp%8#0: bool = (== tmp%7#0 32u)
                 (assert tmp%8#0)
+                return 
+        
+        subroutine tests/approvals/arc4-types.algo.ts::testUFixed() -> void:
+            block@0: // L16
+                let a#0: bytes = 0x000004dc
+                let c#0: bytes = 0x000004dc
+                let tmp%0#0: bool = (== a#0 c#0)
+                (assert tmp%0#0)
                 return 
         
         subroutine tests/approvals/arc4-types.algo.ts::testByte() -> void:
@@ -145,14 +154,6 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
                 let t1#0: bytes = encoded_tuple_buffer%4#0
                 let tmp%1#0: bool = (== 2u 2u)
                 (assert tmp%1#0)
-                return 
-        
-        subroutine tests/approvals/arc4-types.algo.ts::testUFixed() -> void:
-            block@0: // L16
-                let a#0: bytes = 0x000004dc
-                let c#0: bytes = 0x000004dc
-                let tmp%0#0: bool = (== a#0 c#0)
-                (assert tmp%0#0)
                 return 
         
         subroutine tests/approvals/arc4-types.algo.ts::testDynamicBytes(someBytes: bytes) -> void:

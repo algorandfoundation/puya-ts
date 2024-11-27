@@ -1,10 +1,23 @@
 #pragma version 10
 
 tests/approvals/jsdoc.algo.ts::JSDocDemo.approvalProgram:
-    intcblock 1 0
-    bytecblock 0x151f7c75
+    intcblock 0 1
+    bytecblock 0x151f7c75 0x
+    txn ApplicationID
+    bnz main_after_if_else@2
+    callsub constructor
+
+main_after_if_else@2:
     callsub __puya_arc4_router__
     return
+
+
+// tests/approvals/jsdoc.algo.ts::JSDocDemo.constructor() -> void:
+constructor:
+    // tests/approvals/jsdoc.algo.ts:20
+    // export class JSDocDemo extends Contract {
+    proto 0 0
+    retsub
 
 
 // tests/approvals/jsdoc.algo.ts::JSDocDemo.__puya_arc4_router__() -> uint64:
@@ -13,20 +26,26 @@ __puya_arc4_router__:
     // export class JSDocDemo extends Contract {
     proto 0 1
     txn NumAppArgs
+    intc_0 // 0
+    !=
     bz __puya_arc4_router___bare_routing@6
-    pushbytess 0x60d93beb 0x6618726a // method "test(uint64,byte[])(uint64)", method "test2(byte[])(byte[])"
     txna ApplicationArgs 0
+    pushbytes 0x60d93beb // method "test(uint64,byte[])(uint64)"
+    pushbytes 0x6618726a // method "test2(byte[])(byte[])"
+    uncover 2
     match __puya_arc4_router___test_route@2 __puya_arc4_router___test2_route@3
-    intc_1 // 0
-    retsub
+    b __puya_arc4_router___switch_case_default@4
 
 __puya_arc4_router___test_route@2:
     // tests/approvals/jsdoc.algo.ts:30
     // test(a: uint64, b: bytes): DemoStruct {
     txn OnCompletion
-    !
+    intc_0 // NoOp
+    ==
     assert // OnCompletion is not NoOp
     txn ApplicationID
+    intc_0 // 0
+    !=
     assert // can only call when not creating
     // tests/approvals/jsdoc.algo.ts:20
     // export class JSDocDemo extends Contract {
@@ -41,16 +60,19 @@ __puya_arc4_router___test_route@2:
     swap
     concat
     log
-    intc_0 // 1
+    intc_1 // 1
     retsub
 
 __puya_arc4_router___test2_route@3:
     // tests/approvals/jsdoc.algo.ts:39
     // test2(a: bytes): DemoType {
     txn OnCompletion
-    !
+    intc_0 // NoOp
+    ==
     assert // OnCompletion is not NoOp
     txn ApplicationID
+    intc_0 // 0
+    !=
     assert // can only call when not creating
     // tests/approvals/jsdoc.algo.ts:20
     // export class JSDocDemo extends Contract {
@@ -65,31 +87,50 @@ __puya_arc4_router___test2_route@3:
     extract 6 2
     swap
     concat
-    pushbytes 0x0002
+    pushint 2 // 2
+    itob
+    extract 6 2
+    bytec_1 // 0x
+    swap
+    concat
     swap
     concat
     bytec_0 // 0x151f7c75
     swap
     concat
     log
-    intc_0 // 1
+    intc_1 // 1
     retsub
+
+__puya_arc4_router___switch_case_default@4:
+    b __puya_arc4_router___after_if_else@10
 
 __puya_arc4_router___bare_routing@6:
     // tests/approvals/jsdoc.algo.ts:20
     // export class JSDocDemo extends Contract {
     txn OnCompletion
-    bnz __puya_arc4_router___after_if_else@10
+    intc_0 // 0
+    swap
+    match __puya_arc4_router_____algots__.defaultCreate@7
+    b __puya_arc4_router___switch_case_default@8
+
+__puya_arc4_router_____algots__.defaultCreate@7:
+    // tests/approvals/jsdoc.algo.ts:20
+    // export class JSDocDemo extends Contract {
     txn ApplicationID
-    !
+    intc_0 // 0
+    ==
     assert // can only call when creating
-    intc_0 // 1
+    callsub __algots__.defaultCreate
+    intc_1 // 1
     retsub
+
+__puya_arc4_router___switch_case_default@8:
 
 __puya_arc4_router___after_if_else@10:
     // tests/approvals/jsdoc.algo.ts:20
     // export class JSDocDemo extends Contract {
-    intc_1 // 0
+    intc_0 // 0
     retsub
 
 
@@ -102,6 +143,9 @@ test:
     // return new DemoStruct({ a: new UintN<64>(a) })
     frame_dig -2
     itob
+    bytec_1 // 0x
+    swap
+    concat
     retsub
 
 
@@ -115,4 +159,12 @@ test2:
     //   a,
     // }
     frame_dig -1
+    retsub
+
+
+// tests/approvals/jsdoc.algo.ts::JSDocDemo.__algots__.defaultCreate() -> void:
+__algots__.defaultCreate:
+    // tests/approvals/jsdoc.algo.ts:20
+    // export class JSDocDemo extends Contract {
+    proto 0 0
     retsub

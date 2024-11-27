@@ -23,6 +23,7 @@ describe('Approvals', () => {
       outputTeal: true,
       outputArc32: true,
       outputArc56: true,
+      outputSsaIr: true,
     },
   )
   invariant(result.ast, 'Compilation must result in ast')
