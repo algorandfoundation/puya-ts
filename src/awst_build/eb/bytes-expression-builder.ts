@@ -357,7 +357,7 @@ class EqualsFunctionBuilder extends FunctionBuilder {
       nodeFactory.bytesComparisonExpression({
         operator: EqualityComparison.eq,
         lhs: this.expr,
-        rhs: right.toBytes(sourceLocation),
+        rhs: right.resolve(),
         sourceLocation,
       }),
     )

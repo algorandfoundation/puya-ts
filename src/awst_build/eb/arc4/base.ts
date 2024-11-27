@@ -1,12 +1,12 @@
 import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
-import { BytesConstant, EqualityComparison } from '../../../awst/nodes'
+import { EqualityComparison } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { wtypes } from '../../../awst/wtypes'
 import { CodeError } from '../../../errors'
-import { hexToUint8Array } from '../../../util'
+import { codeInvariant, hexToUint8Array } from '../../../util'
 import { bytesPType, type PType } from '../../ptypes'
-import type { ARC4EncodedType } from '../../ptypes/arc4-types'
+import { ARC4EncodedType } from '../../ptypes/arc4-types'
 import { instanceEb, typeRegistry } from '../../type-registry'
 import { BooleanExpressionBuilder } from '../boolean-expression-builder'
 import { BytesExpressionBuilder } from '../bytes-expression-builder'
@@ -124,20 +124,14 @@ export class Arc4EncodedFromBytesFunctionBuilder extends FunctionBuilder {
       callLocation: sourceLocation,
     })
 
-    const ptype = (this.ptypeFactory ? this.ptypeFactory(ptypes) : ptypes[0]) as ARC4EncodedType
-    const initialValue = initialValueBuilder.resolveToPType(bytesPType).resolve()
-    const initialValueExpr =
-      initialValue instanceof BytesConstant
-        ? nodeFactory.bytesConstant({
-            value: initialValue.value,
-            wtype: ptype.wtypeOrThrow,
-            sourceLocation: sourceLocation,
-          })
-        : nodeFactory.reinterpretCast({
-            wtype: ptype.wtype,
-            sourceLocation,
-            expr: initialValue,
-          })
+    const ptype = this.ptypeFactory ? this.ptypeFactory(ptypes) : ptypes[0]
+    codeInvariant(ptype instanceof ARC4EncodedType, 'Expected ARC4EncodedType')
+    const initialValue = initialValueBuilder.resolve()
+    const initialValueExpr = nodeFactory.reinterpretCast({
+      wtype: ptype.wtype,
+      sourceLocation,
+      expr: initialValue,
+    })
 
     return typeRegistry.getInstanceEb(initialValueExpr, ptype)
   }
@@ -166,8 +160,9 @@ export class Arc4EncodedFromLogFunctionBuilder extends FunctionBuilder {
       callLocation: sourceLocation,
     })
 
-    const ptype = (this.ptypeFactory ? this.ptypeFactory(ptypes) : ptypes[0]) as ARC4EncodedType
-    const initialValue = initialValueBuilder.resolveToPType(bytesPType).resolve()
+    const ptype = this.ptypeFactory ? this.ptypeFactory(ptypes) : ptypes[0]
+    codeInvariant(ptype instanceof ARC4EncodedType, 'Expected ARC4EncodedType')
+    const initialValue = initialValueBuilder.resolve()
     const arc4Value = nodeFactory.intrinsicCall({
       opCode: 'extract',
       immediates: [4n, 0n],
@@ -180,7 +175,7 @@ export class Arc4EncodedFromLogFunctionBuilder extends FunctionBuilder {
       sourceLocation,
       expr: arc4Value,
     })
-    const arc4Prefix = nodeFactory.intrinsicCall({
+    const arc4ReturnValuePrefix = nodeFactory.intrinsicCall({
       opCode: 'extract',
       immediates: [0n, 4n],
       wtype: bytesPType.wtype,
@@ -189,7 +184,7 @@ export class Arc4EncodedFromLogFunctionBuilder extends FunctionBuilder {
     })
     const arc4PrefixIsValid = nodeFactory.bytesComparisonExpression({
       operator: EqualityComparison.eq,
-      lhs: arc4Prefix,
+      lhs: arc4ReturnValuePrefix,
       rhs: nodeFactory.bytesConstant({ value: hexToUint8Array('151F7C75'), sourceLocation }),
       sourceLocation,
     })

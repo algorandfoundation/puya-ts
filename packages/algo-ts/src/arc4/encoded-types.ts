@@ -6,8 +6,8 @@ import { DeliberateAny } from '../typescript-helpers'
 import { err } from '../util'
 
 export type BitSize = 8 | 16 | 32 | 64 | 128 | 256 | 512
-export type NativeForArc4Int<N extends BitSize> = N extends 8 | 16 | 32 | 64 ? uint64 : biguint
-export type CompatForArc4Int<N extends BitSize> = N extends 8 | 16 | 32 | 64 ? Uint64Compat : BigUintCompat
+type NativeForArc4Int<N extends BitSize> = N extends 8 | 16 | 32 | 64 ? uint64 : biguint
+type CompatForArc4Int<N extends BitSize> = N extends 8 | 16 | 32 | 64 ? Uint64Compat : BigUintCompat
 
 export abstract class ARC4Encoded implements BytesBacked {
   abstract __type?: string
