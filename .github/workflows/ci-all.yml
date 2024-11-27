@@ -28,7 +28,6 @@ jobs:
         diffTextLen=${#diffText}
         [ $diffTextLen -eq 0 ] && echo 'No changes' || (echo 'ERROR: Code differs to published version. Please bump package version or revert changes'; echo $diffText; exit 1;)
 
-
   ci-puya-ts:
     name: 'Build @algorandfoundation/puya-ts'
     uses: ./.github/workflows/node-ci.yml
@@ -48,5 +47,5 @@ jobs:
       python-version: 3.12.6
       pre-test-script: |
         pipx install algokit --python 3.12.6
-        algokit localnet start
+        algokit localnet reset --update
         pipx install git+https://github.com/algorandfoundation/puya --python 3.12.6
