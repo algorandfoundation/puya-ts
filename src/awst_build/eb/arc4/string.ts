@@ -8,11 +8,10 @@ import { stringPType } from '../../ptypes'
 import type { ARC4EncodedType } from '../../ptypes/arc4-types'
 import { ARC4StrClass, ARC4StringType } from '../../ptypes/arc4-types'
 import type { InstanceBuilder, NodeBuilder } from '../index'
-import { ClassBuilder } from '../index'
 import { parseFunctionArgs } from '../util/arg-parsing'
-import { Arc4EncodedBaseExpressionBuilder } from './base'
+import { Arc4EncodedBaseClassBuilder, Arc4EncodedBaseExpressionBuilder } from './base'
 
-export class StrClassBuilder extends ClassBuilder {
+export class StrClassBuilder extends Arc4EncodedBaseClassBuilder {
   readonly ptype = ARC4StrClass
 
   newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {

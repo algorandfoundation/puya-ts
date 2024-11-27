@@ -33,9 +33,9 @@ import { SliceFunctionBuilder } from '../shared/slice-function-builder'
 import { UInt64ExpressionBuilder } from '../uint64-expression-builder'
 import { requireExpressionOfType } from '../util'
 import { parseFunctionArgs } from '../util/arg-parsing'
-import { Arc4EncodedBaseExpressionBuilder } from './base'
+import { Arc4EncodedBaseClassBuilder, Arc4EncodedBaseExpressionBuilder } from './base'
 
-export class DynamicArrayClassBuilder extends ClassBuilder {
+export class DynamicArrayClassBuilder extends Arc4EncodedBaseClassBuilder {
   readonly ptype = DynamicArrayConstructor
 
   newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
@@ -63,7 +63,7 @@ export class DynamicArrayClassBuilder extends ClassBuilder {
     )
   }
 }
-export class StaticArrayClassBuilder extends ClassBuilder {
+export class StaticArrayClassBuilder extends Arc4EncodedBaseClassBuilder {
   readonly ptype = StaticArrayConstructor
 
   newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
@@ -105,7 +105,7 @@ export class StaticArrayClassBuilder extends ClassBuilder {
     )
   }
 }
-export class AddressClassBuilder extends ClassBuilder {
+export class AddressClassBuilder extends Arc4EncodedBaseClassBuilder {
   readonly ptype = AddressClass
 
   newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {

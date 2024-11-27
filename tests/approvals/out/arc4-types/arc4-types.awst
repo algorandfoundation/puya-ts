@@ -30,12 +30,12 @@ subroutine testStr(): void
 subroutine testDynamicBytes(someBytes: bytes): void
 {
   db1: arc4.dynamic_array<arc4.byte> = 0x0000
-  assert(reinterpret_cast<bytes>(db1)[2:] == 0x)
+  assert(ARC4_DECODE(db1) == 0x)
   assert(reinterpret_cast<bytes>(db1) == reinterpret_cast<bytes>(0))
   db2: arc4.dynamic_array<arc4.byte> = ARC4_ENCODE(someBytes, wtype=arc4.dynamic_array<arc4.byte>)
-  assert(reinterpret_cast<bytes>(db2)[2:] == someBytes)
+  assert(ARC4_DECODE(db2) == someBytes)
   db3: arc4.dynamic_array<arc4.byte> = 0x000568656c6c6f
-  assert(reinterpret_cast<bytes>(db3)[2:] == "hello")
+  assert(ARC4_DECODE(db3) == "hello")
 }
 subroutine testStaticBytes(): void
 {
@@ -84,6 +84,7 @@ contract Arc4TypesTestContract
     x: arc4.uint64 = 0
     tests/approvals/arc4-types.algo.ts::testStr()
     tests/approvals/arc4-types.algo.ts::test(1, 2, 4)
+    tests/approvals/arc4-types.algo.ts::testUFixed()
     tests/approvals/arc4-types.algo.ts::testByte()
     tests/approvals/arc4-types.algo.ts::testArrays(65)
     tests/approvals/arc4-types.algo.ts::testAddress()

@@ -3,10 +3,9 @@ import type { SourceLocation } from '../../../awst/source-location'
 import type { PType } from '../../ptypes'
 import { ARC4BoolClass, ARC4BooleanType, type ARC4EncodedType } from '../../ptypes/arc4-types'
 import type { InstanceBuilder, NodeBuilder } from '../index'
-import { ClassBuilder } from '../index'
-import { Arc4EncodedBaseExpressionBuilder } from './base'
+import { Arc4EncodedBaseClassBuilder, Arc4EncodedBaseExpressionBuilder } from './base'
 
-export class BoolClassBuilder extends ClassBuilder {
+export class BoolClassBuilder extends Arc4EncodedBaseClassBuilder {
   readonly ptype = ARC4BoolClass
 
   newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {

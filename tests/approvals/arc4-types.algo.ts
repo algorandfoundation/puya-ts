@@ -14,7 +14,7 @@ import {
 } from '@algorandfoundation/algorand-typescript/arc4'
 
 function testUFixed() {
-  const a = new UFixedNxM('1.244', 32, 4)
+  const a = new UFixedNxM<32, 4>('1.244')
   const c = new UFixedNxM<32, 4>('1.244')
 
   assert(a.equals(c))
@@ -112,6 +112,7 @@ export class Arc4TypesTestContract extends BaseContract {
     const x = new ARC4Uint64()
     testStr()
     test(1, 2n, new UintN<256>(4))
+    testUFixed()
     testByte()
     testArrays(new UintN<64>(65))
     testAddress()

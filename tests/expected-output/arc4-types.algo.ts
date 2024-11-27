@@ -14,7 +14,7 @@ import {
 } from '@algorandfoundation/algorand-typescript/arc4'
 
 function testUFixed() {
-  const a = new UFixedNxM('1.244', 32, 4)
+  const a = new UFixedNxM<32, 4>('1.244')
   const c = new UFixedNxM<32, 4>('1.244')
 
   assert(a.equals(c))

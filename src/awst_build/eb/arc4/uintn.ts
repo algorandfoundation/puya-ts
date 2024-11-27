@@ -8,12 +8,16 @@ import type { PType } from '../../ptypes'
 import { biguintPType, NumericLiteralPType, uint64PType } from '../../ptypes'
 import { arc4ByteAlias, ByteClass, UintNClass, UintNType } from '../../ptypes/arc4-types'
 import type { InstanceBuilder, NodeBuilder } from '../index'
-import { ClassBuilder } from '../index'
 import { isValidLiteralForPType } from '../util'
 import { parseFunctionArgs } from '../util/arg-parsing'
-import { Arc4EncodedBaseExpressionBuilder } from './base'
+import {
+  Arc4EncodedBaseClassBuilder,
+  Arc4EncodedBaseExpressionBuilder,
+  Arc4EncodedFromBytesFunctionBuilder,
+  Arc4EncodedFromLogFunctionBuilder,
+} from './base'
 
-export class UintNClassBuilder extends ClassBuilder {
+export class UintNClassBuilder extends Arc4EncodedBaseClassBuilder {
   readonly ptype = UintNClass
 
   newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
@@ -37,9 +41,20 @@ export class UintNClassBuilder extends ClassBuilder {
 
     return newUintN(initialValueBuilder, ptype, sourceLocation)
   }
+
+  memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
+    const ptypeFactory = (args: PType[]) => new UintNType({ n: (args[0] as NumericLiteralPType).literalValue })
+    switch (name) {
+      case 'fromBytes':
+        return new Arc4EncodedFromBytesFunctionBuilder(sourceLocation, ptypeFactory)
+      case 'fromLog':
+        return new Arc4EncodedFromLogFunctionBuilder(sourceLocation, ptypeFactory)
+    }
+    return super.memberAccess(name, sourceLocation)
+  }
 }
 
-export class ByteClassBuilder extends ClassBuilder {
+export class ByteClassBuilder extends Arc4EncodedBaseClassBuilder {
   readonly ptype = ByteClass
 
   newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {

@@ -10,9 +10,9 @@ import { InstanceBuilder } from '../index'
 import { NodeBuilder } from '../index'
 import { requireExpressionOfType } from '../util'
 import { parseFunctionArgs } from '../util/arg-parsing'
-import { Arc4EncodedBaseExpressionBuilder } from './base'
+import { Arc4EncodedBaseClassBuilder, Arc4EncodedBaseExpressionBuilder } from './base'
 
-export class StructClassBuilder extends NodeBuilder {
+export class StructClassBuilder extends Arc4EncodedBaseClassBuilder {
   readonly ptype: ARC4StructClass
 
   constructor(sourceLocation: SourceLocation, ptype: PType) {
