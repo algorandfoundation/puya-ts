@@ -202,7 +202,7 @@
             "end_column": 34
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
               "line": 9,
@@ -217,17 +217,149 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "BytesComparisonExpression",
+            "condition": {
+              "_type": "BytesComparisonExpression",
+              "source_location": {
+                "file": "tests/approvals/box-proxies.algo.ts",
+                "line": 9,
+                "end_line": 9,
+                "column": 9,
+                "end_column": 33
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "lhs": {
+                "_type": "BoxValueExpression",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
                   "line": 9,
                   "end_line": 9,
                   "column": 9,
+                  "end_column": 18
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "string",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 1
+                },
+                "key": {
+                  "_type": "VarExpression",
+                  "source_location": {
+                    "file": "tests/approvals/box-proxies.algo.ts",
+                    "line": 9,
+                    "end_line": 9,
+                    "column": 9,
+                    "end_column": 12
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "box_key",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 1
+                  },
+                  "name": "box"
+                },
+                "exists_assertion_message": "Box must have value"
+              },
+              "operator": "==",
+              "rhs": {
+                "_type": "BoxValueExpression",
+                "source_location": {
+                  "file": "tests/approvals/box-proxies.algo.ts",
+                  "line": 9,
+                  "end_line": 9,
+                  "column": 23,
                   "end_column": 33
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "string",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 1
+                },
+                "key": {
+                  "_type": "BytesConstant",
+                  "source_location": {
+                    "file": "tests/approvals/box-proxies.algo.ts",
+                    "line": 4,
+                    "end_line": 4,
+                    "column": 38,
+                    "end_column": 41
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "box_key",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 1
+                  },
+                  "value": "K>",
+                  "encoding": "utf8"
+                },
+                "exists_assertion_message": "Box must have value"
+              }
+            },
+            "error_message": null
+          }
+        },
+        {
+          "_type": "ExpressionStatement",
+          "source_location": {
+            "file": "tests/approvals/box-proxies.algo.ts",
+            "line": 11,
+            "end_line": 11,
+            "column": 2,
+            "end_column": 35
+          },
+          "expr": {
+            "_type": "AssertExpression",
+            "source_location": {
+              "file": "tests/approvals/box-proxies.algo.ts",
+              "line": 11,
+              "end_line": 11,
+              "column": 2,
+              "end_column": 35
+            },
+            "wtype": {
+              "_type": "WType",
+              "name": "void",
+              "immutable": true,
+              "ephemeral": false,
+              "scalar_type": null
+            },
+            "condition": {
+              "_type": "BooleanBinaryOperation",
+              "source_location": {
+                "file": "tests/approvals/box-proxies.algo.ts",
+                "line": 11,
+                "end_line": 11,
+                "column": 9,
+                "end_column": 34
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "left": {
+                "_type": "StateExists",
+                "source_location": {
+                  "file": "tests/approvals/box-proxies.algo.ts",
+                  "line": 11,
+                  "end_line": 11,
+                  "column": 9,
+                  "end_column": 19
                 },
                 "wtype": {
                   "_type": "WType",
@@ -236,14 +368,14 @@
                   "ephemeral": false,
                   "scalar_type": 2
                 },
-                "lhs": {
+                "field": {
                   "_type": "BoxValueExpression",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 9,
-                    "end_line": 9,
+                    "line": 11,
+                    "end_line": 11,
                     "column": 9,
-                    "end_column": 18
+                    "end_column": 19
                   },
                   "wtype": {
                     "_type": "WType",
@@ -256,8 +388,8 @@
                     "_type": "VarExpression",
                     "source_location": {
                       "file": "tests/approvals/box-proxies.algo.ts",
-                      "line": 9,
-                      "end_line": 9,
+                      "line": 11,
+                      "end_line": 11,
                       "column": 9,
                       "end_column": 12
                     },
@@ -271,16 +403,33 @@
                     "name": "box"
                   },
                   "exists_assertion_message": "Box must have value"
+                }
+              },
+              "op": "and",
+              "right": {
+                "_type": "StateExists",
+                "source_location": {
+                  "file": "tests/approvals/box-proxies.algo.ts",
+                  "line": 11,
+                  "end_line": 11,
+                  "column": 23,
+                  "end_column": 34
                 },
-                "operator": "==",
-                "rhs": {
+                "wtype": {
+                  "_type": "WType",
+                  "name": "bool",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 2
+                },
+                "field": {
                   "_type": "BoxValueExpression",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 9,
-                    "end_line": 9,
+                    "line": 11,
+                    "end_line": 11,
                     "column": 23,
-                    "end_column": 33
+                    "end_column": 34
                   },
                   "wtype": {
                     "_type": "WType",
@@ -311,165 +460,8 @@
                   "exists_assertion_message": "Box must have value"
                 }
               }
-            ],
-            "comment": null
-          }
-        },
-        {
-          "_type": "ExpressionStatement",
-          "source_location": {
-            "file": "tests/approvals/box-proxies.algo.ts",
-            "line": 11,
-            "end_line": 11,
-            "column": 2,
-            "end_column": 35
-          },
-          "expr": {
-            "_type": "IntrinsicCall",
-            "source_location": {
-              "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 11,
-              "end_line": 11,
-              "column": 2,
-              "end_column": 35
             },
-            "wtype": {
-              "_type": "WType",
-              "name": "void",
-              "immutable": true,
-              "ephemeral": false,
-              "scalar_type": null
-            },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "BooleanBinaryOperation",
-                "source_location": {
-                  "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 11,
-                  "end_line": 11,
-                  "column": 9,
-                  "end_column": 34
-                },
-                "wtype": {
-                  "_type": "WType",
-                  "name": "bool",
-                  "immutable": true,
-                  "ephemeral": false,
-                  "scalar_type": 2
-                },
-                "left": {
-                  "_type": "StateExists",
-                  "source_location": {
-                    "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 11,
-                    "end_line": 11,
-                    "column": 9,
-                    "end_column": 19
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "bool",
-                    "immutable": true,
-                    "ephemeral": false,
-                    "scalar_type": 2
-                  },
-                  "field": {
-                    "_type": "BoxValueExpression",
-                    "source_location": {
-                      "file": "tests/approvals/box-proxies.algo.ts",
-                      "line": 11,
-                      "end_line": 11,
-                      "column": 9,
-                      "end_column": 19
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "string",
-                      "immutable": true,
-                      "ephemeral": false,
-                      "scalar_type": 1
-                    },
-                    "key": {
-                      "_type": "VarExpression",
-                      "source_location": {
-                        "file": "tests/approvals/box-proxies.algo.ts",
-                        "line": 11,
-                        "end_line": 11,
-                        "column": 9,
-                        "end_column": 12
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "box_key",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 1
-                      },
-                      "name": "box"
-                    },
-                    "exists_assertion_message": "Box must have value"
-                  }
-                },
-                "op": "and",
-                "right": {
-                  "_type": "StateExists",
-                  "source_location": {
-                    "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 11,
-                    "end_line": 11,
-                    "column": 23,
-                    "end_column": 34
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "bool",
-                    "immutable": true,
-                    "ephemeral": false,
-                    "scalar_type": 2
-                  },
-                  "field": {
-                    "_type": "BoxValueExpression",
-                    "source_location": {
-                      "file": "tests/approvals/box-proxies.algo.ts",
-                      "line": 11,
-                      "end_line": 11,
-                      "column": 23,
-                      "end_column": 34
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "string",
-                      "immutable": true,
-                      "ephemeral": false,
-                      "scalar_type": 1
-                    },
-                    "key": {
-                      "_type": "BytesConstant",
-                      "source_location": {
-                        "file": "tests/approvals/box-proxies.algo.ts",
-                        "line": 4,
-                        "end_line": 4,
-                        "column": 38,
-                        "end_column": 41
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "box_key",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 1
-                      },
-                      "value": "K>",
-                      "encoding": "utf8"
-                    },
-                    "exists_assertion_message": "Box must have value"
-                  }
-                }
-              }
-            ],
-            "comment": null
+            "error_message": null
           }
         },
         {
@@ -482,7 +474,7 @@
             "end_column": 20
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
               "line": 13,
@@ -497,27 +489,40 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "ReinterpretCast",
+            "condition": {
+              "_type": "ReinterpretCast",
+              "source_location": {
+                "file": "tests/approvals/box-proxies.algo.ts",
+                "line": 13,
+                "end_line": 13,
+                "column": 2,
+                "end_column": 20
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "expr": {
+                "_type": "CheckedMaybe",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
                   "line": 13,
                   "end_line": 13,
-                  "column": 2,
-                  "end_column": 20
+                  "column": 9,
+                  "end_column": 19
                 },
                 "wtype": {
                   "_type": "WType",
-                  "name": "bool",
+                  "name": "uint64",
                   "immutable": true,
                   "ephemeral": false,
                   "scalar_type": 2
                 },
                 "expr": {
-                  "_type": "CheckedMaybe",
+                  "_type": "IntrinsicCall",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
                     "line": 13,
@@ -526,91 +531,73 @@
                     "end_column": 19
                   },
                   "wtype": {
-                    "_type": "WType",
-                    "name": "uint64",
+                    "_type": "WTuple",
+                    "name": "tuple",
                     "immutable": true,
                     "ephemeral": false,
-                    "scalar_type": 2
-                  },
-                  "expr": {
-                    "_type": "IntrinsicCall",
-                    "source_location": {
-                      "file": "tests/approvals/box-proxies.algo.ts",
-                      "line": 13,
-                      "end_line": 13,
-                      "column": 9,
-                      "end_column": 19
-                    },
-                    "wtype": {
-                      "_type": "WTuple",
-                      "name": "tuple",
-                      "immutable": true,
-                      "ephemeral": false,
-                      "scalar_type": null,
-                      "types": [
-                        {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": 2
-                        },
-                        {
-                          "_type": "WType",
-                          "name": "bool",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": 2
-                        }
-                      ]
-                    },
-                    "op_code": "box_len",
-                    "immediates": [],
-                    "stack_args": [
+                    "scalar_type": null,
+                    "types": [
                       {
-                        "_type": "BoxValueExpression",
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true,
+                        "ephemeral": false,
+                        "scalar_type": 2
+                      },
+                      {
+                        "_type": "WType",
+                        "name": "bool",
+                        "immutable": true,
+                        "ephemeral": false,
+                        "scalar_type": 2
+                      }
+                    ]
+                  },
+                  "op_code": "box_len",
+                  "immediates": [],
+                  "stack_args": [
+                    {
+                      "_type": "BoxValueExpression",
+                      "source_location": {
+                        "file": "tests/approvals/box-proxies.algo.ts",
+                        "line": 13,
+                        "end_line": 13,
+                        "column": 9,
+                        "end_column": 19
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "string",
+                        "immutable": true,
+                        "ephemeral": false,
+                        "scalar_type": 1
+                      },
+                      "key": {
+                        "_type": "VarExpression",
                         "source_location": {
                           "file": "tests/approvals/box-proxies.algo.ts",
                           "line": 13,
                           "end_line": 13,
                           "column": 9,
-                          "end_column": 19
+                          "end_column": 12
                         },
                         "wtype": {
                           "_type": "WType",
-                          "name": "string",
+                          "name": "box_key",
                           "immutable": true,
                           "ephemeral": false,
                           "scalar_type": 1
                         },
-                        "key": {
-                          "_type": "VarExpression",
-                          "source_location": {
-                            "file": "tests/approvals/box-proxies.algo.ts",
-                            "line": 13,
-                            "end_line": 13,
-                            "column": 9,
-                            "end_column": 12
-                          },
-                          "wtype": {
-                            "_type": "WType",
-                            "name": "box_key",
-                            "immutable": true,
-                            "ephemeral": false,
-                            "scalar_type": 1
-                          },
-                          "name": "box"
-                        },
-                        "exists_assertion_message": "Box must have value"
-                      }
-                    ],
-                    "comment": null
-                  },
-                  "comment": "Box must exist"
-                }
+                        "name": "box"
+                      },
+                      "exists_assertion_message": "Box must have value"
+                    }
+                  ]
+                },
+                "comment": "Box must exist"
               }
-            ],
-            "comment": null
+            },
+            "error_message": null
           }
         },
         {
@@ -750,7 +737,7 @@
             "end_column": 37
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
               "line": 17,
@@ -765,17 +752,30 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "BooleanBinaryOperation",
+            "condition": {
+              "_type": "BooleanBinaryOperation",
+              "source_location": {
+                "file": "tests/approvals/box-proxies.algo.ts",
+                "line": 17,
+                "end_line": 17,
+                "column": 9,
+                "end_column": 36
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "left": {
+                "_type": "Not",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
                   "line": 17,
                   "end_line": 17,
                   "column": 9,
-                  "end_column": 36
+                  "end_column": 20
                 },
                 "wtype": {
                   "_type": "WType",
@@ -784,13 +784,13 @@
                   "ephemeral": false,
                   "scalar_type": 2
                 },
-                "left": {
-                  "_type": "Not",
+                "expr": {
+                  "_type": "StateExists",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
                     "line": 17,
                     "end_line": 17,
-                    "column": 9,
+                    "column": 10,
                     "end_column": 20
                   },
                   "wtype": {
@@ -800,8 +800,8 @@
                     "ephemeral": false,
                     "scalar_type": 2
                   },
-                  "expr": {
-                    "_type": "StateExists",
+                  "field": {
+                    "_type": "BoxValueExpression",
                     "source_location": {
                       "file": "tests/approvals/box-proxies.algo.ts",
                       "line": 17,
@@ -811,57 +811,57 @@
                     },
                     "wtype": {
                       "_type": "WType",
-                      "name": "bool",
+                      "name": "string",
                       "immutable": true,
                       "ephemeral": false,
-                      "scalar_type": 2
+                      "scalar_type": 1
                     },
-                    "field": {
-                      "_type": "BoxValueExpression",
+                    "key": {
+                      "_type": "VarExpression",
                       "source_location": {
                         "file": "tests/approvals/box-proxies.algo.ts",
                         "line": 17,
                         "end_line": 17,
                         "column": 10,
-                        "end_column": 20
+                        "end_column": 13
                       },
                       "wtype": {
                         "_type": "WType",
-                        "name": "string",
+                        "name": "box_key",
                         "immutable": true,
                         "ephemeral": false,
                         "scalar_type": 1
                       },
-                      "key": {
-                        "_type": "VarExpression",
-                        "source_location": {
-                          "file": "tests/approvals/box-proxies.algo.ts",
-                          "line": 17,
-                          "end_line": 17,
-                          "column": 10,
-                          "end_column": 13
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "box_key",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": 1
-                        },
-                        "name": "box"
-                      },
-                      "exists_assertion_message": "Box must have value"
-                    }
+                      "name": "box"
+                    },
+                    "exists_assertion_message": "Box must have value"
                   }
+                }
+              },
+              "op": "and",
+              "right": {
+                "_type": "Not",
+                "source_location": {
+                  "file": "tests/approvals/box-proxies.algo.ts",
+                  "line": 17,
+                  "end_line": 17,
+                  "column": 24,
+                  "end_column": 36
                 },
-                "op": "and",
-                "right": {
-                  "_type": "Not",
+                "wtype": {
+                  "_type": "WType",
+                  "name": "bool",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 2
+                },
+                "expr": {
+                  "_type": "StateExists",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
                     "line": 17,
                     "end_line": 17,
-                    "column": 24,
+                    "column": 25,
                     "end_column": 36
                   },
                   "wtype": {
@@ -871,8 +871,8 @@
                     "ephemeral": false,
                     "scalar_type": 2
                   },
-                  "expr": {
-                    "_type": "StateExists",
+                  "field": {
+                    "_type": "BoxValueExpression",
                     "source_location": {
                       "file": "tests/approvals/box-proxies.algo.ts",
                       "line": 17,
@@ -882,53 +882,36 @@
                     },
                     "wtype": {
                       "_type": "WType",
-                      "name": "bool",
+                      "name": "string",
                       "immutable": true,
                       "ephemeral": false,
-                      "scalar_type": 2
+                      "scalar_type": 1
                     },
-                    "field": {
-                      "_type": "BoxValueExpression",
+                    "key": {
+                      "_type": "BytesConstant",
                       "source_location": {
                         "file": "tests/approvals/box-proxies.algo.ts",
-                        "line": 17,
-                        "end_line": 17,
-                        "column": 25,
-                        "end_column": 36
+                        "line": 4,
+                        "end_line": 4,
+                        "column": 38,
+                        "end_column": 41
                       },
                       "wtype": {
                         "_type": "WType",
-                        "name": "string",
+                        "name": "box_key",
                         "immutable": true,
                         "ephemeral": false,
                         "scalar_type": 1
                       },
-                      "key": {
-                        "_type": "BytesConstant",
-                        "source_location": {
-                          "file": "tests/approvals/box-proxies.algo.ts",
-                          "line": 4,
-                          "end_line": 4,
-                          "column": 38,
-                          "end_column": 41
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "box_key",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": 1
-                        },
-                        "value": "K>",
-                        "encoding": "utf8"
-                      },
-                      "exists_assertion_message": "Box must have value"
-                    }
+                      "value": "K>",
+                      "encoding": "utf8"
+                    },
+                    "exists_assertion_message": "Box must have value"
                   }
                 }
               }
-            ],
-            "comment": null
+            },
+            "error_message": null
           }
         },
         {
@@ -987,7 +970,7 @@
             "end_column": 80
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
               "line": 20,
@@ -1002,33 +985,46 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "BytesComparisonExpression",
+            "condition": {
+              "_type": "BytesComparisonExpression",
+              "source_location": {
+                "file": "tests/approvals/box-proxies.algo.ts",
+                "line": 20,
+                "end_line": 20,
+                "column": 9,
+                "end_column": 79
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "lhs": {
+                "_type": "StateGet",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
                   "line": 20,
                   "end_line": 20,
                   "column": 9,
-                  "end_column": 79
+                  "end_column": 42
                 },
                 "wtype": {
                   "_type": "WType",
-                  "name": "bool",
+                  "name": "string",
                   "immutable": true,
                   "ephemeral": false,
-                  "scalar_type": 2
+                  "scalar_type": 1
                 },
-                "lhs": {
-                  "_type": "StateGet",
+                "field": {
+                  "_type": "BoxValueExpression",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
                     "line": 20,
                     "end_line": 20,
                     "column": 9,
-                    "end_column": 42
+                    "end_column": 17
                   },
                   "wtype": {
                     "_type": "WType",
@@ -1037,71 +1033,71 @@
                     "ephemeral": false,
                     "scalar_type": 1
                   },
-                  "field": {
-                    "_type": "BoxValueExpression",
+                  "key": {
+                    "_type": "BytesConstant",
                     "source_location": {
                       "file": "tests/approvals/box-proxies.algo.ts",
-                      "line": 20,
-                      "end_line": 20,
-                      "column": 9,
-                      "end_column": 17
+                      "line": 4,
+                      "end_line": 4,
+                      "column": 38,
+                      "end_column": 41
                     },
                     "wtype": {
                       "_type": "WType",
-                      "name": "string",
+                      "name": "box_key",
                       "immutable": true,
                       "ephemeral": false,
                       "scalar_type": 1
                     },
-                    "key": {
-                      "_type": "BytesConstant",
-                      "source_location": {
-                        "file": "tests/approvals/box-proxies.algo.ts",
-                        "line": 4,
-                        "end_line": 4,
-                        "column": 38,
-                        "end_column": 41
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "box_key",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 1
-                      },
-                      "value": "K>",
-                      "encoding": "utf8"
-                    },
-                    "exists_assertion_message": "Box must have value"
+                    "value": "K>",
+                    "encoding": "utf8"
                   },
-                  "default": {
-                    "_type": "VarExpression",
-                    "source_location": {
-                      "file": "tests/approvals/box-proxies.algo.ts",
-                      "line": 20,
-                      "end_line": 20,
-                      "column": 29,
-                      "end_column": 39
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "string",
-                      "immutable": true,
-                      "ephemeral": false,
-                      "scalar_type": 1
-                    },
-                    "name": "defaultVal"
-                  }
+                  "exists_assertion_message": "Box must have value"
                 },
-                "operator": "==",
-                "rhs": {
-                  "_type": "StateGet",
+                "default": {
+                  "_type": "VarExpression",
+                  "source_location": {
+                    "file": "tests/approvals/box-proxies.algo.ts",
+                    "line": 20,
+                    "end_line": 20,
+                    "column": 29,
+                    "end_column": 39
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "string",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 1
+                  },
+                  "name": "defaultVal"
+                }
+              },
+              "operator": "==",
+              "rhs": {
+                "_type": "StateGet",
+                "source_location": {
+                  "file": "tests/approvals/box-proxies.algo.ts",
+                  "line": 20,
+                  "end_line": 20,
+                  "column": 47,
+                  "end_column": 79
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "string",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 1
+                },
+                "field": {
+                  "_type": "BoxValueExpression",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
                     "line": 20,
                     "end_line": 20,
                     "column": 47,
-                    "end_column": 79
+                    "end_column": 54
                   },
                   "wtype": {
                     "_type": "WType",
@@ -1110,64 +1106,47 @@
                     "ephemeral": false,
                     "scalar_type": 1
                   },
-                  "field": {
-                    "_type": "BoxValueExpression",
-                    "source_location": {
-                      "file": "tests/approvals/box-proxies.algo.ts",
-                      "line": 20,
-                      "end_line": 20,
-                      "column": 47,
-                      "end_column": 54
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "string",
-                      "immutable": true,
-                      "ephemeral": false,
-                      "scalar_type": 1
-                    },
-                    "key": {
-                      "_type": "VarExpression",
-                      "source_location": {
-                        "file": "tests/approvals/box-proxies.algo.ts",
-                        "line": 20,
-                        "end_line": 20,
-                        "column": 47,
-                        "end_column": 50
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "box_key",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 1
-                      },
-                      "name": "box"
-                    },
-                    "exists_assertion_message": "Box must have value"
-                  },
-                  "default": {
+                  "key": {
                     "_type": "VarExpression",
                     "source_location": {
                       "file": "tests/approvals/box-proxies.algo.ts",
                       "line": 20,
                       "end_line": 20,
-                      "column": 66,
-                      "end_column": 76
+                      "column": 47,
+                      "end_column": 50
                     },
                     "wtype": {
                       "_type": "WType",
-                      "name": "string",
+                      "name": "box_key",
                       "immutable": true,
                       "ephemeral": false,
                       "scalar_type": 1
                     },
-                    "name": "defaultVal"
-                  }
+                    "name": "box"
+                  },
+                  "exists_assertion_message": "Box must have value"
+                },
+                "default": {
+                  "_type": "VarExpression",
+                  "source_location": {
+                    "file": "tests/approvals/box-proxies.algo.ts",
+                    "line": 20,
+                    "end_line": 20,
+                    "column": 66,
+                    "end_column": 76
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "string",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 1
+                  },
+                  "name": "defaultVal"
                 }
               }
-            ],
-            "comment": null
+            },
+            "error_message": null
           }
         },
         {
@@ -1330,7 +1309,7 @@
             "end_column": 12
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
               "line": 23,
@@ -1345,16 +1324,29 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "Not",
+            "condition": {
+              "_type": "Not",
+              "source_location": {
+                "file": "tests/approvals/box-proxies.algo.ts",
+                "line": 23,
+                "end_line": 23,
+                "column": 9,
+                "end_column": 11
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "expr": {
+                "_type": "VarExpression",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
                   "line": 23,
                   "end_line": 23,
-                  "column": 9,
+                  "column": 10,
                   "end_column": 11
                 },
                 "wtype": {
@@ -1364,27 +1356,10 @@
                   "ephemeral": false,
                   "scalar_type": 2
                 },
-                "expr": {
-                  "_type": "VarExpression",
-                  "source_location": {
-                    "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 23,
-                    "end_line": 23,
-                    "column": 10,
-                    "end_column": 11
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "bool",
-                    "immutable": true,
-                    "ephemeral": false,
-                    "scalar_type": 2
-                  },
-                  "name": "e"
-                }
+                "name": "e"
               }
-            ],
-            "comment": null
+            },
+            "error_message": null
           }
         },
         {
@@ -1611,7 +1586,7 @@
             "end_column": 11
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
               "line": 26,
@@ -1626,29 +1601,25 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "VarExpression",
-                "source_location": {
-                  "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 26,
-                  "end_line": 26,
-                  "column": 9,
-                  "end_column": 10
-                },
-                "wtype": {
-                  "_type": "WType",
-                  "name": "bool",
-                  "immutable": true,
-                  "ephemeral": false,
-                  "scalar_type": 2
-                },
-                "name": "e"
-              }
-            ],
-            "comment": null
+            "condition": {
+              "_type": "VarExpression",
+              "source_location": {
+                "file": "tests/approvals/box-proxies.algo.ts",
+                "line": 26,
+                "end_line": 26,
+                "column": 9,
+                "end_column": 10
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "name": "e"
+            },
+            "error_message": null
           }
         }
       ],
@@ -1843,8 +1814,7 @@
                     "name": "key"
                   }
                 }
-              ],
-              "comment": null
+              ]
             },
             "exists_assertion_message": "Box must have value"
           },
@@ -1965,8 +1935,7 @@
                     "name": "key"
                   }
                 }
-              ],
-              "comment": null
+              ]
             },
             "exists_assertion_message": "Box must have value"
           },
@@ -1999,7 +1968,7 @@
             "end_column": 25
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
               "line": 35,
@@ -2014,27 +1983,40 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "ReinterpretCast",
+            "condition": {
+              "_type": "ReinterpretCast",
+              "source_location": {
+                "file": "tests/approvals/box-proxies.algo.ts",
+                "line": 35,
+                "end_line": 35,
+                "column": 2,
+                "end_column": 25
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "expr": {
+                "_type": "CheckedMaybe",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
                   "line": 35,
                   "end_line": 35,
-                  "column": 2,
-                  "end_column": 25
+                  "column": 9,
+                  "end_column": 24
                 },
                 "wtype": {
                   "_type": "WType",
-                  "name": "bool",
+                  "name": "uint64",
                   "immutable": true,
                   "ephemeral": false,
                   "scalar_type": 2
                 },
                 "expr": {
-                  "_type": "CheckedMaybe",
+                  "_type": "IntrinsicCall",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
                     "line": 35,
@@ -2043,49 +2025,49 @@
                     "end_column": 24
                   },
                   "wtype": {
-                    "_type": "WType",
-                    "name": "uint64",
+                    "_type": "WTuple",
+                    "name": "tuple",
                     "immutable": true,
                     "ephemeral": false,
-                    "scalar_type": 2
-                  },
-                  "expr": {
-                    "_type": "IntrinsicCall",
-                    "source_location": {
-                      "file": "tests/approvals/box-proxies.algo.ts",
-                      "line": 35,
-                      "end_line": 35,
-                      "column": 9,
-                      "end_column": 24
-                    },
-                    "wtype": {
-                      "_type": "WTuple",
-                      "name": "tuple",
-                      "immutable": true,
-                      "ephemeral": false,
-                      "scalar_type": null,
-                      "types": [
-                        {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": 2
-                        },
-                        {
-                          "_type": "WType",
-                          "name": "bool",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": 2
-                        }
-                      ]
-                    },
-                    "op_code": "box_len",
-                    "immediates": [],
-                    "stack_args": [
+                    "scalar_type": null,
+                    "types": [
                       {
-                        "_type": "BoxValueExpression",
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true,
+                        "ephemeral": false,
+                        "scalar_type": 2
+                      },
+                      {
+                        "_type": "WType",
+                        "name": "bool",
+                        "immutable": true,
+                        "ephemeral": false,
+                        "scalar_type": 2
+                      }
+                    ]
+                  },
+                  "op_code": "box_len",
+                  "immediates": [],
+                  "stack_args": [
+                    {
+                      "_type": "BoxValueExpression",
+                      "source_location": {
+                        "file": "tests/approvals/box-proxies.algo.ts",
+                        "line": 35,
+                        "end_line": 35,
+                        "column": 9,
+                        "end_column": 19
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "bytes",
+                        "immutable": true,
+                        "ephemeral": false,
+                        "scalar_type": 1
+                      },
+                      "key": {
+                        "_type": "IntrinsicCall",
                         "source_location": {
                           "file": "tests/approvals/box-proxies.algo.ts",
                           "line": 35,
@@ -2095,96 +2077,77 @@
                         },
                         "wtype": {
                           "_type": "WType",
-                          "name": "bytes",
+                          "name": "box_key",
                           "immutable": true,
                           "ephemeral": false,
                           "scalar_type": 1
                         },
-                        "key": {
-                          "_type": "IntrinsicCall",
-                          "source_location": {
-                            "file": "tests/approvals/box-proxies.algo.ts",
-                            "line": 35,
-                            "end_line": 35,
-                            "column": 9,
-                            "end_column": 19
+                        "op_code": "concat",
+                        "immediates": [],
+                        "stack_args": [
+                          {
+                            "_type": "VarExpression",
+                            "source_location": {
+                              "file": "tests/approvals/box-proxies.algo.ts",
+                              "line": 35,
+                              "end_line": 35,
+                              "column": 9,
+                              "end_column": 12
+                            },
+                            "wtype": {
+                              "_type": "WType",
+                              "name": "box_key",
+                              "immutable": true,
+                              "ephemeral": false,
+                              "scalar_type": 1
+                            },
+                            "name": "box"
                           },
-                          "wtype": {
-                            "_type": "WType",
-                            "name": "box_key",
-                            "immutable": true,
-                            "ephemeral": false,
-                            "scalar_type": 1
-                          },
-                          "op_code": "concat",
-                          "immediates": [],
-                          "stack_args": [
-                            {
+                          {
+                            "_type": "ReinterpretCast",
+                            "source_location": {
+                              "file": "tests/approvals/box-proxies.algo.ts",
+                              "line": 35,
+                              "end_line": 35,
+                              "column": 9,
+                              "end_column": 19
+                            },
+                            "wtype": {
+                              "_type": "WType",
+                              "name": "bytes",
+                              "immutable": true,
+                              "ephemeral": false,
+                              "scalar_type": 1
+                            },
+                            "expr": {
                               "_type": "VarExpression",
                               "source_location": {
                                 "file": "tests/approvals/box-proxies.algo.ts",
                                 "line": 35,
                                 "end_line": 35,
-                                "column": 9,
-                                "end_column": 12
+                                "column": 20,
+                                "end_column": 23
                               },
                               "wtype": {
                                 "_type": "WType",
-                                "name": "box_key",
+                                "name": "string",
                                 "immutable": true,
                                 "ephemeral": false,
                                 "scalar_type": 1
                               },
-                              "name": "box"
-                            },
-                            {
-                              "_type": "ReinterpretCast",
-                              "source_location": {
-                                "file": "tests/approvals/box-proxies.algo.ts",
-                                "line": 35,
-                                "end_line": 35,
-                                "column": 9,
-                                "end_column": 19
-                              },
-                              "wtype": {
-                                "_type": "WType",
-                                "name": "bytes",
-                                "immutable": true,
-                                "ephemeral": false,
-                                "scalar_type": 1
-                              },
-                              "expr": {
-                                "_type": "VarExpression",
-                                "source_location": {
-                                  "file": "tests/approvals/box-proxies.algo.ts",
-                                  "line": 35,
-                                  "end_line": 35,
-                                  "column": 20,
-                                  "end_column": 23
-                                },
-                                "wtype": {
-                                  "_type": "WType",
-                                  "name": "string",
-                                  "immutable": true,
-                                  "ephemeral": false,
-                                  "scalar_type": 1
-                                },
-                                "name": "key"
-                              }
+                              "name": "key"
                             }
-                          ],
-                          "comment": null
-                        },
-                        "exists_assertion_message": "Box must have value"
-                      }
-                    ],
-                    "comment": null
-                  },
-                  "comment": "Box must exist"
-                }
+                          }
+                        ]
+                      },
+                      "exists_assertion_message": "Box must have value"
+                    }
+                  ]
+                },
+                "comment": "Box must exist"
               }
-            ],
-            "comment": null
+            },
+            "error_message": null
           }
         },
         {
@@ -2197,7 +2160,7 @@
             "end_column": 27
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
               "line": 37,
@@ -2212,209 +2175,62 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "TupleItemExpression",
+            "condition": {
+              "_type": "TupleItemExpression",
+              "source_location": {
+                "file": "tests/approvals/box-proxies.algo.ts",
+                "line": 37,
+                "end_line": 37,
+                "column": 9,
+                "end_column": 26
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "base": {
+                "_type": "StateGetEx",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
                   "line": 37,
                   "end_line": 37,
                   "column": 9,
-                  "end_column": 26
+                  "end_column": 23
                 },
                 "wtype": {
-                  "_type": "WType",
-                  "name": "bool",
+                  "_type": "WTuple",
+                  "name": "tuple",
                   "immutable": true,
                   "ephemeral": false,
-                  "scalar_type": 2
-                },
-                "base": {
-                  "_type": "StateGetEx",
-                  "source_location": {
-                    "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 37,
-                    "end_line": 37,
-                    "column": 9,
-                    "end_column": 23
-                  },
-                  "wtype": {
-                    "_type": "WTuple",
-                    "name": "tuple",
-                    "immutable": true,
-                    "ephemeral": false,
-                    "scalar_type": null,
-                    "types": [
-                      {
-                        "_type": "WType",
-                        "name": "bytes",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 1
-                      },
-                      {
-                        "_type": "WType",
-                        "name": "bool",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 2
-                      }
-                    ]
-                  },
-                  "field": {
-                    "_type": "BoxValueExpression",
-                    "source_location": {
-                      "file": "tests/approvals/box-proxies.algo.ts",
-                      "line": 37,
-                      "end_line": 37,
-                      "column": 9,
-                      "end_column": 18
-                    },
-                    "wtype": {
+                  "scalar_type": null,
+                  "types": [
+                    {
                       "_type": "WType",
                       "name": "bytes",
                       "immutable": true,
                       "ephemeral": false,
                       "scalar_type": 1
                     },
-                    "key": {
-                      "_type": "IntrinsicCall",
-                      "source_location": {
-                        "file": "tests/approvals/box-proxies.algo.ts",
-                        "line": 37,
-                        "end_line": 37,
-                        "column": 9,
-                        "end_column": 18
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "box_key",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 1
-                      },
-                      "op_code": "concat",
-                      "immediates": [],
-                      "stack_args": [
-                        {
-                          "_type": "VarExpression",
-                          "source_location": {
-                            "file": "tests/approvals/box-proxies.algo.ts",
-                            "line": 37,
-                            "end_line": 37,
-                            "column": 9,
-                            "end_column": 12
-                          },
-                          "wtype": {
-                            "_type": "WType",
-                            "name": "box_key",
-                            "immutable": true,
-                            "ephemeral": false,
-                            "scalar_type": 1
-                          },
-                          "name": "box"
-                        },
-                        {
-                          "_type": "ReinterpretCast",
-                          "source_location": {
-                            "file": "tests/approvals/box-proxies.algo.ts",
-                            "line": 37,
-                            "end_line": 37,
-                            "column": 9,
-                            "end_column": 18
-                          },
-                          "wtype": {
-                            "_type": "WType",
-                            "name": "bytes",
-                            "immutable": true,
-                            "ephemeral": false,
-                            "scalar_type": 1
-                          },
-                          "expr": {
-                            "_type": "VarExpression",
-                            "source_location": {
-                              "file": "tests/approvals/box-proxies.algo.ts",
-                              "line": 37,
-                              "end_line": 37,
-                              "column": 19,
-                              "end_column": 22
-                            },
-                            "wtype": {
-                              "_type": "WType",
-                              "name": "string",
-                              "immutable": true,
-                              "ephemeral": false,
-                              "scalar_type": 1
-                            },
-                            "name": "key"
-                          }
-                        }
-                      ],
-                      "comment": null
-                    },
-                    "exists_assertion_message": "Box must have value"
-                  }
+                    {
+                      "_type": "WType",
+                      "name": "bool",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 2
+                    }
+                  ]
                 },
-                "index": "1"
-              }
-            ],
-            "comment": null
-          }
-        },
-        {
-          "_type": "ExpressionStatement",
-          "source_location": {
-            "file": "tests/approvals/box-proxies.algo.ts",
-            "line": 39,
-            "end_line": 39,
-            "column": 2,
-            "end_column": 42
-          },
-          "expr": {
-            "_type": "IntrinsicCall",
-            "source_location": {
-              "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 39,
-              "end_line": 39,
-              "column": 2,
-              "end_column": 42
-            },
-            "wtype": {
-              "_type": "WType",
-              "name": "void",
-              "immutable": true,
-              "ephemeral": false,
-              "scalar_type": null
-            },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "BytesComparisonExpression",
-                "source_location": {
-                  "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 39,
-                  "end_line": 39,
-                  "column": 9,
-                  "end_column": 41
-                },
-                "wtype": {
-                  "_type": "WType",
-                  "name": "bool",
-                  "immutable": true,
-                  "ephemeral": false,
-                  "scalar_type": 2
-                },
-                "lhs": {
+                "field": {
                   "_type": "BoxValueExpression",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 39,
-                    "end_line": 39,
+                    "line": 37,
+                    "end_line": 37,
                     "column": 9,
-                    "end_column": 16
+                    "end_column": 18
                   },
                   "wtype": {
                     "_type": "WType",
@@ -2427,10 +2243,10 @@
                     "_type": "IntrinsicCall",
                     "source_location": {
                       "file": "tests/approvals/box-proxies.algo.ts",
-                      "line": 39,
-                      "end_line": 39,
+                      "line": 37,
+                      "end_line": 37,
                       "column": 9,
-                      "end_column": 16
+                      "end_column": 18
                     },
                     "wtype": {
                       "_type": "WType",
@@ -2446,8 +2262,8 @@
                         "_type": "VarExpression",
                         "source_location": {
                           "file": "tests/approvals/box-proxies.algo.ts",
-                          "line": 39,
-                          "end_line": 39,
+                          "line": 37,
+                          "end_line": 37,
                           "column": 9,
                           "end_column": 12
                         },
@@ -2464,10 +2280,10 @@
                         "_type": "ReinterpretCast",
                         "source_location": {
                           "file": "tests/approvals/box-proxies.algo.ts",
-                          "line": 39,
-                          "end_line": 39,
+                          "line": 37,
+                          "end_line": 37,
                           "column": 9,
-                          "end_column": 16
+                          "end_column": 18
                         },
                         "wtype": {
                           "_type": "WType",
@@ -2480,10 +2296,10 @@
                           "_type": "VarExpression",
                           "source_location": {
                             "file": "tests/approvals/box-proxies.algo.ts",
-                            "line": 39,
-                            "end_line": 39,
-                            "column": 17,
-                            "end_column": 20
+                            "line": 37,
+                            "end_line": 37,
+                            "column": 19,
+                            "end_column": 22
                           },
                           "wtype": {
                             "_type": "WType",
@@ -2495,14 +2311,168 @@
                           "name": "key"
                         }
                       }
-                    ],
-                    "comment": null
+                    ]
                   },
                   "exists_assertion_message": "Box must have value"
+                }
+              },
+              "index": "1"
+            },
+            "error_message": null
+          }
+        },
+        {
+          "_type": "ExpressionStatement",
+          "source_location": {
+            "file": "tests/approvals/box-proxies.algo.ts",
+            "line": 39,
+            "end_line": 39,
+            "column": 2,
+            "end_column": 42
+          },
+          "expr": {
+            "_type": "AssertExpression",
+            "source_location": {
+              "file": "tests/approvals/box-proxies.algo.ts",
+              "line": 39,
+              "end_line": 39,
+              "column": 2,
+              "end_column": 42
+            },
+            "wtype": {
+              "_type": "WType",
+              "name": "void",
+              "immutable": true,
+              "ephemeral": false,
+              "scalar_type": null
+            },
+            "condition": {
+              "_type": "BytesComparisonExpression",
+              "source_location": {
+                "file": "tests/approvals/box-proxies.algo.ts",
+                "line": 39,
+                "end_line": 39,
+                "column": 9,
+                "end_column": 41
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "lhs": {
+                "_type": "BoxValueExpression",
+                "source_location": {
+                  "file": "tests/approvals/box-proxies.algo.ts",
+                  "line": 39,
+                  "end_line": 39,
+                  "column": 9,
+                  "end_column": 16
                 },
-                "operator": "==",
-                "rhs": {
-                  "_type": "BoxValueExpression",
+                "wtype": {
+                  "_type": "WType",
+                  "name": "bytes",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 1
+                },
+                "key": {
+                  "_type": "IntrinsicCall",
+                  "source_location": {
+                    "file": "tests/approvals/box-proxies.algo.ts",
+                    "line": 39,
+                    "end_line": 39,
+                    "column": 9,
+                    "end_column": 16
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "box_key",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 1
+                  },
+                  "op_code": "concat",
+                  "immediates": [],
+                  "stack_args": [
+                    {
+                      "_type": "VarExpression",
+                      "source_location": {
+                        "file": "tests/approvals/box-proxies.algo.ts",
+                        "line": 39,
+                        "end_line": 39,
+                        "column": 9,
+                        "end_column": 12
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "box_key",
+                        "immutable": true,
+                        "ephemeral": false,
+                        "scalar_type": 1
+                      },
+                      "name": "box"
+                    },
+                    {
+                      "_type": "ReinterpretCast",
+                      "source_location": {
+                        "file": "tests/approvals/box-proxies.algo.ts",
+                        "line": 39,
+                        "end_line": 39,
+                        "column": 9,
+                        "end_column": 16
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "bytes",
+                        "immutable": true,
+                        "ephemeral": false,
+                        "scalar_type": 1
+                      },
+                      "expr": {
+                        "_type": "VarExpression",
+                        "source_location": {
+                          "file": "tests/approvals/box-proxies.algo.ts",
+                          "line": 39,
+                          "end_line": 39,
+                          "column": 17,
+                          "end_column": 20
+                        },
+                        "wtype": {
+                          "_type": "WType",
+                          "name": "string",
+                          "immutable": true,
+                          "ephemeral": false,
+                          "scalar_type": 1
+                        },
+                        "name": "key"
+                      }
+                    }
+                  ]
+                },
+                "exists_assertion_message": "Box must have value"
+              },
+              "operator": "==",
+              "rhs": {
+                "_type": "BoxValueExpression",
+                "source_location": {
+                  "file": "tests/approvals/box-proxies.algo.ts",
+                  "line": 39,
+                  "end_line": 39,
+                  "column": 26,
+                  "end_column": 36
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "bytes",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 1
+                },
+                "key": {
+                  "_type": "IntrinsicCall",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
                     "line": 39,
@@ -2512,92 +2482,74 @@
                   },
                   "wtype": {
                     "_type": "WType",
-                    "name": "bytes",
+                    "name": "box_key",
                     "immutable": true,
                     "ephemeral": false,
                     "scalar_type": 1
                   },
-                  "key": {
-                    "_type": "IntrinsicCall",
-                    "source_location": {
-                      "file": "tests/approvals/box-proxies.algo.ts",
-                      "line": 39,
-                      "end_line": 39,
-                      "column": 26,
-                      "end_column": 36
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "box_key",
-                      "immutable": true,
-                      "ephemeral": false,
-                      "scalar_type": 1
-                    },
-                    "op_code": "concat",
-                    "immediates": [],
-                    "stack_args": [
-                      {
-                        "_type": "BytesConstant",
-                        "source_location": {
-                          "file": "tests/approvals/box-proxies.algo.ts",
-                          "line": 29,
-                          "end_line": 29,
-                          "column": 50,
-                          "end_column": 52
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "box_key",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": 1
-                        },
-                        "value": "",
-                        "encoding": "utf8"
+                  "op_code": "concat",
+                  "immediates": [],
+                  "stack_args": [
+                    {
+                      "_type": "BytesConstant",
+                      "source_location": {
+                        "file": "tests/approvals/box-proxies.algo.ts",
+                        "line": 29,
+                        "end_line": 29,
+                        "column": 50,
+                        "end_column": 52
                       },
-                      {
-                        "_type": "ReinterpretCast",
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "box_key",
+                        "immutable": true,
+                        "ephemeral": false,
+                        "scalar_type": 1
+                      },
+                      "value": "",
+                      "encoding": "utf8"
+                    },
+                    {
+                      "_type": "ReinterpretCast",
+                      "source_location": {
+                        "file": "tests/approvals/box-proxies.algo.ts",
+                        "line": 39,
+                        "end_line": 39,
+                        "column": 26,
+                        "end_column": 36
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "bytes",
+                        "immutable": true,
+                        "ephemeral": false,
+                        "scalar_type": 1
+                      },
+                      "expr": {
+                        "_type": "VarExpression",
                         "source_location": {
                           "file": "tests/approvals/box-proxies.algo.ts",
                           "line": 39,
                           "end_line": 39,
-                          "column": 26,
-                          "end_column": 36
+                          "column": 37,
+                          "end_column": 40
                         },
                         "wtype": {
                           "_type": "WType",
-                          "name": "bytes",
+                          "name": "string",
                           "immutable": true,
                           "ephemeral": false,
                           "scalar_type": 1
                         },
-                        "expr": {
-                          "_type": "VarExpression",
-                          "source_location": {
-                            "file": "tests/approvals/box-proxies.algo.ts",
-                            "line": 39,
-                            "end_line": 39,
-                            "column": 37,
-                            "end_column": 40
-                          },
-                          "wtype": {
-                            "_type": "WType",
-                            "name": "string",
-                            "immutable": true,
-                            "ephemeral": false,
-                            "scalar_type": 1
-                          },
-                          "name": "key"
-                        }
+                        "name": "key"
                       }
-                    ],
-                    "comment": null
-                  },
-                  "exists_assertion_message": "Box must have value"
-                }
+                    }
+                  ]
+                },
+                "exists_assertion_message": "Box must have value"
               }
-            ],
-            "comment": null
+            },
+            "error_message": null
           }
         },
         {
@@ -2713,8 +2665,7 @@
                       "name": "key"
                     }
                   }
-                ],
-                "comment": null
+                ]
               },
               "exists_assertion_message": "Box must have value"
             }
@@ -2730,7 +2681,7 @@
             "end_column": 104
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
               "line": 43,
@@ -2745,33 +2696,46 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "BytesComparisonExpression",
+            "condition": {
+              "_type": "BytesComparisonExpression",
+              "source_location": {
+                "file": "tests/approvals/box-proxies.algo.ts",
+                "line": 43,
+                "end_line": 43,
+                "column": 9,
+                "end_column": 103
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "lhs": {
+                "_type": "StateGet",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
                   "line": 43,
                   "end_line": 43,
                   "column": 9,
-                  "end_column": 103
+                  "end_column": 52
                 },
                 "wtype": {
                   "_type": "WType",
-                  "name": "bool",
+                  "name": "bytes",
                   "immutable": true,
                   "ephemeral": false,
-                  "scalar_type": 2
+                  "scalar_type": 1
                 },
-                "lhs": {
-                  "_type": "StateGet",
+                "field": {
+                  "_type": "BoxValueExpression",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
                     "line": 43,
                     "end_line": 43,
                     "column": 9,
-                    "end_column": 52
+                    "end_column": 16
                   },
                   "wtype": {
                     "_type": "WType",
@@ -2780,8 +2744,8 @@
                     "ephemeral": false,
                     "scalar_type": 1
                   },
-                  "field": {
-                    "_type": "BoxValueExpression",
+                  "key": {
+                    "_type": "IntrinsicCall",
                     "source_location": {
                       "file": "tests/approvals/box-proxies.algo.ts",
                       "line": 43,
@@ -2791,65 +2755,65 @@
                     },
                     "wtype": {
                       "_type": "WType",
-                      "name": "bytes",
+                      "name": "box_key",
                       "immutable": true,
                       "ephemeral": false,
                       "scalar_type": 1
                     },
-                    "key": {
-                      "_type": "IntrinsicCall",
-                      "source_location": {
-                        "file": "tests/approvals/box-proxies.algo.ts",
-                        "line": 43,
-                        "end_line": 43,
-                        "column": 9,
-                        "end_column": 16
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "box_key",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 1
-                      },
-                      "op_code": "concat",
-                      "immediates": [],
-                      "stack_args": [
-                        {
-                          "_type": "VarExpression",
-                          "source_location": {
-                            "file": "tests/approvals/box-proxies.algo.ts",
-                            "line": 43,
-                            "end_line": 43,
-                            "column": 9,
-                            "end_column": 12
-                          },
-                          "wtype": {
-                            "_type": "WType",
-                            "name": "box_key",
-                            "immutable": true,
-                            "ephemeral": false,
-                            "scalar_type": 1
-                          },
-                          "name": "box"
+                    "op_code": "concat",
+                    "immediates": [],
+                    "stack_args": [
+                      {
+                        "_type": "VarExpression",
+                        "source_location": {
+                          "file": "tests/approvals/box-proxies.algo.ts",
+                          "line": 43,
+                          "end_line": 43,
+                          "column": 9,
+                          "end_column": 12
                         },
-                        {
-                          "_type": "ReinterpretCast",
+                        "wtype": {
+                          "_type": "WType",
+                          "name": "box_key",
+                          "immutable": true,
+                          "ephemeral": false,
+                          "scalar_type": 1
+                        },
+                        "name": "box"
+                      },
+                      {
+                        "_type": "ReinterpretCast",
+                        "source_location": {
+                          "file": "tests/approvals/box-proxies.algo.ts",
+                          "line": 43,
+                          "end_line": 43,
+                          "column": 9,
+                          "end_column": 16
+                        },
+                        "wtype": {
+                          "_type": "WType",
+                          "name": "bytes",
+                          "immutable": true,
+                          "ephemeral": false,
+                          "scalar_type": 1
+                        },
+                        "expr": {
+                          "_type": "BytesBinaryOperation",
                           "source_location": {
                             "file": "tests/approvals/box-proxies.algo.ts",
                             "line": 43,
                             "end_line": 43,
-                            "column": 9,
-                            "end_column": 16
+                            "column": 17,
+                            "end_column": 26
                           },
                           "wtype": {
                             "_type": "WType",
-                            "name": "bytes",
+                            "name": "string",
                             "immutable": true,
                             "ephemeral": false,
                             "scalar_type": 1
                           },
-                          "expr": {
+                          "left": {
                             "_type": "BytesBinaryOperation",
                             "source_location": {
                               "file": "tests/approvals/box-proxies.algo.ts",
@@ -2866,61 +2830,6 @@
                               "scalar_type": 1
                             },
                             "left": {
-                              "_type": "BytesBinaryOperation",
-                              "source_location": {
-                                "file": "tests/approvals/box-proxies.algo.ts",
-                                "line": 43,
-                                "end_line": 43,
-                                "column": 17,
-                                "end_column": 26
-                              },
-                              "wtype": {
-                                "_type": "WType",
-                                "name": "string",
-                                "immutable": true,
-                                "ephemeral": false,
-                                "scalar_type": 1
-                              },
-                              "left": {
-                                "_type": "StringConstant",
-                                "source_location": {
-                                  "file": "tests/approvals/box-proxies.algo.ts",
-                                  "line": 43,
-                                  "end_line": 43,
-                                  "column": 17,
-                                  "end_column": 26
-                                },
-                                "wtype": {
-                                  "_type": "WType",
-                                  "name": "string",
-                                  "immutable": true,
-                                  "ephemeral": false,
-                                  "scalar_type": 1
-                                },
-                                "value": ""
-                              },
-                              "op": "+",
-                              "right": {
-                                "_type": "VarExpression",
-                                "source_location": {
-                                  "file": "tests/approvals/box-proxies.algo.ts",
-                                  "line": 43,
-                                  "end_line": 43,
-                                  "column": 20,
-                                  "end_column": 23
-                                },
-                                "wtype": {
-                                  "_type": "WType",
-                                  "name": "string",
-                                  "immutable": true,
-                                  "ephemeral": false,
-                                  "scalar_type": 1
-                                },
-                                "name": "key"
-                              }
-                            },
-                            "op": "+",
-                            "right": {
                               "_type": "StringConstant",
                               "source_location": {
                                 "file": "tests/approvals/box-proxies.algo.ts",
@@ -2936,44 +2845,61 @@
                                 "ephemeral": false,
                                 "scalar_type": 1
                               },
-                              "value": "x"
+                              "value": ""
+                            },
+                            "op": "+",
+                            "right": {
+                              "_type": "VarExpression",
+                              "source_location": {
+                                "file": "tests/approvals/box-proxies.algo.ts",
+                                "line": 43,
+                                "end_line": 43,
+                                "column": 20,
+                                "end_column": 23
+                              },
+                              "wtype": {
+                                "_type": "WType",
+                                "name": "string",
+                                "immutable": true,
+                                "ephemeral": false,
+                                "scalar_type": 1
+                              },
+                              "name": "key"
                             }
+                          },
+                          "op": "+",
+                          "right": {
+                            "_type": "StringConstant",
+                            "source_location": {
+                              "file": "tests/approvals/box-proxies.algo.ts",
+                              "line": 43,
+                              "end_line": 43,
+                              "column": 17,
+                              "end_column": 26
+                            },
+                            "wtype": {
+                              "_type": "WType",
+                              "name": "string",
+                              "immutable": true,
+                              "ephemeral": false,
+                              "scalar_type": 1
+                            },
+                            "value": "x"
                           }
                         }
-                      ],
-                      "comment": null
-                    },
-                    "exists_assertion_message": "Box must have value"
+                      }
+                    ]
                   },
-                  "default": {
-                    "_type": "BytesConstant",
-                    "source_location": {
-                      "file": "tests/approvals/box-proxies.algo.ts",
-                      "line": 43,
-                      "end_line": 43,
-                      "column": 45,
-                      "end_column": 48
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "bytes",
-                      "immutable": true,
-                      "ephemeral": false,
-                      "scalar_type": 1
-                    },
-                    "value": "Vg",
-                    "encoding": "utf8"
-                  }
+                  "exists_assertion_message": "Box must have value"
                 },
-                "operator": "==",
-                "rhs": {
-                  "_type": "StateGet",
+                "default": {
+                  "_type": "BytesConstant",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
                     "line": 43,
                     "end_line": 43,
-                    "column": 57,
-                    "end_column": 103
+                    "column": 45,
+                    "end_column": 48
                   },
                   "wtype": {
                     "_type": "WType",
@@ -2982,8 +2908,45 @@
                     "ephemeral": false,
                     "scalar_type": 1
                   },
-                  "field": {
-                    "_type": "BoxValueExpression",
+                  "value": "Vg",
+                  "encoding": "utf8"
+                }
+              },
+              "operator": "==",
+              "rhs": {
+                "_type": "StateGet",
+                "source_location": {
+                  "file": "tests/approvals/box-proxies.algo.ts",
+                  "line": 43,
+                  "end_line": 43,
+                  "column": 57,
+                  "end_column": 103
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "bytes",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 1
+                },
+                "field": {
+                  "_type": "BoxValueExpression",
+                  "source_location": {
+                    "file": "tests/approvals/box-proxies.algo.ts",
+                    "line": 43,
+                    "end_line": 43,
+                    "column": 57,
+                    "end_column": 67
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "bytes",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 1
+                  },
+                  "key": {
+                    "_type": "IntrinsicCall",
                     "source_location": {
                       "file": "tests/approvals/box-proxies.algo.ts",
                       "line": 43,
@@ -2993,66 +2956,66 @@
                     },
                     "wtype": {
                       "_type": "WType",
-                      "name": "bytes",
+                      "name": "box_key",
                       "immutable": true,
                       "ephemeral": false,
                       "scalar_type": 1
                     },
-                    "key": {
-                      "_type": "IntrinsicCall",
-                      "source_location": {
-                        "file": "tests/approvals/box-proxies.algo.ts",
-                        "line": 43,
-                        "end_line": 43,
-                        "column": 57,
-                        "end_column": 67
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "box_key",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 1
-                      },
-                      "op_code": "concat",
-                      "immediates": [],
-                      "stack_args": [
-                        {
-                          "_type": "BytesConstant",
-                          "source_location": {
-                            "file": "tests/approvals/box-proxies.algo.ts",
-                            "line": 29,
-                            "end_line": 29,
-                            "column": 50,
-                            "end_column": 52
-                          },
-                          "wtype": {
-                            "_type": "WType",
-                            "name": "box_key",
-                            "immutable": true,
-                            "ephemeral": false,
-                            "scalar_type": 1
-                          },
-                          "value": "",
-                          "encoding": "utf8"
+                    "op_code": "concat",
+                    "immediates": [],
+                    "stack_args": [
+                      {
+                        "_type": "BytesConstant",
+                        "source_location": {
+                          "file": "tests/approvals/box-proxies.algo.ts",
+                          "line": 29,
+                          "end_line": 29,
+                          "column": 50,
+                          "end_column": 52
                         },
-                        {
-                          "_type": "ReinterpretCast",
+                        "wtype": {
+                          "_type": "WType",
+                          "name": "box_key",
+                          "immutable": true,
+                          "ephemeral": false,
+                          "scalar_type": 1
+                        },
+                        "value": "",
+                        "encoding": "utf8"
+                      },
+                      {
+                        "_type": "ReinterpretCast",
+                        "source_location": {
+                          "file": "tests/approvals/box-proxies.algo.ts",
+                          "line": 43,
+                          "end_line": 43,
+                          "column": 57,
+                          "end_column": 67
+                        },
+                        "wtype": {
+                          "_type": "WType",
+                          "name": "bytes",
+                          "immutable": true,
+                          "ephemeral": false,
+                          "scalar_type": 1
+                        },
+                        "expr": {
+                          "_type": "BytesBinaryOperation",
                           "source_location": {
                             "file": "tests/approvals/box-proxies.algo.ts",
                             "line": 43,
                             "end_line": 43,
-                            "column": 57,
-                            "end_column": 67
+                            "column": 68,
+                            "end_column": 77
                           },
                           "wtype": {
                             "_type": "WType",
-                            "name": "bytes",
+                            "name": "string",
                             "immutable": true,
                             "ephemeral": false,
                             "scalar_type": 1
                           },
-                          "expr": {
+                          "left": {
                             "_type": "BytesBinaryOperation",
                             "source_location": {
                               "file": "tests/approvals/box-proxies.algo.ts",
@@ -3069,61 +3032,6 @@
                               "scalar_type": 1
                             },
                             "left": {
-                              "_type": "BytesBinaryOperation",
-                              "source_location": {
-                                "file": "tests/approvals/box-proxies.algo.ts",
-                                "line": 43,
-                                "end_line": 43,
-                                "column": 68,
-                                "end_column": 77
-                              },
-                              "wtype": {
-                                "_type": "WType",
-                                "name": "string",
-                                "immutable": true,
-                                "ephemeral": false,
-                                "scalar_type": 1
-                              },
-                              "left": {
-                                "_type": "StringConstant",
-                                "source_location": {
-                                  "file": "tests/approvals/box-proxies.algo.ts",
-                                  "line": 43,
-                                  "end_line": 43,
-                                  "column": 68,
-                                  "end_column": 77
-                                },
-                                "wtype": {
-                                  "_type": "WType",
-                                  "name": "string",
-                                  "immutable": true,
-                                  "ephemeral": false,
-                                  "scalar_type": 1
-                                },
-                                "value": ""
-                              },
-                              "op": "+",
-                              "right": {
-                                "_type": "VarExpression",
-                                "source_location": {
-                                  "file": "tests/approvals/box-proxies.algo.ts",
-                                  "line": 43,
-                                  "end_line": 43,
-                                  "column": 71,
-                                  "end_column": 74
-                                },
-                                "wtype": {
-                                  "_type": "WType",
-                                  "name": "string",
-                                  "immutable": true,
-                                  "ephemeral": false,
-                                  "scalar_type": 1
-                                },
-                                "name": "key"
-                              }
-                            },
-                            "op": "+",
-                            "right": {
                               "_type": "StringConstant",
                               "source_location": {
                                 "file": "tests/approvals/box-proxies.algo.ts",
@@ -3139,38 +3047,75 @@
                                 "ephemeral": false,
                                 "scalar_type": 1
                               },
-                              "value": "x"
+                              "value": ""
+                            },
+                            "op": "+",
+                            "right": {
+                              "_type": "VarExpression",
+                              "source_location": {
+                                "file": "tests/approvals/box-proxies.algo.ts",
+                                "line": 43,
+                                "end_line": 43,
+                                "column": 71,
+                                "end_column": 74
+                              },
+                              "wtype": {
+                                "_type": "WType",
+                                "name": "string",
+                                "immutable": true,
+                                "ephemeral": false,
+                                "scalar_type": 1
+                              },
+                              "name": "key"
                             }
+                          },
+                          "op": "+",
+                          "right": {
+                            "_type": "StringConstant",
+                            "source_location": {
+                              "file": "tests/approvals/box-proxies.algo.ts",
+                              "line": 43,
+                              "end_line": 43,
+                              "column": 68,
+                              "end_column": 77
+                            },
+                            "wtype": {
+                              "_type": "WType",
+                              "name": "string",
+                              "immutable": true,
+                              "ephemeral": false,
+                              "scalar_type": 1
+                            },
+                            "value": "x"
                           }
                         }
-                      ],
-                      "comment": null
-                    },
-                    "exists_assertion_message": "Box must have value"
+                      }
+                    ]
                   },
-                  "default": {
-                    "_type": "BytesConstant",
-                    "source_location": {
-                      "file": "tests/approvals/box-proxies.algo.ts",
-                      "line": 43,
-                      "end_line": 43,
-                      "column": 96,
-                      "end_column": 99
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "bytes",
-                      "immutable": true,
-                      "ephemeral": false,
-                      "scalar_type": 1
-                    },
-                    "value": "Vg",
-                    "encoding": "utf8"
-                  }
+                  "exists_assertion_message": "Box must have value"
+                },
+                "default": {
+                  "_type": "BytesConstant",
+                  "source_location": {
+                    "file": "tests/approvals/box-proxies.algo.ts",
+                    "line": 43,
+                    "end_line": 43,
+                    "column": 96,
+                    "end_column": 99
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "bytes",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 1
+                  },
+                  "value": "Vg",
+                  "encoding": "utf8"
                 }
               }
-            ],
-            "comment": null
+            },
+            "error_message": null
           }
         }
       ],
@@ -3363,8 +3308,7 @@
                     },
                     "exists_assertion_message": "Box must have value"
                   }
-                ],
-                "comment": null
+                ]
               },
               "index": "1"
             }
@@ -3473,8 +3417,7 @@
                           "value": "1000",
                           "teal_alias": null
                         }
-                      ],
-                      "comment": null
+                      ]
                     }
                   }
                 ],
@@ -3608,8 +3551,7 @@
                           },
                           "exists_assertion_message": "Box must have value"
                         }
-                      ],
-                      "comment": null
+                      ]
                     },
                     "comment": "Box must exist"
                   },
@@ -3736,8 +3678,7 @@
                                 },
                                 "name": "length"
                               }
-                            ],
-                            "comment": null
+                            ]
                           }
                         }
                       ],
@@ -3884,8 +3825,7 @@
                 },
                 "name": "someBytes"
               }
-            ],
-            "comment": null
+            ]
           }
         },
         {
@@ -3971,8 +3911,7 @@
                 },
                 "name": "someBytes"
               }
-            ],
-            "comment": null
+            ]
           }
         },
         {
@@ -4096,8 +4035,7 @@
                 "value": "00",
                 "encoding": "base16"
               }
-            ],
-            "comment": null
+            ]
           }
         },
         {
@@ -4222,8 +4160,7 @@
                 "value": "00",
                 "encoding": "base16"
               }
-            ],
-            "comment": null
+            ]
           }
         },
         {
@@ -4236,7 +4173,7 @@
             "end_column": 49
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
               "line": 59,
@@ -4251,84 +4188,80 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "BytesComparisonExpression",
+            "condition": {
+              "_type": "BytesComparisonExpression",
+              "source_location": {
+                "file": "tests/approvals/box-proxies.algo.ts",
+                "line": 59,
+                "end_line": 59,
+                "column": 9,
+                "end_column": 48
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "lhs": {
+                "_type": "BoxValueExpression",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
                   "line": 59,
                   "end_line": 59,
                   "column": 9,
-                  "end_column": 48
+                  "end_column": 18
                 },
                 "wtype": {
                   "_type": "WType",
-                  "name": "bool",
+                  "name": "bytes",
                   "immutable": true,
                   "ephemeral": false,
-                  "scalar_type": 2
+                  "scalar_type": 1
                 },
-                "lhs": {
-                  "_type": "BoxValueExpression",
+                "key": {
+                  "_type": "VarExpression",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
                     "line": 59,
                     "end_line": 59,
                     "column": 9,
-                    "end_column": 18
+                    "end_column": 12
                   },
                   "wtype": {
                     "_type": "WType",
-                    "name": "bytes",
+                    "name": "box_key",
                     "immutable": true,
                     "ephemeral": false,
                     "scalar_type": 1
                   },
-                  "key": {
-                    "_type": "VarExpression",
-                    "source_location": {
-                      "file": "tests/approvals/box-proxies.algo.ts",
-                      "line": 59,
-                      "end_line": 59,
-                      "column": 9,
-                      "end_column": 12
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "box_key",
-                      "immutable": true,
-                      "ephemeral": false,
-                      "scalar_type": 1
-                    },
-                    "name": "box"
-                  },
-                  "exists_assertion_message": "Box must have value"
+                  "name": "box"
                 },
-                "operator": "==",
-                "rhs": {
-                  "_type": "BytesConstant",
-                  "source_location": {
-                    "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 59,
-                    "end_line": 59,
-                    "column": 23,
-                    "end_column": 48
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "bytes",
-                    "immutable": true,
-                    "ephemeral": false,
-                    "scalar_type": 1
-                  },
-                  "value": "{{a90",
-                  "encoding": "base16"
-                }
+                "exists_assertion_message": "Box must have value"
+              },
+              "operator": "==",
+              "rhs": {
+                "_type": "BytesConstant",
+                "source_location": {
+                  "file": "tests/approvals/box-proxies.algo.ts",
+                  "line": 59,
+                  "end_line": 59,
+                  "column": 23,
+                  "end_column": 48
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "bytes",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 1
+                },
+                "value": "{{a90",
+                "encoding": "base16"
               }
-            ],
-            "comment": null
+            },
+            "error_message": null
           }
         }
       ],

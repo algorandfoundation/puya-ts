@@ -3,7 +3,15 @@ import { TodoError } from '../errors'
 import { logger } from '../logger'
 import { uint8ArrayToBase32, uint8ArrayToUtf8 } from '../util'
 import type { ContractReference } from './models'
-import type { AppStorageDefinition, ContractMemberNodeVisitor, Emit, ExpressionVisitor, RootNodeVisitor, StatementVisitor } from './nodes'
+import type {
+  AppStorageDefinition,
+  AssertExpression,
+  ContractMemberNodeVisitor,
+  Emit,
+  ExpressionVisitor,
+  RootNodeVisitor,
+  StatementVisitor,
+} from './nodes'
 import * as nodes from './nodes'
 import { AppStorageKind, BytesEncoding, ContractMethodTarget, InstanceMethodTarget, InstanceSuperMethodTarget, SubroutineID } from './nodes'
 import { SymbolToNumber } from './util'
@@ -330,6 +338,14 @@ export class ToCodeVisitor
   }
   visitLogicSignature(moduleStatement: nodes.LogicSignature): string[] {
     return ['', `logicsig ${moduleStatement.id} {`, ...indent(moduleStatement.program.body.accept(this)), '}']
+  }
+  visitAssertExpression(expression: AssertExpression): string {
+    return [
+      expression.condition ? 'assert(' : 'err(',
+      expression.condition?.accept(this) ?? '',
+      expression.errorMessage ? `, comment=${expression.errorMessage}` : '',
+      ')',
+    ].join('')
   }
 
   private currentContract: ContractReference[] = []

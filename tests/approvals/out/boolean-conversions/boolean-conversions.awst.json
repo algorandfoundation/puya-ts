@@ -127,7 +127,7 @@
             "end_column": 29
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/boolean-conversions.algo.ts",
               "line": 5,
@@ -142,29 +142,25 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "BoolConstant",
-                "source_location": {
-                  "file": "tests/approvals/boolean-conversions.algo.ts",
-                  "line": 5,
-                  "end_line": 5,
-                  "column": 9,
-                  "end_column": 11
-                },
-                "wtype": {
-                  "_type": "WType",
-                  "name": "bool",
-                  "immutable": true,
-                  "ephemeral": false,
-                  "scalar_type": 2
-                },
-                "value": true
-              }
-            ],
-            "comment": "Zero is falsy"
+            "condition": {
+              "_type": "BoolConstant",
+              "source_location": {
+                "file": "tests/approvals/boolean-conversions.algo.ts",
+                "line": 5,
+                "end_line": 5,
+                "column": 9,
+                "end_column": 11
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "value": true
+            },
+            "error_message": "Zero is falsy"
           }
         },
         {
@@ -177,7 +173,7 @@
             "end_column": 33
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/boolean-conversions.algo.ts",
               "line": 6,
@@ -192,29 +188,25 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "BoolConstant",
-                "source_location": {
-                  "file": "tests/approvals/boolean-conversions.algo.ts",
-                  "line": 6,
-                  "end_line": 6,
-                  "column": 2,
-                  "end_column": 33
-                },
-                "wtype": {
-                  "_type": "WType",
-                  "name": "bool",
-                  "immutable": true,
-                  "ephemeral": false,
-                  "scalar_type": 2
-                },
-                "value": true
-              }
-            ],
-            "comment": "Non zero is truthy"
+            "condition": {
+              "_type": "BoolConstant",
+              "source_location": {
+                "file": "tests/approvals/boolean-conversions.algo.ts",
+                "line": 6,
+                "end_line": 6,
+                "column": 2,
+                "end_column": 33
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "value": true
+            },
+            "error_message": "Non zero is truthy"
           }
         },
         {
@@ -227,7 +219,7 @@
             "end_column": 37
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/boolean-conversions.algo.ts",
               "line": 7,
@@ -242,11 +234,24 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "Not",
+            "condition": {
+              "_type": "Not",
+              "source_location": {
+                "file": "tests/approvals/boolean-conversions.algo.ts",
+                "line": 7,
+                "end_line": 7,
+                "column": 9,
+                "end_column": 19
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "expr": {
+                "_type": "ReinterpretCast",
                 "source_location": {
                   "file": "tests/approvals/boolean-conversions.algo.ts",
                   "line": 7,
@@ -262,44 +267,27 @@
                   "scalar_type": 2
                 },
                 "expr": {
-                  "_type": "ReinterpretCast",
+                  "_type": "IntegerConstant",
                   "source_location": {
                     "file": "tests/approvals/boolean-conversions.algo.ts",
                     "line": 7,
                     "end_line": 7,
-                    "column": 9,
-                    "end_column": 19
+                    "column": 17,
+                    "end_column": 18
                   },
                   "wtype": {
                     "_type": "WType",
-                    "name": "bool",
+                    "name": "uint64",
                     "immutable": true,
                     "ephemeral": false,
                     "scalar_type": 2
                   },
-                  "expr": {
-                    "_type": "IntegerConstant",
-                    "source_location": {
-                      "file": "tests/approvals/boolean-conversions.algo.ts",
-                      "line": 7,
-                      "end_line": 7,
-                      "column": 17,
-                      "end_column": 18
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true,
-                      "ephemeral": false,
-                      "scalar_type": 2
-                    },
-                    "value": "0",
-                    "teal_alias": null
-                  }
+                  "value": "0",
+                  "teal_alias": null
                 }
               }
-            ],
-            "comment": "Zero is falsy"
+            },
+            "error_message": "Zero is falsy"
           }
         },
         {
@@ -312,7 +300,7 @@
             "end_column": 41
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/boolean-conversions.algo.ts",
               "line": 8,
@@ -327,47 +315,43 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "ReinterpretCast",
+            "condition": {
+              "_type": "ReinterpretCast",
+              "source_location": {
+                "file": "tests/approvals/boolean-conversions.algo.ts",
+                "line": 8,
+                "end_line": 8,
+                "column": 2,
+                "end_column": 41
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "expr": {
+                "_type": "IntegerConstant",
                 "source_location": {
                   "file": "tests/approvals/boolean-conversions.algo.ts",
                   "line": 8,
                   "end_line": 8,
-                  "column": 2,
-                  "end_column": 41
+                  "column": 16,
+                  "end_column": 17
                 },
                 "wtype": {
                   "_type": "WType",
-                  "name": "bool",
+                  "name": "uint64",
                   "immutable": true,
                   "ephemeral": false,
                   "scalar_type": 2
                 },
-                "expr": {
-                  "_type": "IntegerConstant",
-                  "source_location": {
-                    "file": "tests/approvals/boolean-conversions.algo.ts",
-                    "line": 8,
-                    "end_line": 8,
-                    "column": 16,
-                    "end_column": 17
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "uint64",
-                    "immutable": true,
-                    "ephemeral": false,
-                    "scalar_type": 2
-                  },
-                  "value": "1",
-                  "teal_alias": null
-                }
+                "value": "1",
+                "teal_alias": null
               }
-            ],
-            "comment": "Non zero is truthy"
+            },
+            "error_message": "Non zero is truthy"
           }
         },
         {
@@ -380,7 +364,7 @@
             "end_column": 38
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/boolean-conversions.algo.ts",
               "line": 9,
@@ -395,11 +379,24 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "Not",
+            "condition": {
+              "_type": "Not",
+              "source_location": {
+                "file": "tests/approvals/boolean-conversions.algo.ts",
+                "line": 9,
+                "end_line": 9,
+                "column": 9,
+                "end_column": 20
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "expr": {
+                "_type": "ReinterpretCast",
                 "source_location": {
                   "file": "tests/approvals/boolean-conversions.algo.ts",
                   "line": 9,
@@ -415,120 +412,13 @@
                   "scalar_type": 2
                 },
                 "expr": {
-                  "_type": "ReinterpretCast",
+                  "_type": "IntrinsicCall",
                   "source_location": {
                     "file": "tests/approvals/boolean-conversions.algo.ts",
                     "line": 9,
                     "end_line": 9,
                     "column": 9,
                     "end_column": 20
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "bool",
-                    "immutable": true,
-                    "ephemeral": false,
-                    "scalar_type": 2
-                  },
-                  "expr": {
-                    "_type": "IntrinsicCall",
-                    "source_location": {
-                      "file": "tests/approvals/boolean-conversions.algo.ts",
-                      "line": 9,
-                      "end_line": 9,
-                      "column": 9,
-                      "end_column": 20
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true,
-                      "ephemeral": false,
-                      "scalar_type": 2
-                    },
-                    "op_code": "bitlen",
-                    "immediates": [],
-                    "stack_args": [
-                      {
-                        "_type": "IntegerConstant",
-                        "source_location": {
-                          "file": "tests/approvals/boolean-conversions.algo.ts",
-                          "line": 9,
-                          "end_line": 9,
-                          "column": 18,
-                          "end_column": 19
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "biguint",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": 1
-                        },
-                        "value": "0",
-                        "teal_alias": null
-                      }
-                    ],
-                    "comment": null
-                  }
-                }
-              }
-            ],
-            "comment": "Zero is falsy"
-          }
-        },
-        {
-          "_type": "ExpressionStatement",
-          "source_location": {
-            "file": "tests/approvals/boolean-conversions.algo.ts",
-            "line": 10,
-            "end_line": 10,
-            "column": 2,
-            "end_column": 42
-          },
-          "expr": {
-            "_type": "IntrinsicCall",
-            "source_location": {
-              "file": "tests/approvals/boolean-conversions.algo.ts",
-              "line": 10,
-              "end_line": 10,
-              "column": 2,
-              "end_column": 42
-            },
-            "wtype": {
-              "_type": "WType",
-              "name": "void",
-              "immutable": true,
-              "ephemeral": false,
-              "scalar_type": null
-            },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "ReinterpretCast",
-                "source_location": {
-                  "file": "tests/approvals/boolean-conversions.algo.ts",
-                  "line": 10,
-                  "end_line": 10,
-                  "column": 2,
-                  "end_column": 42
-                },
-                "wtype": {
-                  "_type": "WType",
-                  "name": "bool",
-                  "immutable": true,
-                  "ephemeral": false,
-                  "scalar_type": 2
-                },
-                "expr": {
-                  "_type": "IntrinsicCall",
-                  "source_location": {
-                    "file": "tests/approvals/boolean-conversions.algo.ts",
-                    "line": 10,
-                    "end_line": 10,
-                    "column": 2,
-                    "end_column": 42
                   },
                   "wtype": {
                     "_type": "WType",
@@ -544,10 +434,10 @@
                       "_type": "IntegerConstant",
                       "source_location": {
                         "file": "tests/approvals/boolean-conversions.algo.ts",
-                        "line": 10,
-                        "end_line": 10,
-                        "column": 17,
-                        "end_column": 18
+                        "line": 9,
+                        "end_line": 9,
+                        "column": 18,
+                        "end_column": 19
                       },
                       "wtype": {
                         "_type": "WType",
@@ -556,15 +446,99 @@
                         "ephemeral": false,
                         "scalar_type": 1
                       },
-                      "value": "1",
+                      "value": "0",
                       "teal_alias": null
                     }
-                  ],
-                  "comment": null
+                  ]
                 }
               }
-            ],
-            "comment": "Non zero is truthy"
+            },
+            "error_message": "Zero is falsy"
+          }
+        },
+        {
+          "_type": "ExpressionStatement",
+          "source_location": {
+            "file": "tests/approvals/boolean-conversions.algo.ts",
+            "line": 10,
+            "end_line": 10,
+            "column": 2,
+            "end_column": 42
+          },
+          "expr": {
+            "_type": "AssertExpression",
+            "source_location": {
+              "file": "tests/approvals/boolean-conversions.algo.ts",
+              "line": 10,
+              "end_line": 10,
+              "column": 2,
+              "end_column": 42
+            },
+            "wtype": {
+              "_type": "WType",
+              "name": "void",
+              "immutable": true,
+              "ephemeral": false,
+              "scalar_type": null
+            },
+            "condition": {
+              "_type": "ReinterpretCast",
+              "source_location": {
+                "file": "tests/approvals/boolean-conversions.algo.ts",
+                "line": 10,
+                "end_line": 10,
+                "column": 2,
+                "end_column": 42
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "expr": {
+                "_type": "IntrinsicCall",
+                "source_location": {
+                  "file": "tests/approvals/boolean-conversions.algo.ts",
+                  "line": 10,
+                  "end_line": 10,
+                  "column": 2,
+                  "end_column": 42
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "uint64",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 2
+                },
+                "op_code": "bitlen",
+                "immediates": [],
+                "stack_args": [
+                  {
+                    "_type": "IntegerConstant",
+                    "source_location": {
+                      "file": "tests/approvals/boolean-conversions.algo.ts",
+                      "line": 10,
+                      "end_line": 10,
+                      "column": 17,
+                      "end_column": 18
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "biguint",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 1
+                    },
+                    "value": "1",
+                    "teal_alias": null
+                  }
+                ]
+              }
+            },
+            "error_message": "Non zero is truthy"
           }
         },
         {
@@ -577,7 +551,7 @@
             "end_column": 36
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/boolean-conversions.algo.ts",
               "line": 11,
@@ -592,11 +566,24 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "Not",
+            "condition": {
+              "_type": "Not",
+              "source_location": {
+                "file": "tests/approvals/boolean-conversions.algo.ts",
+                "line": 11,
+                "end_line": 11,
+                "column": 9,
+                "end_column": 17
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "expr": {
+                "_type": "ReinterpretCast",
                 "source_location": {
                   "file": "tests/approvals/boolean-conversions.algo.ts",
                   "line": 11,
@@ -612,120 +599,13 @@
                   "scalar_type": 2
                 },
                 "expr": {
-                  "_type": "ReinterpretCast",
+                  "_type": "IntrinsicCall",
                   "source_location": {
                     "file": "tests/approvals/boolean-conversions.algo.ts",
                     "line": 11,
                     "end_line": 11,
                     "column": 9,
                     "end_column": 17
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "bool",
-                    "immutable": true,
-                    "ephemeral": false,
-                    "scalar_type": 2
-                  },
-                  "expr": {
-                    "_type": "IntrinsicCall",
-                    "source_location": {
-                      "file": "tests/approvals/boolean-conversions.algo.ts",
-                      "line": 11,
-                      "end_line": 11,
-                      "column": 9,
-                      "end_column": 17
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true,
-                      "ephemeral": false,
-                      "scalar_type": 2
-                    },
-                    "op_code": "len",
-                    "immediates": [],
-                    "stack_args": [
-                      {
-                        "_type": "BytesConstant",
-                        "source_location": {
-                          "file": "tests/approvals/boolean-conversions.algo.ts",
-                          "line": 11,
-                          "end_line": 11,
-                          "column": 10,
-                          "end_column": 17
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "bytes",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": 1
-                        },
-                        "value": "",
-                        "encoding": "unknown"
-                      }
-                    ],
-                    "comment": null
-                  }
-                }
-              }
-            ],
-            "comment": "Empty is falsy"
-          }
-        },
-        {
-          "_type": "ExpressionStatement",
-          "source_location": {
-            "file": "tests/approvals/boolean-conversions.algo.ts",
-            "line": 12,
-            "end_line": 12,
-            "column": 2,
-            "end_column": 45
-          },
-          "expr": {
-            "_type": "IntrinsicCall",
-            "source_location": {
-              "file": "tests/approvals/boolean-conversions.algo.ts",
-              "line": 12,
-              "end_line": 12,
-              "column": 2,
-              "end_column": 45
-            },
-            "wtype": {
-              "_type": "WType",
-              "name": "void",
-              "immutable": true,
-              "ephemeral": false,
-              "scalar_type": null
-            },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "ReinterpretCast",
-                "source_location": {
-                  "file": "tests/approvals/boolean-conversions.algo.ts",
-                  "line": 12,
-                  "end_line": 12,
-                  "column": 2,
-                  "end_column": 45
-                },
-                "wtype": {
-                  "_type": "WType",
-                  "name": "bool",
-                  "immutable": true,
-                  "ephemeral": false,
-                  "scalar_type": 2
-                },
-                "expr": {
-                  "_type": "IntrinsicCall",
-                  "source_location": {
-                    "file": "tests/approvals/boolean-conversions.algo.ts",
-                    "line": 12,
-                    "end_line": 12,
-                    "column": 2,
-                    "end_column": 45
                   },
                   "wtype": {
                     "_type": "WType",
@@ -741,10 +621,10 @@
                       "_type": "BytesConstant",
                       "source_location": {
                         "file": "tests/approvals/boolean-conversions.algo.ts",
-                        "line": 12,
-                        "end_line": 12,
-                        "column": 15,
-                        "end_column": 20
+                        "line": 11,
+                        "end_line": 11,
+                        "column": 10,
+                        "end_column": 17
                       },
                       "wtype": {
                         "_type": "WType",
@@ -753,15 +633,99 @@
                         "ephemeral": false,
                         "scalar_type": 1
                       },
-                      "value": "VPaz",
-                      "encoding": "utf8"
+                      "value": "",
+                      "encoding": "unknown"
                     }
-                  ],
-                  "comment": null
+                  ]
                 }
               }
-            ],
-            "comment": "Non empty is truthy"
+            },
+            "error_message": "Empty is falsy"
+          }
+        },
+        {
+          "_type": "ExpressionStatement",
+          "source_location": {
+            "file": "tests/approvals/boolean-conversions.algo.ts",
+            "line": 12,
+            "end_line": 12,
+            "column": 2,
+            "end_column": 45
+          },
+          "expr": {
+            "_type": "AssertExpression",
+            "source_location": {
+              "file": "tests/approvals/boolean-conversions.algo.ts",
+              "line": 12,
+              "end_line": 12,
+              "column": 2,
+              "end_column": 45
+            },
+            "wtype": {
+              "_type": "WType",
+              "name": "void",
+              "immutable": true,
+              "ephemeral": false,
+              "scalar_type": null
+            },
+            "condition": {
+              "_type": "ReinterpretCast",
+              "source_location": {
+                "file": "tests/approvals/boolean-conversions.algo.ts",
+                "line": 12,
+                "end_line": 12,
+                "column": 2,
+                "end_column": 45
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "expr": {
+                "_type": "IntrinsicCall",
+                "source_location": {
+                  "file": "tests/approvals/boolean-conversions.algo.ts",
+                  "line": 12,
+                  "end_line": 12,
+                  "column": 2,
+                  "end_column": 45
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "uint64",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 2
+                },
+                "op_code": "len",
+                "immediates": [],
+                "stack_args": [
+                  {
+                    "_type": "BytesConstant",
+                    "source_location": {
+                      "file": "tests/approvals/boolean-conversions.algo.ts",
+                      "line": 12,
+                      "end_line": 12,
+                      "column": 15,
+                      "end_column": 20
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "bytes",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 1
+                    },
+                    "value": "VPaz",
+                    "encoding": "utf8"
+                  }
+                ]
+              }
+            },
+            "error_message": "Non empty is truthy"
           }
         },
         {
@@ -820,7 +784,7 @@
             "end_column": 34
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/boolean-conversions.algo.ts",
               "line": 14,
@@ -835,11 +799,24 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "Not",
+            "condition": {
+              "_type": "Not",
+              "source_location": {
+                "file": "tests/approvals/boolean-conversions.algo.ts",
+                "line": 14,
+                "end_line": 14,
+                "column": 9,
+                "end_column": 15
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "expr": {
+                "_type": "ReinterpretCast",
                 "source_location": {
                   "file": "tests/approvals/boolean-conversions.algo.ts",
                   "line": 14,
@@ -855,7 +832,7 @@
                   "scalar_type": 2
                 },
                 "expr": {
-                  "_type": "ReinterpretCast",
+                  "_type": "IntrinsicCall",
                   "source_location": {
                     "file": "tests/approvals/boolean-conversions.algo.ts",
                     "line": 14,
@@ -865,55 +842,37 @@
                   },
                   "wtype": {
                     "_type": "WType",
-                    "name": "bool",
+                    "name": "uint64",
                     "immutable": true,
                     "ephemeral": false,
                     "scalar_type": 2
                   },
-                  "expr": {
-                    "_type": "IntrinsicCall",
-                    "source_location": {
-                      "file": "tests/approvals/boolean-conversions.algo.ts",
-                      "line": 14,
-                      "end_line": 14,
-                      "column": 9,
-                      "end_column": 15
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true,
-                      "ephemeral": false,
-                      "scalar_type": 2
-                    },
-                    "op_code": "len",
-                    "immediates": [],
-                    "stack_args": [
-                      {
-                        "_type": "VarExpression",
-                        "source_location": {
-                          "file": "tests/approvals/boolean-conversions.algo.ts",
-                          "line": 14,
-                          "end_line": 14,
-                          "column": 10,
-                          "end_column": 15
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "string",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": 1
-                        },
-                        "name": "empty"
-                      }
-                    ],
-                    "comment": null
-                  }
+                  "op_code": "len",
+                  "immediates": [],
+                  "stack_args": [
+                    {
+                      "_type": "VarExpression",
+                      "source_location": {
+                        "file": "tests/approvals/boolean-conversions.algo.ts",
+                        "line": 14,
+                        "end_line": 14,
+                        "column": 10,
+                        "end_column": 15
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "string",
+                        "immutable": true,
+                        "ephemeral": false,
+                        "scalar_type": 1
+                      },
+                      "name": "empty"
+                    }
+                  ]
                 }
               }
-            ],
-            "comment": "Empty is falsy"
+            },
+            "error_message": "Empty is falsy"
           }
         },
         {
@@ -926,7 +885,7 @@
             "end_column": 38
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/boolean-conversions.algo.ts",
               "line": 15,
@@ -941,11 +900,24 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "ReinterpretCast",
+            "condition": {
+              "_type": "ReinterpretCast",
+              "source_location": {
+                "file": "tests/approvals/boolean-conversions.algo.ts",
+                "line": 15,
+                "end_line": 15,
+                "column": 2,
+                "end_column": 38
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "expr": {
+                "_type": "IntrinsicCall",
                 "source_location": {
                   "file": "tests/approvals/boolean-conversions.algo.ts",
                   "line": 15,
@@ -955,54 +927,36 @@
                 },
                 "wtype": {
                   "_type": "WType",
-                  "name": "bool",
+                  "name": "uint64",
                   "immutable": true,
                   "ephemeral": false,
                   "scalar_type": 2
                 },
-                "expr": {
-                  "_type": "IntrinsicCall",
-                  "source_location": {
-                    "file": "tests/approvals/boolean-conversions.algo.ts",
-                    "line": 15,
-                    "end_line": 15,
-                    "column": 2,
-                    "end_column": 38
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "uint64",
-                    "immutable": true,
-                    "ephemeral": false,
-                    "scalar_type": 2
-                  },
-                  "op_code": "len",
-                  "immediates": [],
-                  "stack_args": [
-                    {
-                      "_type": "StringConstant",
-                      "source_location": {
-                        "file": "tests/approvals/boolean-conversions.algo.ts",
-                        "line": 15,
-                        "end_line": 15,
-                        "column": 9,
-                        "end_column": 14
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "string",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 1
-                      },
-                      "value": "abc"
-                    }
-                  ],
-                  "comment": null
-                }
+                "op_code": "len",
+                "immediates": [],
+                "stack_args": [
+                  {
+                    "_type": "StringConstant",
+                    "source_location": {
+                      "file": "tests/approvals/boolean-conversions.algo.ts",
+                      "line": 15,
+                      "end_line": 15,
+                      "column": 9,
+                      "end_column": 14
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "string",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 1
+                    },
+                    "value": "abc"
+                  }
+                ]
               }
-            ],
-            "comment": "Non empty is truthy"
+            },
+            "error_message": "Non empty is truthy"
           }
         },
         {
@@ -1015,7 +969,7 @@
             "end_column": 34
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/boolean-conversions.algo.ts",
               "line": 16,
@@ -1030,16 +984,29 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "Not",
+            "condition": {
+              "_type": "Not",
+              "source_location": {
+                "file": "tests/approvals/boolean-conversions.algo.ts",
+                "line": 16,
+                "end_line": 16,
+                "column": 9,
+                "end_column": 15
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "expr": {
+                "_type": "BoolConstant",
                 "source_location": {
                   "file": "tests/approvals/boolean-conversions.algo.ts",
                   "line": 16,
                   "end_line": 16,
-                  "column": 9,
+                  "column": 10,
                   "end_column": 15
                 },
                 "wtype": {
@@ -1049,27 +1016,10 @@
                   "ephemeral": false,
                   "scalar_type": 2
                 },
-                "expr": {
-                  "_type": "BoolConstant",
-                  "source_location": {
-                    "file": "tests/approvals/boolean-conversions.algo.ts",
-                    "line": 16,
-                    "end_line": 16,
-                    "column": 10,
-                    "end_column": 15
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "bool",
-                    "immutable": true,
-                    "ephemeral": false,
-                    "scalar_type": 2
-                  },
-                  "value": false
-                }
+                "value": false
               }
-            ],
-            "comment": "False is falsy"
+            },
+            "error_message": "False is falsy"
           }
         },
         {
@@ -1082,7 +1032,7 @@
             "end_column": 32
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/boolean-conversions.algo.ts",
               "line": 17,
@@ -1097,29 +1047,25 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "BoolConstant",
-                "source_location": {
-                  "file": "tests/approvals/boolean-conversions.algo.ts",
-                  "line": 17,
-                  "end_line": 17,
-                  "column": 9,
-                  "end_column": 13
-                },
-                "wtype": {
-                  "_type": "WType",
-                  "name": "bool",
-                  "immutable": true,
-                  "ephemeral": false,
-                  "scalar_type": 2
-                },
-                "value": true
-              }
-            ],
-            "comment": "True is truthy"
+            "condition": {
+              "_type": "BoolConstant",
+              "source_location": {
+                "file": "tests/approvals/boolean-conversions.algo.ts",
+                "line": 17,
+                "end_line": 17,
+                "column": 9,
+                "end_column": 13
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "value": true
+            },
+            "error_message": "True is truthy"
           }
         }
       ],
@@ -1172,7 +1118,7 @@
             "end_column": 35
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/boolean-conversions.algo.ts",
               "line": 22,
@@ -1187,17 +1133,30 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "NumericComparisonExpression",
+            "condition": {
+              "_type": "NumericComparisonExpression",
+              "source_location": {
+                "file": "tests/approvals/boolean-conversions.algo.ts",
+                "line": 22,
+                "end_line": 22,
+                "column": 9,
+                "end_column": 34
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "lhs": {
+                "_type": "Not",
                 "source_location": {
                   "file": "tests/approvals/boolean-conversions.algo.ts",
                   "line": 22,
                   "end_line": 22,
                   "column": 9,
-                  "end_column": 34
+                  "end_column": 19
                 },
                 "wtype": {
                   "_type": "WType",
@@ -1206,7 +1165,7 @@
                   "ephemeral": false,
                   "scalar_type": 2
                 },
-                "lhs": {
+                "expr": {
                   "_type": "Not",
                   "source_location": {
                     "file": "tests/approvals/boolean-conversions.algo.ts",
@@ -1223,7 +1182,7 @@
                     "scalar_type": 2
                   },
                   "expr": {
-                    "_type": "Not",
+                    "_type": "BoolConstant",
                     "source_location": {
                       "file": "tests/approvals/boolean-conversions.algo.ts",
                       "line": 22,
@@ -1238,28 +1197,28 @@
                       "ephemeral": false,
                       "scalar_type": 2
                     },
-                    "expr": {
-                      "_type": "BoolConstant",
-                      "source_location": {
-                        "file": "tests/approvals/boolean-conversions.algo.ts",
-                        "line": 22,
-                        "end_line": 22,
-                        "column": 9,
-                        "end_column": 19
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "bool",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 2
-                      },
-                      "value": true
-                    }
+                    "value": true
                   }
+                }
+              },
+              "operator": "==",
+              "rhs": {
+                "_type": "Not",
+                "source_location": {
+                  "file": "tests/approvals/boolean-conversions.algo.ts",
+                  "line": 22,
+                  "end_line": 22,
+                  "column": 24,
+                  "end_column": 34
                 },
-                "operator": "==",
-                "rhs": {
+                "wtype": {
+                  "_type": "WType",
+                  "name": "bool",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 2
+                },
+                "expr": {
                   "_type": "Not",
                   "source_location": {
                     "file": "tests/approvals/boolean-conversions.algo.ts",
@@ -1276,7 +1235,7 @@
                     "scalar_type": 2
                   },
                   "expr": {
-                    "_type": "Not",
+                    "_type": "BoolConstant",
                     "source_location": {
                       "file": "tests/approvals/boolean-conversions.algo.ts",
                       "line": 22,
@@ -1291,29 +1250,12 @@
                       "ephemeral": false,
                       "scalar_type": 2
                     },
-                    "expr": {
-                      "_type": "BoolConstant",
-                      "source_location": {
-                        "file": "tests/approvals/boolean-conversions.algo.ts",
-                        "line": 22,
-                        "end_line": 22,
-                        "column": 24,
-                        "end_column": 34
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "bool",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 2
-                      },
-                      "value": true
-                    }
+                    "value": true
                   }
                 }
               }
-            ],
-            "comment": null
+            },
+            "error_message": null
           }
         },
         {
@@ -1326,7 +1268,7 @@
             "end_column": 51
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/boolean-conversions.algo.ts",
               "line": 23,
@@ -1341,17 +1283,30 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "NumericComparisonExpression",
+            "condition": {
+              "_type": "NumericComparisonExpression",
+              "source_location": {
+                "file": "tests/approvals/boolean-conversions.algo.ts",
+                "line": 23,
+                "end_line": 23,
+                "column": 9,
+                "end_column": 50
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "lhs": {
+                "_type": "Not",
                 "source_location": {
                   "file": "tests/approvals/boolean-conversions.algo.ts",
                   "line": 23,
                   "end_line": 23,
                   "column": 9,
-                  "end_column": 50
+                  "end_column": 27
                 },
                 "wtype": {
                   "_type": "WType",
@@ -1360,7 +1315,7 @@
                   "ephemeral": false,
                   "scalar_type": 2
                 },
-                "lhs": {
+                "expr": {
                   "_type": "Not",
                   "source_location": {
                     "file": "tests/approvals/boolean-conversions.algo.ts",
@@ -1377,7 +1332,7 @@
                     "scalar_type": 2
                   },
                   "expr": {
-                    "_type": "Not",
+                    "_type": "ReinterpretCast",
                     "source_location": {
                       "file": "tests/approvals/boolean-conversions.algo.ts",
                       "line": 23,
@@ -1393,45 +1348,45 @@
                       "scalar_type": 2
                     },
                     "expr": {
-                      "_type": "ReinterpretCast",
+                      "_type": "IntegerConstant",
                       "source_location": {
                         "file": "tests/approvals/boolean-conversions.algo.ts",
                         "line": 23,
                         "end_line": 23,
-                        "column": 9,
-                        "end_column": 27
+                        "column": 24,
+                        "end_column": 25
                       },
                       "wtype": {
                         "_type": "WType",
-                        "name": "bool",
+                        "name": "uint64",
                         "immutable": true,
                         "ephemeral": false,
                         "scalar_type": 2
                       },
-                      "expr": {
-                        "_type": "IntegerConstant",
-                        "source_location": {
-                          "file": "tests/approvals/boolean-conversions.algo.ts",
-                          "line": 23,
-                          "end_line": 23,
-                          "column": 24,
-                          "end_column": 25
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": 2
-                        },
-                        "value": "1",
-                        "teal_alias": null
-                      }
+                      "value": "1",
+                      "teal_alias": null
                     }
                   }
+                }
+              },
+              "operator": "==",
+              "rhs": {
+                "_type": "Not",
+                "source_location": {
+                  "file": "tests/approvals/boolean-conversions.algo.ts",
+                  "line": 23,
+                  "end_line": 23,
+                  "column": 32,
+                  "end_column": 50
                 },
-                "operator": "==",
-                "rhs": {
+                "wtype": {
+                  "_type": "WType",
+                  "name": "bool",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 2
+                },
+                "expr": {
                   "_type": "Not",
                   "source_location": {
                     "file": "tests/approvals/boolean-conversions.algo.ts",
@@ -1448,7 +1403,7 @@
                     "scalar_type": 2
                   },
                   "expr": {
-                    "_type": "Not",
+                    "_type": "ReinterpretCast",
                     "source_location": {
                       "file": "tests/approvals/boolean-conversions.algo.ts",
                       "line": 23,
@@ -1464,46 +1419,29 @@
                       "scalar_type": 2
                     },
                     "expr": {
-                      "_type": "ReinterpretCast",
+                      "_type": "IntegerConstant",
                       "source_location": {
                         "file": "tests/approvals/boolean-conversions.algo.ts",
                         "line": 23,
                         "end_line": 23,
-                        "column": 32,
-                        "end_column": 50
+                        "column": 47,
+                        "end_column": 48
                       },
                       "wtype": {
                         "_type": "WType",
-                        "name": "bool",
+                        "name": "uint64",
                         "immutable": true,
                         "ephemeral": false,
                         "scalar_type": 2
                       },
-                      "expr": {
-                        "_type": "IntegerConstant",
-                        "source_location": {
-                          "file": "tests/approvals/boolean-conversions.algo.ts",
-                          "line": 23,
-                          "end_line": 23,
-                          "column": 47,
-                          "end_column": 48
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": 2
-                        },
-                        "value": "5",
-                        "teal_alias": null
-                      }
+                      "value": "5",
+                      "teal_alias": null
                     }
                   }
                 }
               }
-            ],
-            "comment": null
+            },
+            "error_message": null
           }
         },
         {
@@ -1516,7 +1454,7 @@
             "end_column": 53
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/boolean-conversions.algo.ts",
               "line": 24,
@@ -1531,17 +1469,30 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "NumericComparisonExpression",
+            "condition": {
+              "_type": "NumericComparisonExpression",
+              "source_location": {
+                "file": "tests/approvals/boolean-conversions.algo.ts",
+                "line": 24,
+                "end_line": 24,
+                "column": 9,
+                "end_column": 52
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "lhs": {
+                "_type": "Not",
                 "source_location": {
                   "file": "tests/approvals/boolean-conversions.algo.ts",
                   "line": 24,
                   "end_line": 24,
                   "column": 9,
-                  "end_column": 52
+                  "end_column": 28
                 },
                 "wtype": {
                   "_type": "WType",
@@ -1550,7 +1501,7 @@
                   "ephemeral": false,
                   "scalar_type": 2
                 },
-                "lhs": {
+                "expr": {
                   "_type": "Not",
                   "source_location": {
                     "file": "tests/approvals/boolean-conversions.algo.ts",
@@ -1567,7 +1518,7 @@
                     "scalar_type": 2
                   },
                   "expr": {
-                    "_type": "Not",
+                    "_type": "ReinterpretCast",
                     "source_location": {
                       "file": "tests/approvals/boolean-conversions.algo.ts",
                       "line": 24,
@@ -1583,7 +1534,7 @@
                       "scalar_type": 2
                     },
                     "expr": {
-                      "_type": "ReinterpretCast",
+                      "_type": "IntrinsicCall",
                       "source_location": {
                         "file": "tests/approvals/boolean-conversions.algo.ts",
                         "line": 24,
@@ -1593,57 +1544,56 @@
                       },
                       "wtype": {
                         "_type": "WType",
-                        "name": "bool",
+                        "name": "uint64",
                         "immutable": true,
                         "ephemeral": false,
                         "scalar_type": 2
                       },
-                      "expr": {
-                        "_type": "IntrinsicCall",
-                        "source_location": {
-                          "file": "tests/approvals/boolean-conversions.algo.ts",
-                          "line": 24,
-                          "end_line": 24,
-                          "column": 9,
-                          "end_column": 28
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": 2
-                        },
-                        "op_code": "bitlen",
-                        "immediates": [],
-                        "stack_args": [
-                          {
-                            "_type": "IntegerConstant",
-                            "source_location": {
-                              "file": "tests/approvals/boolean-conversions.algo.ts",
-                              "line": 24,
-                              "end_line": 24,
-                              "column": 25,
-                              "end_column": 26
-                            },
-                            "wtype": {
-                              "_type": "WType",
-                              "name": "biguint",
-                              "immutable": true,
-                              "ephemeral": false,
-                              "scalar_type": 1
-                            },
-                            "value": "1",
-                            "teal_alias": null
-                          }
-                        ],
-                        "comment": null
-                      }
+                      "op_code": "bitlen",
+                      "immediates": [],
+                      "stack_args": [
+                        {
+                          "_type": "IntegerConstant",
+                          "source_location": {
+                            "file": "tests/approvals/boolean-conversions.algo.ts",
+                            "line": 24,
+                            "end_line": 24,
+                            "column": 25,
+                            "end_column": 26
+                          },
+                          "wtype": {
+                            "_type": "WType",
+                            "name": "biguint",
+                            "immutable": true,
+                            "ephemeral": false,
+                            "scalar_type": 1
+                          },
+                          "value": "1",
+                          "teal_alias": null
+                        }
+                      ]
                     }
                   }
+                }
+              },
+              "operator": "==",
+              "rhs": {
+                "_type": "Not",
+                "source_location": {
+                  "file": "tests/approvals/boolean-conversions.algo.ts",
+                  "line": 24,
+                  "end_line": 24,
+                  "column": 33,
+                  "end_column": 52
                 },
-                "operator": "==",
-                "rhs": {
+                "wtype": {
+                  "_type": "WType",
+                  "name": "bool",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 2
+                },
+                "expr": {
                   "_type": "Not",
                   "source_location": {
                     "file": "tests/approvals/boolean-conversions.algo.ts",
@@ -1660,7 +1610,7 @@
                     "scalar_type": 2
                   },
                   "expr": {
-                    "_type": "Not",
+                    "_type": "ReinterpretCast",
                     "source_location": {
                       "file": "tests/approvals/boolean-conversions.algo.ts",
                       "line": 24,
@@ -1676,7 +1626,7 @@
                       "scalar_type": 2
                     },
                     "expr": {
-                      "_type": "ReinterpretCast",
+                      "_type": "IntrinsicCall",
                       "source_location": {
                         "file": "tests/approvals/boolean-conversions.algo.ts",
                         "line": 24,
@@ -1686,58 +1636,40 @@
                       },
                       "wtype": {
                         "_type": "WType",
-                        "name": "bool",
+                        "name": "uint64",
                         "immutable": true,
                         "ephemeral": false,
                         "scalar_type": 2
                       },
-                      "expr": {
-                        "_type": "IntrinsicCall",
-                        "source_location": {
-                          "file": "tests/approvals/boolean-conversions.algo.ts",
-                          "line": 24,
-                          "end_line": 24,
-                          "column": 33,
-                          "end_column": 52
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": 2
-                        },
-                        "op_code": "bitlen",
-                        "immediates": [],
-                        "stack_args": [
-                          {
-                            "_type": "IntegerConstant",
-                            "source_location": {
-                              "file": "tests/approvals/boolean-conversions.algo.ts",
-                              "line": 24,
-                              "end_line": 24,
-                              "column": 49,
-                              "end_column": 50
-                            },
-                            "wtype": {
-                              "_type": "WType",
-                              "name": "biguint",
-                              "immutable": true,
-                              "ephemeral": false,
-                              "scalar_type": 1
-                            },
-                            "value": "5",
-                            "teal_alias": null
-                          }
-                        ],
-                        "comment": null
-                      }
+                      "op_code": "bitlen",
+                      "immediates": [],
+                      "stack_args": [
+                        {
+                          "_type": "IntegerConstant",
+                          "source_location": {
+                            "file": "tests/approvals/boolean-conversions.algo.ts",
+                            "line": 24,
+                            "end_line": 24,
+                            "column": 49,
+                            "end_column": 50
+                          },
+                          "wtype": {
+                            "_type": "WType",
+                            "name": "biguint",
+                            "immutable": true,
+                            "ephemeral": false,
+                            "scalar_type": 1
+                          },
+                          "value": "5",
+                          "teal_alias": null
+                        }
+                      ]
                     }
                   }
                 }
               }
-            ],
-            "comment": null
+            },
+            "error_message": null
           }
         },
         {
@@ -1750,7 +1682,7 @@
             "end_column": 60
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/boolean-conversions.algo.ts",
               "line": 25,
@@ -1765,16 +1697,86 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "NumericComparisonExpression",
+            "condition": {
+              "_type": "NumericComparisonExpression",
+              "source_location": {
+                "file": "tests/approvals/boolean-conversions.algo.ts",
+                "line": 25,
+                "end_line": 25,
+                "column": 9,
+                "end_column": 59
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "lhs": {
+                "_type": "BytesComparisonExpression",
                 "source_location": {
                   "file": "tests/approvals/boolean-conversions.algo.ts",
                   "line": 25,
                   "end_line": 25,
                   "column": 9,
+                  "end_column": 30
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "bool",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 2
+                },
+                "lhs": {
+                  "_type": "BytesConstant",
+                  "source_location": {
+                    "file": "tests/approvals/boolean-conversions.algo.ts",
+                    "line": 25,
+                    "end_line": 25,
+                    "column": 23,
+                    "end_column": 28
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "bytes",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 1
+                  },
+                  "value": "VPaz",
+                  "encoding": "utf8"
+                },
+                "operator": "!=",
+                "rhs": {
+                  "_type": "BytesConstant",
+                  "source_location": {
+                    "file": "tests/approvals/boolean-conversions.algo.ts",
+                    "line": 25,
+                    "end_line": 25,
+                    "column": 9,
+                    "end_column": 30
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "bytes",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 1
+                  },
+                  "value": "",
+                  "encoding": "unknown"
+                }
+              },
+              "operator": "==",
+              "rhs": {
+                "_type": "BytesComparisonExpression",
+                "source_location": {
+                  "file": "tests/approvals/boolean-conversions.algo.ts",
+                  "line": 25,
+                  "end_line": 25,
+                  "column": 35,
                   "end_column": 59
                 },
                 "wtype": {
@@ -1785,64 +1787,27 @@
                   "scalar_type": 2
                 },
                 "lhs": {
-                  "_type": "BytesComparisonExpression",
+                  "_type": "BytesConstant",
                   "source_location": {
                     "file": "tests/approvals/boolean-conversions.algo.ts",
                     "line": 25,
                     "end_line": 25,
-                    "column": 9,
-                    "end_column": 30
+                    "column": 49,
+                    "end_column": 57
                   },
                   "wtype": {
                     "_type": "WType",
-                    "name": "bool",
+                    "name": "bytes",
                     "immutable": true,
                     "ephemeral": false,
-                    "scalar_type": 2
+                    "scalar_type": 1
                   },
-                  "lhs": {
-                    "_type": "BytesConstant",
-                    "source_location": {
-                      "file": "tests/approvals/boolean-conversions.algo.ts",
-                      "line": 25,
-                      "end_line": 25,
-                      "column": 23,
-                      "end_column": 28
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "bytes",
-                      "immutable": true,
-                      "ephemeral": false,
-                      "scalar_type": 1
-                    },
-                    "value": "VPaz",
-                    "encoding": "utf8"
-                  },
-                  "operator": "!=",
-                  "rhs": {
-                    "_type": "BytesConstant",
-                    "source_location": {
-                      "file": "tests/approvals/boolean-conversions.algo.ts",
-                      "line": 25,
-                      "end_line": 25,
-                      "column": 9,
-                      "end_column": 30
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "bytes",
-                      "immutable": true,
-                      "ephemeral": false,
-                      "scalar_type": 1
-                    },
-                    "value": "",
-                    "encoding": "unknown"
-                  }
+                  "value": "VPa!sWo7",
+                  "encoding": "utf8"
                 },
-                "operator": "==",
+                "operator": "!=",
                 "rhs": {
-                  "_type": "BytesComparisonExpression",
+                  "_type": "BytesConstant",
                   "source_location": {
                     "file": "tests/approvals/boolean-conversions.algo.ts",
                     "line": 25,
@@ -1852,54 +1817,17 @@
                   },
                   "wtype": {
                     "_type": "WType",
-                    "name": "bool",
+                    "name": "bytes",
                     "immutable": true,
                     "ephemeral": false,
-                    "scalar_type": 2
+                    "scalar_type": 1
                   },
-                  "lhs": {
-                    "_type": "BytesConstant",
-                    "source_location": {
-                      "file": "tests/approvals/boolean-conversions.algo.ts",
-                      "line": 25,
-                      "end_line": 25,
-                      "column": 49,
-                      "end_column": 57
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "bytes",
-                      "immutable": true,
-                      "ephemeral": false,
-                      "scalar_type": 1
-                    },
-                    "value": "VPa!sWo7",
-                    "encoding": "utf8"
-                  },
-                  "operator": "!=",
-                  "rhs": {
-                    "_type": "BytesConstant",
-                    "source_location": {
-                      "file": "tests/approvals/boolean-conversions.algo.ts",
-                      "line": 25,
-                      "end_line": 25,
-                      "column": 35,
-                      "end_column": 59
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "bytes",
-                      "immutable": true,
-                      "ephemeral": false,
-                      "scalar_type": 1
-                    },
-                    "value": "",
-                    "encoding": "unknown"
-                  }
+                  "value": "",
+                  "encoding": "unknown"
                 }
               }
-            ],
-            "comment": null
+            },
+            "error_message": null
           }
         },
         {
@@ -1912,7 +1840,7 @@
             "end_column": 46
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/boolean-conversions.algo.ts",
               "line": 27,
@@ -1927,16 +1855,86 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "NumericComparisonExpression",
+            "condition": {
+              "_type": "NumericComparisonExpression",
+              "source_location": {
+                "file": "tests/approvals/boolean-conversions.algo.ts",
+                "line": 27,
+                "end_line": 27,
+                "column": 9,
+                "end_column": 45
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "lhs": {
+                "_type": "BytesComparisonExpression",
                 "source_location": {
                   "file": "tests/approvals/boolean-conversions.algo.ts",
                   "line": 27,
                   "end_line": 27,
                   "column": 9,
+                  "end_column": 23
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "bool",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 2
+                },
+                "lhs": {
+                  "_type": "BytesConstant",
+                  "source_location": {
+                    "file": "tests/approvals/boolean-conversions.algo.ts",
+                    "line": 27,
+                    "end_line": 27,
+                    "column": 17,
+                    "end_column": 22
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "bytes",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 1
+                  },
+                  "value": "VPaz",
+                  "encoding": "utf8"
+                },
+                "operator": "!=",
+                "rhs": {
+                  "_type": "BytesConstant",
+                  "source_location": {
+                    "file": "tests/approvals/boolean-conversions.algo.ts",
+                    "line": 27,
+                    "end_line": 27,
+                    "column": 9,
+                    "end_column": 23
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "bytes",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 1
+                  },
+                  "value": "",
+                  "encoding": "unknown"
+                }
+              },
+              "operator": "==",
+              "rhs": {
+                "_type": "BytesComparisonExpression",
+                "source_location": {
+                  "file": "tests/approvals/boolean-conversions.algo.ts",
+                  "line": 27,
+                  "end_line": 27,
+                  "column": 28,
                   "end_column": 45
                 },
                 "wtype": {
@@ -1947,64 +1945,27 @@
                   "scalar_type": 2
                 },
                 "lhs": {
-                  "_type": "BytesComparisonExpression",
+                  "_type": "BytesConstant",
                   "source_location": {
                     "file": "tests/approvals/boolean-conversions.algo.ts",
                     "line": 27,
                     "end_line": 27,
-                    "column": 9,
-                    "end_column": 23
+                    "column": 36,
+                    "end_column": 44
                   },
                   "wtype": {
                     "_type": "WType",
-                    "name": "bool",
+                    "name": "bytes",
                     "immutable": true,
                     "ephemeral": false,
-                    "scalar_type": 2
+                    "scalar_type": 1
                   },
-                  "lhs": {
-                    "_type": "BytesConstant",
-                    "source_location": {
-                      "file": "tests/approvals/boolean-conversions.algo.ts",
-                      "line": 27,
-                      "end_line": 27,
-                      "column": 17,
-                      "end_column": 22
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "bytes",
-                      "immutable": true,
-                      "ephemeral": false,
-                      "scalar_type": 1
-                    },
-                    "value": "VPaz",
-                    "encoding": "utf8"
-                  },
-                  "operator": "!=",
-                  "rhs": {
-                    "_type": "BytesConstant",
-                    "source_location": {
-                      "file": "tests/approvals/boolean-conversions.algo.ts",
-                      "line": 27,
-                      "end_line": 27,
-                      "column": 9,
-                      "end_column": 23
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "bytes",
-                      "immutable": true,
-                      "ephemeral": false,
-                      "scalar_type": 1
-                    },
-                    "value": "",
-                    "encoding": "unknown"
-                  }
+                  "value": "VPa!sWo7",
+                  "encoding": "utf8"
                 },
-                "operator": "==",
+                "operator": "!=",
                 "rhs": {
-                  "_type": "BytesComparisonExpression",
+                  "_type": "BytesConstant",
                   "source_location": {
                     "file": "tests/approvals/boolean-conversions.algo.ts",
                     "line": 27,
@@ -2014,54 +1975,17 @@
                   },
                   "wtype": {
                     "_type": "WType",
-                    "name": "bool",
+                    "name": "bytes",
                     "immutable": true,
                     "ephemeral": false,
-                    "scalar_type": 2
+                    "scalar_type": 1
                   },
-                  "lhs": {
-                    "_type": "BytesConstant",
-                    "source_location": {
-                      "file": "tests/approvals/boolean-conversions.algo.ts",
-                      "line": 27,
-                      "end_line": 27,
-                      "column": 36,
-                      "end_column": 44
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "bytes",
-                      "immutable": true,
-                      "ephemeral": false,
-                      "scalar_type": 1
-                    },
-                    "value": "VPa!sWo7",
-                    "encoding": "utf8"
-                  },
-                  "operator": "!=",
-                  "rhs": {
-                    "_type": "BytesConstant",
-                    "source_location": {
-                      "file": "tests/approvals/boolean-conversions.algo.ts",
-                      "line": 27,
-                      "end_line": 27,
-                      "column": 28,
-                      "end_column": 45
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "bytes",
-                      "immutable": true,
-                      "ephemeral": false,
-                      "scalar_type": 1
-                    },
-                    "value": "",
-                    "encoding": "unknown"
-                  }
+                  "value": "",
+                  "encoding": "unknown"
                 }
               }
-            ],
-            "comment": null
+            },
+            "error_message": null
           }
         },
         {
@@ -2120,7 +2044,7 @@
             "end_column": 21
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/boolean-conversions.algo.ts",
               "line": 30,
@@ -2135,16 +2059,29 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "Not",
+            "condition": {
+              "_type": "Not",
+              "source_location": {
+                "file": "tests/approvals/boolean-conversions.algo.ts",
+                "line": 30,
+                "end_line": 30,
+                "column": 9,
+                "end_column": 20
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "expr": {
+                "_type": "VarExpression",
                 "source_location": {
                   "file": "tests/approvals/boolean-conversions.algo.ts",
                   "line": 30,
                   "end_line": 30,
-                  "column": 9,
+                  "column": 10,
                   "end_column": 20
                 },
                 "wtype": {
@@ -2154,27 +2091,10 @@
                   "ephemeral": false,
                   "scalar_type": 2
                 },
-                "expr": {
-                  "_type": "VarExpression",
-                  "source_location": {
-                    "file": "tests/approvals/boolean-conversions.algo.ts",
-                    "line": 30,
-                    "end_line": 30,
-                    "column": 10,
-                    "end_column": 20
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "bool",
-                    "immutable": true,
-                    "ephemeral": false,
-                    "scalar_type": 2
-                  },
-                  "name": "boolNoArgs"
-                }
+                "name": "boolNoArgs"
               }
-            ],
-            "comment": null
+            },
+            "error_message": null
           }
         }
       ],

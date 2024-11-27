@@ -168,7 +168,7 @@
             "end_column": 21
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/arc4-types.algo.ts",
               "line": 20,
@@ -183,11 +183,24 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "BytesComparisonExpression",
+            "condition": {
+              "_type": "BytesComparisonExpression",
+              "source_location": {
+                "file": "tests/approvals/arc4-types.algo.ts",
+                "line": 20,
+                "end_line": 20,
+                "column": 9,
+                "end_column": 20
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "lhs": {
+                "_type": "ReinterpretCast",
                 "source_location": {
                   "file": "tests/approvals/arc4-types.algo.ts",
                   "line": 20,
@@ -197,105 +210,88 @@
                 },
                 "wtype": {
                   "_type": "WType",
-                  "name": "bool",
+                  "name": "bytes",
                   "immutable": true,
                   "ephemeral": false,
-                  "scalar_type": 2
+                  "scalar_type": 1
                 },
-                "lhs": {
-                  "_type": "ReinterpretCast",
+                "expr": {
+                  "_type": "VarExpression",
                   "source_location": {
                     "file": "tests/approvals/arc4-types.algo.ts",
                     "line": 20,
                     "end_line": 20,
                     "column": 9,
-                    "end_column": 20
+                    "end_column": 10
                   },
                   "wtype": {
-                    "_type": "WType",
-                    "name": "bytes",
+                    "_type": "ARC4UFixedNxM",
+                    "name": "arc4.ufixed32x4",
                     "immutable": true,
                     "ephemeral": false,
-                    "scalar_type": 1
-                  },
-                  "expr": {
-                    "_type": "VarExpression",
-                    "source_location": {
-                      "file": "tests/approvals/arc4-types.algo.ts",
-                      "line": 20,
-                      "end_line": 20,
-                      "column": 9,
-                      "end_column": 10
-                    },
-                    "wtype": {
-                      "_type": "ARC4UFixedNxM",
-                      "name": "arc4.ufixed32x4",
+                    "scalar_type": 1,
+                    "native_type": {
+                      "_type": "WType",
+                      "name": "uint64",
                       "immutable": true,
                       "ephemeral": false,
-                      "scalar_type": 1,
-                      "native_type": {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 2
-                      },
-                      "arc4_name": "ufixed32x4",
-                      "n": "32",
-                      "m": "4"
+                      "scalar_type": 2
                     },
-                    "name": "a"
-                  }
+                    "arc4_name": "ufixed32x4",
+                    "n": "32",
+                    "m": "4"
+                  },
+                  "name": "a"
+                }
+              },
+              "operator": "==",
+              "rhs": {
+                "_type": "ReinterpretCast",
+                "source_location": {
+                  "file": "tests/approvals/arc4-types.algo.ts",
+                  "line": 20,
+                  "end_line": 20,
+                  "column": 9,
+                  "end_column": 20
                 },
-                "operator": "==",
-                "rhs": {
-                  "_type": "ReinterpretCast",
+                "wtype": {
+                  "_type": "WType",
+                  "name": "bytes",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 1
+                },
+                "expr": {
+                  "_type": "VarExpression",
                   "source_location": {
                     "file": "tests/approvals/arc4-types.algo.ts",
                     "line": 20,
                     "end_line": 20,
-                    "column": 9,
-                    "end_column": 20
+                    "column": 18,
+                    "end_column": 19
                   },
                   "wtype": {
-                    "_type": "WType",
-                    "name": "bytes",
+                    "_type": "ARC4UFixedNxM",
+                    "name": "arc4.ufixed32x4",
                     "immutable": true,
                     "ephemeral": false,
-                    "scalar_type": 1
-                  },
-                  "expr": {
-                    "_type": "VarExpression",
-                    "source_location": {
-                      "file": "tests/approvals/arc4-types.algo.ts",
-                      "line": 20,
-                      "end_line": 20,
-                      "column": 18,
-                      "end_column": 19
-                    },
-                    "wtype": {
-                      "_type": "ARC4UFixedNxM",
-                      "name": "arc4.ufixed32x4",
+                    "scalar_type": 1,
+                    "native_type": {
+                      "_type": "WType",
+                      "name": "uint64",
                       "immutable": true,
                       "ephemeral": false,
-                      "scalar_type": 1,
-                      "native_type": {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 2
-                      },
-                      "arc4_name": "ufixed32x4",
-                      "n": "32",
-                      "m": "4"
+                      "scalar_type": 2
                     },
-                    "name": "c"
-                  }
+                    "arc4_name": "ufixed32x4",
+                    "n": "32",
+                    "m": "4"
+                  },
+                  "name": "c"
                 }
               }
-            ],
-            "comment": null
+            },
+            "error_message": null
           }
         }
       ],
@@ -477,7 +473,7 @@
             "end_column": 30
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/arc4-types.algo.ts",
               "line": 25,
@@ -492,114 +488,109 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "NumericComparisonExpression",
+            "condition": {
+              "_type": "NumericComparisonExpression",
+              "source_location": {
+                "file": "tests/approvals/arc4-types.algo.ts",
+                "line": 25,
+                "end_line": 25,
+                "column": 9,
+                "end_column": 29
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "lhs": {
+                "_type": "IntrinsicCall",
                 "source_location": {
                   "file": "tests/approvals/arc4-types.algo.ts",
                   "line": 25,
                   "end_line": 25,
                   "column": 9,
-                  "end_column": 29
+                  "end_column": 23
                 },
                 "wtype": {
                   "_type": "WType",
-                  "name": "bool",
+                  "name": "uint64",
                   "immutable": true,
                   "ephemeral": false,
                   "scalar_type": 2
                 },
-                "lhs": {
-                  "_type": "IntrinsicCall",
-                  "source_location": {
-                    "file": "tests/approvals/arc4-types.algo.ts",
-                    "line": 25,
-                    "end_line": 25,
-                    "column": 9,
-                    "end_column": 23
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "uint64",
-                    "immutable": true,
-                    "ephemeral": false,
-                    "scalar_type": 2
-                  },
-                  "op_code": "len",
-                  "immediates": [],
-                  "stack_args": [
-                    {
-                      "_type": "ReinterpretCast",
+                "op_code": "len",
+                "immediates": [],
+                "stack_args": [
+                  {
+                    "_type": "ReinterpretCast",
+                    "source_location": {
+                      "file": "tests/approvals/arc4-types.algo.ts",
+                      "line": 25,
+                      "end_line": 25,
+                      "column": 9,
+                      "end_column": 16
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "bytes",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 1
+                    },
+                    "expr": {
+                      "_type": "VarExpression",
                       "source_location": {
                         "file": "tests/approvals/arc4-types.algo.ts",
                         "line": 25,
                         "end_line": 25,
                         "column": 9,
-                        "end_column": 16
+                        "end_column": 10
                       },
                       "wtype": {
-                        "_type": "WType",
-                        "name": "bytes",
+                        "_type": "ARC4UIntN",
+                        "name": "arc4.uint8",
                         "immutable": true,
                         "ephemeral": false,
-                        "scalar_type": 1
-                      },
-                      "expr": {
-                        "_type": "VarExpression",
-                        "source_location": {
-                          "file": "tests/approvals/arc4-types.algo.ts",
-                          "line": 25,
-                          "end_line": 25,
-                          "column": 9,
-                          "end_column": 10
-                        },
-                        "wtype": {
-                          "_type": "ARC4UIntN",
-                          "name": "arc4.uint8",
+                        "scalar_type": 1,
+                        "native_type": {
+                          "_type": "WType",
+                          "name": "uint64",
                           "immutable": true,
                           "ephemeral": false,
-                          "scalar_type": 1,
-                          "native_type": {
-                            "_type": "WType",
-                            "name": "uint64",
-                            "immutable": true,
-                            "ephemeral": false,
-                            "scalar_type": 2
-                          },
-                          "arc4_name": "uint8",
-                          "n": "8"
+                          "scalar_type": 2
                         },
-                        "name": "x"
-                      }
+                        "arc4_name": "uint8",
+                        "n": "8"
+                      },
+                      "name": "x"
                     }
-                  ],
-                  "comment": null
+                  }
+                ]
+              },
+              "operator": "==",
+              "rhs": {
+                "_type": "IntegerConstant",
+                "source_location": {
+                  "file": "tests/approvals/arc4-types.algo.ts",
+                  "line": 25,
+                  "end_line": 25,
+                  "column": 28,
+                  "end_column": 29
                 },
-                "operator": "==",
-                "rhs": {
-                  "_type": "IntegerConstant",
-                  "source_location": {
-                    "file": "tests/approvals/arc4-types.algo.ts",
-                    "line": 25,
-                    "end_line": 25,
-                    "column": 28,
-                    "end_column": 29
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "uint64",
-                    "immutable": true,
-                    "ephemeral": false,
-                    "scalar_type": 2
-                  },
-                  "value": "1",
-                  "teal_alias": null
-                }
+                "wtype": {
+                  "_type": "WType",
+                  "name": "uint64",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 2
+                },
+                "value": "1",
+                "teal_alias": null
               }
-            ],
-            "comment": null
+            },
+            "error_message": null
           }
         },
         {
@@ -677,7 +668,7 @@
             "end_column": 42
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/arc4-types.algo.ts",
               "line": 27,
@@ -692,92 +683,88 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "BytesComparisonExpression",
+            "condition": {
+              "_type": "BytesComparisonExpression",
+              "source_location": {
+                "file": "tests/approvals/arc4-types.algo.ts",
+                "line": 27,
+                "end_line": 27,
+                "column": 9,
+                "end_column": 41
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "lhs": {
+                "_type": "ReinterpretCast",
                 "source_location": {
                   "file": "tests/approvals/arc4-types.algo.ts",
                   "line": 27,
                   "end_line": 27,
                   "column": 9,
-                  "end_column": 41
+                  "end_column": 17
                 },
                 "wtype": {
                   "_type": "WType",
-                  "name": "bool",
+                  "name": "bytes",
                   "immutable": true,
                   "ephemeral": false,
-                  "scalar_type": 2
+                  "scalar_type": 1
                 },
-                "lhs": {
-                  "_type": "ReinterpretCast",
+                "expr": {
+                  "_type": "VarExpression",
                   "source_location": {
                     "file": "tests/approvals/arc4-types.algo.ts",
                     "line": 27,
                     "end_line": 27,
                     "column": 9,
-                    "end_column": 17
+                    "end_column": 11
                   },
                   "wtype": {
-                    "_type": "WType",
-                    "name": "bytes",
+                    "_type": "ARC4UIntN",
+                    "name": "arc4.uint8",
                     "immutable": true,
                     "ephemeral": false,
-                    "scalar_type": 1
-                  },
-                  "expr": {
-                    "_type": "VarExpression",
-                    "source_location": {
-                      "file": "tests/approvals/arc4-types.algo.ts",
-                      "line": 27,
-                      "end_line": 27,
-                      "column": 9,
-                      "end_column": 11
-                    },
-                    "wtype": {
-                      "_type": "ARC4UIntN",
-                      "name": "arc4.uint8",
+                    "scalar_type": 1,
+                    "native_type": {
+                      "_type": "WType",
+                      "name": "uint64",
                       "immutable": true,
                       "ephemeral": false,
-                      "scalar_type": 1,
-                      "native_type": {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 2
-                      },
-                      "arc4_name": "uint8",
-                      "n": "8"
+                      "scalar_type": 2
                     },
-                    "name": "x2"
-                  }
-                },
-                "operator": "==",
-                "rhs": {
-                  "_type": "BytesConstant",
-                  "source_location": {
-                    "file": "tests/approvals/arc4-types.algo.ts",
-                    "line": 27,
-                    "end_line": 27,
-                    "column": 22,
-                    "end_column": 41
+                    "arc4_name": "uint8",
+                    "n": "8"
                   },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "bytes",
-                    "immutable": true,
-                    "ephemeral": false,
-                    "scalar_type": 1
-                  },
-                  "value": "{{",
-                  "encoding": "base16"
+                  "name": "x2"
                 }
+              },
+              "operator": "==",
+              "rhs": {
+                "_type": "BytesConstant",
+                "source_location": {
+                  "file": "tests/approvals/arc4-types.algo.ts",
+                  "line": 27,
+                  "end_line": 27,
+                  "column": 22,
+                  "end_column": 41
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "bytes",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 1
+                },
+                "value": "{{",
+                "encoding": "base16"
               }
-            ],
-            "comment": null
+            },
+            "error_message": null
           }
         },
         {
@@ -855,7 +842,7 @@
             "end_column": 30
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/arc4-types.algo.ts",
               "line": 30,
@@ -870,114 +857,109 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "NumericComparisonExpression",
+            "condition": {
+              "_type": "NumericComparisonExpression",
+              "source_location": {
+                "file": "tests/approvals/arc4-types.algo.ts",
+                "line": 30,
+                "end_line": 30,
+                "column": 9,
+                "end_column": 29
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "lhs": {
+                "_type": "IntrinsicCall",
                 "source_location": {
                   "file": "tests/approvals/arc4-types.algo.ts",
                   "line": 30,
                   "end_line": 30,
                   "column": 9,
-                  "end_column": 29
+                  "end_column": 23
                 },
                 "wtype": {
                   "_type": "WType",
-                  "name": "bool",
+                  "name": "uint64",
                   "immutable": true,
                   "ephemeral": false,
                   "scalar_type": 2
                 },
-                "lhs": {
-                  "_type": "IntrinsicCall",
-                  "source_location": {
-                    "file": "tests/approvals/arc4-types.algo.ts",
-                    "line": 30,
-                    "end_line": 30,
-                    "column": 9,
-                    "end_column": 23
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "uint64",
-                    "immutable": true,
-                    "ephemeral": false,
-                    "scalar_type": 2
-                  },
-                  "op_code": "len",
-                  "immediates": [],
-                  "stack_args": [
-                    {
-                      "_type": "ReinterpretCast",
+                "op_code": "len",
+                "immediates": [],
+                "stack_args": [
+                  {
+                    "_type": "ReinterpretCast",
+                    "source_location": {
+                      "file": "tests/approvals/arc4-types.algo.ts",
+                      "line": 30,
+                      "end_line": 30,
+                      "column": 9,
+                      "end_column": 16
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "bytes",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 1
+                    },
+                    "expr": {
+                      "_type": "VarExpression",
                       "source_location": {
                         "file": "tests/approvals/arc4-types.algo.ts",
                         "line": 30,
                         "end_line": 30,
                         "column": 9,
-                        "end_column": 16
+                        "end_column": 10
                       },
                       "wtype": {
-                        "_type": "WType",
-                        "name": "bytes",
+                        "_type": "ARC4UIntN",
+                        "name": "arc4.uint16",
                         "immutable": true,
                         "ephemeral": false,
-                        "scalar_type": 1
-                      },
-                      "expr": {
-                        "_type": "VarExpression",
-                        "source_location": {
-                          "file": "tests/approvals/arc4-types.algo.ts",
-                          "line": 30,
-                          "end_line": 30,
-                          "column": 9,
-                          "end_column": 10
-                        },
-                        "wtype": {
-                          "_type": "ARC4UIntN",
-                          "name": "arc4.uint16",
+                        "scalar_type": 1,
+                        "native_type": {
+                          "_type": "WType",
+                          "name": "uint64",
                           "immutable": true,
                           "ephemeral": false,
-                          "scalar_type": 1,
-                          "native_type": {
-                            "_type": "WType",
-                            "name": "uint64",
-                            "immutable": true,
-                            "ephemeral": false,
-                            "scalar_type": 2
-                          },
-                          "arc4_name": "uint16",
-                          "n": "16"
+                          "scalar_type": 2
                         },
-                        "name": "y"
-                      }
+                        "arc4_name": "uint16",
+                        "n": "16"
+                      },
+                      "name": "y"
                     }
-                  ],
-                  "comment": null
+                  }
+                ]
+              },
+              "operator": "==",
+              "rhs": {
+                "_type": "IntegerConstant",
+                "source_location": {
+                  "file": "tests/approvals/arc4-types.algo.ts",
+                  "line": 30,
+                  "end_line": 30,
+                  "column": 28,
+                  "end_column": 29
                 },
-                "operator": "==",
-                "rhs": {
-                  "_type": "IntegerConstant",
-                  "source_location": {
-                    "file": "tests/approvals/arc4-types.algo.ts",
-                    "line": 30,
-                    "end_line": 30,
-                    "column": 28,
-                    "end_column": 29
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "uint64",
-                    "immutable": true,
-                    "ephemeral": false,
-                    "scalar_type": 2
-                  },
-                  "value": "2",
-                  "teal_alias": null
-                }
+                "wtype": {
+                  "_type": "WType",
+                  "name": "uint64",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 2
+                },
+                "value": "2",
+                "teal_alias": null
               }
-            ],
-            "comment": null
+            },
+            "error_message": null
           }
         },
         {
@@ -1143,7 +1125,7 @@
             "end_column": 24
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/arc4-types.algo.ts",
               "line": 33,
@@ -1158,65 +1140,61 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "NumericComparisonExpression",
+            "condition": {
+              "_type": "NumericComparisonExpression",
+              "source_location": {
+                "file": "tests/approvals/arc4-types.algo.ts",
+                "line": 33,
+                "end_line": 33,
+                "column": 9,
+                "end_column": 23
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "lhs": {
+                "_type": "VarExpression",
                 "source_location": {
                   "file": "tests/approvals/arc4-types.algo.ts",
                   "line": 33,
                   "end_line": 33,
                   "column": 9,
-                  "end_column": 23
+                  "end_column": 17
                 },
                 "wtype": {
                   "_type": "WType",
-                  "name": "bool",
+                  "name": "uint64",
                   "immutable": true,
                   "ephemeral": false,
                   "scalar_type": 2
                 },
-                "lhs": {
-                  "_type": "VarExpression",
-                  "source_location": {
-                    "file": "tests/approvals/arc4-types.algo.ts",
-                    "line": 33,
-                    "end_line": 33,
-                    "column": 9,
-                    "end_column": 17
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "uint64",
-                    "immutable": true,
-                    "ephemeral": false,
-                    "scalar_type": 2
-                  },
-                  "name": "z_native"
+                "name": "z_native"
+              },
+              "operator": "==",
+              "rhs": {
+                "_type": "VarExpression",
+                "source_location": {
+                  "file": "tests/approvals/arc4-types.algo.ts",
+                  "line": 33,
+                  "end_line": 33,
+                  "column": 22,
+                  "end_column": 23
                 },
-                "operator": "==",
-                "rhs": {
-                  "_type": "VarExpression",
-                  "source_location": {
-                    "file": "tests/approvals/arc4-types.algo.ts",
-                    "line": 33,
-                    "end_line": 33,
-                    "column": 22,
-                    "end_column": 23
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "uint64",
-                    "immutable": true,
-                    "ephemeral": false,
-                    "scalar_type": 2
-                  },
-                  "name": "n"
-                }
+                "wtype": {
+                  "_type": "WType",
+                  "name": "uint64",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 2
+                },
+                "name": "n"
               }
-            ],
-            "comment": null
+            },
+            "error_message": null
           }
         },
         {
@@ -1382,7 +1360,7 @@
             "end_column": 24
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/arc4-types.algo.ts",
               "line": 36,
@@ -1397,65 +1375,61 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "NumericComparisonExpression",
+            "condition": {
+              "_type": "NumericComparisonExpression",
+              "source_location": {
+                "file": "tests/approvals/arc4-types.algo.ts",
+                "line": 36,
+                "end_line": 36,
+                "column": 9,
+                "end_column": 23
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "lhs": {
+                "_type": "VarExpression",
                 "source_location": {
                   "file": "tests/approvals/arc4-types.algo.ts",
                   "line": 36,
                   "end_line": 36,
                   "column": 9,
+                  "end_column": 17
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "biguint",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 1
+                },
+                "name": "a_native"
+              },
+              "operator": "==",
+              "rhs": {
+                "_type": "VarExpression",
+                "source_location": {
+                  "file": "tests/approvals/arc4-types.algo.ts",
+                  "line": 36,
+                  "end_line": 36,
+                  "column": 22,
                   "end_column": 23
                 },
                 "wtype": {
                   "_type": "WType",
-                  "name": "bool",
+                  "name": "biguint",
                   "immutable": true,
                   "ephemeral": false,
-                  "scalar_type": 2
+                  "scalar_type": 1
                 },
-                "lhs": {
-                  "_type": "VarExpression",
-                  "source_location": {
-                    "file": "tests/approvals/arc4-types.algo.ts",
-                    "line": 36,
-                    "end_line": 36,
-                    "column": 9,
-                    "end_column": 17
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "biguint",
-                    "immutable": true,
-                    "ephemeral": false,
-                    "scalar_type": 1
-                  },
-                  "name": "a_native"
-                },
-                "operator": "==",
-                "rhs": {
-                  "_type": "VarExpression",
-                  "source_location": {
-                    "file": "tests/approvals/arc4-types.algo.ts",
-                    "line": 36,
-                    "end_line": 36,
-                    "column": 22,
-                    "end_column": 23
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "biguint",
-                    "immutable": true,
-                    "ephemeral": false,
-                    "scalar_type": 1
-                  },
-                  "name": "b"
-                }
+                "name": "b"
               }
-            ],
-            "comment": null
+            },
+            "error_message": null
           }
         },
         {
@@ -1468,7 +1442,7 @@
             "end_column": 36
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/arc4-types.algo.ts",
               "line": 38,
@@ -1483,114 +1457,109 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "NumericComparisonExpression",
+            "condition": {
+              "_type": "NumericComparisonExpression",
+              "source_location": {
+                "file": "tests/approvals/arc4-types.algo.ts",
+                "line": 38,
+                "end_line": 38,
+                "column": 9,
+                "end_column": 35
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "lhs": {
+                "_type": "IntrinsicCall",
                 "source_location": {
                   "file": "tests/approvals/arc4-types.algo.ts",
                   "line": 38,
                   "end_line": 38,
                   "column": 9,
-                  "end_column": 35
+                  "end_column": 23
                 },
                 "wtype": {
                   "_type": "WType",
-                  "name": "bool",
+                  "name": "uint64",
                   "immutable": true,
                   "ephemeral": false,
                   "scalar_type": 2
                 },
-                "lhs": {
-                  "_type": "IntrinsicCall",
-                  "source_location": {
-                    "file": "tests/approvals/arc4-types.algo.ts",
-                    "line": 38,
-                    "end_line": 38,
-                    "column": 9,
-                    "end_column": 23
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "uint64",
-                    "immutable": true,
-                    "ephemeral": false,
-                    "scalar_type": 2
-                  },
-                  "op_code": "len",
-                  "immediates": [],
-                  "stack_args": [
-                    {
-                      "_type": "ReinterpretCast",
+                "op_code": "len",
+                "immediates": [],
+                "stack_args": [
+                  {
+                    "_type": "ReinterpretCast",
+                    "source_location": {
+                      "file": "tests/approvals/arc4-types.algo.ts",
+                      "line": 38,
+                      "end_line": 38,
+                      "column": 9,
+                      "end_column": 16
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "bytes",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 1
+                    },
+                    "expr": {
+                      "_type": "VarExpression",
                       "source_location": {
                         "file": "tests/approvals/arc4-types.algo.ts",
                         "line": 38,
                         "end_line": 38,
                         "column": 9,
-                        "end_column": 16
+                        "end_column": 10
                       },
                       "wtype": {
-                        "_type": "WType",
-                        "name": "bytes",
+                        "_type": "ARC4UIntN",
+                        "name": "arc4.uint256",
                         "immutable": true,
                         "ephemeral": false,
-                        "scalar_type": 1
-                      },
-                      "expr": {
-                        "_type": "VarExpression",
-                        "source_location": {
-                          "file": "tests/approvals/arc4-types.algo.ts",
-                          "line": 38,
-                          "end_line": 38,
-                          "column": 9,
-                          "end_column": 10
-                        },
-                        "wtype": {
-                          "_type": "ARC4UIntN",
-                          "name": "arc4.uint256",
+                        "scalar_type": 1,
+                        "native_type": {
+                          "_type": "WType",
+                          "name": "biguint",
                           "immutable": true,
                           "ephemeral": false,
-                          "scalar_type": 1,
-                          "native_type": {
-                            "_type": "WType",
-                            "name": "biguint",
-                            "immutable": true,
-                            "ephemeral": false,
-                            "scalar_type": 1
-                          },
-                          "arc4_name": "uint256",
-                          "n": "256"
+                          "scalar_type": 1
                         },
-                        "name": "c"
-                      }
+                        "arc4_name": "uint256",
+                        "n": "256"
+                      },
+                      "name": "c"
                     }
-                  ],
-                  "comment": null
+                  }
+                ]
+              },
+              "operator": "==",
+              "rhs": {
+                "_type": "IntegerConstant",
+                "source_location": {
+                  "file": "tests/approvals/arc4-types.algo.ts",
+                  "line": 38,
+                  "end_line": 38,
+                  "column": 28,
+                  "end_column": 35
                 },
-                "operator": "==",
-                "rhs": {
-                  "_type": "IntegerConstant",
-                  "source_location": {
-                    "file": "tests/approvals/arc4-types.algo.ts",
-                    "line": 38,
-                    "end_line": 38,
-                    "column": 28,
-                    "end_column": 35
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "uint64",
-                    "immutable": true,
-                    "ephemeral": false,
-                    "scalar_type": 2
-                  },
-                  "value": "32",
-                  "teal_alias": null
-                }
+                "wtype": {
+                  "_type": "WType",
+                  "name": "uint64",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 2
+                },
+                "value": "32",
+                "teal_alias": null
               }
-            ],
-            "comment": null
+            },
+            "error_message": null
           }
         }
       ],
@@ -1739,7 +1708,7 @@
             "end_column": 99
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/arc4-types.algo.ts",
               "line": 43,
@@ -1754,114 +1723,64 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "BytesComparisonExpression",
+            "condition": {
+              "_type": "BytesComparisonExpression",
+              "source_location": {
+                "file": "tests/approvals/arc4-types.algo.ts",
+                "line": 43,
+                "end_line": 43,
+                "column": 9,
+                "end_column": 44
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "lhs": {
+                "_type": "ReinterpretCast",
                 "source_location": {
                   "file": "tests/approvals/arc4-types.algo.ts",
                   "line": 43,
                   "end_line": 43,
                   "column": 9,
-                  "end_column": 44
+                  "end_column": 17
                 },
                 "wtype": {
                   "_type": "WType",
-                  "name": "bool",
+                  "name": "bytes",
                   "immutable": true,
                   "ephemeral": false,
-                  "scalar_type": 2
+                  "scalar_type": 1
                 },
-                "lhs": {
-                  "_type": "ReinterpretCast",
+                "expr": {
+                  "_type": "VarExpression",
                   "source_location": {
                     "file": "tests/approvals/arc4-types.algo.ts",
                     "line": 43,
                     "end_line": 43,
                     "column": 9,
-                    "end_column": 17
+                    "end_column": 11
                   },
                   "wtype": {
-                    "_type": "WType",
-                    "name": "bytes",
+                    "_type": "ARC4DynamicArray",
+                    "name": "arc4.dynamic_array<arc4.byte>",
                     "immutable": true,
                     "ephemeral": false,
-                    "scalar_type": 1
-                  },
-                  "expr": {
-                    "_type": "VarExpression",
-                    "source_location": {
-                      "file": "tests/approvals/arc4-types.algo.ts",
-                      "line": 43,
-                      "end_line": 43,
-                      "column": 9,
-                      "end_column": 11
-                    },
-                    "wtype": {
-                      "_type": "ARC4DynamicArray",
-                      "name": "arc4.dynamic_array<arc4.byte>",
+                    "scalar_type": 1,
+                    "native_type": {
+                      "_type": "WType",
+                      "name": "string",
                       "immutable": true,
                       "ephemeral": false,
-                      "scalar_type": 1,
-                      "native_type": {
-                        "_type": "WType",
-                        "name": "string",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 1
-                      },
-                      "arc4_name": "string",
-                      "element_type": {
-                        "_type": "ARC4UIntN",
-                        "name": "arc4.byte",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 1,
-                        "native_type": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": 2
-                        },
-                        "arc4_name": "byte",
-                        "n": "8"
-                      },
-                      "source_location": null
+                      "scalar_type": 1
                     },
-                    "name": "s1"
-                  }
-                },
-                "operator": "==",
-                "rhs": {
-                  "_type": "ReinterpretCast",
-                  "source_location": {
-                    "file": "tests/approvals/arc4-types.algo.ts",
-                    "line": 43,
-                    "end_line": 43,
-                    "column": 22,
-                    "end_column": 44
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "bytes",
-                    "immutable": true,
-                    "ephemeral": false,
-                    "scalar_type": 1
-                  },
-                  "expr": {
-                    "_type": "IntegerConstant",
-                    "source_location": {
-                      "file": "tests/approvals/arc4-types.algo.ts",
-                      "line": 43,
-                      "end_line": 43,
-                      "column": 22,
-                      "end_column": 38
-                    },
-                    "wtype": {
+                    "arc4_name": "string",
+                    "element_type": {
                       "_type": "ARC4UIntN",
-                      "name": "arc4.uint16",
+                      "name": "arc4.byte",
                       "immutable": true,
                       "ephemeral": false,
                       "scalar_type": 1,
@@ -1872,16 +1791,62 @@
                         "ephemeral": false,
                         "scalar_type": 2
                       },
-                      "arc4_name": "uint16",
-                      "n": "16"
+                      "arc4_name": "byte",
+                      "n": "8"
                     },
-                    "value": "0",
-                    "teal_alias": null
-                  }
+                    "source_location": null
+                  },
+                  "name": "s1"
+                }
+              },
+              "operator": "==",
+              "rhs": {
+                "_type": "ReinterpretCast",
+                "source_location": {
+                  "file": "tests/approvals/arc4-types.algo.ts",
+                  "line": 43,
+                  "end_line": 43,
+                  "column": 22,
+                  "end_column": 44
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "bytes",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 1
+                },
+                "expr": {
+                  "_type": "IntegerConstant",
+                  "source_location": {
+                    "file": "tests/approvals/arc4-types.algo.ts",
+                    "line": 43,
+                    "end_line": 43,
+                    "column": 22,
+                    "end_column": 38
+                  },
+                  "wtype": {
+                    "_type": "ARC4UIntN",
+                    "name": "arc4.uint16",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 1,
+                    "native_type": {
+                      "_type": "WType",
+                      "name": "uint64",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 2
+                    },
+                    "arc4_name": "uint16",
+                    "n": "16"
+                  },
+                  "value": "0",
+                  "teal_alias": null
                 }
               }
-            ],
-            "comment": "Empty string should equal the uint16 length prefix"
+            },
+            "error_message": "Empty string should equal the uint16 length prefix"
           }
         },
         {
@@ -1990,7 +1955,7 @@
             "end_column": 31
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/arc4-types.algo.ts",
               "line": 45,
@@ -2005,107 +1970,103 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "BytesComparisonExpression",
+            "condition": {
+              "_type": "BytesComparisonExpression",
+              "source_location": {
+                "file": "tests/approvals/arc4-types.algo.ts",
+                "line": 45,
+                "end_line": 45,
+                "column": 9,
+                "end_column": 30
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "lhs": {
+                "_type": "ARC4Decode",
                 "source_location": {
                   "file": "tests/approvals/arc4-types.algo.ts",
                   "line": 45,
                   "end_line": 45,
                   "column": 9,
-                  "end_column": 30
+                  "end_column": 18
                 },
                 "wtype": {
                   "_type": "WType",
-                  "name": "bool",
+                  "name": "string",
                   "immutable": true,
                   "ephemeral": false,
-                  "scalar_type": 2
+                  "scalar_type": 1
                 },
-                "lhs": {
-                  "_type": "ARC4Decode",
+                "value": {
+                  "_type": "VarExpression",
                   "source_location": {
                     "file": "tests/approvals/arc4-types.algo.ts",
                     "line": 45,
                     "end_line": 45,
                     "column": 9,
-                    "end_column": 18
+                    "end_column": 11
                   },
                   "wtype": {
-                    "_type": "WType",
-                    "name": "string",
+                    "_type": "ARC4DynamicArray",
+                    "name": "arc4.dynamic_array<arc4.byte>",
                     "immutable": true,
                     "ephemeral": false,
-                    "scalar_type": 1
-                  },
-                  "value": {
-                    "_type": "VarExpression",
-                    "source_location": {
-                      "file": "tests/approvals/arc4-types.algo.ts",
-                      "line": 45,
-                      "end_line": 45,
-                      "column": 9,
-                      "end_column": 11
+                    "scalar_type": 1,
+                    "native_type": {
+                      "_type": "WType",
+                      "name": "string",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 1
                     },
-                    "wtype": {
-                      "_type": "ARC4DynamicArray",
-                      "name": "arc4.dynamic_array<arc4.byte>",
+                    "arc4_name": "string",
+                    "element_type": {
+                      "_type": "ARC4UIntN",
+                      "name": "arc4.byte",
                       "immutable": true,
                       "ephemeral": false,
                       "scalar_type": 1,
                       "native_type": {
                         "_type": "WType",
-                        "name": "string",
+                        "name": "uint64",
                         "immutable": true,
                         "ephemeral": false,
-                        "scalar_type": 1
+                        "scalar_type": 2
                       },
-                      "arc4_name": "string",
-                      "element_type": {
-                        "_type": "ARC4UIntN",
-                        "name": "arc4.byte",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 1,
-                        "native_type": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": 2
-                        },
-                        "arc4_name": "byte",
-                        "n": "8"
-                      },
-                      "source_location": null
+                      "arc4_name": "byte",
+                      "n": "8"
                     },
-                    "name": "s2"
-                  }
-                },
-                "operator": "==",
-                "rhs": {
-                  "_type": "StringConstant",
-                  "source_location": {
-                    "file": "tests/approvals/arc4-types.algo.ts",
-                    "line": 45,
-                    "end_line": 45,
-                    "column": 23,
-                    "end_column": 30
+                    "source_location": null
                   },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "string",
-                    "immutable": true,
-                    "ephemeral": false,
-                    "scalar_type": 1
-                  },
-                  "value": "Hello"
+                  "name": "s2"
                 }
+              },
+              "operator": "==",
+              "rhs": {
+                "_type": "StringConstant",
+                "source_location": {
+                  "file": "tests/approvals/arc4-types.algo.ts",
+                  "line": 45,
+                  "end_line": 45,
+                  "column": 23,
+                  "end_column": 30
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "string",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 1
+                },
+                "value": "Hello"
               }
-            ],
-            "comment": null
+            },
+            "error_message": null
           }
         }
       ],
@@ -2274,7 +2235,7 @@
             "end_column": 67
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/arc4-types.algo.ts",
               "line": 50,
@@ -2289,108 +2250,104 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "BytesComparisonExpression",
+            "condition": {
+              "_type": "BytesComparisonExpression",
+              "source_location": {
+                "file": "tests/approvals/arc4-types.algo.ts",
+                "line": 50,
+                "end_line": 50,
+                "column": 9,
+                "end_column": 31
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "lhs": {
+                "_type": "ARC4Decode",
                 "source_location": {
                   "file": "tests/approvals/arc4-types.algo.ts",
                   "line": 50,
                   "end_line": 50,
                   "column": 9,
-                  "end_column": 31
+                  "end_column": 19
                 },
                 "wtype": {
                   "_type": "WType",
-                  "name": "bool",
+                  "name": "bytes",
                   "immutable": true,
                   "ephemeral": false,
-                  "scalar_type": 2
+                  "scalar_type": 1
                 },
-                "lhs": {
-                  "_type": "ARC4Decode",
+                "value": {
+                  "_type": "VarExpression",
                   "source_location": {
                     "file": "tests/approvals/arc4-types.algo.ts",
                     "line": 50,
                     "end_line": 50,
                     "column": 9,
-                    "end_column": 19
+                    "end_column": 12
                   },
                   "wtype": {
-                    "_type": "WType",
-                    "name": "bytes",
+                    "_type": "ARC4DynamicArray",
+                    "name": "arc4.dynamic_array<arc4.byte>",
                     "immutable": true,
                     "ephemeral": false,
-                    "scalar_type": 1
-                  },
-                  "value": {
-                    "_type": "VarExpression",
-                    "source_location": {
-                      "file": "tests/approvals/arc4-types.algo.ts",
-                      "line": 50,
-                      "end_line": 50,
-                      "column": 9,
-                      "end_column": 12
+                    "scalar_type": 1,
+                    "native_type": {
+                      "_type": "WType",
+                      "name": "bytes",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 1
                     },
-                    "wtype": {
-                      "_type": "ARC4DynamicArray",
-                      "name": "arc4.dynamic_array<arc4.byte>",
+                    "arc4_name": "byte[]",
+                    "element_type": {
+                      "_type": "ARC4UIntN",
+                      "name": "arc4.byte",
                       "immutable": true,
                       "ephemeral": false,
                       "scalar_type": 1,
                       "native_type": {
                         "_type": "WType",
-                        "name": "bytes",
+                        "name": "uint64",
                         "immutable": true,
                         "ephemeral": false,
-                        "scalar_type": 1
+                        "scalar_type": 2
                       },
-                      "arc4_name": "byte[]",
-                      "element_type": {
-                        "_type": "ARC4UIntN",
-                        "name": "arc4.byte",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 1,
-                        "native_type": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": 2
-                        },
-                        "arc4_name": "byte",
-                        "n": "8"
-                      },
-                      "source_location": null
+                      "arc4_name": "byte",
+                      "n": "8"
                     },
-                    "name": "db1"
-                  }
-                },
-                "operator": "==",
-                "rhs": {
-                  "_type": "BytesConstant",
-                  "source_location": {
-                    "file": "tests/approvals/arc4-types.algo.ts",
-                    "line": 50,
-                    "end_line": 50,
-                    "column": 24,
-                    "end_column": 31
+                    "source_location": null
                   },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "bytes",
-                    "immutable": true,
-                    "ephemeral": false,
-                    "scalar_type": 1
-                  },
-                  "value": "",
-                  "encoding": "unknown"
+                  "name": "db1"
                 }
+              },
+              "operator": "==",
+              "rhs": {
+                "_type": "BytesConstant",
+                "source_location": {
+                  "file": "tests/approvals/arc4-types.algo.ts",
+                  "line": 50,
+                  "end_line": 50,
+                  "column": 24,
+                  "end_column": 31
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "bytes",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 1
+                },
+                "value": "",
+                "encoding": "unknown"
               }
-            ],
-            "comment": "No args should give empty bytes"
+            },
+            "error_message": "No args should give empty bytes"
           }
         },
         {
@@ -2403,7 +2360,7 @@
             "end_column": 95
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/arc4-types.algo.ts",
               "line": 51,
@@ -2418,114 +2375,64 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "BytesComparisonExpression",
+            "condition": {
+              "_type": "BytesComparisonExpression",
+              "source_location": {
+                "file": "tests/approvals/arc4-types.algo.ts",
+                "line": 51,
+                "end_line": 51,
+                "column": 9,
+                "end_column": 45
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "lhs": {
+                "_type": "ReinterpretCast",
                 "source_location": {
                   "file": "tests/approvals/arc4-types.algo.ts",
                   "line": 51,
                   "end_line": 51,
                   "column": 9,
-                  "end_column": 45
+                  "end_column": 18
                 },
                 "wtype": {
                   "_type": "WType",
-                  "name": "bool",
+                  "name": "bytes",
                   "immutable": true,
                   "ephemeral": false,
-                  "scalar_type": 2
+                  "scalar_type": 1
                 },
-                "lhs": {
-                  "_type": "ReinterpretCast",
+                "expr": {
+                  "_type": "VarExpression",
                   "source_location": {
                     "file": "tests/approvals/arc4-types.algo.ts",
                     "line": 51,
                     "end_line": 51,
                     "column": 9,
-                    "end_column": 18
+                    "end_column": 12
                   },
                   "wtype": {
-                    "_type": "WType",
-                    "name": "bytes",
+                    "_type": "ARC4DynamicArray",
+                    "name": "arc4.dynamic_array<arc4.byte>",
                     "immutable": true,
                     "ephemeral": false,
-                    "scalar_type": 1
-                  },
-                  "expr": {
-                    "_type": "VarExpression",
-                    "source_location": {
-                      "file": "tests/approvals/arc4-types.algo.ts",
-                      "line": 51,
-                      "end_line": 51,
-                      "column": 9,
-                      "end_column": 12
-                    },
-                    "wtype": {
-                      "_type": "ARC4DynamicArray",
-                      "name": "arc4.dynamic_array<arc4.byte>",
+                    "scalar_type": 1,
+                    "native_type": {
+                      "_type": "WType",
+                      "name": "bytes",
                       "immutable": true,
                       "ephemeral": false,
-                      "scalar_type": 1,
-                      "native_type": {
-                        "_type": "WType",
-                        "name": "bytes",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 1
-                      },
-                      "arc4_name": "byte[]",
-                      "element_type": {
-                        "_type": "ARC4UIntN",
-                        "name": "arc4.byte",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 1,
-                        "native_type": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": 2
-                        },
-                        "arc4_name": "byte",
-                        "n": "8"
-                      },
-                      "source_location": null
+                      "scalar_type": 1
                     },
-                    "name": "db1"
-                  }
-                },
-                "operator": "==",
-                "rhs": {
-                  "_type": "ReinterpretCast",
-                  "source_location": {
-                    "file": "tests/approvals/arc4-types.algo.ts",
-                    "line": 51,
-                    "end_line": 51,
-                    "column": 23,
-                    "end_column": 45
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "bytes",
-                    "immutable": true,
-                    "ephemeral": false,
-                    "scalar_type": 1
-                  },
-                  "expr": {
-                    "_type": "IntegerConstant",
-                    "source_location": {
-                      "file": "tests/approvals/arc4-types.algo.ts",
-                      "line": 51,
-                      "end_line": 51,
-                      "column": 23,
-                      "end_column": 39
-                    },
-                    "wtype": {
+                    "arc4_name": "byte[]",
+                    "element_type": {
                       "_type": "ARC4UIntN",
-                      "name": "arc4.uint16",
+                      "name": "arc4.byte",
                       "immutable": true,
                       "ephemeral": false,
                       "scalar_type": 1,
@@ -2536,16 +2443,62 @@
                         "ephemeral": false,
                         "scalar_type": 2
                       },
-                      "arc4_name": "uint16",
-                      "n": "16"
+                      "arc4_name": "byte",
+                      "n": "8"
                     },
-                    "value": "0",
-                    "teal_alias": null
-                  }
+                    "source_location": null
+                  },
+                  "name": "db1"
+                }
+              },
+              "operator": "==",
+              "rhs": {
+                "_type": "ReinterpretCast",
+                "source_location": {
+                  "file": "tests/approvals/arc4-types.algo.ts",
+                  "line": 51,
+                  "end_line": 51,
+                  "column": 23,
+                  "end_column": 45
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "bytes",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 1
+                },
+                "expr": {
+                  "_type": "IntegerConstant",
+                  "source_location": {
+                    "file": "tests/approvals/arc4-types.algo.ts",
+                    "line": 51,
+                    "end_line": 51,
+                    "column": 23,
+                    "end_column": 39
+                  },
+                  "wtype": {
+                    "_type": "ARC4UIntN",
+                    "name": "arc4.uint16",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 1,
+                    "native_type": {
+                      "_type": "WType",
+                      "name": "uint64",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 2
+                    },
+                    "arc4_name": "uint16",
+                    "n": "16"
+                  },
+                  "value": "0",
+                  "teal_alias": null
                 }
               }
-            ],
-            "comment": "bytes prop should return length header (of 0)"
+            },
+            "error_message": "bytes prop should return length header (of 0)"
           }
         },
         {
@@ -2671,7 +2624,7 @@
             "end_column": 34
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/arc4-types.algo.ts",
               "line": 53,
@@ -2686,107 +2639,103 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "BytesComparisonExpression",
+            "condition": {
+              "_type": "BytesComparisonExpression",
+              "source_location": {
+                "file": "tests/approvals/arc4-types.algo.ts",
+                "line": 53,
+                "end_line": 53,
+                "column": 9,
+                "end_column": 33
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "lhs": {
+                "_type": "ARC4Decode",
                 "source_location": {
                   "file": "tests/approvals/arc4-types.algo.ts",
                   "line": 53,
                   "end_line": 53,
                   "column": 9,
-                  "end_column": 33
+                  "end_column": 19
                 },
                 "wtype": {
                   "_type": "WType",
-                  "name": "bool",
+                  "name": "bytes",
                   "immutable": true,
                   "ephemeral": false,
-                  "scalar_type": 2
+                  "scalar_type": 1
                 },
-                "lhs": {
-                  "_type": "ARC4Decode",
-                  "source_location": {
-                    "file": "tests/approvals/arc4-types.algo.ts",
-                    "line": 53,
-                    "end_line": 53,
-                    "column": 9,
-                    "end_column": 19
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "bytes",
-                    "immutable": true,
-                    "ephemeral": false,
-                    "scalar_type": 1
-                  },
-                  "value": {
-                    "_type": "VarExpression",
-                    "source_location": {
-                      "file": "tests/approvals/arc4-types.algo.ts",
-                      "line": 53,
-                      "end_line": 53,
-                      "column": 9,
-                      "end_column": 12
-                    },
-                    "wtype": {
-                      "_type": "ARC4DynamicArray",
-                      "name": "arc4.dynamic_array<arc4.byte>",
-                      "immutable": true,
-                      "ephemeral": false,
-                      "scalar_type": 1,
-                      "native_type": {
-                        "_type": "WType",
-                        "name": "bytes",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 1
-                      },
-                      "arc4_name": "byte[]",
-                      "element_type": {
-                        "_type": "ARC4UIntN",
-                        "name": "arc4.byte",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 1,
-                        "native_type": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": 2
-                        },
-                        "arc4_name": "byte",
-                        "n": "8"
-                      },
-                      "source_location": null
-                    },
-                    "name": "db2"
-                  }
-                },
-                "operator": "==",
-                "rhs": {
+                "value": {
                   "_type": "VarExpression",
                   "source_location": {
                     "file": "tests/approvals/arc4-types.algo.ts",
                     "line": 53,
                     "end_line": 53,
-                    "column": 24,
-                    "end_column": 33
+                    "column": 9,
+                    "end_column": 12
                   },
                   "wtype": {
-                    "_type": "WType",
-                    "name": "bytes",
+                    "_type": "ARC4DynamicArray",
+                    "name": "arc4.dynamic_array<arc4.byte>",
                     "immutable": true,
                     "ephemeral": false,
-                    "scalar_type": 1
+                    "scalar_type": 1,
+                    "native_type": {
+                      "_type": "WType",
+                      "name": "bytes",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 1
+                    },
+                    "arc4_name": "byte[]",
+                    "element_type": {
+                      "_type": "ARC4UIntN",
+                      "name": "arc4.byte",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 1,
+                      "native_type": {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true,
+                        "ephemeral": false,
+                        "scalar_type": 2
+                      },
+                      "arc4_name": "byte",
+                      "n": "8"
+                    },
+                    "source_location": null
                   },
-                  "name": "someBytes"
+                  "name": "db2"
                 }
+              },
+              "operator": "==",
+              "rhs": {
+                "_type": "VarExpression",
+                "source_location": {
+                  "file": "tests/approvals/arc4-types.algo.ts",
+                  "line": 53,
+                  "end_line": 53,
+                  "column": 24,
+                  "end_column": 33
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "bytes",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 1
+                },
+                "name": "someBytes"
               }
-            ],
-            "comment": null
+            },
+            "error_message": null
           }
         },
         {
@@ -2896,7 +2845,7 @@
             "end_column": 39
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/arc4-types.algo.ts",
               "line": 56,
@@ -2911,108 +2860,104 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "BytesComparisonExpression",
+            "condition": {
+              "_type": "BytesComparisonExpression",
+              "source_location": {
+                "file": "tests/approvals/arc4-types.algo.ts",
+                "line": 56,
+                "end_line": 56,
+                "column": 9,
+                "end_column": 38
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "lhs": {
+                "_type": "ARC4Decode",
                 "source_location": {
                   "file": "tests/approvals/arc4-types.algo.ts",
                   "line": 56,
                   "end_line": 56,
                   "column": 9,
-                  "end_column": 38
+                  "end_column": 19
                 },
                 "wtype": {
                   "_type": "WType",
-                  "name": "bool",
+                  "name": "bytes",
                   "immutable": true,
                   "ephemeral": false,
-                  "scalar_type": 2
+                  "scalar_type": 1
                 },
-                "lhs": {
-                  "_type": "ARC4Decode",
+                "value": {
+                  "_type": "VarExpression",
                   "source_location": {
                     "file": "tests/approvals/arc4-types.algo.ts",
                     "line": 56,
                     "end_line": 56,
                     "column": 9,
-                    "end_column": 19
+                    "end_column": 12
                   },
                   "wtype": {
-                    "_type": "WType",
-                    "name": "bytes",
+                    "_type": "ARC4DynamicArray",
+                    "name": "arc4.dynamic_array<arc4.byte>",
                     "immutable": true,
                     "ephemeral": false,
-                    "scalar_type": 1
-                  },
-                  "value": {
-                    "_type": "VarExpression",
-                    "source_location": {
-                      "file": "tests/approvals/arc4-types.algo.ts",
-                      "line": 56,
-                      "end_line": 56,
-                      "column": 9,
-                      "end_column": 12
+                    "scalar_type": 1,
+                    "native_type": {
+                      "_type": "WType",
+                      "name": "bytes",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 1
                     },
-                    "wtype": {
-                      "_type": "ARC4DynamicArray",
-                      "name": "arc4.dynamic_array<arc4.byte>",
+                    "arc4_name": "byte[]",
+                    "element_type": {
+                      "_type": "ARC4UIntN",
+                      "name": "arc4.byte",
                       "immutable": true,
                       "ephemeral": false,
                       "scalar_type": 1,
                       "native_type": {
                         "_type": "WType",
-                        "name": "bytes",
+                        "name": "uint64",
                         "immutable": true,
                         "ephemeral": false,
-                        "scalar_type": 1
+                        "scalar_type": 2
                       },
-                      "arc4_name": "byte[]",
-                      "element_type": {
-                        "_type": "ARC4UIntN",
-                        "name": "arc4.byte",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 1,
-                        "native_type": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": 2
-                        },
-                        "arc4_name": "byte",
-                        "n": "8"
-                      },
-                      "source_location": null
+                      "arc4_name": "byte",
+                      "n": "8"
                     },
-                    "name": "db3"
-                  }
-                },
-                "operator": "==",
-                "rhs": {
-                  "_type": "BytesConstant",
-                  "source_location": {
-                    "file": "tests/approvals/arc4-types.algo.ts",
-                    "line": 56,
-                    "end_line": 56,
-                    "column": 30,
-                    "end_column": 37
+                    "source_location": null
                   },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "bytes",
-                    "immutable": true,
-                    "ephemeral": false,
-                    "scalar_type": 1
-                  },
-                  "value": "Xk~0{Zv",
-                  "encoding": "utf8"
+                  "name": "db3"
                 }
+              },
+              "operator": "==",
+              "rhs": {
+                "_type": "BytesConstant",
+                "source_location": {
+                  "file": "tests/approvals/arc4-types.algo.ts",
+                  "line": 56,
+                  "end_line": 56,
+                  "column": 30,
+                  "end_column": 37
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "bytes",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 1
+                },
+                "value": "Xk~0{Zv",
+                "encoding": "utf8"
               }
-            ],
-            "comment": null
+            },
+            "error_message": null
           }
         }
       ],
@@ -3890,7 +3835,7 @@
             "end_column": 43
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/arc4-types.algo.ts",
               "line": 75,
@@ -3905,11 +3850,24 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "BytesComparisonExpression",
+            "condition": {
+              "_type": "BytesComparisonExpression",
+              "source_location": {
+                "file": "tests/approvals/arc4-types.algo.ts",
+                "line": 75,
+                "end_line": 75,
+                "column": 9,
+                "end_column": 42
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "lhs": {
+                "_type": "ReinterpretCast",
                 "source_location": {
                   "file": "tests/approvals/arc4-types.algo.ts",
                   "line": 75,
@@ -3919,195 +3877,178 @@
                 },
                 "wtype": {
                   "_type": "WType",
-                  "name": "bool",
+                  "name": "bytes",
                   "immutable": true,
                   "ephemeral": false,
-                  "scalar_type": 2
+                  "scalar_type": 1
                 },
-                "lhs": {
-                  "_type": "ReinterpretCast",
+                "expr": {
+                  "_type": "IndexExpression",
                   "source_location": {
                     "file": "tests/approvals/arc4-types.algo.ts",
                     "line": 75,
                     "end_line": 75,
                     "column": 9,
-                    "end_column": 42
+                    "end_column": 20
                   },
                   "wtype": {
-                    "_type": "WType",
-                    "name": "bytes",
+                    "_type": "ARC4UIntN",
+                    "name": "arc4.uint64",
                     "immutable": true,
                     "ephemeral": false,
-                    "scalar_type": 1
+                    "scalar_type": 1,
+                    "native_type": {
+                      "_type": "WType",
+                      "name": "uint64",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 2
+                    },
+                    "arc4_name": "uint64",
+                    "n": "64"
                   },
-                  "expr": {
-                    "_type": "IndexExpression",
+                  "base": {
+                    "_type": "VarExpression",
                     "source_location": {
                       "file": "tests/approvals/arc4-types.algo.ts",
                       "line": 75,
                       "end_line": 75,
                       "column": 9,
-                      "end_column": 20
+                      "end_column": 17
                     },
                     "wtype": {
-                      "_type": "ARC4UIntN",
-                      "name": "arc4.uint64",
-                      "immutable": true,
+                      "_type": "ARC4StaticArray",
+                      "name": "arc4.static_array<arc4.uint64>",
+                      "immutable": false,
                       "ephemeral": false,
                       "scalar_type": 1,
-                      "native_type": {
-                        "_type": "WType",
-                        "name": "uint64",
+                      "native_type": null,
+                      "arc4_name": "uint64[2]",
+                      "element_type": {
+                        "_type": "ARC4UIntN",
+                        "name": "arc4.uint64",
                         "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 2
-                      },
-                      "arc4_name": "uint64",
-                      "n": "64"
-                    },
-                    "base": {
-                      "_type": "VarExpression",
-                      "source_location": {
-                        "file": "tests/approvals/arc4-types.algo.ts",
-                        "line": 75,
-                        "end_line": 75,
-                        "column": 9,
-                        "end_column": 17
-                      },
-                      "wtype": {
-                        "_type": "ARC4StaticArray",
-                        "name": "arc4.static_array<arc4.uint64>",
-                        "immutable": false,
                         "ephemeral": false,
                         "scalar_type": 1,
-                        "native_type": null,
-                        "arc4_name": "uint64[2]",
-                        "element_type": {
-                          "_type": "ARC4UIntN",
-                          "name": "arc4.uint64",
+                        "native_type": {
+                          "_type": "WType",
+                          "name": "uint64",
                           "immutable": true,
                           "ephemeral": false,
-                          "scalar_type": 1,
-                          "native_type": {
-                            "_type": "WType",
-                            "name": "uint64",
-                            "immutable": true,
-                            "ephemeral": false,
-                            "scalar_type": 2
-                          },
-                          "arc4_name": "uint64",
-                          "n": "64"
+                          "scalar_type": 2
                         },
-                        "source_location": null,
-                        "array_size": "2"
+                        "arc4_name": "uint64",
+                        "n": "64"
                       },
-                      "name": "myStatic"
+                      "source_location": null,
+                      "array_size": "2"
                     },
-                    "index": {
-                      "_type": "IntegerConstant",
-                      "source_location": {
-                        "file": "tests/approvals/arc4-types.algo.ts",
-                        "line": 75,
-                        "end_line": 75,
-                        "column": 18,
-                        "end_column": 19
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 2
-                      },
-                      "value": "0",
-                      "teal_alias": null
-                    }
+                    "name": "myStatic"
+                  },
+                  "index": {
+                    "_type": "IntegerConstant",
+                    "source_location": {
+                      "file": "tests/approvals/arc4-types.algo.ts",
+                      "line": 75,
+                      "end_line": 75,
+                      "column": 18,
+                      "end_column": 19
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "uint64",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 2
+                    },
+                    "value": "0",
+                    "teal_alias": null
                   }
+                }
+              },
+              "operator": "==",
+              "rhs": {
+                "_type": "ReinterpretCast",
+                "source_location": {
+                  "file": "tests/approvals/arc4-types.algo.ts",
+                  "line": 75,
+                  "end_line": 75,
+                  "column": 9,
+                  "end_column": 42
                 },
-                "operator": "==",
-                "rhs": {
-                  "_type": "ReinterpretCast",
+                "wtype": {
+                  "_type": "WType",
+                  "name": "bytes",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 1
+                },
+                "expr": {
+                  "_type": "ArrayPop",
                   "source_location": {
                     "file": "tests/approvals/arc4-types.algo.ts",
                     "line": 75,
                     "end_line": 75,
-                    "column": 9,
-                    "end_column": 42
+                    "column": 28,
+                    "end_column": 41
                   },
                   "wtype": {
-                    "_type": "WType",
-                    "name": "bytes",
+                    "_type": "ARC4UIntN",
+                    "name": "arc4.uint64",
                     "immutable": true,
                     "ephemeral": false,
-                    "scalar_type": 1
+                    "scalar_type": 1,
+                    "native_type": {
+                      "_type": "WType",
+                      "name": "uint64",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 2
+                    },
+                    "arc4_name": "uint64",
+                    "n": "64"
                   },
-                  "expr": {
-                    "_type": "ArrayPop",
+                  "base": {
+                    "_type": "VarExpression",
                     "source_location": {
                       "file": "tests/approvals/arc4-types.algo.ts",
                       "line": 75,
                       "end_line": 75,
                       "column": 28,
-                      "end_column": 41
+                      "end_column": 35
                     },
                     "wtype": {
-                      "_type": "ARC4UIntN",
-                      "name": "arc4.uint64",
-                      "immutable": true,
+                      "_type": "ARC4DynamicArray",
+                      "name": "arc4.dynamic_array<arc4.uint64>",
+                      "immutable": false,
                       "ephemeral": false,
                       "scalar_type": 1,
-                      "native_type": {
-                        "_type": "WType",
-                        "name": "uint64",
+                      "native_type": null,
+                      "arc4_name": "uint64[]",
+                      "element_type": {
+                        "_type": "ARC4UIntN",
+                        "name": "arc4.uint64",
                         "immutable": true,
                         "ephemeral": false,
-                        "scalar_type": 2
-                      },
-                      "arc4_name": "uint64",
-                      "n": "64"
-                    },
-                    "base": {
-                      "_type": "VarExpression",
-                      "source_location": {
-                        "file": "tests/approvals/arc4-types.algo.ts",
-                        "line": 75,
-                        "end_line": 75,
-                        "column": 28,
-                        "end_column": 35
-                      },
-                      "wtype": {
-                        "_type": "ARC4DynamicArray",
-                        "name": "arc4.dynamic_array<arc4.uint64>",
-                        "immutable": false,
-                        "ephemeral": false,
                         "scalar_type": 1,
-                        "native_type": null,
-                        "arc4_name": "uint64[]",
-                        "element_type": {
-                          "_type": "ARC4UIntN",
-                          "name": "arc4.uint64",
+                        "native_type": {
+                          "_type": "WType",
+                          "name": "uint64",
                           "immutable": true,
                           "ephemeral": false,
-                          "scalar_type": 1,
-                          "native_type": {
-                            "_type": "WType",
-                            "name": "uint64",
-                            "immutable": true,
-                            "ephemeral": false,
-                            "scalar_type": 2
-                          },
-                          "arc4_name": "uint64",
-                          "n": "64"
+                          "scalar_type": 2
                         },
-                        "source_location": null
+                        "arc4_name": "uint64",
+                        "n": "64"
                       },
-                      "name": "myArray"
-                    }
+                      "source_location": null
+                    },
+                    "name": "myArray"
                   }
                 }
               }
-            ],
-            "comment": null
+            },
+            "error_message": null
           }
         },
         {
@@ -4411,7 +4352,7 @@
             "end_column": 22
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/arc4-types.algo.ts",
               "line": 85,
@@ -4426,11 +4367,24 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "BytesComparisonExpression",
+            "condition": {
+              "_type": "BytesComparisonExpression",
+              "source_location": {
+                "file": "tests/approvals/arc4-types.algo.ts",
+                "line": 85,
+                "end_line": 85,
+                "column": 9,
+                "end_column": 21
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "lhs": {
+                "_type": "ReinterpretCast",
                 "source_location": {
                   "file": "tests/approvals/arc4-types.algo.ts",
                   "line": 85,
@@ -4440,103 +4394,86 @@
                 },
                 "wtype": {
                   "_type": "WType",
-                  "name": "bool",
+                  "name": "bytes",
                   "immutable": true,
                   "ephemeral": false,
-                  "scalar_type": 2
+                  "scalar_type": 1
                 },
-                "lhs": {
-                  "_type": "ReinterpretCast",
+                "expr": {
+                  "_type": "VarExpression",
                   "source_location": {
                     "file": "tests/approvals/arc4-types.algo.ts",
                     "line": 85,
                     "end_line": 85,
                     "column": 9,
-                    "end_column": 21
+                    "end_column": 10
                   },
                   "wtype": {
-                    "_type": "WType",
-                    "name": "bytes",
+                    "_type": "ARC4UIntN",
+                    "name": "arc4.byte",
                     "immutable": true,
                     "ephemeral": false,
-                    "scalar_type": 1
-                  },
-                  "expr": {
-                    "_type": "VarExpression",
-                    "source_location": {
-                      "file": "tests/approvals/arc4-types.algo.ts",
-                      "line": 85,
-                      "end_line": 85,
-                      "column": 9,
-                      "end_column": 10
-                    },
-                    "wtype": {
-                      "_type": "ARC4UIntN",
-                      "name": "arc4.byte",
+                    "scalar_type": 1,
+                    "native_type": {
+                      "_type": "WType",
+                      "name": "uint64",
                       "immutable": true,
                       "ephemeral": false,
-                      "scalar_type": 1,
-                      "native_type": {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 2
-                      },
-                      "arc4_name": "byte",
-                      "n": "8"
+                      "scalar_type": 2
                     },
-                    "name": "b"
-                  }
+                    "arc4_name": "byte",
+                    "n": "8"
+                  },
+                  "name": "b"
+                }
+              },
+              "operator": "==",
+              "rhs": {
+                "_type": "ReinterpretCast",
+                "source_location": {
+                  "file": "tests/approvals/arc4-types.algo.ts",
+                  "line": 85,
+                  "end_line": 85,
+                  "column": 9,
+                  "end_column": 21
                 },
-                "operator": "==",
-                "rhs": {
-                  "_type": "ReinterpretCast",
+                "wtype": {
+                  "_type": "WType",
+                  "name": "bytes",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 1
+                },
+                "expr": {
+                  "_type": "VarExpression",
                   "source_location": {
                     "file": "tests/approvals/arc4-types.algo.ts",
                     "line": 85,
                     "end_line": 85,
-                    "column": 9,
-                    "end_column": 21
+                    "column": 18,
+                    "end_column": 20
                   },
                   "wtype": {
-                    "_type": "WType",
-                    "name": "bytes",
+                    "_type": "ARC4UIntN",
+                    "name": "arc4.byte",
                     "immutable": true,
                     "ephemeral": false,
-                    "scalar_type": 1
-                  },
-                  "expr": {
-                    "_type": "VarExpression",
-                    "source_location": {
-                      "file": "tests/approvals/arc4-types.algo.ts",
-                      "line": 85,
-                      "end_line": 85,
-                      "column": 18,
-                      "end_column": 20
-                    },
-                    "wtype": {
-                      "_type": "ARC4UIntN",
-                      "name": "arc4.byte",
+                    "scalar_type": 1,
+                    "native_type": {
+                      "_type": "WType",
+                      "name": "uint64",
                       "immutable": true,
                       "ephemeral": false,
-                      "scalar_type": 1,
-                      "native_type": {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 2
-                      },
-                      "arc4_name": "byte",
-                      "n": "8"
+                      "scalar_type": 2
                     },
-                    "name": "b2"
-                  }
+                    "arc4_name": "byte",
+                    "n": "8"
+                  },
+                  "name": "b2"
                 }
               }
-            ],
-            "comment": null
+            },
+            "error_message": null
           }
         }
       ],
@@ -4792,8 +4729,7 @@
               "immediates": [
                 "Sender"
               ],
-              "stack_args": [],
-              "comment": null
+              "stack_args": []
             }
           }
         },
@@ -4807,7 +4743,7 @@
             "end_column": 62
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/arc4-types.algo.ts",
               "line": 92,
@@ -4822,206 +4758,30 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "Not",
+            "condition": {
+              "_type": "Not",
+              "source_location": {
+                "file": "tests/approvals/arc4-types.algo.ts",
+                "line": 92,
+                "end_line": 92,
+                "column": 9,
+                "end_column": 21
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "expr": {
+                "_type": "BytesComparisonExpression",
                 "source_location": {
                   "file": "tests/approvals/arc4-types.algo.ts",
                   "line": 92,
                   "end_line": 92,
-                  "column": 9,
+                  "column": 10,
                   "end_column": 21
-                },
-                "wtype": {
-                  "_type": "WType",
-                  "name": "bool",
-                  "immutable": true,
-                  "ephemeral": false,
-                  "scalar_type": 2
-                },
-                "expr": {
-                  "_type": "BytesComparisonExpression",
-                  "source_location": {
-                    "file": "tests/approvals/arc4-types.algo.ts",
-                    "line": 92,
-                    "end_line": 92,
-                    "column": 10,
-                    "end_column": 21
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "bool",
-                    "immutable": true,
-                    "ephemeral": false,
-                    "scalar_type": 2
-                  },
-                  "lhs": {
-                    "_type": "ReinterpretCast",
-                    "source_location": {
-                      "file": "tests/approvals/arc4-types.algo.ts",
-                      "line": 92,
-                      "end_line": 92,
-                      "column": 10,
-                      "end_column": 21
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "bytes",
-                      "immutable": true,
-                      "ephemeral": false,
-                      "scalar_type": 1
-                    },
-                    "expr": {
-                      "_type": "VarExpression",
-                      "source_location": {
-                        "file": "tests/approvals/arc4-types.algo.ts",
-                        "line": 92,
-                        "end_line": 92,
-                        "column": 10,
-                        "end_column": 11
-                      },
-                      "wtype": {
-                        "_type": "ARC4StaticArray",
-                        "name": "arc4.static_array<arc4.byte>",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 1,
-                        "native_type": {
-                          "_type": "WType",
-                          "name": "account",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": 1
-                        },
-                        "arc4_name": "address",
-                        "element_type": {
-                          "_type": "ARC4UIntN",
-                          "name": "arc4.byte",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": 1,
-                          "native_type": {
-                            "_type": "WType",
-                            "name": "uint64",
-                            "immutable": true,
-                            "ephemeral": false,
-                            "scalar_type": 2
-                          },
-                          "arc4_name": "byte",
-                          "n": "8"
-                        },
-                        "source_location": null,
-                        "array_size": "32"
-                      },
-                      "name": "a"
-                    }
-                  },
-                  "operator": "==",
-                  "rhs": {
-                    "_type": "ReinterpretCast",
-                    "source_location": {
-                      "file": "tests/approvals/arc4-types.algo.ts",
-                      "line": 92,
-                      "end_line": 92,
-                      "column": 10,
-                      "end_column": 21
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "bytes",
-                      "immutable": true,
-                      "ephemeral": false,
-                      "scalar_type": 1
-                    },
-                    "expr": {
-                      "_type": "VarExpression",
-                      "source_location": {
-                        "file": "tests/approvals/arc4-types.algo.ts",
-                        "line": 92,
-                        "end_line": 92,
-                        "column": 19,
-                        "end_column": 20
-                      },
-                      "wtype": {
-                        "_type": "ARC4StaticArray",
-                        "name": "arc4.static_array<arc4.byte>",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 1,
-                        "native_type": {
-                          "_type": "WType",
-                          "name": "account",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": 1
-                        },
-                        "arc4_name": "address",
-                        "element_type": {
-                          "_type": "ARC4UIntN",
-                          "name": "arc4.byte",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": 1,
-                          "native_type": {
-                            "_type": "WType",
-                            "name": "uint64",
-                            "immutable": true,
-                            "ephemeral": false,
-                            "scalar_type": 2
-                          },
-                          "arc4_name": "byte",
-                          "n": "8"
-                        },
-                        "source_location": null,
-                        "array_size": "32"
-                      },
-                      "name": "b"
-                    }
-                  }
-                }
-              }
-            ],
-            "comment": "Zero address should not match sender"
-          }
-        },
-        {
-          "_type": "ExpressionStatement",
-          "source_location": {
-            "file": "tests/approvals/arc4-types.algo.ts",
-            "line": 93,
-            "end_line": 93,
-            "column": 2,
-            "end_column": 68
-          },
-          "expr": {
-            "_type": "IntrinsicCall",
-            "source_location": {
-              "file": "tests/approvals/arc4-types.algo.ts",
-              "line": 93,
-              "end_line": 93,
-              "column": 2,
-              "end_column": 68
-            },
-            "wtype": {
-              "_type": "WType",
-              "name": "void",
-              "immutable": true,
-              "ephemeral": false,
-              "scalar_type": null
-            },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "BytesComparisonExpression",
-                "source_location": {
-                  "file": "tests/approvals/arc4-types.algo.ts",
-                  "line": 93,
-                  "end_line": 93,
-                  "column": 9,
-                  "end_column": 32
                 },
                 "wtype": {
                   "_type": "WType",
@@ -5034,10 +4794,10 @@
                   "_type": "ReinterpretCast",
                   "source_location": {
                     "file": "tests/approvals/arc4-types.algo.ts",
-                    "line": 93,
-                    "end_line": 93,
-                    "column": 9,
-                    "end_column": 32
+                    "line": 92,
+                    "end_line": 92,
+                    "column": 10,
+                    "end_column": 21
                   },
                   "wtype": {
                     "_type": "WType",
@@ -5050,10 +4810,10 @@
                     "_type": "VarExpression",
                     "source_location": {
                       "file": "tests/approvals/arc4-types.algo.ts",
-                      "line": 93,
-                      "end_line": 93,
-                      "column": 9,
-                      "end_column": 10
+                      "line": 92,
+                      "end_line": 92,
+                      "column": 10,
+                      "end_column": 11
                     },
                     "wtype": {
                       "_type": "ARC4StaticArray",
@@ -5096,10 +4856,10 @@
                   "_type": "ReinterpretCast",
                   "source_location": {
                     "file": "tests/approvals/arc4-types.algo.ts",
-                    "line": 93,
-                    "end_line": 93,
-                    "column": 9,
-                    "end_column": 32
+                    "line": 92,
+                    "end_line": 92,
+                    "column": 10,
+                    "end_column": 21
                   },
                   "wtype": {
                     "_type": "WType",
@@ -5109,13 +4869,13 @@
                     "scalar_type": 1
                   },
                   "expr": {
-                    "_type": "AddressConstant",
+                    "_type": "VarExpression",
                     "source_location": {
                       "file": "tests/approvals/arc4-types.algo.ts",
-                      "line": 93,
-                      "end_line": 93,
-                      "column": 18,
-                      "end_column": 31
+                      "line": 92,
+                      "end_line": 92,
+                      "column": 19,
+                      "end_column": 20
                     },
                     "wtype": {
                       "_type": "ARC4StaticArray",
@@ -5150,12 +4910,180 @@
                       "source_location": null,
                       "array_size": "32"
                     },
-                    "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ"
+                    "name": "b"
                   }
                 }
               }
-            ],
-            "comment": "Two zero addresses should match"
+            },
+            "error_message": "Zero address should not match sender"
+          }
+        },
+        {
+          "_type": "ExpressionStatement",
+          "source_location": {
+            "file": "tests/approvals/arc4-types.algo.ts",
+            "line": 93,
+            "end_line": 93,
+            "column": 2,
+            "end_column": 68
+          },
+          "expr": {
+            "_type": "AssertExpression",
+            "source_location": {
+              "file": "tests/approvals/arc4-types.algo.ts",
+              "line": 93,
+              "end_line": 93,
+              "column": 2,
+              "end_column": 68
+            },
+            "wtype": {
+              "_type": "WType",
+              "name": "void",
+              "immutable": true,
+              "ephemeral": false,
+              "scalar_type": null
+            },
+            "condition": {
+              "_type": "BytesComparisonExpression",
+              "source_location": {
+                "file": "tests/approvals/arc4-types.algo.ts",
+                "line": 93,
+                "end_line": 93,
+                "column": 9,
+                "end_column": 32
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "lhs": {
+                "_type": "ReinterpretCast",
+                "source_location": {
+                  "file": "tests/approvals/arc4-types.algo.ts",
+                  "line": 93,
+                  "end_line": 93,
+                  "column": 9,
+                  "end_column": 32
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "bytes",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 1
+                },
+                "expr": {
+                  "_type": "VarExpression",
+                  "source_location": {
+                    "file": "tests/approvals/arc4-types.algo.ts",
+                    "line": 93,
+                    "end_line": 93,
+                    "column": 9,
+                    "end_column": 10
+                  },
+                  "wtype": {
+                    "_type": "ARC4StaticArray",
+                    "name": "arc4.static_array<arc4.byte>",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 1,
+                    "native_type": {
+                      "_type": "WType",
+                      "name": "account",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 1
+                    },
+                    "arc4_name": "address",
+                    "element_type": {
+                      "_type": "ARC4UIntN",
+                      "name": "arc4.byte",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 1,
+                      "native_type": {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true,
+                        "ephemeral": false,
+                        "scalar_type": 2
+                      },
+                      "arc4_name": "byte",
+                      "n": "8"
+                    },
+                    "source_location": null,
+                    "array_size": "32"
+                  },
+                  "name": "a"
+                }
+              },
+              "operator": "==",
+              "rhs": {
+                "_type": "ReinterpretCast",
+                "source_location": {
+                  "file": "tests/approvals/arc4-types.algo.ts",
+                  "line": 93,
+                  "end_line": 93,
+                  "column": 9,
+                  "end_column": 32
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "bytes",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 1
+                },
+                "expr": {
+                  "_type": "AddressConstant",
+                  "source_location": {
+                    "file": "tests/approvals/arc4-types.algo.ts",
+                    "line": 93,
+                    "end_line": 93,
+                    "column": 18,
+                    "end_column": 31
+                  },
+                  "wtype": {
+                    "_type": "ARC4StaticArray",
+                    "name": "arc4.static_array<arc4.byte>",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 1,
+                    "native_type": {
+                      "_type": "WType",
+                      "name": "account",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 1
+                    },
+                    "arc4_name": "address",
+                    "element_type": {
+                      "_type": "ARC4UIntN",
+                      "name": "arc4.byte",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 1,
+                      "native_type": {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true,
+                        "ephemeral": false,
+                        "scalar_type": 2
+                      },
+                      "arc4_name": "byte",
+                      "n": "8"
+                    },
+                    "source_location": null,
+                    "array_size": "32"
+                  },
+                  "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ"
+                }
+              }
+            },
+            "error_message": "Two zero addresses should match"
           }
         },
         {
@@ -5168,7 +5096,7 @@
             "end_column": 77
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/arc4-types.algo.ts",
               "line": 94,
@@ -5183,11 +5111,24 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "BytesComparisonExpression",
+            "condition": {
+              "_type": "BytesComparisonExpression",
+              "source_location": {
+                "file": "tests/approvals/arc4-types.algo.ts",
+                "line": 94,
+                "end_line": 94,
+                "column": 9,
+                "end_column": 32
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "lhs": {
+                "_type": "ReinterpretCast",
                 "source_location": {
                   "file": "tests/approvals/arc4-types.algo.ts",
                   "line": 94,
@@ -5197,166 +5138,149 @@
                 },
                 "wtype": {
                   "_type": "WType",
-                  "name": "bool",
+                  "name": "bytes",
                   "immutable": true,
                   "ephemeral": false,
-                  "scalar_type": 2
+                  "scalar_type": 1
                 },
-                "lhs": {
-                  "_type": "ReinterpretCast",
+                "expr": {
+                  "_type": "IndexExpression",
                   "source_location": {
                     "file": "tests/approvals/arc4-types.algo.ts",
                     "line": 94,
                     "end_line": 94,
                     "column": 9,
-                    "end_column": 32
+                    "end_column": 13
                   },
                   "wtype": {
-                    "_type": "WType",
-                    "name": "bytes",
+                    "_type": "ARC4UIntN",
+                    "name": "arc4.byte",
                     "immutable": true,
                     "ephemeral": false,
-                    "scalar_type": 1
+                    "scalar_type": 1,
+                    "native_type": {
+                      "_type": "WType",
+                      "name": "uint64",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 2
+                    },
+                    "arc4_name": "byte",
+                    "n": "8"
                   },
-                  "expr": {
-                    "_type": "IndexExpression",
+                  "base": {
+                    "_type": "VarExpression",
                     "source_location": {
                       "file": "tests/approvals/arc4-types.algo.ts",
                       "line": 94,
                       "end_line": 94,
                       "column": 9,
-                      "end_column": 13
+                      "end_column": 10
                     },
                     "wtype": {
-                      "_type": "ARC4UIntN",
-                      "name": "arc4.byte",
+                      "_type": "ARC4StaticArray",
+                      "name": "arc4.static_array<arc4.byte>",
                       "immutable": true,
                       "ephemeral": false,
                       "scalar_type": 1,
                       "native_type": {
                         "_type": "WType",
-                        "name": "uint64",
+                        "name": "account",
                         "immutable": true,
                         "ephemeral": false,
-                        "scalar_type": 2
+                        "scalar_type": 1
                       },
-                      "arc4_name": "byte",
-                      "n": "8"
-                    },
-                    "base": {
-                      "_type": "VarExpression",
-                      "source_location": {
-                        "file": "tests/approvals/arc4-types.algo.ts",
-                        "line": 94,
-                        "end_line": 94,
-                        "column": 9,
-                        "end_column": 10
-                      },
-                      "wtype": {
-                        "_type": "ARC4StaticArray",
-                        "name": "arc4.static_array<arc4.byte>",
+                      "arc4_name": "address",
+                      "element_type": {
+                        "_type": "ARC4UIntN",
+                        "name": "arc4.byte",
                         "immutable": true,
                         "ephemeral": false,
                         "scalar_type": 1,
                         "native_type": {
                           "_type": "WType",
-                          "name": "account",
+                          "name": "uint64",
                           "immutable": true,
                           "ephemeral": false,
-                          "scalar_type": 1
+                          "scalar_type": 2
                         },
-                        "arc4_name": "address",
-                        "element_type": {
-                          "_type": "ARC4UIntN",
-                          "name": "arc4.byte",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": 1,
-                          "native_type": {
-                            "_type": "WType",
-                            "name": "uint64",
-                            "immutable": true,
-                            "ephemeral": false,
-                            "scalar_type": 2
-                          },
-                          "arc4_name": "byte",
-                          "n": "8"
-                        },
-                        "source_location": null,
-                        "array_size": "32"
+                        "arc4_name": "byte",
+                        "n": "8"
                       },
-                      "name": "a"
+                      "source_location": null,
+                      "array_size": "32"
                     },
-                    "index": {
-                      "_type": "IntegerConstant",
-                      "source_location": {
-                        "file": "tests/approvals/arc4-types.algo.ts",
-                        "line": 94,
-                        "end_line": 94,
-                        "column": 11,
-                        "end_column": 12
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 2
-                      },
-                      "value": "0",
-                      "teal_alias": null
-                    }
-                  }
-                },
-                "operator": "==",
-                "rhs": {
-                  "_type": "ReinterpretCast",
-                  "source_location": {
-                    "file": "tests/approvals/arc4-types.algo.ts",
-                    "line": 94,
-                    "end_line": 94,
-                    "column": 9,
-                    "end_column": 32
+                    "name": "a"
                   },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "bytes",
-                    "immutable": true,
-                    "ephemeral": false,
-                    "scalar_type": 1
-                  },
-                  "expr": {
+                  "index": {
                     "_type": "IntegerConstant",
                     "source_location": {
                       "file": "tests/approvals/arc4-types.algo.ts",
                       "line": 94,
                       "end_line": 94,
-                      "column": 21,
-                      "end_column": 31
+                      "column": 11,
+                      "end_column": 12
                     },
                     "wtype": {
-                      "_type": "ARC4UIntN",
-                      "name": "arc4.byte",
+                      "_type": "WType",
+                      "name": "uint64",
                       "immutable": true,
                       "ephemeral": false,
-                      "scalar_type": 1,
-                      "native_type": {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 2
-                      },
-                      "arc4_name": "byte",
-                      "n": "8"
+                      "scalar_type": 2
                     },
                     "value": "0",
                     "teal_alias": null
                   }
                 }
+              },
+              "operator": "==",
+              "rhs": {
+                "_type": "ReinterpretCast",
+                "source_location": {
+                  "file": "tests/approvals/arc4-types.algo.ts",
+                  "line": 94,
+                  "end_line": 94,
+                  "column": 9,
+                  "end_column": 32
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "bytes",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 1
+                },
+                "expr": {
+                  "_type": "IntegerConstant",
+                  "source_location": {
+                    "file": "tests/approvals/arc4-types.algo.ts",
+                    "line": 94,
+                    "end_line": 94,
+                    "column": 21,
+                    "end_column": 31
+                  },
+                  "wtype": {
+                    "_type": "ARC4UIntN",
+                    "name": "arc4.byte",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 1,
+                    "native_type": {
+                      "_type": "WType",
+                      "name": "uint64",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 2
+                    },
+                    "arc4_name": "byte",
+                    "n": "8"
+                  },
+                  "value": "0",
+                  "teal_alias": null
+                }
               }
-            ],
-            "comment": "Zero address should start with zero byte"
+            },
+            "error_message": "Zero address should start with zero byte"
           }
         }
       ],
@@ -5808,7 +5732,7 @@
             "end_column": 44
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/arc4-types.algo.ts",
               "line": 101,
@@ -5823,11 +5747,24 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "BytesComparisonExpression",
+            "condition": {
+              "_type": "BytesComparisonExpression",
+              "source_location": {
+                "file": "tests/approvals/arc4-types.algo.ts",
+                "line": 101,
+                "end_line": 101,
+                "column": 9,
+                "end_column": 43
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "lhs": {
+                "_type": "ReinterpretCast",
                 "source_location": {
                   "file": "tests/approvals/arc4-types.algo.ts",
                   "line": 101,
@@ -5837,103 +5774,86 @@
                 },
                 "wtype": {
                   "_type": "WType",
-                  "name": "bool",
+                  "name": "bytes",
                   "immutable": true,
                   "ephemeral": false,
-                  "scalar_type": 2
+                  "scalar_type": 1
                 },
-                "lhs": {
-                  "_type": "ReinterpretCast",
+                "expr": {
+                  "_type": "VarExpression",
                   "source_location": {
                     "file": "tests/approvals/arc4-types.algo.ts",
                     "line": 101,
                     "end_line": 101,
                     "column": 9,
-                    "end_column": 43
+                    "end_column": 18
                   },
                   "wtype": {
-                    "_type": "WType",
-                    "name": "bytes",
+                    "_type": "ARC4UIntN",
+                    "name": "arc4.uint64",
                     "immutable": true,
                     "ephemeral": false,
-                    "scalar_type": 1
-                  },
-                  "expr": {
-                    "_type": "VarExpression",
-                    "source_location": {
-                      "file": "tests/approvals/arc4-types.algo.ts",
-                      "line": 101,
-                      "end_line": 101,
-                      "column": 9,
-                      "end_column": 18
-                    },
-                    "wtype": {
-                      "_type": "ARC4UIntN",
-                      "name": "arc4.uint64",
+                    "scalar_type": 1,
+                    "native_type": {
+                      "_type": "WType",
+                      "name": "uint64",
                       "immutable": true,
                       "ephemeral": false,
-                      "scalar_type": 1,
-                      "native_type": {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 2
-                      },
-                      "arc4_name": "uint64",
-                      "n": "64"
+                      "scalar_type": 2
                     },
-                    "name": "firstItem"
-                  }
+                    "arc4_name": "uint64",
+                    "n": "64"
+                  },
+                  "name": "firstItem"
+                }
+              },
+              "operator": "==",
+              "rhs": {
+                "_type": "ReinterpretCast",
+                "source_location": {
+                  "file": "tests/approvals/arc4-types.algo.ts",
+                  "line": 101,
+                  "end_line": 101,
+                  "column": 9,
+                  "end_column": 43
                 },
-                "operator": "==",
-                "rhs": {
-                  "_type": "ReinterpretCast",
+                "wtype": {
+                  "_type": "WType",
+                  "name": "bytes",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 1
+                },
+                "expr": {
+                  "_type": "VarExpression",
                   "source_location": {
                     "file": "tests/approvals/arc4-types.algo.ts",
                     "line": 101,
                     "end_line": 101,
-                    "column": 9,
-                    "end_column": 43
+                    "column": 26,
+                    "end_column": 42
                   },
                   "wtype": {
-                    "_type": "WType",
-                    "name": "bytes",
+                    "_type": "ARC4UIntN",
+                    "name": "arc4.uint64",
                     "immutable": true,
                     "ephemeral": false,
-                    "scalar_type": 1
-                  },
-                  "expr": {
-                    "_type": "VarExpression",
-                    "source_location": {
-                      "file": "tests/approvals/arc4-types.algo.ts",
-                      "line": 101,
-                      "end_line": 101,
-                      "column": 26,
-                      "end_column": 42
-                    },
-                    "wtype": {
-                      "_type": "ARC4UIntN",
-                      "name": "arc4.uint64",
+                    "scalar_type": 1,
+                    "native_type": {
+                      "_type": "WType",
+                      "name": "uint64",
                       "immutable": true,
                       "ephemeral": false,
-                      "scalar_type": 1,
-                      "native_type": {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 2
-                      },
-                      "arc4_name": "uint64",
-                      "n": "64"
+                      "scalar_type": 2
                     },
-                    "name": "firstItemIndexer"
-                  }
+                    "arc4_name": "uint64",
+                    "n": "64"
+                  },
+                  "name": "firstItemIndexer"
                 }
               }
-            ],
-            "comment": null
+            },
+            "error_message": null
           }
         },
         {
@@ -6247,7 +6167,7 @@
             "end_column": 25
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/arc4-types.algo.ts",
               "line": 103,
@@ -6262,67 +6182,63 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "NumericComparisonExpression",
+            "condition": {
+              "_type": "NumericComparisonExpression",
+              "source_location": {
+                "file": "tests/approvals/arc4-types.algo.ts",
+                "line": 103,
+                "end_line": 103,
+                "column": 9,
+                "end_column": 24
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "lhs": {
+                "_type": "IntegerConstant",
                 "source_location": {
                   "file": "tests/approvals/arc4-types.algo.ts",
                   "line": 103,
                   "end_line": 103,
                   "column": 9,
-                  "end_column": 24
+                  "end_column": 18
                 },
                 "wtype": {
                   "_type": "WType",
-                  "name": "bool",
+                  "name": "uint64",
                   "immutable": true,
                   "ephemeral": false,
                   "scalar_type": 2
                 },
-                "lhs": {
-                  "_type": "IntegerConstant",
-                  "source_location": {
-                    "file": "tests/approvals/arc4-types.algo.ts",
-                    "line": 103,
-                    "end_line": 103,
-                    "column": 9,
-                    "end_column": 18
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "uint64",
-                    "immutable": true,
-                    "ephemeral": false,
-                    "scalar_type": 2
-                  },
-                  "value": "2",
-                  "teal_alias": null
+                "value": "2",
+                "teal_alias": null
+              },
+              "operator": "==",
+              "rhs": {
+                "_type": "IntegerConstant",
+                "source_location": {
+                  "file": "tests/approvals/arc4-types.algo.ts",
+                  "line": 103,
+                  "end_line": 103,
+                  "column": 23,
+                  "end_column": 24
                 },
-                "operator": "==",
-                "rhs": {
-                  "_type": "IntegerConstant",
-                  "source_location": {
-                    "file": "tests/approvals/arc4-types.algo.ts",
-                    "line": 103,
-                    "end_line": 103,
-                    "column": 23,
-                    "end_column": 24
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "uint64",
-                    "immutable": true,
-                    "ephemeral": false,
-                    "scalar_type": 2
-                  },
-                  "value": "2",
-                  "teal_alias": null
-                }
+                "wtype": {
+                  "_type": "WType",
+                  "name": "uint64",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 2
+                },
+                "value": "2",
+                "teal_alias": null
               }
-            ],
-            "comment": null
+            },
+            "error_message": null
           }
         }
       ],
@@ -6446,8 +6362,7 @@
                   "immediates": [
                     "ApplicationID"
                   ],
-                  "stack_args": [],
-                  "comment": null
+                  "stack_args": []
                 }
               }
             },
@@ -7133,7 +7048,7 @@
                   "end_column": 31
                 },
                 "expr": {
-                  "_type": "IntrinsicCall",
+                  "_type": "AssertExpression",
                   "source_location": {
                     "file": "tests/approvals/arc4-types.algo.ts",
                     "line": 124,
@@ -7148,126 +7063,121 @@
                     "ephemeral": false,
                     "scalar_type": null
                   },
-                  "op_code": "assert",
-                  "immediates": [],
-                  "stack_args": [
-                    {
-                      "_type": "NumericComparisonExpression",
+                  "condition": {
+                    "_type": "NumericComparisonExpression",
+                    "source_location": {
+                      "file": "tests/approvals/arc4-types.algo.ts",
+                      "line": 124,
+                      "end_line": 124,
+                      "column": 11,
+                      "end_column": 30
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "bool",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 2
+                    },
+                    "lhs": {
+                      "_type": "IntrinsicCall",
                       "source_location": {
                         "file": "tests/approvals/arc4-types.algo.ts",
                         "line": 124,
                         "end_line": 124,
                         "column": 11,
-                        "end_column": 30
+                        "end_column": 24
                       },
                       "wtype": {
                         "_type": "WType",
-                        "name": "bool",
+                        "name": "uint64",
                         "immutable": true,
                         "ephemeral": false,
                         "scalar_type": 2
                       },
-                      "lhs": {
-                        "_type": "IntrinsicCall",
-                        "source_location": {
-                          "file": "tests/approvals/arc4-types.algo.ts",
-                          "line": 124,
-                          "end_line": 124,
-                          "column": 11,
-                          "end_column": 24
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": 2
-                        },
-                        "op_code": "extract_uint16",
-                        "immediates": [],
-                        "stack_args": [
-                          {
-                            "_type": "VarExpression",
-                            "source_location": {
-                              "file": "tests/approvals/arc4-types.algo.ts",
-                              "line": 124,
-                              "end_line": 124,
-                              "column": 11,
-                              "end_column": 17
-                            },
-                            "wtype": {
-                              "_type": "ARC4DynamicArray",
-                              "name": "arc4.dynamic_array<arc4.uint64>",
-                              "immutable": false,
-                              "ephemeral": false,
-                              "scalar_type": 1,
-                              "native_type": null,
-                              "arc4_name": "uint64[]",
-                              "element_type": {
-                                "_type": "ARC4UIntN",
-                                "name": "arc4.uint64",
-                                "immutable": true,
-                                "ephemeral": false,
-                                "scalar_type": 1,
-                                "native_type": {
-                                  "_type": "WType",
-                                  "name": "uint64",
-                                  "immutable": true,
-                                  "ephemeral": false,
-                                  "scalar_type": 2
-                                },
-                                "arc4_name": "uint64",
-                                "n": "64"
-                              },
-                              "source_location": null
-                            },
-                            "name": "result"
+                      "op_code": "extract_uint16",
+                      "immediates": [],
+                      "stack_args": [
+                        {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/arc4-types.algo.ts",
+                            "line": 124,
+                            "end_line": 124,
+                            "column": 11,
+                            "end_column": 17
                           },
-                          {
-                            "_type": "IntegerConstant",
-                            "source_location": {
-                              "file": "tests/approvals/arc4-types.algo.ts",
-                              "line": 124,
-                              "end_line": 124,
-                              "column": 11,
-                              "end_column": 24
-                            },
-                            "wtype": {
-                              "_type": "WType",
-                              "name": "uint64",
+                          "wtype": {
+                            "_type": "ARC4DynamicArray",
+                            "name": "arc4.dynamic_array<arc4.uint64>",
+                            "immutable": false,
+                            "ephemeral": false,
+                            "scalar_type": 1,
+                            "native_type": null,
+                            "arc4_name": "uint64[]",
+                            "element_type": {
+                              "_type": "ARC4UIntN",
+                              "name": "arc4.uint64",
                               "immutable": true,
                               "ephemeral": false,
-                              "scalar_type": 2
+                              "scalar_type": 1,
+                              "native_type": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true,
+                                "ephemeral": false,
+                                "scalar_type": 2
+                              },
+                              "arc4_name": "uint64",
+                              "n": "64"
                             },
-                            "value": "0",
-                            "teal_alias": null
-                          }
-                        ],
-                        "comment": null
+                            "source_location": null
+                          },
+                          "name": "result"
+                        },
+                        {
+                          "_type": "IntegerConstant",
+                          "source_location": {
+                            "file": "tests/approvals/arc4-types.algo.ts",
+                            "line": 124,
+                            "end_line": 124,
+                            "column": 11,
+                            "end_column": 24
+                          },
+                          "wtype": {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true,
+                            "ephemeral": false,
+                            "scalar_type": 2
+                          },
+                          "value": "0",
+                          "teal_alias": null
+                        }
+                      ]
+                    },
+                    "operator": "==",
+                    "rhs": {
+                      "_type": "IntegerConstant",
+                      "source_location": {
+                        "file": "tests/approvals/arc4-types.algo.ts",
+                        "line": 124,
+                        "end_line": 124,
+                        "column": 29,
+                        "end_column": 30
                       },
-                      "operator": "==",
-                      "rhs": {
-                        "_type": "IntegerConstant",
-                        "source_location": {
-                          "file": "tests/approvals/arc4-types.algo.ts",
-                          "line": 124,
-                          "end_line": 124,
-                          "column": 29,
-                          "end_column": 30
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": 2
-                        },
-                        "value": "0",
-                        "teal_alias": null
-                      }
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true,
+                        "ephemeral": false,
+                        "scalar_type": 2
+                      },
+                      "value": "0",
+                      "teal_alias": null
                     }
-                  ],
-                  "comment": null
+                  },
+                  "error_message": null
                 }
               },
               {

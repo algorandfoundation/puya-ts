@@ -317,7 +317,7 @@
               "end_column": 6
             },
             "expr": {
-              "_type": "IntrinsicCall",
+              "_type": "AssertExpression",
               "source_location": {
                 "file": "tests/approvals/pre-approved-sale.algo.ts",
                 "line": 18,
@@ -332,11 +332,24 @@
                 "ephemeral": false,
                 "scalar_type": null
               },
-              "op_code": "assert",
-              "immediates": [],
-              "stack_args": [
-                {
-                  "_type": "BooleanBinaryOperation",
+              "condition": {
+                "_type": "BooleanBinaryOperation",
+                "source_location": {
+                  "file": "tests/approvals/pre-approved-sale.algo.ts",
+                  "line": 18,
+                  "end_line": 21,
+                  "column": 4,
+                  "end_column": 6
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "bool",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 2
+                },
+                "left": {
+                  "_type": "BytesComparisonExpression",
                   "source_location": {
                     "file": "tests/approvals/pre-approved-sale.algo.ts",
                     "line": 18,
@@ -351,8 +364,8 @@
                     "ephemeral": false,
                     "scalar_type": 2
                   },
-                  "left": {
-                    "_type": "BytesComparisonExpression",
+                  "lhs": {
+                    "_type": "IntrinsicCall",
                     "source_location": {
                       "file": "tests/approvals/pre-approved-sale.algo.ts",
                       "line": 18,
@@ -362,77 +375,76 @@
                     },
                     "wtype": {
                       "_type": "WType",
-                      "name": "bool",
+                      "name": "account",
                       "immutable": true,
                       "ephemeral": false,
-                      "scalar_type": 2
+                      "scalar_type": 1
                     },
-                    "lhs": {
-                      "_type": "IntrinsicCall",
-                      "source_location": {
-                        "file": "tests/approvals/pre-approved-sale.algo.ts",
-                        "line": 18,
-                        "end_line": 21,
-                        "column": 4,
-                        "end_column": 6
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "account",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 1
-                      },
-                      "op_code": "gtxns",
-                      "immediates": [
-                        "Receiver"
-                      ],
-                      "stack_args": [
-                        {
-                          "_type": "VarExpression",
-                          "source_location": {
-                            "file": "tests/approvals/pre-approved-sale.algo.ts",
-                            "line": 18,
-                            "end_line": 18,
-                            "column": 16,
-                            "end_column": 22
-                          },
-                          "wtype": {
-                            "_type": "WGroupTransaction",
-                            "name": "group_transaction_pay",
-                            "immutable": true,
-                            "ephemeral": false,
-                            "scalar_type": 2,
-                            "transaction_type": 1
-                          },
-                          "name": "payTxn"
-                        }
-                      ],
-                      "comment": null
-                    },
-                    "operator": "==",
-                    "rhs": {
-                      "_type": "VarExpression",
-                      "source_location": {
-                        "file": "tests/approvals/pre-approved-sale.algo.ts",
-                        "line": 19,
-                        "end_line": 19,
-                        "column": 16,
-                        "end_column": 22
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "account",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 1
-                      },
-                      "name": "seller"
-                    }
+                    "op_code": "gtxns",
+                    "immediates": [
+                      "Receiver"
+                    ],
+                    "stack_args": [
+                      {
+                        "_type": "VarExpression",
+                        "source_location": {
+                          "file": "tests/approvals/pre-approved-sale.algo.ts",
+                          "line": 18,
+                          "end_line": 18,
+                          "column": 16,
+                          "end_column": 22
+                        },
+                        "wtype": {
+                          "_type": "WGroupTransaction",
+                          "name": "group_transaction_pay",
+                          "immutable": true,
+                          "ephemeral": false,
+                          "scalar_type": 2,
+                          "transaction_type": 1
+                        },
+                        "name": "payTxn"
+                      }
+                    ]
                   },
-                  "op": "and",
-                  "right": {
-                    "_type": "NumericComparisonExpression",
+                  "operator": "==",
+                  "rhs": {
+                    "_type": "VarExpression",
+                    "source_location": {
+                      "file": "tests/approvals/pre-approved-sale.algo.ts",
+                      "line": 19,
+                      "end_line": 19,
+                      "column": 16,
+                      "end_column": 22
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "account",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 1
+                    },
+                    "name": "seller"
+                  }
+                },
+                "op": "and",
+                "right": {
+                  "_type": "NumericComparisonExpression",
+                  "source_location": {
+                    "file": "tests/approvals/pre-approved-sale.algo.ts",
+                    "line": 18,
+                    "end_line": 21,
+                    "column": 4,
+                    "end_column": 6
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "bool",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 2
+                  },
+                  "lhs": {
+                    "_type": "IntrinsicCall",
                     "source_location": {
                       "file": "tests/approvals/pre-approved-sale.algo.ts",
                       "line": 18,
@@ -442,77 +454,59 @@
                     },
                     "wtype": {
                       "_type": "WType",
-                      "name": "bool",
+                      "name": "uint64",
                       "immutable": true,
                       "ephemeral": false,
                       "scalar_type": 2
                     },
-                    "lhs": {
-                      "_type": "IntrinsicCall",
-                      "source_location": {
-                        "file": "tests/approvals/pre-approved-sale.algo.ts",
-                        "line": 18,
-                        "end_line": 21,
-                        "column": 4,
-                        "end_column": 6
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 2
-                      },
-                      "op_code": "gtxns",
-                      "immediates": [
-                        "Amount"
-                      ],
-                      "stack_args": [
-                        {
-                          "_type": "VarExpression",
-                          "source_location": {
-                            "file": "tests/approvals/pre-approved-sale.algo.ts",
-                            "line": 18,
-                            "end_line": 18,
-                            "column": 16,
-                            "end_column": 22
-                          },
-                          "wtype": {
-                            "_type": "WGroupTransaction",
-                            "name": "group_transaction_pay",
-                            "immutable": true,
-                            "ephemeral": false,
-                            "scalar_type": 2,
-                            "transaction_type": 1
-                          },
-                          "name": "payTxn"
-                        }
-                      ],
-                      "comment": null
+                    "op_code": "gtxns",
+                    "immediates": [
+                      "Amount"
+                    ],
+                    "stack_args": [
+                      {
+                        "_type": "VarExpression",
+                        "source_location": {
+                          "file": "tests/approvals/pre-approved-sale.algo.ts",
+                          "line": 18,
+                          "end_line": 18,
+                          "column": 16,
+                          "end_column": 22
+                        },
+                        "wtype": {
+                          "_type": "WGroupTransaction",
+                          "name": "group_transaction_pay",
+                          "immutable": true,
+                          "ephemeral": false,
+                          "scalar_type": 2,
+                          "transaction_type": 1
+                        },
+                        "name": "payTxn"
+                      }
+                    ]
+                  },
+                  "operator": "==",
+                  "rhs": {
+                    "_type": "VarExpression",
+                    "source_location": {
+                      "file": "tests/approvals/pre-approved-sale.algo.ts",
+                      "line": 20,
+                      "end_line": 20,
+                      "column": 14,
+                      "end_column": 19
                     },
-                    "operator": "==",
-                    "rhs": {
-                      "_type": "VarExpression",
-                      "source_location": {
-                        "file": "tests/approvals/pre-approved-sale.algo.ts",
-                        "line": 20,
-                        "end_line": 20,
-                        "column": 14,
-                        "end_column": 19
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 2
-                      },
-                      "name": "price"
-                    }
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "uint64",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 2
+                    },
+                    "name": "price"
                   }
                 }
-              ],
-              "comment": "assert target is match for conditions"
+              },
+              "error_message": "assert target is match for conditions"
             }
           },
           {
@@ -525,7 +519,7 @@
               "end_column": 6
             },
             "expr": {
-              "_type": "IntrinsicCall",
+              "_type": "AssertExpression",
               "source_location": {
                 "file": "tests/approvals/pre-approved-sale.algo.ts",
                 "line": 23,
@@ -540,10 +534,23 @@
                 "ephemeral": false,
                 "scalar_type": null
               },
-              "op_code": "assert",
-              "immediates": [],
-              "stack_args": [
-                {
+              "condition": {
+                "_type": "BooleanBinaryOperation",
+                "source_location": {
+                  "file": "tests/approvals/pre-approved-sale.algo.ts",
+                  "line": 23,
+                  "end_line": 29,
+                  "column": 4,
+                  "end_column": 6
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "bool",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 2
+                },
+                "left": {
                   "_type": "BooleanBinaryOperation",
                   "source_location": {
                     "file": "tests/approvals/pre-approved-sale.algo.ts",
@@ -592,184 +599,6 @@
                         "scalar_type": 2
                       },
                       "left": {
-                        "_type": "BooleanBinaryOperation",
-                        "source_location": {
-                          "file": "tests/approvals/pre-approved-sale.algo.ts",
-                          "line": 23,
-                          "end_line": 29,
-                          "column": 4,
-                          "end_column": 6
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "bool",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": 2
-                        },
-                        "left": {
-                          "_type": "NumericComparisonExpression",
-                          "source_location": {
-                            "file": "tests/approvals/pre-approved-sale.algo.ts",
-                            "line": 23,
-                            "end_line": 29,
-                            "column": 4,
-                            "end_column": 6
-                          },
-                          "wtype": {
-                            "_type": "WType",
-                            "name": "bool",
-                            "immutable": true,
-                            "ephemeral": false,
-                            "scalar_type": 2
-                          },
-                          "lhs": {
-                            "_type": "IntrinsicCall",
-                            "source_location": {
-                              "file": "tests/approvals/pre-approved-sale.algo.ts",
-                              "line": 23,
-                              "end_line": 29,
-                              "column": 4,
-                              "end_column": 6
-                            },
-                            "wtype": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true,
-                              "ephemeral": false,
-                              "scalar_type": 2
-                            },
-                            "op_code": "gtxns",
-                            "immediates": [
-                              "AssetAmount"
-                            ],
-                            "stack_args": [
-                              {
-                                "_type": "VarExpression",
-                                "source_location": {
-                                  "file": "tests/approvals/pre-approved-sale.algo.ts",
-                                  "line": 23,
-                                  "end_line": 23,
-                                  "column": 16,
-                                  "end_column": 24
-                                },
-                                "wtype": {
-                                  "_type": "WGroupTransaction",
-                                  "name": "group_transaction_axfer",
-                                  "immutable": true,
-                                  "ephemeral": false,
-                                  "scalar_type": 2,
-                                  "transaction_type": 4
-                                },
-                                "name": "assetTxn"
-                              }
-                            ],
-                            "comment": null
-                          },
-                          "operator": "==",
-                          "rhs": {
-                            "_type": "IntegerConstant",
-                            "source_location": {
-                              "file": "tests/approvals/pre-approved-sale.algo.ts",
-                              "line": 24,
-                              "end_line": 24,
-                              "column": 26,
-                              "end_column": 27
-                            },
-                            "wtype": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true,
-                              "ephemeral": false,
-                              "scalar_type": 2
-                            },
-                            "value": "1",
-                            "teal_alias": null
-                          }
-                        },
-                        "op": "and",
-                        "right": {
-                          "_type": "BytesComparisonExpression",
-                          "source_location": {
-                            "file": "tests/approvals/pre-approved-sale.algo.ts",
-                            "line": 23,
-                            "end_line": 29,
-                            "column": 4,
-                            "end_column": 6
-                          },
-                          "wtype": {
-                            "_type": "WType",
-                            "name": "bool",
-                            "immutable": true,
-                            "ephemeral": false,
-                            "scalar_type": 2
-                          },
-                          "lhs": {
-                            "_type": "IntrinsicCall",
-                            "source_location": {
-                              "file": "tests/approvals/pre-approved-sale.algo.ts",
-                              "line": 23,
-                              "end_line": 29,
-                              "column": 4,
-                              "end_column": 6
-                            },
-                            "wtype": {
-                              "_type": "WType",
-                              "name": "account",
-                              "immutable": true,
-                              "ephemeral": false,
-                              "scalar_type": 1
-                            },
-                            "op_code": "gtxns",
-                            "immediates": [
-                              "Sender"
-                            ],
-                            "stack_args": [
-                              {
-                                "_type": "VarExpression",
-                                "source_location": {
-                                  "file": "tests/approvals/pre-approved-sale.algo.ts",
-                                  "line": 23,
-                                  "end_line": 23,
-                                  "column": 16,
-                                  "end_column": 24
-                                },
-                                "wtype": {
-                                  "_type": "WGroupTransaction",
-                                  "name": "group_transaction_axfer",
-                                  "immutable": true,
-                                  "ephemeral": false,
-                                  "scalar_type": 2,
-                                  "transaction_type": 4
-                                },
-                                "name": "assetTxn"
-                              }
-                            ],
-                            "comment": null
-                          },
-                          "operator": "==",
-                          "rhs": {
-                            "_type": "VarExpression",
-                            "source_location": {
-                              "file": "tests/approvals/pre-approved-sale.algo.ts",
-                              "line": 25,
-                              "end_line": 25,
-                              "column": 14,
-                              "end_column": 20
-                            },
-                            "wtype": {
-                              "_type": "WType",
-                              "name": "account",
-                              "immutable": true,
-                              "ephemeral": false,
-                              "scalar_type": 1
-                            },
-                            "name": "seller"
-                          }
-                        }
-                      },
-                      "op": "and",
-                      "right": {
                         "_type": "NumericComparisonExpression",
                         "source_location": {
                           "file": "tests/approvals/pre-approved-sale.algo.ts",
@@ -796,14 +625,14 @@
                           },
                           "wtype": {
                             "_type": "WType",
-                            "name": "asset",
+                            "name": "uint64",
                             "immutable": true,
                             "ephemeral": false,
                             "scalar_type": 2
                           },
                           "op_code": "gtxns",
                           "immediates": [
-                            "XferAsset"
+                            "AssetAmount"
                           ],
                           "stack_args": [
                             {
@@ -825,33 +654,112 @@
                               },
                               "name": "assetTxn"
                             }
+                          ]
+                        },
+                        "operator": "==",
+                        "rhs": {
+                          "_type": "IntegerConstant",
+                          "source_location": {
+                            "file": "tests/approvals/pre-approved-sale.algo.ts",
+                            "line": 24,
+                            "end_line": 24,
+                            "column": 26,
+                            "end_column": 27
+                          },
+                          "wtype": {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true,
+                            "ephemeral": false,
+                            "scalar_type": 2
+                          },
+                          "value": "1",
+                          "teal_alias": null
+                        }
+                      },
+                      "op": "and",
+                      "right": {
+                        "_type": "BytesComparisonExpression",
+                        "source_location": {
+                          "file": "tests/approvals/pre-approved-sale.algo.ts",
+                          "line": 23,
+                          "end_line": 29,
+                          "column": 4,
+                          "end_column": 6
+                        },
+                        "wtype": {
+                          "_type": "WType",
+                          "name": "bool",
+                          "immutable": true,
+                          "ephemeral": false,
+                          "scalar_type": 2
+                        },
+                        "lhs": {
+                          "_type": "IntrinsicCall",
+                          "source_location": {
+                            "file": "tests/approvals/pre-approved-sale.algo.ts",
+                            "line": 23,
+                            "end_line": 29,
+                            "column": 4,
+                            "end_column": 6
+                          },
+                          "wtype": {
+                            "_type": "WType",
+                            "name": "account",
+                            "immutable": true,
+                            "ephemeral": false,
+                            "scalar_type": 1
+                          },
+                          "op_code": "gtxns",
+                          "immediates": [
+                            "Sender"
                           ],
-                          "comment": null
+                          "stack_args": [
+                            {
+                              "_type": "VarExpression",
+                              "source_location": {
+                                "file": "tests/approvals/pre-approved-sale.algo.ts",
+                                "line": 23,
+                                "end_line": 23,
+                                "column": 16,
+                                "end_column": 24
+                              },
+                              "wtype": {
+                                "_type": "WGroupTransaction",
+                                "name": "group_transaction_axfer",
+                                "immutable": true,
+                                "ephemeral": false,
+                                "scalar_type": 2,
+                                "transaction_type": 4
+                              },
+                              "name": "assetTxn"
+                            }
+                          ]
                         },
                         "operator": "==",
                         "rhs": {
                           "_type": "VarExpression",
                           "source_location": {
                             "file": "tests/approvals/pre-approved-sale.algo.ts",
-                            "line": 26,
-                            "end_line": 26,
-                            "column": 17,
-                            "end_column": 22
+                            "line": 25,
+                            "end_line": 25,
+                            "column": 14,
+                            "end_column": 20
                           },
                           "wtype": {
                             "_type": "WType",
-                            "name": "asset",
+                            "name": "account",
                             "immutable": true,
                             "ephemeral": false,
-                            "scalar_type": 2
+                            "scalar_type": 1
                           },
-                          "name": "asset"
+                          "name": "seller"
                         }
                       }
                     },
                     "op": "and",
                     "right": {
-                      "_type": "BytesComparisonExpression",
+                      "_type": "NumericComparisonExpression",
                       "source_location": {
                         "file": "tests/approvals/pre-approved-sale.algo.ts",
                         "line": 23,
@@ -877,14 +785,14 @@
                         },
                         "wtype": {
                           "_type": "WType",
-                          "name": "account",
+                          "name": "asset",
                           "immutable": true,
                           "ephemeral": false,
-                          "scalar_type": 1
+                          "scalar_type": 2
                         },
                         "op_code": "gtxns",
                         "immediates": [
-                          "AssetCloseTo"
+                          "XferAsset"
                         ],
                         "stack_args": [
                           {
@@ -906,32 +814,26 @@
                             },
                             "name": "assetTxn"
                           }
-                        ],
-                        "comment": null
+                        ]
                       },
                       "operator": "==",
                       "rhs": {
-                        "_type": "IntrinsicCall",
+                        "_type": "VarExpression",
                         "source_location": {
                           "file": "tests/approvals/pre-approved-sale.algo.ts",
-                          "line": 27,
-                          "end_line": 27,
-                          "column": 20,
-                          "end_column": 38
+                          "line": 26,
+                          "end_line": 26,
+                          "column": 17,
+                          "end_column": 22
                         },
                         "wtype": {
                           "_type": "WType",
-                          "name": "account",
+                          "name": "asset",
                           "immutable": true,
                           "ephemeral": false,
-                          "scalar_type": 1
+                          "scalar_type": 2
                         },
-                        "op_code": "global",
-                        "immediates": [
-                          "ZeroAddress"
-                        ],
-                        "stack_args": [],
-                        "comment": null
+                        "name": "asset"
                       }
                     }
                   },
@@ -970,7 +872,7 @@
                       },
                       "op_code": "gtxns",
                       "immediates": [
-                        "RekeyTo"
+                        "AssetCloseTo"
                       ],
                       "stack_args": [
                         {
@@ -992,18 +894,17 @@
                           },
                           "name": "assetTxn"
                         }
-                      ],
-                      "comment": null
+                      ]
                     },
                     "operator": "==",
                     "rhs": {
                       "_type": "IntrinsicCall",
                       "source_location": {
                         "file": "tests/approvals/pre-approved-sale.algo.ts",
-                        "line": 28,
-                        "end_line": 28,
-                        "column": 15,
-                        "end_column": 33
+                        "line": 27,
+                        "end_line": 27,
+                        "column": 20,
+                        "end_column": 38
                       },
                       "wtype": {
                         "_type": "WType",
@@ -1016,13 +917,95 @@
                       "immediates": [
                         "ZeroAddress"
                       ],
-                      "stack_args": [],
-                      "comment": null
+                      "stack_args": []
                     }
                   }
+                },
+                "op": "and",
+                "right": {
+                  "_type": "BytesComparisonExpression",
+                  "source_location": {
+                    "file": "tests/approvals/pre-approved-sale.algo.ts",
+                    "line": 23,
+                    "end_line": 29,
+                    "column": 4,
+                    "end_column": 6
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "bool",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 2
+                  },
+                  "lhs": {
+                    "_type": "IntrinsicCall",
+                    "source_location": {
+                      "file": "tests/approvals/pre-approved-sale.algo.ts",
+                      "line": 23,
+                      "end_line": 29,
+                      "column": 4,
+                      "end_column": 6
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "account",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 1
+                    },
+                    "op_code": "gtxns",
+                    "immediates": [
+                      "RekeyTo"
+                    ],
+                    "stack_args": [
+                      {
+                        "_type": "VarExpression",
+                        "source_location": {
+                          "file": "tests/approvals/pre-approved-sale.algo.ts",
+                          "line": 23,
+                          "end_line": 23,
+                          "column": 16,
+                          "end_column": 24
+                        },
+                        "wtype": {
+                          "_type": "WGroupTransaction",
+                          "name": "group_transaction_axfer",
+                          "immutable": true,
+                          "ephemeral": false,
+                          "scalar_type": 2,
+                          "transaction_type": 4
+                        },
+                        "name": "assetTxn"
+                      }
+                    ]
+                  },
+                  "operator": "==",
+                  "rhs": {
+                    "_type": "IntrinsicCall",
+                    "source_location": {
+                      "file": "tests/approvals/pre-approved-sale.algo.ts",
+                      "line": 28,
+                      "end_line": 28,
+                      "column": 15,
+                      "end_column": 33
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "account",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 1
+                    },
+                    "op_code": "global",
+                    "immediates": [
+                      "ZeroAddress"
+                    ],
+                    "stack_args": []
+                  }
                 }
-              ],
-              "comment": "assert target is match for conditions"
+              },
+              "error_message": "assert target is match for conditions"
             }
           },
           {

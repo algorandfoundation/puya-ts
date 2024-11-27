@@ -23,15 +23,15 @@ subroutine test(n: uint64, b: biguint, c: arc4.uint256): void
 subroutine testStr(): void
 {
   s1: arc4.dynamic_array<arc4.byte> = ""
-  assert(reinterpret_cast<bytes>(s1) == reinterpret_cast<bytes>(0))
+  assert(reinterpret_cast<bytes>(s1) == reinterpret_cast<bytes>(0), comment=Empty string should equal the uint16 length prefix)
   s2: arc4.dynamic_array<arc4.byte> = "Hello"
   assert(ARC4_DECODE(s2) == "Hello")
 }
 subroutine testDynamicBytes(someBytes: bytes): void
 {
   db1: arc4.dynamic_array<arc4.byte> = 0x0000
-  assert(ARC4_DECODE(db1) == 0x)
-  assert(reinterpret_cast<bytes>(db1) == reinterpret_cast<bytes>(0))
+  assert(ARC4_DECODE(db1) == 0x, comment=No args should give empty bytes)
+  assert(reinterpret_cast<bytes>(db1) == reinterpret_cast<bytes>(0), comment=bytes prop should return length header (of 0))
   db2: arc4.dynamic_array<arc4.byte> = ARC4_ENCODE(someBytes, wtype=arc4.dynamic_array<arc4.byte>)
   assert(ARC4_DECODE(db2) == someBytes)
   db3: arc4.dynamic_array<arc4.byte> = 0x000568656c6c6f
@@ -61,9 +61,9 @@ subroutine testAddress(): void
 {
   a: arc4.static_array<arc4.byte> = Address("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ")
   b: arc4.static_array<arc4.byte> = reinterpret_cast<arc4.static_array<arc4.byte>>(txn<Sender>())
-  assert(!reinterpret_cast<bytes>(a) == reinterpret_cast<bytes>(b))
-  assert(reinterpret_cast<bytes>(a) == reinterpret_cast<bytes>(Address("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ")))
-  assert(reinterpret_cast<bytes>(a[0]) == reinterpret_cast<bytes>(0))
+  assert(!reinterpret_cast<bytes>(a) == reinterpret_cast<bytes>(b), comment=Zero address should not match sender)
+  assert(reinterpret_cast<bytes>(a) == reinterpret_cast<bytes>(Address("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ")), comment=Two zero addresses should match)
+  assert(reinterpret_cast<bytes>(a[0]) == reinterpret_cast<bytes>(0), comment=Zero address should start with zero byte)
 }
 subroutine testTuple(): void
 {

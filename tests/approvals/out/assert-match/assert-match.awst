@@ -1,10 +1,10 @@
 subroutine testSelf(): void
 {
-  assert(txn<Receiver>() == global<CurrentApplicationAddress>())
+  assert(txn<Receiver>() == global<CurrentApplicationAddress>(), comment=assert target is match for conditions)
 }
 subroutine test(x: group_transaction_pay): void
 {
-  assert(gtxns<Amount>(x) <= 50000 and gtxns<Amount>(x) >= 0 and gtxns<Sender>(x) == txn<Sender>() and gtxns<Receiver>(x) == global<CurrentApplicationAddress>() and gtxns<CloseRemainderTo>(x) == global<ZeroAddress>() and gtxns<FirstValid>(x) > 1 and gtxns<LastValid>(x) < 1099511627776)
+  assert(gtxns<Amount>(x) <= 50000 and gtxns<Amount>(x) >= 0 and gtxns<Sender>(x) == txn<Sender>() and gtxns<Receiver>(x) == global<CurrentApplicationAddress>() and gtxns<CloseRemainderTo>(x) == global<ZeroAddress>() and gtxns<FirstValid>(x) > 1 and gtxns<LastValid>(x) < 1099511627776, comment=assert target is match for conditions)
 }
 contract AssertMatchContract
 {

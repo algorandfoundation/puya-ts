@@ -107,8 +107,7 @@
                   "immediates": [
                     "ApplicationID"
                   ],
-                  "stack_args": [],
-                  "comment": null
+                  "stack_args": []
                 }
               }
             },
@@ -218,8 +217,7 @@
                     "immediates": [
                       "NumAppArgs"
                     ],
-                    "stack_args": [],
-                    "comment": null
+                    "stack_args": []
                   }
                 },
                 "if_branch": {
@@ -301,8 +299,7 @@
                                     "value": "0",
                                     "teal_alias": null
                                   }
-                                ],
-                                "comment": null
+                                ]
                               },
                               "cases": [
                                 [
@@ -1027,8 +1024,7 @@
                     "immediates": [
                       "CurrentApplicationAddress"
                     ],
-                    "stack_args": [],
-                    "comment": null
+                    "stack_args": []
                   },
                   "ConfigAssetReserve": {
                     "_type": "IntrinsicCall",
@@ -1050,8 +1046,7 @@
                     "immediates": [
                       "CurrentApplicationAddress"
                     ],
-                    "stack_args": [],
-                    "comment": null
+                    "stack_args": []
                   }
                 }
               }
@@ -1354,7 +1349,7 @@
                 "end_column": 75
               },
               "expr": {
-                "_type": "IntrinsicCall",
+                "_type": "AssertExpression",
                 "source_location": {
                   "file": "tests/approvals/itxn.algo.ts",
                   "line": 46,
@@ -1369,86 +1364,82 @@
                   "ephemeral": false,
                   "scalar_type": null
                 },
-                "op_code": "assert",
-                "immediates": [],
-                "stack_args": [
-                  {
-                    "_type": "BytesComparisonExpression",
+                "condition": {
+                  "_type": "BytesComparisonExpression",
+                  "source_location": {
+                    "file": "tests/approvals/itxn.algo.ts",
+                    "line": 46,
+                    "end_line": 46,
+                    "column": 11,
+                    "end_column": 49
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "bool",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 2
+                  },
+                  "lhs": {
+                    "_type": "InnerTransactionField",
                     "source_location": {
                       "file": "tests/approvals/itxn.algo.ts",
                       "line": 46,
                       "end_line": 46,
                       "column": 11,
-                      "end_column": 49
+                      "end_column": 31
                     },
                     "wtype": {
                       "_type": "WType",
-                      "name": "bool",
+                      "name": "bytes",
                       "immutable": true,
                       "ephemeral": false,
-                      "scalar_type": 2
+                      "scalar_type": 1
                     },
-                    "lhs": {
-                      "_type": "InnerTransactionField",
+                    "itxn": {
+                      "_type": "VarExpression",
                       "source_location": {
                         "file": "tests/approvals/itxn.algo.ts",
                         "line": 46,
                         "end_line": 46,
                         "column": 11,
-                        "end_column": 31
+                        "end_column": 21
                       },
                       "wtype": {
-                        "_type": "WType",
-                        "name": "bytes",
+                        "_type": "WInnerTransaction",
+                        "name": "inner_transaction_acfg",
                         "immutable": true,
                         "ephemeral": false,
-                        "scalar_type": 1
+                        "scalar_type": null,
+                        "transaction_type": 3
                       },
-                      "itxn": {
-                        "_type": "VarExpression",
-                        "source_location": {
-                          "file": "tests/approvals/itxn.algo.ts",
-                          "line": 46,
-                          "end_line": 46,
-                          "column": 11,
-                          "end_column": 21
-                        },
-                        "wtype": {
-                          "_type": "WInnerTransaction",
-                          "name": "inner_transaction_acfg",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": null,
-                          "transaction_type": 3
-                        },
-                        "name": "asset1_txn"
-                      },
-                      "field": "ConfigAssetName",
-                      "array_index": null
+                      "name": "asset1_txn"
                     },
-                    "operator": "==",
-                    "rhs": {
-                      "_type": "BytesConstant",
-                      "source_location": {
-                        "file": "tests/approvals/itxn.algo.ts",
-                        "line": 46,
-                        "end_line": 46,
-                        "column": 42,
-                        "end_column": 48
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "bytes",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 1
-                      },
-                      "value": "K~q#Q",
-                      "encoding": "utf8"
-                    }
+                    "field": "ConfigAssetName",
+                    "array_index": null
+                  },
+                  "operator": "==",
+                  "rhs": {
+                    "_type": "BytesConstant",
+                    "source_location": {
+                      "file": "tests/approvals/itxn.algo.ts",
+                      "line": 46,
+                      "end_line": 46,
+                      "column": 42,
+                      "end_column": 48
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "bytes",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 1
+                    },
+                    "value": "K~q#Q",
+                    "encoding": "utf8"
                   }
-                ],
-                "comment": "asset1_txn is correct"
+                },
+                "error_message": "asset1_txn is correct"
               }
             },
             {
@@ -1461,7 +1452,7 @@
                 "end_column": 75
               },
               "expr": {
-                "_type": "IntrinsicCall",
+                "_type": "AssertExpression",
                 "source_location": {
                   "file": "tests/approvals/itxn.algo.ts",
                   "line": 47,
@@ -1476,86 +1467,82 @@
                   "ephemeral": false,
                   "scalar_type": null
                 },
-                "op_code": "assert",
-                "immediates": [],
-                "stack_args": [
-                  {
-                    "_type": "BytesComparisonExpression",
+                "condition": {
+                  "_type": "BytesComparisonExpression",
+                  "source_location": {
+                    "file": "tests/approvals/itxn.algo.ts",
+                    "line": 47,
+                    "end_line": 47,
+                    "column": 11,
+                    "end_column": 49
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "bool",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 2
+                  },
+                  "lhs": {
+                    "_type": "InnerTransactionField",
                     "source_location": {
                       "file": "tests/approvals/itxn.algo.ts",
                       "line": 47,
                       "end_line": 47,
                       "column": 11,
-                      "end_column": 49
+                      "end_column": 31
                     },
                     "wtype": {
                       "_type": "WType",
-                      "name": "bool",
+                      "name": "bytes",
                       "immutable": true,
                       "ephemeral": false,
-                      "scalar_type": 2
+                      "scalar_type": 1
                     },
-                    "lhs": {
-                      "_type": "InnerTransactionField",
+                    "itxn": {
+                      "_type": "VarExpression",
                       "source_location": {
                         "file": "tests/approvals/itxn.algo.ts",
                         "line": 47,
                         "end_line": 47,
                         "column": 11,
-                        "end_column": 31
+                        "end_column": 21
                       },
                       "wtype": {
-                        "_type": "WType",
-                        "name": "bytes",
+                        "_type": "WInnerTransaction",
+                        "name": "inner_transaction_acfg",
                         "immutable": true,
                         "ephemeral": false,
-                        "scalar_type": 1
+                        "scalar_type": null,
+                        "transaction_type": 3
                       },
-                      "itxn": {
-                        "_type": "VarExpression",
-                        "source_location": {
-                          "file": "tests/approvals/itxn.algo.ts",
-                          "line": 47,
-                          "end_line": 47,
-                          "column": 11,
-                          "end_column": 21
-                        },
-                        "wtype": {
-                          "_type": "WInnerTransaction",
-                          "name": "inner_transaction_acfg",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": null,
-                          "transaction_type": 3
-                        },
-                        "name": "asset2_txn"
-                      },
-                      "field": "ConfigAssetName",
-                      "array_index": null
+                      "name": "asset2_txn"
                     },
-                    "operator": "==",
-                    "rhs": {
-                      "_type": "BytesConstant",
-                      "source_location": {
-                        "file": "tests/approvals/itxn.algo.ts",
-                        "line": 47,
-                        "end_line": 47,
-                        "column": 42,
-                        "end_column": 48
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "bytes",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 1
-                      },
-                      "value": "K~q#R",
-                      "encoding": "utf8"
-                    }
+                    "field": "ConfigAssetName",
+                    "array_index": null
+                  },
+                  "operator": "==",
+                  "rhs": {
+                    "_type": "BytesConstant",
+                    "source_location": {
+                      "file": "tests/approvals/itxn.algo.ts",
+                      "line": 47,
+                      "end_line": 47,
+                      "column": 42,
+                      "end_column": 48
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "bytes",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 1
+                    },
+                    "value": "K~q#R",
+                    "encoding": "utf8"
                   }
-                ],
-                "comment": "asset2_txn is correct"
+                },
+                "error_message": "asset2_txn is correct"
               }
             },
             {
@@ -1568,7 +1555,7 @@
                 "end_column": 88
               },
               "expr": {
-                "_type": "IntrinsicCall",
+                "_type": "AssertExpression",
                 "source_location": {
                   "file": "tests/approvals/itxn.algo.ts",
                   "line": 48,
@@ -1583,27 +1570,40 @@
                   "ephemeral": false,
                   "scalar_type": null
                 },
-                "op_code": "assert",
-                "immediates": [],
-                "stack_args": [
-                  {
-                    "_type": "BytesComparisonExpression",
+                "condition": {
+                  "_type": "BytesComparisonExpression",
+                  "source_location": {
+                    "file": "tests/approvals/itxn.algo.ts",
+                    "line": 48,
+                    "end_line": 48,
+                    "column": 11,
+                    "end_column": 57
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "bool",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 2
+                  },
+                  "lhs": {
+                    "_type": "CheckedMaybe",
                     "source_location": {
                       "file": "tests/approvals/itxn.algo.ts",
                       "line": 48,
                       "end_line": 48,
                       "column": 11,
-                      "end_column": 57
+                      "end_column": 39
                     },
                     "wtype": {
                       "_type": "WType",
-                      "name": "bool",
+                      "name": "bytes",
                       "immutable": true,
                       "ephemeral": false,
-                      "scalar_type": 2
+                      "scalar_type": 1
                     },
-                    "lhs": {
-                      "_type": "CheckedMaybe",
+                    "expr": {
+                      "_type": "IntrinsicCall",
                       "source_location": {
                         "file": "tests/approvals/itxn.algo.ts",
                         "line": 48,
@@ -1612,115 +1612,97 @@
                         "end_column": 39
                       },
                       "wtype": {
-                        "_type": "WType",
-                        "name": "bytes",
+                        "_type": "WTuple",
+                        "name": "tuple",
                         "immutable": true,
                         "ephemeral": false,
-                        "scalar_type": 1
-                      },
-                      "expr": {
-                        "_type": "IntrinsicCall",
-                        "source_location": {
-                          "file": "tests/approvals/itxn.algo.ts",
-                          "line": 48,
-                          "end_line": 48,
-                          "column": 11,
-                          "end_column": 39
-                        },
-                        "wtype": {
-                          "_type": "WTuple",
-                          "name": "tuple",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": null,
-                          "types": [
-                            {
-                              "_type": "WType",
-                              "name": "bytes",
-                              "immutable": true,
-                              "ephemeral": false,
-                              "scalar_type": 1
-                            },
-                            {
-                              "_type": "WType",
-                              "name": "bool",
-                              "immutable": true,
-                              "ephemeral": false,
-                              "scalar_type": 2
-                            }
-                          ]
-                        },
-                        "op_code": "asset_params_get",
-                        "immediates": [
-                          "AssetName"
-                        ],
-                        "stack_args": [
+                        "scalar_type": null,
+                        "types": [
                           {
-                            "_type": "InnerTransactionField",
+                            "_type": "WType",
+                            "name": "bytes",
+                            "immutable": true,
+                            "ephemeral": false,
+                            "scalar_type": 1
+                          },
+                          {
+                            "_type": "WType",
+                            "name": "bool",
+                            "immutable": true,
+                            "ephemeral": false,
+                            "scalar_type": 2
+                          }
+                        ]
+                      },
+                      "op_code": "asset_params_get",
+                      "immediates": [
+                        "AssetName"
+                      ],
+                      "stack_args": [
+                        {
+                          "_type": "InnerTransactionField",
+                          "source_location": {
+                            "file": "tests/approvals/itxn.algo.ts",
+                            "line": 48,
+                            "end_line": 48,
+                            "column": 11,
+                            "end_column": 34
+                          },
+                          "wtype": {
+                            "_type": "WType",
+                            "name": "asset",
+                            "immutable": true,
+                            "ephemeral": false,
+                            "scalar_type": 2
+                          },
+                          "itxn": {
+                            "_type": "VarExpression",
                             "source_location": {
                               "file": "tests/approvals/itxn.algo.ts",
                               "line": 48,
                               "end_line": 48,
                               "column": 11,
-                              "end_column": 34
+                              "end_column": 21
                             },
                             "wtype": {
-                              "_type": "WType",
-                              "name": "asset",
+                              "_type": "WInnerTransaction",
+                              "name": "inner_transaction_acfg",
                               "immutable": true,
                               "ephemeral": false,
-                              "scalar_type": 2
+                              "scalar_type": null,
+                              "transaction_type": 3
                             },
-                            "itxn": {
-                              "_type": "VarExpression",
-                              "source_location": {
-                                "file": "tests/approvals/itxn.algo.ts",
-                                "line": 48,
-                                "end_line": 48,
-                                "column": 11,
-                                "end_column": 21
-                              },
-                              "wtype": {
-                                "_type": "WInnerTransaction",
-                                "name": "inner_transaction_acfg",
-                                "immutable": true,
-                                "ephemeral": false,
-                                "scalar_type": null,
-                                "transaction_type": 3
-                              },
-                              "name": "asset1_txn"
-                            },
-                            "field": "CreatedAssetID",
-                            "array_index": null
-                          }
-                        ],
-                        "comment": null
-                      },
-                      "comment": "asset exists"
+                            "name": "asset1_txn"
+                          },
+                          "field": "CreatedAssetID",
+                          "array_index": null
+                        }
+                      ]
                     },
-                    "operator": "==",
-                    "rhs": {
-                      "_type": "BytesConstant",
-                      "source_location": {
-                        "file": "tests/approvals/itxn.algo.ts",
-                        "line": 48,
-                        "end_line": 48,
-                        "column": 50,
-                        "end_column": 56
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "bytes",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 1
-                      },
-                      "value": "K~q#Q",
-                      "encoding": "utf8"
-                    }
+                    "comment": "asset exists"
+                  },
+                  "operator": "==",
+                  "rhs": {
+                    "_type": "BytesConstant",
+                    "source_location": {
+                      "file": "tests/approvals/itxn.algo.ts",
+                      "line": 48,
+                      "end_line": 48,
+                      "column": 50,
+                      "end_column": 56
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "bytes",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 1
+                    },
+                    "value": "K~q#Q",
+                    "encoding": "utf8"
                   }
-                ],
-                "comment": "created asset 1 is correct"
+                },
+                "error_message": "created asset 1 is correct"
               }
             },
             {
@@ -1733,7 +1715,7 @@
                 "end_column": 88
               },
               "expr": {
-                "_type": "IntrinsicCall",
+                "_type": "AssertExpression",
                 "source_location": {
                   "file": "tests/approvals/itxn.algo.ts",
                   "line": 49,
@@ -1748,27 +1730,40 @@
                   "ephemeral": false,
                   "scalar_type": null
                 },
-                "op_code": "assert",
-                "immediates": [],
-                "stack_args": [
-                  {
-                    "_type": "BytesComparisonExpression",
+                "condition": {
+                  "_type": "BytesComparisonExpression",
+                  "source_location": {
+                    "file": "tests/approvals/itxn.algo.ts",
+                    "line": 49,
+                    "end_line": 49,
+                    "column": 11,
+                    "end_column": 57
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "bool",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 2
+                  },
+                  "lhs": {
+                    "_type": "CheckedMaybe",
                     "source_location": {
                       "file": "tests/approvals/itxn.algo.ts",
                       "line": 49,
                       "end_line": 49,
                       "column": 11,
-                      "end_column": 57
+                      "end_column": 39
                     },
                     "wtype": {
                       "_type": "WType",
-                      "name": "bool",
+                      "name": "bytes",
                       "immutable": true,
                       "ephemeral": false,
-                      "scalar_type": 2
+                      "scalar_type": 1
                     },
-                    "lhs": {
-                      "_type": "CheckedMaybe",
+                    "expr": {
+                      "_type": "IntrinsicCall",
                       "source_location": {
                         "file": "tests/approvals/itxn.algo.ts",
                         "line": 49,
@@ -1777,115 +1772,97 @@
                         "end_column": 39
                       },
                       "wtype": {
-                        "_type": "WType",
-                        "name": "bytes",
+                        "_type": "WTuple",
+                        "name": "tuple",
                         "immutable": true,
                         "ephemeral": false,
-                        "scalar_type": 1
-                      },
-                      "expr": {
-                        "_type": "IntrinsicCall",
-                        "source_location": {
-                          "file": "tests/approvals/itxn.algo.ts",
-                          "line": 49,
-                          "end_line": 49,
-                          "column": 11,
-                          "end_column": 39
-                        },
-                        "wtype": {
-                          "_type": "WTuple",
-                          "name": "tuple",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": null,
-                          "types": [
-                            {
-                              "_type": "WType",
-                              "name": "bytes",
-                              "immutable": true,
-                              "ephemeral": false,
-                              "scalar_type": 1
-                            },
-                            {
-                              "_type": "WType",
-                              "name": "bool",
-                              "immutable": true,
-                              "ephemeral": false,
-                              "scalar_type": 2
-                            }
-                          ]
-                        },
-                        "op_code": "asset_params_get",
-                        "immediates": [
-                          "AssetName"
-                        ],
-                        "stack_args": [
+                        "scalar_type": null,
+                        "types": [
                           {
-                            "_type": "InnerTransactionField",
+                            "_type": "WType",
+                            "name": "bytes",
+                            "immutable": true,
+                            "ephemeral": false,
+                            "scalar_type": 1
+                          },
+                          {
+                            "_type": "WType",
+                            "name": "bool",
+                            "immutable": true,
+                            "ephemeral": false,
+                            "scalar_type": 2
+                          }
+                        ]
+                      },
+                      "op_code": "asset_params_get",
+                      "immediates": [
+                        "AssetName"
+                      ],
+                      "stack_args": [
+                        {
+                          "_type": "InnerTransactionField",
+                          "source_location": {
+                            "file": "tests/approvals/itxn.algo.ts",
+                            "line": 49,
+                            "end_line": 49,
+                            "column": 11,
+                            "end_column": 34
+                          },
+                          "wtype": {
+                            "_type": "WType",
+                            "name": "asset",
+                            "immutable": true,
+                            "ephemeral": false,
+                            "scalar_type": 2
+                          },
+                          "itxn": {
+                            "_type": "VarExpression",
                             "source_location": {
                               "file": "tests/approvals/itxn.algo.ts",
                               "line": 49,
                               "end_line": 49,
                               "column": 11,
-                              "end_column": 34
+                              "end_column": 21
                             },
                             "wtype": {
-                              "_type": "WType",
-                              "name": "asset",
+                              "_type": "WInnerTransaction",
+                              "name": "inner_transaction_acfg",
                               "immutable": true,
                               "ephemeral": false,
-                              "scalar_type": 2
+                              "scalar_type": null,
+                              "transaction_type": 3
                             },
-                            "itxn": {
-                              "_type": "VarExpression",
-                              "source_location": {
-                                "file": "tests/approvals/itxn.algo.ts",
-                                "line": 49,
-                                "end_line": 49,
-                                "column": 11,
-                                "end_column": 21
-                              },
-                              "wtype": {
-                                "_type": "WInnerTransaction",
-                                "name": "inner_transaction_acfg",
-                                "immutable": true,
-                                "ephemeral": false,
-                                "scalar_type": null,
-                                "transaction_type": 3
-                              },
-                              "name": "asset2_txn"
-                            },
-                            "field": "CreatedAssetID",
-                            "array_index": null
-                          }
-                        ],
-                        "comment": null
-                      },
-                      "comment": "asset exists"
+                            "name": "asset2_txn"
+                          },
+                          "field": "CreatedAssetID",
+                          "array_index": null
+                        }
+                      ]
                     },
-                    "operator": "==",
-                    "rhs": {
-                      "_type": "BytesConstant",
-                      "source_location": {
-                        "file": "tests/approvals/itxn.algo.ts",
-                        "line": 49,
-                        "end_line": 49,
-                        "column": 50,
-                        "end_column": 56
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "bytes",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 1
-                      },
-                      "value": "K~q#R",
-                      "encoding": "utf8"
-                    }
+                    "comment": "asset exists"
+                  },
+                  "operator": "==",
+                  "rhs": {
+                    "_type": "BytesConstant",
+                    "source_location": {
+                      "file": "tests/approvals/itxn.algo.ts",
+                      "line": 49,
+                      "end_line": 49,
+                      "column": 50,
+                      "end_column": 56
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "bytes",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 1
+                    },
+                    "value": "K~q#R",
+                    "encoding": "utf8"
                   }
-                ],
-                "comment": "created asset 2 is correct"
+                },
+                "error_message": "created asset 2 is correct"
               }
             },
             {
@@ -2232,7 +2209,7 @@
                 "end_column": 48
               },
               "expr": {
-                "_type": "IntrinsicCall",
+                "_type": "AssertExpression",
                 "source_location": {
                   "file": "tests/approvals/itxn.algo.ts",
                   "line": 63,
@@ -2247,66 +2224,62 @@
                   "ephemeral": false,
                   "scalar_type": null
                 },
-                "op_code": "assert",
-                "immediates": [],
-                "stack_args": [
-                  {
-                    "_type": "ReinterpretCast",
+                "condition": {
+                  "_type": "ReinterpretCast",
+                  "source_location": {
+                    "file": "tests/approvals/itxn.algo.ts",
+                    "line": 63,
+                    "end_line": 63,
+                    "column": 4,
+                    "end_column": 48
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "bool",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 2
+                  },
+                  "expr": {
+                    "_type": "InnerTransactionField",
                     "source_location": {
                       "file": "tests/approvals/itxn.algo.ts",
                       "line": 63,
                       "end_line": 63,
-                      "column": 4,
-                      "end_column": 48
+                      "column": 11,
+                      "end_column": 29
                     },
                     "wtype": {
                       "_type": "WType",
-                      "name": "bool",
+                      "name": "application",
                       "immutable": true,
                       "ephemeral": false,
                       "scalar_type": 2
                     },
-                    "expr": {
-                      "_type": "InnerTransactionField",
+                    "itxn": {
+                      "_type": "VarExpression",
                       "source_location": {
                         "file": "tests/approvals/itxn.algo.ts",
                         "line": 63,
                         "end_line": 63,
                         "column": 11,
-                        "end_column": 29
+                        "end_column": 23
                       },
                       "wtype": {
-                        "_type": "WType",
-                        "name": "application",
+                        "_type": "WInnerTransaction",
+                        "name": "inner_transaction_appl",
                         "immutable": true,
                         "ephemeral": false,
-                        "scalar_type": 2
+                        "scalar_type": null,
+                        "transaction_type": 6
                       },
-                      "itxn": {
-                        "_type": "VarExpression",
-                        "source_location": {
-                          "file": "tests/approvals/itxn.algo.ts",
-                          "line": 63,
-                          "end_line": 63,
-                          "column": 11,
-                          "end_column": 23
-                        },
-                        "wtype": {
-                          "_type": "WInnerTransaction",
-                          "name": "inner_transaction_appl",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": null,
-                          "transaction_type": 6
-                        },
-                        "name": "appCreateTxn"
-                      },
-                      "field": "ApplicationID",
-                      "array_index": null
-                    }
+                      "name": "appCreateTxn"
+                    },
+                    "field": "ApplicationID",
+                    "array_index": null
                   }
-                ],
-                "comment": "app is created"
+                },
+                "error_message": "app is created"
               }
             },
             {
@@ -2319,7 +2292,7 @@
                 "end_column": 75
               },
               "expr": {
-                "_type": "IntrinsicCall",
+                "_type": "AssertExpression",
                 "source_location": {
                   "file": "tests/approvals/itxn.algo.ts",
                   "line": 64,
@@ -2334,86 +2307,82 @@
                   "ephemeral": false,
                   "scalar_type": null
                 },
-                "op_code": "assert",
-                "immediates": [],
-                "stack_args": [
-                  {
-                    "_type": "BytesComparisonExpression",
+                "condition": {
+                  "_type": "BytesComparisonExpression",
+                  "source_location": {
+                    "file": "tests/approvals/itxn.algo.ts",
+                    "line": 64,
+                    "end_line": 64,
+                    "column": 11,
+                    "end_column": 49
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "bool",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 2
+                  },
+                  "lhs": {
+                    "_type": "InnerTransactionField",
                     "source_location": {
                       "file": "tests/approvals/itxn.algo.ts",
                       "line": 64,
                       "end_line": 64,
                       "column": 11,
-                      "end_column": 49
+                      "end_column": 31
                     },
                     "wtype": {
                       "_type": "WType",
-                      "name": "bool",
+                      "name": "bytes",
                       "immutable": true,
                       "ephemeral": false,
-                      "scalar_type": 2
+                      "scalar_type": 1
                     },
-                    "lhs": {
-                      "_type": "InnerTransactionField",
+                    "itxn": {
+                      "_type": "VarExpression",
                       "source_location": {
                         "file": "tests/approvals/itxn.algo.ts",
                         "line": 64,
                         "end_line": 64,
                         "column": 11,
-                        "end_column": 31
+                        "end_column": 21
                       },
                       "wtype": {
-                        "_type": "WType",
-                        "name": "bytes",
+                        "_type": "WInnerTransaction",
+                        "name": "inner_transaction_acfg",
                         "immutable": true,
                         "ephemeral": false,
-                        "scalar_type": 1
+                        "scalar_type": null,
+                        "transaction_type": 3
                       },
-                      "itxn": {
-                        "_type": "VarExpression",
-                        "source_location": {
-                          "file": "tests/approvals/itxn.algo.ts",
-                          "line": 64,
-                          "end_line": 64,
-                          "column": 11,
-                          "end_column": 21
-                        },
-                        "wtype": {
-                          "_type": "WInnerTransaction",
-                          "name": "inner_transaction_acfg",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": null,
-                          "transaction_type": 3
-                        },
-                        "name": "asset3_txn"
-                      },
-                      "field": "ConfigAssetName",
-                      "array_index": null
+                      "name": "asset3_txn"
                     },
-                    "operator": "==",
-                    "rhs": {
-                      "_type": "BytesConstant",
-                      "source_location": {
-                        "file": "tests/approvals/itxn.algo.ts",
-                        "line": 64,
-                        "end_line": 64,
-                        "column": 42,
-                        "end_column": 48
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "bytes",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 1
-                      },
-                      "value": "K~q#S",
-                      "encoding": "utf8"
-                    }
+                    "field": "ConfigAssetName",
+                    "array_index": null
+                  },
+                  "operator": "==",
+                  "rhs": {
+                    "_type": "BytesConstant",
+                    "source_location": {
+                      "file": "tests/approvals/itxn.algo.ts",
+                      "line": 64,
+                      "end_line": 64,
+                      "column": 42,
+                      "end_column": 48
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "bytes",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 1
+                    },
+                    "value": "K~q#S",
+                    "encoding": "utf8"
                   }
-                ],
-                "comment": "asset3_txn is correct"
+                },
+                "error_message": "asset3_txn is correct"
               }
             },
             {
@@ -2723,8 +2692,7 @@
                   "immediates": [
                     "NumAppArgs"
                   ],
-                  "stack_args": [],
-                  "comment": null
+                  "stack_args": []
                 }
               },
               "if_branch": {
@@ -3486,7 +3454,7 @@
                 "end_column": 73
               },
               "expr": {
-                "_type": "IntrinsicCall",
+                "_type": "AssertExpression",
                 "source_location": {
                   "file": "tests/approvals/itxn.algo.ts",
                   "line": 95,
@@ -3501,104 +3469,100 @@
                   "ephemeral": false,
                   "scalar_type": null
                 },
-                "op_code": "assert",
-                "immediates": [],
-                "stack_args": [
-                  {
-                    "_type": "BytesComparisonExpression",
+                "condition": {
+                  "_type": "BytesComparisonExpression",
+                  "source_location": {
+                    "file": "tests/approvals/itxn.algo.ts",
+                    "line": 95,
+                    "end_line": 95,
+                    "column": 11,
+                    "end_column": 49
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "bool",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 2
+                  },
+                  "lhs": {
+                    "_type": "InnerTransactionField",
                     "source_location": {
                       "file": "tests/approvals/itxn.algo.ts",
                       "line": 95,
                       "end_line": 95,
                       "column": 11,
-                      "end_column": 49
+                      "end_column": 34
                     },
                     "wtype": {
                       "_type": "WType",
-                      "name": "bool",
+                      "name": "bytes",
                       "immutable": true,
                       "ephemeral": false,
-                      "scalar_type": 2
+                      "scalar_type": 1
                     },
-                    "lhs": {
-                      "_type": "InnerTransactionField",
+                    "itxn": {
+                      "_type": "VarExpression",
                       "source_location": {
                         "file": "tests/approvals/itxn.algo.ts",
                         "line": 95,
                         "end_line": 95,
                         "column": 11,
-                        "end_column": 34
+                        "end_column": 23
                       },
                       "wtype": {
-                        "_type": "WType",
-                        "name": "bytes",
+                        "_type": "WInnerTransaction",
+                        "name": "inner_transaction_appl",
                         "immutable": true,
                         "ephemeral": false,
-                        "scalar_type": 1
+                        "scalar_type": null,
+                        "transaction_type": 6
                       },
-                      "itxn": {
-                        "_type": "VarExpression",
-                        "source_location": {
-                          "file": "tests/approvals/itxn.algo.ts",
-                          "line": 95,
-                          "end_line": 95,
-                          "column": 11,
-                          "end_column": 23
-                        },
-                        "wtype": {
-                          "_type": "WInnerTransaction",
-                          "name": "inner_transaction_appl",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": null,
-                          "transaction_type": 6
-                        },
-                        "name": "createAppTxn"
-                      },
-                      "field": "ApplicationArgs",
-                      "array_index": {
-                        "_type": "IntegerConstant",
-                        "source_location": {
-                          "file": "tests/approvals/itxn.algo.ts",
-                          "line": 95,
-                          "end_line": 95,
-                          "column": 32,
-                          "end_column": 33
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": 2
-                        },
-                        "value": "0",
-                        "teal_alias": null
-                      }
+                      "name": "createAppTxn"
                     },
-                    "operator": "==",
-                    "rhs": {
-                      "_type": "BytesConstant",
+                    "field": "ApplicationArgs",
+                    "array_index": {
+                      "_type": "IntegerConstant",
                       "source_location": {
                         "file": "tests/approvals/itxn.algo.ts",
                         "line": 95,
                         "end_line": 95,
-                        "column": 45,
-                        "end_column": 48
+                        "column": 32,
+                        "end_column": 33
                       },
                       "wtype": {
                         "_type": "WType",
-                        "name": "bytes",
+                        "name": "uint64",
                         "immutable": true,
                         "ephemeral": false,
-                        "scalar_type": 1
+                        "scalar_type": 2
                       },
-                      "value": "F#",
-                      "encoding": "utf8"
+                      "value": "0",
+                      "teal_alias": null
                     }
+                  },
+                  "operator": "==",
+                  "rhs": {
+                    "_type": "BytesConstant",
+                    "source_location": {
+                      "file": "tests/approvals/itxn.algo.ts",
+                      "line": 95,
+                      "end_line": 95,
+                      "column": 45,
+                      "end_column": 48
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "bytes",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 1
+                    },
+                    "value": "F#",
+                    "encoding": "utf8"
                   }
-                ],
-                "comment": "correct args used 1"
+                },
+                "error_message": "correct args used 1"
               }
             },
             {
@@ -3611,7 +3575,7 @@
                 "end_column": 73
               },
               "expr": {
-                "_type": "IntrinsicCall",
+                "_type": "AssertExpression",
                 "source_location": {
                   "file": "tests/approvals/itxn.algo.ts",
                   "line": 96,
@@ -3626,104 +3590,100 @@
                   "ephemeral": false,
                   "scalar_type": null
                 },
-                "op_code": "assert",
-                "immediates": [],
-                "stack_args": [
-                  {
-                    "_type": "BytesComparisonExpression",
+                "condition": {
+                  "_type": "BytesComparisonExpression",
+                  "source_location": {
+                    "file": "tests/approvals/itxn.algo.ts",
+                    "line": 96,
+                    "end_line": 96,
+                    "column": 11,
+                    "end_column": 49
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "bool",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 2
+                  },
+                  "lhs": {
+                    "_type": "InnerTransactionField",
                     "source_location": {
                       "file": "tests/approvals/itxn.algo.ts",
                       "line": 96,
                       "end_line": 96,
                       "column": 11,
-                      "end_column": 49
+                      "end_column": 34
                     },
                     "wtype": {
                       "_type": "WType",
-                      "name": "bool",
+                      "name": "bytes",
                       "immutable": true,
                       "ephemeral": false,
-                      "scalar_type": 2
+                      "scalar_type": 1
                     },
-                    "lhs": {
-                      "_type": "InnerTransactionField",
+                    "itxn": {
+                      "_type": "VarExpression",
                       "source_location": {
                         "file": "tests/approvals/itxn.algo.ts",
                         "line": 96,
                         "end_line": 96,
                         "column": 11,
-                        "end_column": 34
+                        "end_column": 23
                       },
                       "wtype": {
-                        "_type": "WType",
-                        "name": "bytes",
+                        "_type": "WInnerTransaction",
+                        "name": "inner_transaction_appl",
                         "immutable": true,
                         "ephemeral": false,
-                        "scalar_type": 1
+                        "scalar_type": null,
+                        "transaction_type": 6
                       },
-                      "itxn": {
-                        "_type": "VarExpression",
-                        "source_location": {
-                          "file": "tests/approvals/itxn.algo.ts",
-                          "line": 96,
-                          "end_line": 96,
-                          "column": 11,
-                          "end_column": 23
-                        },
-                        "wtype": {
-                          "_type": "WInnerTransaction",
-                          "name": "inner_transaction_appl",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": null,
-                          "transaction_type": 6
-                        },
-                        "name": "createAppTxn"
-                      },
-                      "field": "ApplicationArgs",
-                      "array_index": {
-                        "_type": "IntegerConstant",
-                        "source_location": {
-                          "file": "tests/approvals/itxn.algo.ts",
-                          "line": 96,
-                          "end_line": 96,
-                          "column": 32,
-                          "end_column": 33
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": 2
-                        },
-                        "value": "1",
-                        "teal_alias": null
-                      }
+                      "name": "createAppTxn"
                     },
-                    "operator": "==",
-                    "rhs": {
-                      "_type": "BytesConstant",
+                    "field": "ApplicationArgs",
+                    "array_index": {
+                      "_type": "IntegerConstant",
                       "source_location": {
                         "file": "tests/approvals/itxn.algo.ts",
                         "line": 96,
                         "end_line": 96,
-                        "column": 45,
-                        "end_column": 48
+                        "column": 32,
+                        "end_column": 33
                       },
                       "wtype": {
                         "_type": "WType",
-                        "name": "bytes",
+                        "name": "uint64",
                         "immutable": true,
                         "ephemeral": false,
-                        "scalar_type": 1
+                        "scalar_type": 2
                       },
-                      "value": "G5",
-                      "encoding": "utf8"
+                      "value": "1",
+                      "teal_alias": null
                     }
+                  },
+                  "operator": "==",
+                  "rhs": {
+                    "_type": "BytesConstant",
+                    "source_location": {
+                      "file": "tests/approvals/itxn.algo.ts",
+                      "line": 96,
+                      "end_line": 96,
+                      "column": 45,
+                      "end_column": 48
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "bytes",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 1
+                    },
+                    "value": "G5",
+                    "encoding": "utf8"
                   }
-                ],
-                "comment": "correct args used 2"
+                },
+                "error_message": "correct args used 2"
               }
             },
             {
@@ -3736,7 +3696,7 @@
                 "end_column": 62
               },
               "expr": {
-                "_type": "IntrinsicCall",
+                "_type": "AssertExpression",
                 "source_location": {
                   "file": "tests/approvals/itxn.algo.ts",
                   "line": 97,
@@ -3751,86 +3711,82 @@
                   "ephemeral": false,
                   "scalar_type": null
                 },
-                "op_code": "assert",
-                "immediates": [],
-                "stack_args": [
-                  {
-                    "_type": "BytesComparisonExpression",
+                "condition": {
+                  "_type": "BytesComparisonExpression",
+                  "source_location": {
+                    "file": "tests/approvals/itxn.algo.ts",
+                    "line": 97,
+                    "end_line": 97,
+                    "column": 11,
+                    "end_column": 61
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "bool",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 2
+                  },
+                  "lhs": {
+                    "_type": "InnerTransactionField",
                     "source_location": {
                       "file": "tests/approvals/itxn.algo.ts",
                       "line": 97,
                       "end_line": 97,
                       "column": 11,
-                      "end_column": 61
+                      "end_column": 28
                     },
                     "wtype": {
                       "_type": "WType",
-                      "name": "bool",
+                      "name": "bytes",
                       "immutable": true,
                       "ephemeral": false,
-                      "scalar_type": 2
+                      "scalar_type": 1
                     },
-                    "lhs": {
-                      "_type": "InnerTransactionField",
+                    "itxn": {
+                      "_type": "VarExpression",
                       "source_location": {
                         "file": "tests/approvals/itxn.algo.ts",
                         "line": 97,
                         "end_line": 97,
                         "column": 11,
-                        "end_column": 28
+                        "end_column": 23
                       },
                       "wtype": {
-                        "_type": "WType",
-                        "name": "bytes",
+                        "_type": "WInnerTransaction",
+                        "name": "inner_transaction_appl",
                         "immutable": true,
                         "ephemeral": false,
-                        "scalar_type": 1
+                        "scalar_type": null,
+                        "transaction_type": 6
                       },
-                      "itxn": {
-                        "_type": "VarExpression",
-                        "source_location": {
-                          "file": "tests/approvals/itxn.algo.ts",
-                          "line": 97,
-                          "end_line": 97,
-                          "column": 11,
-                          "end_column": 23
-                        },
-                        "wtype": {
-                          "_type": "WInnerTransaction",
-                          "name": "inner_transaction_appl",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": null,
-                          "transaction_type": 6
-                        },
-                        "name": "createAppTxn"
-                      },
-                      "field": "Note",
-                      "array_index": null
+                      "name": "createAppTxn"
                     },
-                    "operator": "==",
-                    "rhs": {
-                      "_type": "BytesConstant",
-                      "source_location": {
-                        "file": "tests/approvals/itxn.algo.ts",
-                        "line": 97,
-                        "end_line": 97,
-                        "column": 39,
-                        "end_column": 60
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "bytes",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 1
-                      },
-                      "value": "cWHEJAYpQ6b0BbGa$#*Cb7gb",
-                      "encoding": "utf8"
-                    }
+                    "field": "Note",
+                    "array_index": null
+                  },
+                  "operator": "==",
+                  "rhs": {
+                    "_type": "BytesConstant",
+                    "source_location": {
+                      "file": "tests/approvals/itxn.algo.ts",
+                      "line": 97,
+                      "end_line": 97,
+                      "column": 39,
+                      "end_column": 60
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "bytes",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 1
+                    },
+                    "value": "cWHEJAYpQ6b0BbGa$#*Cb7gb",
+                    "encoding": "utf8"
                   }
-                ],
-                "comment": null
+                },
+                "error_message": null
               }
             }
           ],

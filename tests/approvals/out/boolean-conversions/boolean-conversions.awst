@@ -1,18 +1,18 @@
 subroutine test_truthyness(a: uint64, b: uint64, c: string, d: bytes, e: uint64): void
 {
-  assert(True)
-  assert(True)
-  assert(!Boolean(0))
-  assert(Boolean(1))
-  assert(!Boolean(bitlen(0)))
-  assert(Boolean(bitlen(1)))
-  assert(!Boolean(len(0x)))
-  assert(Boolean(len("abc")))
+  assert(True, comment=Zero is falsy)
+  assert(True, comment=Non zero is truthy)
+  assert(!Boolean(0), comment=Zero is falsy)
+  assert(Boolean(1), comment=Non zero is truthy)
+  assert(!Boolean(bitlen(0)), comment=Zero is falsy)
+  assert(Boolean(bitlen(1)), comment=Non zero is truthy)
+  assert(!Boolean(len(0x)), comment=Empty is falsy)
+  assert(Boolean(len("abc")), comment=Non empty is truthy)
   empty: string = ""
-  assert(!Boolean(len(empty)))
-  assert(Boolean(len("abc")))
-  assert(!False)
-  assert(True)
+  assert(!Boolean(len(empty)), comment=Empty is falsy)
+  assert(Boolean(len("abc")), comment=Non empty is truthy)
+  assert(!False, comment=False is falsy)
+  assert(True, comment=True is truthy)
 }
 subroutine test_booleans_are_equal(): void
 {

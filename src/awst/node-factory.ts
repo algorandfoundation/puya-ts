@@ -17,7 +17,6 @@ import {
   Copy,
   ExpressionStatement,
   IntegerConstant,
-  IntrinsicCall,
   MethodDocumentation,
   Not,
   NumericComparisonExpression,
@@ -211,12 +210,6 @@ const explicitNodeFactory = {
       args: props?.args ?? new Map(),
       description: props?.description ?? null,
       returns: props?.returns ?? null,
-    })
-  },
-  intrinsicCall(props: Omit<Props<IntrinsicCall>, 'comment'> & { comment?: string | null }) {
-    return new IntrinsicCall({
-      ...props,
-      comment: props.comment ?? null,
     })
   },
   copy({ value, sourceLocation }: { value: Expression; sourceLocation: SourceLocation }) {

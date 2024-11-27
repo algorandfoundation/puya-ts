@@ -109,8 +109,7 @@
                   "immediates": [
                     "ApplicationID"
                   ],
-                  "stack_args": [],
-                  "comment": null
+                  "stack_args": []
                 }
               }
             },
@@ -985,8 +984,7 @@
                       "name": "x"
                     }
                   }
-                ],
-                "comment": null
+                ]
               }
             },
             {
@@ -1123,8 +1121,7 @@
                       "name": "y"
                     }
                   }
-                ],
-                "comment": null
+                ]
               }
             },
             {
@@ -2336,7 +2333,7 @@
                 "end_column": 25
               },
               "expr": {
-                "_type": "IntrinsicCall",
+                "_type": "AssertExpression",
                 "source_location": {
                   "file": "tests/approvals/arc4-struct.algo.ts",
                   "line": 15,
@@ -2351,11 +2348,24 @@
                   "ephemeral": false,
                   "scalar_type": null
                 },
-                "op_code": "assert",
-                "immediates": [],
-                "stack_args": [
-                  {
-                    "_type": "BytesComparisonExpression",
+                "condition": {
+                  "_type": "BytesComparisonExpression",
+                  "source_location": {
+                    "file": "tests/approvals/arc4-struct.algo.ts",
+                    "line": 15,
+                    "end_line": 15,
+                    "column": 11,
+                    "end_column": 24
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "bool",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 2
+                  },
+                  "lhs": {
+                    "_type": "ReinterpretCast",
                     "source_location": {
                       "file": "tests/approvals/arc4-struct.algo.ts",
                       "line": 15,
@@ -2365,29 +2375,62 @@
                     },
                     "wtype": {
                       "_type": "WType",
-                      "name": "bool",
+                      "name": "bytes",
                       "immutable": true,
                       "ephemeral": false,
-                      "scalar_type": 2
+                      "scalar_type": 1
                     },
-                    "lhs": {
-                      "_type": "ReinterpretCast",
+                    "expr": {
+                      "_type": "VarExpression",
                       "source_location": {
                         "file": "tests/approvals/arc4-struct.algo.ts",
                         "line": 15,
                         "end_line": 15,
                         "column": 11,
-                        "end_column": 24
+                        "end_column": 13
                       },
                       "wtype": {
-                        "_type": "WType",
-                        "name": "bytes",
+                        "_type": "ARC4Struct",
+                        "name": "Vector",
                         "immutable": true,
                         "ephemeral": false,
-                        "scalar_type": 1
-                      },
-                      "expr": {
-                        "_type": "VarExpression",
+                        "scalar_type": 1,
+                        "native_type": null,
+                        "arc4_name": "uint64,uint64",
+                        "fields": {
+                          "x": {
+                            "_type": "ARC4UIntN",
+                            "name": "arc4.uint64",
+                            "immutable": true,
+                            "ephemeral": false,
+                            "scalar_type": 1,
+                            "native_type": {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true,
+                              "ephemeral": false,
+                              "scalar_type": 2
+                            },
+                            "arc4_name": "uint64",
+                            "n": "64"
+                          },
+                          "y": {
+                            "_type": "ARC4UIntN",
+                            "name": "arc4.uint64",
+                            "immutable": true,
+                            "ephemeral": false,
+                            "scalar_type": 1,
+                            "native_type": {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true,
+                              "ephemeral": false,
+                              "scalar_type": 2
+                            },
+                            "arc4_name": "uint64",
+                            "n": "64"
+                          }
+                        },
                         "source_location": {
                           "file": "tests/approvals/arc4-struct.algo.ts",
                           "line": 15,
@@ -2395,79 +2438,79 @@
                           "column": 11,
                           "end_column": 13
                         },
-                        "wtype": {
-                          "_type": "ARC4Struct",
-                          "name": "Vector",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": 1,
-                          "native_type": null,
-                          "arc4_name": "uint64,uint64",
-                          "fields": {
-                            "x": {
-                              "_type": "ARC4UIntN",
-                              "name": "arc4.uint64",
-                              "immutable": true,
-                              "ephemeral": false,
-                              "scalar_type": 1,
-                              "native_type": {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true,
-                                "ephemeral": false,
-                                "scalar_type": 2
-                              },
-                              "arc4_name": "uint64",
-                              "n": "64"
-                            },
-                            "y": {
-                              "_type": "ARC4UIntN",
-                              "name": "arc4.uint64",
-                              "immutable": true,
-                              "ephemeral": false,
-                              "scalar_type": 1,
-                              "native_type": {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true,
-                                "ephemeral": false,
-                                "scalar_type": 2
-                              },
-                              "arc4_name": "uint64",
-                              "n": "64"
-                            }
-                          },
-                          "source_location": {
-                            "file": "tests/approvals/arc4-struct.algo.ts",
-                            "line": 15,
-                            "end_line": 15,
-                            "column": 11,
-                            "end_column": 13
-                          },
-                          "frozen": false
-                        },
-                        "name": "v1"
-                      }
+                        "frozen": false
+                      },
+                      "name": "v1"
+                    }
+                  },
+                  "operator": "==",
+                  "rhs": {
+                    "_type": "ReinterpretCast",
+                    "source_location": {
+                      "file": "tests/approvals/arc4-struct.algo.ts",
+                      "line": 15,
+                      "end_line": 15,
+                      "column": 11,
+                      "end_column": 24
                     },
-                    "operator": "==",
-                    "rhs": {
-                      "_type": "ReinterpretCast",
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "bytes",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 1
+                    },
+                    "expr": {
+                      "_type": "VarExpression",
                       "source_location": {
                         "file": "tests/approvals/arc4-struct.algo.ts",
                         "line": 15,
                         "end_line": 15,
-                        "column": 11,
-                        "end_column": 24
+                        "column": 21,
+                        "end_column": 23
                       },
                       "wtype": {
-                        "_type": "WType",
-                        "name": "bytes",
+                        "_type": "ARC4Struct",
+                        "name": "Vector",
                         "immutable": true,
                         "ephemeral": false,
-                        "scalar_type": 1
-                      },
-                      "expr": {
-                        "_type": "VarExpression",
+                        "scalar_type": 1,
+                        "native_type": null,
+                        "arc4_name": "uint64,uint64",
+                        "fields": {
+                          "x": {
+                            "_type": "ARC4UIntN",
+                            "name": "arc4.uint64",
+                            "immutable": true,
+                            "ephemeral": false,
+                            "scalar_type": 1,
+                            "native_type": {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true,
+                              "ephemeral": false,
+                              "scalar_type": 2
+                            },
+                            "arc4_name": "uint64",
+                            "n": "64"
+                          },
+                          "y": {
+                            "_type": "ARC4UIntN",
+                            "name": "arc4.uint64",
+                            "immutable": true,
+                            "ephemeral": false,
+                            "scalar_type": 1,
+                            "native_type": {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true,
+                              "ephemeral": false,
+                              "scalar_type": 2
+                            },
+                            "arc4_name": "uint64",
+                            "n": "64"
+                          }
+                        },
                         "source_location": {
                           "file": "tests/approvals/arc4-struct.algo.ts",
                           "line": 15,
@@ -2475,63 +2518,13 @@
                           "column": 21,
                           "end_column": 23
                         },
-                        "wtype": {
-                          "_type": "ARC4Struct",
-                          "name": "Vector",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": 1,
-                          "native_type": null,
-                          "arc4_name": "uint64,uint64",
-                          "fields": {
-                            "x": {
-                              "_type": "ARC4UIntN",
-                              "name": "arc4.uint64",
-                              "immutable": true,
-                              "ephemeral": false,
-                              "scalar_type": 1,
-                              "native_type": {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true,
-                                "ephemeral": false,
-                                "scalar_type": 2
-                              },
-                              "arc4_name": "uint64",
-                              "n": "64"
-                            },
-                            "y": {
-                              "_type": "ARC4UIntN",
-                              "name": "arc4.uint64",
-                              "immutable": true,
-                              "ephemeral": false,
-                              "scalar_type": 1,
-                              "native_type": {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true,
-                                "ephemeral": false,
-                                "scalar_type": 2
-                              },
-                              "arc4_name": "uint64",
-                              "n": "64"
-                            }
-                          },
-                          "source_location": {
-                            "file": "tests/approvals/arc4-struct.algo.ts",
-                            "line": 15,
-                            "end_line": 15,
-                            "column": 21,
-                            "end_column": 23
-                          },
-                          "frozen": false
-                        },
-                        "name": "v2"
-                      }
+                        "frozen": false
+                      },
+                      "name": "v2"
                     }
                   }
-                ],
-                "comment": null
+                },
+                "error_message": null
               }
             }
           ],
@@ -5617,7 +5610,7 @@
                 "end_column": 33
               },
               "expr": {
-                "_type": "IntrinsicCall",
+                "_type": "AssertExpression",
                 "source_location": {
                   "file": "tests/approvals/arc4-struct.algo.ts",
                   "line": 28,
@@ -5632,43 +5625,89 @@
                   "ephemeral": false,
                   "scalar_type": null
                 },
-                "op_code": "assert",
-                "immediates": [],
-                "stack_args": [
-                  {
-                    "_type": "BytesComparisonExpression",
+                "condition": {
+                  "_type": "BytesComparisonExpression",
+                  "source_location": {
+                    "file": "tests/approvals/arc4-struct.algo.ts",
+                    "line": 28,
+                    "end_line": 28,
+                    "column": 11,
+                    "end_column": 32
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "bool",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 2
+                  },
+                  "lhs": {
+                    "_type": "ReinterpretCast",
                     "source_location": {
                       "file": "tests/approvals/arc4-struct.algo.ts",
                       "line": 28,
                       "end_line": 28,
                       "column": 11,
-                      "end_column": 32
+                      "end_column": 19
                     },
                     "wtype": {
                       "_type": "WType",
-                      "name": "bool",
+                      "name": "bytes",
                       "immutable": true,
                       "ephemeral": false,
-                      "scalar_type": 2
+                      "scalar_type": 1
                     },
-                    "lhs": {
-                      "_type": "ReinterpretCast",
+                    "expr": {
+                      "_type": "VarExpression",
                       "source_location": {
                         "file": "tests/approvals/arc4-struct.algo.ts",
                         "line": 28,
                         "end_line": 28,
                         "column": 11,
-                        "end_column": 19
+                        "end_column": 13
                       },
                       "wtype": {
-                        "_type": "WType",
-                        "name": "bytes",
+                        "_type": "ARC4Struct",
+                        "name": "Vector",
                         "immutable": true,
                         "ephemeral": false,
-                        "scalar_type": 1
-                      },
-                      "expr": {
-                        "_type": "VarExpression",
+                        "scalar_type": 1,
+                        "native_type": null,
+                        "arc4_name": "uint64,uint64",
+                        "fields": {
+                          "x": {
+                            "_type": "ARC4UIntN",
+                            "name": "arc4.uint64",
+                            "immutable": true,
+                            "ephemeral": false,
+                            "scalar_type": 1,
+                            "native_type": {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true,
+                              "ephemeral": false,
+                              "scalar_type": 2
+                            },
+                            "arc4_name": "uint64",
+                            "n": "64"
+                          },
+                          "y": {
+                            "_type": "ARC4UIntN",
+                            "name": "arc4.uint64",
+                            "immutable": true,
+                            "ephemeral": false,
+                            "scalar_type": 1,
+                            "native_type": {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true,
+                              "ephemeral": false,
+                              "scalar_type": 2
+                            },
+                            "arc4_name": "uint64",
+                            "n": "64"
+                          }
+                        },
                         "source_location": {
                           "file": "tests/approvals/arc4-struct.algo.ts",
                           "line": 28,
@@ -5676,79 +5715,79 @@
                           "column": 11,
                           "end_column": 13
                         },
-                        "wtype": {
-                          "_type": "ARC4Struct",
-                          "name": "Vector",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": 1,
-                          "native_type": null,
-                          "arc4_name": "uint64,uint64",
-                          "fields": {
-                            "x": {
-                              "_type": "ARC4UIntN",
-                              "name": "arc4.uint64",
-                              "immutable": true,
-                              "ephemeral": false,
-                              "scalar_type": 1,
-                              "native_type": {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true,
-                                "ephemeral": false,
-                                "scalar_type": 2
-                              },
-                              "arc4_name": "uint64",
-                              "n": "64"
-                            },
-                            "y": {
-                              "_type": "ARC4UIntN",
-                              "name": "arc4.uint64",
-                              "immutable": true,
-                              "ephemeral": false,
-                              "scalar_type": 1,
-                              "native_type": {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true,
-                                "ephemeral": false,
-                                "scalar_type": 2
-                              },
-                              "arc4_name": "uint64",
-                              "n": "64"
-                            }
-                          },
-                          "source_location": {
-                            "file": "tests/approvals/arc4-struct.algo.ts",
-                            "line": 28,
-                            "end_line": 28,
-                            "column": 11,
-                            "end_column": 13
-                          },
-                          "frozen": false
-                        },
-                        "name": "v1"
-                      }
+                        "frozen": false
+                      },
+                      "name": "v1"
+                    }
+                  },
+                  "operator": "==",
+                  "rhs": {
+                    "_type": "ReinterpretCast",
+                    "source_location": {
+                      "file": "tests/approvals/arc4-struct.algo.ts",
+                      "line": 28,
+                      "end_line": 28,
+                      "column": 24,
+                      "end_column": 32
                     },
-                    "operator": "==",
-                    "rhs": {
-                      "_type": "ReinterpretCast",
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "bytes",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 1
+                    },
+                    "expr": {
+                      "_type": "VarExpression",
                       "source_location": {
                         "file": "tests/approvals/arc4-struct.algo.ts",
                         "line": 28,
                         "end_line": 28,
                         "column": 24,
-                        "end_column": 32
+                        "end_column": 26
                       },
                       "wtype": {
-                        "_type": "WType",
-                        "name": "bytes",
+                        "_type": "ARC4Struct",
+                        "name": "Vector",
                         "immutable": true,
                         "ephemeral": false,
-                        "scalar_type": 1
-                      },
-                      "expr": {
-                        "_type": "VarExpression",
+                        "scalar_type": 1,
+                        "native_type": null,
+                        "arc4_name": "uint64,uint64",
+                        "fields": {
+                          "x": {
+                            "_type": "ARC4UIntN",
+                            "name": "arc4.uint64",
+                            "immutable": true,
+                            "ephemeral": false,
+                            "scalar_type": 1,
+                            "native_type": {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true,
+                              "ephemeral": false,
+                              "scalar_type": 2
+                            },
+                            "arc4_name": "uint64",
+                            "n": "64"
+                          },
+                          "y": {
+                            "_type": "ARC4UIntN",
+                            "name": "arc4.uint64",
+                            "immutable": true,
+                            "ephemeral": false,
+                            "scalar_type": 1,
+                            "native_type": {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true,
+                              "ephemeral": false,
+                              "scalar_type": 2
+                            },
+                            "arc4_name": "uint64",
+                            "n": "64"
+                          }
+                        },
                         "source_location": {
                           "file": "tests/approvals/arc4-struct.algo.ts",
                           "line": 28,
@@ -5756,63 +5795,13 @@
                           "column": 24,
                           "end_column": 26
                         },
-                        "wtype": {
-                          "_type": "ARC4Struct",
-                          "name": "Vector",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": 1,
-                          "native_type": null,
-                          "arc4_name": "uint64,uint64",
-                          "fields": {
-                            "x": {
-                              "_type": "ARC4UIntN",
-                              "name": "arc4.uint64",
-                              "immutable": true,
-                              "ephemeral": false,
-                              "scalar_type": 1,
-                              "native_type": {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true,
-                                "ephemeral": false,
-                                "scalar_type": 2
-                              },
-                              "arc4_name": "uint64",
-                              "n": "64"
-                            },
-                            "y": {
-                              "_type": "ARC4UIntN",
-                              "name": "arc4.uint64",
-                              "immutable": true,
-                              "ephemeral": false,
-                              "scalar_type": 1,
-                              "native_type": {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true,
-                                "ephemeral": false,
-                                "scalar_type": 2
-                              },
-                              "arc4_name": "uint64",
-                              "n": "64"
-                            }
-                          },
-                          "source_location": {
-                            "file": "tests/approvals/arc4-struct.algo.ts",
-                            "line": 28,
-                            "end_line": 28,
-                            "column": 24,
-                            "end_column": 26
-                          },
-                          "frozen": false
-                        },
-                        "name": "v2"
-                      }
+                        "frozen": false
+                      },
+                      "name": "v2"
                     }
                   }
-                ],
-                "comment": null
+                },
+                "error_message": null
               }
             },
             {
@@ -5825,7 +5814,7 @@
                 "end_column": 33
               },
               "expr": {
-                "_type": "IntrinsicCall",
+                "_type": "AssertExpression",
                 "source_location": {
                   "file": "tests/approvals/arc4-struct.algo.ts",
                   "line": 29,
@@ -5840,43 +5829,89 @@
                   "ephemeral": false,
                   "scalar_type": null
                 },
-                "op_code": "assert",
-                "immediates": [],
-                "stack_args": [
-                  {
-                    "_type": "BytesComparisonExpression",
+                "condition": {
+                  "_type": "BytesComparisonExpression",
+                  "source_location": {
+                    "file": "tests/approvals/arc4-struct.algo.ts",
+                    "line": 29,
+                    "end_line": 29,
+                    "column": 11,
+                    "end_column": 32
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "bool",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 2
+                  },
+                  "lhs": {
+                    "_type": "ReinterpretCast",
                     "source_location": {
                       "file": "tests/approvals/arc4-struct.algo.ts",
                       "line": 29,
                       "end_line": 29,
                       "column": 11,
-                      "end_column": 32
+                      "end_column": 19
                     },
                     "wtype": {
                       "_type": "WType",
-                      "name": "bool",
+                      "name": "bytes",
                       "immutable": true,
                       "ephemeral": false,
-                      "scalar_type": 2
+                      "scalar_type": 1
                     },
-                    "lhs": {
-                      "_type": "ReinterpretCast",
+                    "expr": {
+                      "_type": "VarExpression",
                       "source_location": {
                         "file": "tests/approvals/arc4-struct.algo.ts",
                         "line": 29,
                         "end_line": 29,
                         "column": 11,
-                        "end_column": 19
+                        "end_column": 13
                       },
                       "wtype": {
-                        "_type": "WType",
-                        "name": "bytes",
+                        "_type": "ARC4Struct",
+                        "name": "Vector",
                         "immutable": true,
                         "ephemeral": false,
-                        "scalar_type": 1
-                      },
-                      "expr": {
-                        "_type": "VarExpression",
+                        "scalar_type": 1,
+                        "native_type": null,
+                        "arc4_name": "uint64,uint64",
+                        "fields": {
+                          "x": {
+                            "_type": "ARC4UIntN",
+                            "name": "arc4.uint64",
+                            "immutable": true,
+                            "ephemeral": false,
+                            "scalar_type": 1,
+                            "native_type": {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true,
+                              "ephemeral": false,
+                              "scalar_type": 2
+                            },
+                            "arc4_name": "uint64",
+                            "n": "64"
+                          },
+                          "y": {
+                            "_type": "ARC4UIntN",
+                            "name": "arc4.uint64",
+                            "immutable": true,
+                            "ephemeral": false,
+                            "scalar_type": 1,
+                            "native_type": {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true,
+                              "ephemeral": false,
+                              "scalar_type": 2
+                            },
+                            "arc4_name": "uint64",
+                            "n": "64"
+                          }
+                        },
                         "source_location": {
                           "file": "tests/approvals/arc4-struct.algo.ts",
                           "line": 29,
@@ -5884,79 +5919,79 @@
                           "column": 11,
                           "end_column": 13
                         },
-                        "wtype": {
-                          "_type": "ARC4Struct",
-                          "name": "Vector",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": 1,
-                          "native_type": null,
-                          "arc4_name": "uint64,uint64",
-                          "fields": {
-                            "x": {
-                              "_type": "ARC4UIntN",
-                              "name": "arc4.uint64",
-                              "immutable": true,
-                              "ephemeral": false,
-                              "scalar_type": 1,
-                              "native_type": {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true,
-                                "ephemeral": false,
-                                "scalar_type": 2
-                              },
-                              "arc4_name": "uint64",
-                              "n": "64"
-                            },
-                            "y": {
-                              "_type": "ARC4UIntN",
-                              "name": "arc4.uint64",
-                              "immutable": true,
-                              "ephemeral": false,
-                              "scalar_type": 1,
-                              "native_type": {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true,
-                                "ephemeral": false,
-                                "scalar_type": 2
-                              },
-                              "arc4_name": "uint64",
-                              "n": "64"
-                            }
-                          },
-                          "source_location": {
-                            "file": "tests/approvals/arc4-struct.algo.ts",
-                            "line": 29,
-                            "end_line": 29,
-                            "column": 11,
-                            "end_column": 13
-                          },
-                          "frozen": false
-                        },
-                        "name": "v3"
-                      }
+                        "frozen": false
+                      },
+                      "name": "v3"
+                    }
+                  },
+                  "operator": "==",
+                  "rhs": {
+                    "_type": "ReinterpretCast",
+                    "source_location": {
+                      "file": "tests/approvals/arc4-struct.algo.ts",
+                      "line": 29,
+                      "end_line": 29,
+                      "column": 24,
+                      "end_column": 32
                     },
-                    "operator": "==",
-                    "rhs": {
-                      "_type": "ReinterpretCast",
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "bytes",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 1
+                    },
+                    "expr": {
+                      "_type": "VarExpression",
                       "source_location": {
                         "file": "tests/approvals/arc4-struct.algo.ts",
                         "line": 29,
                         "end_line": 29,
                         "column": 24,
-                        "end_column": 32
+                        "end_column": 26
                       },
                       "wtype": {
-                        "_type": "WType",
-                        "name": "bytes",
+                        "_type": "ARC4Struct",
+                        "name": "Vector",
                         "immutable": true,
                         "ephemeral": false,
-                        "scalar_type": 1
-                      },
-                      "expr": {
-                        "_type": "VarExpression",
+                        "scalar_type": 1,
+                        "native_type": null,
+                        "arc4_name": "uint64,uint64",
+                        "fields": {
+                          "x": {
+                            "_type": "ARC4UIntN",
+                            "name": "arc4.uint64",
+                            "immutable": true,
+                            "ephemeral": false,
+                            "scalar_type": 1,
+                            "native_type": {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true,
+                              "ephemeral": false,
+                              "scalar_type": 2
+                            },
+                            "arc4_name": "uint64",
+                            "n": "64"
+                          },
+                          "y": {
+                            "_type": "ARC4UIntN",
+                            "name": "arc4.uint64",
+                            "immutable": true,
+                            "ephemeral": false,
+                            "scalar_type": 1,
+                            "native_type": {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true,
+                              "ephemeral": false,
+                              "scalar_type": 2
+                            },
+                            "arc4_name": "uint64",
+                            "n": "64"
+                          }
+                        },
                         "source_location": {
                           "file": "tests/approvals/arc4-struct.algo.ts",
                           "line": 29,
@@ -5964,63 +5999,13 @@
                           "column": 24,
                           "end_column": 26
                         },
-                        "wtype": {
-                          "_type": "ARC4Struct",
-                          "name": "Vector",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": 1,
-                          "native_type": null,
-                          "arc4_name": "uint64,uint64",
-                          "fields": {
-                            "x": {
-                              "_type": "ARC4UIntN",
-                              "name": "arc4.uint64",
-                              "immutable": true,
-                              "ephemeral": false,
-                              "scalar_type": 1,
-                              "native_type": {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true,
-                                "ephemeral": false,
-                                "scalar_type": 2
-                              },
-                              "arc4_name": "uint64",
-                              "n": "64"
-                            },
-                            "y": {
-                              "_type": "ARC4UIntN",
-                              "name": "arc4.uint64",
-                              "immutable": true,
-                              "ephemeral": false,
-                              "scalar_type": 1,
-                              "native_type": {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true,
-                                "ephemeral": false,
-                                "scalar_type": 2
-                              },
-                              "arc4_name": "uint64",
-                              "n": "64"
-                            }
-                          },
-                          "source_location": {
-                            "file": "tests/approvals/arc4-struct.algo.ts",
-                            "line": 29,
-                            "end_line": 29,
-                            "column": 24,
-                            "end_column": 26
-                          },
-                          "frozen": false
-                        },
-                        "name": "v1"
-                      }
+                        "frozen": false
+                      },
+                      "name": "v1"
                     }
                   }
-                ],
-                "comment": null
+                },
+                "error_message": null
               }
             }
           ],

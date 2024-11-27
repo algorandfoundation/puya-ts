@@ -134,6 +134,19 @@ export class ReturnStatement extends Statement {
     return visitor.visitReturnStatement(this)
   }
 }
+export class AssertExpression extends Expression {
+  constructor(props: Props<AssertExpression>) {
+    super(props)
+    this.condition = props.condition
+    this.errorMessage = props.errorMessage
+    this.wtype = props.wtype
+  }
+  condition: Expression | null
+  errorMessage: string | null
+  accept<T>(visitor: ExpressionVisitor<T>): T {
+    return visitor.visitAssertExpression(this)
+  }
+}
 export class IntegerConstant extends Expression {
   constructor(props: Props<IntegerConstant>) {
     super(props)
@@ -316,12 +329,10 @@ export class IntrinsicCall extends Expression {
     this.opCode = props.opCode
     this.immediates = props.immediates
     this.stackArgs = props.stackArgs
-    this.comment = props.comment
   }
   opCode: string
   immediates: Array<string | bigint>
   stackArgs: Array<Expression>
-  comment: string | null
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitIntrinsicCall(this)
   }
@@ -1309,6 +1320,7 @@ export const concreteNodes = {
   loopExit: LoopExit,
   loopContinue: LoopContinue,
   returnStatement: ReturnStatement,
+  assertExpression: AssertExpression,
   integerConstant: IntegerConstant,
   decimalConstant: DecimalConstant,
   boolConstant: BoolConstant,
@@ -1393,6 +1405,7 @@ export const concreteNodes = {
   bigUIntConstant: IntegerConstant,
 } as const
 export interface ExpressionVisitor<T> {
+  visitAssertExpression(expression: AssertExpression): T
   visitIntegerConstant(expression: IntegerConstant): T
   visitDecimalConstant(expression: DecimalConstant): T
   visitBoolConstant(expression: BoolConstant): T
