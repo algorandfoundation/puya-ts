@@ -17,5 +17,6 @@ export default defineConfig({
   test: {
     globals: true,
     testTimeout: 20_000,
+    exclude: ['packages/**', 'node_modules/**'],
   },
 })
