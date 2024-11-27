@@ -158,7 +158,6 @@ function extractExpectLogs(sourceFile: ts.SourceFile, programDirectory: string) 
           })
         }
       }
-      return node
     }
 
     return ts.visitEachChild(node, visit, undefined)

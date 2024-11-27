@@ -1,7 +1,7 @@
 contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
     program approval:
         subroutine tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract.approvalProgram() -> bool:
-            block@0: // L83
+            block@0: // L111
                 let reinterpret_bool%0#0: bool = (txn ApplicationID)
                 goto reinterpret_bool%0#0 ? block@2 : block@1
             block@1: // if_body_L1
@@ -15,6 +15,9 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
                 tests/approvals/arc4-types.algo.ts::testArrays(0x0000000000000041)
                 tests/approvals/arc4-types.algo.ts::testAddress()
                 tests/approvals/arc4-types.algo.ts::testTuple()
+                tests/approvals/arc4-types.algo.ts::testUFixed()
+                tests/approvals/arc4-types.algo.ts::testDynamicBytes("hmmmmmmmmm")
+                tests/approvals/arc4-types.algo.ts::testStaticBytes()
                 let array_data%0#0: bytes = (concat 0x0000 0x)
                 let result#0: bytes = array_data%0#0
                 let tmp%0#0: uint64 = (extract_uint16 result#0 0u)
@@ -23,11 +26,11 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
                 return 1u
         
         subroutine tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract.constructor() -> void:
-            block@0: // L78
+            block@0: // L106
                 return 
         
         subroutine tests/approvals/arc4-types.algo.ts::testStr() -> void:
-            block@0: // L30
+            block@0: // L41
                 let s1#0: bytes = 0x0000
                 let tmp%0#0: bool = (== s1#0 0x0000)
                 (assert tmp%0#0) // Empty string should equal the uint16 length prefix
@@ -38,7 +41,7 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
                 return 
         
         subroutine tests/approvals/arc4-types.algo.ts::test(n: uint64, b: biguint, c: bytes) -> void:
-            block@0: // L12
+            block@0: // L23
                 let x#0: bytes = 0x04
                 let tmp%0#0: uint64 = (len x#0)
                 let tmp%1#0: bool = (== tmp%0#0 1u)
@@ -69,7 +72,7 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
                 return 
         
         subroutine tests/approvals/arc4-types.algo.ts::testByte() -> void:
-            block@0: // L54
+            block@0: // L82
                 let b#0: bytes = 0x00
                 let b2#0: bytes = 0x00
                 let tmp%0#0: bool = (== b#0 b2#0)
@@ -77,7 +80,7 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
                 return 
         
         subroutine tests/approvals/arc4-types.algo.ts::testArrays(n: bytes) -> void:
-            block@0: // L40
+            block@0: // L68
                 let result%0#0: bytes = (concat 0x n#0)
                 let result%1#0: bytes = (concat result%0#0 n#0)
                 let result%2#0: bytes = (concat result%1#0 n#0)
@@ -109,7 +112,7 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
                 return 
         
         subroutine tests/approvals/arc4-types.algo.ts::testAddress() -> void:
-            block@0: // L60
+            block@0: // L88
                 let a#0: bytes = addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ
                 let b#0: bytes = (txn Sender)
                 let tmp%0#0: bool = (== a#0 b#0)
@@ -125,7 +128,7 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
                 return 
         
         subroutine tests/approvals/arc4-types.algo.ts::testTuple() -> void:
-            block@0: // L69
+            block@0: // L97
                 let current_tail_offset%0#0: uint64 = 8u
                 let encoded_tuple_buffer%0#0: bytes = 0x
                 let encoded_tuple_buffer%1#0: bytes = (concat encoded_tuple_buffer%0#0 0x0000000000000022)
@@ -142,6 +145,43 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
                 let t1#0: bytes = encoded_tuple_buffer%4#0
                 let tmp%1#0: bool = (== 2u 2u)
                 (assert tmp%1#0)
+                return 
+        
+        subroutine tests/approvals/arc4-types.algo.ts::testUFixed() -> void:
+            block@0: // L16
+                let a#0: bytes = 0x000004dc
+                let c#0: bytes = 0x000004dc
+                let tmp%0#0: bool = (== a#0 c#0)
+                (assert tmp%0#0)
+                return 
+        
+        subroutine tests/approvals/arc4-types.algo.ts::testDynamicBytes(someBytes: bytes) -> void:
+            block@0: // L48
+                let db1#0: bytes = 0x0000
+                let tmp%0#0: bytes = ((extract 2 0) db1#0)
+                let tmp%1#0: bool = (== tmp%0#0 0x)
+                (assert tmp%1#0) // No args should give empty bytes
+                let tmp%2#0: bool = (== db1#0 0x0000)
+                (assert tmp%2#0) // bytes prop should return length header (of 0)
+                let length%0#0: uint64 = (len someBytes#0)
+                let as_bytes%0#0: bytes = (itob length%0#0)
+                let length_uint16%0#0: bytes = ((extract 6 2) as_bytes%0#0)
+                let encoded_value%0#0: bytes = (concat length_uint16%0#0 someBytes#0)
+                let db2#0: bytes = encoded_value%0#0
+                let tmp%3#0: bytes = ((extract 2 0) db2#0)
+                let tmp%4#0: bool = (== tmp%3#0 someBytes#0)
+                (assert tmp%4#0)
+                let db3#0: bytes = 0x000568656c6c6f
+                let tmp%5#0: bytes = ((extract 2 0) db3#0)
+                let tmp%6#0: bool = (== tmp%5#0 "hello")
+                (assert tmp%6#0)
+                return 
+        
+        subroutine tests/approvals/arc4-types.algo.ts::testStaticBytes() -> void:
+            block@0: // L59
+                let s1#0: bytes = 0x
+                let s2#0: bytes = 0x00000000
+                let s3#0: bytes = 0xaabbccddee
                 return 
         
         subroutine _puya_lib.arc4.dynamic_array_pop_fixed_size(array: bytes, fixed_byte_size: uint64) -> <bytes, bytes>:

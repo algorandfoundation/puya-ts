@@ -279,3 +279,44 @@ class StructImpl<T extends StructConstraint> extends StructBase {
 type StructConstructor = new <T extends StructConstraint>(initial: T) => StructBase & T
 
 export const Struct = StructImpl as StructConstructor
+
+export class DynamicBytes extends Arc4ReadonlyArray<Byte> {
+  [TypeProperty]?: `arc4.DynamicBytes`
+
+  constructor(value?: bytes | string) {
+    let byteValues: Uint8Array
+    if (value === undefined) {
+      byteValues = new Uint8Array(0)
+    } else if (typeof value === 'string') {
+      byteValues = BytesCls.fromCompat(value).asUint8Array()
+    } else {
+      byteValues = getUint8Array(value)
+    }
+    super(Array.from(byteValues).map((b) => new Byte(b)))
+  }
+
+  get native(): bytes {
+    return Bytes(this.items.map((i) => i.native))
+  }
+}
+
+export class StaticBytes<TLength extends number = 0> extends Arc4ReadonlyArray<Byte> {
+  [TypeProperty]?: `arc4.StaticBytes<${TLength}>`
+
+  constructor(value?: bytes | string) {
+    let byteValues: Uint8Array
+    if (value === undefined) {
+      // TODO: Should be init to TLength
+      byteValues = new Uint8Array(0)
+    } else if (typeof value === 'string') {
+      byteValues = BytesCls.fromCompat(value).asUint8Array()
+    } else {
+      byteValues = getUint8Array(value)
+    }
+    super(Array.from(byteValues).map((b) => new Byte(b)))
+  }
+
+  get native(): bytes {
+    return Bytes(this.items.map((i) => i.native))
+  }
+}

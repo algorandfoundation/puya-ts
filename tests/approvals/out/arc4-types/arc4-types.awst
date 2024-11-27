@@ -27,6 +27,22 @@ subroutine testStr(): void
   s2: arc4.dynamic_array<arc4.byte> = "Hello"
   assert(ARC4_DECODE(s2) == "Hello")
 }
+subroutine testDynamicBytes(someBytes: bytes): void
+{
+  db1: arc4.dynamic_array<arc4.byte> = 0x0000
+  assert(reinterpret_cast<bytes>(db1)[2:] == 0x)
+  assert(reinterpret_cast<bytes>(db1) == reinterpret_cast<bytes>(0))
+  db2: arc4.dynamic_array<arc4.byte> = ARC4_ENCODE(someBytes, wtype=arc4.dynamic_array<arc4.byte>)
+  assert(reinterpret_cast<bytes>(db2)[2:] == someBytes)
+  db3: arc4.dynamic_array<arc4.byte> = 0x000568656c6c6f
+  assert(reinterpret_cast<bytes>(db3)[2:] == "hello")
+}
+subroutine testStaticBytes(): void
+{
+  s1: arc4.static_array<arc4.byte> = 0x
+  s2: arc4.static_array<arc4.byte> = 0x00000000
+  s3: arc4.static_array<arc4.byte> = 0xaabbccddee
+}
 subroutine testArrays(n: arc4.uint64): void
 {
   myArray: arc4.dynamic_array<arc4.uint64> = new arc4.dynamic_array<arc4.uint64>(n, n, n)
@@ -72,6 +88,9 @@ contract Arc4TypesTestContract
     tests/approvals/arc4-types.algo.ts::testArrays(65)
     tests/approvals/arc4-types.algo.ts::testAddress()
     tests/approvals/arc4-types.algo.ts::testTuple()
+    tests/approvals/arc4-types.algo.ts::testUFixed()
+    tests/approvals/arc4-types.algo.ts::testDynamicBytes("hmmmmmmmmm")
+    tests/approvals/arc4-types.algo.ts::testStaticBytes()
     result: arc4.dynamic_array<arc4.uint64> = new arc4.dynamic_array<arc4.uint64>()
     assert(extract_uint16(result, 0) == 0)
     return True

@@ -47,19 +47,15 @@ function testStr() {
 
 function testDynamicBytes(someBytes: bytes) {
   const db1 = new DynamicBytes()
-  assert(db1.native === Bytes(), 'No args should give empty bytes')
-  assert(db1.bytes === new UintN<16>(0).bytes, 'bytes prop should return length header (of 0)')
   const db2 = new DynamicBytes(someBytes)
-  assert(db2.native === someBytes)
-
   const db3 = new DynamicBytes('hello')
-  assert(db3.native === Bytes('hello'))
 }
 
 function testStaticBytes() {
-  const s1 = new StaticBytes()
-  const s2 = new StaticBytes<4>()
-  const s3 = new StaticBytes<5>(Bytes.fromHex('AABBCCDDEE'))
+  // @expect-error StaticBytes length must be greater than or equal to 0
+  const s1 = new StaticBytes<-1>()
+  // @expect-error Value should have byte length of 4
+  const s2 = new StaticBytes<4>('')
 }
 
 type ARC4Uint64 = UintN<64>

@@ -1,8 +1,9 @@
 import type { Account, Asset } from '@algorandfoundation/algorand-typescript'
-import { Contract, Global } from '@algorandfoundation/algorand-typescript'
+import { Contract, ensureBudget, Global } from '@algorandfoundation/algorand-typescript'
 
 export class AccountsContract extends Contract {
   public getAccountInfo(account: Account, asset: Asset) {
+    ensureBudget(1400)
     return {
       bytes: account.bytes,
       balance: account.balance,

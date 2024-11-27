@@ -1,3 +1,4 @@
+import { microAlgo } from '@algorandfoundation/algokit-utils'
 import { describe } from 'vitest'
 import { createArc4TestFixture } from './util/test-fixture'
 
@@ -7,7 +8,7 @@ describe('accounts', () => {
   test('returns account data', async ({ appClientAccountsContract: appClient, expect, assetFactory, testAccount }) => {
     const asset = await assetFactory({ assetName: 'Asset 1', sender: testAccount.addr, total: 1n })
 
-    const result = await appClient.send.call({ method: 'getAccountInfo', args: [testAccount.addr, asset] })
+    const result = await appClient.send.call({ method: 'getAccountInfo', args: [testAccount.addr, asset], extraFee: microAlgo(2000) })
 
     const returnValue = result.return as {
       bytes: number[]

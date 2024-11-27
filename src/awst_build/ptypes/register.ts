@@ -4,8 +4,12 @@ import {
   AddressExpressionBuilder,
   DynamicArrayClassBuilder,
   DynamicArrayExpressionBuilder,
+  DynamicBytesClassBuilder,
+  DynamicBytesExpressionBuilder,
   StaticArrayClassBuilder,
   StaticArrayExpressionBuilder,
+  StaticBytesClassBuilder,
+  StaticBytesExpressionBuilder,
 } from '../eb/arc4/arrays'
 import { BoolClassBuilder, BoolExpressionBuilder } from '../eb/arc4/bool'
 import { StrClassBuilder, StrExpressionBuilder } from '../eb/arc4/string'
@@ -73,9 +77,14 @@ import {
   DynamicArrayConstructor,
   DynamicArrayGeneric,
   DynamicArrayType,
+  DynamicBytesConstructor,
+  DynamicBytesType,
   StaticArrayConstructor,
   StaticArrayGeneric,
   StaticArrayType,
+  StaticBytesConstructor,
+  StaticBytesGeneric,
+  StaticBytesType,
   UFixedNxMClass,
   UFixedNxMGeneric,
   UFixedNxMType,
@@ -296,6 +305,10 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.registerGeneric({ generic: Arc4TupleGeneric, ptype: ARC4TupleType, instanceEb: Arc4TupleExpressionBuilder })
   typeRegistry.register({ ptype: ARC4StructType, instanceEb: StructExpressionBuilder })
   typeRegistry.register({ ptype: ARC4StructClass, singletonEb: StructClassBuilder })
+  typeRegistry.register({ ptype: DynamicBytesConstructor, singletonEb: DynamicBytesClassBuilder })
+  typeRegistry.register({ ptype: StaticBytesConstructor, singletonEb: StaticBytesClassBuilder })
+  typeRegistry.register({ ptype: DynamicBytesType, instanceEb: DynamicBytesExpressionBuilder })
+  typeRegistry.registerGeneric({ generic: StaticBytesGeneric, ptype: StaticBytesType, instanceEb: StaticBytesExpressionBuilder })
 
   // GTXN types
   typeRegistry.register({ ptype: paymentGtxnType, instanceEb: GroupTransactionExpressionBuilder })
