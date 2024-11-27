@@ -20,6 +20,7 @@ const cliOptionsSchema = z.object({
   // Puya options
   outputTeal: z.boolean(),
   outputArc32: z.boolean(),
+  outputArc56: z.boolean(),
   outputSsaIr: z.boolean(),
   outputOptimizationIr: z.boolean(),
   outputDestructuredIr: z.boolean(),
@@ -60,6 +61,11 @@ function cli() {
         '--no-output-arc32',
         'Do not output {contract}.arc32.json ARC-32 app spec file. Only applicable to ARC4 contracts',
       ).default(defaultPuyaOptions.outputArc32),
+    )
+    .addOption(
+      new Option('--output-arc56', 'Output {contract}.arc56.json ARC-56 app spec file. Only applicable to ARC4 contracts').default(
+        defaultPuyaOptions.outputArc56,
+      ),
     )
     .addOption(new Option('--output-ssa-ir', 'Output IR (in SSA form) before optimisations').default(defaultPuyaOptions.outputSsaIr))
     .addOption(new Option('--output-optimization-ir', 'Output IR after each optimization').default(defaultPuyaOptions.outputOptimizationIr))

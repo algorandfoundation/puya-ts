@@ -22,6 +22,7 @@ describe('Approvals', () => {
       optimizationLevel: 0,
       outputTeal: true,
       outputArc32: true,
+      outputArc56: true,
     },
   )
   invariant(result.ast, 'Compilation must result in ast')

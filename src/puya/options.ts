@@ -8,6 +8,7 @@ export type CompilationSetMapping = Record<string, string>
 export const defaultPuyaOptions: PuyaPassThroughOptions = {
   outputTeal: true,
   outputArc32: true,
+  outputArc56: true,
   outputSsaIr: false,
   outputOptimizationIr: false,
   outputDestructuredIr: false,
@@ -26,6 +27,7 @@ export type PuyaPassThroughOptions = Omit<PuyaOptions, 'compilationSet'>
 export class PuyaOptions {
   outputTeal: boolean
   outputArc32: boolean
+  outputArc56: boolean
   outputSsaIr: boolean
   outputOptimizationIr: boolean
   outputDestructuredIr: boolean
@@ -50,6 +52,7 @@ export class PuyaOptions {
     this.compilationSet = compilationSet
     this.outputTeal = passThroughOptions.outputTeal
     this.outputArc32 = passThroughOptions.outputArc32
+    this.outputArc56 = passThroughOptions.outputArc56
     this.outputSsaIr = passThroughOptions.outputSsaIr
     this.outputOptimizationIr = passThroughOptions.outputOptimizationIr
     this.outputDestructuredIr = passThroughOptions.outputDestructuredIr
