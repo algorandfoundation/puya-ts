@@ -263,7 +263,6 @@ export class TypeResolver {
 
   private reflectObjectType(tsType: ts.Type, sourceLocation: SourceLocation): ObjectPType {
     const typeAlias = tsType.aliasSymbol ? this.getSymbolFullName(tsType.aliasSymbol, sourceLocation) : undefined
-
     const properties: Record<string, PType> = {}
     for (const prop of tsType.getProperties()) {
       if (prop.name.startsWith('__@')) {
@@ -280,7 +279,7 @@ export class TypeResolver {
       }
     }
     if (typeAlias) {
-      return new ObjectPType({ ...typeAlias, properties })
+      return new ObjectPType({ ...typeAlias, properties, description: tryGetTypeDescription(tsType) })
     }
     return ObjectPType.anonymous(properties)
   }
@@ -322,13 +321,14 @@ export class TypeResolver {
       module: typeName.module,
     })
   }
+
   private reflectStructType(
     typeName: SymbolName,
     tsType: ts.Type,
     baseType: ARC4StructType,
     sourceLocation: SourceLocation,
   ): ARC4StructType {
-    const ignoredProps = ['bytes', '__type', 'equals', Constants.constructorMethodName]
+    const ignoredProps = ['bytes', 'equals', Constants.constructorMethodName]
     const fields: Record<string, ARC4EncodedType> = {}
     for (const prop of tsType.getProperties()) {
       if (isIn(prop.name, ignoredProps)) continue
@@ -345,6 +345,7 @@ export class TypeResolver {
       ...typeName,
       fields: fields,
       sourceLocation: sourceLocation,
+      description: tryGetTypeDescription(tsType),
     })
   }
 
@@ -441,4 +442,16 @@ function isIntersectionType(tsType: ts.Type): tsType is ts.IntersectionType {
 
 function isInstantiationExpression(tsType: ts.Type): tsType is ts.Type & { node: ts.ExpressionWithTypeArguments } {
   return isObjectType(tsType) && hasFlags(tsType.objectFlags, ObjectFlags.InstantiationExpressionType)
+}
+
+function tryGetTypeDescription(tsType: ts.Type): string | undefined {
+  const dec = tsType.aliasSymbol?.valueDeclaration ?? tsType.symbol.valueDeclaration
+  if (!dec) return undefined
+  const docs = ts.getJSDocCommentsAndTags(dec)
+  for (const doc of docs) {
+    if (ts.isJSDoc(doc)) {
+      return ts.getTextOfJSDocComment(doc.comment)
+    }
+  }
+  return undefined
 }

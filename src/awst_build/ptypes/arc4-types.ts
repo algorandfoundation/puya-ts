@@ -102,6 +102,7 @@ export class ARC4StructClass extends PType {
 export class ARC4StructType extends ARC4EncodedType {
   readonly name: string
   readonly module: string
+  readonly description: string | undefined
   readonly singleton = false
   readonly fields: Record<string, ARC4EncodedType>
   readonly sourceLocation: SourceLocation | undefined
@@ -109,10 +110,12 @@ export class ARC4StructType extends ARC4EncodedType {
     name,
     module,
     fields,
+    description,
     sourceLocation,
   }: {
     name: string
     module: string
+    description: string | undefined
     fields: Record<string, ARC4EncodedType>
     sourceLocation?: SourceLocation
   }) {
@@ -120,6 +123,7 @@ export class ARC4StructType extends ARC4EncodedType {
     this.name = name
     this.module = module
     this.fields = fields
+    this.description = description
     this.sourceLocation = sourceLocation
   }
 
@@ -132,6 +136,7 @@ export class ARC4StructType extends ARC4EncodedType {
       name: this.name,
       fields: Object.fromEntries(Object.entries(this.fields).map(([f, t]) => [f, t.wtype])),
       sourceLocation: this.sourceLocation,
+      desc: this.description ?? null,
       frozen: false,
     })
   }
@@ -154,6 +159,7 @@ export const arc4StructBaseType = new ARC4StructType({
   name: 'StructBase',
   module: Constants.arc4EncodedTypesModuleName,
   fields: {},
+  description: undefined,
 })
 
 export const Arc4TupleClass = new LibClassType({

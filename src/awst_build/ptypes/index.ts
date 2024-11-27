@@ -501,6 +501,7 @@ export class FunctionPType extends PType {
         name: `${props.name}Result`,
         module: props.module,
         properties: props.returnType.properties,
+        description: props.returnType.description,
       })
     } else {
       this.returnType = props.returnType
@@ -617,12 +618,13 @@ export class ArrayPType extends TransientType {
 }
 
 type ObjectPTypeArgs =
-  | { module: string; name: string; properties: Record<string, PType>; isAnonymous?: false }
-  | { module?: undefined; name?: undefined; properties: Record<string, PType>; isAnonymous: true }
+  | { module: string; name: string; description: string | undefined; properties: Record<string, PType>; isAnonymous?: false }
+  | { module?: undefined; name?: undefined; properties: Record<string, PType>; isAnonymous: true; description?: undefined }
 
 export class ObjectPType extends PType {
   readonly name: string
   readonly module: string
+  readonly description: string | undefined
   readonly properties: Record<string, PType>
   readonly singleton = false
   readonly isAnonymous: boolean
@@ -633,6 +635,7 @@ export class ObjectPType extends PType {
     this.module = props.module ?? ''
     this.properties = props.properties
     this.isAnonymous = props.isAnonymous ?? false
+    this.description = props.description
   }
 
   static anonymous(props: Record<string, PType> | Array<[string, PType]>) {

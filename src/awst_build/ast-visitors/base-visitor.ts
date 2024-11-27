@@ -1,6 +1,6 @@
 import ts from 'typescript'
 import { nodeFactory } from '../../awst/node-factory'
-import type { Expression, LValue, Statement } from '../../awst/nodes'
+import type { Expression, LValue, MethodDocumentation, Statement } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { CodeError, NotSupported, TodoError } from '../../errors'
 import { logger } from '../../logger'
@@ -554,6 +554,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
       return new ObjectPType({
         name: targetType.name,
         module: targetType.module,
+        description: targetType.description,
         properties: Object.fromEntries(
           sourceType
             .orderedProperties()
@@ -669,5 +670,40 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
       isStatic,
       isPublic,
     }
+  }
+
+  protected getNodeDescription(node: ts.Node): string | null {
+    const docs = ts.getJSDocCommentsAndTags(node)
+    for (const doc of docs) {
+      if (ts.isJSDoc(doc)) {
+        return ts.getTextOfJSDocComment(doc.comment) ?? null
+      }
+    }
+    return null
+  }
+
+  protected getMethodDocumentation(node: ts.FunctionDeclaration | ts.MethodDeclaration | ts.ConstructorDeclaration): MethodDocumentation {
+    const docs = Array.from(ts.getJSDocCommentsAndTags(node))
+    let description: string | null = null
+    const args = new Map<string, string>()
+    let returns: string | null = null
+    for (const doc of docs) {
+      if (ts.isJSDoc(doc)) {
+        description = ts.getTextOfJSDocComment(doc.comment) ?? null
+        if (doc.tags) docs.push(...doc.tags)
+      } else if (ts.isJSDocParameterTag(doc)) {
+        const paramName = this.textVisitor.accept(doc.name)
+        const paramComment = ts.getTextOfJSDocComment(doc.comment)
+
+        args.set(paramName, paramComment ?? '')
+      } else if (ts.isJSDocReturnTag(doc)) {
+        returns = ts.getTextOfJSDocComment(doc.comment) ?? null
+      }
+    }
+    return nodeFactory.methodDocumentation({
+      description,
+      args,
+      returns,
+    })
   }
 }

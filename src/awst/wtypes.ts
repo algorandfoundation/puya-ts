@@ -251,15 +251,18 @@ export namespace wtypes {
     fields: Record<string, ARC4Type>
     sourceLocation: SourceLocation | null
     frozen: boolean
+    desc: string | null
 
     constructor({
       fields,
       sourceLocation,
       name,
+      desc,
       frozen,
     }: {
       frozen: boolean
       name: string
+      desc: string | null
       fields: Record<string, ARC4Type>
       sourceLocation?: SourceLocation
     }) {
@@ -273,6 +276,7 @@ export namespace wtypes {
       this.sourceLocation = sourceLocation ?? null
       this.fields = fields
       this.frozen = frozen
+      this.desc = desc
     }
   }
   export class ARC4Tuple extends ARC4Type {

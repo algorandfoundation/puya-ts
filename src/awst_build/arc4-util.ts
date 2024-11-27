@@ -61,6 +61,7 @@ export function ptypeToArc4EncodedType(ptype: PType, sourceLocation: SourceLocat
     return new ARC4StructType({
       name: ptype.name,
       module: ptype.module,
+      description: ptype.description,
       fields: Object.fromEntries(ptype.orderedProperties().map(([p, pt]) => [p, ptypeToArc4EncodedType(pt, sourceLocation)])),
     })
 

@@ -65,7 +65,7 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
       ctor: this._ctor ?? this.makeDefaultConstructor(sourceLocation),
       methods: this._methods,
       bases: this._contractPType.baseTypes.map((bt) => ContractReference.fromPType(bt)),
-      description: null,
+      description: this.getNodeDescription(classDec),
       approvalProgram: this._contractPType.isARC4 ? null : this._approvalProgram,
       clearProgram: this._clearStateProgram,
       reservedScratchSpace: new Set(),
@@ -165,7 +165,12 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
     const initializer = this.accept(node.initializer)
 
     if (initializer instanceof GlobalStateFunctionResultBuilder) {
-      const storageDeclaration = initializer.buildStorageDeclaration(propertyName, this.sourceLocation(node.name), this._contractPType)
+      const storageDeclaration = initializer.buildStorageDeclaration(
+        propertyName,
+        this.sourceLocation(node.name),
+        this.getNodeDescription(node),
+        this._contractPType,
+      )
       this.context.addStorageDeclaration(storageDeclaration)
       if (initializer.initialValue) {
         this._propertyInitialization.push(
@@ -183,7 +188,12 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
       }
     } else if (initializer instanceof BoxProxyExpressionBuilder || initializer instanceof LocalStateFunctionResultBuilder) {
       this.context.addStorageDeclaration(
-        initializer.buildStorageDeclaration(propertyName, this.sourceLocation(node.name), this._contractPType),
+        initializer.buildStorageDeclaration(
+          propertyName,
+          this.sourceLocation(node.name),
+          this.getNodeDescription(node),
+          this._contractPType,
+        ),
       )
     } else {
       logger.error(initializer.sourceLocation, `Unsupported property type ${initializer.typeDescription}`)
