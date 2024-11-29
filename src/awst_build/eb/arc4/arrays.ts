@@ -25,7 +25,7 @@ import {
 } from '../../ptypes/arc4-types'
 import { instanceEb } from '../../type-registry'
 import type { InstanceBuilder, NodeBuilder } from '../index'
-import { ClassBuilder, FunctionBuilder } from '../index'
+import { FunctionBuilder } from '../index'
 import { IterableIteratorExpressionBuilder } from '../iterable-iterator-expression-builder'
 import { AccountExpressionBuilder } from '../reference/account'
 import { AtFunctionBuilder } from '../shared/at-function-builder'
@@ -167,7 +167,7 @@ export class AddressClassBuilder extends Arc4EncodedBaseClassBuilder {
     )
   }
 }
-export class StaticBytesClassBuilder extends ClassBuilder {
+export class StaticBytesClassBuilder extends Arc4EncodedBaseClassBuilder {
   readonly ptype = StaticBytesConstructor
 
   newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
@@ -219,7 +219,7 @@ export class StaticBytesClassBuilder extends ClassBuilder {
     }
   }
 }
-export class DynamicBytesClassBuilder extends ClassBuilder {
+export class DynamicBytesClassBuilder extends Arc4EncodedBaseClassBuilder {
   readonly ptype = DynamicBytesConstructor
 
   newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
