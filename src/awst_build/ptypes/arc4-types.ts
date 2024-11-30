@@ -8,6 +8,7 @@ import {
   boolPType,
   bytesPType,
   LibClassType,
+  LibFunctionType,
   NumericLiteralPType,
   ObjectPType,
   stringPType,
@@ -23,6 +24,30 @@ export const UintNClass = new LibClassType({
 
 export const ByteClass = new LibClassType({
   name: 'Byte',
+  module: Constants.arc4EncodedTypesModuleName,
+})
+export const UintN8Class = new LibClassType({
+  name: 'UintN8',
+  module: Constants.arc4EncodedTypesModuleName,
+})
+export const UintN16Class = new LibClassType({
+  name: 'UintN16',
+  module: Constants.arc4EncodedTypesModuleName,
+})
+export const UintN32Class = new LibClassType({
+  name: 'UintN32',
+  module: Constants.arc4EncodedTypesModuleName,
+})
+export const UintN64Class = new LibClassType({
+  name: 'UintN64',
+  module: Constants.arc4EncodedTypesModuleName,
+})
+export const UintN128Class = new LibClassType({
+  name: 'UintN128',
+  module: Constants.arc4EncodedTypesModuleName,
+})
+export const UintN256Class = new LibClassType({
+  name: 'UintN256',
   module: Constants.arc4EncodedTypesModuleName,
 })
 export abstract class ARC4EncodedType extends PType {
@@ -474,4 +499,19 @@ export const DynamicBytesType = new DynamicArrayType({
   immutable: true,
   elementType: arc4ByteAlias,
   nativeType: bytesPType,
+})
+
+export const interpretAsArc4Function = new LibFunctionType({
+  name: 'interpretAsArc4',
+  module: Constants.arc4EncodedTypesModuleName,
+})
+
+export const encodeArc4Function = new LibFunctionType({
+  name: 'encodeArc4',
+  module: Constants.arc4EncodedTypesModuleName,
+})
+
+export const decodeArc4Function = new LibFunctionType({
+  name: 'decodeArc4',
+  module: Constants.arc4EncodedTypesModuleName,
 })

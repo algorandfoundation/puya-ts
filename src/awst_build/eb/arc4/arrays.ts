@@ -25,7 +25,7 @@ import {
 } from '../../ptypes/arc4-types'
 import { instanceEb } from '../../type-registry'
 import type { InstanceBuilder, NodeBuilder } from '../index'
-import { FunctionBuilder } from '../index'
+import { ClassBuilder, FunctionBuilder } from '../index'
 import { IterableIteratorExpressionBuilder } from '../iterable-iterator-expression-builder'
 import { AccountExpressionBuilder } from '../reference/account'
 import { AtFunctionBuilder } from '../shared/at-function-builder'
@@ -33,9 +33,9 @@ import { SliceFunctionBuilder } from '../shared/slice-function-builder'
 import { UInt64ExpressionBuilder } from '../uint64-expression-builder'
 import { requireExpressionOfType } from '../util'
 import { parseFunctionArgs } from '../util/arg-parsing'
-import { Arc4EncodedBaseClassBuilder, Arc4EncodedBaseExpressionBuilder } from './base'
+import { Arc4EncodedBaseExpressionBuilder } from './base'
 
-export class DynamicArrayClassBuilder extends Arc4EncodedBaseClassBuilder {
+export class DynamicArrayClassBuilder extends ClassBuilder {
   readonly ptype = DynamicArrayConstructor
 
   newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
@@ -63,7 +63,7 @@ export class DynamicArrayClassBuilder extends Arc4EncodedBaseClassBuilder {
     )
   }
 }
-export class StaticArrayClassBuilder extends Arc4EncodedBaseClassBuilder {
+export class StaticArrayClassBuilder extends ClassBuilder {
   readonly ptype = StaticArrayConstructor
 
   newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
@@ -105,7 +105,7 @@ export class StaticArrayClassBuilder extends Arc4EncodedBaseClassBuilder {
     )
   }
 }
-export class AddressClassBuilder extends Arc4EncodedBaseClassBuilder {
+export class AddressClassBuilder extends ClassBuilder {
   readonly ptype = AddressClass
 
   newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
@@ -167,7 +167,7 @@ export class AddressClassBuilder extends Arc4EncodedBaseClassBuilder {
     )
   }
 }
-export class StaticBytesClassBuilder extends Arc4EncodedBaseClassBuilder {
+export class StaticBytesClassBuilder extends ClassBuilder {
   readonly ptype = StaticBytesConstructor
 
   newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
@@ -219,7 +219,7 @@ export class StaticBytesClassBuilder extends Arc4EncodedBaseClassBuilder {
     }
   }
 }
-export class DynamicBytesClassBuilder extends Arc4EncodedBaseClassBuilder {
+export class DynamicBytesClassBuilder extends ClassBuilder {
   readonly ptype = DynamicBytesConstructor
 
   newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {

@@ -1,5 +1,5 @@
 import { assert, Contract, log } from '@algorandfoundation/algorand-typescript'
-import { Struct, UintN } from '@algorandfoundation/algorand-typescript/arc4'
+import { interpretAsArc4, Struct, UintN } from '@algorandfoundation/algorand-typescript/arc4'
 
 type ARC4Uint64 = UintN<64>
 const ARC4Uint64 = UintN<64>
@@ -12,7 +12,7 @@ class StructDemo extends Contract {
     log(v1.x)
     log(v1.y)
     const v2 = new Vector({ y: new ARC4Uint64(0), x: new ARC4Uint64(0) })
-    assert(v1.equals(v2))
+    assert(v1 === v2)
   }
 
   public addVectors(v1: Vector, v2: Vector) {
@@ -27,5 +27,10 @@ class StructDemo extends Contract {
     const v3 = new Vector({ ...v2 })
     assert(v1.bytes === v2.bytes)
     assert(v3.bytes === v1.bytes)
+  }
+
+  public toAndFromBytes(v1: Vector): Vector {
+    const v1_bytes = v1.bytes
+    return interpretAsArc4<Vector>(v1_bytes)
   }
 }

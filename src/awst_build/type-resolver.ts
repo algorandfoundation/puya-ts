@@ -38,7 +38,7 @@ import {
   unknownPType,
   voidPType,
 } from './ptypes'
-import { ARC4EncodedType, arc4StructBaseType, ARC4StructClass, ARC4StructType } from './ptypes/arc4-types'
+import { ARC4EncodedType, arc4StructBaseType, ARC4StructClass, ARC4StructType, UintNType } from './ptypes/arc4-types'
 import { SymbolName } from './symbol-name'
 import { typeRegistry } from './type-registry'
 
@@ -217,9 +217,13 @@ export class TypeResolver {
       if (typeName.fullName === baseContractType.fullName) return baseContractType
       if (typeName.fullName === arc4StructBaseType.fullName) return arc4StructBaseType
       if (typeName.fullName === logicSigBaseType.fullName) return logicSigBaseType
+
       const [baseType, ...rest] = tsType.getBaseTypes()?.map((t) => this.resolveType(t, sourceLocation)) ?? []
 
       invariant(rest.length === 0, 'Class can have at most one base type')
+
+      // Treat sub-types of UintN type as the base type.
+      if (baseType instanceof UintNType) return baseType
 
       if (baseType instanceof ContractClassPType) {
         return this.reflectContractType(typeName, tsType, baseType, sourceLocation)

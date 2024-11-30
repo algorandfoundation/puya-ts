@@ -1,7 +1,7 @@
 contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
     program approval:
         subroutine tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract.approvalProgram() -> bool:
-            block@0: // L111
+            block@0: // L135
                 let reinterpret_bool%0#0: bool = (txn ApplicationID)
                 goto reinterpret_bool%0#0 ? block@2 : block@1
             block@1: // if_body_L1
@@ -10,7 +10,7 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
             block@2: // after_if_else_L1
                 let x#0: bytes = 0x0000000000000000
                 tests/approvals/arc4-types.algo.ts::testStr()
-                tests/approvals/arc4-types.algo.ts::test(1u, 2b, 0x0000000000000000000000000000000000000000000000000000000000000004)
+                tests/approvals/arc4-types.algo.ts::testUintN(1u, 2b, 0x0000000000000000000000000000000000000000000000000000000000000004)
                 tests/approvals/arc4-types.algo.ts::testUFixed()
                 tests/approvals/arc4-types.algo.ts::testByte()
                 tests/approvals/arc4-types.algo.ts::testArrays(0x0000000000000041)
@@ -27,11 +27,11 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
                 return 1u
         
         subroutine tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract.constructor() -> void:
-            block@0: // L106
+            block@0: // L130
                 return 
         
         subroutine tests/approvals/arc4-types.algo.ts::testStr() -> void:
-            block@0: // L41
+            block@0: // L59
                 let s1#0: bytes = 0x0000
                 let tmp%0#0: bool = (== s1#0 0x0000)
                 (assert tmp%0#0) // Empty string should equal the uint16 length prefix
@@ -39,10 +39,14 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
                 let tmp%1#0: bytes = ((extract 2 0) s2#0)
                 let tmp%2#0: bool = (== tmp%1#0 "Hello")
                 (assert tmp%2#0)
+                let s2_bytes#0: bytes = s2#0
+                let s2_from_bytes#0: bytes = s2_bytes#0
+                let tmp%3#0: bool = (== s2#0 s2_from_bytes#0)
+                (assert tmp%3#0)
                 return 
         
-        subroutine tests/approvals/arc4-types.algo.ts::test(n: uint64, b: biguint, c: bytes) -> void:
-            block@0: // L23
+        subroutine tests/approvals/arc4-types.algo.ts::testUintN(n: uint64, b: biguint, c: bytes) -> void:
+            block@0: // L26
                 let x#0: bytes = 0x04
                 let tmp%0#0: uint64 = (len x#0)
                 let tmp%1#0: bool = (== tmp%0#0 1u)
@@ -70,10 +74,26 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
                 let tmp%7#0: uint64 = (len c#0)
                 let tmp%8#0: bool = (== tmp%7#0 32u)
                 (assert tmp%8#0)
+                let a_bytes#0: bytes = a#0
+                let a_from_bytes#0: bytes = a_bytes#0
+                let tmp%9#0: bool = (== a_from_bytes#0 a#0)
+                (assert tmp%9#0)
+                let aliased64#0: bytes = 0x000000000000000c
+                let tmp%10#0: uint64 = (btoi aliased64#0)
+                let tmp%11#0: bool = (== tmp%10#0 12u)
+                (assert tmp%11#0)
+                let aliased32#0: bytes = 0x0000c571
+                let reinterpret_biguint%0#0: biguint = aliased32#0
+                let tmp%12#0: bool = (b== reinterpret_biguint%0#0 50545b)
+                (assert tmp%12#0)
+                let byte#0: bytes = 0xff
+                let tmp%13#0: bytes = (b~ byte#0)
+                let tmp%14#0: bool = (== tmp%13#0 0x00)
+                (assert tmp%14#0)
                 return 
         
         subroutine tests/approvals/arc4-types.algo.ts::testUFixed() -> void:
-            block@0: // L16
+            block@0: // L19
                 let a#0: bytes = 0x000004dc
                 let c#0: bytes = 0x000004dc
                 let tmp%0#0: bool = (== a#0 c#0)
@@ -81,7 +101,7 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
                 return 
         
         subroutine tests/approvals/arc4-types.algo.ts::testByte() -> void:
-            block@0: // L82
+            block@0: // L106
                 let b#0: bytes = 0x00
                 let b2#0: bytes = 0x00
                 let tmp%0#0: bool = (== b#0 b2#0)
@@ -89,7 +109,7 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
                 return 
         
         subroutine tests/approvals/arc4-types.algo.ts::testArrays(n: bytes) -> void:
-            block@0: // L68
+            block@0: // L92
                 let result%0#0: bytes = (concat 0x n#0)
                 let result%1#0: bytes = (concat result%0#0 n#0)
                 let result%2#0: bytes = (concat result%1#0 n#0)
@@ -118,26 +138,30 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
                 let assigned_value%0#0: bytes = 0x0000000000000032
                 let updated_target%0#0: bytes = (replace3 myStatic#0 8u assigned_value%0#0)
                 let myStatic#1: bytes = updated_target%0#0
+                let result%5#0: bytes = (concat 0x n#0)
+                let result%6#0: bytes = (concat result%5#0 n#0)
+                let result%7#0: bytes = (concat result%6#0 n#0)
+                let array_data%2#0: bytes = (concat 0x result%7#0)
+                let myStatic2#0: bytes = array_data%2#0
                 return 
         
         subroutine tests/approvals/arc4-types.algo.ts::testAddress() -> void:
-            block@0: // L88
+            block@0: // L112
                 let a#0: bytes = addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ
                 let b#0: bytes = (txn Sender)
-                let tmp%0#0: bool = (== a#0 b#0)
-                let tmp%1#0: bool = (! tmp%0#0)
-                (assert tmp%1#0) // Zero address should not match sender
-                let tmp%2#0: bool = (== a#0 addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ)
-                (assert tmp%2#0) // Two zero addresses should match
+                let tmp%0#0: bool = (!= a#0 b#0)
+                (assert tmp%0#0) // Zero address should not match sender
+                let tmp%1#0: bool = (== a#0 addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ)
+                (assert tmp%1#0) // Two zero addresses should match
                 let array_head_and_tail%0#0: bytes = a#0
                 let item_offset%0#0: uint64 = (* 0u 1u)
-                let tmp%3#0: bytes = (extract3 array_head_and_tail%0#0 item_offset%0#0 1u) // on error: Index access is out of bounds
-                let tmp%4#0: bool = (== tmp%3#0 0x00)
-                (assert tmp%4#0) // Zero address should start with zero byte
+                let tmp%2#0: bytes = (extract3 array_head_and_tail%0#0 item_offset%0#0 1u) // on error: Index access is out of bounds
+                let tmp%3#0: bool = (== tmp%2#0 0x00)
+                (assert tmp%3#0) // Zero address should start with zero byte
                 return 
         
         subroutine tests/approvals/arc4-types.algo.ts::testTuple() -> void:
-            block@0: // L97
+            block@0: // L121
                 let current_tail_offset%0#0: uint64 = 8u
                 let encoded_tuple_buffer%0#0: bytes = 0x
                 let encoded_tuple_buffer%1#0: bytes = (concat encoded_tuple_buffer%0#0 0x0000000000000022)
@@ -157,7 +181,7 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
                 return 
         
         subroutine tests/approvals/arc4-types.algo.ts::testDynamicBytes(someBytes: bytes) -> void:
-            block@0: // L48
+            block@0: // L72
                 let db1#0: bytes = 0x0000
                 let tmp%0#0: bytes = ((extract 2 0) db1#0)
                 let tmp%1#0: bool = (== tmp%0#0 0x)
@@ -179,7 +203,7 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
                 return 
         
         subroutine tests/approvals/arc4-types.algo.ts::testStaticBytes() -> void:
-            block@0: // L59
+            block@0: // L83
                 let s1#0: bytes = 0x
                 let s2#0: bytes = 0x00000000
                 let s3#0: bytes = 0xaabbccddee

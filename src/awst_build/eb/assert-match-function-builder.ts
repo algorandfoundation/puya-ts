@@ -6,11 +6,10 @@ import type { SourceLocation } from '../../awst/source-location'
 import { CodeError } from '../../errors'
 import { codeInvariant } from '../../util'
 import type { PType } from '../ptypes'
-import { assertMatchFunction, stringPType, TuplePType, uint64PType } from '../ptypes'
+import { assertMatchFunction, ObjectPType, stringPType, TuplePType, uint64PType } from '../ptypes'
 import { instanceEb } from '../type-registry'
 import type { InstanceBuilder } from './index'
 import { BuilderComparisonOp, NodeBuilder } from './index'
-import { ObjectLiteralExpressionBuilder } from './literal/object-literal-expression-builder'
 import { requireBuilderOfType, requireInstanceBuilder, requireStringConstant } from './util'
 import { parseFunctionArgs } from './util/arg-parsing'
 import { VoidExpressionBuilder } from './void-expression-builder'
@@ -31,7 +30,7 @@ export class AssertMatchFunctionBuilder extends NodeBuilder {
     })
     codeInvariant(subject, 'subject parameter is missing', sourceLocation)
 
-    codeInvariant(tests instanceof ObjectLiteralExpressionBuilder, 'Test conditions must be an object literal', tests.sourceLocation)
+    codeInvariant(tests.ptype instanceof ObjectPType, 'Test conditions must be an object type', tests.sourceLocation)
 
     const condition = tests.ptype
       .orderedProperties()

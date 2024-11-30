@@ -16,7 +16,8 @@ import { StrClassBuilder, StrExpressionBuilder } from '../eb/arc4/string'
 import { StructClassBuilder, StructExpressionBuilder } from '../eb/arc4/struct'
 import { Arc4TupleClassBuilder, Arc4TupleExpressionBuilder } from '../eb/arc4/tuple'
 import { UFixedNxMClassBuilder, UFixedNxMExpressionBuilder } from '../eb/arc4/ufixed'
-import { ByteClassBuilder, UintNClassBuilder, UintNExpressionBuilder } from '../eb/arc4/uintn'
+import { classBuilderForUintNAlias, UintNClassBuilder, UintNExpressionBuilder } from '../eb/arc4/uintn'
+import { DecodeArc4FunctionBuilder, EncodeArc4FunctionBuilder, InterpretAsArc4FunctionBuilder } from '../eb/arc4/util'
 import { AssertFunctionBuilder, ErrFunctionBuilder } from '../eb/assert-function-builder'
 import { AssertMatchFunctionBuilder } from '../eb/assert-match-function-builder'
 import { BigUintExpressionBuilder, BigUintFunctionBuilder } from '../eb/biguint-expression-builder'
@@ -74,11 +75,14 @@ import {
   Arc4TupleGeneric,
   ARC4TupleType,
   ByteClass,
+  decodeArc4Function,
   DynamicArrayConstructor,
   DynamicArrayGeneric,
   DynamicArrayType,
   DynamicBytesConstructor,
   DynamicBytesType,
+  encodeArc4Function,
+  interpretAsArc4Function,
   StaticArrayConstructor,
   StaticArrayGeneric,
   StaticArrayType,
@@ -88,6 +92,12 @@ import {
   UFixedNxMClass,
   UFixedNxMGeneric,
   UFixedNxMType,
+  UintN128Class,
+  UintN16Class,
+  UintN256Class,
+  UintN32Class,
+  UintN64Class,
+  UintN8Class,
   UintNClass,
   UintNGeneric,
   UintNType,
@@ -286,7 +296,13 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: UintNClass, singletonEb: UintNClassBuilder })
   typeRegistry.register({ ptype: arc4AbiMethodDecorator, singletonEb: Arc4AbiMethodDecoratorBuilder })
   typeRegistry.register({ ptype: arc4BareMethodDecorator, singletonEb: Arc4BareMethodDecoratorBuilder })
-  typeRegistry.register({ ptype: ByteClass, singletonEb: ByteClassBuilder })
+  typeRegistry.register({ ptype: ByteClass, singletonEb: classBuilderForUintNAlias(ByteClass, arc4ByteAlias) })
+  typeRegistry.register({ ptype: UintN8Class, singletonEb: classBuilderForUintNAlias(UintN8Class, new UintNType({ n: 8n })) })
+  typeRegistry.register({ ptype: UintN16Class, singletonEb: classBuilderForUintNAlias(UintN8Class, new UintNType({ n: 16n })) })
+  typeRegistry.register({ ptype: UintN32Class, singletonEb: classBuilderForUintNAlias(UintN8Class, new UintNType({ n: 32n })) })
+  typeRegistry.register({ ptype: UintN64Class, singletonEb: classBuilderForUintNAlias(UintN8Class, new UintNType({ n: 64n })) })
+  typeRegistry.register({ ptype: UintN128Class, singletonEb: classBuilderForUintNAlias(UintN8Class, new UintNType({ n: 128n })) })
+  typeRegistry.register({ ptype: UintN256Class, singletonEb: classBuilderForUintNAlias(UintN8Class, new UintNType({ n: 256n })) })
   typeRegistry.registerGeneric({ generic: UintNGeneric, ptype: UintNType, instanceEb: UintNExpressionBuilder })
   typeRegistry.register({ ptype: UFixedNxMClass, singletonEb: UFixedNxMClassBuilder })
   typeRegistry.registerGeneric({ generic: UFixedNxMGeneric, ptype: UFixedNxMType, instanceEb: UFixedNxMExpressionBuilder })
@@ -309,6 +325,9 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: StaticBytesConstructor, singletonEb: StaticBytesClassBuilder })
   typeRegistry.register({ ptype: DynamicBytesType, instanceEb: DynamicBytesExpressionBuilder })
   typeRegistry.registerGeneric({ generic: StaticBytesGeneric, ptype: StaticBytesType, instanceEb: StaticBytesExpressionBuilder })
+  typeRegistry.register({ ptype: interpretAsArc4Function, singletonEb: InterpretAsArc4FunctionBuilder })
+  typeRegistry.register({ ptype: encodeArc4Function, singletonEb: EncodeArc4FunctionBuilder })
+  typeRegistry.register({ ptype: decodeArc4Function, singletonEb: DecodeArc4FunctionBuilder })
 
   // GTXN types
   typeRegistry.register({ ptype: paymentGtxnType, instanceEb: GroupTransactionExpressionBuilder })

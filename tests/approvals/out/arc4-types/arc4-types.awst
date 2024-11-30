@@ -4,7 +4,7 @@ subroutine testUFixed(): void
   c: arc4.ufixed32x4 = 1.244m
   assert(reinterpret_cast<bytes>(a) == reinterpret_cast<bytes>(c))
 }
-subroutine test(n: uint64, b: biguint, c: arc4.uint256): void
+subroutine testUintN(n: uint64, b: biguint, c: arc4.uint256): void
 {
   x: arc4.uint8 = 4
   assert(len(reinterpret_cast<bytes>(x)) == 1)
@@ -19,6 +19,15 @@ subroutine test(n: uint64, b: biguint, c: arc4.uint256): void
   a_native: biguint = ARC4_DECODE(a)
   assert(a_native == b)
   assert(len(reinterpret_cast<bytes>(c)) == 32)
+  a_bytes: bytes = reinterpret_cast<bytes>(a)
+  a_from_bytes: arc4.uint128 = reinterpret_cast<arc4.uint128>(a_bytes)
+  assert(reinterpret_cast<bytes>(a_from_bytes) == reinterpret_cast<bytes>(a))
+  aliased64: arc4.uint64 = 12
+  assert(ARC4_DECODE(aliased64) == 12)
+  aliased32: arc4.uint32 = 50545
+  assert(reinterpret_cast<biguint>(reinterpret_cast<bytes>(aliased32)) == 50545)
+  byte: arc4.byte = 255
+  assert(~reinterpret_cast<bytes>(byte) == 0x00)
 }
 subroutine testStr(): void
 {
@@ -26,6 +35,9 @@ subroutine testStr(): void
   assert(reinterpret_cast<bytes>(s1) == reinterpret_cast<bytes>(0), comment=Empty string should equal the uint16 length prefix)
   s2: arc4.dynamic_array<arc4.byte> = "Hello"
   assert(ARC4_DECODE(s2) == "Hello")
+  s2_bytes: bytes = reinterpret_cast<bytes>(s2)
+  s2_from_bytes: arc4.dynamic_array<arc4.byte> = reinterpret_cast<arc4.dynamic_array<arc4.byte>>(s2_bytes)
+  assert(reinterpret_cast<bytes>(s2) == reinterpret_cast<bytes>(s2_from_bytes))
 }
 subroutine testDynamicBytes(someBytes: bytes): void
 {
@@ -50,6 +62,7 @@ subroutine testArrays(n: arc4.uint64): void
   myStatic: arc4.static_array<arc4.uint64> = new arc4.static_array<arc4.uint64>(n, n)
   assert(reinterpret_cast<bytes>(myStatic[0]) == reinterpret_cast<bytes>(myArray.pop()))
   myStatic[1]: arc4.uint64 = 50
+  myStatic2: arc4.static_array<arc4.uint64> = new arc4.static_array<arc4.uint64>(n, n, n)
 }
 subroutine testByte(): void
 {
@@ -61,7 +74,7 @@ subroutine testAddress(): void
 {
   a: arc4.static_array<arc4.byte> = Address("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ")
   b: arc4.static_array<arc4.byte> = reinterpret_cast<arc4.static_array<arc4.byte>>(txn<Sender>())
-  assert(!reinterpret_cast<bytes>(a) == reinterpret_cast<bytes>(b), comment=Zero address should not match sender)
+  assert(reinterpret_cast<bytes>(a) != reinterpret_cast<bytes>(b), comment=Zero address should not match sender)
   assert(reinterpret_cast<bytes>(a) == reinterpret_cast<bytes>(Address("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ")), comment=Two zero addresses should match)
   assert(reinterpret_cast<bytes>(a[0]) == reinterpret_cast<bytes>(0), comment=Zero address should start with zero byte)
 }
@@ -83,7 +96,7 @@ contract Arc4TypesTestContract
     }
     x: arc4.uint64 = 0
     tests/approvals/arc4-types.algo.ts::testStr()
-    tests/approvals/arc4-types.algo.ts::test(1, 2, 4)
+    tests/approvals/arc4-types.algo.ts::testUintN(1, 2, 4)
     tests/approvals/arc4-types.algo.ts::testUFixed()
     tests/approvals/arc4-types.algo.ts::testByte()
     tests/approvals/arc4-types.algo.ts::testArrays(65)

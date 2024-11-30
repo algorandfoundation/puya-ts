@@ -1,32 +1,75 @@
-import { avmError, avmInvariant } from '../impl/errors'
-import { arrayUtil, BytesCls, getNumber, getUint8Array, isBytes, isUint64 } from '../impl/primitives'
-import { biguint, BigUintCompat, Bytes, bytes, BytesBacked, BytesCompat, StringCompat, Uint64, uint64, Uint64Compat } from '../primitives'
+import { NoImplementation } from '../impl/errors'
+import { biguint, BigUintCompat, bytes, BytesBacked, BytesCompat, StringCompat, uint64, Uint64Compat } from '../primitives'
 import { Account } from '../reference'
-import { DeliberateAny } from '../typescript-helpers'
-import { err } from '../util'
 
-export type BitSize = 8 | 16 | 32 | 64 | 128 | 256 | 512
-type NativeForArc4Int<N extends BitSize> = N extends 8 | 16 | 32 | 64 ? uint64 : biguint
-type CompatForArc4Int<N extends BitSize> = N extends 8 | 16 | 32 | 64 ? Uint64Compat : BigUintCompat
+type UintBitSize = 8 | 16 | 24 | 32 | 40 | 48 | 56 | 64
+type BigUintBitSize =
+  | 72
+  | 80
+  | 88
+  | 96
+  | 104
+  | 112
+  | 120
+  | 128
+  | 136
+  | 144
+  | 152
+  | 160
+  | 168
+  | 176
+  | 184
+  | 192
+  | 200
+  | 208
+  | 216
+  | 224
+  | 232
+  | 240
+  | 248
+  | 256
+  | 264
+  | 272
+  | 280
+  | 288
+  | 296
+  | 304
+  | 312
+  | 320
+  | 328
+  | 336
+  | 344
+  | 352
+  | 360
+  | 368
+  | 376
+  | 384
+  | 392
+  | 400
+  | 408
+  | 416
+  | 424
+  | 432
+  | 440
+  | 448
+  | 456
+  | 464
+  | 472
+  | 480
+  | 488
+  | 496
+  | 504
+  | 512
+export type BitSize = UintBitSize | BigUintBitSize
+type NativeForArc4Int<N extends BitSize> = N extends UintBitSize ? uint64 : biguint
+type CompatForArc4Int<N extends BitSize> = N extends UintBitSize ? Uint64Compat : BigUintCompat
 
 const TypeProperty = Symbol('ARC4Type')
 
 abstract class ARC4Encoded implements BytesBacked {
   abstract [TypeProperty]?: string
   get bytes(): bytes {
-    throw new Error('todo')
-  }
-
-  equals(other: this): boolean {
-    return this.bytes.equals(other.bytes)
-  }
-
-  static fromBytes<T extends ARC4Encoded>(this: { new (...args: DeliberateAny): T }, bytes: BytesCompat): T {
-    throw new Error('todo')
-  }
-
-  static fromLog<T extends ARC4Encoded>(this: { new (...args: DeliberateAny): T }, log: BytesCompat): T {
-    throw new Error('todo')
+    throw new NoImplementation()
   }
 }
 
@@ -48,17 +91,16 @@ export class UintN<N extends BitSize> extends ARC4Encoded {
     super()
   }
   get native(): NativeForArc4Int<N> {
-    throw new Error('TODO')
-  }
-
-  static fromBytes<N extends BitSize, I = UintN<N>>(this: { new (...args: DeliberateAny): I }, bytes: BytesCompat): I {
-    throw new Error('todo')
-  }
-
-  static fromLog<N extends BitSize, I = UintN<N>>(this: { new (...args: DeliberateAny): I }, log: BytesCompat): I {
-    throw new Error('todo')
+    throw new NoImplementation()
   }
 }
+export class Byte extends UintN<8> {}
+export class UintN8 extends UintN<8> {}
+export class UintN16 extends UintN<16> {}
+export class UintN32 extends UintN<32> {}
+export class UintN64 extends UintN<64> {}
+export class UintN128 extends UintN<128> {}
+export class UintN256 extends UintN<256> {}
 export class UFixedNxM<N extends BitSize, M extends number> extends ARC4Encoded {
   [TypeProperty]?: `arc4.UFixedNxM<${N}x${M}>`
   constructor(v: `${number}.${number}`) {
@@ -66,79 +108,31 @@ export class UFixedNxM<N extends BitSize, M extends number> extends ARC4Encoded 
   }
 
   get native(): NativeForArc4Int<N> {
-    throw new Error('TODO')
-  }
-
-  static fromBytes<N extends BitSize, M extends number, I = UFixedNxM<N, M>>(
-    this: { new (...args: DeliberateAny): I },
-    bytes: BytesCompat,
-  ): I {
-    throw new Error('todo')
-  }
-
-  static fromLog<N extends BitSize, M extends number, I = UFixedNxM<N, M>>(this: { new (...args: DeliberateAny): I }, log: BytesCompat): I {
-    throw new Error('todo')
-  }
-}
-export class Byte extends UintN<8> {
-  constructor(v?: Uint64Compat) {
-    super(v)
-  }
-
-  static fromBytes<I = Byte>(this: { new (...args: DeliberateAny): I }, bytes: BytesCompat): I {
-    throw new Error('todo')
-  }
-
-  static fromLog<I = Byte>(this: { new (...args: DeliberateAny): I }, log: BytesCompat): I {
-    throw new Error('todo')
+    throw new NoImplementation()
   }
 }
 export class Bool extends ARC4Encoded {
   [TypeProperty]?: `arc4.Bool`
-  #v: boolean
+
   constructor(v?: boolean) {
     super()
-    this.#v = v ?? false
   }
 
   get native(): boolean {
-    return this.#v
+    throw new NoImplementation()
   }
 }
 
 abstract class Arc4ReadonlyArray<TItem extends ARC4Encoded> extends ARC4Encoded {
-  protected items: TItem[]
-  protected constructor(items: TItem[]) {
+  protected constructor() {
     super()
-    this.items = items.slice()
-    return new Proxy(this, {
-      get(target, prop) {
-        if (isUint64(prop)) {
-          const idx = getNumber(prop)
-          if (idx < target.items.length) return target.items[idx]
-          avmError('Index out of bounds')
-        }
-        return Reflect.get(target, prop)
-      },
-      set(target, prop, value) {
-        if (isUint64(prop)) {
-          const idx = getNumber(prop)
-          if (idx < target.items.length) {
-            target.items[idx] = value
-            return true
-          }
-          avmError('Index out of bounds')
-        }
-        avmError('Property is not writable')
-      },
-    })
   }
 
   /**
    * Returns the current length of this array
    */
   get length(): uint64 {
-    return Uint64(this.items.length)
+    throw new NoImplementation()
   }
 
   /**
@@ -147,7 +141,7 @@ abstract class Arc4ReadonlyArray<TItem extends ARC4Encoded> extends ARC4Encoded 
    * @param index The index of the item to retrieve
    */
   at(index: Uint64Compat): TItem {
-    return arrayUtil.arrayAt(this.items, index)
+    throw new NoImplementation()
   }
 
   /** @internal
@@ -168,32 +162,28 @@ abstract class Arc4ReadonlyArray<TItem extends ARC4Encoded> extends ARC4Encoded 
    */
   slice(start: Uint64Compat, end: Uint64Compat): DynamicArray<TItem>
   slice(start?: Uint64Compat, end?: Uint64Compat): DynamicArray<TItem> {
-    return new DynamicArray(...arrayUtil.arraySlice(this.items, start, end))
+    throw new NoImplementation()
   }
 
   /**
    * Returns an iterator for the items in this array
    */
   [Symbol.iterator](): IterableIterator<TItem> {
-    return this.items[Symbol.iterator]()
+    throw new NoImplementation()
   }
 
   /**
    * Returns an iterator for a tuple of the indexes and items in this array
    */
-  *entries(): IterableIterator<readonly [uint64, TItem]> {
-    for (const [idx, item] of this.items.entries()) {
-      yield [Uint64(idx), item]
-    }
+  entries(): IterableIterator<readonly [uint64, TItem]> {
+    throw new NoImplementation()
   }
 
   /**
    * Returns an iterator for the indexes in this array
    */
-  *keys(): IterableIterator<uint64> {
-    for (const idx of this.items.keys()) {
-      yield Uint64(idx)
-    }
+  keys(): IterableIterator<uint64> {
+    throw new NoImplementation()
   }
 
   /**
@@ -209,31 +199,17 @@ export class StaticArray<TItem extends ARC4Encoded, TLength extends number> exte
   constructor(...items: TItem[] & { length: TLength })
   constructor(...items: TItem[])
   constructor(...items: TItem[] & { length: TLength }) {
-    super(items)
+    super()
   }
 
   copy(): StaticArray<TItem, TLength> {
-    return new StaticArray<TItem, TLength>(...this.items)
-  }
-
-  static fromBytes<TItem extends ARC4Encoded, TLength extends number, I = StaticArray<TItem, TLength>>(
-    this: { new (...args: DeliberateAny): I },
-    bytes: BytesCompat,
-  ): I {
-    throw new Error('todo')
-  }
-
-  static fromLog<TItem extends ARC4Encoded, TLength extends number, I = StaticArray<TItem, TLength>>(
-    this: { new (...args: DeliberateAny): I },
-    log: BytesCompat,
-  ): I {
-    throw new Error('todo')
+    throw new NoImplementation()
   }
 }
 export class DynamicArray<TItem extends ARC4Encoded> extends Arc4ReadonlyArray<TItem> {
   [TypeProperty]?: `arc4.DynamicArray<${TItem[typeof TypeProperty]}>`
   constructor(...items: TItem[]) {
-    super(items)
+    super()
   }
 
   /**
@@ -241,28 +217,18 @@ export class DynamicArray<TItem extends ARC4Encoded> extends Arc4ReadonlyArray<T
    * @param items The items to be added to this array
    */
   push(...items: TItem[]): void {
-    this.items.push(...items)
+    throw new NoImplementation()
   }
 
   /**
    * Pop a single item from this array
    */
   pop(): TItem {
-    const item = this.items.pop()
-    if (item === undefined) avmError('The array is empty')
-    return item
+    throw new NoImplementation()
   }
 
   copy(): DynamicArray<TItem> {
-    return new DynamicArray<TItem>(...this.items)
-  }
-
-  static fromBytes<TItem extends ARC4Encoded, I = DynamicArray<TItem>>(this: { new (...args: DeliberateAny): I }, bytes: BytesCompat): I {
-    throw new Error('todo')
-  }
-
-  static fromLog<TItem extends ARC4Encoded, I = DynamicArray<TItem>>(this: { new (...args: DeliberateAny): I }, log: BytesCompat): I {
-    throw new Error('todo')
+    throw new NoImplementation()
   }
 }
 type ExpandTupleType<T extends ARC4Encoded[]> = T extends [infer T1 extends ARC4Encoded, ...infer TRest extends ARC4Encoded[]]
@@ -273,59 +239,31 @@ type ExpandTupleType<T extends ARC4Encoded[]> = T extends [infer T1 extends ARC4
 
 export class Tuple<TTuple extends [ARC4Encoded, ...ARC4Encoded[]]> extends ARC4Encoded {
   [TypeProperty]?: `arc4.Tuple<${ExpandTupleType<TTuple>}>`
-  #items: TTuple
   constructor(...items: TTuple) {
     super()
-    this.#items = items
   }
 
   at<TIndex extends keyof TTuple>(index: TIndex): TTuple[TIndex] {
-    return this.#items[index] ?? err('Index out of bounds')
+    throw new NoImplementation()
   }
 
   get length(): TTuple['length'] & uint64 {
-    return this.#items.length
+    throw new NoImplementation()
   }
 
   get native(): TTuple {
-    return this.#items
-  }
-
-  static fromBytes<TTuple extends [ARC4Encoded, ...ARC4Encoded[]], I = Tuple<TTuple>>(
-    this: { new (...args: TTuple): I },
-    bytes: BytesCompat,
-  ): I {
-    throw new Error('todo')
-  }
-
-  static fromLog<TTuple extends [ARC4Encoded, ...ARC4Encoded[]], I = Tuple<TTuple>>(
-    this: { new (...args: TTuple): I },
-    log: BytesCompat,
-  ): I {
-    throw new Error('todo')
+    throw new NoImplementation()
   }
 }
 
 export class Address extends Arc4ReadonlyArray<Byte> {
   [TypeProperty]?: `arc4.Address`
   constructor(value?: Account | string | bytes) {
-    let byteValues: Uint8Array
-    if (value === undefined) {
-      byteValues = new Uint8Array(32)
-    } else if (typeof value === 'string') {
-      // Interpret as base 32
-      byteValues = BytesCls.fromBase32(value).asUint8Array()
-    } else if (isBytes(value)) {
-      byteValues = getUint8Array(value)
-    } else {
-      byteValues = getUint8Array(value.bytes)
-    }
-    avmInvariant(byteValues.length === 32, 'Addresses should be 32 bytes')
-    super(Array.from(byteValues).map((b) => new Byte(b)))
+    super()
   }
 
   get native(): Account {
-    return Account(Bytes(this.items.map((i) => i.native)))
+    throw new NoImplementation()
   }
 }
 
@@ -345,20 +283,9 @@ class StructImpl<T extends StructConstraint> extends StructBase {
       })
     }
   }
-  static fromBytes<T extends StructConstraint, I = StructBase & T>(this: { new (args: T): I }, bytes: BytesCompat): I {
-    throw new Error('todo')
-  }
-
-  static fromLog<T extends StructConstraint, I = StructBase & T>(this: { new (args: T): I }, log: BytesCompat): I {
-    throw new Error('todo')
-  }
 }
 
-type StructConstructor = {
-  new <T extends StructConstraint>(initial: T): StructBase & T
-  fromBytes: <T extends StructConstraint>(bytes: BytesCompat) => StructBase & T
-  fromLog: <T extends StructConstraint>(log: BytesCompat) => StructBase & T
-}
+type StructConstructor = new <T extends StructConstraint>(initial: T) => StructBase & T
 
 export const Struct = StructImpl as StructConstructor
 
@@ -366,19 +293,11 @@ export class DynamicBytes extends Arc4ReadonlyArray<Byte> {
   [TypeProperty]?: `arc4.DynamicBytes`
 
   constructor(value?: bytes | string) {
-    let byteValues: Uint8Array
-    if (value === undefined) {
-      byteValues = new Uint8Array(0)
-    } else if (typeof value === 'string') {
-      byteValues = BytesCls.fromCompat(value).asUint8Array()
-    } else {
-      byteValues = getUint8Array(value)
-    }
-    super(Array.from(byteValues).map((b) => new Byte(b)))
+    super()
   }
 
   get native(): bytes {
-    return Bytes(this.items.map((i) => i.native))
+    throw new NoImplementation()
   }
 }
 
@@ -386,19 +305,36 @@ export class StaticBytes<TLength extends number = 0> extends Arc4ReadonlyArray<B
   [TypeProperty]?: `arc4.StaticBytes<${TLength}>`
 
   constructor(value?: bytes | string) {
-    let byteValues: Uint8Array
-    if (value === undefined) {
-      // TODO: Should be init to TLength
-      byteValues = new Uint8Array(0)
-    } else if (typeof value === 'string') {
-      byteValues = BytesCls.fromCompat(value).asUint8Array()
-    } else {
-      byteValues = getUint8Array(value)
-    }
-    super(Array.from(byteValues).map((b) => new Byte(b)))
+    super()
   }
 
   get native(): bytes {
-    return Bytes(this.items.map((i) => i.native))
+    throw new NoImplementation()
   }
+}
+
+/**
+ * Interpret the provided bytes as an ARC4 encoded type with no validation
+ * @param bytes An arc4 encoded bytes value
+ * @param prefix The prefix (if any), present in the bytes value. This prefix will be validated and removed
+ */
+export function interpretAsArc4<T extends ARC4Encoded>(bytes: BytesCompat, prefix: 'none' | 'log' = 'none'): T {
+  throw new NoImplementation()
+}
+
+/**
+ * Decode the provided bytes to a native Algorand TypeScript value
+ * @param bytes An arc4 encoded bytes value
+ * @param prefix The prefix (if any), present in the bytes value. This prefix will be validated and removed
+ */
+export function decodeArc4<T>(bytes: BytesCompat, prefix: 'none' | 'log' = 'none'): T {
+  throw new NoImplementation()
+}
+
+/**
+ * Encode the provided Algorand TypeScript value as ARC4 bytes
+ * @param value Any native Algorand TypeScript value with a supported ARC4 encoding
+ */
+export function encodeArc4<T>(value: T): bytes {
+  throw new NoImplementation()
 }

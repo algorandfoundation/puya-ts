@@ -7,6 +7,7 @@ import {
   accountPType,
   applicationPType,
   assetPType,
+  biguintPType,
   boolPType,
   bytesPType,
   GroupTransactionPType,
@@ -18,12 +19,11 @@ import {
 } from './ptypes'
 import {
   ARC4BooleanType,
-  arc4ByteAlias,
   ARC4EncodedType,
   ARC4StringType,
   ARC4StructType,
   ARC4TupleType,
-  DynamicArrayType,
+  DynamicBytesType,
   UintNType,
 } from './ptypes/arc4-types'
 
@@ -43,6 +43,7 @@ export function isArc4EncodableType(ptype: PType): boolean {
   if (ptype instanceof ARC4EncodedType) return true
   if (ptype.equals(boolPType)) return true
   if (ptype.equals(uint64PType)) return true
+  if (ptype.equals(biguintPType)) return true
   if (ptype.equals(bytesPType)) return true
   if (ptype.equals(stringPType)) return true
   if (ptype instanceof TuplePType) return ptype.items.every((i) => isArc4EncodableType(i))
@@ -54,7 +55,8 @@ export function ptypeToArc4EncodedType(ptype: PType, sourceLocation: SourceLocat
   if (ptype instanceof ARC4EncodedType) return ptype
   if (ptype.equals(boolPType)) return ARC4BooleanType
   if (ptype.equals(uint64PType)) return new UintNType({ n: 64n })
-  if (ptype.equals(bytesPType)) return new DynamicArrayType({ elementType: arc4ByteAlias })
+  if (ptype.equals(biguintPType)) return new UintNType({ n: 512n })
+  if (ptype.equals(bytesPType)) return DynamicBytesType
   if (ptype.equals(stringPType)) return ARC4StringType
   if (ptype instanceof TuplePType) return new ARC4TupleType({ types: ptype.items.map((i) => ptypeToArc4EncodedType(i, sourceLocation)) })
   if (ptype instanceof ObjectPType)

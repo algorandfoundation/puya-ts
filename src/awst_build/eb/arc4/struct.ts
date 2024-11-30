@@ -7,12 +7,12 @@ import { ObjectPType } from '../../ptypes'
 import { ARC4StructClass, ARC4StructType } from '../../ptypes/arc4-types'
 import { instanceEb } from '../../type-registry'
 import type { NodeBuilder } from '../index'
-import { InstanceBuilder } from '../index'
+import { ClassBuilder, InstanceBuilder } from '../index'
 import { requireExpressionOfType } from '../util'
 import { parseFunctionArgs } from '../util/arg-parsing'
-import { Arc4EncodedBaseClassBuilder, Arc4EncodedBaseExpressionBuilder } from './base'
+import { Arc4EncodedBaseExpressionBuilder } from './base'
 
-export class StructClassBuilder extends Arc4EncodedBaseClassBuilder {
+export class StructClassBuilder extends ClassBuilder {
   readonly ptype: ARC4StructClass
 
   constructor(sourceLocation: SourceLocation, ptype: PType) {

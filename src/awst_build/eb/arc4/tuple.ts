@@ -8,12 +8,12 @@ import { numberPType, TuplePType, uint64PType } from '../../ptypes'
 import { ARC4EncodedType, Arc4TupleClass, ARC4TupleType } from '../../ptypes/arc4-types'
 import { instanceEb } from '../../type-registry'
 import type { InstanceBuilder, NodeBuilder } from '../index'
-import { FunctionBuilder } from '../index'
+import { ClassBuilder, FunctionBuilder } from '../index'
 import { requireIntegerConstant } from '../util'
 import { parseFunctionArgs } from '../util/arg-parsing'
-import { Arc4EncodedBaseClassBuilder, Arc4EncodedBaseExpressionBuilder } from './base'
+import { Arc4EncodedBaseExpressionBuilder } from './base'
 
-export class Arc4TupleClassBuilder extends Arc4EncodedBaseClassBuilder {
+export class Arc4TupleClassBuilder extends ClassBuilder {
   readonly ptype = Arc4TupleClass
 
   newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {

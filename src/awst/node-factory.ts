@@ -123,10 +123,10 @@ const explicitNodeFactory = {
       wtype: wtypes.boolWType,
     })
   },
-  boolConstant(props: { value: boolean; sourceLocation: SourceLocation }): BoolConstant {
+  boolConstant(props: { value: boolean; sourceLocation: SourceLocation; wtype?: wtypes.WType }): BoolConstant {
     return new BoolConstant({
       ...props,
-      wtype: wtypes.boolWType,
+      wtype: props.wtype ?? wtypes.boolWType,
     })
   },
   singleEvaluation({ source }: { source: Expression }) {

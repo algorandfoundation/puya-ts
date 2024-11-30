@@ -2,7 +2,7 @@
 
 tests/approvals/arc4-struct.algo.ts::StructDemo.approvalProgram:
     intcblock 0 8 1
-    bytecblock 0x 0x0000000000000000
+    bytecblock 0x 0x0000000000000000 0x151f7c75
     txn ApplicationID
     bnz main_after_if_else@2
     callsub constructor
@@ -28,14 +28,15 @@ __puya_arc4_router__:
     txn NumAppArgs
     intc_0 // 0
     !=
-    bz __puya_arc4_router___bare_routing@7
+    bz __puya_arc4_router___bare_routing@8
     txna ApplicationArgs 0
     pushbytes 0x89388ddd // method "testVectorCreationAndEquality()void"
     pushbytes 0xef322d6d // method "addVectors((uint64,uint64),(uint64,uint64))(uint64,uint64)"
     pushbytes 0xcb81deb8 // method "implicitCastingAndSpreading((uint64,uint64))void"
-    uncover 3
-    match __puya_arc4_router___testVectorCreationAndEquality_route@2 __puya_arc4_router___addVectors_route@3 __puya_arc4_router___implicitCastingAndSpreading_route@4
-    b __puya_arc4_router___switch_case_default@5
+    pushbytes 0xf79d6c46 // method "toAndFromBytes((uint64,uint64))(uint64,uint64)"
+    uncover 4
+    match __puya_arc4_router___testVectorCreationAndEquality_route@2 __puya_arc4_router___addVectors_route@3 __puya_arc4_router___implicitCastingAndSpreading_route@4 __puya_arc4_router___toAndFromBytes_route@5
+    b __puya_arc4_router___switch_case_default@6
 
 __puya_arc4_router___testVectorCreationAndEquality_route@2:
     // tests/approvals/arc4-struct.algo.ts:10
@@ -70,7 +71,7 @@ __puya_arc4_router___addVectors_route@3:
     // tests/approvals/arc4-struct.algo.ts:18
     // public addVectors(v1: Vector, v2: Vector) {
     callsub addVectors
-    pushbytes 0x151f7c75
+    bytec_2 // 0x151f7c75
     swap
     concat
     log
@@ -97,19 +98,43 @@ __puya_arc4_router___implicitCastingAndSpreading_route@4:
     intc_2 // 1
     retsub
 
-__puya_arc4_router___switch_case_default@5:
-    b __puya_arc4_router___after_if_else@11
+__puya_arc4_router___toAndFromBytes_route@5:
+    // tests/approvals/arc4-struct.algo.ts:32
+    // public toAndFromBytes(v1: Vector): Vector {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    // tests/approvals/arc4-struct.algo.ts:9
+    // class StructDemo extends Contract {
+    txna ApplicationArgs 1
+    // tests/approvals/arc4-struct.algo.ts:32
+    // public toAndFromBytes(v1: Vector): Vector {
+    callsub toAndFromBytes
+    bytec_2 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_2 // 1
+    retsub
 
-__puya_arc4_router___bare_routing@7:
+__puya_arc4_router___switch_case_default@6:
+    b __puya_arc4_router___after_if_else@12
+
+__puya_arc4_router___bare_routing@8:
     // tests/approvals/arc4-struct.algo.ts:9
     // class StructDemo extends Contract {
     txn OnCompletion
     intc_0 // 0
     swap
-    match __puya_arc4_router_____algots__.defaultCreate@8
-    b __puya_arc4_router___switch_case_default@9
+    match __puya_arc4_router_____algots__.defaultCreate@9
+    b __puya_arc4_router___switch_case_default@10
 
-__puya_arc4_router_____algots__.defaultCreate@8:
+__puya_arc4_router_____algots__.defaultCreate@9:
     // tests/approvals/arc4-struct.algo.ts:9
     // class StructDemo extends Contract {
     txn ApplicationID
@@ -120,9 +145,9 @@ __puya_arc4_router_____algots__.defaultCreate@8:
     intc_2 // 1
     retsub
 
-__puya_arc4_router___switch_case_default@9:
+__puya_arc4_router___switch_case_default@10:
 
-__puya_arc4_router___after_if_else@11:
+__puya_arc4_router___after_if_else@12:
     // tests/approvals/arc4-struct.algo.ts:9
     // class StructDemo extends Contract {
     intc_0 // 0
@@ -163,7 +188,7 @@ testVectorCreationAndEquality:
     bytec_1 // 0x0000000000000000
     concat
     // tests/approvals/arc4-struct.algo.ts:15
-    // assert(v1.equals(v2))
+    // assert(v1 === v2)
     ==
     assert
     retsub
@@ -262,6 +287,19 @@ implicitCastingAndSpreading:
     frame_dig -1
     ==
     assert
+    retsub
+
+
+// tests/approvals/arc4-struct.algo.ts::StructDemo.toAndFromBytes(v1: bytes) -> bytes:
+toAndFromBytes:
+    // tests/approvals/arc4-struct.algo.ts:32
+    // public toAndFromBytes(v1: Vector): Vector {
+    proto 1 1
+    // tests/approvals/arc4-struct.algo.ts:33
+    // const v1_bytes = v1.bytes
+    frame_dig -1
+    // tests/approvals/arc4-struct.algo.ts:34
+    // return interpretAsArc4<Vector>(v1_bytes)
     retsub
 
 

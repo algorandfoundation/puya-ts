@@ -1,0 +1,396 @@
+#pragma version 10
+
+tests/approvals/arc4-encoded-decode.algo.ts::Arc4EncodedDecode.approvalProgram:
+    intcblock 0 1 8 64
+    bytecblock 0x00 0x
+    txn ApplicationID
+    bnz main_after_if_else@2
+    callsub constructor
+
+main_after_if_else@2:
+    callsub __puya_arc4_router__
+    return
+
+
+// tests/approvals/arc4-encoded-decode.algo.ts::Arc4EncodedDecode.constructor() -> void:
+constructor:
+    // tests/approvals/arc4-encoded-decode.algo.ts:7
+    // export class Arc4EncodedDecode extends Contract {
+    proto 0 0
+    retsub
+
+
+// tests/approvals/arc4-encoded-decode.algo.ts::Arc4EncodedDecode.__puya_arc4_router__() -> uint64:
+__puya_arc4_router__:
+    // tests/approvals/arc4-encoded-decode.algo.ts:7
+    // export class Arc4EncodedDecode extends Contract {
+    proto 0 1
+    txn NumAppArgs
+    intc_0 // 0
+    !=
+    bz __puya_arc4_router___bare_routing@6
+    txna ApplicationArgs 0
+    pushbytes 0x9be85afa // method "testEncoding(uint64,bool,uint512,byte[],string)void"
+    pushbytes 0xa2d335ac // method "testDecoding(uint64,byte[],bool,byte[],uint512,byte[],string,byte[],(uint64,byte[]),byte[])void"
+    uncover 2
+    match __puya_arc4_router___testEncoding_route@2 __puya_arc4_router___testDecoding_route@3
+    b __puya_arc4_router___switch_case_default@4
+
+__puya_arc4_router___testEncoding_route@2:
+    // tests/approvals/arc4-encoded-decode.algo.ts:8
+    // testEncoding(a: uint64, b: boolean, c: biguint, d: bytes, e: string) {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    // tests/approvals/arc4-encoded-decode.algo.ts:7
+    // export class Arc4EncodedDecode extends Contract {
+    txna ApplicationArgs 1
+    btoi
+    txna ApplicationArgs 2
+    intc_0 // 0
+    getbit
+    txna ApplicationArgs 3
+    txna ApplicationArgs 4
+    extract 2 0
+    txna ApplicationArgs 5
+    extract 2 0
+    // tests/approvals/arc4-encoded-decode.algo.ts:8
+    // testEncoding(a: uint64, b: boolean, c: biguint, d: bytes, e: string) {
+    uncover 4
+    uncover 4
+    uncover 4
+    uncover 4
+    uncover 4
+    callsub testEncoding
+    intc_1 // 1
+    retsub
+
+__puya_arc4_router___testDecoding_route@3:
+    // tests/approvals/arc4-encoded-decode.algo.ts:17-28
+    // testDecoding(
+    //   a: uint64,
+    //   a_bytes: bytes,
+    //   b: boolean,
+    //   b_bytes: bytes,
+    //   c: biguint,
+    //   c_bytes: bytes,
+    //   d: string,
+    //   d_bytes: bytes,
+    //   e: TestObj,
+    //   e_bytes: bytes,
+    // ) {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    // tests/approvals/arc4-encoded-decode.algo.ts:7
+    // export class Arc4EncodedDecode extends Contract {
+    txna ApplicationArgs 1
+    btoi
+    txna ApplicationArgs 2
+    extract 2 0
+    txna ApplicationArgs 3
+    intc_0 // 0
+    getbit
+    txna ApplicationArgs 4
+    extract 2 0
+    txna ApplicationArgs 5
+    txna ApplicationArgs 6
+    extract 2 0
+    txna ApplicationArgs 7
+    extract 2 0
+    txna ApplicationArgs 8
+    extract 2 0
+    txna ApplicationArgs 9
+    dup
+    intc_0 // 0
+    intc_2 // 8
+    extract3 // on error: Index access is out of bounds
+    swap
+    dup
+    intc_2 // 8
+    extract_uint16
+    swap
+    dup
+    len
+    swap
+    uncover 2
+    uncover 2
+    substring3
+    txna ApplicationArgs 10
+    extract 2 0
+    // tests/approvals/arc4-encoded-decode.algo.ts:17-28
+    // testDecoding(
+    //   a: uint64,
+    //   a_bytes: bytes,
+    //   b: boolean,
+    //   b_bytes: bytes,
+    //   c: biguint,
+    //   c_bytes: bytes,
+    //   d: string,
+    //   d_bytes: bytes,
+    //   e: TestObj,
+    //   e_bytes: bytes,
+    // ) {
+    uncover 10
+    uncover 10
+    uncover 10
+    uncover 10
+    uncover 10
+    uncover 10
+    uncover 10
+    uncover 10
+    uncover 10
+    uncover 10
+    uncover 10
+    callsub testDecoding
+    intc_1 // 1
+    retsub
+
+__puya_arc4_router___switch_case_default@4:
+    b __puya_arc4_router___after_if_else@10
+
+__puya_arc4_router___bare_routing@6:
+    // tests/approvals/arc4-encoded-decode.algo.ts:7
+    // export class Arc4EncodedDecode extends Contract {
+    txn OnCompletion
+    intc_0 // 0
+    swap
+    match __puya_arc4_router_____algots__.defaultCreate@7
+    b __puya_arc4_router___switch_case_default@8
+
+__puya_arc4_router_____algots__.defaultCreate@7:
+    // tests/approvals/arc4-encoded-decode.algo.ts:7
+    // export class Arc4EncodedDecode extends Contract {
+    txn ApplicationID
+    intc_0 // 0
+    ==
+    assert // can only call when creating
+    callsub __algots__.defaultCreate
+    intc_1 // 1
+    retsub
+
+__puya_arc4_router___switch_case_default@8:
+
+__puya_arc4_router___after_if_else@10:
+    // tests/approvals/arc4-encoded-decode.algo.ts:7
+    // export class Arc4EncodedDecode extends Contract {
+    intc_0 // 0
+    retsub
+
+
+// tests/approvals/arc4-encoded-decode.algo.ts::Arc4EncodedDecode.testEncoding(a: uint64, b: uint64, c: bytes, d: bytes, e: bytes) -> void:
+testEncoding:
+    // tests/approvals/arc4-encoded-decode.algo.ts:8
+    // testEncoding(a: uint64, b: boolean, c: biguint, d: bytes, e: string) {
+    proto 5 0
+    // tests/approvals/arc4-encoded-decode.algo.ts:9
+    // assert(encodeArc4(a) === new UintN64(a).bytes)
+    frame_dig -5
+    itob
+    frame_dig -5
+    itob
+    ==
+    assert
+    // tests/approvals/arc4-encoded-decode.algo.ts:10
+    // assert(encodeArc4(b) === new Bool(b).bytes)
+    bytec_0 // 0x00
+    intc_0 // 0
+    frame_dig -4
+    setbit
+    bytec_0 // 0x00
+    intc_0 // 0
+    frame_dig -4
+    setbit
+    ==
+    assert
+    // tests/approvals/arc4-encoded-decode.algo.ts:11
+    // assert(encodeArc4(c) === new UintN<512>(c).bytes)
+    frame_dig -3
+    len
+    intc_3 // 64
+    <=
+    assert // overflow
+    intc_3 // 64
+    bzero
+    frame_dig -3
+    b|
+    frame_dig -3
+    len
+    intc_3 // 64
+    <=
+    assert // overflow
+    intc_3 // 64
+    bzero
+    frame_dig -3
+    b|
+    ==
+    assert
+    // tests/approvals/arc4-encoded-decode.algo.ts:12
+    // assert(encodeArc4(d) === new DynamicBytes(d).bytes)
+    frame_dig -2
+    len
+    itob
+    extract 6 2
+    frame_dig -2
+    concat
+    frame_dig -2
+    len
+    itob
+    extract 6 2
+    frame_dig -2
+    concat
+    ==
+    assert
+    // tests/approvals/arc4-encoded-decode.algo.ts:13
+    // assert(encodeArc4(e) === new Str(e).bytes)
+    frame_dig -1
+    len
+    itob
+    extract 6 2
+    frame_dig -1
+    concat
+    frame_dig -1
+    len
+    itob
+    extract 6 2
+    frame_dig -1
+    concat
+    ==
+    assert
+    // tests/approvals/arc4-encoded-decode.algo.ts:14
+    // assert(encodeArc4({ a, b: d }) === new TestStruct({ a: new UintN64(a), b: new DynamicBytes(d) }).bytes)
+    frame_dig -5
+    itob
+    frame_dig -2
+    len
+    itob
+    extract 6 2
+    frame_dig -2
+    concat
+    swap
+    bytec_1 // 0x
+    swap
+    concat
+    pushint 10 // 10
+    itob
+    extract 6 2
+    concat
+    swap
+    concat
+    frame_dig -5
+    itob
+    frame_dig -2
+    len
+    itob
+    extract 6 2
+    frame_dig -2
+    concat
+    swap
+    bytec_1 // 0x
+    swap
+    concat
+    pushint 10 // 10
+    itob
+    extract 6 2
+    concat
+    swap
+    concat
+    ==
+    assert
+    retsub
+
+
+// tests/approvals/arc4-encoded-decode.algo.ts::Arc4EncodedDecode.testDecoding(a: uint64, a_bytes: bytes, b: uint64, b_bytes: bytes, c: bytes, c_bytes: bytes, d: bytes, d_bytes: bytes, e.a: bytes, e.b: bytes, e_bytes: bytes) -> void:
+testDecoding:
+    // tests/approvals/arc4-encoded-decode.algo.ts:17-28
+    // testDecoding(
+    //   a: uint64,
+    //   a_bytes: bytes,
+    //   b: boolean,
+    //   b_bytes: bytes,
+    //   c: biguint,
+    //   c_bytes: bytes,
+    //   d: string,
+    //   d_bytes: bytes,
+    //   e: TestObj,
+    //   e_bytes: bytes,
+    // ) {
+    proto 11 0
+    // tests/approvals/arc4-encoded-decode.algo.ts:29
+    // assert(decodeArc4<uint64>(a_bytes) === a)
+    frame_dig -10
+    btoi
+    frame_dig -11
+    ==
+    assert
+    // tests/approvals/arc4-encoded-decode.algo.ts:30
+    // assert(decodeArc4<boolean>(b_bytes) === b)
+    frame_dig -8
+    intc_0 // 0
+    getbit
+    frame_dig -9
+    ==
+    assert
+    // tests/approvals/arc4-encoded-decode.algo.ts:31
+    // assert(decodeArc4<biguint>(c_bytes) === c)
+    frame_dig -6
+    frame_dig -7
+    b==
+    assert
+    // tests/approvals/arc4-encoded-decode.algo.ts:32
+    // assert(decodeArc4<string>(d_bytes) === d)
+    frame_dig -4
+    extract 2 0
+    frame_dig -5
+    ==
+    assert
+    // tests/approvals/arc4-encoded-decode.algo.ts:34
+    // assertMatch(decodeArc4<TestObj>(e_bytes), e)
+    frame_dig -1
+    intc_0 // 0
+    intc_2 // 8
+    extract3 // on error: Index access is out of bounds
+    frame_dig -3
+    ==
+    bz testDecoding_bool_false@3
+    frame_dig -1
+    intc_2 // 8
+    extract_uint16
+    frame_dig -1
+    len
+    frame_dig -1
+    uncover 2
+    uncover 2
+    substring3
+    frame_dig -2
+    ==
+    bz testDecoding_bool_false@3
+    intc_1 // 1
+    b testDecoding_bool_merge@4
+
+testDecoding_bool_false@3:
+    intc_0 // 0
+
+testDecoding_bool_merge@4:
+    // tests/approvals/arc4-encoded-decode.algo.ts:34
+    // assertMatch(decodeArc4<TestObj>(e_bytes), e)
+    assert // assert target is match for conditions
+    retsub
+
+
+// tests/approvals/arc4-encoded-decode.algo.ts::Arc4EncodedDecode.__algots__.defaultCreate() -> void:
+__algots__.defaultCreate:
+    // tests/approvals/arc4-encoded-decode.algo.ts:7
+    // export class Arc4EncodedDecode extends Contract {
+    proto 0 0
+    retsub

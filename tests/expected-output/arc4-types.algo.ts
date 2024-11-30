@@ -17,7 +17,7 @@ function testUFixed() {
   const a = new UFixedNxM<32, 4>('1.244')
   const c = new UFixedNxM<32, 4>('1.244')
 
-  assert(a.equals(c))
+  assert(a === c)
 }
 
 function test(n: uint64, b: biguint, c: UintN<256>) {
@@ -68,7 +68,7 @@ function testArrays(n: ARC4Uint64) {
 
   const myStatic = new StaticArray(n, n)
 
-  assert(myStatic[0].equals(myArray.pop()))
+  assert(myStatic[0] === myArray.pop())
 
   myStatic[1] = new UintN<64>(50)
 
@@ -78,23 +78,23 @@ function testArrays(n: ARC4Uint64) {
 function testByte() {
   const b = new Byte()
   const b2 = new Byte(0)
-  assert(b.equals(b2))
+  assert(b === b2)
 }
 
 function testAddress() {
   const a = new Address()
   const b = new Address(Txn.sender)
 
-  assert(!a.equals(b), 'Zero address should not match sender')
-  assert(a.equals(new Address()), 'Two zero addresses should match')
-  assert(a[0].equals(new Byte()), 'Zero address should start with zero byte')
+  assert(a !== b, 'Zero address should not match sender')
+  assert(a === new Address(), 'Two zero addresses should match')
+  assert(a[0] === new Byte(), 'Zero address should start with zero byte')
 }
 
 function testTuple() {
   const t = new Tuple(new ARC4Uint64(34))
   const firstItem = t.at(0)
   const firstItemIndexer = t.native[0]
-  assert(firstItem.equals(firstItemIndexer))
+  assert(firstItem === firstItemIndexer)
   const t1 = new Tuple(new Address(), new Byte())
   assert(t1.length === 2)
 }
