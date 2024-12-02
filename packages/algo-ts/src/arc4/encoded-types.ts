@@ -66,7 +66,7 @@ type CompatForArc4Int<N extends BitSize> = N extends UintBitSize ? Uint64Compat 
 
 const TypeProperty = Symbol('ARC4Type')
 
-abstract class ARC4Encoded implements BytesBacked {
+export abstract class ARC4Encoded implements BytesBacked {
   abstract [TypeProperty]?: string
   get bytes(): bytes {
     throw new NoImplementation()

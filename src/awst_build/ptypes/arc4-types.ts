@@ -268,7 +268,7 @@ export class UintNType extends ARC4EncodedType {
     super()
     codeInvariant(n >= 8n && n <= 512n && n % 8n === 0n, 'n must be between 8 and 512, and a multiple of 8')
     this.n = n
-    this.name = name ?? `UIntN<${n}>`
+    this.name = name ?? `UintN<${n}>`
     this.wtype = wtype ?? new wtypes.ARC4UIntN({ n: this.n })
   }
 }
