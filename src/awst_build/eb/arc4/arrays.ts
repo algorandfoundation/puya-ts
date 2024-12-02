@@ -74,7 +74,7 @@ export class StaticArrayClassBuilder extends ClassBuilder {
       args,
       typeArgs,
       callLocation: sourceLocation,
-      funcName: 'DynamicArray constructor',
+      funcName: 'StaticArray constructor',
       genericTypeArgs: 2,
       argSpec: (a) => args.map((_) => a.required()),
     })

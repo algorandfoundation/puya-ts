@@ -451,7 +451,7 @@ export class StaticArrayType extends ARC4EncodedType {
   }
 }
 export const arc4AddressAlias = new StaticArrayType({
-  arraySize: BigInt(Constants.encodedAddressLength),
+  arraySize: BigInt(Constants.addressLength),
   elementType: arc4ByteAlias,
   wtype: wtypes.arc4AddressAliasWType,
   immutable: true,
