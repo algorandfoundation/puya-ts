@@ -206,7 +206,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
       return this.context.getBuilderForNode(node.name)
     }
     const property = this.textVisitor.accept(node.name)
-    return target.memberAccess(property, this.sourceLocation(node))
+    return target.memberAccess(property, this.sourceLocation(node.name))
   }
 
   visitElementAccessExpression(node: ts.ElementAccessExpression): NodeBuilder {

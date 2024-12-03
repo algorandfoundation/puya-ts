@@ -5,11 +5,16 @@ export class TxnFieldData {
   readonly wtype: wtypes.WType
   readonly numValues: number
   readonly isInnerParam: boolean
-  constructor(data: { field: TxnField; wtype: wtypes.WType; numValues?: number; isInnerParam?: boolean }) {
+  /**
+   * If field is an array, accept individual arguments and convert to an array
+   */
+  readonly arrayPromote: boolean
+  constructor(data: { field: TxnField; wtype: wtypes.WType; numValues?: number; isInnerParam?: boolean; arrayPromote?: boolean }) {
     this.immediate = data.field
     this.wtype = data.wtype
     this.numValues = data.numValues ?? 1
     this.isInnerParam = data.isInnerParam ?? true
+    this.arrayPromote = data.arrayPromote ?? false
   }
 }
 
@@ -167,6 +172,16 @@ export const TxnFields: Record<TxnField, TxnFieldData> = {
   // v5
   Logs: new TxnFieldData({ field: TxnField.Logs, wtype: wtypes.bytesWType, numValues: 32, isInnerParam: false }),
   // v7
-  ApprovalProgramPages: new TxnFieldData({ field: TxnField.ApprovalProgramPages, wtype: wtypes.bytesWType, numValues: 4 }),
-  ClearStateProgramPages: new TxnFieldData({ field: TxnField.ClearStateProgramPages, wtype: wtypes.bytesWType, numValues: 4 }),
+  ApprovalProgramPages: new TxnFieldData({
+    field: TxnField.ApprovalProgramPages,
+    wtype: wtypes.bytesWType,
+    numValues: 4,
+    arrayPromote: true,
+  }),
+  ClearStateProgramPages: new TxnFieldData({
+    field: TxnField.ClearStateProgramPages,
+    wtype: wtypes.bytesWType,
+    numValues: 4,
+    arrayPromote: true,
+  }),
 }

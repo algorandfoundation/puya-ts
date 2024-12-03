@@ -1,4 +1,5 @@
 import { sync } from 'cross-spawn'
+import { rimraf } from 'rimraf'
 import { describe, expect, it } from 'vitest'
 import { compile } from '../src'
 import { buildCompileOptions } from '../src/compile-options'
@@ -6,7 +7,9 @@ import { isErrorOrCritical, LoggingContext, LogLevel } from '../src/logger'
 import { defaultPuyaOptions } from '../src/puya/options'
 import { invariant } from '../src/util'
 
-describe('Approvals', () => {
+describe('Approvals', async () => {
+  await rimraf('tests/approvals/out')
+
   using logCtx = LoggingContext.create()
   const result = compile(
     buildCompileOptions({
@@ -15,7 +18,7 @@ describe('Approvals', () => {
       paths: ['tests/approvals'],
       outDir: 'out/[name]',
       dryRun: false,
-      logLevel: LogLevel.Warn,
+      logLevel: LogLevel.Warning,
     }),
     {
       ...defaultPuyaOptions,

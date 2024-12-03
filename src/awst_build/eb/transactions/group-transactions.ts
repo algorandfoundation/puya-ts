@@ -19,6 +19,12 @@ export class GroupTransactionExpressionBuilder extends InstanceExpressionBuilder
     super(expr, ptype)
   }
 
+  hasProperty(name: string): boolean {
+    const txnKind = this.ptype.kind
+    const fields = txnKind === undefined ? anyTxnFields : txnKindToFields[txnKind]
+    return name in fields
+  }
+
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
     const txnKind = this.ptype.kind
     const fields = txnKind === undefined ? anyTxnFields : txnKindToFields[txnKind]

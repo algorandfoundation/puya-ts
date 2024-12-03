@@ -58,10 +58,35 @@ export class ToCodeVisitor
     return `${expression.target.accept(this)}${expression.op}`
   }
   visitCompiledContract(expression: nodes.CompiledContract): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    let overrides = Array.from(expression.allocationOverrides.entries())
+      .map(([f, v]) => `${f}=${v.accept(this)}`)
+      .join(', ')
+    if (overrides) {
+      overrides = `, ${overrides}`
+    }
+
+    let templateVars = Array.from(expression.templateVariables.entries())
+      .map(([n, v]) => `${n}=${v.accept(this)}`)
+      .join(', ')
+    if (templateVars) {
+      templateVars = `, ${templateVars}`
+    }
+
+    const prefix = expression.prefix ? `, prefix=${expression.prefix}` : ''
+
+    return `compile(${expression.contract.id}${overrides}${prefix}${templateVars}`
   }
   visitCompiledLogicSig(expression: nodes.CompiledLogicSig): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    let templateVars = Array.from(expression.templateVariables.entries())
+      .map(([n, v]) => `${n}=${v.accept(this)}`)
+      .join(', ')
+    if (templateVars) {
+      templateVars = `, ${templateVars}`
+    }
+
+    const prefix = expression.prefix ? `, prefix=${expression.prefix}` : ''
+
+    return `compile(${expression.logicSig.id}${prefix}${templateVars}`
   }
   visitLoopExit(statement: nodes.LoopExit): string[] {
     throw new TodoError('Method not implemented.', { sourceLocation: statement.sourceLocation })

@@ -9,7 +9,7 @@ const levelConfig: Record<LogEvent['level'], { colorFn: ColorFn; writeFn: (...ar
   /* eslint-disable no-console */
   debug: { colorFn: chalk.green, writeFn: console.debug },
   info: { colorFn: chalk.green, writeFn: console.info },
-  warn: { colorFn: chalk.yellow, writeFn: console.warn },
+  warning: { colorFn: chalk.yellow, writeFn: console.warn },
   error: { colorFn: chalk.red, writeFn: console.error },
   critical: { colorFn: chalk.red, writeFn: console.error },
   /* eslint-enable no-console */

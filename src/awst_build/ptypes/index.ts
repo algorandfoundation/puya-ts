@@ -79,7 +79,7 @@ export class LogicSigPType extends PType {
   readonly wtype = undefined
   readonly name: string
   readonly module: string
-  readonly singleton = false
+  readonly singleton = true
   readonly sourceLocation: SourceLocation
   readonly baseType: LogicSigPType | undefined
   constructor(props: { module: string; name: string; baseType?: LogicSigPType; sourceLocation: SourceLocation }) {
@@ -1260,4 +1260,32 @@ export const submitGroupItxnFunction = new LibFunctionType({
 export const TemplateVarFunction = new LibFunctionType({
   name: 'TemplateVar',
   module: Constants.templateVarModuleName,
+})
+
+export const compileFunctionType = new LibFunctionType({
+  name: 'compile',
+  module: Constants.compiledModuleName,
+})
+
+export const compiledContractType = new ObjectPType({
+  name: 'CompiledContract',
+  module: Constants.compiledModuleName,
+  description: 'Provides compiled programs and state allocation values for a Contract. Created by calling `compile(ExampleContractType)`',
+  properties: {
+    approvalProgram: new TuplePType({ items: [bytesPType, bytesPType] }),
+    clearStateProgram: new TuplePType({ items: [bytesPType, bytesPType] }),
+    extraProgramPages: uint64PType,
+    globalUints: uint64PType,
+    globalBytes: uint64PType,
+    localUints: uint64PType,
+    localBytes: uint64PType,
+  },
+})
+export const compiledLogicSigType = new ObjectPType({
+  name: 'CompiledLogicSig',
+  module: Constants.compiledModuleName,
+  description: 'Provides account for a Logic Signature. Created by calling `compile(LogicSigType)``',
+  properties: {
+    account: accountPType,
+  },
 })

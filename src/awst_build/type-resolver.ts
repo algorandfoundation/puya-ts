@@ -296,8 +296,8 @@ export class TypeResolver {
       const ptype = this.resolve(typeDeclaration, sourceLocation)
       if (ptype instanceof ARC4StructType) {
         return ARC4StructClass.fromStructType(ptype)
-      } else if (ptype instanceof ContractClassPType) {
-        throw new CodeError('Contract classes cannot be explicitly instantiated', { sourceLocation })
+      } else if (ptype instanceof ContractClassPType || ptype instanceof LogicSigPType) {
+        return ptype
       }
     }
     throw new CodeError('Unable to reflect constructor type', { sourceLocation })

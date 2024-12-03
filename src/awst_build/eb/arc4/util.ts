@@ -2,12 +2,19 @@ import { nodeFactory } from '../../../awst/node-factory'
 import type { BytesConstant, Expression } from '../../../awst/nodes'
 import { EqualityComparison } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
+import { wtypes } from '../../../awst/wtypes'
 import { logger } from '../../../logger'
 import { codeInvariant, hexToUint8Array } from '../../../util'
 import { isArc4EncodableType, ptypeToArc4EncodedType } from '../../arc4-util'
 import type { PType } from '../../ptypes'
 import { bytesPType, stringPType } from '../../ptypes'
-import { ARC4EncodedType, decodeArc4Function, encodeArc4Function, interpretAsArc4Function } from '../../ptypes/arc4-types'
+import {
+  ARC4EncodedType,
+  decodeArc4Function,
+  encodeArc4Function,
+  interpretAsArc4Function,
+  methodSelectorFunction,
+} from '../../ptypes/arc4-types'
 import { instanceEb } from '../../type-registry'
 import type { InstanceBuilder, NodeBuilder } from '../index'
 import { FunctionBuilder } from '../index'
@@ -150,5 +157,33 @@ function getPrefixValue(arg: InstanceBuilder | undefined): BytesConstant | undef
       return undefined
     default:
       logger.error(arg.sourceLocation, `Expected literal string: 'none' | 'log'`)
+  }
+}
+
+export class MethodSelectorFunctionBuilder extends FunctionBuilder {
+  readonly ptype = methodSelectorFunction
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    const {
+      args: [methodSignature],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 0,
+      callLocation: sourceLocation,
+      funcName: this.typeDescription,
+      argSpec: (a) => [a.required(stringPType)],
+    })
+
+    const signature = requireStringConstant(methodSignature).value
+
+    return instanceEb(
+      nodeFactory.methodConstant({
+        value: signature,
+        wtype: wtypes.bytesWType,
+        sourceLocation,
+      }),
+      bytesPType,
+    )
   }
 }

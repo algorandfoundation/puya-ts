@@ -51,6 +51,8 @@ contract tests/approvals/itxn.algo.ts::ItxnDemoContract:
                 let assetParams#0: itxn_field_set = itxn_field_set(0)
                 let assetParams%%param_Fee_idx_0#0: uint64 = 0u
                 let assetParams%%Fee_length#0: uint64 = 1u
+                let assetParams%%param_TypeEnum_idx_0#0: uint64 = 3u
+                let assetParams%%TypeEnum_length#0: uint64 = 1u
                 let assetParams%%param_ConfigAssetTotal_idx_0#0: uint64 = 1000u
                 let assetParams%%ConfigAssetTotal_length#0: uint64 = 1u
                 let (maybe_value%0#0: bytes, maybe_exists%0#0: bool) = (app_global_get_ex 0u "name")
@@ -76,7 +78,6 @@ contract tests/approvals/itxn.algo.ts::ItxnDemoContract:
                 let assetParams%%VoteLast_length#0: uint64 = 0u
                 let assetParams%%VoteKeyDilution_length#0: uint64 = 0u
                 let assetParams%%Type_length#0: uint64 = 0u
-                let assetParams%%TypeEnum_length#0: uint64 = 0u
                 let assetParams%%XferAsset_length#0: uint64 = 0u
                 let assetParams%%AssetAmount_length#0: uint64 = 0u
                 let assetParams%%AssetSender_length#0: uint64 = 0u
@@ -117,6 +118,7 @@ contract tests/approvals/itxn.algo.ts::ItxnDemoContract:
                 ((itxn_field ConfigAssetUnitName) assetParams%%param_ConfigAssetUnitName_idx_0#0)
                 ((itxn_field ConfigAssetName) assetParams%%param_ConfigAssetName_idx_0#0)
                 ((itxn_field ConfigAssetTotal) assetParams%%param_ConfigAssetTotal_idx_0#0)
+                ((itxn_field TypeEnum) assetParams%%param_TypeEnum_idx_0#0)
                 ((itxn_field Fee) assetParams%%param_Fee_idx_0#0)
                 goto block@1
             block@1: // next_txn_L40
@@ -196,6 +198,7 @@ contract tests/approvals/itxn.algo.ts::ItxnDemoContract:
                 ((itxn_field ConfigAssetUnitName) assetParams%%param_ConfigAssetUnitName_idx_0#0)
                 ((itxn_field ConfigAssetName) assetParams%%param_ConfigAssetName_idx_0#1)
                 ((itxn_field ConfigAssetTotal) assetParams%%param_ConfigAssetTotal_idx_0#0)
+                ((itxn_field TypeEnum) assetParams%%param_TypeEnum_idx_0#0)
                 ((itxn_field Fee) assetParams%%param_Fee_idx_0#0)
                 goto block@2
             block@2: // next_txn_L44
@@ -278,10 +281,12 @@ contract tests/approvals/itxn.algo.ts::ItxnDemoContract:
                 let appCreateParams#0: itxn_field_set = itxn_field_set(2)
                 let appCreateParams%%param_Fee_idx_0#0: uint64 = 0u
                 let appCreateParams%%Fee_length#0: uint64 = 1u
-                let appCreateParams%%param_ApprovalProgram_idx_0#0: bytes = 0x098101
-                let appCreateParams%%ApprovalProgram_length#0: uint64 = 1u
-                let appCreateParams%%param_ClearStateProgram_idx_0#0: bytes = 0x098101
-                let appCreateParams%%ClearStateProgram_length#0: uint64 = 1u
+                let appCreateParams%%param_TypeEnum_idx_0#0: uint64 = 6u
+                let appCreateParams%%TypeEnum_length#0: uint64 = 1u
+                let appCreateParams%%param_ApprovalProgramPages_idx_0#0: bytes = 0x098101
+                let appCreateParams%%ApprovalProgramPages_length#0: uint64 = 1u
+                let appCreateParams%%param_ClearStateProgramPages_idx_0#0: bytes = 0x098101
+                let appCreateParams%%ClearStateProgramPages_length#0: uint64 = 1u
                 let appCreateParams%%Sender_length#0: uint64 = 0u
                 let appCreateParams%%Note_length#0: uint64 = 0u
                 let appCreateParams%%Receiver_length#0: uint64 = 0u
@@ -293,7 +298,6 @@ contract tests/approvals/itxn.algo.ts::ItxnDemoContract:
                 let appCreateParams%%VoteLast_length#0: uint64 = 0u
                 let appCreateParams%%VoteKeyDilution_length#0: uint64 = 0u
                 let appCreateParams%%Type_length#0: uint64 = 0u
-                let appCreateParams%%TypeEnum_length#0: uint64 = 0u
                 let appCreateParams%%XferAsset_length#0: uint64 = 0u
                 let appCreateParams%%AssetAmount_length#0: uint64 = 0u
                 let appCreateParams%%AssetSender_length#0: uint64 = 0u
@@ -301,6 +305,8 @@ contract tests/approvals/itxn.algo.ts::ItxnDemoContract:
                 let appCreateParams%%AssetCloseTo_length#0: uint64 = 0u
                 let appCreateParams%%ApplicationID_length#0: uint64 = 0u
                 let appCreateParams%%OnCompletion_length#0: uint64 = 0u
+                let appCreateParams%%ApprovalProgram_length#0: uint64 = 0u
+                let appCreateParams%%ClearStateProgram_length#0: uint64 = 0u
                 let appCreateParams%%RekeyTo_length#0: uint64 = 0u
                 let appCreateParams%%ConfigAsset_length#0: uint64 = 0u
                 let appCreateParams%%ConfigAssetTotal_length#0: uint64 = 0u
@@ -328,14 +334,13 @@ contract tests/approvals/itxn.algo.ts::ItxnDemoContract:
                 let appCreateParams%%Accounts_length#0: uint64 = 0u
                 let appCreateParams%%Assets_length#0: uint64 = 0u
                 let appCreateParams%%Applications_length#0: uint64 = 0u
-                let appCreateParams%%ApprovalProgramPages_length#0: uint64 = 0u
-                let appCreateParams%%ClearStateProgramPages_length#0: uint64 = 0u
                 let assetParams#2: itxn_field_set = itxn_field_set(3)
                 let assetParams%%param_ConfigAssetName_idx_0#2: bytes = "AST3"
                 let assetParams%%ConfigAssetName_length#2: uint64 = 1u
                 itxn_begin
-                ((itxn_field ClearStateProgram) appCreateParams%%param_ClearStateProgram_idx_0#0)
-                ((itxn_field ApprovalProgram) appCreateParams%%param_ApprovalProgram_idx_0#0)
+                ((itxn_field ClearStateProgramPages) appCreateParams%%param_ClearStateProgramPages_idx_0#0)
+                ((itxn_field ApprovalProgramPages) appCreateParams%%param_ApprovalProgramPages_idx_0#0)
+                ((itxn_field TypeEnum) appCreateParams%%param_TypeEnum_idx_0#0)
                 ((itxn_field Fee) appCreateParams%%param_Fee_idx_0#0)
                 goto block@3
             block@3: // next_txn_L61
@@ -346,6 +351,7 @@ contract tests/approvals/itxn.algo.ts::ItxnDemoContract:
                 ((itxn_field ConfigAssetUnitName) assetParams%%param_ConfigAssetUnitName_idx_0#0)
                 ((itxn_field ConfigAssetName) assetParams%%param_ConfigAssetName_idx_0#2)
                 ((itxn_field ConfigAssetTotal) assetParams%%param_ConfigAssetTotal_idx_0#0)
+                ((itxn_field TypeEnum) assetParams%%param_TypeEnum_idx_0#0)
                 ((itxn_field Fee) assetParams%%param_Fee_idx_0#0)
                 goto block@4
             block@4: // next_txn_L61
@@ -493,8 +499,9 @@ contract tests/approvals/itxn.algo.ts::ItxnDemoContract:
                 ((itxn_field Note) appCreateParams%%param_Note_idx_0#0)
                 goto block@6
             block@6: // next_field_L72
-                ((itxn_field ClearStateProgram) appCreateParams%%param_ClearStateProgram_idx_0#0)
-                ((itxn_field ApprovalProgram) appCreateParams%%param_ApprovalProgram_idx_0#0)
+                ((itxn_field ClearStateProgramPages) appCreateParams%%param_ClearStateProgramPages_idx_0#0)
+                ((itxn_field ApprovalProgramPages) appCreateParams%%param_ApprovalProgramPages_idx_0#0)
+                ((itxn_field TypeEnum) appCreateParams%%param_TypeEnum_idx_0#0)
                 ((itxn_field Fee) appCreateParams%%param_Fee_idx_0#0)
                 goto block@7
             block@7: // next_txn_L72
@@ -511,6 +518,7 @@ contract tests/approvals/itxn.algo.ts::ItxnDemoContract:
                 ((itxn_field ConfigAssetUnitName) assetParams%%param_ConfigAssetUnitName_idx_0#0)
                 ((itxn_field ConfigAssetName) assetParams%%param_ConfigAssetName_idx_0#2)
                 ((itxn_field ConfigAssetTotal) assetParams%%param_ConfigAssetTotal_idx_0#0)
+                ((itxn_field TypeEnum) assetParams%%param_TypeEnum_idx_0#0)
                 ((itxn_field Fee) assetParams%%param_Fee_idx_0#0)
                 goto block@10
             block@10: // next_txn_L72
@@ -528,10 +536,12 @@ contract tests/approvals/itxn.algo.ts::ItxnDemoContract:
                 let createAppParams#0: itxn_field_set = itxn_field_set(0)
                 let createAppParams%%param_Fee_idx_0#0: uint64 = 0u
                 let createAppParams%%Fee_length#0: uint64 = 1u
-                let createAppParams%%param_ApprovalProgram_idx_0#0: bytes = "\t\xc2\x81\x01"
-                let createAppParams%%ApprovalProgram_length#0: uint64 = 1u
-                let createAppParams%%param_ClearStateProgram_idx_0#0: bytes = "\t\xc2\x81\x01"
-                let createAppParams%%ClearStateProgram_length#0: uint64 = 1u
+                let createAppParams%%param_TypeEnum_idx_0#0: uint64 = 6u
+                let createAppParams%%TypeEnum_length#0: uint64 = 1u
+                let createAppParams%%param_ApprovalProgramPages_idx_0#0: bytes = "\t\xc2\x81\x01"
+                let createAppParams%%ApprovalProgramPages_length#0: uint64 = 1u
+                let createAppParams%%param_ClearStateProgramPages_idx_0#0: bytes = "\t\xc2\x81\x01"
+                let createAppParams%%ClearStateProgramPages_length#0: uint64 = 1u
                 let createAppParams%%param_ApplicationArgs_idx_0#0: bytes = args.0#0
                 let createAppParams%%param_ApplicationArgs_idx_1#0: bytes = args.1#0
                 let createAppParams%%ApplicationArgs_length#0: uint64 = 2u
@@ -549,13 +559,14 @@ contract tests/approvals/itxn.algo.ts::ItxnDemoContract:
                 let createAppParams%%VoteLast_length#0: uint64 = 0u
                 let createAppParams%%VoteKeyDilution_length#0: uint64 = 0u
                 let createAppParams%%Type_length#0: uint64 = 0u
-                let createAppParams%%TypeEnum_length#0: uint64 = 0u
                 let createAppParams%%XferAsset_length#0: uint64 = 0u
                 let createAppParams%%AssetAmount_length#0: uint64 = 0u
                 let createAppParams%%AssetSender_length#0: uint64 = 0u
                 let createAppParams%%AssetReceiver_length#0: uint64 = 0u
                 let createAppParams%%AssetCloseTo_length#0: uint64 = 0u
                 let createAppParams%%ApplicationID_length#0: uint64 = 0u
+                let createAppParams%%ApprovalProgram_length#0: uint64 = 0u
+                let createAppParams%%ClearStateProgram_length#0: uint64 = 0u
                 let createAppParams%%RekeyTo_length#0: uint64 = 0u
                 let createAppParams%%ConfigAsset_length#0: uint64 = 0u
                 let createAppParams%%ConfigAssetTotal_length#0: uint64 = 0u
@@ -582,17 +593,17 @@ contract tests/approvals/itxn.algo.ts::ItxnDemoContract:
                 let createAppParams%%Accounts_length#0: uint64 = 0u
                 let createAppParams%%Assets_length#0: uint64 = 0u
                 let createAppParams%%Applications_length#0: uint64 = 0u
-                let createAppParams%%ApprovalProgramPages_length#0: uint64 = 0u
-                let createAppParams%%ClearStateProgramPages_length#0: uint64 = 0u
                 goto block@3
             block@2: // else_body_L86
                 let createAppParams#1: itxn_field_set = itxn_field_set(1)
                 let createAppParams%%param_Fee_idx_0#1: uint64 = 0u
                 let createAppParams%%Fee_length#1: uint64 = 1u
-                let createAppParams%%param_ApprovalProgram_idx_0#1: bytes = "\t\xc2\x81\x01"
-                let createAppParams%%ApprovalProgram_length#1: uint64 = 1u
-                let createAppParams%%param_ClearStateProgram_idx_0#1: bytes = "\t\xc2\x81\x01"
-                let createAppParams%%ClearStateProgram_length#1: uint64 = 1u
+                let createAppParams%%param_TypeEnum_idx_0#1: uint64 = 6u
+                let createAppParams%%TypeEnum_length#1: uint64 = 1u
+                let createAppParams%%param_ApprovalProgramPages_idx_0#1: bytes = "\t\xc2\x81\x01"
+                let createAppParams%%ApprovalProgramPages_length#1: uint64 = 1u
+                let createAppParams%%param_ClearStateProgramPages_idx_0#1: bytes = "\t\xc2\x81\x01"
+                let createAppParams%%ClearStateProgramPages_length#1: uint64 = 1u
                 let createAppParams%%param_ApplicationArgs_idx_0#1: bytes = "3"
                 let createAppParams%%param_ApplicationArgs_idx_1#1: bytes = "4"
                 let createAppParams%%param_ApplicationArgs_idx_2#0: bytes = "5"
@@ -609,7 +620,6 @@ contract tests/approvals/itxn.algo.ts::ItxnDemoContract:
                 let createAppParams%%VoteLast_length#1: uint64 = 0u
                 let createAppParams%%VoteKeyDilution_length#1: uint64 = 0u
                 let createAppParams%%Type_length#1: uint64 = 0u
-                let createAppParams%%TypeEnum_length#1: uint64 = 0u
                 let createAppParams%%XferAsset_length#1: uint64 = 0u
                 let createAppParams%%AssetAmount_length#1: uint64 = 0u
                 let createAppParams%%AssetSender_length#1: uint64 = 0u
@@ -617,6 +627,8 @@ contract tests/approvals/itxn.algo.ts::ItxnDemoContract:
                 let createAppParams%%AssetCloseTo_length#1: uint64 = 0u
                 let createAppParams%%ApplicationID_length#1: uint64 = 0u
                 let createAppParams%%OnCompletion_length#1: uint64 = 0u
+                let createAppParams%%ApprovalProgram_length#1: uint64 = 0u
+                let createAppParams%%ClearStateProgram_length#1: uint64 = 0u
                 let createAppParams%%RekeyTo_length#1: uint64 = 0u
                 let createAppParams%%ConfigAsset_length#1: uint64 = 0u
                 let createAppParams%%ConfigAssetTotal_length#1: uint64 = 0u
@@ -643,8 +655,6 @@ contract tests/approvals/itxn.algo.ts::ItxnDemoContract:
                 let createAppParams%%Accounts_length#1: uint64 = 0u
                 let createAppParams%%Assets_length#1: uint64 = 0u
                 let createAppParams%%Applications_length#1: uint64 = 0u
-                let createAppParams%%ApprovalProgramPages_length#1: uint64 = 0u
-                let createAppParams%%ClearStateProgramPages_length#1: uint64 = 0u
                 goto block@3
             block@3: // after_if_else_L77
                 let createAppParams%%param_Note_idx_0#2: bytes = φ(createAppParams%%param_Note_idx_0#0 <- block@1, createAppParams%%param_Note_idx_0#1 <- block@2)
@@ -654,8 +664,9 @@ contract tests/approvals/itxn.algo.ts::ItxnDemoContract:
                 let createAppParams%%param_ApplicationArgs_idx_1#3: bytes = φ(createAppParams%%param_ApplicationArgs_idx_1#0 <- block@1, createAppParams%%param_ApplicationArgs_idx_1#1 <- block@2)
                 let createAppParams%%ApplicationArgs_length#3: uint64 = φ(createAppParams%%ApplicationArgs_length#0 <- block@1, createAppParams%%ApplicationArgs_length#1 <- block@2)
                 let createAppParams%%param_ApplicationArgs_idx_2#2: bytes = φ(createAppParams%%param_ApplicationArgs_idx_2#3 <- block@1, createAppParams%%param_ApplicationArgs_idx_2#0 <- block@2)
-                let createAppParams%%param_ClearStateProgram_idx_0#4: bytes = φ(createAppParams%%param_ClearStateProgram_idx_0#0 <- block@1, createAppParams%%param_ClearStateProgram_idx_0#1 <- block@2)
-                let createAppParams%%param_ApprovalProgram_idx_0#4: bytes = φ(createAppParams%%param_ApprovalProgram_idx_0#0 <- block@1, createAppParams%%param_ApprovalProgram_idx_0#1 <- block@2)
+                let createAppParams%%param_ClearStateProgramPages_idx_0#4: bytes = φ(createAppParams%%param_ClearStateProgramPages_idx_0#0 <- block@1, createAppParams%%param_ClearStateProgramPages_idx_0#1 <- block@2)
+                let createAppParams%%param_ApprovalProgramPages_idx_0#4: bytes = φ(createAppParams%%param_ApprovalProgramPages_idx_0#0 <- block@1, createAppParams%%param_ApprovalProgramPages_idx_0#1 <- block@2)
+                let createAppParams%%param_TypeEnum_idx_0#4: uint64 = φ(createAppParams%%param_TypeEnum_idx_0#0 <- block@1, createAppParams%%param_TypeEnum_idx_0#1 <- block@2)
                 let createAppParams%%param_Fee_idx_0#4: uint64 = φ(createAppParams%%param_Fee_idx_0#0 <- block@1, createAppParams%%param_Fee_idx_0#1 <- block@2)
                 itxn_begin
                 ((itxn_field Note) createAppParams%%param_Note_idx_0#2)
@@ -673,8 +684,9 @@ contract tests/approvals/itxn.algo.ts::ItxnDemoContract:
                 ((itxn_field ApplicationArgs) createAppParams%%param_ApplicationArgs_idx_2#2)
                 goto block@7
             block@7: // next_field_L94
-                ((itxn_field ClearStateProgram) createAppParams%%param_ClearStateProgram_idx_0#4)
-                ((itxn_field ApprovalProgram) createAppParams%%param_ApprovalProgram_idx_0#4)
+                ((itxn_field ClearStateProgramPages) createAppParams%%param_ClearStateProgramPages_idx_0#4)
+                ((itxn_field ApprovalProgramPages) createAppParams%%param_ApprovalProgramPages_idx_0#4)
+                ((itxn_field TypeEnum) createAppParams%%param_TypeEnum_idx_0#4)
                 ((itxn_field Fee) createAppParams%%param_Fee_idx_0#4)
                 goto block@8
             block@8: // next_txn_L94

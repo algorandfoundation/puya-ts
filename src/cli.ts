@@ -47,7 +47,7 @@ function cli() {
     .argument('<paths...>', 'The path, or paths to search for compatible .algo.ts files')
     .addOption(
       new Option('--log-level [level]', 'The minimum log level to output')
-        .choices([LogLevel.Debug, LogLevel.Info, LogLevel.Warn, LogLevel.Error, LogLevel.Critical])
+        .choices([LogLevel.Debug, LogLevel.Info, LogLevel.Warning, LogLevel.Error, LogLevel.Critical])
         .default(LogLevel.Info),
     )
     .addOption(new Option('--output-awst', 'Output debugging awst file per parsed file').default(false))
@@ -115,7 +115,7 @@ function cli() {
 
     .action((a, o) => {
       using logCtx = LoggingContext.create()
-      logger.configure([new ConsoleLogSink(LogLevel.Warn)])
+      logger.configure([new ConsoleLogSink(LogLevel.Warning)])
       try {
         const paths = cliArgumentsSchema.parse(a)
         const cliOptions = cliOptionsSchema.parse(o)

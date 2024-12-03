@@ -7,7 +7,7 @@ type NodeOrSourceLocation = SourceLocation | { sourceLocation: SourceLocation }
 export enum LogLevel {
   Error = 'error',
   Info = 'info',
-  Warn = 'warn',
+  Warning = 'warning',
   Debug = 'debug',
   Critical = 'critical',
 }
@@ -15,7 +15,7 @@ const logLevelToInt = {
   [LogLevel.Critical]: 4,
   [LogLevel.Error]: 3,
   [LogLevel.Info]: 1,
-  [LogLevel.Warn]: 2,
+  [LogLevel.Warning]: 2,
   [LogLevel.Debug]: 0,
 }
 
@@ -39,7 +39,7 @@ class PuyaLogger {
     this.logSinks = sinks
   }
 
-  private addLog(level: LogEvent['level'], source: NodeOrSourceLocation | undefined, message: string) {
+  addLog(level: LogEvent['level'], source: NodeOrSourceLocation | undefined, message: string) {
     const logEvent: LogEvent = {
       sourceLocation: source ? (source instanceof SourceLocation ? source : source.sourceLocation) : undefined,
       message,
@@ -71,7 +71,7 @@ class PuyaLogger {
     this.addLog(LogLevel.Debug, source, message)
   }
   warn(source: NodeOrSourceLocation | undefined, message: string): void {
-    this.addLog(LogLevel.Warn, source, message)
+    this.addLog(LogLevel.Warning, source, message)
   }
   critical(source: NodeOrSourceLocation | undefined, message: string): void {
     this.addLog(LogLevel.Critical, source, message)

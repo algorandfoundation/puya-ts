@@ -38,7 +38,7 @@ export class AssertMatchFunctionBuilder extends NodeBuilder {
         const subjectProperty = requireInstanceBuilder(subject.memberAccess(propName, sourceLocation))
         const subjectType = subjectProperty.ptype
         const testProperty = requireInstanceBuilder(tests.memberAccess(propName, sourceLocation))
-        if (subjectType.equals(propType)) {
+        if (testProperty.resolvableToPType(subjectType)) {
           return combineConditions(
             acc,
             subjectProperty.compare(testProperty, BuilderComparisonOp.eq, sourceLocation).resolve(),
@@ -97,7 +97,9 @@ function getComparisonOpAndOperand(testProperty: InstanceBuilder, targetType: PT
       return [op, requireBuilderOfType(testProperty.memberAccess(prop, testProperty.sourceLocation), targetType)]
     }
   }
-  throw new CodeError('Unsupported assertMatch expression', { sourceLocation: testProperty.sourceLocation })
+  throw new CodeError(`Cannot compare values of type ${testProperty.ptype} and ${targetType.name}`, {
+    sourceLocation: testProperty.sourceLocation,
+  })
 }
 
 function combineConditions(left: Expression | undefined, right: Expression, sourceLocation: SourceLocation): Expression {

@@ -515,3 +515,8 @@ export const decodeArc4Function = new LibFunctionType({
   name: 'decodeArc4',
   module: Constants.arc4EncodedTypesModuleName,
 })
+
+export const methodSelectorFunction = new LibFunctionType({
+  name: 'methodSelector',
+  module: Constants.arc4ModuleName,
+})

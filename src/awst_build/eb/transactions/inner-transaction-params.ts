@@ -41,7 +41,7 @@ export class ItxnParamsFactoryFunctionBuilder extends FunctionBuilder {
     const mappedFields = new Map<TxnField, Expression>()
     // Set default fee to 0 (transaction will be paid for from transaction group budget, rather than from the application balance)
     mappedFields.set(TxnField.Fee, nodeFactory.uInt64Constant({ value: 0n, sourceLocation }))
-
+    if (this.ptype.kind) mappedFields.set(TxnField.TypeEnum, nodeFactory.uInt64Constant({ value: BigInt(this.ptype.kind), sourceLocation }))
     mapTransactionFields(mappedFields, initialFields, this.ptype.kind, sourceLocation)
     const fieldsType = getItxnParamsType(this.ptype.kind)
 
@@ -84,24 +84,30 @@ function mapTransactionFields(
           }),
         )
       } else if (txnFieldData.numValues > 1) {
-        codeInvariant(
-          propValue instanceof ArrayLiteralExpressionBuilder || propValue instanceof TupleExpressionBuilder,
-          `Unsupported expression for ${prop}`,
-          propValue.sourceLocation,
-        )
-
-        mappedFields.set(
-          txnField,
-          nodeFactory.tupleExpression({
-            items: propValue.getItemBuilders().map((i) => requireExpressionOfType(i, fieldType)),
-            sourceLocation: propValue.sourceLocation,
-          }),
-        )
+        if (propValue instanceof ArrayLiteralExpressionBuilder || propValue instanceof TupleExpressionBuilder) {
+          mappedFields.set(
+            txnField,
+            nodeFactory.tupleExpression({
+              items: propValue.getItemBuilders().map((i) => requireExpressionOfType(i, fieldType)),
+              sourceLocation: propValue.sourceLocation,
+            }),
+          )
+        } else if (txnFieldData.arrayPromote) {
+          mappedFields.set(
+            txnField,
+            nodeFactory.tupleExpression({
+              items: [requireExpressionOfType(propValue, fieldType)],
+              sourceLocation: propValue.sourceLocation,
+            }),
+          )
+        } else {
+          logger.error(propValue.sourceLocation, `Unsupported expression for ${prop}`)
+        }
       } else {
         mappedFields.set(txnField, requireExpressionOfType(propValue, fieldType))
       }
     } else {
-      logger.error(sourceLocation, `${prop} not in valid fields `)
+      logger.warn(sourceLocation, `Ignoring additional property: ${prop}`)
     }
   }
 }

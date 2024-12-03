@@ -38,7 +38,7 @@ contract ItxnDemoContract
   test1(): void
   {
     GlobalState["name"]: bytes = "AST1"
-    assetParams: inner_transaction_fields_acfg = create_inner_transaction(Fee=0, ConfigAssetTotal=1000, ConfigAssetName=GlobalState["name"], ConfigAssetUnitName="unit", ConfigAssetDecimals=3, ConfigAssetManager=global<CurrentApplicationAddress>(), ConfigAssetReserve=global<CurrentApplicationAddress>())
+    assetParams: inner_transaction_fields_acfg = create_inner_transaction(Fee=0, TypeEnum=3, ConfigAssetTotal=1000, ConfigAssetName=GlobalState["name"], ConfigAssetUnitName="unit", ConfigAssetDecimals=3, ConfigAssetManager=global<CurrentApplicationAddress>(), ConfigAssetReserve=global<CurrentApplicationAddress>())
     GlobalState["name"]: bytes = "AST2"
     asset1_txn: inner_transaction_acfg = submit_txn(assetParams)
     update_inner_transaction(assetParams, ConfigAssetName=GlobalState["name"])
@@ -47,7 +47,7 @@ contract ItxnDemoContract
     assert(asset2_txn.ConfigAssetName == "AST2", comment=asset2_txn is correct)
     assert(checked_maybe(asset_params_get<AssetName>(asset1_txn.CreatedAssetID), comment=asset exists) == "AST1", comment=created asset 1 is correct)
     assert(checked_maybe(asset_params_get<AssetName>(asset2_txn.CreatedAssetID), comment=asset exists) == "AST2", comment=created asset 2 is correct)
-    appCreateParams: inner_transaction_fields_appl = create_inner_transaction(Fee=0, ApprovalProgram=0x098101, ClearStateProgram=0x098101)
+    appCreateParams: inner_transaction_fields_appl = create_inner_transaction(Fee=0, TypeEnum=6, ApprovalProgramPages=<tuple>[0x098101], ClearStateProgramPages=<tuple>[0x098101])
     update_inner_transaction(assetParams, ConfigAssetName="AST3")
     <tuple>[appCreateTxn, asset3_txn]: readonlytuple[inner_transaction_appl, inner_transaction_acfg] = submit_txn(appCreateParams, assetParams)
     assert(Boolean(appCreateTxn.ApplicationID), comment=app is created)
@@ -61,9 +61,9 @@ contract ItxnDemoContract
   {
     if (Boolean(txn<NumAppArgs>())) {
       args: readonlytuple[bytes, bytes] = <tuple>["1", "2"]
-      createAppParams: inner_transaction_fields_appl = create_inner_transaction(Fee=0, ApprovalProgram="	", ClearStateProgram="	", ApplicationArgs=<tuple>[args.0, args.1], OnCompletion=0, Note="with args param set")
+      createAppParams: inner_transaction_fields_appl = create_inner_transaction(Fee=0, TypeEnum=6, ApprovalProgramPages=<tuple>["	"], ClearStateProgramPages=<tuple>["	"], ApplicationArgs=<tuple>[args.0, args.1], OnCompletion=0, Note="with args param set")
     } else {
-      createAppParams: inner_transaction_fields_appl = create_inner_transaction(Fee=0, ApprovalProgram="	", ClearStateProgram="	", ApplicationArgs=<tuple>["3", "4", "5"], Note="no args param set")
+      createAppParams: inner_transaction_fields_appl = create_inner_transaction(Fee=0, TypeEnum=6, ApprovalProgramPages=<tuple>["	"], ClearStateProgramPages=<tuple>["	"], ApplicationArgs=<tuple>["3", "4", "5"], Note="no args param set")
     }
     createAppTxn: inner_transaction_appl = submit_txn(createAppParams)
     assert(createAppTxn.ApplicationArgs[0] == "1", comment=correct args used 1)
