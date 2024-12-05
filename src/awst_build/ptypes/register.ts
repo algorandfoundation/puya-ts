@@ -1,3 +1,4 @@
+import { Arc28EmitFunctionBuilder } from '../eb/arc28/arc-28-emit-function-builder'
 import { Arc4AbiMethodDecoratorBuilder, Arc4BareMethodDecoratorBuilder } from '../eb/arc4-bare-method-decorator-builder'
 import {
   AddressClassBuilder,
@@ -122,6 +123,7 @@ import {
   applicationItxnType,
   applicationPType,
   ApplicationTxnFunction,
+  arc28EmitFunction,
   arc4AbiMethodDecorator,
   arc4BareMethodDecorator,
   ArrayPType,
@@ -236,6 +238,7 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: urangeFunction, singletonEb: UrangeFunctionBuilder })
   typeRegistry.register({ ptype: TemplateVarFunction, singletonEb: TemplateVarFunctionBuilder })
   typeRegistry.register({ ptype: compileFunctionType, singletonEb: CompileFunctionBuilder })
+  typeRegistry.register({ ptype: arc28EmitFunction, singletonEb: Arc28EmitFunctionBuilder })
 
   typeRegistry.register({ ptype: ContractClassPType, singletonEb: ContractClassBuilder })
   typeRegistry.register({ ptype: LogicSigPType, singletonEb: LogicSigClassBuilder })

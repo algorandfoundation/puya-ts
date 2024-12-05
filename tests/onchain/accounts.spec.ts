@@ -8,7 +8,11 @@ describe('accounts', () => {
   test('returns account data', async ({ appClientAccountsContract: appClient, expect, assetFactory, testAccount }) => {
     const asset = await assetFactory({ assetName: 'Asset 1', sender: testAccount.addr, total: 1n })
 
-    const result = await appClient.send.call({ method: 'getAccountInfo', args: [testAccount.addr, asset], extraFee: microAlgo(2000) })
+    const result = await appClient.send.call({
+      method: 'getAccountInfo',
+      args: [testAccount.addr.publicKey, asset],
+      extraFee: microAlgo(2000),
+    })
 
     const returnValue = result.return as {
       bytes: number[]

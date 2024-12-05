@@ -11,6 +11,8 @@ import {
   boolPType,
   bytesPType,
   GroupTransactionPType,
+  NativeNumericType,
+  numberPType,
   ObjectPType,
   stringPType,
   TuplePType,
@@ -51,6 +53,9 @@ export function isArc4EncodableType(ptype: PType): boolean {
 
   return false
 }
+export function ptypeToArc4EncodedType(ptype: TuplePType, sourceLocation: SourceLocation): ARC4TupleType
+export function ptypeToArc4EncodedType(ptype: ObjectPType, sourceLocation: SourceLocation): ARC4StructType
+export function ptypeToArc4EncodedType(ptype: PType, sourceLocation: SourceLocation): ARC4EncodedType
 export function ptypeToArc4EncodedType(ptype: PType, sourceLocation: SourceLocation): ARC4EncodedType {
   if (ptype instanceof ARC4EncodedType) return ptype
   if (ptype.equals(boolPType)) return ARC4BooleanType
@@ -58,6 +63,9 @@ export function ptypeToArc4EncodedType(ptype: PType, sourceLocation: SourceLocat
   if (ptype.equals(biguintPType)) return new UintNType({ n: 512n })
   if (ptype.equals(bytesPType)) return DynamicBytesType
   if (ptype.equals(stringPType)) return ARC4StringType
+  if (ptype instanceof NativeNumericType) {
+    throw new CodeError(numberPType.expressionMessage, { sourceLocation })
+  }
   if (ptype instanceof TuplePType) return new ARC4TupleType({ types: ptype.items.map((i) => ptypeToArc4EncodedType(i, sourceLocation)) })
   if (ptype instanceof ObjectPType)
     return new ARC4StructType({

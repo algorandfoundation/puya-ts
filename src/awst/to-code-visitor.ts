@@ -354,7 +354,7 @@ export class ToCodeVisitor
     ]
   }
   visitEmit(expression: Emit): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    return `emit("${expression.signature}", ${expression.value.accept(this)})`
   }
 
   visitContractMethod(statement: nodes.ContractMethod): string[] {

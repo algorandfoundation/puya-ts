@@ -267,9 +267,9 @@ export namespace wtypes {
       sourceLocation?: SourceLocation
     }) {
       super({
-        arc4Name: Object.values(fields)
+        arc4Name: `(${Object.values(fields)
           .map((f) => f.arc4Name)
-          .join(','),
+          .join(',')})`,
         name,
         nativeType: null,
       })
@@ -277,6 +277,11 @@ export namespace wtypes {
       this.fields = fields
       this.frozen = frozen
       this.desc = desc
+    }
+
+    toString(): string {
+      if (!this.name) return this.arc4Name
+      return super.toString()
     }
   }
   export class ARC4Tuple extends ARC4Type {

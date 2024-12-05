@@ -1289,3 +1289,8 @@ export const compiledLogicSigType = new ObjectPType({
     account: accountPType,
   },
 })
+
+export const arc28EmitFunction = new LibFunctionType({
+  name: 'emit',
+  module: Constants.arc28ModuleName,
+})

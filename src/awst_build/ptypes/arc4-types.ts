@@ -166,6 +166,10 @@ export class ARC4StructType extends ARC4EncodedType {
     })
   }
 
+  get signature(): string {
+    return `${this.name}${this.wtype.arc4Name}`
+  }
+
   equals(other: PType): boolean {
     if (!(other instanceof ARC4StructType)) return false
     const thisProps = Object.entries(this.fields)

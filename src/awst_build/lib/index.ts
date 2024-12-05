@@ -17,23 +17,11 @@ export function buildLibAwst(context: AwstBuildContext) {
     propertyInitialization: [],
     ctor: nodeFactory.contractMethod({
       memberName: Constants.constructorMethodName,
-      cref: contractCref,
+      cref: baseContractCref,
       args: [],
       sourceLocation: SourceLocation.None,
       documentation: nodeFactory.methodDocumentation(),
-      body: nodeFactory.block(
-        { sourceLocation: SourceLocation.None },
-        nodeFactory.expressionStatement({
-          expr: nodeFactory.subroutineCallExpression({
-            args: [],
-            wtype: wtypes.voidWType,
-            target: nodeFactory.instanceMethodTarget({
-              memberName: Constants.constructorMethodName,
-            }),
-            sourceLocation: SourceLocation.None,
-          }),
-        }),
-      ),
+      body: nodeFactory.block({ sourceLocation: SourceLocation.None }),
       returnType: wtypes.voidWType,
       arc4MethodConfig: null,
     }),
@@ -75,7 +63,19 @@ export function buildLibAwst(context: AwstBuildContext) {
       args: [],
       sourceLocation: SourceLocation.None,
       documentation: nodeFactory.methodDocumentation(),
-      body: nodeFactory.block({ sourceLocation: SourceLocation.None }),
+      body: nodeFactory.block(
+        { sourceLocation: SourceLocation.None },
+        nodeFactory.expressionStatement({
+          expr: nodeFactory.subroutineCallExpression({
+            args: [],
+            wtype: wtypes.voidWType,
+            target: nodeFactory.instanceMethodTarget({
+              memberName: Constants.constructorMethodName,
+            }),
+            sourceLocation: SourceLocation.None,
+          }),
+        }),
+      ),
       returnType: wtypes.voidWType,
       arc4MethodConfig: null,
     }),
