@@ -1,7 +1,7 @@
 contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
     program approval:
         subroutine tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract.approvalProgram() -> bool:
-            block@0: // L135
+            block@0: // L138
                 let reinterpret_bool%0#0: bool = (txn ApplicationID)
                 goto reinterpret_bool%0#0 ? block@2 : block@1
             block@1: // if_body_L1
@@ -27,11 +27,11 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
                 return 1u
         
         subroutine tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract.constructor() -> void:
-            block@0: // L130
+            block@0: // L133
                 return 
         
         subroutine tests/approvals/arc4-types.algo.ts::testStr() -> void:
-            block@0: // L59
+            block@0: // L62
                 let s1#0: bytes = 0x0000
                 let tmp%0#0: bool = (== s1#0 0x0000)
                 (assert tmp%0#0) // Empty string should equal the uint16 length prefix
@@ -46,7 +46,7 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
                 return 
         
         subroutine tests/approvals/arc4-types.algo.ts::testUintN(n: uint64, b: biguint, c: bytes) -> void:
-            block@0: // L26
+            block@0: // L27
                 let x#0: bytes = 0x04
                 let tmp%0#0: uint64 = (len x#0)
                 let tmp%1#0: bool = (== tmp%0#0 1u)
@@ -63,6 +63,7 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
                 let z_native#0: uint64 = (btoi z#0)
                 let tmp%5#0: bool = (== z_native#0 n#0)
                 (assert tmp%5#0)
+                let big128#0: bytes = 0x00000010000000000000000000000000
                 let len_%0#0: uint64 = (len b#0)
                 let no_overflow%0#0: bool = (<= len_%0#0 16u)
                 (assert no_overflow%0#0) // overflow
@@ -93,7 +94,7 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
                 return 
         
         subroutine tests/approvals/arc4-types.algo.ts::testUFixed() -> void:
-            block@0: // L19
+            block@0: // L20
                 let a#0: bytes = 0x000004dc
                 let c#0: bytes = 0x000004dc
                 let tmp%0#0: bool = (== a#0 c#0)
@@ -101,7 +102,7 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
                 return 
         
         subroutine tests/approvals/arc4-types.algo.ts::testByte() -> void:
-            block@0: // L106
+            block@0: // L109
                 let b#0: bytes = 0x00
                 let b2#0: bytes = 0x00
                 let tmp%0#0: bool = (== b#0 b2#0)
@@ -109,7 +110,7 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
                 return 
         
         subroutine tests/approvals/arc4-types.algo.ts::testArrays(n: bytes) -> void:
-            block@0: // L92
+            block@0: // L95
                 let result%0#0: bytes = (concat 0x n#0)
                 let result%1#0: bytes = (concat result%0#0 n#0)
                 let result%2#0: bytes = (concat result%1#0 n#0)
@@ -146,7 +147,7 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
                 return 
         
         subroutine tests/approvals/arc4-types.algo.ts::testAddress() -> void:
-            block@0: // L112
+            block@0: // L115
                 let a#0: bytes = addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ
                 let b#0: bytes = (txn Sender)
                 let tmp%0#0: bool = (!= a#0 b#0)
@@ -161,7 +162,7 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
                 return 
         
         subroutine tests/approvals/arc4-types.algo.ts::testTuple() -> void:
-            block@0: // L121
+            block@0: // L124
                 let current_tail_offset%0#0: uint64 = 8u
                 let encoded_tuple_buffer%0#0: bytes = 0x
                 let encoded_tuple_buffer%1#0: bytes = (concat encoded_tuple_buffer%0#0 0x0000000000000022)
@@ -181,7 +182,7 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
                 return 
         
         subroutine tests/approvals/arc4-types.algo.ts::testDynamicBytes(someBytes: bytes) -> void:
-            block@0: // L72
+            block@0: // L75
                 let db1#0: bytes = 0x0000
                 let tmp%0#0: bytes = ((extract 2 0) db1#0)
                 let tmp%1#0: bool = (== tmp%0#0 0x)
@@ -203,7 +204,7 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
                 return 
         
         subroutine tests/approvals/arc4-types.algo.ts::testStaticBytes() -> void:
-            block@0: // L83
+            block@0: // L86
                 let s1#0: bytes = 0x
                 let s2#0: bytes = 0x00000000
                 let s3#0: bytes = 0xaabbccddee

@@ -1,6 +1,7 @@
 import type { AlgorandClient } from '@algorandfoundation/algokit-utils'
 import { Config, microAlgos } from '@algorandfoundation/algokit-utils'
 import { algorandFixture } from '@algorandfoundation/algokit-utils/testing'
+import type { AlgoAmount } from '@algorandfoundation/algokit-utils/types/amount'
 import type { SendAppTransactionResult } from '@algorandfoundation/algokit-utils/types/app'
 import type { AppClient } from '@algorandfoundation/algokit-utils/types/app-client'
 import type { AppFactory, AppFactoryDeployParams } from '@algorandfoundation/algokit-utils/types/app-factory'
@@ -66,6 +67,7 @@ type ProgramInvokeOptions = {
     | OnApplicationComplete.DeleteApplicationOC
   senderAddr?: string
   args?: Uint8Array[]
+  extraFee?: AlgoAmount
 }
 
 type ProgramInvoker = {
@@ -107,6 +109,7 @@ export function createBaseTestFixture<TContracts extends string = ''>(path: stri
             clearStateProgram,
             sender: options?.senderAddr ?? localnet.context.testAccount.addr,
             args: options?.args ?? [],
+            extraFee: options?.extraFee,
           }
           return localnet.algorand.send.appCall(common as DeliberateAny)
         },

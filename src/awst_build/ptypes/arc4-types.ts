@@ -369,7 +369,8 @@ export class DynamicArrayType extends ARC4EncodedType {
     super()
     this.immutable = immutable ?? false
     this.elementType = elementType
-    ;(this.nativeType = nativeType), (this.name = name ?? `DynamicArray<${elementType}>`)
+    this.nativeType = nativeType
+    this.name = name ?? `DynamicArray<${elementType}>`
     this.sourceLocation = sourceLocation
     this.wtype = new wtypes.ARC4DynamicArray({
       elementType: this.elementType.wtype,

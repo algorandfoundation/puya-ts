@@ -15,6 +15,7 @@ subroutine testUintN(n: uint64, b: biguint, c: arc4.uint256): void
   z: arc4.uint8 = ARC4_ENCODE(n, wtype=arc4.uint8)
   z_native: uint64 = ARC4_DECODE(z)
   assert(z_native == n)
+  big128: arc4.uint128 = 1267650600228229401496703205376
   a: arc4.uint128 = ARC4_ENCODE(b, wtype=arc4.uint128)
   a_native: biguint = ARC4_DECODE(a)
   assert(a_native == b)

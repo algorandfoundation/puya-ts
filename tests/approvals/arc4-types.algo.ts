@@ -12,6 +12,7 @@ import {
   Tuple,
   UFixedNxM,
   UintN,
+  UintN128,
   UintN32,
   UintN64,
 } from '@algorandfoundation/algorand-typescript/arc4'
@@ -34,6 +35,8 @@ function testUintN(n: uint64, b: biguint, c: UintN<256>) {
   const z = new UintN<8>(n)
   const z_native = z.native
   assert(z_native === n)
+  const big128 = new UintN128(2n ** 100n)
+
   const a = new UintN<128>(b)
   const a_native = a.native
   assert(a_native === b)

@@ -3,7 +3,7 @@ import type { Expression } from '../../../awst/nodes'
 import { IntegerConstant } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { CodeError } from '../../../errors'
-import { bigIntToUint8Array, codeInvariant, invariant } from '../../../util'
+import { codeInvariant, invariant } from '../../../util'
 import type { LibClassType, PType } from '../../ptypes'
 import { biguintPType, NumericLiteralPType, uint64PType } from '../../ptypes'
 import { UintNClass, UintNType } from '../../ptypes/arc4-types'
@@ -71,7 +71,7 @@ function newUintN(initialValueBuilder: InstanceBuilder | undefined, ptype: UintN
       ptype,
     )
   }
-  if (initialValueBuilder.resolvableToPType(uint64PType)) {
+  if (ptype.n <= 64 && initialValueBuilder.resolvableToPType(uint64PType)) {
     const initialValue = initialValueBuilder.resolveToPType(uint64PType).resolve()
     if (initialValue instanceof IntegerConstant) {
       codeInvariant(isValidLiteralForPType(initialValue.value, ptype), `${initialValue.value} cannot be converted to ${ptype}`)
@@ -101,10 +101,11 @@ function newUintN(initialValueBuilder: InstanceBuilder | undefined, ptype: UintN
     if (initialValue instanceof IntegerConstant) {
       codeInvariant(isValidLiteralForPType(initialValue.value, ptype), `${initialValue.value} cannot be converted to ${ptype}`)
       return new UintNExpressionBuilder(
-        nodeFactory.bytesConstant({
-          value: bigIntToUint8Array(initialValue.value),
+        nodeFactory.integerConstant({
+          value: initialValue.value,
           wtype: ptype.wtypeOrThrow,
           sourceLocation: sourceLocation,
+          tealAlias: null,
         }),
         ptype,
       )
