@@ -14,6 +14,14 @@ export type uint64 = {
 } & number
 
 /**
+ * Create a uint64 with the default value of 0
+ */
+export function Uint64(): uint64
+/**
+ * Create a uint64 from a string literal
+ */
+export function Uint64(v: string): uint64
+/**
  * Create a uint64 from a bigint literal
  */
 export function Uint64(v: bigint): uint64
@@ -25,8 +33,11 @@ export function Uint64(v: number): uint64
  * Create a uint64 from a boolean value. True is 1, False is 0
  */
 export function Uint64(v: boolean): uint64
-export function Uint64(v: Uint64Compat): uint64 {
-  return Uint64Cls.fromCompat(v).asAlgoTs()
+export function Uint64(v?: Uint64Compat | string): uint64 {
+  if (typeof v === 'string') {
+    v = BigInt(v)
+  }
+  return Uint64Cls.fromCompat(v ?? 0).asAlgoTs()
 }
 
 /**

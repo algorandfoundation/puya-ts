@@ -158,10 +158,11 @@ export namespace wtypes {
     }
 
     toString(): string {
+      const displayName = this.name.split('::').at(-1) ?? this.name
       if (this.names) {
-        return `${this.name ?? ''}{ ${this.names.map((n, i) => `${n}: ${this.types[i]}`).join(', ')} }`
+        return `${displayName}{ ${this.names.map((n, i) => `${n}: ${this.types[i]}`).join(', ')} }`
       }
-      return `${this.immutable ? 'readonly' : ''}${this.name ?? ''}[${this.types.join(', ')}]`
+      return `${this.immutable ? 'readonly' : ''}${displayName}[${this.types.join(', ')}]`
     }
   }
   export class WArray extends WType {
@@ -250,28 +251,37 @@ export namespace wtypes {
     fields: Record<string, ARC4Type>
     sourceLocation: SourceLocation | null
     frozen: boolean
+    desc: string | null
 
     constructor({
       fields,
       sourceLocation,
       name,
+      desc,
       frozen,
     }: {
       frozen: boolean
       name: string
+      desc: string | null
       fields: Record<string, ARC4Type>
       sourceLocation?: SourceLocation
     }) {
       super({
-        arc4Name: Object.values(fields)
+        arc4Name: `(${Object.values(fields)
           .map((f) => f.arc4Name)
-          .join(','),
+          .join(',')})`,
         name,
         nativeType: null,
       })
       this.sourceLocation = sourceLocation ?? null
       this.fields = fields
       this.frozen = frozen
+      this.desc = desc
+    }
+
+    toString(): string {
+      if (!this.name) return this.arc4Name
+      return super.toString()
     }
   }
   export class ARC4Tuple extends ARC4Type {

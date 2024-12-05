@@ -79,7 +79,7 @@ export class LogicSigPType extends PType {
   readonly wtype = undefined
   readonly name: string
   readonly module: string
-  readonly singleton = false
+  readonly singleton = true
   readonly sourceLocation: SourceLocation
   readonly baseType: LogicSigPType | undefined
   constructor(props: { module: string; name: string; baseType?: LogicSigPType; sourceLocation: SourceLocation }) {
@@ -496,7 +496,16 @@ export class FunctionPType extends PType {
     super()
     this.name = props.name
     this.module = props.module
-    this.returnType = props.returnType
+    if (props.returnType instanceof ObjectPType && props.returnType.isAnonymous) {
+      this.returnType = new ObjectPType({
+        name: `${props.name}Result`,
+        module: props.module,
+        properties: props.returnType.properties,
+        description: props.returnType.description,
+      })
+    } else {
+      this.returnType = props.returnType
+    }
     this.parameters = props.parameters
   }
 }
@@ -608,23 +617,32 @@ export class ArrayPType extends TransientType {
   }
 }
 
+type ObjectPTypeArgs =
+  | { module: string; name: string; description: string | undefined; properties: Record<string, PType>; isAnonymous?: false }
+  | { module?: undefined; name?: undefined; properties: Record<string, PType>; isAnonymous: true; description?: undefined }
+
 export class ObjectPType extends PType {
   readonly name: string
   readonly module: string
+  readonly description: string | undefined
   readonly properties: Record<string, PType>
   readonly singleton = false
+  readonly isAnonymous: boolean
 
-  constructor(props: { module?: string; name?: string; properties: Record<string, PType> }) {
+  constructor(props: ObjectPTypeArgs) {
     super()
     this.name = props.name ?? ''
     this.module = props.module ?? ''
     this.properties = props.properties
+    this.isAnonymous = props.isAnonymous ?? false
+    this.description = props.description
   }
 
   static anonymous(props: Record<string, PType> | Array<[string, PType]>) {
     const properties = Array.isArray(props) ? Object.fromEntries(props) : props
     return new ObjectPType({
       properties,
+      isAnonymous: true,
     })
   }
 
@@ -639,7 +657,7 @@ export class ObjectPType extends PType {
       tupleNames.push(propName)
     }
     return new wtypes.WTuple({
-      name: this.name,
+      name: this.fullName,
       names: tupleNames,
       types: tupleTypes,
       immutable: true,
@@ -647,7 +665,7 @@ export class ObjectPType extends PType {
   }
 
   orderedProperties() {
-    return Object.entries(this.properties) //.toSorted(sortBy(([key]) => key))
+    return Object.entries(this.properties)
   }
 
   getPropertyType(name: string): PType {
@@ -1242,4 +1260,37 @@ export const submitGroupItxnFunction = new LibFunctionType({
 export const TemplateVarFunction = new LibFunctionType({
   name: 'TemplateVar',
   module: Constants.templateVarModuleName,
+})
+
+export const compileFunctionType = new LibFunctionType({
+  name: 'compile',
+  module: Constants.compiledModuleName,
+})
+
+export const compiledContractType = new ObjectPType({
+  name: 'CompiledContract',
+  module: Constants.compiledModuleName,
+  description: 'Provides compiled programs and state allocation values for a Contract. Created by calling `compile(ExampleContractType)`',
+  properties: {
+    approvalProgram: new TuplePType({ items: [bytesPType, bytesPType] }),
+    clearStateProgram: new TuplePType({ items: [bytesPType, bytesPType] }),
+    extraProgramPages: uint64PType,
+    globalUints: uint64PType,
+    globalBytes: uint64PType,
+    localUints: uint64PType,
+    localBytes: uint64PType,
+  },
+})
+export const compiledLogicSigType = new ObjectPType({
+  name: 'CompiledLogicSig',
+  module: Constants.compiledModuleName,
+  description: 'Provides account for a Logic Signature. Created by calling `compile(LogicSigType)``',
+  properties: {
+    account: accountPType,
+  },
+})
+
+export const arc28EmitFunction = new LibFunctionType({
+  name: 'emit',
+  module: Constants.arc28ModuleName,
 })

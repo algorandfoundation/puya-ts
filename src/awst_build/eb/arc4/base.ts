@@ -3,14 +3,15 @@ import type { Expression } from '../../../awst/nodes'
 import { EqualityComparison } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { wtypes } from '../../../awst/wtypes'
-import { CodeError } from '../../../errors'
-import type { PType } from '../../ptypes'
+import { tryConvertEnum } from '../../../util'
+import { type PType } from '../../ptypes'
 import type { ARC4EncodedType } from '../../ptypes/arc4-types'
 import { instanceEb } from '../../type-registry'
 import { BooleanExpressionBuilder } from '../boolean-expression-builder'
 import { BytesExpressionBuilder } from '../bytes-expression-builder'
 import type { InstanceBuilder, NodeBuilder } from '../index'
 import { BuilderComparisonOp, FunctionBuilder, InstanceExpressionBuilder } from '../index'
+import { requireBuilderOfType } from '../util'
 import { parseFunctionArgs } from '../util/arg-parsing'
 
 export class Arc4EncodedBaseExpressionBuilder<T extends ARC4EncodedType> extends InstanceExpressionBuilder<T> {
@@ -19,10 +20,19 @@ export class Arc4EncodedBaseExpressionBuilder<T extends ARC4EncodedType> extends
   }
 
   compare(other: InstanceBuilder, op: BuilderComparisonOp, sourceLocation: SourceLocation): InstanceBuilder {
-    switch (op) {
-      case BuilderComparisonOp.eq:
-      case BuilderComparisonOp.ne:
-        throw new CodeError(`${op} operator is not supported on ${this.typeDescription}. Use 'equals' method instead`, { sourceLocation })
+    const equalityOp = tryConvertEnum(op, BuilderComparisonOp, EqualityComparison)
+
+    switch (equalityOp) {
+      case EqualityComparison.eq:
+      case EqualityComparison.ne:
+        return new BooleanExpressionBuilder(
+          nodeFactory.bytesComparisonExpression({
+            operator: equalityOp,
+            lhs: this.toBytes(sourceLocation),
+            rhs: requireBuilderOfType(other, this.ptype).toBytes(sourceLocation),
+            sourceLocation,
+          }),
+        )
     }
     return super.compare(other, op, sourceLocation)
   }

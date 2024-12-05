@@ -15,24 +15,29 @@ contract MyContract
   
   getXY(): XY{ x: uint64, y: uint64 }
   {
-    return { x: (#9 = { x: 1, y: 2 }).x, y: #9.y }
+    return { x: (#0 = { x: 1, y: 2 }).x, y: #0.y }
   }
   
   getYX(): YX{ y: uint64, x: uint64 }
   {
-    return { y: (#10 = { x: 222, y: 111 }).y, x: #10.x }
+    return { y: (#1 = { x: 222, y: 111 }).y, x: #1.x }
   }
   
-  getAnon(): { x: uint64, y: uint64 }
+  getAnon(): getAnonResult{ x: uint64, y: uint64 }
   {
-    return { x: 3, y: 4 }
+    return { x: (#2 = { x: 3, y: 4 }).x, y: #2.y }
+  }
+  
+  test(): void
+  {
+    assert(x.y == y.y and x.x == y.x, comment=assert target is match for conditions)
   }
   
   testing(): readonlytuple[XY{ x: uint64, y: uint64 }, YX{ y: uint64, x: uint64 }, { x: uint64, y: uint64 }]
   {
     a: XY{ x: uint64, y: uint64 } = this.getXY()
     b: YX{ y: uint64, x: uint64 } = this.getYX()
-    c: { x: uint64, y: uint64 } = this.getAnon()
+    c: { x: uint64, y: uint64 } = { x: (#3 = this.getAnon()).x, y: #3.y }
     return <tuple>[a, b, c]
   }
   
@@ -43,11 +48,11 @@ contract MyContract
   
   Contract::constructor(): void
   {
+    this.constructor()
   }
   
-  Contract::constructor(): void
+  BaseContract::constructor(): void
   {
-    this.constructor()
   }
   
   __algots__.defaultCreate(): void

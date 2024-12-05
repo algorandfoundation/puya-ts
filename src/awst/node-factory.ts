@@ -17,7 +17,6 @@ import {
   Copy,
   ExpressionStatement,
   IntegerConstant,
-  IntrinsicCall,
   MethodDocumentation,
   Not,
   NumericComparisonExpression,
@@ -34,7 +33,6 @@ import { wtypes } from './wtypes'
 
 type ConcreteNodes = typeof concreteNodes
 
-let singleEval = 0n
 const explicitNodeFactory = {
   voidConstant(props: { sourceLocation: SourceLocation }): VoidConstant {
     return new VoidConstant({
@@ -125,15 +123,15 @@ const explicitNodeFactory = {
       wtype: wtypes.boolWType,
     })
   },
-  boolConstant(props: { value: boolean; sourceLocation: SourceLocation }): BoolConstant {
+  boolConstant(props: { value: boolean; sourceLocation: SourceLocation; wtype?: wtypes.WType }): BoolConstant {
     return new BoolConstant({
       ...props,
-      wtype: wtypes.boolWType,
+      wtype: props.wtype ?? wtypes.boolWType,
     })
   },
   singleEvaluation({ source }: { source: Expression }) {
     return new SingleEvaluation({
-      id: singleEval++,
+      id: Symbol(),
       sourceLocation: source.sourceLocation,
       wtype: source.wtype,
       source,
@@ -212,12 +210,6 @@ const explicitNodeFactory = {
       args: props?.args ?? new Map(),
       description: props?.description ?? null,
       returns: props?.returns ?? null,
-    })
-  },
-  intrinsicCall(props: Omit<Props<IntrinsicCall>, 'comment'> & { comment?: string | null }) {
-    return new IntrinsicCall({
-      ...props,
-      comment: props.comment ?? null,
     })
   },
   copy({ value, sourceLocation }: { value: Expression; sourceLocation: SourceLocation }) {

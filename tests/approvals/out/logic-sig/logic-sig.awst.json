@@ -78,7 +78,8 @@
       "id": "tests/approvals/logic-sig.algo.ts::program",
       "name": "program"
     },
-    "docstring": ""
+    "docstring": "",
+    "avm_version": null
   },
   {
     "_type": "Subroutine",
@@ -117,7 +118,7 @@
             "end_column": 43
           },
           "expr": {
-            "_type": "IntrinsicCall",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/logic-sig.algo.ts",
               "line": 10,
@@ -132,71 +133,66 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "op_code": "assert",
-            "immediates": [],
-            "stack_args": [
-              {
-                "_type": "NumericComparisonExpression",
+            "condition": {
+              "_type": "NumericComparisonExpression",
+              "source_location": {
+                "file": "tests/approvals/logic-sig.algo.ts",
+                "line": 10,
+                "end_line": 10,
+                "column": 9,
+                "end_column": 22
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "lhs": {
+                "_type": "IntrinsicCall",
                 "source_location": {
                   "file": "tests/approvals/logic-sig.algo.ts",
                   "line": 10,
                   "end_line": 10,
-                  "column": 9,
-                  "end_column": 22
+                  "column": 13,
+                  "end_column": 16
                 },
                 "wtype": {
                   "_type": "WType",
-                  "name": "bool",
+                  "name": "uint64",
                   "immutable": true,
                   "ephemeral": false,
                   "scalar_type": 2
                 },
-                "lhs": {
-                  "_type": "IntrinsicCall",
-                  "source_location": {
-                    "file": "tests/approvals/logic-sig.algo.ts",
-                    "line": 10,
-                    "end_line": 10,
-                    "column": 9,
-                    "end_column": 16
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "uint64",
-                    "immutable": true,
-                    "ephemeral": false,
-                    "scalar_type": 2
-                  },
-                  "op_code": "txn",
-                  "immediates": [
-                    "Fee"
-                  ],
-                  "stack_args": [],
-                  "comment": null
+                "op_code": "txn",
+                "immediates": [
+                  "Fee"
+                ],
+                "stack_args": []
+              },
+              "operator": "==",
+              "rhs": {
+                "_type": "IntegerConstant",
+                "source_location": {
+                  "file": "tests/approvals/logic-sig.algo.ts",
+                  "line": 10,
+                  "end_line": 10,
+                  "column": 21,
+                  "end_column": 22
                 },
-                "operator": "==",
-                "rhs": {
-                  "_type": "IntegerConstant",
-                  "source_location": {
-                    "file": "tests/approvals/logic-sig.algo.ts",
-                    "line": 10,
-                    "end_line": 10,
-                    "column": 21,
-                    "end_column": 22
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "uint64",
-                    "immutable": true,
-                    "ephemeral": false,
-                    "scalar_type": 2
-                  },
-                  "value": "0",
-                  "teal_alias": null
-                }
+                "wtype": {
+                  "_type": "WType",
+                  "name": "uint64",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 2
+                },
+                "value": "0",
+                "teal_alias": null
               }
-            ],
-            "comment": "Fee must be zero"
+            },
+            "error_message": "Fee must be zero"
           }
         }
       ],
@@ -324,6 +320,7 @@
       "id": "tests/approvals/logic-sig.algo.ts::program",
       "name": "program"
     },
-    "docstring": ""
+    "docstring": "",
+    "avm_version": null
   }
 ]

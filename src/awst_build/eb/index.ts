@@ -75,7 +75,7 @@ export abstract class NodeBuilder {
   }
 
   hasProperty(_name: string): boolean {
-    throw new NotSupported(`Has property checks on ${this.typeDescription}`)
+    return false
   }
 
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {

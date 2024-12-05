@@ -1,0 +1,388 @@
+#pragma version 10
+
+tests/approvals/named-types.algo.ts::MyContract.approvalProgram:
+    intcblock 0 1 8
+    bytecblock 0x 0x151f7c75
+    txn ApplicationID
+    bnz main_after_if_else@2
+    callsub constructor
+
+main_after_if_else@2:
+    callsub __puya_arc4_router__
+    return
+
+
+// tests/approvals/named-types.algo.ts::MyContract.constructor() -> void:
+constructor:
+    // tests/approvals/named-types.algo.ts:14
+    // export class MyContract extends Contract {
+    proto 0 0
+    retsub
+
+
+// tests/approvals/named-types.algo.ts::MyContract.__puya_arc4_router__() -> uint64:
+__puya_arc4_router__:
+    // tests/approvals/named-types.algo.ts:14
+    // export class MyContract extends Contract {
+    proto 0 1
+    txn NumAppArgs
+    intc_0 // 0
+    !=
+    bz __puya_arc4_router___bare_routing@9
+    txna ApplicationArgs 0
+    pushbytes 0xf02228b0 // method "getXY()(uint64,uint64)"
+    pushbytes 0xd908575b // method "getYX()(uint64,uint64)"
+    pushbytes 0x577b1ffc // method "getAnon()(uint64,uint64)"
+    pushbytes 0xdc75f81d // method "test((uint64,uint64),(uint64,uint64))void"
+    pushbytes 0x040e2e4e // method "testing()((uint64,uint64),(uint64,uint64),(uint64,uint64))"
+    uncover 5
+    match __puya_arc4_router___getXY_route@2 __puya_arc4_router___getYX_route@3 __puya_arc4_router___getAnon_route@4 __puya_arc4_router___test_route@5 __puya_arc4_router___testing_route@6
+    b __puya_arc4_router___switch_case_default@7
+
+__puya_arc4_router___getXY_route@2:
+    // tests/approvals/named-types.algo.ts:15
+    // public getXY(): XY {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    callsub getXY
+    swap
+    itob
+    swap
+    itob
+    swap
+    bytec_0 // 0x
+    swap
+    concat
+    swap
+    concat
+    bytec_1 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    retsub
+
+__puya_arc4_router___getYX_route@3:
+    // tests/approvals/named-types.algo.ts:22
+    // public getYX(): YX {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    callsub getYX
+    swap
+    itob
+    swap
+    itob
+    swap
+    bytec_0 // 0x
+    swap
+    concat
+    swap
+    concat
+    bytec_1 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    retsub
+
+__puya_arc4_router___getAnon_route@4:
+    // tests/approvals/named-types.algo.ts:29
+    // public getAnon() {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    callsub getAnon
+    swap
+    itob
+    swap
+    itob
+    swap
+    bytec_0 // 0x
+    swap
+    concat
+    swap
+    concat
+    bytec_1 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    retsub
+
+__puya_arc4_router___test_route@5:
+    // tests/approvals/named-types.algo.ts:36
+    // public test(x: XY, y: YX) {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    // tests/approvals/named-types.algo.ts:14
+    // export class MyContract extends Contract {
+    txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    intc_2 // 8
+    extract3 // on error: Index access is out of bounds
+    btoi
+    swap
+    intc_2 // 8
+    dup
+    extract3 // on error: Index access is out of bounds
+    btoi
+    txna ApplicationArgs 2
+    dup
+    intc_0 // 0
+    intc_2 // 8
+    extract3 // on error: Index access is out of bounds
+    btoi
+    swap
+    intc_2 // 8
+    dup
+    extract3 // on error: Index access is out of bounds
+    btoi
+    // tests/approvals/named-types.algo.ts:36
+    // public test(x: XY, y: YX) {
+    uncover 3
+    uncover 3
+    uncover 3
+    uncover 3
+    callsub test
+    intc_1 // 1
+    retsub
+
+__puya_arc4_router___testing_route@6:
+    // tests/approvals/named-types.algo.ts:40
+    // public testing() {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    callsub testing
+    cover 5
+    cover 4
+    cover 3
+    cover 2
+    swap
+    itob
+    swap
+    itob
+    swap
+    bytec_0 // 0x
+    swap
+    concat
+    swap
+    concat
+    cover 2
+    itob
+    swap
+    itob
+    swap
+    bytec_0 // 0x
+    swap
+    concat
+    swap
+    concat
+    uncover 2
+    itob
+    uncover 3
+    itob
+    swap
+    bytec_0 // 0x
+    swap
+    concat
+    swap
+    concat
+    bytec_0 // 0x
+    uncover 3
+    concat
+    uncover 2
+    concat
+    swap
+    concat
+    bytec_1 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    retsub
+
+__puya_arc4_router___switch_case_default@7:
+    b __puya_arc4_router___after_if_else@13
+
+__puya_arc4_router___bare_routing@9:
+    // tests/approvals/named-types.algo.ts:14
+    // export class MyContract extends Contract {
+    txn OnCompletion
+    intc_0 // 0
+    swap
+    match __puya_arc4_router_____algots__.defaultCreate@10
+    b __puya_arc4_router___switch_case_default@11
+
+__puya_arc4_router_____algots__.defaultCreate@10:
+    // tests/approvals/named-types.algo.ts:14
+    // export class MyContract extends Contract {
+    txn ApplicationID
+    intc_0 // 0
+    ==
+    assert // can only call when creating
+    callsub __algots__.defaultCreate
+    intc_1 // 1
+    retsub
+
+__puya_arc4_router___switch_case_default@11:
+
+__puya_arc4_router___after_if_else@13:
+    // tests/approvals/named-types.algo.ts:14
+    // export class MyContract extends Contract {
+    intc_0 // 0
+    retsub
+
+
+// tests/approvals/named-types.algo.ts::MyContract.getXY() -> uint64, uint64:
+getXY:
+    // tests/approvals/named-types.algo.ts:15
+    // public getXY(): XY {
+    proto 0 2
+    // tests/approvals/named-types.algo.ts:17
+    // x: 1,
+    intc_1 // 1
+    // tests/approvals/named-types.algo.ts:18
+    // y: 2,
+    pushint 2 // 2
+    // tests/approvals/named-types.algo.ts:16-19
+    // return {
+    //   x: 1,
+    //   y: 2,
+    // }
+    retsub
+
+
+// tests/approvals/named-types.algo.ts::MyContract.getYX() -> uint64, uint64:
+getYX:
+    // tests/approvals/named-types.algo.ts:22
+    // public getYX(): YX {
+    proto 0 2
+    // tests/approvals/named-types.algo.ts:25
+    // y: 111,
+    pushint 111 // 111
+    // tests/approvals/named-types.algo.ts:24
+    // x: 222,
+    pushint 222 // 222
+    // tests/approvals/named-types.algo.ts:23-26
+    // return {
+    //   x: 222,
+    //   y: 111,
+    // }
+    retsub
+
+
+// tests/approvals/named-types.algo.ts::MyContract.getAnon() -> uint64, uint64:
+getAnon:
+    // tests/approvals/named-types.algo.ts:29
+    // public getAnon() {
+    proto 0 2
+    // tests/approvals/named-types.algo.ts:31
+    // x: Uint64(3),
+    pushint 3 // 3
+    // tests/approvals/named-types.algo.ts:32
+    // y: Uint64(4),
+    pushint 4 // 4
+    // tests/approvals/named-types.algo.ts:30-33
+    // return {
+    //   x: Uint64(3),
+    //   y: Uint64(4),
+    // }
+    retsub
+
+
+// tests/approvals/named-types.algo.ts::MyContract.test(x.x: uint64, x.y: uint64, y.y: uint64, y.x: uint64) -> void:
+test:
+    // tests/approvals/named-types.algo.ts:36
+    // public test(x: XY, y: YX) {
+    proto 4 0
+    // tests/approvals/named-types.algo.ts:37
+    // assertMatch(x, { ...y })
+    frame_dig -3
+    frame_dig -2
+    ==
+    bz test_bool_false@3
+    frame_dig -4
+    frame_dig -1
+    ==
+    bz test_bool_false@3
+    intc_1 // 1
+    b test_bool_merge@4
+
+test_bool_false@3:
+    intc_0 // 0
+
+test_bool_merge@4:
+    // tests/approvals/named-types.algo.ts:37
+    // assertMatch(x, { ...y })
+    assert // assert target is match for conditions
+    retsub
+
+
+// tests/approvals/named-types.algo.ts::MyContract.testing() -> uint64, uint64, uint64, uint64, uint64, uint64:
+testing:
+    // tests/approvals/named-types.algo.ts:40
+    // public testing() {
+    proto 0 6
+    // tests/approvals/named-types.algo.ts:41
+    // const a = this.getXY()
+    callsub getXY
+    swap
+    // tests/approvals/named-types.algo.ts:42
+    // const b = this.getYX()
+    callsub getYX
+    cover 2
+    // tests/approvals/named-types.algo.ts:43
+    // const c = this.getAnon()
+    callsub getAnon
+    pop
+    callsub getAnon
+    cover 2
+    pop
+    swap
+    // tests/approvals/named-types.algo.ts:44
+    // return [a, b, c] as const
+    uncover 3
+    uncover 5
+    uncover 4
+    uncover 5
+    uncover 5
+    uncover 5
+    retsub
+
+
+// tests/approvals/named-types.algo.ts::MyContract.__algots__.defaultCreate() -> void:
+__algots__.defaultCreate:
+    // tests/approvals/named-types.algo.ts:14
+    // export class MyContract extends Contract {
+    proto 0 0
+    retsub

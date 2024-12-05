@@ -11,7 +11,12 @@ import { ValueProxy } from '../value-proxy'
 export abstract class BoxProxyExpressionBuilder<
   TProxyType extends BoxMapPType | BoxRefPType | BoxPType,
 > extends InstanceExpressionBuilder<TProxyType> {
-  buildStorageDeclaration(memberName: string, memberLocation: SourceLocation, contractType: ContractClassPType): AppStorageDeclaration {
+  buildStorageDeclaration(
+    memberName: string,
+    memberLocation: SourceLocation,
+    memberDescription: string | null,
+    contractType: ContractClassPType,
+  ): AppStorageDeclaration {
     codeInvariant(
       this._expr instanceof BytesConstant,
       `key${this.ptype instanceof BoxMapPType ? ' prefix' : ''} must be a compile time constant value if ${this.typeDescription} is assigned to a contract member`,
@@ -21,7 +26,7 @@ export abstract class BoxProxyExpressionBuilder<
       ptype: this.ptype,
       memberName: memberName,
       keyOverride: this._expr ?? null,
-      description: null,
+      description: memberDescription,
       definedIn: contractType,
     })
   }

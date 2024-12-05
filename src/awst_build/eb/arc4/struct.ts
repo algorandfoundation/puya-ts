@@ -2,16 +2,17 @@ import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { invariant } from '../../../util'
-import type { PType } from '../../ptypes'
+import type { PType, PTypeOrClass } from '../../ptypes'
+import { ObjectPType } from '../../ptypes'
 import { ARC4StructClass, ARC4StructType } from '../../ptypes/arc4-types'
 import { instanceEb } from '../../type-registry'
-import type { InstanceBuilder } from '../index'
-import { NodeBuilder } from '../index'
+import type { NodeBuilder } from '../index'
+import { ClassBuilder, InstanceBuilder } from '../index'
 import { requireExpressionOfType } from '../util'
 import { parseFunctionArgs } from '../util/arg-parsing'
 import { Arc4EncodedBaseExpressionBuilder } from './base'
 
-export class StructClassBuilder extends NodeBuilder {
+export class StructClassBuilder extends ClassBuilder {
   readonly ptype: ARC4StructClass
 
   constructor(sourceLocation: SourceLocation, ptype: PType) {
@@ -53,6 +54,10 @@ export class StructExpressionBuilder extends Arc4EncodedBaseExpressionBuilder<AR
     super(expr, ptype)
   }
 
+  hasProperty(name: string): boolean {
+    return name in this.ptype.fields || super.hasProperty(name)
+  }
+
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
     if (name in this.ptype.fields) {
       const fieldType = this.ptype.fields[name]
@@ -67,5 +72,29 @@ export class StructExpressionBuilder extends Arc4EncodedBaseExpressionBuilder<AR
       )
     }
     return super.memberAccess(name, sourceLocation)
+  }
+
+  resolvableToPType(ptype: PTypeOrClass): boolean {
+    if (ptype.equals(this.ptype)) return true
+
+    if (ptype instanceof ObjectPType) {
+      const native = this.memberAccess('native', this.sourceLocation)
+      if (native instanceof InstanceBuilder) {
+        return native.resolvableToPType(ptype)
+      }
+    }
+    return false
+  }
+
+  resolveToPType(ptype: PTypeOrClass): InstanceBuilder {
+    if (ptype.equals(this.ptype)) return this
+
+    if (ptype instanceof ObjectPType) {
+      const native = this.memberAccess('native', this.sourceLocation)
+      if (native instanceof InstanceBuilder) {
+        return native.resolveToPType(ptype)
+      }
+    }
+    return super.resolveToPType(ptype)
   }
 }

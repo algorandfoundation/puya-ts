@@ -4,8 +4,8 @@ import { AppStorageKind, BytesEncoding } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { CodeError } from '../../errors'
 import { invariant, utf8ToUint8Array } from '../../util'
-import type { ContractClassPType, StorageProxyPType } from './../ptypes'
-import { BoxMapPType, BoxPType, BoxRefPType, GlobalStateType, LocalStateType } from './../ptypes'
+import type { ContractClassPType, StorageProxyPType } from '../ptypes'
+import { BoxMapPType, BoxPType, BoxRefPType, GlobalStateType, LocalStateType } from '../ptypes'
 
 export class AppStorageDeclaration {
   readonly memberName: string

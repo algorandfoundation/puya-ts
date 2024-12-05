@@ -7,8 +7,9 @@ import { invariant } from '../util'
 import { buildBase85Encoder } from '../util/base-85'
 import { ARC4ABIMethodConfig, ContractReference, LogicSigReference } from './models'
 import type { RootNode } from './nodes'
-import { IntrinsicCall } from './nodes'
+import { IntrinsicCall, SingleEvaluation } from './nodes'
 import { SourceLocation } from './source-location'
+import { SymbolToNumber } from './util'
 
 export class SnakeCaseSerializer<T> {
   constructor(private readonly spaces = 2) {}
@@ -35,6 +36,7 @@ export class AwstSerializer extends SnakeCaseSerializer<RootNode[]> {
   ) {
     super()
   }
+  #singleEvals = new SymbolToNumber()
   private b85 = buildBase85Encoder()
 
   protected serializerFunction(key: string, value: unknown): unknown {
@@ -95,6 +97,13 @@ export class AwstSerializer extends SnakeCaseSerializer<RootNode[]> {
         ...(super.serializerFunction(key, value) as object),
         scope: undefined,
         file: filePath,
+      }
+    }
+    if (value instanceof SingleEvaluation) {
+      return {
+        _type: SingleEvaluation.name,
+        ...(super.serializerFunction(key, value) as object),
+        id: String(this.#singleEvals.forSymbol(value.id)[0]),
       }
     }
     if (value instanceof ARC4ABIMethodConfig) {

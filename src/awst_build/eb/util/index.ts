@@ -75,17 +75,17 @@ export function requireExpressionsOfType<const TPTypes extends [...PType[]]>(
   throw new CodeError(`Expected ${ptypes.length} args with types ${ptypes.join(', ')}`, { sourceLocation })
 }
 
-export function requireStringConstant(builder: InstanceBuilder): awst.StringConstant {
+export function requireStringConstant(builder: NodeBuilder): awst.StringConstant {
   const constant = requireConstantOfType(builder, stringPType)
   codeInvariant(constant instanceof StringConstant, 'Expected string literal', builder.sourceLocation)
   return constant
 }
-export function requireIntegerConstant(builder: InstanceBuilder): awst.IntegerConstant {
+export function requireIntegerConstant(builder: NodeBuilder): awst.IntegerConstant {
   const constant = requestConstantOfType(builder, uint64PType) ?? requestConstantOfType(builder, biguintPType)
   codeInvariant(constant instanceof IntegerConstant, 'Expected integer literal')
   return constant
 }
-export function requireBooleanConstant(builder: InstanceBuilder): awst.BoolConstant {
+export function requireBooleanConstant(builder: NodeBuilder): awst.BoolConstant {
   const constant = requireConstantOfType(builder, boolPType)
   codeInvariant(constant instanceof BoolConstant, 'Expected boolean literal')
   return constant

@@ -57,15 +57,11 @@ export class FunctionVisitor
     const body = assignDestructuredParams.length
       ? nodeFactory.block({ sourceLocation }, assignDestructuredParams, this.accept(node.body))
       : this.accept(node.body)
-    const documentation = nodeFactory.methodDocumentation({
-      args: new Map(),
-      description: null,
-      returns: null,
-    })
+
     return {
       args,
       body,
-      documentation,
+      documentation: this.getMethodDocumentation(node),
     }
   }
 

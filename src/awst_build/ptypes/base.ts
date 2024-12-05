@@ -1,6 +1,6 @@
 import type { wtypes } from '../../awst/wtypes'
+import { CodeError } from '../../errors'
 import type { DeliberateAny } from '../../typescript-helpers'
-import { codeInvariant } from '../../util'
 
 /**
  * Represents a public type visible to a developer of AlgoTS
@@ -28,7 +28,9 @@ export abstract class PType {
   }
 
   get wtypeOrThrow(): wtypes.WType {
-    codeInvariant(this.wtype, `${this.fullName} does not have a wtype`)
+    if (!this.wtype) {
+      throw new CodeError(`${this.fullName} does not have a wtype`)
+    }
     return this.wtype
   }
 

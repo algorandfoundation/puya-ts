@@ -5,10 +5,10 @@ import type { SourceLocation } from '../../awst/source-location'
 import { wtypes } from '../../awst/wtypes'
 import { Constants } from '../../constants'
 import { CodeError } from '../../errors'
-import { codeInvariant } from '../../util'
+import { codeInvariant, invariant } from '../../util'
 import type { AwstBuildContext } from '../context/awst-build-context'
-import type { ContractClassPType, PType } from '../ptypes'
-import { arc4BaseContractType, baseContractType, StorageProxyPType } from '../ptypes'
+import type { PType } from '../ptypes'
+import { arc4BaseContractType, baseContractType, ContractClassPType, StorageProxyPType } from '../ptypes'
 
 import { instanceEb } from '../type-registry'
 
@@ -85,5 +85,28 @@ export class ContractSuperBuilder extends ContractThisBuilder {
       return new BaseContractMethodExpressionBuilder(sourceLocation, method, this.ptype)
     }
     return super.memberAccess(name, sourceLocation)
+  }
+}
+
+export class ContractClassBuilder extends InstanceBuilder {
+  resolve(): Expression {
+    throw new CodeError('Contract class cannot be used as a value')
+  }
+  resolveLValue(): LValue {
+    throw new CodeError('Contract class cannot be used as a value')
+  }
+  readonly ptype: ContractClassPType
+  constructor(sourceLocation: SourceLocation, ptype: PType) {
+    super(sourceLocation)
+    invariant(ptype instanceof ContractClassPType, 'ptype must be ContractClassPType')
+    this.ptype = ptype
+  }
+
+  newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
+    throw new CodeError('Contract class cannot be constructed manually')
+  }
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
+    throw new CodeError('Contract class cannot be called manually')
   }
 }

@@ -38,7 +38,7 @@ import {
   unknownPType,
   voidPType,
 } from './ptypes'
-import { ARC4EncodedType, arc4StructBaseType, ARC4StructClass, ARC4StructType } from './ptypes/arc4-types'
+import { ARC4EncodedType, arc4StructBaseType, ARC4StructClass, ARC4StructType, UintNType } from './ptypes/arc4-types'
 import { SymbolName } from './symbol-name'
 import { typeRegistry } from './type-registry'
 
@@ -217,9 +217,13 @@ export class TypeResolver {
       if (typeName.fullName === baseContractType.fullName) return baseContractType
       if (typeName.fullName === arc4StructBaseType.fullName) return arc4StructBaseType
       if (typeName.fullName === logicSigBaseType.fullName) return logicSigBaseType
+
       const [baseType, ...rest] = tsType.getBaseTypes()?.map((t) => this.resolveType(t, sourceLocation)) ?? []
 
       invariant(rest.length === 0, 'Class can have at most one base type')
+
+      // Treat sub-types of UintN type as the base type.
+      if (baseType instanceof UintNType) return baseType
 
       if (baseType instanceof ContractClassPType) {
         return this.reflectContractType(typeName, tsType, baseType, sourceLocation)
@@ -263,9 +267,13 @@ export class TypeResolver {
 
   private reflectObjectType(tsType: ts.Type, sourceLocation: SourceLocation): ObjectPType {
     const typeAlias = tsType.aliasSymbol ? this.getSymbolFullName(tsType.aliasSymbol, sourceLocation) : undefined
-
     const properties: Record<string, PType> = {}
     for (const prop of tsType.getProperties()) {
+      if (prop.name.startsWith('__@')) {
+        // Symbol property - ignore
+        // TODO: Check AST nodes to confirm?
+        continue
+      }
       const type = this.checker.getTypeOfSymbol(prop)
       const ptype = this.resolveType(type, sourceLocation)
       if (ptype.singleton) {
@@ -275,7 +283,7 @@ export class TypeResolver {
       }
     }
     if (typeAlias) {
-      return new ObjectPType({ ...typeAlias, properties })
+      return new ObjectPType({ ...typeAlias, properties, description: tryGetTypeDescription(tsType) })
     }
     return ObjectPType.anonymous(properties)
   }
@@ -288,8 +296,8 @@ export class TypeResolver {
       const ptype = this.resolve(typeDeclaration, sourceLocation)
       if (ptype instanceof ARC4StructType) {
         return ARC4StructClass.fromStructType(ptype)
-      } else if (ptype instanceof ContractClassPType) {
-        throw new CodeError('Contract classes cannot be explicitly instantiated', { sourceLocation })
+      } else if (ptype instanceof ContractClassPType || ptype instanceof LogicSigPType) {
+        return ptype
       }
     }
     throw new CodeError('Unable to reflect constructor type', { sourceLocation })
@@ -317,13 +325,14 @@ export class TypeResolver {
       module: typeName.module,
     })
   }
+
   private reflectStructType(
     typeName: SymbolName,
     tsType: ts.Type,
     baseType: ARC4StructType,
     sourceLocation: SourceLocation,
   ): ARC4StructType {
-    const ignoredProps = ['bytes', '__type', 'equals', Constants.constructorMethodName]
+    const ignoredProps = ['bytes', 'equals', Constants.constructorMethodName]
     const fields: Record<string, ARC4EncodedType> = {}
     for (const prop of tsType.getProperties()) {
       if (isIn(prop.name, ignoredProps)) continue
@@ -340,6 +349,7 @@ export class TypeResolver {
       ...typeName,
       fields: fields,
       sourceLocation: sourceLocation,
+      description: tryGetTypeDescription(tsType),
     })
   }
 
@@ -436,4 +446,16 @@ function isIntersectionType(tsType: ts.Type): tsType is ts.IntersectionType {
 
 function isInstantiationExpression(tsType: ts.Type): tsType is ts.Type & { node: ts.ExpressionWithTypeArguments } {
   return isObjectType(tsType) && hasFlags(tsType.objectFlags, ObjectFlags.InstantiationExpressionType)
+}
+
+function tryGetTypeDescription(tsType: ts.Type): string | undefined {
+  const dec = tsType.aliasSymbol?.valueDeclaration ?? tsType.symbol.valueDeclaration
+  if (!dec) return undefined
+  const docs = ts.getJSDocCommentsAndTags(dec)
+  for (const doc of docs) {
+    if (ts.isJSDoc(doc)) {
+      return ts.getTextOfJSDocComment(doc.comment)
+    }
+  }
+  return undefined
 }

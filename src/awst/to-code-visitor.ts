@@ -3,9 +3,18 @@ import { TodoError } from '../errors'
 import { logger } from '../logger'
 import { uint8ArrayToBase32, uint8ArrayToUtf8 } from '../util'
 import type { ContractReference } from './models'
-import type { AppStorageDefinition, ContractMemberNodeVisitor, ExpressionVisitor, RootNodeVisitor, StatementVisitor } from './nodes'
+import type {
+  AppStorageDefinition,
+  AssertExpression,
+  ContractMemberNodeVisitor,
+  Emit,
+  ExpressionVisitor,
+  RootNodeVisitor,
+  StatementVisitor,
+} from './nodes'
 import * as nodes from './nodes'
 import { AppStorageKind, BytesEncoding, ContractMethodTarget, InstanceMethodTarget, InstanceSuperMethodTarget, SubroutineID } from './nodes'
+import { SymbolToNumber } from './util'
 import { wtypes } from './wtypes'
 
 function printBytes(value: Uint8Array, encoding: BytesEncoding) {
@@ -41,7 +50,7 @@ export class ToCodeVisitor
   visitAppStorageDefinition(contractMemberNode: AppStorageDefinition): string[] {
     throw new Error('Method not implemented.')
   }
-  #singleEval = new Set<bigint>()
+  #singleEval = new SymbolToNumber()
   visitUInt64PostfixUnaryOperation(expression: nodes.UInt64PostfixUnaryOperation): string {
     return `${expression.target.accept(this)}${expression.op}`
   }
@@ -49,10 +58,35 @@ export class ToCodeVisitor
     return `${expression.target.accept(this)}${expression.op}`
   }
   visitCompiledContract(expression: nodes.CompiledContract): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    let overrides = Array.from(expression.allocationOverrides.entries())
+      .map(([f, v]) => `${f}=${v.accept(this)}`)
+      .join(', ')
+    if (overrides) {
+      overrides = `, ${overrides}`
+    }
+
+    let templateVars = Array.from(expression.templateVariables.entries())
+      .map(([n, v]) => `${n}=${v.accept(this)}`)
+      .join(', ')
+    if (templateVars) {
+      templateVars = `, ${templateVars}`
+    }
+
+    const prefix = expression.prefix ? `, prefix=${expression.prefix}` : ''
+
+    return `compile(${expression.contract.id}${overrides}${prefix}${templateVars}`
   }
   visitCompiledLogicSig(expression: nodes.CompiledLogicSig): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    let templateVars = Array.from(expression.templateVariables.entries())
+      .map(([n, v]) => `${n}=${v.accept(this)}`)
+      .join(', ')
+    if (templateVars) {
+      templateVars = `, ${templateVars}`
+    }
+
+    const prefix = expression.prefix ? `, prefix=${expression.prefix}` : ''
+
+    return `compile(${expression.logicSig.id}${prefix}${templateVars}`
   }
   visitLoopExit(statement: nodes.LoopExit): string[] {
     throw new TodoError('Method not implemented.', { sourceLocation: statement.sourceLocation })
@@ -175,11 +209,11 @@ export class ToCodeVisitor
     return `LocalState[${expression.account.accept(this)}][${expression.key.accept(this)}]`
   }
   visitSingleEvaluation(expression: nodes.SingleEvaluation): string {
-    if (this.#singleEval.has(expression.id)) {
-      return `#${expression.id}`
+    const [id, isNew] = this.#singleEval.forSymbol(expression.id)
+    if (!isNew) {
+      return `#${id}`
     }
-    this.#singleEval.add(expression.id)
-    return `(#${expression.id} = ${expression.source.accept(this)})`
+    return `(#${id} = ${expression.source.accept(this)})`
   }
   visitReinterpretCast(expression: nodes.ReinterpretCast): string {
     const target = expression.expr.accept(this)
@@ -319,12 +353,24 @@ export class ToCodeVisitor
       '}',
     ]
   }
+  visitEmit(expression: Emit): string {
+    return `emit("${expression.signature}", ${expression.value.accept(this)})`
+  }
+
   visitContractMethod(statement: nodes.ContractMethod): string[] {
     const prefix = statement.cref.id === this.currentContract.at(-1)?.id ? '' : `${statement.cref.className}::`
     return [`${prefix}${statement.memberName}(): ${statement.returnType}`, '{', ...indent(statement.body.accept(this)), '}', '']
   }
   visitLogicSignature(moduleStatement: nodes.LogicSignature): string[] {
     return ['', `logicsig ${moduleStatement.id} {`, ...indent(moduleStatement.program.body.accept(this)), '}']
+  }
+  visitAssertExpression(expression: AssertExpression): string {
+    return [
+      expression.condition ? 'assert(' : 'err(',
+      expression.condition?.accept(this) ?? '',
+      expression.errorMessage ? `, comment=${expression.errorMessage}` : '',
+      ')',
+    ].join('')
   }
 
   private currentContract: ContractReference[] = []

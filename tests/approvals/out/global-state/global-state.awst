@@ -12,8 +12,8 @@ contract TestContract
     if (!Boolean(txn<ApplicationID>())) {
       this.constructor()
     }
-    assert(STATE_EXISTS(GlobalState["testState"]))
-    assert(GlobalState["testState"] == 2)
+    assert(STATE_EXISTS(GlobalState["testState"]), comment=State should have value)
+    assert(GlobalState["testState"] == 2, comment=Value should equal 2)
     GlobalState["testState"]: uint64 = btoi(txnas<ApplicationArgs>(0))
     return True
   }
@@ -29,7 +29,7 @@ contract TestContract
     super.constructor()
     GlobalState["testState"]: uint64 = 2
     GlobalState["TESTSTATE"]: uint64 = 5
-    assert(GlobalState["baseTestState"] == "testing 123")
+    assert(GlobalState["baseTestState"] == "testing 123", comment=Base class state should be initialized after super call)
     GlobalState["noInitialInt"]: uint64 = someValue * GlobalState["testState"]
   }
   
@@ -39,9 +39,8 @@ contract TestContract
     GlobalState["baseTestState"]: string = "testing 123"
   }
   
-  Contract::constructor(): void
+  BaseContract::constructor(): void
   {
-    this.constructor()
   }
   
 }

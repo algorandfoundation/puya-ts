@@ -1,13 +1,13 @@
 import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
-import { IntegerConstant, StringConstant } from '../../../awst/nodes'
+import { BytesConstant, IntegerConstant, StringConstant } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { wtypes } from '../../../awst/wtypes'
 import { Constants } from '../../../constants'
 import { wrapInCodeError } from '../../../errors'
 import { logger } from '../../../logger'
 
-import { base32ToUint8Array, codeInvariant, invariant } from '../../../util'
+import { base32ToUint8Array, bigIntToUint8Array, codeInvariant, invariant } from '../../../util'
 import type { PType } from '../../ptypes'
 import { accountPType, bytesPType, IterableIteratorGeneric, NumericLiteralPType, stringPType, TuplePType, uint64PType } from '../../ptypes'
 import {
@@ -16,8 +16,12 @@ import {
   ARC4EncodedType,
   DynamicArrayConstructor,
   DynamicArrayType,
+  DynamicBytesConstructor,
+  DynamicBytesType,
   StaticArrayConstructor,
   StaticArrayType,
+  StaticBytesConstructor,
+  StaticBytesGeneric,
 } from '../../ptypes/arc4-types'
 import { instanceEb } from '../../type-registry'
 import type { InstanceBuilder, NodeBuilder } from '../index'
@@ -163,6 +167,106 @@ export class AddressClassBuilder extends ClassBuilder {
     )
   }
 }
+export class StaticBytesClassBuilder extends ClassBuilder {
+  readonly ptype = StaticBytesConstructor
+
+  newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
+    const {
+      ptypes: [length],
+      args: [initialValue],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      callLocation: sourceLocation,
+      funcName: `${this.ptype.name} constructor`,
+      genericTypeArgs: 1,
+      argSpec: (a) => [a.optional(bytesPType)],
+    })
+    const resultPType = StaticBytesGeneric.parameterise([length])
+
+    codeInvariant(length instanceof NumericLiteralPType, 'length must be numeric literal', sourceLocation)
+    const byteLength = Number(length.literalValue)
+    if (!initialValue) {
+      return instanceEb(
+        nodeFactory.bytesConstant({
+          value: new Uint8Array(byteLength),
+          sourceLocation,
+          wtype: resultPType.wtype,
+        }),
+        resultPType,
+      )
+    }
+    const value = initialValue.resolve()
+    if (value instanceof BytesConstant) {
+      codeInvariant(value.value.length === byteLength, `Value should have byte length of ${byteLength}`, sourceLocation)
+      return instanceEb(
+        nodeFactory.bytesConstant({
+          value: value.value,
+          wtype: resultPType.wtype,
+          sourceLocation,
+        }),
+        resultPType,
+      )
+    } else {
+      return instanceEb(
+        nodeFactory.aRC4Encode({
+          value: initialValue.resolve(),
+          sourceLocation,
+          wtype: resultPType.wtype,
+        }),
+        resultPType,
+      )
+    }
+  }
+}
+export class DynamicBytesClassBuilder extends ClassBuilder {
+  readonly ptype = DynamicBytesConstructor
+
+  newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
+    const {
+      args: [initialValue],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      callLocation: sourceLocation,
+      funcName: `${this.ptype.name} constructor`,
+      genericTypeArgs: 0,
+      argSpec: (a) => [a.optional(bytesPType)],
+    })
+    const resultPType = DynamicBytesType
+
+    if (!initialValue) {
+      return instanceEb(
+        nodeFactory.bytesConstant({
+          value: new Uint8Array([0, 0]),
+          sourceLocation,
+          wtype: resultPType.wtype,
+        }),
+        resultPType,
+      )
+    }
+    const value = initialValue.resolve()
+    if (value instanceof BytesConstant) {
+      return instanceEb(
+        nodeFactory.bytesConstant({
+          value: new Uint8Array([...bigIntToUint8Array(BigInt(value.value.length), 2), ...value.value]),
+          sourceLocation,
+          wtype: resultPType.wtype,
+        }),
+        resultPType,
+      )
+    } else {
+      return instanceEb(
+        nodeFactory.aRC4Encode({
+          value,
+          sourceLocation,
+          wtype: resultPType.wtype,
+        }),
+        resultPType,
+      )
+    }
+  }
+}
 
 export abstract class ArrayExpressionBuilder<
   TArrayType extends DynamicArrayType | StaticArrayType,
@@ -288,6 +392,33 @@ export class StaticArrayExpressionBuilder extends ArrayExpressionBuilder<StaticA
     return super.memberAccess(name, sourceLocation)
   }
 }
+
+export class DynamicBytesExpressionBuilder extends DynamicArrayExpressionBuilder {
+  memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
+    switch (name) {
+      case 'native':
+        return instanceEb(
+          nodeFactory.aRC4Decode({
+            wtype: bytesPType.wtype,
+            value: this.resolve(),
+            sourceLocation,
+          }),
+          bytesPType,
+        )
+    }
+    return super.memberAccess(name, sourceLocation)
+  }
+}
+export class StaticBytesExpressionBuilder extends StaticArrayExpressionBuilder {
+  memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
+    switch (name) {
+      case 'native':
+        return instanceEb(this.toBytes(sourceLocation), bytesPType)
+    }
+    return super.memberAccess(name, sourceLocation)
+  }
+}
+
 export class AddressExpressionBuilder extends ArrayExpressionBuilder<StaticArrayType> {
   constructor(expr: Expression, ptype: PType) {
     invariant(ptype instanceof StaticArrayType, 'ptype must be instance of StaticArrayType')

@@ -7,9 +7,12 @@ import {
   accountPType,
   applicationPType,
   assetPType,
+  biguintPType,
   boolPType,
   bytesPType,
   GroupTransactionPType,
+  NativeNumericType,
+  numberPType,
   ObjectPType,
   stringPType,
   TuplePType,
@@ -18,12 +21,11 @@ import {
 } from './ptypes'
 import {
   ARC4BooleanType,
-  arc4ByteAlias,
   ARC4EncodedType,
   ARC4StringType,
   ARC4StructType,
   ARC4TupleType,
-  DynamicArrayType,
+  DynamicBytesType,
   UintNType,
 } from './ptypes/arc4-types'
 
@@ -43,6 +45,7 @@ export function isArc4EncodableType(ptype: PType): boolean {
   if (ptype instanceof ARC4EncodedType) return true
   if (ptype.equals(boolPType)) return true
   if (ptype.equals(uint64PType)) return true
+  if (ptype.equals(biguintPType)) return true
   if (ptype.equals(bytesPType)) return true
   if (ptype.equals(stringPType)) return true
   if (ptype instanceof TuplePType) return ptype.items.every((i) => isArc4EncodableType(i))
@@ -50,17 +53,25 @@ export function isArc4EncodableType(ptype: PType): boolean {
 
   return false
 }
+export function ptypeToArc4EncodedType(ptype: TuplePType, sourceLocation: SourceLocation): ARC4TupleType
+export function ptypeToArc4EncodedType(ptype: ObjectPType, sourceLocation: SourceLocation): ARC4StructType
+export function ptypeToArc4EncodedType(ptype: PType, sourceLocation: SourceLocation): ARC4EncodedType
 export function ptypeToArc4EncodedType(ptype: PType, sourceLocation: SourceLocation): ARC4EncodedType {
   if (ptype instanceof ARC4EncodedType) return ptype
   if (ptype.equals(boolPType)) return ARC4BooleanType
   if (ptype.equals(uint64PType)) return new UintNType({ n: 64n })
-  if (ptype.equals(bytesPType)) return new DynamicArrayType({ elementType: arc4ByteAlias })
+  if (ptype.equals(biguintPType)) return new UintNType({ n: 512n })
+  if (ptype.equals(bytesPType)) return DynamicBytesType
   if (ptype.equals(stringPType)) return ARC4StringType
+  if (ptype instanceof NativeNumericType) {
+    throw new CodeError(numberPType.expressionMessage, { sourceLocation })
+  }
   if (ptype instanceof TuplePType) return new ARC4TupleType({ types: ptype.items.map((i) => ptypeToArc4EncodedType(i, sourceLocation)) })
   if (ptype instanceof ObjectPType)
     return new ARC4StructType({
       name: ptype.name,
       module: ptype.module,
+      description: ptype.description,
       fields: Object.fromEntries(ptype.orderedProperties().map(([p, pt]) => [p, ptypeToArc4EncodedType(pt, sourceLocation)])),
     })
 
@@ -75,7 +86,9 @@ export function getFunctionTypes(ptype: FunctionPType, sourceLocation: SourceLoc
   if ('output' in result) {
     logger.error(sourceLocation, 'for compatibility with ARC-32, ARC-4 methods cannot have an argument named output')
   }
+
   result['output'] = ptype.returnType
+
   return result
 }
 

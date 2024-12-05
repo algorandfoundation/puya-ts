@@ -11,13 +11,13 @@ import type { NodeBuilder } from '../eb'
 import type { AppStorageDeclaration } from '../models/app-storage-declaration'
 import type { ContractClassModel } from '../models/contract-class-model'
 import { CompilationSet } from '../models/contract-class-model'
+import type { LogicSigClassModel } from '../models/logic-sig-class-model'
 import type { ContractClassPType, PType } from '../ptypes'
 import { typeRegistry } from '../type-registry'
 import { TypeResolver } from '../type-resolver'
 import { EvaluationContext } from './evaluation-context'
 import { SwitchLoopContext } from './switch-loop-context'
 import { UniqueNameResolver } from './unique-name-resolver'
-import type { LogicSigClassModel } from '../models/logic-sig-class-model'
 
 export interface AwstBuildContext {
   /**

@@ -275,12 +275,12 @@ export const applicationCallTxnFields = {
   /**
    * Approval program
    */
-  approvalProgram: [TxnField.ApprovalProgram, bytesPType] as const,
+  approvalProgram: [TxnField.ApprovalProgramPages, bytesPType] as const,
 
   /**
    * Clear State program
    */
-  clearStateProgram: [TxnField.ClearStateProgram, bytesPType] as const,
+  clearStateProgram: [TxnField.ClearStateProgramPages, bytesPType] as const,
 
   /**
    * Number of Assets
@@ -354,14 +354,9 @@ export const applicationCallTxnFields = {
   apps: [TxnField.Applications, applicationPType] as const,
 
   /**
-   * Approval Program as an array of pages
+   * The id of the created application
    */
-  approvalProgramPages: [TxnField.ApprovalProgramPages, bytesPType] as const,
-
-  /**
-   * Clear State Program as an array of pages
-   */
-  clearStateProgramPages: [TxnField.ClearStateProgramPages, bytesPType] as const,
+  createdApp: [TxnField.CreatedApplicationID, applicationPType] as const,
 } satisfies Record<string, readonly [TxnField, PType]>
 
 export const anyTxnFields = {

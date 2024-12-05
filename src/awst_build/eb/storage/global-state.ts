@@ -108,7 +108,12 @@ export class GlobalStateFunctionResultBuilder extends InstanceBuilder<GlobalStat
     return this._ptype
   }
 
-  buildStorageDeclaration(memberName: string, memberLocation: SourceLocation, contractType: ContractClassPType): AppStorageDeclaration {
+  buildStorageDeclaration(
+    memberName: string,
+    memberLocation: SourceLocation,
+    memberDescription: string | null,
+    contractType: ContractClassPType,
+  ): AppStorageDeclaration {
     if (this._expr)
       codeInvariant(
         this._expr instanceof BytesConstant,
@@ -119,7 +124,7 @@ export class GlobalStateFunctionResultBuilder extends InstanceBuilder<GlobalStat
       ptype: this._ptype,
       memberName: memberName,
       keyOverride: this._expr ?? null,
-      description: null,
+      description: memberDescription,
       definedIn: contractType,
     })
   }

@@ -108,8 +108,7 @@
                   "immediates": [
                     "ApplicationID"
                   ],
-                  "stack_args": [],
-                  "comment": null
+                  "stack_args": []
                 }
               }
             },
@@ -184,7 +183,7 @@
                   "end_column": 62
                 },
                 "expr": {
-                  "_type": "IntrinsicCall",
+                  "_type": "AssertExpression",
                   "source_location": {
                     "file": "tests/approvals/global-state.algo.ts",
                     "line": 22,
@@ -199,65 +198,61 @@
                     "ephemeral": false,
                     "scalar_type": null
                   },
-                  "op_code": "assert",
-                  "immediates": [],
-                  "stack_args": [
-                    {
-                      "_type": "StateExists",
+                  "condition": {
+                    "_type": "StateExists",
+                    "source_location": {
+                      "file": "tests/approvals/global-state.algo.ts",
+                      "line": 22,
+                      "end_line": 22,
+                      "column": 26,
+                      "end_column": 34
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "bool",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 2
+                    },
+                    "field": {
+                      "_type": "AppStateExpression",
                       "source_location": {
                         "file": "tests/approvals/global-state.algo.ts",
                         "line": 22,
                         "end_line": 22,
-                        "column": 11,
+                        "column": 26,
                         "end_column": 34
                       },
                       "wtype": {
                         "_type": "WType",
-                        "name": "bool",
+                        "name": "uint64",
                         "immutable": true,
                         "ephemeral": false,
                         "scalar_type": 2
                       },
-                      "field": {
-                        "_type": "AppStateExpression",
+                      "key": {
+                        "_type": "BytesConstant",
                         "source_location": {
                           "file": "tests/approvals/global-state.algo.ts",
-                          "line": 22,
-                          "end_line": 22,
-                          "column": 11,
-                          "end_column": 34
+                          "line": 11,
+                          "end_line": 11,
+                          "column": 2,
+                          "end_column": 11
                         },
                         "wtype": {
                           "_type": "WType",
-                          "name": "uint64",
+                          "name": "state_key",
                           "immutable": true,
                           "ephemeral": false,
-                          "scalar_type": 2
+                          "scalar_type": 1
                         },
-                        "key": {
-                          "_type": "BytesConstant",
-                          "source_location": {
-                            "file": "tests/approvals/global-state.algo.ts",
-                            "line": 11,
-                            "end_line": 11,
-                            "column": 2,
-                            "end_column": 11
-                          },
-                          "wtype": {
-                            "_type": "WType",
-                            "name": "state_key",
-                            "immutable": true,
-                            "ephemeral": false,
-                            "scalar_type": 1
-                          },
-                          "value": "bY*jNQ*>c;Wd",
-                          "encoding": "utf8"
-                        },
-                        "exists_assertion_message": "check GlobalState exists"
-                      }
+                        "value": "bY*jNQ*>c;Wd",
+                        "encoding": "utf8"
+                      },
+                      "exists_assertion_message": "check GlobalState exists"
                     }
-                  ],
-                  "comment": "State should have value"
+                  },
+                  "error_message": "State should have value"
                 }
               },
               {
@@ -270,7 +265,7 @@
                   "end_column": 62
                 },
                 "expr": {
-                  "_type": "IntrinsicCall",
+                  "_type": "AssertExpression",
                   "source_location": {
                     "file": "tests/approvals/global-state.algo.ts",
                     "line": 23,
@@ -285,85 +280,81 @@
                     "ephemeral": false,
                     "scalar_type": null
                   },
-                  "op_code": "assert",
-                  "immediates": [],
-                  "stack_args": [
-                    {
-                      "_type": "NumericComparisonExpression",
+                  "condition": {
+                    "_type": "NumericComparisonExpression",
+                    "source_location": {
+                      "file": "tests/approvals/global-state.algo.ts",
+                      "line": 23,
+                      "end_line": 23,
+                      "column": 11,
+                      "end_column": 37
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "bool",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 2
+                    },
+                    "lhs": {
+                      "_type": "AppStateExpression",
                       "source_location": {
                         "file": "tests/approvals/global-state.algo.ts",
                         "line": 23,
                         "end_line": 23,
-                        "column": 11,
-                        "end_column": 37
+                        "column": 26,
+                        "end_column": 31
                       },
                       "wtype": {
                         "_type": "WType",
-                        "name": "bool",
+                        "name": "uint64",
                         "immutable": true,
                         "ephemeral": false,
                         "scalar_type": 2
                       },
-                      "lhs": {
-                        "_type": "AppStateExpression",
+                      "key": {
+                        "_type": "BytesConstant",
                         "source_location": {
                           "file": "tests/approvals/global-state.algo.ts",
-                          "line": 23,
-                          "end_line": 23,
-                          "column": 11,
-                          "end_column": 31
+                          "line": 11,
+                          "end_line": 11,
+                          "column": 2,
+                          "end_column": 11
                         },
                         "wtype": {
                           "_type": "WType",
-                          "name": "uint64",
+                          "name": "state_key",
                           "immutable": true,
                           "ephemeral": false,
-                          "scalar_type": 2
+                          "scalar_type": 1
                         },
-                        "key": {
-                          "_type": "BytesConstant",
-                          "source_location": {
-                            "file": "tests/approvals/global-state.algo.ts",
-                            "line": 11,
-                            "end_line": 11,
-                            "column": 2,
-                            "end_column": 11
-                          },
-                          "wtype": {
-                            "_type": "WType",
-                            "name": "state_key",
-                            "immutable": true,
-                            "ephemeral": false,
-                            "scalar_type": 1
-                          },
-                          "value": "bY*jNQ*>c;Wd",
-                          "encoding": "utf8"
-                        },
-                        "exists_assertion_message": "check GlobalState exists"
+                        "value": "bY*jNQ*>c;Wd",
+                        "encoding": "utf8"
                       },
-                      "operator": "==",
-                      "rhs": {
-                        "_type": "IntegerConstant",
-                        "source_location": {
-                          "file": "tests/approvals/global-state.algo.ts",
-                          "line": 23,
-                          "end_line": 23,
-                          "column": 36,
-                          "end_column": 37
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": 2
-                        },
-                        "value": "2",
-                        "teal_alias": null
-                      }
+                      "exists_assertion_message": "check GlobalState exists"
+                    },
+                    "operator": "==",
+                    "rhs": {
+                      "_type": "IntegerConstant",
+                      "source_location": {
+                        "file": "tests/approvals/global-state.algo.ts",
+                        "line": 23,
+                        "end_line": 23,
+                        "column": 36,
+                        "end_column": 37
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true,
+                        "ephemeral": false,
+                        "scalar_type": 2
+                      },
+                      "value": "2",
+                      "teal_alias": null
                     }
-                  ],
-                  "comment": "Value should equal 2"
+                  },
+                  "error_message": "Value should equal 2"
                 }
               },
               {
@@ -381,7 +372,7 @@
                     "file": "tests/approvals/global-state.algo.ts",
                     "line": 25,
                     "end_line": 25,
-                    "column": 4,
+                    "column": 19,
                     "end_column": 24
                   },
                   "wtype": {
@@ -471,11 +462,9 @@
                           "value": "0",
                           "teal_alias": null
                         }
-                      ],
-                      "comment": null
+                      ]
                     }
-                  ],
-                  "comment": null
+                  ]
                 }
               },
               {
@@ -860,7 +849,7 @@
                 "end_column": 113
               },
               "expr": {
-                "_type": "IntrinsicCall",
+                "_type": "AssertExpression",
                 "source_location": {
                   "file": "tests/approvals/global-state.algo.ts",
                   "line": 17,
@@ -875,84 +864,80 @@
                   "ephemeral": false,
                   "scalar_type": null
                 },
-                "op_code": "assert",
-                "immediates": [],
-                "stack_args": [
-                  {
-                    "_type": "BytesComparisonExpression",
+                "condition": {
+                  "_type": "BytesComparisonExpression",
+                  "source_location": {
+                    "file": "tests/approvals/global-state.algo.ts",
+                    "line": 17,
+                    "end_line": 17,
+                    "column": 11,
+                    "end_column": 53
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "bool",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 2
+                  },
+                  "lhs": {
+                    "_type": "AppStateExpression",
                     "source_location": {
                       "file": "tests/approvals/global-state.algo.ts",
                       "line": 17,
                       "end_line": 17,
-                      "column": 11,
+                      "column": 30,
+                      "end_column": 35
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "string",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 1
+                    },
+                    "key": {
+                      "_type": "BytesConstant",
+                      "source_location": {
+                        "file": "tests/approvals/global-state.algo.ts",
+                        "line": 5,
+                        "end_line": 5,
+                        "column": 2,
+                        "end_column": 15
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "state_key",
+                        "immutable": true,
+                        "ephemeral": false,
+                        "scalar_type": 1
+                      },
+                      "value": "VqtS-RAqB?Q*>c;Wd",
+                      "encoding": "utf8"
+                    },
+                    "exists_assertion_message": "check GlobalState exists"
+                  },
+                  "operator": "==",
+                  "rhs": {
+                    "_type": "StringConstant",
+                    "source_location": {
+                      "file": "tests/approvals/global-state.algo.ts",
+                      "line": 17,
+                      "end_line": 17,
+                      "column": 40,
                       "end_column": 53
                     },
                     "wtype": {
                       "_type": "WType",
-                      "name": "bool",
+                      "name": "string",
                       "immutable": true,
                       "ephemeral": false,
-                      "scalar_type": 2
+                      "scalar_type": 1
                     },
-                    "lhs": {
-                      "_type": "AppStateExpression",
-                      "source_location": {
-                        "file": "tests/approvals/global-state.algo.ts",
-                        "line": 17,
-                        "end_line": 17,
-                        "column": 11,
-                        "end_column": 35
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "string",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 1
-                      },
-                      "key": {
-                        "_type": "BytesConstant",
-                        "source_location": {
-                          "file": "tests/approvals/global-state.algo.ts",
-                          "line": 5,
-                          "end_line": 5,
-                          "column": 2,
-                          "end_column": 15
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "state_key",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": 1
-                        },
-                        "value": "VqtS-RAqB?Q*>c;Wd",
-                        "encoding": "utf8"
-                      },
-                      "exists_assertion_message": "check GlobalState exists"
-                    },
-                    "operator": "==",
-                    "rhs": {
-                      "_type": "StringConstant",
-                      "source_location": {
-                        "file": "tests/approvals/global-state.algo.ts",
-                        "line": 17,
-                        "end_line": 17,
-                        "column": 40,
-                        "end_column": 53
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "string",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 1
-                      },
-                      "value": "testing 123"
-                    }
+                    "value": "testing 123"
                   }
-                ],
-                "comment": "Base class state should be initialized after super call"
+                },
+                "error_message": "Base class state should be initialized after super call"
               }
             },
             {
@@ -970,7 +955,7 @@
                   "file": "tests/approvals/global-state.algo.ts",
                   "line": 18,
                   "end_line": 18,
-                  "column": 4,
+                  "column": 22,
                   "end_column": 27
                 },
                 "wtype": {
@@ -1042,7 +1027,7 @@
                     "file": "tests/approvals/global-state.algo.ts",
                     "line": 18,
                     "end_line": 18,
-                    "column": 42,
+                    "column": 57,
                     "end_column": 62
                   },
                   "wtype": {
@@ -1250,42 +1235,7 @@
             "column": 0,
             "end_column": 1
           },
-          "body": [
-            {
-              "_type": "ExpressionStatement",
-              "source_location": {
-                "_type": "SourceLocation",
-                "file": null,
-                "line": 1,
-                "end_line": 1,
-                "column": 0,
-                "end_column": 1
-              },
-              "expr": {
-                "_type": "SubroutineCallExpression",
-                "source_location": {
-                  "_type": "SourceLocation",
-                  "file": null,
-                  "line": 1,
-                  "end_line": 1,
-                  "column": 0,
-                  "end_column": 1
-                },
-                "wtype": {
-                  "_type": "WType",
-                  "name": "void",
-                  "immutable": true,
-                  "ephemeral": false,
-                  "scalar_type": null
-                },
-                "target": {
-                  "_type": "InstanceMethodTarget",
-                  "member_name": "constructor"
-                },
-                "args": []
-              }
-            }
-          ],
+          "body": [],
           "label": null,
           "comment": null
         },
@@ -1295,7 +1245,7 @@
           "args": {},
           "returns": null
         },
-        "cref": "@algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract",
+        "cref": "@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract",
         "member_name": "constructor",
         "arc4_method_config": null
       }
@@ -1508,6 +1458,7 @@
       "localBytes": null,
       "localUints": null
     },
-    "reserved_scratch_space": []
+    "reserved_scratch_space": [],
+    "avm_version": null
   }
 ]

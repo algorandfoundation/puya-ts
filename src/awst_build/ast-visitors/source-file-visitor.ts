@@ -27,7 +27,14 @@ export class SourceFileVisitor extends BaseVisitor implements Visitor<ModuleStat
     super(context)
 
     for (const statement of sourceFile.statements) {
-      this._moduleStatements.push(this.accept(statement))
+      try {
+        this._moduleStatements.push(this.accept(statement))
+      } catch (e) {
+        // Ignore this error and continue visiting other members, so we can show additional errors
+        if (!(e instanceof AwstBuildFailureError)) {
+          throw e
+        }
+      }
     }
   }
 

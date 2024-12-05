@@ -160,7 +160,12 @@ export class LocalStateFunctionResultBuilder extends InstanceBuilder<LocalStateT
   }
   readonly ptype: LocalStateType
 
-  buildStorageDeclaration(memberName: string, memberLocation: SourceLocation, contractType: ContractClassPType): AppStorageDeclaration {
+  buildStorageDeclaration(
+    memberName: string,
+    memberLocation: SourceLocation,
+    memberDescription: string | null,
+    contractType: ContractClassPType,
+  ): AppStorageDeclaration {
     if (this._expr)
       codeInvariant(
         this._expr instanceof BytesConstant,
@@ -171,7 +176,7 @@ export class LocalStateFunctionResultBuilder extends InstanceBuilder<LocalStateT
       ptype: this.ptype,
       memberName: memberName,
       keyOverride: this._expr ?? null,
-      description: null,
+      description: memberDescription,
       definedIn: contractType,
     })
   }

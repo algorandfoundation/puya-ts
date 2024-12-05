@@ -9,12 +9,13 @@ import { wtypes } from '../../awst/wtypes'
 import { NotSupported } from '../../errors'
 import { tryConvertEnum } from '../../util'
 import type { InstanceType, PType } from '../ptypes'
-import { boolPType, Uint64Function, uint64PType } from '../ptypes'
+import { boolPType, stringPType, Uint64Function, uint64PType } from '../ptypes'
 import type { BuilderComparisonOp, InstanceBuilder, NodeBuilder } from './index'
 import { BuilderBinaryOp, BuilderUnaryOp, FunctionBuilder, InstanceExpressionBuilder } from './index'
-import { requireExpressionOfType } from './util'
+import { requireExpressionOfType, requireStringConstant } from './util'
 import { parseFunctionArgs } from './util/arg-parsing'
 import { compareUint64 } from './util/compare-uint64'
+import { stringToBigint } from './util/string-to-bigint'
 
 export class UInt64FunctionBuilder extends FunctionBuilder {
   readonly ptype = Uint64Function
@@ -28,7 +29,7 @@ export class UInt64FunctionBuilder extends FunctionBuilder {
       genericTypeArgs: 0,
       callLocation: sourceLocation,
       funcName: 'Uint64',
-      argSpec: (a) => [a.optional(uint64PType, boolPType)],
+      argSpec: (a) => [a.optional(uint64PType, boolPType, stringPType)],
     })
 
     if (!value) {
@@ -57,6 +58,14 @@ export class UInt64FunctionBuilder extends FunctionBuilder {
           }),
         )
       }
+    } else if (value.ptype.equals(stringPType)) {
+      const valueStr = requireStringConstant(value)
+      return new UInt64ExpressionBuilder(
+        nodeFactory.uInt64Constant({
+          value: stringToBigint(valueStr),
+          sourceLocation,
+        }),
+      )
     }
     return value
   }

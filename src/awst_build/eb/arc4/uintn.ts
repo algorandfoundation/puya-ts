@@ -3,10 +3,10 @@ import type { Expression } from '../../../awst/nodes'
 import { IntegerConstant } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { CodeError } from '../../../errors'
-import { bigIntToUint8Array, codeInvariant, invariant } from '../../../util'
-import type { PType } from '../../ptypes'
+import { codeInvariant, invariant } from '../../../util'
+import type { LibClassType, PType } from '../../ptypes'
 import { biguintPType, NumericLiteralPType, uint64PType } from '../../ptypes'
-import { arc4ByteAlias, ByteClass, UintNClass, UintNType } from '../../ptypes/arc4-types'
+import { UintNClass, UintNType } from '../../ptypes/arc4-types'
 import type { InstanceBuilder, NodeBuilder } from '../index'
 import { ClassBuilder } from '../index'
 import { isValidLiteralForPType } from '../util'
@@ -38,23 +38,24 @@ export class UintNClassBuilder extends ClassBuilder {
     return newUintN(initialValueBuilder, ptype, sourceLocation)
   }
 }
+export const classBuilderForUintNAlias = (aliasClass: LibClassType, aliasInstance: UintNType) => {
+  return class extends ClassBuilder {
+    readonly ptype = aliasClass
 
-export class ByteClassBuilder extends ClassBuilder {
-  readonly ptype = ByteClass
+    newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
+      const {
+        args: [initialValueBuilder],
+      } = parseFunctionArgs({
+        args,
+        typeArgs,
+        genericTypeArgs: 1,
+        funcName: `${this.typeDescription} constructor`,
+        argSpec: (a) => [a.optional()],
+        callLocation: sourceLocation,
+      })
 
-  newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
-    const {
-      args: [initialValueBuilder],
-    } = parseFunctionArgs({
-      args,
-      typeArgs,
-      genericTypeArgs: 0,
-      funcName: 'Byte constructor',
-      argSpec: (a) => [a.optional()],
-      callLocation: sourceLocation,
-    })
-
-    return newUintN(initialValueBuilder, arc4ByteAlias, sourceLocation)
+      return newUintN(initialValueBuilder, aliasInstance, sourceLocation)
+    }
   }
 }
 
@@ -70,7 +71,7 @@ function newUintN(initialValueBuilder: InstanceBuilder | undefined, ptype: UintN
       ptype,
     )
   }
-  if (initialValueBuilder.resolvableToPType(uint64PType)) {
+  if (ptype.n <= 64 && initialValueBuilder.resolvableToPType(uint64PType)) {
     const initialValue = initialValueBuilder.resolveToPType(uint64PType).resolve()
     if (initialValue instanceof IntegerConstant) {
       codeInvariant(isValidLiteralForPType(initialValue.value, ptype), `${initialValue.value} cannot be converted to ${ptype}`)
@@ -100,10 +101,11 @@ function newUintN(initialValueBuilder: InstanceBuilder | undefined, ptype: UintN
     if (initialValue instanceof IntegerConstant) {
       codeInvariant(isValidLiteralForPType(initialValue.value, ptype), `${initialValue.value} cannot be converted to ${ptype}`)
       return new UintNExpressionBuilder(
-        nodeFactory.bytesConstant({
-          value: bigIntToUint8Array(initialValue.value),
+        nodeFactory.integerConstant({
+          value: initialValue.value,
           wtype: ptype.wtypeOrThrow,
           sourceLocation: sourceLocation,
+          tealAlias: null,
         }),
         ptype,
       )

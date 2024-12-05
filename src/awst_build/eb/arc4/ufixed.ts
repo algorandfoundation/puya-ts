@@ -4,7 +4,7 @@ import type { SourceLocation } from '../../../awst/source-location'
 import { CodeError } from '../../../errors'
 import { codeInvariant, invariant } from '../../../util'
 import type { PType } from '../../ptypes'
-import { numberPType, NumericLiteralPType, stringPType } from '../../ptypes'
+import { NumericLiteralPType, stringPType } from '../../ptypes'
 import { UFixedNxMClass, UFixedNxMType } from '../../ptypes/arc4-types'
 import { ClassBuilder, type InstanceBuilder, type NodeBuilder } from '../index'
 import { isValidLiteralForPType, requireStringConstant } from '../util'
@@ -23,7 +23,7 @@ export class UFixedNxMClassBuilder extends ClassBuilder {
       typeArgs,
       genericTypeArgs: 2,
       funcName: this.typeDescription,
-      argSpec: (a) => [a.optional(stringPType), a.optional(numberPType), a.optional(numberPType)],
+      argSpec: (a) => [a.optional(stringPType)],
       callLocation: sourceLocation,
     })
     codeInvariant(

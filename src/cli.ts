@@ -7,6 +7,8 @@ import { ConsoleLogSink } from './logger/sinks/console-log-sink'
 import type { PuyaPassThroughOptions } from './puya/options'
 import { defaultPuyaOptions, LocalsCoalescingStrategy } from './puya/options'
 
+const cmdInteger = () => z.preprocess((x) => (typeof x === 'string' && x.length > 0 ? Number(x) : x), z.number().int())
+
 const cliOptionsSchema = z.object({
   outputAwst: z.boolean(),
   outputAwstJson: z.boolean(),
@@ -18,15 +20,16 @@ const cliOptionsSchema = z.object({
   // Puya options
   outputTeal: z.boolean(),
   outputArc32: z.boolean(),
+  outputArc56: z.boolean(),
   outputSsaIr: z.boolean(),
   outputOptimizationIr: z.boolean(),
   outputDestructuredIr: z.boolean(),
   outputMemoryIr: z.boolean(),
   outputBytecode: z.boolean(),
   matchAlgodBytecode: z.boolean(),
-  debugLevel: z.number().int(),
-  optimizationLevel: z.number().int(),
-  targetAvmVersion: z.number().int(),
+  debugLevel: cmdInteger(),
+  optimizationLevel: cmdInteger(),
+  targetAvmVersion: cmdInteger(),
   cliTemplateDefinitions: z.preprocess((x) => x ?? [], z.array(z.string())),
   templateVarsPrefix: z.string(),
   localsCoalescingStrategy: z.nativeEnum(LocalsCoalescingStrategy),
@@ -44,7 +47,7 @@ function cli() {
     .argument('<paths...>', 'The path, or paths to search for compatible .algo.ts files')
     .addOption(
       new Option('--log-level [level]', 'The minimum log level to output')
-        .choices([LogLevel.Debug, LogLevel.Info, LogLevel.Warn, LogLevel.Error, LogLevel.Critical])
+        .choices([LogLevel.Debug, LogLevel.Info, LogLevel.Warning, LogLevel.Error, LogLevel.Critical])
         .default(LogLevel.Info),
     )
     .addOption(new Option('--output-awst', 'Output debugging awst file per parsed file').default(false))
@@ -58,6 +61,11 @@ function cli() {
         '--no-output-arc32',
         'Do not output {contract}.arc32.json ARC-32 app spec file. Only applicable to ARC4 contracts',
       ).default(defaultPuyaOptions.outputArc32),
+    )
+    .addOption(
+      new Option('--output-arc56', 'Output {contract}.arc56.json ARC-56 app spec file. Only applicable to ARC4 contracts').default(
+        defaultPuyaOptions.outputArc56,
+      ),
     )
     .addOption(new Option('--output-ssa-ir', 'Output IR (in SSA form) before optimisations').default(defaultPuyaOptions.outputSsaIr))
     .addOption(new Option('--output-optimization-ir', 'Output IR after each optimization').default(defaultPuyaOptions.outputOptimizationIr))
@@ -107,6 +115,7 @@ function cli() {
 
     .action((a, o) => {
       using logCtx = LoggingContext.create()
+      logger.configure([new ConsoleLogSink(LogLevel.Warning)])
       try {
         const paths = cliArgumentsSchema.parse(a)
         const cliOptions = cliOptionsSchema.parse(o)

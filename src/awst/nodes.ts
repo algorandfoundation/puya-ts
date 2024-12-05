@@ -134,6 +134,19 @@ export class ReturnStatement extends Statement {
     return visitor.visitReturnStatement(this)
   }
 }
+export class AssertExpression extends Expression {
+  constructor(props: Props<AssertExpression>) {
+    super(props)
+    this.condition = props.condition
+    this.errorMessage = props.errorMessage
+    this.wtype = props.wtype
+  }
+  condition: Expression | null
+  errorMessage: string | null
+  accept<T>(visitor: ExpressionVisitor<T>): T {
+    return visitor.visitAssertExpression(this)
+  }
+}
 export class IntegerConstant extends Expression {
   constructor(props: Props<IntegerConstant>) {
     super(props)
@@ -162,8 +175,8 @@ export class DecimalConstant extends Expression {
 export class BoolConstant extends Expression {
   constructor(props: Props<BoolConstant>) {
     super(props)
-    this.wtype = props.wtype
     this.value = props.value
+    this.wtype = props.wtype
   }
   value: boolean
   accept<T>(visitor: ExpressionVisitor<T>): T {
@@ -193,8 +206,8 @@ export class BytesConstant extends Expression {
 export class StringConstant extends Expression {
   constructor(props: Props<StringConstant>) {
     super(props)
-    this.wtype = props.wtype
     this.value = props.value
+    this.wtype = props.wtype
   }
   value: string
   accept<T>(visitor: ExpressionVisitor<T>): T {
@@ -316,12 +329,10 @@ export class IntrinsicCall extends Expression {
     this.opCode = props.opCode
     this.immediates = props.immediates
     this.stackArgs = props.stackArgs
-    this.comment = props.comment
   }
   opCode: string
   immediates: Array<string | bigint>
   stackArgs: Array<Expression>
-  comment: string | null
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitIntrinsicCall(this)
   }
@@ -538,7 +549,7 @@ export class SingleEvaluation extends Expression {
     this.sourceLocation = props.sourceLocation
   }
   source: Expression
-  id: bigint
+  id: symbol
   sourceLocation: SourceLocation
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitSingleEvaluation(this)
@@ -969,6 +980,19 @@ export class BytesAugmentedAssignment extends Statement {
     return visitor.visitBytesAugmentedAssignment(this)
   }
 }
+export class Emit extends Expression {
+  constructor(props: Props<Emit>) {
+    super(props)
+    this.signature = props.signature
+    this.value = props.value
+    this.wtype = props.wtype
+  }
+  signature: string
+  value: Expression
+  accept<T>(visitor: ExpressionVisitor<T>): T {
+    return visitor.visitEmit(this)
+  }
+}
 export class Range extends Expression {
   constructor(props: Props<Range>) {
     super(props)
@@ -1296,6 +1320,7 @@ export const concreteNodes = {
   loopExit: LoopExit,
   loopContinue: LoopContinue,
   returnStatement: ReturnStatement,
+  assertExpression: AssertExpression,
   integerConstant: IntegerConstant,
   decimalConstant: DecimalConstant,
   boolConstant: BoolConstant,
@@ -1355,6 +1380,7 @@ export const concreteNodes = {
   uInt64AugmentedAssignment: UInt64AugmentedAssignment,
   bigUIntAugmentedAssignment: BigUIntAugmentedAssignment,
   bytesAugmentedAssignment: BytesAugmentedAssignment,
+  emit: Emit,
   range: Range,
   enumeration: Enumeration,
   reversed: Reversed,
@@ -1379,6 +1405,7 @@ export const concreteNodes = {
   bigUIntConstant: IntegerConstant,
 } as const
 export interface ExpressionVisitor<T> {
+  visitAssertExpression(expression: AssertExpression): T
   visitIntegerConstant(expression: IntegerConstant): T
   visitDecimalConstant(expression: DecimalConstant): T
   visitBoolConstant(expression: BoolConstant): T
@@ -1429,6 +1456,7 @@ export interface ExpressionVisitor<T> {
   visitBytesBinaryOperation(expression: BytesBinaryOperation): T
   visitBooleanBinaryOperation(expression: BooleanBinaryOperation): T
   visitNot(expression: Not): T
+  visitEmit(expression: Emit): T
   visitRange(expression: Range): T
   visitEnumeration(expression: Enumeration): T
   visitReversed(expression: Reversed): T

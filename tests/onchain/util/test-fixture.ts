@@ -1,5 +1,7 @@
+import type { AlgorandClient } from '@algorandfoundation/algokit-utils'
 import { Config, microAlgos } from '@algorandfoundation/algokit-utils'
 import { algorandFixture } from '@algorandfoundation/algokit-utils/testing'
+import type { AlgoAmount } from '@algorandfoundation/algokit-utils/types/amount'
 import type { SendAppTransactionResult } from '@algorandfoundation/algokit-utils/types/app'
 import type { AppClient } from '@algorandfoundation/algokit-utils/types/app-client'
 import type { AppFactory, AppFactoryDeployParams } from '@algorandfoundation/algokit-utils/types/app-factory'
@@ -23,6 +25,7 @@ import { generateTempDir } from '../../../src/util/generate-temp-file'
 const algorandTestFixture = (localnetFixture: AlgorandFixture) =>
   test.extend<{
     localnet: AlgorandFixture
+    algorand: AlgorandClient
     testAccount: AlgorandFixture['context']['testAccount']
     assetFactory: (assetCreateParams: AssetCreateParams) => Promise<bigint>
   }>({
@@ -33,6 +36,9 @@ const algorandTestFixture = (localnetFixture: AlgorandFixture) =>
     testAccount: async ({ localnet }, use) => {
       await use(localnet.context.testAccount)
     },
+    algorand: async ({ localnet }, use) => {
+      await use(localnet.context.algorand)
+    },
     assetFactory: async ({ localnet }, use) => {
       use(async (assetCreateParams: AssetCreateParams) => {
         const { assetId } = await localnet.algorand.send.assetCreate(assetCreateParams)
@@ -41,11 +47,11 @@ const algorandTestFixture = (localnetFixture: AlgorandFixture) =>
     },
   })
 
-function createLazyCompiler(path: string) {
+function createLazyCompiler(path: string, options: { outputBytecode: boolean; outputArc32: boolean }) {
   let result: CompilationArtifacts | undefined = undefined
   return {
     getCompileResult(expect: ExpectStatic) {
-      if (!result) result = compilePath(path, expect)
+      if (!result) result = compilePath(path, expect, options)
       return result
     },
   }
@@ -61,6 +67,7 @@ type ProgramInvokeOptions = {
     | OnApplicationComplete.DeleteApplicationOC
   senderAddr?: string
   args?: Uint8Array[]
+  extraFee?: AlgoAmount
 }
 
 type ProgramInvoker = {
@@ -71,7 +78,7 @@ type BaseFixtureContextFor<T extends string> = {
   [key in T as `${key}Invoker`]: ProgramInvoker
 }
 export function createBaseTestFixture<TContracts extends string = ''>(path: string, contracts: TContracts[]) {
-  const lazyCompile = createLazyCompiler(path)
+  const lazyCompile = createLazyCompiler(path, { outputArc32: false, outputBytecode: true })
   const localnet = algorandFixture({
     testAccountFunding: microAlgos(100_000_000_000),
   })
@@ -102,6 +109,7 @@ export function createBaseTestFixture<TContracts extends string = ''>(path: stri
             clearStateProgram,
             sender: options?.senderAddr ?? localnet.context.testAccount.addr,
             args: options?.args ?? [],
+            extraFee: options?.extraFee,
           }
           return localnet.algorand.send.appCall(common as DeliberateAny)
         },
@@ -122,7 +130,7 @@ type ContractConfig = {
 }
 
 export function createArc4TestFixture<TContracts extends string = ''>(path: string, contracts: Record<TContracts, ContractConfig>) {
-  const lazyCompile = createLazyCompiler(path)
+  const lazyCompile = createLazyCompiler(path, { outputArc32: true, outputBytecode: false })
   const localnet = algorandFixture({
     testAccountFunding: microAlgos(100_000_000_000),
   })
@@ -173,7 +181,7 @@ type CompilationArtifacts = {
   clearStateBinaries: Record<string, Uint8Array>
 }
 
-function compilePath(path: string, expect: ExpectStatic): CompilationArtifacts {
+function compilePath(path: string, expect: ExpectStatic, options: { outputBytecode: boolean; outputArc32: boolean }): CompilationArtifacts {
   using tempDir = generateTempDir()
   using logCtx = LoggingContext.create()
 
@@ -189,8 +197,8 @@ function compilePath(path: string, expect: ExpectStatic): CompilationArtifacts {
     {
       ...defaultPuyaOptions,
       outputTeal: false,
-      outputArc32: true,
-      outputBytecode: true,
+      ...options,
+      optimizationLevel: 0,
     },
   )
   for (const log of logCtx.logEvents) {

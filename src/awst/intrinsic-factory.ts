@@ -27,23 +27,19 @@ export const intrinsicFactory = {
     })
   },
   err({ sourceLocation, comment }: { sourceLocation: SourceLocation; comment: string | null }) {
-    return nodeFactory.intrinsicCall({
-      opCode: 'err',
+    return nodeFactory.assertExpression({
+      condition: null,
       sourceLocation,
-      stackArgs: [],
-      immediates: [],
       wtype: wtypes.voidWType,
-      comment,
+      errorMessage: comment,
     })
   },
   assert({ sourceLocation, comment, condition }: { sourceLocation: SourceLocation; comment: string | null; condition: Expression }) {
-    return nodeFactory.intrinsicCall({
-      opCode: 'assert',
+    return nodeFactory.assertExpression({
       sourceLocation,
-      stackArgs: [condition],
-      immediates: [],
+      condition,
       wtype: wtypes.voidWType,
-      comment,
+      errorMessage: comment,
     })
   },
   bytesLen({ value, sourceLocation }: { value: awst.Expression; sourceLocation: SourceLocation }) {
@@ -68,7 +64,7 @@ export const intrinsicFactory = {
     if (value instanceof awst.IntegerConstant) {
       return nodeFactory.bytesConstant({
         sourceLocation,
-        value: bigIntToUint8Array(value.value),
+        value: bigIntToUint8Array(value.value, value.wtype.equals(wtypes.uint64WType) ? 8 : 'dynamic'),
         encoding: BytesEncoding.base16,
       })
     }

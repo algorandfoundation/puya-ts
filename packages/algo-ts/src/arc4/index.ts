@@ -1,6 +1,7 @@
 import { BaseContract } from '../base-contract'
 import { ctxMgr } from '../execution-context'
-import { Uint64 } from '../primitives'
+import { NoImplementation } from '../impl/errors'
+import { bytes, Uint64 } from '../primitives'
 import { DeliberateAny } from '../typescript-helpers'
 
 export * from './encoded-types'
@@ -81,4 +82,14 @@ export function baremethod<TContract extends Contract>(config?: BareMethodConfig
     })
     return target
   }
+}
+
+/**
+ * Returns the ARC4 method selector for a given ARC4 method signature. The method selector is the first
+ * 4 bytes of the SHA512/256 hash of the method signature.
+ * @param methodSignature An ARC4 method signature. Eg. `hello(string)string`. Must be a compile time constant.
+ * @returns The ARC4 method selector. Eg. `02BECE11`
+ */
+export function methodSelector(methodSignature: string): bytes {
+  throw new NoImplementation()
 }

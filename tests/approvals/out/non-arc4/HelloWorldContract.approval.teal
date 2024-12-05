@@ -1,0 +1,30 @@
+#pragma version 10
+
+tests/approvals/non-arc4.algo.ts::HelloWorldContract.approvalProgram:
+    txn ApplicationID
+    bnz main_after_if_else@2
+    callsub constructor
+
+main_after_if_else@2:
+    // tests/approvals/non-arc4.algo.ts:5
+    // const name = String(op.Txn.applicationArgs(0))
+    pushint 0 // 0
+    txnas ApplicationArgs
+    // tests/approvals/non-arc4.algo.ts:6
+    // log(`Hello, ${name}`)
+    pushbytes "Hello, "
+    swap
+    concat
+    log
+    // tests/approvals/non-arc4.algo.ts:7
+    // return true
+    pushint 1 // 1
+    return
+
+
+// tests/approvals/non-arc4.algo.ts::HelloWorldContract.constructor() -> void:
+constructor:
+    // tests/approvals/non-arc4.algo.ts:3
+    // export default class HelloWorldContract extends BaseContract {
+    proto 0 0
+    retsub

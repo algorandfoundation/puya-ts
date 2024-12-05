@@ -1,6 +1,6 @@
 import ts from 'typescript'
 import { nodeFactory } from '../../awst/node-factory'
-import type { Expression, LValue, Statement } from '../../awst/nodes'
+import type { Expression, LValue, MethodDocumentation, Statement } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { CodeError, NotSupported, TodoError } from '../../errors'
 import { logger } from '../../logger'
@@ -28,6 +28,7 @@ import { BigIntLiteralExpressionBuilder } from '../eb/literal/big-int-literal-ex
 import { ConditionalExpressionBuilder } from '../eb/literal/conditional-expression-builder'
 import type { ObjectLiteralParts } from '../eb/literal/object-literal-expression-builder'
 import { ObjectLiteralExpressionBuilder } from '../eb/literal/object-literal-expression-builder'
+import { NamespaceBuilder } from '../eb/namespace-builder'
 import { OmittedExpressionBuilder } from '../eb/omitted-expression-builder'
 import { StringExpressionBuilder, StringFunctionBuilder } from '../eb/string-expression-builder'
 import { requireExpressionOfType, requireInstanceBuilder } from '../eb/util'
@@ -99,11 +100,19 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   }
 
   visitNumericLiteral(node: ts.NumericLiteral): InstanceBuilder {
+    const sourceLocation = this.sourceLocation(node)
     codeInvariant(
       !node.text.includes('.'),
       'Literals with decimal points are not supported. Use a string literal to capture decimal values',
+      sourceLocation,
     )
     const literalValue = BigInt(node.text)
+    if (literalValue > Number.MAX_SAFE_INTEGER || literalValue < Number.MIN_SAFE_INTEGER) {
+      logger.error(
+        sourceLocation,
+        `This number will lose precision at runtime. Use the Uint64 constructor with a bigint or string literal for very large integers.`,
+      )
+    }
     const ptype = this.context.getPTypeForNode(node)
     invariant(ptype instanceof TransientType, 'Literals should resolve to transient PTypes')
     return new BigIntLiteralExpressionBuilder(literalValue, ptype, this.sourceLocation(node))
@@ -192,8 +201,12 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   visitPropertyAccessExpression(node: ts.PropertyAccessExpression): NodeBuilder {
     this.logNotSupported(node.questionDotToken, 'The optional chaining (?.) operator is not supported')
     const target = this.baseAccept(node.expression)
+    if (target instanceof NamespaceBuilder) {
+      codeInvariant(!ts.isPrivateIdentifier(node.name), 'Private identifiers are not supported here', this.sourceLocation(node.name))
+      return this.context.getBuilderForNode(node.name)
+    }
     const property = this.textVisitor.accept(node.name)
-    return target.memberAccess(property, this.sourceLocation(node))
+    return target.memberAccess(property, this.sourceLocation(node.name))
   }
 
   visitElementAccessExpression(node: ts.ElementAccessExpression): NodeBuilder {
@@ -541,6 +554,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
       return new ObjectPType({
         name: targetType.name,
         module: targetType.module,
+        description: targetType.description,
         properties: Object.fromEntries(
           sourceType
             .orderedProperties()
@@ -656,5 +670,40 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
       isStatic,
       isPublic,
     }
+  }
+
+  protected getNodeDescription(node: ts.Node): string | null {
+    const docs = ts.getJSDocCommentsAndTags(node)
+    for (const doc of docs) {
+      if (ts.isJSDoc(doc)) {
+        return ts.getTextOfJSDocComment(doc.comment) ?? null
+      }
+    }
+    return null
+  }
+
+  protected getMethodDocumentation(node: ts.FunctionDeclaration | ts.MethodDeclaration | ts.ConstructorDeclaration): MethodDocumentation {
+    const docs = Array.from(ts.getJSDocCommentsAndTags(node))
+    let description: string | null = null
+    const args = new Map<string, string>()
+    let returns: string | null = null
+    for (const doc of docs) {
+      if (ts.isJSDoc(doc)) {
+        description = ts.getTextOfJSDocComment(doc.comment) ?? null
+        if (doc.tags) docs.push(...doc.tags)
+      } else if (ts.isJSDocParameterTag(doc)) {
+        const paramName = this.textVisitor.accept(doc.name)
+        const paramComment = ts.getTextOfJSDocComment(doc.comment)
+
+        args.set(paramName, paramComment ?? '')
+      } else if (ts.isJSDocReturnTag(doc)) {
+        returns = ts.getTextOfJSDocComment(doc.comment) ?? null
+      }
+    }
+    return nodeFactory.methodDocumentation({
+      description,
+      args,
+      returns,
+    })
   }
 }

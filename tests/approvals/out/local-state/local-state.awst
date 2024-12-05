@@ -30,9 +30,9 @@ contract LocalStateDemo
     LocalState[txn<Sender>()]["localEncoded"]: arc4.static_array<arc4.uint64> = copy(c)
   }
   
-  getState(): { localUint: uint64, localUint2: uint64, localBytes: bytes, localBytes2: bytes, localEncoded: arc4.static_array<arc4.uint64> }
+  getState(): getStateResult{ localUint: uint64, localUint2: uint64, localBytes: bytes, localBytes2: bytes, localEncoded: arc4.static_array<arc4.uint64> }
   {
-    return { localUint: LocalState[txn<Sender>()]["l1"], localUint2: LocalState[txn<Sender>()]["localUint2"], localBytes: LocalState[txn<Sender>()]["b1"], localBytes2: LocalState[txn<Sender>()]["localBytes2"], localEncoded: copy(LocalState[txn<Sender>()]["localEncoded"]) }
+    return { localUint: (#0 = { localUint: LocalState[txn<Sender>()]["l1"], localUint2: LocalState[txn<Sender>()]["localUint2"], localBytes: LocalState[txn<Sender>()]["b1"], localBytes2: LocalState[txn<Sender>()]["localBytes2"], localEncoded: copy(LocalState[txn<Sender>()]["localEncoded"]) }).localUint, localUint2: #0.localUint2, localBytes: #0.localBytes, localBytes2: #0.localBytes2, localEncoded: #0.localEncoded }
   }
   
   clearState(): void
@@ -51,11 +51,11 @@ contract LocalStateDemo
   
   Contract::constructor(): void
   {
+    this.constructor()
   }
   
-  Contract::constructor(): void
+  BaseContract::constructor(): void
   {
-    this.constructor()
   }
   
   __algots__.defaultCreate(): void

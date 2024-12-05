@@ -1,4 +1,4 @@
-subroutine test(a: uint64, b: bool, c: bytes): void
+subroutine testConstructor(a: uint64, b: bool, c: bytes): void
 {
   0
   reinterpret_cast<biguint>(itob(True))
@@ -13,4 +13,40 @@ subroutine test(a: uint64, b: bool, c: bytes): void
   reinterpret_cast<biguint>(itob(a * a))
   reinterpret_cast<biguint>(itob(b))
   reinterpret_cast<biguint>(c)
+}
+subroutine testOps(smaller: biguint, larger: biguint): void
+{
+  assert(smaller < larger)
+  assert(smaller <= smaller)
+  assert(larger > smaller)
+  assert(larger >= larger)
+  assert(smaller == smaller)
+  assert(smaller == reinterpret_cast<biguint>(concat(bzero(4), reinterpret_cast<bytes>(smaller))), comment=Leading zeros should be ignored in equality)
+}
+contract DemoContract
+{
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    tests/approvals/biguint-expressions.algo.ts::testConstructor(1, False, itob(4))
+    tests/approvals/biguint-expressions.algo.ts::testOps(500, 1000)
+    return True
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  constructor(): void
+  {
+    void
+  }
+  
+  BaseContract::constructor(): void
+  {
+  }
+  
 }

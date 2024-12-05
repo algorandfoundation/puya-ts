@@ -1,26 +1,32 @@
 import { sync } from 'cross-spawn'
+import { rimraf } from 'rimraf'
 import { describe, expect, it } from 'vitest'
-import { compile } from '../../src'
-import { buildCompileOptions } from '../../src/compile-options'
-import { isErrorOrCritical, LoggingContext, LogLevel } from '../../src/logger'
-import { defaultPuyaOptions } from '../../src/puya/options'
-import { invariant } from '../../src/util'
+import { compile } from '../src'
+import { buildCompileOptions } from '../src/compile-options'
+import { isErrorOrCritical, LoggingContext, LogLevel } from '../src/logger'
+import { defaultPuyaOptions } from '../src/puya/options'
+import { invariant } from '../src/util'
 
-describe('Approvals', () => {
+describe('Approvals', async () => {
+  await rimraf('tests/approvals/out')
+
   using logCtx = LoggingContext.create()
   const result = compile(
     buildCompileOptions({
-      outputAwstJson: false,
-      outputAwst: false,
+      outputAwstJson: true,
+      outputAwst: true,
       paths: ['tests/approvals'],
       outDir: 'out/[name]',
       dryRun: false,
-      logLevel: LogLevel.Warn,
+      logLevel: LogLevel.Warning,
     }),
     {
       ...defaultPuyaOptions,
-      outputTeal: false,
+      optimizationLevel: 0,
+      outputTeal: true,
       outputArc32: true,
+      outputArc56: true,
+      outputSsaIr: true,
     },
   )
   invariant(result.ast, 'Compilation must result in ast')
@@ -49,10 +55,10 @@ describe('Approvals', () => {
   })
 
   it('There should be no differences to committed changes', () => {
-    // Run git add to force line ending changes
-    sync('git', ['add', '.'], {
-      stdio: 'inherit',
-    })
+    // // Run git add to force line ending changes
+    // sync('git', ['add', '.'], {
+    //   stdio: 'inherit',
+    // })
     const result = sync('git', ['status', '--porcelain'], {
       stdio: 'pipe',
     })

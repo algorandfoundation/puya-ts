@@ -1,0 +1,79 @@
+#pragma version 10
+
+tests/approvals/implicit-create.algo.ts::ExplicitAbiCreateFromBase.approvalProgram:
+    intcblock 0
+    txn ApplicationID
+    bnz main_after_if_else@2
+    callsub constructor
+
+main_after_if_else@2:
+    callsub __puya_arc4_router__
+    return
+
+
+// tests/approvals/implicit-create.algo.ts::ExplicitAbiCreateFromBase.constructor() -> void:
+constructor:
+    // tests/approvals/implicit-create.algo.ts:23
+    // export class ExplicitAbiCreateFromBase extends BaseWithAbiCreate {}
+    proto 0 0
+    callsub tests/approvals/implicit-create.algo.ts::BaseWithAbiCreate.constructor
+    retsub
+
+
+// tests/approvals/implicit-create.algo.ts::BaseWithAbiCreate.constructor() -> void:
+tests/approvals/implicit-create.algo.ts::BaseWithAbiCreate.constructor:
+    // tests/approvals/implicit-create.algo.ts:17
+    // class BaseWithAbiCreate extends Contract {
+    proto 0 0
+    retsub
+
+
+// tests/approvals/implicit-create.algo.ts::ExplicitAbiCreateFromBase.__puya_arc4_router__() -> uint64:
+__puya_arc4_router__:
+    // tests/approvals/implicit-create.algo.ts:23
+    // export class ExplicitAbiCreateFromBase extends BaseWithAbiCreate {}
+    proto 0 1
+    txn NumAppArgs
+    intc_0 // 0
+    !=
+    bz __puya_arc4_router___bare_routing@5
+    txna ApplicationArgs 0
+    pushbytes 0x4c5c61ba // method "create()void"
+    swap
+    match __puya_arc4_router___create_route@2
+    b __puya_arc4_router___switch_case_default@3
+
+__puya_arc4_router___create_route@2:
+    // tests/approvals/implicit-create.algo.ts:18
+    // @abimethod({ onCreate: 'require' })
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    ==
+    assert // can only call when creating
+    callsub create
+    pushint 1 // 1
+    retsub
+
+__puya_arc4_router___switch_case_default@3:
+    b __puya_arc4_router___after_if_else@6
+
+__puya_arc4_router___bare_routing@5:
+
+__puya_arc4_router___after_if_else@6:
+    // tests/approvals/implicit-create.algo.ts:23
+    // export class ExplicitAbiCreateFromBase extends BaseWithAbiCreate {}
+    intc_0 // 0
+    retsub
+
+
+// tests/approvals/implicit-create.algo.ts::BaseWithAbiCreate.create() -> void:
+create:
+    // tests/approvals/implicit-create.algo.ts:18-19
+    // @abimethod({ onCreate: 'require' })
+    // public create() {}
+    proto 0 0
+    retsub

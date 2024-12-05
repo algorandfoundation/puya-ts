@@ -2,7 +2,7 @@ import type { bytes } from '@algorandfoundation/algorand-typescript'
 import { abimethod, Contract, GlobalState, Uint64 } from '@algorandfoundation/algorand-typescript'
 
 export default class AbiDecorators extends Contract {
-  // @expect-warn Duplicate on completion actions
+  // @expect-warning Duplicate on completion actions
   @abimethod({ allowActions: ['NoOp', 'NoOp'] })
   public justNoop(): void {}
   // @expect-error Private or protected methods cannot be exposed as an abi method

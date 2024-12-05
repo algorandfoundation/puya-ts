@@ -68,6 +68,8 @@ export function invokePuya({
       moduleSourceFile.filePath,
       '--log-level',
       getPuyaLogLevel(compileOptions.logLevel),
+      '--log-format',
+      'json',
     ],
     cwd: programDirectory,
   })
@@ -79,7 +81,7 @@ function getPuyaLogLevel(logLevel: LogLevel): string {
       return 'debug'
     case LogLevel.Info:
       return 'info'
-    case LogLevel.Warn:
+    case LogLevel.Warning:
       return 'warning'
     case LogLevel.Error:
       return 'error'
