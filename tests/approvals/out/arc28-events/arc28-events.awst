@@ -16,7 +16,6 @@ contract EventEmitter
   emitSwapped(): void
   {
     emit("Swapped(uint64,uint64)", ARC4_ENCODE({ a: b, b: a }, wtype=Swapped))
-    emit("(uint64,uint64)", ARC4_ENCODE({ a: b, b: a }, wtype=(uint64,uint64)))
     x: Swapped{ a: uint64, b: uint64 } = { a: (#0 = { a: b, b: a }).a, b: #0.b }
     emit("Swapped(uint64,uint64)", ARC4_ENCODE(x, wtype=Swapped))
     y: SwappedArc4 = new SwappedArc4(a=(#1 = { a: ARC4_ENCODE(b, wtype=arc4.uint64), b: ARC4_ENCODE(a, wtype=arc4.uint64) }).a, b=#1.b)

@@ -36,7 +36,7 @@ contract tests/approvals/arc28-events.algo.ts::EventEmitter:
                 let tmp%10#0: uint64 = (btoi tmp%9#0)
                 tests/approvals/arc28-events.algo.ts::EventEmitter.emitSwapped(tmp%8#0, tmp%10#0)
                 return 1u
-            block@3: // emitCustom_route_L29
+            block@3: // emitCustom_route_L28
                 let tmp%11#0: uint64 = (txn OnCompletion)
                 let tmp%12#0: bool = (== tmp%11#0 NoOp)
                 (assert tmp%12#0) // OnCompletion is not NoOp
@@ -79,46 +79,38 @@ contract tests/approvals/arc28-events.algo.ts::EventEmitter:
                 let encoded_tuple_buffer%2#0: bytes = (concat encoded_tuple_buffer%1#0 val_as_bytes%1#0)
                 let event%0#0: bytes = (concat method "Swapped(uint64,uint64)" encoded_tuple_buffer%2#0)
                 (log event%0#0)
-                let val_as_bytes%2#0: bytes = (itob b#0)
-                let val_as_bytes%3#0: bytes = (itob a#0)
+                let (x.a#0: uint64, x.b#0: uint64) = (b#0, a#0)
+                let val_as_bytes%2#0: bytes = (itob x.a#0)
+                let val_as_bytes%3#0: bytes = (itob x.b#0)
                 let current_tail_offset%1#0: uint64 = 16u
                 let encoded_tuple_buffer%3#0: bytes = 0x
                 let encoded_tuple_buffer%4#0: bytes = (concat encoded_tuple_buffer%3#0 val_as_bytes%2#0)
                 let encoded_tuple_buffer%5#0: bytes = (concat encoded_tuple_buffer%4#0 val_as_bytes%3#0)
-                let event%1#0: bytes = (concat method "(uint64,uint64)" encoded_tuple_buffer%5#0)
+                let event%1#0: bytes = (concat method "Swapped(uint64,uint64)" encoded_tuple_buffer%5#0)
                 (log event%1#0)
-                let (x.a#0: uint64, x.b#0: uint64) = (b#0, a#0)
-                let val_as_bytes%4#0: bytes = (itob x.a#0)
-                let val_as_bytes%5#0: bytes = (itob x.b#0)
+                let val_as_bytes%4#0: bytes = (itob b#0)
+                let val_as_bytes%5#0: bytes = (itob a#0)
+                let val_as_bytes%6#0: bytes = (itob b#0)
+                let val_as_bytes%7#0: bytes = (itob a#0)
                 let current_tail_offset%2#0: uint64 = 16u
                 let encoded_tuple_buffer%6#0: bytes = 0x
                 let encoded_tuple_buffer%7#0: bytes = (concat encoded_tuple_buffer%6#0 val_as_bytes%4#0)
-                let encoded_tuple_buffer%8#0: bytes = (concat encoded_tuple_buffer%7#0 val_as_bytes%5#0)
-                let event%2#0: bytes = (concat method "Swapped(uint64,uint64)" encoded_tuple_buffer%8#0)
+                let encoded_tuple_buffer%8#0: bytes = (concat encoded_tuple_buffer%7#0 val_as_bytes%7#0)
+                let y#0: bytes = encoded_tuple_buffer%8#0
+                let event%2#0: bytes = (concat method "SwappedArc4(uint64,uint64)" y#0)
                 (log event%2#0)
-                let val_as_bytes%6#0: bytes = (itob b#0)
-                let val_as_bytes%7#0: bytes = (itob a#0)
                 let val_as_bytes%8#0: bytes = (itob b#0)
                 let val_as_bytes%9#0: bytes = (itob a#0)
                 let current_tail_offset%3#0: uint64 = 16u
                 let encoded_tuple_buffer%9#0: bytes = 0x
-                let encoded_tuple_buffer%10#0: bytes = (concat encoded_tuple_buffer%9#0 val_as_bytes%6#0)
+                let encoded_tuple_buffer%10#0: bytes = (concat encoded_tuple_buffer%9#0 val_as_bytes%8#0)
                 let encoded_tuple_buffer%11#0: bytes = (concat encoded_tuple_buffer%10#0 val_as_bytes%9#0)
-                let y#0: bytes = encoded_tuple_buffer%11#0
-                let event%3#0: bytes = (concat method "SwappedArc4(uint64,uint64)" y#0)
+                let event%3#0: bytes = (concat method "Swapped(uint64,uint64)" encoded_tuple_buffer%11#0)
                 (log event%3#0)
-                let val_as_bytes%10#0: bytes = (itob b#0)
-                let val_as_bytes%11#0: bytes = (itob a#0)
-                let current_tail_offset%4#0: uint64 = 16u
-                let encoded_tuple_buffer%12#0: bytes = 0x
-                let encoded_tuple_buffer%13#0: bytes = (concat encoded_tuple_buffer%12#0 val_as_bytes%10#0)
-                let encoded_tuple_buffer%14#0: bytes = (concat encoded_tuple_buffer%13#0 val_as_bytes%11#0)
-                let event%4#0: bytes = (concat method "Swapped(uint64,uint64)" encoded_tuple_buffer%14#0)
-                (log event%4#0)
                 return 
         
         subroutine tests/approvals/arc28-events.algo.ts::EventEmitter.emitCustom(arg0: bytes, arg1: bool) -> void:
-            block@0: // L29
+            block@0: // L28
                 let length%0#0: uint64 = (len arg0#0)
                 let as_bytes%0#0: bytes = (itob length%0#0)
                 let length_uint16%0#0: bytes = ((extract 6 2) as_bytes%0#0)
