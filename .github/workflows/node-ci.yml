@@ -162,7 +162,7 @@ jobs:
 
         #Requires permissions.checks: write
       - name: Publish test results
-        if: ${{ inputs.output-test-results }}
+        if: ${{ inputs.output-test-results && always() }}
         uses: phoenix-actions/test-reporting@v10
         with:
           name: Test results
