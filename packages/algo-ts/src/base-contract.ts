@@ -55,12 +55,12 @@ type ContractOptions = {
    * Allows defining what values should be used for global and local uint and bytes storage
    * values when creating a contract. Used when outputting ARC-32 application.json schemas.
    *
-   * If let unspecified, the totals will be determined by the compiler based on state
+   * If left unspecified, the totals will be determined by the compiler based on state
    * variables assigned to `this`.
    *
    * This setting is not inherited, and only applies to the exact `Contract` it is specified
    * on. If a base class does specify this setting, and a derived class does not, a warning
-   * will be emitted for the derived class. To resolve this warning, `state_totals` must be
+   * will be emitted for the derived class. To resolve this warning, `stateTotals` must be
    * specified. An empty object may be provided in order to indicate that this contract should
    * revert to the default behaviour
    */

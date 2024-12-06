@@ -123,6 +123,8 @@ type Arc4FixtureContextFor<T extends string> = {
   [key in T as `appFactory${key}`]: AppFactory
 } & {
   [key in T as `appClient${key}`]: AppClient
+} & {
+  [key in T as `appSpec${key}`]: AppSpec
 }
 
 type ContractConfig = {
@@ -139,16 +141,26 @@ export function createArc4TestFixture<TContracts extends string = ''>(path: stri
     logger: nullLogger,
   })
 
+  function getAppSpec(expect: ExpectStatic, contractName: string) {
+    const appSpec = lazyCompile.getCompileResult(expect).appSpecs.find((s) => s.contract.name === contractName)
+    if (appSpec === undefined) {
+      expect.fail(`${path} does not contain an ARC4 contract "${contractName}"`)
+    } else {
+      return appSpec
+    }
+  }
+
   const ctx: DeliberateAny = {}
   for (const [contractName, config] of Object.entries(contracts) as Array<[TContracts, ContractConfig]>) {
+    ctx[`appSpec${contractName}`] = async ({ expect }: { expect: ExpectStatic }, use: Use<AppSpec>) => {
+      await use(getAppSpec(expect, contractName))
+    }
+
     ctx[`appFactory${contractName}`] = async (
       { expect, localnet }: { expect: ExpectStatic; localnet: AlgorandFixture },
       use: Use<AppFactory>,
     ) => {
-      const appSpec = lazyCompile.getCompileResult(expect).appSpecs.find((s) => s.contract.name === contractName)
-      if (appSpec === undefined) {
-        expect.fail(`${path} does not contain an ARC4 contract "${contractName}"`)
-      }
+      const appSpec = getAppSpec(expect, contractName)
       await use(
         localnet.algorand.client.getAppFactory({
           defaultSender: localnet.context.testAccount.addr,
@@ -160,10 +172,7 @@ export function createArc4TestFixture<TContracts extends string = ''>(path: stri
       { expect, localnet }: { expect: ExpectStatic; localnet: AlgorandFixture },
       use: Use<AppClient>,
     ) => {
-      const appSpec = lazyCompile.getCompileResult(expect).appSpecs.find((s) => s.contract.name === contractName)
-      if (appSpec === undefined) {
-        expect.fail(`${path} does not contain an ARC4 contract "${contractName}"`)
-      }
+      const appSpec = getAppSpec(expect, contractName)
       const appFactory = localnet.algorand.client.getAppFactory({
         defaultSender: localnet.context.testAccount.addr,
         appSpec: appSpec!,

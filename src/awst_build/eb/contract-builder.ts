@@ -7,6 +7,7 @@ import { Constants } from '../../constants'
 import { CodeError } from '../../errors'
 import { codeInvariant, invariant } from '../../util'
 import type { AwstBuildContext } from '../context/awst-build-context'
+import type { ContractOptionsDecoratorData } from '../models/decorator-data'
 import type { PType } from '../ptypes'
 import {
   arc4BaseContractType,
@@ -23,7 +24,7 @@ import { instanceEb } from '../type-registry'
 import { BaseContractMethodExpressionBuilder, ContractMethodExpressionBuilder } from './free-subroutine-expression-builder'
 import type { NodeBuilder } from './index'
 import { DecoratorDataBuilder, FunctionBuilder, InstanceBuilder } from './index'
-import { requireStringConstant } from './util'
+import { requireIntegerConstant, requireStringConstant } from './util'
 import { parseFunctionArgs } from './util/arg-parsing'
 import { requireAvmVersion } from './util/avm-version'
 import { VoidExpressionBuilder } from './void-expression-builder'
@@ -126,7 +127,7 @@ export class ContractOptionsDecoratorBuilder extends FunctionBuilder {
   readonly ptype = contractOptionsDecorator
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
-      args: [{ avmVersion, name }],
+      args: [{ avmVersion, name, stateTotals }],
     } = parseFunctionArgs({
       args,
       typeArgs,
@@ -145,9 +146,26 @@ export class ContractOptionsDecoratorBuilder extends FunctionBuilder {
 
     return new DecoratorDataBuilder(sourceLocation, {
       type: 'contract',
-      avmVersion: avmVersion ? requireAvmVersion(avmVersion) : undefined,
-      name: name ? requireStringConstant(name).value : undefined,
+      avmVersion: avmVersion && requireAvmVersion(avmVersion),
+      name: name && requireStringConstant(name).value,
+      stateTotals: stateTotals && buildStateTotals(stateTotals),
       sourceLocation,
     })
+  }
+}
+
+function buildStateTotals(builder: NodeBuilder): ContractOptionsDecoratorData['stateTotals'] {
+  function tryGetProp(name: string): bigint | undefined {
+    if (builder.hasProperty(name)) {
+      return requireIntegerConstant(builder.memberAccess(name, builder.sourceLocation)).value
+    }
+    return undefined
+  }
+
+  return {
+    globalBytes: tryGetProp('globalBytes'),
+    globalUints: tryGetProp('globalUints'),
+    localBytes: tryGetProp('localBytes'),
+    localUints: tryGetProp('localUints'),
   }
 }

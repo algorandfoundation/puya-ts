@@ -1,0 +1,88 @@
+contract tests/approvals/state-totals.algo.ts::ExtendsSubWithTotals:
+    program approval:
+        subroutine @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> bool:
+            block@0: // L1
+                let reinterpret_bool%0#0: bool = (txn ApplicationID)
+                goto reinterpret_bool%0#0 ? block@2 : block@1
+            block@1: // if_body_L1
+                tests/approvals/state-totals.algo.ts::ExtendsSubWithTotals.constructor()
+                goto block@2
+            block@2: // after_if_else_L1
+                let tmp%0#0: bool = tests/approvals/state-totals.algo.ts::ExtendsSubWithTotals.__puya_arc4_router__()
+                return tmp%0#0
+        
+        subroutine tests/approvals/state-totals.algo.ts::ExtendsSubWithTotals.constructor() -> void:
+            block@0: // L27
+                tests/approvals/state-totals.algo.ts::SubClassWithExplicitTotals.constructor()
+                return 
+        
+        subroutine tests/approvals/state-totals.algo.ts::SubClassWithExplicitTotals.constructor() -> void:
+            block@0: // L24
+                tests/approvals/state-totals.algo.ts::BaseWithState.constructor()
+                return 
+        
+        subroutine tests/approvals/state-totals.algo.ts::BaseWithState.constructor() -> void:
+            block@0: // L4
+                (app_global_put "oneGlobal" 1u)
+                return 
+        
+        subroutine tests/approvals/state-totals.algo.ts::ExtendsSubWithTotals.__puya_arc4_router__() -> bool:
+            block@0: // L27
+                let tmp%0#0: uint64 = (txn NumAppArgs)
+                let tmp%1#0: bool = (!= tmp%0#0 0u)
+                goto tmp%1#0 ? block@1 : block@5
+            block@1: // abi_routing_L27
+                let tmp%2#0: bytes = (txna ApplicationArgs 0)
+                switch tmp%2#0 {method "setState(uint64)void" => block@2, * => block@3}
+            block@2: // setState_route_L31
+                let tmp%3#0: uint64 = (txn OnCompletion)
+                let tmp%4#0: bool = (== tmp%3#0 OptIn)
+                (assert tmp%4#0) // OnCompletion is not OptIn
+                let tmp%5#0: uint64 = (txn ApplicationID)
+                let tmp%6#0: bool = (!= tmp%5#0 0u)
+                (assert tmp%6#0) // can only call when not creating
+                let tmp%7#0: bytes = (txna ApplicationArgs 1)
+                let tmp%8#0: uint64 = (btoi tmp%7#0)
+                tests/approvals/state-totals.algo.ts::ExtendsSubWithTotals.setState(tmp%8#0)
+                return 1u
+            block@3: // switch_case_default_L27
+                goto block@4
+            block@4: // switch_case_next_L27
+                goto block@9
+            block@5: // bare_routing_L27
+                let tmp%9#0: uint64 = (txn OnCompletion)
+                switch tmp%9#0 {0u => block@6, * => block@7}
+            block@6: // __algots__.defaultCreate_L27
+                let tmp%10#0: uint64 = (txn ApplicationID)
+                let tmp%11#0: bool = (== tmp%10#0 0u)
+                (assert tmp%11#0) // can only call when creating
+                tests/approvals/state-totals.algo.ts::ExtendsSubWithTotals.__algots__.defaultCreate()
+                return 1u
+            block@7: // switch_case_default_L27
+                goto block@8
+            block@8: // switch_case_next_L27
+                goto block@9
+            block@9: // after_if_else_L27
+                return 0u
+        
+        subroutine tests/approvals/state-totals.algo.ts::ExtendsSubWithTotals.setState(n: uint64) -> void:
+            block@0: // L31
+                tests/approvals/state-totals.algo.ts::BaseWithState.setState(n#0)
+                let tmp%0#0: bytes = (txn Sender)
+                (app_local_put tmp%0#0 "oneLocal" n#0)
+                return 
+        
+        subroutine tests/approvals/state-totals.algo.ts::BaseWithState.setState(n: uint64) -> void:
+            block@0: // L9
+                (app_global_put "oneGlobal" n#0)
+                (app_global_put "twoGlobal" n#0)
+                return 
+        
+        subroutine tests/approvals/state-totals.algo.ts::ExtendsSubWithTotals.__algots__.defaultCreate() -> void:
+            block@0: // L27
+                return 
+    
+    program clear-state:
+        subroutine @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.clearStateProgram() -> bool:
+            block@0: // L1
+                return 1u
