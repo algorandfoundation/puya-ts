@@ -35,7 +35,7 @@ export class AppStorageDeclaration {
       return AppStorageKind.appGlobal
     }
     if (this.ptype instanceof LocalStateType) {
-      return AppStorageKind.appGlobal
+      return AppStorageKind.accountLocal
     }
     invariant(
       this.ptype instanceof BoxPType || this.ptype instanceof BoxRefPType || this.ptype instanceof BoxMapPType,
