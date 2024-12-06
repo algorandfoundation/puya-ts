@@ -49,14 +49,23 @@ export class ContractClassModel {
     this.options = props.options
   }
 
+  hasExplicitStateTotals() {
+    return this.options?.stateTotals !== undefined
+  }
+
   buildContract(compilationSet: CompilationSet): awst.Contract {
     let approvalProgram: ContractMethod | null = this.approvalProgram
     let clearProgram: ContractMethod | null = this.clearProgram
     const methods: ContractMethod[] = [...this.methods, this.ctor]
     const methodResolutionOrder: ContractReference[] = []
+
+    let firstBaseWithStateTotals: ContractClassModel | undefined = undefined
     for (const baseType of this.type.allBases()) {
       const cref = ContractReference.fromPType(baseType)
       const baseClass = compilationSet.getContractClass(cref)
+      if (baseClass.hasExplicitStateTotals() && firstBaseWithStateTotals === undefined) {
+        firstBaseWithStateTotals = baseClass
+      }
       methodResolutionOrder.push(cref)
       approvalProgram ??= baseClass.approvalProgram
       clearProgram ??= baseClass.clearProgram
@@ -91,7 +100,13 @@ export class ContractClassModel {
     codeInvariant(approvalProgram, 'must have approval')
     codeInvariant(clearProgram, 'must have clear')
 
-    // TODO: Tally from bases
+    if (!this.hasExplicitStateTotals && firstBaseWithStateTotals) {
+      logger.warn(
+        this.options?.sourceLocation ?? this.sourceLocation,
+        `Contract extends base contract ${firstBaseWithStateTotals.id} with explicit stateTotals, but does not define its own stateTotals. This could result in insufficient reserved state at run time. An empty object may be provided in order to indicate that this contract should revert to the default behaviour`,
+      )
+    }
+
     const stateTotals = new StateTotals({
       globalBytes: this.options?.stateTotals?.globalBytes ?? null,
       globalUints: this.options?.stateTotals?.globalUints ?? null,
@@ -121,11 +136,11 @@ export class ContractClassModel {
       clearProgram,
       methodResolutionOrder,
       methods,
-      appState: this.appState, // TODO: Tally from base
-      stateTotals: stateTotals, // TODO: Tally
+      appState: this.appState,
+      stateTotals,
       reservedScratchSpace: reservedScratchSpace,
       sourceLocation: this.sourceLocation,
-      avmVersion: this.options?.avmVersion ?? null, // TODO: Allow this to be set with class decorator
+      avmVersion: this.options?.avmVersion ?? null,
     })
   }
 
