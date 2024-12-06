@@ -35,13 +35,12 @@ export type LogicSigOptionsDecoratorData = {
   avmVersion?: SupportedAvmVersion
   name?: string
 }
-type NumberRange = { from: bigint; to: bigint }
 export type ContractOptionsDecoratorData = {
   type: typeof Constants.contractOptionsDecoratorName
   sourceLocation: SourceLocation
   avmVersion?: SupportedAvmVersion
   name?: string
-  scratchSlots?: Array<bigint | NumberRange>
+  scratchSlots?: Set<bigint>
   stateTotals?: {
     globalUints?: bigint
     globalBytes?: bigint

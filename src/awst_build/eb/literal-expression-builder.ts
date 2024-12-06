@@ -74,6 +74,6 @@ export abstract class LiteralExpressionBuilder extends InstanceBuilder {
   }
 
   hasProperty(_name: string): boolean {
-    this.throwInvalidExpression()
+    return false
   }
 }

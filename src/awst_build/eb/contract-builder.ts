@@ -24,7 +24,9 @@ import { instanceEb } from '../type-registry'
 import { BaseContractMethodExpressionBuilder, ContractMethodExpressionBuilder } from './free-subroutine-expression-builder'
 import type { NodeBuilder } from './index'
 import { DecoratorDataBuilder, FunctionBuilder, InstanceBuilder } from './index'
-import { requireIntegerConstant, requireStringConstant } from './util'
+import { ArrayLiteralExpressionBuilder } from './literal/array-literal-expression-builder'
+import { BigIntLiteralExpressionBuilder } from './literal/big-int-literal-expression-builder'
+import { requireStringConstant } from './util'
 import { parseFunctionArgs } from './util/arg-parsing'
 import { requireAvmVersion } from './util/avm-version'
 import { VoidExpressionBuilder } from './void-expression-builder'
@@ -127,7 +129,7 @@ export class ContractOptionsDecoratorBuilder extends FunctionBuilder {
   readonly ptype = contractOptionsDecorator
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
-      args: [{ avmVersion, name, stateTotals }],
+      args: [{ avmVersion, name, stateTotals, scratchSlots }],
     } = parseFunctionArgs({
       args,
       typeArgs,
@@ -149,15 +151,52 @@ export class ContractOptionsDecoratorBuilder extends FunctionBuilder {
       avmVersion: avmVersion && requireAvmVersion(avmVersion),
       name: name && requireStringConstant(name).value,
       stateTotals: stateTotals && buildStateTotals(stateTotals),
+      scratchSlots: scratchSlots && processScratchRanges(scratchSlots),
       sourceLocation,
     })
   }
 }
 
+function getRangeProp(builder: NodeBuilder, name: string): bigint {
+  if (builder.hasProperty(name)) {
+    return getLiteralNumber(builder.memberAccess(name, builder.sourceLocation))
+  }
+  throw new CodeError('Scratch slot reservations should be either a single slot or an object containing a from and to property', {
+    sourceLocation: builder.sourceLocation,
+  })
+}
+
+function getLiteralNumber(builder: NodeBuilder) {
+  codeInvariant(builder instanceof BigIntLiteralExpressionBuilder, 'Expected numeric literal', builder.sourceLocation)
+  return builder.value
+}
+
+function processScratchRanges(builder: NodeBuilder): Set<bigint> {
+  codeInvariant(
+    builder instanceof ArrayLiteralExpressionBuilder,
+    'Scratch ranges should be specified in an array literal',
+    builder.sourceLocation,
+  )
+  const slots = new Set<bigint>()
+  for (const item of builder.getItemBuilders()) {
+    if (item.resolvableToPType(numberPType)) {
+      slots.add(getLiteralNumber(item))
+    } else {
+      const from = getRangeProp(item, 'from')
+      const to = getRangeProp(item, 'to')
+      for (let i = from; i <= to; i++) {
+        slots.add(i)
+      }
+    }
+  }
+
+  return slots
+}
+
 function buildStateTotals(builder: NodeBuilder): ContractOptionsDecoratorData['stateTotals'] {
   function tryGetProp(name: string): bigint | undefined {
     if (builder.hasProperty(name)) {
-      return requireIntegerConstant(builder.memberAccess(name, builder.sourceLocation)).value
+      return getLiteralNumber(builder.memberAccess(name, builder.sourceLocation))
     }
     return undefined
   }

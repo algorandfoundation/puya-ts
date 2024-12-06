@@ -11,6 +11,7 @@ import { logger } from '../../logger'
 import type { Props } from '../../typescript-helpers'
 import { codeInvariant, invariant, isIn } from '../../util'
 import { CustomKeyMap } from '../../util/custom-key-map'
+import { intersectSets } from '../../util/intersect-sets'
 import type { ContractClassPType } from '../ptypes'
 import type { ContractOptionsDecoratorData } from './decorator-data'
 import { LogicSigClassModel } from './logic-sig-class-model'
@@ -58,13 +59,17 @@ export class ContractClassModel {
     let clearProgram: ContractMethod | null = this.clearProgram
     const methods: ContractMethod[] = [...this.methods, this.ctor]
     const methodResolutionOrder: ContractReference[] = []
-
     let firstBaseWithStateTotals: ContractClassModel | undefined = undefined
+    let reservedScratchSpace = new Set<bigint>()
+
     for (const baseType of this.type.allBases()) {
       const cref = ContractReference.fromPType(baseType)
       const baseClass = compilationSet.getContractClass(cref)
       if (baseClass.hasExplicitStateTotals() && firstBaseWithStateTotals === undefined) {
         firstBaseWithStateTotals = baseClass
+      }
+      if (baseClass.options?.scratchSlots) {
+        reservedScratchSpace = intersectSets(reservedScratchSpace, baseClass.options.scratchSlots)
       }
       methodResolutionOrder.push(cref)
       approvalProgram ??= baseClass.approvalProgram
@@ -114,18 +119,8 @@ export class ContractClassModel {
       localUints: this.options?.stateTotals?.localUints ?? null,
     })
 
-    // TODO: Tally from bases
-    const reservedScratchSpace = new Set<bigint>()
     if (this.options?.scratchSlots) {
-      for (const reservation of this.options.scratchSlots) {
-        if (typeof reservation === 'bigint') {
-          reservedScratchSpace.add(reservation)
-        } else {
-          for (let i = reservation.from; i <= reservation.to; i++) {
-            reservedScratchSpace.add(i)
-          }
-        }
-      }
+      reservedScratchSpace = intersectSets(reservedScratchSpace, this.options.scratchSlots)
     }
 
     return nodeFactory.contract({
