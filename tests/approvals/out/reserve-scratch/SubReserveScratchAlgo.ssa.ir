@@ -1,0 +1,49 @@
+contract tests/approvals/reserve-scratch.algo.ts::SubReserveScratchAlgo:
+    program approval:
+        subroutine tests/approvals/reserve-scratch.algo.ts::SubReserveScratchAlgo.approvalProgram() -> bool:
+            block@0: // L24
+                let reinterpret_bool%0#0: bool = (txn ApplicationID)
+                goto reinterpret_bool%0#0 ? block@2 : block@1
+            block@1: // if_body_L1
+                tests/approvals/reserve-scratch.algo.ts::SubReserveScratchAlgo.constructor()
+                goto block@2
+            block@2: // after_if_else_L1
+                tests/approvals/reserve-scratch.algo.ts::ReserveScratchAlgo.approvalProgram()
+                (stores 50u "world")
+                (stores 16u "world")
+                return 1u
+        
+        subroutine tests/approvals/reserve-scratch.algo.ts::SubReserveScratchAlgo.constructor() -> void:
+            block@0: // L22
+                tests/approvals/reserve-scratch.algo.ts::ReserveScratchAlgo.constructor()
+                return 
+        
+        subroutine tests/approvals/reserve-scratch.algo.ts::ReserveScratchAlgo.constructor() -> void:
+            block@0: // L4
+                return 
+        
+        subroutine tests/approvals/reserve-scratch.algo.ts::ReserveScratchAlgo.approvalProgram() -> bool:
+            block@0: // L12
+                tests/approvals/reserve-scratch.algo.ts::ReserveScratchAlgo.setThings()
+                let tmp%0#0: uint64 = (loads 0u)
+                let tmp%1#0: bool = (== tmp%0#0 1u)
+                (assert tmp%1#0)
+                let tmp%2#0: bytes = (loads 0u)
+                let tmp%3#0: bool = (== tmp%2#0 "hello")
+                (assert tmp%3#0)
+                let tmp%4#0: uint64 = (loads 15u)
+                let tmp%5#0: bool = (== tmp%4#0 45u)
+                (assert tmp%5#0)
+                return 1u
+        
+        subroutine tests/approvals/reserve-scratch.algo.ts::ReserveScratchAlgo.setThings() -> void:
+            block@0: // L6
+                (stores 0u 1u)
+                (stores 1u "hello")
+                (stores 15u 45u)
+                return 
+    
+    program clear-state:
+        subroutine @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.clearStateProgram() -> bool:
+            block@0: // L1
+                return 1u

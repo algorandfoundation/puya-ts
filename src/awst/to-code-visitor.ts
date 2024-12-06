@@ -1,6 +1,5 @@
 import { Buffer } from 'node:buffer'
 import { TodoError } from '../errors'
-import { logger } from '../logger'
 import { uint8ArrayToBase32, uint8ArrayToUtf8 } from '../util'
 import type { ContractReference } from './models'
 import type {
@@ -408,7 +407,7 @@ export class ToCodeVisitor
       }
     }
     if (c.reservedScratchSpace.size) {
-      logger.warn(c.sourceLocation, 'Handle reservedScratchSpace to-code')
+      body.push(`reservedScratchSpace: [${Array.from(c.reservedScratchSpace).join(', ')}]`)
     }
     if (c.approvalProgram) {
       body.push(...this.visitSpecialMethod(c.approvalProgram, 'approvalProgram'))
