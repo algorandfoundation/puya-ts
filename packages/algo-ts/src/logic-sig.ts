@@ -26,5 +26,5 @@ type LogicSigOptions = {
  * @param options An object containing the configuration options
  */
 export function logicsig(options: LogicSigOptions) {
-  return <TLogicSig extends LogicSig>(logicSig: ConstructorFor<TLogicSig>) => logicSig
+  return <T extends ConstructorFor<LogicSig>>(logicSig: T) => logicSig
 }

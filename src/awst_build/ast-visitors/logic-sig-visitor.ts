@@ -69,23 +69,23 @@ export class LogicSigVisitor extends BaseVisitor implements Visitor<ClassElement
     this.context.addToCompilationSet(logicSig.id, logicSig)
   }
 
-  private throwStructNotSupported(node: ts.Node, desc: string): never {
+  private throwLogicSigNotSupported(node: ts.Node, desc: string): never {
     throw new CodeError(`${desc} are not supported in logic signature definitions`, {
       sourceLocation: this.sourceLocation(node),
     })
   }
 
   visitClassStaticBlockDeclaration(node: ts.ClassStaticBlockDeclaration) {
-    this.throwStructNotSupported(node, 'Class static block declarations')
+    this.throwLogicSigNotSupported(node, 'Class static block declarations')
   }
   visitConstructor(node: ts.ConstructorDeclaration) {
-    this.throwStructNotSupported(node, 'Constructor declarations')
+    this.throwLogicSigNotSupported(node, 'Constructor declarations')
   }
   visitGetAccessor(node: ts.GetAccessorDeclaration) {
-    this.throwStructNotSupported(node, 'Property declarations')
+    this.throwLogicSigNotSupported(node, 'Property declarations')
   }
   visitIndexSignature(node: ts.IndexSignatureDeclaration) {
-    this.throwStructNotSupported(node, 'Index signature declarations')
+    this.throwLogicSigNotSupported(node, 'Index signature declarations')
   }
   visitMethodDeclaration(node: ts.MethodDeclaration) {
     const sourceLocation = this.sourceLocation(node)
@@ -108,12 +108,12 @@ export class LogicSigVisitor extends BaseVisitor implements Visitor<ClassElement
     this.program = LogicSigProgramVisitor.buildLogicSigProgram(this.context.createChildContext(), node)
   }
   visitPropertyDeclaration(node: ts.PropertyDeclaration) {
-    this.throwStructNotSupported(node, 'Property declarations')
+    this.throwLogicSigNotSupported(node, 'Property declarations')
   }
   visitSemicolonClassElement(node: ts.SemicolonClassElement) {
     // Ignore
   }
   visitSetAccessor(node: ts.SetAccessorDeclaration) {
-    this.throwStructNotSupported(node, 'Property declarations')
+    this.throwLogicSigNotSupported(node, 'Property declarations')
   }
 }
