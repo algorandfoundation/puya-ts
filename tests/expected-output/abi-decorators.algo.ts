@@ -8,8 +8,8 @@ export default class AbiDecorators extends Contract {
   // @expect-error Private or protected methods cannot be exposed as an abi method
   @abimethod({ onCreate: 'require' })
   private createMethod(): void {}
-  // @expect-error Only one decorator is allowed per method. Multiple on complete actions can be provided in a single decorator
   @abimethod({ allowActions: ['NoOp'] })
+  // @expect-error Only one decorator is allowed per method. Multiple on complete actions can be provided in a single decorator
   @abimethod({ allowActions: ['OptIn'] })
   public duplicateDecorators(): void {}
 

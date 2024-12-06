@@ -1,4 +1,4 @@
-import ts from 'typescript'
+import type ts from 'typescript'
 import type { DefaultArgumentSource } from '../../awst/models'
 import { ARC4ABIMethodConfig, ARC4BareMethodConfig, ARC4CreateOption, ContractReference, OnCompletionAction } from '../../awst/models'
 import * as awst from '../../awst/nodes'
@@ -12,10 +12,10 @@ import type { AwstBuildContext } from '../context/awst-build-context'
 import type { NodeBuilder } from '../eb'
 import { ContractSuperBuilder, ContractThisBuilder } from '../eb/contract-builder'
 import { isValidLiteralForPType } from '../eb/util'
+import type { Arc4AbiDecoratorData, DecoratorData } from '../models/decorator-data'
 import type { FunctionPType } from '../ptypes'
 import { ContractClassPType, GlobalStateType } from '../ptypes'
 import { ARC4StructType } from '../ptypes/arc4-types'
-import type { Arc4AbiDecoratorData, DecoratorData } from './decorator-visitor'
 import { DecoratorVisitor } from './decorator-visitor'
 import { FunctionVisitor } from './function-visitor'
 
@@ -50,24 +50,13 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
     const { args, body, documentation } = this.buildFunctionAwst(node)
     const cref = ContractReference.fromPType(this._contractType)
 
-    const decorators = (node.modifiers ?? []).flatMap((modifier) => {
-      if (!ts.isDecorator(modifier)) return []
-
-      return DecoratorVisitor.buildDecoratorData(this.context, modifier)
-    })
-
-    if (decorators.length > 1) {
-      logger.error(
-        sourceLocation,
-        'Only one decorator is allowed per method. Multiple on complete actions can be provided in a single decorator',
-      )
-    }
+    const decorator = DecoratorVisitor.buildContractMethodData(ctx, node)
 
     const modifiers = this.parseMemberModifiers(node)
 
     const arc4MethodConfig = this.buildArc4Config({
       functionType: this._functionType,
-      decorator: decorators[0],
+      decorator,
       modifiers,
       methodLocation: sourceLocation,
     })

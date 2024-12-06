@@ -23,6 +23,7 @@ import type { ContractClassPType } from '../ptypes'
 import { BaseVisitor } from './base-visitor'
 import { ConstructorVisitor } from './constructor-visitor'
 import { ContractMethodVisitor } from './contract-method-visitor'
+import { DecoratorVisitor } from './decorator-visitor'
 
 export class ContractVisitor extends BaseVisitor implements Visitor<ClassElements, void> {
   private _ctor?: ContractMethod
@@ -39,6 +40,8 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
     codeInvariant(classDec.name, 'Anonymous classes are not supported for contracts', sourceLocation)
 
     this._contractPType = ptype
+
+    const contractOptions = DecoratorVisitor.buildContractData(ctx, classDec)
 
     const isAbstract = Boolean(classDec.modifiers?.some((m) => m.kind === ts.SyntaxKind.AbstractKeyword))
 
@@ -68,14 +71,8 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
       description: this.getNodeDescription(classDec),
       approvalProgram: this._contractPType.isARC4 ? null : this._approvalProgram,
       clearProgram: this._clearStateProgram,
-      reservedScratchSpace: new Set(),
+      options: contractOptions,
       sourceLocation: sourceLocation,
-      stateTotals: {
-        globalBytes: null,
-        globalUints: null,
-        localBytes: null,
-        localUints: null,
-      },
     })
     this.context.addToCompilationSet(contract.id, contract)
   }

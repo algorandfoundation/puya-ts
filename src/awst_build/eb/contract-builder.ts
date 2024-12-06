@@ -8,13 +8,24 @@ import { CodeError } from '../../errors'
 import { codeInvariant, invariant } from '../../util'
 import type { AwstBuildContext } from '../context/awst-build-context'
 import type { PType } from '../ptypes'
-import { arc4BaseContractType, baseContractType, ContractClassPType, StorageProxyPType } from '../ptypes'
+import {
+  arc4BaseContractType,
+  baseContractType,
+  ContractClassPType,
+  contractOptionsDecorator,
+  numberPType,
+  StorageProxyPType,
+  stringPType,
+} from '../ptypes'
 
 import { instanceEb } from '../type-registry'
 
 import { BaseContractMethodExpressionBuilder, ContractMethodExpressionBuilder } from './free-subroutine-expression-builder'
 import type { NodeBuilder } from './index'
-import { InstanceBuilder } from './index'
+import { DecoratorDataBuilder, FunctionBuilder, InstanceBuilder } from './index'
+import { requireStringConstant } from './util'
+import { parseFunctionArgs } from './util/arg-parsing'
+import { requireAvmVersion } from './util/avm-version'
 import { VoidExpressionBuilder } from './void-expression-builder'
 
 export class ContractThisBuilder extends InstanceBuilder<ContractClassPType> {
@@ -108,5 +119,35 @@ export class ContractClassBuilder extends InstanceBuilder {
 
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
     throw new CodeError('Contract class cannot be called manually')
+  }
+}
+
+export class ContractOptionsDecoratorBuilder extends FunctionBuilder {
+  readonly ptype = contractOptionsDecorator
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    const {
+      args: [{ avmVersion, name }],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 0,
+      callLocation: sourceLocation,
+      funcName: this.typeDescription,
+      argSpec: (a) => [
+        a.obj({
+          avmVersion: a.optional(numberPType),
+          name: a.optional(stringPType),
+          scratchSlots: a.optional(),
+          stateTotals: a.optional(),
+        }),
+      ],
+    })
+
+    return new DecoratorDataBuilder(sourceLocation, {
+      type: 'contract',
+      avmVersion: avmVersion ? requireAvmVersion(avmVersion) : undefined,
+      name: name ? requireStringConstant(name).value : undefined,
+      sourceLocation,
+    })
   }
 }

@@ -937,6 +937,16 @@ export const arc4AbiMethodDecorator = new LibFunctionType({
   name: 'abimethod',
 })
 
+export const contractOptionsDecorator = new LibFunctionType({
+  module: Constants.baseContractModuleName,
+  name: 'contract',
+})
+
+export const logicSigOptionsDecorator = new LibFunctionType({
+  module: Constants.logicSigModuleName,
+  name: 'logicsig',
+})
+
 export class GroupTransactionPType extends PType {
   get wtype() {
     return new wtypes.WGroupTransaction({

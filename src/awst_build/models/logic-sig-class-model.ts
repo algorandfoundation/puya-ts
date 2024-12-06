@@ -4,6 +4,7 @@ import type { LogicSignature, Subroutine } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import type { Props } from '../../typescript-helpers'
 import type { LogicSigPType } from '../ptypes'
+import type { LogicSigOptionsDecoratorData } from './decorator-data'
 
 export class LogicSigClassModel {
   public readonly isAbstract = false
@@ -16,6 +17,7 @@ export class LogicSigClassModel {
   }
   public readonly description: string | null
   public readonly bases: Array<LogicSigReference>
+  public readonly options: LogicSigOptionsDecoratorData | undefined
   public readonly program: Subroutine
   public readonly sourceLocation: SourceLocation
   constructor(props: Props<Omit<LogicSigClassModel, 'name' | 'id' | 'isAbstract'>>) {
@@ -24,16 +26,17 @@ export class LogicSigClassModel {
     this.program = props.program
     this.bases = props.bases
     this.sourceLocation = props.sourceLocation
+    this.options = props.options
   }
 
   public buildLogicSignature(): LogicSignature {
     return nodeFactory.logicSignature({
       id: this.id,
-      shortName: this.name,
+      shortName: this.options?.name ?? this.name,
       program: this.program,
       sourceLocation: this.sourceLocation,
       docstring: this.description,
-      avmVersion: null, // TODO: Allow this to be set from class decorator
+      avmVersion: this.options?.avmVersion ?? null,
     })
   }
 }

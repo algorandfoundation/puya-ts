@@ -23,6 +23,7 @@ import {
   ExtractUint16Type,
   ExtractUint32Type,
   ExtractUint64Type,
+  FalconVerifyType,
   GaidType,
   GetBitType,
   GetByteType,
@@ -37,6 +38,7 @@ import {
   JsonRefType,
   Keccak256Type,
   MulwType,
+  OnlineStakeType,
   OpsNamespace,
   ReplaceType,
   ScratchType,
@@ -50,6 +52,7 @@ import {
   ShrType,
   SqrtType,
   SubstringType,
+  Sumhash512Type,
   TxnType,
   VrfVerifyType,
 } from './op-types'
@@ -120,6 +123,9 @@ export const shr: ShrType = createFunctionProxy('shr')
 export const sqrt: SqrtType = createFunctionProxy('sqrt')
 export const substring: SubstringType = createFunctionProxy('substring')
 export const vrfVerify: VrfVerifyType = createFunctionProxy('vrfVerify')
+export const onlineStake: OnlineStakeType = createFunctionProxy('onlineStake')
+export const falconVerify: FalconVerifyType = createFunctionProxy('falconVerify')
+export const sumhash512: Sumhash512Type = createFunctionProxy('sumhash512')
 
 export const EllipticCurve: EllipticCurveType = createObjectProxy('EllipticCurve')
 export const Global: GlobalType = createObjectProxy('Global')
@@ -139,3 +145,4 @@ export const AssetHolding = createObjectProxy('AssetHolding')
 export const AssetParams = createObjectProxy('AssetParams')
 export const Block = createObjectProxy('Block')
 export const Box = createObjectProxy('Box')
+export const VoterParams = createObjectProxy('VoterParams')

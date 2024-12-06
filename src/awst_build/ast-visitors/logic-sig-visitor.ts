@@ -15,6 +15,7 @@ import type { LogicSigPType } from '../ptypes'
 import { boolPType, FunctionPType, uint64PType } from '../ptypes'
 import { ptypeIn } from '../ptypes/util'
 import { BaseVisitor } from './base-visitor'
+import { DecoratorVisitor } from './decorator-visitor'
 import { LogicSigProgramVisitor } from './logic-sig-program-visitor'
 
 export class LogicSigVisitor extends BaseVisitor implements Visitor<ClassElements, void> {
@@ -39,6 +40,8 @@ export class LogicSigVisitor extends BaseVisitor implements Visitor<ClassElement
     super(ctx)
     const sourceLocation = this.sourceLocation(classDec)
 
+    const options = DecoratorVisitor.buildLogicSigData(ctx, classDec)
+
     for (const member of classDec.members) {
       try {
         this.accept(member)
@@ -59,7 +62,8 @@ export class LogicSigVisitor extends BaseVisitor implements Visitor<ClassElement
       sourceLocation,
       program: this.program,
       type: this._logicSigPType,
-      description: '',
+      description: this.getNodeDescription(classDec),
+      options,
     })
 
     this.context.addToCompilationSet(logicSig.id, logicSig)

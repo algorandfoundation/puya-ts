@@ -13,20 +13,22 @@ import { Account, Application, Asset } from './reference'
 `
   }
 
-  function* emitDoc(doc: string | string[]) {
+  function* emitDoc(doc: string | string[], minAvmVersion?: number) {
     if (Array.isArray(doc)) {
       yield '\n/**'
       for (const row of doc) {
         yield '\n  * '
         yield row
       }
-      yield '\n */'
     } else if (doc) {
       yield '\n/**'
       yield '\n  * '
       yield doc
-      yield '\n */'
+    } else {
+      return
     }
+    if (minAvmVersion !== undefined) yield `\n  * Min AVM version: ${minAvmVersion}`
+    yield '\n  */'
     yield '\n'
   }
   function* emitEnums() {
@@ -94,7 +96,7 @@ import { Account, Application, Asset } from './reference'
 
   for (const item of module.items) {
     if (item.type === 'op-function') {
-      yield* emitDoc(item.docs)
+      yield* emitDoc(item.docs, item.minAvmVersion)
       yield `export type ${pascalCase(item.name)}Type = (`
       for (const arg of item.immediateArgs) {
         yield arg.name
@@ -138,7 +140,7 @@ import { Account, Application, Asset } from './reference'
 
       for (const ol of Object.values(item.functions)) {
         yield '\n'
-        yield* emitDoc(ol.docs)
+        yield* emitDoc(ol.docs, ol.minAvmVersion)
         if (ol.stackArgs.length === 0 && ol.immediateArgs.length === 1) {
           yield 'get '
         }
