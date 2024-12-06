@@ -178,6 +178,42 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           },
         ],
       },
+      acctIncentiveEligible: {
+        type: 'op-mapping',
+        op: 'acct_params_get',
+        signatures: [
+          {
+            argNames: ['a'],
+            immediateArgs: ['AcctIncentiveEligible'],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.accountPType, ptypes.uint64PType] }],
+            returnType: new ptypes.TuplePType({ items: [ptypes.boolPType, ptypes.boolPType] }),
+          },
+        ],
+      },
+      acctLastProposed: {
+        type: 'op-mapping',
+        op: 'acct_params_get',
+        signatures: [
+          {
+            argNames: ['a'],
+            immediateArgs: ['AcctLastProposed'],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.accountPType, ptypes.uint64PType] }],
+            returnType: new ptypes.TuplePType({ items: [ptypes.uint64PType, ptypes.boolPType] }),
+          },
+        ],
+      },
+      acctLastHeartbeat: {
+        type: 'op-mapping',
+        op: 'acct_params_get',
+        signatures: [
+          {
+            argNames: ['a'],
+            immediateArgs: ['AcctLastHeartbeat'],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.accountPType, ptypes.uint64PType] }],
+            returnType: new ptypes.TuplePType({ items: [ptypes.uint64PType, ptypes.boolPType] }),
+          },
+        ],
+      },
     },
   },
   addw: {
@@ -752,6 +788,102 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           },
         ],
       },
+      blkProposer: {
+        type: 'op-mapping',
+        op: 'block',
+        signatures: [
+          {
+            argNames: ['a'],
+            immediateArgs: ['BlkProposer'],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.uint64PType] }],
+            returnType: ptypes.accountPType,
+          },
+        ],
+      },
+      blkFeesCollected: {
+        type: 'op-mapping',
+        op: 'block',
+        signatures: [
+          {
+            argNames: ['a'],
+            immediateArgs: ['BlkFeesCollected'],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.uint64PType] }],
+            returnType: ptypes.uint64PType,
+          },
+        ],
+      },
+      blkBonus: {
+        type: 'op-mapping',
+        op: 'block',
+        signatures: [
+          {
+            argNames: ['a'],
+            immediateArgs: ['BlkBonus'],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.uint64PType] }],
+            returnType: ptypes.uint64PType,
+          },
+        ],
+      },
+      blkBranch: {
+        type: 'op-mapping',
+        op: 'block',
+        signatures: [
+          {
+            argNames: ['a'],
+            immediateArgs: ['BlkBranch'],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.uint64PType] }],
+            returnType: ptypes.bytesPType,
+          },
+        ],
+      },
+      blkFeeSink: {
+        type: 'op-mapping',
+        op: 'block',
+        signatures: [
+          {
+            argNames: ['a'],
+            immediateArgs: ['BlkFeeSink'],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.uint64PType] }],
+            returnType: ptypes.accountPType,
+          },
+        ],
+      },
+      blkProtocol: {
+        type: 'op-mapping',
+        op: 'block',
+        signatures: [
+          {
+            argNames: ['a'],
+            immediateArgs: ['BlkProtocol'],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.uint64PType] }],
+            returnType: ptypes.bytesPType,
+          },
+        ],
+      },
+      blkTxnCounter: {
+        type: 'op-mapping',
+        op: 'block',
+        signatures: [
+          {
+            argNames: ['a'],
+            immediateArgs: ['BlkTxnCounter'],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.uint64PType] }],
+            returnType: ptypes.uint64PType,
+          },
+        ],
+      },
+      blkProposerPayout: {
+        type: 'op-mapping',
+        op: 'block',
+        signatures: [
+          {
+            argNames: ['a'],
+            immediateArgs: ['BlkProposerPayout'],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.uint64PType] }],
+            returnType: ptypes.uint64PType,
+          },
+        ],
+      },
     },
   },
   Box: {
@@ -1211,6 +1343,22 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           { name: 'b', ptypes: [ptypes.uint64PType] },
         ],
         returnType: ptypes.uint64PType,
+      },
+    ],
+  },
+  falconVerify: {
+    type: 'op-mapping',
+    op: 'falcon_verify',
+    signatures: [
+      {
+        argNames: ['a', 'b', 'c'],
+        immediateArgs: [],
+        stackArgs: [
+          { name: 'a', ptypes: [ptypes.bytesPType] },
+          { name: 'b', ptypes: [ptypes.bytesPType] },
+          { name: 'c', ptypes: [ptypes.bytesPType] },
+        ],
+        returnType: ptypes.boolPType,
       },
     ],
   },
@@ -2196,6 +2344,31 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
         type: 'op-mapping',
         op: 'global',
         signatures: [{ argNames: [], immediateArgs: ['GenesisHash'], stackArgs: [], returnType: ptypes.bytesPType }],
+      },
+      payoutsEnabled: {
+        type: 'op-mapping',
+        op: 'global',
+        signatures: [{ argNames: [], immediateArgs: ['PayoutsEnabled'], stackArgs: [], returnType: ptypes.boolPType }],
+      },
+      payoutsGoOnlineFee: {
+        type: 'op-mapping',
+        op: 'global',
+        signatures: [{ argNames: [], immediateArgs: ['PayoutsGoOnlineFee'], stackArgs: [], returnType: ptypes.uint64PType }],
+      },
+      payoutsPercent: {
+        type: 'op-mapping',
+        op: 'global',
+        signatures: [{ argNames: [], immediateArgs: ['PayoutsPercent'], stackArgs: [], returnType: ptypes.uint64PType }],
+      },
+      payoutsMinBalance: {
+        type: 'op-mapping',
+        op: 'global',
+        signatures: [{ argNames: [], immediateArgs: ['PayoutsMinBalance'], stackArgs: [], returnType: ptypes.uint64PType }],
+      },
+      payoutsMaxBalance: {
+        type: 'op-mapping',
+        op: 'global',
+        signatures: [{ argNames: [], immediateArgs: ['PayoutsMaxBalance'], stackArgs: [], returnType: ptypes.uint64PType }],
       },
     },
   },
@@ -4204,6 +4377,11 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
       },
     ],
   },
+  onlineStake: {
+    type: 'op-mapping',
+    op: 'online_stake',
+    signatures: [{ argNames: [], immediateArgs: [], stackArgs: [], returnType: ptypes.uint64PType }],
+  },
   replace: {
     type: 'op-mapping',
     op: 'replace3',
@@ -4308,6 +4486,13 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
         ],
         returnType: ptypes.bytesPType,
       },
+    ],
+  },
+  sumhash512: {
+    type: 'op-mapping',
+    op: 'sumhash512',
+    signatures: [
+      { argNames: ['a'], immediateArgs: [], stackArgs: [{ name: 'a', ptypes: [ptypes.bytesPType] }], returnType: ptypes.bytesPType },
     ],
   },
   Txn: {
@@ -4702,6 +4887,36 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
         type: 'op-mapping',
         op: 'txn',
         signatures: [{ argNames: [], immediateArgs: ['NumClearStateProgramPages'], stackArgs: [], returnType: ptypes.uint64PType }],
+      },
+    },
+  },
+  VoterParams: {
+    type: 'op-grouping',
+    name: 'VoterParams',
+    ops: {
+      voterBalance: {
+        type: 'op-mapping',
+        op: 'voter_params_get',
+        signatures: [
+          {
+            argNames: ['a'],
+            immediateArgs: ['VoterBalance'],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.uint64PType, ptypes.bytesPType] }],
+            returnType: new ptypes.TuplePType({ items: [ptypes.uint64PType, ptypes.boolPType] }),
+          },
+        ],
+      },
+      voterIncentiveEligible: {
+        type: 'op-mapping',
+        op: 'voter_params_get',
+        signatures: [
+          {
+            argNames: ['a'],
+            immediateArgs: ['VoterIncentiveEligible'],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.uint64PType, ptypes.bytesPType] }],
+            returnType: new ptypes.TuplePType({ items: [ptypes.boolPType, ptypes.boolPType] }),
+          },
+        ],
       },
     },
   },

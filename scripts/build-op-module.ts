@@ -159,6 +159,8 @@ const TYPE_MAP: Record<string, AlgoTsType> = {
   '[33]byte': AlgoTsType.Bytes,
   '[64]byte': AlgoTsType.Bytes,
   '[80]byte': AlgoTsType.Bytes,
+  '[1232]byte': AlgoTsType.Bytes,
+  '[1793]byte': AlgoTsType.Bytes,
   any: AlgoTsType.Uint64 | AlgoTsType.Bytes,
 }
 
@@ -176,7 +178,7 @@ const INPUT_ALGOTS_TYPE_MAP: Record<AlgoTsType, AlgoTsType> = {
   [AlgoTsType.Account]: AlgoTsType.Account,
   [AlgoTsType.Void]: AlgoTsType.Void,
   [AlgoTsType.BigUint]: AlgoTsType.BigUint,
-  [AlgoTsType.Enum]: AlgoTsType.Enum
+  [AlgoTsType.Enum]: AlgoTsType.Enum,
 }
 
 const ARG_ENUMS = Object.entries(langSpec.arg_enums).map(([name, values], index): EnumDef => {
@@ -284,6 +286,7 @@ const GROUPED_OPCODES: { name: string; doc: string; ops: { [key: string]: OpName
   { name: 'AppParams', doc: '', ops: { app_params_get: {} } },
   { name: 'AssetHolding', doc: '', ops: { asset_holding_get: {} } },
   { name: 'AssetParams', doc: '', ops: { asset_params_get: {} } },
+  { name: 'VoterParams', doc: '', ops: { voter_params_get: {} } },
   { name: 'Global', doc: '', ops: { global: {} } },
   { name: 'Block', doc: '', ops: { block: {} } },
   { name: 'JsonRef', doc: '', ops: { json_ref: {} } },
@@ -305,6 +308,7 @@ export type EnumArgMeta = {
 
 export type OpOverloadedFunction = {
   type: 'op-overloaded-function'
+  minAvmVersion: number
   signatures: Array<{ immediateArgs: OpArg[]; stackArgs: OpArg[]; returnTypes: AlgoTsType[]; docs: string[] | string }>
   name: string
   opCode: string
@@ -318,6 +322,7 @@ export type OpFunction = {
   returnTypes: AlgoTsType[]
   name: string
   opCode: string
+  minAvmVersion: number
   docs: string[] | string
 }
 
@@ -408,6 +413,7 @@ export function buildOpModule() {
       for (const member of enumDef.members) {
         opFunctions.push({
           type: 'op-function',
+          minAvmVersion: def.min_avm_version,
           opCode,
           enumArg: {
             member: member.name,
@@ -415,7 +421,10 @@ export function buildOpModule() {
           },
           docs: member.doc,
           name: getEnumOpName(member.name, opNameConfig),
-          immediateArgs: def.immediate_args.map((i) => ({ name: camelCase(i.name), type: getMappedType(i.immediate_type, i.arg_enum, true) })),
+          immediateArgs: def.immediate_args.map((i) => ({
+            name: camelCase(i.name),
+            type: getMappedType(i.immediate_type, i.arg_enum, true),
+          })),
           stackArgs: def.stack_inputs.map((sa, i) => {
             if (i === enumArg.modifies_stack_input) {
               invariant(member.stackType, 'Member must have stack type')
@@ -437,8 +446,12 @@ export function buildOpModule() {
         ...splitUnionReturnTypes({
           type: 'op-function',
           opCode: opCode,
+          minAvmVersion: def.min_avm_version,
           name: getOpName(def.name, opNameConfig),
-          immediateArgs: def.immediate_args.map((i) => ({ name: camelCase(i.name), type: getMappedType(i.immediate_type, i.arg_enum, true) })),
+          immediateArgs: def.immediate_args.map((i) => ({
+            name: camelCase(i.name),
+            type: getMappedType(i.immediate_type, i.arg_enum, true),
+          })),
           stackArgs: def.stack_inputs.map((i) => ({ name: camelCase(i.name), type: getMappedType(i.stack_type, null, true) })),
           returnTypes: def.stack_outputs.map((o) => getMappedType(o.stack_type, null)),
           docs: getOpDocs(def),
@@ -458,6 +471,7 @@ export function buildOpModule() {
   opModule.items.push({
     type: 'op-overloaded-function',
     name: 'select',
+    minAvmVersion: 3,
     signatures: [
       {
         stackArgs: [
@@ -505,6 +519,7 @@ export function buildOpModule() {
   opModule.items.push({
     type: 'op-overloaded-function',
     name: 'setBit',
+    minAvmVersion: 3,
     signatures: [
       {
         stackArgs: [
@@ -569,7 +584,7 @@ function getMappedType(t: string | null, enumName: string | null, isInput: boole
     invariant(enumDef, `Definition must exist for ${enumName}`)
     return enumDef.typeFlag
   }
-  const mappedType = isInput ? INPUT_TYPE_MAP[t ?? ''] ?? TYPE_MAP[t ?? ''] : TYPE_MAP[t ?? '']
+  const mappedType = isInput ? (INPUT_TYPE_MAP[t ?? ''] ?? TYPE_MAP[t ?? '']) : TYPE_MAP[t ?? '']
   invariant(mappedType, `Mapped type must exist for ${t}`)
   return mappedType
 }

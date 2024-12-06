@@ -5,6 +5,7 @@ import { TupleItemExpression } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { CodeError, NotSupported } from '../../errors'
 import { logger } from '../../logger'
+import type { DecoratorData } from '../models/decorator-data'
 import type { LibClassType, PType, PTypeOrClass } from '../ptypes'
 import { instanceEb } from '../type-registry'
 
@@ -271,4 +272,20 @@ export function requireLValue(expr: awst.Expression): awst.LValue {
     }
   }
   return expr as awst.LValue
+}
+
+export class DecoratorDataBuilder extends NodeBuilder {
+  get ptype(): PType | undefined {
+    return undefined
+  }
+  constructor(
+    sourceLocation: SourceLocation,
+    private readonly data: DecoratorData,
+  ) {
+    super(sourceLocation)
+  }
+
+  resolveDecoratorData(): DecoratorData {
+    return this.data
+  }
 }

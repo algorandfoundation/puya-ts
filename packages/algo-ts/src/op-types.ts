@@ -18,68 +18,99 @@ export enum VrfVerify {
 export type AcctParamsType = {
   /**
    * Account balance in microalgos
+   * Min AVM version: 6
    */
   acctBalance(a: Account | uint64): readonly [uint64, boolean]
 
   /**
    * Minimum required balance for account, in microalgos
+   * Min AVM version: 6
    */
   acctMinBalance(a: Account | uint64): readonly [uint64, boolean]
 
   /**
    * Address the account is rekeyed to.
+   * Min AVM version: 6
    */
   acctAuthAddr(a: Account | uint64): readonly [Account, boolean]
 
   /**
    * The total number of uint64 values allocated by this account in Global and Local States.
+   * Min AVM version: 6
    */
   acctTotalNumUint(a: Account | uint64): readonly [uint64, boolean]
 
   /**
    * The total number of byte array values allocated by this account in Global and Local States.
+   * Min AVM version: 6
    */
   acctTotalNumByteSlice(a: Account | uint64): readonly [uint64, boolean]
 
   /**
    * The number of extra app code pages used by this account.
+   * Min AVM version: 6
    */
   acctTotalExtraAppPages(a: Account | uint64): readonly [uint64, boolean]
 
   /**
    * The number of existing apps created by this account.
+   * Min AVM version: 6
    */
   acctTotalAppsCreated(a: Account | uint64): readonly [uint64, boolean]
 
   /**
    * The number of apps this account is opted into.
+   * Min AVM version: 6
    */
   acctTotalAppsOptedIn(a: Account | uint64): readonly [uint64, boolean]
 
   /**
    * The number of existing ASAs created by this account.
+   * Min AVM version: 6
    */
   acctTotalAssetsCreated(a: Account | uint64): readonly [uint64, boolean]
 
   /**
    * The numbers of ASAs held by this account (including ASAs this account created).
+   * Min AVM version: 6
    */
   acctTotalAssets(a: Account | uint64): readonly [uint64, boolean]
 
   /**
    * The number of existing boxes created by this account's app.
+   * Min AVM version: 6
    */
   acctTotalBoxes(a: Account | uint64): readonly [uint64, boolean]
 
   /**
    * The total number of bytes used by this account's app's box keys and values.
+   * Min AVM version: 6
    */
   acctTotalBoxBytes(a: Account | uint64): readonly [uint64, boolean]
+
+  /**
+   * Has this account opted into block payouts
+   * Min AVM version: 6
+   */
+  acctIncentiveEligible(a: Account | uint64): readonly [boolean, boolean]
+
+  /**
+   * The round number of the last block this account proposed.
+   * Min AVM version: 6
+   */
+  acctLastProposed(a: Account | uint64): readonly [uint64, boolean]
+
+  /**
+   * The round number of the last block this account sent a heartbeat.
+   * Min AVM version: 6
+   */
+  acctLastHeartbeat(a: Account | uint64): readonly [uint64, boolean]
 }
 
 /**
  * A plus B as a 128-bit result. X is the carry-bit, Y is the low-order 64 bits.
  * @see Native TEAL opcode: [`addw`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#addw)
+ * Min AVM version: 2
  */
 export type AddwType = (a: uint64, b: uint64) => readonly [uint64, uint64]
 
@@ -92,6 +123,7 @@ export type AppGlobalType = {
    * @param state key.
    * Deleting a key which is already absent has no effect on the application global state. (In particular, it does _not_ cause the program to fail.)
    * @see Native TEAL opcode: [`app_global_del`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_global_del)
+   * Min AVM version: 2
    */
   delete(a: bytes): void
 
@@ -100,6 +132,7 @@ export type AppGlobalType = {
    * @param state key.
    *  * @return value. The value is zero (of type uint64) if the key does not exist.
    * @see Native TEAL opcode: [`app_global_get`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_global_get)
+   * Min AVM version: 2
    */
   getBytes(a: bytes): bytes
 
@@ -108,6 +141,7 @@ export type AppGlobalType = {
    * @param state key.
    *  * @return value. The value is zero (of type uint64) if the key does not exist.
    * @see Native TEAL opcode: [`app_global_get`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_global_get)
+   * Min AVM version: 2
    */
   getUint64(a: bytes): uint64
 
@@ -116,6 +150,7 @@ export type AppGlobalType = {
    * @param Txn.ForeignApps offset (or, since v4, an _available_ application id), state key.
    *  * @return did_exist flag (top of the stack, 1 if the application and key existed and 0 otherwise), value. The value is zero (of type uint64) if the key does not exist.
    * @see Native TEAL opcode: [`app_global_get_ex`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_global_get_ex)
+   * Min AVM version: 2
    */
   getExBytes(a: Application | uint64, b: bytes): readonly [bytes, boolean]
 
@@ -124,12 +159,14 @@ export type AppGlobalType = {
    * @param Txn.ForeignApps offset (or, since v4, an _available_ application id), state key.
    *  * @return did_exist flag (top of the stack, 1 if the application and key existed and 0 otherwise), value. The value is zero (of type uint64) if the key does not exist.
    * @see Native TEAL opcode: [`app_global_get_ex`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_global_get_ex)
+   * Min AVM version: 2
    */
   getExUint64(a: Application | uint64, b: bytes): readonly [uint64, boolean]
 
   /**
    * write B to key A in the global state of the current application
    * @see Native TEAL opcode: [`app_global_put`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_global_put)
+   * Min AVM version: 2
    */
   put(a: bytes, b: uint64 | bytes): void
 }
@@ -143,6 +180,7 @@ export type AppLocalType = {
    * @param Txn.Accounts offset (or, since v4, an _available_ account address), state key.
    * Deleting a key which is already absent has no effect on the application local state. (In particular, it does _not_ cause the program to fail.)
    * @see Native TEAL opcode: [`app_local_del`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_local_del)
+   * Min AVM version: 2
    */
   delete(a: Account | uint64, b: bytes): void
 
@@ -151,6 +189,7 @@ export type AppLocalType = {
    * @param Txn.Accounts offset (or, since v4, an _available_ account address), state key.
    *  * @return value. The value is zero (of type uint64) if the key does not exist.
    * @see Native TEAL opcode: [`app_local_get`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_local_get)
+   * Min AVM version: 2
    */
   getBytes(a: Account | uint64, b: bytes): bytes
 
@@ -159,6 +198,7 @@ export type AppLocalType = {
    * @param Txn.Accounts offset (or, since v4, an _available_ account address), state key.
    *  * @return value. The value is zero (of type uint64) if the key does not exist.
    * @see Native TEAL opcode: [`app_local_get`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_local_get)
+   * Min AVM version: 2
    */
   getUint64(a: Account | uint64, b: bytes): uint64
 
@@ -167,6 +207,7 @@ export type AppLocalType = {
    * @param Txn.Accounts offset (or, since v4, an _available_ account address), _available_ application id (or, since v4, a Txn.ForeignApps offset), state key.
    *  * @return did_exist flag (top of the stack, 1 if the application and key existed and 0 otherwise), value. The value is zero (of type uint64) if the key does not exist.
    * @see Native TEAL opcode: [`app_local_get_ex`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_local_get_ex)
+   * Min AVM version: 2
    */
   getExBytes(a: Account | uint64, b: Application | uint64, c: bytes): readonly [bytes, boolean]
 
@@ -175,6 +216,7 @@ export type AppLocalType = {
    * @param Txn.Accounts offset (or, since v4, an _available_ account address), _available_ application id (or, since v4, a Txn.ForeignApps offset), state key.
    *  * @return did_exist flag (top of the stack, 1 if the application and key existed and 0 otherwise), value. The value is zero (of type uint64) if the key does not exist.
    * @see Native TEAL opcode: [`app_local_get_ex`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_local_get_ex)
+   * Min AVM version: 2
    */
   getExUint64(a: Account | uint64, b: Application | uint64, c: bytes): readonly [uint64, boolean]
 
@@ -182,6 +224,7 @@ export type AppLocalType = {
    * write C to key B in account A's local state of the current application
    * @param Txn.Accounts offset (or, since v4, an _available_ account address), state key, value.
    * @see Native TEAL opcode: [`app_local_put`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_local_put)
+   * Min AVM version: 2
    */
   put(a: Account | uint64, b: bytes, c: uint64 | bytes): void
 }
@@ -191,52 +234,61 @@ export type AppLocalType = {
  * @param Txn.Accounts offset (or, since v4, an _available_ account address), _available_ application id (or, since v4, a Txn.ForeignApps offset).
  *  * @return 1 if opted in and 0 otherwise.
  * @see Native TEAL opcode: [`app_opted_in`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_opted_in)
+ * Min AVM version: 2
  */
 export type AppOptedInType = (a: Account | uint64, b: Application | uint64) => boolean
-
 export type AppParamsType = {
   /**
    * Bytecode of Approval Program
+   * Min AVM version: 5
    */
   appApprovalProgram(a: Application | uint64): readonly [bytes, boolean]
 
   /**
    * Bytecode of Clear State Program
+   * Min AVM version: 5
    */
   appClearStateProgram(a: Application | uint64): readonly [bytes, boolean]
 
   /**
    * Number of uint64 values allowed in Global State
+   * Min AVM version: 5
    */
   appGlobalNumUint(a: Application | uint64): readonly [uint64, boolean]
 
   /**
    * Number of byte array values allowed in Global State
+   * Min AVM version: 5
    */
   appGlobalNumByteSlice(a: Application | uint64): readonly [uint64, boolean]
 
   /**
    * Number of uint64 values allowed in Local State
+   * Min AVM version: 5
    */
   appLocalNumUint(a: Application | uint64): readonly [uint64, boolean]
 
   /**
    * Number of byte array values allowed in Local State
+   * Min AVM version: 5
    */
   appLocalNumByteSlice(a: Application | uint64): readonly [uint64, boolean]
 
   /**
    * Number of Extra Program Pages of code space
+   * Min AVM version: 5
    */
   appExtraProgramPages(a: Application | uint64): readonly [uint64, boolean]
 
   /**
    * Creator address
+   * Min AVM version: 5
    */
   appCreator(a: Application | uint64): readonly [Account, boolean]
 
   /**
    * Address for which this application has authority
+   * Min AVM version: 5
    */
   appAddress(a: Application | uint64): readonly [Account, boolean]
 }
@@ -244,79 +296,92 @@ export type AppParamsType = {
 /**
  * Ath LogicSig argument
  * @see Native TEAL opcode: [`args`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#args)
+ * Min AVM version: 5
  */
 export type ArgType = (a: uint64) => bytes
-
 export type AssetHoldingType = {
   /**
    * Amount of the asset unit held by this account
+   * Min AVM version: 2
    */
   assetBalance(a: Account | uint64, b: Asset | uint64): readonly [uint64, boolean]
 
   /**
    * Is the asset frozen or not
+   * Min AVM version: 2
    */
   assetFrozen(a: Account | uint64, b: Asset | uint64): readonly [boolean, boolean]
 }
-
 export type AssetParamsType = {
   /**
    * Total number of units of this asset
+   * Min AVM version: 2
    */
   assetTotal(a: Asset | uint64): readonly [uint64, boolean]
 
   /**
    * See AssetParams.Decimals
+   * Min AVM version: 2
    */
   assetDecimals(a: Asset | uint64): readonly [uint64, boolean]
 
   /**
    * Frozen by default or not
+   * Min AVM version: 2
    */
   assetDefaultFrozen(a: Asset | uint64): readonly [boolean, boolean]
 
   /**
    * Asset unit name
+   * Min AVM version: 2
    */
   assetUnitName(a: Asset | uint64): readonly [bytes, boolean]
 
   /**
    * Asset name
+   * Min AVM version: 2
    */
   assetName(a: Asset | uint64): readonly [bytes, boolean]
 
   /**
    * URL with additional info about the asset
+   * Min AVM version: 2
    */
   assetUrl(a: Asset | uint64): readonly [bytes, boolean]
 
   /**
    * Arbitrary commitment
+   * Min AVM version: 2
    */
   assetMetadataHash(a: Asset | uint64): readonly [bytes, boolean]
 
   /**
    * Manager address
+   * Min AVM version: 2
    */
   assetManager(a: Asset | uint64): readonly [Account, boolean]
 
   /**
    * Reserve address
+   * Min AVM version: 2
    */
   assetReserve(a: Asset | uint64): readonly [Account, boolean]
 
   /**
    * Freeze address
+   * Min AVM version: 2
    */
   assetFreeze(a: Asset | uint64): readonly [Account, boolean]
 
   /**
    * Clawback address
+   * Min AVM version: 2
    */
   assetClawback(a: Asset | uint64): readonly [Account, boolean]
 
   /**
    * Creator address
+   * Min AVM version: 2
    */
   assetCreator(a: Asset | uint64): readonly [Account, boolean]
 }
@@ -326,6 +391,7 @@ export type AssetParamsType = {
  * @param Txn.Accounts offset (or, since v4, an _available_ account address), _available_ application id (or, since v4, a Txn.ForeignApps offset).
  *  * @return value.
  * @see Native TEAL opcode: [`balance`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#balance)
+ * Min AVM version: 2
  */
 export type BalanceType = (a: Account | uint64) => uint64
 
@@ -334,6 +400,7 @@ export type BalanceType = (a: Account | uint64) => uint64
  * *Warning*: Usage should be restricted to very rare use cases. In almost all cases, smart contracts should directly handle non-encoded byte-strings.	This opcode should only be used in cases where base64 is the only available option, e.g. interoperability with a third-party that only signs base64 strings.
  *  Decodes A using the base64 encoding E. Specify the encoding with an immediate arg either as URL and Filename Safe (`URLEncoding`) or Standard (`StdEncoding`). See [RFC 4648 sections 4 and 5](https://rfc-editor.org/rfc/rfc4648.html#section-4). It is assumed that the encoding ends with the exact number of `=` padding characters as required by the RFC. When padding occurs, any unused pad bits in the encoding must be set to zero or the decoding will fail. The special cases of `\n` and `\r` are allowed but completely ignored. An error will result when attempting to decode a string with a character that is not in the encoding alphabet or not one of `=`, `\r`, or `\n`.
  * @see Native TEAL opcode: [`base64_decode`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#base64_decode)
+ * Min AVM version: 7
  */
 export type Base64DecodeType = (e: Base64, a: bytes) => bytes
 
@@ -341,13 +408,20 @@ export type Base64DecodeType = (e: Base64, a: bytes) => bytes
  * The highest set bit in A. If A is a byte-array, it is interpreted as a big-endian unsigned integer. bitlen of 0 is 0, bitlen of 8 is 4
  * bitlen interprets arrays as big-endian integers, unlike setbit/getbit
  * @see Native TEAL opcode: [`bitlen`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#bitlen)
+ * Min AVM version: 4
  */
 export type BitLengthType = (a: uint64 | bytes) => uint64
-
 export type BlockType = {
   blkSeed(a: uint64): bytes
-
   blkTimestamp(a: uint64): uint64
+  blkProposer(a: uint64): Account
+  blkFeesCollected(a: uint64): uint64
+  blkBonus(a: uint64): uint64
+  blkBranch(a: uint64): bytes
+  blkFeeSink(a: uint64): Account
+  blkProtocol(a: uint64): bytes
+  blkTxnCounter(a: uint64): uint64
+  blkProposerPayout(a: uint64): uint64
 }
 
 /**
@@ -358,18 +432,21 @@ export type BoxType = {
    * create a box named A, of length B. Fail if the name A is empty or B exceeds 32,768. Returns 0 if A already existed, else 1
    * Newly created boxes are filled with 0 bytes. `box_create` will fail if the referenced box already exists with a different size. Otherwise, existing boxes are unchanged by `box_create`.
    * @see Native TEAL opcode: [`box_create`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#box_create)
+   * Min AVM version: 8
    */
   create(a: bytes, b: uint64): boolean
 
   /**
    * delete box named A if it exists. Return 1 if A existed, 0 otherwise
    * @see Native TEAL opcode: [`box_del`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#box_del)
+   * Min AVM version: 8
    */
   delete(a: bytes): boolean
 
   /**
    * read C bytes from box A, starting at offset B. Fail if A does not exist, or the byte range is outside A's size.
    * @see Native TEAL opcode: [`box_extract`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#box_extract)
+   * Min AVM version: 8
    */
   extract(a: bytes, b: uint64, c: uint64): bytes
 
@@ -377,12 +454,14 @@ export type BoxType = {
    * X is the contents of box A if A exists, else ''. Y is 1 if A exists, else 0.
    * For boxes that exceed 4,096 bytes, consider `box_create`, `box_extract`, and `box_replace`
    * @see Native TEAL opcode: [`box_get`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#box_get)
+   * Min AVM version: 8
    */
   get(a: bytes): readonly [bytes, boolean]
 
   /**
    * X is the length of box A if A exists, else 0. Y is 1 if A exists, else 0.
    * @see Native TEAL opcode: [`box_len`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#box_len)
+   * Min AVM version: 8
    */
   length(a: bytes): readonly [uint64, boolean]
 
@@ -390,18 +469,21 @@ export type BoxType = {
    * replaces the contents of box A with byte-array B. Fails if A exists and len(B) != len(box A). Creates A if it does not exist
    * For boxes that exceed 4,096 bytes, consider `box_create`, `box_extract`, and `box_replace`
    * @see Native TEAL opcode: [`box_put`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#box_put)
+   * Min AVM version: 8
    */
   put(a: bytes, b: bytes): void
 
   /**
    * write byte-array C into box A, starting at offset B. Fail if A does not exist, or the byte range is outside A's size.
    * @see Native TEAL opcode: [`box_replace`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#box_replace)
+   * Min AVM version: 8
    */
   replace(a: bytes, b: uint64, c: bytes): void
 
   /**
    * change the size of box named A to be of length B, adding zero bytes to end or removing bytes from the end, as needed. Fail if the name A is empty, A is not an existing box, or B exceeds 32,768.
    * @see Native TEAL opcode: [`box_resize`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#box_resize)
+   * Min AVM version: 10
    */
   resize(a: bytes, b: uint64): void
 
@@ -409,6 +491,7 @@ export type BoxType = {
    * set box A to contain its previous bytes up to index B, followed by D, followed by the original bytes of A that began at index B+C.
    * Boxes are of constant length. If C < len(D), then len(D)-C bytes will be removed from the end. If C > len(D), zero bytes will be appended to the end to reach the box length.
    * @see Native TEAL opcode: [`box_splice`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#box_splice)
+   * Min AVM version: 10
    */
   splice(a: bytes, b: uint64, c: uint64, d: bytes): void
 }
@@ -416,6 +499,7 @@ export type BoxType = {
 /**
  * The largest integer I such that I^2 <= A. A and I are interpreted as big-endian unsigned integers
  * @see Native TEAL opcode: [`bsqrt`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#bsqrt)
+ * Min AVM version: 6
  */
 export type BsqrtType = (a: biguint) => biguint
 
@@ -423,12 +507,14 @@ export type BsqrtType = (a: biguint) => biguint
  * converts big-endian byte array A to uint64. Fails if len(A) > 8. Padded by leading 0s if len(A) < 8.
  * `btoi` fails if the input is longer than 8 bytes.
  * @see Native TEAL opcode: [`btoi`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#btoi)
+ * Min AVM version: 1
  */
 export type BtoiType = (a: bytes) => uint64
 
 /**
  * zero filled byte-array of length A
  * @see Native TEAL opcode: [`bzero`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#bzero)
+ * Min AVM version: 4
  */
 export type BzeroType = (a: uint64) => bytes
 
@@ -436,6 +522,7 @@ export type BzeroType = (a: uint64) => bytes
  * join A and B
  * `concat` fails if the result would be greater than 4096 bytes.
  * @see Native TEAL opcode: [`concat`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#concat)
+ * Min AVM version: 2
  */
 export type ConcatType = (a: bytes, b: bytes) => bytes
 
@@ -443,6 +530,7 @@ export type ConcatType = (a: bytes, b: bytes) => bytes
  * W,X = (A,B / C,D); Y,Z = (A,B modulo C,D)
  * The notation J,K indicates that two uint64 values J and K are interpreted as a uint128 value, with J as the high uint64 and K the low.
  * @see Native TEAL opcode: [`divmodw`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#divmodw)
+ * Min AVM version: 4
  */
 export type DivmodwType = (a: uint64, b: uint64, c: uint64, d: uint64) => readonly [uint64, uint64, uint64, uint64]
 
@@ -450,6 +538,7 @@ export type DivmodwType = (a: uint64, b: uint64, c: uint64, d: uint64) => readon
  * A,B / C. Fail if C == 0 or if result overflows.
  * The notation A,B indicates that A and B are interpreted as a uint128 value, with A as the high uint64 and B the low.
  * @see Native TEAL opcode: [`divw`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#divw)
+ * Min AVM version: 6
  */
 export type DivwType = (a: uint64, b: uint64, c: uint64) => uint64
 
@@ -468,6 +557,7 @@ export type EllipticCurveType = {
    * A and/or B are allowed to be the point at infinity.
    * Does _not_ check if A and B are in the main prime-order subgroup.
    * @see Native TEAL opcode: [`ec_add`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#ec_add)
+   * Min AVM version: 10
    */
   add(g: Ec, a: bytes, b: bytes): bytes
 
@@ -476,6 +566,7 @@ export type EllipticCurveType = {
    * BN254 points are mapped by the SVDW map. BLS12-381 points are mapped by the SSWU map.
    * G1 element inputs are base field elements and G2 element inputs are quadratic field elements, with nearly the same encoding rules (for field elements) as defined in `ec_add`. There is one difference of encoding rule: G1 element inputs do not need to be 0-padded if they fit in less than 32 bytes for BN254 and less than 48 bytes for BLS12-381. (As usual, the empty byte array represents 0.) G2 elements inputs need to be always have the required size.
    * @see Native TEAL opcode: [`ec_map_to`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#ec_map_to)
+   * Min AVM version: 10
    */
   mapTo(g: Ec, a: bytes): bytes
 
@@ -484,6 +575,7 @@ export type EllipticCurveType = {
    * A is a list of concatenated points, encoded and checked as described in `ec_add`. B is a list of concatenated scalars which, unlike ec_scalar_mul, must all be exactly 32 bytes long.
    * The name `ec_multi_scalar_mul` was chosen to reflect common usage, but a more consistent name would be `ec_multi_scalar_mul`. AVM values are limited to 4096 bytes, so `ec_multi_scalar_mul` is limited by the size of the points in the group being operated upon.
    * @see Native TEAL opcode: [`ec_multi_scalar_mul`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#ec_multi_scalar_mul)
+   * Min AVM version: 10
    */
   scalarMulMulti(g: Ec, a: bytes, b: bytes): bytes
 
@@ -491,6 +583,7 @@ export type EllipticCurveType = {
    * 1 if the product of the pairing of each point in A with its respective point in B is equal to the identity element of the target group Gt, else 0
    * A and B are concatenated points, encoded and checked as described in `ec_add`. A contains points of the group G, B contains points of the associated group (G2 if G is G1, and vice versa). Fails if A and B have a different number of points, or if any point is not in its described group or outside the main prime-order subgroup - a stronger condition than other opcodes. AVM values are limited to 4096 bytes, so `ec_pairing_check` is limited by the size of the points in the groups being operated upon.
    * @see Native TEAL opcode: [`ec_pairing_check`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#ec_pairing_check)
+   * Min AVM version: 10
    */
   pairingCheck(g: Ec, a: bytes, b: bytes): boolean
 
@@ -498,12 +591,14 @@ export type EllipticCurveType = {
    * for curve point A and scalar B, return the curve point BA, the point A multiplied by the scalar B.
    * A is a curve point encoded and checked as described in `ec_add`. Scalar B is interpreted as a big-endian unsigned integer. Fails if B exceeds 32 bytes.
    * @see Native TEAL opcode: [`ec_scalar_mul`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#ec_scalar_mul)
+   * Min AVM version: 10
    */
   scalarMul(g: Ec, a: bytes, b: bytes): bytes
 
   /**
    * 1 if A is in the main prime-order subgroup of G (including the point at infinity) else 0. Program fails if A is not in G at all.
    * @see Native TEAL opcode: [`ec_subgroup_check`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#ec_subgroup_check)
+   * Min AVM version: 10
    */
   subgroupCheck(g: Ec, a: bytes): boolean
 }
@@ -512,6 +607,7 @@ export type EllipticCurveType = {
  * decompress pubkey A into components X, Y
  * The 33 byte public key in a compressed form to be decompressed into X and Y (top) components. All values are big-endian encoded.
  * @see Native TEAL opcode: [`ecdsa_pk_decompress`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#ecdsa_pk_decompress)
+ * Min AVM version: 5
  */
 export type EcdsaPkDecompressType = (v: Ecdsa, a: bytes) => readonly [bytes, bytes]
 
@@ -519,6 +615,7 @@ export type EcdsaPkDecompressType = (v: Ecdsa, a: bytes) => readonly [bytes, byt
  * for (data A, recovery id B, signature C, D) recover a public key
  * S (top) and R elements of a signature, recovery id and data (bottom) are expected on the stack and used to deriver a public key. All values are big-endian encoded. The signed data must be 32 bytes long.
  * @see Native TEAL opcode: [`ecdsa_pk_recover`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#ecdsa_pk_recover)
+ * Min AVM version: 5
  */
 export type EcdsaPkRecoverType = (v: Ecdsa, a: bytes, b: uint64, c: bytes, d: bytes) => readonly [bytes, bytes]
 
@@ -526,6 +623,7 @@ export type EcdsaPkRecoverType = (v: Ecdsa, a: bytes, b: uint64, c: bytes, d: by
  * for (data A, signature B, C and pubkey D, E) verify the signature of the data against the pubkey => {0 or 1}
  * The 32 byte Y-component of a public key is the last element on the stack, preceded by X-component of a pubkey, preceded by S and R components of a signature, preceded by the data that is fifth element on the stack. All values are big-endian encoded. The signed data must be 32 bytes long, and signatures in lower-S form are only accepted.
  * @see Native TEAL opcode: [`ecdsa_verify`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#ecdsa_verify)
+ * Min AVM version: 5
  */
 export type EcdsaVerifyType = (v: Ecdsa, a: bytes, b: bytes, c: bytes, d: bytes, e: bytes) => boolean
 
@@ -533,24 +631,28 @@ export type EcdsaVerifyType = (v: Ecdsa, a: bytes, b: bytes, c: bytes, d: bytes,
  * for (data A, signature B, pubkey C) verify the signature of ("ProgData" || program_hash || data) against the pubkey => {0 or 1}
  * The 32 byte public key is the last element on the stack, preceded by the 64 byte signature at the second-to-last element on the stack, preceded by the data which was signed at the third-to-last element on the stack.
  * @see Native TEAL opcode: [`ed25519verify`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#ed25519verify)
+ * Min AVM version: 1
  */
 export type Ed25519verifyType = (a: bytes, b: bytes, c: bytes) => boolean
 
 /**
  * for (data A, signature B, pubkey C) verify the signature of the data against the pubkey => {0 or 1}
  * @see Native TEAL opcode: [`ed25519verify_bare`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#ed25519verify_bare)
+ * Min AVM version: 7
  */
 export type Ed25519verifyBareType = (a: bytes, b: bytes, c: bytes) => boolean
 
 /**
  * A raised to the Bth power. Fail if A == B == 0 and on overflow
  * @see Native TEAL opcode: [`exp`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#exp)
+ * Min AVM version: 4
  */
 export type ExpType = (a: uint64, b: uint64) => uint64
 
 /**
  * A raised to the Bth power as a 128-bit result in two uint64s. X is the high 64 bits, Y is the low. Fail if A == B == 0 or if the results exceeds 2^128-1
  * @see Native TEAL opcode: [`expw`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#expw)
+ * Min AVM version: 4
  */
 export type ExpwType = (a: uint64, b: uint64) => readonly [uint64, uint64]
 
@@ -558,31 +660,43 @@ export type ExpwType = (a: uint64, b: uint64) => readonly [uint64, uint64]
  * A range of bytes from A starting at B up to but not including B+C. If B+C is larger than the array length, the program fails
  * `extract3` can be called using `extract` with no immediates.
  * @see Native TEAL opcode: [`extract3`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#extract3)
+ * Min AVM version: 5
  */
 export type ExtractType = (a: bytes, b: uint64, c: uint64) => bytes
 
 /**
  * A uint16 formed from a range of big-endian bytes from A starting at B up to but not including B+2. If B+2 is larger than the array length, the program fails
  * @see Native TEAL opcode: [`extract_uint16`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#extract_uint16)
+ * Min AVM version: 5
  */
 export type ExtractUint16Type = (a: bytes, b: uint64) => uint64
 
 /**
  * A uint32 formed from a range of big-endian bytes from A starting at B up to but not including B+4. If B+4 is larger than the array length, the program fails
  * @see Native TEAL opcode: [`extract_uint32`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#extract_uint32)
+ * Min AVM version: 5
  */
 export type ExtractUint32Type = (a: bytes, b: uint64) => uint64
 
 /**
  * A uint64 formed from a range of big-endian bytes from A starting at B up to but not including B+8. If B+8 is larger than the array length, the program fails
  * @see Native TEAL opcode: [`extract_uint64`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#extract_uint64)
+ * Min AVM version: 5
  */
 export type ExtractUint64Type = (a: bytes, b: uint64) => uint64
+
+/**
+ * for (data A, compressed-format signature B, pubkey C) verify the signature of data against the pubkey
+ * @see Native TEAL opcode: [`falcon_verify`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#falcon_verify)
+ * Min AVM version: 11
+ */
+export type FalconVerifyType = (a: bytes, b: bytes, c: bytes) => boolean
 
 /**
  * ID of the asset or application created in the Ath transaction of the current group
  * `gaids` fails unless the requested transaction created an asset or application and A < GroupIndex.
  * @see Native TEAL opcode: [`gaids`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#gaids)
+ * Min AVM version: 4
  */
 export type GaidType = (a: uint64) => uint64
 
@@ -590,12 +704,14 @@ export type GaidType = (a: uint64) => uint64
  * Bth bit of (byte-array or integer) A. If B is greater than or equal to the bit length of the value (8*byte length), the program fails
  * see explanation of bit ordering in setbit
  * @see Native TEAL opcode: [`getbit`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#getbit)
+ * Min AVM version: 3
  */
 export type GetBitType = (a: uint64 | bytes, b: uint64) => uint64
 
 /**
  * Bth byte of A, as an integer. If B is greater than or equal to the array length, the program fails
  * @see Native TEAL opcode: [`getbyte`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#getbyte)
+ * Min AVM version: 3
  */
 export type GetByteType = (a: bytes, b: uint64) => uint64
 
@@ -605,341 +721,409 @@ export type GetByteType = (a: bytes, b: uint64) => uint64
 export type GITxnType = {
   /**
    * 32 byte address
+   * Min AVM version: 6
    */
   sender(t: uint64): Account
 
   /**
    * microalgos
+   * Min AVM version: 6
    */
   fee(t: uint64): uint64
 
   /**
    * round number
+   * Min AVM version: 6
    */
   firstValid(t: uint64): uint64
 
   /**
    * UNIX timestamp of block before txn.FirstValid. Fails if negative
+   * Min AVM version: 6
    */
   firstValidTime(t: uint64): uint64
 
   /**
    * round number
+   * Min AVM version: 6
    */
   lastValid(t: uint64): uint64
 
   /**
    * Any data up to 1024 bytes
+   * Min AVM version: 6
    */
   note(t: uint64): bytes
 
   /**
    * 32 byte lease value
+   * Min AVM version: 6
    */
   lease(t: uint64): bytes
 
   /**
    * 32 byte address
+   * Min AVM version: 6
    */
   receiver(t: uint64): Account
 
   /**
    * microalgos
+   * Min AVM version: 6
    */
   amount(t: uint64): uint64
 
   /**
    * 32 byte address
+   * Min AVM version: 6
    */
   closeRemainderTo(t: uint64): Account
 
   /**
    * 32 byte address
+   * Min AVM version: 6
    */
   votePk(t: uint64): bytes
 
   /**
    * 32 byte address
+   * Min AVM version: 6
    */
   selectionPk(t: uint64): bytes
 
   /**
    * The first round that the participation key is valid.
+   * Min AVM version: 6
    */
   voteFirst(t: uint64): uint64
 
   /**
    * The last round that the participation key is valid.
+   * Min AVM version: 6
    */
   voteLast(t: uint64): uint64
 
   /**
    * Dilution for the 2-level participation key
+   * Min AVM version: 6
    */
   voteKeyDilution(t: uint64): uint64
 
   /**
    * Transaction type as bytes
+   * Min AVM version: 6
    */
   type(t: uint64): bytes
 
   /**
    * Transaction type as integer
+   * Min AVM version: 6
    */
   typeEnum(t: uint64): uint64
 
   /**
    * Asset ID
+   * Min AVM version: 6
    */
   xferAsset(t: uint64): Asset
 
   /**
    * value in Asset's units
+   * Min AVM version: 6
    */
   assetAmount(t: uint64): uint64
 
   /**
    * 32 byte address. Source of assets if Sender is the Asset's Clawback address.
+   * Min AVM version: 6
    */
   assetSender(t: uint64): Account
 
   /**
    * 32 byte address
+   * Min AVM version: 6
    */
   assetReceiver(t: uint64): Account
 
   /**
    * 32 byte address
+   * Min AVM version: 6
    */
   assetCloseTo(t: uint64): Account
 
   /**
    * Position of this transaction within an atomic transaction group. A stand-alone transaction is implicitly element 0 in a group of 1
+   * Min AVM version: 6
    */
   groupIndex(t: uint64): uint64
 
   /**
    * The computed ID for this transaction. 32 bytes.
+   * Min AVM version: 6
    */
   txId(t: uint64): bytes
 
   /**
    * ApplicationID from ApplicationCall transaction
+   * Min AVM version: 6
    */
   applicationId(t: uint64): Application
 
   /**
    * ApplicationCall transaction on completion action
+   * Min AVM version: 6
    */
   onCompletion(t: uint64): uint64
 
   /**
    * Arguments passed to the application in the ApplicationCall transaction
+   * Min AVM version: 6
    */
   applicationArgs(t: uint64, a: uint64): bytes
 
   /**
    * Number of ApplicationArgs
+   * Min AVM version: 6
    */
   numAppArgs(t: uint64): uint64
 
   /**
    * Accounts listed in the ApplicationCall transaction
+   * Min AVM version: 6
    */
   accounts(t: uint64, a: uint64): Account
 
   /**
    * Number of Accounts
+   * Min AVM version: 6
    */
   numAccounts(t: uint64): uint64
 
   /**
    * Approval program
+   * Min AVM version: 6
    */
   approvalProgram(t: uint64): bytes
 
   /**
    * Clear state program
+   * Min AVM version: 6
    */
   clearStateProgram(t: uint64): bytes
 
   /**
    * 32 byte Sender's new AuthAddr
+   * Min AVM version: 6
    */
   rekeyTo(t: uint64): Account
 
   /**
    * Asset ID in asset config transaction
+   * Min AVM version: 6
    */
   configAsset(t: uint64): Asset
 
   /**
    * Total number of units of this asset created
+   * Min AVM version: 6
    */
   configAssetTotal(t: uint64): uint64
 
   /**
    * Number of digits to display after the decimal place when displaying the asset
+   * Min AVM version: 6
    */
   configAssetDecimals(t: uint64): uint64
 
   /**
    * Whether the asset's slots are frozen by default or not, 0 or 1
+   * Min AVM version: 6
    */
   configAssetDefaultFrozen(t: uint64): boolean
 
   /**
    * Unit name of the asset
+   * Min AVM version: 6
    */
   configAssetUnitName(t: uint64): bytes
 
   /**
    * The asset name
+   * Min AVM version: 6
    */
   configAssetName(t: uint64): bytes
 
   /**
    * URL
+   * Min AVM version: 6
    */
   configAssetUrl(t: uint64): bytes
 
   /**
    * 32 byte commitment to unspecified asset metadata
+   * Min AVM version: 6
    */
   configAssetMetadataHash(t: uint64): bytes
 
   /**
    * 32 byte address
+   * Min AVM version: 6
    */
   configAssetManager(t: uint64): Account
 
   /**
    * 32 byte address
+   * Min AVM version: 6
    */
   configAssetReserve(t: uint64): Account
 
   /**
    * 32 byte address
+   * Min AVM version: 6
    */
   configAssetFreeze(t: uint64): Account
 
   /**
    * 32 byte address
+   * Min AVM version: 6
    */
   configAssetClawback(t: uint64): Account
 
   /**
    * Asset ID being frozen or un-frozen
+   * Min AVM version: 6
    */
   freezeAsset(t: uint64): Asset
 
   /**
    * 32 byte address of the account whose asset slot is being frozen or un-frozen
+   * Min AVM version: 6
    */
   freezeAssetAccount(t: uint64): Account
 
   /**
    * The new frozen value, 0 or 1
+   * Min AVM version: 6
    */
   freezeAssetFrozen(t: uint64): boolean
 
   /**
    * Foreign Assets listed in the ApplicationCall transaction
+   * Min AVM version: 6
    */
   assets(t: uint64, a: uint64): Asset
 
   /**
    * Number of Assets
+   * Min AVM version: 6
    */
   numAssets(t: uint64): uint64
 
   /**
    * Foreign Apps listed in the ApplicationCall transaction
+   * Min AVM version: 6
    */
   applications(t: uint64, a: uint64): Application
 
   /**
    * Number of Applications
+   * Min AVM version: 6
    */
   numApplications(t: uint64): uint64
 
   /**
    * Number of global state integers in ApplicationCall
+   * Min AVM version: 6
    */
   globalNumUint(t: uint64): uint64
 
   /**
    * Number of global state byteslices in ApplicationCall
+   * Min AVM version: 6
    */
   globalNumByteSlice(t: uint64): uint64
 
   /**
    * Number of local state integers in ApplicationCall
+   * Min AVM version: 6
    */
   localNumUint(t: uint64): uint64
 
   /**
    * Number of local state byteslices in ApplicationCall
+   * Min AVM version: 6
    */
   localNumByteSlice(t: uint64): uint64
 
   /**
    * Number of additional pages for each of the application's approval and clear state programs. An ExtraProgramPages of 1 means 2048 more total bytes, or 1024 for each program.
+   * Min AVM version: 6
    */
   extraProgramPages(t: uint64): uint64
 
   /**
    * Marks an account nonparticipating for rewards
+   * Min AVM version: 6
    */
   nonparticipation(t: uint64): boolean
 
   /**
    * Log messages emitted by an application call (only with `itxn` in v5). Application mode only
+   * Min AVM version: 6
    */
   logs(t: uint64, a: uint64): bytes
 
   /**
    * Number of Logs (only with `itxn` in v5). Application mode only
+   * Min AVM version: 6
    */
   numLogs(t: uint64): uint64
 
   /**
    * Asset ID allocated by the creation of an ASA (only with `itxn` in v5). Application mode only
+   * Min AVM version: 6
    */
   createdAssetId(t: uint64): Asset
 
   /**
    * ApplicationID allocated by the creation of an application (only with `itxn` in v5). Application mode only
+   * Min AVM version: 6
    */
   createdApplicationId(t: uint64): Application
 
   /**
    * The last message emitted. Empty bytes if none were emitted. Application mode only
+   * Min AVM version: 6
    */
   lastLog(t: uint64): bytes
 
   /**
    * 64 byte state proof public key
+   * Min AVM version: 6
    */
   stateProofPk(t: uint64): bytes
 
   /**
    * Approval Program as an array of pages
+   * Min AVM version: 6
    */
   approvalProgramPages(t: uint64, a: uint64): bytes
 
   /**
    * Number of Approval Program pages
+   * Min AVM version: 6
    */
   numApprovalProgramPages(t: uint64): uint64
 
   /**
    * ClearState Program as an array of pages
+   * Min AVM version: 6
    */
   clearStateProgramPages(t: uint64, a: uint64): bytes
 
   /**
    * Number of ClearState Program pages
+   * Min AVM version: 6
    */
   numClearStateProgramPages(t: uint64): uint64
 }
@@ -947,105 +1131,154 @@ export type GITxnType = {
 /**
  * Bth scratch space value of the Ath transaction in the current group
  * @see Native TEAL opcode: [`gloadss`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#gloadss)
+ * Min AVM version: 6
  */
 export type GloadBytesType = (a: uint64, b: uint64) => bytes
 
 /**
  * Bth scratch space value of the Ath transaction in the current group
  * @see Native TEAL opcode: [`gloadss`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#gloadss)
+ * Min AVM version: 6
  */
 export type GloadUint64Type = (a: uint64, b: uint64) => uint64
-
 export type GlobalType = {
   /**
    * microalgos
+   * Min AVM version: 1
    */
   get minTxnFee(): uint64
 
   /**
    * microalgos
+   * Min AVM version: 1
    */
   get minBalance(): uint64
 
   /**
    * rounds
+   * Min AVM version: 1
    */
   get maxTxnLife(): uint64
 
   /**
    * 32 byte address of all zero bytes
+   * Min AVM version: 1
    */
   get zeroAddress(): Account
 
   /**
    * Number of transactions in this atomic transaction group. At least 1
+   * Min AVM version: 1
    */
   get groupSize(): uint64
 
   /**
    * Maximum supported version
+   * Min AVM version: 1
    */
   get logicSigVersion(): uint64
 
   /**
    * Current round number. Application mode only.
+   * Min AVM version: 1
    */
   get round(): uint64
 
   /**
    * Last confirmed block UNIX timestamp. Fails if negative. Application mode only.
+   * Min AVM version: 1
    */
   get latestTimestamp(): uint64
 
   /**
    * ID of current application executing. Application mode only.
+   * Min AVM version: 1
    */
   get currentApplicationId(): Application
 
   /**
    * Address of the creator of the current application. Application mode only.
+   * Min AVM version: 1
    */
   get creatorAddress(): Account
 
   /**
    * Address that the current application controls. Application mode only.
+   * Min AVM version: 1
    */
   get currentApplicationAddress(): Account
 
   /**
    * ID of the transaction group. 32 zero bytes if the transaction is not part of a group.
+   * Min AVM version: 1
    */
   get groupId(): bytes
 
   /**
    * The remaining cost that can be spent by opcodes in this program.
+   * Min AVM version: 1
    */
   get opcodeBudget(): uint64
 
   /**
    * The application ID of the application that called this application. 0 if this application is at the top-level. Application mode only.
+   * Min AVM version: 1
    */
   get callerApplicationId(): uint64
 
   /**
    * The application address of the application that called this application. ZeroAddress if this application is at the top-level. Application mode only.
+   * Min AVM version: 1
    */
   get callerApplicationAddress(): Account
 
   /**
    * The additional minimum balance required to create (and opt-in to) an asset.
+   * Min AVM version: 1
    */
   get assetCreateMinBalance(): uint64
 
   /**
    * The additional minimum balance required to opt-in to an asset.
+   * Min AVM version: 1
    */
   get assetOptInMinBalance(): uint64
 
   /**
    * The Genesis Hash for the network.
+   * Min AVM version: 1
    */
   get genesisHash(): bytes
+
+  /**
+   * Whether block proposal payouts are enabled.
+   * Min AVM version: 1
+   */
+  get payoutsEnabled(): boolean
+
+  /**
+   * The fee required in a keyreg transaction to make an account incentive eligible.
+   * Min AVM version: 1
+   */
+  get payoutsGoOnlineFee(): uint64
+
+  /**
+   * The percentage of transaction fees in a block that can be paid to the block proposer.
+   * Min AVM version: 1
+   */
+  get payoutsPercent(): uint64
+
+  /**
+   * The minimum algo balance an account must have in the agreement round to receive block payouts in the proposal round.
+   * Min AVM version: 1
+   */
+  get payoutsMinBalance(): uint64
+
+  /**
+   * The maximum algo balance an account can have in the agreement round to receive block payouts in the proposal round.
+   * Min AVM version: 1
+   */
+  get payoutsMaxBalance(): uint64
 }
 
 /**
@@ -1054,341 +1287,409 @@ export type GlobalType = {
 export type GTxnType = {
   /**
    * 32 byte address
+   * Min AVM version: 1
    */
   sender(t: uint64): Account
 
   /**
    * microalgos
+   * Min AVM version: 1
    */
   fee(t: uint64): uint64
 
   /**
    * round number
+   * Min AVM version: 1
    */
   firstValid(t: uint64): uint64
 
   /**
    * UNIX timestamp of block before txn.FirstValid. Fails if negative
+   * Min AVM version: 1
    */
   firstValidTime(t: uint64): uint64
 
   /**
    * round number
+   * Min AVM version: 1
    */
   lastValid(t: uint64): uint64
 
   /**
    * Any data up to 1024 bytes
+   * Min AVM version: 1
    */
   note(t: uint64): bytes
 
   /**
    * 32 byte lease value
+   * Min AVM version: 1
    */
   lease(t: uint64): bytes
 
   /**
    * 32 byte address
+   * Min AVM version: 1
    */
   receiver(t: uint64): Account
 
   /**
    * microalgos
+   * Min AVM version: 1
    */
   amount(t: uint64): uint64
 
   /**
    * 32 byte address
+   * Min AVM version: 1
    */
   closeRemainderTo(t: uint64): Account
 
   /**
    * 32 byte address
+   * Min AVM version: 1
    */
   votePk(t: uint64): bytes
 
   /**
    * 32 byte address
+   * Min AVM version: 1
    */
   selectionPk(t: uint64): bytes
 
   /**
    * The first round that the participation key is valid.
+   * Min AVM version: 1
    */
   voteFirst(t: uint64): uint64
 
   /**
    * The last round that the participation key is valid.
+   * Min AVM version: 1
    */
   voteLast(t: uint64): uint64
 
   /**
    * Dilution for the 2-level participation key
+   * Min AVM version: 1
    */
   voteKeyDilution(t: uint64): uint64
 
   /**
    * Transaction type as bytes
+   * Min AVM version: 1
    */
   type(t: uint64): bytes
 
   /**
    * Transaction type as integer
+   * Min AVM version: 1
    */
   typeEnum(t: uint64): uint64
 
   /**
    * Asset ID
+   * Min AVM version: 1
    */
   xferAsset(t: uint64): Asset
 
   /**
    * value in Asset's units
+   * Min AVM version: 1
    */
   assetAmount(t: uint64): uint64
 
   /**
    * 32 byte address. Source of assets if Sender is the Asset's Clawback address.
+   * Min AVM version: 1
    */
   assetSender(t: uint64): Account
 
   /**
    * 32 byte address
+   * Min AVM version: 1
    */
   assetReceiver(t: uint64): Account
 
   /**
    * 32 byte address
+   * Min AVM version: 1
    */
   assetCloseTo(t: uint64): Account
 
   /**
    * Position of this transaction within an atomic transaction group. A stand-alone transaction is implicitly element 0 in a group of 1
+   * Min AVM version: 1
    */
   groupIndex(t: uint64): uint64
 
   /**
    * The computed ID for this transaction. 32 bytes.
+   * Min AVM version: 1
    */
   txId(t: uint64): bytes
 
   /**
    * ApplicationID from ApplicationCall transaction
+   * Min AVM version: 1
    */
   applicationId(t: uint64): Application
 
   /**
    * ApplicationCall transaction on completion action
+   * Min AVM version: 1
    */
   onCompletion(t: uint64): uint64
 
   /**
    * Arguments passed to the application in the ApplicationCall transaction
+   * Min AVM version: 5
    */
   applicationArgs(a: uint64, b: uint64): bytes
 
   /**
    * Number of ApplicationArgs
+   * Min AVM version: 1
    */
   numAppArgs(t: uint64): uint64
 
   /**
    * Accounts listed in the ApplicationCall transaction
+   * Min AVM version: 5
    */
   accounts(a: uint64, b: uint64): Account
 
   /**
    * Number of Accounts
+   * Min AVM version: 1
    */
   numAccounts(t: uint64): uint64
 
   /**
    * Approval program
+   * Min AVM version: 1
    */
   approvalProgram(t: uint64): bytes
 
   /**
    * Clear state program
+   * Min AVM version: 1
    */
   clearStateProgram(t: uint64): bytes
 
   /**
    * 32 byte Sender's new AuthAddr
+   * Min AVM version: 1
    */
   rekeyTo(t: uint64): Account
 
   /**
    * Asset ID in asset config transaction
+   * Min AVM version: 1
    */
   configAsset(t: uint64): Asset
 
   /**
    * Total number of units of this asset created
+   * Min AVM version: 1
    */
   configAssetTotal(t: uint64): uint64
 
   /**
    * Number of digits to display after the decimal place when displaying the asset
+   * Min AVM version: 1
    */
   configAssetDecimals(t: uint64): uint64
 
   /**
    * Whether the asset's slots are frozen by default or not, 0 or 1
+   * Min AVM version: 1
    */
   configAssetDefaultFrozen(t: uint64): boolean
 
   /**
    * Unit name of the asset
+   * Min AVM version: 1
    */
   configAssetUnitName(t: uint64): bytes
 
   /**
    * The asset name
+   * Min AVM version: 1
    */
   configAssetName(t: uint64): bytes
 
   /**
    * URL
+   * Min AVM version: 1
    */
   configAssetUrl(t: uint64): bytes
 
   /**
    * 32 byte commitment to unspecified asset metadata
+   * Min AVM version: 1
    */
   configAssetMetadataHash(t: uint64): bytes
 
   /**
    * 32 byte address
+   * Min AVM version: 1
    */
   configAssetManager(t: uint64): Account
 
   /**
    * 32 byte address
+   * Min AVM version: 1
    */
   configAssetReserve(t: uint64): Account
 
   /**
    * 32 byte address
+   * Min AVM version: 1
    */
   configAssetFreeze(t: uint64): Account
 
   /**
    * 32 byte address
+   * Min AVM version: 1
    */
   configAssetClawback(t: uint64): Account
 
   /**
    * Asset ID being frozen or un-frozen
+   * Min AVM version: 1
    */
   freezeAsset(t: uint64): Asset
 
   /**
    * 32 byte address of the account whose asset slot is being frozen or un-frozen
+   * Min AVM version: 1
    */
   freezeAssetAccount(t: uint64): Account
 
   /**
    * The new frozen value, 0 or 1
+   * Min AVM version: 1
    */
   freezeAssetFrozen(t: uint64): boolean
 
   /**
    * Foreign Assets listed in the ApplicationCall transaction
+   * Min AVM version: 5
    */
   assets(a: uint64, b: uint64): Asset
 
   /**
    * Number of Assets
+   * Min AVM version: 1
    */
   numAssets(t: uint64): uint64
 
   /**
    * Foreign Apps listed in the ApplicationCall transaction
+   * Min AVM version: 5
    */
   applications(a: uint64, b: uint64): Application
 
   /**
    * Number of Applications
+   * Min AVM version: 1
    */
   numApplications(t: uint64): uint64
 
   /**
    * Number of global state integers in ApplicationCall
+   * Min AVM version: 1
    */
   globalNumUint(t: uint64): uint64
 
   /**
    * Number of global state byteslices in ApplicationCall
+   * Min AVM version: 1
    */
   globalNumByteSlice(t: uint64): uint64
 
   /**
    * Number of local state integers in ApplicationCall
+   * Min AVM version: 1
    */
   localNumUint(t: uint64): uint64
 
   /**
    * Number of local state byteslices in ApplicationCall
+   * Min AVM version: 1
    */
   localNumByteSlice(t: uint64): uint64
 
   /**
    * Number of additional pages for each of the application's approval and clear state programs. An ExtraProgramPages of 1 means 2048 more total bytes, or 1024 for each program.
+   * Min AVM version: 1
    */
   extraProgramPages(t: uint64): uint64
 
   /**
    * Marks an account nonparticipating for rewards
+   * Min AVM version: 1
    */
   nonparticipation(t: uint64): boolean
 
   /**
    * Log messages emitted by an application call (only with `itxn` in v5). Application mode only
+   * Min AVM version: 5
    */
   logs(a: uint64, b: uint64): bytes
 
   /**
    * Number of Logs (only with `itxn` in v5). Application mode only
+   * Min AVM version: 1
    */
   numLogs(t: uint64): uint64
 
   /**
    * Asset ID allocated by the creation of an ASA (only with `itxn` in v5). Application mode only
+   * Min AVM version: 1
    */
   createdAssetId(t: uint64): Asset
 
   /**
    * ApplicationID allocated by the creation of an application (only with `itxn` in v5). Application mode only
+   * Min AVM version: 1
    */
   createdApplicationId(t: uint64): Application
 
   /**
    * The last message emitted. Empty bytes if none were emitted. Application mode only
+   * Min AVM version: 1
    */
   lastLog(t: uint64): bytes
 
   /**
    * 64 byte state proof public key
+   * Min AVM version: 1
    */
   stateProofPk(t: uint64): bytes
 
   /**
    * Approval Program as an array of pages
+   * Min AVM version: 5
    */
   approvalProgramPages(a: uint64, b: uint64): bytes
 
   /**
    * Number of Approval Program pages
+   * Min AVM version: 1
    */
   numApprovalProgramPages(t: uint64): uint64
 
   /**
    * ClearState Program as an array of pages
+   * Min AVM version: 5
    */
   clearStateProgramPages(a: uint64, b: uint64): bytes
 
   /**
    * Number of ClearState Program pages
+   * Min AVM version: 1
    */
   numClearStateProgramPages(t: uint64): uint64
 }
@@ -1396,6 +1697,7 @@ export type GTxnType = {
 /**
  * converts uint64 A to big-endian byte array, always of length 8
  * @see Native TEAL opcode: [`itob`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#itob)
+ * Min AVM version: 1
  */
 export type ItobType = (a: uint64) => bytes
 
@@ -1405,341 +1707,409 @@ export type ItobType = (a: uint64) => bytes
 export type ITxnType = {
   /**
    * 32 byte address
+   * Min AVM version: 5
    */
   get sender(): Account
 
   /**
    * microalgos
+   * Min AVM version: 5
    */
   get fee(): uint64
 
   /**
    * round number
+   * Min AVM version: 5
    */
   get firstValid(): uint64
 
   /**
    * UNIX timestamp of block before txn.FirstValid. Fails if negative
+   * Min AVM version: 5
    */
   get firstValidTime(): uint64
 
   /**
    * round number
+   * Min AVM version: 5
    */
   get lastValid(): uint64
 
   /**
    * Any data up to 1024 bytes
+   * Min AVM version: 5
    */
   get note(): bytes
 
   /**
    * 32 byte lease value
+   * Min AVM version: 5
    */
   get lease(): bytes
 
   /**
    * 32 byte address
+   * Min AVM version: 5
    */
   get receiver(): Account
 
   /**
    * microalgos
+   * Min AVM version: 5
    */
   get amount(): uint64
 
   /**
    * 32 byte address
+   * Min AVM version: 5
    */
   get closeRemainderTo(): Account
 
   /**
    * 32 byte address
+   * Min AVM version: 5
    */
   get votePk(): bytes
 
   /**
    * 32 byte address
+   * Min AVM version: 5
    */
   get selectionPk(): bytes
 
   /**
    * The first round that the participation key is valid.
+   * Min AVM version: 5
    */
   get voteFirst(): uint64
 
   /**
    * The last round that the participation key is valid.
+   * Min AVM version: 5
    */
   get voteLast(): uint64
 
   /**
    * Dilution for the 2-level participation key
+   * Min AVM version: 5
    */
   get voteKeyDilution(): uint64
 
   /**
    * Transaction type as bytes
+   * Min AVM version: 5
    */
   get type(): bytes
 
   /**
    * Transaction type as integer
+   * Min AVM version: 5
    */
   get typeEnum(): uint64
 
   /**
    * Asset ID
+   * Min AVM version: 5
    */
   get xferAsset(): Asset
 
   /**
    * value in Asset's units
+   * Min AVM version: 5
    */
   get assetAmount(): uint64
 
   /**
    * 32 byte address. Source of assets if Sender is the Asset's Clawback address.
+   * Min AVM version: 5
    */
   get assetSender(): Account
 
   /**
    * 32 byte address
+   * Min AVM version: 5
    */
   get assetReceiver(): Account
 
   /**
    * 32 byte address
+   * Min AVM version: 5
    */
   get assetCloseTo(): Account
 
   /**
    * Position of this transaction within an atomic transaction group. A stand-alone transaction is implicitly element 0 in a group of 1
+   * Min AVM version: 5
    */
   get groupIndex(): uint64
 
   /**
    * The computed ID for this transaction. 32 bytes.
+   * Min AVM version: 5
    */
   get txId(): bytes
 
   /**
    * ApplicationID from ApplicationCall transaction
+   * Min AVM version: 5
    */
   get applicationId(): Application
 
   /**
    * ApplicationCall transaction on completion action
+   * Min AVM version: 5
    */
   get onCompletion(): uint64
 
   /**
    * Arguments passed to the application in the ApplicationCall transaction
+   * Min AVM version: 6
    */
   applicationArgs(a: uint64): bytes
 
   /**
    * Number of ApplicationArgs
+   * Min AVM version: 5
    */
   get numAppArgs(): uint64
 
   /**
    * Accounts listed in the ApplicationCall transaction
+   * Min AVM version: 6
    */
   accounts(a: uint64): Account
 
   /**
    * Number of Accounts
+   * Min AVM version: 5
    */
   get numAccounts(): uint64
 
   /**
    * Approval program
+   * Min AVM version: 5
    */
   get approvalProgram(): bytes
 
   /**
    * Clear state program
+   * Min AVM version: 5
    */
   get clearStateProgram(): bytes
 
   /**
    * 32 byte Sender's new AuthAddr
+   * Min AVM version: 5
    */
   get rekeyTo(): Account
 
   /**
    * Asset ID in asset config transaction
+   * Min AVM version: 5
    */
   get configAsset(): Asset
 
   /**
    * Total number of units of this asset created
+   * Min AVM version: 5
    */
   get configAssetTotal(): uint64
 
   /**
    * Number of digits to display after the decimal place when displaying the asset
+   * Min AVM version: 5
    */
   get configAssetDecimals(): uint64
 
   /**
    * Whether the asset's slots are frozen by default or not, 0 or 1
+   * Min AVM version: 5
    */
   get configAssetDefaultFrozen(): boolean
 
   /**
    * Unit name of the asset
+   * Min AVM version: 5
    */
   get configAssetUnitName(): bytes
 
   /**
    * The asset name
+   * Min AVM version: 5
    */
   get configAssetName(): bytes
 
   /**
    * URL
+   * Min AVM version: 5
    */
   get configAssetUrl(): bytes
 
   /**
    * 32 byte commitment to unspecified asset metadata
+   * Min AVM version: 5
    */
   get configAssetMetadataHash(): bytes
 
   /**
    * 32 byte address
+   * Min AVM version: 5
    */
   get configAssetManager(): Account
 
   /**
    * 32 byte address
+   * Min AVM version: 5
    */
   get configAssetReserve(): Account
 
   /**
    * 32 byte address
+   * Min AVM version: 5
    */
   get configAssetFreeze(): Account
 
   /**
    * 32 byte address
+   * Min AVM version: 5
    */
   get configAssetClawback(): Account
 
   /**
    * Asset ID being frozen or un-frozen
+   * Min AVM version: 5
    */
   get freezeAsset(): Asset
 
   /**
    * 32 byte address of the account whose asset slot is being frozen or un-frozen
+   * Min AVM version: 5
    */
   get freezeAssetAccount(): Account
 
   /**
    * The new frozen value, 0 or 1
+   * Min AVM version: 5
    */
   get freezeAssetFrozen(): boolean
 
   /**
    * Foreign Assets listed in the ApplicationCall transaction
+   * Min AVM version: 6
    */
   assets(a: uint64): Asset
 
   /**
    * Number of Assets
+   * Min AVM version: 5
    */
   get numAssets(): uint64
 
   /**
    * Foreign Apps listed in the ApplicationCall transaction
+   * Min AVM version: 6
    */
   applications(a: uint64): Application
 
   /**
    * Number of Applications
+   * Min AVM version: 5
    */
   get numApplications(): uint64
 
   /**
    * Number of global state integers in ApplicationCall
+   * Min AVM version: 5
    */
   get globalNumUint(): uint64
 
   /**
    * Number of global state byteslices in ApplicationCall
+   * Min AVM version: 5
    */
   get globalNumByteSlice(): uint64
 
   /**
    * Number of local state integers in ApplicationCall
+   * Min AVM version: 5
    */
   get localNumUint(): uint64
 
   /**
    * Number of local state byteslices in ApplicationCall
+   * Min AVM version: 5
    */
   get localNumByteSlice(): uint64
 
   /**
    * Number of additional pages for each of the application's approval and clear state programs. An ExtraProgramPages of 1 means 2048 more total bytes, or 1024 for each program.
+   * Min AVM version: 5
    */
   get extraProgramPages(): uint64
 
   /**
    * Marks an account nonparticipating for rewards
+   * Min AVM version: 5
    */
   get nonparticipation(): boolean
 
   /**
    * Log messages emitted by an application call (only with `itxn` in v5). Application mode only
+   * Min AVM version: 6
    */
   logs(a: uint64): bytes
 
   /**
    * Number of Logs (only with `itxn` in v5). Application mode only
+   * Min AVM version: 5
    */
   get numLogs(): uint64
 
   /**
    * Asset ID allocated by the creation of an ASA (only with `itxn` in v5). Application mode only
+   * Min AVM version: 5
    */
   get createdAssetId(): Asset
 
   /**
    * ApplicationID allocated by the creation of an application (only with `itxn` in v5). Application mode only
+   * Min AVM version: 5
    */
   get createdApplicationId(): Application
 
   /**
    * The last message emitted. Empty bytes if none were emitted. Application mode only
+   * Min AVM version: 5
    */
   get lastLog(): bytes
 
   /**
    * 64 byte state proof public key
+   * Min AVM version: 5
    */
   get stateProofPk(): bytes
 
   /**
    * Approval Program as an array of pages
+   * Min AVM version: 6
    */
   approvalProgramPages(a: uint64): bytes
 
   /**
    * Number of Approval Program pages
+   * Min AVM version: 5
    */
   get numApprovalProgramPages(): uint64
 
   /**
    * ClearState Program as an array of pages
+   * Min AVM version: 6
    */
   clearStateProgramPages(a: uint64): bytes
 
   /**
    * Number of ClearState Program pages
+   * Min AVM version: 5
    */
   get numClearStateProgramPages(): uint64
 }
@@ -1752,261 +2122,313 @@ export type ITxnCreateType = {
    * begin preparation of a new inner transaction in a new transaction group
    * `itxn_begin` initializes Sender to the application address; Fee to the minimum allowable, taking into account MinTxnFee and credit from overpaying in earlier transactions; FirstValid/LastValid to the values in the invoking transaction, and all other fields to zero or empty values.
    * @see Native TEAL opcode: [`itxn_begin`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#itxn_begin)
+   * Min AVM version: 5
    */
   begin(): void
 
   /**
    * 32 byte address
+   * Min AVM version: 5
    */
   setSender(a: Account): void
 
   /**
    * microalgos
+   * Min AVM version: 5
    */
   setFee(a: uint64): void
 
   /**
    * Any data up to 1024 bytes
+   * Min AVM version: 5
    */
   setNote(a: bytes): void
 
   /**
    * 32 byte address
+   * Min AVM version: 5
    */
   setReceiver(a: Account): void
 
   /**
    * microalgos
+   * Min AVM version: 5
    */
   setAmount(a: uint64): void
 
   /**
    * 32 byte address
+   * Min AVM version: 5
    */
   setCloseRemainderTo(a: Account): void
 
   /**
    * 32 byte address
+   * Min AVM version: 5
    */
   setVotePk(a: bytes): void
 
   /**
    * 32 byte address
+   * Min AVM version: 5
    */
   setSelectionPk(a: bytes): void
 
   /**
    * The first round that the participation key is valid.
+   * Min AVM version: 5
    */
   setVoteFirst(a: uint64): void
 
   /**
    * The last round that the participation key is valid.
+   * Min AVM version: 5
    */
   setVoteLast(a: uint64): void
 
   /**
    * Dilution for the 2-level participation key
+   * Min AVM version: 5
    */
   setVoteKeyDilution(a: uint64): void
 
   /**
    * Transaction type as bytes
+   * Min AVM version: 5
    */
   setType(a: bytes): void
 
   /**
    * Transaction type as integer
+   * Min AVM version: 5
    */
   setTypeEnum(a: uint64): void
 
   /**
    * Asset ID
+   * Min AVM version: 5
    */
   setXferAsset(a: Asset | uint64): void
 
   /**
    * value in Asset's units
+   * Min AVM version: 5
    */
   setAssetAmount(a: uint64): void
 
   /**
    * 32 byte address. Source of assets if Sender is the Asset's Clawback address.
+   * Min AVM version: 5
    */
   setAssetSender(a: Account): void
 
   /**
    * 32 byte address
+   * Min AVM version: 5
    */
   setAssetReceiver(a: Account): void
 
   /**
    * 32 byte address
+   * Min AVM version: 5
    */
   setAssetCloseTo(a: Account): void
 
   /**
    * ApplicationID from ApplicationCall transaction
+   * Min AVM version: 5
    */
   setApplicationId(a: Application | uint64): void
 
   /**
    * ApplicationCall transaction on completion action
+   * Min AVM version: 5
    */
   setOnCompletion(a: uint64): void
 
   /**
    * Arguments passed to the application in the ApplicationCall transaction
+   * Min AVM version: 5
    */
   setApplicationArgs(a: bytes): void
 
   /**
    * Accounts listed in the ApplicationCall transaction
+   * Min AVM version: 5
    */
   setAccounts(a: Account): void
 
   /**
    * Approval program
+   * Min AVM version: 5
    */
   setApprovalProgram(a: bytes): void
 
   /**
    * Clear state program
+   * Min AVM version: 5
    */
   setClearStateProgram(a: bytes): void
 
   /**
    * 32 byte Sender's new AuthAddr
+   * Min AVM version: 5
    */
   setRekeyTo(a: Account): void
 
   /**
    * Asset ID in asset config transaction
+   * Min AVM version: 5
    */
   setConfigAsset(a: Asset | uint64): void
 
   /**
    * Total number of units of this asset created
+   * Min AVM version: 5
    */
   setConfigAssetTotal(a: uint64): void
 
   /**
    * Number of digits to display after the decimal place when displaying the asset
+   * Min AVM version: 5
    */
   setConfigAssetDecimals(a: uint64): void
 
   /**
    * Whether the asset's slots are frozen by default or not, 0 or 1
+   * Min AVM version: 5
    */
   setConfigAssetDefaultFrozen(a: boolean): void
 
   /**
    * Unit name of the asset
+   * Min AVM version: 5
    */
   setConfigAssetUnitName(a: bytes): void
 
   /**
    * The asset name
+   * Min AVM version: 5
    */
   setConfigAssetName(a: bytes): void
 
   /**
    * URL
+   * Min AVM version: 5
    */
   setConfigAssetUrl(a: bytes): void
 
   /**
    * 32 byte commitment to unspecified asset metadata
+   * Min AVM version: 5
    */
   setConfigAssetMetadataHash(a: bytes): void
 
   /**
    * 32 byte address
+   * Min AVM version: 5
    */
   setConfigAssetManager(a: Account): void
 
   /**
    * 32 byte address
+   * Min AVM version: 5
    */
   setConfigAssetReserve(a: Account): void
 
   /**
    * 32 byte address
+   * Min AVM version: 5
    */
   setConfigAssetFreeze(a: Account): void
 
   /**
    * 32 byte address
+   * Min AVM version: 5
    */
   setConfigAssetClawback(a: Account): void
 
   /**
    * Asset ID being frozen or un-frozen
+   * Min AVM version: 5
    */
   setFreezeAsset(a: Asset | uint64): void
 
   /**
    * 32 byte address of the account whose asset slot is being frozen or un-frozen
+   * Min AVM version: 5
    */
   setFreezeAssetAccount(a: Account): void
 
   /**
    * The new frozen value, 0 or 1
+   * Min AVM version: 5
    */
   setFreezeAssetFrozen(a: boolean): void
 
   /**
    * Foreign Assets listed in the ApplicationCall transaction
+   * Min AVM version: 5
    */
   setAssets(a: uint64): void
 
   /**
    * Foreign Apps listed in the ApplicationCall transaction
+   * Min AVM version: 5
    */
   setApplications(a: uint64): void
 
   /**
    * Number of global state integers in ApplicationCall
+   * Min AVM version: 5
    */
   setGlobalNumUint(a: uint64): void
 
   /**
    * Number of global state byteslices in ApplicationCall
+   * Min AVM version: 5
    */
   setGlobalNumByteSlice(a: uint64): void
 
   /**
    * Number of local state integers in ApplicationCall
+   * Min AVM version: 5
    */
   setLocalNumUint(a: uint64): void
 
   /**
    * Number of local state byteslices in ApplicationCall
+   * Min AVM version: 5
    */
   setLocalNumByteSlice(a: uint64): void
 
   /**
    * Number of additional pages for each of the application's approval and clear state programs. An ExtraProgramPages of 1 means 2048 more total bytes, or 1024 for each program.
+   * Min AVM version: 5
    */
   setExtraProgramPages(a: uint64): void
 
   /**
    * Marks an account nonparticipating for rewards
+   * Min AVM version: 5
    */
   setNonparticipation(a: boolean): void
 
   /**
    * 64 byte state proof public key
+   * Min AVM version: 5
    */
   setStateProofPk(a: bytes): void
 
   /**
    * Approval Program as an array of pages
+   * Min AVM version: 5
    */
   setApprovalProgramPages(a: bytes): void
 
   /**
    * ClearState Program as an array of pages
+   * Min AVM version: 5
    */
   setClearStateProgramPages(a: bytes): void
 
@@ -2014,6 +2436,7 @@ export type ITxnCreateType = {
    * begin preparation of a new inner transaction in the same transaction group
    * `itxn_next` initializes the transaction exactly as `itxn_begin` does
    * @see Native TEAL opcode: [`itxn_next`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#itxn_next)
+   * Min AVM version: 6
    */
   next(): void
 
@@ -2021,27 +2444,27 @@ export type ITxnCreateType = {
    * execute the current inner transaction group. Fail if executing this group would exceed the inner transaction limit, or if any transaction in the group fails.
    * `itxn_submit` resets the current transaction so that it can not be resubmitted. A new `itxn_begin` is required to prepare another inner transaction.
    * @see Native TEAL opcode: [`itxn_submit`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#itxn_submit)
+   * Min AVM version: 5
    */
   submit(): void
 }
-
 export type JsonRefType = {
   jsonString(a: bytes, b: bytes): bytes
-
   jsonUint64(a: bytes, b: bytes): uint64
-
   jsonObject(a: bytes, b: bytes): bytes
 }
 
 /**
  * Keccak256 hash of value A, yields [32]byte
  * @see Native TEAL opcode: [`keccak256`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#keccak256)
+ * Min AVM version: 1
  */
 export type Keccak256Type = (a: bytes) => bytes
 
 /**
  * yields length of byte value A
  * @see Native TEAL opcode: [`len`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#len)
+ * Min AVM version: 1
  */
 export type LenType = (a: bytes) => uint64
 
@@ -2052,18 +2475,21 @@ export type ScratchType = {
   /**
    * Ath scratch space value.  All scratch spaces are 0 at program start.
    * @see Native TEAL opcode: [`loads`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#loads)
+   * Min AVM version: 5
    */
   loadBytes(a: uint64): bytes
 
   /**
    * Ath scratch space value.  All scratch spaces are 0 at program start.
    * @see Native TEAL opcode: [`loads`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#loads)
+   * Min AVM version: 5
    */
   loadUint64(a: uint64): uint64
 
   /**
    * store B to the Ath scratch space
    * @see Native TEAL opcode: [`stores`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#stores)
+   * Min AVM version: 5
    */
   store(a: uint64, b: uint64 | bytes): void
 }
@@ -2073,69 +2499,94 @@ export type ScratchType = {
  * @param Txn.Accounts offset (or, since v4, an _available_ account address), _available_ application id (or, since v4, a Txn.ForeignApps offset).
  *  * @return value.
  * @see Native TEAL opcode: [`min_balance`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#min_balance)
+ * Min AVM version: 3
  */
 export type MinBalanceType = (a: Account | uint64) => uint64
 
 /**
  * A times B as a 128-bit result in two uint64s. X is the high 64 bits, Y is the low
  * @see Native TEAL opcode: [`mulw`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#mulw)
+ * Min AVM version: 1
  */
 export type MulwType = (a: uint64, b: uint64) => readonly [uint64, uint64]
+
+/**
+ * the total online stake in the agreement round
+ * @see Native TEAL opcode: [`online_stake`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#online_stake)
+ * Min AVM version: 11
+ */
+export type OnlineStakeType = () => uint64
 
 /**
  * Copy of A with the bytes starting at B replaced by the bytes of C. Fails if B+len(C) exceeds len(A)
  * `replace3` can be called using `replace` with no immediates.
  * @see Native TEAL opcode: [`replace3`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#replace3)
+ * Min AVM version: 7
  */
 export type ReplaceType = (a: bytes, b: uint64, c: bytes) => bytes
 
 /**
  * Copy of A with the Bth byte set to small integer (between 0..255) C. If B is greater than or equal to the array length, the program fails
  * @see Native TEAL opcode: [`setbyte`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#setbyte)
+ * Min AVM version: 3
  */
 export type SetByteType = (a: bytes, b: uint64, c: uint64) => bytes
 
 /**
  * SHA256 hash of value A, yields [32]byte
  * @see Native TEAL opcode: [`sha256`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#sha256)
+ * Min AVM version: 1
  */
 export type Sha256Type = (a: bytes) => bytes
 
 /**
  * SHA3_256 hash of value A, yields [32]byte
  * @see Native TEAL opcode: [`sha3_256`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#sha3_256)
+ * Min AVM version: 7
  */
 export type Sha3_256Type = (a: bytes) => bytes
 
 /**
  * SHA512_256 hash of value A, yields [32]byte
  * @see Native TEAL opcode: [`sha512_256`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#sha512_256)
+ * Min AVM version: 1
  */
 export type Sha512_256Type = (a: bytes) => bytes
 
 /**
  * A times 2^B, modulo 2^64
  * @see Native TEAL opcode: [`shl`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#shl)
+ * Min AVM version: 4
  */
 export type ShlType = (a: uint64, b: uint64) => uint64
 
 /**
  * A divided by 2^B
  * @see Native TEAL opcode: [`shr`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#shr)
+ * Min AVM version: 4
  */
 export type ShrType = (a: uint64, b: uint64) => uint64
 
 /**
  * The largest integer I such that I^2 <= A
  * @see Native TEAL opcode: [`sqrt`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#sqrt)
+ * Min AVM version: 4
  */
 export type SqrtType = (a: uint64) => uint64
 
 /**
  * A range of bytes from A starting at B up to but not including C. If C < B, or either is larger than the array length, the program fails
  * @see Native TEAL opcode: [`substring3`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#substring3)
+ * Min AVM version: 2
  */
 export type SubstringType = (a: bytes, b: uint64, c: uint64) => bytes
+
+/**
+ * sumhash512 of value A, yields [64]byte
+ * @see Native TEAL opcode: [`sumhash512`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#sumhash512)
+ * Min AVM version: 11
+ */
+export type Sumhash512Type = (a: bytes) => bytes
 
 /**
  * Get values for the current executing transaction
@@ -2143,355 +2594,437 @@ export type SubstringType = (a: bytes, b: uint64, c: uint64) => bytes
 export type TxnType = {
   /**
    * 32 byte address
+   * Min AVM version: 1
    */
   get sender(): Account
 
   /**
    * microalgos
+   * Min AVM version: 1
    */
   get fee(): uint64
 
   /**
    * round number
+   * Min AVM version: 1
    */
   get firstValid(): uint64
 
   /**
    * UNIX timestamp of block before txn.FirstValid. Fails if negative
+   * Min AVM version: 1
    */
   get firstValidTime(): uint64
 
   /**
    * round number
+   * Min AVM version: 1
    */
   get lastValid(): uint64
 
   /**
    * Any data up to 1024 bytes
+   * Min AVM version: 1
    */
   get note(): bytes
 
   /**
    * 32 byte lease value
+   * Min AVM version: 1
    */
   get lease(): bytes
 
   /**
    * 32 byte address
+   * Min AVM version: 1
    */
   get receiver(): Account
 
   /**
    * microalgos
+   * Min AVM version: 1
    */
   get amount(): uint64
 
   /**
    * 32 byte address
+   * Min AVM version: 1
    */
   get closeRemainderTo(): Account
 
   /**
    * 32 byte address
+   * Min AVM version: 1
    */
   get votePk(): bytes
 
   /**
    * 32 byte address
+   * Min AVM version: 1
    */
   get selectionPk(): bytes
 
   /**
    * The first round that the participation key is valid.
+   * Min AVM version: 1
    */
   get voteFirst(): uint64
 
   /**
    * The last round that the participation key is valid.
+   * Min AVM version: 1
    */
   get voteLast(): uint64
 
   /**
    * Dilution for the 2-level participation key
+   * Min AVM version: 1
    */
   get voteKeyDilution(): uint64
 
   /**
    * Transaction type as bytes
+   * Min AVM version: 1
    */
   get type(): bytes
 
   /**
    * Transaction type as integer
+   * Min AVM version: 1
    */
   get typeEnum(): uint64
 
   /**
    * Asset ID
+   * Min AVM version: 1
    */
   get xferAsset(): Asset
 
   /**
    * value in Asset's units
+   * Min AVM version: 1
    */
   get assetAmount(): uint64
 
   /**
    * 32 byte address. Source of assets if Sender is the Asset's Clawback address.
+   * Min AVM version: 1
    */
   get assetSender(): Account
 
   /**
    * 32 byte address
+   * Min AVM version: 1
    */
   get assetReceiver(): Account
 
   /**
    * 32 byte address
+   * Min AVM version: 1
    */
   get assetCloseTo(): Account
 
   /**
    * Position of this transaction within an atomic transaction group. A stand-alone transaction is implicitly element 0 in a group of 1
+   * Min AVM version: 1
    */
   get groupIndex(): uint64
 
   /**
    * The computed ID for this transaction. 32 bytes.
+   * Min AVM version: 1
    */
   get txId(): bytes
 
   /**
    * ApplicationID from ApplicationCall transaction
+   * Min AVM version: 1
    */
   get applicationId(): Application
 
   /**
    * ApplicationCall transaction on completion action
+   * Min AVM version: 1
    */
   get onCompletion(): uint64
 
   /**
    * Arguments passed to the application in the ApplicationCall transaction
+   * Min AVM version: 5
    */
   applicationArgs(a: uint64): bytes
 
   /**
    * Number of ApplicationArgs
+   * Min AVM version: 1
    */
   get numAppArgs(): uint64
 
   /**
    * Accounts listed in the ApplicationCall transaction
+   * Min AVM version: 5
    */
   accounts(a: uint64): Account
 
   /**
    * Number of Accounts
+   * Min AVM version: 1
    */
   get numAccounts(): uint64
 
   /**
    * Approval program
+   * Min AVM version: 1
    */
   get approvalProgram(): bytes
 
   /**
    * Clear state program
+   * Min AVM version: 1
    */
   get clearStateProgram(): bytes
 
   /**
    * 32 byte Sender's new AuthAddr
+   * Min AVM version: 1
    */
   get rekeyTo(): Account
 
   /**
    * Asset ID in asset config transaction
+   * Min AVM version: 1
    */
   get configAsset(): Asset
 
   /**
    * Total number of units of this asset created
+   * Min AVM version: 1
    */
   get configAssetTotal(): uint64
 
   /**
    * Number of digits to display after the decimal place when displaying the asset
+   * Min AVM version: 1
    */
   get configAssetDecimals(): uint64
 
   /**
    * Whether the asset's slots are frozen by default or not, 0 or 1
+   * Min AVM version: 1
    */
   get configAssetDefaultFrozen(): boolean
 
   /**
    * Unit name of the asset
+   * Min AVM version: 1
    */
   get configAssetUnitName(): bytes
 
   /**
    * The asset name
+   * Min AVM version: 1
    */
   get configAssetName(): bytes
 
   /**
    * URL
+   * Min AVM version: 1
    */
   get configAssetUrl(): bytes
 
   /**
    * 32 byte commitment to unspecified asset metadata
+   * Min AVM version: 1
    */
   get configAssetMetadataHash(): bytes
 
   /**
    * 32 byte address
+   * Min AVM version: 1
    */
   get configAssetManager(): Account
 
   /**
    * 32 byte address
+   * Min AVM version: 1
    */
   get configAssetReserve(): Account
 
   /**
    * 32 byte address
+   * Min AVM version: 1
    */
   get configAssetFreeze(): Account
 
   /**
    * 32 byte address
+   * Min AVM version: 1
    */
   get configAssetClawback(): Account
 
   /**
    * Asset ID being frozen or un-frozen
+   * Min AVM version: 1
    */
   get freezeAsset(): Asset
 
   /**
    * 32 byte address of the account whose asset slot is being frozen or un-frozen
+   * Min AVM version: 1
    */
   get freezeAssetAccount(): Account
 
   /**
    * The new frozen value, 0 or 1
+   * Min AVM version: 1
    */
   get freezeAssetFrozen(): boolean
 
   /**
    * Foreign Assets listed in the ApplicationCall transaction
+   * Min AVM version: 5
    */
   assets(a: uint64): Asset
 
   /**
    * Number of Assets
+   * Min AVM version: 1
    */
   get numAssets(): uint64
 
   /**
    * Foreign Apps listed in the ApplicationCall transaction
+   * Min AVM version: 5
    */
   applications(a: uint64): Application
 
   /**
    * Number of Applications
+   * Min AVM version: 1
    */
   get numApplications(): uint64
 
   /**
    * Number of global state integers in ApplicationCall
+   * Min AVM version: 1
    */
   get globalNumUint(): uint64
 
   /**
    * Number of global state byteslices in ApplicationCall
+   * Min AVM version: 1
    */
   get globalNumByteSlice(): uint64
 
   /**
    * Number of local state integers in ApplicationCall
+   * Min AVM version: 1
    */
   get localNumUint(): uint64
 
   /**
    * Number of local state byteslices in ApplicationCall
+   * Min AVM version: 1
    */
   get localNumByteSlice(): uint64
 
   /**
    * Number of additional pages for each of the application's approval and clear state programs. An ExtraProgramPages of 1 means 2048 more total bytes, or 1024 for each program.
+   * Min AVM version: 1
    */
   get extraProgramPages(): uint64
 
   /**
    * Marks an account nonparticipating for rewards
+   * Min AVM version: 1
    */
   get nonparticipation(): boolean
 
   /**
    * Log messages emitted by an application call (only with `itxn` in v5). Application mode only
+   * Min AVM version: 5
    */
   logs(a: uint64): bytes
 
   /**
    * Number of Logs (only with `itxn` in v5). Application mode only
+   * Min AVM version: 1
    */
   get numLogs(): uint64
 
   /**
    * Asset ID allocated by the creation of an ASA (only with `itxn` in v5). Application mode only
+   * Min AVM version: 1
    */
   get createdAssetId(): Asset
 
   /**
    * ApplicationID allocated by the creation of an application (only with `itxn` in v5). Application mode only
+   * Min AVM version: 1
    */
   get createdApplicationId(): Application
 
   /**
    * The last message emitted. Empty bytes if none were emitted. Application mode only
+   * Min AVM version: 1
    */
   get lastLog(): bytes
 
   /**
    * 64 byte state proof public key
+   * Min AVM version: 1
    */
   get stateProofPk(): bytes
 
   /**
    * Approval Program as an array of pages
+   * Min AVM version: 5
    */
   approvalProgramPages(a: uint64): bytes
 
   /**
    * Number of Approval Program pages
+   * Min AVM version: 1
    */
   get numApprovalProgramPages(): uint64
 
   /**
    * ClearState Program as an array of pages
+   * Min AVM version: 5
    */
   clearStateProgramPages(a: uint64): bytes
 
   /**
    * Number of ClearState Program pages
+   * Min AVM version: 1
    */
   get numClearStateProgramPages(): uint64
+}
+export type VoterParamsType = {
+  /**
+   * Online stake in microalgos
+   * Min AVM version: 11
+   */
+  voterBalance(a: uint64 | bytes): readonly [uint64, boolean]
+
+  /**
+   * Had this account opted into block payouts
+   * Min AVM version: 11
+   */
+  voterIncentiveEligible(a: uint64 | bytes): readonly [boolean, boolean]
 }
 
 /**
  * Verify the proof B of message A against pubkey C. Returns vrf output and verification flag.
  * `VrfAlgorand` is the VRF used in Algorand. It is ECVRF-ED25519-SHA512-Elligator2, specified in the IETF internet draft [draft-irtf-cfrg-vrf-03](https://datatracker.ietf.org/doc/draft-irtf-cfrg-vrf/03/).
  * @see Native TEAL opcode: [`vrf_verify`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#vrf_verify)
+ * Min AVM version: 7
  */
 export type VrfVerifyType = (s: VrfVerify, a: bytes, b: bytes, c: bytes) => readonly [bytes, boolean]
 export type SelectType = ((a: bytes, b: bytes, c: uint64) => bytes) & ((a: uint64, b: uint64, c: uint64) => uint64)
 export type SetBitType = ((target: bytes, n: uint64, c: uint64) => bytes) & ((target: uint64, n: uint64, c: uint64) => uint64)
 /* THIS FILE IS GENERATED BY ~/scripts/generate-op-types.ts - DO NOT MODIFY DIRECTLY */
-import { bytes, BytesCompat, uint64, Uint64Compat, biguint } from './primitives'
+import { biguint, bytes, uint64 } from './primitives'
 import { Account, Application, Asset } from './reference'
 
 export type OpsNamespace = {
@@ -2527,6 +3060,7 @@ export type OpsNamespace = {
   extractUint16: ExtractUint16Type
   extractUint32: ExtractUint32Type
   extractUint64: ExtractUint64Type
+  falconVerify: FalconVerifyType
   gaid: GaidType
   getBit: GetBitType
   getByte: GetByteType
@@ -2544,6 +3078,7 @@ export type OpsNamespace = {
   Scratch: ScratchType
   minBalance: MinBalanceType
   mulw: MulwType
+  onlineStake: OnlineStakeType
   replace: ReplaceType
   setByte: SetByteType
   sha256: Sha256Type
@@ -2553,7 +3088,9 @@ export type OpsNamespace = {
   shr: ShrType
   sqrt: SqrtType
   substring: SubstringType
+  sumhash512: Sumhash512Type
   Txn: TxnType
+  VoterParams: VoterParamsType
   vrfVerify: VrfVerifyType
   select: SelectType
   setBit: SetBitType

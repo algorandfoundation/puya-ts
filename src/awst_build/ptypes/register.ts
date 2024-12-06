@@ -30,14 +30,14 @@ import { BigUintExpressionBuilder, BigUintFunctionBuilder } from '../eb/biguint-
 import { BooleanExpressionBuilder, BooleanFunctionBuilder } from '../eb/boolean-expression-builder'
 import { BytesExpressionBuilder, BytesFunctionBuilder } from '../eb/bytes-expression-builder'
 import { CompileFunctionBuilder } from '../eb/compiled/compile-function'
-import { ContractClassBuilder } from '../eb/contract-builder'
+import { ContractClassBuilder, ContractOptionsDecoratorBuilder } from '../eb/contract-builder'
 import { EnsureBudgetFunctionBuilder } from '../eb/ensure-budget'
 import { FreeSubroutineExpressionBuilder } from '../eb/free-subroutine-expression-builder'
 import { IntrinsicEnumBuilder } from '../eb/intrinsic-enum-builder'
 import { IterableIteratorExpressionBuilder } from '../eb/iterable-iterator-expression-builder'
 import { ObjectExpressionBuilder } from '../eb/literal/object-expression-builder'
 import { LogFunctionBuilder } from '../eb/log-function-builder'
-import { LogicSigClassBuilder } from '../eb/logic-sig-builder'
+import { LogicSigClassBuilder, LogicSigOptionsDecoratorBuilder } from '../eb/logic-sig-builder'
 import { NamespaceBuilder } from '../eb/namespace-builder'
 import { NativeArrayExpressionBuilder } from '../eb/native-array-expression-builder'
 import { FreeIntrinsicOpBuilder, IntrinsicOpGroupBuilder, IntrinsicOpGroupOrFunctionTypeBuilder } from '../eb/op-module-builder'
@@ -162,6 +162,7 @@ import {
   bytesPType,
   compileFunctionType,
   ContractClassPType,
+  contractOptionsDecorator,
   ensureBudgetFunction,
   errFunction,
   FunctionPType,
@@ -183,6 +184,7 @@ import {
   LocalStateGeneric,
   LocalStateType,
   logFunction,
+  logicSigOptionsDecorator,
   LogicSigPType,
   NamespacePType,
   ObjectPType,
@@ -241,7 +243,9 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: arc28EmitFunction, singletonEb: Arc28EmitFunctionBuilder })
 
   typeRegistry.register({ ptype: ContractClassPType, singletonEb: ContractClassBuilder })
+  typeRegistry.register({ ptype: contractOptionsDecorator, singletonEb: ContractOptionsDecoratorBuilder })
   typeRegistry.register({ ptype: LogicSigPType, singletonEb: LogicSigClassBuilder })
+  typeRegistry.register({ ptype: logicSigOptionsDecorator, singletonEb: LogicSigOptionsDecoratorBuilder })
 
   for (const enumType of [opUpFeeSourceType, onCompleteActionType, transactionTypeType]) {
     typeRegistry.register({ ptype: enumType, singletonEb: Uint64EnumTypeBuilder })

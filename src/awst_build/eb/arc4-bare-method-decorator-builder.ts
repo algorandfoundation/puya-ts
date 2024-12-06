@@ -6,11 +6,11 @@ import { Constants } from '../../constants'
 import { CodeError } from '../../errors'
 import { logger } from '../../logger'
 import { codeInvariant } from '../../util'
-import type { Arc4AbiDecoratorData, DecoratorData } from '../ast-visitors/decorator-visitor'
+import type { Arc4AbiDecoratorData } from '../models/decorator-data'
 import type { PType } from '../ptypes'
 import { arc4AbiMethodDecorator, arc4BareMethodDecorator, ArrayPType, boolPType, stringPType } from '../ptypes'
 import type { InstanceBuilder } from './index'
-import { NodeBuilder } from './index'
+import { DecoratorDataBuilder, NodeBuilder } from './index'
 import { ObjectLiteralExpressionBuilder } from './literal/object-literal-expression-builder'
 import { requireBooleanConstant, requireStringConstant } from './util'
 import { parseFunctionArgs } from './util/arg-parsing'
@@ -155,20 +155,4 @@ function resolveDefaultArguments(
   }
 
   return result
-}
-
-export class DecoratorDataBuilder extends NodeBuilder {
-  get ptype(): PType | undefined {
-    return undefined
-  }
-  constructor(
-    sourceLocation: SourceLocation,
-    private readonly data: DecoratorData,
-  ) {
-    super(sourceLocation)
-  }
-
-  resolveDecoratorData(): DecoratorData {
-    return this.data
-  }
 }

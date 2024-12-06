@@ -2,7 +2,8 @@ import type { awst } from '../../awst'
 import type { LogicSigReference } from '../../awst/models'
 import { ARC4BareMethodConfig, ARC4CreateOption, ContractReference, OnCompletionAction } from '../../awst/models'
 import { nodeFactory } from '../../awst/node-factory'
-import type { AppStorageDefinition, ContractMethod, Statement, StateTotals } from '../../awst/nodes'
+import type { AppStorageDefinition, ContractMethod, Statement } from '../../awst/nodes'
+import { StateTotals } from '../../awst/nodes'
 import { SourceLocation } from '../../awst/source-location'
 import { wtypes } from '../../awst/wtypes'
 import { Constants } from '../../constants'
@@ -11,6 +12,7 @@ import type { Props } from '../../typescript-helpers'
 import { codeInvariant, invariant, isIn } from '../../util'
 import { CustomKeyMap } from '../../util/custom-key-map'
 import type { ContractClassPType } from '../ptypes'
+import type { ContractOptionsDecoratorData } from './decorator-data'
 import { LogicSigClassModel } from './logic-sig-class-model'
 
 export class ContractClassModel {
@@ -22,6 +24,7 @@ export class ContractClassModel {
   public get name(): string {
     return this.type.name
   }
+  public readonly options: ContractOptionsDecoratorData | undefined
   public readonly description: string | null
   public readonly bases: Array<ContractReference>
   public readonly propertyInitialization: Array<Statement>
@@ -30,8 +33,6 @@ export class ContractClassModel {
   public readonly ctor: ContractMethod
   public readonly methods: Array<ContractMethod>
   public readonly appState: Array<AppStorageDefinition>
-  public readonly stateTotals: StateTotals | null
-  public readonly reservedScratchSpace: Set<bigint>
   public readonly sourceLocation: SourceLocation
   constructor(props: Props<Omit<ContractClassModel, 'name' | 'id'>>) {
     this.isAbstract = props.isAbstract
@@ -44,9 +45,8 @@ export class ContractClassModel {
     this.clearProgram = props.clearProgram
     this.methods = props.methods
     this.appState = props.appState
-    this.stateTotals = props.stateTotals
     this.sourceLocation = props.sourceLocation
-    this.reservedScratchSpace = props.reservedScratchSpace
+    this.options = props.options
   }
 
   buildContract(compilationSet: CompilationSet): awst.Contract {
@@ -90,8 +90,31 @@ export class ContractClassModel {
 
     codeInvariant(approvalProgram, 'must have approval')
     codeInvariant(clearProgram, 'must have clear')
+
+    // TODO: Tally from bases
+    const stateTotals = new StateTotals({
+      globalBytes: this.options?.stateTotals?.globalBytes ?? null,
+      globalUints: this.options?.stateTotals?.globalUints ?? null,
+      localBytes: this.options?.stateTotals?.localBytes ?? null,
+      localUints: this.options?.stateTotals?.localUints ?? null,
+    })
+
+    // TODO: Tally from bases
+    const reservedScratchSpace = new Set<bigint>()
+    if (this.options?.scratchSlots) {
+      for (const reservation of this.options.scratchSlots) {
+        if (typeof reservation === 'bigint') {
+          reservedScratchSpace.add(reservation)
+        } else {
+          for (let i = reservation.from; i <= reservation.to; i++) {
+            reservedScratchSpace.add(i)
+          }
+        }
+      }
+    }
+
     return nodeFactory.contract({
-      name: this.name,
+      name: this.options?.name ?? this.name,
       id: this.id,
       description: this.description,
       approvalProgram: this.patchApprovalToCallCtor(approvalProgram),
@@ -99,10 +122,10 @@ export class ContractClassModel {
       methodResolutionOrder,
       methods,
       appState: this.appState, // TODO: Tally from base
-      stateTotals: this.stateTotals, // TODO: Tally
-      reservedScratchSpace: this.reservedScratchSpace,
+      stateTotals: stateTotals, // TODO: Tally
+      reservedScratchSpace: reservedScratchSpace,
       sourceLocation: this.sourceLocation,
-      avmVersion: null, // TODO: Allow this to be set with class decorator
+      avmVersion: this.options?.avmVersion ?? null, // TODO: Allow this to be set with class decorator
     })
   }
 

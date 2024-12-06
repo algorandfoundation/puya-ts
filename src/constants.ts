@@ -23,10 +23,17 @@ export const Constants = {
   arc4EncodedTypesModuleName: `${algoTsPackage}/arc4/encoded-types.d.ts`,
   arc4BareDecoratorName: 'arc4.baremethod',
   arc4AbiDecoratorName: 'arc4.abimethod',
+  contractOptionsDecoratorName: 'contract',
+  logicSigOptionsDecoratorName: 'logicsig',
   constructorMethodName: 'constructor',
   logicSigProgramMethodName: 'program',
   defaultCreateMethodName: '__algots__.defaultCreate',
   addressLength: 32,
   encodedAddressLength: 58,
   zeroAddressEncoded: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ',
+
+  supportedAvmVersions: [10n, 11n],
+  mainNetAvmVersion: [10n],
 } as const
+
+export type SupportedAvmVersion = (typeof Constants.supportedAvmVersions)[number]
