@@ -72,5 +72,5 @@ type ContractOptions = {
  * @param options An object containing the configuration options
  */
 export function contract(options: ContractOptions) {
-  return <TContract extends Contract>(contract: ConstructorFor<TContract>) => contract
+  return <T extends ConstructorFor<Contract>>(contract: T) => contract
 }
