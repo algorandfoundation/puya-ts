@@ -1,4 +1,5 @@
 import { camelCase, pascalCase } from 'change-case'
+import fs from 'fs'
 import langSpec from '../langspec.puya.json'
 import { hasFlags, invariant } from '../src/util'
 import type { Op } from './langspec'
@@ -114,6 +115,7 @@ const OPERATOR_OPCODES = new Set([
 ])
 
 export enum AlgoTsType {
+  None = 0,
   Bytes = 1 << 0,
   Uint64 = 1 << 1,
   Boolean = 1 << 2,
@@ -122,7 +124,8 @@ export enum AlgoTsType {
   Application = 1 << 5,
   Void = 1 << 6,
   BigUint = 1 << 7,
-  Enum = 1 << 8,
+  String = 1 << 8,
+  Enum = 1 << 9,
 }
 
 export type EnumValue = {
@@ -164,15 +167,12 @@ const TYPE_MAP: Record<string, AlgoTsType> = {
   any: AlgoTsType.Uint64 | AlgoTsType.Bytes,
 }
 
-const INPUT_TYPE_MAP: Record<string, AlgoTsType> = {
-  application: AlgoTsType.Application | AlgoTsType.Uint64,
-  asset: AlgoTsType.Asset | AlgoTsType.Uint64,
-}
-
 const INPUT_ALGOTS_TYPE_MAP: Record<AlgoTsType, AlgoTsType> = {
+  [AlgoTsType.None]: AlgoTsType.None,
   [AlgoTsType.Asset]: AlgoTsType.Asset | AlgoTsType.Uint64,
   [AlgoTsType.Application]: AlgoTsType.Application | AlgoTsType.Uint64,
   [AlgoTsType.Bytes]: AlgoTsType.Bytes,
+  [AlgoTsType.String]: AlgoTsType.String,
   [AlgoTsType.Uint64]: AlgoTsType.Uint64,
   [AlgoTsType.Boolean]: AlgoTsType.Boolean,
   [AlgoTsType.Account]: AlgoTsType.Account,
@@ -352,7 +352,7 @@ function isSplitableUnion(t: AlgoTsType): boolean {
   return !(hasFlags(t, AlgoTsType.Enum) || atomicTypes.includes(t))
 }
 /**
- * If a function returns a union type, split it into multiple functions for each part of the union
+ * If a function returns a union type, split into multiple functions for each part of the union
  *
  * eg.
  * get(): bytes | uint64
@@ -423,14 +423,14 @@ export function buildOpModule() {
           name: getEnumOpName(member.name, opNameConfig),
           immediateArgs: def.immediate_args.map((i) => ({
             name: camelCase(i.name),
-            type: getMappedType(i.immediate_type, i.arg_enum, true),
+            type: expandInputType(getMappedType(i.immediate_type, i.arg_enum)),
           })),
           stackArgs: def.stack_inputs.map((sa, i) => {
             if (i === enumArg.modifies_stack_input) {
               invariant(member.stackType, 'Member must have stack type')
-              return { name: camelCase(sa.name), type: INPUT_ALGOTS_TYPE_MAP[member.stackType] ?? member.stackType }
+              return { name: camelCase(sa.name), type: expandInputType(member.stackType) }
             }
-            return { name: camelCase(sa.name), type: getMappedType(sa.stack_type, null, true) }
+            return { name: camelCase(sa.name), type: expandInputType(getMappedType(sa.stack_type, null)) }
           }),
           returnTypes: def.stack_outputs.map((o, i) => {
             if (i === enumArg.modifies_stack_output) {
@@ -450,9 +450,9 @@ export function buildOpModule() {
           name: getOpName(def.name, opNameConfig),
           immediateArgs: def.immediate_args.map((i) => ({
             name: camelCase(i.name),
-            type: getMappedType(i.immediate_type, i.arg_enum, true),
+            type: expandInputType(getMappedType(i.immediate_type, i.arg_enum)),
           })),
-          stackArgs: def.stack_inputs.map((i) => ({ name: camelCase(i.name), type: getMappedType(i.stack_type, null, true) })),
+          stackArgs: def.stack_inputs.map((i) => ({ name: camelCase(i.name), type: expandInputType(getMappedType(i.stack_type, null)) })),
           returnTypes: def.stack_outputs.map((o) => getMappedType(o.stack_type, null)),
           docs: getOpDocs(def),
         }),
@@ -574,7 +574,7 @@ function getEnumOpName(enumMember: string, config: OpNameConfig): string {
   return camelCase([config.prefix, enumMember].filter(Boolean).join('_'))
 }
 
-function getMappedType(t: string | null, enumName: string | null, isInput: boolean = false): AlgoTsType {
+function getMappedType(t: string | null, enumName: string | null): AlgoTsType {
   invariant(t !== 'arg_enum' || enumName !== undefined, 'Must provide enumName for arg_enum types')
   if (t === null || t === undefined) {
     throw new Error('Missing type')
@@ -584,9 +584,21 @@ function getMappedType(t: string | null, enumName: string | null, isInput: boole
     invariant(enumDef, `Definition must exist for ${enumName}`)
     return enumDef.typeFlag
   }
-  const mappedType = isInput ? (INPUT_TYPE_MAP[t ?? ''] ?? TYPE_MAP[t ?? '']) : TYPE_MAP[t ?? '']
+  const mappedType = TYPE_MAP[t ?? '']
   invariant(mappedType, `Mapped type must exist for ${t}`)
   return mappedType
+}
+
+function splitBitFlags<T extends number>(aType: T): T[] {
+  if (!aType) return []
+  return new Array(Math.floor(Math.log2(aType)) + 1).fill(null).flatMap((_, i) => {
+    const n = (2 ** i) as T
+    return n & aType ? n : []
+  })
+}
+
+function expandInputType(aType: AlgoTsType): AlgoTsType {
+  return splitBitFlags(aType).reduce((acc, cur) => acc | (cur in INPUT_ALGOTS_TYPE_MAP ? INPUT_ALGOTS_TYPE_MAP[cur] : cur), AlgoTsType.None)
 }
 
 const getOpDocs = (op: Op): string[] => [
@@ -596,3 +608,10 @@ const getOpDocs = (op: Op): string[] => [
     .flat(),
   `@see Native TEAL opcode: [\`${op.name}\`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#${op.name})`,
 ]
+
+function testOpModule() {
+  const mod = buildOpModule()
+
+  fs.writeFileSync('op-module.json', JSON.stringify(mod, undefined, 2))
+}
+testOpModule()
