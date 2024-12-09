@@ -69,7 +69,6 @@ function mapTransactionFields(
       const [txnField, fieldType] = validFields[prop as keyof typeof validFields]
       const txnFieldData = TxnFields[txnField]
       const propValue = fields.memberAccess(prop, sourceLocation)
-      // TODO: Validate prop value
       if (txnField === TxnField.ApplicationArgs) {
         codeInvariant(
           propValue instanceof ArrayLiteralExpressionBuilder || propValue instanceof TupleExpressionBuilder,
