@@ -1,0 +1,28 @@
+contract CastingAlgo
+{
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    x: uint64 = 123
+    y: readonlytuple[uint64, uint64, uint64] = <tuple>[1, 2, 3]
+    z: readonlytuple[uint64, uint64, uint64] = <tuple>[1, 2, 3]
+    return x > y.0 * y.1 * y.2 * z.0 * z.1 * z.2
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  constructor(): void
+  {
+    void
+  }
+  
+  BaseContract::constructor(): void
+  {
+  }
+  
+}
