@@ -85,6 +85,10 @@ function* algoTsToPType(t: AlgoTsType) {
     t ^= AlgoTsType.Bytes
     yield 'ptypes.bytesPType'
   }
+  if (hasFlags(t, AlgoTsType.String)) {
+    t ^= AlgoTsType.String
+    yield 'ptypes.stringPType'
+  }
   if (Number(t) !== 0) throw new Error(`Unhandled flags ${t}`)
 }
 
