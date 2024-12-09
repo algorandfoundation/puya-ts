@@ -20,8 +20,7 @@ import {
 import type { Visitor } from '../../visitor/visitor'
 import { accept } from '../../visitor/visitor'
 import type { AwstBuildContext } from '../context/awst-build-context'
-import type { InstanceBuilder } from '../eb'
-import { NodeBuilder } from '../eb'
+import { InstanceBuilder, NodeBuilder } from '../eb'
 import { BooleanExpressionBuilder } from '../eb/boolean-expression-builder'
 import { ArrayLiteralExpressionBuilder } from '../eb/literal/array-literal-expression-builder'
 import { BigIntLiteralExpressionBuilder } from '../eb/literal/big-int-literal-expression-builder'
@@ -453,12 +452,26 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   }
 
   visitAsExpression(node: ts.AsExpression): NodeBuilder {
-    // TODO: Is this robust enough??
-    if (ts.isTypeReferenceNode(node.type) && ts.isIdentifier(node.type.typeName) && node.type.typeName.text === 'const') {
-      // TODO: Do we need to do resolveAsPType here to re-resolve the target expression
-      return this.baseAccept(node.expression)
-    }
-    throw new TodoError('AsExpression')
+    // if (ts.isTypeReferenceNode(node.type) && ts.isIdentifier(node.type.typeName) && node.type.typeName.text === 'const') {
+    //   return this.baseAccept(node.expression)
+    // }
+    const outerType = this.context.getPTypeForNode(node)
+
+    const innerExpr = this.baseAccept(node.expression)
+    const sourceLocation = this.sourceLocation(node)
+    codeInvariant(
+      innerExpr instanceof InstanceBuilder,
+      `${innerExpr.typeDescription} is not a valid target for an as expression'`,
+      sourceLocation,
+    )
+
+    codeInvariant(
+      innerExpr.resolvableToPType(outerType),
+      `${innerExpr.typeDescription} cannot be resolved to type ${outerType}`,
+      sourceLocation,
+    )
+
+    return innerExpr.resolveToPType(outerType)
   }
 
   visitNonNullExpression(node: ts.NonNullExpression): NodeBuilder {
