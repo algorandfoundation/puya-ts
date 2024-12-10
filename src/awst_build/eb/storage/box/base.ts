@@ -1,10 +1,12 @@
 import { nodeFactory } from '../../../../awst/node-factory'
 import { type BoxValueExpression, BytesConstant, type Expression } from '../../../../awst/nodes'
 import type { SourceLocation } from '../../../../awst/source-location'
+import { wtypes } from '../../../../awst/wtypes'
 import { codeInvariant } from '../../../../util'
 import { AppStorageDeclaration } from '../../../models/app-storage-declaration'
 import type { BoxPType, BoxRefPType } from '../../../ptypes'
-import { BoxMapPType, type ContractClassPType, type PType } from '../../../ptypes'
+import { boolPType, BoxMapPType, type ContractClassPType, type PType, uint64PType } from '../../../ptypes'
+import { instanceEb } from '../../../type-registry'
 import { InstanceExpressionBuilder } from '../../index'
 import { ValueProxy } from '../value-proxy'
 
@@ -60,4 +62,32 @@ export function boxValue({
     wtype: contentType.wtypeOrThrow,
     existsAssertionMessage: 'Box must have value',
   })
+}
+
+export function boxLength(box: BoxValueExpression, sourceLocation: SourceLocation) {
+  return instanceEb(
+    nodeFactory.checkedMaybe({
+      expr: nodeFactory.intrinsicCall({
+        opCode: 'box_len',
+        stackArgs: [box.key],
+        wtype: new wtypes.WTuple({ types: [wtypes.uint64WType, wtypes.boolWType], immutable: true }),
+        immediates: [],
+        sourceLocation,
+      }),
+      comment: box.existsAssertionMessage ?? 'Box exists',
+    }),
+    uint64PType,
+  )
+}
+
+export function boxExists(box: BoxValueExpression, sourceLocation: SourceLocation) {
+  return instanceEb(
+    nodeFactory.stateExists({
+      field: box,
+      sourceLocation,
+      wtype: wtypes.boolWType,
+    }),
+
+    boolPType,
+  )
 }

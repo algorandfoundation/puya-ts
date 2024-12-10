@@ -4,14 +4,13 @@ import type { SourceLocation } from '../../../../awst/source-location'
 import { wtypes } from '../../../../awst/wtypes'
 import { invariant } from '../../../../util'
 import type { PType } from '../../../ptypes'
-import { boolPType, BoxPType, bytesPType, stringPType, TuplePType, uint64PType } from '../../../ptypes'
+import { boolPType, BoxPType, bytesPType, stringPType, TuplePType } from '../../../ptypes'
 import { instanceEb } from '../../../type-registry'
-import { BooleanExpressionBuilder } from '../../boolean-expression-builder'
 import { FunctionBuilder, type NodeBuilder, ParameterlessFunctionBuilder } from '../../index'
 import { parseFunctionArgs } from '../../util/arg-parsing'
 import { VoidExpressionBuilder } from '../../void-expression-builder'
 import { extractKey } from '../util'
-import { BoxProxyExpressionBuilder, boxValue, BoxValueExpressionBuilder } from './base'
+import { boxExists, boxLength, BoxProxyExpressionBuilder, boxValue, BoxValueExpressionBuilder } from './base'
 
 export class BoxFunctionBuilder extends FunctionBuilder {
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
@@ -48,27 +47,9 @@ export class BoxExpressionBuilder extends BoxProxyExpressionBuilder<BoxPType> {
       case 'value':
         return new BoxValueExpressionBuilder(boxValueExpr, this.ptype.contentType)
       case 'exists':
-        return new BooleanExpressionBuilder(
-          nodeFactory.stateExists({
-            field: boxValueExpr,
-            sourceLocation,
-            wtype: wtypes.boolWType,
-          }),
-        )
+        return boxExists(boxValueExpr, sourceLocation)
       case 'length':
-        return instanceEb(
-          nodeFactory.checkedMaybe({
-            expr: nodeFactory.intrinsicCall({
-              opCode: 'box_len',
-              stackArgs: [boxValueExpr],
-              wtype: new wtypes.WTuple({ types: [wtypes.uint64WType, wtypes.boolWType], immutable: true }),
-              immediates: [],
-              sourceLocation,
-            }),
-            comment: 'Box must exist',
-          }),
-          uint64PType,
-        )
+        return boxLength(boxValueExpr, sourceLocation)
       case 'delete':
         return new BoxDeleteFunctionBuilder(boxValueExpr, sourceLocation)
       case 'get':
