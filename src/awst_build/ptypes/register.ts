@@ -40,6 +40,7 @@ import { LogFunctionBuilder } from '../eb/log-function-builder'
 import { LogicSigClassBuilder, LogicSigOptionsDecoratorBuilder } from '../eb/logic-sig-builder'
 import { NamespaceBuilder } from '../eb/namespace-builder'
 import { NativeArrayExpressionBuilder } from '../eb/native-array-expression-builder'
+import { NeverExpressionBuilder } from '../eb/never-expression-builder'
 import { FreeIntrinsicOpBuilder, IntrinsicOpGroupBuilder, IntrinsicOpGroupOrFunctionTypeBuilder } from '../eb/op-module-builder'
 import { AccountExpressionBuilder, AccountFunctionBuilder } from '../eb/reference/account'
 import { ApplicationExpressionBuilder, ApplicationFunctionBuilder } from '../eb/reference/application'
@@ -187,6 +188,7 @@ import {
   logicSigOptionsDecorator,
   LogicSigPType,
   NamespacePType,
+  neverPType,
   ObjectPType,
   onCompleteActionType,
   opUpFeeSourceType,
@@ -214,6 +216,7 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
     return
   }
   // Primitives
+  typeRegistry.register({ ptype: neverPType, instanceEb: NeverExpressionBuilder })
   typeRegistry.register({ ptype: boolPType, instanceEb: BooleanExpressionBuilder })
   typeRegistry.register({ ptype: BooleanFunction, singletonEb: BooleanFunctionBuilder })
   typeRegistry.register({ ptype: uint64PType, instanceEb: UInt64ExpressionBuilder })

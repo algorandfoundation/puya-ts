@@ -1148,6 +1148,11 @@ export class IterableIteratorType extends TransientType {
   }
 }
 
+export const GeneratorType = new UnsupportedType({
+  name: 'Generator',
+  module: 'typescript/lib/lib.es2015.generator.d.ts',
+})
+
 export const paymentItxnFn = new TransactionFunctionType({
   name: 'payment',
   module: Constants.itxnModuleName,

@@ -218,8 +218,8 @@ function compilePath(path: string, expect: ExpectStatic, options: { outputByteco
     {
       ...defaultPuyaOptions,
       outputTeal: false,
-      ...options,
       optimizationLevel: 0,
+      ...options,
     },
   )
   for (const log of logCtx.logEvents) {

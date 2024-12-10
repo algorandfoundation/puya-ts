@@ -2,7 +2,7 @@ import ts from 'typescript'
 import { nodeFactory } from '../../awst/node-factory'
 import type { Expression, LValue, MethodDocumentation, Statement } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
-import { CodeError, NotSupported, TodoError } from '../../errors'
+import { CodeError, InternalError, NotSupported } from '../../errors'
 import { logger } from '../../logger'
 import { codeInvariant, enumerate, invariant, sortBy } from '../../util'
 import type { Expressions } from '../../visitor/syntax-names'
@@ -130,7 +130,8 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   }
 
   visitPrivateIdentifier(node: ts.PrivateIdentifier): NodeBuilder {
-    throw new TodoError('PrivateIdentifier')
+    // Private identifiers will be wrapped in a property access expression which makes use of the TextVisitor
+    throw InternalError.shouldBeUnreachable()
   }
 
   visitSuperKeyword(node: ts.SuperExpression): NodeBuilder {
@@ -142,11 +143,11 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   }
 
   visitFunctionExpression(node: ts.FunctionExpression): NodeBuilder {
-    throw new TodoError('FunctionExpression')
+    this.throwNotSupported(node, 'function expressions. Use a named function instead eg. `function myFunction(...) {...}`')
   }
 
   visitClassExpression(node: ts.ClassExpression): NodeBuilder {
-    this.throwNotSupported(node, 'Class expressions')
+    this.throwNotSupported(node, 'class expressions')
   }
 
   visitObjectLiteralExpression(node: ts.ObjectLiteralExpression): NodeBuilder {
@@ -249,7 +250,8 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   }
 
   visitTypeAssertionExpression(node: ts.TypeAssertion): NodeBuilder {
-    throw new TodoError('TypeAssertion')
+    // Unsure what code this node represents - it may have been superseded by the AsExpression
+    this.throwNotSupported(node, 'Type assertions')
   }
 
   visitParenthesizedExpression(node: ts.ParenthesizedExpression): NodeBuilder {
@@ -266,15 +268,15 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   }
 
   visitTypeOfExpression(node: ts.TypeOfExpression): NodeBuilder {
-    throw new TodoError('TypeOfExpression')
+    this.throwNotSupported(node, 'typeof expressions are only supported in type expressions')
   }
 
   visitVoidExpression(node: ts.VoidExpression): NodeBuilder {
-    throw new TodoError('VoidExpression')
+    this.throwNotSupported(node, 'void expression')
   }
 
   visitAwaitExpression(node: ts.AwaitExpression): NodeBuilder {
-    throw new TodoError('AwaitExpression')
+    this.throwNotSupported(node, 'await keyword')
   }
 
   visitPrefixUnaryExpression(node: ts.PrefixUnaryExpression): NodeBuilder {
@@ -439,7 +441,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   }
 
   visitYieldExpression(node: ts.YieldExpression): NodeBuilder {
-    throw new TodoError('YieldExpression')
+    this.throwNotSupported(node, 'yield expressions')
   }
 
   visitOmittedExpression(node: ts.OmittedExpression): NodeBuilder {
@@ -452,13 +454,14 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   }
 
   visitAsExpression(node: ts.AsExpression): NodeBuilder {
-    // if (ts.isTypeReferenceNode(node.type) && ts.isIdentifier(node.type.typeName) && node.type.typeName.text === 'const') {
-    //   return this.baseAccept(node.expression)
-    // }
+    const sourceLocation = this.sourceLocation(node)
     const outerType = this.context.getPTypeForNode(node)
 
+    if (outerType instanceof TransientType) {
+      throw new CodeError(outerType.typeMessage, { sourceLocation })
+    }
+
     const innerExpr = this.baseAccept(node.expression)
-    const sourceLocation = this.sourceLocation(node)
     codeInvariant(
       innerExpr instanceof InstanceBuilder,
       `${innerExpr.typeDescription} is not a valid target for an as expression'`,
@@ -475,7 +478,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   }
 
   visitNonNullExpression(node: ts.NonNullExpression): NodeBuilder {
-    throw new TodoError('NonNullExpression')
+    this.throwNotSupported(node, 'non null assertions')
   }
 
   visitSatisfiesExpression(node: ts.SatisfiesExpression): NodeBuilder {
