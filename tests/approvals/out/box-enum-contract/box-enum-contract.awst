@@ -1,0 +1,51 @@
+contract BoxContract
+{
+  boxes {
+    ["oca"]: uint64
+    ["txn"]: uint64
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  storeEnums(): void
+  {
+    Box["oca"].value: uint64 = 1
+    Box["txn"].value: uint64 = 6
+  }
+  
+  readEnums(): arc4.tuple<uint64,uint64>
+  {
+    assert(box_get("oca").0 == itob(reinterpret_cast<uint64>(Box["oca"].value)))
+    assert(box_get("txn").0 == itob(reinterpret_cast<uint64>(Box["txn"].value)))
+    return ARC4_ENCODE(<tuple>[ARC4_ENCODE(reinterpret_cast<uint64>(Box["oca"].value), wtype=arc4.uint64), ARC4_ENCODE(reinterpret_cast<uint64>(Box["txn"].value), wtype=arc4.uint64)], wtype=arc4.tuple<uint64,uint64>)
+  }
+  
+  constructor(): void
+  {
+    void
+  }
+  
+  Contract::constructor(): void
+  {
+    this.constructor()
+  }
+  
+  BaseContract::constructor(): void
+  {
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
