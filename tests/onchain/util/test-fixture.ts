@@ -218,6 +218,7 @@ function compilePath(path: string, expect: ExpectStatic, options: { outputByteco
     {
       ...defaultPuyaOptions,
       outputTeal: false,
+      outputSourceMap: true,
       optimizationLevel: 0,
       ...options,
     },

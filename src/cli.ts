@@ -18,6 +18,7 @@ const cliOptionsSchema = z.object({
   isolatedFiles: z.boolean(),
 
   // Puya options
+  outputSourceMap: z.boolean(),
   outputTeal: z.boolean(),
   outputArc32: z.boolean(),
   outputArc56: z.boolean(),
@@ -56,6 +57,7 @@ function cli() {
     .addOption(new Option('--dry-run', "Just parse typescript files, don't invoke puya compiler").default(false))
     .addOption(new Option('--isolated-files', 'Invoke compilation on each input file individually').default(false))
     .addOption(new Option('--no-output-teal', 'Do not output TEAL code').default(defaultPuyaOptions.outputTeal))
+    .addOption(new Option('--output-source-map', 'Output debug source maps ').default(defaultPuyaOptions.outputSourceMap))
     .addOption(
       new Option(
         '--no-output-arc32',
