@@ -1,7 +1,6 @@
 import type { AlgorandClient } from '@algorandfoundation/algokit-utils'
 import { Config, microAlgos } from '@algorandfoundation/algokit-utils'
 import { algorandFixture } from '@algorandfoundation/algokit-utils/testing'
-import type { AlgoAmount } from '@algorandfoundation/algokit-utils/types/amount'
 import type { SendAppTransactionResult } from '@algorandfoundation/algokit-utils/types/app'
 import type { AppClient } from '@algorandfoundation/algokit-utils/types/app-client'
 import type { AppFactory, AppFactoryDeployParams } from '@algorandfoundation/algokit-utils/types/app-factory'
@@ -56,8 +55,13 @@ function createLazyCompiler(path: string, options: { outputBytecode: boolean; ou
     },
   }
 }
+type AlgoClientAppCallParams = Parameters<AlgorandClient['send']['appCall']>[0]
+
 type ProgramInvokeOptions = {
   appId?: bigint
+  sender?: AlgoClientAppCallParams['sender']
+  approvalProgram?: Uint8Array
+  clearStateProgram?: Uint8Array
   onComplete?:
     | OnApplicationComplete.NoOpOC
     | OnApplicationComplete.OptInOC
@@ -65,10 +69,7 @@ type ProgramInvokeOptions = {
     | OnApplicationComplete.ClearStateOC
     | OnApplicationComplete.UpdateApplicationOC
     | OnApplicationComplete.DeleteApplicationOC
-  senderAddr?: string
-  args?: Uint8Array[]
-  extraFee?: AlgoAmount
-}
+} & Omit<AlgoClientAppCallParams, 'onComplete' | 'sender' | 'appId'>
 
 type ProgramInvoker = {
   send(options?: ProgramInvokeOptions): Promise<SendAppTransactionResult>
@@ -103,15 +104,26 @@ export function createBaseTestFixture<TContracts extends string = ''>(path: stri
       use({
         async send(options?: ProgramInvokeOptions) {
           const common = {
-            onComplete: options?.onComplete ?? OnApplicationComplete.NoOpOC,
+            ...options,
             appId: options?.appId ?? 0n,
-            approvalProgram,
-            clearStateProgram,
-            sender: options?.senderAddr ?? localnet.context.testAccount.addr,
-            args: options?.args ?? [],
-            extraFee: options?.extraFee,
+            onComplete: options?.onComplete ?? OnApplicationComplete.NoOpOC,
+            sender: options?.sender ?? localnet.context.testAccount.addr,
           }
-          return localnet.algorand.send.appCall(common as DeliberateAny)
+          if (common.appId === 0n || common.onComplete === OnApplicationComplete.UpdateApplicationOC) {
+            common.approvalProgram = approvalProgram
+            common.clearStateProgram = clearStateProgram
+          }
+          const group = localnet.algorand.send.newGroup()
+          group.addAppCall(common as DeliberateAny)
+
+          // TODO: Add simulate call to gather trace
+
+          const result = await group.send()
+          return {
+            ...result,
+            confirmation: result.confirmations[0],
+            transaction: result.transactions[0],
+          }
         },
       })
     }

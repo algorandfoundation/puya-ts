@@ -10,7 +10,7 @@ import { instanceEb } from '../../../type-registry'
 import { FunctionBuilder, type NodeBuilder } from '../../index'
 import { parseFunctionArgs } from '../../util/arg-parsing'
 import { extractKey } from '../util'
-import { BoxProxyExpressionBuilder, boxValue, BoxValueExpressionBuilder } from './base'
+import { boxExists, boxLength, BoxProxyExpressionBuilder, boxValue, BoxValueExpressionBuilder } from './base'
 
 export class BoxRefFunctionBuilder extends FunctionBuilder {
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
@@ -55,32 +55,9 @@ export class BoxRefExpressionBuilder extends BoxProxyExpressionBuilder<BoxRefPTy
       case 'replace':
         return new BoxRefReplaceFunctionBuilder(boxValueExpr)
       case 'exists':
+        return boxExists(boxValueExpr, sourceLocation)
       case 'length': {
-        const boxLength = nodeFactory.intrinsicCall({
-          opCode: 'box_len',
-          stackArgs: [boxValueExpr],
-          wtype: new wtypes.WTuple({ types: [wtypes.uint64WType, wtypes.boolWType], immutable: true }),
-          immediates: [],
-          sourceLocation,
-        })
-        if (name === 'exists') {
-          return instanceEb(
-            nodeFactory.tupleItemExpression({
-              base: boxLength,
-              sourceLocation,
-              index: 1n,
-            }),
-            boolPType,
-          )
-        } else {
-          return instanceEb(
-            nodeFactory.checkedMaybe({
-              expr: boxLength,
-              comment: 'Box must exist',
-            }),
-            uint64PType,
-          )
-        }
+        return boxLength(boxValueExpr, sourceLocation)
       }
       case 'value':
         return new BoxValueExpressionBuilder(boxValueExpr, this.ptype.contentType)
@@ -110,7 +87,7 @@ export class BoxRefCreateFunctionBuilder extends BoxRefBaseFunctionBuilder {
     return instanceEb(
       nodeFactory.intrinsicCall({
         opCode: 'box_create',
-        stackArgs: [this.boxValue, size.resolve()],
+        stackArgs: [this.boxValue.key, size.resolve()],
         wtype: wtypes.boolWType,
         immediates: [],
         sourceLocation,
@@ -134,7 +111,7 @@ export class BoxRefResizeFunctionBuilder extends BoxRefBaseFunctionBuilder {
     return instanceEb(
       nodeFactory.intrinsicCall({
         opCode: 'box_resize',
-        stackArgs: [this.boxValue, size.resolve()],
+        stackArgs: [this.boxValue.key, size.resolve()],
         wtype: wtypes.voidWType,
         immediates: [],
         sourceLocation,
@@ -158,7 +135,7 @@ export class BoxRefExtractFunctionBuilder extends BoxRefBaseFunctionBuilder {
     return instanceEb(
       nodeFactory.intrinsicCall({
         opCode: 'box_extract',
-        stackArgs: [this.boxValue, start.resolve(), length.resolve()],
+        stackArgs: [this.boxValue.key, start.resolve(), length.resolve()],
         wtype: wtypes.bytesWType,
         immediates: [],
         sourceLocation,
@@ -182,7 +159,7 @@ export class BoxRefReplaceFunctionBuilder extends BoxRefBaseFunctionBuilder {
     return instanceEb(
       nodeFactory.intrinsicCall({
         opCode: 'box_replace',
-        stackArgs: [this.boxValue, start.resolve(), value.resolve()],
+        stackArgs: [this.boxValue.key, start.resolve(), value.resolve()],
         wtype: wtypes.voidWType,
         immediates: [],
         sourceLocation,
@@ -207,7 +184,7 @@ export class BoxRefPutFunctionBuilder extends BoxRefBaseFunctionBuilder {
     return instanceEb(
       nodeFactory.intrinsicCall({
         opCode: 'box_put',
-        stackArgs: [this.boxValue, value.resolve()],
+        stackArgs: [this.boxValue.key, value.resolve()],
         wtype: wtypes.voidWType,
         immediates: [],
         sourceLocation,
@@ -231,7 +208,7 @@ export class BoxRefSpliceFunctionBuilder extends BoxRefBaseFunctionBuilder {
     return instanceEb(
       nodeFactory.intrinsicCall({
         opCode: 'box_splice',
-        stackArgs: [this.boxValue, start.resolve(), stop.resolve(), value.resolve()],
+        stackArgs: [this.boxValue.key, start.resolve(), stop.resolve(), value.resolve()],
         wtype: wtypes.voidWType,
         immediates: [],
         sourceLocation,

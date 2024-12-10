@@ -1,5 +1,6 @@
 import type { bytes, uint64 } from '@algorandfoundation/algorand-typescript'
-import { assert, Box, BoxMap, BoxRef, Bytes } from '@algorandfoundation/algorand-typescript'
+import { assert, BaseContract, Box, BoxMap, BoxRef, Bytes, Txn } from '@algorandfoundation/algorand-typescript'
+import { itob } from '@algorandfoundation/algorand-typescript/op'
 
 const boxA = Box<string>({ key: Bytes('A') })
 function testBox(box: Box<string>, value: string) {
@@ -51,10 +52,32 @@ function testBoxRef(box: BoxRef, length: uint64) {
   } else if (boxRef.length !== length) {
     boxRef.resize(length)
   }
+  if (box.exists) {
+    box.resize(4)
+  } else {
+    box.create({ size: 4 })
+  }
   const someBytes = Bytes.fromHex('FFFFFFFF')
   box.put(someBytes)
-  boxRef.put(someBytes)
-  box.splice(1, 2, Bytes.fromHex('00'))
-  boxRef.splice(1, 2, Bytes.fromHex('00'))
+
+  assert(box.value === Bytes.fromHex('FFFFFFFF'))
+  box.splice(1, 1, Bytes.fromHex('00'))
   assert(box.value === Bytes.fromHex('FF00FFFF'))
+}
+
+export class BoxContract extends BaseContract {
+  boxOne = Box<string>({ key: 'one' })
+  boxMapTwo = BoxMap<string, bytes>({ keyPrefix: 'two' })
+  boxRefThree = BoxRef({ key: 'three' })
+
+  approvalProgram(): boolean {
+    if (Txn.applicationId.id !== 0) {
+      testBox(this.boxOne, 'aaaaaargh')
+
+      testBoxMap(this.boxMapTwo, 'what?', itob(256456))
+
+      testBoxRef(this.boxRefThree, 99)
+    }
+    return true
+  }
 }

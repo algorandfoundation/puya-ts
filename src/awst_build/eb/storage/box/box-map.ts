@@ -6,14 +6,13 @@ import { wtypes } from '../../../../awst/wtypes'
 
 import { invariant } from '../../../../util'
 import type { PType } from '../../../ptypes'
-import { boolPType, BoxMapPType, bytesPType, stringPType, TuplePType, uint64PType } from '../../../ptypes'
+import { boolPType, BoxMapPType, bytesPType, stringPType, TuplePType } from '../../../ptypes'
 import { instanceEb } from '../../../type-registry'
-import { BooleanExpressionBuilder } from '../../boolean-expression-builder'
 import { FunctionBuilder, type NodeBuilder } from '../../index'
 import { parseFunctionArgs } from '../../util/arg-parsing'
 import { VoidExpressionBuilder } from '../../void-expression-builder'
 import { extractKey } from '../util'
-import { BoxProxyExpressionBuilder, BoxValueExpressionBuilder } from './base'
+import { boxExists, boxLength, BoxProxyExpressionBuilder, BoxValueExpressionBuilder } from './base'
 
 export class BoxMapFunctionBuilder extends FunctionBuilder {
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
@@ -99,13 +98,7 @@ class BoxMapHasFunctionBuilder extends BoxMapFunctionBuilderBase {
       genericTypeArgs: 0,
       argSpec: (a) => [a.required(this.keyType)],
     })
-    return new BooleanExpressionBuilder(
-      nodeFactory.stateExists({
-        wtype: wtypes.boolWType,
-        field: this.boxValueExpression(key.resolve()),
-        sourceLocation,
-      }),
-    )
+    return boxExists(this.boxValueExpression(key.resolve()), sourceLocation)
   }
 }
 
@@ -197,19 +190,7 @@ class BoxMapLengthFunctionBuilder extends BoxMapFunctionBuilderBase {
       argSpec: (a) => [a.required(this.keyType)],
     })
 
-    return instanceEb(
-      nodeFactory.checkedMaybe({
-        expr: nodeFactory.intrinsicCall({
-          opCode: 'box_len',
-          stackArgs: [this.boxValueExpression(key.resolve())],
-          wtype: new wtypes.WTuple({ types: [wtypes.uint64WType, wtypes.boolWType], immutable: true }),
-          immediates: [],
-          sourceLocation,
-        }),
-        comment: 'Box must exist',
-      }),
-      uint64PType,
-    )
+    return boxLength(this.boxValueExpression(key.resolve()), sourceLocation)
   }
 }
 class BoxMapDeleteFunctionBuilder extends BoxMapFunctionBuilderBase {

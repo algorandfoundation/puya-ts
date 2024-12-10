@@ -4,7 +4,7 @@ subroutine testBox(box: box_key, value: string): void
   Box["A"].value: string = value
   assert(box.value == Box["A"].value)
   assert(STATE_EXISTS(box.value) and STATE_EXISTS(Box["A"].value))
-  assert(Boolean(checked_maybe(box_len(box.value), comment=Box must exist)))
+  assert(Boolean(checked_maybe(box_len(box), comment=Box must have value)))
   STATE_DEL(box.value)
   STATE_DEL(Box["A"].value)
   assert(!STATE_EXISTS(box.value) and !STATE_EXISTS(Box["A"].value))
@@ -20,7 +20,7 @@ subroutine testBoxMap(box: box_key, key: string, value: bytes): void
 {
   concat(box, reinterpret_cast<bytes>(key)).value: bytes = value
   concat("", reinterpret_cast<bytes>(key)).value: bytes = value
-  assert(Boolean(checked_maybe(box_len(concat(box, reinterpret_cast<bytes>(key)).value), comment=Box must exist)))
+  assert(Boolean(checked_maybe(box_len(concat(box, reinterpret_cast<bytes>(key))), comment=Box must have value)))
   assert(STATE_GET_EX(concat(box, reinterpret_cast<bytes>(key)).value).1)
   assert(concat(box, reinterpret_cast<bytes>(key)).value == concat("", reinterpret_cast<bytes>(key)).value)
   STATE_DEL(concat(box, reinterpret_cast<bytes>(key)).value)
@@ -28,17 +28,56 @@ subroutine testBoxMap(box: box_key, key: string, value: bytes): void
 }
 subroutine testBoxRef(box: box_key, length: uint64): void
 {
-  if (!box_len(Box["abc"].value).1) {
-    box_create(Box["abc"].value, 1000)
+  if (!STATE_EXISTS(Box["abc"].value)) {
+    box_create("abc", 1000)
   } else {
-    if (checked_maybe(box_len(Box["abc"].value), comment=Box must exist) != length) {
-      box_resize(Box["abc"].value, length)
+    if (checked_maybe(box_len("abc"), comment=Box must have value) != length) {
+      box_resize("abc", length)
     }
   }
+  if (STATE_EXISTS(box.value)) {
+    box_resize(box, 4)
+  } else {
+    box_create(box, 4)
+  }
   someBytes: bytes = 0xffffffff
-  box_put(box.value, someBytes)
-  box_put(Box["abc"].value, someBytes)
-  box_splice(box.value, 1, 2, 0x00)
-  box_splice(Box["abc"].value, 1, 2, 0x00)
+  box_put(box, someBytes)
+  assert(box.value == 0xffffffff)
+  box_splice(box, 1, 1, 0x00)
   assert(box.value == 0xff00ffff)
+}
+contract BoxContract
+{
+  boxes {
+    ["one"]: string
+    ["two"]: bytes
+    ["three"]: bytes
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    if (reinterpret_cast<uint64>(txn<ApplicationID>()) != 0) {
+      tests/approvals/box-proxies.algo.ts::testBox("one", "aaaaaargh")
+      tests/approvals/box-proxies.algo.ts::testBoxMap("two", "what?", itob(256456))
+      tests/approvals/box-proxies.algo.ts::testBoxRef("three", 99)
+    }
+    return True
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  constructor(): void
+  {
+    void
+  }
+  
+  BaseContract::constructor(): void
+  {
+  }
+  
 }
