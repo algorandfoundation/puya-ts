@@ -1,6 +1,14 @@
-import type { Expression } from '../../../awst/nodes'
+import type {
+  AppAccountStateExpression,
+  AppStateExpression,
+  Expression,
+  FieldExpression,
+  IndexExpression,
+  TupleExpression,
+  VarExpression,
+} from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
-import type { PType } from '../../ptypes'
+import type { PType, PTypeOrClass } from '../../ptypes'
 import { typeRegistry } from '../../type-registry'
 import type { BuilderBinaryOp, BuilderComparisonOp, BuilderUnaryOp, InstanceBuilder, NodeBuilder } from '../index'
 import { InstanceExpressionBuilder } from '../index'
@@ -10,6 +18,12 @@ export abstract class ValueProxy<TPType extends PType> extends InstanceExpressio
     return typeRegistry.getInstanceEb(this._expr, this.ptype)
   }
 
+  resolve(): Expression {
+    return this.proxied.resolve()
+  }
+  resolveLValue(): VarExpression | FieldExpression | IndexExpression | TupleExpression | AppStateExpression | AppAccountStateExpression {
+    return this.proxied.resolveLValue()
+  }
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
     return this.proxied.memberAccess(name, sourceLocation)
   }
@@ -34,7 +48,6 @@ export abstract class ValueProxy<TPType extends PType> extends InstanceExpressio
   postfixUnaryOp(op: BuilderUnaryOp, sourceLocation: SourceLocation): InstanceBuilder {
     return this.proxied.postfixUnaryOp(op, sourceLocation)
   }
-
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     return this.proxied.call(args, typeArgs, sourceLocation)
   }
@@ -52,5 +65,11 @@ export abstract class ValueProxy<TPType extends PType> extends InstanceExpressio
   }
   toBytes(sourceLocation: SourceLocation): Expression {
     return this.proxied.toBytes(sourceLocation)
+  }
+  resolvableToPType(ptype: PTypeOrClass): boolean {
+    return this.proxied.resolvableToPType(ptype)
+  }
+  resolveToPType(ptype: PTypeOrClass): InstanceBuilder {
+    return this.proxied.resolveToPType(ptype)
   }
 }
