@@ -4,7 +4,7 @@ import { ARC4ABIMethodConfig, ARC4BareMethodConfig, ARC4CreateOption, ContractRe
 import * as awst from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { Constants } from '../../constants'
-import { CodeError, TodoError } from '../../errors'
+import { CodeError } from '../../errors'
 import { logger } from '../../logger'
 import { codeInvariant, isIn } from '../../util'
 import { getArc4StructDef, getFunctionTypes, ptypeToArc4PType } from '../arc4-util'
@@ -215,6 +215,6 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
         memberName: config.name,
       }
     }
-    throw new TodoError('Unsupported default argument config')
+    throw new CodeError('Unsupported default argument config', { sourceLocation: decoratorLocation })
   }
 }

@@ -1,5 +1,5 @@
 import { SourceLocation } from '../awst/source-location'
-import { AwstBuildFailureError, CodeError, PuyaError, TodoError } from '../errors'
+import { AwstBuildFailureError, CodeError, PuyaError } from '../errors'
 import type { LogSink } from './sinks'
 
 type NodeOrSourceLocation = SourceLocation | { sourceLocation: SourceLocation }
@@ -91,9 +91,7 @@ export const logPuyaExceptions = <T>(action: () => T, sourceLocation: SourceLoca
   try {
     return action()
   } catch (e) {
-    if (e instanceof TodoError) {
-      logger.warn(e.sourceLocation ?? sourceLocation, `TODO: ${e.message}`)
-    } else if (e instanceof PuyaError) {
+    if (e instanceof PuyaError) {
       logger.error(e.sourceLocation ?? sourceLocation, e.message)
     } else {
       throw e
