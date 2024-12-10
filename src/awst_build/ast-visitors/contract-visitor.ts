@@ -6,7 +6,7 @@ import type { ContractMethod } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { wtypes } from '../../awst/wtypes'
 import { Constants } from '../../constants'
-import { AwstBuildFailureError, NotSupported, TodoError } from '../../errors'
+import { AwstBuildFailureError } from '../../errors'
 import { logger } from '../../logger'
 import { codeInvariant, invariant } from '../../util'
 import type { ClassElements } from '../../visitor/syntax-names'
@@ -120,7 +120,7 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
   }
 
   visitClassStaticBlockDeclaration(node: ts.ClassStaticBlockDeclaration): void {
-    throw new TodoError('visitClassStaticBlockDeclaration')
+    this.throwNotSupported(node, 'class static blocks')
   }
   visitConstructor(node: ts.ConstructorDeclaration): void {
     this._ctor = ConstructorVisitor.buildConstructor(this.context, node, {
@@ -129,10 +129,10 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
     })
   }
   visitGetAccessor(node: ts.GetAccessorDeclaration): void {
-    throw new TodoError('visitGetAccessor')
+    this.throwNotSupported(node, 'get accessors')
   }
   visitIndexSignature(node: ts.IndexSignatureDeclaration): void {
-    throw new NotSupported('Index signatures')
+    this.throwNotSupported(node, 'index signatures')
   }
 
   visitMethodDeclaration(node: ts.MethodDeclaration): void {
@@ -193,14 +193,17 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
         ),
       )
     } else {
-      logger.error(initializer.sourceLocation, `Unsupported property type ${initializer.typeDescription}`)
+      logger.error(
+        initializer.sourceLocation,
+        `Unsupported property type ${initializer.typeDescription}. Only GlobalState, LocalState, and Box proxies can be stored on a contract.`,
+      )
     }
   }
   visitSemicolonClassElement(node: ts.SemicolonClassElement): void {
     // Ignore
   }
   visitSetAccessor(node: ts.SetAccessorDeclaration): void {
-    throw new TodoError('visitSetAccessor')
+    this.throwNotSupported(node, 'set accessors')
   }
 
   public static buildContract(ctx: AwstBuildContext, classDec: ts.ClassDeclaration, ptype: ContractClassPType): [] | [awst.Contract] {

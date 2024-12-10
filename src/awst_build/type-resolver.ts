@@ -19,6 +19,7 @@ import {
   ClearStateProgram,
   ContractClassPType,
   FunctionPType,
+  GeneratorType,
   logicSigBaseType,
   LogicSigPType,
   NamespacePType,
@@ -185,7 +186,13 @@ export class TypeResolver {
     }
 
     const typeName = this.getTypeName(tsType, sourceLocation)
+
+    // TODO: These should be resolved from the typeRegistry, but it needs to happen before checking call signatures below
+    if (typeName.fullName === StringFunction.fullName) return StringFunction
+    if (typeName.fullName === BooleanFunction.fullName) return BooleanFunction
+    if (typeName.fullName === ClassMethodDecoratorContext.fullName) return ClassMethodDecoratorContext
     if (typeName.fullName === promisePType.fullName) return promisePType
+    if (typeName.fullName === GeneratorType.fullName) return GeneratorType
     if (tsType.flags === ts.TypeFlags.TypeParameter) {
       return new TypeParameterType(typeName)
     }
@@ -202,11 +209,6 @@ export class TypeResolver {
       const it = typeRegistry.tryResolveInstancePType(typeName)
       if (it) return it
     }
-
-    // TODO: These should be resolved from the typeRegistry, but it needs to happen before checking call signatures below
-    if (typeName.fullName === StringFunction.fullName) return StringFunction
-    if (typeName.fullName === BooleanFunction.fullName) return BooleanFunction
-    if (typeName.fullName === ClassMethodDecoratorContext.fullName) return ClassMethodDecoratorContext
 
     if (tsType.getConstructSignatures().length) {
       return this.reflectConstructorType(tsType, sourceLocation)

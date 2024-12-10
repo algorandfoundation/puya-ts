@@ -16,7 +16,7 @@ export type CreateProgramResult = {
 export function createTsProgram(options: CompileOptions): CreateProgramResult {
   const compilerOptions: ts.CompilerOptions = {
     allowJs: false,
-    noImplicitAny: true,
+    strict: true,
     target: ts.ScriptTarget.ES2022,
     module: ts.ModuleKind.ESNext,
     moduleResolution: ts.ModuleResolutionKind.Bundler,

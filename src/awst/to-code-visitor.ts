@@ -1,5 +1,5 @@
 import { Buffer } from 'node:buffer'
-import { TodoError } from '../errors'
+import { InternalError } from '../errors'
 import { uint8ArrayToBase32, uint8ArrayToUtf8 } from '../util'
 import type { ContractReference } from './models'
 import type {
@@ -88,10 +88,10 @@ export class ToCodeVisitor
     return `compile(${expression.logicSig.id}${prefix}${templateVars}`
   }
   visitLoopExit(statement: nodes.LoopExit): string[] {
-    throw new TodoError('Method not implemented.', { sourceLocation: statement.sourceLocation })
+    return ['break']
   }
   visitLoopContinue(statement: nodes.LoopContinue): string[] {
-    throw new TodoError('Method not implemented.', { sourceLocation: statement.sourceLocation })
+    return ['continue']
   }
   visitGoto(statement: nodes.Goto): string[] {
     return [`goto ${statement.target}`]
@@ -247,7 +247,7 @@ export class ToCodeVisitor
     if (target instanceof ContractMethodTarget) return `${target.cref}.${target.memberName}`
     if (target instanceof InstanceMethodTarget) return `this.${target.memberName}`
     if (target instanceof InstanceSuperMethodTarget) return `super.${target.memberName}`
-    throw new TodoError(`Unhandled target: ${target}`)
+    throw new InternalError(`Unhandled target: ${target}`)
   }
   visitUInt64UnaryOperation(expression: nodes.UInt64UnaryOperation): string {
     return `${expression.op}${expression.expr.accept(this)}`
@@ -274,7 +274,7 @@ export class ToCodeVisitor
     return `enumerate(${expression.expr.accept(this)})`
   }
   visitReversed(expression: nodes.Reversed): string {
-    throw new TodoError('Method not implemented.', { sourceLocation: expression.sourceLocation })
+    return `reversed(${expression.expr.accept(this)})`
   }
   visitStateGet(expression: nodes.StateGet): string {
     return `STATE_GET(${expression.field.accept(this)}, default=${expression.default.accept(this)})`
@@ -328,13 +328,13 @@ export class ToCodeVisitor
     return [`${statement.target.accept(this)}: ${statement.target.wtype} = ${statement.value.accept(this)}`]
   }
   visitUInt64AugmentedAssignment(statement: nodes.UInt64AugmentedAssignment): string[] {
-    throw new TodoError('Method not implemented.', { sourceLocation: statement.sourceLocation })
+    return [`${statement.target.accept(this)} = ${statement.target.accept(this)} ${statement.op} ${statement.value.accept(this)}`]
   }
   visitBigUIntAugmentedAssignment(statement: nodes.BigUIntAugmentedAssignment): string[] {
-    throw new TodoError('Method not implemented.', { sourceLocation: statement.sourceLocation })
+    return [`${statement.target.accept(this)} = ${statement.target.accept(this)} ${statement.op} ${statement.value.accept(this)}`]
   }
   visitBytesAugmentedAssignment(statement: nodes.BytesAugmentedAssignment): string[] {
-    throw new TodoError('Method not implemented.', { sourceLocation: statement.sourceLocation })
+    return [`${statement.target.accept(this)} = ${statement.target.accept(this)} ${statement.op} ${statement.value.accept(this)}`]
   }
   visitForInLoop(statement: nodes.ForInLoop): string[] {
     return [
