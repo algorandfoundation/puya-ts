@@ -56,7 +56,6 @@ export class CodeError extends PuyaError {
     return new CodeError(`Cannot resolve ${sourceType} to ${targetName}`, { sourceLocation })
   }
 }
-export class TodoError extends PuyaError {}
 export class InternalError extends PuyaError {
   static shouldBeUnreachable() {
     return new InternalError('Code should be unreachable')
