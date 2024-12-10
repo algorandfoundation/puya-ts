@@ -10,6 +10,7 @@ export const defaultPuyaOptions: PuyaPassThroughOptions = {
   outputArc32: true,
   outputArc56: true,
   outputSsaIr: false,
+  outputSourceMap: false,
   outputOptimizationIr: false,
   outputDestructuredIr: false,
   outputMemoryIr: false,
@@ -33,6 +34,7 @@ export class PuyaOptions {
   outputDestructuredIr: boolean
   outputMemoryIr: boolean
   outputBytecode: boolean
+  outputSourceMap: boolean
   matchAlgodBytecode: boolean
   debugLevel: number
   optimizationLevel: number
@@ -65,5 +67,6 @@ export class PuyaOptions {
     this.cliTemplateDefinitions = passThroughOptions.cliTemplateDefinitions
     this.templateVarsPrefix = passThroughOptions.templateVarsPrefix
     this.localsCoalescingStrategy = passThroughOptions.localsCoalescingStrategy
+    this.outputSourceMap = passThroughOptions.outputSourceMap
   }
 }
