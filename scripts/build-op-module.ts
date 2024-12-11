@@ -134,6 +134,7 @@ export type EnumValue = {
   doc: string
   stackType: AlgoTsType | null
   mode: string
+  minAvmVersion: number
 }
 
 export type EnumDef = {
@@ -188,6 +189,7 @@ const ARG_ENUMS = Object.entries(langSpec.arg_enums).map(([name, values], index)
       value: v.name,
       doc: v.doc ?? '',
       mode: v.mode,
+      minAvmVersion: v.min_avm_version,
       stackType: v.stack_type === null ? null : getMappedType(v.stack_type, null),
     }),
   )
@@ -413,7 +415,7 @@ export function buildOpModule() {
       for (const member of enumDef.members) {
         opFunctions.push({
           type: 'op-function',
-          minAvmVersion: def.min_avm_version,
+          minAvmVersion: member.minAvmVersion || def.min_avm_version,
           opCode,
           enumArg: {
             member: member.name,

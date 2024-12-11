@@ -40,73 +40,73 @@ export type AcctParamsType = {
 
   /**
    * The total number of uint64 values allocated by this account in Global and Local States.
-   * Min AVM version: 6
+   * Min AVM version: 8
    */
   acctTotalNumUint(a: Account | uint64): readonly [uint64, boolean]
 
   /**
    * The total number of byte array values allocated by this account in Global and Local States.
-   * Min AVM version: 6
+   * Min AVM version: 8
    */
   acctTotalNumByteSlice(a: Account | uint64): readonly [uint64, boolean]
 
   /**
    * The number of extra app code pages used by this account.
-   * Min AVM version: 6
+   * Min AVM version: 8
    */
   acctTotalExtraAppPages(a: Account | uint64): readonly [uint64, boolean]
 
   /**
    * The number of existing apps created by this account.
-   * Min AVM version: 6
+   * Min AVM version: 8
    */
   acctTotalAppsCreated(a: Account | uint64): readonly [uint64, boolean]
 
   /**
    * The number of apps this account is opted into.
-   * Min AVM version: 6
+   * Min AVM version: 8
    */
   acctTotalAppsOptedIn(a: Account | uint64): readonly [uint64, boolean]
 
   /**
    * The number of existing ASAs created by this account.
-   * Min AVM version: 6
+   * Min AVM version: 8
    */
   acctTotalAssetsCreated(a: Account | uint64): readonly [uint64, boolean]
 
   /**
    * The numbers of ASAs held by this account (including ASAs this account created).
-   * Min AVM version: 6
+   * Min AVM version: 8
    */
   acctTotalAssets(a: Account | uint64): readonly [uint64, boolean]
 
   /**
    * The number of existing boxes created by this account's app.
-   * Min AVM version: 6
+   * Min AVM version: 8
    */
   acctTotalBoxes(a: Account | uint64): readonly [uint64, boolean]
 
   /**
    * The total number of bytes used by this account's app's box keys and values.
-   * Min AVM version: 6
+   * Min AVM version: 8
    */
   acctTotalBoxBytes(a: Account | uint64): readonly [uint64, boolean]
 
   /**
    * Has this account opted into block payouts
-   * Min AVM version: 6
+   * Min AVM version: 11
    */
   acctIncentiveEligible(a: Account | uint64): readonly [boolean, boolean]
 
   /**
    * The round number of the last block this account proposed.
-   * Min AVM version: 6
+   * Min AVM version: 11
    */
   acctLastProposed(a: Account | uint64): readonly [uint64, boolean]
 
   /**
    * The round number of the last block this account sent a heartbeat.
-   * Min AVM version: 6
+   * Min AVM version: 11
    */
   acctLastHeartbeat(a: Account | uint64): readonly [uint64, boolean]
 }
@@ -385,7 +385,7 @@ export type AssetParamsType = {
 
   /**
    * Creator address
-   * Min AVM version: 2
+   * Min AVM version: 5
    */
   assetCreator(a: Asset | uint64): readonly [Account, boolean]
 }
@@ -743,7 +743,7 @@ export type GITxnType = {
 
   /**
    * UNIX timestamp of block before txn.FirstValid. Fails if negative
-   * Min AVM version: 6
+   * Min AVM version: 7
    */
   firstValidTime(t: uint64): uint64
 
@@ -869,229 +869,229 @@ export type GITxnType = {
 
   /**
    * ApplicationID from ApplicationCall transaction
-   * Min AVM version: 6
+   * Min AVM version: 2
    */
   applicationId(t: uint64): Application
 
   /**
    * ApplicationCall transaction on completion action
-   * Min AVM version: 6
+   * Min AVM version: 2
    */
   onCompletion(t: uint64): uint64
 
   /**
    * Arguments passed to the application in the ApplicationCall transaction
-   * Min AVM version: 6
+   * Min AVM version: 2
    */
   applicationArgs(t: uint64, a: uint64): bytes
 
   /**
    * Number of ApplicationArgs
-   * Min AVM version: 6
+   * Min AVM version: 2
    */
   numAppArgs(t: uint64): uint64
 
   /**
    * Accounts listed in the ApplicationCall transaction
-   * Min AVM version: 6
+   * Min AVM version: 2
    */
   accounts(t: uint64, a: uint64): Account
 
   /**
    * Number of Accounts
-   * Min AVM version: 6
+   * Min AVM version: 2
    */
   numAccounts(t: uint64): uint64
 
   /**
    * Approval program
-   * Min AVM version: 6
+   * Min AVM version: 2
    */
   approvalProgram(t: uint64): bytes
 
   /**
    * Clear state program
-   * Min AVM version: 6
+   * Min AVM version: 2
    */
   clearStateProgram(t: uint64): bytes
 
   /**
    * 32 byte Sender's new AuthAddr
-   * Min AVM version: 6
+   * Min AVM version: 2
    */
   rekeyTo(t: uint64): Account
 
   /**
    * Asset ID in asset config transaction
-   * Min AVM version: 6
+   * Min AVM version: 2
    */
   configAsset(t: uint64): Asset
 
   /**
    * Total number of units of this asset created
-   * Min AVM version: 6
+   * Min AVM version: 2
    */
   configAssetTotal(t: uint64): uint64
 
   /**
    * Number of digits to display after the decimal place when displaying the asset
-   * Min AVM version: 6
+   * Min AVM version: 2
    */
   configAssetDecimals(t: uint64): uint64
 
   /**
    * Whether the asset's slots are frozen by default or not, 0 or 1
-   * Min AVM version: 6
+   * Min AVM version: 2
    */
   configAssetDefaultFrozen(t: uint64): boolean
 
   /**
    * Unit name of the asset
-   * Min AVM version: 6
+   * Min AVM version: 2
    */
   configAssetUnitName(t: uint64): bytes
 
   /**
    * The asset name
-   * Min AVM version: 6
+   * Min AVM version: 2
    */
   configAssetName(t: uint64): bytes
 
   /**
    * URL
-   * Min AVM version: 6
+   * Min AVM version: 2
    */
   configAssetUrl(t: uint64): bytes
 
   /**
    * 32 byte commitment to unspecified asset metadata
-   * Min AVM version: 6
+   * Min AVM version: 2
    */
   configAssetMetadataHash(t: uint64): bytes
 
   /**
    * 32 byte address
-   * Min AVM version: 6
+   * Min AVM version: 2
    */
   configAssetManager(t: uint64): Account
 
   /**
    * 32 byte address
-   * Min AVM version: 6
+   * Min AVM version: 2
    */
   configAssetReserve(t: uint64): Account
 
   /**
    * 32 byte address
-   * Min AVM version: 6
+   * Min AVM version: 2
    */
   configAssetFreeze(t: uint64): Account
 
   /**
    * 32 byte address
-   * Min AVM version: 6
+   * Min AVM version: 2
    */
   configAssetClawback(t: uint64): Account
 
   /**
    * Asset ID being frozen or un-frozen
-   * Min AVM version: 6
+   * Min AVM version: 2
    */
   freezeAsset(t: uint64): Asset
 
   /**
    * 32 byte address of the account whose asset slot is being frozen or un-frozen
-   * Min AVM version: 6
+   * Min AVM version: 2
    */
   freezeAssetAccount(t: uint64): Account
 
   /**
    * The new frozen value, 0 or 1
-   * Min AVM version: 6
+   * Min AVM version: 2
    */
   freezeAssetFrozen(t: uint64): boolean
 
   /**
    * Foreign Assets listed in the ApplicationCall transaction
-   * Min AVM version: 6
+   * Min AVM version: 3
    */
   assets(t: uint64, a: uint64): Asset
 
   /**
    * Number of Assets
-   * Min AVM version: 6
+   * Min AVM version: 3
    */
   numAssets(t: uint64): uint64
 
   /**
    * Foreign Apps listed in the ApplicationCall transaction
-   * Min AVM version: 6
+   * Min AVM version: 3
    */
   applications(t: uint64, a: uint64): Application
 
   /**
    * Number of Applications
-   * Min AVM version: 6
+   * Min AVM version: 3
    */
   numApplications(t: uint64): uint64
 
   /**
    * Number of global state integers in ApplicationCall
-   * Min AVM version: 6
+   * Min AVM version: 3
    */
   globalNumUint(t: uint64): uint64
 
   /**
    * Number of global state byteslices in ApplicationCall
-   * Min AVM version: 6
+   * Min AVM version: 3
    */
   globalNumByteSlice(t: uint64): uint64
 
   /**
    * Number of local state integers in ApplicationCall
-   * Min AVM version: 6
+   * Min AVM version: 3
    */
   localNumUint(t: uint64): uint64
 
   /**
    * Number of local state byteslices in ApplicationCall
-   * Min AVM version: 6
+   * Min AVM version: 3
    */
   localNumByteSlice(t: uint64): uint64
 
   /**
    * Number of additional pages for each of the application's approval and clear state programs. An ExtraProgramPages of 1 means 2048 more total bytes, or 1024 for each program.
-   * Min AVM version: 6
+   * Min AVM version: 4
    */
   extraProgramPages(t: uint64): uint64
 
   /**
    * Marks an account nonparticipating for rewards
-   * Min AVM version: 6
+   * Min AVM version: 5
    */
   nonparticipation(t: uint64): boolean
 
   /**
    * Log messages emitted by an application call (only with `itxn` in v5). Application mode only
-   * Min AVM version: 6
+   * Min AVM version: 5
    */
   logs(t: uint64, a: uint64): bytes
 
   /**
    * Number of Logs (only with `itxn` in v5). Application mode only
-   * Min AVM version: 6
+   * Min AVM version: 5
    */
   numLogs(t: uint64): uint64
 
   /**
    * Asset ID allocated by the creation of an ASA (only with `itxn` in v5). Application mode only
-   * Min AVM version: 6
+   * Min AVM version: 5
    */
   createdAssetId(t: uint64): Asset
 
   /**
    * ApplicationID allocated by the creation of an application (only with `itxn` in v5). Application mode only
-   * Min AVM version: 6
+   * Min AVM version: 5
    */
   createdApplicationId(t: uint64): Application
 
@@ -1109,25 +1109,25 @@ export type GITxnType = {
 
   /**
    * Approval Program as an array of pages
-   * Min AVM version: 6
+   * Min AVM version: 7
    */
   approvalProgramPages(t: uint64, a: uint64): bytes
 
   /**
    * Number of Approval Program pages
-   * Min AVM version: 6
+   * Min AVM version: 7
    */
   numApprovalProgramPages(t: uint64): uint64
 
   /**
    * ClearState Program as an array of pages
-   * Min AVM version: 6
+   * Min AVM version: 7
    */
   clearStateProgramPages(t: uint64, a: uint64): bytes
 
   /**
    * Number of ClearState Program pages
-   * Min AVM version: 6
+   * Min AVM version: 7
    */
   numClearStateProgramPages(t: uint64): uint64
 }
@@ -1178,109 +1178,109 @@ export type GlobalType = {
 
   /**
    * Maximum supported version
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   get logicSigVersion(): uint64
 
   /**
    * Current round number. Application mode only.
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   get round(): uint64
 
   /**
    * Last confirmed block UNIX timestamp. Fails if negative. Application mode only.
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   get latestTimestamp(): uint64
 
   /**
    * ID of current application executing. Application mode only.
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   get currentApplicationId(): Application
 
   /**
    * Address of the creator of the current application. Application mode only.
-   * Min AVM version: 1
+   * Min AVM version: 3
    */
   get creatorAddress(): Account
 
   /**
    * Address that the current application controls. Application mode only.
-   * Min AVM version: 1
+   * Min AVM version: 5
    */
   get currentApplicationAddress(): Account
 
   /**
    * ID of the transaction group. 32 zero bytes if the transaction is not part of a group.
-   * Min AVM version: 1
+   * Min AVM version: 5
    */
   get groupId(): bytes
 
   /**
    * The remaining cost that can be spent by opcodes in this program.
-   * Min AVM version: 1
+   * Min AVM version: 6
    */
   get opcodeBudget(): uint64
 
   /**
    * The application ID of the application that called this application. 0 if this application is at the top-level. Application mode only.
-   * Min AVM version: 1
+   * Min AVM version: 6
    */
   get callerApplicationId(): uint64
 
   /**
    * The application address of the application that called this application. ZeroAddress if this application is at the top-level. Application mode only.
-   * Min AVM version: 1
+   * Min AVM version: 6
    */
   get callerApplicationAddress(): Account
 
   /**
    * The additional minimum balance required to create (and opt-in to) an asset.
-   * Min AVM version: 1
+   * Min AVM version: 10
    */
   get assetCreateMinBalance(): uint64
 
   /**
    * The additional minimum balance required to opt-in to an asset.
-   * Min AVM version: 1
+   * Min AVM version: 10
    */
   get assetOptInMinBalance(): uint64
 
   /**
    * The Genesis Hash for the network.
-   * Min AVM version: 1
+   * Min AVM version: 10
    */
   get genesisHash(): bytes
 
   /**
    * Whether block proposal payouts are enabled.
-   * Min AVM version: 1
+   * Min AVM version: 11
    */
   get payoutsEnabled(): boolean
 
   /**
    * The fee required in a keyreg transaction to make an account incentive eligible.
-   * Min AVM version: 1
+   * Min AVM version: 11
    */
   get payoutsGoOnlineFee(): uint64
 
   /**
    * The percentage of transaction fees in a block that can be paid to the block proposer.
-   * Min AVM version: 1
+   * Min AVM version: 11
    */
   get payoutsPercent(): uint64
 
   /**
    * The minimum algo balance an account must have in the agreement round to receive block payouts in the proposal round.
-   * Min AVM version: 1
+   * Min AVM version: 11
    */
   get payoutsMinBalance(): uint64
 
   /**
    * The maximum algo balance an account can have in the agreement round to receive block payouts in the proposal round.
-   * Min AVM version: 1
+   * Min AVM version: 11
    */
   get payoutsMaxBalance(): uint64
 }
@@ -1309,7 +1309,7 @@ export type GTxnType = {
 
   /**
    * UNIX timestamp of block before txn.FirstValid. Fails if negative
-   * Min AVM version: 1
+   * Min AVM version: 7
    */
   firstValidTime(t: uint64): uint64
 
@@ -1435,205 +1435,205 @@ export type GTxnType = {
 
   /**
    * ApplicationID from ApplicationCall transaction
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   applicationId(t: uint64): Application
 
   /**
    * ApplicationCall transaction on completion action
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   onCompletion(t: uint64): uint64
 
   /**
    * Arguments passed to the application in the ApplicationCall transaction
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   applicationArgs(a: uint64, b: uint64): bytes
 
   /**
    * Number of ApplicationArgs
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   numAppArgs(t: uint64): uint64
 
   /**
    * Accounts listed in the ApplicationCall transaction
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   accounts(a: uint64, b: uint64): Account
 
   /**
    * Number of Accounts
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   numAccounts(t: uint64): uint64
 
   /**
    * Approval program
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   approvalProgram(t: uint64): bytes
 
   /**
    * Clear state program
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   clearStateProgram(t: uint64): bytes
 
   /**
    * 32 byte Sender's new AuthAddr
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   rekeyTo(t: uint64): Account
 
   /**
    * Asset ID in asset config transaction
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   configAsset(t: uint64): Asset
 
   /**
    * Total number of units of this asset created
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   configAssetTotal(t: uint64): uint64
 
   /**
    * Number of digits to display after the decimal place when displaying the asset
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   configAssetDecimals(t: uint64): uint64
 
   /**
    * Whether the asset's slots are frozen by default or not, 0 or 1
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   configAssetDefaultFrozen(t: uint64): boolean
 
   /**
    * Unit name of the asset
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   configAssetUnitName(t: uint64): bytes
 
   /**
    * The asset name
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   configAssetName(t: uint64): bytes
 
   /**
    * URL
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   configAssetUrl(t: uint64): bytes
 
   /**
    * 32 byte commitment to unspecified asset metadata
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   configAssetMetadataHash(t: uint64): bytes
 
   /**
    * 32 byte address
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   configAssetManager(t: uint64): Account
 
   /**
    * 32 byte address
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   configAssetReserve(t: uint64): Account
 
   /**
    * 32 byte address
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   configAssetFreeze(t: uint64): Account
 
   /**
    * 32 byte address
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   configAssetClawback(t: uint64): Account
 
   /**
    * Asset ID being frozen or un-frozen
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   freezeAsset(t: uint64): Asset
 
   /**
    * 32 byte address of the account whose asset slot is being frozen or un-frozen
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   freezeAssetAccount(t: uint64): Account
 
   /**
    * The new frozen value, 0 or 1
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   freezeAssetFrozen(t: uint64): boolean
 
   /**
    * Foreign Assets listed in the ApplicationCall transaction
-   * Min AVM version: 5
+   * Min AVM version: 3
    */
   assets(a: uint64, b: uint64): Asset
 
   /**
    * Number of Assets
-   * Min AVM version: 1
+   * Min AVM version: 3
    */
   numAssets(t: uint64): uint64
 
   /**
    * Foreign Apps listed in the ApplicationCall transaction
-   * Min AVM version: 5
+   * Min AVM version: 3
    */
   applications(a: uint64, b: uint64): Application
 
   /**
    * Number of Applications
-   * Min AVM version: 1
+   * Min AVM version: 3
    */
   numApplications(t: uint64): uint64
 
   /**
    * Number of global state integers in ApplicationCall
-   * Min AVM version: 1
+   * Min AVM version: 3
    */
   globalNumUint(t: uint64): uint64
 
   /**
    * Number of global state byteslices in ApplicationCall
-   * Min AVM version: 1
+   * Min AVM version: 3
    */
   globalNumByteSlice(t: uint64): uint64
 
   /**
    * Number of local state integers in ApplicationCall
-   * Min AVM version: 1
+   * Min AVM version: 3
    */
   localNumUint(t: uint64): uint64
 
   /**
    * Number of local state byteslices in ApplicationCall
-   * Min AVM version: 1
+   * Min AVM version: 3
    */
   localNumByteSlice(t: uint64): uint64
 
   /**
    * Number of additional pages for each of the application's approval and clear state programs. An ExtraProgramPages of 1 means 2048 more total bytes, or 1024 for each program.
-   * Min AVM version: 1
+   * Min AVM version: 4
    */
   extraProgramPages(t: uint64): uint64
 
   /**
    * Marks an account nonparticipating for rewards
-   * Min AVM version: 1
+   * Min AVM version: 5
    */
   nonparticipation(t: uint64): boolean
 
@@ -1645,55 +1645,55 @@ export type GTxnType = {
 
   /**
    * Number of Logs (only with `itxn` in v5). Application mode only
-   * Min AVM version: 1
+   * Min AVM version: 5
    */
   numLogs(t: uint64): uint64
 
   /**
    * Asset ID allocated by the creation of an ASA (only with `itxn` in v5). Application mode only
-   * Min AVM version: 1
+   * Min AVM version: 5
    */
   createdAssetId(t: uint64): Asset
 
   /**
    * ApplicationID allocated by the creation of an application (only with `itxn` in v5). Application mode only
-   * Min AVM version: 1
+   * Min AVM version: 5
    */
   createdApplicationId(t: uint64): Application
 
   /**
    * The last message emitted. Empty bytes if none were emitted. Application mode only
-   * Min AVM version: 1
+   * Min AVM version: 6
    */
   lastLog(t: uint64): bytes
 
   /**
    * 64 byte state proof public key
-   * Min AVM version: 1
+   * Min AVM version: 6
    */
   stateProofPk(t: uint64): bytes
 
   /**
    * Approval Program as an array of pages
-   * Min AVM version: 5
+   * Min AVM version: 7
    */
   approvalProgramPages(a: uint64, b: uint64): bytes
 
   /**
    * Number of Approval Program pages
-   * Min AVM version: 1
+   * Min AVM version: 7
    */
   numApprovalProgramPages(t: uint64): uint64
 
   /**
    * ClearState Program as an array of pages
-   * Min AVM version: 5
+   * Min AVM version: 7
    */
   clearStateProgramPages(a: uint64, b: uint64): bytes
 
   /**
    * Number of ClearState Program pages
-   * Min AVM version: 1
+   * Min AVM version: 7
    */
   numClearStateProgramPages(t: uint64): uint64
 }
@@ -1729,7 +1729,7 @@ export type ITxnType = {
 
   /**
    * UNIX timestamp of block before txn.FirstValid. Fails if negative
-   * Min AVM version: 5
+   * Min AVM version: 7
    */
   get firstValidTime(): uint64
 
@@ -1855,199 +1855,199 @@ export type ITxnType = {
 
   /**
    * ApplicationID from ApplicationCall transaction
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   get applicationId(): Application
 
   /**
    * ApplicationCall transaction on completion action
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   get onCompletion(): uint64
 
   /**
    * Arguments passed to the application in the ApplicationCall transaction
-   * Min AVM version: 6
+   * Min AVM version: 2
    */
   applicationArgs(a: uint64): bytes
 
   /**
    * Number of ApplicationArgs
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   get numAppArgs(): uint64
 
   /**
    * Accounts listed in the ApplicationCall transaction
-   * Min AVM version: 6
+   * Min AVM version: 2
    */
   accounts(a: uint64): Account
 
   /**
    * Number of Accounts
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   get numAccounts(): uint64
 
   /**
    * Approval program
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   get approvalProgram(): bytes
 
   /**
    * Clear state program
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   get clearStateProgram(): bytes
 
   /**
    * 32 byte Sender's new AuthAddr
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   get rekeyTo(): Account
 
   /**
    * Asset ID in asset config transaction
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   get configAsset(): Asset
 
   /**
    * Total number of units of this asset created
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   get configAssetTotal(): uint64
 
   /**
    * Number of digits to display after the decimal place when displaying the asset
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   get configAssetDecimals(): uint64
 
   /**
    * Whether the asset's slots are frozen by default or not, 0 or 1
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   get configAssetDefaultFrozen(): boolean
 
   /**
    * Unit name of the asset
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   get configAssetUnitName(): bytes
 
   /**
    * The asset name
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   get configAssetName(): bytes
 
   /**
    * URL
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   get configAssetUrl(): bytes
 
   /**
    * 32 byte commitment to unspecified asset metadata
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   get configAssetMetadataHash(): bytes
 
   /**
    * 32 byte address
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   get configAssetManager(): Account
 
   /**
    * 32 byte address
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   get configAssetReserve(): Account
 
   /**
    * 32 byte address
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   get configAssetFreeze(): Account
 
   /**
    * 32 byte address
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   get configAssetClawback(): Account
 
   /**
    * Asset ID being frozen or un-frozen
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   get freezeAsset(): Asset
 
   /**
    * 32 byte address of the account whose asset slot is being frozen or un-frozen
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   get freezeAssetAccount(): Account
 
   /**
    * The new frozen value, 0 or 1
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   get freezeAssetFrozen(): boolean
 
   /**
    * Foreign Assets listed in the ApplicationCall transaction
-   * Min AVM version: 6
+   * Min AVM version: 3
    */
   assets(a: uint64): Asset
 
   /**
    * Number of Assets
-   * Min AVM version: 5
+   * Min AVM version: 3
    */
   get numAssets(): uint64
 
   /**
    * Foreign Apps listed in the ApplicationCall transaction
-   * Min AVM version: 6
+   * Min AVM version: 3
    */
   applications(a: uint64): Application
 
   /**
    * Number of Applications
-   * Min AVM version: 5
+   * Min AVM version: 3
    */
   get numApplications(): uint64
 
   /**
    * Number of global state integers in ApplicationCall
-   * Min AVM version: 5
+   * Min AVM version: 3
    */
   get globalNumUint(): uint64
 
   /**
    * Number of global state byteslices in ApplicationCall
-   * Min AVM version: 5
+   * Min AVM version: 3
    */
   get globalNumByteSlice(): uint64
 
   /**
    * Number of local state integers in ApplicationCall
-   * Min AVM version: 5
+   * Min AVM version: 3
    */
   get localNumUint(): uint64
 
   /**
    * Number of local state byteslices in ApplicationCall
-   * Min AVM version: 5
+   * Min AVM version: 3
    */
   get localNumByteSlice(): uint64
 
   /**
    * Number of additional pages for each of the application's approval and clear state programs. An ExtraProgramPages of 1 means 2048 more total bytes, or 1024 for each program.
-   * Min AVM version: 5
+   * Min AVM version: 4
    */
   get extraProgramPages(): uint64
 
@@ -2059,7 +2059,7 @@ export type ITxnType = {
 
   /**
    * Log messages emitted by an application call (only with `itxn` in v5). Application mode only
-   * Min AVM version: 6
+   * Min AVM version: 5
    */
   logs(a: uint64): bytes
 
@@ -2083,37 +2083,37 @@ export type ITxnType = {
 
   /**
    * The last message emitted. Empty bytes if none were emitted. Application mode only
-   * Min AVM version: 5
+   * Min AVM version: 6
    */
   get lastLog(): bytes
 
   /**
    * 64 byte state proof public key
-   * Min AVM version: 5
+   * Min AVM version: 6
    */
   get stateProofPk(): bytes
 
   /**
    * Approval Program as an array of pages
-   * Min AVM version: 6
+   * Min AVM version: 7
    */
   approvalProgramPages(a: uint64): bytes
 
   /**
    * Number of Approval Program pages
-   * Min AVM version: 5
+   * Min AVM version: 7
    */
   get numApprovalProgramPages(): uint64
 
   /**
    * ClearState Program as an array of pages
-   * Min AVM version: 6
+   * Min AVM version: 7
    */
   clearStateProgramPages(a: uint64): bytes
 
   /**
    * Number of ClearState Program pages
-   * Min AVM version: 5
+   * Min AVM version: 7
    */
   get numClearStateProgramPages(): uint64
 }
@@ -2240,175 +2240,175 @@ export type ITxnCreateType = {
 
   /**
    * ApplicationID from ApplicationCall transaction
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   setApplicationId(a: Application | uint64): void
 
   /**
    * ApplicationCall transaction on completion action
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   setOnCompletion(a: uint64): void
 
   /**
    * Arguments passed to the application in the ApplicationCall transaction
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   setApplicationArgs(a: bytes): void
 
   /**
    * Accounts listed in the ApplicationCall transaction
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   setAccounts(a: Account): void
 
   /**
    * Approval program
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   setApprovalProgram(a: bytes): void
 
   /**
    * Clear state program
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   setClearStateProgram(a: bytes): void
 
   /**
    * 32 byte Sender's new AuthAddr
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   setRekeyTo(a: Account): void
 
   /**
    * Asset ID in asset config transaction
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   setConfigAsset(a: Asset | uint64): void
 
   /**
    * Total number of units of this asset created
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   setConfigAssetTotal(a: uint64): void
 
   /**
    * Number of digits to display after the decimal place when displaying the asset
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   setConfigAssetDecimals(a: uint64): void
 
   /**
    * Whether the asset's slots are frozen by default or not, 0 or 1
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   setConfigAssetDefaultFrozen(a: boolean): void
 
   /**
    * Unit name of the asset
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   setConfigAssetUnitName(a: bytes): void
 
   /**
    * The asset name
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   setConfigAssetName(a: bytes): void
 
   /**
    * URL
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   setConfigAssetUrl(a: bytes): void
 
   /**
    * 32 byte commitment to unspecified asset metadata
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   setConfigAssetMetadataHash(a: bytes): void
 
   /**
    * 32 byte address
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   setConfigAssetManager(a: Account): void
 
   /**
    * 32 byte address
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   setConfigAssetReserve(a: Account): void
 
   /**
    * 32 byte address
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   setConfigAssetFreeze(a: Account): void
 
   /**
    * 32 byte address
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   setConfigAssetClawback(a: Account): void
 
   /**
    * Asset ID being frozen or un-frozen
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   setFreezeAsset(a: Asset | uint64): void
 
   /**
    * 32 byte address of the account whose asset slot is being frozen or un-frozen
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   setFreezeAssetAccount(a: Account): void
 
   /**
    * The new frozen value, 0 or 1
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   setFreezeAssetFrozen(a: boolean): void
 
   /**
    * Foreign Assets listed in the ApplicationCall transaction
-   * Min AVM version: 5
+   * Min AVM version: 3
    */
   setAssets(a: uint64): void
 
   /**
    * Foreign Apps listed in the ApplicationCall transaction
-   * Min AVM version: 5
+   * Min AVM version: 3
    */
   setApplications(a: uint64): void
 
   /**
    * Number of global state integers in ApplicationCall
-   * Min AVM version: 5
+   * Min AVM version: 3
    */
   setGlobalNumUint(a: uint64): void
 
   /**
    * Number of global state byteslices in ApplicationCall
-   * Min AVM version: 5
+   * Min AVM version: 3
    */
   setGlobalNumByteSlice(a: uint64): void
 
   /**
    * Number of local state integers in ApplicationCall
-   * Min AVM version: 5
+   * Min AVM version: 3
    */
   setLocalNumUint(a: uint64): void
 
   /**
    * Number of local state byteslices in ApplicationCall
-   * Min AVM version: 5
+   * Min AVM version: 3
    */
   setLocalNumByteSlice(a: uint64): void
 
   /**
    * Number of additional pages for each of the application's approval and clear state programs. An ExtraProgramPages of 1 means 2048 more total bytes, or 1024 for each program.
-   * Min AVM version: 5
+   * Min AVM version: 4
    */
   setExtraProgramPages(a: uint64): void
 
@@ -2420,19 +2420,19 @@ export type ITxnCreateType = {
 
   /**
    * 64 byte state proof public key
-   * Min AVM version: 5
+   * Min AVM version: 6
    */
   setStateProofPk(a: bytes): void
 
   /**
    * Approval Program as an array of pages
-   * Min AVM version: 5
+   * Min AVM version: 7
    */
   setApprovalProgramPages(a: bytes): void
 
   /**
    * ClearState Program as an array of pages
-   * Min AVM version: 5
+   * Min AVM version: 7
    */
   setClearStateProgramPages(a: bytes): void
 
@@ -2616,7 +2616,7 @@ export type TxnType = {
 
   /**
    * UNIX timestamp of block before txn.FirstValid. Fails if negative
-   * Min AVM version: 1
+   * Min AVM version: 7
    */
   get firstValidTime(): uint64
 
@@ -2742,205 +2742,205 @@ export type TxnType = {
 
   /**
    * ApplicationID from ApplicationCall transaction
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   get applicationId(): Application
 
   /**
    * ApplicationCall transaction on completion action
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   get onCompletion(): uint64
 
   /**
    * Arguments passed to the application in the ApplicationCall transaction
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   applicationArgs(a: uint64): bytes
 
   /**
    * Number of ApplicationArgs
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   get numAppArgs(): uint64
 
   /**
    * Accounts listed in the ApplicationCall transaction
-   * Min AVM version: 5
+   * Min AVM version: 2
    */
   accounts(a: uint64): Account
 
   /**
    * Number of Accounts
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   get numAccounts(): uint64
 
   /**
    * Approval program
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   get approvalProgram(): bytes
 
   /**
    * Clear state program
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   get clearStateProgram(): bytes
 
   /**
    * 32 byte Sender's new AuthAddr
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   get rekeyTo(): Account
 
   /**
    * Asset ID in asset config transaction
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   get configAsset(): Asset
 
   /**
    * Total number of units of this asset created
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   get configAssetTotal(): uint64
 
   /**
    * Number of digits to display after the decimal place when displaying the asset
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   get configAssetDecimals(): uint64
 
   /**
    * Whether the asset's slots are frozen by default or not, 0 or 1
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   get configAssetDefaultFrozen(): boolean
 
   /**
    * Unit name of the asset
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   get configAssetUnitName(): bytes
 
   /**
    * The asset name
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   get configAssetName(): bytes
 
   /**
    * URL
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   get configAssetUrl(): bytes
 
   /**
    * 32 byte commitment to unspecified asset metadata
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   get configAssetMetadataHash(): bytes
 
   /**
    * 32 byte address
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   get configAssetManager(): Account
 
   /**
    * 32 byte address
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   get configAssetReserve(): Account
 
   /**
    * 32 byte address
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   get configAssetFreeze(): Account
 
   /**
    * 32 byte address
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   get configAssetClawback(): Account
 
   /**
    * Asset ID being frozen or un-frozen
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   get freezeAsset(): Asset
 
   /**
    * 32 byte address of the account whose asset slot is being frozen or un-frozen
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   get freezeAssetAccount(): Account
 
   /**
    * The new frozen value, 0 or 1
-   * Min AVM version: 1
+   * Min AVM version: 2
    */
   get freezeAssetFrozen(): boolean
 
   /**
    * Foreign Assets listed in the ApplicationCall transaction
-   * Min AVM version: 5
+   * Min AVM version: 3
    */
   assets(a: uint64): Asset
 
   /**
    * Number of Assets
-   * Min AVM version: 1
+   * Min AVM version: 3
    */
   get numAssets(): uint64
 
   /**
    * Foreign Apps listed in the ApplicationCall transaction
-   * Min AVM version: 5
+   * Min AVM version: 3
    */
   applications(a: uint64): Application
 
   /**
    * Number of Applications
-   * Min AVM version: 1
+   * Min AVM version: 3
    */
   get numApplications(): uint64
 
   /**
    * Number of global state integers in ApplicationCall
-   * Min AVM version: 1
+   * Min AVM version: 3
    */
   get globalNumUint(): uint64
 
   /**
    * Number of global state byteslices in ApplicationCall
-   * Min AVM version: 1
+   * Min AVM version: 3
    */
   get globalNumByteSlice(): uint64
 
   /**
    * Number of local state integers in ApplicationCall
-   * Min AVM version: 1
+   * Min AVM version: 3
    */
   get localNumUint(): uint64
 
   /**
    * Number of local state byteslices in ApplicationCall
-   * Min AVM version: 1
+   * Min AVM version: 3
    */
   get localNumByteSlice(): uint64
 
   /**
    * Number of additional pages for each of the application's approval and clear state programs. An ExtraProgramPages of 1 means 2048 more total bytes, or 1024 for each program.
-   * Min AVM version: 1
+   * Min AVM version: 4
    */
   get extraProgramPages(): uint64
 
   /**
    * Marks an account nonparticipating for rewards
-   * Min AVM version: 1
+   * Min AVM version: 5
    */
   get nonparticipation(): boolean
 
@@ -2952,62 +2952,62 @@ export type TxnType = {
 
   /**
    * Number of Logs (only with `itxn` in v5). Application mode only
-   * Min AVM version: 1
+   * Min AVM version: 5
    */
   get numLogs(): uint64
 
   /**
    * Asset ID allocated by the creation of an ASA (only with `itxn` in v5). Application mode only
-   * Min AVM version: 1
+   * Min AVM version: 5
    */
   get createdAssetId(): Asset
 
   /**
    * ApplicationID allocated by the creation of an application (only with `itxn` in v5). Application mode only
-   * Min AVM version: 1
+   * Min AVM version: 5
    */
   get createdApplicationId(): Application
 
   /**
    * The last message emitted. Empty bytes if none were emitted. Application mode only
-   * Min AVM version: 1
+   * Min AVM version: 6
    */
   get lastLog(): bytes
 
   /**
    * 64 byte state proof public key
-   * Min AVM version: 1
+   * Min AVM version: 6
    */
   get stateProofPk(): bytes
 
   /**
    * Approval Program as an array of pages
-   * Min AVM version: 5
+   * Min AVM version: 7
    */
   approvalProgramPages(a: uint64): bytes
 
   /**
    * Number of Approval Program pages
-   * Min AVM version: 1
+   * Min AVM version: 7
    */
   get numApprovalProgramPages(): uint64
 
   /**
    * ClearState Program as an array of pages
-   * Min AVM version: 5
+   * Min AVM version: 7
    */
   clearStateProgramPages(a: uint64): bytes
 
   /**
    * Number of ClearState Program pages
-   * Min AVM version: 1
+   * Min AVM version: 7
    */
   get numClearStateProgramPages(): uint64
 }
 export type VoterParamsType = {
   /**
    * Online stake in microalgos
-   * Min AVM version: 11
+   * Min AVM version: 6
    */
   voterBalance(a: uint64 | bytes): readonly [uint64, boolean]
 
