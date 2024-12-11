@@ -1,4 +1,4 @@
-import type { biguint, BigUintCompat, bytes, BytesCompat, uint64, Uint64Compat } from '../index'
+import type { biguint, BigUintCompat, bytes, BytesBacked, BytesCompat, uint64, Uint64Compat } from '../index'
 import { base32ToUint8Array } from './base-32'
 import {
   base64ToUint8Array,
@@ -32,6 +32,7 @@ export function toExternalValue(val: uint64 | biguint | bytes | string) {
 }
 export const toBytes = (val: unknown): bytes => {
   if (val instanceof AlgoTsPrimitiveCls) return val.toBytes().asAlgoTs()
+  if ((val as BytesBacked).bytes) return BytesCls.fromCompat((val as BytesBacked).bytes).asAlgoTs()
 
   switch (typeof val) {
     case 'string':
