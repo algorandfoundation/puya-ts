@@ -1,7 +1,6 @@
-import type { bytes, uint64 } from '@algorandfoundation/algorand-typescript'
-import { assert, BigUint, Bytes, Uint64 } from '@algorandfoundation/algorand-typescript'
+import { assert, BaseContract, BigUint, Bytes, Uint64 } from '@algorandfoundation/algorand-typescript'
 
-function test_truthyness(a: uint64, b: uint64, c: string, d: bytes, e: uint64) {
+function test_truthyness() {
   assert(!0, 'Zero is falsy')
   assert(1, 'Non zero is truthy')
   assert(!Uint64(0), 'Zero is falsy')
@@ -28,4 +27,12 @@ function test_booleans_are_equal() {
 
   const boolNoArgs = Boolean()
   assert(!boolNoArgs)
+}
+
+export class BooleanConversionsAlgo extends BaseContract {
+  approvalProgram(): boolean {
+    test_truthyness()
+    test_booleans_are_equal()
+    return true
+  }
 }
