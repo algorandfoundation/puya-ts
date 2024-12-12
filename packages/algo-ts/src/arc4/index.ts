@@ -1,7 +1,8 @@
+import { op } from '..'
 import { BaseContract } from '../base-contract'
 import { ctxMgr } from '../execution-context'
-import { NoImplementation } from '../impl/errors'
-import { bytes, Uint64 } from '../primitives'
+import { encodingUtil } from '../internal'
+import { Bytes, bytes, Uint64 } from '../primitives'
 import { DeliberateAny } from '../typescript-helpers'
 
 export * from './encoded-types'
@@ -91,5 +92,5 @@ export function baremethod<TContract extends Contract>(config?: BareMethodConfig
  * @returns The ARC4 method selector. Eg. `02BECE11`
  */
 export function methodSelector(methodSignature: string): bytes {
-  throw new NoImplementation()
+  return op.sha512_256(Bytes(encodingUtil.utf8ToUint8Array(methodSignature))).slice(0, 4)
 }
