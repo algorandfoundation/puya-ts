@@ -2,19 +2,9 @@ contract tests/approvals/boolean-conversions.algo.ts::BooleanConversionsAlgo:
     program approval:
         subroutine tests/approvals/boolean-conversions.algo.ts::BooleanConversionsAlgo.approvalProgram() -> bool:
             block@0: // L33
-                let reinterpret_bool%0#0: bool = (txn ApplicationID)
-                goto reinterpret_bool%0#0 ? block@2 : block@1
-            block@1: // if_body_L1
-                tests/approvals/boolean-conversions.algo.ts::BooleanConversionsAlgo.constructor()
-                goto block@2
-            block@2: // after_if_else_L1
                 tests/approvals/boolean-conversions.algo.ts::test_truthyness()
                 tests/approvals/boolean-conversions.algo.ts::test_booleans_are_equal()
                 return 1u
-        
-        subroutine tests/approvals/boolean-conversions.algo.ts::BooleanConversionsAlgo.constructor() -> void:
-            block@0: // L32
-                return 
         
         subroutine tests/approvals/boolean-conversions.algo.ts::test_truthyness() -> void:
             block@0: // L3

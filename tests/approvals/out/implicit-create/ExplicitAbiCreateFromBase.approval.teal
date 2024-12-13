@@ -2,30 +2,8 @@
 
 tests/approvals/implicit-create.algo.ts::ExplicitAbiCreateFromBase.approvalProgram:
     intcblock 0
-    txn ApplicationID
-    bnz main_after_if_else@2
-    callsub constructor
-
-main_after_if_else@2:
     callsub __puya_arc4_router__
     return
-
-
-// tests/approvals/implicit-create.algo.ts::ExplicitAbiCreateFromBase.constructor() -> void:
-constructor:
-    // tests/approvals/implicit-create.algo.ts:23
-    // export class ExplicitAbiCreateFromBase extends BaseWithAbiCreate {}
-    proto 0 0
-    callsub tests/approvals/implicit-create.algo.ts::BaseWithAbiCreate.constructor
-    retsub
-
-
-// tests/approvals/implicit-create.algo.ts::BaseWithAbiCreate.constructor() -> void:
-tests/approvals/implicit-create.algo.ts::BaseWithAbiCreate.constructor:
-    // tests/approvals/implicit-create.algo.ts:17
-    // class BaseWithAbiCreate extends Contract {
-    proto 0 0
-    retsub
 
 
 // tests/approvals/implicit-create.algo.ts::ExplicitAbiCreateFromBase.__puya_arc4_router__() -> uint64:

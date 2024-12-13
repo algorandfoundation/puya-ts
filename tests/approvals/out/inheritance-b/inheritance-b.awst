@@ -5,9 +5,6 @@ contract ConcreteSimpleContract
   }
   approvalProgram(): uint64
   {
-    if (!Boolean(txn<ApplicationID>())) {
-      this.constructor()
-    }
     a: uint64 = btoi(txnas<ApplicationArgs>(0))
     b: uint64 = btoi(txnas<ApplicationArgs>(1))
     log(itob(this.simpleMethod(a, b)))
@@ -19,23 +16,9 @@ contract ConcreteSimpleContract
     return True
   }
   
-  constructor(): void
-  {
-    super.constructor()
-  }
-  
   SimpleContract::simpleMethod(): uint64
   {
     return a * b
-  }
-  
-  SimpleContract::constructor(): void
-  {
-    void
-  }
-  
-  BaseContract::constructor(): void
-  {
   }
   
 }
@@ -46,9 +29,6 @@ contract ConcreteArc4Contract
   }
   approvalProgram(): bool
   {
-    if (!Boolean(txn<ApplicationID>())) {
-      this.constructor()
-    }
     return arc4Router()
   }
   
@@ -62,11 +42,6 @@ contract ConcreteArc4Contract
     return "42"
   }
   
-  constructor(): void
-  {
-    super.constructor()
-  }
-  
   Arc4Contract::simpleMethod(): uint64
   {
     return a * b
@@ -75,20 +50,6 @@ contract ConcreteArc4Contract
   Arc4Contract::simpleAbiMethod(): uint64
   {
     return a + b
-  }
-  
-  Arc4Contract::constructor(): void
-  {
-    void
-  }
-  
-  Contract::constructor(): void
-  {
-    this.constructor()
-  }
-  
-  BaseContract::constructor(): void
-  {
   }
   
   __algots__.defaultCreate(): void

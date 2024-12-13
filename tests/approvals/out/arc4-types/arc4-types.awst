@@ -92,9 +92,6 @@ contract Arc4TypesTestContract
 {
   approvalProgram(): bool
   {
-    if (!Boolean(txn<ApplicationID>())) {
-      this.constructor()
-    }
     x: arc4.uint64 = 0
     tests/approvals/arc4-types.algo.ts::testStr()
     tests/approvals/arc4-types.algo.ts::testUintN(1, 2, 4)
@@ -119,15 +116,6 @@ contract Arc4TypesTestContract
   getArc4Values(): readonlytuple[arc4.byte, arc4.uint8, arc4.static_array<arc4.byte>]
   {
     return <tuple>[0, 255, Address("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ")]
-  }
-  
-  constructor(): void
-  {
-    void
-  }
-  
-  BaseContract::constructor(): void
-  {
   }
   
 }

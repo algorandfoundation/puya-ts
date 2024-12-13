@@ -2,9 +2,6 @@ contract Arc4EncodeDecode
 {
   approvalProgram(): bool
   {
-    if (!Boolean(txn<ApplicationID>())) {
-      this.constructor()
-    }
     return arc4Router()
   }
   
@@ -30,20 +27,6 @@ contract Arc4EncodeDecode
     assert(ARC4_DECODE(reinterpret_cast<arc4.uint512>(c_bytes)) == c)
     assert(ARC4_DECODE(reinterpret_cast<arc4.dynamic_array<arc4.byte>>(d_bytes)) == d)
     assert(reinterpret_cast<bytes>(ARC4_DECODE(reinterpret_cast<TestObj>(e_bytes)).a) == reinterpret_cast<bytes>(e.a) and reinterpret_cast<bytes>(ARC4_DECODE(reinterpret_cast<TestObj>(e_bytes)).b) == reinterpret_cast<bytes>(e.b), comment=assert target is match for conditions)
-  }
-  
-  constructor(): void
-  {
-    void
-  }
-  
-  Contract::constructor(): void
-  {
-    this.constructor()
-  }
-  
-  BaseContract::constructor(): void
-  {
   }
   
   __algots__.defaultCreate(): void

@@ -3,21 +3,8 @@
 tests/approvals/precompiled-factory.algo.ts::HelloFactory.approvalProgram:
     intcblock 0 6 1 5
     bytecblock 0x "world" base64(CoEBQw==) 0x151f7c75 0x24378d3c 0xd0a28200 "hello" 0x4c5c61ba
-    txn ApplicationID
-    bnz main_after_if_else@2
-    callsub constructor
-
-main_after_if_else@2:
     callsub __puya_arc4_router__
     return
-
-
-// tests/approvals/precompiled-factory.algo.ts::HelloFactory.constructor() -> void:
-constructor:
-    // tests/approvals/precompiled-factory.algo.ts:6
-    // class HelloFactory extends Contract {
-    proto 0 0
-    retsub
 
 
 // tests/approvals/precompiled-factory.algo.ts::HelloFactory.__puya_arc4_router__() -> uint64:
@@ -163,7 +150,7 @@ test_compile_contract:
     itxn_field ClearStateProgramPages
     bytec_0 // 0x
     itxn_field ClearStateProgramPages
-    pushbytes base64(CiACAAEmAghncmVldGluZwAxGEAAA4gABIgAD0OKAACIAAGJigAAKClniYoAATEbIhNBAIg2GgCABCDfOlSABCQ3jTyABKDoGHKABNCiggBPBI4EAAMAGAAoADhCAFsxGSISRDEYIhJENhoBVwIAiABNI4kxGYEFEkQxGCITRIgARSOJMRmBBBJEMRgiE0SIADkjiTEZIhJEMRgiE0Q2GgFXAgCIAChJFRZXBgJMUIAEFR98dUxQsCOJQgAAIomKAQAoi/9niYoAAImKAACJigEBIihlRClMUIABIFCL/1CJ)
+    pushbytes base64(CiACAAEmAghncmVldGluZwAxGEAAA4gABIgACEOKAAAoKWeJigABMRsiE0EAiDYaAIAEIN86VIAEJDeNPIAEoOgYcoAE0KKCAE8EjgQAAwAYACgAOEIAWzEZIhJEMRgiEkQ2GgFXAgCIAE0jiTEZgQUSRDEYIhNEiABFI4kxGYEEEkQxGCITRIgAOSOJMRkiEkQxGCITRDYaAVcCAIgAKEkVFlcGAkxQgAQVH3x1TFCwI4lCAAAiiYoBACiL/2eJigAAiYoAAImKAQEiKGVEKUxQgAEgUIv/UIk=)
     itxn_field ApprovalProgramPages
     bytec_0 // 0x
     itxn_field ApprovalProgramPages
@@ -668,7 +655,7 @@ test_compile_contract_large:
     itxn_field ClearStateProgramPages
     bytec_0 // 0x
     itxn_field ClearStateProgramPages
-    pushbytes base64(CiACAAExGEAAA4gABIgABUOKAACJigABMRsiE0EARjYaAIAEAr8wz4AEJDeNPE8CjgIAAwAcQgApMRkiEkQxGCITRIgANhaABBUffHVMULAjiTEZgQUSRDEYIhNEiAAsI4lCABUxGSJMjgEAA0IACjEYIhJEiAAYI4kiiYoAAYgAAhWJigABgYAgr4mKAACJigAAiQ==)
+    pushbytes base64(CiACAAGIAAFDigABMRsiE0EARjYaAIAEAr8wz4AEJDeNPE8CjgIAAwAcQgApMRkiEkQxGCITRIgANhaABBUffHVMULAjiTEZgQUSRDEYIhNEiAAsI4lCABUxGSJMjgEAA0IACjEYIhJEiAAYI4kiiYoAAYgAAhWJigABgYAgr4mKAACJigAAiQ==)
     itxn_field ApprovalProgramPages
     bytec_0 // 0x
     itxn_field ApprovalProgramPages

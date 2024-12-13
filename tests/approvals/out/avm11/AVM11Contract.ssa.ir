@@ -2,18 +2,8 @@ contract tests/approvals/avm11.algo.ts::Avm11Contract:
     program approval:
         subroutine @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> bool:
             block@0: // L1
-                let reinterpret_bool%0#0: bool = (txn ApplicationID)
-                goto reinterpret_bool%0#0 ? block@2 : block@1
-            block@1: // if_body_L1
-                tests/approvals/avm11.algo.ts::Avm11Contract.constructor()
-                goto block@2
-            block@2: // after_if_else_L1
                 let tmp%0#0: bool = tests/approvals/avm11.algo.ts::Avm11Contract.__puya_arc4_router__()
                 return tmp%0#0
-        
-        subroutine tests/approvals/avm11.algo.ts::Avm11Contract.constructor() -> void:
-            block@0: // L11
-                return 
         
         subroutine tests/approvals/avm11.algo.ts::Avm11Contract.__puya_arc4_router__() -> bool:
             block@0: // L11

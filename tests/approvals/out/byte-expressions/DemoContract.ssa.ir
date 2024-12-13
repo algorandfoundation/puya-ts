@@ -2,18 +2,8 @@ contract tests/approvals/byte-expressions.algo.ts::DemoContract:
     program approval:
         subroutine tests/approvals/byte-expressions.algo.ts::DemoContract.approvalProgram() -> bool:
             block@0: // L16
-                let reinterpret_bool%0#0: bool = (txn ApplicationID)
-                goto reinterpret_bool%0#0 ? block@2 : block@1
-            block@1: // if_body_L1
-                tests/approvals/byte-expressions.algo.ts::DemoContract.constructor()
-                goto block@2
-            block@2: // after_if_else_L1
                 tests/approvals/byte-expressions.algo.ts::test(1u, 50b, "things")
                 return 1u
-        
-        subroutine tests/approvals/byte-expressions.algo.ts::DemoContract.constructor() -> void:
-            block@0: // L15
-                return 
         
         subroutine tests/approvals/byte-expressions.algo.ts::test(a: uint64, b: biguint, c: bytes) -> void:
             block@0: // L4

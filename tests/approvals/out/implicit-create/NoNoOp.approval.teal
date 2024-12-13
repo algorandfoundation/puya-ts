@@ -2,21 +2,8 @@
 
 tests/approvals/implicit-create.algo.ts::NoNoOp.approvalProgram:
     intcblock 0 1
-    txn ApplicationID
-    bnz main_after_if_else@2
-    callsub constructor
-
-main_after_if_else@2:
     callsub __puya_arc4_router__
     return
-
-
-// tests/approvals/implicit-create.algo.ts::NoNoOp.constructor() -> void:
-constructor:
-    // tests/approvals/implicit-create.algo.ts:8
-    // export class NoNoOp extends Contract {
-    proto 0 0
-    retsub
 
 
 // tests/approvals/implicit-create.algo.ts::NoNoOp.__puya_arc4_router__() -> uint64:

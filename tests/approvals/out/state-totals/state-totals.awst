@@ -32,15 +32,6 @@ contract BaseWithState
     GlobalState["oneGlobal"]: uint64 = 1
   }
   
-  Contract::constructor(): void
-  {
-    this.constructor()
-  }
-  
-  BaseContract::constructor(): void
-  {
-  }
-  
   __algots__.defaultCreate(): void
   {
   }
@@ -76,11 +67,6 @@ contract SubClassWithState
     GlobalState["threeGlobal"]: uint64 = n
   }
   
-  constructor(): void
-  {
-    super.constructor()
-  }
-  
   BaseWithState::setState(): void
   {
     GlobalState["oneGlobal"]: uint64 = n
@@ -91,15 +77,6 @@ contract SubClassWithState
   {
     void
     GlobalState["oneGlobal"]: uint64 = 1
-  }
-  
-  Contract::constructor(): void
-  {
-    this.constructor()
-  }
-  
-  BaseContract::constructor(): void
-  {
   }
   
   __algots__.defaultCreate(): void
@@ -129,11 +106,6 @@ contract SubClassWithExplicitTotals
     return True
   }
   
-  constructor(): void
-  {
-    super.constructor()
-  }
-  
   BaseWithState::setState(): void
   {
     GlobalState["oneGlobal"]: uint64 = n
@@ -144,15 +116,6 @@ contract SubClassWithExplicitTotals
   {
     void
     GlobalState["oneGlobal"]: uint64 = 1
-  }
-  
-  Contract::constructor(): void
-  {
-    this.constructor()
-  }
-  
-  BaseContract::constructor(): void
-  {
   }
   
   __algots__.defaultCreate(): void
@@ -189,16 +152,6 @@ contract ExtendsSubWithTotals
     LocalState[txn<Sender>()]["oneLocal"]: uint64 = n
   }
   
-  constructor(): void
-  {
-    super.constructor()
-  }
-  
-  SubClassWithExplicitTotals::constructor(): void
-  {
-    super.constructor()
-  }
-  
   BaseWithState::setState(): void
   {
     GlobalState["oneGlobal"]: uint64 = n
@@ -209,15 +162,6 @@ contract ExtendsSubWithTotals
   {
     void
     GlobalState["oneGlobal"]: uint64 = 1
-  }
-  
-  Contract::constructor(): void
-  {
-    this.constructor()
-  }
-  
-  BaseContract::constructor(): void
-  {
   }
   
   __algots__.defaultCreate(): void

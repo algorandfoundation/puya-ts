@@ -34,67 +34,88 @@
       "body": {
         "_type": "Block",
         "source_location": {
-          "_type": "SourceLocation",
-          "file": null,
-          "line": 1,
-          "end_line": 1,
-          "column": 0,
-          "end_column": 1
+          "file": "tests/approvals/shadowed-variables.algo.ts",
+          "line": 7,
+          "end_line": 26,
+          "column": 36,
+          "end_column": 3
         },
         "body": [
           {
-            "_type": "IfElse",
+            "_type": "AssignmentStatement",
             "source_location": {
-              "_type": "SourceLocation",
-              "file": null,
-              "line": 1,
-              "end_line": 1,
-              "column": 0,
-              "end_column": 1
+              "file": "tests/approvals/shadowed-variables.algo.ts",
+              "line": 8,
+              "end_line": 8,
+              "column": 10,
+              "end_column": 38
             },
-            "condition": {
-              "_type": "Not",
+            "target": {
+              "_type": "TupleExpression",
               "source_location": {
-                "_type": "SourceLocation",
-                "file": null,
-                "line": 1,
-                "end_line": 1,
-                "column": 0,
-                "end_column": 1
+                "file": "tests/approvals/shadowed-variables.algo.ts",
+                "line": 8,
+                "end_line": 8,
+                "column": 10,
+                "end_column": 38
               },
               "wtype": {
-                "_type": "WType",
-                "name": "bool",
+                "_type": "WTuple",
+                "name": "tuple",
                 "immutable": true,
                 "ephemeral": false,
-                "scalar_type": 2
+                "scalar_type": null,
+                "types": [
+                  {
+                    "_type": "WType",
+                    "name": "bytes",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 1
+                  },
+                  {
+                    "_type": "WType",
+                    "name": "uint64",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 2
+                  },
+                  {
+                    "_type": "WType",
+                    "name": "bool",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 2
+                  }
+                ]
               },
-              "expr": {
-                "_type": "ReinterpretCast",
-                "source_location": {
-                  "_type": "SourceLocation",
-                  "file": null,
-                  "line": 1,
-                  "end_line": 1,
-                  "column": 0,
-                  "end_column": 1
-                },
-                "wtype": {
-                  "_type": "WType",
-                  "name": "bool",
-                  "immutable": true,
-                  "ephemeral": false,
-                  "scalar_type": 2
-                },
-                "expr": {
-                  "_type": "IntrinsicCall",
+              "items": [
+                {
+                  "_type": "VarExpression",
                   "source_location": {
-                    "_type": "SourceLocation",
-                    "file": null,
-                    "line": 1,
-                    "end_line": 1,
-                    "column": 0,
-                    "end_column": 1
+                    "file": "tests/approvals/shadowed-variables.algo.ts",
+                    "line": 8,
+                    "end_line": 8,
+                    "column": 11,
+                    "end_column": 12
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "bytes",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 1
+                  },
+                  "name": "b"
+                },
+                {
+                  "_type": "VarExpression",
+                  "source_location": {
+                    "file": "tests/approvals/shadowed-variables.algo.ts",
+                    "line": 8,
+                    "end_line": 8,
+                    "column": 14,
+                    "end_column": 15
                   },
                   "wtype": {
                     "_type": "WType",
@@ -103,243 +124,230 @@
                     "ephemeral": false,
                     "scalar_type": 2
                   },
-                  "op_code": "txn",
-                  "immediates": [
-                    "ApplicationID"
-                  ],
-                  "stack_args": []
-                }
-              }
-            },
-            "if_branch": {
-              "_type": "Block",
-              "source_location": {
-                "_type": "SourceLocation",
-                "file": null,
-                "line": 1,
-                "end_line": 1,
-                "column": 0,
-                "end_column": 1
-              },
-              "body": [
+                  "name": "u"
+                },
                 {
-                  "_type": "ExpressionStatement",
+                  "_type": "VarExpression",
                   "source_location": {
-                    "_type": "SourceLocation",
-                    "file": null,
-                    "line": 1,
-                    "end_line": 1,
-                    "column": 0,
-                    "end_column": 1
+                    "file": "tests/approvals/shadowed-variables.algo.ts",
+                    "line": 8,
+                    "end_line": 8,
+                    "column": 17,
+                    "end_column": 18
                   },
-                  "expr": {
-                    "_type": "SubroutineCallExpression",
-                    "source_location": {
-                      "_type": "SourceLocation",
-                      "file": null,
-                      "line": 1,
-                      "end_line": 1,
-                      "column": 0,
-                      "end_column": 1
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "void",
-                      "immutable": true,
-                      "ephemeral": false,
-                      "scalar_type": null
-                    },
-                    "target": {
-                      "_type": "InstanceMethodTarget",
-                      "member_name": "constructor"
-                    },
-                    "args": []
-                  }
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "bool",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 2
+                  },
+                  "name": "f"
                 }
-              ],
-              "label": null,
-              "comment": null
+              ]
             },
-            "else_branch": null
+            "value": {
+              "_type": "SubroutineCallExpression",
+              "source_location": {
+                "file": "tests/approvals/shadowed-variables.algo.ts",
+                "line": 8,
+                "end_line": 8,
+                "column": 22,
+                "end_column": 38
+              },
+              "wtype": {
+                "_type": "WTuple",
+                "name": "tuple",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": null,
+                "types": [
+                  {
+                    "_type": "WType",
+                    "name": "bytes",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 1
+                  },
+                  {
+                    "_type": "WType",
+                    "name": "uint64",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 2
+                  },
+                  {
+                    "_type": "WType",
+                    "name": "bool",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 2
+                  }
+                ]
+              },
+              "target": {
+                "_type": "InstanceMethodTarget",
+                "member_name": "getValues"
+              },
+              "args": []
+            }
+          },
+          {
+            "_type": "ExpressionStatement",
+            "source_location": {
+              "file": "tests/approvals/shadowed-variables.algo.ts",
+              "line": 9,
+              "end_line": 9,
+              "column": 4,
+              "end_column": 55
+            },
+            "expr": {
+              "_type": "AssertExpression",
+              "source_location": {
+                "file": "tests/approvals/shadowed-variables.algo.ts",
+                "line": 9,
+                "end_line": 9,
+                "column": 4,
+                "end_column": 55
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "void",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": null
+              },
+              "condition": {
+                "_type": "BytesComparisonExpression",
+                "source_location": {
+                  "file": "tests/approvals/shadowed-variables.algo.ts",
+                  "line": 9,
+                  "end_line": 9,
+                  "column": 11,
+                  "end_column": 18
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "bool",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 2
+                },
+                "lhs": {
+                  "_type": "BytesConstant",
+                  "source_location": {
+                    "file": "tests/approvals/shadowed-variables.algo.ts",
+                    "line": 4,
+                    "end_line": 4,
+                    "column": 16,
+                    "end_column": 21
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "bytes",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 1
+                  },
+                  "value": "F)}j",
+                  "encoding": "utf8"
+                },
+                "operator": "==",
+                "rhs": {
+                  "_type": "VarExpression",
+                  "source_location": {
+                    "file": "tests/approvals/shadowed-variables.algo.ts",
+                    "line": 9,
+                    "end_line": 9,
+                    "column": 17,
+                    "end_column": 18
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "bytes",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 1
+                  },
+                  "name": "b"
+                }
+              },
+              "error_message": "a should be module const (bytes)"
+            }
           },
           {
             "_type": "Block",
             "source_location": {
               "file": "tests/approvals/shadowed-variables.algo.ts",
-              "line": 7,
-              "end_line": 26,
-              "column": 36,
-              "end_column": 3
+              "line": 10,
+              "end_line": 23,
+              "column": 4,
+              "end_column": 5
             },
             "body": [
               {
                 "_type": "AssignmentStatement",
                 "source_location": {
                   "file": "tests/approvals/shadowed-variables.algo.ts",
-                  "line": 8,
-                  "end_line": 8,
-                  "column": 10,
-                  "end_column": 38
+                  "line": 11,
+                  "end_line": 11,
+                  "column": 12,
+                  "end_column": 17
                 },
                 "target": {
-                  "_type": "TupleExpression",
+                  "_type": "VarExpression",
                   "source_location": {
                     "file": "tests/approvals/shadowed-variables.algo.ts",
-                    "line": 8,
-                    "end_line": 8,
-                    "column": 10,
-                    "end_column": 38
+                    "line": 11,
+                    "end_line": 11,
+                    "column": 12,
+                    "end_column": 13
                   },
                   "wtype": {
-                    "_type": "WTuple",
-                    "name": "tuple",
+                    "_type": "WType",
+                    "name": "uint64",
                     "immutable": true,
                     "ephemeral": false,
-                    "scalar_type": null,
-                    "types": [
-                      {
-                        "_type": "WType",
-                        "name": "bytes",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 1
-                      },
-                      {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 2
-                      },
-                      {
-                        "_type": "WType",
-                        "name": "bool",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 2
-                      }
-                    ]
+                    "scalar_type": 2
                   },
-                  "items": [
-                    {
-                      "_type": "VarExpression",
-                      "source_location": {
-                        "file": "tests/approvals/shadowed-variables.algo.ts",
-                        "line": 8,
-                        "end_line": 8,
-                        "column": 11,
-                        "end_column": 12
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "bytes",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 1
-                      },
-                      "name": "b"
-                    },
-                    {
-                      "_type": "VarExpression",
-                      "source_location": {
-                        "file": "tests/approvals/shadowed-variables.algo.ts",
-                        "line": 8,
-                        "end_line": 8,
-                        "column": 14,
-                        "end_column": 15
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 2
-                      },
-                      "name": "u"
-                    },
-                    {
-                      "_type": "VarExpression",
-                      "source_location": {
-                        "file": "tests/approvals/shadowed-variables.algo.ts",
-                        "line": 8,
-                        "end_line": 8,
-                        "column": 17,
-                        "end_column": 18
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "bool",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 2
-                      },
-                      "name": "f"
-                    }
-                  ]
+                  "name": "a"
                 },
                 "value": {
-                  "_type": "SubroutineCallExpression",
+                  "_type": "VarExpression",
                   "source_location": {
                     "file": "tests/approvals/shadowed-variables.algo.ts",
-                    "line": 8,
-                    "end_line": 8,
-                    "column": 22,
-                    "end_column": 38
+                    "line": 11,
+                    "end_line": 11,
+                    "column": 16,
+                    "end_column": 17
                   },
                   "wtype": {
-                    "_type": "WTuple",
-                    "name": "tuple",
+                    "_type": "WType",
+                    "name": "uint64",
                     "immutable": true,
                     "ephemeral": false,
-                    "scalar_type": null,
-                    "types": [
-                      {
-                        "_type": "WType",
-                        "name": "bytes",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 1
-                      },
-                      {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 2
-                      },
-                      {
-                        "_type": "WType",
-                        "name": "bool",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 2
-                      }
-                    ]
+                    "scalar_type": 2
                   },
-                  "target": {
-                    "_type": "InstanceMethodTarget",
-                    "member_name": "getValues"
-                  },
-                  "args": []
+                  "name": "u"
                 }
               },
               {
                 "_type": "ExpressionStatement",
                 "source_location": {
                   "file": "tests/approvals/shadowed-variables.algo.ts",
-                  "line": 9,
-                  "end_line": 9,
-                  "column": 4,
-                  "end_column": 55
+                  "line": 12,
+                  "end_line": 12,
+                  "column": 6,
+                  "end_column": 57
                 },
                 "expr": {
                   "_type": "AssertExpression",
                   "source_location": {
                     "file": "tests/approvals/shadowed-variables.algo.ts",
-                    "line": 9,
-                    "end_line": 9,
-                    "column": 4,
-                    "end_column": 55
+                    "line": 12,
+                    "end_line": 12,
+                    "column": 6,
+                    "end_column": 57
                   },
                   "wtype": {
                     "_type": "WType",
@@ -349,13 +357,13 @@
                     "scalar_type": null
                   },
                   "condition": {
-                    "_type": "BytesComparisonExpression",
+                    "_type": "NumericComparisonExpression",
                     "source_location": {
                       "file": "tests/approvals/shadowed-variables.algo.ts",
-                      "line": 9,
-                      "end_line": 9,
-                      "column": 11,
-                      "end_column": 18
+                      "line": 12,
+                      "end_line": 12,
+                      "column": 13,
+                      "end_column": 22
                     },
                     "wtype": {
                       "_type": "WType",
@@ -365,74 +373,13 @@
                       "scalar_type": 2
                     },
                     "lhs": {
-                      "_type": "BytesConstant",
-                      "source_location": {
-                        "file": "tests/approvals/shadowed-variables.algo.ts",
-                        "line": 4,
-                        "end_line": 4,
-                        "column": 16,
-                        "end_column": 21
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "bytes",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 1
-                      },
-                      "value": "F)}j",
-                      "encoding": "utf8"
-                    },
-                    "operator": "==",
-                    "rhs": {
                       "_type": "VarExpression",
                       "source_location": {
                         "file": "tests/approvals/shadowed-variables.algo.ts",
-                        "line": 9,
-                        "end_line": 9,
-                        "column": 17,
-                        "end_column": 18
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "bytes",
-                        "immutable": true,
-                        "ephemeral": false,
-                        "scalar_type": 1
-                      },
-                      "name": "b"
-                    }
-                  },
-                  "error_message": "a should be module const (bytes)"
-                }
-              },
-              {
-                "_type": "Block",
-                "source_location": {
-                  "file": "tests/approvals/shadowed-variables.algo.ts",
-                  "line": 10,
-                  "end_line": 23,
-                  "column": 4,
-                  "end_column": 5
-                },
-                "body": [
-                  {
-                    "_type": "AssignmentStatement",
-                    "source_location": {
-                      "file": "tests/approvals/shadowed-variables.algo.ts",
-                      "line": 11,
-                      "end_line": 11,
-                      "column": 12,
-                      "end_column": 17
-                    },
-                    "target": {
-                      "_type": "VarExpression",
-                      "source_location": {
-                        "file": "tests/approvals/shadowed-variables.algo.ts",
-                        "line": 11,
-                        "end_line": 11,
-                        "column": 12,
-                        "end_column": 13
+                        "line": 12,
+                        "end_line": 12,
+                        "column": 13,
+                        "end_column": 14
                       },
                       "wtype": {
                         "_type": "WType",
@@ -443,14 +390,15 @@
                       },
                       "name": "a"
                     },
-                    "value": {
-                      "_type": "VarExpression",
+                    "operator": "==",
+                    "rhs": {
+                      "_type": "IntegerConstant",
                       "source_location": {
                         "file": "tests/approvals/shadowed-variables.algo.ts",
-                        "line": 11,
-                        "end_line": 11,
-                        "column": 16,
-                        "end_column": 17
+                        "line": 12,
+                        "end_line": 12,
+                        "column": 19,
+                        "end_column": 22
                       },
                       "wtype": {
                         "_type": "WType",
@@ -459,26 +407,86 @@
                         "ephemeral": false,
                         "scalar_type": 2
                       },
-                      "name": "u"
+                      "value": "123",
+                      "teal_alias": null
+                    }
+                  },
+                  "error_message": "a should be local const (uint)"
+                }
+              },
+              {
+                "_type": "Block",
+                "source_location": {
+                  "file": "tests/approvals/shadowed-variables.algo.ts",
+                  "line": 13,
+                  "end_line": 21,
+                  "column": 6,
+                  "end_column": 7
+                },
+                "body": [
+                  {
+                    "_type": "AssignmentStatement",
+                    "source_location": {
+                      "file": "tests/approvals/shadowed-variables.algo.ts",
+                      "line": 14,
+                      "end_line": 14,
+                      "column": 12,
+                      "end_column": 17
+                    },
+                    "target": {
+                      "_type": "VarExpression",
+                      "source_location": {
+                        "file": "tests/approvals/shadowed-variables.algo.ts",
+                        "line": 14,
+                        "end_line": 14,
+                        "column": 12,
+                        "end_column": 13
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "bool",
+                        "immutable": true,
+                        "ephemeral": false,
+                        "scalar_type": 2
+                      },
+                      "name": "a₁"
+                    },
+                    "value": {
+                      "_type": "VarExpression",
+                      "source_location": {
+                        "file": "tests/approvals/shadowed-variables.algo.ts",
+                        "line": 14,
+                        "end_line": 14,
+                        "column": 16,
+                        "end_column": 17
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "bool",
+                        "immutable": true,
+                        "ephemeral": false,
+                        "scalar_type": 2
+                      },
+                      "name": "f"
                     }
                   },
                   {
                     "_type": "ExpressionStatement",
                     "source_location": {
                       "file": "tests/approvals/shadowed-variables.algo.ts",
-                      "line": 12,
-                      "end_line": 12,
-                      "column": 6,
-                      "end_column": 57
+                      "line": 15,
+                      "end_line": 15,
+                      "column": 8,
+                      "end_column": 50
                     },
                     "expr": {
                       "_type": "AssertExpression",
                       "source_location": {
                         "file": "tests/approvals/shadowed-variables.algo.ts",
-                        "line": 12,
-                        "end_line": 12,
-                        "column": 6,
-                        "end_column": 57
+                        "line": 15,
+                        "end_line": 15,
+                        "column": 8,
+                        "end_column": 50
                       },
                       "wtype": {
                         "_type": "WType",
@@ -488,13 +496,13 @@
                         "scalar_type": null
                       },
                       "condition": {
-                        "_type": "NumericComparisonExpression",
+                        "_type": "Not",
                         "source_location": {
                           "file": "tests/approvals/shadowed-variables.algo.ts",
-                          "line": 12,
-                          "end_line": 12,
-                          "column": 13,
-                          "end_column": 22
+                          "line": 15,
+                          "end_line": 15,
+                          "column": 15,
+                          "end_column": 17
                         },
                         "wtype": {
                           "_type": "WType",
@@ -503,75 +511,55 @@
                           "ephemeral": false,
                           "scalar_type": 2
                         },
-                        "lhs": {
+                        "expr": {
                           "_type": "VarExpression",
                           "source_location": {
                             "file": "tests/approvals/shadowed-variables.algo.ts",
-                            "line": 12,
-                            "end_line": 12,
-                            "column": 13,
-                            "end_column": 14
+                            "line": 15,
+                            "end_line": 15,
+                            "column": 16,
+                            "end_column": 17
                           },
                           "wtype": {
                             "_type": "WType",
-                            "name": "uint64",
+                            "name": "bool",
                             "immutable": true,
                             "ephemeral": false,
                             "scalar_type": 2
                           },
-                          "name": "a"
-                        },
-                        "operator": "==",
-                        "rhs": {
-                          "_type": "IntegerConstant",
-                          "source_location": {
-                            "file": "tests/approvals/shadowed-variables.algo.ts",
-                            "line": 12,
-                            "end_line": 12,
-                            "column": 19,
-                            "end_column": 22
-                          },
-                          "wtype": {
-                            "_type": "WType",
-                            "name": "uint64",
-                            "immutable": true,
-                            "ephemeral": false,
-                            "scalar_type": 2
-                          },
-                          "value": "123",
-                          "teal_alias": null
+                          "name": "a₁"
                         }
                       },
-                      "error_message": "a should be local const (uint)"
+                      "error_message": "a should be local let (bool)"
                     }
                   },
                   {
                     "_type": "Block",
                     "source_location": {
                       "file": "tests/approvals/shadowed-variables.algo.ts",
-                      "line": 13,
-                      "end_line": 21,
-                      "column": 6,
-                      "end_column": 7
+                      "line": 16,
+                      "end_line": 19,
+                      "column": 8,
+                      "end_column": 9
                     },
                     "body": [
                       {
                         "_type": "AssignmentStatement",
                         "source_location": {
                           "file": "tests/approvals/shadowed-variables.algo.ts",
-                          "line": 14,
-                          "end_line": 14,
-                          "column": 12,
-                          "end_column": 17
+                          "line": 17,
+                          "end_line": 17,
+                          "column": 10,
+                          "end_column": 16
                         },
                         "target": {
                           "_type": "VarExpression",
                           "source_location": {
                             "file": "tests/approvals/shadowed-variables.algo.ts",
-                            "line": 14,
-                            "end_line": 14,
-                            "column": 12,
-                            "end_column": 13
+                            "line": 17,
+                            "end_line": 17,
+                            "column": 10,
+                            "end_column": 11
                           },
                           "wtype": {
                             "_type": "WType",
@@ -583,13 +571,13 @@
                           "name": "a₁"
                         },
                         "value": {
-                          "_type": "VarExpression",
+                          "_type": "Not",
                           "source_location": {
                             "file": "tests/approvals/shadowed-variables.algo.ts",
-                            "line": 14,
-                            "end_line": 14,
-                            "column": 16,
-                            "end_column": 17
+                            "line": 17,
+                            "end_line": 17,
+                            "column": 14,
+                            "end_column": 16
                           },
                           "wtype": {
                             "_type": "WType",
@@ -598,42 +586,14 @@
                             "ephemeral": false,
                             "scalar_type": 2
                           },
-                          "name": "f"
-                        }
-                      },
-                      {
-                        "_type": "ExpressionStatement",
-                        "source_location": {
-                          "file": "tests/approvals/shadowed-variables.algo.ts",
-                          "line": 15,
-                          "end_line": 15,
-                          "column": 8,
-                          "end_column": 50
-                        },
-                        "expr": {
-                          "_type": "AssertExpression",
-                          "source_location": {
-                            "file": "tests/approvals/shadowed-variables.algo.ts",
-                            "line": 15,
-                            "end_line": 15,
-                            "column": 8,
-                            "end_column": 50
-                          },
-                          "wtype": {
-                            "_type": "WType",
-                            "name": "void",
-                            "immutable": true,
-                            "ephemeral": false,
-                            "scalar_type": null
-                          },
-                          "condition": {
-                            "_type": "Not",
+                          "expr": {
+                            "_type": "VarExpression",
                             "source_location": {
                               "file": "tests/approvals/shadowed-variables.algo.ts",
-                              "line": 15,
-                              "end_line": 15,
+                              "line": 17,
+                              "end_line": 17,
                               "column": 15,
-                              "end_column": 17
+                              "end_column": 16
                             },
                             "wtype": {
                               "_type": "WType",
@@ -642,168 +602,27 @@
                               "ephemeral": false,
                               "scalar_type": 2
                             },
-                            "expr": {
-                              "_type": "VarExpression",
-                              "source_location": {
-                                "file": "tests/approvals/shadowed-variables.algo.ts",
-                                "line": 15,
-                                "end_line": 15,
-                                "column": 16,
-                                "end_column": 17
-                              },
-                              "wtype": {
-                                "_type": "WType",
-                                "name": "bool",
-                                "immutable": true,
-                                "ephemeral": false,
-                                "scalar_type": 2
-                              },
-                              "name": "a₁"
-                            }
-                          },
-                          "error_message": "a should be local let (bool)"
-                        }
-                      },
-                      {
-                        "_type": "Block",
-                        "source_location": {
-                          "file": "tests/approvals/shadowed-variables.algo.ts",
-                          "line": 16,
-                          "end_line": 19,
-                          "column": 8,
-                          "end_column": 9
-                        },
-                        "body": [
-                          {
-                            "_type": "AssignmentStatement",
-                            "source_location": {
-                              "file": "tests/approvals/shadowed-variables.algo.ts",
-                              "line": 17,
-                              "end_line": 17,
-                              "column": 10,
-                              "end_column": 16
-                            },
-                            "target": {
-                              "_type": "VarExpression",
-                              "source_location": {
-                                "file": "tests/approvals/shadowed-variables.algo.ts",
-                                "line": 17,
-                                "end_line": 17,
-                                "column": 10,
-                                "end_column": 11
-                              },
-                              "wtype": {
-                                "_type": "WType",
-                                "name": "bool",
-                                "immutable": true,
-                                "ephemeral": false,
-                                "scalar_type": 2
-                              },
-                              "name": "a₁"
-                            },
-                            "value": {
-                              "_type": "Not",
-                              "source_location": {
-                                "file": "tests/approvals/shadowed-variables.algo.ts",
-                                "line": 17,
-                                "end_line": 17,
-                                "column": 14,
-                                "end_column": 16
-                              },
-                              "wtype": {
-                                "_type": "WType",
-                                "name": "bool",
-                                "immutable": true,
-                                "ephemeral": false,
-                                "scalar_type": 2
-                              },
-                              "expr": {
-                                "_type": "VarExpression",
-                                "source_location": {
-                                  "file": "tests/approvals/shadowed-variables.algo.ts",
-                                  "line": 17,
-                                  "end_line": 17,
-                                  "column": 15,
-                                  "end_column": 16
-                                },
-                                "wtype": {
-                                  "_type": "WType",
-                                  "name": "bool",
-                                  "immutable": true,
-                                  "ephemeral": false,
-                                  "scalar_type": 2
-                                },
-                                "name": "a₁"
-                              }
-                            }
-                          },
-                          {
-                            "_type": "ExpressionStatement",
-                            "source_location": {
-                              "file": "tests/approvals/shadowed-variables.algo.ts",
-                              "line": 18,
-                              "end_line": 18,
-                              "column": 10,
-                              "end_column": 60
-                            },
-                            "expr": {
-                              "_type": "AssertExpression",
-                              "source_location": {
-                                "file": "tests/approvals/shadowed-variables.algo.ts",
-                                "line": 18,
-                                "end_line": 18,
-                                "column": 10,
-                                "end_column": 60
-                              },
-                              "wtype": {
-                                "_type": "WType",
-                                "name": "void",
-                                "immutable": true,
-                                "ephemeral": false,
-                                "scalar_type": null
-                              },
-                              "condition": {
-                                "_type": "VarExpression",
-                                "source_location": {
-                                  "file": "tests/approvals/shadowed-variables.algo.ts",
-                                  "line": 18,
-                                  "end_line": 18,
-                                  "column": 17,
-                                  "end_column": 18
-                                },
-                                "wtype": {
-                                  "_type": "WType",
-                                  "name": "bool",
-                                  "immutable": true,
-                                  "ephemeral": false,
-                                  "scalar_type": 2
-                                },
-                                "name": "a₁"
-                              },
-                              "error_message": "a should be modified local let (bool)"
-                            }
+                            "name": "a₁"
                           }
-                        ],
-                        "label": null,
-                        "comment": null
+                        }
                       },
                       {
                         "_type": "ExpressionStatement",
                         "source_location": {
                           "file": "tests/approvals/shadowed-variables.algo.ts",
-                          "line": 20,
-                          "end_line": 20,
-                          "column": 8,
-                          "end_column": 64
+                          "line": 18,
+                          "end_line": 18,
+                          "column": 10,
+                          "end_column": 60
                         },
                         "expr": {
                           "_type": "AssertExpression",
                           "source_location": {
                             "file": "tests/approvals/shadowed-variables.algo.ts",
-                            "line": 20,
-                            "end_line": 20,
-                            "column": 8,
-                            "end_column": 64
+                            "line": 18,
+                            "end_line": 18,
+                            "column": 10,
+                            "end_column": 60
                           },
                           "wtype": {
                             "_type": "WType",
@@ -816,10 +635,10 @@
                             "_type": "VarExpression",
                             "source_location": {
                               "file": "tests/approvals/shadowed-variables.algo.ts",
-                              "line": 20,
-                              "end_line": 20,
-                              "column": 15,
-                              "end_column": 16
+                              "line": 18,
+                              "end_line": 18,
+                              "column": 17,
+                              "end_column": 18
                             },
                             "wtype": {
                               "_type": "WType",
@@ -830,7 +649,7 @@
                             },
                             "name": "a₁"
                           },
-                          "error_message": "a should still be modified local let (bool)"
+                          "error_message": "a should be modified local let (bool)"
                         }
                       }
                     ],
@@ -841,19 +660,19 @@
                     "_type": "ExpressionStatement",
                     "source_location": {
                       "file": "tests/approvals/shadowed-variables.algo.ts",
-                      "line": 22,
-                      "end_line": 22,
-                      "column": 6,
-                      "end_column": 57
+                      "line": 20,
+                      "end_line": 20,
+                      "column": 8,
+                      "end_column": 64
                     },
                     "expr": {
                       "_type": "AssertExpression",
                       "source_location": {
                         "file": "tests/approvals/shadowed-variables.algo.ts",
-                        "line": 22,
-                        "end_line": 22,
-                        "column": 6,
-                        "end_column": 57
+                        "line": 20,
+                        "end_line": 20,
+                        "column": 8,
+                        "end_column": 64
                       },
                       "wtype": {
                         "_type": "WType",
@@ -863,13 +682,13 @@
                         "scalar_type": null
                       },
                       "condition": {
-                        "_type": "NumericComparisonExpression",
+                        "_type": "VarExpression",
                         "source_location": {
                           "file": "tests/approvals/shadowed-variables.algo.ts",
-                          "line": 22,
-                          "end_line": 22,
-                          "column": 13,
-                          "end_column": 22
+                          "line": 20,
+                          "end_line": 20,
+                          "column": 15,
+                          "end_column": 16
                         },
                         "wtype": {
                           "_type": "WType",
@@ -878,46 +697,9 @@
                           "ephemeral": false,
                           "scalar_type": 2
                         },
-                        "lhs": {
-                          "_type": "VarExpression",
-                          "source_location": {
-                            "file": "tests/approvals/shadowed-variables.algo.ts",
-                            "line": 22,
-                            "end_line": 22,
-                            "column": 13,
-                            "end_column": 14
-                          },
-                          "wtype": {
-                            "_type": "WType",
-                            "name": "uint64",
-                            "immutable": true,
-                            "ephemeral": false,
-                            "scalar_type": 2
-                          },
-                          "name": "a"
-                        },
-                        "operator": "==",
-                        "rhs": {
-                          "_type": "IntegerConstant",
-                          "source_location": {
-                            "file": "tests/approvals/shadowed-variables.algo.ts",
-                            "line": 22,
-                            "end_line": 22,
-                            "column": 19,
-                            "end_column": 22
-                          },
-                          "wtype": {
-                            "_type": "WType",
-                            "name": "uint64",
-                            "immutable": true,
-                            "ephemeral": false,
-                            "scalar_type": 2
-                          },
-                          "value": "123",
-                          "teal_alias": null
-                        }
+                        "name": "a₁"
                       },
-                      "error_message": "a should be local const (uint)"
+                      "error_message": "a should still be modified local let (bool)"
                     }
                   }
                 ],
@@ -928,19 +710,19 @@
                 "_type": "ExpressionStatement",
                 "source_location": {
                   "file": "tests/approvals/shadowed-variables.algo.ts",
-                  "line": 24,
-                  "end_line": 24,
-                  "column": 4,
-                  "end_column": 66
+                  "line": 22,
+                  "end_line": 22,
+                  "column": 6,
+                  "end_column": 57
                 },
                 "expr": {
                   "_type": "AssertExpression",
                   "source_location": {
                     "file": "tests/approvals/shadowed-variables.algo.ts",
-                    "line": 24,
-                    "end_line": 24,
-                    "column": 4,
-                    "end_column": 66
+                    "line": 22,
+                    "end_line": 22,
+                    "column": 6,
+                    "end_column": 57
                   },
                   "wtype": {
                     "_type": "WType",
@@ -950,13 +732,13 @@
                     "scalar_type": null
                   },
                   "condition": {
-                    "_type": "BytesComparisonExpression",
+                    "_type": "NumericComparisonExpression",
                     "source_location": {
                       "file": "tests/approvals/shadowed-variables.algo.ts",
-                      "line": 24,
-                      "end_line": 24,
-                      "column": 11,
-                      "end_column": 29
+                      "line": 22,
+                      "end_line": 22,
+                      "column": 13,
+                      "end_column": 22
                     },
                     "wtype": {
                       "_type": "WType",
@@ -966,79 +748,162 @@
                       "scalar_type": 2
                     },
                     "lhs": {
-                      "_type": "BytesConstant",
+                      "_type": "VarExpression",
                       "source_location": {
                         "file": "tests/approvals/shadowed-variables.algo.ts",
-                        "line": 4,
-                        "end_line": 4,
-                        "column": 16,
-                        "end_column": 21
+                        "line": 22,
+                        "end_line": 22,
+                        "column": 13,
+                        "end_column": 14
                       },
                       "wtype": {
                         "_type": "WType",
-                        "name": "bytes",
+                        "name": "uint64",
                         "immutable": true,
                         "ephemeral": false,
-                        "scalar_type": 1
+                        "scalar_type": 2
                       },
-                      "value": "F)}j",
-                      "encoding": "utf8"
+                      "name": "a"
                     },
                     "operator": "==",
                     "rhs": {
-                      "_type": "BytesConstant",
+                      "_type": "IntegerConstant",
                       "source_location": {
                         "file": "tests/approvals/shadowed-variables.algo.ts",
-                        "line": 24,
-                        "end_line": 24,
-                        "column": 23,
-                        "end_column": 28
+                        "line": 22,
+                        "end_line": 22,
+                        "column": 19,
+                        "end_column": 22
                       },
                       "wtype": {
                         "_type": "WType",
-                        "name": "bytes",
+                        "name": "uint64",
                         "immutable": true,
                         "ephemeral": false,
-                        "scalar_type": 1
+                        "scalar_type": 2
                       },
-                      "value": "F)}j",
-                      "encoding": "utf8"
+                      "value": "123",
+                      "teal_alias": null
                     }
                   },
-                  "error_message": "a should be module const (bytes)"
-                }
-              },
-              {
-                "_type": "ReturnStatement",
-                "source_location": {
-                  "file": "tests/approvals/shadowed-variables.algo.ts",
-                  "line": 25,
-                  "end_line": 25,
-                  "column": 4,
-                  "end_column": 15
-                },
-                "value": {
-                  "_type": "BoolConstant",
-                  "source_location": {
-                    "file": "tests/approvals/shadowed-variables.algo.ts",
-                    "line": 25,
-                    "end_line": 25,
-                    "column": 11,
-                    "end_column": 15
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "bool",
-                    "immutable": true,
-                    "ephemeral": false,
-                    "scalar_type": 2
-                  },
-                  "value": true
+                  "error_message": "a should be local const (uint)"
                 }
               }
             ],
             "label": null,
             "comment": null
+          },
+          {
+            "_type": "ExpressionStatement",
+            "source_location": {
+              "file": "tests/approvals/shadowed-variables.algo.ts",
+              "line": 24,
+              "end_line": 24,
+              "column": 4,
+              "end_column": 66
+            },
+            "expr": {
+              "_type": "AssertExpression",
+              "source_location": {
+                "file": "tests/approvals/shadowed-variables.algo.ts",
+                "line": 24,
+                "end_line": 24,
+                "column": 4,
+                "end_column": 66
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "void",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": null
+              },
+              "condition": {
+                "_type": "BytesComparisonExpression",
+                "source_location": {
+                  "file": "tests/approvals/shadowed-variables.algo.ts",
+                  "line": 24,
+                  "end_line": 24,
+                  "column": 11,
+                  "end_column": 29
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "bool",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 2
+                },
+                "lhs": {
+                  "_type": "BytesConstant",
+                  "source_location": {
+                    "file": "tests/approvals/shadowed-variables.algo.ts",
+                    "line": 4,
+                    "end_line": 4,
+                    "column": 16,
+                    "end_column": 21
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "bytes",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 1
+                  },
+                  "value": "F)}j",
+                  "encoding": "utf8"
+                },
+                "operator": "==",
+                "rhs": {
+                  "_type": "BytesConstant",
+                  "source_location": {
+                    "file": "tests/approvals/shadowed-variables.algo.ts",
+                    "line": 24,
+                    "end_line": 24,
+                    "column": 23,
+                    "end_column": 28
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "bytes",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 1
+                  },
+                  "value": "F)}j",
+                  "encoding": "utf8"
+                }
+              },
+              "error_message": "a should be module const (bytes)"
+            }
+          },
+          {
+            "_type": "ReturnStatement",
+            "source_location": {
+              "file": "tests/approvals/shadowed-variables.algo.ts",
+              "line": 25,
+              "end_line": 25,
+              "column": 4,
+              "end_column": 15
+            },
+            "value": {
+              "_type": "BoolConstant",
+              "source_location": {
+                "file": "tests/approvals/shadowed-variables.algo.ts",
+                "line": 25,
+                "end_line": 25,
+                "column": 11,
+                "end_column": 15
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "value": true
+            }
           }
         ],
         "label": null,
@@ -1298,116 +1163,6 @@
         },
         "cref": "tests/approvals/shadowed-variables.algo.ts::ShadowedVariablesAlgo",
         "member_name": "getValues",
-        "arc4_method_config": null
-      },
-      {
-        "_type": "ContractMethod",
-        "source_location": {
-          "file": "tests/approvals/shadowed-variables.algo.ts",
-          "line": 6,
-          "end_line": 6,
-          "column": 0,
-          "end_column": 50
-        },
-        "args": [],
-        "return_type": {
-          "_type": "WType",
-          "name": "void",
-          "immutable": true,
-          "ephemeral": false,
-          "scalar_type": null
-        },
-        "body": {
-          "_type": "Block",
-          "source_location": {
-            "file": "tests/approvals/shadowed-variables.algo.ts",
-            "line": 6,
-            "end_line": 6,
-            "column": 0,
-            "end_column": 50
-          },
-          "body": [
-            {
-              "_type": "ExpressionStatement",
-              "source_location": {
-                "file": "tests/approvals/shadowed-variables.algo.ts",
-                "line": 6,
-                "end_line": 6,
-                "column": 0,
-                "end_column": 50
-              },
-              "expr": {
-                "_type": "VoidConstant",
-                "source_location": {
-                  "file": "tests/approvals/shadowed-variables.algo.ts",
-                  "line": 6,
-                  "end_line": 6,
-                  "column": 0,
-                  "end_column": 50
-                },
-                "wtype": {
-                  "_type": "WType",
-                  "name": "void",
-                  "immutable": true,
-                  "ephemeral": false,
-                  "scalar_type": null
-                }
-              }
-            }
-          ],
-          "label": null,
-          "comment": null
-        },
-        "documentation": {
-          "_type": "MethodDocumentation",
-          "description": null,
-          "args": {},
-          "returns": null
-        },
-        "cref": "tests/approvals/shadowed-variables.algo.ts::ShadowedVariablesAlgo",
-        "member_name": "constructor",
-        "arc4_method_config": null
-      },
-      {
-        "_type": "ContractMethod",
-        "source_location": {
-          "_type": "SourceLocation",
-          "file": null,
-          "line": 1,
-          "end_line": 1,
-          "column": 0,
-          "end_column": 1
-        },
-        "args": [],
-        "return_type": {
-          "_type": "WType",
-          "name": "void",
-          "immutable": true,
-          "ephemeral": false,
-          "scalar_type": null
-        },
-        "body": {
-          "_type": "Block",
-          "source_location": {
-            "_type": "SourceLocation",
-            "file": null,
-            "line": 1,
-            "end_line": 1,
-            "column": 0,
-            "end_column": 1
-          },
-          "body": [],
-          "label": null,
-          "comment": null
-        },
-        "documentation": {
-          "_type": "MethodDocumentation",
-          "description": null,
-          "args": {},
-          "returns": null
-        },
-        "cref": "@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract",
-        "member_name": "constructor",
         "arc4_method_config": null
       }
     ],

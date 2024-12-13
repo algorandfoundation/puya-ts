@@ -2,12 +2,6 @@ contract tests/approvals/shadowed-variables.algo.ts::ShadowedVariablesAlgo:
     program approval:
         subroutine tests/approvals/shadowed-variables.algo.ts::ShadowedVariablesAlgo.approvalProgram() -> bool:
             block@0: // L7
-                let reinterpret_bool%0#0: bool = (txn ApplicationID)
-                goto reinterpret_bool%0#0 ? block@2 : block@1
-            block@1: // if_body_L1
-                tests/approvals/shadowed-variables.algo.ts::ShadowedVariablesAlgo.constructor()
-                goto block@2
-            block@2: // after_if_else_L1
                 let (tuple_assignment%0#0: bytes, tuple_assignment%1#0: uint64, tuple_assignment%2#0: bool) = tests/approvals/shadowed-variables.algo.ts::ShadowedVariablesAlgo.getValues()
                 let b#0: bytes = tuple_assignment%0#0
                 let u#0: uint64 = tuple_assignment%1#0
@@ -28,10 +22,6 @@ contract tests/approvals/shadowed-variables.algo.ts::ShadowedVariablesAlgo:
                 let tmp%4#0: bool = (== "123" "123")
                 (assert tmp%4#0) // a should be module const (bytes)
                 return 1u
-        
-        subroutine tests/approvals/shadowed-variables.algo.ts::ShadowedVariablesAlgo.constructor() -> void:
-            block@0: // L6
-                return 
         
         subroutine tests/approvals/shadowed-variables.algo.ts::ShadowedVariablesAlgo.getValues() -> <bytes, uint64, bool>:
             block@0: // L28

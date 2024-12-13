@@ -2,11 +2,6 @@
 
 tests/approvals/shadowed-variables.algo.ts::ShadowedVariablesAlgo.approvalProgram:
     bytecblock "123"
-    txn ApplicationID
-    bnz main_after_if_else@2
-    callsub constructor
-
-main_after_if_else@2:
     // tests/approvals/shadowed-variables.algo.ts:8
     // const [b, u, f] = this.getValues()
     callsub getValues
@@ -62,14 +57,6 @@ main_after_if_else@2:
     // return true
     pushint 1 // 1
     return
-
-
-// tests/approvals/shadowed-variables.algo.ts::ShadowedVariablesAlgo.constructor() -> void:
-constructor:
-    // tests/approvals/shadowed-variables.algo.ts:6
-    // class ShadowedVariablesAlgo extends BaseContract {
-    proto 0 0
-    retsub
 
 
 // tests/approvals/shadowed-variables.algo.ts::ShadowedVariablesAlgo.getValues() -> bytes, uint64, uint64:

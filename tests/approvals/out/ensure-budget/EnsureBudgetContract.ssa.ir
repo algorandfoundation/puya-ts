@@ -2,21 +2,11 @@ contract tests/approvals/ensure-budget.algo.ts::EnsureBudgetContract:
     program approval:
         subroutine tests/approvals/ensure-budget.algo.ts::EnsureBudgetContract.approvalProgram() -> bool:
             block@0: // L4
-                let reinterpret_bool%0#0: bool = (txn ApplicationID)
-                goto reinterpret_bool%0#0 ? block@2 : block@1
-            block@1: // if_body_L1
-                tests/approvals/ensure-budget.algo.ts::EnsureBudgetContract.constructor()
-                goto block@2
-            block@2: // after_if_else_L1
                 _puya_lib.util.ensure_budget(100u, 0u)
                 _puya_lib.util.ensure_budget(100u, 0u)
                 _puya_lib.util.ensure_budget(100u, 1u)
                 _puya_lib.util.ensure_budget(100u, 2u)
                 return 1u
-        
-        subroutine tests/approvals/ensure-budget.algo.ts::EnsureBudgetContract.constructor() -> void:
-            block@0: // L3
-                return 
         
         subroutine _puya_lib.util.ensure_budget(required_budget: uint64, fee_source: uint64) -> void:
             block@0: // L12

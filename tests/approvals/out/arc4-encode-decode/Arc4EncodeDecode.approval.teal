@@ -3,21 +3,8 @@
 tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.approvalProgram:
     intcblock 0 1 8 64
     bytecblock 0x00 0x
-    txn ApplicationID
-    bnz main_after_if_else@2
-    callsub constructor
-
-main_after_if_else@2:
     callsub __puya_arc4_router__
     return
-
-
-// tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.constructor() -> void:
-constructor:
-    // tests/approvals/arc4-encode-decode.algo.ts:7
-    // export class Arc4EncodeDecode extends Contract {
-    proto 0 0
-    retsub
 
 
 // tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.__puya_arc4_router__() -> uint64:

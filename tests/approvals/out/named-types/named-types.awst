@@ -2,9 +2,6 @@ contract MyContract
 {
   approvalProgram(): bool
   {
-    if (!Boolean(txn<ApplicationID>())) {
-      this.constructor()
-    }
     return arc4Router()
   }
   
@@ -39,20 +36,6 @@ contract MyContract
     b: YX{ y: uint64, x: uint64 } = this.getYX()
     c: { x: uint64, y: uint64 } = { x: (#3 = this.getAnon()).x, y: #3.y }
     return <tuple>[a, b, c]
-  }
-  
-  constructor(): void
-  {
-    void
-  }
-  
-  Contract::constructor(): void
-  {
-    this.constructor()
-  }
-  
-  BaseContract::constructor(): void
-  {
   }
   
   __algots__.defaultCreate(): void

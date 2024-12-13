@@ -2,20 +2,10 @@ contract tests/approvals/non-arc4.algo.ts::HelloWorldContract:
     program approval:
         subroutine tests/approvals/non-arc4.algo.ts::HelloWorldContract.approvalProgram() -> bool:
             block@0: // L4
-                let reinterpret_bool%0#0: bool = (txn ApplicationID)
-                goto reinterpret_bool%0#0 ? block@2 : block@1
-            block@1: // if_body_L1
-                tests/approvals/non-arc4.algo.ts::HelloWorldContract.constructor()
-                goto block@2
-            block@2: // after_if_else_L1
                 let name#0: bytes = ((txnas ApplicationArgs) 0u)
                 let tmp%0#0: bytes = (concat "Hello, " name#0)
                 (log tmp%0#0)
                 return 1u
-        
-        subroutine tests/approvals/non-arc4.algo.ts::HelloWorldContract.constructor() -> void:
-            block@0: // L3
-                return 
     
     program clear-state:
         subroutine @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.clearStateProgram() -> bool:

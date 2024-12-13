@@ -2,11 +2,6 @@
 
 tests/approvals/casting.algo.ts::CastingAlgo.approvalProgram:
     intcblock 1 2 3
-    txn ApplicationID
-    bnz main_after_if_else@2
-    callsub constructor
-
-main_after_if_else@2:
     // tests/approvals/casting.algo.ts:8
     // const y = [1, 2, 3] as [uint64, uint64, uint64]
     intc_0 // 1
@@ -45,11 +40,3 @@ main_after_if_else@2:
     // return x > y[0] * y[1] * y[2] * z[0] * z[1] * z[2]
     <
     return
-
-
-// tests/approvals/casting.algo.ts::CastingAlgo.constructor() -> void:
-constructor:
-    // tests/approvals/casting.algo.ts:4
-    // export class CastingAlgo extends BaseContract {
-    proto 0 0
-    retsub

@@ -21,11 +21,6 @@ contract Hello
     GlobalState["greeting"]: string = greeting
   }
   
-  constructor(): void
-  {
-    super.constructor()
-  }
-  
   HelloBase::delete(): void
   {
   }
@@ -43,15 +38,6 @@ contract Hello
   {
     void
     GlobalState["greeting"]: string = ""
-  }
-  
-  Contract::constructor(): void
-  {
-    this.constructor()
-  }
-  
-  BaseContract::constructor(): void
-  {
   }
   
 }
@@ -102,15 +88,6 @@ contract HelloTemplate
     GlobalState["greeting"]: string = ""
   }
   
-  Contract::constructor(): void
-  {
-    this.constructor()
-  }
-  
-  BaseContract::constructor(): void
-  {
-  }
-  
 }
 contract HelloTemplateCustomPrefix
 {
@@ -159,15 +136,6 @@ contract HelloTemplateCustomPrefix
     GlobalState["greeting"]: string = ""
   }
   
-  Contract::constructor(): void
-  {
-    this.constructor()
-  }
-  
-  BaseContract::constructor(): void
-  {
-  }
-  
 }
 subroutine getBigBytes(): bytes
 {
@@ -177,9 +145,6 @@ contract LargeProgram
 {
   approvalProgram(): bool
   {
-    if (!Boolean(txn<ApplicationID>())) {
-      this.constructor()
-    }
     return arc4Router()
   }
   
@@ -194,20 +159,6 @@ contract LargeProgram
   }
   
   delete(): void
-  {
-  }
-  
-  constructor(): void
-  {
-    void
-  }
-  
-  Contract::constructor(): void
-  {
-    this.constructor()
-  }
-  
-  BaseContract::constructor(): void
   {
   }
   

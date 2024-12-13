@@ -1,11 +1,6 @@
 #pragma version 10
 
 tests/approvals/call-expressions.algo.ts::Example.approvalProgram:
-    txn ApplicationID
-    bnz main_after_if_else@2
-    callsub constructor
-
-main_after_if_else@2:
     // tests/approvals/call-expressions.algo.ts:12
     // return this.localMethod() + super.baseMethod() === freeMethod() - this.baseMethod()
     callsub localMethod
@@ -16,23 +11,6 @@ main_after_if_else@2:
     -
     ==
     return
-
-
-// tests/approvals/call-expressions.algo.ts::Example.constructor() -> void:
-constructor:
-    // tests/approvals/call-expressions.algo.ts:10
-    // export default class Example extends ExampleBase {
-    proto 0 0
-    callsub tests/approvals/call-expressions.algo.ts::ExampleBase.constructor
-    retsub
-
-
-// tests/approvals/call-expressions.algo.ts::ExampleBase.constructor() -> void:
-tests/approvals/call-expressions.algo.ts::ExampleBase.constructor:
-    // tests/approvals/call-expressions.algo.ts:4
-    // abstract class ExampleBase extends BaseContract {
-    proto 0 0
-    retsub
 
 
 // tests/approvals/call-expressions.algo.ts::Example.localMethod() -> uint64:
