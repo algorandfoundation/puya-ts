@@ -1,11 +1,3 @@
-subroutine testSelf(): void
-{
-  assert(txn<Receiver>() == global<CurrentApplicationAddress>(), comment=assert target is match for conditions)
-}
-subroutine test(x: group_transaction_pay): void
-{
-  assert(gtxns<Amount>(x) <= 50000 and gtxns<Amount>(x) >= 0 and gtxns<Sender>(x) == txn<Sender>() and gtxns<Receiver>(x) == global<CurrentApplicationAddress>() and gtxns<CloseRemainderTo>(x) == global<ZeroAddress>() and gtxns<FirstValid>(x) > 1 and gtxns<LastValid>(x) < 1099511627776, comment=assert target is match for conditions)
-}
 contract AssertMatchContract
 {
   approvalProgram(): bool
@@ -13,13 +5,17 @@ contract AssertMatchContract
     if (!Boolean(txn<ApplicationID>())) {
       this.constructor()
     }
-    txn: group_transaction_pay = reinterpret_cast<group_transaction_pay>(1)
-    tests/approvals/assert-match.algo.ts::test(txn)
-    return True
+    return arc4Router()
   }
   
   clearProgram(): bool
   {
+    return True
+  }
+  
+  testPay(): bool
+  {
+    assert(gtxns<Amount>(pay) <= 50000 and gtxns<Amount>(pay) >= 0 and gtxns<Sender>(pay) == txn<Sender>() and gtxns<Receiver>(pay) == global<CurrentApplicationAddress>() and gtxns<CloseRemainderTo>(pay) == global<ZeroAddress>() and gtxns<FirstValid>(pay) > 1 and gtxns<LastValid>(pay) < 1099511627776, comment=assert target is match for conditions)
     return True
   }
   
@@ -28,7 +24,16 @@ contract AssertMatchContract
     void
   }
   
+  Contract::constructor(): void
+  {
+    this.constructor()
+  }
+  
   BaseContract::constructor(): void
+  {
+  }
+  
+  __algots__.defaultCreate(): void
   {
   }
   

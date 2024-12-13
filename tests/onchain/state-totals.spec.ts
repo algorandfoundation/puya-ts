@@ -11,8 +11,8 @@ describe('State totals', () => {
   })
 
   test('BaseWithState has correct totals', ({ appSpecBaseWithState }) => {
-    expect(appSpecBaseWithState.state.global.num_uints).toBe(2)
-    expect(appSpecBaseWithState.state.local.num_byte_slices).toBe(1)
+    expect(appSpecBaseWithState.state.schema.global.ints).toBe(2)
+    expect(appSpecBaseWithState.state.schema.local.bytes).toBe(1)
   })
   test('BaseWithState runs', async ({ appClientBaseWithState }) => {
     await appClientBaseWithState.send.call({ method: 'setState', args: [123] })
@@ -22,8 +22,8 @@ describe('State totals', () => {
     expect(state['twoGlobal'].value).toBe(123n)
   })
   test('SubClassWithState has correct totals', ({ appSpecSubClassWithState }) => {
-    expect(appSpecSubClassWithState.state.global.num_uints).toBe(3)
-    expect(appSpecSubClassWithState.state.local.num_byte_slices).toBe(2)
+    expect(appSpecSubClassWithState.state.schema.global.ints).toBe(3)
+    expect(appSpecSubClassWithState.state.schema.local.bytes).toBe(2)
   })
   test('SubClassWithState runs', async ({ appClientSubClassWithState }) => {
     await appClientSubClassWithState.send.call({ method: 'setState', args: [456] })
@@ -34,15 +34,15 @@ describe('State totals', () => {
     expect(state['threeGlobal'].value).toBe(456n)
   })
   test('SubClassWithExplicitTotals has correct totals', ({ appSpecSubClassWithExplicitTotals }) => {
-    expect(appSpecSubClassWithExplicitTotals.state.global.num_uints).toBe(4)
-    expect(appSpecSubClassWithExplicitTotals.state.global.num_byte_slices).toBe(0)
-    expect(appSpecSubClassWithExplicitTotals.state.local.num_uints).toBe(0)
-    expect(appSpecSubClassWithExplicitTotals.state.local.num_byte_slices).toBe(1)
+    expect(appSpecSubClassWithExplicitTotals.state.schema.global.ints).toBe(4)
+    expect(appSpecSubClassWithExplicitTotals.state.schema.global.bytes).toBe(0)
+    expect(appSpecSubClassWithExplicitTotals.state.schema.local.ints).toBe(0)
+    expect(appSpecSubClassWithExplicitTotals.state.schema.local.bytes).toBe(1)
   })
   test('ExtendsSubWithTotals has correct totals', ({ appSpecExtendsSubWithTotals }) => {
-    expect(appSpecExtendsSubWithTotals.state.global.num_uints).toBe(2)
-    expect(appSpecExtendsSubWithTotals.state.local.num_uints).toBe(1)
-    expect(appSpecExtendsSubWithTotals.state.local.num_byte_slices).toBe(1)
+    expect(appSpecExtendsSubWithTotals.state.schema.global.ints).toBe(2)
+    expect(appSpecExtendsSubWithTotals.state.schema.local.ints).toBe(1)
+    expect(appSpecExtendsSubWithTotals.state.schema.local.bytes).toBe(1)
   })
   test('ExtendsSubWithTotals runs', async ({ appClientExtendsSubWithTotals, testAccount }) => {
     await appClientExtendsSubWithTotals.send.call({ method: 'setState', args: [789], onComplete: OnApplicationComplete.OptInOC })

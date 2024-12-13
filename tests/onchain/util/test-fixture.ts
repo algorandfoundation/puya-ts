@@ -2,9 +2,9 @@ import type { AlgorandClient } from '@algorandfoundation/algokit-utils'
 import { Config, microAlgos } from '@algorandfoundation/algokit-utils'
 import { algorandFixture } from '@algorandfoundation/algokit-utils/testing'
 import type { SendAppTransactionResult } from '@algorandfoundation/algokit-utils/types/app'
+import type { Arc56Contract } from '@algorandfoundation/algokit-utils/types/app-arc56'
 import type { AppClient } from '@algorandfoundation/algokit-utils/types/app-client'
 import type { AppFactory, AppFactoryDeployParams } from '@algorandfoundation/algokit-utils/types/app-factory'
-import type { AppSpec } from '@algorandfoundation/algokit-utils/types/app-spec'
 import type { AssetCreateParams } from '@algorandfoundation/algokit-utils/types/composer'
 import { nullLogger } from '@algorandfoundation/algokit-utils/types/logging'
 import type { AlgorandFixture } from '@algorandfoundation/algokit-utils/types/testing'
@@ -46,7 +46,7 @@ const algorandTestFixture = (localnetFixture: AlgorandFixture) =>
     },
   })
 
-function createLazyCompiler(path: string, options: { outputBytecode: boolean; outputArc32: boolean }) {
+function createLazyCompiler(path: string, options: { outputBytecode: boolean; outputArc56: boolean }) {
   let result: CompilationArtifacts | undefined = undefined
   return {
     getCompileResult(expect: ExpectStatic) {
@@ -79,7 +79,7 @@ type BaseFixtureContextFor<T extends string> = {
   [key in T as `${key}Invoker`]: ProgramInvoker
 }
 export function createBaseTestFixture<TContracts extends string = ''>(path: string, contracts: TContracts[]) {
-  const lazyCompile = createLazyCompiler(path, { outputArc32: false, outputBytecode: true })
+  const lazyCompile = createLazyCompiler(path, { outputArc56: false, outputBytecode: true })
   const localnet = algorandFixture({
     testAccountFunding: microAlgos(100_000_000_000),
   })
@@ -136,7 +136,7 @@ type Arc4FixtureContextFor<T extends string> = {
 } & {
   [key in T as `appClient${key}`]: AppClient
 } & {
-  [key in T as `appSpec${key}`]: AppSpec
+  [key in T as `appSpec${key}`]: Arc56Contract
 }
 
 type ContractConfig = {
@@ -144,7 +144,7 @@ type ContractConfig = {
 }
 
 export function createArc4TestFixture<TContracts extends string = ''>(path: string, contracts: Record<TContracts, ContractConfig>) {
-  const lazyCompile = createLazyCompiler(path, { outputArc32: true, outputBytecode: false })
+  const lazyCompile = createLazyCompiler(path, { outputArc56: true, outputBytecode: false })
   const localnet = algorandFixture({
     testAccountFunding: microAlgos(100_000_000_000),
   })
@@ -154,7 +154,7 @@ export function createArc4TestFixture<TContracts extends string = ''>(path: stri
   })
 
   function getAppSpec(expect: ExpectStatic, contractName: string) {
-    const appSpec = lazyCompile.getCompileResult(expect).appSpecs.find((s) => s.contract.name === contractName)
+    const appSpec = lazyCompile.getCompileResult(expect).appSpecs.find((s) => s.name === contractName)
     if (appSpec === undefined) {
       expect.fail(`${path} does not contain an ARC4 contract "${contractName}"`)
     } else {
@@ -164,7 +164,7 @@ export function createArc4TestFixture<TContracts extends string = ''>(path: stri
 
   const ctx: DeliberateAny = {}
   for (const [contractName, config] of Object.entries(contracts) as Array<[TContracts, ContractConfig]>) {
-    ctx[`appSpec${contractName}`] = async ({ expect }: { expect: ExpectStatic }, use: Use<AppSpec>) => {
+    ctx[`appSpec${contractName}`] = async ({ expect }: { expect: ExpectStatic }, use: Use<Arc56Contract>) => {
       await use(getAppSpec(expect, contractName))
     }
 
@@ -197,12 +197,12 @@ export function createArc4TestFixture<TContracts extends string = ''>(path: stri
 }
 
 type CompilationArtifacts = {
-  appSpecs: AppSpec[]
+  appSpecs: Arc56Contract[]
   approvalBinaries: Record<string, Uint8Array>
   clearStateBinaries: Record<string, Uint8Array>
 }
 
-function compilePath(path: string, expect: ExpectStatic, options: { outputBytecode: boolean; outputArc32: boolean }): CompilationArtifacts {
+function compilePath(path: string, expect: ExpectStatic, options: { outputBytecode: boolean; outputArc56: boolean }): CompilationArtifacts {
   using tempDir = generateTempDir()
   using logCtx = LoggingContext.create()
 
@@ -217,6 +217,7 @@ function compilePath(path: string, expect: ExpectStatic, options: { outputByteco
     }),
     {
       ...defaultPuyaOptions,
+      outputArc32: false,
       outputTeal: false,
       outputSourceMap: true,
       optimizationLevel: 0,
@@ -232,11 +233,11 @@ function compilePath(path: string, expect: ExpectStatic, options: { outputByteco
   }
 
   const matchBinary = /(?<appName>[^\\/]+)\.(?<programName>(approval)|(clear))\.bin$/
-  const appSpecs = new Array<AppSpec>()
+  const appSpecs = new Array<Arc56Contract>()
   const approvalBinaries: Record<string, Uint8Array> = {}
   const clearStateBinaries: Record<string, Uint8Array> = {}
   for (const filePath of tempDir.files()) {
-    if (filePath.endsWith('.arc32.json')) {
+    if (filePath.endsWith('.arc56.json')) {
       appSpecs.push(JSON.parse(fs.readFileSync(filePath, 'utf-8')))
     } else {
       const m = matchBinary.exec(filePath)
