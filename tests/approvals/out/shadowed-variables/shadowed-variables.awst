@@ -2,9 +2,6 @@ contract ShadowedVariablesAlgo
 {
   approvalProgram(): bool
   {
-    if (!Boolean(txn<ApplicationID>())) {
-      this.constructor()
-    }
     <tuple>[b, u, f]: readonlytuple[bytes, uint64, bool] = this.getValues()
     assert("123" == b, comment=a should be module const (bytes))
     a: uint64 = u
@@ -27,15 +24,6 @@ contract ShadowedVariablesAlgo
   getValues(): readonlytuple[bytes, uint64, bool]
   {
     return <tuple>["123", 123, False]
-  }
-  
-  constructor(): void
-  {
-    void
-  }
-  
-  BaseContract::constructor(): void
-  {
   }
   
 }

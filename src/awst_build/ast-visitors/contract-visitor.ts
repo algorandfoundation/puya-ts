@@ -97,6 +97,8 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
   }
 
   private makeDefaultConstructor(sourceLocation: SourceLocation) {
+    // If there is no property initialization, we don't need an implicit constructor
+    if (this._propertyInitialization.length === 0) return null
     invariant(this._contractPType.baseTypes.length === 1, 'Only single base type supported for now')
     return nodeFactory.contractMethod({
       memberName: Constants.constructorMethodName,

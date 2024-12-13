@@ -61,6 +61,7 @@ type ProgramInvokeOptions = {
   appId?: bigint
   sender?: AlgoClientAppCallParams['sender']
   approvalProgram?: Uint8Array
+
   clearStateProgram?: Uint8Array
   onComplete?:
     | OnApplicationComplete.NoOpOC
@@ -69,6 +70,16 @@ type ProgramInvokeOptions = {
     | OnApplicationComplete.ClearStateOC
     | OnApplicationComplete.UpdateApplicationOC
     | OnApplicationComplete.DeleteApplicationOC
+  schema?: {
+    /** The number of integers saved in global state. */
+    globalInts?: number
+    /** The number of byte slices saved in global state. */
+    globalByteSlices?: number
+    /** The number of integers saved in local state. */
+    localInts?: number
+    /** The number of byte slices saved in local state. */
+    localByteSlices?: number
+  }
 } & Omit<AlgoClientAppCallParams, 'onComplete' | 'sender' | 'appId'>
 
 type ProgramInvoker = {

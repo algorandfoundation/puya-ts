@@ -2,12 +2,6 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
     program approval:
         subroutine tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract.approvalProgram() -> bool:
             block@0: // L138
-                let reinterpret_bool%0#0: bool = (txn ApplicationID)
-                goto reinterpret_bool%0#0 ? block@2 : block@1
-            block@1: // if_body_L1
-                tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract.constructor()
-                goto block@2
-            block@2: // after_if_else_L1
                 let x#0: bytes = 0x0000000000000000
                 tests/approvals/arc4-types.algo.ts::testStr()
                 tests/approvals/arc4-types.algo.ts::testUintN(1u, 2b, 0x0000000000000000000000000000000000000000000000000000000000000004)
@@ -25,10 +19,6 @@ contract tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract:
                 let tmp%1#0: bool = (== tmp%0#0 0u)
                 (assert tmp%1#0)
                 return 1u
-        
-        subroutine tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract.constructor() -> void:
-            block@0: // L133
-                return 
         
         subroutine tests/approvals/arc4-types.algo.ts::testStr() -> void:
             block@0: // L62

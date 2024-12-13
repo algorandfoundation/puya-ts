@@ -3,11 +3,6 @@
 tests/approvals/ensure-budget.algo.ts::EnsureBudgetContract.approvalProgram:
     intcblock 100 0 1
     bytecblock 0x068101
-    txn ApplicationID
-    bnz main_after_if_else@2
-    callsub constructor
-
-main_after_if_else@2:
     // tests/approvals/ensure-budget.algo.ts:5
     // ensureBudget(100)
     intc_0 // 100
@@ -32,14 +27,6 @@ main_after_if_else@2:
     // return true
     intc_2 // 1
     return
-
-
-// tests/approvals/ensure-budget.algo.ts::EnsureBudgetContract.constructor() -> void:
-constructor:
-    // tests/approvals/ensure-budget.algo.ts:3
-    // export class EnsureBudgetContract extends BaseContract {
-    proto 0 0
-    retsub
 
 
 // _puya_lib.util.ensure_budget(required_budget: uint64, fee_source: uint64) -> void:

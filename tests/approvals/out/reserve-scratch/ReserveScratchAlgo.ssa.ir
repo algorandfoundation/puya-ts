@@ -2,12 +2,6 @@ contract tests/approvals/reserve-scratch.algo.ts::ReserveScratchAlgo:
     program approval:
         subroutine tests/approvals/reserve-scratch.algo.ts::ReserveScratchAlgo.approvalProgram() -> bool:
             block@0: // L12
-                let reinterpret_bool%0#0: bool = (txn ApplicationID)
-                goto reinterpret_bool%0#0 ? block@2 : block@1
-            block@1: // if_body_L1
-                tests/approvals/reserve-scratch.algo.ts::ReserveScratchAlgo.constructor()
-                goto block@2
-            block@2: // after_if_else_L1
                 tests/approvals/reserve-scratch.algo.ts::ReserveScratchAlgo.setThings()
                 let tmp%0#0: uint64 = (loads 0u)
                 let tmp%1#0: bool = (== tmp%0#0 1u)
@@ -19,10 +13,6 @@ contract tests/approvals/reserve-scratch.algo.ts::ReserveScratchAlgo:
                 let tmp%5#0: bool = (== tmp%4#0 45u)
                 (assert tmp%5#0)
                 return 1u
-        
-        subroutine tests/approvals/reserve-scratch.algo.ts::ReserveScratchAlgo.constructor() -> void:
-            block@0: // L4
-                return 
         
         subroutine tests/approvals/reserve-scratch.algo.ts::ReserveScratchAlgo.setThings() -> void:
             block@0: // L6

@@ -2,9 +2,6 @@ contract Example
 {
   approvalProgram(): bool
   {
-    if (!Boolean(txn<ApplicationID>())) {
-      this.constructor()
-    }
     return this.localMethod() + super.baseMethod() == tests/approvals/call-expressions.algo.ts::freeMethod() - this.baseMethod()
   }
   
@@ -23,23 +20,9 @@ contract Example
     return 5
   }
   
-  constructor(): void
-  {
-    super.constructor()
-  }
-  
   ExampleBase::baseMethod(): uint64
   {
     return 2
-  }
-  
-  ExampleBase::constructor(): void
-  {
-    void
-  }
-  
-  BaseContract::constructor(): void
-  {
   }
   
 }

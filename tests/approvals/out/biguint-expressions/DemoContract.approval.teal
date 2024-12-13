@@ -3,11 +3,6 @@
 tests/approvals/biguint-expressions.algo.ts::DemoContract.approvalProgram:
     intcblock 4 0 1
     bytecblock 0x 0x01
-    txn ApplicationID
-    bnz main_after_if_else@2
-    callsub constructor
-
-main_after_if_else@2:
     // tests/approvals/biguint-expressions.algo.ts:32
     // testConstructor(12312312, 12312312n, false, 0n, itob(4), 4n)
     intc_0 // 4
@@ -28,14 +23,6 @@ main_after_if_else@2:
     // return true
     intc_2 // 1
     return
-
-
-// tests/approvals/biguint-expressions.algo.ts::DemoContract.constructor() -> void:
-constructor:
-    // tests/approvals/biguint-expressions.algo.ts:30
-    // class DemoContract extends BaseContract {
-    proto 0 0
-    retsub
 
 
 // tests/approvals/biguint-expressions.algo.ts::testConstructor(a: uint64, a_b: bytes, b: uint64, b_b: bytes, c: bytes, c_b: bytes) -> void:

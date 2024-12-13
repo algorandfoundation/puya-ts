@@ -3,11 +3,6 @@
 tests/approvals/reserve-scratch.algo.ts::ReserveScratchAlgo.approvalProgram:
     intcblock 1 0 15 45
     bytecblock "hello"
-    txn ApplicationID
-    bnz main_after_if_else@2
-    callsub constructor
-
-main_after_if_else@2:
     // tests/approvals/reserve-scratch.algo.ts:13
     // this.setThings()
     callsub setThings
@@ -36,15 +31,6 @@ main_after_if_else@2:
     // return true
     intc_0 // 1
     return
-
-
-// tests/approvals/reserve-scratch.algo.ts::ReserveScratchAlgo.constructor() -> void:
-constructor:
-    // tests/approvals/reserve-scratch.algo.ts:4-5
-    // @contract({ scratchSlots: [0, 1, { from: 10, to: 20 }] })
-    // export class ReserveScratchAlgo extends BaseContract {
-    proto 0 0
-    retsub
 
 
 // tests/approvals/reserve-scratch.algo.ts::ReserveScratchAlgo.setThings() -> void:

@@ -3,9 +3,6 @@ contract ReserveScratchAlgo
   reservedScratchSpace: [0, 1, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
   approvalProgram(): bool
   {
-    if (!Boolean(txn<ApplicationID>())) {
-      this.constructor()
-    }
     this.setThings()
     assert(loads(0) == 1)
     assert(loads(0) == "hello")
@@ -25,24 +22,12 @@ contract ReserveScratchAlgo
     stores(15, 45)
   }
   
-  constructor(): void
-  {
-    void
-  }
-  
-  BaseContract::constructor(): void
-  {
-  }
-  
 }
 contract SubReserveScratchAlgo
 {
   reservedScratchSpace: [0, 1, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 50]
   approvalProgram(): bool
   {
-    if (!Boolean(txn<ApplicationID>())) {
-      this.constructor()
-    }
     super.approvalProgram()
     stores(50, "world")
     stores(16, "world")
@@ -52,11 +37,6 @@ contract SubReserveScratchAlgo
   clearProgram(): bool
   {
     return True
-  }
-  
-  constructor(): void
-  {
-    super.constructor()
   }
   
   ReserveScratchAlgo::approvalProgram(): bool
@@ -73,15 +53,6 @@ contract SubReserveScratchAlgo
     stores(0, 1)
     stores(1, "hello")
     stores(15, 45)
-  }
-  
-  ReserveScratchAlgo::constructor(): void
-  {
-    void
-  }
-  
-  BaseContract::constructor(): void
-  {
   }
   
 }

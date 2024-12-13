@@ -3,11 +3,6 @@
 tests/approvals/boolean-conversions.algo.ts::BooleanConversionsAlgo.approvalProgram:
     intcblock 1 0
     bytecblock 0x "abc" 0x01 "abcdef"
-    txn ApplicationID
-    bnz main_after_if_else@2
-    callsub constructor
-
-main_after_if_else@2:
     // tests/approvals/boolean-conversions.algo.ts:34
     // test_truthyness()
     callsub test_truthyness
@@ -18,14 +13,6 @@ main_after_if_else@2:
     // return true
     intc_0 // 1
     return
-
-
-// tests/approvals/boolean-conversions.algo.ts::BooleanConversionsAlgo.constructor() -> void:
-constructor:
-    // tests/approvals/boolean-conversions.algo.ts:32
-    // export class BooleanConversionsAlgo extends BaseContract {
-    proto 0 0
-    retsub
 
 
 // tests/approvals/boolean-conversions.algo.ts::test_truthyness() -> void:

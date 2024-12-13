@@ -9,9 +9,6 @@ contract LocalStateDemo
   }
   approvalProgram(): bool
   {
-    if (!Boolean(txn<ApplicationID>())) {
-      this.constructor()
-    }
     return arc4Router()
   }
   
@@ -42,20 +39,6 @@ contract LocalStateDemo
     STATE_DEL(LocalState[txn<Sender>()]["b1"])
     STATE_DEL(LocalState[txn<Sender>()]["localBytes2"])
     STATE_DEL(LocalState[txn<Sender>()]["localEncoded"])
-  }
-  
-  constructor(): void
-  {
-    void
-  }
-  
-  Contract::constructor(): void
-  {
-    this.constructor()
-  }
-  
-  BaseContract::constructor(): void
-  {
   }
   
   __algots__.defaultCreate(): void

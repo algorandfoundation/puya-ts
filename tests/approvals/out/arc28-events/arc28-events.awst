@@ -2,9 +2,6 @@ contract EventEmitter
 {
   approvalProgram(): bool
   {
-    if (!Boolean(txn<ApplicationID>())) {
-      this.constructor()
-    }
     return arc4Router()
   }
   
@@ -26,20 +23,6 @@ contract EventEmitter
   emitCustom(): void
   {
     emit("Custom(string,bool)", new Custom(0=ARC4_ENCODE(arg0, wtype=arc4.dynamic_array<arc4.byte>), 1=ARC4_ENCODE(arg1, wtype=arc4.bool)))
-  }
-  
-  constructor(): void
-  {
-    void
-  }
-  
-  Contract::constructor(): void
-  {
-    this.constructor()
-  }
-  
-  BaseContract::constructor(): void
-  {
   }
   
   __algots__.defaultCreate(): void

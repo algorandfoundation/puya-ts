@@ -3,21 +3,8 @@
 tests/approvals/local-state.algo.ts::LocalStateDemo.approvalProgram:
     intcblock 0 1 8 100
     bytecblock "l1" "localUint2" "b1" "localBytes2" "localEncoded"
-    txn ApplicationID
-    bnz main_after_if_else@2
-    callsub constructor
-
-main_after_if_else@2:
     callsub __puya_arc4_router__
     return
-
-
-// tests/approvals/local-state.algo.ts::LocalStateDemo.constructor() -> void:
-constructor:
-    // tests/approvals/local-state.algo.ts:7
-    // export class LocalStateDemo extends Contract {
-    proto 0 0
-    retsub
 
 
 // tests/approvals/local-state.algo.ts::LocalStateDemo.__puya_arc4_router__() -> uint64:

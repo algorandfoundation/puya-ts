@@ -2,27 +2,17 @@ contract tests/approvals/box-proxies.algo.ts::BoxContract:
     program approval:
         subroutine tests/approvals/box-proxies.algo.ts::BoxContract.approvalProgram() -> bool:
             block@0: // L73
-                let reinterpret_bool%0#0: bool = (txn ApplicationID)
-                goto reinterpret_bool%0#0 ? block@2 : block@1
-            block@1: // if_body_L1
-                tests/approvals/box-proxies.algo.ts::BoxContract.constructor()
-                goto block@2
-            block@2: // after_if_else_L1
                 let tmp%0#0: uint64 = (txn ApplicationID)
                 let tmp%1#0: bool = (!= tmp%0#0 0u)
-                goto tmp%1#0 ? block@3 : block@4
-            block@3: // if_body_L74
+                goto tmp%1#0 ? block@1 : block@2
+            block@1: // if_body_L74
                 tests/approvals/box-proxies.algo.ts::testBox("one", "aaaaaargh")
                 let tmp%2#0: bytes = (itob 256456u)
                 tests/approvals/box-proxies.algo.ts::testBoxMap("two", "what?", tmp%2#0)
                 tests/approvals/box-proxies.algo.ts::testBoxRef("three", 99u)
-                goto block@4
-            block@4: // after_if_else_L74
+                goto block@2
+            block@2: // after_if_else_L74
                 return 1u
-        
-        subroutine tests/approvals/box-proxies.algo.ts::BoxContract.constructor() -> void:
-            block@0: // L68
-                return 
         
         subroutine tests/approvals/box-proxies.algo.ts::testBox(box: bytes, value: bytes) -> void:
             block@0: // L6

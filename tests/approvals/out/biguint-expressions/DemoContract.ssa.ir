@@ -2,20 +2,10 @@ contract tests/approvals/biguint-expressions.algo.ts::DemoContract:
     program approval:
         subroutine tests/approvals/biguint-expressions.algo.ts::DemoContract.approvalProgram() -> bool:
             block@0: // L31
-                let reinterpret_bool%0#0: bool = (txn ApplicationID)
-                goto reinterpret_bool%0#0 ? block@2 : block@1
-            block@1: // if_body_L1
-                tests/approvals/biguint-expressions.algo.ts::DemoContract.constructor()
-                goto block@2
-            block@2: // after_if_else_L1
                 let tmp%0#0: bytes = (itob 4u)
                 tests/approvals/biguint-expressions.algo.ts::testConstructor(12312312u, 12312312b, 0u, 0b, tmp%0#0, 4b)
                 tests/approvals/biguint-expressions.algo.ts::testOps(500b, 1000b)
                 return 1u
-        
-        subroutine tests/approvals/biguint-expressions.algo.ts::DemoContract.constructor() -> void:
-            block@0: // L30
-                return 
         
         subroutine tests/approvals/biguint-expressions.algo.ts::testConstructor(a: uint64, a_b: biguint, b: bool, b_b: biguint, c: bytes, c_b: biguint) -> void:
             block@0: // L5

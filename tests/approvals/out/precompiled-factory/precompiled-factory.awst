@@ -2,9 +2,6 @@ contract HelloFactory
 {
   approvalProgram(): bool
   {
-    if (!Boolean(txn<ApplicationID>())) {
-      this.constructor()
-    }
     return arc4Router()
   }
   
@@ -51,20 +48,6 @@ contract HelloFactory
     result: uint64 = ARC4_DECODE(reinterpret_cast<arc4.uint64>(checked_maybe(<tuple>[extract<4, 0>((#3 = txn.LastLog)), extract<0, 4>(#3) == 0x151f7c75], comment=Bytes has valid prefix)))
     assert(result == 4096)
     submit_txn(create_inner_transaction(Fee=0, TypeEnum=6, ApplicationID=largeApp, ApplicationArgs=<tuple>[Method("delete()void")], OnCompletion=5))
-  }
-  
-  constructor(): void
-  {
-    void
-  }
-  
-  Contract::constructor(): void
-  {
-    this.constructor()
-  }
-  
-  BaseContract::constructor(): void
-  {
   }
   
   __algots__.defaultCreate(): void

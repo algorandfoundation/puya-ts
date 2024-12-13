@@ -2,9 +2,6 @@ contract EnsureBudgetContract
 {
   approvalProgram(): bool
   {
-    if (!Boolean(txn<ApplicationID>())) {
-      this.constructor()
-    }
     ensure_budget(100, 0)
     ensure_budget(100, 0)
     ensure_budget(100, 1)
@@ -15,15 +12,6 @@ contract EnsureBudgetContract
   clearProgram(): bool
   {
     return True
-  }
-  
-  constructor(): void
-  {
-    void
-  }
-  
-  BaseContract::constructor(): void
-  {
   }
   
 }

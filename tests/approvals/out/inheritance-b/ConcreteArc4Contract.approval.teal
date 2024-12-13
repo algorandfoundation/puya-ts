@@ -3,30 +3,8 @@
 tests/approvals/inheritance-b.algo.ts::ConcreteArc4Contract.approvalProgram:
     intcblock 0 1
     bytecblock 0x151f7c75
-    txn ApplicationID
-    bnz main_after_if_else@2
-    callsub constructor
-
-main_after_if_else@2:
     callsub __puya_arc4_router__
     return
-
-
-// tests/approvals/inheritance-b.algo.ts::ConcreteArc4Contract.constructor() -> void:
-constructor:
-    // tests/approvals/inheritance-b.algo.ts:14
-    // export class ConcreteArc4Contract extends Arc4Contract {
-    proto 0 0
-    callsub tests/approvals/inheritance-a.algo.ts::Arc4Contract.constructor
-    retsub
-
-
-// tests/approvals/inheritance-a.algo.ts::Arc4Contract.constructor() -> void:
-tests/approvals/inheritance-a.algo.ts::Arc4Contract.constructor:
-    // tests/approvals/inheritance-a.algo.ts:11
-    // export abstract class Arc4Contract extends Contract {
-    proto 0 0
-    retsub
 
 
 // tests/approvals/inheritance-b.algo.ts::ConcreteArc4Contract.__puya_arc4_router__() -> uint64:

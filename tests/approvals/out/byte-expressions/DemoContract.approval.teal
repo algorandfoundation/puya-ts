@@ -1,11 +1,6 @@
 #pragma version 10
 
 tests/approvals/byte-expressions.algo.ts::DemoContract.approvalProgram:
-    txn ApplicationID
-    bnz main_after_if_else@2
-    callsub constructor
-
-main_after_if_else@2:
     // tests/approvals/byte-expressions.algo.ts:17
     // test(1, 50n, 'things')
     pushint 1 // 1
@@ -16,14 +11,6 @@ main_after_if_else@2:
     // return true
     pushint 1 // 1
     return
-
-
-// tests/approvals/byte-expressions.algo.ts::DemoContract.constructor() -> void:
-constructor:
-    // tests/approvals/byte-expressions.algo.ts:15
-    // class DemoContract extends BaseContract {
-    proto 0 0
-    retsub
 
 
 // tests/approvals/byte-expressions.algo.ts::test(a: uint64, b: bytes, c: bytes) -> void:

@@ -55,9 +55,6 @@ contract BoxContract
   }
   approvalProgram(): bool
   {
-    if (!Boolean(txn<ApplicationID>())) {
-      this.constructor()
-    }
     if (reinterpret_cast<uint64>(txn<ApplicationID>()) != 0) {
       tests/approvals/box-proxies.algo.ts::testBox("one", "aaaaaargh")
       tests/approvals/box-proxies.algo.ts::testBoxMap("two", "what?", itob(256456))
@@ -69,15 +66,6 @@ contract BoxContract
   clearProgram(): bool
   {
     return True
-  }
-  
-  constructor(): void
-  {
-    void
-  }
-  
-  BaseContract::constructor(): void
-  {
   }
   
 }

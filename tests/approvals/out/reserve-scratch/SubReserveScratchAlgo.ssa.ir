@@ -2,25 +2,10 @@ contract tests/approvals/reserve-scratch.algo.ts::SubReserveScratchAlgo:
     program approval:
         subroutine tests/approvals/reserve-scratch.algo.ts::SubReserveScratchAlgo.approvalProgram() -> bool:
             block@0: // L24
-                let reinterpret_bool%0#0: bool = (txn ApplicationID)
-                goto reinterpret_bool%0#0 ? block@2 : block@1
-            block@1: // if_body_L1
-                tests/approvals/reserve-scratch.algo.ts::SubReserveScratchAlgo.constructor()
-                goto block@2
-            block@2: // after_if_else_L1
                 tests/approvals/reserve-scratch.algo.ts::ReserveScratchAlgo.approvalProgram()
                 (stores 50u "world")
                 (stores 16u "world")
                 return 1u
-        
-        subroutine tests/approvals/reserve-scratch.algo.ts::SubReserveScratchAlgo.constructor() -> void:
-            block@0: // L22
-                tests/approvals/reserve-scratch.algo.ts::ReserveScratchAlgo.constructor()
-                return 
-        
-        subroutine tests/approvals/reserve-scratch.algo.ts::ReserveScratchAlgo.constructor() -> void:
-            block@0: // L4
-                return 
         
         subroutine tests/approvals/reserve-scratch.algo.ts::ReserveScratchAlgo.approvalProgram() -> bool:
             block@0: // L12

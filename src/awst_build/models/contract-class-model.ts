@@ -31,7 +31,7 @@ export class ContractClassModel {
   public readonly propertyInitialization: Array<Statement>
   public readonly approvalProgram: ContractMethod | null
   public readonly clearProgram: ContractMethod | null
-  public readonly ctor: ContractMethod
+  public readonly ctor: ContractMethod | null
   public readonly methods: Array<ContractMethod>
   public readonly appState: Array<AppStorageDefinition>
   public readonly sourceLocation: SourceLocation
@@ -57,7 +57,8 @@ export class ContractClassModel {
   buildContract(compilationSet: CompilationSet): awst.Contract {
     let approvalProgram: ContractMethod | null = this.approvalProgram
     let clearProgram: ContractMethod | null = this.clearProgram
-    const methods: ContractMethod[] = [...this.methods, this.ctor]
+    const methods: ContractMethod[] = [...this.methods]
+    if (this.ctor) methods.push(this.ctor)
     const methodResolutionOrder: ContractReference[] = []
     let firstBaseWithStateTotals: ContractClassModel | undefined = undefined
     let reservedScratchSpace = new Set<bigint>()
@@ -80,7 +81,7 @@ export class ContractClassModel {
         // Maybe need validation??
         methods.push(method)
       }
-      methods.push(baseClass.ctor)
+      if (baseClass.ctor) methods.push(baseClass.ctor)
     }
     if (this.type.isARC4) {
       const hasCreate = methods.some((m) => isIn(m.arc4MethodConfig?.create, [ARC4CreateOption.Allow, ARC4CreateOption.Require]))
@@ -127,7 +128,7 @@ export class ContractClassModel {
       name: this.options?.name ?? this.name,
       id: this.id,
       description: this.description,
-      approvalProgram: this.patchApprovalToCallCtor(approvalProgram),
+      approvalProgram: ContractClassModel.patchApprovalToCallCtor(approvalProgram, methods),
       clearProgram,
       methodResolutionOrder,
       methods,
@@ -139,7 +140,11 @@ export class ContractClassModel {
     })
   }
 
-  private patchApprovalToCallCtor(approval: ContractMethod): ContractMethod {
+  private static patchApprovalToCallCtor(approval: ContractMethod, methods: ContractMethod[]): ContractMethod {
+    // Only need to call ctor if there is at least 1 constructor in the inheritance chain
+    if (methods.every((m) => m.memberName !== Constants.constructorMethodName)) {
+      return approval
+    }
     const callCtorIfNew = nodeFactory.ifElse({
       condition: nodeFactory.not({
         expr: nodeFactory.reinterpretCast({

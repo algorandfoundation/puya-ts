@@ -6,9 +6,6 @@ contract AVM11Contract
 {
   approvalProgram(): bool
   {
-    if (!Boolean(txn<ApplicationID>())) {
-      this.constructor()
-    }
     return arc4Router()
   }
   
@@ -40,20 +37,6 @@ contract AVM11Contract
     assert(Boolean(global<PayoutsMaxBalance>()), comment=payouts_max_balance)
     <tuple>[g, h]: readonlytuple[uint64, bool] = voter_params_get<VoterBalance>(0)
     <tuple>[i, j]: readonlytuple[bool, bool] = voter_params_get<VoterIncentiveEligible>(0)
-  }
-  
-  constructor(): void
-  {
-    void
-  }
-  
-  Contract::constructor(): void
-  {
-    this.constructor()
-  }
-  
-  BaseContract::constructor(): void
-  {
   }
   
   __algots__.defaultCreate(): void
