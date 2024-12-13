@@ -143,7 +143,10 @@ type ContractConfig = {
   deployParams?: AppFactoryDeployParams
 }
 
-export function createArc4TestFixture<TContracts extends string = ''>(path: string, contracts: Record<TContracts, ContractConfig>) {
+export function createArc4TestFixture<TContracts extends string = ''>(
+  path: string,
+  contracts: Record<TContracts, ContractConfig> | TContracts[],
+) {
   const lazyCompile = createLazyCompiler(path, { outputArc56: true, outputBytecode: false })
   const localnet = algorandFixture({
     testAccountFunding: microAlgos(100_000_000_000),
@@ -162,8 +165,20 @@ export function createArc4TestFixture<TContracts extends string = ''>(path: stri
     }
   }
 
+  function* getContracts(): Iterable<[name: TContracts, config: ContractConfig]> {
+    if (Array.isArray(contracts)) {
+      for (const c of contracts) {
+        yield [c, {}]
+      }
+    } else {
+      for (const [c, cfg] of Object.entries(contracts) as Array<[TContracts, ContractConfig]>) {
+        yield [c, cfg]
+      }
+    }
+  }
+
   const ctx: DeliberateAny = {}
-  for (const [contractName, config] of Object.entries(contracts) as Array<[TContracts, ContractConfig]>) {
+  for (const [contractName, config] of getContracts()) {
     ctx[`appSpec${contractName}`] = async ({ expect }: { expect: ExpectStatic }, use: Use<Arc56Contract>) => {
       await use(getAppSpec(expect, contractName))
     }
