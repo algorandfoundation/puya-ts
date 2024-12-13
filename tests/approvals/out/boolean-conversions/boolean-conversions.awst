@@ -1,4 +1,4 @@
-subroutine test_truthyness(a: uint64, b: uint64, c: string, d: bytes, e: uint64): void
+subroutine test_truthyness(): void
 {
   assert(True, comment=Zero is falsy)
   assert(True, comment=Non zero is truthy)
@@ -23,4 +23,31 @@ subroutine test_booleans_are_equal(): void
   assert("abc" != 0x == "abcdef" != 0x)
   boolNoArgs: bool = False
   assert(!boolNoArgs)
+}
+contract BooleanConversionsAlgo
+{
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    tests/approvals/boolean-conversions.algo.ts::test_truthyness()
+    tests/approvals/boolean-conversions.algo.ts::test_booleans_are_equal()
+    return True
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  constructor(): void
+  {
+    void
+  }
+  
+  BaseContract::constructor(): void
+  {
+  }
+  
 }
