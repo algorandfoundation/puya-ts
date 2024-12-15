@@ -313,7 +313,7 @@ export class TypeResolver {
     if (typeName.fullName === ApprovalProgram.fullName) return ApprovalProgram
     if (typeName.fullName === ClearStateProgram.fullName) return ClearStateProgram
 
-    codeInvariant(callSignatures.length === 1, 'User defined functions must have exactly 1 call signature')
+    codeInvariant(callSignatures.length === 1, 'User defined functions must have exactly 1 call signature', sourceLocation)
     const [sig] = callSignatures
     const returnType = this.resolveType(sig.getReturnType(), sourceLocation)
     const parameters = sig.getParameters().map((p) => {
