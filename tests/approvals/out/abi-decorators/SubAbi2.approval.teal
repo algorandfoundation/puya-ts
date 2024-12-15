@@ -1,0 +1,97 @@
+#pragma version 10
+
+tests/approvals/abi-decorators.algo.ts::SubAbi2.approvalProgram:
+    intcblock 0 1
+    callsub __puya_arc4_router__
+    return
+
+
+// tests/approvals/abi-decorators.algo.ts::SubAbi2.__puya_arc4_router__() -> uint64:
+__puya_arc4_router__:
+    // tests/approvals/abi-decorators.algo.ts:50
+    // export class SubAbi2 extends BaseAbi {
+    proto 0 1
+    txn NumAppArgs
+    intc_0 // 0
+    !=
+    bz __puya_arc4_router___bare_routing@5
+    txna ApplicationArgs 0
+    pushbytes 0x1e29ffff // method "someMethod()string"
+    swap
+    match __puya_arc4_router___someMethod_route@2
+    b __puya_arc4_router___switch_case_default@3
+
+__puya_arc4_router___someMethod_route@2:
+    // tests/approvals/abi-decorators.algo.ts:52
+    // someMethod(): string {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    callsub someMethod
+    dup
+    len
+    itob
+    extract 6 2
+    swap
+    concat
+    pushbytes 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    retsub
+
+__puya_arc4_router___switch_case_default@3:
+    b __puya_arc4_router___after_if_else@9
+
+__puya_arc4_router___bare_routing@5:
+    // tests/approvals/abi-decorators.algo.ts:50
+    // export class SubAbi2 extends BaseAbi {
+    txn OnCompletion
+    intc_0 // 0
+    swap
+    match __puya_arc4_router_____algots__.defaultCreate@6
+    b __puya_arc4_router___switch_case_default@7
+
+__puya_arc4_router_____algots__.defaultCreate@6:
+    // tests/approvals/abi-decorators.algo.ts:50
+    // export class SubAbi2 extends BaseAbi {
+    txn ApplicationID
+    intc_0 // 0
+    ==
+    assert // can only call when creating
+    callsub __algots__.defaultCreate
+    intc_1 // 1
+    retsub
+
+__puya_arc4_router___switch_case_default@7:
+
+__puya_arc4_router___after_if_else@9:
+    // tests/approvals/abi-decorators.algo.ts:50
+    // export class SubAbi2 extends BaseAbi {
+    intc_0 // 0
+    retsub
+
+
+// tests/approvals/abi-decorators.algo.ts::SubAbi2.someMethod() -> bytes:
+someMethod:
+    // tests/approvals/abi-decorators.algo.ts:52
+    // someMethod(): string {
+    proto 0 1
+    // tests/approvals/abi-decorators.algo.ts:53
+    // return 'sub-abi-2:noop'
+    pushbytes "sub-abi-2:noop"
+    retsub
+
+
+// tests/approvals/abi-decorators.algo.ts::SubAbi2.__algots__.defaultCreate() -> void:
+__algots__.defaultCreate:
+    // tests/approvals/abi-decorators.algo.ts:50
+    // export class SubAbi2 extends BaseAbi {
+    proto 0 0
+    retsub

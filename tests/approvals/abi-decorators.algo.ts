@@ -32,3 +32,24 @@ export class OverloadedMethods extends Contract {
     return x * y
   }
 }
+
+export class BaseAbi extends Contract {
+  @abimethod({ allowActions: 'OptIn' })
+  someMethod() {
+    return 'base-abi:optin'
+  }
+}
+
+export class SubAbi extends BaseAbi {
+  @abimethod({ allowActions: 'OptIn' })
+  someMethod() {
+    return 'sub-abi:optin'
+  }
+}
+
+export class SubAbi2 extends BaseAbi {
+  // Implicitly overrides base with NoOp
+  someMethod(): string {
+    return 'sub-abi-2:noop'
+  }
+}
