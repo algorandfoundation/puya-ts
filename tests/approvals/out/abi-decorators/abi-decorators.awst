@@ -72,3 +72,79 @@ contract OverloadedMethods
   }
   
 }
+contract BaseAbi
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  someMethod(): string
+  {
+    return "base-abi:optin"
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+contract SubAbi
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  someMethod(): string
+  {
+    return "sub-abi:optin"
+  }
+  
+  BaseAbi::someMethod(): string
+  {
+    return "base-abi:optin"
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+contract SubAbi2
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  someMethod(): string
+  {
+    return "sub-abi-2:noop"
+  }
+  
+  BaseAbi::someMethod(): string
+  {
+    return "base-abi:optin"
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

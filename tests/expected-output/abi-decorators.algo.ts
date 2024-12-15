@@ -21,7 +21,7 @@ export default class AbiDecorators extends Contract {
 }
 
 export class OverloadedMethods extends Contract {
-  // @expect-error User defined functions must hav exactly 1 call signature
+  // @expect-error User defined functions must have exactly 1 call signature
   public overloaded(x: uint64): uint64
   public overloaded(x: uint64, y: uint64): uint64
   public overloaded(x: uint64, y?: uint64): uint64 {

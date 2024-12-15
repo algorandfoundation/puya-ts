@@ -1,0 +1,98 @@
+#pragma version 10
+
+tests/approvals/abi-decorators.algo.ts::BaseAbi.approvalProgram:
+    intcblock 0 1
+    callsub __puya_arc4_router__
+    return
+
+
+// tests/approvals/abi-decorators.algo.ts::BaseAbi.__puya_arc4_router__() -> uint64:
+__puya_arc4_router__:
+    // tests/approvals/abi-decorators.algo.ts:36
+    // export class BaseAbi extends Contract {
+    proto 0 1
+    txn NumAppArgs
+    intc_0 // 0
+    !=
+    bz __puya_arc4_router___bare_routing@5
+    txna ApplicationArgs 0
+    pushbytes 0x1e29ffff // method "someMethod()string"
+    swap
+    match __puya_arc4_router___someMethod_route@2
+    b __puya_arc4_router___switch_case_default@3
+
+__puya_arc4_router___someMethod_route@2:
+    // tests/approvals/abi-decorators.algo.ts:37
+    // @abimethod({ allowActions: 'OptIn' })
+    txn OnCompletion
+    intc_1 // OptIn
+    ==
+    assert // OnCompletion is not OptIn
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    callsub someMethod
+    dup
+    len
+    itob
+    extract 6 2
+    swap
+    concat
+    pushbytes 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    retsub
+
+__puya_arc4_router___switch_case_default@3:
+    b __puya_arc4_router___after_if_else@9
+
+__puya_arc4_router___bare_routing@5:
+    // tests/approvals/abi-decorators.algo.ts:36
+    // export class BaseAbi extends Contract {
+    txn OnCompletion
+    intc_0 // 0
+    swap
+    match __puya_arc4_router_____algots__.defaultCreate@6
+    b __puya_arc4_router___switch_case_default@7
+
+__puya_arc4_router_____algots__.defaultCreate@6:
+    // tests/approvals/abi-decorators.algo.ts:36
+    // export class BaseAbi extends Contract {
+    txn ApplicationID
+    intc_0 // 0
+    ==
+    assert // can only call when creating
+    callsub __algots__.defaultCreate
+    intc_1 // 1
+    retsub
+
+__puya_arc4_router___switch_case_default@7:
+
+__puya_arc4_router___after_if_else@9:
+    // tests/approvals/abi-decorators.algo.ts:36
+    // export class BaseAbi extends Contract {
+    intc_0 // 0
+    retsub
+
+
+// tests/approvals/abi-decorators.algo.ts::BaseAbi.someMethod() -> bytes:
+someMethod:
+    // tests/approvals/abi-decorators.algo.ts:37-38
+    // @abimethod({ allowActions: 'OptIn' })
+    // someMethod() {
+    proto 0 1
+    // tests/approvals/abi-decorators.algo.ts:39
+    // return 'base-abi:optin'
+    pushbytes "base-abi:optin"
+    retsub
+
+
+// tests/approvals/abi-decorators.algo.ts::BaseAbi.__algots__.defaultCreate() -> void:
+__algots__.defaultCreate:
+    // tests/approvals/abi-decorators.algo.ts:36
+    // export class BaseAbi extends Contract {
+    proto 0 0
+    retsub
