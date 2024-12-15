@@ -20,3 +20,15 @@ export default class AbiDecorators extends Contract {
     return a * b + c
   }
 }
+
+export class OverloadedMethods extends Contract {
+  @abimethod({ name: 'doThing' })
+  doThingOne(x: uint64): uint64 {
+    return x
+  }
+
+  @abimethod({ name: 'doThing' })
+  doThingTwo(x: uint64, y: uint64): uint64 {
+    return x * y
+  }
+}

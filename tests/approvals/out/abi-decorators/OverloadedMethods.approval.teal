@@ -1,0 +1,143 @@
+#pragma version 10
+
+tests/approvals/abi-decorators.algo.ts::OverloadedMethods.approvalProgram:
+    intcblock 0 1
+    bytecblock 0x151f7c75
+    callsub __puya_arc4_router__
+    return
+
+
+// tests/approvals/abi-decorators.algo.ts::OverloadedMethods.__puya_arc4_router__() -> uint64:
+__puya_arc4_router__:
+    // tests/approvals/abi-decorators.algo.ts:24
+    // export class OverloadedMethods extends Contract {
+    proto 0 1
+    txn NumAppArgs
+    intc_0 // 0
+    !=
+    bz __puya_arc4_router___bare_routing@6
+    txna ApplicationArgs 0
+    pushbytes 0x7920dd57 // method "doThing(uint64)uint64"
+    pushbytes 0x1cefbc5a // method "doThing(uint64,uint64)uint64"
+    uncover 2
+    match __puya_arc4_router___doThing_route@2 __puya_arc4_router___doThing_route@3
+    b __puya_arc4_router___switch_case_default@4
+
+__puya_arc4_router___doThing_route@2:
+    // tests/approvals/abi-decorators.algo.ts:25
+    // @abimethod({ name: 'doThing' })
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    // tests/approvals/abi-decorators.algo.ts:24
+    // export class OverloadedMethods extends Contract {
+    txna ApplicationArgs 1
+    btoi
+    // tests/approvals/abi-decorators.algo.ts:25
+    // @abimethod({ name: 'doThing' })
+    callsub doThingOne
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    retsub
+
+__puya_arc4_router___doThing_route@3:
+    // tests/approvals/abi-decorators.algo.ts:30
+    // @abimethod({ name: 'doThing' })
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    // tests/approvals/abi-decorators.algo.ts:24
+    // export class OverloadedMethods extends Contract {
+    txna ApplicationArgs 1
+    btoi
+    txna ApplicationArgs 2
+    btoi
+    // tests/approvals/abi-decorators.algo.ts:30
+    // @abimethod({ name: 'doThing' })
+    callsub doThingTwo
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    retsub
+
+__puya_arc4_router___switch_case_default@4:
+    b __puya_arc4_router___after_if_else@10
+
+__puya_arc4_router___bare_routing@6:
+    // tests/approvals/abi-decorators.algo.ts:24
+    // export class OverloadedMethods extends Contract {
+    txn OnCompletion
+    intc_0 // 0
+    swap
+    match __puya_arc4_router_____algots__.defaultCreate@7
+    b __puya_arc4_router___switch_case_default@8
+
+__puya_arc4_router_____algots__.defaultCreate@7:
+    // tests/approvals/abi-decorators.algo.ts:24
+    // export class OverloadedMethods extends Contract {
+    txn ApplicationID
+    intc_0 // 0
+    ==
+    assert // can only call when creating
+    callsub __algots__.defaultCreate
+    intc_1 // 1
+    retsub
+
+__puya_arc4_router___switch_case_default@8:
+
+__puya_arc4_router___after_if_else@10:
+    // tests/approvals/abi-decorators.algo.ts:24
+    // export class OverloadedMethods extends Contract {
+    intc_0 // 0
+    retsub
+
+
+// tests/approvals/abi-decorators.algo.ts::OverloadedMethods.doThingOne(x: uint64) -> uint64:
+doThingOne:
+    // tests/approvals/abi-decorators.algo.ts:25-26
+    // @abimethod({ name: 'doThing' })
+    // doThingOne(x: uint64): uint64 {
+    proto 1 1
+    // tests/approvals/abi-decorators.algo.ts:27
+    // return x
+    frame_dig -1
+    retsub
+
+
+// tests/approvals/abi-decorators.algo.ts::OverloadedMethods.doThingTwo(x: uint64, y: uint64) -> uint64:
+doThingTwo:
+    // tests/approvals/abi-decorators.algo.ts:30-31
+    // @abimethod({ name: 'doThing' })
+    // doThingTwo(x: uint64, y: uint64): uint64 {
+    proto 2 1
+    // tests/approvals/abi-decorators.algo.ts:32
+    // return x * y
+    frame_dig -2
+    frame_dig -1
+    *
+    retsub
+
+
+// tests/approvals/abi-decorators.algo.ts::OverloadedMethods.__algots__.defaultCreate() -> void:
+__algots__.defaultCreate:
+    // tests/approvals/abi-decorators.algo.ts:24
+    // export class OverloadedMethods extends Contract {
+    proto 0 0
+    retsub
