@@ -12,7 +12,6 @@ export const uint8ArrayToBigInt = (v: Uint8Array): bigint => {
 
 export const hexToUint8Array = (value: string): Uint8Array => {
   if (value.length % 2 !== 0) {
-    // TODO: Verify AVM behaviour is to fail
     throw new AvmError('Hex string must have even number of characters')
   }
   return Uint8Array.from(Buffer.from(value, 'hex'))

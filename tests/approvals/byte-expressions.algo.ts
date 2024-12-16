@@ -1,5 +1,5 @@
 import type { biguint, uint64 } from '@algorandfoundation/algorand-typescript'
-import { assert, BaseContract, BigUint, Bytes, op, Uint64 } from '@algorandfoundation/algorand-typescript'
+import { assert, BigUint, Bytes, Contract, op, Uint64 } from '@algorandfoundation/algorand-typescript'
 
 function test(a: uint64, b: biguint, c: string) {
   assert(Bytes().length === 0, 'Empty bytes has length of 0')
@@ -12,8 +12,8 @@ function test(a: uint64, b: biguint, c: string) {
   assert(Bytes([1, 2, 3, 4]) === Bytes.fromHex('01020304'))
 }
 
-class DemoContract extends BaseContract {
-  public approvalProgram() {
+class DemoContract extends Contract {
+  public test() {
     test(1, 50n, 'things')
     return true
   }
