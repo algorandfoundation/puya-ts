@@ -279,7 +279,6 @@ function compilePath(path: string, expect: ExpectStatic, options: { outputByteco
     }
   }
 
-  //TODO: check log context for errors
   return {
     appSpecs,
     approvalBinaries,

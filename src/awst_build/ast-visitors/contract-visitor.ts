@@ -154,7 +154,6 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
     const sourceLocation = this.sourceLocation(node)
     codeInvariant(!node.questionToken, 'Optional properties are not supported', sourceLocation)
     codeInvariant(!node.exclamationToken, 'Non-null assertion operators on properties are not supported', sourceLocation)
-    // TODO: Check modifiers?
 
     const propertyName = this.textVisitor.accept(node.name)
     codeInvariant(node.initializer, 'Properties must have an initializer', sourceLocation)
