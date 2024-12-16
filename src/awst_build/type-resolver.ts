@@ -13,13 +13,10 @@ import {
   baseContractType,
   BigIntLiteralPType,
   bigIntPType,
-  BooleanFunction,
   boolPType,
-  ClassMethodDecoratorContext,
   ClearStateProgram,
   ContractClassPType,
   FunctionPType,
-  GeneratorType,
   logicSigBaseType,
   LogicSigPType,
   NamespacePType,
@@ -28,9 +25,7 @@ import {
   numberPType,
   NumericLiteralPType,
   ObjectPType,
-  promisePType,
   StorageProxyPType,
-  StringFunction,
   stringPType,
   TuplePType,
   TypeParameterType,
@@ -171,8 +166,6 @@ export class TypeResolver {
       return bigIntPType
     }
     if (isTupleReference(tsType)) {
-      //codeInvariant(tsType.readonly, 'Tuple types should be declared as readonly', sourceLocation)
-      codeInvariant(tsType.target.minLength, 'Tuple types cannot have a zero length', sourceLocation)
       codeInvariant(tsType.target.fixedLength, 'Tuple types should have a fixed length', sourceLocation)
       codeInvariant(tsType.typeArguments, 'Tuple items must have types', sourceLocation)
 
@@ -181,18 +174,11 @@ export class TypeResolver {
       })
     }
     if (isInstantiationExpression(tsType)) {
-      // TODO: We have generic type args available here but maybe they're not required
       return this.resolve(tsType.node.expression, sourceLocation)
     }
 
     const typeName = this.getTypeName(tsType, sourceLocation)
 
-    // TODO: These should be resolved from the typeRegistry, but it needs to happen before checking call signatures below
-    if (typeName.fullName === StringFunction.fullName) return StringFunction
-    if (typeName.fullName === BooleanFunction.fullName) return BooleanFunction
-    if (typeName.fullName === ClassMethodDecoratorContext.fullName) return ClassMethodDecoratorContext
-    if (typeName.fullName === promisePType.fullName) return promisePType
-    if (typeName.fullName === GeneratorType.fullName) return GeneratorType
     if (tsType.flags === ts.TypeFlags.TypeParameter) {
       return new TypeParameterType(typeName)
     }

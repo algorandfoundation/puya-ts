@@ -729,10 +729,24 @@ export const undefinedPType = new UnsupportedType({
   module: 'lib.d.ts',
   fullName: 'undefined',
 })
-export const promisePType = new UnsupportedType({
+export const PromiseGeneric = new GenericPType({
   name: 'Promise',
   module: 'typescript/lib/lib.es5.d.ts',
+  parameterise(ptypes: PType[]) {
+    codeInvariant(ptypes.length === 1, 'Promise expects exactly 1 generic parameter')
+    return new PromiseType({ resolveType: ptypes[0] })
+  },
 })
+export class PromiseType extends UnsupportedType {
+  readonly resolveType: PType
+  constructor({ resolveType }: { resolveType: PType }) {
+    super({
+      name: 'Promise',
+      module: 'typescript/lib/lib.es5.d.ts',
+    })
+    this.resolveType = resolveType
+  }
+}
 export const anyPType = new AnyPType()
 
 export const boolPType = new InstanceType({
@@ -1148,10 +1162,35 @@ export class IterableIteratorType extends TransientType {
   }
 }
 
-export const GeneratorType = new UnsupportedType({
+export const GeneratorGeneric = new GenericPType({
   name: 'Generator',
   module: 'typescript/lib/lib.es2015.generator.d.ts',
+  parameterise(ptypes) {
+    codeInvariant(ptypes.length === 3, 'Generator type expects exactly 3 type params')
+
+    const [itemType, returnType, nextType] = ptypes
+    return new GeneratorType({
+      itemType,
+      nextType,
+      returnType,
+    })
+  },
 })
+
+export class GeneratorType extends UnsupportedType {
+  readonly itemType: PType
+  readonly returnType: PType
+  readonly nextType: PType
+  constructor({ itemType, returnType, nextType }: { itemType: PType; returnType: PType; nextType: PType }) {
+    super({
+      name: 'Generator',
+      module: 'typescript/lib/lib.es2015.generator.d.ts',
+    })
+    this.itemType = itemType
+    this.returnType = returnType
+    this.nextType = nextType
+  }
+}
 
 export const paymentItxnFn = new TransactionFunctionType({
   name: 'payment',
