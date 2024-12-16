@@ -67,6 +67,7 @@ import { InnerTransactionExpressionBuilder } from '../eb/transactions/inner-tran
 import { TupleExpressionBuilder } from '../eb/tuple-expression-builder'
 import { Uint64EnumMemberExpressionBuilder, Uint64EnumTypeBuilder } from '../eb/uint64-enum-type-builder'
 import { UInt64ExpressionBuilder, UInt64FunctionBuilder } from '../eb/uint64-expression-builder'
+import { UnresolvableExpressionBuilder } from '../eb/unresolvable-expression-builder'
 import { UrangeFunctionBuilder } from '../eb/urange-function'
 import { VoidExpressionBuilder } from '../eb/void-expression-builder'
 import { OP_METADATA } from '../op-metadata'
@@ -161,12 +162,15 @@ import {
   boxRefType,
   BytesFunction,
   bytesPType,
+  ClassMethodDecoratorContext,
   compileFunctionType,
   ContractClassPType,
   contractOptionsDecorator,
   ensureBudgetFunction,
   errFunction,
   FunctionPType,
+  GeneratorGeneric,
+  GeneratorType,
   GlobalStateFunction,
   GlobalStateGeneric,
   GlobalStateType,
@@ -197,6 +201,8 @@ import {
   paymentItxnParamsType,
   paymentItxnType,
   PaymentTxnFunction,
+  PromiseGeneric,
+  PromiseType,
   StringFunction,
   stringPType,
   submitGroupItxnFunction,
@@ -233,6 +239,11 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: ArrayPType, instanceEb: NativeArrayExpressionBuilder })
   typeRegistry.register({ ptype: TuplePType, instanceEb: TupleExpressionBuilder })
   typeRegistry.register({ ptype: ObjectPType, instanceEb: ObjectExpressionBuilder })
+
+  // Unresolvable
+  typeRegistry.registerGeneric({ ptype: GeneratorType, generic: GeneratorGeneric, instanceEb: UnresolvableExpressionBuilder })
+  typeRegistry.registerGeneric({ ptype: PromiseType, generic: PromiseGeneric, instanceEb: UnresolvableExpressionBuilder })
+  typeRegistry.register({ ptype: ClassMethodDecoratorContext, instanceEb: UnresolvableExpressionBuilder })
 
   // Lib functions
   typeRegistry.register({ ptype: logFunction, singletonEb: LogFunctionBuilder })
