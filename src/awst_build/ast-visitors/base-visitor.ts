@@ -659,7 +659,6 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
             isPublic = false
             continue
           case ts.SyntaxKind.AbstractKeyword:
-            // TODO: Do we need to do anything here?
             continue
           case ts.SyntaxKind.AccessorKeyword:
             logger.error(this.sourceLocation(m), 'properties are not supported')
