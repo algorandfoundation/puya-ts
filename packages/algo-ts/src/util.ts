@@ -1,7 +1,25 @@
+import { ARC4Encoded } from './arc4'
 import { ctxMgr } from './execution-context'
-import { AssertError, AvmError } from './impl/errors'
-import { toBytes } from './impl/primitives'
-import { biguint, BigUintCompat, BytesBacked, BytesCompat, StringCompat, uint64, Uint64Compat } from './primitives'
+import { AssertError, AvmError, internalError } from './impl/errors'
+import { nameOfType } from './impl/name-of-type'
+import { AlgoTsPrimitiveCls, BigUintCls, BytesCls, Uint64Cls } from './impl/primitives'
+import { biguint, BigUintCompat, bytes, BytesBacked, BytesCompat, StringCompat, uint64, Uint64Compat } from './primitives'
+
+export const toBytes = (val: unknown): bytes => {
+  if (val instanceof AlgoTsPrimitiveCls) return val.toBytes().asAlgoTs()
+  if (val instanceof ARC4Encoded) return val.bytes
+
+  switch (typeof val) {
+    case 'string':
+      return BytesCls.fromCompat(val).asAlgoTs()
+    case 'bigint':
+      return BigUintCls.fromCompat(val).toBytes().asAlgoTs()
+    case 'number':
+      return Uint64Cls.fromCompat(val).toBytes().asAlgoTs()
+    default:
+      internalError(`Unsupported arg type ${nameOfType(val)}`)
+  }
+}
 
 export function log(...args: Array<Uint64Compat | BytesCompat | BigUintCompat | StringCompat | BytesBacked>): void {
   ctxMgr.instance.log(args.map(toBytes).reduce((left, right) => left.concat(right)))

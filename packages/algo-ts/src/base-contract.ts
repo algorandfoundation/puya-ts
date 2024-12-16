@@ -71,6 +71,16 @@ type ContractOptions = {
  * The contract decorator can be used to specify additional configuration options for a smart contract
  * @param options An object containing the configuration options
  */
+export const ContractOptionsSymbol = Symbol('ContractOptions')
 export function contract(options: ContractOptions) {
-  return <T extends ConstructorFor<Contract>>(contract: T) => contract
+  return <T extends ConstructorFor<Contract>>(contract: T, ctx: ClassDecoratorContext) => {
+    ctx.addInitializer(function () {
+      Object.defineProperty(this, ContractOptionsSymbol, {
+        value: options,
+        writable: false,
+        enumerable: false,
+      })
+    })
+    return contract
+  }
 }
