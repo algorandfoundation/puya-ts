@@ -6,7 +6,6 @@ import { buildCompileOptions } from '../src/compile-options'
 import { isErrorOrCritical, LoggingContext, LogLevel } from '../src/logger'
 import { defaultPuyaOptions } from '../src/puya/options'
 import { invariant } from '../src/util'
-import { Environment } from './constants'
 
 describe('Approvals', async () => {
   await rimraf('tests/approvals/out')
@@ -56,12 +55,6 @@ describe('Approvals', async () => {
   })
 
   it('There should be no differences to committed changes', () => {
-    if (Environment.IsCi) {
-      // Run git add to force line ending changes
-      sync('git', ['add', '.'], {
-        stdio: 'inherit',
-      })
-    }
     const result = sync('git', ['status', '--porcelain'], {
       stdio: 'pipe',
     })
