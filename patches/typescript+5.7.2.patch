@@ -1,20 +1,20 @@
 diff --git a/node_modules/typescript/lib/typescript.d.ts b/node_modules/typescript/lib/typescript.d.ts
-index 963c573..299a8a4 100644
+index 6780dd1..8700e72 100644
 --- a/node_modules/typescript/lib/typescript.d.ts
 +++ b/node_modules/typescript/lib/typescript.d.ts
-@@ -6116,6 +6116,7 @@ declare namespace ts {
+@@ -6159,6 +6159,7 @@ declare namespace ts {
          getIndexInfoOfType(type: Type, kind: IndexKind): IndexInfo | undefined;
          getIndexInfosOfType(type: Type): readonly IndexInfo[];
-         getIndexInfosOfIndexSymbol: (indexSymbol: Symbol) => IndexInfo[];
+         getIndexInfosOfIndexSymbol: (indexSymbol: Symbol, siblingSymbols?: Symbol[] | undefined) => IndexInfo[];
 +        getTypeArgumentsForResolvedSignature(signature: Signature): readonly Type[] | undefined;
          getSignaturesOfType(type: Type, kind: SignatureKind): readonly Signature[];
          getIndexTypeOfType(type: Type, kind: IndexKind): Type | undefined;
          getBaseTypes(type: InterfaceType): BaseType[];
 diff --git a/node_modules/typescript/lib/typescript.js b/node_modules/typescript/lib/typescript.js
-index 90f3266..9daa319 100644
+index 33387ea..a1f35b3 100644
 --- a/node_modules/typescript/lib/typescript.js
 +++ b/node_modules/typescript/lib/typescript.js
-@@ -50171,6 +50171,7 @@ function createTypeChecker(host) {
+@@ -50655,6 +50655,7 @@ function createTypeChecker(host) {
      getGlobalDiagnostics,
      getRecursionIdentity,
      getUnmatchedProperties,
@@ -22,13 +22,13 @@ index 90f3266..9daa319 100644
      getTypeOfSymbolAtLocation: (symbol, locationIn) => {
        const location = getParseTreeNode(locationIn);
        return location ? getTypeOfSymbolAtLocation(symbol, location) : errorType;
-@@ -92895,6 +92896,9 @@ function createTypeChecker(host) {
-     Debug.assert(specifier && nodeIsSynthesized(specifier) && specifier.text === "tslib", `Expected sourceFile.imports[0] to be the synthesized tslib import`);
-     return specifier;
+@@ -71776,6 +71777,9 @@ function createTypeChecker(host) {
+       }
+     }
    }
 +  function getTypeArgumentsForResolvedSignature(signature) {
 +    return signature.mapper && instantiateTypes((signature.target ?? signature).typeParameters ?? [], signature.mapper);
 +  }
- }
- function isNotAccessor(declaration) {
-   return !isAccessor(declaration);
+   function getUnmatchedProperty(source, target, requireOptionalProperties, matchDiscriminantProperties) {
+     return firstOrUndefinedIterator(getUnmatchedProperties(source, target, requireOptionalProperties, matchDiscriminantProperties));
+   }
