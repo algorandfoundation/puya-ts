@@ -1,20 +1,100 @@
 #pragma version 10
 
 tests/approvals/byte-expressions.algo.ts::DemoContract.approvalProgram:
-    // tests/approvals/byte-expressions.algo.ts:17
-    // test(1, 50n, 'things')
-    pushint 1 // 1
-    pushbytes 0x32
-    pushbytes "things"
-    callsub test
-    // tests/approvals/byte-expressions.algo.ts:18
-    // return true
-    pushint 1 // 1
+    intcblock 0 1
+    callsub __puya_arc4_router__
     return
 
 
-// tests/approvals/byte-expressions.algo.ts::test(a: uint64, b: bytes, c: bytes) -> void:
+// tests/approvals/byte-expressions.algo.ts::DemoContract.__puya_arc4_router__() -> uint64:
+__puya_arc4_router__:
+    // tests/approvals/byte-expressions.algo.ts:15
+    // class DemoContract extends Contract {
+    proto 0 1
+    txn NumAppArgs
+    intc_0 // 0
+    !=
+    bz __puya_arc4_router___bare_routing@5
+    txna ApplicationArgs 0
+    pushbytes 0xf59e3cc4 // method "test()bool"
+    swap
+    match __puya_arc4_router___test_route@2
+    b __puya_arc4_router___switch_case_default@3
+
+__puya_arc4_router___test_route@2:
+    // tests/approvals/byte-expressions.algo.ts:16
+    // public test() {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    callsub test
+    pushbytes 0x00
+    intc_0 // 0
+    uncover 2
+    setbit
+    pushbytes 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    retsub
+
+__puya_arc4_router___switch_case_default@3:
+    b __puya_arc4_router___after_if_else@9
+
+__puya_arc4_router___bare_routing@5:
+    // tests/approvals/byte-expressions.algo.ts:15
+    // class DemoContract extends Contract {
+    txn OnCompletion
+    intc_0 // 0
+    swap
+    match __puya_arc4_router_____algots__.defaultCreate@6
+    b __puya_arc4_router___switch_case_default@7
+
+__puya_arc4_router_____algots__.defaultCreate@6:
+    // tests/approvals/byte-expressions.algo.ts:15
+    // class DemoContract extends Contract {
+    txn ApplicationID
+    intc_0 // 0
+    ==
+    assert // can only call when creating
+    callsub __algots__.defaultCreate
+    intc_1 // 1
+    retsub
+
+__puya_arc4_router___switch_case_default@7:
+
+__puya_arc4_router___after_if_else@9:
+    // tests/approvals/byte-expressions.algo.ts:15
+    // class DemoContract extends Contract {
+    intc_0 // 0
+    retsub
+
+
+// tests/approvals/byte-expressions.algo.ts::DemoContract.test() -> uint64:
 test:
+    // tests/approvals/byte-expressions.algo.ts:16
+    // public test() {
+    proto 0 1
+    // tests/approvals/byte-expressions.algo.ts:17
+    // test(1, 50n, 'things')
+    intc_1 // 1
+    pushbytes 0x32
+    pushbytes "things"
+    callsub tests/approvals/byte-expressions.algo.ts::test
+    // tests/approvals/byte-expressions.algo.ts:18
+    // return true
+    intc_1 // 1
+    retsub
+
+
+// tests/approvals/byte-expressions.algo.ts::test(a: uint64, b: bytes, c: bytes) -> void:
+tests/approvals/byte-expressions.algo.ts::test:
     // tests/approvals/byte-expressions.algo.ts:4
     // function test(a: uint64, b: biguint, c: string) {
     proto 3 0
@@ -22,7 +102,7 @@ test:
     // assert(Bytes().length === 0, 'Empty bytes has length of 0')
     pushbytes 0x
     len
-    pushint 0 // 0
+    intc_0 // 0
     ==
     assert // Empty bytes has length of 0
     // tests/approvals/byte-expressions.algo.ts:6
@@ -69,4 +149,12 @@ test:
     dup
     ==
     assert
+    retsub
+
+
+// tests/approvals/byte-expressions.algo.ts::DemoContract.__algots__.defaultCreate() -> void:
+__algots__.defaultCreate:
+    // tests/approvals/byte-expressions.algo.ts:15
+    // class DemoContract extends Contract {
+    proto 0 0
     retsub
