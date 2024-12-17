@@ -40,6 +40,10 @@ describe('ArrayUtil', () => {
       [[1, 2, 3], [-3], [1, 2, 3]],
       [[1, 2, 3], [4], []],
       [[1, 2, 3], [-4], [1, 2, 3]],
+    ])('%s.at(%d) results in %s', (theArray, [start, stop], theResult) => {
+      expect(arrayUtil.arraySlice(theArray, start, stop)).toEqual(theResult)
+    })
+    it.each([
       [new Uint8Array([1, 2, 3]), [], new Uint8Array([1, 2, 3])],
       [new Uint8Array([1, 2, 3]), [0], new Uint8Array([1, 2, 3])],
       [new Uint8Array([1, 2, 3]), [1], new Uint8Array([2, 3])],

@@ -201,11 +201,14 @@ import {
   paymentItxnParamsType,
   paymentItxnType,
   PaymentTxnFunction,
+  PolytypeClassMethodHelper,
   PromiseGeneric,
   PromiseType,
   StringFunction,
   stringPType,
   submitGroupItxnFunction,
+  SuperPrototypeSelector,
+  SuperPrototypeSelectorGeneric,
   TemplateVarFunction,
   TransactionFunction,
   transactionTypeType,
@@ -244,6 +247,12 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.registerGeneric({ ptype: GeneratorType, generic: GeneratorGeneric, instanceEb: UnresolvableExpressionBuilder })
   typeRegistry.registerGeneric({ ptype: PromiseType, generic: PromiseGeneric, instanceEb: UnresolvableExpressionBuilder })
   typeRegistry.register({ ptype: ClassMethodDecoratorContext, instanceEb: UnresolvableExpressionBuilder })
+  typeRegistry.registerGeneric({
+    ptype: SuperPrototypeSelector,
+    generic: SuperPrototypeSelectorGeneric,
+    instanceEb: UnresolvableExpressionBuilder,
+  })
+  typeRegistry.register({ ptype: PolytypeClassMethodHelper, instanceEb: UnresolvableExpressionBuilder })
 
   // Lib functions
   typeRegistry.register({ ptype: logFunction, singletonEb: LogFunctionBuilder })

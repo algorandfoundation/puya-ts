@@ -1,5 +1,5 @@
 main tests/approvals/super-calls.algo.ts::SubSubSubContract.approvalProgram:
-    block@0: // L37
+    block@0: // L41
         let reinterpret_bool%0#0: bool = (txn ApplicationID)
         goto reinterpret_bool%0#0 ? block@2 : block@1
     block@1: // if_body_L1
@@ -21,13 +21,13 @@ main tests/approvals/super-calls.algo.ts::SubSubSubContract.approvalProgram:
         return 1u
 
 subroutine tests/approvals/super-calls.algo.ts::SubSubSubContract.constructor() -> void:
-    block@0: // L33
+    block@0: // L37
         tests/approvals/super-calls.algo.ts::SubContract.constructor()
         (app_global_put "g3" 3u)
         return 
 
 subroutine tests/approvals/super-calls.algo.ts::SubContract.constructor() -> void:
-    block@0: // L13
+    block@0: // L17
         tests/approvals/super-calls.algo.ts::SuperContract.constructor()
         (app_global_put "g2" 2u)
         return 

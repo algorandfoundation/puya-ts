@@ -4,6 +4,7 @@ import { Constants } from '../constants'
 import { CodeError, InternalError } from '../errors'
 import { logger } from '../logger'
 import { codeInvariant, hasFlags, intersectsFlags, invariant, isIn, normalisePath } from '../util'
+import { getNodeName } from '../visitor/syntax-names'
 import type { AppStorageType, PType } from './ptypes'
 import {
   anyPType,
@@ -15,8 +16,11 @@ import {
   bigIntPType,
   boolPType,
   ClearStateProgram,
+  ClusteredContractClassType,
+  ClusteredPrototype,
   ContractClassPType,
   FunctionPType,
+  IntersectionPType,
   logicSigBaseType,
   LogicSigPType,
   NamespacePType,
@@ -27,6 +31,7 @@ import {
   ObjectPType,
   StorageProxyPType,
   stringPType,
+  SuperPrototypeSelector,
   TuplePType,
   TypeParameterType,
   undefinedPType,
@@ -65,7 +70,7 @@ export class TypeResolver {
     /*
       The method getTypeArgumentsForResolvedSignature has not made it into typescript yet, but it has been
       proposed here: https://github.com/microsoft/TypeScript/issues/59637 and added to the backlog. For now
-      the method has been patched into the TypeScript 5.6.2 using patch-package
+      the method has been patched into the TypeScript 5.7.2 using patch-package
      */
     const tps = this.checker.getTypeArgumentsForResolvedSignature(sig)
     return tps?.map((t) => this.resolveType(t, sourceLocation)) ?? []
@@ -94,8 +99,11 @@ export class TypeResolver {
     }
     const type = this.checker.getTypeAtLocation(node)
     if (node.kind === ts.SyntaxKind.ThisKeyword || node.kind === ts.SyntaxKind.SuperKeyword) {
-      const [declaration] = type.symbol.declarations ?? []
-      return this.resolve(declaration, sourceLocation)
+      /**
+       * This shouldn't be used in any code paths as `visitThisKeyword` and `visitSuperKeyword` have their own way to
+       * determine the type.
+       */
+      logger.debug(sourceLocation, `Attempting to reflect type of ${getNodeName(node)} node which is known to be unreliable`)
     }
     if (ts.isConstructorDeclaration(node)) {
       const signature = this.checker.getSignatureFromDeclaration(node)
@@ -119,11 +127,23 @@ export class TypeResolver {
   }
 
   resolveType(tsType: ts.Type, sourceLocation: SourceLocation): PType {
-    if (isIntersectionType(tsType)) {
+    if (tsType.symbol) {
+      const symbolType = this.checker.getTypeOfSymbol(tsType.symbol)
+      if (symbolType !== tsType && !tsType.isClass() && symbolType.isClass()) {
+        tsType = symbolType
+      }
+    }
+
+    intersect: if (isIntersectionType(tsType)) {
+      if (tsType.aliasSymbol) {
+        break intersect
+      }
       // Special handling of struct base types which are an intersection of `StructBase` and the generic `T` type
       const parts = tsType.types.map((t) => this.resolveType(t, sourceLocation))
-      if (parts.some((p) => p.fullName === arc4StructBaseType.fullName)) {
+      if (parts.some((p) => p.equals(arc4StructBaseType))) {
         return arc4StructBaseType
+      } else {
+        return IntersectionPType.fromTypes(parts)
       }
     }
     if (isUnionType(tsType)) {
@@ -178,6 +198,10 @@ export class TypeResolver {
     }
 
     const typeName = this.getTypeName(tsType, sourceLocation)
+
+    if (typeName.fullName === ClusteredPrototype.fullName) {
+      return this.resolveClusteredPrototype(tsType, sourceLocation)
+    }
 
     if (tsType.flags === ts.TypeFlags.TypeParameter) {
       return new TypeParameterType(typeName)
@@ -368,12 +392,33 @@ export class TypeResolver {
     })
   }
 
+  private resolveClusteredPrototype(tsType: ts.Type, sourceLocation: SourceLocation): PType {
+    invariant(isIntersectionType(tsType), 'Clustered prototypes must be an intersection type')
+    const baseContracts: ContractClassPType[] = []
+    for (const t of tsType.types.map((t) => this.resolveType(t, sourceLocation))) {
+      if (t instanceof ContractClassPType) {
+        baseContracts.push(t)
+      } else if (t instanceof SuperPrototypeSelector) {
+        // Ignore for now
+      } else {
+        throw new CodeError(
+          `Unexpected type: ${t}. Polytype can only be used to support multiple inheritance in contracts for now. All base types must extend the Contract or BaseContract class.}`,
+        )
+      }
+    }
+    return new ClusteredContractClassType({
+      methods: {},
+      baseTypes: baseContracts,
+      sourceLocation,
+    })
+  }
+
   private getTypeName(type: ts.Type, sourceLocation: SourceLocation): SymbolName {
     if (type.aliasSymbol) {
       const name = this.getSymbolFullName(type.aliasSymbol, sourceLocation)
-      // We only respect type aliases within the algo ts package, otherwise use the
+      // We only respect type aliases within certain modules, otherwise use the
       // unaliased symbol
-      if (name.module.startsWith(Constants.algoTsPackage)) return name
+      if (name.module.startsWith(Constants.algoTsPackage) || name.module === Constants.polytypeModuleName) return name
     }
     invariant(type.symbol, 'Type must have a symbol')
     return this.getSymbolFullName(type.symbol, sourceLocation)
