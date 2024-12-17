@@ -212,27 +212,19 @@ class AwstBuildContextImpl implements AwstBuildContext {
 
   getStorageDefinitionsForContract(contractType: ContractClassPType): AppStorageDefinition[] {
     const result = new Map<string, AppStorageDefinition>()
-    for (const baseType of contractType.baseTypes) {
-      for (const definition of this.getStorageDefinitionsForContract(baseType)) {
-        if (result.has(definition.memberName)) {
+    const seenContracts = new Set<string>()
+    for (const ct of [contractType, ...contractType.allBases()]) {
+      if (seenContracts.has(ct.fullName)) continue
+      seenContracts.add(ct.fullName)
+
+      for (const [memberName, declaration] of this.storageDeclarations.get(ct.fullName) ?? []) {
+        if (result.has(memberName)) {
           logger.error(
-            definition.sourceLocation,
-            `Redefinition of app storage member, original declared in ${result.get(definition.memberName)?.sourceLocation}`,
+            result.get(memberName)?.sourceLocation,
+            `Redefinition of app storage member, original declared in ${declaration.sourceLocation}`,
           )
         }
-        result.set(definition.memberName, definition)
-      }
-    }
-    const localDeclarations = this.storageDeclarations.get(contractType.fullName)
-    if (localDeclarations) {
-      for (const [member, declaration] of localDeclarations) {
-        if (result.has(member)) {
-          logger.error(
-            declaration.sourceLocation,
-            `Redefinition of app storage member, original declared in ${result.get(member)?.sourceLocation}`,
-          )
-        }
-        result.set(member, declaration.definition)
+        result.set(memberName, declaration.definition)
       }
     }
     return Array.from(result.values())

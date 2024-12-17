@@ -5,6 +5,7 @@ import * as awst from '../../awst/nodes'
 import { AwstBuildFailureError } from '../../errors'
 import { codeInvariant, invariant } from '../../util'
 import type { AwstBuildContext } from '../context/awst-build-context'
+import type { ContractClassPType } from '../ptypes'
 import { voidPType } from '../ptypes'
 import { ContractMethodBaseVisitor } from './contract-method-visitor'
 
@@ -17,8 +18,8 @@ export class ConstructorVisitor extends ContractMethodBaseVisitor {
   private readonly _result: awst.ContractMethod
   private _foundSuperCall = false
   private readonly _propertyInitializerStatements: awst.Statement[]
-  constructor(ctx: AwstBuildContext, node: ts.ConstructorDeclaration, contractInfo: ConstructorInfo) {
-    super(ctx, node)
+  constructor(ctx: AwstBuildContext, node: ts.ConstructorDeclaration, contractType: ContractClassPType, contractInfo: ConstructorInfo) {
+    super(ctx, node, contractType)
     this._propertyInitializerStatements = contractInfo.propertyInitializerStatements
     const sourceLocation = this.sourceLocation(node)
 
@@ -40,8 +41,13 @@ export class ConstructorVisitor extends ContractMethodBaseVisitor {
     return this._result
   }
 
-  public static buildConstructor(parentCtx: AwstBuildContext, node: ts.ConstructorDeclaration, constructorMethodInfo: ConstructorInfo) {
-    const result = new ConstructorVisitor(parentCtx.createChildContext(), node, constructorMethodInfo).result
+  public static buildConstructor(
+    parentCtx: AwstBuildContext,
+    node: ts.ConstructorDeclaration,
+    contractType: ContractClassPType,
+    constructorMethodInfo: ConstructorInfo,
+  ) {
+    const result = new ConstructorVisitor(parentCtx.createChildContext(), node, contractType, constructorMethodInfo).result
     invariant(result instanceof awst.ContractMethod, "result must be ContractMethod'")
     return result
   }

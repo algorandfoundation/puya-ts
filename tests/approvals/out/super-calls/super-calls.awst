@@ -17,6 +17,11 @@ contract SuperContract
     return True
   }
   
+  superMethod(): bool
+  {
+    return True
+  }
+  
   constructor(): void
   {
     void
@@ -27,8 +32,8 @@ contract SuperContract
 contract SubContract
 {
   globals {
-    ["g1"]: uint64
     ["g2"]: uint64
+    ["g1"]: uint64
   }
   approvalProgram(): bool
   {
@@ -57,6 +62,11 @@ contract SubContract
     return True
   }
   
+  SuperContract::superMethod(): bool
+  {
+    return True
+  }
+  
   SuperContract::constructor(): void
   {
     void
@@ -67,8 +77,8 @@ contract SubContract
 contract SubSubContract
 {
   globals {
-    ["g1"]: uint64
     ["g2"]: uint64
+    ["g1"]: uint64
   }
   approvalProgram(): bool
   {
@@ -104,6 +114,11 @@ contract SubSubContract
     return True
   }
   
+  SuperContract::superMethod(): bool
+  {
+    return True
+  }
+  
   SuperContract::constructor(): void
   {
     void
@@ -114,9 +129,9 @@ contract SubSubContract
 contract SubSubSubContract
 {
   globals {
-    ["g1"]: uint64
-    ["g2"]: uint64
     ["g3"]: uint64
+    ["g2"]: uint64
+    ["g1"]: uint64
   }
   approvalProgram(): bool
   {
@@ -132,6 +147,11 @@ contract SubSubSubContract
   clearProgram(): bool
   {
     return True
+  }
+  
+  subSubSubMethod(): bool
+  {
+    return super.superMethod()
   }
   
   constructor(): void
@@ -163,6 +183,11 @@ contract SubSubSubContract
   SuperContract::approvalProgram(): bool
   {
     assert(GlobalState["g1"] == 1)
+    return True
+  }
+  
+  SuperContract::superMethod(): bool
+  {
     return True
   }
   
