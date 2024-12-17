@@ -6,46 +6,45 @@ import type { SourceLocation } from '../../awst/source-location'
 import { Constants } from '../../constants'
 import { CodeError } from '../../errors'
 import { logger } from '../../logger'
-import { codeInvariant, isIn } from '../../util'
+import { codeInvariant, invariant, isIn } from '../../util'
 import { getArc4StructDef, getFunctionTypes, ptypeToArc4PType } from '../arc4-util'
 import type { AwstBuildContext } from '../context/awst-build-context'
 import type { NodeBuilder } from '../eb'
 import { ContractSuperBuilder, ContractThisBuilder } from '../eb/contract-builder'
 import { isValidLiteralForPType } from '../eb/util'
 import type { Arc4AbiDecoratorData, DecoratorData } from '../models/decorator-data'
-import type { FunctionPType } from '../ptypes'
-import { ContractClassPType, GlobalStateType } from '../ptypes'
+import type { ContractClassPType, FunctionPType } from '../ptypes'
+import { GlobalStateType } from '../ptypes'
 import { ARC4StructType } from '../ptypes/arc4-types'
 import { DecoratorVisitor } from './decorator-visitor'
 import { FunctionVisitor } from './function-visitor'
 
 export class ContractMethodBaseVisitor extends FunctionVisitor {
+  protected readonly _contractType: ContractClassPType
+  constructor(ctx: AwstBuildContext, node: ts.MethodDeclaration | ts.ConstructorDeclaration, contractType: ContractClassPType) {
+    super(ctx, node)
+    this._contractType = contractType
+  }
   visitSuperKeyword(node: ts.SuperExpression): NodeBuilder {
     const sourceLocation = this.sourceLocation(node)
-    const ptype = this.context.getPTypeForNode(node)
-    if (ptype instanceof ContractClassPType) {
-      return new ContractSuperBuilder(ptype, sourceLocation, this.context)
-    }
-    throw new CodeError(`'super' keyword is not valid outside of a contract type`, { sourceLocation })
+
+    // Only the polytype clustered class should have more than one base type, and it shouldn't have
+    // any user code with super calls
+    invariant(this._contractType.baseTypes.length === 1, 'Super keyword only valid if contract has a single base type')
+    return new ContractSuperBuilder(this._contractType.baseTypes[0], sourceLocation, this.context)
   }
 
   visitThisKeyword(node: ts.ThisExpression): NodeBuilder {
     const sourceLocation = this.sourceLocation(node)
-    const ptype = this.context.getPTypeForNode(node)
-    if (ptype instanceof ContractClassPType) {
-      return new ContractThisBuilder(ptype, sourceLocation, this.context)
-    }
-    throw new CodeError(`'this' keyword is not valid outside of a contract type`, { sourceLocation })
+    return new ContractThisBuilder(this._contractType, sourceLocation, this.context)
   }
 }
 
 export class ContractMethodVisitor extends ContractMethodBaseVisitor {
   private readonly _result: awst.ContractMethod
-  private readonly _contractType: ContractClassPType
 
   constructor(ctx: AwstBuildContext, node: ts.MethodDeclaration, contractType: ContractClassPType) {
-    super(ctx, node)
-    this._contractType = contractType
+    super(ctx, node, contractType)
     const sourceLocation = this.sourceLocation(node)
     const { args, body, documentation } = this.buildFunctionAwst(node)
     const cref = ContractReference.fromPType(this._contractType)

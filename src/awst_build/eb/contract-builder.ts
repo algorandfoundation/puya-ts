@@ -12,6 +12,7 @@ import type { PType } from '../ptypes'
 import {
   arc4BaseContractType,
   baseContractType,
+  ClusteredContractClassType,
   ContractClassPType,
   contractOptionsDecorator,
   numberPType,
@@ -21,7 +22,11 @@ import {
 
 import { instanceEb } from '../type-registry'
 
-import { BaseContractMethodExpressionBuilder, ContractMethodExpressionBuilder } from './free-subroutine-expression-builder'
+import {
+  BaseContractMethodExpressionBuilder,
+  ContractMethodExpressionBuilder,
+  ExplicitBaseContractMethodExpressionBuilder,
+} from './free-subroutine-expression-builder'
 import type { NodeBuilder } from './index'
 import { DecoratorDataBuilder, FunctionBuilder, InstanceBuilder } from './index'
 import { ArrayLiteralExpressionBuilder } from './literal/array-literal-expression-builder'
@@ -31,6 +36,9 @@ import { parseFunctionArgs } from './util/arg-parsing'
 import { requireAvmVersion } from './util/avm-version'
 import { VoidExpressionBuilder } from './void-expression-builder'
 
+/**
+ * Handles expressions using `this` in the context of a contract
+ */
 export class ContractThisBuilder extends InstanceBuilder<ContractClassPType> {
   resolve(): Expression {
     throw new CodeError('this keyword is not valid as a value', { sourceLocation: this.sourceLocation })
@@ -69,6 +77,9 @@ export class ContractThisBuilder extends InstanceBuilder<ContractClassPType> {
   }
 }
 
+/**
+ * Handles expressions using `super` in the context of a contract
+ */
 export class ContractSuperBuilder extends ContractThisBuilder {
   constructor(ptype: ContractClassPType, sourceLocation: SourceLocation, context: AwstBuildContext) {
     super(ptype, sourceLocation, context)
@@ -94,9 +105,73 @@ export class ContractSuperBuilder extends ContractThisBuilder {
   }
 
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
+    if (this.ptype instanceof ClusteredContractClassType && name === 'class') {
+      return new PolytypeClassSuperMethodBuilder(this.ptype, sourceLocation, this.context)
+    }
+
     const method = this.ptype.methods[name]
     if (method) {
-      return new BaseContractMethodExpressionBuilder(sourceLocation, method, this.ptype)
+      return new BaseContractMethodExpressionBuilder(sourceLocation, method)
+    }
+    return super.memberAccess(name, sourceLocation)
+  }
+}
+
+/**
+ * Handles calls of `super.class` from polytype library which is used to access the prototype of a specific base type
+ */
+class PolytypeClassSuperMethodBuilder extends FunctionBuilder {
+  constructor(
+    public readonly ptype: ClusteredContractClassType,
+    sourceLocation: SourceLocation,
+    private readonly context: AwstBuildContext,
+  ) {
+    super(sourceLocation)
+  }
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    const {
+      args: [contract],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 1,
+      callLocation: sourceLocation,
+      funcName: 'super.class',
+      argSpec: (a) => [a.required(ContractClassPType)],
+    })
+    const matchedBaseType = this.ptype.baseTypes.find((b) => b.equals(contract.ptype))
+
+    codeInvariant(matchedBaseType, `${contract.ptype} must be a direct base type of this class`)
+    return new PolytypeExplicitClassAccessExpressionBuilder(matchedBaseType, sourceLocation)
+  }
+}
+
+/**
+ * Matches polytype's super.class(SomeType) expression
+ */
+export class PolytypeExplicitClassAccessExpressionBuilder extends InstanceBuilder {
+  resolve(): Expression {
+    throw new CodeError('Contract class cannot be used as a value')
+  }
+  resolveLValue(): LValue {
+    throw new CodeError('Contract class cannot be used as a value')
+  }
+  constructor(
+    public readonly ptype: ContractClassPType,
+    sourceLocation: SourceLocation,
+  ) {
+    super(sourceLocation)
+  }
+
+  memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
+    const method = this.ptype.methods[name]
+    if (method) {
+      return new ExplicitBaseContractMethodExpressionBuilder(sourceLocation, method, this.ptype)
+    }
+    if (name in this.ptype.properties) {
+      throw new CodeError(`Not Supported: Accessing properties of a specific base type. Instead just use \`this.${name}\``, {
+        sourceLocation,
+      })
     }
     return super.memberAccess(name, sourceLocation)
   }

@@ -1,0 +1,247 @@
+contract CommonBase
+{
+  globals {
+    ["stateCommon"]: uint64
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  methodCommon(): string
+  {
+    return "common"
+  }
+  
+  b2CantOverride(): string
+  {
+    return "common"
+  }
+  
+  constructor(): void
+  {
+    void
+    GlobalState["stateCommon"]: uint64 = 123
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+contract BaseOne
+{
+  globals {
+    ["stateOne"]: uint64
+    ["stateCommon"]: uint64
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  methodOne(): string
+  {
+    return "base-one"
+  }
+  
+  constructor(): void
+  {
+    super.constructor()
+    GlobalState["stateOne"]: uint64 = 45
+  }
+  
+  CommonBase::methodCommon(): string
+  {
+    return "common"
+  }
+  
+  CommonBase::b2CantOverride(): string
+  {
+    return "common"
+  }
+  
+  CommonBase::constructor(): void
+  {
+    void
+    GlobalState["stateCommon"]: uint64 = 123
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+contract BaseTwo
+{
+  globals {
+    ["stateTwo"]: string
+    ["stateCommon"]: uint64
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  methodTwo(): string
+  {
+    return "base-two"
+  }
+  
+  b2CantOverride(): string
+  {
+    return "base-two"
+  }
+  
+  constructor(): void
+  {
+    super.constructor()
+    GlobalState["stateTwo"]: string = "Hello"
+  }
+  
+  CommonBase::methodCommon(): string
+  {
+    return "common"
+  }
+  
+  CommonBase::b2CantOverride(): string
+  {
+    return "common"
+  }
+  
+  CommonBase::constructor(): void
+  {
+    void
+    GlobalState["stateCommon"]: uint64 = 123
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+contract MultiBases
+{
+  globals {
+    ["stateMulti"]: string
+    ["stateOne"]: uint64
+    ["stateCommon"]: uint64
+    ["stateTwo"]: string
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  methodMulti(): string
+  {
+    return "multi-bases"
+  }
+  
+  methodCallsSuper(): string
+  {
+    return super.methodTwo()
+  }
+  
+  callB2CantOverride(): string
+  {
+    return tests/approvals/multi-inheritance.algo.ts::BaseTwo.b2CantOverride()
+  }
+  
+  callB2Common(): string
+  {
+    return tests/approvals/multi-inheritance.algo.ts::BaseTwo.methodCommon()
+  }
+  
+  constructor(): void
+  {
+    super.constructor()
+    GlobalState["stateMulti"]: string = "Hmmm"
+  }
+  
+  ClusteredContract<tests/approvals/multi-inheritance.algo.ts::BaseOne,tests/approvals/multi-inheritance.algo.ts::BaseTwo>::constructor(): void
+  {
+    tests/approvals/multi-inheritance.algo.ts::BaseOne.constructor()
+    tests/approvals/multi-inheritance.algo.ts::BaseTwo.constructor()
+  }
+  
+  BaseOne::methodOne(): string
+  {
+    return "base-one"
+  }
+  
+  BaseOne::constructor(): void
+  {
+    super.constructor()
+    GlobalState["stateOne"]: uint64 = 45
+  }
+  
+  CommonBase::methodCommon(): string
+  {
+    return "common"
+  }
+  
+  CommonBase::b2CantOverride(): string
+  {
+    return "common"
+  }
+  
+  CommonBase::constructor(): void
+  {
+    void
+    GlobalState["stateCommon"]: uint64 = 123
+  }
+  
+  BaseTwo::methodTwo(): string
+  {
+    return "base-two"
+  }
+  
+  BaseTwo::b2CantOverride(): string
+  {
+    return "base-two"
+  }
+  
+  BaseTwo::constructor(): void
+  {
+    super.constructor()
+    GlobalState["stateTwo"]: string = "Hello"
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

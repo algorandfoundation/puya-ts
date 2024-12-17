@@ -16,4 +16,8 @@ export const transientTypeErrors = {
     usedAsType: `Union types are not valid as a variable, parameter, return, or property type. Expression type is ${typeName}`,
     usedInExpression: `Union types are only valid in boolean expressions. Expression type is ${typeName}`,
   }),
+  intersectionTypes: (typeName) => ({
+    usedAsType: `Intersection types are not valid as a variable, parameter, return, or property type. Expression type is ${typeName}`,
+    usedInExpression: `Intersection types not valid here. Expression type is ${typeName}`,
+  }),
 } satisfies Record<string, (typeName: string) => TransientTypeError>

@@ -11,8 +11,8 @@ import { logger } from '../../logger'
 import type { Props } from '../../typescript-helpers'
 import { codeInvariant, invariant, isIn } from '../../util'
 import { CustomKeyMap } from '../../util/custom-key-map'
-import { intersectSets } from '../../util/intersect-sets'
 import type { ContractClassPType } from '../ptypes'
+import { ClusteredContractClassType } from '../ptypes'
 import type { ContractOptionsDecoratorData } from './decorator-data'
 import { LogicSigClassModel } from './logic-sig-class-model'
 
@@ -27,7 +27,6 @@ export class ContractClassModel {
   }
   public readonly options: ContractOptionsDecoratorData | undefined
   public readonly description: string | null
-  public readonly bases: Array<ContractReference>
   public readonly propertyInitialization: Array<Statement>
   public readonly approvalProgram: ContractMethod | null
   public readonly clearProgram: ContractMethod | null
@@ -40,7 +39,6 @@ export class ContractClassModel {
     this.type = props.type
     this.description = props.description
     this.propertyInitialization = props.propertyInitialization
-    this.bases = props.bases
     this.ctor = props.ctor
     this.approvalProgram = props.approvalProgram
     this.clearProgram = props.clearProgram
@@ -63,16 +61,22 @@ export class ContractClassModel {
     let firstBaseWithStateTotals: ContractClassModel | undefined = undefined
     let reservedScratchSpace = new Set<bigint>()
 
+    const seenContractIds = new Set<string>()
+
     for (const baseType of this.type.allBases()) {
-      const cref = ContractReference.fromPType(baseType)
-      const baseClass = compilationSet.getContractClass(cref)
+      const baseClass = this.getModelForClass(compilationSet, baseType)
       if (baseClass.hasExplicitStateTotals() && firstBaseWithStateTotals === undefined) {
         firstBaseWithStateTotals = baseClass
       }
       if (baseClass.options?.scratchSlots) {
-        reservedScratchSpace = intersectSets(reservedScratchSpace, baseClass.options.scratchSlots)
+        reservedScratchSpace = reservedScratchSpace.union(baseClass.options.scratchSlots)
       }
-      methodResolutionOrder.push(cref)
+      methodResolutionOrder.push(baseClass.id)
+      if (seenContractIds.has(baseClass.id.toString())) {
+        continue
+      } else {
+        seenContractIds.add(baseClass.id.toString())
+      }
       approvalProgram ??= baseClass.approvalProgram
       clearProgram ??= baseClass.clearProgram
       if (baseClass.approvalProgram && baseClass.approvalProgram !== approvalProgram) methods.push(baseClass.approvalProgram)
@@ -121,7 +125,7 @@ export class ContractClassModel {
     })
 
     if (this.options?.scratchSlots) {
-      reservedScratchSpace = intersectSets(reservedScratchSpace, this.options.scratchSlots)
+      reservedScratchSpace = reservedScratchSpace.union(this.options.scratchSlots)
     }
 
     return nodeFactory.contract({
@@ -137,6 +141,69 @@ export class ContractClassModel {
       reservedScratchSpace: reservedScratchSpace,
       sourceLocation: this.sourceLocation,
       avmVersion: this.options?.avmVersion ?? null,
+    })
+  }
+
+  private getModelForClass(compilationSet: CompilationSet, contractType: ContractClassPType): ContractClassModel {
+    if (contractType instanceof ClusteredContractClassType) {
+      return this.buildClusteredMetaClass(compilationSet, contractType)
+    } else {
+      return compilationSet.getContractClass(ContractReference.fromPType(contractType))
+    }
+  }
+
+  private buildClusteredMetaClass(compilationSet: CompilationSet, clusteredType: ClusteredContractClassType): ContractClassModel {
+    // Need to inject a constructor in here which calls all extended super constructors
+
+    const ctor = nodeFactory.contractMethod({
+      memberName: Constants.constructorMethodName,
+      cref: ContractReference.fromPType(clusteredType),
+      documentation: nodeFactory.methodDocumentation({}),
+      sourceLocation: SourceLocation.None,
+      args: [],
+      returnType: wtypes.voidWType,
+      body: nodeFactory.block({
+        sourceLocation: SourceLocation.None,
+      }),
+      arc4MethodConfig: null,
+    })
+    const ctorTargets: awst.ContractMethod[] = []
+    for (const baseType of clusteredType.baseTypes) {
+      for (const b of [baseType, ...baseType.allBases()]) {
+        const baseClassModel = this.getModelForClass(compilationSet, b)
+        if (baseClassModel.ctor) {
+          ctorTargets.push(baseClassModel.ctor)
+          break
+        }
+      }
+    }
+    ctor.body.body.push(
+      ...ctorTargets.map((ct) =>
+        nodeFactory.expressionStatement({
+          expr: nodeFactory.subroutineCallExpression({
+            target: nodeFactory.contractMethodTarget({
+              memberName: ct.memberName,
+              cref: ct.cref,
+            }),
+            args: [],
+            sourceLocation: SourceLocation.None,
+            wtype: wtypes.voidWType,
+          }),
+        }),
+      ),
+    )
+    return new ContractClassModel({
+      appState: [],
+      approvalProgram: null,
+      clearProgram: null,
+      isAbstract: true,
+      sourceLocation: SourceLocation.None,
+      propertyInitialization: [],
+      description: null,
+      ctor: ctor,
+      methods: [],
+      options: undefined,
+      type: clusteredType,
     })
   }
 
