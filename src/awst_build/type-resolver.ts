@@ -15,6 +15,8 @@ import {
   bigIntPType,
   boolPType,
   ClearStateProgram,
+  ClusteredContractClassType,
+  ClusteredPrototype,
   ContractClassPType,
   FunctionPType,
   logicSigBaseType,
@@ -27,6 +29,7 @@ import {
   ObjectPType,
   StorageProxyPType,
   stringPType,
+  SuperPrototypeSelector,
   TuplePType,
   TypeParameterType,
   undefinedPType,
@@ -120,6 +123,11 @@ export class TypeResolver {
 
   resolveType(tsType: ts.Type, sourceLocation: SourceLocation): PType {
     if (isIntersectionType(tsType)) {
+      if (tsType.aliasSymbol) {
+        const aliasName = this.getSymbolFullName(tsType.aliasSymbol, sourceLocation)
+        if (aliasName.fullName === '') {
+        }
+      }
       // Special handling of struct base types which are an intersection of `StructBase` and the generic `T` type
       const parts = tsType.types.map((t) => this.resolveType(t, sourceLocation))
       if (parts.some((p) => p.fullName === arc4StructBaseType.fullName)) {
@@ -178,6 +186,10 @@ export class TypeResolver {
     }
 
     const typeName = this.getTypeName(tsType, sourceLocation)
+
+    if (typeName.fullName === ClusteredPrototype.fullName) {
+      return this.resolveClusteredPrototype(tsType, sourceLocation)
+    }
 
     if (tsType.flags === ts.TypeFlags.TypeParameter) {
       return new TypeParameterType(typeName)
@@ -368,12 +380,33 @@ export class TypeResolver {
     })
   }
 
+  private resolveClusteredPrototype(tsType: ts.Type, sourceLocation: SourceLocation): PType {
+    invariant(isIntersectionType(tsType), 'Clustered prototypes must be an intersection type')
+    const baseContracts: ContractClassPType[] = []
+    for (const t of tsType.types.map((t) => this.resolveType(t, sourceLocation))) {
+      if (t instanceof ContractClassPType) {
+        baseContracts.push(t)
+      } else if (t instanceof SuperPrototypeSelector) {
+        // Ignore for now
+      } else {
+        throw new CodeError(
+          `Unexpected type: ${t}. Polytype can only be used to support multiple inheritance in contracts for now. All base types must extend the Contract or BaseContract class.}`,
+        )
+      }
+    }
+    return new ClusteredContractClassType({
+      methods: {},
+      baseTypes: baseContracts,
+      sourceLocation,
+    })
+  }
+
   private getTypeName(type: ts.Type, sourceLocation: SourceLocation): SymbolName {
     if (type.aliasSymbol) {
       const name = this.getSymbolFullName(type.aliasSymbol, sourceLocation)
-      // We only respect type aliases within the algo ts package, otherwise use the
+      // We only respect type aliases within certain modules, otherwise use the
       // unaliased symbol
-      if (name.module.startsWith(Constants.algoTsPackage)) return name
+      if (name.module.startsWith(Constants.algoTsPackage) || name.module === Constants.polytypeModuleName) return name
     }
     invariant(type.symbol, 'Type must have a symbol')
     return this.getSymbolFullName(type.symbol, sourceLocation)

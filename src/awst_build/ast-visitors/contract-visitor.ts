@@ -67,7 +67,6 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
       appState: this.context.getStorageDefinitionsForContract(this._contractPType),
       ctor: this._ctor ?? this.makeDefaultConstructor(sourceLocation),
       methods: this._methods,
-      bases: this._contractPType.baseTypes.map((bt) => ContractReference.fromPType(bt)),
       description: this.getNodeDescription(classDec),
       approvalProgram: this._contractPType.isARC4 ? null : this._approvalProgram,
       clearProgram: this._clearStateProgram,

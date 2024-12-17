@@ -136,6 +136,17 @@ export class ContractClassPType extends PType {
   }
 }
 
+export class ClusteredContractClassType extends ContractClassPType {
+  constructor(props: { methods: Record<string, FunctionPType>; baseTypes: ContractClassPType[]; sourceLocation: SourceLocation }) {
+    super({
+      ...props,
+      name: `ClusteredContract<${props.baseTypes.map((t) => t.fullName).join(',')}>`,
+      module: Constants.polytypeModuleName,
+      properties: {},
+    })
+  }
+}
+
 export class BaseContractClassType extends ContractClassPType {
   readonly _isArc4: boolean
   get isARC4(): boolean {
@@ -1347,4 +1358,28 @@ export const compiledLogicSigType = new ObjectPType({
 export const arc28EmitFunction = new LibFunctionType({
   name: 'emit',
   module: Constants.arc28ModuleName,
+})
+
+export const SuperPrototypeSelectorGeneric = new GenericPType({
+  name: 'SuperPrototypeSelector',
+  module: Constants.polytypeModuleName,
+  parameterise(ptypes: PType[]) {
+    return new SuperPrototypeSelector({ bases: ptypes })
+  },
+})
+export class SuperPrototypeSelector extends InternalType {
+  constructor({ bases }: { bases: PType[] }) {
+    super({
+      name: 'SuperPrototypeSelector',
+      module: Constants.polytypeModuleName,
+    })
+  }
+}
+export const ClusteredPrototype = new InternalType({
+  name: 'ClusteredPrototype',
+  module: Constants.polytypeModuleName,
+})
+export const PolytypeClassMethodHelper = new LibFunctionType({
+  name: 'class',
+  module: Constants.polytypeModuleName,
 })
