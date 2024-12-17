@@ -9,7 +9,7 @@ describe('assert match', () => {
     const payment = algorand.createTransaction.payment({
       receiver: appClientAssertMatchContract.appAddress,
       sender: testAccount.addr,
-      amount: microAlgos(5000),
+      amount: microAlgos(105000),
     })
     await appClientAssertMatchContract.send.call({ method: 'testPay', args: [payment] })
   })
