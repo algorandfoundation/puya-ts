@@ -4,7 +4,7 @@ import { assertMatch, Contract, Global, Txn } from '@algorandfoundation/algorand
 export class AssertMatchContract extends Contract {
   public testPay(pay: gtxn.PaymentTxn): boolean {
     assertMatch(pay, {
-      amount: { between: [0, 50000] },
+      amount: { between: [100_000, 105_000] },
       sender: Txn.sender,
       receiver: Global.currentApplicationAddress,
       closeRemainderTo: Global.zeroAddress,

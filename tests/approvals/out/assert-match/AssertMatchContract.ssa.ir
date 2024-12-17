@@ -53,11 +53,11 @@ contract tests/approvals/assert-match.algo.ts::AssertMatchContract:
         subroutine tests/approvals/assert-match.algo.ts::AssertMatchContract.testPay(pay: uint64) -> bool:
             block@0: // L5
                 let tmp%0#0: uint64 = ((gtxns Amount) pay#0)
-                let tmp%1#0: bool = (<= tmp%0#0 50000u)
+                let tmp%1#0: bool = (<= tmp%0#0 105000u)
                 goto tmp%1#0 ? block@1 : block@8
             block@1: // and_contd_L6
                 let tmp%2#0: uint64 = ((gtxns Amount) pay#0)
-                let tmp%3#0: bool = (>= tmp%2#0 0u)
+                let tmp%3#0: bool = (>= tmp%2#0 100000u)
                 goto tmp%3#0 ? block@2 : block@8
             block@2: // and_contd_L6
                 let tmp%4#0: bytes = ((gtxns Sender) pay#0)
