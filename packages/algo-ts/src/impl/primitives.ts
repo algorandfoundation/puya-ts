@@ -30,20 +30,6 @@ export function toExternalValue(val: uint64 | biguint | bytes | string) {
   if (instance instanceof BigUintCls) return instance.asBigInt()
   if (typeof val === 'string') return val
 }
-export const toBytes = (val: unknown): bytes => {
-  if (val instanceof AlgoTsPrimitiveCls) return val.toBytes().asAlgoTs()
-
-  switch (typeof val) {
-    case 'string':
-      return BytesCls.fromCompat(val).asAlgoTs()
-    case 'bigint':
-      return BigUintCls.fromCompat(val).toBytes().asAlgoTs()
-    case 'number':
-      return Uint64Cls.fromCompat(val).toBytes().asAlgoTs()
-    default:
-      internalError(`Unsupported arg type ${nameOfType(val)}`)
-  }
-}
 
 /**
  * Convert a StubUint64Compat value into a 'number' if possible.
