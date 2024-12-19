@@ -1,0 +1,41 @@
+subroutine test_truthyness(): void
+{
+  assert(True, comment=Zero is falsy)
+  assert(True, comment=Non zero is truthy)
+  assert(!Boolean(0), comment=Zero is falsy)
+  assert(Boolean(1), comment=Non zero is truthy)
+  assert(!Boolean(bitlen(0)), comment=Zero is falsy)
+  assert(Boolean(bitlen(1)), comment=Non zero is truthy)
+  assert(!Boolean(len(0x)), comment=Empty is falsy)
+  assert(Boolean(len("abc")), comment=Non empty is truthy)
+  empty: string = ""
+  assert(!Boolean(len(empty)), comment=Empty is falsy)
+  assert(Boolean(len("abc")), comment=Non empty is truthy)
+  assert(!False, comment=False is falsy)
+  assert(True, comment=True is truthy)
+}
+subroutine test_booleans_are_equal(): void
+{
+  assert(!!True == !!True)
+  assert(!!Boolean(1) == !!Boolean(5))
+  assert(!!Boolean(bitlen(1)) == !!Boolean(bitlen(5)))
+  assert("abc" != 0x == "abcdef" != 0x)
+  assert("abc" != 0x == "abcdef" != 0x)
+  boolNoArgs: bool = False
+  assert(!boolNoArgs)
+}
+contract BooleanConversionsAlgo
+{
+  approvalProgram(): bool
+  {
+    tests/approvals/boolean-conversions.algo.ts::test_truthyness()
+    tests/approvals/boolean-conversions.algo.ts::test_booleans_are_equal()
+    return True
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+}

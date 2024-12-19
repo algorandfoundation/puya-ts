@@ -1,0 +1,45 @@
+contract StructDemo
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  testVectorCreationAndEquality(): void
+  {
+    v1: Vector = new Vector(x=(#0 = { x: 0, y: 0 }).x, y=#0.y)
+    log(reinterpret_cast<bytes>(v1.x))
+    log(reinterpret_cast<bytes>(v1.y))
+    v2: Vector = new Vector(x=(#1 = { x: (#2 = { y: 0, x: 0 }).x, y: #2.y }).x, y=#1.y)
+    assert(reinterpret_cast<bytes>(v1) == reinterpret_cast<bytes>(v2))
+  }
+  
+  addVectors(): Vector
+  {
+    return new Vector(x=(#3 = { x: ARC4_ENCODE(ARC4_DECODE(v1.x) + ARC4_DECODE(v2.x), wtype=arc4.uint64), y: ARC4_ENCODE(ARC4_DECODE(v1.y) + ARC4_DECODE(v2.y), wtype=arc4.uint64) }).x, y=#3.y)
+  }
+  
+  implicitCastingAndSpreading(): void
+  {
+    v2: Vector = new Vector(x=(#4 = ARC4_DECODE(v1)).x, y=#4.y)
+    v3: Vector = new Vector(x=(#5 = { x: v2.x, y: v2.y }).x, y=#5.y)
+    assert(reinterpret_cast<bytes>(v1) == reinterpret_cast<bytes>(v2))
+    assert(reinterpret_cast<bytes>(v3) == reinterpret_cast<bytes>(v1))
+  }
+  
+  toAndFromBytes(): Vector
+  {
+    v1_bytes: bytes = reinterpret_cast<bytes>(v1)
+    return reinterpret_cast<Vector>(v1_bytes)
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

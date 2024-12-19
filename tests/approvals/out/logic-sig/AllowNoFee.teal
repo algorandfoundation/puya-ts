@@ -1,0 +1,24 @@
+#pragma version 10
+
+tests/approvals/logic-sig.algo.ts::AllowNoFee:
+    // tests/approvals/logic-sig.algo.ts:15
+    // feeIsZero()
+    callsub feeIsZero
+    // tests/approvals/logic-sig.algo.ts:16
+    // return Uint64(1)
+    pushint 1 // 1
+    return
+
+
+// tests/approvals/logic-sig.algo.ts::feeIsZero() -> void:
+feeIsZero:
+    // tests/approvals/logic-sig.algo.ts:9
+    // function feeIsZero() {
+    proto 0 0
+    // tests/approvals/logic-sig.algo.ts:10
+    // assert(Txn.fee === 0, 'Fee must be zero')
+    txn Fee
+    pushint 0 // 0
+    ==
+    assert // Fee must be zero
+    retsub

@@ -1,0 +1,171 @@
+contract BaseWithState
+{
+  globals {
+    ["oneGlobal"]: uint64
+    ["twoGlobal"]: uint64
+  }
+  locals {
+    ["oneLocalBytes"]: bytes
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  setState(): void
+  {
+    GlobalState["oneGlobal"]: uint64 = n
+    GlobalState["twoGlobal"]: uint64 = n
+  }
+  
+  constructor(): void
+  {
+    void
+    GlobalState["oneGlobal"]: uint64 = 1
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+contract SubClassWithState
+{
+  globals {
+    ["oneGlobal"]: uint64
+    ["twoGlobal"]: uint64
+    ["threeGlobal"]: uint64
+  }
+  locals {
+    ["oneLocalBytes"]: bytes
+    ["twoLocalBytes"]: bytes
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  setState(): void
+  {
+    super.setState(n)
+    GlobalState["threeGlobal"]: uint64 = n
+  }
+  
+  BaseWithState::setState(): void
+  {
+    GlobalState["oneGlobal"]: uint64 = n
+    GlobalState["twoGlobal"]: uint64 = n
+  }
+  
+  BaseWithState::constructor(): void
+  {
+    void
+    GlobalState["oneGlobal"]: uint64 = 1
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+contract SubClassWithExplicitTotals
+{
+  globals {
+    ["oneGlobal"]: uint64
+    ["twoGlobal"]: uint64
+  }
+  locals {
+    ["oneLocalBytes"]: bytes
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  BaseWithState::setState(): void
+  {
+    GlobalState["oneGlobal"]: uint64 = n
+    GlobalState["twoGlobal"]: uint64 = n
+  }
+  
+  BaseWithState::constructor(): void
+  {
+    void
+    GlobalState["oneGlobal"]: uint64 = 1
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+contract ExtendsSubWithTotals
+{
+  globals {
+    ["oneGlobal"]: uint64
+    ["twoGlobal"]: uint64
+  }
+  locals {
+    ["oneLocalBytes"]: bytes
+    ["oneLocal"]: uint64
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  setState(): void
+  {
+    super.setState(n)
+    LocalState[txn<Sender>()]["oneLocal"]: uint64 = n
+  }
+  
+  BaseWithState::setState(): void
+  {
+    GlobalState["oneGlobal"]: uint64 = n
+    GlobalState["twoGlobal"]: uint64 = n
+  }
+  
+  BaseWithState::constructor(): void
+  {
+    void
+    GlobalState["oneGlobal"]: uint64 = 1
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

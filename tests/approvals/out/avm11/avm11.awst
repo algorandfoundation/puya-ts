@@ -1,0 +1,46 @@
+
+logicsig tests/approvals/avm11.algo.ts::Avm11Sig {
+  return len(sumhash512(""))
+}
+contract AVM11Contract
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  testNewOps(): void
+  {
+    assert(!falcon_verify(0x, 0x, bzero(1793)))
+    assert(Boolean(len(sumhash512(0x))))
+    assert(Boolean(online_stake()))
+    <tuple>[a, b]: readonlytuple[bool, bool] = acct_params_get<AcctIncentiveEligible>(txn<Sender>())
+    <tuple>[c, d]: readonlytuple[uint64, bool] = acct_params_get<AcctLastProposed>(txn<Sender>())
+    <tuple>[e, f]: readonlytuple[uint64, bool] = acct_params_get<AcctLastProposed>(txn<Sender>())
+    assert(block<BlkProposer>(0) != global<ZeroAddress>(), comment=proposer)
+    assert(Boolean(block<BlkFeesCollected>(0)), comment=fees collected)
+    assert(Boolean(block<BlkBonus>(0)), comment=bonus)
+    assert(Boolean(len(block<BlkBranch>(0))), comment=branch)
+    assert(block<BlkFeeSink>(0) != global<ZeroAddress>(), comment=fee sink)
+    assert(Boolean(len(block<BlkProtocol>(0))), comment=protocol)
+    assert(Boolean(block<BlkTxnCounter>(0)), comment=txn counter)
+    assert(Boolean(block<BlkProposerPayout>(0)), comment=proposer payout)
+    assert(global<PayoutsEnabled>(), comment=payouts_enabled)
+    assert(Boolean(global<PayoutsGoOnlineFee>()), comment=payouts_go_online_fee)
+    assert(Boolean(global<PayoutsPercent>()), comment=payouts_percent)
+    assert(Boolean(global<PayoutsMinBalance>()), comment=payouts_min_balance)
+    assert(Boolean(global<PayoutsMaxBalance>()), comment=payouts_max_balance)
+    <tuple>[g, h]: readonlytuple[uint64, bool] = voter_params_get<VoterBalance>(0)
+    <tuple>[i, j]: readonlytuple[bool, bool] = voter_params_get<VoterIncentiveEligible>(0)
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

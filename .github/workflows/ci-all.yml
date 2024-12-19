@@ -1,0 +1,53 @@
+on:
+  workflow_call:
+    inputs:
+      run-commit-lint:
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  ci-algo-ts:
+    name: 'Build @algorandfoundation/algorand-typescript'
+    uses: ./.github/workflows/node-ci.yml
+    with:
+      node-version: 20.x
+      run-build: true
+      audit-script: npm run audit
+      working-directory: packages/algo-ts
+      upload-artifact-name: algo-ts
+      upload-artifact-path: ./packages/algo-ts/dist
+      post-build-script: |
+        cd dist
+        set +e # Continue on error
+        thisVersion=$(npm view ./ version)
+        diffText=$(npm diff --diff=./ --diff=@algorandfoundation/algorand-typescript@$thisVersion)
+        diffExitCode=$?
+        set -e # Exit on error
+        [ $diffExitCode -ne 0 ] && (echo "$thisVersion has not been published yet"; exit 0;) || echo "$thisVersion already published, checking diff against local build"
+        diffTextLen=${#diffText}
+        [ $diffTextLen -eq 0 ] && echo 'No changes' || (echo 'ERROR: Code differs to published version. Please bump package version or revert changes'; echo $diffText; exit 1;)
+
+  ci-puya-ts:
+    name: 'Build @algorandfoundation/puya-ts'
+    uses: ./.github/workflows/node-ci.yml
+    needs:
+      - ci-algo-ts
+    with:
+      download-artifact-pattern: algo-*
+      download-artifact-path: ./packages-temp
+      pre-run-script: mv packages-temp/algo-ts packages/algo-ts/dist
+      node-version: 20.x
+      run-build: true
+      run-commit-lint: ${{ inputs.run-commit-lint }}
+      build-script: npm run build
+      audit-script: npm run audit
+      upload-artifact-name: puya-ts
+      upload-artifact-path: ./dist
+      python-version: 3.12.6
+      pre-test-script: |
+        pipx install algokit --python 3.12.6
+        algokit localnet reset --update
+        pipx install git+https://github.com/algorandfoundation/puya --python 3.12.6
+      test-script: npm run test:ci
+      output-test-results: true

@@ -1,0 +1,71 @@
+name: Publish
+
+on:
+  push:
+    branches:
+      - alpha
+      - main
+      - release
+  workflow_dispatch:
+
+concurrency: release
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+  checks: write
+
+jobs:
+  ci:
+    name: Build and test
+    uses: ./.github/workflows/ci-all.yml
+    with:
+      run-commit-lint: false
+
+  release:
+    name: Release
+    needs: ci
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+
+      - run: npm ci --ignore-scripts
+
+      - name: Download package artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Publish @algorandfoundation/algorand-typescript
+        uses: JS-DevTools/npm-publish@v3
+        id: publish-algo-ts
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          package: artifacts/algo-ts/package.json
+          access: 'public'
+
+      - name: Install @algorandfoundation/puya-ts dependencies and patch for bundling
+        run: npm i --include=prod && npx patch-package --patch-dir ../../patches
+        working-directory: artifacts/puya-ts
+
+      - name: Generate semantic version for @algorandfoundation/puya-ts
+        run: npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish @algorandfoundation/puya-ts
+        uses: JS-DevTools/npm-publish@v3
+        id: publish-puya-ts
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          package: artifacts/puya-ts/package.json
+          access: 'public'

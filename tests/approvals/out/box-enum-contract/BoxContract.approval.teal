@@ -1,0 +1,200 @@
+#pragma version 10
+
+tests/approvals/box-enum-contract.algo.ts::BoxContract.approvalProgram:
+    intcblock 0 1
+    bytecblock "oca" "txn"
+    callsub __puya_arc4_router__
+    return
+
+
+// tests/approvals/box-enum-contract.algo.ts::BoxContract.__puya_arc4_router__() -> uint64:
+__puya_arc4_router__:
+    // tests/approvals/box-enum-contract.algo.ts:4
+    // export class BoxContract extends arc4.Contract {
+    proto 0 1
+    txn NumAppArgs
+    intc_0 // 0
+    !=
+    bz __puya_arc4_router___bare_routing@6
+    txna ApplicationArgs 0
+    pushbytes 0xf26c6d42 // method "store_enums()void"
+    pushbytes 0xef186cf7 // method "read_enums()(uint64,uint64)"
+    uncover 2
+    match __puya_arc4_router___store_enums_route@2 __puya_arc4_router___read_enums_route@3
+    b __puya_arc4_router___switch_case_default@4
+
+__puya_arc4_router___store_enums_route@2:
+    // tests/approvals/box-enum-contract.algo.ts:8
+    // @arc4.abimethod({ name: 'store_enums' })
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    callsub storeEnums
+    intc_1 // 1
+    retsub
+
+__puya_arc4_router___read_enums_route@3:
+    // tests/approvals/box-enum-contract.algo.ts:14
+    // @arc4.abimethod({ name: 'read_enums' })
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    callsub readEnums
+    pushbytes 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    retsub
+
+__puya_arc4_router___switch_case_default@4:
+    b __puya_arc4_router___after_if_else@10
+
+__puya_arc4_router___bare_routing@6:
+    // tests/approvals/box-enum-contract.algo.ts:4
+    // export class BoxContract extends arc4.Contract {
+    txn OnCompletion
+    intc_0 // 0
+    swap
+    match __puya_arc4_router_____algots__.defaultCreate@7
+    b __puya_arc4_router___switch_case_default@8
+
+__puya_arc4_router_____algots__.defaultCreate@7:
+    // tests/approvals/box-enum-contract.algo.ts:4
+    // export class BoxContract extends arc4.Contract {
+    txn ApplicationID
+    intc_0 // 0
+    ==
+    assert // can only call when creating
+    callsub __algots__.defaultCreate
+    intc_1 // 1
+    retsub
+
+__puya_arc4_router___switch_case_default@8:
+
+__puya_arc4_router___after_if_else@10:
+    // tests/approvals/box-enum-contract.algo.ts:4
+    // export class BoxContract extends arc4.Contract {
+    intc_0 // 0
+    retsub
+
+
+// tests/approvals/box-enum-contract.algo.ts::BoxContract.storeEnums() -> void:
+storeEnums:
+    // tests/approvals/box-enum-contract.algo.ts:8-9
+    // @arc4.abimethod({ name: 'store_enums' })
+    // public storeEnums(): void {
+    proto 0 0
+    // tests/approvals/box-enum-contract.algo.ts:10
+    // this.oca.value = arc4.OnCompleteAction.OptIn
+    intc_1 // 1
+    itob
+    // tests/approvals/box-enum-contract.algo.ts:5
+    // oca = Box<arc4.OnCompleteAction>({ key: Bytes('oca') })
+    bytec_0 // "oca"
+    // tests/approvals/box-enum-contract.algo.ts:10
+    // this.oca.value = arc4.OnCompleteAction.OptIn
+    swap
+    box_put
+    // tests/approvals/box-enum-contract.algo.ts:11
+    // this.txn.value = TransactionType.ApplicationCall
+    pushint 6 // 6
+    itob
+    // tests/approvals/box-enum-contract.algo.ts:6
+    // txn = Box<TransactionType>({ key: Bytes('txn') })
+    bytec_1 // "txn"
+    // tests/approvals/box-enum-contract.algo.ts:11
+    // this.txn.value = TransactionType.ApplicationCall
+    swap
+    box_put
+    retsub
+
+
+// tests/approvals/box-enum-contract.algo.ts::BoxContract.readEnums() -> bytes:
+readEnums:
+    // tests/approvals/box-enum-contract.algo.ts:14-15
+    // @arc4.abimethod({ name: 'read_enums' })
+    // public readEnums(): Tuple<[UintN64, UintN64]> {
+    proto 0 1
+    // tests/approvals/box-enum-contract.algo.ts:16
+    // assert(op.Box.get(Bytes('oca'))[0] === op.itob(this.oca.value))
+    bytec_0 // "oca"
+    box_get
+    pop
+    // tests/approvals/box-enum-contract.algo.ts:5
+    // oca = Box<arc4.OnCompleteAction>({ key: Bytes('oca') })
+    bytec_0 // "oca"
+    // tests/approvals/box-enum-contract.algo.ts:16
+    // assert(op.Box.get(Bytes('oca'))[0] === op.itob(this.oca.value))
+    box_get
+    swap
+    btoi
+    swap
+    assert // Box must have value
+    itob
+    ==
+    assert
+    // tests/approvals/box-enum-contract.algo.ts:17
+    // assert(op.Box.get(Bytes('txn'))[0] === op.itob(this.txn.value))
+    bytec_1 // "txn"
+    box_get
+    pop
+    // tests/approvals/box-enum-contract.algo.ts:6
+    // txn = Box<TransactionType>({ key: Bytes('txn') })
+    bytec_1 // "txn"
+    // tests/approvals/box-enum-contract.algo.ts:17
+    // assert(op.Box.get(Bytes('txn'))[0] === op.itob(this.txn.value))
+    box_get
+    swap
+    btoi
+    swap
+    assert // Box must have value
+    itob
+    ==
+    assert
+    // tests/approvals/box-enum-contract.algo.ts:5
+    // oca = Box<arc4.OnCompleteAction>({ key: Bytes('oca') })
+    bytec_0 // "oca"
+    // tests/approvals/box-enum-contract.algo.ts:19
+    // return new Tuple(new UintN64(this.oca.value), new UintN64(this.txn.value))
+    box_get
+    swap
+    btoi
+    swap
+    assert // Box must have value
+    itob
+    // tests/approvals/box-enum-contract.algo.ts:6
+    // txn = Box<TransactionType>({ key: Bytes('txn') })
+    bytec_1 // "txn"
+    // tests/approvals/box-enum-contract.algo.ts:19
+    // return new Tuple(new UintN64(this.oca.value), new UintN64(this.txn.value))
+    box_get
+    swap
+    btoi
+    swap
+    assert // Box must have value
+    itob
+    pushbytes 0x
+    uncover 2
+    concat
+    swap
+    concat
+    retsub
+
+
+// tests/approvals/box-enum-contract.algo.ts::BoxContract.__algots__.defaultCreate() -> void:
+__algots__.defaultCreate:
+    // tests/approvals/box-enum-contract.algo.ts:4
+    // export class BoxContract extends arc4.Contract {
+    proto 0 0
+    retsub

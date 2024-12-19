@@ -1,0 +1,22 @@
+name: Pull Request
+
+on:
+  pull_request:
+    branches:
+      - main
+      - alpha
+    paths-ignore:
+      - 'docs/**'
+      - 'scripts/**'
+
+
+permissions:
+  contents: read
+  checks: write
+
+jobs:
+  ci-all:
+    name: 'Build and test all packages'
+    uses: ./.github/workflows/ci-all.yml
+    with:
+      run-commit-lint: true
