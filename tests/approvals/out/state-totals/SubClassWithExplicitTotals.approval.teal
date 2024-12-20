@@ -1,47 +1,50 @@
 #pragma version 10
+#pragma typetrack false
 
-tests/approvals/state-totals.algo.ts::SubClassWithExplicitTotals.approvalProgram:
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
     intcblock 0 1
     bytecblock "oneGlobal"
     txn ApplicationID
     bnz main_after_if_else@2
+
+main_if_body@1:
     callsub constructor
 
 main_after_if_else@2:
-    callsub __puya_arc4_router__
-    return
 
-
-// tests/approvals/state-totals.algo.ts::BaseWithState.constructor() -> void:
-constructor:
-    // tests/approvals/state-totals.algo.ts:4
-    // export class BaseWithState extends Contract {
-    proto 0 0
-    // tests/approvals/state-totals.algo.ts:5
-    // oneGlobal = GlobalState({ initialValue: Uint64(1) })
-    bytec_0 // "oneGlobal"
-    intc_1 // 1
-    app_global_put
-    retsub
-
-
-// tests/approvals/state-totals.algo.ts::SubClassWithExplicitTotals.__puya_arc4_router__() -> uint64:
-__puya_arc4_router__:
+main_block@3:
     // tests/approvals/state-totals.algo.ts:24-25
     // @contract({ stateTotals: { globalUints: 4, localUints: 0 } })
     // export class SubClassWithExplicitTotals extends BaseWithState {}
-    proto 0 1
     txn NumAppArgs
     intc_0 // 0
     !=
-    bz __puya_arc4_router___bare_routing@5
+    bz main_bare_routing@8
+
+main_abi_routing@4:
+    // tests/approvals/state-totals.algo.ts:24-25
+    // @contract({ stateTotals: { globalUints: 4, localUints: 0 } })
+    // export class SubClassWithExplicitTotals extends BaseWithState {}
     txna ApplicationArgs 0
     pushbytes 0x2cd95aa1 // method "setState(uint64)void"
     swap
-    match __puya_arc4_router___setState_route@2
-    b __puya_arc4_router___switch_case_default@3
+    match main_setState_route@5
 
-__puya_arc4_router___setState_route@2:
+main_switch_case_default@6:
+
+main_switch_case_next@7:
+
+main_after_if_else@12:
+    // tests/approvals/state-totals.algo.ts:24-25
+    // @contract({ stateTotals: { globalUints: 4, localUints: 0 } })
+    // export class SubClassWithExplicitTotals extends BaseWithState {}
+    intc_0 // 0
+
+main_after_inlined_tests/approvals/state-totals.algo.ts::SubClassWithExplicitTotals.__puya_arc4_router__@13:
+    return
+
+main_setState_route@5:
     // tests/approvals/state-totals.algo.ts:9
     // setState(n: uint64) {
     txn OnCompletion
@@ -61,22 +64,23 @@ __puya_arc4_router___setState_route@2:
     // setState(n: uint64) {
     callsub setState
     intc_1 // 1
-    retsub
+    b main_after_inlined_tests/approvals/state-totals.algo.ts::SubClassWithExplicitTotals.__puya_arc4_router__@13
 
-__puya_arc4_router___switch_case_default@3:
-    b __puya_arc4_router___after_if_else@9
-
-__puya_arc4_router___bare_routing@5:
+main_bare_routing@8:
     // tests/approvals/state-totals.algo.ts:24-25
     // @contract({ stateTotals: { globalUints: 4, localUints: 0 } })
     // export class SubClassWithExplicitTotals extends BaseWithState {}
     txn OnCompletion
     intc_0 // 0
     swap
-    match __puya_arc4_router_____algots__.defaultCreate@6
-    b __puya_arc4_router___switch_case_default@7
+    match main___algots__.defaultCreate@9
 
-__puya_arc4_router_____algots__.defaultCreate@6:
+main_switch_case_default@10:
+
+main_switch_case_next@11:
+    b main_after_if_else@12
+
+main___algots__.defaultCreate@9:
     // tests/approvals/state-totals.algo.ts:24-25
     // @contract({ stateTotals: { globalUints: 4, localUints: 0 } })
     // export class SubClassWithExplicitTotals extends BaseWithState {}
@@ -86,15 +90,19 @@ __puya_arc4_router_____algots__.defaultCreate@6:
     assert // can only call when creating
     callsub __algots__.defaultCreate
     intc_1 // 1
-    retsub
+    b main_after_inlined_tests/approvals/state-totals.algo.ts::SubClassWithExplicitTotals.__puya_arc4_router__@13
 
-__puya_arc4_router___switch_case_default@7:
 
-__puya_arc4_router___after_if_else@9:
-    // tests/approvals/state-totals.algo.ts:24-25
-    // @contract({ stateTotals: { globalUints: 4, localUints: 0 } })
-    // export class SubClassWithExplicitTotals extends BaseWithState {}
-    intc_0 // 0
+// tests/approvals/state-totals.algo.ts::BaseWithState.constructor() -> void:
+constructor:
+    // tests/approvals/state-totals.algo.ts:4
+    // export class BaseWithState extends Contract {
+    proto 0 0
+    // tests/approvals/state-totals.algo.ts:5
+    // oneGlobal = GlobalState({ initialValue: Uint64(1) })
+    bytec_0 // "oneGlobal"
+    intc_1 // 1
+    app_global_put
     retsub
 
 

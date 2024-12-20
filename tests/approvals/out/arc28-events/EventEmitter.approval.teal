@@ -1,52 +1,41 @@
 #pragma version 10
+#pragma typetrack false
 
-tests/approvals/arc28-events.algo.ts::EventEmitter.approvalProgram:
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
     intcblock 0 1
     bytecblock 0x 0x1ccbd925
-    callsub __puya_arc4_router__
-    return
 
-
-// tests/approvals/arc28-events.algo.ts::EventEmitter.__puya_arc4_router__() -> uint64:
-__puya_arc4_router__:
+main_block@1:
     // tests/approvals/arc28-events.algo.ts:12
     // class EventEmitter extends Contract {
-    proto 0 1
     txn NumAppArgs
     intc_0 // 0
     !=
-    bz __puya_arc4_router___bare_routing@6
+    bz main_bare_routing@7
+
+main_abi_routing@2:
+    // tests/approvals/arc28-events.algo.ts:12
+    // class EventEmitter extends Contract {
     txna ApplicationArgs 0
     pushbytes 0xd43cee5d // method "emitSwapped(uint64,uint64)void"
     pushbytes 0xf14889d7 // method "emitCustom(string,bool)void"
     uncover 2
-    match __puya_arc4_router___emitSwapped_route@2 __puya_arc4_router___emitCustom_route@3
-    b __puya_arc4_router___switch_case_default@4
+    match main_emitSwapped_route@3 main_emitCustom_route@4
 
-__puya_arc4_router___emitSwapped_route@2:
-    // tests/approvals/arc28-events.algo.ts:13
-    // emitSwapped(a: uint64, b: uint64) {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
+main_switch_case_default@5:
+
+main_switch_case_next@6:
+
+main_after_if_else@11:
     // tests/approvals/arc28-events.algo.ts:12
     // class EventEmitter extends Contract {
-    txna ApplicationArgs 1
-    btoi
-    txna ApplicationArgs 2
-    btoi
-    // tests/approvals/arc28-events.algo.ts:13
-    // emitSwapped(a: uint64, b: uint64) {
-    callsub emitSwapped
-    intc_1 // 1
-    retsub
+    intc_0 // 0
 
-__puya_arc4_router___emitCustom_route@3:
+main_after_inlined_tests/approvals/arc28-events.algo.ts::EventEmitter.__puya_arc4_router__@12:
+    return
+
+main_emitCustom_route@4:
     // tests/approvals/arc28-events.algo.ts:28
     // emitCustom(arg0: string, arg1: boolean) {
     txn OnCompletion
@@ -68,21 +57,45 @@ __puya_arc4_router___emitCustom_route@3:
     // emitCustom(arg0: string, arg1: boolean) {
     callsub emitCustom
     intc_1 // 1
-    retsub
+    b main_after_inlined_tests/approvals/arc28-events.algo.ts::EventEmitter.__puya_arc4_router__@12
 
-__puya_arc4_router___switch_case_default@4:
-    b __puya_arc4_router___after_if_else@10
+main_emitSwapped_route@3:
+    // tests/approvals/arc28-events.algo.ts:13
+    // emitSwapped(a: uint64, b: uint64) {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    // tests/approvals/arc28-events.algo.ts:12
+    // class EventEmitter extends Contract {
+    txna ApplicationArgs 1
+    btoi
+    txna ApplicationArgs 2
+    btoi
+    // tests/approvals/arc28-events.algo.ts:13
+    // emitSwapped(a: uint64, b: uint64) {
+    callsub emitSwapped
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/arc28-events.algo.ts::EventEmitter.__puya_arc4_router__@12
 
-__puya_arc4_router___bare_routing@6:
+main_bare_routing@7:
     // tests/approvals/arc28-events.algo.ts:12
     // class EventEmitter extends Contract {
     txn OnCompletion
     intc_0 // 0
     swap
-    match __puya_arc4_router_____algots__.defaultCreate@7
-    b __puya_arc4_router___switch_case_default@8
+    match main___algots__.defaultCreate@8
 
-__puya_arc4_router_____algots__.defaultCreate@7:
+main_switch_case_default@9:
+
+main_switch_case_next@10:
+    b main_after_if_else@11
+
+main___algots__.defaultCreate@8:
     // tests/approvals/arc28-events.algo.ts:12
     // class EventEmitter extends Contract {
     txn ApplicationID
@@ -91,15 +104,7 @@ __puya_arc4_router_____algots__.defaultCreate@7:
     assert // can only call when creating
     callsub __algots__.defaultCreate
     intc_1 // 1
-    retsub
-
-__puya_arc4_router___switch_case_default@8:
-
-__puya_arc4_router___after_if_else@10:
-    // tests/approvals/arc28-events.algo.ts:12
-    // class EventEmitter extends Contract {
-    intc_0 // 0
-    retsub
+    b main_after_inlined_tests/approvals/arc28-events.algo.ts::EventEmitter.__puya_arc4_router__@12
 
 
 // tests/approvals/arc28-events.algo.ts::EventEmitter.emitSwapped(a: uint64, b: uint64) -> void:

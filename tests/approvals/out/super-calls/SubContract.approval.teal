@@ -1,10 +1,14 @@
 #pragma version 10
+#pragma typetrack false
 
-tests/approvals/super-calls.algo.ts::SubContract.approvalProgram:
+// tests/approvals/super-calls.algo.ts::SubContract.approvalProgram() -> uint64:
+main:
     intcblock 1 0 2
     bytecblock "g1" "g2"
     txn ApplicationID
     bnz main_after_if_else@2
+
+main_if_body@1:
     callsub constructor
 
 main_after_if_else@2:
