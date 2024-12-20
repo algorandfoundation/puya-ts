@@ -1,9 +1,13 @@
 #pragma version 10
+#pragma typetrack false
 
-tests/approvals/super-calls.algo.ts::SuperContract.approvalProgram:
+// tests/approvals/super-calls.algo.ts::SuperContract.approvalProgram() -> uint64:
+main:
     bytecblock "g1"
     txn ApplicationID
     bnz main_after_if_else@2
+
+main_if_body@1:
     callsub constructor
 
 main_after_if_else@2:

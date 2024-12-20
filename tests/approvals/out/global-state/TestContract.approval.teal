@@ -1,10 +1,14 @@
 #pragma version 10
+#pragma typetrack false
 
-tests/approvals/global-state.algo.ts::TestContract.approvalProgram:
+// tests/approvals/global-state.algo.ts::TestContract.approvalProgram() -> uint64:
+main:
     intcblock 0 2
     bytecblock "testState" "baseTestState" "testing 123"
     txn ApplicationID
     bnz main_after_if_else@2
+
+main_if_body@1:
     callsub constructor
 
 main_after_if_else@2:
