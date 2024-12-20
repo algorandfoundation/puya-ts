@@ -2,6 +2,7 @@
 
 tests/approvals/multi-inheritance.algo.ts::CommonBase.approvalProgram:
     intcblock 0 1
+    bytecblock 0x151f7c75 "common"
     txn ApplicationID
     bnz main_after_if_else@2
     callsub constructor
@@ -32,12 +33,13 @@ __puya_arc4_router__:
     txn NumAppArgs
     intc_0 // 0
     !=
-    bz __puya_arc4_router___bare_routing@5
+    bz __puya_arc4_router___bare_routing@6
     txna ApplicationArgs 0
     pushbytes 0x455c8d09 // method "methodCommon()string"
-    swap
-    match __puya_arc4_router___methodCommon_route@2
-    b __puya_arc4_router___switch_case_default@3
+    pushbytes 0xf9f5142c // method "b2CantOverride()string"
+    uncover 2
+    match __puya_arc4_router___methodCommon_route@2 __puya_arc4_router___b2CantOverride_route@3
+    b __puya_arc4_router___switch_case_default@4
 
 __puya_arc4_router___methodCommon_route@2:
     // tests/approvals/multi-inheritance.algo.ts:8
@@ -57,26 +59,51 @@ __puya_arc4_router___methodCommon_route@2:
     extract 6 2
     swap
     concat
-    pushbytes 0x151f7c75
+    bytec_0 // 0x151f7c75
     swap
     concat
     log
     intc_1 // 1
     retsub
 
-__puya_arc4_router___switch_case_default@3:
-    b __puya_arc4_router___after_if_else@9
+__puya_arc4_router___b2CantOverride_route@3:
+    // tests/approvals/multi-inheritance.algo.ts:12
+    // b2CantOverride(): string {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    callsub b2CantOverride
+    dup
+    len
+    itob
+    extract 6 2
+    swap
+    concat
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    retsub
 
-__puya_arc4_router___bare_routing@5:
+__puya_arc4_router___switch_case_default@4:
+    b __puya_arc4_router___after_if_else@10
+
+__puya_arc4_router___bare_routing@6:
     // tests/approvals/multi-inheritance.algo.ts:5
     // export class CommonBase extends Contract {
     txn OnCompletion
     intc_0 // 0
     swap
-    match __puya_arc4_router_____algots__.defaultCreate@6
-    b __puya_arc4_router___switch_case_default@7
+    match __puya_arc4_router_____algots__.defaultCreate@7
+    b __puya_arc4_router___switch_case_default@8
 
-__puya_arc4_router_____algots__.defaultCreate@6:
+__puya_arc4_router_____algots__.defaultCreate@7:
     // tests/approvals/multi-inheritance.algo.ts:5
     // export class CommonBase extends Contract {
     txn ApplicationID
@@ -87,9 +114,9 @@ __puya_arc4_router_____algots__.defaultCreate@6:
     intc_1 // 1
     retsub
 
-__puya_arc4_router___switch_case_default@7:
+__puya_arc4_router___switch_case_default@8:
 
-__puya_arc4_router___after_if_else@9:
+__puya_arc4_router___after_if_else@10:
     // tests/approvals/multi-inheritance.algo.ts:5
     // export class CommonBase extends Contract {
     intc_0 // 0
@@ -103,7 +130,18 @@ methodCommon:
     proto 0 1
     // tests/approvals/multi-inheritance.algo.ts:9
     // return 'common'
-    pushbytes "common"
+    bytec_1 // "common"
+    retsub
+
+
+// tests/approvals/multi-inheritance.algo.ts::CommonBase.b2CantOverride() -> bytes:
+b2CantOverride:
+    // tests/approvals/multi-inheritance.algo.ts:12
+    // b2CantOverride(): string {
+    proto 0 1
+    // tests/approvals/multi-inheritance.algo.ts:13
+    // return 'common'
+    bytec_1 // "common"
     retsub
 
 

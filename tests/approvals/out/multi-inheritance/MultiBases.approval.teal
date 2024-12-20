@@ -2,7 +2,7 @@
 
 tests/approvals/multi-inheritance.algo.ts::MultiBases.approvalProgram:
     intcblock 0 1
-    bytecblock 0x151f7c75
+    bytecblock 0x151f7c75 "common"
     txn ApplicationID
     bnz main_after_if_else@2
     callsub constructor
@@ -14,11 +14,11 @@ main_after_if_else@2:
 
 // tests/approvals/multi-inheritance.algo.ts::MultiBases.constructor() -> void:
 constructor:
-    // tests/approvals/multi-inheritance.algo.ts:27
+    // tests/approvals/multi-inheritance.algo.ts:40
     // export class MultiBases extends classes(BaseOne, BaseTwo) {
     proto 0 0
     callsub polytype/lib/polytype-module.d.ts::ClusteredContract<tests/approvals/multi-inheritance.algo.ts::BaseOne,tests/approvals/multi-inheritance.algo.ts::BaseTwo>.constructor
-    // tests/approvals/multi-inheritance.algo.ts:28
+    // tests/approvals/multi-inheritance.algo.ts:41
     // stateMulti = GlobalState({ initialValue: 'Hmmm' })
     pushbytes "stateMulti"
     pushbytes "Hmmm"
@@ -36,11 +36,11 @@ polytype/lib/polytype-module.d.ts::ClusteredContract<tests/approvals/multi-inher
 
 // tests/approvals/multi-inheritance.algo.ts::BaseOne.constructor() -> void:
 tests/approvals/multi-inheritance.algo.ts::BaseOne.constructor:
-    // tests/approvals/multi-inheritance.algo.ts:13
+    // tests/approvals/multi-inheritance.algo.ts:17
     // export class BaseOne extends CommonBase {
     proto 0 0
     callsub tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor
-    // tests/approvals/multi-inheritance.algo.ts:14
+    // tests/approvals/multi-inheritance.algo.ts:18
     // stateOne = GlobalState({ initialValue: Uint64(45) })
     pushbytes "stateOne"
     pushint 45 // 45
@@ -63,11 +63,11 @@ tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor:
 
 // tests/approvals/multi-inheritance.algo.ts::BaseTwo.constructor() -> void:
 tests/approvals/multi-inheritance.algo.ts::BaseTwo.constructor:
-    // tests/approvals/multi-inheritance.algo.ts:20
+    // tests/approvals/multi-inheritance.algo.ts:24
     // export class BaseTwo extends CommonBase {
     proto 0 0
     callsub tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor
-    // tests/approvals/multi-inheritance.algo.ts:21
+    // tests/approvals/multi-inheritance.algo.ts:25
     // stateTwo = GlobalState({ initialValue: 'Hello' })
     pushbytes "stateTwo"
     pushbytes "Hello"
@@ -77,24 +77,25 @@ tests/approvals/multi-inheritance.algo.ts::BaseTwo.constructor:
 
 // tests/approvals/multi-inheritance.algo.ts::MultiBases.__puya_arc4_router__() -> uint64:
 __puya_arc4_router__:
-    // tests/approvals/multi-inheritance.algo.ts:27
+    // tests/approvals/multi-inheritance.algo.ts:40
     // export class MultiBases extends classes(BaseOne, BaseTwo) {
     proto 0 1
     txn NumAppArgs
     intc_0 // 0
     !=
-    bz __puya_arc4_router___bare_routing@8
+    bz __puya_arc4_router___bare_routing@9
     txna ApplicationArgs 0
     pushbytes 0x290eba9f // method "methodMulti()string"
     pushbytes 0xc32533e3 // method "methodOne()string"
     pushbytes 0x455c8d09 // method "methodCommon()string"
+    pushbytes 0xf9f5142c // method "b2CantOverride()string"
     pushbytes 0x363b329e // method "methodTwo()string"
-    uncover 4
-    match __puya_arc4_router___methodMulti_route@2 __puya_arc4_router___methodOne_route@3 __puya_arc4_router___methodCommon_route@4 __puya_arc4_router___methodTwo_route@5
-    b __puya_arc4_router___switch_case_default@6
+    uncover 5
+    match __puya_arc4_router___methodMulti_route@2 __puya_arc4_router___methodOne_route@3 __puya_arc4_router___methodCommon_route@4 __puya_arc4_router___b2CantOverride_route@5 __puya_arc4_router___methodTwo_route@6
+    b __puya_arc4_router___switch_case_default@7
 
 __puya_arc4_router___methodMulti_route@2:
-    // tests/approvals/multi-inheritance.algo.ts:30
+    // tests/approvals/multi-inheritance.algo.ts:43
     // methodMulti() {
     txn OnCompletion
     intc_0 // NoOp
@@ -119,7 +120,7 @@ __puya_arc4_router___methodMulti_route@2:
     retsub
 
 __puya_arc4_router___methodOne_route@3:
-    // tests/approvals/multi-inheritance.algo.ts:15
+    // tests/approvals/multi-inheritance.algo.ts:19
     // methodOne() {
     txn OnCompletion
     intc_0 // NoOp
@@ -168,8 +169,33 @@ __puya_arc4_router___methodCommon_route@4:
     intc_1 // 1
     retsub
 
-__puya_arc4_router___methodTwo_route@5:
-    // tests/approvals/multi-inheritance.algo.ts:22
+__puya_arc4_router___b2CantOverride_route@5:
+    // tests/approvals/multi-inheritance.algo.ts:12
+    // b2CantOverride(): string {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    callsub b2CantOverride
+    dup
+    len
+    itob
+    extract 6 2
+    swap
+    concat
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    retsub
+
+__puya_arc4_router___methodTwo_route@6:
+    // tests/approvals/multi-inheritance.algo.ts:26
     // methodTwo() {
     txn OnCompletion
     intc_0 // NoOp
@@ -193,20 +219,20 @@ __puya_arc4_router___methodTwo_route@5:
     intc_1 // 1
     retsub
 
-__puya_arc4_router___switch_case_default@6:
-    b __puya_arc4_router___after_if_else@12
+__puya_arc4_router___switch_case_default@7:
+    b __puya_arc4_router___after_if_else@13
 
-__puya_arc4_router___bare_routing@8:
-    // tests/approvals/multi-inheritance.algo.ts:27
+__puya_arc4_router___bare_routing@9:
+    // tests/approvals/multi-inheritance.algo.ts:40
     // export class MultiBases extends classes(BaseOne, BaseTwo) {
     txn OnCompletion
     intc_0 // 0
     swap
-    match __puya_arc4_router_____algots__.defaultCreate@9
-    b __puya_arc4_router___switch_case_default@10
+    match __puya_arc4_router_____algots__.defaultCreate@10
+    b __puya_arc4_router___switch_case_default@11
 
-__puya_arc4_router_____algots__.defaultCreate@9:
-    // tests/approvals/multi-inheritance.algo.ts:27
+__puya_arc4_router_____algots__.defaultCreate@10:
+    // tests/approvals/multi-inheritance.algo.ts:40
     // export class MultiBases extends classes(BaseOne, BaseTwo) {
     txn ApplicationID
     intc_0 // 0
@@ -216,10 +242,10 @@ __puya_arc4_router_____algots__.defaultCreate@9:
     intc_1 // 1
     retsub
 
-__puya_arc4_router___switch_case_default@10:
+__puya_arc4_router___switch_case_default@11:
 
-__puya_arc4_router___after_if_else@12:
-    // tests/approvals/multi-inheritance.algo.ts:27
+__puya_arc4_router___after_if_else@13:
+    // tests/approvals/multi-inheritance.algo.ts:40
     // export class MultiBases extends classes(BaseOne, BaseTwo) {
     intc_0 // 0
     retsub
@@ -227,10 +253,10 @@ __puya_arc4_router___after_if_else@12:
 
 // tests/approvals/multi-inheritance.algo.ts::MultiBases.methodMulti() -> bytes:
 methodMulti:
-    // tests/approvals/multi-inheritance.algo.ts:30
+    // tests/approvals/multi-inheritance.algo.ts:43
     // methodMulti() {
     proto 0 1
-    // tests/approvals/multi-inheritance.algo.ts:31
+    // tests/approvals/multi-inheritance.algo.ts:44
     // return 'multi-bases'
     pushbytes "multi-bases"
     retsub
@@ -238,10 +264,10 @@ methodMulti:
 
 // tests/approvals/multi-inheritance.algo.ts::BaseOne.methodOne() -> bytes:
 methodOne:
-    // tests/approvals/multi-inheritance.algo.ts:15
+    // tests/approvals/multi-inheritance.algo.ts:19
     // methodOne() {
     proto 0 1
-    // tests/approvals/multi-inheritance.algo.ts:16
+    // tests/approvals/multi-inheritance.algo.ts:20
     // return 'base-one'
     pushbytes "base-one"
     retsub
@@ -254,16 +280,27 @@ methodCommon:
     proto 0 1
     // tests/approvals/multi-inheritance.algo.ts:9
     // return 'common'
-    pushbytes "common"
+    bytec_1 // "common"
+    retsub
+
+
+// tests/approvals/multi-inheritance.algo.ts::CommonBase.b2CantOverride() -> bytes:
+b2CantOverride:
+    // tests/approvals/multi-inheritance.algo.ts:12
+    // b2CantOverride(): string {
+    proto 0 1
+    // tests/approvals/multi-inheritance.algo.ts:13
+    // return 'common'
+    bytec_1 // "common"
     retsub
 
 
 // tests/approvals/multi-inheritance.algo.ts::BaseTwo.methodTwo() -> bytes:
 methodTwo:
-    // tests/approvals/multi-inheritance.algo.ts:22
+    // tests/approvals/multi-inheritance.algo.ts:26
     // methodTwo() {
     proto 0 1
-    // tests/approvals/multi-inheritance.algo.ts:23
+    // tests/approvals/multi-inheritance.algo.ts:27
     // return 'base-two'
     pushbytes "base-two"
     retsub
@@ -271,7 +308,7 @@ methodTwo:
 
 // tests/approvals/multi-inheritance.algo.ts::MultiBases.__algots__.defaultCreate() -> void:
 __algots__.defaultCreate:
-    // tests/approvals/multi-inheritance.algo.ts:27
+    // tests/approvals/multi-inheritance.algo.ts:40
     // export class MultiBases extends classes(BaseOne, BaseTwo) {
     proto 0 0
     retsub

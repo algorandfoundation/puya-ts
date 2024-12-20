@@ -52,4 +52,8 @@ describe('multi-inheritance', () => {
     expect((await appClientMultiBases.send.call({ method: 'methodTwo' })).return).toEqual('base-two')
     expect((await appClientMultiBases.send.call({ method: 'methodMulti' })).return).toEqual('multi-bases')
   })
+
+  test('MRO is depth first', async ({ appClientMultiBases, expect }) => {
+    expect((await appClientMultiBases.send.call({ method: 'b2CantOverride' })).return).toEqual('common')
+  })
 })

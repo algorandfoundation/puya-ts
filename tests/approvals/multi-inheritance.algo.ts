@@ -8,6 +8,10 @@ export class CommonBase extends Contract {
   methodCommon() {
     return 'common'
   }
+
+  b2CantOverride(): string {
+    return 'common'
+  }
 }
 
 export class BaseOne extends CommonBase {
@@ -20,6 +24,15 @@ export class BaseOne extends CommonBase {
 export class BaseTwo extends CommonBase {
   stateTwo = GlobalState({ initialValue: 'Hello' })
   methodTwo() {
+    return 'base-two'
+  }
+
+  /**
+   * Because CommonBase implements this method, and MRO for polytype is depth first; this method
+   * should not be accessible from MultiBases as the MRO should be `BaseOne => CommonBase => BaseTwo => CommonBase`
+   * and since CommonBase provides an implementation, this one should not be used
+   */
+  b2CantOverride(): string {
     return 'base-two'
   }
 }

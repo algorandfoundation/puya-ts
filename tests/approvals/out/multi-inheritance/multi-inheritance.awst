@@ -21,6 +21,11 @@ contract CommonBase
     return "common"
   }
   
+  b2CantOverride(): string
+  {
+    return "common"
+  }
+  
   constructor(): void
   {
     void
@@ -67,6 +72,11 @@ contract BaseOne
     return "common"
   }
   
+  CommonBase::b2CantOverride(): string
+  {
+    return "common"
+  }
+  
   CommonBase::constructor(): void
   {
     void
@@ -102,6 +112,11 @@ contract BaseTwo
     return "base-two"
   }
   
+  b2CantOverride(): string
+  {
+    return "base-two"
+  }
+  
   constructor(): void
   {
     super.constructor()
@@ -109,6 +124,11 @@ contract BaseTwo
   }
   
   CommonBase::methodCommon(): string
+  {
+    return "common"
+  }
+  
+  CommonBase::b2CantOverride(): string
   {
     return "common"
   }
@@ -178,6 +198,11 @@ contract MultiBases
     return "common"
   }
   
+  CommonBase::b2CantOverride(): string
+  {
+    return "common"
+  }
+  
   CommonBase::constructor(): void
   {
     void
@@ -185,6 +210,11 @@ contract MultiBases
   }
   
   BaseTwo::methodTwo(): string
+  {
+    return "base-two"
+  }
+  
+  BaseTwo::b2CantOverride(): string
   {
     return "base-two"
   }

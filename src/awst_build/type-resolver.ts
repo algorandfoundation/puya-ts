@@ -19,6 +19,7 @@ import {
   ClusteredPrototype,
   ContractClassPType,
   FunctionPType,
+  IntersectionPType,
   logicSigBaseType,
   LogicSigPType,
   NamespacePType,
@@ -122,16 +123,20 @@ export class TypeResolver {
   }
 
   resolveType(tsType: ts.Type, sourceLocation: SourceLocation): PType {
-    if (isIntersectionType(tsType)) {
+    intersect: if (isIntersectionType(tsType)) {
       if (tsType.aliasSymbol) {
-        const aliasName = this.getSymbolFullName(tsType.aliasSymbol, sourceLocation)
-        if (aliasName.fullName === '') {
-        }
+        break intersect
+        // const aliasName = this.getSymbolFullName(tsType.aliasSymbol, sourceLocation)
+        // if (aliasName.fullName === '@algorandfoundation/algorand-typescript/primitives.d.ts::uint64') {
+        //   break intersect
+        // }
       }
       // Special handling of struct base types which are an intersection of `StructBase` and the generic `T` type
       const parts = tsType.types.map((t) => this.resolveType(t, sourceLocation))
       if (parts.some((p) => p.fullName === arc4StructBaseType.fullName)) {
         return arc4StructBaseType
+      } else {
+        return IntersectionPType.fromTypes(parts)
       }
     }
     if (isUnionType(tsType)) {
