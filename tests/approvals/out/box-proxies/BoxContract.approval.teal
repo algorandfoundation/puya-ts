@@ -1,6 +1,8 @@
 #pragma version 10
+#pragma typetrack false
 
-tests/approvals/box-proxies.algo.ts::BoxContract.approvalProgram:
+// tests/approvals/box-proxies.algo.ts::BoxContract.approvalProgram() -> uint64:
+main:
     intcblock 1 0 4
     bytecblock "A" "" "abc" "O" 0xffffffff
     // tests/approvals/box-proxies.algo.ts:74
@@ -9,6 +11,8 @@ tests/approvals/box-proxies.algo.ts::BoxContract.approvalProgram:
     intc_1 // 0
     !=
     bz main_after_if_else@2
+
+main_if_body@1:
     // tests/approvals/box-proxies.algo.ts:69
     // boxOne = Box<string>({ key: 'one' })
     pushbytes "one"
@@ -90,6 +94,8 @@ testBox:
     box_len
     bury 1
     bz testBox_bool_false@3
+
+testBox_and_contd@1:
     // tests/approvals/box-proxies.algo.ts:5
     // const boxA = Box<string>({ key: Bytes('A') })
     bytec_0 // "A"
@@ -98,11 +104,9 @@ testBox:
     box_len
     bury 1
     bz testBox_bool_false@3
-    intc_0 // 1
-    b testBox_bool_merge@4
 
-testBox_bool_false@3:
-    intc_1 // 0
+testBox_bool_true@2:
+    intc_0 // 1
 
 testBox_bool_merge@4:
     // tests/approvals/box-proxies.algo.ts:12
@@ -132,6 +136,8 @@ testBox_bool_merge@4:
     box_len
     bury 1
     bnz testBox_bool_false@7
+
+testBox_and_contd@5:
     // tests/approvals/box-proxies.algo.ts:5
     // const boxA = Box<string>({ key: Bytes('A') })
     bytec_0 // "A"
@@ -140,11 +146,9 @@ testBox_bool_merge@4:
     box_len
     bury 1
     bnz testBox_bool_false@7
-    intc_0 // 1
-    b testBox_bool_merge@8
 
-testBox_bool_false@7:
-    intc_1 // 0
+testBox_bool_true@6:
+    intc_0 // 1
 
 testBox_bool_merge@8:
     // tests/approvals/box-proxies.algo.ts:18
@@ -204,6 +208,14 @@ testBox_bool_merge@8:
     // assert(e)
     assert
     retsub
+
+testBox_bool_false@7:
+    intc_1 // 0
+    b testBox_bool_merge@8
+
+testBox_bool_false@3:
+    intc_1 // 0
+    b testBox_bool_merge@4
 
 
 // tests/approvals/box-proxies.algo.ts::testBoxMap(box: bytes, key: bytes, value: bytes) -> void:
@@ -326,6 +338,8 @@ testBoxRef:
     box_len
     bury 1
     bnz testBoxRef_else_body@2
+
+testBoxRef_if_body@1:
     // tests/approvals/box-proxies.algo.ts:47
     // const boxRef = BoxRef({ key: 'abc' })
     bytec_2 // "abc"
@@ -334,28 +348,6 @@ testBoxRef:
     pushint 1000 // 1000
     box_create
     pop
-    b testBoxRef_after_if_else@5
-
-testBoxRef_else_body@2:
-    // tests/approvals/box-proxies.algo.ts:47
-    // const boxRef = BoxRef({ key: 'abc' })
-    bytec_2 // "abc"
-    // tests/approvals/box-proxies.algo.ts:52
-    // } else if (boxRef.length !== length) {
-    box_len
-    assert // Box must have value
-    frame_dig -1
-    !=
-    bz testBoxRef_after_if_else@4
-    // tests/approvals/box-proxies.algo.ts:47
-    // const boxRef = BoxRef({ key: 'abc' })
-    bytec_2 // "abc"
-    // tests/approvals/box-proxies.algo.ts:53
-    // boxRef.resize(length)
-    frame_dig -1
-    box_resize
-
-testBoxRef_after_if_else@4:
 
 testBoxRef_after_if_else@5:
     // tests/approvals/box-proxies.algo.ts:55
@@ -364,20 +356,13 @@ testBoxRef_after_if_else@5:
     box_len
     bury 1
     bz testBoxRef_else_body@7
+
+testBoxRef_if_body@6:
     // tests/approvals/box-proxies.algo.ts:56
     // box.resize(4)
     frame_dig -2
     intc_2 // 4
     box_resize
-    b testBoxRef_after_if_else@8
-
-testBoxRef_else_body@7:
-    // tests/approvals/box-proxies.algo.ts:58
-    // box.create({ size: 4 })
-    frame_dig -2
-    intc_2 // 4
-    box_create
-    pop
 
 testBoxRef_after_if_else@8:
     // tests/approvals/box-proxies.algo.ts:61
@@ -413,3 +398,36 @@ testBoxRef_after_if_else@8:
     ==
     assert
     retsub
+
+testBoxRef_else_body@7:
+    // tests/approvals/box-proxies.algo.ts:58
+    // box.create({ size: 4 })
+    frame_dig -2
+    intc_2 // 4
+    box_create
+    pop
+    b testBoxRef_after_if_else@8
+
+testBoxRef_else_body@2:
+    // tests/approvals/box-proxies.algo.ts:47
+    // const boxRef = BoxRef({ key: 'abc' })
+    bytec_2 // "abc"
+    // tests/approvals/box-proxies.algo.ts:52
+    // } else if (boxRef.length !== length) {
+    box_len
+    assert // Box must have value
+    frame_dig -1
+    !=
+    bz testBoxRef_after_if_else@4
+
+testBoxRef_if_body@3:
+    // tests/approvals/box-proxies.algo.ts:47
+    // const boxRef = BoxRef({ key: 'abc' })
+    bytec_2 // "abc"
+    // tests/approvals/box-proxies.algo.ts:53
+    // boxRef.resize(length)
+    frame_dig -1
+    box_resize
+
+testBoxRef_after_if_else@4:
+    b testBoxRef_after_if_else@5

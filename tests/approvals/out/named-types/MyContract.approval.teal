@@ -1,21 +1,22 @@
 #pragma version 10
+#pragma typetrack false
 
-tests/approvals/named-types.algo.ts::MyContract.approvalProgram:
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
     intcblock 0 1 8
     bytecblock 0x 0x151f7c75
-    callsub __puya_arc4_router__
-    return
 
-
-// tests/approvals/named-types.algo.ts::MyContract.__puya_arc4_router__() -> uint64:
-__puya_arc4_router__:
+main_block@1:
     // tests/approvals/named-types.algo.ts:14
     // export class MyContract extends Contract {
-    proto 0 1
     txn NumAppArgs
     intc_0 // 0
     !=
-    bz __puya_arc4_router___bare_routing@9
+    bz main_bare_routing@10
+
+main_abi_routing@2:
+    // tests/approvals/named-types.algo.ts:14
+    // export class MyContract extends Contract {
     txna ApplicationArgs 0
     pushbytes 0xf02228b0 // method "getXY()(uint64,uint64)"
     pushbytes 0xd908575b // method "getYX()(uint64,uint64)"
@@ -23,142 +24,21 @@ __puya_arc4_router__:
     pushbytes 0xdc75f81d // method "test((uint64,uint64),(uint64,uint64))void"
     pushbytes 0x040e2e4e // method "testing()((uint64,uint64),(uint64,uint64),(uint64,uint64))"
     uncover 5
-    match __puya_arc4_router___getXY_route@2 __puya_arc4_router___getYX_route@3 __puya_arc4_router___getAnon_route@4 __puya_arc4_router___test_route@5 __puya_arc4_router___testing_route@6
-    b __puya_arc4_router___switch_case_default@7
+    match main_getXY_route@3 main_getYX_route@4 main_getAnon_route@5 main_test_route@6 main_testing_route@7
 
-__puya_arc4_router___getXY_route@2:
-    // tests/approvals/named-types.algo.ts:15
-    // public getXY(): XY {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    callsub getXY
-    swap
-    itob
-    swap
-    itob
-    swap
-    bytec_0 // 0x
-    swap
-    concat
-    swap
-    concat
-    bytec_1 // 0x151f7c75
-    swap
-    concat
-    log
-    intc_1 // 1
-    retsub
+main_switch_case_default@8:
 
-__puya_arc4_router___getYX_route@3:
-    // tests/approvals/named-types.algo.ts:22
-    // public getYX(): YX {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    callsub getYX
-    swap
-    itob
-    swap
-    itob
-    swap
-    bytec_0 // 0x
-    swap
-    concat
-    swap
-    concat
-    bytec_1 // 0x151f7c75
-    swap
-    concat
-    log
-    intc_1 // 1
-    retsub
+main_switch_case_next@9:
 
-__puya_arc4_router___getAnon_route@4:
-    // tests/approvals/named-types.algo.ts:29
-    // public getAnon() {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    callsub getAnon
-    swap
-    itob
-    swap
-    itob
-    swap
-    bytec_0 // 0x
-    swap
-    concat
-    swap
-    concat
-    bytec_1 // 0x151f7c75
-    swap
-    concat
-    log
-    intc_1 // 1
-    retsub
-
-__puya_arc4_router___test_route@5:
-    // tests/approvals/named-types.algo.ts:36
-    // public test(x: XY, y: YX) {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
+main_after_if_else@14:
     // tests/approvals/named-types.algo.ts:14
     // export class MyContract extends Contract {
-    txna ApplicationArgs 1
-    dup
     intc_0 // 0
-    intc_2 // 8
-    extract3 // on error: Index access is out of bounds
-    btoi
-    swap
-    intc_2 // 8
-    dup
-    extract3 // on error: Index access is out of bounds
-    btoi
-    txna ApplicationArgs 2
-    dup
-    intc_0 // 0
-    intc_2 // 8
-    extract3 // on error: Index access is out of bounds
-    btoi
-    swap
-    intc_2 // 8
-    dup
-    extract3 // on error: Index access is out of bounds
-    btoi
-    // tests/approvals/named-types.algo.ts:36
-    // public test(x: XY, y: YX) {
-    uncover 3
-    uncover 3
-    uncover 3
-    uncover 3
-    callsub test
-    intc_1 // 1
-    retsub
 
-__puya_arc4_router___testing_route@6:
+main_after_inlined_tests/approvals/named-types.algo.ts::MyContract.__puya_arc4_router__@15:
+    return
+
+main_testing_route@7:
     // tests/approvals/named-types.algo.ts:40
     // public testing() {
     txn OnCompletion
@@ -216,21 +96,154 @@ __puya_arc4_router___testing_route@6:
     concat
     log
     intc_1 // 1
-    retsub
+    b main_after_inlined_tests/approvals/named-types.algo.ts::MyContract.__puya_arc4_router__@15
 
-__puya_arc4_router___switch_case_default@7:
-    b __puya_arc4_router___after_if_else@13
+main_test_route@6:
+    // tests/approvals/named-types.algo.ts:36
+    // public test(x: XY, y: YX) {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    // tests/approvals/named-types.algo.ts:14
+    // export class MyContract extends Contract {
+    txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    intc_2 // 8
+    extract3 // on error: Index access is out of bounds
+    btoi
+    swap
+    intc_2 // 8
+    dup
+    extract3 // on error: Index access is out of bounds
+    btoi
+    txna ApplicationArgs 2
+    dup
+    intc_0 // 0
+    intc_2 // 8
+    extract3 // on error: Index access is out of bounds
+    btoi
+    swap
+    intc_2 // 8
+    dup
+    extract3 // on error: Index access is out of bounds
+    btoi
+    // tests/approvals/named-types.algo.ts:36
+    // public test(x: XY, y: YX) {
+    uncover 3
+    uncover 3
+    uncover 3
+    uncover 3
+    callsub test
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/named-types.algo.ts::MyContract.__puya_arc4_router__@15
 
-__puya_arc4_router___bare_routing@9:
+main_getAnon_route@5:
+    // tests/approvals/named-types.algo.ts:29
+    // public getAnon() {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    callsub getAnon
+    swap
+    itob
+    swap
+    itob
+    swap
+    bytec_0 // 0x
+    swap
+    concat
+    swap
+    concat
+    bytec_1 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/named-types.algo.ts::MyContract.__puya_arc4_router__@15
+
+main_getYX_route@4:
+    // tests/approvals/named-types.algo.ts:22
+    // public getYX(): YX {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    callsub getYX
+    swap
+    itob
+    swap
+    itob
+    swap
+    bytec_0 // 0x
+    swap
+    concat
+    swap
+    concat
+    bytec_1 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/named-types.algo.ts::MyContract.__puya_arc4_router__@15
+
+main_getXY_route@3:
+    // tests/approvals/named-types.algo.ts:15
+    // public getXY(): XY {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    callsub getXY
+    swap
+    itob
+    swap
+    itob
+    swap
+    bytec_0 // 0x
+    swap
+    concat
+    swap
+    concat
+    bytec_1 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/named-types.algo.ts::MyContract.__puya_arc4_router__@15
+
+main_bare_routing@10:
     // tests/approvals/named-types.algo.ts:14
     // export class MyContract extends Contract {
     txn OnCompletion
     intc_0 // 0
     swap
-    match __puya_arc4_router_____algots__.defaultCreate@10
-    b __puya_arc4_router___switch_case_default@11
+    match main___algots__.defaultCreate@11
 
-__puya_arc4_router_____algots__.defaultCreate@10:
+main_switch_case_default@12:
+
+main_switch_case_next@13:
+    b main_after_if_else@14
+
+main___algots__.defaultCreate@11:
     // tests/approvals/named-types.algo.ts:14
     // export class MyContract extends Contract {
     txn ApplicationID
@@ -239,15 +252,7 @@ __puya_arc4_router_____algots__.defaultCreate@10:
     assert // can only call when creating
     callsub __algots__.defaultCreate
     intc_1 // 1
-    retsub
-
-__puya_arc4_router___switch_case_default@11:
-
-__puya_arc4_router___after_if_else@13:
-    // tests/approvals/named-types.algo.ts:14
-    // export class MyContract extends Contract {
-    intc_0 // 0
-    retsub
+    b main_after_inlined_tests/approvals/named-types.algo.ts::MyContract.__puya_arc4_router__@15
 
 
 // tests/approvals/named-types.algo.ts::MyContract.getXY() -> uint64, uint64:
@@ -318,21 +323,27 @@ test:
     frame_dig -2
     ==
     bz test_bool_false@3
+
+test_and_contd@1:
+    // tests/approvals/named-types.algo.ts:37
+    // assertMatch(x, { ...y })
     frame_dig -4
     frame_dig -1
     ==
     bz test_bool_false@3
-    intc_1 // 1
-    b test_bool_merge@4
 
-test_bool_false@3:
-    intc_0 // 0
+test_bool_true@2:
+    intc_1 // 1
 
 test_bool_merge@4:
     // tests/approvals/named-types.algo.ts:37
     // assertMatch(x, { ...y })
     assert // assert target is match for conditions
     retsub
+
+test_bool_false@3:
+    intc_0 // 0
+    b test_bool_merge@4
 
 
 // tests/approvals/named-types.algo.ts::MyContract.testing() -> uint64, uint64, uint64, uint64, uint64, uint64:

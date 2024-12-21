@@ -1,28 +1,42 @@
 #pragma version 11
+#pragma typetrack false
 
-tests/approvals/avm11.algo.ts::Avm11Contract.approvalProgram:
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
     intcblock 0 1
-    callsub __puya_arc4_router__
-    return
 
-
-// tests/approvals/avm11.algo.ts::Avm11Contract.__puya_arc4_router__() -> uint64:
-__puya_arc4_router__:
+main_block@1:
     // tests/approvals/avm11.algo.ts:11-12
     // @contract({ name: 'AVM11Contract', avmVersion: 11 })
     // export class Avm11Contract extends Contract {
-    proto 0 1
     txn NumAppArgs
     intc_0 // 0
     !=
-    bz __puya_arc4_router___bare_routing@5
+    bz main_bare_routing@6
+
+main_abi_routing@2:
+    // tests/approvals/avm11.algo.ts:11-12
+    // @contract({ name: 'AVM11Contract', avmVersion: 11 })
+    // export class Avm11Contract extends Contract {
     txna ApplicationArgs 0
     pushbytes 0x52448a31 // method "testNewOps()void"
     swap
-    match __puya_arc4_router___testNewOps_route@2
-    b __puya_arc4_router___switch_case_default@3
+    match main_testNewOps_route@3
 
-__puya_arc4_router___testNewOps_route@2:
+main_switch_case_default@4:
+
+main_switch_case_next@5:
+
+main_after_if_else@10:
+    // tests/approvals/avm11.algo.ts:11-12
+    // @contract({ name: 'AVM11Contract', avmVersion: 11 })
+    // export class Avm11Contract extends Contract {
+    intc_0 // 0
+
+main_after_inlined_tests/approvals/avm11.algo.ts::Avm11Contract.__puya_arc4_router__@11:
+    return
+
+main_testNewOps_route@3:
     // tests/approvals/avm11.algo.ts:13
     // testNewOps() {
     txn OnCompletion
@@ -35,22 +49,23 @@ __puya_arc4_router___testNewOps_route@2:
     assert // can only call when not creating
     callsub testNewOps
     intc_1 // 1
-    retsub
+    b main_after_inlined_tests/approvals/avm11.algo.ts::Avm11Contract.__puya_arc4_router__@11
 
-__puya_arc4_router___switch_case_default@3:
-    b __puya_arc4_router___after_if_else@9
-
-__puya_arc4_router___bare_routing@5:
+main_bare_routing@6:
     // tests/approvals/avm11.algo.ts:11-12
     // @contract({ name: 'AVM11Contract', avmVersion: 11 })
     // export class Avm11Contract extends Contract {
     txn OnCompletion
     intc_0 // 0
     swap
-    match __puya_arc4_router_____algots__.defaultCreate@6
-    b __puya_arc4_router___switch_case_default@7
+    match main___algots__.defaultCreate@7
 
-__puya_arc4_router_____algots__.defaultCreate@6:
+main_switch_case_default@8:
+
+main_switch_case_next@9:
+    b main_after_if_else@10
+
+main___algots__.defaultCreate@7:
     // tests/approvals/avm11.algo.ts:11-12
     // @contract({ name: 'AVM11Contract', avmVersion: 11 })
     // export class Avm11Contract extends Contract {
@@ -60,16 +75,7 @@ __puya_arc4_router_____algots__.defaultCreate@6:
     assert // can only call when creating
     callsub __algots__.defaultCreate
     intc_1 // 1
-    retsub
-
-__puya_arc4_router___switch_case_default@7:
-
-__puya_arc4_router___after_if_else@9:
-    // tests/approvals/avm11.algo.ts:11-12
-    // @contract({ name: 'AVM11Contract', avmVersion: 11 })
-    // export class Avm11Contract extends Contract {
-    intc_0 // 0
-    retsub
+    b main_after_inlined_tests/approvals/avm11.algo.ts::Avm11Contract.__puya_arc4_router__@11
 
 
 // tests/approvals/avm11.algo.ts::Avm11Contract.testNewOps() -> void:

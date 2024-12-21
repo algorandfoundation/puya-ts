@@ -1,0 +1,17 @@
+main tests/approvals/property-ordering.algo.ts::Demo.approvalProgram:
+    block@0: // L19
+        tests/approvals/property-ordering.algo.ts::test_assign_from_literal(4u)
+        tests/approvals/property-ordering.algo.ts::test_assign_from_var(3u, 4u)
+        return 1u
+
+subroutine tests/approvals/property-ordering.algo.ts::test_assign_from_literal(x: uint64) -> void:
+    block@0: // L10
+        let b#0: uint64 = (* x#0 2u)
+        let b#1: uint64 = (* x#0 2u)
+        let (obj.a#0: uint64, obj.z#0: uint64) = (b#0, b#1)
+        return 
+
+subroutine tests/approvals/property-ordering.algo.ts::test_assign_from_var(x.a: uint64, x.b: uint64) -> void:
+    block@0: // L6
+        let (obj.b#0: uint64, obj.a#0: uint64) = (x.b#0, x.a#0)
+        return 

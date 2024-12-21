@@ -1,29 +1,72 @@
 #pragma version 10
+#pragma typetrack false
 
-tests/approvals/strings.algo.ts::StringContract.approvalProgram:
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
     intcblock 0 1
     bytecblock 0x151f7c75
-    callsub __puya_arc4_router__
-    return
 
-
-// tests/approvals/strings.algo.ts::StringContract.__puya_arc4_router__() -> uint64:
-__puya_arc4_router__:
+main_block@1:
     // tests/approvals/strings.algo.ts:3
     // class StringContract extends Contract {
-    proto 0 1
     txn NumAppArgs
     intc_0 // 0
     !=
-    bz __puya_arc4_router___bare_routing@6
+    bz main_bare_routing@7
+
+main_abi_routing@2:
+    // tests/approvals/strings.algo.ts:3
+    // class StringContract extends Contract {
     txna ApplicationArgs 0
     pushbytes 0x5049bd1b // method "join(string,string)string"
     pushbytes 0xdc882e2f // method "interpolate(string)string"
     uncover 2
-    match __puya_arc4_router___join_route@2 __puya_arc4_router___interpolate_route@3
-    b __puya_arc4_router___switch_case_default@4
+    match main_join_route@3 main_interpolate_route@4
 
-__puya_arc4_router___join_route@2:
+main_switch_case_default@5:
+
+main_switch_case_next@6:
+
+main_after_if_else@11:
+    // tests/approvals/strings.algo.ts:3
+    // class StringContract extends Contract {
+    intc_0 // 0
+
+main_after_inlined_tests/approvals/strings.algo.ts::StringContract.__puya_arc4_router__@12:
+    return
+
+main_interpolate_route@4:
+    // tests/approvals/strings.algo.ts:8
+    // interpolate(a: string): string {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    // tests/approvals/strings.algo.ts:3
+    // class StringContract extends Contract {
+    txna ApplicationArgs 1
+    extract 2 0
+    // tests/approvals/strings.algo.ts:8
+    // interpolate(a: string): string {
+    callsub interpolate
+    dup
+    len
+    itob
+    extract 6 2
+    swap
+    concat
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/strings.algo.ts::StringContract.__puya_arc4_router__@12
+
+main_join_route@3:
     // tests/approvals/strings.algo.ts:4
     // join(a: string, b: string): string {
     txn OnCompletion
@@ -54,52 +97,22 @@ __puya_arc4_router___join_route@2:
     concat
     log
     intc_1 // 1
-    retsub
+    b main_after_inlined_tests/approvals/strings.algo.ts::StringContract.__puya_arc4_router__@12
 
-__puya_arc4_router___interpolate_route@3:
-    // tests/approvals/strings.algo.ts:8
-    // interpolate(a: string): string {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    // tests/approvals/strings.algo.ts:3
-    // class StringContract extends Contract {
-    txna ApplicationArgs 1
-    extract 2 0
-    // tests/approvals/strings.algo.ts:8
-    // interpolate(a: string): string {
-    callsub interpolate
-    dup
-    len
-    itob
-    extract 6 2
-    swap
-    concat
-    bytec_0 // 0x151f7c75
-    swap
-    concat
-    log
-    intc_1 // 1
-    retsub
-
-__puya_arc4_router___switch_case_default@4:
-    b __puya_arc4_router___after_if_else@10
-
-__puya_arc4_router___bare_routing@6:
+main_bare_routing@7:
     // tests/approvals/strings.algo.ts:3
     // class StringContract extends Contract {
     txn OnCompletion
     intc_0 // 0
     swap
-    match __puya_arc4_router_____algots__.defaultCreate@7
-    b __puya_arc4_router___switch_case_default@8
+    match main___algots__.defaultCreate@8
 
-__puya_arc4_router_____algots__.defaultCreate@7:
+main_switch_case_default@9:
+
+main_switch_case_next@10:
+    b main_after_if_else@11
+
+main___algots__.defaultCreate@8:
     // tests/approvals/strings.algo.ts:3
     // class StringContract extends Contract {
     txn ApplicationID
@@ -108,15 +121,7 @@ __puya_arc4_router_____algots__.defaultCreate@7:
     assert // can only call when creating
     callsub __algots__.defaultCreate
     intc_1 // 1
-    retsub
-
-__puya_arc4_router___switch_case_default@8:
-
-__puya_arc4_router___after_if_else@10:
-    // tests/approvals/strings.algo.ts:3
-    // class StringContract extends Contract {
-    intc_0 // 0
-    retsub
+    b main_after_inlined_tests/approvals/strings.algo.ts::StringContract.__puya_arc4_router__@12
 
 
 // tests/approvals/strings.algo.ts::StringContract.join(a: bytes, b: bytes) -> bytes:

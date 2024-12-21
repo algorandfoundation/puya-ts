@@ -1,32 +1,42 @@
 #pragma version 10
+#pragma typetrack false
 
-tests/approvals/implicit-create.algo.ts::ExplicitBareCreateFromBase.approvalProgram:
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
     intcblock 0
-    callsub __puya_arc4_router__
-    return
 
-
-// tests/approvals/implicit-create.algo.ts::ExplicitBareCreateFromBase.__puya_arc4_router__() -> uint64:
-__puya_arc4_router__:
+main_block@1:
     // tests/approvals/implicit-create.algo.ts:21
     // export class ExplicitBareCreateFromBase extends BaseWithBareCreate {}
-    proto 0 1
     txn NumAppArgs
     intc_0 // 0
     !=
-    bz __puya_arc4_router___bare_routing@2
-    b __puya_arc4_router___after_if_else@6
+    bz main_bare_routing@3
 
-__puya_arc4_router___bare_routing@2:
+main_abi_routing@2:
+
+main_after_if_else@7:
+    // tests/approvals/implicit-create.algo.ts:21
+    // export class ExplicitBareCreateFromBase extends BaseWithBareCreate {}
+    intc_0 // 0
+
+main_after_inlined_tests/approvals/implicit-create.algo.ts::ExplicitBareCreateFromBase.__puya_arc4_router__@8:
+    return
+
+main_bare_routing@3:
     // tests/approvals/implicit-create.algo.ts:21
     // export class ExplicitBareCreateFromBase extends BaseWithBareCreate {}
     txn OnCompletion
     intc_0 // 0
     swap
-    match __puya_arc4_router___create@3
-    b __puya_arc4_router___switch_case_default@4
+    match main_create@4
 
-__puya_arc4_router___create@3:
+main_switch_case_default@5:
+
+main_switch_case_next@6:
+    b main_after_if_else@7
+
+main_create@4:
     // tests/approvals/implicit-create.algo.ts:14
     // @baremethod({ onCreate: 'require' })
     txn ApplicationID
@@ -38,15 +48,7 @@ __puya_arc4_router___create@3:
     // public create() {}
     callsub create
     pushint 1 // 1
-    retsub
-
-__puya_arc4_router___switch_case_default@4:
-
-__puya_arc4_router___after_if_else@6:
-    // tests/approvals/implicit-create.algo.ts:21
-    // export class ExplicitBareCreateFromBase extends BaseWithBareCreate {}
-    intc_0 // 0
-    retsub
+    b main_after_inlined_tests/approvals/implicit-create.algo.ts::ExplicitBareCreateFromBase.__puya_arc4_router__@8
 
 
 // tests/approvals/implicit-create.algo.ts::BaseWithBareCreate.create() -> void:
