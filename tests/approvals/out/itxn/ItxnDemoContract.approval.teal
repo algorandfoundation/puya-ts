@@ -1,10 +1,14 @@
 #pragma version 10
+#pragma typetrack false
 
-tests/approvals/itxn.algo.ts::ItxnDemoContract.approvalProgram:
+// tests/approvals/itxn.algo.ts::ItxnDemoContract.approvalProgram() -> uint64:
+main:
     intcblock 0 3 1 1000
-    bytecblock "name" "unit" 0x098101 "AST1" "AST2" "AST3" "3rd" "with args param set" "\t\xc2\x81\x01"
+    bytecblock "name" "unit" 0x098101 0x "AST1" "AST2" "AST3" "3rd" "with args param set" "\t\xc2\x81\x01"
     txn ApplicationID
     bnz main_after_if_else@2
+
+main_if_body@1:
     callsub constructor
 
 main_after_if_else@2:
@@ -12,6 +16,8 @@ main_after_if_else@2:
     // if (Txn.numAppArgs) {
     txn NumAppArgs
     bz main_after_if_else@15
+
+main_if_body@3:
     // tests/approvals/itxn.algo.ts:12
     // switch (Txn.applicationArgs(0)) {
     intc_0 // 0
@@ -42,37 +48,10 @@ main_after_if_else@2:
     // }
     uncover 4
     match main_switch_case_0@4 main_switch_case_1@6 main_switch_case_2@8 main_switch_case_3@10
-    b main_switch_case_default@12
-
-main_switch_case_0@4:
-    // tests/approvals/itxn.algo.ts:14
-    // this.test1()
-    callsub test1
-    // tests/approvals/itxn.algo.ts:15
-    // break
-    b main_block@14
-
-main_switch_case_1@6:
-    // tests/approvals/itxn.algo.ts:17
-    // this.test2()
-    callsub test2
-    // tests/approvals/itxn.algo.ts:18
-    // break
-    b main_block@14
-
-main_switch_case_2@8:
-    // tests/approvals/itxn.algo.ts:19
-    // case Bytes('test3'):
-    b main_block@11
-
-main_switch_case_3@10:
-
-main_block@11:
-    // tests/approvals/itxn.algo.ts:21
-    // break
-    b main_block@14
 
 main_switch_case_default@12:
+
+main_switch_case_next@13:
 
 main_block@14:
 
@@ -81,6 +60,40 @@ main_after_if_else@15:
     // return true
     intc_2 // 1
     return
+
+main_switch_case_3@10:
+
+main_block@11:
+    // tests/approvals/itxn.algo.ts:21
+    // break
+    b main_block@14
+
+main_switch_case_2@8:
+
+main_block@9:
+    // tests/approvals/itxn.algo.ts:19
+    // case Bytes('test3'):
+    b main_block@11
+
+main_switch_case_1@6:
+
+main_block@7:
+    // tests/approvals/itxn.algo.ts:17
+    // this.test2()
+    callsub test2
+    // tests/approvals/itxn.algo.ts:18
+    // break
+    b main_block@14
+
+main_switch_case_0@4:
+
+main_block@5:
+    // tests/approvals/itxn.algo.ts:14
+    // this.test1()
+    callsub test1
+    // tests/approvals/itxn.algo.ts:15
+    // break
+    b main_block@14
 
 
 // tests/approvals/itxn.algo.ts::ItxnDemoContract.constructor() -> void:
@@ -91,7 +104,7 @@ constructor:
     // tests/approvals/itxn.algo.ts:8
     // name = GlobalState({ initialValue: Bytes() })
     bytec_0 // "name"
-    pushbytes 0x
+    bytec_3 // 0x
     app_global_put
     retsub
 
@@ -107,7 +120,7 @@ test1:
     bytec_0 // "name"
     // tests/approvals/itxn.algo.ts:28
     // this.name.value = Bytes('AST1')
-    bytec_3 // "AST1"
+    bytec 4 // "AST1"
     app_global_put
     // tests/approvals/itxn.algo.ts:32
     // assetName: this.name.value,
@@ -134,7 +147,7 @@ test1:
     bytec_0 // "name"
     // tests/approvals/itxn.algo.ts:39
     // this.name.value = Bytes('AST2')
-    bytec 4 // "AST2"
+    bytec 5 // "AST2"
     app_global_put
     // tests/approvals/itxn.algo.ts:40
     // const asset1_txn = assetParams.submit()
@@ -167,6 +180,8 @@ test1:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
+
+test1_next_txn@1:
     // tests/approvals/itxn.algo.ts:40
     // const asset1_txn = assetParams.submit()
     itxn_submit
@@ -216,6 +231,8 @@ test1:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
+
+test1_next_txn@2:
     // tests/approvals/itxn.algo.ts:44
     // const asset2_txn = assetParams.submit()
     itxn_submit
@@ -225,12 +242,12 @@ test1:
     // tests/approvals/itxn.algo.ts:46
     // assert(asset1_txn.assetName === Bytes('AST1'), 'asset1_txn is correct')
     frame_dig 0
-    bytec_3 // "AST1"
+    bytec 4 // "AST1"
     ==
     assert // asset1_txn is correct
     // tests/approvals/itxn.algo.ts:47
     // assert(asset2_txn.assetName === Bytes('AST2'), 'asset2_txn is correct')
-    bytec 4 // "AST2"
+    bytec 5 // "AST2"
     ==
     assert // asset2_txn is correct
     // tests/approvals/itxn.algo.ts:48
@@ -238,14 +255,14 @@ test1:
     swap
     asset_params_get AssetName
     assert // asset exists
-    bytec_3 // "AST1"
+    bytec 4 // "AST1"
     ==
     assert // created asset 1 is correct
     // tests/approvals/itxn.algo.ts:49
     // assert(asset2_txn.createdAsset.name === Bytes('AST2'), 'created asset 2 is correct')
     asset_params_get AssetName
     assert // asset exists
-    bytec 4 // "AST2"
+    bytec 5 // "AST2"
     ==
     assert // created asset 2 is correct
     // tests/approvals/itxn.algo.ts:61
@@ -271,6 +288,8 @@ test1:
     // fee: 0,
     intc_0 // 0
     itxn_field Fee
+
+test1_next_txn@3:
     // tests/approvals/itxn.algo.ts:61
     // const [appCreateTxn, asset3_txn] = itxn.submitGroup(appCreateParams, assetParams)
     itxn_next
@@ -288,7 +307,7 @@ test1:
     itxn_field ConfigAssetUnitName
     // tests/approvals/itxn.algo.ts:58
     // assetName: 'AST3',
-    bytec 5 // "AST3"
+    bytec 6 // "AST3"
     itxn_field ConfigAssetName
     // tests/approvals/itxn.algo.ts:31
     // total: 1000,
@@ -307,6 +326,8 @@ test1:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
+
+test1_next_txn@4:
     // tests/approvals/itxn.algo.ts:61
     // const [appCreateTxn, asset3_txn] = itxn.submitGroup(appCreateParams, assetParams)
     itxn_submit
@@ -318,7 +339,7 @@ test1:
     assert // app is created
     // tests/approvals/itxn.algo.ts:64
     // assert(asset3_txn.assetName === Bytes('AST3'), 'asset3_txn is correct')
-    bytec 5 // "AST3"
+    bytec 6 // "AST3"
     ==
     assert // asset3_txn is correct
     // tests/approvals/itxn.algo.ts:72
@@ -332,9 +353,11 @@ test1:
     // tests/approvals/itxn.algo.ts:72
     // itxn.submitGroup(appCreateParams, assetParams)
     bz test1_next_field@6
+
+test1_set_Note_0_to_0@5:
     // tests/approvals/itxn.algo.ts:67
     // note: '3rd',
-    bytec 6 // "3rd"
+    bytec 7 // "3rd"
     itxn_field Note
 
 test1_next_field@6:
@@ -358,6 +381,8 @@ test1_next_field@6:
     // fee: 0,
     intc_0 // 0
     itxn_field Fee
+
+test1_next_txn@7:
     // tests/approvals/itxn.algo.ts:72
     // itxn.submitGroup(appCreateParams, assetParams)
     itxn_next
@@ -369,9 +394,11 @@ test1_next_field@6:
     // tests/approvals/itxn.algo.ts:72
     // itxn.submitGroup(appCreateParams, assetParams)
     bz test1_next_field@9
+
+test1_set_Note_0_to_0@8:
     // tests/approvals/itxn.algo.ts:70
     // note: '3rd',
-    bytec 6 // "3rd"
+    bytec 7 // "3rd"
     itxn_field Note
 
 test1_next_field@9:
@@ -389,7 +416,7 @@ test1_next_field@9:
     itxn_field ConfigAssetUnitName
     // tests/approvals/itxn.algo.ts:58
     // assetName: 'AST3',
-    bytec 5 // "AST3"
+    bytec 6 // "AST3"
     itxn_field ConfigAssetName
     // tests/approvals/itxn.algo.ts:31
     // total: 1000,
@@ -408,6 +435,8 @@ test1_next_field@9:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
+
+test1_next_txn@10:
     // tests/approvals/itxn.algo.ts:72
     // itxn.submitGroup(appCreateParams, assetParams)
     itxn_submit
@@ -420,13 +449,17 @@ test2:
     // private test2() {
     proto 0 0
     intc_0 // 0
-    dupn 2
-    pushbytes ""
-    dupn 2
+    dup
+    bytec_3 // ""
+    dup
+    intc_0 // 0
+    bytec_3 // ""
     // tests/approvals/itxn.algo.ts:77
     // if (Txn.numAppArgs) {
     txn NumAppArgs
     bz test2_else_body@2
+
+test2_if_body@1:
     // tests/approvals/itxn.algo.ts:78
     // const args = [Bytes('1'), Bytes('2')] as const
     pushbytes "1"
@@ -436,46 +469,28 @@ test2:
     // tests/approvals/itxn.algo.ts:82
     // appArgs: args,
     pushint 2 // 2
-    frame_bury 3
+    frame_bury 2
     // tests/approvals/itxn.algo.ts:83
     // onCompletion: OnCompleteAction.NoOp,
     intc_0 // 0
     frame_bury 5
     intc_2 // 1
-    frame_bury 4
+    frame_bury 3
     // tests/approvals/itxn.algo.ts:84
     // note: 'with args param set',
-    bytec 7 // "with args param set"
-    b test2_after_if_else@3
-
-test2_else_body@2:
-    // tests/approvals/itxn.algo.ts:90
-    // appArgs: [Bytes('3'), '4', Bytes('5')],
-    pushbytes "3"
-    frame_bury 0
-    pushbytes "4"
-    frame_bury 1
-    pushbytes "5"
-    frame_bury 2
-    intc_1 // 3
-    frame_bury 3
-    // tests/approvals/itxn.algo.ts:91
-    // note: 'no args param set',
-    pushbytes "no args param set"
-    // tests/approvals/itxn.algo.ts:87
-    // createAppParams = itxn.applicationCall({
-    intc_0 // 0
-    frame_bury 4
+    bytec 8 // "with args param set"
 
 test2_after_if_else@3:
     // tests/approvals/itxn.algo.ts:94
     // const createAppTxn = createAppParams.submit()
     itxn_begin
     itxn_field Note
-    frame_dig 4
+    frame_dig 3
     intc_2 // 1
     >=
     bz test2_next_field@5
+
+test2_set_OnCompletion_0_to_0@4:
     frame_dig 5
     itxn_field OnCompletion
 
@@ -484,21 +499,23 @@ test2_next_field@5:
     itxn_field ApplicationArgs
     frame_dig 1
     itxn_field ApplicationArgs
-    frame_dig 3
+    frame_dig 2
     intc_1 // 3
     >=
     // tests/approvals/itxn.algo.ts:94
     // const createAppTxn = createAppParams.submit()
     bz test2_next_field@7
-    frame_dig 2
+
+test2_set_ApplicationArgs_2_to_2@6:
+    frame_dig 4
     itxn_field ApplicationArgs
 
 test2_next_field@7:
     // tests/approvals/itxn.algo.ts:5
     // const APPROVE = Bytes('\x09\x81\x01')
-    bytec 8 // "\t\xc2\x81\x01"
+    bytec 9 // "\t\xc2\x81\x01"
     itxn_field ClearStateProgramPages
-    bytec 8 // "\t\xc2\x81\x01"
+    bytec 9 // "\t\xc2\x81\x01"
     itxn_field ApprovalProgramPages
     // tests/approvals/itxn.algo.ts:79-85
     // createAppParams = itxn.applicationCall({
@@ -512,6 +529,8 @@ test2_next_field@7:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
+
+test2_next_txn@8:
     // tests/approvals/itxn.algo.ts:94
     // const createAppTxn = createAppParams.submit()
     itxn_submit
@@ -532,7 +551,27 @@ test2_next_field@7:
     assert // correct args used 2
     // tests/approvals/itxn.algo.ts:97
     // assert(createAppTxn.note === Bytes('with args param set'))
-    bytec 7 // "with args param set"
+    bytec 8 // "with args param set"
     ==
     assert
     retsub
+
+test2_else_body@2:
+    // tests/approvals/itxn.algo.ts:90
+    // appArgs: [Bytes('3'), '4', Bytes('5')],
+    pushbytes "3"
+    frame_bury 0
+    pushbytes "4"
+    frame_bury 1
+    pushbytes "5"
+    frame_bury 4
+    intc_1 // 3
+    frame_bury 2
+    // tests/approvals/itxn.algo.ts:91
+    // note: 'no args param set',
+    pushbytes "no args param set"
+    // tests/approvals/itxn.algo.ts:87
+    // createAppParams = itxn.applicationCall({
+    intc_0 // 0
+    frame_bury 3
+    b test2_after_if_else@3

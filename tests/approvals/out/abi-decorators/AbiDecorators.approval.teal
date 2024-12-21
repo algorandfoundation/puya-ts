@@ -1,39 +1,29 @@
 #pragma version 10
+#pragma typetrack false
 
-tests/approvals/abi-decorators.algo.ts::AbiDecorators.approvalProgram:
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
     intcblock 0 1
     bytecblock 0x151f7c75
     txn ApplicationID
     bnz main_after_if_else@2
+
+main_if_body@1:
     callsub constructor
 
 main_after_if_else@2:
-    callsub __puya_arc4_router__
-    return
 
-
-// tests/approvals/abi-decorators.algo.ts::AbiDecorators.constructor() -> void:
-constructor:
+main_block@3:
     // tests/approvals/abi-decorators.algo.ts:4
     // export default class AbiDecorators extends Contract {
-    proto 0 0
-    // tests/approvals/abi-decorators.algo.ts:16
-    // globalValue = GlobalState({ initialValue: Uint64(123) })
-    pushbytes "globalValue"
-    pushint 123 // 123
-    app_global_put
-    retsub
-
-
-// tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__() -> uint64:
-__puya_arc4_router__:
-    // tests/approvals/abi-decorators.algo.ts:4
-    // export default class AbiDecorators extends Contract {
-    proto 0 1
     txn NumAppArgs
     intc_0 // 0
     !=
-    bz __puya_arc4_router___bare_routing@9
+    bz main_bare_routing@12
+
+main_abi_routing@4:
+    // tests/approvals/abi-decorators.algo.ts:4
+    // export default class AbiDecorators extends Contract {
     txna ApplicationArgs 0
     pushbytes 0xf9020d5a // method "justNoop()void"
     pushbytes 0xe179f9d4 // method "createMethod()void"
@@ -41,71 +31,21 @@ __puya_arc4_router__:
     pushbytes 0x14d1b6ea // method "overrideReadonlyName()uint64"
     pushbytes 0xc1367374 // method "methodWithDefaults(uint64,uint64,uint64)uint64"
     uncover 5
-    match __puya_arc4_router___justNoop_route@2 __puya_arc4_router___createMethod_route@3 __puya_arc4_router___allActions_route@4 __puya_arc4_router___overrideReadonlyName_route@5 __puya_arc4_router___methodWithDefaults_route@6
-    b __puya_arc4_router___switch_case_default@7
+    match main_justNoop_route@5 main_createMethod_route@6 main_allActions_route@7 main_overrideReadonlyName_route@8 main_methodWithDefaults_route@9
 
-__puya_arc4_router___justNoop_route@2:
-    // tests/approvals/abi-decorators.algo.ts:5
-    // @abimethod({ allowActions: 'NoOp' })
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
+main_switch_case_default@10:
+
+main_switch_case_next@11:
+
+main_after_if_else@13:
+    // tests/approvals/abi-decorators.algo.ts:4
+    // export default class AbiDecorators extends Contract {
     intc_0 // 0
-    !=
-    assert // can only call when not creating
-    callsub justNoop
-    intc_1 // 1
-    retsub
 
-__puya_arc4_router___createMethod_route@3:
-    // tests/approvals/abi-decorators.algo.ts:7
-    // @abimethod({ onCreate: 'require' })
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    ==
-    assert // can only call when creating
-    callsub createMethod
-    intc_1 // 1
-    retsub
+main_after_inlined_tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__@14:
+    return
 
-__puya_arc4_router___allActions_route@4:
-    // tests/approvals/abi-decorators.algo.ts:9
-    // @abimethod({ allowActions: ['NoOp', 'OptIn', 'CloseOut', 'DeleteApplication', 'UpdateApplication'] })
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    callsub allActions
-    intc_1 // 1
-    retsub
-
-__puya_arc4_router___overrideReadonlyName_route@5:
-    // tests/approvals/abi-decorators.algo.ts:11
-    // @abimethod({ readonly: true, name: 'overrideReadonlyName' })
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    callsub readonly
-    itob
-    bytec_0 // 0x151f7c75
-    swap
-    concat
-    log
-    intc_1 // 1
-    retsub
-
-__puya_arc4_router___methodWithDefaults_route@6:
+main_methodWithDefaults_route@9:
     // tests/approvals/abi-decorators.algo.ts:18
     // @abimethod({ defaultArguments: { a: { from: 'globalValue' }, b: { from: 'readonly' }, c: { constant: 145 } } })
     txn OnCompletion
@@ -136,17 +76,83 @@ __puya_arc4_router___methodWithDefaults_route@6:
     concat
     log
     intc_1 // 1
-    retsub
+    b main_after_inlined_tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__@14
 
-__puya_arc4_router___switch_case_default@7:
-    b __puya_arc4_router___after_if_else@10
+main_overrideReadonlyName_route@8:
+    // tests/approvals/abi-decorators.algo.ts:11
+    // @abimethod({ readonly: true, name: 'overrideReadonlyName' })
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    callsub readonly
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__@14
 
-__puya_arc4_router___bare_routing@9:
+main_allActions_route@7:
+    // tests/approvals/abi-decorators.algo.ts:9
+    // @abimethod({ allowActions: ['NoOp', 'OptIn', 'CloseOut', 'DeleteApplication', 'UpdateApplication'] })
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    callsub allActions
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__@14
 
-__puya_arc4_router___after_if_else@10:
+main_createMethod_route@6:
+    // tests/approvals/abi-decorators.algo.ts:7
+    // @abimethod({ onCreate: 'require' })
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    ==
+    assert // can only call when creating
+    callsub createMethod
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__@14
+
+main_justNoop_route@5:
+    // tests/approvals/abi-decorators.algo.ts:5
+    // @abimethod({ allowActions: 'NoOp' })
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    callsub justNoop
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__@14
+
+main_bare_routing@12:
+    b main_after_if_else@13
+
+
+// tests/approvals/abi-decorators.algo.ts::AbiDecorators.constructor() -> void:
+constructor:
     // tests/approvals/abi-decorators.algo.ts:4
     // export default class AbiDecorators extends Contract {
-    intc_0 // 0
+    proto 0 0
+    // tests/approvals/abi-decorators.algo.ts:16
+    // globalValue = GlobalState({ initialValue: Uint64(123) })
+    pushbytes "globalValue"
+    pushint 123 // 123
+    app_global_put
     retsub
 
 
