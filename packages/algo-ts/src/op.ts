@@ -2,6 +2,8 @@ import { ctxMgr } from './execution-context'
 
 import {
   AddwType,
+  AppOptedInType,
+  ArgType,
   BalanceType,
   Base64DecodeType,
   BitLengthType,
@@ -37,6 +39,7 @@ import {
   ITxnType,
   JsonRefType,
   Keccak256Type,
+  LenType,
   MulwType,
   OnlineStakeType,
   OpsNamespace,
@@ -82,6 +85,8 @@ const createObjectProxy = <TName extends ObjectKeys>(name: TName) => {
 }
 
 export const addw: AddwType = createFunctionProxy('addw')
+export const appOptedIn: AppOptedInType = createFunctionProxy('appOptedIn')
+export const arg: ArgType = createFunctionProxy('arg')
 export const balance: BalanceType = createFunctionProxy('balance')
 export const base64Decode: Base64DecodeType = createFunctionProxy('base64Decode')
 export const bitLength: BitLengthType = createFunctionProxy('bitLength')
@@ -109,6 +114,7 @@ export const gloadBytes: GloadBytesType = createFunctionProxy('gloadBytes')
 export const gloadUint64: GloadUint64Type = createFunctionProxy('gloadUint64')
 export const itob: ItobType = createFunctionProxy('itob')
 export const keccak256: Keccak256Type = createFunctionProxy('keccak256')
+export const len: LenType = createFunctionProxy('len')
 export const minBalance: BalanceType = createFunctionProxy('minBalance')
 export const mulw: MulwType = createFunctionProxy('mulw')
 export const replace: ReplaceType = createFunctionProxy('replace')
