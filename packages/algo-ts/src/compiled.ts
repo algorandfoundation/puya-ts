@@ -52,7 +52,7 @@ export type CompiledLogicSig = {
 /**
  * Options for compiling a contract
  */
-type CompileContractOptions = {
+export type CompileContractOptions = {
   /**
    * Number of extra program pages, defaults to minimum required for contract
    */
@@ -87,7 +87,7 @@ type CompileContractOptions = {
 /**
  * Options for compiling a logic signature
  */
-type CompileLogicSigOptions = {
+export type CompileLogicSigOptions = {
   /**
    * Template variables to substitute into the contract, key should be without the prefix, must evaluate to a compile time constant
    * and match the type of the template var declaration
