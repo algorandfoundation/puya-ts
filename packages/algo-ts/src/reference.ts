@@ -1,4 +1,4 @@
-import { ctxMgr } from './execution-context'
+import { NoImplementation } from './impl/errors'
 import { bytes, uint64 } from './primitives'
 
 export type Account = {
@@ -100,13 +100,13 @@ export type Account = {
 export function Account(): Account
 export function Account(address: bytes): Account
 export function Account(address?: bytes): Account {
-  return ctxMgr.instance.account(address)
+  throw new NoImplementation()
 }
 
 export function Asset(): Asset
 export function Asset(assetId: uint64): Asset
 export function Asset(assetId?: uint64): Asset {
-  return ctxMgr.instance.asset(assetId)
+  throw new NoImplementation()
 }
 /**
  * An Asset on the Algorand network.
@@ -199,7 +199,7 @@ export type Asset = {
 export function Application(): Application
 export function Application(applicationId: uint64): Application
 export function Application(applicationId?: uint64): Application {
-  return ctxMgr.instance.application(applicationId)
+  throw new NoImplementation()
 }
 
 /**
