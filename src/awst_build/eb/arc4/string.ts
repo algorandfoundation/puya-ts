@@ -6,7 +6,7 @@ import { wtypes } from '../../../awst/wtypes'
 import type { PType } from '../../ptypes'
 import { stringPType } from '../../ptypes'
 import type { ARC4EncodedType } from '../../ptypes/arc4-types'
-import { ARC4StrClass, ARC4StringType } from '../../ptypes/arc4-types'
+import { ARC4StrClass, arc4StringType } from '../../ptypes/arc4-types'
 import type { InstanceBuilder, NodeBuilder } from '../index'
 import { ClassBuilder } from '../index'
 import { parseFunctionArgs } from '../util/arg-parsing'
@@ -59,6 +59,6 @@ export class StrClassBuilder extends ClassBuilder {
 
 export class StrExpressionBuilder extends Arc4EncodedBaseExpressionBuilder<ARC4EncodedType> {
   constructor(expression: Expression) {
-    super(expression, ARC4StringType)
+    super(expression, arc4StringType)
   }
 }

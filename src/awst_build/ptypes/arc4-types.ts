@@ -79,13 +79,13 @@ export const ARC4StrClass = new LibClassType({
   module: Constants.arc4EncodedTypesModuleName,
 })
 
-export const ARC4BooleanType = new ARC4InstanceType({
+export const arc4BooleanType = new ARC4InstanceType({
   name: 'Bool',
   wtype: wtypes.arc4BooleanWType,
   nativeType: boolPType,
 })
 
-export const ARC4StringType = new ARC4InstanceType({
+export const arc4StringType = new ARC4InstanceType({
   name: 'Str',
   wtype: wtypes.arc4StringAliasWType,
   nativeType: stringPType,

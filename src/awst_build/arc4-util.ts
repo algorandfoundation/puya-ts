@@ -20,9 +20,9 @@ import {
   voidPType,
 } from './ptypes'
 import {
-  ARC4BooleanType,
+  arc4BooleanType,
   ARC4EncodedType,
-  ARC4StringType,
+  arc4StringType,
   ARC4StructType,
   ARC4TupleType,
   DynamicBytesType,
@@ -58,15 +58,16 @@ export function ptypeToArc4EncodedType(ptype: ObjectPType, sourceLocation: Sourc
 export function ptypeToArc4EncodedType(ptype: PType, sourceLocation: SourceLocation): ARC4EncodedType
 export function ptypeToArc4EncodedType(ptype: PType, sourceLocation: SourceLocation): ARC4EncodedType {
   if (ptype instanceof ARC4EncodedType) return ptype
-  if (ptype.equals(boolPType)) return ARC4BooleanType
+  if (ptype.equals(boolPType)) return arc4BooleanType
   if (ptype.equals(uint64PType)) return new UintNType({ n: 64n })
   if (ptype.equals(biguintPType)) return new UintNType({ n: 512n })
   if (ptype.equals(bytesPType)) return DynamicBytesType
-  if (ptype.equals(stringPType)) return ARC4StringType
+  if (ptype.equals(stringPType)) return arc4StringType
   if (ptype instanceof NativeNumericType) {
     throw new CodeError(numberPType.expressionMessage, { sourceLocation })
   }
   if (ptype instanceof TuplePType) return new ARC4TupleType({ types: ptype.items.map((i) => ptypeToArc4EncodedType(i, sourceLocation)) })
+
   if (ptype instanceof ObjectPType)
     return new ARC4StructType({
       name: ptype.name,

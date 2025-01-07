@@ -76,10 +76,10 @@ import {
   AddressClass,
   arc4AddressAlias,
   ARC4BoolClass,
-  ARC4BooleanType,
+  arc4BooleanType,
   arc4ByteAlias,
   ARC4StrClass,
-  ARC4StringType,
+  arc4StringType,
   ARC4StructClass,
   ARC4StructType,
   Arc4TupleClass,
@@ -351,8 +351,8 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: arc4AddressAlias, instanceEb: AddressExpressionBuilder })
   typeRegistry.register({ ptype: AddressClass, singletonEb: AddressClassBuilder })
   typeRegistry.register({ ptype: ARC4BoolClass, singletonEb: BoolClassBuilder })
-  typeRegistry.register({ ptype: ARC4BooleanType, instanceEb: BoolExpressionBuilder })
-  typeRegistry.register({ ptype: ARC4StringType, instanceEb: StrExpressionBuilder })
+  typeRegistry.register({ ptype: arc4BooleanType, instanceEb: BoolExpressionBuilder })
+  typeRegistry.register({ ptype: arc4StringType, instanceEb: StrExpressionBuilder })
   typeRegistry.register({ ptype: ARC4StrClass, singletonEb: StrClassBuilder })
   typeRegistry.register({ ptype: Arc4TupleClass, singletonEb: Arc4TupleClassBuilder })
   typeRegistry.registerGeneric({ generic: Arc4TupleGeneric, ptype: ARC4TupleType, instanceEb: Arc4TupleExpressionBuilder })
