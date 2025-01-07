@@ -228,6 +228,8 @@ export namespace wtypes {
         nativeType: n <= 64 ? uint64WType : biguintWType,
         arc4Name: arc4Name ?? `uint${n}`,
       })
+      invariant(n >= 8n && n <= 512n, 'Invalid uint: n must be between 8 and 512')
+      invariant(n % 8n === 0n, 'Invalid uint: n must be multiple of 8')
       this.n = n
     }
   }
@@ -242,6 +244,10 @@ export namespace wtypes {
         nativeType: n <= 64 ? uint64WType : biguintWType,
         arc4Name: `ufixed${n}x${m}`,
       })
+
+      invariant(n >= 8n && n <= 512n, 'Invalid ufixed: n must be between 8 and 512')
+      invariant(n % 8n === 0n, 'Invalid ufixed: n must be multiple of 8')
+      invariant(m >= 0n && m <= 160n, 'Invalid ufixed: m must be between 0 and 160')
       this.n = n
       this.m = m
     }

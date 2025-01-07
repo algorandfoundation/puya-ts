@@ -1,15 +1,16 @@
 import { nodeFactory } from '../../../awst/node-factory'
-import type { Expression } from '../../../awst/nodes'
-import type { SourceLocation } from '../../../awst/source-location'
-import { InternalError } from '../../../errors'
+import type { Expression, StringConstant } from '../../../awst/nodes'
+import { SourceLocation } from '../../../awst/source-location'
+import { CodeError, InternalError } from '../../../errors'
 import { logger } from '../../../logger'
 import { codeInvariant } from '../../../util'
+import { Arc4ParseError, parseArc4Type } from '../../../util/arc4-signature-parser'
 import { ptypeToArc4EncodedType } from '../../arc4-util'
 import type { PType } from '../../ptypes'
 import { arc28EmitFunction, ObjectPType, stringPType, voidPType } from '../../ptypes'
-import { ARC4EncodedType, ARC4StructType } from '../../ptypes/arc4-types'
+import { ARC4EncodedType, ARC4StructType, ARC4TupleType } from '../../ptypes/arc4-types'
 import { instanceEb } from '../../type-registry'
-import type { NodeBuilder } from '../index'
+import type { InstanceBuilder, NodeBuilder } from '../index'
 import { FunctionBuilder } from '../index'
 import { requireStringConstant } from '../util'
 import { parseFunctionArgs } from '../util/arg-parsing'
@@ -31,17 +32,28 @@ export class Arc28EmitFunctionBuilder extends FunctionBuilder {
     })
 
     if (nameOrObj.ptype.equals(stringPType)) {
-      const name = requireStringConstant(nameOrObj).value
       const thisModule = nameOrObj.sourceLocation.file ?? ''
 
       const fields: Record<string, ARC4EncodedType> = {}
       const values = new Map<string, Expression>()
 
-      for (const [index, prop] of Object.entries(props)) {
+      const { name, propTypes } = parseEventName(nameOrObj)
+
+      for (const [index, prop] of props.entries()) {
         const arc4Type = ptypeToArc4EncodedType(prop.ptype, prop.sourceLocation)
+
+        const expectedType = propTypes?.[index]
+        if (expectedType) {
+          codeInvariant(
+            expectedType.wtype.equals(arc4Type.wtype),
+            `Expected type ${expectedType} does not match actual type ${arc4Type}`,
+            prop.sourceLocation,
+          )
+        }
+
         fields[index] = arc4Type
         values.set(
-          index,
+          index.toString(),
           prop.ptype instanceof ARC4EncodedType
             ? prop.resolve()
             : nodeFactory.aRC4Encode({
@@ -51,9 +63,14 @@ export class Arc28EmitFunctionBuilder extends FunctionBuilder {
               }),
         )
       }
+      if (propTypes && propTypes.length !== values.size) {
+        throw new CodeError(`Event signature length (${propTypes.length}) does not match number of provided values (${values.size}).`, {
+          sourceLocation: sourceLocation,
+        })
+      }
 
       const structType = new ARC4StructType({
-        name,
+        name: name.value,
         module: thisModule,
         fields,
         description: undefined,
@@ -106,4 +123,42 @@ function emitStruct(ptype: ARC4StructType, expression: Expression, sourceLocatio
     }),
     voidPType,
   )
+}
+
+function parseEventName(nameBuilder: InstanceBuilder): {
+  name: StringConstant
+  propTypes?: ARC4EncodedType[]
+} {
+  const name = requireStringConstant(nameBuilder)
+  const parenthesisIndex = name.value.indexOf('(')
+  if (parenthesisIndex === -1) {
+    return {
+      name,
+    }
+  }
+  const signature = name.value.substring(parenthesisIndex)
+
+  try {
+    const signatureType = parseArc4Type(signature)
+    codeInvariant(signatureType instanceof ARC4TupleType, 'Event signature must be a tuple type', name.sourceLocation)
+    return {
+      name: nodeFactory.stringConstant({
+        value: name.value.substring(0, parenthesisIndex),
+        sourceLocation: name.sourceLocation,
+      }),
+      propTypes: signatureType.items,
+    }
+  } catch (e) {
+    if (e instanceof Arc4ParseError) {
+      // Assumes StringConstant is all on one line
+      throw new CodeError(`Invalid signature: ${e.message}`, {
+        sourceLocation: new SourceLocation({
+          ...name.sourceLocation,
+          column: name.sourceLocation.column + parenthesisIndex + e.index,
+        }),
+      })
+    } else {
+      throw e
+    }
+  }
 }
