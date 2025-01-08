@@ -447,3 +447,20 @@ function tryGetTypeDescription(tsType: ts.Type): string | undefined {
   }
   return undefined
 }
+
+export class CachedTypeResolver extends TypeResolver {
+  #typeCache = new WeakMap<ts.Node | ts.Type, PType>()
+
+  resolve(node: ts.Node, sourceLocation: SourceLocation): PType {
+    if (this.#typeCache.has(node)) return this.#typeCache.get(node)!
+    const result = super.resolve(node, sourceLocation)
+    this.#typeCache.set(node, result)
+    return result
+  }
+  resolveTypeNode(node: ts.TypeNode, sourceLocation: SourceLocation): PType {
+    if (this.#typeCache.has(node)) return this.#typeCache.get(node)!
+    const result = super.resolveTypeNode(node, sourceLocation)
+    this.#typeCache.set(node, result)
+    return result
+  }
+}

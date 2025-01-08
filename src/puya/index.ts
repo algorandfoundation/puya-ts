@@ -6,6 +6,7 @@ import { logger, LogLevel } from '../logger'
 import type { SourceFileMapping } from '../parser'
 import { jsonSerializeSourceFiles } from '../parser/json-serialize-source-files'
 import { generateTempFile } from '../util/generate-temp-file'
+import { perfmon } from '../util/performance'
 import { buildCompilationSetMapping } from './build-compilation-set-mapping'
 import type { PuyaPassThroughOptions } from './options'
 import { PuyaOptions } from './options'
@@ -26,6 +27,7 @@ export function invokePuya({
   compilationSet: CompilationSet
   passThroughOptions: PuyaPassThroughOptions
 }) {
+  using _ = perfmon.markPuyaCompile()
   // Write AWST file
   using moduleAwstFile = generateTempFile()
   logger.debug(undefined, `Writing awst to ${moduleAwstFile.filePath}`)

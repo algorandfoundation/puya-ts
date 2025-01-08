@@ -4,6 +4,7 @@ import type { CompileOptions } from '../compile-options'
 import { logger, LoggingContext } from '../logger'
 import type { DeliberateAny } from '../typescript-helpers'
 import { normalisePath } from '../util'
+import { perfmon } from '../util/performance'
 import { resolveModuleNameLiterals } from './resolve-module-name-literals'
 
 export type SourceFileMapping = Record<string, ts.SourceFile>
@@ -14,6 +15,7 @@ export type CreateProgramResult = {
 }
 
 export function createTsProgram(options: CompileOptions): CreateProgramResult {
+  using _ = perfmon.markTypeScript()
   const compilerOptions: ts.CompilerOptions = {
     allowJs: false,
     strict: true,

@@ -6,6 +6,7 @@ import type { CompileOptions } from '../compile-options'
 import { AwstBuildFailureError } from '../errors'
 import { logger } from '../logger'
 import type { CreateProgramResult } from '../parser'
+import { perfmon } from '../util/performance'
 import { ArtifactKind, writeArtifact } from '../write-artifact'
 import { SourceFileVisitor } from './ast-visitors/source-file-visitor'
 import { buildContextForProgram } from './context/awst-build-context'
@@ -13,6 +14,8 @@ import { buildLibAwst } from './lib'
 import type { CompilationSet } from './models/contract-class-model'
 
 export function buildAwst({ program, sourceFiles }: CreateProgramResult, options: CompileOptions): [AWST[], CompilationSet] {
+  using _ = perfmon.markAwstBuild()
+
   const awstBuildContext = buildContextForProgram(program)
   buildLibAwst(awstBuildContext)
   const moduleAwst: AWST[] = []

@@ -22,6 +22,7 @@ import {
   uint8ArrayToUtf8,
   utf8ToUint8Array,
 } from './util'
+import { perfmon } from './util/performance'
 
 export { SourceLocation } from './awst/source-location'
 export * as ptypes from './awst_build/ptypes/for-export'
@@ -105,6 +106,7 @@ export function compile(options: CompileOptions, passThroughOptions: PuyaPassThr
       sourceFiles: programResult.sourceFiles,
     })
   }
+  perfmon.gatherMeasurements()
 
   return {
     programDirectory: programResult.programDirectory,
