@@ -10,7 +10,7 @@ contract AssertMatchContract
     return True
   }
   
-  testPay(): bool
+  testPay(pay: group_transaction_pay): bool
   {
     assert(gtxns<Amount>(pay) <= 105000 and gtxns<Amount>(pay) >= 100000 and gtxns<Sender>(pay) == txn<Sender>() and gtxns<Receiver>(pay) == global<CurrentApplicationAddress>() and gtxns<CloseRemainderTo>(pay) == global<ZeroAddress>() and gtxns<FirstValid>(pay) > 1 and gtxns<LastValid>(pay) < 1099511627776, comment=assert target is match for conditions)
     return True

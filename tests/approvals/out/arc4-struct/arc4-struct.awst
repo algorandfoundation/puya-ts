@@ -19,12 +19,12 @@ contract StructDemo
     assert(reinterpret_cast<bytes>(v1) == reinterpret_cast<bytes>(v2))
   }
   
-  addVectors(): Vector
+  addVectors(v1: Vector, v2: Vector): Vector
   {
     return new Vector(x=(#3 = { x: ARC4_ENCODE(ARC4_DECODE(v1.x) + ARC4_DECODE(v2.x), wtype=arc4.uint64), y: ARC4_ENCODE(ARC4_DECODE(v1.y) + ARC4_DECODE(v2.y), wtype=arc4.uint64) }).x, y=#3.y)
   }
   
-  implicitCastingAndSpreading(): void
+  implicitCastingAndSpreading(v1: Vector): void
   {
     v2: Vector = new Vector(x=(#4 = ARC4_DECODE(v1)).x, y=#4.y)
     v3: Vector = new Vector(x=(#5 = { x: v2.x, y: v2.y }).x, y=#5.y)
@@ -32,7 +32,7 @@ contract StructDemo
     assert(reinterpret_cast<bytes>(v3) == reinterpret_cast<bytes>(v1))
   }
   
-  toAndFromBytes(): Vector
+  toAndFromBytes(v1: Vector): Vector
   {
     v1_bytes: bytes = reinterpret_cast<bytes>(v1)
     return reinterpret_cast<Vector>(v1_bytes)

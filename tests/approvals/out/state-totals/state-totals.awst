@@ -20,7 +20,7 @@ contract BaseWithState
     return True
   }
   
-  setState(): void
+  setState(n: uint64): void
   {
     GlobalState["oneGlobal"]: uint64 = n
     GlobalState["twoGlobal"]: uint64 = n
@@ -61,13 +61,13 @@ contract SubClassWithState
     return True
   }
   
-  setState(): void
+  setState(n: uint64): void
   {
     super.setState(n)
     GlobalState["threeGlobal"]: uint64 = n
   }
   
-  BaseWithState::setState(): void
+  BaseWithState::setState(n: uint64): void
   {
     GlobalState["oneGlobal"]: uint64 = n
     GlobalState["twoGlobal"]: uint64 = n
@@ -106,7 +106,7 @@ contract SubClassWithExplicitTotals
     return True
   }
   
-  BaseWithState::setState(): void
+  BaseWithState::setState(n: uint64): void
   {
     GlobalState["oneGlobal"]: uint64 = n
     GlobalState["twoGlobal"]: uint64 = n
@@ -146,13 +146,13 @@ contract ExtendsSubWithTotals
     return True
   }
   
-  setState(): void
+  setState(n: uint64): void
   {
     super.setState(n)
     LocalState[txn<Sender>()]["oneLocal"]: uint64 = n
   }
   
-  BaseWithState::setState(): void
+  BaseWithState::setState(n: uint64): void
   {
     GlobalState["oneGlobal"]: uint64 = n
     GlobalState["twoGlobal"]: uint64 = n

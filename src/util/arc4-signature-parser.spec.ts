@@ -48,7 +48,7 @@ describe('arc4 signature parser', () => {
       ['uint2', 'n must be between 8 and 512, and a multiple of 8', 0],
       ['(uint8,uint2)', 'n must be between 8 and 512, and a multiple of 8', 7],
       ['uint8[', "Expecting character ']', but got end of input.", 6],
-      ['uint8]', "Expecting ',', '[', or ')', but got ]", 5],
+      ['uint8]', "Expecting ',', '[', or ')', but got ]", 6],
       ['uint8,uint8', 'Signature contained more than one type. Wrap multiple types in parentheses to declare a tuple type', 0],
       ['(uint8', 'Tuple has not been closed', 6],
       ['(uint8,bool))', "Char ')' has no matching opening '('", 13],
