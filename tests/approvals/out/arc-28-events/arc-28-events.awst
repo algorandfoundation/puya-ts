@@ -10,7 +10,7 @@ contract EventEmitter
     return True
   }
   
-  emitSwapped(): void
+  emitSwapped(a: arc4.uint8, b: arc4.uint8): void
   {
     emit("Swapped(uint8,uint8)", ARC4_ENCODE({ a: b, b: a }, wtype=Swapped))
     x: Swapped{ a: arc4.uint8, b: arc4.uint8 } = { a: (#0 = { a: b, b: a }).a, b: #0.b }
@@ -22,10 +22,15 @@ contract EventEmitter
     emit("Swapped((uint8,uint8),uint8)", new Swapped(0=ARC4_ENCODE(<tuple>[b, b], wtype=arc4.tuple<uint8,uint8>), 1=a))
   }
   
-  emitCustom(): void
+  emitCustom(arg0: string, arg1: bool): void
   {
     emit("Custom(string,bool)", new Custom(0=ARC4_ENCODE(arg0, wtype=arc4.dynamic_array<arc4.byte>), 1=ARC4_ENCODE(arg1, wtype=arc4.bool)))
     emit("Custom(string,bool)", new Custom(0=ARC4_ENCODE(arg0, wtype=arc4.dynamic_array<arc4.byte>), 1=ARC4_ENCODE(arg1, wtype=arc4.bool)))
+  }
+  
+  emitDynamicBytes(x: bytes, y: arc4.dynamic_array<arc4.byte>): void
+  {
+    emit("DB(byte[],byte[])", new DB(0=ARC4_ENCODE(x, wtype=arc4.dynamic_array<arc4.byte>), 1=y))
   }
   
   __algots__.defaultCreate(): void

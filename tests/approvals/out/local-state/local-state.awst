@@ -17,7 +17,7 @@ contract LocalStateDemo
     return True
   }
   
-  setState(): void
+  setState(p: { a: uint64, b: bytes }, c: arc4.static_array<arc4.uint64>): void
   {
     { a: a, b: b }: { a: uint64, b: bytes } = p
     LocalState[txn<Sender>()]["l1"]: uint64 = a
