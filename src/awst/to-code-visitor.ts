@@ -357,8 +357,10 @@ export class ToCodeVisitor
   }
 
   visitContractMethod(statement: nodes.ContractMethod): string[] {
+    const args = statement.args.map((a) => `${a.name}: ${a.wtype}`).join(', ')
+
     const prefix = statement.cref.id === this.currentContract.at(-1)?.id ? '' : `${statement.cref.className}::`
-    return [`${prefix}${statement.memberName}(): ${statement.returnType}`, '{', ...indent(statement.body.accept(this)), '}', '']
+    return [`${prefix}${statement.memberName}(${args}): ${statement.returnType}`, '{', ...indent(statement.body.accept(this)), '}', '']
   }
   visitLogicSignature(moduleStatement: nodes.LogicSignature): string[] {
     return ['', `logicsig ${moduleStatement.id} {`, ...indent(moduleStatement.program.body.accept(this)), '}']
