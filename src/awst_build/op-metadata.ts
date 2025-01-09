@@ -4901,7 +4901,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           {
             argNames: ['a'],
             immediateArgs: ['VoterBalance'],
-            stackArgs: [{ name: 'a', ptypes: [ptypes.uint64PType, ptypes.bytesPType] }],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.accountPType, ptypes.uint64PType] }],
             returnType: new ptypes.TuplePType({ items: [ptypes.uint64PType, ptypes.boolPType] }),
           },
         ],
@@ -4913,7 +4913,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           {
             argNames: ['a'],
             immediateArgs: ['VoterIncentiveEligible'],
-            stackArgs: [{ name: 'a', ptypes: [ptypes.uint64PType, ptypes.bytesPType] }],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.accountPType, ptypes.uint64PType] }],
             returnType: new ptypes.TuplePType({ items: [ptypes.boolPType, ptypes.boolPType] }),
           },
         ],
