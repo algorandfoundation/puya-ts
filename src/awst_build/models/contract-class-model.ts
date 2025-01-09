@@ -15,6 +15,7 @@ import type { ContractClassPType } from '../ptypes'
 import { ClusteredContractClassType } from '../ptypes'
 import type { ContractOptionsDecoratorData } from './decorator-data'
 import { LogicSigClassModel } from './logic-sig-class-model'
+import '../../polyfill/set.prototype.union'
 
 export class ContractClassModel {
   public readonly isAbstract: boolean
