@@ -10,7 +10,7 @@ export default defineConfig({
     typescript({
       target: 'ES2022',
       compilerOptions: {
-        lib: ['es2023'],
+        lib: ['ESNext'],
       },
     }),
   ],

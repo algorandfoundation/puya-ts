@@ -1,3 +1,4 @@
+import { ContractReference } from '../../awst/models'
 import { nodeFactory } from '../../awst/node-factory'
 import type { InstanceMethodTarget, InstanceSuperMethodTarget, SubroutineID } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
@@ -40,6 +41,25 @@ abstract class SubroutineExpressionBuilder extends FunctionBuilder {
   }
 }
 
+/**
+ * Invoke a contract method by naming the contract explicitly
+ */
+export class ExplicitBaseContractMethodExpressionBuilder extends SubroutineExpressionBuilder {
+  constructor(sourceLocation: SourceLocation, ptype: FunctionPType, baseContractPType: ContractClassPType) {
+    super(
+      sourceLocation,
+      ptype,
+      nodeFactory.contractMethodTarget({
+        cref: ContractReference.fromPType(baseContractPType),
+        memberName: ptype.name,
+      }),
+    )
+  }
+}
+
+/**
+ * Invoke a contract method on the current contract (ie. this.someMethod())
+ */
 export class ContractMethodExpressionBuilder extends SubroutineExpressionBuilder {
   constructor(sourceLocation: SourceLocation, ptype: FunctionPType) {
     super(
@@ -52,8 +72,11 @@ export class ContractMethodExpressionBuilder extends SubroutineExpressionBuilder
   }
 }
 
+/**
+ * Invoke a contract method on the super contract (ie. super.someMethod())
+ */
 export class BaseContractMethodExpressionBuilder extends SubroutineExpressionBuilder {
-  constructor(sourceLocation: SourceLocation, ptype: FunctionPType, baseContractPType: ContractClassPType) {
+  constructor(sourceLocation: SourceLocation, ptype: FunctionPType) {
     super(
       sourceLocation,
       ptype,
@@ -64,6 +87,9 @@ export class BaseContractMethodExpressionBuilder extends SubroutineExpressionBui
   }
 }
 
+/**
+ * Invoke a free subroutine (ie. someMethod())
+ */
 export class FreeSubroutineExpressionBuilder extends SubroutineExpressionBuilder {
   constructor(sourceLocation: SourceLocation, ptype: PType) {
     if (!(ptype instanceof FunctionPType)) {

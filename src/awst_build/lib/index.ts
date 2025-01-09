@@ -16,7 +16,6 @@ export function buildLibAwst(context: AwstBuildContext) {
     isAbstract: true,
     propertyInitialization: [],
     ctor: null,
-    bases: [],
     methods: [],
     appState: [],
     options: undefined,
@@ -52,7 +51,6 @@ export function buildLibAwst(context: AwstBuildContext) {
     appState: [],
     options: undefined,
     description: null,
-    bases: [baseContractCref],
     clearProgram: null,
     sourceLocation: SourceLocation.None,
     approvalProgram: nodeFactory.contractMethod({

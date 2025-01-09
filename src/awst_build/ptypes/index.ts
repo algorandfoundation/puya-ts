@@ -136,6 +136,18 @@ export class ContractClassPType extends PType {
   }
 }
 
+export class ClusteredContractClassType extends ContractClassPType {
+  constructor(props: { methods: Record<string, FunctionPType>; baseTypes: ContractClassPType[]; sourceLocation: SourceLocation }) {
+    super({
+      ...props,
+      name: `ClusteredContract<${props.baseTypes.map((t) => t.fullName).join(',')}>`,
+      module: Constants.polytypeModuleName,
+      methods: Object.assign({}, ...props.baseTypes.toReversed().map((t) => t.methods)),
+      properties: Object.assign({}, ...props.baseTypes.toReversed().map((t) => t.properties)),
+    })
+  }
+}
+
 export class BaseContractClassType extends ContractClassPType {
   readonly _isArc4: boolean
   get isARC4(): boolean {
@@ -156,6 +168,39 @@ export class BaseContractClassType extends ContractClassPType {
   }) {
     super(rest)
     this._isArc4 = isArc4
+  }
+}
+
+export class IntersectionPType extends TransientType {
+  get fullName() {
+    return this.types.map((t) => t).join(' & ')
+  }
+  readonly singleton = false
+  readonly types: PType[]
+
+  private constructor({ types }: { types: PType[] }) {
+    const name = types.map((t) => t).join(' & ')
+    super({
+      name,
+      module: 'lib.d.ts',
+      singleton: false,
+      typeMessage: transientTypeErrors.intersectionTypes(name).usedAsType,
+      expressionMessage: transientTypeErrors.unionTypes(name).usedInExpression,
+    })
+    this.types = types
+  }
+
+  static fromTypes(types: PType[]) {
+    if (types.length === 0) {
+      throw new InternalError('Cannot create intersection of zero types')
+    }
+    const distinctTypes = types.filter(distinctByEquality((a, b) => a.equals(b))).toSorted(sortBy((t) => t.fullName))
+    if (distinctTypes.length === 1) {
+      return distinctTypes[0]
+    }
+    return new IntersectionPType({
+      types: distinctTypes,
+    })
   }
 }
 
@@ -1347,4 +1392,28 @@ export const compiledLogicSigType = new ObjectPType({
 export const arc28EmitFunction = new LibFunctionType({
   name: 'emit',
   module: Constants.arc28ModuleName,
+})
+
+export const SuperPrototypeSelectorGeneric = new GenericPType({
+  name: 'SuperPrototypeSelector',
+  module: Constants.polytypeModuleName,
+  parameterise(ptypes: PType[]) {
+    return new SuperPrototypeSelector({ bases: ptypes })
+  },
+})
+export class SuperPrototypeSelector extends InternalType {
+  constructor({ bases }: { bases: PType[] }) {
+    super({
+      name: 'SuperPrototypeSelector',
+      module: Constants.polytypeModuleName,
+    })
+  }
+}
+export const ClusteredPrototype = new InternalType({
+  name: 'ClusteredPrototype',
+  module: Constants.polytypeModuleName,
+})
+export const PolytypeClassMethodHelper = new LibFunctionType({
+  name: 'class',
+  module: Constants.polytypeModuleName,
 })

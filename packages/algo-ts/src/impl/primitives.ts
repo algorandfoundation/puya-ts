@@ -358,8 +358,7 @@ export const arrayUtil = new (class ArrayUtil {
   }
   arraySlice(arrayLike: Uint8Array, start: undefined | StubUint64Compat, end: undefined | StubUint64Compat): Uint8Array
   arraySlice<T>(arrayLike: T[], start: undefined | StubUint64Compat, end: undefined | StubUint64Compat): T[]
-  arraySlice<T>(arrayLike: T[] | Uint8Array, start: undefined | StubUint64Compat, end: undefined | StubUint64Compat): Uint8Array | T[]
-  arraySlice<T>(arrayLike: T[] | Uint8Array, start: undefined | StubUint64Compat, end: undefined | StubUint64Compat) {
+  arraySlice<T>(arrayLike: T[] | Uint8Array, start: undefined | StubUint64Compat, end: undefined | StubUint64Compat): Uint8Array | T[] {
     const startNum = start === undefined ? undefined : getNumber(start)
     const endNum = end === undefined ? undefined : getNumber(end)
     if (arrayLike instanceof Uint8Array) {

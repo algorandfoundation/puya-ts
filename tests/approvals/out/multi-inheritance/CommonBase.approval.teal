@@ -1,0 +1,160 @@
+#pragma version 10
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0 1
+    bytecblock 0x151f7c75 "common"
+    txn ApplicationID
+    bnz main_after_if_else@2
+
+main_if_body@1:
+    callsub constructor
+
+main_after_if_else@2:
+
+main_block@3:
+    // tests/approvals/multi-inheritance.algo.ts:5
+    // export class CommonBase extends Contract {
+    txn NumAppArgs
+    intc_0 // 0
+    !=
+    bz main_bare_routing@9
+
+main_abi_routing@4:
+    // tests/approvals/multi-inheritance.algo.ts:5
+    // export class CommonBase extends Contract {
+    txna ApplicationArgs 0
+    pushbytes 0x455c8d09 // method "methodCommon()string"
+    pushbytes 0xf9f5142c // method "b2CantOverride()string"
+    uncover 2
+    match main_methodCommon_route@5 main_b2CantOverride_route@6
+
+main_switch_case_default@7:
+
+main_switch_case_next@8:
+
+main_after_if_else@13:
+    // tests/approvals/multi-inheritance.algo.ts:5
+    // export class CommonBase extends Contract {
+    intc_0 // 0
+
+main_after_inlined_tests/approvals/multi-inheritance.algo.ts::CommonBase.__puya_arc4_router__@14:
+    return
+
+main_b2CantOverride_route@6:
+    // tests/approvals/multi-inheritance.algo.ts:12
+    // b2CantOverride(): string {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    callsub b2CantOverride
+    dup
+    len
+    itob
+    extract 6 2
+    swap
+    concat
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/multi-inheritance.algo.ts::CommonBase.__puya_arc4_router__@14
+
+main_methodCommon_route@5:
+    // tests/approvals/multi-inheritance.algo.ts:8
+    // methodCommon() {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    callsub methodCommon
+    dup
+    len
+    itob
+    extract 6 2
+    swap
+    concat
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/multi-inheritance.algo.ts::CommonBase.__puya_arc4_router__@14
+
+main_bare_routing@9:
+    // tests/approvals/multi-inheritance.algo.ts:5
+    // export class CommonBase extends Contract {
+    txn OnCompletion
+    intc_0 // 0
+    swap
+    match main___algots__.defaultCreate@10
+
+main_switch_case_default@11:
+
+main_switch_case_next@12:
+    b main_after_if_else@13
+
+main___algots__.defaultCreate@10:
+    // tests/approvals/multi-inheritance.algo.ts:5
+    // export class CommonBase extends Contract {
+    txn ApplicationID
+    intc_0 // 0
+    ==
+    assert // can only call when creating
+    callsub __algots__.defaultCreate
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/multi-inheritance.algo.ts::CommonBase.__puya_arc4_router__@14
+
+
+// tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor() -> void:
+constructor:
+    // tests/approvals/multi-inheritance.algo.ts:5
+    // export class CommonBase extends Contract {
+    proto 0 0
+    // tests/approvals/multi-inheritance.algo.ts:6
+    // stateCommon = GlobalState<uint64>({ initialValue: 123 })
+    pushbytes "stateCommon"
+    pushint 123 // 123
+    app_global_put
+    retsub
+
+
+// tests/approvals/multi-inheritance.algo.ts::CommonBase.methodCommon() -> bytes:
+methodCommon:
+    // tests/approvals/multi-inheritance.algo.ts:8
+    // methodCommon() {
+    proto 0 1
+    // tests/approvals/multi-inheritance.algo.ts:9
+    // return 'common'
+    bytec_1 // "common"
+    retsub
+
+
+// tests/approvals/multi-inheritance.algo.ts::CommonBase.b2CantOverride() -> bytes:
+b2CantOverride:
+    // tests/approvals/multi-inheritance.algo.ts:12
+    // b2CantOverride(): string {
+    proto 0 1
+    // tests/approvals/multi-inheritance.algo.ts:13
+    // return 'common'
+    bytec_1 // "common"
+    retsub
+
+
+// tests/approvals/multi-inheritance.algo.ts::CommonBase.__algots__.defaultCreate() -> void:
+__algots__.defaultCreate:
+    // tests/approvals/multi-inheritance.algo.ts:5
+    // export class CommonBase extends Contract {
+    proto 0 0
+    retsub
