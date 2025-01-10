@@ -3009,13 +3009,13 @@ export type VoterParamsType = {
    * Online stake in microalgos
    * Min AVM version: 6
    */
-  voterBalance(a: uint64 | bytes): readonly [uint64, boolean]
+  voterBalance(a: Account | uint64): readonly [uint64, boolean]
 
   /**
    * Had this account opted into block payouts
    * Min AVM version: 11
    */
-  voterIncentiveEligible(a: uint64 | bytes): readonly [boolean, boolean]
+  voterIncentiveEligible(a: Account | uint64): readonly [boolean, boolean]
 }
 
 /**

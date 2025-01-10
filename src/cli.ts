@@ -93,7 +93,7 @@ function cli() {
         .choices(['0', '1', '2'])
         .default(defaultPuyaOptions.optimizationLevel),
     )
-    .addOption(new Option('--target-avm-version [version]', '').choices(['10']).default(10))
+    .addOption(new Option('--target-avm-version [version]', '').choices(['10', '11']).default(10))
     .addOption(
       new Option(
         '--cli-template-definitions <...definitions>',
