@@ -1,8 +1,17 @@
 import { sync } from 'cross-spawn'
 import { logger } from '../logger'
-import { deserializeAndLog } from './log-deserializer'
 
-export function runPuya({ command, args, cwd }: { command: string; args: string[]; cwd?: string }) {
+export function runPuya({
+  command,
+  args,
+  cwd,
+  onOutput,
+}: {
+  command: string
+  args: string[]
+  cwd?: string
+  onOutput: (line: string) => void
+}) {
   const proc = sync(command, args, {
     // forward all stdin/stdout/stderr to current handlers, with correct interleaving
     stdio: 'pipe',
@@ -16,7 +25,7 @@ export function runPuya({ command, args, cwd }: { command: string; args: string[
     for (const c of text) {
       switch (c) {
         case '\n':
-          deserializeAndLog(line)
+          onOutput(line)
           line = ''
           break
         case '\r':
@@ -27,7 +36,7 @@ export function runPuya({ command, args, cwd }: { command: string; args: string[
       }
     }
   }
-  if (line) deserializeAndLog(line)
+  if (line) onOutput(line)
 
   if (proc.error) {
     // only happens during invocation error, not error return status

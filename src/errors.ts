@@ -22,7 +22,15 @@ export class PuyaError extends Error {
   }
 }
 
-export class CodeError extends PuyaError {
+/**
+ * Any error that is 'caused' by a user of Puya
+ */
+export abstract class UserError extends PuyaError {}
+
+/**
+ * Thrown when the user's code is invalid, or not supported
+ */
+export class CodeError extends UserError {
   static unexpectedUnhandledArgs({ sourceLocation }: { sourceLocation: SourceLocation }) {
     return new CodeError('Unexpected/unhandled args', {
       sourceLocation,
@@ -56,6 +64,10 @@ export class CodeError extends PuyaError {
     return new CodeError(`Cannot resolve ${sourceType} to ${targetName}`, { sourceLocation })
   }
 }
+
+/**
+ * Thrown when the compiler ends up in an unrecoverable state
+ */
 export class InternalError extends PuyaError {
   static shouldBeUnreachable() {
     return new InternalError('Code should be unreachable')
@@ -66,6 +78,11 @@ export class NotSupported extends CodeError {
     super(`Not Supported: ${featureName}`, options)
   }
 }
+
+/**
+ * Thrown when the user's environment is not set up correctly
+ */
+export class EnvironmentError extends UserError {}
 
 export const throwError = (error: Error): never => {
   throw error

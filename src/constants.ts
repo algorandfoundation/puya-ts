@@ -35,6 +35,7 @@ export const Constants = {
 
   supportedAvmVersions: [10n, 11n],
   mainNetAvmVersion: [10n],
+  targetedPuyaVersion: '4.1.1',
 } as const
 
 export type SupportedAvmVersion = (typeof Constants.supportedAvmVersions)[number]
