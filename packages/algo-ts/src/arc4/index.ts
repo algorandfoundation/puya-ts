@@ -8,6 +8,8 @@ import { DeliberateAny } from '../typescript-helpers'
 export * from './encoded-types'
 
 export class Contract extends BaseContract {
+  static isArc4 = true
+
   override approvalProgram(): boolean {
     return true
   }

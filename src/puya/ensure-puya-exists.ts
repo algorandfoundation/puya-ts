@@ -1,9 +1,9 @@
-import { sync as whichSync } from 'which'
+import which from 'which'
 import { EnvironmentError } from '../errors'
 
 export function ensurePuyaExists() {
   if (
-    whichSync('puya', {
+    which.sync('puya', {
       nothrow: true,
     })
   )
