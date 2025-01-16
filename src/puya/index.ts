@@ -7,6 +7,9 @@ import type { SourceFileMapping } from '../parser'
 import { jsonSerializeSourceFiles } from '../parser/json-serialize-source-files'
 import { generateTempFile } from '../util/generate-temp-file'
 import { buildCompilationSetMapping } from './build-compilation-set-mapping'
+import { checkPuyaVersion } from './check-puya-version'
+import { ensurePuyaExists } from './ensure-puya-exists'
+import { deserializeAndLog } from './log-deserializer'
 import type { PuyaPassThroughOptions } from './options'
 import { PuyaOptions } from './options'
 import { runPuya } from './run-puya'
@@ -26,6 +29,8 @@ export function invokePuya({
   compilationSet: CompilationSet
   passThroughOptions: PuyaPassThroughOptions
 }) {
+  ensurePuyaExists()
+  checkPuyaVersion()
   // Write AWST file
   using moduleAwstFile = generateTempFile()
   logger.debug(undefined, `Writing awst to ${moduleAwstFile.filePath}`)
@@ -72,6 +77,7 @@ export function invokePuya({
       'json',
     ],
     cwd: programDirectory,
+    onOutput: deserializeAndLog,
   })
 }
 

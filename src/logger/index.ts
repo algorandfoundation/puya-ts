@@ -1,5 +1,5 @@
 import { SourceLocation } from '../awst/source-location'
-import { AwstBuildFailureError, CodeError, PuyaError } from '../errors'
+import { AwstBuildFailureError, PuyaError, UserError } from '../errors'
 import type { LogSink } from './sinks'
 
 type NodeOrSourceLocation = SourceLocation | { sourceLocation: SourceLocation }
@@ -55,7 +55,8 @@ class PuyaLogger {
   error(source: NodeOrSourceLocation | undefined, message: string): void
   error(source: NodeOrSourceLocation | undefined | Error, message?: string): void {
     if (source instanceof Error) {
-      const stack = source instanceof CodeError ? '' : `\n ${source.stack}`
+      // Don't include the stack for user errors as the message and source location is what's relevant
+      const stack = source instanceof UserError ? '' : `\n ${source.stack}`
       this.addLog(LogLevel.Error, tryGetSourceLocationFromError(source), `${source.message}${stack}`)
       if (source.cause) {
         this.addLog(LogLevel.Error, tryGetSourceLocationFromError(source.cause), `Caused by: ${source.cause}`)
