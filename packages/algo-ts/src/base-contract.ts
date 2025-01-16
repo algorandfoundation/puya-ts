@@ -3,6 +3,8 @@ import { uint64 } from './primitives'
 import { ConstructorFor } from './typescript-helpers'
 
 export abstract class BaseContract {
+  static isArc4 = false
+
   public abstract approvalProgram(): boolean | uint64
   public clearStateProgram(): boolean | uint64 {
     return true
