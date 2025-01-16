@@ -1285,22 +1285,6 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
       },
     ],
   },
-  extract: {
-    type: 'op-mapping',
-    op: 'extract3',
-    signatures: [
-      {
-        argNames: ['a', 'b', 'c'],
-        immediateArgs: [],
-        stackArgs: [
-          { name: 'a', ptypes: [ptypes.bytesPType] },
-          { name: 'b', ptypes: [ptypes.uint64PType] },
-          { name: 'c', ptypes: [ptypes.uint64PType] },
-        ],
-        returnType: ptypes.bytesPType,
-      },
-    ],
-  },
   extractUint16: {
     type: 'op-mapping',
     op: 'extract_uint16',
@@ -4933,6 +4917,31 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           { name: 'c', ptypes: [ptypes.bytesPType] },
         ],
         returnType: new ptypes.TuplePType({ items: [ptypes.bytesPType, ptypes.boolPType] }),
+      },
+    ],
+  },
+  extract: {
+    type: 'op-mapping',
+    op: 'extract3',
+    signatures: [
+      {
+        argNames: ['a', 'b'],
+        immediateArgs: [],
+        stackArgs: [
+          { name: 'a', ptypes: [ptypes.bytesPType] },
+          { name: 'b', ptypes: [ptypes.uint64PType] },
+        ],
+        returnType: ptypes.bytesPType,
+      },
+      {
+        argNames: ['a', 'b', 'c'],
+        immediateArgs: [],
+        stackArgs: [
+          { name: 'a', ptypes: [ptypes.bytesPType] },
+          { name: 'b', ptypes: [ptypes.uint64PType] },
+          { name: 'c', ptypes: [ptypes.uint64PType] },
+        ],
+        returnType: ptypes.bytesPType,
       },
     ],
   },

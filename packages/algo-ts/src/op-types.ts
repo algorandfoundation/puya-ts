@@ -661,14 +661,6 @@ export type ExpType = (a: uint64, b: uint64) => uint64
 export type ExpwType = (a: uint64, b: uint64) => readonly [uint64, uint64]
 
 /**
- * A range of bytes from A starting at B up to but not including B+C. If B+C is larger than the array length, the program fails
- * `extract3` can be called using `extract` with no immediates.
- * @see Native TEAL opcode: [`extract3`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#extract3)
- * Min AVM version: 5
- */
-export type ExtractType = (a: bytes, b: uint64, c: uint64) => bytes
-
-/**
  * A uint16 formed from a range of big-endian bytes from A starting at B up to but not including B+2. If B+2 is larger than the array length, the program fails
  * @see Native TEAL opcode: [`extract_uint16`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#extract_uint16)
  * Min AVM version: 5
@@ -3025,6 +3017,7 @@ export type VoterParamsType = {
  * Min AVM version: 7
  */
 export type VrfVerifyType = (s: VrfVerify, a: bytes, b: bytes, c: bytes) => readonly [bytes, boolean]
+export type ExtractType = ((a: bytes, b: uint64) => bytes) & ((a: bytes, b: uint64, c: uint64) => bytes)
 export type SelectType = ((a: bytes, b: bytes, c: uint64) => bytes) & ((a: uint64, b: uint64, c: uint64) => uint64)
 export type SetBitType = ((target: bytes, n: uint64, c: uint64) => bytes) & ((target: uint64, n: uint64, c: uint64) => uint64)
 export type OpsNamespace = {
@@ -3056,7 +3049,6 @@ export type OpsNamespace = {
   ed25519verifyBare: Ed25519verifyBareType
   exp: ExpType
   expw: ExpwType
-  extract: ExtractType
   extractUint16: ExtractUint16Type
   extractUint32: ExtractUint32Type
   extractUint64: ExtractUint64Type
@@ -3092,6 +3084,7 @@ export type OpsNamespace = {
   Txn: TxnType
   VoterParams: VoterParamsType
   vrfVerify: VrfVerifyType
+  extract: ExtractType
   select: SelectType
   setBit: SetBitType
 }

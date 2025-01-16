@@ -1,0 +1,26 @@
+contract ExtractBytesAlgo
+{
+  approvalProgram(): bool
+  {
+    this.test(2, 0)
+    return True
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  test(two: uint64, zero: uint64): void
+  {
+    assert(two == 2, comment=Param two should be 2)
+    assert(zero == 0, comment=Param zero should be 0)
+    b: bytes = "abcdefg"
+    assert(extract<2, 0>(b) == "cdefg")
+    assert(extract3(b, two, len(b) - two) == "cdefg")
+    assert(extract3(b, 2, 2) == "cd")
+    assert(extract3(b, two, two) == "cd")
+    assert(extract3(b, two, zero) == "")
+  }
+  
+}
