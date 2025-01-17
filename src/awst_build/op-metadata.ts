@@ -4334,6 +4334,18 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
       },
     },
   },
+  mimc: {
+    type: 'op-mapping',
+    op: 'mimc',
+    signatures: [
+      {
+        argNames: ['c', 'a'],
+        immediateArgs: [{ name: 'c', ptypes: [ptypes.mimcConfigurationsPType] }],
+        stackArgs: [{ name: 'a', ptypes: [ptypes.bytesPType] }],
+        returnType: ptypes.bytesPType,
+      },
+    ],
+  },
   minBalance: {
     type: 'op-mapping',
     op: 'min_balance',

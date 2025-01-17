@@ -9,7 +9,7 @@ function range(start: number, end: number) {
     .fill(0)
     .map((_, i) => start + i)
 }
-export const ENUMS_TO_EXPOSE = new Set(['EC', 'ECDSA', 'vrf_verify', 'base64'])
+export const ENUMS_TO_EXPOSE = new Set(['EC', 'ECDSA', 'vrf_verify', 'base64', 'Mimc Configurations'])
 
 const EXCLUDED_OPCODES = new Set([
   // low level flow control

@@ -40,6 +40,7 @@ import {
   JsonRefType,
   Keccak256Type,
   LenType,
+  MimcType,
   MulwType,
   OnlineStakeType,
   OpsNamespace,
@@ -132,6 +133,7 @@ export const vrfVerify: VrfVerifyType = createFunctionProxy('vrfVerify')
 export const onlineStake: OnlineStakeType = createFunctionProxy('onlineStake')
 export const falconVerify: FalconVerifyType = createFunctionProxy('falconVerify')
 export const sumhash512: Sumhash512Type = createFunctionProxy('sumhash512')
+export const mimc: MimcType = createFunctionProxy('mimc')
 
 export const EllipticCurve: EllipticCurveType = createObjectProxy('EllipticCurve')
 export const Global: GlobalType = createObjectProxy('Global')
