@@ -57,6 +57,7 @@ const EXCLUDED_OPCODES = new Set([
   'replace2',
   'substring',
   'extract',
+  'extract3',
   'gaid',
   'gload',
   'gloads',
@@ -207,7 +208,6 @@ const RENAMED_OPCODES_MAP = new Map([
   ['return', 'exit'],
   ['replace3', 'replace'],
   ['substring3', 'substring'],
-  ['extract3', 'extract'],
   ['gaids', 'gaid'],
   ['gloadss', 'gload'],
   ['setbit', 'setBit'],
@@ -470,6 +470,50 @@ export function buildOpModule() {
   }
 
   // Manually handle select overloads
+  opModule.items.push({
+    type: 'op-overloaded-function',
+    name: 'extract',
+    minAvmVersion: 5,
+    signatures: [
+      {
+        stackArgs: [
+          {
+            name: 'a',
+            type: AlgoTsType.Bytes,
+          },
+          {
+            name: 'b',
+            type: AlgoTsType.Uint64,
+          },
+        ],
+        immediateArgs: [],
+        returnTypes: [AlgoTsType.Bytes],
+        docs: ['A range of bytes from A starting at B up to the end of the sequence'],
+      },
+      {
+        stackArgs: [
+          {
+            name: 'a',
+            type: AlgoTsType.Bytes,
+          },
+          {
+            name: 'b',
+            type: AlgoTsType.Uint64,
+          },
+          {
+            name: 'c',
+            type: AlgoTsType.Uint64,
+          },
+        ],
+        immediateArgs: [],
+        returnTypes: [AlgoTsType.Bytes],
+        docs: [
+          'A range of bytes from A starting at B up to but not including B+C. If B+C is larger than the array length, the program fails',
+        ],
+      },
+    ],
+    opCode: 'extract3',
+  })
   opModule.items.push({
     type: 'op-overloaded-function',
     name: 'select',

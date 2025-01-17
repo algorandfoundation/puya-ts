@@ -1,15 +1,25 @@
+import { intrinsicFactory } from '../../awst/intrinsic-factory'
 import { nodeFactory } from '../../awst/node-factory'
-import { Expression, IntegerConstant, StringConstant } from '../../awst/nodes'
+import { Expression, IntegerConstant, StringConstant, UInt64BinaryOperator } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { CodeError, InternalError } from '../../errors'
-import { enumerate, invariant } from '../../util'
+import { codeInvariant, enumerate, invariant } from '../../util'
 import type { IntrinsicOpGrouping, IntrinsicOpMapping } from '../op-metadata'
 import { OP_METADATA } from '../op-metadata'
 import type { PType } from '../ptypes'
-import { IntrinsicEnumType, IntrinsicFunctionGroupType, IntrinsicFunctionType, stringPType, voidPType } from '../ptypes'
-import { typeRegistry } from '../type-registry'
+import {
+  bytesPType,
+  IntrinsicEnumType,
+  IntrinsicFunctionGroupType,
+  IntrinsicFunctionType,
+  stringPType,
+  uint64PType,
+  voidPType,
+} from '../ptypes'
+import { instanceEb, typeRegistry } from '../type-registry'
 import { FunctionBuilder, InstanceExpressionBuilder, NodeBuilder } from './index'
 import { requestConstantOfType, requestExpressionOfType } from './util'
+import { parseFunctionArgs } from './util/arg-parsing'
 
 export class IntrinsicOpGroupBuilder extends NodeBuilder {
   private opGrouping: IntrinsicOpGrouping
@@ -72,7 +82,82 @@ abstract class IntrinsicOpBuilderBase extends FunctionBuilder {
     super(sourceLocation)
   }
 
+  /**
+   * Extract with 2 args extracts to the end of the sequence, the exact op code depends on if the start index is a constant value or not
+   * @param args
+   * @param typeArgs
+   * @param sourceLocation
+   */
+  handleExtract(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    const {
+      args: [target, start, end],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 0,
+      funcName: 'extract',
+      callLocation: sourceLocation,
+      argSpec: (a) => [a.required(bytesPType), a.required(uint64PType), a.optional(uint64PType)],
+    })
+    if (end) {
+      const endExpr = end.resolve()
+      codeInvariant(
+        !(endExpr instanceof IntegerConstant && endExpr.value === 0n),
+        'Extract with length=0 will always return an empty byte array. Omit length parameter to extract to the end of the sequence.',
+      )
+      return instanceEb(
+        nodeFactory.intrinsicCall({
+          opCode: 'extract3',
+          immediates: [],
+          stackArgs: [target.resolve(), start.resolve(), endExpr],
+          wtype: bytesPType.wtype,
+          sourceLocation,
+        }),
+        bytesPType,
+      )
+    }
+    const startExpr = start.resolve()
+    if (startExpr instanceof IntegerConstant) {
+      // Use immediate version of extract
+      return instanceEb(
+        nodeFactory.intrinsicCall({
+          opCode: 'extract',
+          immediates: [startExpr.value, 0n],
+          stackArgs: [target.resolve()],
+          wtype: bytesPType.wtype,
+          sourceLocation,
+        }),
+        bytesPType,
+      )
+    } else {
+      const targetExpr = target.singleEvaluation().resolve()
+      const startExpr = start.singleEvaluation().resolve()
+      return instanceEb(
+        nodeFactory.intrinsicCall({
+          opCode: 'extract3',
+          immediates: [],
+          stackArgs: [
+            targetExpr,
+            startExpr,
+            nodeFactory.uInt64BinaryOperation({
+              op: UInt64BinaryOperator.sub,
+              sourceLocation,
+              left: intrinsicFactory.bytesLen({ value: targetExpr, sourceLocation }),
+              right: startExpr,
+            }),
+          ],
+          wtype: bytesPType.wtype,
+          sourceLocation,
+        }),
+        bytesPType,
+      )
+    }
+  }
+
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    if (this.opMapping.op === 'extract3') {
+      return this.handleExtract(args, typeArgs, sourceLocation)
+    }
     signatureLoop: for (const [index, sig] of enumerate(this.opMapping.signatures)) {
       const isLastSig = index + 1 >= this.opMapping.signatures.length
       if (args.length !== sig.argNames.length) {
