@@ -67,6 +67,7 @@ type CompatForArc4Int<N extends BitSize> = N extends UintBitSize ? Uint64Compat 
 const TypeProperty = Symbol('ARC4Type')
 
 export abstract class ARC4Encoded implements BytesBacked {
+  /** @hidden */
   abstract [TypeProperty]?: string
   get bytes(): bytes {
     throw new NoImplementation()
@@ -74,6 +75,7 @@ export abstract class ARC4Encoded implements BytesBacked {
 }
 
 export class Str extends ARC4Encoded {
+  /** @hidden */
   [TypeProperty]?: 'arc4.Str'
   #value: string
   constructor(s?: StringCompat) {
@@ -85,6 +87,7 @@ export class Str extends ARC4Encoded {
   }
 }
 export class UintN<N extends BitSize> extends ARC4Encoded {
+  /** @hidden */
   [TypeProperty]?: `arc4.UintN<${N}>`
 
   constructor(v?: CompatForArc4Int<N>) {
@@ -102,6 +105,7 @@ export class UintN64 extends UintN<64> {}
 export class UintN128 extends UintN<128> {}
 export class UintN256 extends UintN<256> {}
 export class UFixedNxM<N extends BitSize, M extends number> extends ARC4Encoded {
+  /** @hidden */
   [TypeProperty]?: `arc4.UFixedNxM<${N}x${M}>`
   constructor(v: `${number}.${number}`) {
     super()
@@ -112,6 +116,7 @@ export class UFixedNxM<N extends BitSize, M extends number> extends ARC4Encoded 
   }
 }
 export class Bool extends ARC4Encoded {
+  /** @hidden */
   [TypeProperty]?: `arc4.Bool`
 
   constructor(v?: boolean) {
@@ -123,7 +128,7 @@ export class Bool extends ARC4Encoded {
   }
 }
 
-abstract class Arc4ReadonlyArray<TItem extends ARC4Encoded> extends ARC4Encoded {
+abstract class Arc4ArrayBase<TItem extends ARC4Encoded> extends ARC4Encoded {
   protected constructor() {
     super()
   }
@@ -193,7 +198,8 @@ abstract class Arc4ReadonlyArray<TItem extends ARC4Encoded> extends ARC4Encoded 
   [index: uint64]: TItem
 }
 
-export class StaticArray<TItem extends ARC4Encoded, TLength extends number> extends Arc4ReadonlyArray<TItem> {
+export class StaticArray<TItem extends ARC4Encoded, TLength extends number> extends Arc4ArrayBase<TItem> {
+  /** @hidden */
   [TypeProperty]?: `arc4.StaticArray<${TItem[typeof TypeProperty]}, ${TLength}>`
   constructor()
   constructor(...items: TItem[] & { length: TLength })
@@ -214,7 +220,8 @@ export class StaticArray<TItem extends ARC4Encoded, TLength extends number> exte
     throw new NoImplementation()
   }
 }
-export class DynamicArray<TItem extends ARC4Encoded> extends Arc4ReadonlyArray<TItem> {
+export class DynamicArray<TItem extends ARC4Encoded> extends Arc4ArrayBase<TItem> {
+  /** @hidden */
   [TypeProperty]?: `arc4.DynamicArray<${TItem[typeof TypeProperty]}>`
   constructor(...items: TItem[]) {
     super()
@@ -254,6 +261,7 @@ type ExpandTupleType<T extends ARC4Encoded[]> = T extends [infer T1 extends ARC4
   : ''
 
 export class Tuple<TTuple extends [ARC4Encoded, ...ARC4Encoded[]]> extends ARC4Encoded {
+  /** @hidden */
   [TypeProperty]?: `arc4.Tuple<${ExpandTupleType<TTuple>}>`
   constructor(...items: TTuple) {
     super()
@@ -272,7 +280,8 @@ export class Tuple<TTuple extends [ARC4Encoded, ...ARC4Encoded[]]> extends ARC4E
   }
 }
 
-export class Address extends Arc4ReadonlyArray<Byte> {
+export class Address extends Arc4ArrayBase<Byte> {
+  /** @hidden */
   [TypeProperty]?: `arc4.Address`
   constructor(value?: Account | string | bytes) {
     super()
@@ -286,6 +295,7 @@ export class Address extends Arc4ReadonlyArray<Byte> {
 type StructConstraint = Record<string, ARC4Encoded>
 
 class StructBase extends ARC4Encoded {
+  /** @hidden */
   [TypeProperty] = 'arc4.Struct'
 }
 class StructImpl<T extends StructConstraint> extends StructBase {
@@ -305,7 +315,8 @@ type StructConstructor = new <T extends StructConstraint>(initial: T) => StructB
 
 export const Struct = StructImpl as StructConstructor
 
-export class DynamicBytes extends Arc4ReadonlyArray<Byte> {
+export class DynamicBytes extends Arc4ArrayBase<Byte> {
+  /** @hidden */
   [TypeProperty]?: `arc4.DynamicBytes`
 
   constructor(value?: bytes | string) {
@@ -325,7 +336,8 @@ export class DynamicBytes extends Arc4ReadonlyArray<Byte> {
   }
 }
 
-export class StaticBytes<TLength extends number = 0> extends Arc4ReadonlyArray<Byte> {
+export class StaticBytes<TLength extends number = 0> extends Arc4ArrayBase<Byte> {
+  /** @hidden */
   [TypeProperty]?: `arc4.StaticBytes<${TLength}>`
 
   constructor(value?: bytes | string) {
