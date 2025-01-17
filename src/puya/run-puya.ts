@@ -13,7 +13,6 @@ export function runPuya({
   onOutput: (line: string) => void
 }) {
   const proc = sync(command, args, {
-    // forward all stdin/stdout/stderr to current handlers, with correct interleaving
     stdio: 'pipe',
     cwd,
   })

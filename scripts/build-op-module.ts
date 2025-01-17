@@ -1,5 +1,4 @@
 import { camelCase, pascalCase } from 'change-case'
-import fs from 'fs'
 import langSpec from '../langspec.puya.json'
 import { hasFlags, invariant } from '../src/util'
 import type { Op } from './langspec'
@@ -301,6 +300,7 @@ const GROUPED_OPCODES: { name: string; doc: string; ops: { [key: string]: OpName
 export type OpArg = {
   name: string
   type: AlgoTsType
+  optional?: boolean
 }
 
 export type EnumArgMeta = {
@@ -654,10 +654,3 @@ const getOpDocs = (op: Op): string[] => [
     .flat(),
   `@see Native TEAL opcode: [\`${op.name}\`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#${op.name})`,
 ]
-
-function testOpModule() {
-  const mod = buildOpModule()
-
-  fs.writeFileSync('op-module.json', JSON.stringify(mod, undefined, 2))
-}
-testOpModule()
