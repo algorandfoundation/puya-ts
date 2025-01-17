@@ -7,21 +7,27 @@ import type * as txnTypes from './transactions'
 const isItxn = Symbol('isItxn')
 
 export interface PaymentInnerTxn extends txnTypes.PaymentTxn {
+  /** @hidden */
   [isItxn]?: true
 }
 export interface KeyRegistrationInnerTxn extends txnTypes.KeyRegistrationTxn {
+  /** @hidden */
   [isItxn]?: true
 }
 export interface AssetConfigInnerTxn extends txnTypes.AssetConfigTxn {
+  /** @hidden */
   [isItxn]?: true
 }
 export interface AssetTransferInnerTxn extends txnTypes.AssetTransferTxn {
+  /** @hidden */
   [isItxn]?: true
 }
 export interface AssetFreezeInnerTxn extends txnTypes.AssetFreezeTxn {
+  /** @hidden */
   [isItxn]?: true
 }
 export interface ApplicationInnerTxn extends txnTypes.ApplicationTxn {
+  /** @hidden */
   [isItxn]?: true
 }
 
