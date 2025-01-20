@@ -2641,7 +2641,7 @@
     {
       "type": "op-function",
       "opCode": "falcon_verify",
-      "minAvmVersion": 11,
+      "minAvmVersion": 12,
       "name": "falconVerify",
       "immediateArgs": [],
       "stackArgs": [
@@ -4978,7 +4978,7 @@
             "member": "PayoutsMinBalance",
             "pos": 0
           },
-          "docs": "The minimum algo balance an account must have in the agreement round to receive block payouts in the proposal round.",
+          "docs": "The minimum balance an account must have in the agreement round to receive block payouts in the proposal round.",
           "name": "payoutsMinBalance",
           "immediateArgs": [
             {
@@ -4999,7 +4999,7 @@
             "member": "PayoutsMaxBalance",
             "pos": 0
           },
-          "docs": "The maximum algo balance an account can have in the agreement round to receive block payouts in the proposal round.",
+          "docs": "The maximum balance an account can have in the agreement round to receive block payouts in the proposal round.",
           "name": "payoutsMaxBalance",
           "immediateArgs": [
             {
@@ -9729,6 +9729,33 @@
     },
     {
       "type": "op-function",
+      "opCode": "mimc",
+      "minAvmVersion": 11,
+      "name": "mimc",
+      "immediateArgs": [
+        {
+          "name": "c",
+          "type": 8389120
+        }
+      ],
+      "stackArgs": [
+        {
+          "name": "a",
+          "type": 1
+        }
+      ],
+      "returnTypes": [
+        1
+      ],
+      "docs": [
+        "MiMC hash of scalars A, using curve and parameters specified by configuration C",
+        "A is a list of concatenated 32 byte big-endian unsigned integer scalars.  Fail if A's length is not a multiple of 32 or any element exceeds the curve modulus.",
+        "The MiMC hash function has known collisions since any input which is a multiple of the elliptic curve modulus will hash to the same value. MiMC is thus not a general purpose hash function, but meant to be used in zero knowledge applications to match a zk-circuit implementation.",
+        "@see Native TEAL opcode: [`mimc`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#mimc)"
+      ]
+    },
+    {
+      "type": "op-function",
       "opCode": "min_balance",
       "minAvmVersion": 3,
       "name": "minBalance",
@@ -10005,7 +10032,7 @@
     {
       "type": "op-function",
       "opCode": "sumhash512",
-      "minAvmVersion": 11,
+      "minAvmVersion": 12,
       "name": "sumhash512",
       "immediateArgs": [],
       "stackArgs": [
@@ -11497,7 +11524,7 @@
       "functions": {
         "voterBalance": {
           "type": "op-function",
-          "minAvmVersion": 6,
+          "minAvmVersion": 11,
           "opCode": "voter_params_get",
           "enumArg": {
             "member": "VoterBalance",
@@ -11508,7 +11535,7 @@
           "immediateArgs": [
             {
               "name": "f",
-              "type": 8389120
+              "type": 16777728
             }
           ],
           "stackArgs": [
@@ -11535,7 +11562,7 @@
           "immediateArgs": [
             {
               "name": "f",
-              "type": 8389120
+              "type": 16777728
             }
           ],
           "stackArgs": [
@@ -11561,7 +11588,7 @@
       "immediateArgs": [
         {
           "name": "s",
-          "type": 16777728
+          "type": 33554944
         }
       ],
       "stackArgs": [
@@ -13042,7 +13069,7 @@
         {
           "name": "PayoutsMinBalance",
           "value": "PayoutsMinBalance",
-          "doc": "The minimum algo balance an account must have in the agreement round to receive block payouts in the proposal round.",
+          "doc": "The minimum balance an account must have in the agreement round to receive block payouts in the proposal round.",
           "mode": "any",
           "minAvmVersion": 11,
           "stackType": 2
@@ -13050,7 +13077,7 @@
         {
           "name": "PayoutsMaxBalance",
           "value": "PayoutsMaxBalance",
-          "doc": "The maximum algo balance an account can have in the agreement round to receive block payouts in the proposal round.",
+          "doc": "The maximum balance an account can have in the agreement round to receive block payouts in the proposal round.",
           "mode": "any",
           "minAvmVersion": 11,
           "stackType": 2
@@ -13505,6 +13532,29 @@
     },
     {
       "typeFlag": 8389120,
+      "name": "Mimc Configurations",
+      "tsName": "MimcConfigurations",
+      "members": [
+        {
+          "name": "BN254Mp110",
+          "value": "BN254Mp110",
+          "doc": "MiMC configuration for the BN254 curve with Miyaguchi-Preneel mode, 110 rounds, exponent 5, seed \"seed\"",
+          "mode": "any",
+          "minAvmVersion": 11,
+          "stackType": null
+        },
+        {
+          "name": "BLS12_381Mp111",
+          "value": "BLS12_381Mp111",
+          "doc": "MiMC configuration for the BLS12-381 curve with Miyaguchi-Preneel mode, 111 rounds, exponent 5, seed \"seed\"",
+          "mode": "any",
+          "minAvmVersion": 11,
+          "stackType": null
+        }
+      ]
+    },
+    {
+      "typeFlag": 16777728,
       "name": "voter_params",
       "tsName": "VoterParams",
       "members": [
@@ -13513,7 +13563,7 @@
           "value": "VoterBalance",
           "doc": "Online stake in microalgos",
           "mode": "app",
-          "minAvmVersion": 6,
+          "minAvmVersion": 11,
           "stackType": 2
         },
         {
@@ -13527,7 +13577,7 @@
       ]
     },
     {
-      "typeFlag": 16777728,
+      "typeFlag": 33554944,
       "name": "vrf_verify",
       "tsName": "VrfVerify",
       "members": [
