@@ -75,6 +75,7 @@ export class Arc28EmitFunctionBuilder extends FunctionBuilder {
         fields,
         description: undefined,
         sourceLocation,
+        frozen: true,
       })
       const structExpression = nodeFactory.newStruct({
         wtype: structType.wtype,

@@ -362,6 +362,7 @@ export class TypeResolver {
       fields: fields,
       sourceLocation: sourceLocation,
       description: tryGetTypeDescription(tsType),
+      frozen: baseType.frozen,
     })
   }
 
