@@ -4,7 +4,8 @@ import { assert, Bytes, Contract, contract, Global, logicsig, LogicSig, MimcConf
 @logicsig({ name: 'AVM11SIG', avmVersion: 11 })
 export class Avm11Sig extends LogicSig {
   program(): uint64 {
-    return op.mimc(MimcConfigurations.BN254Mp110, Bytes('')).length
+    const a = Bytes.fromHex('00000000000000000000000000000000000000000000000000000000499602d2')
+    return op.mimc(MimcConfigurations.BN254Mp110, a).length
   }
 }
 
@@ -12,7 +13,8 @@ export class Avm11Sig extends LogicSig {
 export class Avm11Contract extends Contract {
   testNewOps() {
     // Ops
-    assert(op.mimc(MimcConfigurations.BLS12_381Mp111, Bytes()))
+    const x = Bytes.fromHex('00000000000000000000000000000000000000000000000000000000499602d2')
+    assert(op.mimc(MimcConfigurations.BLS12_381Mp111, x))
     assert(op.onlineStake())
 
     // AcctParams
