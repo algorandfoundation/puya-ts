@@ -357,6 +357,11 @@ export const applicationCallTxnFields = {
    * The id of the created application
    */
   createdApp: [TxnField.CreatedApplicationID, applicationPType] as const,
+
+  /**
+   * Number of logs
+   */
+  numLogs: [TxnField.NumLogs, uint64PType] as const,
 } satisfies Record<string, readonly [TxnField, PType]>
 
 export const anyTxnFields = {

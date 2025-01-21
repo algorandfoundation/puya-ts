@@ -28,9 +28,17 @@ export const ecdsaPType = new IntrinsicEnumType({
     ['Secp256r1', 'Secp256r1'],
   ],
 })
+export const mimcConfigurationsPType = new IntrinsicEnumType({
+  name: 'MimcConfigurations',
+  module: `${Constants.algoTsPackage}/op-types.d.ts`,
+  members: [
+    ['BN254Mp110', 'BN254Mp110'],
+    ['BLS12_381Mp111', 'BLS12_381Mp111'],
+  ],
+})
 export const vrfVerifyPType = new IntrinsicEnumType({
   name: 'VrfVerify',
   module: `${Constants.algoTsPackage}/op-types.d.ts`,
   members: [['VrfAlgorand', 'VrfAlgorand']],
 })
-export const ALL_OP_ENUMS = [base64PType, ecPType, ecdsaPType, vrfVerifyPType]
+export const ALL_OP_ENUMS = [base64PType, ecPType, ecdsaPType, mimcConfigurationsPType, vrfVerifyPType]

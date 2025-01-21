@@ -16,6 +16,10 @@ export enum Ecdsa {
   Secp256k1 = 'Secp256k1',
   Secp256r1 = 'Secp256r1',
 }
+export enum MimcConfigurations {
+  BN254Mp110 = 'BN254Mp110',
+  BLS12_381Mp111 = 'BLS12_381Mp111',
+}
 export enum VrfVerify {
   VrfAlgorand = 'VrfAlgorand',
 }
@@ -684,7 +688,7 @@ export type ExtractUint64Type = (a: bytes, b: uint64) => uint64
 /**
  * for (data A, compressed-format signature B, pubkey C) verify the signature of data against the pubkey
  * @see Native TEAL opcode: [`falcon_verify`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#falcon_verify)
- * Min AVM version: 11
+ * Min AVM version: 12
  */
 export type FalconVerifyType = (a: bytes, b: bytes, c: bytes) => boolean
 
@@ -1265,13 +1269,13 @@ export type GlobalType = {
   get payoutsPercent(): uint64
 
   /**
-   * The minimum algo balance an account must have in the agreement round to receive block payouts in the proposal round.
+   * The minimum balance an account must have in the agreement round to receive block payouts in the proposal round.
    * Min AVM version: 11
    */
   get payoutsMinBalance(): uint64
 
   /**
-   * The maximum algo balance an account can have in the agreement round to receive block payouts in the proposal round.
+   * The maximum balance an account can have in the agreement round to receive block payouts in the proposal round.
    * Min AVM version: 11
    */
   get payoutsMaxBalance(): uint64
@@ -2491,6 +2495,15 @@ export type ScratchType = {
 }
 
 /**
+ * MiMC hash of scalars A, using curve and parameters specified by configuration C
+ * A is a list of concatenated 32 byte big-endian unsigned integer scalars.  Fail if A's length is not a multiple of 32 or any element exceeds the curve modulus.
+ * The MiMC hash function has known collisions since any input which is a multiple of the elliptic curve modulus will hash to the same value. MiMC is thus not a general purpose hash function, but meant to be used in zero knowledge applications to match a zk-circuit implementation.
+ * @see Native TEAL opcode: [`mimc`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#mimc)
+ * Min AVM version: 11
+ */
+export type MimcType = (c: MimcConfigurations, a: bytes) => bytes
+
+/**
  * minimum required balance for account A, in microalgos. Required balance is affected by ASA, App, and Box usage. When creating or opting into an app, the minimum balance grows before the app code runs, therefore the increase is visible there. When deleting or closing out, the minimum balance decreases after the app executes. Changes caused by inner transactions or box usage are observable immediately following the opcode effecting the change.
  * @param Txn.Accounts offset (or, since v4, an _available_ account address), _available_ application id (or, since v4, a Txn.ForeignApps offset).
  *  * @return value.
@@ -2580,7 +2593,7 @@ export type SubstringType = (a: bytes, b: uint64, c: uint64) => bytes
 /**
  * sumhash512 of value A, yields [64]byte
  * @see Native TEAL opcode: [`sumhash512`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#sumhash512)
- * Min AVM version: 11
+ * Min AVM version: 12
  */
 export type Sumhash512Type = (a: bytes) => bytes
 
@@ -2999,7 +3012,7 @@ export type TxnType = {
 export type VoterParamsType = {
   /**
    * Online stake in microalgos
-   * Min AVM version: 6
+   * Min AVM version: 11
    */
   voterBalance(a: Account | uint64): readonly [uint64, boolean]
 
@@ -3068,6 +3081,7 @@ export type OpsNamespace = {
   keccak256: Keccak256Type
   len: LenType
   Scratch: ScratchType
+  mimc: MimcType
   minBalance: MinBalanceType
   mulw: MulwType
   onlineStake: OnlineStakeType

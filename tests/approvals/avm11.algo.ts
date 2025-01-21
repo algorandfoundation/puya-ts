@@ -1,10 +1,11 @@
 import type { uint64 } from '@algorandfoundation/algorand-typescript'
-import { assert, Bytes, Contract, contract, Global, logicsig, LogicSig, op, Txn } from '@algorandfoundation/algorand-typescript'
+import { assert, Bytes, Contract, contract, Global, logicsig, LogicSig, MimcConfigurations, op, Txn } from '@algorandfoundation/algorand-typescript'
 
 @logicsig({ name: 'AVM11SIG', avmVersion: 11 })
 export class Avm11Sig extends LogicSig {
   program(): uint64 {
-    return op.sumhash512(Bytes('')).length
+    const a = Bytes.fromHex('00000000000000000000000000000000000000000000000000000000499602d2')
+    return op.mimc(MimcConfigurations.BN254Mp110, a).length
   }
 }
 
@@ -12,8 +13,8 @@ export class Avm11Sig extends LogicSig {
 export class Avm11Contract extends Contract {
   testNewOps() {
     // Ops
-    assert(!op.falconVerify(Bytes(), Bytes(), op.bzero(1793)))
-    assert(op.sumhash512(Bytes()))
+    const x = Bytes.fromHex('00000000000000000000000000000000000000000000000000000000499602d2')
+    assert(op.mimc(MimcConfigurations.BLS12_381Mp111, x))
     assert(op.onlineStake())
 
     // AcctParams

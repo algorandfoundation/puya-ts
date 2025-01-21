@@ -1,6 +1,7 @@
 
 logicsig tests/approvals/avm11.algo.ts::Avm11Sig {
-  return len(sumhash512(""))
+  a: bytes = 0x00000000000000000000000000000000000000000000000000000000499602d2
+  return len(mimc<BN254Mp110>(a))
 }
 contract AVM11Contract
 {
@@ -16,8 +17,8 @@ contract AVM11Contract
   
   testNewOps(): void
   {
-    assert(!falcon_verify(0x, 0x, bzero(1793)))
-    assert(Boolean(len(sumhash512(0x))))
+    x: bytes = 0x00000000000000000000000000000000000000000000000000000000499602d2
+    assert(Boolean(len(mimc<BLS12_381Mp111>(x))))
     assert(Boolean(online_stake()))
     <tuple>[a, b]: readonlytuple[bool, bool] = acct_params_get<AcctIncentiveEligible>(txn<Sender>())
     <tuple>[c, d]: readonlytuple[uint64, bool] = acct_params_get<AcctLastProposed>(txn<Sender>())
