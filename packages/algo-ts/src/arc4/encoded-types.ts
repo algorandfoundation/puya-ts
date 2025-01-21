@@ -285,7 +285,7 @@ class StructImpl<T extends StructConstraint> extends StructBase {
   }
 }
 
-type StructConstructor = new <T extends StructConstraint>(initial: T) => StructBase & T
+type StructConstructor = new <T extends StructConstraint>(initial: T) => StructBase & Readonly<T>
 
 export const Struct = StructImpl as StructConstructor
 

@@ -74,6 +74,7 @@ export function ptypeToArc4EncodedType(ptype: PType, sourceLocation: SourceLocat
       module: ptype.module,
       description: ptype.description,
       fields: Object.fromEntries(ptype.orderedProperties().map(([p, pt]) => [p, ptypeToArc4EncodedType(pt, sourceLocation)])),
+      frozen: true,
     })
 
   throw new CodeError(`${ptype} cannot be encoded to an ARC4 type`, { sourceLocation })
