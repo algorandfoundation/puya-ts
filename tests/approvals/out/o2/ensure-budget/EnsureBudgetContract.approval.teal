@@ -1,0 +1,73 @@
+#pragma version 10
+#pragma typetrack false
+
+// tests/approvals/ensure-budget.algo.ts::EnsureBudgetContract.approvalProgram() -> uint64:
+main:
+    intcblock 100 0 1
+    bytecblock 0x068101
+    // tests/approvals/ensure-budget.algo.ts:5
+    // ensureBudget(100)
+    intc_0 // 100
+    intc_1 // 0
+    callsub ensure_budget
+    // tests/approvals/ensure-budget.algo.ts:6
+    // ensureBudget(100, OpUpFeeSource.GroupCredit)
+    intc_0 // 100
+    intc_1 // 0
+    callsub ensure_budget
+    // tests/approvals/ensure-budget.algo.ts:7
+    // ensureBudget(100, OpUpFeeSource.AppAccount)
+    intc_0 // 100
+    intc_2 // 1
+    callsub ensure_budget
+    // tests/approvals/ensure-budget.algo.ts:8
+    // ensureBudget(100, OpUpFeeSource.Any)
+    intc_0 // 100
+    pushint 2 // 2
+    callsub ensure_budget
+    // tests/approvals/ensure-budget.algo.ts:10
+    // return true
+    intc_2 // 1
+    return
+
+
+// _puya_lib.util.ensure_budget(required_budget: uint64, fee_source: uint64) -> void:
+ensure_budget:
+    proto 2 0
+    frame_dig -2
+    pushint 10 // 10
+    +
+
+ensure_budget_while_top@1:
+    frame_dig 0
+    global OpcodeBudget
+    >
+    bz ensure_budget_after_while@7
+    itxn_begin
+    pushint 6 // appl
+    itxn_field TypeEnum
+    pushint 5 // DeleteApplication
+    itxn_field OnCompletion
+    bytec_0 // 0x068101
+    itxn_field ApprovalProgram
+    bytec_0 // 0x068101
+    itxn_field ClearStateProgram
+    frame_dig -1
+    switch ensure_budget_switch_case_0@3 ensure_budget_switch_case_1@4
+
+ensure_budget_switch_case_next@6:
+    itxn_submit
+    b ensure_budget_while_top@1
+
+ensure_budget_switch_case_1@4:
+    global MinTxnFee
+    itxn_field Fee
+    b ensure_budget_switch_case_next@6
+
+ensure_budget_switch_case_0@3:
+    intc_1 // 0
+    itxn_field Fee
+    b ensure_budget_switch_case_next@6
+
+ensure_budget_after_while@7:
+    retsub

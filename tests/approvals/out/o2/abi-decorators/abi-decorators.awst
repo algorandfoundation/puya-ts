@@ -1,0 +1,150 @@
+contract AbiDecorators
+{
+  globals {
+    ["globalValue"]: uint64
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  justNoop(): void
+  {
+  }
+  
+  createMethod(): void
+  {
+  }
+  
+  allActions(): void
+  {
+  }
+  
+  readonly(): uint64
+  {
+    return 5
+  }
+  
+  methodWithDefaults(a: uint64, b: uint64, c: uint64): uint64
+  {
+    return a * b + c
+  }
+  
+  constructor(): void
+  {
+    void
+    GlobalState["globalValue"]: uint64 = 123
+  }
+  
+}
+contract OverloadedMethods
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  doThingOne(x: uint64): uint64
+  {
+    return x
+  }
+  
+  doThingTwo(x: uint64, y: uint64): uint64
+  {
+    return x * y
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+contract BaseAbi
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  someMethod(): string
+  {
+    return "base-abi:optin"
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+contract SubAbi
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  someMethod(): string
+  {
+    return "sub-abi:optin"
+  }
+  
+  BaseAbi::someMethod(): string
+  {
+    return "base-abi:optin"
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+contract SubAbi2
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  someMethod(): string
+  {
+    return "sub-abi-2:noop"
+  }
+  
+  BaseAbi::someMethod(): string
+  {
+    return "base-abi:optin"
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

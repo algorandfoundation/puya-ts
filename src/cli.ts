@@ -1,10 +1,8 @@
 import { Command, Option } from 'commander'
 import { z } from 'zod'
-import { buildCompileOptions } from './compile-options'
 import { compile } from './index'
 import { logger, LoggingContext, LogLevel } from './logger'
 import { ConsoleLogSink } from './logger/sinks/console-log-sink'
-import type { PuyaPassThroughOptions } from './puya/options'
 import { defaultPuyaOptions, LocalsCoalescingStrategy } from './puya/options'
 
 const cmdInteger = () => z.preprocess((x) => (typeof x === 'string' && x.length > 0 ? Number(x) : x), z.number().int())
@@ -14,8 +12,8 @@ const cliOptionsSchema = z.object({
   outputAwstJson: z.boolean(),
   outDir: z.string(),
   dryRun: z.boolean(),
+  skipVersionCheck: z.boolean(),
   logLevel: z.nativeEnum(LogLevel),
-  isolatedFiles: z.boolean(),
 
   // Puya options
   outputSourceMap: z.boolean(),
@@ -55,7 +53,7 @@ function cli() {
     .addOption(new Option('--output-awst-json', 'Output debugging awst json file per parsed file').default(false))
     .addOption(new Option('--out-dir [outDir]').default('out'))
     .addOption(new Option('--dry-run', "Just parse typescript files, don't invoke puya compiler").default(false))
-    .addOption(new Option('--isolated-files', 'Invoke compilation on each input file individually').default(false))
+    .addOption(new Option('--skip-version-check', "Don't verify installed puya compiler version matches targeted version").default(false))
     .addOption(new Option('--no-output-teal', 'Do not output TEAL code').default(defaultPuyaOptions.outputTeal))
     .addOption(new Option('--output-source-map', 'Output debug source maps ').default(defaultPuyaOptions.outputSourceMap))
     .addOption(
@@ -115,50 +113,24 @@ function cli() {
         ]),
     )
 
-    .action((a, o) => {
-      using logCtx = LoggingContext.create()
-      logger.configure([new ConsoleLogSink(LogLevel.Warning)])
-      try {
-        const paths = cliArgumentsSchema.parse(a)
-        const cliOptions = cliOptionsSchema.parse(o)
-        logger.configure([new ConsoleLogSink(cliOptions.logLevel)])
-        const compileOptions = buildCompileOptions({
-          paths,
-          ...cliOptions,
-        })
-        const passThroughOptions: PuyaPassThroughOptions = cliOptions
-
-        if (cliOptions.isolatedFiles) {
-          let anyHasErrors = false
-          for (const file of compileOptions.filePaths) {
-            using logCtx = LoggingContext.create()
-            try {
-              compile(
-                {
-                  ...compileOptions,
-                  filePaths: [file],
-                },
-                passThroughOptions,
-              )
-            } catch (e) {
-              logger.critical(undefined, `Compilation failure: ${e}`)
-            }
-            anyHasErrors ||= logCtx.hasErrors()
-          }
-          if (anyHasErrors) {
-            process.exit(-1)
-          }
-        } else {
-          compile(compileOptions, passThroughOptions)
+    .action(async (a, o) => {
+      const logCtx = LoggingContext.create()
+      return logCtx.run(async () => {
+        logger.configure([new ConsoleLogSink(LogLevel.Warning)])
+        try {
+          const paths = cliArgumentsSchema.parse(a)
+          const cliOptions = cliOptionsSchema.parse(o)
+          logger.configure([new ConsoleLogSink(cliOptions.logLevel)])
+          await compile({ paths, ...cliOptions })
           logCtx.exitIfErrors()
+        } catch (e) {
+          if (e instanceof Error) {
+            logger.error(e)
+          } else {
+            throw e
+          }
         }
-      } catch (e) {
-        if (e instanceof Error) {
-          logger.error(e)
-        } else {
-          throw e
-        }
-      }
+      })
     })
 
   if (process.argv.length < 3) {

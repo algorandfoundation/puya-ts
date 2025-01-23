@@ -1,0 +1,41 @@
+#pragma version 10
+#pragma typetrack false
+
+// tests/approvals/reserve-scratch.algo.ts::ReserveScratchAlgo.approvalProgram() -> uint64:
+main:
+    intcblock 1 45
+    bytecblock "hello"
+    // tests/approvals/reserve-scratch.algo.ts:7
+    // Scratch.store(0, 1)
+    intc_0 // 1
+    store 0
+    // tests/approvals/reserve-scratch.algo.ts:8
+    // Scratch.store(1, Bytes('hello'))
+    bytec_0 // "hello"
+    store 1
+    // tests/approvals/reserve-scratch.algo.ts:9
+    // Scratch.store(15, 45)
+    intc_1 // 45
+    store 15
+    // tests/approvals/reserve-scratch.algo.ts:15
+    // assert(Scratch.loadUint64(0) === 1)
+    load 0
+    intc_0 // 1
+    ==
+    assert
+    // tests/approvals/reserve-scratch.algo.ts:16
+    // assert(Scratch.loadBytes(0) === Bytes('hello'))
+    load 0
+    bytec_0 // "hello"
+    ==
+    assert
+    // tests/approvals/reserve-scratch.algo.ts:17
+    // assert(Scratch.loadUint64(15) === 45)
+    load 15
+    intc_1 // 45
+    ==
+    assert
+    // tests/approvals/reserve-scratch.algo.ts:18
+    // return true
+    intc_0 // 1
+    return

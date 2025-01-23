@@ -1,0 +1,173 @@
+contract Hello
+{
+  globals {
+    ["greeting"]: string
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  create(greeting: string): void
+  {
+    GlobalState["greeting"]: string = greeting
+  }
+  
+  HelloBase::delete(): void
+  {
+  }
+  
+  HelloBase::update(): void
+  {
+  }
+  
+  HelloBase::greet(name: string): string
+  {
+    return "" + GlobalState["greeting"] + " " + name
+  }
+  
+  HelloBase::constructor(): void
+  {
+    void
+    GlobalState["greeting"]: string = ""
+  }
+  
+}
+contract HelloTemplate
+{
+  globals {
+    ["greeting"]: string
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  create(): void
+  {
+  }
+  
+  constructor(): void
+  {
+    super.constructor()
+    GlobalState["greeting"]: string = TemplateVar[string](TMPL_GREETING)
+  }
+  
+  HelloBase::delete(): void
+  {
+  }
+  
+  HelloBase::update(): void
+  {
+  }
+  
+  HelloBase::greet(name: string): string
+  {
+    return "" + GlobalState["greeting"] + " " + name
+  }
+  
+  HelloBase::constructor(): void
+  {
+    void
+    GlobalState["greeting"]: string = ""
+  }
+  
+}
+contract HelloTemplateCustomPrefix
+{
+  globals {
+    ["greeting"]: string
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  create(): void
+  {
+  }
+  
+  constructor(): void
+  {
+    super.constructor()
+    GlobalState["greeting"]: string = TemplateVar[string](PRFX_GREETING)
+  }
+  
+  HelloBase::delete(): void
+  {
+  }
+  
+  HelloBase::update(): void
+  {
+  }
+  
+  HelloBase::greet(name: string): string
+  {
+    return "" + GlobalState["greeting"] + " " + name
+  }
+  
+  HelloBase::constructor(): void
+  {
+    void
+    GlobalState["greeting"]: string = ""
+  }
+  
+}
+subroutine getBigBytes(): bytes
+{
+  return bzero(4096)
+}
+contract LargeProgram
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  getBigBytesLength(): uint64
+  {
+    return len(tests/approvals/precompiled-apps.algo.ts::getBigBytes())
+  }
+  
+  delete(): void
+  {
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+
+logicsig tests/approvals/precompiled-apps.algo.ts::TerribleCustodialAccount {
+  return True
+}

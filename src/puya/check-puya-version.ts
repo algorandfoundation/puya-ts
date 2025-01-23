@@ -10,15 +10,15 @@ export enum VersionCompareVerdict {
   RevisionMismatch = 'RevisionMismatch',
 }
 
-export function comparePuyaVersion(): {
+export async function comparePuyaVersion(): Promise<{
   target: string
   found?: string
   verdict: VersionCompareVerdict
-} {
+}> {
   const target = Constants.targetedPuyaVersion
 
   const versionParser = new VersionParser()
-  runPuya({
+  await runPuya({
     command: 'puya',
     args: ['--version'],
     onOutput: (line) => versionParser.receiveLine(line),
@@ -35,8 +35,8 @@ export function comparePuyaVersion(): {
   return { verdict: VersionCompareVerdict.ExactMatch, target, found: ver.formatted }
 }
 
-export function checkPuyaVersion() {
-  const result = comparePuyaVersion()
+export async function checkPuyaVersion() {
+  const result = await comparePuyaVersion()
   switch (result.verdict) {
     case VersionCompareVerdict.Inconclusive:
       logger.warn(undefined, `Unable to verify installed puya version. Please ensure version ${result.target} is available`)

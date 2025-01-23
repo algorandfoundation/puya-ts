@@ -1,0 +1,27 @@
+#pragma version 10
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    // tests/approvals/implicit-create.algo.ts:13
+    // class BaseWithBareCreate extends Contract {
+    txn NumAppArgs
+    bnz main_after_if_else@7
+    txn OnCompletion
+    bnz main_after_if_else@7
+    // tests/approvals/implicit-create.algo.ts:14
+    // @baremethod({ onCreate: 'require' })
+    txn ApplicationID
+    !
+    assert // can only call when creating
+    // tests/approvals/implicit-create.algo.ts:14-15
+    // @baremethod({ onCreate: 'require' })
+    // public create() {}
+    pushint 1 // 1
+    return
+
+main_after_if_else@7:
+    // tests/approvals/implicit-create.algo.ts:13
+    // class BaseWithBareCreate extends Contract {
+    pushint 0 // 0
+    return

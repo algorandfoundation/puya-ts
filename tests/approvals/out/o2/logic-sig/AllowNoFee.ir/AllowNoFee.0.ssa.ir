@@ -1,0 +1,11 @@
+main tests/approvals/logic-sig.algo.ts::program:
+    block@0: // L14
+        tests/approvals/logic-sig.algo.ts::feeIsZero()
+        return 1u
+
+subroutine tests/approvals/logic-sig.algo.ts::feeIsZero() -> void:
+    block@0: // L9
+        let tmp%0#0: uint64 = (txn Fee)
+        let tmp%1#0: bool = (== tmp%0#0 0u)
+        (assert tmp%1#0) // Fee must be zero
+        return 
