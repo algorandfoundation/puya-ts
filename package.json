@@ -9,7 +9,7 @@
     "dev:examples": "tsx src/cli.ts build examples --output-awst --output-awst-json",
     "dev:approvals": "rimraf tests/approvals/out && tsx src/cli.ts build tests/approvals --dry-run",
     "dev:expected-output": "tsx src/cli.ts build tests/expected-output --dry-run",
-    "dev:testing": "tsx src/cli.ts build tests/approvals/extract-bytes.algo.ts --output-awst --output-awst-json --output-ssa-ir --log-level=info --out-dir out/[name] --optimization-level=0",
+    "dev:testing": "tsx src/cli.ts build tests/approvals/avm11.algo.ts --output-awst --output-awst-json --output-ssa-ir --log-level=info --out-dir out/[name] --optimization-level=0",
     "audit": "better-npm-audit audit",
     "format": "prettier --write .",
     "lint": "eslint \"src/**/*.ts\"",
@@ -33,10 +33,7 @@
     "algo-ts:build:watch": "cd packages/algo-ts && npm run build:3-build:watch",
     "algo-ts:install": "npm i -D @algorandfoundation/algorand-typescript@./packages/algo-ts/dist",
     "npm-install-all": "cd packages/algo-ts && npm i && npm run build && cd ../../ && npm i",
-    "script-all": "run-p script:*",
-    "script:op-types": "tsx ./scripts/generate-op-types.ts packages/algo-ts/src/op-types.ts && cd packages/algo-ts && eslint src/op-types.ts --fix",
-    "script:op-metadata": "tsx ./scripts/generate-op-metadata.ts src/awst_build/op-metadata.ts && eslint src/awst_build/op-metadata.ts --fix",
-    "script:op-ptypes": "tsx ./scripts/generate-op-ptypes.ts src/awst_build/ptypes/op-ptypes.ts && eslint src/awst_build/ptypes/op-ptypes.ts --fix"
+    "script:code-gen": "tsx ./scripts/code-gen.ts"
   },
   "author": "Algorand foundation",
   "license": "MIT",

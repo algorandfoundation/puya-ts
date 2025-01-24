@@ -4,7 +4,7 @@ import { Constants } from '../../constants'
 
 export const base64PType = new IntrinsicEnumType({
   name: 'Base64',
-  module: `${Constants.algoTsPackage}/op-types.d.ts`,
+  module: `${Constants.algoTsPackage}/op.d.ts`,
   members: [
     ['URLEncoding', 'URLEncoding'],
     ['StdEncoding', 'StdEncoding'],
@@ -12,7 +12,7 @@ export const base64PType = new IntrinsicEnumType({
 })
 export const ecPType = new IntrinsicEnumType({
   name: 'Ec',
-  module: `${Constants.algoTsPackage}/op-types.d.ts`,
+  module: `${Constants.algoTsPackage}/op.d.ts`,
   members: [
     ['BN254g1', 'BN254g1'],
     ['BN254g2', 'BN254g2'],
@@ -22,7 +22,7 @@ export const ecPType = new IntrinsicEnumType({
 })
 export const ecdsaPType = new IntrinsicEnumType({
   name: 'Ecdsa',
-  module: `${Constants.algoTsPackage}/op-types.d.ts`,
+  module: `${Constants.algoTsPackage}/op.d.ts`,
   members: [
     ['Secp256k1', 'Secp256k1'],
     ['Secp256r1', 'Secp256r1'],
@@ -30,7 +30,7 @@ export const ecdsaPType = new IntrinsicEnumType({
 })
 export const mimcConfigurationsPType = new IntrinsicEnumType({
   name: 'MimcConfigurations',
-  module: `${Constants.algoTsPackage}/op-types.d.ts`,
+  module: `${Constants.algoTsPackage}/op.d.ts`,
   members: [
     ['BN254Mp110', 'BN254Mp110'],
     ['BLS12_381Mp111', 'BLS12_381Mp111'],
@@ -38,7 +38,7 @@ export const mimcConfigurationsPType = new IntrinsicEnumType({
 })
 export const vrfVerifyPType = new IntrinsicEnumType({
   name: 'VrfVerify',
-  module: `${Constants.algoTsPackage}/op-types.d.ts`,
+  module: `${Constants.algoTsPackage}/op.d.ts`,
   members: [['VrfAlgorand', 'VrfAlgorand']],
 })
 export const ALL_OP_ENUMS = [base64PType, ecPType, ecdsaPType, mimcConfigurationsPType, vrfVerifyPType]

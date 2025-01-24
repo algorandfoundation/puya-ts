@@ -1,7 +1,6 @@
 import { camelCase, pascalCase } from 'change-case'
-import * as fs from 'fs'
 import type { EnumDef, OpModule } from './build-op-module'
-import { buildOpModule, ENUMS_TO_EXPOSE } from './build-op-module'
+import { ENUMS_TO_EXPOSE } from './build-op-module'
 
 function* emitHeader() {
   yield `
@@ -13,11 +12,11 @@ function* emitHeader() {
 `
 }
 
-function* emitTypes(module: OpModule) {
+export function* emitOpPTypes(module: OpModule) {
   function* emitEnumPType(enumDef: EnumDef) {
     yield `export const ${camelCase(enumDef.tsName)}PType = new IntrinsicEnumType({
       name: '${pascalCase(enumDef.name)}',
-      module: \`\${Constants.algoTsPackage}/op-types.d.ts\`,
+      module: \`\${Constants.algoTsPackage}/op.d.ts\`,
       members: [`
     for (const member of enumDef.members) {
       yield `['${member.name}', '${member.value}'],`
@@ -38,7 +37,3 @@ function* emitTypes(module: OpModule) {
   yield '];'
   yield `\n`
 }
-const fullFilePathName = process.argv[2]
-
-const opModule = buildOpModule()
-fs.writeFileSync(fullFilePathName, Array.from(emitTypes(opModule)).join(''))

@@ -476,7 +476,7 @@ export class IntrinsicFunctionGroupType extends PType {
 export class IntrinsicFunctionGroupTypeType extends PType {
   readonly wtype: undefined
   readonly name: string
-  readonly module: string = Constants.opTypesModuleName
+  readonly module: string = Constants.opModuleName
   readonly singleton = false
 
   constructor({ name }: { name: string }) {
@@ -498,7 +498,7 @@ export class IntrinsicFunctionType extends PType {
 export class IntrinsicFunctionTypeType extends PType {
   readonly wtype: undefined
   readonly name: string
-  readonly module: string = Constants.opTypesModuleName
+  readonly module: string = Constants.opModuleName
   readonly singleton = false
 
   constructor({ name }: { name: string }) {

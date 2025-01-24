@@ -1,9 +1,7 @@
 import { Box, BoxMap, BoxRef, Contract, GlobalState, gtxn, itxn, LocalState } from '.'
 import { AbiMethodConfig, BareMethodConfig } from './arc4'
-import { OpsNamespace } from './op-types'
 
 export type ExecutionContext = {
-  op: Partial<OpsNamespace>
   abiMetadata: {
     captureMethodConfig<T extends Contract>(contract: T, methodName: string, config?: AbiMethodConfig<T> | BareMethodConfig): void
   }

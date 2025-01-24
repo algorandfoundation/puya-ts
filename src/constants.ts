@@ -8,7 +8,6 @@ export const Constants = {
   opModuleName: `${algoTsPackage}/op.d.ts`,
   templateVarModuleName: `${algoTsPackage}/template-var.d.ts`,
   logicSigModuleName: `${algoTsPackage}/logic-sig.d.ts`,
-  opTypesModuleName: `${algoTsPackage}/op-types.d.ts`,
   baseContractModuleName: `${algoTsPackage}/base-contract.d.ts`,
   utilModuleName: `${algoTsPackage}/util.d.ts`,
   referenceModuleName: `${algoTsPackage}/reference.d.ts`,
