@@ -1,0 +1,162 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        let tmp%0#0: bool = tests/approvals/switch-statements.algo.ts::DemoContract.__puya_arc4_router__()
+        return tmp%0#0
+
+subroutine tests/approvals/switch-statements.algo.ts::DemoContract.__puya_arc4_router__() -> bool:
+    block@0: // L4
+        let tmp%0#0: uint64 = (txn NumAppArgs)
+        let tmp%1#0: bool = (!= tmp%0#0 0u)
+        goto tmp%1#0 ? block@1 : block@5
+    block@1: // abi_routing_L4
+        let tmp%2#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%2#0 {method "run()void" => block@2, * => block@3}
+    block@2: // run_route_L5
+        let tmp%3#0: uint64 = (txn OnCompletion)
+        let tmp%4#0: bool = (== tmp%3#0 NoOp)
+        (assert tmp%4#0) // OnCompletion is not NoOp
+        let tmp%5#0: uint64 = (txn ApplicationID)
+        let tmp%6#0: bool = (!= tmp%5#0 0u)
+        (assert tmp%6#0) // can only call when not creating
+        tests/approvals/switch-statements.algo.ts::DemoContract.run()
+        return 1u
+    block@3: // switch_case_default_L4
+        goto block@4
+    block@4: // switch_case_next_L4
+        goto block@9
+    block@5: // bare_routing_L4
+        let tmp%7#0: uint64 = (txn OnCompletion)
+        switch tmp%7#0 {0u => block@6, * => block@7}
+    block@6: // __algots__.defaultCreate_L4
+        let tmp%8#0: uint64 = (txn ApplicationID)
+        let tmp%9#0: bool = (== tmp%8#0 0u)
+        (assert tmp%9#0) // can only call when creating
+        tests/approvals/switch-statements.algo.ts::DemoContract.__algots__.defaultCreate()
+        return 1u
+    block@7: // switch_case_default_L4
+        goto block@8
+    block@8: // switch_case_next_L4
+        goto block@9
+    block@9: // after_if_else_L4
+        return 0u
+
+subroutine tests/approvals/switch-statements.algo.ts::DemoContract.run() -> void:
+    block@0: // L5
+        let tmp%0#0: uint64 = tests/approvals/switch-statements.algo.ts::DemoContract.test_uint64(1u)
+        let tmp%1#0: bool = (== tmp%0#0 3u)
+        (assert tmp%1#0)
+        let tmp%2#0: uint64 = tests/approvals/switch-statements.algo.ts::DemoContract.test_uint64(2u)
+        let tmp%3#0: bool = (== tmp%2#0 3u)
+        (assert tmp%3#0)
+        let tmp%4#0: uint64 = tests/approvals/switch-statements.algo.ts::DemoContract.test_uint64(3u)
+        let tmp%5#0: bool = (== tmp%4#0 1u)
+        (assert tmp%5#0)
+        let tmp%6#0: uint64 = tests/approvals/switch-statements.algo.ts::DemoContract.test_uint64(4u)
+        let tmp%7#0: bool = (== tmp%6#0 3u)
+        (assert tmp%7#0)
+        let tmp%8#0: uint64 = tests/approvals/switch-statements.algo.ts::DemoContract.test_break(1u)
+        let tmp%9#0: bool = (== tmp%8#0 11u)
+        (assert tmp%9#0)
+        let tmp%10#0: uint64 = tests/approvals/switch-statements.algo.ts::DemoContract.test_break(2u)
+        let tmp%11#0: bool = (== tmp%10#0 12u)
+        (assert tmp%11#0)
+        let tmp%12#0: uint64 = tests/approvals/switch-statements.algo.ts::DemoContract.test_break(3u)
+        let tmp%13#0: bool = (== tmp%12#0 10u)
+        (assert tmp%13#0)
+        let tmp%14#0: uint64 = tests/approvals/switch-statements.algo.ts::DemoContract.test_break(4u)
+        let tmp%15#0: bool = (== tmp%14#0 14u)
+        (assert tmp%15#0)
+        let tmp%16#0: uint64 = tests/approvals/switch-statements.algo.ts::DemoContract.test_break(5u)
+        let tmp%17#0: bool = (== tmp%16#0 50u)
+        (assert tmp%17#0)
+        let tmp%18#0: bool = tests/approvals/switch-statements.algo.ts::DemoContract.test_bytes("hmmm")
+        (assert tmp%18#0)
+        let tmp%19#0: bool = tests/approvals/switch-statements.algo.ts::DemoContract.test_bytes(0xff)
+        (assert tmp%19#0)
+        let tmp%20#0: bool = tests/approvals/switch-statements.algo.ts::DemoContract.test_bytes(ZHNmc2Rmc2Q=)
+        (assert tmp%20#0)
+        let tmp%21#0: bool = tests/approvals/switch-statements.algo.ts::DemoContract.test_bytes(ONSGMZ3OMJTGOZDGMRSGM)
+        (assert tmp%21#0)
+        let tmp%22#0: bool = tests/approvals/switch-statements.algo.ts::DemoContract.test_bytes(0x)
+        let tmp%23#0: bool = (! tmp%22#0)
+        (assert tmp%23#0)
+        return 
+
+subroutine tests/approvals/switch-statements.algo.ts::DemoContract.test_uint64(x: uint64) -> uint64:
+    block@0: // L24
+        switch x#0 {1u => block@1, 2u => block@3, 4u => block@5, * => block@7}
+    block@1: // switch_case_0_L26
+        goto block@2
+    block@2: // L26
+        goto block@4
+    block@3: // switch_case_1_L27
+        goto block@4
+    block@4: // L27
+        goto block@6
+    block@5: // switch_case_2_L28
+        goto block@6
+    block@6: // L28
+        return 3u
+    block@7: // switch_case_default_L30
+        goto block@8
+    block@8: // L30
+        return 1u
+
+subroutine tests/approvals/switch-statements.algo.ts::DemoContract.test_break(x: uint64) -> uint64:
+    block@0: // L36
+        let i#0: uint64 = 10u
+        switch x#0 {1u => block@1, 2u => block@3, 4u => block@5, 5u => block@7, * => block@9}
+    block@1: // switch_case_0_L39
+        goto block@2
+    block@2: // L39
+        goto block@4
+    block@3: // switch_case_1_L40
+        goto block@4
+    block@4: // L40
+        goto block@6
+    block@5: // switch_case_2_L41
+        goto block@6
+    block@6: // L41
+        let i#2: uint64 = (+ i#0 x#0)
+        goto block@11
+    block@7: // switch_case_3_L44
+        goto block@8
+    block@8: // L44
+        let i#4: uint64 = (* i#0 x#0)
+        goto block@10
+    block@9: // switch_case_default_L38
+        goto block@10
+    block@10: // switch_case_next_L38
+        let i#7: uint64 = φ(i#4 <- block@8, i#0 <- block@9)
+        goto block@11
+    block@11: // L38
+        let i#5: uint64 = φ(i#2 <- block@6, i#7 <- block@10)
+        return i#5
+
+subroutine tests/approvals/switch-statements.algo.ts::DemoContract.test_bytes(x: bytes) -> bool:
+    block@0: // L50
+        switch x#0 {"hmmm" => block@1, 0xff => block@3, ZHNmc2Rmc2Q= => block@5, ONSGMZ3OMJTGOZDGMRSGM => block@7, * => block@9}
+    block@1: // switch_case_0_L52
+        goto block@2
+    block@2: // L52
+        goto block@4
+    block@3: // switch_case_1_L53
+        goto block@4
+    block@4: // L53
+        goto block@6
+    block@5: // switch_case_2_L54
+        goto block@6
+    block@6: // L54
+        goto block@8
+    block@7: // switch_case_3_L55
+        goto block@8
+    block@8: // L55
+        return 1u
+    block@9: // switch_case_default_L51
+        goto block@10
+    block@10: // switch_case_next_L51
+        return 0u
+
+subroutine tests/approvals/switch-statements.algo.ts::DemoContract.__algots__.defaultCreate() -> void:
+    block@0: // L4
+        return 

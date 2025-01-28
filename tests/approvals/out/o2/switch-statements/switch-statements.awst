@@ -1,56 +1,94 @@
-subroutine test_uint64(x: uint64): uint64
+contract DemoContract
 {
-  switch (x) {
-    case 1:
-      #switch₁ᶜ₀:
-      goto #switch₁ᶜ₁
-    case 2:
-      #switch₁ᶜ₁:
-      goto #switch₁ᶜ₂
-    case 4:
-      #switch₁ᶜ₂:
-      return 3
-    default:
-      #switch₁ᶜ₃:
-      return 1
+  approvalProgram(): bool
+  {
+    return arc4Router()
   }
-}
-subroutine test_break(x: uint64): uint64
-{
-  i: uint64 = 0
-  switch (x) {
-    case 1:
-      #switch₁ᶜ₀:
-      goto #switch₁ᶜ₁
-    case 2:
-      #switch₁ᶜ₁:
-      goto #switch₁ᶜ₂
-    case 4:
-      #switch₁ᶜ₂:
-      i: uint64 = i + x
-      goto #switch₁ᵇ
-    case 5:
-      #switch₁ᶜ₃:
-      i: uint64 = i * x
+  
+  clearProgram(): bool
+  {
+    return True
   }
-  #switch₁ᵇ:
-  return i
-}
-subroutine test_bytes(x: bytes): bytes
-{
-  switch (x) {
-    case "hmmm":
-      #switch₁ᶜ₀:
-      goto #switch₁ᶜ₁
-    case 0xff:
-      #switch₁ᶜ₁:
-      goto #switch₁ᶜ₂
-    case b64<ZHNmc2Rmc2Q=>:
-      #switch₁ᶜ₂:
-      goto #switch₁ᶜ₃
-    case b32<ONSGMZ3OMJTGOZDGMRSGM>:
-      #switch₁ᶜ₃:
-      return x
+  
+  run(): void
+  {
+    assert(this.test_uint64(1) == 3)
+    assert(this.test_uint64(2) == 3)
+    assert(this.test_uint64(3) == 1)
+    assert(this.test_uint64(4) == 3)
+    assert(this.test_break(1) == 11)
+    assert(this.test_break(2) == 12)
+    assert(this.test_break(3) == 10)
+    assert(this.test_break(4) == 14)
+    assert(this.test_break(5) == 50)
+    assert(this.test_bytes("hmmm"))
+    assert(this.test_bytes(0xff))
+    assert(this.test_bytes(b64<ZHNmc2Rmc2Q=>))
+    assert(this.test_bytes(b32<ONSGMZ3OMJTGOZDGMRSGM>))
+    assert(!this.test_bytes(0x))
   }
-  return x
+  
+  test_uint64(x: uint64): uint64
+  {
+    switch (x) {
+      case 1:
+        #switch₁ᶜ₀:
+        goto #switch₁ᶜ₁
+      case 2:
+        #switch₁ᶜ₁:
+        goto #switch₁ᶜ₂
+      case 4:
+        #switch₁ᶜ₂:
+        return 3
+      default:
+        #switch₁ᶜ₃:
+        return 1
+    }
+  }
+  
+  test_break(x: uint64): uint64
+  {
+    i: uint64 = 10
+    switch (x) {
+      case 1:
+        #switch₁ᶜ₀:
+        goto #switch₁ᶜ₁
+      case 2:
+        #switch₁ᶜ₁:
+        goto #switch₁ᶜ₂
+      case 4:
+        #switch₁ᶜ₂:
+        i: uint64 = i + x
+        goto #switch₁ᵇ
+      case 5:
+        #switch₁ᶜ₃:
+        i: uint64 = i * x
+    }
+    #switch₁ᵇ:
+    return i
+  }
+  
+  test_bytes(x: bytes): bool
+  {
+    switch (x) {
+      case "hmmm":
+        #switch₁ᶜ₀:
+        goto #switch₁ᶜ₁
+      case 0xff:
+        #switch₁ᶜ₁:
+        goto #switch₁ᶜ₂
+      case b64<ZHNmc2Rmc2Q=>:
+        #switch₁ᶜ₂:
+        goto #switch₁ᶜ₃
+      case b32<ONSGMZ3OMJTGOZDGMRSGM>:
+        #switch₁ᶜ₃:
+        return True
+    }
+    return False
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
 }

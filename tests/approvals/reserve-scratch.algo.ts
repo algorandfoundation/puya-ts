@@ -13,7 +13,7 @@ export class ReserveScratchAlgo extends BaseContract {
     this.setThings()
 
     assert(Scratch.loadUint64(0) === 1)
-    assert(Scratch.loadBytes(0) === Bytes('hello'))
+    assert(Scratch.loadBytes(1) === Bytes('hello'))
     assert(Scratch.loadUint64(15) === 45)
     return true
   }

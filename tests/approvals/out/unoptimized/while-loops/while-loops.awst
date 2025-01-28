@@ -1,9 +1,28 @@
-subroutine test_while(stop: uint64): void
+contract DemoContract
 {
-  i: uint64 = 0
-  while (i < stop) {
-    i: uint64 = i + 1
-    #loop₁ᶜ:
+  approvalProgram(): bool
+  {
+    return arc4Router()
   }
-  #loop₁ᵇ:
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  testWhile(stop: uint64): uint64
+  {
+    i: uint64 = 0
+    while (i < stop) {
+      i: uint64 = i + 1
+      #loop₁ᶜ:
+    }
+    #loop₁ᵇ:
+    return i
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
 }

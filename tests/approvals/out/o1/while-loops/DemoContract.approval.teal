@@ -1,0 +1,89 @@
+#pragma version 10
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 1 0
+    // tests/approvals/while-loops.algo.ts:4
+    // class DemoContract extends Contract {
+    txn NumAppArgs
+    bz main_bare_routing@6
+    pushbytes 0x28a52d73 // method "testWhile(uint64)uint64"
+    txna ApplicationArgs 0
+    match main_testWhile_route@3
+
+main_after_if_else@10:
+    // tests/approvals/while-loops.algo.ts:4
+    // class DemoContract extends Contract {
+    intc_1 // 0
+    return
+
+main_testWhile_route@3:
+    // tests/approvals/while-loops.algo.ts:5
+    // public testWhile(stop: uint64) {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    // tests/approvals/while-loops.algo.ts:4
+    // class DemoContract extends Contract {
+    txna ApplicationArgs 1
+    btoi
+    // tests/approvals/while-loops.algo.ts:5
+    // public testWhile(stop: uint64) {
+    callsub testWhile
+    itob
+    pushbytes 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
+
+main_bare_routing@6:
+    // tests/approvals/while-loops.algo.ts:4
+    // class DemoContract extends Contract {
+    txn OnCompletion
+    bnz main_after_if_else@10
+    txn ApplicationID
+    !
+    assert // can only call when creating
+    intc_0 // 1
+    return
+
+
+// tests/approvals/while-loops.algo.ts::DemoContract.testWhile(stop: uint64) -> uint64:
+testWhile:
+    // tests/approvals/while-loops.algo.ts:5
+    // public testWhile(stop: uint64) {
+    proto 1 1
+    // tests/approvals/while-loops.algo.ts:6
+    // let i = Uint64(0)
+    intc_1 // 0
+
+testWhile_while_top@1:
+    // tests/approvals/while-loops.algo.ts:7
+    // while (i < stop) {
+    frame_dig 0
+    frame_dig -1
+    <
+    // tests/approvals/while-loops.algo.ts:7-9
+    // while (i < stop) {
+    //   i += 1
+    // }
+    bz testWhile_after_while@4
+    // tests/approvals/while-loops.algo.ts:8
+    // i += 1
+    frame_dig 0
+    intc_0 // 1
+    +
+    frame_bury 0
+    b testWhile_while_top@1
+
+testWhile_after_while@4:
+    // tests/approvals/while-loops.algo.ts:11
+    // return i
+    frame_dig 0
+    swap
+    retsub
