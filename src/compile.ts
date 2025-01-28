@@ -1,5 +1,6 @@
 import type ts from 'typescript'
 import type { AWST } from './awst/nodes'
+import { validateAwst } from './awst/validation'
 import { buildAwst } from './awst_build'
 import type { CompilationSet } from './awst_build/models/contract-class-model'
 import { registerPTypes } from './awst_build/ptypes/register'
@@ -85,6 +86,8 @@ export async function compile({
     throw new Error('Compilation halted by onProgramCreated hook')
   }
   const [moduleAwst, compilationSet] = buildAwst(programResult, compileOptions)
+  validateAwst(moduleAwst)
+
   if (loggerCtx.hasErrors()) {
     logger.info(undefined, 'Compilation halted due to errors')
     return {

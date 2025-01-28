@@ -56,9 +56,6 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
         this.acceptAndIgnoreBuildErrors(member)
       }
     }
-    if (this._approvalProgram && this._contractPType.isARC4) {
-      logger.error(this._approvalProgram.sourceLocation, 'ARC4 contracts cannot define their own approval methods.')
-    }
 
     const contract = new ContractClassModel({
       type: this._contractPType,
@@ -68,7 +65,7 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
       ctor: this._ctor ?? this.makeDefaultConstructor(sourceLocation),
       methods: this._methods,
       description: this.getNodeDescription(classDec),
-      approvalProgram: this._contractPType.isARC4 ? null : this._approvalProgram,
+      approvalProgram: this._approvalProgram,
       clearProgram: this._clearStateProgram,
       options: contractOptions,
       sourceLocation: sourceLocation,
