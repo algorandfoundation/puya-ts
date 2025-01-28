@@ -1,5 +1,5 @@
 import { OnCompleteAction } from './arc4'
-import { ctxMgr } from './execution-context'
+import { NoImplementation } from './impl/errors'
 import { bytes, uint64 } from './primitives'
 import type { Account, Application, Asset } from './reference'
 import type * as txnTypes from './transactions'
@@ -174,23 +174,23 @@ export type AssetFreezeItxnParams = InnerTransaction<AssetFreezeFields, AssetFre
 export type ApplicationCallItxnParams = InnerTransaction<ApplicationCallFields, ApplicationInnerTxn>
 
 export function submitGroup<TFields extends InnerTxnList>(...transactionFields: TFields): TxnFor<TFields> {
-  return ctxMgr.instance.itxn.submitGroup(...transactionFields)
+  throw new NoImplementation()
 }
 export function payment(fields: PaymentFields): PaymentItxnParams {
-  return ctxMgr.instance.itxn.payment(fields)
+  throw new NoImplementation()
 }
 export function keyRegistration(fields: KeyRegistrationFields): KeyRegistrationItxnParams {
-  return ctxMgr.instance.itxn.keyRegistration(fields)
+  throw new NoImplementation()
 }
 export function assetConfig(fields: AssetConfigFields): AssetConfigItxnParams {
-  return ctxMgr.instance.itxn.assetConfig(fields)
+  throw new NoImplementation()
 }
 export function assetTransfer(fields: AssetTransferFields): AssetTransferItxnParams {
-  return ctxMgr.instance.itxn.assetTransfer(fields)
+  throw new NoImplementation()
 }
 export function assetFreeze(fields: AssetFreezeFields): AssetFreezeItxnParams {
-  return ctxMgr.instance.itxn.assetFreeze(fields)
+  throw new NoImplementation()
 }
 export function applicationCall(fields: ApplicationCallFields): ApplicationCallItxnParams {
-  return ctxMgr.instance.itxn.applicationCall(fields)
+  throw new NoImplementation()
 }
