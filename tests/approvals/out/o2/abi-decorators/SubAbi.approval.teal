@@ -1,0 +1,43 @@
+#pragma version 10
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    // tests/approvals/abi-decorators.algo.ts:43
+    // export class SubAbi extends BaseAbi {
+    txn NumAppArgs
+    bz main_bare_routing@6
+    pushbytes 0x1e29ffff // method "someMethod()string"
+    txna ApplicationArgs 0
+    match main_someMethod_route@3
+
+main_after_if_else@10:
+    // tests/approvals/abi-decorators.algo.ts:43
+    // export class SubAbi extends BaseAbi {
+    pushint 0 // 0
+    return
+
+main_someMethod_route@3:
+    // tests/approvals/abi-decorators.algo.ts:44
+    // @abimethod({ allowActions: 'OptIn' })
+    txn OnCompletion
+    pushint 1 // OptIn
+    ==
+    assert // OnCompletion is not OptIn
+    txn ApplicationID
+    assert // can only call when not creating
+    pushbytes 0x151f7c75000d7375622d6162693a6f7074696e
+    log
+    pushint 1 // 1
+    return
+
+main_bare_routing@6:
+    // tests/approvals/abi-decorators.algo.ts:43
+    // export class SubAbi extends BaseAbi {
+    txn OnCompletion
+    bnz main_after_if_else@10
+    txn ApplicationID
+    !
+    assert // can only call when creating
+    pushint 1 // 1
+    return

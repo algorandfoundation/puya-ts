@@ -1,3 +1,4 @@
+import { AsyncLocalStorage } from 'node:async_hooks'
 import { SourceLocation } from '../awst/source-location'
 import { AwstBuildFailureError, PuyaError, UserError } from '../errors'
 import type { LogSink } from './sinks'
@@ -101,7 +102,7 @@ export const logPuyaExceptions = <T>(action: () => T, sourceLocation: SourceLoca
   }
 }
 
-export class LoggingContext implements Disposable {
+export class LoggingContext {
   logEvents: LogEvent[] = []
   sourcesByPath: Record<string, string[]> = {}
 
@@ -115,23 +116,20 @@ export class LoggingContext implements Disposable {
     if (this.hasErrors()) process.exit(1)
   }
 
-  private static contexts: LoggingContext[] = []
+  run<R>(cb: () => R) {
+    return LoggingContext.asyncStore.run(this, cb)
+  }
 
-  static create(): Disposable & LoggingContext {
-    const ctx = new LoggingContext()
-    this.contexts.push(ctx)
-    return ctx
+  private static asyncStore = new AsyncLocalStorage<LoggingContext>()
+
+  static create(): LoggingContext {
+    return new LoggingContext()
   }
   static get current() {
-    const top = LoggingContext.contexts.at(-1)
-    if (!top) {
+    const ctx = this.asyncStore.getStore()
+    if (!ctx) {
       throw new Error('There is no current context')
     }
-    return top
-  }
-
-  [Symbol.dispose]() {
-    const top = LoggingContext.contexts.pop()
-    if (top !== this) throw new Error('Parent context is being disposed before a child context')
+    return ctx
   }
 }

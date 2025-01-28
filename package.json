@@ -9,7 +9,7 @@
     "dev:examples": "tsx src/cli.ts build examples --output-awst --output-awst-json",
     "dev:approvals": "rimraf tests/approvals/out && tsx src/cli.ts build tests/approvals --dry-run",
     "dev:expected-output": "tsx src/cli.ts build tests/expected-output --dry-run",
-    "dev:testing": "tsx src/cli.ts build tests/approvals/avm11.algo.ts --output-awst --output-awst-json --output-ssa-ir --log-level=info --out-dir out/[name] --optimization-level=0",
+    "dev:testing": "tsx src/cli.ts build tests/approvals/switch-statements.algo.ts --output-awst --output-awst-json --output-ssa-ir --log-level=info --out-dir out/unoptimized/[name] --optimization-level=1",
     "audit": "better-npm-audit audit",
     "format": "prettier --write .",
     "lint": "eslint \"src/**/*.ts\"",
@@ -50,6 +50,7 @@
     "@rollup/plugin-node-resolve": "15.3.0",
     "@rollup/plugin-typescript": "^12.1.1",
     "@tsconfig/node20": "20.1.4",
+    "@types/argparse": "^2.0.17",
     "@types/cross-spawn": "^6.0.6",
     "@types/node": "22.10.1",
     "@types/which": "^3.0.4",
@@ -73,16 +74,16 @@
   },
   "dependencies": {
     "arcsecond": "^5.0.0",
+    "argparse": "^2.0.1",
     "chalk": "^5.3.0",
     "change-case": "^5.4.4",
-    "commander": "^12.1.0",
     "cross-spawn": "7.0.6",
     "glob": "^11.0.0",
     "polytype": "^0.17.0",
     "typescript": "^5.7.2",
     "upath": "^2.0.1",
     "which": "^5.0.0",
-    "zod": "^3.24.0"
+    "zod": "^3.24.1"
   },
   "overrides": {
     "cross-spawn": "7.0.6",

@@ -1,7 +1,7 @@
 import { AwstSerializer, SnakeCaseSerializer } from '../awst/json-serialize-awst'
 import type { AWST } from '../awst/nodes'
 import type { CompilationSet } from '../awst_build/models/contract-class-model'
-import type { CompileOptions } from '../compile-options'
+import type { PuyaTsCompileOptions } from '../compile-options'
 import { logger, LogLevel } from '../logger'
 import type { SourceFileMapping } from '../parser'
 import { jsonSerializeSourceFiles } from '../parser/json-serialize-source-files'
@@ -14,7 +14,7 @@ import type { PuyaPassThroughOptions } from './options'
 import { PuyaOptions } from './options'
 import { runPuya } from './run-puya'
 
-export function invokePuya({
+export async function invokePuya({
   moduleAwst,
   programDirectory,
   sourceFiles,
@@ -25,12 +25,14 @@ export function invokePuya({
   moduleAwst: AWST[]
   programDirectory: string
   sourceFiles: SourceFileMapping
-  compileOptions: CompileOptions
+  compileOptions: PuyaTsCompileOptions
   compilationSet: CompilationSet
   passThroughOptions: PuyaPassThroughOptions
 }) {
   ensurePuyaExists()
-  checkPuyaVersion()
+  if (!compileOptions.skipVersionCheck) {
+    await checkPuyaVersion()
+  }
   // Write AWST file
   using moduleAwstFile = generateTempFile()
   logger.debug(undefined, `Writing awst to ${moduleAwstFile.filePath}`)
@@ -62,7 +64,7 @@ export function invokePuya({
     undefined,
     `Invoking puya: puya --options ${optionsFile.filePath} --awst ${moduleAwstFile.filePath} --source-annotations ${moduleSourceFile.filePath}`,
   )
-  runPuya({
+  await runPuya({
     command: 'puya',
     args: [
       '--options',

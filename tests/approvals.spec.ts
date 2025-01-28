@@ -1,83 +1,68 @@
-import { sync } from 'cross-spawn'
+import { globSync } from 'glob'
 import { rimraf } from 'rimraf'
 import { describe, expect, it } from 'vitest'
 import { compile } from '../src'
-import { buildCompileOptions } from '../src/compile-options'
 import { isErrorOrCritical, LoggingContext, LogLevel } from '../src/logger'
 import { defaultPuyaOptions } from '../src/puya/options'
-import { invariant } from '../src/util'
+import { normalisePath } from '../src/util'
+import { invokeCli } from '../src/util/invoke-cli'
 
 describe('Approvals', async () => {
   await rimraf('tests/approvals/out')
 
-  using logCtx = LoggingContext.create()
-  const result = compile(
-    buildCompileOptions({
-      outputAwstJson: true,
-      outputAwst: true,
-      paths: ['tests/approvals'],
-      outDir: 'out/[name]',
-      dryRun: false,
-      logLevel: LogLevel.Warning,
-    }),
-    {
-      ...defaultPuyaOptions,
-      optimizationLevel: 0,
-      outputTeal: true,
-      outputArc32: true,
-      outputArc56: true,
-      outputSsaIr: true,
-    },
-  )
-  invariant(result.ast, 'Compilation must result in ast')
-  const paths = Object.entries(result.ast ?? {}).map(([path, ast]) => ({
-    path,
-    ast,
-    logs: logCtx.logEvents.filter((l) => l.sourceLocation?.file === path && isErrorOrCritical(l.level)),
-  }))
+  const contractFiles = globSync('tests/approvals/*.algo.ts')
+    .map((p) => normalisePath(p, process.cwd()))
+    .toSorted()
+  describe.each([
+    ['Unoptimized', 'out/unoptimized/[name]', { optimizationLevel: 0 }],
+    ['O1', 'out/o1/[name]', { optimizationLevel: 1 }],
+    ['O2', 'out/o2/[name]', { optimizationLevel: 2 }],
+  ])('Compile %s', async (desc, outDir, puyaOptions) => {
+    const logCtx = LoggingContext.create()
+    const result = await logCtx.run(() =>
+      compile({
+        paths: ['tests/approvals'],
+        outDir,
+        dryRun: false,
+        logLevel: LogLevel.Warning,
+        skipVersionCheck: true,
+        ...defaultPuyaOptions,
+        outputAwstJson: true,
+        outputAwst: true,
+        outputTeal: true,
+        outputArc32: true,
+        outputArc56: true,
+        outputSsaIr: true,
+        ...puyaOptions,
+      }),
+    )
+    it.each(contractFiles)('%s', (contractFilePath) => {
+      const awst = result.awst?.filter((s) => s.sourceLocation.file === contractFilePath)
 
-  const generalErrorLogs = logCtx.logEvents.filter((l) => !l.sourceLocation && isErrorOrCritical(l.level))
-
-  it('There should be no general error logs', () => {
-    if (generalErrorLogs.length) {
-      expect.fail(
-        `${generalErrorLogs.length} general errors during compilation. \nLogs: \n${generalErrorLogs.map((l) => `${l.level}: ${l.message}`).join('\n')}`,
+      const errors = logCtx.logEvents.filter(
+        (l) => (!l.sourceLocation || l.sourceLocation.file === contractFilePath) && isErrorOrCritical(l.level),
       )
-    }
-  })
-
-  describe.each(paths)('$path', ({ logs }) => {
-    it('compiles without errors', () => {
-      if (logs.length) {
-        expect.fail(`${logs.length} errors during compilation`)
+      if (errors.length === 0) {
+        expect(errors.length).toBe(0)
+      } else {
+        expect.fail(`Errors: \n${errors.map((e) => e.message).join('\n')}`)
       }
+
+      expect(awst, 'Contract file must produce awst').toBeDefined()
     })
   })
 
-  it('There should be no differences to committed changes', () => {
-    const result = sync('git', ['status', '--porcelain'], {
-      stdio: 'pipe',
+  it('There should be no differences to committed changes', async () => {
+    const result = await invokeCli({
+      command: 'git',
+      args: ['status', '--porcelain'],
     })
+    const diffs = result.lines
 
-    expect(result.status).toBe(0)
-    const diffs = []
-    let line = ''
-    for (const chunk of result.output) {
-      if (chunk === undefined || chunk === null) continue
-      const text = chunk.toString('utf-8')
-      for (const c of text) {
-        if (c === '\n') {
-          diffs.push(line)
-          line = ''
-        } else {
-          line += c
-        }
-      }
-      if (line) diffs.push(line)
-
-      if (diffs.length) {
-        expect.fail(`There are uncommitted changes: \n\n${diffs.join('\n')}`)
-      }
+    if (diffs.length) {
+      expect.fail(
+        `There are uncommitted changes: \n\n${diffs.slice(0, 5).join('\n')}${diffs.length > 5 ? `\n +${diffs.length - 5} more` : ''}`,
+      )
     }
   })
 })

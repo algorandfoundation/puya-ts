@@ -1,0 +1,30 @@
+main tests/approvals/extract-bytes.algo.ts::ExtractBytesAlgo.approvalProgram:
+    block@0: // L6
+        tests/approvals/extract-bytes.algo.ts::ExtractBytesAlgo.test(2u, 0u)
+        return 1u
+
+subroutine tests/approvals/extract-bytes.algo.ts::ExtractBytesAlgo.test(two: uint64, zero: uint64) -> void:
+    block@0: // L11
+        let tmp%0#0: bool = (== two#0 2u)
+        (assert tmp%0#0) // Param two should be 2
+        let tmp%1#0: bool = (== zero#0 0u)
+        (assert tmp%1#0) // Param zero should be 0
+        let b#0: bytes = "abcdefg"
+        let tmp%2#0: bytes = ((extract 2 0) b#0)
+        let tmp%3#0: bool = (== tmp%2#0 "cdefg")
+        (assert tmp%3#0)
+        let tmp%4#0: uint64 = (len b#0)
+        let tmp%5#0: uint64 = (- tmp%4#0 two#0)
+        let tmp%6#0: bytes = (extract3 b#0 two#0 tmp%5#0)
+        let tmp%7#0: bool = (== tmp%6#0 "cdefg")
+        (assert tmp%7#0)
+        let tmp%8#0: bytes = (extract3 b#0 2u 2u)
+        let tmp%9#0: bool = (== tmp%8#0 "cd")
+        (assert tmp%9#0)
+        let tmp%10#0: bytes = (extract3 b#0 two#0 two#0)
+        let tmp%11#0: bool = (== tmp%10#0 "cd")
+        (assert tmp%11#0)
+        let tmp%12#0: bytes = (extract3 b#0 two#0 zero#0)
+        let tmp%13#0: bool = (== tmp%12#0 "")
+        (assert tmp%13#0)
+        return 

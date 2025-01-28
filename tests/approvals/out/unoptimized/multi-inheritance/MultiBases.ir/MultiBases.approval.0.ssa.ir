@@ -1,0 +1,230 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        let reinterpret_bool%0#0: bool = (txn ApplicationID)
+        goto reinterpret_bool%0#0 ? block@2 : block@1
+    block@1: // if_body_L1
+        tests/approvals/multi-inheritance.algo.ts::MultiBases.constructor()
+        goto block@2
+    block@2: // after_if_else_L1
+        let tmp%0#0: bool = tests/approvals/multi-inheritance.algo.ts::MultiBases.__puya_arc4_router__()
+        return tmp%0#0
+
+subroutine tests/approvals/multi-inheritance.algo.ts::MultiBases.constructor() -> void:
+    block@0: // L40
+        polytype/lib/polytype-module.d.ts::ClusteredContract<tests/approvals/multi-inheritance.algo.ts::BaseOne,tests/approvals/multi-inheritance.algo.ts::BaseTwo>.constructor()
+        (app_global_put "stateMulti" "Hmmm")
+        return 
+
+subroutine polytype/lib/polytype-module.d.ts::ClusteredContract<tests/approvals/multi-inheritance.algo.ts::BaseOne,tests/approvals/multi-inheritance.algo.ts::BaseTwo>.constructor() -> void:
+    block@0: // L1
+        tests/approvals/multi-inheritance.algo.ts::BaseOne.constructor()
+        tests/approvals/multi-inheritance.algo.ts::BaseTwo.constructor()
+        return 
+
+subroutine tests/approvals/multi-inheritance.algo.ts::BaseOne.constructor() -> void:
+    block@0: // L17
+        tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor()
+        (app_global_put "stateOne" 45u)
+        return 
+
+subroutine tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor() -> void:
+    block@0: // L5
+        (app_global_put "stateCommon" 123u)
+        return 
+
+subroutine tests/approvals/multi-inheritance.algo.ts::BaseTwo.constructor() -> void:
+    block@0: // L24
+        tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor()
+        (app_global_put "stateTwo" "Hello")
+        return 
+
+subroutine tests/approvals/multi-inheritance.algo.ts::MultiBases.__puya_arc4_router__() -> bool:
+    block@0: // L40
+        let tmp%0#0: uint64 = (txn NumAppArgs)
+        let tmp%1#0: bool = (!= tmp%0#0 0u)
+        goto tmp%1#0 ? block@1 : block@12
+    block@1: // abi_routing_L40
+        let tmp%2#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%2#0 {method "methodMulti()string" => block@2, method "methodCallsSuper()string" => block@3, method "callB2CantOverride()string" => block@4, method "callB2Common()string" => block@5, method "methodOne()string" => block@6, method "methodCommon()string" => block@7, method "b2CantOverride()string" => block@8, method "methodTwo()string" => block@9, * => block@10}
+    block@2: // methodMulti_route_L43
+        let tmp%3#0: uint64 = (txn OnCompletion)
+        let tmp%4#0: bool = (== tmp%3#0 NoOp)
+        (assert tmp%4#0) // OnCompletion is not NoOp
+        let tmp%5#0: uint64 = (txn ApplicationID)
+        let tmp%6#0: bool = (!= tmp%5#0 0u)
+        (assert tmp%6#0) // can only call when not creating
+        let to_encode%0#0: bytes = tests/approvals/multi-inheritance.algo.ts::MultiBases.methodMulti()
+        let length%0#0: uint64 = (len to_encode%0#0)
+        let as_bytes%0#0: bytes = (itob length%0#0)
+        let length_uint16%0#0: bytes = ((extract 6 2) as_bytes%0#0)
+        let encoded_value%0#0: bytes = (concat length_uint16%0#0 to_encode%0#0)
+        let tmp%7#0: bytes = (concat 0x151f7c75 encoded_value%0#0)
+        (log tmp%7#0)
+        return 1u
+    block@3: // methodCallsSuper_route_L47
+        let tmp%8#0: uint64 = (txn OnCompletion)
+        let tmp%9#0: bool = (== tmp%8#0 NoOp)
+        (assert tmp%9#0) // OnCompletion is not NoOp
+        let tmp%10#0: uint64 = (txn ApplicationID)
+        let tmp%11#0: bool = (!= tmp%10#0 0u)
+        (assert tmp%11#0) // can only call when not creating
+        let to_encode%1#0: bytes = tests/approvals/multi-inheritance.algo.ts::MultiBases.methodCallsSuper()
+        let length%1#0: uint64 = (len to_encode%1#0)
+        let as_bytes%1#0: bytes = (itob length%1#0)
+        let length_uint16%1#0: bytes = ((extract 6 2) as_bytes%1#0)
+        let encoded_value%1#0: bytes = (concat length_uint16%1#0 to_encode%1#0)
+        let tmp%12#0: bytes = (concat 0x151f7c75 encoded_value%1#0)
+        (log tmp%12#0)
+        return 1u
+    block@4: // callB2CantOverride_route_L51
+        let tmp%13#0: uint64 = (txn OnCompletion)
+        let tmp%14#0: bool = (== tmp%13#0 NoOp)
+        (assert tmp%14#0) // OnCompletion is not NoOp
+        let tmp%15#0: uint64 = (txn ApplicationID)
+        let tmp%16#0: bool = (!= tmp%15#0 0u)
+        (assert tmp%16#0) // can only call when not creating
+        let to_encode%2#0: bytes = tests/approvals/multi-inheritance.algo.ts::MultiBases.callB2CantOverride()
+        let length%2#0: uint64 = (len to_encode%2#0)
+        let as_bytes%2#0: bytes = (itob length%2#0)
+        let length_uint16%2#0: bytes = ((extract 6 2) as_bytes%2#0)
+        let encoded_value%2#0: bytes = (concat length_uint16%2#0 to_encode%2#0)
+        let tmp%17#0: bytes = (concat 0x151f7c75 encoded_value%2#0)
+        (log tmp%17#0)
+        return 1u
+    block@5: // callB2Common_route_L55
+        let tmp%18#0: uint64 = (txn OnCompletion)
+        let tmp%19#0: bool = (== tmp%18#0 NoOp)
+        (assert tmp%19#0) // OnCompletion is not NoOp
+        let tmp%20#0: uint64 = (txn ApplicationID)
+        let tmp%21#0: bool = (!= tmp%20#0 0u)
+        (assert tmp%21#0) // can only call when not creating
+        let to_encode%3#0: bytes = tests/approvals/multi-inheritance.algo.ts::MultiBases.callB2Common()
+        let length%3#0: uint64 = (len to_encode%3#0)
+        let as_bytes%3#0: bytes = (itob length%3#0)
+        let length_uint16%3#0: bytes = ((extract 6 2) as_bytes%3#0)
+        let encoded_value%3#0: bytes = (concat length_uint16%3#0 to_encode%3#0)
+        let tmp%22#0: bytes = (concat 0x151f7c75 encoded_value%3#0)
+        (log tmp%22#0)
+        return 1u
+    block@6: // methodOne_route_L19
+        let tmp%23#0: uint64 = (txn OnCompletion)
+        let tmp%24#0: bool = (== tmp%23#0 NoOp)
+        (assert tmp%24#0) // OnCompletion is not NoOp
+        let tmp%25#0: uint64 = (txn ApplicationID)
+        let tmp%26#0: bool = (!= tmp%25#0 0u)
+        (assert tmp%26#0) // can only call when not creating
+        let to_encode%4#0: bytes = tests/approvals/multi-inheritance.algo.ts::BaseOne.methodOne()
+        let length%4#0: uint64 = (len to_encode%4#0)
+        let as_bytes%4#0: bytes = (itob length%4#0)
+        let length_uint16%4#0: bytes = ((extract 6 2) as_bytes%4#0)
+        let encoded_value%4#0: bytes = (concat length_uint16%4#0 to_encode%4#0)
+        let tmp%27#0: bytes = (concat 0x151f7c75 encoded_value%4#0)
+        (log tmp%27#0)
+        return 1u
+    block@7: // methodCommon_route_L8
+        let tmp%28#0: uint64 = (txn OnCompletion)
+        let tmp%29#0: bool = (== tmp%28#0 NoOp)
+        (assert tmp%29#0) // OnCompletion is not NoOp
+        let tmp%30#0: uint64 = (txn ApplicationID)
+        let tmp%31#0: bool = (!= tmp%30#0 0u)
+        (assert tmp%31#0) // can only call when not creating
+        let to_encode%5#0: bytes = tests/approvals/multi-inheritance.algo.ts::CommonBase.methodCommon()
+        let length%5#0: uint64 = (len to_encode%5#0)
+        let as_bytes%5#0: bytes = (itob length%5#0)
+        let length_uint16%5#0: bytes = ((extract 6 2) as_bytes%5#0)
+        let encoded_value%5#0: bytes = (concat length_uint16%5#0 to_encode%5#0)
+        let tmp%32#0: bytes = (concat 0x151f7c75 encoded_value%5#0)
+        (log tmp%32#0)
+        return 1u
+    block@8: // b2CantOverride_route_L12
+        let tmp%33#0: uint64 = (txn OnCompletion)
+        let tmp%34#0: bool = (== tmp%33#0 NoOp)
+        (assert tmp%34#0) // OnCompletion is not NoOp
+        let tmp%35#0: uint64 = (txn ApplicationID)
+        let tmp%36#0: bool = (!= tmp%35#0 0u)
+        (assert tmp%36#0) // can only call when not creating
+        let to_encode%6#0: bytes = tests/approvals/multi-inheritance.algo.ts::CommonBase.b2CantOverride()
+        let length%6#0: uint64 = (len to_encode%6#0)
+        let as_bytes%6#0: bytes = (itob length%6#0)
+        let length_uint16%6#0: bytes = ((extract 6 2) as_bytes%6#0)
+        let encoded_value%6#0: bytes = (concat length_uint16%6#0 to_encode%6#0)
+        let tmp%37#0: bytes = (concat 0x151f7c75 encoded_value%6#0)
+        (log tmp%37#0)
+        return 1u
+    block@9: // methodTwo_route_L26
+        let tmp%38#0: uint64 = (txn OnCompletion)
+        let tmp%39#0: bool = (== tmp%38#0 NoOp)
+        (assert tmp%39#0) // OnCompletion is not NoOp
+        let tmp%40#0: uint64 = (txn ApplicationID)
+        let tmp%41#0: bool = (!= tmp%40#0 0u)
+        (assert tmp%41#0) // can only call when not creating
+        let to_encode%7#0: bytes = tests/approvals/multi-inheritance.algo.ts::BaseTwo.methodTwo()
+        let length%7#0: uint64 = (len to_encode%7#0)
+        let as_bytes%7#0: bytes = (itob length%7#0)
+        let length_uint16%7#0: bytes = ((extract 6 2) as_bytes%7#0)
+        let encoded_value%7#0: bytes = (concat length_uint16%7#0 to_encode%7#0)
+        let tmp%42#0: bytes = (concat 0x151f7c75 encoded_value%7#0)
+        (log tmp%42#0)
+        return 1u
+    block@10: // switch_case_default_L40
+        goto block@11
+    block@11: // switch_case_next_L40
+        goto block@16
+    block@12: // bare_routing_L40
+        let tmp%43#0: uint64 = (txn OnCompletion)
+        switch tmp%43#0 {0u => block@13, * => block@14}
+    block@13: // __algots__.defaultCreate_L40
+        let tmp%44#0: uint64 = (txn ApplicationID)
+        let tmp%45#0: bool = (== tmp%44#0 0u)
+        (assert tmp%45#0) // can only call when creating
+        tests/approvals/multi-inheritance.algo.ts::MultiBases.__algots__.defaultCreate()
+        return 1u
+    block@14: // switch_case_default_L40
+        goto block@15
+    block@15: // switch_case_next_L40
+        goto block@16
+    block@16: // after_if_else_L40
+        return 0u
+
+subroutine tests/approvals/multi-inheritance.algo.ts::MultiBases.methodMulti() -> bytes:
+    block@0: // L43
+        return "multi-bases"
+
+subroutine tests/approvals/multi-inheritance.algo.ts::MultiBases.methodCallsSuper() -> bytes:
+    block@0: // L47
+        let tmp%0#0: bytes = tests/approvals/multi-inheritance.algo.ts::BaseTwo.methodTwo()
+        return tmp%0#0
+
+subroutine tests/approvals/multi-inheritance.algo.ts::BaseTwo.methodTwo() -> bytes:
+    block@0: // L26
+        return "base-two"
+
+subroutine tests/approvals/multi-inheritance.algo.ts::MultiBases.callB2CantOverride() -> bytes:
+    block@0: // L51
+        let tmp%0#0: bytes = tests/approvals/multi-inheritance.algo.ts::BaseTwo.b2CantOverride()
+        return tmp%0#0
+
+subroutine tests/approvals/multi-inheritance.algo.ts::BaseTwo.b2CantOverride() -> bytes:
+    block@0: // L35
+        return "base-two"
+
+subroutine tests/approvals/multi-inheritance.algo.ts::MultiBases.callB2Common() -> bytes:
+    block@0: // L55
+        let tmp%0#0: bytes = tests/approvals/multi-inheritance.algo.ts::CommonBase.methodCommon()
+        return tmp%0#0
+
+subroutine tests/approvals/multi-inheritance.algo.ts::CommonBase.methodCommon() -> bytes:
+    block@0: // L8
+        return "common"
+
+subroutine tests/approvals/multi-inheritance.algo.ts::BaseOne.methodOne() -> bytes:
+    block@0: // L19
+        return "base-one"
+
+subroutine tests/approvals/multi-inheritance.algo.ts::CommonBase.b2CantOverride() -> bytes:
+    block@0: // L12
+        return "common"
+
+subroutine tests/approvals/multi-inheritance.algo.ts::MultiBases.__algots__.defaultCreate() -> void:
+    block@0: // L40
+        return 

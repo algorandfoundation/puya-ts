@@ -12,17 +12,16 @@ export interface AlgoFile {
   outDir: string
 }
 
-export interface CompileOptions {
+export interface PuyaTsCompileOptions {
   filePaths: AlgoFile[]
   logLevel: LogLevel
   outputAwst: boolean
   outputAwstJson: boolean
+  skipVersionCheck: boolean
   /*
   Don't generate artifacts for puya, or invoke puya
    */
   dryRun: boolean
-
-  getFileFromSource(sourceFile: string): AlgoFile | undefined
 }
 
 export const buildCompileOptions = ({
@@ -35,10 +34,11 @@ export const buildCompileOptions = ({
   outputAwst: boolean
   outDir: string
   outputAwstJson: boolean
+  skipVersionCheck: boolean
   workingDirectory?: string
   dryRun: boolean
   logLevel: LogLevel
-}): CompileOptions => {
+}): PuyaTsCompileOptions => {
   const filePaths: AlgoFile[] = []
 
   for (const p of paths) {
@@ -78,9 +78,6 @@ export const buildCompileOptions = ({
   return {
     filePaths: filePaths.map(replaceOutDirTokens),
     ...rest,
-    getFileFromSource(sourceFile: string): AlgoFile | undefined {
-      return this.filePaths.find((p) => p.sourceFile === sourceFile)
-    },
   }
 }
 

@@ -1,0 +1,23 @@
+subroutine testNested(arg: readonlytuple[uint64, readonlytuple[biguint, biguint]]): void
+{
+  <tuple>[a, b]: readonlytuple[uint64, readonlytuple[biguint, biguint]] = arg
+  <tuple>[c, <tuple>[d, _]]: readonlytuple[uint64, readonlytuple[biguint, biguint]] = arg
+}
+subroutine test(): void
+{
+  <tuple>[a, b, c, d]: readonlytuple[uint64, bytes, bool, biguint] = tests/approvals/array-destructuring.algo.ts::produceItems()
+  <tuple>[_, _₁, e, _₂]: readonlytuple[uint64, bytes, bool, biguint] = tests/approvals/array-destructuring.algo.ts::produceItems()
+  f: readonlytuple[uint64, bytes, bool, biguint] = (<tuple>[g, _₃, _₄, i] = tests/approvals/array-destructuring.algo.ts::produceItems())
+}
+subroutine produceItems(): readonlytuple[uint64, bytes, bool, biguint]
+{
+  return <tuple>[5, 0x, False, 6]
+}
+subroutine testLiteralDestructuring(): void
+{
+  a: uint64 = 1
+  b: uint64 = 2
+  <tuple>[x, y]: readonlytuple[uint64, uint64] = (<tuple>[b, a] = <tuple>[a, b])
+  assert(x == b)
+  assert(y == a)
+}

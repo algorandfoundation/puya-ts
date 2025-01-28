@@ -1,0 +1,45 @@
+contract MyContract
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  getXY(): XY{ x: uint64, y: uint64 }
+  {
+    return { x: (#0 = { x: 1, y: 2 }).x, y: #0.y }
+  }
+  
+  getYX(): YX{ y: uint64, x: uint64 }
+  {
+    return { y: (#1 = { x: 222, y: 111 }).y, x: #1.x }
+  }
+  
+  getAnon(): getAnonResult{ x: uint64, y: uint64 }
+  {
+    return { x: (#2 = { x: 3, y: 4 }).x, y: #2.y }
+  }
+  
+  test(x: XY{ x: uint64, y: uint64 }, y: YX{ y: uint64, x: uint64 }): void
+  {
+    assert(x.y == y.y and x.x == y.x, comment=assert target is match for conditions)
+  }
+  
+  testing(): readonlytuple[XY{ x: uint64, y: uint64 }, YX{ y: uint64, x: uint64 }, { x: uint64, y: uint64 }]
+  {
+    a: XY{ x: uint64, y: uint64 } = this.getXY()
+    b: YX{ y: uint64, x: uint64 } = this.getYX()
+    c: { x: uint64, y: uint64 } = { x: (#3 = this.getAnon()).x, y: #3.y }
+    return <tuple>[a, b, c]
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

@@ -1,0 +1,11 @@
+subroutine test(p: { a: uint64, b: bytes, c: bool }): void
+{
+  { a: a, b: b, c: c }: { a: uint64, b: bytes, c: bool } = p
+  log(concat(concat(itob(a), b), itob(c)))
+}
+subroutine init(): void
+{
+  tests/approvals/destructured-params.algo.ts::test({ a: (#0 = { a: 1, b: "", c: False }).a, b: #0.b, c: #0.c })
+  temp: { a: uint64, b: bytes, c: bool } = { a: 2, b: "Hello", c: True }
+  tests/approvals/destructured-params.algo.ts::test(temp)
+}

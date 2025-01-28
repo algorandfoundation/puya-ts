@@ -1,0 +1,103 @@
+#pragma version 10
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 1
+    txn ApplicationID
+    bnz main_after_if_else@2
+    // tests/approvals/abi-decorators.algo.ts:16
+    // globalValue = GlobalState({ initialValue: Uint64(123) })
+    pushbytes "globalValue"
+    pushint 123 // 123
+    app_global_put
+
+main_after_if_else@2:
+    // tests/approvals/abi-decorators.algo.ts:4
+    // export default class AbiDecorators extends Contract {
+    txn NumAppArgs
+    bz main_after_if_else@13
+    pushbytess 0xf9020d5a 0xe179f9d4 0x63c27aba 0x14d1b6ea 0xc1367374 // method "justNoop()void", method "createMethod()void", method "allActions()void", method "overrideReadonlyName()uint64", method "methodWithDefaults(uint64,uint64,uint64)uint64"
+    txna ApplicationArgs 0
+    match main_justNoop_route@5 main_createMethod_route@6 main_allActions_route@7 main_overrideReadonlyName_route@8 main_methodWithDefaults_route@9
+
+main_after_if_else@13:
+    // tests/approvals/abi-decorators.algo.ts:4
+    // export default class AbiDecorators extends Contract {
+    pushint 0 // 0
+    return
+
+main_methodWithDefaults_route@9:
+    // tests/approvals/abi-decorators.algo.ts:18
+    // @abimethod({ defaultArguments: { a: { from: 'globalValue' }, b: { from: 'readonly' }, c: { constant: 145 } } })
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    // tests/approvals/abi-decorators.algo.ts:4
+    // export default class AbiDecorators extends Contract {
+    txna ApplicationArgs 1
+    btoi
+    txna ApplicationArgs 2
+    btoi
+    txna ApplicationArgs 3
+    btoi
+    // tests/approvals/abi-decorators.algo.ts:20
+    // return a * b + c
+    cover 2
+    *
+    +
+    // tests/approvals/abi-decorators.algo.ts:18
+    // @abimethod({ defaultArguments: { a: { from: 'globalValue' }, b: { from: 'readonly' }, c: { constant: 145 } } })
+    itob
+    pushbytes 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
+
+main_overrideReadonlyName_route@8:
+    // tests/approvals/abi-decorators.algo.ts:11
+    // @abimethod({ readonly: true, name: 'overrideReadonlyName' })
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    pushbytes 0x151f7c750000000000000005
+    log
+    intc_0 // 1
+    return
+
+main_allActions_route@7:
+    // tests/approvals/abi-decorators.algo.ts:9
+    // @abimethod({ allowActions: ['NoOp', 'OptIn', 'CloseOut', 'DeleteApplication', 'UpdateApplication'] })
+    txn ApplicationID
+    assert // can only call when not creating
+    intc_0 // 1
+    return
+
+main_createMethod_route@6:
+    // tests/approvals/abi-decorators.algo.ts:7
+    // @abimethod({ onCreate: 'require' })
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    !
+    assert // can only call when creating
+    intc_0 // 1
+    return
+
+main_justNoop_route@5:
+    // tests/approvals/abi-decorators.algo.ts:5
+    // @abimethod({ allowActions: 'NoOp' })
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    intc_0 // 1
+    return

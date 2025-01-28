@@ -1,0 +1,111 @@
+#pragma version 10
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 1 0
+    bytecblock "greeting" TMPL_GREETING
+    txn ApplicationID
+    bnz main_after_if_else@2
+    // tests/approvals/precompiled-apps.algo.ts:4
+    // greeting = GlobalState({ initialValue: '' })
+    bytec_0 // "greeting"
+    pushbytes ""
+    app_global_put
+    bytec_0 // "greeting"
+    // tests/approvals/precompiled-apps.algo.ts:27
+    // this.greeting.value = TemplateVar<string>('GREETING')
+    bytec_1 // TMPL_GREETING
+    app_global_put
+
+main_after_if_else@2:
+    // tests/approvals/precompiled-apps.algo.ts:24
+    // export class HelloTemplate extends HelloBase {
+    txn NumAppArgs
+    bz main_after_if_else@12
+    pushbytess 0x4c5c61ba 0x24378d3c 0xa0e81872 0xd0a28200 // method "create()void", method "delete()void", method "update()void", method "greet(string)string"
+    txna ApplicationArgs 0
+    match main_create_route@5 main_delete_route@6 main_update_route@7 main_greet_route@8
+
+main_after_if_else@12:
+    // tests/approvals/precompiled-apps.algo.ts:24
+    // export class HelloTemplate extends HelloBase {
+    intc_1 // 0
+    return
+
+main_greet_route@8:
+    // tests/approvals/precompiled-apps.algo.ts:12
+    // greet(name: string): string {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    // tests/approvals/precompiled-apps.algo.ts:24
+    // export class HelloTemplate extends HelloBase {
+    txna ApplicationArgs 1
+    extract 2 0
+    // tests/approvals/precompiled-apps.algo.ts:13
+    // return `${this.greeting.value} ${name}`
+    intc_1 // 0
+    // tests/approvals/precompiled-apps.algo.ts:4
+    // greeting = GlobalState({ initialValue: '' })
+    bytec_0 // "greeting"
+    // tests/approvals/precompiled-apps.algo.ts:13
+    // return `${this.greeting.value} ${name}`
+    app_global_get_ex
+    assert // check GlobalState exists
+    pushbytes " "
+    concat
+    swap
+    concat
+    // tests/approvals/precompiled-apps.algo.ts:12
+    // greet(name: string): string {
+    dup
+    len
+    itob
+    extract 6 2
+    swap
+    concat
+    pushbytes 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
+
+main_update_route@7:
+    // tests/approvals/precompiled-apps.algo.ts:9
+    // @abimethod({ allowActions: 'UpdateApplication' })
+    txn OnCompletion
+    pushint 4 // UpdateApplication
+    ==
+    assert // OnCompletion is not UpdateApplication
+    txn ApplicationID
+    assert // can only call when not creating
+    intc_0 // 1
+    return
+
+main_delete_route@6:
+    // tests/approvals/precompiled-apps.algo.ts:6
+    // @abimethod({ allowActions: 'DeleteApplication' })
+    txn OnCompletion
+    pushint 5 // DeleteApplication
+    ==
+    assert // OnCompletion is not DeleteApplication
+    txn ApplicationID
+    assert // can only call when not creating
+    intc_0 // 1
+    return
+
+main_create_route@5:
+    // tests/approvals/precompiled-apps.algo.ts:30
+    // @abimethod({ onCreate: 'require' })
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    !
+    assert // can only call when creating
+    intc_0 // 1
+    return
