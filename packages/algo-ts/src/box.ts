@@ -1,4 +1,4 @@
-import { ctxMgr } from './execution-context'
+import { NoImplementation } from './impl/errors'
 import { bytes, uint64 } from './primitives'
 
 export type Box<TValue> = {
@@ -40,13 +40,13 @@ export type BoxRef = {
 }
 
 export function Box<TValue>(options: { key: bytes | string }): Box<TValue> {
-  return ctxMgr.instance.state.Box(options)
+  throw new NoImplementation()
 }
 
 export function BoxMap<TKey, TValue>(options: { keyPrefix: bytes | string }): BoxMap<TKey, TValue> {
-  return ctxMgr.instance.state.BoxMap(options)
+  throw new NoImplementation()
 }
 
 export function BoxRef(options: { key: bytes | string }): BoxRef {
-  return ctxMgr.instance.state.BoxRef(options)
+  throw new NoImplementation()
 }

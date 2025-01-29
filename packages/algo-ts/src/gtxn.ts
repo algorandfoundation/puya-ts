@@ -1,4 +1,4 @@
-import { ctxMgr } from './execution-context'
+import { NoImplementation } from './impl/errors'
 import { uint64 } from './primitives'
 import type * as txnTypes from './transactions'
 
@@ -25,23 +25,23 @@ export interface ApplicationTxn extends txnTypes.ApplicationTxn {
 export type Transaction = PaymentTxn | KeyRegistrationTxn | AssetConfigTxn | AssetTransferTxn | AssetFreezeTxn | ApplicationTxn
 
 export function Transaction(groupIndex: uint64): Transaction {
-  return ctxMgr.instance.gtxn.Transaction(groupIndex)
+  throw new NoImplementation()
 }
 export function PaymentTxn(groupIndex: uint64): PaymentTxn {
-  return ctxMgr.instance.gtxn.PaymentTxn(groupIndex)
+  throw new NoImplementation()
 }
 export function KeyRegistrationTxn(groupIndex: uint64): KeyRegistrationTxn {
-  return ctxMgr.instance.gtxn.KeyRegistrationTxn(groupIndex)
+  throw new NoImplementation()
 }
 export function AssetConfigTxn(groupIndex: uint64): AssetConfigTxn {
-  return ctxMgr.instance.gtxn.AssetConfigTxn(groupIndex)
+  throw new NoImplementation()
 }
 export function AssetTransferTxn(groupIndex: uint64): AssetTransferTxn {
-  return ctxMgr.instance.gtxn.AssetTransferTxn(groupIndex)
+  throw new NoImplementation()
 }
 export function AssetFreezeTxn(groupIndex: uint64): AssetFreezeTxn {
-  return ctxMgr.instance.gtxn.AssetFreezeTxn(groupIndex)
+  throw new NoImplementation()
 }
 export function ApplicationTxn(groupIndex: uint64): ApplicationTxn {
-  return ctxMgr.instance.gtxn.ApplicationTxn(groupIndex)
+  throw new NoImplementation()
 }
