@@ -1,21 +1,20 @@
 import type ts from 'typescript'
-import type { DefaultArgumentSource } from '../../awst/models'
-import { ARC4ABIMethodConfig, ARC4BareMethodConfig, ARC4CreateOption, ContractReference, OnCompletionAction } from '../../awst/models'
+import { ContractReference, OnCompletionAction } from '../../awst/models'
+import { nodeFactory } from '../../awst/node-factory'
+import type { ABIMethodArgConstantDefault, ABIMethodArgMemberDefault } from '../../awst/nodes'
 import * as awst from '../../awst/nodes'
+import { ARC4ABIMethodConfig, ARC4BareMethodConfig, ARC4CreateOption } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { Constants } from '../../constants'
 import { CodeError } from '../../errors'
 import { logger } from '../../logger'
 import { codeInvariant, invariant, isIn } from '../../util'
-import { getArc4StructDef, getFunctionTypes, ptypeToArc4PType } from '../arc4-util'
 import type { AwstBuildContext } from '../context/awst-build-context'
 import type { NodeBuilder } from '../eb'
 import { ContractSuperBuilder, ContractThisBuilder } from '../eb/contract-builder'
-import { isValidLiteralForPType } from '../eb/util'
 import type { Arc4AbiDecoratorData, DecoratorData } from '../models/decorator-data'
 import type { ContractClassPType, FunctionPType } from '../ptypes'
-import { GlobalStateType } from '../ptypes'
-import { ARC4StructType } from '../ptypes/arc4-types'
+import { GlobalStateType, LocalStateType } from '../ptypes'
 import { DecoratorVisitor } from './decorator-visitor'
 import { FunctionVisitor } from './function-visitor'
 
@@ -69,6 +68,7 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
       body,
       cref,
       documentation,
+      inline: null,
     })
   }
 
@@ -121,16 +121,6 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
       })
     }
 
-    const funcTypes = getFunctionTypes(functionType, methodLocation)
-
-    const mappedTypes = Object.entries(funcTypes).map(([n, t]) => [n, ptypeToArc4PType(t, methodLocation)])
-
-    const structs = Object.fromEntries(
-      mappedTypes
-        .filter((mappedType): mappedType is [string, ARC4StructType] => mappedType[1] instanceof ARC4StructType)
-        .map(([p, t]) => [p, getArc4StructDef(t)]),
-    )
-
     if (decorator?.type === 'arc4.abimethod') {
       return new ARC4ABIMethodConfig({
         sourceLocation: decorator.sourceLocation,
@@ -138,7 +128,7 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
         create: decorator.create,
         name: decorator.nameOverride ?? functionType.name,
         readonly: decorator.readonly,
-        defaultArgs: Object.fromEntries(
+        defaultArgs: new Map(
           Object.entries(decorator.defaultArguments).map(([parameterName, argConfig]) => [
             parameterName,
             this.buildDefaultArgument({
@@ -149,17 +139,15 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
             }),
           ]),
         ),
-        structs,
       })
     } else if (isPublic && this._contractType.isARC4) {
       return new ARC4ABIMethodConfig({
         sourceLocation: methodLocation,
         allowedCompletionTypes: [OnCompletionAction.NoOp],
-        create: ARC4CreateOption.Disallow,
+        create: ARC4CreateOption.disallow,
         name: functionType.name,
         readonly: false,
-        defaultArgs: {},
-        structs,
+        defaultArgs: new Map(),
       })
     }
     return null
@@ -175,7 +163,7 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
     parameterName: string
     config: Arc4AbiDecoratorData['defaultArguments'][string]
     decoratorLocation: SourceLocation
-  }): DefaultArgumentSource {
+  }): ABIMethodArgMemberDefault | ABIMethodArgConstantDefault {
     const [, paramType] = this._contractType.methods[methodName].parameters.find(([p]) => p === parameterName) ?? [undefined, undefined]
     codeInvariant(
       paramType,
@@ -183,12 +171,15 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
       decoratorLocation,
     )
     if (config.type === 'constant') {
-      codeInvariant(isValidLiteralForPType(config.value, paramType), `Literal cannot be converted to type ${paramType}`, decoratorLocation)
+      codeInvariant(
+        config.value.wtype.equals(paramType.wtypeOrThrow),
+        `Default argument specification for '${parameterName}' does not match parameter type`,
+        decoratorLocation,
+      )
 
-      return {
-        source: 'constant',
+      return nodeFactory.aBIMethodArgConstantDefault({
         value: config.value,
-      }
+      })
     }
     const methodType = this._contractType.methods[config.name]
     if (methodType) {
@@ -197,22 +188,20 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
         `Default argument specification for '${parameterName}' does not match parameter type`,
         decoratorLocation,
       )
-      return {
-        source: 'abi-method',
-        memberName: config.name,
-      }
+      return nodeFactory.aBIMethodArgMemberDefault({
+        name: config.name,
+      })
     }
     const propertyType = this._contractType.properties[config.name]
-    if (propertyType instanceof GlobalStateType) {
+    if (propertyType instanceof GlobalStateType || propertyType instanceof LocalStateType) {
       codeInvariant(
         propertyType.contentType.equals(paramType),
         `Default argument specification for '${parameterName}' does not match parameter type`,
         decoratorLocation,
       )
-      return {
-        source: 'global-state',
-        memberName: config.name,
-      }
+      return nodeFactory.aBIMethodArgMemberDefault({
+        name: config.name,
+      })
     }
     throw new CodeError('Unsupported default argument config', { sourceLocation: decoratorLocation })
   }

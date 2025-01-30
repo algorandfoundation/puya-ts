@@ -29,7 +29,6 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
     sourceLocation: SourceLocation,
     ptype: ObjectPType,
     private readonly parts: ObjectLiteralParts[],
-    private readonly generateDiscardedVarName: () => string,
   ) {
     super(sourceLocation)
     this._ptype = ptype

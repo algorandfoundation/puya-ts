@@ -7,6 +7,7 @@ import { DecoratorDataBuilder, FunctionBuilder, InstanceBuilder, type NodeBuilde
 import { requireStringConstant } from './util'
 import { parseFunctionArgs } from './util/arg-parsing'
 import { requireAvmVersion } from './util/avm-version'
+import { processScratchRanges } from './util/scratch-slots'
 
 export class LogicSigClassBuilder extends InstanceBuilder {
   resolve(): Expression {
@@ -36,7 +37,7 @@ export class LogicSigOptionsDecoratorBuilder extends FunctionBuilder {
 
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
-      args: [{ avmVersion, name }],
+      args: [{ avmVersion, name, scratchSlots }],
     } = parseFunctionArgs({
       args,
       typeArgs,
@@ -47,6 +48,7 @@ export class LogicSigOptionsDecoratorBuilder extends FunctionBuilder {
         a.obj({
           avmVersion: a.optional(numberPType),
           name: a.optional(stringPType),
+          scratchSlots: a.optional(),
         }),
       ],
     })
@@ -56,6 +58,7 @@ export class LogicSigOptionsDecoratorBuilder extends FunctionBuilder {
       avmVersion: avmVersion ? requireAvmVersion(avmVersion) : undefined,
       name: name ? requireStringConstant(name).value : undefined,
       sourceLocation,
+      scratchSlots: scratchSlots && processScratchRanges(scratchSlots),
     })
   }
 }

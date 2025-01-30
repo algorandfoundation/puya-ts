@@ -55,6 +55,14 @@ export abstract class ARC4EncodedType extends PType {
   abstract readonly nativeType: PType | undefined
 }
 
+export abstract class ARC4ArrayType extends ARC4EncodedType {
+  readonly elementType: ARC4EncodedType
+  constructor({ elementType }: { elementType: ARC4EncodedType }) {
+    super()
+    this.elementType = elementType
+  }
+}
+
 export class ARC4InstanceType extends ARC4EncodedType {
   readonly wtype: wtypes.ARC4Type
   readonly name: string
@@ -348,9 +356,9 @@ export const DynamicArrayGeneric = new GenericPType({
     return new DynamicArrayType({ elementType: elementType })
   },
 })
-export class DynamicArrayType extends ARC4EncodedType {
+export class DynamicArrayType extends ARC4ArrayType {
   readonly module = Constants.arc4EncodedTypesModuleName
-  readonly elementType: ARC4EncodedType
+
   readonly immutable: boolean
   readonly name: string
   readonly singleton = false
@@ -371,9 +379,10 @@ export class DynamicArrayType extends ARC4EncodedType {
     immutable?: boolean
     nativeType?: PType
   }) {
-    super()
+    super({
+      elementType,
+    })
     this.immutable = immutable ?? false
-    this.elementType = elementType
     this.nativeType = nativeType
     this.name = name ?? `DynamicArray<${elementType}>`
     this.sourceLocation = sourceLocation
@@ -407,10 +416,8 @@ export const StaticArrayGeneric = new GenericPType({
     return new StaticArrayType({ arraySize: arraySize.literalValue, elementType })
   },
 })
-export class StaticArrayType extends ARC4EncodedType {
-  static baseFullName = `${Constants.arc4EncodedTypesModuleName}::StaticArray`
+export class StaticArrayType extends ARC4ArrayType {
   readonly module = Constants.arc4EncodedTypesModuleName
-  readonly elementType: ARC4EncodedType
   readonly arraySize: bigint
   readonly immutable: boolean
   readonly name: string
@@ -437,10 +444,8 @@ export class StaticArrayType extends ARC4EncodedType {
     nativeType?: PType
   }) {
     codeInvariant(arraySize >= 0, 'StaticArray length must be greater than or equal to 0')
-
-    super()
+    super({ elementType })
     this.immutable = immutable ?? false
-    this.elementType = elementType
     this.arraySize = arraySize
     this.name = name ?? `StaticArray<${elementType}, ${arraySize}>`
     this.sourceLocation = sourceLocation

@@ -8,6 +8,7 @@ import type {
   ARC4Router,
   ArrayConcat,
   ArrayExtend,
+  ArrayLength,
   ArrayPop,
   AssertExpression,
   AssignmentExpression,
@@ -97,6 +98,10 @@ export class FunctionTraverser implements ExpressionVisitor<void>, StatementVisi
     for (const s of statement.body) {
       s.accept(this)
     }
+  }
+
+  visitArrayLength(expression: ArrayLength): void {
+    expression.array.accept(this)
   }
 
   visitGoto(statement: Goto): void {}

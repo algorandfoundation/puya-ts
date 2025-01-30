@@ -11,6 +11,7 @@ import { UFixedNxMType, UintNType } from '../../ptypes/arc4-types'
 import type { NodeBuilder } from '../index'
 import { InstanceBuilder } from '../index'
 import { LiteralExpressionBuilder } from '../literal-expression-builder'
+import { BigIntLiteralExpressionBuilder } from '../literal/big-int-literal-expression-builder'
 
 export function requireExpressionOfType(builder: NodeBuilder, ptype: PTypeOrClass): Expression {
   if (builder instanceof InstanceBuilder) {
@@ -110,6 +111,11 @@ export function requireConstantOfType(builder: NodeBuilder, ptype: PType, messag
   const constExpr = requestConstantOfType(builder, ptype)
   if (constExpr) return constExpr
   throw new CodeError(messageOverride ?? `Expected constant of type ${ptype}`, { sourceLocation: builder.sourceLocation })
+}
+
+export function requireLiteralNumber(builder: NodeBuilder) {
+  codeInvariant(builder instanceof BigIntLiteralExpressionBuilder, 'Expected numeric literal', builder.sourceLocation)
+  return builder.value
 }
 
 export function isValidLiteralForPType(literalValue: ConstantValue, ptype: PTypeOrClass): boolean {

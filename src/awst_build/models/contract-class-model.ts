@@ -1,9 +1,9 @@
 import type { awst } from '../../awst'
 import type { LogicSigReference } from '../../awst/models'
-import { ARC4BareMethodConfig, ARC4CreateOption, ContractReference, OnCompletionAction } from '../../awst/models'
+import { ContractReference, OnCompletionAction } from '../../awst/models'
 import { nodeFactory } from '../../awst/node-factory'
 import type { AppStorageDefinition, ContractMethod, Statement } from '../../awst/nodes'
-import { StateTotals } from '../../awst/nodes'
+import { ARC4BareMethodConfig, ARC4CreateOption, StateTotals } from '../../awst/nodes'
 import { SourceLocation } from '../../awst/source-location'
 import { wtypes } from '../../awst/wtypes'
 import { Constants } from '../../constants'
@@ -89,9 +89,10 @@ export class ContractClassModel {
       if (baseClass.ctor) methods.push(baseClass.ctor)
     }
     if (this.type.isARC4) {
-      const hasCreate = methods.some((m) => isIn(m.arc4MethodConfig?.create, [ARC4CreateOption.Allow, ARC4CreateOption.Require]))
+      const hasCreate = methods.some((m) => isIn(m.arc4MethodConfig?.create, [ARC4CreateOption.allow, ARC4CreateOption.require]))
       const hasBareNoop = methods.some(
-        (m) => m.arc4MethodConfig?.isBare === true && isIn(OnCompletionAction.NoOp, m.arc4MethodConfig.allowedCompletionTypes),
+        (m) =>
+          m.arc4MethodConfig instanceof ARC4BareMethodConfig && isIn(OnCompletionAction.NoOp, m.arc4MethodConfig.allowedCompletionTypes),
       )
 
       if (!hasCreate) {
@@ -167,6 +168,7 @@ export class ContractClassModel {
         sourceLocation: SourceLocation.None,
       }),
       arc4MethodConfig: null,
+      inline: null, // TODO: Expose inline hint option
     })
     const ctorTargets: awst.ContractMethod[] = []
     for (const baseType of clusteredType.baseTypes) {
@@ -258,7 +260,7 @@ export class ContractClassModel {
       args: [],
       arc4MethodConfig: new ARC4BareMethodConfig({
         allowedCompletionTypes: [OnCompletionAction.NoOp],
-        create: ARC4CreateOption.Require,
+        create: ARC4CreateOption.require,
         sourceLocation: this.sourceLocation,
       }),
       returnType: wtypes.voidWType,
@@ -269,6 +271,7 @@ export class ContractClassModel {
       body: nodeFactory.block({
         sourceLocation: this.sourceLocation,
       }),
+      inline: null, // TODO: Expose inline hint option?
     })
   }
 }

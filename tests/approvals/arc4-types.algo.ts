@@ -81,12 +81,18 @@ function testDynamicBytes(someBytes: bytes) {
 
   const db3 = new DynamicBytes('hello')
   assert(db3.native === Bytes('hello'))
+
+  const db4 = db3.concat(new DynamicBytes(' world'))
+  assert(db4.native === Bytes('hello world'))
 }
 
 function testStaticBytes() {
   const s1 = new StaticBytes()
   const s2 = new StaticBytes<4>()
   const s3 = new StaticBytes<5>(Bytes.fromHex('AABBCCDDEE'))
+
+  const s4 = s2.concat(s3)
+  assert(s4.native === Bytes.fromHex('00000000AABBCCDDEE'))
 }
 
 type ARC4Uint64 = UintN<64>
@@ -96,6 +102,10 @@ function testArrays(n: ARC4Uint64) {
   const myArray = new DynamicArray(n, n, n)
 
   myArray.push(n)
+
+  const doubleArray = myArray.concat(myArray)
+
+  assert(doubleArray === new DynamicArray(n, n, n, n, n, n, n, n))
 
   const myStatic = new StaticArray(n, n)
 

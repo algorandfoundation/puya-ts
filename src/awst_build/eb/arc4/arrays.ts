@@ -1,6 +1,6 @@
 import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
-import { BytesConstant, IntegerConstant, StringConstant } from '../../../awst/nodes'
+import { BytesConstant, StringConstant } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { wtypes } from '../../../awst/wtypes'
 import { Constants } from '../../../constants'
@@ -33,6 +33,9 @@ import { SliceFunctionBuilder } from '../shared/slice-function-builder'
 import { UInt64ExpressionBuilder } from '../uint64-expression-builder'
 import { requireExpressionOfType } from '../util'
 import { parseFunctionArgs } from '../util/arg-parsing'
+import { concatArrays } from '../util/array/concat'
+import { indexAccess } from '../util/array/index-access'
+import { arrayLength } from '../util/array/length'
 import { resolveCompatExpression } from '../util/resolve-compat-builder'
 import { Arc4EncodedBaseExpressionBuilder } from './base'
 
@@ -278,23 +281,13 @@ export abstract class ArrayExpressionBuilder<
   }
 
   indexAccess(index: InstanceBuilder, sourceLocation: SourceLocation): NodeBuilder {
-    const indexExpr = requireExpressionOfType(index, uint64PType)
-    if (indexExpr instanceof IntegerConstant && this.ptype instanceof StaticArrayType && indexExpr.value >= this.ptype.arraySize) {
-      logger.error(index.sourceLocation, 'Index access out of bounds')
-    }
-    return instanceEb(
-      nodeFactory.indexExpression({
-        base: this.resolve(),
-        sourceLocation: sourceLocation,
-        index: indexExpr,
-        wtype: this.ptype.elementType.wtype,
-      }),
-      this.ptype.elementType,
-    )
+    return indexAccess(this, index, sourceLocation)
   }
 
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
     switch (name) {
+      case 'length':
+        return arrayLength(this, sourceLocation)
       case 'at':
         return new AtFunctionBuilder(
           this.resolve(),
@@ -307,6 +300,8 @@ export abstract class ArrayExpressionBuilder<
         return new EntriesFunctionBuilder(this)
       case 'copy':
         return new CopyFunctionBuilder(this)
+      case 'concat':
+        return new ConcatFunctionBuilder(this)
       case 'slice': {
         const sliceResult =
           this.ptype instanceof StaticArrayType ? new DynamicArrayType({ elementType: this.ptype.elementType }) : this.ptype
@@ -331,6 +326,25 @@ class CopyFunctionBuilder extends FunctionBuilder {
       }),
       this.arrayBuilder.ptype,
     )
+  }
+}
+class ConcatFunctionBuilder extends FunctionBuilder {
+  constructor(private arrayBuilder: ArrayExpressionBuilder<DynamicArrayType | StaticArrayType>) {
+    super(arrayBuilder.sourceLocation)
+  }
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    const {
+      args: [other],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 0,
+      argSpec: (a) => [a.required()],
+      funcName: 'concat',
+      callLocation: sourceLocation,
+    })
+    return concatArrays(this.arrayBuilder, other, sourceLocation)
   }
 }
 class EntriesFunctionBuilder extends FunctionBuilder {
@@ -361,16 +375,6 @@ export class DynamicArrayExpressionBuilder extends ArrayExpressionBuilder<Dynami
   }
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
     switch (name) {
-      case 'length':
-        return new UInt64ExpressionBuilder(
-          nodeFactory.intrinsicCall({
-            opCode: 'extract_uint16',
-            immediates: [],
-            stackArgs: [this._expr, nodeFactory.uInt64Constant({ value: 0n, sourceLocation })],
-            sourceLocation,
-            wtype: wtypes.uint64WType,
-          }),
-        )
       case 'push':
         return new ArrayPushFunctionBuilder(this)
       case 'pop':
@@ -384,14 +388,6 @@ export class StaticArrayExpressionBuilder extends ArrayExpressionBuilder<StaticA
   constructor(expr: Expression, ptype: PType) {
     invariant(ptype instanceof StaticArrayType, 'ptype must be instance of StaticArrayType')
     super(expr, ptype)
-  }
-
-  memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
-    switch (name) {
-      case 'length':
-        return new UInt64ExpressionBuilder(nodeFactory.uInt64Constant({ value: this.ptype.arraySize, sourceLocation }))
-    }
-    return super.memberAccess(name, sourceLocation)
   }
 }
 

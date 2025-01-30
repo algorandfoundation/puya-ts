@@ -1,4 +1,5 @@
-import type { ARC4CreateOption, OnCompletionAction } from '../../awst/models'
+import type { OnCompletionAction } from '../../awst/models'
+import type { ARC4CreateOption, Expression } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import type { Constants, SupportedAvmVersion } from '../../constants'
 
@@ -13,7 +14,7 @@ export type Arc4AbiDecoratorData = {
     string,
     | {
         type: 'constant'
-        value: string | boolean | bigint | Uint8Array
+        value: Expression
       }
     | {
         type: 'member'
@@ -34,6 +35,7 @@ export type LogicSigOptionsDecoratorData = {
   sourceLocation: SourceLocation
   avmVersion?: SupportedAvmVersion
   name?: string
+  scratchSlots?: Set<bigint>
 }
 export type ContractOptionsDecoratorData = {
   type: typeof Constants.contractOptionsDecoratorName

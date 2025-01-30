@@ -82,12 +82,7 @@ export class FunctionVisitor
           props.push([propertyName, this.visitBindingName(element.name, sourceLocation)])
         }
         const ptype = ObjectPType.anonymous(props.map(([name, builder]): [string, PType] => [name, builder.ptype]))
-        return new ObjectLiteralExpressionBuilder(
-          sourceLocation,
-          ptype,
-          [{ type: 'properties', properties: Object.fromEntries(props) }],
-          () => this.context.generateDiscardedVarName(),
-        )
+        return new ObjectLiteralExpressionBuilder(sourceLocation, ptype, [{ type: 'properties', properties: Object.fromEntries(props) }])
       }
       case ts.SyntaxKind.ArrayBindingPattern: {
         const items: InstanceBuilder[] = []

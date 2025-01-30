@@ -1,6 +1,6 @@
-import { ARC4CreateOption, OnCompletionAction } from '../../awst/models'
+import { OnCompletionAction } from '../../awst/models'
 import type { Expression } from '../../awst/nodes'
-import { NewArray, StringConstant, TupleExpression } from '../../awst/nodes'
+import { ARC4CreateOption, NewArray, StringConstant, TupleExpression } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { Constants } from '../../constants'
 import { CodeError } from '../../errors'
@@ -12,9 +12,8 @@ import { arc4AbiMethodDecorator, arc4BareMethodDecorator, ArrayPType, boolPType,
 import type { InstanceBuilder } from './index'
 import { DecoratorDataBuilder, NodeBuilder } from './index'
 import { ObjectLiteralExpressionBuilder } from './literal/object-literal-expression-builder'
-import { requireBooleanConstant, requireStringConstant } from './util'
+import { requireBooleanConstant, requireInstanceBuilder, requireStringConstant } from './util'
 import { parseFunctionArgs } from './util/arg-parsing'
-import { requireConstantValue } from './util/require-constant-value'
 
 const ocaMap: Record<string, OnCompletionAction> = {
   NoOp: OnCompletionAction.NoOp,
@@ -26,9 +25,9 @@ const ocaMap: Record<string, OnCompletionAction> = {
 }
 
 const createMap: Record<string, ARC4CreateOption> = {
-  allow: ARC4CreateOption.Allow,
-  require: ARC4CreateOption.Require,
-  disallow: ARC4CreateOption.Disallow,
+  allow: ARC4CreateOption.allow,
+  require: ARC4CreateOption.require,
+  disallow: ARC4CreateOption.disallow,
 }
 
 export class Arc4BareMethodDecoratorBuilder extends NodeBuilder {
@@ -55,7 +54,7 @@ export class Arc4BareMethodDecoratorBuilder extends NodeBuilder {
     return new DecoratorDataBuilder(sourceLocation, {
       type: Constants.arc4BareDecoratorName,
       ocas: resolveOnCompletionActions(allowActions),
-      create: onCreate ? mapStringConstant(createMap, onCreate?.resolve()) : ARC4CreateOption.Disallow,
+      create: onCreate ? mapStringConstant(createMap, onCreate?.resolve()) : ARC4CreateOption.disallow,
       sourceLocation: sourceLocation,
     })
   }
@@ -89,7 +88,7 @@ export class Arc4AbiMethodDecoratorBuilder extends NodeBuilder {
     return new DecoratorDataBuilder(sourceLocation, {
       type: Constants.arc4AbiDecoratorName,
       ocas: resolveOnCompletionActions(allowActions),
-      create: onCreate ? mapStringConstant(createMap, onCreate?.resolve()) : ARC4CreateOption.Disallow,
+      create: onCreate ? mapStringConstant(createMap, onCreate?.resolve()) : ARC4CreateOption.disallow,
       sourceLocation: sourceLocation,
       nameOverride: name ? requireStringConstant(name).value : undefined,
       readonly: readonly ? requireBooleanConstant(readonly).value : false,
@@ -142,7 +141,7 @@ function resolveDefaultArguments(
     if (paramConfig.hasProperty('constant')) {
       result[parameterName] = {
         type: 'constant',
-        value: requireConstantValue(paramConfig.memberAccess('constant', sourceLocation), sourceLocation),
+        value: requireInstanceBuilder(paramConfig.memberAccess('constant', sourceLocation)).resolve(),
       }
     } else if (paramConfig.hasProperty('from')) {
       result[parameterName] = {

@@ -1,7 +1,7 @@
 import ts from 'typescript'
 import { nodeFactory } from '../../awst/node-factory'
 import type { Expression, LValue, MethodDocumentation, Statement } from '../../awst/nodes'
-import type { SourceLocation } from '../../awst/source-location'
+import { SourceLocation } from '../../awst/source-location'
 import { CodeError, InternalError, NotSupported } from '../../errors'
 import { logger } from '../../logger'
 import { codeInvariant, enumerate, invariant, sortBy } from '../../util'
@@ -31,6 +31,7 @@ import { NamespaceBuilder } from '../eb/namespace-builder'
 import { OmittedExpressionBuilder } from '../eb/omitted-expression-builder'
 import { StringExpressionBuilder, StringFunctionBuilder } from '../eb/string-expression-builder'
 import { requireExpressionOfType, requireInstanceBuilder } from '../eb/util'
+import { concatArrays } from '../eb/util/array/concat'
 import type { PType } from '../ptypes'
 import {
   ArrayLiteralPType,
@@ -187,15 +188,39 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
     })
     const ptype = this.context.getPTypeForNode(node)
     invariant(ptype instanceof ObjectPType, 'Object literal ptype should resolve to ObjectPType')
-    return new ObjectLiteralExpressionBuilder(sourceLocation, ptype, parts, () => this.context.generateDiscardedVarName())
+    return new ObjectLiteralExpressionBuilder(sourceLocation, ptype, parts)
   }
 
   visitArrayLiteralExpression(node: ts.ArrayLiteralExpression): NodeBuilder {
     const sourceLocation = this.sourceLocation(node)
-    return new ArrayLiteralExpressionBuilder(
-      sourceLocation,
-      node.elements.map((e) => requireInstanceBuilder(this.baseAccept(e))),
-    )
+
+    const toConcat: Array<InstanceBuilder[] | InstanceBuilder> = []
+    let itemBuffer: InstanceBuilder[] = []
+    for (const element of node.elements) {
+      if (ts.isSpreadElement(element)) {
+        const spreadExpr = requireInstanceBuilder(this.baseAccept(element.expression))
+        if (itemBuffer.length !== 0) {
+          toConcat.push(itemBuffer)
+          itemBuffer = []
+        }
+        toConcat.push(spreadExpr)
+      } else {
+        itemBuffer.push(requireInstanceBuilder(this.baseAccept(element)))
+      }
+    }
+    if (itemBuffer.length !== 0) {
+      toConcat.push(itemBuffer)
+    }
+
+    return toConcat
+      .map((i) =>
+        Array.isArray(i) ? new ArrayLiteralExpressionBuilder(SourceLocation.fromLocations(...i.map((li) => li.sourceLocation)), i) : i,
+      )
+      .reduce((acc, cur) => concatArrays(acc, cur, sourceLocation))
+  }
+
+  visitSpreadElement(node: ts.SpreadElement): NodeBuilder {
+    this.throwNotSupported(node, 'Spread element should be handled by array literal visitor')
   }
 
   visitPropertyAccessExpression(node: ts.PropertyAccessExpression): NodeBuilder {

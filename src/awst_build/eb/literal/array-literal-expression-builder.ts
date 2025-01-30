@@ -32,10 +32,6 @@ export class ArrayLiteralExpressionBuilder extends InstanceBuilder {
 
   resolveLValue(): LValue {
     throw new CodeError('Array literal is not a valid lvalue')
-    // return nodeFactory.tupleExpression({
-    //   items: this.items.map((i) => i.resolveLValue()),
-    //   sourceLocation: this.sourceLocation,
-    // })
   }
 
   singleEvaluation(): InstanceBuilder {

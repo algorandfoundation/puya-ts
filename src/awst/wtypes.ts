@@ -167,13 +167,15 @@ export namespace wtypes {
   }
   export class WArray extends WType {
     readonly elementType: WType
-    constructor(props: { itemType: WType; immutable: boolean }) {
+    readonly sourceLocation: SourceLocation | null
+    constructor(props: { itemType: WType; immutable: boolean; sourceLocation?: SourceLocation }) {
       super({
         name: 'WArray',
         scalarType: null,
         immutable: props.immutable,
       })
       this.elementType = props.itemType
+      this.sourceLocation = props.sourceLocation ?? null
     }
   }
 

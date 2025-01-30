@@ -49,17 +49,23 @@ subroutine testDynamicBytes(someBytes: bytes): void
   assert(ARC4_DECODE(db2) == someBytes)
   db3: arc4.dynamic_array<arc4.byte> = 0x000568656c6c6f
   assert(ARC4_DECODE(db3) == "hello")
+  db4: arc4.dynamic_array<arc4.byte> = db3.concat(0x000620776f726c64)
+  assert(ARC4_DECODE(db4) == "hello world")
 }
 subroutine testStaticBytes(): void
 {
   s1: arc4.static_array<arc4.byte> = 0x
   s2: arc4.static_array<arc4.byte> = 0x00000000
   s3: arc4.static_array<arc4.byte> = 0xaabbccddee
+  s4: arc4.dynamic_array<arc4.byte> = s2.concat(s3)
+  assert(ARC4_DECODE(s4) == 0x00000000aabbccddee)
 }
 subroutine testArrays(n: arc4.uint64): void
 {
   myArray: arc4.dynamic_array<arc4.uint64> = new arc4.dynamic_array<arc4.uint64>(n, n, n)
   myArray.push(...<tuple>[n]
+  doubleArray: arc4.dynamic_array<arc4.uint64> = myArray.concat(myArray)
+  assert(reinterpret_cast<bytes>(doubleArray) == reinterpret_cast<bytes>(new arc4.dynamic_array<arc4.uint64>(n, n, n, n, n, n, n, n)))
   myStatic: arc4.static_array<arc4.uint64> = new arc4.static_array<arc4.uint64>(n, n)
   assert(reinterpret_cast<bytes>(myStatic[0]) == reinterpret_cast<bytes>(myArray.pop()))
   myStatic[1]: arc4.uint64 = 50
