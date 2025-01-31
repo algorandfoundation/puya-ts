@@ -1,0 +1,36 @@
+contract AssetProxyAlgo
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  testAsset(asset: asset): void
+  {
+    log(itob(reinterpret_cast<uint64>(asset)))
+    log(itob(checked_maybe(asset_params_get<AssetTotal>(asset), comment=asset exists)))
+    log(itob(checked_maybe(asset_params_get<AssetDecimals>(asset), comment=asset exists)))
+    log(itob(checked_maybe(asset_params_get<AssetDefaultFrozen>(asset), comment=asset exists)))
+    log(checked_maybe(asset_params_get<AssetUnitName>(asset), comment=asset exists))
+    log(checked_maybe(asset_params_get<AssetName>(asset), comment=asset exists))
+    log(checked_maybe(asset_params_get<AssetURL>(asset), comment=asset exists))
+    log(checked_maybe(asset_params_get<AssetMetadataHash>(asset), comment=asset exists))
+    log(reinterpret_cast<bytes>(checked_maybe(asset_params_get<AssetManager>(asset), comment=asset exists)))
+    log(reinterpret_cast<bytes>(checked_maybe(asset_params_get<AssetReserve>(asset), comment=asset exists)))
+    log(reinterpret_cast<bytes>(checked_maybe(asset_params_get<AssetFreeze>(asset), comment=asset exists)))
+    log(reinterpret_cast<bytes>(checked_maybe(asset_params_get<AssetClawback>(asset), comment=asset exists)))
+    log(reinterpret_cast<bytes>(checked_maybe(asset_params_get<AssetCreator>(asset), comment=asset exists)))
+    log(itob(checked_maybe(asset_holding_get<AssetBalance>(txn<Sender>(), asset), comment=account opted into asset)))
+    log(itob(checked_maybe(asset_holding_get<AssetFrozen>(txn<Sender>(), asset), comment=account opted into asset)))
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

@@ -1,0 +1,152 @@
+#pragma version 10
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    // tests/approvals/asset-proxy.algo.ts:4
+    // export class AssetProxyAlgo extends Contract {
+    txn NumAppArgs
+    bz main_bare_routing@6
+    pushbytes 0x5df11c28 // method "testAsset(asset)void"
+    txna ApplicationArgs 0
+    match main_testAsset_route@3
+
+main_after_if_else@10:
+    // tests/approvals/asset-proxy.algo.ts:4
+    // export class AssetProxyAlgo extends Contract {
+    pushint 0 // 0
+    return
+
+main_testAsset_route@3:
+    // tests/approvals/asset-proxy.algo.ts:5
+    // testAsset(asset: Asset): void {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    // tests/approvals/asset-proxy.algo.ts:4
+    // export class AssetProxyAlgo extends Contract {
+    txna ApplicationArgs 1
+    btoi
+    txnas Assets
+    // tests/approvals/asset-proxy.algo.ts:5
+    // testAsset(asset: Asset): void {
+    callsub testAsset
+    pushint 1 // 1
+    return
+
+main_bare_routing@6:
+    // tests/approvals/asset-proxy.algo.ts:4
+    // export class AssetProxyAlgo extends Contract {
+    txn OnCompletion
+    bnz main_after_if_else@10
+    txn ApplicationID
+    !
+    assert // can only call when creating
+    pushint 1 // 1
+    return
+
+
+// tests/approvals/asset-proxy.algo.ts::AssetProxyAlgo.testAsset(asset: uint64) -> void:
+testAsset:
+    // tests/approvals/asset-proxy.algo.ts:5
+    // testAsset(asset: Asset): void {
+    proto 1 0
+    // tests/approvals/asset-proxy.algo.ts:6
+    // log(asset.id)
+    frame_dig -1
+    itob
+    log
+    // tests/approvals/asset-proxy.algo.ts:7
+    // log(asset.total)
+    frame_dig -1
+    asset_params_get AssetTotal
+    assert // asset exists
+    itob
+    log
+    // tests/approvals/asset-proxy.algo.ts:8
+    // log(asset.decimals)
+    frame_dig -1
+    asset_params_get AssetDecimals
+    assert // asset exists
+    itob
+    log
+    // tests/approvals/asset-proxy.algo.ts:9
+    // log(asset.defaultFrozen)
+    frame_dig -1
+    asset_params_get AssetDefaultFrozen
+    assert // asset exists
+    itob
+    log
+    // tests/approvals/asset-proxy.algo.ts:10
+    // log(asset.unitName)
+    frame_dig -1
+    asset_params_get AssetUnitName
+    assert // asset exists
+    log
+    // tests/approvals/asset-proxy.algo.ts:11
+    // log(asset.name)
+    frame_dig -1
+    asset_params_get AssetName
+    assert // asset exists
+    log
+    // tests/approvals/asset-proxy.algo.ts:12
+    // log(asset.url)
+    frame_dig -1
+    asset_params_get AssetURL
+    assert // asset exists
+    log
+    // tests/approvals/asset-proxy.algo.ts:13
+    // log(asset.metadataHash)
+    frame_dig -1
+    asset_params_get AssetMetadataHash
+    assert // asset exists
+    log
+    // tests/approvals/asset-proxy.algo.ts:14
+    // log(asset.manager)
+    frame_dig -1
+    asset_params_get AssetManager
+    assert // asset exists
+    log
+    // tests/approvals/asset-proxy.algo.ts:15
+    // log(asset.reserve)
+    frame_dig -1
+    asset_params_get AssetReserve
+    assert // asset exists
+    log
+    // tests/approvals/asset-proxy.algo.ts:16
+    // log(asset.freeze)
+    frame_dig -1
+    asset_params_get AssetFreeze
+    assert // asset exists
+    log
+    // tests/approvals/asset-proxy.algo.ts:17
+    // log(asset.clawback)
+    frame_dig -1
+    asset_params_get AssetClawback
+    assert // asset exists
+    log
+    // tests/approvals/asset-proxy.algo.ts:18
+    // log(asset.creator)
+    frame_dig -1
+    asset_params_get AssetCreator
+    assert // asset exists
+    log
+    // tests/approvals/asset-proxy.algo.ts:20
+    // log(asset.balance(Txn.sender))
+    txn Sender
+    frame_dig -1
+    asset_holding_get AssetBalance
+    assert // account opted into asset
+    itob
+    log
+    // tests/approvals/asset-proxy.algo.ts:21
+    // log(asset.frozen(Txn.sender))
+    txn Sender
+    frame_dig -1
+    asset_holding_get AssetFrozen
+    assert // account opted into asset
+    itob
+    log
+    retsub
