@@ -33,6 +33,7 @@ import { SliceFunctionBuilder } from '../shared/slice-function-builder'
 import { UInt64ExpressionBuilder } from '../uint64-expression-builder'
 import { requireExpressionOfType } from '../util'
 import { parseFunctionArgs } from '../util/arg-parsing'
+import { resolveCompatExpression } from '../util/resolve-compat-builder'
 import { Arc4EncodedBaseExpressionBuilder } from './base'
 
 export class DynamicArrayClassBuilder extends ClassBuilder {
@@ -180,7 +181,7 @@ export class StaticBytesClassBuilder extends ClassBuilder {
       callLocation: sourceLocation,
       funcName: `${this.ptype.name} constructor`,
       genericTypeArgs: 1,
-      argSpec: (a) => [a.optional(bytesPType)],
+      argSpec: (a) => [a.optional(bytesPType, stringPType)],
     })
     const resultPType = StaticBytesGeneric.parameterise([length])
 
@@ -196,7 +197,7 @@ export class StaticBytesClassBuilder extends ClassBuilder {
         resultPType,
       )
     }
-    const value = initialValue.resolve()
+    const value = resolveCompatExpression(initialValue, bytesPType)
     if (value instanceof BytesConstant) {
       codeInvariant(value.value.length === byteLength, `Value should have byte length of ${byteLength}`, sourceLocation)
       return instanceEb(
@@ -231,7 +232,7 @@ export class DynamicBytesClassBuilder extends ClassBuilder {
       callLocation: sourceLocation,
       funcName: `${this.ptype.name} constructor`,
       genericTypeArgs: 0,
-      argSpec: (a) => [a.optional(bytesPType)],
+      argSpec: (a) => [a.optional(bytesPType, stringPType)],
     })
     const resultPType = DynamicBytesType
 
@@ -245,7 +246,8 @@ export class DynamicBytesClassBuilder extends ClassBuilder {
         resultPType,
       )
     }
-    const value = initialValue.resolve()
+
+    const value = resolveCompatExpression(initialValue, bytesPType)
     if (value instanceof BytesConstant) {
       return instanceEb(
         nodeFactory.bytesConstant({
@@ -431,7 +433,9 @@ export class AddressExpressionBuilder extends ArrayExpressionBuilder<StaticArray
       case 'length':
         return new UInt64ExpressionBuilder(nodeFactory.uInt64Constant({ value: this.ptype.arraySize, sourceLocation }))
       case 'native':
-        return new AccountExpressionBuilder(this.toBytes(sourceLocation))
+        return new AccountExpressionBuilder(
+          nodeFactory.reinterpretCast({ expr: this.toBytes(sourceLocation), sourceLocation, wtype: wtypes.accountWType }),
+        )
     }
     return super.memberAccess(name, sourceLocation)
   }

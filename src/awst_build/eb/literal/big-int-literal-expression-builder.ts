@@ -35,10 +35,17 @@ export class BigIntLiteralExpressionBuilder extends LiteralExpressionBuilder {
   }
 
   resolvableToPType(ptype: PTypeOrClass): boolean {
+    const isUnsigned = ptype.equals(biguintPType) || ptype.equals(uint64PType)
     if (this.ptype instanceof NumericLiteralPType || this.ptype.equals(numberPType)) {
-      return ptype.equals(biguintPType) || ptype.equals(uint64PType) || ptype.equals(numberPType) || ptype.equals(this.ptype)
+      if (isUnsigned) {
+        return this.value >= 0n
+      }
+      return ptype.equals(numberPType) || ptype.equals(this.ptype)
     } else if (this.ptype instanceof BigIntLiteralPType || this.ptype.equals(bigIntPType)) {
-      return ptype.equals(biguintPType) || ptype.equals(uint64PType) || ptype.equals(bigIntPType) || ptype.equals(this.ptype)
+      if (isUnsigned) {
+        return this.value >= 0n
+      }
+      return ptype.equals(bigIntPType) || ptype.equals(this.ptype)
     }
     return false
   }

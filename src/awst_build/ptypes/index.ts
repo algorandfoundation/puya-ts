@@ -814,6 +814,7 @@ export const bigIntPType = new NativeNumericType({
   typeMessage: transientTypeErrors.nativeNumeric('bigint').usedAsType,
   expressionMessage: transientTypeErrors.nativeNumeric('bigint').usedInExpression,
 })
+
 export const stringPType = new InstanceType({
   name: 'string',
   module: 'lib.d.ts',
