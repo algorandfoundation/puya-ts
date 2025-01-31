@@ -1,4 +1,3 @@
-import { Contract } from './arc4'
 import { uint64 } from './primitives'
 import { ConstructorFor } from './typescript-helpers'
 
@@ -75,7 +74,7 @@ type ContractOptions = {
  */
 export const ContractOptionsSymbol = Symbol('ContractOptions')
 export function contract(options: ContractOptions) {
-  return <T extends ConstructorFor<Contract>>(contract: T, ctx: ClassDecoratorContext) => {
+  return <T extends ConstructorFor<BaseContract>>(contract: T, ctx: ClassDecoratorContext) => {
     ctx.addInitializer(function () {
       Object.defineProperty(this, ContractOptionsSymbol, {
         value: options,
