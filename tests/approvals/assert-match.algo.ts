@@ -3,6 +3,10 @@ import { assertMatch, Contract, Global, Txn } from '@algorandfoundation/algorand
 
 export class AssertMatchContract extends Contract {
   public testPay(pay: gtxn.PaymentTxn): boolean {
+    assertMatch(Txn, {
+      fee: { greaterThan: 0 },
+    })
+
     assertMatch(pay, {
       amount: { between: [100_000, 105_000] },
       sender: Txn.sender,
