@@ -42,6 +42,8 @@ subroutine testBoxRef(box: box_key, length: uint64): void
   }
   someBytes: bytes = 0xffffffff
   box_put(box, someBytes)
+  maybeBox: readonlytuple[bytes, bool] = STATE_GET_EX(box.value)
+  assert(maybeBox.1)
   assert(box.value == 0xffffffff)
   box_splice(box, 1, 1, 0x00)
   assert(box.value == 0xff00ffff)

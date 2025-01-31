@@ -5,7 +5,7 @@
 main:
     intcblock 1 0 4
     bytecblock "A" "" "abc" "O" 0xffffffff
-    // tests/approvals/box-proxies.algo.ts:74
+    // tests/approvals/box-proxies.algo.ts:77
     // if (Txn.applicationId.id !== 0) {
     txn ApplicationID
     intc_1 // 0
@@ -13,35 +13,35 @@ main:
     bz main_after_if_else@2
 
 main_if_body@1:
-    // tests/approvals/box-proxies.algo.ts:69
+    // tests/approvals/box-proxies.algo.ts:72
     // boxOne = Box<string>({ key: 'one' })
     pushbytes "one"
-    // tests/approvals/box-proxies.algo.ts:75
+    // tests/approvals/box-proxies.algo.ts:78
     // testBox(this.boxOne, 'aaaaaargh')
     pushbytes "aaaaaargh"
     callsub testBox
-    // tests/approvals/box-proxies.algo.ts:77
+    // tests/approvals/box-proxies.algo.ts:80
     // testBoxMap(this.boxMapTwo, 'what?', itob(256456))
     pushint 256456 // 256456
     itob
-    // tests/approvals/box-proxies.algo.ts:70
+    // tests/approvals/box-proxies.algo.ts:73
     // boxMapTwo = BoxMap<string, bytes>({ keyPrefix: 'two' })
     pushbytes "two"
-    // tests/approvals/box-proxies.algo.ts:77
+    // tests/approvals/box-proxies.algo.ts:80
     // testBoxMap(this.boxMapTwo, 'what?', itob(256456))
     pushbytes "what?"
     uncover 2
     callsub testBoxMap
-    // tests/approvals/box-proxies.algo.ts:71
+    // tests/approvals/box-proxies.algo.ts:74
     // boxRefThree = BoxRef({ key: 'three' })
     pushbytes "three"
-    // tests/approvals/box-proxies.algo.ts:79
+    // tests/approvals/box-proxies.algo.ts:82
     // testBoxRef(this.boxRefThree, 99)
     pushint 99 // 99
     callsub testBoxRef
 
 main_after_if_else@2:
-    // tests/approvals/box-proxies.algo.ts:81
+    // tests/approvals/box-proxies.algo.ts:84
     // return true
     intc_0 // 1
     return
@@ -375,6 +375,14 @@ testBoxRef_after_if_else@8:
     // box.put(someBytes)
     box_put
     // tests/approvals/box-proxies.algo.ts:63
+    // const maybeBox = box.maybe()
+    frame_dig -2
+    box_get
+    bury 1
+    // tests/approvals/box-proxies.algo.ts:64
+    // assert(maybeBox[1])
+    assert
+    // tests/approvals/box-proxies.algo.ts:66
     // assert(box.value === Bytes.fromHex('FFFFFFFF'))
     frame_dig -2
     box_get
@@ -382,14 +390,14 @@ testBoxRef_after_if_else@8:
     bytec 4 // 0xffffffff
     ==
     assert
-    // tests/approvals/box-proxies.algo.ts:64
+    // tests/approvals/box-proxies.algo.ts:67
     // box.splice(1, 1, Bytes.fromHex('00'))
     frame_dig -2
     intc_0 // 1
     dup
     pushbytes 0x00
     box_splice
-    // tests/approvals/box-proxies.algo.ts:65
+    // tests/approvals/box-proxies.algo.ts:68
     // assert(box.value === Bytes.fromHex('FF00FFFF'))
     frame_dig -2
     box_get

@@ -60,6 +60,9 @@ function testBoxRef(box: BoxRef, length: uint64) {
   const someBytes = Bytes.fromHex('FFFFFFFF')
   box.put(someBytes)
 
+  const maybeBox = box.maybe()
+  assert(maybeBox[1])
+
   assert(box.value === Bytes.fromHex('FFFFFFFF'))
   box.splice(1, 1, Bytes.fromHex('00'))
   assert(box.value === Bytes.fromHex('FF00FFFF'))

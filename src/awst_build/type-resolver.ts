@@ -199,6 +199,15 @@ export class TypeResolver {
 
     const typeName = this.getTypeName(tsType, sourceLocation)
 
+    if (typeName.name === '__type' && typeName.module.startsWith(Constants.algoTsPackage)) {
+      // We are likely dealing with `typeof X` where X is a singleton exported by algo-ts
+      const declarationNode = tsType.symbol.getDeclarations()?.[0]?.parent
+
+      if (declarationNode && ts.isVariableDeclaration(declarationNode)) {
+        return this.resolve(declarationNode.name, sourceLocation)
+      }
+    }
+
     if (typeName.fullName === ClusteredPrototype.fullName) {
       return this.resolveClusteredPrototype(tsType, sourceLocation)
     }

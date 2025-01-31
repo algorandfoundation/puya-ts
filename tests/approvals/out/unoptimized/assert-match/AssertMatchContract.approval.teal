@@ -98,7 +98,21 @@ testPay:
     // tests/approvals/assert-match.algo.ts:5
     // public testPay(pay: gtxn.PaymentTxn): boolean {
     proto 1 1
-    // tests/approvals/assert-match.algo.ts:6-13
+    // tests/approvals/assert-match.algo.ts:6-8
+    // assertMatch(Txn, {
+    //   fee: { greaterThan: 0 },
+    // })
+    txn Fee
+    // tests/approvals/assert-match.algo.ts:7
+    // fee: { greaterThan: 0 },
+    intc_0 // 0
+    // tests/approvals/assert-match.algo.ts:6-8
+    // assertMatch(Txn, {
+    //   fee: { greaterThan: 0 },
+    // })
+    >
+    assert // assert target is match for conditions
+    // tests/approvals/assert-match.algo.ts:10-17
     // assertMatch(pay, {
     //   amount: { between: [100_000, 105_000] },
     //   sender: Txn.sender,
@@ -109,10 +123,10 @@ testPay:
     // })
     frame_dig -1
     gtxns Amount
-    // tests/approvals/assert-match.algo.ts:7
+    // tests/approvals/assert-match.algo.ts:11
     // amount: { between: [100_000, 105_000] },
     pushint 105000 // 105000
-    // tests/approvals/assert-match.algo.ts:6-13
+    // tests/approvals/assert-match.algo.ts:10-17
     // assertMatch(pay, {
     //   amount: { between: [100_000, 105_000] },
     //   sender: Txn.sender,
@@ -125,7 +139,7 @@ testPay:
     bz testPay_bool_false@8
 
 testPay_and_contd@1:
-    // tests/approvals/assert-match.algo.ts:6-13
+    // tests/approvals/assert-match.algo.ts:10-17
     // assertMatch(pay, {
     //   amount: { between: [100_000, 105_000] },
     //   sender: Txn.sender,
@@ -136,10 +150,10 @@ testPay_and_contd@1:
     // })
     frame_dig -1
     gtxns Amount
-    // tests/approvals/assert-match.algo.ts:7
+    // tests/approvals/assert-match.algo.ts:11
     // amount: { between: [100_000, 105_000] },
     pushint 100000 // 100000
-    // tests/approvals/assert-match.algo.ts:6-13
+    // tests/approvals/assert-match.algo.ts:10-17
     // assertMatch(pay, {
     //   amount: { between: [100_000, 105_000] },
     //   sender: Txn.sender,
@@ -152,7 +166,7 @@ testPay_and_contd@1:
     bz testPay_bool_false@8
 
 testPay_and_contd@2:
-    // tests/approvals/assert-match.algo.ts:6-13
+    // tests/approvals/assert-match.algo.ts:10-17
     // assertMatch(pay, {
     //   amount: { between: [100_000, 105_000] },
     //   sender: Txn.sender,
@@ -163,10 +177,10 @@ testPay_and_contd@2:
     // })
     frame_dig -1
     gtxns Sender
-    // tests/approvals/assert-match.algo.ts:8
+    // tests/approvals/assert-match.algo.ts:12
     // sender: Txn.sender,
     txn Sender
-    // tests/approvals/assert-match.algo.ts:6-13
+    // tests/approvals/assert-match.algo.ts:10-17
     // assertMatch(pay, {
     //   amount: { between: [100_000, 105_000] },
     //   sender: Txn.sender,
@@ -179,7 +193,7 @@ testPay_and_contd@2:
     bz testPay_bool_false@8
 
 testPay_and_contd@3:
-    // tests/approvals/assert-match.algo.ts:6-13
+    // tests/approvals/assert-match.algo.ts:10-17
     // assertMatch(pay, {
     //   amount: { between: [100_000, 105_000] },
     //   sender: Txn.sender,
@@ -190,10 +204,10 @@ testPay_and_contd@3:
     // })
     frame_dig -1
     gtxns Receiver
-    // tests/approvals/assert-match.algo.ts:9
+    // tests/approvals/assert-match.algo.ts:13
     // receiver: Global.currentApplicationAddress,
     global CurrentApplicationAddress
-    // tests/approvals/assert-match.algo.ts:6-13
+    // tests/approvals/assert-match.algo.ts:10-17
     // assertMatch(pay, {
     //   amount: { between: [100_000, 105_000] },
     //   sender: Txn.sender,
@@ -206,7 +220,7 @@ testPay_and_contd@3:
     bz testPay_bool_false@8
 
 testPay_and_contd@4:
-    // tests/approvals/assert-match.algo.ts:6-13
+    // tests/approvals/assert-match.algo.ts:10-17
     // assertMatch(pay, {
     //   amount: { between: [100_000, 105_000] },
     //   sender: Txn.sender,
@@ -217,10 +231,10 @@ testPay_and_contd@4:
     // })
     frame_dig -1
     gtxns CloseRemainderTo
-    // tests/approvals/assert-match.algo.ts:10
+    // tests/approvals/assert-match.algo.ts:14
     // closeRemainderTo: Global.zeroAddress,
     global ZeroAddress
-    // tests/approvals/assert-match.algo.ts:6-13
+    // tests/approvals/assert-match.algo.ts:10-17
     // assertMatch(pay, {
     //   amount: { between: [100_000, 105_000] },
     //   sender: Txn.sender,
@@ -233,7 +247,7 @@ testPay_and_contd@4:
     bz testPay_bool_false@8
 
 testPay_and_contd@5:
-    // tests/approvals/assert-match.algo.ts:6-13
+    // tests/approvals/assert-match.algo.ts:10-17
     // assertMatch(pay, {
     //   amount: { between: [100_000, 105_000] },
     //   sender: Txn.sender,
@@ -244,10 +258,10 @@ testPay_and_contd@5:
     // })
     frame_dig -1
     gtxns FirstValid
-    // tests/approvals/assert-match.algo.ts:11
+    // tests/approvals/assert-match.algo.ts:15
     // firstValid: { greaterThan: 1 },
     intc_1 // 1
-    // tests/approvals/assert-match.algo.ts:6-13
+    // tests/approvals/assert-match.algo.ts:10-17
     // assertMatch(pay, {
     //   amount: { between: [100_000, 105_000] },
     //   sender: Txn.sender,
@@ -260,7 +274,7 @@ testPay_and_contd@5:
     bz testPay_bool_false@8
 
 testPay_and_contd@6:
-    // tests/approvals/assert-match.algo.ts:6-13
+    // tests/approvals/assert-match.algo.ts:10-17
     // assertMatch(pay, {
     //   amount: { between: [100_000, 105_000] },
     //   sender: Txn.sender,
@@ -271,10 +285,10 @@ testPay_and_contd@6:
     // })
     frame_dig -1
     gtxns LastValid
-    // tests/approvals/assert-match.algo.ts:12
+    // tests/approvals/assert-match.algo.ts:16
     // lastValid: { lessThan: 2 ** 40 },
     pushint 1099511627776 // 1099511627776
-    // tests/approvals/assert-match.algo.ts:6-13
+    // tests/approvals/assert-match.algo.ts:10-17
     // assertMatch(pay, {
     //   amount: { between: [100_000, 105_000] },
     //   sender: Txn.sender,
@@ -290,7 +304,7 @@ testPay_bool_true@7:
     intc_1 // 1
 
 testPay_bool_merge@9:
-    // tests/approvals/assert-match.algo.ts:6-13
+    // tests/approvals/assert-match.algo.ts:10-17
     // assertMatch(pay, {
     //   amount: { between: [100_000, 105_000] },
     //   sender: Txn.sender,
@@ -300,7 +314,7 @@ testPay_bool_merge@9:
     //   lastValid: { lessThan: 2 ** 40 },
     // })
     assert // assert target is match for conditions
-    // tests/approvals/assert-match.algo.ts:14
+    // tests/approvals/assert-match.algo.ts:18
     // return true
     intc_1 // 1
     retsub

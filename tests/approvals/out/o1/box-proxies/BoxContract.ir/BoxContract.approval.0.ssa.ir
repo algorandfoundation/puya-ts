@@ -1,15 +1,15 @@
 main tests/approvals/box-proxies.algo.ts::BoxContract.approvalProgram:
-    block@0: // L73
+    block@0: // L76
         let tmp%0#0: uint64 = (txn ApplicationID)
         let tmp%1#0: bool = (!= tmp%0#0 0u)
         goto tmp%1#0 ? block@1 : block@2
-    block@1: // if_body_L74
+    block@1: // if_body_L77
         tests/approvals/box-proxies.algo.ts::testBox("one", "aaaaaargh")
         let tmp%2#0: bytes = (itob 256456u)
         tests/approvals/box-proxies.algo.ts::testBoxMap("two", "what?", tmp%2#0)
         tests/approvals/box-proxies.algo.ts::testBoxRef("three", 99u)
         goto block@2
-    block@2: // after_if_else_L74
+    block@2: // after_if_else_L77
         return 1u
 
 subroutine tests/approvals/box-proxies.algo.ts::testBox(box: bytes, value: bytes) -> void:
@@ -148,12 +148,15 @@ subroutine tests/approvals/box-proxies.algo.ts::testBoxRef(box: bytes, length: u
         let someBytes#0: bytes = 0xffffffff
         (box_put box#0 someBytes#0)
         let (maybe_value%2#0: bytes, maybe_exists%2#0: bool) = (box_get box#0)
-        (assert maybe_exists%2#0) // Box must have value
-        let tmp%1#0: bool = (== maybe_value%2#0 0xffffffff)
-        (assert tmp%1#0)
-        (box_splice box#0 1u 1u 0x00)
+        let (maybeBox.0#0: bytes, maybeBox.1#0: bool) = (maybe_value%2#0, maybe_exists%2#0)
+        (assert maybeBox.1#0)
         let (maybe_value%3#0: bytes, maybe_exists%3#0: bool) = (box_get box#0)
         (assert maybe_exists%3#0) // Box must have value
-        let tmp%2#0: bool = (== maybe_value%3#0 0xff00ffff)
+        let tmp%1#0: bool = (== maybe_value%3#0 0xffffffff)
+        (assert tmp%1#0)
+        (box_splice box#0 1u 1u 0x00)
+        let (maybe_value%4#0: bytes, maybe_exists%4#0: bool) = (box_get box#0)
+        (assert maybe_exists%4#0) // Box must have value
+        let tmp%2#0: bool = (== maybe_value%4#0 0xff00ffff)
         (assert tmp%2#0)
         return 

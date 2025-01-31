@@ -5,7 +5,7 @@ import { wtypes } from '../../../../awst/wtypes'
 
 import { invariant } from '../../../../util'
 import type { PType } from '../../../ptypes'
-import { boolPType, BoxRefPType, boxRefType, bytesPType, stringPType, uint64PType, voidPType } from '../../../ptypes'
+import { boolPType, BoxRefPType, boxRefType, bytesPType, stringPType, TuplePType, uint64PType, voidPType } from '../../../ptypes'
 import { instanceEb } from '../../../type-registry'
 import { FunctionBuilder, type NodeBuilder } from '../../index'
 import { parseFunctionArgs } from '../../util/arg-parsing'
@@ -56,6 +56,8 @@ export class BoxRefExpressionBuilder extends BoxProxyExpressionBuilder<BoxRefPTy
         return new BoxRefReplaceFunctionBuilder(boxValueExpr)
       case 'exists':
         return boxExists(boxValueExpr, sourceLocation)
+      case 'maybe':
+        return new BoxRefMaybeFunctionBuilder(boxValueExpr)
       case 'length': {
         return boxLength(boxValueExpr, sourceLocation)
       }
@@ -214,6 +216,29 @@ export class BoxRefSpliceFunctionBuilder extends BoxRefBaseFunctionBuilder {
         sourceLocation,
       }),
       voidPType,
+    )
+  }
+}
+
+class BoxRefMaybeFunctionBuilder extends BoxRefBaseFunctionBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    parseFunctionArgs({
+      args,
+      typeArgs,
+      funcName: 'BoxRef.maybe',
+      callLocation: sourceLocation,
+      genericTypeArgs: 0,
+      argSpec: () => [],
+    })
+    const type = new TuplePType({ items: [bytesPType, boolPType] })
+
+    return instanceEb(
+      nodeFactory.stateGetEx({
+        sourceLocation,
+        wtype: type.wtype,
+        field: this.boxValue,
+      }),
+      type,
     )
   }
 }
