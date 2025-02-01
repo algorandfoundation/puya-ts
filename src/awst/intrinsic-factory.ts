@@ -1,17 +1,14 @@
-import { concat } from '@algorandfoundation/algorand-typescript/op'
 import type { DeliberateAny } from '../typescript-helpers'
 import { bigIntToUint8Array } from '../util'
 import { nodeFactory } from './node-factory'
-import * as awst from './nodes'
 import type { Expression } from './nodes'
+import * as awst from './nodes'
 import { BytesConstant, BytesEncoding, StringConstant } from './nodes'
 import { SourceLocation } from './source-location'
 import { wtypes } from './wtypes'
 
 export const intrinsicFactory = {
   bytesConcat({ left, right, sourceLocation }: { left: awst.Expression; right: awst.Expression; sourceLocation: SourceLocation }) {
-    // invariant(left.wtype.equals(right.wtype), 'left and right operand wtypes must match')
-
     if (left.wtype.equals(right.wtype)) {
       if (left instanceof BytesConstant && right instanceof BytesConstant) {
         const concatValue = new Uint8Array(left.value.length + right.value.length)
