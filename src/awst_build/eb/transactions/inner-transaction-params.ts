@@ -8,12 +8,12 @@ import { codeInvariant, invariant } from '../../../util'
 import type { PType } from '../../ptypes'
 import { ItxnParamsPType, ObjectPType, submitGroupItxnFunction, TransactionFunctionType, TuplePType } from '../../ptypes'
 import { instanceEb } from '../../type-registry'
-import type { InstanceBuilder, NodeBuilder } from '../index'
+import type { NodeBuilder, InstanceBuilder } from '../index'
 import { FunctionBuilder, InstanceExpressionBuilder } from '../index'
 import { ArrayLiteralExpressionBuilder } from '../literal/array-literal-expression-builder'
 import { TupleExpressionBuilder } from '../tuple-expression-builder'
-import { requireExpressionOfType } from '../util'
 import { parseFunctionArgs } from '../util/arg-parsing'
+import { resolveCompatExpression } from '../util/resolve-compat-builder'
 import { InnerTransactionExpressionBuilder } from './inner-transactions'
 import { anyTxnFields, txnKindToFields } from './txn-fields'
 import { getInnerTransactionType, getItxnParamsType } from './util'
@@ -87,7 +87,7 @@ function mapTransactionFields(
           mappedFields.set(
             txnField,
             nodeFactory.tupleExpression({
-              items: propValue.getItemBuilders().map((i) => requireExpressionOfType(i, fieldType)),
+              items: propValue.getItemBuilders().map((i) => resolveCompatExpression(i, fieldType)),
               sourceLocation: propValue.sourceLocation,
             }),
           )
@@ -95,7 +95,7 @@ function mapTransactionFields(
           mappedFields.set(
             txnField,
             nodeFactory.tupleExpression({
-              items: [requireExpressionOfType(propValue, fieldType)],
+              items: [resolveCompatExpression(propValue, fieldType)],
               sourceLocation: propValue.sourceLocation,
             }),
           )
@@ -103,7 +103,7 @@ function mapTransactionFields(
           logger.error(propValue.sourceLocation, `Unsupported expression for ${prop}`)
         }
       } else {
-        mappedFields.set(txnField, requireExpressionOfType(propValue, fieldType))
+        mappedFields.set(txnField, resolveCompatExpression(propValue, fieldType))
       }
     } else {
       logger.warn(sourceLocation, `Ignoring additional property: ${prop}`)
@@ -212,7 +212,7 @@ class CopyInnerTxnMethodBuilder extends InnerTxnFieldsMethodBuilder {
       argSpec: () => [],
     })
 
-    return new InnerTransactionExpressionBuilder(
+    return new ItxnParamsExpressionBuilder(
       nodeFactory.copy({
         value: this.builder.resolve(),
         sourceLocation,

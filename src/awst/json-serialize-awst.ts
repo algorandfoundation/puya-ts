@@ -41,6 +41,12 @@ export class AwstSerializer extends SnakeCaseSerializer<RootNode[]> {
 
   protected serializerFunction(key: string, value: unknown): unknown {
     if (typeof value === 'bigint') {
+      if (value < 0n) {
+        if (value < Number.MIN_SAFE_INTEGER) {
+          throw new InternalError(`Cannot safely serialize ${value} to JSON`)
+        }
+        return Number(value)
+      }
       return `${value}`
     }
     if (value instanceof Set) {

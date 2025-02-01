@@ -12,6 +12,8 @@ import {
   uint64PType,
 } from '../../ptypes'
 
+type TxnFieldsMeta = Record<string, readonly [TxnField, PType]>
+
 const baseTxnFields = {
   /**
    * 32 byte address
@@ -73,7 +75,7 @@ const baseTxnFields = {
    * 32 byte Sender's new AuthAddr
    */
   rekeyTo: [TxnField.RekeyTo, accountPType] as const,
-}
+} satisfies TxnFieldsMeta
 
 export const paymentTxnFields = {
   ...baseTxnFields,
@@ -91,7 +93,7 @@ export const paymentTxnFields = {
    * 32 byte address
    */
   closeRemainderTo: [TxnField.CloseRemainderTo, accountPType] as const,
-} satisfies Record<string, readonly [TxnField, PType]>
+} satisfies TxnFieldsMeta
 
 export const keyRegistrationTxnFields = {
   ...baseTxnFields,
@@ -129,7 +131,7 @@ export const keyRegistrationTxnFields = {
    * 64 byte state proof public key
    */
   stateProofKey: [TxnField.StateProofPK, bytesPType] as const,
-} satisfies Record<string, readonly [TxnField, PType]>
+} satisfies TxnFieldsMeta
 
 export const assetConfigTxnFields = {
   ...baseTxnFields,
@@ -197,7 +199,7 @@ export const assetConfigTxnFields = {
    * 32 byte address
    */
   clawback: [TxnField.ConfigAssetClawback, accountPType] as const,
-} satisfies Record<string, readonly [TxnField, PType]>
+} satisfies TxnFieldsMeta
 
 export const assetTransferTxnFields = {
   ...baseTxnFields,
@@ -225,7 +227,7 @@ export const assetTransferTxnFields = {
    * 32 byte address
    */
   assetCloseTo: [TxnField.AssetCloseTo, accountPType] as const,
-} satisfies Record<string, readonly [TxnField, PType]>
+} satisfies TxnFieldsMeta
 
 export const assetFreezeTxnFields = {
   ...baseTxnFields,
@@ -243,7 +245,7 @@ export const assetFreezeTxnFields = {
    * The new frozen value
    */
   frozen: [TxnField.FreezeAssetFrozen, boolPType] as const,
-} satisfies Record<string, readonly [TxnField, PType]>
+} satisfies TxnFieldsMeta
 
 export const applicationCallTxnFields = {
   ...baseTxnFields,
@@ -323,14 +325,27 @@ export const applicationCallTxnFields = {
   lastLog: [TxnField.LastLog, bytesPType] as const,
 
   /**
+   * Read application logs
+   */
+  logs: [TxnField.Logs, bytesPType] as const,
+
+  /**
    * Number of Approval Program pages
    */
   numApprovalProgramPages: [TxnField.NumApprovalProgramPages, uint64PType] as const,
+  /**
+   * Read approval program pages
+   */
+  approvalProgramPages: [TxnField.ApprovalProgramPages, bytesPType] as const,
 
   /**
    * Number of Clear State Program pages
    */
   numClearStateProgramPages: [TxnField.NumClearStateProgramPages, uint64PType] as const,
+  /**
+   * Read clear state program pages
+   */
+  clearStateProgramPages: [TxnField.ClearStateProgramPages, bytesPType] as const,
 
   /**
    * Arguments passed to the application in the ApplicationCall transaction
@@ -362,7 +377,7 @@ export const applicationCallTxnFields = {
    * Number of logs
    */
   numLogs: [TxnField.NumLogs, uint64PType] as const,
-} satisfies Record<string, readonly [TxnField, PType]>
+} satisfies TxnFieldsMeta
 
 export const anyTxnFields = {
   ...paymentTxnFields,
@@ -371,7 +386,7 @@ export const anyTxnFields = {
   ...assetTransferTxnFields,
   ...assetFreezeTxnFields,
   ...applicationCallTxnFields,
-} satisfies Record<string, readonly [TxnField, PType]>
+} satisfies TxnFieldsMeta
 
 export const txnKindToFields = {
   [TransactionKind.pay]: paymentTxnFields,

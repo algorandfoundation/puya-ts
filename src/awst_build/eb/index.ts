@@ -106,10 +106,20 @@ export abstract class InstanceBuilder<TPType extends PType = PType> extends Node
   abstract resolve(): awst.Expression
   abstract resolveLValue(): awst.LValue
 
+  /**
+   * Returns a boolean indicating if the current builder can be resolved to the target type.
+   * Resolvable meaning it may have a different type, but would be assignable to the target type in TypeScript
+   * without a cast.
+   * @param ptype
+   */
   resolvableToPType(ptype: PTypeOrClass): boolean {
     return this.ptype.equalsOrInstanceOf(ptype)
   }
 
+  /**
+   * Attempts to resolve the value held by this builder to the target type.
+   * @param ptype
+   */
   resolveToPType(ptype: PTypeOrClass): InstanceBuilder {
     if (this.ptype.equalsOrInstanceOf(ptype)) {
       return this
@@ -176,6 +186,17 @@ export abstract class InstanceBuilder<TPType extends PType = PType> extends Node
     throw new NotSupported(`Augmented assignment to ${this.typeDescription} with ${op}`, {
       sourceLocation,
     })
+  }
+
+  reinterpretCast(target: PType, sourceLocation?: SourceLocation) {
+    return instanceEb(
+      nodeFactory.reinterpretCast({
+        expr: this.resolve(),
+        sourceLocation: sourceLocation ?? this.sourceLocation,
+        wtype: target.wtypeOrThrow,
+      }),
+      target,
+    )
   }
 }
 

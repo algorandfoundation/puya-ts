@@ -1,6 +1,7 @@
 import type { AlgorandClient } from '@algorandfoundation/algokit-utils'
 import { Config, microAlgos } from '@algorandfoundation/algokit-utils'
 import { algorandFixture } from '@algorandfoundation/algokit-utils/testing'
+import type { AlgoAmount } from '@algorandfoundation/algokit-utils/types/amount'
 import type { SendAppTransactionResult } from '@algorandfoundation/algokit-utils/types/app'
 import type { Arc56Contract } from '@algorandfoundation/algokit-utils/types/app-arc56'
 import type { AppClient } from '@algorandfoundation/algokit-utils/types/app-client'
@@ -151,6 +152,7 @@ type Arc4FixtureContextFor<T extends string> = {
 
 type ContractConfig = {
   deployParams?: AppFactoryDeployParams
+  funding?: AlgoAmount
 }
 
 export function createArc4TestFixture<TContracts extends string = ''>(
@@ -215,6 +217,7 @@ export function createArc4TestFixture<TContracts extends string = ''>(
         appSpec: appSpec!,
       })
       const { appClient } = await appFactory.deploy(config.deployParams ?? {})
+      if (config.funding) await appClient.fundAppAccount({ amount: config.funding })
       await use(appClient)
     }
   }
