@@ -10,7 +10,7 @@
 
 > **Uint64**(): [`uint64`](../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/primitives.ts:19](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/primitives.ts#L19)
+Defined in: [packages/algo-ts/src/primitives.ts:19](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/primitives.ts#L19)
 
 Create a uint64 with the default value of 0
 
@@ -22,7 +22,7 @@ Create a uint64 with the default value of 0
 
 > **Uint64**(`v`): [`uint64`](../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/primitives.ts:23](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/primitives.ts#L23)
+Defined in: [packages/algo-ts/src/primitives.ts:23](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/primitives.ts#L23)
 
 Create a uint64 from a string literal
 
@@ -40,7 +40,7 @@ Create a uint64 from a string literal
 
 > **Uint64**(`v`): [`uint64`](../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/primitives.ts:27](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/primitives.ts#L27)
+Defined in: [packages/algo-ts/src/primitives.ts:27](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/primitives.ts#L27)
 
 Create a uint64 from a bigint literal
 
@@ -58,7 +58,7 @@ Create a uint64 from a bigint literal
 
 > **Uint64**(`v`): [`uint64`](../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/primitives.ts:31](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/primitives.ts#L31)
+Defined in: [packages/algo-ts/src/primitives.ts:31](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/primitives.ts#L31)
 
 Create a uint64 from a number literal
 
@@ -76,7 +76,7 @@ Create a uint64 from a number literal
 
 > **Uint64**(`v`): [`uint64`](../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/primitives.ts:35](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/primitives.ts#L35)
+Defined in: [packages/algo-ts/src/primitives.ts:35](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/primitives.ts#L35)
 
 Create a uint64 from a boolean value. True is 1, False is 0
 

@@ -6,7 +6,7 @@
 
 # Interface: ApplicationCallFields
 
-Defined in: [packages/algo-ts/src/itxn.ts:144](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/itxn.ts#L144)
+Defined in: [packages/algo-ts/src/itxn.ts:157](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/itxn.ts#L157)
 
 ## Extends
 
@@ -16,9 +16,9 @@ Defined in: [packages/algo-ts/src/itxn.ts:144](https://github.com/algorandfounda
 
 ### accounts?
 
-> `optional` **accounts**: readonly [`Account`](../../../type-aliases/Account.md)[]
+> `optional` **accounts**: readonly `AccountInput`[]
 
-Defined in: [packages/algo-ts/src/itxn.ts:155](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/itxn.ts#L155)
+Defined in: [packages/algo-ts/src/itxn.ts:168](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/itxn.ts#L168)
 
 ***
 
@@ -26,15 +26,15 @@ Defined in: [packages/algo-ts/src/itxn.ts:155](https://github.com/algorandfounda
 
 > `optional` **appArgs**: readonly `unknown`[]
 
-Defined in: [packages/algo-ts/src/itxn.ts:154](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/itxn.ts#L154)
+Defined in: [packages/algo-ts/src/itxn.ts:167](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/itxn.ts#L167)
 
 ***
 
 ### appId?
 
-> `optional` **appId**: [`uint64`](../../../type-aliases/uint64.md) \| [`Application`](../../../type-aliases/Application.md)
+> `optional` **appId**: `ApplicationInput`
 
-Defined in: [packages/algo-ts/src/itxn.ts:145](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/itxn.ts#L145)
+Defined in: [packages/algo-ts/src/itxn.ts:158](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/itxn.ts#L158)
 
 ***
 
@@ -42,23 +42,23 @@ Defined in: [packages/algo-ts/src/itxn.ts:145](https://github.com/algorandfounda
 
 > `optional` **approvalProgram**: [`bytes`](../../../type-aliases/bytes.md) \| readonly [`bytes`](../../../type-aliases/bytes.md)[]
 
-Defined in: [packages/algo-ts/src/itxn.ts:146](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/itxn.ts#L146)
+Defined in: [packages/algo-ts/src/itxn.ts:159](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/itxn.ts#L159)
 
 ***
 
 ### apps?
 
-> `optional` **apps**: readonly [`Application`](../../../type-aliases/Application.md)[]
+> `optional` **apps**: readonly `ApplicationInput`[]
 
-Defined in: [packages/algo-ts/src/itxn.ts:157](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/itxn.ts#L157)
+Defined in: [packages/algo-ts/src/itxn.ts:170](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/itxn.ts#L170)
 
 ***
 
 ### assets?
 
-> `optional` **assets**: readonly [`Asset`](../../../type-aliases/Asset.md)[]
+> `optional` **assets**: readonly `AssetInput`[]
 
-Defined in: [packages/algo-ts/src/itxn.ts:156](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/itxn.ts#L156)
+Defined in: [packages/algo-ts/src/itxn.ts:169](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/itxn.ts#L169)
 
 ***
 
@@ -66,7 +66,7 @@ Defined in: [packages/algo-ts/src/itxn.ts:156](https://github.com/algorandfounda
 
 > `optional` **clearStateProgram**: [`bytes`](../../../type-aliases/bytes.md) \| readonly [`bytes`](../../../type-aliases/bytes.md)[]
 
-Defined in: [packages/algo-ts/src/itxn.ts:147](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/itxn.ts#L147)
+Defined in: [packages/algo-ts/src/itxn.ts:160](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/itxn.ts#L160)
 
 ***
 
@@ -74,7 +74,7 @@ Defined in: [packages/algo-ts/src/itxn.ts:147](https://github.com/algorandfounda
 
 > `optional` **extraProgramPages**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:153](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/itxn.ts#L153)
+Defined in: [packages/algo-ts/src/itxn.ts:166](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/itxn.ts#L166)
 
 ***
 
@@ -82,7 +82,7 @@ Defined in: [packages/algo-ts/src/itxn.ts:153](https://github.com/algorandfounda
 
 > `optional` **fee**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:44](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/itxn.ts#L44)
+Defined in: [packages/algo-ts/src/itxn.ts:47](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/itxn.ts#L47)
 
 microalgos
 
@@ -92,11 +92,39 @@ microalgos
 
 ***
 
+### firstValid?
+
+> `optional` **firstValid**: [`uint64`](../../../type-aliases/uint64.md)
+
+Defined in: [packages/algo-ts/src/itxn.ts:52](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/itxn.ts#L52)
+
+round number
+
+#### Inherited from
+
+[`CommonTransactionFields`](CommonTransactionFields.md).[`firstValid`](CommonTransactionFields.md#firstvalid)
+
+***
+
+### firstValidTime?
+
+> `optional` **firstValidTime**: [`uint64`](../../../type-aliases/uint64.md)
+
+Defined in: [packages/algo-ts/src/itxn.ts:57](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/itxn.ts#L57)
+
+UNIX timestamp of block before txn.FirstValid. Fails if negative
+
+#### Inherited from
+
+[`CommonTransactionFields`](CommonTransactionFields.md).[`firstValidTime`](CommonTransactionFields.md#firstvalidtime)
+
+***
+
 ### globalNumBytes?
 
 > `optional` **globalNumBytes**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:150](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/itxn.ts#L150)
+Defined in: [packages/algo-ts/src/itxn.ts:163](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/itxn.ts#L163)
 
 ***
 
@@ -104,7 +132,7 @@ Defined in: [packages/algo-ts/src/itxn.ts:150](https://github.com/algorandfounda
 
 > `optional` **globalNumUint**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:149](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/itxn.ts#L149)
+Defined in: [packages/algo-ts/src/itxn.ts:162](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/itxn.ts#L162)
 
 ***
 
@@ -112,7 +140,7 @@ Defined in: [packages/algo-ts/src/itxn.ts:149](https://github.com/algorandfounda
 
 > `optional` **lease**: [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:54](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/itxn.ts#L54)
+Defined in: [packages/algo-ts/src/itxn.ts:67](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/itxn.ts#L67)
 
 32 byte lease value
 
@@ -126,7 +154,7 @@ Defined in: [packages/algo-ts/src/itxn.ts:54](https://github.com/algorandfoundat
 
 > `optional` **localNumBytes**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:152](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/itxn.ts#L152)
+Defined in: [packages/algo-ts/src/itxn.ts:165](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/itxn.ts#L165)
 
 ***
 
@@ -134,7 +162,7 @@ Defined in: [packages/algo-ts/src/itxn.ts:152](https://github.com/algorandfounda
 
 > `optional` **localNumUint**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:151](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/itxn.ts#L151)
+Defined in: [packages/algo-ts/src/itxn.ts:164](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/itxn.ts#L164)
 
 ***
 
@@ -142,7 +170,7 @@ Defined in: [packages/algo-ts/src/itxn.ts:151](https://github.com/algorandfounda
 
 > `optional` **note**: `string` \| [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:49](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/itxn.ts#L49)
+Defined in: [packages/algo-ts/src/itxn.ts:62](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/itxn.ts#L62)
 
 Any data up to 1024 bytes
 
@@ -156,15 +184,15 @@ Any data up to 1024 bytes
 
 > `optional` **onCompletion**: [`uint64`](../../../type-aliases/uint64.md) \| [`OnCompleteAction`](../../arc4/enumerations/OnCompleteAction.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:148](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/itxn.ts#L148)
+Defined in: [packages/algo-ts/src/itxn.ts:161](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/itxn.ts#L161)
 
 ***
 
 ### rekeyTo?
 
-> `optional` **rekeyTo**: `string` \| [`Account`](../../../type-aliases/Account.md)
+> `optional` **rekeyTo**: `AccountInput`
 
-Defined in: [packages/algo-ts/src/itxn.ts:59](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/itxn.ts#L59)
+Defined in: [packages/algo-ts/src/itxn.ts:72](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/itxn.ts#L72)
 
 32 byte Sender's new AuthAddr
 
@@ -176,9 +204,9 @@ Defined in: [packages/algo-ts/src/itxn.ts:59](https://github.com/algorandfoundat
 
 ### sender?
 
-> `optional` **sender**: `string` \| [`Account`](../../../type-aliases/Account.md)
+> `optional` **sender**: `AccountInput`
 
-Defined in: [packages/algo-ts/src/itxn.ts:39](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/itxn.ts#L39)
+Defined in: [packages/algo-ts/src/itxn.ts:42](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/itxn.ts#L42)
 
 32 byte address
 

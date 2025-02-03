@@ -8,7 +8,7 @@
 
 > **gaid**(`a`): [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/op.ts:932](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/op.ts#L932)
+Defined in: [packages/algo-ts/src/op.ts:932](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/op.ts#L932)
 
 ID of the asset or application created in the Ath transaction of the current group
 `gaids` fails unless the requested transaction created an asset or application and A < GroupIndex.

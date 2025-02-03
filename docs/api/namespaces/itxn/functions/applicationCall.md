@@ -6,9 +6,9 @@
 
 # Function: applicationCall()
 
-> **applicationCall**(`fields`): [`ApplicationCallItxnParams`](../type-aliases/ApplicationCallItxnParams.md)
+> **applicationCall**(`fields`): [`ApplicationCallItxnParams`](../interfaces/ApplicationCallItxnParams.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:200](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/itxn.ts#L200)
+Defined in: [packages/algo-ts/src/itxn.ts:236](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/itxn.ts#L236)
 
 ## Parameters
 
@@ -18,4 +18,4 @@ Defined in: [packages/algo-ts/src/itxn.ts:200](https://github.com/algorandfounda
 
 ## Returns
 
-[`ApplicationCallItxnParams`](../type-aliases/ApplicationCallItxnParams.md)
+[`ApplicationCallItxnParams`](../interfaces/ApplicationCallItxnParams.md)

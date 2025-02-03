@@ -10,7 +10,7 @@
 
 > **Application**(): [`Application`](../type-aliases/Application.md)
 
-Defined in: [packages/algo-ts/src/reference.ts:199](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/reference.ts#L199)
+Defined in: [packages/algo-ts/src/reference.ts:199](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/reference.ts#L199)
 
 ### Returns
 
@@ -20,7 +20,7 @@ Defined in: [packages/algo-ts/src/reference.ts:199](https://github.com/algorandf
 
 > **Application**(`applicationId`): [`Application`](../type-aliases/Application.md)
 
-Defined in: [packages/algo-ts/src/reference.ts:200](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/reference.ts#L200)
+Defined in: [packages/algo-ts/src/reference.ts:200](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/reference.ts#L200)
 
 ### Parameters
 

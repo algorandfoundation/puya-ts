@@ -8,7 +8,7 @@
 
 > **vrfVerify**(`s`, `a`, `b`, `c`): readonly \[[`bytes`](../../../type-aliases/bytes.md), `boolean`\]
 
-Defined in: [packages/algo-ts/src/op.ts:4025](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/op.ts#L4025)
+Defined in: [packages/algo-ts/src/op.ts:4025](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/op.ts#L4025)
 
 Verify the proof B of message A against pubkey C. Returns vrf output and verification flag.
 `VrfAlgorand` is the VRF used in Algorand. It is ECVRF-ED25519-SHA512-Elligator2, specified in the IETF internet draft [draft-irtf-cfrg-vrf-03](https://datatracker.ietf.org/doc/draft-irtf-cfrg-vrf/03/).

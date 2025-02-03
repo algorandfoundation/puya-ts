@@ -9,29 +9,29 @@
 ## Interfaces
 
 - [ApplicationCallFields](interfaces/ApplicationCallFields.md)
+- [ApplicationCallItxnParams](interfaces/ApplicationCallItxnParams.md)
 - [ApplicationInnerTxn](interfaces/ApplicationInnerTxn.md)
 - [AssetConfigFields](interfaces/AssetConfigFields.md)
 - [AssetConfigInnerTxn](interfaces/AssetConfigInnerTxn.md)
+- [AssetConfigItxnParams](interfaces/AssetConfigItxnParams.md)
 - [AssetFreezeFields](interfaces/AssetFreezeFields.md)
 - [AssetFreezeInnerTxn](interfaces/AssetFreezeInnerTxn.md)
+- [AssetFreezeItxnParams](interfaces/AssetFreezeItxnParams.md)
 - [AssetTransferFields](interfaces/AssetTransferFields.md)
 - [AssetTransferInnerTxn](interfaces/AssetTransferInnerTxn.md)
+- [AssetTransferItxnParams](interfaces/AssetTransferItxnParams.md)
 - [CommonTransactionFields](interfaces/CommonTransactionFields.md)
 - [KeyRegistrationFields](interfaces/KeyRegistrationFields.md)
 - [KeyRegistrationInnerTxn](interfaces/KeyRegistrationInnerTxn.md)
+- [KeyRegistrationItxnParams](interfaces/KeyRegistrationItxnParams.md)
 - [PaymentFields](interfaces/PaymentFields.md)
 - [PaymentInnerTxn](interfaces/PaymentInnerTxn.md)
+- [PaymentItxnParams](interfaces/PaymentItxnParams.md)
 
 ## Type Aliases
 
-- [ApplicationCallItxnParams](type-aliases/ApplicationCallItxnParams.md)
-- [AssetConfigItxnParams](type-aliases/AssetConfigItxnParams.md)
-- [AssetFreezeItxnParams](type-aliases/AssetFreezeItxnParams.md)
-- [AssetTransferItxnParams](type-aliases/AssetTransferItxnParams.md)
 - [InnerTransaction](type-aliases/InnerTransaction.md)
 - [InnerTxnList](type-aliases/InnerTxnList.md)
-- [KeyRegistrationItxnParams](type-aliases/KeyRegistrationItxnParams.md)
-- [PaymentItxnParams](type-aliases/PaymentItxnParams.md)
 - [TxnFor](type-aliases/TxnFor.md)
 
 ## Functions

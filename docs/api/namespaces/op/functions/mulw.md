@@ -8,7 +8,7 @@
 
 > **mulw**(`a`, `b`): readonly \[[`uint64`](../../../type-aliases/uint64.md), [`uint64`](../../../type-aliases/uint64.md)\]
 
-Defined in: [packages/algo-ts/src/op.ts:3348](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/op.ts#L3348)
+Defined in: [packages/algo-ts/src/op.ts:3348](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/op.ts#L3348)
 
 A times B as a 128-bit result in two uint64s. X is the high 64 bits, Y is the low
 

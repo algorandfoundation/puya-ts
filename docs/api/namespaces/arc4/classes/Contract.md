@@ -6,7 +6,7 @@
 
 # Class: Contract
 
-Defined in: [packages/algo-ts/src/arc4/index.ts:10](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/arc4/index.ts#L10)
+Defined in: [packages/algo-ts/src/arc4/index.ts:10](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/arc4/index.ts#L10)
 
 ## Extends
 
@@ -32,7 +32,7 @@ Defined in: [packages/algo-ts/src/arc4/index.ts:10](https://github.com/algorandf
 
 > `static` **isArc4**: `boolean` = `true`
 
-Defined in: [packages/algo-ts/src/arc4/index.ts:11](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/arc4/index.ts#L11)
+Defined in: [packages/algo-ts/src/arc4/index.ts:11](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/arc4/index.ts#L11)
 
 #### Overrides
 
@@ -44,7 +44,7 @@ Defined in: [packages/algo-ts/src/arc4/index.ts:11](https://github.com/algorandf
 
 > **approvalProgram**(): `boolean`
 
-Defined in: [packages/algo-ts/src/arc4/index.ts:13](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/arc4/index.ts#L13)
+Defined in: [packages/algo-ts/src/arc4/index.ts:13](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/arc4/index.ts#L13)
 
 #### Returns
 
@@ -60,7 +60,7 @@ Defined in: [packages/algo-ts/src/arc4/index.ts:13](https://github.com/algorandf
 
 > **clearStateProgram**(): `boolean` \| [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/base-contract.ts:9](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/base-contract.ts#L9)
+Defined in: [packages/algo-ts/src/base-contract.ts:8](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/base-contract.ts#L8)
 
 #### Returns
 

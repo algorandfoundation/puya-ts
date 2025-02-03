@@ -8,7 +8,7 @@
 
 > **exp**(`a`, `b`): [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/op.ts:877](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/op.ts#L877)
+Defined in: [packages/algo-ts/src/op.ts:877](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/op.ts#L877)
 
 A raised to the Bth power. Fail if A == B == 0 and on overflow
 

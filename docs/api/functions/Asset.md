@@ -10,7 +10,7 @@
 
 > **Asset**(): [`Asset`](../type-aliases/Asset.md)
 
-Defined in: [packages/algo-ts/src/reference.ts:106](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/reference.ts#L106)
+Defined in: [packages/algo-ts/src/reference.ts:106](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/reference.ts#L106)
 
 ### Returns
 
@@ -20,7 +20,7 @@ Defined in: [packages/algo-ts/src/reference.ts:106](https://github.com/algorandf
 
 > **Asset**(`assetId`): [`Asset`](../type-aliases/Asset.md)
 
-Defined in: [packages/algo-ts/src/reference.ts:107](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/reference.ts#L107)
+Defined in: [packages/algo-ts/src/reference.ts:107](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/reference.ts#L107)
 
 ### Parameters
 

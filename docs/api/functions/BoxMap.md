@@ -8,21 +8,27 @@
 
 > **BoxMap**\<`TKey`, `TValue`\>(`options`): [`BoxMap`](../type-aliases/BoxMap.md)\<`TKey`, `TValue`\>
 
-Defined in: [packages/algo-ts/src/box.ts:46](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/box.ts#L46)
+Defined in: [packages/algo-ts/src/box.ts:234](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/box.ts#L234)
+
+Creates a BoxMap proxy object offering methods of getting and setting a set of values stored in individual boxes indexed by a common key type
 
 ## Type Parameters
 
 • **TKey**
 
+The type of the value used to key each box. This key will be encoded to bytes and prefixed with `keyPrefix`
+
 • **TValue**
+
+The type of the data stored in the box. This value will be encoded to bytes when stored and decoded on retrieval.
 
 ## Parameters
 
 ### options
 
-#### keyPrefix
+`CreateBoxMapOptions`
 
-`string` \| [`bytes`](../type-aliases/bytes.md)
+Options for creating the BoxMap proxy
 
 ## Returns
 
