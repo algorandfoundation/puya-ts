@@ -6,7 +6,7 @@
 
 # Class: StaticBytes\<TLength\>
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:315](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/arc4/encoded-types.ts#L315)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:315](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/arc4/encoded-types.ts#L315)
 
 ## Extends
 
@@ -26,7 +26,7 @@ Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:315](https://github.com/
 
 > **new StaticBytes**\<`TLength`\>(`value`?): [`StaticBytes`](StaticBytes.md)\<`TLength`\>
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:319](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/arc4/encoded-types.ts#L319)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:319](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/arc4/encoded-types.ts#L319)
 
 #### Parameters
 
@@ -50,7 +50,7 @@ Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:319](https://github.com/
 
 > **get** **bytes**(): [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:72](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/arc4/encoded-types.ts#L72)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:72](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/arc4/encoded-types.ts#L72)
 
 ##### Returns
 
@@ -68,7 +68,7 @@ Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:72](https://github.com/a
 
 > **get** **length**(): [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:139](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/arc4/encoded-types.ts#L139)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:139](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/arc4/encoded-types.ts#L139)
 
 Returns the current length of this array
 
@@ -88,7 +88,7 @@ Returns the current length of this array
 
 > **get** **native**(): [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:323](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/arc4/encoded-types.ts#L323)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:323](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/arc4/encoded-types.ts#L323)
 
 ##### Returns
 
@@ -100,7 +100,7 @@ Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:323](https://github.com/
 
 > **\[iterator\]**(): `IterableIterator`\<[`Byte`](Byte.md)\>
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:176](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/arc4/encoded-types.ts#L176)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:176](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/arc4/encoded-types.ts#L176)
 
 Returns an iterator for the items in this array
 
@@ -118,7 +118,7 @@ Returns an iterator for the items in this array
 
 > **at**(`index`): [`Byte`](Byte.md)
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:148](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/arc4/encoded-types.ts#L148)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:148](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/arc4/encoded-types.ts#L148)
 
 Returns the item at the given index.
 Negative indexes are taken from the end.
@@ -145,7 +145,7 @@ The index of the item to retrieve
 
 > **entries**(): `IterableIterator`\<readonly \[[`uint64`](../../../type-aliases/uint64.md), [`Byte`](Byte.md)\]\>
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:183](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/arc4/encoded-types.ts#L183)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:183](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/arc4/encoded-types.ts#L183)
 
 Returns an iterator for a tuple of the indexes and items in this array
 
@@ -163,7 +163,7 @@ Returns an iterator for a tuple of the indexes and items in this array
 
 > **keys**(): `IterableIterator`\<[`uint64`](../../../type-aliases/uint64.md)\>
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:190](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/arc4/encoded-types.ts#L190)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:190](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/arc4/encoded-types.ts#L190)
 
 Returns an iterator for the indexes in this array
 
@@ -183,7 +183,7 @@ Returns an iterator for the indexes in this array
 
 > **slice**(): [`DynamicArray`](DynamicArray.md)\<[`Byte`](Byte.md)\>
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:155](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/arc4/encoded-types.ts#L155)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:155](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/arc4/encoded-types.ts#L155)
 
 **`Internal`**
 
@@ -201,7 +201,7 @@ Create a new Dynamic array with all items from this array
 
 > **slice**(`end`): [`DynamicArray`](DynamicArray.md)\<[`Byte`](Byte.md)\>
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:161](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/arc4/encoded-types.ts#L161)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:161](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/arc4/encoded-types.ts#L161)
 
 **`Internal`**
 
@@ -228,7 +228,7 @@ An index in which to stop copying items.
 
 > **slice**(`start`, `end`): [`DynamicArray`](DynamicArray.md)\<[`Byte`](Byte.md)\>
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:168](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/arc4/encoded-types.ts#L168)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:168](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/arc4/encoded-types.ts#L168)
 
 **`Internal`**
 

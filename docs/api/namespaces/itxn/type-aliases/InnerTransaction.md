@@ -4,40 +4,8 @@
 
 [@algorandfoundation/algorand-typescript](../../../README.md) / [itxn](../README.md) / InnerTransaction
 
-# Type Alias: InnerTransaction\<TFields, TTransaction\>
+# Type Alias: InnerTransaction
 
-> **InnerTransaction**\<`TFields`, `TTransaction`\>: `object`
+> **InnerTransaction**: [`PaymentItxnParams`](../interfaces/PaymentItxnParams.md) \| [`KeyRegistrationItxnParams`](../interfaces/KeyRegistrationItxnParams.md) \| [`AssetConfigItxnParams`](../interfaces/AssetConfigItxnParams.md) \| [`AssetTransferItxnParams`](../interfaces/AssetTransferItxnParams.md) \| [`AssetFreezeItxnParams`](../interfaces/AssetFreezeItxnParams.md) \| [`ApplicationCallItxnParams`](../interfaces/ApplicationCallItxnParams.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:160](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/itxn.ts#L160)
-
-## Type Parameters
-
-• **TFields**
-
-• **TTransaction**
-
-## Type declaration
-
-### copy()
-
-#### Returns
-
-[`InnerTransaction`](InnerTransaction.md)\<`TFields`, `TTransaction`\>
-
-### set()
-
-#### Parameters
-
-##### p
-
-`Partial`\<`TFields`\>
-
-#### Returns
-
-`void`
-
-### submit()
-
-#### Returns
-
-`TTransaction`
+Defined in: [packages/algo-ts/src/itxn.ts:173](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/itxn.ts#L173)

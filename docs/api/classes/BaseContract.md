@@ -6,7 +6,7 @@
 
 # Class: `abstract` BaseContract
 
-Defined in: [packages/algo-ts/src/base-contract.ts:5](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/base-contract.ts#L5)
+Defined in: [packages/algo-ts/src/base-contract.ts:4](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/base-contract.ts#L4)
 
 ## Extended by
 
@@ -28,7 +28,7 @@ Defined in: [packages/algo-ts/src/base-contract.ts:5](https://github.com/algoran
 
 > `static` **isArc4**: `boolean` = `false`
 
-Defined in: [packages/algo-ts/src/base-contract.ts:6](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/base-contract.ts#L6)
+Defined in: [packages/algo-ts/src/base-contract.ts:5](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/base-contract.ts#L5)
 
 ## Methods
 
@@ -36,7 +36,7 @@ Defined in: [packages/algo-ts/src/base-contract.ts:6](https://github.com/algoran
 
 > `abstract` **approvalProgram**(): `boolean` \| [`uint64`](../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/base-contract.ts:8](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/base-contract.ts#L8)
+Defined in: [packages/algo-ts/src/base-contract.ts:7](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/base-contract.ts#L7)
 
 #### Returns
 
@@ -48,7 +48,7 @@ Defined in: [packages/algo-ts/src/base-contract.ts:8](https://github.com/algoran
 
 > **clearStateProgram**(): `boolean` \| [`uint64`](../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/base-contract.ts:9](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/base-contract.ts#L9)
+Defined in: [packages/algo-ts/src/base-contract.ts:8](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/base-contract.ts#L8)
 
 #### Returns
 

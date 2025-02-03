@@ -8,19 +8,23 @@
 
 > **Box**\<`TValue`\>(`options`): [`Box`](../type-aliases/Box.md)\<`TValue`\>
 
-Defined in: [packages/algo-ts/src/box.ts:42](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/box.ts#L42)
+Defined in: [packages/algo-ts/src/box.ts:214](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/box.ts#L214)
+
+Creates a Box proxy object offering methods of getting and setting the value stored in a single box.
 
 ## Type Parameters
 
 • **TValue**
 
+The type of the data stored in the box. This value will be encoded to bytes when stored and decoded on retrieval.
+
 ## Parameters
 
 ### options
 
-#### key
+`CreateBoxOptions`
 
-`string` \| [`bytes`](../type-aliases/bytes.md)
+Options for creating the Box proxy
 
 ## Returns
 

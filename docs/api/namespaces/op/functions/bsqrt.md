@@ -8,7 +8,7 @@
 
 > **bsqrt**(`a`): [`biguint`](../../../type-aliases/biguint.md)
 
-Defined in: [packages/algo-ts/src/op.ts:697](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/op.ts#L697)
+Defined in: [packages/algo-ts/src/op.ts:697](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/op.ts#L697)
 
 The largest integer I such that I^2 <= A. A and I are interpreted as big-endian unsigned integers
 

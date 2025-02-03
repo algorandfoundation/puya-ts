@@ -8,11 +8,15 @@
 
 > **Box**\<`TValue`\>: `object`
 
-Defined in: [packages/algo-ts/src/box.ts:42](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/box.ts#L42)
+Defined in: [packages/algo-ts/src/box.ts:214](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/box.ts#L214)
+
+A Box proxy
 
 ## Type Parameters
 
 • **TValue**
+
+The type of the data stored in the box.
 
 ## Type declaration
 
@@ -20,29 +24,47 @@ Defined in: [packages/algo-ts/src/box.ts:42](https://github.com/algorandfoundati
 
 > `readonly` **exists**: `boolean`
 
+Get a boolean indicating if the box exists or not
+
 ### key
 
 > `readonly` **key**: [`bytes`](bytes.md)
+
+Get the key used by this box proxy
 
 ### length
 
 > `readonly` **length**: [`uint64`](uint64.md)
 
+Returns the length of the box, or error if the box does not exist
+
 ### value
 
 > **value**: `TValue`
 
+Get or set the value stored in the box
+
+Get will error if the box does not exist
+
 ### delete()
+
+Delete the box associated with this proxy if it exists.
 
 #### Returns
 
 `boolean`
 
+True if the box existed and was deleted, else false
+
 ### get()
+
+Get the value stored in the box, or return a specified default value if the box does not exist
 
 #### Parameters
 
 ##### options
+
+Options to specify a default value to be returned if no other value exists
 
 ###### default
 
@@ -52,8 +74,16 @@ Defined in: [packages/algo-ts/src/box.ts:42](https://github.com/algorandfoundati
 
 `TValue`
 
+The value if the box exists, else the default value
+
 ### maybe()
+
+Get the value stored in the box if available, and a boolean indicating if the box exists.
+
+If the box does not exist, the value returned at position 0 is _undocumented_ and should not be relied on to have a specific value.
 
 #### Returns
 
 readonly \[`TValue`, `boolean`\]
+
+A tuple with the first item being the box value, and the second item being a boolean indicating if the box exists.
