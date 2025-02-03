@@ -8,7 +8,7 @@
 
 > **submitGroup**\<`TFields`\>(...`transactionFields`): [`TxnFor`](../type-aliases/TxnFor.md)\<`TFields`\>
 
-Defined in: [packages/algo-ts/src/itxn.ts:182](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/itxn.ts#L182)
+Defined in: [packages/algo-ts/src/itxn.ts:218](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/itxn.ts#L218)
 
 ## Type Parameters
 

@@ -8,7 +8,7 @@
 
 > **contract**(`options`): \<`T`\>(`contract`, `ctx`) => `T`
 
-Defined in: [packages/algo-ts/src/base-contract.ts:77](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/base-contract.ts#L77)
+Defined in: [packages/algo-ts/src/base-contract.ts:76](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/base-contract.ts#L76)
 
 ## Parameters
 
@@ -22,7 +22,7 @@ Defined in: [packages/algo-ts/src/base-contract.ts:77](https://github.com/algora
 
 ### Type Parameters
 
-• **T** *extends* `ConstructorFor`\<[`Contract`](../namespaces/arc4/classes/Contract.md)\>
+• **T** *extends* `ConstructorFor`\<[`BaseContract`](../classes/BaseContract.md)\>
 
 ### Parameters
 

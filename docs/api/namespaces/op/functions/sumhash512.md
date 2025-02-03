@@ -8,7 +8,7 @@
 
 > **sumhash512**(`a`): [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/op.ts:3448](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/op.ts#L3448)
+Defined in: [packages/algo-ts/src/op.ts:3448](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/op.ts#L3448)
 
 sumhash512 of value A, yields [64]byte
 

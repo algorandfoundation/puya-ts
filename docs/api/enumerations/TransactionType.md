@@ -6,7 +6,7 @@
 
 # Enumeration: TransactionType
 
-Defined in: [packages/algo-ts/src/transactions.ts:8](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/transactions.ts#L8)
+Defined in: [packages/algo-ts/src/transactions.ts:8](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/transactions.ts#L8)
 
 The different transaction types available in a transaction
 
@@ -16,7 +16,7 @@ The different transaction types available in a transaction
 
 > **ApplicationCall**: `6`
 
-Defined in: [packages/algo-ts/src/transactions.ts:32](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/transactions.ts#L32)
+Defined in: [packages/algo-ts/src/transactions.ts:32](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/transactions.ts#L32)
 
 An Application Call transaction
 
@@ -26,7 +26,7 @@ An Application Call transaction
 
 > **AssetConfig**: `3`
 
-Defined in: [packages/algo-ts/src/transactions.ts:20](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/transactions.ts#L20)
+Defined in: [packages/algo-ts/src/transactions.ts:20](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/transactions.ts#L20)
 
 An Asset Config transaction
 
@@ -36,7 +36,7 @@ An Asset Config transaction
 
 > **AssetFreeze**: `5`
 
-Defined in: [packages/algo-ts/src/transactions.ts:28](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/transactions.ts#L28)
+Defined in: [packages/algo-ts/src/transactions.ts:28](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/transactions.ts#L28)
 
 An Asset Freeze transaction
 
@@ -46,7 +46,7 @@ An Asset Freeze transaction
 
 > **AssetTransfer**: `4`
 
-Defined in: [packages/algo-ts/src/transactions.ts:24](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/transactions.ts#L24)
+Defined in: [packages/algo-ts/src/transactions.ts:24](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/transactions.ts#L24)
 
 An Asset Transfer transaction
 
@@ -56,7 +56,7 @@ An Asset Transfer transaction
 
 > **KeyRegistration**: `2`
 
-Defined in: [packages/algo-ts/src/transactions.ts:16](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/transactions.ts#L16)
+Defined in: [packages/algo-ts/src/transactions.ts:16](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/transactions.ts#L16)
 
 A Key Registration transaction
 
@@ -66,6 +66,6 @@ A Key Registration transaction
 
 > **Payment**: `1`
 
-Defined in: [packages/algo-ts/src/transactions.ts:12](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/transactions.ts#L12)
+Defined in: [packages/algo-ts/src/transactions.ts:12](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/transactions.ts#L12)
 
 A Payment transaction

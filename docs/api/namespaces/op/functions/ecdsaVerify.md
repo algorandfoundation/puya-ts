@@ -8,7 +8,7 @@
 
 > **ecdsaVerify**(`v`, `a`, `b`, `c`, `d`, `e`): `boolean`
 
-Defined in: [packages/algo-ts/src/op.ts:849](https://github.com/algorandfoundation/puya-ts/blob/5bdb536fcbeffa6fe079b274d09cae785c8fb7b7/packages/algo-ts/src/op.ts#L849)
+Defined in: [packages/algo-ts/src/op.ts:849](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/op.ts#L849)
 
 for (data A, signature B, C and pubkey D, E) verify the signature of the data against the pubkey => {0 or 1}
 The 32 byte Y-component of a public key is the last element on the stack, preceded by X-component of a pubkey, preceded by S and R components of a signature, preceded by the data that is fifth element on the stack. All values are big-endian encoded. The signed data must be 32 bytes long, and signatures in lower-S form are only accepted.
