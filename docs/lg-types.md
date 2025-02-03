@@ -7,12 +7,12 @@ ARC4 defines an Application Binary Interface (ABI) for how data should be passed
 ## AVM Types
 
 The most basic [types on the AVM](https://developer.algorand.org/docs/get-details/dapps/avm/teal/specification/#stack-types)
-are `uint64` and `bytes[]`, representing unsigned 64-bit integers and byte arrays respectively.
+are `uint64` and `bytes`, representing unsigned 64-bit integers and byte arrays respectively.
 These are represented by [`uint64`](./#uint64) and [`bytes`](./#bytes) in Algorand TypeScript.
 
 There are further "bounded" types supported by the AVM, which are backed by these two simple primitives.
 For example, `biguint` represents a variably sized (up to 512-bits), unsigned integer, but is actually
-backed by a `bytes[]`. This is represented by [`biguint`](./#biguint) in Algorand TypeScript.
+backed by a `byte[]`. This is represented by [`biguint`](./#biguint) in Algorand TypeScript.
 
 ### Uint64
 
@@ -65,7 +65,7 @@ const d = Uint64(a * x)
 
 ### BigUint
 
-`biguint` represents an unsigned integer of up to 512-bit. The leading `0` padding is variable and not guaranteed. Operations made using a `biguint` are more expensive in terms of [opcode budget](https://developer.algorand.org/docs/get-details/dapps/avm/teal/#dynamic-operational-cost-of-teal-opcodes) by an order of magnitude, as such - the `biguint` type should only be used when dealing with integers which are larger than 64-bit. A `biguint` can be declared with a bigint literal (A number with an `n` suffix) and a type annotation of `biguint`, or by using the `BigUint` factory method. The same quirks of the `uint64` type apply here with regards to required type annotations.
+`biguint` represents an unsigned integer of up to 512-bit. The leading `0` padding is variable and not guaranteed. Operations made using a `biguint` are more expensive in terms of [opcode budget](https://developer.algorand.org/docs/get-details/dapps/avm/teal/#dynamic-operational-cost-of-teal-opcodes) by an order of magnitude, as such - the `biguint` type should only be used when dealing with integers which are larger than 64-bit. A `biguint` can be declared with a bigint literal (A number with an `n` suffix) and a type annotation of `biguint`, or by using the `BigUint` factory method. The same constraints of the `uint64` type apply here with regards to required type annotations.
 
 ```ts
 import {BigUint, bigint } from "@algorandfoundation/algorand-typescript";

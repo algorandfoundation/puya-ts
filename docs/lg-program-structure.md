@@ -127,7 +127,7 @@ class Arc4HybridAlgo extends Contract {
 
 ## BaseContract
 
-If ARC4 routing and/or interoperability is not required, a contract can extend the `BaseContract` type which gives full control to the developer to implement the approval and clear state programs. If this type is extended directly it will not be possible to output ARC-32 or ARC-56 spec files and related artifacts. Transaction arguments will also need to be decoded manually.
+If ARC4 routing and/or interoperability is not required, a contract can extend the `BaseContract` type which gives full control to the developer to implement the approval and clear state programs. If this type is extended directly it will not be possible to output ARC-32 or ARC-56 app spec files and related artifacts. Transaction arguments will also need to be decoded manually.
 
 ```ts
 import { BaseContract, log, op } from '@algorandfoundation/algorand-typescript'
