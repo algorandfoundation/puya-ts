@@ -9,10 +9,10 @@ import type { DeliberateAny } from '../typescript-helpers'
 
 export { base32ToUint8Array, uint8ArrayToBase32 } from './base-32'
 
-class InvariantError extends Error {}
-export function invariant(condition: unknown, message: string): asserts condition {
+class InvariantError extends InternalError {}
+export function invariant(condition: unknown, message: string, sourceLocation?: SourceLocation): asserts condition {
   if (!condition) {
-    throw new InvariantError(message)
+    throw new InvariantError(message, { sourceLocation })
   }
 }
 
