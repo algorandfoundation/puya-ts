@@ -1,0 +1,33 @@
+contract MatchExprAlgo
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  testMatches(x: uint64): void
+  {
+    xObj: { x: uint64 } = { x: x }
+    assert(xObj.x == 5, comment=x should be 5)
+    assert(xObj.x > 4)
+    assert(xObj.x < 6)
+    assert(xObj.x >= 5)
+    assert(xObj.x <= 5)
+    xArray: WArray = new WArray(x)
+    assert(xArray.length == 1 and xArray[0] == 5)
+    assert(xArray.length == 1 and xArray[0] > 4)
+    assert(xArray.length == 1 and xArray[0] < 6)
+    assert(xArray.length == 1 and xArray[0] >= 5)
+    assert(xArray.length == 1 and xArray[0] <= 5)
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

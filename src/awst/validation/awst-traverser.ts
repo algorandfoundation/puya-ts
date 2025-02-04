@@ -10,6 +10,7 @@ import type {
   ArrayExtend,
   ArrayLength,
   ArrayPop,
+  ArrayReplace,
   AssertExpression,
   AssignmentExpression,
   AssignmentStatement,
@@ -102,6 +103,12 @@ export class FunctionTraverser implements ExpressionVisitor<void>, StatementVisi
 
   visitArrayLength(expression: ArrayLength): void {
     expression.array.accept(this)
+  }
+
+  visitArrayReplace(expression: ArrayReplace): void {
+    expression.base.accept(this)
+    expression.index.accept(this)
+    expression.value.accept(this)
   }
 
   visitGoto(statement: Goto): void {}

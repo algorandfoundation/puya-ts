@@ -1,17 +1,14 @@
 import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
-import { UInt64BinaryOperator } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import type { wtypes } from '../../../awst/wtypes'
-
-import { logger } from '../../../logger'
 import type { PType } from '../../ptypes'
 import { numberPType, uint64PType } from '../../ptypes'
 import { instanceEb } from '../../type-registry'
 import type { NodeBuilder } from '../index'
 import { FunctionBuilder } from '../index'
 import { parseFunctionArgs } from '../util/arg-parsing'
-import { getBigIntOrUint64Expr } from '../util/get-bigint-or-uint64-expr'
+import { translateNegativeIndex } from '../util/translate-negative-index'
 
 export class AtFunctionBuilder extends FunctionBuilder {
   constructor(
@@ -34,40 +31,11 @@ export class AtFunctionBuilder extends FunctionBuilder {
       argSpec: (a) => [a.required(uint64PType, numberPType)],
     })
 
-    const indexParam = getBigIntOrUint64Expr(index)
-    let indexExpr: Expression
-
-    if (typeof indexParam === 'bigint') {
-      if (typeof this.exprLength === 'bigint') {
-        let indexValue = indexParam < 0 ? this.exprLength + indexParam : indexParam
-        if (indexValue < 0n || indexValue >= this.exprLength) {
-          logger.error(index.sourceLocation, 'Index access out of bounds')
-          indexValue = 0n
-        }
-        indexExpr = nodeFactory.uInt64Constant({
-          value: indexValue,
-          sourceLocation: index.sourceLocation,
-        })
-      } else {
-        indexExpr = nodeFactory.uInt64BinaryOperation({
-          op: UInt64BinaryOperator.sub,
-          left: this.exprLength,
-          right: nodeFactory.uInt64Constant({
-            value: indexParam * -1n,
-            sourceLocation: index.sourceLocation,
-          }),
-          sourceLocation: index.sourceLocation,
-        })
-      }
-    } else {
-      indexExpr = indexParam
-    }
-
     return instanceEb(
       nodeFactory.indexExpression({
         base: this.expr,
         sourceLocation: sourceLocation,
-        index: indexExpr,
+        index: translateNegativeIndex(this.exprLength, index),
         wtype: this.itemPType.wtype,
       }),
       this.itemPType,

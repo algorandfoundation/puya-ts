@@ -578,7 +578,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
         // Narrow array literal types to array type
         codeInvariant(
           sourceType.items.every((i) =>
-            this.buildAssignmentExpressionType(targetType.itemType, i, sourceLocation).equals(targetType.itemType),
+            this.buildAssignmentExpressionType(targetType.elementType, i, sourceLocation).equals(targetType.elementType),
           ),
           errorMessage,
           sourceLocation,

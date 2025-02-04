@@ -17,13 +17,16 @@ contract NativeArraysAlgo
   
   doThings(): void
   {
-    a: WArray = new WArray("a", "b", "c")
-    c: WArray = a
     arr: WArray = this.buildArray()
-    arr: WArray = arr.concat(new WArray(4))
+    assert(arr.length == 4 and arr[0] == 1 and arr[1] == 2 and arr[2] == 3 and arr[3] == 4, comment=assert target is match for conditions)
+    arr: WArray = arr.concat(new WArray(5))
+    assert(arr.length == 5 and arr[0] == 1 and arr[1] == 2 and arr[2] == 3 and arr[3] == 4 and arr[4] == 5, comment=assert target is match for conditions)
     top: uint64 = arr[arr.length - 1]
+    assert(top == 5)
     arr: WArray = arr.slice(0, -1)
-    arr: WArray = arr
+    assert(arr.length == 4 and arr[0] == 1 and arr[1] == 2 and arr[2] == 3 and arr[3] == 4, comment=assert target is match for conditions)
+    arr: WArray = arr.with(1, 10)
+    assert(arr.length == 4 and arr[0] == 1 and arr[1] == 10 and arr[2] == 3 and arr[3] == 4, comment=assert target is match for conditions)
   }
   
   __algots__.defaultCreate(): void

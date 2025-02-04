@@ -89,7 +89,15 @@ export class BytesFunctionBuilder extends FunctionBuilder {
       callLocation: sourceLocation,
       funcName: 'Bytes',
       argSpec: (a) => [
-        a.optional(numberPType, bigIntPType, uint64PType, biguintPType, stringPType, bytesPType, new ArrayPType({ itemType: uint64PType })),
+        a.optional(
+          numberPType,
+          bigIntPType,
+          uint64PType,
+          biguintPType,
+          stringPType,
+          bytesPType,
+          new ArrayPType({ elementType: uint64PType }),
+        ),
       ],
     })
     const empty = nodeFactory.bytesConstant({

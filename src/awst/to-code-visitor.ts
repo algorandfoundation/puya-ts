@@ -151,6 +151,9 @@ export class ToCodeVisitor
   visitArrayLength(expression: nodes.ArrayLength): string {
     return `${expression.array.accept(this)}.length`
   }
+  visitArrayReplace(expression: nodes.ArrayReplace): string {
+    return `${expression.base.accept(this)}.with(${expression.index.accept(this)}, ${expression.value.accept(this)})`
+  }
   visitARC4Decode(expression: nodes.ARC4Decode): string {
     return `ARC4_DECODE(${expression.value.accept(this)})`
   }

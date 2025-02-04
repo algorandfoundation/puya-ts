@@ -295,6 +295,20 @@ export class ArrayPop extends Expression {
     return visitor.visitArrayPop(this)
   }
 }
+export class ArrayReplace extends Expression {
+  constructor(props: Props<ArrayReplace>) {
+    super(props)
+    this.base = props.base
+    this.index = props.index
+    this.value = props.value
+  }
+  base: Expression
+  index: Expression
+  value: Expression
+  accept<T>(visitor: ExpressionVisitor<T>): T {
+    return visitor.visitArrayReplace(this)
+  }
+}
 export class ArrayExtend extends Expression {
   constructor(props: Props<ArrayExtend>) {
     super(props)
@@ -1391,6 +1405,7 @@ export const concreteNodes = {
   copy: Copy,
   arrayConcat: ArrayConcat,
   arrayPop: ArrayPop,
+  arrayReplace: ArrayReplace,
   arrayExtend: ArrayExtend,
   aRC4Decode: ARC4Decode,
   intrinsicCall: IntrinsicCall,
@@ -1482,6 +1497,7 @@ export interface ExpressionVisitor<T> {
   visitCopy(expression: Copy): T
   visitArrayConcat(expression: ArrayConcat): T
   visitArrayPop(expression: ArrayPop): T
+  visitArrayReplace(expression: ArrayReplace): T
   visitArrayExtend(expression: ArrayExtend): T
   visitARC4Decode(expression: ARC4Decode): T
   visitIntrinsicCall(expression: IntrinsicCall): T

@@ -34,9 +34,9 @@ function getArrayConcatType(left: PType, right: PType, sourceLocation: SourceLoc
     }
   } else if (left instanceof ArrayPType || left instanceof ArrayLiteralPType) {
     if (right instanceof ArrayPType || right instanceof ArrayLiteralPType) {
-      sameElementType(left.itemType, right.itemType, sourceLocation)
+      sameElementType(left.elementType, right.elementType, sourceLocation)
       return new ArrayPType({
-        itemType: left.itemType,
+        elementType: left.elementType,
       })
     }
   }

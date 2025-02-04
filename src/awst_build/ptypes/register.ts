@@ -38,6 +38,8 @@ import { IterableIteratorExpressionBuilder } from '../eb/iterable-iterator-expre
 import { ObjectExpressionBuilder } from '../eb/literal/object-expression-builder'
 import { LogFunctionBuilder } from '../eb/log-function-builder'
 import { LogicSigClassBuilder, LogicSigOptionsDecoratorBuilder } from '../eb/logic-sig-builder'
+import { MatchFunctionBuilder } from '../eb/match-function-builder'
+import { MutableArrayClassBuilder, MutableArrayExpressionBuilder } from '../eb/mutable-arrays'
 import { NamespaceBuilder } from '../eb/namespace-builder'
 import { NativeArrayExpressionBuilder } from '../eb/native-array-expression-builder'
 import { NeverExpressionBuilder } from '../eb/never-expression-builder'
@@ -191,6 +193,10 @@ import {
   logFunction,
   logicSigOptionsDecorator,
   LogicSigPType,
+  matchFunction,
+  MutableArrayConstructor,
+  MutableArrayGeneric,
+  MutableArrayType,
   NamespacePType,
   neverPType,
   ObjectPType,
@@ -243,6 +249,9 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: TuplePType, instanceEb: TupleExpressionBuilder })
   typeRegistry.register({ ptype: ObjectPType, instanceEb: ObjectExpressionBuilder })
 
+  typeRegistry.register({ ptype: MutableArrayConstructor, singletonEb: MutableArrayClassBuilder })
+  typeRegistry.registerGeneric({ generic: MutableArrayGeneric, ptype: MutableArrayType, instanceEb: MutableArrayExpressionBuilder })
+
   // Unresolvable
   typeRegistry.registerGeneric({ ptype: GeneratorType, generic: GeneratorGeneric, instanceEb: UnresolvableExpressionBuilder })
   typeRegistry.registerGeneric({ ptype: PromiseType, generic: PromiseGeneric, instanceEb: UnresolvableExpressionBuilder })
@@ -258,6 +267,7 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: logFunction, singletonEb: LogFunctionBuilder })
   typeRegistry.register({ ptype: assertFunction, singletonEb: AssertFunctionBuilder })
   typeRegistry.register({ ptype: errFunction, singletonEb: ErrFunctionBuilder })
+  typeRegistry.register({ ptype: matchFunction, singletonEb: MatchFunctionBuilder })
   typeRegistry.register({ ptype: assertMatchFunction, singletonEb: AssertMatchFunctionBuilder })
   typeRegistry.register({ ptype: ensureBudgetFunction, singletonEb: EnsureBudgetFunctionBuilder })
   typeRegistry.register({ ptype: urangeFunction, singletonEb: UrangeFunctionBuilder })

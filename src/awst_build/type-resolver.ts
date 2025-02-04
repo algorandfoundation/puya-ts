@@ -275,7 +275,7 @@ export class TypeResolver {
       } else {
         const itemPType = this.resolveType(itemType, sourceLocation)
         return new ArrayPType({
-          itemType: itemPType,
+          elementType: itemPType,
           immutable: true,
         })
       }

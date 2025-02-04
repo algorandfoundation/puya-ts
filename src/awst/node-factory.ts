@@ -4,6 +4,7 @@ import { codeInvariant, instanceOfAny, invariant } from '../util'
 import type { Expression, Statement } from './nodes'
 import {
   ArrayLength,
+  ArrayReplace,
   AssignmentExpression,
   AssignmentStatement,
   BigUIntBinaryOperation,
@@ -260,6 +261,25 @@ const explicitNodeFactory = {
       array,
       sourceLocation,
       wtype: wtypes.uint64WType,
+    })
+  },
+  arrayReplace({
+    base,
+    index,
+    value,
+    sourceLocation,
+  }: {
+    base: Expression
+    index: Expression
+    value: Expression
+    sourceLocation: SourceLocation
+  }) {
+    return new ArrayReplace({
+      base,
+      index,
+      value,
+      sourceLocation,
+      wtype: base.wtype,
     })
   },
 } satisfies { [key in keyof ConcreteNodes]?: (...args: DeliberateAny[]) => DeliberateAny }

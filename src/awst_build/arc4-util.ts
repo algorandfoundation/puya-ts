@@ -51,7 +51,7 @@ export function isArc4EncodableType(ptype: PType): boolean {
   if (ptype.equals(stringPType)) return true
   if (ptype instanceof TuplePType) return ptype.items.every((i) => isArc4EncodableType(i))
   if (ptype instanceof ObjectPType) return ptype.orderedProperties().every(([, pt]) => isArc4EncodableType(pt))
-  if (ptype instanceof ArrayPType) return isArc4EncodableType(ptype.itemType)
+  if (ptype instanceof ArrayPType) return isArc4EncodableType(ptype.elementType)
   return false
 }
 export function ptypeToArc4EncodedType(ptype: TuplePType, sourceLocation: SourceLocation): ARC4TupleType
@@ -70,7 +70,7 @@ export function ptypeToArc4EncodedType(ptype: PType, sourceLocation: SourceLocat
   }
   if (ptype instanceof ArrayPType)
     return new DynamicArrayType({
-      elementType: ptypeToArc4EncodedType(ptype.itemType, sourceLocation),
+      elementType: ptypeToArc4EncodedType(ptype.elementType, sourceLocation),
       immutable: true,
     })
 

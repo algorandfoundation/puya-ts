@@ -7,7 +7,7 @@ import { ArrayPType, IterableIteratorType, TuplePType, UnionPType } from './inde
 
 export const getSequenceItemType = (sequence: PType, sequenceLocation: SourceLocation) => {
   if (sequence instanceof IterableIteratorType) return sequence.itemType
-  if (sequence instanceof ArrayPType) return sequence.itemType
+  if (sequence instanceof ArrayPType) return sequence.elementType
   if (sequence instanceof TuplePType) {
     codeInvariant(
       sequence.items.every((i) => i.equals(sequence.items[0])),

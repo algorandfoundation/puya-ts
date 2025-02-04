@@ -559,7 +559,7 @@ export class ArrayLiteralPType extends TransientType {
     return `${this.module}::[${this.items.map((i) => i).join(', ')}]`
   }
 
-  get itemType() {
+  get elementType() {
     return UnionPType.fromTypes(this.items)
   }
 
@@ -581,8 +581,8 @@ export class ArrayLiteralPType extends TransientType {
     const itemType = UnionPType.fromTypes(this.items)
 
     return new ArrayPType({
-      immutable: false,
-      itemType,
+      immutable: true,
+      elementType: itemType,
     })
   }
 
@@ -635,30 +635,30 @@ export class TuplePType extends PType {
   }
 }
 export class ArrayPType extends PType {
-  readonly itemType: PType
+  readonly elementType: PType
   readonly immutable: boolean
   readonly singleton = false
   readonly name: string
   readonly module: string = 'lib.d.ts'
   get fullName() {
-    return `${this.module}::Array<${this.itemType.fullName}>`
+    return `${this.module}::Array<${this.elementType.fullName}>`
   }
-  constructor(props: { itemType: PType; immutable?: boolean }) {
+  constructor(props: { elementType: PType; immutable?: boolean }) {
     super()
-    this.name = `Array<${props.itemType.name}>`
-    this.itemType = props.itemType
+    this.name = `Array<${props.elementType.name}>`
+    this.elementType = props.elementType
     this.immutable = props.immutable ?? true
   }
 
   get wtype() {
     return new wtypes.WArray({
-      itemType: this.itemType.wtypeOrThrow,
+      itemType: this.elementType.wtypeOrThrow,
       immutable: this.immutable,
     })
   }
 
   equals(other: PType): boolean {
-    return other instanceof ArrayPType && this.immutable === other.immutable && this.itemType.equals(other.itemType)
+    return other instanceof ArrayPType && this.immutable === other.immutable && this.elementType.equals(other.elementType)
   }
 }
 
@@ -1102,6 +1102,10 @@ export const assertMatchFunction = new LibFunctionType({
   name: 'assertMatch',
   module: Constants.utilModuleName,
 })
+export const matchFunction = new LibFunctionType({
+  name: 'match',
+  module: Constants.utilModuleName,
+})
 
 export class Uint64EnumMemberType extends PType {
   readonly wtype = wtypes.uint64WType
@@ -1418,3 +1422,48 @@ export const PolytypeClassMethodHelper = new LibFunctionType({
   name: 'class',
   module: Constants.polytypeModuleName,
 })
+
+export const MutableArrayConstructor = new LibClassType({
+  name: 'MutableArray',
+  module: Constants.mutableArrayModuleName,
+})
+export const MutableArrayGeneric = new GenericPType({
+  name: 'MutableArray',
+  module: Constants.mutableArrayModuleName,
+  parameterise: (typeArgs: PType[]): MutableArrayType => {
+    codeInvariant(typeArgs.length === 1, 'MutableArray type expects exactly one type parameter')
+    const [elementType] = typeArgs
+
+    return new MutableArrayType({ elementType: elementType })
+  },
+})
+export class MutableArrayType extends PType {
+  readonly module = Constants.mutableArrayModuleName
+  readonly immutable = false as const
+  readonly name: string
+  readonly singleton = false
+  readonly sourceLocation: SourceLocation | undefined
+  readonly wtype: wtypes.WArray
+  readonly elementType: PType
+
+  constructor({
+    elementType,
+    sourceLocation,
+    name,
+  }: {
+    elementType: PType
+    sourceLocation?: SourceLocation
+    name?: string
+    immutable?: boolean
+  }) {
+    super()
+    this.name = name ?? `MutableArray<${elementType}>`
+    this.sourceLocation = sourceLocation
+    this.elementType = elementType
+    this.wtype = new wtypes.WArray({
+      itemType: this.elementType.wtypeOrThrow,
+      sourceLocation: this.sourceLocation,
+      immutable: false,
+    })
+  }
+}

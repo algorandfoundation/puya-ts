@@ -1,14 +1,16 @@
+import { nodeFactory } from '../../awst/node-factory'
 import type { Expression } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
-import { logger } from '../../logger'
 import { invariant } from '../../util'
 import type { PType } from '../ptypes'
-import { ArrayPType } from '../ptypes'
+import { ArrayPType, numberPType, uint64PType } from '../ptypes'
 import type { InstanceBuilder, NodeBuilder } from './index'
 import { FunctionBuilder, InstanceExpressionBuilder } from './index'
 import { SliceFunctionBuilder } from './shared/slice-function-builder'
+import { parseFunctionArgs } from './util/arg-parsing'
 import { indexAccess } from './util/array/index-access'
 import { arrayLength } from './util/array/length'
+import { translateNegativeIndex } from './util/translate-negative-index'
 
 export class NativeArrayExpressionBuilder extends InstanceExpressionBuilder<ArrayPType> {
   constructor(expr: Expression, ptype: PType) {
@@ -43,7 +45,25 @@ class WithFunctionBuilder extends FunctionBuilder {
   }
 
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
-    logger.warn(sourceLocation, 'TODO: Return array replace node')
-    return this.arrayBuilder
+    const {
+      args: [index, newValue],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 0,
+      argSpec: (a) => [a.required(uint64PType, numberPType), a.required(this.arrayBuilder.ptype.elementType)],
+      callLocation: sourceLocation,
+      funcName: 'Array.with',
+    })
+
+    return new NativeArrayExpressionBuilder(
+      nodeFactory.arrayReplace({
+        base: this.arrayBuilder.resolve(),
+        value: newValue.resolve(),
+        index: translateNegativeIndex(arrayLength(this.arrayBuilder, index.sourceLocation).resolve(), index),
+        sourceLocation,
+      }),
+      this.arrayBuilder.ptype,
+    )
   }
 }

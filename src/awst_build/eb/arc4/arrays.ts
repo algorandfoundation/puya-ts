@@ -29,6 +29,8 @@ import { ClassBuilder, FunctionBuilder } from '../index'
 import { IterableIteratorExpressionBuilder } from '../iterable-iterator-expression-builder'
 import { AccountExpressionBuilder } from '../reference/account'
 import { AtFunctionBuilder } from '../shared/at-function-builder'
+import { ArrayPopFunctionBuilder } from '../shared/pop-function-builder'
+import { ArrayPushFunctionBuilder } from '../shared/push-function-builder'
 import { SliceFunctionBuilder } from '../shared/slice-function-builder'
 import { UInt64ExpressionBuilder } from '../uint64-expression-builder'
 import { requireExpressionOfType } from '../util'
@@ -434,64 +436,5 @@ export class AddressExpressionBuilder extends ArrayExpressionBuilder<StaticArray
         )
     }
     return super.memberAccess(name, sourceLocation)
-  }
-}
-
-export class ArrayPushFunctionBuilder extends FunctionBuilder {
-  constructor(private arrayBuilder: ArrayExpressionBuilder<DynamicArrayType>) {
-    super(arrayBuilder.sourceLocation)
-  }
-
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
-    const elementType = this.arrayBuilder.ptype.elementType
-    const {
-      args: [...items],
-    } = parseFunctionArgs({
-      args,
-      typeArgs,
-      funcName: 'push',
-      callLocation: sourceLocation,
-      genericTypeArgs: 0,
-      argSpec: (a) => [a.required(elementType), ...args.slice(1).map(() => a.required(elementType))],
-    })
-
-    return instanceEb(
-      nodeFactory.arrayExtend({
-        base: this.arrayBuilder.resolve(),
-        other: nodeFactory.tupleExpression({
-          items: items.map((i) => i.resolve()),
-          sourceLocation,
-        }),
-        sourceLocation,
-        wtype: this.arrayBuilder.ptype.wtype,
-      }),
-      this.arrayBuilder.ptype,
-    )
-  }
-}
-export class ArrayPopFunctionBuilder extends FunctionBuilder {
-  constructor(private arrayBuilder: ArrayExpressionBuilder<DynamicArrayType>) {
-    super(arrayBuilder.sourceLocation)
-  }
-
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
-    const elementType = this.arrayBuilder.ptype.elementType
-    parseFunctionArgs({
-      args,
-      typeArgs,
-      funcName: 'at',
-      callLocation: sourceLocation,
-      genericTypeArgs: 0,
-      argSpec: () => [],
-    })
-
-    return instanceEb(
-      nodeFactory.arrayPop({
-        base: this.arrayBuilder.resolve(),
-        sourceLocation,
-        wtype: elementType.wtype,
-      }),
-      elementType,
-    )
   }
 }

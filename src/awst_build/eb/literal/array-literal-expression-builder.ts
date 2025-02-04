@@ -9,6 +9,7 @@ import type { NodeBuilder } from '../index'
 import { InstanceBuilder } from '../index'
 import { TupleExpressionBuilder } from '../tuple-expression-builder'
 import { requireIntegerConstant } from '../util'
+import { arrayLength } from '../util/array/length'
 
 export class ArrayLiteralExpressionBuilder extends InstanceBuilder {
   readonly ptype: ArrayLiteralPType
@@ -47,6 +48,14 @@ export class ArrayLiteralExpressionBuilder extends InstanceBuilder {
     return this.items[indexNum]
   }
 
+  memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
+    switch (name) {
+      case 'length':
+        return arrayLength(this, sourceLocation)
+    }
+    return super.memberAccess(name, sourceLocation)
+  }
+
   resolveToPType(ptype: PTypeOrClass): InstanceBuilder {
     if (ptype instanceof TuplePType) {
       codeInvariant(
@@ -64,7 +73,7 @@ export class ArrayLiteralExpressionBuilder extends InstanceBuilder {
     if (ptype instanceof ArrayPType) {
       return new ArrayLiteralExpressionBuilder(
         this.sourceLocation,
-        this.items.map((i) => i.resolveToPType(ptype.itemType)),
+        this.items.map((i) => i.resolveToPType(ptype.elementType)),
       )
     }
     return super.resolveToPType(ptype)
@@ -76,7 +85,7 @@ export class ArrayLiteralExpressionBuilder extends InstanceBuilder {
       return ptype.items.every((itemType, index) => this.items[index].resolvableToPType(itemType))
     }
     if (ptype instanceof ArrayPType) {
-      return this.items.every((i) => i.resolveToPType(ptype.itemType))
+      return this.items.every((i) => i.resolveToPType(ptype.elementType))
     }
     return false
   }
