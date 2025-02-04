@@ -1,4 +1,4 @@
-import { NoImplementation } from '../impl/errors'
+import { NoImplementation } from '../internal/errors'
 import { biguint, BigUintCompat, bytes, BytesBacked, BytesCompat, StringCompat, uint64, Uint64Compat } from '../primitives'
 import { Account } from '../reference'
 

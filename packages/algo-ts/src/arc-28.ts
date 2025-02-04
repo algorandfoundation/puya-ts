@@ -1,5 +1,5 @@
-import { NoImplementation } from './impl/errors'
-import { DeliberateAny } from './typescript-helpers'
+import { NoImplementation } from './internal/errors'
+import { DeliberateAny } from './internal/typescript-helpers'
 
 /**
  * Emit an arc28 event log using either an ARC4Struct type or a named object type.

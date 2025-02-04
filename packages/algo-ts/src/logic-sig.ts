@@ -1,5 +1,5 @@
+import { ConstructorFor } from './internal/typescript-helpers'
 import { uint64 } from './primitives'
-import { ConstructorFor } from './typescript-helpers'
 
 export abstract class LogicSig {
   abstract program(): boolean | uint64

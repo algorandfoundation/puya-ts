@@ -1,5 +1,4 @@
-import { CodeError } from './impl/errors'
-import { BigUintCls, BytesCls, getNumber, Uint64Cls } from './impl/primitives'
+import { NoImplementation } from './internal/errors'
 
 export type Uint64Compat = uint64 | bigint | boolean | number
 export type BigUintCompat = bigint | bytes | number | boolean
@@ -34,10 +33,7 @@ export function Uint64(v: number): uint64
  */
 export function Uint64(v: boolean): uint64
 export function Uint64(v?: Uint64Compat | string): uint64 {
-  if (typeof v === 'string') {
-    v = BigInt(v)
-  }
-  return Uint64Cls.fromCompat(v ?? 0).asAlgoTs()
+  throw new NoImplementation()
 }
 
 /**
@@ -78,9 +74,7 @@ export function BigUint(v: string): biguint
  */
 export function BigUint(): biguint
 export function BigUint(v?: BigUintCompat | string): biguint {
-  if (typeof v === 'string') v = BigInt(v)
-  else if (v === undefined) v = 0n
-  return BigUintCls.fromCompat(v).asAlgoTs()
+  throw new NoImplementation()
 }
 
 export type bytes = {
@@ -142,22 +136,7 @@ export function Bytes(
   value?: BytesCompat | TemplateStringsArray | biguint | uint64 | Iterable<number>,
   ...replacements: BytesCompat[]
 ): bytes {
-  if (isTemplateStringsArray(value)) {
-    return BytesCls.fromInterpolation(value, replacements).asAlgoTs()
-  } else if (typeof value === 'bigint' || value instanceof BigUintCls) {
-    return BigUintCls.fromCompat(value).toBytes().asAlgoTs()
-  } else if (typeof value === 'number' || value instanceof Uint64Cls) {
-    return Uint64Cls.fromCompat(value).toBytes().asAlgoTs()
-  } else if (typeof value === 'object' && Symbol.iterator in value) {
-    const valueItems = Array.from(value).map((v) => getNumber(v))
-    const invalidValue = valueItems.find((v) => v < 0 && v > 255)
-    if (invalidValue) {
-      throw new CodeError(`Cannot convert ${invalidValue} to a byte`)
-    }
-    return new BytesCls(new Uint8Array(value)).asAlgoTs()
-  } else {
-    return BytesCls.fromCompat(value).asAlgoTs()
-  }
+  throw new NoImplementation()
 }
 
 /**
@@ -165,14 +144,14 @@ export function Bytes(
  * @param hex
  */
 Bytes.fromHex = (hex: string): bytes => {
-  return BytesCls.fromHex(hex).asAlgoTs()
+  throw new NoImplementation()
 }
 /**
  * Create a new bytes value from a base 64 encoded string
  * @param b64
  */
 Bytes.fromBase64 = (b64: string): bytes => {
-  return BytesCls.fromBase64(b64).asAlgoTs()
+  throw new NoImplementation()
 }
 
 /**
@@ -180,11 +159,7 @@ Bytes.fromBase64 = (b64: string): bytes => {
  * @param b32
  */
 Bytes.fromBase32 = (b32: string): bytes => {
-  return BytesCls.fromBase32(b32).asAlgoTs()
-}
-
-function isTemplateStringsArray(v: unknown): v is TemplateStringsArray {
-  return Boolean(v) && Array.isArray(v) && typeof v[0] === 'string'
+  throw new NoImplementation()
 }
 
 export interface BytesBacked {

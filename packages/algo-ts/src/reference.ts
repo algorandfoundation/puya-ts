@@ -1,4 +1,4 @@
-import { NoImplementation } from './impl/errors'
+import { NoImplementation } from './internal/errors'
 import { bytes, uint64 } from './primitives'
 
 export type Account = {

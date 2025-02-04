@@ -1,4 +1,4 @@
-import { NoImplementation } from './impl/errors'
+import { NoImplementation } from './internal/errors'
 import { uint64 } from './primitives'
 import type * as txnTypes from './transactions'
 
