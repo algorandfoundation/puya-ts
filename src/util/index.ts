@@ -170,7 +170,7 @@ export function normalisePath(filePath: string, workingDirectory: string): strin
   if (localPackageName) {
     return `${Constants.algoTsPackage}/${localPackageName[1]}`
   }
-  const nodeModuleName = /node_modules\/(.*)$/.exec(filePath)
+  const nodeModuleName = /.*\/node_modules\/(.*)$/.exec(filePath)
   if (nodeModuleName) {
     return nodeModuleName[1]
   }
