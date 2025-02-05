@@ -1,4 +1,4 @@
-import type { wtypes } from '../../awst/wtypes'
+import { wtypes } from '../../awst/wtypes'
 import { CodeError } from '../../errors'
 import type { DeliberateAny } from '../../typescript-helpers'
 
@@ -35,7 +35,7 @@ export abstract class PType {
   }
 
   equals(other: PType): boolean {
-    return other instanceof this.constructor && this.fullName === other.fullName
+    return ptypesAreEqual(this, other)
   }
 
   static equals(other: PType): boolean {
@@ -69,3 +69,48 @@ export class GenericPType<T extends PType = PType> extends PType {
 }
 
 export type PTypeOrClass = PType | { new (...args: DeliberateAny[]): PType; equals(other: PType): boolean }
+
+function ptypesAreEqual(left: PType, right: PType): boolean {
+  if (!(right instanceof left.constructor)) {
+    return false
+  }
+  return compareProperties(left, right)
+}
+
+const ignoredProperties = new Set(['sourceLocation', 'wtype'])
+
+function notIgnored(key: string): boolean {
+  return !ignoredProperties.has(key)
+}
+
+function compareProperties(left: object, right: object) {
+  if (Object.keys(left).filter(notIgnored).length !== Object.keys(right).filter(notIgnored).length) {
+    return false
+  }
+  const rightEntries = new Map(Object.entries(right))
+  return Object.entries(left)
+    .filter(([key]) => notIgnored(key))
+    .every(([key, value]) => compareValues(value, rightEntries.get(key)))
+}
+
+function compareValues(left: unknown, right: unknown): boolean {
+  // Handle primitive comparison
+  if (typeof left !== 'object' || left === right) {
+    return left === right
+  }
+  if (left === null) {
+    return right === null
+  }
+  // Recursively compare array items
+  if (Array.isArray(left)) {
+    return Array.isArray(right) && left.length === right.length && left.every((v, i) => compareValues(v, right[i]))
+  }
+  // Recursively compare ptypes
+  if (left instanceof PType) {
+    return right instanceof PType && ptypesAreEqual(left, right)
+  }
+  if (left instanceof wtypes.WType) {
+    return right instanceof wtypes.WType && left.equals(right)
+  }
+  return typeof right === 'object' && right !== null && compareProperties(left, right)
+}

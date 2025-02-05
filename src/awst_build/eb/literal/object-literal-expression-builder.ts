@@ -4,7 +4,7 @@ import type { SourceLocation } from '../../../awst/source-location'
 import { CodeError } from '../../../errors'
 import type { PTypeOrClass } from '../../ptypes'
 import { ObjectPType } from '../../ptypes'
-import type { InstanceBuilder } from '../index'
+import type { InstanceBuilder, NodeBuilder } from '../index'
 import { LiteralExpressionBuilder } from '../literal-expression-builder'
 import { requestExpressionOfType, requireExpressionOfType, requireInstanceBuilder } from '../util'
 import { ObjectExpressionBuilder } from './object-expression-builder'
@@ -40,12 +40,14 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
   }
   resolveLValue(): LValue {
     return nodeFactory.tupleExpression({
-      items: this.ptype.orderedProperties().map(([p, propPType]) => this.memberAccess(p, this.sourceLocation).resolveLValue()),
+      items: this.ptype
+        .orderedProperties()
+        .map(([p, propPType]) => requireInstanceBuilder(this.memberAccess(p, this.sourceLocation)).resolveLValue()),
       sourceLocation: this.sourceLocation,
       wtype: this.ptype.wtype,
     })
   }
-  memberAccess(name: string, sourceLocation: SourceLocation): InstanceBuilder {
+  memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
     for (const part of this.parts.toReversed()) {
       if (part.type === 'properties') {
         if (Object.hasOwn(part.properties, name)) {
@@ -53,7 +55,7 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
         }
       } else {
         if (part.obj.hasProperty(name)) {
-          return requireInstanceBuilder(part.obj.memberAccess(name, sourceLocation))
+          return part.obj.memberAccess(name, sourceLocation)
         }
       }
     }
@@ -73,7 +75,6 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
       // Resolve this object to a tuple using declared order but using the target property types.
       // This will resolve numeric literals to algo-ts types if available
       const tempType = new ObjectPType({
-        isAnonymous: true,
         properties: Object.fromEntries(this.ptype.orderedProperties().map(([p]) => [p, ptype.getPropertyType(p)] as const)),
       })
 

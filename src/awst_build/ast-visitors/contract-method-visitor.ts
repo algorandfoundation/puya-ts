@@ -12,6 +12,7 @@ import { codeInvariant, invariant, isIn } from '../../util'
 import type { AwstBuildContext } from '../context/awst-build-context'
 import type { NodeBuilder } from '../eb'
 import { ContractSuperBuilder, ContractThisBuilder } from '../eb/contract-builder'
+import { requireExpressionOfType } from '../eb/util'
 import type { Arc4AbiDecoratorData, DecoratorData } from '../models/decorator-data'
 import type { ContractClassPType, FunctionPType } from '../ptypes'
 import { GlobalStateType, LocalStateType } from '../ptypes'
@@ -171,14 +172,8 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
       decoratorLocation,
     )
     if (config.type === 'constant') {
-      codeInvariant(
-        config.value.wtype.equals(paramType.wtypeOrThrow),
-        `Default argument specification for '${parameterName}' does not match parameter type`,
-        decoratorLocation,
-      )
-
       return nodeFactory.aBIMethodArgConstantDefault({
-        value: config.value,
+        value: requireExpressionOfType(config.value, paramType),
       })
     }
     const methodType = this._contractType.methods[config.name]

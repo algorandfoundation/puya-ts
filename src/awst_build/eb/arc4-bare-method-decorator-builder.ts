@@ -141,7 +141,7 @@ function resolveDefaultArguments(
     if (paramConfig.hasProperty('constant')) {
       result[parameterName] = {
         type: 'constant',
-        value: requireInstanceBuilder(paramConfig.memberAccess('constant', sourceLocation)).resolve(),
+        value: requireInstanceBuilder(paramConfig.memberAccess('constant', sourceLocation)),
       }
     } else if (paramConfig.hasProperty('from')) {
       result[parameterName] = {

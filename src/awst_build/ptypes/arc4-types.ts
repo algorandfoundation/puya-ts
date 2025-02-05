@@ -1,7 +1,7 @@
 import type { SourceLocation } from '../../awst/source-location'
 import { wtypes } from '../../awst/wtypes'
 import { Constants } from '../../constants'
-import { codeInvariant, zipStrict } from '../../util'
+import { codeInvariant } from '../../util'
 import { GenericPType, PType } from './base'
 import {
   biguintPType,
@@ -181,19 +181,6 @@ export class ARC4StructType extends ARC4EncodedType {
   get signature(): string {
     return `${this.name}${this.wtype.arc4Name}`
   }
-
-  equals(other: PType): boolean {
-    if (!(other instanceof ARC4StructType)) return false
-    const thisProps = Object.entries(this.fields)
-    const otherProps = Object.entries(other.fields)
-    return (
-      this.name === other.name &&
-      thisProps.length === otherProps.length &&
-      zipStrict(thisProps, otherProps).every(
-        ([[left_prop, left_type], [right_prop, right_type]]) => left_prop === right_prop && left_type.equals(right_type),
-      )
-    )
-  }
 }
 
 export const arc4StructBaseType = new ARC4StructType({
@@ -246,14 +233,6 @@ export class ARC4TupleType extends ARC4EncodedType {
       types: this.items.map((t) => t.wtype),
       sourceLocation: this.sourceLocation,
     })
-  }
-
-  equals(other: PType): boolean {
-    return (
-      other instanceof ARC4TupleType &&
-      this.items.length === other.items.length &&
-      zipStrict(this.items, other.items).every(([a, b]) => a.equals(b))
-    )
   }
 }
 export const UintNGeneric = new GenericPType({

@@ -4,7 +4,8 @@ import { wtypes } from '../../awst/wtypes'
 
 import { Constants } from '../../constants'
 import { CodeError, InternalError, NotSupported } from '../../errors'
-import { codeInvariant, distinctByEquality, sortBy, zipStrict } from '../../util'
+import { codeInvariant, distinctByEquality, sortBy } from '../../util'
+import { SymbolName } from '../symbol-name'
 import { GenericPType, PType } from './base'
 import { transientTypeErrors } from './transient-type-errors'
 
@@ -591,14 +592,6 @@ export class ArrayLiteralPType extends TransientType {
       items: this.items,
     })
   }
-
-  equals(other: PType): boolean {
-    return (
-      other instanceof ArrayLiteralPType &&
-      this.items.length === other.items.length &&
-      zipStrict(this.items, other.items).every(([a, b]) => a.equals(b))
-    )
-  }
 }
 
 export class TuplePType extends PType {
@@ -625,14 +618,6 @@ export class TuplePType extends PType {
       immutable: this.immutable,
     })
   }
-
-  equals(other: PType): boolean {
-    return (
-      other instanceof TuplePType &&
-      this.items.length === other.items.length &&
-      zipStrict(this.items, other.items).every(([a, b]) => a.equals(b))
-    )
-  }
 }
 export class ArrayPType extends PType {
   readonly elementType: PType
@@ -656,30 +641,19 @@ export class ArrayPType extends PType {
       immutable: this.immutable,
     })
   }
-
-  equals(other: PType): boolean {
-    return other instanceof ArrayPType && this.immutable === other.immutable && this.elementType.equals(other.elementType)
-  }
 }
 
-type ObjectPTypeArgs =
-  | { module: string; name: string; description: string | undefined; properties: Record<string, PType>; isAnonymous?: false }
-  | { module?: undefined; name?: undefined; properties: Record<string, PType>; isAnonymous: true; description?: undefined }
-
 export class ObjectPType extends PType {
-  readonly name: string
-  readonly module: string
+  readonly name: string = 'object'
+  readonly module: string = 'lib.d.ts'
+  readonly alias?: SymbolName
   readonly description: string | undefined
   readonly properties: Record<string, PType>
   readonly singleton = false
-  readonly isAnonymous: boolean
 
-  constructor(props: ObjectPTypeArgs) {
+  constructor(props: { alias?: SymbolName; properties: Record<string, PType>; description?: string }) {
     super()
-    this.name = props.name ?? ''
-    this.module = props.module ?? ''
     this.properties = props.properties
-    this.isAnonymous = props.isAnonymous ?? false
     this.description = props.description
   }
 
@@ -687,7 +661,6 @@ export class ObjectPType extends PType {
     const properties = Array.isArray(props) ? Object.fromEntries(props) : props
     return new ObjectPType({
       properties,
-      isAnonymous: true,
     })
   }
 
@@ -726,19 +699,6 @@ export class ObjectPType extends PType {
 
   hasPropertyOfType(name: string, type: PType) {
     return this.hasProperty(name) && this.properties[name].equals(type)
-  }
-
-  equals(other: PType): boolean {
-    if (!(other instanceof ObjectPType)) return false
-    const thisProps = this.orderedProperties()
-    const otherProps = other.orderedProperties()
-    return (
-      this.name === other.name &&
-      thisProps.length === otherProps.length &&
-      zipStrict(thisProps, otherProps).every(
-        ([[left_prop, left_type], [right_prop, right_type]]) => left_prop === right_prop && left_type.equals(right_type),
-      )
-    )
   }
 
   toString(): string {
@@ -1372,8 +1332,10 @@ export const compileFunctionType = new LibFunctionType({
 })
 
 export const compiledContractType = new ObjectPType({
-  name: 'CompiledContract',
-  module: Constants.compiledModuleName,
+  alias: new SymbolName({
+    name: 'CompiledContract',
+    module: Constants.compiledModuleName,
+  }),
   description: 'Provides compiled programs and state allocation values for a Contract. Created by calling `compile(ExampleContractType)`',
   properties: {
     approvalProgram: new TuplePType({ items: [bytesPType, bytesPType] }),
@@ -1386,8 +1348,10 @@ export const compiledContractType = new ObjectPType({
   },
 })
 export const compiledLogicSigType = new ObjectPType({
-  name: 'CompiledLogicSig',
-  module: Constants.compiledModuleName,
+  alias: new SymbolName({
+    name: 'CompiledLogicSig',
+    module: Constants.compiledModuleName,
+  }),
   description: 'Provides account for a Logic Signature. Created by calling `compile(LogicSigType)``',
   properties: {
     account: accountPType,

@@ -1,7 +1,8 @@
 import type { OnCompletionAction } from '../../awst/models'
-import type { ARC4CreateOption, Expression } from '../../awst/nodes'
+import type { ARC4CreateOption } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import type { Constants, SupportedAvmVersion } from '../../constants'
+import type { InstanceBuilder } from '../eb'
 
 export type Arc4AbiDecoratorData = {
   type: typeof Constants.arc4AbiDecoratorName
@@ -14,7 +15,7 @@ export type Arc4AbiDecoratorData = {
     string,
     | {
         type: 'constant'
-        value: Expression
+        value: InstanceBuilder
       }
     | {
         type: 'member'

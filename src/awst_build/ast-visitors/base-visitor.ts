@@ -593,8 +593,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
         .orderedProperties()
         .reduce((acc, [prop], index) => acc.set(prop, index), new Map<string, number>())
       return new ObjectPType({
-        name: targetType.name,
-        module: targetType.module,
+        alias: targetType.alias,
         description: targetType.description,
         properties: Object.fromEntries(
           sourceType
@@ -640,7 +639,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
         const targets: LValue[] = []
         for (const [propName, propType] of assignmentType.orderedProperties()) {
           if (target.hasProperty(propName)) {
-            targets.push(this.buildLValue(target.memberAccess(propName, sourceLocation), propType, sourceLocation))
+            targets.push(this.buildLValue(requireInstanceBuilder(target.memberAccess(propName, sourceLocation)), propType, sourceLocation))
           } else {
             targets.push(
               nodeFactory.varExpression({

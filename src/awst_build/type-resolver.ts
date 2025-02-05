@@ -304,7 +304,7 @@ export class TypeResolver {
       }
     }
     if (typeAlias) {
-      return new ObjectPType({ ...typeAlias, properties, description: tryGetTypeDescription(tsType) })
+      return new ObjectPType({ alias: typeAlias, properties, description: tryGetTypeDescription(tsType) })
     }
     return ObjectPType.anonymous(properties)
   }
