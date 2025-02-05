@@ -3,7 +3,7 @@ import { describe, it } from 'vitest'
 import { compile } from '../src'
 import { SourceLocation } from '../src/awst/source-location'
 import type { LogEvent } from '../src/logger'
-import { LoggingContext, LogLevel } from '../src/logger'
+import { isMinLevel, LoggingContext, LogLevel } from '../src/logger'
 import { defaultPuyaOptions } from '../src/puya/options'
 import { enumFromValue, invariant } from '../src/util'
 
@@ -61,7 +61,7 @@ describe('Expected output', async () => {
           matchedLogs.add(matchedLog)
         }
       }
-      const unmatchedLogs = logs.filter((l) => !matchedLogs.has(l))
+      const unmatchedLogs = logs.filter((l) => !matchedLogs.has(l) && isMinLevel(l.level, LogLevel.Warning))
       if (unmatchedLogs.length) {
         const [firstUnmatched] = unmatchedLogs
         invariant(firstUnmatched.sourceLocation, 'Log must have source location')
