@@ -17,7 +17,9 @@ export function createTsProgram(options: PuyaTsCompileOptions): CreateProgramRes
   const compilerOptions: ts.CompilerOptions = {
     allowJs: false,
     strict: true,
-    target: ts.ScriptTarget.ES2022,
+    // Lib names need to be the full file name from the typescript package 'lib' folder.
+    lib: ['lib.es2023.d.ts'],
+    target: ts.ScriptTarget.ES2023,
     module: ts.ModuleKind.ESNext,
     moduleResolution: ts.ModuleResolutionKind.Bundler,
   }
