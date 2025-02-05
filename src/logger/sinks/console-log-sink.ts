@@ -1,7 +1,7 @@
 import chalk from 'chalk'
 import type { SourceLocation } from '../../awst/source-location'
-import type { LogEvent, LogLevel } from '../index'
-import { LoggingContext } from '../index'
+import type { LogEvent } from '../index'
+import { isMinLevel, LoggingContext, LogLevel } from '../index'
 import type { LogSink } from './index'
 
 type ColorFn = (text: string) => string
@@ -26,7 +26,8 @@ export class ConsoleLogSink implements LogSink {
       const sourceLocationText = logEvent.sourceLocation.toString()
       const indentSize = sourceLocationText.length + logEvent.level.length + 4
 
-      logText = `${sourceLocationText} ${logText}${this.getSourceSummary(logEvent.sourceLocation, indentSize)}`
+      const sourceSummary = isMinLevel(logEvent.level, LogLevel.Warning) ? this.getSourceSummary(logEvent.sourceLocation, indentSize) : ''
+      logText = `${sourceLocationText} ${logText}${sourceSummary}`
     }
     config.writeFn(logText)
   }
