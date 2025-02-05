@@ -1,5 +1,5 @@
-import { NoImplementation } from './impl/errors'
+import { NoImplementation } from './internal/errors'
 
 export function TemplateVar<T>(variableName: string, prefix = 'TMPL_'): T {
-  throw NoImplementation
+  throw new NoImplementation()
 }

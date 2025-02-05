@@ -1,15 +1,11 @@
 import { BaseContract } from '../base-contract'
-import { ctxMgr } from '../execution-context'
-import { encodingUtil } from '../internal'
-import { sha512_256 } from '../op'
-import { Bytes, bytes, Uint64 } from '../primitives'
-import { DeliberateAny } from '../typescript-helpers'
+import { NoImplementation } from '../internal/errors'
+import { DeliberateAny } from '../internal/typescript-helpers'
+import { bytes } from '../primitives'
 
 export * from './encoded-types'
 
 export class Contract extends BaseContract {
-  static isArc4 = true
-
   override approvalProgram(): boolean {
     return true
   }
@@ -19,15 +15,16 @@ export type CreateOptions = 'allow' | 'disallow' | 'require'
 export type OnCompleteActionStr = 'NoOp' | 'OptIn' | 'ClearState' | 'CloseOut' | 'UpdateApplication' | 'DeleteApplication'
 
 export enum OnCompleteAction {
-  NoOp = Uint64(0),
-  OptIn = Uint64(1),
-  CloseOut = Uint64(2),
-  ClearState = Uint64(3),
-  UpdateApplication = Uint64(4),
-  DeleteApplication = Uint64(5),
+  NoOp = 0,
+  OptIn = 1,
+  CloseOut = 2,
+  ClearState = 3,
+  UpdateApplication = 4,
+  DeleteApplication = 5,
 }
 
 export type DefaultArgument<TContract extends Contract> = { constant: string | boolean | number | bigint } | { from: keyof TContract }
+
 export type AbiMethodConfig<TContract extends Contract> = {
   /**
    * Which on complete action(s) are allowed when invoking this method.
@@ -51,15 +48,17 @@ export type AbiMethodConfig<TContract extends Contract> = {
 
   defaultArguments?: Record<string, DefaultArgument<TContract>>
 }
+
+/**
+ * Declares the decorated method as an abimethod that is called when the first transaction arg matches the method selector
+ * @param config
+ */
 export function abimethod<TContract extends Contract>(config?: AbiMethodConfig<TContract>) {
   return function <TArgs extends DeliberateAny[], TReturn>(
     target: (this: TContract, ...args: TArgs) => TReturn,
     ctx: ClassMethodDecoratorContext<TContract>,
   ): (this: TContract, ...args: TArgs) => TReturn {
-    ctx.addInitializer(function () {
-      ctxMgr.instance.abiMetadata.captureMethodConfig(this, target.name, config)
-    })
-    return target
+    throw new NoImplementation()
   }
 }
 
@@ -75,15 +74,17 @@ export type BareMethodConfig = {
    */
   onCreate?: CreateOptions
 }
+
+/**
+ * Declares the decorated method as a baremethod that can only be called with no transaction args
+ * @param config
+ */
 export function baremethod<TContract extends Contract>(config?: BareMethodConfig) {
   return function <TArgs extends DeliberateAny[], TReturn>(
     target: (this: TContract, ...args: TArgs) => TReturn,
     ctx: ClassMethodDecoratorContext<TContract>,
   ): (this: TContract, ...args: TArgs) => TReturn {
-    ctx.addInitializer(function () {
-      ctxMgr.instance.abiMetadata.captureMethodConfig(this, target.name, config)
-    })
-    return target
+    throw new NoImplementation()
   }
 }
 
@@ -94,5 +95,5 @@ export function baremethod<TContract extends Contract>(config?: BareMethodConfig
  * @returns The ARC4 method selector. Eg. `02BECE11`
  */
 export function methodSelector(methodSignature: string): bytes {
-  return sha512_256(Bytes(encodingUtil.utf8ToUint8Array(methodSignature))).slice(0, 4)
+  throw new NoImplementation()
 }

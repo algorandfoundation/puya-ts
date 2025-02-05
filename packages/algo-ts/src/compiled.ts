@@ -1,9 +1,9 @@
 import { BaseContract } from './base-contract'
-import { NoImplementation } from './impl/errors'
+import { NoImplementation } from './internal/errors'
+import { ConstructorFor, DeliberateAny } from './internal/typescript-helpers'
 import { LogicSig } from './logic-sig'
 import { bytes, uint64 } from './primitives'
 import { Account } from './reference'
-import { ConstructorFor, DeliberateAny } from './typescript-helpers'
 
 /**
  * Provides compiled programs and state allocation values for a Contract. Created by calling `compile(ExampleContractType)`

@@ -1,4 +1,4 @@
-import { AssertError, AvmError, NoImplementation } from './impl/errors'
+import { NoImplementation } from './internal/errors'
 import { biguint, BigUintCompat, BytesBacked, BytesCompat, StringCompat, uint64, Uint64Compat } from './primitives'
 
 export function log(...args: Array<Uint64Compat | BytesCompat | BigUintCompat | StringCompat | BytesBacked>): void {
@@ -6,13 +6,11 @@ export function log(...args: Array<Uint64Compat | BytesCompat | BigUintCompat | 
 }
 
 export function assert(condition: unknown, message?: string): asserts condition {
-  if (!condition) {
-    throw new AssertError(message ?? 'Assertion failed')
-  }
+  throw new NoImplementation()
 }
 
 export function err(message?: string): never {
-  throw new AvmError(message ?? 'err opcode executed')
+  throw new NoImplementation()
 }
 
 type NumericComparison<T> = T | { lessThan: T } | { greaterThan: T } | { greaterThanEq: T } | { lessThanEq: T } | { between: [T, T] }
@@ -24,10 +22,10 @@ type MatchTest<T> = {
 }
 
 export function match<T>(subject: T, test: MatchTest<T>): boolean {
-  return true
+  throw new NoImplementation()
 }
 export function assertMatch<T>(subject: T, test: MatchTest<T>, message?: string): boolean {
-  return true
+  throw new NoImplementation()
 }
 
 export enum OpUpFeeSource {
@@ -37,12 +35,17 @@ export enum OpUpFeeSource {
 }
 
 export function ensureBudget(budget: uint64, feeSource: OpUpFeeSource = OpUpFeeSource.GroupCredit) {
-  throw new Error('Not implemented')
+  throw new NoImplementation()
 }
 
 export function urange(stop: Uint64Compat): IterableIterator<uint64>
 export function urange(start: Uint64Compat, stop: Uint64Compat): IterableIterator<uint64>
 export function urange(start: Uint64Compat, stop: Uint64Compat, step: Uint64Compat): IterableIterator<uint64>
 export function urange(a: Uint64Compat, b?: Uint64Compat, c?: Uint64Compat): IterableIterator<uint64> {
-  throw new Error('Not implemented')
+  throw new NoImplementation()
 }
+
+/**
+ * Defines a numeric range including all numbers between from and to
+ */
+export type NumberRange = { from: number; to: number }

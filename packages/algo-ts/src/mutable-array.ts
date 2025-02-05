@@ -1,4 +1,4 @@
-import { NoImplementation } from './impl/errors'
+import { NoImplementation } from './internal/errors'
 import { uint64, Uint64Compat } from './primitives'
 
 export class MutableArray<TItem> {

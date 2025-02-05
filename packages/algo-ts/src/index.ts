@@ -3,7 +3,6 @@ export { log, err, assert, match, assertMatch, ensureBudget, urange, OpUpFeeSour
 export * from './reference'
 export * as op from './op'
 export { Txn, Global } from './op'
-export * as internal from './internal'
 export * as arc4 from './arc4'
 export { Contract, abimethod } from './arc4'
 export { BaseContract, contract } from './base-contract'

@@ -149,41 +149,36 @@ export class TypeResolver {
     if (isUnionType(tsType)) {
       return UnionPType.fromTypes(tsType.types.map((t) => this.resolveType(t, sourceLocation)))
     }
-    if (tsType.flags === ts.TypeFlags.Undefined) {
-      return undefinedPType
-    }
-    if (hasFlags(tsType.flags, ts.TypeFlags.Null)) {
-      return nullPType
-    }
-    if (hasFlags(tsType.flags, ts.TypeFlags.Any)) {
-      return anyPType
-    }
-    if (intersectsFlags(tsType.flags, ts.TypeFlags.Boolean | ts.TypeFlags.BooleanLiteral)) {
-      return boolPType
-    }
-    if (tsType.flags === ts.TypeFlags.Void) {
-      return voidPType
-    }
-    if (intersectsFlags(tsType.flags, ts.TypeFlags.String | ts.TypeFlags.StringLiteral)) {
-      return stringPType
-    }
-    if (tsType.flags === ts.TypeFlags.Never) {
-      return neverPType
-    }
-    if (hasFlags(tsType.flags, ts.TypeFlags.Unknown)) {
-      return unknownPType
-    }
-    if (intersectsFlags(tsType.flags, ts.TypeFlags.Number | ts.TypeFlags.NumberLiteral) && tsType.getSymbol() === undefined) {
-      if (tsType.isNumberLiteral()) {
+    switch (tsType.flags) {
+      case ts.TypeFlags.Undefined:
+        return undefinedPType
+      case ts.TypeFlags.Null:
+        return nullPType
+      case ts.TypeFlags.Any:
+        return anyPType
+      case ts.TypeFlags.Boolean | ts.TypeFlags.Union:
+      case ts.TypeFlags.BooleanLiteral:
+        return boolPType
+      case ts.TypeFlags.Void:
+        return voidPType
+      case ts.TypeFlags.String:
+      case ts.TypeFlags.StringLiteral:
+        return stringPType
+      case ts.TypeFlags.Never:
+        return neverPType
+      case ts.TypeFlags.Unknown:
+        return unknownPType
+      case ts.TypeFlags.NumberLiteral | ts.TypeFlags.EnumLiteral:
+      case ts.TypeFlags.NumberLiteral:
+        invariant(tsType.isNumberLiteral(), 'type must be literal', sourceLocation)
         return new NumericLiteralPType({ literalValue: BigInt(tsType.value) })
-      }
-      return numberPType
-    }
-    if (intersectsFlags(tsType.flags, ts.TypeFlags.BigInt | ts.TypeFlags.BigIntLiteral) && tsType.getSymbol() === undefined) {
-      if (tsType.isLiteral() && typeof tsType.value === 'object') {
+      case ts.TypeFlags.Number:
+        return numberPType
+      case ts.TypeFlags.BigIntLiteral:
+        invariant(tsType.isLiteral() && typeof tsType.value === 'object', 'type must be literal bigint', sourceLocation)
         return new BigIntLiteralPType({ literalValue: BigInt(tsType.value.base10Value) * (tsType.value.negative ? -1n : 1n) })
-      }
-      return bigIntPType
+      case ts.TypeFlags.BigInt:
+        return bigIntPType
     }
     if (isTupleReference(tsType)) {
       codeInvariant(
@@ -434,7 +429,7 @@ export class TypeResolver {
       // unaliased symbol
       if (name.module.startsWith(Constants.algoTsPackage) || name.module === Constants.polytypeModuleName) return name
     }
-    invariant(type.symbol, 'Type must have a symbol')
+    invariant(type.symbol, 'Type must have a symbol', sourceLocation)
     return this.getSymbolFullName(type.symbol, sourceLocation)
   }
 
