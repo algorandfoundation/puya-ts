@@ -186,7 +186,11 @@ export class TypeResolver {
       return bigIntPType
     }
     if (isTupleReference(tsType)) {
-      codeInvariant(tsType.target.fixedLength, 'Tuple types should have a fixed length', sourceLocation)
+      codeInvariant(
+        tsType.target.fixedLength !== undefined && tsType.target.fixedLength !== null,
+        'Tuple types should have a fixed length',
+        sourceLocation,
+      )
       codeInvariant(tsType.typeArguments, 'Tuple items must have types', sourceLocation)
 
       return new TuplePType({
