@@ -197,6 +197,7 @@ export class TypeResolver {
     }
 
     const typeName = this.getTypeName(tsType, sourceLocation)
+    logger.debug(sourceLocation, `Resolving ptype for ${typeName}`)
 
     if (typeName.name === '__type' && typeName.module.startsWith(Constants.algoTsPackage)) {
       // We are likely dealing with `typeof X` where X is a singleton exported by algo-ts
