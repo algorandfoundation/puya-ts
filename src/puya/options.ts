@@ -10,7 +10,7 @@ export const defaultPuyaOptions: PuyaPassThroughOptions = {
   outputArc32: true,
   outputArc56: true,
   outputSsaIr: false,
-  outputSourceMap: false,
+  outputSourceMap: true,
   outputOptimizationIr: false,
   outputDestructuredIr: false,
   outputMemoryIr: false,
