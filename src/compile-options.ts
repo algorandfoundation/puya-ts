@@ -1,4 +1,5 @@
 import { globSync } from 'glob'
+import { minimatch } from 'minimatch'
 import * as fs from 'node:fs'
 import upath from 'upath'
 import { PuyaError } from './errors'
@@ -41,15 +42,15 @@ export const buildCompileOptions = ({
 }): PuyaTsCompileOptions => {
   const filePaths: AlgoFile[] = []
 
-  for (const p of paths) {
+  for (const p of paths.map((p) => upath.normalizeTrim(p))) {
     if (p.endsWith('.algo.ts')) {
       if (fs.existsSync(p)) {
-        const actualPath = normalisePath(p, workingDirectory)
+        const sourceFile = normalisePath(p, workingDirectory)
 
         filePaths.push({
           matchedInput: p,
-          sourceFile: actualPath,
-          outDir: upath.isAbsolute(outDir) ? upath.normalize(outDir) : upath.join(upath.dirname(actualPath), outDir),
+          sourceFile,
+          outDir: determineOutDir(p, sourceFile, outDir),
         })
       } else {
         logger.warn(undefined, `File ${p} could not be found`)
@@ -60,10 +61,11 @@ export const buildCompileOptions = ({
       const matches = globSync(upath.join(p, '**/*.algo.ts'))
       if (matches.length) {
         for (const match of matches) {
+          const sourceFile = normalisePath(match, workingDirectory)
           filePaths.push({
             matchedInput: p,
-            sourceFile: normalisePath(match, workingDirectory),
-            outDir: upath.join(upath.isAbsolute(outDir) ? outDir : upath.join(p, outDir), upath.relative(p, upath.dirname(match))),
+            sourceFile,
+            outDir: determineOutDir(p, sourceFile, outDir),
           })
         }
       } else {
@@ -79,6 +81,28 @@ export const buildCompileOptions = ({
     filePaths: filePaths.map(replaceOutDirTokens),
     ...rest,
   }
+}
+
+function findMinimalMatch(inputPath: string, testPath: string): string {
+  const [matchedPath] = minimatch.match([testPath], inputPath)
+  if (matchedPath) {
+    if (matchedPath.endsWith('.algo.ts')) {
+      return upath.dirname(matchedPath)
+    }
+    return matchedPath
+  }
+  return findMinimalMatch(inputPath, upath.dirname(testPath))
+}
+
+export function determineOutDir(inputPath: string, sourceFile: string, outDir: string) {
+  const outDirBase = findMinimalMatch(inputPath, sourceFile)
+
+  const subPath = upath.dirname(sourceFile.slice(outDirBase.length))
+
+  if (upath.isAbsolute(outDir)) {
+    return upath.normalizeTrim(upath.join(outDir, subPath))
+  }
+  return upath.normalizeTrim(upath.join(outDirBase, outDir, subPath))
 }
 
 function replaceOutDirTokens(algoFile: AlgoFile): AlgoFile {
