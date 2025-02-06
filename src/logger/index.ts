@@ -119,7 +119,7 @@ export class LoggingContext {
   run<R>(cb: () => R) {
     return LoggingContext.asyncStore.run(this, cb)
   }
-
+  private static fallbackContext = new LoggingContext()
   private static asyncStore = new AsyncLocalStorage<LoggingContext>()
 
   static create(): LoggingContext {
@@ -128,7 +128,7 @@ export class LoggingContext {
   static get current() {
     const ctx = this.asyncStore.getStore()
     if (!ctx) {
-      throw new Error('There is no current context')
+      return this.fallbackContext
     }
     return ctx
   }
