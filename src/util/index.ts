@@ -108,7 +108,10 @@ export const uint8ArrayToUtf8 = (value: Uint8Array): string => {
 }
 
 export const bigIntToUint8Array = (val: bigint, fixedSize: number | 'dynamic' = 'dynamic'): Uint8Array => {
-  const maxBytes = fixedSize === 'dynamic' ? 64 : fixedSize
+  if (val === 0n && fixedSize === 'dynamic') {
+    return new Uint8Array(0)
+  }
+  const maxBytes = fixedSize === 'dynamic' ? 4096 : fixedSize
 
   let hex = val.toString(16)
 
