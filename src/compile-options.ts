@@ -83,8 +83,12 @@ export const buildCompileOptions = ({
   }
 }
 
+function trimCurrentDir(path: string) {
+  return path.startsWith('./') ? path.slice(2) : path
+}
+
 function findMinimalMatch(inputPath: string, testPath: string): string {
-  const [matchedPath] = minimatch.match([testPath], inputPath)
+  const [matchedPath] = minimatch.match([trimCurrentDir(testPath)], trimCurrentDir(inputPath))
   if (matchedPath) {
     if (matchedPath.endsWith('.algo.ts')) {
       return upath.dirname(matchedPath)

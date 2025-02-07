@@ -5,6 +5,13 @@ import { determineOutDir } from './compile-options'
 describe('determineOutDir', () => {
   const isWindows = os.platform() === 'win32'
   it.each([
+    // Relative input path with explicit ./
+    ['./examples/*', 'examples/hello/contract.algo.ts', 'out', 'examples/hello/out'],
+    ['./examples/*', 'examples/hello/nested/contract.algo.ts', 'out', 'examples/hello/out/nested'],
+    ['./examples/**', 'examples/hello/nested/contract.algo.ts', 'out', 'examples/hello/nested/out'],
+    ['./examples', 'examples/hello/contract.algo.ts', 'out', 'examples/out/hello'],
+    ['./examples/hello', 'examples/hello/contract.algo.ts', 'out', 'examples/hello/out'],
+    ['./examples/hello/contract.algo.ts', 'examples/hello/contract.algo.ts', 'out', 'examples/hello/out'],
     // Relative outDir
     ['examples/*', 'examples/hello/contract.algo.ts', 'out', 'examples/hello/out'],
     ['examples/*', 'examples/hello/nested/contract.algo.ts', 'out', 'examples/hello/out/nested'],
