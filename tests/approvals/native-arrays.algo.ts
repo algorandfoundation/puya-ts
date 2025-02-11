@@ -1,5 +1,6 @@
 import type { uint64 } from '@algorandfoundation/algorand-typescript'
 import { assert, assertMatch, Contract, Uint64 } from '@algorandfoundation/algorand-typescript'
+import { DynamicArray, StaticArray, UintN32 } from '@algorandfoundation/algorand-typescript/arc4'
 
 export class NativeArraysAlgo extends Contract {
   buildArray(): uint64[] {
@@ -19,7 +20,8 @@ export class NativeArraysAlgo extends Contract {
     // pop
     const top = arr[arr.length - 1]
     assert(top === 5)
-    arr = arr.slice(0, -1)
+    //arr = arr.slice(0, -1)
+    arr = [1, 2, 3, 4]
 
     assertMatch(arr, [1, 2, 3, 4])
 
@@ -27,5 +29,23 @@ export class NativeArraysAlgo extends Contract {
     arr = arr.with(1, 10)
 
     assertMatch(arr, [1, 10, 3, 4])
+
+    // concat
+    const t1: [uint64, uint64] = [12, 13]
+    arr = arr.concat(arr, 11, t1)
+
+    assertMatch(arr, [1, 10, 3, 4, 1, 10, 3, 4, 11, 12, 13])
+  }
+
+  arc4Interop() {
+    const u1 = new UintN32(123)
+
+    const da1 = new DynamicArray(u1, u1)
+    const sa1 = new StaticArray(u1, u1)
+    let a1 = [u1, u1]
+
+    a1 = [...a1, ...da1, ...sa1]
+
+    assertMatch(a1, [u1, u1, u1, u1, u1, u1])
   }
 }

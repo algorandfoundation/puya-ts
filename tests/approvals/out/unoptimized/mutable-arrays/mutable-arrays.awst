@@ -12,6 +12,7 @@ contract MutableArraysAlgo
   
   test(length: uint64): void
   {
+    ensure_budget(2000, 0)
     ma: WArray = new WArray()
     i: uint64 = 0
     while (i < length) {
@@ -21,7 +22,10 @@ contract MutableArraysAlgo
     }
     #loop₁ᵇ:
     assert(ma.length == length)
-    assert(ma.pop() == length - 1)
+    assert(Boolean(length), comment=has length)
+    popped: uint64 = ma.pop()
+    assert(Boolean(length), comment=has length)
+    assert(popped == length - 1)
   }
   
   __algots__.defaultCreate(): void

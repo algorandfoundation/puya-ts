@@ -93,7 +93,7 @@ export class Arc28EmitFunctionBuilder extends FunctionBuilder {
     if (eventType instanceof ARC4StructType) {
       return emitStruct(eventType, nameOrObj.resolve(), sourceLocation)
     } else if (eventType instanceof ObjectPType) {
-      if (eventType.isAnonymous) {
+      if (!eventType.alias) {
         logger.error(
           eventBuilder.sourceLocation,
           'Event cannot be an anonymous type. If a named type exists, try specifying it explicitly via the generic parameter. Eg. `emit<YourType>({...})`',
@@ -151,7 +151,7 @@ function parseEventName(nameBuilder: InstanceBuilder): {
     }
   } catch (e) {
     if (e instanceof Arc4ParseError) {
-      // Assumes StringConstant is all on one line
+      // Source location adjustment assumes StringConstant is all on one line
       throw new CodeError(`Invalid signature: ${e.message}`, {
         sourceLocation: new SourceLocation({
           ...name.sourceLocation,

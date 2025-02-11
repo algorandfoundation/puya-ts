@@ -3,7 +3,7 @@ import type { SourceLocation } from '../../../../awst/source-location'
 import { CodeError } from '../../../../errors'
 import { codeInvariant } from '../../../../util'
 import type { PType } from '../../../ptypes'
-import { ArrayLiteralPType, ArrayPType } from '../../../ptypes'
+import { ArrayLiteralPType, ArrayPType, TuplePType } from '../../../ptypes'
 import { ARC4ArrayType, DynamicArrayType, DynamicBytesType, StaticBytesType } from '../../../ptypes/arc4-types'
 import { instanceEb } from '../../../type-registry'
 import type { InstanceBuilder } from '../../index'
@@ -33,8 +33,14 @@ function getArrayConcatType(left: PType, right: PType, sourceLocation: SourceLoc
       })
     }
   } else if (left instanceof ArrayPType || left instanceof ArrayLiteralPType) {
-    if (right instanceof ArrayPType || right instanceof ArrayLiteralPType) {
+    if (right instanceof ArrayPType || right instanceof ArrayLiteralPType || right instanceof ARC4ArrayType) {
       sameElementType(left.elementType, right.elementType, sourceLocation)
+      return new ArrayPType({
+        elementType: left.elementType,
+      })
+    }
+    if (right instanceof TuplePType) {
+      right.items.forEach((i) => sameElementType(left.elementType, i, sourceLocation))
       return new ArrayPType({
         elementType: left.elementType,
       })
@@ -48,5 +54,5 @@ function cannotConcat(left: PType, right: PType, sourceLocation: SourceLocation)
 }
 
 function sameElementType(left: PType, right: PType, sourceLocation: SourceLocation) {
-  codeInvariant(left.equals(right), `Cannot concat array of type ${left} with array of type ${right}`, sourceLocation)
+  codeInvariant(left.equals(right), `Cannot concat array of type ${left} with iterable of type ${right}`, sourceLocation)
 }

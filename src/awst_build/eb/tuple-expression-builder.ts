@@ -2,8 +2,8 @@ import { nodeFactory } from '../../awst/node-factory'
 import type { Expression } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { codeInvariant, invariant } from '../../util'
-import type { PType } from '../ptypes'
-import { TuplePType, uint64PType } from '../ptypes'
+import type { PType, PTypeOrClass } from '../ptypes'
+import { ArrayPType, TuplePType, uint64PType } from '../ptypes'
 import { instanceEb } from '../type-registry'
 import type { InstanceBuilder, NodeBuilder } from './index'
 import { InstanceExpressionBuilder } from './index'
@@ -17,6 +17,28 @@ export class TupleExpressionBuilder extends InstanceExpressionBuilder<TuplePType
 
   iterate(): Expression {
     return this.resolve()
+  }
+
+  resolvableToPType(ptype: PTypeOrClass): boolean {
+    if (ptype instanceof ArrayPType && this.ptype.items.every((i) => i.equals(ptype.elementType))) {
+      return true
+    }
+    return super.resolvableToPType(ptype)
+  }
+
+  resolveToPType(ptype: PTypeOrClass): InstanceBuilder {
+    if (ptype instanceof ArrayPType && this.ptype.items.every((i) => i.equals(ptype.elementType))) {
+      return instanceEb(
+        nodeFactory.newArray({
+          values: this.getItemBuilders().map((i) => i.resolve()),
+          wtype: ptype.wtype,
+          sourceLocation: this.sourceLocation,
+        }),
+        ptype,
+      )
+    }
+
+    return super.resolveToPType(ptype)
   }
 
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {

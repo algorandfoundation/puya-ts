@@ -1,6 +1,8 @@
 import { nodeFactory } from '../../../awst/node-factory'
 import type { SourceLocation } from '../../../awst/source-location'
+import { wtypes } from '../../../awst/wtypes'
 import type { PType } from '../../ptypes'
+import { voidPType } from '../../ptypes'
 import { instanceEb } from '../../type-registry'
 import type { InstanceBuilder } from '../index'
 import { FunctionBuilder, type NodeBuilder } from '../index'
@@ -32,9 +34,9 @@ export class ArrayPushFunctionBuilder extends FunctionBuilder {
           sourceLocation,
         }),
         sourceLocation,
-        wtype: this.arrayBuilder.ptype.wtypeOrThrow,
+        wtype: wtypes.voidWType,
       }),
-      this.arrayBuilder.ptype,
+      voidPType,
     )
   }
 }

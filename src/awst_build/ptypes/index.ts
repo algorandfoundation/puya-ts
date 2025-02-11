@@ -542,10 +542,9 @@ export class FunctionPType extends PType {
     super()
     this.name = props.name
     this.module = props.module
-    if (props.returnType instanceof ObjectPType && props.returnType.isAnonymous) {
+    if (props.returnType instanceof ObjectPType && !props.returnType.alias) {
       this.returnType = new ObjectPType({
-        name: `${props.name}Result`,
-        module: props.module,
+        alias: new SymbolName({ name: `${props.name}Result`, module: this.module }),
         properties: props.returnType.properties,
         description: props.returnType.description,
       })
