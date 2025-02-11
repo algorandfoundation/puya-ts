@@ -635,7 +635,7 @@ export class ArrayPType extends PType {
   }
 
   get wtype() {
-    return new wtypes.WArray({
+    return new wtypes.StackArray({
       itemType: this.elementType.wtypeOrThrow,
       immutable: this.immutable,
     })
@@ -645,15 +645,16 @@ export class ArrayPType extends PType {
 export class ObjectPType extends PType {
   readonly name: string = 'object'
   readonly module: string = 'lib.d.ts'
-  readonly alias?: SymbolName
+  readonly alias: SymbolName | null
   readonly description: string | undefined
   readonly properties: Record<string, PType>
   readonly singleton = false
 
-  constructor(props: { alias?: SymbolName; properties: Record<string, PType>; description?: string }) {
+  constructor(props: { alias?: SymbolName | null; properties: Record<string, PType>; description?: string }) {
     super()
     this.properties = props.properties
     this.description = props.description
+    this.alias = props.alias ?? null
   }
 
   static anonymous(props: Record<string, PType> | Array<[string, PType]>) {
@@ -674,7 +675,7 @@ export class ObjectPType extends PType {
       tupleNames.push(propName)
     }
     return new wtypes.WTuple({
-      name: this.fullName,
+      name: this.alias?.fullName ?? this.fullName,
       names: tupleNames,
       types: tupleTypes,
       immutable: true,
@@ -1406,7 +1407,6 @@ export class MutableArrayType extends PType {
   readonly name: string
   readonly singleton = false
   readonly sourceLocation: SourceLocation | undefined
-  readonly wtype: wtypes.WArray
   readonly elementType: PType
 
   constructor({
@@ -1423,7 +1423,10 @@ export class MutableArrayType extends PType {
     this.name = name ?? `MutableArray<${elementType}>`
     this.sourceLocation = sourceLocation
     this.elementType = elementType
-    this.wtype = new wtypes.WArray({
+  }
+
+  get wtype() {
+    return new wtypes.ReferenceArray({
       itemType: this.elementType.wtypeOrThrow,
       sourceLocation: this.sourceLocation,
       immutable: false,

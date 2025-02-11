@@ -579,7 +579,7 @@ export class NewArray extends Expression {
     this.wtype = props.wtype
     this.values = props.values
   }
-  declare wtype: wtypes.WArray | wtypes.ARC4Array
+  declare wtype: wtypes.NativeArray | wtypes.ARC4Array
   values: Array<Expression>
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitNewArray(this)

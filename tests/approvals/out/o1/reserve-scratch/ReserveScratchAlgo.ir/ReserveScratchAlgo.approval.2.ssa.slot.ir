@@ -1,0 +1,15 @@
+main tests/approvals/reserve-scratch.algo.ts::ReserveScratchAlgo.approvalProgram:
+    block@0: // L12
+        ((store 0) 1u)
+        ((store 1) "hello")
+        ((store 15) 45u)
+        let tmp%0#0: uint64 = (load 0)
+        let tmp%1#0: bool = (== tmp%0#0 1u)
+        (assert tmp%1#0)
+        let tmp%2#0: bytes = (load 1)
+        let tmp%3#0: bool = (== tmp%2#0 "hello")
+        (assert tmp%3#0)
+        let tmp%4#0: uint64 = (load 15)
+        let tmp%5#0: bool = (== tmp%4#0 45u)
+        (assert tmp%5#0)
+        return 1u

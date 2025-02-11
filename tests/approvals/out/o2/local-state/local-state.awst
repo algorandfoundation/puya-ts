@@ -17,9 +17,9 @@ contract LocalStateDemo
     return True
   }
   
-  setState(p: { a: uint64, b: bytes }, c: arc4.static_array<arc4.uint64>): void
+  setState(p: object{ a: uint64, b: bytes }, c: arc4.static_array<arc4.uint64>): void
   {
-    { a: a, b: b }: { a: uint64, b: bytes } = p
+    { a: a, b: b }: object{ a: uint64, b: bytes } = p
     LocalState[txn<Sender>()]["l1"]: uint64 = a
     LocalState[txn<Sender>()]["localUint2"]: uint64 = a
     LocalState[txn<Sender>()]["b1"]: bytes = b

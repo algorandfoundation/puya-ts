@@ -1,14 +1,26 @@
+import { intrinsicFactory } from '../../../../awst/intrinsic-factory'
 import { nodeFactory } from '../../../../awst/node-factory'
+import type { Expression } from '../../../../awst/nodes'
 import type { SourceLocation } from '../../../../awst/source-location'
+import { wtypes } from '../../../../awst/wtypes'
 import { CodeError } from '../../../../errors'
-import { codeInvariant } from '../../../../util'
+import { bigIntToUint8Array, codeInvariant } from '../../../../util'
 import type { PType } from '../../../ptypes'
 import { ArrayLiteralPType, ArrayPType, TuplePType } from '../../../ptypes'
-import { ARC4ArrayType, DynamicArrayType, DynamicBytesType, StaticBytesType } from '../../../ptypes/arc4-types'
+import { ARC4ArrayType, DynamicArrayType, DynamicBytesType, StaticArrayType, StaticBytesType } from '../../../ptypes/arc4-types'
 import { instanceEb } from '../../../type-registry'
 import type { InstanceBuilder } from '../../index'
 
 export function concatArrays(left: InstanceBuilder, right: InstanceBuilder, sourceLocation: SourceLocation): InstanceBuilder {
+  if (left.ptype instanceof StaticBytesType || left.ptype instanceof StaticArrayType) {
+    /*
+      Note: This is only required because puya doesn't support staticarray + other => dynamic array
+      To work around this, we convert arc4 static bytes and static array to dynamic bytes and dynamic array
+     */
+    const dynamicType = left.ptype instanceof StaticBytesType ? DynamicBytesType : new DynamicArrayType({ ...left.ptype })
+    return concatArrays(toArc4Dynamic(left.ptype.arraySize, left.resolve(), dynamicType), right, sourceLocation)
+  }
+
   const returnType = getArrayConcatType(left.ptype, right.ptype, sourceLocation)
   return instanceEb(
     nodeFactory.arrayConcat({
@@ -55,4 +67,26 @@ function cannotConcat(left: PType, right: PType, sourceLocation: SourceLocation)
 
 function sameElementType(left: PType, right: PType, sourceLocation: SourceLocation) {
   codeInvariant(left.equals(right), `Cannot concat array of type ${left} with iterable of type ${right}`, sourceLocation)
+}
+
+function toArc4Dynamic(staticSize: bigint, staticBytes: Expression, dynamicType: DynamicArrayType) {
+  return instanceEb(
+    nodeFactory.reinterpretCast({
+      expr: intrinsicFactory.bytesConcat({
+        left: nodeFactory.bytesConstant({
+          value: bigIntToUint8Array(staticSize, 2),
+          sourceLocation: staticBytes.sourceLocation,
+        }),
+        right: nodeFactory.reinterpretCast({
+          expr: staticBytes,
+          wtype: wtypes.bytesWType,
+          sourceLocation: staticBytes.sourceLocation,
+        }),
+        sourceLocation: staticBytes.sourceLocation,
+      }),
+      wtype: dynamicType.wtype,
+      sourceLocation: staticBytes.sourceLocation,
+    }),
+    dynamicType,
+  )
 }

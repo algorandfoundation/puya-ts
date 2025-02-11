@@ -304,6 +304,7 @@
       "args": {},
       "returns": null
     },
+    "inline": null,
     "id": "tests/approvals/arc4-types.algo.ts::testUFixed",
     "name": "testUFixed"
   },
@@ -320,42 +321,49 @@
       {
         "_type": "SubroutineArgument",
         "name": "n",
-        "wtype": {
-          "_type": "WType",
-          "name": "uint64",
-          "immutable": true,
-          "ephemeral": false,
-          "scalar_type": 2
-        },
         "source_location": {
           "file": "tests/approvals/arc4-types.algo.ts",
           "line": 27,
           "end_line": 27,
           "column": 19,
           "end_column": 28
+        },
+        "wtype": {
+          "_type": "WType",
+          "name": "uint64",
+          "immutable": true,
+          "ephemeral": false,
+          "scalar_type": 2
         }
       },
       {
         "_type": "SubroutineArgument",
         "name": "b",
-        "wtype": {
-          "_type": "WType",
-          "name": "biguint",
-          "immutable": true,
-          "ephemeral": false,
-          "scalar_type": 1
-        },
         "source_location": {
           "file": "tests/approvals/arc4-types.algo.ts",
           "line": 27,
           "end_line": 27,
           "column": 30,
           "end_column": 40
+        },
+        "wtype": {
+          "_type": "WType",
+          "name": "biguint",
+          "immutable": true,
+          "ephemeral": false,
+          "scalar_type": 1
         }
       },
       {
         "_type": "SubroutineArgument",
         "name": "c",
+        "source_location": {
+          "file": "tests/approvals/arc4-types.algo.ts",
+          "line": 27,
+          "end_line": 27,
+          "column": 42,
+          "end_column": 55
+        },
         "wtype": {
           "_type": "ARC4UIntN",
           "name": "arc4.uint256",
@@ -371,13 +379,6 @@
           },
           "arc4_name": "uint256",
           "n": "256"
-        },
-        "source_location": {
-          "file": "tests/approvals/arc4-types.algo.ts",
-          "line": 27,
-          "end_line": 27,
-          "column": 42,
-          "end_column": 55
         }
       }
     ],
@@ -2481,6 +2482,7 @@
       "args": {},
       "returns": null
     },
+    "inline": null,
     "id": "tests/approvals/arc4-types.algo.ts::testUintN",
     "name": "testUintN"
   },
@@ -3355,6 +3357,7 @@
       "args": {},
       "returns": null
     },
+    "inline": null,
     "id": "tests/approvals/arc4-types.algo.ts::testStr",
     "name": "testStr"
   },
@@ -3371,19 +3374,19 @@
       {
         "_type": "SubroutineArgument",
         "name": "someBytes",
-        "wtype": {
-          "_type": "WType",
-          "name": "bytes",
-          "immutable": true,
-          "ephemeral": false,
-          "scalar_type": 1
-        },
         "source_location": {
           "file": "tests/approvals/arc4-types.algo.ts",
           "line": 75,
           "end_line": 75,
           "column": 26,
           "end_column": 42
+        },
+        "wtype": {
+          "_type": "WType",
+          "name": "bytes",
+          "immutable": true,
+          "ephemeral": false,
+          "scalar_type": 1
         }
       }
     ],
@@ -4553,6 +4556,7 @@
       "args": {},
       "returns": null
     },
+    "inline": null,
     "id": "tests/approvals/arc4-types.algo.ts::testDynamicBytes",
     "name": "testDynamicBytes"
   },
@@ -4974,7 +4978,7 @@
               "source_location": null
             },
             "left": {
-              "_type": "VarExpression",
+              "_type": "ReinterpretCast",
               "source_location": {
                 "file": "tests/approvals/arc4-types.algo.ts",
                 "line": 94,
@@ -4983,8 +4987,8 @@
                 "end_column": 15
               },
               "wtype": {
-                "_type": "ARC4StaticArray",
-                "name": "arc4.static_array<arc4.byte>",
+                "_type": "ARC4DynamicArray",
+                "name": "arc4.dynamic_array<arc4.byte>",
                 "immutable": true,
                 "ephemeral": false,
                 "scalar_type": 1,
@@ -4995,7 +4999,7 @@
                   "ephemeral": false,
                   "scalar_type": 1
                 },
-                "arc4_name": "byte[4]",
+                "arc4_name": "byte[]",
                 "element_type": {
                   "_type": "ARC4UIntN",
                   "name": "arc4.byte",
@@ -5012,10 +5016,109 @@
                   "arc4_name": "byte",
                   "n": "8"
                 },
-                "source_location": null,
-                "array_size": "4"
+                "source_location": null
               },
-              "name": "s2"
+              "expr": {
+                "_type": "IntrinsicCall",
+                "source_location": {
+                  "file": "tests/approvals/arc4-types.algo.ts",
+                  "line": 94,
+                  "end_line": 94,
+                  "column": 13,
+                  "end_column": 15
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "bytes",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 1
+                },
+                "op_code": "concat",
+                "immediates": [],
+                "stack_args": [
+                  {
+                    "_type": "BytesConstant",
+                    "source_location": {
+                      "file": "tests/approvals/arc4-types.algo.ts",
+                      "line": 94,
+                      "end_line": 94,
+                      "column": 13,
+                      "end_column": 15
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "bytes",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 1
+                    },
+                    "value": "00a",
+                    "encoding": "unknown"
+                  },
+                  {
+                    "_type": "ReinterpretCast",
+                    "source_location": {
+                      "file": "tests/approvals/arc4-types.algo.ts",
+                      "line": 94,
+                      "end_line": 94,
+                      "column": 13,
+                      "end_column": 15
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "bytes",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 1
+                    },
+                    "expr": {
+                      "_type": "VarExpression",
+                      "source_location": {
+                        "file": "tests/approvals/arc4-types.algo.ts",
+                        "line": 94,
+                        "end_line": 94,
+                        "column": 13,
+                        "end_column": 15
+                      },
+                      "wtype": {
+                        "_type": "ARC4StaticArray",
+                        "name": "arc4.static_array<arc4.byte>",
+                        "immutable": true,
+                        "ephemeral": false,
+                        "scalar_type": 1,
+                        "native_type": {
+                          "_type": "WType",
+                          "name": "bytes",
+                          "immutable": true,
+                          "ephemeral": false,
+                          "scalar_type": 1
+                        },
+                        "arc4_name": "byte[4]",
+                        "element_type": {
+                          "_type": "ARC4UIntN",
+                          "name": "arc4.byte",
+                          "immutable": true,
+                          "ephemeral": false,
+                          "scalar_type": 1,
+                          "native_type": {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true,
+                            "ephemeral": false,
+                            "scalar_type": 2
+                          },
+                          "arc4_name": "byte",
+                          "n": "8"
+                        },
+                        "source_location": null,
+                        "array_size": "4"
+                      },
+                      "name": "s2"
+                    }
+                  }
+                ]
+              }
             },
             "right": {
               "_type": "VarExpression",
@@ -5198,6 +5301,7 @@
       "args": {},
       "returns": null
     },
+    "inline": null,
     "id": "tests/approvals/arc4-types.algo.ts::testStaticBytes",
     "name": "testStaticBytes"
   },
@@ -5214,6 +5318,13 @@
       {
         "_type": "SubroutineArgument",
         "name": "n",
+        "source_location": {
+          "file": "tests/approvals/arc4-types.algo.ts",
+          "line": 101,
+          "end_line": 101,
+          "column": 20,
+          "end_column": 33
+        },
         "wtype": {
           "_type": "ARC4UIntN",
           "name": "arc4.uint64",
@@ -5229,13 +5340,6 @@
           },
           "arc4_name": "uint64",
           "n": "64"
-        },
-        "source_location": {
-          "file": "tests/approvals/arc4-types.algo.ts",
-          "line": 101,
-          "end_line": 101,
-          "column": 20,
-          "end_column": 33
         }
       }
     ],
@@ -5447,30 +5551,11 @@
               "end_column": 17
             },
             "wtype": {
-              "_type": "ARC4DynamicArray",
-              "name": "arc4.dynamic_array<arc4.uint64>",
-              "immutable": false,
+              "_type": "WType",
+              "name": "void",
+              "immutable": true,
               "ephemeral": false,
-              "scalar_type": 1,
-              "native_type": null,
-              "arc4_name": "uint64[]",
-              "element_type": {
-                "_type": "ARC4UIntN",
-                "name": "arc4.uint64",
-                "immutable": true,
-                "ephemeral": false,
-                "scalar_type": 1,
-                "native_type": {
-                  "_type": "WType",
-                  "name": "uint64",
-                  "immutable": true,
-                  "ephemeral": false,
-                  "scalar_type": 2
-                },
-                "arc4_name": "uint64",
-                "n": "64"
-              },
-              "source_location": null
+              "scalar_type": null
             },
             "base": {
               "_type": "VarExpression",
@@ -6775,6 +6860,7 @@
       "args": {},
       "returns": null
     },
+    "inline": null,
     "id": "tests/approvals/arc4-types.algo.ts::testArrays",
     "name": "testArrays"
   },
@@ -7079,6 +7165,7 @@
       "args": {},
       "returns": null
     },
+    "inline": null,
     "id": "tests/approvals/arc4-types.algo.ts::testByte",
     "name": "testByte"
   },
@@ -7869,6 +7956,7 @@
       "args": {},
       "returns": null
     },
+    "inline": null,
     "id": "tests/approvals/arc4-types.algo.ts::testAddress",
     "name": "testAddress"
   },
@@ -8827,6 +8915,7 @@
       "args": {},
       "returns": null
     },
+    "inline": null,
     "id": "tests/approvals/arc4-types.algo.ts::testTuple",
     "name": "testTuple"
   },
@@ -9525,7 +9614,7 @@
                   "scalar_type": 2
                 },
                 "lhs": {
-                  "_type": "IntrinsicCall",
+                  "_type": "ArrayLength",
                   "source_location": {
                     "file": "tests/approvals/arc4-types.algo.ts",
                     "line": 161,
@@ -9540,66 +9629,43 @@
                     "ephemeral": false,
                     "scalar_type": 2
                   },
-                  "op_code": "extract_uint16",
-                  "immediates": [],
-                  "stack_args": [
-                    {
-                      "_type": "VarExpression",
-                      "source_location": {
-                        "file": "tests/approvals/arc4-types.algo.ts",
-                        "line": 161,
-                        "end_line": 161,
-                        "column": 11,
-                        "end_column": 17
-                      },
-                      "wtype": {
-                        "_type": "ARC4DynamicArray",
-                        "name": "arc4.dynamic_array<arc4.uint64>",
-                        "immutable": false,
-                        "ephemeral": false,
-                        "scalar_type": 1,
-                        "native_type": null,
-                        "arc4_name": "uint64[]",
-                        "element_type": {
-                          "_type": "ARC4UIntN",
-                          "name": "arc4.uint64",
-                          "immutable": true,
-                          "ephemeral": false,
-                          "scalar_type": 1,
-                          "native_type": {
-                            "_type": "WType",
-                            "name": "uint64",
-                            "immutable": true,
-                            "ephemeral": false,
-                            "scalar_type": 2
-                          },
-                          "arc4_name": "uint64",
-                          "n": "64"
-                        },
-                        "source_location": null
-                      },
-                      "name": "result"
+                  "array": {
+                    "_type": "VarExpression",
+                    "source_location": {
+                      "file": "tests/approvals/arc4-types.algo.ts",
+                      "line": 161,
+                      "end_line": 161,
+                      "column": 11,
+                      "end_column": 17
                     },
-                    {
-                      "_type": "IntegerConstant",
-                      "source_location": {
-                        "file": "tests/approvals/arc4-types.algo.ts",
-                        "line": 161,
-                        "end_line": 161,
-                        "column": 18,
-                        "end_column": 24
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "uint64",
+                    "wtype": {
+                      "_type": "ARC4DynamicArray",
+                      "name": "arc4.dynamic_array<arc4.uint64>",
+                      "immutable": false,
+                      "ephemeral": false,
+                      "scalar_type": 1,
+                      "native_type": null,
+                      "arc4_name": "uint64[]",
+                      "element_type": {
+                        "_type": "ARC4UIntN",
+                        "name": "arc4.uint64",
                         "immutable": true,
                         "ephemeral": false,
-                        "scalar_type": 2
+                        "scalar_type": 1,
+                        "native_type": {
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true,
+                          "ephemeral": false,
+                          "scalar_type": 2
+                        },
+                        "arc4_name": "uint64",
+                        "n": "64"
                       },
-                      "value": "0",
-                      "teal_alias": null
-                    }
-                  ]
+                      "source_location": null
+                    },
+                    "name": "result"
+                  }
                 },
                 "operator": "==",
                 "rhs": {
@@ -9663,6 +9729,7 @@
         "args": {},
         "returns": null
       },
+      "inline": null,
       "cref": "tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract",
       "member_name": "approvalProgram",
       "arc4_method_config": null
@@ -9736,6 +9803,7 @@
         "args": {},
         "returns": null
       },
+      "inline": null,
       "cref": "@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract",
       "member_name": "clearStateProgram",
       "arc4_method_config": null
@@ -10041,6 +10109,7 @@
           "args": {},
           "returns": null
         },
+        "inline": null,
         "cref": "tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract",
         "member_name": "getArc4Values",
         "arc4_method_config": null

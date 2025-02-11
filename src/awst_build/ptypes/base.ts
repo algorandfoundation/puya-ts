@@ -1,6 +1,7 @@
 import { wtypes } from '../../awst/wtypes'
 import { CodeError } from '../../errors'
 import type { DeliberateAny } from '../../typescript-helpers'
+import { zipStrict } from '../../util'
 
 /**
  * Represents a public type visible to a developer of AlgoTS
@@ -84,13 +85,14 @@ function notIgnored(key: string): boolean {
 }
 
 function compareProperties(left: object, right: object) {
-  if (Object.keys(left).filter(notIgnored).length !== Object.keys(right).filter(notIgnored).length) {
-    return false
-  }
-  const rightEntries = new Map(Object.entries(right))
-  return Object.entries(left)
-    .filter(([key]) => notIgnored(key))
-    .every(([key, value]) => compareValues(value, rightEntries.get(key)))
+  const leftProps = Object.entries(left).filter(([key]) => notIgnored(key))
+  const rightProps = Object.entries(right).filter(([key]) => notIgnored(key))
+  if (leftProps.length !== rightProps.length) return false
+
+  return zipStrict(leftProps, rightProps).every(([[lKey, lValue], [rKey, rValue]]) => {
+    if (lKey !== rKey) return false
+    return compareValues(lValue, rValue)
+  })
 }
 
 function compareValues(left: unknown, right: unknown): boolean {

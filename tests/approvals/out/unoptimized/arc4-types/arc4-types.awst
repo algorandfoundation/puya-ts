@@ -57,7 +57,7 @@ subroutine testStaticBytes(): void
   s1: arc4.static_array<arc4.byte> = 0x
   s2: arc4.static_array<arc4.byte> = 0x00000000
   s3: arc4.static_array<arc4.byte> = 0xaabbccddee
-  s4: arc4.dynamic_array<arc4.byte> = s2.concat(s3)
+  s4: arc4.dynamic_array<arc4.byte> = reinterpret_cast<arc4.dynamic_array<arc4.byte>>(concat(0x0004, reinterpret_cast<bytes>(s2))).concat(s3)
   assert(ARC4_DECODE(s4) == 0x00000000aabbccddee)
 }
 subroutine testArrays(n: arc4.uint64): void
@@ -110,7 +110,7 @@ contract Arc4TypesTestContract
     tests/approvals/arc4-types.algo.ts::testDynamicBytes("hmmmmmmmmm")
     tests/approvals/arc4-types.algo.ts::testStaticBytes()
     result: arc4.dynamic_array<arc4.uint64> = new arc4.dynamic_array<arc4.uint64>()
-    assert(extract_uint16(result, 0) == 0)
+    assert(result.length == 0)
     return True
   }
   

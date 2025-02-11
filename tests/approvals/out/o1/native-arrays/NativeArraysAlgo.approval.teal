@@ -1,0 +1,65 @@
+#pragma version 10
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 1
+    // tests/approvals/native-arrays.algo.ts:5
+    // export class NativeArraysAlgo extends Contract {
+    txn NumAppArgs
+    bz main_bare_routing@8
+    pushbytess 0x0f4c11ca 0x13a588c8 0x787b50b2 // method "buildArray()uint64[]", method "doThings()void", method "arc4Interop()void"
+    txna ApplicationArgs 0
+    match main_buildArray_route@3 main_doThings_route@4 main_arc4Interop_route@5
+
+main_after_if_else@12:
+    // tests/approvals/native-arrays.algo.ts:5
+    // export class NativeArraysAlgo extends Contract {
+    pushint 0 // 0
+    return
+
+main_arc4Interop_route@5:
+    // tests/approvals/native-arrays.algo.ts:40
+    // arc4Interop() {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    intc_0 // 1
+    return
+
+main_doThings_route@4:
+    // tests/approvals/native-arrays.algo.ts:10
+    // doThings() {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    intc_0 // 1
+    return
+
+main_buildArray_route@3:
+    // tests/approvals/native-arrays.algo.ts:6
+    // buildArray(): uint64[] {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    pushbytes 0x151f7c7500040000000000000001000000000000000200000000000000030000000000000004
+    log
+    intc_0 // 1
+    return
+
+main_bare_routing@8:
+    // tests/approvals/native-arrays.algo.ts:5
+    // export class NativeArraysAlgo extends Contract {
+    txn OnCompletion
+    bnz main_after_if_else@12
+    txn ApplicationID
+    !
+    assert // can only call when creating
+    intc_0 // 1
+    return
