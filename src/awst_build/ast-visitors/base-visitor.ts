@@ -29,7 +29,9 @@ import type { ObjectLiteralParts } from '../eb/literal/object-literal-expression
 import { ObjectLiteralExpressionBuilder } from '../eb/literal/object-literal-expression-builder'
 import { NamespaceBuilder } from '../eb/namespace-builder'
 import { OmittedExpressionBuilder } from '../eb/omitted-expression-builder'
+import { SpreadExpressionBuilder } from '../eb/spread-expression-builder'
 import { StringExpressionBuilder, StringFunctionBuilder } from '../eb/string-expression-builder'
+import { StaticIterator } from '../eb/traits/static-iterator'
 import { requireExpressionOfType, requireInstanceBuilder } from '../eb/util'
 import { concatArrays } from '../eb/util/array/concat'
 import type { PType } from '../ptypes'
@@ -220,7 +222,8 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   }
 
   visitSpreadElement(node: ts.SpreadElement): NodeBuilder {
-    this.throwNotSupported(node, 'Spread element should be handled by array literal visitor')
+    const base = requireInstanceBuilder(this.baseAccept(node.expression))
+    return new SpreadExpressionBuilder(base, this.sourceLocation(node))
   }
 
   visitPropertyAccessExpression(node: ts.PropertyAccessExpression): NodeBuilder {
@@ -247,7 +250,9 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
     this.logNotSupported(node.questionDotToken, 'The optional chaining (?.) operator is not supported')
     const sourceLocation = this.sourceLocation(node)
     const eb = this.baseAccept(node.expression)
-    const args = node.arguments.map((a) => this.baseAccept(a))
+    const args = node.arguments
+      .map((a) => this.baseAccept(a))
+      .flatMap((a) => (a instanceof SpreadExpressionBuilder ? a.getSpreadItems() : a))
     const typeArgs = this.context.getTypeParameters(node)
     return eb.call(args, typeArgs, sourceLocation)
   }
@@ -255,7 +260,8 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   visitNewExpression(node: ts.NewExpression): NodeBuilder {
     const sourceLocation = this.sourceLocation(node)
     const eb = this.baseAccept(node.expression)
-    const args = node.arguments?.map((a) => this.baseAccept(a)) ?? []
+    const args =
+      node.arguments?.map((a) => this.baseAccept(a)).flatMap((a) => (a instanceof SpreadExpressionBuilder ? a.getSpreadItems() : a)) ?? []
     const typeArgs = this.context.getTypeParameters(node)
     return eb.newCall(args, typeArgs, sourceLocation)
   }
@@ -614,7 +620,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   buildLValue(target: InstanceBuilder, assignmentType: PType, sourceLocation: SourceLocation): LValue {
     if (target instanceof ArrayLiteralExpressionBuilder) {
       if (assignmentType instanceof TuplePType) {
-        const targetItems = target.getItemBuilders()
+        const targetItems = target[StaticIterator]()
 
         const targets: LValue[] = []
         for (const [index, sourceItemType] of enumerate(assignmentType.items)) {

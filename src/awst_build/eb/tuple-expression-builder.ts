@@ -7,9 +7,11 @@ import { ArrayPType, TuplePType, uint64PType } from '../ptypes'
 import { instanceEb } from '../type-registry'
 import type { InstanceBuilder, NodeBuilder } from './index'
 import { InstanceExpressionBuilder } from './index'
+import type { StaticallyIterable } from './traits/static-iterator'
+import { StaticIterator } from './traits/static-iterator'
 import { requireIntegerConstant } from './util'
 
-export class TupleExpressionBuilder extends InstanceExpressionBuilder<TuplePType> {
+export class TupleExpressionBuilder extends InstanceExpressionBuilder<TuplePType> implements StaticallyIterable {
   constructor(expression: Expression, ptype: PType) {
     invariant(ptype instanceof TuplePType, 'TupleExpressionBuilder must be built with ptype of type TuplePType')
     super(expression, ptype)
@@ -30,7 +32,7 @@ export class TupleExpressionBuilder extends InstanceExpressionBuilder<TuplePType
     if (ptype instanceof ArrayPType && this.ptype.items.every((i) => i.equals(ptype.elementType))) {
       return instanceEb(
         nodeFactory.newArray({
-          values: this.getItemBuilders().map((i) => i.resolve()),
+          values: this[StaticIterator]().map((i) => i.resolve()),
           wtype: ptype.wtype,
           sourceLocation: this.sourceLocation,
         }),
@@ -72,7 +74,7 @@ export class TupleExpressionBuilder extends InstanceExpressionBuilder<TuplePType
     )
   }
 
-  getItemBuilders(): InstanceBuilder[] {
+  [StaticIterator](): InstanceBuilder[] {
     return this.ptype.items.map((itemType, index) =>
       instanceEb(
         nodeFactory.tupleItemExpression({

@@ -3,6 +3,7 @@ import { codeInvariant } from '../../../util'
 import { numberPType } from '../../ptypes'
 import type { NodeBuilder } from '../index'
 import { ArrayLiteralExpressionBuilder } from '../literal/array-literal-expression-builder'
+import { StaticIterator } from '../traits/static-iterator'
 import { requireLiteralNumber } from './index'
 
 export function processScratchRanges(builder: NodeBuilder): Set<bigint> {
@@ -12,7 +13,7 @@ export function processScratchRanges(builder: NodeBuilder): Set<bigint> {
     builder.sourceLocation,
   )
   const slots = new Set<bigint>()
-  for (const item of builder.getItemBuilders()) {
+  for (const item of builder[StaticIterator]()) {
     if (item.resolvableToPType(numberPType)) {
       slots.add(requireLiteralNumber(item))
     } else {

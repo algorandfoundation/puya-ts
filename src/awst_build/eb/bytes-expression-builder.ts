@@ -33,11 +33,11 @@ import {
 import { BooleanExpressionBuilder } from './boolean-expression-builder'
 import type { BuilderComparisonOp, InstanceBuilder, NodeBuilder } from './index'
 import { BuilderUnaryOp, FunctionBuilder, InstanceExpressionBuilder, ParameterlessFunctionBuilder } from './index'
-import { ArrayLiteralExpressionBuilder } from './literal/array-literal-expression-builder'
 import { BigIntLiteralExpressionBuilder } from './literal/big-int-literal-expression-builder'
 import { AtFunctionBuilder } from './shared/at-function-builder'
 import { SliceFunctionBuilder } from './shared/slice-function-builder'
 import { StringExpressionBuilder } from './string-expression-builder'
+import { isStaticallyIterable, StaticIterator } from './traits/static-iterator'
 import { UInt64ExpressionBuilder } from './uint64-expression-builder'
 import { requireExpressionOfType, requireExpressionsOfType } from './util'
 import { parseFunctionArgs } from './util/arg-parsing'
@@ -121,10 +121,9 @@ export class BytesFunctionBuilder extends FunctionBuilder {
     } else if (initialValue.ptype.equals(bytesPType)) {
       return initialValue
     } else {
-      // Array
-      if (initialValue instanceof ArrayLiteralExpressionBuilder) {
+      if (isStaticallyIterable(initialValue)) {
         const bytes: number[] = []
-        for (const item of initialValue.getItemBuilders()) {
+        for (const item of initialValue[StaticIterator]()) {
           const byte = item.resolve()
           if (byte instanceof IntegerConstant && byte.value < 256n) {
             bytes.push(Number(byte.value))
@@ -138,7 +137,7 @@ export class BytesFunctionBuilder extends FunctionBuilder {
           sourceLocation: initialValue.sourceLocation,
         })
       } else {
-        logger.error(initialValue.sourceLocation, 'Only array literals are supported here')
+        logger.error(initialValue.sourceLocation, 'Only array literals or tuples are supported here')
         bytesExpr = empty
       }
     }

@@ -45,6 +45,10 @@ export class MutableArrayExpressionBuilder extends InstanceExpressionBuilder<Mut
     super(expr, ptype)
   }
 
+  iterate(sourceLocation: SourceLocation): Expression {
+    return this.resolve()
+  }
+
   indexAccess(index: InstanceBuilder, sourceLocation: SourceLocation): NodeBuilder {
     return indexAccess(this, index, sourceLocation)
   }

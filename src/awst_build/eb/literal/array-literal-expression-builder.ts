@@ -7,11 +7,13 @@ import type { PTypeOrClass } from '../../ptypes'
 import { ArrayLiteralPType, ArrayPType, TuplePType } from '../../ptypes'
 import type { NodeBuilder } from '../index'
 import { InstanceBuilder } from '../index'
+import type { StaticallyIterable } from '../traits/static-iterator'
+import { StaticIterator } from '../traits/static-iterator'
 import { TupleExpressionBuilder } from '../tuple-expression-builder'
 import { requireIntegerConstant } from '../util'
 import { arrayLength } from '../util/array/length'
 
-export class ArrayLiteralExpressionBuilder extends InstanceBuilder {
+export class ArrayLiteralExpressionBuilder extends InstanceBuilder implements StaticallyIterable {
   readonly ptype: ArrayLiteralPType
   constructor(
     sourceLocation: SourceLocation,
@@ -90,7 +92,7 @@ export class ArrayLiteralExpressionBuilder extends InstanceBuilder {
     return false
   }
 
-  getItemBuilders(): InstanceBuilder[] {
+  [StaticIterator](): InstanceBuilder[] {
     return this.items
   }
 }

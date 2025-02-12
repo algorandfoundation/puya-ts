@@ -10,7 +10,7 @@ describe('for loops', () => {
     const r1 = await appClientForLoopsAlgo.send.call({ method: 'test_for_loop', args: [2, 10, 2] })
     expect(r1.return).toBe(2n + 4n + 6n + 8n)
     const r2 = await appClientForLoopsAlgo.send.call({ method: 'test_for_loop', args: [2, 11, 2] })
-    expect(r2.return).toBe(2n + 4n + 6n + 8n + 11n)
+    expect(r2.return).toBe(2n + 4n + 6n + 8n + 10n)
   })
   test('break', async ({ appClientForLoopsAlgo }) => {
     const r1 = await appClientForLoopsAlgo.send.call({ method: 'test_for_loop_break', args: [2, 10, 2] })

@@ -1,10 +1,73 @@
-subroutine test_for_of_loop(items: readonlytuple[uint64, uint64, uint64]): uint64
+contract ForOfLoopsAlgo
 {
-  total: uint64 = 0
-  for (item in items) {
-    total: uint64 = total + item
-    #loop₁ᶜ:
+  approvalProgram(): bool
+  {
+    return arc4Router()
   }
-  #loop₁ᵇ:
-  return total
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  test_for_of_loop_tuple(items: readonlytuple[uint64, uint64, uint64]): uint64
+  {
+    total: uint64 = 0
+    for (item in items) {
+      total: uint64 = total + item
+      #loop₁ᶜ:
+    }
+    #loop₁ᵇ:
+    return total
+  }
+  
+  test_for_of_loop_arc4_dynamic_array(items: arc4.dynamic_array<arc4.uint64>): uint64
+  {
+    total: uint64 = 0
+    for (item in items) {
+      total: uint64 = total + ARC4_DECODE(item)
+      #loop₁ᶜ:
+    }
+    #loop₁ᵇ:
+    return total
+  }
+  
+  test_for_of_loop_arc4_static_array(items: arc4.static_array<arc4.uint64>): uint64
+  {
+    total: uint64 = 0
+    for (item in items) {
+      total: uint64 = total + ARC4_DECODE(item)
+      #loop₁ᶜ:
+    }
+    #loop₁ᵇ:
+    return total
+  }
+  
+  test_for_of_loop_native_immutable_array(items: stack_array<uint64>): uint64
+  {
+    total: uint64 = 0
+    for (item in items) {
+      total: uint64 = total + item
+      #loop₁ᶜ:
+    }
+    #loop₁ᵇ:
+    return total
+  }
+  
+  test_for_of_loop_native_mutable_array(items: readonlytuple[uint64, uint64, uint64]): uint64
+  {
+    mutable: ref_array<uint64> = new ref_array<uint64>(items.0, items.1, items.2)
+    total: uint64 = 0
+    for (item in mutable) {
+      total: uint64 = total + item
+      #loop₁ᶜ:
+    }
+    #loop₁ᵇ:
+    return total
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
 }
