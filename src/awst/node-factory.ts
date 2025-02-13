@@ -274,6 +274,7 @@ const explicitNodeFactory = {
     value: Expression
     sourceLocation: SourceLocation
   }) {
+    invariant(base.wtype instanceof wtypes.StackArray, 'base must have wtype of StackArray', base.sourceLocation)
     return new ArrayReplace({
       base,
       index,

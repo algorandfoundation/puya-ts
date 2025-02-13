@@ -10,7 +10,7 @@ export abstract class Node {
   constructor(props: Props<Node>) {
     this.sourceLocation = props.sourceLocation
   }
-  sourceLocation: SourceLocation
+  readonly sourceLocation: SourceLocation
 }
 export abstract class Statement extends Node {
   constructor(props: Props<Statement>) {
@@ -23,7 +23,7 @@ export abstract class Expression extends Node {
     super(props)
     this.wtype = props.wtype
   }
-  wtype: wtypes.WType
+  readonly wtype: wtypes.WType
   abstract accept<T>(visitor: ExpressionVisitor<T>): T
 }
 export class ExpressionStatement extends Statement {
@@ -32,8 +32,8 @@ export class ExpressionStatement extends Statement {
     this.expr = props.expr
     this.sourceLocation = props.sourceLocation
   }
-  expr: Expression
-  sourceLocation: SourceLocation
+  readonly expr: Expression
+  readonly sourceLocation: SourceLocation
   accept<T>(visitor: StatementVisitor<T>): T {
     return visitor.visitExpressionStatement(this)
   }
@@ -45,9 +45,9 @@ export class Block extends Statement {
     this.label = props.label
     this.comment = props.comment
   }
-  body: Array<Statement>
-  label: string | null
-  comment: string | null
+  readonly body: Array<Statement>
+  readonly label: string | null
+  readonly comment: string | null
   accept<T>(visitor: StatementVisitor<T>): T {
     return visitor.visitBlock(this)
   }
@@ -57,7 +57,7 @@ export class Goto extends Statement {
     super(props)
     this.target = props.target
   }
-  target: string
+  readonly target: string
   accept<T>(visitor: StatementVisitor<T>): T {
     return visitor.visitGoto(this)
   }
@@ -69,9 +69,9 @@ export class IfElse extends Statement {
     this.ifBranch = props.ifBranch
     this.elseBranch = props.elseBranch
   }
-  condition: Expression
-  ifBranch: Block
-  elseBranch: Block | null
+  readonly condition: Expression
+  readonly ifBranch: Block
+  readonly elseBranch: Block | null
   accept<T>(visitor: StatementVisitor<T>): T {
     return visitor.visitIfElse(this)
   }
@@ -83,9 +83,9 @@ export class Switch extends Statement {
     this.cases = props.cases
     this.defaultCase = props.defaultCase
   }
-  value: Expression
-  cases: Map<Expression, Block>
-  defaultCase: Block | null
+  readonly value: Expression
+  readonly cases: Map<Expression, Block>
+  readonly defaultCase: Block | null
   accept<T>(visitor: StatementVisitor<T>): T {
     return visitor.visitSwitch(this)
   }
@@ -96,8 +96,8 @@ export class WhileLoop extends Statement {
     this.condition = props.condition
     this.loopBody = props.loopBody
   }
-  condition: Expression
-  loopBody: Block
+  readonly condition: Expression
+  readonly loopBody: Block
   accept<T>(visitor: StatementVisitor<T>): T {
     return visitor.visitWhileLoop(this)
   }
@@ -123,7 +123,7 @@ export class ReturnStatement extends Statement {
     super(props)
     this.value = props.value
   }
-  value: Expression | null
+  readonly value: Expression | null
   accept<T>(visitor: StatementVisitor<T>): T {
     return visitor.visitReturnStatement(this)
   }
@@ -135,8 +135,9 @@ export class AssertExpression extends Expression {
     this.errorMessage = props.errorMessage
     this.wtype = props.wtype
   }
-  condition: Expression | null
-  errorMessage: string | null
+  readonly condition: Expression | null
+  readonly errorMessage: string | null
+  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitAssertExpression(this)
   }
@@ -148,8 +149,9 @@ export class IntegerConstant extends Expression {
     this.value = props.value
     this.tealAlias = props.tealAlias
   }
-  value: bigint
-  tealAlias: string | null
+  readonly wtype: wtypes.WType
+  readonly value: bigint
+  readonly tealAlias: string | null
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitIntegerConstant(this)
   }
@@ -160,8 +162,8 @@ export class DecimalConstant extends Expression {
     this.wtype = props.wtype
     this.value = props.value
   }
-  declare wtype: wtypes.ARC4UFixedNxM
-  value: string
+  readonly wtype: wtypes.ARC4UFixedNxM
+  readonly value: string
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitDecimalConstant(this)
   }
@@ -172,7 +174,8 @@ export class BoolConstant extends Expression {
     this.value = props.value
     this.wtype = props.wtype
   }
-  value: boolean
+  readonly value: boolean
+  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitBoolConstant(this)
   }
@@ -191,8 +194,9 @@ export class BytesConstant extends Expression {
     this.value = props.value
     this.encoding = props.encoding
   }
-  value: Uint8Array
-  encoding: BytesEncoding
+  readonly wtype: wtypes.WType
+  readonly value: Uint8Array
+  readonly encoding: BytesEncoding
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitBytesConstant(this)
   }
@@ -203,7 +207,8 @@ export class StringConstant extends Expression {
     this.value = props.value
     this.wtype = props.wtype
   }
-  value: string
+  readonly value: string
+  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitStringConstant(this)
   }
@@ -213,6 +218,7 @@ export class VoidConstant extends Expression {
     super(props)
     this.wtype = props.wtype
   }
+  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitVoidConstant(this)
   }
@@ -223,7 +229,8 @@ export class TemplateVar extends Expression {
     this.wtype = props.wtype
     this.name = props.name
   }
-  name: string
+  readonly wtype: wtypes.WType
+  readonly name: string
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitTemplateVar(this)
   }
@@ -234,7 +241,8 @@ export class MethodConstant extends Expression {
     this.wtype = props.wtype
     this.value = props.value
   }
-  value: string
+  readonly wtype: wtypes.WType
+  readonly value: string
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitMethodConstant(this)
   }
@@ -245,7 +253,8 @@ export class AddressConstant extends Expression {
     this.wtype = props.wtype
     this.value = props.value
   }
-  value: string
+  readonly wtype: wtypes.WType
+  readonly value: string
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitAddressConstant(this)
   }
@@ -256,8 +265,8 @@ export class ARC4Encode extends Expression {
     this.value = props.value
     this.wtype = props.wtype
   }
-  value: Expression
-  declare wtype: wtypes.ARC4Type
+  readonly value: Expression
+  readonly wtype: wtypes.ARC4Type
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitARC4Encode(this)
   }
@@ -268,7 +277,8 @@ export class Copy extends Expression {
     this.value = props.value
     this.wtype = props.wtype
   }
-  value: Expression
+  readonly value: Expression
+  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitCopy(this)
   }
@@ -278,19 +288,37 @@ export class ArrayConcat extends Expression {
     super(props)
     this.left = props.left
     this.right = props.right
+    this.wtype = props.wtype
   }
-  left: Expression
-  right: Expression
+  readonly left: Expression
+  readonly right: Expression
+  readonly wtype: wtypes.ARC4DynamicArray | wtypes.StackArray
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitArrayConcat(this)
+  }
+}
+export class ArrayExtend extends Expression {
+  constructor(props: Props<ArrayExtend>) {
+    super(props)
+    this.base = props.base
+    this.other = props.other
+    this.wtype = props.wtype
+  }
+  readonly base: Expression
+  readonly other: Expression
+  readonly wtype: wtypes.WType
+  accept<T>(visitor: ExpressionVisitor<T>): T {
+    return visitor.visitArrayExtend(this)
   }
 }
 export class ArrayPop extends Expression {
   constructor(props: Props<ArrayPop>) {
     super(props)
     this.base = props.base
+    this.wtype = props.wtype
   }
-  base: Expression
+  readonly base: Expression
+  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitArrayPop(this)
   }
@@ -301,24 +329,14 @@ export class ArrayReplace extends Expression {
     this.base = props.base
     this.index = props.index
     this.value = props.value
+    this.wtype = props.wtype
   }
-  base: Expression
-  index: Expression
-  value: Expression
+  readonly base: Expression
+  readonly index: Expression
+  readonly value: Expression
+  readonly wtype: wtypes.StackArray
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitArrayReplace(this)
-  }
-}
-export class ArrayExtend extends Expression {
-  constructor(props: Props<ArrayExtend>) {
-    super(props)
-    this.base = props.base
-    this.other = props.other
-  }
-  base: Expression
-  other: Expression
-  accept<T>(visitor: ExpressionVisitor<T>): T {
-    return visitor.visitArrayExtend(this)
   }
 }
 export class ARC4Decode extends Expression {
@@ -326,7 +344,7 @@ export class ARC4Decode extends Expression {
     super(props)
     this.value = props.value
   }
-  value: Expression
+  readonly value: Expression
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitARC4Decode(this)
   }
@@ -338,9 +356,9 @@ export class IntrinsicCall extends Expression {
     this.immediates = props.immediates
     this.stackArgs = props.stackArgs
   }
-  opCode: string
-  immediates: Array<string | bigint>
-  stackArgs: Array<Expression>
+  readonly opCode: string
+  readonly immediates: Array<string | bigint>
+  readonly stackArgs: Array<Expression>
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitIntrinsicCall(this)
   }
@@ -351,8 +369,8 @@ export class CreateInnerTransaction extends Expression {
     this.wtype = props.wtype
     this.fields = props.fields
   }
-  declare wtype: wtypes.WInnerTransactionFields
-  fields: Map<TxnField, Expression>
+  readonly wtype: wtypes.WInnerTransactionFields
+  readonly fields: Map<TxnField, Expression>
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitCreateInnerTransaction(this)
   }
@@ -364,8 +382,9 @@ export class UpdateInnerTransaction extends Expression {
     this.fields = props.fields
     this.wtype = props.wtype
   }
-  itxn: Expression
-  fields: Map<TxnField, Expression>
+  readonly itxn: Expression
+  readonly fields: Map<TxnField, Expression>
+  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitUpdateInnerTransaction(this)
   }
@@ -376,8 +395,8 @@ export class GroupTransactionReference extends Expression {
     this.index = props.index
     this.wtype = props.wtype
   }
-  index: Expression
-  declare wtype: wtypes.WGroupTransaction
+  readonly index: Expression
+  readonly wtype: wtypes.WGroupTransaction
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitGroupTransactionReference(this)
   }
@@ -390,9 +409,10 @@ export class CheckedMaybe extends Expression {
     this.wtype = props.wtype
     this.sourceLocation = props.sourceLocation
   }
-  expr: Expression
-  comment: string
-  sourceLocation: SourceLocation
+  readonly expr: Expression
+  readonly comment: string
+  readonly wtype: wtypes.WType
+  readonly sourceLocation: SourceLocation
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitCheckedMaybe(this)
   }
@@ -403,8 +423,8 @@ export class TupleExpression extends Expression {
     this.items = props.items
     this.wtype = props.wtype
   }
-  items: Array<Expression>
-  declare wtype: wtypes.WTuple
+  readonly items: Array<Expression>
+  readonly wtype: wtypes.WTuple
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitTupleExpression(this)
   }
@@ -416,8 +436,9 @@ export class TupleItemExpression extends Expression {
     this.index = props.index
     this.wtype = props.wtype
   }
-  base: Expression
-  index: bigint
+  readonly base: Expression
+  readonly index: bigint
+  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitTupleItemExpression(this)
   }
@@ -427,7 +448,7 @@ export class VarExpression extends Expression {
     super(props)
     this.name = props.name
   }
-  name: string
+  readonly name: string
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitVarExpression(this)
   }
@@ -439,9 +460,9 @@ export class InnerTransactionField extends Expression {
     this.field = props.field
     this.arrayIndex = props.arrayIndex
   }
-  itxn: Expression
-  field: TxnField
-  arrayIndex: Expression | null
+  readonly itxn: Expression
+  readonly field: TxnField
+  readonly arrayIndex: Expression | null
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitInnerTransactionField(this)
   }
@@ -452,7 +473,8 @@ export class SubmitInnerTransaction extends Expression {
     this.itxns = props.itxns
     this.wtype = props.wtype
   }
-  itxns: Array<Expression>
+  readonly itxns: Array<Expression>
+  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitSubmitInnerTransaction(this)
   }
@@ -464,8 +486,9 @@ export class FieldExpression extends Expression {
     this.name = props.name
     this.wtype = props.wtype
   }
-  base: Expression
-  name: string
+  readonly base: Expression
+  readonly name: string
+  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitFieldExpression(this)
   }
@@ -476,8 +499,8 @@ export class IndexExpression extends Expression {
     this.base = props.base
     this.index = props.index
   }
-  base: Expression
-  index: Expression
+  readonly base: Expression
+  readonly index: Expression
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitIndexExpression(this)
   }
@@ -489,9 +512,9 @@ export class SliceExpression extends Expression {
     this.beginIndex = props.beginIndex
     this.endIndex = props.endIndex
   }
-  base: Expression
-  beginIndex: Expression | null
-  endIndex: Expression | null
+  readonly base: Expression
+  readonly beginIndex: Expression | null
+  readonly endIndex: Expression | null
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitSliceExpression(this)
   }
@@ -503,9 +526,9 @@ export class IntersectionSliceExpression extends Expression {
     this.beginIndex = props.beginIndex
     this.endIndex = props.endIndex
   }
-  base: Expression
-  beginIndex: Expression | bigint | null
-  endIndex: Expression | bigint | null
+  readonly base: Expression
+  readonly beginIndex: Expression | bigint | null
+  readonly endIndex: Expression | bigint | null
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitIntersectionSliceExpression(this)
   }
@@ -516,8 +539,8 @@ export class AppStateExpression extends Expression {
     this.key = props.key
     this.existsAssertionMessage = props.existsAssertionMessage
   }
-  key: Expression
-  existsAssertionMessage: string | null
+  readonly key: Expression
+  readonly existsAssertionMessage: string | null
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitAppStateExpression(this)
   }
@@ -529,9 +552,9 @@ export class AppAccountStateExpression extends Expression {
     this.existsAssertionMessage = props.existsAssertionMessage
     this.account = props.account
   }
-  key: Expression
-  existsAssertionMessage: string | null
-  account: Expression
+  readonly key: Expression
+  readonly existsAssertionMessage: string | null
+  readonly account: Expression
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitAppAccountStateExpression(this)
   }
@@ -542,8 +565,8 @@ export class BoxValueExpression extends Expression {
     this.key = props.key
     this.existsAssertionMessage = props.existsAssertionMessage
   }
-  key: Expression
-  existsAssertionMessage: string | null
+  readonly key: Expression
+  readonly existsAssertionMessage: string | null
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitBoxValueExpression(this)
   }
@@ -556,9 +579,10 @@ export class SingleEvaluation extends Expression {
     this.wtype = props.wtype
     this.sourceLocation = props.sourceLocation
   }
-  source: Expression
-  id: symbol
-  sourceLocation: SourceLocation
+  readonly source: Expression
+  readonly id: symbol
+  readonly wtype: wtypes.WType
+  readonly sourceLocation: SourceLocation
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitSingleEvaluation(this)
   }
@@ -568,7 +592,7 @@ export class ReinterpretCast extends Expression {
     super(props)
     this.expr = props.expr
   }
-  expr: Expression
+  readonly expr: Expression
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitReinterpretCast(this)
   }
@@ -579,8 +603,8 @@ export class NewArray extends Expression {
     this.wtype = props.wtype
     this.values = props.values
   }
-  declare wtype: wtypes.NativeArray | wtypes.ARC4Array
-  values: Array<Expression>
+  readonly wtype: wtypes.ARC4DynamicArray | wtypes.ARC4StaticArray | wtypes.ReferenceArray | wtypes.StackArray
+  readonly values: Array<Expression>
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitNewArray(this)
   }
@@ -591,7 +615,8 @@ export class ArrayLength extends Expression {
     this.array = props.array
     this.wtype = props.wtype
   }
-  array: Expression
+  readonly array: Expression
+  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitArrayLength(this)
   }
@@ -604,9 +629,10 @@ export class ConditionalExpression extends Expression {
     this.falseExpr = props.falseExpr
     this.wtype = props.wtype
   }
-  condition: Expression
-  trueExpr: Expression
-  falseExpr: Expression
+  readonly condition: Expression
+  readonly trueExpr: Expression
+  readonly falseExpr: Expression
+  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitConditionalExpression(this)
   }
@@ -617,7 +643,7 @@ export class AssignmentStatement extends Statement {
     this.target = props.target
     this.value = props.value
   }
-  target:
+  readonly target:
     | VarExpression
     | FieldExpression
     | IndexExpression
@@ -625,7 +651,7 @@ export class AssignmentStatement extends Statement {
     | AppStateExpression
     | AppAccountStateExpression
     | BoxValueExpression
-  value: Expression
+  readonly value: Expression
   accept<T>(visitor: StatementVisitor<T>): T {
     return visitor.visitAssignmentStatement(this)
   }
@@ -637,7 +663,7 @@ export class AssignmentExpression extends Expression {
     this.value = props.value
     this.wtype = props.wtype
   }
-  target:
+  readonly target:
     | VarExpression
     | FieldExpression
     | IndexExpression
@@ -645,7 +671,8 @@ export class AssignmentExpression extends Expression {
     | AppStateExpression
     | AppAccountStateExpression
     | BoxValueExpression
-  value: Expression
+  readonly value: Expression
+  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitAssignmentExpression(this)
   }
@@ -670,9 +697,10 @@ export class NumericComparisonExpression extends Expression {
     this.operator = props.operator
     this.rhs = props.rhs
   }
-  lhs: Expression
-  operator: NumericComparison
-  rhs: Expression
+  readonly wtype: wtypes.WType
+  readonly lhs: Expression
+  readonly operator: NumericComparison
+  readonly rhs: Expression
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitNumericComparisonExpression(this)
   }
@@ -685,9 +713,10 @@ export class BytesComparisonExpression extends Expression {
     this.operator = props.operator
     this.rhs = props.rhs
   }
-  lhs: Expression
-  operator: EqualityComparison
-  rhs: Expression
+  readonly wtype: wtypes.WType
+  readonly lhs: Expression
+  readonly operator: EqualityComparison
+  readonly rhs: Expression
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitBytesComparisonExpression(this)
   }
@@ -696,35 +725,35 @@ export class SubroutineID {
   constructor(props: Props<SubroutineID>) {
     this.target = props.target
   }
-  target: string
+  readonly target: string
 }
 export class InstanceMethodTarget {
   constructor(props: Props<InstanceMethodTarget>) {
     this.memberName = props.memberName
   }
-  memberName: string
+  readonly memberName: string
 }
 export class InstanceSuperMethodTarget {
   constructor(props: Props<InstanceSuperMethodTarget>) {
     this.memberName = props.memberName
   }
-  memberName: string
+  readonly memberName: string
 }
 export class ContractMethodTarget {
   constructor(props: Props<ContractMethodTarget>) {
     this.cref = props.cref
     this.memberName = props.memberName
   }
-  cref: ContractReference
-  memberName: string
+  readonly cref: ContractReference
+  readonly memberName: string
 }
 export class CallArg {
   constructor(props: Props<CallArg>) {
     this.name = props.name
     this.value = props.value
   }
-  name: string | null
-  value: Expression
+  readonly name: string | null
+  readonly value: Expression
 }
 export class SubroutineCallExpression extends Expression {
   constructor(props: Props<SubroutineCallExpression>) {
@@ -732,8 +761,8 @@ export class SubroutineCallExpression extends Expression {
     this.target = props.target
     this.args = props.args
   }
-  target: SubroutineID | InstanceMethodTarget | InstanceSuperMethodTarget | ContractMethodTarget
-  args: Array<CallArg>
+  readonly target: SubroutineID | InstanceMethodTarget | InstanceSuperMethodTarget | ContractMethodTarget
+  readonly args: Array<CallArg>
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitSubroutineCallExpression(this)
   }
@@ -744,9 +773,9 @@ export class PuyaLibData {
     this.params = props.params
     this.wtype = props.wtype
   }
-  id: string
-  params: Map<string, wtypes.WType>
-  wtype: wtypes.WType
+  readonly id: string
+  readonly params: Map<string, wtypes.WType>
+  readonly wtype: wtypes.WType
 }
 export enum PuyaLibFunction {
   ensureBudget = 'ensure_budget',
@@ -759,8 +788,9 @@ export class PuyaLibCall extends Expression {
     this.args = props.args
     this.wtype = props.wtype
   }
-  func: PuyaLibFunction
-  args: Array<CallArg>
+  readonly func: PuyaLibFunction
+  readonly args: Array<CallArg>
+  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitPuyaLibCall(this)
   }
@@ -811,8 +841,9 @@ export class UInt64UnaryOperation extends Expression {
     this.expr = props.expr
     this.wtype = props.wtype
   }
-  op: UInt64UnaryOperator
-  expr: Expression
+  readonly op: UInt64UnaryOperator
+  readonly expr: Expression
+  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitUInt64UnaryOperation(this)
   }
@@ -824,8 +855,8 @@ export class UInt64PostfixUnaryOperation extends Expression {
     this.target = props.target
     this.wtype = props.wtype
   }
-  op: UInt64PostfixUnaryOperator
-  target:
+  readonly op: UInt64PostfixUnaryOperator
+  readonly target:
     | VarExpression
     | FieldExpression
     | IndexExpression
@@ -833,6 +864,7 @@ export class UInt64PostfixUnaryOperation extends Expression {
     | AppStateExpression
     | AppAccountStateExpression
     | BoxValueExpression
+  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitUInt64PostfixUnaryOperation(this)
   }
@@ -848,8 +880,9 @@ export class BigUIntPostfixUnaryOperation extends Expression {
     this.target = props.target
     this.wtype = props.wtype
   }
-  op: BigUIntPostfixUnaryOperator
-  target: Expression
+  readonly op: BigUIntPostfixUnaryOperator
+  readonly target: Expression
+  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitBigUIntPostfixUnaryOperation(this)
   }
@@ -861,8 +894,9 @@ export class BytesUnaryOperation extends Expression {
     this.expr = props.expr
     this.wtype = props.wtype
   }
-  op: BytesUnaryOperator
-  expr: Expression
+  readonly op: BytesUnaryOperator
+  readonly expr: Expression
+  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitBytesUnaryOperation(this)
   }
@@ -875,9 +909,10 @@ export class UInt64BinaryOperation extends Expression {
     this.right = props.right
     this.wtype = props.wtype
   }
-  left: Expression
-  op: UInt64BinaryOperator
-  right: Expression
+  readonly left: Expression
+  readonly op: UInt64BinaryOperator
+  readonly right: Expression
+  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitUInt64BinaryOperation(this)
   }
@@ -890,9 +925,10 @@ export class BigUIntBinaryOperation extends Expression {
     this.right = props.right
     this.wtype = props.wtype
   }
-  left: Expression
-  op: BigUIntBinaryOperator
-  right: Expression
+  readonly left: Expression
+  readonly op: BigUIntBinaryOperator
+  readonly right: Expression
+  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitBigUIntBinaryOperation(this)
   }
@@ -905,9 +941,10 @@ export class BytesBinaryOperation extends Expression {
     this.right = props.right
     this.wtype = props.wtype
   }
-  left: Expression
-  op: BytesBinaryOperator
-  right: Expression
+  readonly left: Expression
+  readonly op: BytesBinaryOperator
+  readonly right: Expression
+  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitBytesBinaryOperation(this)
   }
@@ -924,9 +961,10 @@ export class BooleanBinaryOperation extends Expression {
     this.right = props.right
     this.wtype = props.wtype
   }
-  left: Expression
-  op: BinaryBooleanOperator
-  right: Expression
+  readonly left: Expression
+  readonly op: BinaryBooleanOperator
+  readonly right: Expression
+  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitBooleanBinaryOperation(this)
   }
@@ -937,7 +975,8 @@ export class Not extends Expression {
     this.expr = props.expr
     this.wtype = props.wtype
   }
-  expr: Expression
+  readonly expr: Expression
+  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitNot(this)
   }
@@ -949,7 +988,7 @@ export class UInt64AugmentedAssignment extends Statement {
     this.op = props.op
     this.value = props.value
   }
-  target:
+  readonly target:
     | VarExpression
     | FieldExpression
     | IndexExpression
@@ -957,8 +996,8 @@ export class UInt64AugmentedAssignment extends Statement {
     | AppStateExpression
     | AppAccountStateExpression
     | BoxValueExpression
-  op: UInt64BinaryOperator
-  value: Expression
+  readonly op: UInt64BinaryOperator
+  readonly value: Expression
   accept<T>(visitor: StatementVisitor<T>): T {
     return visitor.visitUInt64AugmentedAssignment(this)
   }
@@ -970,7 +1009,7 @@ export class BigUIntAugmentedAssignment extends Statement {
     this.op = props.op
     this.value = props.value
   }
-  target:
+  readonly target:
     | VarExpression
     | FieldExpression
     | IndexExpression
@@ -978,8 +1017,8 @@ export class BigUIntAugmentedAssignment extends Statement {
     | AppStateExpression
     | AppAccountStateExpression
     | BoxValueExpression
-  op: BigUIntBinaryOperator
-  value: Expression
+  readonly op: BigUIntBinaryOperator
+  readonly value: Expression
   accept<T>(visitor: StatementVisitor<T>): T {
     return visitor.visitBigUIntAugmentedAssignment(this)
   }
@@ -991,7 +1030,7 @@ export class BytesAugmentedAssignment extends Statement {
     this.op = props.op
     this.value = props.value
   }
-  target:
+  readonly target:
     | VarExpression
     | FieldExpression
     | IndexExpression
@@ -999,8 +1038,8 @@ export class BytesAugmentedAssignment extends Statement {
     | AppStateExpression
     | AppAccountStateExpression
     | BoxValueExpression
-  op: BytesBinaryOperator
-  value: Expression
+  readonly op: BytesBinaryOperator
+  readonly value: Expression
   accept<T>(visitor: StatementVisitor<T>): T {
     return visitor.visitBytesAugmentedAssignment(this)
   }
@@ -1012,8 +1051,9 @@ export class Emit extends Expression {
     this.value = props.value
     this.wtype = props.wtype
   }
-  signature: string
-  value: Expression
+  readonly signature: string
+  readonly value: Expression
+  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitEmit(this)
   }
@@ -1026,9 +1066,10 @@ export class Range extends Expression {
     this.stop = props.stop
     this.step = props.step
   }
-  start: Expression
-  stop: Expression
-  step: Expression
+  readonly wtype: wtypes.WType
+  readonly start: Expression
+  readonly stop: Expression
+  readonly step: Expression
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitRange(this)
   }
@@ -1039,8 +1080,8 @@ export class Enumeration extends Expression {
     this.expr = props.expr
     this.wtype = props.wtype
   }
-  expr: Expression
-  declare wtype: wtypes.WEnumeration
+  readonly expr: Expression
+  readonly wtype: wtypes.WEnumeration
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitEnumeration(this)
   }
@@ -1051,7 +1092,8 @@ export class Reversed extends Expression {
     this.expr = props.expr
     this.wtype = props.wtype
   }
-  expr: Expression
+  readonly expr: Expression
+  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitReversed(this)
   }
@@ -1063,8 +1105,8 @@ export class ForInLoop extends Statement {
     this.items = props.items
     this.loopBody = props.loopBody
   }
-  sequence: Expression
-  items:
+  readonly sequence: Expression
+  readonly items:
     | VarExpression
     | FieldExpression
     | IndexExpression
@@ -1072,7 +1114,7 @@ export class ForInLoop extends Statement {
     | AppStateExpression
     | AppAccountStateExpression
     | BoxValueExpression
-  loopBody: Block
+  readonly loopBody: Block
   accept<T>(visitor: StatementVisitor<T>): T {
     return visitor.visitForInLoop(this)
   }
@@ -1084,8 +1126,9 @@ export class StateGet extends Expression {
     this.default = props.default
     this.wtype = props.wtype
   }
-  field: AppStateExpression | AppAccountStateExpression | BoxValueExpression
-  default: Expression
+  readonly field: AppStateExpression | AppAccountStateExpression | BoxValueExpression
+  readonly default: Expression
+  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitStateGet(this)
   }
@@ -1096,8 +1139,8 @@ export class StateGetEx extends Expression {
     this.field = props.field
     this.wtype = props.wtype
   }
-  field: AppStateExpression | AppAccountStateExpression | BoxValueExpression
-  declare wtype: wtypes.WTuple
+  readonly field: AppStateExpression | AppAccountStateExpression | BoxValueExpression
+  readonly wtype: wtypes.WTuple
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitStateGetEx(this)
   }
@@ -1108,7 +1151,8 @@ export class StateExists extends Expression {
     this.field = props.field
     this.wtype = props.wtype
   }
-  field: AppStateExpression | AppAccountStateExpression | BoxValueExpression
+  readonly field: AppStateExpression | AppAccountStateExpression | BoxValueExpression
+  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitStateExists(this)
   }
@@ -1119,7 +1163,8 @@ export class StateDelete extends Expression {
     this.field = props.field
     this.wtype = props.wtype
   }
-  field: AppStateExpression | AppAccountStateExpression | BoxValueExpression
+  readonly field: AppStateExpression | AppAccountStateExpression | BoxValueExpression
+  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitStateDelete(this)
   }
@@ -1130,8 +1175,8 @@ export class NewStruct extends Expression {
     this.wtype = props.wtype
     this.values = props.values
   }
-  declare wtype: wtypes.WStructType | wtypes.ARC4Struct
-  values: Map<string, Expression>
+  readonly wtype: wtypes.WStructType | wtypes.ARC4Struct
+  readonly values: Map<string, Expression>
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitNewStruct(this)
   }
@@ -1148,9 +1193,9 @@ export class SubroutineArgument {
     this.sourceLocation = props.sourceLocation
     this.wtype = props.wtype
   }
-  name: string
-  sourceLocation: SourceLocation
-  wtype: wtypes.WType
+  readonly name: string
+  readonly sourceLocation: SourceLocation
+  readonly wtype: wtypes.WType
 }
 export class MethodDocumentation {
   constructor(props: Props<MethodDocumentation>) {
@@ -1158,9 +1203,9 @@ export class MethodDocumentation {
     this.args = props.args
     this.returns = props.returns
   }
-  description: string | null
-  args: Map<string, string>
-  returns: string | null
+  readonly description: string | null
+  readonly args: Map<string, string>
+  readonly returns: string | null
 }
 export abstract class _Function extends Node {
   constructor(props: Props<_Function>) {
@@ -1171,11 +1216,11 @@ export abstract class _Function extends Node {
     this.documentation = props.documentation
     this.inline = props.inline
   }
-  args: Array<SubroutineArgument>
-  returnType: wtypes.WType
-  body: Block
-  documentation: MethodDocumentation
-  inline: boolean | null
+  readonly args: Array<SubroutineArgument>
+  readonly returnType: wtypes.WType
+  readonly body: Block
+  readonly documentation: MethodDocumentation
+  readonly inline: boolean | null
 }
 export class Subroutine extends classes(_Function, RootNode) {
   constructor(props: Props<Subroutine>) {
@@ -1183,8 +1228,8 @@ export class Subroutine extends classes(_Function, RootNode) {
     this.id = props.id
     this.name = props.name
   }
-  id: string
-  name: string
+  readonly id: string
+  readonly name: string
   accept<T>(visitor: RootNodeVisitor<T>): T {
     return visitor.visitSubroutine(this)
   }
@@ -1202,9 +1247,9 @@ export class ContractMethod extends classes(_Function, ContractMemberNode) {
     this.memberName = props.memberName
     this.arc4MethodConfig = props.arc4MethodConfig
   }
-  cref: ContractReference
-  memberName: string
-  arc4MethodConfig: ARC4BareMethodConfig | ARC4ABIMethodConfig | null
+  readonly cref: ContractReference
+  readonly memberName: string
+  readonly arc4MethodConfig: ARC4BareMethodConfig | ARC4ABIMethodConfig | null
   accept<T>(visitor: ContractMemberNodeVisitor<T>): T {
     return visitor.visitContractMethod(this)
   }
@@ -1224,12 +1269,12 @@ export class AppStorageDefinition extends ContractMemberNode {
     this.key = props.key
     this.description = props.description
   }
-  memberName: string
-  kind: AppStorageKind
-  storageWtype: wtypes.WType
-  keyWtype: wtypes.WType | null
-  key: BytesConstant
-  description: string | null
+  readonly memberName: string
+  readonly kind: AppStorageKind
+  readonly storageWtype: wtypes.WType
+  readonly keyWtype: wtypes.WType | null
+  readonly key: BytesConstant
+  readonly description: string | null
   accept<T>(visitor: ContractMemberNodeVisitor<T>): T {
     return visitor.visitAppStorageDefinition(this)
   }
@@ -1244,12 +1289,12 @@ export class LogicSignature extends RootNode {
     this.reservedScratchSpace = props.reservedScratchSpace
     this.avmVersion = props.avmVersion
   }
-  id: LogicSigReference
-  shortName: string
-  program: Subroutine
-  docstring: string | null
-  reservedScratchSpace: Set<bigint>
-  avmVersion: bigint | null
+  readonly id: LogicSigReference
+  readonly shortName: string
+  readonly program: Subroutine
+  readonly docstring: string | null
+  readonly reservedScratchSpace: Set<bigint>
+  readonly avmVersion: bigint | null
   accept<T>(visitor: RootNodeVisitor<T>): T {
     return visitor.visitLogicSignature(this)
   }
@@ -1262,10 +1307,10 @@ export class CompiledContract extends Expression {
     this.prefix = props.prefix
     this.templateVariables = props.templateVariables
   }
-  contract: ContractReference
-  allocationOverrides: Map<TxnField, Expression>
-  prefix: string | null
-  templateVariables: Map<string, Expression>
+  readonly contract: ContractReference
+  readonly allocationOverrides: Map<TxnField, Expression>
+  readonly prefix: string | null
+  readonly templateVariables: Map<string, Expression>
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitCompiledContract(this)
   }
@@ -1277,9 +1322,9 @@ export class CompiledLogicSig extends Expression {
     this.prefix = props.prefix
     this.templateVariables = props.templateVariables
   }
-  logicSig: LogicSigReference
-  prefix: string | null
-  templateVariables: Map<string, Expression>
+  readonly logicSig: LogicSigReference
+  readonly prefix: string | null
+  readonly templateVariables: Map<string, Expression>
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitCompiledLogicSig(this)
   }
@@ -1291,16 +1336,17 @@ export class StateTotals {
     this.globalBytes = props.globalBytes
     this.localBytes = props.localBytes
   }
-  globalUints: bigint | null
-  localUints: bigint | null
-  globalBytes: bigint | null
-  localBytes: bigint | null
+  readonly globalUints: bigint | null
+  readonly localUints: bigint | null
+  readonly globalBytes: bigint | null
+  readonly localBytes: bigint | null
 }
 export class ARC4Router extends Expression {
   constructor(props: Props<ARC4Router>) {
     super(props)
     this.wtype = props.wtype
   }
+  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitARC4Router(this)
   }
@@ -1320,17 +1366,17 @@ export class Contract extends RootNode {
     this.reservedScratchSpace = props.reservedScratchSpace
     this.avmVersion = props.avmVersion
   }
-  id: ContractReference
-  name: string
-  description: string | null
-  methodResolutionOrder: Array<ContractReference>
-  approvalProgram: ContractMethod
-  clearProgram: ContractMethod
-  methods: Array<ContractMethod>
-  appState: Array<AppStorageDefinition>
-  stateTotals: StateTotals | null
-  reservedScratchSpace: Set<bigint>
-  avmVersion: bigint | null
+  readonly id: ContractReference
+  readonly name: string
+  readonly description: string | null
+  readonly methodResolutionOrder: Array<ContractReference>
+  readonly approvalProgram: ContractMethod
+  readonly clearProgram: ContractMethod
+  readonly methods: Array<ContractMethod>
+  readonly appState: Array<AppStorageDefinition>
+  readonly stateTotals: StateTotals | null
+  readonly reservedScratchSpace: Set<bigint>
+  readonly avmVersion: bigint | null
   accept<T>(visitor: RootNodeVisitor<T>): T {
     return visitor.visitContract(this)
   }
@@ -1346,21 +1392,21 @@ export class ARC4BareMethodConfig {
     this.allowedCompletionTypes = props.allowedCompletionTypes
     this.create = props.create
   }
-  sourceLocation: SourceLocation
-  allowedCompletionTypes: Array<OnCompletionAction>
-  create: ARC4CreateOption
+  readonly sourceLocation: SourceLocation
+  readonly allowedCompletionTypes: Array<OnCompletionAction>
+  readonly create: ARC4CreateOption
 }
 export class ABIMethodArgConstantDefault {
   constructor(props: Props<ABIMethodArgConstantDefault>) {
     this.value = props.value
   }
-  value: Expression
+  readonly value: Expression
 }
 export class ABIMethodArgMemberDefault {
   constructor(props: Props<ABIMethodArgMemberDefault>) {
     this.name = props.name
   }
-  name: string
+  readonly name: string
 }
 export class ARC4ABIMethodConfig {
   constructor(props: Props<ARC4ABIMethodConfig>) {
@@ -1371,12 +1417,12 @@ export class ARC4ABIMethodConfig {
     this.readonly = props.readonly
     this.defaultArgs = props.defaultArgs
   }
-  sourceLocation: SourceLocation
-  allowedCompletionTypes: Array<OnCompletionAction>
-  create: ARC4CreateOption
-  name: string
-  readonly: boolean
-  defaultArgs: Map<string, ABIMethodArgMemberDefault | ABIMethodArgConstantDefault>
+  readonly sourceLocation: SourceLocation
+  readonly allowedCompletionTypes: Array<OnCompletionAction>
+  readonly create: ARC4CreateOption
+  readonly name: string
+  readonly readonly: boolean
+  readonly defaultArgs: Map<string, ABIMethodArgMemberDefault | ABIMethodArgConstantDefault>
 }
 export type LValue = VarExpression | FieldExpression | IndexExpression | TupleExpression | AppStateExpression | AppAccountStateExpression
 export type Constant = IntegerConstant | BoolConstant | BytesConstant | StringConstant
@@ -1404,9 +1450,9 @@ export const concreteNodes = {
   aRC4Encode: ARC4Encode,
   copy: Copy,
   arrayConcat: ArrayConcat,
+  arrayExtend: ArrayExtend,
   arrayPop: ArrayPop,
   arrayReplace: ArrayReplace,
-  arrayExtend: ArrayExtend,
   aRC4Decode: ARC4Decode,
   intrinsicCall: IntrinsicCall,
   createInnerTransaction: CreateInnerTransaction,
@@ -1496,9 +1542,9 @@ export interface ExpressionVisitor<T> {
   visitARC4Encode(expression: ARC4Encode): T
   visitCopy(expression: Copy): T
   visitArrayConcat(expression: ArrayConcat): T
+  visitArrayExtend(expression: ArrayExtend): T
   visitArrayPop(expression: ArrayPop): T
   visitArrayReplace(expression: ArrayReplace): T
-  visitArrayExtend(expression: ArrayExtend): T
   visitARC4Decode(expression: ARC4Decode): T
   visitIntrinsicCall(expression: IntrinsicCall): T
   visitCreateInnerTransaction(expression: CreateInnerTransaction): T

@@ -33,7 +33,7 @@ export const Constants = {
   encodedAddressLength: 58,
   zeroAddressEncoded: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ',
   supportedAvmVersions: [10n, 11n],
-  targetedPuyaVersion: '4.2.1',
+  targetedPuyaVersion: '4.3.3',
 } as const
 
 export type SupportedAvmVersion = (typeof Constants.supportedAvmVersions)[number]
