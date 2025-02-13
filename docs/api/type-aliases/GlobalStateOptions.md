@@ -8,7 +8,9 @@
 
 > **GlobalStateOptions**\<`ValueType`\>: `object`
 
-Defined in: [packages/algo-ts/src/state.ts:12](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/state.ts#L12)
+Defined in: [packages/algo-ts/src/state.ts:26](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/state.ts#L26)
+
+Options for declaring a global state field
 
 ## Type Parameters
 
@@ -20,6 +22,12 @@ Defined in: [packages/algo-ts/src/state.ts:12](https://github.com/algorandfounda
 
 > `optional` **initialValue**: `ValueType`
 
+An initial value to assign to this global state field when the application is created
+
 ### key?
 
 > `optional` **key**: [`bytes`](bytes.md) \| `string`
+
+The key to be used for this global state field.
+
+Defaults to the name of the property this proxy is assigned to

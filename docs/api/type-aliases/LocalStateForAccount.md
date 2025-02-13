@@ -8,9 +8,9 @@
 
 > **LocalStateForAccount**\<`ValueType`\>: `object`
 
-Defined in: [packages/algo-ts/src/state.ts:20](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/state.ts#L20)
+Defined in: [packages/algo-ts/src/state.ts:51](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/state.ts#L51)
 
-A value saved in local state
+A proxy for manipulating a local state field for a single account
 
 ## Type Parameters
 
@@ -18,18 +18,22 @@ A value saved in local state
 
 ## Type declaration
 
-### delete()
-
-> **delete**: () => `void`
-
-#### Returns
-
-`void`
-
 ### hasValue
 
-> **hasValue**: `boolean`
+> `readonly` **hasValue**: `boolean`
+
+Gets a boolean value indicating if local state field for a single account currently has a value
 
 ### value
 
 > **value**: `ValueType`
+
+Get or set the value of this local state field for a single account
+
+### delete()
+
+Delete the stored value of this local state field for a single account
+
+#### Returns
+
+`void`

@@ -6,7 +6,7 @@
 
 # Interface: CommonTransactionFields
 
-Defined in: [packages/algo-ts/src/itxn.ts:38](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/itxn.ts#L38)
+Defined in: [packages/algo-ts/src/itxn.ts:38](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/itxn.ts#L38)
 
 ## Extended by
 
@@ -23,7 +23,7 @@ Defined in: [packages/algo-ts/src/itxn.ts:38](https://github.com/algorandfoundat
 
 > `optional` **fee**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:47](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/itxn.ts#L47)
+Defined in: [packages/algo-ts/src/itxn.ts:47](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/itxn.ts#L47)
 
 microalgos
 
@@ -33,7 +33,7 @@ microalgos
 
 > `optional` **firstValid**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:52](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/itxn.ts#L52)
+Defined in: [packages/algo-ts/src/itxn.ts:52](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/itxn.ts#L52)
 
 round number
 
@@ -43,7 +43,7 @@ round number
 
 > `optional` **firstValidTime**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:57](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/itxn.ts#L57)
+Defined in: [packages/algo-ts/src/itxn.ts:57](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/itxn.ts#L57)
 
 UNIX timestamp of block before txn.FirstValid. Fails if negative
 
@@ -53,7 +53,7 @@ UNIX timestamp of block before txn.FirstValid. Fails if negative
 
 > `optional` **lease**: [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:67](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/itxn.ts#L67)
+Defined in: [packages/algo-ts/src/itxn.ts:67](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/itxn.ts#L67)
 
 32 byte lease value
 
@@ -63,7 +63,7 @@ Defined in: [packages/algo-ts/src/itxn.ts:67](https://github.com/algorandfoundat
 
 > `optional` **note**: `string` \| [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:62](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/itxn.ts#L62)
+Defined in: [packages/algo-ts/src/itxn.ts:62](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/itxn.ts#L62)
 
 Any data up to 1024 bytes
 
@@ -73,7 +73,7 @@ Any data up to 1024 bytes
 
 > `optional` **rekeyTo**: `AccountInput`
 
-Defined in: [packages/algo-ts/src/itxn.ts:72](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/itxn.ts#L72)
+Defined in: [packages/algo-ts/src/itxn.ts:72](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/itxn.ts#L72)
 
 32 byte Sender's new AuthAddr
 
@@ -83,6 +83,6 @@ Defined in: [packages/algo-ts/src/itxn.ts:72](https://github.com/algorandfoundat
 
 > `optional` **sender**: `AccountInput`
 
-Defined in: [packages/algo-ts/src/itxn.ts:42](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/itxn.ts#L42)
+Defined in: [packages/algo-ts/src/itxn.ts:42](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/itxn.ts#L42)
 
 32 byte address

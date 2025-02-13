@@ -8,28 +8,34 @@
 
 > **GlobalState**\<`ValueType`\>: `object`
 
-Defined in: [packages/algo-ts/src/state.ts:15](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/state.ts#L15)
+Defined in: [packages/algo-ts/src/state.ts:44](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/state.ts#L44)
 
-A value saved in global state
+A proxy for manipulating a global state field
 
 ## Type Parameters
 
 • **ValueType**
 
+The type of the value being stored - must be a serializable type
+
 ## Type declaration
-
-### delete()
-
-> **delete**: () => `void`
-
-#### Returns
-
-`void`
 
 ### hasValue
 
-> **hasValue**: `boolean`
+> `readonly` **hasValue**: `boolean`
+
+Gets a boolean value indicating if global state field currently has a value
 
 ### value
 
 > **value**: `ValueType`
+
+Get or set the value of this global state field
+
+### delete()
+
+Delete the stored value of this global state field
+
+#### Returns
+
+`void`

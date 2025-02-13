@@ -6,7 +6,7 @@
 
 # Class: Tuple\<TTuple\>
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:247](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/arc4/encoded-types.ts#L247)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:247](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/arc4/encoded-types.ts#L247)
 
 ## Extends
 
@@ -22,7 +22,7 @@ Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:247](https://github.com/
 
 > **new Tuple**\<`TTuple`\>(...`items`): [`Tuple`](Tuple.md)\<`TTuple`\>
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:250](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/arc4/encoded-types.ts#L250)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:250](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/arc4/encoded-types.ts#L250)
 
 #### Parameters
 
@@ -46,7 +46,7 @@ Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:250](https://github.com/
 
 > **get** **bytes**(): [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:72](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/arc4/encoded-types.ts#L72)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:72](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/arc4/encoded-types.ts#L72)
 
 ##### Returns
 
@@ -64,7 +64,7 @@ Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:72](https://github.com/a
 
 > **get** **length**(): `TTuple`\[`"length"`\] & `object` & `number`
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:258](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/arc4/encoded-types.ts#L258)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:258](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/arc4/encoded-types.ts#L258)
 
 ##### Returns
 
@@ -78,7 +78,7 @@ Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:258](https://github.com/
 
 > **get** **native**(): `TTuple`
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:262](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/arc4/encoded-types.ts#L262)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:262](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/arc4/encoded-types.ts#L262)
 
 ##### Returns
 
@@ -90,7 +90,7 @@ Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:262](https://github.com/
 
 > **at**\<`TIndex`\>(`index`): `TTuple`\[`TIndex`\]
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:254](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/arc4/encoded-types.ts#L254)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:254](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/arc4/encoded-types.ts#L254)
 
 #### Type Parameters
 
