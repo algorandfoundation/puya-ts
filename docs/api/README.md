@@ -46,6 +46,7 @@
 - [GlobalStateOptions](type-aliases/GlobalStateOptions.md)
 - [LocalState](type-aliases/LocalState.md)
 - [LocalStateForAccount](type-aliases/LocalStateForAccount.md)
+- [LocalStateOptions](type-aliases/LocalStateOptions.md)
 - [StringCompat](type-aliases/StringCompat.md)
 - [uint64](type-aliases/uint64.md)
 - [Uint64Compat](type-aliases/Uint64Compat.md)

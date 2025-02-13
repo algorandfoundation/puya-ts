@@ -161,6 +161,82 @@ class Demo extends Contract {
 
 ```
 
+### Arrays
+
+**Immutable**
+
+```ts
+const myArray: uint64[] = [1, 2, 3]
+const myOtherArray = ['a', 'b', 'c']
+```
+
+Arrays in Algorand TypeScript can be declared using the array literal syntax and are explicitly typed using either the `T[]` shorthand or `Array<T>` full name. The type can usually be inferred by uints will require a type hint. Native arrays are currently considered immutable (as if they were declared `readonly T[]`) as the AVM offers limited resources for storing mutable reference types in a heap. "Mutations" can be done using the pure methods available on the Array prototype.
+
+```ts
+let myArray: uint64[] = [1, 2, 3]
+
+// Instead of .push
+myArray = [...myArray, 4]
+
+// Instead of index assignment
+myArray = myArray.with(2, 3)
+```
+
+Similar to other supported native types, much of the full prototype of Array is not supported but this coverage may expand over time.
+
+**Mutable**
+
+```ts
+import { MutableArray, uint64 } from '@algorandfoundation/algorand-typescript'
+
+const myMutable = new MutableArray<uint64>()
+myMutable.push(1)
+addToArray(myMutable)
+assert(myMutable.pop() === 4)
+
+function addToArray(x: MutableArray<uint64>) {
+  x.push(4)
+}
+```
+
+Mutable arrays can be declared using the [MutableArray](api/classes/MutableArray.md) type. This type makes use of [scratch space](https://developer.algorand.org/docs/get-details/dapps/avm/teal/specification/?from_query=scratch%20space#scratch-space) as a heap in order to provide an array type with 'pass by reference' semantics. It is currently limited to fixed size item types.
+
+### Tuples
+
+```ts
+import { Uint64, Bytes } from "@algorandfoundation/algorand-typescript"
+
+const myTuple = [Uint64(1), 'test', false] as const
+
+const myOtherTuple: [string, bytes] = ["hello", Bytes("World")]
+const myOtherTuple2: readonly [string, bytes] = ["hello", Bytes("World")]
+```
+
+Tuples can be declared by appending the `as const` keywords to an array literal expression, or by adding an explicit type annotation. Tuples are considered immutable regardless of how they are declared meaning `readonly [T1, T2]` is equivalent to `[T1, T2]`. Including the `readonly` keyword will improve intellisense and TypeScript IDE feedback at the expense of verbosity.
+
+### Objects
+
+```ts
+import { Uint64, Bytes, uint64 } from "@algorandfoundation/algorand-typescript"
+
+type NamedObj = { x: uint64, y: uint64 }
+
+const myObj = { a: Uint64(123), b: Bytes("test"), c: false }
+
+function test(obj: NamedObj): uint64 {
+  return obj.x = obj.y
+}
+```
+
+Object types and literals are treated as named tuples. The types themselves can be declared with a name using a `type NAME = { ... }` expression, or anonymously using an inline type annotation `let x: { a: boolean } = { ... }`. If no type annotation is present, the type will be inferred from the assigned values. Object types are immutable and are treated as if they were declared with the `Readonly` helper type. i.e. `{ a: boolean }` is equivalent to `Readonly<{ a: boolean }>`. An object's property can be updated using a spread expression.
+
+```ts
+import { Uint64 } from "@algorandfoundation/algorand-typescript"
+
+let obj = { first: 'John', last: 'Doh' }
+obj = { ...obj, first: 'Jane' }
+```
+
 ## ARC4 Encoded Types
 
 ARC4 encoded types live in the `/arc4` module

@@ -21,4 +21,5 @@ If you are interested in learning about the design of Algorand TypeScript, you c
 
  - [Program Structure](lg-program-structure.md)
  - [Basic Types](lg-types.md)
+ - [Storage](lg-storage.md)
 

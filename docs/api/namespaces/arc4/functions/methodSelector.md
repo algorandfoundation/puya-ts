@@ -8,7 +8,7 @@
 
 > **methodSelector**(`methodSignature`): [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/arc4/index.ts:96](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/arc4/index.ts#L96)
+Defined in: [packages/algo-ts/src/arc4/index.ts:97](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/arc4/index.ts#L97)
 
 Returns the ARC4 method selector for a given ARC4 method signature. The method selector is the first
 4 bytes of the SHA512/256 hash of the method signature.
