@@ -2,7 +2,7 @@ import type { AlgorandClient } from '@algorandfoundation/algokit-utils'
 import { Config, microAlgos } from '@algorandfoundation/algokit-utils'
 import { algorandFixture } from '@algorandfoundation/algokit-utils/testing'
 import type { AlgoAmount } from '@algorandfoundation/algokit-utils/types/amount'
-import type { SendAppTransactionResult } from '@algorandfoundation/algokit-utils/types/app'
+import type { AppState, SendAppTransactionResult } from '@algorandfoundation/algokit-utils/types/app'
 import type { Arc56Contract } from '@algorandfoundation/algokit-utils/types/app-arc56'
 import type { AppClient } from '@algorandfoundation/algokit-utils/types/app-client'
 import type { AppFactory, AppFactoryDeployParams } from '@algorandfoundation/algokit-utils/types/app-factory'
@@ -83,6 +83,7 @@ type ProgramInvokeOptions = {
 } & Omit<AlgoClientAppCallParams, 'onComplete' | 'sender' | 'appId'>
 
 type ProgramInvoker = {
+  globalState(appId: bigint): Promise<AppState>
   send(options?: ProgramInvokeOptions): Promise<SendAppTransactionResult>
 }
 
@@ -113,6 +114,10 @@ export function createBaseTestFixture<TContracts extends string = ''>(path: stri
       invariant(clearStateProgram, `No clear state program found for ${contractName}`)
 
       use({
+        async globalState(appId: bigint) {
+          return localnet.algorand.app.getGlobalState(appId)
+        },
+
         async send(options?: ProgramInvokeOptions) {
           const common = {
             ...options,

@@ -86,6 +86,7 @@ export class GlobalStateFunctionResultBuilder extends InstanceBuilder<GlobalStat
       'Global state must have explicit key provided if not being assigned to a contract property',
       this.sourceLocation,
     )
+    codeInvariant(!this.initialValue, 'Global state can only have an initial value specified if being assigned to a contract property')
     return this._expr
   }
   resolveLValue(): LValue {

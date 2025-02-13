@@ -40,3 +40,26 @@ contract TestContract
   }
   
 }
+contract TestArc4
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  setState(key: bytes, value: uint64): void
+  {
+    proxy: state_key = reinterpret_cast<state_key>(key)
+    GlobalState[proxy]: uint64 = value
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

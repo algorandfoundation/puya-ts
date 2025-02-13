@@ -1,0 +1,66 @@
+#pragma version 10
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    // tests/approvals/global-state.algo.ts:31-32
+    // @contract({ stateTotals: { globalUints: 5 } })
+    // export class TestArc4 extends Contract {
+    txn NumAppArgs
+    bz main_bare_routing@6
+    pushbytes 0xe5675c8f // method "setState(byte[],uint64)void"
+    txna ApplicationArgs 0
+    match main_setState_route@3
+
+main_after_if_else@10:
+    // tests/approvals/global-state.algo.ts:31-32
+    // @contract({ stateTotals: { globalUints: 5 } })
+    // export class TestArc4 extends Contract {
+    pushint 0 // 0
+    return
+
+main_setState_route@3:
+    // tests/approvals/global-state.algo.ts:33
+    // setState(key: bytes, value: uint64) {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    // tests/approvals/global-state.algo.ts:31-32
+    // @contract({ stateTotals: { globalUints: 5 } })
+    // export class TestArc4 extends Contract {
+    txna ApplicationArgs 1
+    extract 2 0
+    txna ApplicationArgs 2
+    btoi
+    // tests/approvals/global-state.algo.ts:33
+    // setState(key: bytes, value: uint64) {
+    callsub setState
+    pushint 1 // 1
+    return
+
+main_bare_routing@6:
+    // tests/approvals/global-state.algo.ts:31-32
+    // @contract({ stateTotals: { globalUints: 5 } })
+    // export class TestArc4 extends Contract {
+    txn OnCompletion
+    bnz main_after_if_else@10
+    txn ApplicationID
+    !
+    assert // can only call when creating
+    pushint 1 // 1
+    return
+
+
+// tests/approvals/global-state.algo.ts::TestArc4.setState(key: bytes, value: uint64) -> void:
+setState:
+    // tests/approvals/global-state.algo.ts:33
+    // setState(key: bytes, value: uint64) {
+    proto 2 0
+    // tests/approvals/global-state.algo.ts:36
+    // proxy.value = value
+    frame_dig -2
+    frame_dig -1
+    app_global_put
+    retsub
