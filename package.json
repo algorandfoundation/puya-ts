@@ -7,10 +7,9 @@
   "scripts": {
     "postinstall": "npx patch-package",
     "dev:examples": "tsx src/cli.ts build examples --output-awst --output-awst-json",
-    "dev:approvals": "rimraf tests/approvals/out && tsx src/cli.ts build tests/approvals --dry-run",
+    "dev:approvals": "tsx src/cli.ts build tests/approvals --dry-run",
     "dev:expected-output": "tsx src/cli.ts build tests/expected-output --dry-run",
     "dev:testing": "tsx src/cli.ts build tests/approvals/native-arrays.algo.ts tests/approvals/mutable-arrays.algo.ts --output-awst --output-awst-json --output-ssa-ir --log-level=info --out-dir out/unoptimized/[name] --optimization-level=1",
-    "dev:testing2": "tsx src/cli.ts build tests/approvals/match-expr.algo.ts --output-awst --output-awst-json --output-ssa-ir --log-level=info --out-dir out/unoptimized/[name] --optimization-level=1",
     "audit": "better-npm-audit audit",
     "format": "prettier --write .",
     "lint": "eslint \"src/**/*.ts\"",
