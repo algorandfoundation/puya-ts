@@ -15,6 +15,7 @@ contract TestContract
     assert(STATE_EXISTS(GlobalState["testState"]), comment=State should have value)
     assert(GlobalState["testState"] == 2, comment=Value should equal 2)
     GlobalState["testState"]: uint64 = btoi(txnas<ApplicationArgs>(0))
+    GlobalState["noInitial"]: bytes = "abc"
     return True
   }
   
@@ -37,6 +38,34 @@ contract TestContract
   {
     void
     GlobalState["baseTestState"]: string = "testing 123"
+  }
+  
+}
+contract TestArc4
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  setState(key: string, value: uint64): void
+  {
+    proxy: state_key = reinterpret_cast<state_key>(reinterpret_cast<bytes>(key))
+    GlobalState[proxy]: uint64 = value
+  }
+  
+  deleteState(key: string): void
+  {
+    STATE_DEL(GlobalState[reinterpret_cast<state_key>(reinterpret_cast<bytes>(key))])
+  }
+  
+  __algots__.defaultCreate(): void
+  {
   }
   
 }
