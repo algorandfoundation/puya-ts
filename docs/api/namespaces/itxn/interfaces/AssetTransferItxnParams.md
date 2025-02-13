@@ -6,7 +6,7 @@
 
 # Interface: AssetTransferItxnParams
 
-Defined in: [packages/algo-ts/src/itxn.ts:202](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/itxn.ts#L202)
+Defined in: [packages/algo-ts/src/itxn.ts:202](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/itxn.ts#L202)
 
 ## Methods
 
@@ -14,7 +14,7 @@ Defined in: [packages/algo-ts/src/itxn.ts:202](https://github.com/algorandfounda
 
 > **copy**(): [`AssetTransferItxnParams`](AssetTransferItxnParams.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:205](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/itxn.ts#L205)
+Defined in: [packages/algo-ts/src/itxn.ts:205](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/itxn.ts#L205)
 
 #### Returns
 
@@ -26,7 +26,7 @@ Defined in: [packages/algo-ts/src/itxn.ts:205](https://github.com/algorandfounda
 
 > **set**(`p`): `void`
 
-Defined in: [packages/algo-ts/src/itxn.ts:204](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/itxn.ts#L204)
+Defined in: [packages/algo-ts/src/itxn.ts:204](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/itxn.ts#L204)
 
 #### Parameters
 
@@ -44,7 +44,7 @@ Defined in: [packages/algo-ts/src/itxn.ts:204](https://github.com/algorandfounda
 
 > **submit**(): [`AssetTransferInnerTxn`](AssetTransferInnerTxn.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:203](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/itxn.ts#L203)
+Defined in: [packages/algo-ts/src/itxn.ts:203](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/itxn.ts#L203)
 
 #### Returns
 

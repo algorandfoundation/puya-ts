@@ -6,7 +6,7 @@
 
 # Class: Contract
 
-Defined in: [packages/algo-ts/src/arc4/index.ts:10](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/arc4/index.ts#L10)
+Defined in: [packages/algo-ts/src/arc4/index.ts:8](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/arc4/index.ts#L8)
 
 ## Extends
 
@@ -26,25 +26,13 @@ Defined in: [packages/algo-ts/src/arc4/index.ts:10](https://github.com/algorandf
 
 [`BaseContract`](../../../classes/BaseContract.md).[`constructor`](../../../classes/BaseContract.md#constructors)
 
-## Properties
-
-### isArc4
-
-> `static` **isArc4**: `boolean` = `true`
-
-Defined in: [packages/algo-ts/src/arc4/index.ts:11](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/arc4/index.ts#L11)
-
-#### Overrides
-
-[`BaseContract`](../../../classes/BaseContract.md).[`isArc4`](../../../classes/BaseContract.md#isarc4)
-
 ## Methods
 
 ### approvalProgram()
 
 > **approvalProgram**(): `boolean`
 
-Defined in: [packages/algo-ts/src/arc4/index.ts:13](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/arc4/index.ts#L13)
+Defined in: [packages/algo-ts/src/arc4/index.ts:9](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/arc4/index.ts#L9)
 
 #### Returns
 
@@ -60,7 +48,7 @@ Defined in: [packages/algo-ts/src/arc4/index.ts:13](https://github.com/algorandf
 
 > **clearStateProgram**(): `boolean` \| [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/base-contract.ts:8](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/base-contract.ts#L8)
+Defined in: [packages/algo-ts/src/base-contract.ts:8](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/base-contract.ts#L8)
 
 #### Returns
 

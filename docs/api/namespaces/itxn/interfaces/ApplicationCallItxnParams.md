@@ -6,7 +6,7 @@
 
 # Interface: ApplicationCallItxnParams
 
-Defined in: [packages/algo-ts/src/itxn.ts:212](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/itxn.ts#L212)
+Defined in: [packages/algo-ts/src/itxn.ts:212](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/itxn.ts#L212)
 
 ## Methods
 
@@ -14,7 +14,7 @@ Defined in: [packages/algo-ts/src/itxn.ts:212](https://github.com/algorandfounda
 
 > **copy**(): [`ApplicationCallItxnParams`](ApplicationCallItxnParams.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:215](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/itxn.ts#L215)
+Defined in: [packages/algo-ts/src/itxn.ts:215](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/itxn.ts#L215)
 
 #### Returns
 
@@ -26,7 +26,7 @@ Defined in: [packages/algo-ts/src/itxn.ts:215](https://github.com/algorandfounda
 
 > **set**(`p`): `void`
 
-Defined in: [packages/algo-ts/src/itxn.ts:214](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/itxn.ts#L214)
+Defined in: [packages/algo-ts/src/itxn.ts:214](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/itxn.ts#L214)
 
 #### Parameters
 
@@ -44,7 +44,7 @@ Defined in: [packages/algo-ts/src/itxn.ts:214](https://github.com/algorandfounda
 
 > **submit**(): [`ApplicationInnerTxn`](ApplicationInnerTxn.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:213](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/itxn.ts#L213)
+Defined in: [packages/algo-ts/src/itxn.ts:213](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/itxn.ts#L213)
 
 #### Returns
 

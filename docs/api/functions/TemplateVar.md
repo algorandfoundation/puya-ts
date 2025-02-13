@@ -8,7 +8,11 @@
 
 > **TemplateVar**\<`T`\>(`variableName`, `prefix`): `T`
 
-Defined in: [packages/algo-ts/src/template-var.ts:3](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/template-var.ts#L3)
+Defined in: [packages/algo-ts/src/template-var.ts:10](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/template-var.ts#L10)
+
+Declare a template variable which can be replaced at compile time with an environment specific value.
+
+The final variable name will be `prefix + variableName`
 
 ## Type Parameters
 
@@ -20,9 +24,13 @@ Defined in: [packages/algo-ts/src/template-var.ts:3](https://github.com/algorand
 
 `string`
 
+The key used to identify the variable.
+
 ### prefix
 
 `string` = `'TMPL_'`
+
+The prefix to apply the variable name (Defaults to 'TMPL_')
 
 ## Returns
 

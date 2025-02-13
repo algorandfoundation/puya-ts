@@ -8,7 +8,7 @@
 
 > **bitLength**(`a`): [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/op.ts:557](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/op.ts#L557)
+Defined in: [packages/algo-ts/src/op.ts:557](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/op.ts#L557)
 
 The highest set bit in A. If A is a byte-array, it is interpreted as a big-endian unsigned integer. bitlen of 0 is 0, bitlen of 8 is 4
 bitlen interprets arrays as big-endian integers, unlike setbit/getbit
@@ -17,7 +17,7 @@ bitlen interprets arrays as big-endian integers, unlike setbit/getbit
 
 ### a
 
-[`bytes`](../../../type-aliases/bytes.md) | [`uint64`](../../../type-aliases/uint64.md)
+[`uint64`](../../../type-aliases/uint64.md) | [`bytes`](../../../type-aliases/bytes.md)
 
 ## Returns
 

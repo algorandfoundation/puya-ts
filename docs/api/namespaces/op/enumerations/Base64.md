@@ -6,7 +6,7 @@
 
 # Enumeration: Base64
 
-Defined in: [packages/algo-ts/src/op.ts:6](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/op.ts#L6)
+Defined in: [packages/algo-ts/src/op.ts:6](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/op.ts#L6)
 
 ## Enumeration Members
 
@@ -14,7 +14,7 @@ Defined in: [packages/algo-ts/src/op.ts:6](https://github.com/algorandfoundation
 
 > **StdEncoding**: `"StdEncoding"`
 
-Defined in: [packages/algo-ts/src/op.ts:8](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/op.ts#L8)
+Defined in: [packages/algo-ts/src/op.ts:8](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/op.ts#L8)
 
 ***
 
@@ -22,4 +22,4 @@ Defined in: [packages/algo-ts/src/op.ts:8](https://github.com/algorandfoundation
 
 > **URLEncoding**: `"URLEncoding"`
 
-Defined in: [packages/algo-ts/src/op.ts:7](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/op.ts#L7)
+Defined in: [packages/algo-ts/src/op.ts:7](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/op.ts#L7)

@@ -6,7 +6,7 @@
 
 # Class: UintN\<N\>
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:89](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/arc4/encoded-types.ts#L89)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:89](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/arc4/encoded-types.ts#L89)
 
 ## Extends
 
@@ -32,7 +32,7 @@ Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:89](https://github.com/a
 
 > **new UintN**\<`N`\>(`v`?): [`UintN`](UintN.md)\<`N`\>
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:93](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/arc4/encoded-types.ts#L93)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:93](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/arc4/encoded-types.ts#L93)
 
 #### Parameters
 
@@ -56,7 +56,7 @@ Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:93](https://github.com/a
 
 > **get** **bytes**(): [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:72](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/arc4/encoded-types.ts#L72)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:72](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/arc4/encoded-types.ts#L72)
 
 ##### Returns
 
@@ -74,7 +74,7 @@ Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:72](https://github.com/a
 
 > **get** **native**(): `NativeForArc4Int`\<`N`\>
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:96](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/arc4/encoded-types.ts#L96)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:96](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/arc4/encoded-types.ts#L96)
 
 ##### Returns
 

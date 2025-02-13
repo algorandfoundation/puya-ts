@@ -8,19 +8,23 @@
 
 > **GlobalState**\<`ValueType`\>(`options`?): [`GlobalState`](../type-aliases/GlobalState.md)\<`ValueType`\>
 
-Defined in: [packages/algo-ts/src/state.ts:15](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/state.ts#L15)
+Defined in: [packages/algo-ts/src/state.ts:44](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/state.ts#L44)
 
-A single key in global state
+Creates a new proxy for manipulating a global state field
 
 ## Type Parameters
 
 • **ValueType**
+
+The type of the value being stored - must be a serializable type
 
 ## Parameters
 
 ### options?
 
 [`GlobalStateOptions`](../type-aliases/GlobalStateOptions.md)\<`ValueType`\>
+
+Options for configuring this field
 
 ## Returns
 

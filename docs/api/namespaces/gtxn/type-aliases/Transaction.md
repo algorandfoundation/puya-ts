@@ -8,4 +8,4 @@
 
 > **Transaction**: [`PaymentTxn`](../interfaces/PaymentTxn.md) \| [`KeyRegistrationTxn`](../interfaces/KeyRegistrationTxn.md) \| [`AssetConfigTxn`](../interfaces/AssetConfigTxn.md) \| [`AssetTransferTxn`](../interfaces/AssetTransferTxn.md) \| [`AssetFreezeTxn`](../interfaces/AssetFreezeTxn.md) \| [`ApplicationTxn`](../interfaces/ApplicationTxn.md)
 
-Defined in: [packages/algo-ts/src/gtxn.ts:33](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/gtxn.ts#L33)
+Defined in: [packages/algo-ts/src/gtxn.ts:33](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/gtxn.ts#L33)

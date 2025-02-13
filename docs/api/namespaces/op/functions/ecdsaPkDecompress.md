@@ -8,7 +8,7 @@
 
 > **ecdsaPkDecompress**(`v`, `a`): readonly \[[`bytes`](../../../type-aliases/bytes.md), [`bytes`](../../../type-aliases/bytes.md)\]
 
-Defined in: [packages/algo-ts/src/op.ts:829](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/op.ts#L829)
+Defined in: [packages/algo-ts/src/op.ts:829](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/op.ts#L829)
 
 decompress pubkey A into components X, Y
 The 33 byte public key in a compressed form to be decompressed into X and Y (top) components. All values are big-endian encoded.

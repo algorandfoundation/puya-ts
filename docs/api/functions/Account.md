@@ -10,7 +10,7 @@
 
 > **Account**(): [`Account`](../type-aliases/Account.md)
 
-Defined in: [packages/algo-ts/src/reference.ts:100](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/reference.ts#L100)
+Defined in: [packages/algo-ts/src/reference.ts:100](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/reference.ts#L100)
 
 ### Returns
 
@@ -20,7 +20,7 @@ Defined in: [packages/algo-ts/src/reference.ts:100](https://github.com/algorandf
 
 > **Account**(`address`): [`Account`](../type-aliases/Account.md)
 
-Defined in: [packages/algo-ts/src/reference.ts:101](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/reference.ts#L101)
+Defined in: [packages/algo-ts/src/reference.ts:101](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/reference.ts#L101)
 
 ### Parameters
 

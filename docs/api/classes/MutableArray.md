@@ -6,7 +6,7 @@
 
 # Class: MutableArray\<TItem\>
 
-Defined in: [packages/algo-ts/src/mutable-array.ts:4](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/mutable-array.ts#L4)
+Defined in: [packages/algo-ts/src/mutable-array.ts:4](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/mutable-array.ts#L4)
 
 ## Type Parameters
 
@@ -22,7 +22,7 @@ Defined in: [packages/algo-ts/src/mutable-array.ts:4](https://github.com/algoran
 
 > **new MutableArray**\<`TItem`\>(...`items`): [`MutableArray`](MutableArray.md)\<`TItem`\>
 
-Defined in: [packages/algo-ts/src/mutable-array.ts:5](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/mutable-array.ts#L5)
+Defined in: [packages/algo-ts/src/mutable-array.ts:5](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/mutable-array.ts#L5)
 
 #### Parameters
 
@@ -42,7 +42,7 @@ Defined in: [packages/algo-ts/src/mutable-array.ts:5](https://github.com/algoran
 
 > **get** **length**(): [`uint64`](../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/mutable-array.ts:10](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/mutable-array.ts#L10)
+Defined in: [packages/algo-ts/src/mutable-array.ts:10](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/mutable-array.ts#L10)
 
 Returns the current length of this array
 
@@ -56,7 +56,7 @@ Returns the current length of this array
 
 > **\[iterator\]**(): `IterableIterator`\<`TItem`\>
 
-Defined in: [packages/algo-ts/src/mutable-array.ts:47](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/mutable-array.ts#L47)
+Defined in: [packages/algo-ts/src/mutable-array.ts:47](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/mutable-array.ts#L47)
 
 Returns an iterator for the items in this array
 
@@ -70,7 +70,7 @@ Returns an iterator for the items in this array
 
 > **at**(`index`): `TItem`
 
-Defined in: [packages/algo-ts/src/mutable-array.ts:19](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/mutable-array.ts#L19)
+Defined in: [packages/algo-ts/src/mutable-array.ts:19](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/mutable-array.ts#L19)
 
 Returns the item at the given index.
 Negative indexes are taken from the end.
@@ -93,7 +93,7 @@ The index of the item to retrieve
 
 > **copy**(): [`MutableArray`](MutableArray.md)\<`TItem`\>
 
-Defined in: [packages/algo-ts/src/mutable-array.ts:86](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/mutable-array.ts#L86)
+Defined in: [packages/algo-ts/src/mutable-array.ts:86](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/mutable-array.ts#L86)
 
 #### Returns
 
@@ -105,7 +105,7 @@ Defined in: [packages/algo-ts/src/mutable-array.ts:86](https://github.com/algora
 
 > **entries**(): `IterableIterator`\<readonly \[[`uint64`](../type-aliases/uint64.md), `TItem`\]\>
 
-Defined in: [packages/algo-ts/src/mutable-array.ts:54](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/mutable-array.ts#L54)
+Defined in: [packages/algo-ts/src/mutable-array.ts:54](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/mutable-array.ts#L54)
 
 Returns an iterator for a tuple of the indexes and items in this array
 
@@ -119,7 +119,7 @@ Returns an iterator for a tuple of the indexes and items in this array
 
 > **keys**(): `IterableIterator`\<[`uint64`](../type-aliases/uint64.md)\>
 
-Defined in: [packages/algo-ts/src/mutable-array.ts:61](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/mutable-array.ts#L61)
+Defined in: [packages/algo-ts/src/mutable-array.ts:61](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/mutable-array.ts#L61)
 
 Returns an iterator for the indexes in this array
 
@@ -133,7 +133,7 @@ Returns an iterator for the indexes in this array
 
 > **pop**(): `TItem`
 
-Defined in: [packages/algo-ts/src/mutable-array.ts:82](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/mutable-array.ts#L82)
+Defined in: [packages/algo-ts/src/mutable-array.ts:82](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/mutable-array.ts#L82)
 
 Pop a single item from this array
 
@@ -147,7 +147,7 @@ Pop a single item from this array
 
 > **push**(...`items`): `void`
 
-Defined in: [packages/algo-ts/src/mutable-array.ts:75](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/mutable-array.ts#L75)
+Defined in: [packages/algo-ts/src/mutable-array.ts:75](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/mutable-array.ts#L75)
 
 Push a number of items into this array
 
@@ -171,7 +171,7 @@ The items to be added to this array
 
 > **slice**(): [`MutableArray`](MutableArray.md)\<`TItem`\>
 
-Defined in: [packages/algo-ts/src/mutable-array.ts:26](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/mutable-array.ts#L26)
+Defined in: [packages/algo-ts/src/mutable-array.ts:26](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/mutable-array.ts#L26)
 
 Create a new Dynamic array with all items from this array
 
@@ -183,7 +183,7 @@ Create a new Dynamic array with all items from this array
 
 > **slice**(`end`): [`MutableArray`](MutableArray.md)\<`TItem`\>
 
-Defined in: [packages/algo-ts/src/mutable-array.ts:32](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/mutable-array.ts#L32)
+Defined in: [packages/algo-ts/src/mutable-array.ts:32](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/mutable-array.ts#L32)
 
 Create a new MutableArray with all items up till `end`.
 Negative indexes are taken from the end.
@@ -204,7 +204,7 @@ An index in which to stop copying items.
 
 > **slice**(`start`, `end`): [`MutableArray`](MutableArray.md)\<`TItem`\>
 
-Defined in: [packages/algo-ts/src/mutable-array.ts:39](https://github.com/algorandfoundation/puya-ts/blob/14c9827d80da81ff08b4923e997ba22be04aa0db/packages/algo-ts/src/mutable-array.ts#L39)
+Defined in: [packages/algo-ts/src/mutable-array.ts:39](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/mutable-array.ts#L39)
 
 Create a new MutableArray with items from `start`, up until `end`
 Negative indexes are taken from the end.
