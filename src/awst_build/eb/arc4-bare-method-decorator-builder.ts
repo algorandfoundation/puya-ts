@@ -46,7 +46,7 @@ export class Arc4BareMethodDecoratorBuilder extends NodeBuilder {
       funcName: 'arc4.baremethod',
       argSpec: (a) => [
         a.obj({
-          allowActions: a.optional(stringPType, new ArrayPType({ elementType: stringPType, immutable: true })),
+          allowActions: a.optional(stringPType, new ArrayPType({ elementType: stringPType })),
           onCreate: a.optional(stringPType),
         }),
       ],
@@ -76,7 +76,7 @@ export class Arc4AbiMethodDecoratorBuilder extends NodeBuilder {
       funcName: 'arc4.abimethod',
       argSpec: (a) => [
         a.obj({
-          allowActions: a.optional(stringPType, new ArrayPType({ elementType: stringPType, immutable: true })),
+          allowActions: a.optional(stringPType, new ArrayPType({ elementType: stringPType })),
           onCreate: a.optional(stringPType),
           readonly: a.optional(boolPType),
           name: a.optional(stringPType),

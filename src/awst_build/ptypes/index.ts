@@ -581,7 +581,6 @@ export class ArrayLiteralPType extends TransientType {
     const itemType = UnionPType.fromTypes(this.items)
 
     return new ArrayPType({
-      immutable: true,
       elementType: itemType,
     })
   }
@@ -620,18 +619,17 @@ export class TuplePType extends PType {
 }
 export class ArrayPType extends PType {
   readonly elementType: PType
-  readonly immutable: boolean
+  readonly immutable = true
   readonly singleton = false
   readonly name: string
   readonly module: string = 'lib.d.ts'
   get fullName() {
     return `${this.module}::Array<${this.elementType.fullName}>`
   }
-  constructor(props: { elementType: PType; immutable?: boolean }) {
+  constructor(props: { elementType: PType }) {
     super()
     this.name = `Array<${props.elementType.name}>`
     this.elementType = props.elementType
-    this.immutable = props.immutable ?? true
   }
 
   get wtype() {
