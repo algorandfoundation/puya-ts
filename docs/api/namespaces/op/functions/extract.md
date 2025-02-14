@@ -10,7 +10,7 @@
 
 > **extract**(`a`, `b`): [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/op.ts:4032](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/op.ts#L4032)
+Defined in: [packages/algo-ts/src/op.ts:4032](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L4032)
 
 A range of bytes from A starting at B up to the end of the sequence
 
@@ -32,7 +32,7 @@ A range of bytes from A starting at B up to the end of the sequence
 
 > **extract**(`a`, `b`, `c`): [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/op.ts:4037](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/op.ts#L4037)
+Defined in: [packages/algo-ts/src/op.ts:4037](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L4037)
 
 A range of bytes from A starting at B up to but not including B+C. If B+C is larger than the array length, the program fails
 

@@ -10,7 +10,7 @@
 
 > **BigUint**(`v`): [`biguint`](../type-aliases/biguint.md)
 
-Defined in: [packages/algo-ts/src/primitives.ts:51](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/primitives.ts#L51)
+Defined in: [packages/algo-ts/src/primitives.ts:51](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L51)
 
 Create a biguint from a bigint literal
 
@@ -28,7 +28,7 @@ Create a biguint from a bigint literal
 
 > **BigUint**(`v`): [`biguint`](../type-aliases/biguint.md)
 
-Defined in: [packages/algo-ts/src/primitives.ts:55](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/primitives.ts#L55)
+Defined in: [packages/algo-ts/src/primitives.ts:55](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L55)
 
 Create a biguint from a boolean value (true = 1, false = 0)
 
@@ -46,7 +46,7 @@ Create a biguint from a boolean value (true = 1, false = 0)
 
 > **BigUint**(`v`): [`biguint`](../type-aliases/biguint.md)
 
-Defined in: [packages/algo-ts/src/primitives.ts:59](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/primitives.ts#L59)
+Defined in: [packages/algo-ts/src/primitives.ts:59](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L59)
 
 Create a biguint from a uint64 value
 
@@ -64,7 +64,7 @@ Create a biguint from a uint64 value
 
 > **BigUint**(`v`): [`biguint`](../type-aliases/biguint.md)
 
-Defined in: [packages/algo-ts/src/primitives.ts:63](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/primitives.ts#L63)
+Defined in: [packages/algo-ts/src/primitives.ts:63](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L63)
 
 Create a biguint from a number literal
 
@@ -82,7 +82,7 @@ Create a biguint from a number literal
 
 > **BigUint**(`v`): [`biguint`](../type-aliases/biguint.md)
 
-Defined in: [packages/algo-ts/src/primitives.ts:67](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/primitives.ts#L67)
+Defined in: [packages/algo-ts/src/primitives.ts:67](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L67)
 
 Create a biguint from a byte array interpreted as a big-endian number
 
@@ -100,7 +100,7 @@ Create a biguint from a byte array interpreted as a big-endian number
 
 > **BigUint**(`v`): [`biguint`](../type-aliases/biguint.md)
 
-Defined in: [packages/algo-ts/src/primitives.ts:71](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/primitives.ts#L71)
+Defined in: [packages/algo-ts/src/primitives.ts:71](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L71)
 
 Create a biguint from a string literal containing the decimal digits
 
@@ -118,7 +118,7 @@ Create a biguint from a string literal containing the decimal digits
 
 > **BigUint**(): [`biguint`](../type-aliases/biguint.md)
 
-Defined in: [packages/algo-ts/src/primitives.ts:75](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/primitives.ts#L75)
+Defined in: [packages/algo-ts/src/primitives.ts:75](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L75)
 
 Create a biguint with the default value of 0
 

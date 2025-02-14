@@ -8,7 +8,7 @@
 
 > **ed25519verify**(`a`, `b`, `c`): `boolean`
 
-Defined in: [packages/algo-ts/src/op.ts:859](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/op.ts#L859)
+Defined in: [packages/algo-ts/src/op.ts:859](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L859)
 
 for (data A, signature B, pubkey C) verify the signature of ("ProgData" || program_hash || data) against the pubkey => {0 or 1}
 The 32 byte public key is the last element on the stack, preceded by the 64 byte signature at the second-to-last element on the stack, preceded by the data which was signed at the third-to-last element on the stack.

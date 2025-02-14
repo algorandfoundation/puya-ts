@@ -8,7 +8,7 @@
 
 > **getByte**(`a`, `b`): [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/op.ts:951](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/op.ts#L951)
+Defined in: [packages/algo-ts/src/op.ts:951](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L951)
 
 Bth byte of A, as an integer. If B is greater than or equal to the array length, the program fails
 

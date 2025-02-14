@@ -10,7 +10,7 @@
 
 > **compile**(`contract`, `options`?): [`CompiledContract`](../type-aliases/CompiledContract.md)
 
-Defined in: [packages/algo-ts/src/compiled.ts:107](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/compiled.ts#L107)
+Defined in: [packages/algo-ts/src/compiled.ts:107](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/compiled.ts#L107)
 
 Compile a contract and return the resulting byte code for approval and clear state programs.
 
@@ -36,7 +36,7 @@ Options for compiling the contract
 
 > **compile**(`logicSig`, `options`?): [`CompiledLogicSig`](../type-aliases/CompiledLogicSig.md)
 
-Defined in: [packages/algo-ts/src/compiled.ts:113](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/compiled.ts#L113)
+Defined in: [packages/algo-ts/src/compiled.ts:113](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/compiled.ts#L113)
 
 Compile a logic signature and return an account ready for signing transactions.
 

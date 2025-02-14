@@ -8,7 +8,7 @@
 
 > **mimc**(`c`, `a`): [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/op.ts:3328](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/op.ts#L3328)
+Defined in: [packages/algo-ts/src/op.ts:3328](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3328)
 
 MiMC hash of scalars A, using curve and parameters specified by configuration C
 A is a list of concatenated 32 byte big-endian unsigned integer scalars.  Fail if A's length is not a multiple of 32 or any element exceeds the curve modulus.

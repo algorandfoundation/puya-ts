@@ -8,13 +8,17 @@
 
 > **err**(`message`?): `never`
 
-Defined in: [packages/algo-ts/src/util.ts:12](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/util.ts#L12)
+Defined in: [packages/algo-ts/src/util.ts:27](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L27)
+
+Raise an error and halt execution
 
 ## Parameters
 
 ### message?
 
 `string`
+
+The message to accompany the error
 
 ## Returns
 

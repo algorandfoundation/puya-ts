@@ -8,4 +8,4 @@
 
 > **BitSize**: `UintBitSize` \| `BigUintBitSize`
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:63](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/arc4/encoded-types.ts#L63)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:63](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L63)

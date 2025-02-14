@@ -8,7 +8,7 @@
 
 > `const` **AppLocal**: `object`
 
-Defined in: [packages/algo-ts/src/op.ts:254](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/op.ts#L254)
+Defined in: [packages/algo-ts/src/op.ts:254](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L254)
 
 Get or modify Local app state
 
