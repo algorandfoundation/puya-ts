@@ -8,7 +8,7 @@
 
 > **replace**(`a`, `b`, `c`): [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/op.ts:3367](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/op.ts#L3367)
+Defined in: [packages/algo-ts/src/op.ts:3367](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3367)
 
 Copy of A with the bytes starting at B replaced by the bytes of C. Fails if B+len(C) exceeds len(A)
 `replace3` can be called using `replace` with no immediates.

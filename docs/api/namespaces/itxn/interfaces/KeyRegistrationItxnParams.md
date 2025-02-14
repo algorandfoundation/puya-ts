@@ -6,7 +6,7 @@
 
 # Interface: KeyRegistrationItxnParams
 
-Defined in: [packages/algo-ts/src/itxn.ts:192](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/itxn.ts#L192)
+Defined in: [packages/algo-ts/src/itxn.ts:192](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L192)
 
 ## Methods
 
@@ -14,7 +14,7 @@ Defined in: [packages/algo-ts/src/itxn.ts:192](https://github.com/algorandfounda
 
 > **copy**(): [`KeyRegistrationItxnParams`](KeyRegistrationItxnParams.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:195](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/itxn.ts#L195)
+Defined in: [packages/algo-ts/src/itxn.ts:195](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L195)
 
 #### Returns
 
@@ -26,7 +26,7 @@ Defined in: [packages/algo-ts/src/itxn.ts:195](https://github.com/algorandfounda
 
 > **set**(`p`): `void`
 
-Defined in: [packages/algo-ts/src/itxn.ts:194](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/itxn.ts#L194)
+Defined in: [packages/algo-ts/src/itxn.ts:194](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L194)
 
 #### Parameters
 
@@ -44,7 +44,7 @@ Defined in: [packages/algo-ts/src/itxn.ts:194](https://github.com/algorandfounda
 
 > **submit**(): [`KeyRegistrationInnerTxn`](KeyRegistrationInnerTxn.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:193](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/itxn.ts#L193)
+Defined in: [packages/algo-ts/src/itxn.ts:193](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L193)
 
 #### Returns
 

@@ -6,7 +6,7 @@
 
 # Class: UintN16
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:102](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/arc4/encoded-types.ts#L102)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:102](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L102)
 
 ## Extends
 
@@ -18,7 +18,7 @@ Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:102](https://github.com/
 
 > **new UintN16**(`v`?): [`UintN16`](UintN16.md)
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:93](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/arc4/encoded-types.ts#L93)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:93](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L93)
 
 #### Parameters
 
@@ -42,7 +42,7 @@ Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:93](https://github.com/a
 
 > **get** **bytes**(): [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:72](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/arc4/encoded-types.ts#L72)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:72](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L72)
 
 ##### Returns
 
@@ -60,7 +60,7 @@ Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:72](https://github.com/a
 
 > **get** **native**(): `NativeForArc4Int`\<`N`\>
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:96](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/arc4/encoded-types.ts#L96)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:96](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L96)
 
 ##### Returns
 

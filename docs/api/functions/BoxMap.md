@@ -8,7 +8,7 @@
 
 > **BoxMap**\<`TKey`, `TValue`\>(`options`): [`BoxMap`](../type-aliases/BoxMap.md)\<`TKey`, `TValue`\>
 
-Defined in: [packages/algo-ts/src/box.ts:234](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/box.ts#L234)
+Defined in: [packages/algo-ts/src/box.ts:234](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L234)
 
 Creates a BoxMap proxy object offering methods of getting and setting a set of values stored in individual boxes indexed by a common key type
 

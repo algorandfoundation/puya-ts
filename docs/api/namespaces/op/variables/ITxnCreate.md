@@ -8,7 +8,7 @@
 
 > `const` **ITxnCreate**: `object`
 
-Defined in: [packages/algo-ts/src/op.ts:2817](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/op.ts#L2817)
+Defined in: [packages/algo-ts/src/op.ts:2817](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L2817)
 
 Create inner transactions
 

@@ -8,7 +8,7 @@
 
 > **divw**(`a`, `b`, `c`): [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/op.ts:746](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/op.ts#L746)
+Defined in: [packages/algo-ts/src/op.ts:746](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L746)
 
 A,B / C. Fail if C == 0 or if result overflows.
 The notation A,B indicates that A and B are interpreted as a uint128 value, with A as the high uint64 and B the low.

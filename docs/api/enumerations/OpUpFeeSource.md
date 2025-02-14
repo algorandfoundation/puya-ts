@@ -6,7 +6,9 @@
 
 # Enumeration: OpUpFeeSource
 
-Defined in: [packages/algo-ts/src/util.ts:31](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/util.ts#L31)
+Defined in: [packages/algo-ts/src/util.ts:107](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L107)
+
+Defines the source of fees for the OpUp utility
 
 ## Enumeration Members
 
@@ -14,7 +16,9 @@ Defined in: [packages/algo-ts/src/util.ts:31](https://github.com/algorandfoundat
 
 > **Any**: `2`
 
-Defined in: [packages/algo-ts/src/util.ts:34](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/util.ts#L34)
+Defined in: [packages/algo-ts/src/util.ts:119](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L119)
+
+First the excess will be used, then remaining fees taken from the app account
 
 ***
 
@@ -22,7 +26,9 @@ Defined in: [packages/algo-ts/src/util.ts:34](https://github.com/algorandfoundat
 
 > **AppAccount**: `1`
 
-Defined in: [packages/algo-ts/src/util.ts:33](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/util.ts#L33)
+Defined in: [packages/algo-ts/src/util.ts:115](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L115)
+
+The app's account will cover all fees (itxn.fee = Global.minTxFee)
 
 ***
 
@@ -30,4 +36,6 @@ Defined in: [packages/algo-ts/src/util.ts:33](https://github.com/algorandfoundat
 
 > **GroupCredit**: `0`
 
-Defined in: [packages/algo-ts/src/util.ts:32](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/util.ts#L32)
+Defined in: [packages/algo-ts/src/util.ts:111](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L111)
+
+Only the excess fee (credit) on the outer group should be used (itxn.fee = 0)

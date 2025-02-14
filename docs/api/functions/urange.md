@@ -10,13 +10,17 @@
 
 > **urange**(`stop`): `IterableIterator`\<[`uint64`](../type-aliases/uint64.md)\>
 
-Defined in: [packages/algo-ts/src/util.ts:41](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/util.ts#L41)
+Defined in: [packages/algo-ts/src/util.ts:138](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L138)
+
+Generates an iterable sequence from 0...stop inclusive
 
 ### Parameters
 
 #### stop
 
 [`Uint64Compat`](../type-aliases/Uint64Compat.md)
+
+The stop number of the sequence
 
 ### Returns
 
@@ -26,7 +30,9 @@ Defined in: [packages/algo-ts/src/util.ts:41](https://github.com/algorandfoundat
 
 > **urange**(`start`, `stop`): `IterableIterator`\<[`uint64`](../type-aliases/uint64.md)\>
 
-Defined in: [packages/algo-ts/src/util.ts:42](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/util.ts#L42)
+Defined in: [packages/algo-ts/src/util.ts:144](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L144)
+
+Generates an iterable sequence from start...stop inclusive
 
 ### Parameters
 
@@ -34,9 +40,13 @@ Defined in: [packages/algo-ts/src/util.ts:42](https://github.com/algorandfoundat
 
 [`Uint64Compat`](../type-aliases/Uint64Compat.md)
 
+The start number of the sequence
+
 #### stop
 
 [`Uint64Compat`](../type-aliases/Uint64Compat.md)
+
+The stop number of the sequence
 
 ### Returns
 
@@ -46,7 +56,9 @@ Defined in: [packages/algo-ts/src/util.ts:42](https://github.com/algorandfoundat
 
 > **urange**(`start`, `stop`, `step`): `IterableIterator`\<[`uint64`](../type-aliases/uint64.md)\>
 
-Defined in: [packages/algo-ts/src/util.ts:43](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/util.ts#L43)
+Defined in: [packages/algo-ts/src/util.ts:151](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L151)
+
+Generates an iterable sequence from start...stop inclusive with increments of size step
 
 ### Parameters
 
@@ -54,13 +66,19 @@ Defined in: [packages/algo-ts/src/util.ts:43](https://github.com/algorandfoundat
 
 [`Uint64Compat`](../type-aliases/Uint64Compat.md)
 
+The start number of the sequence
+
 #### stop
 
 [`Uint64Compat`](../type-aliases/Uint64Compat.md)
 
+The stop number of the sequence
+
 #### step
 
 [`Uint64Compat`](../type-aliases/Uint64Compat.md)
+
+The step size of the sequence
 
 ### Returns
 

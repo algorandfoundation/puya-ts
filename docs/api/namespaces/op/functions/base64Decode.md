@@ -8,7 +8,7 @@
 
 > **base64Decode**(`e`, `a`): [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/op.ts:547](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/op.ts#L547)
+Defined in: [packages/algo-ts/src/op.ts:547](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L547)
 
 decode A which was base64-encoded using _encoding_ E. Fail if A is not base64 encoded with encoding E
 *Warning*: Usage should be restricted to very rare use cases. In almost all cases, smart contracts should directly handle non-encoded byte-strings.	This opcode should only be used in cases where base64 is the only available option, e.g. interoperability with a third-party that only signs base64 strings.

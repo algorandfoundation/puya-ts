@@ -6,7 +6,7 @@
 
 # Interface: PaymentItxnParams
 
-Defined in: [packages/algo-ts/src/itxn.ts:187](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/itxn.ts#L187)
+Defined in: [packages/algo-ts/src/itxn.ts:187](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L187)
 
 ## Methods
 
@@ -14,7 +14,7 @@ Defined in: [packages/algo-ts/src/itxn.ts:187](https://github.com/algorandfounda
 
 > **copy**(): [`PaymentItxnParams`](PaymentItxnParams.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:190](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/itxn.ts#L190)
+Defined in: [packages/algo-ts/src/itxn.ts:190](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L190)
 
 #### Returns
 
@@ -26,7 +26,7 @@ Defined in: [packages/algo-ts/src/itxn.ts:190](https://github.com/algorandfounda
 
 > **set**(`p`): `void`
 
-Defined in: [packages/algo-ts/src/itxn.ts:189](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/itxn.ts#L189)
+Defined in: [packages/algo-ts/src/itxn.ts:189](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L189)
 
 #### Parameters
 
@@ -44,7 +44,7 @@ Defined in: [packages/algo-ts/src/itxn.ts:189](https://github.com/algorandfounda
 
 > **submit**(): [`PaymentInnerTxn`](PaymentInnerTxn.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:188](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/itxn.ts#L188)
+Defined in: [packages/algo-ts/src/itxn.ts:188](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L188)
 
 #### Returns
 
