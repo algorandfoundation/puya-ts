@@ -82,21 +82,17 @@ subroutine tests/approvals/mutable-arrays.algo.ts::MutableArraysAlgo.test(length
         let i#0: uint64 = 0u
         goto block@1
     block@1: // while_top_L8
-        let i#1: uint64 = φ(i#0 <- block@0, i#3 <- block@3)
+        let i#1: uint64 = φ(i#0 <- block@0, i#2 <- block@2)
         let tmp%0#0: bool = (< i#1 length#0)
-        goto tmp%0#0 ? block@2 : block@4
+        goto tmp%0#0 ? block@2 : block@3
     block@2: // while_body_L8
         let encoded%1#0: uint64[] = encode<uint64>(i#1)
         let slot_contents%0#0: uint64[] = read(ma#0)
         let extended%0#0: uint64[] = slot_contents%0#0.concat(encoded%1#0)
         write(ma#0, extended%0#0)
-        goto block@3
-    block@3: // L8
-        let i#3: uint64 = (+ i#1 1u)
+        let i#2: uint64 = (+ i#1 1u)
         goto block@1
-    block@4: // after_while_L8
-        goto block@5
-    block@5: // L8
+    block@3: // after_while_L8
         let slot_contents%1#0: uint64[] = read(ma#0)
         let tmp%1#0: uint64 = slot_contents%1#0.length
         let tmp%2#0: bool = (== tmp%1#0 length#0)

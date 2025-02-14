@@ -59,7 +59,7 @@ test:
     pushint 2010 // 2010
     global OpcodeBudget
     >
-    bz test_after_while@12
+    bz test_after_while@10
     itxn_begin
     pushint 6 // appl
     itxn_field TypeEnum
@@ -74,7 +74,7 @@ test:
     itxn_submit
     b test
 
-test_after_while@12:
+test_after_while@10:
     // tests/approvals/mutable-arrays.algo.ts:7
     // const ma = new MutableArray<uint64>()
     bytec_0 // 0x
@@ -90,7 +90,7 @@ test_while_top@1:
     frame_dig 1
     frame_dig -1
     <
-    bz test_after_while@4
+    bz test_after_while@3
     // tests/approvals/mutable-arrays.algo.ts:9
     // ma.push(i)
     frame_dig 1
@@ -107,7 +107,7 @@ test_while_top@1:
     frame_bury 1
     b test_while_top@1
 
-test_after_while@4:
+test_after_while@3:
     frame_dig 0
     // tests/approvals/mutable-arrays.algo.ts:12
     // assert(ma.length === length)

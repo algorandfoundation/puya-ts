@@ -24,6 +24,7 @@ import { FunctionPType, ObjectPType } from '../ptypes'
 import { getSequenceItemType } from '../ptypes/util'
 import { typeRegistry } from '../type-registry'
 import { BaseVisitor } from './base-visitor'
+import { maybeNodes } from './util'
 
 // noinspection JSUnusedGlobalSymbols
 export class FunctionVisitor
@@ -220,11 +221,11 @@ export class FunctionVisitor
             sourceLocation,
           },
           this.accept(node.statement),
-          ctx.continueTarget,
+          ...maybeNodes(ctx.hasContinues, ctx.continueTarget),
           incrementor,
         ),
       }),
-      ctx.breakTarget,
+      ...maybeNodes(ctx.hasBreaks, ctx.breakTarget),
     ]
   }
 
@@ -250,9 +251,9 @@ export class FunctionVisitor
         sourceLocation,
         sequence: requireInstanceBuilder(this.accept(node.expression)).iterate(sourceLocation),
         items,
-        loopBody: nodeFactory.block({ sourceLocation }, this.accept(node.statement), ctx.continueTarget),
+        loopBody: nodeFactory.block({ sourceLocation }, this.accept(node.statement), ...maybeNodes(ctx.hasContinues, ctx.continueTarget)),
       }),
-      ctx.breakTarget,
+      ...maybeNodes(ctx.hasBreaks, ctx.breakTarget),
     )
   }
   visitForInStatement(node: ts.ForInStatement): awst.Statement | awst.Statement[] {
@@ -306,16 +307,19 @@ export class FunctionVisitor
         loopBody: nodeFactory.block(
           { sourceLocation },
           this.accept(node.statement),
-          ctx.continueTarget,
+          ...maybeNodes(ctx.hasContinues, ctx.continueTarget),
           nodeFactory.ifElse({
             condition: this.evaluateCondition(node.expression, true),
             sourceLocation,
-            ifBranch: nodeFactory.block({ sourceLocation }, nodeFactory.goto({ sourceLocation, target: ctx.breakTarget.label })),
+            ifBranch: nodeFactory.block(
+              { sourceLocation },
+              nodeFactory.goto({ sourceLocation, target: this.context.switchLoopCtx.getBreakTarget(undefined, sourceLocation) }),
+            ),
             elseBranch: null,
           }),
         ),
       }),
-      ctx.breakTarget,
+      ...maybeNodes(ctx.hasBreaks, ctx.breakTarget),
     )
   }
   visitWhileStatement(node: ts.WhileStatement): awst.Statement | awst.Statement[] {
@@ -327,9 +331,9 @@ export class FunctionVisitor
       nodeFactory.whileLoop({
         sourceLocation,
         condition: this.evaluateCondition(node.expression),
-        loopBody: nodeFactory.block({ sourceLocation }, this.accept(node.statement), ctx.continueTarget),
+        loopBody: nodeFactory.block({ sourceLocation }, this.accept(node.statement), ...maybeNodes(ctx.hasContinues, ctx.continueTarget)),
       }),
-      ctx.breakTarget,
+      ...maybeNodes(ctx.hasBreaks, ctx.breakTarget),
     )
   }
   visitContinueStatement(node: ts.ContinueStatement): awst.Statement | awst.Statement[] {

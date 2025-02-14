@@ -33,9 +33,9 @@ class ForLoopsAlgo extends Contract {
     let total = Uint64(0)
     outer: for (let i = start; i < stop; i += step) {
       for (let j = start; j < stop; j += step) {
-        total += j + j
-        // TODO: Can't unconditionally break as it leads to unreachable blocks and puya goes 💥
-        if (j === start) break outer
+        total += i + j
+
+        if (i * j > stop) break outer
       }
     }
     return total

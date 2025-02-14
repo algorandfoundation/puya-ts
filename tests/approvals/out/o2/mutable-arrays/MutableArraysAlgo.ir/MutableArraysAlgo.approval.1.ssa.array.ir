@@ -34,7 +34,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let i#0: uint64 = 0u
         goto block@19
     block@19: // while_top_L8
-        let i#1: uint64 = φ(i#0 <- block@18, i#3 <- block@20)
+        let i#1: uint64 = φ(i#0 <- block@18, i#2 <- block@20)
         let tmp%0#2: bool = (< i#1 length#0)
         goto tmp%0#2 ? block@20 : block@21
     block@20: // while_body_L8
@@ -46,7 +46,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let array%array_contents%0#1: bytes = (concat slot_contents%0#0 encoded%1#0) // on error: max array length exceeded
         let extended%0#0: uint64[] = array%array_contents%0#1
         write(ma#0, extended%0#0)
-        let i#3: uint64 = (+ i#1 1u)
+        let i#2: uint64 = (+ i#1 1u)
         goto block@19
     block@21: // after_while_L8
         let slot_contents%1#0: uint64[] = read(ma#0)

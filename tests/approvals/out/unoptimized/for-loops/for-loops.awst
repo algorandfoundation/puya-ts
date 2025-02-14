@@ -16,10 +16,8 @@ contract ForLoopsAlgo
     i: uint64 = start
     while (i < stop) {
       total: uint64 = total + i
-      #loop₁ᶜ:
       i: uint64 = i + step
     }
-    #loop₁ᵇ:
     return total
   }
   
@@ -32,7 +30,6 @@ contract ForLoopsAlgo
       if (total > 10) {
         goto #loop₁ᵇ
       }
-      #loop₁ᶜ:
       i: uint64 = i + step
     }
     #loop₁ᵇ:
@@ -51,7 +48,6 @@ contract ForLoopsAlgo
       #loop₁ᶜ:
       i: uint64 = i + step
     }
-    #loop₁ᵇ:
     return total
   }
   
@@ -62,15 +58,12 @@ contract ForLoopsAlgo
     while (i < stop) {
       j: uint64 = start
       while (j < stop) {
-        total: uint64 = total + j + j
-        if (j == start) {
+        total: uint64 = total + i + j
+        if (i * j > stop) {
           goto outer₁ᵇ
         }
-        #loop₁ᶜ:
         j: uint64 = j + step
       }
-      #loop₁ᵇ:
-      outer₁ᶜ:
       i: uint64 = i + step
     }
     outer₁ᵇ:

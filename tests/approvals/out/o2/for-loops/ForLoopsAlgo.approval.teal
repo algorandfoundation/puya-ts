@@ -65,18 +65,21 @@ main_while_top@20:
     <
     bz main_after_while@24
     // tests/approvals/for-loops.algo.ts:36
-    // total += j + j
-    dig 4
+    // total += i + j
+    dig 5
     dup
-    dig 1
+    dig 6
+    dup
+    cover 3
     +
-    dig 2
+    dig 3
     +
-    bury 2
+    bury 3
     // tests/approvals/for-loops.algo.ts:38
-    // if (j === start) break outer
-    dig 4
-    ==
+    // if (i * j > stop) break outer
+    *
+    dig 2
+    >
     bnz main_block@26
     // tests/approvals/for-loops.algo.ts:35
     // for (let j = start; j < stop; j += step) {

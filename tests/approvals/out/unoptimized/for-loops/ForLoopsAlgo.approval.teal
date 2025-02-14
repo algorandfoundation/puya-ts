@@ -212,28 +212,25 @@ test_for_loop_while_top@1:
     frame_dig 1
     frame_dig -2
     <
-    bz test_for_loop_after_while@4
+    bz test_for_loop_after_while@3
 
 test_for_loop_while_body@2:
     // tests/approvals/for-loops.algo.ts:8
     // total += i
     frame_dig 0
     frame_dig 1
+    dup
+    cover 2
     +
     frame_bury 0
-
-test_for_loop_block@3:
     // tests/approvals/for-loops.algo.ts:7
     // for (let i = start; i < stop; i += step) {
-    frame_dig 1
     frame_dig -1
     +
     frame_bury 1
     b test_for_loop_while_top@1
 
-test_for_loop_after_while@4:
-
-test_for_loop_block@5:
+test_for_loop_after_while@3:
     // tests/approvals/for-loops.algo.ts:10
     // return total
     retsub
@@ -257,7 +254,7 @@ test_for_loop_break_while_top@1:
     frame_dig 1
     frame_dig -2
     <
-    bz test_for_loop_break_after_while@6
+    bz test_for_loop_break_after_while@5
 
 test_for_loop_break_while_body@2:
     // tests/approvals/for-loops.algo.ts:16
@@ -275,14 +272,12 @@ test_for_loop_break_while_body@2:
 
 test_for_loop_break_if_body@3:
 
-test_for_loop_break_block@7:
+test_for_loop_break_block@6:
     // tests/approvals/for-loops.algo.ts:21
     // return total
     retsub
 
 test_for_loop_break_after_if_else@4:
-
-test_for_loop_break_block@5:
     // tests/approvals/for-loops.algo.ts:15
     // for (let i = start; i < stop; i += step) {
     frame_dig 1
@@ -291,8 +286,8 @@ test_for_loop_break_block@5:
     frame_bury 1
     b test_for_loop_break_while_top@1
 
-test_for_loop_break_after_while@6:
-    b test_for_loop_break_block@7
+test_for_loop_break_after_while@5:
+    b test_for_loop_break_block@6
 
 
 // tests/approvals/for-loops.algo.ts::ForLoopsAlgo.test_for_loop_continue(start: uint64, stop: uint64, step: uint64) -> uint64:
@@ -346,8 +341,6 @@ test_for_loop_continue_after_if_else@4:
     b test_for_loop_continue_block@5
 
 test_for_loop_continue_after_while@6:
-
-test_for_loop_continue_block@7:
     // tests/approvals/for-loops.algo.ts:30
     // return total
     retsub
@@ -372,7 +365,7 @@ test_for_loop_labelled_while_top@1:
     frame_dig 2
     frame_dig -2
     <
-    bz test_for_loop_labelled_after_while@11
+    bz test_for_loop_labelled_after_while@8
 
 test_for_loop_labelled_while_body@2:
     // tests/approvals/for-loops.algo.ts:35
@@ -386,27 +379,30 @@ test_for_loop_labelled_while_top@3:
     frame_dig 0
     frame_dig -2
     <
-    bz test_for_loop_labelled_after_while@8
+    bz test_for_loop_labelled_after_while@7
 
 test_for_loop_labelled_while_body@4:
     // tests/approvals/for-loops.algo.ts:36
-    // total += j + j
+    // total += i + j
+    frame_dig 2
+    dup
     frame_dig 0
     dup
-    dig 1
+    cover 3
     +
     frame_dig 1
     +
     frame_bury 1
     // tests/approvals/for-loops.algo.ts:38
-    // if (j === start) break outer
-    frame_dig -3
-    ==
+    // if (i * j > stop) break outer
+    *
+    frame_dig -2
+    >
     bz test_for_loop_labelled_after_if_else@6
 
 test_for_loop_labelled_if_body@5:
 
-test_for_loop_labelled_block@12:
+test_for_loop_labelled_block@9:
     // tests/approvals/for-loops.algo.ts:41
     // return total
     frame_dig 1
@@ -414,8 +410,6 @@ test_for_loop_labelled_block@12:
     retsub
 
 test_for_loop_labelled_after_if_else@6:
-
-test_for_loop_labelled_block@7:
     // tests/approvals/for-loops.algo.ts:35
     // for (let j = start; j < stop; j += step) {
     frame_dig 0
@@ -424,11 +418,7 @@ test_for_loop_labelled_block@7:
     frame_bury 0
     b test_for_loop_labelled_while_top@3
 
-test_for_loop_labelled_after_while@8:
-
-test_for_loop_labelled_block@9:
-
-test_for_loop_labelled_block@10:
+test_for_loop_labelled_after_while@7:
     // tests/approvals/for-loops.algo.ts:34
     // outer: for (let i = start; i < stop; i += step) {
     frame_dig 2
@@ -437,8 +427,8 @@ test_for_loop_labelled_block@10:
     frame_bury 2
     b test_for_loop_labelled_while_top@1
 
-test_for_loop_labelled_after_while@11:
-    b test_for_loop_labelled_block@12
+test_for_loop_labelled_after_while@8:
+    b test_for_loop_labelled_block@9
 
 
 // tests/approvals/for-loops.algo.ts::ForLoopsAlgo.__algots__.defaultCreate() -> void:
