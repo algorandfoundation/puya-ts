@@ -6,7 +6,7 @@
 
 # Class: `abstract` ARC4Encoded
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:69](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/arc4/encoded-types.ts#L69)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:69](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L69)
 
 ## Extended by
 
@@ -38,7 +38,7 @@ Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:69](https://github.com/a
 
 > **get** **bytes**(): [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:72](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/arc4/encoded-types.ts#L72)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:72](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L72)
 
 ##### Returns
 

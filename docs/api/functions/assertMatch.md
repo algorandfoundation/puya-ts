@@ -8,11 +8,15 @@
 
 > **assertMatch**\<`T`\>(`subject`, `test`, `message`?): `boolean`
 
-Defined in: [packages/algo-ts/src/util.ts:27](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/util.ts#L27)
+Defined in: [packages/algo-ts/src/util.ts:100](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L100)
+
+Applies all tests in `test` against `subject` and asserts they all pass
 
 ## Type Parameters
 
 • **T**
+
+The type of the subject
 
 ## Parameters
 
@@ -20,13 +24,19 @@ Defined in: [packages/algo-ts/src/util.ts:27](https://github.com/algorandfoundat
 
 `T`
 
+An object or tuple to be tested
+
 ### test
 
 `MatchTest`\<`T`\>
 
+An object containing one or more tests to be applied to the subject
+
 ### message?
 
 `string`
+
+An optional message to show if the assertion fails
 
 ## Returns
 

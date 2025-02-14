@@ -8,7 +8,7 @@
 
 > **biguint**: `object` & `bigint`
 
-Defined in: [packages/algo-ts/src/primitives.ts:44](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/primitives.ts#L44)
+Defined in: [packages/algo-ts/src/primitives.ts:44](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L44)
 
 An unsigned integer of up to 512 bits
 

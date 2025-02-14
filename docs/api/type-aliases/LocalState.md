@@ -8,7 +8,7 @@
 
 > **LocalState**\<`ValueType`\>: (`account`) => [`LocalStateForAccount`](LocalStateForAccount.md)\<`ValueType`\>
 
-Defined in: [packages/algo-ts/src/state.ts:92](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/state.ts#L92)
+Defined in: [packages/algo-ts/src/state.ts:92](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/state.ts#L92)
 
 A proxy for manipulating a local state field for any account
 

@@ -6,7 +6,7 @@
 
 # Class: UFixedNxM\<N, M\>
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:107](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/arc4/encoded-types.ts#L107)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:107](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L107)
 
 ## Extends
 
@@ -24,7 +24,7 @@ Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:107](https://github.com/
 
 > **new UFixedNxM**\<`N`, `M`\>(`v`): [`UFixedNxM`](UFixedNxM.md)\<`N`, `M`\>
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:110](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/arc4/encoded-types.ts#L110)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:110](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L110)
 
 #### Parameters
 
@@ -48,7 +48,7 @@ Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:110](https://github.com/
 
 > **get** **bytes**(): [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:72](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/arc4/encoded-types.ts#L72)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:72](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L72)
 
 ##### Returns
 
@@ -66,7 +66,7 @@ Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:72](https://github.com/a
 
 > **get** **native**(): `NativeForArc4Int`\<`N`\>
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:114](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/arc4/encoded-types.ts#L114)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:114](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L114)
 
 ##### Returns
 

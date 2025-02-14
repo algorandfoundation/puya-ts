@@ -6,7 +6,7 @@
 
 # Interface: AssetConfigItxnParams
 
-Defined in: [packages/algo-ts/src/itxn.ts:197](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/itxn.ts#L197)
+Defined in: [packages/algo-ts/src/itxn.ts:197](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L197)
 
 ## Methods
 
@@ -14,7 +14,7 @@ Defined in: [packages/algo-ts/src/itxn.ts:197](https://github.com/algorandfounda
 
 > **copy**(): [`AssetConfigItxnParams`](AssetConfigItxnParams.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:200](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/itxn.ts#L200)
+Defined in: [packages/algo-ts/src/itxn.ts:200](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L200)
 
 #### Returns
 
@@ -26,7 +26,7 @@ Defined in: [packages/algo-ts/src/itxn.ts:200](https://github.com/algorandfounda
 
 > **set**(`p`): `void`
 
-Defined in: [packages/algo-ts/src/itxn.ts:199](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/itxn.ts#L199)
+Defined in: [packages/algo-ts/src/itxn.ts:199](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L199)
 
 #### Parameters
 
@@ -44,7 +44,7 @@ Defined in: [packages/algo-ts/src/itxn.ts:199](https://github.com/algorandfounda
 
 > **submit**(): [`AssetConfigInnerTxn`](AssetConfigInnerTxn.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:198](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/itxn.ts#L198)
+Defined in: [packages/algo-ts/src/itxn.ts:198](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L198)
 
 #### Returns
 

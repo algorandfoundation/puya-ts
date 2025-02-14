@@ -8,7 +8,7 @@
 
 > **logicsig**(`options`): \<`T`\>(`logicSig`) => `T`
 
-Defined in: [packages/algo-ts/src/logic-sig.ts:28](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/logic-sig.ts#L28)
+Defined in: [packages/algo-ts/src/logic-sig.ts:28](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/logic-sig.ts#L28)
 
 The logicsig decorator can be used to specify additional configuration options for a logic signature
 

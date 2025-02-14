@@ -10,7 +10,7 @@
 
 > **emit**\<`TEvent`\>(`event`): `void`
 
-Defined in: [packages/algo-ts/src/arc-28.ts:22](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/arc-28.ts#L22)
+Defined in: [packages/algo-ts/src/arc-28.ts:22](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc-28.ts#L22)
 
 Emit an arc28 event log using either an ARC4Struct type or a named object type.
 Object types must have an ARC4 equivalent type.
@@ -52,7 +52,7 @@ emit(d)
 
 > **emit**\<`TProps`\>(`eventName`, ...`eventProps`): `void`
 
-Defined in: [packages/algo-ts/src/arc-28.ts:36](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/arc-28.ts#L36)
+Defined in: [packages/algo-ts/src/arc-28.ts:36](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc-28.ts#L36)
 
 Emit an arc28 event log using an explicit name and inferred property/field types.
 Property types must be ARC4 or have an ARC4 equivalent type.

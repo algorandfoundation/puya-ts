@@ -8,11 +8,15 @@
 
 > **match**\<`T`\>(`subject`, `test`): `boolean`
 
-Defined in: [packages/algo-ts/src/util.ts:24](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/util.ts#L24)
+Defined in: [packages/algo-ts/src/util.ts:88](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L88)
+
+Applies all tests in `test` against `subject` and returns a boolean indicating if they all pass
 
 ## Type Parameters
 
 • **T**
+
+The type of the subject
 
 ## Parameters
 
@@ -20,10 +24,16 @@ Defined in: [packages/algo-ts/src/util.ts:24](https://github.com/algorandfoundat
 
 `T`
 
+An object or tuple to be tested
+
 ### test
 
 `MatchTest`\<`T`\>
 
+An object containing one or more tests to be applied to the subject
+
 ## Returns
 
 `boolean`
+
+True if all tests pass, otherwise false

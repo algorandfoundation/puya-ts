@@ -6,7 +6,7 @@
 
 # Class: Str
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:77](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/arc4/encoded-types.ts#L77)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:77](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L77)
 
 ## Extends
 
@@ -18,7 +18,7 @@ Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:77](https://github.com/a
 
 > **new Str**(`s`?): [`Str`](Str.md)
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:81](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/arc4/encoded-types.ts#L81)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:81](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L81)
 
 #### Parameters
 
@@ -42,7 +42,7 @@ Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:81](https://github.com/a
 
 > **get** **bytes**(): [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:72](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/arc4/encoded-types.ts#L72)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:72](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L72)
 
 ##### Returns
 
@@ -60,7 +60,7 @@ Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:72](https://github.com/a
 
 > **get** **native**(): `string`
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:85](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/arc4/encoded-types.ts#L85)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:85](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L85)
 
 ##### Returns
 

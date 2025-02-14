@@ -6,7 +6,7 @@
 
 # Class: Contract
 
-Defined in: [packages/algo-ts/src/arc4/index.ts:8](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/arc4/index.ts#L8)
+Defined in: [packages/algo-ts/src/arc4/index.ts:8](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L8)
 
 ## Extends
 
@@ -32,7 +32,7 @@ Defined in: [packages/algo-ts/src/arc4/index.ts:8](https://github.com/algorandfo
 
 > **approvalProgram**(): `boolean`
 
-Defined in: [packages/algo-ts/src/arc4/index.ts:9](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/arc4/index.ts#L9)
+Defined in: [packages/algo-ts/src/arc4/index.ts:9](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L9)
 
 #### Returns
 
@@ -48,7 +48,7 @@ Defined in: [packages/algo-ts/src/arc4/index.ts:9](https://github.com/algorandfo
 
 > **clearStateProgram**(): `boolean` \| [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/base-contract.ts:8](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/base-contract.ts#L8)
+Defined in: [packages/algo-ts/src/base-contract.ts:8](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/base-contract.ts#L8)
 
 #### Returns
 

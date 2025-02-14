@@ -8,7 +8,9 @@
 
 > **assert**(`condition`, `message`?): `asserts condition`
 
-Defined in: [packages/algo-ts/src/util.ts:8](https://github.com/algorandfoundation/puya-ts/blob/89ee9cf9a58d93e3ffbb727cfadf537835799a71/packages/algo-ts/src/util.ts#L8)
+Defined in: [packages/algo-ts/src/util.ts:19](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L19)
+
+Asserts that `condition` is truthy, otherwise error and halt execution.
 
 ## Parameters
 
@@ -16,9 +18,13 @@ Defined in: [packages/algo-ts/src/util.ts:8](https://github.com/algorandfoundati
 
 `unknown`
 
+An expression that can be evaluated as truthy of falsy
+
 ### message?
 
 `string`
+
+The message to show if `condition` is falsy and an error is raised.
 
 ## Returns
 
