@@ -14,7 +14,7 @@ import type { InstanceBuilder } from '../../index'
 export function concatArrays(left: InstanceBuilder, right: InstanceBuilder, sourceLocation: SourceLocation): InstanceBuilder {
   if (left.ptype instanceof StaticBytesType || left.ptype instanceof StaticArrayType) {
     /*
-      Note: This is only required because puya doesn't support staticarray + other => dynamic array
+      TODO: This is only required because puya doesn't support staticarray + other => dynamic array
       To work around this, we convert arc4 static bytes and static array to dynamic bytes and dynamic array
      */
     const dynamicType = left.ptype instanceof StaticBytesType ? DynamicBytesType : new DynamicArrayType({ ...left.ptype })

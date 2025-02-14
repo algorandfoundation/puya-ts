@@ -20,10 +20,6 @@ export function resolveCompatBuilder(builder: NodeBuilder, targetType: PType) {
   }
 
   if (targetType.equals(accountPType)) {
-    if (builder.resolvableToPType(stringPType)) {
-      // TODO: account string should be interpreted as base32
-      return builder.resolveToPType(stringPType)
-    }
     if (builder.resolvableToPType(bytesPType)) {
       // Account bytes should just be cast
       return builder.resolveToPType(bytesPType).reinterpretCast(accountPType)

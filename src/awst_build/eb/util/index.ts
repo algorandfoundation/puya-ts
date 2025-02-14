@@ -2,7 +2,6 @@ import type { awst, ConstantValue } from '../../../awst'
 import { isConstant } from '../../../awst'
 import type { Expression } from '../../../awst/nodes'
 import { BoolConstant, IntegerConstant, StringConstant } from '../../../awst/nodes'
-import type { SourceLocation } from '../../../awst/source-location'
 import { CodeError } from '../../../errors'
 import { codeInvariant } from '../../../util'
 import type { PType, PTypeOrClass } from '../../ptypes'
@@ -63,17 +62,6 @@ export function requestBuilderOfType(builder: NodeBuilder, ptype: PTypeOrClass):
 export function requireInstanceBuilder(builder: NodeBuilder): InstanceBuilder {
   if (builder instanceof InstanceBuilder) return builder
   throw new CodeError(`Expected instance of a type, got ${builder.typeDescription}`, { sourceLocation: builder.sourceLocation })
-}
-
-export function requireExpressionsOfType<const TPTypes extends [...PType[]]>(
-  builders: ReadonlyArray<NodeBuilder>,
-  ptypes: TPTypes,
-  sourceLocation: SourceLocation,
-): Array<awst.Expression> {
-  if (builders.length === ptypes.length) {
-    return builders.map((builder, i) => requireExpressionOfType(builder, ptypes[i]))
-  }
-  throw new CodeError(`Expected ${ptypes.length} args with types ${ptypes.join(', ')}`, { sourceLocation })
 }
 
 export function requireStringConstant(builder: NodeBuilder): awst.StringConstant {

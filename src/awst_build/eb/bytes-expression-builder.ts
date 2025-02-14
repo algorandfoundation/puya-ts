@@ -10,12 +10,10 @@ import {
   BytesUnaryOperator,
   EqualityComparison,
   IntegerConstant,
-  StringConstant,
 } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { wtypes } from '../../awst/wtypes'
-
-import { CodeError, wrapInCodeError } from '../../errors'
+import { wrapInCodeError } from '../../errors'
 import { logger } from '../../logger'
 import { base32ToUint8Array, base64ToUint8Array, enumKeyFromValue, hexToUint8Array, uint8ArrayToUtf8, utf8ToUint8Array } from '../../util'
 import type { InstanceType, PType } from '../ptypes'
@@ -39,7 +37,7 @@ import { SliceFunctionBuilder } from './shared/slice-function-builder'
 import { StringExpressionBuilder } from './string-expression-builder'
 import { isStaticallyIterable, StaticIterator } from './traits/static-iterator'
 import { UInt64ExpressionBuilder } from './uint64-expression-builder'
-import { requireExpressionOfType, requireExpressionsOfType } from './util'
+import { requireExpressionOfType, requireStringConstant } from './util'
 import { parseFunctionArgs } from './util/arg-parsing'
 import { compareBytes } from './util/compare-bytes'
 
@@ -147,11 +145,11 @@ export class BytesFunctionBuilder extends FunctionBuilder {
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
     switch (name) {
       case 'fromHex':
-        return new FromEncodingBuilder(sourceLocation, hexToUint8Array, BytesEncoding.base16)
+        return new FromEncodingBuilder(sourceLocation, hexToUint8Array, BytesEncoding.base16, 'fromHex')
       case 'fromBase32':
-        return new FromEncodingBuilder(sourceLocation, base32ToUint8Array, BytesEncoding.base32)
+        return new FromEncodingBuilder(sourceLocation, base32ToUint8Array, BytesEncoding.base32, 'fromBase32')
       case 'fromBase64':
-        return new FromEncodingBuilder(sourceLocation, base64ToUint8Array, BytesEncoding.base64)
+        return new FromEncodingBuilder(sourceLocation, base64ToUint8Array, BytesEncoding.base64, 'fromBase64')
     }
     return super.memberAccess(name, sourceLocation)
   }
@@ -162,23 +160,32 @@ class FromEncodingBuilder extends FunctionBuilder {
     sourceLocation: SourceLocation,
     private decodeLiteral: (value: string) => Uint8Array,
     private encoding: BytesEncoding,
+    private functionName: string,
   ) {
     super(sourceLocation)
   }
 
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
-    const [value] = requireExpressionsOfType(args, [stringPType], sourceLocation)
+    const {
+      args: [valueBuilder],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      callLocation: sourceLocation,
+      genericTypeArgs: 0,
+      funcName: this.functionName,
+      argSpec: (a) => [a.required(stringPType)],
+    })
 
-    if (value instanceof StringConstant) {
-      return new BytesExpressionBuilder(
-        nodeFactory.bytesConstant({
-          value: wrapInCodeError(() => this.decodeLiteral(value.value), value.sourceLocation),
-          encoding: this.encoding,
-          sourceLocation,
-        }),
-      )
-    }
-    throw CodeError.expectedCompileTimeConstant({ sourceLocation })
+    const value = requireStringConstant(valueBuilder)
+
+    return new BytesExpressionBuilder(
+      nodeFactory.bytesConstant({
+        value: wrapInCodeError(() => this.decodeLiteral(value.value), value.sourceLocation),
+        encoding: this.encoding,
+        sourceLocation,
+      }),
+    )
   }
 }
 
@@ -269,11 +276,20 @@ export class ConcatExpressionBuilder extends FunctionBuilder {
   }
 
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
-    const [other] = requireExpressionsOfType(args, [bytesPType], sourceLocation)
+    const {
+      args: [other],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      callLocation: sourceLocation,
+      funcName: 'concat',
+      genericTypeArgs: 0,
+      argSpec: (a) => [a.required(bytesPType)],
+    })
     return new BytesExpressionBuilder(
       intrinsicFactory.bytesConcat({
         left: this.expr,
-        right: other,
+        right: other.resolve(),
         sourceLocation: sourceLocation,
       }),
     )
