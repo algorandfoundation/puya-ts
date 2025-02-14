@@ -8,7 +8,7 @@
 
 > **Account**: `object`
 
-Defined in: [packages/algo-ts/src/reference.ts:100](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L100)
+Defined in: [packages/algo-ts/src/reference.ts:106](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L106)
 
 ## Type declaration
 
@@ -31,6 +31,8 @@ Account must be an available resource
 ### bytes
 
 > `readonly` **bytes**: [`bytes`](bytes.md)
+
+Get the accounts address in bytes
 
 ### minBalance
 
