@@ -2,7 +2,6 @@ import type { awst, ConstantValue } from '../../../awst'
 import { isConstant } from '../../../awst'
 import type { Expression } from '../../../awst/nodes'
 import { BoolConstant, IntegerConstant, StringConstant } from '../../../awst/nodes'
-import type { SourceLocation } from '../../../awst/source-location'
 import { CodeError } from '../../../errors'
 import { codeInvariant } from '../../../util'
 import type { PType, PTypeOrClass } from '../../ptypes'
@@ -11,6 +10,7 @@ import { UFixedNxMType, UintNType } from '../../ptypes/arc4-types'
 import type { NodeBuilder } from '../index'
 import { InstanceBuilder } from '../index'
 import { LiteralExpressionBuilder } from '../literal-expression-builder'
+import { BigIntLiteralExpressionBuilder } from '../literal/big-int-literal-expression-builder'
 
 export function requireExpressionOfType(builder: NodeBuilder, ptype: PTypeOrClass): Expression {
   if (builder instanceof InstanceBuilder) {
@@ -64,17 +64,6 @@ export function requireInstanceBuilder(builder: NodeBuilder): InstanceBuilder {
   throw new CodeError(`Expected instance of a type, got ${builder.typeDescription}`, { sourceLocation: builder.sourceLocation })
 }
 
-export function requireExpressionsOfType<const TPTypes extends [...PType[]]>(
-  builders: ReadonlyArray<NodeBuilder>,
-  ptypes: TPTypes,
-  sourceLocation: SourceLocation,
-): Array<awst.Expression> {
-  if (builders.length === ptypes.length) {
-    return builders.map((builder, i) => requireExpressionOfType(builder, ptypes[i]))
-  }
-  throw new CodeError(`Expected ${ptypes.length} args with types ${ptypes.join(', ')}`, { sourceLocation })
-}
-
 export function requireStringConstant(builder: NodeBuilder): awst.StringConstant {
   const constant = requireConstantOfType(builder, stringPType)
   codeInvariant(constant instanceof StringConstant, 'Expected string literal', builder.sourceLocation)
@@ -110,6 +99,11 @@ export function requireConstantOfType(builder: NodeBuilder, ptype: PType, messag
   const constExpr = requestConstantOfType(builder, ptype)
   if (constExpr) return constExpr
   throw new CodeError(messageOverride ?? `Expected constant of type ${ptype}`, { sourceLocation: builder.sourceLocation })
+}
+
+export function requireLiteralNumber(builder: NodeBuilder) {
+  codeInvariant(builder instanceof BigIntLiteralExpressionBuilder, 'Expected numeric literal', builder.sourceLocation)
+  return builder.value
 }
 
 export function isValidLiteralForPType(literalValue: ConstantValue, ptype: PTypeOrClass): boolean {

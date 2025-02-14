@@ -7,10 +7,13 @@ import type { PTypeOrClass } from '../../ptypes'
 import { ArrayLiteralPType, ArrayPType, TuplePType } from '../../ptypes'
 import type { NodeBuilder } from '../index'
 import { InstanceBuilder } from '../index'
+import type { StaticallyIterable } from '../traits/static-iterator'
+import { StaticIterator } from '../traits/static-iterator'
 import { TupleExpressionBuilder } from '../tuple-expression-builder'
 import { requireIntegerConstant } from '../util'
+import { arrayLength } from '../util/array/length'
 
-export class ArrayLiteralExpressionBuilder extends InstanceBuilder {
+export class ArrayLiteralExpressionBuilder extends InstanceBuilder implements StaticallyIterable {
   readonly ptype: ArrayLiteralPType
   constructor(
     sourceLocation: SourceLocation,
@@ -32,10 +35,6 @@ export class ArrayLiteralExpressionBuilder extends InstanceBuilder {
 
   resolveLValue(): LValue {
     throw new CodeError('Array literal is not a valid lvalue')
-    // return nodeFactory.tupleExpression({
-    //   items: this.items.map((i) => i.resolveLValue()),
-    //   sourceLocation: this.sourceLocation,
-    // })
   }
 
   singleEvaluation(): InstanceBuilder {
@@ -49,6 +48,14 @@ export class ArrayLiteralExpressionBuilder extends InstanceBuilder {
     const indexNum = Number(requireIntegerConstant(index).value)
     codeInvariant(indexNum < this.items.length, `Index ${indexNum} out of bounds of array`, sourceLocation)
     return this.items[indexNum]
+  }
+
+  memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
+    switch (name) {
+      case 'length':
+        return arrayLength(this, sourceLocation)
+    }
+    return super.memberAccess(name, sourceLocation)
   }
 
   resolveToPType(ptype: PTypeOrClass): InstanceBuilder {
@@ -68,7 +75,7 @@ export class ArrayLiteralExpressionBuilder extends InstanceBuilder {
     if (ptype instanceof ArrayPType) {
       return new ArrayLiteralExpressionBuilder(
         this.sourceLocation,
-        this.items.map((i) => i.resolveToPType(ptype.itemType)),
+        this.items.map((i) => i.resolveToPType(ptype.elementType)),
       )
     }
     return super.resolveToPType(ptype)
@@ -80,12 +87,12 @@ export class ArrayLiteralExpressionBuilder extends InstanceBuilder {
       return ptype.items.every((itemType, index) => this.items[index].resolvableToPType(itemType))
     }
     if (ptype instanceof ArrayPType) {
-      return this.items.every((i) => i.resolveToPType(ptype.itemType))
+      return this.items.every((i) => i.resolveToPType(ptype.elementType))
     }
     return false
   }
 
-  getItemBuilders(): InstanceBuilder[] {
+  [StaticIterator](): InstanceBuilder[] {
     return this.items
   }
 }

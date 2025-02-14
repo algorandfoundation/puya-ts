@@ -5,21 +5,21 @@
 main:
     intcblock 1 0 15 45
     bytecblock "world" "hello"
-    // tests/approvals/reserve-scratch.algo.ts:25
+    // tests/approvals/reserve-scratch.algo.ts:30
     // super.approvalProgram()
     callsub approvalProgram
     pop
-    // tests/approvals/reserve-scratch.algo.ts:26
+    // tests/approvals/reserve-scratch.algo.ts:31
     // Scratch.store(50, Bytes('world'))
     pushint 50 // 50
     bytec_0 // "world"
     stores
-    // tests/approvals/reserve-scratch.algo.ts:27
+    // tests/approvals/reserve-scratch.algo.ts:32
     // Scratch.store(16, Bytes('world'))
     pushint 16 // 16
     bytec_0 // "world"
     stores
-    // tests/approvals/reserve-scratch.algo.ts:28
+    // tests/approvals/reserve-scratch.algo.ts:33
     // return true
     intc_0 // 1
     return
@@ -27,34 +27,31 @@ main:
 
 // tests/approvals/reserve-scratch.algo.ts::ReserveScratchAlgo.approvalProgram() -> uint64:
 approvalProgram:
-    // tests/approvals/reserve-scratch.algo.ts:12
-    // approvalProgram(): boolean {
-    proto 0 1
-    // tests/approvals/reserve-scratch.algo.ts:13
+    // tests/approvals/reserve-scratch.algo.ts:18
     // this.setThings()
     callsub setThings
-    // tests/approvals/reserve-scratch.algo.ts:15
+    // tests/approvals/reserve-scratch.algo.ts:20
     // assert(Scratch.loadUint64(0) === 1)
     intc_1 // 0
     loads
     intc_0 // 1
     ==
     assert
-    // tests/approvals/reserve-scratch.algo.ts:16
+    // tests/approvals/reserve-scratch.algo.ts:21
     // assert(Scratch.loadBytes(1) === Bytes('hello'))
     intc_0 // 1
     loads
     bytec_1 // "hello"
     ==
     assert
-    // tests/approvals/reserve-scratch.algo.ts:17
+    // tests/approvals/reserve-scratch.algo.ts:22
     // assert(Scratch.loadUint64(15) === 45)
     intc_2 // 15
     loads
     intc_3 // 45
     ==
     assert
-    // tests/approvals/reserve-scratch.algo.ts:18
+    // tests/approvals/reserve-scratch.algo.ts:23
     // return true
     intc_0 // 1
     retsub
@@ -62,20 +59,17 @@ approvalProgram:
 
 // tests/approvals/reserve-scratch.algo.ts::ReserveScratchAlgo.setThings() -> void:
 setThings:
-    // tests/approvals/reserve-scratch.algo.ts:6
-    // setThings() {
-    proto 0 0
-    // tests/approvals/reserve-scratch.algo.ts:7
+    // tests/approvals/reserve-scratch.algo.ts:12
     // Scratch.store(0, 1)
     intc_1 // 0
     intc_0 // 1
     stores
-    // tests/approvals/reserve-scratch.algo.ts:8
+    // tests/approvals/reserve-scratch.algo.ts:13
     // Scratch.store(1, Bytes('hello'))
     intc_0 // 1
     bytec_1 // "hello"
     stores
-    // tests/approvals/reserve-scratch.algo.ts:9
+    // tests/approvals/reserve-scratch.algo.ts:14
     // Scratch.store(15, 45)
     intc_2 // 15
     intc_3 // 45

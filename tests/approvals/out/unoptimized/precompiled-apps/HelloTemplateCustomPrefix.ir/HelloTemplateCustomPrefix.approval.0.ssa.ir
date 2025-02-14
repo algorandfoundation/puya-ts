@@ -9,17 +9,6 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%0#0: bool = tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix.__puya_arc4_router__()
         return tmp%0#0
 
-subroutine tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix.constructor() -> void:
-    block@0: // L35
-        tests/approvals/precompiled-apps.algo.ts::HelloBase.constructor()
-        (app_global_put "greeting" TemplateVar[bytes](PRFX_GREETING))
-        return 
-
-subroutine tests/approvals/precompiled-apps.algo.ts::HelloBase.constructor() -> void:
-    block@0: // L3
-        (app_global_put "greeting" "")
-        return 
-
 subroutine tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix.__puya_arc4_router__() -> bool:
     block@0: // L34
         let tmp%0#0: uint64 = (txn NumAppArgs)
@@ -66,7 +55,7 @@ subroutine tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix._
         let tmp%20#0: bytes = ((extract 2 0) tmp%19#0)
         let to_encode%0#0: bytes = tests/approvals/precompiled-apps.algo.ts::HelloBase.greet(tmp%20#0)
         let length%0#0: uint64 = (len to_encode%0#0)
-        let as_bytes%0#0: bytes = (itob length%0#0)
+        let as_bytes%0#0: bytes[8] = (itob length%0#0)
         let length_uint16%0#0: bytes = ((extract 6 2) as_bytes%0#0)
         let encoded_value%0#0: bytes = (concat length_uint16%0#0 to_encode%0#0)
         let tmp%21#0: bytes = (concat 0x151f7c75 encoded_value%0#0)
@@ -85,6 +74,12 @@ subroutine tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix.c
     block@0: // L40
         return 
 
+subroutine tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix.constructor() -> void:
+    block@0: // L35
+        tests/approvals/precompiled-apps.algo.ts::HelloBase.constructor()
+        (app_global_put "greeting" TemplateVar[bytes](PRFX_GREETING))
+        return 
+
 subroutine tests/approvals/precompiled-apps.algo.ts::HelloBase.delete() -> void:
     block@0: // L6
         return 
@@ -101,3 +96,8 @@ subroutine tests/approvals/precompiled-apps.algo.ts::HelloBase.greet(name: bytes
         let tmp%1#0: bytes = (concat tmp%0#0 " ")
         let tmp%2#0: bytes = (concat tmp%1#0 name#0)
         return tmp%2#0
+
+subroutine tests/approvals/precompiled-apps.algo.ts::HelloBase.constructor() -> void:
+    block@0: // L3
+        (app_global_put "greeting" "")
+        return 

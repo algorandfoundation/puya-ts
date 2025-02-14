@@ -5,10 +5,10 @@ import { BigIntLiteralExpressionBuilder } from '../literal/big-int-literal-expre
 
 export function getBigIntOrUint64Expr(builder: InstanceBuilder) {
   if (builder.ptype.equals(numberPType)) {
-    invariant(builder instanceof BigIntLiteralExpressionBuilder, 'Builder for number type must be BigIntLiteral')
+    invariant(builder instanceof BigIntLiteralExpressionBuilder, 'Builder for number type must be BigIntLiteral', builder.sourceLocation)
     return builder.value
   } else {
-    invariant(builder.ptype.equals(uint64PType), 'Builder must be uint64 if not number')
+    invariant(builder.ptype.equals(uint64PType), 'Builder must be uint64 if not number', builder.sourceLocation)
     return builder.resolve()
   }
 }

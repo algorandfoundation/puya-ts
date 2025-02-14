@@ -114,6 +114,7 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
         }),
         ...this._propertyInitialization,
       ),
+      inline: null,
     })
   }
 

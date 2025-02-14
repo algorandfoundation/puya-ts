@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1
+    intcblock 1 0 8
     bytecblock 0x151f7c75 0x0000000000000000
     // tests/approvals/arc4-struct.algo.ts:9
     // class StructDemo extends Contract {
@@ -16,7 +16,7 @@ main:
 main_after_if_else@13:
     // tests/approvals/arc4-struct.algo.ts:9
     // class StructDemo extends Contract {
-    pushint 0 // 0
+    intc_1 // 0
     return
 
 main_toAndFromBytes_route@6:
@@ -103,9 +103,6 @@ main_bare_routing@9:
 
 // tests/approvals/arc4-struct.algo.ts::StructDemo.testVectorCreationAndEquality() -> void:
 testVectorCreationAndEquality:
-    // tests/approvals/arc4-struct.algo.ts:10
-    // public testVectorCreationAndEquality() {
-    proto 0 0
     // tests/approvals/arc4-struct.algo.ts:12
     // log(v1.x)
     bytec_1 // 0x0000000000000000
@@ -125,21 +122,21 @@ addVectors:
     // tests/approvals/arc4-struct.algo.ts:20
     // x: new ARC4Uint64(v1.x.native + v2.x.native),
     frame_dig -2
-    extract 0 8 // on error: Index access is out of bounds
-    btoi
+    intc_1 // 0
+    extract_uint64
     frame_dig -1
-    extract 0 8 // on error: Index access is out of bounds
-    btoi
+    intc_1 // 0
+    extract_uint64
     +
     itob
     // tests/approvals/arc4-struct.algo.ts:21
     // y: new ARC4Uint64(v1.y.native + v2.y.native),
     frame_dig -2
-    extract 8 8 // on error: Index access is out of bounds
-    btoi
+    intc_2 // 8
+    extract_uint64
     frame_dig -1
-    extract 8 8 // on error: Index access is out of bounds
-    btoi
+    intc_2 // 8
+    extract_uint64
     +
     itob
     // tests/approvals/arc4-struct.algo.ts:19-22

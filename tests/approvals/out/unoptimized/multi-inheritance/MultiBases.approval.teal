@@ -4,7 +4,7 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 0 1
-    bytecblock 0x151f7c75 "base-two" "common"
+    bytecblock 0x151f7c75 "common" "base-two"
     txn ApplicationID
     bnz main_after_if_else@2
 
@@ -84,7 +84,7 @@ main_b2CantOverride_route@11:
     intc_0 // 0
     !=
     assert // can only call when not creating
-    callsub tests/approvals/multi-inheritance.algo.ts::CommonBase.b2CantOverride
+    callsub b2CantOverride
     dup
     len
     itob
@@ -273,11 +273,42 @@ main___algots__.defaultCreate@16:
     b main_after_inlined_tests/approvals/multi-inheritance.algo.ts::MultiBases.__puya_arc4_router__@20
 
 
+// tests/approvals/multi-inheritance.algo.ts::MultiBases.methodMulti() -> bytes:
+methodMulti:
+    // tests/approvals/multi-inheritance.algo.ts:44
+    // return 'multi-bases'
+    pushbytes "multi-bases"
+    retsub
+
+
+// tests/approvals/multi-inheritance.algo.ts::MultiBases.methodCallsSuper() -> bytes:
+methodCallsSuper:
+    // tests/approvals/multi-inheritance.algo.ts:48
+    // return super.methodTwo()
+    callsub methodTwo
+    retsub
+
+
+// tests/approvals/multi-inheritance.algo.ts::MultiBases.callB2CantOverride() -> bytes:
+callB2CantOverride:
+    // tests/approvals/multi-inheritance.algo.ts:52
+    // return super.class(BaseTwo).b2CantOverride()
+    callsub tests/approvals/multi-inheritance.algo.ts::BaseTwo.b2CantOverride
+    retsub
+
+
+// tests/approvals/multi-inheritance.algo.ts::MultiBases.callB2Common() -> bytes:
+callB2Common:
+    // tests/approvals/multi-inheritance.algo.ts:56
+    // return super.class(BaseTwo).methodCommon()
+    callsub methodCommon
+    retsub
+
+
 // tests/approvals/multi-inheritance.algo.ts::MultiBases.constructor() -> void:
 constructor:
     // tests/approvals/multi-inheritance.algo.ts:40
     // export class MultiBases extends classes(BaseOne, BaseTwo) {
-    proto 0 0
     callsub polytype/lib/polytype-module.d.ts::ClusteredContract<tests/approvals/multi-inheritance.algo.ts::BaseOne,tests/approvals/multi-inheritance.algo.ts::BaseTwo>.constructor
     // tests/approvals/multi-inheritance.algo.ts:41
     // stateMulti = GlobalState({ initialValue: 'Hmmm' })
@@ -289,9 +320,16 @@ constructor:
 
 // polytype/lib/polytype-module.d.ts::ClusteredContract<tests/approvals/multi-inheritance.algo.ts::BaseOne,tests/approvals/multi-inheritance.algo.ts::BaseTwo>.constructor() -> void:
 polytype/lib/polytype-module.d.ts::ClusteredContract<tests/approvals/multi-inheritance.algo.ts::BaseOne,tests/approvals/multi-inheritance.algo.ts::BaseTwo>.constructor:
-    proto 0 0
     callsub tests/approvals/multi-inheritance.algo.ts::BaseOne.constructor
     callsub tests/approvals/multi-inheritance.algo.ts::BaseTwo.constructor
+    retsub
+
+
+// tests/approvals/multi-inheritance.algo.ts::BaseOne.methodOne() -> bytes:
+methodOne:
+    // tests/approvals/multi-inheritance.algo.ts:20
+    // return 'base-one'
+    pushbytes "base-one"
     retsub
 
 
@@ -299,7 +337,6 @@ polytype/lib/polytype-module.d.ts::ClusteredContract<tests/approvals/multi-inher
 tests/approvals/multi-inheritance.algo.ts::BaseOne.constructor:
     // tests/approvals/multi-inheritance.algo.ts:17
     // export class BaseOne extends CommonBase {
-    proto 0 0
     callsub tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor
     // tests/approvals/multi-inheritance.algo.ts:18
     // stateOne = GlobalState({ initialValue: Uint64(45) })
@@ -309,11 +346,24 @@ tests/approvals/multi-inheritance.algo.ts::BaseOne.constructor:
     retsub
 
 
+// tests/approvals/multi-inheritance.algo.ts::CommonBase.methodCommon() -> bytes:
+methodCommon:
+    // tests/approvals/multi-inheritance.algo.ts:9
+    // return 'common'
+    bytec_1 // "common"
+    retsub
+
+
+// tests/approvals/multi-inheritance.algo.ts::CommonBase.b2CantOverride() -> bytes:
+b2CantOverride:
+    // tests/approvals/multi-inheritance.algo.ts:13
+    // return 'common'
+    bytec_1 // "common"
+    retsub
+
+
 // tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor() -> void:
 tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor:
-    // tests/approvals/multi-inheritance.algo.ts:5
-    // export class CommonBase extends Contract {
-    proto 0 0
     // tests/approvals/multi-inheritance.algo.ts:6
     // stateCommon = GlobalState<uint64>({ initialValue: 123 })
     pushbytes "stateCommon"
@@ -322,11 +372,26 @@ tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor:
     retsub
 
 
+// tests/approvals/multi-inheritance.algo.ts::BaseTwo.methodTwo() -> bytes:
+methodTwo:
+    // tests/approvals/multi-inheritance.algo.ts:27
+    // return 'base-two'
+    bytec_2 // "base-two"
+    retsub
+
+
+// tests/approvals/multi-inheritance.algo.ts::BaseTwo.b2CantOverride() -> bytes:
+tests/approvals/multi-inheritance.algo.ts::BaseTwo.b2CantOverride:
+    // tests/approvals/multi-inheritance.algo.ts:36
+    // return 'base-two'
+    bytec_2 // "base-two"
+    retsub
+
+
 // tests/approvals/multi-inheritance.algo.ts::BaseTwo.constructor() -> void:
 tests/approvals/multi-inheritance.algo.ts::BaseTwo.constructor:
     // tests/approvals/multi-inheritance.algo.ts:24
     // export class BaseTwo extends CommonBase {
-    proto 0 0
     callsub tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor
     // tests/approvals/multi-inheritance.algo.ts:25
     // stateTwo = GlobalState({ initialValue: 'Hello' })
@@ -336,108 +401,6 @@ tests/approvals/multi-inheritance.algo.ts::BaseTwo.constructor:
     retsub
 
 
-// tests/approvals/multi-inheritance.algo.ts::MultiBases.methodMulti() -> bytes:
-methodMulti:
-    // tests/approvals/multi-inheritance.algo.ts:43
-    // methodMulti() {
-    proto 0 1
-    // tests/approvals/multi-inheritance.algo.ts:44
-    // return 'multi-bases'
-    pushbytes "multi-bases"
-    retsub
-
-
-// tests/approvals/multi-inheritance.algo.ts::MultiBases.methodCallsSuper() -> bytes:
-methodCallsSuper:
-    // tests/approvals/multi-inheritance.algo.ts:47
-    // methodCallsSuper() {
-    proto 0 1
-    // tests/approvals/multi-inheritance.algo.ts:48
-    // return super.methodTwo()
-    callsub methodTwo
-    retsub
-
-
-// tests/approvals/multi-inheritance.algo.ts::BaseTwo.methodTwo() -> bytes:
-methodTwo:
-    // tests/approvals/multi-inheritance.algo.ts:26
-    // methodTwo() {
-    proto 0 1
-    // tests/approvals/multi-inheritance.algo.ts:27
-    // return 'base-two'
-    bytec_1 // "base-two"
-    retsub
-
-
-// tests/approvals/multi-inheritance.algo.ts::MultiBases.callB2CantOverride() -> bytes:
-callB2CantOverride:
-    // tests/approvals/multi-inheritance.algo.ts:51
-    // callB2CantOverride() {
-    proto 0 1
-    // tests/approvals/multi-inheritance.algo.ts:52
-    // return super.class(BaseTwo).b2CantOverride()
-    callsub b2CantOverride
-    retsub
-
-
-// tests/approvals/multi-inheritance.algo.ts::BaseTwo.b2CantOverride() -> bytes:
-b2CantOverride:
-    // tests/approvals/multi-inheritance.algo.ts:35
-    // b2CantOverride(): string {
-    proto 0 1
-    // tests/approvals/multi-inheritance.algo.ts:36
-    // return 'base-two'
-    bytec_1 // "base-two"
-    retsub
-
-
-// tests/approvals/multi-inheritance.algo.ts::MultiBases.callB2Common() -> bytes:
-callB2Common:
-    // tests/approvals/multi-inheritance.algo.ts:55
-    // callB2Common() {
-    proto 0 1
-    // tests/approvals/multi-inheritance.algo.ts:56
-    // return super.class(BaseTwo).methodCommon()
-    callsub methodCommon
-    retsub
-
-
-// tests/approvals/multi-inheritance.algo.ts::CommonBase.methodCommon() -> bytes:
-methodCommon:
-    // tests/approvals/multi-inheritance.algo.ts:8
-    // methodCommon() {
-    proto 0 1
-    // tests/approvals/multi-inheritance.algo.ts:9
-    // return 'common'
-    bytec_2 // "common"
-    retsub
-
-
-// tests/approvals/multi-inheritance.algo.ts::BaseOne.methodOne() -> bytes:
-methodOne:
-    // tests/approvals/multi-inheritance.algo.ts:19
-    // methodOne() {
-    proto 0 1
-    // tests/approvals/multi-inheritance.algo.ts:20
-    // return 'base-one'
-    pushbytes "base-one"
-    retsub
-
-
-// tests/approvals/multi-inheritance.algo.ts::CommonBase.b2CantOverride() -> bytes:
-tests/approvals/multi-inheritance.algo.ts::CommonBase.b2CantOverride:
-    // tests/approvals/multi-inheritance.algo.ts:12
-    // b2CantOverride(): string {
-    proto 0 1
-    // tests/approvals/multi-inheritance.algo.ts:13
-    // return 'common'
-    bytec_2 // "common"
-    retsub
-
-
 // tests/approvals/multi-inheritance.algo.ts::MultiBases.__algots__.defaultCreate() -> void:
 __algots__.defaultCreate:
-    // tests/approvals/multi-inheritance.algo.ts:40
-    // export class MultiBases extends classes(BaseOne, BaseTwo) {
-    proto 0 0
     retsub

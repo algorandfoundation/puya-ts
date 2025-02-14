@@ -1,6 +1,4 @@
 import type { ContractClassPType, LogicSigPType } from '../awst_build/ptypes'
-import type { Props } from '../typescript-helpers'
-import type { SourceLocation } from './source-location'
 
 export enum OnCompletionAction {
   NoOp = 0,
@@ -11,12 +9,6 @@ export enum OnCompletionAction {
   DeleteApplication = 5,
 }
 
-export enum ARC4CreateOption {
-  Allow = 1,
-  Require = 2,
-  Disallow = 3,
-}
-
 class ModelBase {
   /**
    * This field prevents us from accidentally passing an object literal with structural equality to
@@ -24,63 +16,6 @@ class ModelBase {
    * @private
    */
   #isModel = true
-}
-
-export class ARC4BareMethodConfig extends ModelBase {
-  readonly sourceLocation: SourceLocation | undefined
-  readonly allowedCompletionTypes: OnCompletionAction[]
-  readonly create: ARC4CreateOption
-  readonly isBare = true
-  constructor(props: Omit<Props<ARC4BareMethodConfig>, 'isBare'>) {
-    super()
-    this.sourceLocation = props.sourceLocation
-    this.allowedCompletionTypes = props.allowedCompletionTypes
-    this.create = props.create
-  }
-}
-
-export type DefaultArgumentSource =
-  | {
-      source: 'constant'
-      value: string | bigint | number | boolean | Uint8Array
-    }
-  | {
-      source: 'global-state'
-      memberName: string
-    }
-  | {
-      source: 'local-state'
-      memberName: string
-    }
-  | {
-      source: 'abi-method'
-      memberName: string
-    }
-
-export class ARC4ABIMethodConfig extends ModelBase {
-  readonly sourceLocation: SourceLocation | undefined
-  readonly name: string
-  readonly isBare = false
-  readonly create: ARC4CreateOption
-  readonly readonly: boolean
-  readonly allowedCompletionTypes: OnCompletionAction[]
-  readonly defaultArgs: Record<string, DefaultArgumentSource>
-  readonly structs: Record<string, ARC32StructDef>
-  constructor(props: Omit<Props<ARC4ABIMethodConfig>, 'isBare'>) {
-    super()
-    this.sourceLocation = props.sourceLocation
-    this.name = props.name
-    this.create = props.create
-    this.readonly = props.readonly
-    this.allowedCompletionTypes = props.allowedCompletionTypes
-    this.defaultArgs = props.defaultArgs
-    this.structs = props.structs
-  }
-}
-
-export interface ARC32StructDef {
-  name: string
-  elements: [...[string, string][]]
 }
 
 export class ContractReference extends ModelBase {

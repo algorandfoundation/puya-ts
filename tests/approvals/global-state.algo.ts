@@ -1,5 +1,5 @@
 import type { bytes, uint64 } from '@algorandfoundation/algorand-typescript'
-import { assert, BaseContract, Bytes, GlobalState, op, Txn, Uint64 } from '@algorandfoundation/algorand-typescript'
+import { assert, BaseContract, Bytes, contract, Contract, GlobalState, op, Txn, Uint64 } from '@algorandfoundation/algorand-typescript'
 
 export abstract class BaseTestContract extends BaseContract {
   baseTestState = GlobalState({ initialValue: 'testing 123' })
@@ -24,6 +24,21 @@ export class TestContract extends BaseTestContract {
 
     this.testState.value = op.btoi(Txn.applicationArgs(0))
 
+    this.noInitial.value = Bytes('abc')
+
     return true
+  }
+}
+
+@contract({ stateTotals: { globalUints: 5 } })
+export class TestArc4 extends Contract {
+  setState(key: string, value: uint64) {
+    const proxy = GlobalState<uint64>({ key })
+
+    proxy.value = value
+  }
+
+  deleteState(key: string) {
+    GlobalState<uint64>({ key }).delete()
   }
 }

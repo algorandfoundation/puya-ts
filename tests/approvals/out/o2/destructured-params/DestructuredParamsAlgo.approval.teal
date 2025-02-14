@@ -1,0 +1,113 @@
+#pragma version 10
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0 1
+    // tests/approvals/destructured-params.algo.ts:4
+    // export class DestructuredParamsAlgo extends Contract {
+    txn NumAppArgs
+    bz main_bare_routing@7
+    pushbytess 0xfefea766 0x83f14748 // method "test((uint64,byte[],bool))void", method "init()void"
+    txna ApplicationArgs 0
+    match main_test_route@3 main_init_route@4
+
+main_after_if_else@11:
+    // tests/approvals/destructured-params.algo.ts:4
+    // export class DestructuredParamsAlgo extends Contract {
+    intc_0 // 0
+    return
+
+main_init_route@4:
+    // tests/approvals/destructured-params.algo.ts:9
+    // init() {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    // tests/approvals/destructured-params.algo.ts:10
+    // this.test({ a: 456, b: Bytes(''), c: false })
+    pushint 456 // 456
+    pushbytes ""
+    intc_0 // 0
+    callsub test
+    // tests/approvals/destructured-params.algo.ts:11
+    // const temp = { a: Uint64(2), b: Bytes('Hello'), c: true }
+    pushint 2 // 2
+    pushbytes "Hello"
+    intc_1 // 1
+    // tests/approvals/destructured-params.algo.ts:12
+    // this.test(temp)
+    callsub test
+    // tests/approvals/destructured-params.algo.ts:9
+    // init() {
+    intc_1 // 1
+    return
+
+main_test_route@3:
+    // tests/approvals/destructured-params.algo.ts:5
+    // test({ a, b, c }: { a: uint64; b: bytes; c: boolean }): void {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    // tests/approvals/destructured-params.algo.ts:4
+    // export class DestructuredParamsAlgo extends Contract {
+    txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint64
+    dig 1
+    pushint 8 // 8
+    extract_uint16
+    dig 2
+    len
+    dig 3
+    cover 2
+    substring3
+    extract 2 0
+    uncover 2
+    pushint 80 // 80
+    getbit
+    pushbytes 0x00
+    intc_0 // 0
+    uncover 2
+    setbit
+    intc_0 // 0
+    getbit
+    // tests/approvals/destructured-params.algo.ts:5
+    // test({ a, b, c }: { a: uint64; b: bytes; c: boolean }): void {
+    callsub test
+    intc_1 // 1
+    return
+
+main_bare_routing@7:
+    // tests/approvals/destructured-params.algo.ts:4
+    // export class DestructuredParamsAlgo extends Contract {
+    txn OnCompletion
+    bnz main_after_if_else@11
+    txn ApplicationID
+    !
+    assert // can only call when creating
+    intc_1 // 1
+    return
+
+
+// tests/approvals/destructured-params.algo.ts::DestructuredParamsAlgo.test(p.a: uint64, p.b: bytes, p.c: uint64) -> void:
+test:
+    // tests/approvals/destructured-params.algo.ts:5
+    // test({ a, b, c }: { a: uint64; b: bytes; c: boolean }): void {
+    proto 3 0
+    // tests/approvals/destructured-params.algo.ts:6
+    // log(a, b, c)
+    frame_dig -3
+    itob
+    frame_dig -2
+    concat
+    frame_dig -1
+    itob
+    concat
+    log
+    retsub

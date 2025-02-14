@@ -237,3 +237,14 @@ export const zipStrict = <T1, T2>(array1: T1[], array2: T2[]): [T1, T2][] => {
 export function isIn<TSubject, TItem extends TSubject>(subject: TSubject, items: readonly TItem[]): subject is TItem {
   return items.some((i) => i === subject)
 }
+
+export function joinUint8Arrays(...arrays: Uint8Array[]): Uint8Array {
+  const length = arrays.reduce((acc, cur) => acc + cur.length, 0)
+  const result = new Uint8Array(length)
+  let offset = 0
+  for (const a of arrays) {
+    result.set(a, offset)
+    offset += a.length
+  }
+  return result
+}

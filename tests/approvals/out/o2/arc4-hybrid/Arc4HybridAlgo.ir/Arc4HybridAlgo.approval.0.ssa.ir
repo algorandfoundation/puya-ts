@@ -5,11 +5,6 @@ main tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.approvalProgram:
         (log "after")
         return result#0
 
-subroutine @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> bool:
-    block@0: // L1
-        let tmp%0#0: bool = tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.__puya_arc4_router__()
-        return tmp%0#0
-
 subroutine tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.__puya_arc4_router__() -> bool:
     block@0: // L3
         let tmp%0#0: uint64 = (txn NumAppArgs)
@@ -51,6 +46,11 @@ subroutine tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.someMethod() -> v
     block@0: // L11
         (log "some method")
         return 
+
+subroutine @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> bool:
+    block@0: // L1
+        let tmp%0#0: bool = tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.__puya_arc4_router__()
+        return tmp%0#0
 
 subroutine tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.__algots__.defaultCreate() -> void:
     block@0: // L3

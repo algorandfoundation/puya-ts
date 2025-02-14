@@ -20,6 +20,7 @@ export class LogicSigProgramVisitor extends FunctionVisitor {
       returnType: this._functionType.returnType.wtypeOrThrow,
       body,
       documentation,
+      inline: null,
     })
   }
 

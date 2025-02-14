@@ -39,6 +39,7 @@ export function buildLibAwst(context: AwstBuildContext) {
           value: nodeFactory.boolConstant({ value: true, sourceLocation: SourceLocation.None }),
         }),
       ),
+      inline: null,
     }),
   })
   context.addToCompilationSet(baseContractCref, baseContract)
@@ -70,6 +71,7 @@ export function buildLibAwst(context: AwstBuildContext) {
           value: nodeFactory.aRC4Router({ sourceLocation: SourceLocation.None, wtype: wtypes.boolWType }),
         }),
       ),
+      inline: null,
     }),
   })
   context.addToCompilationSet(contractCref, contract)

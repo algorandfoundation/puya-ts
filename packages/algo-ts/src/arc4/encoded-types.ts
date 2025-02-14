@@ -205,6 +205,14 @@ export class StaticArray<TItem extends ARC4Encoded, TLength extends number> exte
   copy(): StaticArray<TItem, TLength> {
     throw new NoImplementation()
   }
+
+  /**
+   * Returns a new array containing all items from _this_ array, and _other_ array
+   * @param other Another array to concat with this one
+   */
+  concat(other: Arc4ReadonlyArray<TItem>): DynamicArray<TItem> {
+    throw new NoImplementation()
+  }
 }
 export class DynamicArray<TItem extends ARC4Encoded> extends Arc4ReadonlyArray<TItem> {
   [TypeProperty]?: `arc4.DynamicArray<${TItem[typeof TypeProperty]}>`
@@ -228,6 +236,14 @@ export class DynamicArray<TItem extends ARC4Encoded> extends Arc4ReadonlyArray<T
   }
 
   copy(): DynamicArray<TItem> {
+    throw new NoImplementation()
+  }
+
+  /**
+   * Returns a new array containing all items from _this_ array, and _other_ array
+   * @param other Another array to concat with this one
+   */
+  concat(other: Arc4ReadonlyArray<TItem>): DynamicArray<TItem> {
     throw new NoImplementation()
   }
 }
@@ -299,6 +315,14 @@ export class DynamicBytes extends Arc4ReadonlyArray<Byte> {
   get native(): bytes {
     throw new NoImplementation()
   }
+
+  /**
+   * Returns a dynamic bytes object containing all bytes from _this_ and _other_
+   * @param other Another array of bytes to concat with this one
+   */
+  concat(other: Arc4ReadonlyArray<Byte>): DynamicBytes {
+    throw new NoImplementation()
+  }
 }
 
 export class StaticBytes<TLength extends number = 0> extends Arc4ReadonlyArray<Byte> {
@@ -309,6 +333,14 @@ export class StaticBytes<TLength extends number = 0> extends Arc4ReadonlyArray<B
   }
 
   get native(): bytes {
+    throw new NoImplementation()
+  }
+
+  /**
+   * Returns a dynamic bytes object containing all bytes from _this_ and _other_
+   * @param other Another array of bytes to concat with this one
+   */
+  concat(other: Arc4ReadonlyArray<Byte>): DynamicBytes {
     throw new NoImplementation()
   }
 }

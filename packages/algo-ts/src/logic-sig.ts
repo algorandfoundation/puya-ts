@@ -5,6 +5,8 @@ export abstract class LogicSig {
   abstract program(): boolean | uint64
 }
 
+type NumberRange = { from: number; to: number }
+
 /**
  * Defines optional configuration for a logic signature
  */
@@ -19,6 +21,14 @@ type LogicSigOptions = {
    * Defaults to the class name
    */
   name?: string
+  /**
+   * Allows you to mark a slot ID or range of slot IDs as "off limits" to Puya.
+   * These slot ID(s) will never be written to or otherwise manipulating by the compiler itself.
+   * This is particularly useful in combination with `op.gload_bytes` / `op.gload_uint64`
+   * which lets a contract in a group transaction read from the scratch slots of another contract
+   * that occurs earlier in the transaction group.
+   */
+  scratchSlots?: Array<number | NumberRange>
 }
 
 /**

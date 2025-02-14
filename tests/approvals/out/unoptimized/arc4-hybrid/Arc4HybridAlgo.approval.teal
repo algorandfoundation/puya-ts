@@ -20,9 +20,17 @@ main:
     return
 
 
+// tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.someMethod() -> void:
+someMethod:
+    // tests/approvals/arc4-hybrid.algo.ts:12
+    // log('some method')
+    pushbytes "some method"
+    log
+    retsub
+
+
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 approvalProgram:
-    proto 0 1
 
 approvalProgram_block@1:
     // tests/approvals/arc4-hybrid.algo.ts:3
@@ -92,21 +100,6 @@ approvalProgram___algots__.defaultCreate@7:
     b approvalProgram_after_inlined_tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.__puya_arc4_router__@11
 
 
-// tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.someMethod() -> void:
-someMethod:
-    // tests/approvals/arc4-hybrid.algo.ts:11
-    // someMethod() {
-    proto 0 0
-    // tests/approvals/arc4-hybrid.algo.ts:12
-    // log('some method')
-    pushbytes "some method"
-    log
-    retsub
-
-
 // tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.__algots__.defaultCreate() -> void:
 __algots__.defaultCreate:
-    // tests/approvals/arc4-hybrid.algo.ts:3
-    // class Arc4HybridAlgo extends Contract {
-    proto 0 0
     retsub

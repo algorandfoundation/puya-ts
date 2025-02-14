@@ -165,15 +165,36 @@ export namespace wtypes {
       return `${this.immutable ? 'readonly' : ''}${displayName}[${this.types.join(', ')}]`
     }
   }
-  export class WArray extends WType {
+  export abstract class NativeArray extends WType {
     readonly elementType: WType
-    constructor(props: { itemType: WType; immutable: boolean }) {
+    readonly sourceLocation: SourceLocation | null
+    protected constructor(props: { name: string; itemType: WType; sourceLocation?: SourceLocation; scalarType?: AVMType }) {
       super({
-        name: 'WArray',
-        scalarType: null,
-        immutable: props.immutable,
+        name: props.name,
+        scalarType: props.scalarType ?? null,
       })
       this.elementType = props.itemType
+      this.sourceLocation = props.sourceLocation ?? null
+    }
+  }
+
+  export class StackArray extends NativeArray {
+    readonly immutable = true
+    constructor(props: { itemType: WType; immutable: boolean; sourceLocation?: SourceLocation }) {
+      super({
+        name: `stack_array<${props.itemType.name}>`,
+        scalarType: AVMType.bytes,
+        ...props,
+      })
+    }
+  }
+  export class ReferenceArray extends NativeArray {
+    readonly immutable = false
+    constructor(props: { itemType: WType; immutable: boolean; sourceLocation?: SourceLocation }) {
+      super({
+        name: `ref_array<${props.itemType.name}>`,
+        ...props,
+      })
     }
   }
 
@@ -181,7 +202,7 @@ export namespace wtypes {
     readonly sequenceType: WType
     constructor(props: { sequenceType: WType }) {
       super({
-        name: 'WArray',
+        name: `enumeration<${props.sequenceType.name}>`,
         scalarType: null,
         immutable: true,
       })

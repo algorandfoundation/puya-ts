@@ -1,0 +1,177 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        goto block@1
+    block@1: // L4
+        let tmp%0#1: uint64 = (txn NumAppArgs)
+        let tmp%1#0: bool = (!= tmp%0#1 0u)
+        goto tmp%1#0 ? block@2 : block@8
+    block@2: // abi_routing_L4
+        let tmp%2#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%2#0 {method "testNested((uint64,(uint512,uint512)))(uint64,(uint512,uint512),uint64,uint512)" => block@3, method "test()void" => block@4, method "testLiteralDestructuring()void" => block@5, * => block@6}
+    block@3: // testNested_route_L5
+        let tmp%3#0: uint64 = (txn OnCompletion)
+        let tmp%4#0: bool = (== tmp%3#0 NoOp)
+        (assert tmp%4#0) // OnCompletion is not NoOp
+        let tmp%5#0: uint64 = (txn ApplicationID)
+        let tmp%6#0: bool = (!= tmp%5#0 0u)
+        (assert tmp%6#0) // can only call when not creating
+        let reinterpret_bytes[136]%0#0: bytes[136] = (txna ApplicationArgs 1)
+        let item0%0#0: bytes = (extract3 reinterpret_bytes[136]%0#0 0u 8u) // on error: Index access is out of bounds
+        let item0%0%0#0: uint64 = (btoi item0%0#0)
+        let item1%0#0: bytes = (extract3 reinterpret_bytes[136]%0#0 8u 128u) // on error: Index access is out of bounds
+        let item0%1#0: bytes = (extract3 item1%0#0 0u 64u) // on error: Index access is out of bounds
+        let item1%1#0: bytes = (extract3 item1%0#0 64u 64u) // on error: Index access is out of bounds
+        let (elements_to_encode%0#0: uint64, elements_to_encode%1#0: biguint, elements_to_encode%2#0: biguint, elements_to_encode%3#0: uint64, elements_to_encode%4#0: biguint) = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.testNested(item0%0%0#0, item0%1#0, item1%1#0)
+        let val_as_bytes%0#0: bytes[8] = (itob elements_to_encode%0#0)
+        let len_%0#0: uint64 = (len elements_to_encode%1#0)
+        let no_overflow%0#0: bool = (<= len_%0#0 64u)
+        (assert no_overflow%0#0) // overflow
+        let b_zeros%0#0: bytes = (bzero 64u)
+        let arc4_item%0#0: bytes = (b| elements_to_encode%1#0 b_zeros%0#0)
+        let len_%1#0: uint64 = (len elements_to_encode%2#0)
+        let no_overflow%1#0: bool = (<= len_%1#0 64u)
+        (assert no_overflow%1#0) // overflow
+        let b_zeros%1#0: bytes = (bzero 64u)
+        let arc4_item%1#0: bytes = (b| elements_to_encode%2#0 b_zeros%1#0)
+        let encoded_tuple_buffer%1#0: bytes = (concat 0x arc4_item%0#0)
+        let encoded_tuple_buffer%2#0: bytes = (concat encoded_tuple_buffer%1#0 arc4_item%1#0)
+        let val_as_bytes%1#0: bytes[8] = (itob elements_to_encode%3#0)
+        let len_%2#0: uint64 = (len elements_to_encode%4#0)
+        let no_overflow%2#0: bool = (<= len_%2#0 64u)
+        (assert no_overflow%2#0) // overflow
+        let b_zeros%2#0: bytes = (bzero 64u)
+        let arc4_item%2#0: bytes = (b| elements_to_encode%4#0 b_zeros%2#0)
+        let encoded_tuple_buffer%4#0: bytes = (concat 0x val_as_bytes%0#0)
+        let encoded_tuple_buffer%5#0: bytes = (concat encoded_tuple_buffer%4#0 encoded_tuple_buffer%2#0)
+        let encoded_tuple_buffer%6#0: bytes = (concat encoded_tuple_buffer%5#0 val_as_bytes%1#0)
+        let encoded_tuple_buffer%7#0: bytes = (concat encoded_tuple_buffer%6#0 arc4_item%2#0)
+        let tmp%7#0: bytes = (concat 0x151f7c75 encoded_tuple_buffer%7#0)
+        (log tmp%7#0)
+        let tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.__puya_arc4_router__%0#0: bool = 1u
+        goto block@13
+    block@4: // test_route_L11
+        let tmp%8#0: uint64 = (txn OnCompletion)
+        let tmp%9#0: bool = (== tmp%8#0 NoOp)
+        (assert tmp%9#0) // OnCompletion is not NoOp
+        let tmp%10#0: uint64 = (txn ApplicationID)
+        let tmp%11#0: bool = (!= tmp%10#0 0u)
+        (assert tmp%11#0) // can only call when not creating
+        tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.test()
+        let tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.__puya_arc4_router__%0#1: bool = 1u
+        goto block@13
+    block@5: // testLiteralDestructuring_route_L32
+        let tmp%12#0: uint64 = (txn OnCompletion)
+        let tmp%13#0: bool = (== tmp%12#0 NoOp)
+        (assert tmp%13#0) // OnCompletion is not NoOp
+        let tmp%14#0: uint64 = (txn ApplicationID)
+        let tmp%15#0: bool = (!= tmp%14#0 0u)
+        (assert tmp%15#0) // can only call when not creating
+        tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.testLiteralDestructuring()
+        let tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.__puya_arc4_router__%0#2: bool = 1u
+        goto block@13
+    block@6: // switch_case_default_L4
+        goto block@7
+    block@7: // switch_case_next_L4
+        goto block@12
+    block@8: // bare_routing_L4
+        let tmp%16#0: uint64 = (txn OnCompletion)
+        switch tmp%16#0 {0u => block@9, * => block@10}
+    block@9: // __algots__.defaultCreate_L4
+        let tmp%17#0: uint64 = (txn ApplicationID)
+        let tmp%18#0: bool = (== tmp%17#0 0u)
+        (assert tmp%18#0) // can only call when creating
+        tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.__algots__.defaultCreate()
+        let tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.__puya_arc4_router__%0#3: bool = 1u
+        goto block@13
+    block@10: // switch_case_default_L4
+        goto block@11
+    block@11: // switch_case_next_L4
+        goto block@12
+    block@12: // after_if_else_L4
+        let tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.__puya_arc4_router__%0#4: bool = 0u
+        goto block@13
+    block@13: // after_inlined_tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.__puya_arc4_router___L1
+        let tmp%0#0: bool = φ(tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.__puya_arc4_router__%0#0 <- block@3, tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.__puya_arc4_router__%0#1 <- block@4, tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.__puya_arc4_router__%0#2 <- block@5, tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.__puya_arc4_router__%0#3 <- block@9, tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.__puya_arc4_router__%0#4 <- block@12)
+        return tmp%0#0
+
+subroutine tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.testNested(arg.0: uint64, arg.1.0: biguint, arg.1.1: biguint) -> <uint64, biguint, biguint, uint64, biguint>:
+    block@0: // L5
+        let a#0: uint64 = arg.0#0
+        let b.0#0: biguint = arg.1.0#0
+        let b.1#0: biguint = arg.1.1#0
+        let c#0: uint64 = arg.0#0
+        let d#0: biguint = arg.1.0#0
+        return a#0 b.0#0 b.1#0 c#0 d#0
+
+subroutine tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.test() -> void:
+    block@0: // L11
+        let (tuple_assignment%0#0: uint64, tuple_assignment%1#0: bytes, tuple_assignment%2#0: bool, tuple_assignment%3#0: biguint) = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceItems()
+        let a#0: uint64 = tuple_assignment%0#0
+        let b#0: bytes = tuple_assignment%1#0
+        let c#0: bool = tuple_assignment%2#0
+        let d#0: biguint = tuple_assignment%3#0
+        let (tuple_assignment%4#0: uint64, tuple_assignment%5#0: bytes, tuple_assignment%6#0: bool, tuple_assignment%7#0: biguint) = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceItems()
+        let e#0: bool = tuple_assignment%6#0
+        let (tuple_assignment%8#0: uint64, tuple_assignment%9#0: bytes, tuple_assignment%10#0: bool, tuple_assignment%11#0: biguint) = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceItems()
+        let g#0: uint64 = tuple_assignment%8#0
+        let _₃#0: bytes = tuple_assignment%9#0
+        let _₄#0: bool = tuple_assignment%10#0
+        let i#0: biguint = tuple_assignment%11#0
+        let f.0#0: uint64 = g#0
+        let f.1#0: bytes = _₃#0
+        let f.2#0: bool = _₄#0
+        let f.3#0: biguint = i#0
+        let tmp%0#0: bool = (== a#0 5u)
+        (assert tmp%0#0)
+        let tmp%1#0: bool = (== b#0 0x)
+        (assert tmp%1#0)
+        let tmp%2#0: bool = (! c#0)
+        (assert tmp%2#0)
+        let tmp%3#0: bool = (b== d#0 6b)
+        (assert tmp%3#0)
+        let tmp%4#0: bool = (! e#0)
+        (assert tmp%4#0)
+        let tmp%5#0: bool = (== g#0 5u)
+        (assert tmp%5#0)
+        let tmp%6#0: bool = (b== i#0 6b)
+        (assert tmp%6#0)
+        let tmp%7#0: bool = (== 4u 4u)
+        goto tmp%7#0 ? block@1 : block@6
+    block@1: // and_contd_L25
+        let tmp%8#0: bool = (== f.0#0 5u)
+        goto tmp%8#0 ? block@2 : block@6
+    block@2: // and_contd_L25
+        let tmp%9#0: bool = (== f.1#0 0x)
+        goto tmp%9#0 ? block@3 : block@6
+    block@3: // and_contd_L25
+        let tmp%10#0: bool = (== f.2#0 0u)
+        goto tmp%10#0 ? block@4 : block@6
+    block@4: // and_contd_L25
+        let tmp%11#0: bool = (b== f.3#0 6b)
+        goto tmp%11#0 ? block@5 : block@6
+    block@5: // bool_true_L25
+        let and_result%0#0: bool = 1u
+        goto block@7
+    block@6: // bool_false_L25
+        let and_result%0#1: bool = 0u
+        goto block@7
+    block@7: // bool_merge_L25
+        let and_result%0#2: bool = φ(and_result%0#0 <- block@5, and_result%0#1 <- block@6)
+        (assert and_result%0#2) // assert target is match for conditions
+        return 
+
+subroutine tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceItems() -> <uint64, bytes, bool, biguint>:
+    block@0: // L28
+        return 5u 0x 0u 6b
+
+subroutine tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.testLiteralDestructuring() -> void:
+    block@0: // L32
+        let tmp%0#0: bool = (== 1u 1u)
+        (assert tmp%0#0)
+        let tmp%1#0: bool = (== 2u 2u)
+        (assert tmp%1#0)
+        return 
+
+subroutine tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.__algots__.defaultCreate() -> void:
+    block@0: // L4
+        return 

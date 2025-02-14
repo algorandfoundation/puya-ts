@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 0
+    intcblock 1 0 8
     pushbytes ""
     dup
     // tests/approvals/named-types.algo.ts:14
@@ -45,18 +45,18 @@ main_test_route@6:
     // export class MyContract extends Contract {
     txna ApplicationArgs 1
     dup
-    extract 0 8 // on error: Index access is out of bounds
-    btoi
+    intc_1 // 0
+    extract_uint64
     bury 3
-    extract 8 8 // on error: Index access is out of bounds
-    btoi
+    intc_2 // 8
+    extract_uint64
     txna ApplicationArgs 2
     dup
-    extract 0 8 // on error: Index access is out of bounds
-    btoi
+    intc_1 // 0
+    extract_uint64
     swap
-    extract 8 8 // on error: Index access is out of bounds
-    btoi
+    intc_2 // 8
+    extract_uint64
     bury 3
     // tests/approvals/named-types.algo.ts:37
     // assertMatch(x, { ...y })

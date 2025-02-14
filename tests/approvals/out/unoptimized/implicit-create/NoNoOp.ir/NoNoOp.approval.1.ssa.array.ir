@@ -1,0 +1,44 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        goto block@1
+    block@1: // L8
+        let tmp%0#1: uint64 = (txn NumAppArgs)
+        let tmp%1#0: bool = (!= tmp%0#1 0u)
+        goto tmp%1#0 ? block@2 : block@3
+    block@2: // abi_routing_L8
+        goto block@8
+    block@3: // bare_routing_L8
+        let tmp%2#0: uint64 = (txn OnCompletion)
+        switch tmp%2#0 {4u => block@4, 0u => block@5, * => block@6}
+    block@4: // handleUpdate_L9
+        let tmp%3#0: uint64 = (txn ApplicationID)
+        let tmp%4#0: bool = (!= tmp%3#0 0u)
+        (assert tmp%4#0) // can only call when not creating
+        tests/approvals/implicit-create.algo.ts::NoNoOp.handleUpdate()
+        let tests/approvals/implicit-create.algo.ts::NoNoOp.__puya_arc4_router__%0#0: bool = 1u
+        goto block@9
+    block@5: // __algots__.defaultCreate_L8
+        let tmp%5#0: uint64 = (txn ApplicationID)
+        let tmp%6#0: bool = (== tmp%5#0 0u)
+        (assert tmp%6#0) // can only call when creating
+        tests/approvals/implicit-create.algo.ts::NoNoOp.__algots__.defaultCreate()
+        let tests/approvals/implicit-create.algo.ts::NoNoOp.__puya_arc4_router__%0#1: bool = 1u
+        goto block@9
+    block@6: // switch_case_default_L8
+        goto block@7
+    block@7: // switch_case_next_L8
+        goto block@8
+    block@8: // after_if_else_L8
+        let tests/approvals/implicit-create.algo.ts::NoNoOp.__puya_arc4_router__%0#2: bool = 0u
+        goto block@9
+    block@9: // after_inlined_tests/approvals/implicit-create.algo.ts::NoNoOp.__puya_arc4_router___L1
+        let tmp%0#0: bool = φ(tests/approvals/implicit-create.algo.ts::NoNoOp.__puya_arc4_router__%0#0 <- block@4, tests/approvals/implicit-create.algo.ts::NoNoOp.__puya_arc4_router__%0#1 <- block@5, tests/approvals/implicit-create.algo.ts::NoNoOp.__puya_arc4_router__%0#2 <- block@8)
+        return tmp%0#0
+
+subroutine tests/approvals/implicit-create.algo.ts::NoNoOp.handleUpdate() -> void:
+    block@0: // L9
+        return 
+
+subroutine tests/approvals/implicit-create.algo.ts::NoNoOp.__algots__.defaultCreate() -> void:
+    block@0: // L8
+        return 

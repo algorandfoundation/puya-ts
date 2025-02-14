@@ -82,34 +82,6 @@ main___algots__.defaultCreate@7:
     b main_after_inlined_tests/approvals/prefix-postfix-operators.algo.ts::DemoContract.__puya_arc4_router__@11
 
 
-// tests/approvals/prefix-postfix-operators.algo.ts::DemoContract.test() -> uint64:
-test:
-    // tests/approvals/prefix-postfix-operators.algo.ts:58
-    // test() {
-    proto 0 1
-    // tests/approvals/prefix-postfix-operators.algo.ts:59
-    // test_uint64(10, 5)
-    intc_2 // 10
-    intc_3 // 5
-    callsub test_uint64
-    pop
-    // tests/approvals/prefix-postfix-operators.algo.ts:60
-    // test_biguint(10n, 5n)
-    bytec_0 // 0x0a
-    bytec_2 // 0x05
-    callsub test_biguint
-    pop
-    // tests/approvals/prefix-postfix-operators.algo.ts:62
-    // test_bytes(bzero(4))
-    pushint 4 // 4
-    bzero
-    callsub test_bytes
-    // tests/approvals/prefix-postfix-operators.algo.ts:64
-    // return true
-    intc_1 // 1
-    retsub
-
-
 // tests/approvals/prefix-postfix-operators.algo.ts::test_uint64(x: uint64, y: uint64) -> uint64:
 test_uint64:
     // tests/approvals/prefix-postfix-operators.algo.ts:5
@@ -350,9 +322,31 @@ test_bytes:
     retsub
 
 
+// tests/approvals/prefix-postfix-operators.algo.ts::DemoContract.test() -> uint64:
+test:
+    // tests/approvals/prefix-postfix-operators.algo.ts:59
+    // test_uint64(10, 5)
+    intc_2 // 10
+    intc_3 // 5
+    callsub test_uint64
+    pop
+    // tests/approvals/prefix-postfix-operators.algo.ts:60
+    // test_biguint(10n, 5n)
+    bytec_0 // 0x0a
+    bytec_2 // 0x05
+    callsub test_biguint
+    pop
+    // tests/approvals/prefix-postfix-operators.algo.ts:62
+    // test_bytes(bzero(4))
+    pushint 4 // 4
+    bzero
+    callsub test_bytes
+    // tests/approvals/prefix-postfix-operators.algo.ts:64
+    // return true
+    intc_1 // 1
+    retsub
+
+
 // tests/approvals/prefix-postfix-operators.algo.ts::DemoContract.__algots__.defaultCreate() -> void:
 __algots__.defaultCreate:
-    // tests/approvals/prefix-postfix-operators.algo.ts:57
-    // export class DemoContract extends Contract {
-    proto 0 0
     retsub

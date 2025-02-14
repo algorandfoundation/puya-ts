@@ -143,52 +143,23 @@ main_bare_routing@12:
     b main_after_if_else@13
 
 
-// tests/approvals/abi-decorators.algo.ts::AbiDecorators.constructor() -> void:
-constructor:
-    // tests/approvals/abi-decorators.algo.ts:4
-    // export default class AbiDecorators extends Contract {
-    proto 0 0
-    // tests/approvals/abi-decorators.algo.ts:16
-    // globalValue = GlobalState({ initialValue: Uint64(123) })
-    pushbytes "globalValue"
-    pushint 123 // 123
-    app_global_put
-    retsub
-
-
 // tests/approvals/abi-decorators.algo.ts::AbiDecorators.justNoop() -> void:
 justNoop:
-    // tests/approvals/abi-decorators.algo.ts:5-6
-    // @abimethod({ allowActions: 'NoOp' })
-    // public justNoop(): void {}
-    proto 0 0
     retsub
 
 
 // tests/approvals/abi-decorators.algo.ts::AbiDecorators.createMethod() -> void:
 createMethod:
-    // tests/approvals/abi-decorators.algo.ts:7-8
-    // @abimethod({ onCreate: 'require' })
-    // public createMethod(): void {}
-    proto 0 0
     retsub
 
 
 // tests/approvals/abi-decorators.algo.ts::AbiDecorators.allActions() -> void:
 allActions:
-    // tests/approvals/abi-decorators.algo.ts:9-10
-    // @abimethod({ allowActions: ['NoOp', 'OptIn', 'CloseOut', 'DeleteApplication', 'UpdateApplication'] })
-    // public allActions(): void {}
-    proto 0 0
     retsub
 
 
 // tests/approvals/abi-decorators.algo.ts::AbiDecorators.readonly() -> uint64:
 readonly:
-    // tests/approvals/abi-decorators.algo.ts:11-12
-    // @abimethod({ readonly: true, name: 'overrideReadonlyName' })
-    // public readonly(): uint64 {
-    proto 0 1
     // tests/approvals/abi-decorators.algo.ts:13
     // return 5
     pushint 5 // 5
@@ -208,4 +179,14 @@ methodWithDefaults:
     *
     frame_dig -1
     +
+    retsub
+
+
+// tests/approvals/abi-decorators.algo.ts::AbiDecorators.constructor() -> void:
+constructor:
+    // tests/approvals/abi-decorators.algo.ts:16
+    // globalValue = GlobalState({ initialValue: Uint64(123) })
+    pushbytes "globalValue"
+    pushint 123 // 123
+    app_global_put
     retsub

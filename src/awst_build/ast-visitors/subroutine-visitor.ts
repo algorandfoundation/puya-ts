@@ -20,6 +20,7 @@ export class SubroutineVisitor extends FunctionVisitor {
       returnType: this._functionType.returnType.wtypeOrThrow,
       body,
       documentation,
+      inline: null,
     })
   }
 

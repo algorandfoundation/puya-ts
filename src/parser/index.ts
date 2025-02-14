@@ -19,12 +19,14 @@ export function createTsProgram(options: PuyaTsCompileOptions): CreateProgramRes
     strict: true,
     // Lib names need to be the full file name from the typescript package 'lib' folder.
     lib: ['lib.es2023.d.ts'],
+    libReplacement: false,
     target: ts.ScriptTarget.ES2023,
     module: ts.ModuleKind.ESNext,
     moduleResolution: ts.ModuleResolutionKind.Bundler,
   }
 
   const host = ts.createCompilerHost(compilerOptions)
+
   const program = ts.createProgram(
     options.filePaths.map((p) => p.sourceFile),
     compilerOptions,

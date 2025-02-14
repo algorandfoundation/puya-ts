@@ -35,7 +35,7 @@ export class SwitchLoopContext {
   getBreakTarget(label: ts.Identifier | undefined, sourceLocation: SourceLocation): string {
     const labelName = label?.text
     const item = this.switchLoopStack.toReversed().find(({ label }) => labelName === undefined || label === labelName)
-    codeInvariant(item, 'Break must must exist inside a switch or loop construct', sourceLocation)
+    codeInvariant(item, 'Break must exist inside a switch or loop construct', sourceLocation)
     item.numBreaks++
     return `${item.uniqueName}${breakSuffix}`
   }
@@ -43,7 +43,7 @@ export class SwitchLoopContext {
   getContinueTarget(label: ts.Identifier | undefined, sourceLocation: SourceLocation): string {
     const labelName = label?.text
     const item = this.switchLoopStack.toReversed().find(({ label }) => labelName === undefined || label === labelName)
-    codeInvariant(item?.type === 'loop', 'Continue must must exist inside a loop construct', sourceLocation)
+    codeInvariant(item?.type === 'loop', 'Continue must exist inside a loop construct', sourceLocation)
     item.numContinues++
     return `${item.uniqueName}${continueSuffix}`
   }

@@ -19,10 +19,10 @@ subroutine tests/approvals/named-types.algo.ts::MyContract.__puya_arc4_router__(
         let tmp%6#0: bool = (!= tmp%5#0 0u)
         (assert tmp%6#0) // can only call when not creating
         let (elements_to_encode%0#0: uint64, elements_to_encode%1#0: uint64) = tests/approvals/named-types.algo.ts::MyContract.getXY()
-        let val_as_bytes%0#0: bytes = (itob elements_to_encode%0#0)
-        let val_as_bytes%1#0: bytes = (itob elements_to_encode%1#0)
+        let val_as_bytes%0#0: bytes[8] = (itob elements_to_encode%0#0)
+        let val_as_bytes%1#0: bytes[8] = (itob elements_to_encode%1#0)
         let current_tail_offset%0#0: uint64 = 16u
-        let encoded_tuple_buffer%0#0: bytes = 0x
+        let encoded_tuple_buffer%0#0: bytes[0] = 0x
         let encoded_tuple_buffer%1#0: bytes = (concat encoded_tuple_buffer%0#0 val_as_bytes%0#0)
         let encoded_tuple_buffer%2#0: bytes = (concat encoded_tuple_buffer%1#0 val_as_bytes%1#0)
         let tmp%7#0: bytes = (concat 0x151f7c75 encoded_tuple_buffer%2#0)
@@ -36,10 +36,10 @@ subroutine tests/approvals/named-types.algo.ts::MyContract.__puya_arc4_router__(
         let tmp%11#0: bool = (!= tmp%10#0 0u)
         (assert tmp%11#0) // can only call when not creating
         let (elements_to_encode%2#0: uint64, elements_to_encode%3#0: uint64) = tests/approvals/named-types.algo.ts::MyContract.getYX()
-        let val_as_bytes%2#0: bytes = (itob elements_to_encode%2#0)
-        let val_as_bytes%3#0: bytes = (itob elements_to_encode%3#0)
+        let val_as_bytes%2#0: bytes[8] = (itob elements_to_encode%2#0)
+        let val_as_bytes%3#0: bytes[8] = (itob elements_to_encode%3#0)
         let current_tail_offset%1#0: uint64 = 16u
-        let encoded_tuple_buffer%3#0: bytes = 0x
+        let encoded_tuple_buffer%3#0: bytes[0] = 0x
         let encoded_tuple_buffer%4#0: bytes = (concat encoded_tuple_buffer%3#0 val_as_bytes%2#0)
         let encoded_tuple_buffer%5#0: bytes = (concat encoded_tuple_buffer%4#0 val_as_bytes%3#0)
         let tmp%12#0: bytes = (concat 0x151f7c75 encoded_tuple_buffer%5#0)
@@ -53,10 +53,10 @@ subroutine tests/approvals/named-types.algo.ts::MyContract.__puya_arc4_router__(
         let tmp%16#0: bool = (!= tmp%15#0 0u)
         (assert tmp%16#0) // can only call when not creating
         let (elements_to_encode%4#0: uint64, elements_to_encode%5#0: uint64) = tests/approvals/named-types.algo.ts::MyContract.getAnon()
-        let val_as_bytes%4#0: bytes = (itob elements_to_encode%4#0)
-        let val_as_bytes%5#0: bytes = (itob elements_to_encode%5#0)
+        let val_as_bytes%4#0: bytes[8] = (itob elements_to_encode%4#0)
+        let val_as_bytes%5#0: bytes[8] = (itob elements_to_encode%5#0)
         let current_tail_offset%2#0: uint64 = 16u
-        let encoded_tuple_buffer%6#0: bytes = 0x
+        let encoded_tuple_buffer%6#0: bytes[0] = 0x
         let encoded_tuple_buffer%7#0: bytes = (concat encoded_tuple_buffer%6#0 val_as_bytes%4#0)
         let encoded_tuple_buffer%8#0: bytes = (concat encoded_tuple_buffer%7#0 val_as_bytes%5#0)
         let tmp%17#0: bytes = (concat 0x151f7c75 encoded_tuple_buffer%8#0)
@@ -69,63 +69,63 @@ subroutine tests/approvals/named-types.algo.ts::MyContract.__puya_arc4_router__(
         let tmp%20#0: uint64 = (txn ApplicationID)
         let tmp%21#0: bool = (!= tmp%20#0 0u)
         (assert tmp%21#0) // can only call when not creating
-        let tmp%22#0: bytes = (txna ApplicationArgs 1)
-        let item0%0#0: bytes = (extract3 tmp%22#0 0u 8u) // on error: Index access is out of bounds
+        let reinterpret_bytes[16]%0#0: bytes[16] = (txna ApplicationArgs 1)
+        let item0%0#0: bytes = (extract3 reinterpret_bytes[16]%0#0 0u 8u) // on error: Index access is out of bounds
         let item0%0%0#0: uint64 = (btoi item0%0#0)
-        let item1%0#0: bytes = (extract3 tmp%22#0 8u 8u) // on error: Index access is out of bounds
+        let item1%0#0: bytes = (extract3 reinterpret_bytes[16]%0#0 8u 8u) // on error: Index access is out of bounds
         let item1%0%0#0: uint64 = (btoi item1%0#0)
-        let tmp%23#0: bytes = (txna ApplicationArgs 2)
-        let item0%1#0: bytes = (extract3 tmp%23#0 0u 8u) // on error: Index access is out of bounds
+        let reinterpret_bytes[16]%1#0: bytes[16] = (txna ApplicationArgs 2)
+        let item0%1#0: bytes = (extract3 reinterpret_bytes[16]%1#0 0u 8u) // on error: Index access is out of bounds
         let item0%1%0#0: uint64 = (btoi item0%1#0)
-        let item1%1#0: bytes = (extract3 tmp%23#0 8u 8u) // on error: Index access is out of bounds
+        let item1%1#0: bytes = (extract3 reinterpret_bytes[16]%1#0 8u 8u) // on error: Index access is out of bounds
         let item1%1%0#0: uint64 = (btoi item1%1#0)
         tests/approvals/named-types.algo.ts::MyContract.test(item0%0%0#0, item1%0%0#0, item0%1%0#0, item1%1%0#0)
         return 1u
     block@6: // testing_route_L40
-        let tmp%24#0: uint64 = (txn OnCompletion)
-        let tmp%25#0: bool = (== tmp%24#0 NoOp)
-        (assert tmp%25#0) // OnCompletion is not NoOp
-        let tmp%26#0: uint64 = (txn ApplicationID)
-        let tmp%27#0: bool = (!= tmp%26#0 0u)
-        (assert tmp%27#0) // can only call when not creating
+        let tmp%22#0: uint64 = (txn OnCompletion)
+        let tmp%23#0: bool = (== tmp%22#0 NoOp)
+        (assert tmp%23#0) // OnCompletion is not NoOp
+        let tmp%24#0: uint64 = (txn ApplicationID)
+        let tmp%25#0: bool = (!= tmp%24#0 0u)
+        (assert tmp%25#0) // can only call when not creating
         let (elements_to_encode%6#0: uint64, elements_to_encode%7#0: uint64, elements_to_encode%8#0: uint64, elements_to_encode%9#0: uint64, elements_to_encode%10#0: uint64, elements_to_encode%11#0: uint64) = tests/approvals/named-types.algo.ts::MyContract.testing()
-        let val_as_bytes%6#0: bytes = (itob elements_to_encode%6#0)
-        let val_as_bytes%7#0: bytes = (itob elements_to_encode%7#0)
+        let val_as_bytes%6#0: bytes[8] = (itob elements_to_encode%6#0)
+        let val_as_bytes%7#0: bytes[8] = (itob elements_to_encode%7#0)
         let current_tail_offset%3#0: uint64 = 16u
-        let encoded_tuple_buffer%9#0: bytes = 0x
+        let encoded_tuple_buffer%9#0: bytes[0] = 0x
         let encoded_tuple_buffer%10#0: bytes = (concat encoded_tuple_buffer%9#0 val_as_bytes%6#0)
         let encoded_tuple_buffer%11#0: bytes = (concat encoded_tuple_buffer%10#0 val_as_bytes%7#0)
-        let val_as_bytes%8#0: bytes = (itob elements_to_encode%8#0)
-        let val_as_bytes%9#0: bytes = (itob elements_to_encode%9#0)
+        let val_as_bytes%8#0: bytes[8] = (itob elements_to_encode%8#0)
+        let val_as_bytes%9#0: bytes[8] = (itob elements_to_encode%9#0)
         let current_tail_offset%4#0: uint64 = 16u
-        let encoded_tuple_buffer%12#0: bytes = 0x
+        let encoded_tuple_buffer%12#0: bytes[0] = 0x
         let encoded_tuple_buffer%13#0: bytes = (concat encoded_tuple_buffer%12#0 val_as_bytes%8#0)
         let encoded_tuple_buffer%14#0: bytes = (concat encoded_tuple_buffer%13#0 val_as_bytes%9#0)
-        let val_as_bytes%10#0: bytes = (itob elements_to_encode%10#0)
-        let val_as_bytes%11#0: bytes = (itob elements_to_encode%11#0)
+        let val_as_bytes%10#0: bytes[8] = (itob elements_to_encode%10#0)
+        let val_as_bytes%11#0: bytes[8] = (itob elements_to_encode%11#0)
         let current_tail_offset%5#0: uint64 = 16u
-        let encoded_tuple_buffer%15#0: bytes = 0x
+        let encoded_tuple_buffer%15#0: bytes[0] = 0x
         let encoded_tuple_buffer%16#0: bytes = (concat encoded_tuple_buffer%15#0 val_as_bytes%10#0)
         let encoded_tuple_buffer%17#0: bytes = (concat encoded_tuple_buffer%16#0 val_as_bytes%11#0)
         let current_tail_offset%6#0: uint64 = 48u
-        let encoded_tuple_buffer%18#0: bytes = 0x
+        let encoded_tuple_buffer%18#0: bytes[0] = 0x
         let encoded_tuple_buffer%19#0: bytes = (concat encoded_tuple_buffer%18#0 encoded_tuple_buffer%11#0)
         let encoded_tuple_buffer%20#0: bytes = (concat encoded_tuple_buffer%19#0 encoded_tuple_buffer%14#0)
         let encoded_tuple_buffer%21#0: bytes = (concat encoded_tuple_buffer%20#0 encoded_tuple_buffer%17#0)
-        let tmp%28#0: bytes = (concat 0x151f7c75 encoded_tuple_buffer%21#0)
-        (log tmp%28#0)
+        let tmp%26#0: bytes = (concat 0x151f7c75 encoded_tuple_buffer%21#0)
+        (log tmp%26#0)
         return 1u
     block@7: // switch_case_default_L14
         goto block@8
     block@8: // switch_case_next_L14
         goto block@13
     block@9: // bare_routing_L14
-        let tmp%29#0: uint64 = (txn OnCompletion)
-        switch tmp%29#0 {0u => block@10, * => block@11}
+        let tmp%27#0: uint64 = (txn OnCompletion)
+        switch tmp%27#0 {0u => block@10, * => block@11}
     block@10: // __algots__.defaultCreate_L14
-        let tmp%30#0: uint64 = (txn ApplicationID)
-        let tmp%31#0: bool = (== tmp%30#0 0u)
-        (assert tmp%31#0) // can only call when creating
+        let tmp%28#0: uint64 = (txn ApplicationID)
+        let tmp%29#0: bool = (== tmp%28#0 0u)
+        (assert tmp%29#0) // can only call when creating
         tests/approvals/named-types.algo.ts::MyContract.__algots__.defaultCreate()
         return 1u
     block@11: // switch_case_default_L14
