@@ -20,6 +20,7 @@ export class NativeArraysAlgo extends Contract {
     // pop
     const top = arr[arr.length - 1]
     assert(top === 5)
+    // TODO: Uncomment this once puya supports array slicing
     //arr = arr.slice(0, -1)
     arr = [1, 2, 3, 4]
 
