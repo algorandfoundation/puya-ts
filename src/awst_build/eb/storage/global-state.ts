@@ -14,6 +14,7 @@ import { BooleanExpressionBuilder } from '../boolean-expression-builder'
 import type { NodeBuilder } from '../index'
 import { FunctionBuilder, InstanceBuilder, InstanceExpressionBuilder } from '../index'
 import { parseFunctionArgs } from '../util/arg-parsing'
+import { VoidExpressionBuilder } from '../void-expression-builder'
 import { extractKey } from './util'
 
 export class GlobalStateFunctionBuilder extends FunctionBuilder {
@@ -47,6 +48,33 @@ export class GlobalStateFunctionBuilder extends FunctionBuilder {
   }
 }
 
+class GlobalStateDeleteFunctionBuilder extends FunctionBuilder {
+  constructor(
+    private key: AppStateExpression,
+    sourceLocation: SourceLocation,
+  ) {
+    super(sourceLocation)
+  }
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 0,
+      callLocation: sourceLocation,
+      funcName: 'GlobalState.delete',
+      argSpec: () => [],
+    })
+    return new VoidExpressionBuilder(
+      nodeFactory.stateDelete({
+        field: this.key,
+        sourceLocation,
+        wtype: wtypes.voidWType,
+      }),
+    )
+  }
+}
+
 export class GlobalStateExpressionBuilder extends InstanceExpressionBuilder<GlobalStateType> {
   constructor(expr: Expression, ptype: PType) {
     invariant(ptype instanceof GlobalStateType, 'ptype must be instance of GlobalStateType')
@@ -55,12 +83,14 @@ export class GlobalStateExpressionBuilder extends InstanceExpressionBuilder<Glob
 
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
     switch (name) {
+      case 'delete':
+        return new GlobalStateDeleteFunctionBuilder(this.buildField(), sourceLocation)
       case 'value':
-        return typeRegistry.getInstanceEb(this.buildField(sourceLocation), this.ptype.contentType)
+        return typeRegistry.getInstanceEb(this.buildField(), this.ptype.contentType)
       case 'hasValue':
         return new BooleanExpressionBuilder(
           nodeFactory.stateExists({
-            field: this.buildField(sourceLocation),
+            field: this.buildField(),
             wtype: boolPType.wtype,
             sourceLocation,
           }),
@@ -69,12 +99,12 @@ export class GlobalStateExpressionBuilder extends InstanceExpressionBuilder<Glob
     return super.memberAccess(name, sourceLocation)
   }
 
-  private buildField(sourceLocation: SourceLocation): AppStateExpression {
+  private buildField(): AppStateExpression {
     return nodeFactory.appStateExpression({
       key: this._expr,
       wtype: this.ptype.contentType.wtypeOrThrow,
       existsAssertionMessage: 'check GlobalState exists',
-      sourceLocation,
+      sourceLocation: this.sourceLocation,
     })
   }
 }
