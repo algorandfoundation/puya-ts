@@ -197,6 +197,17 @@ export class ContractClassBuilder extends InstanceBuilder {
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
     throw new CodeError('Contract class cannot be called manually')
   }
+
+  memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
+    if (name === 'prototype') {
+      return new ContractClassBuilder(sourceLocation, this.ptype)
+    }
+    const method = this.ptype.methods[name]
+    if (method) {
+      return new ContractMethodExpressionBuilder(sourceLocation, method)
+    }
+    return super.memberAccess(name, sourceLocation)
+  }
 }
 
 export class ContractOptionsDecoratorBuilder extends FunctionBuilder {

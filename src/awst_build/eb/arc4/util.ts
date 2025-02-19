@@ -5,7 +5,7 @@ import type { SourceLocation } from '../../../awst/source-location'
 import { wtypes } from '../../../awst/wtypes'
 import { logger } from '../../../logger'
 import { codeInvariant, hexToUint8Array } from '../../../util'
-import { isArc4EncodableType, ptypeToArc4EncodedType } from '../../arc4-util'
+import { isArc4EncodableType, ptypeToArc4EncodedType, ptypeToArc4PType } from '../../arc4-util'
 import type { PType } from '../../ptypes'
 import { bytesPType, stringPType } from '../../ptypes'
 import {
@@ -16,6 +16,7 @@ import {
   methodSelectorFunction,
 } from '../../ptypes/arc4-types'
 import { instanceEb } from '../../type-registry'
+import { ContractMethodExpressionBuilder } from '../free-subroutine-expression-builder'
 import type { InstanceBuilder, NodeBuilder } from '../index'
 import { FunctionBuilder } from '../index'
 import { requireStringConstant } from '../util'
@@ -160,6 +161,11 @@ function getPrefixValue(arg: InstanceBuilder | undefined): BytesConstant | undef
   }
 }
 
+function getArc4TypeName(arg: PType, sourceLocation: SourceLocation): string {
+  const arc4Type = ptypeToArc4PType(arg, sourceLocation)
+  return arc4Type.wtype instanceof wtypes.ARC4Type ? arc4Type.wtype.arc4Name : (arc4Type.wtype?.name ?? arc4Type.name)
+}
+
 export class MethodSelectorFunctionBuilder extends FunctionBuilder {
   readonly ptype = methodSelectorFunction
 
@@ -169,13 +175,16 @@ export class MethodSelectorFunctionBuilder extends FunctionBuilder {
     } = parseFunctionArgs({
       args,
       typeArgs,
-      genericTypeArgs: 0,
+      genericTypeArgs: 4,
       callLocation: sourceLocation,
       funcName: this.typeDescription,
-      argSpec: (a) => [a.required(stringPType)],
+      argSpec: (a) => [a.required()],
     })
 
-    const signature = requireStringConstant(methodSignature).value
+    const signature =
+      methodSignature instanceof ContractMethodExpressionBuilder
+        ? `${methodSignature.ptype.name}(${methodSignature.ptype.parameters.map(([_, ptype]) => getArc4TypeName(ptype, sourceLocation)).join(',')})${getArc4TypeName(methodSignature.ptype.returnType, sourceLocation)}`
+        : requireStringConstant(methodSignature).value
 
     return instanceEb(
       nodeFactory.methodConstant({
