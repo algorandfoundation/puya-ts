@@ -183,7 +183,7 @@ export class MethodSelectorFunctionBuilder extends FunctionBuilder {
 
     const signature =
       methodSignature instanceof ContractMethodExpressionBuilder
-        ? `${methodSignature.ptype.name}(${methodSignature.ptype.parameters.map(([_, ptype]) => getArc4TypeName(ptype, sourceLocation)).join(',')})${getArc4TypeName(methodSignature.ptype.returnType, sourceLocation)}`
+        ? `${methodSignature.nameOverride ?? methodSignature.ptype.name}(${methodSignature.ptype.parameters.map(([_, ptype]) => getArc4TypeName(ptype, sourceLocation)).join(',')})${getArc4TypeName(methodSignature.ptype.returnType, sourceLocation)}`
         : requireStringConstant(methodSignature).value
 
     return instanceEb(

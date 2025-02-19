@@ -61,7 +61,11 @@ export class ExplicitBaseContractMethodExpressionBuilder extends SubroutineExpre
  * Invoke a contract method on the current contract (ie. this.someMethod())
  */
 export class ContractMethodExpressionBuilder extends SubroutineExpressionBuilder {
-  constructor(sourceLocation: SourceLocation, ptype: FunctionPType) {
+  constructor(
+    sourceLocation: SourceLocation,
+    ptype: FunctionPType,
+    public readonly nameOverride?: string,
+  ) {
     super(
       sourceLocation,
       ptype,

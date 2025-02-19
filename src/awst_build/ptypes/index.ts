@@ -107,6 +107,7 @@ export class ContractClassPType extends PType {
   readonly singleton = true
   readonly baseTypes: ContractClassPType[]
   readonly sourceLocation: SourceLocation
+  readonly methodNameOverrides: Record<string, string>
 
   constructor(props: {
     module: string
@@ -115,6 +116,7 @@ export class ContractClassPType extends PType {
     methods: Record<string, FunctionPType>
     baseTypes: ContractClassPType[]
     sourceLocation: SourceLocation
+    methodNameOverrides?: Record<string, string>
   }) {
     super()
     this.name = props.name
@@ -123,6 +125,7 @@ export class ContractClassPType extends PType {
     this.methods = props.methods
     this.baseTypes = props.baseTypes
     this.sourceLocation = props.sourceLocation
+    this.methodNameOverrides = props.methodNameOverrides ?? {}
   }
 
   get isARC4(): boolean {

@@ -70,7 +70,7 @@ export class ContractThisBuilder extends InstanceBuilder<ContractClassPType> {
     }
     const method = this.ptype.methods[name]
     if (method) {
-      return new ContractMethodExpressionBuilder(sourceLocation, method)
+      return new ContractMethodExpressionBuilder(sourceLocation, method, this.ptype.methodNameOverrides[method.name])
     }
     return super.memberAccess(name, sourceLocation)
   }
@@ -204,7 +204,7 @@ export class ContractClassBuilder extends InstanceBuilder {
     }
     const method = this.ptype.methods[name]
     if (method) {
-      return new ContractMethodExpressionBuilder(sourceLocation, method)
+      return new ContractMethodExpressionBuilder(sourceLocation, method, this.ptype.methodNameOverrides[method.name])
     }
     return super.memberAccess(name, sourceLocation)
   }
