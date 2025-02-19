@@ -2,6 +2,7 @@ import type { uint64 } from '@algorandfoundation/algorand-typescript'
 import { assert, assertMatch, Contract, Uint64 } from '@algorandfoundation/algorand-typescript'
 import { DynamicArray, StaticArray, UintN32 } from '@algorandfoundation/algorand-typescript/arc4'
 
+type Vector = { x: uint64; y: uint64 }
 export class NativeArraysAlgo extends Contract {
   buildArray(): uint64[] {
     return [1, 2, 3, 4]
@@ -48,5 +49,14 @@ export class NativeArraysAlgo extends Contract {
     a1 = [...a1, ...da1, ...sa1]
 
     assertMatch(a1, [u1, u1, u1, u1, u1, u1])
+  }
+
+  structs({ x, y }: Vector) {
+    let myVectors: Vector[] = []
+
+    myVectors = [{ x, y }]
+
+    assertMatch(myVectors, [{ x, y }])
+    return myVectors
   }
 }

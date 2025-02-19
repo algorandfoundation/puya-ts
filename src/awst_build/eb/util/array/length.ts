@@ -1,14 +1,15 @@
 import { nodeFactory } from '../../../../awst/node-factory'
 import type { SourceLocation } from '../../../../awst/source-location'
-import { ArrayLiteralPType, TuplePType, uint64PType } from '../../../ptypes'
+import { uint64PType } from '../../../ptypes'
 import { instanceEb } from '../../../type-registry'
 import type { InstanceBuilder } from '../../index'
+import { isStaticallyIterable, StaticIterator } from '../../traits/static-iterator'
 
 export function arrayLength(array: InstanceBuilder, sourceLocation: SourceLocation) {
-  if (array.ptype instanceof ArrayLiteralPType || array.ptype instanceof TuplePType) {
+  if (isStaticallyIterable(array)) {
     return instanceEb(
       nodeFactory.uInt64Constant({
-        value: BigInt(array.ptype.items.length),
+        value: BigInt(array[StaticIterator]().length),
         sourceLocation,
       }),
       uint64PType,

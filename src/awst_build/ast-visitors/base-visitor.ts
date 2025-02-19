@@ -42,6 +42,7 @@ import {
   bigIntPType,
   biguintPType,
   boolPType,
+  neverPType,
   numberPType,
   NumericLiteralPType,
   ObjectPType,
@@ -195,6 +196,10 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
 
   visitArrayLiteralExpression(node: ts.ArrayLiteralExpression): NodeBuilder {
     const sourceLocation = this.sourceLocation(node)
+
+    if (node.elements.length === 0) {
+      return new ArrayLiteralExpressionBuilder(sourceLocation, [])
+    }
 
     const toConcat: Array<InstanceBuilder[] | InstanceBuilder> = []
     let itemBuffer: InstanceBuilder[] = []
@@ -613,6 +618,11 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
             .toSorted(sortBy(([prop]) => targetPropertyOrder.get(prop) ?? Number.MAX_SAFE_INTEGER)),
         ),
       })
+    }
+    // Array<never> can be assigned to any target array type
+    if (sourceType instanceof ArrayPType && sourceType.elementType.equals(neverPType)) {
+      codeInvariant(targetType instanceof ArrayPType, errorMessage)
+      return targetType
     }
     return sourceType
   }

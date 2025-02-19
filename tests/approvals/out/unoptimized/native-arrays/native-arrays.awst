@@ -42,6 +42,15 @@ contract NativeArraysAlgo
     assert(a1.length == 6 and reinterpret_cast<bytes>(a1[0]) == reinterpret_cast<bytes>(u1) and reinterpret_cast<bytes>(a1[1]) == reinterpret_cast<bytes>(u1) and reinterpret_cast<bytes>(a1[2]) == reinterpret_cast<bytes>(u1) and reinterpret_cast<bytes>(a1[3]) == reinterpret_cast<bytes>(u1) and reinterpret_cast<bytes>(a1[4]) == reinterpret_cast<bytes>(u1) and reinterpret_cast<bytes>(a1[5]) == reinterpret_cast<bytes>(u1), comment=assert target is match for conditions)
   }
   
+  structs(p: Vector{ x: uint64, y: uint64 }): stack_array<tests/approvals/native-arrays.algo.ts::Vector>
+  {
+    { x: x, y: y }: object{ x: uint64, y: uint64 } = { x: p.x, y: p.y }
+    myVectors: stack_array<tests/approvals/native-arrays.algo.ts::Vector> = new stack_array<tests/approvals/native-arrays.algo.ts::Vector>()
+    myVectors: stack_array<tests/approvals/native-arrays.algo.ts::Vector> = new stack_array<tests/approvals/native-arrays.algo.ts::Vector>({ x: (#0 = { x: x, y: y }).x, y: #0.y })
+    assert(myVectors.length == 1 and myVectors[0].x == x and myVectors[0].y == y, comment=assert target is match for conditions)
+    return myVectors
+  }
+  
   __algots__.defaultCreate(): void
   {
   }

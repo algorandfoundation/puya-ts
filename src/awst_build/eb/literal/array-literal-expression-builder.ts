@@ -14,17 +14,18 @@ import { requireIntegerConstant } from '../util'
 import { arrayLength } from '../util/array/length'
 
 export class ArrayLiteralExpressionBuilder extends InstanceBuilder implements StaticallyIterable {
-  readonly ptype: ArrayLiteralPType
+  readonly ptype: ArrayLiteralPType | ArrayPType
   constructor(
     sourceLocation: SourceLocation,
     private readonly items: InstanceBuilder[],
+    ptype?: ArrayPType | ArrayLiteralPType,
   ) {
     super(sourceLocation)
-    this.ptype = new ArrayLiteralPType({ items: items.map((i) => i.ptype) })
+    this.ptype = ptype ?? new ArrayLiteralPType({ items: items.map((i) => i.ptype) })
   }
 
   resolve(): Expression {
-    const arrayType = this.ptype.getArrayType()
+    const arrayType = this.ptype instanceof ArrayPType ? this.ptype : this.ptype.getArrayType()
 
     return nodeFactory.newArray({
       sourceLocation: this.sourceLocation,
@@ -76,6 +77,7 @@ export class ArrayLiteralExpressionBuilder extends InstanceBuilder implements St
       return new ArrayLiteralExpressionBuilder(
         this.sourceLocation,
         this.items.map((i) => i.resolveToPType(ptype.elementType)),
+        ptype,
       )
     }
     return super.resolveToPType(ptype)

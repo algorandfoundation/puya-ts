@@ -560,7 +560,7 @@ export class ArrayLiteralPType extends TransientType {
   }
 
   get elementType() {
-    return UnionPType.fromTypes(this.items)
+    return this.items.length ? UnionPType.fromTypes(this.items) : neverPType
   }
 
   readonly items: PType[]
@@ -578,10 +578,8 @@ export class ArrayLiteralPType extends TransientType {
   }
 
   getArrayType(): ArrayPType {
-    const itemType = UnionPType.fromTypes(this.items)
-
     return new ArrayPType({
-      elementType: itemType,
+      elementType: this.elementType,
     })
   }
 

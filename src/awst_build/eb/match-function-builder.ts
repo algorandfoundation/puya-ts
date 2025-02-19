@@ -5,10 +5,11 @@ import type { SourceLocation } from '../../awst/source-location'
 import { CodeError } from '../../errors'
 import { codeInvariant } from '../../util'
 import type { PType } from '../ptypes'
-import { ArrayLiteralPType, ArrayPType, boolPType, matchFunction, ObjectPType, TuplePType, uint64PType } from '../ptypes'
+import { ArrayPType, boolPType, matchFunction, ObjectPType, TuplePType, uint64PType } from '../ptypes'
 import { instanceEb } from '../type-registry'
 import type { InstanceBuilder } from './index'
 import { BuilderComparisonOp, NodeBuilder } from './index'
+import { isStaticallyIterable, StaticIterator } from './traits/static-iterator'
 import { requireBuilderOfType, requireInstanceBuilder } from './util'
 import { parseFunctionArgs } from './util/arg-parsing'
 
@@ -40,21 +41,20 @@ export function buildComparisons(subject: NodeBuilder, tests: InstanceBuilder, f
         const subjectProperty = requireInstanceBuilder(subject.memberAccess(propName, sourceLocation))
         const testProperty = requireInstanceBuilder(tests.memberAccess(propName, sourceLocation))
 
-        const comparison = buildComparison(subjectProperty, testProperty, sourceLocation)
+        const comparison = buildComparison(subjectProperty, testProperty, functionName, sourceLocation)
         return combineConditions(acc, comparison.resolve(), sourceLocation)
       }, undefined)
     codeInvariant(condition, `${functionName} must have at least 1 condition`, sourceLocation)
     return instanceEb(condition, boolPType)
-  } else if (tests.ptype instanceof ArrayLiteralPType || tests.ptype instanceof TuplePType) {
-    const condition = tests.ptype.items.reduce<Expression | undefined>(
-      (acc, cur, index) => {
+  } else if (isStaticallyIterable(tests)) {
+    const condition = tests[StaticIterator]().reduce<Expression | undefined>(
+      (acc, testItem, index) => {
         const indexAsBuilder = instanceEb(nodeFactory.uInt64Constant({ value: BigInt(index), sourceLocation }), uint64PType)
         const subjectItem = requireInstanceBuilder(subject.indexAccess(indexAsBuilder, sourceLocation))
-        const testItem = requireInstanceBuilder(tests.indexAccess(indexAsBuilder, sourceLocation))
-        const comparison = buildComparison(subjectItem, testItem, sourceLocation)
+        const comparison = buildComparison(subjectItem, testItem, functionName, sourceLocation)
         return combineConditions(acc, comparison.resolve(), sourceLocation)
       },
-      compareLengths(subject, tests, sourceLocation),
+      compareLengths(subject, tests, functionName, sourceLocation),
     )
     codeInvariant(condition, `${functionName} must have at least 1 condition`, sourceLocation)
     return instanceEb(condition, boolPType)
@@ -65,15 +65,29 @@ export function buildComparisons(subject: NodeBuilder, tests: InstanceBuilder, f
   }
 }
 
-function compareLengths(subject: NodeBuilder, tests: InstanceBuilder, sourceLocation: SourceLocation) {
+function compareLengths(subject: NodeBuilder, tests: InstanceBuilder, functionName: string, sourceLocation: SourceLocation) {
   const subjectLength = requireInstanceBuilder(subject.memberAccess('length', sourceLocation))
   const testsLength = requireInstanceBuilder(tests.memberAccess('length', sourceLocation))
 
-  return buildComparison(subjectLength, testsLength, sourceLocation).resolve()
+  return buildComparison(subjectLength, testsLength, functionName, sourceLocation).resolve()
 }
 
-function buildComparison(subjectProperty: InstanceBuilder, testProperty: InstanceBuilder, sourceLocation: SourceLocation): InstanceBuilder {
+function buildComparison(
+  subjectProperty: InstanceBuilder,
+  testProperty: InstanceBuilder,
+  functionName: string,
+  sourceLocation: SourceLocation,
+): InstanceBuilder {
   const subjectType = subjectProperty.ptype
+  // Recurse comparisons for nested objects
+  if (
+    subjectProperty.ptype instanceof ObjectPType ||
+    subjectProperty.ptype instanceof TuplePType ||
+    subjectProperty.ptype instanceof ArrayPType
+  ) {
+    return buildComparisons(subjectProperty, testProperty, functionName, sourceLocation)
+  }
+
   if (testProperty.resolvableToPType(subjectType)) {
     return subjectProperty.compare(testProperty, BuilderComparisonOp.eq, sourceLocation)
   } else if (testProperty.hasProperty('between')) {

@@ -3,23 +3,50 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1
-    // tests/approvals/native-arrays.algo.ts:5
+    intcblock 1 0 8
+    // tests/approvals/native-arrays.algo.ts:6
     // export class NativeArraysAlgo extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@8
-    pushbytess 0x0f4c11ca 0x13a588c8 0x787b50b2 // method "buildArray()uint64[]", method "doThings()void", method "arc4Interop()void"
+    bz main_bare_routing@9
+    pushbytess 0x0f4c11ca 0x13a588c8 0x787b50b2 0xeb87a064 // method "buildArray()uint64[]", method "doThings()void", method "arc4Interop()void", method "structs((uint64,uint64))(uint64,uint64)[]"
     txna ApplicationArgs 0
-    match main_buildArray_route@3 main_doThings_route@4 main_arc4Interop_route@5
+    match main_buildArray_route@3 main_doThings_route@4 main_arc4Interop_route@5 main_structs_route@6
 
-main_after_if_else@12:
-    // tests/approvals/native-arrays.algo.ts:5
+main_after_if_else@13:
+    // tests/approvals/native-arrays.algo.ts:6
     // export class NativeArraysAlgo extends Contract {
-    pushint 0 // 0
+    intc_1 // 0
+    return
+
+main_structs_route@6:
+    // tests/approvals/native-arrays.algo.ts:54
+    // structs({ x, y }: Vector) {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    // tests/approvals/native-arrays.algo.ts:6
+    // export class NativeArraysAlgo extends Contract {
+    txna ApplicationArgs 1
+    dup
+    intc_1 // 0
+    extract_uint64
+    swap
+    intc_2 // 8
+    extract_uint64
+    // tests/approvals/native-arrays.algo.ts:54
+    // structs({ x, y }: Vector) {
+    callsub structs
+    pushbytes 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
     return
 
 main_arc4Interop_route@5:
-    // tests/approvals/native-arrays.algo.ts:41
+    // tests/approvals/native-arrays.algo.ts:42
     // arc4Interop() {
     txn OnCompletion
     !
@@ -30,7 +57,7 @@ main_arc4Interop_route@5:
     return
 
 main_doThings_route@4:
-    // tests/approvals/native-arrays.algo.ts:10
+    // tests/approvals/native-arrays.algo.ts:11
     // doThings() {
     txn OnCompletion
     !
@@ -41,7 +68,7 @@ main_doThings_route@4:
     return
 
 main_buildArray_route@3:
-    // tests/approvals/native-arrays.algo.ts:6
+    // tests/approvals/native-arrays.algo.ts:7
     // buildArray(): uint64[] {
     txn OnCompletion
     !
@@ -53,13 +80,74 @@ main_buildArray_route@3:
     intc_0 // 1
     return
 
-main_bare_routing@8:
-    // tests/approvals/native-arrays.algo.ts:5
+main_bare_routing@9:
+    // tests/approvals/native-arrays.algo.ts:6
     // export class NativeArraysAlgo extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@12
+    bnz main_after_if_else@13
     txn ApplicationID
     !
     assert // can only call when creating
     intc_0 // 1
     return
+
+
+// tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.structs(p.x: uint64, p.y: uint64) -> bytes:
+structs:
+    // tests/approvals/native-arrays.algo.ts:54
+    // structs({ x, y }: Vector) {
+    proto 2 1
+    intc_1 // 0
+    frame_dig -2
+    itob
+    frame_dig -1
+    itob
+    concat
+    // tests/approvals/native-arrays.algo.ts:57
+    // myVectors = [{ x, y }]
+    dup
+    len
+    pushint 16 // 16
+    /
+    itob
+    extract 6 2
+    swap
+    concat
+    dup
+    // tests/approvals/native-arrays.algo.ts:59
+    // assertMatch(myVectors, [{ x, y }])
+    intc_1 // 0
+    extract_uint16
+    intc_0 // 1
+    ==
+    bz structs_bool_false@4
+    frame_dig 1
+    extract 2 16
+    dup
+    frame_bury 0
+    intc_1 // 0
+    extract_uint64
+    frame_dig -2
+    ==
+    bz structs_bool_false@4
+    frame_dig 0
+    intc_2 // 8
+    extract_uint64
+    frame_dig -1
+    ==
+    bz structs_bool_false@4
+    intc_0 // 1
+
+structs_bool_merge@5:
+    // tests/approvals/native-arrays.algo.ts:59
+    // assertMatch(myVectors, [{ x, y }])
+    assert // assert target is match for conditions
+    // tests/approvals/native-arrays.algo.ts:60
+    // return myVectors
+    frame_dig 1
+    frame_bury 0
+    retsub
+
+structs_bool_false@4:
+    intc_1 // 0
+    b structs_bool_merge@5

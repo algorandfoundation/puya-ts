@@ -14,7 +14,7 @@ describe('Approvals', async () => {
     .map((p) => normalisePath(p, process.cwd()))
     .toSorted()
   describe.each([
-    ['Unoptimized', 'out/unoptimized/[name]', { optimizationLevel: 0 }],
+    ['Unoptimized', 'out/unoptimized/[name]', { optimizationLevel: 0, outputAwstJson: true, outputAwst: true }],
     ['O1', 'out/o1/[name]', { optimizationLevel: 1 }],
     ['O2', 'out/o2/[name]', { optimizationLevel: 2 }],
   ])('Compile %s', async (desc, outDir, puyaOptions) => {
@@ -27,8 +27,8 @@ describe('Approvals', async () => {
         logLevel: LogLevel.Warning,
         skipVersionCheck: true,
         ...defaultPuyaOptions,
-        outputAwstJson: true,
-        outputAwst: true,
+        outputAwstJson: false,
+        outputAwst: false,
         outputTeal: true,
         outputArc32: true,
         outputArc56: true,
