@@ -1,0 +1,203 @@
+#pragma version 10
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 1 0 5 2
+    // tests/approvals/match-expr.algo.ts:4
+    // class MatchExprAlgo extends Contract {
+    txn NumAppArgs
+    bz main_bare_routing@6
+    pushbytes 0x937e729a // method "testMatches(uint64)void"
+    txna ApplicationArgs 0
+    match main_testMatches_route@3
+
+main_after_if_else@10:
+    // tests/approvals/match-expr.algo.ts:4
+    // class MatchExprAlgo extends Contract {
+    intc_1 // 0
+    return
+
+main_testMatches_route@3:
+    // tests/approvals/match-expr.algo.ts:5
+    // public testMatches(x: uint64) {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    // tests/approvals/match-expr.algo.ts:4
+    // class MatchExprAlgo extends Contract {
+    txna ApplicationArgs 1
+    btoi
+    // tests/approvals/match-expr.algo.ts:5
+    // public testMatches(x: uint64) {
+    callsub testMatches
+    intc_0 // 1
+    return
+
+main_bare_routing@6:
+    // tests/approvals/match-expr.algo.ts:4
+    // class MatchExprAlgo extends Contract {
+    txn OnCompletion
+    bnz main_after_if_else@10
+    txn ApplicationID
+    !
+    assert // can only call when creating
+    intc_0 // 1
+    return
+
+
+// tests/approvals/match-expr.algo.ts::MatchExprAlgo.testMatches(x: uint64) -> void:
+testMatches:
+    // tests/approvals/match-expr.algo.ts:5
+    // public testMatches(x: uint64) {
+    proto 1 0
+    // tests/approvals/match-expr.algo.ts:7
+    // assertMatch(xObj, { x: 5 }, 'x should be 5')
+    frame_dig -1
+    intc_2 // 5
+    ==
+    assert // x should be 5
+    // tests/approvals/match-expr.algo.ts:9
+    // assert(match(xObj, { x: { greaterThan: 4 } }))
+    frame_dig -1
+    pushint 4 // 4
+    >
+    assert
+    // tests/approvals/match-expr.algo.ts:10
+    // assert(match(xObj, { x: { lessThan: 6 } }))
+    frame_dig -1
+    pushint 6 // 6
+    <
+    assert
+    // tests/approvals/match-expr.algo.ts:11
+    // assert(match(xObj, { x: { greaterThanEq: 5 } }))
+    frame_dig -1
+    intc_2 // 5
+    >=
+    assert
+    // tests/approvals/match-expr.algo.ts:12
+    // assert(match(xObj, { x: { lessThanEq: 5 } }))
+    frame_dig -1
+    intc_2 // 5
+    <=
+    assert
+    // tests/approvals/match-expr.algo.ts:14
+    // const xArray = [x]
+    frame_dig -1
+    itob
+    dup
+    len
+    pushint 8 // 8
+    /
+    itob
+    extract 6 2
+    swap
+    concat
+    dup
+    // tests/approvals/match-expr.algo.ts:16
+    // assert(match(xArray, [5]))
+    intc_1 // 0
+    extract_uint16
+    intc_0 // 1
+    ==
+    dup
+    bz testMatches_bool_false@3
+    frame_dig 0
+    intc_3 // 2
+    extract_uint64
+    intc_2 // 5
+    ==
+    bz testMatches_bool_false@3
+    intc_0 // 1
+
+testMatches_bool_merge@4:
+    // tests/approvals/match-expr.algo.ts:16
+    // assert(match(xArray, [5]))
+    assert
+    // tests/approvals/match-expr.algo.ts:17
+    // assert(match(xArray, [{ greaterThan: 4 }]))
+    frame_dig 1
+    bz testMatches_bool_false@7
+    frame_dig 0
+    intc_3 // 2
+    extract_uint64
+    pushint 4 // 4
+    >
+    bz testMatches_bool_false@7
+    intc_0 // 1
+
+testMatches_bool_merge@8:
+    // tests/approvals/match-expr.algo.ts:17
+    // assert(match(xArray, [{ greaterThan: 4 }]))
+    assert
+    // tests/approvals/match-expr.algo.ts:18
+    // assert(match(xArray, [{ lessThan: 6 }]))
+    frame_dig 1
+    bz testMatches_bool_false@11
+    frame_dig 0
+    intc_3 // 2
+    extract_uint64
+    pushint 6 // 6
+    <
+    bz testMatches_bool_false@11
+    intc_0 // 1
+
+testMatches_bool_merge@12:
+    // tests/approvals/match-expr.algo.ts:18
+    // assert(match(xArray, [{ lessThan: 6 }]))
+    assert
+    // tests/approvals/match-expr.algo.ts:19
+    // assert(match(xArray, [{ greaterThanEq: 5 }]))
+    frame_dig 1
+    bz testMatches_bool_false@15
+    frame_dig 0
+    intc_3 // 2
+    extract_uint64
+    intc_2 // 5
+    >=
+    bz testMatches_bool_false@15
+    intc_0 // 1
+
+testMatches_bool_merge@16:
+    // tests/approvals/match-expr.algo.ts:19
+    // assert(match(xArray, [{ greaterThanEq: 5 }]))
+    assert
+    // tests/approvals/match-expr.algo.ts:20
+    // assert(match(xArray, [{ lessThanEq: 5 }]))
+    frame_dig 1
+    bz testMatches_bool_false@19
+    frame_dig 0
+    intc_3 // 2
+    extract_uint64
+    intc_2 // 5
+    <=
+    bz testMatches_bool_false@19
+    intc_0 // 1
+
+testMatches_bool_merge@20:
+    // tests/approvals/match-expr.algo.ts:20
+    // assert(match(xArray, [{ lessThanEq: 5 }]))
+    assert
+    retsub
+
+testMatches_bool_false@19:
+    intc_1 // 0
+    b testMatches_bool_merge@20
+
+testMatches_bool_false@15:
+    intc_1 // 0
+    b testMatches_bool_merge@16
+
+testMatches_bool_false@11:
+    intc_1 // 0
+    b testMatches_bool_merge@12
+
+testMatches_bool_false@7:
+    intc_1 // 0
+    b testMatches_bool_merge@8
+
+testMatches_bool_false@3:
+    intc_1 // 0
+    b testMatches_bool_merge@4

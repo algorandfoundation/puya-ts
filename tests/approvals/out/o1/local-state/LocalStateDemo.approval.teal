@@ -93,8 +93,8 @@ main_setState_route@3:
     // export class LocalStateDemo extends Contract {
     txna ApplicationArgs 1
     dup
-    extract 0 8 // on error: Index access is out of bounds
-    btoi
+    intc_0 // 0
+    extract_uint64
     dig 1
     pushint 8 // 8
     extract_uint16
@@ -183,9 +183,6 @@ setState:
 
 // tests/approvals/local-state.algo.ts::LocalStateDemo.getState() -> uint64, uint64, bytes, bytes, bytes:
 getState:
-    // tests/approvals/local-state.algo.ts:22
-    // public getState() {
-    proto 0 5
     // tests/approvals/local-state.algo.ts:24
     // localUint: this.localUint(Txn.sender).value,
     txn Sender
@@ -494,9 +491,6 @@ getState:
 
 // tests/approvals/local-state.algo.ts::LocalStateDemo.clearState() -> void:
 clearState:
-    // tests/approvals/local-state.algo.ts:32
-    // public clearState() {
-    proto 0 0
     // tests/approvals/local-state.algo.ts:33
     // this.localUint(Txn.sender).delete()
     txn Sender

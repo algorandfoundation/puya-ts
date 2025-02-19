@@ -1,7 +1,7 @@
 import type { SourceLocation } from '../../awst/source-location'
 import { wtypes } from '../../awst/wtypes'
 import { Constants } from '../../constants'
-import { codeInvariant, zipStrict } from '../../util'
+import { codeInvariant } from '../../util'
 import { GenericPType, PType } from './base'
 import {
   biguintPType,
@@ -53,6 +53,14 @@ export const UintN256Class = new LibClassType({
 export abstract class ARC4EncodedType extends PType {
   abstract readonly wtype: wtypes.ARC4Type
   abstract readonly nativeType: PType | undefined
+}
+
+export abstract class ARC4ArrayType extends ARC4EncodedType {
+  readonly elementType: ARC4EncodedType
+  constructor({ elementType }: { elementType: ARC4EncodedType }) {
+    super()
+    this.elementType = elementType
+  }
 }
 
 export class ARC4InstanceType extends ARC4EncodedType {
@@ -173,19 +181,6 @@ export class ARC4StructType extends ARC4EncodedType {
   get signature(): string {
     return `${this.name}${this.wtype.arc4Name}`
   }
-
-  equals(other: PType): boolean {
-    if (!(other instanceof ARC4StructType)) return false
-    const thisProps = Object.entries(this.fields)
-    const otherProps = Object.entries(other.fields)
-    return (
-      this.name === other.name &&
-      thisProps.length === otherProps.length &&
-      zipStrict(thisProps, otherProps).every(
-        ([[left_prop, left_type], [right_prop, right_type]]) => left_prop === right_prop && left_type.equals(right_type),
-      )
-    )
-  }
 }
 
 export const arc4StructBaseType = new ARC4StructType({
@@ -238,14 +233,6 @@ export class ARC4TupleType extends ARC4EncodedType {
       types: this.items.map((t) => t.wtype),
       sourceLocation: this.sourceLocation,
     })
-  }
-
-  equals(other: PType): boolean {
-    return (
-      other instanceof ARC4TupleType &&
-      this.items.length === other.items.length &&
-      zipStrict(this.items, other.items).every(([a, b]) => a.equals(b))
-    )
   }
 }
 export const UintNGeneric = new GenericPType({
@@ -348,9 +335,9 @@ export const DynamicArrayGeneric = new GenericPType({
     return new DynamicArrayType({ elementType: elementType })
   },
 })
-export class DynamicArrayType extends ARC4EncodedType {
+export class DynamicArrayType extends ARC4ArrayType {
   readonly module = Constants.arc4EncodedTypesModuleName
-  readonly elementType: ARC4EncodedType
+
   readonly immutable: boolean
   readonly name: string
   readonly singleton = false
@@ -371,9 +358,10 @@ export class DynamicArrayType extends ARC4EncodedType {
     immutable?: boolean
     nativeType?: PType
   }) {
-    super()
+    super({
+      elementType,
+    })
     this.immutable = immutable ?? false
-    this.elementType = elementType
     this.nativeType = nativeType
     this.name = name ?? `DynamicArray<${elementType}>`
     this.sourceLocation = sourceLocation
@@ -407,10 +395,8 @@ export const StaticArrayGeneric = new GenericPType({
     return new StaticArrayType({ arraySize: arraySize.literalValue, elementType })
   },
 })
-export class StaticArrayType extends ARC4EncodedType {
-  static baseFullName = `${Constants.arc4EncodedTypesModuleName}::StaticArray`
+export class StaticArrayType extends ARC4ArrayType {
   readonly module = Constants.arc4EncodedTypesModuleName
-  readonly elementType: ARC4EncodedType
   readonly arraySize: bigint
   readonly immutable: boolean
   readonly name: string
@@ -437,10 +423,8 @@ export class StaticArrayType extends ARC4EncodedType {
     nativeType?: PType
   }) {
     codeInvariant(arraySize >= 0, 'StaticArray length must be greater than or equal to 0')
-
-    super()
+    super({ elementType })
     this.immutable = immutable ?? false
-    this.elementType = elementType
     this.arraySize = arraySize
     this.name = name ?? `StaticArray<${elementType}, ${arraySize}>`
     this.sourceLocation = sourceLocation

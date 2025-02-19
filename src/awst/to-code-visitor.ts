@@ -140,13 +140,19 @@ export class ToCodeVisitor
     return `copy(${expression.value.accept(this)})`
   }
   visitArrayConcat(expression: nodes.ArrayConcat): string {
-    return `${expression.left.accept(this)}.concat(${expression.right.accept(this)}`
+    return `${expression.left.accept(this)}.concat(${expression.right.accept(this)})`
   }
   visitArrayPop(expression: nodes.ArrayPop): string {
     return `${expression.base.accept(this)}.pop()`
   }
   visitArrayExtend(expression: nodes.ArrayExtend): string {
     return `${expression.base.accept(this)}.push(...${expression.other.accept(this)}`
+  }
+  visitArrayLength(expression: nodes.ArrayLength): string {
+    return `${expression.array.accept(this)}.length`
+  }
+  visitArrayReplace(expression: nodes.ArrayReplace): string {
+    return `${expression.base.accept(this)}.with(${expression.index.accept(this)}, ${expression.value.accept(this)})`
   }
   visitARC4Decode(expression: nodes.ARC4Decode): string {
     return `ARC4_DECODE(${expression.value.accept(this)})`

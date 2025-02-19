@@ -81,9 +81,6 @@ main_bare_routing@9:
 
 // tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract() -> void:
 test_compile_contract:
-    // tests/approvals/precompiled-factory.algo.ts:7
-    // test_compile_contract() {
-    proto 0 0
     // tests/approvals/precompiled-factory.algo.ts:10-17
     // const helloApp = itxn
     //   .applicationCall({
@@ -173,13 +170,11 @@ test_compile_contract:
     // tests/approvals/precompiled-factory.algo.ts:25
     // const result = decodeArc4<string>(txn.lastLog, 'log')
     dup
-    extract 4 0
-    swap
     extract 0 4
     bytec_1 // 0x151f7c75
     ==
     assert // Bytes has valid prefix
-    extract 2 0
+    extract 6 0
     // tests/approvals/precompiled-factory.algo.ts:27
     // assert(result === 'hello world')
     pushbytes "hello world"
@@ -228,9 +223,6 @@ test_compile_contract:
 
 // tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_with_template() -> void:
 test_compile_contract_with_template:
-    // tests/approvals/precompiled-factory.algo.ts:38
-    // test_compile_contract_with_template() {
-    proto 0 0
     // tests/approvals/precompiled-factory.algo.ts:41-48
     // const helloApp = itxn
     //   .applicationCall({
@@ -318,13 +310,11 @@ test_compile_contract_with_template:
     // tests/approvals/precompiled-factory.algo.ts:56
     // const result = decodeArc4<string>(txn.lastLog, 'log')
     dup
-    extract 4 0
-    swap
     extract 0 4
     bytec_1 // 0x151f7c75
     ==
     assert // Bytes has valid prefix
-    extract 2 0
+    extract 6 0
     // tests/approvals/precompiled-factory.algo.ts:58
     // assert(result === 'hey world')
     pushbytes "hey world"
@@ -373,9 +363,6 @@ test_compile_contract_with_template:
 
 // tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_with_template_and_custom_prefix() -> void:
 test_compile_contract_with_template_and_custom_prefix:
-    // tests/approvals/precompiled-factory.algo.ts:69
-    // test_compile_contract_with_template_and_custom_prefix() {
-    proto 0 0
     // tests/approvals/precompiled-factory.algo.ts:72-79
     // const helloApp = itxn
     //   .applicationCall({
@@ -463,13 +450,11 @@ test_compile_contract_with_template_and_custom_prefix:
     // tests/approvals/precompiled-factory.algo.ts:87
     // const result = decodeArc4<string>(txn.lastLog, 'log')
     dup
-    extract 4 0
-    swap
     extract 0 4
     bytec_1 // 0x151f7c75
     ==
     assert // Bytes has valid prefix
-    extract 2 0
+    extract 6 0
     // tests/approvals/precompiled-factory.algo.ts:89
     // assert(result === 'bonjour world')
     pushbytes "bonjour world"
@@ -518,9 +503,6 @@ test_compile_contract_with_template_and_custom_prefix:
 
 // tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_large() -> void:
 test_compile_contract_large:
-    // tests/approvals/precompiled-factory.algo.ts:100
-    // test_compile_contract_large() {
-    proto 0 0
     // tests/approvals/precompiled-factory.algo.ts:103-110
     // const largeApp = itxn
     //   .applicationCall({
@@ -535,7 +517,7 @@ test_compile_contract_large:
     // const compiled = compile(LargeProgram)
     bytec_0 // base64(CoEBQw==)
     itxn_field ClearStateProgramPages
-    pushbytes base64(CjEbQQA7ggIEAr8wzwQkN408NhoAjgIADwADgQBDMRmBBRJEMRhEgQFDMRkURDEYRIgAGRaABBUffHVMULCBAUMxGUD/1TEYFESBAUOKAAGBgCCvFYk=)
+    pushbytes base64(CjEbQQA7ggIEAr8wzwQkN408NhoAjgIADwADgQBDMRmBBRJEMRhEgQFDMRkURDEYRIgAGRaABBUffHVMULCBAUMxGUD/1TEYFESBAUOBgCCvFYk=)
     itxn_field ApprovalProgramPages
     // tests/approvals/precompiled-factory.algo.ts:103-109
     // const largeApp = itxn

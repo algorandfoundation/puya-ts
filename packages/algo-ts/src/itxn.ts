@@ -25,7 +25,7 @@ export interface ApplicationInnerTxn extends txnTypes.ApplicationTxn {
   [isItxn]?: true
 }
 
-type AccountInput = Account | bytes | string
+type AccountInput = Account | bytes
 type AssetInput = Asset | uint64
 type ApplicationInput = Application | uint64
 

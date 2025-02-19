@@ -275,8 +275,7 @@ export class TypeResolver {
       } else {
         const itemPType = this.resolveType(itemType, sourceLocation)
         return new ArrayPType({
-          itemType: itemPType,
-          immutable: false,
+          elementType: itemPType,
         })
       }
     }
@@ -304,7 +303,7 @@ export class TypeResolver {
       }
     }
     if (typeAlias) {
-      return new ObjectPType({ ...typeAlias, properties, description: tryGetTypeDescription(tsType) })
+      return new ObjectPType({ alias: typeAlias, properties, description: tryGetTypeDescription(tsType) })
     }
     return ObjectPType.anonymous(properties)
   }

@@ -27,45 +27,45 @@ subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__(
         let tmp%9#0: uint64 = (txn ApplicationID)
         let tmp%10#0: bool = (!= tmp%9#0 0u)
         (assert tmp%10#0) // can only call when not creating
-        let tmp%11#0: bytes = (txna ApplicationArgs 1)
-        let tmp%12#0: bytes = (txna ApplicationArgs 2)
-        let tmp%13#0: bytes = tests/approvals/arc4-struct.algo.ts::StructDemo.addVectors(tmp%11#0, tmp%12#0)
-        let tmp%14#0: bytes = (concat 0x151f7c75 tmp%13#0)
-        (log tmp%14#0)
+        let reinterpret_bytes[16]%0#0: bytes[16] = (txna ApplicationArgs 1)
+        let reinterpret_bytes[16]%1#0: bytes[16] = (txna ApplicationArgs 2)
+        let tmp%11#0: bytes[16] = tests/approvals/arc4-struct.algo.ts::StructDemo.addVectors(reinterpret_bytes[16]%0#0, reinterpret_bytes[16]%1#0)
+        let tmp%12#0: bytes = (concat 0x151f7c75 tmp%11#0)
+        (log tmp%12#0)
         return 1u
     block@4: // implicitCastingAndSpreading_route_L25
-        let tmp%15#0: uint64 = (txn OnCompletion)
-        let tmp%16#0: bool = (== tmp%15#0 NoOp)
-        (assert tmp%16#0) // OnCompletion is not NoOp
-        let tmp%17#0: uint64 = (txn ApplicationID)
-        let tmp%18#0: bool = (!= tmp%17#0 0u)
-        (assert tmp%18#0) // can only call when not creating
-        let tmp%19#0: bytes = (txna ApplicationArgs 1)
-        tests/approvals/arc4-struct.algo.ts::StructDemo.implicitCastingAndSpreading(tmp%19#0)
+        let tmp%13#0: uint64 = (txn OnCompletion)
+        let tmp%14#0: bool = (== tmp%13#0 NoOp)
+        (assert tmp%14#0) // OnCompletion is not NoOp
+        let tmp%15#0: uint64 = (txn ApplicationID)
+        let tmp%16#0: bool = (!= tmp%15#0 0u)
+        (assert tmp%16#0) // can only call when not creating
+        let reinterpret_bytes[16]%2#0: bytes[16] = (txna ApplicationArgs 1)
+        tests/approvals/arc4-struct.algo.ts::StructDemo.implicitCastingAndSpreading(reinterpret_bytes[16]%2#0)
         return 1u
     block@5: // toAndFromBytes_route_L32
-        let tmp%20#0: uint64 = (txn OnCompletion)
-        let tmp%21#0: bool = (== tmp%20#0 NoOp)
-        (assert tmp%21#0) // OnCompletion is not NoOp
-        let tmp%22#0: uint64 = (txn ApplicationID)
-        let tmp%23#0: bool = (!= tmp%22#0 0u)
-        (assert tmp%23#0) // can only call when not creating
-        let tmp%24#0: bytes = (txna ApplicationArgs 1)
-        let tmp%25#0: bytes = tests/approvals/arc4-struct.algo.ts::StructDemo.toAndFromBytes(tmp%24#0)
-        let tmp%26#0: bytes = (concat 0x151f7c75 tmp%25#0)
-        (log tmp%26#0)
+        let tmp%17#0: uint64 = (txn OnCompletion)
+        let tmp%18#0: bool = (== tmp%17#0 NoOp)
+        (assert tmp%18#0) // OnCompletion is not NoOp
+        let tmp%19#0: uint64 = (txn ApplicationID)
+        let tmp%20#0: bool = (!= tmp%19#0 0u)
+        (assert tmp%20#0) // can only call when not creating
+        let reinterpret_bytes[16]%3#0: bytes[16] = (txna ApplicationArgs 1)
+        let tmp%21#0: bytes[16] = tests/approvals/arc4-struct.algo.ts::StructDemo.toAndFromBytes(reinterpret_bytes[16]%3#0)
+        let tmp%22#0: bytes = (concat 0x151f7c75 tmp%21#0)
+        (log tmp%22#0)
         return 1u
     block@6: // switch_case_default_L9
         goto block@7
     block@7: // switch_case_next_L9
         goto block@12
     block@8: // bare_routing_L9
-        let tmp%27#0: uint64 = (txn OnCompletion)
-        switch tmp%27#0 {0u => block@9, * => block@10}
+        let tmp%23#0: uint64 = (txn OnCompletion)
+        switch tmp%23#0 {0u => block@9, * => block@10}
     block@9: // __algots__.defaultCreate_L9
-        let tmp%28#0: uint64 = (txn ApplicationID)
-        let tmp%29#0: bool = (== tmp%28#0 0u)
-        (assert tmp%29#0) // can only call when creating
+        let tmp%24#0: uint64 = (txn ApplicationID)
+        let tmp%25#0: bool = (== tmp%24#0 0u)
+        (assert tmp%25#0) // can only call when creating
         tests/approvals/arc4-struct.algo.ts::StructDemo.__algots__.defaultCreate()
         return 1u
     block@10: // switch_case_default_L9
@@ -78,85 +78,86 @@ subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__(
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.testVectorCreationAndEquality() -> void:
     block@0: // L10
         let current_tail_offset%0#0: uint64 = 16u
-        let encoded_tuple_buffer%0#0: bytes = 0x
+        let encoded_tuple_buffer%0#0: bytes[0] = 0x
         let encoded_tuple_buffer%1#0: bytes = (concat encoded_tuple_buffer%0#0 0x0000000000000000)
         let encoded_tuple_buffer%2#0: bytes = (concat encoded_tuple_buffer%1#0 0x0000000000000000)
-        let v1#0: bytes = encoded_tuple_buffer%2#0
+        let v1#0: bytes[16] = encoded_tuple_buffer%2#0
         let tmp%0#0: bytes = (extract3 v1#0 0u 8u) // on error: Index access is out of bounds
         (log tmp%0#0)
         let tmp%1#0: bytes = (extract3 v1#0 8u 8u) // on error: Index access is out of bounds
         (log tmp%1#0)
         let current_tail_offset%1#0: uint64 = 16u
-        let encoded_tuple_buffer%3#0: bytes = 0x
+        let encoded_tuple_buffer%3#0: bytes[0] = 0x
         let encoded_tuple_buffer%4#0: bytes = (concat encoded_tuple_buffer%3#0 0x0000000000000000)
         let encoded_tuple_buffer%5#0: bytes = (concat encoded_tuple_buffer%4#0 0x0000000000000000)
-        let v2#0: bytes = encoded_tuple_buffer%5#0
+        let v2#0: bytes[16] = encoded_tuple_buffer%5#0
         let tmp%2#0: bool = (== v1#0 v2#0)
         (assert tmp%2#0)
         return 
 
-subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.addVectors(v1: bytes, v2: bytes) -> bytes:
+subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.addVectors(v1: bytes[16], v2: bytes[16]) -> bytes[16]:
     block@0: // L18
         let tmp%0#0: bytes = (extract3 v1#0 0u 8u) // on error: Index access is out of bounds
         let tmp%1#0: uint64 = (btoi tmp%0#0)
         let tmp%2#0: bytes = (extract3 v2#0 0u 8u) // on error: Index access is out of bounds
         let tmp%3#0: uint64 = (btoi tmp%2#0)
         let to_encode%0#0: uint64 = (+ tmp%1#0 tmp%3#0)
-        let val_as_bytes%0#0: bytes = (itob to_encode%0#0)
+        let val_as_bytes%0#0: bytes[8] = (itob to_encode%0#0)
         let tmp%4#0: bytes = (extract3 v1#0 8u 8u) // on error: Index access is out of bounds
         let tmp%5#0: uint64 = (btoi tmp%4#0)
         let tmp%6#0: bytes = (extract3 v2#0 8u 8u) // on error: Index access is out of bounds
         let tmp%7#0: uint64 = (btoi tmp%6#0)
         let to_encode%1#0: uint64 = (+ tmp%5#0 tmp%7#0)
-        let val_as_bytes%1#0: bytes = (itob to_encode%1#0)
+        let val_as_bytes%1#0: bytes[8] = (itob to_encode%1#0)
         let tmp%8#0: bytes = (extract3 v1#0 0u 8u) // on error: Index access is out of bounds
         let tmp%9#0: uint64 = (btoi tmp%8#0)
         let tmp%10#0: bytes = (extract3 v2#0 0u 8u) // on error: Index access is out of bounds
         let tmp%11#0: uint64 = (btoi tmp%10#0)
         let to_encode%2#0: uint64 = (+ tmp%9#0 tmp%11#0)
-        let val_as_bytes%2#0: bytes = (itob to_encode%2#0)
+        let val_as_bytes%2#0: bytes[8] = (itob to_encode%2#0)
         let tmp%12#0: bytes = (extract3 v1#0 8u 8u) // on error: Index access is out of bounds
         let tmp%13#0: uint64 = (btoi tmp%12#0)
         let tmp%14#0: bytes = (extract3 v2#0 8u 8u) // on error: Index access is out of bounds
         let tmp%15#0: uint64 = (btoi tmp%14#0)
         let to_encode%3#0: uint64 = (+ tmp%13#0 tmp%15#0)
-        let val_as_bytes%3#0: bytes = (itob to_encode%3#0)
+        let val_as_bytes%3#0: bytes[8] = (itob to_encode%3#0)
         let current_tail_offset%0#0: uint64 = 16u
-        let encoded_tuple_buffer%0#0: bytes = 0x
+        let encoded_tuple_buffer%0#0: bytes[0] = 0x
         let encoded_tuple_buffer%1#0: bytes = (concat encoded_tuple_buffer%0#0 val_as_bytes%0#0)
         let encoded_tuple_buffer%2#0: bytes = (concat encoded_tuple_buffer%1#0 val_as_bytes%3#0)
         return encoded_tuple_buffer%2#0
 
-subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.implicitCastingAndSpreading(v1: bytes) -> void:
+subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.implicitCastingAndSpreading(v1: bytes[16]) -> void:
     block@0: // L25
         let item0%0#0: bytes = (extract3 v1#0 0u 8u) // on error: Index access is out of bounds
         let item1%0#0: bytes = (extract3 v1#0 8u 8u) // on error: Index access is out of bounds
         let item0%1#0: bytes = (extract3 v1#0 0u 8u) // on error: Index access is out of bounds
         let item1%1#0: bytes = (extract3 v1#0 8u 8u) // on error: Index access is out of bounds
         let current_tail_offset%0#0: uint64 = 16u
-        let encoded_tuple_buffer%0#0: bytes = 0x
+        let encoded_tuple_buffer%0#0: bytes[0] = 0x
         let encoded_tuple_buffer%1#0: bytes = (concat encoded_tuple_buffer%0#0 item0%0#0)
         let encoded_tuple_buffer%2#0: bytes = (concat encoded_tuple_buffer%1#0 item1%1#0)
-        let v2#0: bytes = encoded_tuple_buffer%2#0
+        let v2#0: bytes[16] = encoded_tuple_buffer%2#0
         let tmp%0#0: bytes = (extract3 v2#0 0u 8u) // on error: Index access is out of bounds
         let tmp%1#0: bytes = (extract3 v2#0 8u 8u) // on error: Index access is out of bounds
         let tmp%2#0: bytes = (extract3 v2#0 0u 8u) // on error: Index access is out of bounds
         let tmp%3#0: bytes = (extract3 v2#0 8u 8u) // on error: Index access is out of bounds
         let current_tail_offset%1#0: uint64 = 16u
-        let encoded_tuple_buffer%3#0: bytes = 0x
+        let encoded_tuple_buffer%3#0: bytes[0] = 0x
         let encoded_tuple_buffer%4#0: bytes = (concat encoded_tuple_buffer%3#0 tmp%0#0)
         let encoded_tuple_buffer%5#0: bytes = (concat encoded_tuple_buffer%4#0 tmp%3#0)
-        let v3#0: bytes = encoded_tuple_buffer%5#0
+        let v3#0: bytes[16] = encoded_tuple_buffer%5#0
         let tmp%4#0: bool = (== v1#0 v2#0)
         (assert tmp%4#0)
         let tmp%5#0: bool = (== v3#0 v1#0)
         (assert tmp%5#0)
         return 
 
-subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.toAndFromBytes(v1: bytes) -> bytes:
+subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.toAndFromBytes(v1: bytes[16]) -> bytes[16]:
     block@0: // L32
         let v1_bytes#0: bytes = v1#0
-        return v1_bytes#0
+        let reinterpret_bytes[16]%0#0: bytes[16] = v1_bytes#0
+        return reinterpret_bytes[16]%0#0
 
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.__algots__.defaultCreate() -> void:
     block@0: // L9

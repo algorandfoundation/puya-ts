@@ -34,6 +34,7 @@ export class ConstructorVisitor extends ContractMethodBaseVisitor {
       body,
       cref: contractInfo.cref,
       documentation,
+      inline: null,
     })
   }
 

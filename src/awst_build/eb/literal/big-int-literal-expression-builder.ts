@@ -19,7 +19,7 @@ import { foldBinaryOp, foldComparisonOp } from '../folding'
 import type { BuilderBinaryOp, BuilderComparisonOp, InstanceBuilder } from '../index'
 import { BuilderUnaryOp } from '../index'
 import { LiteralExpressionBuilder } from '../literal-expression-builder'
-import { isValidLiteralForPType } from '../util'
+import { isValidLiteralForPType } from '../util/is-valid-literal-for-ptype'
 
 export class BigIntLiteralExpressionBuilder extends LiteralExpressionBuilder {
   singleEvaluation(): InstanceBuilder {

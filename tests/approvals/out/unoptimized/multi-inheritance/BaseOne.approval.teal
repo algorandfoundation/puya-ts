@@ -143,11 +143,18 @@ main___algots__.defaultCreate@11:
     b main_after_inlined_tests/approvals/multi-inheritance.algo.ts::BaseOne.__puya_arc4_router__@15
 
 
+// tests/approvals/multi-inheritance.algo.ts::BaseOne.methodOne() -> bytes:
+methodOne:
+    // tests/approvals/multi-inheritance.algo.ts:20
+    // return 'base-one'
+    pushbytes "base-one"
+    retsub
+
+
 // tests/approvals/multi-inheritance.algo.ts::BaseOne.constructor() -> void:
 constructor:
     // tests/approvals/multi-inheritance.algo.ts:17
     // export class BaseOne extends CommonBase {
-    proto 0 0
     callsub tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor
     // tests/approvals/multi-inheritance.algo.ts:18
     // stateOne = GlobalState({ initialValue: Uint64(45) })
@@ -157,35 +164,8 @@ constructor:
     retsub
 
 
-// tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor() -> void:
-tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor:
-    // tests/approvals/multi-inheritance.algo.ts:5
-    // export class CommonBase extends Contract {
-    proto 0 0
-    // tests/approvals/multi-inheritance.algo.ts:6
-    // stateCommon = GlobalState<uint64>({ initialValue: 123 })
-    pushbytes "stateCommon"
-    pushint 123 // 123
-    app_global_put
-    retsub
-
-
-// tests/approvals/multi-inheritance.algo.ts::BaseOne.methodOne() -> bytes:
-methodOne:
-    // tests/approvals/multi-inheritance.algo.ts:19
-    // methodOne() {
-    proto 0 1
-    // tests/approvals/multi-inheritance.algo.ts:20
-    // return 'base-one'
-    pushbytes "base-one"
-    retsub
-
-
 // tests/approvals/multi-inheritance.algo.ts::CommonBase.methodCommon() -> bytes:
 methodCommon:
-    // tests/approvals/multi-inheritance.algo.ts:8
-    // methodCommon() {
-    proto 0 1
     // tests/approvals/multi-inheritance.algo.ts:9
     // return 'common'
     bytec_1 // "common"
@@ -194,18 +174,22 @@ methodCommon:
 
 // tests/approvals/multi-inheritance.algo.ts::CommonBase.b2CantOverride() -> bytes:
 b2CantOverride:
-    // tests/approvals/multi-inheritance.algo.ts:12
-    // b2CantOverride(): string {
-    proto 0 1
     // tests/approvals/multi-inheritance.algo.ts:13
     // return 'common'
     bytec_1 // "common"
     retsub
 
 
+// tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor() -> void:
+tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor:
+    // tests/approvals/multi-inheritance.algo.ts:6
+    // stateCommon = GlobalState<uint64>({ initialValue: 123 })
+    pushbytes "stateCommon"
+    pushint 123 // 123
+    app_global_put
+    retsub
+
+
 // tests/approvals/multi-inheritance.algo.ts::BaseOne.__algots__.defaultCreate() -> void:
 __algots__.defaultCreate:
-    // tests/approvals/multi-inheritance.algo.ts:17
-    // export class BaseOne extends CommonBase {
-    proto 0 0
     retsub

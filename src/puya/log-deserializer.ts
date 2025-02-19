@@ -1,3 +1,4 @@
+import upath from 'upath'
 import { z } from 'zod'
 import { SourceLocation } from '../awst/source-location'
 import { logger, LogLevel } from '../logger'
@@ -22,7 +23,7 @@ export function deserializeAndLog(logText: string) {
 
     const sourceLocation = log.location
       ? new SourceLocation({
-          file: log.location.file,
+          file: upath.normalize(log.location.file),
           line: log.location.line,
           endLine: log.location.end_line ?? log.location.line + 1,
           column: log.location.column,

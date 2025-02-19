@@ -44,7 +44,7 @@ main_test_route@3:
     intc_0 // 0
     !=
     assert // can only call when not creating
-    callsub test
+    callsub tests/approvals/byte-expressions.algo.ts::DemoContract.test
     pushbytes 0x00
     intc_0 // 0
     uncover 2
@@ -81,25 +81,8 @@ main___algots__.defaultCreate@7:
     b main_after_inlined_tests/approvals/byte-expressions.algo.ts::DemoContract.__puya_arc4_router__@11
 
 
-// tests/approvals/byte-expressions.algo.ts::DemoContract.test() -> uint64:
-test:
-    // tests/approvals/byte-expressions.algo.ts:16
-    // public test() {
-    proto 0 1
-    // tests/approvals/byte-expressions.algo.ts:17
-    // test(1, 50n, 'things')
-    intc_1 // 1
-    pushbytes 0x32
-    pushbytes "things"
-    callsub tests/approvals/byte-expressions.algo.ts::test
-    // tests/approvals/byte-expressions.algo.ts:18
-    // return true
-    intc_1 // 1
-    retsub
-
-
 // tests/approvals/byte-expressions.algo.ts::test(a: uint64, b: bytes, c: bytes) -> void:
-tests/approvals/byte-expressions.algo.ts::test:
+test:
     // tests/approvals/byte-expressions.algo.ts:4
     // function test(a: uint64, b: biguint, c: string) {
     proto 3 0
@@ -157,9 +140,20 @@ tests/approvals/byte-expressions.algo.ts::test:
     retsub
 
 
+// tests/approvals/byte-expressions.algo.ts::DemoContract.test() -> uint64:
+tests/approvals/byte-expressions.algo.ts::DemoContract.test:
+    // tests/approvals/byte-expressions.algo.ts:17
+    // test(1, 50n, 'things')
+    intc_1 // 1
+    pushbytes 0x32
+    pushbytes "things"
+    callsub test
+    // tests/approvals/byte-expressions.algo.ts:18
+    // return true
+    intc_1 // 1
+    retsub
+
+
 // tests/approvals/byte-expressions.algo.ts::DemoContract.__algots__.defaultCreate() -> void:
 __algots__.defaultCreate:
-    // tests/approvals/byte-expressions.algo.ts:15
-    // class DemoContract extends Contract {
-    proto 0 0
     retsub

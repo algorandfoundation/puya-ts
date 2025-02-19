@@ -94,23 +94,8 @@ main___algots__.defaultCreate@8:
     b main_after_inlined_tests/approvals/precompiled-apps.algo.ts::LargeProgram.__puya_arc4_router__@12
 
 
-// tests/approvals/precompiled-apps.algo.ts::LargeProgram.getBigBytesLength() -> uint64:
-getBigBytesLength:
-    // tests/approvals/precompiled-apps.algo.ts:49
-    // getBigBytesLength() {
-    proto 0 1
-    // tests/approvals/precompiled-apps.algo.ts:50
-    // return getBigBytes().length
-    callsub getBigBytes
-    len
-    retsub
-
-
 // tests/approvals/precompiled-apps.algo.ts::getBigBytes() -> bytes:
 getBigBytes:
-    // tests/approvals/precompiled-apps.algo.ts:44
-    // function getBigBytes() {
-    proto 0 1
     // tests/approvals/precompiled-apps.algo.ts:45
     // return op.bzero(4096)
     pushint 4096 // 4096
@@ -118,18 +103,20 @@ getBigBytes:
     retsub
 
 
+// tests/approvals/precompiled-apps.algo.ts::LargeProgram.getBigBytesLength() -> uint64:
+getBigBytesLength:
+    // tests/approvals/precompiled-apps.algo.ts:50
+    // return getBigBytes().length
+    callsub getBigBytes
+    len
+    retsub
+
+
 // tests/approvals/precompiled-apps.algo.ts::LargeProgram.delete() -> void:
 delete:
-    // tests/approvals/precompiled-apps.algo.ts:53-54
-    // @abimethod({ allowActions: 'DeleteApplication' })
-    // delete() {}
-    proto 0 0
     retsub
 
 
 // tests/approvals/precompiled-apps.algo.ts::LargeProgram.__algots__.defaultCreate() -> void:
 __algots__.defaultCreate:
-    // tests/approvals/precompiled-apps.algo.ts:48
-    // export class LargeProgram extends Contract {
-    proto 0 0
     retsub
