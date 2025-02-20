@@ -36,7 +36,7 @@ Algorand Python has specific [UInt64 and BigUint types](https://algorandfoundati
 
 - **[AlgoKit Guiding Principles](https://github.com/algorandfoundation/algokit-cli/blob/main/docs/algokit.md#guiding-principles)** - specifically Seamless onramp, Leverage existing ecosystem, Meet devs where they are
 - **[Algorand Python Principles](https://algorandfoundation.github.io/puya/principles.html#principles)**
-- **[Algorand TypeScript Guiding Principles](../lg-guiding-principals#guiding-principals)**
+- **[Algorand TypeScript Guiding Principles](../lg-guiding-principles)**
 
 ## Options
 

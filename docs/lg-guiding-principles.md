@@ -1,4 +1,4 @@
-# Guiding Principals
+# Guiding Principles
 
 ## Familiarity
 

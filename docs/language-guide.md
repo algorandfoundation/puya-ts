@@ -14,7 +14,7 @@ Another example is the equality operator `===`, in EcmaScript this always operat
 
 EcmaScript is extremely liberal in its type system when it comes to type coercion in comparison between types. Algorand TypeScript aims to be more restrictive in this regard as this behaviour can often lead to unintended bugs. For example, the comparison between unrelated types in EcmaScript will simply return `false` (or something [barely predicable](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Equality) if using the `==` operator). Algorand TypeScript will instead error as the comparison is likely a bug.
 
-If you are interested in learning about the design of Algorand TypeScript, you can see our [Guiding Principals](lg-guiding-principals.md) for more detail including the Architectural Decision Records (ADRs) which got us here.
+If you are interested in learning about the design of Algorand TypeScript, you can see our [Guiding Principles](lg-guiding-principles) for more detail including the Architectural Decision Records (ADRs) which got us here.
 
 
 ## Table of Contents
@@ -22,4 +22,5 @@ If you are interested in learning about the design of Algorand TypeScript, you c
  - [Program Structure](lg-program-structure.md)
  - [Basic Types](lg-types.md)
  - [Storage](lg-storage.md)
+ - [Ops](lg-ops.md)
 
