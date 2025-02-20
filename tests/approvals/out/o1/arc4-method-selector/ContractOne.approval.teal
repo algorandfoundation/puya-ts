@@ -7,7 +7,7 @@ main:
     // class ContractOne extends Contract {
     txn NumAppArgs
     bz main_bare_routing@7
-    pushbytess 0x2ad746ef 0xc2e9596e // method "test()byte[]", method "someMethod()uint64"
+    pushbytess 0xf59e3cc4 0xc2e9596e // method "test()bool", method "someMethod()uint64"
     txna ApplicationArgs 0
     match main_test_route@3 main_someMethod_route@4
 
@@ -38,7 +38,7 @@ main_test_route@3:
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    pushbytes 0x151f7c750004438c64f3
+    pushbytes 0x151f7c7580
     log
     pushint 1 // 1
     return

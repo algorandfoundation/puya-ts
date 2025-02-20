@@ -6,9 +6,8 @@ class ContractOne extends Contract {
     // @expect-error bareMethod is not an ABI method
     return methodSelector(ContractTwo.prototype.bareMethod)
   }
-
   test2() {
-    // @epect-error Expected contract instance method, found someSubroutine
+    // @expect-error Expected contract instance method, found someSubroutine
     return methodSelector(someSubroutine)
   }
   test3() {
@@ -19,7 +18,7 @@ class ContractOne extends Contract {
 
 class ContractTwo extends Contract {
   @baremethod({ onCreate: 'allow' })
-  bareMethod() {}
+  bareMethod() { }
 }
 
 function someSubroutine() {

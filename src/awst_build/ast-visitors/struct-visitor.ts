@@ -5,6 +5,7 @@ import { invariant } from '../../util'
 import type { ClassElements } from '../../visitor/syntax-names'
 import type { Visitor } from '../../visitor/visitor'
 import { accept } from '../../visitor/visitor'
+import { AwstBuildContext } from '../context/awst-build-context'
 import type { ARC4StructType } from '../ptypes/arc4-types'
 import { BaseVisitor } from './base-visitor'
 
@@ -12,8 +13,10 @@ export class StructVisitor extends BaseVisitor implements Visitor<ClassElements,
   public accept = <TNode extends ts.Node>(node: TNode) => accept<StructVisitor, TNode>(this, node)
 
   static buildStructDef(classDec: ts.ClassDeclaration, ptype: ARC4StructType) {
-    new StructVisitor(classDec, ptype)
-    return []
+    return AwstBuildContext.current.runInChildContext(() => {
+      new StructVisitor(classDec, ptype)
+      return []
+    })
   }
 
   constructor(classDec: ts.ClassDeclaration, ptype: ARC4StructType) {

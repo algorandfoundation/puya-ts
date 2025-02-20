@@ -18,7 +18,7 @@ main_abi_routing@2:
     // class ContractTwo extends Contract {
     txna ApplicationArgs 0
     pushbytes 0x438c64f3 // method "renamedSomeMethod()void"
-    pushbytes 0x2ad746ef // method "test()byte[]"
+    pushbytes 0xf59e3cc4 // method "test()bool"
     uncover 2
     match main_renamedSomeMethod_route@3 main_test_route@4
 
@@ -46,12 +46,10 @@ main_test_route@4:
     !=
     assert // can only call when not creating
     callsub test
-    dup
-    len
-    itob
-    extract 6 2
-    swap
-    concat
+    pushbytes 0x00
+    intc_0 // 0
+    uncover 2
+    setbit
     pushbytes 0x151f7c75
     swap
     concat
@@ -104,11 +102,13 @@ someMethod:
     retsub
 
 
-// tests/approvals/arc4-method-selector.algo.ts::ContractTwo.test() -> bytes:
+// tests/approvals/arc4-method-selector.algo.ts::ContractTwo.test() -> uint64:
 test:
     // tests/approvals/arc4-method-selector.algo.ts:18
-    // return methodSelector(ContractOne.prototype.someMethod)
+    // return methodSelector(ContractOne.prototype.someMethod) === methodSelector('someMethod()uint64')
     pushbytes 0xc2e9596e // method "someMethod()uint64"
+    dup
+    ==
     retsub
 
 

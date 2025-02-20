@@ -10,9 +10,9 @@ contract ContractOne
     return True
   }
   
-  test(): bytes
+  test(): bool
   {
-    return Method("renamedSomeMethod()void")
+    return Method("renamedSomeMethod()void") == Method("renamedSomeMethod()void")
   }
   
   someMethod(): uint64
@@ -41,9 +41,9 @@ contract ContractTwo
   {
   }
   
-  test(): bytes
+  test(): bool
   {
-    return Method("someMethod()uint64")
+    return Method("someMethod()uint64") == Method("someMethod()uint64")
   }
   
   __algots__.defaultCreate(): void

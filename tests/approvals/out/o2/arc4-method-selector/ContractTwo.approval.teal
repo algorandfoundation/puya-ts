@@ -7,7 +7,7 @@ main:
     // class ContractTwo extends Contract {
     txn NumAppArgs
     bz main_bare_routing@7
-    pushbytess 0x438c64f3 0x2ad746ef // method "renamedSomeMethod()void", method "test()byte[]"
+    pushbytess 0x438c64f3 0xf59e3cc4 // method "renamedSomeMethod()void", method "test()bool"
     txna ApplicationArgs 0
     match main_renamedSomeMethod_route@3 main_test_route@4
 
@@ -25,7 +25,7 @@ main_test_route@4:
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    pushbytes 0x151f7c750004c2e9596e
+    pushbytes 0x151f7c7580
     log
     pushint 1 // 1
     return
