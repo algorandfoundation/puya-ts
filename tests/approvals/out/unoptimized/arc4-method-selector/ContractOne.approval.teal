@@ -1,0 +1,128 @@
+#pragma version 10
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0 1
+    bytecblock 0x151f7c75
+
+main_block@1:
+    // tests/approvals/arc4-method-selector.algo.ts:4
+    // class ContractOne extends Contract {
+    txn NumAppArgs
+    intc_0 // 0
+    !=
+    bz main_bare_routing@7
+
+main_abi_routing@2:
+    // tests/approvals/arc4-method-selector.algo.ts:4
+    // class ContractOne extends Contract {
+    txna ApplicationArgs 0
+    pushbytes 0x2ad746ef // method "test()byte[]"
+    pushbytes 0xc2e9596e // method "someMethod()uint64"
+    uncover 2
+    match main_test_route@3 main_someMethod_route@4
+
+main_switch_case_default@5:
+
+main_switch_case_next@6:
+
+main_after_if_else@11:
+    // tests/approvals/arc4-method-selector.algo.ts:4
+    // class ContractOne extends Contract {
+    intc_0 // 0
+
+main_after_inlined_tests/approvals/arc4-method-selector.algo.ts::ContractOne.__puya_arc4_router__@12:
+    return
+
+main_someMethod_route@4:
+    // tests/approvals/arc4-method-selector.algo.ts:8
+    // someMethod() {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    callsub someMethod
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/arc4-method-selector.algo.ts::ContractOne.__puya_arc4_router__@12
+
+main_test_route@3:
+    // tests/approvals/arc4-method-selector.algo.ts:5
+    // test() {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    callsub test
+    dup
+    len
+    itob
+    extract 6 2
+    swap
+    concat
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/arc4-method-selector.algo.ts::ContractOne.__puya_arc4_router__@12
+
+main_bare_routing@7:
+    // tests/approvals/arc4-method-selector.algo.ts:4
+    // class ContractOne extends Contract {
+    txn OnCompletion
+    intc_0 // 0
+    swap
+    match main___algots__.defaultCreate@8
+
+main_switch_case_default@9:
+
+main_switch_case_next@10:
+    b main_after_if_else@11
+
+main___algots__.defaultCreate@8:
+    // tests/approvals/arc4-method-selector.algo.ts:4
+    // class ContractOne extends Contract {
+    txn ApplicationID
+    intc_0 // 0
+    ==
+    assert // can only call when creating
+    callsub __algots__.defaultCreate
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/arc4-method-selector.algo.ts::ContractOne.__puya_arc4_router__@12
+
+
+// tests/approvals/arc4-method-selector.algo.ts::ContractOne.test() -> bytes:
+test:
+    // tests/approvals/arc4-method-selector.algo.ts:6
+    // return methodSelector(ContractTwo.prototype.someMethod)
+    pushbytes 0x438c64f3 // method "renamedSomeMethod()void"
+    retsub
+
+
+// tests/approvals/arc4-method-selector.algo.ts::ContractOne.someMethod() -> uint64:
+someMethod:
+    // tests/approvals/arc4-method-selector.algo.ts:22
+    // const someConst = Uint64(123)
+    pushint 123 // 123
+    // tests/approvals/arc4-method-selector.algo.ts:9
+    // return someConst
+    retsub
+
+
+// tests/approvals/arc4-method-selector.algo.ts::ContractOne.__algots__.defaultCreate() -> void:
+__algots__.defaultCreate:
+    retsub

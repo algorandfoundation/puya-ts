@@ -1,15 +1,14 @@
 import type ts from 'typescript'
-import { LogicSigReference } from '../../awst/models'
-import type * as awst from '../../awst/nodes'
 import type { Subroutine } from '../../awst/nodes'
+import type { SourceLocation } from '../../awst/source-location'
 import { Constants } from '../../constants'
-import { AwstBuildFailureError, CodeError } from '../../errors'
+import { CodeError } from '../../errors'
 import { logger } from '../../logger'
-import { invariant } from '../../util'
+import { codeInvariant, invariant } from '../../util'
 import type { ClassElements } from '../../visitor/syntax-names'
 import type { Visitor } from '../../visitor/visitor'
 import { accept } from '../../visitor/visitor'
-import { AwstBuildContext } from '../context/awst-build-context'
+import type { LogicSigOptionsDecoratorData } from '../models/decorator-data'
 import { LogicSigClassModel } from '../models/logic-sig-class-model'
 import type { LogicSigPType } from '../ptypes'
 import { boolPType, FunctionPType, uint64PType } from '../ptypes'
@@ -17,20 +16,21 @@ import { ptypeIn } from '../ptypes/util'
 import { BaseVisitor } from './base-visitor'
 import { DecoratorVisitor } from './decorator-visitor'
 import { LogicSigProgramVisitor } from './logic-sig-program-visitor'
+import { visitInChildContext } from './util'
 
 export class LogicSigVisitor extends BaseVisitor implements Visitor<ClassElements, void> {
   public accept = <TNode extends ts.Node>(node: TNode) => accept<LogicSigVisitor, TNode>(this, node)
 
-  private getLogicSig(): [] | [awst.LogicSignature] {
-    const logicSigClass = this.context.compilationSet.getLogicSig(LogicSigReference.fromPType(this._logicSigPType))
-    return [logicSigClass.buildLogicSignature()]
-  }
-
   static buildLogicSig(classDec: ts.ClassDeclaration, ptype: LogicSigPType) {
-    return new LogicSigVisitor(classDec, ptype).getLogicSig()
+    return visitInChildContext(this, classDec, ptype)
   }
 
-  private program: Subroutine | null = null
+  private program?: () => Subroutine
+  private readonly metaData: {
+    description: string | null
+    options: LogicSigOptionsDecoratorData | undefined
+    sourceLocation: SourceLocation
+  }
 
   constructor(
     classDec: ts.ClassDeclaration,
@@ -45,27 +45,34 @@ export class LogicSigVisitor extends BaseVisitor implements Visitor<ClassElement
       try {
         this.accept(member)
       } catch (e) {
-        // Ignore this error and continue visiting other members, so we can show additional errors
-        if (!(e instanceof AwstBuildFailureError)) {
-          throw e
-        }
+        invariant(e instanceof Error, 'Only errors should be thrown')
+        logger.error(e)
       }
     }
 
-    if (!this.program) {
-      throw new CodeError('Logic signature class must implement a valid program method', { sourceLocation })
+    this.metaData = {
+      options,
+      sourceLocation,
+      description: this.getNodeDescription(classDec),
     }
+  }
+
+  get result() {
+    const { sourceLocation, options, description } = this.metaData
+
+    codeInvariant(this.program, 'Logic signature class must implement a valid program method', sourceLocation)
 
     const logicSig = new LogicSigClassModel({
       bases: [],
       sourceLocation,
-      program: this.program,
+      program: this.program(),
       type: this._logicSigPType,
-      description: this.getNodeDescription(classDec),
+      description,
       options,
     })
 
     this.context.addToCompilationSet(logicSig.id, logicSig)
+    return logicSig.buildLogicSignature()
   }
 
   private throwLogicSigNotSupported(node: ts.Node, desc: string): never {
@@ -104,7 +111,7 @@ export class LogicSigVisitor extends BaseVisitor implements Visitor<ClassElement
       )
       return
     }
-    this.program = AwstBuildContext.current.runInChildContext(() => LogicSigProgramVisitor.buildLogicSigProgram(node))
+    this.program = LogicSigProgramVisitor.buildLogicSigProgram(node)
   }
   visitPropertyDeclaration(node: ts.PropertyDeclaration) {
     this.throwLogicSigNotSupported(node, 'Property declarations')

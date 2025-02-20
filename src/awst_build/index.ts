@@ -1,11 +1,10 @@
 import { jsonSerializeAwst } from '../awst/json-serialize-awst'
 import type { AWST } from '../awst/nodes'
-import { SourceLocation } from '../awst/source-location'
 import { ToCodeVisitor } from '../awst/to-code-visitor'
 import type { AlgoFile, PuyaTsCompileOptions } from '../compile-options'
-import { AwstBuildFailureError } from '../errors'
 import { logger } from '../logger'
 import type { CreateProgramResult } from '../parser'
+import { invariant } from '../util'
 import { ArtifactKind, writeArtifact } from '../write-artifact'
 import { SourceFileVisitor } from './ast-visitors/source-file-visitor'
 import { AwstBuildContext } from './context/awst-build-context'
@@ -54,13 +53,8 @@ export function buildAwst({ program, sourceFiles }: CreateProgramResult, options
           moduleAwst.push(...module)
         })
       } catch (e) {
-        if (e instanceof AwstBuildFailureError) {
-          logger.error(SourceLocation.fromFile(sourceFile, program.getCurrentDirectory()), e.message)
-        } else if (e instanceof Error) {
-          logger.error(e)
-        } else {
-          logger.error(undefined, `Unknown error: ${e}`)
-        }
+        invariant(e instanceof Error, 'Only errors should be thrown')
+        logger.error(e)
       }
     }
     return [moduleAwst, AwstBuildContext.current.compilationSet]

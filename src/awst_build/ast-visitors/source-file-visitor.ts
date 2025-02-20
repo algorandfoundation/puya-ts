@@ -1,7 +1,7 @@
 import ts from 'typescript'
 import type * as awst from '../../awst/nodes'
-import { AwstBuildFailureError, CodeError } from '../../errors'
-import { logger, logPuyaExceptions } from '../../logger'
+import { CodeError } from '../../errors'
+import { logger, patchErrorLocation } from '../../logger'
 import { expandMaybeArray, invariant } from '../../util'
 import type { ModuleStatements } from '../../visitor/syntax-names'
 import type { Visitor } from '../../visitor/visitor'
@@ -28,10 +28,8 @@ export class SourceFileVisitor extends BaseVisitor implements Visitor<ModuleStat
       try {
         this._moduleStatements.push(this.accept(statement))
       } catch (e) {
-        // Ignore this error and continue visiting other members, so we can show additional errors
-        if (!(e instanceof AwstBuildFailureError)) {
-          throw e
-        }
+        invariant(e instanceof Error, 'Only errors should be thrown')
+        logger.error(e)
       }
     }
   }
@@ -47,8 +45,8 @@ export class SourceFileVisitor extends BaseVisitor implements Visitor<ModuleStat
   }
 
   visitFunctionDeclaration(node: ts.FunctionDeclaration): NodeOrDeferred {
-    return () =>
-      logPuyaExceptions(() => this.context.runInChildContext(() => SubroutineVisitor.buildSubroutine(node)), this.sourceLocation(node))
+    const sourceLocation = this.sourceLocation(node)
+    return this.context.runInChildContext(() => patchErrorLocation(SubroutineVisitor.buildSubroutine(node), sourceLocation))
   }
 
   buildModule(): awst.AWST[] {
@@ -68,10 +66,8 @@ export class SourceFileVisitor extends BaseVisitor implements Visitor<ModuleStat
           }
         }
       } catch (e) {
-        // Ignore this error and continue visiting other statements, so we can show additional errors
-        if (!(e instanceof AwstBuildFailureError)) {
-          throw e
-        }
+        invariant(e instanceof Error, 'Only errors should be thrown')
+        logger.error(e)
       }
     }
   }
@@ -110,17 +106,16 @@ export class SourceFileVisitor extends BaseVisitor implements Visitor<ModuleStat
   visitClassDeclaration(node: ts.ClassDeclaration): NodeOrDeferred {
     const sourceLocation = this.sourceLocation(node)
     const ptype = this.context.getPTypeForNode(node)
-    return this.context.runInChildContext(() => {
-      if (ptype instanceof ContractClassPType) {
-        return () => logPuyaExceptions(() => ContractVisitor.buildContract(node, ptype), sourceLocation)
-      } else if (ptype instanceof ARC4StructType) {
-        return () => logPuyaExceptions(() => StructVisitor.buildStructDef(node, ptype), sourceLocation)
-      } else if (ptype instanceof LogicSigPType) {
-        return () => logPuyaExceptions(() => LogicSigVisitor.buildLogicSig(node, ptype), sourceLocation)
-      } else {
-        logger.warn(sourceLocation, `Ignoring class declaration ${ptype.fullName}`)
-        return []
-      }
-    })
+
+    if (ptype instanceof ContractClassPType) {
+      return patchErrorLocation(ContractVisitor.buildContract(node, ptype), sourceLocation)
+    } else if (ptype instanceof ARC4StructType) {
+      return patchErrorLocation(() => StructVisitor.buildStructDef(node, ptype), sourceLocation)()
+    } else if (ptype instanceof LogicSigPType) {
+      return patchErrorLocation(LogicSigVisitor.buildLogicSig(node, ptype), sourceLocation)
+    } else {
+      logger.warn(sourceLocation, `Ignoring class declaration ${ptype.fullName}`)
+      return []
+    }
   }
 }

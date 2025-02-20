@@ -24,8 +24,12 @@ contract SuperContract
   
   constructor(): void
   {
-    void
+    super.constructor()
     GlobalState["g1"]: uint64 = 1
+  }
+  
+  BaseContract::constructor(): void
+  {
   }
   
 }
@@ -50,12 +54,6 @@ contract SubContract
     return True
   }
   
-  constructor(): void
-  {
-    super.constructor()
-    GlobalState["g2"]: uint64 = 2
-  }
-  
   SuperContract::approvalProgram(): bool
   {
     assert(GlobalState["g1"] == 1)
@@ -67,10 +65,20 @@ contract SubContract
     return True
   }
   
+  constructor(): void
+  {
+    super.constructor()
+    GlobalState["g2"]: uint64 = 2
+  }
+  
   SuperContract::constructor(): void
   {
-    void
+    super.constructor()
     GlobalState["g1"]: uint64 = 1
+  }
+  
+  BaseContract::constructor(): void
+  {
   }
   
 }
@@ -102,12 +110,6 @@ contract SubSubContract
     return True
   }
   
-  SubContract::constructor(): void
-  {
-    super.constructor()
-    GlobalState["g2"]: uint64 = 2
-  }
-  
   SuperContract::approvalProgram(): bool
   {
     assert(GlobalState["g1"] == 1)
@@ -119,10 +121,20 @@ contract SubSubContract
     return True
   }
   
+  SubContract::constructor(): void
+  {
+    super.constructor()
+    GlobalState["g2"]: uint64 = 2
+  }
+  
   SuperContract::constructor(): void
   {
-    void
+    super.constructor()
     GlobalState["g1"]: uint64 = 1
+  }
+  
+  BaseContract::constructor(): void
+  {
   }
   
 }
@@ -154,12 +166,6 @@ contract SubSubSubContract
     return super.superMethod()
   }
   
-  constructor(): void
-  {
-    super.constructor()
-    GlobalState["g3"]: uint64 = 3
-  }
-  
   SubSubContract::approvalProgram(): bool
   {
     assert(GlobalState["g1"] == 1)
@@ -174,12 +180,6 @@ contract SubSubSubContract
     return True
   }
   
-  SubContract::constructor(): void
-  {
-    super.constructor()
-    GlobalState["g2"]: uint64 = 2
-  }
-  
   SuperContract::approvalProgram(): bool
   {
     assert(GlobalState["g1"] == 1)
@@ -191,10 +191,26 @@ contract SubSubSubContract
     return True
   }
   
+  constructor(): void
+  {
+    super.constructor()
+    GlobalState["g3"]: uint64 = 3
+  }
+  
+  SubContract::constructor(): void
+  {
+    super.constructor()
+    GlobalState["g2"]: uint64 = 2
+  }
+  
   SuperContract::constructor(): void
   {
-    void
+    super.constructor()
     GlobalState["g1"]: uint64 = 1
+  }
+  
+  BaseContract::constructor(): void
+  {
   }
   
 }

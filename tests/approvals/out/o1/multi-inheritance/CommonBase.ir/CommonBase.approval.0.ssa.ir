@@ -75,11 +75,16 @@ subroutine tests/approvals/multi-inheritance.algo.ts::CommonBase.b2CantOverride(
     block@0: // L12
         return "common"
 
+subroutine tests/approvals/multi-inheritance.algo.ts::CommonBase.__algots__.defaultCreate() -> void:
+    block@0: // L5
+        return 
+
 subroutine tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor() -> void:
     block@0: // L5
+        @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor()
         (app_global_put "stateCommon" 123u)
         return 
 
-subroutine tests/approvals/multi-inheritance.algo.ts::CommonBase.__algots__.defaultCreate() -> void:
-    block@0: // L5
+subroutine @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor() -> void:
+    block@0: // L1
         return 

@@ -14,6 +14,7 @@ import type { ContractClassModel } from '../models/contract-class-model'
 import { CompilationSet } from '../models/contract-class-model'
 import type { LogicSigClassModel } from '../models/logic-sig-class-model'
 import type { ContractClassPType, PType } from '../ptypes'
+import { arc4BaseContractType, baseContractType } from '../ptypes'
 import { typeRegistry } from '../type-registry'
 import { TypeResolver } from '../type-resolver'
 import { EvaluationContext } from './evaluation-context'
@@ -117,12 +118,16 @@ export abstract class AwstBuildContext {
     return AwstBuildContext.asyncStore.run(ctx, cb)
   }
 
-  runInChildContext<R>(cb: () => R) {
+  runInChildContext<R>(cb: (deferred: RunDeferred) => R) {
     const childCtx = this.createChildContext()
 
-    return AwstBuildContext.asyncStore.run(childCtx, cb)
+    const runDeferred: RunDeferred = (action) => () => AwstBuildContext.asyncStore.run(childCtx, action)
+
+    return AwstBuildContext.asyncStore.run(childCtx, () => cb(runDeferred))
   }
 }
+
+type RunDeferred = <T>(action: () => T) => () => T
 
 class AwstBuildContextImpl extends AwstBuildContext {
   readonly evaluationCtx = new EvaluationContext()
@@ -168,6 +173,7 @@ class AwstBuildContextImpl extends AwstBuildContext {
 
   getArc4Config(contractType: ContractClassPType, memberName: string): ARC4MethodConfig | undefined {
     for (const ct of [contractType, ...contractType.allBases()]) {
+      if (ct.equals(baseContractType) || ct.equals(arc4BaseContractType)) continue
       const contractMethods = this.arc4MethodConfig.get(ct.fullName)
       invariant(contractMethods, `${ct} has not been visited`)
       if (contractMethods.has(memberName)) {

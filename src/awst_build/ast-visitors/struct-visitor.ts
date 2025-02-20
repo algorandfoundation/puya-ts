@@ -1,5 +1,7 @@
 import type ts from 'typescript'
-import { AwstBuildFailureError, CodeError } from '../../errors'
+import { CodeError } from '../../errors'
+import { logger } from '../../logger'
+import { invariant } from '../../util'
 import type { ClassElements } from '../../visitor/syntax-names'
 import type { Visitor } from '../../visitor/visitor'
 import { accept } from '../../visitor/visitor'
@@ -21,10 +23,8 @@ export class StructVisitor extends BaseVisitor implements Visitor<ClassElements,
       try {
         this.accept(member)
       } catch (e) {
-        // Ignore this error and continue visiting other members, so we can show additional errors
-        if (!(e instanceof AwstBuildFailureError)) {
-          throw e
-        }
+        invariant(e instanceof Error, 'Only errors should be thrown')
+        logger.error(e)
       }
     }
   }

@@ -36,8 +36,12 @@ contract Hello
   
   HelloBase::constructor(): void
   {
-    void
+    super.constructor()
     GlobalState["greeting"]: string = ""
+  }
+  
+  BaseContract::constructor(): void
+  {
   }
   
 }
@@ -63,12 +67,6 @@ contract HelloTemplate
   {
   }
   
-  constructor(): void
-  {
-    super.constructor()
-    GlobalState["greeting"]: string = TemplateVar[string](TMPL_GREETING)
-  }
-  
   HelloBase::delete(): void
   {
   }
@@ -82,10 +80,20 @@ contract HelloTemplate
     return "" + GlobalState["greeting"] + " " + name
   }
   
+  constructor(): void
+  {
+    super.constructor()
+    GlobalState["greeting"]: string = TemplateVar[string](TMPL_GREETING)
+  }
+  
   HelloBase::constructor(): void
   {
-    void
+    super.constructor()
     GlobalState["greeting"]: string = ""
+  }
+  
+  BaseContract::constructor(): void
+  {
   }
   
 }
@@ -111,12 +119,6 @@ contract HelloTemplateCustomPrefix
   {
   }
   
-  constructor(): void
-  {
-    super.constructor()
-    GlobalState["greeting"]: string = TemplateVar[string](PRFX_GREETING)
-  }
-  
   HelloBase::delete(): void
   {
   }
@@ -130,10 +132,20 @@ contract HelloTemplateCustomPrefix
     return "" + GlobalState["greeting"] + " " + name
   }
   
+  constructor(): void
+  {
+    super.constructor()
+    GlobalState["greeting"]: string = TemplateVar[string](PRFX_GREETING)
+  }
+  
   HelloBase::constructor(): void
   {
-    void
+    super.constructor()
     GlobalState["greeting"]: string = ""
+  }
+  
+  BaseContract::constructor(): void
+  {
   }
   
 }

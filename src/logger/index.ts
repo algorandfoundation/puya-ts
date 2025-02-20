@@ -1,6 +1,6 @@
 import { AsyncLocalStorage } from 'node:async_hooks'
 import { SourceLocation } from '../awst/source-location'
-import { AwstBuildFailureError, PuyaError, UserError } from '../errors'
+import { PuyaError, UserError } from '../errors'
 import type { LogSink } from './sinks'
 
 type NodeOrSourceLocation = SourceLocation | { sourceLocation: SourceLocation }
@@ -89,16 +89,19 @@ const tryGetSourceLocationFromError = (error: unknown): SourceLocation | undefin
 
 export const logger = new PuyaLogger()
 
-export const logPuyaExceptions = <T>(action: () => T, sourceLocation: SourceLocation): T => {
-  try {
-    return action()
-  } catch (e) {
-    if (e instanceof PuyaError) {
-      logger.error(e.sourceLocation ?? sourceLocation, e.message)
-    } else {
+export const patchErrorLocation = <TArgs extends unknown[], TReturn>(
+  action: (...args: TArgs) => TReturn,
+  sourceLocation: SourceLocation,
+) => {
+  return (...args: TArgs) => {
+    try {
+      return action(...args)
+    } catch (e) {
+      if (e instanceof PuyaError && !e.sourceLocation) {
+        Object.assign(e, { sourceLocation })
+      }
       throw e
     }
-    throw new AwstBuildFailureError()
   }
 }
 

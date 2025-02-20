@@ -1,5 +1,4 @@
 import ts from 'typescript'
-import { AwstBuildFailureError } from '../../errors'
 import { logger } from '../../logger'
 import { invariant, isIn } from '../../util'
 import { accept } from '../../visitor/visitor'
@@ -28,10 +27,9 @@ export class DecoratorVisitor extends BaseVisitor {
         try {
           return AwstBuildContext.current.runInChildContext(() => new DecoratorVisitor(modifier).result)
         } catch (e) {
-          if (e instanceof AwstBuildFailureError) {
-            return []
-          }
-          throw e
+          invariant(e instanceof Error, 'Only errors should be thrown')
+          logger.error(e)
+          return []
         }
       }) ?? []
     )

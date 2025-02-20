@@ -95,21 +95,25 @@ subroutine tests/approvals/multi-inheritance.algo.ts::BaseTwo.b2CantOverride() -
     block@0: // L35
         return "base-two"
 
+subroutine tests/approvals/multi-inheritance.algo.ts::CommonBase.methodCommon() -> bytes:
+    block@0: // L8
+        return "common"
+
+subroutine tests/approvals/multi-inheritance.algo.ts::BaseTwo.__algots__.defaultCreate() -> void:
+    block@0: // L24
+        return 
+
 subroutine tests/approvals/multi-inheritance.algo.ts::BaseTwo.constructor() -> void:
     block@0: // L24
         tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor()
         (app_global_put "stateTwo" "Hello")
         return 
 
-subroutine tests/approvals/multi-inheritance.algo.ts::CommonBase.methodCommon() -> bytes:
-    block@0: // L8
-        return "common"
-
 subroutine tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor() -> void:
     block@0: // L5
+        goto block@1
+    block@1: // L1
+        goto block@2
+    block@2: // after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor_L5
         (app_global_put "stateCommon" 123u)
-        return 
-
-subroutine tests/approvals/multi-inheritance.algo.ts::BaseTwo.__algots__.defaultCreate() -> void:
-    block@0: // L24
         return 

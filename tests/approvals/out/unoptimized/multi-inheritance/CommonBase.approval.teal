@@ -133,16 +133,20 @@ b2CantOverride:
     retsub
 
 
+// tests/approvals/multi-inheritance.algo.ts::CommonBase.__algots__.defaultCreate() -> void:
+__algots__.defaultCreate:
+    retsub
+
+
 // tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor() -> void:
 constructor:
+
+constructor_block@1:
+
+constructor_after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor@2:
     // tests/approvals/multi-inheritance.algo.ts:6
     // stateCommon = GlobalState<uint64>({ initialValue: 123 })
     pushbytes "stateCommon"
     pushint 123 // 123
     app_global_put
-    retsub
-
-
-// tests/approvals/multi-inheritance.algo.ts::CommonBase.__algots__.defaultCreate() -> void:
-__algots__.defaultCreate:
     retsub

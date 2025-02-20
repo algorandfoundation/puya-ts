@@ -18,7 +18,7 @@ import {
   methodSelectorFunction,
 } from '../../ptypes/arc4-types'
 import { instanceEb } from '../../type-registry'
-import { ContractMethodExpressionBuilder } from '../free-subroutine-expression-builder'
+import { ContractMethodExpressionBuilder, SubroutineExpressionBuilder } from '../free-subroutine-expression-builder'
 import type { InstanceBuilder, NodeBuilder } from '../index'
 import { FunctionBuilder } from '../index'
 import { requireStringConstant } from '../util'
@@ -185,7 +185,12 @@ export class MethodSelectorFunctionBuilder extends FunctionBuilder {
 
     let signature: string
 
-    if (methodSignature instanceof ContractMethodExpressionBuilder) {
+    if (methodSignature instanceof SubroutineExpressionBuilder) {
+      codeInvariant(
+        methodSignature instanceof ContractMethodExpressionBuilder,
+        `Expected contract instance method, found ${methodSignature.typeDescription}`,
+      )
+
       const methodTarget = methodSignature.target
       const arc4Config = AwstBuildContext.current.getArc4Config(methodSignature.contractType, methodTarget.memberName)
       codeInvariant(

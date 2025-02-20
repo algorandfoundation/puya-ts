@@ -26,13 +26,17 @@ contract CommonBase
     return "common"
   }
   
+  __algots__.defaultCreate(): void
+  {
+  }
+  
   constructor(): void
   {
-    void
+    super.constructor()
     GlobalState["stateCommon"]: uint64 = 123
   }
   
-  __algots__.defaultCreate(): void
+  BaseContract::constructor(): void
   {
   }
   
@@ -61,12 +65,6 @@ contract BaseOne
     return "base-one"
   }
   
-  constructor(): void
-  {
-    super.constructor()
-    GlobalState["stateOne"]: uint64 = 45
-  }
-  
   CommonBase::methodCommon(): string
   {
     return "common"
@@ -77,13 +75,23 @@ contract BaseOne
     return "common"
   }
   
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+  constructor(): void
+  {
+    super.constructor()
+    GlobalState["stateOne"]: uint64 = 45
+  }
+  
   CommonBase::constructor(): void
   {
-    void
+    super.constructor()
     GlobalState["stateCommon"]: uint64 = 123
   }
   
-  __algots__.defaultCreate(): void
+  BaseContract::constructor(): void
   {
   }
   
@@ -117,12 +125,6 @@ contract BaseTwo
     return "base-two"
   }
   
-  constructor(): void
-  {
-    super.constructor()
-    GlobalState["stateTwo"]: string = "Hello"
-  }
-  
   CommonBase::methodCommon(): string
   {
     return "common"
@@ -133,13 +135,23 @@ contract BaseTwo
     return "common"
   }
   
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+  constructor(): void
+  {
+    super.constructor()
+    GlobalState["stateTwo"]: string = "Hello"
+  }
+  
   CommonBase::constructor(): void
   {
-    void
+    super.constructor()
     GlobalState["stateCommon"]: uint64 = 123
   }
   
-  __algots__.defaultCreate(): void
+  BaseContract::constructor(): void
   {
   }
   
@@ -185,27 +197,9 @@ contract MultiBases
     return tests/approvals/multi-inheritance.algo.ts::BaseTwo.methodCommon()
   }
   
-  constructor(): void
-  {
-    super.constructor()
-    GlobalState["stateMulti"]: string = "Hmmm"
-  }
-  
-  ClusteredContract<tests/approvals/multi-inheritance.algo.ts::BaseOne,tests/approvals/multi-inheritance.algo.ts::BaseTwo>::constructor(): void
-  {
-    tests/approvals/multi-inheritance.algo.ts::BaseOne.constructor()
-    tests/approvals/multi-inheritance.algo.ts::BaseTwo.constructor()
-  }
-  
   BaseOne::methodOne(): string
   {
     return "base-one"
-  }
-  
-  BaseOne::constructor(): void
-  {
-    super.constructor()
-    GlobalState["stateOne"]: uint64 = 45
   }
   
   CommonBase::methodCommon(): string
@@ -218,12 +212,6 @@ contract MultiBases
     return "common"
   }
   
-  CommonBase::constructor(): void
-  {
-    void
-    GlobalState["stateCommon"]: uint64 = 123
-  }
-  
   BaseTwo::methodTwo(): string
   {
     return "base-two"
@@ -234,14 +222,42 @@ contract MultiBases
     return "base-two"
   }
   
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+  constructor(): void
+  {
+    super.constructor()
+    GlobalState["stateMulti"]: string = "Hmmm"
+  }
+  
+  ClusteredContract<tests/approvals/multi-inheritance.algo.ts::BaseOne,tests/approvals/multi-inheritance.algo.ts::BaseTwo>::constructor(): void
+  {
+    tests/approvals/multi-inheritance.algo.ts::BaseOne.constructor()
+    tests/approvals/multi-inheritance.algo.ts::BaseTwo.constructor()
+  }
+  
+  BaseOne::constructor(): void
+  {
+    super.constructor()
+    GlobalState["stateOne"]: uint64 = 45
+  }
+  
+  CommonBase::constructor(): void
+  {
+    super.constructor()
+    GlobalState["stateCommon"]: uint64 = 123
+  }
+  
+  BaseContract::constructor(): void
+  {
+  }
+  
   BaseTwo::constructor(): void
   {
     super.constructor()
     GlobalState["stateTwo"]: string = "Hello"
-  }
-  
-  __algots__.defaultCreate(): void
-  {
   }
   
 }

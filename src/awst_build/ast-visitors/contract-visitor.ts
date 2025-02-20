@@ -6,7 +6,6 @@ import type { ContractMethod } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { wtypes } from '../../awst/wtypes'
 import { Constants } from '../../constants'
-import { AwstBuildFailureError } from '../../errors'
 import { logger } from '../../logger'
 import { codeInvariant, invariant } from '../../util'
 import type { ClassElements } from '../../visitor/syntax-names'
@@ -18,20 +17,27 @@ import { GlobalStateFunctionResultBuilder } from '../eb/storage/global-state'
 import { LocalStateFunctionResultBuilder } from '../eb/storage/local-state'
 import { requireInstanceBuilder } from '../eb/util'
 import { ContractClassModel } from '../models/contract-class-model'
+import type { ContractOptionsDecoratorData } from '../models/decorator-data'
 import type { ContractClassPType } from '../ptypes'
 import { BaseVisitor } from './base-visitor'
 import { ConstructorVisitor } from './constructor-visitor'
 import { ContractMethodVisitor } from './contract-method-visitor'
 import { DecoratorVisitor } from './decorator-visitor'
+import { visitInChildContext } from './util'
 
 export class ContractVisitor extends BaseVisitor implements Visitor<ClassElements, void> {
-  private _ctor?: ContractMethod
-  private _methods: ContractMethod[] = []
-  private _approvalProgram: ContractMethod | null = null
-  private _clearStateProgram: ContractMethod | null = null
+  private _ctor?: () => ContractMethod
+  private _methods: Array<() => ContractMethod> = []
   private readonly _contractPType: ContractClassPType
   private readonly _propertyInitialization: awst.Statement[] = []
   public accept = <TNode extends ts.Node>(node: TNode) => accept<ContractVisitor, TNode>(this, node)
+
+  private readonly metaData: {
+    isAbstract: boolean
+    contractOptions: ContractOptionsDecoratorData | undefined
+    sourceLocation: SourceLocation
+    description: string | null
+  }
 
   constructor(classDec: ts.ClassDeclaration, ptype: ContractClassPType) {
     super()
@@ -56,23 +62,50 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
       }
     }
 
+    this.metaData = {
+      isAbstract,
+      sourceLocation,
+      contractOptions,
+      description: this.getNodeDescription(classDec),
+    }
+  }
+
+  get result(): [] | [awst.Contract] {
+    const { isAbstract, sourceLocation, contractOptions, description } = this.metaData
+
+    let approvalProgram: ContractMethod | null = null
+    let clearProgram: ContractMethod | null = null
+    const methods: ContractMethod[] = []
+    const ctor: ContractMethod | null = this._ctor?.() ?? this.makeDefaultConstructor(sourceLocation)
+
+    for (const deferredMethod of this._methods) {
+      const contractMethod = deferredMethod()
+      switch (contractMethod.memberName) {
+        case Constants.approvalProgramMethodName:
+          approvalProgram = contractMethod
+          break
+        case Constants.clearStateProgramMethodName:
+          clearProgram = contractMethod
+          break
+        default:
+          methods.push(contractMethod)
+      }
+    }
+
     const contract = new ContractClassModel({
       type: this._contractPType,
       propertyInitialization: this._propertyInitialization,
       isAbstract: isAbstract,
       appState: this.context.getStorageDefinitionsForContract(this._contractPType),
-      ctor: this._ctor ?? this.makeDefaultConstructor(sourceLocation),
-      methods: this._methods,
-      description: this.getNodeDescription(classDec),
-      approvalProgram: this._approvalProgram,
-      clearProgram: this._clearStateProgram,
+      ctor,
+      methods,
+      description,
+      approvalProgram,
+      clearProgram,
       options: contractOptions,
       sourceLocation: sourceLocation,
     })
     this.context.addToCompilationSet(contract.id, contract)
-  }
-
-  private getContract(): [] | [awst.Contract] {
     const contractClass = this.context.compilationSet.getContractClass(ContractReference.fromPType(this._contractPType))
     if (!contractClass.isAbstract) {
       return [contractClass.buildContract(this.context.compilationSet)]
@@ -84,10 +117,8 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
     try {
       this.accept(node)
     } catch (e) {
-      // Ignore this error and continue visiting other members, so we can show additional errors
-      if (!(e instanceof AwstBuildFailureError)) {
-        throw e
-      }
+      invariant(e instanceof Error, 'Only errors should be thrown')
+      logger.error(e)
     }
   }
 
@@ -134,26 +165,7 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
   }
 
   visitMethodDeclaration(node: ts.MethodDeclaration): void {
-    const contractMethod = ContractMethodVisitor.buildContractMethod(node, this._contractPType)
-    if (contractMethod.arc4MethodConfig) {
-      this.context.addArc4Config({
-        contractReference: contractMethod.cref,
-        arc4MethodConfig: contractMethod.arc4MethodConfig,
-        memberName: contractMethod.memberName,
-        sourceLocation: contractMethod.sourceLocation,
-      })
-    }
-
-    switch (contractMethod.memberName) {
-      case Constants.approvalProgramMethodName:
-        this._approvalProgram = contractMethod
-        break
-      case Constants.clearStateProgramMethodName:
-        this._clearStateProgram = contractMethod
-        break
-      default:
-        this._methods.push(contractMethod)
-    }
+    this._methods.push(ContractMethodVisitor.buildContractMethod(node, this._contractPType))
   }
   visitPropertyDeclaration(node: ts.PropertyDeclaration): void {
     const sourceLocation = this.sourceLocation(node)
@@ -213,7 +225,7 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
     this.throwNotSupported(node, 'set accessors')
   }
 
-  public static buildContract(classDec: ts.ClassDeclaration, ptype: ContractClassPType): [] | [awst.Contract] {
-    return new ContractVisitor(classDec, ptype).getContract()
+  public static buildContract(classDec: ts.ClassDeclaration, ptype: ContractClassPType) {
+    return visitInChildContext(this, classDec, ptype)
   }
 }

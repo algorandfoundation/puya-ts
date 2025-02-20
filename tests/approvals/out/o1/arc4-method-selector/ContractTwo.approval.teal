@@ -1,0 +1,53 @@
+#pragma version 10
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    // tests/approvals/arc4-method-selector.algo.ts:13
+    // class ContractTwo extends Contract {
+    txn NumAppArgs
+    bz main_bare_routing@7
+    pushbytess 0x438c64f3 0x2ad746ef // method "renamedSomeMethod()void", method "test()byte[]"
+    txna ApplicationArgs 0
+    match main_renamedSomeMethod_route@3 main_test_route@4
+
+main_after_if_else@11:
+    // tests/approvals/arc4-method-selector.algo.ts:13
+    // class ContractTwo extends Contract {
+    pushint 0 // 0
+    return
+
+main_test_route@4:
+    // tests/approvals/arc4-method-selector.algo.ts:17
+    // test() {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    pushbytes 0x151f7c750004c2e9596e
+    log
+    pushint 1 // 1
+    return
+
+main_renamedSomeMethod_route@3:
+    // tests/approvals/arc4-method-selector.algo.ts:14
+    // @abimethod({ name: 'renamedSomeMethod' })
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    pushint 1 // 1
+    return
+
+main_bare_routing@7:
+    // tests/approvals/arc4-method-selector.algo.ts:13
+    // class ContractTwo extends Contract {
+    txn OnCompletion
+    bnz main_after_if_else@11
+    txn ApplicationID
+    !
+    assert // can only call when creating
+    pushint 1 // 1
+    return

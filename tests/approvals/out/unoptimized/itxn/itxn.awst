@@ -123,13 +123,17 @@ contract ItxnDemoContract
     assert(app1.ClearStateProgramPages[0] == 0x098101, comment=expected clear state page)
   }
   
+  __algots__.defaultCreate(): void
+  {
+  }
+  
   constructor(): void
   {
-    void
+    super.constructor()
     GlobalState["name"]: bytes = 0x
   }
   
-  __algots__.defaultCreate(): void
+  BaseContract::constructor(): void
   {
   }
   

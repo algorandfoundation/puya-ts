@@ -528,11 +528,15 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test4() -> void:
         (assert tmp%14#0) // expected clear state page
         return 
 
-subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.constructor() -> void:
-    block@0: // L7
-        (app_global_put "name" 0x)
-        return 
-
 subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.__algots__.defaultCreate() -> void:
     block@0: // L7
+        return 
+
+subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.constructor() -> void:
+    block@0: // L7
+        goto block@1
+    block@1: // L1
+        goto block@2
+    block@2: // after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor_L7
+        (app_global_put "name" 0x)
         return 

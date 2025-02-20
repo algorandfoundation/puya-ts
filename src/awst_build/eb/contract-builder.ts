@@ -10,8 +10,6 @@ import { AwstBuildContext } from '../context/awst-build-context'
 import type { ContractOptionsDecoratorData } from '../models/decorator-data'
 import type { PType } from '../ptypes'
 import {
-  arc4BaseContractType,
-  baseContractType,
   ClusteredContractClassType,
   ContractClassPType,
   contractOptionsDecorator,
@@ -76,10 +74,6 @@ export class ContractSuperBuilder extends ContractThisBuilder {
   }
 
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
-    if (this.ptype.equals(baseContractType) || this.ptype.equals(arc4BaseContractType)) {
-      // Contract base types have no code to execute so we can just return void
-      return new VoidExpressionBuilder(nodeFactory.voidConstant({ sourceLocation }))
-    }
     codeInvariant(args.length === 0, 'Constructor arguments are not supported', sourceLocation)
     codeInvariant(typeArgs.length === 0, 'Super calls cannot be generic', sourceLocation)
     return new VoidExpressionBuilder(

@@ -5,37 +5,44 @@
 main:
     intcblock 0 1
     bytecblock 0x151f7c75
+    txn ApplicationID
+    bnz main_after_if_else@2
 
-main_block@1:
+main_if_body@1:
+    callsub constructor
+
+main_after_if_else@2:
+
+main_block@3:
     // tests/approvals/inheritance-b.algo.ts:14
     // export class ConcreteArc4Contract extends Arc4Contract {
     txn NumAppArgs
     intc_0 // 0
     !=
-    bz main_bare_routing@7
+    bz main_bare_routing@9
 
-main_abi_routing@2:
+main_abi_routing@4:
     // tests/approvals/inheritance-b.algo.ts:14
     // export class ConcreteArc4Contract extends Arc4Contract {
     txna ApplicationArgs 0
     pushbytes 0xc73da9b9 // method "getVeryImportantValue()string"
     pushbytes 0xf161dc37 // method "simpleAbiMethod(uint64,uint64)uint64"
     uncover 2
-    match main_getVeryImportantValue_route@3 main_simpleAbiMethod_route@4
+    match main_getVeryImportantValue_route@5 main_simpleAbiMethod_route@6
 
-main_switch_case_default@5:
+main_switch_case_default@7:
 
-main_switch_case_next@6:
+main_switch_case_next@8:
 
-main_after_if_else@11:
+main_after_if_else@13:
     // tests/approvals/inheritance-b.algo.ts:14
     // export class ConcreteArc4Contract extends Arc4Contract {
     intc_0 // 0
 
-main_after_inlined_tests/approvals/inheritance-b.algo.ts::ConcreteArc4Contract.__puya_arc4_router__@12:
+main_after_inlined_tests/approvals/inheritance-b.algo.ts::ConcreteArc4Contract.__puya_arc4_router__@14:
     return
 
-main_simpleAbiMethod_route@4:
+main_simpleAbiMethod_route@6:
     // tests/approvals/inheritance-a.algo.ts:17
     // public simpleAbiMethod(a: uint64, b: uint64): uint64 {
     txn OnCompletion
@@ -61,10 +68,10 @@ main_simpleAbiMethod_route@4:
     concat
     log
     intc_1 // 1
-    b main_after_inlined_tests/approvals/inheritance-b.algo.ts::ConcreteArc4Contract.__puya_arc4_router__@12
+    b main_after_inlined_tests/approvals/inheritance-b.algo.ts::ConcreteArc4Contract.__puya_arc4_router__@14
 
-main_getVeryImportantValue_route@3:
-    // tests/approvals/inheritance-b.algo.ts:15
+main_getVeryImportantValue_route@5:
+    // tests/approvals/inheritance-b.algo.ts:16
     // public getVeryImportantValue() {
     txn OnCompletion
     intc_0 // NoOp
@@ -86,22 +93,22 @@ main_getVeryImportantValue_route@3:
     concat
     log
     intc_1 // 1
-    b main_after_inlined_tests/approvals/inheritance-b.algo.ts::ConcreteArc4Contract.__puya_arc4_router__@12
+    b main_after_inlined_tests/approvals/inheritance-b.algo.ts::ConcreteArc4Contract.__puya_arc4_router__@14
 
-main_bare_routing@7:
+main_bare_routing@9:
     // tests/approvals/inheritance-b.algo.ts:14
     // export class ConcreteArc4Contract extends Arc4Contract {
     txn OnCompletion
     intc_0 // 0
     swap
-    match main___algots__.defaultCreate@8
+    match main___algots__.defaultCreate@10
 
-main_switch_case_default@9:
+main_switch_case_default@11:
 
-main_switch_case_next@10:
-    b main_after_if_else@11
+main_switch_case_next@12:
+    b main_after_if_else@13
 
-main___algots__.defaultCreate@8:
+main___algots__.defaultCreate@10:
     // tests/approvals/inheritance-b.algo.ts:14
     // export class ConcreteArc4Contract extends Arc4Contract {
     txn ApplicationID
@@ -110,7 +117,7 @@ main___algots__.defaultCreate@8:
     assert // can only call when creating
     callsub __algots__.defaultCreate
     intc_1 // 1
-    b main_after_inlined_tests/approvals/inheritance-b.algo.ts::ConcreteArc4Contract.__puya_arc4_router__@12
+    b main_after_inlined_tests/approvals/inheritance-b.algo.ts::ConcreteArc4Contract.__puya_arc4_router__@14
 
 
 // tests/approvals/inheritance-b.algo.ts::ConcreteArc4Contract.getVeryImportantValue() -> bytes:
@@ -118,7 +125,7 @@ getVeryImportantValue:
     // tests/approvals/inheritance-a.algo.ts:22
     // export const VERY_IMPORTANT_VALUE = '42'
     pushbytes "42"
-    // tests/approvals/inheritance-b.algo.ts:16
+    // tests/approvals/inheritance-b.algo.ts:17
     // return VERY_IMPORTANT_VALUE
     retsub
 
@@ -138,4 +145,18 @@ simpleAbiMethod:
 
 // tests/approvals/inheritance-b.algo.ts::ConcreteArc4Contract.__algots__.defaultCreate() -> void:
 __algots__.defaultCreate:
+    retsub
+
+
+// tests/approvals/inheritance-b.algo.ts::ConcreteArc4Contract.constructor() -> void:
+constructor:
+
+constructor_block@1:
+
+constructor_after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor@2:
+    // tests/approvals/inheritance-b.algo.ts:15
+    // concreteState = GlobalState({ initialValue: 'testing' })
+    pushbytes "concreteState"
+    pushbytes "testing"
+    app_global_put
     retsub
