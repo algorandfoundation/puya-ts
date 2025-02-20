@@ -5,7 +5,7 @@ they can utilise: [Global storage](#global-storage), [Local storage](#local-stor
 
 ## Global storage
 
-Global or Application storage is a key/value store of `bytes` or `uint64` values stored against a smart contract application. The number of values used must be declared when the application is first created. For ARC4 contracts this information is captured in the ARC32 and ARC56 specification files and automatically included in deployments.
+Global or Application storage is a key/value store of `bytes` or `uint64` values stored against a smart contract application. The number of values used must be declared when the application is first created and will affect the [minimum balance requirement](https://developer.algorand.org/docs/get-details/dapps/smart-contracts/apps/#minimum-balance-requirement-for-a-smart-contract) for the application. For ARC4 contracts this information is captured in the ARC32 and ARC56 specification files and automatically included in deployments.
 
 Global storage values are declared using the [GlobalState](api/functions/GlobalState.md) function to create a [GlobalState](api/type-aliases/GlobalState.md) proxy object.
 
@@ -20,7 +20,7 @@ class DemoContract extends Contract {
 
 }
 
-// If using dynamic keys, state msut be explicitly reserved
+// If using dynamic keys, state must be explicitly reserved
 @contract({ stateTotals: { globalBytes: 5 } })
 class DynamicAccessContract extends Contract {
   test(key: string, value: string) {
@@ -33,7 +33,94 @@ class DynamicAccessContract extends Contract {
 
 ## Local storage
 
+Local or Account storage is a key/value store of `bytes` or `uint64` stored against a smart contract application _and_ a single account which has opted into that contract. The number of values used must be declared when the application is first created and will affect the minimum balance requirement of an account which opts in to the contract. For ARC4 contracts this information is captured in the ARC32 and ARC56 specification files and automatically included in deployments.
+
+```ts
+import type { bytes, uint64 } from '@algorandfoundation/algorand-typescript'
+import { abimethod, Contract, LocalState, Txn } from '@algorandfoundation/algorand-typescript'
+import type { StaticArray, UintN } from '@algorandfoundation/algorand-typescript/arc4'
+
+type SampleArray = StaticArray<UintN<64>, 10>
+
+export class LocalStateDemo extends Contract {
+  localUint = LocalState<uint64>({ key: 'l1' })
+  localUint2 = LocalState<uint64>()
+  localBytes = LocalState<bytes>({ key: 'b1' })
+  localBytes2 = LocalState<bytes>()
+  localEncoded = LocalState<SampleArray>()
+
+  @abimethod({ allowActions: 'OptIn' })
+  optIn() {}
+
+  public setState({ a, b }: { a: uint64; b: bytes }, c: SampleArray) {
+    this.localUint(Txn.sender).value = a
+    this.localUint2(Txn.sender).value = a
+    this.localBytes(Txn.sender).value = b
+    this.localBytes2(Txn.sender).value = b
+    this.localEncoded(Txn.sender).value = c.copy()
+  }
+
+  public getState() {
+    return {
+      localUint: this.localUint(Txn.sender).value,
+      localUint2: this.localUint2(Txn.sender).value,
+      localBytes: this.localBytes(Txn.sender).value,
+      localBytes2: this.localBytes2(Txn.sender).value,
+      localEncoded: this.localEncoded(Txn.sender).value.copy(),
+    }
+  }
+
+  public clearState() {
+    this.localUint(Txn.sender).delete()
+    this.localUint2(Txn.sender).delete()
+    this.localBytes(Txn.sender).delete()
+    this.localBytes2(Txn.sender).delete()
+    this.localEncoded(Txn.sender).delete()
+  }
+}
+```
+
 ## Box storage
+
+We provide 3 different types for accessing box storage: [Box](./api/functions/Box.md), [BoxMap](./api/functions/BoxMap.md), and [BoxRef](./api/functions/BoxRef.md). We also expose raw operations via the [AVM ops](./lg-ops.md) module.
+
+Before using box storage, be sure to familiarise yourself with the [requirements and restrictions](https://developer.algorand.org/articles/smart-contract-storage-boxes/) of the underlying API.
+
+The `Box` type provides an abstraction over storing a single value in a single box. A box can be declared as a class field (in which case the key must be a compile time constant); or as a local variable within any
+subroutine. `Box` proxy instances can be passed around like any other value.
+
+`BoxMap` is similar to the `Box` type, but allows for grouping a set of boxes with a common key and content type.
+A `keyPrefix` is specified when the `BoxMap` is created and the item key can be a `Bytes` value, or anything that can be converted to `Bytes`. The final box name is the combination of `keyPrefix + key`.
+
+`BoxRef` is a specialised type for interacting with boxes which contain binary data. In addition to being able to set and read the box value, there are operations for extracting and replacing just a portion of the box data which
+is useful for minimizing the amount of reads and writes required, but also allows you to interact with byte arrays which are longer than the AVM can support (currently 4096).
+
+```ts
+import type { Account, uint64 } from '@algorandfoundation/algorand-typescript'
+import { Box, BoxMap, BoxRef, Contract, Txn } from '@algorandfoundation/algorand-typescript'
+import { bzero } from '@algorandfoundation/algorand-typescript/op'
+
+export class BoxContract extends Contract {
+  boxOne = Box<string>({ key: 'one' })
+  boxMapTwo = BoxMap<Account, uint64>({ keyPrefix: 'two' })
+  boxRefThree = BoxRef({ key: 'three' })
+
+  test(): void {
+    if (!this.boxOne.exists) {
+      this.boxOne.value = 'Hello World'
+    }
+    this.boxMapTwo.set(Txn.sender, Txn.sender.balance)
+    if (this.boxRefThree.exists) {
+      this.boxRefThree.resize(8000)
+    } else {
+      this.boxRefThree.create({size: 8000})
+    }
+
+    this.boxRefThree.replace(0, bzero(0).bitwiseInvert())
+    this.boxRefThree.replace(4000, bzero(0))
+  }
+}
+```
 
 ## Scratch storage
 
