@@ -4,14 +4,13 @@ import type * as awst from '../../awst/nodes'
 import type { Block } from '../../awst/nodes'
 import { AssignmentExpression, Goto, ReturnStatement } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
-import { AwstBuildFailureError, CodeError, InternalError, NotSupported } from '../../errors'
+import { CodeError, InternalError, NotSupported } from '../../errors'
 import { logger } from '../../logger'
 import { codeInvariant, enumerate, instanceOfAny, invariant } from '../../util'
 import type { Statements } from '../../visitor/syntax-names'
 import { getNodeName } from '../../visitor/syntax-names'
 import type { Visitor } from '../../visitor/visitor'
 import { accept } from '../../visitor/visitor'
-import type { AwstBuildContext } from '../context/awst-build-context'
 import type { InstanceBuilder } from '../eb'
 import { ArrayLiteralExpressionBuilder } from '../eb/literal/array-literal-expression-builder'
 import { ObjectLiteralExpressionBuilder } from '../eb/literal/object-literal-expression-builder'
@@ -27,7 +26,7 @@ import { BaseVisitor } from './base-visitor'
 import { maybeNodes } from './util'
 
 // noinspection JSUnusedGlobalSymbols
-export class FunctionVisitor
+export abstract class FunctionVisitor
   extends BaseVisitor
   implements
     Visitor<ts.ParameterDeclaration, awst.SubroutineArgument>,
@@ -38,18 +37,19 @@ export class FunctionVisitor
 
   protected readonly _functionType: FunctionPType
 
-  constructor(ctx: AwstBuildContext, node: ts.MethodDeclaration | ts.FunctionDeclaration | ts.ConstructorDeclaration) {
-    super(ctx)
-    const type = ctx.getPTypeForNode(node)
+  constructor(protected readonly node: ts.MethodDeclaration | ts.FunctionDeclaration | ts.ConstructorDeclaration) {
+    super()
+    const type = this.context.getPTypeForNode(node)
     invariant(type instanceof FunctionPType, 'type of function must be FunctionPType')
     this._functionType = type
   }
 
-  protected buildFunctionAwst(node: ts.MethodDeclaration | ts.FunctionDeclaration | ts.ConstructorDeclaration): {
+  protected buildFunctionAwst(): {
     args: awst.SubroutineArgument[]
     documentation: awst.MethodDocumentation
     body: awst.Block
   } {
+    const node = this.node
     const sourceLocation = this.sourceLocation(node)
 
     const args = node.parameters.map((p) => this.accept(p))
@@ -442,8 +442,9 @@ export class FunctionVisitor
         try {
           return this.accept(s)
         } catch (e) {
-          if (e instanceof AwstBuildFailureError) return []
-          throw e
+          invariant(e instanceof Error, 'Only errors should be thrown')
+          logger.error(e)
+          return []
         }
       }),
     )

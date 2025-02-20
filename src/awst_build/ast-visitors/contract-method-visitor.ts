@@ -1,7 +1,7 @@
 import type ts from 'typescript'
 import { ContractReference, OnCompletionAction } from '../../awst/models'
 import { nodeFactory } from '../../awst/node-factory'
-import type { ABIMethodArgConstantDefault, ABIMethodArgMemberDefault } from '../../awst/nodes'
+import type { ABIMethodArgConstantDefault, ABIMethodArgMemberDefault, ARC4MethodConfig } from '../../awst/nodes'
 import * as awst from '../../awst/nodes'
 import { ARC4ABIMethodConfig, ARC4BareMethodConfig, ARC4CreateOption } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
@@ -9,7 +9,6 @@ import { Constants } from '../../constants'
 import { CodeError } from '../../errors'
 import { logger } from '../../logger'
 import { codeInvariant, invariant, isIn } from '../../util'
-import type { AwstBuildContext } from '../context/awst-build-context'
 import type { NodeBuilder } from '../eb'
 import { ContractSuperBuilder, ContractThisBuilder } from '../eb/contract-builder'
 import { requireExpressionOfType } from '../eb/util'
@@ -18,11 +17,12 @@ import type { ContractClassPType, FunctionPType } from '../ptypes'
 import { GlobalStateType, LocalStateType } from '../ptypes'
 import { DecoratorVisitor } from './decorator-visitor'
 import { FunctionVisitor } from './function-visitor'
+import { visitInChildContext } from './util'
 
 export class ContractMethodBaseVisitor extends FunctionVisitor {
   protected readonly _contractType: ContractClassPType
-  constructor(ctx: AwstBuildContext, node: ts.MethodDeclaration | ts.ConstructorDeclaration, contractType: ContractClassPType) {
-    super(ctx, node)
+  constructor(node: ts.MethodDeclaration | ts.ConstructorDeclaration, contractType: ContractClassPType) {
+    super(node)
     this._contractType = contractType
   }
   visitSuperKeyword(node: ts.SuperExpression): NodeBuilder {
@@ -31,25 +31,28 @@ export class ContractMethodBaseVisitor extends FunctionVisitor {
     // Only the polytype clustered class should have more than one base type, and it shouldn't have
     // any user code with super calls
     invariant(this._contractType.baseTypes.length === 1, 'Super keyword only valid if contract has a single base type')
-    return new ContractSuperBuilder(this._contractType.baseTypes[0], sourceLocation, this.context)
+    return new ContractSuperBuilder(this._contractType.baseTypes[0], sourceLocation)
   }
 
   visitThisKeyword(node: ts.ThisExpression): NodeBuilder {
     const sourceLocation = this.sourceLocation(node)
-    return new ContractThisBuilder(this._contractType, sourceLocation, this.context)
+    return new ContractThisBuilder(this._contractType, sourceLocation)
   }
 }
 
 export class ContractMethodVisitor extends ContractMethodBaseVisitor {
-  private readonly _result: awst.ContractMethod
+  private readonly metaData: {
+    cref: ContractReference
+    arc4MethodConfig: ARC4MethodConfig | null
+    sourceLocation: SourceLocation
+  }
 
-  constructor(ctx: AwstBuildContext, node: ts.MethodDeclaration, contractType: ContractClassPType) {
-    super(ctx, node, contractType)
+  constructor(node: ts.MethodDeclaration, contractType: ContractClassPType) {
+    super(node, contractType)
     const sourceLocation = this.sourceLocation(node)
-    const { args, body, documentation } = this.buildFunctionAwst(node)
-    const cref = ContractReference.fromPType(this._contractType)
 
-    const decorator = DecoratorVisitor.buildContractMethodData(ctx, node)
+    const decorator = DecoratorVisitor.buildContractMethodData(node)
+    const cref = ContractReference.fromPType(this._contractType)
 
     const modifiers = this.parseMemberModifiers(node)
 
@@ -60,29 +63,38 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
       methodLocation: sourceLocation,
     })
 
-    this._result = new awst.ContractMethod({
-      arc4MethodConfig: arc4MethodConfig ?? null,
-      memberName: this._functionType.name,
+    if (arc4MethodConfig)
+      this.context.addArc4Config({
+        contractReference: cref,
+        sourceLocation,
+        arc4MethodConfig,
+        memberName: this._functionType.name,
+      })
+    this.metaData = {
+      arc4MethodConfig,
+      cref,
       sourceLocation,
+    }
+  }
+
+  get result() {
+    const { args, body, documentation } = this.buildFunctionAwst()
+
+    return new awst.ContractMethod({
+      arc4MethodConfig: this.metaData.arc4MethodConfig,
+      memberName: this._functionType.name,
+      sourceLocation: this.metaData.sourceLocation,
       args,
       returnType: this._functionType.returnType.wtypeOrThrow,
       body,
-      cref,
+      cref: this.metaData.cref,
       documentation,
       inline: null,
     })
   }
 
-  get result() {
-    return this._result
-  }
-
-  public static buildContractMethod(
-    parentCtx: AwstBuildContext,
-    node: ts.MethodDeclaration,
-    contractType: ContractClassPType,
-  ): awst.ContractMethod {
-    return new ContractMethodVisitor(parentCtx.createChildContext(), node, contractType).result
+  public static buildContractMethod(node: ts.MethodDeclaration, contractType: ContractClassPType): () => awst.ContractMethod {
+    return visitInChildContext(this, node, contractType)
   }
 
   private buildArc4Config({
@@ -95,7 +107,7 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
     decorator: DecoratorData | undefined
     modifiers: { isPublic: boolean; isStatic: boolean }
     methodLocation: SourceLocation
-  }): awst.ContractMethod['arc4MethodConfig'] | null {
+  }): awst.ARC4MethodConfig | null {
     const isProgramMethod = isIn(functionType.name, [Constants.approvalProgramMethodName, Constants.clearStateProgramMethodName])
 
     if (decorator && isIn(decorator.type, [Constants.arc4BareDecoratorName, Constants.arc4AbiDecoratorName])) {

@@ -57,7 +57,7 @@ export class ContractClassModel {
     let approvalProgram: ContractMethod | null = this.approvalProgram
     let clearProgram: ContractMethod | null = this.clearProgram
     const methods: ContractMethod[] = [...this.methods]
-    if (this.ctor) methods.push(this.ctor)
+    const ctors: ContractMethod[] = this.ctor ? [this.ctor] : []
     const methodResolutionOrder: ContractReference[] = []
     let firstBaseWithStateTotals: ContractClassModel | undefined = undefined
     let reservedScratchSpace = new Set<bigint>()
@@ -86,7 +86,7 @@ export class ContractClassModel {
         // Maybe need validation??
         methods.push(method)
       }
-      if (baseClass.ctor) methods.push(baseClass.ctor)
+      if (baseClass.ctor) ctors.push(baseClass.ctor)
     }
     if (this.type.isARC4) {
       const hasCreate = methods.some((m) => isIn(m.arc4MethodConfig?.create, [ARC4CreateOption.allow, ARC4CreateOption.require]))
@@ -130,14 +130,16 @@ export class ContractClassModel {
       reservedScratchSpace = reservedScratchSpace.union(this.options.scratchSlots)
     }
 
+    const hasSignificantConstructor = ctors.length > 1
+
     return nodeFactory.contract({
       name: this.options?.name ?? this.name,
       id: this.id,
       description: this.description,
-      approvalProgram: ContractClassModel.patchApprovalToCallCtor(approvalProgram, methods),
+      approvalProgram: hasSignificantConstructor ? ContractClassModel.patchApprovalToCallCtor(approvalProgram, methods) : approvalProgram,
       clearProgram,
       methodResolutionOrder,
-      methods,
+      methods: [...methods, ...(hasSignificantConstructor ? ctors : [])],
       appState: this.appState,
       stateTotals,
       reservedScratchSpace: reservedScratchSpace,
@@ -155,8 +157,6 @@ export class ContractClassModel {
   }
 
   private buildClusteredMetaClass(compilationSet: CompilationSet, clusteredType: ClusteredContractClassType): ContractClassModel {
-    // Need to inject a constructor in here which calls all extended super constructors
-
     const ctor = nodeFactory.contractMethod({
       memberName: Constants.constructorMethodName,
       cref: ContractReference.fromPType(clusteredType),
@@ -211,10 +211,6 @@ export class ContractClassModel {
   }
 
   private static patchApprovalToCallCtor(approval: ContractMethod, methods: ContractMethod[]): ContractMethod {
-    // Only need to call ctor if there is at least 1 constructor in the inheritance chain
-    if (methods.every((m) => m.memberName !== Constants.constructorMethodName)) {
-      return approval
-    }
     const callCtorIfNew = nodeFactory.ifElse({
       condition: nodeFactory.not({
         expr: nodeFactory.reinterpretCast({

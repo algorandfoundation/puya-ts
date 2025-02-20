@@ -7,7 +7,7 @@ contract ConcreteSimpleContract
   {
     a: uint64 = btoi(txnas<ApplicationArgs>(0))
     b: uint64 = btoi(txnas<ApplicationArgs>(1))
-    log(itob(this.simpleMethod(a, b)))
+    log(itob(tests/approvals/inheritance-b.algo.ts::ConcreteSimpleContract.simpleMethod(a, b)))
     return 1
   }
   
@@ -25,10 +25,14 @@ contract ConcreteSimpleContract
 contract ConcreteArc4Contract
 {
   globals {
+    ["concreteState"]: string
     ["someState"]: uint64
   }
   approvalProgram(): bool
   {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
     return arc4Router()
   }
   
@@ -53,6 +57,16 @@ contract ConcreteArc4Contract
   }
   
   __algots__.defaultCreate(): void
+  {
+  }
+  
+  constructor(): void
+  {
+    super.constructor()
+    GlobalState["concreteState"]: string = "testing"
+  }
+  
+  BaseContract::constructor(): void
   {
   }
   

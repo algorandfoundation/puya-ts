@@ -54,11 +54,16 @@ subroutine tests/approvals/state-totals.algo.ts::BaseWithState.setState(n: uint6
         (app_global_put "twoGlobal" n#0)
         return 
 
+subroutine tests/approvals/state-totals.algo.ts::BaseWithState.__algots__.defaultCreate() -> void:
+    block@0: // L4
+        return 
+
 subroutine tests/approvals/state-totals.algo.ts::BaseWithState.constructor() -> void:
     block@0: // L4
+        @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor()
         (app_global_put "oneGlobal" 1u)
         return 
 
-subroutine tests/approvals/state-totals.algo.ts::BaseWithState.__algots__.defaultCreate() -> void:
-    block@0: // L4
+subroutine @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor() -> void:
+    block@0: // L1
         return 

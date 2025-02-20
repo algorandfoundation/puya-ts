@@ -84,7 +84,7 @@ test_compile_contract:
     // tests/approvals/precompiled-factory.algo.ts:10-17
     // const helloApp = itxn
     //   .applicationCall({
-    //     appArgs: [methodSelector('create(string)void'), encodeArc4('hello')],
+    //     appArgs: [methodSelector(Hello.prototype.create), encodeArc4('hello')],
     //     approvalProgram: compiled.approvalProgram,
     //     clearStateProgram: compiled.clearStateProgram,
     //     globalNumBytes: 1,
@@ -99,18 +99,18 @@ test_compile_contract:
     // const compiled = compile(Hello)
     bytec_0 // base64(CoEBQw==)
     itxn_field ClearStateProgramPages
-    pushbytes base64(CiACAQAmAQhncmVldGluZzEYQAAEKIAAZzEbQQAjggQEIN86VAQkN408BKDoGHIE0KKCADYaAI4EADsAMAAlAAIjQzEZFEQxGEQ2GgFXAgCIAERJFRZXBgJMUIAEFR98dUxQsCJDMRmBBBJEMRhEIkMxGYEFEkQxGEQiQzEZFEQxGBRENhoBVwIAiAACIkOKAQAoi/9niYoBASMoZUSAASBQi/9QiQ==)
+    pushbytes base64(CiACAQAmAQhncmVldGluZzEYQAAEKIAAZzEbQQAjggQEAJIlrgQkN408BKDoGHIE0KKCADYaAI4EADsAMAAlAAIjQzEZFEQxGEQ2GgFXAgCIAERJFRZXBgJMUIAEFR98dUxQsCJDMRmBBBJEMRhEIkMxGYEFEkQxGEQiQzEZFEQxGBRENhoBVwIAiAACIkOKAQAoi/9niYoBASMoZUSAASBQi/9QiQ==)
     itxn_field ApprovalProgramPages
     // tests/approvals/precompiled-factory.algo.ts:12
-    // appArgs: [methodSelector('create(string)void'), encodeArc4('hello')],
-    pushbytes 0x20df3a54 // method "create(string)void"
+    // appArgs: [methodSelector(Hello.prototype.create), encodeArc4('hello')],
+    pushbytes 0x009225ae // method "helloCreate(string)void"
     itxn_field ApplicationArgs
     pushbytes 0x000568656c6c6f
     itxn_field ApplicationArgs
     // tests/approvals/precompiled-factory.algo.ts:10-16
     // const helloApp = itxn
     //   .applicationCall({
-    //     appArgs: [methodSelector('create(string)void'), encodeArc4('hello')],
+    //     appArgs: [methodSelector(Hello.prototype.create), encodeArc4('hello')],
     //     approvalProgram: compiled.approvalProgram,
     //     clearStateProgram: compiled.clearStateProgram,
     //     globalNumBytes: 1,
@@ -122,7 +122,7 @@ test_compile_contract:
     // tests/approvals/precompiled-factory.algo.ts:10-17
     // const helloApp = itxn
     //   .applicationCall({
-    //     appArgs: [methodSelector('create(string)void'), encodeArc4('hello')],
+    //     appArgs: [methodSelector(Hello.prototype.create), encodeArc4('hello')],
     //     approvalProgram: compiled.approvalProgram,
     //     clearStateProgram: compiled.clearStateProgram,
     //     globalNumBytes: 1,
@@ -135,7 +135,7 @@ test_compile_contract:
     // tests/approvals/precompiled-factory.algo.ts:19-24
     // const txn = itxn
     //   .applicationCall({
-    //     appArgs: [methodSelector('greet(string)string'), encodeArc4('world')],
+    //     appArgs: [methodSelector(Hello.prototype.greet), encodeArc4('world')],
     //     appId: helloApp,
     //   })
     //   .submit()
@@ -143,7 +143,7 @@ test_compile_contract:
     dup
     itxn_field ApplicationID
     // tests/approvals/precompiled-factory.algo.ts:21
-    // appArgs: [methodSelector('greet(string)string'), encodeArc4('world')],
+    // appArgs: [methodSelector(Hello.prototype.greet), encodeArc4('world')],
     bytec_3 // method "greet(string)string"
     itxn_field ApplicationArgs
     bytec 4 // 0x0005776f726c64
@@ -151,7 +151,7 @@ test_compile_contract:
     // tests/approvals/precompiled-factory.algo.ts:19-23
     // const txn = itxn
     //   .applicationCall({
-    //     appArgs: [methodSelector('greet(string)string'), encodeArc4('world')],
+    //     appArgs: [methodSelector(Hello.prototype.greet), encodeArc4('world')],
     //     appId: helloApp,
     //   })
     intc_1 // 6
@@ -161,7 +161,7 @@ test_compile_contract:
     // tests/approvals/precompiled-factory.algo.ts:19-24
     // const txn = itxn
     //   .applicationCall({
-    //     appArgs: [methodSelector('greet(string)string'), encodeArc4('world')],
+    //     appArgs: [methodSelector(Hello.prototype.greet), encodeArc4('world')],
     //     appId: helloApp,
     //   })
     //   .submit()
@@ -184,7 +184,7 @@ test_compile_contract:
     // itxn
     //   .applicationCall({
     //     appId: helloApp,
-    //     appArgs: [methodSelector('delete()void')],
+    //     appArgs: [methodSelector(Hello.prototype.delete)],
     //     onCompletion: OnCompleteAction.DeleteApplication,
     //   })
     //   .submit()
@@ -194,7 +194,7 @@ test_compile_contract:
     intc_3 // 5
     itxn_field OnCompletion
     // tests/approvals/precompiled-factory.algo.ts:32
-    // appArgs: [methodSelector('delete()void')],
+    // appArgs: [methodSelector(Hello.prototype.delete)],
     bytec_2 // method "delete()void"
     itxn_field ApplicationArgs
     itxn_field ApplicationID
@@ -202,7 +202,7 @@ test_compile_contract:
     // itxn
     //   .applicationCall({
     //     appId: helloApp,
-    //     appArgs: [methodSelector('delete()void')],
+    //     appArgs: [methodSelector(Hello.prototype.delete)],
     //     onCompletion: OnCompleteAction.DeleteApplication,
     //   })
     intc_1 // 6
@@ -213,7 +213,7 @@ test_compile_contract:
     // itxn
     //   .applicationCall({
     //     appId: helloApp,
-    //     appArgs: [methodSelector('delete()void')],
+    //     appArgs: [methodSelector(Hello.prototype.delete)],
     //     onCompletion: OnCompleteAction.DeleteApplication,
     //   })
     //   .submit()

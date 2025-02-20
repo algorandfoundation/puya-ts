@@ -159,6 +159,19 @@ b2CantOverride:
     retsub
 
 
+// tests/approvals/multi-inheritance.algo.ts::CommonBase.methodCommon() -> bytes:
+methodCommon:
+    // tests/approvals/multi-inheritance.algo.ts:9
+    // return 'common'
+    pushbytes "common"
+    retsub
+
+
+// tests/approvals/multi-inheritance.algo.ts::BaseTwo.__algots__.defaultCreate() -> void:
+__algots__.defaultCreate:
+    retsub
+
+
 // tests/approvals/multi-inheritance.algo.ts::BaseTwo.constructor() -> void:
 constructor:
     // tests/approvals/multi-inheritance.algo.ts:24
@@ -172,24 +185,15 @@ constructor:
     retsub
 
 
-// tests/approvals/multi-inheritance.algo.ts::CommonBase.methodCommon() -> bytes:
-methodCommon:
-    // tests/approvals/multi-inheritance.algo.ts:9
-    // return 'common'
-    pushbytes "common"
-    retsub
-
-
 // tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor() -> void:
 tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor:
+
+tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor_block@1:
+
+tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor_after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor@2:
     // tests/approvals/multi-inheritance.algo.ts:6
     // stateCommon = GlobalState<uint64>({ initialValue: 123 })
     pushbytes "stateCommon"
     pushint 123 // 123
     app_global_put
-    retsub
-
-
-// tests/approvals/multi-inheritance.algo.ts::BaseTwo.__algots__.defaultCreate() -> void:
-__algots__.defaultCreate:
     retsub

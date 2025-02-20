@@ -343,6 +343,7 @@ export class TypeResolver {
       parameters,
       name: typeName.name,
       module: typeName.module,
+      sourceLocation,
     })
   }
 
@@ -382,6 +383,7 @@ export class TypeResolver {
   ): ContractClassPType {
     const properties: Record<string, AppStorageType> = {}
     const methods: Record<string, FunctionPType> = {}
+
     for (const prop of tsType.getProperties()) {
       const type = this.checker.getTypeOfSymbol(prop)
       const ptype = this.resolveType(type, this.getLocationOfSymbol(prop) ?? sourceLocation)

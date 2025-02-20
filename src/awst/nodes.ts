@@ -1427,6 +1427,7 @@ export class ARC4ABIMethodConfig {
 export type LValue = VarExpression | FieldExpression | IndexExpression | TupleExpression | AppStateExpression | AppAccountStateExpression
 export type Constant = IntegerConstant | BoolConstant | BytesConstant | StringConstant
 export type AWST = Contract | LogicSignature | Subroutine
+export type ARC4MethodConfig = ARC4BareMethodConfig | ARC4ABIMethodConfig
 export const concreteNodes = {
   expressionStatement: ExpressionStatement,
   block: Block,

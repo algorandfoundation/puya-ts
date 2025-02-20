@@ -6,14 +6,6 @@ type PuyaErrorOptions = {
   sourceLocation?: SourceLocation
 }
 
-/**
- * Thrown when the awst visitor cannot return a meaningful value
- */
-export class AwstBuildFailureError extends Error {
-  constructor() {
-    super('AWST build failure. See previous errors')
-  }
-}
 export class PuyaError extends Error {
   readonly sourceLocation: SourceLocation | undefined
   constructor(message?: string, options?: PuyaErrorOptions) {

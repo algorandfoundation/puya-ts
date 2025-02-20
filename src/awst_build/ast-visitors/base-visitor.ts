@@ -19,7 +19,7 @@ import {
 } from '../../visitor/syntax-names'
 import type { Visitor } from '../../visitor/visitor'
 import { accept } from '../../visitor/visitor'
-import type { AwstBuildContext } from '../context/awst-build-context'
+import { AwstBuildContext } from '../context/awst-build-context'
 import { InstanceBuilder, NodeBuilder } from '../eb'
 import { BooleanExpressionBuilder } from '../eb/boolean-expression-builder'
 import { ArrayLiteralExpressionBuilder } from '../eb/literal/array-literal-expression-builder'
@@ -57,9 +57,12 @@ import { TextVisitor } from './text-visitor'
 export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   private baseAccept = <TNode extends ts.Node>(node: TNode) => accept<BaseVisitor, TNode>(this, node)
   readonly textVisitor: TextVisitor
+  get context() {
+    return AwstBuildContext.current
+  }
 
-  protected constructor(public context: AwstBuildContext) {
-    this.textVisitor = new TextVisitor(context)
+  protected constructor() {
+    this.textVisitor = new TextVisitor()
   }
 
   logNotSupported(node: ts.Node | undefined, message: string) {

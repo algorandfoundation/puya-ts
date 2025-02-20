@@ -305,6 +305,51 @@ callB2Common:
     retsub
 
 
+// tests/approvals/multi-inheritance.algo.ts::BaseOne.methodOne() -> bytes:
+methodOne:
+    // tests/approvals/multi-inheritance.algo.ts:20
+    // return 'base-one'
+    pushbytes "base-one"
+    retsub
+
+
+// tests/approvals/multi-inheritance.algo.ts::CommonBase.methodCommon() -> bytes:
+methodCommon:
+    // tests/approvals/multi-inheritance.algo.ts:9
+    // return 'common'
+    bytec_1 // "common"
+    retsub
+
+
+// tests/approvals/multi-inheritance.algo.ts::CommonBase.b2CantOverride() -> bytes:
+b2CantOverride:
+    // tests/approvals/multi-inheritance.algo.ts:13
+    // return 'common'
+    bytec_1 // "common"
+    retsub
+
+
+// tests/approvals/multi-inheritance.algo.ts::BaseTwo.methodTwo() -> bytes:
+methodTwo:
+    // tests/approvals/multi-inheritance.algo.ts:27
+    // return 'base-two'
+    bytec_2 // "base-two"
+    retsub
+
+
+// tests/approvals/multi-inheritance.algo.ts::BaseTwo.b2CantOverride() -> bytes:
+tests/approvals/multi-inheritance.algo.ts::BaseTwo.b2CantOverride:
+    // tests/approvals/multi-inheritance.algo.ts:36
+    // return 'base-two'
+    bytec_2 // "base-two"
+    retsub
+
+
+// tests/approvals/multi-inheritance.algo.ts::MultiBases.__algots__.defaultCreate() -> void:
+__algots__.defaultCreate:
+    retsub
+
+
 // tests/approvals/multi-inheritance.algo.ts::MultiBases.constructor() -> void:
 constructor:
     // tests/approvals/multi-inheritance.algo.ts:40
@@ -325,14 +370,6 @@ polytype/lib/polytype-module.d.ts::ClusteredContract<tests/approvals/multi-inher
     retsub
 
 
-// tests/approvals/multi-inheritance.algo.ts::BaseOne.methodOne() -> bytes:
-methodOne:
-    // tests/approvals/multi-inheritance.algo.ts:20
-    // return 'base-one'
-    pushbytes "base-one"
-    retsub
-
-
 // tests/approvals/multi-inheritance.algo.ts::BaseOne.constructor() -> void:
 tests/approvals/multi-inheritance.algo.ts::BaseOne.constructor:
     // tests/approvals/multi-inheritance.algo.ts:17
@@ -346,45 +383,17 @@ tests/approvals/multi-inheritance.algo.ts::BaseOne.constructor:
     retsub
 
 
-// tests/approvals/multi-inheritance.algo.ts::CommonBase.methodCommon() -> bytes:
-methodCommon:
-    // tests/approvals/multi-inheritance.algo.ts:9
-    // return 'common'
-    bytec_1 // "common"
-    retsub
-
-
-// tests/approvals/multi-inheritance.algo.ts::CommonBase.b2CantOverride() -> bytes:
-b2CantOverride:
-    // tests/approvals/multi-inheritance.algo.ts:13
-    // return 'common'
-    bytec_1 // "common"
-    retsub
-
-
 // tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor() -> void:
 tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor:
+
+tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor_block@1:
+
+tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor_after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor@2:
     // tests/approvals/multi-inheritance.algo.ts:6
     // stateCommon = GlobalState<uint64>({ initialValue: 123 })
     pushbytes "stateCommon"
     pushint 123 // 123
     app_global_put
-    retsub
-
-
-// tests/approvals/multi-inheritance.algo.ts::BaseTwo.methodTwo() -> bytes:
-methodTwo:
-    // tests/approvals/multi-inheritance.algo.ts:27
-    // return 'base-two'
-    bytec_2 // "base-two"
-    retsub
-
-
-// tests/approvals/multi-inheritance.algo.ts::BaseTwo.b2CantOverride() -> bytes:
-tests/approvals/multi-inheritance.algo.ts::BaseTwo.b2CantOverride:
-    // tests/approvals/multi-inheritance.algo.ts:36
-    // return 'base-two'
-    bytec_2 // "base-two"
     retsub
 
 
@@ -398,9 +407,4 @@ tests/approvals/multi-inheritance.algo.ts::BaseTwo.constructor:
     pushbytes "stateTwo"
     pushbytes "Hello"
     app_global_put
-    retsub
-
-
-// tests/approvals/multi-inheritance.algo.ts::MultiBases.__algots__.defaultCreate() -> void:
-__algots__.defaultCreate:
     retsub

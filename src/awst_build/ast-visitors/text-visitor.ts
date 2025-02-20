@@ -2,12 +2,14 @@ import type * as ts from 'typescript'
 import { NotSupported } from '../../errors'
 import type { Visitor } from '../../visitor/visitor'
 import { accept } from '../../visitor/visitor'
-import type { AwstBuildContext } from '../context/awst-build-context'
+import { AwstBuildContext } from '../context/awst-build-context'
 
 type ObjectNames = ts.PropertyName | ts.PseudoLiteralToken
 
 export class TextVisitor implements Visitor<ObjectNames, string> {
-  constructor(public context: AwstBuildContext) {}
+  get context() {
+    return AwstBuildContext.current
+  }
 
   visitBigIntLiteral(node: ts.BigIntLiteral): string {
     return node.text

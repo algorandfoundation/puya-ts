@@ -6,12 +6,10 @@ import { wtypes } from '../../awst/wtypes'
 import { Constants } from '../../constants'
 import { CodeError } from '../../errors'
 import { codeInvariant, invariant } from '../../util'
-import type { AwstBuildContext } from '../context/awst-build-context'
+import { AwstBuildContext } from '../context/awst-build-context'
 import type { ContractOptionsDecoratorData } from '../models/decorator-data'
 import type { PType } from '../ptypes'
 import {
-  arc4BaseContractType,
-  baseContractType,
   ClusteredContractClassType,
   ContractClassPType,
   contractOptionsDecorator,
@@ -22,13 +20,8 @@ import {
 
 import { instanceEb } from '../type-registry'
 
-import {
-  BaseContractMethodExpressionBuilder,
-  ContractMethodExpressionBuilder,
-  ExplicitBaseContractMethodExpressionBuilder,
-} from './free-subroutine-expression-builder'
-import type { NodeBuilder } from './index'
-import { DecoratorDataBuilder, FunctionBuilder, InstanceBuilder } from './index'
+import { BaseContractMethodExpressionBuilder, ContractMethodExpressionBuilder } from './free-subroutine-expression-builder'
+import { DecoratorDataBuilder, FunctionBuilder, InstanceBuilder, NodeBuilder } from './index'
 import { requireLiteralNumber, requireStringConstant } from './util'
 import { parseFunctionArgs } from './util/arg-parsing'
 import { requireAvmVersion } from './util/avm-version'
@@ -46,11 +39,7 @@ export class ContractThisBuilder extends InstanceBuilder<ContractClassPType> {
     throw new CodeError('this keyword is not valid as a value', { sourceLocation: this.sourceLocation })
   }
   readonly #ptype: ContractClassPType
-  constructor(
-    ptype: ContractClassPType,
-    sourceLocation: SourceLocation,
-    protected context: AwstBuildContext,
-  ) {
+  constructor(ptype: ContractClassPType, sourceLocation: SourceLocation) {
     super(sourceLocation)
     this.#ptype = ptype
   }
@@ -62,7 +51,7 @@ export class ContractThisBuilder extends InstanceBuilder<ContractClassPType> {
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
     const property = this.ptype.properties[name]
     if (property) {
-      const storageDeclaration = this.context.getStorageDeclaration(this.ptype, name)
+      const storageDeclaration = AwstBuildContext.current.getStorageDeclaration(this.ptype, name)
       if (property instanceof StorageProxyPType) {
         codeInvariant(storageDeclaration, `No declaration exists for property ${property}.`, sourceLocation)
         return instanceEb(storageDeclaration.key, property)
@@ -70,7 +59,7 @@ export class ContractThisBuilder extends InstanceBuilder<ContractClassPType> {
     }
     const method = this.ptype.methods[name]
     if (method) {
-      return new ContractMethodExpressionBuilder(sourceLocation, method)
+      return new ContractMethodExpressionBuilder(sourceLocation, method, this.ptype)
     }
     return super.memberAccess(name, sourceLocation)
   }
@@ -80,15 +69,11 @@ export class ContractThisBuilder extends InstanceBuilder<ContractClassPType> {
  * Handles expressions using `super` in the context of a contract
  */
 export class ContractSuperBuilder extends ContractThisBuilder {
-  constructor(ptype: ContractClassPType, sourceLocation: SourceLocation, context: AwstBuildContext) {
-    super(ptype, sourceLocation, context)
+  constructor(ptype: ContractClassPType, sourceLocation: SourceLocation) {
+    super(ptype, sourceLocation)
   }
 
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
-    if (this.ptype.equals(baseContractType) || this.ptype.equals(arc4BaseContractType)) {
-      // Contract base types have no code to execute so we can just return void
-      return new VoidExpressionBuilder(nodeFactory.voidConstant({ sourceLocation }))
-    }
     codeInvariant(args.length === 0, 'Constructor arguments are not supported', sourceLocation)
     codeInvariant(typeArgs.length === 0, 'Super calls cannot be generic', sourceLocation)
     return new VoidExpressionBuilder(
@@ -105,7 +90,7 @@ export class ContractSuperBuilder extends ContractThisBuilder {
 
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
     if (this.ptype instanceof ClusteredContractClassType && name === 'class') {
-      return new PolytypeClassSuperMethodBuilder(this.ptype, sourceLocation, this.context)
+      return new PolytypeClassSuperMethodBuilder(this.ptype, sourceLocation)
     }
 
     const method = this.ptype.methods[name]
@@ -123,7 +108,6 @@ class PolytypeClassSuperMethodBuilder extends FunctionBuilder {
   constructor(
     public readonly ptype: ClusteredContractClassType,
     sourceLocation: SourceLocation,
-    private readonly context: AwstBuildContext,
   ) {
     super(sourceLocation)
   }
@@ -165,7 +149,7 @@ export class PolytypeExplicitClassAccessExpressionBuilder extends InstanceBuilde
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
     const method = this.ptype.methods[name]
     if (method) {
-      return new ExplicitBaseContractMethodExpressionBuilder(sourceLocation, method, this.ptype)
+      return new ContractMethodExpressionBuilder(sourceLocation, method, this.ptype)
     }
     if (name in this.ptype.properties) {
       throw new CodeError(`Not Supported: Accessing properties of a specific base type. Instead just use \`this.${name}\``, {
@@ -196,6 +180,31 @@ export class ContractClassBuilder extends InstanceBuilder {
 
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
     throw new CodeError('Contract class cannot be called manually')
+  }
+
+  memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
+    switch (name) {
+      case 'prototype':
+        return new ContractClassPrototypeBuilder(sourceLocation, this.ptype)
+    }
+    return super.memberAccess(name, sourceLocation)
+  }
+}
+
+class ContractClassPrototypeBuilder extends NodeBuilder {
+  constructor(
+    sourceLocation: SourceLocation,
+    readonly ptype: ContractClassPType,
+  ) {
+    super(sourceLocation)
+  }
+
+  memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
+    const method = this.ptype.methods[name]
+    if (method) {
+      return new ContractMethodExpressionBuilder(sourceLocation, method, this.ptype)
+    }
+    return super.memberAccess(name, sourceLocation)
   }
 }
 

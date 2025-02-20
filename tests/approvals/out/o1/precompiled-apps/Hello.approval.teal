@@ -18,9 +18,9 @@ main_after_if_else@2:
     // export class Hello extends HelloBase {
     txn NumAppArgs
     bz main_after_if_else@12
-    pushbytess 0x20df3a54 0x24378d3c 0xa0e81872 0xd0a28200 // method "create(string)void", method "delete()void", method "update()void", method "greet(string)string"
+    pushbytess 0x009225ae 0x24378d3c 0xa0e81872 0xd0a28200 // method "helloCreate(string)void", method "delete()void", method "update()void", method "greet(string)string"
     txna ApplicationArgs 0
-    match main_create_route@5 main_delete_route@6 main_update_route@7 main_greet_route@8
+    match main_helloCreate_route@5 main_delete_route@6 main_update_route@7 main_greet_route@8
 
 main_after_if_else@12:
     // tests/approvals/precompiled-apps.algo.ts:17
@@ -80,9 +80,9 @@ main_delete_route@6:
     intc_0 // 1
     return
 
-main_create_route@5:
+main_helloCreate_route@5:
     // tests/approvals/precompiled-apps.algo.ts:18
-    // @abimethod({ onCreate: 'require' })
+    // @abimethod({ name: 'helloCreate', onCreate: 'require' })
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
@@ -94,7 +94,7 @@ main_create_route@5:
     txna ApplicationArgs 1
     extract 2 0
     // tests/approvals/precompiled-apps.algo.ts:18
-    // @abimethod({ onCreate: 'require' })
+    // @abimethod({ name: 'helloCreate', onCreate: 'require' })
     callsub create
     intc_0 // 1
     return
@@ -103,7 +103,7 @@ main_create_route@5:
 // tests/approvals/precompiled-apps.algo.ts::Hello.create(greeting: bytes) -> void:
 create:
     // tests/approvals/precompiled-apps.algo.ts:18-19
-    // @abimethod({ onCreate: 'require' })
+    // @abimethod({ name: 'helloCreate', onCreate: 'require' })
     // create(greeting: string) {
     proto 1 0
     // tests/approvals/precompiled-apps.algo.ts:4

@@ -9,7 +9,7 @@ class HelloFactory extends Contract {
 
     const helloApp = itxn
       .applicationCall({
-        appArgs: [methodSelector('create(string)void'), encodeArc4('hello')],
+        appArgs: [methodSelector(Hello.prototype.create), encodeArc4('hello')],
         approvalProgram: compiled.approvalProgram,
         clearStateProgram: compiled.clearStateProgram,
         globalNumBytes: 1,
@@ -18,7 +18,7 @@ class HelloFactory extends Contract {
 
     const txn = itxn
       .applicationCall({
-        appArgs: [methodSelector('greet(string)string'), encodeArc4('world')],
+        appArgs: [methodSelector(Hello.prototype.greet), encodeArc4('world')],
         appId: helloApp,
       })
       .submit()
@@ -29,7 +29,7 @@ class HelloFactory extends Contract {
     itxn
       .applicationCall({
         appId: helloApp,
-        appArgs: [methodSelector('delete()void')],
+        appArgs: [methodSelector(Hello.prototype.delete)],
         onCompletion: OnCompleteAction.DeleteApplication,
       })
       .submit()

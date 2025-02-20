@@ -537,11 +537,19 @@ export class FunctionPType extends PType {
   readonly returnType: PType
   readonly parameters: Array<readonly [string, PType]>
   readonly singleton = true
+  readonly sourceLocation: SourceLocation | undefined
 
-  constructor(props: { name: string; module: string; returnType: PType; parameters: Array<readonly [string, PType]> }) {
+  constructor(props: {
+    name: string
+    module: string
+    returnType: PType
+    parameters: Array<readonly [string, PType]>
+    sourceLocation: SourceLocation | undefined
+  }) {
     super()
     this.name = props.name
     this.module = props.module
+    this.sourceLocation = props.sourceLocation
     if (props.returnType instanceof ObjectPType && !props.returnType.alias) {
       this.returnType = new ObjectPType({
         alias: new SymbolName({ name: `${props.name}Result`, module: this.module }),
@@ -911,6 +919,7 @@ export const ClearStateProgram = new FunctionPType({
   module: Constants.baseContractModuleName,
   returnType: uint64PType,
   parameters: [],
+  sourceLocation: undefined,
 })
 
 export const ApprovalProgram = new FunctionPType({
@@ -918,6 +927,7 @@ export const ApprovalProgram = new FunctionPType({
   module: Constants.arc4ModuleName,
   returnType: boolPType,
   parameters: [],
+  sourceLocation: undefined,
 })
 
 export const baseContractType = new BaseContractClassType({

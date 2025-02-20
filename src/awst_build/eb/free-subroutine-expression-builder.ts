@@ -1,6 +1,6 @@
 import { ContractReference } from '../../awst/models'
 import { nodeFactory } from '../../awst/node-factory'
-import type { InstanceMethodTarget, InstanceSuperMethodTarget, SubroutineID } from '../../awst/nodes'
+import type { ContractMethodTarget, InstanceMethodTarget, InstanceSuperMethodTarget, SubroutineID } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { InternalError } from '../../errors'
 import type { ContractClassPType, PType } from '../ptypes'
@@ -10,11 +10,11 @@ import type { NodeBuilder } from './index'
 import { FunctionBuilder } from './index'
 import { parseFunctionArgs } from './util/arg-parsing'
 
-abstract class SubroutineExpressionBuilder extends FunctionBuilder {
+export abstract class SubroutineExpressionBuilder extends FunctionBuilder {
   protected constructor(
     sourceLocation: SourceLocation,
     public readonly ptype: FunctionPType,
-    protected readonly target: SubroutineID | InstanceMethodTarget | InstanceSuperMethodTarget,
+    public readonly target: SubroutineID | InstanceMethodTarget | InstanceSuperMethodTarget | ContractMethodTarget,
   ) {
     super(sourceLocation)
   }
@@ -42,30 +42,21 @@ abstract class SubroutineExpressionBuilder extends FunctionBuilder {
 }
 
 /**
- * Invoke a contract method by naming the contract explicitly
+ * Invoke a contract method on the current contract (ie. this.someMethod())
  */
-export class ExplicitBaseContractMethodExpressionBuilder extends SubroutineExpressionBuilder {
-  constructor(sourceLocation: SourceLocation, ptype: FunctionPType, baseContractPType: ContractClassPType) {
+export class ContractMethodExpressionBuilder extends SubroutineExpressionBuilder {
+  declare readonly target: ContractMethodTarget
+
+  constructor(
+    sourceLocation: SourceLocation,
+    ptype: FunctionPType,
+    public readonly contractType: ContractClassPType,
+  ) {
     super(
       sourceLocation,
       ptype,
       nodeFactory.contractMethodTarget({
-        cref: ContractReference.fromPType(baseContractPType),
-        memberName: ptype.name,
-      }),
-    )
-  }
-}
-
-/**
- * Invoke a contract method on the current contract (ie. this.someMethod())
- */
-export class ContractMethodExpressionBuilder extends SubroutineExpressionBuilder {
-  constructor(sourceLocation: SourceLocation, ptype: FunctionPType) {
-    super(
-      sourceLocation,
-      ptype,
-      nodeFactory.instanceMethodTarget({
+        cref: ContractReference.fromPType(contractType),
         memberName: ptype.name,
       }),
     )

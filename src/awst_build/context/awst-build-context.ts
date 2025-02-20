@@ -1,8 +1,9 @@
+import { AsyncLocalStorage } from 'node:async_hooks'
 import ts from 'typescript'
 import type { awst } from '../../awst'
 import type { ContractReference, LogicSigReference } from '../../awst/models'
 import { nodeFactory } from '../../awst/node-factory'
-import type { AppStorageDefinition, Constant } from '../../awst/nodes'
+import type { AppStorageDefinition, ARC4MethodConfig, Constant } from '../../awst/nodes'
 import { SourceLocation } from '../../awst/source-location'
 import { logger } from '../../logger'
 import { invariant } from '../../util'
@@ -13,95 +14,122 @@ import type { ContractClassModel } from '../models/contract-class-model'
 import { CompilationSet } from '../models/contract-class-model'
 import type { LogicSigClassModel } from '../models/logic-sig-class-model'
 import type { ContractClassPType, PType } from '../ptypes'
+import { arc4BaseContractType, baseContractType } from '../ptypes'
 import { typeRegistry } from '../type-registry'
 import { TypeResolver } from '../type-resolver'
 import { EvaluationContext } from './evaluation-context'
 import { SwitchLoopContext } from './switch-loop-context'
 import { UniqueNameResolver } from './unique-name-resolver'
 
-export interface AwstBuildContext {
+export abstract class AwstBuildContext {
   /**
    * Get the source location of a node in the current source file
    * @param node
    */
-  getSourceLocation(node: ts.Node): SourceLocation
+  abstract getSourceLocation(node: ts.Node): SourceLocation
 
   /**
    * Get NodeBuilder instance for the given identifier.
    * @param node
    */
-  getBuilderForNode(node: ts.Identifier): NodeBuilder
+  abstract getBuilderForNode(node: ts.Identifier): NodeBuilder
 
   /**
    * Reflect the PType of the given node
    * @param node
    */
-  getPTypeForNode(node: ts.Node): PType
+  abstract getPTypeForNode(node: ts.Node): PType
 
   /**
    * Reflect generic type parameters for a call expression
    * @param node
    */
-  getTypeParameters(node: ts.CallExpression | ts.NewExpression): PType[]
+  abstract getTypeParameters(node: ts.CallExpression | ts.NewExpression): PType[]
 
   /**
    * Resolve the given identifier to a unique variable name that accounts
    * for shadowed variable names.
    * @param node
    */
-  resolveVariableName(node: ts.Identifier): string
+  abstract resolveVariableName(node: ts.Identifier): string
 
   /**
    * Resolve the given parameter declaration to a unique parameter name to be used
    * in destructuring assignments where no explicit parameter name is available.
    * @param node
    */
-  resolveDestructuredParamName(node: ts.ParameterDeclaration): string
+  abstract resolveDestructuredParamName(node: ts.ParameterDeclaration): string
 
   /**
    * Generate a unique variable name for a discarded value.
    */
-  generateDiscardedVarName(): string
+  abstract generateDiscardedVarName(): string
 
   /**
    * Add a named constant to the current context
    * @param identifier The identifier of the constant declaration in this source file
    * @param value The compile time constant value
    */
-  addConstant(identifier: ts.Identifier, value: awst.Constant): void
+  abstract addConstant(identifier: ts.Identifier, value: awst.Constant): void
 
   /**
    * Retrieve the evaluation context
    */
-  get evaluationCtx(): EvaluationContext
+  abstract get evaluationCtx(): EvaluationContext
 
   /**
    * Retrieve the switch loop context
    */
-  get switchLoopCtx(): SwitchLoopContext
+  abstract get switchLoopCtx(): SwitchLoopContext
 
-  /**
-   * Create a child context from this context. Used when entering a child parsing context such as a class or function.
-   */
-  createChildContext(): AwstBuildContext
+  abstract addStorageDeclaration(declaration: AppStorageDeclaration): void
+  abstract addArc4Config(methodData: {
+    contractReference: ContractReference
+    sourceLocation: SourceLocation
+    arc4MethodConfig: ARC4MethodConfig
+    memberName: string
+  }): void
+  abstract getArc4Config(contractType: ContractClassPType, memberName: string): ARC4MethodConfig | undefined
 
-  addStorageDeclaration(declaration: AppStorageDeclaration): void
+  abstract getStorageDeclaration(contractType: ContractClassPType, memberName: string): AppStorageDeclaration | undefined
 
-  getStorageDeclaration(contractType: ContractClassPType, memberName: string): AppStorageDeclaration | undefined
+  abstract getStorageDefinitionsForContract(contractType: ContractClassPType): AppStorageDefinition[]
 
-  getStorageDefinitionsForContract(contractType: ContractClassPType): AppStorageDefinition[]
+  abstract addToCompilationSet(compilationTarget: ContractReference, contract: ContractClassModel): void
+  abstract addToCompilationSet(compilationTarget: LogicSigReference, logicSig: LogicSigClassModel): void
 
-  addToCompilationSet(compilationTarget: ContractReference, contract: ContractClassModel): void
-  addToCompilationSet(compilationTarget: LogicSigReference, logicSig: LogicSigClassModel): void
+  abstract get compilationSet(): CompilationSet
 
-  get compilationSet(): CompilationSet
+  protected abstract createChildContext(): AwstBuildContext
+
+  static get current(): AwstBuildContext {
+    const ctx = this.asyncStore.getStore()
+    if (!ctx) {
+      throw new Error('No context available!')
+    }
+    return ctx
+  }
+
+  private static asyncStore = new AsyncLocalStorage<AwstBuildContext>()
+
+  static run<R>(program: ts.Program, cb: () => R) {
+    const ctx = AwstBuildContextImpl.forProgram(program)
+
+    return AwstBuildContext.asyncStore.run(ctx, cb)
+  }
+
+  runInChildContext<R>(cb: (deferred: RunDeferred) => R) {
+    const childCtx = this.createChildContext()
+
+    const runDeferred: RunDeferred = (action) => () => AwstBuildContext.asyncStore.run(childCtx, action)
+
+    return AwstBuildContext.asyncStore.run(childCtx, () => cb(runDeferred))
+  }
 }
 
-export function buildContextForProgram(program: ts.Program): AwstBuildContext {
-  return AwstBuildContextImpl.forProgram(program)
-}
+type RunDeferred = <T>(action: () => T) => () => T
 
-class AwstBuildContextImpl implements AwstBuildContext {
+class AwstBuildContextImpl extends AwstBuildContext {
   readonly evaluationCtx = new EvaluationContext()
   readonly switchLoopCtx = new SwitchLoopContext()
   readonly typeResolver: TypeResolver
@@ -112,15 +140,58 @@ class AwstBuildContextImpl implements AwstBuildContext {
     private readonly constants: ConstantStore,
     private readonly nameResolver: UniqueNameResolver,
     private readonly storageDeclarations: Map<string, Map<string, AppStorageDeclaration>>,
+    private readonly arc4MethodConfig: Map<string, Map<string, ARC4MethodConfig>>,
     compilationSet: CompilationSet,
   ) {
+    super()
     this.typeChecker = program.getTypeChecker()
     this.typeResolver = new TypeResolver(this.typeChecker, this.program.getCurrentDirectory())
     this.#compilationSet = compilationSet
   }
 
+  addArc4Config({
+    memberName,
+    sourceLocation,
+    contractReference,
+    arc4MethodConfig,
+  }: {
+    contractReference: ContractReference
+    sourceLocation: SourceLocation
+    arc4MethodConfig: ARC4MethodConfig
+    memberName: string
+  }): void {
+    const contractConfig = this.arc4MethodConfig.get(contractReference.id) ?? new Map<string, ARC4MethodConfig>()
+    if (contractConfig.size === 0) {
+      // Add to map if new
+      this.arc4MethodConfig.set(contractReference.id, contractConfig)
+    }
+    if (contractConfig.has(memberName)) {
+      logger.error(sourceLocation, `Duplicate declaration of member ${memberName} on ${contractReference}`)
+    }
+    contractConfig.set(memberName, arc4MethodConfig)
+  }
+
+  getArc4Config(contractType: ContractClassPType, memberName: string): ARC4MethodConfig | undefined {
+    for (const ct of [contractType, ...contractType.allBases()]) {
+      if (ct.equals(baseContractType) || ct.equals(arc4BaseContractType)) continue
+      const contractMethods = this.arc4MethodConfig.get(ct.fullName)
+      invariant(contractMethods, `${ct} has not been visited`)
+      if (contractMethods.has(memberName)) {
+        return contractMethods.get(memberName)
+      }
+    }
+    return undefined
+  }
+
   static forProgram(program: ts.Program): AwstBuildContext {
-    return new AwstBuildContextImpl(program, new ConstantStore(program), new UniqueNameResolver(), new Map(), new CompilationSet())
+    return new AwstBuildContextImpl(
+      program,
+      new ConstantStore(program),
+      new UniqueNameResolver(),
+      new Map(),
+      new Map(),
+      new CompilationSet(),
+    )
   }
 
   addConstant(identifier: ts.Identifier, value: Constant) {
@@ -133,6 +204,7 @@ class AwstBuildContextImpl implements AwstBuildContext {
       this.constants,
       this.nameResolver.createChild(),
       this.storageDeclarations,
+      this.arc4MethodConfig,
       this.#compilationSet,
     )
   }

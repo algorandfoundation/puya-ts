@@ -25,12 +25,12 @@ main_abi_routing@4:
     // tests/approvals/precompiled-apps.algo.ts:17
     // export class Hello extends HelloBase {
     txna ApplicationArgs 0
-    pushbytes 0x20df3a54 // method "create(string)void"
+    pushbytes 0x009225ae // method "helloCreate(string)void"
     pushbytes 0x24378d3c // method "delete()void"
     pushbytes 0xa0e81872 // method "update()void"
     pushbytes 0xd0a28200 // method "greet(string)string"
     uncover 4
-    match main_create_route@5 main_delete_route@6 main_update_route@7 main_greet_route@8
+    match main_helloCreate_route@5 main_delete_route@6 main_update_route@7 main_greet_route@8
 
 main_switch_case_default@9:
 
@@ -105,9 +105,9 @@ main_delete_route@6:
     intc_1 // 1
     b main_after_inlined_tests/approvals/precompiled-apps.algo.ts::Hello.__puya_arc4_router__@13
 
-main_create_route@5:
+main_helloCreate_route@5:
     // tests/approvals/precompiled-apps.algo.ts:18
-    // @abimethod({ onCreate: 'require' })
+    // @abimethod({ name: 'helloCreate', onCreate: 'require' })
     txn OnCompletion
     intc_0 // NoOp
     ==
@@ -121,7 +121,7 @@ main_create_route@5:
     txna ApplicationArgs 1
     extract 2 0
     // tests/approvals/precompiled-apps.algo.ts:18
-    // @abimethod({ onCreate: 'require' })
+    // @abimethod({ name: 'helloCreate', onCreate: 'require' })
     callsub create
     intc_1 // 1
     b main_after_inlined_tests/approvals/precompiled-apps.algo.ts::Hello.__puya_arc4_router__@13
@@ -133,7 +133,7 @@ main_bare_routing@11:
 // tests/approvals/precompiled-apps.algo.ts::Hello.create(greeting: bytes) -> void:
 create:
     // tests/approvals/precompiled-apps.algo.ts:18-19
-    // @abimethod({ onCreate: 'require' })
+    // @abimethod({ name: 'helloCreate', onCreate: 'require' })
     // create(greeting: string) {
     proto 1 0
     // tests/approvals/precompiled-apps.algo.ts:4
@@ -181,6 +181,10 @@ greet:
 
 // tests/approvals/precompiled-apps.algo.ts::HelloBase.constructor() -> void:
 constructor:
+
+constructor_block@1:
+
+constructor_after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor@2:
     // tests/approvals/precompiled-apps.algo.ts:4
     // greeting = GlobalState({ initialValue: '' })
     bytec_0 // "greeting"

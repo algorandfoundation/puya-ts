@@ -91,12 +91,6 @@ subroutine tests/approvals/multi-inheritance.algo.ts::BaseOne.methodOne() -> byt
     block@0: // L19
         return "base-one"
 
-subroutine tests/approvals/multi-inheritance.algo.ts::BaseOne.constructor() -> void:
-    block@0: // L17
-        tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor()
-        (app_global_put "stateOne" 45u)
-        return 
-
 subroutine tests/approvals/multi-inheritance.algo.ts::CommonBase.methodCommon() -> bytes:
     block@0: // L8
         return "common"
@@ -105,11 +99,21 @@ subroutine tests/approvals/multi-inheritance.algo.ts::CommonBase.b2CantOverride(
     block@0: // L12
         return "common"
 
-subroutine tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor() -> void:
-    block@0: // L5
-        (app_global_put "stateCommon" 123u)
-        return 
-
 subroutine tests/approvals/multi-inheritance.algo.ts::BaseOne.__algots__.defaultCreate() -> void:
     block@0: // L17
+        return 
+
+subroutine tests/approvals/multi-inheritance.algo.ts::BaseOne.constructor() -> void:
+    block@0: // L17
+        tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor()
+        (app_global_put "stateOne" 45u)
+        return 
+
+subroutine tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor() -> void:
+    block@0: // L5
+        goto block@1
+    block@1: // L1
+        goto block@2
+    block@2: // after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor_L5
+        (app_global_put "stateCommon" 123u)
         return 

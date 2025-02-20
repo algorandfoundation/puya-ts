@@ -94,6 +94,11 @@ export function baremethod<TContract extends Contract>(config?: BareMethodConfig
  * @param methodSignature An ARC4 method signature. Eg. `hello(string)string`. Must be a compile time constant.
  * @returns The ARC4 method selector. Eg. `02BECE11`
  */
-export function methodSelector(methodSignature: string): bytes {
+export function methodSelector<
+  TMethod extends (this: TContract, ...args: TArgs) => TReturn,
+  TContract extends Contract,
+  TArgs extends DeliberateAny[],
+  TReturn,
+>(methodSignature: string | TMethod): bytes {
   throw new NoImplementation()
 }

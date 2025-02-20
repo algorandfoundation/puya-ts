@@ -129,21 +129,6 @@ create:
     retsub
 
 
-// tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix.constructor() -> void:
-constructor:
-    // tests/approvals/precompiled-apps.algo.ts:36
-    // super()
-    callsub tests/approvals/precompiled-apps.algo.ts::HelloBase.constructor
-    // tests/approvals/precompiled-apps.algo.ts:4
-    // greeting = GlobalState({ initialValue: '' })
-    bytec_0 // "greeting"
-    // tests/approvals/precompiled-apps.algo.ts:37
-    // this.greeting.value = TemplateVar<string>('GREETING', 'PRFX_')
-    bytec_2 // PRFX_GREETING
-    app_global_put
-    retsub
-
-
 // tests/approvals/precompiled-apps.algo.ts::HelloBase.delete() -> void:
 delete:
     retsub
@@ -177,8 +162,27 @@ greet:
     retsub
 
 
+// tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix.constructor() -> void:
+constructor:
+    // tests/approvals/precompiled-apps.algo.ts:36
+    // super()
+    callsub tests/approvals/precompiled-apps.algo.ts::HelloBase.constructor
+    // tests/approvals/precompiled-apps.algo.ts:4
+    // greeting = GlobalState({ initialValue: '' })
+    bytec_0 // "greeting"
+    // tests/approvals/precompiled-apps.algo.ts:37
+    // this.greeting.value = TemplateVar<string>('GREETING', 'PRFX_')
+    bytec_2 // PRFX_GREETING
+    app_global_put
+    retsub
+
+
 // tests/approvals/precompiled-apps.algo.ts::HelloBase.constructor() -> void:
 tests/approvals/precompiled-apps.algo.ts::HelloBase.constructor:
+
+tests/approvals/precompiled-apps.algo.ts::HelloBase.constructor_block@1:
+
+tests/approvals/precompiled-apps.algo.ts::HelloBase.constructor_after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor@2:
     // tests/approvals/precompiled-apps.algo.ts:4
     // greeting = GlobalState({ initialValue: '' })
     bytec_0 // "greeting"
