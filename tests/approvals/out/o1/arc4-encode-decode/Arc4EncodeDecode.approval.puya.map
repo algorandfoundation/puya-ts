@@ -1,0 +1,1322 @@
+{
+  "version": 3,
+  "sources": [
+    "C:/Source/algorand/puya-ts/tests/approvals/arc4-encode-decode.algo.ts"
+  ],
+  "mappings": ";;;;;;AAMA;;AAAA;;;AAAA;;;;;;;;;;;;AAAA;;;AAAA;;;;;;AAAA;;AAUE;;AAAA;AAAA;AAAA;;AAAA;AAVF;;;AAAA;AAAA;;;AAAA;;;AAAA;;;;AAAA;AAAA;;;AAAA;;;AAAA;;;AAAA;;;AAAA;;;AAAA;;;AAAA;;;AAAA;;;AAAA;;;AAAA;;;AAAA;AAAA;;;AAAA;;AAAA;AAAA;AAAA;;AAAA;AAAA;;AAAA;;AAAA;AAAA;;;AAAA;;;AAUE;;;AAAA;;AATA;;AAAA;AAAA;AAAA;;AAAA;AADF;;;AAAA;AAAA;;;;AAAA;AAAA;;;AAAA;;;AAAA;;;AAAA;;;AAAA;;;AACE;;;AAAA;;AADF;;AAAA;;;AAAA;;AAAA;AAAA;AAAA;;AACE;;;AAGS;;AAAA;AAAA;;AAAA;AAAA;;AAMT;;;AAYS;;AAAA;AAAA;;AAAA;AAAP;AACO;;;AAAA;AAAA;;AAAA;AAAP;AACO;;AAAA;;AAAA;AAAP;AACO;;AAAA;;;AAAA;;AAAA;AAAP;AAEY;;AAAA;;;AAAA;;AAAA;AAAA;AAAA;AAAA;;AAAA;AAAA;AAAZ;;AAAA;AAAA;;;AAAY;;AAAA;;AAAA;;AAAA;AAAZ;;AAAA;AAAA;;;;AAAA;;;",
+  "op_pc_offset": 0,
+  "pc_events": {
+    "1": {
+      "subroutine": "@algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram",
+      "params": {},
+      "block": "main",
+      "stack_in": [],
+      "op": "intcblock 0 1 8"
+    },
+    "6": {
+      "op": "txn NumAppArgs",
+      "defined_out": [
+        "tmp%0#1"
+      ],
+      "stack_out": [
+        "tmp%0#1"
+      ]
+    },
+    "8": {
+      "op": "bz main_bare_routing@7",
+      "stack_out": []
+    },
+    "11": {
+      "op": "pushbytess 0x9be85afa 0xa2d335ac // method \"testEncoding(uint64,bool,uint512,byte[],string)void\", method \"testDecoding(uint64,byte[],bool,byte[],uint512,byte[],string,byte[],(uint64,byte[]),byte[])void\""
+    },
+    "23": {
+      "op": "txna ApplicationArgs 0"
+    },
+    "26": {
+      "op": "match main_testEncoding_route@3 main_testDecoding_route@4"
+    },
+    "32": {
+      "block": "main_after_if_else@11",
+      "stack_in": [],
+      "op": "intc_0 // 0",
+      "defined_out": [
+        "tmp%0#0"
+      ],
+      "stack_out": [
+        "tmp%0#0"
+      ]
+    },
+    "33": {
+      "op": "return"
+    },
+    "34": {
+      "block": "main_testDecoding_route@4",
+      "stack_in": [],
+      "op": "txn OnCompletion",
+      "defined_out": [
+        "tmp%13#0"
+      ],
+      "stack_out": [
+        "tmp%13#0"
+      ]
+    },
+    "36": {
+      "op": "!",
+      "defined_out": [
+        "tmp%14#0"
+      ],
+      "stack_out": [
+        "tmp%14#0"
+      ]
+    },
+    "37": {
+      "error": "OnCompletion is not NoOp",
+      "op": "assert // OnCompletion is not NoOp",
+      "stack_out": []
+    },
+    "38": {
+      "op": "txn ApplicationID",
+      "defined_out": [
+        "tmp%15#0"
+      ],
+      "stack_out": [
+        "tmp%15#0"
+      ]
+    },
+    "40": {
+      "error": "can only call when not creating",
+      "op": "assert // can only call when not creating",
+      "stack_out": []
+    },
+    "41": {
+      "op": "txna ApplicationArgs 1",
+      "defined_out": [
+        "reinterpret_bytes[8]%1#0"
+      ],
+      "stack_out": [
+        "reinterpret_bytes[8]%1#0"
+      ]
+    },
+    "44": {
+      "op": "btoi",
+      "defined_out": [
+        "tmp%17#0"
+      ],
+      "stack_out": [
+        "tmp%17#0"
+      ]
+    },
+    "45": {
+      "op": "txna ApplicationArgs 2",
+      "defined_out": [
+        "tmp%17#0",
+        "tmp%18#0"
+      ],
+      "stack_out": [
+        "tmp%17#0",
+        "tmp%18#0"
+      ]
+    },
+    "48": {
+      "op": "extract 2 0",
+      "defined_out": [
+        "tmp%17#0",
+        "tmp%19#0"
+      ],
+      "stack_out": [
+        "tmp%17#0",
+        "tmp%19#0"
+      ]
+    },
+    "51": {
+      "op": "txna ApplicationArgs 3",
+      "defined_out": [
+        "reinterpret_bytes[1]%1#0",
+        "tmp%17#0",
+        "tmp%19#0"
+      ],
+      "stack_out": [
+        "tmp%17#0",
+        "tmp%19#0",
+        "reinterpret_bytes[1]%1#0"
+      ]
+    },
+    "54": {
+      "op": "intc_0 // 0",
+      "defined_out": [
+        "0",
+        "reinterpret_bytes[1]%1#0",
+        "tmp%17#0",
+        "tmp%19#0"
+      ],
+      "stack_out": [
+        "tmp%17#0",
+        "tmp%19#0",
+        "reinterpret_bytes[1]%1#0",
+        "0"
+      ]
+    },
+    "55": {
+      "op": "getbit",
+      "defined_out": [
+        "tmp%17#0",
+        "tmp%19#0",
+        "tmp%20#0"
+      ],
+      "stack_out": [
+        "tmp%17#0",
+        "tmp%19#0",
+        "tmp%20#0"
+      ]
+    },
+    "56": {
+      "op": "txna ApplicationArgs 4",
+      "defined_out": [
+        "tmp%17#0",
+        "tmp%19#0",
+        "tmp%20#0",
+        "tmp%21#0"
+      ],
+      "stack_out": [
+        "tmp%17#0",
+        "tmp%19#0",
+        "tmp%20#0",
+        "tmp%21#0"
+      ]
+    },
+    "59": {
+      "op": "extract 2 0",
+      "defined_out": [
+        "tmp%17#0",
+        "tmp%19#0",
+        "tmp%20#0",
+        "tmp%22#0"
+      ],
+      "stack_out": [
+        "tmp%17#0",
+        "tmp%19#0",
+        "tmp%20#0",
+        "tmp%22#0"
+      ]
+    },
+    "62": {
+      "op": "txna ApplicationArgs 5",
+      "defined_out": [
+        "reinterpret_bytes[64]%1#0",
+        "tmp%17#0",
+        "tmp%19#0",
+        "tmp%20#0",
+        "tmp%22#0"
+      ],
+      "stack_out": [
+        "tmp%17#0",
+        "tmp%19#0",
+        "tmp%20#0",
+        "tmp%22#0",
+        "reinterpret_bytes[64]%1#0"
+      ]
+    },
+    "65": {
+      "op": "txna ApplicationArgs 6",
+      "defined_out": [
+        "reinterpret_bytes[64]%1#0",
+        "tmp%17#0",
+        "tmp%19#0",
+        "tmp%20#0",
+        "tmp%22#0",
+        "tmp%23#0"
+      ],
+      "stack_out": [
+        "tmp%17#0",
+        "tmp%19#0",
+        "tmp%20#0",
+        "tmp%22#0",
+        "reinterpret_bytes[64]%1#0",
+        "tmp%23#0"
+      ]
+    },
+    "68": {
+      "op": "extract 2 0",
+      "defined_out": [
+        "reinterpret_bytes[64]%1#0",
+        "tmp%17#0",
+        "tmp%19#0",
+        "tmp%20#0",
+        "tmp%22#0",
+        "tmp%24#0"
+      ],
+      "stack_out": [
+        "tmp%17#0",
+        "tmp%19#0",
+        "tmp%20#0",
+        "tmp%22#0",
+        "reinterpret_bytes[64]%1#0",
+        "tmp%24#0"
+      ]
+    },
+    "71": {
+      "op": "txna ApplicationArgs 7",
+      "defined_out": [
+        "reinterpret_bytes[64]%1#0",
+        "tmp%17#0",
+        "tmp%19#0",
+        "tmp%20#0",
+        "tmp%22#0",
+        "tmp%24#0",
+        "tmp%25#0"
+      ],
+      "stack_out": [
+        "tmp%17#0",
+        "tmp%19#0",
+        "tmp%20#0",
+        "tmp%22#0",
+        "reinterpret_bytes[64]%1#0",
+        "tmp%24#0",
+        "tmp%25#0"
+      ]
+    },
+    "74": {
+      "op": "extract 2 0",
+      "defined_out": [
+        "reinterpret_bytes[64]%1#0",
+        "tmp%17#0",
+        "tmp%19#0",
+        "tmp%20#0",
+        "tmp%22#0",
+        "tmp%24#0",
+        "tmp%26#0"
+      ],
+      "stack_out": [
+        "tmp%17#0",
+        "tmp%19#0",
+        "tmp%20#0",
+        "tmp%22#0",
+        "reinterpret_bytes[64]%1#0",
+        "tmp%24#0",
+        "tmp%26#0"
+      ]
+    },
+    "77": {
+      "op": "txna ApplicationArgs 8",
+      "defined_out": [
+        "reinterpret_bytes[64]%1#0",
+        "tmp%17#0",
+        "tmp%19#0",
+        "tmp%20#0",
+        "tmp%22#0",
+        "tmp%24#0",
+        "tmp%26#0",
+        "tmp%27#0"
+      ],
+      "stack_out": [
+        "tmp%17#0",
+        "tmp%19#0",
+        "tmp%20#0",
+        "tmp%22#0",
+        "reinterpret_bytes[64]%1#0",
+        "tmp%24#0",
+        "tmp%26#0",
+        "tmp%27#0"
+      ]
+    },
+    "80": {
+      "op": "extract 2 0",
+      "defined_out": [
+        "reinterpret_bytes[64]%1#0",
+        "tmp%17#0",
+        "tmp%19#0",
+        "tmp%20#0",
+        "tmp%22#0",
+        "tmp%24#0",
+        "tmp%26#0",
+        "tmp%28#0"
+      ],
+      "stack_out": [
+        "tmp%17#0",
+        "tmp%19#0",
+        "tmp%20#0",
+        "tmp%22#0",
+        "reinterpret_bytes[64]%1#0",
+        "tmp%24#0",
+        "tmp%26#0",
+        "tmp%28#0"
+      ]
+    },
+    "83": {
+      "op": "txna ApplicationArgs 9"
+    },
+    "86": {
+      "op": "dup",
+      "defined_out": [
+        "reinterpret_bytes[64]%1#0",
+        "tmp%17#0",
+        "tmp%19#0",
+        "tmp%20#0",
+        "tmp%22#0",
+        "tmp%24#0",
+        "tmp%26#0",
+        "tmp%28#0",
+        "tmp%29#0",
+        "tmp%29#0 (copy)"
+      ],
+      "stack_out": [
+        "tmp%17#0",
+        "tmp%19#0",
+        "tmp%20#0",
+        "tmp%22#0",
+        "reinterpret_bytes[64]%1#0",
+        "tmp%24#0",
+        "tmp%26#0",
+        "tmp%28#0",
+        "tmp%29#0",
+        "tmp%29#0 (copy)"
+      ]
+    },
+    "87": {
+      "error": "Index access is out of bounds",
+      "op": "extract 0 8 // on error: Index access is out of bounds",
+      "defined_out": [
+        "item0%0#0",
+        "reinterpret_bytes[64]%1#0",
+        "tmp%17#0",
+        "tmp%19#0",
+        "tmp%20#0",
+        "tmp%22#0",
+        "tmp%24#0",
+        "tmp%26#0",
+        "tmp%28#0",
+        "tmp%29#0"
+      ],
+      "stack_out": [
+        "tmp%17#0",
+        "tmp%19#0",
+        "tmp%20#0",
+        "tmp%22#0",
+        "reinterpret_bytes[64]%1#0",
+        "tmp%24#0",
+        "tmp%26#0",
+        "tmp%28#0",
+        "tmp%29#0",
+        "item0%0#0"
+      ]
+    },
+    "90": {
+      "op": "dig 1",
+      "stack_out": [
+        "tmp%17#0",
+        "tmp%19#0",
+        "tmp%20#0",
+        "tmp%22#0",
+        "reinterpret_bytes[64]%1#0",
+        "tmp%24#0",
+        "tmp%26#0",
+        "tmp%28#0",
+        "tmp%29#0",
+        "item0%0#0",
+        "tmp%29#0 (copy)"
+      ]
+    },
+    "92": {
+      "op": "intc_2 // 8",
+      "defined_out": [
+        "8",
+        "item0%0#0",
+        "reinterpret_bytes[64]%1#0",
+        "tmp%17#0",
+        "tmp%19#0",
+        "tmp%20#0",
+        "tmp%22#0",
+        "tmp%24#0",
+        "tmp%26#0",
+        "tmp%28#0",
+        "tmp%29#0",
+        "tmp%29#0 (copy)"
+      ],
+      "stack_out": [
+        "tmp%17#0",
+        "tmp%19#0",
+        "tmp%20#0",
+        "tmp%22#0",
+        "reinterpret_bytes[64]%1#0",
+        "tmp%24#0",
+        "tmp%26#0",
+        "tmp%28#0",
+        "tmp%29#0",
+        "item0%0#0",
+        "tmp%29#0 (copy)",
+        "8"
+      ]
+    },
+    "93": {
+      "op": "extract_uint16",
+      "defined_out": [
+        "item0%0#0",
+        "item_start_offset%0#0",
+        "reinterpret_bytes[64]%1#0",
+        "tmp%17#0",
+        "tmp%19#0",
+        "tmp%20#0",
+        "tmp%22#0",
+        "tmp%24#0",
+        "tmp%26#0",
+        "tmp%28#0",
+        "tmp%29#0"
+      ],
+      "stack_out": [
+        "tmp%17#0",
+        "tmp%19#0",
+        "tmp%20#0",
+        "tmp%22#0",
+        "reinterpret_bytes[64]%1#0",
+        "tmp%24#0",
+        "tmp%26#0",
+        "tmp%28#0",
+        "tmp%29#0",
+        "item0%0#0",
+        "item_start_offset%0#0"
+      ]
+    },
+    "94": {
+      "op": "dig 2",
+      "stack_out": [
+        "tmp%17#0",
+        "tmp%19#0",
+        "tmp%20#0",
+        "tmp%22#0",
+        "reinterpret_bytes[64]%1#0",
+        "tmp%24#0",
+        "tmp%26#0",
+        "tmp%28#0",
+        "tmp%29#0",
+        "item0%0#0",
+        "item_start_offset%0#0",
+        "tmp%29#0 (copy)"
+      ]
+    },
+    "96": {
+      "op": "len",
+      "defined_out": [
+        "item0%0#0",
+        "item_end_offset%0#0",
+        "item_start_offset%0#0",
+        "reinterpret_bytes[64]%1#0",
+        "tmp%17#0",
+        "tmp%19#0",
+        "tmp%20#0",
+        "tmp%22#0",
+        "tmp%24#0",
+        "tmp%26#0",
+        "tmp%28#0",
+        "tmp%29#0"
+      ],
+      "stack_out": [
+        "tmp%17#0",
+        "tmp%19#0",
+        "tmp%20#0",
+        "tmp%22#0",
+        "reinterpret_bytes[64]%1#0",
+        "tmp%24#0",
+        "tmp%26#0",
+        "tmp%28#0",
+        "tmp%29#0",
+        "item0%0#0",
+        "item_start_offset%0#0",
+        "item_end_offset%0#0"
+      ]
+    },
+    "97": {
+      "op": "uncover 3",
+      "stack_out": [
+        "tmp%17#0",
+        "tmp%19#0",
+        "tmp%20#0",
+        "tmp%22#0",
+        "reinterpret_bytes[64]%1#0",
+        "tmp%24#0",
+        "tmp%26#0",
+        "tmp%28#0",
+        "item0%0#0",
+        "item_start_offset%0#0",
+        "item_end_offset%0#0",
+        "tmp%29#0"
+      ]
+    },
+    "99": {
+      "op": "cover 2",
+      "stack_out": [
+        "tmp%17#0",
+        "tmp%19#0",
+        "tmp%20#0",
+        "tmp%22#0",
+        "reinterpret_bytes[64]%1#0",
+        "tmp%24#0",
+        "tmp%26#0",
+        "tmp%28#0",
+        "item0%0#0",
+        "tmp%29#0",
+        "item_start_offset%0#0",
+        "item_end_offset%0#0"
+      ]
+    },
+    "101": {
+      "op": "substring3",
+      "defined_out": [
+        "item0%0#0",
+        "item1%0#0",
+        "reinterpret_bytes[64]%1#0",
+        "tmp%17#0",
+        "tmp%19#0",
+        "tmp%20#0",
+        "tmp%22#0",
+        "tmp%24#0",
+        "tmp%26#0",
+        "tmp%28#0"
+      ],
+      "stack_out": [
+        "tmp%17#0",
+        "tmp%19#0",
+        "tmp%20#0",
+        "tmp%22#0",
+        "reinterpret_bytes[64]%1#0",
+        "tmp%24#0",
+        "tmp%26#0",
+        "tmp%28#0",
+        "item0%0#0",
+        "item1%0#0"
+      ]
+    },
+    "102": {
+      "op": "txna ApplicationArgs 10",
+      "defined_out": [
+        "item0%0#0",
+        "item1%0#0",
+        "reinterpret_bytes[64]%1#0",
+        "tmp%17#0",
+        "tmp%19#0",
+        "tmp%20#0",
+        "tmp%22#0",
+        "tmp%24#0",
+        "tmp%26#0",
+        "tmp%28#0",
+        "tmp%30#0"
+      ],
+      "stack_out": [
+        "tmp%17#0",
+        "tmp%19#0",
+        "tmp%20#0",
+        "tmp%22#0",
+        "reinterpret_bytes[64]%1#0",
+        "tmp%24#0",
+        "tmp%26#0",
+        "tmp%28#0",
+        "item0%0#0",
+        "item1%0#0",
+        "tmp%30#0"
+      ]
+    },
+    "105": {
+      "op": "extract 2 0",
+      "defined_out": [
+        "item0%0#0",
+        "item1%0#0",
+        "reinterpret_bytes[64]%1#0",
+        "tmp%17#0",
+        "tmp%19#0",
+        "tmp%20#0",
+        "tmp%22#0",
+        "tmp%24#0",
+        "tmp%26#0",
+        "tmp%28#0",
+        "tmp%31#0"
+      ],
+      "stack_out": [
+        "tmp%17#0",
+        "tmp%19#0",
+        "tmp%20#0",
+        "tmp%22#0",
+        "reinterpret_bytes[64]%1#0",
+        "tmp%24#0",
+        "tmp%26#0",
+        "tmp%28#0",
+        "item0%0#0",
+        "item1%0#0",
+        "tmp%31#0"
+      ]
+    },
+    "108": {
+      "callsub": "tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDecoding",
+      "op": "callsub testDecoding",
+      "stack_out": []
+    },
+    "111": {
+      "op": "intc_1 // 1",
+      "defined_out": [
+        "tmp%0#0"
+      ],
+      "stack_out": [
+        "tmp%0#0"
+      ]
+    },
+    "112": {
+      "op": "return"
+    },
+    "113": {
+      "block": "main_testEncoding_route@3",
+      "stack_in": [],
+      "op": "txn OnCompletion",
+      "defined_out": [
+        "tmp%3#0"
+      ],
+      "stack_out": [
+        "tmp%3#0"
+      ]
+    },
+    "115": {
+      "op": "!",
+      "defined_out": [
+        "tmp%4#0"
+      ],
+      "stack_out": [
+        "tmp%4#0"
+      ]
+    },
+    "116": {
+      "error": "OnCompletion is not NoOp",
+      "op": "assert // OnCompletion is not NoOp",
+      "stack_out": []
+    },
+    "117": {
+      "op": "txn ApplicationID",
+      "defined_out": [
+        "tmp%5#0"
+      ],
+      "stack_out": [
+        "tmp%5#0"
+      ]
+    },
+    "119": {
+      "error": "can only call when not creating",
+      "op": "assert // can only call when not creating",
+      "stack_out": []
+    },
+    "120": {
+      "op": "txna ApplicationArgs 1",
+      "defined_out": [
+        "reinterpret_bytes[8]%0#0"
+      ],
+      "stack_out": [
+        "reinterpret_bytes[8]%0#0"
+      ]
+    },
+    "123": {
+      "op": "btoi",
+      "defined_out": [
+        "tmp%7#0"
+      ],
+      "stack_out": [
+        "tmp%7#0"
+      ]
+    },
+    "124": {
+      "op": "txna ApplicationArgs 2",
+      "defined_out": [
+        "reinterpret_bytes[1]%0#0",
+        "tmp%7#0"
+      ],
+      "stack_out": [
+        "tmp%7#0",
+        "reinterpret_bytes[1]%0#0"
+      ]
+    },
+    "127": {
+      "op": "intc_0 // 0",
+      "defined_out": [
+        "0",
+        "reinterpret_bytes[1]%0#0",
+        "tmp%7#0"
+      ],
+      "stack_out": [
+        "tmp%7#0",
+        "reinterpret_bytes[1]%0#0",
+        "0"
+      ]
+    },
+    "128": {
+      "op": "getbit",
+      "defined_out": [
+        "tmp%7#0",
+        "tmp%8#0"
+      ],
+      "stack_out": [
+        "tmp%7#0",
+        "tmp%8#0"
+      ]
+    },
+    "129": {
+      "op": "txna ApplicationArgs 3",
+      "defined_out": [
+        "reinterpret_bytes[64]%0#0",
+        "tmp%7#0",
+        "tmp%8#0"
+      ],
+      "stack_out": [
+        "tmp%7#0",
+        "tmp%8#0",
+        "reinterpret_bytes[64]%0#0"
+      ]
+    },
+    "132": {
+      "op": "txna ApplicationArgs 4",
+      "defined_out": [
+        "reinterpret_bytes[64]%0#0",
+        "tmp%7#0",
+        "tmp%8#0",
+        "tmp%9#0"
+      ],
+      "stack_out": [
+        "tmp%7#0",
+        "tmp%8#0",
+        "reinterpret_bytes[64]%0#0",
+        "tmp%9#0"
+      ]
+    },
+    "135": {
+      "op": "extract 2 0",
+      "defined_out": [
+        "reinterpret_bytes[64]%0#0",
+        "tmp%10#0",
+        "tmp%7#0",
+        "tmp%8#0"
+      ],
+      "stack_out": [
+        "tmp%7#0",
+        "tmp%8#0",
+        "reinterpret_bytes[64]%0#0",
+        "tmp%10#0"
+      ]
+    },
+    "138": {
+      "op": "txna ApplicationArgs 5",
+      "defined_out": [
+        "reinterpret_bytes[64]%0#0",
+        "tmp%10#0",
+        "tmp%11#0",
+        "tmp%7#0",
+        "tmp%8#0"
+      ],
+      "stack_out": [
+        "tmp%7#0",
+        "tmp%8#0",
+        "reinterpret_bytes[64]%0#0",
+        "tmp%10#0",
+        "tmp%11#0"
+      ]
+    },
+    "141": {
+      "op": "extract 2 0",
+      "defined_out": [
+        "reinterpret_bytes[64]%0#0",
+        "tmp%10#0",
+        "tmp%12#0",
+        "tmp%7#0",
+        "tmp%8#0"
+      ],
+      "stack_out": [
+        "tmp%7#0",
+        "tmp%8#0",
+        "reinterpret_bytes[64]%0#0",
+        "tmp%10#0",
+        "tmp%12#0"
+      ]
+    },
+    "144": {
+      "callsub": "tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEncoding",
+      "op": "callsub testEncoding",
+      "stack_out": []
+    },
+    "147": {
+      "op": "intc_1 // 1",
+      "defined_out": [
+        "tmp%0#0"
+      ],
+      "stack_out": [
+        "tmp%0#0"
+      ]
+    },
+    "148": {
+      "op": "return"
+    },
+    "149": {
+      "block": "main_bare_routing@7",
+      "stack_in": [],
+      "op": "txn OnCompletion",
+      "defined_out": [
+        "tmp%32#0"
+      ],
+      "stack_out": [
+        "tmp%32#0"
+      ]
+    },
+    "151": {
+      "op": "bnz main_after_if_else@11",
+      "stack_out": []
+    },
+    "154": {
+      "op": "txn ApplicationID"
+    },
+    "156": {
+      "op": "!"
+    },
+    "157": {
+      "error": "can only call when creating",
+      "op": "assert // can only call when creating"
+    },
+    "158": {
+      "op": "intc_1 // 1"
+    },
+    "159": {
+      "op": "return"
+    },
+    "160": {
+      "subroutine": "tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEncoding",
+      "params": {
+        "a#0": "uint64",
+        "b#0": "uint64",
+        "c#0": "bytes",
+        "d#0": "bytes",
+        "e#0": "bytes"
+      },
+      "block": "testEncoding",
+      "stack_in": [],
+      "op": "proto 5 0"
+    },
+    "163": {
+      "op": "frame_dig -3",
+      "defined_out": [
+        "c#0 (copy)"
+      ],
+      "stack_out": [
+        "c#0 (copy)"
+      ]
+    },
+    "165": {
+      "op": "len",
+      "defined_out": [
+        "len_%0#0"
+      ],
+      "stack_out": [
+        "len_%0#0"
+      ]
+    },
+    "166": {
+      "op": "pushint 64 // 64",
+      "defined_out": [
+        "64",
+        "len_%0#0"
+      ],
+      "stack_out": [
+        "len_%0#0",
+        "64"
+      ]
+    },
+    "168": {
+      "op": "<=",
+      "defined_out": [
+        "no_overflow%0#0"
+      ],
+      "stack_out": [
+        "no_overflow%0#0"
+      ]
+    },
+    "169": {
+      "error": "overflow",
+      "op": "assert // overflow",
+      "stack_out": []
+    },
+    "170": {
+      "retsub": true,
+      "op": "retsub"
+    },
+    "171": {
+      "subroutine": "tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDecoding",
+      "params": {
+        "a#0": "uint64",
+        "a_bytes#0": "bytes",
+        "b#0": "uint64",
+        "b_bytes#0": "bytes",
+        "c#0": "bytes",
+        "c_bytes#0": "bytes",
+        "d#0": "bytes",
+        "d_bytes#0": "bytes",
+        "e.a#0": "bytes",
+        "e.b#0": "bytes",
+        "e_bytes#0": "bytes"
+      },
+      "block": "testDecoding",
+      "stack_in": [],
+      "op": "proto 11 0"
+    },
+    "174": {
+      "op": "frame_dig -10",
+      "defined_out": [
+        "a_bytes#0 (copy)"
+      ],
+      "stack_out": [
+        "a_bytes#0 (copy)"
+      ]
+    },
+    "176": {
+      "op": "btoi",
+      "defined_out": [
+        "tmp%0#0"
+      ],
+      "stack_out": [
+        "tmp%0#0"
+      ]
+    },
+    "177": {
+      "op": "frame_dig -11",
+      "defined_out": [
+        "a#0 (copy)",
+        "tmp%0#0"
+      ],
+      "stack_out": [
+        "tmp%0#0",
+        "a#0 (copy)"
+      ]
+    },
+    "179": {
+      "op": "==",
+      "defined_out": [
+        "tmp%1#0"
+      ],
+      "stack_out": [
+        "tmp%1#0"
+      ]
+    },
+    "180": {
+      "op": "assert",
+      "stack_out": []
+    },
+    "181": {
+      "op": "frame_dig -8",
+      "defined_out": [
+        "b_bytes#0 (copy)"
+      ],
+      "stack_out": [
+        "b_bytes#0 (copy)"
+      ]
+    },
+    "183": {
+      "op": "intc_0 // 0",
+      "defined_out": [
+        "0",
+        "b_bytes#0 (copy)"
+      ],
+      "stack_out": [
+        "b_bytes#0 (copy)",
+        "0"
+      ]
+    },
+    "184": {
+      "op": "getbit",
+      "defined_out": [
+        "tmp%2#0"
+      ],
+      "stack_out": [
+        "tmp%2#0"
+      ]
+    },
+    "185": {
+      "op": "frame_dig -9",
+      "defined_out": [
+        "b#0 (copy)",
+        "tmp%2#0"
+      ],
+      "stack_out": [
+        "tmp%2#0",
+        "b#0 (copy)"
+      ]
+    },
+    "187": {
+      "op": "==",
+      "defined_out": [
+        "tmp%3#0"
+      ],
+      "stack_out": [
+        "tmp%3#0"
+      ]
+    },
+    "188": {
+      "op": "assert",
+      "stack_out": []
+    },
+    "189": {
+      "op": "frame_dig -6",
+      "defined_out": [
+        "c_bytes#0 (copy)"
+      ],
+      "stack_out": [
+        "c_bytes#0 (copy)"
+      ]
+    },
+    "191": {
+      "op": "frame_dig -7",
+      "defined_out": [
+        "c#0 (copy)",
+        "c_bytes#0 (copy)"
+      ],
+      "stack_out": [
+        "c_bytes#0 (copy)",
+        "c#0 (copy)"
+      ]
+    },
+    "193": {
+      "op": "b==",
+      "defined_out": [
+        "tmp%4#0"
+      ],
+      "stack_out": [
+        "tmp%4#0"
+      ]
+    },
+    "194": {
+      "op": "assert",
+      "stack_out": []
+    },
+    "195": {
+      "op": "frame_dig -4",
+      "defined_out": [
+        "d_bytes#0 (copy)"
+      ],
+      "stack_out": [
+        "d_bytes#0 (copy)"
+      ]
+    },
+    "197": {
+      "op": "extract 2 0",
+      "defined_out": [
+        "tmp%5#0"
+      ],
+      "stack_out": [
+        "tmp%5#0"
+      ]
+    },
+    "200": {
+      "op": "frame_dig -5",
+      "defined_out": [
+        "d#0 (copy)",
+        "tmp%5#0"
+      ],
+      "stack_out": [
+        "tmp%5#0",
+        "d#0 (copy)"
+      ]
+    },
+    "202": {
+      "op": "==",
+      "defined_out": [
+        "tmp%6#0"
+      ],
+      "stack_out": [
+        "tmp%6#0"
+      ]
+    },
+    "203": {
+      "op": "assert",
+      "stack_out": []
+    },
+    "204": {
+      "op": "frame_dig -1",
+      "defined_out": [
+        "e_bytes#0 (copy)"
+      ],
+      "stack_out": [
+        "e_bytes#0 (copy)"
+      ]
+    },
+    "206": {
+      "error": "Index access is out of bounds",
+      "op": "extract 0 8 // on error: Index access is out of bounds",
+      "defined_out": [
+        "item0%0#0"
+      ],
+      "stack_out": [
+        "item0%0#0"
+      ]
+    },
+    "209": {
+      "op": "frame_dig -1",
+      "stack_out": [
+        "item0%0#0",
+        "e_bytes#0 (copy)"
+      ]
+    },
+    "211": {
+      "op": "intc_2 // 8",
+      "defined_out": [
+        "8",
+        "e_bytes#0 (copy)",
+        "item0%0#0"
+      ],
+      "stack_out": [
+        "item0%0#0",
+        "e_bytes#0 (copy)",
+        "8"
+      ]
+    },
+    "212": {
+      "op": "extract_uint16",
+      "defined_out": [
+        "item0%0#0",
+        "item_start_offset%0#0"
+      ],
+      "stack_out": [
+        "item0%0#0",
+        "item_start_offset%0#0"
+      ]
+    },
+    "213": {
+      "op": "swap",
+      "defined_out": [
+        "item0%0#0",
+        "item_start_offset%0#0"
+      ],
+      "stack_out": [
+        "item_start_offset%0#0",
+        "item0%0#0"
+      ]
+    },
+    "214": {
+      "op": "frame_dig -1",
+      "stack_out": [
+        "item_start_offset%0#0",
+        "item0%0#0",
+        "e_bytes#0 (copy)"
+      ]
+    },
+    "216": {
+      "op": "len",
+      "defined_out": [
+        "item0%0#0",
+        "item_end_offset%0#0",
+        "item_start_offset%0#0"
+      ],
+      "stack_out": [
+        "item_start_offset%0#0",
+        "item0%0#0",
+        "item_end_offset%0#0"
+      ]
+    },
+    "217": {
+      "op": "swap",
+      "defined_out": [
+        "item0%0#0",
+        "item_end_offset%0#0",
+        "item_start_offset%0#0"
+      ],
+      "stack_out": [
+        "item_start_offset%0#0",
+        "item_end_offset%0#0",
+        "item0%0#0"
+      ]
+    },
+    "218": {
+      "op": "frame_dig -3",
+      "defined_out": [
+        "e.a#0 (copy)",
+        "item0%0#0",
+        "item_end_offset%0#0",
+        "item_start_offset%0#0"
+      ],
+      "stack_out": [
+        "item_start_offset%0#0",
+        "item_end_offset%0#0",
+        "item0%0#0",
+        "e.a#0 (copy)"
+      ]
+    },
+    "220": {
+      "op": "==",
+      "defined_out": [
+        "item_end_offset%0#0",
+        "item_start_offset%0#0",
+        "tmp%7#0"
+      ],
+      "stack_out": [
+        "item_start_offset%0#0",
+        "item_end_offset%0#0",
+        "tmp%7#0"
+      ]
+    },
+    "221": {
+      "op": "bz testDecoding_bool_false@3",
+      "stack_out": [
+        "item_start_offset%0#0",
+        "item_end_offset%0#0"
+      ]
+    },
+    "224": {
+      "op": "frame_dig -1"
+    },
+    "226": {
+      "op": "frame_dig 0"
+    },
+    "228": {
+      "op": "frame_dig 1"
+    },
+    "230": {
+      "op": "substring3"
+    },
+    "231": {
+      "op": "frame_dig -2"
+    },
+    "233": {
+      "op": "=="
+    },
+    "234": {
+      "op": "bz testDecoding_bool_false@3"
+    },
+    "237": {
+      "op": "intc_1 // 1"
+    },
+    "238": {
+      "block": "testDecoding_bool_merge@4",
+      "stack_in": [
+        "item_start_offset%0#0",
+        "item_end_offset%0#0",
+        "and_result%0#0"
+      ],
+      "error": "assert target is match for conditions",
+      "op": "assert // assert target is match for conditions",
+      "defined_out": [],
+      "stack_out": [
+        "item_start_offset%0#0",
+        "item_end_offset%0#0"
+      ]
+    },
+    "239": {
+      "retsub": true,
+      "op": "retsub"
+    },
+    "240": {
+      "block": "testDecoding_bool_false@3",
+      "stack_in": [
+        "item_start_offset%0#0",
+        "item_end_offset%0#0"
+      ],
+      "op": "intc_0 // 0",
+      "defined_out": [
+        "and_result%0#0"
+      ],
+      "stack_out": [
+        "item_start_offset%0#0",
+        "item_end_offset%0#0",
+        "and_result%0#0"
+      ]
+    },
+    "241": {
+      "op": "b testDecoding_bool_merge@4"
+    }
+  }
+}

@@ -1,0 +1,734 @@
+{
+  "version": 3,
+  "sources": [
+    "C:/Source/algorand/puya-ts/tests/approvals/asset-proxy.algo.ts"
+  ],
+  "mappings": ";AAGA;;AAAA;;;AAAA;;;;;;AAAA;;;AAAA;;;;AAAA;;;AACE;;AAAA;AAAA;AAAA;;AAAA;AADF;;;AAAA;AAAA;;AAEI;AAAA;AAAA;AACU;AAAA;;AAAA;AAAV;AAAA;AACU;AAAA;;AAAA;AAAV;AAAA;AACU;AAAA;;AAAA;AAAV;AAAA;AACU;AAAA;;AAAA;AAAV;AACU;AAAA;;AAAA;AAAV;AACU;AAAA;;AAAA;AAAV;AACU;AAAA;;AAAA;AAAV;AACU;AAAA;;AAAA;AAAV;AACU;AAAA;;AAAA;AAAV;AACU;AAAA;;AAAA;AAAV;AACU;AAAA;;AAAA;AAAV;AACU;AAAA;;AAAA;AAAV;AAEsB;;AAAlB;;AAAA;;AAAA;AAAJ;AAAA;AACqB;;AAAjB;AAAA;;AAAA;AAAJ;AAAA;AAhBF;;;AADF;;AAAA;;;AAAA;;AAAA;AAAA;AAAA;;",
+  "op_pc_offset": 0,
+  "pc_events": {
+    "1": {
+      "subroutine": "@algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram",
+      "params": {},
+      "block": "main",
+      "stack_in": [],
+      "op": "txn NumAppArgs",
+      "defined_out": [
+        "tmp%0#1"
+      ],
+      "stack_out": [
+        "tmp%0#1"
+      ]
+    },
+    "3": {
+      "op": "bz main_bare_routing@6",
+      "stack_out": []
+    },
+    "6": {
+      "op": "pushbytes 0x5df11c28 // method \"testAsset(asset)void\""
+    },
+    "12": {
+      "op": "txna ApplicationArgs 0"
+    },
+    "15": {
+      "op": "match main_testAsset_route@3"
+    },
+    "19": {
+      "block": "main_after_if_else@10",
+      "stack_in": [],
+      "op": "pushint 0 // 0",
+      "defined_out": [
+        "tmp%0#0"
+      ],
+      "stack_out": [
+        "tmp%0#0"
+      ]
+    },
+    "21": {
+      "op": "return"
+    },
+    "22": {
+      "block": "main_testAsset_route@3",
+      "stack_in": [],
+      "op": "txn OnCompletion",
+      "defined_out": [
+        "tmp%3#0"
+      ],
+      "stack_out": [
+        "tmp%3#0"
+      ]
+    },
+    "24": {
+      "op": "!",
+      "defined_out": [
+        "tmp%4#0"
+      ],
+      "stack_out": [
+        "tmp%4#0"
+      ]
+    },
+    "25": {
+      "error": "OnCompletion is not NoOp",
+      "op": "assert // OnCompletion is not NoOp",
+      "stack_out": []
+    },
+    "26": {
+      "op": "txn ApplicationID",
+      "defined_out": [
+        "tmp%5#0"
+      ],
+      "stack_out": [
+        "tmp%5#0"
+      ]
+    },
+    "28": {
+      "error": "can only call when not creating",
+      "op": "assert // can only call when not creating",
+      "stack_out": []
+    },
+    "29": {
+      "op": "txna ApplicationArgs 1",
+      "defined_out": [
+        "reinterpret_bytes[1]%0#0"
+      ],
+      "stack_out": [
+        "reinterpret_bytes[1]%0#0"
+      ]
+    },
+    "32": {
+      "op": "btoi",
+      "defined_out": [
+        "tmp%7#0"
+      ],
+      "stack_out": [
+        "tmp%7#0"
+      ]
+    },
+    "33": {
+      "op": "txnas Assets",
+      "defined_out": [
+        "asset#0"
+      ],
+      "stack_out": [
+        "asset#0"
+      ]
+    },
+    "35": {
+      "op": "dup",
+      "defined_out": [
+        "asset#0",
+        "asset#0 (copy)"
+      ],
+      "stack_out": [
+        "asset#0",
+        "asset#0 (copy)"
+      ]
+    },
+    "36": {
+      "op": "itob",
+      "defined_out": [
+        "asset#0",
+        "tmp%0#2"
+      ],
+      "stack_out": [
+        "asset#0",
+        "tmp%0#2"
+      ]
+    },
+    "37": {
+      "op": "log",
+      "stack_out": [
+        "asset#0"
+      ]
+    },
+    "38": {
+      "op": "dup",
+      "stack_out": [
+        "asset#0",
+        "asset#0 (copy)"
+      ]
+    },
+    "39": {
+      "op": "asset_params_get AssetTotal",
+      "defined_out": [
+        "asset#0",
+        "check%0#0",
+        "value%0#0"
+      ],
+      "stack_out": [
+        "asset#0",
+        "value%0#0",
+        "check%0#0"
+      ]
+    },
+    "41": {
+      "error": "asset exists",
+      "op": "assert // asset exists",
+      "stack_out": [
+        "asset#0",
+        "value%0#0"
+      ]
+    },
+    "42": {
+      "op": "itob",
+      "defined_out": [
+        "asset#0",
+        "tmp%1#1"
+      ],
+      "stack_out": [
+        "asset#0",
+        "tmp%1#1"
+      ]
+    },
+    "43": {
+      "op": "log",
+      "stack_out": [
+        "asset#0"
+      ]
+    },
+    "44": {
+      "op": "dup",
+      "stack_out": [
+        "asset#0",
+        "asset#0 (copy)"
+      ]
+    },
+    "45": {
+      "op": "asset_params_get AssetDecimals",
+      "defined_out": [
+        "asset#0",
+        "check%1#0",
+        "value%1#0"
+      ],
+      "stack_out": [
+        "asset#0",
+        "value%1#0",
+        "check%1#0"
+      ]
+    },
+    "47": {
+      "error": "asset exists",
+      "op": "assert // asset exists",
+      "stack_out": [
+        "asset#0",
+        "value%1#0"
+      ]
+    },
+    "48": {
+      "op": "itob",
+      "defined_out": [
+        "asset#0",
+        "tmp%2#0"
+      ],
+      "stack_out": [
+        "asset#0",
+        "tmp%2#0"
+      ]
+    },
+    "49": {
+      "op": "log",
+      "stack_out": [
+        "asset#0"
+      ]
+    },
+    "50": {
+      "op": "dup",
+      "stack_out": [
+        "asset#0",
+        "asset#0 (copy)"
+      ]
+    },
+    "51": {
+      "op": "asset_params_get AssetDefaultFrozen",
+      "defined_out": [
+        "asset#0",
+        "check%2#0",
+        "value%2#0"
+      ],
+      "stack_out": [
+        "asset#0",
+        "value%2#0",
+        "check%2#0"
+      ]
+    },
+    "53": {
+      "error": "asset exists",
+      "op": "assert // asset exists",
+      "stack_out": [
+        "asset#0",
+        "value%2#0"
+      ]
+    },
+    "54": {
+      "op": "itob",
+      "defined_out": [
+        "asset#0",
+        "tmp%3#1"
+      ],
+      "stack_out": [
+        "asset#0",
+        "tmp%3#1"
+      ]
+    },
+    "55": {
+      "op": "log",
+      "stack_out": [
+        "asset#0"
+      ]
+    },
+    "56": {
+      "op": "dup",
+      "stack_out": [
+        "asset#0",
+        "asset#0 (copy)"
+      ]
+    },
+    "57": {
+      "op": "asset_params_get AssetUnitName",
+      "defined_out": [
+        "asset#0",
+        "check%3#0",
+        "value%3#0"
+      ],
+      "stack_out": [
+        "asset#0",
+        "value%3#0",
+        "check%3#0"
+      ]
+    },
+    "59": {
+      "error": "asset exists",
+      "op": "assert // asset exists",
+      "stack_out": [
+        "asset#0",
+        "value%3#0"
+      ]
+    },
+    "60": {
+      "op": "log",
+      "stack_out": [
+        "asset#0"
+      ]
+    },
+    "61": {
+      "op": "dup",
+      "stack_out": [
+        "asset#0",
+        "asset#0 (copy)"
+      ]
+    },
+    "62": {
+      "op": "asset_params_get AssetName",
+      "defined_out": [
+        "asset#0",
+        "check%4#0",
+        "value%4#0"
+      ],
+      "stack_out": [
+        "asset#0",
+        "value%4#0",
+        "check%4#0"
+      ]
+    },
+    "64": {
+      "error": "asset exists",
+      "op": "assert // asset exists",
+      "stack_out": [
+        "asset#0",
+        "value%4#0"
+      ]
+    },
+    "65": {
+      "op": "log",
+      "stack_out": [
+        "asset#0"
+      ]
+    },
+    "66": {
+      "op": "dup",
+      "stack_out": [
+        "asset#0",
+        "asset#0 (copy)"
+      ]
+    },
+    "67": {
+      "op": "asset_params_get AssetURL",
+      "defined_out": [
+        "asset#0",
+        "check%5#0",
+        "value%5#0"
+      ],
+      "stack_out": [
+        "asset#0",
+        "value%5#0",
+        "check%5#0"
+      ]
+    },
+    "69": {
+      "error": "asset exists",
+      "op": "assert // asset exists",
+      "stack_out": [
+        "asset#0",
+        "value%5#0"
+      ]
+    },
+    "70": {
+      "op": "log",
+      "stack_out": [
+        "asset#0"
+      ]
+    },
+    "71": {
+      "op": "dup",
+      "stack_out": [
+        "asset#0",
+        "asset#0 (copy)"
+      ]
+    },
+    "72": {
+      "op": "asset_params_get AssetMetadataHash",
+      "defined_out": [
+        "asset#0",
+        "check%6#0",
+        "value%6#0"
+      ],
+      "stack_out": [
+        "asset#0",
+        "value%6#0",
+        "check%6#0"
+      ]
+    },
+    "74": {
+      "error": "asset exists",
+      "op": "assert // asset exists",
+      "stack_out": [
+        "asset#0",
+        "value%6#0"
+      ]
+    },
+    "75": {
+      "op": "log",
+      "stack_out": [
+        "asset#0"
+      ]
+    },
+    "76": {
+      "op": "dup",
+      "stack_out": [
+        "asset#0",
+        "asset#0 (copy)"
+      ]
+    },
+    "77": {
+      "op": "asset_params_get AssetManager",
+      "defined_out": [
+        "asset#0",
+        "check%7#0",
+        "value%7#0"
+      ],
+      "stack_out": [
+        "asset#0",
+        "value%7#0",
+        "check%7#0"
+      ]
+    },
+    "79": {
+      "error": "asset exists",
+      "op": "assert // asset exists",
+      "stack_out": [
+        "asset#0",
+        "value%7#0"
+      ]
+    },
+    "80": {
+      "op": "log",
+      "stack_out": [
+        "asset#0"
+      ]
+    },
+    "81": {
+      "op": "dup",
+      "stack_out": [
+        "asset#0",
+        "asset#0 (copy)"
+      ]
+    },
+    "82": {
+      "op": "asset_params_get AssetReserve",
+      "defined_out": [
+        "asset#0",
+        "check%8#0",
+        "value%8#0"
+      ],
+      "stack_out": [
+        "asset#0",
+        "value%8#0",
+        "check%8#0"
+      ]
+    },
+    "84": {
+      "error": "asset exists",
+      "op": "assert // asset exists",
+      "stack_out": [
+        "asset#0",
+        "value%8#0"
+      ]
+    },
+    "85": {
+      "op": "log",
+      "stack_out": [
+        "asset#0"
+      ]
+    },
+    "86": {
+      "op": "dup",
+      "stack_out": [
+        "asset#0",
+        "asset#0 (copy)"
+      ]
+    },
+    "87": {
+      "op": "asset_params_get AssetFreeze",
+      "defined_out": [
+        "asset#0",
+        "check%9#0",
+        "value%9#0"
+      ],
+      "stack_out": [
+        "asset#0",
+        "value%9#0",
+        "check%9#0"
+      ]
+    },
+    "89": {
+      "error": "asset exists",
+      "op": "assert // asset exists",
+      "stack_out": [
+        "asset#0",
+        "value%9#0"
+      ]
+    },
+    "90": {
+      "op": "log",
+      "stack_out": [
+        "asset#0"
+      ]
+    },
+    "91": {
+      "op": "dup",
+      "stack_out": [
+        "asset#0",
+        "asset#0 (copy)"
+      ]
+    },
+    "92": {
+      "op": "asset_params_get AssetClawback",
+      "defined_out": [
+        "asset#0",
+        "check%10#0",
+        "value%10#0"
+      ],
+      "stack_out": [
+        "asset#0",
+        "value%10#0",
+        "check%10#0"
+      ]
+    },
+    "94": {
+      "error": "asset exists",
+      "op": "assert // asset exists",
+      "stack_out": [
+        "asset#0",
+        "value%10#0"
+      ]
+    },
+    "95": {
+      "op": "log",
+      "stack_out": [
+        "asset#0"
+      ]
+    },
+    "96": {
+      "op": "dup",
+      "stack_out": [
+        "asset#0",
+        "asset#0 (copy)"
+      ]
+    },
+    "97": {
+      "op": "asset_params_get AssetCreator",
+      "defined_out": [
+        "asset#0",
+        "check%11#0",
+        "value%11#0"
+      ],
+      "stack_out": [
+        "asset#0",
+        "value%11#0",
+        "check%11#0"
+      ]
+    },
+    "99": {
+      "error": "asset exists",
+      "op": "assert // asset exists",
+      "stack_out": [
+        "asset#0",
+        "value%11#0"
+      ]
+    },
+    "100": {
+      "op": "log",
+      "stack_out": [
+        "asset#0"
+      ]
+    },
+    "101": {
+      "op": "txn Sender",
+      "defined_out": [
+        "asset#0",
+        "tmp%4#1"
+      ],
+      "stack_out": [
+        "asset#0",
+        "tmp%4#1"
+      ]
+    },
+    "103": {
+      "op": "dig 1",
+      "stack_out": [
+        "asset#0",
+        "tmp%4#1",
+        "asset#0 (copy)"
+      ]
+    },
+    "105": {
+      "op": "asset_holding_get AssetBalance",
+      "defined_out": [
+        "asset#0",
+        "check%12#0",
+        "value%12#0"
+      ],
+      "stack_out": [
+        "asset#0",
+        "value%12#0",
+        "check%12#0"
+      ]
+    },
+    "107": {
+      "error": "account opted into asset",
+      "op": "assert // account opted into asset",
+      "stack_out": [
+        "asset#0",
+        "value%12#0"
+      ]
+    },
+    "108": {
+      "op": "itob",
+      "defined_out": [
+        "asset#0",
+        "tmp%5#1"
+      ],
+      "stack_out": [
+        "asset#0",
+        "tmp%5#1"
+      ]
+    },
+    "109": {
+      "op": "log",
+      "stack_out": [
+        "asset#0"
+      ]
+    },
+    "110": {
+      "op": "txn Sender",
+      "defined_out": [
+        "asset#0",
+        "tmp%6#1"
+      ],
+      "stack_out": [
+        "asset#0",
+        "tmp%6#1"
+      ]
+    },
+    "112": {
+      "op": "swap",
+      "stack_out": [
+        "tmp%6#1",
+        "asset#0"
+      ]
+    },
+    "113": {
+      "op": "asset_holding_get AssetFrozen",
+      "defined_out": [
+        "check%13#0",
+        "value%13#0"
+      ],
+      "stack_out": [
+        "value%13#0",
+        "check%13#0"
+      ]
+    },
+    "115": {
+      "error": "account opted into asset",
+      "op": "assert // account opted into asset",
+      "stack_out": [
+        "value%13#0"
+      ]
+    },
+    "116": {
+      "op": "itob",
+      "defined_out": [
+        "tmp%7#1"
+      ],
+      "stack_out": [
+        "tmp%7#1"
+      ]
+    },
+    "117": {
+      "op": "log",
+      "stack_out": []
+    },
+    "118": {
+      "op": "pushint 1 // 1",
+      "defined_out": [
+        "tmp%0#0"
+      ],
+      "stack_out": [
+        "tmp%0#0"
+      ]
+    },
+    "120": {
+      "op": "return"
+    },
+    "121": {
+      "block": "main_bare_routing@6",
+      "stack_in": [],
+      "op": "txn OnCompletion",
+      "defined_out": [
+        "tmp%9#0"
+      ],
+      "stack_out": [
+        "tmp%9#0"
+      ]
+    },
+    "123": {
+      "op": "bnz main_after_if_else@10",
+      "stack_out": []
+    },
+    "126": {
+      "op": "txn ApplicationID"
+    },
+    "128": {
+      "op": "!"
+    },
+    "129": {
+      "error": "can only call when creating",
+      "op": "assert // can only call when creating"
+    },
+    "130": {
+      "op": "pushint 1 // 1"
+    },
+    "132": {
+      "op": "return"
+    }
+  }
+}

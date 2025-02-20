@@ -1,0 +1,358 @@
+{
+  "version": 3,
+  "sources": [
+    "C:/Source/algorand/puya-ts/tests/approvals/arc4-hybrid.algo.ts"
+  ],
+  "mappings": ";;;;;AAIQ;;;;;;;;AAAJ;AACe;;;AACX;;;;;;;AAAJ;AACA;AASI;;;;;;;;;;;;;AAAJ;;AAdJ;;AAAA;AAAA;AAAA;;;AAAA;;;AAAA;;;;;;AAAA;AAAA;;;;AAAA;;AAaE;;AAAA;AAAA;AAAA;AAAA;;AAAA;AAAA;AAAA;AAAA;;;AAAA;;;;AAbF;;AAAA;AAAA;AAAA;;;;;;;AAAA;;AAAA;AAAA;AAAA;AAAA;;;AAAA;;;;",
+  "op_pc_offset": 0,
+  "pc_events": {
+    "1": {
+      "subroutine": "tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.approvalProgram",
+      "params": {},
+      "block": "main",
+      "stack_in": [],
+      "op": "intcblock 0 1"
+    },
+    "5": {
+      "op": "pushbytes \"before\"",
+      "defined_out": [
+        "\"before\""
+      ],
+      "stack_out": [
+        "\"before\""
+      ]
+    },
+    "13": {
+      "op": "log",
+      "stack_out": []
+    },
+    "14": {
+      "callsub": "@algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram",
+      "op": "callsub approvalProgram",
+      "defined_out": [
+        "result#0"
+      ],
+      "stack_out": [
+        "result#0"
+      ]
+    },
+    "17": {
+      "op": "pushbytes \"after\"",
+      "defined_out": [
+        "\"after\"",
+        "result#0"
+      ],
+      "stack_out": [
+        "result#0",
+        "\"after\""
+      ]
+    },
+    "24": {
+      "op": "log",
+      "stack_out": [
+        "result#0"
+      ]
+    },
+    "25": {
+      "op": "return",
+      "stack_out": []
+    },
+    "26": {
+      "subroutine": "tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.someMethod",
+      "params": {},
+      "block": "someMethod",
+      "stack_in": [],
+      "op": "pushbytes \"some method\"",
+      "defined_out": [
+        "\"some method\""
+      ],
+      "stack_out": [
+        "\"some method\""
+      ]
+    },
+    "39": {
+      "op": "log",
+      "stack_out": []
+    },
+    "40": {
+      "retsub": true,
+      "op": "retsub"
+    },
+    "41": {
+      "subroutine": "@algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram",
+      "params": {},
+      "block": "approvalProgram_block@1",
+      "stack_in": [],
+      "op": "txn NumAppArgs",
+      "defined_out": [
+        "tmp%0#1"
+      ],
+      "stack_out": [
+        "tmp%0#1"
+      ]
+    },
+    "43": {
+      "op": "intc_0 // 0",
+      "defined_out": [
+        "0",
+        "tmp%0#1"
+      ],
+      "stack_out": [
+        "tmp%0#1",
+        "0"
+      ]
+    },
+    "44": {
+      "op": "!=",
+      "defined_out": [
+        "tmp%1#0"
+      ],
+      "stack_out": [
+        "tmp%1#0"
+      ]
+    },
+    "45": {
+      "op": "bz approvalProgram_bare_routing@6",
+      "stack_out": []
+    },
+    "48": {
+      "block": "approvalProgram_abi_routing@2",
+      "stack_in": [],
+      "op": "txna ApplicationArgs 0",
+      "defined_out": [
+        "tmp%2#0"
+      ],
+      "stack_out": [
+        "tmp%2#0"
+      ]
+    },
+    "51": {
+      "op": "pushbytes 0xc258469e // method \"someMethod()void\"",
+      "defined_out": [
+        "Method(someMethod()void)",
+        "tmp%2#0"
+      ],
+      "stack_out": [
+        "tmp%2#0",
+        "Method(someMethod()void)"
+      ]
+    },
+    "57": {
+      "op": "swap",
+      "stack_out": [
+        "Method(someMethod()void)",
+        "tmp%2#0"
+      ]
+    },
+    "58": {
+      "op": "match approvalProgram_someMethod_route@3",
+      "stack_out": []
+    },
+    "62": {
+      "block": "approvalProgram_after_if_else@10",
+      "stack_in": [],
+      "op": "intc_0 // 0",
+      "defined_out": [
+        "tmp%0#0"
+      ],
+      "stack_out": [
+        "tmp%0#0"
+      ]
+    },
+    "63": {
+      "block": "approvalProgram_after_inlined_tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.__puya_arc4_router__@11",
+      "stack_in": [
+        "tmp%0#0"
+      ],
+      "retsub": true,
+      "op": "retsub",
+      "defined_out": [
+        "tmp%0#0"
+      ]
+    },
+    "64": {
+      "block": "approvalProgram_someMethod_route@3",
+      "stack_in": [],
+      "op": "txn OnCompletion",
+      "defined_out": [
+        "tmp%3#0"
+      ],
+      "stack_out": [
+        "tmp%3#0"
+      ]
+    },
+    "66": {
+      "op": "intc_0 // NoOp",
+      "defined_out": [
+        "NoOp",
+        "tmp%3#0"
+      ],
+      "stack_out": [
+        "tmp%3#0",
+        "NoOp"
+      ]
+    },
+    "67": {
+      "op": "==",
+      "defined_out": [
+        "tmp%4#0"
+      ],
+      "stack_out": [
+        "tmp%4#0"
+      ]
+    },
+    "68": {
+      "error": "OnCompletion is not NoOp",
+      "op": "assert // OnCompletion is not NoOp",
+      "stack_out": []
+    },
+    "69": {
+      "op": "txn ApplicationID",
+      "defined_out": [
+        "tmp%5#0"
+      ],
+      "stack_out": [
+        "tmp%5#0"
+      ]
+    },
+    "71": {
+      "op": "intc_0 // 0",
+      "defined_out": [
+        "0",
+        "tmp%5#0"
+      ],
+      "stack_out": [
+        "tmp%5#0",
+        "0"
+      ]
+    },
+    "72": {
+      "op": "!=",
+      "defined_out": [
+        "tmp%6#0"
+      ],
+      "stack_out": [
+        "tmp%6#0"
+      ]
+    },
+    "73": {
+      "error": "can only call when not creating",
+      "op": "assert // can only call when not creating",
+      "stack_out": []
+    },
+    "74": {
+      "callsub": "tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.someMethod",
+      "op": "callsub someMethod"
+    },
+    "77": {
+      "op": "intc_1 // 1",
+      "defined_out": [
+        "tmp%0#0"
+      ],
+      "stack_out": [
+        "tmp%0#0"
+      ]
+    },
+    "78": {
+      "op": "b approvalProgram_after_inlined_tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.__puya_arc4_router__@11"
+    },
+    "81": {
+      "block": "approvalProgram_bare_routing@6",
+      "stack_in": [],
+      "op": "txn OnCompletion",
+      "defined_out": [
+        "tmp%7#0"
+      ],
+      "stack_out": [
+        "tmp%7#0"
+      ]
+    },
+    "83": {
+      "op": "intc_0 // 0",
+      "defined_out": [
+        "0",
+        "tmp%7#0"
+      ],
+      "stack_out": [
+        "tmp%7#0",
+        "0"
+      ]
+    },
+    "84": {
+      "op": "swap",
+      "stack_out": [
+        "0",
+        "tmp%7#0"
+      ]
+    },
+    "85": {
+      "op": "match approvalProgram___algots__.defaultCreate@7",
+      "stack_out": []
+    },
+    "89": {
+      "block": "approvalProgram_switch_case_next@9",
+      "stack_in": [],
+      "op": "b approvalProgram_after_if_else@10"
+    },
+    "92": {
+      "block": "approvalProgram___algots__.defaultCreate@7",
+      "stack_in": [],
+      "op": "txn ApplicationID",
+      "defined_out": [
+        "tmp%8#0"
+      ],
+      "stack_out": [
+        "tmp%8#0"
+      ]
+    },
+    "94": {
+      "op": "intc_0 // 0",
+      "defined_out": [
+        "0",
+        "tmp%8#0"
+      ],
+      "stack_out": [
+        "tmp%8#0",
+        "0"
+      ]
+    },
+    "95": {
+      "op": "==",
+      "defined_out": [
+        "tmp%9#0"
+      ],
+      "stack_out": [
+        "tmp%9#0"
+      ]
+    },
+    "96": {
+      "error": "can only call when creating",
+      "op": "assert // can only call when creating",
+      "stack_out": []
+    },
+    "97": {
+      "callsub": "tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.__algots__.defaultCreate",
+      "op": "callsub __algots__.defaultCreate"
+    },
+    "100": {
+      "op": "intc_1 // 1",
+      "defined_out": [
+        "tmp%0#0"
+      ],
+      "stack_out": [
+        "tmp%0#0"
+      ]
+    },
+    "101": {
+      "op": "b approvalProgram_after_inlined_tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.__puya_arc4_router__@11"
+    },
+    "104": {
+      "subroutine": "tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.__algots__.defaultCreate",
+      "params": {},
+      "block": "__algots__.defaultCreate",
+      "stack_in": [],
+      "retsub": true,
+      "op": "retsub"
+    }
+  }
+}
