@@ -107,7 +107,6 @@ export class ContractClassPType extends PType {
   readonly singleton = true
   readonly baseTypes: ContractClassPType[]
   readonly sourceLocation: SourceLocation
-  readonly methodNameOverrides: Record<string, string>
 
   constructor(props: {
     module: string
@@ -116,7 +115,6 @@ export class ContractClassPType extends PType {
     methods: Record<string, FunctionPType>
     baseTypes: ContractClassPType[]
     sourceLocation: SourceLocation
-    methodNameOverrides?: Record<string, string>
   }) {
     super()
     this.name = props.name
@@ -125,7 +123,6 @@ export class ContractClassPType extends PType {
     this.methods = props.methods
     this.baseTypes = props.baseTypes
     this.sourceLocation = props.sourceLocation
-    this.methodNameOverrides = props.methodNameOverrides ?? {}
   }
 
   get isARC4(): boolean {
@@ -540,11 +537,19 @@ export class FunctionPType extends PType {
   readonly returnType: PType
   readonly parameters: Array<readonly [string, PType]>
   readonly singleton = true
+  readonly sourceLocation: SourceLocation | undefined
 
-  constructor(props: { name: string; module: string; returnType: PType; parameters: Array<readonly [string, PType]> }) {
+  constructor(props: {
+    name: string
+    module: string
+    returnType: PType
+    parameters: Array<readonly [string, PType]>
+    sourceLocation: SourceLocation | undefined
+  }) {
     super()
     this.name = props.name
     this.module = props.module
+    this.sourceLocation = props.sourceLocation
     if (props.returnType instanceof ObjectPType && !props.returnType.alias) {
       this.returnType = new ObjectPType({
         alias: new SymbolName({ name: `${props.name}Result`, module: this.module }),
@@ -914,6 +919,7 @@ export const ClearStateProgram = new FunctionPType({
   module: Constants.baseContractModuleName,
   returnType: uint64PType,
   parameters: [],
+  sourceLocation: undefined,
 })
 
 export const ApprovalProgram = new FunctionPType({
@@ -921,6 +927,7 @@ export const ApprovalProgram = new FunctionPType({
   module: Constants.arc4ModuleName,
   returnType: boolPType,
   parameters: [],
+  sourceLocation: undefined,
 })
 
 export const baseContractType = new BaseContractClassType({

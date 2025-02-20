@@ -221,7 +221,7 @@ export function parseFunctionArgs<const TGenericCount extends number, const TArg
         }
         if (source) {
           if (a.t.length === 0) {
-            return source
+            return requireInstanceBuilder(source)
           } else {
             for (const t of a.t) {
               const builder = requestBuilderOfType(source, t)

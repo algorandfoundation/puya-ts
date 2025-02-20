@@ -11,7 +11,6 @@ import type { Statements } from '../../visitor/syntax-names'
 import { getNodeName } from '../../visitor/syntax-names'
 import type { Visitor } from '../../visitor/visitor'
 import { accept } from '../../visitor/visitor'
-import type { AwstBuildContext } from '../context/awst-build-context'
 import type { InstanceBuilder } from '../eb'
 import { ArrayLiteralExpressionBuilder } from '../eb/literal/array-literal-expression-builder'
 import { ObjectLiteralExpressionBuilder } from '../eb/literal/object-literal-expression-builder'
@@ -38,9 +37,9 @@ export class FunctionVisitor
 
   protected readonly _functionType: FunctionPType
 
-  constructor(ctx: AwstBuildContext, node: ts.MethodDeclaration | ts.FunctionDeclaration | ts.ConstructorDeclaration) {
-    super(ctx)
-    const type = ctx.getPTypeForNode(node)
+  constructor(node: ts.MethodDeclaration | ts.FunctionDeclaration | ts.ConstructorDeclaration) {
+    super()
+    const type = this.context.getPTypeForNode(node)
     invariant(type instanceof FunctionPType, 'type of function must be FunctionPType')
     this._functionType = type
   }

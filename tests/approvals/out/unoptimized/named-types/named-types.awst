@@ -32,9 +32,9 @@ contract MyContract
   
   testing(): readonlytuple[XY{ x: uint64, y: uint64 }, YX{ y: uint64, x: uint64 }, object{ x: uint64, y: uint64 }]
   {
-    a: XY{ x: uint64, y: uint64 } = this.getXY()
-    b: YX{ y: uint64, x: uint64 } = this.getYX()
-    c: object{ x: uint64, y: uint64 } = { x: (#3 = this.getAnon()).x, y: #3.y }
+    a: XY{ x: uint64, y: uint64 } = tests/approvals/named-types.algo.ts::MyContract.getXY()
+    b: YX{ y: uint64, x: uint64 } = tests/approvals/named-types.algo.ts::MyContract.getYX()
+    c: object{ x: uint64, y: uint64 } = { x: (#3 = tests/approvals/named-types.algo.ts::MyContract.getAnon()).x, y: #3.y }
     return <tuple>[a, b, c]
   }
   

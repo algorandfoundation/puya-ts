@@ -6,8 +6,6 @@ import { expandMaybeArray, invariant } from '../../util'
 import type { ModuleStatements } from '../../visitor/syntax-names'
 import type { Visitor } from '../../visitor/visitor'
 import { accept } from '../../visitor/visitor'
-
-import type { AwstBuildContext } from '../context/awst-build-context'
 import { requireConstantOfType } from '../eb/util'
 import { ContractClassPType, LibClassType, LogicSigPType } from '../ptypes'
 import { ARC4StructType } from '../ptypes/arc4-types'
@@ -23,8 +21,8 @@ export class SourceFileVisitor extends BaseVisitor implements Visitor<ModuleStat
   private _moduleStatements: NodeOrDeferred[] = []
   private accept = <TNode extends ts.Node>(node: TNode) => accept<SourceFileVisitor, TNode>(this, node)
 
-  constructor(context: AwstBuildContext, sourceFile: ts.SourceFile) {
-    super(context)
+  constructor(sourceFile: ts.SourceFile) {
+    super()
 
     for (const statement of sourceFile.statements) {
       try {
@@ -49,7 +47,8 @@ export class SourceFileVisitor extends BaseVisitor implements Visitor<ModuleStat
   }
 
   visitFunctionDeclaration(node: ts.FunctionDeclaration): NodeOrDeferred {
-    return () => logPuyaExceptions(() => SubroutineVisitor.buildSubroutine(this.context, node), this.sourceLocation(node))
+    return () =>
+      logPuyaExceptions(() => this.context.runInChildContext(() => SubroutineVisitor.buildSubroutine(node)), this.sourceLocation(node))
   }
 
   buildModule(): awst.AWST[] {
@@ -111,15 +110,17 @@ export class SourceFileVisitor extends BaseVisitor implements Visitor<ModuleStat
   visitClassDeclaration(node: ts.ClassDeclaration): NodeOrDeferred {
     const sourceLocation = this.sourceLocation(node)
     const ptype = this.context.getPTypeForNode(node)
-    if (ptype instanceof ContractClassPType) {
-      return () => logPuyaExceptions(() => ContractVisitor.buildContract(this.context.createChildContext(), node, ptype), sourceLocation)
-    } else if (ptype instanceof ARC4StructType) {
-      return () => logPuyaExceptions(() => StructVisitor.buildStructDef(this.context.createChildContext(), node, ptype), sourceLocation)
-    } else if (ptype instanceof LogicSigPType) {
-      return () => logPuyaExceptions(() => LogicSigVisitor.buildLogicSig(this.context.createChildContext(), node, ptype), sourceLocation)
-    } else {
-      logger.warn(sourceLocation, `Ignoring class declaration ${ptype.fullName}`)
-      return []
-    }
+    return this.context.runInChildContext(() => {
+      if (ptype instanceof ContractClassPType) {
+        return () => logPuyaExceptions(() => ContractVisitor.buildContract(node, ptype), sourceLocation)
+      } else if (ptype instanceof ARC4StructType) {
+        return () => logPuyaExceptions(() => StructVisitor.buildStructDef(node, ptype), sourceLocation)
+      } else if (ptype instanceof LogicSigPType) {
+        return () => logPuyaExceptions(() => LogicSigVisitor.buildLogicSig(node, ptype), sourceLocation)
+      } else {
+        logger.warn(sourceLocation, `Ignoring class declaration ${ptype.fullName}`)
+        return []
+      }
+    })
   }
 }

@@ -124,14 +124,13 @@ main_bare_routing@11:
     b main_after_if_else@12
 
 
+// tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix.create() -> void:
+create:
+    retsub
+
+
 // tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix.constructor() -> void:
 constructor:
-    // tests/approvals/precompiled-apps.algo.ts:35-38
-    // constructor() {
-    //   super()
-    //   this.greeting.value = TemplateVar<string>('GREETING', 'PRFX_')
-    // }
-    proto 0 0
     // tests/approvals/precompiled-apps.algo.ts:36
     // super()
     callsub tests/approvals/precompiled-apps.algo.ts::HelloBase.constructor
@@ -145,43 +144,13 @@ constructor:
     retsub
 
 
-// tests/approvals/precompiled-apps.algo.ts::HelloBase.constructor() -> void:
-tests/approvals/precompiled-apps.algo.ts::HelloBase.constructor:
-    // tests/approvals/precompiled-apps.algo.ts:3
-    // abstract class HelloBase extends Contract {
-    proto 0 0
-    // tests/approvals/precompiled-apps.algo.ts:4
-    // greeting = GlobalState({ initialValue: '' })
-    bytec_0 // "greeting"
-    bytec_1 // ""
-    app_global_put
-    retsub
-
-
-// tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix.create() -> void:
-create:
-    // tests/approvals/precompiled-apps.algo.ts:40-41
-    // @abimethod({ onCreate: 'require' })
-    // create() { }
-    proto 0 0
-    retsub
-
-
 // tests/approvals/precompiled-apps.algo.ts::HelloBase.delete() -> void:
 delete:
-    // tests/approvals/precompiled-apps.algo.ts:6-7
-    // @abimethod({ allowActions: 'DeleteApplication' })
-    // delete() { }
-    proto 0 0
     retsub
 
 
 // tests/approvals/precompiled-apps.algo.ts::HelloBase.update() -> void:
 update:
-    // tests/approvals/precompiled-apps.algo.ts:9-10
-    // @abimethod({ allowActions: 'UpdateApplication' })
-    // update() { }
-    proto 0 0
     retsub
 
 
@@ -190,16 +159,14 @@ greet:
     // tests/approvals/precompiled-apps.algo.ts:12
     // greet(name: string): string {
     proto 1 1
-    // tests/approvals/precompiled-apps.algo.ts:13
-    // return `${this.greeting.value} ${name}`
-    intc_0 // 0
     // tests/approvals/precompiled-apps.algo.ts:4
     // greeting = GlobalState({ initialValue: '' })
+    intc_0 // 0
     bytec_0 // "greeting"
-    // tests/approvals/precompiled-apps.algo.ts:13
-    // return `${this.greeting.value} ${name}`
     app_global_get_ex
     assert // check GlobalState exists
+    // tests/approvals/precompiled-apps.algo.ts:13
+    // return `${this.greeting.value} ${name}`
     bytec_1 // ""
     swap
     concat
@@ -207,4 +174,14 @@ greet:
     concat
     frame_dig -1
     concat
+    retsub
+
+
+// tests/approvals/precompiled-apps.algo.ts::HelloBase.constructor() -> void:
+tests/approvals/precompiled-apps.algo.ts::HelloBase.constructor:
+    // tests/approvals/precompiled-apps.algo.ts:4
+    // greeting = GlobalState({ initialValue: '' })
+    bytec_0 // "greeting"
+    bytec_1 // ""
+    app_global_put
     retsub

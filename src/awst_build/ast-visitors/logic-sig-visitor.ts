@@ -9,7 +9,7 @@ import { invariant } from '../../util'
 import type { ClassElements } from '../../visitor/syntax-names'
 import type { Visitor } from '../../visitor/visitor'
 import { accept } from '../../visitor/visitor'
-import type { AwstBuildContext } from '../context/awst-build-context'
+import { AwstBuildContext } from '../context/awst-build-context'
 import { LogicSigClassModel } from '../models/logic-sig-class-model'
 import type { LogicSigPType } from '../ptypes'
 import { boolPType, FunctionPType, uint64PType } from '../ptypes'
@@ -26,21 +26,20 @@ export class LogicSigVisitor extends BaseVisitor implements Visitor<ClassElement
     return [logicSigClass.buildLogicSignature()]
   }
 
-  static buildLogicSig(ctx: AwstBuildContext, classDec: ts.ClassDeclaration, ptype: LogicSigPType) {
-    return new LogicSigVisitor(ctx, classDec, ptype).getLogicSig()
+  static buildLogicSig(classDec: ts.ClassDeclaration, ptype: LogicSigPType) {
+    return new LogicSigVisitor(classDec, ptype).getLogicSig()
   }
 
   private program: Subroutine | null = null
 
   constructor(
-    ctx: AwstBuildContext,
     classDec: ts.ClassDeclaration,
     private _logicSigPType: LogicSigPType,
   ) {
-    super(ctx)
+    super()
     const sourceLocation = this.sourceLocation(classDec)
 
-    const options = DecoratorVisitor.buildLogicSigData(ctx, classDec)
+    const options = DecoratorVisitor.buildLogicSigData(classDec)
 
     for (const member of classDec.members) {
       try {
@@ -105,7 +104,7 @@ export class LogicSigVisitor extends BaseVisitor implements Visitor<ClassElement
       )
       return
     }
-    this.program = LogicSigProgramVisitor.buildLogicSigProgram(this.context.createChildContext(), node)
+    this.program = AwstBuildContext.current.runInChildContext(() => LogicSigProgramVisitor.buildLogicSigProgram(node))
   }
   visitPropertyDeclaration(node: ts.PropertyDeclaration) {
     this.throwLogicSigNotSupported(node, 'Property declarations')

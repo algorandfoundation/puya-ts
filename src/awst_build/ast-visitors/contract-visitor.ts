@@ -12,7 +12,6 @@ import { codeInvariant, invariant } from '../../util'
 import type { ClassElements } from '../../visitor/syntax-names'
 import type { Visitor } from '../../visitor/visitor'
 import { accept } from '../../visitor/visitor'
-import type { AwstBuildContext } from '../context/awst-build-context'
 import { ContractSuperBuilder } from '../eb/contract-builder'
 import { BoxProxyExpressionBuilder } from '../eb/storage/box'
 import { GlobalStateFunctionResultBuilder } from '../eb/storage/global-state'
@@ -34,14 +33,14 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
   private readonly _propertyInitialization: awst.Statement[] = []
   public accept = <TNode extends ts.Node>(node: TNode) => accept<ContractVisitor, TNode>(this, node)
 
-  constructor(ctx: AwstBuildContext, classDec: ts.ClassDeclaration, ptype: ContractClassPType) {
-    super(ctx)
+  constructor(classDec: ts.ClassDeclaration, ptype: ContractClassPType) {
+    super()
     const sourceLocation = this.context.getSourceLocation(classDec)
     codeInvariant(classDec.name, 'Anonymous classes are not supported for contracts', sourceLocation)
 
     this._contractPType = ptype
 
-    const contractOptions = DecoratorVisitor.buildContractData(ctx, classDec)
+    const contractOptions = DecoratorVisitor.buildContractData(classDec)
 
     const isAbstract = Boolean(classDec.modifiers?.some((m) => m.kind === ts.SyntaxKind.AbstractKeyword))
 
@@ -109,7 +108,7 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
         { sourceLocation },
         nodeFactory.expressionStatement({
           expr: requireInstanceBuilder(
-            new ContractSuperBuilder(this._contractPType.baseTypes[0], sourceLocation, this.context).call([], [], sourceLocation),
+            new ContractSuperBuilder(this._contractPType.baseTypes[0], sourceLocation).call([], [], sourceLocation),
           ).resolve(),
         }),
         ...this._propertyInitialization,
@@ -122,7 +121,7 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
     this.throwNotSupported(node, 'class static blocks')
   }
   visitConstructor(node: ts.ConstructorDeclaration): void {
-    this._ctor = ConstructorVisitor.buildConstructor(this.context, node, this._contractPType, {
+    this._ctor = ConstructorVisitor.buildConstructor(node, this._contractPType, {
       cref: ContractReference.fromPType(this._contractPType),
       propertyInitializerStatements: this._propertyInitialization,
     })
@@ -135,7 +134,16 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
   }
 
   visitMethodDeclaration(node: ts.MethodDeclaration): void {
-    const contractMethod = ContractMethodVisitor.buildContractMethod(this.context, node, this._contractPType)
+    const contractMethod = ContractMethodVisitor.buildContractMethod(node, this._contractPType)
+    if (contractMethod.arc4MethodConfig) {
+      this.context.addArc4Config({
+        contractReference: contractMethod.cref,
+        arc4MethodConfig: contractMethod.arc4MethodConfig,
+        memberName: contractMethod.memberName,
+        sourceLocation: contractMethod.sourceLocation,
+      })
+    }
+
     switch (contractMethod.memberName) {
       case Constants.approvalProgramMethodName:
         this._approvalProgram = contractMethod
@@ -205,7 +213,7 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
     this.throwNotSupported(node, 'set accessors')
   }
 
-  public static buildContract(ctx: AwstBuildContext, classDec: ts.ClassDeclaration, ptype: ContractClassPType): [] | [awst.Contract] {
-    return new ContractVisitor(ctx, classDec, ptype).getContract()
+  public static buildContract(classDec: ts.ClassDeclaration, ptype: ContractClassPType): [] | [awst.Contract] {
+    return new ContractVisitor(classDec, ptype).getContract()
   }
 }

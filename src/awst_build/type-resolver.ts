@@ -343,6 +343,7 @@ export class TypeResolver {
       parameters,
       name: typeName.name,
       module: typeName.module,
+      sourceLocation,
     })
   }
 
@@ -382,7 +383,6 @@ export class TypeResolver {
   ): ContractClassPType {
     const properties: Record<string, AppStorageType> = {}
     const methods: Record<string, FunctionPType> = {}
-    const methodNameOverrides = this.getMethodNameOverridesInArc4MethodDecorators(tsType)
 
     for (const prop of tsType.getProperties()) {
       const type = this.checker.getTypeOfSymbol(prop)
@@ -400,33 +400,7 @@ export class TypeResolver {
       module: typeName.module,
       baseTypes: [baseType],
       sourceLocation,
-      methodNameOverrides,
     })
-  }
-
-  private getMethodNameOverridesInArc4MethodDecorators(tsType: ts.Type): Record<string, string> {
-    const methodNameOverrides: Record<string, string> = {}
-    ;(tsType.symbol?.declarations?.[0] as ts.ClassDeclaration).members.forEach((member: ts.ClassElement) => {
-      ts.isMethodDeclaration(member) &&
-        member.modifiers
-          ?.filter((d) => ts.isDecorator(d))
-          .map((m) => {
-            if (
-              ts.isCallExpression(m.expression) &&
-              ts.isIdentifier(m.expression.expression) &&
-              ['abimethod', 'baremethod'].includes(m.expression.expression.text) &&
-              m.expression.arguments.length === 1 &&
-              ts.isObjectLiteralExpression(m.expression.arguments[0])
-            ) {
-              m.expression.arguments[0].properties.forEach((p) => {
-                if (ts.isPropertyAssignment(p) && ts.isIdentifier(p.name) && p.name.text === 'name' && ts.isStringLiteral(p.initializer)) {
-                  methodNameOverrides[member.name.getText()] = p.initializer.text
-                }
-              })
-            }
-          })
-    })
-    return methodNameOverrides
   }
 
   private resolveClusteredPrototype(tsType: ts.Type, sourceLocation: SourceLocation): PType {

@@ -4,10 +4,10 @@ abstract class HelloBase extends Contract {
   greeting = GlobalState({ initialValue: '' })
 
   @abimethod({ allowActions: 'DeleteApplication' })
-  delete() { }
+  delete() {}
 
   @abimethod({ allowActions: 'UpdateApplication' })
-  update() { }
+  update() {}
 
   greet(name: string): string {
     return `${this.greeting.value} ${name}`
@@ -28,7 +28,7 @@ export class HelloTemplate extends HelloBase {
   }
 
   @abimethod({ onCreate: 'require' })
-  create() { }
+  create() {}
 }
 
 export class HelloTemplateCustomPrefix extends HelloBase {
@@ -38,7 +38,7 @@ export class HelloTemplateCustomPrefix extends HelloBase {
   }
 
   @abimethod({ onCreate: 'require' })
-  create() { }
+  create() {}
 }
 
 function getBigBytes() {
@@ -51,7 +51,7 @@ export class LargeProgram extends Contract {
   }
 
   @abimethod({ allowActions: 'DeleteApplication' })
-  delete() { }
+  delete() {}
 }
 
 /**

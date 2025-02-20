@@ -3,20 +3,19 @@ import { AwstBuildFailureError, CodeError } from '../../errors'
 import type { ClassElements } from '../../visitor/syntax-names'
 import type { Visitor } from '../../visitor/visitor'
 import { accept } from '../../visitor/visitor'
-import type { AwstBuildContext } from '../context/awst-build-context'
 import type { ARC4StructType } from '../ptypes/arc4-types'
 import { BaseVisitor } from './base-visitor'
 
 export class StructVisitor extends BaseVisitor implements Visitor<ClassElements, void> {
   public accept = <TNode extends ts.Node>(node: TNode) => accept<StructVisitor, TNode>(this, node)
 
-  static buildStructDef(ctx: AwstBuildContext, classDec: ts.ClassDeclaration, ptype: ARC4StructType) {
-    new StructVisitor(ctx, classDec, ptype)
+  static buildStructDef(classDec: ts.ClassDeclaration, ptype: ARC4StructType) {
+    new StructVisitor(classDec, ptype)
     return []
   }
 
-  constructor(ctx: AwstBuildContext, classDec: ts.ClassDeclaration, ptype: ARC4StructType) {
-    super(ctx)
+  constructor(classDec: ts.ClassDeclaration, ptype: ARC4StructType) {
+    super()
 
     for (const member of classDec.members) {
       try {
