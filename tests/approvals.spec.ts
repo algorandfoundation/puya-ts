@@ -27,6 +27,7 @@ describe('Approvals', async () => {
         logLevel: LogLevel.Warning,
         skipVersionCheck: true,
         ...defaultPuyaOptions,
+        outputSourceMap: false,
         outputAwstJson: false,
         outputAwst: false,
         outputTeal: true,
