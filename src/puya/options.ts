@@ -15,7 +15,6 @@ export const defaultPuyaOptions: PuyaPassThroughOptions = {
   outputDestructuredIr: false,
   outputMemoryIr: false,
   outputBytecode: false,
-  matchAlgodBytecode: false,
   debugLevel: 1,
   optimizationLevel: 1,
   targetAvmVersion: 10,
@@ -35,7 +34,6 @@ export class PuyaOptions {
   outputMemoryIr: boolean
   outputBytecode: boolean
   outputSourceMap: boolean
-  matchAlgodBytecode: boolean
   debugLevel: number
   optimizationLevel: number
   targetAvmVersion: number
@@ -60,7 +58,6 @@ export class PuyaOptions {
     this.outputDestructuredIr = passThroughOptions.outputDestructuredIr
     this.outputMemoryIr = passThroughOptions.outputMemoryIr
     this.outputBytecode = passThroughOptions.outputBytecode
-    this.matchAlgodBytecode = passThroughOptions.matchAlgodBytecode
     this.debugLevel = passThroughOptions.debugLevel
     this.optimizationLevel = passThroughOptions.optimizationLevel
     this.targetAvmVersion = passThroughOptions.targetAvmVersion

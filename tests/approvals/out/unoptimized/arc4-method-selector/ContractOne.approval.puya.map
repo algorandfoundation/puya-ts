@@ -1,0 +1,561 @@
+{
+  "version": 3,
+  "sources": [
+    "C:/Source/algorand/puya-ts/tests/approvals/arc4-method-selector.algo.ts"
+  ],
+  "mappings": ";;;;;;;;;;;;AAGA;;AAAA;AAAA;AAAA;;;AAAA;;;AAAA;;;;;;AAAA;;;;;;AAAA;;AAAA;;;;;;AAAA;;AAIE;;AAAA;AAAA;AAAA;AAAA;;AAAA;AAAA;AAAA;AAAA;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;;;;AAHA;;AAAA;AAAA;AAAA;AAAA;;AAAA;AAAA;AAAA;AAAA;;;AAAA;;;AAAA;AAAA;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;;;;AADF;;AAAA;AAAA;AAAA;;;;;;;AAAA;;AAAA;AAAA;AAAA;AAAA;;;AAAA;;;;AAEW;;;;;;AAAqD;AAArD;AAAP;AAgBqB;;AAbrB;",
+  "op_pc_offset": 0,
+  "pc_events": {
+    "1": {
+      "subroutine": "@algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram",
+      "params": {},
+      "block": "main",
+      "stack_in": [],
+      "op": "intcblock 0 1"
+    },
+    "5": {
+      "op": "bytecblock 0x151f7c75"
+    },
+    "12": {
+      "block": "main_block@1",
+      "stack_in": [],
+      "op": "txn NumAppArgs",
+      "defined_out": [
+        "tmp%0#1"
+      ],
+      "stack_out": [
+        "tmp%0#1"
+      ]
+    },
+    "14": {
+      "op": "intc_0 // 0",
+      "defined_out": [
+        "0",
+        "tmp%0#1"
+      ],
+      "stack_out": [
+        "tmp%0#1",
+        "0"
+      ]
+    },
+    "15": {
+      "op": "!=",
+      "defined_out": [
+        "tmp%1#0"
+      ],
+      "stack_out": [
+        "tmp%1#0"
+      ]
+    },
+    "16": {
+      "op": "bz main_bare_routing@7",
+      "stack_out": []
+    },
+    "19": {
+      "block": "main_abi_routing@2",
+      "stack_in": [],
+      "op": "txna ApplicationArgs 0",
+      "defined_out": [
+        "tmp%2#0"
+      ],
+      "stack_out": [
+        "tmp%2#0"
+      ]
+    },
+    "22": {
+      "op": "pushbytes 0xf59e3cc4 // method \"test()bool\"",
+      "defined_out": [
+        "Method(test()bool)",
+        "tmp%2#0"
+      ],
+      "stack_out": [
+        "tmp%2#0",
+        "Method(test()bool)"
+      ]
+    },
+    "28": {
+      "op": "pushbytes 0xc2e9596e // method \"someMethod()uint64\"",
+      "defined_out": [
+        "Method(someMethod()uint64)",
+        "Method(test()bool)",
+        "tmp%2#0"
+      ],
+      "stack_out": [
+        "tmp%2#0",
+        "Method(test()bool)",
+        "Method(someMethod()uint64)"
+      ]
+    },
+    "34": {
+      "op": "uncover 2",
+      "stack_out": [
+        "Method(test()bool)",
+        "Method(someMethod()uint64)",
+        "tmp%2#0"
+      ]
+    },
+    "36": {
+      "op": "match main_test_route@3 main_someMethod_route@4",
+      "stack_out": []
+    },
+    "42": {
+      "block": "main_after_if_else@11",
+      "stack_in": [],
+      "op": "intc_0 // 0",
+      "defined_out": [
+        "tmp%0#0"
+      ],
+      "stack_out": [
+        "tmp%0#0"
+      ]
+    },
+    "43": {
+      "block": "main_after_inlined_tests/approvals/arc4-method-selector.algo.ts::ContractOne.__puya_arc4_router__@12",
+      "stack_in": [
+        "tmp%0#0"
+      ],
+      "op": "return",
+      "defined_out": [],
+      "stack_out": []
+    },
+    "44": {
+      "block": "main_someMethod_route@4",
+      "stack_in": [],
+      "op": "txn OnCompletion",
+      "defined_out": [
+        "tmp%8#0"
+      ],
+      "stack_out": [
+        "tmp%8#0"
+      ]
+    },
+    "46": {
+      "op": "intc_0 // NoOp",
+      "defined_out": [
+        "NoOp",
+        "tmp%8#0"
+      ],
+      "stack_out": [
+        "tmp%8#0",
+        "NoOp"
+      ]
+    },
+    "47": {
+      "op": "==",
+      "defined_out": [
+        "tmp%9#0"
+      ],
+      "stack_out": [
+        "tmp%9#0"
+      ]
+    },
+    "48": {
+      "error": "OnCompletion is not NoOp",
+      "op": "assert // OnCompletion is not NoOp",
+      "stack_out": []
+    },
+    "49": {
+      "op": "txn ApplicationID",
+      "defined_out": [
+        "tmp%10#0"
+      ],
+      "stack_out": [
+        "tmp%10#0"
+      ]
+    },
+    "51": {
+      "op": "intc_0 // 0",
+      "defined_out": [
+        "0",
+        "tmp%10#0"
+      ],
+      "stack_out": [
+        "tmp%10#0",
+        "0"
+      ]
+    },
+    "52": {
+      "op": "!=",
+      "defined_out": [
+        "tmp%11#0"
+      ],
+      "stack_out": [
+        "tmp%11#0"
+      ]
+    },
+    "53": {
+      "error": "can only call when not creating",
+      "op": "assert // can only call when not creating",
+      "stack_out": []
+    },
+    "54": {
+      "callsub": "tests/approvals/arc4-method-selector.algo.ts::ContractOne.someMethod",
+      "op": "callsub someMethod",
+      "defined_out": [
+        "to_encode%1#0"
+      ],
+      "stack_out": [
+        "to_encode%1#0"
+      ]
+    },
+    "57": {
+      "op": "itob",
+      "defined_out": [
+        "val_as_bytes%0#0"
+      ],
+      "stack_out": [
+        "val_as_bytes%0#0"
+      ]
+    },
+    "58": {
+      "op": "bytec_0 // 0x151f7c75",
+      "defined_out": [
+        "0x151f7c75",
+        "val_as_bytes%0#0"
+      ],
+      "stack_out": [
+        "val_as_bytes%0#0",
+        "0x151f7c75"
+      ]
+    },
+    "59": {
+      "op": "swap",
+      "stack_out": [
+        "0x151f7c75",
+        "val_as_bytes%0#0"
+      ]
+    },
+    "60": {
+      "op": "concat",
+      "defined_out": [
+        "tmp%12#0"
+      ],
+      "stack_out": [
+        "tmp%12#0"
+      ]
+    },
+    "61": {
+      "op": "log",
+      "stack_out": []
+    },
+    "62": {
+      "op": "intc_1 // 1",
+      "defined_out": [
+        "tmp%0#0"
+      ],
+      "stack_out": [
+        "tmp%0#0"
+      ]
+    },
+    "63": {
+      "op": "b main_after_inlined_tests/approvals/arc4-method-selector.algo.ts::ContractOne.__puya_arc4_router__@12"
+    },
+    "66": {
+      "block": "main_test_route@3",
+      "stack_in": [],
+      "op": "txn OnCompletion",
+      "defined_out": [
+        "tmp%3#0"
+      ],
+      "stack_out": [
+        "tmp%3#0"
+      ]
+    },
+    "68": {
+      "op": "intc_0 // NoOp",
+      "defined_out": [
+        "NoOp",
+        "tmp%3#0"
+      ],
+      "stack_out": [
+        "tmp%3#0",
+        "NoOp"
+      ]
+    },
+    "69": {
+      "op": "==",
+      "defined_out": [
+        "tmp%4#0"
+      ],
+      "stack_out": [
+        "tmp%4#0"
+      ]
+    },
+    "70": {
+      "error": "OnCompletion is not NoOp",
+      "op": "assert // OnCompletion is not NoOp",
+      "stack_out": []
+    },
+    "71": {
+      "op": "txn ApplicationID",
+      "defined_out": [
+        "tmp%5#0"
+      ],
+      "stack_out": [
+        "tmp%5#0"
+      ]
+    },
+    "73": {
+      "op": "intc_0 // 0",
+      "defined_out": [
+        "0",
+        "tmp%5#0"
+      ],
+      "stack_out": [
+        "tmp%5#0",
+        "0"
+      ]
+    },
+    "74": {
+      "op": "!=",
+      "defined_out": [
+        "tmp%6#0"
+      ],
+      "stack_out": [
+        "tmp%6#0"
+      ]
+    },
+    "75": {
+      "error": "can only call when not creating",
+      "op": "assert // can only call when not creating",
+      "stack_out": []
+    },
+    "76": {
+      "callsub": "tests/approvals/arc4-method-selector.algo.ts::ContractOne.test",
+      "op": "callsub test",
+      "defined_out": [
+        "to_encode%0#0"
+      ],
+      "stack_out": [
+        "to_encode%0#0"
+      ]
+    },
+    "79": {
+      "op": "pushbytes 0x00",
+      "defined_out": [
+        "0x00",
+        "to_encode%0#0"
+      ],
+      "stack_out": [
+        "to_encode%0#0",
+        "0x00"
+      ]
+    },
+    "82": {
+      "op": "intc_0 // 0",
+      "stack_out": [
+        "to_encode%0#0",
+        "0x00",
+        "0"
+      ]
+    },
+    "83": {
+      "op": "uncover 2",
+      "stack_out": [
+        "0x00",
+        "0",
+        "to_encode%0#0"
+      ]
+    },
+    "85": {
+      "op": "setbit",
+      "defined_out": [
+        "encoded_bool%0#0"
+      ],
+      "stack_out": [
+        "encoded_bool%0#0"
+      ]
+    },
+    "86": {
+      "op": "bytec_0 // 0x151f7c75",
+      "defined_out": [
+        "0x151f7c75",
+        "encoded_bool%0#0"
+      ],
+      "stack_out": [
+        "encoded_bool%0#0",
+        "0x151f7c75"
+      ]
+    },
+    "87": {
+      "op": "swap",
+      "stack_out": [
+        "0x151f7c75",
+        "encoded_bool%0#0"
+      ]
+    },
+    "88": {
+      "op": "concat",
+      "defined_out": [
+        "tmp%7#0"
+      ],
+      "stack_out": [
+        "tmp%7#0"
+      ]
+    },
+    "89": {
+      "op": "log",
+      "stack_out": []
+    },
+    "90": {
+      "op": "intc_1 // 1",
+      "defined_out": [
+        "tmp%0#0"
+      ],
+      "stack_out": [
+        "tmp%0#0"
+      ]
+    },
+    "91": {
+      "op": "b main_after_inlined_tests/approvals/arc4-method-selector.algo.ts::ContractOne.__puya_arc4_router__@12"
+    },
+    "94": {
+      "block": "main_bare_routing@7",
+      "stack_in": [],
+      "op": "txn OnCompletion",
+      "defined_out": [
+        "tmp%13#0"
+      ],
+      "stack_out": [
+        "tmp%13#0"
+      ]
+    },
+    "96": {
+      "op": "intc_0 // 0",
+      "defined_out": [
+        "0",
+        "tmp%13#0"
+      ],
+      "stack_out": [
+        "tmp%13#0",
+        "0"
+      ]
+    },
+    "97": {
+      "op": "swap",
+      "stack_out": [
+        "0",
+        "tmp%13#0"
+      ]
+    },
+    "98": {
+      "op": "match main___algots__.defaultCreate@8",
+      "stack_out": []
+    },
+    "102": {
+      "block": "main_switch_case_next@10",
+      "stack_in": [],
+      "op": "b main_after_if_else@11"
+    },
+    "105": {
+      "block": "main___algots__.defaultCreate@8",
+      "stack_in": [],
+      "op": "txn ApplicationID",
+      "defined_out": [
+        "tmp%14#0"
+      ],
+      "stack_out": [
+        "tmp%14#0"
+      ]
+    },
+    "107": {
+      "op": "intc_0 // 0",
+      "defined_out": [
+        "0",
+        "tmp%14#0"
+      ],
+      "stack_out": [
+        "tmp%14#0",
+        "0"
+      ]
+    },
+    "108": {
+      "op": "==",
+      "defined_out": [
+        "tmp%15#0"
+      ],
+      "stack_out": [
+        "tmp%15#0"
+      ]
+    },
+    "109": {
+      "error": "can only call when creating",
+      "op": "assert // can only call when creating",
+      "stack_out": []
+    },
+    "110": {
+      "callsub": "tests/approvals/arc4-method-selector.algo.ts::ContractOne.__algots__.defaultCreate",
+      "op": "callsub __algots__.defaultCreate"
+    },
+    "113": {
+      "op": "intc_1 // 1",
+      "defined_out": [
+        "tmp%0#0"
+      ],
+      "stack_out": [
+        "tmp%0#0"
+      ]
+    },
+    "114": {
+      "op": "b main_after_inlined_tests/approvals/arc4-method-selector.algo.ts::ContractOne.__puya_arc4_router__@12"
+    },
+    "117": {
+      "subroutine": "tests/approvals/arc4-method-selector.algo.ts::ContractOne.test",
+      "params": {},
+      "block": "test",
+      "stack_in": [],
+      "op": "pushbytes 0x438c64f3 // method \"renamedSomeMethod()void\"",
+      "defined_out": [
+        "Method(renamedSomeMethod()void)"
+      ],
+      "stack_out": [
+        "Method(renamedSomeMethod()void)"
+      ]
+    },
+    "123": {
+      "op": "dup",
+      "stack_out": [
+        "Method(renamedSomeMethod()void)",
+        "Method(renamedSomeMethod()void)"
+      ]
+    },
+    "124": {
+      "op": "==",
+      "defined_out": [
+        "tmp%0#0"
+      ],
+      "stack_out": [
+        "tmp%0#0"
+      ]
+    },
+    "125": {
+      "retsub": true,
+      "op": "retsub"
+    },
+    "126": {
+      "subroutine": "tests/approvals/arc4-method-selector.algo.ts::ContractOne.someMethod",
+      "params": {},
+      "block": "someMethod",
+      "stack_in": [],
+      "op": "pushint 123 // 123",
+      "defined_out": [
+        "123"
+      ],
+      "stack_out": [
+        "123"
+      ]
+    },
+    "128": {
+      "retsub": true,
+      "op": "retsub"
+    },
+    "129": {
+      "subroutine": "tests/approvals/arc4-method-selector.algo.ts::ContractOne.__algots__.defaultCreate",
+      "params": {},
+      "block": "__algots__.defaultCreate",
+      "stack_in": [],
+      "retsub": true,
+      "op": "retsub"
+    }
+  }
+}

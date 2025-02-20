@@ -1,0 +1,312 @@
+{
+  "version": 3,
+  "sources": [
+    "C:/Source/algorand/puya-ts/tests/approvals/multi-inheritance.algo.ts"
+  ],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;AAKE;;;;;;;;;;;;;AAAkD;;AAAlD;AAYA;;;;;;;;;;AAA8C;;AAA9C;AADF;;AAAA;;;AAAA;;;;;;;;;;;;;;;;;AAAA;;;AAAA;;;;;;;;AAAA;;;AALE;;AAAA;AAAA;AAAA;;AAAA;AAAA;AAAA;AAAA;;AAJA;;AAAA;AAAA;AAAA;;AAAA;AAAA;AAAA;AAAA;;AAWA;;AAAA;AAAA;AAAA;;AAAA;AAAA;;;;;;;;;;;;;;;;AAAA;AAAA;;AAFF;;AAAA;;;AAAA;;AAAA;AAAA;AAAA;",
+  "op_pc_offset": 0,
+  "pc_events": {
+    "1": {
+      "subroutine": "@algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram",
+      "params": {},
+      "block": "main",
+      "stack_in": [],
+      "op": "intcblock 1"
+    },
+    "4": {
+      "op": "bytecblock 0x151f7c750006636f6d6d6f6e"
+    },
+    "19": {
+      "op": "txn ApplicationID",
+      "defined_out": [
+        "reinterpret_bool%0#0"
+      ],
+      "stack_out": [
+        "reinterpret_bool%0#0"
+      ]
+    },
+    "21": {
+      "op": "bnz main_after_if_else@2",
+      "stack_out": []
+    },
+    "24": {
+      "op": "pushbytes \"stateCommon\""
+    },
+    "37": {
+      "op": "pushint 123 // 123"
+    },
+    "39": {
+      "op": "app_global_put"
+    },
+    "40": {
+      "op": "pushbytes \"stateOne\""
+    },
+    "50": {
+      "op": "pushint 45 // 45"
+    },
+    "52": {
+      "op": "app_global_put"
+    },
+    "53": {
+      "block": "main_after_if_else@2",
+      "stack_in": [],
+      "op": "txn NumAppArgs",
+      "defined_out": [
+        "tmp%0#1"
+      ],
+      "stack_out": [
+        "tmp%0#1"
+      ]
+    },
+    "55": {
+      "op": "bz main_bare_routing@10",
+      "stack_out": []
+    },
+    "58": {
+      "op": "pushbytess 0xc32533e3 0x455c8d09 0xf9f5142c // method \"methodOne()string\", method \"methodCommon()string\", method \"b2CantOverride()string\""
+    },
+    "75": {
+      "op": "txna ApplicationArgs 0"
+    },
+    "78": {
+      "op": "match main_methodOne_route@5 main_methodCommon_route@6 main_b2CantOverride_route@7"
+    },
+    "86": {
+      "block": "main_after_if_else@14",
+      "stack_in": [],
+      "op": "pushint 0 // 0",
+      "defined_out": [
+        "tmp%0#0"
+      ],
+      "stack_out": [
+        "tmp%0#0"
+      ]
+    },
+    "88": {
+      "op": "return"
+    },
+    "89": {
+      "block": "main_b2CantOverride_route@7",
+      "stack_in": [],
+      "op": "txn OnCompletion",
+      "defined_out": [
+        "tmp%13#0"
+      ],
+      "stack_out": [
+        "tmp%13#0"
+      ]
+    },
+    "91": {
+      "op": "!",
+      "defined_out": [
+        "tmp%14#0"
+      ],
+      "stack_out": [
+        "tmp%14#0"
+      ]
+    },
+    "92": {
+      "error": "OnCompletion is not NoOp",
+      "op": "assert // OnCompletion is not NoOp",
+      "stack_out": []
+    },
+    "93": {
+      "op": "txn ApplicationID",
+      "defined_out": [
+        "tmp%15#0"
+      ],
+      "stack_out": [
+        "tmp%15#0"
+      ]
+    },
+    "95": {
+      "error": "can only call when not creating",
+      "op": "assert // can only call when not creating",
+      "stack_out": []
+    },
+    "96": {
+      "op": "bytec_0 // 0x151f7c750006636f6d6d6f6e",
+      "defined_out": [
+        "0x151f7c750006636f6d6d6f6e"
+      ],
+      "stack_out": [
+        "0x151f7c750006636f6d6d6f6e"
+      ]
+    },
+    "97": {
+      "op": "log",
+      "stack_out": []
+    },
+    "98": {
+      "op": "intc_0 // 1",
+      "defined_out": [
+        "tmp%0#0"
+      ],
+      "stack_out": [
+        "tmp%0#0"
+      ]
+    },
+    "99": {
+      "op": "return"
+    },
+    "100": {
+      "block": "main_methodCommon_route@6",
+      "stack_in": [],
+      "op": "txn OnCompletion",
+      "defined_out": [
+        "tmp%8#0"
+      ],
+      "stack_out": [
+        "tmp%8#0"
+      ]
+    },
+    "102": {
+      "op": "!",
+      "defined_out": [
+        "tmp%9#0"
+      ],
+      "stack_out": [
+        "tmp%9#0"
+      ]
+    },
+    "103": {
+      "error": "OnCompletion is not NoOp",
+      "op": "assert // OnCompletion is not NoOp",
+      "stack_out": []
+    },
+    "104": {
+      "op": "txn ApplicationID",
+      "defined_out": [
+        "tmp%10#0"
+      ],
+      "stack_out": [
+        "tmp%10#0"
+      ]
+    },
+    "106": {
+      "error": "can only call when not creating",
+      "op": "assert // can only call when not creating",
+      "stack_out": []
+    },
+    "107": {
+      "op": "bytec_0 // 0x151f7c750006636f6d6d6f6e",
+      "defined_out": [
+        "0x151f7c750006636f6d6d6f6e"
+      ],
+      "stack_out": [
+        "0x151f7c750006636f6d6d6f6e"
+      ]
+    },
+    "108": {
+      "op": "log",
+      "stack_out": []
+    },
+    "109": {
+      "op": "intc_0 // 1",
+      "defined_out": [
+        "tmp%0#0"
+      ],
+      "stack_out": [
+        "tmp%0#0"
+      ]
+    },
+    "110": {
+      "op": "return"
+    },
+    "111": {
+      "block": "main_methodOne_route@5",
+      "stack_in": [],
+      "op": "txn OnCompletion",
+      "defined_out": [
+        "tmp%3#0"
+      ],
+      "stack_out": [
+        "tmp%3#0"
+      ]
+    },
+    "113": {
+      "op": "!",
+      "defined_out": [
+        "tmp%4#0"
+      ],
+      "stack_out": [
+        "tmp%4#0"
+      ]
+    },
+    "114": {
+      "error": "OnCompletion is not NoOp",
+      "op": "assert // OnCompletion is not NoOp",
+      "stack_out": []
+    },
+    "115": {
+      "op": "txn ApplicationID",
+      "defined_out": [
+        "tmp%5#0"
+      ],
+      "stack_out": [
+        "tmp%5#0"
+      ]
+    },
+    "117": {
+      "error": "can only call when not creating",
+      "op": "assert // can only call when not creating",
+      "stack_out": []
+    },
+    "118": {
+      "op": "pushbytes 0x151f7c750008626173652d6f6e65",
+      "defined_out": [
+        "0x151f7c750008626173652d6f6e65"
+      ],
+      "stack_out": [
+        "0x151f7c750008626173652d6f6e65"
+      ]
+    },
+    "134": {
+      "op": "log",
+      "stack_out": []
+    },
+    "135": {
+      "op": "intc_0 // 1",
+      "defined_out": [
+        "tmp%0#0"
+      ],
+      "stack_out": [
+        "tmp%0#0"
+      ]
+    },
+    "136": {
+      "op": "return"
+    },
+    "137": {
+      "block": "main_bare_routing@10",
+      "stack_in": [],
+      "op": "txn OnCompletion",
+      "defined_out": [
+        "tmp%18#0"
+      ],
+      "stack_out": [
+        "tmp%18#0"
+      ]
+    },
+    "139": {
+      "op": "bnz main_after_if_else@14",
+      "stack_out": []
+    },
+    "142": {
+      "op": "txn ApplicationID"
+    },
+    "144": {
+      "op": "!"
+    },
+    "145": {
+      "error": "can only call when creating",
+      "op": "assert // can only call when creating"
+    },
+    "146": {
+      "op": "intc_0 // 1"
+    },
+    "147": {
+      "op": "return"
+    }
+  }
+}

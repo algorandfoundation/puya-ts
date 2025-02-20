@@ -1,0 +1,830 @@
+{
+  "version": 3,
+  "sources": [
+    "C:/Source/algorand/puya-ts/tests/approvals/match-expr.algo.ts"
+  ],
+  "mappings": ";;;;;;;AAGA;;AAAA;;;AAAA;;;;;;AAAA;;;AAAA;;;;AAAA;;AACE;;AAAA;AAAA;AAAA;;AAAA;AADF;;;AAAA;AACE;;;AAAA;;AADF;;AAAA;;;AAAA;;AAAA;AAAA;AAAA;;AACE;;;AAEE;;AAAuB;AAAvB;AAAA;AAEO;;AAAgC;;AAAhC;AAAP;AACO;;AAA6B;;AAA7B;AAAP;AACO;;AAAkC;AAAlC;AAAP;AACO;;AAA+B;AAA/B;AAAP;AAEgB;;AAAA;AAAA;AAAA;AAAA;;AAAA;AAAA;AAAA;;;AAAA;AAAA;AAAA;AAET;AAAA;AAAA;AAAA;AAAA;AAAA;;;AAAA;;;AAAA;AAAe;AAAf;AAAA;;;;AAAP;AACO;;AAAA;;;AAAA;;;AAAA;AAA8B;;AAA9B;AAAA;;;;AAAP;AACO;;AAAA;;;AAAA;;;AAAA;AAA2B;;AAA3B;AAAA;;;;AAAP;AACO;;AAAA;;;AAAA;;;AAAA;AAAgC;AAAhC;AAAA;;;;AAAP;AACO;;AAAA;;;AAAA;;;AAAA;AAA6B;AAA7B;AAAA;;;;AAAP;;;;;;;;;;;;;;;;;;;",
+  "op_pc_offset": 0,
+  "pc_events": {
+    "1": {
+      "subroutine": "@algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram",
+      "params": {},
+      "block": "main",
+      "stack_in": [],
+      "op": "intcblock 1 0 5 2"
+    },
+    "7": {
+      "op": "txn NumAppArgs",
+      "defined_out": [
+        "tmp%0#1"
+      ],
+      "stack_out": [
+        "tmp%0#1"
+      ]
+    },
+    "9": {
+      "op": "bz main_bare_routing@6",
+      "stack_out": []
+    },
+    "12": {
+      "op": "pushbytes 0x937e729a // method \"testMatches(uint64)void\""
+    },
+    "18": {
+      "op": "txna ApplicationArgs 0"
+    },
+    "21": {
+      "op": "match main_testMatches_route@3"
+    },
+    "25": {
+      "block": "main_after_if_else@10",
+      "stack_in": [],
+      "op": "intc_1 // 0",
+      "defined_out": [
+        "tmp%0#0"
+      ],
+      "stack_out": [
+        "tmp%0#0"
+      ]
+    },
+    "26": {
+      "op": "return"
+    },
+    "27": {
+      "block": "main_testMatches_route@3",
+      "stack_in": [],
+      "op": "txn OnCompletion",
+      "defined_out": [
+        "tmp%3#0"
+      ],
+      "stack_out": [
+        "tmp%3#0"
+      ]
+    },
+    "29": {
+      "op": "!",
+      "defined_out": [
+        "tmp%4#0"
+      ],
+      "stack_out": [
+        "tmp%4#0"
+      ]
+    },
+    "30": {
+      "error": "OnCompletion is not NoOp",
+      "op": "assert // OnCompletion is not NoOp",
+      "stack_out": []
+    },
+    "31": {
+      "op": "txn ApplicationID",
+      "defined_out": [
+        "tmp%5#0"
+      ],
+      "stack_out": [
+        "tmp%5#0"
+      ]
+    },
+    "33": {
+      "error": "can only call when not creating",
+      "op": "assert // can only call when not creating",
+      "stack_out": []
+    },
+    "34": {
+      "op": "txna ApplicationArgs 1",
+      "defined_out": [
+        "reinterpret_bytes[8]%0#0"
+      ],
+      "stack_out": [
+        "reinterpret_bytes[8]%0#0"
+      ]
+    },
+    "37": {
+      "op": "btoi",
+      "defined_out": [
+        "tmp%7#0"
+      ],
+      "stack_out": [
+        "tmp%7#0"
+      ]
+    },
+    "38": {
+      "callsub": "tests/approvals/match-expr.algo.ts::MatchExprAlgo.testMatches",
+      "op": "callsub testMatches",
+      "stack_out": []
+    },
+    "41": {
+      "op": "intc_0 // 1",
+      "defined_out": [
+        "tmp%0#0"
+      ],
+      "stack_out": [
+        "tmp%0#0"
+      ]
+    },
+    "42": {
+      "op": "return"
+    },
+    "43": {
+      "block": "main_bare_routing@6",
+      "stack_in": [],
+      "op": "txn OnCompletion",
+      "defined_out": [
+        "tmp%8#0"
+      ],
+      "stack_out": [
+        "tmp%8#0"
+      ]
+    },
+    "45": {
+      "op": "bnz main_after_if_else@10",
+      "stack_out": []
+    },
+    "48": {
+      "op": "txn ApplicationID"
+    },
+    "50": {
+      "op": "!"
+    },
+    "51": {
+      "error": "can only call when creating",
+      "op": "assert // can only call when creating"
+    },
+    "52": {
+      "op": "intc_0 // 1"
+    },
+    "53": {
+      "op": "return"
+    },
+    "54": {
+      "subroutine": "tests/approvals/match-expr.algo.ts::MatchExprAlgo.testMatches",
+      "params": {
+        "x#0": "uint64"
+      },
+      "block": "testMatches",
+      "stack_in": [],
+      "op": "proto 1 0"
+    },
+    "57": {
+      "op": "frame_dig -1",
+      "defined_out": [
+        "x#0 (copy)"
+      ],
+      "stack_out": [
+        "x#0 (copy)"
+      ]
+    },
+    "59": {
+      "op": "intc_2 // 5",
+      "defined_out": [
+        "5",
+        "x#0 (copy)"
+      ],
+      "stack_out": [
+        "x#0 (copy)",
+        "5"
+      ]
+    },
+    "60": {
+      "op": "==",
+      "defined_out": [
+        "tmp%0#0"
+      ],
+      "stack_out": [
+        "tmp%0#0"
+      ]
+    },
+    "61": {
+      "error": "x should be 5",
+      "op": "assert // x should be 5",
+      "stack_out": []
+    },
+    "62": {
+      "op": "frame_dig -1",
+      "stack_out": [
+        "x#0 (copy)"
+      ]
+    },
+    "64": {
+      "op": "pushint 4 // 4",
+      "defined_out": [
+        "4",
+        "x#0 (copy)"
+      ],
+      "stack_out": [
+        "x#0 (copy)",
+        "4"
+      ]
+    },
+    "66": {
+      "op": ">",
+      "defined_out": [
+        "tmp%1#0"
+      ],
+      "stack_out": [
+        "tmp%1#0"
+      ]
+    },
+    "67": {
+      "op": "assert",
+      "stack_out": []
+    },
+    "68": {
+      "op": "frame_dig -1",
+      "stack_out": [
+        "x#0 (copy)"
+      ]
+    },
+    "70": {
+      "op": "pushint 6 // 6",
+      "defined_out": [
+        "6",
+        "x#0 (copy)"
+      ],
+      "stack_out": [
+        "x#0 (copy)",
+        "6"
+      ]
+    },
+    "72": {
+      "op": "<",
+      "defined_out": [
+        "tmp%2#0"
+      ],
+      "stack_out": [
+        "tmp%2#0"
+      ]
+    },
+    "73": {
+      "op": "assert",
+      "stack_out": []
+    },
+    "74": {
+      "op": "frame_dig -1",
+      "stack_out": [
+        "x#0 (copy)"
+      ]
+    },
+    "76": {
+      "op": "intc_2 // 5",
+      "stack_out": [
+        "x#0 (copy)",
+        "5"
+      ]
+    },
+    "77": {
+      "op": ">=",
+      "defined_out": [
+        "tmp%3#0"
+      ],
+      "stack_out": [
+        "tmp%3#0"
+      ]
+    },
+    "78": {
+      "op": "assert",
+      "stack_out": []
+    },
+    "79": {
+      "op": "frame_dig -1",
+      "stack_out": [
+        "x#0 (copy)"
+      ]
+    },
+    "81": {
+      "op": "intc_2 // 5",
+      "stack_out": [
+        "x#0 (copy)",
+        "5"
+      ]
+    },
+    "82": {
+      "op": "<=",
+      "defined_out": [
+        "tmp%4#0"
+      ],
+      "stack_out": [
+        "tmp%4#0"
+      ]
+    },
+    "83": {
+      "op": "assert",
+      "stack_out": []
+    },
+    "84": {
+      "op": "frame_dig -1",
+      "stack_out": [
+        "x#0 (copy)"
+      ]
+    },
+    "86": {
+      "op": "itob",
+      "defined_out": [
+        "array%sub_item%0#1"
+      ],
+      "stack_out": [
+        "array%sub_item%0#1"
+      ]
+    },
+    "87": {
+      "op": "dup",
+      "defined_out": [
+        "array%sub_item%0#1",
+        "array%sub_item%0#1 (copy)"
+      ],
+      "stack_out": [
+        "array%sub_item%0#1",
+        "array%sub_item%0#1 (copy)"
+      ]
+    },
+    "88": {
+      "op": "len",
+      "defined_out": [
+        "array%sub_item%0#1",
+        "byte_len%0#0"
+      ],
+      "stack_out": [
+        "array%sub_item%0#1",
+        "byte_len%0#0"
+      ]
+    },
+    "89": {
+      "op": "pushint 8 // 8",
+      "defined_out": [
+        "8",
+        "array%sub_item%0#1",
+        "byte_len%0#0"
+      ],
+      "stack_out": [
+        "array%sub_item%0#1",
+        "byte_len%0#0",
+        "8"
+      ]
+    },
+    "91": {
+      "op": "/",
+      "defined_out": [
+        "array%sub_item%0#1",
+        "len_%0#0"
+      ],
+      "stack_out": [
+        "array%sub_item%0#1",
+        "len_%0#0"
+      ]
+    },
+    "92": {
+      "op": "itob",
+      "defined_out": [
+        "array%sub_item%0#1",
+        "as_bytes%0#0"
+      ],
+      "stack_out": [
+        "array%sub_item%0#1",
+        "as_bytes%0#0"
+      ]
+    },
+    "93": {
+      "op": "extract 6 2",
+      "defined_out": [
+        "array%sub_item%0#1",
+        "len_16_bit%0#0"
+      ],
+      "stack_out": [
+        "array%sub_item%0#1",
+        "len_16_bit%0#0"
+      ]
+    },
+    "96": {
+      "op": "swap",
+      "stack_out": [
+        "len_16_bit%0#0",
+        "array%sub_item%0#1"
+      ]
+    },
+    "97": {
+      "op": "concat",
+      "defined_out": [
+        "xArray#0"
+      ],
+      "stack_out": [
+        "xArray#0"
+      ]
+    },
+    "98": {
+      "op": "dup",
+      "defined_out": [
+        "xArray#0"
+      ],
+      "stack_out": [
+        "xArray#0",
+        "xArray#0"
+      ]
+    },
+    "99": {
+      "op": "intc_1 // 0",
+      "stack_out": [
+        "xArray#0",
+        "xArray#0",
+        "0"
+      ]
+    },
+    "100": {
+      "op": "extract_uint16",
+      "defined_out": [
+        "tmp%5#0",
+        "xArray#0"
+      ],
+      "stack_out": [
+        "xArray#0",
+        "tmp%5#0"
+      ]
+    },
+    "101": {
+      "op": "intc_0 // 1",
+      "defined_out": [
+        "1",
+        "tmp%5#0",
+        "xArray#0"
+      ],
+      "stack_out": [
+        "xArray#0",
+        "tmp%5#0",
+        "1"
+      ]
+    },
+    "102": {
+      "op": "==",
+      "defined_out": [
+        "tmp%6#0",
+        "xArray#0"
+      ],
+      "stack_out": [
+        "xArray#0",
+        "tmp%6#0"
+      ]
+    },
+    "103": {
+      "op": "dup",
+      "defined_out": [
+        "tmp%6#0",
+        "xArray#0"
+      ],
+      "stack_out": [
+        "xArray#0",
+        "tmp%6#0",
+        "tmp%6#0"
+      ]
+    },
+    "104": {
+      "op": "bz testMatches_bool_false@3",
+      "stack_out": [
+        "xArray#0",
+        "tmp%6#0"
+      ]
+    },
+    "107": {
+      "op": "frame_dig 0"
+    },
+    "109": {
+      "op": "intc_3 // 2"
+    },
+    "110": {
+      "op": "extract_uint64"
+    },
+    "111": {
+      "op": "intc_2 // 5"
+    },
+    "112": {
+      "op": "=="
+    },
+    "113": {
+      "op": "bz testMatches_bool_false@3"
+    },
+    "116": {
+      "op": "intc_0 // 1"
+    },
+    "117": {
+      "block": "testMatches_bool_merge@4",
+      "stack_in": [
+        "xArray#0",
+        "tmp%6#0",
+        "and_result%0#0"
+      ],
+      "op": "assert",
+      "defined_out": [],
+      "stack_out": [
+        "xArray#0",
+        "tmp%6#0"
+      ]
+    },
+    "118": {
+      "op": "frame_dig 1",
+      "defined_out": [
+        "tmp%6#0"
+      ],
+      "stack_out": [
+        "xArray#0",
+        "tmp%6#0",
+        "tmp%6#0"
+      ]
+    },
+    "120": {
+      "op": "bz testMatches_bool_false@7",
+      "stack_out": [
+        "xArray#0",
+        "tmp%6#0"
+      ]
+    },
+    "123": {
+      "op": "frame_dig 0"
+    },
+    "125": {
+      "op": "intc_3 // 2"
+    },
+    "126": {
+      "op": "extract_uint64"
+    },
+    "127": {
+      "op": "pushint 4 // 4"
+    },
+    "129": {
+      "op": ">"
+    },
+    "130": {
+      "op": "bz testMatches_bool_false@7"
+    },
+    "133": {
+      "op": "intc_0 // 1"
+    },
+    "134": {
+      "block": "testMatches_bool_merge@8",
+      "stack_in": [
+        "xArray#0",
+        "tmp%6#0",
+        "and_result%1#0"
+      ],
+      "op": "assert",
+      "defined_out": [],
+      "stack_out": [
+        "xArray#0",
+        "tmp%6#0"
+      ]
+    },
+    "135": {
+      "op": "frame_dig 1",
+      "defined_out": [
+        "tmp%6#0"
+      ],
+      "stack_out": [
+        "xArray#0",
+        "tmp%6#0",
+        "tmp%6#0"
+      ]
+    },
+    "137": {
+      "op": "bz testMatches_bool_false@11",
+      "stack_out": [
+        "xArray#0",
+        "tmp%6#0"
+      ]
+    },
+    "140": {
+      "op": "frame_dig 0"
+    },
+    "142": {
+      "op": "intc_3 // 2"
+    },
+    "143": {
+      "op": "extract_uint64"
+    },
+    "144": {
+      "op": "pushint 6 // 6"
+    },
+    "146": {
+      "op": "<"
+    },
+    "147": {
+      "op": "bz testMatches_bool_false@11"
+    },
+    "150": {
+      "op": "intc_0 // 1"
+    },
+    "151": {
+      "block": "testMatches_bool_merge@12",
+      "stack_in": [
+        "xArray#0",
+        "tmp%6#0",
+        "and_result%2#0"
+      ],
+      "op": "assert",
+      "defined_out": [],
+      "stack_out": [
+        "xArray#0",
+        "tmp%6#0"
+      ]
+    },
+    "152": {
+      "op": "frame_dig 1",
+      "defined_out": [
+        "tmp%6#0"
+      ],
+      "stack_out": [
+        "xArray#0",
+        "tmp%6#0",
+        "tmp%6#0"
+      ]
+    },
+    "154": {
+      "op": "bz testMatches_bool_false@15",
+      "stack_out": [
+        "xArray#0",
+        "tmp%6#0"
+      ]
+    },
+    "157": {
+      "op": "frame_dig 0"
+    },
+    "159": {
+      "op": "intc_3 // 2"
+    },
+    "160": {
+      "op": "extract_uint64"
+    },
+    "161": {
+      "op": "intc_2 // 5"
+    },
+    "162": {
+      "op": ">="
+    },
+    "163": {
+      "op": "bz testMatches_bool_false@15"
+    },
+    "166": {
+      "op": "intc_0 // 1"
+    },
+    "167": {
+      "block": "testMatches_bool_merge@16",
+      "stack_in": [
+        "xArray#0",
+        "tmp%6#0",
+        "and_result%3#0"
+      ],
+      "op": "assert",
+      "defined_out": [],
+      "stack_out": [
+        "xArray#0",
+        "tmp%6#0"
+      ]
+    },
+    "168": {
+      "op": "frame_dig 1",
+      "defined_out": [
+        "tmp%6#0"
+      ],
+      "stack_out": [
+        "xArray#0",
+        "tmp%6#0",
+        "tmp%6#0"
+      ]
+    },
+    "170": {
+      "op": "bz testMatches_bool_false@19",
+      "stack_out": [
+        "xArray#0",
+        "tmp%6#0"
+      ]
+    },
+    "173": {
+      "op": "frame_dig 0"
+    },
+    "175": {
+      "op": "intc_3 // 2"
+    },
+    "176": {
+      "op": "extract_uint64"
+    },
+    "177": {
+      "op": "intc_2 // 5"
+    },
+    "178": {
+      "op": "<="
+    },
+    "179": {
+      "op": "bz testMatches_bool_false@19"
+    },
+    "182": {
+      "op": "intc_0 // 1"
+    },
+    "183": {
+      "block": "testMatches_bool_merge@20",
+      "stack_in": [
+        "xArray#0",
+        "tmp%6#0",
+        "and_result%4#0"
+      ],
+      "op": "assert",
+      "defined_out": [],
+      "stack_out": [
+        "xArray#0",
+        "tmp%6#0"
+      ]
+    },
+    "184": {
+      "retsub": true,
+      "op": "retsub"
+    },
+    "185": {
+      "block": "testMatches_bool_false@19",
+      "stack_in": [
+        "xArray#0",
+        "tmp%6#0"
+      ],
+      "op": "intc_1 // 0",
+      "defined_out": [
+        "and_result%4#0"
+      ],
+      "stack_out": [
+        "xArray#0",
+        "tmp%6#0",
+        "and_result%4#0"
+      ]
+    },
+    "186": {
+      "op": "b testMatches_bool_merge@20"
+    },
+    "189": {
+      "block": "testMatches_bool_false@15",
+      "stack_in": [
+        "xArray#0",
+        "tmp%6#0"
+      ],
+      "op": "intc_1 // 0",
+      "defined_out": [
+        "and_result%3#0"
+      ],
+      "stack_out": [
+        "xArray#0",
+        "tmp%6#0",
+        "and_result%3#0"
+      ]
+    },
+    "190": {
+      "op": "b testMatches_bool_merge@16"
+    },
+    "193": {
+      "block": "testMatches_bool_false@11",
+      "stack_in": [
+        "xArray#0",
+        "tmp%6#0"
+      ],
+      "op": "intc_1 // 0",
+      "defined_out": [
+        "and_result%2#0"
+      ],
+      "stack_out": [
+        "xArray#0",
+        "tmp%6#0",
+        "and_result%2#0"
+      ]
+    },
+    "194": {
+      "op": "b testMatches_bool_merge@12"
+    },
+    "197": {
+      "block": "testMatches_bool_false@7",
+      "stack_in": [
+        "xArray#0",
+        "tmp%6#0"
+      ],
+      "op": "intc_1 // 0",
+      "defined_out": [
+        "and_result%1#0"
+      ],
+      "stack_out": [
+        "xArray#0",
+        "tmp%6#0",
+        "and_result%1#0"
+      ]
+    },
+    "198": {
+      "op": "b testMatches_bool_merge@8"
+    },
+    "201": {
+      "block": "testMatches_bool_false@3",
+      "stack_in": [
+        "xArray#0",
+        "tmp%6#0"
+      ],
+      "op": "intc_1 // 0",
+      "defined_out": [
+        "and_result%0#0"
+      ],
+      "stack_out": [
+        "xArray#0",
+        "tmp%6#0",
+        "and_result%0#0"
+      ]
+    },
+    "202": {
+      "op": "b testMatches_bool_merge@4"
+    }
+  }
+}

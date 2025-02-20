@@ -1,0 +1,532 @@
+{
+  "version": 3,
+  "sources": [
+    "C:/Source/algorand/puya-ts/tests/approvals/assert-match.algo.ts"
+  ],
+  "mappings": ";;;;;;;;AAGA;;AAAA;;;AAAA;;;;;;AAAA;;;AAAA;;;;AAAA;;AACE;;AAAA;AAAA;AAAA;;AAAA;AADF;;AAAA;AAAA;AAAA;AAAA;;AAAA;AAAA;;AAAA;AAAA;AAAA;AAEI;;AAAA;AAIA;;AAAA;AAAA;;AAC+B;;;;AAD/B;AAAA;;;AAAA;AACsB;;;;AADtB;AAAA;;;AAAA;;AAAA;;AAEc;;AAFd;AAAA;;;AAAA;;AAAA;;AAGmB;;AAHnB;AAAA;;;AAAA;;AAAA;;AAI2B;;AAJ3B;AAAA;;;AAAA;;AAAA;;AAK6B;AAL7B;AAAA;;;AAAA;;AAAA;;AAMyB;;;;;;;AANzB;AAAA;;;;AAAA;AALF;;;;;;;AAAA;AAAA;;;;;;AADF;;AAAA;;;AAAA;;AAAA;AAAA;AAAA;",
+  "op_pc_offset": 0,
+  "pc_events": {
+    "1": {
+      "subroutine": "@algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram",
+      "params": {},
+      "block": "main",
+      "stack_in": [],
+      "op": "intcblock 1 0"
+    },
+    "5": {
+      "op": "pushbytes \"\"",
+      "stack_out": [
+        "pay#0"
+      ]
+    },
+    "7": {
+      "op": "dup",
+      "stack_out": [
+        "pay#0",
+        "tmp%2#1"
+      ]
+    },
+    "8": {
+      "op": "txn NumAppArgs",
+      "defined_out": [
+        "tmp%0#1"
+      ],
+      "stack_out": [
+        "pay#0",
+        "tmp%2#1",
+        "tmp%0#1"
+      ]
+    },
+    "10": {
+      "op": "bz main_bare_routing@6",
+      "stack_out": [
+        "pay#0",
+        "tmp%2#1"
+      ]
+    },
+    "13": {
+      "op": "pushbytes 0x8fef7668 // method \"testPay(pay)bool\""
+    },
+    "19": {
+      "op": "txna ApplicationArgs 0"
+    },
+    "22": {
+      "op": "match main_testPay_route@3"
+    },
+    "26": {
+      "block": "main_after_if_else@10",
+      "stack_in": [
+        "pay#0",
+        "tmp%2#1"
+      ],
+      "op": "intc_1 // 0",
+      "defined_out": [
+        "tmp%0#0"
+      ],
+      "stack_out": [
+        "pay#0",
+        "tmp%2#1",
+        "tmp%0#0"
+      ]
+    },
+    "27": {
+      "op": "return"
+    },
+    "28": {
+      "block": "main_testPay_route@3",
+      "stack_in": [
+        "pay#0",
+        "tmp%2#1"
+      ],
+      "op": "txn OnCompletion",
+      "defined_out": [
+        "tmp%3#0"
+      ],
+      "stack_out": [
+        "pay#0",
+        "tmp%2#1",
+        "tmp%3#0"
+      ]
+    },
+    "30": {
+      "op": "!",
+      "defined_out": [
+        "tmp%4#0"
+      ],
+      "stack_out": [
+        "pay#0",
+        "tmp%2#1",
+        "tmp%4#0"
+      ]
+    },
+    "31": {
+      "error": "OnCompletion is not NoOp",
+      "op": "assert // OnCompletion is not NoOp",
+      "stack_out": [
+        "pay#0",
+        "tmp%2#1"
+      ]
+    },
+    "32": {
+      "op": "txn ApplicationID",
+      "defined_out": [
+        "tmp%5#0"
+      ],
+      "stack_out": [
+        "pay#0",
+        "tmp%2#1",
+        "tmp%5#0"
+      ]
+    },
+    "34": {
+      "error": "can only call when not creating",
+      "op": "assert // can only call when not creating",
+      "stack_out": [
+        "pay#0",
+        "tmp%2#1"
+      ]
+    },
+    "35": {
+      "op": "txn GroupIndex",
+      "defined_out": [
+        "tmp%7#0"
+      ],
+      "stack_out": [
+        "pay#0",
+        "tmp%2#1",
+        "tmp%7#0"
+      ]
+    },
+    "37": {
+      "op": "intc_0 // 1",
+      "defined_out": [
+        "1",
+        "tmp%7#0"
+      ],
+      "stack_out": [
+        "pay#0",
+        "tmp%2#1",
+        "tmp%7#0",
+        "1"
+      ]
+    },
+    "38": {
+      "op": "-",
+      "defined_out": [
+        "pay#0"
+      ],
+      "stack_out": [
+        "pay#0",
+        "tmp%2#1",
+        "pay#0"
+      ]
+    },
+    "39": {
+      "op": "dup",
+      "stack_out": [
+        "pay#0",
+        "tmp%2#1",
+        "pay#0",
+        "pay#0"
+      ]
+    },
+    "40": {
+      "op": "bury 3",
+      "defined_out": [
+        "pay#0"
+      ],
+      "stack_out": [
+        "pay#0",
+        "tmp%2#1",
+        "pay#0"
+      ]
+    },
+    "42": {
+      "op": "dup",
+      "defined_out": [
+        "pay#0",
+        "pay#0 (copy)"
+      ],
+      "stack_out": [
+        "pay#0",
+        "tmp%2#1",
+        "pay#0",
+        "pay#0 (copy)"
+      ]
+    },
+    "43": {
+      "op": "gtxns TypeEnum",
+      "defined_out": [
+        "gtxn_type%0#0",
+        "pay#0"
+      ],
+      "stack_out": [
+        "pay#0",
+        "tmp%2#1",
+        "pay#0",
+        "gtxn_type%0#0"
+      ]
+    },
+    "45": {
+      "op": "intc_0 // pay",
+      "defined_out": [
+        "gtxn_type%0#0",
+        "pay",
+        "pay#0"
+      ],
+      "stack_out": [
+        "pay#0",
+        "tmp%2#1",
+        "pay#0",
+        "gtxn_type%0#0",
+        "pay"
+      ]
+    },
+    "46": {
+      "op": "==",
+      "defined_out": [
+        "gtxn_type_matches%0#0",
+        "pay#0"
+      ],
+      "stack_out": [
+        "pay#0",
+        "tmp%2#1",
+        "pay#0",
+        "gtxn_type_matches%0#0"
+      ]
+    },
+    "47": {
+      "error": "transaction type is pay",
+      "op": "assert // transaction type is pay",
+      "stack_out": [
+        "pay#0",
+        "tmp%2#1",
+        "pay#0"
+      ]
+    },
+    "48": {
+      "op": "txn Fee",
+      "defined_out": [
+        "pay#0",
+        "tmp%0#1"
+      ],
+      "stack_out": [
+        "pay#0",
+        "tmp%2#1",
+        "pay#0",
+        "tmp%0#1"
+      ]
+    },
+    "50": {
+      "error": "assert target is match for conditions",
+      "op": "assert // assert target is match for conditions",
+      "stack_out": [
+        "pay#0",
+        "tmp%2#1",
+        "pay#0"
+      ]
+    },
+    "51": {
+      "op": "gtxns Amount",
+      "defined_out": [
+        "pay#0",
+        "tmp%2#1"
+      ],
+      "stack_out": [
+        "pay#0",
+        "tmp%2#1",
+        "tmp%2#1"
+      ]
+    },
+    "53": {
+      "op": "dup",
+      "stack_out": [
+        "pay#0",
+        "tmp%2#1",
+        "tmp%2#1",
+        "tmp%2#1"
+      ]
+    },
+    "54": {
+      "op": "bury 2",
+      "defined_out": [
+        "pay#0",
+        "tmp%2#1"
+      ],
+      "stack_out": [
+        "pay#0",
+        "tmp%2#1",
+        "tmp%2#1"
+      ]
+    },
+    "56": {
+      "op": "pushint 105000 // 105000",
+      "defined_out": [
+        "105000",
+        "pay#0",
+        "tmp%2#1"
+      ],
+      "stack_out": [
+        "pay#0",
+        "tmp%2#1",
+        "tmp%2#1",
+        "105000"
+      ]
+    },
+    "60": {
+      "op": "<=",
+      "defined_out": [
+        "pay#0",
+        "tmp%2#1",
+        "tmp%3#1"
+      ],
+      "stack_out": [
+        "pay#0",
+        "tmp%2#1",
+        "tmp%3#1"
+      ]
+    },
+    "61": {
+      "op": "bz main_bool_false@22",
+      "stack_out": [
+        "pay#0",
+        "tmp%2#1"
+      ]
+    },
+    "64": {
+      "op": "dup"
+    },
+    "65": {
+      "op": "pushint 100000 // 100000"
+    },
+    "69": {
+      "op": ">="
+    },
+    "70": {
+      "op": "bz main_bool_false@22"
+    },
+    "73": {
+      "op": "dig 1"
+    },
+    "75": {
+      "op": "gtxns Sender"
+    },
+    "77": {
+      "op": "txn Sender"
+    },
+    "79": {
+      "op": "=="
+    },
+    "80": {
+      "op": "bz main_bool_false@22"
+    },
+    "83": {
+      "op": "dig 1"
+    },
+    "85": {
+      "op": "gtxns Receiver"
+    },
+    "87": {
+      "op": "global CurrentApplicationAddress"
+    },
+    "89": {
+      "op": "=="
+    },
+    "90": {
+      "op": "bz main_bool_false@22"
+    },
+    "93": {
+      "op": "dig 1"
+    },
+    "95": {
+      "op": "gtxns CloseRemainderTo"
+    },
+    "97": {
+      "op": "global ZeroAddress"
+    },
+    "99": {
+      "op": "=="
+    },
+    "100": {
+      "op": "bz main_bool_false@22"
+    },
+    "103": {
+      "op": "dig 1"
+    },
+    "105": {
+      "op": "gtxns FirstValid"
+    },
+    "107": {
+      "op": "intc_0 // 1"
+    },
+    "108": {
+      "op": ">"
+    },
+    "109": {
+      "op": "bz main_bool_false@22"
+    },
+    "112": {
+      "op": "dig 1"
+    },
+    "114": {
+      "op": "gtxns LastValid"
+    },
+    "116": {
+      "op": "pushint 1099511627776 // 1099511627776"
+    },
+    "123": {
+      "op": "<"
+    },
+    "124": {
+      "op": "bz main_bool_false@22"
+    },
+    "127": {
+      "op": "intc_0 // 1"
+    },
+    "128": {
+      "block": "main_bool_merge@23",
+      "stack_in": [
+        "pay#0",
+        "tmp%2#1",
+        "and_result%0#0"
+      ],
+      "error": "assert target is match for conditions",
+      "op": "assert // assert target is match for conditions",
+      "defined_out": [],
+      "stack_out": [
+        "pay#0",
+        "tmp%2#1"
+      ]
+    },
+    "129": {
+      "op": "pushbytes 0x151f7c7580",
+      "defined_out": [
+        "0x151f7c7580"
+      ],
+      "stack_out": [
+        "pay#0",
+        "tmp%2#1",
+        "0x151f7c7580"
+      ]
+    },
+    "136": {
+      "op": "log",
+      "stack_out": [
+        "pay#0",
+        "tmp%2#1"
+      ]
+    },
+    "137": {
+      "op": "intc_0 // 1",
+      "defined_out": [
+        "tmp%0#0"
+      ],
+      "stack_out": [
+        "pay#0",
+        "tmp%2#1",
+        "tmp%0#0"
+      ]
+    },
+    "138": {
+      "op": "return"
+    },
+    "139": {
+      "block": "main_bool_false@22",
+      "stack_in": [
+        "pay#0",
+        "tmp%2#1"
+      ],
+      "op": "intc_1 // 0",
+      "defined_out": [
+        "and_result%0#0"
+      ],
+      "stack_out": [
+        "pay#0",
+        "tmp%2#1",
+        "and_result%0#0"
+      ]
+    },
+    "140": {
+      "op": "b main_bool_merge@23"
+    },
+    "143": {
+      "block": "main_bare_routing@6",
+      "stack_in": [
+        "pay#0",
+        "tmp%2#1"
+      ],
+      "op": "txn OnCompletion",
+      "defined_out": [
+        "tmp%9#0"
+      ],
+      "stack_out": [
+        "pay#0",
+        "tmp%2#1",
+        "tmp%9#0"
+      ]
+    },
+    "145": {
+      "op": "bnz main_after_if_else@10",
+      "stack_out": [
+        "pay#0",
+        "tmp%2#1"
+      ]
+    },
+    "148": {
+      "op": "txn ApplicationID"
+    },
+    "150": {
+      "op": "!"
+    },
+    "151": {
+      "error": "can only call when creating",
+      "op": "assert // can only call when creating"
+    },
+    "152": {
+      "op": "intc_0 // 1"
+    },
+    "153": {
+      "op": "return"
+    }
+  }
+}

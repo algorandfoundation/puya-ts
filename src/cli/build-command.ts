@@ -22,7 +22,6 @@ export interface BuildCommandArgs {
   output_destructured_ir: boolean
   output_memory_ir: boolean
   output_bytecode: boolean
-  match_algod_bytecode: boolean
   out_dir: string
   debug_level: string
   optimization_level: string
@@ -113,11 +112,6 @@ export function addBuildCommand(subparsers: SubParser) {
     help: 'Output AVM bytecode',
     default: defaultPuyaOptions.outputBytecode,
   })
-  buildParser.add_argument('--match-algod-bytecode', {
-    action: BooleanOptionalAction,
-    help: 'When outputting bytecode, ensure bytecode matches algod output',
-    default: defaultPuyaOptions.matchAlgodBytecode,
-  })
 
   buildParser.add_argument('--out-dir', {
     action: 'store',
@@ -194,7 +188,6 @@ export async function buildCommand(args: BuildCommandArgs) {
         outputMemoryIr: args.output_memory_ir,
         outputBytecode: args.output_bytecode,
         outputSourceMap: args.output_source_map,
-        matchAlgodBytecode: args.match_algod_bytecode,
         debugLevel: convertInt(args.debug_level),
         optimizationLevel: convertInt(args.optimization_level),
         targetAvmVersion: convertInt(args.target_avm_version),
