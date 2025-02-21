@@ -463,9 +463,13 @@ type StructConstraint = Record<string, ARC4Encoded>
 /**
  * The base type for arc4 structs
  */
-class StructBase extends ARC4Encoded {
+class StructBase<T> extends ARC4Encoded {
   /** @hidden */
   [TypeProperty] = 'arc4.Struct'
+
+  get native(): T {
+    throw new NoImplementation()
+  }
 }
 
 /**
@@ -473,7 +477,7 @@ class StructBase extends ARC4Encoded {
  * @typeParam T The shape of the arc4 struct
  */
 type StructConstructor = {
-  new <T extends Record<string, ARC4Encoded>>(initial: T): StructBase & Readonly<T> & { native: T }
+  new <T extends Record<string, ARC4Encoded>>(initial: T): StructBase<T> & Readonly<T>
 }
 
 /**

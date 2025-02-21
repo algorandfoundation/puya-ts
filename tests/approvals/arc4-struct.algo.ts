@@ -33,4 +33,8 @@ class StructDemo extends Contract {
     const v1_bytes = v1.bytes
     return interpretAsArc4<Vector>(v1_bytes)
   }
+
+  public toNative(v1: Vector) {
+    return v1.native
+  }
 }
