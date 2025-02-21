@@ -34,7 +34,7 @@ export type Box<TValue> = {
   /**
    * Get the value stored in the box if available, and a boolean indicating if the box exists.
    *
-   * If the box does not exist, the value returned at position 0 is _undocumented_ and should not be relied on to have a specific value.
+   * If the box does not exist, the value returned at position 0 should not be relied on to have a valid value.
    * @returns A tuple with the first item being the box value, and the second item being a boolean indicating if the box exists.
    */
   maybe(): readonly [TValue, boolean]
@@ -87,7 +87,7 @@ export type BoxMap<TKey, TValue> = {
   /**
    * Get the value of a keyed box if available, and a boolean indicating if the box exists.
    *
-   * If the box does not exist, the value returned at position 0 is _undocumented_ and should not be relied on to have a specific value.
+   * If the box does not exist, the value returned at position 0 should not be relied on to have a valid value.
    * @param key The key of the box to check
    * @returns A tuple with the first item being the box value, and the second item being a boolean indicating if the box exists.
    */
@@ -186,7 +186,7 @@ export type BoxRef = {
   /**
    * Get the value stored in the box if available, and a boolean indicating if the box exists.
    *
-   * If the box does not exist, the value returned at position 0 is _undocumented_ and should not be relied on to have a specific value.
+   * If the box does not exist, the value returned at position 0 will be an empty byte array.
    * @returns A tuple with the first item being the box value, and the second item being a boolean indicating if the box exists.
    */
   maybe(): readonly [bytes, boolean]
