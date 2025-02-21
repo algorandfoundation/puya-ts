@@ -4,6 +4,7 @@ import { compile } from '../compile'
 import { logger, LoggingContext, LogLevel } from '../logger'
 import { ConsoleLogSink } from '../logger/sinks/console-log-sink'
 import { defaultPuyaOptions, LocalsCoalescingStrategy } from '../puya/options'
+import { parseCliTemplateVar } from '../util/template-var-cli-parser'
 import { addEnumArg, convertInt } from './util'
 
 export interface BuildCommandArgs {
@@ -191,7 +192,7 @@ export async function buildCommand(args: BuildCommandArgs) {
         debugLevel: convertInt(args.debug_level),
         optimizationLevel: convertInt(args.optimization_level),
         targetAvmVersion: convertInt(args.target_avm_version),
-        cliTemplateDefinitions: args.cli_template_definitions,
+        cliTemplateDefinitions: Object.fromEntries(args.cli_template_definitions?.map(parseCliTemplateVar) ?? []),
         templateVarsPrefix: args.template_vars_prefix,
         localsCoalescingStrategy: args.locals_coalescing_strategy,
       })

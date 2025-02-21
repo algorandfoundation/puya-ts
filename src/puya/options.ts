@@ -18,7 +18,7 @@ export const defaultPuyaOptions: PuyaPassThroughOptions = {
   debugLevel: 1,
   optimizationLevel: 1,
   targetAvmVersion: 10,
-  cliTemplateDefinitions: [],
+  cliTemplateDefinitions: {},
   templateVarsPrefix: 'TMPL_',
   localsCoalescingStrategy: LocalsCoalescingStrategy.root_operand,
 }
@@ -37,7 +37,7 @@ export class PuyaOptions {
   debugLevel: number
   optimizationLevel: number
   targetAvmVersion: number
-  cliTemplateDefinitions: string[]
+  cliTemplateDefinitions: Record<string, Uint8Array | bigint>
   templateVarsPrefix: string
   localsCoalescingStrategy: LocalsCoalescingStrategy
 
