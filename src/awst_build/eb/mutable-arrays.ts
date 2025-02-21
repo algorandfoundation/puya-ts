@@ -6,6 +6,7 @@ import type { LibClassType, PType } from '../ptypes'
 import { MutableArrayConstructor, MutableArrayGeneric, MutableArrayType } from '../ptypes'
 import type { InstanceBuilder, NodeBuilder } from './index'
 import { ClassBuilder, InstanceExpressionBuilder } from './index'
+import { ArrayCopyFunctionBuilder } from './shared/array-copy-function-builder'
 import { ArrayPopFunctionBuilder } from './shared/pop-function-builder'
 import { ArrayPushFunctionBuilder } from './shared/push-function-builder'
 import { requireExpressionOfType } from './util'
@@ -61,6 +62,8 @@ export class MutableArrayExpressionBuilder extends InstanceExpressionBuilder<Mut
         return new ArrayPopFunctionBuilder(this)
       case 'length':
         return arrayLength(this, sourceLocation)
+      case 'copy':
+        return new ArrayCopyFunctionBuilder(this)
     }
     return super.memberAccess(name, sourceLocation)
   }
