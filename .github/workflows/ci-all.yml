@@ -11,7 +11,7 @@ jobs:
     name: 'Build @algorandfoundation/algorand-typescript'
     uses: ./.github/workflows/node-ci.yml
     with:
-      node-version: 20.x
+      node-version: 21.x
       run-build: true
       audit-script: npm run audit
       working-directory: packages/algo-ts
@@ -37,7 +37,7 @@ jobs:
       download-artifact-pattern: algo-*
       download-artifact-path: ./packages-temp
       pre-run-script: mv packages-temp/algo-ts packages/algo-ts/dist
-      node-version: 20.x
+      node-version: 21.x
       run-build: true
       run-commit-lint: ${{ inputs.run-commit-lint }}
       build-script: npm run build
