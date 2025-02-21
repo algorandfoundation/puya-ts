@@ -20,6 +20,24 @@ type JSONWithRaw = typeof JSON & {
   rawJSON?(value: string): string
 }
 
+function serializeBigInt(value: bigint): unknown {
+  const jsonWithRaw = JSON as unknown as JSONWithRaw
+  if (jsonWithRaw.rawJSON) {
+    return jsonWithRaw.rawJSON(`${value}`)
+  }
+  if (value < 0n) {
+    if (value < Number.MIN_SAFE_INTEGER) {
+      throw new InternalError(`Cannot safely serialize ${value} to JSON`)
+    }
+    return Number(value)
+  } else {
+    if (value > Number.MAX_SAFE_INTEGER) {
+      return `${value}`
+    }
+    return Number(value)
+  }
+}
+
 export class SnakeCaseSerializer<T> {
   constructor(private readonly spaces = 2) {}
   public serialize(obj: T): string {
@@ -29,21 +47,7 @@ export class SnakeCaseSerializer<T> {
 
   protected serializerFunction(key: string, value: unknown): unknown {
     if (typeof value === 'bigint') {
-      const jsonWithRaw = JSON as unknown as JSONWithRaw
-      if (jsonWithRaw.rawJSON) {
-        return jsonWithRaw.rawJSON(`${value}`)
-      }
-      if (value < 0n) {
-        if (value < Number.MIN_SAFE_INTEGER) {
-          throw new InternalError(`Cannot safely serialize ${value} to JSON`)
-        }
-        return Number(value)
-      } else {
-        if (value > Number.MAX_SAFE_INTEGER) {
-          return `${value}`
-        }
-        return Number(value)
-      }
+      return serializeBigInt(value)
     }
     if (value instanceof Uint8Array) {
       return this.b85.encode(value)
@@ -99,14 +103,7 @@ export class AwstSerializer extends SnakeCaseSerializer<RootNode[]> {
         ...(super.serializerFunction(key, value) as object),
         immediates: value.immediates.map((i) => {
           if (typeof i === 'bigint') {
-            if (i <= Number.MAX_SAFE_INTEGER) {
-              return Number(i)
-            } else {
-              throw new InternalError(
-                'Intrinsic call with integer immediate arg cannot be serialized as it is larger than Number.MAX_SAFE_INTEGER',
-                { sourceLocation: value.sourceLocation },
-              )
-            }
+            return serializeBigInt(i)
           }
           return i
         }),
