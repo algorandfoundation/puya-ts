@@ -5,23 +5,25 @@ type InvokeCliOptions = {
   args: string[]
   cwd?: string
   onReceiveLine?(line: string): void
-  dontThrowOnNonzeroCode?: boolean
+  dontThrowOnNonZeroCode?: boolean
 }
 
 type InvokeCliResponse = {
-  lines: string[]
+  outputLines: string[]
   code: number
 }
 
 class InvokeCliError extends Error {
   constructor(public exit: { code?: number | null; signal?: NodeJS.Signals | null }) {
+    let message: string
     if (exit.code) {
-      super(`Exited with code ${exit.code}`)
+      message = `Exited with code ${exit.code}`
     } else if (exit.signal) {
-      super(`Exited with signal ${exit.signal}`)
+      message = `Exited with signal ${exit.signal}`
     } else {
-      super('Exited with unknown cause')
+      message = 'Exited with unknown cause'
     }
+    super(message)
   }
 }
 
@@ -33,27 +35,28 @@ export function invokeCli(options: InvokeCliOptions): Promise<InvokeCliResponse>
     })
 
     process.stdout.on('data', (data) => lineAggregator.aggregate(data))
+    process.stderr.on('data', (data) => lineAggregator.aggregate(data))
     process.once('close', (code) => {
-      if (code !== 0 && !options.dontThrowOnNonzeroCode) {
+      if (code !== 0 && !options.dontThrowOnNonZeroCode) {
         reject(new InvokeCliError({ code }))
       }
       lineAggregator.flush()
       resolve({
         code: code ?? 0,
-        lines: lineAggregator.lines,
+        outputLines: lineAggregator.lines,
       })
     })
     process.once('exit', (code, signal) => {
       if (signal !== null) {
         reject(new InvokeCliError({ signal }))
       }
-      if (code !== 0 && !options.dontThrowOnNonzeroCode) {
+      if (code !== 0 && !options.dontThrowOnNonZeroCode) {
         reject(new InvokeCliError({ code }))
       }
       lineAggregator.flush()
       resolve({
         code: code ?? 0,
-        lines: lineAggregator.lines,
+        outputLines: lineAggregator.lines,
       })
     })
     process.once('error', reject)

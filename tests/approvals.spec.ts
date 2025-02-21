@@ -1,55 +1,54 @@
 import { globSync } from 'glob'
 import { rimraf } from 'rimraf'
-import { describe, expect, it } from 'vitest'
-import { compile } from '../src'
-import { isErrorOrCritical, LoggingContext, LogLevel } from '../src/logger'
-import { defaultPuyaOptions } from '../src/puya/options'
+import { beforeAll, describe, expect, it } from 'vitest'
 import { normalisePath } from '../src/util'
 import { invokeCli } from '../src/util/invoke-cli'
 
 describe('Approvals', async () => {
-  await rimraf('tests/approvals/out')
+  beforeAll(async () => {
+    await rimraf('tests/approvals/out')
+  })
 
   const contractFiles = globSync('tests/approvals/*.algo.ts')
     .map((p) => normalisePath(p, process.cwd()))
     .toSorted()
-  describe.each([
-    ['Unoptimized', 'out/unoptimized/[name]', { optimizationLevel: 0, outputAwstJson: true, outputAwst: true }],
-    ['O1', 'out/o1/[name]', { optimizationLevel: 1 }],
-    ['O2', 'out/o2/[name]', { optimizationLevel: 2 }],
-  ])('Compile %s', async (desc, outDir, puyaOptions) => {
-    const logCtx = LoggingContext.create()
-    const result = await logCtx.run(() =>
-      compile({
-        paths: ['tests/approvals'],
-        outDir,
-        dryRun: false,
-        logLevel: LogLevel.Warning,
-        skipVersionCheck: true,
-        ...defaultPuyaOptions,
-        outputSourceMap: false,
-        outputAwstJson: false,
-        outputAwst: false,
-        outputTeal: true,
-        outputArc32: true,
-        outputArc56: true,
-        outputSsaIr: true,
-        ...puyaOptions,
-      }),
-    )
-    it.each(contractFiles)('%s', (contractFilePath) => {
-      const awst = result.awst?.filter((s) => s.sourceLocation.file === contractFilePath)
 
-      const errors = logCtx.logEvents.filter(
-        (l) => (!l.sourceLocation || l.sourceLocation.file === contractFilePath) && isErrorOrCritical(l.level),
-      )
-      if (errors.length === 0) {
-        expect(errors.length).toBe(0)
-      } else {
-        expect.fail(`Errors: \n${errors.map((e) => e.message).join('\n')}`)
+  describe.concurrent.each(contractFiles)('%s', (contractFile) => {
+    it.each([
+      [
+        'Unoptimized',
+        [
+          '--out-dir',
+          'out/[name]/unoptimized',
+          '--optimization-level=0',
+          '--output-awst-json',
+          '--output-awst',
+          '--output-arc32',
+          '--output-arc56',
+        ],
+      ],
+      ['O1', ['--out-dir', 'out/[name]/o1', '--optimization-level=1', '--no-output-arc32', '--no-output-arc56']],
+      ['02', ['--out-dir', 'out/[name]/o2', '--optimization-level=2', '--no-output-arc32', '--no-output-arc56']],
+    ])('compiles %s', async (desc, args) => {
+      const result = await invokeCli({
+        command: 'node_modules/.bin/tsx',
+        args: [
+          'src/cli.ts',
+          'build',
+          contractFile,
+          '--no-output-source-map',
+          '--skip-version-check',
+          '--log-level=error',
+          '--output-teal',
+          '--output-ssa-ir',
+          ...args,
+        ],
+        dontThrowOnNonZeroCode: true,
+      })
+      if (result.outputLines.length > 0) {
+        expect.fail(result.outputLines.join('\n'))
       }
-
-      expect(awst, 'Contract file must produce awst').toBeDefined()
+      expect(result.code, 'Response code should be 0').toBe(0)
     })
   })
 
@@ -58,7 +57,7 @@ describe('Approvals', async () => {
       command: 'git',
       args: ['status', '--porcelain'],
     })
-    const diffs = result.lines
+    const diffs = result.outputLines
 
     if (diffs.length) {
       expect.fail(

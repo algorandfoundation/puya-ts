@@ -17,7 +17,7 @@ export async function runPuya({
     args,
     cwd,
     onReceiveLine: onOutput,
-    dontThrowOnNonzeroCode: true,
+    dontThrowOnNonZeroCode: true,
   })
 
   if (result.code !== 0) {

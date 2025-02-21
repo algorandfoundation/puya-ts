@@ -1,4 +1,5 @@
 import typescript from '@rollup/plugin-typescript'
+import os from 'os'
 import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
@@ -16,6 +17,7 @@ export default defineConfig({
   ],
   test: {
     setupFiles: 'test.setup.ts',
+    maxConcurrency: os.cpus().length,
     globals: true,
     testTimeout: 20_000,
     exclude: ['packages/**', 'node_modules/**'],
