@@ -199,7 +199,7 @@ function addToArray(x: MutableArray<uint64>) {
 }
 ```
 
-Mutable arrays can be declared using the [MutableArray](api/classes/MutableArray.md) type. This type makes use of [scratch space](https://developer.algorand.org/docs/get-details/dapps/avm/teal/specification/?from_query=scratch%20space#scratch-space) as a heap in order to provide an array type with 'pass by reference' semantics. It is currently limited to fixed size item types.
+Mutable arrays can be declared using the [MutableArray](api/index/classes/MutableArray.md) type. This type makes use of [scratch space](https://developer.algorand.org/docs/get-details/dapps/avm/teal/specification/?from_query=scratch%20space#scratch-space) as a heap in order to provide an array type with 'pass by reference' semantics. It is currently limited to fixed size item types.
 
 ### Tuples
 

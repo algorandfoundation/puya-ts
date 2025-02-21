@@ -5,26 +5,87 @@ import { bytes } from '../primitives'
 
 export * from './encoded-types'
 
+/**
+ * The base type for all ARC4 contracts in Algorand TypeScript
+ */
 export class Contract extends BaseContract {
+  /**
+   * Default implementation of an ARC4 approval program, routes transactions to ABI or bare methods based on application
+   * args and on completion actions
+   */
   override approvalProgram(): boolean {
-    return true
+    throw new NoImplementation()
   }
 }
 
+/**
+ * The possible options for a method being available on application create
+ *
+ * allow: This method CAN be called when the application is being created, but it is not required
+ * disallow: This method CANNOT be called when the application is being created
+ * require: This method CAN ONLY be called when the application is being created
+ */
 export type CreateOptions = 'allow' | 'disallow' | 'require'
+/**
+ * The possible on complete actions a method can handle, represented as a string
+ */
 export type OnCompleteActionStr = 'NoOp' | 'OptIn' | 'ClearState' | 'CloseOut' | 'UpdateApplication' | 'DeleteApplication'
 
+/**
+ * The possible on complete actions a method can handle, represented as an integer
+ */
 export enum OnCompleteAction {
+  /**
+   * Do nothing after the transaction has completed
+   */
   NoOp = 0,
+  /**
+   * Opt the calling user into the contract
+   */
   OptIn = 1,
+  /**
+   * Close the calling user out of the contract
+   */
   CloseOut = 2,
+  /**
+   * Run the clear state program and forcibly close the user out of the contract
+   */
   ClearState = 3,
+  /**
+   * Replace the application's approval and clear state programs with the bytes from this transaction
+   */
   UpdateApplication = 4,
+  /**
+   * Delete the application
+   */
   DeleteApplication = 5,
 }
 
-export type DefaultArgument<TContract extends Contract> = { constant: string | boolean | number | bigint } | { from: keyof TContract }
-
+/**
+ * Type alias for a default argument schema
+ * @typeParam TContract The type of the contract containing the method this default argument is for
+ */
+export type DefaultArgument<TContract extends Contract> =
+  | {
+      /**
+       * A compile time constant value to be used as a default
+       */
+      constant: string | boolean | number | bigint
+    }
+  | {
+      /**
+       * Retrieve the default value from a member of this contract. The member can be
+       *
+       * LocalState: The value is retrieved from the calling user's local state before invoking this method
+       * GlobalState: The value is retrieved from the specified global state key before invoking this method
+       * Method: Any readonly abimethod with no arguments can be used as a source
+       */
+      from: keyof TContract
+    }
+/**
+ * Configuration options for an abi method
+ * @typeParam TContract the type of the contract this method is a part of
+ */
 export type AbiMethodConfig<TContract extends Contract> = {
   /**
    * Which on complete action(s) are allowed when invoking this method.
@@ -46,12 +107,18 @@ export type AbiMethodConfig<TContract extends Contract> = {
    */
   name?: string
 
+  /**
+   * Specify default arguments that can be populated by clients calling this method.
+   *
+   * A map of parameter names to the default argument source
+   */
   defaultArguments?: Record<string, DefaultArgument<TContract>>
 }
 
 /**
  * Declares the decorated method as an abimethod that is called when the first transaction arg matches the method selector
- * @param config
+ * @param config The config for this abi method
+ * @typeParam TContract the type of the contract this method is a part of
  */
 export function abimethod<TContract extends Contract>(config?: AbiMethodConfig<TContract>) {
   return function <TArgs extends DeliberateAny[], TReturn>(
@@ -62,6 +129,9 @@ export function abimethod<TContract extends Contract>(config?: AbiMethodConfig<T
   }
 }
 
+/**
+ * Configuration options for a bare method
+ */
 export type BareMethodConfig = {
   /**
    * Which on complete action(s) are allowed when invoking this method.
@@ -77,7 +147,8 @@ export type BareMethodConfig = {
 
 /**
  * Declares the decorated method as a baremethod that can only be called with no transaction args
- * @param config
+ * @param config The config for this bare method
+ * @typeParam TContract the type of the contract this method is a part of
  */
 export function baremethod<TContract extends Contract>(config?: BareMethodConfig) {
   return function <TArgs extends DeliberateAny[], TReturn>(
@@ -89,16 +160,16 @@ export function baremethod<TContract extends Contract>(config?: BareMethodConfig
 }
 
 /**
+ * A type alias for a contract instance method
+ */
+type ContractMethod = (this: Contract, ...args: DeliberateAny[]) => DeliberateAny
+
+/**
  * Returns the ARC4 method selector for a given ARC4 method signature. The method selector is the first
  * 4 bytes of the SHA512/256 hash of the method signature.
- * @param methodSignature An ARC4 method signature. Eg. `hello(string)string`. Must be a compile time constant.
+ * @param methodSignature An ARC4 method signature string ( Eg. `hello(string)string`.  Must be a compile time constant), or a contract method reference. (Eg. `MyContract.prototype.myMethod`)
  * @returns The ARC4 method selector. Eg. `02BECE11`
  */
-export function methodSelector<
-  TMethod extends (this: TContract, ...args: TArgs) => TReturn,
-  TContract extends Contract,
-  TArgs extends DeliberateAny[],
-  TReturn,
->(methodSignature: string | TMethod): bytes {
+export function methodSelector(methodSignature: string | ContractMethod): bytes {
   throw new NoImplementation()
 }

@@ -7,7 +7,7 @@ they can utilise: [Global storage](#global-storage), [Local storage](#local-stor
 
 Global or Application storage is a key/value store of `bytes` or `uint64` values stored against a smart contract application. The number of values used must be declared when the application is first created and will affect the [minimum balance requirement](https://developer.algorand.org/docs/get-details/dapps/smart-contracts/apps/#minimum-balance-requirement-for-a-smart-contract) for the application. For ARC4 contracts this information is captured in the ARC32 and ARC56 specification files and automatically included in deployments.
 
-Global storage values are declared using the [GlobalState](api/functions/GlobalState.md) function to create a [GlobalState](api/type-aliases/GlobalState.md) proxy object.
+Global storage values are declared using the [GlobalState](api/index/functions/GlobalState.md) function to create a [GlobalState](api/index/type-aliases/GlobalState.md) proxy object.
 
 ```ts
 import {GlobalState, Contract, uint64, bytes, Uint64, contract} from "@algorandfoundation/algorand-typescript";
@@ -82,7 +82,7 @@ export class LocalStateDemo extends Contract {
 
 ## Box storage
 
-We provide 3 different types for accessing box storage: [Box](./api/functions/Box.md), [BoxMap](./api/functions/BoxMap.md), and [BoxRef](./api/functions/BoxRef.md). We also expose raw operations via the [AVM ops](./lg-ops.md) module.
+We provide 3 different types for accessing box storage: [Box](./api/index/functions/Box.md), [BoxMap](./api/index/functions/BoxMap.md), and [BoxRef](./api/index/functions/BoxRef.md). We also expose raw operations via the [AVM ops](./lg-ops.md) module.
 
 Before using box storage, be sure to familiarise yourself with the [requirements and restrictions](https://developer.algorand.org/articles/smart-contract-storage-boxes/) of the underlying API.
 

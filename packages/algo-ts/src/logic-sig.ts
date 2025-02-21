@@ -1,11 +1,29 @@
 import { ConstructorFor } from './internal/typescript-helpers'
 import { uint64 } from './primitives'
 
+/**
+ * Base class for Algorand TypeScript Logic Signatures (also known as Smart Signatures)
+ */
 export abstract class LogicSig {
+  /**
+   * The logic signature program logic
+   */
   abstract program(): boolean | uint64
 }
 
-type NumberRange = { from: number; to: number }
+/**
+ * Alias for a numeric range specification.
+ */
+type NumberRange = {
+  /**
+   * The start point of the range (inclusive)
+   */
+  from: number
+  /**
+   * The end point of the range (inclusive)
+   */
+  to: number
+}
 
 /**
  * Defines optional configuration for a logic signature
