@@ -28,6 +28,7 @@ import type { InstanceBuilder, NodeBuilder } from '../index'
 import { ClassBuilder, FunctionBuilder } from '../index'
 import { IterableIteratorExpressionBuilder } from '../iterable-iterator-expression-builder'
 import { AccountExpressionBuilder } from '../reference/account'
+import { ArrayCopyFunctionBuilder } from '../shared/array-copy-function-builder'
 import { AtFunctionBuilder } from '../shared/at-function-builder'
 import { ArrayPopFunctionBuilder } from '../shared/pop-function-builder'
 import { ArrayPushFunctionBuilder } from '../shared/push-function-builder'
@@ -301,7 +302,7 @@ export abstract class ArrayExpressionBuilder<
       case 'entries':
         return new EntriesFunctionBuilder(this)
       case 'copy':
-        return new CopyFunctionBuilder(this)
+        return new ArrayCopyFunctionBuilder(this)
       case 'concat':
         return new ConcatFunctionBuilder(this)
       case 'slice': {
@@ -314,22 +315,6 @@ export abstract class ArrayExpressionBuilder<
   }
 }
 
-class CopyFunctionBuilder extends FunctionBuilder {
-  constructor(private arrayBuilder: ArrayExpressionBuilder<DynamicArrayType | StaticArrayType>) {
-    super(arrayBuilder.sourceLocation)
-  }
-
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
-    parseFunctionArgs({ args, typeArgs, genericTypeArgs: 0, argSpec: (a) => [], funcName: 'copy', callLocation: sourceLocation })
-    return instanceEb(
-      nodeFactory.copy({
-        value: this.arrayBuilder.resolve(),
-        sourceLocation,
-      }),
-      this.arrayBuilder.ptype,
-    )
-  }
-}
 class ConcatFunctionBuilder extends FunctionBuilder {
   constructor(private arrayBuilder: ArrayExpressionBuilder<DynamicArrayType | StaticArrayType>) {
     super(arrayBuilder.sourceLocation)
