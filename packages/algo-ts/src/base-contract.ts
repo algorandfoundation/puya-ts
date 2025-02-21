@@ -3,8 +3,18 @@ import { ConstructorFor } from './internal/typescript-helpers'
 import { uint64 } from './primitives'
 import { NumberRange } from './util'
 
+/**
+ * The base type for all Algorand TypeScript contracts
+ */
 export abstract class BaseContract {
+  /**
+   * The program to be run when the On Completion Action is != ClearState (3)
+   */
   public abstract approvalProgram(): boolean | uint64
+
+  /**
+   * The program to be run when the On Completion Action is == ClearState (3)
+   */
   public clearStateProgram(): boolean | uint64 {
     return true
   }
@@ -25,6 +35,9 @@ export type StateTotals = {
   localBytes?: number
 }
 
+/**
+ * Additional configuration options for a contract
+ */
 export type ContractOptions = {
   /**
    * Determines which AVM version to use, this affects what operations are supported.

@@ -1,7 +1,14 @@
 import { NoImplementation } from './internal/errors'
 import { uint64, Uint64Compat } from './primitives'
 
+/**
+ * An in memory mutable array which is passed by reference
+ */
 export class MutableArray<TItem> {
+  /**
+   * Create a new MutableArray with the specified items
+   * @param items The initial items for the array
+   */
   constructor(...items: TItem[]) {}
 
   /**
@@ -86,6 +93,9 @@ export class MutableArray<TItem> {
     throw new NoImplementation()
   }
 
+  /**
+   * Create a copy of this array
+   */
   copy(): MutableArray<TItem> {
     throw new NoImplementation()
   }

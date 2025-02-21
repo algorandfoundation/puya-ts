@@ -1,6 +1,9 @@
 import { NoImplementation } from './internal/errors'
 import { bytes, uint64 } from './primitives'
 
+/**
+ * Represents an Algorand Account and exposes properties and methods for reading account data
+ */
 export type Account = {
   /**
    * Get the accounts address in bytes
