@@ -8,7 +8,7 @@
 
 > **decodeArc4**\<`T`\>(`bytes`, `prefix`): `T`
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:565](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L565)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:569](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L569)
 
 Decode the provided bytes to a native Algorand TypeScript value
 

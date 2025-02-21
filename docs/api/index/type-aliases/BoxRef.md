@@ -121,7 +121,7 @@ The value if the box exists, else the default value
 
 Get the value stored in the box if available, and a boolean indicating if the box exists.
 
-If the box does not exist, the value returned at position 0 is _undocumented_ and should not be relied on to have a specific value.
+If the box does not exist, the value returned at position 0 will be an empty byte array.
 
 #### Returns
 
