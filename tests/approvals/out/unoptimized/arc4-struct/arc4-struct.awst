@@ -38,6 +38,11 @@ contract StructDemo
     return reinterpret_cast<Vector>(v1_bytes)
   }
   
+  toNative(v1: Vector): toNativeResult{ x: arc4.uint64, y: arc4.uint64 }
+  {
+    return { x: (#6 = ARC4_DECODE(v1)).x, y: #6.y }
+  }
+  
   __algots__.defaultCreate(): void
   {
   }

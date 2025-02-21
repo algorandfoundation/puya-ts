@@ -208,6 +208,7 @@ export class TypeResolver {
       }
     }
 
+    if (typeName.fullName === arc4StructBaseType.fullName) return arc4StructBaseType
     if (typeName.fullName === ClusteredPrototype.fullName) {
       return this.resolveClusteredPrototype(tsType, sourceLocation)
     }
@@ -236,7 +237,6 @@ export class TypeResolver {
     if (tsType.isClass()) {
       if (typeName.fullName === arc4BaseContractType.fullName) return arc4BaseContractType
       if (typeName.fullName === baseContractType.fullName) return baseContractType
-      if (typeName.fullName === arc4StructBaseType.fullName) return arc4StructBaseType
       if (typeName.fullName === logicSigBaseType.fullName) return logicSigBaseType
 
       const [baseType, ...rest] = tsType.getBaseTypes()?.map((t) => this.resolveType(t, sourceLocation)) ?? []
@@ -353,7 +353,7 @@ export class TypeResolver {
     baseType: ARC4StructType,
     sourceLocation: SourceLocation,
   ): ARC4StructType {
-    const ignoredProps = ['bytes', 'equals', Constants.constructorMethodName]
+    const ignoredProps = ['bytes', 'equals', 'native', Constants.constructorMethodName]
     const fields: Record<string, ARC4EncodedType> = {}
     for (const prop of tsType.getProperties()) {
       if (isIn(prop.name, ignoredProps)) continue
