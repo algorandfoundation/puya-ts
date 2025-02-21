@@ -1,0 +1,160 @@
+#pragma version 10
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0 1 TMPL_AN_INT
+    bytecblock 0x151f7c75 TMPL_A_STRING TMPL_SOME_BYTES
+
+main_block@1:
+    // tests/approvals/template-var.algo.ts:4
+    // export class MyContract extends Contract {
+    txn NumAppArgs
+    intc_0 // 0
+    !=
+    bz main_bare_routing@8
+
+main_abi_routing@2:
+    // tests/approvals/template-var.algo.ts:4
+    // export class MyContract extends Contract {
+    txna ApplicationArgs 0
+    pushbytes 0xbe93200b // method "getInt()uint64"
+    pushbytes 0xc1a13295 // method "getString()string"
+    pushbytes 0xaf43db36 // method "getBytes()byte[]"
+    uncover 3
+    match main_getInt_route@3 main_getString_route@4 main_getBytes_route@5
+
+main_switch_case_default@6:
+
+main_switch_case_next@7:
+
+main_after_if_else@12:
+    // tests/approvals/template-var.algo.ts:4
+    // export class MyContract extends Contract {
+    intc_0 // 0
+
+main_after_inlined_tests/approvals/template-var.algo.ts::MyContract.__puya_arc4_router__@13:
+    return
+
+main_getBytes_route@5:
+    // tests/approvals/template-var.algo.ts:13
+    // getBytes() {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    callsub getBytes
+    dup
+    len
+    itob
+    extract 6 2
+    swap
+    concat
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/template-var.algo.ts::MyContract.__puya_arc4_router__@13
+
+main_getString_route@4:
+    // tests/approvals/template-var.algo.ts:9
+    // getString() {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    callsub getString
+    dup
+    len
+    itob
+    extract 6 2
+    swap
+    concat
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/template-var.algo.ts::MyContract.__puya_arc4_router__@13
+
+main_getInt_route@3:
+    // tests/approvals/template-var.algo.ts:5
+    // getInt() {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    callsub getInt
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/template-var.algo.ts::MyContract.__puya_arc4_router__@13
+
+main_bare_routing@8:
+    // tests/approvals/template-var.algo.ts:4
+    // export class MyContract extends Contract {
+    txn OnCompletion
+    intc_0 // 0
+    swap
+    match main___algots__.defaultCreate@9
+
+main_switch_case_default@10:
+
+main_switch_case_next@11:
+    b main_after_if_else@12
+
+main___algots__.defaultCreate@9:
+    // tests/approvals/template-var.algo.ts:4
+    // export class MyContract extends Contract {
+    txn ApplicationID
+    intc_0 // 0
+    ==
+    assert // can only call when creating
+    callsub __algots__.defaultCreate
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/template-var.algo.ts::MyContract.__puya_arc4_router__@13
+
+
+// tests/approvals/template-var.algo.ts::MyContract.getInt() -> uint64:
+getInt:
+    // tests/approvals/template-var.algo.ts:6
+    // return TemplateVar<uint64>('AN_INT')
+    intc_2 // TMPL_AN_INT
+    retsub
+
+
+// tests/approvals/template-var.algo.ts::MyContract.getString() -> bytes:
+getString:
+    // tests/approvals/template-var.algo.ts:10
+    // return TemplateVar<string>('A_STRING')
+    bytec_1 // TMPL_A_STRING
+    retsub
+
+
+// tests/approvals/template-var.algo.ts::MyContract.getBytes() -> bytes:
+getBytes:
+    // tests/approvals/template-var.algo.ts:14
+    // return TemplateVar<bytes>('SOME_BYTES')
+    bytec_2 // TMPL_SOME_BYTES
+    retsub
+
+
+// tests/approvals/template-var.algo.ts::MyContract.__algots__.defaultCreate() -> void:
+__algots__.defaultCreate:
+    retsub
