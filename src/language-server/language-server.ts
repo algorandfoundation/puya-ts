@@ -1,14 +1,18 @@
-import type { CodeAction, Diagnostic, InitializeParams, InitializeResult } from 'vscode-languageserver/node.js'
+import { TextDocument } from 'vscode-languageserver-textdocument'
+import type { CodeAction, Diagnostic, DocumentDiagnosticReport, InitializeParams, InitializeResult } from 'vscode-languageserver/node.js'
 import {
   createConnection,
+  DiagnosticSeverity,
   DidChangeConfigurationNotification,
+  DocumentDiagnosticReportKind,
   ProposedFeatures,
   TextDocuments,
   TextDocumentSyncKind,
 } from 'vscode-languageserver/node.js'
-
-import { TextDocument } from 'vscode-languageserver-textdocument'
 import { URI } from 'vscode-uri'
+import { compile } from '../compile'
+import { LoggingContext, LogLevel } from '../logger'
+import { LocalsCoalescingStrategy } from '../puya/options'
 
 // Create a connection for the server, using Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
@@ -56,7 +60,24 @@ connection.onInitialized(() => {
     })
   }
 
-  connection.console.log('Initialized')
+  connection.console.log('Mighty server initialized')
+})
+
+connection.languages.diagnostics.on(async (params) => {
+  const document = documents.get(params.textDocument.uri)
+  if (document !== undefined) {
+    return {
+      kind: DocumentDiagnosticReportKind.Full,
+      items: await validateTextDocument(document),
+    } satisfies DocumentDiagnosticReport
+  } else {
+    // We don't know the document. We can either try to read it from disk
+    // or we don't report problems for it.
+    return {
+      kind: DocumentDiagnosticReportKind.Full,
+      items: [],
+    } satisfies DocumentDiagnosticReport
+  }
 })
 
 documents.onDidSave(async (event) => {
@@ -70,7 +91,26 @@ async function validateTextDocument(textDocument: TextDocument): Promise<Diagnos
   // Get the full file path
   const filePath = URI.parse(textDocument.uri).fsPath
   connection.console.log(`Validating document: ${filePath}`)
-  return []
+
+  const errorLogs = await compileFile(filePath)
+  return errorLogs.map((e) => ({
+    severity: DiagnosticSeverity.Error,
+    range: {
+      start: textDocument.positionAt(
+        textDocument.offsetAt({
+          line: e.sourceLocation!.line,
+          character: e.sourceLocation!.column,
+        }),
+      ),
+      end: textDocument.positionAt(
+        textDocument.offsetAt({
+          line: e.sourceLocation!.endLine,
+          character: e.sourceLocation!.endColumn,
+        }),
+      ),
+    },
+    message: e.message,
+  }))
 }
 
 connection.onDidChangeWatchedFiles((_change) => {
@@ -96,4 +136,34 @@ connection.onCodeAction((params) => {
 
 export function startLanguageServer() {
   connection.listen()
+}
+
+export const compileFile = async (path: string) => {
+  const logCtx = LoggingContext.create()
+  await logCtx.run(async () => {
+    await compile({
+      paths: [path],
+      outputAwst: false,
+      outDir: '',
+      outputAwstJson: false,
+      logLevel: LogLevel.Info,
+      outputTeal: false,
+      outputArc32: false,
+      outputArc56: false,
+      outputSsaIr: false,
+      outputSourceMap: false,
+      outputOptimizationIr: false,
+      outputDestructuredIr: false,
+      outputMemoryIr: false,
+      outputBytecode: false,
+      matchAlgodBytecode: false,
+      debugLevel: 1,
+      optimizationLevel: 1,
+      targetAvmVersion: 10,
+      cliTemplateDefinitions: [],
+      templateVarsPrefix: 'TMPL_',
+      localsCoalescingStrategy: LocalsCoalescingStrategy.root_operand,
+    })
+  })
+  return logCtx.logEvents.filter((e) => e.level === LogLevel.Error)
 }
