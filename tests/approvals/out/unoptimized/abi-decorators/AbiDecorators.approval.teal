@@ -5,6 +5,8 @@
 main:
     intcblock 0 1
     bytecblock 0x151f7c75
+
+main_block@0:
     txn ApplicationID
     bnz main_after_if_else@2
 
@@ -145,21 +147,29 @@ main_bare_routing@12:
 
 // tests/approvals/abi-decorators.algo.ts::AbiDecorators.justNoop() -> void:
 justNoop:
+
+justNoop_block@0:
     retsub
 
 
 // tests/approvals/abi-decorators.algo.ts::AbiDecorators.createMethod() -> void:
 createMethod:
+
+createMethod_block@0:
     retsub
 
 
 // tests/approvals/abi-decorators.algo.ts::AbiDecorators.allActions() -> void:
 allActions:
+
+allActions_block@0:
     retsub
 
 
 // tests/approvals/abi-decorators.algo.ts::AbiDecorators.readonly() -> uint64:
 readonly:
+
+readonly_block@0:
     // tests/approvals/abi-decorators.algo.ts:13
     // return 5
     pushint 5 // 5
@@ -172,6 +182,8 @@ methodWithDefaults:
     // @abimethod({ defaultArguments: { a: { from: 'globalValue' }, b: { from: 'readonly' }, c: { constant: 145 } } })
     // public methodWithDefaults(a: uint64, b: uint64, c: uint64): uint64 {
     proto 3 1
+
+methodWithDefaults_block@0:
     // tests/approvals/abi-decorators.algo.ts:20
     // return a * b + c
     frame_dig -3
@@ -184,6 +196,8 @@ methodWithDefaults:
 
 // tests/approvals/abi-decorators.algo.ts::AbiDecorators.constructor() -> void:
 constructor:
+
+constructor_block@0:
 
 constructor_block@1:
 
