@@ -1,12 +1,14 @@
 import ts from 'typescript'
+import { isConstant } from '../../awst'
 import type * as awst from '../../awst/nodes'
+import { TemplateVar } from '../../awst/nodes'
 import { CodeError } from '../../errors'
 import { logger, patchErrorLocation } from '../../logger'
-import { expandMaybeArray, invariant } from '../../util'
+import { codeInvariant, expandMaybeArray, invariant } from '../../util'
 import type { ModuleStatements } from '../../visitor/syntax-names'
 import type { Visitor } from '../../visitor/visitor'
 import { accept } from '../../visitor/visitor'
-import { requireConstantOfType } from '../eb/util'
+import { requireExpressionOfType } from '../eb/util'
 import { ContractClassPType, LibClassType, LogicSigPType } from '../ptypes'
 import { ARC4StructType } from '../ptypes/arc4-types'
 import { BaseVisitor } from './base-visitor'
@@ -94,7 +96,10 @@ export class SourceFileVisitor extends BaseVisitor implements Visitor<ModuleStat
         return []
       }
 
-      const value = requireConstantOfType(initializerBuilder, ptype, 'Module level assignments must be compile time constants')
+      const value = requireExpressionOfType(initializerBuilder, ptype)
+
+      codeInvariant(isConstant(value) || value instanceof TemplateVar, 'Module level assignments must be compile time constants')
+
       this.context.addConstant(dec.name, value)
 
       return []

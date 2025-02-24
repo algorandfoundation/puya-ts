@@ -3,7 +3,7 @@ import ts from 'typescript'
 import type { awst } from '../../awst'
 import type { ContractReference, LogicSigReference } from '../../awst/models'
 import { nodeFactory } from '../../awst/node-factory'
-import type { AppStorageDefinition, ARC4MethodConfig, Constant } from '../../awst/nodes'
+import type { AppStorageDefinition, ARC4MethodConfig } from '../../awst/nodes'
 import { SourceLocation } from '../../awst/source-location'
 import { logger } from '../../logger'
 import { invariant } from '../../util'
@@ -70,7 +70,7 @@ export abstract class AwstBuildContext {
    * @param identifier The identifier of the constant declaration in this source file
    * @param value The compile time constant value
    */
-  abstract addConstant(identifier: ts.Identifier, value: awst.Constant): void
+  abstract addConstant(identifier: ts.Identifier, value: awst.Constant | awst.TemplateVar): void
 
   /**
    * Retrieve the evaluation context
@@ -194,7 +194,7 @@ class AwstBuildContextImpl extends AwstBuildContext {
     )
   }
 
-  addConstant(identifier: ts.Identifier, value: Constant) {
+  addConstant(identifier: ts.Identifier, value: awst.Constant | awst.TemplateVar) {
     this.constants.addConstant(identifier, value, this.getSourceLocation(identifier))
   }
 
