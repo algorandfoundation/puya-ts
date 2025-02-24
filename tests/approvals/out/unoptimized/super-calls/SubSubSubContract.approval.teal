@@ -5,6 +5,8 @@
 main:
     intcblock 0 1 2 3
     bytecblock "g1" "g2" "g3"
+
+main_block@0:
     txn ApplicationID
     bnz main_after_if_else@2
 
@@ -53,6 +55,8 @@ main_after_if_else@2:
 
 // tests/approvals/super-calls.algo.ts::SubSubSubContract.constructor() -> void:
 constructor:
+
+constructor_block@0:
     // tests/approvals/super-calls.algo.ts:38
     // super()
     callsub tests/approvals/super-calls.algo.ts::SubContract.constructor
@@ -68,6 +72,8 @@ constructor:
 
 // tests/approvals/super-calls.algo.ts::SubContract.constructor() -> void:
 tests/approvals/super-calls.algo.ts::SubContract.constructor:
+
+tests/approvals/super-calls.algo.ts::SubContract.constructor_block@0:
     // tests/approvals/super-calls.algo.ts:17
     // export class SubContract extends SuperContract {
     callsub tests/approvals/super-calls.algo.ts::SuperContract.constructor
@@ -81,6 +87,8 @@ tests/approvals/super-calls.algo.ts::SubContract.constructor:
 
 // tests/approvals/super-calls.algo.ts::SuperContract.constructor() -> void:
 tests/approvals/super-calls.algo.ts::SuperContract.constructor:
+
+tests/approvals/super-calls.algo.ts::SuperContract.constructor_block@0:
 
 tests/approvals/super-calls.algo.ts::SuperContract.constructor_block@1:
 

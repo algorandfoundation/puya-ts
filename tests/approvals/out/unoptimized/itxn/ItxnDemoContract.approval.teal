@@ -5,6 +5,8 @@
 main:
     intcblock 0 6 5 3 1000
     bytecblock 0x098101 0x09361a00b08101 "name" "1" "unit" "2" "AST1" "AST2" "AST3" "3" "4" "5" "3rd" "with args param set" "42" "10" "11" "12" "13" "14" "15" "16"
+
+main_block@0:
     txn ApplicationID
     bnz main_after_if_else@2
 
@@ -135,6 +137,8 @@ test1:
     // public test1() {
     proto 0 0
     intc_0 // 0
+
+test1_block@0:
     // tests/approvals/itxn.algo.ts:8
     // name = GlobalState({ initialValue: Bytes() })
     bytec_2 // "name"
@@ -460,6 +464,8 @@ test2:
     dupn 2
     pushbytes ""
     dup
+
+test2_block@0:
     intc_0 // 0
     pushbytes ""
     // tests/approvals/itxn.algo.ts:60
@@ -654,6 +660,8 @@ test2_else_body@2:
 
 // tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
 test3:
+
+test3_block@0:
     // tests/approvals/itxn.algo.ts:134-151
     // const [app1, app2, app3, app4, app5, app6, app7, app8, app9, app10, app11, app12, app13, app14, app15, app16] = itxn.submitGroup(
     //   appTxn1,
@@ -1320,6 +1328,8 @@ test3_next_txn@16:
 
 // tests/approvals/itxn.algo.ts::ItxnDemoContract.test4() -> void:
 test4:
+
+test4_block@0:
     // tests/approvals/itxn.algo.ts:172
     // const lotsOfBytes = op.bzero(2044)
     pushint 2044 // 2044
@@ -1496,11 +1506,15 @@ test4_next_txn@1:
 
 // tests/approvals/itxn.algo.ts::ItxnDemoContract.__algots__.defaultCreate() -> void:
 __algots__.defaultCreate:
+
+__algots__.defaultCreate_block@0:
     retsub
 
 
 // tests/approvals/itxn.algo.ts::ItxnDemoContract.constructor() -> void:
 constructor:
+
+constructor_block@0:
 
 constructor_block@1:
 

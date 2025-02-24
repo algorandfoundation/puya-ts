@@ -5,6 +5,8 @@
 main:
     intcblock 0 8 1
     bytecblock 0x 0x068101
+
+main_block@0:
     pushbytes 0x7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
     store 0
 
@@ -85,6 +87,8 @@ main___algots__.defaultCreate@7:
 // _puya_lib.util.ensure_budget(required_budget: uint64, fee_source: uint64) -> void:
 ensure_budget:
     proto 2 0
+
+ensure_budget_block@0:
     frame_dig -2
     pushint 10 // 10
     +
@@ -135,6 +139,8 @@ test:
     // tests/approvals/mutable-arrays.algo.ts:5
     // test(length: uint64) {
     proto 1 0
+
+test_block@0:
     // tests/approvals/mutable-arrays.algo.ts:6
     // ensureBudget(2000)
     pushint 2000 // 2000
@@ -245,11 +251,15 @@ test_after_while@3:
 
 // tests/approvals/mutable-arrays.algo.ts::MutableArraysAlgo.__algots__.defaultCreate() -> void:
 __algots__.defaultCreate:
+
+__algots__.defaultCreate_block@0:
     retsub
 
 
 // _puya_lib.mem.new_slot() -> uint64:
 _puya_lib.mem.new_slot:
+
+_puya_lib.mem.new_slot@entry:
     load 0
     bitlen
     load 0

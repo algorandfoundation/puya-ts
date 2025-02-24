@@ -5,6 +5,8 @@
 main:
     intcblock 0 1
     bytecblock 0x151f7c75 "common" "base-two"
+
+main_block@0:
     txn ApplicationID
     bnz main_after_if_else@2
 
@@ -275,6 +277,8 @@ main___algots__.defaultCreate@16:
 
 // tests/approvals/multi-inheritance.algo.ts::MultiBases.methodMulti() -> bytes:
 methodMulti:
+
+methodMulti_block@0:
     // tests/approvals/multi-inheritance.algo.ts:44
     // return 'multi-bases'
     pushbytes "multi-bases"
@@ -283,6 +287,8 @@ methodMulti:
 
 // tests/approvals/multi-inheritance.algo.ts::MultiBases.methodCallsSuper() -> bytes:
 methodCallsSuper:
+
+methodCallsSuper_block@0:
     // tests/approvals/multi-inheritance.algo.ts:48
     // return super.methodTwo()
     callsub methodTwo
@@ -291,6 +297,8 @@ methodCallsSuper:
 
 // tests/approvals/multi-inheritance.algo.ts::MultiBases.callB2CantOverride() -> bytes:
 callB2CantOverride:
+
+callB2CantOverride_block@0:
     // tests/approvals/multi-inheritance.algo.ts:52
     // return super.class(BaseTwo).b2CantOverride()
     callsub tests/approvals/multi-inheritance.algo.ts::BaseTwo.b2CantOverride
@@ -299,6 +307,8 @@ callB2CantOverride:
 
 // tests/approvals/multi-inheritance.algo.ts::MultiBases.callB2Common() -> bytes:
 callB2Common:
+
+callB2Common_block@0:
     // tests/approvals/multi-inheritance.algo.ts:56
     // return super.class(BaseTwo).methodCommon()
     callsub methodCommon
@@ -307,6 +317,8 @@ callB2Common:
 
 // tests/approvals/multi-inheritance.algo.ts::BaseOne.methodOne() -> bytes:
 methodOne:
+
+methodOne_block@0:
     // tests/approvals/multi-inheritance.algo.ts:20
     // return 'base-one'
     pushbytes "base-one"
@@ -315,6 +327,8 @@ methodOne:
 
 // tests/approvals/multi-inheritance.algo.ts::CommonBase.methodCommon() -> bytes:
 methodCommon:
+
+methodCommon_block@0:
     // tests/approvals/multi-inheritance.algo.ts:9
     // return 'common'
     bytec_1 // "common"
@@ -323,6 +337,8 @@ methodCommon:
 
 // tests/approvals/multi-inheritance.algo.ts::CommonBase.b2CantOverride() -> bytes:
 b2CantOverride:
+
+b2CantOverride_block@0:
     // tests/approvals/multi-inheritance.algo.ts:13
     // return 'common'
     bytec_1 // "common"
@@ -331,6 +347,8 @@ b2CantOverride:
 
 // tests/approvals/multi-inheritance.algo.ts::BaseTwo.methodTwo() -> bytes:
 methodTwo:
+
+methodTwo_block@0:
     // tests/approvals/multi-inheritance.algo.ts:27
     // return 'base-two'
     bytec_2 // "base-two"
@@ -339,6 +357,8 @@ methodTwo:
 
 // tests/approvals/multi-inheritance.algo.ts::BaseTwo.b2CantOverride() -> bytes:
 tests/approvals/multi-inheritance.algo.ts::BaseTwo.b2CantOverride:
+
+tests/approvals/multi-inheritance.algo.ts::BaseTwo.b2CantOverride_block@0:
     // tests/approvals/multi-inheritance.algo.ts:36
     // return 'base-two'
     bytec_2 // "base-two"
@@ -347,11 +367,15 @@ tests/approvals/multi-inheritance.algo.ts::BaseTwo.b2CantOverride:
 
 // tests/approvals/multi-inheritance.algo.ts::MultiBases.__algots__.defaultCreate() -> void:
 __algots__.defaultCreate:
+
+__algots__.defaultCreate_block@0:
     retsub
 
 
 // tests/approvals/multi-inheritance.algo.ts::MultiBases.constructor() -> void:
 constructor:
+
+constructor_block@0:
     // tests/approvals/multi-inheritance.algo.ts:40
     // export class MultiBases extends classes(BaseOne, BaseTwo) {
     callsub polytype/lib/polytype-module.d.ts::ClusteredContract<tests/approvals/multi-inheritance.algo.ts::BaseOne,tests/approvals/multi-inheritance.algo.ts::BaseTwo>.constructor
@@ -365,6 +389,8 @@ constructor:
 
 // polytype/lib/polytype-module.d.ts::ClusteredContract<tests/approvals/multi-inheritance.algo.ts::BaseOne,tests/approvals/multi-inheritance.algo.ts::BaseTwo>.constructor() -> void:
 polytype/lib/polytype-module.d.ts::ClusteredContract<tests/approvals/multi-inheritance.algo.ts::BaseOne,tests/approvals/multi-inheritance.algo.ts::BaseTwo>.constructor:
+
+polytype/lib/polytype-module.d.ts::ClusteredContract<tests/approvals/multi-inheritance.algo.ts::BaseOne,tests/approvals/multi-inheritance.algo.ts::BaseTwo>.constructor_block@0:
     callsub tests/approvals/multi-inheritance.algo.ts::BaseOne.constructor
     callsub tests/approvals/multi-inheritance.algo.ts::BaseTwo.constructor
     retsub
@@ -372,6 +398,8 @@ polytype/lib/polytype-module.d.ts::ClusteredContract<tests/approvals/multi-inher
 
 // tests/approvals/multi-inheritance.algo.ts::BaseOne.constructor() -> void:
 tests/approvals/multi-inheritance.algo.ts::BaseOne.constructor:
+
+tests/approvals/multi-inheritance.algo.ts::BaseOne.constructor_block@0:
     // tests/approvals/multi-inheritance.algo.ts:17
     // export class BaseOne extends CommonBase {
     callsub tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor
@@ -386,6 +414,8 @@ tests/approvals/multi-inheritance.algo.ts::BaseOne.constructor:
 // tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor() -> void:
 tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor:
 
+tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor_block@0:
+
 tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor_block@1:
 
 tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor_after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor@2:
@@ -399,6 +429,8 @@ tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor_after_inlined_
 
 // tests/approvals/multi-inheritance.algo.ts::BaseTwo.constructor() -> void:
 tests/approvals/multi-inheritance.algo.ts::BaseTwo.constructor:
+
+tests/approvals/multi-inheritance.algo.ts::BaseTwo.constructor_block@0:
     // tests/approvals/multi-inheritance.algo.ts:24
     // export class BaseTwo extends CommonBase {
     callsub tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor
