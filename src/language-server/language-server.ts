@@ -155,11 +155,10 @@ export const compileFile = async (path: string) => {
       outputDestructuredIr: false,
       outputMemoryIr: false,
       outputBytecode: false,
-      matchAlgodBytecode: false,
       debugLevel: 1,
       optimizationLevel: 1,
       targetAvmVersion: 10,
-      cliTemplateDefinitions: [],
+      cliTemplateDefinitions: {},
       templateVarsPrefix: 'TMPL_',
       localsCoalescingStrategy: LocalsCoalescingStrategy.root_operand,
     })
