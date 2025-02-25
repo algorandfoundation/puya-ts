@@ -9,7 +9,7 @@
     "dev:examples": "tsx src/cli.ts build examples --output-awst --output-awst-json",
     "dev:approvals": "tsx src/cli.ts build tests/approvals --dry-run",
     "dev:expected-output": "tsx src/cli.ts build tests/expected-output --dry-run",
-    "dev:testing": "tsx src/cli.ts build tests/approvals/arc4-method-selector.algo.ts --output-awst --output-awst-json --output-ssa-ir --log-level=info --out-dir out/unoptimized/[name] --optimization-level=1",
+    "dev:testing": "tsx src/cli.ts build tests/approvals/shadowed-variables.algo.ts  --log-level=debug --out-dir out/unoptimized/[name] --optimization-level=1 --cli-template-definitions AN_INT=1 A_STRING=hello SOME_BYTES=0xFF0055",
     "audit": "better-npm-audit audit",
     "format": "prettier --write .",
     "lint": "eslint \"src/**/*.ts\"",
@@ -33,7 +33,8 @@
     "algo-ts:build:watch": "cd packages/algo-ts && npm run build:3-build:watch",
     "algo-ts:install": "npm i -D @algorandfoundation/algorand-typescript@./packages/algo-ts/dist",
     "npm-install-all": "cd packages/algo-ts && npm i && npm run build && cd ../../ && npm i",
-    "script:code-gen": "tsx ./scripts/code-gen.ts"
+    "script:code-gen": "tsx ./scripts/code-gen.ts",
+    "script:documentation": "typedoc"
   },
   "author": "Algorand foundation",
   "license": "MIT",
@@ -70,6 +71,9 @@
     "rollup": "^4.28.1",
     "semantic-release": "^24.2.0",
     "tsx": "4.19.2",
+    "typedoc": "^0.27.6",
+    "typedoc-plugin-markdown": "^4.4.1",
+    "typedoc-plugin-missing-exports": "^3.1.0",
     "vitest": "2.1.9"
   },
   "dependencies": {

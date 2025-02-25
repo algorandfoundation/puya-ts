@@ -4,6 +4,8 @@
 // tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.approvalProgram() -> uint64:
 main:
     intcblock 0 1
+
+main_block@0:
     // tests/approvals/arc4-hybrid.algo.ts:5
     // log('before')
     pushbytes "before"
@@ -22,7 +24,9 @@ main:
 
 // tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.someMethod() -> void:
 someMethod:
-    // tests/approvals/arc4-hybrid.algo.ts:12
+
+someMethod_block@0:
+    // tests/approvals/arc4-hybrid.algo.ts:17
     // log('some method')
     pushbytes "some method"
     log
@@ -31,6 +35,8 @@ someMethod:
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 approvalProgram:
+
+approvalProgram_block@0:
 
 approvalProgram_block@1:
     // tests/approvals/arc4-hybrid.algo.ts:3
@@ -61,7 +67,7 @@ approvalProgram_after_inlined_tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlg
     retsub
 
 approvalProgram_someMethod_route@3:
-    // tests/approvals/arc4-hybrid.algo.ts:11
+    // tests/approvals/arc4-hybrid.algo.ts:16
     // someMethod() {
     txn OnCompletion
     intc_0 // NoOp
@@ -102,4 +108,6 @@ approvalProgram___algots__.defaultCreate@7:
 
 // tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.__algots__.defaultCreate() -> void:
 __algots__.defaultCreate:
+
+__algots__.defaultCreate_block@0:
     retsub

@@ -5,6 +5,8 @@
 main:
     intcblock 0 1
 
+main_block@0:
+
 main_block@1:
     // tests/approvals/global-state.algo.ts:33-34
     // @contract({ stateTotals: { globalUints: 5 } })
@@ -115,6 +117,8 @@ setState:
     // tests/approvals/global-state.algo.ts:35
     // setState(key: string, value: uint64) {
     proto 2 0
+
+setState_block@0:
     // tests/approvals/global-state.algo.ts:36
     // const proxy = GlobalState<uint64>({ key })
     frame_dig -2
@@ -130,6 +134,8 @@ deleteState:
     // tests/approvals/global-state.algo.ts:41
     // deleteState(key: string) {
     proto 1 0
+
+deleteState_block@0:
     // tests/approvals/global-state.algo.ts:42
     // GlobalState<uint64>({ key }).delete()
     frame_dig -1
@@ -139,4 +145,6 @@ deleteState:
 
 // tests/approvals/global-state.algo.ts::TestArc4.__algots__.defaultCreate() -> void:
 __algots__.defaultCreate:
+
+__algots__.defaultCreate_block@0:
     retsub

@@ -90,6 +90,9 @@ interface TransactionBase {
   readonly rekeyTo: Account
 }
 
+/**
+ * A payment transaction
+ */
 export interface PaymentTxn extends TransactionBase {
   /**
    * 32 byte address

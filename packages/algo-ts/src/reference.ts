@@ -1,7 +1,13 @@
 import { NoImplementation } from './internal/errors'
 import { bytes, uint64 } from './primitives'
 
+/**
+ * Represents an Algorand Account and exposes properties and methods for reading account data
+ */
 export type Account = {
+  /**
+   * Get the accounts address in bytes
+   */
   readonly bytes: bytes
 
   /**
@@ -97,13 +103,27 @@ export type Account = {
   isOptedIn(assetOrApp: Asset | Application): boolean
 }
 
+/**
+ * Create a new account object representing the zero address
+ */
 export function Account(): Account
+/**
+ * Create a new account object representing the provided address
+ * @param address A 32-byte Algorand address
+ */
 export function Account(address: bytes): Account
 export function Account(address?: bytes): Account {
   throw new NoImplementation()
 }
 
+/**
+ * Creates a new Asset object represent the asset id 0 (an invalid ID)
+ */
 export function Asset(): Asset
+/**
+ * Creates a new Asset object representing the asset with the specified id
+ * @param assetId The id of the asset
+ */
 export function Asset(assetId: uint64): Asset
 export function Asset(assetId?: uint64): Asset {
   throw new NoImplementation()
@@ -196,7 +216,14 @@ export type Asset = {
   frozen(account: Account): boolean
 }
 
+/**
+ * Creates a new Application object represent the application id 0 (an invalid ID)
+ */
 export function Application(): Application
+/**
+ * Creates a new Application object representing the application with the specified id
+ * @param applicationId The id of the application
+ */
 export function Application(applicationId: uint64): Application
 export function Application(applicationId?: uint64): Application {
   throw new NoImplementation()

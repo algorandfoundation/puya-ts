@@ -177,7 +177,7 @@ export class MethodSelectorFunctionBuilder extends FunctionBuilder {
     } = parseFunctionArgs({
       args,
       typeArgs,
-      genericTypeArgs: 4,
+      genericTypeArgs: 0,
       callLocation: sourceLocation,
       funcName: this.typeDescription,
       argSpec: (a) => [a.passthrough()],

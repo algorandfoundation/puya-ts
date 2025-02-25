@@ -6,6 +6,8 @@ main:
     intcblock 0 64 1 5
     bytecblock 0x 0x06
 
+main_block@0:
+
 main_block@1:
     // tests/approvals/array-destructuring.algo.ts:4
     // export class ArrayDestructuringAlgo extends Contract {
@@ -189,6 +191,8 @@ testNested:
     // tests/approvals/array-destructuring.algo.ts:5
     // testNested(arg: [uint64, [biguint, biguint]]) {
     proto 3 5
+
+testNested_block@0:
     // tests/approvals/array-destructuring.algo.ts:6
     // const [a, b] = arg
     frame_dig -3
@@ -213,6 +217,8 @@ test:
     // tests/approvals/array-destructuring.algo.ts:11
     // test() {
     proto 0 0
+
+test_block@0:
     // tests/approvals/array-destructuring.algo.ts:12
     // const [a, b, c, d] = this.produceItems()
     callsub produceItems
@@ -340,6 +346,8 @@ test_bool_false@6:
 
 // tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceItems() -> uint64, bytes, uint64, bytes:
 produceItems:
+
+produceItems_block@0:
     // tests/approvals/array-destructuring.algo.ts:29
     // return [5, Bytes(), false, 6n]
     intc_3 // 5
@@ -351,6 +359,8 @@ produceItems:
 
 // tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.testLiteralDestructuring() -> void:
 testLiteralDestructuring:
+
+testLiteralDestructuring_block@0:
     // tests/approvals/array-destructuring.algo.ts:33
     // let a = Uint64(1)
     intc_2 // 1
@@ -372,4 +382,6 @@ testLiteralDestructuring:
 
 // tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.__algots__.defaultCreate() -> void:
 __algots__.defaultCreate:
+
+__algots__.defaultCreate_block@0:
     retsub

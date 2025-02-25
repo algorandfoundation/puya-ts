@@ -5,6 +5,8 @@
 main:
     intcblock 0 1
     bytecblock "oneGlobal"
+
+main_block@0:
     txn ApplicationID
     bnz main_after_if_else@2
 
@@ -92,6 +94,8 @@ setState:
     // tests/approvals/state-totals.algo.ts:18
     // setState(n: uint64) {
     proto 1 0
+
+setState_block@0:
     // tests/approvals/state-totals.algo.ts:19
     // super.setState(n)
     frame_dig -1
@@ -111,6 +115,8 @@ tests/approvals/state-totals.algo.ts::BaseWithState.setState:
     // tests/approvals/state-totals.algo.ts:9
     // setState(n: uint64) {
     proto 1 0
+
+tests/approvals/state-totals.algo.ts::BaseWithState.setState_block@0:
     // tests/approvals/state-totals.algo.ts:5
     // oneGlobal = GlobalState({ initialValue: Uint64(1) })
     bytec_0 // "oneGlobal"
@@ -130,11 +136,15 @@ tests/approvals/state-totals.algo.ts::BaseWithState.setState:
 
 // tests/approvals/state-totals.algo.ts::SubClassWithState.__algots__.defaultCreate() -> void:
 __algots__.defaultCreate:
+
+__algots__.defaultCreate_block@0:
     retsub
 
 
 // tests/approvals/state-totals.algo.ts::BaseWithState.constructor() -> void:
 constructor:
+
+constructor_block@0:
 
 constructor_block@1:
 

@@ -5,6 +5,8 @@
 main:
     intcblock 0 1
     bytecblock 0x151f7c75 "common"
+
+main_block@0:
     txn ApplicationID
     bnz main_after_if_else@2
 
@@ -145,6 +147,8 @@ main___algots__.defaultCreate@11:
 
 // tests/approvals/multi-inheritance.algo.ts::BaseOne.methodOne() -> bytes:
 methodOne:
+
+methodOne_block@0:
     // tests/approvals/multi-inheritance.algo.ts:20
     // return 'base-one'
     pushbytes "base-one"
@@ -153,6 +157,8 @@ methodOne:
 
 // tests/approvals/multi-inheritance.algo.ts::CommonBase.methodCommon() -> bytes:
 methodCommon:
+
+methodCommon_block@0:
     // tests/approvals/multi-inheritance.algo.ts:9
     // return 'common'
     bytec_1 // "common"
@@ -161,6 +167,8 @@ methodCommon:
 
 // tests/approvals/multi-inheritance.algo.ts::CommonBase.b2CantOverride() -> bytes:
 b2CantOverride:
+
+b2CantOverride_block@0:
     // tests/approvals/multi-inheritance.algo.ts:13
     // return 'common'
     bytec_1 // "common"
@@ -169,11 +177,15 @@ b2CantOverride:
 
 // tests/approvals/multi-inheritance.algo.ts::BaseOne.__algots__.defaultCreate() -> void:
 __algots__.defaultCreate:
+
+__algots__.defaultCreate_block@0:
     retsub
 
 
 // tests/approvals/multi-inheritance.algo.ts::BaseOne.constructor() -> void:
 constructor:
+
+constructor_block@0:
     // tests/approvals/multi-inheritance.algo.ts:17
     // export class BaseOne extends CommonBase {
     callsub tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor
@@ -187,6 +199,8 @@ constructor:
 
 // tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor() -> void:
 tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor:
+
+tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor_block@0:
 
 tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor_block@1:
 

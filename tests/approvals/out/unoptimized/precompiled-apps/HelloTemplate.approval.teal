@@ -5,6 +5,8 @@
 main:
     intcblock 0 1
     bytecblock "greeting" "" TMPL_GREETING
+
+main_block@0:
     txn ApplicationID
     bnz main_after_if_else@2
 
@@ -126,16 +128,22 @@ main_bare_routing@11:
 
 // tests/approvals/precompiled-apps.algo.ts::HelloTemplate.create() -> void:
 create:
+
+create_block@0:
     retsub
 
 
 // tests/approvals/precompiled-apps.algo.ts::HelloBase.delete() -> void:
 delete:
+
+delete_block@0:
     retsub
 
 
 // tests/approvals/precompiled-apps.algo.ts::HelloBase.update() -> void:
 update:
+
+update_block@0:
     retsub
 
 
@@ -144,6 +152,8 @@ greet:
     // tests/approvals/precompiled-apps.algo.ts:12
     // greet(name: string): string {
     proto 1 1
+
+greet_block@0:
     // tests/approvals/precompiled-apps.algo.ts:4
     // greeting = GlobalState({ initialValue: '' })
     intc_0 // 0
@@ -164,6 +174,8 @@ greet:
 
 // tests/approvals/precompiled-apps.algo.ts::HelloTemplate.constructor() -> void:
 constructor:
+
+constructor_block@0:
     // tests/approvals/precompiled-apps.algo.ts:26
     // super()
     callsub tests/approvals/precompiled-apps.algo.ts::HelloBase.constructor
@@ -179,6 +191,8 @@ constructor:
 
 // tests/approvals/precompiled-apps.algo.ts::HelloBase.constructor() -> void:
 tests/approvals/precompiled-apps.algo.ts::HelloBase.constructor:
+
+tests/approvals/precompiled-apps.algo.ts::HelloBase.constructor_block@0:
 
 tests/approvals/precompiled-apps.algo.ts::HelloBase.constructor_block@1:
 

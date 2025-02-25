@@ -4,21 +4,27 @@ import type * as txnTypes from './transactions'
 
 const isGtxn = Symbol('isGtxn')
 export interface PaymentTxn extends txnTypes.PaymentTxn {
+  /** @hidden */
   [isGtxn]?: true
 }
 export interface KeyRegistrationTxn extends txnTypes.KeyRegistrationTxn {
+  /** @hidden */
   [isGtxn]?: true
 }
 export interface AssetConfigTxn extends txnTypes.AssetConfigTxn {
+  /** @hidden */
   [isGtxn]?: true
 }
 export interface AssetTransferTxn extends txnTypes.AssetTransferTxn {
+  /** @hidden */
   [isGtxn]?: true
 }
 export interface AssetFreezeTxn extends txnTypes.AssetFreezeTxn {
+  /** @hidden */
   [isGtxn]?: true
 }
 export interface ApplicationTxn extends txnTypes.ApplicationTxn {
+  /** @hidden */
   [isGtxn]?: true
 }
 

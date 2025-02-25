@@ -1,5 +1,5 @@
 import type { bytes, uint64 } from '@algorandfoundation/algorand-typescript'
-import { Contract, LocalState, Txn } from '@algorandfoundation/algorand-typescript'
+import { abimethod, Contract, LocalState, Txn } from '@algorandfoundation/algorand-typescript'
 import type { StaticArray, UintN } from '@algorandfoundation/algorand-typescript/arc4'
 
 type SampleArray = StaticArray<UintN<64>, 10>
@@ -10,6 +10,9 @@ export class LocalStateDemo extends Contract {
   localBytes = LocalState<bytes>({ key: 'b1' })
   localBytes2 = LocalState<bytes>()
   localEncoded = LocalState<SampleArray>()
+
+  @abimethod({ allowActions: 'OptIn' })
+  optIn() {}
 
   public setState({ a, b }: { a: uint64; b: bytes }, c: SampleArray) {
     this.localUint(Txn.sender).value = a

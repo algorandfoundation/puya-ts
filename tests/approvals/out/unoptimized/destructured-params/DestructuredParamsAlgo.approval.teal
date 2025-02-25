@@ -5,6 +5,8 @@
 main:
     intcblock 0 1 8
 
+main_block@0:
+
 main_block@1:
     // tests/approvals/destructured-params.algo.ts:4
     // export class DestructuredParamsAlgo extends Contract {
@@ -129,6 +131,10 @@ test:
     // tests/approvals/destructured-params.algo.ts:5
     // test({ a, b, c }: { a: uint64; b: bytes; c: boolean }): void {
     proto 3 0
+
+test_block@0:
+    // tests/approvals/destructured-params.algo.ts:5
+    // test({ a, b, c }: { a: uint64; b: bytes; c: boolean }): void {
     frame_dig -3
     frame_dig -2
     swap
@@ -148,6 +154,8 @@ test:
 
 // tests/approvals/destructured-params.algo.ts::DestructuredParamsAlgo.init() -> void:
 init:
+
+init_block@0:
     // tests/approvals/destructured-params.algo.ts:10
     // this.test({ a: 456, b: Bytes(''), c: false })
     pushint 456 // 456
@@ -167,4 +175,6 @@ init:
 
 // tests/approvals/destructured-params.algo.ts::DestructuredParamsAlgo.__algots__.defaultCreate() -> void:
 __algots__.defaultCreate:
+
+__algots__.defaultCreate_block@0:
     retsub

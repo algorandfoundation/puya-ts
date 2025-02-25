@@ -4,10 +4,10 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@1: // L9
         let tmp%0#1: uint64 = (txn NumAppArgs)
         let tmp%1#0: bool = (!= tmp%0#1 0u)
-        goto tmp%1#0 ? block@2 : block@9
+        goto tmp%1#0 ? block@2 : block@10
     block@2: // abi_routing_L9
         let tmp%2#0: bytes = (txna ApplicationArgs 0)
-        switch tmp%2#0 {method "testVectorCreationAndEquality()void" => block@3, method "addVectors((uint64,uint64),(uint64,uint64))(uint64,uint64)" => block@4, method "implicitCastingAndSpreading((uint64,uint64))void" => block@5, method "toAndFromBytes((uint64,uint64))(uint64,uint64)" => block@6, * => block@7}
+        switch tmp%2#0 {method "testVectorCreationAndEquality()void" => block@3, method "addVectors((uint64,uint64),(uint64,uint64))(uint64,uint64)" => block@4, method "implicitCastingAndSpreading((uint64,uint64))void" => block@5, method "toAndFromBytes((uint64,uint64))(uint64,uint64)" => block@6, method "toNative((uint64,uint64))(uint64,uint64)" => block@7, * => block@8}
     block@3: // testVectorCreationAndEquality_route_L10
         let tmp%3#0: uint64 = (txn OnCompletion)
         let tmp%4#0: bool = (== tmp%3#0 NoOp)
@@ -17,7 +17,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%6#0) // can only call when not creating
         tests/approvals/arc4-struct.algo.ts::StructDemo.testVectorCreationAndEquality()
         let tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#0: bool = 1u
-        goto block@14
+        goto block@15
     block@4: // addVectors_route_L18
         let tmp%7#0: uint64 = (txn OnCompletion)
         let tmp%8#0: bool = (== tmp%7#0 NoOp)
@@ -31,7 +31,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%12#0: bytes = (concat 0x151f7c75 tmp%11#0)
         (log tmp%12#0)
         let tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#1: bool = 1u
-        goto block@14
+        goto block@15
     block@5: // implicitCastingAndSpreading_route_L25
         let tmp%13#0: uint64 = (txn OnCompletion)
         let tmp%14#0: bool = (== tmp%13#0 NoOp)
@@ -42,7 +42,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let reinterpret_bytes[16]%2#0: bytes[16] = (txna ApplicationArgs 1)
         tests/approvals/arc4-struct.algo.ts::StructDemo.implicitCastingAndSpreading(reinterpret_bytes[16]%2#0)
         let tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#2: bool = 1u
-        goto block@14
+        goto block@15
     block@6: // toAndFromBytes_route_L32
         let tmp%17#0: uint64 = (txn OnCompletion)
         let tmp%18#0: bool = (== tmp%17#0 NoOp)
@@ -55,30 +55,45 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%22#0: bytes = (concat 0x151f7c75 tmp%21#0)
         (log tmp%22#0)
         let tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#3: bool = 1u
-        goto block@14
-    block@7: // switch_case_default_L9
-        goto block@8
-    block@8: // switch_case_next_L9
-        goto block@13
-    block@9: // bare_routing_L9
+        goto block@15
+    block@7: // toNative_route_L37
         let tmp%23#0: uint64 = (txn OnCompletion)
-        switch tmp%23#0 {0u => block@10, * => block@11}
-    block@10: // __algots__.defaultCreate_L9
-        let tmp%24#0: uint64 = (txn ApplicationID)
-        let tmp%25#0: bool = (== tmp%24#0 0u)
-        (assert tmp%25#0) // can only call when creating
-        tests/approvals/arc4-struct.algo.ts::StructDemo.__algots__.defaultCreate()
+        let tmp%24#0: bool = (== tmp%23#0 NoOp)
+        (assert tmp%24#0) // OnCompletion is not NoOp
+        let tmp%25#0: uint64 = (txn ApplicationID)
+        let tmp%26#0: bool = (!= tmp%25#0 0u)
+        (assert tmp%26#0) // can only call when not creating
+        let reinterpret_bytes[16]%4#0: bytes[16] = (txna ApplicationArgs 1)
+        let (elements_to_encode%0#0: bytes[8], elements_to_encode%1#0: bytes[8]) = tests/approvals/arc4-struct.algo.ts::StructDemo.toNative(reinterpret_bytes[16]%4#0)
+        let encoded_tuple_buffer%1#0: bytes = (concat 0x elements_to_encode%0#0)
+        let encoded_tuple_buffer%2#0: bytes = (concat encoded_tuple_buffer%1#0 elements_to_encode%1#0)
+        let tmp%27#0: bytes = (concat 0x151f7c75 encoded_tuple_buffer%2#0)
+        (log tmp%27#0)
         let tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#4: bool = 1u
+        goto block@15
+    block@8: // switch_case_default_L9
+        goto block@9
+    block@9: // switch_case_next_L9
         goto block@14
-    block@11: // switch_case_default_L9
-        goto block@12
-    block@12: // switch_case_next_L9
+    block@10: // bare_routing_L9
+        let tmp%28#0: uint64 = (txn OnCompletion)
+        switch tmp%28#0 {0u => block@11, * => block@12}
+    block@11: // __algots__.defaultCreate_L9
+        let tmp%29#0: uint64 = (txn ApplicationID)
+        let tmp%30#0: bool = (== tmp%29#0 0u)
+        (assert tmp%30#0) // can only call when creating
+        tests/approvals/arc4-struct.algo.ts::StructDemo.__algots__.defaultCreate()
+        let tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#5: bool = 1u
+        goto block@15
+    block@12: // switch_case_default_L9
         goto block@13
-    block@13: // after_if_else_L9
-        let tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#5: bool = 0u
+    block@13: // switch_case_next_L9
         goto block@14
-    block@14: // after_inlined_tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router___L1
-        let tmp%0#0: bool = φ(tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#0 <- block@3, tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#1 <- block@4, tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#2 <- block@5, tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#3 <- block@6, tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#4 <- block@10, tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#5 <- block@13)
+    block@14: // after_if_else_L9
+        let tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#6: bool = 0u
+        goto block@15
+    block@15: // after_inlined_tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router___L1
+        let tmp%0#0: bool = φ(tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#0 <- block@3, tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#1 <- block@4, tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#2 <- block@5, tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#3 <- block@6, tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#4 <- block@7, tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#5 <- block@11, tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#6 <- block@14)
         return tmp%0#0
 
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.testVectorCreationAndEquality() -> void:
@@ -138,6 +153,12 @@ subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.toAndFromBytes(v1: by
         let v1_bytes#0: bytes = v1#0
         let reinterpret_bytes[16]%0#0: bytes[16] = v1_bytes#0
         return reinterpret_bytes[16]%0#0
+
+subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.toNative(v1: bytes[16]) -> <bytes[8], bytes[8]>:
+    block@0: // L37
+        let item0%0#0: bytes = (extract3 v1#0 0u 8u) // on error: Index access is out of bounds
+        let item1%1#0: bytes = (extract3 v1#0 8u 8u) // on error: Index access is out of bounds
+        return item0%0#0 item1%1#0
 
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.__algots__.defaultCreate() -> void:
     block@0: // L9

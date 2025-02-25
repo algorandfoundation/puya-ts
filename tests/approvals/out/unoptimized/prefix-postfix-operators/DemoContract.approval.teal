@@ -6,6 +6,8 @@ main:
     intcblock 0 1 10 5
     bytecblock 0x0a 0x01 0x05
 
+main_block@0:
+
 main_block@1:
     // tests/approvals/prefix-postfix-operators.algo.ts:57
     // export class DemoContract extends Contract {
@@ -87,6 +89,8 @@ test_uint64:
     // tests/approvals/prefix-postfix-operators.algo.ts:5
     // function test_uint64(x: uint64, y: uint64) {
     proto 2 1
+
+test_uint64_block@0:
     // tests/approvals/prefix-postfix-operators.algo.ts:6
     // assert(x === 10, 'x input must be 10')
     frame_dig -2
@@ -200,6 +204,8 @@ test_biguint:
     // tests/approvals/prefix-postfix-operators.algo.ts:30
     // function test_biguint(x: biguint, y: biguint) {
     proto 2 1
+
+test_biguint_block@0:
     // tests/approvals/prefix-postfix-operators.algo.ts:31
     // assert(x === 10n, 'x input must be 10')
     frame_dig -2
@@ -303,6 +309,8 @@ test_bytes:
     // tests/approvals/prefix-postfix-operators.algo.ts:50
     // function test_bytes(x: bytes) {
     proto 1 0
+
+test_bytes_block@0:
     // tests/approvals/prefix-postfix-operators.algo.ts:51
     // assert(x === bzero(4), 'x must be 4 unset bytes')
     pushint 4 // 4
@@ -324,6 +332,8 @@ test_bytes:
 
 // tests/approvals/prefix-postfix-operators.algo.ts::DemoContract.test() -> uint64:
 test:
+
+test_block@0:
     // tests/approvals/prefix-postfix-operators.algo.ts:59
     // test_uint64(10, 5)
     intc_2 // 10
@@ -349,4 +359,6 @@ test:
 
 // tests/approvals/prefix-postfix-operators.algo.ts::DemoContract.__algots__.defaultCreate() -> void:
 __algots__.defaultCreate:
+
+__algots__.defaultCreate_block@0:
     retsub

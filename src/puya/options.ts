@@ -10,16 +10,15 @@ export const defaultPuyaOptions: PuyaPassThroughOptions = {
   outputArc32: true,
   outputArc56: true,
   outputSsaIr: false,
-  outputSourceMap: false,
+  outputSourceMap: true,
   outputOptimizationIr: false,
   outputDestructuredIr: false,
   outputMemoryIr: false,
   outputBytecode: false,
-  matchAlgodBytecode: false,
   debugLevel: 1,
   optimizationLevel: 1,
   targetAvmVersion: 10,
-  cliTemplateDefinitions: [],
+  cliTemplateDefinitions: {},
   templateVarsPrefix: 'TMPL_',
   localsCoalescingStrategy: LocalsCoalescingStrategy.root_operand,
 }
@@ -35,11 +34,10 @@ export class PuyaOptions {
   outputMemoryIr: boolean
   outputBytecode: boolean
   outputSourceMap: boolean
-  matchAlgodBytecode: boolean
   debugLevel: number
   optimizationLevel: number
   targetAvmVersion: number
-  cliTemplateDefinitions: string[]
+  cliTemplateDefinitions: Record<string, Uint8Array | bigint>
   templateVarsPrefix: string
   localsCoalescingStrategy: LocalsCoalescingStrategy
 
@@ -60,7 +58,6 @@ export class PuyaOptions {
     this.outputDestructuredIr = passThroughOptions.outputDestructuredIr
     this.outputMemoryIr = passThroughOptions.outputMemoryIr
     this.outputBytecode = passThroughOptions.outputBytecode
-    this.matchAlgodBytecode = passThroughOptions.matchAlgodBytecode
     this.debugLevel = passThroughOptions.debugLevel
     this.optimizationLevel = passThroughOptions.optimizationLevel
     this.targetAvmVersion = passThroughOptions.targetAvmVersion

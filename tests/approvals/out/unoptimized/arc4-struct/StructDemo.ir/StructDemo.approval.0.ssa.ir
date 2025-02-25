@@ -7,10 +7,10 @@ subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__(
     block@0: // L9
         let tmp%0#0: uint64 = (txn NumAppArgs)
         let tmp%1#0: bool = (!= tmp%0#0 0u)
-        goto tmp%1#0 ? block@1 : block@8
+        goto tmp%1#0 ? block@1 : block@9
     block@1: // abi_routing_L9
         let tmp%2#0: bytes = (txna ApplicationArgs 0)
-        switch tmp%2#0 {method "testVectorCreationAndEquality()void" => block@2, method "addVectors((uint64,uint64),(uint64,uint64))(uint64,uint64)" => block@3, method "implicitCastingAndSpreading((uint64,uint64))void" => block@4, method "toAndFromBytes((uint64,uint64))(uint64,uint64)" => block@5, * => block@6}
+        switch tmp%2#0 {method "testVectorCreationAndEquality()void" => block@2, method "addVectors((uint64,uint64),(uint64,uint64))(uint64,uint64)" => block@3, method "implicitCastingAndSpreading((uint64,uint64))void" => block@4, method "toAndFromBytes((uint64,uint64))(uint64,uint64)" => block@5, method "toNative((uint64,uint64))(uint64,uint64)" => block@6, * => block@7}
     block@2: // testVectorCreationAndEquality_route_L10
         let tmp%3#0: uint64 = (txn OnCompletion)
         let tmp%4#0: bool = (== tmp%3#0 NoOp)
@@ -55,24 +55,40 @@ subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__(
         let tmp%22#0: bytes = (concat 0x151f7c75 tmp%21#0)
         (log tmp%22#0)
         return 1u
-    block@6: // switch_case_default_L9
-        goto block@7
-    block@7: // switch_case_next_L9
-        goto block@12
-    block@8: // bare_routing_L9
+    block@6: // toNative_route_L37
         let tmp%23#0: uint64 = (txn OnCompletion)
-        switch tmp%23#0 {0u => block@9, * => block@10}
-    block@9: // __algots__.defaultCreate_L9
-        let tmp%24#0: uint64 = (txn ApplicationID)
-        let tmp%25#0: bool = (== tmp%24#0 0u)
-        (assert tmp%25#0) // can only call when creating
+        let tmp%24#0: bool = (== tmp%23#0 NoOp)
+        (assert tmp%24#0) // OnCompletion is not NoOp
+        let tmp%25#0: uint64 = (txn ApplicationID)
+        let tmp%26#0: bool = (!= tmp%25#0 0u)
+        (assert tmp%26#0) // can only call when not creating
+        let reinterpret_bytes[16]%4#0: bytes[16] = (txna ApplicationArgs 1)
+        let (elements_to_encode%0#0: bytes[8], elements_to_encode%1#0: bytes[8]) = tests/approvals/arc4-struct.algo.ts::StructDemo.toNative(reinterpret_bytes[16]%4#0)
+        let current_tail_offset%0#0: uint64 = 16u
+        let encoded_tuple_buffer%0#0: bytes[0] = 0x
+        let encoded_tuple_buffer%1#0: bytes = (concat encoded_tuple_buffer%0#0 elements_to_encode%0#0)
+        let encoded_tuple_buffer%2#0: bytes = (concat encoded_tuple_buffer%1#0 elements_to_encode%1#0)
+        let tmp%27#0: bytes = (concat 0x151f7c75 encoded_tuple_buffer%2#0)
+        (log tmp%27#0)
+        return 1u
+    block@7: // switch_case_default_L9
+        goto block@8
+    block@8: // switch_case_next_L9
+        goto block@13
+    block@9: // bare_routing_L9
+        let tmp%28#0: uint64 = (txn OnCompletion)
+        switch tmp%28#0 {0u => block@10, * => block@11}
+    block@10: // __algots__.defaultCreate_L9
+        let tmp%29#0: uint64 = (txn ApplicationID)
+        let tmp%30#0: bool = (== tmp%29#0 0u)
+        (assert tmp%30#0) // can only call when creating
         tests/approvals/arc4-struct.algo.ts::StructDemo.__algots__.defaultCreate()
         return 1u
-    block@10: // switch_case_default_L9
-        goto block@11
-    block@11: // switch_case_next_L9
+    block@11: // switch_case_default_L9
         goto block@12
-    block@12: // after_if_else_L9
+    block@12: // switch_case_next_L9
+        goto block@13
+    block@13: // after_if_else_L9
         return 0u
 
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.testVectorCreationAndEquality() -> void:
@@ -158,6 +174,14 @@ subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.toAndFromBytes(v1: by
         let v1_bytes#0: bytes = v1#0
         let reinterpret_bytes[16]%0#0: bytes[16] = v1_bytes#0
         return reinterpret_bytes[16]%0#0
+
+subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.toNative(v1: bytes[16]) -> <bytes[8], bytes[8]>:
+    block@0: // L37
+        let item0%0#0: bytes = (extract3 v1#0 0u 8u) // on error: Index access is out of bounds
+        let item1%0#0: bytes = (extract3 v1#0 8u 8u) // on error: Index access is out of bounds
+        let item0%1#0: bytes = (extract3 v1#0 0u 8u) // on error: Index access is out of bounds
+        let item1%1#0: bytes = (extract3 v1#0 8u 8u) // on error: Index access is out of bounds
+        return item0%0#0 item1%1#0
 
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.__algots__.defaultCreate() -> void:
     block@0: // L9
