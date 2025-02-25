@@ -14,10 +14,9 @@ import { compile } from '../compile'
 import { LoggingContext, LogLevel } from '../logger'
 import { LocalsCoalescingStrategy } from '../puya/options'
 
-// Create a connection for the server, using Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
 const connection = createConnection(ProposedFeatures.all)
-// 1
+
 // Create a simple text document manager.
 const documents = new TextDocuments(TextDocument)
 
@@ -98,13 +97,13 @@ async function validateTextDocument(textDocument: TextDocument): Promise<Diagnos
     range: {
       start: textDocument.positionAt(
         textDocument.offsetAt({
-          line: e.sourceLocation!.line,
+          line: e.sourceLocation!.line - 1,
           character: e.sourceLocation!.column,
         }),
       ),
       end: textDocument.positionAt(
         textDocument.offsetAt({
-          line: e.sourceLocation!.endLine,
+          line: e.sourceLocation!.endLine - 1,
           character: e.sourceLocation!.endColumn,
         }),
       ),
