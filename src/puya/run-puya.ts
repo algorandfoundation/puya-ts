@@ -1,5 +1,6 @@
 import { logger } from '../logger'
 import { invokeCli } from '../util/invoke-cli'
+import { downloadPuyaBinary } from './download-puya'
 
 export async function runPuya({
   command,
@@ -12,8 +13,12 @@ export async function runPuya({
   cwd?: string
   onOutput: (line: string) => void
 }) {
+  // Download Puya binary with fixed version 1.1.1
+  const puyaBinaryPath = await downloadPuyaBinary('1.1.1')
+
+  // Use the downloaded binary path in invokeCli
   const result = await invokeCli({
-    command,
+    command: puyaBinaryPath,
     args,
     cwd,
     onReceiveLine: onOutput,
