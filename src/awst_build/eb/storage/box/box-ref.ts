@@ -42,6 +42,12 @@ export class BoxRefExpressionBuilder extends BoxProxyExpressionBuilder<BoxRefPTy
       contentType: this.ptype.contentType,
     })
     switch (name) {
+      case 'key':
+        return instanceEb(this.toBytes(sourceLocation), bytesPType)
+      case 'get':
+        return new BoxRefGetFunctionBuilder(boxValueExpr)
+      case 'delete':
+        return new BoxRefDeleteFunctionBuilder(boxValueExpr)
       case 'put':
         return new BoxRefPutFunctionBuilder(boxValueExpr)
       case 'splice':
@@ -58,9 +64,8 @@ export class BoxRefExpressionBuilder extends BoxProxyExpressionBuilder<BoxRefPTy
         return boxExists(boxValueExpr, sourceLocation)
       case 'maybe':
         return new BoxRefMaybeFunctionBuilder(boxValueExpr)
-      case 'length': {
+      case 'length':
         return boxLength(boxValueExpr, sourceLocation)
-      }
       case 'value':
         return new BoxValueExpressionBuilder(boxValueExpr, this.ptype.contentType)
     }
@@ -68,13 +73,13 @@ export class BoxRefExpressionBuilder extends BoxProxyExpressionBuilder<BoxRefPTy
   }
 }
 
-export abstract class BoxRefBaseFunctionBuilder extends FunctionBuilder {
+abstract class BoxRefBaseFunctionBuilder extends FunctionBuilder {
   constructor(protected readonly boxValue: BoxValueExpression) {
     super(boxValue.sourceLocation)
   }
 }
 
-export class BoxRefCreateFunctionBuilder extends BoxRefBaseFunctionBuilder {
+class BoxRefCreateFunctionBuilder extends BoxRefBaseFunctionBuilder {
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [{ size }],
@@ -98,7 +103,7 @@ export class BoxRefCreateFunctionBuilder extends BoxRefBaseFunctionBuilder {
     )
   }
 }
-export class BoxRefResizeFunctionBuilder extends BoxRefBaseFunctionBuilder {
+class BoxRefResizeFunctionBuilder extends BoxRefBaseFunctionBuilder {
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [size],
@@ -122,7 +127,7 @@ export class BoxRefResizeFunctionBuilder extends BoxRefBaseFunctionBuilder {
     )
   }
 }
-export class BoxRefExtractFunctionBuilder extends BoxRefBaseFunctionBuilder {
+class BoxRefExtractFunctionBuilder extends BoxRefBaseFunctionBuilder {
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [start, length],
@@ -146,7 +151,7 @@ export class BoxRefExtractFunctionBuilder extends BoxRefBaseFunctionBuilder {
     )
   }
 }
-export class BoxRefReplaceFunctionBuilder extends BoxRefBaseFunctionBuilder {
+class BoxRefReplaceFunctionBuilder extends BoxRefBaseFunctionBuilder {
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [start, value],
@@ -170,8 +175,36 @@ export class BoxRefReplaceFunctionBuilder extends BoxRefBaseFunctionBuilder {
     )
   }
 }
+class BoxRefGetFunctionBuilder extends BoxRefBaseFunctionBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    const {
+      args: [{ default: defaultValue }],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      funcName: 'BoxRef.get',
+      callLocation: sourceLocation,
+      genericTypeArgs: 0,
+      argSpec: (a) => [a.obj({ default: a.optional(bytesPType) })],
+    })
 
-export class BoxRefPutFunctionBuilder extends BoxRefBaseFunctionBuilder {
+    if (defaultValue) {
+      return instanceEb(
+        nodeFactory.stateGet({
+          sourceLocation,
+          default: defaultValue.resolve(),
+          wtype: wtypes.bytesWType,
+          field: this.boxValue,
+        }),
+        bytesPType,
+      )
+    } else {
+      return new BoxValueExpressionBuilder(this.boxValue, bytesPType)
+    }
+  }
+}
+
+class BoxRefPutFunctionBuilder extends BoxRefBaseFunctionBuilder {
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [value],
@@ -195,7 +228,7 @@ export class BoxRefPutFunctionBuilder extends BoxRefBaseFunctionBuilder {
     )
   }
 }
-export class BoxRefSpliceFunctionBuilder extends BoxRefBaseFunctionBuilder {
+class BoxRefSpliceFunctionBuilder extends BoxRefBaseFunctionBuilder {
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [start, stop, value],
@@ -239,6 +272,28 @@ class BoxRefMaybeFunctionBuilder extends BoxRefBaseFunctionBuilder {
         field: this.boxValue,
       }),
       type,
+    )
+  }
+}
+
+class BoxRefDeleteFunctionBuilder extends BoxRefBaseFunctionBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    parseFunctionArgs({
+      args,
+      typeArgs,
+      funcName: 'BoxRef.delete',
+      callLocation: sourceLocation,
+      genericTypeArgs: 0,
+      argSpec: () => [],
+    })
+
+    return instanceEb(
+      nodeFactory.stateDelete({
+        field: this.boxValue,
+        sourceLocation,
+        wtype: wtypes.voidWType,
+      }),
+      voidPType,
     )
   }
 }

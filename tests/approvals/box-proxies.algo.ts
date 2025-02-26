@@ -7,6 +7,9 @@ function testBox(box: Box<string>, value: string) {
   box.value = value
   boxA.value = value
 
+  assert(box.key === Bytes('one'))
+  assert(boxA.key === Bytes('A'))
+
   assert(box.value === boxA.value)
 
   assert(box.exists && boxA.exists)
@@ -23,7 +26,7 @@ function testBox(box: Box<string>, value: string) {
   let [, e] = box.maybe()
   assert(!e)
   box.value = value
-  ;[, e] = box.maybe()
+    ;[, e] = box.maybe()
   assert(e)
 }
 
@@ -32,6 +35,9 @@ const boxMap = BoxMap<string, bytes>({ keyPrefix: '' })
 function testBoxMap(box: BoxMap<string, bytes>, key: string, value: bytes) {
   box.set(key, value)
   boxMap.set(key, value)
+
+  assert(box.keyPrefix === Bytes('two'))
+  assert(boxMap.keyPrefix === Bytes(''))
 
   assert(box.length(key))
 
@@ -47,6 +53,9 @@ function testBoxMap(box: BoxMap<string, bytes>, key: string, value: bytes) {
 const boxRef = BoxRef({ key: 'abc' })
 
 function testBoxRef(box: BoxRef, length: uint64) {
+  assert(box.key === Bytes('three'))
+  assert(boxRef.key === Bytes('abc'))
+
   if (!boxRef.exists) {
     boxRef.create({ size: 1000 })
   } else if (boxRef.length !== length) {
@@ -60,12 +69,17 @@ function testBoxRef(box: BoxRef, length: uint64) {
   const someBytes = Bytes.fromHex('FFFFFFFF')
   box.put(someBytes)
 
+  assert(box.get({ default: Bytes() }) === Bytes.fromHex('FFFFFFFF'))
+
   const maybeBox = box.maybe()
   assert(maybeBox[1])
 
   assert(box.value === Bytes.fromHex('FFFFFFFF'))
   box.splice(1, 1, Bytes.fromHex('00'))
   assert(box.value === Bytes.fromHex('FF00FFFF'))
+
+  box.delete()
+  assert(!box.exists)
 }
 
 export class BoxContract extends BaseContract {

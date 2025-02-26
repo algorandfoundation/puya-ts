@@ -2,6 +2,8 @@ subroutine testBox(box: box_key, value: string): void
 {
   box.value: string = value
   Box["A"].value: string = value
+  assert(reinterpret_cast<bytes>(box) == "one")
+  assert("A" == "A")
   assert(box.value == Box["A"].value)
   assert(STATE_EXISTS(box.value) and STATE_EXISTS(Box["A"].value))
   assert(Boolean(checked_maybe(box_len(box), comment=Box must have value)))
@@ -20,6 +22,8 @@ subroutine testBoxMap(box: box_key, key: string, value: bytes): void
 {
   concat(box, reinterpret_cast<bytes>(key)).value: bytes = value
   concat("", reinterpret_cast<bytes>(key)).value: bytes = value
+  assert(reinterpret_cast<bytes>(box) == "two")
+  assert("" == "")
   assert(Boolean(checked_maybe(box_len(concat(box, reinterpret_cast<bytes>(key))), comment=Box must have value)))
   assert(STATE_GET_EX(concat(box, reinterpret_cast<bytes>(key)).value).1)
   assert(concat(box, reinterpret_cast<bytes>(key)).value == concat("", reinterpret_cast<bytes>(key)).value)
@@ -28,6 +32,8 @@ subroutine testBoxMap(box: box_key, key: string, value: bytes): void
 }
 subroutine testBoxRef(box: box_key, length: uint64): void
 {
+  assert(reinterpret_cast<bytes>(box) == "three")
+  assert("abc" == "abc")
   if (!STATE_EXISTS(Box["abc"].value)) {
     box_create("abc", 1000)
   } else {
@@ -42,11 +48,14 @@ subroutine testBoxRef(box: box_key, length: uint64): void
   }
   someBytes: bytes = 0xffffffff
   box_put(box, someBytes)
+  assert(STATE_GET(box.value, default=0x) == 0xffffffff)
   maybeBox: readonlytuple[bytes, bool] = STATE_GET_EX(box.value)
   assert(maybeBox.1)
   assert(box.value == 0xffffffff)
   box_splice(box, 1, 1, 0x00)
   assert(box.value == 0xff00ffff)
+  STATE_DEL(box.value)
+  assert(!STATE_EXISTS(box.value))
 }
 contract BoxContract
 {
