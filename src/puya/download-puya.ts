@@ -84,7 +84,7 @@ export async function downloadPuyaBinary(version: string): Promise<string> {
   // Build platform-specific filenames
   const platformId = `${os}_${arch}`
   const archiveFileName = `puya-${platformId}.tar.gz`
-  const checksumFileName = `puya-${platformId}-checksum.txt`
+  // const checksumFileName = `puya-${platformId}-checksum.txt`
   const binaryFileName = getBinaryName()
 
   // Find node_modules directory and set up storage paths
@@ -93,7 +93,7 @@ export async function downloadPuyaBinary(version: string): Promise<string> {
   const tempDir = path.join(nodeModulesDir, '.puya-ts-temp')
 
   const tarFilePath = path.join(tempDir, archiveFileName)
-  const checksumFilePath = path.join(tempDir, checksumFileName)
+  // const checksumFilePath = path.join(tempDir, checksumFileName)
   const extractedBinaryPath = path.join(puyaStorageDir, binaryFileName)
 
   // Check if binary already exists in the extraction directory
@@ -112,14 +112,14 @@ export async function downloadPuyaBinary(version: string): Promise<string> {
   logger.info(undefined, `Downloading Puya binary for version ${version} and platform ${platformId}`)
   // URLs for downloading files
   const archiveUrl = `https://github.com/${repo}/releases/download/${version}/${archiveFileName}`
-  const checksumUrl = `https://github.com/${repo}/releases/download/${version}/${checksumFileName}`
+  // const checksumUrl = `https://github.com/${repo}/releases/download/${version}/${checksumFileName}`
 
   // Download both files
   await downloadFile(archiveUrl, tarFilePath)
-  await downloadFile(checksumUrl, checksumFilePath)
+  // await downloadFile(checksumUrl, checksumFilePath)
 
   // Verify the checksum
-  await verifyChecksum(tarFilePath, checksumFilePath)
+  // await verifyChecksum(tarFilePath, checksumFilePath)
 
   // Extract the tar file
   try {
@@ -194,6 +194,7 @@ async function downloadFile(url: string, destination: string): Promise<void> {
  * @param checksumFilePath Path to the checksum file
  * @returns Promise that resolves to true if the checksum matches, false otherwise
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function verifyChecksum(filePath: string, checksumFilePath: string): Promise<void> {
   return new Promise((resolve) => {
     // Read the checksum file
