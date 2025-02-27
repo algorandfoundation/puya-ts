@@ -17,9 +17,8 @@ function getBinaryName(): string {
  * @returns The absolute path to the node_modules directory
  */
 function findNodeModulesDir(): string {
-  // TODO: confirm this logic
-  // Start with the current module's directory
-  let currentDir = __dirname
+  // Start with the current working directory
+  let currentDir = process.cwd()
 
   // Keep going up directories until we find node_modules or hit the root
   while (currentDir !== path.parse(currentDir).root) {
