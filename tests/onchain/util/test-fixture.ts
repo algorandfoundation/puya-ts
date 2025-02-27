@@ -15,6 +15,7 @@ import fs from 'fs'
 import type { ExpectStatic } from 'vitest'
 import { test } from 'vitest'
 import { compile } from '../../../src'
+import { processInputPaths } from '../../../src/input-paths/process-input-paths'
 import { LoggingContext, LogLevel } from '../../../src/logger'
 import { defaultPuyaOptions } from '../../../src/puya/options'
 import type { DeliberateAny } from '../../../src/typescript-helpers'
@@ -244,11 +245,11 @@ async function compilePath(
   const logCtx = LoggingContext.create()
 
   return await logCtx.run(async () => {
+    const filePaths = processInputPaths({ paths: [path], outDir: tempDir.dirPath })
     await compile({
+      filePaths,
       outputAwstJson: false,
       outputAwst: false,
-      paths: [path],
-      outDir: tempDir.dirPath,
       dryRun: false,
       logLevel: LogLevel.Error,
       skipVersionCheck: true,

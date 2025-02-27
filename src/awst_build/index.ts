@@ -1,7 +1,7 @@
 import { jsonSerializeAwst } from '../awst/json-serialize-awst'
 import type { AWST } from '../awst/nodes'
 import { ToCodeVisitor } from '../awst/to-code-visitor'
-import type { AlgoFile, PuyaTsCompileOptions } from '../compile-options'
+import type { PuyaTsCompileOptions } from '../compile-options'
 import { logger } from '../logger'
 import type { CreateProgramResult } from '../parser'
 import { invariant } from '../util'
@@ -11,11 +11,9 @@ import { AwstBuildContext } from './context/awst-build-context'
 import { buildLibAwst } from './lib'
 import type { CompilationSet } from './models/contract-class-model'
 
-function getFileFromSource(options: PuyaTsCompileOptions, sourceFile: string): AlgoFile | undefined {
-  return options.filePaths.find((p) => p.sourceFile === sourceFile)
-}
+type BuildAwstOptions = Pick<PuyaTsCompileOptions, 'filePaths' | 'outputAwst' | 'outputAwstJson'>
 
-export function buildAwst({ program, sourceFiles }: CreateProgramResult, options: PuyaTsCompileOptions): [AWST[], CompilationSet] {
+export function buildAwst({ program, sourceFiles }: CreateProgramResult, options: BuildAwstOptions): [AWST[], CompilationSet] {
   return AwstBuildContext.run(program, () => {
     buildLibAwst()
     const moduleAwst: AWST[] = []
@@ -23,7 +21,7 @@ export function buildAwst({ program, sourceFiles }: CreateProgramResult, options
       try {
         AwstBuildContext.current.runInChildContext(() => {
           const visitor = new SourceFileVisitor(sourceFile)
-          const algoFile = getFileFromSource(options, sourcePath)
+          const algoFile = options.filePaths.find((p) => p.sourceFile === sourcePath)
 
           const module = visitor.buildModule()
 

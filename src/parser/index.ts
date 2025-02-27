@@ -1,6 +1,6 @@
 import ts from 'typescript'
 import { SourceLocation } from '../awst/source-location'
-import type { PuyaTsCompileOptions } from '../compile-options'
+import type { AlgoFile } from '../compile-options'
 import { logger, LoggingContext } from '../logger'
 import type { DeliberateAny } from '../typescript-helpers'
 import { normalisePath } from '../util'
@@ -13,7 +13,7 @@ export type CreateProgramResult = {
   programDirectory: string
 }
 
-export function createTsProgram(options: PuyaTsCompileOptions): CreateProgramResult {
+export function createTsProgram(options: { filePaths: AlgoFile[] }): CreateProgramResult {
   const compilerOptions: ts.CompilerOptions = {
     allowJs: false,
     strict: true,
@@ -33,6 +33,14 @@ export function createTsProgram(options: PuyaTsCompileOptions): CreateProgramRes
     {
       ...host,
       resolveModuleNameLiterals,
+      getSourceFile(
+        fileName: string,
+        languageVersionOrOptions: ts.ScriptTarget | ts.CreateSourceFileOptions,
+        onError?: (message: string) => void,
+        shouldCreateNewSourceFile?: boolean,
+      ): ts.SourceFile | undefined {
+        return host.getSourceFile(fileName, languageVersionOrOptions, onError, shouldCreateNewSourceFile)
+      },
     },
   )
   const programDirectory = program.getCurrentDirectory()

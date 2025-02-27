@@ -2,6 +2,7 @@ import ts from 'typescript'
 import { describe, it } from 'vitest'
 import { compile } from '../src'
 import { SourceLocation } from '../src/awst/source-location'
+import { processInputPaths } from '../src/input-paths/process-input-paths'
 import type { LogEvent } from '../src/logger'
 import { isMinLevel, LoggingContext, LogLevel } from '../src/logger'
 import { defaultPuyaOptions } from '../src/puya/options'
@@ -27,18 +28,18 @@ import { enumFromValue, invariant } from '../src/util'
  */
 describe('Expected output', async () => {
   const logCtx = LoggingContext.create()
-  const result = await logCtx.run(() =>
-    compile({
+  const result = await logCtx.run(() => {
+    const filePaths = processInputPaths({ paths: ['tests/expected-output'] })
+    return compile({
+      filePaths,
       outputAwstJson: false,
       outputAwst: false,
-      paths: ['tests/expected-output'],
-      outDir: '',
       dryRun: true,
       logLevel: LogLevel.Debug,
       skipVersionCheck: true,
       ...defaultPuyaOptions,
-    }),
-  )
+    })
+  })
   invariant(result.ast, 'Compilation must result in ast')
   const paths = Object.entries(result.ast ?? {}).map(([path, ast]) => ({
     path,
