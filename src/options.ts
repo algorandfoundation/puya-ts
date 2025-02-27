@@ -2,9 +2,9 @@ import { LogLevel } from './logger'
 import type { Props } from './typescript-helpers'
 
 export interface AlgoFile {
-  matchedInput: string
   sourceFile: string
   outDir: string
+  fileContents?: string
 }
 
 export class CompileOptions {
@@ -39,15 +39,15 @@ export class CompileOptions {
     this.outputAwstJson = options.outputAwstJson ?? false
     this.skipVersionCheck = options.skipVersionCheck ?? false
     this.dryRun = options.dryRun ?? false
-    this.outputTeal = options.outputTeal ?? defaultPuyaOptions.outputTeal
-    this.outputArc32 = options.outputArc32 ?? defaultPuyaOptions.outputArc32
-    this.outputArc56 = options.outputArc56 ?? defaultPuyaOptions.outputArc56
-    this.outputSsaIr = options.outputSsaIr ?? defaultPuyaOptions.outputSsaIr
-    this.outputOptimizationIr = options.outputOptimizationIr ?? defaultPuyaOptions.outputOptimizationIr
-    this.outputDestructuredIr = options.outputDestructuredIr ?? defaultPuyaOptions.outputDestructuredIr
-    this.outputMemoryIr = options.outputMemoryIr ?? defaultPuyaOptions.outputMemoryIr
-    this.outputBytecode = options.outputBytecode ?? defaultPuyaOptions.outputBytecode
-    this.outputSourceMap = options.outputSourceMap ?? defaultPuyaOptions.outputSourceMap
+    this.outputTeal = options.outputTeal ?? false
+    this.outputArc32 = options.outputArc32 ?? false
+    this.outputArc56 = options.outputArc56 ?? false
+    this.outputSsaIr = options.outputSsaIr ?? false
+    this.outputOptimizationIr = options.outputOptimizationIr ?? false
+    this.outputDestructuredIr = options.outputDestructuredIr ?? false
+    this.outputMemoryIr = options.outputMemoryIr ?? false
+    this.outputBytecode = options.outputBytecode ?? false
+    this.outputSourceMap = options.outputSourceMap ?? false
     this.debugLevel = options.debugLevel ?? defaultPuyaOptions.debugLevel
     this.optimizationLevel = options.optimizationLevel ?? defaultPuyaOptions.optimizationLevel
     this.targetAvmVersion = options.targetAvmVersion ?? defaultPuyaOptions.targetAvmVersion

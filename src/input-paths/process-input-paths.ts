@@ -24,7 +24,6 @@ export const processInputPaths = ({
         const sourceFile = normalisePath(p, workingDirectory)
 
         filePaths.push({
-          matchedInput: p,
           sourceFile,
           outDir: determineOutDir(p, sourceFile, outDir),
         })
@@ -39,7 +38,6 @@ export const processInputPaths = ({
         for (const match of matches) {
           const sourceFile = normalisePath(match, workingDirectory)
           filePaths.push({
-            matchedInput: p,
             sourceFile,
             outDir: determineOutDir(p, sourceFile, outDir),
           })
