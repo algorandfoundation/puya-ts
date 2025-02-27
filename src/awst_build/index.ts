@@ -1,8 +1,8 @@
 import { jsonSerializeAwst } from '../awst/json-serialize-awst'
 import type { AWST } from '../awst/nodes'
 import { ToCodeVisitor } from '../awst/to-code-visitor'
-import type { PuyaTsCompileOptions } from '../compile-options'
 import { logger } from '../logger'
+import type { CompileOptions } from '../options'
 import type { CreateProgramResult } from '../parser'
 import { invariant } from '../util'
 import { ArtifactKind, writeArtifact } from '../write-artifact'
@@ -11,9 +11,9 @@ import { AwstBuildContext } from './context/awst-build-context'
 import { buildLibAwst } from './lib'
 import type { CompilationSet } from './models/contract-class-model'
 
-type BuildAwstOptions = Pick<PuyaTsCompileOptions, 'filePaths' | 'outputAwst' | 'outputAwstJson'>
+type BuildAwstOptions = Pick<CompileOptions, 'filePaths' | 'outputAwst' | 'outputAwstJson'>
 
-export function buildAwst({ program, sourceFiles }: CreateProgramResult, options: BuildAwstOptions): [AWST[], CompilationSet] {
+export function buildAwst({ program, sourceFiles }: CreateProgramResult, options: CompileOptions): [AWST[], CompilationSet] {
   return AwstBuildContext.run(program, () => {
     buildLibAwst()
     const moduleAwst: AWST[] = []

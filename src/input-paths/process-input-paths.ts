@@ -1,9 +1,9 @@
 import { globSync } from 'glob'
 import fs from 'node:fs'
 import upath from 'upath'
-import type { AlgoFile } from '../compile-options'
 import { PuyaError } from '../errors'
 import { logger } from '../logger'
+import type { AlgoFile } from '../options'
 import { normalisePath } from '../util'
 import { determineOutDir } from './determine-out-dir'
 

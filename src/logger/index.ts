@@ -119,6 +119,11 @@ export class LoggingContext {
     if (this.hasErrors()) process.exit(1)
   }
 
+  enterContext() {
+    LoggingContext.asyncStore.enterWith(this)
+    return this
+  }
+
   run<R>(cb: () => R) {
     return LoggingContext.asyncStore.run(this, cb)
   }

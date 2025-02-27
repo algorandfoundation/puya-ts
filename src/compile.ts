@@ -5,11 +5,10 @@ import { buildAwst } from './awst_build'
 import type { CompilationSet } from './awst_build/models/contract-class-model'
 import { registerPTypes } from './awst_build/ptypes/register'
 import { typeRegistry } from './awst_build/type-registry'
-import type { PuyaTsCompileOptions } from './compile-options'
 import { logger, LoggingContext } from './logger'
+import type { CompileOptions } from './options'
 import { createTsProgram } from './parser'
 import { invokePuya } from './puya'
-import type { PuyaPassThroughOptions } from './puya/options'
 
 export type CompileResult = {
   programDirectory: string
@@ -18,20 +17,10 @@ export type CompileResult = {
   compilationSet?: CompilationSet
 }
 
-export type CompileArgs = PuyaTsCompileOptions & PuyaPassThroughOptions
-
-export async function compile({
-  filePaths,
-  outputAwst,
-  outputAwstJson,
-  skipVersionCheck = false,
-  dryRun = false,
-  logLevel,
-  ...passThroughOptions
-}: CompileArgs): Promise<CompileResult> {
+export async function compile(options: CompileOptions): Promise<CompileResult> {
   const loggerCtx = LoggingContext.current
   registerPTypes(typeRegistry)
-  const programResult = createTsProgram({ filePaths })
+  const programResult = createTsProgram(options)
   if (loggerCtx.hasErrors()) {
     logger.info(undefined, 'Compilation halted due to parse errors')
     return {
@@ -39,7 +28,7 @@ export async function compile({
       ast: programResult.sourceFiles,
     }
   }
-  const [moduleAwst, compilationSet] = buildAwst(programResult, { filePaths, outputAwst, outputAwstJson })
+  const [moduleAwst, compilationSet] = buildAwst(programResult, options)
   validateAwst(moduleAwst)
 
   if (loggerCtx.hasErrors()) {
@@ -51,12 +40,9 @@ export async function compile({
       compilationSet,
     }
   }
-  if (!dryRun) {
+  if (!options.dryRun) {
     await invokePuya({
-      passThroughOptions,
-      skipVersionCheck,
-      logLevel,
-      filePaths,
+      options,
       moduleAwst,
       programDirectory: programResult.programDirectory,
       compilationSet,
