@@ -59,7 +59,7 @@ function getPlatformDetails(): { os: string; arch: string } {
   let arch: string
   switch (process.arch) {
     case 'x64':
-      arch = 'amd64'
+      arch = 'x64'
       break
     case 'arm64':
       arch = 'arm64'
@@ -91,27 +91,26 @@ export async function downloadPuyaBinary(version: string): Promise<string> {
   // Find node_modules directory and set up storage paths
   const nodeModulesDir = findNodeModulesDir()
   const puyaStorageDir = path.join(nodeModulesDir, '.puya-ts')
-  const tempDir = path.join(puyaStorageDir, 'temp')
-  const extractDir = path.join(puyaStorageDir, `${version}-${platformId}`)
+  const tempDir = path.join(nodeModulesDir, '.puya-ts-temp')
+
+  const tarFilePath = path.join(tempDir, archiveFileName)
+  const checksumFilePath = path.join(tempDir, checksumFileName)
+  const extractedBinaryPath = path.join(puyaStorageDir, binaryFileName)
+
+  // Check if binary already exists in the extraction directory
+  if (fs.existsSync(extractedBinaryPath)) {
+    logger.info(undefined, `Using cached Puya binary for version ${version} and platform ${platformId}`)
+    return extractedBinaryPath
+  }
 
   // Ensure our storage directories exist
-  for (const dir of [puyaStorageDir, tempDir, extractDir]) {
+  for (const dir of [puyaStorageDir, tempDir]) {
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir, { recursive: true })
     }
   }
 
-  const tarFilePath = path.join(tempDir, archiveFileName)
-  const checksumFilePath = path.join(tempDir, checksumFileName)
-  const extractedBinaryPath = path.join(extractDir, binaryFileName)
-
-  // Check if binary already exists in the extraction directory
-  if (fs.existsSync(extractedBinaryPath)) {
-    logger.info(undefined, `Using cached Puya binary for ${version} and ${platformId}`)
-    return extractedBinaryPath
-  }
-
-  logger.info(undefined, `Downloading Puya binary for ${version} and ${platformId}`)
+  logger.info(undefined, `Downloading Puya binary for version ${version} and platform ${platformId}`)
   // URLs for downloading files
   const archiveUrl = `https://github.com/${repo}/releases/download/${version}/${archiveFileName}`
   const checksumUrl = `https://github.com/${repo}/releases/download/${version}/${checksumFileName}`
@@ -125,11 +124,10 @@ export async function downloadPuyaBinary(version: string): Promise<string> {
 
   // Extract the tar file
   try {
-    await extractTar(tarFilePath, extractDir)
-
-    // Delete the tar file after successful extraction
-    fs.unlinkSync(tarFilePath)
-    fs.unlinkSync(checksumFilePath)
+    await tar.extract({
+      file: tarFilePath,
+      cwd: puyaStorageDir,
+    })
 
     // Check if extraction was successful and binary exists
     if (!fs.existsSync(extractedBinaryPath)) {
@@ -144,28 +142,13 @@ export async function downloadPuyaBinary(version: string): Promise<string> {
     logger.info(undefined, `Successfully downloaded and extracted Puya binary to ${extractedBinaryPath}`)
     return extractedBinaryPath
   } catch (error: unknown) {
-    // Clean up on extraction error
-    if (fs.existsSync(tarFilePath)) {
-      fs.unlinkSync(tarFilePath)
-    }
-    if (fs.existsSync(checksumFilePath)) {
-      fs.unlinkSync(checksumFilePath)
-    }
     throw new Error(`Failed to extract archive: ${error instanceof Error ? error.message : String(error)}`)
+  } finally {
+    // Clean up
+    if (fs.existsSync(tempDir)) {
+      fs.rmSync(tempDir, { recursive: true, force: true })
+    }
   }
-}
-
-/**
- * Extracts a tar file to the specified directory
- * @param tarFilePath Path to the tar file
- * @param extractDir Directory to extract to
- * @returns Promise that resolves when extraction is complete
- */
-async function extractTar(tarFilePath: string, extractDir: string): Promise<void> {
-  return tar.extract({
-    file: tarFilePath,
-    cwd: extractDir,
-  })
 }
 
 /**
@@ -200,7 +183,7 @@ async function downloadFile(url: string, destination: string): Promise<void> {
   } catch (error) {
     // Clean up if file was partially created
     if (fs.existsSync(destination)) {
-      fs.unlinkSync(destination)
+      fs.rmSync(destination)
     }
     throw error
   }
@@ -230,11 +213,12 @@ async function verifyChecksum(filePath: string, checksumFilePath: string): Promi
 
       if (calculatedChecksum !== expectedChecksum) {
         // Remove the downloaded files if checksum verification fails
-        fs.unlinkSync(filePath)
-        fs.unlinkSync(checksumFilePath)
+        fs.rmSync(filePath)
+        fs.rmSync(checksumFilePath)
 
         throw new Error(`Checksum verification failed. Expected checksum: ${expectedChecksum} but got: ${calculatedChecksum}`)
       }
+      resolve()
     })
   })
 }
