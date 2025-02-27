@@ -2,6 +2,7 @@ import * as crypto from 'crypto'
 import * as fs from 'fs'
 import * as path from 'path'
 import * as tar from 'tar'
+import { logger } from '../logger'
 
 /**
  * Gets the platform-specific binary name
@@ -16,6 +17,7 @@ function getBinaryName(): string {
  * @returns The absolute path to the node_modules directory
  */
 function findNodeModulesDir(): string {
+  // TODO: confirm this logic
   // Start with the current module's directory
   let currentDir = __dirname
 
@@ -28,8 +30,45 @@ function findNodeModulesDir(): string {
     currentDir = path.dirname(currentDir)
   }
 
-  // If we couldn't find it, default to the current directory's node_modules
-  return path.join(process.cwd(), 'node_modules')
+  // If we couldn't find it, default to the current directory
+  return process.cwd()
+}
+
+/**
+ * Gets the platform-specific details for downloads
+ * @returns Object containing OS and architecture information
+ */
+function getPlatformDetails(): { os: string; arch: string } {
+  // Map Node.js platform to OS name used in filenames
+  let os: string
+  switch (process.platform) {
+    case 'win32':
+      os = 'windows'
+      break
+    case 'darwin':
+      os = 'macos'
+      break
+    case 'linux':
+      os = 'linux'
+      break
+    default:
+      throw new Error(`Unsupported platform: ${process.platform}`)
+  }
+
+  // Map Node.js architecture to architecture name used in filenames
+  let arch: string
+  switch (process.arch) {
+    case 'x64':
+      arch = 'amd64'
+      break
+    case 'arm64':
+      arch = 'arm64'
+      break
+    default:
+      throw new Error(`Unsupported architecture: ${process.arch}`)
+  }
+
+  return { os, arch }
 }
 
 /**
@@ -39,15 +78,21 @@ function findNodeModulesDir(): string {
  */
 export async function downloadPuyaBinary(version: string): Promise<string> {
   const repo = 'PatrickDinh/puya'
-  const archiveFileName = 'puya.tar.gz'
+
+  // Get platform-specific details
+  const { os, arch } = getPlatformDetails()
+
+  // Build platform-specific filenames
+  const platformId = `${os}_${arch}`
+  const archiveFileName = `puya-${platformId}.tar.gz`
+  const checksumFileName = `puya-${platformId}-checksum.txt`
   const binaryFileName = getBinaryName()
-  const checksumFileName = 'puya-checksum.txt'
 
   // Find node_modules directory and set up storage paths
   const nodeModulesDir = findNodeModulesDir()
   const puyaStorageDir = path.join(nodeModulesDir, '.puya-ts')
   const tempDir = path.join(puyaStorageDir, 'temp')
-  const extractDir = path.join(puyaStorageDir, version)
+  const extractDir = path.join(puyaStorageDir, `${version}-${platformId}`)
 
   // Ensure our storage directories exist
   for (const dir of [puyaStorageDir, tempDir, extractDir]) {
@@ -62,9 +107,11 @@ export async function downloadPuyaBinary(version: string): Promise<string> {
 
   // Check if binary already exists in the extraction directory
   if (fs.existsSync(extractedBinaryPath)) {
+    logger.info(undefined, `Using cached Puya binary for ${version} and ${platformId}`)
     return extractedBinaryPath
   }
 
+  logger.info(undefined, `Downloading Puya binary for ${version} and ${platformId}`)
   // URLs for downloading files
   const archiveUrl = `https://github.com/${repo}/releases/download/${version}/${archiveFileName}`
   const checksumUrl = `https://github.com/${repo}/releases/download/${version}/${checksumFileName}`
@@ -90,10 +137,11 @@ export async function downloadPuyaBinary(version: string): Promise<string> {
     }
 
     // Make binary executable on non-Windows platforms
-    if (process.platform !== 'win32') {
+    if (os !== 'windows') {
       fs.chmodSync(extractedBinaryPath, 0o755)
     }
 
+    logger.info(undefined, `Successfully downloaded and extracted Puya binary to ${extractedBinaryPath}`)
     return extractedBinaryPath
   } catch (error: unknown) {
     // Clean up on extraction error

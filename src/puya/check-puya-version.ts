@@ -37,6 +37,7 @@ export async function comparePuyaVersion(): Promise<{
   return { verdict: VersionCompareVerdict.ExactMatch, target, found: ver.formatted }
 }
 
+// TODO: potential this won't be needed if we download the binary ourselves
 export async function checkPuyaVersion() {
   const result = await comparePuyaVersion()
   switch (result.verdict) {
