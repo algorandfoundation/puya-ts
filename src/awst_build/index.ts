@@ -13,7 +13,7 @@ import type { CompilationSet } from './models/contract-class-model'
 
 type BuildAwstOptions = Pick<CompileOptions, 'filePaths' | 'outputAwst' | 'outputAwstJson'>
 
-export function buildAwst({ program, sourceFiles }: CreateProgramResult, options: CompileOptions): [AWST[], CompilationSet] {
+export function buildAwst({ program, sourceFiles }: CreateProgramResult, options: BuildAwstOptions): [AWST[], CompilationSet] {
   return AwstBuildContext.run(program, () => {
     buildLibAwst()
     const moduleAwst: AWST[] = []
