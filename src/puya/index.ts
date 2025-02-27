@@ -8,7 +8,6 @@ import { jsonSerializeSourceFiles } from '../parser/json-serialize-source-files'
 import { generateTempFile } from '../util/generate-temp-file'
 import { buildCompilationSetMapping } from './build-compilation-set-mapping'
 import { checkPuyaVersion } from './check-puya-version'
-import { ensurePuyaExists } from './ensure-puya-exists'
 import { deserializeAndLog } from './log-deserializer'
 import type { PuyaPassThroughOptions } from './options'
 import { PuyaOptions } from './options'
@@ -29,7 +28,7 @@ export async function invokePuya({
   compilationSet: CompilationSet
   passThroughOptions: PuyaPassThroughOptions
 }) {
-  ensurePuyaExists()
+  // ensurePuyaExists()
   if (!compileOptions.skipVersionCheck) {
     await checkPuyaVersion()
   }

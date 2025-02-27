@@ -1,6 +1,7 @@
 import which from 'which'
 import { EnvironmentError } from '../errors'
 
+// TODO: Remove this function
 export function ensurePuyaExists() {
   if (
     which.sync('puya', {
