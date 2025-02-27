@@ -1,7 +1,7 @@
 import { AwstSerializer, SnakeCaseSerializer } from '../awst/json-serialize-awst'
 import type { AWST } from '../awst/nodes'
 import type { CompilationSet } from '../awst_build/models/contract-class-model'
-import type { PuyaTsCompileOptions } from '../compile-options'
+import type { AlgoFile } from '../compile-options'
 import { logger, LogLevel } from '../logger'
 import type { SourceFileMapping } from '../parser'
 import { jsonSerializeSourceFiles } from '../parser/json-serialize-source-files'
@@ -18,19 +18,23 @@ export async function invokePuya({
   moduleAwst,
   programDirectory,
   sourceFiles,
-  compileOptions,
+  filePaths,
+  skipVersionCheck,
+  logLevel,
   compilationSet,
   passThroughOptions,
 }: {
   moduleAwst: AWST[]
   programDirectory: string
   sourceFiles: SourceFileMapping
-  compileOptions: PuyaTsCompileOptions
+  filePaths: AlgoFile[]
+  logLevel: LogLevel
+  skipVersionCheck: boolean
   compilationSet: CompilationSet
   passThroughOptions: PuyaPassThroughOptions
 }) {
   ensurePuyaExists()
-  if (!compileOptions.skipVersionCheck) {
+  if (!skipVersionCheck) {
     await checkPuyaVersion()
   }
   // Write AWST file
@@ -52,7 +56,7 @@ export async function invokePuya({
     passThroughOptions: passThroughOptions,
     compilationSet: buildCompilationSetMapping({
       awst: moduleAwst,
-      inputPaths: compileOptions.filePaths,
+      inputPaths: filePaths,
       compilationSet,
     }),
   })
@@ -74,7 +78,7 @@ export async function invokePuya({
       `--source-annotations`,
       moduleSourceFile.filePath,
       '--log-level',
-      getPuyaLogLevel(compileOptions.logLevel),
+      getPuyaLogLevel(logLevel),
       '--log-format',
       'json',
     ],

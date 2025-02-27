@@ -1,6 +1,7 @@
 import type { SubParser } from 'argparse'
 import { BooleanOptionalAction } from 'argparse'
 import { compile } from '../compile'
+import { processInputPaths } from '../input-paths/process-input-paths'
 import { logger, LoggingContext, LogLevel } from '../logger'
 import { ConsoleLogSink } from '../logger/sinks/console-log-sink'
 import { defaultPuyaOptions, LocalsCoalescingStrategy } from '../puya/options'
@@ -170,12 +171,13 @@ export async function buildCommand(args: BuildCommandArgs) {
   return logCtx.run(async () => {
     logger.configure([new ConsoleLogSink(args.log_level)])
     try {
+      const filePaths = processInputPaths({ paths: args.paths, outDir: args.out_dir })
+
       await compile({
-        paths: args.paths,
+        filePaths,
         outputAwst: args.output_awst,
         outputAwstJson: args.output_awst_json,
 
-        outDir: args.out_dir,
         skipVersionCheck: args.skip_version_check,
         dryRun: args.dry_run,
         logLevel: args.log_level,

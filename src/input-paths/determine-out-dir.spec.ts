@@ -1,6 +1,6 @@
 import os from 'os'
 import { describe, expect, it } from 'vitest'
-import { determineOutDir } from './compile-options'
+import { determineOutDir } from './determine-out-dir'
 
 describe('determineOutDir', () => {
   const isWindows = os.platform() === 'win32'
