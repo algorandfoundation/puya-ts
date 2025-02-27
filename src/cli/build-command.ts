@@ -4,7 +4,8 @@ import { compile } from '../compile'
 import { processInputPaths } from '../input-paths/process-input-paths'
 import { logger, LoggingContext, LogLevel } from '../logger'
 import { ConsoleLogSink } from '../logger/sinks/console-log-sink'
-import { defaultPuyaOptions, LocalsCoalescingStrategy } from '../puya/options'
+import { CompileOptions, defaultPuyaOptions, LocalsCoalescingStrategy } from '../options'
+
 import { parseCliTemplateVar } from '../util/template-var-cli-parser'
 import { addEnumArg, convertInt } from './util'
 
@@ -173,31 +174,33 @@ export async function buildCommand(args: BuildCommandArgs) {
     try {
       const filePaths = processInputPaths({ paths: args.paths, outDir: args.out_dir })
 
-      await compile({
-        filePaths,
-        outputAwst: args.output_awst,
-        outputAwstJson: args.output_awst_json,
+      await compile(
+        new CompileOptions({
+          filePaths,
+          outputAwst: args.output_awst,
+          outputAwstJson: args.output_awst_json,
 
-        skipVersionCheck: args.skip_version_check,
-        dryRun: args.dry_run,
-        logLevel: args.log_level,
+          skipVersionCheck: args.skip_version_check,
+          dryRun: args.dry_run,
+          logLevel: args.log_level,
 
-        outputTeal: args.output_teal,
-        outputArc32: args.output_arc32,
-        outputArc56: args.output_arc56,
-        outputSsaIr: args.output_ssa_ir,
-        outputOptimizationIr: args.output_optimization_ir,
-        outputDestructuredIr: args.output_destructured_ir,
-        outputMemoryIr: args.output_memory_ir,
-        outputBytecode: args.output_bytecode,
-        outputSourceMap: args.output_source_map,
-        debugLevel: convertInt(args.debug_level),
-        optimizationLevel: convertInt(args.optimization_level),
-        targetAvmVersion: convertInt(args.target_avm_version),
-        cliTemplateDefinitions: Object.fromEntries(args.cli_template_definitions?.map(parseCliTemplateVar) ?? []),
-        templateVarsPrefix: args.template_vars_prefix,
-        localsCoalescingStrategy: args.locals_coalescing_strategy,
-      })
+          outputTeal: args.output_teal,
+          outputArc32: args.output_arc32,
+          outputArc56: args.output_arc56,
+          outputSsaIr: args.output_ssa_ir,
+          outputOptimizationIr: args.output_optimization_ir,
+          outputDestructuredIr: args.output_destructured_ir,
+          outputMemoryIr: args.output_memory_ir,
+          outputBytecode: args.output_bytecode,
+          outputSourceMap: args.output_source_map,
+          debugLevel: convertInt(args.debug_level),
+          optimizationLevel: convertInt(args.optimization_level),
+          targetAvmVersion: convertInt(args.target_avm_version),
+          cliTemplateDefinitions: Object.fromEntries(args.cli_template_definitions?.map(parseCliTemplateVar) ?? []),
+          templateVarsPrefix: args.template_vars_prefix,
+          localsCoalescingStrategy: args.locals_coalescing_strategy,
+        }),
+      )
       logCtx.exitIfErrors()
     } catch (e) {
       if (e instanceof Error) {

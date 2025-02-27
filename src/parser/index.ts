@@ -1,7 +1,7 @@
 import ts from 'typescript'
 import { SourceLocation } from '../awst/source-location'
-import type { AlgoFile } from '../compile-options'
 import { logger, LoggingContext } from '../logger'
+import type { CompileOptions } from '../options'
 import type { DeliberateAny } from '../typescript-helpers'
 import { normalisePath } from '../util'
 import { resolveModuleNameLiterals } from './resolve-module-name-literals'
@@ -13,7 +13,7 @@ export type CreateProgramResult = {
   programDirectory: string
 }
 
-export function createTsProgram(options: { filePaths: AlgoFile[] }): CreateProgramResult {
+export function createTsProgram(options: Pick<CompileOptions, 'filePaths'>): CreateProgramResult {
   const compilerOptions: ts.CompilerOptions = {
     allowJs: false,
     strict: true,
