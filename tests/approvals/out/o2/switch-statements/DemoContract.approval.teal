@@ -3,20 +3,153 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 0
-    bytecblock "hmmm" 0xff base64(ZHNmc2Rmc2Q=) base32(ONSGMZ3OMJTGOZDGMRSGM)
+    intcblock 1 0 2
+    bytecblock "evalCount"
+    pushbytes ""
+    dup
     // tests/approvals/switch-statements.algo.ts:4
     // export class DemoContract extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@6
-    pushbytes 0xa6ff944a // method "run()void"
+    bz main_bare_routing@8
+    pushbytess 0xa6ff944a 0x97d4cf00 0xa81a47ab // method "run()void", method "test_side_effects(uint64)void", method "test_non_trivial_termination_of_clause(uint64,uint64)uint64"
     txna ApplicationArgs 0
-    match main_run_route@3
+    match main_run_route@3 main_test_side_effects_route@4 main_test_non_trivial_termination_of_clause_route@5
 
-main_after_if_else@10:
+main_after_if_else@12:
     // tests/approvals/switch-statements.algo.ts:4
     // export class DemoContract extends Contract {
     intc_1 // 0
+    return
+
+main_test_non_trivial_termination_of_clause_route@5:
+    // tests/approvals/switch-statements.algo.ts:83
+    // public test_non_trivial_termination_of_clause(n: uint64, y: uint64): uint64 {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    // tests/approvals/switch-statements.algo.ts:4
+    // export class DemoContract extends Contract {
+    txna ApplicationArgs 1
+    btoi
+    dup
+    bury 3
+    txna ApplicationArgs 2
+    btoi
+    bury 2
+    // tests/approvals/switch-statements.algo.ts:85
+    // case 1:
+    intc_0 // 1
+    ==
+    // tests/approvals/switch-statements.algo.ts:85-90
+    // case 1:
+    //   if (y % 2 === 0) {
+    //     return y
+    //   } else {
+    //     return n
+    //   }
+    bz main_after_if_else@20
+    // tests/approvals/switch-statements.algo.ts:86
+    // if (y % 2 === 0) {
+    dup
+    intc_2 // 2
+    %
+    bnz main_else_body@19
+    dup
+
+main_after_inlined_tests/approvals/switch-statements.algo.ts::DemoContract.test_non_trivial_termination_of_clause@21:
+    // tests/approvals/switch-statements.algo.ts:83
+    // public test_non_trivial_termination_of_clause(n: uint64, y: uint64): uint64 {
+    itob
+    pushbytes 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
+
+main_else_body@19:
+    dig 1
+    // tests/approvals/switch-statements.algo.ts:83
+    // public test_non_trivial_termination_of_clause(n: uint64, y: uint64): uint64 {
+    b main_after_inlined_tests/approvals/switch-statements.algo.ts::DemoContract.test_non_trivial_termination_of_clause@21
+
+main_after_if_else@20:
+    // tests/approvals/switch-statements.algo.ts:92
+    // return y * n
+    dup
+    dig 2
+    *
+    // tests/approvals/switch-statements.algo.ts:83
+    // public test_non_trivial_termination_of_clause(n: uint64, y: uint64): uint64 {
+    b main_after_inlined_tests/approvals/switch-statements.algo.ts::DemoContract.test_non_trivial_termination_of_clause@21
+
+main_test_side_effects_route@4:
+    // tests/approvals/switch-statements.algo.ts:68
+    // public test_side_effects(n: uint64) {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    // tests/approvals/switch-statements.algo.ts:4
+    // export class DemoContract extends Contract {
+    txna ApplicationArgs 1
+    btoi
+    dup
+    bury 3
+    // tests/approvals/switch-statements.algo.ts:61
+    // evalCount = GlobalState<uint64>()
+    bytec_0 // "evalCount"
+    // tests/approvals/switch-statements.algo.ts:69
+    // this.evalCount.value = 0
+    intc_1 // 0
+    app_global_put
+    // tests/approvals/switch-statements.algo.ts:72
+    // case this.increaseEvalAndReturn(n - 1):
+    dup
+    intc_0 // 1
+    -
+    callsub increaseEvalAndReturn
+    ==
+    // tests/approvals/switch-statements.algo.ts:72-73
+    // case this.increaseEvalAndReturn(n - 1):
+    //   break
+    bnz main_block@25
+    // tests/approvals/switch-statements.algo.ts:74
+    // case this.increaseEvalAndReturn(n):
+    dig 1
+    dup
+    callsub increaseEvalAndReturn
+    ==
+    // tests/approvals/switch-statements.algo.ts:74-75
+    // case this.increaseEvalAndReturn(n):
+    //   break
+    bnz main_block@25
+    // tests/approvals/switch-statements.algo.ts:76
+    // case this.increaseEvalAndReturn(n + 1):
+    dig 1
+    intc_0 // 1
+    +
+    callsub increaseEvalAndReturn
+    pop
+
+main_block@25:
+    // tests/approvals/switch-statements.algo.ts:61
+    // evalCount = GlobalState<uint64>()
+    intc_1 // 0
+    bytec_0 // "evalCount"
+    app_global_get_ex
+    assert // check GlobalState exists
+    // tests/approvals/switch-statements.algo.ts:80
+    // assert(this.evalCount.value === 2, 'Only two functions should be evaluated')
+    intc_2 // 2
+    ==
+    assert // Only two functions should be evaluated
+    // tests/approvals/switch-statements.algo.ts:68
+    // public test_side_effects(n: uint64) {
+    intc_0 // 1
     return
 
 main_run_route@3:
@@ -27,219 +160,44 @@ main_run_route@3:
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/switch-statements.algo.ts:52
-    // case Bytes('hmmm'):
-    bytec_0 // "hmmm"
-    // tests/approvals/switch-statements.algo.ts:53
-    // case Bytes.fromHex('Ff'):
-    bytec_1 // 0xff
-    // tests/approvals/switch-statements.algo.ts:54
-    // case Bytes.fromBase64('ZHNmc2Rmc2Q='):
-    bytec_2 // base64(ZHNmc2Rmc2Q=)
-    // tests/approvals/switch-statements.algo.ts:55
-    // case Bytes.fromBase32('ONSGMZ3OMJTGOZDGMRSGM==='):
-    bytec_3 // base32(ONSGMZ3OMJTGOZDGMRSGM)
-    // tests/approvals/switch-statements.algo.ts:17
-    // assert(this.test_bytes(Bytes('hmmm')))
-    bytec_0 // "hmmm"
-    // tests/approvals/switch-statements.algo.ts:51-57
-    // switch (x) {
-    //   case Bytes('hmmm'):
-    //   case Bytes.fromHex('Ff'):
-    //   case Bytes.fromBase64('ZHNmc2Rmc2Q='):
-    //   case Bytes.fromBase32('ONSGMZ3OMJTGOZDGMRSGM==='):
-    //     return true
-    // }
-    match main_block@31 main_block@31 main_block@31 main_block@31
-    // tests/approvals/switch-statements.algo.ts:58
-    // return false
-    intc_1 // 0
-
-main_after_inlined_tests/approvals/switch-statements.algo.ts::DemoContract.test_bytes@33:
-    // tests/approvals/switch-statements.algo.ts:17
-    // assert(this.test_bytes(Bytes('hmmm')))
-    assert
-    // tests/approvals/switch-statements.algo.ts:52
-    // case Bytes('hmmm'):
-    bytec_0 // "hmmm"
-    // tests/approvals/switch-statements.algo.ts:53
-    // case Bytes.fromHex('Ff'):
-    bytec_1 // 0xff
-    // tests/approvals/switch-statements.algo.ts:54
-    // case Bytes.fromBase64('ZHNmc2Rmc2Q='):
-    bytec_2 // base64(ZHNmc2Rmc2Q=)
-    // tests/approvals/switch-statements.algo.ts:55
-    // case Bytes.fromBase32('ONSGMZ3OMJTGOZDGMRSGM==='):
-    bytec_3 // base32(ONSGMZ3OMJTGOZDGMRSGM)
-    // tests/approvals/switch-statements.algo.ts:18
-    // assert(this.test_bytes(Bytes.fromHex('ff')))
-    bytec_1 // 0xff
-    // tests/approvals/switch-statements.algo.ts:51-57
-    // switch (x) {
-    //   case Bytes('hmmm'):
-    //   case Bytes.fromHex('Ff'):
-    //   case Bytes.fromBase64('ZHNmc2Rmc2Q='):
-    //   case Bytes.fromBase32('ONSGMZ3OMJTGOZDGMRSGM==='):
-    //     return true
-    // }
-    match main_block@34 main_block@34 main_block@34 main_block@34
-    // tests/approvals/switch-statements.algo.ts:58
-    // return false
-    intc_1 // 0
-
-main_after_inlined_tests/approvals/switch-statements.algo.ts::DemoContract.test_bytes@36:
-    // tests/approvals/switch-statements.algo.ts:18
-    // assert(this.test_bytes(Bytes.fromHex('ff')))
-    assert
-    // tests/approvals/switch-statements.algo.ts:52
-    // case Bytes('hmmm'):
-    bytec_0 // "hmmm"
-    // tests/approvals/switch-statements.algo.ts:53
-    // case Bytes.fromHex('Ff'):
-    bytec_1 // 0xff
-    // tests/approvals/switch-statements.algo.ts:54
-    // case Bytes.fromBase64('ZHNmc2Rmc2Q='):
-    bytec_2 // base64(ZHNmc2Rmc2Q=)
-    // tests/approvals/switch-statements.algo.ts:55
-    // case Bytes.fromBase32('ONSGMZ3OMJTGOZDGMRSGM==='):
-    bytec_3 // base32(ONSGMZ3OMJTGOZDGMRSGM)
-    // tests/approvals/switch-statements.algo.ts:19
-    // assert(this.test_bytes(Bytes.fromBase64('ZHNmc2Rmc2Q=')))
-    bytec_2 // base64(ZHNmc2Rmc2Q=)
-    // tests/approvals/switch-statements.algo.ts:51-57
-    // switch (x) {
-    //   case Bytes('hmmm'):
-    //   case Bytes.fromHex('Ff'):
-    //   case Bytes.fromBase64('ZHNmc2Rmc2Q='):
-    //   case Bytes.fromBase32('ONSGMZ3OMJTGOZDGMRSGM==='):
-    //     return true
-    // }
-    match main_block@37 main_block@37 main_block@37 main_block@37
-    // tests/approvals/switch-statements.algo.ts:58
-    // return false
-    intc_1 // 0
-
-main_after_inlined_tests/approvals/switch-statements.algo.ts::DemoContract.test_bytes@39:
-    // tests/approvals/switch-statements.algo.ts:19
-    // assert(this.test_bytes(Bytes.fromBase64('ZHNmc2Rmc2Q=')))
-    assert
-    // tests/approvals/switch-statements.algo.ts:52
-    // case Bytes('hmmm'):
-    bytec_0 // "hmmm"
-    // tests/approvals/switch-statements.algo.ts:53
-    // case Bytes.fromHex('Ff'):
-    bytec_1 // 0xff
-    // tests/approvals/switch-statements.algo.ts:54
-    // case Bytes.fromBase64('ZHNmc2Rmc2Q='):
-    bytec_2 // base64(ZHNmc2Rmc2Q=)
-    // tests/approvals/switch-statements.algo.ts:55
-    // case Bytes.fromBase32('ONSGMZ3OMJTGOZDGMRSGM==='):
-    bytec_3 // base32(ONSGMZ3OMJTGOZDGMRSGM)
-    // tests/approvals/switch-statements.algo.ts:20
-    // assert(this.test_bytes(Bytes.fromBase32('ONSGMZ3OMJTGOZDGMRSGM===')))
-    dup
-    // tests/approvals/switch-statements.algo.ts:51-57
-    // switch (x) {
-    //   case Bytes('hmmm'):
-    //   case Bytes.fromHex('Ff'):
-    //   case Bytes.fromBase64('ZHNmc2Rmc2Q='):
-    //   case Bytes.fromBase32('ONSGMZ3OMJTGOZDGMRSGM==='):
-    //     return true
-    // }
-    match main_block@40 main_block@40 main_block@40 main_block@40
-    // tests/approvals/switch-statements.algo.ts:58
-    // return false
-    intc_1 // 0
-
-main_after_inlined_tests/approvals/switch-statements.algo.ts::DemoContract.test_bytes@42:
-    // tests/approvals/switch-statements.algo.ts:20
-    // assert(this.test_bytes(Bytes.fromBase32('ONSGMZ3OMJTGOZDGMRSGM===')))
-    assert
-    // tests/approvals/switch-statements.algo.ts:52
-    // case Bytes('hmmm'):
-    bytec_0 // "hmmm"
-    // tests/approvals/switch-statements.algo.ts:53
-    // case Bytes.fromHex('Ff'):
-    bytec_1 // 0xff
-    // tests/approvals/switch-statements.algo.ts:54
-    // case Bytes.fromBase64('ZHNmc2Rmc2Q='):
-    bytec_2 // base64(ZHNmc2Rmc2Q=)
-    // tests/approvals/switch-statements.algo.ts:55
-    // case Bytes.fromBase32('ONSGMZ3OMJTGOZDGMRSGM==='):
-    bytec_3 // base32(ONSGMZ3OMJTGOZDGMRSGM)
-    // tests/approvals/switch-statements.algo.ts:21
-    // assert(!this.test_bytes(Bytes()))
-    pushbytes 0x
-    // tests/approvals/switch-statements.algo.ts:51-57
-    // switch (x) {
-    //   case Bytes('hmmm'):
-    //   case Bytes.fromHex('Ff'):
-    //   case Bytes.fromBase64('ZHNmc2Rmc2Q='):
-    //   case Bytes.fromBase32('ONSGMZ3OMJTGOZDGMRSGM==='):
-    //     return true
-    // }
-    match main_block@43 main_block@43 main_block@43 main_block@43
-    // tests/approvals/switch-statements.algo.ts:58
-    // return false
-    intc_1 // 0
-
-main_after_inlined_tests/approvals/switch-statements.algo.ts::DemoContract.test_bytes@45:
-    // tests/approvals/switch-statements.algo.ts:21
-    // assert(!this.test_bytes(Bytes()))
-    !
-    assert
-    // tests/approvals/switch-statements.algo.ts:5
-    // run() {
     intc_0 // 1
     return
 
-main_block@43:
-    // tests/approvals/switch-statements.algo.ts:56
-    // return true
-    intc_0 // 1
-    // tests/approvals/switch-statements.algo.ts:21
-    // assert(!this.test_bytes(Bytes()))
-    b main_after_inlined_tests/approvals/switch-statements.algo.ts::DemoContract.test_bytes@45
-
-main_block@40:
-    // tests/approvals/switch-statements.algo.ts:56
-    // return true
-    intc_0 // 1
-    // tests/approvals/switch-statements.algo.ts:20
-    // assert(this.test_bytes(Bytes.fromBase32('ONSGMZ3OMJTGOZDGMRSGM===')))
-    b main_after_inlined_tests/approvals/switch-statements.algo.ts::DemoContract.test_bytes@42
-
-main_block@37:
-    // tests/approvals/switch-statements.algo.ts:56
-    // return true
-    intc_0 // 1
-    // tests/approvals/switch-statements.algo.ts:19
-    // assert(this.test_bytes(Bytes.fromBase64('ZHNmc2Rmc2Q=')))
-    b main_after_inlined_tests/approvals/switch-statements.algo.ts::DemoContract.test_bytes@39
-
-main_block@34:
-    // tests/approvals/switch-statements.algo.ts:56
-    // return true
-    intc_0 // 1
-    // tests/approvals/switch-statements.algo.ts:18
-    // assert(this.test_bytes(Bytes.fromHex('ff')))
-    b main_after_inlined_tests/approvals/switch-statements.algo.ts::DemoContract.test_bytes@36
-
-main_block@31:
-    // tests/approvals/switch-statements.algo.ts:56
-    // return true
-    intc_0 // 1
-    // tests/approvals/switch-statements.algo.ts:17
-    // assert(this.test_bytes(Bytes('hmmm')))
-    b main_after_inlined_tests/approvals/switch-statements.algo.ts::DemoContract.test_bytes@33
-
-main_bare_routing@6:
+main_bare_routing@8:
     // tests/approvals/switch-statements.algo.ts:4
     // export class DemoContract extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@10
+    bnz main_after_if_else@12
     txn ApplicationID
     !
     assert // can only call when creating
     intc_0 // 1
     return
+
+
+// tests/approvals/switch-statements.algo.ts::DemoContract.increaseEvalAndReturn(n: uint64) -> uint64:
+increaseEvalAndReturn:
+    // tests/approvals/switch-statements.algo.ts:63
+    // private increaseEvalAndReturn(n: uint64) {
+    proto 1 1
+    // tests/approvals/switch-statements.algo.ts:61
+    // evalCount = GlobalState<uint64>()
+    intc_1 // 0
+    bytec_0 // "evalCount"
+    app_global_get_ex
+    assert // check GlobalState exists
+    // tests/approvals/switch-statements.algo.ts:64
+    // this.evalCount.value++
+    intc_0 // 1
+    +
+    // tests/approvals/switch-statements.algo.ts:61
+    // evalCount = GlobalState<uint64>()
+    bytec_0 // "evalCount"
+    // tests/approvals/switch-statements.algo.ts:64
+    // this.evalCount.value++
+    swap
+    app_global_put
+    // tests/approvals/switch-statements.algo.ts:65
+    // return n
+    frame_dig -1
+    retsub

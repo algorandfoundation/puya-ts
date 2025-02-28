@@ -79,4 +79,17 @@ export class DemoContract extends Contract {
 
     assert(this.evalCount.value === 2, 'Only two functions should be evaluated')
   }
+
+  public test_non_trivial_termination_of_clause(n: uint64, y: uint64): uint64 {
+    switch (n) {
+      case 1:
+        if (y % 2 === 0) {
+          return y
+        } else {
+          return n
+        }
+      default:
+        return y * n
+    }
+  }
 }
