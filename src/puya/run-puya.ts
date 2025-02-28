@@ -1,29 +1,26 @@
 import { logger } from '../logger'
 import { invokeCli } from '../util/invoke-cli'
-import { downloadPuyaBinary } from './download-puya'
 
 export async function runPuya({
   command,
   args,
   cwd,
   onOutput,
+  shell = false,
 }: {
   command: string
   args: string[]
   cwd?: string
   onOutput: (line: string) => void
+  shell?: boolean
 }) {
-  const puyaScriptPath = process.env.PUYA_SCRIPT_PATH
-  // Use the environment variable path if it exists, otherwise download the binary
-  const puyaBinaryPath = puyaScriptPath || (await downloadPuyaBinary('1.1.1'))
-
   const result = await invokeCli({
-    command: puyaBinaryPath,
+    command,
     args,
     cwd,
     onReceiveLine: onOutput,
     dontThrowOnNonzeroCode: true,
-    shell: !!puyaScriptPath,
+    shell,
   })
 
   if (result.code !== 0) {
