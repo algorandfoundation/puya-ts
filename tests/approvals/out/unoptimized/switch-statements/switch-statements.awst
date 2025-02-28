@@ -1,5 +1,8 @@
 contract DemoContract
 {
+  globals {
+    ["evalCount"]: uint64
+  }
   approvalProgram(): bool
   {
     return arc4Router()
@@ -30,39 +33,41 @@ contract DemoContract
   
   test_uint64(x: uint64): uint64
   {
-    switch (x) {
-      case 1:
-        #switch₁ᶜ₀:
-        goto #switch₁ᶜ₁
-      case 2:
-        #switch₁ᶜ₁:
-        goto #switch₁ᶜ₂
-      case 4:
-        #switch₁ᶜ₂:
-        return 3
-      default:
-        #switch₁ᶜ₃:
-        return 1
+    if (x == 1) {
+      #switch₁ᶜ₀:
+      goto #switch₁ᶜ₁
     }
+    if (x == 2) {
+      #switch₁ᶜ₁:
+      goto #switch₁ᶜ₂
+    }
+    if (x == 4) {
+      #switch₁ᶜ₂:
+      return 3
+    }
+    #switch₁ᶜ₃:
+    return 1
   }
   
   test_break(x: uint64): uint64
   {
     i: uint64 = 10
-    switch (x) {
-      case 1:
-        #switch₁ᶜ₀:
-        goto #switch₁ᶜ₁
-      case 2:
-        #switch₁ᶜ₁:
-        goto #switch₁ᶜ₂
-      case 4:
-        #switch₁ᶜ₂:
-        i: uint64 = i + x
-        goto #switch₁ᵇ
-      case 5:
-        #switch₁ᶜ₃:
-        i: uint64 = i * x
+    if (x == 1) {
+      #switch₁ᶜ₀:
+      goto #switch₁ᶜ₁
+    }
+    if (x == 2) {
+      #switch₁ᶜ₁:
+      goto #switch₁ᶜ₂
+    }
+    if (x == 4) {
+      #switch₁ᶜ₂:
+      i: uint64 = i + x
+      goto #switch₁ᵇ
+    }
+    if (x == 5) {
+      #switch₁ᶜ₃:
+      i: uint64 = i * x
     }
     #switch₁ᵇ:
     return i
@@ -70,21 +75,63 @@ contract DemoContract
   
   test_bytes(x: bytes): bool
   {
-    switch (x) {
-      case "hmmm":
-        #switch₁ᶜ₀:
-        goto #switch₁ᶜ₁
-      case 0xff:
-        #switch₁ᶜ₁:
-        goto #switch₁ᶜ₂
-      case b64<ZHNmc2Rmc2Q=>:
-        #switch₁ᶜ₂:
-        goto #switch₁ᶜ₃
-      case b32<ONSGMZ3OMJTGOZDGMRSGM>:
-        #switch₁ᶜ₃:
-        return True
+    if (x == "hmmm") {
+      #switch₁ᶜ₀:
+      goto #switch₁ᶜ₁
+    }
+    if (x == 0xff) {
+      #switch₁ᶜ₁:
+      goto #switch₁ᶜ₂
+    }
+    if (x == b64<ZHNmc2Rmc2Q=>) {
+      #switch₁ᶜ₂:
+      goto #switch₁ᶜ₃
+    }
+    if (x == b32<ONSGMZ3OMJTGOZDGMRSGM>) {
+      #switch₁ᶜ₃:
+      return True
     }
     return False
+  }
+  
+  increaseEvalAndReturn(n: uint64): uint64
+  {
+    GlobalState["evalCount"]++
+    return n
+  }
+  
+  test_side_effects(n: uint64): void
+  {
+    GlobalState["evalCount"]: uint64 = 0
+    if (n == tests/approvals/switch-statements.algo.ts::DemoContract.increaseEvalAndReturn(n - 1)) {
+      #switch₁ᶜ₀:
+      goto #switch₁ᵇ
+    }
+    if (n == tests/approvals/switch-statements.algo.ts::DemoContract.increaseEvalAndReturn(n)) {
+      #switch₁ᶜ₁:
+      goto #switch₁ᵇ
+    }
+    if (n == tests/approvals/switch-statements.algo.ts::DemoContract.increaseEvalAndReturn(n + 1)) {
+      #switch₁ᶜ₂:
+      goto #switch₁ᵇ
+    }
+    #switch₁ᵇ:
+    assert(GlobalState["evalCount"] == 2, comment=Only two functions should be evaluated)
+  }
+  
+  test_non_trivial_termination_of_clause(n: uint64, y: uint64): uint64
+  {
+    if (n == 1) {
+      #switch₁ᶜ₀:
+      if (y % 2 == 0) {
+        return y
+      } else {
+        return n
+      }
+      goto #switch₁ᶜ₁
+    }
+    #switch₁ᶜ₁:
+    return y * n
   }
   
   __algots__.defaultCreate(): void

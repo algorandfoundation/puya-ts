@@ -12,6 +12,7 @@ import { getNodeName } from '../../visitor/syntax-names'
 import type { Visitor } from '../../visitor/visitor'
 import { accept } from '../../visitor/visitor'
 import type { InstanceBuilder } from '../eb'
+import { BuilderComparisonOp } from '../eb'
 import { ArrayLiteralExpressionBuilder } from '../eb/literal/array-literal-expression-builder'
 import { ObjectLiteralExpressionBuilder } from '../eb/literal/object-literal-expression-builder'
 import { NativeArrayExpressionBuilder } from '../eb/native-array-expression-builder'
@@ -373,11 +374,11 @@ export abstract class FunctionVisitor
     const sourceLocation = this.sourceLocation(node)
     using ctx = this.context.switchLoopCtx.enterSwitch(node, sourceLocation)
 
-    const subject = requireInstanceBuilder(this.accept(node.expression))
-    codeInvariant(subject.ptype, 'The subject of a switch statement must have a resolvable ptype', this.sourceLocation(node.expression))
+    const subject = requireInstanceBuilder(this.accept(node.expression)).singleEvaluation()
 
     let defaultCase: Block | null = null
-    const cases = new Map<awst.Expression, awst.Block>()
+
+    const clauses: awst.Statement[] = []
     for (const [index, clause] of enumerate(node.caseBlock.clauses)) {
       const sourceLocation = this.sourceLocation(clause)
 
@@ -395,25 +396,25 @@ export abstract class FunctionVisitor
       if (clause.kind === ts.SyntaxKind.DefaultClause) {
         defaultCase = caseBlock
       } else {
-        const clauseExpr = requireExpressionOfType(this.accept(clause.expression), subject.ptype)
-        cases.set(clauseExpr, caseBlock)
+        const clauseExpr = requireInstanceBuilder(this.accept(clause.expression))
+        clauses.push(
+          nodeFactory.ifElse({
+            condition: subject.compare(clauseExpr, BuilderComparisonOp.eq, clauseExpr.sourceLocation).boolEval(clauseExpr.sourceLocation),
+            ifBranch: caseBlock,
+            elseBranch: null,
+            sourceLocation,
+          }),
+        )
       }
     }
-    const switchStatement = nodeFactory.switch({
-      value: subject.resolve(),
-      sourceLocation,
-      cases,
-      defaultCase,
-    })
-    if (!ctx.hasBreaks) {
-      return switchStatement
-    }
+    if (defaultCase !== null) clauses.push(defaultCase)
+
     return nodeFactory.block(
       {
         sourceLocation,
       },
-      switchStatement,
-      ctx.breakTarget,
+      ...clauses,
+      ...maybeNodes(ctx.hasBreaks, ctx.breakTarget),
     )
   }
 
