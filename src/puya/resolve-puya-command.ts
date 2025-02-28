@@ -2,7 +2,7 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { Constants } from '../constants'
 import { logger } from '../logger'
-import { checkSpecificBinaryVersion } from './check-puya-version'
+import { checkBinaryVersion } from './check-puya-version'
 import { downloadPuyaBinary } from './download-puya'
 import { getPuyaEnv } from './puya-env'
 
@@ -68,7 +68,7 @@ function deleteCachedPuyaBinary(): void {
  * @param skipVersionCheck Whether to skip version checking
  * @returns Promise that resolves to the path of the Puya binary to use
  */
-export async function resolvePuyaBinary(skipVersionCheck = false): Promise<{ binaryPath: string; useShell: boolean }> {
+export async function resolvePuyaCommand(skipVersionCheck = false): Promise<{ command: string; useShell: boolean }> {
   const puyaEnv = getPuyaEnv()
 
   // Check for user-specified binary path
@@ -77,10 +77,10 @@ export async function resolvePuyaBinary(skipVersionCheck = false): Promise<{ bin
 
     // Check version compatibility if not skipping
     if (!skipVersionCheck) {
-      await checkSpecificBinaryVersion(puyaEnv.binaryPath, false)
+      await checkBinaryVersion(puyaEnv.binaryPath, false)
     }
 
-    return { binaryPath: puyaEnv.binaryPath, useShell: false }
+    return { command: puyaEnv.binaryPath, useShell: false }
   }
 
   // Check for user-specified script path
@@ -89,11 +89,11 @@ export async function resolvePuyaBinary(skipVersionCheck = false): Promise<{ bin
 
     // Check version compatibility if not skipping
     if (!skipVersionCheck) {
-      await checkSpecificBinaryVersion(puyaEnv.scriptPath, true)
+      await checkBinaryVersion(puyaEnv.scriptPath, true)
     }
 
     // Always use shell mode for user-specified Puya scripts
-    return { binaryPath: puyaEnv.scriptPath, useShell: true }
+    return { command: puyaEnv.scriptPath, useShell: true }
   }
 
   // Look for cached binary
@@ -103,10 +103,10 @@ export async function resolvePuyaBinary(skipVersionCheck = false): Promise<{ bin
 
     // Check if the cached binary version matches (if not skipping)
     if (!skipVersionCheck) {
-      const versionMatches = await checkSpecificBinaryVersion(cachedBinaryPath, false, true)
+      const versionMatches = await checkBinaryVersion(cachedBinaryPath, false, true)
       if (versionMatches) {
         logger.info(undefined, `Using cached Puya binary with matching version`)
-        return { binaryPath: cachedBinaryPath, useShell: false }
+        return { command: cachedBinaryPath, useShell: false }
       }
 
       // If version doesn't match, delete the cached binary
@@ -115,12 +115,12 @@ export async function resolvePuyaBinary(skipVersionCheck = false): Promise<{ bin
     } else {
       // Skip version check, use the cached binary
       logger.info(undefined, `Using cached Puya binary (version check skipped)`)
-      return { binaryPath: cachedBinaryPath, useShell: false }
+      return { command: cachedBinaryPath, useShell: false }
     }
   }
 
   // Download the required version
   logger.info(undefined, `Downloading Puya binary version ${Constants.targetedPuyaVersion}`)
   const downloadedPath = await downloadPuyaBinary(Constants.targetedPuyaVersion)
-  return { binaryPath: downloadedPath, useShell: false }
+  return { command: downloadedPath, useShell: false }
 }
