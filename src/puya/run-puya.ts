@@ -13,16 +13,17 @@ export async function runPuya({
   cwd?: string
   onOutput: (line: string) => void
 }) {
-  // Download Puya binary with fixed version 1.1.1
-  const puyaBinaryPath = await downloadPuyaBinary('1.1.1')
+  const puyaScriptPath = process.env.PUYA_SCRIPT_PATH
+  // Use the environment variable path if it exists, otherwise download the binary
+  const puyaBinaryPath = puyaScriptPath || (await downloadPuyaBinary('1.1.1'))
 
-  // Use the downloaded binary path in invokeCli
   const result = await invokeCli({
     command: puyaBinaryPath,
     args,
     cwd,
     onReceiveLine: onOutput,
     dontThrowOnNonzeroCode: true,
+    shell: !!puyaScriptPath,
   })
 
   if (result.code !== 0) {
