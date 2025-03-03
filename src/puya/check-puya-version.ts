@@ -11,7 +11,10 @@ export enum VersionCompareVerdict {
   NewerRevision = 'NewerRevision',
 }
 
-export async function comparePuyaVersion(): Promise<{
+export async function comparePuyaVersion(
+  command: string,
+  useShell = false,
+): Promise<{
   target: string
   found?: string
   verdict: VersionCompareVerdict
@@ -20,9 +23,10 @@ export async function comparePuyaVersion(): Promise<{
 
   const versionParser = new VersionParser()
   await runPuya({
-    command: 'puya',
+    command: command,
     args: ['--version'],
     onOutput: (line) => versionParser.receiveLine(line),
+    shell: useShell,
   })
 
   if (!versionParser.version) return { target, verdict: VersionCompareVerdict.Inconclusive }
@@ -37,32 +41,36 @@ export async function comparePuyaVersion(): Promise<{
   return { verdict: VersionCompareVerdict.ExactMatch, target, found: ver.formatted }
 }
 
-export async function checkPuyaVersion() {
-  const result = await comparePuyaVersion()
+export async function checkPuyaVersion(command: string, useShell = false, suppressWarnings = false): Promise<boolean> {
+  const result = await comparePuyaVersion(command, useShell)
+  let warningMessage = undefined
+
   switch (result.verdict) {
     case VersionCompareVerdict.Inconclusive:
-      logger.warn(undefined, `Unable to verify installed puya version. Please ensure version ${result.target} is available`)
+      warningMessage = `Unable to verify puya version. Please ensure version ${result.target} is available`
       break
     case VersionCompareVerdict.MajorMismatch:
     case VersionCompareVerdict.MinorMismatch:
-      logger.warn(
-        undefined,
-        `Installed version of puya (${result.found}) does not match targeted version for puya-ts (${result.target}). There may be compatability issues.`,
-      )
+      warningMessage = `Version of puya (${result.found}) does not match targeted version (${result.target}). There may be compatibility issues.`
       break
     case VersionCompareVerdict.OlderRevision:
-      logger.warn(
-        undefined,
-        `Installed revision of puya (${result.found}) is older than the targeted revision for puya-ts (${Constants.targetedPuyaVersion})`,
-      )
+      warningMessage = `Revision of puya (${result.found}) is older than the targeted revision (${result.target})`
       break
     case VersionCompareVerdict.NewerRevision:
-      logger.debug(
-        undefined,
-        `Installed revision of puya (${result.found}) is newer than the targeted revision for puya-ts (${Constants.targetedPuyaVersion})`,
-      )
+      warningMessage = `Revision of puya (${result.found}) is newer than the targeted revision (${result.target})`
       break
+    case VersionCompareVerdict.ExactMatch:
+      return true
   }
+
+  if (warningMessage) {
+    if (!suppressWarnings) {
+      logger.warn(undefined, warningMessage)
+    }
+    return false
+  }
+
+  return true
 }
 
 type SemVer = {

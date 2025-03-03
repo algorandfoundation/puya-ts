@@ -3,7 +3,7 @@ import { comparePuyaVersion, VersionCompareVerdict } from '../src/puya/check-puy
 
 describe('The puya version available for testing', () => {
   test('must match the target version', async () => {
-    const result = await comparePuyaVersion()
+    const result = await comparePuyaVersion('puya', true)
 
     expect(result.found).toBe(result.target)
     expect(result.verdict, 'Compare version must be exact match').toBe(VersionCompareVerdict.ExactMatch)

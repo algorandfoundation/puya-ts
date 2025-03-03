@@ -6,11 +6,13 @@ export async function runPuya({
   args,
   cwd,
   onOutput,
+  shell = false,
 }: {
   command: string
   args: string[]
   cwd?: string
   onOutput: (line: string) => void
+  shell?: boolean
 }) {
   const result = await invokeCli({
     command,
@@ -18,6 +20,7 @@ export async function runPuya({
     cwd,
     onReceiveLine: onOutput,
     dontThrowOnNonzeroCode: true,
+    shell,
   })
 
   if (result.code !== 0) {
