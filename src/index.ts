@@ -17,7 +17,9 @@ export { registerPTypes } from './awst_build/ptypes/register'
 export { typeRegistry } from './awst_build/type-registry'
 export { TypeResolver } from './awst_build/type-resolver'
 export { compile } from './compile'
+export { processInputPaths } from './input-paths/process-input-paths'
 export { LoggingContext } from './logger'
+export { CompileOptions } from './options'
 
 export const encodingUtil = {
   utf8ToUint8Array,

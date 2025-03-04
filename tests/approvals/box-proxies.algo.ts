@@ -16,8 +16,9 @@ function testBox(box: Box<string>, value: string) {
 
   assert(box.length)
 
-  box.delete()
-  boxA.delete()
+  assert(box.delete(), 'delete failed')
+  const isBoxADeleted = boxA.delete()
+  assert(isBoxADeleted, 'delete failed')
   assert(!box.exists && !boxA.exists)
 
   const defaultVal = 'O'
@@ -45,7 +46,8 @@ function testBoxMap(box: BoxMap<string, bytes>, key: string, value: bytes) {
 
   assert(box.get(key) === boxMap.get(key))
 
-  box.delete(key)
+  const isBoxDeleted = box.delete(key)
+  assert(isBoxDeleted, 'delete failed')
 
   assert(box.get(`${key}x`, { default: Bytes('b') }) === boxMap.get(`${key}x`, { default: Bytes('b') }))
 }
@@ -78,7 +80,8 @@ function testBoxRef(box: BoxRef, length: uint64) {
   box.splice(1, 1, Bytes.fromHex('00'))
   assert(box.value === Bytes.fromHex('FF00FFFF'))
 
-  box.delete()
+  const x = box.delete()
+  assert(x, 'delete failed')
   assert(!box.exists)
 }
 

@@ -287,7 +287,7 @@ export class ToCodeVisitor
   }
 
   visitStateDelete(expression: nodes.StateDelete): string {
-    return `STATE_DEL(${expression.field.accept(this)})`
+    return `STATE_DELETE(${expression.field.accept(this)})`
   }
   visitStateGetEx(expression: nodes.StateGetEx): string {
     return `STATE_GET_EX(${expression.field.accept(this)})`
