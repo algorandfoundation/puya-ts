@@ -2,12 +2,12 @@
 
 The puya-ts cli is a tool for compiling Algorand TypeScript code into artifacts which can be used to deploy smart contracts and logic signatures on the Algorand Virtual Machine (AVM). At a high level these include:
 
-| Output                      | Description                                                                                                                                                                                                                                                            |
-|-----------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Teal code (`*.teal`)        | Teal is a low level, human readable stack based language which 'runs' on the AVM                                                                                                                                                                                       |
-| Bytecode (`*.bin`)          | Bytecode, in this context, is a binary representation of teal code - and is what the AVM actually interprets                                                                                                                                                           |
-| ARC32 Spec (`*.arc32.json`) | A specification file which describes an ARC4 contract and how to interact with it. It also includes an encoded copy of the teal approval and clear state programs of the contract. See [ARC32](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0032.md)  |
-| ARC56 Spec (`*.arc56.json`) | A more recently defined specification file which describes an ARC4 contract and how to interact with it. See [ARC56](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0056.md)                                                                            |
+| Output                      | Description                                                                                                                                                                                                                                                           |
+| --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Teal code (`*.teal`)        | Teal is a low level, human readable stack based language which 'runs' on the AVM                                                                                                                                                                                      |
+| Bytecode (`*.bin`)          | Bytecode, in this context, is a binary representation of teal code - and is what the AVM actually interprets                                                                                                                                                          |
+| ARC32 Spec (`*.arc32.json`) | A specification file which describes an ARC4 contract and how to interact with it. It also includes an encoded copy of the teal approval and clear state programs of the contract. See [ARC32](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0032.md) |
+| ARC56 Spec (`*.arc56.json`) | A more recently defined specification file which describes an ARC4 contract and how to interact with it. See [ARC56](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0056.md)                                                                           |
 
 ## Installation
 
@@ -43,7 +43,21 @@ positional arguments:
 
 ### Puya
 
-Puya-ts is only the front end component of the compiler. After parsing and converting TypeScript into a common AST known as AWST, the remainder of the compilation is passed onto the Puya backend compiler. The Puya compiler is written in Python and can be installed using `pipx`. You will require Python 3.12+ and to have pipx available on your path for the following to work.
+Puya-ts is only the front end component of the compiler. After parsing and converting TypeScript into a common AST known as AWST, the remainder of the compilation is passed onto the Puya backend compiler. Puya is released as a binary from the Puya GitHub [repository](https://github.com/algorandfoundation/puya).
+
+Currently, Puya binaries are available for:
+
+- Linux (Intel and ARM)
+- MacOS (Intel and Apple Silicon)
+- Windows (Intel and ARM)
+
+If your system is supported, puya-ts will automatically download the appropriate binary for your system. It will make sure that the version of puya-ts and puya are compatible.
+
+### Puya (manual installation)
+
+This session is relevant if your platform is not supported by the Puya binaries or you need to run Puya in a specific way.
+
+The most convenient way to install Puya manually is using `pipx`. You will require Python 3.12+ and to have pipx available on your path for the following to work.
 
 ```shell
 pipx install puyapy
@@ -57,7 +71,6 @@ pipx install puyapy==4.2.1 --force
 
 `--force` may or may not be required depending on if you already have a version installed.
 
-
 You can verify a successful installation by running the `puya` command with no args.
 
 ```shell
@@ -66,6 +79,20 @@ usage: puya [-h] [--version] [--log-level {notset,debug,info,warning,error,criti
 puya: error: the following arguments are required: --options, --awst
 ```
 
+After confirming that Puya is installed, you need to create a script file to trigger it. Then set the `PUYA_SCRIPT_PATH` environment variable to the path of the script file before running `puya-ts`. An example script file is shown below.
+
+```sh
+#!/bin/bash
+puya "$@"
+```
+
+Don't forget to make the script file executable.
+
+```shell
+chmod +x run-puya.sh
+```
+
+If you don't wish to install Puya using `pipx`, you just need to make sure that the `PUYA_SCRIPT_PATH` environment variable is set to the path of the script file which triggers Puya before running `puya-ts`.
 
 ## Commands
 
@@ -76,7 +103,6 @@ Shows the currently installed version of puya-ts, its targeted puya version, and
 ```shell
 puya-ts --version
 ```
-
 
 ### Build
 
@@ -95,7 +121,7 @@ puya-ts build smart_contracts/*
 Flag arguments are true when used in the base form `--my-flag` but can be negated by using the format `--no-my-flag`. The latter is necessary to disable options which are on by default.
 
 | Arg                            | Type                                                       | Required                     | Description                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-|--------------------------------|------------------------------------------------------------|------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ------------------------------ | ---------------------------------------------------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `PATHS`                        | String[]                                                   | Yes                          | The paths to be compiled. Can be exact path to a `*.algo.ts` contract file, a directory, or a path including wildcards. All subfolders in a directory will be searched for `*.algo.ts` files.                                                                                                                                                                                                                                                        |
 | `--log-level`                  | Enum (error,info,warning,debug,critical)                   | No (default: info)           | The minimum log level to output to the console.                                                                                                                                                                                                                                                                                                                                                                                                      |
 | `--out-dir`                    | String                                                     | No (default: 'out')          | The directory in which to write build artifacts. If absolute, artifacts will be written under sub-directories relative to the input PATH they were discovered by. If relative, this directory will be created relative to the input PATH. Artifacts will be written under sub-directories relative to the input PATH they were discovered by. Out directory can contain the placeholder `[name]` which will be replaced with the contract file name. |
@@ -105,7 +131,7 @@ Flag arguments are true when used in the base form `--my-flag` but can be negate
 | `--skip-version-check`         | Flag                                                       | No (default false)           | Don't verify the installed version of `puya` matches the one targeted by `puya-ts` before invoking compilation.                                                                                                                                                                                                                                                                                                                                      |
 | `--target-avm-version`         | Integer                                                    | No (default current version) | Which AVM version to target for compilation output of contracts which do not explicitly identify their target version. Will default to current version in `mainnet` (with a small lag). Number must be a supported version of the compiler.                                                                                                                                                                                                          |
 | `--cli-template-definition`    | KeyValuePair[]                                             | No                           | A list of template variable definitions which will be used to replace place holders in the compiled output. Values should be in the format MY_VAR_NAME=123 where the variable name does not include the template variable prefix. Binary values can be specified in hex strings using MY_VAR=0x1234FF                                                                                                                                                |
-| `--template-vars-prefix`       | String                                                     | No (default 'TMPL_')         | The prefix used by template variables in the compilation targets.                                                                                                                                                                                                                                                                                                                                                                                    |
+| `--template-vars-prefix`       | String                                                     | No (default 'TMPL\_')        | The prefix used by template variables in the compilation targets.                                                                                                                                                                                                                                                                                                                                                                                    |
 | `--locals-coalescing-strategy` | Enum (root_operand,root_operand_excluding_args,aggressive) | No (default root_operand)    | Determines the out-of-ssa variable name coalescing strategy used by the compiler. root_operand coalesces based on the original variable name, root_operand_excluding_args is the same but won't coalesce subroutine arguments whilst aggressive will attempt to minimise the number of local variables used regardless of name or type - based only on variable lifetimes. The strategy used can affect output code legibility and size.             |
 | `--output-awst`                | Flag                                                       | No (default false)           | Output a human readable representation of the AWST generated by compilation.                                                                                                                                                                                                                                                                                                                                                                         |
 | `--output-awst-json`           | Flag                                                       | No (default false)           | Output a json encoded representation of the AWST generated by compilation                                                                                                                                                                                                                                                                                                                                                                            |
