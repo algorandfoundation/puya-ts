@@ -2,7 +2,6 @@ import { Constants } from '../constants'
 import { logger } from '../logger'
 import { checkPuyaVersion } from './check-puya-version'
 import { deleteCachedPuyaBinary, downloadPuyaBinary, findCachedPuyaBinary } from './puya-binary'
-import { getPuyaEnv } from './puya-env'
 
 /**
  * Resolves the path to the Puya binary, downloading if necessary
@@ -10,31 +9,18 @@ import { getPuyaEnv } from './puya-env'
  * @returns Promise that resolves to the path of the Puya binary to use
  */
 export async function resolvePuyaCommand(skipVersionCheck = false): Promise<{ command: string; useShell: boolean }> {
-  const puyaEnv = getPuyaEnv()
-
-  // Check for user-specified binary path
-  if (puyaEnv.command) {
-    logger.info(undefined, `Using user-specified Puya binary: ${puyaEnv.command}`)
-
-    // Check version compatibility if not skipping
-    if (!skipVersionCheck) {
-      await checkPuyaVersion(puyaEnv.command, false)
-    }
-
-    return { command: puyaEnv.command, useShell: false }
-  }
-
   // Check for user-specified script path
-  if (puyaEnv.scriptPath) {
-    logger.info(undefined, `Using user-specified Puya script: ${puyaEnv.scriptPath}`)
+  const scriptPath = process.env.PUYA_SCRIPT_PATH
+  if (scriptPath) {
+    logger.info(undefined, `Using user-specified Puya script: ${scriptPath}`)
 
     // Check version compatibility if not skipping
     if (!skipVersionCheck) {
-      await checkPuyaVersion(puyaEnv.scriptPath, true)
+      await checkPuyaVersion(scriptPath, true)
     }
 
     // Always use shell mode for user-specified Puya scripts
-    return { command: puyaEnv.scriptPath, useShell: true }
+    return { command: scriptPath, useShell: true }
   }
 
   // Look for cached binary
