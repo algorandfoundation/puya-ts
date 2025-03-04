@@ -6,11 +6,10 @@ import { wtypes } from '../../../../awst/wtypes'
 
 import { invariant } from '../../../../util'
 import type { PType } from '../../../ptypes'
-import { boolPType, BoxMapPType, bytesPType, stringPType, TuplePType } from '../../../ptypes'
+import { boolPType, BoxMapPType, bytesPType, stringPType, TuplePType, voidPType } from '../../../ptypes'
 import { instanceEb } from '../../../type-registry'
 import { FunctionBuilder, type NodeBuilder } from '../../index'
 import { parseFunctionArgs } from '../../util/arg-parsing'
-import { VoidExpressionBuilder } from '../../void-expression-builder'
 import { extractKey } from '../util'
 import { boxExists, boxLength, BoxProxyExpressionBuilder, BoxValueExpressionBuilder } from './base'
 
@@ -40,6 +39,8 @@ export class BoxMapExpressionBuilder extends BoxProxyExpressionBuilder<BoxMapPTy
   }
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
     switch (name) {
+      case 'keyPrefix':
+        return instanceEb(this.toBytes(sourceLocation), bytesPType)
       case 'set':
         return new BoxMapSetFunctionBuilder(this._expr, this.ptype, sourceLocation)
       case 'delete':
@@ -206,12 +207,13 @@ class BoxMapDeleteFunctionBuilder extends BoxMapFunctionBuilderBase {
       argSpec: (a) => [a.required(this.keyType)],
     })
 
-    return new VoidExpressionBuilder(
+    return instanceEb(
       nodeFactory.stateDelete({
         field: this.boxValueExpression(key.resolve()),
         sourceLocation,
         wtype: wtypes.voidWType,
       }),
+      voidPType,
     )
   }
 }

@@ -15,8 +15,9 @@ import fs from 'fs'
 import type { ExpectStatic } from 'vitest'
 import { test } from 'vitest'
 import { compile } from '../../../src'
+import { processInputPaths } from '../../../src/input-paths/process-input-paths'
 import { LoggingContext, LogLevel } from '../../../src/logger'
-import { defaultPuyaOptions } from '../../../src/puya/options'
+import { CompileOptions } from '../../../src/options'
 import type { DeliberateAny } from '../../../src/typescript-helpers'
 import { invariant } from '../../../src/util'
 import { generateTempDir } from '../../../src/util/generate-temp-file'
@@ -244,21 +245,19 @@ async function compilePath(
   const logCtx = LoggingContext.create()
 
   return await logCtx.run(async () => {
-    await compile({
-      outputAwstJson: false,
-      outputAwst: false,
-      paths: [path],
-      outDir: tempDir.dirPath,
-      dryRun: false,
-      logLevel: LogLevel.Error,
-      skipVersionCheck: true,
-      ...defaultPuyaOptions,
-      outputArc32: false,
-      outputTeal: false,
-      outputSourceMap: true,
-      optimizationLevel: 0,
-      ...options,
-    })
+    const filePaths = processInputPaths({ paths: [path], outDir: tempDir.dirPath })
+    await compile(
+      new CompileOptions({
+        filePaths,
+        logLevel: LogLevel.Error,
+        skipVersionCheck: true,
+        outputArc32: false,
+        outputTeal: false,
+        outputSourceMap: true,
+        optimizationLevel: 0,
+        ...options,
+      }),
+    )
     for (const log of logCtx.logEvents) {
       switch (log.level) {
         case LogLevel.Error:

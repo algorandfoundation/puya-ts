@@ -32,6 +32,14 @@ export abstract class BoxProxyExpressionBuilder<
       definedIn: contractType,
     })
   }
+
+  toBytes(sourceLocation: SourceLocation): Expression {
+    return nodeFactory.reinterpretCast({
+      expr: this.resolve(),
+      wtype: wtypes.bytesWType,
+      sourceLocation,
+    })
+  }
 }
 
 /**

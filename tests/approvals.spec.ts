@@ -2,8 +2,9 @@ import { globSync } from 'glob'
 import { rimraf } from 'rimraf'
 import { describe, expect, it } from 'vitest'
 import { compile } from '../src'
+import { processInputPaths } from '../src/input-paths/process-input-paths'
 import { isErrorOrCritical, LoggingContext, LogLevel } from '../src/logger'
-import { defaultPuyaOptions } from '../src/puya/options'
+import { CompileOptions } from '../src/options'
 import { normalisePath } from '../src/util'
 import { invokeCli } from '../src/util/invoke-cli'
 
@@ -19,24 +20,25 @@ describe('Approvals', async () => {
     ['O2', 'out/o2/[name]', { optimizationLevel: 2 }],
   ])('Compile %s', async (desc, outDir, puyaOptions) => {
     const logCtx = LoggingContext.create()
-    const result = await logCtx.run(() =>
-      compile({
-        paths: ['tests/approvals'],
-        outDir,
-        dryRun: false,
-        logLevel: LogLevel.Warning,
-        skipVersionCheck: true,
-        ...defaultPuyaOptions,
-        outputSourceMap: false,
-        outputAwstJson: false,
-        outputAwst: false,
-        outputTeal: true,
-        outputArc32: true,
-        outputArc56: true,
-        outputSsaIr: true,
-        ...puyaOptions,
-      }),
-    )
+    const result = await logCtx.run(() => {
+      const filePaths = processInputPaths({ paths: ['tests/approvals'], outDir })
+      return compile(
+        new CompileOptions({
+          filePaths,
+          dryRun: false,
+          logLevel: LogLevel.Warning,
+          skipVersionCheck: true,
+          outputSourceMap: false,
+          outputAwstJson: false,
+          outputAwst: false,
+          outputTeal: true,
+          outputArc32: true,
+          outputArc56: true,
+          outputSsaIr: true,
+          ...puyaOptions,
+        }),
+      )
+    })
     it.each(contractFiles)('%s', (contractFilePath) => {
       const awst = result.awst?.filter((s) => s.sourceLocation.file === contractFilePath)
 

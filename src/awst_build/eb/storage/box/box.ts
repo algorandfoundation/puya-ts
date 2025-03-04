@@ -4,11 +4,10 @@ import type { SourceLocation } from '../../../../awst/source-location'
 import { wtypes } from '../../../../awst/wtypes'
 import { invariant } from '../../../../util'
 import type { PType } from '../../../ptypes'
-import { boolPType, BoxPType, bytesPType, stringPType, TuplePType } from '../../../ptypes'
+import { boolPType, BoxPType, bytesPType, stringPType, TuplePType, voidPType } from '../../../ptypes'
 import { instanceEb } from '../../../type-registry'
 import { FunctionBuilder, type NodeBuilder, ParameterlessFunctionBuilder } from '../../index'
 import { parseFunctionArgs } from '../../util/arg-parsing'
-import { VoidExpressionBuilder } from '../../void-expression-builder'
 import { extractKey } from '../util'
 import { boxExists, boxLength, BoxProxyExpressionBuilder, boxValue, BoxValueExpressionBuilder } from './base'
 
@@ -44,6 +43,8 @@ export class BoxExpressionBuilder extends BoxProxyExpressionBuilder<BoxPType> {
       contentType: this.ptype.contentType,
     })
     switch (name) {
+      case 'key':
+        return instanceEb(this.toBytes(sourceLocation), bytesPType)
       case 'value':
         return new BoxValueExpressionBuilder(boxValueExpr, this.ptype.contentType)
       case 'exists':
@@ -63,16 +64,15 @@ export class BoxExpressionBuilder extends BoxProxyExpressionBuilder<BoxPType> {
 
 class BoxDeleteFunctionBuilder extends ParameterlessFunctionBuilder {
   constructor(boxValue: BoxValueExpression, sourceLocation: SourceLocation) {
-    super(
-      boxValue,
-      (expr) =>
-        new VoidExpressionBuilder(
-          nodeFactory.stateDelete({
-            sourceLocation,
-            field: boxValue,
-            wtype: wtypes.voidWType,
-          }),
-        ),
+    super(boxValue, (expr) =>
+      instanceEb(
+        nodeFactory.stateDelete({
+          sourceLocation,
+          field: boxValue,
+          wtype: wtypes.voidWType,
+        }),
+        voidPType,
+      ),
     )
   }
 }

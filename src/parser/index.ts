@@ -1,7 +1,7 @@
 import ts from 'typescript'
 import { SourceLocation } from '../awst/source-location'
-import type { PuyaTsCompileOptions } from '../compile-options'
 import { logger, LoggingContext } from '../logger'
+import type { AlgoFile, CompileOptions } from '../options'
 import type { DeliberateAny } from '../typescript-helpers'
 import { normalisePath } from '../util'
 import { resolveModuleNameLiterals } from './resolve-module-name-literals'
@@ -13,7 +13,7 @@ export type CreateProgramResult = {
   programDirectory: string
 }
 
-export function createTsProgram(options: PuyaTsCompileOptions): CreateProgramResult {
+export function createTsProgram(options: Pick<CompileOptions, 'filePaths'>): CreateProgramResult {
   const compilerOptions: ts.CompilerOptions = {
     allowJs: false,
     strict: true,
@@ -27,13 +27,24 @@ export function createTsProgram(options: PuyaTsCompileOptions): CreateProgramRes
 
   const host = ts.createCompilerHost(compilerOptions)
 
+  const fileMap = options.filePaths.reduce((acc, cur) => acc.set(cur.sourceFile, cur), new Map<string, AlgoFile>())
+  const { fileExists, readFile } = host
+  host.fileExists = function (fileName): boolean {
+    return fileMap.has(fileName) || fileExists(fileName)
+  }
+  host.readFile = function (fileName): string | undefined {
+    const matchedFile = fileMap.get(fileName)
+    if (matchedFile?.fileContents) {
+      return matchedFile.fileContents
+    }
+    return readFile(fileName)
+  }
+  host.resolveModuleNameLiterals = resolveModuleNameLiterals
+
   const program = ts.createProgram(
     options.filePaths.map((p) => p.sourceFile),
     compilerOptions,
-    {
-      ...host,
-      resolveModuleNameLiterals,
-    },
+    host,
   )
   const programDirectory = program.getCurrentDirectory()
 
