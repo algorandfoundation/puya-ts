@@ -161,7 +161,7 @@ export class AddressClassBuilder extends ClassBuilder {
       }
       logger.error(
         value.sourceLocation,
-        `Invalid address literal. Addresses should be ${Constants.encodedAddressLength} characters and not include base32 padding`,
+        `Invalid address literal. Addresses should be ${Constants.algo.encodedAddressLength} characters and not include base32 padding`,
       )
     }
     return new AddressExpressionBuilder(
