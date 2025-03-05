@@ -84,7 +84,7 @@ export default class MyContract extends BaseContract {
     return a / b
   }
 
-  public clearState(): boolean {
+  public clearStateProgram(): boolean {
     return true
   }
 }

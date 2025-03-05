@@ -7,7 +7,7 @@ export default class HelloWorldContract extends BaseContract {
     return true
   }
 
-  public clearState(): boolean {
+  public clearStateProgram(): boolean {
     return true
   }
 }
