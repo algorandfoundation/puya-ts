@@ -4,7 +4,7 @@ import type { SourceLocation } from '../../../../awst/source-location'
 import { wtypes } from '../../../../awst/wtypes'
 import { invariant } from '../../../../util'
 import type { PType } from '../../../ptypes'
-import { boolPType, BoxPType, bytesPType, stringPType, TuplePType, voidPType } from '../../../ptypes'
+import { boolPType, BoxPType, bytesPType, stringPType, TuplePType } from '../../../ptypes'
 import { instanceEb } from '../../../type-registry'
 import { FunctionBuilder, type NodeBuilder, ParameterlessFunctionBuilder } from '../../index'
 import { parseFunctionArgs } from '../../util/arg-parsing'
@@ -69,9 +69,9 @@ class BoxDeleteFunctionBuilder extends ParameterlessFunctionBuilder {
         nodeFactory.stateDelete({
           sourceLocation,
           field: boxValue,
-          wtype: wtypes.voidWType,
+          wtype: wtypes.boolWType,
         }),
-        voidPType,
+        boolPType,
       ),
     )
   }

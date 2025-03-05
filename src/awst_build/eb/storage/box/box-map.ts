@@ -6,7 +6,7 @@ import { wtypes } from '../../../../awst/wtypes'
 
 import { invariant } from '../../../../util'
 import type { PType } from '../../../ptypes'
-import { boolPType, BoxMapPType, bytesPType, stringPType, TuplePType, voidPType } from '../../../ptypes'
+import { boolPType, BoxMapPType, bytesPType, stringPType, TuplePType } from '../../../ptypes'
 import { instanceEb } from '../../../type-registry'
 import { FunctionBuilder, type NodeBuilder } from '../../index'
 import { parseFunctionArgs } from '../../util/arg-parsing'
@@ -211,9 +211,9 @@ class BoxMapDeleteFunctionBuilder extends BoxMapFunctionBuilderBase {
       nodeFactory.stateDelete({
         field: this.boxValueExpression(key.resolve()),
         sourceLocation,
-        wtype: wtypes.voidWType,
+        wtype: wtypes.boolWType,
       }),
-      voidPType,
+      boolPType,
     )
   }
 }

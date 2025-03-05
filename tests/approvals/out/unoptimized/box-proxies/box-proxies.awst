@@ -7,8 +7,9 @@ subroutine testBox(box: box_key, value: string): void
   assert(box.value == Box["A"].value)
   assert(STATE_EXISTS(box.value) and STATE_EXISTS(Box["A"].value))
   assert(Boolean(checked_maybe(box_len(box), comment=Box must have value)))
-  STATE_DEL(box.value)
-  STATE_DEL(Box["A"].value)
+  assert(STATE_DELETE(box.value), comment=delete failed)
+  isBoxADeleted: bool = STATE_DELETE(Box["A"].value)
+  assert(isBoxADeleted, comment=delete failed)
   assert(!STATE_EXISTS(box.value) and !STATE_EXISTS(Box["A"].value))
   defaultVal: string = "O"
   assert(STATE_GET(Box["A"].value, default=defaultVal) == STATE_GET(box.value, default=defaultVal))
@@ -27,7 +28,8 @@ subroutine testBoxMap(box: box_key, key: string, value: bytes): void
   assert(Boolean(checked_maybe(box_len(concat(box, reinterpret_cast<bytes>(key))), comment=Box must have value)))
   assert(STATE_GET_EX(concat(box, reinterpret_cast<bytes>(key)).value).1)
   assert(concat(box, reinterpret_cast<bytes>(key)).value == concat("", reinterpret_cast<bytes>(key)).value)
-  STATE_DEL(concat(box, reinterpret_cast<bytes>(key)).value)
+  isBoxDeleted: bool = STATE_DELETE(concat(box, reinterpret_cast<bytes>(key)).value)
+  assert(isBoxDeleted, comment=delete failed)
   assert(STATE_GET(concat(box, reinterpret_cast<bytes>("" + key + "x")).value, default="b") == STATE_GET(concat("", reinterpret_cast<bytes>("" + key + "x")).value, default="b"))
 }
 subroutine testBoxRef(box: box_key, length: uint64): void
@@ -54,7 +56,8 @@ subroutine testBoxRef(box: box_key, length: uint64): void
   assert(box.value == 0xffffffff)
   box_splice(box, 1, 1, 0x00)
   assert(box.value == 0xff00ffff)
-  STATE_DEL(box.value)
+  x: bool = STATE_DELETE(box.value)
+  assert(x, comment=delete failed)
   assert(!STATE_EXISTS(box.value))
 }
 contract BoxContract
