@@ -7,13 +7,13 @@ import { codeInvariant, invariant } from '../../../util'
 import { AppStorageDeclaration } from '../../models/app-storage-declaration'
 import type { ContractClassPType, PType } from '../../ptypes'
 import { boolPType, bytesPType, GlobalStateType, stringPType } from '../../ptypes'
-import { typeRegistry } from '../../type-registry'
 import { BooleanExpressionBuilder } from '../boolean-expression-builder'
 import type { NodeBuilder } from '../index'
 import { FunctionBuilder, InstanceExpressionBuilder } from '../index'
 import { parseFunctionArgs } from '../util/arg-parsing'
 import { VoidExpressionBuilder } from '../void-expression-builder'
-import { extractKey } from './util'
+import { StateValueExpressionBuilder } from './state-value'
+import { extractKey, getStorageWType } from './util'
 
 export class GlobalStateFunctionBuilder extends FunctionBuilder {
   constructor(sourceLocation: SourceLocation) {
@@ -84,7 +84,7 @@ export class GlobalStateExpressionBuilder extends InstanceExpressionBuilder<Glob
       case 'delete':
         return new GlobalStateDeleteFunctionBuilder(this.buildField(), sourceLocation)
       case 'value':
-        return typeRegistry.getInstanceEb(this.buildField(), this.ptype.contentType)
+        return new StateValueExpressionBuilder(this.buildField(), this.ptype.contentType)
       case 'hasValue':
         return new BooleanExpressionBuilder(
           nodeFactory.stateExists({
@@ -100,7 +100,7 @@ export class GlobalStateExpressionBuilder extends InstanceExpressionBuilder<Glob
   protected buildField(): AppStateExpression {
     return nodeFactory.appStateExpression({
       key: this._expr,
-      wtype: this.ptype.contentType.wtypeOrThrow,
+      wtype: getStorageWType(this.ptype.contentType, this.sourceLocation),
       existsAssertionMessage: 'check GlobalState exists',
       sourceLocation: this.sourceLocation,
     })

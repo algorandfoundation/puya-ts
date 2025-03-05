@@ -2,8 +2,8 @@ import { nodeFactory } from '../../awst/node-factory'
 import type { AppStorageDefinition, BytesConstant } from '../../awst/nodes'
 import { AppStorageKind, BytesEncoding } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
-import { CodeError } from '../../errors'
 import { invariant, utf8ToUint8Array } from '../../util'
+import { getStorageWType } from '../eb/storage/util'
 import type { ContractClassPType, StorageProxyPType } from '../ptypes'
 import { BoxMapPType, BoxPType, BoxRefPType, GlobalStateType, LocalStateType } from '../ptypes'
 
@@ -59,15 +59,12 @@ export class AppStorageDeclaration {
   }
 
   get definition(): AppStorageDefinition {
-    if (!this.ptype.contentType.wtype || !this.ptype.contentType.wtype.scalarType) {
-      throw new CodeError(`${this.ptype.contentType.fullName} is not a valid type for storage`, { sourceLocation: this.sourceLocation })
-    }
     return nodeFactory.appStorageDefinition({
       ...this,
       kind: this.kind,
       key: this.key,
       keyWtype: null,
-      storageWtype: this.ptype.contentType.wtypeOrThrow,
+      storageWtype: getStorageWType(this.ptype.contentType, this.sourceLocation),
     })
   }
 }
