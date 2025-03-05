@@ -6,7 +6,7 @@ Algorand TypeScript constructs and types can be imported from the `@algorandfoun
 
 ## Contracts
 
-A contract in Algorand TypeScript is defined by declaring a class which extends the `Contract`, or `BaseContract` types exported by `@algorandfoundation/algorand-typescript`.
+A contract in Algorand TypeScript is defined by declaring a class which extends the `Contract`, or `BaseContract` types exported by `@algorandfoundation/algorand-typescript`. See [ABI routing](./abi-routing.md) docs for more on the differences between these two options.
 
 ### ARC4 Contract
 
@@ -84,6 +84,33 @@ export class MyContract extends Contract {
   }
 }
 ```
+
+### Custom approval and clear state programs
+
+The default implementation of a clear state program on a contract is to just return `true`, custom logic can be added by overriding the base implementation
+
+The default implementation of an approval program on a contract is to perform ABI routing. Custom logic can be added by overriding the base implementation. If your implementation does not call `super.approvalProgram()` at some point, ABI routing will not function.
+
+```ts
+class Arc4HybridAlgo extends Contract {
+  override approvalProgram(): boolean {
+    log('before')
+    const result = super.approvalProgram()
+    log('after')
+    return result
+  }
+
+  override clearStateProgram(): boolean {
+    log('clearing state')
+    return true
+  }
+
+  someMethod() {
+    log('some method')
+  }
+}
+```
+
 
 ### Application State
 
