@@ -3,6 +3,12 @@ main tests/approvals/pre-approved-sale.algo.ts::program:
         let seller#0: bytes[32] = TemplateVar[bytes[32]](TMPL_SELLER)
         let price#0: uint64 = TemplateVar[uint64](TMPL_PRICE)
         let asset#0: uint64 = TemplateVar[uint64](TMPL_ASSET)
+        let gtxn_type%0#0: uint64 = ((gtxns TypeEnum) 0u)
+        let gtxn_type_matches%0#0: bool = (== gtxn_type%0#0 pay)
+        (assert gtxn_type_matches%0#0) // transaction type is pay
+        let gtxn_type%1#0: uint64 = ((gtxns TypeEnum) 1u)
+        let gtxn_type_matches%1#0: bool = (== gtxn_type%1#0 axfer)
+        (assert gtxn_type_matches%1#0) // transaction type is axfer
         let tmp%0#0: bytes[32] = ((gtxns Receiver) 0u)
         let tmp%1#0: bool = (== tmp%0#0 seller#0)
         goto tmp%1#0 ? block@1 : block@3

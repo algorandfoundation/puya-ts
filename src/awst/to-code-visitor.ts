@@ -38,7 +38,7 @@ export class ToCodeVisitor
     return `void`
   }
   visitGroupTransactionReference(expression: nodes.GroupTransactionReference): string {
-    throw new Error('Method not implemented.')
+    return `group_transaction(index=${expression.index.accept(this)}, type=${expression.wtype})`
   }
   visitPuyaLibCall(expression: nodes.PuyaLibCall): string {
     return `${expression.func}(${expression.args.map((a) => a.value.accept(this)).join(', ')})`
