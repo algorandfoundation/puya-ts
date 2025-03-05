@@ -1,0 +1,164 @@
+#pragma version 10
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0 8 1
+
+main_block@0:
+
+main_block@1:
+    // tests/approvals/n-tuples.algo.ts:4
+    // export class NTuplesAlgo extends Contract {
+    txn NumAppArgs
+    intc_0 // 0
+    !=
+    bz main_bare_routing@7
+
+main_abi_routing@2:
+    // tests/approvals/n-tuples.algo.ts:4
+    // export class NTuplesAlgo extends Contract {
+    txna ApplicationArgs 0
+    pushbytes 0xe9976a2c // method "abiTest((uint64,uint64,uint64,uint64))(uint64,uint64)"
+    pushbytes 0xf577698a // method "storage()void"
+    uncover 2
+    match main_abiTest_route@3 main_storage_route@4
+
+main_switch_case_default@5:
+
+main_switch_case_next@6:
+
+main_after_if_else@11:
+    // tests/approvals/n-tuples.algo.ts:4
+    // export class NTuplesAlgo extends Contract {
+    intc_0 // 0
+
+main_after_inlined_tests/approvals/n-tuples.algo.ts::NTuplesAlgo.__puya_arc4_router__@12:
+    return
+
+main_storage_route@4:
+    // tests/approvals/n-tuples.algo.ts:11
+    // storage() {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    callsub storage
+    intc_2 // 1
+    b main_after_inlined_tests/approvals/n-tuples.algo.ts::NTuplesAlgo.__puya_arc4_router__@12
+
+main_abiTest_route@3:
+    // tests/approvals/n-tuples.algo.ts:6
+    // abiTest(arg: NTuple<uint64, 4>): NTuple<uint64, 2> {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    // tests/approvals/n-tuples.algo.ts:4
+    // export class NTuplesAlgo extends Contract {
+    txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    intc_1 // 8
+    extract3 // on error: Index access is out of bounds
+    btoi
+    swap
+    dup
+    intc_1 // 8
+    dup
+    extract3 // on error: Index access is out of bounds
+    btoi
+    swap
+    dup
+    pushint 16 // 16
+    intc_1 // 8
+    extract3 // on error: Index access is out of bounds
+    btoi
+    swap
+    pushint 24 // 24
+    intc_1 // 8
+    extract3 // on error: Index access is out of bounds
+    btoi
+    // tests/approvals/n-tuples.algo.ts:6
+    // abiTest(arg: NTuple<uint64, 4>): NTuple<uint64, 2> {
+    uncover 3
+    uncover 3
+    uncover 3
+    uncover 3
+    callsub abiTest
+    swap
+    itob
+    swap
+    itob
+    swap
+    pushbytes 0x
+    swap
+    concat
+    swap
+    concat
+    pushbytes 0x151f7c75
+    swap
+    concat
+    log
+    intc_2 // 1
+    b main_after_inlined_tests/approvals/n-tuples.algo.ts::NTuplesAlgo.__puya_arc4_router__@12
+
+main_bare_routing@7:
+    // tests/approvals/n-tuples.algo.ts:4
+    // export class NTuplesAlgo extends Contract {
+    txn OnCompletion
+    intc_0 // 0
+    swap
+    match main___algots__.defaultCreate@8
+
+main_switch_case_default@9:
+
+main_switch_case_next@10:
+    b main_after_if_else@11
+
+main___algots__.defaultCreate@8:
+    // tests/approvals/n-tuples.algo.ts:4
+    // export class NTuplesAlgo extends Contract {
+    txn ApplicationID
+    intc_0 // 0
+    ==
+    assert // can only call when creating
+    callsub __algots__.defaultCreate
+    intc_2 // 1
+    b main_after_inlined_tests/approvals/n-tuples.algo.ts::NTuplesAlgo.__puya_arc4_router__@12
+
+
+// tests/approvals/n-tuples.algo.ts::NTuplesAlgo.abiTest(arg.0: uint64, arg.1: uint64, arg.2: uint64, arg.3: uint64) -> uint64, uint64:
+abiTest:
+    // tests/approvals/n-tuples.algo.ts:6
+    // abiTest(arg: NTuple<uint64, 4>): NTuple<uint64, 2> {
+    proto 4 2
+
+abiTest_block@0:
+    // tests/approvals/n-tuples.algo.ts:8
+    // return [arg[0], arg[1]]
+    frame_dig -4
+    frame_dig -3
+    retsub
+
+
+// tests/approvals/n-tuples.algo.ts::NTuplesAlgo.storage() -> void:
+storage:
+
+storage_block@0:
+    retsub
+
+
+// tests/approvals/n-tuples.algo.ts::NTuplesAlgo.__algots__.defaultCreate() -> void:
+__algots__.defaultCreate:
+
+__algots__.defaultCreate_block@0:
+    retsub

@@ -1,9 +1,11 @@
 import type { uint64 } from '@algorandfoundation/algorand-typescript'
-import { assert, assertMatch, Contract, Uint64 } from '@algorandfoundation/algorand-typescript'
+import { assert, assertMatch, Contract, GlobalState, Uint64 } from '@algorandfoundation/algorand-typescript'
 import { DynamicArray, StaticArray, UintN32 } from '@algorandfoundation/algorand-typescript/arc4'
 
 type Vector = { x: uint64; y: uint64 }
 export class NativeArraysAlgo extends Contract {
+  myState = GlobalState<uint64[]>()
+
   buildArray(): uint64[] {
     return [1, 2, 3, 4]
   }
@@ -58,5 +60,9 @@ export class NativeArraysAlgo extends Contract {
 
     assertMatch(myVectors, [{ x, y }])
     return myVectors
+  }
+
+  writeToState(x: uint64[]) {
+    this.myState.value = x
   }
 }
