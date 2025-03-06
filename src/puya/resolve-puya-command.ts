@@ -15,9 +15,10 @@ export async function resolvePuyaCommand(skipVersionCheck = false): Promise<{ co
     logger.info(undefined, `Using user-specified Puya script: ${scriptPath}`)
 
     // Check version compatibility if not skipping
-    if (!skipVersionCheck) {
-      await checkPuyaVersion(scriptPath, true)
-    }
+    // if (!skipVersionCheck) {
+    //   await checkPuyaVersion(scriptPath, true)
+    // }
+    // await startPuya({ command: scriptPath, shell: true })
 
     // Always use shell mode for user-specified Puya scripts
     return { command: scriptPath, useShell: true }

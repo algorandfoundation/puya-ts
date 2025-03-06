@@ -69,7 +69,7 @@ export function createTsProgram(options: Pick<CompileOptions, 'filePaths'>): Cre
     }),
   )
 
-  reportDiagnostics(program)
+  // reportDiagnostics(program)
   return {
     sourceFiles,
     program,

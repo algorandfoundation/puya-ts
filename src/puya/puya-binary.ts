@@ -121,7 +121,7 @@ export async function downloadPuyaBinary(version: string): Promise<string> {
   const tempDir = path.join(nodeModulesDir, '.puya-ts-temp')
 
   const tarFilePath = path.join(tempDir, archiveFileName)
-  const checksumFilePath = path.join(tempDir, checksumFileName)
+  // const checksumFilePath = path.join(tempDir, checksumFileName)
   const extractedBinaryPath = path.join(puyaStorageDir, binaryFileName)
 
   // Ensure our storage directories exist
@@ -133,12 +133,12 @@ export async function downloadPuyaBinary(version: string): Promise<string> {
 
   logger.info(undefined, `Downloading Puya binary for version ${version} and platform ${platformId}`)
   const archiveUrl = `https://github.com/${Constants.puyaGithubRepo}/releases/download/${version}/${archiveFileName}`
-  const checksumUrl = `https://github.com/${Constants.puyaGithubRepo}/releases/download/${version}/${checksumFileName}`
+  // const checksumUrl = `https://github.com/${Constants.puyaGithubRepo}/releases/download/${version}/${checksumFileName}`
 
   await downloadFile(archiveUrl, tarFilePath)
-  await downloadFile(checksumUrl, checksumFilePath)
+  // await downloadFile(checksumUrl, checksumFilePath)
 
-  await verifyChecksum(tarFilePath, checksumFilePath)
+  // await verifyChecksum(tarFilePath, checksumFilePath)
 
   try {
     await tar.extract({

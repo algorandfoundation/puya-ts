@@ -6,7 +6,7 @@
   "types": "src/index.ts",
   "scripts": {
     "postinstall": "npx patch-package",
-    "dev:examples": "tsx src/cli.ts build examples --output-awst --output-awst-json",
+    "dev:examples": "cross-env PUYA_SCRIPT_PATH=C:/algorand/puya-ts/run-puya.cmd tsx src/cli.ts build examples/auction --output-awst --output-awst-json --optimization-level=0",
     "dev:approvals": "tsx src/cli.ts build tests/approvals --dry-run",
     "dev:expected-output": "tsx src/cli.ts build tests/expected-output --dry-run",
     "dev:testing": "tsx src/cli.ts build tests/approvals/shadowed-variables.algo.ts  --log-level=debug --out-dir out/unoptimized/[name] --optimization-level=1 --cli-template-definitions AN_INT=1 A_STRING=hello SOME_BYTES=0xFF0055",

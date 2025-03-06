@@ -1,4 +1,5 @@
 import { spawn } from 'cross-spawn'
+import { logger } from '../logger'
 
 type InvokeCliOptions = {
   command: string
@@ -29,6 +30,8 @@ class InvokeCliError extends Error {
 export function invokeCli(options: InvokeCliOptions): Promise<InvokeCliResponse> {
   return new Promise<InvokeCliResponse>((resolve, reject) => {
     const lineAggregator = new LineAggregator(options.onReceiveLine)
+
+    const startTime = performance.now()
     const process = spawn(options.command, options.args, {
       stdio: 'pipe',
       shell: options.shell,
@@ -53,6 +56,10 @@ export function invokeCli(options: InvokeCliOptions): Promise<InvokeCliResponse>
         reject(new InvokeCliError({ code }))
       }
       lineAggregator.flush()
+
+      const endTime = performance.now()
+      const duration = endTime - startTime
+      logger.info(undefined, `invokeCli ${options.command} - ${options.args.join(' ')} took ${duration.toFixed(2)}ms`)
       resolve({
         code: code ?? 0,
         lines: lineAggregator.lines,
