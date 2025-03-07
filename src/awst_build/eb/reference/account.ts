@@ -3,11 +3,11 @@ import type { Expression } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { wtypes } from '../../../awst/wtypes'
 import type { PType } from '../../ptypes'
-import { accountPType, applicationPType, assetPType, bytesPType, uint64PType } from '../../ptypes'
+import { accountPType, applicationPType, assetPType, bytesPType, stringPType, uint64PType } from '../../ptypes'
 import { BooleanExpressionBuilder } from '../boolean-expression-builder'
 import type { BuilderComparisonOp, InstanceBuilder, NodeBuilder } from '../index'
 import { FunctionBuilder } from '../index'
-import { requireExpressionOfType } from '../util'
+import { requireExpressionOfType, requireStringConstant } from '../util'
 import { parseFunctionArgs } from '../util/arg-parsing'
 import { compareBytes } from '../util/compare-bytes'
 import { ReferenceTypeExpressionBuilder } from './base'
@@ -15,25 +15,17 @@ import { ReferenceTypeExpressionBuilder } from './base'
 export class AccountFunctionBuilder extends FunctionBuilder {
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
-      args: [addressBytes],
+      args: [addressOrKey],
     } = parseFunctionArgs({
       args,
       typeArgs,
       callLocation: sourceLocation,
       funcName: 'Account function',
       genericTypeArgs: 0,
-      argSpec: (a) => [a.optional(bytesPType)],
+      argSpec: (a) => [a.optional(stringPType, bytesPType)],
     })
 
-    if (addressBytes) {
-      return new AccountExpressionBuilder(
-        nodeFactory.reinterpretCast({
-          expr: addressBytes.resolve(),
-          wtype: accountPType.wtype,
-          sourceLocation,
-        }),
-      )
-    } else {
+    if (!addressOrKey) {
       return new AccountExpressionBuilder(
         nodeFactory.intrinsicCall({
           opCode: 'global',
@@ -44,6 +36,24 @@ export class AccountFunctionBuilder extends FunctionBuilder {
         }),
       )
     }
+    if (addressOrKey.ptype.equals(stringPType)) {
+      const address = requireStringConstant(addressOrKey)
+      return new AccountExpressionBuilder(
+        nodeFactory.addressConstant({
+          value: address.value,
+          sourceLocation: address.sourceLocation,
+          wtype: accountPType.wtype,
+        }),
+      )
+    }
+
+    return new AccountExpressionBuilder(
+      nodeFactory.reinterpretCast({
+        expr: requireExpressionOfType(addressOrKey, bytesPType),
+        wtype: accountPType.wtype,
+        sourceLocation,
+      }),
+    )
   }
 }
 export class AccountExpressionBuilder extends ReferenceTypeExpressionBuilder {
