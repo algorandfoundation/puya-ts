@@ -1,3 +1,4 @@
+import type { uint64 } from '@algorandfoundation/algorand-typescript'
 import { arc4, assert, Box, BoxMap, Contract, log } from '@algorandfoundation/algorand-typescript'
 import { interpretAsArc4, methodSelector, Struct, UintN } from '@algorandfoundation/algorand-typescript/arc4'
 
@@ -49,7 +50,7 @@ class StructDemo extends Contract {
   plugin = Box<PluginInfo>({ key: 'main' })
 
   public getPlugin(key: string): PluginInfo {
-    const value = this.plugins.get(key).copy()
+    const value = this.plugins(key).value.copy()
     assert(value.lastCalled.native > 0, 'Last called not zero')
     return value
   }
@@ -60,23 +61,24 @@ class StructDemo extends Contract {
     return value
   }
 
+  public setLastCalled(key: string, index: uint64, lastCalled: uint64) {
+    this.plugins(key).value.methods[index].lastCalled = new arc4.UintN64(lastCalled)
+  }
+
   public setPlugin(key: string) {
-    this.plugins.set(
-      key,
-      new PluginInfo({
-        lastValidRound: new arc4.UintN64(1),
-        cooldown: new arc4.UintN64(),
-        lastCalled: new arc4.UintN64(),
-        adminPrivileges: new arc4.Bool(false),
-        methods: new arc4.DynamicArray(
-          new MethodInfo({
-            selector: new arc4.StaticBytes<4>(methodSelector('test()void')),
-            cooldown: new arc4.UintN64(1),
-            lastCalled: new arc4.UintN64(1),
-          }),
-        ),
-      }),
-    )
+    this.plugins(key).value = new PluginInfo({
+      lastValidRound: new arc4.UintN64(1),
+      cooldown: new arc4.UintN64(),
+      lastCalled: new arc4.UintN64(),
+      adminPrivileges: new arc4.Bool(false),
+      methods: new arc4.DynamicArray(
+        new MethodInfo({
+          selector: new arc4.StaticBytes<4>(methodSelector('test()void')),
+          cooldown: new arc4.UintN64(1),
+          lastCalled: new arc4.UintN64(1),
+        }),
+      ),
+    })
   }
 }
 

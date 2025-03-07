@@ -27,29 +27,33 @@ function testBox(box: Box<string>, value: string) {
   let [, e] = box.maybe()
   assert(!e)
   box.value = value
-    ;[, e] = box.maybe()
+  ;[, e] = box.maybe()
   assert(e)
 }
 
 const boxMap = BoxMap<string, bytes>({ keyPrefix: '' })
 
 function testBoxMap(box: BoxMap<string, bytes>, key: string, value: bytes) {
-  box.set(key, value)
-  boxMap.set(key, value)
+  box(key).value = value
+  boxMap(key).value = value
+
+  const boxMapItem = boxMap(key)
+
+  assert(boxMapItem.exists)
 
   assert(box.keyPrefix === Bytes('two'))
   assert(boxMap.keyPrefix === Bytes(''))
 
-  assert(box.length(key))
+  assert(box(key).length)
 
-  assert(box.maybe(key)[1])
+  assert(box(key).maybe()[1])
 
-  assert(box.get(key) === boxMap.get(key))
+  assert(box(key).value === boxMap(key).value)
 
-  const isBoxDeleted = box.delete(key)
+  const isBoxDeleted = box(key).delete()
   assert(isBoxDeleted, 'delete failed')
 
-  assert(box.get(`${key}x`, { default: Bytes('b') }) === boxMap.get(`${key}x`, { default: Bytes('b') }))
+  assert(box(`${key}x`).get({ default: Bytes('b') }) === boxMap(`${key}x`).get({ default: Bytes('b') }))
 }
 
 const boxRef = BoxRef({ key: 'abc' })

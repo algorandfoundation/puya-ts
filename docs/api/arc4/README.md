@@ -52,6 +52,7 @@
 ## Functions
 
 - [abimethod](functions/abimethod.md)
+- [arc4EncodedLength](functions/arc4EncodedLength.md)
 - [baremethod](functions/baremethod.md)
 - [decodeArc4](functions/decodeArc4.md)
 - [encodeArc4](functions/encodeArc4.md)

@@ -23,6 +23,8 @@ subroutine testBoxMap(box: box_key, key: string, value: bytes): void
 {
   Box[concat(box, reinterpret_cast<bytes>(key))].value: bytes = value
   Box[concat("", reinterpret_cast<bytes>(key))].value: bytes = value
+  boxMapItem: box_key = concat("", reinterpret_cast<bytes>(key))
+  assert(STATE_EXISTS(Box[boxMapItem].value))
   assert(reinterpret_cast<bytes>(box) == "two")
   assert("" == "")
   assert(Boolean(checked_maybe(box_len(concat(box, reinterpret_cast<bytes>(key))), comment=Box must have value)))
