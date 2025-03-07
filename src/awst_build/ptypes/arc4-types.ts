@@ -231,7 +231,7 @@ export const arc4StructBaseType = new ARC4StructType({
   module: Constants.arc4EncodedTypesModuleName,
   fields: {},
   description: undefined,
-  frozen: true,
+  frozen: false,
 })
 
 export const Arc4TupleClass = new LibClassType({

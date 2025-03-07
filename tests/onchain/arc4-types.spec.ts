@@ -31,6 +31,11 @@ describe('arc4-struct', () => {
     const result = await appClientStructDemo.send.call({ method: 'toNative', args: [v1] })
     expect(result.return).toStrictEqual({ x: 100n, y: 100n })
   })
+  test('mutate vector', async ({ appClientStructDemo, expect }) => {
+    const v1 = { x: 100, y: 100 }
+    const result = await appClientStructDemo.send.call({ method: 'mutateVector', args: [v1, 50, 50] })
+    expect(result.return).toStrictEqual({ x: 50n, y: 50n })
+  })
 })
 describe('arc4-encode-decode', () => {
   const test = createArc4TestFixture('tests/approvals/arc4-encode-decode.algo.ts', { Arc4EncodeDecode: {} })

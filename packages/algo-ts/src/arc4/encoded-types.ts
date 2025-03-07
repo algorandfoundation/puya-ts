@@ -479,7 +479,7 @@ class StructBase<T> extends ARC4Encoded {
  * @typeParam T The shape of the arc4 struct
  */
 type StructConstructor = {
-  new <T extends Record<string, ARC4Encoded>>(initial: T): StructBase<T> & Readonly<T>
+  new <T extends Record<string, ARC4Encoded>>(initial: T): StructBase<T> & T
 }
 
 /**
