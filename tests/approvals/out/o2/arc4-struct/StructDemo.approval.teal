@@ -3,20 +3,163 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 0 8
-    bytecblock 0x151f7c75 0x0000000000000000
+    intcblock 1 0 16 8
+    bytecblock 0x151f7c75 "plugins" 0x0000000000000000
     // tests/approvals/arc4-struct.algo.ts:9
     // class StructDemo extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@10
-    pushbytess 0x89388ddd 0xef322d6d 0xcb81deb8 0xf79d6c46 0x91915545 // method "testVectorCreationAndEquality()void", method "addVectors((uint64,uint64),(uint64,uint64))(uint64,uint64)", method "implicitCastingAndSpreading((uint64,uint64))void", method "toAndFromBytes((uint64,uint64))(uint64,uint64)", method "toNative((uint64,uint64))(uint64,uint64)"
+    bz main_bare_routing@13
+    pushbytess 0x89388ddd 0xef322d6d 0xcb81deb8 0xf79d6c46 0x91915545 0x3814f92a 0x007a4cb0 0xa9bc61f1 // method "testVectorCreationAndEquality()void", method "addVectors((uint64,uint64),(uint64,uint64))(uint64,uint64)", method "implicitCastingAndSpreading((uint64,uint64))void", method "toAndFromBytes((uint64,uint64))(uint64,uint64)", method "toNative((uint64,uint64))(uint64,uint64)", method "getPlugin(string)(uint64,uint64,uint64,bool,(byte[4],uint64,uint64)[])", method "getMain()(uint64,uint64,uint64,bool,(byte[4],uint64,uint64)[])", method "setPlugin(string)void"
     txna ApplicationArgs 0
-    match main_testVectorCreationAndEquality_route@3 main_addVectors_route@4 main_implicitCastingAndSpreading_route@5 main_toAndFromBytes_route@6 main_toNative_route@7
+    match main_testVectorCreationAndEquality_route@3 main_addVectors_route@4 main_implicitCastingAndSpreading_route@5 main_toAndFromBytes_route@6 main_toNative_route@7 main_getPlugin_route@8 main_getMain_route@9 main_setPlugin_route@10
 
-main_after_if_else@14:
+main_after_if_else@17:
     // tests/approvals/arc4-struct.algo.ts:9
     // class StructDemo extends Contract {
     intc_1 // 0
+    return
+
+main_setPlugin_route@10:
+    // tests/approvals/arc4-struct.algo.ts:57
+    // public setPlugin(key: string) {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    // tests/approvals/arc4-struct.algo.ts:9
+    // class StructDemo extends Contract {
+    txna ApplicationArgs 1
+    extract 2 0
+    // tests/approvals/arc4-struct.algo.ts:41
+    // plugins = BoxMap<string, PluginInfo>({ keyPrefix: 'plugins' })
+    bytec_1 // "plugins"
+    // tests/approvals/arc4-struct.algo.ts:58
+    // this.plugins.set(
+    swap
+    concat
+    // tests/approvals/arc4-struct.algo.ts:58-73
+    // this.plugins.set(
+    //   key,
+    //   new PluginInfo({
+    //     lastValidRound: new arc4.UintN64(1),
+    //     cooldown: new arc4.UintN64(),
+    //     lastCalled: new arc4.UintN64(),
+    //     adminPrivileges: new arc4.Bool(false),
+    //     methods: new arc4.DynamicArray(
+    //       new MethodInfo({
+    //         selector: new arc4.StaticBytes<4>(methodSelector('test()void')),
+    //         cooldown: new arc4.UintN64(1),
+    //         lastCalled: new arc4.UintN64(1),
+    //       }),
+    //     ),
+    //   }),
+    // )
+    dup
+    box_del
+    pop
+    // tests/approvals/arc4-struct.algo.ts:60-72
+    // new PluginInfo({
+    //   lastValidRound: new arc4.UintN64(1),
+    //   cooldown: new arc4.UintN64(),
+    //   lastCalled: new arc4.UintN64(),
+    //   adminPrivileges: new arc4.Bool(false),
+    //   methods: new arc4.DynamicArray(
+    //     new MethodInfo({
+    //       selector: new arc4.StaticBytes<4>(methodSelector('test()void')),
+    //       cooldown: new arc4.UintN64(1),
+    //       lastCalled: new arc4.UintN64(1),
+    //     }),
+    //   ),
+    // }),
+    pushbytes 0x00000000000000010000000000000000000000000000000000001b0001a78000de00000000000000010000000000000001
+    // tests/approvals/arc4-struct.algo.ts:58-73
+    // this.plugins.set(
+    //   key,
+    //   new PluginInfo({
+    //     lastValidRound: new arc4.UintN64(1),
+    //     cooldown: new arc4.UintN64(),
+    //     lastCalled: new arc4.UintN64(),
+    //     adminPrivileges: new arc4.Bool(false),
+    //     methods: new arc4.DynamicArray(
+    //       new MethodInfo({
+    //         selector: new arc4.StaticBytes<4>(methodSelector('test()void')),
+    //         cooldown: new arc4.UintN64(1),
+    //         lastCalled: new arc4.UintN64(1),
+    //       }),
+    //     ),
+    //   }),
+    // )
+    box_put
+    // tests/approvals/arc4-struct.algo.ts:57
+    // public setPlugin(key: string) {
+    intc_0 // 1
+    return
+
+main_getMain_route@9:
+    // tests/approvals/arc4-struct.algo.ts:51
+    // public getMain() {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    // tests/approvals/arc4-struct.algo.ts:43
+    // plugin = Box<PluginInfo>({ key: 'main' })
+    pushbytes "main"
+    // tests/approvals/arc4-struct.algo.ts:52
+    // const value = this.plugin.value.copy()
+    box_get
+    assert // Box must have value
+    // tests/approvals/arc4-struct.algo.ts:53
+    // assert(value.lastCalled.native > 0, 'Last called not zero')
+    dup
+    intc_2 // 16
+    extract_uint64
+    assert // Last called not zero
+    // tests/approvals/arc4-struct.algo.ts:51
+    // public getMain() {
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
+
+main_getPlugin_route@8:
+    // tests/approvals/arc4-struct.algo.ts:45
+    // public getPlugin(key: string): PluginInfo {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    // tests/approvals/arc4-struct.algo.ts:9
+    // class StructDemo extends Contract {
+    txna ApplicationArgs 1
+    extract 2 0
+    // tests/approvals/arc4-struct.algo.ts:41
+    // plugins = BoxMap<string, PluginInfo>({ keyPrefix: 'plugins' })
+    bytec_1 // "plugins"
+    // tests/approvals/arc4-struct.algo.ts:46
+    // const value = this.plugins.get(key).copy()
+    swap
+    concat
+    box_get
+    assert // Box must have value
+    // tests/approvals/arc4-struct.algo.ts:47
+    // assert(value.lastCalled.native > 0, 'Last called not zero')
+    dup
+    intc_2 // 16
+    extract_uint64
+    assert // Last called not zero
+    // tests/approvals/arc4-struct.algo.ts:45
+    // public getPlugin(key: string): PluginInfo {
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
     return
 
 main_toNative_route@7:
@@ -130,10 +273,10 @@ main_addVectors_route@4:
     // tests/approvals/arc4-struct.algo.ts:21
     // y: new ARC4Uint64(v1.y.native + v2.y.native),
     uncover 2
-    intc_2 // 8
+    intc_3 // 8
     extract_uint64
     uncover 2
-    intc_2 // 8
+    intc_3 // 8
     extract_uint64
     +
     itob
@@ -162,22 +305,22 @@ main_testVectorCreationAndEquality_route@3:
     assert // can only call when not creating
     // tests/approvals/arc4-struct.algo.ts:12
     // log(v1.x)
-    bytec_1 // 0x0000000000000000
+    bytec_2 // 0x0000000000000000
     log
     // tests/approvals/arc4-struct.algo.ts:13
     // log(v1.y)
-    bytec_1 // 0x0000000000000000
+    bytec_2 // 0x0000000000000000
     log
     // tests/approvals/arc4-struct.algo.ts:10
     // public testVectorCreationAndEquality() {
     intc_0 // 1
     return
 
-main_bare_routing@10:
+main_bare_routing@13:
     // tests/approvals/arc4-struct.algo.ts:9
     // class StructDemo extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@14
+    bnz main_after_if_else@17
     txn ApplicationID
     !
     assert // can only call when creating

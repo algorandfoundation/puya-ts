@@ -10,15 +10,26 @@ main:
     // tests/approvals/accounts.algo.ts:4
     // export class AccountsContract extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@6
-    pushbytes 0xdfe9a035 // method "getAccountInfo(account,asset)(byte[],uint64,uint64,byte[],uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,bool)"
+    bz main_bare_routing@7
+    pushbytess 0xdfe9a035 0xf62943d1 // method "getAccountInfo(account,asset)(byte[],uint64,uint64,byte[],uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,bool)", method "otherAccount()void"
     txna ApplicationArgs 0
-    match main_getAccountInfo_route@3
+    match main_getAccountInfo_route@3 main_otherAccount_route@4
 
-main_after_if_else@10:
+main_after_if_else@11:
     // tests/approvals/accounts.algo.ts:4
     // export class AccountsContract extends Contract {
     intc_0 // 0
+    return
+
+main_otherAccount_route@4:
+    // tests/approvals/accounts.algo.ts:26
+    // public otherAccount() {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    intc_1 // 1
     return
 
 main_getAccountInfo_route@3:
@@ -40,11 +51,11 @@ main_getAccountInfo_route@3:
     txnas Assets
     bury 1
 
-main_while_top@15:
+main_while_top@18:
     pushint 1410 // 1410
     global OpcodeBudget
     >
-    bz main_after_while@18
+    bz main_after_while@21
     itxn_begin
     pushint 6 // appl
     itxn_field TypeEnum
@@ -57,9 +68,9 @@ main_while_top@15:
     intc_0 // 0
     itxn_field Fee
     itxn_submit
-    b main_while_top@15
+    b main_while_top@18
 
-main_after_while@18:
+main_after_while@21:
     // tests/approvals/accounts.algo.ts:9
     // balance: account.balance,
     dig 1
@@ -1235,11 +1246,11 @@ main_after_while@18:
     intc_1 // 1
     return
 
-main_bare_routing@6:
+main_bare_routing@7:
     // tests/approvals/accounts.algo.ts:4
     // export class AccountsContract extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@10
+    bnz main_after_if_else@11
     txn ApplicationID
     !
     assert // can only call when creating

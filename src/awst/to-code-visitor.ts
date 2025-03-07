@@ -103,10 +103,7 @@ export class ToCodeVisitor
     return `${expression.base.accept(this)}.slice(${args})`
   }
   visitBoxValueExpression(expression: nodes.BoxValueExpression): string {
-    if (expression.key instanceof nodes.BytesConstant) {
-      return `Box[${expression.key.accept(this)}].value`
-    }
-    return `${expression.key.accept(this)}.value`
+    return `Box[${expression.key.accept(this)}].value`
   }
   visitIntegerConstant(expression: nodes.IntegerConstant): string {
     if (expression.tealAlias) return expression.tealAlias
