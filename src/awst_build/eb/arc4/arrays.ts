@@ -2,7 +2,6 @@ import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
 import { BytesConstant, StringConstant } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
-import { wtypes } from '../../../awst/wtypes'
 import { Constants } from '../../../constants'
 import { wrapInCodeError } from '../../../errors'
 import { logger } from '../../../logger'
@@ -27,7 +26,6 @@ import { instanceEb } from '../../type-registry'
 import type { InstanceBuilder, NodeBuilder } from '../index'
 import { ClassBuilder, FunctionBuilder } from '../index'
 import { IterableIteratorExpressionBuilder } from '../iterable-iterator-expression-builder'
-import { AccountExpressionBuilder } from '../reference/account'
 import { ArrayCopyFunctionBuilder } from '../shared/array-copy-function-builder'
 import { AtFunctionBuilder } from '../shared/at-function-builder'
 import { ArrayPopFunctionBuilder } from '../shared/pop-function-builder'
@@ -310,6 +308,15 @@ export abstract class ArrayExpressionBuilder<
           this.ptype instanceof StaticArrayType ? new DynamicArrayType({ elementType: this.ptype.elementType }) : this.ptype
         return new SliceFunctionBuilder(this.resolve(), sliceResult)
       }
+      case 'native':
+        return instanceEb(
+          nodeFactory.aRC4Decode({
+            value: this.resolve(),
+            wtype: this.ptype.nativeType.wtypeOrThrow,
+            sourceLocation,
+          }),
+          this.ptype.nativeType,
+        )
     }
     return super.memberAccess(name, sourceLocation)
   }
@@ -376,33 +383,25 @@ export class StaticArrayExpressionBuilder extends ArrayExpressionBuilder<StaticA
     invariant(ptype instanceof StaticArrayType, 'ptype must be instance of StaticArrayType')
     super(expr, ptype)
   }
-}
 
-export class DynamicBytesExpressionBuilder extends DynamicArrayExpressionBuilder {
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
     switch (name) {
       case 'native':
         return instanceEb(
           nodeFactory.aRC4Decode({
-            wtype: bytesPType.wtype,
             value: this.resolve(),
+            wtype: this.ptype.nativeType.wtypeOrThrow,
             sourceLocation,
           }),
-          bytesPType,
+          this.ptype.nativeType,
         )
     }
     return super.memberAccess(name, sourceLocation)
   }
 }
-export class StaticBytesExpressionBuilder extends StaticArrayExpressionBuilder {
-  memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
-    switch (name) {
-      case 'native':
-        return instanceEb(this.toBytes(sourceLocation), bytesPType)
-    }
-    return super.memberAccess(name, sourceLocation)
-  }
-}
+
+export class DynamicBytesExpressionBuilder extends DynamicArrayExpressionBuilder {}
+export class StaticBytesExpressionBuilder extends StaticArrayExpressionBuilder {}
 
 export class AddressExpressionBuilder extends ArrayExpressionBuilder<StaticArrayType> {
   constructor(expr: Expression, ptype: PType) {
@@ -415,10 +414,6 @@ export class AddressExpressionBuilder extends ArrayExpressionBuilder<StaticArray
     switch (name) {
       case 'length':
         return new UInt64ExpressionBuilder(nodeFactory.uInt64Constant({ value: this.ptype.arraySize, sourceLocation }))
-      case 'native':
-        return new AccountExpressionBuilder(
-          nodeFactory.reinterpretCast({ expr: this.toBytes(sourceLocation), sourceLocation, wtype: wtypes.accountWType }),
-        )
     }
     return super.memberAccess(name, sourceLocation)
   }
