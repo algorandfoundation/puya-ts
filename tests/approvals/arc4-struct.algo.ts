@@ -22,6 +22,12 @@ class StructDemo extends Contract {
     })
   }
 
+  public mutateVector(v1: Vector, newX: ARC4Uint64, newY: ARC4Uint64): Vector {
+    v1.x = newX
+    v1.y = newY
+    return v1
+  }
+
   public implicitCastingAndSpreading(v1: Vector) {
     const v2 = new Vector(v1)
     const v3 = new Vector({ ...v2 })

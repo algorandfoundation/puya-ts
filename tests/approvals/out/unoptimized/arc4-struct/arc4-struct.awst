@@ -28,6 +28,13 @@ contract StructDemo
     return new Vector(x=(#3 = { x: ARC4_ENCODE(ARC4_DECODE(v1.x) + ARC4_DECODE(v2.x), wtype=arc4.uint64), y: ARC4_ENCODE(ARC4_DECODE(v1.y) + ARC4_DECODE(v2.y), wtype=arc4.uint64) }).x, y=#3.y)
   }
   
+  mutateVector(v1: Vector, newX: arc4.uint64, newY: arc4.uint64): Vector
+  {
+    v1.x: arc4.uint64 = newX
+    v1.y: arc4.uint64 = newY
+    return v1
+  }
+  
   implicitCastingAndSpreading(v1: Vector): void
   {
     v2: Vector = new Vector(x=(#4 = ARC4_DECODE(v1)).x, y=#4.y)
