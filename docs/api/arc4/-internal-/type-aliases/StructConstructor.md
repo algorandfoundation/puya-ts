@@ -6,9 +6,9 @@
 
 # Type Alias: StructConstructor()
 
-> **StructConstructor**: \<`T`\>(`initial`) => [`StructBase`](../classes/StructBase.md)\<`T`\> & [`Readonly`](Readonly.md)\<`T`\>
+> **StructConstructor**: \<`T`\>(`initial`) => [`StructBase`](../classes/StructBase.md)\<`T`\> & `T`
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:479](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L479)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:481](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L481)
 
 Type alias for the Struct constructor function
 
@@ -20,4 +20,4 @@ Type alias for the Struct constructor function
 
 ## Returns
 
-[`StructBase`](../classes/StructBase.md)\<`T`\> & [`Readonly`](Readonly.md)\<`T`\>
+[`StructBase`](../classes/StructBase.md)\<`T`\> & `T`

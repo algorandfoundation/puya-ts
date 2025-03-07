@@ -8,7 +8,7 @@
 
 > `const` **Struct**: [`StructConstructor`](../-internal-/type-aliases/StructConstructor.md)
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:491](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L491)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:493](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L493)
 
 The base type of arc4 structs
 

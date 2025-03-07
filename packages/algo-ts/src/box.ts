@@ -53,51 +53,12 @@ export type BoxMap<TKey, TValue> = {
    * Get the bytes used to prefix each key
    */
   readonly keyPrefix: bytes
+
   /**
-   * Get the value of a keyed box, error if the box does not exist
-   * @param key The key of the box to retrieve
-   * @returns The value
+   * Get a Box proxy for a single item in the BoxMap
+   * @param key The key of the box to retrieve a proxy for
    */
-  get(key: TKey): TValue
-  /**
-   * Get the value of a keyed box, or return `options.default` if the box does not exist
-   * @param key The key of the box to retrieve
-   * @param options Options to specify a default value to be returned if no other value exists
-   * @returns The value if the box exists, else the default value
-   */
-  get(key: TKey, options: { default: TValue }): TValue
-  /**
-   * Set the value of a keyed box
-   * @param key The key of the box to set
-   * @param value The value to write to that box
-   */
-  set(key: TKey, value: TValue): void
-  /**
-   * Delete the box associated with a specific key
-   * @param key The key of the box to delete
-   * @returns True if the box existed and was deleted, else false
-   */
-  delete(key: TKey): boolean
-  /**
-   * Returns a boolean indicating if a box associated with the specified key exists
-   * @param key The key of the box to check
-   * @returns True if the box exists, else false
-   */
-  has(key: TKey): boolean
-  /**
-   * Get the value of a keyed box if available, and a boolean indicating if the box exists.
-   *
-   * If the box does not exist, the value returned at position 0 should not be relied on to have a valid value.
-   * @param key The key of the box to check
-   * @returns A tuple with the first item being the box value, and the second item being a boolean indicating if the box exists.
-   */
-  maybe(key: TKey): readonly [TValue, boolean]
-  /**
-   * Get the length of a keyed box, or error if the box does not exist
-   * @param key The key of the box to check
-   * @returns The length of the box
-   */
-  length(key: TKey): uint64
+  (key: TKey): Box<TValue>
 }
 
 /**

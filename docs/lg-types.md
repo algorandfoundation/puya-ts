@@ -344,7 +344,7 @@ ARC4 Tuples are immutable statically sized arrays of mixed item types. Item type
 **Encoding:** See [ARC4 Container Packing](#ARC4-Container-Packing)
 **Native equivalent:** _None_
 
-ARC4 Structs are named tuples. Items can be accessed via names instead of indexes.
+ARC4 Structs are named tuples. Items can be accessed via names instead of indexes. They are also mutable
 
 ### ARC4 Container Packing
 

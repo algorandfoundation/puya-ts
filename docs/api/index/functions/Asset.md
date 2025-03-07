@@ -10,7 +10,7 @@
 
 > **Asset**(): [`Asset`](../type-aliases/Asset.md)
 
-Defined in: [packages/algo-ts/src/reference.ts:122](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L122)
+Defined in: [packages/algo-ts/src/reference.ts:128](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L128)
 
 Creates a new Asset object represent the asset id 0 (an invalid ID)
 
@@ -22,7 +22,7 @@ Creates a new Asset object represent the asset id 0 (an invalid ID)
 
 > **Asset**(`assetId`): [`Asset`](../type-aliases/Asset.md)
 
-Defined in: [packages/algo-ts/src/reference.ts:127](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L127)
+Defined in: [packages/algo-ts/src/reference.ts:133](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L133)
 
 Creates a new Asset object representing the asset with the specified id
 

@@ -6,7 +6,7 @@
 
 # Class: StaticBytes\<TLength\>
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:527](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L527)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:529](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L529)
 
 A fixed length sequence of bytes
 
@@ -28,7 +28,7 @@ A fixed length sequence of bytes
 
 > **new StaticBytes**\<`TLength`\>(`value`?): [`StaticBytes`](StaticBytes.md)\<`TLength`\>
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:535](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L535)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:537](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L537)
 
 Create a new StaticBytes instance
 
@@ -96,7 +96,7 @@ Returns the current length of this array
 
 > **get** **native**(): [`bytes`](../../index/type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:542](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L542)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:544](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L544)
 
 Get the native bytes value
 
@@ -155,7 +155,7 @@ The index of the item to retrieve
 
 > **concat**(`other`): [`DynamicBytes`](DynamicBytes.md)
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:550](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L550)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:552](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L552)
 
 Returns a dynamic bytes object containing all bytes from _this_ and _other_
 

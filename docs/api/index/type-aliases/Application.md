@@ -8,7 +8,7 @@
 
 > **Application**: `object`
 
-Defined in: [packages/algo-ts/src/reference.ts:222](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L222)
+Defined in: [packages/algo-ts/src/reference.ts:228](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L228)
 
 An Application on the Algorand network.
 

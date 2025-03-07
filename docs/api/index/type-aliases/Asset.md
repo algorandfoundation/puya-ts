@@ -8,7 +8,7 @@
 
 > **Asset**: `object`
 
-Defined in: [packages/algo-ts/src/reference.ts:122](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L122)
+Defined in: [packages/algo-ts/src/reference.ts:128](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L128)
 
 An Asset on the Algorand network.
 
