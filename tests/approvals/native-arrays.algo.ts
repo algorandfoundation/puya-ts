@@ -1,6 +1,6 @@
 import type { uint64 } from '@algorandfoundation/algorand-typescript'
 import { assert, assertMatch, Contract, Uint64 } from '@algorandfoundation/algorand-typescript'
-import { DynamicArray, StaticArray, UintN32 } from '@algorandfoundation/algorand-typescript/arc4'
+import { Bool, DynamicArray, StaticArray, UintN32 } from '@algorandfoundation/algorand-typescript/arc4'
 
 type Vector = { x: uint64; y: uint64 }
 export class NativeArraysAlgo extends Contract {
@@ -58,5 +58,21 @@ export class NativeArraysAlgo extends Contract {
 
     assertMatch(myVectors, [{ x, y }])
     return myVectors
+  }
+
+  booleans() {
+    return [true, false, true]
+  }
+
+  booleansStatic() {
+    return [true, false, true] as const
+  }
+
+  arc4Booleans() {
+    return [new Bool(true), new Bool(false), new Bool(true)]
+  }
+
+  arc4BooleansStatic() {
+    return [new Bool(true), new Bool(false), new Bool(true)] as const
   }
 }

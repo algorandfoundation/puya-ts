@@ -1,5 +1,5 @@
 import type { biguint, bytes, uint64 } from '@algorandfoundation/algorand-typescript'
-import { arc4, assert, BaseContract, BigUint, Bytes, Txn } from '@algorandfoundation/algorand-typescript'
+import { arc4, assert, assertMatch, BaseContract, BigUint, Bytes, Txn } from '@algorandfoundation/algorand-typescript'
 import {
   Address,
   Byte,
@@ -114,6 +114,12 @@ function testArrays(n: ARC4Uint64) {
   myStatic[1] = new UintN<64>(50)
 
   const myStatic2 = new StaticArray<ARC4Uint64, 3>(n, n, n)
+
+  const staticNative = myStatic2.native
+  assertMatch(staticNative, [n, n, n])
+
+  const dynamicNative = doubleArray.native
+  assertMatch(dynamicNative, [n, n, n, n, n, n, n, n])
 }
 
 function testByte() {
