@@ -28,7 +28,7 @@ import type { InstanceBuilder, NodeBuilder } from '../index'
 import { ClassBuilder, FunctionBuilder } from '../index'
 import { IterableIteratorExpressionBuilder } from '../iterable-iterator-expression-builder'
 import { AccountExpressionBuilder } from '../reference/account'
-import { ArrayCopyFunctionBuilder } from '../shared/array-copy-function-builder'
+import { Arc4CopyFunctionBuilder } from '../shared/arc4-copy-function-builder'
 import { AtFunctionBuilder } from '../shared/at-function-builder'
 import { ArrayPopFunctionBuilder } from '../shared/pop-function-builder'
 import { ArrayPushFunctionBuilder } from '../shared/push-function-builder'
@@ -302,7 +302,7 @@ export abstract class ArrayExpressionBuilder<
       case 'entries':
         return new EntriesFunctionBuilder(this)
       case 'copy':
-        return new ArrayCopyFunctionBuilder(this)
+        return new Arc4CopyFunctionBuilder(this)
       case 'concat':
         return new ConcatFunctionBuilder(this)
       case 'slice': {

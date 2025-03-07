@@ -359,7 +359,7 @@ export class TypeResolver {
     baseType: ARC4StructType,
     sourceLocation: SourceLocation,
   ): ARC4StructType {
-    const ignoredProps = ['bytes', 'equals', 'native', Constants.constructorMethodName]
+    const ignoredProps = ['bytes', 'equals', 'native', 'copy', Constants.constructorMethodName]
     const fields: Record<string, ARC4EncodedType> = {}
     for (const prop of tsType.getProperties()) {
       if (isIn(prop.name, ignoredProps)) continue
