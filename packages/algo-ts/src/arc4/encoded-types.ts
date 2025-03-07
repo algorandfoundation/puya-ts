@@ -579,3 +579,13 @@ export function decodeArc4<T>(bytes: BytesCompat, prefix: 'none' | 'log' = 'none
 export function encodeArc4<T>(value: T): bytes {
   throw new NoImplementation()
 }
+
+/**
+ * Return the total number of bytes required to store T as ARC4 bytes.
+ *
+ * T must represent a type with a fixed length encoding scheme.
+ * @typeParam T Any native or arc4 type with a fixed encoding size.
+ */
+export function arc4EncodedLength<T>(): uint64 {
+  throw new NoImplementation()
+}

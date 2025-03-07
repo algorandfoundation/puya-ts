@@ -9,8 +9,9 @@ import { codeInvariant, hexToUint8Array } from '../../../util'
 import { isArc4EncodableType, ptypeToArc4EncodedType, ptypeToArc4PType } from '../../arc4-util'
 import { AwstBuildContext } from '../../context/awst-build-context'
 import type { PType } from '../../ptypes'
-import { bytesPType, stringPType } from '../../ptypes'
+import { bytesPType, stringPType, uint64PType } from '../../ptypes'
 import {
+  arc4EncodedLengthFunction,
   ARC4EncodedType,
   decodeArc4Function,
   encodeArc4Function,
@@ -218,6 +219,39 @@ export class MethodSelectorFunctionBuilder extends FunctionBuilder {
         sourceLocation,
       }),
       bytesPType,
+    )
+  }
+}
+
+export class Arc4EncodedLengthFunctionBuilder extends FunctionBuilder {
+  readonly ptype = arc4EncodedLengthFunction
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    const {
+      ptypes: [typeToEncode],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 1,
+      funcName: this.typeDescription,
+      argSpec: (a) => [],
+      callLocation: sourceLocation,
+    })
+
+    const arc4Type = ptypeToArc4EncodedType(typeToEncode, sourceLocation)
+
+    codeInvariant(
+      arc4Type.encodedBitSize !== null,
+      `Target type must encode to a fixed size. ${typeToEncode} encodes with a variable length`,
+      sourceLocation,
+    )
+
+    return instanceEb(
+      nodeFactory.uInt64Constant({
+        value: ARC4EncodedType.bitsToBytes(arc4Type.encodedBitSize),
+        sourceLocation,
+      }),
+      uint64PType,
     )
   }
 }
