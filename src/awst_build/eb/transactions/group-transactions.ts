@@ -1,5 +1,6 @@
 import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
+import { IntegerConstant } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import type { TxnFieldData } from '../../../awst/txn-fields'
 import { TxnFields } from '../../../awst/txn-fields'
@@ -7,11 +8,10 @@ import { Constants } from '../../../constants'
 import { logger } from '../../../logger'
 import { invariant } from '../../../util'
 import type { PType } from '../../ptypes'
-import { GroupTransactionPType, numberPType, TransactionFunctionType, uint64PType } from '../../ptypes'
+import { GroupTransactionPType, TransactionFunctionType, uint64PType } from '../../ptypes'
 import { instanceEb } from '../../type-registry'
 import type { NodeBuilder } from '../index'
 import { FunctionBuilder, InstanceExpressionBuilder } from '../index'
-import { requireIntegerConstant } from '../util'
 import { parseFunctionArgs } from '../util/arg-parsing'
 import { anyTxnFields, txnKindToFields } from './txn-fields'
 import { getGroupTransactionType } from './util'
@@ -76,11 +76,11 @@ export class GroupTransactionFunctionBuilder extends FunctionBuilder {
       genericTypeArgs: 0,
       callLocation: sourceLocation,
       funcName: this.ptype.name,
-      argSpec: (a) => [a.required(numberPType)],
+      argSpec: (a) => [a.required(uint64PType)],
     })
     const txnPType = getGroupTransactionType(this.ptype.kind)
-    const groupIndex = requireIntegerConstant(groupIndexBuilder)
-    if (groupIndex.value >= Constants.algo.maxTransactionGroupSize) {
+    const groupIndex = groupIndexBuilder.resolve()
+    if (groupIndex instanceof IntegerConstant && groupIndex.value >= Constants.algo.maxTransactionGroupSize) {
       logger.error(groupIndex.sourceLocation, `transaction group index should be less than ${Constants.algo.maxTransactionGroupSize}`)
     }
 

@@ -58,7 +58,7 @@ const baseTxnFields = {
   /**
    * Transaction type as integer
    */
-  type: [TxnField.TypeEnum, transactionTypeType] as const,
+  type: [TxnField.TypeEnum, transactionTypeType.memberType] as const,
 
   /**
    * Position of this transaction within an atomic group
