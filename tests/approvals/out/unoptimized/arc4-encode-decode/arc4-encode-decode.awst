@@ -10,7 +10,7 @@ contract Arc4EncodeDecode
     return True
   }
   
-  testEncoding(a: uint64, b: bool, c: biguint, d: bytes, e: string): void
+  testEncoding(a: uint64, b: bool, c: biguint, d: bytes, e: string, f: arc4.static_array<arc4.byte>): void
   {
     assert(reinterpret_cast<bytes>(ARC4_ENCODE(a, wtype=arc4.uint64)) == reinterpret_cast<bytes>(ARC4_ENCODE(a, wtype=arc4.uint64)))
     assert(reinterpret_cast<bytes>(ARC4_ENCODE(b, wtype=arc4.bool)) == reinterpret_cast<bytes>(ARC4_ENCODE(b, wtype=arc4.bool)))
@@ -18,6 +18,13 @@ contract Arc4EncodeDecode
     assert(reinterpret_cast<bytes>(ARC4_ENCODE(d, wtype=arc4.dynamic_array<arc4.byte>)) == reinterpret_cast<bytes>(ARC4_ENCODE(d, wtype=arc4.dynamic_array<arc4.byte>)))
     assert(reinterpret_cast<bytes>(ARC4_ENCODE(e, wtype=arc4.dynamic_array<arc4.byte>)) == reinterpret_cast<bytes>(ARC4_ENCODE(e, wtype=arc4.dynamic_array<arc4.byte>)))
     assert(reinterpret_cast<bytes>(ARC4_ENCODE({ a: a, b: d }, wtype=object)) == reinterpret_cast<bytes>(new TestStruct(a=(#0 = { a: ARC4_ENCODE(a, wtype=arc4.uint64), b: ARC4_ENCODE(d, wtype=arc4.dynamic_array<arc4.byte>) }).a, b=#0.b)))
+    assert(reinterpret_cast<bytes>(f) == reinterpret_cast<bytes>(f))
+    assert(reinterpret_cast<bytes>(ARC4_ENCODE(new stack_array<uint64>(a), wtype=arc4.dynamic_array<arc4.uint64>)) == reinterpret_cast<bytes>(new arc4.dynamic_array<arc4.uint64>(ARC4_ENCODE(a, wtype=arc4.uint64))))
+    assert(reinterpret_cast<bytes>(ARC4_ENCODE(new stack_array<bool>(b), wtype=arc4.dynamic_array<arc4.bool>)) == reinterpret_cast<bytes>(new arc4.dynamic_array<arc4.bool>(ARC4_ENCODE(b, wtype=arc4.bool))))
+    assert(reinterpret_cast<bytes>(ARC4_ENCODE(new stack_array<biguint>(c), wtype=arc4.dynamic_array<arc4.uint512>)) == reinterpret_cast<bytes>(new arc4.dynamic_array<arc4.uint512>(ARC4_ENCODE(c, wtype=arc4.uint512))))
+    assert(reinterpret_cast<bytes>(ARC4_ENCODE(new stack_array<bytes>(d), wtype=arc4.dynamic_array<arc4.dynamic_array<arc4.byte>>)) == reinterpret_cast<bytes>(new arc4.dynamic_array<arc4.dynamic_array<arc4.byte>>(ARC4_ENCODE(d, wtype=arc4.dynamic_array<arc4.byte>))))
+    assert(reinterpret_cast<bytes>(ARC4_ENCODE(new stack_array<string>(e), wtype=arc4.dynamic_array<arc4.dynamic_array<arc4.byte>>)) == reinterpret_cast<bytes>(new arc4.dynamic_array<arc4.dynamic_array<arc4.byte>>(ARC4_ENCODE(e, wtype=arc4.dynamic_array<arc4.byte>))))
+    assert(reinterpret_cast<bytes>(ARC4_ENCODE(new stack_array<arc4.static_array<arc4.byte>>(f), wtype=arc4.dynamic_array<arc4.static_array<arc4.byte>>)) == reinterpret_cast<bytes>(new arc4.dynamic_array<arc4.static_array<arc4.byte>>(f)))
     assert(8 == 8)
     assert(1 == 1)
     assert(64 == 64)
@@ -27,13 +34,22 @@ contract Arc4EncodeDecode
     assert(3 == 3)
   }
   
-  testDecoding(a: uint64, a_bytes: bytes, b: bool, b_bytes: bytes, c: biguint, c_bytes: bytes, d: string, d_bytes: bytes, e: TestObj{ a: arc4.uint64, b: arc4.dynamic_array<arc4.byte> }, e_bytes: bytes): void
+  testDecoding(a: uint64, a_bytes: bytes, b: bool, b_bytes: bytes, c: biguint, c_bytes: bytes, d: string, d_bytes: bytes, e: TestObj{ a: arc4.uint64, b: arc4.dynamic_array<arc4.byte> }, e_bytes: bytes, f: arc4.static_array<arc4.byte>, f_bytes: bytes): void
   {
     assert(ARC4_DECODE(reinterpret_cast<arc4.uint64>(a_bytes)) == a)
     assert(ARC4_DECODE(reinterpret_cast<arc4.bool>(b_bytes)) == b)
     assert(ARC4_DECODE(reinterpret_cast<arc4.uint512>(c_bytes)) == c)
     assert(ARC4_DECODE(reinterpret_cast<arc4.dynamic_array<arc4.byte>>(d_bytes)) == d)
     assert(reinterpret_cast<bytes>(ARC4_DECODE(reinterpret_cast<TestObj>(e_bytes)).a) == reinterpret_cast<bytes>(e.a) and reinterpret_cast<bytes>(ARC4_DECODE(reinterpret_cast<TestObj>(e_bytes)).b) == reinterpret_cast<bytes>(e.b), comment=assert target is match for conditions)
+    lenPrefix: bytes = itob(1).slice(6, 8)
+    offsetHeader: bytes = itob(2).slice(6, 8)
+    assert(ARC4_DECODE(reinterpret_cast<arc4.dynamic_array<arc4.uint64>>(concat(lenPrefix, a_bytes))).length == 1 and ARC4_DECODE(reinterpret_cast<arc4.dynamic_array<arc4.uint64>>(concat(lenPrefix, a_bytes)))[0] == a, comment=Array of uint64 matches)
+    assert(ARC4_DECODE(reinterpret_cast<arc4.dynamic_array<arc4.bool>>(concat(lenPrefix, b_bytes))).length == 1 and ARC4_DECODE(reinterpret_cast<arc4.dynamic_array<arc4.bool>>(concat(lenPrefix, b_bytes)))[0] == b, comment=Array of boolean matches)
+    log(concat(lenPrefix, c_bytes))
+    assert(ARC4_DECODE(reinterpret_cast<arc4.dynamic_array<arc4.uint512>>(concat(lenPrefix, c_bytes))).length == 1 and ARC4_DECODE(reinterpret_cast<arc4.dynamic_array<arc4.uint512>>(concat(lenPrefix, c_bytes)))[0] == c, comment=Array of biguint matches)
+    assert(ARC4_DECODE(reinterpret_cast<arc4.dynamic_array<arc4.dynamic_array<arc4.byte>>>("" + lenPrefix + offsetHeader + d_bytes)).length == 1 and ARC4_DECODE(reinterpret_cast<arc4.dynamic_array<arc4.dynamic_array<arc4.byte>>>("" + lenPrefix + offsetHeader + d_bytes))[0] == d, comment=Array of string matches)
+    assert(ARC4_DECODE(reinterpret_cast<arc4.dynamic_array<TestObj>>("" + lenPrefix + offsetHeader + e_bytes)).length == 1 and reinterpret_cast<bytes>(ARC4_DECODE(reinterpret_cast<arc4.dynamic_array<TestObj>>("" + lenPrefix + offsetHeader + e_bytes))[0].a) == reinterpret_cast<bytes>(e.a) and reinterpret_cast<bytes>(ARC4_DECODE(reinterpret_cast<arc4.dynamic_array<TestObj>>("" + lenPrefix + offsetHeader + e_bytes))[0].b) == reinterpret_cast<bytes>(e.b), comment=Array of struct matches)
+    assert(ARC4_DECODE(reinterpret_cast<arc4.dynamic_array<arc4.static_array<arc4.byte>>>("" + lenPrefix + f_bytes)).length == 1 and reinterpret_cast<bytes>(ARC4_DECODE(reinterpret_cast<arc4.dynamic_array<arc4.static_array<arc4.byte>>>("" + lenPrefix + f_bytes))[0]) == reinterpret_cast<bytes>(f), comment=Array of address matches)
   }
   
   __algots__.defaultCreate(): void

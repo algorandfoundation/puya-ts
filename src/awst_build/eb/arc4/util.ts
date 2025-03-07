@@ -9,7 +9,7 @@ import { codeInvariant, hexToUint8Array } from '../../../util'
 import { isArc4EncodableType, ptypeToArc4EncodedType, ptypeToArc4PType } from '../../arc4-util'
 import { AwstBuildContext } from '../../context/awst-build-context'
 import type { PType } from '../../ptypes'
-import { bytesPType, stringPType, uint64PType } from '../../ptypes'
+import { ArrayLiteralPType, bytesPType, stringPType, uint64PType } from '../../ptypes'
 import {
   arc4EncodedLengthFunction,
   ARC4EncodedType,
@@ -58,7 +58,7 @@ export class EncodeArc4FunctionBuilder extends FunctionBuilder {
   readonly ptype = encodeArc4Function
 
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
-    const {
+    let {
       args: [valueToEncode],
     } = parseFunctionArgs({
       args,
@@ -68,6 +68,23 @@ export class EncodeArc4FunctionBuilder extends FunctionBuilder {
       argSpec: (a) => [a.required()],
       callLocation: sourceLocation,
     })
+    if (valueToEncode.ptype instanceof ARC4EncodedType) {
+      // Already encoded, just reinterpret as bytes
+      return instanceEb(
+        nodeFactory.reinterpretCast({
+          expr: valueToEncode.resolve(),
+          wtype: wtypes.bytesWType,
+          sourceLocation,
+        }),
+        bytesPType,
+      )
+    }
+
+    if (valueToEncode.ptype instanceof ArrayLiteralPType) {
+      // Array literals should be interpreted as arrays
+      valueToEncode = valueToEncode.resolveToPType(valueToEncode.ptype.getArrayType())
+    }
+
     const encodedType = ptypeToArc4EncodedType(valueToEncode.ptype, sourceLocation)
 
     return instanceEb(
@@ -99,6 +116,12 @@ export class DecodeArc4FunctionBuilder extends FunctionBuilder {
       argSpec: (a) => [a.required(bytesPType), a.optional(stringPType)],
       callLocation: sourceLocation,
     })
+    codeInvariant(
+      !(ptype instanceof ARC4EncodedType),
+      `Cannot decode to ${ptype} as it is an ARC4 type. Use \`interpretAsArc4<${ptype}>\` instead`,
+      sourceLocation,
+    )
+
     codeInvariant(isArc4EncodableType(ptype), `Cannot determine ARC4 encoding for ${ptype}`, sourceLocation)
 
     const arc4Encoded = ptypeToArc4EncodedType(ptype, sourceLocation)

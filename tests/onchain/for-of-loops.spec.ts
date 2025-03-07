@@ -9,7 +9,7 @@ describe('for loops', () => {
   test('test_for_of_loop_tuple', async ({ appClientForOfLoopsAlgo }) => {
     const r1 = await appClientForOfLoopsAlgo.send.call({ method: 'test_for_of_loop_tuple', args: [[4, 8, 10]] })
     expect(r1.return).toBe(4n + 8n + 10n)
-    const r2 = await appClientForOfLoopsAlgo.send.call({ method: 'test_for_of_loop_tuple', args: [[4, 42, 8, 10]] })
+    const r2 = await appClientForOfLoopsAlgo.send.call({ method: 'test_for_of_loop_tuple', args: [[4, 42, 10]] })
     expect(r2.return).toBe(4n + 42n)
   })
   test('test_for_of_loop_arc4_dynamic_array', async ({ appClientForOfLoopsAlgo }) => {

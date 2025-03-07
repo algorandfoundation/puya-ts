@@ -253,3 +253,13 @@ export interface BytesBacked {
    */
   get bytes(): bytes
 }
+
+/**
+ * Declare a homogeneous tuple with the item type T and length N.
+ *
+ * Eg.
+ * NTuple<uint64, 3> === [uint64, uint64, uint64]
+ */
+export type NTuple<T, N extends number> = N extends N ? (number extends N ? T[] : _TupleOf<T, N, readonly []>) : never
+
+type _TupleOf<T, N extends number, R extends readonly unknown[]> = R['length'] extends N ? R : _TupleOf<T, N, readonly [T, ...R]>
