@@ -1054,6 +1054,14 @@ export const ApplicationTxnFunction = new TransactionFunctionType({
   module: Constants.gtxnModuleName,
   kind: TransactionKind.appl,
 })
+export const gtxnUnion = UnionPType.fromTypes([
+  paymentGtxnType,
+  keyRegistrationGtxnType,
+  assetConfigGtxnType,
+  assetTransferGtxnType,
+  assetFreezeGtxnType,
+  applicationCallGtxnType,
+])
 export const anyGtxnType = new GroupTransactionPType({
   name: 'Transaction',
   kind: undefined,

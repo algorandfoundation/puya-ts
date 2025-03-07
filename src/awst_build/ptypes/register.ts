@@ -219,6 +219,7 @@ import {
   TransactionFunction,
   transactionTypeType,
   TuplePType,
+  Uint64EnumMemberType,
   Uint64Function,
   uint64PType,
   urangeFunction,
@@ -284,6 +285,7 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
     typeRegistry.register({ ptype: enumType, singletonEb: Uint64EnumTypeBuilder })
     typeRegistry.register({ ptype: enumType.memberType, instanceEb: Uint64EnumMemberExpressionBuilder })
   }
+  typeRegistry.register({ ptype: Uint64EnumMemberType, instanceEb: Uint64EnumMemberExpressionBuilder })
 
   typeRegistry.registerGeneric({
     generic: IterableIteratorGeneric,
