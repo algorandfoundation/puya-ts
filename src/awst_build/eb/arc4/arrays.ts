@@ -1,6 +1,7 @@
+import { intrinsicFactory } from '../../../awst/intrinsic-factory'
 import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
-import { BytesConstant, StringConstant } from '../../../awst/nodes'
+import { BytesConstant, NumericComparison, StringConstant } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { wtypes } from '../../../awst/wtypes'
 import { Constants } from '../../../constants'
@@ -215,11 +216,43 @@ export class StaticBytesClassBuilder extends ClassBuilder {
         resultPType,
       )
     } else {
+      // TODO: puya should support encoding bytes to static bytes but currently doesn't
+      // return instanceEb(
+      //   nodeFactory.aRC4Encode({
+      //     value: initialValue.resolve(),
+      //     sourceLocation,
+      //     wtype: resultPType.wtype,
+      //   }),
+      //   resultPType,
+      // )
+
+      const value = initialValue.singleEvaluation().resolve()
+
       return instanceEb(
-        nodeFactory.aRC4Encode({
-          value: initialValue.resolve(),
-          sourceLocation,
-          wtype: resultPType.wtype,
+        nodeFactory.checkedMaybe({
+          comment: `Length is ${resultPType.arraySize}`,
+          expr: nodeFactory.tupleExpression({
+            items: [
+              nodeFactory.reinterpretCast({
+                expr: value,
+                wtype: resultPType.wtype,
+                sourceLocation,
+              }),
+              nodeFactory.numericComparisonExpression({
+                operator: NumericComparison.eq,
+                lhs: nodeFactory.uInt64Constant({
+                  value: resultPType.arraySize,
+                  sourceLocation,
+                }),
+                rhs: intrinsicFactory.bytesLen({
+                  value,
+                  sourceLocation,
+                }),
+                sourceLocation,
+              }),
+            ],
+            sourceLocation,
+          }),
         }),
         resultPType,
       )
