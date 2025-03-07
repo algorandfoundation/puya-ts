@@ -20,38 +20,38 @@ subroutine tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo._
         (assert tmp%6#0) // can only call when not creating
         let reinterpret_bytes[136]%0#0: bytes[136] = (txna ApplicationArgs 1)
         let item0%0#0: bytes = (extract3 reinterpret_bytes[136]%0#0 0u 8u) // on error: Index access is out of bounds
-        let item0%0%0#0: uint64 = (btoi item0%0#0)
+        let item0%1#0: uint64 = (btoi item0%0#0)
         let item1%0#0: bytes = (extract3 reinterpret_bytes[136]%0#0 8u 128u) // on error: Index access is out of bounds
-        let item0%1#0: bytes = (extract3 item1%0#0 0u 64u) // on error: Index access is out of bounds
+        let item0%2#0: bytes = (extract3 item1%0#0 0u 64u) // on error: Index access is out of bounds
         let item1%1#0: bytes = (extract3 item1%0#0 64u 64u) // on error: Index access is out of bounds
-        let (elements_to_encode%0#0: uint64, elements_to_encode%1#0: biguint, elements_to_encode%2#0: biguint, elements_to_encode%3#0: uint64, elements_to_encode%4#0: biguint) = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.testNested(item0%0%0#0, item0%1#0, item1%1#0)
+        let (elements_to_encode%0#0: uint64, elements_to_encode%1#0: biguint, elements_to_encode%2#0: biguint, elements_to_encode%3#0: uint64, elements_to_encode%4#0: biguint) = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.testNested(item0%1#0, item0%2#0, item1%1#0)
         let val_as_bytes%0#0: bytes[8] = (itob elements_to_encode%0#0)
-        let len_%0#0: uint64 = (len elements_to_encode%1#0)
-        let no_overflow%0#0: bool = (<= len_%0#0 64u)
-        (assert no_overflow%0#0) // overflow
-        let b_zeros%0#0: bytes = (bzero 64u)
-        let arc4_item%0#0: bytes = (b| elements_to_encode%1#0 b_zeros%0#0)
-        let len_%1#0: uint64 = (len elements_to_encode%2#0)
-        let no_overflow%1#0: bool = (<= len_%1#0 64u)
-        (assert no_overflow%1#0) // overflow
-        let b_zeros%1#0: bytes = (bzero 64u)
-        let arc4_item%1#0: bytes = (b| elements_to_encode%2#0 b_zeros%1#0)
+        let value_len%0#0: uint64 = (len elements_to_encode%1#0)
+        let len_ok%0#0: bool = (<= value_len%0#0 64u)
+        (assert len_ok%0#0) // overflow
+        let bzero%0#0: bytes = (bzero 64u)
+        let arc4_encoded%0#0: bytes[64] = (b| elements_to_encode%1#0 bzero%0#0)
+        let value_len%1#0: uint64 = (len elements_to_encode%2#0)
+        let len_ok%1#0: bool = (<= value_len%1#0 64u)
+        (assert len_ok%1#0) // overflow
+        let bzero%1#0: bytes = (bzero 64u)
+        let arc4_encoded%1#0: bytes[64] = (b| elements_to_encode%2#0 bzero%1#0)
         let current_tail_offset%0#0: uint64 = 128u
         let encoded_tuple_buffer%0#0: bytes[0] = 0x
-        let encoded_tuple_buffer%1#0: bytes = (concat encoded_tuple_buffer%0#0 arc4_item%0#0)
-        let encoded_tuple_buffer%2#0: bytes = (concat encoded_tuple_buffer%1#0 arc4_item%1#0)
+        let encoded_tuple_buffer%1#0: bytes = (concat encoded_tuple_buffer%0#0 arc4_encoded%0#0)
+        let encoded_tuple_buffer%2#0: bytes = (concat encoded_tuple_buffer%1#0 arc4_encoded%1#0)
         let val_as_bytes%1#0: bytes[8] = (itob elements_to_encode%3#0)
-        let len_%2#0: uint64 = (len elements_to_encode%4#0)
-        let no_overflow%2#0: bool = (<= len_%2#0 64u)
-        (assert no_overflow%2#0) // overflow
-        let b_zeros%2#0: bytes = (bzero 64u)
-        let arc4_item%2#0: bytes = (b| elements_to_encode%4#0 b_zeros%2#0)
+        let value_len%2#0: uint64 = (len elements_to_encode%4#0)
+        let len_ok%2#0: bool = (<= value_len%2#0 64u)
+        (assert len_ok%2#0) // overflow
+        let bzero%2#0: bytes = (bzero 64u)
+        let arc4_encoded%2#0: bytes[64] = (b| elements_to_encode%4#0 bzero%2#0)
         let current_tail_offset%1#0: uint64 = 208u
         let encoded_tuple_buffer%3#0: bytes[0] = 0x
         let encoded_tuple_buffer%4#0: bytes = (concat encoded_tuple_buffer%3#0 val_as_bytes%0#0)
         let encoded_tuple_buffer%5#0: bytes = (concat encoded_tuple_buffer%4#0 encoded_tuple_buffer%2#0)
         let encoded_tuple_buffer%6#0: bytes = (concat encoded_tuple_buffer%5#0 val_as_bytes%1#0)
-        let encoded_tuple_buffer%7#0: bytes = (concat encoded_tuple_buffer%6#0 arc4_item%2#0)
+        let encoded_tuple_buffer%7#0: bytes = (concat encoded_tuple_buffer%6#0 arc4_encoded%2#0)
         let tmp%7#0: bytes = (concat 0x151f7c75 encoded_tuple_buffer%7#0)
         (log tmp%7#0)
         return 1u

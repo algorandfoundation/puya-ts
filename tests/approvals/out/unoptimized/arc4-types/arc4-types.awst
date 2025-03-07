@@ -42,7 +42,7 @@ subroutine testDynamicBytes(someBytes: bytes): void
 subroutine testStaticBytes(): void
 {
   s5: arc4.static_array<arc4.static_array<arc4.byte>> = new arc4.static_array<arc4.static_array<arc4.byte>>(0xaabbccddee)
-  assert(reinterpret_cast<bytes>(s5[0]) == 0xaabbccddee)
+  assert(ARC4_DECODE(s5[0]) == 0xaabbccddee)
   s4: arc4.dynamic_array<arc4.byte> = 0x000400000000.concat(0xaabbccddee)
   assert(ARC4_DECODE(s4) == 0x00000000aabbccddee)
 }
@@ -56,6 +56,10 @@ subroutine testArrays(n: arc4.uint64): void
   assert(reinterpret_cast<bytes>(myStatic[0]) == reinterpret_cast<bytes>(myArray.pop()))
   myStatic[1]: arc4.uint64 = 50
   myStatic2: arc4.static_array<arc4.uint64> = new arc4.static_array<arc4.uint64>(n, n, n)
+  staticNative: readonlytuple[arc4.uint64, arc4.uint64, arc4.uint64] = ARC4_DECODE(myStatic2)
+  assert(3 == 3 and reinterpret_cast<bytes>(staticNative.0) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(staticNative.1) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(staticNative.2) == reinterpret_cast<bytes>(n), comment=assert target is match for conditions)
+  dynamicNative: stack_array<arc4.uint64> = ARC4_DECODE(doubleArray)
+  assert(dynamicNative.length == 8 and reinterpret_cast<bytes>(dynamicNative[0]) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(dynamicNative[1]) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(dynamicNative[2]) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(dynamicNative[3]) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(dynamicNative[4]) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(dynamicNative[5]) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(dynamicNative[6]) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(dynamicNative[7]) == reinterpret_cast<bytes>(n), comment=assert target is match for conditions)
 }
 subroutine testByte(): void
 {
@@ -81,6 +85,7 @@ contract Arc4TypesTestContract
 {
   approvalProgram(): bool
   {
+    ensure_budget(1400, 0)
     tests/approvals/arc4-types.algo.ts::testStr()
     tests/approvals/arc4-types.algo.ts::testUintN(1, 2, 4)
     tests/approvals/arc4-types.algo.ts::testUFixed()

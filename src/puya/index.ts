@@ -56,25 +56,24 @@ export async function invokePuya({
   using optionsFile = generateTempFile()
   logger.debug(undefined, `Write options to ${optionsFile.filePath}`)
   optionsFile.writeFileSync(new SnakeCaseSerializer().serialize(puyaOptions))
-
-  logger.debug(
-    undefined,
-    `Invoking puya: ${puyaPath} --options ${optionsFile.filePath} --awst ${moduleAwstFile.filePath} --source-annotations ${moduleSourceFile.filePath}`,
-  )
+  const puyaArgs = [
+    '--options',
+    optionsFile.filePath,
+    `--awst`,
+    moduleAwstFile.filePath,
+    `--source-annotations`,
+    moduleSourceFile.filePath,
+    '--log-level',
+    getPuyaLogLevel(options.logLevel),
+    '--log-format',
+    'json',
+  ]
+  // Useful to have this in a var to copy/paste when debugging puya
+  const puyaArgsStr = puyaArgs.join(' ')
+  logger.debug(undefined, `Invoking puya: ${puyaPath} ${puyaArgsStr}`)
   await runPuya({
     command: puyaPath,
-    args: [
-      '--options',
-      optionsFile.filePath,
-      `--awst`,
-      moduleAwstFile.filePath,
-      `--source-annotations`,
-      moduleSourceFile.filePath,
-      '--log-level',
-      getPuyaLogLevel(options.logLevel),
-      '--log-format',
-      'json',
-    ],
+    args: puyaArgs,
     cwd: programDirectory,
     onOutput: deserializeAndLog,
   })
