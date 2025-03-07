@@ -8,6 +8,7 @@ import { ARC4StructClass, ARC4StructType } from '../../ptypes/arc4-types'
 import { instanceEb } from '../../type-registry'
 import type { NodeBuilder } from '../index'
 import { ClassBuilder, InstanceBuilder } from '../index'
+import { Arc4CopyFunctionBuilder } from '../shared/arc4-copy-function-builder'
 import { requireExpressionOfType } from '../util'
 import { parseFunctionArgs } from '../util/arg-parsing'
 import { Arc4EncodedBaseExpressionBuilder } from './base'
@@ -59,6 +60,10 @@ export class StructExpressionBuilder extends Arc4EncodedBaseExpressionBuilder<AR
   }
 
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
+    switch (name) {
+      case 'copy':
+        return new Arc4CopyFunctionBuilder(this)
+    }
     if (name in this.ptype.fields) {
       const fieldType = this.ptype.fields[name]
       return instanceEb(

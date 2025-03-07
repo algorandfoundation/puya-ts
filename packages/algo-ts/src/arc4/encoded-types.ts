@@ -456,11 +456,6 @@ export class Address extends Arc4ArrayBase<Byte> {
 }
 
 /**
- * An alias for the type which arc4 structs must extend
- */
-type StructConstraint = Record<string, ARC4Encoded>
-
-/**
  * The base type for arc4 structs
  */
 class StructBase<T> extends ARC4Encoded {
@@ -468,6 +463,13 @@ class StructBase<T> extends ARC4Encoded {
   [TypeProperty] = 'arc4.Struct'
 
   get native(): T {
+    throw new NoImplementation()
+  }
+
+  /**
+   * Returns a deep copy of this struct
+   */
+  copy(): this {
     throw new NoImplementation()
   }
 }
