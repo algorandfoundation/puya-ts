@@ -18,6 +18,11 @@ contract Arc4EncodeDecode
     assert(reinterpret_cast<bytes>(ARC4_ENCODE(d, wtype=arc4.dynamic_array<arc4.byte>)) == reinterpret_cast<bytes>(ARC4_ENCODE(d, wtype=arc4.dynamic_array<arc4.byte>)))
     assert(reinterpret_cast<bytes>(ARC4_ENCODE(e, wtype=arc4.dynamic_array<arc4.byte>)) == reinterpret_cast<bytes>(ARC4_ENCODE(e, wtype=arc4.dynamic_array<arc4.byte>)))
     assert(reinterpret_cast<bytes>(ARC4_ENCODE({ a: a, b: d }, wtype=object)) == reinterpret_cast<bytes>(new TestStruct(a=(#0 = { a: ARC4_ENCODE(a, wtype=arc4.uint64), b: ARC4_ENCODE(d, wtype=arc4.dynamic_array<arc4.byte>) }).a, b=#0.b)))
+    assert(8 == 8)
+    assert(1 == 1)
+    assert(64 == 64)
+    assert(17 == 17)
+    assert(17 == 17)
   }
   
   testDecoding(a: uint64, a_bytes: bytes, b: bool, b_bytes: bytes, c: biguint, c_bytes: bytes, d: string, d_bytes: bytes, e: TestObj{ a: arc4.uint64, b: arc4.dynamic_array<arc4.byte> }, e_bytes: bytes): void

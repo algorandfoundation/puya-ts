@@ -4,7 +4,7 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 0 1 8
-    // tests/approvals/arc4-encode-decode.algo.ts:7
+    // tests/approvals/arc4-encode-decode.algo.ts:17
     // export class Arc4EncodeDecode extends Contract {
     txn NumAppArgs
     bz main_bare_routing@7
@@ -13,13 +13,13 @@ main:
     match main_testEncoding_route@3 main_testDecoding_route@4
 
 main_after_if_else@11:
-    // tests/approvals/arc4-encode-decode.algo.ts:7
+    // tests/approvals/arc4-encode-decode.algo.ts:17
     // export class Arc4EncodeDecode extends Contract {
     intc_0 // 0
     return
 
 main_testDecoding_route@4:
-    // tests/approvals/arc4-encode-decode.algo.ts:17-28
+    // tests/approvals/arc4-encode-decode.algo.ts:33-44
     // testDecoding(
     //   a: uint64,
     //   a_bytes: bytes,
@@ -37,7 +37,7 @@ main_testDecoding_route@4:
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/arc4-encode-decode.algo.ts:7
+    // tests/approvals/arc4-encode-decode.algo.ts:17
     // export class Arc4EncodeDecode extends Contract {
     txna ApplicationArgs 1
     btoi
@@ -68,7 +68,7 @@ main_testDecoding_route@4:
     substring3
     txna ApplicationArgs 10
     extract 2 0
-    // tests/approvals/arc4-encode-decode.algo.ts:17-28
+    // tests/approvals/arc4-encode-decode.algo.ts:33-44
     // testDecoding(
     //   a: uint64,
     //   a_bytes: bytes,
@@ -86,14 +86,14 @@ main_testDecoding_route@4:
     return
 
 main_testEncoding_route@3:
-    // tests/approvals/arc4-encode-decode.algo.ts:8
+    // tests/approvals/arc4-encode-decode.algo.ts:18
     // testEncoding(a: uint64, b: boolean, c: biguint, d: bytes, e: string) {
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/arc4-encode-decode.algo.ts:7
+    // tests/approvals/arc4-encode-decode.algo.ts:17
     // export class Arc4EncodeDecode extends Contract {
     txna ApplicationArgs 1
     btoi
@@ -105,14 +105,14 @@ main_testEncoding_route@3:
     extract 2 0
     txna ApplicationArgs 5
     extract 2 0
-    // tests/approvals/arc4-encode-decode.algo.ts:8
+    // tests/approvals/arc4-encode-decode.algo.ts:18
     // testEncoding(a: uint64, b: boolean, c: biguint, d: bytes, e: string) {
     callsub testEncoding
     intc_1 // 1
     return
 
 main_bare_routing@7:
-    // tests/approvals/arc4-encode-decode.algo.ts:7
+    // tests/approvals/arc4-encode-decode.algo.ts:17
     // export class Arc4EncodeDecode extends Contract {
     txn OnCompletion
     bnz main_after_if_else@11
@@ -125,10 +125,10 @@ main_bare_routing@7:
 
 // tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEncoding(a: uint64, b: uint64, c: bytes, d: bytes, e: bytes) -> void:
 testEncoding:
-    // tests/approvals/arc4-encode-decode.algo.ts:8
+    // tests/approvals/arc4-encode-decode.algo.ts:18
     // testEncoding(a: uint64, b: boolean, c: biguint, d: bytes, e: string) {
     proto 5 0
-    // tests/approvals/arc4-encode-decode.algo.ts:11
+    // tests/approvals/arc4-encode-decode.algo.ts:21
     // assert(encodeArc4(c) === new UintN<512>(c).bytes)
     frame_dig -3
     len
@@ -140,7 +140,7 @@ testEncoding:
 
 // tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDecoding(a: uint64, a_bytes: bytes, b: uint64, b_bytes: bytes, c: bytes, c_bytes: bytes, d: bytes, d_bytes: bytes, e.a: bytes, e.b: bytes, e_bytes: bytes) -> void:
 testDecoding:
-    // tests/approvals/arc4-encode-decode.algo.ts:17-28
+    // tests/approvals/arc4-encode-decode.algo.ts:33-44
     // testDecoding(
     //   a: uint64,
     //   a_bytes: bytes,
@@ -154,14 +154,14 @@ testDecoding:
     //   e_bytes: bytes,
     // ) {
     proto 11 0
-    // tests/approvals/arc4-encode-decode.algo.ts:29
+    // tests/approvals/arc4-encode-decode.algo.ts:45
     // assert(decodeArc4<uint64>(a_bytes) === a)
     frame_dig -10
     btoi
     frame_dig -11
     ==
     assert
-    // tests/approvals/arc4-encode-decode.algo.ts:30
+    // tests/approvals/arc4-encode-decode.algo.ts:46
     // assert(decodeArc4<boolean>(b_bytes) === b)
     frame_dig -8
     intc_0 // 0
@@ -169,20 +169,20 @@ testDecoding:
     frame_dig -9
     ==
     assert
-    // tests/approvals/arc4-encode-decode.algo.ts:31
+    // tests/approvals/arc4-encode-decode.algo.ts:47
     // assert(decodeArc4<biguint>(c_bytes) === c)
     frame_dig -6
     frame_dig -7
     b==
     assert
-    // tests/approvals/arc4-encode-decode.algo.ts:32
+    // tests/approvals/arc4-encode-decode.algo.ts:48
     // assert(decodeArc4<string>(d_bytes) === d)
     frame_dig -4
     extract 2 0
     frame_dig -5
     ==
     assert
-    // tests/approvals/arc4-encode-decode.algo.ts:34
+    // tests/approvals/arc4-encode-decode.algo.ts:50
     // assertMatch(decodeArc4<TestObj>(e_bytes), e)
     frame_dig -1
     extract 0 8 // on error: Index access is out of bounds
@@ -206,7 +206,7 @@ testDecoding:
     intc_1 // 1
 
 testDecoding_bool_merge@4:
-    // tests/approvals/arc4-encode-decode.algo.ts:34
+    // tests/approvals/arc4-encode-decode.algo.ts:50
     // assertMatch(decodeArc4<TestObj>(e_bytes), e)
     assert // assert target is match for conditions
     retsub
