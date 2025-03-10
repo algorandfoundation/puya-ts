@@ -1,6 +1,7 @@
 import { Constants } from '../constants'
 import { logger } from '../logger'
 import { runPuya } from './run-puya'
+import type { SemVer } from './semver'
 
 export enum VersionCompareVerdict {
   ExactMatch = 'ExactMatch',
@@ -11,10 +12,7 @@ export enum VersionCompareVerdict {
   NewerRevision = 'NewerRevision',
 }
 
-export async function comparePuyaVersion(
-  command: string,
-  useShell = false,
-): Promise<{
+export async function comparePuyaVersion(puyaPath: string): Promise<{
   target: string
   found?: string
   verdict: VersionCompareVerdict
@@ -23,10 +21,9 @@ export async function comparePuyaVersion(
 
   const versionParser = new VersionParser()
   await runPuya({
-    command: command,
+    command: puyaPath,
     args: ['--version'],
     onOutput: (line) => versionParser.receiveLine(line),
-    shell: useShell,
   })
 
   if (!versionParser.version) return { target, verdict: VersionCompareVerdict.Inconclusive }
@@ -41,43 +38,27 @@ export async function comparePuyaVersion(
   return { verdict: VersionCompareVerdict.ExactMatch, target, found: ver.formatted }
 }
 
-export async function checkPuyaVersion(command: string, useShell = false, suppressWarnings = false): Promise<boolean> {
-  const result = await comparePuyaVersion(command, useShell)
-  let warningMessage = undefined
+export async function checkPuyaVersion(puyaPath: string) {
+  const result = await comparePuyaVersion(puyaPath)
 
   switch (result.verdict) {
     case VersionCompareVerdict.Inconclusive:
-      warningMessage = `Unable to verify puya version. Please ensure version ${result.target} is available`
+      logger.warn(undefined, `Unable to verify the version of Puya at ${puyaPath}.`)
       break
     case VersionCompareVerdict.MajorMismatch:
     case VersionCompareVerdict.MinorMismatch:
-      warningMessage = `Version of puya (${result.found}) does not match targeted version (${result.target}). There may be compatibility issues.`
+      logger.warn(
+        undefined,
+        `Version of Puya at ${puyaPath} (${result.found}) does not match targeted version (${result.target}). There may be compatibility issues.`,
+      )
       break
     case VersionCompareVerdict.OlderRevision:
-      warningMessage = `Revision of puya (${result.found}) is older than the targeted revision (${result.target})`
+      logger.warn(undefined, `Revision of Puya at ${puyaPath} (${result.found}) is older than the targeted revision (${result.target})`)
       break
     case VersionCompareVerdict.NewerRevision:
-      warningMessage = `Revision of puya (${result.found}) is newer than the targeted revision (${result.target})`
+      logger.warn(undefined, `Revision of Puya at ${puyaPath} (${result.found}) is newer than the targeted revision (${result.target})`)
       break
-    case VersionCompareVerdict.ExactMatch:
-      return true
   }
-
-  if (warningMessage) {
-    if (!suppressWarnings) {
-      logger.warn(undefined, warningMessage)
-    }
-    return false
-  }
-
-  return true
-}
-
-type SemVer = {
-  major: number
-  minor: number
-  rev: number
-  formatted: string
 }
 
 class VersionParser {

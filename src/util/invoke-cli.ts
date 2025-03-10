@@ -6,7 +6,6 @@ type InvokeCliOptions = {
   cwd?: string
   onReceiveLine?(line: string): void
   dontThrowOnNonzeroCode?: boolean
-  shell?: boolean | string
 }
 
 type InvokeCliResponse = {
@@ -31,7 +30,6 @@ export function invokeCli(options: InvokeCliOptions): Promise<InvokeCliResponse>
     const lineAggregator = new LineAggregator(options.onReceiveLine)
     const process = spawn(options.command, options.args, {
       stdio: 'pipe',
-      shell: options.shell,
     })
 
     process.stdout.on('data', (data) => lineAggregator.aggregate(data))

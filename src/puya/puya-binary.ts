@@ -3,7 +3,10 @@ import * as fs from 'fs'
 import * as path from 'path'
 import * as tar from 'tar'
 import { Constants } from '../constants'
+import { InternalError } from '../errors'
 import { logger } from '../logger'
+import { generateTempDir } from '../util/generate-temp-file'
+import type { SemVer } from './semver'
 
 /**
  * Gets the platform-specific binary name
@@ -34,33 +37,21 @@ export function findNodeModulesDir(): string {
   return process.cwd()
 }
 
+function getPuyaStorageDir(version: SemVer): string {
+  const nodeModulesDir = findNodeModulesDir()
+  return path.join(nodeModulesDir, '.puya-ts', version.formatted)
+}
+
 /**
  * Finds the path to a cached Puya binary if it exists
  * @returns The path to the cached binary or undefined if not found
  */
-export function findCachedPuyaBinary(): string | undefined {
-  const nodeModulesDir = findNodeModulesDir()
-  const puyaStorageDir = path.join(nodeModulesDir, '.puya-ts')
+export function findCachedPuyaBinary(version: SemVer): string | undefined {
+  const puyaStorageDir = getPuyaStorageDir(version)
   const binaryFileName = getBinaryName()
   const binaryPath = path.join(puyaStorageDir, binaryFileName)
 
   return fs.existsSync(binaryPath) ? binaryPath : undefined
-}
-
-/**
- * Deletes the cached Puya binary if it exists
- */
-export function deleteCachedPuyaBinary(): void {
-  const cachedPath = findCachedPuyaBinary()
-  if (cachedPath && fs.existsSync(cachedPath)) {
-    try {
-      logger.info(undefined, `Removing outdated Puya binary at ${cachedPath}`)
-      fs.unlinkSync(cachedPath)
-    } catch (error) {
-      logger.warn(undefined, `Failed to delete outdated Puya binary: ${error instanceof Error ? error.message : String(error)}`)
-      throw error
-    }
-  }
 }
 
 /**
@@ -81,7 +72,7 @@ function getPlatformDetails(): { os: string; arch: string } {
       os = 'linux'
       break
     default:
-      throw new Error(`Unsupported platform: ${process.platform}`)
+      throw new InternalError(`Unsupported platform: ${process.platform}`)
   }
 
   // Map Node.js architecture to architecture name used in filenames
@@ -94,7 +85,7 @@ function getPlatformDetails(): { os: string; arch: string } {
       arch = 'arm64'
       break
     default:
-      throw new Error(`Unsupported architecture: ${process.arch}`)
+      throw new InternalError(`Unsupported architecture: ${process.arch}`)
   }
 
   return { os, arch }
@@ -102,70 +93,57 @@ function getPlatformDetails(): { os: string; arch: string } {
 
 /**
  * Downloads the Puya binary for a specific release version
- * @param version The release version to download (e.g., "v1.0.0")
+ * @param version The release version to download (e.g., "1.0.0")
  * @returns Promise that resolves to the path of the extracted binary
  */
-export async function downloadPuyaBinary(version: string): Promise<string> {
+export async function downloadPuyaBinary(version: SemVer): Promise<string> {
   // Get platform-specific details
   const { os, arch } = getPlatformDetails()
 
   // Build platform-specific filenames
   const platformId = `${os}_${arch}`
   const archiveFileName = `puya-${platformId}.tar.gz`
-  const checksumFileName = `puya-${platformId}-checksum.txt`
+  const checksumFileName = `puya-${platformId}.sha256.txt`
   const binaryFileName = getBinaryName()
 
-  // Find node_modules directory and set up storage paths
-  const nodeModulesDir = findNodeModulesDir()
-  const puyaStorageDir = path.join(nodeModulesDir, '.puya-ts')
-  const tempDir = path.join(nodeModulesDir, '.puya-ts-temp')
-
-  const tarFilePath = path.join(tempDir, archiveFileName)
-  const checksumFilePath = path.join(tempDir, checksumFileName)
-  const extractedBinaryPath = path.join(puyaStorageDir, binaryFileName)
-
+  const puyaStorageDir = getPuyaStorageDir(version)
   // Ensure our storage directories exist
-  for (const dir of [puyaStorageDir, tempDir]) {
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true })
-    }
+  if (!fs.existsSync(puyaStorageDir)) {
+    fs.mkdirSync(puyaStorageDir, { recursive: true })
   }
 
-  logger.info(undefined, `Downloading Puya binary for version ${version} and platform ${platformId}`)
-  const archiveUrl = `https://github.com/${Constants.puyaGithubRepo}/releases/download/${version}/${archiveFileName}`
-  const checksumUrl = `https://github.com/${Constants.puyaGithubRepo}/releases/download/${version}/${checksumFileName}`
+  using tempDir = generateTempDir()
+
+  const tarFilePath = path.join(tempDir.dirPath, archiveFileName)
+  const checksumFilePath = path.join(tempDir.dirPath, checksumFileName)
+  const extractedBinaryPath = path.join(puyaStorageDir, binaryFileName)
+
+  logger.debug(undefined, `Downloading Puya binary for version ${version} and platform ${platformId}`)
+  const archiveUrl = `https://github.com/${Constants.puyaGithubRepo}/releases/download/${version.formatted}/${archiveFileName}`
+  const checksumUrl = `https://github.com/${Constants.puyaGithubRepo}/releases/download/${version.formatted}/${checksumFileName}`
 
   await downloadFile(archiveUrl, tarFilePath)
   await downloadFile(checksumUrl, checksumFilePath)
 
   await verifyChecksum(tarFilePath, checksumFilePath)
 
-  try {
-    await tar.extract({
-      file: tarFilePath,
-      cwd: puyaStorageDir,
-    })
+  await tar.extract({
+    file: tarFilePath,
+    cwd: puyaStorageDir,
+  })
 
-    // Check if extraction was successful and binary exists
-    if (!fs.existsSync(extractedBinaryPath)) {
-      throw new Error(`Binary file ${binaryFileName} not found in the extracted archive`)
-    }
-
-    // Make binary executable on non-Windows platforms
-    if (os !== 'windows') {
-      fs.chmodSync(extractedBinaryPath, 0o755)
-    }
-
-    logger.info(undefined, `Successfully downloaded and extracted Puya binary to ${extractedBinaryPath}`)
-    return extractedBinaryPath
-  } catch (error: unknown) {
-    throw new Error(`Failed to extract archive: ${error instanceof Error ? error.message : String(error)}`)
-  } finally {
-    // Clean up
-    if (fs.existsSync(tempDir)) {
-      fs.rmSync(tempDir, { recursive: true, force: true })
-    }
+  // Check if extraction was successful and binary exists
+  if (!fs.existsSync(extractedBinaryPath)) {
+    throw new InternalError(`Binary file ${binaryFileName} not found in the extracted archive`)
   }
+
+  // Make binary executable on non-Windows platforms
+  if (os !== 'windows') {
+    fs.chmodSync(extractedBinaryPath, 0o755)
+  }
+
+  logger.debug(undefined, `Successfully downloaded and extracted Puya binary to ${extractedBinaryPath}`)
+  return extractedBinaryPath
 }
 
 /**
