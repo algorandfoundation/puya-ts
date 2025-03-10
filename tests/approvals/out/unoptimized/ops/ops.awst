@@ -17,6 +17,9 @@ contract MyContract
     assert(b == 18446744073709551615)
     c: uint64 = shr(b, 32)
     assert(c == 4294967295)
+    assert(gtxns<ApplicationID>(txn<GroupIndex>()) == txn<ApplicationID>())
+    assert(txnas<ApplicationArgs>(0) == Method("test()void"))
+    assert(gtxnsas<ApplicationArgs>(txn<GroupIndex>(), 0) == Method("test()void"))
   }
   
   __algots__.defaultCreate(): void
