@@ -1,7 +1,9 @@
 import * as crypto from 'crypto'
 import * as fs from 'fs'
+import { fileURLToPath } from 'node:url'
 import * as path from 'path'
 import * as tar from 'tar'
+import upath from 'upath'
 import { Constants } from '../constants'
 import { InternalError } from '../errors'
 import { logger } from '../logger'
@@ -22,7 +24,8 @@ function getBinaryName(): string {
  */
 function findNodeModulesDir(): string {
   // Start with the current working directory
-  let currentDir = process.cwd()
+  const moduleDir = upath.dirname(fileURLToPath(import.meta.url))
+  let currentDir = moduleDir
 
   // Keep going up directories until we find node_modules or hit the root
   while (currentDir !== path.parse(currentDir).root) {
@@ -34,7 +37,7 @@ function findNodeModulesDir(): string {
   }
 
   // If we couldn't find it, default to the current directory
-  return process.cwd()
+  return moduleDir
 }
 
 function getPuyaStorageDir(version: SemVer): string {
