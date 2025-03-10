@@ -43,19 +43,19 @@ positional arguments:
 
 ### Puya
 
-Puya-ts is only the front end component of the compiler. After parsing and converting TypeScript into a common AST known as AWST, the remainder of the compilation is passed onto the Puya backend compiler. Puya is released as a binary from the Puya GitHub [repository](https://github.com/algorandfoundation/puya).
+Puya-ts is only the front end component of the compiler. After parsing and converting TypeScript into a common AST known as AWST, the remainder of the compilation is passed onto the Puya backend compiler. Puya is released as a binary on the Puya GitHub [repository](https://github.com/algorandfoundation/puya).
 
 Currently, Puya binaries are available for:
 
-- Linux (Intel and ARM)
-- MacOS (Intel and Apple Silicon)
-- Windows (Intel and ARM)
+- Linux (x64 and ARM)
+- MacOS (x64 and Apple Silicon)
+- Windows (x64 and ARM)
 
-If your system is supported, puya-ts will automatically download the appropriate binary for your system. It will make sure that the version of puya-ts and puya are compatible.
+If your system is supported, puya-ts will automatically download the appropriate binary for your system. 
 
 ### Puya (manual installation)
 
-This session is relevant if your platform is not supported by the Puya binaries or you need to run Puya in a specific way.
+This section is relevant if your platform is not supported by the Puya binaries ,or you need to run a custom version of Puya (eg. A pre-release version).
 
 The most convenient way to install Puya manually is using `pipx`. You will require Python 3.12+ and to have pipx available on your path for the following to work.
 
