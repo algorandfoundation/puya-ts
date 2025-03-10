@@ -3,6 +3,7 @@ import chalk from 'chalk'
 import { sync } from 'cross-spawn'
 import fs from 'fs'
 import upath from 'upath'
+import type { OpModule } from './build-op-module'
 import { buildOpModule } from './build-op-module'
 import { emitOpFuncTypes } from './generate-op-funcs'
 import { emitOpMetaData } from './generate-op-metadata'
@@ -18,7 +19,25 @@ function runCodeGen(puyaTsRootDir: string) {
 
   const opModule = buildOpModule()
 
-  const files = {
+  const files: Record<
+    string,
+    {
+      emitFn: (module: OpModule) => Generator<string, void>
+      projectRoot: string
+      outPath: string
+      disabled?: boolean
+      skipLint?: boolean
+    }
+  > = {
+    'op-module': {
+      emitFn: function* (opModule) {
+        yield JSON.stringify(opModule, undefined, 2)
+      },
+      projectRoot: '',
+      outPath: 'scripts/temp/ops.json',
+      disabled: true,
+      skipLint: true,
+    },
     'op function types': {
       emitFn: emitOpFuncTypes,
       projectRoot: 'packages/algo-ts',
@@ -36,12 +55,20 @@ function runCodeGen(puyaTsRootDir: string) {
     },
   }
 
-  for (const [desc, { emitFn, projectRoot, outPath }] of Object.entries(files)) {
+  for (const [desc, { emitFn, projectRoot, outPath, skipLint, disabled }] of Object.entries(files)) {
+    if (disabled) {
+      console.log(chalk.gray(`Skipping disabled ${desc}`))
+      continue
+    }
     console.log(chalk.blueBright(`Generating ${desc}`))
 
     const fullPath = upath.join(puyaTsRootDir, projectRoot, outPath)
     console.log(chalk.blue(`Writing text to ${fullPath}`))
     fs.writeFileSync(fullPath, Array.from(emitFn(opModule)).join(''), 'utf8')
+    if (skipLint) {
+      console.log(chalk.gray(`Skipping linting ${fullPath}`))
+      continue
+    }
     console.log(chalk.blue(`Linting ${fullPath}`))
     lintFile(upath.join(puyaTsRootDir, projectRoot), outPath)
   }
