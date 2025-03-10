@@ -108,11 +108,17 @@ export type Account = {
  */
 export function Account(): Account
 /**
- * Create a new account object representing the provided address
- * @param address A 32-byte Algorand address
+ * Create a new account object representing the provided public key bytes
+ * @param publicKey A 32-byte Algorand account public key
  */
-export function Account(address: bytes): Account
-export function Account(address?: bytes): Account {
+export function Account(publicKey: bytes): Account
+/**
+ * Create a new account object representing the provided address
+ * @param address A 56 character base-32 encoded Algorand address
+ * @constructor
+ */
+export function Account(address: string): Account
+export function Account(publicKeyOrAddress?: bytes | string): Account {
   throw new NoImplementation()
 }
 

@@ -7,6 +7,7 @@ import { codeInvariant, hasFlags, intersectsFlags, invariant, isIn, normalisePat
 import { getNodeName } from '../visitor/syntax-names'
 import type { AppStorageType, PType } from './ptypes'
 import {
+  anyGtxnType,
   anyPType,
   ApprovalProgram,
   arc4BaseContractType,
@@ -20,6 +21,7 @@ import {
   ClusteredPrototype,
   ContractClassPType,
   FunctionPType,
+  gtxnUnion,
   IntersectionPType,
   logicSigBaseType,
   LogicSigPType,
@@ -147,7 +149,11 @@ export class TypeResolver {
       }
     }
     if (isUnionType(tsType)) {
-      return UnionPType.fromTypes(tsType.types.map((t) => this.resolveType(t, sourceLocation)))
+      const ut = UnionPType.fromTypes(tsType.types.map((t) => this.resolveType(t, sourceLocation)))
+      if (ut.equals(gtxnUnion)) {
+        return anyGtxnType
+      }
+      return ut
     }
     switch (tsType.flags) {
       case ts.TypeFlags.Undefined:
@@ -353,7 +359,7 @@ export class TypeResolver {
     baseType: ARC4StructType,
     sourceLocation: SourceLocation,
   ): ARC4StructType {
-    const ignoredProps = ['bytes', 'equals', 'native', Constants.constructorMethodName]
+    const ignoredProps = ['bytes', 'equals', 'native', 'copy', Constants.constructorMethodName]
     const fields: Record<string, ARC4EncodedType> = {}
     for (const prop of tsType.getProperties()) {
       if (isIn(prop.name, ignoredProps)) continue

@@ -29,11 +29,16 @@ export const Constants = {
   constructorMethodName: 'constructor',
   logicSigProgramMethodName: 'program',
   defaultCreateMethodName: '__algots__.defaultCreate',
-  addressLength: 32,
-  encodedAddressLength: 58,
+
+  algo: {
+    addressLength: 32,
+    encodedAddressLength: 58,
+    maxTransactionGroupSize: 16,
+  },
+
   zeroAddressEncoded: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ',
   supportedAvmVersions: [10n, 11n],
-  targetedPuyaVersion: '4.4.2',
+  targetedPuyaVersion: '4.4.4',
   puyaGithubRepo: 'algorandfoundation/puya',
 } as const
 

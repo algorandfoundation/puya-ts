@@ -299,6 +299,7 @@ export namespace wtypes {
           .join(',')})`,
         name,
         nativeType: null,
+        immutable: frozen && Object.values(fields).every((t) => t.immutable),
       })
       this.sourceLocation = sourceLocation ?? null
       this.fields = fields

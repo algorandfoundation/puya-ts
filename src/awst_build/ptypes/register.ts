@@ -19,6 +19,7 @@ import { Arc4TupleClassBuilder, Arc4TupleExpressionBuilder } from '../eb/arc4/tu
 import { UFixedNxMClassBuilder, UFixedNxMExpressionBuilder } from '../eb/arc4/ufixed'
 import { classBuilderForUintNAlias, UintNClassBuilder, UintNExpressionBuilder } from '../eb/arc4/uintn'
 import {
+  Arc4EncodedLengthFunctionBuilder,
   DecodeArc4FunctionBuilder,
   EncodeArc4FunctionBuilder,
   InterpretAsArc4FunctionBuilder,
@@ -80,6 +81,7 @@ import {
   ARC4BoolClass,
   arc4BooleanType,
   arc4ByteAlias,
+  arc4EncodedLengthFunction,
   ARC4StrClass,
   arc4StringType,
   ARC4StructClass,
@@ -219,6 +221,7 @@ import {
   TransactionFunction,
   transactionTypeType,
   TuplePType,
+  Uint64EnumMemberType,
   Uint64Function,
   uint64PType,
   urangeFunction,
@@ -284,6 +287,7 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
     typeRegistry.register({ ptype: enumType, singletonEb: Uint64EnumTypeBuilder })
     typeRegistry.register({ ptype: enumType.memberType, instanceEb: Uint64EnumMemberExpressionBuilder })
   }
+  typeRegistry.register({ ptype: Uint64EnumMemberType, instanceEb: Uint64EnumMemberExpressionBuilder })
 
   typeRegistry.registerGeneric({
     generic: IterableIteratorGeneric,
@@ -385,6 +389,7 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: encodeArc4Function, singletonEb: EncodeArc4FunctionBuilder })
   typeRegistry.register({ ptype: decodeArc4Function, singletonEb: DecodeArc4FunctionBuilder })
   typeRegistry.register({ ptype: methodSelectorFunction, singletonEb: MethodSelectorFunctionBuilder })
+  typeRegistry.register({ ptype: arc4EncodedLengthFunction, singletonEb: Arc4EncodedLengthFunctionBuilder })
 
   // GTXN types
   typeRegistry.register({ ptype: paymentGtxnType, instanceEb: GroupTransactionExpressionBuilder })

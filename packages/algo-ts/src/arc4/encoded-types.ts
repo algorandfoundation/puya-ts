@@ -456,11 +456,6 @@ export class Address extends Arc4ArrayBase<Byte> {
 }
 
 /**
- * An alias for the type which arc4 structs must extend
- */
-type StructConstraint = Record<string, ARC4Encoded>
-
-/**
  * The base type for arc4 structs
  */
 class StructBase<T> extends ARC4Encoded {
@@ -470,6 +465,13 @@ class StructBase<T> extends ARC4Encoded {
   get native(): T {
     throw new NoImplementation()
   }
+
+  /**
+   * Returns a deep copy of this struct
+   */
+  copy(): this {
+    throw new NoImplementation()
+  }
 }
 
 /**
@@ -477,7 +479,7 @@ class StructBase<T> extends ARC4Encoded {
  * @typeParam T The shape of the arc4 struct
  */
 type StructConstructor = {
-  new <T extends Record<string, ARC4Encoded>>(initial: T): StructBase<T> & Readonly<T>
+  new <T extends Record<string, ARC4Encoded>>(initial: T): StructBase<T> & T
 }
 
 /**
@@ -575,5 +577,15 @@ export function decodeArc4<T>(bytes: BytesCompat, prefix: 'none' | 'log' = 'none
  * @param value Any native Algorand TypeScript value with a supported ARC4 encoding
  */
 export function encodeArc4<T>(value: T): bytes {
+  throw new NoImplementation()
+}
+
+/**
+ * Return the total number of bytes required to store T as ARC4 bytes.
+ *
+ * T must represent a type with a fixed length encoding scheme.
+ * @typeParam T Any native or arc4 type with a fixed encoding size.
+ */
+export function arc4EncodedLength<T>(): uint64 {
   throw new NoImplementation()
 }

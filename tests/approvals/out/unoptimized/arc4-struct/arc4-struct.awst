@@ -1,5 +1,9 @@
 contract StructDemo
 {
+  boxes {
+    ["plugins"]: PluginInfo
+    ["main"]: PluginInfo
+  }
   approvalProgram(): bool
   {
     return arc4Router()
@@ -24,6 +28,13 @@ contract StructDemo
     return new Vector(x=(#3 = { x: ARC4_ENCODE(ARC4_DECODE(v1.x) + ARC4_DECODE(v2.x), wtype=arc4.uint64), y: ARC4_ENCODE(ARC4_DECODE(v1.y) + ARC4_DECODE(v2.y), wtype=arc4.uint64) }).x, y=#3.y)
   }
   
+  mutateVector(v1: Vector, newX: arc4.uint64, newY: arc4.uint64): Vector
+  {
+    v1.x: arc4.uint64 = newX
+    v1.y: arc4.uint64 = newY
+    return v1
+  }
+  
   implicitCastingAndSpreading(v1: Vector): void
   {
     v2: Vector = new Vector(x=(#4 = ARC4_DECODE(v1)).x, y=#4.y)
@@ -41,6 +52,30 @@ contract StructDemo
   toNative(v1: Vector): toNativeResult{ x: arc4.uint64, y: arc4.uint64 }
   {
     return { x: (#6 = ARC4_DECODE(v1)).x, y: #6.y }
+  }
+  
+  getPlugin(key: string): PluginInfo
+  {
+    value: PluginInfo = copy(Box[concat("plugins", reinterpret_cast<bytes>(key))].value)
+    assert(ARC4_DECODE(value.lastCalled) > 0, comment=Last called not zero)
+    return value
+  }
+  
+  getMain(): PluginInfo
+  {
+    value: PluginInfo = copy(Box["main"].value)
+    assert(ARC4_DECODE(value.lastCalled) > 0, comment=Last called not zero)
+    return value
+  }
+  
+  setLastCalled(key: string, index: uint64, lastCalled: uint64): void
+  {
+    Box[concat("plugins", reinterpret_cast<bytes>(key))].value.methods[index].lastCalled: arc4.uint64 = ARC4_ENCODE(lastCalled, wtype=arc4.uint64)
+  }
+  
+  setPlugin(key: string): void
+  {
+    Box[concat("plugins", reinterpret_cast<bytes>(key))].value: PluginInfo = new PluginInfo(lastValidRound=(#7 = { lastValidRound: 1, cooldown: 0, lastCalled: 0, adminPrivileges: False, methods: new arc4.dynamic_array<MethodInfo>(new MethodInfo(selector=(#8 = { selector: checked_maybe(<tuple>[reinterpret_cast<arc4.static_array<arc4.byte>>((#9 = Method("test()void"))), 4 == len(#9)], comment=Length is 4), cooldown: 1, lastCalled: 1 }).selector, cooldown=#8.cooldown, lastCalled=#8.lastCalled)) }).lastValidRound, cooldown=#7.cooldown, lastCalled=#7.lastCalled, adminPrivileges=#7.adminPrivileges, methods=#7.methods)
   }
   
   __algots__.defaultCreate(): void

@@ -6,8 +6,10 @@ import { invariant } from '../../util'
 import type { PType, PTypeOrClass } from '../ptypes'
 import { Uint64EnumMemberType, Uint64EnumType, uint64PType } from '../ptypes'
 import { instanceEb } from '../type-registry'
-import type { InstanceBuilder } from './index'
+import type { BuilderComparisonOp, InstanceBuilder } from './index'
 import { InstanceExpressionBuilder, NodeBuilder } from './index'
+import { requireExpressionOfType } from './util'
+import { compareUint64 } from './util/compare-uint64'
 
 export class Uint64EnumTypeBuilder extends NodeBuilder {
   readonly ptype: Uint64EnumType
@@ -35,6 +37,11 @@ export class Uint64EnumMemberExpressionBuilder extends InstanceExpressionBuilder
   constructor(expr: Expression, ptype: PType) {
     invariant(ptype instanceof Uint64EnumMemberType, 'ptype must be Uint64EnumType')
     super(expr, ptype)
+  }
+
+  compare(other: InstanceBuilder, op: BuilderComparisonOp, sourceLocation: SourceLocation): InstanceBuilder {
+    const otherExpr = requireExpressionOfType(other, uint64PType)
+    return compareUint64(this._expr, otherExpr, op, sourceLocation, this.typeDescription)
   }
 
   resolvableToPType(ptype: PTypeOrClass): boolean {

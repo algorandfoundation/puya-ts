@@ -7,4 +7,8 @@ describe('switch statements', () => {
   test('runs', async ({ appClientDemoContract }) => {
     await appClientDemoContract.send.call({ method: 'run', args: [] })
   })
+
+  test('test_side_effects', async ({ appClientDemoContract }) => {
+    await appClientDemoContract.send.call({ method: 'test_side_effects', args: [5] })
+  })
 })

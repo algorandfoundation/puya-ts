@@ -291,9 +291,9 @@ class BoxRefDeleteFunctionBuilder extends BoxRefBaseFunctionBuilder {
       nodeFactory.stateDelete({
         field: this.boxValue,
         sourceLocation,
-        wtype: wtypes.voidWType,
+        wtype: wtypes.boolWType,
       }),
-      voidPType,
+      boolPType,
     )
   }
 }

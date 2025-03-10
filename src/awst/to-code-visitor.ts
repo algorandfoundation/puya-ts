@@ -38,7 +38,7 @@ export class ToCodeVisitor
     return `void`
   }
   visitGroupTransactionReference(expression: nodes.GroupTransactionReference): string {
-    throw new Error('Method not implemented.')
+    return `group_transaction(index=${expression.index.accept(this)}, type=${expression.wtype})`
   }
   visitPuyaLibCall(expression: nodes.PuyaLibCall): string {
     return `${expression.func}(${expression.args.map((a) => a.value.accept(this)).join(', ')})`
@@ -103,10 +103,7 @@ export class ToCodeVisitor
     return `${expression.base.accept(this)}.slice(${args})`
   }
   visitBoxValueExpression(expression: nodes.BoxValueExpression): string {
-    if (expression.key instanceof nodes.BytesConstant) {
-      return `Box[${expression.key.accept(this)}].value`
-    }
-    return `${expression.key.accept(this)}.value`
+    return `Box[${expression.key.accept(this)}].value`
   }
   visitIntegerConstant(expression: nodes.IntegerConstant): string {
     if (expression.tealAlias) return expression.tealAlias
@@ -287,7 +284,7 @@ export class ToCodeVisitor
   }
 
   visitStateDelete(expression: nodes.StateDelete): string {
-    return `STATE_DEL(${expression.field.accept(this)})`
+    return `STATE_DELETE(${expression.field.accept(this)})`
   }
   visitStateGetEx(expression: nodes.StateGetEx): string {
     return `STATE_GET_EX(${expression.field.accept(this)})`

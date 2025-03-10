@@ -97,7 +97,7 @@ is useful for minimizing the amount of reads and writes required, but also allow
 
 ```ts
 import type { Account, uint64 } from '@algorandfoundation/algorand-typescript'
-import { Box, BoxMap, BoxRef, Contract, Txn } from '@algorandfoundation/algorand-typescript'
+import { Box, BoxMap, BoxRef, Contract, Txn, assert } from '@algorandfoundation/algorand-typescript'
 import { bzero } from '@algorandfoundation/algorand-typescript/op'
 
 export class BoxContract extends Contract {
@@ -109,7 +109,9 @@ export class BoxContract extends Contract {
     if (!this.boxOne.exists) {
       this.boxOne.value = 'Hello World'
     }
-    this.boxMapTwo.set(Txn.sender, Txn.sender.balance)
+    this.boxMapTwo(Txn.sender).value = Txn.sender.balance
+    const boxForSender = this.boxMapTwo(Txn.sender)
+    assert(boxForSender.exists)
     if (this.boxRefThree.exists) {
       this.boxRefThree.resize(8000)
     } else {

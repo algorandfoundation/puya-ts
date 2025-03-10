@@ -22,6 +22,5 @@
 - [CompatForArc4Int](type-aliases/CompatForArc4Int.md)
 - [ContractMethod](type-aliases/ContractMethod.md)
 - [NativeForArc4Int](type-aliases/NativeForArc4Int.md)
-- [Readonly](type-aliases/Readonly.md)
 - [StructConstructor](type-aliases/StructConstructor.md)
 - [UintBitSize](type-aliases/UintBitSize.md)

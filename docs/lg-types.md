@@ -141,12 +141,13 @@ import { Application, Asset, Account } from '@algorandfoundation/algorand-typesc
 
 const app = Application(123n) // Create from application id
 const asset = Asset(456n) // Create from asset id
-const account = Account(Bytes.fromBase32("ADDRESS")) // Create from account address
+const account = Account("A7NMWS3NT3IUDMLVO26ULGXGIIOUQ3ND2TXSER6EBGRZNOBOUIQXHIBGDE") // Create from account address
+const account2 = Account(Bytes.fromHex('07DACB4B6D9ED141B17576BD459AE6421D486DA3D4EF2247C409A396B82EA221')) // Create from account public key bytes
 ```
 
 They can also be used in ABI method parameters where they will be created referencing the relevant `foreign_*` array on the transaction. See [ARC4 reference types](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0004.md#reference-types)
 
-### gtxn.Transaction, gtxn.PayTxn, gtxn.KeyRegistrationTxn, gtxn.AssetConfigTxn, gtxn.AssetTransferTxn, gtxn.AssetFreezeTxn, gtxn.ApplicationTxn
+### Group Transactions
 
 The group transaction types expose properties and methods for reading attributes of other transactions in the group. They can be created explicitly by calling `gtxn.Transaction(n)` where `n` is the index of the desired transaction in the group, or they can be used in ABI method signatures where the ARC4 router will take care of providing the relevant transaction specified by the client. They should not be confused with the `itxn` namespace which contains types for composing inner transactions
 
@@ -156,6 +157,28 @@ import { gtxn, Contract } from '@algorandfoundation/algorand-typescript'
 class Demo extends Contract {
   doThing(payTxn: gtxn.PayTxn): void {
     const assetConfig = gtxn.AssetConfigTxn(1)
+
+    const txn = gtxn.Transaction(i)
+    switch (txn.type) {
+      case TransactionType.ApplicationCall:
+        log(txn.appId.id)
+        break
+      case TransactionType.AssetTransfer:
+        log(txn.xferAsset.id)
+        break
+      case TransactionType.AssetConfig:
+        log(txn.configAsset.id)
+        break
+      case TransactionType.Payment:
+        log(txn.receiver)
+        break
+      case TransactionType.KeyRegistration:
+        log(txn.voteKey)
+        break
+      default:
+        log(txn.freezeAsset.id)
+        break
+    }
   }
 }
 
@@ -321,7 +344,7 @@ ARC4 Tuples are immutable statically sized arrays of mixed item types. Item type
 **Encoding:** See [ARC4 Container Packing](#ARC4-Container-Packing)
 **Native equivalent:** _None_
 
-ARC4 Structs are named tuples. Items can be accessed via names instead of indexes.
+ARC4 Structs are named tuples. Items can be accessed via names instead of indexes. They are also mutable
 
 ### ARC4 Container Packing
 

@@ -8,7 +8,7 @@ main:
     dup
     pushbytes ""
     dup
-    // tests/approvals/arc4-encode-decode.algo.ts:7
+    // tests/approvals/arc4-encode-decode.algo.ts:17
     // export class Arc4EncodeDecode extends Contract {
     txn NumAppArgs
     bz main_bare_routing@7
@@ -17,13 +17,13 @@ main:
     match main_testEncoding_route@3 main_testDecoding_route@4
 
 main_after_if_else@11:
-    // tests/approvals/arc4-encode-decode.algo.ts:7
+    // tests/approvals/arc4-encode-decode.algo.ts:17
     // export class Arc4EncodeDecode extends Contract {
     intc_0 // 0
     return
 
 main_testDecoding_route@4:
-    // tests/approvals/arc4-encode-decode.algo.ts:17-28
+    // tests/approvals/arc4-encode-decode.algo.ts:33-44
     // testDecoding(
     //   a: uint64,
     //   a_bytes: bytes,
@@ -41,7 +41,7 @@ main_testDecoding_route@4:
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/arc4-encode-decode.algo.ts:7
+    // tests/approvals/arc4-encode-decode.algo.ts:17
     // export class Arc4EncodeDecode extends Contract {
     txna ApplicationArgs 1
     btoi
@@ -76,14 +76,14 @@ main_testDecoding_route@4:
     dup
     cover 2
     bury 14
-    // tests/approvals/arc4-encode-decode.algo.ts:29
+    // tests/approvals/arc4-encode-decode.algo.ts:45
     // assert(decodeArc4<uint64>(a_bytes) === a)
     uncover 9
     btoi
     uncover 10
     ==
     assert
-    // tests/approvals/arc4-encode-decode.algo.ts:30
+    // tests/approvals/arc4-encode-decode.algo.ts:46
     // assert(decodeArc4<boolean>(b_bytes) === b)
     uncover 7
     intc_0 // 0
@@ -91,20 +91,20 @@ main_testDecoding_route@4:
     uncover 8
     ==
     assert
-    // tests/approvals/arc4-encode-decode.algo.ts:31
+    // tests/approvals/arc4-encode-decode.algo.ts:47
     // assert(decodeArc4<biguint>(c_bytes) === c)
     uncover 5
     uncover 6
     b==
     assert
-    // tests/approvals/arc4-encode-decode.algo.ts:32
+    // tests/approvals/arc4-encode-decode.algo.ts:48
     // assert(decodeArc4<string>(d_bytes) === d)
     uncover 3
     extract 4 0
     uncover 4
     ==
     assert
-    // tests/approvals/arc4-encode-decode.algo.ts:34
+    // tests/approvals/arc4-encode-decode.algo.ts:50
     // assertMatch(decodeArc4<TestObj>(e_bytes), e)
     extract 2 8
     dig 1
@@ -126,10 +126,10 @@ main_testDecoding_route@4:
     intc_1 // 1
 
 main_bool_merge@19:
-    // tests/approvals/arc4-encode-decode.algo.ts:34
+    // tests/approvals/arc4-encode-decode.algo.ts:50
     // assertMatch(decodeArc4<TestObj>(e_bytes), e)
     assert // assert target is match for conditions
-    // tests/approvals/arc4-encode-decode.algo.ts:17-28
+    // tests/approvals/arc4-encode-decode.algo.ts:33-44
     // testDecoding(
     //   a: uint64,
     //   a_bytes: bytes,
@@ -150,29 +150,29 @@ main_bool_false@18:
     b main_bool_merge@19
 
 main_testEncoding_route@3:
-    // tests/approvals/arc4-encode-decode.algo.ts:8
+    // tests/approvals/arc4-encode-decode.algo.ts:18
     // testEncoding(a: uint64, b: boolean, c: biguint, d: bytes, e: string) {
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/arc4-encode-decode.algo.ts:7
+    // tests/approvals/arc4-encode-decode.algo.ts:17
     // export class Arc4EncodeDecode extends Contract {
     txna ApplicationArgs 3
-    // tests/approvals/arc4-encode-decode.algo.ts:11
+    // tests/approvals/arc4-encode-decode.algo.ts:21
     // assert(encodeArc4(c) === new UintN<512>(c).bytes)
     len
     pushint 64 // 64
     <=
     assert // overflow
-    // tests/approvals/arc4-encode-decode.algo.ts:8
+    // tests/approvals/arc4-encode-decode.algo.ts:18
     // testEncoding(a: uint64, b: boolean, c: biguint, d: bytes, e: string) {
     intc_1 // 1
     return
 
 main_bare_routing@7:
-    // tests/approvals/arc4-encode-decode.algo.ts:7
+    // tests/approvals/arc4-encode-decode.algo.ts:17
     // export class Arc4EncodeDecode extends Contract {
     txn OnCompletion
     bnz main_after_if_else@11

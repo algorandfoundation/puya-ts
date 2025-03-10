@@ -58,7 +58,7 @@
       "source_location": {
         "file": "tests/approvals/box-proxies.algo.ts",
         "line": 6,
-        "end_line": 31,
+        "end_line": 32,
         "column": 50,
         "end_column": 1
       },
@@ -772,17 +772,17 @@
             "file": "tests/approvals/box-proxies.algo.ts",
             "line": 19,
             "end_line": 19,
-            "column": 6,
-            "end_column": 12
+            "column": 2,
+            "end_column": 39
           },
           "expr": {
-            "_type": "StateDelete",
+            "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
               "line": 19,
               "end_line": 19,
-              "column": 6,
-              "end_column": 12
+              "column": 2,
+              "end_column": 39
             },
             "wtype": {
               "_type": "WType",
@@ -791,68 +791,104 @@
               "ephemeral": false,
               "scalar_type": null
             },
-            "field": {
-              "_type": "BoxValueExpression",
+            "condition": {
+              "_type": "StateDelete",
               "source_location": {
                 "file": "tests/approvals/box-proxies.algo.ts",
                 "line": 19,
                 "end_line": 19,
-                "column": 6,
-                "end_column": 12
+                "column": 13,
+                "end_column": 19
               },
               "wtype": {
                 "_type": "WType",
-                "name": "string",
+                "name": "bool",
                 "immutable": true,
                 "ephemeral": false,
-                "scalar_type": 1
+                "scalar_type": 2
               },
-              "key": {
-                "_type": "VarExpression",
+              "field": {
+                "_type": "BoxValueExpression",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
                   "line": 19,
                   "end_line": 19,
-                  "column": 2,
-                  "end_column": 5
+                  "column": 13,
+                  "end_column": 19
                 },
                 "wtype": {
                   "_type": "WType",
-                  "name": "box_key",
+                  "name": "string",
                   "immutable": true,
                   "ephemeral": false,
                   "scalar_type": 1
                 },
-                "name": "box"
-              },
-              "exists_assertion_message": "Box must have value"
-            }
+                "key": {
+                  "_type": "VarExpression",
+                  "source_location": {
+                    "file": "tests/approvals/box-proxies.algo.ts",
+                    "line": 19,
+                    "end_line": 19,
+                    "column": 9,
+                    "end_column": 12
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "box_key",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 1
+                  },
+                  "name": "box"
+                },
+                "exists_assertion_message": "Box must have value"
+              }
+            },
+            "error_message": "delete failed"
           }
         },
         {
-          "_type": "ExpressionStatement",
+          "_type": "AssignmentStatement",
           "source_location": {
             "file": "tests/approvals/box-proxies.algo.ts",
             "line": 20,
             "end_line": 20,
-            "column": 7,
-            "end_column": 13
+            "column": 8,
+            "end_column": 37
           },
-          "expr": {
+          "target": {
+            "_type": "VarExpression",
+            "source_location": {
+              "file": "tests/approvals/box-proxies.algo.ts",
+              "line": 20,
+              "end_line": 20,
+              "column": 8,
+              "end_column": 21
+            },
+            "wtype": {
+              "_type": "WType",
+              "name": "bool",
+              "immutable": true,
+              "ephemeral": false,
+              "scalar_type": 2
+            },
+            "name": "isBoxADeleted"
+          },
+          "value": {
             "_type": "StateDelete",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
               "line": 20,
               "end_line": 20,
-              "column": 7,
-              "end_column": 13
+              "column": 29,
+              "end_column": 35
             },
             "wtype": {
               "_type": "WType",
-              "name": "void",
+              "name": "bool",
               "immutable": true,
               "ephemeral": false,
-              "scalar_type": null
+              "scalar_type": 2
             },
             "field": {
               "_type": "BoxValueExpression",
@@ -860,8 +896,8 @@
                 "file": "tests/approvals/box-proxies.algo.ts",
                 "line": 20,
                 "end_line": 20,
-                "column": 7,
-                "end_column": 13
+                "column": 29,
+                "end_column": 35
               },
               "wtype": {
                 "_type": "WType",
@@ -900,7 +936,7 @@
             "line": 21,
             "end_line": 21,
             "column": 2,
-            "end_column": 37
+            "end_column": 40
           },
           "expr": {
             "_type": "AssertExpression",
@@ -908,6 +944,52 @@
               "file": "tests/approvals/box-proxies.algo.ts",
               "line": 21,
               "end_line": 21,
+              "column": 2,
+              "end_column": 40
+            },
+            "wtype": {
+              "_type": "WType",
+              "name": "void",
+              "immutable": true,
+              "ephemeral": false,
+              "scalar_type": null
+            },
+            "condition": {
+              "_type": "VarExpression",
+              "source_location": {
+                "file": "tests/approvals/box-proxies.algo.ts",
+                "line": 21,
+                "end_line": 21,
+                "column": 9,
+                "end_column": 22
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "name": "isBoxADeleted"
+            },
+            "error_message": "delete failed"
+          }
+        },
+        {
+          "_type": "ExpressionStatement",
+          "source_location": {
+            "file": "tests/approvals/box-proxies.algo.ts",
+            "line": 22,
+            "end_line": 22,
+            "column": 2,
+            "end_column": 37
+          },
+          "expr": {
+            "_type": "AssertExpression",
+            "source_location": {
+              "file": "tests/approvals/box-proxies.algo.ts",
+              "line": 22,
+              "end_line": 22,
               "column": 2,
               "end_column": 37
             },
@@ -922,8 +1004,8 @@
               "_type": "BooleanBinaryOperation",
               "source_location": {
                 "file": "tests/approvals/box-proxies.algo.ts",
-                "line": 21,
-                "end_line": 21,
+                "line": 22,
+                "end_line": 22,
                 "column": 9,
                 "end_column": 36
               },
@@ -938,8 +1020,8 @@
                 "_type": "Not",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 21,
-                  "end_line": 21,
+                  "line": 22,
+                  "end_line": 22,
                   "column": 9,
                   "end_column": 20
                 },
@@ -954,8 +1036,8 @@
                   "_type": "StateExists",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 21,
-                    "end_line": 21,
+                    "line": 22,
+                    "end_line": 22,
                     "column": 14,
                     "end_column": 20
                   },
@@ -970,8 +1052,8 @@
                     "_type": "BoxValueExpression",
                     "source_location": {
                       "file": "tests/approvals/box-proxies.algo.ts",
-                      "line": 21,
-                      "end_line": 21,
+                      "line": 22,
+                      "end_line": 22,
                       "column": 14,
                       "end_column": 20
                     },
@@ -986,8 +1068,8 @@
                       "_type": "VarExpression",
                       "source_location": {
                         "file": "tests/approvals/box-proxies.algo.ts",
-                        "line": 21,
-                        "end_line": 21,
+                        "line": 22,
+                        "end_line": 22,
                         "column": 10,
                         "end_column": 13
                       },
@@ -1009,8 +1091,8 @@
                 "_type": "Not",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 21,
-                  "end_line": 21,
+                  "line": 22,
+                  "end_line": 22,
                   "column": 24,
                   "end_column": 36
                 },
@@ -1025,8 +1107,8 @@
                   "_type": "StateExists",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 21,
-                    "end_line": 21,
+                    "line": 22,
+                    "end_line": 22,
                     "column": 30,
                     "end_column": 36
                   },
@@ -1041,8 +1123,8 @@
                     "_type": "BoxValueExpression",
                     "source_location": {
                       "file": "tests/approvals/box-proxies.algo.ts",
-                      "line": 21,
-                      "end_line": 21,
+                      "line": 22,
+                      "end_line": 22,
                       "column": 30,
                       "end_column": 36
                     },
@@ -1084,8 +1166,8 @@
           "_type": "AssignmentStatement",
           "source_location": {
             "file": "tests/approvals/box-proxies.algo.ts",
-            "line": 23,
-            "end_line": 23,
+            "line": 24,
+            "end_line": 24,
             "column": 8,
             "end_column": 24
           },
@@ -1093,8 +1175,8 @@
             "_type": "VarExpression",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 23,
-              "end_line": 23,
+              "line": 24,
+              "end_line": 24,
               "column": 8,
               "end_column": 18
             },
@@ -1111,8 +1193,8 @@
             "_type": "StringConstant",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 23,
-              "end_line": 23,
+              "line": 24,
+              "end_line": 24,
               "column": 21,
               "end_column": 24
             },
@@ -1130,8 +1212,8 @@
           "_type": "ExpressionStatement",
           "source_location": {
             "file": "tests/approvals/box-proxies.algo.ts",
-            "line": 24,
-            "end_line": 24,
+            "line": 25,
+            "end_line": 25,
             "column": 2,
             "end_column": 80
           },
@@ -1139,8 +1221,8 @@
             "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 24,
-              "end_line": 24,
+              "line": 25,
+              "end_line": 25,
               "column": 2,
               "end_column": 80
             },
@@ -1155,8 +1237,8 @@
               "_type": "BytesComparisonExpression",
               "source_location": {
                 "file": "tests/approvals/box-proxies.algo.ts",
-                "line": 24,
-                "end_line": 24,
+                "line": 25,
+                "end_line": 25,
                 "column": 9,
                 "end_column": 79
               },
@@ -1171,8 +1253,8 @@
                 "_type": "StateGet",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 24,
-                  "end_line": 24,
+                  "line": 25,
+                  "end_line": 25,
                   "column": 9,
                   "end_column": 42
                 },
@@ -1187,8 +1269,8 @@
                   "_type": "BoxValueExpression",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 24,
-                    "end_line": 24,
+                    "line": 25,
+                    "end_line": 25,
                     "column": 14,
                     "end_column": 17
                   },
@@ -1224,8 +1306,8 @@
                   "_type": "VarExpression",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 24,
-                    "end_line": 24,
+                    "line": 25,
+                    "end_line": 25,
                     "column": 29,
                     "end_column": 39
                   },
@@ -1244,8 +1326,8 @@
                 "_type": "StateGet",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 24,
-                  "end_line": 24,
+                  "line": 25,
+                  "end_line": 25,
                   "column": 47,
                   "end_column": 79
                 },
@@ -1260,8 +1342,8 @@
                   "_type": "BoxValueExpression",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 24,
-                    "end_line": 24,
+                    "line": 25,
+                    "end_line": 25,
                     "column": 51,
                     "end_column": 54
                   },
@@ -1276,8 +1358,8 @@
                     "_type": "VarExpression",
                     "source_location": {
                       "file": "tests/approvals/box-proxies.algo.ts",
-                      "line": 24,
-                      "end_line": 24,
+                      "line": 25,
+                      "end_line": 25,
                       "column": 47,
                       "end_column": 50
                     },
@@ -1296,8 +1378,8 @@
                   "_type": "VarExpression",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 24,
-                    "end_line": 24,
+                    "line": 25,
+                    "end_line": 25,
                     "column": 66,
                     "end_column": 76
                   },
@@ -1319,8 +1401,8 @@
           "_type": "AssignmentStatement",
           "source_location": {
             "file": "tests/approvals/box-proxies.algo.ts",
-            "line": 26,
-            "end_line": 26,
+            "line": 27,
+            "end_line": 27,
             "column": 6,
             "end_column": 25
           },
@@ -1328,8 +1410,8 @@
             "_type": "TupleExpression",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 26,
-              "end_line": 26,
+              "line": 27,
+              "end_line": 27,
               "column": 6,
               "end_column": 25
             },
@@ -1361,8 +1443,8 @@
                 "_type": "VarExpression",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 26,
-                  "end_line": 26,
+                  "line": 27,
+                  "end_line": 27,
                   "column": 6,
                   "end_column": 25
                 },
@@ -1379,8 +1461,8 @@
                 "_type": "VarExpression",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 26,
-                  "end_line": 26,
+                  "line": 27,
+                  "end_line": 27,
                   "column": 9,
                   "end_column": 10
                 },
@@ -1399,8 +1481,8 @@
             "_type": "StateGetEx",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 26,
-              "end_line": 26,
+              "line": 27,
+              "end_line": 27,
               "column": 14,
               "end_column": 25
             },
@@ -1431,8 +1513,8 @@
               "_type": "BoxValueExpression",
               "source_location": {
                 "file": "tests/approvals/box-proxies.algo.ts",
-                "line": 26,
-                "end_line": 26,
+                "line": 27,
+                "end_line": 27,
                 "column": 18,
                 "end_column": 23
               },
@@ -1447,8 +1529,8 @@
                 "_type": "VarExpression",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 26,
-                  "end_line": 26,
+                  "line": 27,
+                  "end_line": 27,
                   "column": 14,
                   "end_column": 17
                 },
@@ -1469,8 +1551,8 @@
           "_type": "ExpressionStatement",
           "source_location": {
             "file": "tests/approvals/box-proxies.algo.ts",
-            "line": 27,
-            "end_line": 27,
+            "line": 28,
+            "end_line": 28,
             "column": 2,
             "end_column": 12
           },
@@ -1478,8 +1560,8 @@
             "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 27,
-              "end_line": 27,
+              "line": 28,
+              "end_line": 28,
               "column": 2,
               "end_column": 12
             },
@@ -1494,8 +1576,8 @@
               "_type": "Not",
               "source_location": {
                 "file": "tests/approvals/box-proxies.algo.ts",
-                "line": 27,
-                "end_line": 27,
+                "line": 28,
+                "end_line": 28,
                 "column": 9,
                 "end_column": 11
               },
@@ -1510,8 +1592,8 @@
                 "_type": "VarExpression",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 27,
-                  "end_line": 27,
+                  "line": 28,
+                  "end_line": 28,
                   "column": 10,
                   "end_column": 11
                 },
@@ -1532,8 +1614,8 @@
           "_type": "AssignmentStatement",
           "source_location": {
             "file": "tests/approvals/box-proxies.algo.ts",
-            "line": 28,
-            "end_line": 28,
+            "line": 29,
+            "end_line": 29,
             "column": 2,
             "end_column": 19
           },
@@ -1541,8 +1623,8 @@
             "_type": "BoxValueExpression",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 28,
-              "end_line": 28,
+              "line": 29,
+              "end_line": 29,
               "column": 6,
               "end_column": 11
             },
@@ -1557,8 +1639,8 @@
               "_type": "VarExpression",
               "source_location": {
                 "file": "tests/approvals/box-proxies.algo.ts",
-                "line": 28,
-                "end_line": 28,
+                "line": 29,
+                "end_line": 29,
                 "column": 2,
                 "end_column": 5
               },
@@ -1577,8 +1659,8 @@
             "_type": "VarExpression",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 28,
-              "end_line": 28,
+              "line": 29,
+              "end_line": 29,
               "column": 14,
               "end_column": 19
             },
@@ -1596,19 +1678,19 @@
           "_type": "AssignmentStatement",
           "source_location": {
             "file": "tests/approvals/box-proxies.algo.ts",
-            "line": 29,
-            "end_line": 29,
-            "column": 5,
-            "end_column": 24
+            "line": 30,
+            "end_line": 30,
+            "column": 3,
+            "end_column": 22
           },
           "target": {
             "_type": "TupleExpression",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 29,
-              "end_line": 29,
-              "column": 5,
-              "end_column": 24
+              "line": 30,
+              "end_line": 30,
+              "column": 3,
+              "end_column": 22
             },
             "wtype": {
               "_type": "WTuple",
@@ -1638,10 +1720,10 @@
                 "_type": "VarExpression",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 29,
-                  "end_line": 29,
-                  "column": 5,
-                  "end_column": 24
+                  "line": 30,
+                  "end_line": 30,
+                  "column": 3,
+                  "end_column": 22
                 },
                 "wtype": {
                   "_type": "WType",
@@ -1656,10 +1738,10 @@
                 "_type": "VarExpression",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 29,
-                  "end_line": 29,
-                  "column": 8,
-                  "end_column": 9
+                  "line": 30,
+                  "end_line": 30,
+                  "column": 6,
+                  "end_column": 7
                 },
                 "wtype": {
                   "_type": "WType",
@@ -1676,10 +1758,10 @@
             "_type": "StateGetEx",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 29,
-              "end_line": 29,
-              "column": 13,
-              "end_column": 24
+              "line": 30,
+              "end_line": 30,
+              "column": 11,
+              "end_column": 22
             },
             "wtype": {
               "_type": "WTuple",
@@ -1708,10 +1790,10 @@
               "_type": "BoxValueExpression",
               "source_location": {
                 "file": "tests/approvals/box-proxies.algo.ts",
-                "line": 29,
-                "end_line": 29,
-                "column": 17,
-                "end_column": 22
+                "line": 30,
+                "end_line": 30,
+                "column": 15,
+                "end_column": 20
               },
               "wtype": {
                 "_type": "WType",
@@ -1724,10 +1806,10 @@
                 "_type": "VarExpression",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 29,
-                  "end_line": 29,
-                  "column": 13,
-                  "end_column": 16
+                  "line": 30,
+                  "end_line": 30,
+                  "column": 11,
+                  "end_column": 14
                 },
                 "wtype": {
                   "_type": "WType",
@@ -1746,8 +1828,8 @@
           "_type": "ExpressionStatement",
           "source_location": {
             "file": "tests/approvals/box-proxies.algo.ts",
-            "line": 30,
-            "end_line": 30,
+            "line": 31,
+            "end_line": 31,
             "column": 2,
             "end_column": 11
           },
@@ -1755,8 +1837,8 @@
             "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 30,
-              "end_line": 30,
+              "line": 31,
+              "end_line": 31,
               "column": 2,
               "end_column": 11
             },
@@ -1771,8 +1853,8 @@
               "_type": "VarExpression",
               "source_location": {
                 "file": "tests/approvals/box-proxies.algo.ts",
-                "line": 30,
-                "end_line": 30,
+                "line": 31,
+                "end_line": 31,
                 "column": 9,
                 "end_column": 10
               },
@@ -1806,8 +1888,8 @@
     "_type": "Subroutine",
     "source_location": {
       "file": "tests/approvals/box-proxies.algo.ts",
-      "line": 35,
-      "end_line": 35,
+      "line": 36,
+      "end_line": 36,
       "column": 0,
       "end_column": 74
     },
@@ -1817,8 +1899,8 @@
         "name": "box",
         "source_location": {
           "file": "tests/approvals/box-proxies.algo.ts",
-          "line": 35,
-          "end_line": 35,
+          "line": 36,
+          "end_line": 36,
           "column": 20,
           "end_column": 46
         },
@@ -1835,8 +1917,8 @@
         "name": "key",
         "source_location": {
           "file": "tests/approvals/box-proxies.algo.ts",
-          "line": 35,
-          "end_line": 35,
+          "line": 36,
+          "end_line": 36,
           "column": 48,
           "end_column": 59
         },
@@ -1853,8 +1935,8 @@
         "name": "value",
         "source_location": {
           "file": "tests/approvals/box-proxies.algo.ts",
-          "line": 35,
-          "end_line": 35,
+          "line": 36,
+          "end_line": 36,
           "column": 61,
           "end_column": 73
         },
@@ -1878,8 +1960,8 @@
       "_type": "Block",
       "source_location": {
         "file": "tests/approvals/box-proxies.algo.ts",
-        "line": 35,
-        "end_line": 51,
+        "line": 36,
+        "end_line": 57,
         "column": 75,
         "end_column": 1
       },
@@ -1888,19 +1970,19 @@
           "_type": "AssignmentStatement",
           "source_location": {
             "file": "tests/approvals/box-proxies.algo.ts",
-            "line": 36,
-            "end_line": 36,
+            "line": 37,
+            "end_line": 37,
             "column": 2,
-            "end_column": 21
+            "end_column": 24
           },
           "target": {
             "_type": "BoxValueExpression",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 36,
-              "end_line": 36,
-              "column": 6,
-              "end_column": 9
+              "line": 37,
+              "end_line": 37,
+              "column": 11,
+              "end_column": 16
             },
             "wtype": {
               "_type": "WType",
@@ -1913,10 +1995,10 @@
               "_type": "IntrinsicCall",
               "source_location": {
                 "file": "tests/approvals/box-proxies.algo.ts",
-                "line": 36,
-                "end_line": 36,
-                "column": 6,
-                "end_column": 9
+                "line": 37,
+                "end_line": 37,
+                "column": 2,
+                "end_column": 5
               },
               "wtype": {
                 "_type": "WType",
@@ -1932,8 +2014,8 @@
                   "_type": "VarExpression",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 36,
-                    "end_line": 36,
+                    "line": 37,
+                    "end_line": 37,
                     "column": 2,
                     "end_column": 5
                   },
@@ -1950,10 +2032,10 @@
                   "_type": "ReinterpretCast",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 36,
-                    "end_line": 36,
-                    "column": 6,
-                    "end_column": 9
+                    "line": 37,
+                    "end_line": 37,
+                    "column": 2,
+                    "end_column": 10
                   },
                   "wtype": {
                     "_type": "WType",
@@ -1966,10 +2048,10 @@
                     "_type": "VarExpression",
                     "source_location": {
                       "file": "tests/approvals/box-proxies.algo.ts",
-                      "line": 36,
-                      "end_line": 36,
-                      "column": 10,
-                      "end_column": 13
+                      "line": 37,
+                      "end_line": 37,
+                      "column": 6,
+                      "end_column": 9
                     },
                     "wtype": {
                       "_type": "WType",
@@ -1989,10 +2071,10 @@
             "_type": "VarExpression",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 36,
-              "end_line": 36,
-              "column": 15,
-              "end_column": 20
+              "line": 37,
+              "end_line": 37,
+              "column": 19,
+              "end_column": 24
             },
             "wtype": {
               "_type": "WType",
@@ -2008,19 +2090,19 @@
           "_type": "AssignmentStatement",
           "source_location": {
             "file": "tests/approvals/box-proxies.algo.ts",
-            "line": 37,
-            "end_line": 37,
+            "line": 38,
+            "end_line": 38,
             "column": 2,
-            "end_column": 24
+            "end_column": 27
           },
           "target": {
             "_type": "BoxValueExpression",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 37,
-              "end_line": 37,
-              "column": 9,
-              "end_column": 12
+              "line": 38,
+              "end_line": 38,
+              "column": 14,
+              "end_column": 19
             },
             "wtype": {
               "_type": "WType",
@@ -2033,10 +2115,10 @@
               "_type": "IntrinsicCall",
               "source_location": {
                 "file": "tests/approvals/box-proxies.algo.ts",
-                "line": 37,
-                "end_line": 37,
-                "column": 9,
-                "end_column": 12
+                "line": 34,
+                "end_line": 34,
+                "column": 50,
+                "end_column": 52
               },
               "wtype": {
                 "_type": "WType",
@@ -2052,8 +2134,8 @@
                   "_type": "BytesConstant",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 33,
-                    "end_line": 33,
+                    "line": 34,
+                    "end_line": 34,
                     "column": 50,
                     "end_column": 52
                   },
@@ -2071,10 +2153,10 @@
                   "_type": "ReinterpretCast",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 37,
-                    "end_line": 37,
-                    "column": 9,
-                    "end_column": 12
+                    "line": 38,
+                    "end_line": 38,
+                    "column": 2,
+                    "end_column": 13
                   },
                   "wtype": {
                     "_type": "WType",
@@ -2087,10 +2169,10 @@
                     "_type": "VarExpression",
                     "source_location": {
                       "file": "tests/approvals/box-proxies.algo.ts",
-                      "line": 37,
-                      "end_line": 37,
-                      "column": 13,
-                      "end_column": 16
+                      "line": 38,
+                      "end_line": 38,
+                      "column": 9,
+                      "end_column": 12
                     },
                     "wtype": {
                       "_type": "WType",
@@ -2110,10 +2192,10 @@
             "_type": "VarExpression",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 37,
-              "end_line": 37,
-              "column": 18,
-              "end_column": 23
+              "line": 38,
+              "end_line": 38,
+              "column": 22,
+              "end_column": 27
             },
             "wtype": {
               "_type": "WType",
@@ -2126,11 +2208,195 @@
           }
         },
         {
+          "_type": "AssignmentStatement",
+          "source_location": {
+            "file": "tests/approvals/box-proxies.algo.ts",
+            "line": 40,
+            "end_line": 40,
+            "column": 8,
+            "end_column": 32
+          },
+          "target": {
+            "_type": "VarExpression",
+            "source_location": {
+              "file": "tests/approvals/box-proxies.algo.ts",
+              "line": 40,
+              "end_line": 40,
+              "column": 8,
+              "end_column": 18
+            },
+            "wtype": {
+              "_type": "WType",
+              "name": "box_key",
+              "immutable": true,
+              "ephemeral": false,
+              "scalar_type": 1
+            },
+            "name": "boxMapItem"
+          },
+          "value": {
+            "_type": "IntrinsicCall",
+            "source_location": {
+              "file": "tests/approvals/box-proxies.algo.ts",
+              "line": 34,
+              "end_line": 34,
+              "column": 50,
+              "end_column": 52
+            },
+            "wtype": {
+              "_type": "WType",
+              "name": "box_key",
+              "immutable": true,
+              "ephemeral": false,
+              "scalar_type": 1
+            },
+            "op_code": "concat",
+            "immediates": [],
+            "stack_args": [
+              {
+                "_type": "BytesConstant",
+                "source_location": {
+                  "file": "tests/approvals/box-proxies.algo.ts",
+                  "line": 34,
+                  "end_line": 34,
+                  "column": 50,
+                  "end_column": 52
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "box_key",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 1
+                },
+                "value": "",
+                "encoding": "utf8"
+              },
+              {
+                "_type": "ReinterpretCast",
+                "source_location": {
+                  "file": "tests/approvals/box-proxies.algo.ts",
+                  "line": 40,
+                  "end_line": 40,
+                  "column": 21,
+                  "end_column": 32
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "bytes",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 1
+                },
+                "expr": {
+                  "_type": "VarExpression",
+                  "source_location": {
+                    "file": "tests/approvals/box-proxies.algo.ts",
+                    "line": 40,
+                    "end_line": 40,
+                    "column": 28,
+                    "end_column": 31
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "string",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 1
+                  },
+                  "name": "key"
+                }
+              }
+            ]
+          }
+        },
+        {
           "_type": "ExpressionStatement",
           "source_location": {
             "file": "tests/approvals/box-proxies.algo.ts",
-            "line": 39,
-            "end_line": 39,
+            "line": 42,
+            "end_line": 42,
+            "column": 2,
+            "end_column": 27
+          },
+          "expr": {
+            "_type": "AssertExpression",
+            "source_location": {
+              "file": "tests/approvals/box-proxies.algo.ts",
+              "line": 42,
+              "end_line": 42,
+              "column": 2,
+              "end_column": 27
+            },
+            "wtype": {
+              "_type": "WType",
+              "name": "void",
+              "immutable": true,
+              "ephemeral": false,
+              "scalar_type": null
+            },
+            "condition": {
+              "_type": "StateExists",
+              "source_location": {
+                "file": "tests/approvals/box-proxies.algo.ts",
+                "line": 42,
+                "end_line": 42,
+                "column": 20,
+                "end_column": 26
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "field": {
+                "_type": "BoxValueExpression",
+                "source_location": {
+                  "file": "tests/approvals/box-proxies.algo.ts",
+                  "line": 42,
+                  "end_line": 42,
+                  "column": 20,
+                  "end_column": 26
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "bytes",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": 1
+                },
+                "key": {
+                  "_type": "VarExpression",
+                  "source_location": {
+                    "file": "tests/approvals/box-proxies.algo.ts",
+                    "line": 42,
+                    "end_line": 42,
+                    "column": 9,
+                    "end_column": 19
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "box_key",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 1
+                  },
+                  "name": "boxMapItem"
+                },
+                "exists_assertion_message": "Box must have value"
+              }
+            },
+            "error_message": null
+          }
+        },
+        {
+          "_type": "ExpressionStatement",
+          "source_location": {
+            "file": "tests/approvals/box-proxies.algo.ts",
+            "line": 44,
+            "end_line": 44,
             "column": 2,
             "end_column": 40
           },
@@ -2138,8 +2404,8 @@
             "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 39,
-              "end_line": 39,
+              "line": 44,
+              "end_line": 44,
               "column": 2,
               "end_column": 40
             },
@@ -2154,8 +2420,8 @@
               "_type": "BytesComparisonExpression",
               "source_location": {
                 "file": "tests/approvals/box-proxies.algo.ts",
-                "line": 39,
-                "end_line": 39,
+                "line": 44,
+                "end_line": 44,
                 "column": 9,
                 "end_column": 39
               },
@@ -2170,8 +2436,8 @@
                 "_type": "ReinterpretCast",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 39,
-                  "end_line": 39,
+                  "line": 44,
+                  "end_line": 44,
                   "column": 13,
                   "end_column": 22
                 },
@@ -2186,8 +2452,8 @@
                   "_type": "VarExpression",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 39,
-                    "end_line": 39,
+                    "line": 44,
+                    "end_line": 44,
                     "column": 9,
                     "end_column": 12
                   },
@@ -2206,8 +2472,8 @@
                 "_type": "BytesConstant",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 39,
-                  "end_line": 39,
+                  "line": 44,
+                  "end_line": 44,
                   "column": 33,
                   "end_column": 38
                 },
@@ -2229,8 +2495,8 @@
           "_type": "ExpressionStatement",
           "source_location": {
             "file": "tests/approvals/box-proxies.algo.ts",
-            "line": 40,
-            "end_line": 40,
+            "line": 45,
+            "end_line": 45,
             "column": 2,
             "end_column": 40
           },
@@ -2238,8 +2504,8 @@
             "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 40,
-              "end_line": 40,
+              "line": 45,
+              "end_line": 45,
               "column": 2,
               "end_column": 40
             },
@@ -2254,8 +2520,8 @@
               "_type": "BytesComparisonExpression",
               "source_location": {
                 "file": "tests/approvals/box-proxies.algo.ts",
-                "line": 40,
-                "end_line": 40,
+                "line": 45,
+                "end_line": 45,
                 "column": 9,
                 "end_column": 39
               },
@@ -2270,8 +2536,8 @@
                 "_type": "BytesConstant",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 40,
-                  "end_line": 40,
+                  "line": 45,
+                  "end_line": 45,
                   "column": 16,
                   "end_column": 25
                 },
@@ -2290,8 +2556,8 @@
                 "_type": "BytesConstant",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 40,
-                  "end_line": 40,
+                  "line": 45,
+                  "end_line": 45,
                   "column": 36,
                   "end_column": 38
                 },
@@ -2313,8 +2579,8 @@
           "_type": "ExpressionStatement",
           "source_location": {
             "file": "tests/approvals/box-proxies.algo.ts",
-            "line": 42,
-            "end_line": 42,
+            "line": 47,
+            "end_line": 47,
             "column": 2,
             "end_column": 25
           },
@@ -2322,8 +2588,8 @@
             "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 42,
-              "end_line": 42,
+              "line": 47,
+              "end_line": 47,
               "column": 2,
               "end_column": 25
             },
@@ -2338,8 +2604,8 @@
               "_type": "ReinterpretCast",
               "source_location": {
                 "file": "tests/approvals/box-proxies.algo.ts",
-                "line": 42,
-                "end_line": 42,
+                "line": 47,
+                "end_line": 47,
                 "column": 2,
                 "end_column": 25
               },
@@ -2354,9 +2620,9 @@
                 "_type": "CheckedMaybe",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 42,
-                  "end_line": 42,
-                  "column": 9,
+                  "line": 47,
+                  "end_line": 47,
+                  "column": 18,
                   "end_column": 24
                 },
                 "wtype": {
@@ -2370,9 +2636,9 @@
                   "_type": "IntrinsicCall",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 42,
-                    "end_line": 42,
-                    "column": 9,
+                    "line": 47,
+                    "end_line": 47,
+                    "column": 18,
                     "end_column": 24
                   },
                   "wtype": {
@@ -2405,10 +2671,10 @@
                       "_type": "IntrinsicCall",
                       "source_location": {
                         "file": "tests/approvals/box-proxies.algo.ts",
-                        "line": 42,
-                        "end_line": 42,
-                        "column": 13,
-                        "end_column": 19
+                        "line": 47,
+                        "end_line": 47,
+                        "column": 9,
+                        "end_column": 12
                       },
                       "wtype": {
                         "_type": "WType",
@@ -2424,8 +2690,8 @@
                           "_type": "VarExpression",
                           "source_location": {
                             "file": "tests/approvals/box-proxies.algo.ts",
-                            "line": 42,
-                            "end_line": 42,
+                            "line": 47,
+                            "end_line": 47,
                             "column": 9,
                             "end_column": 12
                           },
@@ -2442,10 +2708,10 @@
                           "_type": "ReinterpretCast",
                           "source_location": {
                             "file": "tests/approvals/box-proxies.algo.ts",
-                            "line": 42,
-                            "end_line": 42,
-                            "column": 13,
-                            "end_column": 19
+                            "line": 47,
+                            "end_line": 47,
+                            "column": 9,
+                            "end_column": 17
                           },
                           "wtype": {
                             "_type": "WType",
@@ -2458,10 +2724,10 @@
                             "_type": "VarExpression",
                             "source_location": {
                               "file": "tests/approvals/box-proxies.algo.ts",
-                              "line": 42,
-                              "end_line": 42,
-                              "column": 20,
-                              "end_column": 23
+                              "line": 47,
+                              "end_line": 47,
+                              "column": 13,
+                              "end_column": 16
                             },
                             "wtype": {
                               "_type": "WType",
@@ -2487,19 +2753,19 @@
           "_type": "ExpressionStatement",
           "source_location": {
             "file": "tests/approvals/box-proxies.algo.ts",
-            "line": 44,
-            "end_line": 44,
+            "line": 49,
+            "end_line": 49,
             "column": 2,
-            "end_column": 27
+            "end_column": 29
           },
           "expr": {
             "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 44,
-              "end_line": 44,
+              "line": 49,
+              "end_line": 49,
               "column": 2,
-              "end_column": 27
+              "end_column": 29
             },
             "wtype": {
               "_type": "WType",
@@ -2512,10 +2778,10 @@
               "_type": "TupleItemExpression",
               "source_location": {
                 "file": "tests/approvals/box-proxies.algo.ts",
-                "line": 44,
-                "end_line": 44,
+                "line": 49,
+                "end_line": 49,
                 "column": 9,
-                "end_column": 26
+                "end_column": 28
               },
               "wtype": {
                 "_type": "WType",
@@ -2528,10 +2794,10 @@
                 "_type": "StateGetEx",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 44,
-                  "end_line": 44,
+                  "line": 49,
+                  "end_line": 49,
                   "column": 9,
-                  "end_column": 23
+                  "end_column": 25
                 },
                 "wtype": {
                   "_type": "WTuple",
@@ -2560,10 +2826,10 @@
                   "_type": "BoxValueExpression",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 44,
-                    "end_line": 44,
-                    "column": 13,
-                    "end_column": 18
+                    "line": 49,
+                    "end_line": 49,
+                    "column": 18,
+                    "end_column": 23
                   },
                   "wtype": {
                     "_type": "WType",
@@ -2576,10 +2842,10 @@
                     "_type": "IntrinsicCall",
                     "source_location": {
                       "file": "tests/approvals/box-proxies.algo.ts",
-                      "line": 44,
-                      "end_line": 44,
-                      "column": 13,
-                      "end_column": 18
+                      "line": 49,
+                      "end_line": 49,
+                      "column": 9,
+                      "end_column": 12
                     },
                     "wtype": {
                       "_type": "WType",
@@ -2595,8 +2861,8 @@
                         "_type": "VarExpression",
                         "source_location": {
                           "file": "tests/approvals/box-proxies.algo.ts",
-                          "line": 44,
-                          "end_line": 44,
+                          "line": 49,
+                          "end_line": 49,
                           "column": 9,
                           "end_column": 12
                         },
@@ -2613,10 +2879,10 @@
                         "_type": "ReinterpretCast",
                         "source_location": {
                           "file": "tests/approvals/box-proxies.algo.ts",
-                          "line": 44,
-                          "end_line": 44,
-                          "column": 13,
-                          "end_column": 18
+                          "line": 49,
+                          "end_line": 49,
+                          "column": 9,
+                          "end_column": 17
                         },
                         "wtype": {
                           "_type": "WType",
@@ -2629,10 +2895,10 @@
                           "_type": "VarExpression",
                           "source_location": {
                             "file": "tests/approvals/box-proxies.algo.ts",
-                            "line": 44,
-                            "end_line": 44,
-                            "column": 19,
-                            "end_column": 22
+                            "line": 49,
+                            "end_line": 49,
+                            "column": 13,
+                            "end_column": 16
                           },
                           "wtype": {
                             "_type": "WType",
@@ -2658,19 +2924,19 @@
           "_type": "ExpressionStatement",
           "source_location": {
             "file": "tests/approvals/box-proxies.algo.ts",
-            "line": 46,
-            "end_line": 46,
+            "line": 51,
+            "end_line": 51,
             "column": 2,
-            "end_column": 42
+            "end_column": 46
           },
           "expr": {
             "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 46,
-              "end_line": 46,
+              "line": 51,
+              "end_line": 51,
               "column": 2,
-              "end_column": 42
+              "end_column": 46
             },
             "wtype": {
               "_type": "WType",
@@ -2683,10 +2949,10 @@
               "_type": "BytesComparisonExpression",
               "source_location": {
                 "file": "tests/approvals/box-proxies.algo.ts",
-                "line": 46,
-                "end_line": 46,
+                "line": 51,
+                "end_line": 51,
                 "column": 9,
-                "end_column": 41
+                "end_column": 45
               },
               "wtype": {
                 "_type": "WType",
@@ -2699,10 +2965,10 @@
                 "_type": "BoxValueExpression",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 46,
-                  "end_line": 46,
-                  "column": 13,
-                  "end_column": 16
+                  "line": 51,
+                  "end_line": 51,
+                  "column": 18,
+                  "end_column": 23
                 },
                 "wtype": {
                   "_type": "WType",
@@ -2715,10 +2981,10 @@
                   "_type": "IntrinsicCall",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 46,
-                    "end_line": 46,
-                    "column": 13,
-                    "end_column": 16
+                    "line": 51,
+                    "end_line": 51,
+                    "column": 9,
+                    "end_column": 12
                   },
                   "wtype": {
                     "_type": "WType",
@@ -2734,8 +3000,8 @@
                       "_type": "VarExpression",
                       "source_location": {
                         "file": "tests/approvals/box-proxies.algo.ts",
-                        "line": 46,
-                        "end_line": 46,
+                        "line": 51,
+                        "end_line": 51,
                         "column": 9,
                         "end_column": 12
                       },
@@ -2752,10 +3018,10 @@
                       "_type": "ReinterpretCast",
                       "source_location": {
                         "file": "tests/approvals/box-proxies.algo.ts",
-                        "line": 46,
-                        "end_line": 46,
-                        "column": 13,
-                        "end_column": 16
+                        "line": 51,
+                        "end_line": 51,
+                        "column": 9,
+                        "end_column": 17
                       },
                       "wtype": {
                         "_type": "WType",
@@ -2768,10 +3034,10 @@
                         "_type": "VarExpression",
                         "source_location": {
                           "file": "tests/approvals/box-proxies.algo.ts",
-                          "line": 46,
-                          "end_line": 46,
-                          "column": 17,
-                          "end_column": 20
+                          "line": 51,
+                          "end_line": 51,
+                          "column": 13,
+                          "end_column": 16
                         },
                         "wtype": {
                           "_type": "WType",
@@ -2792,10 +3058,10 @@
                 "_type": "BoxValueExpression",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 46,
-                  "end_line": 46,
-                  "column": 33,
-                  "end_column": 36
+                  "line": 51,
+                  "end_line": 51,
+                  "column": 40,
+                  "end_column": 45
                 },
                 "wtype": {
                   "_type": "WType",
@@ -2808,10 +3074,10 @@
                   "_type": "IntrinsicCall",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 46,
-                    "end_line": 46,
-                    "column": 33,
-                    "end_column": 36
+                    "line": 34,
+                    "end_line": 34,
+                    "column": 50,
+                    "end_column": 52
                   },
                   "wtype": {
                     "_type": "WType",
@@ -2827,8 +3093,8 @@
                       "_type": "BytesConstant",
                       "source_location": {
                         "file": "tests/approvals/box-proxies.algo.ts",
-                        "line": 33,
-                        "end_line": 33,
+                        "line": 34,
+                        "end_line": 34,
                         "column": 50,
                         "end_column": 52
                       },
@@ -2846,10 +3112,10 @@
                       "_type": "ReinterpretCast",
                       "source_location": {
                         "file": "tests/approvals/box-proxies.algo.ts",
-                        "line": 46,
-                        "end_line": 46,
-                        "column": 33,
-                        "end_column": 36
+                        "line": 51,
+                        "end_line": 51,
+                        "column": 28,
+                        "end_column": 39
                       },
                       "wtype": {
                         "_type": "WType",
@@ -2862,10 +3128,10 @@
                         "_type": "VarExpression",
                         "source_location": {
                           "file": "tests/approvals/box-proxies.algo.ts",
-                          "line": 46,
-                          "end_line": 46,
-                          "column": 37,
-                          "end_column": 40
+                          "line": 51,
+                          "end_line": 51,
+                          "column": 35,
+                          "end_column": 38
                         },
                         "wtype": {
                           "_type": "WType",
@@ -2886,38 +3152,56 @@
           }
         },
         {
-          "_type": "ExpressionStatement",
+          "_type": "AssignmentStatement",
           "source_location": {
             "file": "tests/approvals/box-proxies.algo.ts",
-            "line": 48,
-            "end_line": 48,
-            "column": 2,
-            "end_column": 17
+            "line": 53,
+            "end_line": 53,
+            "column": 8,
+            "end_column": 40
           },
-          "expr": {
-            "_type": "StateDelete",
+          "target": {
+            "_type": "VarExpression",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 48,
-              "end_line": 48,
-              "column": 2,
-              "end_column": 17
+              "line": 53,
+              "end_line": 53,
+              "column": 8,
+              "end_column": 20
             },
             "wtype": {
               "_type": "WType",
-              "name": "void",
+              "name": "bool",
               "immutable": true,
               "ephemeral": false,
-              "scalar_type": null
+              "scalar_type": 2
+            },
+            "name": "isBoxDeleted"
+          },
+          "value": {
+            "_type": "StateDelete",
+            "source_location": {
+              "file": "tests/approvals/box-proxies.algo.ts",
+              "line": 53,
+              "end_line": 53,
+              "column": 32,
+              "end_column": 38
+            },
+            "wtype": {
+              "_type": "WType",
+              "name": "bool",
+              "immutable": true,
+              "ephemeral": false,
+              "scalar_type": 2
             },
             "field": {
               "_type": "BoxValueExpression",
               "source_location": {
                 "file": "tests/approvals/box-proxies.algo.ts",
-                "line": 48,
-                "end_line": 48,
-                "column": 6,
-                "end_column": 12
+                "line": 53,
+                "end_line": 53,
+                "column": 32,
+                "end_column": 38
               },
               "wtype": {
                 "_type": "WType",
@@ -2930,10 +3214,10 @@
                 "_type": "IntrinsicCall",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 48,
-                  "end_line": 48,
-                  "column": 6,
-                  "end_column": 12
+                  "line": 53,
+                  "end_line": 53,
+                  "column": 23,
+                  "end_column": 26
                 },
                 "wtype": {
                   "_type": "WType",
@@ -2949,10 +3233,10 @@
                     "_type": "VarExpression",
                     "source_location": {
                       "file": "tests/approvals/box-proxies.algo.ts",
-                      "line": 48,
-                      "end_line": 48,
-                      "column": 2,
-                      "end_column": 5
+                      "line": 53,
+                      "end_line": 53,
+                      "column": 23,
+                      "end_column": 26
                     },
                     "wtype": {
                       "_type": "WType",
@@ -2967,10 +3251,10 @@
                     "_type": "ReinterpretCast",
                     "source_location": {
                       "file": "tests/approvals/box-proxies.algo.ts",
-                      "line": 48,
-                      "end_line": 48,
-                      "column": 6,
-                      "end_column": 12
+                      "line": 53,
+                      "end_line": 53,
+                      "column": 23,
+                      "end_column": 31
                     },
                     "wtype": {
                       "_type": "WType",
@@ -2983,10 +3267,10 @@
                       "_type": "VarExpression",
                       "source_location": {
                         "file": "tests/approvals/box-proxies.algo.ts",
-                        "line": 48,
-                        "end_line": 48,
-                        "column": 13,
-                        "end_column": 16
+                        "line": 53,
+                        "end_line": 53,
+                        "column": 27,
+                        "end_column": 30
                       },
                       "wtype": {
                         "_type": "WType",
@@ -3008,8 +3292,54 @@
           "_type": "ExpressionStatement",
           "source_location": {
             "file": "tests/approvals/box-proxies.algo.ts",
-            "line": 50,
-            "end_line": 50,
+            "line": 54,
+            "end_line": 54,
+            "column": 2,
+            "end_column": 39
+          },
+          "expr": {
+            "_type": "AssertExpression",
+            "source_location": {
+              "file": "tests/approvals/box-proxies.algo.ts",
+              "line": 54,
+              "end_line": 54,
+              "column": 2,
+              "end_column": 39
+            },
+            "wtype": {
+              "_type": "WType",
+              "name": "void",
+              "immutable": true,
+              "ephemeral": false,
+              "scalar_type": null
+            },
+            "condition": {
+              "_type": "VarExpression",
+              "source_location": {
+                "file": "tests/approvals/box-proxies.algo.ts",
+                "line": 54,
+                "end_line": 54,
+                "column": 9,
+                "end_column": 21
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "name": "isBoxDeleted"
+            },
+            "error_message": "delete failed"
+          }
+        },
+        {
+          "_type": "ExpressionStatement",
+          "source_location": {
+            "file": "tests/approvals/box-proxies.algo.ts",
+            "line": 56,
+            "end_line": 56,
             "column": 2,
             "end_column": 104
           },
@@ -3017,8 +3347,8 @@
             "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 50,
-              "end_line": 50,
+              "line": 56,
+              "end_line": 56,
               "column": 2,
               "end_column": 104
             },
@@ -3033,8 +3363,8 @@
               "_type": "BytesComparisonExpression",
               "source_location": {
                 "file": "tests/approvals/box-proxies.algo.ts",
-                "line": 50,
-                "end_line": 50,
+                "line": 56,
+                "end_line": 56,
                 "column": 9,
                 "end_column": 103
               },
@@ -3049,8 +3379,8 @@
                 "_type": "StateGet",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 50,
-                  "end_line": 50,
+                  "line": 56,
+                  "end_line": 56,
                   "column": 9,
                   "end_column": 52
                 },
@@ -3065,10 +3395,10 @@
                   "_type": "BoxValueExpression",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 50,
-                    "end_line": 50,
-                    "column": 13,
-                    "end_column": 16
+                    "line": 56,
+                    "end_line": 56,
+                    "column": 24,
+                    "end_column": 27
                   },
                   "wtype": {
                     "_type": "WType",
@@ -3081,10 +3411,10 @@
                     "_type": "IntrinsicCall",
                     "source_location": {
                       "file": "tests/approvals/box-proxies.algo.ts",
-                      "line": 50,
-                      "end_line": 50,
-                      "column": 13,
-                      "end_column": 16
+                      "line": 56,
+                      "end_line": 56,
+                      "column": 9,
+                      "end_column": 12
                     },
                     "wtype": {
                       "_type": "WType",
@@ -3100,8 +3430,8 @@
                         "_type": "VarExpression",
                         "source_location": {
                           "file": "tests/approvals/box-proxies.algo.ts",
-                          "line": 50,
-                          "end_line": 50,
+                          "line": 56,
+                          "end_line": 56,
                           "column": 9,
                           "end_column": 12
                         },
@@ -3118,10 +3448,10 @@
                         "_type": "ReinterpretCast",
                         "source_location": {
                           "file": "tests/approvals/box-proxies.algo.ts",
-                          "line": 50,
-                          "end_line": 50,
-                          "column": 13,
-                          "end_column": 16
+                          "line": 56,
+                          "end_line": 56,
+                          "column": 9,
+                          "end_column": 23
                         },
                         "wtype": {
                           "_type": "WType",
@@ -3134,10 +3464,10 @@
                           "_type": "BytesBinaryOperation",
                           "source_location": {
                             "file": "tests/approvals/box-proxies.algo.ts",
-                            "line": 50,
-                            "end_line": 50,
-                            "column": 17,
-                            "end_column": 26
+                            "line": 56,
+                            "end_line": 56,
+                            "column": 13,
+                            "end_column": 22
                           },
                           "wtype": {
                             "_type": "WType",
@@ -3150,10 +3480,10 @@
                             "_type": "BytesBinaryOperation",
                             "source_location": {
                               "file": "tests/approvals/box-proxies.algo.ts",
-                              "line": 50,
-                              "end_line": 50,
-                              "column": 17,
-                              "end_column": 26
+                              "line": 56,
+                              "end_line": 56,
+                              "column": 13,
+                              "end_column": 22
                             },
                             "wtype": {
                               "_type": "WType",
@@ -3166,10 +3496,10 @@
                               "_type": "StringConstant",
                               "source_location": {
                                 "file": "tests/approvals/box-proxies.algo.ts",
-                                "line": 50,
-                                "end_line": 50,
-                                "column": 17,
-                                "end_column": 26
+                                "line": 56,
+                                "end_line": 56,
+                                "column": 13,
+                                "end_column": 22
                               },
                               "wtype": {
                                 "_type": "WType",
@@ -3185,10 +3515,10 @@
                               "_type": "VarExpression",
                               "source_location": {
                                 "file": "tests/approvals/box-proxies.algo.ts",
-                                "line": 50,
-                                "end_line": 50,
-                                "column": 20,
-                                "end_column": 23
+                                "line": 56,
+                                "end_line": 56,
+                                "column": 16,
+                                "end_column": 19
                               },
                               "wtype": {
                                 "_type": "WType",
@@ -3205,10 +3535,10 @@
                             "_type": "StringConstant",
                             "source_location": {
                               "file": "tests/approvals/box-proxies.algo.ts",
-                              "line": 50,
-                              "end_line": 50,
-                              "column": 17,
-                              "end_column": 26
+                              "line": 56,
+                              "end_line": 56,
+                              "column": 13,
+                              "end_column": 22
                             },
                             "wtype": {
                               "_type": "WType",
@@ -3229,8 +3559,8 @@
                   "_type": "BytesConstant",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 50,
-                    "end_line": 50,
+                    "line": 56,
+                    "end_line": 56,
                     "column": 45,
                     "end_column": 48
                   },
@@ -3250,8 +3580,8 @@
                 "_type": "StateGet",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 50,
-                  "end_line": 50,
+                  "line": 56,
+                  "end_line": 56,
                   "column": 57,
                   "end_column": 103
                 },
@@ -3266,10 +3596,10 @@
                   "_type": "BoxValueExpression",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 50,
-                    "end_line": 50,
-                    "column": 64,
-                    "end_column": 67
+                    "line": 56,
+                    "end_line": 56,
+                    "column": 75,
+                    "end_column": 78
                   },
                   "wtype": {
                     "_type": "WType",
@@ -3282,10 +3612,10 @@
                     "_type": "IntrinsicCall",
                     "source_location": {
                       "file": "tests/approvals/box-proxies.algo.ts",
-                      "line": 50,
-                      "end_line": 50,
-                      "column": 64,
-                      "end_column": 67
+                      "line": 34,
+                      "end_line": 34,
+                      "column": 50,
+                      "end_column": 52
                     },
                     "wtype": {
                       "_type": "WType",
@@ -3301,8 +3631,8 @@
                         "_type": "BytesConstant",
                         "source_location": {
                           "file": "tests/approvals/box-proxies.algo.ts",
-                          "line": 33,
-                          "end_line": 33,
+                          "line": 34,
+                          "end_line": 34,
                           "column": 50,
                           "end_column": 52
                         },
@@ -3320,10 +3650,10 @@
                         "_type": "ReinterpretCast",
                         "source_location": {
                           "file": "tests/approvals/box-proxies.algo.ts",
-                          "line": 50,
-                          "end_line": 50,
-                          "column": 64,
-                          "end_column": 67
+                          "line": 56,
+                          "end_line": 56,
+                          "column": 57,
+                          "end_column": 74
                         },
                         "wtype": {
                           "_type": "WType",
@@ -3336,10 +3666,10 @@
                           "_type": "BytesBinaryOperation",
                           "source_location": {
                             "file": "tests/approvals/box-proxies.algo.ts",
-                            "line": 50,
-                            "end_line": 50,
-                            "column": 68,
-                            "end_column": 77
+                            "line": 56,
+                            "end_line": 56,
+                            "column": 64,
+                            "end_column": 73
                           },
                           "wtype": {
                             "_type": "WType",
@@ -3352,10 +3682,10 @@
                             "_type": "BytesBinaryOperation",
                             "source_location": {
                               "file": "tests/approvals/box-proxies.algo.ts",
-                              "line": 50,
-                              "end_line": 50,
-                              "column": 68,
-                              "end_column": 77
+                              "line": 56,
+                              "end_line": 56,
+                              "column": 64,
+                              "end_column": 73
                             },
                             "wtype": {
                               "_type": "WType",
@@ -3368,10 +3698,10 @@
                               "_type": "StringConstant",
                               "source_location": {
                                 "file": "tests/approvals/box-proxies.algo.ts",
-                                "line": 50,
-                                "end_line": 50,
-                                "column": 68,
-                                "end_column": 77
+                                "line": 56,
+                                "end_line": 56,
+                                "column": 64,
+                                "end_column": 73
                               },
                               "wtype": {
                                 "_type": "WType",
@@ -3387,10 +3717,10 @@
                               "_type": "VarExpression",
                               "source_location": {
                                 "file": "tests/approvals/box-proxies.algo.ts",
-                                "line": 50,
-                                "end_line": 50,
-                                "column": 71,
-                                "end_column": 74
+                                "line": 56,
+                                "end_line": 56,
+                                "column": 67,
+                                "end_column": 70
                               },
                               "wtype": {
                                 "_type": "WType",
@@ -3407,10 +3737,10 @@
                             "_type": "StringConstant",
                             "source_location": {
                               "file": "tests/approvals/box-proxies.algo.ts",
-                              "line": 50,
-                              "end_line": 50,
-                              "column": 68,
-                              "end_column": 77
+                              "line": 56,
+                              "end_line": 56,
+                              "column": 64,
+                              "end_column": 73
                             },
                             "wtype": {
                               "_type": "WType",
@@ -3431,8 +3761,8 @@
                   "_type": "BytesConstant",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 50,
-                    "end_line": 50,
+                    "line": 56,
+                    "end_line": 56,
                     "column": 96,
                     "end_column": 99
                   },
@@ -3469,8 +3799,8 @@
     "_type": "Subroutine",
     "source_location": {
       "file": "tests/approvals/box-proxies.algo.ts",
-      "line": 55,
-      "end_line": 55,
+      "line": 61,
+      "end_line": 61,
       "column": 0,
       "end_column": 48
     },
@@ -3480,8 +3810,8 @@
         "name": "box",
         "source_location": {
           "file": "tests/approvals/box-proxies.algo.ts",
-          "line": 55,
-          "end_line": 55,
+          "line": 61,
+          "end_line": 61,
           "column": 20,
           "end_column": 31
         },
@@ -3498,8 +3828,8 @@
         "name": "length",
         "source_location": {
           "file": "tests/approvals/box-proxies.algo.ts",
-          "line": 55,
-          "end_line": 55,
+          "line": 61,
+          "end_line": 61,
           "column": 33,
           "end_column": 47
         },
@@ -3523,8 +3853,8 @@
       "_type": "Block",
       "source_location": {
         "file": "tests/approvals/box-proxies.algo.ts",
-        "line": 55,
-        "end_line": 83,
+        "line": 61,
+        "end_line": 90,
         "column": 49,
         "end_column": 1
       },
@@ -3533,8 +3863,8 @@
           "_type": "ExpressionStatement",
           "source_location": {
             "file": "tests/approvals/box-proxies.algo.ts",
-            "line": 56,
-            "end_line": 56,
+            "line": 62,
+            "end_line": 62,
             "column": 2,
             "end_column": 36
           },
@@ -3542,8 +3872,8 @@
             "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 56,
-              "end_line": 56,
+              "line": 62,
+              "end_line": 62,
               "column": 2,
               "end_column": 36
             },
@@ -3558,8 +3888,8 @@
               "_type": "BytesComparisonExpression",
               "source_location": {
                 "file": "tests/approvals/box-proxies.algo.ts",
-                "line": 56,
-                "end_line": 56,
+                "line": 62,
+                "end_line": 62,
                 "column": 9,
                 "end_column": 35
               },
@@ -3574,8 +3904,8 @@
                 "_type": "ReinterpretCast",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 56,
-                  "end_line": 56,
+                  "line": 62,
+                  "end_line": 62,
                   "column": 13,
                   "end_column": 16
                 },
@@ -3590,8 +3920,8 @@
                   "_type": "VarExpression",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 56,
-                    "end_line": 56,
+                    "line": 62,
+                    "end_line": 62,
                     "column": 9,
                     "end_column": 12
                   },
@@ -3610,8 +3940,8 @@
                 "_type": "BytesConstant",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 56,
-                  "end_line": 56,
+                  "line": 62,
+                  "end_line": 62,
                   "column": 27,
                   "end_column": 34
                 },
@@ -3633,8 +3963,8 @@
           "_type": "ExpressionStatement",
           "source_location": {
             "file": "tests/approvals/box-proxies.algo.ts",
-            "line": 57,
-            "end_line": 57,
+            "line": 63,
+            "end_line": 63,
             "column": 2,
             "end_column": 37
           },
@@ -3642,8 +3972,8 @@
             "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 57,
-              "end_line": 57,
+              "line": 63,
+              "end_line": 63,
               "column": 2,
               "end_column": 37
             },
@@ -3658,8 +3988,8 @@
               "_type": "BytesComparisonExpression",
               "source_location": {
                 "file": "tests/approvals/box-proxies.algo.ts",
-                "line": 57,
-                "end_line": 57,
+                "line": 63,
+                "end_line": 63,
                 "column": 9,
                 "end_column": 36
               },
@@ -3674,8 +4004,8 @@
                 "_type": "BytesConstant",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 57,
-                  "end_line": 57,
+                  "line": 63,
+                  "end_line": 63,
                   "column": 16,
                   "end_column": 19
                 },
@@ -3694,8 +4024,8 @@
                 "_type": "BytesConstant",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 57,
-                  "end_line": 57,
+                  "line": 63,
+                  "end_line": 63,
                   "column": 30,
                   "end_column": 35
                 },
@@ -3717,8 +4047,8 @@
           "_type": "IfElse",
           "source_location": {
             "file": "tests/approvals/box-proxies.algo.ts",
-            "line": 59,
-            "end_line": 59,
+            "line": 65,
+            "end_line": 65,
             "column": 2,
             "end_column": 21
           },
@@ -3726,8 +4056,8 @@
             "_type": "Not",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 59,
-              "end_line": 59,
+              "line": 65,
+              "end_line": 65,
               "column": 6,
               "end_column": 20
             },
@@ -3742,8 +4072,8 @@
               "_type": "StateExists",
               "source_location": {
                 "file": "tests/approvals/box-proxies.algo.ts",
-                "line": 59,
-                "end_line": 59,
+                "line": 65,
+                "end_line": 65,
                 "column": 14,
                 "end_column": 20
               },
@@ -3758,8 +4088,8 @@
                 "_type": "BoxValueExpression",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 59,
-                  "end_line": 59,
+                  "line": 65,
+                  "end_line": 65,
                   "column": 14,
                   "end_column": 20
                 },
@@ -3774,8 +4104,8 @@
                   "_type": "BytesConstant",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 53,
-                    "end_line": 53,
+                    "line": 59,
+                    "end_line": 59,
                     "column": 29,
                     "end_column": 34
                   },
@@ -3797,8 +4127,8 @@
             "_type": "Block",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 59,
-              "end_line": 61,
+              "line": 65,
+              "end_line": 67,
               "column": 22,
               "end_column": 3
             },
@@ -3807,8 +4137,8 @@
                 "_type": "Block",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 59,
-                  "end_line": 61,
+                  "line": 65,
+                  "end_line": 67,
                   "column": 22,
                   "end_column": 3
                 },
@@ -3817,8 +4147,8 @@
                     "_type": "ExpressionStatement",
                     "source_location": {
                       "file": "tests/approvals/box-proxies.algo.ts",
-                      "line": 60,
-                      "end_line": 60,
+                      "line": 66,
+                      "end_line": 66,
                       "column": 4,
                       "end_column": 33
                     },
@@ -3826,8 +4156,8 @@
                       "_type": "IntrinsicCall",
                       "source_location": {
                         "file": "tests/approvals/box-proxies.algo.ts",
-                        "line": 60,
-                        "end_line": 60,
+                        "line": 66,
+                        "end_line": 66,
                         "column": 4,
                         "end_column": 33
                       },
@@ -3845,8 +4175,8 @@
                           "_type": "BytesConstant",
                           "source_location": {
                             "file": "tests/approvals/box-proxies.algo.ts",
-                            "line": 53,
-                            "end_line": 53,
+                            "line": 59,
+                            "end_line": 59,
                             "column": 29,
                             "end_column": 34
                           },
@@ -3864,8 +4194,8 @@
                           "_type": "IntegerConstant",
                           "source_location": {
                             "file": "tests/approvals/box-proxies.algo.ts",
-                            "line": 60,
-                            "end_line": 60,
+                            "line": 66,
+                            "end_line": 66,
                             "column": 26,
                             "end_column": 30
                           },
@@ -3894,8 +4224,8 @@
             "_type": "Block",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 61,
-              "end_line": 61,
+              "line": 67,
+              "end_line": 67,
               "column": 9,
               "end_column": 38
             },
@@ -3904,8 +4234,8 @@
                 "_type": "IfElse",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 61,
-                  "end_line": 61,
+                  "line": 67,
+                  "end_line": 67,
                   "column": 9,
                   "end_column": 38
                 },
@@ -3913,8 +4243,8 @@
                   "_type": "NumericComparisonExpression",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 61,
-                    "end_line": 61,
+                    "line": 67,
+                    "end_line": 67,
                     "column": 13,
                     "end_column": 37
                   },
@@ -3929,8 +4259,8 @@
                     "_type": "CheckedMaybe",
                     "source_location": {
                       "file": "tests/approvals/box-proxies.algo.ts",
-                      "line": 61,
-                      "end_line": 61,
+                      "line": 67,
+                      "end_line": 67,
                       "column": 20,
                       "end_column": 26
                     },
@@ -3945,8 +4275,8 @@
                       "_type": "IntrinsicCall",
                       "source_location": {
                         "file": "tests/approvals/box-proxies.algo.ts",
-                        "line": 61,
-                        "end_line": 61,
+                        "line": 67,
+                        "end_line": 67,
                         "column": 20,
                         "end_column": 26
                       },
@@ -3980,8 +4310,8 @@
                           "_type": "BytesConstant",
                           "source_location": {
                             "file": "tests/approvals/box-proxies.algo.ts",
-                            "line": 53,
-                            "end_line": 53,
+                            "line": 59,
+                            "end_line": 59,
                             "column": 29,
                             "end_column": 34
                           },
@@ -4004,8 +4334,8 @@
                     "_type": "VarExpression",
                     "source_location": {
                       "file": "tests/approvals/box-proxies.algo.ts",
-                      "line": 61,
-                      "end_line": 61,
+                      "line": 67,
+                      "end_line": 67,
                       "column": 31,
                       "end_column": 37
                     },
@@ -4023,8 +4353,8 @@
                   "_type": "Block",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 61,
-                    "end_line": 63,
+                    "line": 67,
+                    "end_line": 69,
                     "column": 39,
                     "end_column": 3
                   },
@@ -4033,8 +4363,8 @@
                       "_type": "Block",
                       "source_location": {
                         "file": "tests/approvals/box-proxies.algo.ts",
-                        "line": 61,
-                        "end_line": 63,
+                        "line": 67,
+                        "end_line": 69,
                         "column": 39,
                         "end_column": 3
                       },
@@ -4043,8 +4373,8 @@
                           "_type": "ExpressionStatement",
                           "source_location": {
                             "file": "tests/approvals/box-proxies.algo.ts",
-                            "line": 62,
-                            "end_line": 62,
+                            "line": 68,
+                            "end_line": 68,
                             "column": 4,
                             "end_column": 25
                           },
@@ -4052,8 +4382,8 @@
                             "_type": "IntrinsicCall",
                             "source_location": {
                               "file": "tests/approvals/box-proxies.algo.ts",
-                              "line": 62,
-                              "end_line": 62,
+                              "line": 68,
+                              "end_line": 68,
                               "column": 4,
                               "end_column": 25
                             },
@@ -4071,8 +4401,8 @@
                                 "_type": "BytesConstant",
                                 "source_location": {
                                   "file": "tests/approvals/box-proxies.algo.ts",
-                                  "line": 53,
-                                  "end_line": 53,
+                                  "line": 59,
+                                  "end_line": 59,
                                   "column": 29,
                                   "end_column": 34
                                 },
@@ -4090,8 +4420,8 @@
                                 "_type": "VarExpression",
                                 "source_location": {
                                   "file": "tests/approvals/box-proxies.algo.ts",
-                                  "line": 62,
-                                  "end_line": 62,
+                                  "line": 68,
+                                  "end_line": 68,
                                   "column": 18,
                                   "end_column": 24
                                 },
@@ -4126,8 +4456,8 @@
           "_type": "IfElse",
           "source_location": {
             "file": "tests/approvals/box-proxies.algo.ts",
-            "line": 64,
-            "end_line": 64,
+            "line": 70,
+            "end_line": 70,
             "column": 2,
             "end_column": 17
           },
@@ -4135,8 +4465,8 @@
             "_type": "StateExists",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 64,
-              "end_line": 64,
+              "line": 70,
+              "end_line": 70,
               "column": 10,
               "end_column": 16
             },
@@ -4151,8 +4481,8 @@
               "_type": "BoxValueExpression",
               "source_location": {
                 "file": "tests/approvals/box-proxies.algo.ts",
-                "line": 64,
-                "end_line": 64,
+                "line": 70,
+                "end_line": 70,
                 "column": 10,
                 "end_column": 16
               },
@@ -4167,8 +4497,8 @@
                 "_type": "VarExpression",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 64,
-                  "end_line": 64,
+                  "line": 70,
+                  "end_line": 70,
                   "column": 6,
                   "end_column": 9
                 },
@@ -4188,8 +4518,8 @@
             "_type": "Block",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 64,
-              "end_line": 66,
+              "line": 70,
+              "end_line": 72,
               "column": 18,
               "end_column": 3
             },
@@ -4198,8 +4528,8 @@
                 "_type": "Block",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 64,
-                  "end_line": 66,
+                  "line": 70,
+                  "end_line": 72,
                   "column": 18,
                   "end_column": 3
                 },
@@ -4208,8 +4538,8 @@
                     "_type": "ExpressionStatement",
                     "source_location": {
                       "file": "tests/approvals/box-proxies.algo.ts",
-                      "line": 65,
-                      "end_line": 65,
+                      "line": 71,
+                      "end_line": 71,
                       "column": 4,
                       "end_column": 17
                     },
@@ -4217,8 +4547,8 @@
                       "_type": "IntrinsicCall",
                       "source_location": {
                         "file": "tests/approvals/box-proxies.algo.ts",
-                        "line": 65,
-                        "end_line": 65,
+                        "line": 71,
+                        "end_line": 71,
                         "column": 4,
                         "end_column": 17
                       },
@@ -4236,8 +4566,8 @@
                           "_type": "VarExpression",
                           "source_location": {
                             "file": "tests/approvals/box-proxies.algo.ts",
-                            "line": 65,
-                            "end_line": 65,
+                            "line": 71,
+                            "end_line": 71,
                             "column": 4,
                             "end_column": 7
                           },
@@ -4254,8 +4584,8 @@
                           "_type": "IntegerConstant",
                           "source_location": {
                             "file": "tests/approvals/box-proxies.algo.ts",
-                            "line": 65,
-                            "end_line": 65,
+                            "line": 71,
+                            "end_line": 71,
                             "column": 15,
                             "end_column": 16
                           },
@@ -4284,8 +4614,8 @@
             "_type": "Block",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 66,
-              "end_line": 68,
+              "line": 72,
+              "end_line": 74,
               "column": 9,
               "end_column": 3
             },
@@ -4294,8 +4624,8 @@
                 "_type": "Block",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 66,
-                  "end_line": 68,
+                  "line": 72,
+                  "end_line": 74,
                   "column": 9,
                   "end_column": 3
                 },
@@ -4304,8 +4634,8 @@
                     "_type": "ExpressionStatement",
                     "source_location": {
                       "file": "tests/approvals/box-proxies.algo.ts",
-                      "line": 67,
-                      "end_line": 67,
+                      "line": 73,
+                      "end_line": 73,
                       "column": 4,
                       "end_column": 27
                     },
@@ -4313,8 +4643,8 @@
                       "_type": "IntrinsicCall",
                       "source_location": {
                         "file": "tests/approvals/box-proxies.algo.ts",
-                        "line": 67,
-                        "end_line": 67,
+                        "line": 73,
+                        "end_line": 73,
                         "column": 4,
                         "end_column": 27
                       },
@@ -4332,8 +4662,8 @@
                           "_type": "VarExpression",
                           "source_location": {
                             "file": "tests/approvals/box-proxies.algo.ts",
-                            "line": 67,
-                            "end_line": 67,
+                            "line": 73,
+                            "end_line": 73,
                             "column": 4,
                             "end_column": 7
                           },
@@ -4350,8 +4680,8 @@
                           "_type": "IntegerConstant",
                           "source_location": {
                             "file": "tests/approvals/box-proxies.algo.ts",
-                            "line": 67,
-                            "end_line": 67,
+                            "line": 73,
+                            "end_line": 73,
                             "column": 23,
                             "end_column": 24
                           },
@@ -4381,8 +4711,8 @@
           "_type": "AssignmentStatement",
           "source_location": {
             "file": "tests/approvals/box-proxies.algo.ts",
-            "line": 69,
-            "end_line": 69,
+            "line": 75,
+            "end_line": 75,
             "column": 8,
             "end_column": 45
           },
@@ -4390,8 +4720,8 @@
             "_type": "VarExpression",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 69,
-              "end_line": 69,
+              "line": 75,
+              "end_line": 75,
               "column": 8,
               "end_column": 17
             },
@@ -4408,8 +4738,8 @@
             "_type": "BytesConstant",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 69,
-              "end_line": 69,
+              "line": 75,
+              "end_line": 75,
               "column": 20,
               "end_column": 45
             },
@@ -4428,8 +4758,8 @@
           "_type": "ExpressionStatement",
           "source_location": {
             "file": "tests/approvals/box-proxies.algo.ts",
-            "line": 70,
-            "end_line": 70,
+            "line": 76,
+            "end_line": 76,
             "column": 2,
             "end_column": 20
           },
@@ -4437,8 +4767,8 @@
             "_type": "IntrinsicCall",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 70,
-              "end_line": 70,
+              "line": 76,
+              "end_line": 76,
               "column": 2,
               "end_column": 20
             },
@@ -4456,8 +4786,8 @@
                 "_type": "VarExpression",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 70,
-                  "end_line": 70,
+                  "line": 76,
+                  "end_line": 76,
                   "column": 2,
                   "end_column": 5
                 },
@@ -4474,8 +4804,8 @@
                 "_type": "VarExpression",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 70,
-                  "end_line": 70,
+                  "line": 76,
+                  "end_line": 76,
                   "column": 10,
                   "end_column": 19
                 },
@@ -4495,8 +4825,8 @@
           "_type": "ExpressionStatement",
           "source_location": {
             "file": "tests/approvals/box-proxies.algo.ts",
-            "line": 72,
-            "end_line": 72,
+            "line": 78,
+            "end_line": 78,
             "column": 2,
             "end_column": 69
           },
@@ -4504,8 +4834,8 @@
             "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 72,
-              "end_line": 72,
+              "line": 78,
+              "end_line": 78,
               "column": 2,
               "end_column": 69
             },
@@ -4520,8 +4850,8 @@
               "_type": "BytesComparisonExpression",
               "source_location": {
                 "file": "tests/approvals/box-proxies.algo.ts",
-                "line": 72,
-                "end_line": 72,
+                "line": 78,
+                "end_line": 78,
                 "column": 9,
                 "end_column": 68
               },
@@ -4536,8 +4866,8 @@
                 "_type": "StateGet",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 72,
-                  "end_line": 72,
+                  "line": 78,
+                  "end_line": 78,
                   "column": 9,
                   "end_column": 38
                 },
@@ -4552,8 +4882,8 @@
                   "_type": "BoxValueExpression",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 72,
-                    "end_line": 72,
+                    "line": 78,
+                    "end_line": 78,
                     "column": 13,
                     "end_column": 16
                   },
@@ -4568,8 +4898,8 @@
                     "_type": "VarExpression",
                     "source_location": {
                       "file": "tests/approvals/box-proxies.algo.ts",
-                      "line": 72,
-                      "end_line": 72,
+                      "line": 78,
+                      "end_line": 78,
                       "column": 9,
                       "end_column": 12
                     },
@@ -4588,8 +4918,8 @@
                   "_type": "BytesConstant",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 72,
-                    "end_line": 72,
+                    "line": 78,
+                    "end_line": 78,
                     "column": 28,
                     "end_column": 35
                   },
@@ -4609,8 +4939,8 @@
                 "_type": "BytesConstant",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 72,
-                  "end_line": 72,
+                  "line": 78,
+                  "end_line": 78,
                   "column": 43,
                   "end_column": 68
                 },
@@ -4632,8 +4962,8 @@
           "_type": "AssignmentStatement",
           "source_location": {
             "file": "tests/approvals/box-proxies.algo.ts",
-            "line": 74,
-            "end_line": 74,
+            "line": 80,
+            "end_line": 80,
             "column": 8,
             "end_column": 30
           },
@@ -4641,8 +4971,8 @@
             "_type": "VarExpression",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 74,
-              "end_line": 74,
+              "line": 80,
+              "end_line": 80,
               "column": 8,
               "end_column": 16
             },
@@ -4675,8 +5005,8 @@
             "_type": "StateGetEx",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 74,
-              "end_line": 74,
+              "line": 80,
+              "end_line": 80,
               "column": 19,
               "end_column": 30
             },
@@ -4707,8 +5037,8 @@
               "_type": "BoxValueExpression",
               "source_location": {
                 "file": "tests/approvals/box-proxies.algo.ts",
-                "line": 74,
-                "end_line": 74,
+                "line": 80,
+                "end_line": 80,
                 "column": 23,
                 "end_column": 28
               },
@@ -4723,8 +5053,8 @@
                 "_type": "VarExpression",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 74,
-                  "end_line": 74,
+                  "line": 80,
+                  "end_line": 80,
                   "column": 19,
                   "end_column": 22
                 },
@@ -4745,8 +5075,8 @@
           "_type": "ExpressionStatement",
           "source_location": {
             "file": "tests/approvals/box-proxies.algo.ts",
-            "line": 75,
-            "end_line": 75,
+            "line": 81,
+            "end_line": 81,
             "column": 2,
             "end_column": 21
           },
@@ -4754,8 +5084,8 @@
             "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 75,
-              "end_line": 75,
+              "line": 81,
+              "end_line": 81,
               "column": 2,
               "end_column": 21
             },
@@ -4770,8 +5100,8 @@
               "_type": "TupleItemExpression",
               "source_location": {
                 "file": "tests/approvals/box-proxies.algo.ts",
-                "line": 75,
-                "end_line": 75,
+                "line": 81,
+                "end_line": 81,
                 "column": 9,
                 "end_column": 20
               },
@@ -4786,8 +5116,8 @@
                 "_type": "VarExpression",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 75,
-                  "end_line": 75,
+                  "line": 81,
+                  "end_line": 81,
                   "column": 9,
                   "end_column": 17
                 },
@@ -4825,8 +5155,8 @@
           "_type": "ExpressionStatement",
           "source_location": {
             "file": "tests/approvals/box-proxies.algo.ts",
-            "line": 77,
-            "end_line": 77,
+            "line": 83,
+            "end_line": 83,
             "column": 2,
             "end_column": 49
           },
@@ -4834,8 +5164,8 @@
             "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 77,
-              "end_line": 77,
+              "line": 83,
+              "end_line": 83,
               "column": 2,
               "end_column": 49
             },
@@ -4850,8 +5180,8 @@
               "_type": "BytesComparisonExpression",
               "source_location": {
                 "file": "tests/approvals/box-proxies.algo.ts",
-                "line": 77,
-                "end_line": 77,
+                "line": 83,
+                "end_line": 83,
                 "column": 9,
                 "end_column": 48
               },
@@ -4866,8 +5196,8 @@
                 "_type": "BoxValueExpression",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 77,
-                  "end_line": 77,
+                  "line": 83,
+                  "end_line": 83,
                   "column": 13,
                   "end_column": 18
                 },
@@ -4882,8 +5212,8 @@
                   "_type": "VarExpression",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 77,
-                    "end_line": 77,
+                    "line": 83,
+                    "end_line": 83,
                     "column": 9,
                     "end_column": 12
                   },
@@ -4903,8 +5233,8 @@
                 "_type": "BytesConstant",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 77,
-                  "end_line": 77,
+                  "line": 83,
+                  "end_line": 83,
                   "column": 23,
                   "end_column": 48
                 },
@@ -4926,8 +5256,8 @@
           "_type": "ExpressionStatement",
           "source_location": {
             "file": "tests/approvals/box-proxies.algo.ts",
-            "line": 78,
-            "end_line": 78,
+            "line": 84,
+            "end_line": 84,
             "column": 2,
             "end_column": 39
           },
@@ -4935,8 +5265,8 @@
             "_type": "IntrinsicCall",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 78,
-              "end_line": 78,
+              "line": 84,
+              "end_line": 84,
               "column": 2,
               "end_column": 39
             },
@@ -4954,8 +5284,8 @@
                 "_type": "VarExpression",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 78,
-                  "end_line": 78,
+                  "line": 84,
+                  "end_line": 84,
                   "column": 2,
                   "end_column": 5
                 },
@@ -4972,8 +5302,8 @@
                 "_type": "IntegerConstant",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 78,
-                  "end_line": 78,
+                  "line": 84,
+                  "end_line": 84,
                   "column": 13,
                   "end_column": 14
                 },
@@ -4991,8 +5321,8 @@
                 "_type": "IntegerConstant",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 78,
-                  "end_line": 78,
+                  "line": 84,
+                  "end_line": 84,
                   "column": 16,
                   "end_column": 17
                 },
@@ -5010,8 +5340,8 @@
                 "_type": "BytesConstant",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 78,
-                  "end_line": 78,
+                  "line": 84,
+                  "end_line": 84,
                   "column": 19,
                   "end_column": 38
                 },
@@ -5032,8 +5362,8 @@
           "_type": "ExpressionStatement",
           "source_location": {
             "file": "tests/approvals/box-proxies.algo.ts",
-            "line": 79,
-            "end_line": 79,
+            "line": 85,
+            "end_line": 85,
             "column": 2,
             "end_column": 49
           },
@@ -5041,8 +5371,8 @@
             "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 79,
-              "end_line": 79,
+              "line": 85,
+              "end_line": 85,
               "column": 2,
               "end_column": 49
             },
@@ -5057,8 +5387,8 @@
               "_type": "BytesComparisonExpression",
               "source_location": {
                 "file": "tests/approvals/box-proxies.algo.ts",
-                "line": 79,
-                "end_line": 79,
+                "line": 85,
+                "end_line": 85,
                 "column": 9,
                 "end_column": 48
               },
@@ -5073,8 +5403,8 @@
                 "_type": "BoxValueExpression",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 79,
-                  "end_line": 79,
+                  "line": 85,
+                  "end_line": 85,
                   "column": 13,
                   "end_column": 18
                 },
@@ -5089,8 +5419,8 @@
                   "_type": "VarExpression",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 79,
-                    "end_line": 79,
+                    "line": 85,
+                    "end_line": 85,
                     "column": 9,
                     "end_column": 12
                   },
@@ -5110,8 +5440,8 @@
                 "_type": "BytesConstant",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 79,
-                  "end_line": 79,
+                  "line": 85,
+                  "end_line": 85,
                   "column": 23,
                   "end_column": 48
                 },
@@ -5130,38 +5460,56 @@
           }
         },
         {
-          "_type": "ExpressionStatement",
+          "_type": "AssignmentStatement",
           "source_location": {
             "file": "tests/approvals/box-proxies.algo.ts",
-            "line": 81,
-            "end_line": 81,
-            "column": 2,
-            "end_column": 14
+            "line": 87,
+            "end_line": 87,
+            "column": 8,
+            "end_column": 24
           },
-          "expr": {
-            "_type": "StateDelete",
+          "target": {
+            "_type": "VarExpression",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 81,
-              "end_line": 81,
-              "column": 2,
-              "end_column": 14
+              "line": 87,
+              "end_line": 87,
+              "column": 8,
+              "end_column": 9
             },
             "wtype": {
               "_type": "WType",
-              "name": "void",
+              "name": "bool",
               "immutable": true,
               "ephemeral": false,
-              "scalar_type": null
+              "scalar_type": 2
+            },
+            "name": "x"
+          },
+          "value": {
+            "_type": "StateDelete",
+            "source_location": {
+              "file": "tests/approvals/box-proxies.algo.ts",
+              "line": 87,
+              "end_line": 87,
+              "column": 12,
+              "end_column": 24
+            },
+            "wtype": {
+              "_type": "WType",
+              "name": "bool",
+              "immutable": true,
+              "ephemeral": false,
+              "scalar_type": 2
             },
             "field": {
               "_type": "BoxValueExpression",
               "source_location": {
                 "file": "tests/approvals/box-proxies.algo.ts",
-                "line": 81,
-                "end_line": 81,
-                "column": 6,
-                "end_column": 12
+                "line": 87,
+                "end_line": 87,
+                "column": 16,
+                "end_column": 22
               },
               "wtype": {
                 "_type": "WType",
@@ -5174,10 +5522,10 @@
                 "_type": "VarExpression",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 81,
-                  "end_line": 81,
-                  "column": 2,
-                  "end_column": 5
+                  "line": 87,
+                  "end_line": 87,
+                  "column": 12,
+                  "end_column": 15
                 },
                 "wtype": {
                   "_type": "WType",
@@ -5196,8 +5544,54 @@
           "_type": "ExpressionStatement",
           "source_location": {
             "file": "tests/approvals/box-proxies.algo.ts",
-            "line": 82,
-            "end_line": 82,
+            "line": 88,
+            "end_line": 88,
+            "column": 2,
+            "end_column": 28
+          },
+          "expr": {
+            "_type": "AssertExpression",
+            "source_location": {
+              "file": "tests/approvals/box-proxies.algo.ts",
+              "line": 88,
+              "end_line": 88,
+              "column": 2,
+              "end_column": 28
+            },
+            "wtype": {
+              "_type": "WType",
+              "name": "void",
+              "immutable": true,
+              "ephemeral": false,
+              "scalar_type": null
+            },
+            "condition": {
+              "_type": "VarExpression",
+              "source_location": {
+                "file": "tests/approvals/box-proxies.algo.ts",
+                "line": 88,
+                "end_line": 88,
+                "column": 9,
+                "end_column": 10
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true,
+                "ephemeral": false,
+                "scalar_type": 2
+              },
+              "name": "x"
+            },
+            "error_message": "delete failed"
+          }
+        },
+        {
+          "_type": "ExpressionStatement",
+          "source_location": {
+            "file": "tests/approvals/box-proxies.algo.ts",
+            "line": 89,
+            "end_line": 89,
             "column": 2,
             "end_column": 21
           },
@@ -5205,8 +5599,8 @@
             "_type": "AssertExpression",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 82,
-              "end_line": 82,
+              "line": 89,
+              "end_line": 89,
               "column": 2,
               "end_column": 21
             },
@@ -5221,8 +5615,8 @@
               "_type": "Not",
               "source_location": {
                 "file": "tests/approvals/box-proxies.algo.ts",
-                "line": 82,
-                "end_line": 82,
+                "line": 89,
+                "end_line": 89,
                 "column": 9,
                 "end_column": 20
               },
@@ -5237,8 +5631,8 @@
                 "_type": "StateExists",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 82,
-                  "end_line": 82,
+                  "line": 89,
+                  "end_line": 89,
                   "column": 14,
                   "end_column": 20
                 },
@@ -5253,8 +5647,8 @@
                   "_type": "BoxValueExpression",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 82,
-                    "end_line": 82,
+                    "line": 89,
+                    "end_line": 89,
                     "column": 14,
                     "end_column": 20
                   },
@@ -5269,8 +5663,8 @@
                     "_type": "VarExpression",
                     "source_location": {
                       "file": "tests/approvals/box-proxies.algo.ts",
-                      "line": 82,
-                      "end_line": 82,
+                      "line": 89,
+                      "end_line": 89,
                       "column": 10,
                       "end_column": 13
                     },
@@ -5308,8 +5702,8 @@
     "_type": "Contract",
     "source_location": {
       "file": "tests/approvals/box-proxies.algo.ts",
-      "line": 85,
-      "end_line": 85,
+      "line": 92,
+      "end_line": 92,
       "column": 0,
       "end_column": 47
     },
@@ -5323,8 +5717,8 @@
       "_type": "ContractMethod",
       "source_location": {
         "file": "tests/approvals/box-proxies.algo.ts",
-        "line": 90,
-        "end_line": 90,
+        "line": 97,
+        "end_line": 97,
         "column": 2,
         "end_column": 28
       },
@@ -5340,8 +5734,8 @@
         "_type": "Block",
         "source_location": {
           "file": "tests/approvals/box-proxies.algo.ts",
-          "line": 90,
-          "end_line": 99,
+          "line": 97,
+          "end_line": 106,
           "column": 29,
           "end_column": 3
         },
@@ -5350,8 +5744,8 @@
             "_type": "IfElse",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 91,
-              "end_line": 91,
+              "line": 98,
+              "end_line": 98,
               "column": 4,
               "end_column": 35
             },
@@ -5359,8 +5753,8 @@
               "_type": "NumericComparisonExpression",
               "source_location": {
                 "file": "tests/approvals/box-proxies.algo.ts",
-                "line": 91,
-                "end_line": 91,
+                "line": 98,
+                "end_line": 98,
                 "column": 8,
                 "end_column": 34
               },
@@ -5375,8 +5769,8 @@
                 "_type": "ReinterpretCast",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 91,
-                  "end_line": 91,
+                  "line": 98,
+                  "end_line": 98,
                   "column": 26,
                   "end_column": 28
                 },
@@ -5391,8 +5785,8 @@
                   "_type": "IntrinsicCall",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 91,
-                    "end_line": 91,
+                    "line": 98,
+                    "end_line": 98,
                     "column": 12,
                     "end_column": 25
                   },
@@ -5415,8 +5809,8 @@
                 "_type": "IntegerConstant",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
-                  "line": 91,
-                  "end_line": 91,
+                  "line": 98,
+                  "end_line": 98,
                   "column": 33,
                   "end_column": 34
                 },
@@ -5435,8 +5829,8 @@
               "_type": "Block",
               "source_location": {
                 "file": "tests/approvals/box-proxies.algo.ts",
-                "line": 91,
-                "end_line": 97,
+                "line": 98,
+                "end_line": 104,
                 "column": 36,
                 "end_column": 5
               },
@@ -5445,8 +5839,8 @@
                   "_type": "Block",
                   "source_location": {
                     "file": "tests/approvals/box-proxies.algo.ts",
-                    "line": 91,
-                    "end_line": 97,
+                    "line": 98,
+                    "end_line": 104,
                     "column": 36,
                     "end_column": 5
                   },
@@ -5455,8 +5849,8 @@
                       "_type": "ExpressionStatement",
                       "source_location": {
                         "file": "tests/approvals/box-proxies.algo.ts",
-                        "line": 92,
-                        "end_line": 92,
+                        "line": 99,
+                        "end_line": 99,
                         "column": 6,
                         "end_column": 39
                       },
@@ -5464,8 +5858,8 @@
                         "_type": "SubroutineCallExpression",
                         "source_location": {
                           "file": "tests/approvals/box-proxies.algo.ts",
-                          "line": 92,
-                          "end_line": 92,
+                          "line": 99,
+                          "end_line": 99,
                           "column": 6,
                           "end_column": 39
                         },
@@ -5488,8 +5882,8 @@
                               "_type": "BytesConstant",
                               "source_location": {
                                 "file": "tests/approvals/box-proxies.algo.ts",
-                                "line": 86,
-                                "end_line": 86,
+                                "line": 93,
+                                "end_line": 93,
                                 "column": 30,
                                 "end_column": 35
                               },
@@ -5511,8 +5905,8 @@
                               "_type": "StringConstant",
                               "source_location": {
                                 "file": "tests/approvals/box-proxies.algo.ts",
-                                "line": 92,
-                                "end_line": 92,
+                                "line": 99,
+                                "end_line": 99,
                                 "column": 27,
                                 "end_column": 38
                               },
@@ -5533,8 +5927,8 @@
                       "_type": "ExpressionStatement",
                       "source_location": {
                         "file": "tests/approvals/box-proxies.algo.ts",
-                        "line": 94,
-                        "end_line": 94,
+                        "line": 101,
+                        "end_line": 101,
                         "column": 6,
                         "end_column": 55
                       },
@@ -5542,8 +5936,8 @@
                         "_type": "SubroutineCallExpression",
                         "source_location": {
                           "file": "tests/approvals/box-proxies.algo.ts",
-                          "line": 94,
-                          "end_line": 94,
+                          "line": 101,
+                          "end_line": 101,
                           "column": 6,
                           "end_column": 55
                         },
@@ -5566,8 +5960,8 @@
                               "_type": "BytesConstant",
                               "source_location": {
                                 "file": "tests/approvals/box-proxies.algo.ts",
-                                "line": 87,
-                                "end_line": 87,
+                                "line": 94,
+                                "end_line": 94,
                                 "column": 49,
                                 "end_column": 54
                               },
@@ -5589,8 +5983,8 @@
                               "_type": "StringConstant",
                               "source_location": {
                                 "file": "tests/approvals/box-proxies.algo.ts",
-                                "line": 94,
-                                "end_line": 94,
+                                "line": 101,
+                                "end_line": 101,
                                 "column": 33,
                                 "end_column": 40
                               },
@@ -5611,8 +6005,8 @@
                               "_type": "IntrinsicCall",
                               "source_location": {
                                 "file": "tests/approvals/box-proxies.algo.ts",
-                                "line": 94,
-                                "end_line": 94,
+                                "line": 101,
+                                "end_line": 101,
                                 "column": 42,
                                 "end_column": 54
                               },
@@ -5630,8 +6024,8 @@
                                   "_type": "IntegerConstant",
                                   "source_location": {
                                     "file": "tests/approvals/box-proxies.algo.ts",
-                                    "line": 94,
-                                    "end_line": 94,
+                                    "line": 101,
+                                    "end_line": 101,
                                     "column": 47,
                                     "end_column": 53
                                   },
@@ -5655,8 +6049,8 @@
                       "_type": "ExpressionStatement",
                       "source_location": {
                         "file": "tests/approvals/box-proxies.algo.ts",
-                        "line": 96,
-                        "end_line": 96,
+                        "line": 103,
+                        "end_line": 103,
                         "column": 6,
                         "end_column": 38
                       },
@@ -5664,8 +6058,8 @@
                         "_type": "SubroutineCallExpression",
                         "source_location": {
                           "file": "tests/approvals/box-proxies.algo.ts",
-                          "line": 96,
-                          "end_line": 96,
+                          "line": 103,
+                          "end_line": 103,
                           "column": 6,
                           "end_column": 38
                         },
@@ -5688,8 +6082,8 @@
                               "_type": "BytesConstant",
                               "source_location": {
                                 "file": "tests/approvals/box-proxies.algo.ts",
-                                "line": 88,
-                                "end_line": 88,
+                                "line": 95,
+                                "end_line": 95,
                                 "column": 30,
                                 "end_column": 37
                               },
@@ -5711,8 +6105,8 @@
                               "_type": "IntegerConstant",
                               "source_location": {
                                 "file": "tests/approvals/box-proxies.algo.ts",
-                                "line": 96,
-                                "end_line": 96,
+                                "line": 103,
+                                "end_line": 103,
                                 "column": 35,
                                 "end_column": 37
                               },
@@ -5744,8 +6138,8 @@
             "_type": "ReturnStatement",
             "source_location": {
               "file": "tests/approvals/box-proxies.algo.ts",
-              "line": 98,
-              "end_line": 98,
+              "line": 105,
+              "end_line": 105,
               "column": 4,
               "end_column": 15
             },
@@ -5753,8 +6147,8 @@
               "_type": "BoolConstant",
               "source_location": {
                 "file": "tests/approvals/box-proxies.algo.ts",
-                "line": 98,
-                "end_line": 98,
+                "line": 105,
+                "end_line": 105,
                 "column": 11,
                 "end_column": 15
               },
@@ -5863,8 +6257,8 @@
         "_type": "AppStorageDefinition",
         "source_location": {
           "file": "tests/approvals/box-proxies.algo.ts",
-          "line": 86,
-          "end_line": 86,
+          "line": 93,
+          "end_line": 93,
           "column": 2,
           "end_column": 8
         },
@@ -5882,8 +6276,8 @@
           "_type": "BytesConstant",
           "source_location": {
             "file": "tests/approvals/box-proxies.algo.ts",
-            "line": 86,
-            "end_line": 86,
+            "line": 93,
+            "end_line": 93,
             "column": 30,
             "end_column": 35
           },
@@ -5903,8 +6297,8 @@
         "_type": "AppStorageDefinition",
         "source_location": {
           "file": "tests/approvals/box-proxies.algo.ts",
-          "line": 87,
-          "end_line": 87,
+          "line": 94,
+          "end_line": 94,
           "column": 2,
           "end_column": 11
         },
@@ -5922,8 +6316,8 @@
           "_type": "BytesConstant",
           "source_location": {
             "file": "tests/approvals/box-proxies.algo.ts",
-            "line": 87,
-            "end_line": 87,
+            "line": 94,
+            "end_line": 94,
             "column": 49,
             "end_column": 54
           },
@@ -5943,8 +6337,8 @@
         "_type": "AppStorageDefinition",
         "source_location": {
           "file": "tests/approvals/box-proxies.algo.ts",
-          "line": 88,
-          "end_line": 88,
+          "line": 95,
+          "end_line": 95,
           "column": 2,
           "end_column": 13
         },
@@ -5962,8 +6356,8 @@
           "_type": "BytesConstant",
           "source_location": {
             "file": "tests/approvals/box-proxies.algo.ts",
-            "line": 88,
-            "end_line": 88,
+            "line": 95,
+            "end_line": 95,
             "column": 30,
             "end_column": 37
           },

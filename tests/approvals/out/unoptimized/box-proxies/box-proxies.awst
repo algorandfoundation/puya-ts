@@ -1,34 +1,38 @@
 subroutine testBox(box: box_key, value: string): void
 {
-  box.value: string = value
+  Box[box].value: string = value
   Box["A"].value: string = value
   assert(reinterpret_cast<bytes>(box) == "one")
   assert("A" == "A")
-  assert(box.value == Box["A"].value)
-  assert(STATE_EXISTS(box.value) and STATE_EXISTS(Box["A"].value))
+  assert(Box[box].value == Box["A"].value)
+  assert(STATE_EXISTS(Box[box].value) and STATE_EXISTS(Box["A"].value))
   assert(Boolean(checked_maybe(box_len(box), comment=Box must have value)))
-  STATE_DEL(box.value)
-  STATE_DEL(Box["A"].value)
-  assert(!STATE_EXISTS(box.value) and !STATE_EXISTS(Box["A"].value))
+  assert(STATE_DELETE(Box[box].value), comment=delete failed)
+  isBoxADeleted: bool = STATE_DELETE(Box["A"].value)
+  assert(isBoxADeleted, comment=delete failed)
+  assert(!STATE_EXISTS(Box[box].value) and !STATE_EXISTS(Box["A"].value))
   defaultVal: string = "O"
-  assert(STATE_GET(Box["A"].value, default=defaultVal) == STATE_GET(box.value, default=defaultVal))
-  <tuple>[_, e]: readonlytuple[string, bool] = STATE_GET_EX(box.value)
+  assert(STATE_GET(Box["A"].value, default=defaultVal) == STATE_GET(Box[box].value, default=defaultVal))
+  <tuple>[_, e]: readonlytuple[string, bool] = STATE_GET_EX(Box[box].value)
   assert(!e)
-  box.value: string = value
-  <tuple>[_₁, e]: readonlytuple[string, bool] = STATE_GET_EX(box.value)
+  Box[box].value: string = value
+  <tuple>[_₁, e]: readonlytuple[string, bool] = STATE_GET_EX(Box[box].value)
   assert(e)
 }
 subroutine testBoxMap(box: box_key, key: string, value: bytes): void
 {
-  concat(box, reinterpret_cast<bytes>(key)).value: bytes = value
-  concat("", reinterpret_cast<bytes>(key)).value: bytes = value
+  Box[concat(box, reinterpret_cast<bytes>(key))].value: bytes = value
+  Box[concat("", reinterpret_cast<bytes>(key))].value: bytes = value
+  boxMapItem: box_key = concat("", reinterpret_cast<bytes>(key))
+  assert(STATE_EXISTS(Box[boxMapItem].value))
   assert(reinterpret_cast<bytes>(box) == "two")
   assert("" == "")
   assert(Boolean(checked_maybe(box_len(concat(box, reinterpret_cast<bytes>(key))), comment=Box must have value)))
-  assert(STATE_GET_EX(concat(box, reinterpret_cast<bytes>(key)).value).1)
-  assert(concat(box, reinterpret_cast<bytes>(key)).value == concat("", reinterpret_cast<bytes>(key)).value)
-  STATE_DEL(concat(box, reinterpret_cast<bytes>(key)).value)
-  assert(STATE_GET(concat(box, reinterpret_cast<bytes>("" + key + "x")).value, default="b") == STATE_GET(concat("", reinterpret_cast<bytes>("" + key + "x")).value, default="b"))
+  assert(STATE_GET_EX(Box[concat(box, reinterpret_cast<bytes>(key))].value).1)
+  assert(Box[concat(box, reinterpret_cast<bytes>(key))].value == Box[concat("", reinterpret_cast<bytes>(key))].value)
+  isBoxDeleted: bool = STATE_DELETE(Box[concat(box, reinterpret_cast<bytes>(key))].value)
+  assert(isBoxDeleted, comment=delete failed)
+  assert(STATE_GET(Box[concat(box, reinterpret_cast<bytes>("" + key + "x"))].value, default="b") == STATE_GET(Box[concat("", reinterpret_cast<bytes>("" + key + "x"))].value, default="b"))
 }
 subroutine testBoxRef(box: box_key, length: uint64): void
 {
@@ -41,21 +45,22 @@ subroutine testBoxRef(box: box_key, length: uint64): void
       box_resize("abc", length)
     }
   }
-  if (STATE_EXISTS(box.value)) {
+  if (STATE_EXISTS(Box[box].value)) {
     box_resize(box, 4)
   } else {
     box_create(box, 4)
   }
   someBytes: bytes = 0xffffffff
   box_put(box, someBytes)
-  assert(STATE_GET(box.value, default=0x) == 0xffffffff)
-  maybeBox: readonlytuple[bytes, bool] = STATE_GET_EX(box.value)
+  assert(STATE_GET(Box[box].value, default=0x) == 0xffffffff)
+  maybeBox: readonlytuple[bytes, bool] = STATE_GET_EX(Box[box].value)
   assert(maybeBox.1)
-  assert(box.value == 0xffffffff)
+  assert(Box[box].value == 0xffffffff)
   box_splice(box, 1, 1, 0x00)
-  assert(box.value == 0xff00ffff)
-  STATE_DEL(box.value)
-  assert(!STATE_EXISTS(box.value))
+  assert(Box[box].value == 0xff00ffff)
+  x: bool = STATE_DELETE(Box[box].value)
+  assert(x, comment=delete failed)
+  assert(!STATE_EXISTS(Box[box].value))
 }
 contract BoxContract
 {

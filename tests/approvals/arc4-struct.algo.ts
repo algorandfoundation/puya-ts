@@ -1,5 +1,6 @@
-import { assert, Contract, log } from '@algorandfoundation/algorand-typescript'
-import { interpretAsArc4, Struct, UintN } from '@algorandfoundation/algorand-typescript/arc4'
+import type { uint64 } from '@algorandfoundation/algorand-typescript'
+import { arc4, assert, Box, BoxMap, Contract, log } from '@algorandfoundation/algorand-typescript'
+import { interpretAsArc4, methodSelector, Struct, UintN } from '@algorandfoundation/algorand-typescript/arc4'
 
 type ARC4Uint64 = UintN<64>
 const ARC4Uint64 = UintN<64>
@@ -22,6 +23,12 @@ class StructDemo extends Contract {
     })
   }
 
+  public mutateVector(v1: Vector, newX: ARC4Uint64, newY: ARC4Uint64): Vector {
+    v1.x = newX
+    v1.y = newY
+    return v1
+  }
+
   public implicitCastingAndSpreading(v1: Vector) {
     const v2 = new Vector(v1)
     const v3 = new Vector({ ...v2 })
@@ -37,4 +44,62 @@ class StructDemo extends Contract {
   public toNative(v1: Vector) {
     return v1.native
   }
+
+  plugins = BoxMap<string, PluginInfo>({ keyPrefix: 'plugins' })
+
+  plugin = Box<PluginInfo>({ key: 'main' })
+
+  public getPlugin(key: string): PluginInfo {
+    const value = this.plugins(key).value.copy()
+    assert(value.lastCalled.native > 0, 'Last called not zero')
+    return value
+  }
+
+  public getMain() {
+    const value = this.plugin.value.copy()
+    assert(value.lastCalled.native > 0, 'Last called not zero')
+    return value
+  }
+
+  public setLastCalled(key: string, index: uint64, lastCalled: uint64) {
+    this.plugins(key).value.methods[index].lastCalled = new arc4.UintN64(lastCalled)
+  }
+
+  public setPlugin(key: string) {
+    this.plugins(key).value = new PluginInfo({
+      lastValidRound: new arc4.UintN64(1),
+      cooldown: new arc4.UintN64(),
+      lastCalled: new arc4.UintN64(),
+      adminPrivileges: new arc4.Bool(false),
+      methods: new arc4.DynamicArray(
+        new MethodInfo({
+          selector: new arc4.StaticBytes<4>(methodSelector('test()void')),
+          cooldown: new arc4.UintN64(1),
+          lastCalled: new arc4.UintN64(1),
+        }),
+      ),
+    })
+  }
 }
+
+export class PluginInfo extends arc4.Struct<{
+  /** The last round at which this plugin can be called */
+  lastValidRound: arc4.UintN64
+  /** The number of rounds that must pass before the plugin can be called again */
+  cooldown: arc4.UintN64
+  /** The last round the plugin was called */
+  lastCalled: arc4.UintN64
+  /** Whether the plugin has permissions to change the admin account */
+  adminPrivileges: arc4.Bool
+  /** The methods that are allowed to be called for the plugin by the address */
+  methods: arc4.DynamicArray<MethodInfo>
+}> {}
+
+export class MethodInfo extends arc4.Struct<{
+  /** The method signature */
+  selector: arc4.StaticBytes<4>
+  /** The number of rounds that must pass before the method can be called again */
+  cooldown: arc4.UintN64
+  /** The last round the method was called */
+  lastCalled: arc4.UintN64
+}> {}

@@ -1,6 +1,16 @@
 import type { biguint, bytes, uint64 } from '@algorandfoundation/algorand-typescript'
 import { assert, assertMatch, Contract } from '@algorandfoundation/algorand-typescript'
-import { Bool, decodeArc4, DynamicBytes, encodeArc4, Str, Struct, UintN, UintN64 } from '@algorandfoundation/algorand-typescript/arc4'
+import {
+  arc4EncodedLength,
+  Bool,
+  decodeArc4,
+  DynamicBytes,
+  encodeArc4,
+  Str,
+  Struct,
+  UintN,
+  UintN64,
+} from '@algorandfoundation/algorand-typescript/arc4'
 
 class TestStruct extends Struct<{ a: UintN64; b: DynamicBytes }> {}
 type TestObj = { a: UintN64; b: DynamicBytes }
@@ -12,6 +22,12 @@ export class Arc4EncodeDecode extends Contract {
     assert(encodeArc4(d) === new DynamicBytes(d).bytes)
     assert(encodeArc4(e) === new Str(e).bytes)
     assert(encodeArc4({ a, b: d }) === new TestStruct({ a: new UintN64(a), b: new DynamicBytes(d) }).bytes)
+
+    assert(arc4EncodedLength<uint64>() === 8)
+    assert(arc4EncodedLength<boolean>() === 1)
+    assert(arc4EncodedLength<UintN<512>>() === 64)
+    assert(arc4EncodedLength<[uint64, uint64, boolean]>() === 17)
+    assert(arc4EncodedLength<[uint64, uint64, boolean, boolean]>() === 17)
   }
 
   testDecoding(

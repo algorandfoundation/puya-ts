@@ -6,7 +6,7 @@ import type { LibClassType, PType } from '../ptypes'
 import { MutableArrayConstructor, MutableArrayGeneric, MutableArrayType } from '../ptypes'
 import type { InstanceBuilder, NodeBuilder } from './index'
 import { ClassBuilder, InstanceExpressionBuilder } from './index'
-import { ArrayCopyFunctionBuilder } from './shared/array-copy-function-builder'
+import { Arc4CopyFunctionBuilder } from './shared/arc4-copy-function-builder'
 import { ArrayPopFunctionBuilder } from './shared/pop-function-builder'
 import { ArrayPushFunctionBuilder } from './shared/push-function-builder'
 import { requireExpressionOfType } from './util'
@@ -63,7 +63,7 @@ export class MutableArrayExpressionBuilder extends InstanceExpressionBuilder<Mut
       case 'length':
         return arrayLength(this, sourceLocation)
       case 'copy':
-        return new ArrayCopyFunctionBuilder(this)
+        return new Arc4CopyFunctionBuilder(this)
     }
     return super.memberAccess(name, sourceLocation)
   }

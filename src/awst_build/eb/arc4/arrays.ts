@@ -1,6 +1,7 @@
+import { intrinsicFactory } from '../../../awst/intrinsic-factory'
 import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
-import { BytesConstant, StringConstant } from '../../../awst/nodes'
+import { BytesConstant, NumericComparison, StringConstant } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { wtypes } from '../../../awst/wtypes'
 import { Constants } from '../../../constants'
@@ -28,7 +29,7 @@ import type { InstanceBuilder, NodeBuilder } from '../index'
 import { ClassBuilder, FunctionBuilder } from '../index'
 import { IterableIteratorExpressionBuilder } from '../iterable-iterator-expression-builder'
 import { AccountExpressionBuilder } from '../reference/account'
-import { ArrayCopyFunctionBuilder } from '../shared/array-copy-function-builder'
+import { Arc4CopyFunctionBuilder } from '../shared/arc4-copy-function-builder'
 import { AtFunctionBuilder } from '../shared/at-function-builder'
 import { ArrayPopFunctionBuilder } from '../shared/pop-function-builder'
 import { ArrayPushFunctionBuilder } from '../shared/push-function-builder'
@@ -161,7 +162,7 @@ export class AddressClassBuilder extends ClassBuilder {
       }
       logger.error(
         value.sourceLocation,
-        `Invalid address literal. Addresses should be ${Constants.encodedAddressLength} characters and not include base32 padding`,
+        `Invalid address literal. Addresses should be ${Constants.algo.encodedAddressLength} characters and not include base32 padding`,
       )
     }
     return new AddressExpressionBuilder(
@@ -215,11 +216,43 @@ export class StaticBytesClassBuilder extends ClassBuilder {
         resultPType,
       )
     } else {
+      // TODO: puya should support encoding bytes to static bytes but currently doesn't
+      // return instanceEb(
+      //   nodeFactory.aRC4Encode({
+      //     value: initialValue.resolve(),
+      //     sourceLocation,
+      //     wtype: resultPType.wtype,
+      //   }),
+      //   resultPType,
+      // )
+
+      const value = initialValue.singleEvaluation().resolve()
+
       return instanceEb(
-        nodeFactory.aRC4Encode({
-          value: initialValue.resolve(),
-          sourceLocation,
-          wtype: resultPType.wtype,
+        nodeFactory.checkedMaybe({
+          comment: `Length is ${resultPType.arraySize}`,
+          expr: nodeFactory.tupleExpression({
+            items: [
+              nodeFactory.reinterpretCast({
+                expr: value,
+                wtype: resultPType.wtype,
+                sourceLocation,
+              }),
+              nodeFactory.numericComparisonExpression({
+                operator: NumericComparison.eq,
+                lhs: nodeFactory.uInt64Constant({
+                  value: resultPType.arraySize,
+                  sourceLocation,
+                }),
+                rhs: intrinsicFactory.bytesLen({
+                  value,
+                  sourceLocation,
+                }),
+                sourceLocation,
+              }),
+            ],
+            sourceLocation,
+          }),
         }),
         resultPType,
       )
@@ -302,7 +335,7 @@ export abstract class ArrayExpressionBuilder<
       case 'entries':
         return new EntriesFunctionBuilder(this)
       case 'copy':
-        return new ArrayCopyFunctionBuilder(this)
+        return new Arc4CopyFunctionBuilder(this)
       case 'concat':
         return new ConcatFunctionBuilder(this)
       case 'slice': {

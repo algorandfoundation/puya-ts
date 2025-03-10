@@ -1,5 +1,5 @@
 import type { bytes, uint64 } from '@algorandfoundation/algorand-typescript'
-import { assert, Bytes, Contract, Uint64 } from '@algorandfoundation/algorand-typescript'
+import { assert, Bytes, Contract, GlobalState, Uint64 } from '@algorandfoundation/algorand-typescript'
 
 export class DemoContract extends Contract {
   run() {
@@ -56,5 +56,40 @@ export class DemoContract extends Contract {
         return true
     }
     return false
+  }
+
+  evalCount = GlobalState<uint64>()
+
+  private increaseEvalAndReturn(n: uint64) {
+    this.evalCount.value++
+    return n
+  }
+
+  public test_side_effects(n: uint64) {
+    this.evalCount.value = 0
+
+    switch (n) {
+      case this.increaseEvalAndReturn(n - 1):
+        break
+      case this.increaseEvalAndReturn(n):
+        break
+      case this.increaseEvalAndReturn(n + 1):
+        break
+    }
+
+    assert(this.evalCount.value === 2, 'Only two functions should be evaluated')
+  }
+
+  public test_non_trivial_termination_of_clause(n: uint64, y: uint64): uint64 {
+    switch (n) {
+      case 1:
+        if (y % 2 === 0) {
+          return y
+        } else {
+          return n
+        }
+      default:
+        return y * n
+    }
   }
 }
