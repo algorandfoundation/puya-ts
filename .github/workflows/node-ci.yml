@@ -5,6 +5,9 @@ on:
         required: false
         type: string
         default: 18.x
+      python-version:
+        required: false
+        type: string
       working-directory:
         required: false
         type: string
@@ -112,6 +115,12 @@ jobs:
           scope: '@makerxstudio'
           cache: 'npm'
           cache-dependency-path: ${{ inputs.working-directory }}/package-lock.json
+
+      - name: Set up Python
+        if: ${{ inputs.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ inputs.python-version }}
 
       - name: Download artifacts
         if: ${{ inputs.download-artifact-name || inputs.download-artifact-pattern }}
