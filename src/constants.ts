@@ -39,6 +39,7 @@ export const Constants = {
   zeroAddressEncoded: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ',
   supportedAvmVersions: [10n, 11n],
   targetedPuyaVersion: '4.4.4',
+  puyaGithubRepo: 'algorandfoundation/puya',
 } as const
 
 export type SupportedAvmVersion = (typeof Constants.supportedAvmVersions)[number]
