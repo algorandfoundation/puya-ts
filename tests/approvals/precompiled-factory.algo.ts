@@ -1,6 +1,6 @@
 import type { uint64 } from '@algorandfoundation/algorand-typescript'
-import { assert, compile, Contract, itxn } from '@algorandfoundation/algorand-typescript'
-import { decodeArc4, encodeArc4, methodSelector, OnCompleteAction } from '@algorandfoundation/algorand-typescript/arc4'
+import { assert, compile, Contract, itxn, OnCompleteAction } from '@algorandfoundation/algorand-typescript'
+import { decodeArc4, encodeArc4, methodSelector } from '@algorandfoundation/algorand-typescript/arc4'
 import { Hello, HelloTemplate, HelloTemplateCustomPrefix, LargeProgram } from './precompiled-apps.algo'
 
 class HelloFactory extends Contract {

@@ -1,5 +1,5 @@
-import { OnCompleteAction } from './arc4'
 import { NoImplementation } from './internal/errors'
+import { OnCompleteAction } from './on-complete-action'
 import { bytes, uint64 } from './primitives'
 import type { Account, Application, Asset } from './reference'
 import type * as txnTypes from './transactions'
