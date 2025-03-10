@@ -12,7 +12,7 @@ import type { SemVer } from './semver'
  * Gets the platform-specific binary name
  * @returns The appropriate binary name for the current platform
  */
-export function getBinaryName(): string {
+function getBinaryName(): string {
   return process.platform === 'win32' ? 'puya.exe' : 'puya'
 }
 
@@ -20,7 +20,7 @@ export function getBinaryName(): string {
  * Finds the path to the node_modules directory
  * @returns The absolute path to the node_modules directory
  */
-export function findNodeModulesDir(): string {
+function findNodeModulesDir(): string {
   // Start with the current working directory
   let currentDir = process.cwd()
 
