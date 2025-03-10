@@ -153,35 +153,27 @@ export async function downloadPuyaBinary(version: SemVer): Promise<string> {
  * @returns Promise that resolves when the download is complete
  */
 async function downloadFile(url: string, destination: string): Promise<void> {
-  try {
-    const response = await fetch(url)
-    if (!response.ok) {
-      throw new Error(`Failed to download file. Status Code: ${response.status}`)
-    }
-    const buffer = await response.arrayBuffer()
-    return await new Promise<void>((resolve, reject) => {
-      const fileStream = fs.createWriteStream(destination)
-      const nodeBuffer = Buffer.from(buffer)
-
-      fileStream.write(nodeBuffer)
-      fileStream.end()
-
-      fileStream.on('finish', () => {
-        resolve()
-      })
-
-      fileStream.on('error', (err) => {
-        fs.unlinkSync(destination)
-        reject(err)
-      })
-    })
-  } catch (error) {
-    // Clean up if file was partially created
-    if (fs.existsSync(destination)) {
-      fs.rmSync(destination)
-    }
-    throw error
+  const response = await fetch(url)
+  if (!response.ok) {
+    throw new Error(`Failed to download file. Status Code: ${response.status}`)
   }
+  const buffer = await response.arrayBuffer()
+  return await new Promise<void>((resolve, reject) => {
+    const fileStream = fs.createWriteStream(destination)
+    const nodeBuffer = Buffer.from(buffer)
+
+    fileStream.write(nodeBuffer)
+    fileStream.end()
+
+    fileStream.on('finish', () => {
+      resolve()
+    })
+
+    fileStream.on('error', (err) => {
+      fs.unlinkSync(destination)
+      reject(err)
+    })
+  })
 }
 
 /**
@@ -191,7 +183,7 @@ async function downloadFile(url: string, destination: string): Promise<void> {
  * @returns Promise that resolves to true if the checksum matches, false otherwise
  */
 async function verifyChecksum(filePath: string, checksumFilePath: string): Promise<void> {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     // Read the checksum file
     const expectedChecksum = fs.readFileSync(checksumFilePath, 'utf8').trim().toLowerCase()
 
@@ -207,11 +199,7 @@ async function verifyChecksum(filePath: string, checksumFilePath: string): Promi
       const calculatedChecksum = hash.digest('hex').toLowerCase()
 
       if (calculatedChecksum !== expectedChecksum) {
-        // Remove the downloaded files if checksum verification fails
-        fs.rmSync(filePath)
-        fs.rmSync(checksumFilePath)
-
-        throw new Error(`Checksum verification failed. Expected checksum: ${expectedChecksum} but got: ${calculatedChecksum}`)
+        reject(new InternalError(`Checksum verification failed. Expected checksum: ${expectedChecksum} but got: ${calculatedChecksum}`))
       }
       resolve()
     })
