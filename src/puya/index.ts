@@ -24,7 +24,9 @@ export async function invokePuya({
   options: CompileOptions
   compilationSet: CompilationSet
 }) {
-  const { command, useShell } = await resolvePuyaCommand(options.skipVersionCheck)
+  const { command, useShell } = await resolvePuyaCommand({
+    skipVersionCheck: options.skipVersionCheck,
+  })
 
   // Write AWST file
   using moduleAwstFile = generateTempFile()

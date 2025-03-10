@@ -8,7 +8,14 @@ import { deleteCachedPuyaBinary, downloadPuyaBinary, findCachedPuyaBinary } from
  * @param skipVersionCheck Whether to skip version checking
  * @returns Promise that resolves to the path of the Puya binary to use
  */
-export async function resolvePuyaCommand(skipVersionCheck = false): Promise<{ command: string; useShell: boolean }> {
+export async function resolvePuyaCommand({
+  skipVersionCheck = false,
+}: {
+  skipVersionCheck?: boolean
+} = {}): Promise<{
+  command: string
+  useShell: boolean
+}> {
   // Check for user-specified script path
   const scriptPath = process.env.PUYA_SCRIPT_PATH
   if (scriptPath) {

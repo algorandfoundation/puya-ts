@@ -51,11 +51,11 @@ Currently, Puya binaries are available for:
 - MacOS (x64 and Apple Silicon)
 - Windows (x64 and ARM)
 
-If your system is supported, puya-ts will automatically download the appropriate binary for your system. 
+If your system is supported, puya-ts will automatically download the appropriate binary for your system.
 
 ### Puya (manual installation)
 
-This section is relevant if your platform is not supported by the Puya binaries ,or you need to run a custom version of Puya (eg. A pre-release version).
+This section is relevant if your platform is not supported by the Puya binaries, or you need to run a custom version of Puya (eg. A pre-release version).
 
 The most convenient way to install Puya manually is using `pipx`. You will require Python 3.12+ and to have pipx available on your path for the following to work.
 

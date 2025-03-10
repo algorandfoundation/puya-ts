@@ -135,7 +135,7 @@ describe('resolvePuyaCommand', () => {
     fs.writeFileSync(cachedBinaryPath, 'dummy binary content', { mode: 0o755 })
 
     // Execute the function with skipVersionCheck=true
-    const result = await resolvePuyaCommand(true)
+    const result = await resolvePuyaCommand({ skipVersionCheck: true })
 
     // Verify results
     expect(result.command).toBe(cachedBinaryPath)
