@@ -8,10 +8,10 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@2: // after_if_else_L1
         let tmp%0#1: uint64 = (txn NumAppArgs)
         goto tmp%0#1 ? block@4 : block@11
-    block@4: // abi_routing_L7
+    block@4: // abi_routing_L6
         let tmp%2#0: bytes = (txna ApplicationArgs 0)
         switch tmp%2#0 {method "test1()void" => block@5, method "test2()void" => block@6, method "test3()void" => block@7, method "test4()void" => block@8, * => block@15}
-    block@5: // test1_route_L10
+    block@5: // test1_route_L9
         let tmp%3#0: uint64 = (txn OnCompletion)
         let tmp%4#0: bool = (! tmp%3#0)
         (assert tmp%4#0) // OnCompletion is not NoOp
@@ -100,7 +100,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         itxn_submit
         let tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__%0#0: bool = 1u
         goto block@16
-    block@6: // test2_route_L58
+    block@6: // test2_route_L57
         let tmp%7#0: uint64 = (txn OnCompletion)
         let tmp%8#0: bool = (! tmp%7#0)
         (assert tmp%8#0) // OnCompletion is not NoOp
@@ -110,7 +110,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let createAppParams%%param_OnCompletion_idx_0#2: uint64 = undefined
         let reinterpret_bool%0#1: bool = (txn NumAppArgs)
         goto reinterpret_bool%0#1 ? block@24 : block@25
-    block@24: // if_body_L60
+    block@24: // if_body_L59
         let createAppParams%%param_ApplicationArgs_idx_0#0: bytes = "1"
         let createAppParams%%param_ApplicationArgs_idx_1#0: bytes = "2"
         let createAppParams%%ApplicationArgs_length#0: uint64 = 2u
@@ -118,7 +118,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let createAppParams%%OnCompletion_length#0: uint64 = 1u
         let createAppParams%%param_Note_idx_0#0: bytes = "with args param set"
         goto block@26
-    block@25: // else_body_L69
+    block@25: // else_body_L68
         let createAppParams%%param_ApplicationArgs_idx_0#1: bytes = "3"
         let createAppParams%%param_ApplicationArgs_idx_1#1: bytes = "4"
         let createAppParams%%param_ApplicationArgs_idx_2#0: bytes = "5"
@@ -126,7 +126,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let createAppParams%%param_Note_idx_0#1: bytes = "no args param set"
         let createAppParams%%OnCompletion_length#1: uint64 = 0u
         goto block@26
-    block@26: // after_if_else_L60
+    block@26: // after_if_else_L59
         let createAppParams%%param_Note_idx_0#2: bytes = φ(createAppParams%%param_Note_idx_0#0 <- block@24, createAppParams%%param_Note_idx_0#1 <- block@25)
         let createAppParams%%OnCompletion_length#2: uint64 = φ(createAppParams%%OnCompletion_length#0 <- block@24, createAppParams%%OnCompletion_length#1 <- block@25)
         let createAppParams%%param_OnCompletion_idx_0#1: uint64 = φ(createAppParams%%param_OnCompletion_idx_0#0 <- block@24, createAppParams%%param_OnCompletion_idx_0#2 <- block@25)
@@ -137,18 +137,18 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         itxn_begin
         ((itxn_field Note) createAppParams%%param_Note_idx_0#2)
         goto createAppParams%%OnCompletion_length#2 ? block@27 : block@28
-    block@27: // set_OnCompletion_0_to_0_L77
+    block@27: // set_OnCompletion_0_to_0_L76
         ((itxn_field OnCompletion) createAppParams%%param_OnCompletion_idx_0#1)
         goto block@28
-    block@28: // next_field_L77
+    block@28: // next_field_L76
         ((itxn_field ApplicationArgs) createAppParams%%param_ApplicationArgs_idx_0#3)
         ((itxn_field ApplicationArgs) createAppParams%%param_ApplicationArgs_idx_1#3)
         let is_ApplicationArgs_count_gte_3%0#0: bool = (>= createAppParams%%ApplicationArgs_length#3 3u)
         goto is_ApplicationArgs_count_gte_3%0#0 ? block@29 : block@30
-    block@29: // set_ApplicationArgs_2_to_2_L77
+    block@29: // set_ApplicationArgs_2_to_2_L76
         ((itxn_field ApplicationArgs) createAppParams%%param_ApplicationArgs_idx_2#2)
         goto block@30
-    block@30: // next_field_L77
+    block@30: // next_field_L76
         ((itxn_field ClearStateProgramPages) 0x098101)
         ((itxn_field ApprovalProgramPages) 0x098101)
         ((itxn_field TypeEnum) 6u)
@@ -164,7 +164,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%4#3: uint64 = (txn NumAppArgs)
         let tmp%5#3: bool = (> tmp%4#3 1u)
         goto tmp%5#3 ? block@31 : block@32
-    block@31: // if_body_L81
+    block@31: // if_body_L80
         itxn_begin
         ((itxn_field ApplicationArgs) "42")
         ((itxn_field OnCompletion) 5u)
@@ -179,10 +179,10 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%8#3: bool = (== createAppTxn.Note#0 "with args param set")
         (assert tmp%8#3)
         goto block@32
-    block@32: // after_if_else_L81
+    block@32: // after_if_else_L80
         let tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__%0#1: bool = 1u
         goto block@16
-    block@7: // test3_route_L95
+    block@7: // test3_route_L94
         let tmp%11#0: uint64 = (txn OnCompletion)
         let tmp%12#0: bool = (! tmp%11#0)
         (assert tmp%12#0) // OnCompletion is not NoOp
@@ -351,7 +351,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%31#0)
         let tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__%0#2: bool = 1u
         goto block@16
-    block@8: // test4_route_L171
+    block@8: // test4_route_L170
         let tmp%15#0: uint64 = (txn OnCompletion)
         let tmp%16#0: bool = (! tmp%15#0)
         (assert tmp%16#0) // OnCompletion is not NoOp
@@ -405,16 +405,16 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%14#1) // expected clear state page
         let tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__%0#3: bool = 1u
         goto block@16
-    block@11: // bare_routing_L7
+    block@11: // bare_routing_L6
         let tmp%19#0: uint64 = (txn OnCompletion)
         goto tmp%19#0 ? block@15 : block@12
-    block@12: // __algots__.defaultCreate_L7
+    block@12: // __algots__.defaultCreate_L6
         let tmp%20#0: uint64 = (txn ApplicationID)
         let tmp%21#0: bool = (! tmp%20#0)
         (assert tmp%21#0) // can only call when creating
         let tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__%0#4: bool = 1u
         goto block@16
-    block@15: // after_if_else_L7
+    block@15: // after_if_else_L6
         let tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__%0#5: bool = 0u
         goto block@16
     block@16: // after_inlined_tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router___L1

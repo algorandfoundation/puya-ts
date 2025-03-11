@@ -62,12 +62,12 @@ const EXCLUDED_OPCODES = new Set([
   'gloads',
   // has overload with stack params
   'txna',
-  'gtxna',
   'itxna',
-  'gitxna',
+  'gtxna',
+  'gtxn',
   'gtxnsa',
   'gtxnas',
-  'gtxns',
+  'gitxna',
   // Manually crafted
   'assert',
   'err',
@@ -292,7 +292,7 @@ const GROUPED_OPCODES: { name: string; doc: string; ops: { [key: string]: OpName
   { name: 'Block', doc: '', ops: { block: {} } },
   { name: 'JsonRef', doc: '', ops: { json_ref: {} } },
   { name: 'Txn', doc: 'Get values for the current executing transaction', ops: { txn: {}, txnas: {} } },
-  { name: 'GTxn', doc: 'Get values for transactions in the current group', ops: { gtxn: {}, gtxnsas: {} } },
+  { name: 'GTxn', doc: 'Get values for transactions in the current group', ops: { gtxns: {}, gtxnsas: {} } },
   { name: 'GITxn', doc: 'Get values for inner transaction in the last group submitted', ops: { gitxn: {}, gitxnas: {} } },
   { name: 'ITxn', doc: 'Get values for the last inner transaction', ops: { itxn: {}, itxnas: {} } },
 ]
