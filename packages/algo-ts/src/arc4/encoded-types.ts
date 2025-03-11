@@ -1,5 +1,5 @@
 import { NoImplementation } from '../internal/errors'
-import { biguint, BigUintCompat, bytes, BytesBacked, BytesCompat, StringCompat, uint64, Uint64Compat } from '../primitives'
+import { biguint, BigUintCompat, bytes, BytesBacked, StringCompat, uint64, Uint64Compat } from '../primitives'
 import { Account } from '../reference'
 
 /**
@@ -552,40 +552,4 @@ export class StaticBytes<TLength extends number = 0> extends Arc4ArrayBase<Byte>
   concat(other: Arc4ArrayBase<Byte>): DynamicBytes {
     throw new NoImplementation()
   }
-}
-
-/**
- * Interpret the provided bytes as an ARC4 encoded type with no validation
- * @param bytes An arc4 encoded bytes value
- * @param prefix The prefix (if any), present in the bytes value. This prefix will be validated and removed
- */
-export function interpretAsArc4<T extends ARC4Encoded>(bytes: BytesCompat, prefix: 'none' | 'log' = 'none'): T {
-  throw new NoImplementation()
-}
-
-/**
- * Decode the provided bytes to a native Algorand TypeScript value
- * @param bytes An arc4 encoded bytes value
- * @param prefix The prefix (if any), present in the bytes value. This prefix will be validated and removed
- */
-export function decodeArc4<T>(bytes: BytesCompat, prefix: 'none' | 'log' = 'none'): T {
-  throw new NoImplementation()
-}
-
-/**
- * Encode the provided Algorand TypeScript value as ARC4 bytes
- * @param value Any native Algorand TypeScript value with a supported ARC4 encoding
- */
-export function encodeArc4<T>(value: T): bytes {
-  throw new NoImplementation()
-}
-
-/**
- * Return the total number of bytes required to store T as ARC4 bytes.
- *
- * T must represent a type with a fixed length encoding scheme.
- * @typeParam T Any native or arc4 type with a fixed encoding size.
- */
-export function arc4EncodedLength<T>(): uint64 {
-  throw new NoImplementation()
 }

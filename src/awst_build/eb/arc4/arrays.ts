@@ -130,7 +130,7 @@ export class AddressClassBuilder extends ClassBuilder {
     if (!accountOrAddressOrBytes) {
       return new AddressExpressionBuilder(
         nodeFactory.addressConstant({
-          value: Constants.zeroAddressEncoded,
+          value: Constants.algo.zeroAddressB32,
           sourceLocation,
           wtype: arc4AddressAlias.wtype,
         }),

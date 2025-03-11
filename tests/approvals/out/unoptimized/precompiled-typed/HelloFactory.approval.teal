@@ -1,0 +1,199 @@
+#pragma version 10
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0 1
+    bytecblock 0x 0x02bf30cf
+
+main_block@0:
+
+main_block@1:
+    // tests/approvals/precompiled-typed.algo.ts:5
+    // class HelloFactory extends Contract {
+    txn NumAppArgs
+    intc_0 // 0
+    !=
+    bz main_bare_routing@6
+
+main_abi_routing@2:
+    // tests/approvals/precompiled-typed.algo.ts:5
+    // class HelloFactory extends Contract {
+    txna ApplicationArgs 0
+    pushbytes 0x02947ca2 // method "test_compile_contract_large()void"
+    swap
+    match main_test_compile_contract_large_route@3
+
+main_switch_case_default@4:
+
+main_switch_case_next@5:
+
+main_after_if_else@10:
+    // tests/approvals/precompiled-typed.algo.ts:5
+    // class HelloFactory extends Contract {
+    intc_0 // 0
+
+main_after_inlined_tests/approvals/precompiled-typed.algo.ts::HelloFactory.__puya_arc4_router__@11:
+    return
+
+main_test_compile_contract_large_route@3:
+    // tests/approvals/precompiled-typed.algo.ts:65
+    // test_compile_contract_large() {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    callsub test_compile_contract_large
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/precompiled-typed.algo.ts::HelloFactory.__puya_arc4_router__@11
+
+main_bare_routing@6:
+    // tests/approvals/precompiled-typed.algo.ts:5
+    // class HelloFactory extends Contract {
+    txn OnCompletion
+    intc_0 // 0
+    swap
+    match main___algots__.defaultCreate@7
+
+main_switch_case_default@8:
+
+main_switch_case_next@9:
+    b main_after_if_else@10
+
+main___algots__.defaultCreate@7:
+    // tests/approvals/precompiled-typed.algo.ts:5
+    // class HelloFactory extends Contract {
+    txn ApplicationID
+    intc_0 // 0
+    ==
+    assert // can only call when creating
+    callsub __algots__.defaultCreate
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/precompiled-typed.algo.ts::HelloFactory.__puya_arc4_router__@11
+
+
+// tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_large() -> void:
+test_compile_contract_large:
+    // tests/approvals/precompiled-typed.algo.ts:65
+    // test_compile_contract_large() {
+    proto 0 0
+    bytec_0 // ""
+
+test_compile_contract_large_block@0:
+    // tests/approvals/precompiled-typed.algo.ts:68
+    // const largeApp = compiled.bareCreate().createdApp
+    itxn_begin
+    // tests/approvals/precompiled-typed.algo.ts:66
+    // const compiled = compileArc4(LargeProgram)
+    intc_0 // 0
+    itxn_field ExtraProgramPages
+    intc_0 // 0
+    itxn_field LocalNumUint
+    intc_0 // 0
+    itxn_field LocalNumByteSlice
+    intc_0 // 0
+    itxn_field GlobalNumByteSlice
+    intc_0 // 0
+    itxn_field GlobalNumUint
+    pushbytes base64(CoEBQw==)
+    itxn_field ClearStateProgramPages
+    bytec_0 // 0x
+    itxn_field ClearStateProgramPages
+    pushbytes base64(CiACAAExGyITQQBGNhoAgAQCvzDPgAQkN408TwKOAgAUAAIiQzEZgQUSRDEYIhNEiABAI0L/7TEZIhJEMRgiE0SIACoWgAQVH3x1TFCwI0L/0jEZIkyOAQADQv/GMRgiEkSIAA8jQv+7gYAgr4mI//gViYmJ)
+    itxn_field ApprovalProgramPages
+    bytec_0 // 0x
+    itxn_field ApprovalProgramPages
+    // tests/approvals/precompiled-typed.algo.ts:68
+    // const largeApp = compiled.bareCreate().createdApp
+    intc_0 // 0
+    itxn_field OnCompletion
+    intc_0 // 0
+    itxn_field Fee
+
+test_compile_contract_large_next_txn@1:
+    // tests/approvals/precompiled-typed.algo.ts:68
+    // const largeApp = compiled.bareCreate().createdApp
+    itxn_submit
+    itxn CreatedApplicationID
+    dup
+    frame_bury 0
+    // tests/approvals/precompiled-typed.algo.ts:70-72
+    // compiled.call.getBigBytesLength({
+    //   appId: largeApp,
+    // })
+    itxn_begin
+    bytec_1 // method "getBigBytesLength()uint64"
+    itxn_field ApplicationArgs
+    intc_0 // 0
+    itxn_field OnCompletion
+    itxn_field ApplicationID
+    intc_0 // 0
+    itxn_field Fee
+
+test_compile_contract_large_next_txn@2:
+    // tests/approvals/precompiled-typed.algo.ts:70-72
+    // compiled.call.getBigBytesLength({
+    //   appId: largeApp,
+    // })
+    itxn_submit
+    itxn_begin
+    // tests/approvals/precompiled-typed.algo.ts:71
+    // appId: largeApp,
+    frame_dig 0
+    // tests/approvals/precompiled-typed.algo.ts:70-72
+    // compiled.call.getBigBytesLength({
+    //   appId: largeApp,
+    // })
+    bytec_1 // method "getBigBytesLength()uint64"
+    itxn_field ApplicationArgs
+    intc_0 // 0
+    itxn_field OnCompletion
+    itxn_field ApplicationID
+    intc_0 // 0
+    itxn_field Fee
+
+test_compile_contract_large_next_txn@3:
+    // tests/approvals/precompiled-typed.algo.ts:70-72
+    // compiled.call.getBigBytesLength({
+    //   appId: largeApp,
+    // })
+    itxn_submit
+    itxn_begin
+    // tests/approvals/precompiled-typed.algo.ts:71
+    // appId: largeApp,
+    frame_dig 0
+    // tests/approvals/precompiled-typed.algo.ts:70-72
+    // compiled.call.getBigBytesLength({
+    //   appId: largeApp,
+    // })
+    bytec_1 // method "getBigBytesLength()uint64"
+    itxn_field ApplicationArgs
+    intc_0 // 0
+    itxn_field OnCompletion
+    itxn_field ApplicationID
+    intc_0 // 0
+    itxn_field Fee
+
+test_compile_contract_large_next_txn@4:
+    // tests/approvals/precompiled-typed.algo.ts:70-72
+    // compiled.call.getBigBytesLength({
+    //   appId: largeApp,
+    // })
+    itxn_submit
+    itxn LastLog
+    extract 0 4
+    pushbytes 0x151f7c75
+    ==
+    assert // Bytes has valid prefix
+    retsub
+
+
+// tests/approvals/precompiled-typed.algo.ts::HelloFactory.__algots__.defaultCreate() -> void:
+__algots__.defaultCreate:
+
+__algots__.defaultCreate_block@0:
+    retsub
