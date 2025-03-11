@@ -85,3 +85,31 @@ contract BoxContract
   }
   
 }
+contract BoxNotExist
+{
+  approvalProgram(): bool
+  {
+    if (reinterpret_cast<uint64>(txn<ApplicationID>()) != 0) {
+      if ((#0 = reinterpret_cast<string>(txnas<ApplicationArgs>(0))) == "box") {
+        #switch₁ᶜ₀:
+        return Box["abc"].value
+      }
+      if (#0 == "boxmap") {
+        #switch₁ᶜ₁:
+        return Box[concat("a", "bc")].value
+      }
+      if (#0 == "createbox") {
+        #switch₁ᶜ₂:
+        Box["abc"].value: bool = True
+        return True
+      }
+    }
+    return True
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+}
