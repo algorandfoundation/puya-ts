@@ -1,13 +1,13 @@
 import { nodeFactory } from '../../../awst/node-factory'
 import type { BytesConstant, Expression } from '../../../awst/nodes'
-import { ARC4ABIMethodConfig, EqualityComparison } from '../../../awst/nodes'
+import { EqualityComparison } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { wtypes } from '../../../awst/wtypes'
+import { Constants } from '../../../constants'
 import { CodeError } from '../../../errors'
 import { logger } from '../../../logger'
 import { codeInvariant, hexToUint8Array } from '../../../util'
-import { isArc4EncodableType, ptypeToArc4EncodedType, ptypeToArc4PType } from '../../arc4-util'
-import { AwstBuildContext } from '../../context/awst-build-context'
+import { isArc4EncodableType, ptypeToArc4EncodedType } from '../../arc4-util'
 import type { PType } from '../../ptypes'
 import { bytesPType, stringPType, uint64PType } from '../../ptypes'
 import {
@@ -119,7 +119,11 @@ export class DecodeArc4FunctionBuilder extends FunctionBuilder {
     )
   }
 }
-function validatePrefix(base: InstanceBuilder, expectedPrefix: BytesConstant | undefined, sourceLocation: SourceLocation): Expression {
+export function validatePrefix(
+  base: InstanceBuilder,
+  expectedPrefix: BytesConstant | undefined,
+  sourceLocation: SourceLocation,
+): Expression {
   if (expectedPrefix === undefined) return base.resolve()
 
   const baseSingle = base.singleEvaluation().resolve()
@@ -156,17 +160,12 @@ function getPrefixValue(arg: InstanceBuilder | undefined): BytesConstant | undef
   const value = requireStringConstant(arg).value
   switch (value) {
     case 'log':
-      return nodeFactory.bytesConstant({ value: hexToUint8Array('151F7C75'), sourceLocation: arg.sourceLocation })
+      return nodeFactory.bytesConstant({ value: hexToUint8Array(Constants.algo.arc4.logPrefixHex), sourceLocation: arg.sourceLocation })
     case 'none':
       return undefined
     default:
       logger.error(arg.sourceLocation, `Expected literal string: 'none' | 'log'`)
   }
-}
-
-function getArc4TypeName(arg: PType, sourceLocation: SourceLocation): string {
-  const arc4Type = ptypeToArc4PType(arg, sourceLocation)
-  return arc4Type.wtype instanceof wtypes.ARC4Type ? arc4Type.wtype.arc4Name : (arc4Type.wtype?.name ?? arc4Type.name)
 }
 
 export class MethodSelectorFunctionBuilder extends FunctionBuilder {
@@ -184,24 +183,12 @@ export class MethodSelectorFunctionBuilder extends FunctionBuilder {
       argSpec: (a) => [a.passthrough()],
     })
 
-    let signature: string
-
     if (methodSignature instanceof SubroutineExpressionBuilder) {
       codeInvariant(
         methodSignature instanceof ContractMethodExpressionBuilder,
         `Expected contract instance method, found ${methodSignature.typeDescription}`,
       )
-
-      const methodTarget = methodSignature.target
-      const arc4Config = AwstBuildContext.current.getArc4Config(methodSignature.contractType, methodTarget.memberName)
-      codeInvariant(
-        arc4Config instanceof ARC4ABIMethodConfig,
-        `${methodTarget.memberName} is not an ABI method`,
-        methodSignature.sourceLocation,
-      )
-      const params = methodSignature.ptype.parameters.map(([_, ptype]) => getArc4TypeName(ptype, sourceLocation)).join(',')
-      const returnType = getArc4TypeName(methodSignature.ptype.returnType, sourceLocation)
-      signature = `${arc4Config.name}(${params})${returnType}`
+      return instanceEb(methodSignature.getMethodSelector(sourceLocation), bytesPType)
     } else {
       if (methodSignature === undefined) {
         throw new CodeError(
@@ -209,17 +196,15 @@ export class MethodSelectorFunctionBuilder extends FunctionBuilder {
           { sourceLocation },
         )
       }
-      signature = requireStringConstant(methodSignature).value
+      return instanceEb(
+        nodeFactory.methodConstant({
+          value: requireStringConstant(methodSignature).value,
+          wtype: wtypes.bytesWType,
+          sourceLocation,
+        }),
+        bytesPType,
+      )
     }
-
-    return instanceEb(
-      nodeFactory.methodConstant({
-        value: signature,
-        wtype: wtypes.bytesWType,
-        sourceLocation,
-      }),
-      bytesPType,
-    )
   }
 }
 

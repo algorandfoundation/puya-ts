@@ -22,7 +22,7 @@ import {
   paymentItxnType,
 } from '../../ptypes'
 
-export function getInnerTransactionType(kind: TransactionKind | undefined): InnerTransactionPType {
+export function getInnerTransactionType(kind: TransactionKind): InnerTransactionPType {
   switch (kind) {
     case TransactionKind.pay:
       return paymentItxnType
@@ -36,12 +36,9 @@ export function getInnerTransactionType(kind: TransactionKind | undefined): Inne
       return assetFreezeItxnType
     case TransactionKind.appl:
       return applicationItxnType
-    default:
-      throw new Error('TODO')
-    //return anyInnerTransaction
   }
 }
-export function getItxnParamsType(kind: TransactionKind | undefined): ItxnParamsPType {
+export function getItxnParamsType(kind: TransactionKind): ItxnParamsPType {
   switch (kind) {
     case TransactionKind.pay:
       return paymentItxnParamsType
@@ -55,9 +52,6 @@ export function getItxnParamsType(kind: TransactionKind | undefined): ItxnParams
       return assetFreezeItxnParamsType
     case TransactionKind.appl:
       return applicationCallItxnParamsType
-    default:
-      throw new Error('TODO')
-    //return anyInnerTransaction
   }
 }
 export function getGroupTransactionType(kind: TransactionKind | undefined): GroupTransactionPType {

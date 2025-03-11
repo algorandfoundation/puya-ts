@@ -42,6 +42,7 @@ export class ItxnParamsFactoryFunctionBuilder extends FunctionBuilder {
     mappedFields.set(TxnField.Fee, nodeFactory.uInt64Constant({ value: 0n, sourceLocation }))
     if (this.ptype.kind) mappedFields.set(TxnField.TypeEnum, nodeFactory.uInt64Constant({ value: BigInt(this.ptype.kind), sourceLocation }))
     mapTransactionFields(mappedFields, initialFields, this.ptype.kind, sourceLocation)
+    invariant(this.ptype.kind !== undefined, 'Cannot have untyped itxn params factory', sourceLocation)
     const fieldsType = getItxnParamsType(this.ptype.kind)
 
     return new ItxnParamsExpressionBuilder(
@@ -55,15 +56,17 @@ export class ItxnParamsFactoryFunctionBuilder extends FunctionBuilder {
   }
 }
 
-function mapTransactionFields(
+export function mapTransactionFields(
   mappedFields: Map<TxnField, Expression>,
   fields: InstanceBuilder,
   kind: TransactionKind | undefined,
   sourceLocation: SourceLocation,
+  ignoreProps?: Set<string>,
 ) {
   codeInvariant(fields.ptype instanceof ObjectPType, 'fields argument must be an object type')
   const validFields: Record<string, readonly [TxnField, PType]> = kind !== undefined ? txnKindToFields[kind] : anyTxnFields
   for (const [prop] of fields.ptype.orderedProperties()) {
+    if (ignoreProps?.has(prop)) continue
     if (prop in validFields) {
       const [txnField, fieldType] = validFields[prop as keyof typeof validFields]
       const txnFieldData = TxnFields[txnField]
@@ -125,6 +128,8 @@ class SubmitInnerTxnMethodBuilder extends InnerTxnFieldsMethodBuilder {
       funcName: 'submit',
       argSpec: () => [],
     })
+    invariant(this.builder.ptype.kind !== undefined, 'Cannot have untyped itxn params type', sourceLocation)
+
     const transactionPType = getInnerTransactionType(this.builder.ptype.kind)
     return new InnerTransactionExpressionBuilder(
       nodeFactory.submitInnerTransaction({
@@ -152,6 +157,8 @@ export class SubmitItxnGroupFunctionBuilder extends FunctionBuilder {
     const resultType = new TuplePType({
       items: itxnParams.map((p, i) => {
         codeInvariant(p.ptype instanceof ItxnParamsPType, `Argument ${i} must be an itxn params type`, p.sourceLocation)
+        invariant(p.ptype.kind !== undefined, 'Cannot have untyped itxn params type', sourceLocation)
+
         return getInnerTransactionType(p.ptype.kind)
       }),
     })

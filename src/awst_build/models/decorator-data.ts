@@ -5,7 +5,7 @@ import type { Constants, SupportedAvmVersion } from '../../constants'
 import type { InstanceBuilder } from '../eb'
 
 export type Arc4AbiDecoratorData = {
-  type: typeof Constants.arc4AbiDecoratorName
+  type: typeof Constants.symbolNames.arc4AbiDecoratorName
   create: ARC4CreateOption
   ocas: OnCompletionAction[]
   sourceLocation: SourceLocation
@@ -25,21 +25,21 @@ export type Arc4AbiDecoratorData = {
 }
 
 export type Arc4BareDecoratorData = {
-  type: typeof Constants.arc4BareDecoratorName
+  type: typeof Constants.symbolNames.arc4BareDecoratorName
   create: ARC4CreateOption
   ocas: OnCompletionAction[]
   sourceLocation: SourceLocation
 }
 
 export type LogicSigOptionsDecoratorData = {
-  type: typeof Constants.logicSigOptionsDecoratorName
+  type: typeof Constants.symbolNames.logicSigOptionsDecoratorName
   sourceLocation: SourceLocation
   avmVersion?: SupportedAvmVersion
   name?: string
   scratchSlots?: Set<bigint>
 }
 export type ContractOptionsDecoratorData = {
-  type: typeof Constants.contractOptionsDecoratorName
+  type: typeof Constants.symbolNames.contractOptionsDecoratorName
   sourceLocation: SourceLocation
   avmVersion?: SupportedAvmVersion
   name?: string
