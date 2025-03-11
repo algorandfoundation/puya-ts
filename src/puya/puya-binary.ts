@@ -42,7 +42,7 @@ function findNodeModulesDir(): string {
 
 function getPuyaStorageDir(version: SemVer): string {
   const nodeModulesDir = findNodeModulesDir()
-  return path.join(nodeModulesDir, '.puya-ts', version.formatted)
+  return path.join(nodeModulesDir, '.puya', version.formatted)
 }
 
 /**
