@@ -111,13 +111,12 @@ contract ItxnDemoContract
   test4(): void
   {
     lotsOfBytes: bytes = bzero(2044)
-    approval1: bytes = 0x098101
     approval2: bytes = concat(concat(0x80fc0f, lotsOfBytes), 0x48)
-    appTxn1: inner_transaction_fields_appl = create_inner_transaction(Fee=0, TypeEnum=6, ApprovalProgramPages=<tuple>[approval1, approval2, approval2, approval2], ClearStateProgramPages=<tuple>[0x098101], OnCompletion=5, ApplicationArgs=<tuple>["1"], ExtraProgramPages=3)
+    appTxn1: inner_transaction_fields_appl = create_inner_transaction(Fee=0, TypeEnum=6, ApprovalProgramPages=<tuple>[0x098101, approval2, approval2, approval2], ClearStateProgramPages=<tuple>[0x098101], OnCompletion=5, ApplicationArgs=<tuple>["1"], ExtraProgramPages=3)
     app1: inner_transaction_appl = submit_txn(appTxn1)
     assert(app1.ExtraProgramPages == 3, comment=extra pages = 3)
     assert(app1.NumApprovalProgramPages == 2, comment=approval pages = 2)
-    assert(app1.ApprovalProgramPages[0] == concat(concat(approval1, approval2), approval2.slice(0, -3)), comment=expected approval page 0)
+    assert(app1.ApprovalProgramPages[0] == concat(concat(0x098101, approval2), approval2.slice(0, -3)), comment=expected approval page 0)
     assert(app1.ApprovalProgramPages[1] == concat(approval2.slice(-3), approval2), comment=expected approval page 1)
     assert(app1.NumClearStateProgramPages == 1, comment=clear state pages = 1)
     assert(app1.ClearStateProgramPages[0] == 0x098101, comment=expected clear state page)
