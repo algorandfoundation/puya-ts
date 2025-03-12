@@ -1,5 +1,6 @@
 import type { biguint, bytes, uint64 } from '@algorandfoundation/algorand-typescript'
 import { assert, assertMatch, Contract } from '@algorandfoundation/algorand-typescript'
+import type { StaticArray } from '@algorandfoundation/algorand-typescript/arc4'
 import {
   arc4EncodedLength,
   Bool,
@@ -28,6 +29,12 @@ export class Arc4EncodeDecode extends Contract {
     assert(arc4EncodedLength<UintN<512>>() === 64)
     assert(arc4EncodedLength<[uint64, uint64, boolean]>() === 17)
     assert(arc4EncodedLength<[uint64, uint64, boolean, boolean]>() === 17)
+    assert(arc4EncodedLength<[StaticArray<Bool, 10>, boolean, boolean]>() === 3)
+    assert(
+      arc4EncodedLength<
+        [[boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean], boolean, boolean]
+      >() === 3,
+    )
   }
 
   testDecoding(

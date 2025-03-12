@@ -1,10 +1,10 @@
 import { algos } from '@algorandfoundation/algokit-utils'
-import { describe } from 'vitest'
-import { invariant } from '../../src/util'
+import { describe, expect } from 'vitest'
+import { invariant, utf8ToUint8Array } from '../../src/util'
 import { createBaseTestFixture } from './util/test-fixture'
 
 describe('BoxProxies', () => {
-  const test = createBaseTestFixture('tests/approvals/box-proxies.algo.ts', ['BoxContract'])
+  const test = createBaseTestFixture('tests/approvals/box-proxies.algo.ts', ['BoxContract', 'BoxNotExist'])
 
   test('Should run', async ({ BoxContractInvoker, algorand, testAccount }) => {
     const created = await BoxContractInvoker.send()
@@ -20,6 +20,54 @@ describe('BoxProxies', () => {
     await BoxContractInvoker.send({
       appId: created.confirmation.applicationIndex,
       boxReferences: ['A', 'one', 'abc', 'what?', 'twowhat?', 'three', 'what?x', 'twowhat?x'],
+    })
+  })
+
+  test('Box that does not exist should fail when accessed', async ({ BoxNotExistInvoker, algorand, testAccount }) => {
+    const created = await BoxNotExistInvoker.send()
+
+    invariant(created.confirmation.applicationIndex, 'There must be an application id')
+    const appInfo = await algorand.app.getById(created.confirmation.applicationIndex)
+    // Fund the app account
+    await algorand.send.payment({
+      receiver: appInfo.appAddress,
+      sender: testAccount.addr,
+      amount: algos(1),
+    })
+
+    // Accessing box.value when the box doesn't exist fails
+    await expect(
+      BoxNotExistInvoker.send({
+        appId: created.confirmation.applicationIndex,
+        boxReferences: ['abc'],
+        args: [utf8ToUint8Array('box')],
+      }),
+    ).rejects.toThrow(/assert failed/)
+    await expect(
+      BoxNotExistInvoker.send({
+        appId: created.confirmation.applicationIndex,
+        boxReferences: ['abc'],
+        args: [utf8ToUint8Array('boxmap')],
+      }),
+    ).rejects.toThrow(/assert failed/)
+
+    // Create the box
+    await BoxNotExistInvoker.send({
+      appId: created.confirmation.applicationIndex,
+      boxReferences: ['abc'],
+      args: [utf8ToUint8Array('createbox')],
+    })
+
+    // Should work fine now the box exists
+    await BoxNotExistInvoker.send({
+      appId: created.confirmation.applicationIndex,
+      boxReferences: ['abc'],
+      args: [utf8ToUint8Array('box')],
+    })
+    await BoxNotExistInvoker.send({
+      appId: created.confirmation.applicationIndex,
+      boxReferences: ['abc'],
+      args: [utf8ToUint8Array('boxmap')],
     })
   })
 })

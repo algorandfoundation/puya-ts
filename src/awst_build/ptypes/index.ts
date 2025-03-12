@@ -1097,9 +1097,7 @@ export class Uint64EnumMemberType extends PType {
 }
 
 export class Uint64EnumType extends PType {
-  get memberType(): Uint64EnumMemberType {
-    return new Uint64EnumMemberType(this)
-  }
+  readonly memberType: Uint64EnumMemberType
   readonly wtype = wtypes.uint64WType
   readonly name: string
   readonly module: string
@@ -1111,6 +1109,7 @@ export class Uint64EnumType extends PType {
     this.name = props.name
     this.module = props.module
     this.members = props.members
+    this.memberType = new Uint64EnumMemberType(this)
   }
 }
 
@@ -1127,7 +1126,7 @@ export const transactionTypeType = new Uint64EnumType({
   },
 })
 export const onCompleteActionType = new Uint64EnumType({
-  module: Constants.arc4ModuleName,
+  module: Constants.onCompleteActionModuleName,
   name: 'OnCompleteAction',
   members: {
     NoOp: 0n,

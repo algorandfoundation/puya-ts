@@ -74,7 +74,10 @@ export type BoxRef = {
    */
   readonly exists: boolean
   /**
-   * Get the value of the box. Error if this value is larger than what the `bytes` type supports
+   * Get the value of the box.
+   *
+   * Error if this value is larger than what the `bytes` type supports
+   * Error if getting the value and the box does not exist
    */
   value: bytes
   /**
