@@ -51,11 +51,12 @@ export async function startLanguageServer() {
 
   // Create a simple text document manager.
   const documents = new TextDocuments(TextDocument)
-  let workspaceFolder: string
+  let workspaceFolder: string | undefined
 
   connection.onInitialize((params) => {
-    // TODO: test this?
-    workspaceFolder = params.workspaceFolders?.[0]?.uri ?? ''
+    // On the client, workspaceFolder property is set
+    // It means the work
+    workspaceFolder = params.workspaceFolders?.[0]?.uri
 
     const result: InitializeResult = {
       capabilities: {
@@ -73,13 +74,13 @@ export async function startLanguageServer() {
   })
 
   connection.onInitialized(() => {
-    connection.console.log('Puya TypeScript Language Server initialized')
+    connection.console.log('Algorand TypeScript Language Server initialized')
   })
 
   connection.languages.diagnostics.on(async (params) => {
     const document = documents.get(params.textDocument.uri)
     if (document !== undefined) {
-      connection.console.log(`Validating document: ${params.textDocument.uri}`)
+      connection.console.debug(`Validating document: ${params.textDocument.uri}`)
 
       const fsPath = URI.parse(workspaceFolder).fsPath
       const diagnosticsMap = await debounceParse(connection, documents, fsPath)
@@ -131,9 +132,10 @@ export async function startLanguageServer() {
 
 async function parse(connection: Connection, documents: TextDocuments<TextDocument>, path: string): Promise<Map<string, Diagnostic[]>> {
   try {
-    connection.console.log(`Parsing ${path}`)
+    connection.console.debug(`Parsing ${path}`)
 
     // TODO: test new file saved, then ref by an existing file
+    // TODO: work out tests/virtual-file
     const files = processInputPaths({ paths: [path], outDir: 'tests/virtual-file/out' })
 
     // To support unsaved files, we need to replace the file content with the content of the document
@@ -165,7 +167,7 @@ async function parse(connection: Connection, documents: TextDocuments<TextDocume
       const fileUri = URI.file(event.sourceLocation.file).toString()
 
       const diagnostic: Diagnostic = {
-        source: 'Puya TS',
+        source: 'Algorand TypeScript',
         severity: event.level === LogLevel.Error ? DiagnosticSeverity.Error : DiagnosticSeverity.Warning,
         range: {
           start: {
@@ -236,4 +238,4 @@ function debounce<T extends (...args: any[]) => Promise<any>>(func: T, wait: num
   }
 }
 
-const debounceParse = debounce(parse, 500)
+const debounceParse = debounce(parse, 200)
