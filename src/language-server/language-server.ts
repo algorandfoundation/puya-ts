@@ -130,63 +130,68 @@ export async function startLanguageServer() {
 }
 
 async function parse(connection: Connection, documents: TextDocuments<TextDocument>, path: string): Promise<Map<string, Diagnostic[]>> {
-  connection.console.log(`Parsing ${path}`)
+  try {
+    connection.console.log(`Parsing ${path}`)
 
-  // TODO: test new file saved, then ref by an existing file
-  const files = processInputPaths({ paths: [path], outDir: 'tests/virtual-file/out' })
+    // TODO: test new file saved, then ref by an existing file
+    const files = processInputPaths({ paths: [path], outDir: 'tests/virtual-file/out' })
 
-  // To support unsaved files, we need to replace the file content with the content of the document
-  const processedFiles = files.map((file) => {
-    const fileUri = URI.file(file.sourceFile).toString()
-    const document = documents.get(fileUri)
+    // To support unsaved files, we need to replace the file content with the content of the document
+    const processedFiles = files.map((file) => {
+      const fileUri = URI.file(file.sourceFile).toString()
+      const document = documents.get(fileUri)
 
-    if (document) {
-      return {
-        sourceFile: file.sourceFile,
-        outDir: 'tests/virtual-file/out',
-        fileContents: document.getText(),
+      if (document) {
+        return {
+          sourceFile: file.sourceFile,
+          outDir: 'tests/virtual-file/out',
+          fileContents: document.getText(),
+        }
       }
-    }
-    return file
-  })
+      return file
+    })
 
-  const logEvents = await compileFiles(processedFiles)
+    const logEvents = await compileFiles(processedFiles)
 
-  // Filter for errors and warnings
-  const filteredEvents = logEvents.filter((e) => e.level === LogLevel.Error || e.level === LogLevel.Warning)
+    // Filter for errors and warnings
+    const filteredEvents = logEvents.filter((e) => e.level === LogLevel.Error || e.level === LogLevel.Warning)
 
-  // Group diagnostics by file URI
-  const diagnosticsMap = new Map<string, Diagnostic[]>()
+    // Group diagnostics by file URI
+    const diagnosticsMap = new Map<string, Diagnostic[]>()
 
-  for (const event of filteredEvents) {
-    if (!event.sourceLocation || !event.sourceLocation.file) continue
+    for (const event of filteredEvents) {
+      if (!event.sourceLocation || !event.sourceLocation.file) continue
 
-    const fileUri = URI.file(event.sourceLocation.file).toString()
+      const fileUri = URI.file(event.sourceLocation.file).toString()
 
-    const diagnostic: Diagnostic = {
-      source: 'Puya TS',
-      severity: event.level === LogLevel.Error ? DiagnosticSeverity.Error : DiagnosticSeverity.Warning,
-      range: {
-        start: {
-          line: event.sourceLocation.line - 1,
-          character: event.sourceLocation.column,
+      const diagnostic: Diagnostic = {
+        source: 'Puya TS',
+        severity: event.level === LogLevel.Error ? DiagnosticSeverity.Error : DiagnosticSeverity.Warning,
+        range: {
+          start: {
+            line: event.sourceLocation.line - 1,
+            character: event.sourceLocation.column,
+          },
+          end: {
+            line: event.sourceLocation.endLine - 1,
+            character: event.sourceLocation.endColumn,
+          },
         },
-        end: {
-          line: event.sourceLocation.endLine - 1,
-          character: event.sourceLocation.endColumn,
-        },
-      },
-      message: event.message,
+        message: event.message,
+      }
+
+      if (!diagnosticsMap.has(fileUri)) {
+        diagnosticsMap.set(fileUri, [])
+      }
+
+      diagnosticsMap.get(fileUri)!.push(diagnostic)
     }
 
-    if (!diagnosticsMap.has(fileUri)) {
-      diagnosticsMap.set(fileUri, [])
-    }
-
-    diagnosticsMap.get(fileUri)!.push(diagnostic)
+    return diagnosticsMap
+  } catch (error) {
+    connection.console.error(`Failed to parse: ${JSON.stringify(error)}`)
+    return new Map()
   }
-
-  return diagnosticsMap
 }
 
 async function compileFiles(files: AlgoFile[]) {
