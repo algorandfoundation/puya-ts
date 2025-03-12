@@ -105,3 +105,20 @@ export class BoxContract extends BaseContract {
     return true
   }
 }
+
+class BoxNotExist extends BaseContract {
+  approvalProgram(): boolean {
+    if (Txn.applicationId.id !== 0) {
+      switch (Txn.applicationArgs(0).toString()) {
+        case 'box':
+          return Box<boolean>({ key: 'abc' }).value
+        case 'boxmap':
+          return BoxMap<string, boolean>({ keyPrefix: 'a' })('bc').value
+        case 'createbox':
+          Box<boolean>({ key: 'abc' }).value = true
+          return true
+      }
+    }
+    return true
+  }
+}

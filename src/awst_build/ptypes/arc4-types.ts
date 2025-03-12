@@ -65,10 +65,10 @@ export abstract class ARC4EncodedType extends PType {
     return types.reduce((acc: bigint | null, cur) => {
       if (acc === null || cur.encodedBitSize === null) return null
 
-      if (cur.encodedBitSize < 8n) {
+      if (cur.encodedBitSize === 1n) {
         return acc + cur.encodedBitSize
       } else {
-        return this.bitsToBytes(acc) * 8n + cur.encodedBitSize
+        return this.roundBitsUpToNearestByte(acc) + this.roundBitsUpToNearestByte(cur.encodedBitSize)
       }
     }, 0n)
   }
@@ -79,6 +79,10 @@ export abstract class ARC4EncodedType extends PType {
    */
   static bitsToBytes(n: bigint): bigint {
     return (n + 7n) / 8n
+  }
+
+  static roundBitsUpToNearestByte(bits: bigint): bigint {
+    return this.bitsToBytes(bits) * 8n
   }
 }
 
