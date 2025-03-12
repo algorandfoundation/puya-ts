@@ -1,4 +1,5 @@
 import ts from 'typescript'
+import { isConstant } from '../../awst'
 import { nodeFactory } from '../../awst/node-factory'
 import type * as awst from '../../awst/nodes'
 import type { Block } from '../../awst/nodes'
@@ -6,7 +7,7 @@ import { AssignmentExpression, Goto, ReturnStatement } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { CodeError, InternalError, NotSupported } from '../../errors'
 import { logger } from '../../logger'
-import { codeInvariant, enumerate, instanceOfAny, invariant } from '../../util'
+import { codeInvariant, enumerate, hasFlags, instanceOfAny, invariant } from '../../util'
 import type { Statements } from '../../visitor/syntax-names'
 import { getNodeName } from '../../visitor/syntax-names'
 import type { Visitor } from '../../visitor/visitor'
@@ -168,6 +169,7 @@ export abstract class FunctionVisitor
   }
 
   visitVariableDeclarationList(node: ts.VariableDeclarationList): awst.Statement[] {
+    const isConstDeclaration = hasFlags(node.flags, ts.NodeFlags.Const)
     return node.declarations.flatMap((d) => {
       const sourceLocation = this.sourceLocation(d)
       if (!d.initializer) {
@@ -180,6 +182,24 @@ export abstract class FunctionVisitor
       }
 
       const source = requireInstanceBuilder(this.accept(d.initializer))
+
+      /*
+       If we encounter a simple const VAR = %VALUE% declaration, and the value is a compile time constant
+       store this value as a constant in the context instead of processing the assignment.
+
+       visitIdentifier will then resolve this constant instead of a VarExpression then the constant is referenced.
+
+       NOTE: This only handles basic expressions for now. Constant values which are destructured from more complex expressions
+       are not currently handled. eg. const [myConst] = ["constant value"]
+       */
+      storeConst: if (isConstDeclaration && ts.isIdentifier(d.name)) {
+        const targetType = this.context.getPTypeForNode(d.name)
+        if (!targetType.wtype) break storeConst
+        const expr = source.resolveToPType(targetType).resolve()
+        if (!isConstant(expr)) break storeConst
+        this.context.addConstant(d.name, expr)
+        return []
+      }
 
       return this.handleAssignmentStatement(this.visitBindingName(d.name, sourceLocation), source, sourceLocation)
     })

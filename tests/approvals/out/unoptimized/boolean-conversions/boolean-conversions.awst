@@ -8,8 +8,7 @@ subroutine test_truthyness(): void
   assert(Boolean(bitlen(1)), comment=Non zero is truthy)
   assert(!Boolean(len(0x)), comment=Empty is falsy)
   assert(Boolean(len("abc")), comment=Non empty is truthy)
-  empty: string = ""
-  assert(!Boolean(len(empty)), comment=Empty is falsy)
+  assert(!Boolean(len("")), comment=Empty is falsy)
   assert(Boolean(len("abc")), comment=Non empty is truthy)
   assert(!False, comment=False is falsy)
   assert(True, comment=True is truthy)
@@ -21,8 +20,7 @@ subroutine test_booleans_are_equal(): void
   assert(!!Boolean(bitlen(1)) == !!Boolean(bitlen(5)))
   assert("abc" != 0x == "abcdef" != 0x)
   assert("abc" != 0x == "abcdef" != 0x)
-  boolNoArgs: bool = False
-  assert(!boolNoArgs)
+  assert(!False)
 }
 contract BooleanConversionsAlgo
 {
