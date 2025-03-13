@@ -25,12 +25,11 @@ export async function invokePuya({
   options: CompileOptions
   compilationSet: CompilationSet
 }) {
-  let puyaPath = options.puyaPath
-  if (puyaPath) {
-    checkPuyaVersion(puyaPath)
-  } else {
-    puyaPath = await resolvePuyaPath()
+  if (options.puyaPath && !options.skipVersionCheck) {
+    checkPuyaVersion(options.puyaPath)
   }
+
+  const puyaPath = options.puyaPath ?? (await resolvePuyaPath())
 
   // Write AWST file
   using moduleAwstFile = generateTempFile()

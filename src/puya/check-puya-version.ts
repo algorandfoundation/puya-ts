@@ -56,7 +56,7 @@ export async function checkPuyaVersion(puyaPath: string) {
       logger.warn(undefined, `Revision of Puya at ${puyaPath} (${result.found}) is older than the targeted revision (${result.target})`)
       break
     case VersionCompareVerdict.NewerRevision:
-      logger.warn(undefined, `Revision of Puya at ${puyaPath} (${result.found}) is newer than the targeted revision (${result.target})`)
+      logger.debug(undefined, `Revision of Puya at ${puyaPath} (${result.found}) is newer than the targeted revision (${result.target})`)
       break
   }
 }
