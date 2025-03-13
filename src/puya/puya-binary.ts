@@ -62,6 +62,9 @@ export function findCachedPuyaBinary(version: SemVer): string | undefined {
  * @returns Object containing OS and architecture information
  */
 function getPlatformDetails(): { os: string; arch: string } {
+  const cliMessage = `Please refer to the CLI documentation for information on how to install Puya manually.`
+  throw new InternalError(`Unsupported platform: ${process.platform}. ${cliMessage}`)
+
   // Map Node.js platform to OS name used in filenames
   let os: string
   switch (process.platform) {
@@ -75,7 +78,7 @@ function getPlatformDetails(): { os: string; arch: string } {
       os = 'linux'
       break
     default:
-      throw new InternalError(`Unsupported platform: ${process.platform}`)
+      throw new InternalError(`Unsupported platform: ${process.platform}. ${cliMessage}`)
   }
 
   // Map Node.js architecture to architecture name used in filenames
@@ -88,7 +91,7 @@ function getPlatformDetails(): { os: string; arch: string } {
       arch = 'arm64'
       break
     default:
-      throw new InternalError(`Unsupported architecture: ${process.arch}`)
+      throw new InternalError(`Unsupported architecture: ${process.arch}. ${cliMessage}`)
   }
 
   return { os, arch }

@@ -79,20 +79,13 @@ usage: puya [-h] [--version] [--log-level {notset,debug,info,warning,error,criti
 puya: error: the following arguments are required: --options, --awst
 ```
 
-After confirming that Puya is installed, you need to create a script file to trigger it. Then set the `PUYA_SCRIPT_PATH` environment variable to the path of the script file before running `puya-ts`. An example script file is shown below.
-
-```sh
-#!/bin/bash
-puya "$@"
-```
-
-Don't forget to make the script file executable.
+After confirming that Puya is installed, you can pass the path to the Puya binary to `puya-ts` using the `--puya-path` flag.
 
 ```shell
-chmod +x run-puya.sh
+puya-ts build examples --output-awst --output-awst-json --puya-path puya
 ```
 
-If you don't wish to install Puya using `pipx`, you just need to make sure that the `PUYA_SCRIPT_PATH` environment variable is set to the path of the script file which triggers Puya before running `puya-ts`.
+If you don't wish to install Puya using `pipx`, you can build the Puya binary yourself from source. Refer to the [Puya README](https://github.com/algorandfoundation/puya) for more information. Once you have a binary, you can pass the path to it using the `--puya-path` flag.
 
 ## Commands
 
