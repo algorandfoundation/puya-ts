@@ -19,7 +19,4 @@ function test() {
   Uint64(1844674407370955161)
   // @expect-error uint64 overflow or underflow...
   Uint64('18446744073709551616')
-  const varStr = '123'
-  // @expect-error Expected constant of type string
-  Uint64(varStr)
 }

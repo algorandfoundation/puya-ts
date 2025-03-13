@@ -34,12 +34,11 @@ contract NativeArraysAlgo
   
   arc4Interop(): void
   {
-    u1: arc4.uint32 = 123
-    da1: arc4.dynamic_array<arc4.uint32> = new arc4.dynamic_array<arc4.uint32>(u1, u1)
-    sa1: arc4.static_array<arc4.uint32> = new arc4.static_array<arc4.uint32>(u1, u1)
-    a1: stack_array<arc4.uint32> = new stack_array<arc4.uint32>(u1, u1)
+    da1: arc4.dynamic_array<arc4.uint32> = new arc4.dynamic_array<arc4.uint32>(123, 123)
+    sa1: arc4.static_array<arc4.uint32> = new arc4.static_array<arc4.uint32>(123, 123)
+    a1: stack_array<arc4.uint32> = new stack_array<arc4.uint32>(123, 123)
     a1: stack_array<arc4.uint32> = a1.concat(da1).concat(sa1)
-    assert(a1.length == 6 and reinterpret_cast<bytes>(a1[0]) == reinterpret_cast<bytes>(u1) and reinterpret_cast<bytes>(a1[1]) == reinterpret_cast<bytes>(u1) and reinterpret_cast<bytes>(a1[2]) == reinterpret_cast<bytes>(u1) and reinterpret_cast<bytes>(a1[3]) == reinterpret_cast<bytes>(u1) and reinterpret_cast<bytes>(a1[4]) == reinterpret_cast<bytes>(u1) and reinterpret_cast<bytes>(a1[5]) == reinterpret_cast<bytes>(u1), comment=assert target is match for conditions)
+    assert(a1.length == 6 and reinterpret_cast<bytes>(a1[0]) == reinterpret_cast<bytes>(123) and reinterpret_cast<bytes>(a1[1]) == reinterpret_cast<bytes>(123) and reinterpret_cast<bytes>(a1[2]) == reinterpret_cast<bytes>(123) and reinterpret_cast<bytes>(a1[3]) == reinterpret_cast<bytes>(123) and reinterpret_cast<bytes>(a1[4]) == reinterpret_cast<bytes>(123) and reinterpret_cast<bytes>(a1[5]) == reinterpret_cast<bytes>(123), comment=assert target is match for conditions)
   }
   
   structs(p: Vector{ x: uint64, y: uint64 }): stack_array<tests/approvals/native-arrays.algo.ts::Vector>

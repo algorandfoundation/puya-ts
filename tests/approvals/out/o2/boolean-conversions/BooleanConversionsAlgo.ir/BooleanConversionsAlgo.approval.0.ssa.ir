@@ -21,8 +21,7 @@ subroutine tests/approvals/boolean-conversions.algo.ts::test_truthyness() -> voi
         (assert tmp%2#0) // Empty is falsy
         let reinterpret_bool%5#0: bool = (len "abc")
         (assert reinterpret_bool%5#0) // Non empty is truthy
-        let empty#0: bytes = ""
-        let reinterpret_bool%6#0: bool = (len empty#0)
+        let reinterpret_bool%6#0: bool = (len "")
         let tmp%3#0: bool = (! reinterpret_bool%6#0)
         (assert tmp%3#0) // Empty is falsy
         let reinterpret_bool%7#0: bool = (len "abc")
@@ -63,7 +62,6 @@ subroutine tests/approvals/boolean-conversions.algo.ts::test_booleans_are_equal(
         let tmp%19#0: bool = (!= "abcdef" 0x)
         let tmp%20#0: bool = (== tmp%18#0 tmp%19#0)
         (assert tmp%20#0)
-        let boolNoArgs#0: bool = 0u
-        let tmp%21#0: bool = (! boolNoArgs#0)
+        let tmp%21#0: bool = (! 0u)
         (assert tmp%21#0)
         return 
