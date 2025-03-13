@@ -63,7 +63,6 @@ export function findCachedPuyaBinary(version: SemVer): string | undefined {
  */
 function getPlatformDetails(): { os: string; arch: string } {
   const cliMessage = `Please refer to the CLI documentation for information on how to install Puya manually.`
-  throw new InternalError(`Unsupported platform: ${process.platform}. ${cliMessage}`)
 
   // Map Node.js platform to OS name used in filenames
   let os: string
