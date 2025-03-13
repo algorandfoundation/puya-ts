@@ -9,6 +9,7 @@ const config: RollupOptions = {
     index: 'src/index.ts',
     cli: 'src/cli.ts',
     'bin/run-cli': 'src/bin/run-cli.ts',
+    'bin/download-puya-binary': 'src/bin/download-puya-binary.ts',
   },
   output: [
     {
