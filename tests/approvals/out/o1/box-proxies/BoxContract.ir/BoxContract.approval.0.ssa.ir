@@ -64,11 +64,10 @@ subroutine tests/approvals/box-proxies.algo.ts::testBox(box: bytes, value: bytes
     block@8: // bool_merge_L22
         let and_result%1#2: bool = φ(and_result%1#0 <- block@6, and_result%1#1 <- block@7)
         (assert and_result%1#2)
-        let defaultVal#0: bytes = "O"
         let (maybe_value%6#0: bytes, maybe_exists%6#0: bool) = (box_get "A")
-        let state_get%0#0: bytes = (select defaultVal#0 maybe_value%6#0 maybe_exists%6#0)
+        let state_get%0#0: bytes = (select "O" maybe_value%6#0 maybe_exists%6#0)
         let (maybe_value%7#0: bytes, maybe_exists%7#0: bool) = (box_get box#0)
-        let state_get%1#0: bytes = (select defaultVal#0 maybe_value%7#0 maybe_exists%7#0)
+        let state_get%1#0: bytes = (select "O" maybe_value%7#0 maybe_exists%7#0)
         let tmp%4#0: bool = (== state_get%0#0 state_get%1#0)
         (assert tmp%4#0)
         let (maybe_value%8#0: bytes, maybe_exists%8#0: bool) = (box_get box#0)
@@ -163,8 +162,7 @@ subroutine tests/approvals/box-proxies.algo.ts::testBoxRef(box: bytes, length: u
         (box_create box#0 4u)
         goto block@8
     block@8: // after_if_else_L70
-        let someBytes#0: bytes = 0xffffffff
-        (box_put box#0 someBytes#0)
+        (box_put box#0 0xffffffff)
         let (maybe_value%2#0: bytes, maybe_exists%2#0: bool) = (box_get box#0)
         let state_get%0#0: bytes = (select 0x maybe_value%2#0 maybe_exists%2#0)
         let tmp%3#0: bool = (== state_get%0#0 0xffffffff)

@@ -11,8 +11,7 @@ subroutine testBox(box: box_key, value: string): void
   isBoxADeleted: bool = STATE_DELETE(Box["A"].value)
   assert(isBoxADeleted, comment=delete failed)
   assert(!STATE_EXISTS(Box[box].value) and !STATE_EXISTS(Box["A"].value))
-  defaultVal: string = "O"
-  assert(STATE_GET(Box["A"].value, default=defaultVal) == STATE_GET(Box[box].value, default=defaultVal))
+  assert(STATE_GET(Box["A"].value, default="O") == STATE_GET(Box[box].value, default="O"))
   <tuple>[_, e]: readonlytuple[string, bool] = STATE_GET_EX(Box[box].value)
   assert(!e)
   Box[box].value: string = value
@@ -50,8 +49,7 @@ subroutine testBoxRef(box: box_key, length: uint64): void
   } else {
     box_create(box, 4)
   }
-  someBytes: bytes = 0xffffffff
-  box_put(box, someBytes)
+  box_put(box, 0xffffffff)
   assert(STATE_GET(Box[box].value, default=0x) == 0xffffffff)
   maybeBox: readonlytuple[bytes, bool] = STATE_GET_EX(Box[box].value)
   assert(maybeBox.1)

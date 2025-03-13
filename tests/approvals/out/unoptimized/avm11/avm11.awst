@@ -1,7 +1,6 @@
 
 logicsig tests/approvals/avm11.algo.ts::Avm11Sig {
-  a: bytes = 0x00000000000000000000000000000000000000000000000000000000499602d2
-  return len(mimc<BN254Mp110>(a))
+  return len(mimc<BN254Mp110>(0x00000000000000000000000000000000000000000000000000000000499602d2))
 }
 contract AVM11Contract
 {
@@ -17,8 +16,7 @@ contract AVM11Contract
   
   testNewOps(): void
   {
-    x: bytes = 0x00000000000000000000000000000000000000000000000000000000499602d2
-    assert(Boolean(len(mimc<BLS12_381Mp111>(x))))
+    assert(Boolean(len(mimc<BLS12_381Mp111>(0x00000000000000000000000000000000000000000000000000000000499602d2))))
     assert(Boolean(online_stake()))
     <tuple>[a, b]: readonlytuple[bool, bool] = acct_params_get<AcctIncentiveEligible>(txn<Sender>())
     <tuple>[c, d]: readonlytuple[uint64, bool] = acct_params_get<AcctLastProposed>(txn<Sender>())
