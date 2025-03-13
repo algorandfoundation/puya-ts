@@ -9,7 +9,6 @@ describe('SourceLocation', () => {
         'empty.ts',
         '', // empty content
         ts.ScriptTarget.Latest,
-        true,
       )
 
       const location = SourceLocation.fromFile(sourceFile, '/test')
@@ -22,7 +21,7 @@ describe('SourceLocation', () => {
     })
 
     it('should handle non-empty files correctly', () => {
-      const sourceFile = ts.createSourceFile('test.ts', 'const x = 1;\n', ts.ScriptTarget.Latest, true)
+      const sourceFile = ts.createSourceFile('test.ts', 'const x = 1;\n', ts.ScriptTarget.Latest)
 
       const location = SourceLocation.fromFile(sourceFile, '/test')
       expect(location.line).toBe(1)
