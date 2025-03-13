@@ -10,7 +10,7 @@ import {
 } from 'vscode-languageserver/node.js'
 
 export const getDebugLspPort = () => {
-  const port = Number(process.env.DEBUG_LSP_PORT)
+  const port = Number(process.env.PUYA_TS_DEBUG_LSP_PORT)
   return !isNaN(port) && port > 0 ? port : undefined
 }
 
@@ -21,7 +21,7 @@ const resolveConnection = async () => {
     return createConnection(ProposedFeatures.all)
   }
 
-  // When the debug env variable DEBUG_LSP_PORT is set, we start the server with socket transport.
+  // When the debug env variable PUYA_TS_DEBUG_LSP_PORT is set, we start the server with socket transport.
   // Note: this is actually the oposite to how vscode-languageserver is designed.
   // Normally, the extension is the web socker server and the language server is the client.
   // Here, we flip it. This allows an easier debugging experience.
@@ -56,7 +56,7 @@ export async function startLanguageServer() {
   })
 
   connection.onInitialized(() => {
-    connection.console.log('Puya TypeScript Language Server initialized')
+    connection.console.log('Algorand TypeScript Language Server initialized')
   })
 
   connection.languages.diagnostics.on(async (params) => {
