@@ -263,11 +263,9 @@ testDynamicBytes_block@0:
     bytec_0 // 0x
     ==
     assert // No args should give empty bytes
-    // tests/approvals/arc4-types.algo.ts:76
-    // const db1 = new DynamicBytes()
-    bytec_1 // 0x0000
     // tests/approvals/arc4-types.algo.ts:78
     // assert(db1.bytes === new UintN<16>(0).bytes, 'bytes prop should return length header (of 0)')
+    bytec_1 // 0x0000
     dup
     ==
     assert // bytes prop should return length header (of 0)
@@ -322,15 +320,11 @@ testDynamicBytes_block@0:
 testStaticBytes:
 
 testStaticBytes_block@0:
-    // tests/approvals/arc4-types.algo.ts:94
-    // const s4 = s2.concat(s3)
-    pushbytes 0x0004
     // tests/approvals/arc4-types.algo.ts:91
     // const s2 = new StaticBytes<4>()
-    pushbytes 0x00000000
+    pushbytes 0x000400000000
     // tests/approvals/arc4-types.algo.ts:94
     // const s4 = s2.concat(s3)
-    concat
     extract 2 0
     // tests/approvals/arc4-types.algo.ts:92
     // const s3 = new StaticBytes<5>(Bytes.fromHex('AABBCCDDEE'))

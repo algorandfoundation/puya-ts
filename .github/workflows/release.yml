@@ -53,10 +53,6 @@ jobs:
           package: artifacts/algo-ts/package.json
           access: 'public'
 
-      - name: Install @algorandfoundation/puya-ts dependencies and patch for bundling
-        run: npm i --include=prod && npx patch-package --patch-dir ../../patches
-        working-directory: artifacts/puya-ts
-
       - name: Generate semantic version for @algorandfoundation/puya-ts
         run: npx semantic-release
         env:

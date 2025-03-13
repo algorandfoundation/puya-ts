@@ -4,6 +4,7 @@ export const Constants = {
   approvalProgramMethodName: 'approvalProgram',
   clearStateProgramMethodName: 'clearStateProgram',
   algoTsPackage,
+  onCompleteActionModuleName: `${algoTsPackage}/on-complete-action.d.ts`,
   arc4ModuleName: `${algoTsPackage}/arc4/index.d.ts`,
   opModuleName: `${algoTsPackage}/op.d.ts`,
   templateVarModuleName: `${algoTsPackage}/template-var.d.ts`,

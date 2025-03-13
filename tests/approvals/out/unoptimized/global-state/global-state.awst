@@ -26,12 +26,11 @@ contract TestContract
   
   constructor(): void
   {
-    someValue: uint64 = 72057594037927936
     super.constructor()
     GlobalState["testState"]: uint64 = 2
     GlobalState["TESTSTATE"]: uint64 = 5
     assert(GlobalState["baseTestState"] == "testing 123", comment=Base class state should be initialized after super call)
-    GlobalState["noInitialInt"]: uint64 = someValue * GlobalState["testState"]
+    GlobalState["noInitialInt"]: uint64 = 72057594037927936 * GlobalState["testState"]
   }
   
   BaseTestContract::constructor(): void

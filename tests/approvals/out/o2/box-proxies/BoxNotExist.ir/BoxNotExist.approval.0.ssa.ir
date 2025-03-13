@@ -1,0 +1,42 @@
+main tests/approvals/box-proxies.algo.ts::BoxNotExist.approvalProgram:
+    block@0: // L110
+        let tmp%0#0: uint64 = (txn ApplicationID)
+        let tmp%1#0: bool = (!= tmp%0#0 0u)
+        goto tmp%1#0 ? block@1 : block@11
+    block@1: // if_body_L111
+        let awst_tmp%0#0: bytes = ((txnas ApplicationArgs) 0u)
+        let tmp%2#0: bool = (== awst_tmp%0#0 "box")
+        goto tmp%2#0 ? block@2 : block@4
+    block@2: // if_body_L113
+        goto block@3
+    block@3: // L113
+        let (maybe_value%0#0: bytes, maybe_exists%0#0: bool) = (box_get "abc")
+        let maybe_value_converted%0#0: bool = (btoi maybe_value%0#0)
+        (assert maybe_exists%0#0) // Box must have value
+        return maybe_value_converted%0#0
+    block@4: // after_if_else_L113
+        let awst_tmp%1#0: bytes = ((txnas ApplicationArgs) 0u)
+        let tmp%3#0: bool = (== awst_tmp%1#0 "boxmap")
+        goto tmp%3#0 ? block@5 : block@7
+    block@5: // if_body_L115
+        goto block@6
+    block@6: // L115
+        let tmp%4#0: bytes = (concat "a" "bc")
+        let (maybe_value%1#0: bytes, maybe_exists%1#0: bool) = (box_get tmp%4#0)
+        let maybe_value_converted%1#0: bool = (btoi maybe_value%1#0)
+        (assert maybe_exists%1#0) // Box must have value
+        return maybe_value_converted%1#0
+    block@7: // after_if_else_L115
+        let awst_tmp%2#0: bytes = ((txnas ApplicationArgs) 0u)
+        let tmp%5#0: bool = (== awst_tmp%2#0 "createbox")
+        goto tmp%5#0 ? block@8 : block@10
+    block@8: // if_body_L117
+        goto block@9
+    block@9: // L117
+        let new_box_value%0#0: bytes[8] = (itob 1u)
+        (box_put "abc" new_box_value%0#0)
+        return 1u
+    block@10: // after_if_else_L117
+        goto block@11
+    block@11: // after_if_else_L111
+        return 1u

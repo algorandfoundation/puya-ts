@@ -1425,7 +1425,7 @@ export class ARC4ABIMethodConfig {
   readonly defaultArgs: Map<string, ABIMethodArgMemberDefault | ABIMethodArgConstantDefault>
 }
 export type LValue = VarExpression | FieldExpression | IndexExpression | TupleExpression | AppStateExpression | AppAccountStateExpression
-export type Constant = IntegerConstant | BoolConstant | BytesConstant | StringConstant
+export type Constant = IntegerConstant | BoolConstant | BytesConstant | StringConstant | DecimalConstant | MethodConstant | AddressConstant
 export type AWST = Contract | LogicSignature | Subroutine
 export type ARC4MethodConfig = ARC4BareMethodConfig | ARC4ABIMethodConfig
 export const concreteNodes = {

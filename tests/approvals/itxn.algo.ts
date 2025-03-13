@@ -1,5 +1,4 @@
-import { assert, Bytes, Contract, Global, GlobalState, itxn, op, Txn } from '@algorandfoundation/algorand-typescript'
-import { OnCompleteAction } from '@algorandfoundation/algorand-typescript/arc4'
+import { assert, Bytes, Contract, Global, GlobalState, itxn, OnCompleteAction, op, Txn } from '@algorandfoundation/algorand-typescript'
 
 const LOG_1ST_ARG_AND_APPROVE = Bytes.fromHex('09361A00B08101')
 const APPROVE = Bytes.fromHex('098101')

@@ -1,4 +1,4 @@
-import { OnCompleteActionStr } from './arc4'
+import { OnCompleteActionStr } from './on-complete-action'
 import { bytes, uint64 } from './primitives'
 import { Account, Application, Asset } from './reference'
 
