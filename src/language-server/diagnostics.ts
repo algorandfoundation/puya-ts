@@ -12,8 +12,7 @@ import { debounce } from '../util/debounce'
 type LogEventWithSource = LogEvent & { sourceLocation: SourceLocation & { file: string } }
 
 function prepareFiles(workspaceFolder: string, documents: TextDocuments<TextDocument>) {
-  // TODO: work out tests/virtual-file
-  const files = processInputPaths({ paths: [workspaceFolder], outDir: 'tests/virtual-file/out' })
+  const files = processInputPaths({ paths: [workspaceFolder] })
 
   // To support unsaved files, we need to replace the file content with the content of the document
   return files.map((file) => {
@@ -23,9 +22,9 @@ function prepareFiles(workspaceFolder: string, documents: TextDocuments<TextDocu
     if (document) {
       return {
         sourceFile: file.sourceFile,
-        outDir: 'tests/virtual-file/out',
+        outDir: '',
         fileContents: document.getText(),
-      }
+      } satisfies AlgoFile
     }
     return file
   })
