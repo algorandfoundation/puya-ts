@@ -21,6 +21,13 @@ export const intrinsicFactory = {
           sourceLocation: SourceLocation.fromLocations(left.sourceLocation, right.sourceLocation),
         })
       } else if (left instanceof StringConstant && right instanceof StringConstant) {
+        if (left.sourceLocation.file !== right.sourceLocation.file) {
+          return nodeFactory.stringConstant({
+            value: left.value + right.value,
+            sourceLocation: sourceLocation,
+          })
+        }
+
         return nodeFactory.stringConstant({
           value: left.value + right.value,
           sourceLocation: SourceLocation.fromLocations(left.sourceLocation, right.sourceLocation),

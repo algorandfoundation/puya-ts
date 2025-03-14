@@ -27,9 +27,7 @@ export class SourceLocation {
     this.scope = props.scope
 
     // Exclude scope from enumerable properties so it doesn't end up being serialized
-    Object.defineProperty(this, 'scope', {
-      enumerable: false,
-    })
+    Object.defineProperty(this, 'scope', { enumerable: false })
   }
 
   private static getStartAndEnd(node: ts.Node): { start: number; end: number } {
@@ -46,10 +44,7 @@ export class SourceLocation {
       return fromNodeTillStartOfNode(node, node.thenStatement)
     }
 
-    return {
-      start: node.getStart(),
-      end: node.getEnd(),
-    }
+    return { start: node.getStart(), end: node.getEnd() }
   }
 
   static fromNode(node: ts.Node, programDirectory: string): SourceLocation {
@@ -77,7 +72,7 @@ export class SourceLocation {
       file: normalisePath(sourceFile.fileName, programDirectory),
       line: 1,
       endLine: endLoc.line + 1,
-      column: 1,
+      column: 0,
       endColumn: endLoc.character,
       scope: 'file',
     })
@@ -131,18 +126,9 @@ export class SourceLocation {
     })
   }
 
-  static None = new SourceLocation({
-    line: 1,
-    endLine: 1,
-    column: 0,
-    endColumn: 1,
-    scope: 'file',
-  })
+  static None = new SourceLocation({ line: 1, endLine: 1, column: 0, endColumn: 1, scope: 'file' })
 }
 
 function fromNodeTillStartOfNode(n1: ts.Node, n2?: ts.Node): { start: number; end: number } {
-  return {
-    start: n1.getStart(),
-    end: n2 ? n2.getStart() - n2.getLeadingTriviaWidth() : n1.getEnd(),
-  }
+  return { start: n1.getStart(), end: n2 ? n2.getStart() - n2.getLeadingTriviaWidth() : n1.getEnd() }
 }
