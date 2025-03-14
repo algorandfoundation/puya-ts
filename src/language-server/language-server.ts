@@ -8,6 +8,8 @@ import {
   TextDocuments,
   TextDocumentSyncKind,
 } from 'vscode-languageserver/node.js'
+import { URI } from 'vscode-uri'
+import { debouncegetWorkspaceDiagnostics } from './diagnostics'
 
 export const getDebugLspPort = () => {
   const port = Number(process.env.PUYA_TS_DEBUG_LSP_PORT)
@@ -38,15 +40,18 @@ export async function startLanguageServer() {
 
   // Create a simple text document manager.
   const documents = new TextDocuments(TextDocument)
+  let workspaceFolder: string | undefined
 
-  connection.onInitialize(() => {
+  const trackedDocumentUris = new Set<string>()
+
+  connection.onInitialize((params) => {
+    // The extension sets the workspaceFolder property
+    // therefore, workspaceFolders is an array with one element
+    workspaceFolder = params.workspaceFolders?.[0]?.uri
+
     const result: InitializeResult = {
       capabilities: {
         textDocumentSync: TextDocumentSyncKind.Incremental,
-        diagnosticProvider: {
-          interFileDependencies: true,
-          workspaceDiagnostics: false,
-        },
         codeActionProvider: {
           resolveProvider: false,
         },
@@ -59,18 +64,34 @@ export async function startLanguageServer() {
     connection.console.log('Algorand TypeScript Language Server initialized')
   })
 
-  connection.languages.diagnostics.on(async (params) => {
-    const document = documents.get(params.textDocument.uri)
-    if (document !== undefined) {
+  documents.onDidChangeContent(async (params) => {
+    if (!workspaceFolder) {
+      connection.console.error('Workspace folder not set')
       return {
         kind: DocumentDiagnosticReportKind.Full,
         items: [],
       } satisfies DocumentDiagnosticReport
-    } else {
-      return {
-        kind: DocumentDiagnosticReportKind.Full,
-        items: [],
-      } satisfies DocumentDiagnosticReport
+    }
+
+    connection.console.debug(`Document changed event: ${params.document.uri}`)
+
+    const workspacePath = URI.parse(workspaceFolder).fsPath
+    const diagnosticsMap = await debouncegetWorkspaceDiagnostics(connection, workspacePath, documents)
+
+    for (const docUri of diagnosticsMap.keys()) {
+      if (!trackedDocumentUris.has(docUri)) {
+        trackedDocumentUris.add(docUri)
+      }
+    }
+
+    // Send diagnostics for all tracked documents
+    // Needs to do this to reset diagnostics for files that don't have issues anymore
+    for (const docUri of trackedDocumentUris) {
+      const diagnostics = diagnosticsMap.get(docUri) ?? []
+      connection.sendDiagnostics({
+        uri: docUri,
+        diagnostics,
+      })
     }
   })
 
