@@ -18,31 +18,18 @@ function getBinaryName(): string {
   return process.platform === 'win32' ? 'puya.exe' : 'puya'
 }
 
-/**
- * Finds the path to the node_modules directory
- * @returns The absolute path to the node_modules directory
- */
-function findNodeModulesDir(): string {
-  // Start with the current working directory
-  const moduleDir = upath.dirname(fileURLToPath(import.meta.url))
-  let currentDir = moduleDir
-
-  // Keep going up directories until we find node_modules or hit the root
-  while (currentDir !== path.parse(currentDir).root) {
-    const potentialNodeModulesDir = path.join(currentDir, 'node_modules')
-    if (fs.existsSync(potentialNodeModulesDir)) {
-      return potentialNodeModulesDir
-    }
-    currentDir = path.dirname(currentDir)
+function getPuyaTsDir(): string {
+  try {
+    return upath.dirname(require.resolve('@algorandfoundation/puya-ts'))
+  } catch {
+    return upath.dirname(fileURLToPath(import.meta.url))
   }
-
-  // If we couldn't find it, default to the current directory
-  return moduleDir
 }
 
 function getPuyaStorageDir(version: SemVer): string {
-  const nodeModulesDir = findNodeModulesDir()
-  return path.join(nodeModulesDir, '.puya', version.formatted)
+  const puyaTsDirName = getPuyaTsDir()
+  const puyaBinDir = path.join(puyaTsDirName, 'puya-bin')
+  return path.join(puyaBinDir, version.formatted)
 }
 
 /**
