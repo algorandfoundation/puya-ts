@@ -71,7 +71,6 @@ async function getWorkspaceDiagnostics(
   try {
     connection.console.debug(`Parsing ${workspaceFolder}`)
 
-    // TODO: handle error not from our code
     const files = prepareFiles(workspaceFolder, documents)
 
     const logEvents = await compileAndExtractLogs(files)
