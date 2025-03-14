@@ -64,38 +64,6 @@ export async function startLanguageServer() {
     connection.console.log('Algorand TypeScript Language Server initialized')
   })
 
-  connection.languages.diagnostics.on(async (params) => {
-    const document = documents.get(params.textDocument.uri)
-
-    if (!workspaceFolder) {
-      connection.console.error('Workspace folder not set')
-      return {
-        kind: DocumentDiagnosticReportKind.Full,
-        items: [],
-      } satisfies DocumentDiagnosticReport
-    }
-
-    if (!document) {
-      connection.console.error('Document not found')
-      return {
-        kind: DocumentDiagnosticReportKind.Full,
-        items: [],
-      } satisfies DocumentDiagnosticReport
-    }
-
-    connection.console.debug(`Validating document: ${params.textDocument.uri}`)
-
-    const workspacePath = URI.parse(workspaceFolder).fsPath
-    const diagnosticsMap = await debouncegetWorkspaceDiagnostics(connection, workspacePath, documents)
-
-    const currentDocumentDiagnostics = diagnosticsMap.get(document.uri)
-
-    return {
-      kind: DocumentDiagnosticReportKind.Full,
-      items: currentDocumentDiagnostics ?? [],
-    } satisfies DocumentDiagnosticReport
-  })
-
   documents.onDidChangeContent(async (params) => {
     if (!workspaceFolder) {
       connection.console.error('Workspace folder not set')
