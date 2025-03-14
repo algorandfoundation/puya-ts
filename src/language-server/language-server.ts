@@ -42,6 +42,8 @@ export async function startLanguageServer() {
   const documents = new TextDocuments(TextDocument)
   let workspaceFolder: string | undefined
 
+  const trackedDocumentUris = new Set<string>()
+
   connection.onInitialize((params) => {
     // The extension sets the workspaceFolder property
     // therefore, workspaceFolders is an array with one element
@@ -50,10 +52,6 @@ export async function startLanguageServer() {
     const result: InitializeResult = {
       capabilities: {
         textDocumentSync: TextDocumentSyncKind.Incremental,
-        diagnosticProvider: {
-          interFileDependencies: true,
-          workspaceDiagnostics: false,
-        },
         codeActionProvider: {
           resolveProvider: false,
         },
@@ -96,6 +94,37 @@ export async function startLanguageServer() {
       kind: DocumentDiagnosticReportKind.Full,
       items: currentDocumentDiagnostics ?? [],
     } satisfies DocumentDiagnosticReport
+  })
+
+  documents.onDidChangeContent(async (params) => {
+    if (!workspaceFolder) {
+      connection.console.error('Workspace folder not set')
+      return {
+        kind: DocumentDiagnosticReportKind.Full,
+        items: [],
+      } satisfies DocumentDiagnosticReport
+    }
+
+    connection.console.debug(`Document changed event: ${params.document.uri}`)
+
+    const workspacePath = URI.parse(workspaceFolder).fsPath
+    const diagnosticsMap = await debouncegetWorkspaceDiagnostics(connection, workspacePath, documents)
+
+    for (const docUri of diagnosticsMap.keys()) {
+      if (!trackedDocumentUris.has(docUri)) {
+        trackedDocumentUris.add(docUri)
+      }
+    }
+
+    // Send diagnostics for all tracked documents
+    // Needs to do this to reset diagnostics for files that don't have issues anymore
+    for (const docUri of trackedDocumentUris) {
+      const diagnostics = diagnosticsMap.get(docUri) ?? []
+      connection.sendDiagnostics({
+        uri: docUri,
+        diagnostics,
+      })
+    }
   })
 
   // Make the text document manager listen on the connection
