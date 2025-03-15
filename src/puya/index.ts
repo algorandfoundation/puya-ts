@@ -8,8 +8,8 @@ import { jsonSerializeSourceFiles } from '../parser/json-serialize-source-files'
 import { generateTempFile } from '../util/generate-temp-file'
 import { buildCompilationSetMapping } from './build-compilation-set-mapping'
 import { checkPuyaVersion } from './check-puya-version'
-import { ensurePuyaExists } from './ensure-puya-exists'
 import { deserializeAndLog } from './log-deserializer'
+import { resolvePuyaPath } from './resolve-puya-path'
 import { runPuya } from './run-puya'
 
 export async function invokePuya({
@@ -25,10 +25,12 @@ export async function invokePuya({
   options: CompileOptions
   compilationSet: CompilationSet
 }) {
-  ensurePuyaExists()
-  if (!options.skipVersionCheck) {
-    await checkPuyaVersion()
+  if (options.puyaPath && !options.skipVersionCheck) {
+    checkPuyaVersion(options.puyaPath)
   }
+
+  const puyaPath = options.puyaPath ?? (await resolvePuyaPath())
+
   // Write AWST file
   using moduleAwstFile = generateTempFile()
   logger.debug(undefined, `Writing awst to ${moduleAwstFile.filePath}`)
@@ -57,10 +59,10 @@ export async function invokePuya({
 
   logger.debug(
     undefined,
-    `Invoking puya: puya --options ${optionsFile.filePath} --awst ${moduleAwstFile.filePath} --source-annotations ${moduleSourceFile.filePath}`,
+    `Invoking puya: ${puyaPath} --options ${optionsFile.filePath} --awst ${moduleAwstFile.filePath} --source-annotations ${moduleSourceFile.filePath}`,
   )
   await runPuya({
-    command: 'puya',
+    command: puyaPath,
     args: [
       '--options',
       optionsFile.filePath,
