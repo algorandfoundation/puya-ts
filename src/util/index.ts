@@ -10,12 +10,28 @@ import type { DeliberateAny } from '../typescript-helpers'
 export { base32ToUint8Array, uint8ArrayToBase32 } from './base-32'
 
 class InvariantError extends InternalError {}
+
+/**
+ * Checks an invariant condition hold true. If this check fails it indicates the compiler is in an unstable state. For invariants related to
+ * user code, use codeInvariant below.
+ *
+ * @param condition
+ * @param message
+ * @param sourceLocation
+ */
 export function invariant(condition: unknown, message: string, sourceLocation?: SourceLocation): asserts condition {
   if (!condition) {
     throw new InvariantError(message, { sourceLocation })
   }
 }
 
+/**
+ * Checks an invariant related to user code holds true. If this check fails it indicates the user code is not valid. For invariants the user
+ * has no control over, use invariant above.
+ * @param condition
+ * @param message
+ * @param sourceLocation
+ */
 export function codeInvariant(condition: unknown, message: string, sourceLocation?: SourceLocation): asserts condition {
   if (!condition) {
     throw new CodeError(message, {
@@ -26,7 +42,7 @@ export function codeInvariant(condition: unknown, message: string, sourceLocatio
 
 export const enumFromValue = <TValue, TEnum extends TValue>(
   value: TValue,
-  enumType: Record<string, TEnum>,
+  enumType: Record<string, TEnum | string>,
   message: string = 'Invalid enum value: ',
 ) => {
   if (Object.values(enumType).some((v) => v === value)) {

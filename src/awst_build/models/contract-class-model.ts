@@ -158,7 +158,7 @@ export class ContractClassModel {
 
   private buildClusteredMetaClass(compilationSet: CompilationSet, clusteredType: ClusteredContractClassType): ContractClassModel {
     const ctor = nodeFactory.contractMethod({
-      memberName: Constants.constructorMethodName,
+      memberName: Constants.symbolNames.constructorMethodName,
       cref: ContractReference.fromPType(clusteredType),
       documentation: nodeFactory.methodDocumentation({}),
       sourceLocation: SourceLocation.None,
@@ -233,7 +233,7 @@ export class ContractClassModel {
             args: [],
             wtype: wtypes.voidWType,
             target: nodeFactory.instanceMethodTarget({
-              memberName: Constants.constructorMethodName,
+              memberName: Constants.symbolNames.constructorMethodName,
             }),
             sourceLocation: SourceLocation.None,
           }),
@@ -251,7 +251,7 @@ export class ContractClassModel {
 
   private makeDefaultCreate() {
     return nodeFactory.contractMethod({
-      memberName: Constants.defaultCreateMethodName,
+      memberName: Constants.symbolNames.defaultCreateMethodName,
       cref: ContractReference.fromPType(this.type),
       args: [],
       arc4MethodConfig: new ARC4BareMethodConfig({

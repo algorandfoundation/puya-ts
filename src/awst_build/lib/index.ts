@@ -16,7 +16,7 @@ export function buildLibAwst() {
     isAbstract: true,
     propertyInitialization: [],
     ctor: nodeFactory.contractMethod({
-      memberName: Constants.constructorMethodName,
+      memberName: Constants.symbolNames.constructorMethodName,
       cref: baseContractCref,
       args: [],
       arc4MethodConfig: null,
@@ -33,7 +33,7 @@ export function buildLibAwst() {
     sourceLocation: SourceLocation.None,
     approvalProgram: null,
     clearProgram: nodeFactory.contractMethod({
-      memberName: Constants.clearStateProgramMethodName,
+      memberName: Constants.symbolNames.clearStateProgramMethodName,
       cref: baseContractCref,
       args: [],
       arc4MethodConfig: null,
@@ -65,7 +65,7 @@ export function buildLibAwst() {
     clearProgram: null,
     sourceLocation: SourceLocation.None,
     approvalProgram: nodeFactory.contractMethod({
-      memberName: Constants.approvalProgramMethodName,
+      memberName: Constants.symbolNames.approvalProgramMethodName,
       cref: contractCref,
       args: [],
       arc4MethodConfig: null,

@@ -1,5 +1,6 @@
 import { TransactionKind } from '../../../awst/models'
 import { TxnField } from '../../../awst/txn-fields'
+import type { DeliberateAny } from '../../../typescript-helpers'
 import type { PType } from '../../ptypes'
 import {
   accountPType,
@@ -396,3 +397,11 @@ export const txnKindToFields = {
   [TransactionKind.afrz]: assetFreezeTxnFields,
   [TransactionKind.appl]: applicationCallTxnFields,
 }
+
+type TxnFieldName = keyof typeof anyTxnFields
+export const txnFieldName = new Proxy<Record<TxnFieldName, TxnFieldName>>({} as DeliberateAny, {
+  get(_, prop) {
+    if (prop in anyTxnFields) return prop
+    return Reflect.get(_, prop)
+  },
+})

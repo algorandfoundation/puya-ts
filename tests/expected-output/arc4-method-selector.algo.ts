@@ -14,11 +14,16 @@ class ContractOne extends Contract {
     // @expect-error approvalProgram is not an ABI method
     return methodSelector(ContractTwo.prototype.approvalProgram)
   }
+  test4() {
+    // @expect-error subroutine is not an ABI method
+    return methodSelector(this.subroutine)
+  }
+  private subroutine() {}
 }
 
 class ContractTwo extends Contract {
   @baremethod({ onCreate: 'allow' })
-  bareMethod() { }
+  bareMethod() {}
 }
 
 function someSubroutine() {
