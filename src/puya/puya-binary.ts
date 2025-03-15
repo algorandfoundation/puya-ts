@@ -94,8 +94,8 @@ export async function downloadPuyaBinary(version: SemVer): Promise<string> {
 
   // Build platform-specific filenames
   const platformId = `${os}_${arch}`
-  const archiveFileName = `puya-${platformId}.tar.gz`
-  const checksumFileName = `puya-${platformId}.sha256.txt`
+  const archiveFileName = `puya-${version.formatted}-${platformId}.tar.gz`
+  const checksumFileName = `puya-${version.formatted}-${platformId}.sha256.txt`
   const binaryFileName = getBinaryName()
 
   const puyaStorageDir = getPuyaStorageDir(version)
@@ -106,21 +106,21 @@ export async function downloadPuyaBinary(version: SemVer): Promise<string> {
 
   using tempDir = generateTempDir()
 
-  const tarFilePath = path.join(tempDir.dirPath, archiveFileName)
+  const archiveFilePath = path.join(tempDir.dirPath, archiveFileName)
   const checksumFilePath = path.join(tempDir.dirPath, checksumFileName)
   const extractedBinaryPath = path.join(puyaStorageDir, binaryFileName)
 
-  logger.debug(undefined, `Downloading Puya binary for version ${version} and platform ${platformId}`)
-  const archiveUrl = `https://github.com/${Constants.puyaGithubRepo}/releases/download/${version.formatted}/${archiveFileName}`
-  const checksumUrl = `https://github.com/${Constants.puyaGithubRepo}/releases/download/${version.formatted}/${checksumFileName}`
+  logger.debug(undefined, `Downloading Puya binary for version ${version.formatted} and platform ${platformId}`)
+  const archiveUrl = `https://github.com/${Constants.puyaGithubRepo}/releases/download/v${version.formatted}/${archiveFileName}`
+  const checksumUrl = `https://github.com/${Constants.puyaGithubRepo}/releases/download/v${version.formatted}/${checksumFileName}`
 
-  await downloadFile(archiveUrl, tarFilePath)
+  await downloadFile(archiveUrl, archiveFilePath)
   await downloadFile(checksumUrl, checksumFilePath)
 
-  await verifyChecksum(tarFilePath, checksumFilePath)
+  await verifyChecksum(archiveFilePath, archiveFileName, checksumFilePath)
 
   await tar.extract({
-    file: tarFilePath,
+    file: archiveFilePath,
     cwd: puyaStorageDir,
   })
 
@@ -174,7 +174,7 @@ async function downloadFile(url: string, destination: string): Promise<void> {
  * @param checksumFilePath Path to the checksum file
  * @returns Promise that resolves to true if the checksum matches, false otherwise
  */
-async function verifyChecksum(filePath: string, checksumFilePath: string): Promise<void> {
+async function verifyChecksum(filePath: string, fileName: string, checksumFilePath: string): Promise<void> {
   return new Promise((resolve, reject) => {
     // Read the checksum file
     const expectedChecksum = fs.readFileSync(checksumFilePath, 'utf8').trim().toLowerCase()
@@ -190,7 +190,7 @@ async function verifyChecksum(filePath: string, checksumFilePath: string): Promi
     stream.on('end', () => {
       const calculatedChecksum = hash.digest('hex').toLowerCase()
 
-      if (calculatedChecksum !== expectedChecksum) {
+      if (`${calculatedChecksum}  ${fileName}` !== expectedChecksum) {
         reject(new InternalError(`Checksum verification failed. Expected checksum: ${expectedChecksum} but got: ${calculatedChecksum}`))
       }
       resolve()
