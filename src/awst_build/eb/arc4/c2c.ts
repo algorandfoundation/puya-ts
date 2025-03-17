@@ -59,7 +59,8 @@ export class AbiCallFunctionBuilder extends FunctionBuilder {
     const itxnResult = makeApplicationCall({
       fields,
       methodSelector: methodSelector,
-      abiConfig: arc4Config,
+      functionType,
+      arc4Config,
       sourceLocation,
     })
     return formatApplicationCallResponse({ itxnResult, functionType, sourceLocation })
@@ -133,7 +134,7 @@ export class ContractProxyBareCreateFunctionBuilder extends FunctionBuilder {
     }
 
     const itxnResult = makeApplicationCall({
-      abiConfig:
+      arc4Config:
         bareCreate ??
         new ARC4BareMethodConfig({
           allowedCompletionTypes: [OnCompletionAction.NoOp],
@@ -142,6 +143,7 @@ export class ContractProxyBareCreateFunctionBuilder extends FunctionBuilder {
         }),
       sourceLocation,
       methodSelector: null,
+      functionType: null,
       fields,
       proxy: this.proxy,
     })
@@ -198,7 +200,8 @@ export class ContractProxyCallFunctionBuilder extends FunctionBuilder {
     return formatApplicationCallResponse({
       itxnResult: makeApplicationCall({
         proxy: this.proxy,
-        abiConfig: arc4Config,
+        arc4Config: arc4Config,
+        functionType: this.functionType,
         methodSelector,
         fields,
         sourceLocation,
@@ -209,21 +212,24 @@ export class ContractProxyCallFunctionBuilder extends FunctionBuilder {
   }
 }
 const typedAppCallIgnoredFields = new Set(['args', 'appArgs'])
+
 function makeApplicationCall({
   sourceLocation,
   fields,
-  abiConfig,
+  arc4Config,
   proxy,
   methodSelector,
+  functionType,
 }: {
   proxy?: InstanceBuilder
   fields?: InstanceBuilder
-  abiConfig: ARC4MethodConfig
+  functionType: FunctionPType | null
+  arc4Config: ARC4MethodConfig
   methodSelector: MethodConstant | null
   sourceLocation: SourceLocation
 }): SubmitInnerTransaction {
   const mappedFields = new Map<TxnField, Expression>([
-    //x Set default fee to 0 (transaction will be paid for from transaction group budget, rather than from the application balance)
+    // Set default fee to 0 (transaction will be paid for from transaction group budget, rather than from the application balance)
     [TxnField.Fee, nodeFactory.uInt64Constant({ value: 0n, sourceLocation })],
     [TxnField.TypeEnum, nodeFactory.uInt64Constant({ value: 6n, sourceLocation, tealAlias: 'appl' })],
   ])
@@ -235,7 +241,7 @@ function makeApplicationCall({
   // Add implicit fields
   if (proxy) {
     // Create a copy of the fields
-    const implicitFields = getImplicitFields({ proxy, mappedFields, sourceLocation, methodConfig: abiConfig })
+    const implicitFields = getImplicitFields({ proxy, mappedFields, sourceLocation, methodConfig: arc4Config })
     // Only add fields that aren't explicitly provided
     for (const [key, expr] of implicitFields) {
       if (!mappedFields.has(key)) {
@@ -244,8 +250,9 @@ function makeApplicationCall({
     }
   }
   // Add app args by merging provided args with method selector
-  if (methodSelector) {
-    addAppArgs({ fields, methodSelector, mappedFields, sourceLocation })
+  if (arc4Config instanceof ARC4ABIMethodConfig) {
+    invariant(methodSelector && functionType, 'methodSelector and functionType both required for abi calls')
+    addAppArgs({ fields, methodSelector, mappedFields, sourceLocation, functionType })
   }
   // Build itxn and submit
   const itxn = nodeFactory.createInnerTransaction({
@@ -382,11 +389,13 @@ function getOca(
 function addAppArgs({
   fields,
   methodSelector,
+  functionType,
   mappedFields,
   sourceLocation,
 }: {
   mappedFields: Map<TxnField, Expression>
   fields?: InstanceBuilder
+  functionType: FunctionPType
   methodSelector: MethodConstant
   sourceLocation: SourceLocation
 }) {
@@ -394,7 +403,25 @@ function addAppArgs({
   const appArgs: Expression[] = [methodSelector]
   if (appArgsBuilder) {
     codeInvariant(isStaticallyIterable(appArgsBuilder), 'Unsupported expression for args', appArgsBuilder.sourceLocation)
-    appArgs.push(...appArgsBuilder[StaticIterator]().map((i) => i.toBytes(sourceLocation)))
+    appArgs.push(
+      ...appArgsBuilder[StaticIterator]().map((arg, index) => {
+        const [paramName, paramType] = functionType.parameters[index]
+
+        const encodedType = ptypeToArc4EncodedType(paramType, sourceLocation)
+
+        const resolvedArg = arg.resolveToPType(paramType)
+
+        if (encodedType.equals(paramType)) {
+          return resolvedArg.resolve()
+        }
+
+        return nodeFactory.aRC4Encode({
+          value: arg.resolve(),
+          wtype: encodedType.wtype,
+          sourceLocation: arg.sourceLocation,
+        })
+      }),
+    )
   }
   mappedFields.set(
     TxnField.ApplicationArgs,
