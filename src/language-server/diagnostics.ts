@@ -10,7 +10,6 @@ import type { LogEvent } from '../logger'
 import { LoggingContext, LogLevel } from '../logger'
 import type { AlgoFile } from '../options'
 import { CompileOptions } from '../options'
-import { debounce } from '../util/debounce'
 
 type LogEventWithSource = LogEvent & { sourceLocation: SourceLocation & { file: string } }
 
@@ -66,7 +65,7 @@ function mapToDiagnostic(event: LogEventWithSource): Diagnostic {
   }
 }
 
-async function getWorkspaceDiagnostics(
+export async function getWorkspaceDiagnostics(
   connection: Connection,
   workspaceFolder: string,
   documents: TextDocuments<TextDocument>,
@@ -97,5 +96,3 @@ async function getWorkspaceDiagnostics(
     return new Map()
   }
 }
-
-export const debounceGetWorkspaceDiagnostics = debounce(getWorkspaceDiagnostics, 200)

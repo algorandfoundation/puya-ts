@@ -1,5 +1,6 @@
+import { Observable } from 'rxjs'
 import { TextDocument } from 'vscode-languageserver-textdocument'
-import type { CodeAction, DocumentDiagnosticReport, InitializeResult } from 'vscode-languageserver/node.js'
+import type { CodeAction, DocumentDiagnosticReport, InitializeResult, TextDocumentChangeEvent } from 'vscode-languageserver/node.js'
 import {
   createClientSocketTransport,
   createConnection,
@@ -9,7 +10,7 @@ import {
   TextDocumentSyncKind,
 } from 'vscode-languageserver/node.js'
 import { URI } from 'vscode-uri'
-import { debounceGetWorkspaceDiagnostics } from './diagnostics'
+import { getWorkspaceDiagnostics } from './diagnostics'
 
 export const getDebugLspPort = () => {
   const port = Number(process.env.PUYA_TS_DEBUG_LSP_PORT)
@@ -64,19 +65,24 @@ export async function startLanguageServer() {
     connection.console.log('Algorand TypeScript Language Server initialized')
   })
 
-  documents.onDidChangeContent(async (params) => {
+  const documentChangeObservable = new Observable<TextDocumentChangeEvent<TextDocument>>((subscriber) => {
+    documents.onDidChangeContent((event) => {
+      subscriber.next(event)
+    })
+  })
+
+  documentChangeObservable.subscribe(async () => {
     if (!workspaceFolder) {
       connection.console.error('Workspace folder not set')
+
       return {
         kind: DocumentDiagnosticReportKind.Full,
         items: [],
       } satisfies DocumentDiagnosticReport
     }
 
-    connection.console.debug(`Document changed event: ${params.document.uri}`)
-
     const workspacePath = URI.parse(workspaceFolder).fsPath
-    const diagnosticsMap = await debounceGetWorkspaceDiagnostics(connection, workspacePath, documents)
+    const diagnosticsMap = await getWorkspaceDiagnostics(connection, workspacePath, documents)
 
     for (const docUri of diagnosticsMap.keys()) {
       trackedDocumentUris.add(docUri)
