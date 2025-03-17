@@ -1,0 +1,22 @@
+subroutine test(): readonlytuple[uint64, uint64, uint64, uint64, uint64]
+{
+  return <tuple>[0, 0, 1, 1, 1]
+}
+subroutine test2(): void
+{
+  y: uint64 = 123 * 100
+}
+contract DemoContract
+{
+  approvalProgram(): uint64
+  {
+    tests/approvals/uint64-expressions.algo.ts::test2()
+    return 5
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+}

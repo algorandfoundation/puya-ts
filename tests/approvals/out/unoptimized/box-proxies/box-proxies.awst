@@ -1,0 +1,113 @@
+subroutine testBox(box: box_key, value: string): void
+{
+  Box[box].value: string = value
+  Box["A"].value: string = value
+  assert(reinterpret_cast<bytes>(box) == "one")
+  assert("A" == "A")
+  assert(Box[box].value == Box["A"].value)
+  assert(STATE_EXISTS(Box[box].value) and STATE_EXISTS(Box["A"].value))
+  assert(Boolean(checked_maybe(box_len(box), comment=Box must have value)))
+  assert(STATE_DELETE(Box[box].value), comment=delete failed)
+  isBoxADeleted: bool = STATE_DELETE(Box["A"].value)
+  assert(isBoxADeleted, comment=delete failed)
+  assert(!STATE_EXISTS(Box[box].value) and !STATE_EXISTS(Box["A"].value))
+  assert(STATE_GET(Box["A"].value, default="O") == STATE_GET(Box[box].value, default="O"))
+  <tuple>[_, e]: readonlytuple[string, bool] = STATE_GET_EX(Box[box].value)
+  assert(!e)
+  Box[box].value: string = value
+  <tuple>[_₁, e]: readonlytuple[string, bool] = STATE_GET_EX(Box[box].value)
+  assert(e)
+}
+subroutine testBoxMap(box: box_key, key: string, value: bytes): void
+{
+  Box[concat(box, reinterpret_cast<bytes>(key))].value: bytes = value
+  Box[concat("", reinterpret_cast<bytes>(key))].value: bytes = value
+  boxMapItem: box_key = concat("", reinterpret_cast<bytes>(key))
+  assert(STATE_EXISTS(Box[boxMapItem].value))
+  assert(reinterpret_cast<bytes>(box) == "two")
+  assert("" == "")
+  assert(Boolean(checked_maybe(box_len(concat(box, reinterpret_cast<bytes>(key))), comment=Box must have value)))
+  assert(STATE_GET_EX(Box[concat(box, reinterpret_cast<bytes>(key))].value).1)
+  assert(Box[concat(box, reinterpret_cast<bytes>(key))].value == Box[concat("", reinterpret_cast<bytes>(key))].value)
+  isBoxDeleted: bool = STATE_DELETE(Box[concat(box, reinterpret_cast<bytes>(key))].value)
+  assert(isBoxDeleted, comment=delete failed)
+  assert(STATE_GET(Box[concat(box, reinterpret_cast<bytes>("" + key + "x"))].value, default="b") == STATE_GET(Box[concat("", reinterpret_cast<bytes>("" + key + "x"))].value, default="b"))
+}
+subroutine testBoxRef(box: box_key, length: uint64): void
+{
+  assert(reinterpret_cast<bytes>(box) == "three")
+  assert("abc" == "abc")
+  if (!STATE_EXISTS(Box["abc"].value)) {
+    box_create("abc", 1000)
+  } else {
+    if (checked_maybe(box_len("abc"), comment=Box must have value) != length) {
+      box_resize("abc", length)
+    }
+  }
+  if (STATE_EXISTS(Box[box].value)) {
+    box_resize(box, 4)
+  } else {
+    box_create(box, 4)
+  }
+  box_put(box, 0xffffffff)
+  assert(STATE_GET(Box[box].value, default=0x) == 0xffffffff)
+  maybeBox: readonlytuple[bytes, bool] = STATE_GET_EX(Box[box].value)
+  assert(maybeBox.1)
+  assert(Box[box].value == 0xffffffff)
+  box_splice(box, 1, 1, 0x00)
+  assert(Box[box].value == 0xff00ffff)
+  x: bool = STATE_DELETE(Box[box].value)
+  assert(x, comment=delete failed)
+  assert(!STATE_EXISTS(Box[box].value))
+}
+contract BoxContract
+{
+  boxes {
+    ["one"]: string
+    ["two"]: bytes
+    ["three"]: bytes
+  }
+  approvalProgram(): bool
+  {
+    if (reinterpret_cast<uint64>(txn<ApplicationID>()) != 0) {
+      tests/approvals/box-proxies.algo.ts::testBox("one", "aaaaaargh")
+      tests/approvals/box-proxies.algo.ts::testBoxMap("two", "what?", itob(256456))
+      tests/approvals/box-proxies.algo.ts::testBoxRef("three", 99)
+    }
+    return True
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+}
+contract BoxNotExist
+{
+  approvalProgram(): bool
+  {
+    if (reinterpret_cast<uint64>(txn<ApplicationID>()) != 0) {
+      if ((#0 = reinterpret_cast<string>(txnas<ApplicationArgs>(0))) == "box") {
+        #switch₁ᶜ₀:
+        return Box["abc"].value
+      }
+      if (#0 == "boxmap") {
+        #switch₁ᶜ₁:
+        return Box[concat("a", "bc")].value
+      }
+      if (#0 == "createbox") {
+        #switch₁ᶜ₂:
+        Box["abc"].value: bool = True
+        return True
+      }
+    }
+    return True
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+}

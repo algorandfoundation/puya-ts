@@ -1,0 +1,61 @@
+#pragma version 10
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0
+
+main_block@0:
+
+main_block@1:
+    // tests/approvals/implicit-create.algo.ts:17
+    // class BaseWithAbiCreate extends Contract {
+    txn NumAppArgs
+    intc_0 // 0
+    !=
+    bz main_bare_routing@6
+
+main_abi_routing@2:
+    // tests/approvals/implicit-create.algo.ts:17
+    // class BaseWithAbiCreate extends Contract {
+    txna ApplicationArgs 0
+    pushbytes 0x4c5c61ba // method "create()void"
+    swap
+    match main_create_route@3
+
+main_switch_case_default@4:
+
+main_switch_case_next@5:
+
+main_after_if_else@7:
+    // tests/approvals/implicit-create.algo.ts:17
+    // class BaseWithAbiCreate extends Contract {
+    intc_0 // 0
+
+main_after_inlined_tests/approvals/implicit-create.algo.ts::BaseWithAbiCreate.__puya_arc4_router__@8:
+    return
+
+main_create_route@3:
+    // tests/approvals/implicit-create.algo.ts:18
+    // @abimethod({ onCreate: 'require' })
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    ==
+    assert // can only call when creating
+    callsub create
+    pushint 1 // 1
+    b main_after_inlined_tests/approvals/implicit-create.algo.ts::BaseWithAbiCreate.__puya_arc4_router__@8
+
+main_bare_routing@6:
+    b main_after_if_else@7
+
+
+// tests/approvals/implicit-create.algo.ts::BaseWithAbiCreate.create() -> void:
+create:
+
+create_block@0:
+    retsub

@@ -1,7 +1,7 @@
 import type ts from 'typescript'
 import type { AwstBuildContext } from '../awst_build/context/awst-build-context'
-import { AwstBuildFailureError } from '../errors'
-import { logger, logPuyaExceptions } from '../logger'
+import { CodeError } from '../errors'
+import { patchErrorLocation } from '../logger'
 import type { DeliberateAny } from '../typescript-helpers'
 import type { MapBaseType, SyntaxKindNameType } from './syntax-names'
 import { getNodeName, SyntaxKindName } from './syntax-names'
@@ -43,12 +43,11 @@ export const accept = <TSelf extends { context: AwstBuildContext }, T extends ts
     const nodeName = getNodeName(node)
     const visitFunction = `visit${nodeName}`
     if (visitFunction in Object.getPrototypeOf(visitor)) {
-      return logPuyaExceptions(() => Object.getPrototypeOf(visitor)[visitFunction].call(visitor, node), sourceLocation)
+      return patchErrorLocation(() => Object.getPrototypeOf(visitor)[visitFunction].call(visitor, node), sourceLocation)()
     } else {
-      logger.error(sourceLocation, `Unsupported syntax visitor ${nodeName}`)
+      throw new CodeError(`Unsupported syntax visitor ${nodeName}`, { sourceLocation })
     }
   } else {
-    logger.error(sourceLocation, `Unknown syntax kind ${node.kind}`)
+    throw new CodeError(`Unknown syntax kind ${node.kind}`, { sourceLocation })
   }
-  throw new AwstBuildFailureError()
 }

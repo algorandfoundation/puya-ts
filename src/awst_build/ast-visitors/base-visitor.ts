@@ -1,7 +1,7 @@
 import ts from 'typescript'
 import { nodeFactory } from '../../awst/node-factory'
 import type { Expression, LValue, MethodDocumentation, Statement } from '../../awst/nodes'
-import type { SourceLocation } from '../../awst/source-location'
+import { SourceLocation } from '../../awst/source-location'
 import { CodeError, InternalError, NotSupported } from '../../errors'
 import { logger } from '../../logger'
 import { codeInvariant, enumerate, invariant, sortBy } from '../../util'
@@ -19,7 +19,7 @@ import {
 } from '../../visitor/syntax-names'
 import type { Visitor } from '../../visitor/visitor'
 import { accept } from '../../visitor/visitor'
-import type { AwstBuildContext } from '../context/awst-build-context'
+import { AwstBuildContext } from '../context/awst-build-context'
 import { InstanceBuilder, NodeBuilder } from '../eb'
 import { BooleanExpressionBuilder } from '../eb/boolean-expression-builder'
 import { ArrayLiteralExpressionBuilder } from '../eb/literal/array-literal-expression-builder'
@@ -29,8 +29,11 @@ import type { ObjectLiteralParts } from '../eb/literal/object-literal-expression
 import { ObjectLiteralExpressionBuilder } from '../eb/literal/object-literal-expression-builder'
 import { NamespaceBuilder } from '../eb/namespace-builder'
 import { OmittedExpressionBuilder } from '../eb/omitted-expression-builder'
+import { SpreadExpressionBuilder } from '../eb/spread-expression-builder'
 import { StringExpressionBuilder, StringFunctionBuilder } from '../eb/string-expression-builder'
+import { StaticIterator } from '../eb/traits/static-iterator'
 import { requireExpressionOfType, requireInstanceBuilder } from '../eb/util'
+import { concatArrays } from '../eb/util/array/concat'
 import type { PType } from '../ptypes'
 import {
   ArrayLiteralPType,
@@ -39,6 +42,7 @@ import {
   bigIntPType,
   biguintPType,
   boolPType,
+  neverPType,
   numberPType,
   NumericLiteralPType,
   ObjectPType,
@@ -53,9 +57,12 @@ import { TextVisitor } from './text-visitor'
 export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   private baseAccept = <TNode extends ts.Node>(node: TNode) => accept<BaseVisitor, TNode>(this, node)
   readonly textVisitor: TextVisitor
+  get context() {
+    return AwstBuildContext.current
+  }
 
-  protected constructor(public context: AwstBuildContext) {
-    this.textVisitor = new TextVisitor(context)
+  protected constructor() {
+    this.textVisitor = new TextVisitor()
   }
 
   logNotSupported(node: ts.Node | undefined, message: string) {
@@ -187,15 +194,44 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
     })
     const ptype = this.context.getPTypeForNode(node)
     invariant(ptype instanceof ObjectPType, 'Object literal ptype should resolve to ObjectPType')
-    return new ObjectLiteralExpressionBuilder(sourceLocation, ptype, parts, () => this.context.generateDiscardedVarName())
+    return new ObjectLiteralExpressionBuilder(sourceLocation, ptype, parts)
   }
 
   visitArrayLiteralExpression(node: ts.ArrayLiteralExpression): NodeBuilder {
     const sourceLocation = this.sourceLocation(node)
-    return new ArrayLiteralExpressionBuilder(
-      sourceLocation,
-      node.elements.map((e) => requireInstanceBuilder(this.baseAccept(e))),
-    )
+
+    if (node.elements.length === 0) {
+      return new ArrayLiteralExpressionBuilder(sourceLocation, [])
+    }
+
+    const toConcat: Array<InstanceBuilder[] | InstanceBuilder> = []
+    let itemBuffer: InstanceBuilder[] = []
+    for (const element of node.elements) {
+      if (ts.isSpreadElement(element)) {
+        const spreadExpr = requireInstanceBuilder(this.baseAccept(element.expression))
+        if (itemBuffer.length !== 0) {
+          toConcat.push(itemBuffer)
+          itemBuffer = []
+        }
+        toConcat.push(spreadExpr)
+      } else {
+        itemBuffer.push(requireInstanceBuilder(this.baseAccept(element)))
+      }
+    }
+    if (itemBuffer.length !== 0) {
+      toConcat.push(itemBuffer)
+    }
+
+    return toConcat
+      .map((i) =>
+        Array.isArray(i) ? new ArrayLiteralExpressionBuilder(SourceLocation.fromLocations(...i.map((li) => li.sourceLocation)), i) : i,
+      )
+      .reduce((acc, cur) => concatArrays(acc, cur, sourceLocation))
+  }
+
+  visitSpreadElement(node: ts.SpreadElement): NodeBuilder {
+    const base = requireInstanceBuilder(this.baseAccept(node.expression))
+    return new SpreadExpressionBuilder(base, this.sourceLocation(node))
   }
 
   visitPropertyAccessExpression(node: ts.PropertyAccessExpression): NodeBuilder {
@@ -222,7 +258,9 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
     this.logNotSupported(node.questionDotToken, 'The optional chaining (?.) operator is not supported')
     const sourceLocation = this.sourceLocation(node)
     const eb = this.baseAccept(node.expression)
-    const args = node.arguments.map((a) => this.baseAccept(a))
+    const args = node.arguments
+      .map((a) => this.baseAccept(a))
+      .flatMap((a) => (a instanceof SpreadExpressionBuilder ? a.getSpreadItems() : a))
     const typeArgs = this.context.getTypeParameters(node)
     return eb.call(args, typeArgs, sourceLocation)
   }
@@ -230,7 +268,8 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   visitNewExpression(node: ts.NewExpression): NodeBuilder {
     const sourceLocation = this.sourceLocation(node)
     const eb = this.baseAccept(node.expression)
-    const args = node.arguments?.map((a) => this.baseAccept(a)) ?? []
+    const args =
+      node.arguments?.map((a) => this.baseAccept(a)).flatMap((a) => (a instanceof SpreadExpressionBuilder ? a.getSpreadItems() : a)) ?? []
     const typeArgs = this.context.getTypeParameters(node)
     return eb.newCall(args, typeArgs, sourceLocation)
   }
@@ -553,7 +592,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
         // Narrow array literal types to array type
         codeInvariant(
           sourceType.items.every((i) =>
-            this.buildAssignmentExpressionType(targetType.itemType, i, sourceLocation).equals(targetType.itemType),
+            this.buildAssignmentExpressionType(targetType.elementType, i, sourceLocation).equals(targetType.elementType),
           ),
           errorMessage,
           sourceLocation,
@@ -568,8 +607,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
         .orderedProperties()
         .reduce((acc, [prop], index) => acc.set(prop, index), new Map<string, number>())
       return new ObjectPType({
-        name: targetType.name,
-        module: targetType.module,
+        alias: targetType.alias,
         description: targetType.description,
         properties: Object.fromEntries(
           sourceType
@@ -584,13 +622,18 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
         ),
       })
     }
+    // Array<never> can be assigned to any target array type
+    if (sourceType instanceof ArrayPType && sourceType.elementType.equals(neverPType)) {
+      codeInvariant(targetType instanceof ArrayPType, errorMessage)
+      return targetType
+    }
     return sourceType
   }
 
   buildLValue(target: InstanceBuilder, assignmentType: PType, sourceLocation: SourceLocation): LValue {
     if (target instanceof ArrayLiteralExpressionBuilder) {
       if (assignmentType instanceof TuplePType) {
-        const targetItems = target.getItemBuilders()
+        const targetItems = target[StaticIterator]()
 
         const targets: LValue[] = []
         for (const [index, sourceItemType] of enumerate(assignmentType.items)) {
@@ -615,7 +658,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
         const targets: LValue[] = []
         for (const [propName, propType] of assignmentType.orderedProperties()) {
           if (target.hasProperty(propName)) {
-            targets.push(this.buildLValue(target.memberAccess(propName, sourceLocation), propType, sourceLocation))
+            targets.push(this.buildLValue(requireInstanceBuilder(target.memberAccess(propName, sourceLocation)), propType, sourceLocation))
           } else {
             targets.push(
               nodeFactory.varExpression({

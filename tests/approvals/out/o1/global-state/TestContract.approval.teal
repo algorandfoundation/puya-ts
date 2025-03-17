@@ -1,0 +1,98 @@
+#pragma version 10
+#pragma typetrack false
+
+// tests/approvals/global-state.algo.ts::TestContract.approvalProgram() -> uint64:
+main:
+    intcblock 0 2
+    bytecblock "testState" "baseTestState" "testing 123"
+    txn ApplicationID
+    bnz main_after_if_else@2
+    // tests/approvals/global-state.algo.ts:5
+    // baseTestState = GlobalState({ initialValue: 'testing 123' })
+    bytec_1 // "baseTestState"
+    bytec_2 // "testing 123"
+    app_global_put
+    // tests/approvals/global-state.algo.ts:11
+    // testState = GlobalState({ initialValue: Uint64(2) })
+    bytec_0 // "testState"
+    intc_1 // 2
+    app_global_put
+    // tests/approvals/global-state.algo.ts:12
+    // testState2 = GlobalState({ initialValue: Uint64(5), key: Bytes('TESTSTATE') })
+    pushbytes "TESTSTATE"
+    pushint 5 // 5
+    app_global_put
+    // tests/approvals/global-state.algo.ts:5
+    // baseTestState = GlobalState({ initialValue: 'testing 123' })
+    intc_0 // 0
+    bytec_1 // "baseTestState"
+    app_global_get_ex
+    assert // check GlobalState exists
+    // tests/approvals/global-state.algo.ts:17
+    // assert(this.baseTestState.value === 'testing 123', 'Base class state should be initialized after super call')
+    bytec_2 // "testing 123"
+    ==
+    assert // Base class state should be initialized after super call
+    // tests/approvals/global-state.algo.ts:11
+    // testState = GlobalState({ initialValue: Uint64(2) })
+    intc_0 // 0
+    bytec_0 // "testState"
+    app_global_get_ex
+    assert // check GlobalState exists
+    // tests/approvals/global-state.algo.ts:15
+    // const someValue: uint64 = 2 ** 56
+    pushint 72057594037927936 // 72057594037927936
+    // tests/approvals/global-state.algo.ts:18
+    // this.noInitialInt.value = someValue * this.testState.value
+    *
+    // tests/approvals/global-state.algo.ts:10
+    // noInitialInt = GlobalState<uint64>()
+    pushbytes "noInitialInt"
+    // tests/approvals/global-state.algo.ts:18
+    // this.noInitialInt.value = someValue * this.testState.value
+    swap
+    app_global_put
+
+main_after_if_else@2:
+    // tests/approvals/global-state.algo.ts:11
+    // testState = GlobalState({ initialValue: Uint64(2) })
+    intc_0 // 0
+    bytec_0 // "testState"
+    // tests/approvals/global-state.algo.ts:22
+    // assert(this.testState.hasValue, 'State should have value')
+    app_global_get_ex
+    bury 1
+    assert // State should have value
+    // tests/approvals/global-state.algo.ts:11
+    // testState = GlobalState({ initialValue: Uint64(2) })
+    intc_0 // 0
+    bytec_0 // "testState"
+    app_global_get_ex
+    assert // check GlobalState exists
+    // tests/approvals/global-state.algo.ts:23
+    // assert(this.testState.value === 2, 'Value should equal 2')
+    intc_1 // 2
+    ==
+    assert // Value should equal 2
+    // tests/approvals/global-state.algo.ts:25
+    // this.testState.value = op.btoi(Txn.applicationArgs(0))
+    intc_0 // 0
+    txnas ApplicationArgs
+    btoi
+    // tests/approvals/global-state.algo.ts:11
+    // testState = GlobalState({ initialValue: Uint64(2) })
+    bytec_0 // "testState"
+    // tests/approvals/global-state.algo.ts:25
+    // this.testState.value = op.btoi(Txn.applicationArgs(0))
+    swap
+    app_global_put
+    // tests/approvals/global-state.algo.ts:9
+    // noInitial = GlobalState<bytes>()
+    pushbytess "noInitial" "abc" // "noInitial", "abc"
+    // tests/approvals/global-state.algo.ts:27
+    // this.noInitial.value = Bytes('abc')
+    app_global_put
+    // tests/approvals/global-state.algo.ts:29
+    // return true
+    pushint 1 // 1
+    return

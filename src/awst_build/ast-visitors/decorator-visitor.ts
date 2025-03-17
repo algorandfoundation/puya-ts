@@ -1,9 +1,8 @@
 import ts from 'typescript'
-import { AwstBuildFailureError } from '../../errors'
 import { logger } from '../../logger'
 import { invariant, isIn } from '../../util'
 import { accept } from '../../visitor/visitor'
-import type { AwstBuildContext } from '../context/awst-build-context'
+import { AwstBuildContext } from '../context/awst-build-context'
 import { DecoratorDataBuilder } from '../eb'
 import type { DecoratorData, DecoratorDataForType, DecoratorType } from '../models/decorator-data'
 import { BaseVisitor } from './base-visitor'
@@ -13,32 +12,31 @@ export class DecoratorVisitor extends BaseVisitor {
 
   public readonly result: DecoratorData
 
-  constructor(context: AwstBuildContext, node: ts.Decorator) {
-    super(context)
+  constructor(node: ts.Decorator) {
+    super()
 
     const expr = this.accept(node.expression)
     invariant(expr instanceof DecoratorDataBuilder, 'expr must be DecoratorDataBuilder')
     this.result = expr.resolveDecoratorData()
   }
 
-  private static buildDecoratorData(context: AwstBuildContext, node: { modifiers?: ts.NodeArray<ts.ModifierLike> }): DecoratorData[] {
+  private static buildDecoratorData(node: { modifiers?: ts.NodeArray<ts.ModifierLike> }): DecoratorData[] {
     return (
       node.modifiers?.flatMap((modifier) => {
         if (!ts.isDecorator(modifier)) return []
         try {
-          return new DecoratorVisitor(context.createChildContext(), modifier).result
+          return AwstBuildContext.current.runInChildContext(() => new DecoratorVisitor(modifier).result)
         } catch (e) {
-          if (e instanceof AwstBuildFailureError) {
-            return []
-          }
-          throw e
+          invariant(e instanceof Error, 'Only errors should be thrown')
+          logger.error(e)
+          return []
         }
       }) ?? []
     )
   }
 
-  static buildContractData(context: AwstBuildContext, target: ts.ClassDeclaration) {
-    const data = DecoratorVisitor.buildDecoratorData(context, target)
+  static buildContractData(target: ts.ClassDeclaration) {
+    const data = DecoratorVisitor.buildDecoratorData(target)
     return DecoratorVisitor.filterDecoratorData(
       data,
       ['contract'],
@@ -46,8 +44,8 @@ export class DecoratorVisitor extends BaseVisitor {
       'Only one decorator is allowed per contract.',
     )
   }
-  static buildLogicSigData(context: AwstBuildContext, target: ts.ClassDeclaration) {
-    const data = DecoratorVisitor.buildDecoratorData(context, target)
+  static buildLogicSigData(target: ts.ClassDeclaration) {
+    const data = DecoratorVisitor.buildDecoratorData(target)
     return DecoratorVisitor.filterDecoratorData(
       data,
       ['logicsig'],
@@ -55,8 +53,8 @@ export class DecoratorVisitor extends BaseVisitor {
       'Only one decorator is allowed per logic signature.',
     )
   }
-  static buildContractMethodData(context: AwstBuildContext, target: ts.MethodDeclaration) {
-    const data = DecoratorVisitor.buildDecoratorData(context, target)
+  static buildContractMethodData(target: ts.MethodDeclaration) {
+    const data = DecoratorVisitor.buildDecoratorData(target)
     return DecoratorVisitor.filterDecoratorData(
       data,
       ['arc4.abimethod', 'arc4.baremethod'],

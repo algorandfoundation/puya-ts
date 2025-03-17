@@ -1,7 +1,7 @@
 import type { SourceLocation } from '../../awst/source-location'
 import { wtypes } from '../../awst/wtypes'
 import { Constants } from '../../constants'
-import { codeInvariant, zipStrict } from '../../util'
+import { codeInvariant } from '../../util'
 import { GenericPType, PType } from './base'
 import {
   biguintPType,
@@ -53,6 +53,45 @@ export const UintN256Class = new LibClassType({
 export abstract class ARC4EncodedType extends PType {
   abstract readonly wtype: wtypes.ARC4Type
   abstract readonly nativeType: PType | undefined
+  abstract readonly encodedBitSize: bigint | null
+
+  /**
+   * Calculate the number of bits required to store a sequence of ARC4 types using ARC4's bit-packing technique for consecutive booleans.
+   *
+   * Returns `null` if the sequence contains a dynamically sized type
+   * @param types The sequence of types being encoded
+   */
+  protected static calculateFixedBitSize(types: ARC4EncodedType[]): bigint | null {
+    return types.reduce((acc: bigint | null, cur) => {
+      if (acc === null || cur.encodedBitSize === null) return null
+
+      if (cur.encodedBitSize === 1n) {
+        return acc + cur.encodedBitSize
+      } else {
+        return this.roundBitsUpToNearestByte(acc) + this.roundBitsUpToNearestByte(cur.encodedBitSize)
+      }
+    }, 0n)
+  }
+
+  /**
+   * Get the number of bytes required to represent n bits
+   * @param n The number of bits which need representing
+   */
+  static bitsToBytes(n: bigint): bigint {
+    return (n + 7n) / 8n
+  }
+
+  static roundBitsUpToNearestByte(bits: bigint): bigint {
+    return this.bitsToBytes(bits) * 8n
+  }
+}
+
+export abstract class ARC4ArrayType extends ARC4EncodedType {
+  readonly elementType: ARC4EncodedType
+  constructor({ elementType }: { elementType: ARC4EncodedType }) {
+    super()
+    this.elementType = elementType
+  }
 }
 
 export class ARC4InstanceType extends ARC4EncodedType {
@@ -61,11 +100,23 @@ export class ARC4InstanceType extends ARC4EncodedType {
   readonly module = Constants.arc4EncodedTypesModuleName
   readonly singleton = false
   readonly nativeType: PType
-  constructor({ wtype, nativeType, name }: { wtype: wtypes.ARC4Type; name: string; nativeType: PType }) {
+  readonly encodedBitSize: bigint | null
+  constructor({
+    wtype,
+    nativeType,
+    name,
+    encodedBitSize,
+  }: {
+    wtype: wtypes.ARC4Type
+    name: string
+    nativeType: PType
+    encodedBitSize: bigint | null
+  }) {
     super()
     this.wtype = wtype
     this.name = name
     this.nativeType = nativeType
+    this.encodedBitSize = encodedBitSize
   }
 }
 
@@ -79,16 +130,18 @@ export const ARC4StrClass = new LibClassType({
   module: Constants.arc4EncodedTypesModuleName,
 })
 
-export const ARC4BooleanType = new ARC4InstanceType({
+export const arc4BooleanType = new ARC4InstanceType({
   name: 'Bool',
   wtype: wtypes.arc4BooleanWType,
   nativeType: boolPType,
+  encodedBitSize: 1n,
 })
 
-export const ARC4StringType = new ARC4InstanceType({
+export const arc4StringType = new ARC4InstanceType({
   name: 'Str',
   wtype: wtypes.arc4StringAliasWType,
   nativeType: stringPType,
+  encodedBitSize: null,
 })
 
 export class ARC4StructClass extends PType {
@@ -131,8 +184,11 @@ export class ARC4StructType extends ARC4EncodedType {
   readonly singleton = false
   readonly fields: Record<string, ARC4EncodedType>
   readonly sourceLocation: SourceLocation | undefined
+  readonly frozen: boolean
+  readonly encodedBitSize: bigint | null
   constructor({
     name,
+    frozen,
     module,
     fields,
     description,
@@ -140,6 +196,7 @@ export class ARC4StructType extends ARC4EncodedType {
   }: {
     name: string
     module: string
+    frozen: boolean
     description: string | undefined
     fields: Record<string, ARC4EncodedType>
     sourceLocation?: SourceLocation
@@ -147,9 +204,11 @@ export class ARC4StructType extends ARC4EncodedType {
     super()
     this.name = name
     this.module = module
+    this.frozen = frozen
     this.fields = fields
     this.description = description
     this.sourceLocation = sourceLocation
+    this.encodedBitSize = ARC4EncodedType.calculateFixedBitSize(Object.values(fields))
   }
 
   get nativeType(): ObjectPType {
@@ -162,25 +221,12 @@ export class ARC4StructType extends ARC4EncodedType {
       fields: Object.fromEntries(Object.entries(this.fields).map(([f, t]) => [f, t.wtype])),
       sourceLocation: this.sourceLocation,
       desc: this.description ?? null,
-      frozen: false,
+      frozen: this.frozen,
     })
   }
 
   get signature(): string {
     return `${this.name}${this.wtype.arc4Name}`
-  }
-
-  equals(other: PType): boolean {
-    if (!(other instanceof ARC4StructType)) return false
-    const thisProps = Object.entries(this.fields)
-    const otherProps = Object.entries(other.fields)
-    return (
-      this.name === other.name &&
-      thisProps.length === otherProps.length &&
-      zipStrict(thisProps, otherProps).every(
-        ([[left_prop, left_type], [right_prop, right_type]]) => left_prop === right_prop && left_type.equals(right_type),
-      )
-    )
   }
 }
 
@@ -189,6 +235,7 @@ export const arc4StructBaseType = new ARC4StructType({
   module: Constants.arc4EncodedTypesModuleName,
   fields: {},
   description: undefined,
+  frozen: false,
 })
 
 export const Arc4TupleClass = new LibClassType({
@@ -218,7 +265,7 @@ export class ARC4TupleType extends ARC4EncodedType {
   readonly singleton = false
   readonly items: ARC4EncodedType[]
   readonly sourceLocation: SourceLocation | undefined
-
+  readonly encodedBitSize: bigint | null
   readonly nativeType: TuplePType
 
   constructor({ types, sourceLocation }: { types: ARC4EncodedType[]; sourceLocation?: SourceLocation }) {
@@ -226,6 +273,7 @@ export class ARC4TupleType extends ARC4EncodedType {
     this.items = types
     this.sourceLocation = sourceLocation
     this.nativeType = new TuplePType({ items: this.items })
+    this.encodedBitSize = ARC4EncodedType.calculateFixedBitSize(types)
   }
 
   get wtype(): wtypes.ARC4Tuple {
@@ -233,14 +281,6 @@ export class ARC4TupleType extends ARC4EncodedType {
       types: this.items.map((t) => t.wtype),
       sourceLocation: this.sourceLocation,
     })
-  }
-
-  equals(other: PType): boolean {
-    return (
-      other instanceof ARC4TupleType &&
-      this.items.length === other.items.length &&
-      zipStrict(this.items, other.items).every(([a, b]) => a.equals(b))
-    )
   }
 }
 export const UintNGeneric = new GenericPType({
@@ -263,6 +303,10 @@ export class UintNType extends ARC4EncodedType {
   readonly name: string
   readonly singleton = false
   readonly wtype: wtypes.ARC4UIntN
+
+  get encodedBitSize() {
+    return this.n
+  }
 
   get nativeType() {
     return this.n <= 64n ? uint64PType : biguintPType
@@ -308,6 +352,10 @@ export class UFixedNxMType extends ARC4EncodedType {
   readonly singleton = false
   readonly wtype: wtypes.ARC4UFixedNxM
 
+  get encodedBitSize() {
+    return this.n
+  }
+
   get nativeType() {
     return this.n <= 64n ? uint64PType : biguintPType
   }
@@ -343,15 +391,16 @@ export const DynamicArrayGeneric = new GenericPType({
     return new DynamicArrayType({ elementType: elementType })
   },
 })
-export class DynamicArrayType extends ARC4EncodedType {
+export class DynamicArrayType extends ARC4ArrayType {
   readonly module = Constants.arc4EncodedTypesModuleName
-  readonly elementType: ARC4EncodedType
+
   readonly immutable: boolean
   readonly name: string
   readonly singleton = false
   readonly sourceLocation: SourceLocation | undefined
   readonly nativeType: PType | undefined = undefined
   readonly wtype: wtypes.ARC4DynamicArray
+  readonly encodedBitSize = null
 
   constructor({
     elementType,
@@ -366,9 +415,10 @@ export class DynamicArrayType extends ARC4EncodedType {
     immutable?: boolean
     nativeType?: PType
   }) {
-    super()
+    super({
+      elementType,
+    })
     this.immutable = immutable ?? false
-    this.elementType = elementType
     this.nativeType = nativeType
     this.name = name ?? `DynamicArray<${elementType}>`
     this.sourceLocation = sourceLocation
@@ -402,10 +452,8 @@ export const StaticArrayGeneric = new GenericPType({
     return new StaticArrayType({ arraySize: arraySize.literalValue, elementType })
   },
 })
-export class StaticArrayType extends ARC4EncodedType {
-  static baseFullName = `${Constants.arc4EncodedTypesModuleName}::StaticArray`
+export class StaticArrayType extends ARC4ArrayType {
   readonly module = Constants.arc4EncodedTypesModuleName
-  readonly elementType: ARC4EncodedType
   readonly arraySize: bigint
   readonly immutable: boolean
   readonly name: string
@@ -413,7 +461,7 @@ export class StaticArrayType extends ARC4EncodedType {
   readonly sourceLocation: SourceLocation | undefined
   readonly wtype: wtypes.ARC4StaticArray
   readonly nativeType: PType | undefined
-
+  readonly encodedBitSize: bigint | null
   constructor({
     elementType,
     arraySize,
@@ -432,10 +480,8 @@ export class StaticArrayType extends ARC4EncodedType {
     nativeType?: PType
   }) {
     codeInvariant(arraySize >= 0, 'StaticArray length must be greater than or equal to 0')
-
-    super()
+    super({ elementType })
     this.immutable = immutable ?? false
-    this.elementType = elementType
     this.arraySize = arraySize
     this.name = name ?? `StaticArray<${elementType}, ${arraySize}>`
     this.sourceLocation = sourceLocation
@@ -448,10 +494,11 @@ export class StaticArrayType extends ARC4EncodedType {
         immutable: this.immutable,
         nativeType: nativeType?.wtype,
       })
+    this.encodedBitSize = ARC4EncodedType.calculateFixedBitSize(new Array(Number(arraySize)).fill(elementType))
   }
 }
 export const arc4AddressAlias = new StaticArrayType({
-  arraySize: BigInt(Constants.addressLength),
+  arraySize: BigInt(Constants.algo.addressLength),
   elementType: arc4ByteAlias,
   wtype: wtypes.arc4AddressAliasWType,
   immutable: true,
@@ -513,6 +560,10 @@ export const interpretAsArc4Function = new LibFunctionType({
 
 export const encodeArc4Function = new LibFunctionType({
   name: 'encodeArc4',
+  module: Constants.arc4EncodedTypesModuleName,
+})
+export const arc4EncodedLengthFunction = new LibFunctionType({
+  name: 'arc4EncodedLength',
   module: Constants.arc4EncodedTypesModuleName,
 })
 

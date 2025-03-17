@@ -26,7 +26,7 @@ Algorand Python has specific [Bytes and String types](https://algorandfoundation
 
 - **[AlgoKit Guiding Principles](https://github.com/algorandfoundation/algokit-cli/blob/main/docs/algokit.md#guiding-principles)** - specifically Seamless onramp, Leverage existing ecosystem, Meet devs where they are
 - **[Algorand Python Principles](https://algorandfoundation.github.io/puya/principles.html#principles)**
-- **[Algorand TypeScript Guiding Principles](../README.md#guiding-principals)**
+- **[Algorand TypeScript Guiding Principles](../lg-guiding-principles)**
 
 ## Options
 
@@ -160,20 +160,20 @@ const f = Str`Example string`
 
 ```
 
-Whilst we still can't accept string literals on their own, the tagged template is almost as concise. 
+Whilst we still can't accept string literals on their own, the tagged template is almost as concise.
 
 Having `bytes` and `str` behave like a primitive value type (value equality) whilst not _actually_ being a primitive is not strictly semantically compatible with EcmaScript however the lowercase type names (plus factory with no `new` keyword) communicates the intention of it being a primitive value type and there is an existing precedence of introducing new value types to the language in a similar pattern (`bigint` and `BigInt`). Essentially - if EcmaScript were to have a primitive bytes type, this is most likely what it would look like.
 
 ## Preferred option
 
-Option 3 can be excluded because the requirement for a `new` keyword feels unnatural for representing a primitive value type. 
+Option 3 can be excluded because the requirement for a `new` keyword feels unnatural for representing a primitive value type.
 
 Option 1 and 2 are not preferred as they make maintaining semantic compatability with EcmaScript impractical.
 
-Option 4 gives us the most natural feeling api whilst still giving us full control over the api surface. It doesn't support the `+` operator, but supports interpolation and `.concat` which gives us most of what `+` provides other than augmented assignment (ie. `+=`). 
+Option 4 gives us the most natural feeling api whilst still giving us full control over the api surface. It doesn't support the `+` operator, but supports interpolation and `.concat` which gives us most of what `+` provides other than augmented assignment (ie. `+=`).
 
-We should select an appropriate name for the type representing an AVM string. It should not conflict with the semantically incompatible EcmaScript type `string`. 
- - `str`/`Str`: 
+We should select an appropriate name for the type representing an AVM string. It should not conflict with the semantically incompatible EcmaScript type `string`.
+ - `str`/`Str`:
    - ✅ Short
    - ✅ obvious what it is
    - ✅ obvious equivalent in ABI types

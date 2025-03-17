@@ -5,7 +5,7 @@ import type { SourceLocation } from '../../../awst/source-location'
 import { wtypes } from '../../../awst/wtypes'
 import type { PType } from '../../ptypes'
 import { boolPType } from '../../ptypes'
-import { ARC4BoolClass, ARC4BooleanType, type ARC4EncodedType } from '../../ptypes/arc4-types'
+import { ARC4BoolClass, arc4BooleanType, type ARC4EncodedType } from '../../ptypes/arc4-types'
 import type { InstanceBuilder, NodeBuilder } from '../index'
 import { ClassBuilder } from '../index'
 import { parseFunctionArgs } from '../util/arg-parsing'
@@ -55,6 +55,6 @@ export class BoolClassBuilder extends ClassBuilder {
 
 export class BoolExpressionBuilder extends Arc4EncodedBaseExpressionBuilder<ARC4EncodedType> {
   constructor(expression: Expression) {
-    super(expression, ARC4BooleanType)
+    super(expression, arc4BooleanType)
   }
 }

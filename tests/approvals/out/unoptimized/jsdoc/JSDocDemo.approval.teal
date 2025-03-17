@@ -1,0 +1,167 @@
+#pragma version 10
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0 1
+    bytecblock 0x 0x151f7c75
+
+main_block@0:
+
+main_block@1:
+    // tests/approvals/jsdoc.algo.ts:20
+    // export class JSDocDemo extends Contract {
+    txn NumAppArgs
+    intc_0 // 0
+    !=
+    bz main_bare_routing@7
+
+main_abi_routing@2:
+    // tests/approvals/jsdoc.algo.ts:20
+    // export class JSDocDemo extends Contract {
+    txna ApplicationArgs 0
+    pushbytes 0x60d93beb // method "test(uint64,byte[])(uint64)"
+    pushbytes 0x6618726a // method "test2(byte[])(byte[])"
+    uncover 2
+    match main_test_route@3 main_test2_route@4
+
+main_switch_case_default@5:
+
+main_switch_case_next@6:
+
+main_after_if_else@11:
+    // tests/approvals/jsdoc.algo.ts:20
+    // export class JSDocDemo extends Contract {
+    intc_0 // 0
+
+main_after_inlined_tests/approvals/jsdoc.algo.ts::JSDocDemo.__puya_arc4_router__@12:
+    return
+
+main_test2_route@4:
+    // tests/approvals/jsdoc.algo.ts:39
+    // test2(a: bytes): DemoType {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    // tests/approvals/jsdoc.algo.ts:20
+    // export class JSDocDemo extends Contract {
+    txna ApplicationArgs 1
+    extract 2 0
+    // tests/approvals/jsdoc.algo.ts:39
+    // test2(a: bytes): DemoType {
+    callsub test2
+    dup
+    len
+    itob
+    extract 6 2
+    swap
+    concat
+    pushint 2 // 2
+    itob
+    extract 6 2
+    bytec_0 // 0x
+    swap
+    concat
+    swap
+    concat
+    bytec_1 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/jsdoc.algo.ts::JSDocDemo.__puya_arc4_router__@12
+
+main_test_route@3:
+    // tests/approvals/jsdoc.algo.ts:30
+    // test(a: uint64, b: bytes): DemoStruct {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    // tests/approvals/jsdoc.algo.ts:20
+    // export class JSDocDemo extends Contract {
+    txna ApplicationArgs 1
+    btoi
+    txna ApplicationArgs 2
+    extract 2 0
+    // tests/approvals/jsdoc.algo.ts:30
+    // test(a: uint64, b: bytes): DemoStruct {
+    callsub test
+    bytec_1 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/jsdoc.algo.ts::JSDocDemo.__puya_arc4_router__@12
+
+main_bare_routing@7:
+    // tests/approvals/jsdoc.algo.ts:20
+    // export class JSDocDemo extends Contract {
+    txn OnCompletion
+    intc_0 // 0
+    swap
+    match main___algots__.defaultCreate@8
+
+main_switch_case_default@9:
+
+main_switch_case_next@10:
+    b main_after_if_else@11
+
+main___algots__.defaultCreate@8:
+    // tests/approvals/jsdoc.algo.ts:20
+    // export class JSDocDemo extends Contract {
+    txn ApplicationID
+    intc_0 // 0
+    ==
+    assert // can only call when creating
+    callsub __algots__.defaultCreate
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/jsdoc.algo.ts::JSDocDemo.__puya_arc4_router__@12
+
+
+// tests/approvals/jsdoc.algo.ts::JSDocDemo.test(a: uint64, b: bytes) -> bytes:
+test:
+    // tests/approvals/jsdoc.algo.ts:30
+    // test(a: uint64, b: bytes): DemoStruct {
+    proto 2 1
+
+test_block@0:
+    // tests/approvals/jsdoc.algo.ts:31
+    // return new DemoStruct({ a: new UintN<64>(a) })
+    frame_dig -2
+    itob
+    bytec_0 // 0x
+    swap
+    concat
+    retsub
+
+
+// tests/approvals/jsdoc.algo.ts::JSDocDemo.test2(a: bytes) -> bytes:
+test2:
+    // tests/approvals/jsdoc.algo.ts:39
+    // test2(a: bytes): DemoType {
+    proto 1 1
+
+test2_block@0:
+    // tests/approvals/jsdoc.algo.ts:40-42
+    // return {
+    //   a,
+    // }
+    frame_dig -1
+    retsub
+
+
+// tests/approvals/jsdoc.algo.ts::JSDocDemo.__algots__.defaultCreate() -> void:
+__algots__.defaultCreate:
+
+__algots__.defaultCreate_block@0:
+    retsub

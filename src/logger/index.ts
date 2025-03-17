@@ -1,5 +1,6 @@
+import { AsyncLocalStorage } from 'node:async_hooks'
 import { SourceLocation } from '../awst/source-location'
-import { AwstBuildFailureError, CodeError, PuyaError } from '../errors'
+import { PuyaError, UserError } from '../errors'
 import type { LogSink } from './sinks'
 
 type NodeOrSourceLocation = SourceLocation | { sourceLocation: SourceLocation }
@@ -55,7 +56,8 @@ class PuyaLogger {
   error(source: NodeOrSourceLocation | undefined, message: string): void
   error(source: NodeOrSourceLocation | undefined | Error, message?: string): void {
     if (source instanceof Error) {
-      const stack = source instanceof CodeError ? '' : `\n ${source.stack}`
+      // Don't include the stack for user errors as the message and source location is what's relevant
+      const stack = source instanceof UserError ? '' : `\n ${source.stack}`
       this.addLog(LogLevel.Error, tryGetSourceLocationFromError(source), `${source.message}${stack}`)
       if (source.cause) {
         this.addLog(LogLevel.Error, tryGetSourceLocationFromError(source.cause), `Caused by: ${source.cause}`)
@@ -87,20 +89,23 @@ const tryGetSourceLocationFromError = (error: unknown): SourceLocation | undefin
 
 export const logger = new PuyaLogger()
 
-export const logPuyaExceptions = <T>(action: () => T, sourceLocation: SourceLocation): T => {
-  try {
-    return action()
-  } catch (e) {
-    if (e instanceof PuyaError) {
-      logger.error(e.sourceLocation ?? sourceLocation, e.message)
-    } else {
+export const patchErrorLocation = <TArgs extends unknown[], TReturn>(
+  action: (...args: TArgs) => TReturn,
+  sourceLocation: SourceLocation,
+) => {
+  return (...args: TArgs) => {
+    try {
+      return action(...args)
+    } catch (e) {
+      if (e instanceof PuyaError && !e.sourceLocation) {
+        Object.assign(e, { sourceLocation })
+      }
       throw e
     }
-    throw new AwstBuildFailureError()
   }
 }
 
-export class LoggingContext implements Disposable {
+export class LoggingContext {
   logEvents: LogEvent[] = []
   sourcesByPath: Record<string, string[]> = {}
 
@@ -114,23 +119,25 @@ export class LoggingContext implements Disposable {
     if (this.hasErrors()) process.exit(1)
   }
 
-  private static contexts: LoggingContext[] = []
+  enterContext() {
+    LoggingContext.asyncStore.enterWith(this)
+    return this
+  }
 
-  static create(): Disposable & LoggingContext {
-    const ctx = new LoggingContext()
-    this.contexts.push(ctx)
-    return ctx
+  run<R>(cb: () => R) {
+    return LoggingContext.asyncStore.run(this, cb)
+  }
+  private static fallbackContext = new LoggingContext()
+  private static asyncStore = new AsyncLocalStorage<LoggingContext>()
+
+  static create(): LoggingContext {
+    return new LoggingContext()
   }
   static get current() {
-    const top = LoggingContext.contexts.at(-1)
-    if (!top) {
-      throw new Error('There is no current context')
+    const ctx = this.asyncStore.getStore()
+    if (!ctx) {
+      return this.fallbackContext
     }
-    return top
-  }
-
-  [Symbol.dispose]() {
-    const top = LoggingContext.contexts.pop()
-    if (top !== this) throw new Error('Parent context is being disposed before a child context')
+    return ctx
   }
 }

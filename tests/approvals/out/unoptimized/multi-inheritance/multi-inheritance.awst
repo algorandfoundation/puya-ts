@@ -1,0 +1,263 @@
+contract CommonBase
+{
+  globals {
+    ["stateCommon"]: uint64
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  methodCommon(): string
+  {
+    return "common"
+  }
+  
+  b2CantOverride(): string
+  {
+    return "common"
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+  constructor(): void
+  {
+    super.constructor()
+    GlobalState["stateCommon"]: uint64 = 123
+  }
+  
+  BaseContract::constructor(): void
+  {
+  }
+  
+}
+contract BaseOne
+{
+  globals {
+    ["stateOne"]: uint64
+    ["stateCommon"]: uint64
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  methodOne(): string
+  {
+    return "base-one"
+  }
+  
+  CommonBase::methodCommon(): string
+  {
+    return "common"
+  }
+  
+  CommonBase::b2CantOverride(): string
+  {
+    return "common"
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+  constructor(): void
+  {
+    super.constructor()
+    GlobalState["stateOne"]: uint64 = 45
+  }
+  
+  CommonBase::constructor(): void
+  {
+    super.constructor()
+    GlobalState["stateCommon"]: uint64 = 123
+  }
+  
+  BaseContract::constructor(): void
+  {
+  }
+  
+}
+contract BaseTwo
+{
+  globals {
+    ["stateTwo"]: string
+    ["stateCommon"]: uint64
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  methodTwo(): string
+  {
+    return "base-two"
+  }
+  
+  b2CantOverride(): string
+  {
+    return "base-two"
+  }
+  
+  CommonBase::methodCommon(): string
+  {
+    return "common"
+  }
+  
+  CommonBase::b2CantOverride(): string
+  {
+    return "common"
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+  constructor(): void
+  {
+    super.constructor()
+    GlobalState["stateTwo"]: string = "Hello"
+  }
+  
+  CommonBase::constructor(): void
+  {
+    super.constructor()
+    GlobalState["stateCommon"]: uint64 = 123
+  }
+  
+  BaseContract::constructor(): void
+  {
+  }
+  
+}
+contract MultiBases
+{
+  globals {
+    ["stateMulti"]: string
+    ["stateOne"]: uint64
+    ["stateCommon"]: uint64
+    ["stateTwo"]: string
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  methodMulti(): string
+  {
+    return "multi-bases"
+  }
+  
+  methodCallsSuper(): string
+  {
+    return super.methodTwo()
+  }
+  
+  callB2CantOverride(): string
+  {
+    return tests/approvals/multi-inheritance.algo.ts::BaseTwo.b2CantOverride()
+  }
+  
+  callB2Common(): string
+  {
+    return tests/approvals/multi-inheritance.algo.ts::BaseTwo.methodCommon()
+  }
+  
+  BaseOne::methodOne(): string
+  {
+    return "base-one"
+  }
+  
+  CommonBase::methodCommon(): string
+  {
+    return "common"
+  }
+  
+  CommonBase::b2CantOverride(): string
+  {
+    return "common"
+  }
+  
+  BaseTwo::methodTwo(): string
+  {
+    return "base-two"
+  }
+  
+  BaseTwo::b2CantOverride(): string
+  {
+    return "base-two"
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+  constructor(): void
+  {
+    super.constructor()
+    GlobalState["stateMulti"]: string = "Hmmm"
+  }
+  
+  ClusteredContract<tests/approvals/multi-inheritance.algo.ts::BaseOne,tests/approvals/multi-inheritance.algo.ts::BaseTwo>::constructor(): void
+  {
+    tests/approvals/multi-inheritance.algo.ts::BaseOne.constructor()
+    tests/approvals/multi-inheritance.algo.ts::BaseTwo.constructor()
+  }
+  
+  BaseOne::constructor(): void
+  {
+    super.constructor()
+    GlobalState["stateOne"]: uint64 = 45
+  }
+  
+  CommonBase::constructor(): void
+  {
+    super.constructor()
+    GlobalState["stateCommon"]: uint64 = 123
+  }
+  
+  BaseContract::constructor(): void
+  {
+  }
+  
+  BaseTwo::constructor(): void
+  {
+    super.constructor()
+    GlobalState["stateTwo"]: string = "Hello"
+  }
+  
+}

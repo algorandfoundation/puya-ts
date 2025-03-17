@@ -1,0 +1,70 @@
+#pragma version 10
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    bytecblock "oneGlobal"
+    txn ApplicationID
+    bnz main_after_if_else@2
+    // tests/approvals/state-totals.algo.ts:5
+    // oneGlobal = GlobalState({ initialValue: Uint64(1) })
+    bytec_0 // "oneGlobal"
+    pushint 1 // 1
+    app_global_put
+
+main_after_if_else@2:
+    // tests/approvals/state-totals.algo.ts:4
+    // export class BaseWithState extends Contract {
+    txn NumAppArgs
+    bz main_bare_routing@8
+    pushbytes 0x2cd95aa1 // method "setState(uint64)void"
+    txna ApplicationArgs 0
+    match main_setState_route@5
+
+main_after_if_else@12:
+    // tests/approvals/state-totals.algo.ts:4
+    // export class BaseWithState extends Contract {
+    pushint 0 // 0
+    return
+
+main_setState_route@5:
+    // tests/approvals/state-totals.algo.ts:9
+    // setState(n: uint64) {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    // tests/approvals/state-totals.algo.ts:4
+    // export class BaseWithState extends Contract {
+    txna ApplicationArgs 1
+    btoi
+    // tests/approvals/state-totals.algo.ts:5
+    // oneGlobal = GlobalState({ initialValue: Uint64(1) })
+    bytec_0 // "oneGlobal"
+    // tests/approvals/state-totals.algo.ts:10
+    // this.oneGlobal.value = n
+    dig 1
+    app_global_put
+    // tests/approvals/state-totals.algo.ts:6
+    // twoGlobal = GlobalState<uint64>()
+    pushbytes "twoGlobal"
+    // tests/approvals/state-totals.algo.ts:11
+    // this.twoGlobal.value = n
+    swap
+    app_global_put
+    // tests/approvals/state-totals.algo.ts:9
+    // setState(n: uint64) {
+    pushint 1 // 1
+    return
+
+main_bare_routing@8:
+    // tests/approvals/state-totals.algo.ts:4
+    // export class BaseWithState extends Contract {
+    txn OnCompletion
+    bnz main_after_if_else@12
+    txn ApplicationID
+    !
+    assert // can only call when creating
+    pushint 1 // 1
+    return

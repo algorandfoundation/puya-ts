@@ -1,5 +1,10 @@
 import { assert, BaseContract, Bytes, contract } from '@algorandfoundation/algorand-typescript'
-import { Scratch } from '@algorandfoundation/algorand-typescript/op'
+import { gloadBytes, gloadUint64, Scratch } from '@algorandfoundation/algorand-typescript/op'
+
+function test() {
+  const b = gloadBytes(0, 1)
+  const u = gloadUint64(1, 2)
+}
 
 @contract({ scratchSlots: [0, 1, { from: 10, to: 20 }] })
 export class ReserveScratchAlgo extends BaseContract {
@@ -13,7 +18,7 @@ export class ReserveScratchAlgo extends BaseContract {
     this.setThings()
 
     assert(Scratch.loadUint64(0) === 1)
-    assert(Scratch.loadBytes(0) === Bytes('hello'))
+    assert(Scratch.loadBytes(1) === Bytes('hello'))
     assert(Scratch.loadUint64(15) === 45)
     return true
   }

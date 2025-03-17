@@ -2,6 +2,14 @@ import { describe } from 'vitest'
 import { createArc4TestFixture, createBaseTestFixture } from './util/test-fixture'
 
 describe('primitives', () => {
+  describe('boolean', () => {
+    const test = createBaseTestFixture('tests/approvals/boolean-conversions.algo.ts', ['BooleanConversionsAlgo'])
+
+    test('it can be called', async ({ BooleanConversionsAlgoInvoker }) => {
+      await BooleanConversionsAlgoInvoker.send()
+    })
+  })
+
   describe('uint64', () => {
     const test = createBaseTestFixture('tests/approvals/uint64-expressions.algo.ts', ['DemoContract'])
     test('can be created', async ({ DemoContractInvoker }) => {

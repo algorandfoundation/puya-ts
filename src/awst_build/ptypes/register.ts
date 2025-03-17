@@ -19,6 +19,7 @@ import { Arc4TupleClassBuilder, Arc4TupleExpressionBuilder } from '../eb/arc4/tu
 import { UFixedNxMClassBuilder, UFixedNxMExpressionBuilder } from '../eb/arc4/ufixed'
 import { classBuilderForUintNAlias, UintNClassBuilder, UintNExpressionBuilder } from '../eb/arc4/uintn'
 import {
+  Arc4EncodedLengthFunctionBuilder,
   DecodeArc4FunctionBuilder,
   EncodeArc4FunctionBuilder,
   InterpretAsArc4FunctionBuilder,
@@ -38,6 +39,8 @@ import { IterableIteratorExpressionBuilder } from '../eb/iterable-iterator-expre
 import { ObjectExpressionBuilder } from '../eb/literal/object-expression-builder'
 import { LogFunctionBuilder } from '../eb/log-function-builder'
 import { LogicSigClassBuilder, LogicSigOptionsDecoratorBuilder } from '../eb/logic-sig-builder'
+import { MatchFunctionBuilder } from '../eb/match-function-builder'
+import { MutableArrayClassBuilder, MutableArrayExpressionBuilder } from '../eb/mutable-arrays'
 import { NamespaceBuilder } from '../eb/namespace-builder'
 import { NativeArrayExpressionBuilder } from '../eb/native-array-expression-builder'
 import { NeverExpressionBuilder } from '../eb/never-expression-builder'
@@ -76,10 +79,11 @@ import {
   AddressClass,
   arc4AddressAlias,
   ARC4BoolClass,
-  ARC4BooleanType,
+  arc4BooleanType,
   arc4ByteAlias,
+  arc4EncodedLengthFunction,
   ARC4StrClass,
-  ARC4StringType,
+  arc4StringType,
   ARC4StructClass,
   ARC4StructType,
   Arc4TupleClass,
@@ -191,6 +195,10 @@ import {
   logFunction,
   logicSigOptionsDecorator,
   LogicSigPType,
+  matchFunction,
+  MutableArrayConstructor,
+  MutableArrayGeneric,
+  MutableArrayType,
   NamespacePType,
   neverPType,
   ObjectPType,
@@ -201,15 +209,19 @@ import {
   paymentItxnParamsType,
   paymentItxnType,
   PaymentTxnFunction,
+  PolytypeClassMethodHelper,
   PromiseGeneric,
   PromiseType,
   StringFunction,
   stringPType,
   submitGroupItxnFunction,
+  SuperPrototypeSelector,
+  SuperPrototypeSelectorGeneric,
   TemplateVarFunction,
   TransactionFunction,
   transactionTypeType,
   TuplePType,
+  Uint64EnumMemberType,
   Uint64Function,
   uint64PType,
   urangeFunction,
@@ -240,15 +252,25 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: TuplePType, instanceEb: TupleExpressionBuilder })
   typeRegistry.register({ ptype: ObjectPType, instanceEb: ObjectExpressionBuilder })
 
+  typeRegistry.register({ ptype: MutableArrayConstructor, singletonEb: MutableArrayClassBuilder })
+  typeRegistry.registerGeneric({ generic: MutableArrayGeneric, ptype: MutableArrayType, instanceEb: MutableArrayExpressionBuilder })
+
   // Unresolvable
   typeRegistry.registerGeneric({ ptype: GeneratorType, generic: GeneratorGeneric, instanceEb: UnresolvableExpressionBuilder })
   typeRegistry.registerGeneric({ ptype: PromiseType, generic: PromiseGeneric, instanceEb: UnresolvableExpressionBuilder })
   typeRegistry.register({ ptype: ClassMethodDecoratorContext, instanceEb: UnresolvableExpressionBuilder })
+  typeRegistry.registerGeneric({
+    ptype: SuperPrototypeSelector,
+    generic: SuperPrototypeSelectorGeneric,
+    instanceEb: UnresolvableExpressionBuilder,
+  })
+  typeRegistry.register({ ptype: PolytypeClassMethodHelper, instanceEb: UnresolvableExpressionBuilder })
 
   // Lib functions
   typeRegistry.register({ ptype: logFunction, singletonEb: LogFunctionBuilder })
   typeRegistry.register({ ptype: assertFunction, singletonEb: AssertFunctionBuilder })
   typeRegistry.register({ ptype: errFunction, singletonEb: ErrFunctionBuilder })
+  typeRegistry.register({ ptype: matchFunction, singletonEb: MatchFunctionBuilder })
   typeRegistry.register({ ptype: assertMatchFunction, singletonEb: AssertMatchFunctionBuilder })
   typeRegistry.register({ ptype: ensureBudgetFunction, singletonEb: EnsureBudgetFunctionBuilder })
   typeRegistry.register({ ptype: urangeFunction, singletonEb: UrangeFunctionBuilder })
@@ -265,6 +287,7 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
     typeRegistry.register({ ptype: enumType, singletonEb: Uint64EnumTypeBuilder })
     typeRegistry.register({ ptype: enumType.memberType, instanceEb: Uint64EnumMemberExpressionBuilder })
   }
+  typeRegistry.register({ ptype: Uint64EnumMemberType, instanceEb: Uint64EnumMemberExpressionBuilder })
 
   typeRegistry.registerGeneric({
     generic: IterableIteratorGeneric,
@@ -351,8 +374,8 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: arc4AddressAlias, instanceEb: AddressExpressionBuilder })
   typeRegistry.register({ ptype: AddressClass, singletonEb: AddressClassBuilder })
   typeRegistry.register({ ptype: ARC4BoolClass, singletonEb: BoolClassBuilder })
-  typeRegistry.register({ ptype: ARC4BooleanType, instanceEb: BoolExpressionBuilder })
-  typeRegistry.register({ ptype: ARC4StringType, instanceEb: StrExpressionBuilder })
+  typeRegistry.register({ ptype: arc4BooleanType, instanceEb: BoolExpressionBuilder })
+  typeRegistry.register({ ptype: arc4StringType, instanceEb: StrExpressionBuilder })
   typeRegistry.register({ ptype: ARC4StrClass, singletonEb: StrClassBuilder })
   typeRegistry.register({ ptype: Arc4TupleClass, singletonEb: Arc4TupleClassBuilder })
   typeRegistry.registerGeneric({ generic: Arc4TupleGeneric, ptype: ARC4TupleType, instanceEb: Arc4TupleExpressionBuilder })
@@ -366,6 +389,7 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: encodeArc4Function, singletonEb: EncodeArc4FunctionBuilder })
   typeRegistry.register({ ptype: decodeArc4Function, singletonEb: DecodeArc4FunctionBuilder })
   typeRegistry.register({ ptype: methodSelectorFunction, singletonEb: MethodSelectorFunctionBuilder })
+  typeRegistry.register({ ptype: arc4EncodedLengthFunction, singletonEb: Arc4EncodedLengthFunctionBuilder })
 
   // GTXN types
   typeRegistry.register({ ptype: paymentGtxnType, instanceEb: GroupTransactionExpressionBuilder })

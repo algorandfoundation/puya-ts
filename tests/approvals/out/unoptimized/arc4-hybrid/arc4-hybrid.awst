@@ -1,0 +1,36 @@
+contract Arc4HybridAlgo
+{
+  approvalProgram(): bool
+  {
+    log("before")
+    result: bool = super.approvalProgram()
+    log("after")
+    return result
+  }
+  
+  clearProgram(): bool
+  {
+    log("clearing state")
+    return True
+  }
+  
+  someMethod(): void
+  {
+    log("some method")
+  }
+  
+  Contract::approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  BaseContract::clearStateProgram(): bool
+  {
+    return True
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

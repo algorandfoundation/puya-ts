@@ -1,0 +1,77 @@
+#pragma version 10
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    txn ApplicationID
+    bnz main_after_if_else@2
+    // tests/approvals/inheritance-b.algo.ts:15
+    // concreteState = GlobalState({ initialValue: 'testing' })
+    pushbytess "concreteState" "testing" // "concreteState", "testing"
+    app_global_put
+
+main_after_if_else@2:
+    // tests/approvals/inheritance-b.algo.ts:14
+    // export class ConcreteArc4Contract extends Arc4Contract {
+    txn NumAppArgs
+    bz main_bare_routing@9
+    pushbytess 0xc73da9b9 0xf161dc37 // method "getVeryImportantValue()string", method "simpleAbiMethod(uint64,uint64)uint64"
+    txna ApplicationArgs 0
+    match main_getVeryImportantValue_route@5 main_simpleAbiMethod_route@6
+
+main_after_if_else@13:
+    // tests/approvals/inheritance-b.algo.ts:14
+    // export class ConcreteArc4Contract extends Arc4Contract {
+    pushint 0 // 0
+    return
+
+main_simpleAbiMethod_route@6:
+    // tests/approvals/inheritance-a.algo.ts:17
+    // public simpleAbiMethod(a: uint64, b: uint64): uint64 {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    // tests/approvals/inheritance-b.algo.ts:14
+    // export class ConcreteArc4Contract extends Arc4Contract {
+    txna ApplicationArgs 1
+    btoi
+    txna ApplicationArgs 2
+    btoi
+    // tests/approvals/inheritance-a.algo.ts:18
+    // return a + b
+    +
+    // tests/approvals/inheritance-a.algo.ts:17
+    // public simpleAbiMethod(a: uint64, b: uint64): uint64 {
+    itob
+    pushbytes 0x151f7c75
+    swap
+    concat
+    log
+    pushint 1 // 1
+    return
+
+main_getVeryImportantValue_route@5:
+    // tests/approvals/inheritance-b.algo.ts:16
+    // public getVeryImportantValue() {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    pushbytes 0x151f7c7500023432
+    log
+    pushint 1 // 1
+    return
+
+main_bare_routing@9:
+    // tests/approvals/inheritance-b.algo.ts:14
+    // export class ConcreteArc4Contract extends Arc4Contract {
+    txn OnCompletion
+    bnz main_after_if_else@13
+    txn ApplicationID
+    !
+    assert // can only call when creating
+    pushint 1 // 1
+    return

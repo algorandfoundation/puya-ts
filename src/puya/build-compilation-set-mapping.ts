@@ -1,8 +1,7 @@
 import type { AWST } from '../awst/nodes'
 import type { CompilationSet } from '../awst_build/models/contract-class-model'
-import type { AlgoFile } from '../compile-options'
+import type { AlgoFile, CompilationSetMapping } from '../options'
 import { mkDirIfNotExists } from '../util'
-import type { CompilationSetMapping } from './options'
 
 export function buildCompilationSetMapping({
   awst,

@@ -8,6 +8,10 @@ export class SuperContract extends BaseContract {
     assert(this.g1.value === 1)
     return true
   }
+
+  superMethod() {
+    return true
+  }
 }
 
 export class SubContract extends SuperContract {
@@ -39,5 +43,9 @@ export class SubSubSubContract extends SubSubContract {
     assert(this.g2.value === 2)
     assert(this.g3.value === 3)
     return true
+  }
+
+  subSubSubMethod() {
+    return super.superMethod()
   }
 }

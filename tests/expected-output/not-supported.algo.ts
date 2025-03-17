@@ -1,5 +1,5 @@
 import type { uint64 } from '@algorandfoundation/algorand-typescript'
-import { Contract, Uint64 } from '@algorandfoundation/algorand-typescript'
+import { Contract, GlobalState, Uint64 } from '@algorandfoundation/algorand-typescript'
 
 type uint = ReturnType<typeof Uint64>
 
@@ -39,6 +39,9 @@ function testDelete() {
 class BadContract extends Contract {
   // @expect-error Unsupported property type uint64. Only GlobalState, LocalState, and Box proxies can be stored on a contract.
   #myState = Uint64(123)
+
+  // @expect-error Static properties are not supported
+  static staticState = GlobalState<boolean>()
 
   test() {
     // @expect-error Not Supported: Accessing member #myState on BadContract

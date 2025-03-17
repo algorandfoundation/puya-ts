@@ -1,0 +1,57 @@
+#pragma version 10
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0
+
+main_block@0:
+
+main_block@1:
+    // tests/approvals/implicit-create.algo.ts:13
+    // class BaseWithBareCreate extends Contract {
+    txn NumAppArgs
+    intc_0 // 0
+    !=
+    bz main_bare_routing@3
+
+main_abi_routing@2:
+
+main_after_if_else@7:
+    // tests/approvals/implicit-create.algo.ts:13
+    // class BaseWithBareCreate extends Contract {
+    intc_0 // 0
+
+main_after_inlined_tests/approvals/implicit-create.algo.ts::BaseWithBareCreate.__puya_arc4_router__@8:
+    return
+
+main_bare_routing@3:
+    // tests/approvals/implicit-create.algo.ts:13
+    // class BaseWithBareCreate extends Contract {
+    txn OnCompletion
+    intc_0 // 0
+    swap
+    match main_create@4
+
+main_switch_case_default@5:
+
+main_switch_case_next@6:
+    b main_after_if_else@7
+
+main_create@4:
+    // tests/approvals/implicit-create.algo.ts:14
+    // @baremethod({ onCreate: 'require' })
+    txn ApplicationID
+    intc_0 // 0
+    ==
+    assert // can only call when creating
+    callsub create
+    pushint 1 // 1
+    b main_after_inlined_tests/approvals/implicit-create.algo.ts::BaseWithBareCreate.__puya_arc4_router__@8
+
+
+// tests/approvals/implicit-create.algo.ts::BaseWithBareCreate.create() -> void:
+create:
+
+create_block@0:
+    retsub

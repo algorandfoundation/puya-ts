@@ -1,14 +1,17 @@
 import { nodeFactory } from '../../../awst/node-factory'
 import type { BytesConstant, Expression } from '../../../awst/nodes'
-import { EqualityComparison } from '../../../awst/nodes'
+import { ARC4ABIMethodConfig, EqualityComparison } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { wtypes } from '../../../awst/wtypes'
+import { CodeError } from '../../../errors'
 import { logger } from '../../../logger'
 import { codeInvariant, hexToUint8Array } from '../../../util'
-import { isArc4EncodableType, ptypeToArc4EncodedType } from '../../arc4-util'
+import { isArc4EncodableType, ptypeToArc4EncodedType, ptypeToArc4PType } from '../../arc4-util'
+import { AwstBuildContext } from '../../context/awst-build-context'
 import type { PType } from '../../ptypes'
-import { bytesPType, stringPType } from '../../ptypes'
+import { bytesPType, stringPType, uint64PType } from '../../ptypes'
 import {
+  arc4EncodedLengthFunction,
   ARC4EncodedType,
   decodeArc4Function,
   encodeArc4Function,
@@ -16,6 +19,7 @@ import {
   methodSelectorFunction,
 } from '../../ptypes/arc4-types'
 import { instanceEb } from '../../type-registry'
+import { ContractMethodExpressionBuilder, SubroutineExpressionBuilder } from '../free-subroutine-expression-builder'
 import type { InstanceBuilder, NodeBuilder } from '../index'
 import { FunctionBuilder } from '../index'
 import { requireStringConstant } from '../util'
@@ -160,6 +164,11 @@ function getPrefixValue(arg: InstanceBuilder | undefined): BytesConstant | undef
   }
 }
 
+function getArc4TypeName(arg: PType, sourceLocation: SourceLocation): string {
+  const arc4Type = ptypeToArc4PType(arg, sourceLocation)
+  return arc4Type.wtype instanceof wtypes.ARC4Type ? arc4Type.wtype.arc4Name : (arc4Type.wtype?.name ?? arc4Type.name)
+}
+
 export class MethodSelectorFunctionBuilder extends FunctionBuilder {
   readonly ptype = methodSelectorFunction
 
@@ -172,10 +181,36 @@ export class MethodSelectorFunctionBuilder extends FunctionBuilder {
       genericTypeArgs: 0,
       callLocation: sourceLocation,
       funcName: this.typeDescription,
-      argSpec: (a) => [a.required(stringPType)],
+      argSpec: (a) => [a.passthrough()],
     })
 
-    const signature = requireStringConstant(methodSignature).value
+    let signature: string
+
+    if (methodSignature instanceof SubroutineExpressionBuilder) {
+      codeInvariant(
+        methodSignature instanceof ContractMethodExpressionBuilder,
+        `Expected contract instance method, found ${methodSignature.typeDescription}`,
+      )
+
+      const methodTarget = methodSignature.target
+      const arc4Config = AwstBuildContext.current.getArc4Config(methodSignature.contractType, methodTarget.memberName)
+      codeInvariant(
+        arc4Config instanceof ARC4ABIMethodConfig,
+        `${methodTarget.memberName} is not an ABI method`,
+        methodSignature.sourceLocation,
+      )
+      const params = methodSignature.ptype.parameters.map(([_, ptype]) => getArc4TypeName(ptype, sourceLocation)).join(',')
+      const returnType = getArc4TypeName(methodSignature.ptype.returnType, sourceLocation)
+      signature = `${arc4Config.name}(${params})${returnType}`
+    } else {
+      if (methodSignature === undefined) {
+        throw new CodeError(
+          `${this.typeDescription} expects exactly 1 argument that is either a string literal, or a contract function reference`,
+          { sourceLocation },
+        )
+      }
+      signature = requireStringConstant(methodSignature).value
+    }
 
     return instanceEb(
       nodeFactory.methodConstant({
@@ -184,6 +219,39 @@ export class MethodSelectorFunctionBuilder extends FunctionBuilder {
         sourceLocation,
       }),
       bytesPType,
+    )
+  }
+}
+
+export class Arc4EncodedLengthFunctionBuilder extends FunctionBuilder {
+  readonly ptype = arc4EncodedLengthFunction
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    const {
+      ptypes: [typeToEncode],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 1,
+      funcName: this.typeDescription,
+      argSpec: (a) => [],
+      callLocation: sourceLocation,
+    })
+
+    const arc4Type = ptypeToArc4EncodedType(typeToEncode, sourceLocation)
+
+    codeInvariant(
+      arc4Type.encodedBitSize !== null,
+      `Target type must encode to a fixed size. ${typeToEncode} encodes with a variable length`,
+      sourceLocation,
+    )
+
+    return instanceEb(
+      nodeFactory.uInt64Constant({
+        value: ARC4EncodedType.bitsToBytes(arc4Type.encodedBitSize),
+        sourceLocation,
+      }),
+      uint64PType,
     )
   }
 }

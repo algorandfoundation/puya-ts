@@ -10,6 +10,18 @@ class EventEmitter extends Contract {
 
     // @expect-error Asset cannot be encoded to an ARC4 type
     emit<Named>({ a: b, b: Asset(a) })
+
+    // @expect-error Event signature length (2) does not match number of provided values (1).
+    emit('Swapped(uint64,uint64)', b)
+
+    // @expect-error Invalid signature: Tuple has not been closed
+    emit('Swapped(uint64', b)
+
+    // @expect-error Expected type UintN<16> does not match actual type UintN<64>
+    emit('Swapped(uint16,uint64)', b, a)
+
+    // @expect-error [uint64, uint64] cannot be encoded to an ARC4 type
+    emit('Swapped((uint64,uint64),uint64)', [b, b], a)
   }
 
   emitCustom(arg0: string, arg1: boolean) {

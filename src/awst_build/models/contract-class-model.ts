@@ -1,9 +1,9 @@
 import type { awst } from '../../awst'
 import type { LogicSigReference } from '../../awst/models'
-import { ARC4BareMethodConfig, ARC4CreateOption, ContractReference, OnCompletionAction } from '../../awst/models'
+import { ContractReference, OnCompletionAction } from '../../awst/models'
 import { nodeFactory } from '../../awst/node-factory'
 import type { AppStorageDefinition, ContractMethod, Statement } from '../../awst/nodes'
-import { StateTotals } from '../../awst/nodes'
+import { ARC4BareMethodConfig, ARC4CreateOption, StateTotals } from '../../awst/nodes'
 import { SourceLocation } from '../../awst/source-location'
 import { wtypes } from '../../awst/wtypes'
 import { Constants } from '../../constants'
@@ -11,10 +11,11 @@ import { logger } from '../../logger'
 import type { Props } from '../../typescript-helpers'
 import { codeInvariant, invariant, isIn } from '../../util'
 import { CustomKeyMap } from '../../util/custom-key-map'
-import { intersectSets } from '../../util/intersect-sets'
 import type { ContractClassPType } from '../ptypes'
+import { ClusteredContractClassType } from '../ptypes'
 import type { ContractOptionsDecoratorData } from './decorator-data'
 import { LogicSigClassModel } from './logic-sig-class-model'
+import '../../polyfill/set.prototype.union'
 
 export class ContractClassModel {
   public readonly isAbstract: boolean
@@ -27,7 +28,6 @@ export class ContractClassModel {
   }
   public readonly options: ContractOptionsDecoratorData | undefined
   public readonly description: string | null
-  public readonly bases: Array<ContractReference>
   public readonly propertyInitialization: Array<Statement>
   public readonly approvalProgram: ContractMethod | null
   public readonly clearProgram: ContractMethod | null
@@ -40,7 +40,6 @@ export class ContractClassModel {
     this.type = props.type
     this.description = props.description
     this.propertyInitialization = props.propertyInitialization
-    this.bases = props.bases
     this.ctor = props.ctor
     this.approvalProgram = props.approvalProgram
     this.clearProgram = props.clearProgram
@@ -58,21 +57,27 @@ export class ContractClassModel {
     let approvalProgram: ContractMethod | null = this.approvalProgram
     let clearProgram: ContractMethod | null = this.clearProgram
     const methods: ContractMethod[] = [...this.methods]
-    if (this.ctor) methods.push(this.ctor)
+    const ctors: ContractMethod[] = this.ctor ? [this.ctor] : []
     const methodResolutionOrder: ContractReference[] = []
     let firstBaseWithStateTotals: ContractClassModel | undefined = undefined
     let reservedScratchSpace = new Set<bigint>()
 
+    const seenContractIds = new Set<string>()
+
     for (const baseType of this.type.allBases()) {
-      const cref = ContractReference.fromPType(baseType)
-      const baseClass = compilationSet.getContractClass(cref)
+      const baseClass = this.getModelForClass(compilationSet, baseType)
       if (baseClass.hasExplicitStateTotals() && firstBaseWithStateTotals === undefined) {
         firstBaseWithStateTotals = baseClass
       }
       if (baseClass.options?.scratchSlots) {
-        reservedScratchSpace = intersectSets(reservedScratchSpace, baseClass.options.scratchSlots)
+        reservedScratchSpace = reservedScratchSpace.union(baseClass.options.scratchSlots)
       }
-      methodResolutionOrder.push(cref)
+      methodResolutionOrder.push(baseClass.id)
+      if (seenContractIds.has(baseClass.id.toString())) {
+        continue
+      } else {
+        seenContractIds.add(baseClass.id.toString())
+      }
       approvalProgram ??= baseClass.approvalProgram
       clearProgram ??= baseClass.clearProgram
       if (baseClass.approvalProgram && baseClass.approvalProgram !== approvalProgram) methods.push(baseClass.approvalProgram)
@@ -81,12 +86,13 @@ export class ContractClassModel {
         // Maybe need validation??
         methods.push(method)
       }
-      if (baseClass.ctor) methods.push(baseClass.ctor)
+      if (baseClass.ctor) ctors.push(baseClass.ctor)
     }
     if (this.type.isARC4) {
-      const hasCreate = methods.some((m) => isIn(m.arc4MethodConfig?.create, [ARC4CreateOption.Allow, ARC4CreateOption.Require]))
+      const hasCreate = methods.some((m) => isIn(m.arc4MethodConfig?.create, [ARC4CreateOption.allow, ARC4CreateOption.require]))
       const hasBareNoop = methods.some(
-        (m) => m.arc4MethodConfig?.isBare === true && isIn(OnCompletionAction.NoOp, m.arc4MethodConfig.allowedCompletionTypes),
+        (m) =>
+          m.arc4MethodConfig instanceof ARC4BareMethodConfig && isIn(OnCompletionAction.NoOp, m.arc4MethodConfig.allowedCompletionTypes),
       )
 
       if (!hasCreate) {
@@ -121,17 +127,19 @@ export class ContractClassModel {
     })
 
     if (this.options?.scratchSlots) {
-      reservedScratchSpace = intersectSets(reservedScratchSpace, this.options.scratchSlots)
+      reservedScratchSpace = reservedScratchSpace.union(this.options.scratchSlots)
     }
+
+    const hasSignificantConstructor = ctors.length > 1
 
     return nodeFactory.contract({
       name: this.options?.name ?? this.name,
       id: this.id,
       description: this.description,
-      approvalProgram: ContractClassModel.patchApprovalToCallCtor(approvalProgram, methods),
+      approvalProgram: hasSignificantConstructor ? ContractClassModel.patchApprovalToCallCtor(approvalProgram, methods) : approvalProgram,
       clearProgram,
       methodResolutionOrder,
-      methods,
+      methods: [...methods, ...(hasSignificantConstructor ? ctors : [])],
       appState: this.appState,
       stateTotals,
       reservedScratchSpace: reservedScratchSpace,
@@ -140,11 +148,69 @@ export class ContractClassModel {
     })
   }
 
-  private static patchApprovalToCallCtor(approval: ContractMethod, methods: ContractMethod[]): ContractMethod {
-    // Only need to call ctor if there is at least 1 constructor in the inheritance chain
-    if (methods.every((m) => m.memberName !== Constants.constructorMethodName)) {
-      return approval
+  private getModelForClass(compilationSet: CompilationSet, contractType: ContractClassPType): ContractClassModel {
+    if (contractType instanceof ClusteredContractClassType) {
+      return this.buildClusteredMetaClass(compilationSet, contractType)
+    } else {
+      return compilationSet.getContractClass(ContractReference.fromPType(contractType))
     }
+  }
+
+  private buildClusteredMetaClass(compilationSet: CompilationSet, clusteredType: ClusteredContractClassType): ContractClassModel {
+    const ctor = nodeFactory.contractMethod({
+      memberName: Constants.constructorMethodName,
+      cref: ContractReference.fromPType(clusteredType),
+      documentation: nodeFactory.methodDocumentation({}),
+      sourceLocation: SourceLocation.None,
+      args: [],
+      returnType: wtypes.voidWType,
+      body: nodeFactory.block({
+        sourceLocation: SourceLocation.None,
+      }),
+      arc4MethodConfig: null,
+      inline: null, // TODO: Expose inline hint option
+    })
+    const ctorTargets: awst.ContractMethod[] = []
+    for (const baseType of clusteredType.baseTypes) {
+      for (const b of [baseType, ...baseType.allBases()]) {
+        const baseClassModel = this.getModelForClass(compilationSet, b)
+        if (baseClassModel.ctor) {
+          ctorTargets.push(baseClassModel.ctor)
+          break
+        }
+      }
+    }
+    ctor.body.body.push(
+      ...ctorTargets.map((ct) =>
+        nodeFactory.expressionStatement({
+          expr: nodeFactory.subroutineCallExpression({
+            target: nodeFactory.contractMethodTarget({
+              memberName: ct.memberName,
+              cref: ct.cref,
+            }),
+            args: [],
+            sourceLocation: SourceLocation.None,
+            wtype: wtypes.voidWType,
+          }),
+        }),
+      ),
+    )
+    return new ContractClassModel({
+      appState: [],
+      approvalProgram: null,
+      clearProgram: null,
+      isAbstract: true,
+      sourceLocation: SourceLocation.None,
+      propertyInitialization: [],
+      description: null,
+      ctor: ctor,
+      methods: [],
+      options: undefined,
+      type: clusteredType,
+    })
+  }
+
+  private static patchApprovalToCallCtor(approval: ContractMethod, methods: ContractMethod[]): ContractMethod {
     const callCtorIfNew = nodeFactory.ifElse({
       condition: nodeFactory.not({
         expr: nodeFactory.reinterpretCast({
@@ -190,7 +256,7 @@ export class ContractClassModel {
       args: [],
       arc4MethodConfig: new ARC4BareMethodConfig({
         allowedCompletionTypes: [OnCompletionAction.NoOp],
-        create: ARC4CreateOption.Require,
+        create: ARC4CreateOption.require,
         sourceLocation: this.sourceLocation,
       }),
       returnType: wtypes.voidWType,
@@ -201,6 +267,7 @@ export class ContractClassModel {
       body: nodeFactory.block({
         sourceLocation: this.sourceLocation,
       }),
+      inline: null, // TODO: Expose inline hint option?
     })
   }
 }

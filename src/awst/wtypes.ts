@@ -165,15 +165,36 @@ export namespace wtypes {
       return `${this.immutable ? 'readonly' : ''}${displayName}[${this.types.join(', ')}]`
     }
   }
-  export class WArray extends WType {
+  export abstract class NativeArray extends WType {
     readonly elementType: WType
-    constructor(props: { itemType: WType; immutable: boolean }) {
+    readonly sourceLocation: SourceLocation | null
+    protected constructor(props: { name: string; itemType: WType; sourceLocation?: SourceLocation; scalarType?: AVMType }) {
       super({
-        name: 'WArray',
-        scalarType: null,
-        immutable: props.immutable,
+        name: props.name,
+        scalarType: props.scalarType ?? null,
       })
       this.elementType = props.itemType
+      this.sourceLocation = props.sourceLocation ?? null
+    }
+  }
+
+  export class StackArray extends NativeArray {
+    readonly immutable = true
+    constructor(props: { itemType: WType; immutable: boolean; sourceLocation?: SourceLocation }) {
+      super({
+        name: `stack_array<${props.itemType.name}>`,
+        scalarType: AVMType.bytes,
+        ...props,
+      })
+    }
+  }
+  export class ReferenceArray extends NativeArray {
+    readonly immutable = false
+    constructor(props: { itemType: WType; immutable: boolean; sourceLocation?: SourceLocation }) {
+      super({
+        name: `ref_array<${props.itemType.name}>`,
+        ...props,
+      })
     }
   }
 
@@ -181,7 +202,7 @@ export namespace wtypes {
     readonly sequenceType: WType
     constructor(props: { sequenceType: WType }) {
       super({
-        name: 'WArray',
+        name: `enumeration<${props.sequenceType.name}>`,
         scalarType: null,
         immutable: true,
       })
@@ -228,6 +249,8 @@ export namespace wtypes {
         nativeType: n <= 64 ? uint64WType : biguintWType,
         arc4Name: arc4Name ?? `uint${n}`,
       })
+      invariant(n >= 8n && n <= 512n, 'Invalid uint: n must be between 8 and 512')
+      invariant(n % 8n === 0n, 'Invalid uint: n must be multiple of 8')
       this.n = n
     }
   }
@@ -242,6 +265,10 @@ export namespace wtypes {
         nativeType: n <= 64 ? uint64WType : biguintWType,
         arc4Name: `ufixed${n}x${m}`,
       })
+
+      invariant(n >= 8n && n <= 512n, 'Invalid ufixed: n must be between 8 and 512')
+      invariant(n % 8n === 0n, 'Invalid ufixed: n must be multiple of 8')
+      invariant(m >= 0n && m <= 160n, 'Invalid ufixed: m must be between 0 and 160')
       this.n = n
       this.m = m
     }
@@ -272,6 +299,7 @@ export namespace wtypes {
           .join(',')})`,
         name,
         nativeType: null,
+        immutable: frozen && Object.values(fields).every((t) => t.immutable),
       })
       this.sourceLocation = sourceLocation ?? null
       this.fields = fields

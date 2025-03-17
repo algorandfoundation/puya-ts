@@ -1,0 +1,84 @@
+#pragma version 10
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 1
+    bytecblock 0x151f7c750006636f6d6d6f6e
+    txn ApplicationID
+    bnz main_after_if_else@2
+    // tests/approvals/multi-inheritance.algo.ts:6
+    // stateCommon = GlobalState<uint64>({ initialValue: 123 })
+    pushbytes "stateCommon"
+    pushint 123 // 123
+    app_global_put
+    // tests/approvals/multi-inheritance.algo.ts:18
+    // stateOne = GlobalState({ initialValue: Uint64(45) })
+    pushbytes "stateOne"
+    pushint 45 // 45
+    app_global_put
+
+main_after_if_else@2:
+    // tests/approvals/multi-inheritance.algo.ts:17
+    // export class BaseOne extends CommonBase {
+    txn NumAppArgs
+    bz main_bare_routing@10
+    pushbytess 0xc32533e3 0x455c8d09 0xf9f5142c // method "methodOne()string", method "methodCommon()string", method "b2CantOverride()string"
+    txna ApplicationArgs 0
+    match main_methodOne_route@5 main_methodCommon_route@6 main_b2CantOverride_route@7
+
+main_after_if_else@14:
+    // tests/approvals/multi-inheritance.algo.ts:17
+    // export class BaseOne extends CommonBase {
+    pushint 0 // 0
+    return
+
+main_b2CantOverride_route@7:
+    // tests/approvals/multi-inheritance.algo.ts:12
+    // b2CantOverride(): string {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    bytec_0 // 0x151f7c750006636f6d6d6f6e
+    log
+    intc_0 // 1
+    return
+
+main_methodCommon_route@6:
+    // tests/approvals/multi-inheritance.algo.ts:8
+    // methodCommon() {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    bytec_0 // 0x151f7c750006636f6d6d6f6e
+    log
+    intc_0 // 1
+    return
+
+main_methodOne_route@5:
+    // tests/approvals/multi-inheritance.algo.ts:19
+    // methodOne() {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    pushbytes 0x151f7c750008626173652d6f6e65
+    log
+    intc_0 // 1
+    return
+
+main_bare_routing@10:
+    // tests/approvals/multi-inheritance.algo.ts:17
+    // export class BaseOne extends CommonBase {
+    txn OnCompletion
+    bnz main_after_if_else@14
+    txn ApplicationID
+    !
+    assert // can only call when creating
+    intc_0 // 1
+    return

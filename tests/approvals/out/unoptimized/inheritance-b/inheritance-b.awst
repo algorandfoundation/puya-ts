@@ -1,0 +1,73 @@
+contract ConcreteSimpleContract
+{
+  globals {
+    ["someState"]: uint64
+  }
+  approvalProgram(): uint64
+  {
+    a: uint64 = btoi(txnas<ApplicationArgs>(0))
+    b: uint64 = btoi(txnas<ApplicationArgs>(1))
+    log(itob(tests/approvals/inheritance-b.algo.ts::ConcreteSimpleContract.simpleMethod(a, b)))
+    return 1
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  SimpleContract::simpleMethod(a: uint64, b: uint64): uint64
+  {
+    return a * b
+  }
+  
+}
+contract ConcreteArc4Contract
+{
+  globals {
+    ["concreteState"]: string
+    ["someState"]: uint64
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  getVeryImportantValue(): string
+  {
+    return "42"
+  }
+  
+  Arc4Contract::simpleMethod(a: uint64, b: uint64): uint64
+  {
+    return a * b
+  }
+  
+  Arc4Contract::simpleAbiMethod(a: uint64, b: uint64): uint64
+  {
+    return a + b
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+  constructor(): void
+  {
+    super.constructor()
+    GlobalState["concreteState"]: string = "testing"
+  }
+  
+  BaseContract::constructor(): void
+  {
+  }
+  
+}

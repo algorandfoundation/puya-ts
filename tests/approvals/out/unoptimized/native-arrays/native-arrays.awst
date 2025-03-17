@@ -1,0 +1,57 @@
+contract NativeArraysAlgo
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  buildArray(): stack_array<uint64>
+  {
+    return new stack_array<uint64>(1, 2, 3, 4)
+  }
+  
+  doThings(): void
+  {
+    arr: stack_array<uint64> = tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.buildArray()
+    assert(arr.length == 4 and arr[0] == 1 and arr[1] == 2 and arr[2] == 3 and arr[3] == 4, comment=assert target is match for conditions)
+    arr: stack_array<uint64> = arr.concat(new stack_array<uint64>(5))
+    assert(arr.length == 5 and arr[0] == 1 and arr[1] == 2 and arr[2] == 3 and arr[3] == 4 and arr[4] == 5, comment=assert target is match for conditions)
+    top: uint64 = arr[arr.length - 1]
+    assert(top == 5)
+    arr: stack_array<uint64> = new stack_array<uint64>(1, 2, 3, 4)
+    assert(arr.length == 4 and arr[0] == 1 and arr[1] == 2 and arr[2] == 3 and arr[3] == 4, comment=assert target is match for conditions)
+    arr: stack_array<uint64> = arr.with(1, 10)
+    assert(arr.length == 4 and arr[0] == 1 and arr[1] == 10 and arr[2] == 3 and arr[3] == 4, comment=assert target is match for conditions)
+    t1: readonlytuple[uint64, uint64] = <tuple>[12, 13]
+    arr: stack_array<uint64> = arr.concat(arr).concat(<tuple>[11]).concat(t1)
+    assert(arr.length == 11 and arr[0] == 1 and arr[1] == 10 and arr[2] == 3 and arr[3] == 4 and arr[4] == 1 and arr[5] == 10 and arr[6] == 3 and arr[7] == 4 and arr[8] == 11 and arr[9] == 12 and arr[10] == 13, comment=assert target is match for conditions)
+  }
+  
+  arc4Interop(): void
+  {
+    da1: arc4.dynamic_array<arc4.uint32> = new arc4.dynamic_array<arc4.uint32>(123, 123)
+    sa1: arc4.static_array<arc4.uint32> = new arc4.static_array<arc4.uint32>(123, 123)
+    a1: stack_array<arc4.uint32> = new stack_array<arc4.uint32>(123, 123)
+    a1: stack_array<arc4.uint32> = a1.concat(da1).concat(sa1)
+    assert(a1.length == 6 and reinterpret_cast<bytes>(a1[0]) == reinterpret_cast<bytes>(123) and reinterpret_cast<bytes>(a1[1]) == reinterpret_cast<bytes>(123) and reinterpret_cast<bytes>(a1[2]) == reinterpret_cast<bytes>(123) and reinterpret_cast<bytes>(a1[3]) == reinterpret_cast<bytes>(123) and reinterpret_cast<bytes>(a1[4]) == reinterpret_cast<bytes>(123) and reinterpret_cast<bytes>(a1[5]) == reinterpret_cast<bytes>(123), comment=assert target is match for conditions)
+  }
+  
+  structs(p: Vector{ x: uint64, y: uint64 }): stack_array<tests/approvals/native-arrays.algo.ts::Vector>
+  {
+    { x: x, y: y }: object{ x: uint64, y: uint64 } = { x: p.x, y: p.y }
+    myVectors: stack_array<tests/approvals/native-arrays.algo.ts::Vector> = new stack_array<tests/approvals/native-arrays.algo.ts::Vector>()
+    myVectors: stack_array<tests/approvals/native-arrays.algo.ts::Vector> = new stack_array<tests/approvals/native-arrays.algo.ts::Vector>({ x: (#0 = { x: x, y: y }).x, y: #0.y })
+    assert(myVectors.length == 1 and myVectors[0].x == x and myVectors[0].y == y, comment=assert target is match for conditions)
+    return myVectors
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

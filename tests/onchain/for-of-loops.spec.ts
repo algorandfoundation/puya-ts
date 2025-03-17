@@ -1,0 +1,39 @@
+import { describe, expect } from 'vitest'
+import { createArc4TestFixture } from './util/test-fixture'
+
+describe('for loops', () => {
+  const test = createArc4TestFixture('tests/approvals/for-of-loops.algo.ts', {
+    ForOfLoopsAlgo: {},
+  })
+
+  test('test_for_of_loop_tuple', async ({ appClientForOfLoopsAlgo }) => {
+    const r1 = await appClientForOfLoopsAlgo.send.call({ method: 'test_for_of_loop_tuple', args: [[4, 8, 10]] })
+    expect(r1.return).toBe(4n + 8n + 10n)
+    const r2 = await appClientForOfLoopsAlgo.send.call({ method: 'test_for_of_loop_tuple', args: [[4, 42, 8, 10]] })
+    expect(r2.return).toBe(4n + 42n)
+  })
+  test('test_for_of_loop_arc4_dynamic_array', async ({ appClientForOfLoopsAlgo }) => {
+    const r1 = await appClientForOfLoopsAlgo.send.call({ method: 'test_for_of_loop_arc4_dynamic_array', args: [[4, 8, 10]] })
+    expect(r1.return).toBe(4n + 8n + 10n)
+    const r2 = await appClientForOfLoopsAlgo.send.call({ method: 'test_for_of_loop_arc4_dynamic_array', args: [[4, 42, 6]] })
+    expect(r2.return).toBe(4n + 42n)
+  })
+  test('test_for_of_loop_arc4_static_array', async ({ appClientForOfLoopsAlgo }) => {
+    const r1 = await appClientForOfLoopsAlgo.send.call({ method: 'test_for_of_loop_arc4_static_array', args: [[4, 8, 10, 10, 10]] })
+    expect(r1.return).toBe(4n + 8n + 10n + 10n + 10n)
+    const r2 = await appClientForOfLoopsAlgo.send.call({ method: 'test_for_of_loop_arc4_static_array', args: [[4, 8, 10, 42, 10]] })
+    expect(r2.return).toBe(4n + 8n + 10n + 42n)
+  })
+  test('test_for_of_loop_native_immutable_array', async ({ appClientForOfLoopsAlgo }) => {
+    const r1 = await appClientForOfLoopsAlgo.send.call({ method: 'test_for_of_loop_native_immutable_array', args: [[4, 8, 10]] })
+    expect(r1.return).toBe(4n + 8n + 10n)
+    const r2 = await appClientForOfLoopsAlgo.send.call({ method: 'test_for_of_loop_native_immutable_array', args: [[42, 8, 10]] })
+    expect(r2.return).toBe(42n)
+  })
+  test('test_for_of_loop_native_mutable_array', async ({ appClientForOfLoopsAlgo }) => {
+    const r1 = await appClientForOfLoopsAlgo.send.call({ method: 'test_for_of_loop_native_mutable_array', args: [[4, 8, 10]] })
+    expect(r1.return).toBe(4n + 8n + 10n)
+    const r2 = await appClientForOfLoopsAlgo.send.call({ method: 'test_for_of_loop_native_mutable_array', args: [[4, 8, 42]] })
+    expect(r2.return).toBe(4n + 8n + 42n)
+  })
+})

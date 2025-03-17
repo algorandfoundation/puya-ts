@@ -33,10 +33,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Use Node.js 20.x
+      - name: Use Node.js 21.x
         uses: actions/setup-node@v4
         with:
-          node-version: 20.x
+          node-version: 21.x
 
       - run: npm ci --ignore-scripts
 
@@ -52,10 +52,6 @@ jobs:
           token: ${{ secrets.NPM_TOKEN }}
           package: artifacts/algo-ts/package.json
           access: 'public'
-
-      - name: Install @algorandfoundation/puya-ts dependencies and patch for bundling
-        run: npm i --include=prod && npx patch-package --patch-dir ../../patches
-        working-directory: artifacts/puya-ts
 
       - name: Generate semantic version for @algorandfoundation/puya-ts
         run: npx semantic-release
