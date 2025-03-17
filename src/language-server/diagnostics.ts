@@ -45,7 +45,7 @@ async function compileAndExtractLogs(files: AlgoFile[]): Promise<LogEventWithSou
   })
   return logCtx.logEvents
     .filter((e) => e.level === LogLevel.Error || e.level === LogLevel.Warning)
-    .filter((e): e is LogEventWithSource => Boolean(e.sourceLocation && e.sourceLocation.file))
+    .filter((e): e is LogEventWithSource => Boolean(e.sourceLocation?.file))
 }
 
 function mapToDiagnostic(event: LogEventWithSource): Diagnostic {
@@ -98,4 +98,4 @@ async function getWorkspaceDiagnostics(
   }
 }
 
-export const debouncegetWorkspaceDiagnostics = debounce(getWorkspaceDiagnostics, 200)
+export const debounceGetWorkspaceDiagnostics = debounce(getWorkspaceDiagnostics, 200)

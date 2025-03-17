@@ -9,7 +9,7 @@ import {
   TextDocumentSyncKind,
 } from 'vscode-languageserver/node.js'
 import { URI } from 'vscode-uri'
-import { debouncegetWorkspaceDiagnostics } from './diagnostics'
+import { debounceGetWorkspaceDiagnostics } from './diagnostics'
 
 export const getDebugLspPort = () => {
   const port = Number(process.env.PUYA_TS_DEBUG_LSP_PORT)
@@ -76,12 +76,10 @@ export async function startLanguageServer() {
     connection.console.debug(`Document changed event: ${params.document.uri}`)
 
     const workspacePath = URI.parse(workspaceFolder).fsPath
-    const diagnosticsMap = await debouncegetWorkspaceDiagnostics(connection, workspacePath, documents)
+    const diagnosticsMap = await debounceGetWorkspaceDiagnostics(connection, workspacePath, documents)
 
     for (const docUri of diagnosticsMap.keys()) {
-      if (!trackedDocumentUris.has(docUri)) {
-        trackedDocumentUris.add(docUri)
-      }
+      trackedDocumentUris.add(docUri)
     }
 
     // Send diagnostics for all tracked documents
