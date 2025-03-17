@@ -129,11 +129,6 @@ export async function downloadPuyaBinary(version: SemVer): Promise<string> {
     throw new InternalError(`Binary file ${binaryFileName} not found in the extracted archive`)
   }
 
-  // Make binary executable on non-Windows platforms
-  if (os !== 'windows') {
-    fs.chmodSync(extractedBinaryPath, 0o755)
-  }
-
   logger.debug(undefined, `Successfully downloaded and extracted Puya binary to ${extractedBinaryPath}`)
   return extractedBinaryPath
 }
