@@ -1,0 +1,63 @@
+main tests/approvals/biguint-expressions.algo.ts::DemoContract.approvalProgram:
+    block@0: // L31
+        let tmp%0#0: bytes = (itob 4u)
+        tests/approvals/biguint-expressions.algo.ts::testConstructor(12312312u, 12312312b, 0u, 0b, tmp%0#0, 4b)
+        tests/approvals/biguint-expressions.algo.ts::testOps(500b, 1000b)
+        return 1u
+
+subroutine tests/approvals/biguint-expressions.algo.ts::testConstructor(a: uint64, a_b: biguint, b: bool, b_b: biguint, c: bytes, c_b: biguint) -> void:
+    block@0: // L5
+        let tmp%0#0: bool = (b== 0b 0b)
+        (assert tmp%0#0)
+        let reinterpret_biguint%0#0: biguint = (itob 1u)
+        let tmp%1#0: bool = (b== reinterpret_biguint%0#0 1b)
+        (assert tmp%1#0)
+        let reinterpret_biguint%1#0: biguint = (itob 0u)
+        let tmp%2#0: bool = (b== reinterpret_biguint%1#0 0b)
+        (assert tmp%2#0)
+        let tmp%3#0: bool = (b== 0b 0b)
+        (assert tmp%3#0)
+        let tmp%4#0: bool = (b== 1b 1b)
+        (assert tmp%4#0)
+        let tmp%5#0: bool = (b== 0b 0b)
+        (assert tmp%5#0)
+        let tmp%6#0: bool = (b== 1b 1b)
+        (assert tmp%6#0)
+        let tmp%7#0: bool = (b== 13407807929942597099574024998205846127479365820592393377723561443721764030073546976801874298166903427690031858186486050853753882811946569946433649006084095b 13407807929942597099574024998205846127479365820592393377723561443721764030073546976801874298166903427690031858186486050853753882811946569946433649006084095b)
+        (assert tmp%7#0)
+        let tmp%8#0: bool = (b== 1231232134123123b 1231232134123123b)
+        (assert tmp%8#0)
+        let reinterpret_biguint%2#0: biguint = (itob a#0)
+        let tmp%9#0: bool = (b== reinterpret_biguint%2#0 a_b#0)
+        (assert tmp%9#0)
+        let tmp%10#0: uint64 = (* a#0 a#0)
+        let reinterpret_biguint%3#0: biguint = (itob tmp%10#0)
+        let tmp%11#0: biguint = (b* a_b#0 a_b#0)
+        let tmp%12#0: bool = (b== reinterpret_biguint%3#0 tmp%11#0)
+        (assert tmp%12#0)
+        let reinterpret_biguint%4#0: biguint = (itob b#0)
+        let tmp%13#0: bool = (b== reinterpret_biguint%4#0 b_b#0)
+        (assert tmp%13#0)
+        let reinterpret_biguint%5#0: biguint = c#0
+        let tmp%14#0: bool = (b== reinterpret_biguint%5#0 c_b#0)
+        (assert tmp%14#0)
+        return 
+
+subroutine tests/approvals/biguint-expressions.algo.ts::testOps(smaller: biguint, larger: biguint) -> void:
+    block@0: // L21
+        let tmp%0#0: bool = (b< smaller#0 larger#0)
+        (assert tmp%0#0)
+        let tmp%1#0: bool = (b<= smaller#0 smaller#0)
+        (assert tmp%1#0)
+        let tmp%2#0: bool = (b> larger#0 smaller#0)
+        (assert tmp%2#0)
+        let tmp%3#0: bool = (b>= larger#0 larger#0)
+        (assert tmp%3#0)
+        let tmp%4#0: bool = (b== smaller#0 smaller#0)
+        (assert tmp%4#0)
+        let tmp%5#0: bytes = (bzero 4u)
+        let reinterpret_bytes%0#0: bytes = smaller#0
+        let reinterpret_biguint%0#0: biguint = (concat tmp%5#0 reinterpret_bytes%0#0)
+        let tmp%6#0: bool = (b== smaller#0 reinterpret_biguint%0#0)
+        (assert tmp%6#0) // Leading zeros should be ignored in equality
+        return 

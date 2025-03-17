@@ -163,7 +163,7 @@ jobs:
         #Requires permissions.checks: write
       - name: Publish test results
         if: ${{ inputs.output-test-results && always() }}
-        uses: phoenix-actions/test-reporting@v10
+        uses: phoenix-actions/test-reporting@v15
         with:
           name: Test results
           path: ${{ inputs.test-results-file-pattern }}
@@ -191,5 +191,3 @@ jobs:
         with:
           name: ${{ inputs.upload-artifact-name }}
           path: ${{ inputs.upload-artifact-path }}
-
-

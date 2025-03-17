@@ -1,0 +1,109 @@
+#pragma version 10
+#pragma typetrack false
+
+// tests/approvals/box-proxies.algo.ts::BoxNotExist.approvalProgram() -> uint64:
+main:
+    intcblock 0 1
+    bytecblock "abc"
+
+main_block@0:
+    // tests/approvals/box-proxies.algo.ts:111
+    // if (Txn.applicationId.id !== 0) {
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    bz main_after_if_else@11
+
+main_if_body@1:
+    // tests/approvals/box-proxies.algo.ts:112
+    // switch (Txn.applicationArgs(0).toString()) {
+    intc_0 // 0
+    txnas ApplicationArgs
+    // tests/approvals/box-proxies.algo.ts:113
+    // case 'box':
+    pushbytes "box"
+    ==
+    // tests/approvals/box-proxies.algo.ts:113-114
+    // case 'box':
+    //   return Box<boolean>({ key: 'abc' }).value
+    bz main_after_if_else@4
+
+main_if_body@2:
+
+main_block@3:
+    // tests/approvals/box-proxies.algo.ts:114
+    // return Box<boolean>({ key: 'abc' }).value
+    bytec_0 // "abc"
+    box_get
+    swap
+    btoi
+    swap
+    assert // Box must have value
+    return
+
+main_after_if_else@4:
+    // tests/approvals/box-proxies.algo.ts:112
+    // switch (Txn.applicationArgs(0).toString()) {
+    intc_0 // 0
+    txnas ApplicationArgs
+    // tests/approvals/box-proxies.algo.ts:115
+    // case 'boxmap':
+    pushbytes "boxmap"
+    ==
+    // tests/approvals/box-proxies.algo.ts:115-116
+    // case 'boxmap':
+    //   return BoxMap<string, boolean>({ keyPrefix: 'a' })('bc').value
+    bz main_after_if_else@7
+
+main_if_body@5:
+
+main_block@6:
+    // tests/approvals/box-proxies.algo.ts:116
+    // return BoxMap<string, boolean>({ keyPrefix: 'a' })('bc').value
+    pushbytes "a"
+    pushbytes "bc"
+    concat
+    box_get
+    swap
+    btoi
+    swap
+    assert // Box must have value
+    return
+
+main_after_if_else@7:
+    // tests/approvals/box-proxies.algo.ts:112
+    // switch (Txn.applicationArgs(0).toString()) {
+    intc_0 // 0
+    txnas ApplicationArgs
+    // tests/approvals/box-proxies.algo.ts:117
+    // case 'createbox':
+    pushbytes "createbox"
+    ==
+    // tests/approvals/box-proxies.algo.ts:117-119
+    // case 'createbox':
+    //   Box<boolean>({ key: 'abc' }).value = true
+    //   return true
+    bz main_after_if_else@10
+
+main_if_body@8:
+
+main_block@9:
+    // tests/approvals/box-proxies.algo.ts:118
+    // Box<boolean>({ key: 'abc' }).value = true
+    intc_1 // 1
+    itob
+    bytec_0 // "abc"
+    swap
+    box_put
+    // tests/approvals/box-proxies.algo.ts:119
+    // return true
+    intc_1 // 1
+    return
+
+main_after_if_else@10:
+
+main_after_if_else@11:
+    // tests/approvals/box-proxies.algo.ts:122
+    // return true
+    intc_1 // 1
+    return

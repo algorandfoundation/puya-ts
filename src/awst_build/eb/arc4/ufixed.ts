@@ -7,8 +7,9 @@ import type { PType } from '../../ptypes'
 import { NumericLiteralPType, stringPType } from '../../ptypes'
 import { UFixedNxMClass, UFixedNxMType } from '../../ptypes/arc4-types'
 import { ClassBuilder, type InstanceBuilder, type NodeBuilder } from '../index'
-import { isValidLiteralForPType, requireStringConstant } from '../util'
+import { requireStringConstant } from '../util'
 import { parseFunctionArgs } from '../util/arg-parsing'
+import { isValidLiteralForPType } from '../util/is-valid-literal-for-ptype'
 import { Arc4EncodedBaseExpressionBuilder } from './base'
 
 export class UFixedNxMClassBuilder extends ClassBuilder {

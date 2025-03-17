@@ -3,21 +3,31 @@ import { bigIntToUint8Array } from '../util'
 import { nodeFactory } from './node-factory'
 import type { Expression } from './nodes'
 import * as awst from './nodes'
-import { BytesEncoding } from './nodes'
-import type { SourceLocation } from './source-location'
+import { BytesConstant, BytesEncoding, StringConstant } from './nodes'
+import { SourceLocation } from './source-location'
 import { wtypes } from './wtypes'
 
 export const intrinsicFactory = {
-  bytesConcat({
-    left,
-    right,
-    sourceLocation,
-  }: {
-    left: awst.Expression
-    right: awst.Expression
-    sourceLocation: SourceLocation
-  }): awst.IntrinsicCall {
-    // invariant(left.wtype.equals(right.wtype), 'left and right operand wtypes must match')
+  bytesConcat({ left, right, sourceLocation }: { left: awst.Expression; right: awst.Expression; sourceLocation: SourceLocation }) {
+    if (left.wtype.equals(right.wtype)) {
+      if (left instanceof BytesConstant && right instanceof BytesConstant) {
+        const concatValue = new Uint8Array(left.value.length + right.value.length)
+        concatValue.set(left.value, 0)
+        concatValue.set(right.value, left.value.length)
+        return nodeFactory.bytesConstant({
+          value: concatValue,
+          wtype: left.wtype,
+          encoding: left.encoding,
+          sourceLocation: SourceLocation.fromLocations(left.sourceLocation, right.sourceLocation),
+        })
+      } else if (left instanceof StringConstant && right instanceof StringConstant) {
+        return nodeFactory.stringConstant({
+          value: left.value + right.value,
+          sourceLocation: SourceLocation.fromLocations(left.sourceLocation, right.sourceLocation),
+        })
+      }
+    }
+
     return nodeFactory.intrinsicCall({
       sourceLocation,
       stackArgs: [left, right],

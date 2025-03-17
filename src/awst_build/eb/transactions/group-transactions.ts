@@ -1,8 +1,11 @@
 import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
+import { IntegerConstant } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import type { TxnFieldData } from '../../../awst/txn-fields'
 import { TxnFields } from '../../../awst/txn-fields'
+import { Constants } from '../../../constants'
+import { logger } from '../../../logger'
 import { invariant } from '../../../util'
 import type { PType } from '../../ptypes'
 import { GroupTransactionPType, TransactionFunctionType, uint64PType } from '../../ptypes'
@@ -66,7 +69,7 @@ export class GroupTransactionFunctionBuilder extends FunctionBuilder {
 
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
-      args: [groupIndex],
+      args: [groupIndexBuilder],
     } = parseFunctionArgs({
       args,
       typeArgs,
@@ -76,10 +79,14 @@ export class GroupTransactionFunctionBuilder extends FunctionBuilder {
       argSpec: (a) => [a.required(uint64PType)],
     })
     const txnPType = getGroupTransactionType(this.ptype.kind)
+    const groupIndex = groupIndexBuilder.resolve()
+    if (groupIndex instanceof IntegerConstant && groupIndex.value >= Constants.algo.maxTransactionGroupSize) {
+      logger.error(groupIndex.sourceLocation, `transaction group index should be less than ${Constants.algo.maxTransactionGroupSize}`)
+    }
 
     return new GroupTransactionExpressionBuilder(
-      nodeFactory.reinterpretCast({
-        expr: groupIndex.resolve(),
+      nodeFactory.groupTransactionReference({
+        index: groupIndex,
         wtype: txnPType.wtype,
         sourceLocation,
       }),

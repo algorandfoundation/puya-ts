@@ -38,7 +38,7 @@ export class ToCodeVisitor
     return `void`
   }
   visitGroupTransactionReference(expression: nodes.GroupTransactionReference): string {
-    throw new Error('Method not implemented.')
+    return `group_transaction(index=${expression.index.accept(this)}, type=${expression.wtype})`
   }
   visitPuyaLibCall(expression: nodes.PuyaLibCall): string {
     return `${expression.func}(${expression.args.map((a) => a.value.accept(this)).join(', ')})`
@@ -103,10 +103,7 @@ export class ToCodeVisitor
     return `${expression.base.accept(this)}.slice(${args})`
   }
   visitBoxValueExpression(expression: nodes.BoxValueExpression): string {
-    if (expression.key instanceof nodes.BytesConstant) {
-      return `Box[${expression.key.accept(this)}].value`
-    }
-    return `${expression.key.accept(this)}.value`
+    return `Box[${expression.key.accept(this)}].value`
   }
   visitIntegerConstant(expression: nodes.IntegerConstant): string {
     if (expression.tealAlias) return expression.tealAlias
@@ -140,13 +137,19 @@ export class ToCodeVisitor
     return `copy(${expression.value.accept(this)})`
   }
   visitArrayConcat(expression: nodes.ArrayConcat): string {
-    return `${expression.left.accept(this)}.concat(${expression.right.accept(this)}`
+    return `${expression.left.accept(this)}.concat(${expression.right.accept(this)})`
   }
   visitArrayPop(expression: nodes.ArrayPop): string {
     return `${expression.base.accept(this)}.pop()`
   }
   visitArrayExtend(expression: nodes.ArrayExtend): string {
     return `${expression.base.accept(this)}.push(...${expression.other.accept(this)}`
+  }
+  visitArrayLength(expression: nodes.ArrayLength): string {
+    return `${expression.array.accept(this)}.length`
+  }
+  visitArrayReplace(expression: nodes.ArrayReplace): string {
+    return `${expression.base.accept(this)}.with(${expression.index.accept(this)}, ${expression.value.accept(this)})`
   }
   visitARC4Decode(expression: nodes.ARC4Decode): string {
     return `ARC4_DECODE(${expression.value.accept(this)})`
@@ -281,7 +284,7 @@ export class ToCodeVisitor
   }
 
   visitStateDelete(expression: nodes.StateDelete): string {
-    return `STATE_DEL(${expression.field.accept(this)})`
+    return `STATE_DELETE(${expression.field.accept(this)})`
   }
   visitStateGetEx(expression: nodes.StateGetEx): string {
     return `STATE_GET_EX(${expression.field.accept(this)})`
@@ -357,8 +360,10 @@ export class ToCodeVisitor
   }
 
   visitContractMethod(statement: nodes.ContractMethod): string[] {
+    const args = statement.args.map((a) => `${a.name}: ${a.wtype}`).join(', ')
+
     const prefix = statement.cref.id === this.currentContract.at(-1)?.id ? '' : `${statement.cref.className}::`
-    return [`${prefix}${statement.memberName}(): ${statement.returnType}`, '{', ...indent(statement.body.accept(this)), '}', '']
+    return [`${prefix}${statement.memberName}(${args}): ${statement.returnType}`, '{', ...indent(statement.body.accept(this)), '}', '']
   }
   visitLogicSignature(moduleStatement: nodes.LogicSignature): string[] {
     return ['', `logicsig ${moduleStatement.id} {`, ...indent(moduleStatement.program.body.accept(this)), '}']

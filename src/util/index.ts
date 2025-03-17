@@ -9,10 +9,10 @@ import type { DeliberateAny } from '../typescript-helpers'
 
 export { base32ToUint8Array, uint8ArrayToBase32 } from './base-32'
 
-class InvariantError extends Error {}
-export function invariant(condition: unknown, message: string): asserts condition {
+class InvariantError extends InternalError {}
+export function invariant(condition: unknown, message: string, sourceLocation?: SourceLocation): asserts condition {
   if (!condition) {
-    throw new InvariantError(message)
+    throw new InvariantError(message, { sourceLocation })
   }
 }
 
@@ -108,7 +108,10 @@ export const uint8ArrayToUtf8 = (value: Uint8Array): string => {
 }
 
 export const bigIntToUint8Array = (val: bigint, fixedSize: number | 'dynamic' = 'dynamic'): Uint8Array => {
-  const maxBytes = fixedSize === 'dynamic' ? 64 : fixedSize
+  if (val === 0n && fixedSize === 'dynamic') {
+    return new Uint8Array(0)
+  }
+  const maxBytes = fixedSize === 'dynamic' ? 4096 : fixedSize
 
   let hex = val.toString(16)
 
@@ -170,7 +173,7 @@ export function normalisePath(filePath: string, workingDirectory: string): strin
   if (localPackageName) {
     return `${Constants.algoTsPackage}/${localPackageName[1]}`
   }
-  const nodeModuleName = /node_modules\/(.*)$/.exec(filePath)
+  const nodeModuleName = /.*\/node_modules\/(.*)$/.exec(filePath)
   if (nodeModuleName) {
     return nodeModuleName[1]
   }
@@ -233,4 +236,15 @@ export const zipStrict = <T1, T2>(array1: T1[], array2: T2[]): [T1, T2][] => {
 
 export function isIn<TSubject, TItem extends TSubject>(subject: TSubject, items: readonly TItem[]): subject is TItem {
   return items.some((i) => i === subject)
+}
+
+export function joinUint8Arrays(...arrays: Uint8Array[]): Uint8Array {
+  const length = arrays.reduce((acc, cur) => acc + cur.length, 0)
+  const result = new Uint8Array(length)
+  let offset = 0
+  for (const a of arrays) {
+    result.set(a, offset)
+    offset += a.length
+  }
+  return result
 }

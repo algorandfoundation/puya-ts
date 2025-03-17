@@ -481,6 +481,7 @@ export type Expressions =
   | ts.AsExpression
   | ts.NonNullExpression
   | ts.SatisfiesExpression
+  | ts.SpreadElement
   | PrimaryExpressions
   | LeftHandSideExpression
 

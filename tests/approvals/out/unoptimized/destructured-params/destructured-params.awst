@@ -1,0 +1,30 @@
+contract DestructuredParamsAlgo
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  test(p: object{ a: uint64, b: bytes, c: bool }): void
+  {
+    { a: a, b: b, c: c }: object{ a: uint64, b: bytes, c: bool } = p
+    log(concat(concat(itob(a), b), itob(c)))
+  }
+  
+  init(): void
+  {
+    tests/approvals/destructured-params.algo.ts::DestructuredParamsAlgo.test({ a: (#0 = { a: 456, b: "", c: False }).a, b: #0.b, c: #0.c })
+    temp: object{ a: uint64, b: bytes, c: bool } = { a: 2, b: "Hello", c: True }
+    tests/approvals/destructured-params.algo.ts::DestructuredParamsAlgo.test(temp)
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

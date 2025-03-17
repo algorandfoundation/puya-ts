@@ -1,0 +1,57 @@
+#pragma version 10
+#pragma typetrack false
+
+// tests/approvals/call-expressions.algo.ts::Example.approvalProgram() -> uint64:
+main:
+
+main_block@0:
+    // tests/approvals/call-expressions.algo.ts:12
+    // return this.localMethod() + super.baseMethod() === freeMethod() - this.baseMethod()
+    callsub localMethod
+    callsub tests/approvals/call-expressions.algo.ts::ExampleBase.baseMethod
+    +
+    callsub freeMethod
+    callsub baseMethod
+    -
+    ==
+    return
+
+
+// tests/approvals/call-expressions.algo.ts::freeMethod() -> uint64:
+freeMethod:
+
+freeMethod_block@0:
+    // tests/approvals/call-expressions.algo.ts:23
+    // return 7
+    pushint 7 // 7
+    retsub
+
+
+// tests/approvals/call-expressions.algo.ts::Example.baseMethod() -> uint64:
+baseMethod:
+
+baseMethod_block@0:
+    // tests/approvals/call-expressions.algo.ts:15
+    // return 1
+    pushint 1 // 1
+    retsub
+
+
+// tests/approvals/call-expressions.algo.ts::Example.localMethod() -> uint64:
+localMethod:
+
+localMethod_block@0:
+    // tests/approvals/call-expressions.algo.ts:18
+    // return 5
+    pushint 5 // 5
+    retsub
+
+
+// tests/approvals/call-expressions.algo.ts::ExampleBase.baseMethod() -> uint64:
+tests/approvals/call-expressions.algo.ts::ExampleBase.baseMethod:
+
+tests/approvals/call-expressions.algo.ts::ExampleBase.baseMethod_block@0:
+    // tests/approvals/call-expressions.algo.ts:6
+    // return 2
+    pushint 2 // 2
+    retsub

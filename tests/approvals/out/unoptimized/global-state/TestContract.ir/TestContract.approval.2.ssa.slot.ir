@@ -1,0 +1,43 @@
+main tests/approvals/global-state.algo.ts::TestContract.approvalProgram:
+    block@0: // L21
+        let reinterpret_bool%0#0: bool = (txn ApplicationID)
+        goto reinterpret_bool%0#0 ? block@2 : block@1
+    block@1: // if_body_L1
+        tests/approvals/global-state.algo.ts::TestContract.constructor()
+        goto block@2
+    block@2: // after_if_else_L1
+        let (maybe_value%0#0: uint64, maybe_exists%0#0: bool) = (app_global_get_ex 0u "testState")
+        (assert maybe_exists%0#0) // State should have value
+        let (maybe_value%1#0: uint64, maybe_exists%1#0: bool) = (app_global_get_ex 0u "testState")
+        (assert maybe_exists%1#0) // check GlobalState exists
+        let tmp%0#0: bool = (== maybe_value%1#0 2u)
+        (assert tmp%0#0) // Value should equal 2
+        let tmp%1#0: bytes = ((txnas ApplicationArgs) 0u)
+        let new_state_value%0#0: uint64 = (btoi tmp%1#0)
+        (app_global_put "testState" new_state_value%0#0)
+        (app_global_put "noInitial" "abc")
+        return 1u
+
+subroutine tests/approvals/global-state.algo.ts::TestContract.constructor() -> void:
+    block@0: // L14
+        tests/approvals/global-state.algo.ts::BaseTestContract.constructor()
+        (app_global_put "testState" 2u)
+        (app_global_put "TESTSTATE" 5u)
+        let (maybe_value%0#0: bytes, maybe_exists%0#0: bool) = (app_global_get_ex 0u "baseTestState")
+        (assert maybe_exists%0#0) // check GlobalState exists
+        let tmp%0#0: bool = (== maybe_value%0#0 "testing 123")
+        (assert tmp%0#0) // Base class state should be initialized after super call
+        let (maybe_value%1#0: uint64, maybe_exists%1#0: bool) = (app_global_get_ex 0u "testState")
+        (assert maybe_exists%1#0) // check GlobalState exists
+        let new_state_value%0#0: uint64 = (* 72057594037927936u maybe_value%1#0)
+        (app_global_put "noInitialInt" new_state_value%0#0)
+        return 
+
+subroutine tests/approvals/global-state.algo.ts::BaseTestContract.constructor() -> void:
+    block@0: // L4
+        goto block@1
+    block@1: // L1
+        goto block@2
+    block@2: // after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor_L4
+        (app_global_put "baseTestState" "testing 123")
+        return 

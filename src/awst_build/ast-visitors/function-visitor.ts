@@ -1,18 +1,19 @@
 import ts from 'typescript'
+import { isConstant } from '../../awst'
 import { nodeFactory } from '../../awst/node-factory'
 import type * as awst from '../../awst/nodes'
 import type { Block } from '../../awst/nodes'
 import { AssignmentExpression, Goto, ReturnStatement } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
-import { AwstBuildFailureError, CodeError, InternalError, NotSupported } from '../../errors'
+import { CodeError, InternalError, NotSupported } from '../../errors'
 import { logger } from '../../logger'
-import { codeInvariant, enumerate, instanceOfAny, invariant } from '../../util'
+import { codeInvariant, enumerate, hasFlags, instanceOfAny, invariant } from '../../util'
 import type { Statements } from '../../visitor/syntax-names'
 import { getNodeName } from '../../visitor/syntax-names'
 import type { Visitor } from '../../visitor/visitor'
 import { accept } from '../../visitor/visitor'
-import type { AwstBuildContext } from '../context/awst-build-context'
 import type { InstanceBuilder } from '../eb'
+import { BuilderComparisonOp } from '../eb'
 import { ArrayLiteralExpressionBuilder } from '../eb/literal/array-literal-expression-builder'
 import { ObjectLiteralExpressionBuilder } from '../eb/literal/object-literal-expression-builder'
 import { NativeArrayExpressionBuilder } from '../eb/native-array-expression-builder'
@@ -24,9 +25,10 @@ import { FunctionPType, ObjectPType } from '../ptypes'
 import { getSequenceItemType } from '../ptypes/util'
 import { typeRegistry } from '../type-registry'
 import { BaseVisitor } from './base-visitor'
+import { maybeNodes } from './util'
 
 // noinspection JSUnusedGlobalSymbols
-export class FunctionVisitor
+export abstract class FunctionVisitor
   extends BaseVisitor
   implements
     Visitor<ts.ParameterDeclaration, awst.SubroutineArgument>,
@@ -37,18 +39,19 @@ export class FunctionVisitor
 
   protected readonly _functionType: FunctionPType
 
-  constructor(ctx: AwstBuildContext, node: ts.MethodDeclaration | ts.FunctionDeclaration | ts.ConstructorDeclaration) {
-    super(ctx)
-    const type = ctx.getPTypeForNode(node)
+  constructor(protected readonly node: ts.MethodDeclaration | ts.FunctionDeclaration | ts.ConstructorDeclaration) {
+    super()
+    const type = this.context.getPTypeForNode(node)
     invariant(type instanceof FunctionPType, 'type of function must be FunctionPType')
     this._functionType = type
   }
 
-  protected buildFunctionAwst(node: ts.MethodDeclaration | ts.FunctionDeclaration | ts.ConstructorDeclaration): {
+  protected buildFunctionAwst(): {
     args: awst.SubroutineArgument[]
     documentation: awst.MethodDocumentation
     body: awst.Block
   } {
+    const node = this.node
     const sourceLocation = this.sourceLocation(node)
 
     const args = node.parameters.map((p) => this.accept(p))
@@ -82,12 +85,7 @@ export class FunctionVisitor
           props.push([propertyName, this.visitBindingName(element.name, sourceLocation)])
         }
         const ptype = ObjectPType.anonymous(props.map(([name, builder]): [string, PType] => [name, builder.ptype]))
-        return new ObjectLiteralExpressionBuilder(
-          sourceLocation,
-          ptype,
-          [{ type: 'properties', properties: Object.fromEntries(props) }],
-          () => this.context.generateDiscardedVarName(),
-        )
+        return new ObjectLiteralExpressionBuilder(sourceLocation, ptype, [{ type: 'properties', properties: Object.fromEntries(props) }])
       }
       case ts.SyntaxKind.ArrayBindingPattern: {
         const items: InstanceBuilder[] = []
@@ -171,6 +169,7 @@ export class FunctionVisitor
   }
 
   visitVariableDeclarationList(node: ts.VariableDeclarationList): awst.Statement[] {
+    const isConstDeclaration = hasFlags(node.flags, ts.NodeFlags.Const)
     return node.declarations.flatMap((d) => {
       const sourceLocation = this.sourceLocation(d)
       if (!d.initializer) {
@@ -183,6 +182,24 @@ export class FunctionVisitor
       }
 
       const source = requireInstanceBuilder(this.accept(d.initializer))
+
+      /*
+       If we encounter a simple const VAR = %VALUE% declaration, and the value is a compile time constant
+       store this value as a constant in the context instead of processing the assignment.
+
+       visitIdentifier will then resolve this constant instead of a VarExpression then the constant is referenced.
+
+       NOTE: This only handles basic expressions for now. Constant values which are destructured from more complex expressions
+       are not currently handled. eg. const [myConst] = ["constant value"]
+       */
+      storeConst: if (isConstDeclaration && ts.isIdentifier(d.name)) {
+        const targetType = this.context.getPTypeForNode(d.name)
+        if (!targetType.wtype) break storeConst
+        const expr = source.resolveToPType(targetType).resolve()
+        if (!isConstant(expr)) break storeConst
+        this.context.addConstant(d.name, expr)
+        return []
+      }
 
       return this.handleAssignmentStatement(this.visitBindingName(d.name, sourceLocation), source, sourceLocation)
     })
@@ -225,11 +242,11 @@ export class FunctionVisitor
             sourceLocation,
           },
           this.accept(node.statement),
-          ctx.continueTarget,
+          ...maybeNodes(ctx.hasContinues, ctx.continueTarget),
           incrementor,
         ),
       }),
-      ctx.breakTarget,
+      ...maybeNodes(ctx.hasBreaks, ctx.breakTarget),
     ]
   }
 
@@ -255,9 +272,9 @@ export class FunctionVisitor
         sourceLocation,
         sequence: requireInstanceBuilder(this.accept(node.expression)).iterate(sourceLocation),
         items,
-        loopBody: nodeFactory.block({ sourceLocation }, this.accept(node.statement), ctx.continueTarget),
+        loopBody: nodeFactory.block({ sourceLocation }, this.accept(node.statement), ...maybeNodes(ctx.hasContinues, ctx.continueTarget)),
       }),
-      ctx.breakTarget,
+      ...maybeNodes(ctx.hasBreaks, ctx.breakTarget),
     )
   }
   visitForInStatement(node: ts.ForInStatement): awst.Statement | awst.Statement[] {
@@ -311,16 +328,19 @@ export class FunctionVisitor
         loopBody: nodeFactory.block(
           { sourceLocation },
           this.accept(node.statement),
-          ctx.continueTarget,
+          ...maybeNodes(ctx.hasContinues, ctx.continueTarget),
           nodeFactory.ifElse({
             condition: this.evaluateCondition(node.expression, true),
             sourceLocation,
-            ifBranch: nodeFactory.block({ sourceLocation }, nodeFactory.goto({ sourceLocation, target: ctx.breakTarget.label })),
+            ifBranch: nodeFactory.block(
+              { sourceLocation },
+              nodeFactory.goto({ sourceLocation, target: this.context.switchLoopCtx.getBreakTarget(undefined, sourceLocation) }),
+            ),
             elseBranch: null,
           }),
         ),
       }),
-      ctx.breakTarget,
+      ...maybeNodes(ctx.hasBreaks, ctx.breakTarget),
     )
   }
   visitWhileStatement(node: ts.WhileStatement): awst.Statement | awst.Statement[] {
@@ -332,9 +352,9 @@ export class FunctionVisitor
       nodeFactory.whileLoop({
         sourceLocation,
         condition: this.evaluateCondition(node.expression),
-        loopBody: nodeFactory.block({ sourceLocation }, this.accept(node.statement), ctx.continueTarget),
+        loopBody: nodeFactory.block({ sourceLocation }, this.accept(node.statement), ...maybeNodes(ctx.hasContinues, ctx.continueTarget)),
       }),
-      ctx.breakTarget,
+      ...maybeNodes(ctx.hasBreaks, ctx.breakTarget),
     )
   }
   visitContinueStatement(node: ts.ContinueStatement): awst.Statement | awst.Statement[] {
@@ -374,11 +394,11 @@ export class FunctionVisitor
     const sourceLocation = this.sourceLocation(node)
     using ctx = this.context.switchLoopCtx.enterSwitch(node, sourceLocation)
 
-    const subject = requireInstanceBuilder(this.accept(node.expression))
-    codeInvariant(subject.ptype, 'The subject of a switch statement must have a resolvable ptype', this.sourceLocation(node.expression))
+    const subject = requireInstanceBuilder(this.accept(node.expression)).singleEvaluation()
 
     let defaultCase: Block | null = null
-    const cases = new Map<awst.Expression, awst.Block>()
+
+    const clauses: awst.Statement[] = []
     for (const [index, clause] of enumerate(node.caseBlock.clauses)) {
       const sourceLocation = this.sourceLocation(clause)
 
@@ -396,25 +416,25 @@ export class FunctionVisitor
       if (clause.kind === ts.SyntaxKind.DefaultClause) {
         defaultCase = caseBlock
       } else {
-        const clauseExpr = requireExpressionOfType(this.accept(clause.expression), subject.ptype)
-        cases.set(clauseExpr, caseBlock)
+        const clauseExpr = requireInstanceBuilder(this.accept(clause.expression))
+        clauses.push(
+          nodeFactory.ifElse({
+            condition: subject.compare(clauseExpr, BuilderComparisonOp.eq, clauseExpr.sourceLocation).boolEval(clauseExpr.sourceLocation),
+            ifBranch: caseBlock,
+            elseBranch: null,
+            sourceLocation,
+          }),
+        )
       }
     }
-    const switchStatement = nodeFactory.switch({
-      value: subject.resolve(),
-      sourceLocation,
-      cases,
-      defaultCase,
-    })
-    if (!ctx.hasBreaks) {
-      return switchStatement
-    }
+    if (defaultCase !== null) clauses.push(defaultCase)
+
     return nodeFactory.block(
       {
         sourceLocation,
       },
-      switchStatement,
-      ctx.breakTarget,
+      ...clauses,
+      ...maybeNodes(ctx.hasBreaks, ctx.breakTarget),
     )
   }
 
@@ -443,8 +463,9 @@ export class FunctionVisitor
         try {
           return this.accept(s)
         } catch (e) {
-          if (e instanceof AwstBuildFailureError) return []
-          throw e
+          invariant(e instanceof Error, 'Only errors should be thrown')
+          logger.error(e)
+          return []
         }
       }),
     )

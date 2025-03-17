@@ -1,0 +1,29 @@
+contract ShadowedVariablesAlgo
+{
+  approvalProgram(): bool
+  {
+    <tuple>[b, u, f]: readonlytuple[bytes, uint64, bool] = tests/approvals/shadowed-variables.algo.ts::ShadowedVariablesAlgo.getValues()
+    assert("123" == b, comment=a should be module const (bytes))
+    a: uint64 = u
+    assert(a == 123, comment=a should be local const (uint))
+    a₁: bool = f
+    assert(!a₁, comment=a should be local let (bool))
+    a₁: bool = !a₁
+    assert(a₁, comment=a should be modified local let (bool))
+    assert(a₁, comment=a should still be modified local let (bool))
+    assert(a == 123, comment=a should be local const (uint))
+    assert("123" == "123", comment=a should be module const (bytes))
+    return True
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  getValues(): readonlytuple[bytes, uint64, bool]
+  {
+    return <tuple>["123", 123, False]
+  }
+  
+}

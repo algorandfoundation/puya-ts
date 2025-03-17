@@ -4,8 +4,10 @@ import { Constants } from '../constants'
 import { CodeError, InternalError } from '../errors'
 import { logger } from '../logger'
 import { codeInvariant, hasFlags, intersectsFlags, invariant, isIn, normalisePath } from '../util'
+import { getNodeName } from '../visitor/syntax-names'
 import type { AppStorageType, PType } from './ptypes'
 import {
+  anyGtxnType,
   anyPType,
   ApprovalProgram,
   arc4BaseContractType,
@@ -15,8 +17,12 @@ import {
   bigIntPType,
   boolPType,
   ClearStateProgram,
+  ClusteredContractClassType,
+  ClusteredPrototype,
   ContractClassPType,
   FunctionPType,
+  gtxnUnion,
+  IntersectionPType,
   logicSigBaseType,
   LogicSigPType,
   NamespacePType,
@@ -27,6 +33,7 @@ import {
   ObjectPType,
   StorageProxyPType,
   stringPType,
+  SuperPrototypeSelector,
   TuplePType,
   TypeParameterType,
   undefinedPType,
@@ -65,7 +72,7 @@ export class TypeResolver {
     /*
       The method getTypeArgumentsForResolvedSignature has not made it into typescript yet, but it has been
       proposed here: https://github.com/microsoft/TypeScript/issues/59637 and added to the backlog. For now
-      the method has been patched into the TypeScript 5.6.2 using patch-package
+      the method has been patched into the TypeScript 5.7.2 using patch-package
      */
     const tps = this.checker.getTypeArgumentsForResolvedSignature(sig)
     return tps?.map((t) => this.resolveType(t, sourceLocation)) ?? []
@@ -94,8 +101,11 @@ export class TypeResolver {
     }
     const type = this.checker.getTypeAtLocation(node)
     if (node.kind === ts.SyntaxKind.ThisKeyword || node.kind === ts.SyntaxKind.SuperKeyword) {
-      const [declaration] = type.symbol.declarations ?? []
-      return this.resolve(declaration, sourceLocation)
+      /**
+       * This shouldn't be used in any code paths as `visitThisKeyword` and `visitSuperKeyword` have their own way to
+       * determine the type.
+       */
+      logger.debug(sourceLocation, `Attempting to reflect type of ${getNodeName(node)} node which is known to be unreliable`)
     }
     if (ts.isConstructorDeclaration(node)) {
       const signature = this.checker.getSignatureFromDeclaration(node)
@@ -119,54 +129,69 @@ export class TypeResolver {
   }
 
   resolveType(tsType: ts.Type, sourceLocation: SourceLocation): PType {
-    if (isIntersectionType(tsType)) {
+    if (tsType.symbol) {
+      const symbolType = this.checker.getTypeOfSymbol(tsType.symbol)
+      if (symbolType !== tsType && !tsType.isClass() && symbolType.isClass()) {
+        tsType = symbolType
+      }
+    }
+
+    intersect: if (isIntersectionType(tsType)) {
+      if (tsType.aliasSymbol) {
+        break intersect
+      }
       // Special handling of struct base types which are an intersection of `StructBase` and the generic `T` type
       const parts = tsType.types.map((t) => this.resolveType(t, sourceLocation))
-      if (parts.some((p) => p.fullName === arc4StructBaseType.fullName)) {
+      if (parts.some((p) => p.equals(arc4StructBaseType))) {
         return arc4StructBaseType
+      } else {
+        return IntersectionPType.fromTypes(parts)
       }
     }
     if (isUnionType(tsType)) {
-      return UnionPType.fromTypes(tsType.types.map((t) => this.resolveType(t, sourceLocation)))
+      const ut = UnionPType.fromTypes(tsType.types.map((t) => this.resolveType(t, sourceLocation)))
+      if (ut.equals(gtxnUnion)) {
+        return anyGtxnType
+      }
+      return ut
     }
-    if (tsType.flags === ts.TypeFlags.Undefined) {
-      return undefinedPType
-    }
-    if (hasFlags(tsType.flags, ts.TypeFlags.Null)) {
-      return nullPType
-    }
-    if (hasFlags(tsType.flags, ts.TypeFlags.Any)) {
-      return anyPType
-    }
-    if (intersectsFlags(tsType.flags, ts.TypeFlags.Boolean | ts.TypeFlags.BooleanLiteral)) {
-      return boolPType
-    }
-    if (tsType.flags === ts.TypeFlags.Void) {
-      return voidPType
-    }
-    if (intersectsFlags(tsType.flags, ts.TypeFlags.String | ts.TypeFlags.StringLiteral)) {
-      return stringPType
-    }
-    if (tsType.flags === ts.TypeFlags.Never) {
-      return neverPType
-    }
-    if (hasFlags(tsType.flags, ts.TypeFlags.Unknown)) {
-      return unknownPType
-    }
-    if (intersectsFlags(tsType.flags, ts.TypeFlags.Number | ts.TypeFlags.NumberLiteral) && tsType.getSymbol() === undefined) {
-      if (tsType.isNumberLiteral()) {
+    switch (tsType.flags) {
+      case ts.TypeFlags.Undefined:
+        return undefinedPType
+      case ts.TypeFlags.Null:
+        return nullPType
+      case ts.TypeFlags.Any:
+        return anyPType
+      case ts.TypeFlags.Boolean | ts.TypeFlags.Union:
+      case ts.TypeFlags.BooleanLiteral:
+        return boolPType
+      case ts.TypeFlags.Void:
+        return voidPType
+      case ts.TypeFlags.String:
+      case ts.TypeFlags.StringLiteral:
+        return stringPType
+      case ts.TypeFlags.Never:
+        return neverPType
+      case ts.TypeFlags.Unknown:
+        return unknownPType
+      case ts.TypeFlags.NumberLiteral | ts.TypeFlags.EnumLiteral:
+      case ts.TypeFlags.NumberLiteral:
+        invariant(tsType.isNumberLiteral(), 'type must be literal', sourceLocation)
         return new NumericLiteralPType({ literalValue: BigInt(tsType.value) })
-      }
-      return numberPType
-    }
-    if (intersectsFlags(tsType.flags, ts.TypeFlags.BigInt | ts.TypeFlags.BigIntLiteral) && tsType.getSymbol() === undefined) {
-      if (tsType.isLiteral() && typeof tsType.value === 'object') {
+      case ts.TypeFlags.Number:
+        return numberPType
+      case ts.TypeFlags.BigIntLiteral:
+        invariant(tsType.isLiteral() && typeof tsType.value === 'object', 'type must be literal bigint', sourceLocation)
         return new BigIntLiteralPType({ literalValue: BigInt(tsType.value.base10Value) * (tsType.value.negative ? -1n : 1n) })
-      }
-      return bigIntPType
+      case ts.TypeFlags.BigInt:
+        return bigIntPType
     }
     if (isTupleReference(tsType)) {
-      codeInvariant(tsType.target.fixedLength, 'Tuple types should have a fixed length', sourceLocation)
+      codeInvariant(
+        tsType.target.fixedLength !== undefined && tsType.target.fixedLength !== null,
+        'Tuple types should have a fixed length',
+        sourceLocation,
+      )
       codeInvariant(tsType.typeArguments, 'Tuple items must have types', sourceLocation)
 
       return new TuplePType({
@@ -178,6 +203,21 @@ export class TypeResolver {
     }
 
     const typeName = this.getTypeName(tsType, sourceLocation)
+    logger.debug(sourceLocation, `Resolving ptype for ${typeName}`)
+
+    if (typeName.name === '__type' && typeName.module.startsWith(Constants.algoTsPackage)) {
+      // We are likely dealing with `typeof X` where X is a singleton exported by algo-ts
+      const declarationNode = tsType.symbol.getDeclarations()?.[0]?.parent
+
+      if (declarationNode && ts.isVariableDeclaration(declarationNode)) {
+        return this.resolve(declarationNode.name, sourceLocation)
+      }
+    }
+
+    if (typeName.fullName === arc4StructBaseType.fullName) return arc4StructBaseType
+    if (typeName.fullName === ClusteredPrototype.fullName) {
+      return this.resolveClusteredPrototype(tsType, sourceLocation)
+    }
 
     if (tsType.flags === ts.TypeFlags.TypeParameter) {
       return new TypeParameterType(typeName)
@@ -203,7 +243,6 @@ export class TypeResolver {
     if (tsType.isClass()) {
       if (typeName.fullName === arc4BaseContractType.fullName) return arc4BaseContractType
       if (typeName.fullName === baseContractType.fullName) return baseContractType
-      if (typeName.fullName === arc4StructBaseType.fullName) return arc4StructBaseType
       if (typeName.fullName === logicSigBaseType.fullName) return logicSigBaseType
 
       const [baseType, ...rest] = tsType.getBaseTypes()?.map((t) => this.resolveType(t, sourceLocation)) ?? []
@@ -242,8 +281,7 @@ export class TypeResolver {
       } else {
         const itemPType = this.resolveType(itemType, sourceLocation)
         return new ArrayPType({
-          itemType: itemPType,
-          immutable: false,
+          elementType: itemPType,
         })
       }
     }
@@ -271,7 +309,7 @@ export class TypeResolver {
       }
     }
     if (typeAlias) {
-      return new ObjectPType({ ...typeAlias, properties, description: tryGetTypeDescription(tsType) })
+      return new ObjectPType({ alias: typeAlias, properties, description: tryGetTypeDescription(tsType) })
     }
     return ObjectPType.anonymous(properties)
   }
@@ -311,6 +349,7 @@ export class TypeResolver {
       parameters,
       name: typeName.name,
       module: typeName.module,
+      sourceLocation,
     })
   }
 
@@ -320,7 +359,7 @@ export class TypeResolver {
     baseType: ARC4StructType,
     sourceLocation: SourceLocation,
   ): ARC4StructType {
-    const ignoredProps = ['bytes', 'equals', Constants.constructorMethodName]
+    const ignoredProps = ['bytes', 'equals', 'native', 'copy', Constants.constructorMethodName]
     const fields: Record<string, ARC4EncodedType> = {}
     for (const prop of tsType.getProperties()) {
       if (isIn(prop.name, ignoredProps)) continue
@@ -338,6 +377,7 @@ export class TypeResolver {
       fields: fields,
       sourceLocation: sourceLocation,
       description: tryGetTypeDescription(tsType),
+      frozen: baseType.frozen,
     })
   }
 
@@ -349,6 +389,7 @@ export class TypeResolver {
   ): ContractClassPType {
     const properties: Record<string, AppStorageType> = {}
     const methods: Record<string, FunctionPType> = {}
+
     for (const prop of tsType.getProperties()) {
       const type = this.checker.getTypeOfSymbol(prop)
       const ptype = this.resolveType(type, this.getLocationOfSymbol(prop) ?? sourceLocation)
@@ -368,14 +409,35 @@ export class TypeResolver {
     })
   }
 
+  private resolveClusteredPrototype(tsType: ts.Type, sourceLocation: SourceLocation): PType {
+    invariant(isIntersectionType(tsType), 'Clustered prototypes must be an intersection type')
+    const baseContracts: ContractClassPType[] = []
+    for (const t of tsType.types.map((t) => this.resolveType(t, sourceLocation))) {
+      if (t instanceof ContractClassPType) {
+        baseContracts.push(t)
+      } else if (t instanceof SuperPrototypeSelector) {
+        // Ignore for now
+      } else {
+        throw new CodeError(
+          `Unexpected type: ${t}. Polytype can only be used to support multiple inheritance in contracts for now. All base types must extend the Contract or BaseContract class.}`,
+        )
+      }
+    }
+    return new ClusteredContractClassType({
+      methods: {},
+      baseTypes: baseContracts,
+      sourceLocation,
+    })
+  }
+
   private getTypeName(type: ts.Type, sourceLocation: SourceLocation): SymbolName {
     if (type.aliasSymbol) {
       const name = this.getSymbolFullName(type.aliasSymbol, sourceLocation)
-      // We only respect type aliases within the algo ts package, otherwise use the
+      // We only respect type aliases within certain modules, otherwise use the
       // unaliased symbol
-      if (name.module.startsWith(Constants.algoTsPackage)) return name
+      if (name.module.startsWith(Constants.algoTsPackage) || name.module === Constants.polytypeModuleName) return name
     }
-    invariant(type.symbol, 'Type must have a symbol')
+    invariant(type.symbol, 'Type must have a symbol', sourceLocation)
     return this.getSymbolFullName(type.symbol, sourceLocation)
   }
 

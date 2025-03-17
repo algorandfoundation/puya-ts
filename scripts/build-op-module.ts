@@ -1,5 +1,4 @@
 import { camelCase, pascalCase } from 'change-case'
-import fs from 'fs'
 import langSpec from '../langspec.puya.json'
 import { hasFlags, invariant } from '../src/util'
 import type { Op } from './langspec'
@@ -9,7 +8,7 @@ function range(start: number, end: number) {
     .fill(0)
     .map((_, i) => start + i)
 }
-export const ENUMS_TO_EXPOSE = new Set(['EC', 'ECDSA', 'vrf_verify', 'base64'])
+export const ENUMS_TO_EXPOSE = new Set(['EC', 'ECDSA', 'vrf_verify', 'base64', 'Mimc Configurations'])
 
 const EXCLUDED_OPCODES = new Set([
   // low level flow control
@@ -57,17 +56,18 @@ const EXCLUDED_OPCODES = new Set([
   'replace2',
   'substring',
   'extract',
+  'extract3',
   'gaid',
   'gload',
   'gloads',
   // has overload with stack params
   'txna',
-  'gtxna',
   'itxna',
-  'gitxna',
+  'gtxna',
+  'gtxn',
   'gtxnsa',
   'gtxnas',
-  'gtxns',
+  'gitxna',
   // Manually crafted
   'assert',
   'err',
@@ -207,7 +207,6 @@ const RENAMED_OPCODES_MAP = new Map([
   ['return', 'exit'],
   ['replace3', 'replace'],
   ['substring3', 'substring'],
-  ['extract3', 'extract'],
   ['gaids', 'gaid'],
   ['gloadss', 'gload'],
   ['setbit', 'setBit'],
@@ -293,7 +292,7 @@ const GROUPED_OPCODES: { name: string; doc: string; ops: { [key: string]: OpName
   { name: 'Block', doc: '', ops: { block: {} } },
   { name: 'JsonRef', doc: '', ops: { json_ref: {} } },
   { name: 'Txn', doc: 'Get values for the current executing transaction', ops: { txn: {}, txnas: {} } },
-  { name: 'GTxn', doc: 'Get values for transactions in the current group', ops: { gtxn: {}, gtxnsas: {} } },
+  { name: 'GTxn', doc: 'Get values for transactions in the current group', ops: { gtxns: {}, gtxnsas: {} } },
   { name: 'GITxn', doc: 'Get values for inner transaction in the last group submitted', ops: { gitxn: {}, gitxnas: {} } },
   { name: 'ITxn', doc: 'Get values for the last inner transaction', ops: { itxn: {}, itxnas: {} } },
 ]
@@ -301,6 +300,7 @@ const GROUPED_OPCODES: { name: string; doc: string; ops: { [key: string]: OpName
 export type OpArg = {
   name: string
   type: AlgoTsType
+  optional?: boolean
 }
 
 export type EnumArgMeta = {
@@ -472,6 +472,50 @@ export function buildOpModule() {
   // Manually handle select overloads
   opModule.items.push({
     type: 'op-overloaded-function',
+    name: 'extract',
+    minAvmVersion: 5,
+    signatures: [
+      {
+        stackArgs: [
+          {
+            name: 'a',
+            type: AlgoTsType.Bytes,
+          },
+          {
+            name: 'b',
+            type: AlgoTsType.Uint64,
+          },
+        ],
+        immediateArgs: [],
+        returnTypes: [AlgoTsType.Bytes],
+        docs: ['A range of bytes from A starting at B up to the end of the sequence'],
+      },
+      {
+        stackArgs: [
+          {
+            name: 'a',
+            type: AlgoTsType.Bytes,
+          },
+          {
+            name: 'b',
+            type: AlgoTsType.Uint64,
+          },
+          {
+            name: 'c',
+            type: AlgoTsType.Uint64,
+          },
+        ],
+        immediateArgs: [],
+        returnTypes: [AlgoTsType.Bytes],
+        docs: [
+          'A range of bytes from A starting at B up to but not including B+C. If B+C is larger than the array length, the program fails',
+        ],
+      },
+    ],
+    opCode: 'extract3',
+  })
+  opModule.items.push({
+    type: 'op-overloaded-function',
     name: 'select',
     minAvmVersion: 3,
     signatures: [
@@ -610,10 +654,3 @@ const getOpDocs = (op: Op): string[] => [
     .flat(),
   `@see Native TEAL opcode: [\`${op.name}\`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#${op.name})`,
 ]
-
-function testOpModule() {
-  const mod = buildOpModule()
-
-  fs.writeFileSync('op-module.json', JSON.stringify(mod, undefined, 2))
-}
-testOpModule()

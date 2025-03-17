@@ -9,8 +9,8 @@ import { biguintPType, NumericLiteralPType, uint64PType } from '../../ptypes'
 import { UintNClass, UintNType } from '../../ptypes/arc4-types'
 import type { InstanceBuilder, NodeBuilder } from '../index'
 import { ClassBuilder } from '../index'
-import { isValidLiteralForPType } from '../util'
 import { parseFunctionArgs } from '../util/arg-parsing'
+import { isValidLiteralForPType } from '../util/is-valid-literal-for-ptype'
 import { Arc4EncodedBaseExpressionBuilder } from './base'
 
 export class UintNClassBuilder extends ClassBuilder {

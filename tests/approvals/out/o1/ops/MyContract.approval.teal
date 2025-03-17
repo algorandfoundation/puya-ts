@@ -1,0 +1,70 @@
+#pragma version 10
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0 1
+    bytecblock 0xa78000de
+    // tests/approvals/ops.algo.ts:6
+    // class MyContract extends Contract {
+    txn NumAppArgs
+    bz main_bare_routing@6
+    bytec_0 // method "test()void"
+    txna ApplicationArgs 0
+    match main_test_route@3
+
+main_after_if_else@10:
+    // tests/approvals/ops.algo.ts:6
+    // class MyContract extends Contract {
+    intc_0 // 0
+    return
+
+main_test_route@3:
+    // tests/approvals/ops.algo.ts:7
+    // test() {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    callsub test
+    intc_1 // 1
+    return
+
+main_bare_routing@6:
+    // tests/approvals/ops.algo.ts:6
+    // class MyContract extends Contract {
+    txn OnCompletion
+    bnz main_after_if_else@10
+    txn ApplicationID
+    !
+    assert // can only call when creating
+    intc_1 // 1
+    return
+
+
+// tests/approvals/ops.algo.ts::MyContract.test() -> void:
+test:
+    // tests/approvals/ops.algo.ts:16
+    // assert(GTxn.applicationId(Txn.groupIndex) === Txn.applicationId)
+    txn GroupIndex
+    gtxns ApplicationID
+    txn ApplicationID
+    ==
+    assert
+    // tests/approvals/ops.algo.ts:18
+    // assert(Txn.applicationArgs(0) === methodSelector('test()void'))
+    intc_0 // 0
+    txnas ApplicationArgs
+    bytec_0 // method "test()void"
+    ==
+    assert
+    // tests/approvals/ops.algo.ts:19
+    // assert(GTxn.applicationArgs(Txn.groupIndex, 0) === methodSelector(MyContract.prototype.test))
+    txn GroupIndex
+    intc_0 // 0
+    gtxnsas ApplicationArgs
+    bytec_0 // method "test()void"
+    ==
+    assert
+    retsub

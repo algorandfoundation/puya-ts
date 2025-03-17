@@ -1,0 +1,15 @@
+#pragma version 11
+#pragma typetrack false
+
+// tests/approvals/avm11.algo.ts::program() -> uint64:
+main:
+
+main_block@0:
+    // tests/approvals/avm11.algo.ts:7
+    // const a = Bytes.fromHex('00000000000000000000000000000000000000000000000000000000499602d2')
+    pushbytes 0x00000000000000000000000000000000000000000000000000000000499602d2
+    // tests/approvals/avm11.algo.ts:8
+    // return op.mimc(MimcConfigurations.BN254Mp110, a).length
+    mimc BN254Mp110
+    len
+    return

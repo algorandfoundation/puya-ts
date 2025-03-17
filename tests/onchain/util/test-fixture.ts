@@ -1,7 +1,8 @@
 import type { AlgorandClient } from '@algorandfoundation/algokit-utils'
 import { Config, microAlgos } from '@algorandfoundation/algokit-utils'
 import { algorandFixture } from '@algorandfoundation/algokit-utils/testing'
-import type { SendAppTransactionResult } from '@algorandfoundation/algokit-utils/types/app'
+import type { AlgoAmount } from '@algorandfoundation/algokit-utils/types/amount'
+import type { AppState, SendAppTransactionResult } from '@algorandfoundation/algokit-utils/types/app'
 import type { Arc56Contract } from '@algorandfoundation/algokit-utils/types/app-arc56'
 import type { AppClient } from '@algorandfoundation/algokit-utils/types/app-client'
 import type { AppFactory, AppFactoryDeployParams } from '@algorandfoundation/algokit-utils/types/app-factory'
@@ -14,9 +15,9 @@ import fs from 'fs'
 import type { ExpectStatic } from 'vitest'
 import { test } from 'vitest'
 import { compile } from '../../../src'
-import { buildCompileOptions } from '../../../src/compile-options'
+import { processInputPaths } from '../../../src/input-paths/process-input-paths'
 import { LoggingContext, LogLevel } from '../../../src/logger'
-import { defaultPuyaOptions } from '../../../src/puya/options'
+import { CompileOptions } from '../../../src/options'
 import type { DeliberateAny } from '../../../src/typescript-helpers'
 import { invariant } from '../../../src/util'
 import { generateTempDir } from '../../../src/util/generate-temp-file'
@@ -49,8 +50,8 @@ const algorandTestFixture = (localnetFixture: AlgorandFixture) =>
 function createLazyCompiler(path: string, options: { outputBytecode: boolean; outputArc56: boolean }) {
   let result: CompilationArtifacts | undefined = undefined
   return {
-    getCompileResult(expect: ExpectStatic) {
-      if (!result) result = compilePath(path, expect, options)
+    async getCompileResult(expect: ExpectStatic) {
+      if (!result) result = await compilePath(path, expect, options)
       return result
     },
   }
@@ -83,6 +84,7 @@ type ProgramInvokeOptions = {
 } & Omit<AlgoClientAppCallParams, 'onComplete' | 'sender' | 'appId'>
 
 type ProgramInvoker = {
+  globalState(appId: bigint): Promise<AppState>
   send(options?: ProgramInvokeOptions): Promise<SendAppTransactionResult>
 }
 
@@ -105,7 +107,7 @@ export function createBaseTestFixture<TContracts extends string = ''>(path: stri
       { expect, localnet }: { expect: ExpectStatic; localnet: AlgorandFixture },
       use: Use<ProgramInvoker>,
     ) => {
-      const compiled = lazyCompile.getCompileResult(expect)
+      const compiled = await lazyCompile.getCompileResult(expect)
 
       const approvalProgram = compiled.approvalBinaries[contractName]
       const clearStateProgram = compiled.clearStateBinaries[contractName]
@@ -113,6 +115,10 @@ export function createBaseTestFixture<TContracts extends string = ''>(path: stri
       invariant(clearStateProgram, `No clear state program found for ${contractName}`)
 
       use({
+        async globalState(appId: bigint) {
+          return localnet.algorand.app.getGlobalState(appId)
+        },
+
         async send(options?: ProgramInvokeOptions) {
           const common = {
             ...options,
@@ -152,6 +158,7 @@ type Arc4FixtureContextFor<T extends string> = {
 
 type ContractConfig = {
   deployParams?: AppFactoryDeployParams
+  funding?: AlgoAmount
 }
 
 export function createArc4TestFixture<TContracts extends string = ''>(
@@ -167,8 +174,8 @@ export function createArc4TestFixture<TContracts extends string = ''>(
     logger: nullLogger,
   })
 
-  function getAppSpec(expect: ExpectStatic, contractName: string) {
-    const appSpec = lazyCompile.getCompileResult(expect).appSpecs.find((s) => s.name === contractName)
+  async function getAppSpec(expect: ExpectStatic, contractName: string) {
+    const appSpec = (await lazyCompile.getCompileResult(expect)).appSpecs.find((s) => s.name === contractName)
     if (appSpec === undefined) {
       expect.fail(`${path} does not contain an ARC4 contract "${contractName}"`)
     } else {
@@ -191,14 +198,14 @@ export function createArc4TestFixture<TContracts extends string = ''>(
   const ctx: DeliberateAny = {}
   for (const [contractName, config] of getContracts()) {
     ctx[`appSpec${contractName}`] = async ({ expect }: { expect: ExpectStatic }, use: Use<Arc56Contract>) => {
-      await use(getAppSpec(expect, contractName))
+      await use(await getAppSpec(expect, contractName))
     }
 
     ctx[`appFactory${contractName}`] = async (
       { expect, localnet }: { expect: ExpectStatic; localnet: AlgorandFixture },
       use: Use<AppFactory>,
     ) => {
-      const appSpec = getAppSpec(expect, contractName)
+      const appSpec = await getAppSpec(expect, contractName)
       await use(
         localnet.algorand.client.getAppFactory({
           defaultSender: localnet.context.testAccount.addr,
@@ -210,12 +217,13 @@ export function createArc4TestFixture<TContracts extends string = ''>(
       { expect, localnet }: { expect: ExpectStatic; localnet: AlgorandFixture },
       use: Use<AppClient>,
     ) => {
-      const appSpec = getAppSpec(expect, contractName)
+      const appSpec = await getAppSpec(expect, contractName)
       const appFactory = localnet.algorand.client.getAppFactory({
         defaultSender: localnet.context.testAccount.addr,
         appSpec: appSpec!,
       })
       const { appClient } = await appFactory.deploy(config.deployParams ?? {})
+      if (config.funding) await appClient.fundAppAccount({ amount: config.funding })
       await use(appClient)
     }
   }
@@ -228,60 +236,61 @@ type CompilationArtifacts = {
   clearStateBinaries: Record<string, Uint8Array>
 }
 
-function compilePath(path: string, expect: ExpectStatic, options: { outputBytecode: boolean; outputArc56: boolean }): CompilationArtifacts {
+async function compilePath(
+  path: string,
+  expect: ExpectStatic,
+  options: { outputBytecode: boolean; outputArc56: boolean },
+): Promise<CompilationArtifacts> {
   using tempDir = generateTempDir()
-  using logCtx = LoggingContext.create()
+  const logCtx = LoggingContext.create()
 
-  compile(
-    buildCompileOptions({
-      outputAwstJson: false,
-      outputAwst: false,
-      paths: [path],
-      outDir: tempDir.dirPath,
-      dryRun: false,
-      logLevel: LogLevel.Error,
-    }),
-    {
-      ...defaultPuyaOptions,
-      outputArc32: false,
-      outputTeal: false,
-      outputSourceMap: true,
-      optimizationLevel: 0,
-      ...options,
-    },
-  )
-  for (const log of logCtx.logEvents) {
-    switch (log.level) {
-      case LogLevel.Error:
-      case LogLevel.Critical:
-        expect.fail(`Compilation error ${log.sourceLocation} [${log.level}]: ${log.message}`)
+  return await logCtx.run(async () => {
+    const filePaths = processInputPaths({ paths: [path], outDir: tempDir.dirPath })
+    await compile(
+      new CompileOptions({
+        filePaths,
+        logLevel: LogLevel.Error,
+        skipVersionCheck: true,
+        outputArc32: false,
+        outputTeal: false,
+        outputSourceMap: true,
+        optimizationLevel: 0,
+        ...options,
+      }),
+    )
+    for (const log of logCtx.logEvents) {
+      switch (log.level) {
+        case LogLevel.Error:
+        case LogLevel.Critical:
+          expect.fail(`Compilation error ${log.sourceLocation} [${log.level}]: ${log.message}`)
+      }
     }
-  }
 
-  const matchBinary = /(?<appName>[^\\/]+)\.(?<programName>(approval)|(clear))\.bin$/
-  const appSpecs = new Array<Arc56Contract>()
-  const approvalBinaries: Record<string, Uint8Array> = {}
-  const clearStateBinaries: Record<string, Uint8Array> = {}
-  for (const filePath of tempDir.files()) {
-    if (filePath.endsWith('.arc56.json')) {
-      appSpecs.push(JSON.parse(fs.readFileSync(filePath, 'utf-8')))
-    } else {
-      const m = matchBinary.exec(filePath)
-      if (m?.groups) {
-        const { appName, programName } = m.groups
-        const binary = new Uint8Array(fs.readFileSync(filePath))
-        if (programName === 'approval') {
-          approvalBinaries[appName] = binary
-        } else {
-          clearStateBinaries[appName] = binary
+    const matchBinary = /(?<appName>[^\\/]+)\.(?<programName>(approval)|(clear))\.bin$/
+    const appSpecs = new Array<Arc56Contract>()
+    const approvalBinaries: Record<string, Uint8Array> = {}
+    const clearStateBinaries: Record<string, Uint8Array> = {}
+    for (const filePath of tempDir.files()) {
+      if (filePath.endsWith('.arc56.json')) {
+        appSpecs.push(JSON.parse(fs.readFileSync(filePath, 'utf-8')))
+      } else {
+        const m = matchBinary.exec(filePath)
+        if (m?.groups) {
+          const { appName, programName } = m.groups
+          const binary = new Uint8Array(fs.readFileSync(filePath))
+          if (programName === 'approval') {
+            approvalBinaries[appName] = binary
+          } else {
+            clearStateBinaries[appName] = binary
+          }
         }
       }
     }
-  }
 
-  return {
-    appSpecs,
-    approvalBinaries,
-    clearStateBinaries,
-  }
+    return {
+      appSpecs,
+      approvalBinaries,
+      clearStateBinaries,
+    }
+  })
 }

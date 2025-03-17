@@ -77,7 +77,7 @@ export class AssetExpressionBuilder extends Uint64BackedReferenceTypeExpressionB
       fieldOpCode: 'asset_params_get',
       fieldMapping: {
         total: ['AssetTotal', uint64PType],
-        decimal: ['AssetDecimals', uint64PType],
+        decimals: ['AssetDecimals', uint64PType],
         defaultFrozen: ['AssetDefaultFrozen', boolPType],
         unitName: ['AssetUnitName', bytesPType],
         name: ['AssetName', bytesPType],

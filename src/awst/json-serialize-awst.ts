@@ -2,22 +2,56 @@ import { snakeCase } from 'change-case'
 import path from 'node:path'
 import { Constants } from '../constants'
 import { InternalError } from '../errors'
-import { logger } from '../logger'
 import { invariant } from '../util'
 import { buildBase85Encoder } from '../util/base-85'
-import { ARC4ABIMethodConfig, ContractReference, LogicSigReference } from './models'
+import { ContractReference, LogicSigReference } from './models'
 import type { RootNode } from './nodes'
 import { IntrinsicCall, SingleEvaluation } from './nodes'
 import { SourceLocation } from './source-location'
 import { SymbolToNumber } from './util'
+
+type JSONWithRaw = typeof JSON & {
+  /**
+   * This method exists in Node 21+ and several browsers but hasn't made its way into the typescript lib
+   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/rawJSON
+   *
+   *
+   */
+  rawJSON?(value: string): string
+}
+
+function serializeBigInt(value: bigint): unknown {
+  const jsonWithRaw = JSON as unknown as JSONWithRaw
+  if (jsonWithRaw.rawJSON) {
+    return jsonWithRaw.rawJSON(`${value}`)
+  }
+  if (value < 0n) {
+    if (value < Number.MIN_SAFE_INTEGER) {
+      throw new InternalError(`Cannot safely serialize ${value} to JSON`)
+    }
+    return Number(value)
+  } else {
+    if (value > Number.MAX_SAFE_INTEGER) {
+      return `${value}`
+    }
+    return Number(value)
+  }
+}
 
 export class SnakeCaseSerializer<T> {
   constructor(private readonly spaces = 2) {}
   public serialize(obj: T): string {
     return JSON.stringify(obj, (k, v) => this.serializerFunction(k, v), this.spaces)
   }
+  private b85 = buildBase85Encoder()
 
   protected serializerFunction(key: string, value: unknown): unknown {
+    if (typeof value === 'bigint') {
+      return serializeBigInt(value)
+    }
+    if (value instanceof Uint8Array) {
+      return this.b85.encode(value)
+    }
     if (value instanceof Object && value.constructor.name !== 'Date' && value.constructor.name !== 'Object') {
       return {
         ...Object.fromEntries(Object.entries(value).map(([key, value]) => [snakeCase(key), value])),
@@ -37,12 +71,8 @@ export class AwstSerializer extends SnakeCaseSerializer<RootNode[]> {
     super()
   }
   #singleEvals = new SymbolToNumber()
-  private b85 = buildBase85Encoder()
 
   protected serializerFunction(key: string, value: unknown): unknown {
-    if (typeof value === 'bigint') {
-      return `${value}`
-    }
     if (value instanceof Set) {
       return Array.from(value.keys())
     }
@@ -60,6 +90,9 @@ export class AwstSerializer extends SnakeCaseSerializer<RootNode[]> {
       }
       return Array.from(value.entries())
     }
+    if (value instanceof Uint8Array) {
+      return super.serializerFunction(key, value)
+    }
     if (value instanceof ContractReference || value instanceof LogicSigReference) {
       return value.toString()
     }
@@ -70,14 +103,7 @@ export class AwstSerializer extends SnakeCaseSerializer<RootNode[]> {
         ...(super.serializerFunction(key, value) as object),
         immediates: value.immediates.map((i) => {
           if (typeof i === 'bigint') {
-            if (i <= Number.MAX_SAFE_INTEGER) {
-              return Number(i)
-            } else {
-              throw new InternalError(
-                'Intrinsic call with integer immediate arg cannot be serialized as it is larger than Number.MAX_SAFE_INTEGER',
-                { sourceLocation: value.sourceLocation },
-              )
-            }
+            return serializeBigInt(i)
           }
           return i
         }),
@@ -105,26 +131,6 @@ export class AwstSerializer extends SnakeCaseSerializer<RootNode[]> {
         ...(super.serializerFunction(key, value) as object),
         id: String(this.#singleEvals.forSymbol(value.id)[0]),
       }
-    }
-    if (value instanceof ARC4ABIMethodConfig) {
-      // TODO: This can be removed once puya has been updated to support a more advanced default args schema
-      return {
-        _type: value.constructor.name,
-        ...(super.serializerFunction(key, value) as object),
-        default_args: Object.fromEntries(
-          Object.entries(value.defaultArgs).flatMap(([key, v]) => {
-            if (v.source === 'constant') {
-              logger.warn(value.sourceLocation, `Ignoring constant default value for ${key} as puya does not support this yet`)
-              return []
-            } else {
-              return [[key, v.memberName]]
-            }
-          }),
-        ),
-      }
-    }
-    if (value instanceof Uint8Array) {
-      return this.b85.encode(value)
     }
 
     if (value instanceof Object && value.constructor.name !== 'Object') {

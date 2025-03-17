@@ -1,0 +1,216 @@
+contract SuperContract
+{
+  globals {
+    ["g1"]: uint64
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    assert(GlobalState["g1"] == 1)
+    return True
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  superMethod(): bool
+  {
+    return True
+  }
+  
+  constructor(): void
+  {
+    super.constructor()
+    GlobalState["g1"]: uint64 = 1
+  }
+  
+  BaseContract::constructor(): void
+  {
+  }
+  
+}
+contract SubContract
+{
+  globals {
+    ["g2"]: uint64
+    ["g1"]: uint64
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    assert(GlobalState["g1"] == 1)
+    assert(GlobalState["g2"] == 2)
+    return True
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  SuperContract::approvalProgram(): bool
+  {
+    assert(GlobalState["g1"] == 1)
+    return True
+  }
+  
+  SuperContract::superMethod(): bool
+  {
+    return True
+  }
+  
+  constructor(): void
+  {
+    super.constructor()
+    GlobalState["g2"]: uint64 = 2
+  }
+  
+  SuperContract::constructor(): void
+  {
+    super.constructor()
+    GlobalState["g1"]: uint64 = 1
+  }
+  
+  BaseContract::constructor(): void
+  {
+  }
+  
+}
+contract SubSubContract
+{
+  globals {
+    ["g2"]: uint64
+    ["g1"]: uint64
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    assert(GlobalState["g1"] == 1)
+    assert(GlobalState["g2"] == 2)
+    return True
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  SubContract::approvalProgram(): bool
+  {
+    assert(GlobalState["g1"] == 1)
+    assert(GlobalState["g2"] == 2)
+    return True
+  }
+  
+  SuperContract::approvalProgram(): bool
+  {
+    assert(GlobalState["g1"] == 1)
+    return True
+  }
+  
+  SuperContract::superMethod(): bool
+  {
+    return True
+  }
+  
+  SubContract::constructor(): void
+  {
+    super.constructor()
+    GlobalState["g2"]: uint64 = 2
+  }
+  
+  SuperContract::constructor(): void
+  {
+    super.constructor()
+    GlobalState["g1"]: uint64 = 1
+  }
+  
+  BaseContract::constructor(): void
+  {
+  }
+  
+}
+contract SubSubSubContract
+{
+  globals {
+    ["g3"]: uint64
+    ["g2"]: uint64
+    ["g1"]: uint64
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    assert(GlobalState["g1"] == 1)
+    assert(GlobalState["g2"] == 2)
+    assert(GlobalState["g3"] == 3)
+    return True
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  subSubSubMethod(): bool
+  {
+    return super.superMethod()
+  }
+  
+  SubSubContract::approvalProgram(): bool
+  {
+    assert(GlobalState["g1"] == 1)
+    assert(GlobalState["g2"] == 2)
+    return True
+  }
+  
+  SubContract::approvalProgram(): bool
+  {
+    assert(GlobalState["g1"] == 1)
+    assert(GlobalState["g2"] == 2)
+    return True
+  }
+  
+  SuperContract::approvalProgram(): bool
+  {
+    assert(GlobalState["g1"] == 1)
+    return True
+  }
+  
+  SuperContract::superMethod(): bool
+  {
+    return True
+  }
+  
+  constructor(): void
+  {
+    super.constructor()
+    GlobalState["g3"]: uint64 = 3
+  }
+  
+  SubContract::constructor(): void
+  {
+    super.constructor()
+    GlobalState["g2"]: uint64 = 2
+  }
+  
+  SuperContract::constructor(): void
+  {
+    super.constructor()
+    GlobalState["g1"]: uint64 = 1
+  }
+  
+  BaseContract::constructor(): void
+  {
+  }
+  
+}

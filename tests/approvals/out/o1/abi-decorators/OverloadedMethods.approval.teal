@@ -1,0 +1,91 @@
+#pragma version 10
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    bytecblock 0x151f7c75
+    // tests/approvals/abi-decorators.algo.ts:24
+    // export class OverloadedMethods extends Contract {
+    txn NumAppArgs
+    bz main_bare_routing@7
+    pushbytess 0x7920dd57 0x1cefbc5a // method "doThing(uint64)uint64", method "doThing(uint64,uint64)uint64"
+    txna ApplicationArgs 0
+    match main_doThing_route@3 main_doThing_route@4
+
+main_after_if_else@11:
+    // tests/approvals/abi-decorators.algo.ts:24
+    // export class OverloadedMethods extends Contract {
+    pushint 0 // 0
+    return
+
+main_doThing_route@4:
+    // tests/approvals/abi-decorators.algo.ts:30
+    // @abimethod({ name: 'doThing' })
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    // tests/approvals/abi-decorators.algo.ts:24
+    // export class OverloadedMethods extends Contract {
+    txna ApplicationArgs 1
+    btoi
+    txna ApplicationArgs 2
+    btoi
+    // tests/approvals/abi-decorators.algo.ts:30
+    // @abimethod({ name: 'doThing' })
+    callsub doThingTwo
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    pushint 1 // 1
+    return
+
+main_doThing_route@3:
+    // tests/approvals/abi-decorators.algo.ts:25
+    // @abimethod({ name: 'doThing' })
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    // tests/approvals/abi-decorators.algo.ts:24
+    // export class OverloadedMethods extends Contract {
+    txna ApplicationArgs 1
+    btoi
+    // tests/approvals/abi-decorators.algo.ts:25
+    // @abimethod({ name: 'doThing' })
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    pushint 1 // 1
+    return
+
+main_bare_routing@7:
+    // tests/approvals/abi-decorators.algo.ts:24
+    // export class OverloadedMethods extends Contract {
+    txn OnCompletion
+    bnz main_after_if_else@11
+    txn ApplicationID
+    !
+    assert // can only call when creating
+    pushint 1 // 1
+    return
+
+
+// tests/approvals/abi-decorators.algo.ts::OverloadedMethods.doThingTwo(x: uint64, y: uint64) -> uint64:
+doThingTwo:
+    // tests/approvals/abi-decorators.algo.ts:30-31
+    // @abimethod({ name: 'doThing' })
+    // doThingTwo(x: uint64, y: uint64): uint64 {
+    proto 2 1
+    // tests/approvals/abi-decorators.algo.ts:32
+    // return x * y
+    frame_dig -2
+    frame_dig -1
+    *
+    retsub

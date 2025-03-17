@@ -15,7 +15,7 @@ abstract class HelloBase extends Contract {
 }
 
 export class Hello extends HelloBase {
-  @abimethod({ onCreate: 'require' })
+  @abimethod({ name: 'helloCreate', onCreate: 'require' })
   create(greeting: string) {
     this.greeting.value = greeting
   }

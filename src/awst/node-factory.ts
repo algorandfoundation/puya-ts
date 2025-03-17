@@ -3,6 +3,8 @@ import type { DeliberateAny, Props } from '../typescript-helpers'
 import { codeInvariant, instanceOfAny, invariant } from '../util'
 import type { Expression, Statement } from './nodes'
 import {
+  ArrayLength,
+  ArrayReplace,
   AssignmentExpression,
   AssignmentStatement,
   BigUIntBinaryOperation,
@@ -252,6 +254,33 @@ const explicitNodeFactory = {
       expr,
       wtype,
       sourceLocation,
+    })
+  },
+  arrayLength({ array, sourceLocation }: { array: Expression; sourceLocation: SourceLocation }) {
+    return new ArrayLength({
+      array,
+      sourceLocation,
+      wtype: wtypes.uint64WType,
+    })
+  },
+  arrayReplace({
+    base,
+    index,
+    value,
+    sourceLocation,
+  }: {
+    base: Expression
+    index: Expression
+    value: Expression
+    sourceLocation: SourceLocation
+  }) {
+    invariant(base.wtype instanceof wtypes.StackArray, 'base must have wtype of StackArray', base.sourceLocation)
+    return new ArrayReplace({
+      base,
+      index,
+      value,
+      sourceLocation,
+      wtype: base.wtype,
     })
   },
 } satisfies { [key in keyof ConcreteNodes]?: (...args: DeliberateAny[]) => DeliberateAny }

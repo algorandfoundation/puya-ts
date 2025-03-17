@@ -2,11 +2,12 @@ import ts from 'typescript'
 import type { ContractReference } from '../../awst/models'
 import { nodeFactory } from '../../awst/node-factory'
 import * as awst from '../../awst/nodes'
-import { AwstBuildFailureError } from '../../errors'
+import { logger } from '../../logger'
 import { codeInvariant, invariant } from '../../util'
-import type { AwstBuildContext } from '../context/awst-build-context'
+import type { ContractClassPType } from '../ptypes'
 import { voidPType } from '../ptypes'
 import { ContractMethodBaseVisitor } from './contract-method-visitor'
+import { visitInChildContext } from './util'
 
 export interface ConstructorInfo {
   propertyInitializerStatements: awst.Statement[]
@@ -14,36 +15,37 @@ export interface ConstructorInfo {
 }
 
 export class ConstructorVisitor extends ContractMethodBaseVisitor {
-  private readonly _result: awst.ContractMethod
   private _foundSuperCall = false
-  private readonly _propertyInitializerStatements: awst.Statement[]
-  constructor(ctx: AwstBuildContext, node: ts.ConstructorDeclaration, contractInfo: ConstructorInfo) {
-    super(ctx, node)
-    this._propertyInitializerStatements = contractInfo.propertyInitializerStatements
-    const sourceLocation = this.sourceLocation(node)
+  constructor(
+    node: ts.ConstructorDeclaration,
+    contractType: ContractClassPType,
+    private readonly contractInfo: ConstructorInfo,
+  ) {
+    super(node, contractType)
+  }
 
-    const { args, body, documentation } = this.buildFunctionAwst(node)
-
-    this._result = new awst.ContractMethod({
+  get result() {
+    const sourceLocation = this.sourceLocation(this.node)
+    const { args, body, documentation } = this.buildFunctionAwst()
+    return new awst.ContractMethod({
       arc4MethodConfig: null,
       memberName: this._functionType.name,
       sourceLocation,
       args,
       returnType: voidPType.wtype,
       body,
-      cref: contractInfo.cref,
+      cref: this.contractInfo.cref,
       documentation,
+      inline: null,
     })
   }
 
-  get result() {
-    return this._result
-  }
-
-  public static buildConstructor(parentCtx: AwstBuildContext, node: ts.ConstructorDeclaration, constructorMethodInfo: ConstructorInfo) {
-    const result = new ConstructorVisitor(parentCtx.createChildContext(), node, constructorMethodInfo).result
-    invariant(result instanceof awst.ContractMethod, "result must be ContractMethod'")
-    return result
+  public static buildConstructor(
+    node: ts.ConstructorDeclaration,
+    contractType: ContractClassPType,
+    constructorMethodInfo: ConstructorInfo,
+  ) {
+    return visitInChildContext(this, node, contractType, constructorMethodInfo)
   }
 
   visitBlock(node: ts.Block): awst.Block {
@@ -63,13 +65,14 @@ export class ConstructorVisitor extends ContractMethodBaseVisitor {
                 sourceLocation: this.sourceLocation(s),
               },
               ...(Array.isArray(statement) ? statement : [statement]),
-              ...this._propertyInitializerStatements,
+              ...this.contractInfo.propertyInitializerStatements,
             )
           }
           return statement
         } catch (e) {
-          if (e instanceof AwstBuildFailureError) return []
-          throw e
+          invariant(e instanceof Error, 'Only errors should be thrown')
+          logger.error(e)
+          return []
         }
       }),
     )

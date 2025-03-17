@@ -10,10 +10,9 @@ import { ItxnParamsPType, ObjectPType, submitGroupItxnFunction, TransactionFunct
 import { instanceEb } from '../../type-registry'
 import type { InstanceBuilder, NodeBuilder } from '../index'
 import { FunctionBuilder, InstanceExpressionBuilder } from '../index'
-import { ArrayLiteralExpressionBuilder } from '../literal/array-literal-expression-builder'
-import { TupleExpressionBuilder } from '../tuple-expression-builder'
-import { requireExpressionOfType } from '../util'
+import { isStaticallyIterable, StaticIterator } from '../traits/static-iterator'
 import { parseFunctionArgs } from '../util/arg-parsing'
+import { resolveCompatExpression } from '../util/resolve-compat-builder'
 import { InnerTransactionExpressionBuilder } from './inner-transactions'
 import { anyTxnFields, txnKindToFields } from './txn-fields'
 import { getInnerTransactionType, getItxnParamsType } from './util'
@@ -70,24 +69,20 @@ function mapTransactionFields(
       const txnFieldData = TxnFields[txnField]
       const propValue = fields.memberAccess(prop, sourceLocation)
       if (txnField === TxnField.ApplicationArgs) {
-        codeInvariant(
-          propValue instanceof ArrayLiteralExpressionBuilder || propValue instanceof TupleExpressionBuilder,
-          'Unsupported expression for appArgs',
-          propValue.sourceLocation,
-        )
+        codeInvariant(isStaticallyIterable(propValue), 'Unsupported expression for appArgs', propValue.sourceLocation)
         mappedFields.set(
           txnField,
           nodeFactory.tupleExpression({
-            items: propValue.getItemBuilders().map((i) => i.toBytes(propValue.sourceLocation)),
+            items: propValue[StaticIterator]().map((i) => i.toBytes(propValue.sourceLocation)),
             sourceLocation: propValue.sourceLocation,
           }),
         )
       } else if (txnFieldData.numValues > 1) {
-        if (propValue instanceof ArrayLiteralExpressionBuilder || propValue instanceof TupleExpressionBuilder) {
+        if (isStaticallyIterable(propValue)) {
           mappedFields.set(
             txnField,
             nodeFactory.tupleExpression({
-              items: propValue.getItemBuilders().map((i) => requireExpressionOfType(i, fieldType)),
+              items: propValue[StaticIterator]().map((i) => resolveCompatExpression(i, fieldType)),
               sourceLocation: propValue.sourceLocation,
             }),
           )
@@ -95,7 +90,7 @@ function mapTransactionFields(
           mappedFields.set(
             txnField,
             nodeFactory.tupleExpression({
-              items: [requireExpressionOfType(propValue, fieldType)],
+              items: [resolveCompatExpression(propValue, fieldType)],
               sourceLocation: propValue.sourceLocation,
             }),
           )
@@ -103,7 +98,7 @@ function mapTransactionFields(
           logger.error(propValue.sourceLocation, `Unsupported expression for ${prop}`)
         }
       } else {
-        mappedFields.set(txnField, requireExpressionOfType(propValue, fieldType))
+        mappedFields.set(txnField, resolveCompatExpression(propValue, fieldType))
       }
     } else {
       logger.warn(sourceLocation, `Ignoring additional property: ${prop}`)
@@ -212,7 +207,7 @@ class CopyInnerTxnMethodBuilder extends InnerTxnFieldsMethodBuilder {
       argSpec: () => [],
     })
 
-    return new InnerTransactionExpressionBuilder(
+    return new ItxnParamsExpressionBuilder(
       nodeFactory.copy({
         value: this.builder.resolve(),
         sourceLocation,

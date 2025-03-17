@@ -1,0 +1,175 @@
+#pragma version 10
+#pragma typetrack false
+
+// tests/approvals/biguint-expressions.algo.ts::DemoContract.approvalProgram() -> uint64:
+main:
+    intcblock 4 0 1
+    bytecblock 0x 0x01
+
+main_block@0:
+    // tests/approvals/biguint-expressions.algo.ts:32
+    // testConstructor(12312312, 12312312n, false, 0n, itob(4), 4n)
+    intc_0 // 4
+    itob
+    pushint 12312312 // 12312312
+    pushbytes 0xbbdef8
+    intc_1 // 0
+    bytec_0 // 0x
+    uncover 4
+    pushbytes 0x04
+    callsub testConstructor
+    // tests/approvals/biguint-expressions.algo.ts:33
+    // testOps(500n, 1000n)
+    pushbytes 0x01f4
+    pushbytes 0x03e8
+    callsub testOps
+    // tests/approvals/biguint-expressions.algo.ts:34
+    // return true
+    intc_2 // 1
+    return
+
+
+// tests/approvals/biguint-expressions.algo.ts::testConstructor(a: uint64, a_b: bytes, b: uint64, b_b: bytes, c: bytes, c_b: bytes) -> void:
+testConstructor:
+    // tests/approvals/biguint-expressions.algo.ts:5
+    // function testConstructor(a: uint64, a_b: biguint, b: boolean, b_b: biguint, c: bytes, c_b: biguint) {
+    proto 6 0
+
+testConstructor_block@0:
+    // tests/approvals/biguint-expressions.algo.ts:6
+    // assert(BigUint() === 0n)
+    bytec_0 // 0x
+    dup
+    b==
+    assert
+    // tests/approvals/biguint-expressions.algo.ts:7
+    // assert(BigUint(true) === 1n)
+    intc_2 // 1
+    itob
+    bytec_1 // 0x01
+    b==
+    assert
+    // tests/approvals/biguint-expressions.algo.ts:8
+    // assert(BigUint(false) === 0n)
+    intc_1 // 0
+    itob
+    bytec_0 // 0x
+    b==
+    assert
+    // tests/approvals/biguint-expressions.algo.ts:9
+    // assert(BigUint(0) === 0n)
+    bytec_0 // 0x
+    dup
+    b==
+    assert
+    // tests/approvals/biguint-expressions.algo.ts:10
+    // assert(BigUint(1) === 1n)
+    bytec_1 // 0x01
+    dup
+    b==
+    assert
+    // tests/approvals/biguint-expressions.algo.ts:11
+    // assert(BigUint(0n) === 0n)
+    bytec_0 // 0x
+    dup
+    b==
+    assert
+    // tests/approvals/biguint-expressions.algo.ts:12
+    // assert(BigUint(1n) === 1n)
+    bytec_1 // 0x01
+    dup
+    b==
+    assert
+    // tests/approvals/biguint-expressions.algo.ts:13
+    // assert(BigUint(2n ** 512n - 1n) === 2n ** 512n - 1n)
+    pushbytes 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+    dup
+    b==
+    assert
+    // tests/approvals/biguint-expressions.algo.ts:14
+    // assert(BigUint('1231232134123123') === 1231232134123123n)
+    pushbytes 0x045fcc91fd8e73
+    dup
+    b==
+    assert
+    // tests/approvals/biguint-expressions.algo.ts:15
+    // assert(BigUint(a) === a_b)
+    frame_dig -6
+    itob
+    frame_dig -5
+    b==
+    assert
+    // tests/approvals/biguint-expressions.algo.ts:16
+    // assert(BigUint(a * a) === a_b * a_b)
+    frame_dig -6
+    dup
+    *
+    itob
+    frame_dig -5
+    dup
+    b*
+    b==
+    assert
+    // tests/approvals/biguint-expressions.algo.ts:17
+    // assert(BigUint(b) === b_b)
+    frame_dig -4
+    itob
+    frame_dig -3
+    b==
+    assert
+    // tests/approvals/biguint-expressions.algo.ts:18
+    // assert(BigUint(c) === c_b)
+    frame_dig -2
+    frame_dig -1
+    b==
+    assert
+    retsub
+
+
+// tests/approvals/biguint-expressions.algo.ts::testOps(smaller: bytes, larger: bytes) -> void:
+testOps:
+    // tests/approvals/biguint-expressions.algo.ts:21
+    // function testOps(smaller: biguint, larger: biguint) {
+    proto 2 0
+
+testOps_block@0:
+    // tests/approvals/biguint-expressions.algo.ts:22
+    // assert(smaller < larger)
+    frame_dig -2
+    frame_dig -1
+    b<
+    assert
+    // tests/approvals/biguint-expressions.algo.ts:23
+    // assert(smaller <= smaller)
+    frame_dig -2
+    dup
+    b<=
+    assert
+    // tests/approvals/biguint-expressions.algo.ts:24
+    // assert(larger > smaller)
+    frame_dig -1
+    frame_dig -2
+    b>
+    assert
+    // tests/approvals/biguint-expressions.algo.ts:25
+    // assert(larger >= larger)
+    frame_dig -1
+    dup
+    b>=
+    assert
+    // tests/approvals/biguint-expressions.algo.ts:26
+    // assert(smaller === BigUint(smaller))
+    frame_dig -2
+    dup
+    b==
+    assert
+    // tests/approvals/biguint-expressions.algo.ts:27
+    // assert(smaller === BigUint(op.bzero(4).concat(Bytes(smaller))), 'Leading zeros should be ignored in equality')
+    intc_0 // 4
+    bzero
+    frame_dig -2
+    concat
+    frame_dig -2
+    b==
+    assert // Leading zeros should be ignored in equality
+    retsub

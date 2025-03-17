@@ -1,15 +1,24 @@
-import { Contract } from './arc4'
+import { NoImplementation } from './internal/errors'
+import { ConstructorFor } from './internal/typescript-helpers'
 import { uint64 } from './primitives'
-import { ConstructorFor } from './typescript-helpers'
+import { NumberRange } from './util'
 
+/**
+ * The base type for all Algorand TypeScript contracts
+ */
 export abstract class BaseContract {
+  /**
+   * The program to be run when the On Completion Action is != ClearState (3)
+   */
   public abstract approvalProgram(): boolean | uint64
+
+  /**
+   * The program to be run when the On Completion Action is == ClearState (3)
+   */
   public clearStateProgram(): boolean | uint64 {
     return true
   }
 }
-
-type NumberRange = { from: number; to: number }
 
 /**
  * Options class to manually define the total amount of global and local state contract will use.
@@ -19,14 +28,17 @@ type NumberRange = { from: number; to: number }
  * to reserve additional state storage for future contract updates, since the Algorand protocol
  * doesn't allow increasing them after creation.
  */
-type StateTotals = {
+export type StateTotals = {
   globalUints?: number
   globalBytes?: number
   localUints?: number
   localBytes?: number
 }
 
-type ContractOptions = {
+/**
+ * Additional configuration options for a contract
+ */
+export type ContractOptions = {
   /**
    * Determines which AVM version to use, this affects what operations are supported.
    * Defaults to value provided supplied on command line (which defaults to current mainnet version)
@@ -71,16 +83,8 @@ type ContractOptions = {
  * The contract decorator can be used to specify additional configuration options for a smart contract
  * @param options An object containing the configuration options
  */
-export const ContractOptionsSymbol = Symbol('ContractOptions')
 export function contract(options: ContractOptions) {
-  return <T extends ConstructorFor<Contract>>(contract: T, ctx: ClassDecoratorContext) => {
-    ctx.addInitializer(function () {
-      Object.defineProperty(this, ContractOptionsSymbol, {
-        value: options,
-        writable: false,
-        enumerable: false,
-      })
-    })
-    return contract
+  return <T extends ConstructorFor<BaseContract>>(contract: T, ctx: ClassDecoratorContext) => {
+    throw new NoImplementation()
   }
 }

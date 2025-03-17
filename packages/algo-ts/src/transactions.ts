@@ -1,4 +1,4 @@
-import { OnCompleteActionStr } from './arc4'
+import { OnCompleteActionStr } from './on-complete-action'
 import { bytes, uint64 } from './primitives'
 import { Account, Application, Asset } from './reference'
 
@@ -90,6 +90,9 @@ interface TransactionBase {
   readonly rekeyTo: Account
 }
 
+/**
+ * A payment transaction
+ */
 export interface PaymentTxn extends TransactionBase {
   /**
    * 32 byte address

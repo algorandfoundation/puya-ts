@@ -84,13 +84,10 @@ export class StringExpressionBuilder extends InstanceExpressionBuilder<InstanceT
   }
 
   resolvableToPType(ptype: PTypeOrClass): boolean {
-    return ptype.equals(bytesPType) || super.resolvableToPType(ptype)
+    return super.resolvableToPType(ptype)
   }
 
   resolveToPType(ptype: PTypeOrClass): InstanceBuilder {
-    if (ptype.equals(bytesPType)) {
-      return instanceEb(this.toBytes(this.sourceLocation), bytesPType)
-    }
     return super.resolveToPType(ptype)
   }
 
@@ -110,6 +107,7 @@ export class StringExpressionBuilder extends InstanceExpressionBuilder<InstanceT
     }
     return super.memberAccess(name, sourceLocation)
   }
+
   compare(other: InstanceBuilder, op: BuilderComparisonOp, sourceLocation: SourceLocation): InstanceBuilder {
     const otherExpr = requireExpressionOfType(other, stringPType)
     const numComOp = tryConvertEnum(op, BuilderComparisonOp, EqualityComparison)

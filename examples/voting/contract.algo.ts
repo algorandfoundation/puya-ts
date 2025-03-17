@@ -172,7 +172,7 @@ export class VotingRoundApp extends arc4.Contract {
   }
 
   private alreadyVoted(): boolean {
-    return this.votesByAccount.has(Txn.sender)
+    return this.votesByAccount(Txn.sender).exists
   }
 
   public vote(fundMinBalReq: gtxn.PaymentTxn, signature: bytes, answerIds: VoteIndexArray): void {
@@ -206,7 +206,7 @@ export class VotingRoundApp extends arc4.Contract {
       assert(answerOptionIndex < optionsCount, 'Answer option index invalid')
       this.incrementVoteInBox(cumulativeOffset + answerOptionIndex)
       cumulativeOffset += optionsCount
-      this.votesByAccount.set(Txn.sender, answerIds.copy())
+      this.votesByAccount(Txn.sender).value = answerIds.copy()
       this.voterCount.value += 1
     }
   }

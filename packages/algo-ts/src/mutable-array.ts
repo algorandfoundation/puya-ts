@@ -1,7 +1,14 @@
-import { NoImplementation } from './impl/errors'
+import { NoImplementation } from './internal/errors'
 import { uint64, Uint64Compat } from './primitives'
 
+/**
+ * An in memory mutable array which is passed by reference
+ */
 export class MutableArray<TItem> {
+  /**
+   * Create a new MutableArray with the specified items
+   * @param items The initial items for the array
+   */
   constructor(...items: TItem[]) {}
 
   /**
@@ -22,12 +29,14 @@ export class MutableArray<TItem> {
 
   /**
    * Create a new Dynamic array with all items from this array
+   * @internal Not supported yet
    */
   slice(): MutableArray<TItem>
   /**
    * Create a new MutableArray with all items up till `end`.
    * Negative indexes are taken from the end.
    * @param end An index in which to stop copying items.
+   * @internal Not supported yet
    */
   slice(end: Uint64Compat): MutableArray<TItem>
   /**
@@ -35,6 +44,7 @@ export class MutableArray<TItem> {
    * Negative indexes are taken from the end.
    * @param start An index in which to start copying items.
    * @param end An index in which to stop copying items
+   * @internal Not supported yet
    */
   slice(start: Uint64Compat, end: Uint64Compat): MutableArray<TItem>
   slice(start?: Uint64Compat, end?: Uint64Compat): MutableArray<TItem> {
@@ -83,6 +93,9 @@ export class MutableArray<TItem> {
     throw new NoImplementation()
   }
 
+  /**
+   * Create a copy of this array
+   */
   copy(): MutableArray<TItem> {
     throw new NoImplementation()
   }

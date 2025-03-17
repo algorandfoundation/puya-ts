@@ -1,5 +1,7 @@
 import { nodeFactory } from '../../awst/node-factory'
 import type { SourceLocation } from '../../awst/source-location'
+import { logger } from '../../logger'
+import { TemplateVarNameRegex } from '../../util/template-var-cli-parser'
 import type { PType } from '../ptypes'
 import { stringPType, TemplateVarFunction } from '../ptypes'
 import { instanceEb } from '../type-registry'
@@ -25,6 +27,14 @@ export class TemplateVarFunctionBuilder extends FunctionBuilder {
     })
 
     const nameStr = requireStringConstant(name).value
+    const validName = TemplateVarNameRegex.exec(nameStr)
+    if (validName?.[0] !== nameStr) {
+      logger.error(
+        name.sourceLocation,
+        'Invalid name. Template variable names must only contain capital letters A-Z, numbers 0-9, and underscores',
+      )
+    }
+
     const prefixStr = prefix ? requireStringConstant(prefix).value : 'TMPL_'
 
     return instanceEb(

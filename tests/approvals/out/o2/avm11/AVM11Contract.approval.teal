@@ -1,0 +1,134 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0 1
+    // tests/approvals/avm11.algo.ts:12-13
+    // @contract({ name: 'AVM11Contract', avmVersion: 11 })
+    // export class Avm11Contract extends Contract {
+    txn NumAppArgs
+    bz main_bare_routing@6
+    pushbytes 0x52448a31 // method "testNewOps()void"
+    txna ApplicationArgs 0
+    match main_testNewOps_route@3
+
+main_after_if_else@10:
+    // tests/approvals/avm11.algo.ts:12-13
+    // @contract({ name: 'AVM11Contract', avmVersion: 11 })
+    // export class Avm11Contract extends Contract {
+    intc_0 // 0
+    return
+
+main_testNewOps_route@3:
+    // tests/approvals/avm11.algo.ts:14
+    // testNewOps() {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    // tests/approvals/avm11.algo.ts:16
+    // const x = Bytes.fromHex('00000000000000000000000000000000000000000000000000000000499602d2')
+    pushbytes 0x00000000000000000000000000000000000000000000000000000000499602d2
+    // tests/approvals/avm11.algo.ts:17
+    // assert(op.mimc(MimcConfigurations.BLS12_381Mp111, x))
+    mimc BLS12_381Mp111
+    len
+    assert
+    // tests/approvals/avm11.algo.ts:18
+    // assert(op.onlineStake())
+    online_stake
+    assert
+    // tests/approvals/avm11.algo.ts:26
+    // assert(op.Block.blkProposer(0) !== Global.zeroAddress, 'proposer')
+    intc_0 // 0
+    block BlkProposer
+    global ZeroAddress
+    !=
+    assert // proposer
+    // tests/approvals/avm11.algo.ts:27
+    // assert(op.Block.blkFeesCollected(0), 'fees collected')
+    intc_0 // 0
+    block BlkFeesCollected
+    assert // fees collected
+    // tests/approvals/avm11.algo.ts:28
+    // assert(op.Block.blkBonus(0), 'bonus')
+    intc_0 // 0
+    block BlkBonus
+    assert // bonus
+    // tests/approvals/avm11.algo.ts:29
+    // assert(op.Block.blkBranch(0), 'branch')
+    intc_0 // 0
+    block BlkBranch
+    len
+    assert // branch
+    // tests/approvals/avm11.algo.ts:30
+    // assert(op.Block.blkFeeSink(0) !== Global.zeroAddress, 'fee sink')
+    intc_0 // 0
+    block BlkFeeSink
+    global ZeroAddress
+    !=
+    assert // fee sink
+    // tests/approvals/avm11.algo.ts:31
+    // assert(op.Block.blkProtocol(0), 'protocol')
+    intc_0 // 0
+    block BlkProtocol
+    len
+    assert // protocol
+    // tests/approvals/avm11.algo.ts:32
+    // assert(op.Block.blkTxnCounter(0), 'txn counter')
+    intc_0 // 0
+    block BlkTxnCounter
+    assert // txn counter
+    // tests/approvals/avm11.algo.ts:33
+    // assert(op.Block.blkProposerPayout(0), 'proposer payout')
+    intc_0 // 0
+    block BlkProposerPayout
+    assert // proposer payout
+    // tests/approvals/avm11.algo.ts:36
+    // assert(op.Global.payoutsEnabled, 'payouts_enabled')
+    global PayoutsEnabled
+    assert // payouts_enabled
+    // tests/approvals/avm11.algo.ts:37
+    // assert(op.Global.payoutsGoOnlineFee, 'payouts_go_online_fee')
+    global PayoutsGoOnlineFee
+    assert // payouts_go_online_fee
+    // tests/approvals/avm11.algo.ts:38
+    // assert(op.Global.payoutsPercent, 'payouts_percent')
+    global PayoutsPercent
+    assert // payouts_percent
+    // tests/approvals/avm11.algo.ts:39
+    // assert(op.Global.payoutsMinBalance, 'payouts_min_balance')
+    global PayoutsMinBalance
+    assert // payouts_min_balance
+    // tests/approvals/avm11.algo.ts:40
+    // assert(op.Global.payoutsMaxBalance, 'payouts_max_balance')
+    global PayoutsMaxBalance
+    assert // payouts_max_balance
+    // tests/approvals/avm11.algo.ts:42
+    // const [g, h] = op.VoterParams.voterBalance(0)
+    intc_0 // 0
+    voter_params_get VoterBalance
+    popn 2
+    // tests/approvals/avm11.algo.ts:43
+    // const [i, j] = op.VoterParams.voterIncentiveEligible(0)
+    intc_0 // 0
+    voter_params_get VoterIncentiveEligible
+    popn 2
+    // tests/approvals/avm11.algo.ts:14
+    // testNewOps() {
+    intc_1 // 1
+    return
+
+main_bare_routing@6:
+    // tests/approvals/avm11.algo.ts:12-13
+    // @contract({ name: 'AVM11Contract', avmVersion: 11 })
+    // export class Avm11Contract extends Contract {
+    txn OnCompletion
+    bnz main_after_if_else@10
+    txn ApplicationID
+    !
+    assert // can only call when creating
+    intc_1 // 1
+    return

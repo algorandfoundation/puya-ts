@@ -4,7 +4,8 @@ import { wtypes } from '../../awst/wtypes'
 
 import { Constants } from '../../constants'
 import { CodeError, InternalError, NotSupported } from '../../errors'
-import { codeInvariant, distinctByEquality, sortBy, zipStrict } from '../../util'
+import { codeInvariant, distinctByEquality, sortBy } from '../../util'
+import { SymbolName } from '../symbol-name'
 import { GenericPType, PType } from './base'
 import { transientTypeErrors } from './transient-type-errors'
 
@@ -136,6 +137,18 @@ export class ContractClassPType extends PType {
   }
 }
 
+export class ClusteredContractClassType extends ContractClassPType {
+  constructor(props: { methods: Record<string, FunctionPType>; baseTypes: ContractClassPType[]; sourceLocation: SourceLocation }) {
+    super({
+      ...props,
+      name: `ClusteredContract<${props.baseTypes.map((t) => t.fullName).join(',')}>`,
+      module: Constants.polytypeModuleName,
+      methods: Object.assign({}, ...props.baseTypes.toReversed().map((t) => t.methods)),
+      properties: Object.assign({}, ...props.baseTypes.toReversed().map((t) => t.properties)),
+    })
+  }
+}
+
 export class BaseContractClassType extends ContractClassPType {
   readonly _isArc4: boolean
   get isARC4(): boolean {
@@ -156,6 +169,39 @@ export class BaseContractClassType extends ContractClassPType {
   }) {
     super(rest)
     this._isArc4 = isArc4
+  }
+}
+
+export class IntersectionPType extends TransientType {
+  get fullName() {
+    return this.types.map((t) => t).join(' & ')
+  }
+  readonly singleton = false
+  readonly types: PType[]
+
+  private constructor({ types }: { types: PType[] }) {
+    const name = types.map((t) => t).join(' & ')
+    super({
+      name,
+      module: 'lib.d.ts',
+      singleton: false,
+      typeMessage: transientTypeErrors.intersectionTypes(name).usedAsType,
+      expressionMessage: transientTypeErrors.unionTypes(name).usedInExpression,
+    })
+    this.types = types
+  }
+
+  static fromTypes(types: PType[]) {
+    if (types.length === 0) {
+      throw new InternalError('Cannot create intersection of zero types')
+    }
+    const distinctTypes = types.filter(distinctByEquality((a, b) => a.equals(b))).toSorted(sortBy((t) => t.fullName))
+    if (distinctTypes.length === 1) {
+      return distinctTypes[0]
+    }
+    return new IntersectionPType({
+      types: distinctTypes,
+    })
   }
 }
 
@@ -431,7 +477,7 @@ export class IntrinsicFunctionGroupType extends PType {
 export class IntrinsicFunctionGroupTypeType extends PType {
   readonly wtype: undefined
   readonly name: string
-  readonly module: string = Constants.opTypesModuleName
+  readonly module: string = Constants.opModuleName
   readonly singleton = false
 
   constructor({ name }: { name: string }) {
@@ -453,7 +499,7 @@ export class IntrinsicFunctionType extends PType {
 export class IntrinsicFunctionTypeType extends PType {
   readonly wtype: undefined
   readonly name: string
-  readonly module: string = Constants.opTypesModuleName
+  readonly module: string = Constants.opModuleName
   readonly singleton = false
 
   constructor({ name }: { name: string }) {
@@ -491,15 +537,22 @@ export class FunctionPType extends PType {
   readonly returnType: PType
   readonly parameters: Array<readonly [string, PType]>
   readonly singleton = true
+  readonly sourceLocation: SourceLocation | undefined
 
-  constructor(props: { name: string; module: string; returnType: PType; parameters: Array<readonly [string, PType]> }) {
+  constructor(props: {
+    name: string
+    module: string
+    returnType: PType
+    parameters: Array<readonly [string, PType]>
+    sourceLocation: SourceLocation | undefined
+  }) {
     super()
     this.name = props.name
     this.module = props.module
-    if (props.returnType instanceof ObjectPType && props.returnType.isAnonymous) {
+    this.sourceLocation = props.sourceLocation
+    if (props.returnType instanceof ObjectPType && !props.returnType.alias) {
       this.returnType = new ObjectPType({
-        name: `${props.name}Result`,
-        module: props.module,
+        alias: new SymbolName({ name: `${props.name}Result`, module: this.module }),
         properties: props.returnType.properties,
         description: props.returnType.description,
       })
@@ -512,6 +565,10 @@ export class FunctionPType extends PType {
 export class ArrayLiteralPType extends TransientType {
   get fullName() {
     return `${this.module}::[${this.items.map((i) => i).join(', ')}]`
+  }
+
+  get elementType() {
+    return this.items.length ? UnionPType.fromTypes(this.items) : neverPType
   }
 
   readonly items: PType[]
@@ -529,11 +586,8 @@ export class ArrayLiteralPType extends TransientType {
   }
 
   getArrayType(): ArrayPType {
-    const itemType = UnionPType.fromTypes(this.items)
-
     return new ArrayPType({
-      immutable: false,
-      itemType,
+      elementType: this.elementType,
     })
   }
 
@@ -541,14 +595,6 @@ export class ArrayLiteralPType extends TransientType {
     return new TuplePType({
       items: this.items,
     })
-  }
-
-  equals(other: PType): boolean {
-    return (
-      other instanceof ArrayLiteralPType &&
-      this.items.length === other.items.length &&
-      zipStrict(this.items, other.items).every(([a, b]) => a.equals(b))
-    )
   }
 }
 
@@ -576,73 +622,49 @@ export class TuplePType extends PType {
       immutable: this.immutable,
     })
   }
-
-  equals(other: PType): boolean {
-    return (
-      other instanceof TuplePType &&
-      this.items.length === other.items.length &&
-      zipStrict(this.items, other.items).every(([a, b]) => a.equals(b))
-    )
-  }
 }
-export class ArrayPType extends TransientType {
-  readonly itemType: PType
-  readonly immutable: boolean
-
+export class ArrayPType extends PType {
+  readonly elementType: PType
+  readonly immutable = true
+  readonly singleton = false
+  readonly name: string
+  readonly module: string = 'lib.d.ts'
   get fullName() {
-    return `${this.module}::Array<${this.itemType.fullName}>`
+    return `${this.module}::Array<${this.elementType.fullName}>`
   }
-  constructor(props: { itemType: PType; immutable?: boolean }) {
-    const name = `Array<${props.itemType.name}>`
-    super({
-      name,
-      typeMessage: transientTypeErrors.arrays(name).usedAsType,
-      expressionMessage: transientTypeErrors.arrays(name).usedInExpression,
-      module: 'lib.d.ts',
-      singleton: false,
-    })
-    this.itemType = props.itemType
-    this.immutable = props.immutable ?? true
+  constructor(props: { elementType: PType }) {
+    super()
+    this.name = `Array<${props.elementType.name}>`
+    this.elementType = props.elementType
   }
 
   get wtype() {
-    return new wtypes.WArray({
-      itemType: this.itemType.wtypeOrThrow,
+    return new wtypes.StackArray({
+      itemType: this.elementType.wtypeOrThrow,
       immutable: this.immutable,
     })
   }
-
-  equals(other: PType): boolean {
-    return other instanceof ArrayPType && this.immutable === other.immutable && this.itemType.equals(other.itemType)
-  }
 }
 
-type ObjectPTypeArgs =
-  | { module: string; name: string; description: string | undefined; properties: Record<string, PType>; isAnonymous?: false }
-  | { module?: undefined; name?: undefined; properties: Record<string, PType>; isAnonymous: true; description?: undefined }
-
 export class ObjectPType extends PType {
-  readonly name: string
-  readonly module: string
+  readonly name: string = 'object'
+  readonly module: string = 'lib.d.ts'
+  readonly alias: SymbolName | null
   readonly description: string | undefined
   readonly properties: Record<string, PType>
   readonly singleton = false
-  readonly isAnonymous: boolean
 
-  constructor(props: ObjectPTypeArgs) {
+  constructor(props: { alias?: SymbolName | null; properties: Record<string, PType>; description?: string }) {
     super()
-    this.name = props.name ?? ''
-    this.module = props.module ?? ''
     this.properties = props.properties
-    this.isAnonymous = props.isAnonymous ?? false
     this.description = props.description
+    this.alias = props.alias ?? null
   }
 
   static anonymous(props: Record<string, PType> | Array<[string, PType]>) {
     const properties = Array.isArray(props) ? Object.fromEntries(props) : props
     return new ObjectPType({
       properties,
-      isAnonymous: true,
     })
   }
 
@@ -657,7 +679,7 @@ export class ObjectPType extends PType {
       tupleNames.push(propName)
     }
     return new wtypes.WTuple({
-      name: this.fullName,
+      name: this.alias?.fullName ?? this.fullName,
       names: tupleNames,
       types: tupleTypes,
       immutable: true,
@@ -681,19 +703,6 @@ export class ObjectPType extends PType {
 
   hasPropertyOfType(name: string, type: PType) {
     return this.hasProperty(name) && this.properties[name].equals(type)
-  }
-
-  equals(other: PType): boolean {
-    if (!(other instanceof ObjectPType)) return false
-    const thisProps = this.orderedProperties()
-    const otherProps = other.orderedProperties()
-    return (
-      this.name === other.name &&
-      thisProps.length === otherProps.length &&
-      zipStrict(thisProps, otherProps).every(
-        ([[left_prop, left_type], [right_prop, right_type]]) => left_prop === right_prop && left_type.equals(right_type),
-      )
-    )
   }
 
   toString(): string {
@@ -769,6 +778,7 @@ export const bigIntPType = new NativeNumericType({
   typeMessage: transientTypeErrors.nativeNumeric('bigint').usedAsType,
   expressionMessage: transientTypeErrors.nativeNumeric('bigint').usedInExpression,
 })
+
 export const stringPType = new InstanceType({
   name: 'string',
   module: 'lib.d.ts',
@@ -909,6 +919,7 @@ export const ClearStateProgram = new FunctionPType({
   module: Constants.baseContractModuleName,
   returnType: uint64PType,
   parameters: [],
+  sourceLocation: undefined,
 })
 
 export const ApprovalProgram = new FunctionPType({
@@ -916,6 +927,7 @@ export const ApprovalProgram = new FunctionPType({
   module: Constants.arc4ModuleName,
   returnType: boolPType,
   parameters: [],
+  sourceLocation: undefined,
 })
 
 export const baseContractType = new BaseContractClassType({
@@ -1042,6 +1054,14 @@ export const ApplicationTxnFunction = new TransactionFunctionType({
   module: Constants.gtxnModuleName,
   kind: TransactionKind.appl,
 })
+export const gtxnUnion = UnionPType.fromTypes([
+  paymentGtxnType,
+  keyRegistrationGtxnType,
+  assetConfigGtxnType,
+  assetTransferGtxnType,
+  assetFreezeGtxnType,
+  applicationCallGtxnType,
+])
 export const anyGtxnType = new GroupTransactionPType({
   name: 'Transaction',
   kind: undefined,
@@ -1054,6 +1074,10 @@ export const TransactionFunction = new TransactionFunctionType({
 
 export const assertMatchFunction = new LibFunctionType({
   name: 'assertMatch',
+  module: Constants.utilModuleName,
+})
+export const matchFunction = new LibFunctionType({
+  name: 'match',
   module: Constants.utilModuleName,
 })
 
@@ -1073,9 +1097,7 @@ export class Uint64EnumMemberType extends PType {
 }
 
 export class Uint64EnumType extends PType {
-  get memberType(): Uint64EnumMemberType {
-    return new Uint64EnumMemberType(this)
-  }
+  readonly memberType: Uint64EnumMemberType
   readonly wtype = wtypes.uint64WType
   readonly name: string
   readonly module: string
@@ -1087,6 +1109,7 @@ export class Uint64EnumType extends PType {
     this.name = props.name
     this.module = props.module
     this.members = props.members
+    this.memberType = new Uint64EnumMemberType(this)
   }
 }
 
@@ -1103,7 +1126,7 @@ export const transactionTypeType = new Uint64EnumType({
   },
 })
 export const onCompleteActionType = new Uint64EnumType({
-  module: Constants.arc4ModuleName,
+  module: Constants.onCompleteActionModuleName,
   name: 'OnCompleteAction',
   members: {
     NoOp: 0n,
@@ -1322,8 +1345,10 @@ export const compileFunctionType = new LibFunctionType({
 })
 
 export const compiledContractType = new ObjectPType({
-  name: 'CompiledContract',
-  module: Constants.compiledModuleName,
+  alias: new SymbolName({
+    name: 'CompiledContract',
+    module: Constants.compiledModuleName,
+  }),
   description: 'Provides compiled programs and state allocation values for a Contract. Created by calling `compile(ExampleContractType)`',
   properties: {
     approvalProgram: new TuplePType({ items: [bytesPType, bytesPType] }),
@@ -1336,8 +1361,10 @@ export const compiledContractType = new ObjectPType({
   },
 })
 export const compiledLogicSigType = new ObjectPType({
-  name: 'CompiledLogicSig',
-  module: Constants.compiledModuleName,
+  alias: new SymbolName({
+    name: 'CompiledLogicSig',
+    module: Constants.compiledModuleName,
+  }),
   description: 'Provides account for a Logic Signature. Created by calling `compile(LogicSigType)``',
   properties: {
     account: accountPType,
@@ -1348,3 +1375,74 @@ export const arc28EmitFunction = new LibFunctionType({
   name: 'emit',
   module: Constants.arc28ModuleName,
 })
+
+export const SuperPrototypeSelectorGeneric = new GenericPType({
+  name: 'SuperPrototypeSelector',
+  module: Constants.polytypeModuleName,
+  parameterise(ptypes: PType[]) {
+    return new SuperPrototypeSelector({ bases: ptypes })
+  },
+})
+export class SuperPrototypeSelector extends InternalType {
+  constructor({ bases }: { bases: PType[] }) {
+    super({
+      name: 'SuperPrototypeSelector',
+      module: Constants.polytypeModuleName,
+    })
+  }
+}
+export const ClusteredPrototype = new InternalType({
+  name: 'ClusteredPrototype',
+  module: Constants.polytypeModuleName,
+})
+export const PolytypeClassMethodHelper = new LibFunctionType({
+  name: 'class',
+  module: Constants.polytypeModuleName,
+})
+
+export const MutableArrayConstructor = new LibClassType({
+  name: 'MutableArray',
+  module: Constants.mutableArrayModuleName,
+})
+export const MutableArrayGeneric = new GenericPType({
+  name: 'MutableArray',
+  module: Constants.mutableArrayModuleName,
+  parameterise: (typeArgs: PType[]): MutableArrayType => {
+    codeInvariant(typeArgs.length === 1, 'MutableArray type expects exactly one type parameter')
+    const [elementType] = typeArgs
+
+    return new MutableArrayType({ elementType: elementType })
+  },
+})
+export class MutableArrayType extends PType {
+  readonly module = Constants.mutableArrayModuleName
+  readonly immutable = false as const
+  readonly name: string
+  readonly singleton = false
+  readonly sourceLocation: SourceLocation | undefined
+  readonly elementType: PType
+
+  constructor({
+    elementType,
+    sourceLocation,
+    name,
+  }: {
+    elementType: PType
+    sourceLocation?: SourceLocation
+    name?: string
+    immutable?: boolean
+  }) {
+    super()
+    this.name = name ?? `MutableArray<${elementType}>`
+    this.sourceLocation = sourceLocation
+    this.elementType = elementType
+  }
+
+  get wtype() {
+    return new wtypes.ReferenceArray({
+      itemType: this.elementType.wtypeOrThrow,
+      sourceLocation: this.sourceLocation,
+      immutable: false,
+    })
+  }
+}

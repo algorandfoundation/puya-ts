@@ -1,0 +1,332 @@
+#pragma version 10
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0 1 3 4
+    bytecblock 0x 0x0b6325ed 0x00 0xa313c066
+
+main_block@0:
+
+main_block@1:
+    // tests/approvals/arc-28-events.algo.ts:13
+    // class EventEmitter extends Contract {
+    txn NumAppArgs
+    intc_0 // 0
+    !=
+    bz main_bare_routing@8
+
+main_abi_routing@2:
+    // tests/approvals/arc-28-events.algo.ts:13
+    // class EventEmitter extends Contract {
+    txna ApplicationArgs 0
+    pushbytes 0x8769b79a // method "emitSwapped(uint8,uint8)void"
+    pushbytes 0xf14889d7 // method "emitCustom(string,bool)void"
+    pushbytes 0xd4c97c9c // method "emitDynamicBytes(byte[],byte[])void"
+    uncover 3
+    match main_emitSwapped_route@3 main_emitCustom_route@4 main_emitDynamicBytes_route@5
+
+main_switch_case_default@6:
+
+main_switch_case_next@7:
+
+main_after_if_else@12:
+    // tests/approvals/arc-28-events.algo.ts:13
+    // class EventEmitter extends Contract {
+    intc_0 // 0
+
+main_after_inlined_tests/approvals/arc-28-events.algo.ts::EventEmitter.__puya_arc4_router__@13:
+    return
+
+main_emitDynamicBytes_route@5:
+    // tests/approvals/arc-28-events.algo.ts:37
+    // emitDynamicBytes(x: bytes, y: DynamicBytes) {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    // tests/approvals/arc-28-events.algo.ts:13
+    // class EventEmitter extends Contract {
+    txna ApplicationArgs 1
+    extract 2 0
+    txna ApplicationArgs 2
+    // tests/approvals/arc-28-events.algo.ts:37
+    // emitDynamicBytes(x: bytes, y: DynamicBytes) {
+    callsub emitDynamicBytes
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/arc-28-events.algo.ts::EventEmitter.__puya_arc4_router__@13
+
+main_emitCustom_route@4:
+    // tests/approvals/arc-28-events.algo.ts:32
+    // emitCustom(arg0: string, arg1: boolean) {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    // tests/approvals/arc-28-events.algo.ts:13
+    // class EventEmitter extends Contract {
+    txna ApplicationArgs 1
+    extract 2 0
+    txna ApplicationArgs 2
+    intc_0 // 0
+    getbit
+    // tests/approvals/arc-28-events.algo.ts:32
+    // emitCustom(arg0: string, arg1: boolean) {
+    callsub emitCustom
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/arc-28-events.algo.ts::EventEmitter.__puya_arc4_router__@13
+
+main_emitSwapped_route@3:
+    // tests/approvals/arc-28-events.algo.ts:14
+    // emitSwapped(a: UintN8, b: UintN8) {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    // tests/approvals/arc-28-events.algo.ts:13
+    // class EventEmitter extends Contract {
+    txna ApplicationArgs 1
+    txna ApplicationArgs 2
+    // tests/approvals/arc-28-events.algo.ts:14
+    // emitSwapped(a: UintN8, b: UintN8) {
+    callsub emitSwapped
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/arc-28-events.algo.ts::EventEmitter.__puya_arc4_router__@13
+
+main_bare_routing@8:
+    // tests/approvals/arc-28-events.algo.ts:13
+    // class EventEmitter extends Contract {
+    txn OnCompletion
+    intc_0 // 0
+    swap
+    match main___algots__.defaultCreate@9
+
+main_switch_case_default@10:
+
+main_switch_case_next@11:
+    b main_after_if_else@12
+
+main___algots__.defaultCreate@9:
+    // tests/approvals/arc-28-events.algo.ts:13
+    // class EventEmitter extends Contract {
+    txn ApplicationID
+    intc_0 // 0
+    ==
+    assert // can only call when creating
+    callsub __algots__.defaultCreate
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/arc-28-events.algo.ts::EventEmitter.__puya_arc4_router__@13
+
+
+// tests/approvals/arc-28-events.algo.ts::EventEmitter.emitSwapped(a: bytes, b: bytes) -> void:
+emitSwapped:
+    // tests/approvals/arc-28-events.algo.ts:14
+    // emitSwapped(a: UintN8, b: UintN8) {
+    proto 2 0
+
+emitSwapped_block@0:
+    // tests/approvals/arc-28-events.algo.ts:15
+    // emit<Swapped>({ a: b, b: a })
+    bytec_0 // 0x
+    frame_dig -1
+    concat
+    frame_dig -2
+    concat
+    bytec_1 // method "Swapped(uint8,uint8)"
+    swap
+    concat
+    log
+    // tests/approvals/arc-28-events.algo.ts:17
+    // const x: Swapped = { a: b, b: a }
+    frame_dig -1
+    frame_dig -2
+    swap
+    // tests/approvals/arc-28-events.algo.ts:18
+    // emit(x)
+    bytec_0 // 0x
+    swap
+    concat
+    swap
+    concat
+    bytec_1 // method "Swapped(uint8,uint8)"
+    swap
+    concat
+    log
+    // tests/approvals/arc-28-events.algo.ts:20-23
+    // const y = new SwappedArc4({
+    //   a: b,
+    //   b: a,
+    // })
+    bytec_0 // 0x
+    frame_dig -1
+    concat
+    frame_dig -2
+    concat
+    // tests/approvals/arc-28-events.algo.ts:24
+    // emit(y)
+    pushbytes 0x441e2cd8 // method "SwappedArc4(uint8,uint8)"
+    swap
+    concat
+    log
+    // tests/approvals/arc-28-events.algo.ts:26
+    // emit('Swapped', b, a)
+    bytec_0 // 0x
+    frame_dig -1
+    concat
+    frame_dig -2
+    concat
+    bytec_1 // method "Swapped(uint8,uint8)"
+    swap
+    concat
+    log
+    // tests/approvals/arc-28-events.algo.ts:28
+    // emit('Swapped(uint8,uint8)', b, a)
+    bytec_0 // 0x
+    frame_dig -1
+    concat
+    frame_dig -2
+    concat
+    bytec_1 // method "Swapped(uint8,uint8)"
+    swap
+    concat
+    log
+    // tests/approvals/arc-28-events.algo.ts:29
+    // emit('Swapped((uint8,uint8),uint8)', [b, b] as const, a)
+    bytec_0 // 0x
+    frame_dig -1
+    concat
+    frame_dig -1
+    concat
+    bytec_0 // 0x
+    swap
+    concat
+    frame_dig -2
+    concat
+    pushbytes 0x388cc12d // method "Swapped((uint8,uint8),uint8)"
+    swap
+    concat
+    log
+    retsub
+
+
+// tests/approvals/arc-28-events.algo.ts::EventEmitter.emitCustom(arg0: bytes, arg1: uint64) -> void:
+emitCustom:
+    // tests/approvals/arc-28-events.algo.ts:32
+    // emitCustom(arg0: string, arg1: boolean) {
+    proto 2 0
+
+emitCustom_block@0:
+    // tests/approvals/arc-28-events.algo.ts:33
+    // emit('Custom', arg0, arg1)
+    frame_dig -2
+    len
+    itob
+    extract 6 2
+    frame_dig -2
+    concat
+    bytec_2 // 0x00
+    intc_0 // 0
+    frame_dig -1
+    setbit
+    intc_2 // 3
+    itob
+    extract 6 2
+    bytec_0 // 0x
+    swap
+    concat
+    swap
+    concat
+    swap
+    concat
+    bytec_3 // method "Custom(string,bool)"
+    swap
+    concat
+    log
+    // tests/approvals/arc-28-events.algo.ts:34
+    // emit('Custom(string,bool)', arg0, arg1)
+    frame_dig -2
+    len
+    itob
+    extract 6 2
+    frame_dig -2
+    concat
+    bytec_2 // 0x00
+    intc_0 // 0
+    frame_dig -1
+    setbit
+    intc_2 // 3
+    itob
+    extract 6 2
+    bytec_0 // 0x
+    swap
+    concat
+    swap
+    concat
+    swap
+    concat
+    bytec_3 // method "Custom(string,bool)"
+    swap
+    concat
+    log
+    retsub
+
+
+// tests/approvals/arc-28-events.algo.ts::EventEmitter.emitDynamicBytes(x: bytes, y: bytes) -> void:
+emitDynamicBytes:
+    // tests/approvals/arc-28-events.algo.ts:37
+    // emitDynamicBytes(x: bytes, y: DynamicBytes) {
+    proto 2 0
+
+emitDynamicBytes_block@0:
+    // tests/approvals/arc-28-events.algo.ts:38
+    // emit('DB(byte[],byte[])', x, y)
+    frame_dig -2
+    len
+    itob
+    extract 6 2
+    frame_dig -2
+    concat
+    intc_3 // 4
+    itob
+    extract 6 2
+    bytec_0 // 0x
+    swap
+    concat
+    swap
+    dup
+    len
+    intc_3 // 4
+    +
+    itob
+    extract 6 2
+    uncover 2
+    swap
+    concat
+    swap
+    concat
+    frame_dig -1
+    concat
+    pushbytes 0x4524e1dd // method "DB(byte[],byte[])"
+    swap
+    concat
+    log
+    retsub
+
+
+// tests/approvals/arc-28-events.algo.ts::EventEmitter.__algots__.defaultCreate() -> void:
+__algots__.defaultCreate:
+
+__algots__.defaultCreate_block@0:
+    retsub

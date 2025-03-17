@@ -1,0 +1,1281 @@
+#pragma version 10
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0 1
+    bytecblock 0x00 0x068101
+    // tests/approvals/accounts.algo.ts:8
+    // export class AccountsContract extends Contract {
+    txn NumAppArgs
+    bz main_bare_routing@7
+    pushbytess 0xdfe9a035 0xf62943d1 // method "getAccountInfo(account,asset)(byte[],uint64,uint64,byte[],uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,bool)", method "otherAccount()void"
+    txna ApplicationArgs 0
+    match main_getAccountInfo_route@3 main_otherAccount_route@4
+
+main_after_if_else@11:
+    // tests/approvals/accounts.algo.ts:8
+    // export class AccountsContract extends Contract {
+    intc_0 // 0
+    return
+
+main_otherAccount_route@4:
+    // tests/approvals/accounts.algo.ts:30
+    // public otherAccount() {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    intc_1 // 1
+    return
+
+main_getAccountInfo_route@3:
+    // tests/approvals/accounts.algo.ts:9
+    // public getAccountInfo(account: Account, asset: Asset) {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    // tests/approvals/accounts.algo.ts:8
+    // export class AccountsContract extends Contract {
+    txna ApplicationArgs 1
+    btoi
+    txnas Accounts
+    txna ApplicationArgs 2
+    btoi
+    txnas Assets
+    // tests/approvals/accounts.algo.ts:9
+    // public getAccountInfo(account: Account, asset: Asset) {
+    callsub getAccountInfo
+    dig 14
+    len
+    itob
+    extract 6 2
+    uncover 15
+    concat
+    uncover 14
+    itob
+    uncover 14
+    itob
+    dig 14
+    len
+    itob
+    extract 6 2
+    uncover 15
+    concat
+    uncover 14
+    itob
+    uncover 14
+    itob
+    uncover 14
+    itob
+    uncover 14
+    itob
+    uncover 14
+    itob
+    uncover 14
+    itob
+    uncover 14
+    itob
+    uncover 14
+    itob
+    uncover 14
+    itob
+    bytec_0 // 0x00
+    intc_0 // 0
+    uncover 16
+    setbit
+    bytec_0 // 0x00
+    intc_0 // 0
+    uncover 16
+    setbit
+    dig 14
+    len
+    pushint 93 // 93
+    +
+    pushbytes 0x005d
+    uncover 15
+    concat
+    uncover 14
+    concat
+    swap
+    itob
+    extract 6 2
+    concat
+    uncover 11
+    concat
+    uncover 10
+    concat
+    uncover 9
+    concat
+    uncover 8
+    concat
+    uncover 7
+    concat
+    uncover 6
+    concat
+    uncover 5
+    concat
+    uncover 4
+    concat
+    uncover 3
+    concat
+    uncover 2
+    concat
+    swap
+    intc_0 // 0
+    getbit
+    pushint 737 // 737
+    swap
+    setbit
+    uncover 2
+    concat
+    swap
+    concat
+    pushbytes 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    return
+
+main_bare_routing@7:
+    // tests/approvals/accounts.algo.ts:8
+    // export class AccountsContract extends Contract {
+    txn OnCompletion
+    bnz main_after_if_else@11
+    txn ApplicationID
+    !
+    assert // can only call when creating
+    intc_1 // 1
+    return
+
+
+// tests/approvals/accounts.algo.ts::AccountsContract.getAccountInfo(account: bytes, asset: uint64) -> bytes, uint64, uint64, bytes, uint64, uint64, uint64, uint64, uint64, uint64, uint64, uint64, uint64, uint64, uint64:
+getAccountInfo:
+    // tests/approvals/accounts.algo.ts:9
+    // public getAccountInfo(account: Account, asset: Asset) {
+    proto 2 15
+
+getAccountInfo_while_top@2:
+    pushint 1410 // 1410
+    global OpcodeBudget
+    >
+    bz getAccountInfo_after_while@7
+    itxn_begin
+    pushint 6 // appl
+    itxn_field TypeEnum
+    pushint 5 // DeleteApplication
+    itxn_field OnCompletion
+    bytec_1 // 0x068101
+    itxn_field ApprovalProgram
+    bytec_1 // 0x068101
+    itxn_field ClearStateProgram
+    intc_0 // 0
+    itxn_field Fee
+    itxn_submit
+    b getAccountInfo_while_top@2
+
+getAccountInfo_after_while@7:
+    // tests/approvals/accounts.algo.ts:13
+    // balance: account.balance,
+    frame_dig -2
+    acct_params_get AcctBalance
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:14
+    // minBalance: account.minBalance,
+    frame_dig -2
+    acct_params_get AcctMinBalance
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:15
+    // authAddress: account.authAddress.bytes,
+    frame_dig -2
+    acct_params_get AcctAuthAddr
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:16
+    // totalNumUint: account.totalNumUint,
+    frame_dig -2
+    acct_params_get AcctTotalNumUint
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:17
+    // totalNumByteSlice: account.totalNumByteSlice,
+    frame_dig -2
+    acct_params_get AcctTotalNumByteSlice
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:18
+    // totalExtraAppPages: account.totalExtraAppPages,
+    frame_dig -2
+    acct_params_get AcctTotalExtraAppPages
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:19
+    // totalAppsCreated: account.totalAppsCreated,
+    frame_dig -2
+    acct_params_get AcctTotalAppsCreated
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:20
+    // totalAppsOptedIn: account.totalAppsOptedIn,
+    frame_dig -2
+    acct_params_get AcctTotalAppsOptedIn
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:21
+    // totalAssetsCreated: account.totalAssetsCreated,
+    frame_dig -2
+    acct_params_get AcctTotalAssetsCreated
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:22
+    // totalAssets: account.totalAssets,
+    frame_dig -2
+    acct_params_get AcctTotalAssets
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:23
+    // totalBoxes: account.totalBoxes,
+    frame_dig -2
+    acct_params_get AcctTotalBoxes
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:24
+    // totalBoxBytes: account.totalBoxBytes,
+    frame_dig -2
+    acct_params_get AcctTotalBoxBytes
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:13
+    // balance: account.balance,
+    frame_dig -2
+    acct_params_get AcctBalance
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:14
+    // minBalance: account.minBalance,
+    frame_dig -2
+    acct_params_get AcctMinBalance
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:15
+    // authAddress: account.authAddress.bytes,
+    frame_dig -2
+    acct_params_get AcctAuthAddr
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:16
+    // totalNumUint: account.totalNumUint,
+    frame_dig -2
+    acct_params_get AcctTotalNumUint
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:17
+    // totalNumByteSlice: account.totalNumByteSlice,
+    frame_dig -2
+    acct_params_get AcctTotalNumByteSlice
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:18
+    // totalExtraAppPages: account.totalExtraAppPages,
+    frame_dig -2
+    acct_params_get AcctTotalExtraAppPages
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:19
+    // totalAppsCreated: account.totalAppsCreated,
+    frame_dig -2
+    acct_params_get AcctTotalAppsCreated
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:20
+    // totalAppsOptedIn: account.totalAppsOptedIn,
+    frame_dig -2
+    acct_params_get AcctTotalAppsOptedIn
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:21
+    // totalAssetsCreated: account.totalAssetsCreated,
+    frame_dig -2
+    acct_params_get AcctTotalAssetsCreated
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:22
+    // totalAssets: account.totalAssets,
+    frame_dig -2
+    acct_params_get AcctTotalAssets
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:23
+    // totalBoxes: account.totalBoxes,
+    frame_dig -2
+    acct_params_get AcctTotalBoxes
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:24
+    // totalBoxBytes: account.totalBoxBytes,
+    frame_dig -2
+    acct_params_get AcctTotalBoxBytes
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:13
+    // balance: account.balance,
+    frame_dig -2
+    acct_params_get AcctBalance
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:14
+    // minBalance: account.minBalance,
+    frame_dig -2
+    acct_params_get AcctMinBalance
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:15
+    // authAddress: account.authAddress.bytes,
+    frame_dig -2
+    acct_params_get AcctAuthAddr
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:16
+    // totalNumUint: account.totalNumUint,
+    frame_dig -2
+    acct_params_get AcctTotalNumUint
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:17
+    // totalNumByteSlice: account.totalNumByteSlice,
+    frame_dig -2
+    acct_params_get AcctTotalNumByteSlice
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:18
+    // totalExtraAppPages: account.totalExtraAppPages,
+    frame_dig -2
+    acct_params_get AcctTotalExtraAppPages
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:19
+    // totalAppsCreated: account.totalAppsCreated,
+    frame_dig -2
+    acct_params_get AcctTotalAppsCreated
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:20
+    // totalAppsOptedIn: account.totalAppsOptedIn,
+    frame_dig -2
+    acct_params_get AcctTotalAppsOptedIn
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:21
+    // totalAssetsCreated: account.totalAssetsCreated,
+    frame_dig -2
+    acct_params_get AcctTotalAssetsCreated
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:22
+    // totalAssets: account.totalAssets,
+    frame_dig -2
+    acct_params_get AcctTotalAssets
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:23
+    // totalBoxes: account.totalBoxes,
+    frame_dig -2
+    acct_params_get AcctTotalBoxes
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:24
+    // totalBoxBytes: account.totalBoxBytes,
+    frame_dig -2
+    acct_params_get AcctTotalBoxBytes
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:13
+    // balance: account.balance,
+    frame_dig -2
+    acct_params_get AcctBalance
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:14
+    // minBalance: account.minBalance,
+    frame_dig -2
+    acct_params_get AcctMinBalance
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:15
+    // authAddress: account.authAddress.bytes,
+    frame_dig -2
+    acct_params_get AcctAuthAddr
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:16
+    // totalNumUint: account.totalNumUint,
+    frame_dig -2
+    acct_params_get AcctTotalNumUint
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:17
+    // totalNumByteSlice: account.totalNumByteSlice,
+    frame_dig -2
+    acct_params_get AcctTotalNumByteSlice
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:18
+    // totalExtraAppPages: account.totalExtraAppPages,
+    frame_dig -2
+    acct_params_get AcctTotalExtraAppPages
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:19
+    // totalAppsCreated: account.totalAppsCreated,
+    frame_dig -2
+    acct_params_get AcctTotalAppsCreated
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:20
+    // totalAppsOptedIn: account.totalAppsOptedIn,
+    frame_dig -2
+    acct_params_get AcctTotalAppsOptedIn
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:21
+    // totalAssetsCreated: account.totalAssetsCreated,
+    frame_dig -2
+    acct_params_get AcctTotalAssetsCreated
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:22
+    // totalAssets: account.totalAssets,
+    frame_dig -2
+    acct_params_get AcctTotalAssets
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:23
+    // totalBoxes: account.totalBoxes,
+    frame_dig -2
+    acct_params_get AcctTotalBoxes
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:24
+    // totalBoxBytes: account.totalBoxBytes,
+    frame_dig -2
+    acct_params_get AcctTotalBoxBytes
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:13
+    // balance: account.balance,
+    frame_dig -2
+    acct_params_get AcctBalance
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:14
+    // minBalance: account.minBalance,
+    frame_dig -2
+    acct_params_get AcctMinBalance
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:15
+    // authAddress: account.authAddress.bytes,
+    frame_dig -2
+    acct_params_get AcctAuthAddr
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:16
+    // totalNumUint: account.totalNumUint,
+    frame_dig -2
+    acct_params_get AcctTotalNumUint
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:17
+    // totalNumByteSlice: account.totalNumByteSlice,
+    frame_dig -2
+    acct_params_get AcctTotalNumByteSlice
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:18
+    // totalExtraAppPages: account.totalExtraAppPages,
+    frame_dig -2
+    acct_params_get AcctTotalExtraAppPages
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:19
+    // totalAppsCreated: account.totalAppsCreated,
+    frame_dig -2
+    acct_params_get AcctTotalAppsCreated
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:20
+    // totalAppsOptedIn: account.totalAppsOptedIn,
+    frame_dig -2
+    acct_params_get AcctTotalAppsOptedIn
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:21
+    // totalAssetsCreated: account.totalAssetsCreated,
+    frame_dig -2
+    acct_params_get AcctTotalAssetsCreated
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:22
+    // totalAssets: account.totalAssets,
+    frame_dig -2
+    acct_params_get AcctTotalAssets
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:23
+    // totalBoxes: account.totalBoxes,
+    frame_dig -2
+    acct_params_get AcctTotalBoxes
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:24
+    // totalBoxBytes: account.totalBoxBytes,
+    frame_dig -2
+    acct_params_get AcctTotalBoxBytes
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:13
+    // balance: account.balance,
+    frame_dig -2
+    acct_params_get AcctBalance
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:14
+    // minBalance: account.minBalance,
+    frame_dig -2
+    acct_params_get AcctMinBalance
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:15
+    // authAddress: account.authAddress.bytes,
+    frame_dig -2
+    acct_params_get AcctAuthAddr
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:16
+    // totalNumUint: account.totalNumUint,
+    frame_dig -2
+    acct_params_get AcctTotalNumUint
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:17
+    // totalNumByteSlice: account.totalNumByteSlice,
+    frame_dig -2
+    acct_params_get AcctTotalNumByteSlice
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:18
+    // totalExtraAppPages: account.totalExtraAppPages,
+    frame_dig -2
+    acct_params_get AcctTotalExtraAppPages
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:19
+    // totalAppsCreated: account.totalAppsCreated,
+    frame_dig -2
+    acct_params_get AcctTotalAppsCreated
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:20
+    // totalAppsOptedIn: account.totalAppsOptedIn,
+    frame_dig -2
+    acct_params_get AcctTotalAppsOptedIn
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:21
+    // totalAssetsCreated: account.totalAssetsCreated,
+    frame_dig -2
+    acct_params_get AcctTotalAssetsCreated
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:22
+    // totalAssets: account.totalAssets,
+    frame_dig -2
+    acct_params_get AcctTotalAssets
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:23
+    // totalBoxes: account.totalBoxes,
+    frame_dig -2
+    acct_params_get AcctTotalBoxes
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:24
+    // totalBoxBytes: account.totalBoxBytes,
+    frame_dig -2
+    acct_params_get AcctTotalBoxBytes
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:13
+    // balance: account.balance,
+    frame_dig -2
+    acct_params_get AcctBalance
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:14
+    // minBalance: account.minBalance,
+    frame_dig -2
+    acct_params_get AcctMinBalance
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:15
+    // authAddress: account.authAddress.bytes,
+    frame_dig -2
+    acct_params_get AcctAuthAddr
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:16
+    // totalNumUint: account.totalNumUint,
+    frame_dig -2
+    acct_params_get AcctTotalNumUint
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:17
+    // totalNumByteSlice: account.totalNumByteSlice,
+    frame_dig -2
+    acct_params_get AcctTotalNumByteSlice
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:18
+    // totalExtraAppPages: account.totalExtraAppPages,
+    frame_dig -2
+    acct_params_get AcctTotalExtraAppPages
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:19
+    // totalAppsCreated: account.totalAppsCreated,
+    frame_dig -2
+    acct_params_get AcctTotalAppsCreated
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:20
+    // totalAppsOptedIn: account.totalAppsOptedIn,
+    frame_dig -2
+    acct_params_get AcctTotalAppsOptedIn
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:21
+    // totalAssetsCreated: account.totalAssetsCreated,
+    frame_dig -2
+    acct_params_get AcctTotalAssetsCreated
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:22
+    // totalAssets: account.totalAssets,
+    frame_dig -2
+    acct_params_get AcctTotalAssets
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:23
+    // totalBoxes: account.totalBoxes,
+    frame_dig -2
+    acct_params_get AcctTotalBoxes
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:24
+    // totalBoxBytes: account.totalBoxBytes,
+    frame_dig -2
+    acct_params_get AcctTotalBoxBytes
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:13
+    // balance: account.balance,
+    frame_dig -2
+    acct_params_get AcctBalance
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:14
+    // minBalance: account.minBalance,
+    frame_dig -2
+    acct_params_get AcctMinBalance
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:15
+    // authAddress: account.authAddress.bytes,
+    frame_dig -2
+    acct_params_get AcctAuthAddr
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:16
+    // totalNumUint: account.totalNumUint,
+    frame_dig -2
+    acct_params_get AcctTotalNumUint
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:17
+    // totalNumByteSlice: account.totalNumByteSlice,
+    frame_dig -2
+    acct_params_get AcctTotalNumByteSlice
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:18
+    // totalExtraAppPages: account.totalExtraAppPages,
+    frame_dig -2
+    acct_params_get AcctTotalExtraAppPages
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:19
+    // totalAppsCreated: account.totalAppsCreated,
+    frame_dig -2
+    acct_params_get AcctTotalAppsCreated
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:20
+    // totalAppsOptedIn: account.totalAppsOptedIn,
+    frame_dig -2
+    acct_params_get AcctTotalAppsOptedIn
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:21
+    // totalAssetsCreated: account.totalAssetsCreated,
+    frame_dig -2
+    acct_params_get AcctTotalAssetsCreated
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:22
+    // totalAssets: account.totalAssets,
+    frame_dig -2
+    acct_params_get AcctTotalAssets
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:23
+    // totalBoxes: account.totalBoxes,
+    frame_dig -2
+    acct_params_get AcctTotalBoxes
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:24
+    // totalBoxBytes: account.totalBoxBytes,
+    frame_dig -2
+    acct_params_get AcctTotalBoxBytes
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:13
+    // balance: account.balance,
+    frame_dig -2
+    acct_params_get AcctBalance
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:14
+    // minBalance: account.minBalance,
+    frame_dig -2
+    acct_params_get AcctMinBalance
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:15
+    // authAddress: account.authAddress.bytes,
+    frame_dig -2
+    acct_params_get AcctAuthAddr
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:16
+    // totalNumUint: account.totalNumUint,
+    frame_dig -2
+    acct_params_get AcctTotalNumUint
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:17
+    // totalNumByteSlice: account.totalNumByteSlice,
+    frame_dig -2
+    acct_params_get AcctTotalNumByteSlice
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:18
+    // totalExtraAppPages: account.totalExtraAppPages,
+    frame_dig -2
+    acct_params_get AcctTotalExtraAppPages
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:19
+    // totalAppsCreated: account.totalAppsCreated,
+    frame_dig -2
+    acct_params_get AcctTotalAppsCreated
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:20
+    // totalAppsOptedIn: account.totalAppsOptedIn,
+    frame_dig -2
+    acct_params_get AcctTotalAppsOptedIn
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:21
+    // totalAssetsCreated: account.totalAssetsCreated,
+    frame_dig -2
+    acct_params_get AcctTotalAssetsCreated
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:22
+    // totalAssets: account.totalAssets,
+    frame_dig -2
+    acct_params_get AcctTotalAssets
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:23
+    // totalBoxes: account.totalBoxes,
+    frame_dig -2
+    acct_params_get AcctTotalBoxes
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:24
+    // totalBoxBytes: account.totalBoxBytes,
+    frame_dig -2
+    acct_params_get AcctTotalBoxBytes
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:13
+    // balance: account.balance,
+    frame_dig -2
+    acct_params_get AcctBalance
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:14
+    // minBalance: account.minBalance,
+    frame_dig -2
+    acct_params_get AcctMinBalance
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:15
+    // authAddress: account.authAddress.bytes,
+    frame_dig -2
+    acct_params_get AcctAuthAddr
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:16
+    // totalNumUint: account.totalNumUint,
+    frame_dig -2
+    acct_params_get AcctTotalNumUint
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:17
+    // totalNumByteSlice: account.totalNumByteSlice,
+    frame_dig -2
+    acct_params_get AcctTotalNumByteSlice
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:18
+    // totalExtraAppPages: account.totalExtraAppPages,
+    frame_dig -2
+    acct_params_get AcctTotalExtraAppPages
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:19
+    // totalAppsCreated: account.totalAppsCreated,
+    frame_dig -2
+    acct_params_get AcctTotalAppsCreated
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:20
+    // totalAppsOptedIn: account.totalAppsOptedIn,
+    frame_dig -2
+    acct_params_get AcctTotalAppsOptedIn
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:21
+    // totalAssetsCreated: account.totalAssetsCreated,
+    frame_dig -2
+    acct_params_get AcctTotalAssetsCreated
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:22
+    // totalAssets: account.totalAssets,
+    frame_dig -2
+    acct_params_get AcctTotalAssets
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:23
+    // totalBoxes: account.totalBoxes,
+    frame_dig -2
+    acct_params_get AcctTotalBoxes
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:24
+    // totalBoxBytes: account.totalBoxBytes,
+    frame_dig -2
+    acct_params_get AcctTotalBoxBytes
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:13
+    // balance: account.balance,
+    frame_dig -2
+    acct_params_get AcctBalance
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:14
+    // minBalance: account.minBalance,
+    frame_dig -2
+    acct_params_get AcctMinBalance
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:15
+    // authAddress: account.authAddress.bytes,
+    frame_dig -2
+    acct_params_get AcctAuthAddr
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:16
+    // totalNumUint: account.totalNumUint,
+    frame_dig -2
+    acct_params_get AcctTotalNumUint
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:17
+    // totalNumByteSlice: account.totalNumByteSlice,
+    frame_dig -2
+    acct_params_get AcctTotalNumByteSlice
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:18
+    // totalExtraAppPages: account.totalExtraAppPages,
+    frame_dig -2
+    acct_params_get AcctTotalExtraAppPages
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:19
+    // totalAppsCreated: account.totalAppsCreated,
+    frame_dig -2
+    acct_params_get AcctTotalAppsCreated
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:20
+    // totalAppsOptedIn: account.totalAppsOptedIn,
+    frame_dig -2
+    acct_params_get AcctTotalAppsOptedIn
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:21
+    // totalAssetsCreated: account.totalAssetsCreated,
+    frame_dig -2
+    acct_params_get AcctTotalAssetsCreated
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:22
+    // totalAssets: account.totalAssets,
+    frame_dig -2
+    acct_params_get AcctTotalAssets
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:23
+    // totalBoxes: account.totalBoxes,
+    frame_dig -2
+    acct_params_get AcctTotalBoxes
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:24
+    // totalBoxBytes: account.totalBoxBytes,
+    frame_dig -2
+    acct_params_get AcctTotalBoxBytes
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:13
+    // balance: account.balance,
+    frame_dig -2
+    acct_params_get AcctBalance
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:14
+    // minBalance: account.minBalance,
+    frame_dig -2
+    acct_params_get AcctMinBalance
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:15
+    // authAddress: account.authAddress.bytes,
+    frame_dig -2
+    acct_params_get AcctAuthAddr
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:16
+    // totalNumUint: account.totalNumUint,
+    frame_dig -2
+    acct_params_get AcctTotalNumUint
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:17
+    // totalNumByteSlice: account.totalNumByteSlice,
+    frame_dig -2
+    acct_params_get AcctTotalNumByteSlice
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:18
+    // totalExtraAppPages: account.totalExtraAppPages,
+    frame_dig -2
+    acct_params_get AcctTotalExtraAppPages
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:19
+    // totalAppsCreated: account.totalAppsCreated,
+    frame_dig -2
+    acct_params_get AcctTotalAppsCreated
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:20
+    // totalAppsOptedIn: account.totalAppsOptedIn,
+    frame_dig -2
+    acct_params_get AcctTotalAppsOptedIn
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:21
+    // totalAssetsCreated: account.totalAssetsCreated,
+    frame_dig -2
+    acct_params_get AcctTotalAssetsCreated
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:22
+    // totalAssets: account.totalAssets,
+    frame_dig -2
+    acct_params_get AcctTotalAssets
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:23
+    // totalBoxes: account.totalBoxes,
+    frame_dig -2
+    acct_params_get AcctTotalBoxes
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:24
+    // totalBoxBytes: account.totalBoxBytes,
+    frame_dig -2
+    acct_params_get AcctTotalBoxBytes
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:13
+    // balance: account.balance,
+    frame_dig -2
+    acct_params_get AcctBalance
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:14
+    // minBalance: account.minBalance,
+    frame_dig -2
+    acct_params_get AcctMinBalance
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:15
+    // authAddress: account.authAddress.bytes,
+    frame_dig -2
+    acct_params_get AcctAuthAddr
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:16
+    // totalNumUint: account.totalNumUint,
+    frame_dig -2
+    acct_params_get AcctTotalNumUint
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:17
+    // totalNumByteSlice: account.totalNumByteSlice,
+    frame_dig -2
+    acct_params_get AcctTotalNumByteSlice
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:18
+    // totalExtraAppPages: account.totalExtraAppPages,
+    frame_dig -2
+    acct_params_get AcctTotalExtraAppPages
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:19
+    // totalAppsCreated: account.totalAppsCreated,
+    frame_dig -2
+    acct_params_get AcctTotalAppsCreated
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:20
+    // totalAppsOptedIn: account.totalAppsOptedIn,
+    frame_dig -2
+    acct_params_get AcctTotalAppsOptedIn
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:21
+    // totalAssetsCreated: account.totalAssetsCreated,
+    frame_dig -2
+    acct_params_get AcctTotalAssetsCreated
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:22
+    // totalAssets: account.totalAssets,
+    frame_dig -2
+    acct_params_get AcctTotalAssets
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:23
+    // totalBoxes: account.totalBoxes,
+    frame_dig -2
+    acct_params_get AcctTotalBoxes
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:24
+    // totalBoxBytes: account.totalBoxBytes,
+    frame_dig -2
+    acct_params_get AcctTotalBoxBytes
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:13
+    // balance: account.balance,
+    frame_dig -2
+    acct_params_get AcctBalance
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:14
+    // minBalance: account.minBalance,
+    frame_dig -2
+    acct_params_get AcctMinBalance
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:15
+    // authAddress: account.authAddress.bytes,
+    frame_dig -2
+    acct_params_get AcctAuthAddr
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:16
+    // totalNumUint: account.totalNumUint,
+    frame_dig -2
+    acct_params_get AcctTotalNumUint
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:17
+    // totalNumByteSlice: account.totalNumByteSlice,
+    frame_dig -2
+    acct_params_get AcctTotalNumByteSlice
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:18
+    // totalExtraAppPages: account.totalExtraAppPages,
+    frame_dig -2
+    acct_params_get AcctTotalExtraAppPages
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:19
+    // totalAppsCreated: account.totalAppsCreated,
+    frame_dig -2
+    acct_params_get AcctTotalAppsCreated
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:20
+    // totalAppsOptedIn: account.totalAppsOptedIn,
+    frame_dig -2
+    acct_params_get AcctTotalAppsOptedIn
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:21
+    // totalAssetsCreated: account.totalAssetsCreated,
+    frame_dig -2
+    acct_params_get AcctTotalAssetsCreated
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:22
+    // totalAssets: account.totalAssets,
+    frame_dig -2
+    acct_params_get AcctTotalAssets
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:23
+    // totalBoxes: account.totalBoxes,
+    frame_dig -2
+    acct_params_get AcctTotalBoxes
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:24
+    // totalBoxBytes: account.totalBoxBytes,
+    frame_dig -2
+    acct_params_get AcctTotalBoxBytes
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:25
+    // isOptInApp: account.isOptedIn(Global.currentApplicationId),
+    frame_dig -2
+    global CurrentApplicationID
+    app_opted_in
+    // tests/approvals/accounts.algo.ts:13
+    // balance: account.balance,
+    frame_dig -2
+    acct_params_get AcctBalance
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:14
+    // minBalance: account.minBalance,
+    frame_dig -2
+    acct_params_get AcctMinBalance
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:15
+    // authAddress: account.authAddress.bytes,
+    frame_dig -2
+    acct_params_get AcctAuthAddr
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:16
+    // totalNumUint: account.totalNumUint,
+    frame_dig -2
+    acct_params_get AcctTotalNumUint
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:17
+    // totalNumByteSlice: account.totalNumByteSlice,
+    frame_dig -2
+    acct_params_get AcctTotalNumByteSlice
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:18
+    // totalExtraAppPages: account.totalExtraAppPages,
+    frame_dig -2
+    acct_params_get AcctTotalExtraAppPages
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:19
+    // totalAppsCreated: account.totalAppsCreated,
+    frame_dig -2
+    acct_params_get AcctTotalAppsCreated
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:20
+    // totalAppsOptedIn: account.totalAppsOptedIn,
+    frame_dig -2
+    acct_params_get AcctTotalAppsOptedIn
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:21
+    // totalAssetsCreated: account.totalAssetsCreated,
+    frame_dig -2
+    acct_params_get AcctTotalAssetsCreated
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:22
+    // totalAssets: account.totalAssets,
+    frame_dig -2
+    acct_params_get AcctTotalAssets
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:23
+    // totalBoxes: account.totalBoxes,
+    frame_dig -2
+    acct_params_get AcctTotalBoxes
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:24
+    // totalBoxBytes: account.totalBoxBytes,
+    frame_dig -2
+    acct_params_get AcctTotalBoxBytes
+    bury 1
+    assert // account funded
+    // tests/approvals/accounts.algo.ts:26
+    // isOptInAsset: account.isOptedIn(asset),
+    frame_dig -2
+    frame_dig -1
+    asset_holding_get AssetBalance
+    bury 1
+    // tests/approvals/accounts.algo.ts:11-27
+    // return {
+    //   bytes: account.bytes,
+    //   balance: account.balance,
+    //   minBalance: account.minBalance,
+    //   authAddress: account.authAddress.bytes,
+    //   totalNumUint: account.totalNumUint,
+    //   totalNumByteSlice: account.totalNumByteSlice,
+    //   totalExtraAppPages: account.totalExtraAppPages,
+    //   totalAppsCreated: account.totalAppsCreated,
+    //   totalAppsOptedIn: account.totalAppsOptedIn,
+    //   totalAssetsCreated: account.totalAssetsCreated,
+    //   totalAssets: account.totalAssets,
+    //   totalBoxes: account.totalBoxes,
+    //   totalBoxBytes: account.totalBoxBytes,
+    //   isOptInApp: account.isOptedIn(Global.currentApplicationId),
+    //   isOptInAsset: account.isOptedIn(asset),
+    // }
+    frame_dig -2
+    cover 14
+    retsub

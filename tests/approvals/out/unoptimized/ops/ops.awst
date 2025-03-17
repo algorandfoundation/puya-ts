@@ -1,0 +1,29 @@
+contract MyContract
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  test(): void
+  {
+    a: bytes = ~bzero(8)
+    b: uint64 = btoi(a)
+    assert(b == 18446744073709551615)
+    c: uint64 = shr(b, 32)
+    assert(c == 4294967295)
+    assert(gtxns<ApplicationID>(txn<GroupIndex>()) == txn<ApplicationID>())
+    assert(txnas<ApplicationArgs>(0) == Method("test()void"))
+    assert(gtxnsas<ApplicationArgs>(txn<GroupIndex>(), 0) == Method("test()void"))
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
