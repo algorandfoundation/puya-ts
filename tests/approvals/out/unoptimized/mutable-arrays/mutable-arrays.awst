@@ -22,8 +22,9 @@ contract MutableArraysAlgo
     assert(ma.length == length)
     assert(Boolean(length), comment=has length)
     popped: uint64 = ma.pop()
-    assert(Boolean(length), comment=has length)
     assert(popped == length - 1)
+    assert(ma[ma.length - 1] == length - 2)
+    assert(ma[1] == 1)
   }
   
   __algots__.defaultCreate(): void
