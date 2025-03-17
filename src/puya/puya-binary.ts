@@ -49,7 +49,7 @@ export function findCachedPuyaBinary(version: SemVer): string | undefined {
  * @returns Object containing OS and architecture information
  */
 function getPlatformDetails(): { os: string; arch: string } {
-  const cliMessage = `Please refer to the CLI documentation for information on how to install Puya manually.`
+  const cliMessage = `Please refer to the puya-ts CLI documentation for information on how to install the Puya backend manually.`
 
   // Map Node.js platform to OS name used in filenames
   let os: string
@@ -190,10 +190,10 @@ async function verifyChecksum(filePath: string, fileName: string, checksumFilePa
     stream.on('end', () => {
       const calculatedChecksum = hash.digest('hex').toLowerCase()
 
-      if (`${calculatedChecksum}  ${fileName}` !== expectedChecksum) {
-        reject(new InternalError(`Checksum verification failed. Expected checksum: ${expectedChecksum} but got: ${calculatedChecksum}`))
+      if (`${calculatedChecksum}  ${fileName}` === expectedChecksum) {
+        resolve()
       }
-      resolve()
+      reject(new InternalError(`Checksum verification failed. Expected checksum: ${expectedChecksum} but got: ${calculatedChecksum}`))
     })
   })
 }

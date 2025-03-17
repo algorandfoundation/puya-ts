@@ -49,7 +49,9 @@ Currently, Puya binaries are available for:
 
 - Linux (x64 and ARM)
 - MacOS (x64 and Apple Silicon)
-- Windows (x64 and ARM)
+- Windows (x64 and ARM\*)
+
+*: ARM compatibility is supplied by Windows x64 emulation.
 
 If your system is supported, puya-ts will automatically download the appropriate binary for your system.
 
@@ -79,13 +81,13 @@ usage: puya [-h] [--version] [--log-level {notset,debug,info,warning,error,criti
 puya: error: the following arguments are required: --options, --awst
 ```
 
-After confirming that Puya is installed, you can pass the path to the Puya binary to `puya-ts` using the `--puya-path` flag.
+After confirming that Puya is installed, you can pass the Puya binary path to `puya-ts` using the `--puya-path` option.
 
 ```shell
 puya-ts build examples --output-awst --output-awst-json --puya-path puya
 ```
 
-If you don't wish to install Puya using `pipx`, you can build the Puya binary yourself from source. Refer to the [Puya README](https://github.com/algorandfoundation/puya) for more information. Once you have a binary, you can pass the path to it using the `--puya-path` flag.
+If you don't wish to install Puya using `pipx`, you can build the Puya binary yourself from source. Refer to the [Puya README](https://github.com/algorandfoundation/puya) for more information. Once you have a binary, you can pass the path to it using the `--puya-path /path/to/binary/puya` option.
 
 ## Commands
 
@@ -137,3 +139,4 @@ Flag arguments are true when used in the base form `--my-flag` but can be negate
 | `--output-destructured-ir`     | Flag                                                       | No (default false)           | Output a representation of the destructured (out of ssa) IR nodes for advanced debugging purposes                                                                                                                                                                                                                                                                                                                                                    |
 | `--output-optimization-ir`     | Flag                                                       | No (default false)           | Output a representation of the IR nodes after each optimization round for advanced debugging purposes                                                                                                                                                                                                                                                                                                                                                |
 | `--output-memory-ir`           | Flag                                                       | No (default false)           | Output a representation of the Memory IR nodes for advanced debugging purposes                                                                                                                                                                                                                                                                                                                                                                       |
+| `--puya-path`                  | String                                                     | No                           | The Puya path used for compilation. If not provided, puya-ts will attempt to download a compatible binary for your platform from the puya GitHub releases page.                                                                                                                                                                                                                                                                                      |
