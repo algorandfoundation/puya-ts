@@ -1,3 +1,5 @@
+import { getInnerTransactionType } from '../awst_build/eb/transactions/util'
+import { anyItxnType } from '../awst_build/ptypes'
 import { CodeError } from '../errors'
 import type { DeliberateAny, Props } from '../typescript-helpers'
 import { codeInvariant, instanceOfAny, invariant } from '../util'
@@ -25,6 +27,7 @@ import {
   ReinterpretCast,
   SingleEvaluation,
   StringConstant,
+  SubmitInnerTransaction,
   TupleExpression,
   TupleItemExpression,
   UInt64BinaryOperation,
@@ -32,6 +35,8 @@ import {
 } from './nodes'
 import type { SourceLocation } from './source-location'
 import { wtypes } from './wtypes'
+import WInnerTransactionFields = wtypes.WInnerTransactionFields
+import WTuple = wtypes.WTuple
 
 type ConcreteNodes = typeof concreteNodes
 
@@ -281,6 +286,21 @@ const explicitNodeFactory = {
       value,
       sourceLocation,
       wtype: base.wtype,
+    })
+  },
+  submitInnerTransaction({ itxns, sourceLocation }: Omit<Props<SubmitInnerTransaction>, 'wtype'>) {
+    const itxnWTypes = itxns.map(({ wtype }, index) => {
+      invariant(
+        wtype instanceof WInnerTransactionFields,
+        `WType at index ${index} must be WInnerTransactionFields with type`,
+        sourceLocation,
+      )
+      return wtype.transactionType === null ? anyItxnType.wtype : getInnerTransactionType(wtype.transactionType).wtype
+    })
+    return new SubmitInnerTransaction({
+      itxns,
+      sourceLocation,
+      wtype: itxnWTypes.length === 1 ? itxnWTypes[0] : new WTuple({ types: itxnWTypes, immutable: true }),
     })
   },
 } satisfies { [key in keyof ConcreteNodes]?: (...args: DeliberateAny[]) => DeliberateAny }

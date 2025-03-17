@@ -1324,6 +1324,9 @@ export const applicationItxnType = new InnerTransactionPType({
   name: 'ApplicationInnerTxn',
   kind: TransactionKind.appl,
 })
+export const anyItxnType = new InnerTransactionPType({
+  name: 'AnyInnerTxn',
+})
 
 export const submitGroupItxnFunction = new LibFunctionType({
   name: 'submitGroup',

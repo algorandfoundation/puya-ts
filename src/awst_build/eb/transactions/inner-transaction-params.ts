@@ -134,7 +134,6 @@ class SubmitInnerTxnMethodBuilder extends InnerTxnFieldsMethodBuilder {
     return new InnerTransactionExpressionBuilder(
       nodeFactory.submitInnerTransaction({
         itxns: [this.builder.resolve()],
-        wtype: transactionPType.wtype,
         sourceLocation,
       }),
       transactionPType,
@@ -166,7 +165,6 @@ export class SubmitItxnGroupFunctionBuilder extends FunctionBuilder {
     return instanceEb(
       nodeFactory.submitInnerTransaction({
         itxns: itxnParams.map((p) => p.resolve()),
-        wtype: resultType.wtype,
         sourceLocation,
       }),
       resultType,

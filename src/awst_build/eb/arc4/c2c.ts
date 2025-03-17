@@ -1,6 +1,6 @@
 import { OnCompletionAction, TransactionKind } from '../../../awst/models'
 import { nodeFactory } from '../../../awst/node-factory'
-import type { ARC4MethodConfig, Expression, MethodConstant, SubmitInnerTransaction } from '../../../awst/nodes'
+import type { ARC4MethodConfig, Expression, MethodConstant } from '../../../awst/nodes'
 import { ARC4ABIMethodConfig, ARC4BareMethodConfig, ARC4CreateOption, CompiledContract, IntegerConstant } from '../../../awst/nodes'
 import { SourceLocation } from '../../../awst/source-location'
 import { TxnField } from '../../../awst/txn-fields'
@@ -11,7 +11,15 @@ import { codeInvariant, enumFromValue, hexToUint8Array, invariant } from '../../
 import { getArc4MethodConstant, ptypeToArc4EncodedType } from '../../arc4-util'
 import { AwstBuildContext } from '../../context/awst-build-context'
 import type { FunctionPType, PType } from '../../ptypes'
-import { applicationCallItxnParamsType, applicationItxnType, bytesPType, compiledContractType, voidPType } from '../../ptypes'
+import {
+  applicationCallItxnParamsType,
+  applicationItxnType,
+  bytesPType,
+  compiledContractType,
+  GroupTransactionPType,
+  ItxnParamsPType,
+  voidPType,
+} from '../../ptypes'
 import {
   abiCallFunction,
   compileArc4Function,
@@ -227,7 +235,8 @@ function makeApplicationCall({
   arc4Config: ARC4MethodConfig
   methodSelector: MethodConstant | null
   sourceLocation: SourceLocation
-}): SubmitInnerTransaction {
+}): Expression {
+  const itxnGroup: Expression[] = []
   const mappedFields = new Map<TxnField, Expression>([
     // Set default fee to 0 (transaction will be paid for from transaction group budget, rather than from the application balance)
     [TxnField.Fee, nodeFactory.uInt64Constant({ value: 0n, sourceLocation })],
@@ -252,20 +261,31 @@ function makeApplicationCall({
   // Add app args by merging provided args with method selector
   if (arc4Config instanceof ARC4ABIMethodConfig) {
     invariant(methodSelector && functionType, 'methodSelector and functionType both required for abi calls')
-    addAppArgs({ fields, methodSelector, mappedFields, sourceLocation, functionType })
+    const { itxns, appArgs } = parseAppArgs({ fields, methodSelector, sourceLocation, functionType })
+    mappedFields.set(TxnField.ApplicationArgs, appArgs)
+    itxnGroup.push(...itxns)
   }
   // Build itxn and submit
-  const itxn = nodeFactory.createInnerTransaction({
-    fields: mappedFields,
+  itxnGroup.push(
+    nodeFactory.createInnerTransaction({
+      fields: mappedFields,
+      sourceLocation,
+      wtype: applicationCallItxnParamsType.wtype,
+    }),
+  )
+
+  const txnGroup = nodeFactory.submitInnerTransaction({
+    itxns: itxnGroup,
     sourceLocation,
-    wtype: applicationCallItxnParamsType.wtype,
   })
 
-  return nodeFactory.submitInnerTransaction({
-    itxns: [itxn],
-    wtype: applicationItxnType.wtype,
-    sourceLocation,
-  })
+  return txnGroup.itxns.length === 1
+    ? txnGroup
+    : nodeFactory.tupleItemExpression({
+        base: txnGroup,
+        index: BigInt(txnGroup.itxns.length - 1),
+        sourceLocation,
+      })
 }
 
 function formatApplicationCallResponse({
@@ -273,7 +293,7 @@ function formatApplicationCallResponse({
   functionType,
   sourceLocation,
 }: {
-  itxnResult: SubmitInnerTransaction
+  itxnResult: Expression
   functionType: FunctionPType
   sourceLocation: SourceLocation
 }) {
@@ -386,26 +406,38 @@ function getOca(
   }
 }
 
-function addAppArgs({
+function parseAppArgs({
   fields,
   methodSelector,
   functionType,
-  mappedFields,
   sourceLocation,
 }: {
-  mappedFields: Map<TxnField, Expression>
   fields?: InstanceBuilder
   functionType: FunctionPType
   methodSelector: MethodConstant
   sourceLocation: SourceLocation
 }) {
+  const itxns: Expression[] = []
   const appArgsBuilder = fields && fields.hasProperty('args') && fields.memberAccess('args', sourceLocation)
   const appArgs: Expression[] = [methodSelector]
   if (appArgsBuilder) {
     codeInvariant(isStaticallyIterable(appArgsBuilder), 'Unsupported expression for args', appArgsBuilder.sourceLocation)
     appArgs.push(
-      ...appArgsBuilder[StaticIterator]().map((arg, index) => {
+      ...appArgsBuilder[StaticIterator]().flatMap((arg, index) => {
         const [paramName, paramType] = functionType.parameters[index]
+
+        if (paramType instanceof GroupTransactionPType) {
+          codeInvariant(arg.ptype instanceof ItxnParamsPType, `${paramName} should be an ItxnParams object`)
+          if (paramType.kind !== undefined) {
+            codeInvariant(
+              arg.ptype.kind === paramType.kind,
+              `${paramName} should be an ItxnParams object for a ${TransactionKind[paramType.kind]} txn`,
+            )
+          }
+          // Push any itxn params to the itxn array in order
+          itxns.push(arg.resolve())
+          return []
+        }
 
         const encodedType = ptypeToArc4EncodedType(paramType, sourceLocation)
 
@@ -423,13 +455,13 @@ function addAppArgs({
       }),
     )
   }
-  mappedFields.set(
-    TxnField.ApplicationArgs,
-    nodeFactory.tupleExpression({
+  return {
+    appArgs: nodeFactory.tupleExpression({
       items: appArgs,
       sourceLocation,
     }),
-  )
+    itxns,
+  }
 }
 
 function getReturnValueExpr(itxnResult: Expression, returnType: PType, sourceLocation: SourceLocation) {

@@ -1,6 +1,6 @@
-import { assert, Contract } from '@algorandfoundation/algorand-typescript'
-import { abiCall, compileArc4 } from '@algorandfoundation/algorand-typescript/arc4'
-import { Hello, HelloTemplate, HelloTemplateCustomPrefix, LargeProgram } from './precompiled-apps.algo'
+import { assert, Contract, Global, itxn } from '@algorandfoundation/algorand-typescript'
+import { abiCall, compileArc4, methodSelector } from '@algorandfoundation/algorand-typescript/arc4'
+import { Hello, HelloTemplate, HelloTemplateCustomPrefix, LargeProgram, ReceivesTxns } from './precompiled-apps.algo'
 
 class HelloFactory extends Contract {
   test_compile_contract() {
@@ -75,6 +75,49 @@ class HelloFactory extends Contract {
 
     compiled.call.delete({
       appId: largeApp,
+    })
+  }
+
+  test_call_contract_with_transactions() {
+    const compiled = compileArc4(ReceivesTxns)
+
+    const appId = compiled.bareCreate().createdApp
+
+    const assetCreate = itxn.assetConfig({
+      total: 1,
+      unitName: 'T',
+      assetName: 'TEST',
+    })
+
+    compiled.call.receivesAnyTxn({
+      args: [assetCreate],
+      appId,
+    })
+
+    const appCall = itxn.applicationCall({
+      appId,
+      appArgs: [methodSelector(ReceivesTxns.prototype.getOne)],
+    })
+
+    compiled.call.receivesAnyTxn({
+      appId,
+      args: [appCall],
+    })
+
+    compiled.call.receivesAssetConfig({
+      appId,
+      args: [assetCreate],
+    })
+
+    const pay = itxn.payment({
+      receiver: appId.address,
+      amount: 100000,
+      sender: Global.currentApplicationId.address,
+    })
+
+    compiled.call.receivesAssetConfigAndPay({
+      appId,
+      args: [assetCreate, pay],
     })
   }
 }
