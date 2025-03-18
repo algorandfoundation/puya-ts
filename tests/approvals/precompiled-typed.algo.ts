@@ -1,6 +1,13 @@
-import { assert, Contract, Global, itxn } from '@algorandfoundation/algorand-typescript'
+import { assert, Contract, Global, itxn, Txn } from '@algorandfoundation/algorand-typescript'
 import { abiCall, compileArc4, methodSelector } from '@algorandfoundation/algorand-typescript/arc4'
-import { Hello, HelloTemplate, HelloTemplateCustomPrefix, LargeProgram, ReceivesTxns } from './precompiled-apps.algo'
+import {
+  Hello,
+  HelloTemplate,
+  HelloTemplateCustomPrefix,
+  LargeProgram,
+  ReceivesReferenceTypes,
+  ReceivesTxns,
+} from './precompiled-apps.algo'
 
 class HelloFactory extends Contract {
   test_compile_contract() {
@@ -119,5 +126,28 @@ class HelloFactory extends Contract {
       appId,
       args: [assetCreate, pay],
     })
+  }
+
+  test_call_contract_with_reference_types() {
+    const compiled = compileArc4(ReceivesReferenceTypes)
+
+    const appId = compiled.bareCreate().createdApp
+
+    const asset = itxn
+      .assetConfig({
+        total: 1,
+        unitName: 'T',
+        assetName: 'TEST',
+      })
+      .submit().createdAsset
+
+    const result = compiled.call.receivesReferenceTypes({
+      args: [Global.currentApplicationId, Txn.sender, asset],
+      appId,
+    })
+
+    assert(result.itxn.logs(0) === Global.currentApplicationAddress.bytes)
+    assert(result.itxn.logs(1) === Txn.sender.bytes)
+    assert(result.itxn.logs(2) === asset.name)
   }
 }

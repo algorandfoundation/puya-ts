@@ -12,8 +12,11 @@ import { getArc4MethodConstant, ptypeToArc4EncodedType } from '../../arc4-util'
 import { AwstBuildContext } from '../../context/awst-build-context'
 import type { FunctionPType, PType } from '../../ptypes'
 import {
+  accountPType,
   applicationCallItxnParamsType,
   applicationItxnType,
+  applicationPType,
+  assetPType,
   bytesPType,
   compiledContractType,
   GroupTransactionPType,
@@ -35,7 +38,7 @@ import { FunctionBuilder, InstanceExpressionBuilder, NodeBuilder } from '../inde
 import { isStaticallyIterable, StaticIterator } from '../traits/static-iterator'
 import { mapTransactionFields } from '../transactions/inner-transaction-params'
 import { txnFieldName } from '../transactions/txn-fields'
-import { requireInstanceBuilder } from '../util'
+import { requireExpressionOfType, requireInstanceBuilder } from '../util'
 import { parseFunctionArgs } from '../util/arg-parsing'
 import { validatePrefix } from './util'
 
@@ -261,8 +264,17 @@ function makeApplicationCall({
   // Add app args by merging provided args with method selector
   if (arc4Config instanceof ARC4ABIMethodConfig) {
     invariant(methodSelector && functionType, 'methodSelector and functionType both required for abi calls')
-    const { itxns, appArgs } = parseAppArgs({ fields, methodSelector, sourceLocation, functionType })
+    const { itxns, appArgs, foreignApps, foreignAssets, foreignAccounts } = parseAppArgs({
+      fields,
+      methodSelector,
+      sourceLocation,
+      functionType,
+    })
     mappedFields.set(TxnField.ApplicationArgs, appArgs)
+    if (foreignApps) mappedFields.set(TxnField.Applications, foreignApps)
+    if (foreignAssets) mappedFields.set(TxnField.Assets, foreignAssets)
+    if (foreignAccounts) mappedFields.set(TxnField.Accounts, foreignAccounts)
+
     itxnGroup.push(...itxns)
   }
   // Build itxn and submit
@@ -417,7 +429,13 @@ function parseAppArgs({
   methodSelector: MethodConstant
   sourceLocation: SourceLocation
 }) {
-  const itxns: Expression[] = []
+  const results = {
+    itxns: new Array<Expression>(),
+    foreignApps: new Array<Expression>(),
+    foreignAccounts: new Array<Expression>(),
+    foreignAssets: new Array<Expression>(),
+  }
+
   const appArgsBuilder = fields && fields.hasProperty('args') && fields.memberAccess('args', sourceLocation)
   const appArgs: Expression[] = [methodSelector]
   if (appArgsBuilder) {
@@ -435,20 +453,29 @@ function parseAppArgs({
             )
           }
           // Push any itxn params to the itxn array in order
-          itxns.push(arg.resolve())
+          results.itxns.push(arg.resolve())
           return []
+        }
+        if (paramType.equals(assetPType)) {
+          return handleForeignRef(results.foreignAssets, 0n, paramType, arg)
+        }
+        if (paramType.equals(applicationPType)) {
+          return handleForeignRef(results.foreignApps, 1n, paramType, arg)
+        }
+        if (paramType.equals(accountPType)) {
+          return handleForeignRef(results.foreignAccounts, 1n, paramType, arg)
         }
 
         const encodedType = ptypeToArc4EncodedType(paramType, sourceLocation)
 
-        const resolvedArg = arg.resolveToPType(paramType)
+        const resolvedArg = requireExpressionOfType(arg, paramType)
 
         if (encodedType.equals(paramType)) {
-          return resolvedArg.resolve()
+          return resolvedArg
         }
 
         return nodeFactory.aRC4Encode({
-          value: arg.resolve(),
+          value: resolvedArg,
           wtype: encodedType.wtype,
           sourceLocation: arg.sourceLocation,
         })
@@ -460,8 +487,43 @@ function parseAppArgs({
       items: appArgs,
       sourceLocation,
     }),
-    itxns,
+    itxns: results.itxns,
+    foreignApps: results.foreignApps.length
+      ? nodeFactory.tupleExpression({
+          items: results.foreignApps,
+          sourceLocation,
+        })
+      : null,
+    foreignAccounts: results.foreignAccounts.length
+      ? nodeFactory.tupleExpression({
+          items: results.foreignAccounts,
+          sourceLocation,
+        })
+      : null,
+    foreignAssets: results.foreignAssets.length
+      ? nodeFactory.tupleExpression({
+          items: results.foreignAssets,
+          sourceLocation,
+        })
+      : null,
   }
+}
+
+/**
+ * Adds the arg expression to the foreign refs array and returns the index of that item
+ * @param refsArray The foreign refs array associated with the ref type
+ * @param offset The initial offset for the ref type. Account 0 is Txn.sender and App 0 is Global.currentApplication
+ * @param paramType The ptype for the parameter
+ * @param arg The builder for the arg value
+ */
+function handleForeignRef(refsArray: Expression[], offset: bigint, paramType: PType, arg: InstanceBuilder) {
+  refsArray.push(requireExpressionOfType(arg, paramType))
+  return nodeFactory.integerConstant({
+    value: BigInt(refsArray.length - 1) + offset,
+    wtype: new wtypes.ARC4UIntN({ n: 8n }),
+    sourceLocation: SourceLocation.None,
+    tealAlias: null,
+  })
 }
 
 function getReturnValueExpr(itxnResult: Expression, returnType: PType, sourceLocation: SourceLocation) {

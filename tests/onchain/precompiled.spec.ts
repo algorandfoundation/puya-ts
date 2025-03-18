@@ -37,5 +37,8 @@ describe('precompiled', () => {
     test('Program with txn params can be called', async ({ appClientHelloFactory }) => {
       await appClientHelloFactory.send.call({ method: 'test_call_contract_with_transactions', extraFee: algo(1) })
     })
+    test('Program with reference type params can be called', async ({ appClientHelloFactory }) => {
+      await appClientHelloFactory.send.call({ method: 'test_call_contract_with_reference_types', extraFee: algo(1) })
+    })
   })
 })

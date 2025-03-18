@@ -1,9 +1,10 @@
-import type { bytes, gtxn, uint64 } from '@algorandfoundation/algorand-typescript'
+import type { Account, Application, Asset, bytes, gtxn, uint64 } from '@algorandfoundation/algorand-typescript'
 import {
   abimethod,
   assert,
   Contract,
   GlobalState,
+  log,
   LogicSig,
   op,
   TemplateVar,
@@ -96,5 +97,13 @@ export class ReceivesTxns extends Contract {
   receivesAssetConfigAndPay(assetCfg: gtxn.AssetConfigTxn, payTxn: gtxn.PaymentTxn): void {
     assert(assetCfg.type === TransactionType.AssetConfig)
     assert(payTxn.type === TransactionType.Payment)
+  }
+}
+
+export class ReceivesReferenceTypes extends Contract {
+  receivesReferenceTypes(app: Application, acc: Account, asset: Asset) {
+    log(app.address)
+    log(acc.bytes)
+    log(asset.name)
   }
 }
