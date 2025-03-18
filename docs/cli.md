@@ -51,7 +51,7 @@ Currently, Puya binaries are available for:
 - MacOS (x64 and Apple Silicon)
 - Windows (x64 and ARM\*)
 
-*: ARM compatibility is supplied by Windows x64 emulation.
+\*: ARM compatibility is supplied by Windows x64 emulation.
 
 If your system is supported, puya-ts will automatically download the appropriate binary for your system.
 
@@ -81,7 +81,7 @@ usage: puya [-h] [--version] [--log-level {notset,debug,info,warning,error,criti
 puya: error: the following arguments are required: --options, --awst
 ```
 
-After confirming that Puya is installed, you can pass the Puya binary path to `puya-ts` using the `--puya-path` option.
+After confirming that Puya is installed, you can pass the Puya path to `puya-ts` using the `--puya-path` option.
 
 ```shell
 puya-ts build examples --output-awst --output-awst-json --puya-path puya

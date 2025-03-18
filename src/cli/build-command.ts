@@ -164,7 +164,7 @@ export function addBuildCommand(subparsers: SubParser) {
   })
 
   buildParser.add_argument('--puya-path', {
-    help: 'The path to the puya binary',
+    help: '(Optional) The path to the Puya. If not provided, puya-ts will automatically download the appropriate binary for your system',
   })
 
   buildParser.set_defaults({
