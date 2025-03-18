@@ -4,6 +4,7 @@ import { Constants } from '../../constants'
 import { codeInvariant } from '../../util'
 import { GenericPType, PType } from './base'
 import {
+  ArrayPType,
   biguintPType,
   boolPType,
   bytesPType,
@@ -398,7 +399,7 @@ export class DynamicArrayType extends ARC4ArrayType {
   readonly name: string
   readonly singleton = false
   readonly sourceLocation: SourceLocation | undefined
-  readonly nativeType: PType | undefined = undefined
+  readonly nativeType: PType
   readonly wtype: wtypes.ARC4DynamicArray
   readonly encodedBitSize = null
 
@@ -419,14 +420,14 @@ export class DynamicArrayType extends ARC4ArrayType {
       elementType,
     })
     this.immutable = immutable ?? false
-    this.nativeType = nativeType
+    this.nativeType = nativeType ?? new ArrayPType({ elementType })
     this.name = name ?? `DynamicArray<${elementType}>`
     this.sourceLocation = sourceLocation
     this.wtype = new wtypes.ARC4DynamicArray({
       elementType: this.elementType.wtype,
       sourceLocation: this.sourceLocation,
       immutable: this.immutable,
-      nativeType: this.nativeType?.wtype,
+      nativeType: this.nativeType.wtype,
     })
   }
 }
@@ -460,7 +461,7 @@ export class StaticArrayType extends ARC4ArrayType {
   readonly singleton = false
   readonly sourceLocation: SourceLocation | undefined
   readonly wtype: wtypes.ARC4StaticArray
-  readonly nativeType: PType | undefined
+  readonly nativeType: PType
   readonly encodedBitSize: bigint | null
   constructor({
     elementType,
@@ -485,7 +486,7 @@ export class StaticArrayType extends ARC4ArrayType {
     this.arraySize = arraySize
     this.name = name ?? `StaticArray<${elementType}, ${arraySize}>`
     this.sourceLocation = sourceLocation
-    this.nativeType = nativeType
+    this.nativeType = nativeType ?? new TuplePType({ items: new Array(Number(arraySize)).fill(elementType) })
     this.wtype =
       wtype ??
       new wtypes.ARC4StaticArray({

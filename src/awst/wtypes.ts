@@ -94,7 +94,7 @@ export namespace wtypes {
     scalarType: AVMType.uint64,
   })
 
-  export class ARC4Type extends WType {
+  export abstract class ARC4Type extends WType {
     readonly nativeType: WType | null
     readonly arc4Name: string
     constructor({
@@ -114,6 +114,8 @@ export namespace wtypes {
       this.nativeType = nativeType
     }
   }
+
+  export class _SimpleARC4Type extends ARC4Type {}
 
   export class WStructType extends WType {
     fields: Record<string, WType>
@@ -412,7 +414,7 @@ export namespace wtypes {
     arc4Name: 'address',
   })
 
-  export const arc4BooleanWType = new ARC4Type({
+  export const arc4BooleanWType = new _SimpleARC4Type({
     name: 'arc4.bool',
     arc4Name: 'bool',
     immutable: true,
