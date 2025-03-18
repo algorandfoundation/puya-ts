@@ -40,6 +40,13 @@ describe('determineOutDir', () => {
     ['examples', 'examples/hello/contract.algo.ts', '/out', '/out/hello'],
     ['examples/hello', 'examples/hello/contract.algo.ts', '/out', '/out'],
     ['examples/hello/contract.algo.ts', 'examples/hello/contract.algo.ts', '/out', '/out'],
+
+    // Dot paths
+    ['.', 'examples/hello/contract.algo.ts', 'out', 'out/examples/hello'],
+    ['./', 'examples/hello/contract.algo.ts', 'out', 'out/examples/hello'],
+
+    // Unix Absolute inputs
+    ['/users/bob/src/', '/users/bob/src/contract.algo.ts', 'out', '/users/bob/src/out'],
   ])('returns the correct out dir', (inputPath, sourceFile, outDir, result) => {
     const calculatedOutDir = determineOutDir(inputPath, sourceFile, outDir)
     expect(calculatedOutDir).toBe(result)

@@ -111,7 +111,7 @@ export class AwstSerializer extends SnakeCaseSerializer<RootNode[]> {
     }
     if (value instanceof SourceLocation && value.file) {
       let filePath: string = value.file
-      if (this.options?.sourcePaths === 'absolute') {
+      if (this.options?.sourcePaths === 'absolute' && !path.isAbsolute(value.file)) {
         invariant(this.options.programDirectory, 'Program directory must be supplied for absolute paths')
         if (value.file.startsWith(Constants.algoTsPackage)) {
           filePath = path.join(this.options.programDirectory, 'node_modules', value.file)

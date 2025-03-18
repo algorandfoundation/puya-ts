@@ -2,7 +2,7 @@ import { minimatch } from 'minimatch'
 import upath from 'upath'
 
 export function determineOutDir(inputPath: string, sourceFile: string, outDir: string) {
-  const outDirBase = findMinimalMatch(inputPath, sourceFile)
+  const outDirBase = findMinimalMatch(upath.normalizeTrim(inputPath), sourceFile)
 
   const subPath = upath.dirname(sourceFile.slice(outDirBase.length))
 
@@ -17,6 +17,9 @@ function trimCurrentDir(path: string) {
 }
 
 function findMinimalMatch(inputPath: string, testPath: string): string {
+  if (inputPath === '.' || testPath === '.') {
+    return ''
+  }
   const [matchedPath] = minimatch.match([trimCurrentDir(testPath)], trimCurrentDir(inputPath))
   if (matchedPath) {
     if (matchedPath.endsWith('.algo.ts')) {
