@@ -77,7 +77,7 @@ export class SourceLocation {
       file: normalisePath(sourceFile.fileName, programDirectory),
       line: 1,
       endLine: endLoc.line + 1,
-      column: 1,
+      column: 0,
       endColumn: endLoc.character,
       scope: 'file',
     })
