@@ -12,8 +12,9 @@ class MutableArraysAlgo extends Contract {
     assert(ma.length === length)
     assert(length, 'has length')
     const popped = ma.pop()
-    assert(length, 'has length')
 
     assert(popped === length - 1)
+    assert(ma.at(-1) === length - 2)
+    assert(ma.at(1) === 1)
   }
 }

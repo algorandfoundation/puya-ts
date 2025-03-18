@@ -12,14 +12,6 @@ To set up the project locally:
 
 1. **Install Node.js**: Download from [nodejs.org](https://nodejs.org/).
 
-1. **Install Python 3.12+**.
-
-1. **Install Puya**:
-
-   ```sh
-   pipx install puyapy --python 3.12.6
-   ```
-
 1. **Install AlgoKit CLI**: Follow the guide from [Algokit](https://github.com/algorandfoundation/algokit-cli?tab=readme-ov-file#install).
 
 1. **Start localnet**:

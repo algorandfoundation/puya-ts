@@ -32,6 +32,8 @@ export class CompileOptions {
   public readonly cliTemplateDefinitions: Record<string, Uint8Array | bigint>
   public readonly templateVarsPrefix: string
   public readonly localsCoalescingStrategy: LocalsCoalescingStrategy
+  public readonly customPuyaPath?: string
+
   constructor(options: Partial<Props<CompileOptions>> & { filePaths: AlgoFile[] }) {
     this.filePaths = options.filePaths
     this.logLevel = options.logLevel ?? LogLevel.Info
@@ -54,6 +56,7 @@ export class CompileOptions {
     this.cliTemplateDefinitions = options.cliTemplateDefinitions ?? defaultPuyaOptions.cliTemplateDefinitions
     this.templateVarsPrefix = options.templateVarsPrefix ?? defaultPuyaOptions.templateVarsPrefix
     this.localsCoalescingStrategy = options.localsCoalescingStrategy ?? defaultPuyaOptions.localsCoalescingStrategy
+    this.customPuyaPath = options.customPuyaPath
   }
 
   buildPuyaOptions(compilationSet: CompilationSetMapping) {

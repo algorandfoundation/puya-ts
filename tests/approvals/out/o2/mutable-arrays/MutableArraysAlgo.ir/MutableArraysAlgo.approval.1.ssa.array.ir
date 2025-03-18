@@ -69,6 +69,25 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%3#1: uint64 = (- length#0 1u)
         let tmp%4#1: bool = (== popped#0 tmp%3#1)
         (assert tmp%4#1)
+        let array%bytes_len%1#1: uint64 = (len new_contents%0#0)
+        let array%array_len%1#1: uint64 = (/ array%bytes_len%1#1 8u)
+        let tmp%5#1: uint64 = array%array_len%1#1
+        let tmp%6#1: uint64 = (- tmp%5#1 1u)
+        let array%bytes_index%1#1: uint64 = (* tmp%6#1 8u)
+        let array%value%1#1: bytes = (extract3 new_contents%0#0 array%bytes_index%1#1 8u)
+        let array%sub_item%3#1: bytes = (extract3 array%value%1#1 0u 8u)
+        let array%sub_item%4#1: uint64 = (btoi array%sub_item%3#1)
+        let tmp%7#1: uint64 = array%sub_item%4#1
+        let tmp%8#1: uint64 = (- length#0 2u)
+        let tmp%9#1: bool = (== tmp%7#1 tmp%8#1)
+        (assert tmp%9#1)
+        let array%bytes_index%2#1: uint64 = (* 1u 8u)
+        let array%value%2#1: bytes = (extract3 new_contents%0#0 array%bytes_index%2#1 8u)
+        let array%sub_item%5#1: bytes = (extract3 array%value%2#1 0u 8u)
+        let array%sub_item%6#1: uint64 = (btoi array%sub_item%5#1)
+        let tmp%10#1: uint64 = array%sub_item%6#1
+        let tmp%11#0: bool = (== tmp%10#1 1u)
+        (assert tmp%11#0)
         let tests/approvals/mutable-arrays.algo.ts::MutableArraysAlgo.__puya_arc4_router__%0#0: bool = 1u
         goto block@11
     block@6: // bare_routing_L4

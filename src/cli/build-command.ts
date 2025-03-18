@@ -33,6 +33,7 @@ export interface BuildCommandArgs {
   template_vars_prefix: string
   locals_coalescing_strategy: LocalsCoalescingStrategy
   paths: string[]
+  puya_path: string
 }
 
 export function addBuildCommand(subparsers: SubParser) {
@@ -162,6 +163,10 @@ export function addBuildCommand(subparsers: SubParser) {
     help: 'The path, or paths to search for compatible .algo.ts files',
   })
 
+  buildParser.add_argument('--puya-path', {
+    help: 'The path to Puya. If not provided, puya-ts will automatically download the appropriate binary for your system',
+  })
+
   buildParser.set_defaults({
     command: 'build',
   })
@@ -199,6 +204,8 @@ export async function buildCommand(args: BuildCommandArgs) {
           cliTemplateDefinitions: Object.fromEntries(args.cli_template_definitions?.map(parseCliTemplateVar) ?? []),
           templateVarsPrefix: args.template_vars_prefix,
           localsCoalescingStrategy: args.locals_coalescing_strategy,
+
+          customPuyaPath: args.puya_path,
         }),
       )
       logCtx.exitIfErrors()
