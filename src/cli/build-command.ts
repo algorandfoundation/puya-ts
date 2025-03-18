@@ -205,7 +205,7 @@ export async function buildCommand(args: BuildCommandArgs) {
           templateVarsPrefix: args.template_vars_prefix,
           localsCoalescingStrategy: args.locals_coalescing_strategy,
 
-          puyaPath: args.puya_path,
+          customPuyaPath: args.puya_path,
         }),
       )
       logCtx.exitIfErrors()
