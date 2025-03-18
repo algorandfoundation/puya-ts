@@ -1,6 +1,6 @@
 import { Contract } from '@algorandfoundation/algorand-typescript'
-import { a, b } from './test.algo'
-import { d } from './test1.algo'
+import { a, b } from './constant-a.algo'
+import { d } from './constant-b.algo'
 
 export class HelloWorld extends Contract {
   public getHello(): string {
