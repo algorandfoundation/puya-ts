@@ -1,4 +1,4 @@
-import type { SubParser } from 'argparse'
+import type { ArgumentParser } from 'argparse'
 import { BooleanOptionalAction } from 'argparse'
 import { compile } from '../compile'
 import { processInputPaths } from '../input-paths/process-input-paths'
@@ -36,139 +36,131 @@ export interface BuildCommandArgs {
   puya_path: string
 }
 
-export function addBuildCommand(subparsers: SubParser) {
-  const buildParser = subparsers.add_parser('build', {
-    description: 'Build a smart contract or logic signature',
-    help: `When provided with a directory or .algo.ts file, parses and compiles all smart contracts and logic signatures found in the directory or file and outputs compilation artifacts.`,
-  })
-
-  addEnumArg(buildParser, {
+export function addBuildCommand(parser: ArgumentParser) {
+  addEnumArg(parser, {
     name: '--log-level',
     default: LogLevel.Info,
     enumType: LogLevel,
     help: 'The minimum log level to output',
   })
 
-  buildParser.add_argument('--output-awst', {
+  parser.add_argument('--output-awst', {
     help: 'Output debugging awst file per parsed file',
     default: false,
     action: BooleanOptionalAction,
   })
 
-  buildParser.add_argument('--output-awst-json', {
+  parser.add_argument('--output-awst-json', {
     action: BooleanOptionalAction,
     default: false,
     help: 'Output debugging awst json file per parsed file',
   })
 
-  buildParser.add_argument('--dry-run', {
+  parser.add_argument('--dry-run', {
     action: BooleanOptionalAction,
     default: false,
     help: "Just parse typescript files, don't invoke puya compiler",
   })
-  buildParser.add_argument('--skip-version-check', {
+  parser.add_argument('--skip-version-check', {
     action: BooleanOptionalAction,
     default: false,
     help: "Don't verify installed puya compiler version matches targeted version",
   })
-  buildParser.add_argument('--output-teal', {
+  parser.add_argument('--output-teal', {
     action: BooleanOptionalAction,
     help: 'Output TEAL code',
     default: defaultPuyaOptions.outputTeal,
   })
-  buildParser.add_argument('--output-source-map', {
+  parser.add_argument('--output-source-map', {
     action: BooleanOptionalAction,
     help: 'Output debug source maps ',
     default: defaultPuyaOptions.outputSourceMap,
   })
-  buildParser.add_argument('--output-arc32', {
+  parser.add_argument('--output-arc32', {
     action: BooleanOptionalAction,
     help: 'Output {contract}.arc32.json ARC-32 app spec file. Only applicable to ARC4 contracts ',
     default: defaultPuyaOptions.outputArc32,
   })
-  buildParser.add_argument('--output-arc56', {
+  parser.add_argument('--output-arc56', {
     action: BooleanOptionalAction,
     help: 'Output {contract}.arc56.json ARC-56 app spec file. Only applicable to ARC4 contracts ',
     default: defaultPuyaOptions.outputArc56,
   })
-  buildParser.add_argument('--output-ssa-ir', {
+  parser.add_argument('--output-ssa-ir', {
     action: BooleanOptionalAction,
     help: 'Output IR (in SSA form) before optimisations',
     default: defaultPuyaOptions.outputSsaIr,
   })
-  buildParser.add_argument('--output-optimization-ir', {
+  parser.add_argument('--output-optimization-ir', {
     action: BooleanOptionalAction,
     help: 'Output IR after each optimization',
     default: defaultPuyaOptions.outputOptimizationIr,
   })
-  buildParser.add_argument('--output-destructured-ir', {
+  parser.add_argument('--output-destructured-ir', {
     action: BooleanOptionalAction,
     help: 'Output IR after SSA destructuring and before MIR',
     default: defaultPuyaOptions.outputDestructuredIr,
   })
-  buildParser.add_argument('--output-memory-ir', {
+  parser.add_argument('--output-memory-ir', {
     action: BooleanOptionalAction,
     help: 'Output MIR before lowering to TealOps',
     default: defaultPuyaOptions.outputMemoryIr,
   })
-  buildParser.add_argument('--output-bytecode', {
+  parser.add_argument('--output-bytecode', {
     action: BooleanOptionalAction,
     help: 'Output AVM bytecode',
     default: defaultPuyaOptions.outputBytecode,
   })
 
-  buildParser.add_argument('--out-dir', {
+  parser.add_argument('--out-dir', {
     action: 'store',
     help: 'Where to output builder artifacts. Can use [name] placeholder to include contract name in path',
     default: 'out',
   })
 
-  buildParser.add_argument('--debug-level', {
+  parser.add_argument('--debug-level', {
     default: defaultPuyaOptions.debugLevel.toString(),
     choices: ['0', '1', '2'],
     help: 'Output debug information level, 0 = none, 1 = debug, 2 = reserved for future use',
   })
-  buildParser.add_argument('--optimization-level', {
+  parser.add_argument('--optimization-level', {
     default: defaultPuyaOptions.optimizationLevel.toString(),
     choices: ['0', '1', '2'],
     help: 'Set optimization level of output TEAL / AVM bytecode, 0 = none, 1 = normal, 2 = intensive',
   })
-  buildParser.add_argument('--target-avm-version', {
+  parser.add_argument('--target-avm-version', {
     default: defaultPuyaOptions.targetAvmVersion.toString(),
     choices: ['10', '11'],
     help: 'Select the targeted AVM version for compilation output',
   })
 
-  buildParser.add_argument('--cli-template-definitions', {
+  parser.add_argument('--cli-template-definitions', {
     metavar: 'VAR=VALUE',
     nargs: '+',
     help: 'Define template vars for use when assembling via --output-bytecode, should be specified without the prefix (see --template-vars-prefix)',
   })
 
-  buildParser.add_argument('--template-vars-prefix', {
+  parser.add_argument('--template-vars-prefix', {
     help: 'Define the prefix to use with --template-var',
     default: defaultPuyaOptions.templateVarsPrefix,
   })
 
-  addEnumArg(buildParser, {
+  addEnumArg(parser, {
     name: '--locals-coalescing-strategy',
     enumType: LocalsCoalescingStrategy,
     help: 'Strategy choice for out-of-ssa local variable coalescing. The best choice for your app is best determined through experimentation',
     default: defaultPuyaOptions.localsCoalescingStrategy,
   })
 
-  buildParser.add_argument('paths', {
+  parser.add_argument('paths', {
     metavar: 'PATHS',
-    nargs: '+',
+    nargs: '*',
     help: 'The path, or paths to search for compatible .algo.ts files',
+    default: ['.'],
   })
 
-  buildParser.add_argument('--puya-path', {
+  parser.add_argument('--puya-path', {
     help: 'The path to Puya. If not provided, puya-ts will automatically download the appropriate binary for your system',
-  })
-
-  buildParser.set_defaults({
-    command: 'build',
   })
 }
 
