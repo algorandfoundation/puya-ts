@@ -1,10 +1,9 @@
-import { Observable } from 'rxjs'
+import { concatMap, map, Observable, throttleTime } from 'rxjs'
 import { TextDocument } from 'vscode-languageserver-textdocument'
-import type { CodeAction, DocumentDiagnosticReport, InitializeResult, TextDocumentChangeEvent } from 'vscode-languageserver/node.js'
+import type { CodeAction, Diagnostic, InitializeResult, TextDocumentChangeEvent } from 'vscode-languageserver/node.js'
 import {
   createClientSocketTransport,
   createConnection,
-  DocumentDiagnosticReportKind,
   ProposedFeatures,
   TextDocuments,
   TextDocumentSyncKind,
@@ -71,14 +70,11 @@ export async function startLanguageServer() {
     })
   })
 
-  documentChangeObservable.subscribe(async () => {
+  async function buildWorkspaceDiagnosticsMap(): Promise<Map<string, Diagnostic[]>> {
     if (!workspaceFolder) {
       connection.console.error('Workspace folder not set')
 
-      return {
-        kind: DocumentDiagnosticReportKind.Full,
-        items: [],
-      } satisfies DocumentDiagnosticReport
+      return new Map()
     }
 
     const workspacePath = URI.parse(workspaceFolder).fsPath
@@ -88,16 +84,31 @@ export async function startLanguageServer() {
       trackedDocumentUris.add(docUri)
     }
 
+    return diagnosticsMap
+  }
+
+  async function sendDiagnostics(diagnosticsMap: Map<string, Diagnostic[]>) {
     // Send diagnostics for all tracked documents
     // Needs to do this to reset diagnostics for files that don't have issues anymore
-    for (const docUri of trackedDocumentUris) {
-      const diagnostics = diagnosticsMap.get(docUri) ?? []
-      connection.sendDiagnostics({
-        uri: docUri,
-        diagnostics,
-      })
-    }
-  })
+    await Promise.all(
+      Array.from(trackedDocumentUris).map((docUri) =>
+        connection.sendDiagnostics({
+          uri: docUri,
+          diagnostics: diagnosticsMap.get(docUri) ?? [],
+        }),
+      ),
+    )
+  }
+
+  documentChangeObservable
+    .pipe(
+      throttleTime(200),
+      map(buildWorkspaceDiagnosticsMap),
+      concatMap(async (v) => sendDiagnostics(await v)),
+    )
+    .subscribe(async () => {
+      // Need a subscriber or the observable won't fire
+    })
 
   // Make the text document manager listen on the connection
   // for open, change and close text document events
