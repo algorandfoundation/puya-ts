@@ -2,8 +2,10 @@ import { ArgumentParser } from 'argparse'
 import { appVersion } from './app-version'
 import type { BuildCommandArgs } from './build-command'
 import { addBuildCommand, buildCommand } from './build-command'
+import { checkNodeVersion } from './check-node-version'
 
 export async function parseCliArguments() {
+  checkNodeVersion()
   const parser = new ArgumentParser({
     prog: 'puya-ts',
   })
