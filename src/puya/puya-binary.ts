@@ -26,7 +26,7 @@ function getPuyaTsDir(): string {
   }
 }
 
-function getPuyaStorageDir(version: SemVer): string {
+export function getPuyaStorageDir(version: SemVer): string {
   const puyaTsDirName = getPuyaTsDir()
   const puyaBinDir = path.join(puyaTsDirName, '.puya')
   return path.join(puyaBinDir, version.formatted)
