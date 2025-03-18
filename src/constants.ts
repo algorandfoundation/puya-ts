@@ -41,6 +41,7 @@ export const Constants = {
   supportedAvmVersions: [10n, 11n],
   targetedPuyaVersion: '4.5.0',
   puyaGithubRepo: 'algorandfoundation/puya',
+  minNodeVersion: '20.19.0',
 } as const
 
 export type SupportedAvmVersion = (typeof Constants.supportedAvmVersions)[number]
