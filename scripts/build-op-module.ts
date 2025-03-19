@@ -669,5 +669,5 @@ const getOpDocs = (op: Op): string[] => [
     .filter(Boolean)
     .map((d: string) => `${d.replace('params: ', '@param ').replace('Return: ', '\n * @return ')}`.split('\n').map((s) => s.trimEnd()))
     .flat(),
-  `@see Native TEAL opcode: [\`${op.name}\`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#${op.name})`,
+  `@see Native TEAL opcode: [\`${op.name}\`](https://dev.algorand.co/reference/algorand-teal/opcodes#${op.name})`,
 ]
