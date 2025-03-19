@@ -21,7 +21,7 @@ export abstract class LiteralExpressionBuilder extends InstanceBuilder {
   abstract resolveToPType(ptype: PTypeOrClass): InstanceBuilder
 
   private throwInvalidExpression(): never {
-    if (this.ptype instanceof TransientType) throw new CodeError(this.ptype.expressionMessage, { sourceLocation: this.sourceLocation })
+    if (this.ptype instanceof TransientType) throw this.ptype.expressionError(this.sourceLocation)
     throw new CodeError(`Invalid expression type ${this.ptype}`, { sourceLocation: this.sourceLocation })
   }
 

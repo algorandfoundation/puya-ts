@@ -3,7 +3,7 @@ import { SourceLocation } from '../../awst/source-location'
 import { wtypes } from '../../awst/wtypes'
 
 import { Constants } from '../../constants'
-import { CodeError, InternalError, NotSupported } from '../../errors'
+import { CodeError, CodeErrorWithFixError, InternalError, NotSupported, WellKnownErrors } from '../../errors'
 import { codeInvariant, distinctByEquality, sortBy } from '../../util'
 import { SymbolName } from '../symbol-name'
 import { GenericPType, PType } from './base'
@@ -21,7 +21,7 @@ export abstract class TransientType extends PType {
   readonly module: string
   readonly singleton: boolean
   readonly typeMessage: string
-  readonly expressionMessage: string
+  readonly expressionError: (sourceLocation: SourceLocation) => CodeError
 
   constructor({
     name,
@@ -34,14 +34,14 @@ export abstract class TransientType extends PType {
     module: string
     singleton: boolean
     typeMessage: string
-    expressionMessage: string
+    expressionMessage: (sourceLocation: SourceLocation) => CodeError
   }) {
     super()
     this.name = name
     this.module = module
     this.singleton = singleton
     this.typeMessage = typeMessage
-    this.expressionMessage = expressionMessage
+    this.expressionError = expressionMessage
   }
 
   get wtype(): wtypes.WType | undefined {
@@ -186,7 +186,7 @@ export class IntersectionPType extends TransientType {
       module: 'lib.d.ts',
       singleton: false,
       typeMessage: transientTypeErrors.intersectionTypes(name).usedAsType,
-      expressionMessage: transientTypeErrors.unionTypes(name).usedInExpression,
+      expressionMessage: (sourceLocation) => new CodeError(transientTypeErrors.unionTypes(name).usedInExpression, { sourceLocation }),
     })
     this.types = types
   }
@@ -214,27 +214,27 @@ export class UnionPType extends TransientType {
 
   private constructor({ types }: { types: PType[] }) {
     let typeMessage: string
-    let expressionMessage: string
+    let expressionError: (sourceLocation: SourceLocation) => CodeError
     const name = types.map((t) => t).join(' | ')
     const transientType = types.find((t) => t instanceof TransientType)
     if (transientType) {
       if (transientType instanceof NativeNumericType) {
         typeMessage = transientTypeErrors.nativeNumeric(name).usedAsType
-        expressionMessage = transientTypeErrors.nativeNumeric(name).usedInExpression
+        expressionError = (sourceLocation) => new CodeError(transientTypeErrors.nativeNumeric(name).usedInExpression, { sourceLocation })
       } else {
         typeMessage = transientType.typeMessage
-        expressionMessage = transientType.expressionMessage
+        expressionError = transientType.expressionError
       }
     } else {
       typeMessage = transientTypeErrors.unionTypes(name).usedAsType
-      expressionMessage = transientTypeErrors.unionTypes(name).usedInExpression
+      expressionError = (sourceLocation) => new CodeError(transientTypeErrors.unionTypes(name).usedInExpression, { sourceLocation })
     }
     super({
       name,
       module: 'lib.d.ts',
       singleton: false,
       typeMessage,
-      expressionMessage,
+      expressionMessage: expressionError,
     })
     this.types = types
   }
@@ -579,7 +579,7 @@ export class ArrayLiteralPType extends TransientType {
       module: 'lib.d.ts',
       name,
       typeMessage: transientTypeErrors.arrays(name).usedAsType,
-      expressionMessage: transientTypeErrors.arrays(name).usedInExpression,
+      expressionMessage: (sourceLocation) => new CodeError(transientTypeErrors.arrays(name).usedInExpression, { sourceLocation }),
       singleton: false,
     })
     this.items = props.items
@@ -776,7 +776,11 @@ export const bigIntPType = new NativeNumericType({
   module: 'lib.d.ts',
   singleton: false,
   typeMessage: transientTypeErrors.nativeNumeric('bigint').usedAsType,
-  expressionMessage: transientTypeErrors.nativeNumeric('bigint').usedInExpression,
+  expressionMessage: (sourceLocation) =>
+    new CodeErrorWithFixError(transientTypeErrors.nativeNumeric('bigint').usedInExpression, {
+      sourceLocation,
+      identifier: WellKnownErrors.BigIntNeedsWrapping,
+    }),
 })
 
 export const stringPType = new InstanceType({
@@ -807,7 +811,11 @@ export class NumericLiteralPType extends NativeNumericType {
       module: 'lib.d.ts',
       singleton: false,
       typeMessage: transientTypeErrors.nativeNumeric(literalValue.toString()).usedAsType,
-      expressionMessage: transientTypeErrors.nativeNumeric(literalValue.toString()).usedInExpression,
+      expressionMessage: (sourceLocation) =>
+        new CodeErrorWithFixError(transientTypeErrors.nativeNumeric(literalValue.toString()).usedInExpression, {
+          sourceLocation,
+          identifier: WellKnownErrors.NumberNeedsWrapping,
+        }),
     })
     this.literalValue = literalValue
   }
@@ -820,7 +828,11 @@ export class BigIntLiteralPType extends NativeNumericType {
       module: 'lib.d.ts',
       singleton: false,
       typeMessage: transientTypeErrors.nativeNumeric(`${literalValue}n`).usedAsType,
-      expressionMessage: transientTypeErrors.nativeNumeric(`${literalValue}n`).usedInExpression,
+      expressionMessage: (sourceLocation) =>
+        new CodeErrorWithFixError(transientTypeErrors.nativeNumeric(`${literalValue}n`).usedInExpression, {
+          sourceLocation,
+          identifier: WellKnownErrors.BigIntNeedsWrapping,
+        }),
     })
     this.literalValue = literalValue
   }
@@ -830,7 +842,11 @@ export const numberPType = new NativeNumericType({
   module: 'lib.d.ts',
   singleton: false,
   typeMessage: transientTypeErrors.nativeNumeric('number').usedAsType,
-  expressionMessage: transientTypeErrors.nativeNumeric('number').usedInExpression,
+  expressionMessage: (sourceLocation) =>
+    new CodeErrorWithFixError(transientTypeErrors.nativeNumeric('number').usedInExpression, {
+      sourceLocation,
+      identifier: WellKnownErrors.NumberNeedsWrapping,
+    }),
 })
 export const Uint64Function = new LibFunctionType({
   name: 'Uint64',
@@ -1174,7 +1190,8 @@ export class IterableIteratorType extends TransientType {
       name: `IterableIterator<${itemType.name}>`,
       module: 'typescript/lib/lib.es2015.iterable.d.ts',
       typeMessage: '`IterableIterator` is not valid as a variable, parameter, return, or property type. ',
-      expressionMessage: 'IterableIterator expressions can only be used in for loops',
+      expressionMessage: (sourceLocation) =>
+        new CodeError('IterableIterator expressions can only be used in for loops', { sourceLocation }),
       singleton: false,
     })
     this.itemType = itemType

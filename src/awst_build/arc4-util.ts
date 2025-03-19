@@ -66,7 +66,7 @@ export function ptypeToArc4EncodedType(ptype: PType, sourceLocation: SourceLocat
   if (ptype.equals(bytesPType)) return DynamicBytesType
   if (ptype.equals(stringPType)) return arc4StringType
   if (ptype instanceof NativeNumericType) {
-    throw new CodeError(numberPType.expressionMessage, { sourceLocation })
+    throw numberPType.expressionError(sourceLocation)
   }
   if (ptype instanceof ArrayPType)
     return new DynamicArrayType({

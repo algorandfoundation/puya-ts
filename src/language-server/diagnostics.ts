@@ -5,13 +5,14 @@ import type { TextDocuments } from 'vscode-languageserver/node.js'
 import { URI } from 'vscode-uri'
 import type { SourceLocation } from '../awst/source-location'
 import { compile } from '../compile'
+import type { WellKnownErrors } from '../errors'
 import { processInputPaths } from '../input-paths/process-input-paths'
 import type { LogEvent } from '../logger'
 import { LoggingContext, LogLevel } from '../logger'
 import type { AlgoFile } from '../options'
 import { CompileOptions } from '../options'
 
-type LogEventWithSource = LogEvent & { sourceLocation: SourceLocation & { file: string } }
+type LogEventWithSource = LogEvent & { sourceLocation: SourceLocation & { file: string }; identifier?: WellKnownErrors }
 
 function prepareFiles(workspaceFolder: string, documents: TextDocuments<TextDocument>) {
   const files = processInputPaths({ paths: [workspaceFolder] })
@@ -50,6 +51,7 @@ async function compileAndExtractLogs(files: AlgoFile[]): Promise<LogEventWithSou
 function mapToDiagnostic(event: LogEventWithSource): Diagnostic {
   return {
     source: 'Algorand TypeScript',
+    code: event.identifier ?? 'noid',
     severity: event.level === LogLevel.Error ? DiagnosticSeverity.Error : DiagnosticSeverity.Warning,
     range: {
       start: {

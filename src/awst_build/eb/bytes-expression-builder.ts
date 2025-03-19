@@ -108,7 +108,7 @@ export class BytesFunctionBuilder extends FunctionBuilder {
     if (!initialValue) {
       bytesExpr = empty
     } else if (initialValue instanceof BigIntLiteralExpressionBuilder) {
-      logger.error(initialValue.sourceLocation, initialValue.ptype.expressionMessage)
+      logger.error(initialValue.ptype.expressionError(initialValue.sourceLocation))
       bytesExpr = empty
     } else if (initialValue.ptype.equals(uint64PType)) {
       bytesExpr = initialValue.toBytes(sourceLocation)

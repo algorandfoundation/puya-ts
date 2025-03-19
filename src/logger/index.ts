@@ -1,5 +1,6 @@
 import { AsyncLocalStorage } from 'node:async_hooks'
 import { SourceLocation } from '../awst/source-location'
+import type { WellKnownErrors } from '../errors'
 import { PuyaError, UserError } from '../errors'
 import type { LogSink } from './sinks'
 
@@ -30,6 +31,7 @@ export const isErrorOrCritical = (l: LogLevel) => errorOrCritical.has(l)
 
 export type LogEvent = {
   level: LogLevel
+  identifier?: WellKnownErrors
   message: string
   sourceLocation: SourceLocation | undefined
 }

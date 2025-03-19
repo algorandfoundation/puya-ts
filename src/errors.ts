@@ -90,3 +90,24 @@ export const wrapInCodeError = <T>(func: () => T, sourceLocation: SourceLocation
     }
   }
 }
+
+export class CodeErrorWithFixError extends CodeError {
+  readonly identifier: string
+
+  constructor(
+    message: string,
+    options: {
+      cause?: Error
+      sourceLocation: SourceLocation
+      identifier: string
+    },
+  ) {
+    super(message, options)
+    this.identifier = options.identifier
+  }
+}
+
+export enum WellKnownErrors {
+  NumberNeedsWrapping = 'abascdsafdsafsd',
+  BigIntNeedsWrapping = 'abascdsafdsafsd2',
+}
