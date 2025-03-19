@@ -1,4 +1,4 @@
-import { concatMap, map, Observable, throttleTime } from 'rxjs'
+import { concatMap, debounceTime, map, Observable } from 'rxjs'
 import { TextDocument } from 'vscode-languageserver-textdocument'
 import type { CodeAction, Diagnostic, InitializeResult, TextDocumentChangeEvent } from 'vscode-languageserver/node.js'
 import {
@@ -102,7 +102,7 @@ export async function startLanguageServer() {
 
   documentChangeObservable
     .pipe(
-      throttleTime(200),
+      debounceTime(200),
       map(buildWorkspaceDiagnosticsMap),
       concatMap(async (v) => sendDiagnostics(await v)),
     )
