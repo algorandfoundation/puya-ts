@@ -7,14 +7,14 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         goto block@2
     block@2: // after_if_else_L1
         goto block@3
-    block@3: // L34
+    block@3: // L45
         let tmp%0#1: uint64 = (txn NumAppArgs)
         let tmp%1#0: bool = (!= tmp%0#1 0u)
         goto tmp%1#0 ? block@4 : block@11
-    block@4: // abi_routing_L34
+    block@4: // abi_routing_L45
         let tmp%2#0: bytes = (txna ApplicationArgs 0)
         switch tmp%2#0 {method "create()void" => block@5, method "delete()void" => block@6, method "update()void" => block@7, method "greet(string)string" => block@8, * => block@9}
-    block@5: // create_route_L40
+    block@5: // create_route_L51
         let tmp%3#0: uint64 = (txn OnCompletion)
         let tmp%4#0: bool = (== tmp%3#0 NoOp)
         (assert tmp%4#0) // OnCompletion is not NoOp
@@ -24,7 +24,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix.create()
         let tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix.__puya_arc4_router__%0#0: bool = 1u
         goto block@13
-    block@6: // delete_route_L6
+    block@6: // delete_route_L17
         let tmp%7#0: uint64 = (txn OnCompletion)
         let tmp%8#0: bool = (== tmp%7#0 DeleteApplication)
         (assert tmp%8#0) // OnCompletion is not DeleteApplication
@@ -34,7 +34,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         tests/approvals/precompiled-apps.algo.ts::HelloBase.delete()
         let tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix.__puya_arc4_router__%0#1: bool = 1u
         goto block@13
-    block@7: // update_route_L9
+    block@7: // update_route_L20
         let tmp%11#0: uint64 = (txn OnCompletion)
         let tmp%12#0: bool = (== tmp%11#0 UpdateApplication)
         (assert tmp%12#0) // OnCompletion is not UpdateApplication
@@ -44,7 +44,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         tests/approvals/precompiled-apps.algo.ts::HelloBase.update()
         let tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix.__puya_arc4_router__%0#2: bool = 1u
         goto block@13
-    block@8: // greet_route_L12
+    block@8: // greet_route_L23
         let tmp%15#0: uint64 = (txn OnCompletion)
         let tmp%16#0: bool = (== tmp%15#0 NoOp)
         (assert tmp%16#0) // OnCompletion is not NoOp
@@ -62,13 +62,13 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (log tmp%21#0)
         let tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix.__puya_arc4_router__%0#3: bool = 1u
         goto block@13
-    block@9: // switch_case_default_L34
+    block@9: // switch_case_default_L45
         goto block@10
-    block@10: // switch_case_next_L34
+    block@10: // switch_case_next_L45
         goto block@12
-    block@11: // bare_routing_L34
+    block@11: // bare_routing_L45
         goto block@12
-    block@12: // after_if_else_L34
+    block@12: // after_if_else_L45
         let tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix.__puya_arc4_router__%0#4: bool = 0u
         goto block@13
     block@13: // after_inlined_tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix.__puya_arc4_router___L1
@@ -76,19 +76,19 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         return tmp%0#0
 
 subroutine tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix.create() -> void:
-    block@0: // L40
+    block@0: // L51
         return 
 
 subroutine tests/approvals/precompiled-apps.algo.ts::HelloBase.delete() -> void:
-    block@0: // L6
+    block@0: // L17
         return 
 
 subroutine tests/approvals/precompiled-apps.algo.ts::HelloBase.update() -> void:
-    block@0: // L9
+    block@0: // L20
         return 
 
 subroutine tests/approvals/precompiled-apps.algo.ts::HelloBase.greet(name: bytes) -> bytes:
-    block@0: // L12
+    block@0: // L23
         let (maybe_value%0#0: bytes, maybe_exists%0#0: bool) = (app_global_get_ex 0u "greeting")
         (assert maybe_exists%0#0) // check GlobalState exists
         let tmp%0#0: bytes = (concat "" maybe_value%0#0)
@@ -97,16 +97,16 @@ subroutine tests/approvals/precompiled-apps.algo.ts::HelloBase.greet(name: bytes
         return tmp%2#0
 
 subroutine tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix.constructor() -> void:
-    block@0: // L35
+    block@0: // L46
         tests/approvals/precompiled-apps.algo.ts::HelloBase.constructor()
         (app_global_put "greeting" TemplateVar[bytes](PRFX_GREETING))
         return 
 
 subroutine tests/approvals/precompiled-apps.algo.ts::HelloBase.constructor() -> void:
-    block@0: // L3
+    block@0: // L14
         goto block@1
     block@1: // L1
         goto block@2
-    block@2: // after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor_L3
+    block@2: // after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor_L14
         (app_global_put "greeting" "")
         return 

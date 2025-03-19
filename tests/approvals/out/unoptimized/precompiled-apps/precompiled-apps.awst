@@ -183,3 +183,74 @@ contract LargeProgram
 logicsig tests/approvals/precompiled-apps.algo.ts::TerribleCustodialAccount {
   return True
 }
+contract ReceivesTxns
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  getOne(): uint64
+  {
+    return 1
+  }
+  
+  receivesAnyTxn(txn: group_transaction): uint64
+  {
+    if ((#0 = gtxns<TypeEnum>(txn)) == reinterpret_cast<uint64>(3)) {
+      #switch₁ᶜ₀:
+      return (Boolean((#1 = reinterpret_cast<uint64>(gtxns<CreatedAssetID>(txn)))) ? #1 : reinterpret_cast<uint64>(gtxns<ConfigAsset>(txn)))
+    }
+    if (#0 == reinterpret_cast<uint64>(6)) {
+      #switch₁ᶜ₁:
+      return (Boolean((#2 = reinterpret_cast<uint64>(gtxns<CreatedApplicationID>(txn)))) ? #2 : reinterpret_cast<uint64>(gtxns<ApplicationID>(txn)))
+    }
+    #switch₁ᶜ₂:
+    return 0
+  }
+  
+  receivesAssetConfig(assetCfg: group_transaction_acfg): bytes
+  {
+    return gtxns<TxID>(assetCfg)
+  }
+  
+  receivesAssetConfigAndPay(assetCfg: group_transaction_acfg, payTxn: group_transaction_pay): void
+  {
+    assert(gtxns<TypeEnum>(assetCfg) == reinterpret_cast<uint64>(3))
+    assert(gtxns<TypeEnum>(payTxn) == reinterpret_cast<uint64>(1))
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+contract ReceivesReferenceTypes
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  receivesReferenceTypes(app: application, acc: account, asset: asset): void
+  {
+    log(reinterpret_cast<bytes>(checked_maybe(app_params_get<AppAddress>(app), comment=application exists)))
+    log(reinterpret_cast<bytes>(acc))
+    log(checked_maybe(asset_params_get<AssetName>(asset), comment=asset exists))
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

@@ -189,14 +189,14 @@ subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.addVectors(v1: bytes[
         let tmp%3#0: uint64 = (btoi tmp%2#0)
         let to_encode%0#0: uint64 = (+ tmp%1#0 tmp%3#0)
         let val_as_bytes%0#0: bytes[8] = (itob to_encode%0#0)
-        let tmp%12#0: bytes = (extract3 v1#0 8u 8u) // on error: Index access is out of bounds
-        let tmp%13#0: uint64 = (btoi tmp%12#0)
-        let tmp%14#0: bytes = (extract3 v2#0 8u 8u) // on error: Index access is out of bounds
-        let tmp%15#0: uint64 = (btoi tmp%14#0)
-        let to_encode%3#0: uint64 = (+ tmp%13#0 tmp%15#0)
-        let val_as_bytes%3#0: bytes[8] = (itob to_encode%3#0)
+        let tmp%4#0: bytes = (extract3 v1#0 8u 8u) // on error: Index access is out of bounds
+        let tmp%5#0: uint64 = (btoi tmp%4#0)
+        let tmp%6#0: bytes = (extract3 v2#0 8u 8u) // on error: Index access is out of bounds
+        let tmp%7#0: uint64 = (btoi tmp%6#0)
+        let to_encode%1#0: uint64 = (+ tmp%5#0 tmp%7#0)
+        let val_as_bytes%1#0: bytes[8] = (itob to_encode%1#0)
         let encoded_tuple_buffer%1#0: bytes = (concat 0x val_as_bytes%0#0)
-        let encoded_tuple_buffer%2#0: bytes = (concat encoded_tuple_buffer%1#0 val_as_bytes%3#0)
+        let encoded_tuple_buffer%2#0: bytes = (concat encoded_tuple_buffer%1#0 val_as_bytes%1#0)
         return encoded_tuple_buffer%2#0
 
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.mutateVector(v1: bytes[16], newX: bytes[8], newY: bytes[8]) -> bytes[16]:
@@ -212,19 +212,19 @@ subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.mutateVector(v1: byte
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.implicitCastingAndSpreading(v1: bytes[16]) -> void:
     block@0: // L32
         let item0%0#0: bytes = (extract3 v1#0 0u 8u) // on error: Index access is out of bounds
-        let item1%1#0: bytes = (extract3 v1#0 8u 8u) // on error: Index access is out of bounds
+        let item1%0#0: bytes = (extract3 v1#0 8u 8u) // on error: Index access is out of bounds
         let encoded_tuple_buffer%1#0: bytes = (concat 0x item0%0#0)
-        let encoded_tuple_buffer%2#0: bytes = (concat encoded_tuple_buffer%1#0 item1%1#0)
+        let encoded_tuple_buffer%2#0: bytes = (concat encoded_tuple_buffer%1#0 item1%0#0)
         let v2#0: bytes[16] = encoded_tuple_buffer%2#0
         let tmp%0#0: bytes = (extract3 v2#0 0u 8u) // on error: Index access is out of bounds
-        let tmp%3#0: bytes = (extract3 v2#0 8u 8u) // on error: Index access is out of bounds
+        let tmp%1#0: bytes = (extract3 v2#0 8u 8u) // on error: Index access is out of bounds
         let encoded_tuple_buffer%4#0: bytes = (concat 0x tmp%0#0)
-        let encoded_tuple_buffer%5#0: bytes = (concat encoded_tuple_buffer%4#0 tmp%3#0)
+        let encoded_tuple_buffer%5#0: bytes = (concat encoded_tuple_buffer%4#0 tmp%1#0)
         let v3#0: bytes[16] = encoded_tuple_buffer%5#0
-        let tmp%4#0: bool = (== v1#0 v2#0)
-        (assert tmp%4#0)
-        let tmp%5#0: bool = (== v3#0 v1#0)
-        (assert tmp%5#0)
+        let tmp%2#0: bool = (== v1#0 v2#0)
+        (assert tmp%2#0)
+        let tmp%3#0: bool = (== v3#0 v1#0)
+        (assert tmp%3#0)
         return 
 
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.toAndFromBytes(v1: bytes[16]) -> bytes[16]:
@@ -236,8 +236,8 @@ subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.toAndFromBytes(v1: by
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.toNative(v1: bytes[16]) -> <bytes[8], bytes[8]>:
     block@0: // L44
         let item0%0#0: bytes = (extract3 v1#0 0u 8u) // on error: Index access is out of bounds
-        let item1%1#0: bytes = (extract3 v1#0 8u 8u) // on error: Index access is out of bounds
-        return item0%0#0 item1%1#0
+        let item1%0#0: bytes = (extract3 v1#0 8u 8u) // on error: Index access is out of bounds
+        return item0%0#0 item1%0#0
 
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.getPlugin(key: bytes) -> bytes:
     block@0: // L52
@@ -298,64 +298,22 @@ subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.setPlugin(key: bytes)
         let tmp%0#0: uint64 = (len method "test()void")
         let tmp%1#0: bool = (== 4u tmp%0#0)
         (assert tmp%1#0) // Length is 4
-        let tmp%2#0: uint64 = (len method "test()void")
-        let tmp%3#0: bool = (== 4u tmp%2#0)
-        (assert tmp%3#0) // Length is 4
-        let tmp%4#0: uint64 = (len method "test()void")
-        let tmp%5#0: bool = (== 4u tmp%4#0)
-        (assert tmp%5#0) // Length is 4
-        let tmp%6#0: uint64 = (len method "test()void")
-        let tmp%7#0: bool = (== 4u tmp%6#0)
-        (assert tmp%7#0) // Length is 4
-        let tmp%8#0: uint64 = (len method "test()void")
-        let tmp%9#0: bool = (== 4u tmp%8#0)
-        (assert tmp%9#0) // Length is 4
-        let tmp%10#0: uint64 = (len method "test()void")
-        let tmp%11#0: bool = (== 4u tmp%10#0)
-        (assert tmp%11#0) // Length is 4
-        let tmp%12#0: uint64 = (len method "test()void")
-        let tmp%13#0: bool = (== 4u tmp%12#0)
-        (assert tmp%13#0) // Length is 4
-        let tmp%14#0: uint64 = (len method "test()void")
-        let tmp%15#0: bool = (== 4u tmp%14#0)
-        (assert tmp%15#0) // Length is 4
-        let tmp%16#0: uint64 = (len method "test()void")
-        let tmp%17#0: bool = (== 4u tmp%16#0)
-        (assert tmp%17#0) // Length is 4
-        let tmp%18#0: uint64 = (len method "test()void")
-        let tmp%19#0: bool = (== 4u tmp%18#0)
-        (assert tmp%19#0) // Length is 4
-        let tmp%20#0: uint64 = (len method "test()void")
-        let tmp%21#0: bool = (== 4u tmp%20#0)
-        (assert tmp%21#0) // Length is 4
-        let tmp%22#0: uint64 = (len method "test()void")
-        let tmp%23#0: bool = (== 4u tmp%22#0)
-        (assert tmp%23#0) // Length is 4
-        let tmp%24#0: uint64 = (len method "test()void")
-        let tmp%25#0: bool = (== 4u tmp%24#0)
-        (assert tmp%25#0) // Length is 4
-        let tmp%26#0: uint64 = (len method "test()void")
-        let tmp%27#0: bool = (== 4u tmp%26#0)
-        (assert tmp%27#0) // Length is 4
-        let tmp%28#0: uint64 = (len method "test()void")
-        let tmp%29#0: bool = (== 4u tmp%28#0)
-        (assert tmp%29#0) // Length is 4
-        let encoded_tuple_buffer%17#0: bytes = (concat 0x method "test()void")
-        let encoded_tuple_buffer%18#0: bytes = (concat encoded_tuple_buffer%17#0 0x0000000000000001)
-        let encoded_tuple_buffer%19#0: bytes = (concat encoded_tuple_buffer%18#0 0x0000000000000001)
-        let result%4#0: bytes = (concat 0x encoded_tuple_buffer%19#0)
-        let array_data%4#0: bytes = (concat 0x0001 result%4#0)
-        let encoded_tuple_buffer%21#0: bytes = (concat 0x 0x0000000000000001)
-        let encoded_tuple_buffer%22#0: bytes = (concat encoded_tuple_buffer%21#0 0x0000000000000000)
-        let encoded_tuple_buffer%23#0: bytes = (concat encoded_tuple_buffer%22#0 0x0000000000000000)
-        let encoded_tuple_buffer%24#0: bytes = (concat encoded_tuple_buffer%23#0 0x00)
+        let encoded_tuple_buffer%1#0: bytes = (concat 0x method "test()void")
+        let encoded_tuple_buffer%2#0: bytes = (concat encoded_tuple_buffer%1#0 0x0000000000000001)
+        let encoded_tuple_buffer%3#0: bytes = (concat encoded_tuple_buffer%2#0 0x0000000000000001)
+        let result%0#0: bytes = (concat 0x encoded_tuple_buffer%3#0)
+        let array_data%0#0: bytes = (concat 0x0001 result%0#0)
+        let encoded_tuple_buffer%5#0: bytes = (concat 0x 0x0000000000000001)
+        let encoded_tuple_buffer%6#0: bytes = (concat encoded_tuple_buffer%5#0 0x0000000000000000)
+        let encoded_tuple_buffer%7#0: bytes = (concat encoded_tuple_buffer%6#0 0x0000000000000000)
+        let encoded_tuple_buffer%8#0: bytes = (concat encoded_tuple_buffer%7#0 0x00)
         let as_bytes%0#0: bytes[8] = (itob 27u)
         let offset_as_uint16%0#0: bytes = ((extract 6 2) as_bytes%0#0)
-        let encoded_tuple_buffer%25#0: bytes = (concat encoded_tuple_buffer%24#0 offset_as_uint16%0#0)
-        let encoded_tuple_buffer%26#0: bytes = (concat encoded_tuple_buffer%25#0 array_data%4#0)
-        let tmp%30#0: bytes = (concat "plugins" key#0)
-        (box_del tmp%30#0)
-        (box_put tmp%30#0 encoded_tuple_buffer%26#0)
+        let encoded_tuple_buffer%9#0: bytes = (concat encoded_tuple_buffer%8#0 offset_as_uint16%0#0)
+        let encoded_tuple_buffer%10#0: bytes = (concat encoded_tuple_buffer%9#0 array_data%0#0)
+        let tmp%2#0: bytes = (concat "plugins" key#0)
+        (box_del tmp%2#0)
+        (box_put tmp%2#0 encoded_tuple_buffer%10#0)
         return 
 
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.__algots__.defaultCreate() -> void:

@@ -52,7 +52,7 @@ export const Constants = {
   },
 
   supportedAvmVersions: [10n, 11n],
-  targetedPuyaVersion: '4.5.2',
+  targetedPuyaVersion: '4.5.3',
   puyaGithubRepo: 'algorandfoundation/puya',
   minNodeVersion: '20.19.0',
 } as const
