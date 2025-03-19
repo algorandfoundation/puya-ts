@@ -24,5 +24,5 @@ zero filled byte-array of length A
 
 ## See
 
-Native TEAL opcode: [`bzero`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#bzero)
+Native TEAL opcode: [`bzero`](https://dev.algorand.co/reference/algorand-teal/opcodes#bzero)
 Min AVM version: 4

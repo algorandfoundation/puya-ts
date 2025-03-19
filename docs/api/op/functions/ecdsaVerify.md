@@ -45,5 +45,5 @@ The 32 byte Y-component of a public key is the last element on the stack, preced
 
 ## See
 
-Native TEAL opcode: [`ecdsa_verify`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#ecdsa_verify)
+Native TEAL opcode: [`ecdsa_verify`](https://dev.algorand.co/reference/algorand-teal/opcodes#ecdsa_verify)
 Min AVM version: 5

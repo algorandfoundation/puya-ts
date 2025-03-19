@@ -28,5 +28,5 @@ Bth scratch space value of the Ath transaction in the current group
 
 ## See
 
-Native TEAL opcode: [`gloadss`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#gloadss)
+Native TEAL opcode: [`gloadss`](https://dev.algorand.co/reference/algorand-teal/opcodes#gloadss)
 Min AVM version: 6

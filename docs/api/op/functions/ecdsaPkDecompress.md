@@ -29,5 +29,5 @@ readonly \[[`bytes`](../../index/type-aliases/bytes.md), [`bytes`](../../index/t
 
 ## See
 
-Native TEAL opcode: [`ecdsa_pk_decompress`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#ecdsa_pk_decompress)
+Native TEAL opcode: [`ecdsa_pk_decompress`](https://dev.algorand.co/reference/algorand-teal/opcodes#ecdsa_pk_decompress)
 Min AVM version: 5

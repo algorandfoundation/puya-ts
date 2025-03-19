@@ -32,5 +32,5 @@ Copy of A with the Bth byte set to small integer (between 0..255) C. If B is gre
 
 ## See
 
-Native TEAL opcode: [`setbyte`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#setbyte)
+Native TEAL opcode: [`setbyte`](https://dev.algorand.co/reference/algorand-teal/opcodes#setbyte)
 Min AVM version: 3

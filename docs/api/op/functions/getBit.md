@@ -29,5 +29,5 @@ see explanation of bit ordering in setbit
 
 ## See
 
-Native TEAL opcode: [`getbit`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#getbit)
+Native TEAL opcode: [`getbit`](https://dev.algorand.co/reference/algorand-teal/opcodes#getbit)
 Min AVM version: 3

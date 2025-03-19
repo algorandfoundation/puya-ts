@@ -37,5 +37,5 @@ readonly \[[`uint64`](../../index/type-aliases/uint64.md), [`uint64`](../../inde
 
 ## See
 
-Native TEAL opcode: [`divmodw`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#divmodw)
+Native TEAL opcode: [`divmodw`](https://dev.algorand.co/reference/algorand-teal/opcodes#divmodw)
 Min AVM version: 4
