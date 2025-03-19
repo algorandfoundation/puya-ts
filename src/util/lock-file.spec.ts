@@ -1,10 +1,10 @@
 import { existsSync, mkdirSync, rmdirSync } from 'fs'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
-import { lockFile, unlockFile } from './lock-file'
+import { createLockFile } from './lock-file'
+import { sleep } from './sleep'
 
 describe('lock-file', () => {
-  const testPath = 'test-lock-file'
-  const lockPath = `${testPath}.lock`
+  const lockPath = `test-lock-file.lock`
 
   beforeEach(() => {
     // Clean up any existing lock files before each test
@@ -21,20 +21,19 @@ describe('lock-file', () => {
   })
 
   it('should create and remove lock file', async () => {
-    await lockFile(testPath)
-    expect(existsSync(lockPath)).toBe(true)
+    {
+      await using _ = await createLockFile(lockPath)
+      expect(existsSync(lockPath)).toBe(true)
+    }
 
-    await unlockFile(testPath)
     expect(existsSync(lockPath)).toBe(false)
   })
 
   it('should throw error when lock already exists', async () => {
-    await lockFile(testPath)
+    await createLockFile(lockPath)
 
     // Set maxRetries to 0 to fail immediately without retrying
-    await expect(lockFile(testPath, { maxRetries: 0 })).rejects.toThrow('Failed to lock file')
-
-    await unlockFile(testPath)
+    await expect(createLockFile(lockPath, { maxRetries: 0 })).rejects.toThrow('Failed to lock file')
   })
 
   it('should handle stale locks', async () => {
@@ -42,12 +41,10 @@ describe('lock-file', () => {
     mkdirSync(lockPath)
 
     // Wait for the lock to become stale
-    await new Promise((resolve) => setTimeout(resolve, 1100))
+    await sleep(1100)
 
     // Should succeed because the lock is stale
-    await expect(lockFile(testPath, { staleMs: 1000 })).resolves.not.toThrow()
-
-    await unlockFile(testPath)
+    await expect(createLockFile(lockPath, { staleMs: 1000 })).resolves.not.toThrow()
   })
 
   it('should retry specified number of times', async () => {
@@ -57,7 +54,7 @@ describe('lock-file', () => {
     const startTime = Date.now()
 
     // Try to acquire lock with 2 retries and 100ms delay
-    await expect(lockFile(testPath, { maxRetries: 2, delayMs: 100, staleMs: 5000 })).rejects.toThrow('Failed to lock file')
+    await expect(createLockFile(lockPath, { maxRetries: 2, delayMs: 100, staleMs: 5000 })).rejects.toThrow('Failed to lock file')
 
     const duration = Date.now() - startTime
 
@@ -78,8 +75,6 @@ describe('lock-file', () => {
     }, 150)
 
     // Should succeed on second retry
-    await expect(lockFile(testPath, { maxRetries: 3, delayMs: 100 })).resolves.not.toThrow()
-
-    await unlockFile(testPath)
+    await expect(createLockFile(lockPath, { maxRetries: 3, delayMs: 100 })).resolves.not.toThrow()
   })
 })
