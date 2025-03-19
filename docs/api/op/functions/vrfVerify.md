@@ -37,5 +37,5 @@ readonly \[[`bytes`](../../index/type-aliases/bytes.md), `boolean`\]
 
 ## See
 
-Native TEAL opcode: [`vrf_verify`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#vrf_verify)
+Native TEAL opcode: [`vrf_verify`](https://dev.algorand.co/reference/algorand-teal/opcodes#vrf_verify)
 Min AVM version: 7

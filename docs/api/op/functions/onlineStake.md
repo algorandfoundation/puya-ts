@@ -18,5 +18,5 @@ the total online stake in the agreement round
 
 ## See
 
-Native TEAL opcode: [`online_stake`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#online_stake)
+Native TEAL opcode: [`online_stake`](https://dev.algorand.co/reference/algorand-teal/opcodes#online_stake)
 Min AVM version: 11

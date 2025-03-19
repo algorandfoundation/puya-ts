@@ -33,5 +33,5 @@ The 32 byte public key is the last element on the stack, preceded by the 64 byte
 
 ## See
 
-Native TEAL opcode: [`ed25519verify`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#ed25519verify)
+Native TEAL opcode: [`ed25519verify`](https://dev.algorand.co/reference/algorand-teal/opcodes#ed25519verify)
 Min AVM version: 1

@@ -28,5 +28,5 @@ A uint16 formed from a range of big-endian bytes from A starting at B up to but 
 
 ## See
 
-Native TEAL opcode: [`extract_uint16`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#extract_uint16)
+Native TEAL opcode: [`extract_uint16`](https://dev.algorand.co/reference/algorand-teal/opcodes#extract_uint16)
 Min AVM version: 5

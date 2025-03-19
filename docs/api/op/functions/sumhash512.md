@@ -24,5 +24,5 @@ sumhash512 of value A, yields [64]byte
 
 ## See
 
-Native TEAL opcode: [`sumhash512`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#sumhash512)
+Native TEAL opcode: [`sumhash512`](https://dev.algorand.co/reference/algorand-teal/opcodes#sumhash512)
 Min AVM version: 12

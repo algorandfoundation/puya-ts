@@ -30,5 +30,5 @@ The MiMC hash function has known collisions since any input which is a multiple 
 
 ## See
 
-Native TEAL opcode: [`mimc`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#mimc)
+Native TEAL opcode: [`mimc`](https://dev.algorand.co/reference/algorand-teal/opcodes#mimc)
 Min AVM version: 11

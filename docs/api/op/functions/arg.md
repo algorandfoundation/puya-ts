@@ -24,5 +24,5 @@ Ath LogicSig argument
 
 ## See
 
-Native TEAL opcode: [`args`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#args)
+Native TEAL opcode: [`args`](https://dev.algorand.co/reference/algorand-teal/opcodes#args)
 Min AVM version: 5

@@ -28,5 +28,5 @@ A times 2^B, modulo 2^64
 
 ## See
 
-Native TEAL opcode: [`shl`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#shl)
+Native TEAL opcode: [`shl`](https://dev.algorand.co/reference/algorand-teal/opcodes#shl)
 Min AVM version: 4

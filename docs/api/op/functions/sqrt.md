@@ -24,5 +24,5 @@ The largest integer I such that I^2 <= A
 
 ## See
 
-Native TEAL opcode: [`sqrt`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#sqrt)
+Native TEAL opcode: [`sqrt`](https://dev.algorand.co/reference/algorand-teal/opcodes#sqrt)
 Min AVM version: 4
