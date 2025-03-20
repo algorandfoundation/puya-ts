@@ -26,20 +26,18 @@ function getPuyaTsDir(): string {
   }
 }
 
-export function getPuyaStorageDir(version: SemVer): string {
+export function getPuyaStorageDir(): string {
   const puyaTsDirName = getPuyaTsDir()
-  const puyaBinDir = path.join(puyaTsDirName, '.puya')
-  return path.join(puyaBinDir, version.formatted)
+  return path.join(puyaTsDirName, '.puya')
 }
 
 /**
  * Finds the path to a cached Puya binary if it exists
  * @returns The path to the cached binary or undefined if not found
  */
-export function findCachedPuyaBinary(version: SemVer): string | undefined {
-  const puyaStorageDir = getPuyaStorageDir(version)
+export function findCachedPuyaBinary(puyaStorageDir: string, version: SemVer): string | undefined {
   const binaryFileName = getBinaryName()
-  const binaryPath = path.join(puyaStorageDir, binaryFileName)
+  const binaryPath = path.join(puyaStorageDir, version.formatted, binaryFileName)
 
   return fs.existsSync(binaryPath) ? binaryPath : undefined
 }
@@ -88,7 +86,7 @@ function getPlatformDetails(): { os: string; arch: string } {
  * @param version The release version to download (e.g., "1.0.0")
  * @returns Promise that resolves to the path of the extracted binary
  */
-export async function downloadPuyaBinary(version: SemVer): Promise<string> {
+export async function downloadPuyaBinary(puyaStorageDir: string, version: SemVer): Promise<string> {
   // Get platform-specific details
   const { os, arch } = getPlatformDetails()
 
@@ -98,17 +96,18 @@ export async function downloadPuyaBinary(version: SemVer): Promise<string> {
   const checksumFileName = `puya-${version.formatted}-${platformId}.sha256.txt`
   const binaryFileName = getBinaryName()
 
-  const puyaStorageDir = getPuyaStorageDir(version)
+  const extractedDir = path.join(puyaStorageDir, version.formatted)
+
   // Ensure our storage directories exist
-  if (!fs.existsSync(puyaStorageDir)) {
-    fs.mkdirSync(puyaStorageDir, { recursive: true })
+  if (!fs.existsSync(extractedDir)) {
+    fs.mkdirSync(extractedDir, { recursive: true })
   }
 
   using tempDir = generateTempDir()
 
   const archiveFilePath = path.join(tempDir.dirPath, archiveFileName)
   const checksumFilePath = path.join(tempDir.dirPath, checksumFileName)
-  const extractedBinaryPath = path.join(puyaStorageDir, binaryFileName)
+  const extractedBinaryPath = path.join(extractedDir, binaryFileName)
 
   logger.debug(undefined, `Downloading Puya binary for version ${version.formatted} and platform ${platformId}`)
   const archiveUrl = `https://github.com/${Constants.puyaGithubRepo}/releases/download/v${version.formatted}/${archiveFileName}`
@@ -121,7 +120,7 @@ export async function downloadPuyaBinary(version: SemVer): Promise<string> {
 
   await tar.extract({
     file: archiveFilePath,
-    cwd: puyaStorageDir,
+    cwd: extractedDir,
   })
 
   // Check if extraction was successful and binary exists
