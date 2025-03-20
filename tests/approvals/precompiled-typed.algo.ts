@@ -2,6 +2,7 @@ import { assert, Contract, Global, itxn, Txn } from '@algorandfoundation/algoran
 import { abiCall, compileArc4, methodSelector } from '@algorandfoundation/algorand-typescript/arc4'
 import {
   Hello,
+  HelloStubbed,
   HelloTemplate,
   HelloTemplateCustomPrefix,
   LargeProgram,
@@ -29,6 +30,12 @@ class HelloFactory extends Contract {
     }).returnValue
 
     assert(result2 === 'hello abi')
+
+    const result3 = abiCall(HelloStubbed.prototype.greet, {
+      appId: app,
+      args: ['stubbed'],
+    }).returnValue
+    assert(result3 === 'hello stubbed')
 
     compiled.call.delete({
       appId: app,

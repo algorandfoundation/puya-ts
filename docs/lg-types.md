@@ -19,18 +19,16 @@ backed by a `byte[]`. This is represented by [`biguint`](./#biguint) in Algorand
 `uint64` represents an unsigned 64-bit integer type that will error on both underflow (negative values) and overflows (values larger than 64-bit). It can be declared with a numeric literal and a type annotation of `uint64` or by using the `Uint64` factory method (think `number` (type) vs `Number` (a function for creating numbers))
 
 ```ts
-import { Uint64, uint64 } from "@algorandfoundation/algorand-typescript";
+import { Uint64, uint64 } from '@algorandfoundation/algorand-typescript'
 
 const x: uint64 = 123
 demo(x)
 // Type annotation is not required when `uint64` can be inferred from usage
 demo(456)
 
-function demo(y: uint64) {
-
-}
+function demo(y: uint64) {}
 // `Uint64` constructor can be used to define `uint64` values which `number` cannot safely represent
-const z = Uint64(2n**54n)
+const z = Uint64(2n ** 54n)
 
 // No arg (returns 0), similar to Number()
 demo(Uint64())
@@ -45,7 +43,7 @@ demo(Uint64(34 + 3435))
 Math operations with the `uint64` work the same as EcmaScript's `number` type however due to a hard limitation in TypeScript, it is not possible to control the type of these expressions - they will always be inferred as `number`. As a result, a type annotation will be required making use of the expression value if the type cannot be inferred from usage.
 
 ```ts
-import { Uint64, uint64 } from "@algorandfoundation/algorand-typescript";
+import { Uint64, uint64 } from '@algorandfoundation/algorand-typescript'
 
 function add(x: uint64, y: uint64): uint64 {
   return x + y // uint64 inferred from function's return type
@@ -68,16 +66,14 @@ const d = Uint64(a * x)
 `biguint` represents an unsigned integer of up to 512-bit. The leading `0` padding is variable and not guaranteed. Operations made using a `biguint` are more expensive in terms of [opcode budget](https://developer.algorand.org/docs/get-details/dapps/avm/teal/#dynamic-operational-cost-of-teal-opcodes) by an order of magnitude, as such - the `biguint` type should only be used when dealing with integers which are larger than 64-bit. A `biguint` can be declared with a bigint literal (A number with an `n` suffix) and a type annotation of `biguint`, or by using the `BigUint` factory method. The same constraints of the `uint64` type apply here with regards to required type annotations.
 
 ```ts
-import {BigUint, bigint } from "@algorandfoundation/algorand-typescript";
+import { BigUint, bigint } from '@algorandfoundation/algorand-typescript'
 
 const x: bigint = 123n
 demo(x)
 // Type annotation is not required when `bigint` can be inferred from usage
 demo(456n)
 
-function demo(y: bigint) {
-
-}
+function demo(y: bigint) {}
 
 // No arg (returns 0), similar to Number()
 demo(BigUint())
@@ -96,7 +92,7 @@ demo(BigUint(34 + 3435))
 ```ts
 import { Bytes } from '@algorandfoundation/algorand-typescript'
 
-const fromUtf8 = Bytes("abc")
+const fromUtf8 = Bytes('abc')
 const fromHex = Bytes.fromHex('AAFF')
 const fromBase32 = Bytes.fromBase32('....')
 const fromBase64 = Bytes.fromBase64('....')
@@ -110,12 +106,11 @@ const concatenated = fromUtf8.concat(fromHex).concat(fromBase32).concat(fromBase
 `string` literals and values are supported in Algorand TypeScript however most of the prototype is not implemented. Strings in EcmaScript are implemented using utf-16 characters and achieving semantic compatability for any prototype method which slices or splits strings based on characters would be non-trivial (and opcode expensive) to implement on the AVM with no clear benefit as string manipulation tasks can easily be performed off-chain. Algorand TypeScript APIs which expect a `bytes` value will often also accept a `string` value. In these cases, the `string` will be interpreted as a `utf8` encoded value.
 
 ```ts
-
-const a = "Hello"
-const b = "world"
+const a = 'Hello'
+const b = 'world'
 
 const interpolate = `${a} ${b}`
-const concat = a + " " + b
+const concat = a + ' ' + b
 ```
 
 ### Boolean
@@ -141,7 +136,7 @@ import { Application, Asset, Account } from '@algorandfoundation/algorand-typesc
 
 const app = Application(123n) // Create from application id
 const asset = Asset(456n) // Create from asset id
-const account = Account("A7NMWS3NT3IUDMLVO26ULGXGIIOUQ3ND2TXSER6EBGRZNOBOUIQXHIBGDE") // Create from account address
+const account = Account('A7NMWS3NT3IUDMLVO26ULGXGIIOUQ3ND2TXSER6EBGRZNOBOUIQXHIBGDE') // Create from account address
 const account2 = Account(Bytes.fromHex('07DACB4B6D9ED141B17576BD459AE6421D486DA3D4EF2247C409A396B82EA221')) // Create from account public key bytes
 ```
 
@@ -149,7 +144,7 @@ They can also be used in ABI method parameters where they will be created refere
 
 ### Group Transactions
 
-The group transaction types expose properties and methods for reading attributes of other transactions in the group. They can be created explicitly by calling `gtxn.Transaction(n)` where `n` is the index of the desired transaction in the group, or they can be used in ABI method signatures where the ARC4 router will take care of providing the relevant transaction specified by the client. They should not be confused with the `itxn` namespace which contains types for composing inner transactions
+The group transaction types expose properties and methods for reading attributes of other transactions in the group. They can be created explicitly by calling `gtxn.Transaction(n)` where `n` is the index of the desired transaction in the group, or they can be used in ABI method signatures where the ARC4 router will take care of providing the relevant transaction specified by the client. They should not be confused with the [itxn](lg-itxns.md) namespace which contains types for composing inner transactions
 
 ```ts
 import { gtxn, Contract } from '@algorandfoundation/algorand-typescript'
@@ -181,7 +176,6 @@ class Demo extends Contract {
     }
   }
 }
-
 ```
 
 ### Arrays
@@ -227,12 +221,12 @@ Mutable arrays can be declared using the [MutableArray](api/index/classes/Mutabl
 ### Tuples
 
 ```ts
-import { Uint64, Bytes } from "@algorandfoundation/algorand-typescript"
+import { Uint64, Bytes } from '@algorandfoundation/algorand-typescript'
 
 const myTuple = [Uint64(1), 'test', false] as const
 
-const myOtherTuple: [string, bytes] = ["hello", Bytes("World")]
-const myOtherTuple2: readonly [string, bytes] = ["hello", Bytes("World")]
+const myOtherTuple: [string, bytes] = ['hello', Bytes('World')]
+const myOtherTuple2: readonly [string, bytes] = ['hello', Bytes('World')]
 ```
 
 Tuples can be declared by appending the `as const` keywords to an array literal expression, or by adding an explicit type annotation. Tuples are considered immutable regardless of how they are declared meaning `readonly [T1, T2]` is equivalent to `[T1, T2]`. Including the `readonly` keyword will improve intellisense and TypeScript IDE feedback at the expense of verbosity.
@@ -240,21 +234,21 @@ Tuples can be declared by appending the `as const` keywords to an array literal 
 ### Objects
 
 ```ts
-import { Uint64, Bytes, uint64 } from "@algorandfoundation/algorand-typescript"
+import { Uint64, Bytes, uint64 } from '@algorandfoundation/algorand-typescript'
 
-type NamedObj = { x: uint64, y: uint64 }
+type NamedObj = { x: uint64; y: uint64 }
 
-const myObj = { a: Uint64(123), b: Bytes("test"), c: false }
+const myObj = { a: Uint64(123), b: Bytes('test'), c: false }
 
 function test(obj: NamedObj): uint64 {
-  return obj.x = obj.y
+  return (obj.x = obj.y)
 }
 ```
 
 Object types and literals are treated as named tuples. The types themselves can be declared with a name using a `type NAME = { ... }` expression, or anonymously using an inline type annotation `let x: { a: boolean } = { ... }`. If no type annotation is present, the type will be inferred from the assigned values. Object types are immutable and are treated as if they were declared with the `Readonly` helper type. i.e. `{ a: boolean }` is equivalent to `Readonly<{ a: boolean }>`. An object's property can be updated using a spread expression.
 
 ```ts
-import { Uint64 } from "@algorandfoundation/algorand-typescript"
+import { Uint64 } from '@algorandfoundation/algorand-typescript'
 
 let obj = { first: 'John', last: 'Doh' }
 obj = { ...obj, first: 'Jane' }
@@ -294,7 +288,6 @@ Common bit sizes have also been aliased under `@algorandfoundation/algorand-type
 
 Strings are assumed to be utf-8 encoded and the length of a string is the total number of bytes, _not the total number of characters_.
 
-
 ### StaticBytes
 
 **Types:** `@algorandfoundation/algorand-typescript/arc4::StaticBytes`
@@ -312,6 +305,7 @@ Like `DynamicBytes` but the length header can be omitted as the data is assumed 
 An ARC4 StaticArray is an array of a fixed size. The item type is specified by the first generic parameter and the size is specified by the second.
 
 ### Address
+
 **Type:** `@algorandfoundation/algorand-typescript/arc4::Address`
 **Encoding:** A byte array 32 bytes long
 **Native equivalent:** `Account`
@@ -328,7 +322,6 @@ reference an address in an ARC4 struct, tuple or return type. It is a subclass o
 An ARC4 DynamicArray is an array of a variable size. The item type is specified by the first generic parameter. Items can be added and removed via `.pop`, `.append`, and `.extend`.
 
 The current length of the array is encoded in a 16-bit prefix similar to the `arc4.DynamicBytes` and `arc4.String` types
-
 
 ### Tuples
 
@@ -357,6 +350,6 @@ Containers are composed of a head and a tail portion, with a possible length pre
                   ^ Offsets are from the start of the head bytes
 ```
 
- - Fixed length items (eg. bool, uintn, byte, or a static array of a fixed length item) are inserted directly into the head
- - Variable length items (eg. bytes, string, dynamic array, or even a static array of a variable length item) are inserted into the tail. The head will include a 16-bit number representing the offset of the tail data, the offset is the total number of bytes in the head + the number of bytes preceding the tail data for this item (ie. the tail bytes of any previous items)
- - Consecutive boolean values are packed into CEIL(N / 8) bytes where each bit will represent a single boolean value (big endian)
+- Fixed length items (eg. bool, uintn, byte, or a static array of a fixed length item) are inserted directly into the head
+- Variable length items (eg. bytes, string, dynamic array, or even a static array of a variable length item) are inserted into the tail. The head will include a 16-bit number representing the offset of the tail data, the offset is the total number of bytes in the head + the number of bytes preceding the tail data for this item (ie. the tail bytes of any previous items)
+- Consecutive boolean values are packed into CEIL(N / 8) bytes where each bit will represent a single boolean value (big endian)

@@ -16,11 +16,10 @@ EcmaScript is extremely liberal in its type system when it comes to type coercio
 
 If you are interested in learning about the design of Algorand TypeScript, you can see our [Guiding Principles](lg-guiding-principles) for more detail including the Architectural Decision Records (ADRs) which got us here.
 
-
 ## Table of Contents
 
- - [Program Structure](lg-program-structure.md)
- - [Basic Types](lg-types.md)
- - [Storage](lg-storage.md)
- - [Ops](lg-ops.md)
-
+- [Program Structure](lg-program-structure.md)
+- [Basic Types](lg-types.md)
+- [Storage](lg-storage.md)
+- [Ops](lg-ops.md)
+- [Inner Transactions](lg-itxns.md)

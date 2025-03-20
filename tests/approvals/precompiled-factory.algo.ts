@@ -12,7 +12,7 @@ class HelloFactory extends Contract {
         appArgs: [methodSelector(Hello.prototype.create), encodeArc4('hello')],
         approvalProgram: compiled.approvalProgram,
         clearStateProgram: compiled.clearStateProgram,
-        globalNumBytes: 1,
+        globalNumBytes: compiled.globalBytes,
       })
       .submit().createdApp
 

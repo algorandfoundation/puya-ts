@@ -3,6 +3,7 @@ import {
   abimethod,
   assert,
   Contract,
+  err,
   GlobalState,
   log,
   LogicSig,
@@ -105,5 +106,11 @@ export class ReceivesReferenceTypes extends Contract {
     log(app.address)
     log(acc.bytes)
     log(asset.name)
+  }
+}
+
+export abstract class HelloStubbed extends Contract {
+  greet(name: string): string {
+    err('stub only')
   }
 }
