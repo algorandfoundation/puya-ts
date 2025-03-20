@@ -31,15 +31,9 @@ export function getPuyaStorageDir(): string {
   return path.join(puyaTsDirName, '.puya')
 }
 
-/**
- * Finds the path to a cached Puya binary if it exists
- * @returns The path to the cached binary or undefined if not found
- */
-export function findCachedPuyaBinary(puyaStorageDir: string, version: SemVer): string | undefined {
+export function getCachedPuyaBinaryPath(puyaStorageDir: string, version: SemVer): string {
   const binaryFileName = getBinaryName()
-  const binaryPath = path.join(puyaStorageDir, version.formatted, binaryFileName)
-
-  return fs.existsSync(binaryPath) ? binaryPath : undefined
+  return path.join(puyaStorageDir, version.formatted, binaryFileName)
 }
 
 /**
