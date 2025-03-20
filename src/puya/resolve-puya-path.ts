@@ -11,19 +11,21 @@ export async function resolvePuyaPath(): Promise<string> {
   const puyaStorageDir = getPuyaStorageDir()
   const cachedBinaryPath = getCachedPuyaBinaryPath(puyaStorageDir, version)
 
-  if (checkIfCacheExists(cachedBinaryPath)) {
+  if (isBinaryCached(cachedBinaryPath)) {
     return cachedBinaryPath
   }
 
   await using _ = await createLockFile(`${puyaStorageDir}.lock`, { maxRetries: 30, delayMs: 1000, staleMs: 60 * 1000 })
 
-  if (checkIfCacheExists(cachedBinaryPath)) {
+  // Between the first check and acquiring the lock, the binary may have been downloaded by another process.
+  // In this case there is no need to download the binary again.
+  if (isBinaryCached(cachedBinaryPath)) {
     return cachedBinaryPath
   }
   return await downloadPuyaBinary(puyaStorageDir, version)
 }
 
-function checkIfCacheExists(cachePath: string): boolean {
+function isBinaryCached(cachePath: string): boolean {
   if (fs.existsSync(cachePath)) {
     logger.debug(undefined, `Found cached Puya binary at ${cachePath}`)
     return true
