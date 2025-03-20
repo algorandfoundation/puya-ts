@@ -1,26 +1,44 @@
-import type { SourceLocation } from '../awst/source-location'
+import type { TextDocument } from 'vscode-languageserver-textdocument'
+import { CodeActionKind, type CodeAction, type Diagnostic } from 'vscode-languageserver/node'
 import { WellKnownErrors } from '../errors'
 
-export abstract class CodeFix {}
-
-export class WrappingCodeFix extends CodeFix {
-  constructor(
-    readonly sourceLocation: SourceLocation,
-    readonly beforeText: string,
-    readonly afterText: string,
-  ) {
-    super()
-  }
-}
-
-export class WrapInUint64CtorFix extends WrappingCodeFix {
-  constructor(sourceLocation: SourceLocation) {
-    super(sourceLocation, 'Uint64(', ')')
-  }
-}
-
-const codeFixes = {
-  [WellKnownErrors.NumberNeedsWrapping]: (sourceLocation: SourceLocation): CodeFix[] => {
-    return []
+export const codeFixes: Record<WellKnownErrors, (document: TextDocument, diagnostic: Diagnostic) => CodeAction[]> = {
+  [WellKnownErrors.BigIntNeedsWrapping]: (document: TextDocument, diagnostic: Diagnostic): CodeAction[] => {
+    return [
+      {
+        title: 'Wrap in BigUint constructor',
+        diagnostics: [diagnostic],
+        kind: CodeActionKind.QuickFix,
+        edit: {
+          changes: {
+            [document.uri.toString()]: [
+              {
+                range: diagnostic.range,
+                newText: `BigUint(${document.getText(diagnostic.range)})`,
+              },
+            ],
+          },
+        },
+      },
+    ]
+  },
+  [WellKnownErrors.NumberNeedsWrapping]: (document: TextDocument, diagnostic: Diagnostic): CodeAction[] => {
+    return [
+      {
+        title: 'Wrap in Uint64 constructor',
+        diagnostics: [diagnostic],
+        kind: CodeActionKind.QuickFix,
+        edit: {
+          changes: {
+            [document.uri.toString()]: [
+              {
+                range: diagnostic.range,
+                newText: `Uint64(${document.getText(diagnostic.range)})`,
+              },
+            ],
+          },
+        },
+      },
+    ]
   },
 }

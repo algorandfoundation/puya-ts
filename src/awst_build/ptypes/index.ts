@@ -3,7 +3,7 @@ import { SourceLocation } from '../../awst/source-location'
 import { wtypes } from '../../awst/wtypes'
 
 import { Constants } from '../../constants'
-import { CodeError, CodeErrorWithFixError, InternalError, NotSupported, WellKnownErrors } from '../../errors'
+import { CodeError, FixableCodeError, InternalError, NotSupported, WellKnownErrors } from '../../errors'
 import { codeInvariant, distinctByEquality, sortBy } from '../../util'
 import { SymbolName } from '../symbol-name'
 import { GenericPType, PType } from './base'
@@ -777,7 +777,7 @@ export const bigIntPType = new NativeNumericType({
   singleton: false,
   typeMessage: transientTypeErrors.nativeNumeric('bigint').usedAsType,
   expressionMessage: (sourceLocation) =>
-    new CodeErrorWithFixError(transientTypeErrors.nativeNumeric('bigint').usedInExpression, {
+    new FixableCodeError(transientTypeErrors.nativeNumeric('bigint').usedInExpression, {
       sourceLocation,
       identifier: WellKnownErrors.BigIntNeedsWrapping,
     }),
@@ -812,7 +812,7 @@ export class NumericLiteralPType extends NativeNumericType {
       singleton: false,
       typeMessage: transientTypeErrors.nativeNumeric(literalValue.toString()).usedAsType,
       expressionMessage: (sourceLocation) =>
-        new CodeErrorWithFixError(transientTypeErrors.nativeNumeric(literalValue.toString()).usedInExpression, {
+        new FixableCodeError(transientTypeErrors.nativeNumeric(literalValue.toString()).usedInExpression, {
           sourceLocation,
           identifier: WellKnownErrors.NumberNeedsWrapping,
         }),
@@ -829,7 +829,7 @@ export class BigIntLiteralPType extends NativeNumericType {
       singleton: false,
       typeMessage: transientTypeErrors.nativeNumeric(`${literalValue}n`).usedAsType,
       expressionMessage: (sourceLocation) =>
-        new CodeErrorWithFixError(transientTypeErrors.nativeNumeric(`${literalValue}n`).usedInExpression, {
+        new FixableCodeError(transientTypeErrors.nativeNumeric(`${literalValue}n`).usedInExpression, {
           sourceLocation,
           identifier: WellKnownErrors.BigIntNeedsWrapping,
         }),
@@ -843,7 +843,7 @@ export const numberPType = new NativeNumericType({
   singleton: false,
   typeMessage: transientTypeErrors.nativeNumeric('number').usedAsType,
   expressionMessage: (sourceLocation) =>
-    new CodeErrorWithFixError(transientTypeErrors.nativeNumeric('number').usedInExpression, {
+    new FixableCodeError(transientTypeErrors.nativeNumeric('number').usedInExpression, {
       sourceLocation,
       identifier: WellKnownErrors.NumberNeedsWrapping,
     }),

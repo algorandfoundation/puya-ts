@@ -9,6 +9,8 @@ import {
   TextDocumentSyncKind,
 } from 'vscode-languageserver/node.js'
 import { URI } from 'vscode-uri'
+import type { WellKnownErrors } from '../errors'
+import { codeFixes } from './code-fix'
 import { getWorkspaceDiagnostics } from './diagnostics'
 
 export const getDebugLspPort = () => {
@@ -71,6 +73,7 @@ export async function startLanguageServer() {
   })
 
   async function buildWorkspaceDiagnosticsMap(): Promise<Map<string, Diagnostic[]>> {
+    // TODO: maybe this can be moved outside of this scope
     if (!workspaceFolder) {
       connection.console.error('Workspace folder not set')
 
@@ -120,10 +123,18 @@ export async function startLanguageServer() {
       return []
     }
 
-    const codeActions: CodeAction[] = []
-
-    return codeActions
+    return getCodeActions(document, params.context.diagnostics[0])
   })
 
   connection.listen()
+}
+
+function getCodeActions(document: TextDocument, diagnostic: Diagnostic): CodeAction[] {
+  if (!diagnostic.code) {
+    return []
+  }
+  // TODO: ensure diagnostic.code is a valid WellKnownErrors
+
+  const codeFix = codeFixes[diagnostic.code as WellKnownErrors]
+  return codeFix(document, diagnostic)
 }
