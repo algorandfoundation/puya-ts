@@ -79,7 +79,7 @@ export class ContractSuperBuilder extends ContractThisBuilder {
     return new VoidExpressionBuilder(
       nodeFactory.subroutineCallExpression({
         target: nodeFactory.instanceSuperMethodTarget({
-          memberName: Constants.constructorMethodName,
+          memberName: Constants.symbolNames.constructorMethodName,
         }),
         args: [],
         sourceLocation,

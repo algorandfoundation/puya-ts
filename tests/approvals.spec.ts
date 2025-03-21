@@ -1,10 +1,8 @@
 import { globSync } from 'glob'
 import { rimraf } from 'rimraf'
 import { describe, expect, it } from 'vitest'
-import { compile } from '../src'
-import { processInputPaths } from '../src/input-paths/process-input-paths'
+import { compile, CompileOptions, processInputPaths } from '../src'
 import { isErrorOrCritical, LoggingContext, LogLevel } from '../src/logger'
-import { CompileOptions } from '../src/options'
 import { normalisePath } from '../src/util'
 import { invokeCli } from '../src/util/invoke-cli'
 

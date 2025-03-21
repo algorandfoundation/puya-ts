@@ -52,7 +52,7 @@ export class Arc4BareMethodDecoratorBuilder extends NodeBuilder {
       ],
     })
     return new DecoratorDataBuilder(sourceLocation, {
-      type: Constants.arc4BareDecoratorName,
+      type: Constants.symbolNames.arc4BareDecoratorName,
       ocas: resolveOnCompletionActions(allowActions),
       create: onCreate ? mapStringConstant(createMap, onCreate?.resolve()) : ARC4CreateOption.disallow,
       sourceLocation: sourceLocation,
@@ -86,7 +86,7 @@ export class Arc4AbiMethodDecoratorBuilder extends NodeBuilder {
     })
 
     return new DecoratorDataBuilder(sourceLocation, {
-      type: Constants.arc4AbiDecoratorName,
+      type: Constants.symbolNames.arc4AbiDecoratorName,
       ocas: resolveOnCompletionActions(allowActions),
       create: onCreate ? mapStringConstant(createMap, onCreate?.resolve()) : ARC4CreateOption.disallow,
       sourceLocation: sourceLocation,
@@ -124,6 +124,7 @@ function resolveOnCompletionActions(oca: InstanceBuilder | undefined): OnComplet
   if (distinctOcas.length !== ocas.length) {
     logger.warn(oca.sourceLocation, 'Duplicate on completion actions')
   }
+  codeInvariant(distinctOcas.length, 'Method must allow at least one on complete action', oca.sourceLocation)
   return ocas
 }
 

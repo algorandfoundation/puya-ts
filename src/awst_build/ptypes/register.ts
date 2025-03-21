@@ -13,6 +13,7 @@ import {
   StaticBytesExpressionBuilder,
 } from '../eb/arc4/arrays'
 import { BoolClassBuilder, BoolExpressionBuilder } from '../eb/arc4/bool'
+import { AbiCallFunctionBuilder, CompileArc4FunctionBuilder, ContractProxyExpressionBuilder } from '../eb/arc4/c2c'
 import { StrClassBuilder, StrExpressionBuilder } from '../eb/arc4/string'
 import { StructClassBuilder, StructExpressionBuilder } from '../eb/arc4/struct'
 import { Arc4TupleClassBuilder, Arc4TupleExpressionBuilder } from '../eb/arc4/tuple'
@@ -76,6 +77,7 @@ import { VoidExpressionBuilder } from '../eb/void-expression-builder'
 import { OP_METADATA } from '../op-metadata'
 import type { TypeRegistry } from '../type-registry'
 import {
+  abiCallFunction,
   AddressClass,
   arc4AddressAlias,
   ARC4BoolClass,
@@ -90,6 +92,9 @@ import {
   Arc4TupleGeneric,
   ARC4TupleType,
   ByteClass,
+  compileArc4Function,
+  ContractProxyGeneric,
+  ContractProxyType,
   decodeArc4Function,
   DynamicArrayConstructor,
   DynamicArrayGeneric,
@@ -390,11 +395,16 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.registerGeneric({ generic: Arc4TupleGeneric, ptype: ARC4TupleType, instanceEb: Arc4TupleExpressionBuilder })
   typeRegistry.register({ ptype: ARC4StructType, instanceEb: StructExpressionBuilder })
   typeRegistry.register({ ptype: ARC4StructClass, singletonEb: StructClassBuilder })
+
+  // ARC4 lib
   typeRegistry.register({ ptype: interpretAsArc4Function, singletonEb: InterpretAsArc4FunctionBuilder })
   typeRegistry.register({ ptype: encodeArc4Function, singletonEb: EncodeArc4FunctionBuilder })
   typeRegistry.register({ ptype: decodeArc4Function, singletonEb: DecodeArc4FunctionBuilder })
   typeRegistry.register({ ptype: methodSelectorFunction, singletonEb: MethodSelectorFunctionBuilder })
   typeRegistry.register({ ptype: arc4EncodedLengthFunction, singletonEb: Arc4EncodedLengthFunctionBuilder })
+  typeRegistry.register({ ptype: compileArc4Function, singletonEb: CompileArc4FunctionBuilder })
+  typeRegistry.register({ ptype: abiCallFunction, singletonEb: AbiCallFunctionBuilder })
+  typeRegistry.registerGeneric({ ptype: ContractProxyType, generic: ContractProxyGeneric, instanceEb: ContractProxyExpressionBuilder })
 
   // GTXN types
   typeRegistry.register({ ptype: paymentGtxnType, instanceEb: GroupTransactionExpressionBuilder })

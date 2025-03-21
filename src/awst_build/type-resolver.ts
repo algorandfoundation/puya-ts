@@ -113,7 +113,7 @@ export class TypeResolver {
       const parentType = this.getTypeName(this.checker.getTypeAtLocation(node.parent), sourceLocation)
       return this.reflectFunctionType(
         new SymbolName({
-          name: Constants.constructorMethodName,
+          name: Constants.symbolNames.constructorMethodName,
           module: parentType.module,
         }),
         [signature],
@@ -359,7 +359,7 @@ export class TypeResolver {
     baseType: ARC4StructType,
     sourceLocation: SourceLocation,
   ): ARC4StructType {
-    const ignoredProps = ['bytes', 'equals', 'native', 'copy', Constants.constructorMethodName]
+    const ignoredProps = ['bytes', 'equals', 'native', 'copy', Constants.symbolNames.constructorMethodName]
     const fields: Record<string, ARC4EncodedType> = {}
     for (const prop of tsType.getProperties()) {
       if (isIn(prop.name, ignoredProps)) continue
@@ -435,7 +435,7 @@ export class TypeResolver {
       const name = this.getSymbolFullName(type.aliasSymbol, sourceLocation)
       // We only respect type aliases within certain modules, otherwise use the
       // unaliased symbol
-      if (name.module.startsWith(Constants.algoTsPackage) || name.module === Constants.polytypeModuleName) return name
+      if (name.module.startsWith(Constants.algoTsPackage) || name.module === Constants.moduleNames.polytype) return name
     }
     invariant(type.symbol, 'Type must have a symbol', sourceLocation)
     return this.getSymbolFullName(type.symbol, sourceLocation)

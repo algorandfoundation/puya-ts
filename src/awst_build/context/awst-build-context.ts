@@ -90,6 +90,7 @@ export abstract class AwstBuildContext {
     memberName: string
   }): void
   abstract getArc4Config(contractType: ContractClassPType, memberName: string): ARC4MethodConfig | undefined
+  abstract getArc4Config(contractType: ContractClassPType): ARC4MethodConfig[]
 
   abstract getStorageDeclaration(contractType: ContractClassPType, memberName: string): AppStorageDeclaration | undefined
 
@@ -171,16 +172,34 @@ class AwstBuildContextImpl extends AwstBuildContext {
     contractConfig.set(memberName, arc4MethodConfig)
   }
 
-  getArc4Config(contractType: ContractClassPType, memberName: string): ARC4MethodConfig | undefined {
-    for (const ct of [contractType, ...contractType.allBases()]) {
-      if (ct.equals(baseContractType) || ct.equals(arc4BaseContractType)) continue
-      const contractMethods = this.arc4MethodConfig.get(ct.fullName)
-      invariant(contractMethods, `${ct} has not been visited`)
-      if (contractMethods.has(memberName)) {
-        return contractMethods.get(memberName)
+  getArc4Config(contractType: ContractClassPType): ARC4MethodConfig[]
+  getArc4Config(contractType: ContractClassPType, memberName: string): ARC4MethodConfig | undefined
+  getArc4Config(contractType: ContractClassPType, memberName?: string): ARC4MethodConfig | undefined | ARC4MethodConfig[] {
+    if (memberName) {
+      for (const ct of [contractType, ...contractType.allBases()]) {
+        if (ct.equals(baseContractType) || ct.equals(arc4BaseContractType)) continue
+        const contractMethods = this.arc4MethodConfig.get(ct.fullName)
+        invariant(contractMethods, `${ct} has not been visited`)
+        if (contractMethods.has(memberName)) {
+          return contractMethods.get(memberName)
+        }
       }
+      return undefined
+    } else {
+      return Array.from(
+        [contractType, ...contractType.allBases()]
+          .toReversed()
+          .reduce((acc, ct) => {
+            if (ct.equals(baseContractType) || ct.equals(arc4BaseContractType)) return acc
+
+            const contractMethods = this.arc4MethodConfig.get(ct.fullName)
+            invariant(contractMethods, `${ct} has not been visited`)
+
+            return new Map([...acc, ...contractMethods])
+          }, new Map<string, ARC4MethodConfig>())
+          .values(),
+      )
     }
-    return undefined
   }
 
   static forProgram(program: ts.Program): AwstBuildContext {
