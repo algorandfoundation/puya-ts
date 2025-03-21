@@ -1,13 +1,15 @@
+import { concatMap, debounceTime, map, Observable } from 'rxjs'
 import { TextDocument } from 'vscode-languageserver-textdocument'
-import type { CodeAction, DocumentDiagnosticReport, InitializeResult } from 'vscode-languageserver/node.js'
+import type { CodeAction, Diagnostic, InitializeResult, TextDocumentChangeEvent } from 'vscode-languageserver/node.js'
 import {
   createClientSocketTransport,
   createConnection,
-  DocumentDiagnosticReportKind,
   ProposedFeatures,
   TextDocuments,
   TextDocumentSyncKind,
 } from 'vscode-languageserver/node.js'
+import { URI } from 'vscode-uri'
+import { getWorkspaceDiagnostics } from './diagnostics'
 
 export const getDebugLspPort = () => {
   const port = Number(process.env.PUYA_TS_DEBUG_LSP_PORT)
@@ -38,15 +40,18 @@ export async function startLanguageServer() {
 
   // Create a simple text document manager.
   const documents = new TextDocuments(TextDocument)
+  let workspaceFolder: string | undefined
 
-  connection.onInitialize(() => {
+  const trackedDocumentUris = new Set<string>()
+
+  connection.onInitialize((params) => {
+    // The extension sets the workspaceFolder property
+    // therefore, workspaceFolders is an array with one element
+    workspaceFolder = params.workspaceFolders?.[0]?.uri
+
     const result: InitializeResult = {
       capabilities: {
         textDocumentSync: TextDocumentSyncKind.Incremental,
-        diagnosticProvider: {
-          interFileDependencies: true,
-          workspaceDiagnostics: false,
-        },
         codeActionProvider: {
           resolveProvider: false,
         },
@@ -59,20 +64,51 @@ export async function startLanguageServer() {
     connection.console.log('Algorand TypeScript Language Server initialized')
   })
 
-  connection.languages.diagnostics.on(async (params) => {
-    const document = documents.get(params.textDocument.uri)
-    if (document !== undefined) {
-      return {
-        kind: DocumentDiagnosticReportKind.Full,
-        items: [],
-      } satisfies DocumentDiagnosticReport
-    } else {
-      return {
-        kind: DocumentDiagnosticReportKind.Full,
-        items: [],
-      } satisfies DocumentDiagnosticReport
-    }
+  const documentChangeObservable = new Observable<TextDocumentChangeEvent<TextDocument>>((subscriber) => {
+    documents.onDidChangeContent((event) => {
+      subscriber.next(event)
+    })
   })
+
+  async function buildWorkspaceDiagnosticsMap(): Promise<Map<string, Diagnostic[]>> {
+    if (!workspaceFolder) {
+      connection.console.error('Workspace folder not set')
+
+      return new Map()
+    }
+
+    const workspacePath = URI.parse(workspaceFolder).fsPath
+    const diagnosticsMap = await getWorkspaceDiagnostics(connection, workspacePath, documents)
+
+    for (const docUri of diagnosticsMap.keys()) {
+      trackedDocumentUris.add(docUri)
+    }
+
+    return diagnosticsMap
+  }
+
+  async function sendDiagnostics(diagnosticsMap: Map<string, Diagnostic[]>) {
+    // Send diagnostics for all tracked documents
+    // Needs to do this to reset diagnostics for files that don't have issues anymore
+    await Promise.all(
+      Array.from(trackedDocumentUris).map((docUri) =>
+        connection.sendDiagnostics({
+          uri: docUri,
+          diagnostics: diagnosticsMap.get(docUri) ?? [],
+        }),
+      ),
+    )
+  }
+
+  documentChangeObservable
+    .pipe(
+      debounceTime(200),
+      map(buildWorkspaceDiagnosticsMap),
+      concatMap(async (v) => sendDiagnostics(await v)),
+    )
+    .subscribe(async () => {
+      // Need a subscriber or the observable won't fire
+    })
 
   // Make the text document manager listen on the connection
   // for open, change and close text document events
