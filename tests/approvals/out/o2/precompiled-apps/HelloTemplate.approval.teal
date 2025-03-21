@@ -7,19 +7,19 @@ main:
     bytecblock "greeting" TMPL_GREETING
     txn ApplicationID
     bnz main_after_if_else@2
-    // tests/approvals/precompiled-apps.algo.ts:4
+    // tests/approvals/precompiled-apps.algo.ts:16
     // greeting = GlobalState({ initialValue: '' })
     bytec_0 // "greeting"
     pushbytes ""
     app_global_put
     bytec_0 // "greeting"
-    // tests/approvals/precompiled-apps.algo.ts:27
+    // tests/approvals/precompiled-apps.algo.ts:39
     // this.greeting.value = TemplateVar<string>('GREETING')
     bytec_1 // TMPL_GREETING
     app_global_put
 
 main_after_if_else@2:
-    // tests/approvals/precompiled-apps.algo.ts:24
+    // tests/approvals/precompiled-apps.algo.ts:36
     // export class HelloTemplate extends HelloBase {
     txn NumAppArgs
     bz main_after_if_else@12
@@ -28,36 +28,36 @@ main_after_if_else@2:
     match main_create_route@5 main_delete_route@6 main_update_route@7 main_greet_route@8
 
 main_after_if_else@12:
-    // tests/approvals/precompiled-apps.algo.ts:24
+    // tests/approvals/precompiled-apps.algo.ts:36
     // export class HelloTemplate extends HelloBase {
     intc_1 // 0
     return
 
 main_greet_route@8:
-    // tests/approvals/precompiled-apps.algo.ts:12
+    // tests/approvals/precompiled-apps.algo.ts:24
     // greet(name: string): string {
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/precompiled-apps.algo.ts:24
+    // tests/approvals/precompiled-apps.algo.ts:36
     // export class HelloTemplate extends HelloBase {
     txna ApplicationArgs 1
     extract 2 0
-    // tests/approvals/precompiled-apps.algo.ts:4
+    // tests/approvals/precompiled-apps.algo.ts:16
     // greeting = GlobalState({ initialValue: '' })
     intc_1 // 0
     bytec_0 // "greeting"
     app_global_get_ex
     assert // check GlobalState exists
-    // tests/approvals/precompiled-apps.algo.ts:13
+    // tests/approvals/precompiled-apps.algo.ts:25
     // return `${this.greeting.value} ${name}`
     pushbytes " "
     concat
     swap
     concat
-    // tests/approvals/precompiled-apps.algo.ts:12
+    // tests/approvals/precompiled-apps.algo.ts:24
     // greet(name: string): string {
     dup
     len
@@ -73,7 +73,7 @@ main_greet_route@8:
     return
 
 main_update_route@7:
-    // tests/approvals/precompiled-apps.algo.ts:9
+    // tests/approvals/precompiled-apps.algo.ts:21
     // @abimethod({ allowActions: 'UpdateApplication' })
     txn OnCompletion
     pushint 4 // UpdateApplication
@@ -85,7 +85,7 @@ main_update_route@7:
     return
 
 main_delete_route@6:
-    // tests/approvals/precompiled-apps.algo.ts:6
+    // tests/approvals/precompiled-apps.algo.ts:18
     // @abimethod({ allowActions: 'DeleteApplication' })
     txn OnCompletion
     pushint 5 // DeleteApplication
@@ -97,7 +97,7 @@ main_delete_route@6:
     return
 
 main_create_route@5:
-    // tests/approvals/precompiled-apps.algo.ts:30
+    // tests/approvals/precompiled-apps.algo.ts:42
     // @abimethod({ onCreate: 'require' })
     txn OnCompletion
     !

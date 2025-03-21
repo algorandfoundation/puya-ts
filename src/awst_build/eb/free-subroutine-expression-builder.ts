@@ -1,8 +1,12 @@
 import { ContractReference } from '../../awst/models'
 import { nodeFactory } from '../../awst/node-factory'
-import type { ContractMethodTarget, InstanceMethodTarget, InstanceSuperMethodTarget, SubroutineID } from '../../awst/nodes'
+import type { ContractMethodTarget, InstanceMethodTarget, InstanceSuperMethodTarget, MethodConstant, SubroutineID } from '../../awst/nodes'
+import { ARC4ABIMethodConfig } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { InternalError } from '../../errors'
+import { codeInvariant } from '../../util'
+import { getArc4MethodConstant } from '../arc4-util'
+import { AwstBuildContext } from '../context/awst-build-context'
 import type { ContractClassPType, PType } from '../ptypes'
 import { FunctionPType } from '../ptypes'
 import { typeRegistry } from '../type-registry'
@@ -60,6 +64,13 @@ export class ContractMethodExpressionBuilder extends SubroutineExpressionBuilder
         memberName: ptype.name,
       }),
     )
+  }
+
+  getMethodSelector(sourceLocation = this.sourceLocation): MethodConstant {
+    const methodTarget = this.target
+    const arc4Config = AwstBuildContext.current.getArc4Config(this.contractType, methodTarget.memberName)
+    codeInvariant(arc4Config instanceof ARC4ABIMethodConfig, `${methodTarget.memberName} is not an ABI method`, this.sourceLocation)
+    return getArc4MethodConstant(this.ptype, arc4Config, sourceLocation)
   }
 }
 
