@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    // tests/approvals/precompiled-apps.algo.ts:103
+    // tests/approvals/precompiled-apps.algo.ts:104
     // export class ReceivesReferenceTypes extends Contract {
     txn NumAppArgs
     bz main_bare_routing@6
@@ -12,20 +12,20 @@ main:
     match main_receivesReferenceTypes_route@3
 
 main_after_if_else@10:
-    // tests/approvals/precompiled-apps.algo.ts:103
+    // tests/approvals/precompiled-apps.algo.ts:104
     // export class ReceivesReferenceTypes extends Contract {
     pushint 0 // 0
     return
 
 main_receivesReferenceTypes_route@3:
-    // tests/approvals/precompiled-apps.algo.ts:104
+    // tests/approvals/precompiled-apps.algo.ts:105
     // receivesReferenceTypes(app: Application, acc: Account, asset: Asset) {
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/precompiled-apps.algo.ts:103
+    // tests/approvals/precompiled-apps.algo.ts:104
     // export class ReceivesReferenceTypes extends Contract {
     txna ApplicationArgs 1
     btoi
@@ -36,28 +36,28 @@ main_receivesReferenceTypes_route@3:
     txna ApplicationArgs 3
     btoi
     txnas Assets
-    // tests/approvals/precompiled-apps.algo.ts:105
+    // tests/approvals/precompiled-apps.algo.ts:106
     // log(app.address)
     uncover 2
     app_params_get AppAddress
     assert // application exists
     log
-    // tests/approvals/precompiled-apps.algo.ts:106
+    // tests/approvals/precompiled-apps.algo.ts:107
     // log(acc.bytes)
     swap
     log
-    // tests/approvals/precompiled-apps.algo.ts:107
+    // tests/approvals/precompiled-apps.algo.ts:108
     // log(asset.name)
     asset_params_get AssetName
     assert // asset exists
     log
-    // tests/approvals/precompiled-apps.algo.ts:104
+    // tests/approvals/precompiled-apps.algo.ts:105
     // receivesReferenceTypes(app: Application, acc: Account, asset: Asset) {
     pushint 1 // 1
     return
 
 main_bare_routing@6:
-    // tests/approvals/precompiled-apps.algo.ts:103
+    // tests/approvals/precompiled-apps.algo.ts:104
     // export class ReceivesReferenceTypes extends Contract {
     txn OnCompletion
     bnz main_after_if_else@10

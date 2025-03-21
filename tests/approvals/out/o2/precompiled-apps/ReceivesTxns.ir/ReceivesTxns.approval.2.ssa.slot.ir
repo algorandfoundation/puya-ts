@@ -2,10 +2,10 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@0: // L1
         let tmp%0#1: uint64 = (txn NumAppArgs)
         goto tmp%0#1 ? block@2 : block@9
-    block@2: // abi_routing_L78
+    block@2: // abi_routing_L79
         let tmp%2#0: bytes = (txna ApplicationArgs 0)
         switch tmp%2#0 {method "getOne()uint64" => block@3, method "receivesAnyTxn(txn)uint64" => block@4, method "receivesAssetConfig(acfg)byte[]" => block@5, method "receivesAssetConfigAndPay(acfg,pay)void" => block@6, * => block@13}
-    block@3: // getOne_route_L79
+    block@3: // getOne_route_L80
         let tmp%3#0: uint64 = (txn OnCompletion)
         let tmp%4#0: bool = (! tmp%3#0)
         (assert tmp%4#0) // OnCompletion is not NoOp
@@ -14,7 +14,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (log 0x151f7c750000000000000001)
         let tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.__puya_arc4_router__%0#0: bool = 1u
         goto block@14
-    block@4: // receivesAnyTxn_route_L83
+    block@4: // receivesAnyTxn_route_L84
         let tmp%8#0: uint64 = (txn OnCompletion)
         let tmp%9#0: bool = (! tmp%8#0)
         (assert tmp%9#0) // OnCompletion is not NoOp
@@ -25,42 +25,42 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let awst_tmp%0#0: uint64 = ((gtxns TypeEnum) txn#0)
         let tmp%0#4: bool = (== awst_tmp%0#0 3u)
         goto tmp%0#4 ? block@22 : block@26
-    block@22: // if_body_L85
+    block@22: // if_body_L86
         let awst_tmp%1#0: uint64 = ((gtxns CreatedAssetID) txn#0)
         goto awst_tmp%1#0 ? block@23 : block@24
-    block@23: // ternary_true_L86
+    block@23: // ternary_true_L87
         goto block@25
-    block@24: // ternary_false_L86
+    block@24: // ternary_false_L87
         let ternary_result%0#1: uint64 = ((gtxns ConfigAsset) txn#0)
         goto block@25
-    block@25: // ternary_merge_L86
+    block@25: // ternary_merge_L87
         let ternary_result%0#2: uint64 = φ(awst_tmp%1#0 <- block@23, ternary_result%0#1 <- block@24)
         goto block@32
-    block@26: // after_if_else_L85
+    block@26: // after_if_else_L86
         let tmp%1#2: bool = (== awst_tmp%0#0 6u)
         goto tmp%1#2 ? block@27 : block@31
-    block@27: // if_body_L87
+    block@27: // if_body_L88
         let awst_tmp%2#0: uint64 = ((gtxns CreatedApplicationID) txn#0)
         goto awst_tmp%2#0 ? block@28 : block@29
-    block@28: // ternary_true_L88
+    block@28: // ternary_true_L89
         goto block@30
-    block@29: // ternary_false_L88
+    block@29: // ternary_false_L89
         let ternary_result%1#1: uint64 = ((gtxns ApplicationID) txn#0)
         goto block@30
-    block@30: // ternary_merge_L88
+    block@30: // ternary_merge_L89
         let ternary_result%1#2: uint64 = φ(awst_tmp%2#0 <- block@28, ternary_result%1#1 <- block@29)
         goto block@32
-    block@31: // after_if_else_L87
+    block@31: // after_if_else_L88
         let tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.receivesAnyTxn%0#2: uint64 = 0u
         goto block@32
-    block@32: // after_inlined_tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.receivesAnyTxn_L83
+    block@32: // after_inlined_tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.receivesAnyTxn_L84
         let to_encode%1#0: uint64 = φ(ternary_result%0#2 <- block@25, ternary_result%1#2 <- block@30, tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.receivesAnyTxn%0#2 <- block@31)
         let val_as_bytes%1#0: bytes[8] = (itob to_encode%1#0)
         let tmp%13#0: bytes = (concat 0x151f7c75 val_as_bytes%1#0)
         (log tmp%13#0)
         let tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.__puya_arc4_router__%0#1: bool = 1u
         goto block@14
-    block@5: // receivesAssetConfig_route_L94
+    block@5: // receivesAssetConfig_route_L95
         let tmp%14#0: uint64 = (txn OnCompletion)
         let tmp%15#0: bool = (! tmp%14#0)
         (assert tmp%15#0) // OnCompletion is not NoOp
@@ -80,7 +80,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (log tmp%19#0)
         let tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.__puya_arc4_router__%0#2: bool = 1u
         goto block@14
-    block@6: // receivesAssetConfigAndPay_route_L97
+    block@6: // receivesAssetConfigAndPay_route_L98
         let tmp%20#0: uint64 = (txn OnCompletion)
         let tmp%21#0: bool = (! tmp%20#0)
         (assert tmp%21#0) // OnCompletion is not NoOp
@@ -102,16 +102,16 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%3#1)
         let tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.__puya_arc4_router__%0#3: bool = 1u
         goto block@14
-    block@9: // bare_routing_L78
+    block@9: // bare_routing_L79
         let tmp%26#0: uint64 = (txn OnCompletion)
         goto tmp%26#0 ? block@13 : block@10
-    block@10: // __algots__.defaultCreate_L78
+    block@10: // __algots__.defaultCreate_L79
         let tmp%27#0: uint64 = (txn ApplicationID)
         let tmp%28#0: bool = (! tmp%27#0)
         (assert tmp%28#0) // can only call when creating
         let tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.__puya_arc4_router__%0#4: bool = 1u
         goto block@14
-    block@13: // after_if_else_L78
+    block@13: // after_if_else_L79
         let tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.__puya_arc4_router__%0#5: bool = 0u
         goto block@14
     block@14: // after_inlined_tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.__puya_arc4_router___L1
