@@ -24,5 +24,5 @@ converts uint64 A to big-endian byte array, always of length 8
 
 ## See
 
-Native TEAL opcode: [`itob`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#itob)
+Native TEAL opcode: [`itob`](https://dev.algorand.co/reference/algorand-teal/opcodes#itob)
 Min AVM version: 1

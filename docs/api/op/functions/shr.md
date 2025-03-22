@@ -28,5 +28,5 @@ A divided by 2^B
 
 ## See
 
-Native TEAL opcode: [`shr`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#shr)
+Native TEAL opcode: [`shr`](https://dev.algorand.co/reference/algorand-teal/opcodes#shr)
 Min AVM version: 4

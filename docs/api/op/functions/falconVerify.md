@@ -32,5 +32,5 @@ for (data A, compressed-format signature B, pubkey C) verify the signature of da
 
 ## See
 
-Native TEAL opcode: [`falcon_verify`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#falcon_verify)
+Native TEAL opcode: [`falcon_verify`](https://dev.algorand.co/reference/algorand-teal/opcodes#falcon_verify)
 Min AVM version: 12

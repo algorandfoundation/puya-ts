@@ -32,5 +32,5 @@ A range of bytes from A starting at B up to but not including C. If C < B, or ei
 
 ## See
 
-Native TEAL opcode: [`substring3`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#substring3)
+Native TEAL opcode: [`substring3`](https://dev.algorand.co/reference/algorand-teal/opcodes#substring3)
 Min AVM version: 2

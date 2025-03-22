@@ -25,5 +25,5 @@ ID of the asset or application created in the Ath transaction of the current gro
 
 ## See
 
-Native TEAL opcode: [`gaids`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#gaids)
+Native TEAL opcode: [`gaids`](https://dev.algorand.co/reference/algorand-teal/opcodes#gaids)
 Min AVM version: 4

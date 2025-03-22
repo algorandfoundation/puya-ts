@@ -24,5 +24,5 @@ The largest integer I such that I^2 <= A. A and I are interpreted as big-endian 
 
 ## See
 
-Native TEAL opcode: [`bsqrt`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#bsqrt)
+Native TEAL opcode: [`bsqrt`](https://dev.algorand.co/reference/algorand-teal/opcodes#bsqrt)
 Min AVM version: 6

@@ -28,5 +28,5 @@ A raised to the Bth power. Fail if A == B == 0 and on overflow
 
 ## See
 
-Native TEAL opcode: [`exp`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#exp)
+Native TEAL opcode: [`exp`](https://dev.algorand.co/reference/algorand-teal/opcodes#exp)
 Min AVM version: 4

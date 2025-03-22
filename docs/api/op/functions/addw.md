@@ -28,5 +28,5 @@ readonly \[[`uint64`](../../index/type-aliases/uint64.md), [`uint64`](../../inde
 
 ## See
 
-Native TEAL opcode: [`addw`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#addw)
+Native TEAL opcode: [`addw`](https://dev.algorand.co/reference/algorand-teal/opcodes#addw)
 Min AVM version: 2
