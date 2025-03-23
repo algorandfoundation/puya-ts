@@ -5,6 +5,7 @@
 main:
     intcblock 0 1
     bytecblock "abc"
+    intc_0 // 0
 
 main_block@0:
     // tests/approvals/box-proxies.algo.ts:111
@@ -19,6 +20,8 @@ main_if_body@1:
     // switch (Txn.applicationArgs(0).toString()) {
     intc_0 // 0
     txnas ApplicationArgs
+    dup
+    bury 2
     // tests/approvals/box-proxies.algo.ts:113
     // case 'box':
     pushbytes "box"
@@ -42,12 +45,9 @@ main_block@3:
     return
 
 main_after_if_else@4:
-    // tests/approvals/box-proxies.algo.ts:112
-    // switch (Txn.applicationArgs(0).toString()) {
-    intc_0 // 0
-    txnas ApplicationArgs
     // tests/approvals/box-proxies.algo.ts:115
     // case 'boxmap':
+    dup
     pushbytes "boxmap"
     ==
     // tests/approvals/box-proxies.algo.ts:115-116
@@ -71,12 +71,9 @@ main_block@6:
     return
 
 main_after_if_else@7:
-    // tests/approvals/box-proxies.algo.ts:112
-    // switch (Txn.applicationArgs(0).toString()) {
-    intc_0 // 0
-    txnas ApplicationArgs
     // tests/approvals/box-proxies.algo.ts:117
     // case 'createbox':
+    dup
     pushbytes "createbox"
     ==
     // tests/approvals/box-proxies.algo.ts:117-119

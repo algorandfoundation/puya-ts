@@ -1,7 +1,10 @@
+import { nodeFactory } from '../awst/node-factory'
+import type { ARC4ABIMethodConfig } from '../awst/nodes'
 import type { SourceLocation } from '../awst/source-location'
+import { wtypes } from '../awst/wtypes'
 import { CodeError } from '../errors'
 import { logger } from '../logger'
-import type { PType } from './ptypes'
+import type { FunctionPType, PType } from './ptypes'
 import {
   accountPType,
   applicationPType,
@@ -40,6 +43,24 @@ export function ptypeToArc4PType(ptype: PType, sourceLocation: SourceLocation): 
   }
   logger.error(sourceLocation, `Unsupported type used in ABI method: ${ptype}`)
   return ptype
+}
+
+export function getArc4MethodConstant(functionType: FunctionPType, arc4Config: ARC4ABIMethodConfig, sourceLocation: SourceLocation) {
+  const params = functionType.parameters.map(([_, ptype]) => getArc4TypeName(ptype, sourceLocation)).join(',')
+  const returnType = getArc4TypeName(functionType.returnType, sourceLocation)
+  return nodeFactory.methodConstant({
+    value: `${arc4Config.name}(${params})${returnType}`,
+    wtype: wtypes.bytesWType,
+    sourceLocation,
+  })
+}
+
+export function getArc4TypeName(arg: PType, sourceLocation: SourceLocation): string {
+  const arc4Type = ptypeToArc4PType(arg, sourceLocation)
+  if (arc4Type.wtype instanceof wtypes.ARC4Type || arc4Type.wtype instanceof wtypes.WGroupTransaction) {
+    return arc4Type.wtype.arc4Name
+  }
+  return arc4Type.wtypeOrThrow.name
 }
 
 export function isArc4EncodableType(ptype: PType): boolean {

@@ -1,5 +1,5 @@
 main tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract.approvalProgram:
-    block@0: // L148
+    block@0: // L151
         let array%encoded%0#1: bytes[8][] = (concat 0x 0x0000000000000041)
         let array%data%0#1: bytes[8][] = (concat 0x array%encoded%0#1)
         let encoded%0#0: bytes[8][] = array%data%0#1
@@ -23,8 +23,8 @@ main tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract.approvalProgram:
         let tmp%0#9: bytes = (itob length_minus_1#0)
         let tmp%1#8: bytes = ((extract 6 0) tmp%0#9)
         let result#1: bytes = ((replace2 0) myArray#1 tmp%1#8)
-        let tmp%2#5: uint64 = (len result#1)
-        let item_location#0: uint64 = (- tmp%2#5 8u)
+        let tmp%2#6: uint64 = (len result#1)
+        let item_location#0: uint64 = (- tmp%2#6 8u)
         let popped#0: bytes = (extract3 result#1 item_location#0 8u)
         let tmp%2#2: bool = (== 0x0000000000000041 popped#0)
         (assert tmp%2#2)

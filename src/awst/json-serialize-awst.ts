@@ -129,7 +129,7 @@ export class AwstSerializer extends SnakeCaseSerializer<RootNode[]> {
       return {
         _type: SingleEvaluation.name,
         ...(super.serializerFunction(key, value) as object),
-        id: String(this.#singleEvals.forSymbol(value.id)[0]),
+        _id: String(this.#singleEvals.forSymbol(value.id)[0]),
       }
     }
 

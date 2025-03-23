@@ -8,36 +8,86 @@ main:
 main_block@0:
 
 main_block@1:
-    // tests/approvals/arc4-method-selector.algo.ts:13
+    // tests/approvals/arc4-method-selector.algo.ts:20
     // class ContractTwo extends Contract {
     txn NumAppArgs
     intc_0 // 0
     !=
-    bz main_bare_routing@7
+    bz main_bare_routing@8
 
 main_abi_routing@2:
-    // tests/approvals/arc4-method-selector.algo.ts:13
+    // tests/approvals/arc4-method-selector.algo.ts:20
     // class ContractTwo extends Contract {
     txna ApplicationArgs 0
     pushbytes 0x438c64f3 // method "renamedSomeMethod()void"
     pushbytes 0xf59e3cc4 // method "test()bool"
-    uncover 2
-    match main_renamedSomeMethod_route@3 main_test_route@4
+    pushbytes 0xd04fc274 // method "referenceTypes(pay,asset,account,application,appl)void"
+    uncover 3
+    match main_renamedSomeMethod_route@3 main_test_route@4 main_referenceTypes_route@5
 
-main_switch_case_default@5:
+main_switch_case_default@6:
 
-main_switch_case_next@6:
+main_switch_case_next@7:
 
-main_after_if_else@11:
-    // tests/approvals/arc4-method-selector.algo.ts:13
+main_after_if_else@12:
+    // tests/approvals/arc4-method-selector.algo.ts:20
     // class ContractTwo extends Contract {
     intc_0 // 0
 
-main_after_inlined_tests/approvals/arc4-method-selector.algo.ts::ContractTwo.__puya_arc4_router__@12:
+main_after_inlined_tests/approvals/arc4-method-selector.algo.ts::ContractTwo.__puya_arc4_router__@13:
     return
 
+main_referenceTypes_route@5:
+    // tests/approvals/arc4-method-selector.algo.ts:28
+    // referenceTypes(pay: gtxn.PaymentTxn, asset: Asset, account: Account, app: Application, appTxn: gtxn.ApplicationTxn) {}
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    // tests/approvals/arc4-method-selector.algo.ts:20
+    // class ContractTwo extends Contract {
+    txn GroupIndex
+    pushint 2 // 2
+    -
+    dup
+    gtxns TypeEnum
+    intc_1 // pay
+    ==
+    assert // transaction type is pay
+    txna ApplicationArgs 1
+    btoi
+    txnas Assets
+    txna ApplicationArgs 2
+    btoi
+    txnas Accounts
+    txna ApplicationArgs 3
+    btoi
+    txnas Applications
+    txn GroupIndex
+    intc_1 // 1
+    -
+    dup
+    gtxns TypeEnum
+    pushint 6 // appl
+    ==
+    assert // transaction type is appl
+    // tests/approvals/arc4-method-selector.algo.ts:28
+    // referenceTypes(pay: gtxn.PaymentTxn, asset: Asset, account: Account, app: Application, appTxn: gtxn.ApplicationTxn) {}
+    uncover 4
+    uncover 4
+    uncover 4
+    uncover 4
+    uncover 4
+    callsub referenceTypes
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/arc4-method-selector.algo.ts::ContractTwo.__puya_arc4_router__@13
+
 main_test_route@4:
-    // tests/approvals/arc4-method-selector.algo.ts:17
+    // tests/approvals/arc4-method-selector.algo.ts:24
     // test() {
     txn OnCompletion
     intc_0 // NoOp
@@ -57,10 +107,10 @@ main_test_route@4:
     concat
     log
     intc_1 // 1
-    b main_after_inlined_tests/approvals/arc4-method-selector.algo.ts::ContractTwo.__puya_arc4_router__@12
+    b main_after_inlined_tests/approvals/arc4-method-selector.algo.ts::ContractTwo.__puya_arc4_router__@13
 
 main_renamedSomeMethod_route@3:
-    // tests/approvals/arc4-method-selector.algo.ts:14
+    // tests/approvals/arc4-method-selector.algo.ts:21
     // @abimethod({ name: 'renamedSomeMethod' })
     txn OnCompletion
     intc_0 // NoOp
@@ -72,23 +122,23 @@ main_renamedSomeMethod_route@3:
     assert // can only call when not creating
     callsub someMethod
     intc_1 // 1
-    b main_after_inlined_tests/approvals/arc4-method-selector.algo.ts::ContractTwo.__puya_arc4_router__@12
+    b main_after_inlined_tests/approvals/arc4-method-selector.algo.ts::ContractTwo.__puya_arc4_router__@13
 
-main_bare_routing@7:
-    // tests/approvals/arc4-method-selector.algo.ts:13
+main_bare_routing@8:
+    // tests/approvals/arc4-method-selector.algo.ts:20
     // class ContractTwo extends Contract {
     txn OnCompletion
     intc_0 // 0
     swap
-    match main___algots__.defaultCreate@8
+    match main___algots__.defaultCreate@9
 
-main_switch_case_default@9:
+main_switch_case_default@10:
 
-main_switch_case_next@10:
-    b main_after_if_else@11
+main_switch_case_next@11:
+    b main_after_if_else@12
 
-main___algots__.defaultCreate@8:
-    // tests/approvals/arc4-method-selector.algo.ts:13
+main___algots__.defaultCreate@9:
+    // tests/approvals/arc4-method-selector.algo.ts:20
     // class ContractTwo extends Contract {
     txn ApplicationID
     intc_0 // 0
@@ -96,7 +146,7 @@ main___algots__.defaultCreate@8:
     assert // can only call when creating
     callsub __algots__.defaultCreate
     intc_1 // 1
-    b main_after_inlined_tests/approvals/arc4-method-selector.algo.ts::ContractTwo.__puya_arc4_router__@12
+    b main_after_inlined_tests/approvals/arc4-method-selector.algo.ts::ContractTwo.__puya_arc4_router__@13
 
 
 // tests/approvals/arc4-method-selector.algo.ts::ContractTwo.someMethod() -> void:
@@ -110,11 +160,21 @@ someMethod_block@0:
 test:
 
 test_block@0:
-    // tests/approvals/arc4-method-selector.algo.ts:18
+    // tests/approvals/arc4-method-selector.algo.ts:25
     // return methodSelector(ContractOne.prototype.someMethod) === methodSelector('someMethod()uint64')
     pushbytes 0xc2e9596e // method "someMethod()uint64"
     dup
     ==
+    retsub
+
+
+// tests/approvals/arc4-method-selector.algo.ts::ContractTwo.referenceTypes(pay: uint64, asset: uint64, account: bytes, app: uint64, appTxn: uint64) -> void:
+referenceTypes:
+    // tests/approvals/arc4-method-selector.algo.ts:28
+    // referenceTypes(pay: gtxn.PaymentTxn, asset: Asset, account: Account, app: Application, appTxn: gtxn.ApplicationTxn) {}
+    proto 5 0
+
+referenceTypes_block@0:
     retsub
 
 

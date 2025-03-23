@@ -1,5 +1,5 @@
 main tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract.approvalProgram:
-    block@0: // L148
+    block@0: // L151
         tests/approvals/arc4-types.algo.ts::testStr()
         tests/approvals/arc4-types.algo.ts::testUintN(1u, 2b, 0x0000000000000000000000000000000000000000000000000000000000000004)
         tests/approvals/arc4-types.algo.ts::testUFixed()
@@ -121,6 +121,14 @@ subroutine tests/approvals/arc4-types.algo.ts::testDynamicBytes(someBytes: bytes
 
 subroutine tests/approvals/arc4-types.algo.ts::testStaticBytes() -> void:
     block@0: // L89
+        let result%0#0: bytes = (concat 0x 0xaabbccddee)
+        let array_data%0#0: bytes = (concat 0x result%0#0)
+        let s5#0: bytes[5] = array_data%0#0
+        let array_head_and_tail%0#0: bytes[5] = s5#0
+        let item_offset%0#0: uint64 = (* 0u 5u)
+        let tmp%0#0: bytes = (extract3 array_head_and_tail%0#0 item_offset%0#0 5u) // on error: Index access is out of bounds
+        let tmp%1#0: bool = (== tmp%0#0 0xaabbccddee)
+        (assert tmp%1#0)
         let expr_value_trimmed%0#0: bytes = ((extract 2 0) 0x000400000000)
         let concatenated%0#0: bytes = (concat expr_value_trimmed%0#0 0xaabbccddee)
         let len_%0#0: uint64 = (len concatenated%0#0)
@@ -128,13 +136,13 @@ subroutine tests/approvals/arc4-types.algo.ts::testStaticBytes() -> void:
         let len_16_bit%0#0: bytes = ((extract 6 2) as_bytes%0#0)
         let concat_result%0#0: bytes = (concat len_16_bit%0#0 concatenated%0#0)
         let s4#0: bytes = concat_result%0#0
-        let tmp%0#0: bytes = ((extract 2 0) s4#0)
-        let tmp%1#0: bool = (== tmp%0#0 0x00000000aabbccddee)
-        (assert tmp%1#0)
+        let tmp%2#0: bytes = ((extract 2 0) s4#0)
+        let tmp%3#0: bool = (== tmp%2#0 0x00000000aabbccddee)
+        (assert tmp%3#0)
         return 
 
 subroutine tests/approvals/arc4-types.algo.ts::testArrays(n: bytes[8]) -> void:
-    block@0: // L101
+    block@0: // L104
         let result%0#0: bytes = (concat 0x n#0)
         let result%1#0: bytes = (concat result%0#0 n#0)
         let result%2#0: bytes = (concat result%1#0 n#0)
@@ -184,13 +192,13 @@ subroutine tests/approvals/arc4-types.algo.ts::testArrays(n: bytes[8]) -> void:
         return 
 
 subroutine tests/approvals/arc4-types.algo.ts::testByte() -> void:
-    block@0: // L119
+    block@0: // L122
         let tmp%0#0: bool = (== 0x00 0x00)
         (assert tmp%0#0)
         return 
 
 subroutine tests/approvals/arc4-types.algo.ts::testAddress() -> void:
-    block@0: // L125
+    block@0: // L128
         let b#0: bytes[32] = (txn Sender)
         let tmp%0#0: bool = (!= addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ b#0)
         (assert tmp%0#0) // Zero address should not match sender
@@ -203,7 +211,7 @@ subroutine tests/approvals/arc4-types.algo.ts::testAddress() -> void:
         return 
 
 subroutine tests/approvals/arc4-types.algo.ts::testTuple() -> void:
-    block@0: // L134
+    block@0: // L137
         let encoded_tuple_buffer%1#0: bytes = (concat 0x 0x0000000000000022)
         let t#0: bytes[8] = encoded_tuple_buffer%1#0
         let firstItem#0: bytes[8] = (extract3 t#0 0u 8u) // on error: Index access is out of bounds
