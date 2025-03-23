@@ -76,16 +76,11 @@ export async function getWorkspaceDiagnostics(
     const files = prepareFiles(workspaceFolder, documents)
     const logEvents = await compileAndExtractLogs(files)
 
-    const diagnosticsMap = new Map<string, Diagnostic[]>(files.map((file) => [URI.file(file.sourceFile).toString(), []]))
-
-    // Add diagnostics from log events
-    for (const event of logEvents) {
-      const fileUri = URI.file(event.sourceLocation.file).toString()
-      const diagnostic = mapToDiagnostic(event)
-      diagnosticsMap.get(fileUri)!.push(diagnostic)
-    }
-
-    return diagnosticsMap
+    return files.reduce((acc, file) => {
+      const diagnostics = logEvents.filter((e) => e.sourceLocation.file === file.sourceFile).map(mapToDiagnostic)
+      acc.set(URI.file(file.sourceFile).toString(), diagnostics)
+      return acc
+    }, new Map<string, Diagnostic[]>())
   } catch (error) {
     connection.console.error(`Failed to compile: ${JSON.stringify(error)}`)
     return new Map()
