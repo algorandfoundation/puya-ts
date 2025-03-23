@@ -74,19 +74,14 @@ export async function getWorkspaceDiagnostics(
     connection.console.debug(`Parsing ${workspaceFolder}`)
 
     const files = prepareFiles(workspaceFolder, documents)
-
     const logEvents = await compileAndExtractLogs(files)
 
-    // Group diagnostics by file URI
-    const diagnosticsMap = new Map<string, Diagnostic[]>()
+    const diagnosticsMap = new Map<string, Diagnostic[]>(files.map((file) => [URI.file(file.sourceFile).toString(), []]))
 
+    // Add diagnostics from log events
     for (const event of logEvents) {
       const fileUri = URI.file(event.sourceLocation.file).toString()
       const diagnostic = mapToDiagnostic(event)
-
-      if (!diagnosticsMap.has(fileUri)) {
-        diagnosticsMap.set(fileUri, [])
-      }
       diagnosticsMap.get(fileUri)!.push(diagnostic)
     }
 
