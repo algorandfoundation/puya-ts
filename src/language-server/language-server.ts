@@ -44,8 +44,6 @@ export async function startLanguageServer() {
   const documents = new TextDocuments(TextDocument)
   let workspaceFolder: string | undefined
 
-  const trackedDocumentUris = new Set<string>()
-
   connection.onInitialize((params) => {
     // The extension sets the workspaceFolder property
     // therefore, workspaceFolders is an array with one element
@@ -81,29 +79,19 @@ export async function startLanguageServer() {
     }
 
     const workspacePath = URI.parse(workspaceFolder).fsPath
-    const diagnosticsMap = await getWorkspaceDiagnostics(connection, workspacePath, documents)
-
-    for (const docUri of diagnosticsMap.keys()) {
-      trackedDocumentUris.add(docUri)
-    }
-
-    return diagnosticsMap
+    return await getWorkspaceDiagnostics(connection, workspacePath, documents)
   }
 
   async function sendDiagnostics(diagnosticsMap: Map<string, Diagnostic[]>) {
-    // Send diagnostics for all tracked documents
-    // Needs to do this to reset diagnostics for files that don't have issues anymore
-    await Promise.all(
-      Array.from(trackedDocumentUris).map((docUri) =>
-        connection.sendDiagnostics({
-          uri: docUri,
-          diagnostics: diagnosticsMap.get(docUri) ?? [],
-        }),
-      ),
-    )
+    for (const [docUri, diagnostics] of diagnosticsMap.entries()) {
+      await connection.sendDiagnostics({
+        uri: docUri,
+        diagnostics: diagnostics,
+      })
+    }
   }
 
-  documentChangeObservable
+  const documentChangeSubscription = documentChangeObservable
     .pipe(
       debounceTime(200),
       map(buildWorkspaceDiagnosticsMap),
@@ -124,6 +112,10 @@ export async function startLanguageServer() {
     }
 
     return getCodeActions(document, params.context.diagnostics[0])
+  })
+
+  connection.onShutdown(() => {
+    documentChangeSubscription.unsubscribe()
   })
 
   connection.listen()

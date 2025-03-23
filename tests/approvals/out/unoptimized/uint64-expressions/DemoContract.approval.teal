@@ -3,19 +3,143 @@
 
 // tests/approvals/uint64-expressions.algo.ts::DemoContract.approvalProgram() -> uint64:
 main:
+    intcblock 1 0 123 12300
 
 main_block@0:
     // tests/approvals/uint64-expressions.algo.ts:15
-    // test2()
+    // assertMatch(test2(), [123, 12300])
+    pushint 2 // 2
+    dup
+    ==
+    bz main_bool_false@4
+
+main_and_contd@1:
+    // tests/approvals/uint64-expressions.algo.ts:15
+    // assertMatch(test2(), [123, 12300])
     callsub test2
+    pop
+    intc_2 // 123
+    ==
+    bz main_bool_false@4
+
+main_and_contd@2:
+    // tests/approvals/uint64-expressions.algo.ts:15
+    // assertMatch(test2(), [123, 12300])
+    callsub test2
+    bury 1
+    intc_3 // 12300
+    ==
+    bz main_bool_false@4
+
+main_bool_true@3:
+    intc_0 // 1
+
+main_bool_merge@5:
+    // tests/approvals/uint64-expressions.algo.ts:15
+    // assertMatch(test2(), [123, 12300])
+    assert // assert target is match for conditions
     // tests/approvals/uint64-expressions.algo.ts:16
-    // return test().length
+    // assertMatch(test(), [0, 0, 1, 1, 1])
     pushint 5 // 5
+    dup
+    ==
+    bz main_bool_false@12
+
+main_and_contd@6:
+    // tests/approvals/uint64-expressions.algo.ts:16
+    // assertMatch(test(), [0, 0, 1, 1, 1])
+    callsub test
+    popn 4
+    intc_1 // 0
+    ==
+    bz main_bool_false@12
+
+main_and_contd@7:
+    // tests/approvals/uint64-expressions.algo.ts:16
+    // assertMatch(test(), [0, 0, 1, 1, 1])
+    callsub test
+    popn 3
+    bury 1
+    intc_1 // 0
+    ==
+    bz main_bool_false@12
+
+main_and_contd@8:
+    // tests/approvals/uint64-expressions.algo.ts:16
+    // assertMatch(test(), [0, 0, 1, 1, 1])
+    callsub test
+    popn 2
+    cover 2
+    popn 2
+    intc_0 // 1
+    ==
+    bz main_bool_false@12
+
+main_and_contd@9:
+    // tests/approvals/uint64-expressions.algo.ts:16
+    // assertMatch(test(), [0, 0, 1, 1, 1])
+    callsub test
+    pop
+    cover 3
+    popn 3
+    intc_0 // 1
+    ==
+    bz main_bool_false@12
+
+main_and_contd@10:
+    // tests/approvals/uint64-expressions.algo.ts:16
+    // assertMatch(test(), [0, 0, 1, 1, 1])
+    callsub test
+    cover 4
+    popn 4
+    intc_0 // 1
+    ==
+    bz main_bool_false@12
+
+main_bool_true@11:
+    intc_0 // 1
+
+main_bool_merge@13:
+    // tests/approvals/uint64-expressions.algo.ts:16
+    // assertMatch(test(), [0, 0, 1, 1, 1])
+    assert // assert target is match for conditions
+    // tests/approvals/uint64-expressions.algo.ts:17
+    // return true
+    intc_0 // 1
     return
 
+main_bool_false@12:
+    intc_1 // 0
+    b main_bool_merge@13
 
-// tests/approvals/uint64-expressions.algo.ts::test2() -> void:
+main_bool_false@4:
+    intc_1 // 0
+    b main_bool_merge@5
+
+
+// tests/approvals/uint64-expressions.algo.ts::test() -> uint64, uint64, uint64, uint64, uint64:
+test:
+
+test_block@0:
+    // tests/approvals/uint64-expressions.algo.ts:4
+    // return [Uint64(), Uint64(0), Uint64('1'), Uint64(1n), Uint64(true)] as const
+    intc_1 // 0
+    dup
+    intc_0 // 1
+    dupn 2
+    retsub
+
+
+// tests/approvals/uint64-expressions.algo.ts::test2() -> uint64, uint64:
 test2:
 
 test2_block@0:
+    // tests/approvals/uint64-expressions.algo.ts:8
+    // const x = Uint64(123)
+    intc_2 // 123
+    // tests/approvals/uint64-expressions.algo.ts:9
+    // const y = Uint64(x * 100)
+    intc_3 // 12300
+    // tests/approvals/uint64-expressions.algo.ts:10
+    // return [x, y] as const
     retsub

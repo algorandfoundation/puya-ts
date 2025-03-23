@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
-import { Constants } from '../constants'
-import { downloadPuyaBinary } from '../puya/puya-binary'
-import { parseSemVer } from '../puya/semver'
+import { logger, LogLevel } from '../logger'
+import { ConsoleLogSink } from '../logger/sinks/console-log-sink'
+import { resolvePuyaPath } from '../puya/resolve-puya-path'
 
-const version = parseSemVer(Constants.targetedPuyaVersion)
-void downloadPuyaBinary(version)
+logger.configure([new ConsoleLogSink(LogLevel.Debug)])
+
+void resolvePuyaPath()

@@ -211,12 +211,14 @@ export namespace wtypes {
   }
   export class WGroupTransaction extends WType {
     transactionType: TransactionKind | null
+    arc4Name: string
     constructor({ transactionType }: { transactionType?: TransactionKind }) {
       super({
         scalarType: AVMType.uint64,
         name: transactionType === undefined ? 'group_transaction' : `group_transaction_${TransactionKind[transactionType]}`,
       })
       this.transactionType = transactionType ?? null
+      this.arc4Name = transactionType ? TransactionKind[transactionType] : 'txn'
     }
   }
   export class WInnerTransaction extends WType {

@@ -81,10 +81,10 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
     for (const deferredMethod of this._methods) {
       const contractMethod = deferredMethod()
       switch (contractMethod.memberName) {
-        case Constants.approvalProgramMethodName:
+        case Constants.symbolNames.approvalProgramMethodName:
           approvalProgram = contractMethod
           break
-        case Constants.clearStateProgramMethodName:
+        case Constants.symbolNames.clearStateProgramMethodName:
           clearProgram = contractMethod
           break
         default:
@@ -127,7 +127,7 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
     if (this._propertyInitialization.length === 0) return null
     invariant(this._contractPType.baseTypes.length === 1, 'Only single base type supported for now')
     return nodeFactory.contractMethod({
-      memberName: Constants.constructorMethodName,
+      memberName: Constants.symbolNames.constructorMethodName,
       cref: ContractReference.fromPType(this._contractPType),
       args: [],
       arc4MethodConfig: null,

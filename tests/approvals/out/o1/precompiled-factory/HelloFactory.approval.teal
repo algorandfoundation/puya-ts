@@ -87,16 +87,14 @@ test_compile_contract:
     //     appArgs: [methodSelector(Hello.prototype.create), encodeArc4('hello')],
     //     approvalProgram: compiled.approvalProgram,
     //     clearStateProgram: compiled.clearStateProgram,
-    //     globalNumBytes: 1,
+    //     globalNumBytes: compiled.globalBytes,
     //   })
     //   .submit().createdApp
     itxn_begin
-    // tests/approvals/precompiled-factory.algo.ts:15
-    // globalNumBytes: 1,
-    intc_2 // 1
-    itxn_field GlobalNumByteSlice
     // tests/approvals/precompiled-factory.algo.ts:8
     // const compiled = compile(Hello)
+    intc_2 // 1
+    itxn_field GlobalNumByteSlice
     bytec_0 // base64(CoEBQw==)
     itxn_field ClearStateProgramPages
     pushbytes base64(CiACAQAmAQhncmVldGluZzEYQAAEKIAAZzEbQQAjggQEAJIlrgQkN408BKDoGHIE0KKCADYaAI4EADsAMAAlAAIjQzEZFEQxGEQ2GgFXAgCIAERJFRZXBgJMUIAEFR98dUxQsCJDMRmBBBJEMRhEIkMxGYEFEkQxGEQiQzEZFEQxGBRENhoBVwIAiAACIkOKAQAoi/9niYoBASMoZUSAASBQi/9QiQ==)
@@ -113,7 +111,7 @@ test_compile_contract:
     //     appArgs: [methodSelector(Hello.prototype.create), encodeArc4('hello')],
     //     approvalProgram: compiled.approvalProgram,
     //     clearStateProgram: compiled.clearStateProgram,
-    //     globalNumBytes: 1,
+    //     globalNumBytes: compiled.globalBytes,
     //   })
     intc_1 // 6
     itxn_field TypeEnum
@@ -125,7 +123,7 @@ test_compile_contract:
     //     appArgs: [methodSelector(Hello.prototype.create), encodeArc4('hello')],
     //     approvalProgram: compiled.approvalProgram,
     //     clearStateProgram: compiled.clearStateProgram,
-    //     globalNumBytes: 1,
+    //     globalNumBytes: compiled.globalBytes,
     //   })
     //   .submit().createdApp
     itxn_submit
