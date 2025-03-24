@@ -47,4 +47,10 @@ describe('gtxns contract', () => {
       bigIntToUint8Array(appClientGtxnsAlgo.appId, 8),
     ])
   })
+
+  test('oca is enum and can be compared to enum values', async ({ appClientGtxnsAlgo }) => {
+    const callTest3 = await appClientGtxnsAlgo.createTransaction.call({ method: 'test3', args: [] })
+
+    await appClientGtxnsAlgo.send.call({ method: 'test4', args: [callTest3.transactions[0]] })
+  })
 })
