@@ -112,9 +112,13 @@ export async function startLanguageServer() {
     }),
   )
 
-  connection.onShutdown(() => {
+  const shutdownDisposable = connection.onShutdown(() => {
     documentChangeSubscription.unsubscribe()
     disposables.forEach((d) => d.dispose())
+  })
+
+  connection.onExit(() => {
+    shutdownDisposable.dispose()
   })
 
   connection.listen()
