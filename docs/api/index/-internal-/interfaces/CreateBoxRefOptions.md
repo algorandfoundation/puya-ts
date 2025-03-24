@@ -6,7 +6,7 @@
 
 # Interface: CreateBoxRefOptions
 
-Defined in: [packages/algo-ts/src/box.ts:202](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L202)
+Defined in: [packages/algo-ts/src/box.ts:205](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L205)
 
 Options for creating a BoxRef proxy
 
@@ -16,6 +16,6 @@ Options for creating a BoxRef proxy
 
 > **key**: `string` \| [`bytes`](../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/box.ts:206](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L206)
+Defined in: [packages/algo-ts/src/box.ts:209](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L209)
 
 The bytes which make up the key of the box

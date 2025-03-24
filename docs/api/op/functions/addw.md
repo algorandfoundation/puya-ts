@@ -8,7 +8,7 @@
 
 > **addw**(`a`, `b`): readonly \[[`uint64`](../../index/type-aliases/uint64.md), [`uint64`](../../index/type-aliases/uint64.md)\]
 
-Defined in: [packages/algo-ts/src/op.ts:178](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L178)
+Defined in: [packages/algo-ts/src/op.ts:179](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L179)
 
 A plus B as a 128-bit result. X is the carry-bit, Y is the low-order 64 bits.
 

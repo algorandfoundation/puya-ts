@@ -2,7 +2,7 @@
 
 ***
 
-[@algorandfoundation/algorand-typescript](../../../README.md) / [index](../../README.md) / [\<internal\>](../README.md) / ConstructorFor
+[@algorandfoundation/algorand-typescript](../../../README.md) / [arc4](../../README.md) / [\<internal\>](../README.md) / ConstructorFor
 
 # Type Alias: ConstructorFor()\<T, TArgs\>
 
@@ -14,7 +14,7 @@ Defined in: [packages/algo-ts/src/internal/typescript-helpers.ts:5](https://gith
 
 • **T**
 
-• **TArgs** *extends* [`DeliberateAny`](DeliberateAny.md)[] = [`DeliberateAny`](DeliberateAny.md)[]
+• **TArgs** *extends* [`DeliberateAny`](../../../index/-internal-/type-aliases/DeliberateAny.md)[] = [`DeliberateAny`](../../../index/-internal-/type-aliases/DeliberateAny.md)[]
 
 ## Parameters
 

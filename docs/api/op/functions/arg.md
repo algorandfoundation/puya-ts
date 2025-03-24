@@ -8,7 +8,7 @@
 
 > **arg**(`a`): [`bytes`](../../index/type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/op.ts:410](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L410)
+Defined in: [packages/algo-ts/src/op.ts:411](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L411)
 
 Ath LogicSig argument
 

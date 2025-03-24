@@ -8,7 +8,7 @@
 
 > **appOptedIn**(`a`, `b`): `boolean`
 
-Defined in: [packages/algo-ts/src/op.ts:328](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L328)
+Defined in: [packages/algo-ts/src/op.ts:329](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L329)
 
 1 if account A is opted in to application B, else 0
 

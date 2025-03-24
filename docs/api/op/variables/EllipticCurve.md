@@ -8,7 +8,7 @@
 
 > `const` **EllipticCurve**: `object`
 
-Defined in: [packages/algo-ts/src/op.ts:753](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L753)
+Defined in: [packages/algo-ts/src/op.ts:754](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L754)
 
 Elliptic Curve functions
 

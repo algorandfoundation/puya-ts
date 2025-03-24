@@ -33,7 +33,6 @@
 - [AssetInput](type-aliases/AssetInput.md)
 - [BuiltinIteratorReturn](type-aliases/BuiltinIteratorReturn.md)
 - [ComparisonFor](type-aliases/ComparisonFor.md)
-- [ConstructorFor](type-aliases/ConstructorFor.md)
 - [ContractOptions](type-aliases/ContractOptions.md)
 - [DecoratorMetadataObject](type-aliases/DecoratorMetadataObject.md)
 - [DeliberateAny](type-aliases/DeliberateAny.md)

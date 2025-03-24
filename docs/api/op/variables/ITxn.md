@@ -8,7 +8,7 @@
 
 > `const` **ITxn**: `object`
 
-Defined in: [packages/algo-ts/src/op.ts:2268](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L2268)
+Defined in: [packages/algo-ts/src/op.ts:2269](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L2269)
 
 Get values for the last inner transaction
 
@@ -629,14 +629,14 @@ Min AVM version: 5
 
 #### Get Signature
 
-> **get** **onCompletion**(): [`uint64`](../../index/type-aliases/uint64.md)
+> **get** **onCompletion**(): [`OnCompleteAction`](../../index/enumerations/OnCompleteAction.md)
 
 ApplicationCall transaction on completion action
 Min AVM version: 2
 
 ##### Returns
 
-[`uint64`](../../index/type-aliases/uint64.md)
+[`OnCompleteAction`](../../index/enumerations/OnCompleteAction.md)
 
 ### receiver
 
@@ -733,14 +733,14 @@ Min AVM version: 5
 
 #### Get Signature
 
-> **get** **typeEnum**(): [`uint64`](../../index/type-aliases/uint64.md)
+> **get** **typeEnum**(): [`TransactionType`](../../index/enumerations/TransactionType.md)
 
 Transaction type as integer
 Min AVM version: 5
 
 ##### Returns
 
-[`uint64`](../../index/type-aliases/uint64.md)
+[`TransactionType`](../../index/enumerations/TransactionType.md)
 
 ### voteFirst
 

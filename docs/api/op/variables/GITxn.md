@@ -8,7 +8,7 @@
 
 > `const` **GITxn**: `object`
 
-Defined in: [packages/algo-ts/src/op.ts:958](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L958)
+Defined in: [packages/algo-ts/src/op.ts:959](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L959)
 
 Get values for inner transaction in the last group submitted
 
@@ -865,7 +865,7 @@ Min AVM version: 2
 
 #### Returns
 
-[`uint64`](../../index/type-aliases/uint64.md)
+[`OnCompleteAction`](../../index/enumerations/OnCompleteAction.md)
 
 ### receiver()
 
@@ -985,7 +985,7 @@ Min AVM version: 6
 
 #### Returns
 
-[`uint64`](../../index/type-aliases/uint64.md)
+[`TransactionType`](../../index/enumerations/TransactionType.md)
 
 ### voteFirst()
 

@@ -8,7 +8,7 @@
 
 > **sqrt**(`a`): [`uint64`](../../index/type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/op.ts:3430](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3430)
+Defined in: [packages/algo-ts/src/op.ts:3431](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3431)
 
 The largest integer I such that I^2 <= A
 

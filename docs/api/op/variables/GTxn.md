@@ -8,7 +8,7 @@
 
 > `const` **GTxn**: `object`
 
-Defined in: [packages/algo-ts/src/op.ts:1710](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L1710)
+Defined in: [packages/algo-ts/src/op.ts:1711](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L1711)
 
 Get values for transactions in the current group
 
@@ -36,11 +36,11 @@ Min AVM version: 2
 ### amount()
 
 microalgos
-Min AVM version: 1
+Min AVM version: 3
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -74,7 +74,7 @@ Min AVM version: 2
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -108,7 +108,7 @@ Min AVM version: 2
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -138,11 +138,11 @@ Min AVM version: 7
 ### assetAmount()
 
 value in Asset's units
-Min AVM version: 1
+Min AVM version: 3
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -153,11 +153,11 @@ Min AVM version: 1
 ### assetCloseTo()
 
 32 byte address
-Min AVM version: 1
+Min AVM version: 3
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -168,11 +168,11 @@ Min AVM version: 1
 ### assetReceiver()
 
 32 byte address
-Min AVM version: 1
+Min AVM version: 3
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -202,11 +202,11 @@ Min AVM version: 3
 ### assetSender()
 
 32 byte address. Source of assets if Sender is the Asset's Clawback address.
-Min AVM version: 1
+Min AVM version: 3
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -221,7 +221,7 @@ Min AVM version: 2
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -251,11 +251,11 @@ Min AVM version: 7
 ### closeRemainderTo()
 
 32 byte address
-Min AVM version: 1
+Min AVM version: 3
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -270,7 +270,7 @@ Min AVM version: 2
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -285,7 +285,7 @@ Min AVM version: 2
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -300,7 +300,7 @@ Min AVM version: 2
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -315,7 +315,7 @@ Min AVM version: 2
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -330,7 +330,7 @@ Min AVM version: 2
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -345,7 +345,7 @@ Min AVM version: 2
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -360,7 +360,7 @@ Min AVM version: 2
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -375,7 +375,7 @@ Min AVM version: 2
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -390,7 +390,7 @@ Min AVM version: 2
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -405,7 +405,7 @@ Min AVM version: 2
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -420,7 +420,7 @@ Min AVM version: 2
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -435,7 +435,7 @@ Min AVM version: 2
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -450,7 +450,7 @@ Min AVM version: 5
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -465,7 +465,7 @@ Min AVM version: 5
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -480,7 +480,7 @@ Min AVM version: 4
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -491,11 +491,11 @@ Min AVM version: 4
 ### fee()
 
 microalgos
-Min AVM version: 1
+Min AVM version: 3
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -506,11 +506,11 @@ Min AVM version: 1
 ### firstValid()
 
 round number
-Min AVM version: 1
+Min AVM version: 3
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -525,7 +525,7 @@ Min AVM version: 7
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -540,7 +540,7 @@ Min AVM version: 2
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -555,7 +555,7 @@ Min AVM version: 2
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -570,7 +570,7 @@ Min AVM version: 2
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -585,7 +585,7 @@ Min AVM version: 3
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -600,7 +600,7 @@ Min AVM version: 3
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -611,11 +611,11 @@ Min AVM version: 3
 ### groupIndex()
 
 Position of this transaction within an atomic transaction group. A stand-alone transaction is implicitly element 0 in a group of 1
-Min AVM version: 1
+Min AVM version: 3
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -630,7 +630,7 @@ Min AVM version: 6
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -641,11 +641,11 @@ Min AVM version: 6
 ### lastValid()
 
 round number
-Min AVM version: 1
+Min AVM version: 3
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -656,11 +656,11 @@ Min AVM version: 1
 ### lease()
 
 32 byte lease value
-Min AVM version: 1
+Min AVM version: 3
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -675,7 +675,7 @@ Min AVM version: 3
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -690,7 +690,7 @@ Min AVM version: 3
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -724,7 +724,7 @@ Min AVM version: 5
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -735,11 +735,11 @@ Min AVM version: 5
 ### note()
 
 Any data up to 1024 bytes
-Min AVM version: 1
+Min AVM version: 3
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -754,7 +754,7 @@ Min AVM version: 2
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -769,7 +769,7 @@ Min AVM version: 2
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -784,7 +784,7 @@ Min AVM version: 3
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -799,7 +799,7 @@ Min AVM version: 7
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -814,7 +814,7 @@ Min AVM version: 3
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -829,7 +829,7 @@ Min AVM version: 7
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -844,7 +844,7 @@ Min AVM version: 5
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -859,22 +859,22 @@ Min AVM version: 2
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
 #### Returns
 
-[`uint64`](../../index/type-aliases/uint64.md)
+[`OnCompleteAction`](../../index/enumerations/OnCompleteAction.md)
 
 ### receiver()
 
 32 byte address
-Min AVM version: 1
+Min AVM version: 3
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -889,7 +889,7 @@ Min AVM version: 2
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -900,11 +900,11 @@ Min AVM version: 2
 ### selectionPk()
 
 32 byte address
-Min AVM version: 1
+Min AVM version: 3
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -915,11 +915,11 @@ Min AVM version: 1
 ### sender()
 
 32 byte address
-Min AVM version: 1
+Min AVM version: 3
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -934,7 +934,7 @@ Min AVM version: 6
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -945,11 +945,11 @@ Min AVM version: 6
 ### txId()
 
 The computed ID for this transaction. 32 bytes.
-Min AVM version: 1
+Min AVM version: 3
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -960,11 +960,11 @@ Min AVM version: 1
 ### type()
 
 Transaction type as bytes
-Min AVM version: 1
+Min AVM version: 3
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -975,26 +975,26 @@ Min AVM version: 1
 ### typeEnum()
 
 Transaction type as integer
-Min AVM version: 1
+Min AVM version: 3
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
 #### Returns
 
-[`uint64`](../../index/type-aliases/uint64.md)
+[`TransactionType`](../../index/enumerations/TransactionType.md)
 
 ### voteFirst()
 
 The first round that the participation key is valid.
-Min AVM version: 1
+Min AVM version: 3
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -1005,11 +1005,11 @@ Min AVM version: 1
 ### voteKeyDilution()
 
 Dilution for the 2-level participation key
-Min AVM version: 1
+Min AVM version: 3
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -1020,11 +1020,11 @@ Min AVM version: 1
 ### voteLast()
 
 The last round that the participation key is valid.
-Min AVM version: 1
+Min AVM version: 3
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -1035,11 +1035,11 @@ Min AVM version: 1
 ### votePk()
 
 32 byte address
-Min AVM version: 1
+Min AVM version: 3
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 
@@ -1050,11 +1050,11 @@ Min AVM version: 1
 ### xferAsset()
 
 Asset ID
-Min AVM version: 1
+Min AVM version: 3
 
 #### Parameters
 
-##### t
+##### a
 
 [`uint64`](../../index/type-aliases/uint64.md)
 

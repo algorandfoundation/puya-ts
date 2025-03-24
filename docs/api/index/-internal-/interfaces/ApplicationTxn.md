@@ -290,7 +290,7 @@ Number of logs
 
 ### onCompletion
 
-> `readonly` **onCompletion**: [`OnCompleteActionStr`](../../../arc4/type-aliases/OnCompleteActionStr.md)
+> `readonly` **onCompletion**: [`OnCompleteAction`](../../enumerations/OnCompleteAction.md)
 
 Defined in: [packages/algo-ts/src/transactions.ts:291](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L291)
 
