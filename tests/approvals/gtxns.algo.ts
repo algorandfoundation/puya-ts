@@ -1,4 +1,14 @@
-import { assert, Contract, Global, gtxn, log, TransactionType, urange } from '@algorandfoundation/algorand-typescript'
+import {
+  assert,
+  Contract,
+  Global,
+  gtxn,
+  log,
+  OnCompleteAction,
+  TransactionType,
+  Txn,
+  urange,
+} from '@algorandfoundation/algorand-typescript'
 
 export class GtxnsAlgo extends Contract {
   test() {
@@ -29,5 +39,15 @@ export class GtxnsAlgo extends Contract {
           break
       }
     }
+  }
+
+  test3() {
+    assert(Txn.onCompletion === OnCompleteAction.NoOp, 'OCA must be NoOp')
+    assert(Txn.typeEnum === TransactionType.ApplicationCall)
+  }
+
+  test4(other: gtxn.ApplicationTxn) {
+    assert(other.onCompletion === OnCompleteAction.NoOp, 'Other txn must be NoOp')
+    assert(other.type === TransactionType.ApplicationCall)
   }
 }

@@ -1587,7 +1587,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
             argNames: ['t'],
             immediateArgs: [{ name: 't', ptypes: [ptypes.uint64PType] }, 'TypeEnum'],
             stackArgs: [],
-            returnType: ptypes.uint64PType,
+            returnType: ptypes.transactionTypeType.memberType,
           },
         ],
       },
@@ -1695,7 +1695,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
             argNames: ['t'],
             immediateArgs: [{ name: 't', ptypes: [ptypes.uint64PType] }, 'OnCompletion'],
             stackArgs: [],
-            returnType: ptypes.uint64PType,
+            returnType: ptypes.onCompleteActionType.memberType,
           },
         ],
       },
@@ -2560,7 +2560,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
             argNames: ['a'],
             immediateArgs: ['TypeEnum'],
             stackArgs: [{ name: 'a', ptypes: [ptypes.uint64PType] }],
-            returnType: ptypes.uint64PType,
+            returnType: ptypes.transactionTypeType.memberType,
           },
         ],
       },
@@ -2668,7 +2668,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
             argNames: ['a'],
             immediateArgs: ['OnCompletion'],
             stackArgs: [{ name: 'a', ptypes: [ptypes.uint64PType] }],
-            returnType: ptypes.uint64PType,
+            returnType: ptypes.onCompleteActionType.memberType,
           },
         ],
       },
@@ -3293,7 +3293,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
       typeEnum: {
         type: 'op-mapping',
         op: 'itxn',
-        signatures: [{ argNames: [], immediateArgs: ['TypeEnum'], stackArgs: [], returnType: ptypes.uint64PType }],
+        signatures: [{ argNames: [], immediateArgs: ['TypeEnum'], stackArgs: [], returnType: ptypes.transactionTypeType.memberType }],
       },
       xferAsset: {
         type: 'op-mapping',
@@ -3338,7 +3338,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
       onCompletion: {
         type: 'op-mapping',
         op: 'itxn',
-        signatures: [{ argNames: [], immediateArgs: ['OnCompletion'], stackArgs: [], returnType: ptypes.uint64PType }],
+        signatures: [{ argNames: [], immediateArgs: ['OnCompletion'], stackArgs: [], returnType: ptypes.onCompleteActionType.memberType }],
       },
       applicationArgs: {
         type: 'op-mapping',
@@ -4578,7 +4578,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
       typeEnum: {
         type: 'op-mapping',
         op: 'txn',
-        signatures: [{ argNames: [], immediateArgs: ['TypeEnum'], stackArgs: [], returnType: ptypes.uint64PType }],
+        signatures: [{ argNames: [], immediateArgs: ['TypeEnum'], stackArgs: [], returnType: ptypes.transactionTypeType.memberType }],
       },
       xferAsset: {
         type: 'op-mapping',
@@ -4623,7 +4623,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
       onCompletion: {
         type: 'op-mapping',
         op: 'txn',
-        signatures: [{ argNames: [], immediateArgs: ['OnCompletion'], stackArgs: [], returnType: ptypes.uint64PType }],
+        signatures: [{ argNames: [], immediateArgs: ['OnCompletion'], stackArgs: [], returnType: ptypes.onCompleteActionType.memberType }],
       },
       applicationArgs: {
         type: 'op-mapping',
