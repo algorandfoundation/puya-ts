@@ -8,7 +8,7 @@
 
 > `const` **AcctParams**: `object`
 
-Defined in: [packages/algo-ts/src/op.ts:51](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L51)
+Defined in: [packages/algo-ts/src/op.ts:52](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L52)
 
 ## Type declaration
 

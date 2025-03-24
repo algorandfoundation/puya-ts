@@ -8,7 +8,7 @@
 
 > `const` **Block**: `object`
 
-Defined in: [packages/algo-ts/src/op.ts:560](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L560)
+Defined in: [packages/algo-ts/src/op.ts:561](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L561)
 
 ## Type declaration
 

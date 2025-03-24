@@ -8,7 +8,7 @@
 
 > **btoi**(`a`): [`uint64`](../../index/type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/op.ts:707](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L707)
+Defined in: [packages/algo-ts/src/op.ts:708](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L708)
 
 converts big-endian byte array A to uint64. Fails if len(A) > 8. Padded by leading 0s if len(A) < 8.
 `btoi` fails if the input is longer than 8 bytes.

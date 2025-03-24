@@ -8,7 +8,7 @@
 
 > **Box**\<`TValue`\>: `object`
 
-Defined in: [packages/algo-ts/src/box.ts:175](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L175)
+Defined in: [packages/algo-ts/src/box.ts:178](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L178)
 
 A Box proxy
 

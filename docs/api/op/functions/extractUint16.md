@@ -8,7 +8,7 @@
 
 > **extractUint16**(`a`, `b`): [`uint64`](../../index/type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/op.ts:895](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L895)
+Defined in: [packages/algo-ts/src/op.ts:896](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L896)
 
 A uint16 formed from a range of big-endian bytes from A starting at B up to but not including B+2. If B+2 is larger than the array length, the program fails
 

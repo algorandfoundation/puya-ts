@@ -8,7 +8,7 @@
 
 > `const` **Box**: `object`
 
-Defined in: [packages/algo-ts/src/op.ts:605](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L605)
+Defined in: [packages/algo-ts/src/op.ts:606](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L606)
 
 Get or modify box state
 

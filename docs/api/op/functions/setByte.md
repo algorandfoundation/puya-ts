@@ -8,7 +8,7 @@
 
 > **setByte**(`a`, `b`, `c`): [`bytes`](../../index/type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/op.ts:3376](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3376)
+Defined in: [packages/algo-ts/src/op.ts:3377](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3377)
 
 Copy of A with the Bth byte set to small integer (between 0..255) C. If B is greater than or equal to the array length, the program fails
 

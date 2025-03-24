@@ -8,7 +8,7 @@
 
 > `const` **AppGlobal**: `object`
 
-Defined in: [packages/algo-ts/src/op.ts:185](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L185)
+Defined in: [packages/algo-ts/src/op.ts:186](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L186)
 
 Get or modify Global app state
 

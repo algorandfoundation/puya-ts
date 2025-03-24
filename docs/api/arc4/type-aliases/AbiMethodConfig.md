@@ -8,7 +8,7 @@
 
 > **AbiMethodConfig**\<`TContract`\>: `object`
 
-Defined in: [packages/algo-ts/src/arc4/index.ts:89](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L89)
+Defined in: [packages/algo-ts/src/arc4/index.ts:58](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L58)
 
 Configuration options for an abi method
 
@@ -22,7 +22,7 @@ the type of the contract this method is a part of
 
 ### allowActions?
 
-> `optional` **allowActions**: [`OnCompleteActionStr`](OnCompleteActionStr.md) \| [`OnCompleteActionStr`](OnCompleteActionStr.md)[]
+> `optional` **allowActions**: [`OnCompleteActionStr`](../../index/type-aliases/OnCompleteActionStr.md) \| [`OnCompleteActionStr`](../../index/type-aliases/OnCompleteActionStr.md)[]
 
 Which on complete action(s) are allowed when invoking this method.
 

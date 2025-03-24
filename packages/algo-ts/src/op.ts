@@ -2,7 +2,8 @@
 import { NoImplementation } from './internal/errors'
 import { bytes, uint64, biguint } from './primitives'
 import { Account, Application, Asset } from './reference'
-
+import { OnCompleteAction } from './on-complete-action'
+import { TransactionType } from './transactions'
 export enum Base64 {
   URLEncoding = 'URLEncoding',
   StdEncoding = 'StdEncoding',
@@ -1088,7 +1089,7 @@ export const GITxn = {
    * Transaction type as integer
    * Min AVM version: 6
    */
-  typeEnum(t: uint64): uint64 {
+  typeEnum(t: uint64): TransactionType {
     throw new NoImplementation()
   },
 
@@ -1160,7 +1161,7 @@ export const GITxn = {
    * ApplicationCall transaction on completion action
    * Min AVM version: 2
    */
-  onCompletion(t: uint64): uint64 {
+  onCompletion(t: uint64): OnCompleteAction {
     throw new NoImplementation()
   },
 
@@ -1840,7 +1841,7 @@ export const GTxn = {
    * Transaction type as integer
    * Min AVM version: 3
    */
-  typeEnum(a: uint64): uint64 {
+  typeEnum(a: uint64): TransactionType {
     throw new NoImplementation()
   },
 
@@ -1912,7 +1913,7 @@ export const GTxn = {
    * ApplicationCall transaction on completion action
    * Min AVM version: 2
    */
-  onCompletion(a: uint64): uint64 {
+  onCompletion(a: uint64): OnCompleteAction {
     throw new NoImplementation()
   },
 
@@ -2398,7 +2399,7 @@ export const ITxn = {
    * Transaction type as integer
    * Min AVM version: 5
    */
-  get typeEnum(): uint64 {
+  get typeEnum(): TransactionType {
     throw new NoImplementation()
   },
 
@@ -2470,7 +2471,7 @@ export const ITxn = {
    * ApplicationCall transaction on completion action
    * Min AVM version: 2
    */
-  get onCompletion(): uint64 {
+  get onCompletion(): OnCompleteAction {
     throw new NoImplementation()
   },
 
@@ -3585,7 +3586,7 @@ export const Txn = {
    * Transaction type as integer
    * Min AVM version: 1
    */
-  get typeEnum(): uint64 {
+  get typeEnum(): TransactionType {
     throw new NoImplementation()
   },
 
@@ -3657,7 +3658,7 @@ export const Txn = {
    * ApplicationCall transaction on completion action
    * Min AVM version: 2
    */
-  get onCompletion(): uint64 {
+  get onCompletion(): OnCompleteAction {
     throw new NoImplementation()
   },
 

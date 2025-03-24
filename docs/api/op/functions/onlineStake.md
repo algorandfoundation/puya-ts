@@ -8,7 +8,7 @@
 
 > **onlineStake**(): [`uint64`](../../index/type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/op.ts:3357](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3357)
+Defined in: [packages/algo-ts/src/op.ts:3358](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3358)
 
 the total online stake in the agreement round
 

@@ -8,7 +8,7 @@
 
 > **ed25519verifyBare**(`a`, `b`, `c`): `boolean`
 
-Defined in: [packages/algo-ts/src/op.ts:868](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L868)
+Defined in: [packages/algo-ts/src/op.ts:869](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L869)
 
 for (data A, signature B, pubkey C) verify the signature of the data against the pubkey => {0 or 1}
 

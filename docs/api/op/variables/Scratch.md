@@ -8,7 +8,7 @@
 
 > `const` **Scratch**: `object`
 
-Defined in: [packages/algo-ts/src/op.ts:3292](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3292)
+Defined in: [packages/algo-ts/src/op.ts:3293](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3293)
 
 Load or store scratch values
 

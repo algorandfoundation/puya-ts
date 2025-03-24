@@ -1,4 +1,4 @@
-import { OnCompleteActionStr } from './on-complete-action'
+import { OnCompleteAction } from './on-complete-action'
 import { bytes, uint64 } from './primitives'
 import { Account, Application, Asset } from './reference'
 
@@ -288,7 +288,7 @@ export interface ApplicationTxn extends TransactionBase {
   /**
    * ApplicationCall transaction on completion action
    */
-  readonly onCompletion: OnCompleteActionStr
+  readonly onCompletion: OnCompleteAction
 
   /**
    * Number of ApplicationArgs

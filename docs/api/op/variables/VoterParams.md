@@ -8,7 +8,7 @@
 
 > `const` **VoterParams**: `object`
 
-Defined in: [packages/algo-ts/src/op.ts:4001](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L4001)
+Defined in: [packages/algo-ts/src/op.ts:4002](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L4002)
 
 ## Type declaration
 

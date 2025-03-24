@@ -6,7 +6,7 @@
 
 # Class: Contract
 
-Defined in: [packages/algo-ts/src/arc4/index.ts:11](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L11)
+Defined in: [packages/algo-ts/src/arc4/index.ts:14](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L14)
 
 The base type for all ARC4 contracts in Algorand TypeScript
 
@@ -34,7 +34,7 @@ The base type for all ARC4 contracts in Algorand TypeScript
 
 > **approvalProgram**(): `boolean`
 
-Defined in: [packages/algo-ts/src/arc4/index.ts:16](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L16)
+Defined in: [packages/algo-ts/src/arc4/index.ts:19](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L19)
 
 Default implementation of an ARC4 approval program, routes transactions to ABI or bare methods based on application
 args and on completion actions

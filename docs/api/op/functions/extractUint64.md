@@ -8,7 +8,7 @@
 
 > **extractUint64**(`a`, `b`): [`uint64`](../../index/type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/op.ts:913](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L913)
+Defined in: [packages/algo-ts/src/op.ts:914](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L914)
 
 A uint64 formed from a range of big-endian bytes from A starting at B up to but not including B+8. If B+8 is larger than the array length, the program fails
 
