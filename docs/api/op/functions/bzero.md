@@ -8,7 +8,7 @@
 
 > **bzero**(`a`): [`bytes`](../../index/type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/op.ts:716](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L716)
+Defined in: [packages/algo-ts/src/op.ts:717](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L717)
 
 zero filled byte-array of length A
 

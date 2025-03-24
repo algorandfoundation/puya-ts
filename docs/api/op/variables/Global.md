@@ -8,7 +8,7 @@
 
 > `const` **Global**: `object`
 
-Defined in: [packages/algo-ts/src/op.ts:1521](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L1521)
+Defined in: [packages/algo-ts/src/op.ts:1522](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L1522)
 
 ## Type declaration
 

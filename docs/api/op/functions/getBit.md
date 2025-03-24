@@ -8,7 +8,7 @@
 
 > **getBit**(`a`, `b`): [`uint64`](../../index/type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/op.ts:942](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L942)
+Defined in: [packages/algo-ts/src/op.ts:943](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L943)
 
 Bth bit of (byte-array or integer) A. If B is greater than or equal to the bit length of the value (8*byte length), the program fails
 see explanation of bit ordering in setbit

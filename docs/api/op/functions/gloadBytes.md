@@ -8,7 +8,7 @@
 
 > **gloadBytes**(`a`, `b`): [`bytes`](../../index/type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/op.ts:1509](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L1509)
+Defined in: [packages/algo-ts/src/op.ts:1510](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L1510)
 
 Bth scratch space value of the Ath transaction in the current group
 

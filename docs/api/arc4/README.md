@@ -10,10 +10,6 @@
 
 - [\<internal\>](-internal-/README.md)
 
-## Enumerations
-
-- [OnCompleteAction](enumerations/OnCompleteAction.md)
-
 ## Classes
 
 - [Address](classes/Address.md)
@@ -39,11 +35,18 @@
 ## Type Aliases
 
 - [AbiMethodConfig](type-aliases/AbiMethodConfig.md)
+- [BareCreateApplicationCallFields](type-aliases/BareCreateApplicationCallFields.md)
 - [BareMethodConfig](type-aliases/BareMethodConfig.md)
 - [BitSize](type-aliases/BitSize.md)
+- [ContractProxy](type-aliases/ContractProxy.md)
+- [ContractProxyMethod](type-aliases/ContractProxyMethod.md)
 - [CreateOptions](type-aliases/CreateOptions.md)
 - [DefaultArgument](type-aliases/DefaultArgument.md)
-- [OnCompleteActionStr](type-aliases/OnCompleteActionStr.md)
+- [GtxnToItxnFields](type-aliases/GtxnToItxnFields.md)
+- [TypedApplicationArg](type-aliases/TypedApplicationArg.md)
+- [TypedApplicationArgs](type-aliases/TypedApplicationArgs.md)
+- [TypedApplicationCallFields](type-aliases/TypedApplicationCallFields.md)
+- [TypedApplicationCallResponse](type-aliases/TypedApplicationCallResponse.md)
 
 ## Variables
 
@@ -51,9 +54,11 @@
 
 ## Functions
 
+- [abiCall](functions/abiCall.md)
 - [abimethod](functions/abimethod.md)
 - [arc4EncodedLength](functions/arc4EncodedLength.md)
 - [baremethod](functions/baremethod.md)
+- [compileArc4](functions/compileArc4.md)
 - [decodeArc4](functions/decodeArc4.md)
 - [encodeArc4](functions/encodeArc4.md)
 - [interpretAsArc4](functions/interpretAsArc4.md)

@@ -26,7 +26,7 @@ An object containing the configuration options
 
 ### Type Parameters
 
-• **T** *extends* [`ConstructorFor`](../-internal-/type-aliases/ConstructorFor.md)\<[`BaseContract`](../classes/BaseContract.md)\>
+• **T** *extends* [`ConstructorFor`](../../arc4/-internal-/type-aliases/ConstructorFor.md)\<[`BaseContract`](../classes/BaseContract.md)\>
 
 ### Parameters
 

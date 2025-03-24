@@ -8,7 +8,7 @@
 
 > **shl**(`a`, `b`): [`uint64`](../../index/type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/op.ts:3412](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3412)
+Defined in: [packages/algo-ts/src/op.ts:3413](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3413)
 
 A times 2^B, modulo 2^64
 

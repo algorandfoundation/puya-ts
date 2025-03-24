@@ -8,7 +8,7 @@
 
 > **encodeArc4**\<`T`\>(`value`): [`bytes`](../../index/type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:579](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L579)
+Defined in: [packages/algo-ts/src/arc4/index.ts:170](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L170)
 
 Encode the provided Algorand TypeScript value as ARC4 bytes
 

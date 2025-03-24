@@ -8,7 +8,7 @@
 
 > **baremethod**\<`TContract`\>(`config`?): \<`TArgs`, `TReturn`\>(`target`, `ctx`) => (`this`, ...`args`) => `TReturn`
 
-Defined in: [packages/algo-ts/src/arc4/index.ts:153](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L153)
+Defined in: [packages/algo-ts/src/arc4/index.ts:122](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L122)
 
 Declares the decorated method as a baremethod that can only be called with no transaction args
 

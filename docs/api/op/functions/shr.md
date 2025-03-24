@@ -8,7 +8,7 @@
 
 > **shr**(`a`, `b`): [`uint64`](../../index/type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/op.ts:3421](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3421)
+Defined in: [packages/algo-ts/src/op.ts:3422](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3422)
 
 A divided by 2^B
 

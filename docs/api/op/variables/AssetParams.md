@@ -8,7 +8,7 @@
 
 > `const` **AssetParams**: `object`
 
-Defined in: [packages/algo-ts/src/op.ts:431](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L431)
+Defined in: [packages/algo-ts/src/op.ts:432](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L432)
 
 ## Type declaration
 

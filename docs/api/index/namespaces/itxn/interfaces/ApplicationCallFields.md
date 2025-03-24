@@ -182,7 +182,7 @@ Any data up to 1024 bytes
 
 ### onCompletion?
 
-> `optional` **onCompletion**: [`uint64`](../../../type-aliases/uint64.md) \| [`OnCompleteAction`](../../../../arc4/enumerations/OnCompleteAction.md)
+> `optional` **onCompletion**: [`uint64`](../../../type-aliases/uint64.md) \| [`OnCompleteAction`](../../../enumerations/OnCompleteAction.md)
 
 Defined in: [packages/algo-ts/src/itxn.ts:161](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L161)
 
