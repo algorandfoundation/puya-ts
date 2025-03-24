@@ -80,12 +80,14 @@ export async function startLanguageServer() {
   }
 
   async function sendDiagnostics(diagnosticsMap: Map<string, Diagnostic[]>) {
-    for (const [docUri, diagnostics] of diagnosticsMap.entries()) {
-      await connection.sendDiagnostics({
-        uri: docUri,
-        diagnostics: diagnostics,
-      })
-    }
+    await Promise.all(
+      diagnosticsMap.entries().map(([docUri, diagnostics]) =>
+        connection.sendDiagnostics({
+          uri: docUri,
+          diagnostics: diagnostics,
+        }),
+      ),
+    )
   }
 
   const documentChangeSubscription = documentChangeObservable
