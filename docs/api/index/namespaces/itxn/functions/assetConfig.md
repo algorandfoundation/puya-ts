@@ -6,9 +6,9 @@
 
 # Function: assetConfig()
 
-> **assetConfig**(`fields`): [`AssetConfigItxnParams`](../interfaces/AssetConfigItxnParams.md)
+> **assetConfig**(`fields`): [`AssetConfigItxnParams`](../classes/AssetConfigItxnParams.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:227](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L227)
+Defined in: [packages/algo-ts/src/itxn.ts:1018](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L1018)
 
 ## Parameters
 
@@ -18,4 +18,4 @@ Defined in: [packages/algo-ts/src/itxn.ts:227](https://github.com/algorandfounda
 
 ## Returns
 
-[`AssetConfigItxnParams`](../interfaces/AssetConfigItxnParams.md)
+[`AssetConfigItxnParams`](../classes/AssetConfigItxnParams.md)

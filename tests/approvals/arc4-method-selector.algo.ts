@@ -25,7 +25,7 @@ class ContractTwo extends Contract {
     return methodSelector(ContractOne.prototype.someMethod) === methodSelector('someMethod()uint64')
   }
 
-  referenceTypes(pay: gtxn.PaymentTxn, asset: Asset, account: Account, app: Application, appTxn: gtxn.ApplicationTxn) {}
+  referenceTypes(pay: gtxn.PaymentTxn, asset: Asset, account: Account, app: Application, appTxn: gtxn.ApplicationCallTxn) {}
 }
 
 const someConst = Uint64(123)

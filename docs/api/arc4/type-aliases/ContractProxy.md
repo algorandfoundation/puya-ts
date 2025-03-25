@@ -35,7 +35,7 @@ Specify values for transaction fields which should override the default values.
 
 #### Returns
 
-[`ApplicationInnerTxn`](../../index/namespaces/itxn/interfaces/ApplicationInnerTxn.md)
+[`ApplicationCallInnerTxn`](../../index/namespaces/itxn/interfaces/ApplicationCallInnerTxn.md)
 
 ## Type Parameters
 
