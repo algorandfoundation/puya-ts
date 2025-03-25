@@ -24,7 +24,7 @@ A fixed bit size, fixed decimal unsigned value
 
 ### new UFixedNxM()
 
-> **new UFixedNxM**\<`N`, `M`\>(`v`): [`UFixedNxM`](UFixedNxM.md)\<`N`, `M`\>
+> **new UFixedNxM**\<`N`, `M`\>(`v`?): [`UFixedNxM`](UFixedNxM.md)\<`N`, `M`\>
 
 Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:194](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L194)
 
@@ -32,7 +32,7 @@ Create a new UFixedNxM value
 
 #### Parameters
 
-##### v
+##### v?
 
 `` `${number}.${number}` ``
 

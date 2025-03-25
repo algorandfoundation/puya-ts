@@ -6,7 +6,7 @@
 
 # Class: Address
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:438](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L438)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:443](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L443)
 
 A 32 byte Algorand Address
 
@@ -24,7 +24,7 @@ A 32 byte Algorand Address
 
 > **new Address**(`value`?): [`Address`](Address.md)
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:446](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L446)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:451](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L451)
 
 Create a new Address instance
 
@@ -92,7 +92,7 @@ Returns the current length of this array
 
 > **get** **native**(): [`Account`](../../index/type-aliases/Account.md)
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:453](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L453)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:458](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L458)
 
 Returns an Account instance for this Address
 

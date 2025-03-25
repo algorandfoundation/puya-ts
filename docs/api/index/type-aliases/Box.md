@@ -8,7 +8,7 @@
 
 > **Box**\<`TValue`\>: `object`
 
-Defined in: [packages/algo-ts/src/box.ts:178](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L178)
+Defined in: [packages/algo-ts/src/box.ts:187](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L187)
 
 A Box proxy
 
@@ -45,6 +45,28 @@ Returns the length of the box, or error if the box does not exist
 Get or set the value stored in the box
 
 Get will error if the box does not exist
+
+### create()
+
+Create the box for this proxy with a bzero value.
+ - If options.size is specified, the box will be created with that length
+ - Otherwise the box will be created with the minimum size for the given data type
+
+No op if the box already exists
+
+#### Parameters
+
+##### options?
+
+###### size?
+
+[`uint64`](uint64.md)
+
+#### Returns
+
+`boolean`
+
+True if the box was created, false if it already existed
 
 ### delete()
 

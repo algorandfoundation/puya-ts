@@ -61,6 +61,10 @@ export abstract class ARC4EncodedType extends PType {
   abstract readonly fixedBitSize: bigint | null
   abstract readonly minBitSize: bigint
 
+  get minByteSize() {
+    return ARC4EncodedType.bitsToBytes(this.minBitSize)
+  }
+
   /**
    * Calculate fixed the number of bits required to store a sequence of ARC4 types using ARC4's bit-packing technique for consecutive booleans.
    *
