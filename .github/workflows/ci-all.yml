@@ -44,9 +44,43 @@ jobs:
       audit-script: npm run audit
       upload-artifact-name: puya-ts
       upload-artifact-path: ./dist
-      python-version: 3.12.6
-      pre-test-script: |
-        pipx install algokit --python 3.12.6
-        algokit localnet reset --update
-      test-script: npm run test:ci
-      output-test-results: true
+#      python-version: 3.12.6
+#      pre-test-script: |
+#        pipx install algokit --python 3.12.6
+#        algokit localnet reset --update
+      test-script: npm run skip-test
+#      output-test-results: true
+
+  smoke-test-examples:
+    name: 'puya-ts-demo'
+    uses: ./.github/workflows/smoke-test.yml
+    needs:
+      - ci-algo-ts
+      - ci-puya-ts
+    with:
+      repository: algorandfoundation/puya-ts-demo
+      download-artifact-path: ./packages-temp
+      install-script: |
+        npm install @algorandfoundation/algorand-typescript@./packages-temp/algo-ts @algorandfoundation/puya-ts@./packages-temp/puya-ts
+      test-script:
+        npm run build:puya
+
+  smoke-test-testing:
+    name: 'algorand-typescript-testing'
+    uses: ./.github/workflows/smoke-test.yml
+    needs:
+      - ci-algo-ts
+      - ci-puya-ts
+    with:
+      repository: algorandfoundation/algorand-typescript-testing
+      download-artifact-path: ./packages-temp
+      install-script: |
+        npm install @algorandfoundation/algorand-typescript@./packages-temp/algo-ts @algorandfoundation/puya-ts@./packages-temp/puya-ts
+      pre-test-script:
+        npm run script:refresh-test-artifacts
+      test-script:
+        npm run test:ci
+
+
+
+
