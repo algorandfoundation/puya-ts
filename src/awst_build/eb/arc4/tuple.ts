@@ -3,6 +3,7 @@ import type { Expression } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { logger } from '../../../logger'
 import { codeInvariant, invariant } from '../../../util'
+import { ptypeToArc4EncodedType, zeroValue } from '../../arc4-util'
 import type { PType } from '../../ptypes'
 import { numberPType, TuplePType, uint64PType } from '../../ptypes'
 import { ARC4EncodedType, Arc4TupleClass, ARC4TupleType } from '../../ptypes/arc4-types'
@@ -17,14 +18,23 @@ export class Arc4TupleClassBuilder extends ClassBuilder {
   readonly ptype = Arc4TupleClass
 
   newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
-    const { args: tupleItems } = parseFunctionArgs({
+    const {
+      args: tupleItems,
+      ptypes: [tupleType],
+    } = parseFunctionArgs({
       args,
       typeArgs,
       genericTypeArgs: 1,
       funcName: this.typeDescription,
       callLocation: sourceLocation,
-      argSpec: (a) => [a.required(), ...args.slice(1).map(() => a.required())],
+      argSpec: (a) => args.map(() => a.required()),
     })
+    codeInvariant(tupleType instanceof TuplePType, 'Generic type must be a native tuple type', sourceLocation)
+
+    if (args.length === 0) {
+      const arc4Type = ptypeToArc4EncodedType(tupleType, sourceLocation)
+      return new Arc4TupleExpressionBuilder(zeroValue(arc4Type, sourceLocation), arc4Type)
+    }
 
     const expressions: Expression[] = []
     const types: ARC4EncodedType[] = []
@@ -36,9 +46,6 @@ export class Arc4TupleClassBuilder extends ClassBuilder {
         logger.error(item.sourceLocation, 'ARC4 tuple items must be ARC4 encoded types')
       }
     }
-    const tupleType = new TuplePType({
-      items: types,
-    })
     const arc4TupleType = new ARC4TupleType({
       types,
       sourceLocation,

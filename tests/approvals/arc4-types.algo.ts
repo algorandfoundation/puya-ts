@@ -2,6 +2,7 @@ import type { biguint, bytes, uint64 } from '@algorandfoundation/algorand-typesc
 import { arc4, assert, BaseContract, BigUint, Bytes, Txn } from '@algorandfoundation/algorand-typescript'
 import {
   Address,
+  Bool,
   Byte,
   DynamicArray,
   DynamicBytes,
@@ -15,7 +16,9 @@ import {
   UintN128,
   UintN32,
   UintN64,
+  type UintN8,
 } from '@algorandfoundation/algorand-typescript/arc4'
+import { bzero } from '@algorandfoundation/algorand-typescript/op'
 
 function testUFixed() {
   const a = new UFixedNxM<32, 4>('1.244')
@@ -160,8 +163,25 @@ export class Arc4TypesTestContract extends BaseContract {
     testUFixed()
     testDynamicBytes(Bytes('hmmmmmmmmm'))
     testStaticBytes()
+    testZeroValues()
     const result = new arc4.DynamicArray<arc4.UintN<64>>()
     assert(result.length === 0)
     return true
   }
+}
+
+function testZeroValues() {
+  assert(new StaticArray<UintN8, 4>().bytes === bzero(4))
+  assert(new StaticArray<Bool, 4>().bytes === bzero(1))
+  assert(new StaticArray<Bool, 9>().bytes === bzero(2))
+  assert(new StaticArray<Str, 4>().bytes === bzero(4 * 2))
+  assert(new Tuple<[UintN8, Bool, Bool, Str]>().bytes === bzero(4))
+  assert(new DynamicArray<UintN8>().bytes === bzero(2))
+  assert(new Str().bytes === bzero(2))
+  assert(new DynamicBytes().bytes === bzero(2))
+  assert(new StaticBytes<5>().bytes === bzero(5))
+  assert(new Address().bytes === bzero(32))
+  assert(new UFixedNxM<32, 4>().bytes === bzero(32 / 8))
+  assert(new Bool().bytes === bzero(1))
+  assert(new UintN32().bytes === bzero(32 / 8))
 }

@@ -9,6 +9,7 @@ import { wrapInCodeError } from '../../../errors'
 import { logger } from '../../../logger'
 
 import { base32ToUint8Array, bigIntToUint8Array, codeInvariant, invariant } from '../../../util'
+import { zeroValue } from '../../arc4-util'
 import type { PType } from '../../ptypes'
 import { accountPType, bytesPType, IterableIteratorGeneric, NumericLiteralPType, stringPType, TuplePType, uint64PType } from '../../ptypes'
 import {
@@ -92,20 +93,20 @@ export class StaticArrayClassBuilder extends ClassBuilder {
       `Array size type parameter of ${this.typeDescription} must be a literal number. Inferred type is ${arraySize.name}`,
       sourceLocation,
     )
-    const initialItemExprs = initialItems.map((i) => requireExpressionOfType(i, elementType))
     const ptype = new StaticArrayType({ elementType, arraySize: arraySize.literalValue, sourceLocation })
+    if (initialItems.length === 0) {
+      return new StaticArrayExpressionBuilder(zeroValue(ptype, sourceLocation), ptype)
+    }
 
-    // TODO: We should support passing no args in which case the array should be initialized with 'default' values where
-    // default is specific to the element type.
     codeInvariant(
-      BigInt(initialItemExprs.length) === arraySize.literalValue,
+      BigInt(initialItems.length) === arraySize.literalValue,
       `Static array of size ${arraySize.literalValue} must be initialized with ${arraySize.literalValue} values`,
       sourceLocation,
     )
 
     return new StaticArrayExpressionBuilder(
       nodeFactory.newArray({
-        values: initialItemExprs,
+        values: initialItems.map((i) => requireExpressionOfType(i, elementType)),
         wtype: ptype.wtype,
         sourceLocation,
       }),

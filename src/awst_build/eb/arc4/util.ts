@@ -226,14 +226,14 @@ export class Arc4EncodedLengthFunctionBuilder extends FunctionBuilder {
     const arc4Type = ptypeToArc4EncodedType(typeToEncode, sourceLocation)
 
     codeInvariant(
-      arc4Type.encodedBitSize !== null,
+      arc4Type.fixedBitSize !== null,
       `Target type must encode to a fixed size. ${typeToEncode} encodes with a variable length`,
       sourceLocation,
     )
 
     return instanceEb(
       nodeFactory.uInt64Constant({
-        value: ARC4EncodedType.bitsToBytes(arc4Type.encodedBitSize),
+        value: ARC4EncodedType.bitsToBytes(arc4Type.fixedBitSize),
         sourceLocation,
       }),
       uint64PType,
