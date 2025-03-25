@@ -6,7 +6,7 @@
 
 # Class: DynamicBytes
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:498](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L498)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:503](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L503)
 
 A variable length sequence of bytes prefixed with its length expressed as a 2 byte uint
 
@@ -24,7 +24,7 @@ A variable length sequence of bytes prefixed with its length expressed as a 2 by
 
 > **new DynamicBytes**(`value`?): [`DynamicBytes`](DynamicBytes.md)
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:506](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L506)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:511](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L511)
 
 Create a new DynamicBytes instance
 
@@ -92,7 +92,7 @@ Returns the current length of this array
 
 > **get** **native**(): [`bytes`](../../index/type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:513](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L513)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:518](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L518)
 
 Get the native bytes value (excludes the length prefix)
 
@@ -151,7 +151,7 @@ The index of the item to retrieve
 
 > **concat**(`other`): [`DynamicBytes`](DynamicBytes.md)
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:521](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L521)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:526](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L526)
 
 Returns a dynamic bytes object containing all bytes from _this_ and _other_
 

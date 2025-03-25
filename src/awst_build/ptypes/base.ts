@@ -39,6 +39,10 @@ export abstract class PType {
     return ptypesAreEqual(this, other)
   }
 
+  equalsOneOf(...others: PType[]): boolean {
+    return others.some((o) => ptypesAreEqual(this, o))
+  }
+
   static equals(other: PType): boolean {
     return other instanceof this
   }

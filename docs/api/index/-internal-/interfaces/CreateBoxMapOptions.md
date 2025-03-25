@@ -6,7 +6,7 @@
 
 # Interface: CreateBoxMapOptions
 
-Defined in: [packages/algo-ts/src/box.ts:185](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L185)
+Defined in: [packages/algo-ts/src/box.ts:194](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L194)
 
 Options for creating a BoxMap proxy
 
@@ -16,6 +16,6 @@ Options for creating a BoxMap proxy
 
 > **keyPrefix**: `string` \| [`bytes`](../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/box.ts:189](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L189)
+Defined in: [packages/algo-ts/src/box.ts:198](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L198)
 
 The bytes which prefix each key of the box map

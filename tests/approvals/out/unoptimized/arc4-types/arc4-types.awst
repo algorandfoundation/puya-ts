@@ -91,6 +91,7 @@ contract Arc4TypesTestContract
     tests/approvals/arc4-types.algo.ts::testUFixed()
     tests/approvals/arc4-types.algo.ts::testDynamicBytes("hmmmmmmmmm")
     tests/approvals/arc4-types.algo.ts::testStaticBytes()
+    tests/approvals/arc4-types.algo.ts::testZeroValues()
     result: arc4.dynamic_array<arc4.uint64> = new arc4.dynamic_array<arc4.uint64>()
     assert(result.length == 0)
     return True
@@ -106,4 +107,20 @@ contract Arc4TypesTestContract
     return <tuple>[0, 255, Address("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ")]
   }
   
+}
+subroutine testZeroValues(): void
+{
+  assert(reinterpret_cast<bytes>(bzero(4)) == bzero(4))
+  assert(reinterpret_cast<bytes>(bzero(1)) == bzero(1))
+  assert(reinterpret_cast<bytes>(bzero(2)) == bzero(2))
+  assert(reinterpret_cast<bytes>(bzero(8)) == bzero(8))
+  assert(reinterpret_cast<bytes>(bzero(4)) == bzero(4))
+  assert(reinterpret_cast<bytes>(new arc4.dynamic_array<arc4.uint8>()) == bzero(2))
+  assert(reinterpret_cast<bytes>("") == bzero(2))
+  assert(0x0000 == bzero(2))
+  assert(0x0000000000 == bzero(5))
+  assert(reinterpret_cast<bytes>(Address("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ")) == bzero(32))
+  assert(reinterpret_cast<bytes>(0m) == bzero(4))
+  assert(reinterpret_cast<bytes>(False) == bzero(1))
+  assert(reinterpret_cast<bytes>(0) == bzero(4))
 }

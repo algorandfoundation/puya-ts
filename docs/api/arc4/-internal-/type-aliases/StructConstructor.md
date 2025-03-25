@@ -8,7 +8,7 @@
 
 > **StructConstructor**: \<`T`\>(`initial`) => [`StructBase`](../classes/StructBase.md)\<`T`\> & `T`
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:481](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L481)
+Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:486](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L486)
 
 Type alias for the Struct constructor function
 

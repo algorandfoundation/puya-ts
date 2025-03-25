@@ -8,7 +8,7 @@
 
 > **BoxRef**: `object`
 
-Defined in: [packages/algo-ts/src/box.ts:217](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L217)
+Defined in: [packages/algo-ts/src/box.ts:226](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L226)
 
 A BoxRef proxy
 
