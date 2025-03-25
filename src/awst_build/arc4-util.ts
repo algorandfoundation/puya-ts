@@ -1,5 +1,5 @@
 import { nodeFactory } from '../awst/node-factory'
-import type { ARC4ABIMethodConfig } from '../awst/nodes'
+import type { ARC4ABIMethodConfig, Expression } from '../awst/nodes'
 import type { SourceLocation } from '../awst/source-location'
 import { wtypes } from '../awst/wtypes'
 import { CodeError } from '../errors'
@@ -112,4 +112,19 @@ export function ptypeToArc4EncodedType(ptype: PType, sourceLocation: SourceLocat
     })
 
   throw new CodeError(`${ptype} cannot be encoded to an ARC4 type`, { sourceLocation })
+}
+
+export function zeroValue(ptype: ARC4EncodedType, sourceLocation: SourceLocation): Expression {
+  return nodeFactory.intrinsicCall({
+    opCode: 'bzero',
+    immediates: [],
+    stackArgs: [
+      nodeFactory.uInt64Constant({
+        value: ARC4EncodedType.bitsToBytes(ptype.minBitSize),
+        sourceLocation,
+      }),
+    ],
+    sourceLocation,
+    wtype: ptype.wtype,
+  })
 }

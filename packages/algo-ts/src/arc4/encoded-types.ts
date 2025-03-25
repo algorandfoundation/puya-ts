@@ -191,7 +191,7 @@ export class UFixedNxM<N extends BitSize, M extends number> extends ARC4Encoded 
    * Create a new UFixedNxM value
    * @param v A string representing the integer and fractional portion of the number
    */
-  constructor(v: `${number}.${number}`) {
+  constructor(v?: `${number}.${number}`) {
     super()
   }
 
@@ -402,10 +402,15 @@ export class Tuple<TTuple extends [ARC4Encoded, ...ARC4Encoded[]]> extends ARC4E
   [TypeProperty]?: `arc4.Tuple<${ExpandTupleType<TTuple>}>`
 
   /**
+   * Create a new Tuple with the default zero values for items
+   */
+  constructor()
+  /**
    * Create a new Tuple with the specified items
    * @param items The tuple items
    */
-  constructor(...items: TTuple) {
+  constructor(...items: TTuple)
+  constructor(...items: TTuple | []) {
     super()
   }
 

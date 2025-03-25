@@ -58,22 +58,38 @@ export const UintN256Class = new LibClassType({
 export abstract class ARC4EncodedType extends PType {
   abstract readonly wtype: wtypes.ARC4Type
   abstract readonly nativeType: PType | undefined
-  abstract readonly encodedBitSize: bigint | null
+  abstract readonly fixedBitSize: bigint | null
+  abstract readonly minBitSize: bigint
 
   /**
-   * Calculate the number of bits required to store a sequence of ARC4 types using ARC4's bit-packing technique for consecutive booleans.
+   * Calculate fixed the number of bits required to store a sequence of ARC4 types using ARC4's bit-packing technique for consecutive booleans.
    *
    * Returns `null` if the sequence contains a dynamically sized type
    * @param types The sequence of types being encoded
    */
   protected static calculateFixedBitSize(types: ARC4EncodedType[]): bigint | null {
     return types.reduce((acc: bigint | null, cur) => {
-      if (acc === null || cur.encodedBitSize === null) return null
+      if (acc === null || cur.fixedBitSize === null) return null
 
-      if (cur.encodedBitSize === 1n) {
-        return acc + cur.encodedBitSize
+      if (cur.fixedBitSize === 1n) {
+        return acc + cur.fixedBitSize
       } else {
-        return this.roundBitsUpToNearestByte(acc) + this.roundBitsUpToNearestByte(cur.encodedBitSize)
+        return this.roundBitsUpToNearestByte(acc) + this.roundBitsUpToNearestByte(cur.fixedBitSize)
+      }
+    }, 0n)
+  }
+  /**
+   * Calculate minimum the number of bits required to store a sequence of ARC4 types using ARC4's bit-packing technique for consecutive booleans.
+   *
+   * Dynamically sized types are assumed to be of zero length
+   * @param types The sequence of types being encoded
+   */
+  protected static calculateMinBitSize(types: ARC4EncodedType[]): bigint {
+    return types.reduce((acc: bigint, cur) => {
+      if (cur.minBitSize === 1n) {
+        return acc + cur.minBitSize
+      } else {
+        return this.roundBitsUpToNearestByte(acc) + this.roundBitsUpToNearestByte(cur.minBitSize)
       }
     }, 0n)
   }
@@ -105,23 +121,27 @@ export class ARC4InstanceType extends ARC4EncodedType {
   readonly module = Constants.moduleNames.algoTs.arc4.encodedTypes
   readonly singleton = false
   readonly nativeType: PType
-  readonly encodedBitSize: bigint | null
+  readonly fixedBitSize: bigint | null
+  readonly minBitSize: bigint
   constructor({
     wtype,
     nativeType,
     name,
-    encodedBitSize,
+    fixedBitSize,
+    minBitSize,
   }: {
     wtype: wtypes.ARC4Type
     name: string
     nativeType: PType
-    encodedBitSize: bigint | null
+    fixedBitSize: bigint | null
+    minBitSize: bigint
   }) {
     super()
     this.wtype = wtype
     this.name = name
     this.nativeType = nativeType
-    this.encodedBitSize = encodedBitSize
+    this.fixedBitSize = fixedBitSize
+    this.minBitSize = minBitSize
   }
 }
 
@@ -139,14 +159,16 @@ export const arc4BooleanType = new ARC4InstanceType({
   name: 'Bool',
   wtype: wtypes.arc4BooleanWType,
   nativeType: boolPType,
-  encodedBitSize: 1n,
+  fixedBitSize: 1n,
+  minBitSize: 1n,
 })
 
 export const arc4StringType = new ARC4InstanceType({
   name: 'Str',
   wtype: wtypes.arc4StringAliasWType,
   nativeType: stringPType,
-  encodedBitSize: null,
+  fixedBitSize: null,
+  minBitSize: 16n,
 })
 
 export class ARC4StructClass extends PType {
@@ -190,7 +212,8 @@ export class ARC4StructType extends ARC4EncodedType {
   readonly fields: Record<string, ARC4EncodedType>
   readonly sourceLocation: SourceLocation | undefined
   readonly frozen: boolean
-  readonly encodedBitSize: bigint | null
+  readonly fixedBitSize: bigint | null
+  readonly minBitSize: bigint
   constructor({
     name,
     frozen,
@@ -213,7 +236,8 @@ export class ARC4StructType extends ARC4EncodedType {
     this.fields = fields
     this.description = description
     this.sourceLocation = sourceLocation
-    this.encodedBitSize = ARC4EncodedType.calculateFixedBitSize(Object.values(fields))
+    this.fixedBitSize = ARC4EncodedType.calculateFixedBitSize(Object.values(fields))
+    this.minBitSize = ARC4EncodedType.calculateMinBitSize(Object.values(fields))
   }
 
   get nativeType(): ObjectPType {
@@ -270,7 +294,8 @@ export class ARC4TupleType extends ARC4EncodedType {
   readonly singleton = false
   readonly items: ARC4EncodedType[]
   readonly sourceLocation: SourceLocation | undefined
-  readonly encodedBitSize: bigint | null
+  readonly fixedBitSize: bigint | null
+  readonly minBitSize: bigint
   readonly nativeType: TuplePType
 
   constructor({ types, sourceLocation }: { types: ARC4EncodedType[]; sourceLocation?: SourceLocation }) {
@@ -278,7 +303,8 @@ export class ARC4TupleType extends ARC4EncodedType {
     this.items = types
     this.sourceLocation = sourceLocation
     this.nativeType = new TuplePType({ items: this.items })
-    this.encodedBitSize = ARC4EncodedType.calculateFixedBitSize(types)
+    this.fixedBitSize = ARC4EncodedType.calculateFixedBitSize(types)
+    this.minBitSize = ARC4EncodedType.calculateMinBitSize(types)
   }
 
   get wtype(): wtypes.ARC4Tuple {
@@ -309,7 +335,11 @@ export class UintNType extends ARC4EncodedType {
   readonly singleton = false
   readonly wtype: wtypes.ARC4UIntN
 
-  get encodedBitSize() {
+  get fixedBitSize() {
+    return this.n
+  }
+
+  get minBitSize() {
     return this.n
   }
 
@@ -357,7 +387,11 @@ export class UFixedNxMType extends ARC4EncodedType {
   readonly singleton = false
   readonly wtype: wtypes.ARC4UFixedNxM
 
-  get encodedBitSize() {
+  get fixedBitSize() {
+    return this.n
+  }
+
+  get minBitSize() {
     return this.n
   }
 
@@ -405,7 +439,8 @@ export class DynamicArrayType extends ARC4ArrayType {
   readonly sourceLocation: SourceLocation | undefined
   readonly nativeType: PType | undefined = undefined
   readonly wtype: wtypes.ARC4DynamicArray
-  readonly encodedBitSize = null
+  readonly fixedBitSize = null
+  readonly minBitSize = 16n
 
   constructor({
     elementType,
@@ -466,7 +501,8 @@ export class StaticArrayType extends ARC4ArrayType {
   readonly sourceLocation: SourceLocation | undefined
   readonly wtype: wtypes.ARC4StaticArray
   readonly nativeType: PType | undefined
-  readonly encodedBitSize: bigint | null
+  readonly fixedBitSize: bigint | null
+  readonly minBitSize: bigint
   constructor({
     elementType,
     arraySize,
@@ -499,7 +535,8 @@ export class StaticArrayType extends ARC4ArrayType {
         immutable: this.immutable,
         nativeType: nativeType?.wtype,
       })
-    this.encodedBitSize = ARC4EncodedType.calculateFixedBitSize(new Array(Number(arraySize)).fill(elementType))
+    this.fixedBitSize = ARC4EncodedType.calculateFixedBitSize(new Array(Number(arraySize)).fill(elementType))
+    this.minBitSize = ARC4EncodedType.calculateMinBitSize(new Array(Number(arraySize)).fill(elementType))
   }
 }
 export const arc4AddressAlias = new StaticArrayType({
