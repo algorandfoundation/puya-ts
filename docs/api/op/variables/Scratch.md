@@ -30,7 +30,7 @@ Ath scratch space value.  All scratch spaces are 0 at program start.
 
 #### See
 
-Native TEAL opcode: [`loads`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#loads)
+Native TEAL opcode: [`loads`](https://dev.algorand.co/reference/algorand-teal/opcodes#loads)
 Min AVM version: 5
 
 ### loadUint64()
@@ -49,7 +49,7 @@ Ath scratch space value.  All scratch spaces are 0 at program start.
 
 #### See
 
-Native TEAL opcode: [`loads`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#loads)
+Native TEAL opcode: [`loads`](https://dev.algorand.co/reference/algorand-teal/opcodes#loads)
 Min AVM version: 5
 
 ### store()
@@ -72,5 +72,5 @@ store B to the Ath scratch space
 
 #### See
 
-Native TEAL opcode: [`stores`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#stores)
+Native TEAL opcode: [`stores`](https://dev.algorand.co/reference/algorand-teal/opcodes#stores)
 Min AVM version: 5

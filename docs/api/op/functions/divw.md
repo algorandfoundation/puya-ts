@@ -33,5 +33,5 @@ The notation A,B indicates that A and B are interpreted as a uint128 value, with
 
 ## See
 
-Native TEAL opcode: [`divw`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#divw)
+Native TEAL opcode: [`divw`](https://dev.algorand.co/reference/algorand-teal/opcodes#divw)
 Min AVM version: 6

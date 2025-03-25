@@ -28,5 +28,5 @@ Bth byte of A, as an integer. If B is greater than or equal to the array length,
 
 ## See
 
-Native TEAL opcode: [`getbyte`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#getbyte)
+Native TEAL opcode: [`getbyte`](https://dev.algorand.co/reference/algorand-teal/opcodes#getbyte)
 Min AVM version: 3

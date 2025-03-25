@@ -24,5 +24,5 @@ yields length of byte value A
 
 ## See
 
-Native TEAL opcode: [`len`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#len)
+Native TEAL opcode: [`len`](https://dev.algorand.co/reference/algorand-teal/opcodes#len)
 Min AVM version: 1

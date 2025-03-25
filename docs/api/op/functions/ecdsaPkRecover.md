@@ -41,5 +41,5 @@ readonly \[[`bytes`](../../index/type-aliases/bytes.md), [`bytes`](../../index/t
 
 ## See
 
-Native TEAL opcode: [`ecdsa_pk_recover`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#ecdsa_pk_recover)
+Native TEAL opcode: [`ecdsa_pk_recover`](https://dev.algorand.co/reference/algorand-teal/opcodes#ecdsa_pk_recover)
 Min AVM version: 5

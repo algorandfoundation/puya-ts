@@ -30,5 +30,5 @@ decode A which was base64-encoded using _encoding_ E. Fail if A is not base64 en
 
 ## See
 
-Native TEAL opcode: [`base64_decode`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#base64_decode)
+Native TEAL opcode: [`base64_decode`](https://dev.algorand.co/reference/algorand-teal/opcodes#base64_decode)
 Min AVM version: 7

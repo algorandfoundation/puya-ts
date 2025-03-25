@@ -30,5 +30,5 @@ Defined in: [packages/algo-ts/src/op.ts:329](https://github.com/algorandfoundati
 
 ## See
 
-Native TEAL opcode: [`app_opted_in`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_opted_in)
+Native TEAL opcode: [`app_opted_in`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_opted_in)
 Min AVM version: 2

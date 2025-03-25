@@ -33,5 +33,5 @@ Copy of A with the bytes starting at B replaced by the bytes of C. Fails if B+le
 
 ## See
 
-Native TEAL opcode: [`replace3`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#replace3)
+Native TEAL opcode: [`replace3`](https://dev.algorand.co/reference/algorand-teal/opcodes#replace3)
 Min AVM version: 7

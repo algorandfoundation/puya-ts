@@ -25,5 +25,5 @@ converts big-endian byte array A to uint64. Fails if len(A) > 8. Padded by leadi
 
 ## See
 
-Native TEAL opcode: [`btoi`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#btoi)
+Native TEAL opcode: [`btoi`](https://dev.algorand.co/reference/algorand-teal/opcodes#btoi)
 Min AVM version: 1

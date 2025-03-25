@@ -46,7 +46,7 @@ Does _not_ check if A and B are in the main prime-order subgroup.
 
 #### See
 
-Native TEAL opcode: [`ec_add`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#ec_add)
+Native TEAL opcode: [`ec_add`](https://dev.algorand.co/reference/algorand-teal/opcodes#ec_add)
 Min AVM version: 10
 
 ### mapTo()
@@ -71,7 +71,7 @@ G1 element inputs are base field elements and G2 element inputs are quadratic fi
 
 #### See
 
-Native TEAL opcode: [`ec_map_to`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#ec_map_to)
+Native TEAL opcode: [`ec_map_to`](https://dev.algorand.co/reference/algorand-teal/opcodes#ec_map_to)
 Min AVM version: 10
 
 ### pairingCheck()
@@ -99,7 +99,7 @@ A and B are concatenated points, encoded and checked as described in `ec_add`. A
 
 #### See
 
-Native TEAL opcode: [`ec_pairing_check`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#ec_pairing_check)
+Native TEAL opcode: [`ec_pairing_check`](https://dev.algorand.co/reference/algorand-teal/opcodes#ec_pairing_check)
 Min AVM version: 10
 
 ### scalarMul()
@@ -127,7 +127,7 @@ A is a curve point encoded and checked as described in `ec_add`. Scalar B is int
 
 #### See
 
-Native TEAL opcode: [`ec_scalar_mul`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#ec_scalar_mul)
+Native TEAL opcode: [`ec_scalar_mul`](https://dev.algorand.co/reference/algorand-teal/opcodes#ec_scalar_mul)
 Min AVM version: 10
 
 ### scalarMulMulti()
@@ -156,7 +156,7 @@ The name `ec_multi_scalar_mul` was chosen to reflect common usage, but a more co
 
 #### See
 
-Native TEAL opcode: [`ec_multi_scalar_mul`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#ec_multi_scalar_mul)
+Native TEAL opcode: [`ec_multi_scalar_mul`](https://dev.algorand.co/reference/algorand-teal/opcodes#ec_multi_scalar_mul)
 Min AVM version: 10
 
 ### subgroupCheck()
@@ -179,5 +179,5 @@ Min AVM version: 10
 
 #### See
 
-Native TEAL opcode: [`ec_subgroup_check`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#ec_subgroup_check)
+Native TEAL opcode: [`ec_subgroup_check`](https://dev.algorand.co/reference/algorand-teal/opcodes#ec_subgroup_check)
 Min AVM version: 10

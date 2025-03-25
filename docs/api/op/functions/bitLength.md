@@ -25,5 +25,5 @@ bitlen interprets arrays as big-endian integers, unlike setbit/getbit
 
 ## See
 
-Native TEAL opcode: [`bitlen`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#bitlen)
+Native TEAL opcode: [`bitlen`](https://dev.algorand.co/reference/algorand-teal/opcodes#bitlen)
 Min AVM version: 4

@@ -30,7 +30,7 @@ delete key A from the global state of the current application
 
 #### See
 
-Native TEAL opcode: [`app_global_del`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_global_del)
+Native TEAL opcode: [`app_global_del`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_global_del)
 Min AVM version: 2
 
 ### getBytes()
@@ -51,7 +51,7 @@ value. The value is zero (of type uint64) if the key does not exist.
 
 #### See
 
-Native TEAL opcode: [`app_global_get`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_global_get)
+Native TEAL opcode: [`app_global_get`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_global_get)
 Min AVM version: 2
 
 ### getExBytes()
@@ -76,7 +76,7 @@ did_exist flag (top of the stack, 1 if the application and key existed and 0 oth
 
 #### See
 
-Native TEAL opcode: [`app_global_get_ex`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_global_get_ex)
+Native TEAL opcode: [`app_global_get_ex`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_global_get_ex)
 Min AVM version: 2
 
 ### getExUint64()
@@ -101,7 +101,7 @@ did_exist flag (top of the stack, 1 if the application and key existed and 0 oth
 
 #### See
 
-Native TEAL opcode: [`app_global_get_ex`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_global_get_ex)
+Native TEAL opcode: [`app_global_get_ex`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_global_get_ex)
 Min AVM version: 2
 
 ### getUint64()
@@ -122,7 +122,7 @@ value. The value is zero (of type uint64) if the key does not exist.
 
 #### See
 
-Native TEAL opcode: [`app_global_get`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_global_get)
+Native TEAL opcode: [`app_global_get`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_global_get)
 Min AVM version: 2
 
 ### put()
@@ -145,5 +145,5 @@ write B to key A in the global state of the current application
 
 #### See
 
-Native TEAL opcode: [`app_global_put`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_global_put)
+Native TEAL opcode: [`app_global_put`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_global_put)
 Min AVM version: 2

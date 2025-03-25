@@ -24,5 +24,5 @@ Keccak256 hash of value A, yields [32]byte
 
 ## See
 
-Native TEAL opcode: [`keccak256`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#keccak256)
+Native TEAL opcode: [`keccak256`](https://dev.algorand.co/reference/algorand-teal/opcodes#keccak256)
 Min AVM version: 1

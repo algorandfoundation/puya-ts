@@ -173,7 +173,7 @@ export const AcctParams = {
 
 /**
  * A plus B as a 128-bit result. X is the carry-bit, Y is the low-order 64 bits.
- * @see Native TEAL opcode: [`addw`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#addw)
+ * @see Native TEAL opcode: [`addw`](https://dev.algorand.co/reference/algorand-teal/opcodes#addw)
  * Min AVM version: 2
  */
 export function addw(a: uint64, b: uint64): readonly [uint64, uint64] {
@@ -188,7 +188,7 @@ export const AppGlobal = {
    * delete key A from the global state of the current application
    * @param state key.
    * Deleting a key which is already absent has no effect on the application global state. (In particular, it does _not_ cause the program to fail.)
-   * @see Native TEAL opcode: [`app_global_del`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_global_del)
+   * @see Native TEAL opcode: [`app_global_del`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_global_del)
    * Min AVM version: 2
    */
   delete(a: bytes): void {
@@ -199,7 +199,7 @@ export const AppGlobal = {
    * global state of the key A in the current application
    * @param state key.
    *  * @return value. The value is zero (of type uint64) if the key does not exist.
-   * @see Native TEAL opcode: [`app_global_get`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_global_get)
+   * @see Native TEAL opcode: [`app_global_get`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_global_get)
    * Min AVM version: 2
    */
   getBytes(a: bytes): bytes {
@@ -210,7 +210,7 @@ export const AppGlobal = {
    * global state of the key A in the current application
    * @param state key.
    *  * @return value. The value is zero (of type uint64) if the key does not exist.
-   * @see Native TEAL opcode: [`app_global_get`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_global_get)
+   * @see Native TEAL opcode: [`app_global_get`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_global_get)
    * Min AVM version: 2
    */
   getUint64(a: bytes): uint64 {
@@ -221,7 +221,7 @@ export const AppGlobal = {
    * X is the global state of application A, key B. Y is 1 if key existed, else 0
    * @param Txn.ForeignApps offset (or, since v4, an _available_ application id), state key.
    *  * @return did_exist flag (top of the stack, 1 if the application and key existed and 0 otherwise), value. The value is zero (of type uint64) if the key does not exist.
-   * @see Native TEAL opcode: [`app_global_get_ex`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_global_get_ex)
+   * @see Native TEAL opcode: [`app_global_get_ex`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_global_get_ex)
    * Min AVM version: 2
    */
   getExBytes(a: Application | uint64, b: bytes): readonly [bytes, boolean] {
@@ -232,7 +232,7 @@ export const AppGlobal = {
    * X is the global state of application A, key B. Y is 1 if key existed, else 0
    * @param Txn.ForeignApps offset (or, since v4, an _available_ application id), state key.
    *  * @return did_exist flag (top of the stack, 1 if the application and key existed and 0 otherwise), value. The value is zero (of type uint64) if the key does not exist.
-   * @see Native TEAL opcode: [`app_global_get_ex`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_global_get_ex)
+   * @see Native TEAL opcode: [`app_global_get_ex`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_global_get_ex)
    * Min AVM version: 2
    */
   getExUint64(a: Application | uint64, b: bytes): readonly [uint64, boolean] {
@@ -241,7 +241,7 @@ export const AppGlobal = {
 
   /**
    * write B to key A in the global state of the current application
-   * @see Native TEAL opcode: [`app_global_put`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_global_put)
+   * @see Native TEAL opcode: [`app_global_put`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_global_put)
    * Min AVM version: 2
    */
   put(a: bytes, b: uint64 | bytes): void {
@@ -257,7 +257,7 @@ export const AppLocal = {
    * delete key B from account A's local state of the current application
    * @param Txn.Accounts offset (or, since v4, an _available_ account address), state key.
    * Deleting a key which is already absent has no effect on the application local state. (In particular, it does _not_ cause the program to fail.)
-   * @see Native TEAL opcode: [`app_local_del`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_local_del)
+   * @see Native TEAL opcode: [`app_local_del`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_local_del)
    * Min AVM version: 2
    */
   delete(a: Account | uint64, b: bytes): void {
@@ -268,7 +268,7 @@ export const AppLocal = {
    * local state of the key B in the current application in account A
    * @param Txn.Accounts offset (or, since v4, an _available_ account address), state key.
    *  * @return value. The value is zero (of type uint64) if the key does not exist.
-   * @see Native TEAL opcode: [`app_local_get`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_local_get)
+   * @see Native TEAL opcode: [`app_local_get`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_local_get)
    * Min AVM version: 2
    */
   getBytes(a: Account | uint64, b: bytes): bytes {
@@ -279,7 +279,7 @@ export const AppLocal = {
    * local state of the key B in the current application in account A
    * @param Txn.Accounts offset (or, since v4, an _available_ account address), state key.
    *  * @return value. The value is zero (of type uint64) if the key does not exist.
-   * @see Native TEAL opcode: [`app_local_get`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_local_get)
+   * @see Native TEAL opcode: [`app_local_get`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_local_get)
    * Min AVM version: 2
    */
   getUint64(a: Account | uint64, b: bytes): uint64 {
@@ -290,7 +290,7 @@ export const AppLocal = {
    * X is the local state of application B, key C in account A. Y is 1 if key existed, else 0
    * @param Txn.Accounts offset (or, since v4, an _available_ account address), _available_ application id (or, since v4, a Txn.ForeignApps offset), state key.
    *  * @return did_exist flag (top of the stack, 1 if the application and key existed and 0 otherwise), value. The value is zero (of type uint64) if the key does not exist.
-   * @see Native TEAL opcode: [`app_local_get_ex`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_local_get_ex)
+   * @see Native TEAL opcode: [`app_local_get_ex`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_local_get_ex)
    * Min AVM version: 2
    */
   getExBytes(a: Account | uint64, b: Application | uint64, c: bytes): readonly [bytes, boolean] {
@@ -301,7 +301,7 @@ export const AppLocal = {
    * X is the local state of application B, key C in account A. Y is 1 if key existed, else 0
    * @param Txn.Accounts offset (or, since v4, an _available_ account address), _available_ application id (or, since v4, a Txn.ForeignApps offset), state key.
    *  * @return did_exist flag (top of the stack, 1 if the application and key existed and 0 otherwise), value. The value is zero (of type uint64) if the key does not exist.
-   * @see Native TEAL opcode: [`app_local_get_ex`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_local_get_ex)
+   * @see Native TEAL opcode: [`app_local_get_ex`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_local_get_ex)
    * Min AVM version: 2
    */
   getExUint64(a: Account | uint64, b: Application | uint64, c: bytes): readonly [uint64, boolean] {
@@ -311,7 +311,7 @@ export const AppLocal = {
   /**
    * write C to key B in account A's local state of the current application
    * @param Txn.Accounts offset (or, since v4, an _available_ account address), state key, value.
-   * @see Native TEAL opcode: [`app_local_put`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_local_put)
+   * @see Native TEAL opcode: [`app_local_put`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_local_put)
    * Min AVM version: 2
    */
   put(a: Account | uint64, b: bytes, c: uint64 | bytes): void {
@@ -323,7 +323,7 @@ export const AppLocal = {
  * 1 if account A is opted in to application B, else 0
  * @param Txn.Accounts offset (or, since v4, an _available_ account address), _available_ application id (or, since v4, a Txn.ForeignApps offset).
  *  * @return 1 if opted in and 0 otherwise.
- * @see Native TEAL opcode: [`app_opted_in`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_opted_in)
+ * @see Native TEAL opcode: [`app_opted_in`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_opted_in)
  * Min AVM version: 2
  */
 export function appOptedIn(a: Account | uint64, b: Application | uint64): boolean {
@@ -405,7 +405,7 @@ export const AppParams = {
 
 /**
  * Ath LogicSig argument
- * @see Native TEAL opcode: [`args`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#args)
+ * @see Native TEAL opcode: [`args`](https://dev.algorand.co/reference/algorand-teal/opcodes#args)
  * Min AVM version: 5
  */
 export function arg(a: uint64): bytes {
@@ -531,7 +531,7 @@ export const AssetParams = {
  * balance for account A, in microalgos. The balance is observed after the effects of previous transactions in the group, and after the fee for the current transaction is deducted. Changes caused by inner transactions are observable immediately following `itxn_submit`
  * @param Txn.Accounts offset (or, since v4, an _available_ account address), _available_ application id (or, since v4, a Txn.ForeignApps offset).
  *  * @return value.
- * @see Native TEAL opcode: [`balance`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#balance)
+ * @see Native TEAL opcode: [`balance`](https://dev.algorand.co/reference/algorand-teal/opcodes#balance)
  * Min AVM version: 2
  */
 export function balance(a: Account | uint64): uint64 {
@@ -542,7 +542,7 @@ export function balance(a: Account | uint64): uint64 {
  * decode A which was base64-encoded using _encoding_ E. Fail if A is not base64 encoded with encoding E
  * *Warning*: Usage should be restricted to very rare use cases. In almost all cases, smart contracts should directly handle non-encoded byte-strings.	This opcode should only be used in cases where base64 is the only available option, e.g. interoperability with a third-party that only signs base64 strings.
  *  Decodes A using the base64 encoding E. Specify the encoding with an immediate arg either as URL and Filename Safe (`URLEncoding`) or Standard (`StdEncoding`). See [RFC 4648 sections 4 and 5](https://rfc-editor.org/rfc/rfc4648.html#section-4). It is assumed that the encoding ends with the exact number of `=` padding characters as required by the RFC. When padding occurs, any unused pad bits in the encoding must be set to zero or the decoding will fail. The special cases of `\n` and `\r` are allowed but completely ignored. An error will result when attempting to decode a string with a character that is not in the encoding alphabet or not one of `=`, `\r`, or `\n`.
- * @see Native TEAL opcode: [`base64_decode`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#base64_decode)
+ * @see Native TEAL opcode: [`base64_decode`](https://dev.algorand.co/reference/algorand-teal/opcodes#base64_decode)
  * Min AVM version: 7
  */
 export function base64Decode(e: Base64, a: bytes): bytes {
@@ -552,7 +552,7 @@ export function base64Decode(e: Base64, a: bytes): bytes {
 /**
  * The highest set bit in A. If A is a byte-array, it is interpreted as a big-endian unsigned integer. bitlen of 0 is 0, bitlen of 8 is 4
  * bitlen interprets arrays as big-endian integers, unlike setbit/getbit
- * @see Native TEAL opcode: [`bitlen`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#bitlen)
+ * @see Native TEAL opcode: [`bitlen`](https://dev.algorand.co/reference/algorand-teal/opcodes#bitlen)
  * Min AVM version: 4
  */
 export function bitLength(a: uint64 | bytes): uint64 {
@@ -607,7 +607,7 @@ export const Box = {
   /**
    * create a box named A, of length B. Fail if the name A is empty or B exceeds 32,768. Returns 0 if A already existed, else 1
    * Newly created boxes are filled with 0 bytes. `box_create` will fail if the referenced box already exists with a different size. Otherwise, existing boxes are unchanged by `box_create`.
-   * @see Native TEAL opcode: [`box_create`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#box_create)
+   * @see Native TEAL opcode: [`box_create`](https://dev.algorand.co/reference/algorand-teal/opcodes#box_create)
    * Min AVM version: 8
    */
   create(a: bytes, b: uint64): boolean {
@@ -616,7 +616,7 @@ export const Box = {
 
   /**
    * delete box named A if it exists. Return 1 if A existed, 0 otherwise
-   * @see Native TEAL opcode: [`box_del`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#box_del)
+   * @see Native TEAL opcode: [`box_del`](https://dev.algorand.co/reference/algorand-teal/opcodes#box_del)
    * Min AVM version: 8
    */
   delete(a: bytes): boolean {
@@ -625,7 +625,7 @@ export const Box = {
 
   /**
    * read C bytes from box A, starting at offset B. Fail if A does not exist, or the byte range is outside A's size.
-   * @see Native TEAL opcode: [`box_extract`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#box_extract)
+   * @see Native TEAL opcode: [`box_extract`](https://dev.algorand.co/reference/algorand-teal/opcodes#box_extract)
    * Min AVM version: 8
    */
   extract(a: bytes, b: uint64, c: uint64): bytes {
@@ -635,7 +635,7 @@ export const Box = {
   /**
    * X is the contents of box A if A exists, else ''. Y is 1 if A exists, else 0.
    * For boxes that exceed 4,096 bytes, consider `box_create`, `box_extract`, and `box_replace`
-   * @see Native TEAL opcode: [`box_get`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#box_get)
+   * @see Native TEAL opcode: [`box_get`](https://dev.algorand.co/reference/algorand-teal/opcodes#box_get)
    * Min AVM version: 8
    */
   get(a: bytes): readonly [bytes, boolean] {
@@ -644,7 +644,7 @@ export const Box = {
 
   /**
    * X is the length of box A if A exists, else 0. Y is 1 if A exists, else 0.
-   * @see Native TEAL opcode: [`box_len`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#box_len)
+   * @see Native TEAL opcode: [`box_len`](https://dev.algorand.co/reference/algorand-teal/opcodes#box_len)
    * Min AVM version: 8
    */
   length(a: bytes): readonly [uint64, boolean] {
@@ -654,7 +654,7 @@ export const Box = {
   /**
    * replaces the contents of box A with byte-array B. Fails if A exists and len(B) != len(box A). Creates A if it does not exist
    * For boxes that exceed 4,096 bytes, consider `box_create`, `box_extract`, and `box_replace`
-   * @see Native TEAL opcode: [`box_put`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#box_put)
+   * @see Native TEAL opcode: [`box_put`](https://dev.algorand.co/reference/algorand-teal/opcodes#box_put)
    * Min AVM version: 8
    */
   put(a: bytes, b: bytes): void {
@@ -663,7 +663,7 @@ export const Box = {
 
   /**
    * write byte-array C into box A, starting at offset B. Fail if A does not exist, or the byte range is outside A's size.
-   * @see Native TEAL opcode: [`box_replace`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#box_replace)
+   * @see Native TEAL opcode: [`box_replace`](https://dev.algorand.co/reference/algorand-teal/opcodes#box_replace)
    * Min AVM version: 8
    */
   replace(a: bytes, b: uint64, c: bytes): void {
@@ -672,7 +672,7 @@ export const Box = {
 
   /**
    * change the size of box named A to be of length B, adding zero bytes to end or removing bytes from the end, as needed. Fail if the name A is empty, A is not an existing box, or B exceeds 32,768.
-   * @see Native TEAL opcode: [`box_resize`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#box_resize)
+   * @see Native TEAL opcode: [`box_resize`](https://dev.algorand.co/reference/algorand-teal/opcodes#box_resize)
    * Min AVM version: 10
    */
   resize(a: bytes, b: uint64): void {
@@ -682,7 +682,7 @@ export const Box = {
   /**
    * set box A to contain its previous bytes up to index B, followed by D, followed by the original bytes of A that began at index B+C.
    * Boxes are of constant length. If C < len(D), then len(D)-C bytes will be removed from the end. If C > len(D), zero bytes will be appended to the end to reach the box length.
-   * @see Native TEAL opcode: [`box_splice`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#box_splice)
+   * @see Native TEAL opcode: [`box_splice`](https://dev.algorand.co/reference/algorand-teal/opcodes#box_splice)
    * Min AVM version: 10
    */
   splice(a: bytes, b: uint64, c: uint64, d: bytes): void {
@@ -692,7 +692,7 @@ export const Box = {
 
 /**
  * The largest integer I such that I^2 <= A. A and I are interpreted as big-endian unsigned integers
- * @see Native TEAL opcode: [`bsqrt`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#bsqrt)
+ * @see Native TEAL opcode: [`bsqrt`](https://dev.algorand.co/reference/algorand-teal/opcodes#bsqrt)
  * Min AVM version: 6
  */
 export function bsqrt(a: biguint): biguint {
@@ -702,7 +702,7 @@ export function bsqrt(a: biguint): biguint {
 /**
  * converts big-endian byte array A to uint64. Fails if len(A) > 8. Padded by leading 0s if len(A) < 8.
  * `btoi` fails if the input is longer than 8 bytes.
- * @see Native TEAL opcode: [`btoi`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#btoi)
+ * @see Native TEAL opcode: [`btoi`](https://dev.algorand.co/reference/algorand-teal/opcodes#btoi)
  * Min AVM version: 1
  */
 export function btoi(a: bytes): uint64 {
@@ -711,7 +711,7 @@ export function btoi(a: bytes): uint64 {
 
 /**
  * zero filled byte-array of length A
- * @see Native TEAL opcode: [`bzero`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#bzero)
+ * @see Native TEAL opcode: [`bzero`](https://dev.algorand.co/reference/algorand-teal/opcodes#bzero)
  * Min AVM version: 4
  */
 export function bzero(a: uint64): bytes {
@@ -721,7 +721,7 @@ export function bzero(a: uint64): bytes {
 /**
  * join A and B
  * `concat` fails if the result would be greater than 4096 bytes.
- * @see Native TEAL opcode: [`concat`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#concat)
+ * @see Native TEAL opcode: [`concat`](https://dev.algorand.co/reference/algorand-teal/opcodes#concat)
  * Min AVM version: 2
  */
 export function concat(a: bytes, b: bytes): bytes {
@@ -731,7 +731,7 @@ export function concat(a: bytes, b: bytes): bytes {
 /**
  * W,X = (A,B / C,D); Y,Z = (A,B modulo C,D)
  * The notation J,K indicates that two uint64 values J and K are interpreted as a uint128 value, with J as the high uint64 and K the low.
- * @see Native TEAL opcode: [`divmodw`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#divmodw)
+ * @see Native TEAL opcode: [`divmodw`](https://dev.algorand.co/reference/algorand-teal/opcodes#divmodw)
  * Min AVM version: 4
  */
 export function divmodw(a: uint64, b: uint64, c: uint64, d: uint64): readonly [uint64, uint64, uint64, uint64] {
@@ -741,7 +741,7 @@ export function divmodw(a: uint64, b: uint64, c: uint64, d: uint64): readonly [u
 /**
  * A,B / C. Fail if C == 0 or if result overflows.
  * The notation A,B indicates that A and B are interpreted as a uint128 value, with A as the high uint64 and B the low.
- * @see Native TEAL opcode: [`divw`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#divw)
+ * @see Native TEAL opcode: [`divw`](https://dev.algorand.co/reference/algorand-teal/opcodes#divw)
  * Min AVM version: 6
  */
 export function divw(a: uint64, b: uint64, c: uint64): uint64 {
@@ -762,7 +762,7 @@ export const EllipticCurve = {
    * Fails if A or B is not in G.
    * A and/or B are allowed to be the point at infinity.
    * Does _not_ check if A and B are in the main prime-order subgroup.
-   * @see Native TEAL opcode: [`ec_add`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#ec_add)
+   * @see Native TEAL opcode: [`ec_add`](https://dev.algorand.co/reference/algorand-teal/opcodes#ec_add)
    * Min AVM version: 10
    */
   add(g: Ec, a: bytes, b: bytes): bytes {
@@ -773,7 +773,7 @@ export const EllipticCurve = {
    * maps field element A to group G
    * BN254 points are mapped by the SVDW map. BLS12-381 points are mapped by the SSWU map.
    * G1 element inputs are base field elements and G2 element inputs are quadratic field elements, with nearly the same encoding rules (for field elements) as defined in `ec_add`. There is one difference of encoding rule: G1 element inputs do not need to be 0-padded if they fit in less than 32 bytes for BN254 and less than 48 bytes for BLS12-381. (As usual, the empty byte array represents 0.) G2 elements inputs need to be always have the required size.
-   * @see Native TEAL opcode: [`ec_map_to`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#ec_map_to)
+   * @see Native TEAL opcode: [`ec_map_to`](https://dev.algorand.co/reference/algorand-teal/opcodes#ec_map_to)
    * Min AVM version: 10
    */
   mapTo(g: Ec, a: bytes): bytes {
@@ -784,7 +784,7 @@ export const EllipticCurve = {
    * for curve points A and scalars B, return curve point B0A0 + B1A1 + B2A2 + ... + BnAn
    * A is a list of concatenated points, encoded and checked as described in `ec_add`. B is a list of concatenated scalars which, unlike ec_scalar_mul, must all be exactly 32 bytes long.
    * The name `ec_multi_scalar_mul` was chosen to reflect common usage, but a more consistent name would be `ec_multi_scalar_mul`. AVM values are limited to 4096 bytes, so `ec_multi_scalar_mul` is limited by the size of the points in the group being operated upon.
-   * @see Native TEAL opcode: [`ec_multi_scalar_mul`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#ec_multi_scalar_mul)
+   * @see Native TEAL opcode: [`ec_multi_scalar_mul`](https://dev.algorand.co/reference/algorand-teal/opcodes#ec_multi_scalar_mul)
    * Min AVM version: 10
    */
   scalarMulMulti(g: Ec, a: bytes, b: bytes): bytes {
@@ -794,7 +794,7 @@ export const EllipticCurve = {
   /**
    * 1 if the product of the pairing of each point in A with its respective point in B is equal to the identity element of the target group Gt, else 0
    * A and B are concatenated points, encoded and checked as described in `ec_add`. A contains points of the group G, B contains points of the associated group (G2 if G is G1, and vice versa). Fails if A and B have a different number of points, or if any point is not in its described group or outside the main prime-order subgroup - a stronger condition than other opcodes. AVM values are limited to 4096 bytes, so `ec_pairing_check` is limited by the size of the points in the groups being operated upon.
-   * @see Native TEAL opcode: [`ec_pairing_check`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#ec_pairing_check)
+   * @see Native TEAL opcode: [`ec_pairing_check`](https://dev.algorand.co/reference/algorand-teal/opcodes#ec_pairing_check)
    * Min AVM version: 10
    */
   pairingCheck(g: Ec, a: bytes, b: bytes): boolean {
@@ -804,7 +804,7 @@ export const EllipticCurve = {
   /**
    * for curve point A and scalar B, return the curve point BA, the point A multiplied by the scalar B.
    * A is a curve point encoded and checked as described in `ec_add`. Scalar B is interpreted as a big-endian unsigned integer. Fails if B exceeds 32 bytes.
-   * @see Native TEAL opcode: [`ec_scalar_mul`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#ec_scalar_mul)
+   * @see Native TEAL opcode: [`ec_scalar_mul`](https://dev.algorand.co/reference/algorand-teal/opcodes#ec_scalar_mul)
    * Min AVM version: 10
    */
   scalarMul(g: Ec, a: bytes, b: bytes): bytes {
@@ -813,7 +813,7 @@ export const EllipticCurve = {
 
   /**
    * 1 if A is in the main prime-order subgroup of G (including the point at infinity) else 0. Program fails if A is not in G at all.
-   * @see Native TEAL opcode: [`ec_subgroup_check`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#ec_subgroup_check)
+   * @see Native TEAL opcode: [`ec_subgroup_check`](https://dev.algorand.co/reference/algorand-teal/opcodes#ec_subgroup_check)
    * Min AVM version: 10
    */
   subgroupCheck(g: Ec, a: bytes): boolean {
@@ -824,7 +824,7 @@ export const EllipticCurve = {
 /**
  * decompress pubkey A into components X, Y
  * The 33 byte public key in a compressed form to be decompressed into X and Y (top) components. All values are big-endian encoded.
- * @see Native TEAL opcode: [`ecdsa_pk_decompress`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#ecdsa_pk_decompress)
+ * @see Native TEAL opcode: [`ecdsa_pk_decompress`](https://dev.algorand.co/reference/algorand-teal/opcodes#ecdsa_pk_decompress)
  * Min AVM version: 5
  */
 export function ecdsaPkDecompress(v: Ecdsa, a: bytes): readonly [bytes, bytes] {
@@ -834,7 +834,7 @@ export function ecdsaPkDecompress(v: Ecdsa, a: bytes): readonly [bytes, bytes] {
 /**
  * for (data A, recovery id B, signature C, D) recover a public key
  * S (top) and R elements of a signature, recovery id and data (bottom) are expected on the stack and used to deriver a public key. All values are big-endian encoded. The signed data must be 32 bytes long.
- * @see Native TEAL opcode: [`ecdsa_pk_recover`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#ecdsa_pk_recover)
+ * @see Native TEAL opcode: [`ecdsa_pk_recover`](https://dev.algorand.co/reference/algorand-teal/opcodes#ecdsa_pk_recover)
  * Min AVM version: 5
  */
 export function ecdsaPkRecover(v: Ecdsa, a: bytes, b: uint64, c: bytes, d: bytes): readonly [bytes, bytes] {
@@ -844,7 +844,7 @@ export function ecdsaPkRecover(v: Ecdsa, a: bytes, b: uint64, c: bytes, d: bytes
 /**
  * for (data A, signature B, C and pubkey D, E) verify the signature of the data against the pubkey => {0 or 1}
  * The 32 byte Y-component of a public key is the last element on the stack, preceded by X-component of a pubkey, preceded by S and R components of a signature, preceded by the data that is fifth element on the stack. All values are big-endian encoded. The signed data must be 32 bytes long, and signatures in lower-S form are only accepted.
- * @see Native TEAL opcode: [`ecdsa_verify`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#ecdsa_verify)
+ * @see Native TEAL opcode: [`ecdsa_verify`](https://dev.algorand.co/reference/algorand-teal/opcodes#ecdsa_verify)
  * Min AVM version: 5
  */
 export function ecdsaVerify(v: Ecdsa, a: bytes, b: bytes, c: bytes, d: bytes, e: bytes): boolean {
@@ -854,7 +854,7 @@ export function ecdsaVerify(v: Ecdsa, a: bytes, b: bytes, c: bytes, d: bytes, e:
 /**
  * for (data A, signature B, pubkey C) verify the signature of ("ProgData" || program_hash || data) against the pubkey => {0 or 1}
  * The 32 byte public key is the last element on the stack, preceded by the 64 byte signature at the second-to-last element on the stack, preceded by the data which was signed at the third-to-last element on the stack.
- * @see Native TEAL opcode: [`ed25519verify`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#ed25519verify)
+ * @see Native TEAL opcode: [`ed25519verify`](https://dev.algorand.co/reference/algorand-teal/opcodes#ed25519verify)
  * Min AVM version: 1
  */
 export function ed25519verify(a: bytes, b: bytes, c: bytes): boolean {
@@ -863,7 +863,7 @@ export function ed25519verify(a: bytes, b: bytes, c: bytes): boolean {
 
 /**
  * for (data A, signature B, pubkey C) verify the signature of the data against the pubkey => {0 or 1}
- * @see Native TEAL opcode: [`ed25519verify_bare`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#ed25519verify_bare)
+ * @see Native TEAL opcode: [`ed25519verify_bare`](https://dev.algorand.co/reference/algorand-teal/opcodes#ed25519verify_bare)
  * Min AVM version: 7
  */
 export function ed25519verifyBare(a: bytes, b: bytes, c: bytes): boolean {
@@ -872,7 +872,7 @@ export function ed25519verifyBare(a: bytes, b: bytes, c: bytes): boolean {
 
 /**
  * A raised to the Bth power. Fail if A == B == 0 and on overflow
- * @see Native TEAL opcode: [`exp`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#exp)
+ * @see Native TEAL opcode: [`exp`](https://dev.algorand.co/reference/algorand-teal/opcodes#exp)
  * Min AVM version: 4
  */
 export function exp(a: uint64, b: uint64): uint64 {
@@ -881,7 +881,7 @@ export function exp(a: uint64, b: uint64): uint64 {
 
 /**
  * A raised to the Bth power as a 128-bit result in two uint64s. X is the high 64 bits, Y is the low. Fail if A == B == 0 or if the results exceeds 2^128-1
- * @see Native TEAL opcode: [`expw`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#expw)
+ * @see Native TEAL opcode: [`expw`](https://dev.algorand.co/reference/algorand-teal/opcodes#expw)
  * Min AVM version: 4
  */
 export function expw(a: uint64, b: uint64): readonly [uint64, uint64] {
@@ -890,7 +890,7 @@ export function expw(a: uint64, b: uint64): readonly [uint64, uint64] {
 
 /**
  * A uint16 formed from a range of big-endian bytes from A starting at B up to but not including B+2. If B+2 is larger than the array length, the program fails
- * @see Native TEAL opcode: [`extract_uint16`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#extract_uint16)
+ * @see Native TEAL opcode: [`extract_uint16`](https://dev.algorand.co/reference/algorand-teal/opcodes#extract_uint16)
  * Min AVM version: 5
  */
 export function extractUint16(a: bytes, b: uint64): uint64 {
@@ -899,7 +899,7 @@ export function extractUint16(a: bytes, b: uint64): uint64 {
 
 /**
  * A uint32 formed from a range of big-endian bytes from A starting at B up to but not including B+4. If B+4 is larger than the array length, the program fails
- * @see Native TEAL opcode: [`extract_uint32`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#extract_uint32)
+ * @see Native TEAL opcode: [`extract_uint32`](https://dev.algorand.co/reference/algorand-teal/opcodes#extract_uint32)
  * Min AVM version: 5
  */
 export function extractUint32(a: bytes, b: uint64): uint64 {
@@ -908,7 +908,7 @@ export function extractUint32(a: bytes, b: uint64): uint64 {
 
 /**
  * A uint64 formed from a range of big-endian bytes from A starting at B up to but not including B+8. If B+8 is larger than the array length, the program fails
- * @see Native TEAL opcode: [`extract_uint64`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#extract_uint64)
+ * @see Native TEAL opcode: [`extract_uint64`](https://dev.algorand.co/reference/algorand-teal/opcodes#extract_uint64)
  * Min AVM version: 5
  */
 export function extractUint64(a: bytes, b: uint64): uint64 {
@@ -917,7 +917,7 @@ export function extractUint64(a: bytes, b: uint64): uint64 {
 
 /**
  * for (data A, compressed-format signature B, pubkey C) verify the signature of data against the pubkey
- * @see Native TEAL opcode: [`falcon_verify`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#falcon_verify)
+ * @see Native TEAL opcode: [`falcon_verify`](https://dev.algorand.co/reference/algorand-teal/opcodes#falcon_verify)
  * Min AVM version: 12
  */
 export function falconVerify(a: bytes, b: bytes, c: bytes): boolean {
@@ -927,7 +927,7 @@ export function falconVerify(a: bytes, b: bytes, c: bytes): boolean {
 /**
  * ID of the asset or application created in the Ath transaction of the current group
  * `gaids` fails unless the requested transaction created an asset or application and A < GroupIndex.
- * @see Native TEAL opcode: [`gaids`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#gaids)
+ * @see Native TEAL opcode: [`gaids`](https://dev.algorand.co/reference/algorand-teal/opcodes#gaids)
  * Min AVM version: 4
  */
 export function gaid(a: uint64): uint64 {
@@ -937,7 +937,7 @@ export function gaid(a: uint64): uint64 {
 /**
  * Bth bit of (byte-array or integer) A. If B is greater than or equal to the bit length of the value (8*byte length), the program fails
  * see explanation of bit ordering in setbit
- * @see Native TEAL opcode: [`getbit`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#getbit)
+ * @see Native TEAL opcode: [`getbit`](https://dev.algorand.co/reference/algorand-teal/opcodes#getbit)
  * Min AVM version: 3
  */
 export function getBit(a: uint64 | bytes, b: uint64): uint64 {
@@ -946,7 +946,7 @@ export function getBit(a: uint64 | bytes, b: uint64): uint64 {
 
 /**
  * Bth byte of A, as an integer. If B is greater than or equal to the array length, the program fails
- * @see Native TEAL opcode: [`getbyte`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#getbyte)
+ * @see Native TEAL opcode: [`getbyte`](https://dev.algorand.co/reference/algorand-teal/opcodes#getbyte)
  * Min AVM version: 3
  */
 export function getByte(a: bytes, b: uint64): uint64 {
@@ -1504,7 +1504,7 @@ export const GITxn = {
 
 /**
  * Bth scratch space value of the Ath transaction in the current group
- * @see Native TEAL opcode: [`gloadss`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#gloadss)
+ * @see Native TEAL opcode: [`gloadss`](https://dev.algorand.co/reference/algorand-teal/opcodes#gloadss)
  * Min AVM version: 6
  */
 export function gloadBytes(a: uint64, b: uint64): bytes {
@@ -1513,7 +1513,7 @@ export function gloadBytes(a: uint64, b: uint64): bytes {
 
 /**
  * Bth scratch space value of the Ath transaction in the current group
- * @see Native TEAL opcode: [`gloadss`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#gloadss)
+ * @see Native TEAL opcode: [`gloadss`](https://dev.algorand.co/reference/algorand-teal/opcodes#gloadss)
  * Min AVM version: 6
  */
 export function gloadUint64(a: uint64, b: uint64): uint64 {
@@ -2256,7 +2256,7 @@ export const GTxn = {
 
 /**
  * converts uint64 A to big-endian byte array, always of length 8
- * @see Native TEAL opcode: [`itob`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#itob)
+ * @see Native TEAL opcode: [`itob`](https://dev.algorand.co/reference/algorand-teal/opcodes#itob)
  * Min AVM version: 1
  */
 export function itob(a: uint64): bytes {
@@ -2819,7 +2819,7 @@ export const ITxnCreate = {
   /**
    * begin preparation of a new inner transaction in a new transaction group
    * `itxn_begin` initializes Sender to the application address; Fee to the minimum allowable, taking into account MinTxnFee and credit from overpaying in earlier transactions; FirstValid/LastValid to the values in the invoking transaction, and all other fields to zero or empty values.
-   * @see Native TEAL opcode: [`itxn_begin`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#itxn_begin)
+   * @see Native TEAL opcode: [`itxn_begin`](https://dev.algorand.co/reference/algorand-teal/opcodes#itxn_begin)
    * Min AVM version: 5
    */
   begin(): void {
@@ -3237,7 +3237,7 @@ export const ITxnCreate = {
   /**
    * begin preparation of a new inner transaction in the same transaction group
    * `itxn_next` initializes the transaction exactly as `itxn_begin` does
-   * @see Native TEAL opcode: [`itxn_next`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#itxn_next)
+   * @see Native TEAL opcode: [`itxn_next`](https://dev.algorand.co/reference/algorand-teal/opcodes#itxn_next)
    * Min AVM version: 6
    */
   next(): void {
@@ -3247,7 +3247,7 @@ export const ITxnCreate = {
   /**
    * execute the current inner transaction group. Fail if executing this group would exceed the inner transaction limit, or if any transaction in the group fails.
    * `itxn_submit` resets the current transaction so that it can not be resubmitted. A new `itxn_begin` is required to prepare another inner transaction.
-   * @see Native TEAL opcode: [`itxn_submit`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#itxn_submit)
+   * @see Native TEAL opcode: [`itxn_submit`](https://dev.algorand.co/reference/algorand-teal/opcodes#itxn_submit)
    * Min AVM version: 5
    */
   submit(): void {
@@ -3271,7 +3271,7 @@ export const JsonRef = {
 
 /**
  * Keccak256 hash of value A, yields [32]byte
- * @see Native TEAL opcode: [`keccak256`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#keccak256)
+ * @see Native TEAL opcode: [`keccak256`](https://dev.algorand.co/reference/algorand-teal/opcodes#keccak256)
  * Min AVM version: 1
  */
 export function keccak256(a: bytes): bytes {
@@ -3280,7 +3280,7 @@ export function keccak256(a: bytes): bytes {
 
 /**
  * yields length of byte value A
- * @see Native TEAL opcode: [`len`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#len)
+ * @see Native TEAL opcode: [`len`](https://dev.algorand.co/reference/algorand-teal/opcodes#len)
  * Min AVM version: 1
  */
 export function len(a: bytes): uint64 {
@@ -3293,7 +3293,7 @@ export function len(a: bytes): uint64 {
 export const Scratch = {
   /**
    * Ath scratch space value.  All scratch spaces are 0 at program start.
-   * @see Native TEAL opcode: [`loads`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#loads)
+   * @see Native TEAL opcode: [`loads`](https://dev.algorand.co/reference/algorand-teal/opcodes#loads)
    * Min AVM version: 5
    */
   loadBytes(a: uint64): bytes {
@@ -3302,7 +3302,7 @@ export const Scratch = {
 
   /**
    * Ath scratch space value.  All scratch spaces are 0 at program start.
-   * @see Native TEAL opcode: [`loads`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#loads)
+   * @see Native TEAL opcode: [`loads`](https://dev.algorand.co/reference/algorand-teal/opcodes#loads)
    * Min AVM version: 5
    */
   loadUint64(a: uint64): uint64 {
@@ -3311,7 +3311,7 @@ export const Scratch = {
 
   /**
    * store B to the Ath scratch space
-   * @see Native TEAL opcode: [`stores`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#stores)
+   * @see Native TEAL opcode: [`stores`](https://dev.algorand.co/reference/algorand-teal/opcodes#stores)
    * Min AVM version: 5
    */
   store(a: uint64, b: uint64 | bytes): void {
@@ -3323,7 +3323,7 @@ export const Scratch = {
  * MiMC hash of scalars A, using curve and parameters specified by configuration C
  * A is a list of concatenated 32 byte big-endian unsigned integer scalars.  Fail if A's length is not a multiple of 32 or any element exceeds the curve modulus.
  * The MiMC hash function has known collisions since any input which is a multiple of the elliptic curve modulus will hash to the same value. MiMC is thus not a general purpose hash function, but meant to be used in zero knowledge applications to match a zk-circuit implementation.
- * @see Native TEAL opcode: [`mimc`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#mimc)
+ * @see Native TEAL opcode: [`mimc`](https://dev.algorand.co/reference/algorand-teal/opcodes#mimc)
  * Min AVM version: 11
  */
 export function mimc(c: MimcConfigurations, a: bytes): bytes {
@@ -3334,7 +3334,7 @@ export function mimc(c: MimcConfigurations, a: bytes): bytes {
  * minimum required balance for account A, in microalgos. Required balance is affected by ASA, App, and Box usage. When creating or opting into an app, the minimum balance grows before the app code runs, therefore the increase is visible there. When deleting or closing out, the minimum balance decreases after the app executes. Changes caused by inner transactions or box usage are observable immediately following the opcode effecting the change.
  * @param Txn.Accounts offset (or, since v4, an _available_ account address), _available_ application id (or, since v4, a Txn.ForeignApps offset).
  *  * @return value.
- * @see Native TEAL opcode: [`min_balance`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#min_balance)
+ * @see Native TEAL opcode: [`min_balance`](https://dev.algorand.co/reference/algorand-teal/opcodes#min_balance)
  * Min AVM version: 3
  */
 export function minBalance(a: Account | uint64): uint64 {
@@ -3343,7 +3343,7 @@ export function minBalance(a: Account | uint64): uint64 {
 
 /**
  * A times B as a 128-bit result in two uint64s. X is the high 64 bits, Y is the low
- * @see Native TEAL opcode: [`mulw`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#mulw)
+ * @see Native TEAL opcode: [`mulw`](https://dev.algorand.co/reference/algorand-teal/opcodes#mulw)
  * Min AVM version: 1
  */
 export function mulw(a: uint64, b: uint64): readonly [uint64, uint64] {
@@ -3352,7 +3352,7 @@ export function mulw(a: uint64, b: uint64): readonly [uint64, uint64] {
 
 /**
  * the total online stake in the agreement round
- * @see Native TEAL opcode: [`online_stake`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#online_stake)
+ * @see Native TEAL opcode: [`online_stake`](https://dev.algorand.co/reference/algorand-teal/opcodes#online_stake)
  * Min AVM version: 11
  */
 export function onlineStake(): uint64 {
@@ -3362,7 +3362,7 @@ export function onlineStake(): uint64 {
 /**
  * Copy of A with the bytes starting at B replaced by the bytes of C. Fails if B+len(C) exceeds len(A)
  * `replace3` can be called using `replace` with no immediates.
- * @see Native TEAL opcode: [`replace3`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#replace3)
+ * @see Native TEAL opcode: [`replace3`](https://dev.algorand.co/reference/algorand-teal/opcodes#replace3)
  * Min AVM version: 7
  */
 export function replace(a: bytes, b: uint64, c: bytes): bytes {
@@ -3371,7 +3371,7 @@ export function replace(a: bytes, b: uint64, c: bytes): bytes {
 
 /**
  * Copy of A with the Bth byte set to small integer (between 0..255) C. If B is greater than or equal to the array length, the program fails
- * @see Native TEAL opcode: [`setbyte`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#setbyte)
+ * @see Native TEAL opcode: [`setbyte`](https://dev.algorand.co/reference/algorand-teal/opcodes#setbyte)
  * Min AVM version: 3
  */
 export function setByte(a: bytes, b: uint64, c: uint64): bytes {
@@ -3380,7 +3380,7 @@ export function setByte(a: bytes, b: uint64, c: uint64): bytes {
 
 /**
  * SHA256 hash of value A, yields [32]byte
- * @see Native TEAL opcode: [`sha256`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#sha256)
+ * @see Native TEAL opcode: [`sha256`](https://dev.algorand.co/reference/algorand-teal/opcodes#sha256)
  * Min AVM version: 1
  */
 export function sha256(a: bytes): bytes {
@@ -3389,7 +3389,7 @@ export function sha256(a: bytes): bytes {
 
 /**
  * SHA3_256 hash of value A, yields [32]byte
- * @see Native TEAL opcode: [`sha3_256`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#sha3_256)
+ * @see Native TEAL opcode: [`sha3_256`](https://dev.algorand.co/reference/algorand-teal/opcodes#sha3_256)
  * Min AVM version: 7
  */
 export function sha3_256(a: bytes): bytes {
@@ -3398,7 +3398,7 @@ export function sha3_256(a: bytes): bytes {
 
 /**
  * SHA512_256 hash of value A, yields [32]byte
- * @see Native TEAL opcode: [`sha512_256`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#sha512_256)
+ * @see Native TEAL opcode: [`sha512_256`](https://dev.algorand.co/reference/algorand-teal/opcodes#sha512_256)
  * Min AVM version: 1
  */
 export function sha512_256(a: bytes): bytes {
@@ -3407,7 +3407,7 @@ export function sha512_256(a: bytes): bytes {
 
 /**
  * A times 2^B, modulo 2^64
- * @see Native TEAL opcode: [`shl`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#shl)
+ * @see Native TEAL opcode: [`shl`](https://dev.algorand.co/reference/algorand-teal/opcodes#shl)
  * Min AVM version: 4
  */
 export function shl(a: uint64, b: uint64): uint64 {
@@ -3416,7 +3416,7 @@ export function shl(a: uint64, b: uint64): uint64 {
 
 /**
  * A divided by 2^B
- * @see Native TEAL opcode: [`shr`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#shr)
+ * @see Native TEAL opcode: [`shr`](https://dev.algorand.co/reference/algorand-teal/opcodes#shr)
  * Min AVM version: 4
  */
 export function shr(a: uint64, b: uint64): uint64 {
@@ -3425,7 +3425,7 @@ export function shr(a: uint64, b: uint64): uint64 {
 
 /**
  * The largest integer I such that I^2 <= A
- * @see Native TEAL opcode: [`sqrt`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#sqrt)
+ * @see Native TEAL opcode: [`sqrt`](https://dev.algorand.co/reference/algorand-teal/opcodes#sqrt)
  * Min AVM version: 4
  */
 export function sqrt(a: uint64): uint64 {
@@ -3434,7 +3434,7 @@ export function sqrt(a: uint64): uint64 {
 
 /**
  * A range of bytes from A starting at B up to but not including C. If C < B, or either is larger than the array length, the program fails
- * @see Native TEAL opcode: [`substring3`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#substring3)
+ * @see Native TEAL opcode: [`substring3`](https://dev.algorand.co/reference/algorand-teal/opcodes#substring3)
  * Min AVM version: 2
  */
 export function substring(a: bytes, b: uint64, c: uint64): bytes {
@@ -3443,7 +3443,7 @@ export function substring(a: bytes, b: uint64, c: uint64): bytes {
 
 /**
  * sumhash512 of value A, yields [64]byte
- * @see Native TEAL opcode: [`sumhash512`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#sumhash512)
+ * @see Native TEAL opcode: [`sumhash512`](https://dev.algorand.co/reference/algorand-teal/opcodes#sumhash512)
  * Min AVM version: 12
  */
 export function sumhash512(a: bytes): bytes {
@@ -4020,7 +4020,7 @@ export const VoterParams = {
 /**
  * Verify the proof B of message A against pubkey C. Returns vrf output and verification flag.
  * `VrfAlgorand` is the VRF used in Algorand. It is ECVRF-ED25519-SHA512-Elligator2, specified in the IETF internet draft [draft-irtf-cfrg-vrf-03](https://datatracker.ietf.org/doc/draft-irtf-cfrg-vrf/03/).
- * @see Native TEAL opcode: [`vrf_verify`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#vrf_verify)
+ * @see Native TEAL opcode: [`vrf_verify`](https://dev.algorand.co/reference/algorand-teal/opcodes#vrf_verify)
  * Min AVM version: 7
  */
 export function vrfVerify(s: VrfVerify, a: bytes, b: bytes, c: bytes): readonly [bytes, boolean] {
