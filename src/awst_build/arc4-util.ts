@@ -3,7 +3,7 @@ import type { ARC4ABIMethodConfig } from '../awst/nodes'
 import type { SourceLocation } from '../awst/source-location'
 import { wtypes } from '../awst/wtypes'
 import { CodeError } from '../errors'
-import { logger } from '../logger'
+import { codeInvariant } from '../util'
 import type { FunctionPType, PType } from './ptypes'
 import {
   accountPType,
@@ -33,21 +33,26 @@ import {
   UintNType,
 } from './ptypes/arc4-types'
 
-export function ptypeToArc4PType(ptype: PType, sourceLocation: SourceLocation): PType {
+export function ptypeToArc4PType(ptype: PType, direction: 'in' | 'out', sourceLocation: SourceLocation): PType {
   if (ptype instanceof ARC4EncodedType) return ptype
-  if (ptype instanceof GroupTransactionPType) return ptype
-  if (ptype.equals(applicationPType) || ptype.equals(accountPType) || ptype.equals(assetPType)) return ptype
+  if (ptype instanceof GroupTransactionPType) {
+    codeInvariant(direction === 'in', `${ptype.name} cannot be used as an ABI return type`, sourceLocation)
+    return ptype
+  }
+  if (ptype.equals(applicationPType) || ptype.equals(accountPType) || ptype.equals(assetPType)) {
+    codeInvariant(direction === 'in', `${ptype.name} cannot be used as an ABI return type`, sourceLocation)
+    return ptype
+  }
   if (ptype.equals(voidPType)) return voidPType
   if (isArc4EncodableType(ptype)) {
     return ptypeToArc4EncodedType(ptype, sourceLocation)
   }
-  logger.error(sourceLocation, `Unsupported type used in ABI method: ${ptype}`)
-  return ptype
+  throw new CodeError(`${ptype} cannot be used as an ABI ${direction === 'in' ? 'param' : 'return'} type`, { sourceLocation })
 }
 
 export function getArc4MethodConstant(functionType: FunctionPType, arc4Config: ARC4ABIMethodConfig, sourceLocation: SourceLocation) {
-  const params = functionType.parameters.map(([_, ptype]) => getArc4TypeName(ptype, sourceLocation)).join(',')
-  const returnType = getArc4TypeName(functionType.returnType, sourceLocation)
+  const params = functionType.parameters.map(([_, ptype]) => getArc4TypeName(ptype, 'in', sourceLocation)).join(',')
+  const returnType = getArc4TypeName(functionType.returnType, 'out', sourceLocation)
   return nodeFactory.methodConstant({
     value: `${arc4Config.name}(${params})${returnType}`,
     wtype: wtypes.bytesWType,
@@ -55,8 +60,8 @@ export function getArc4MethodConstant(functionType: FunctionPType, arc4Config: A
   })
 }
 
-export function getArc4TypeName(arg: PType, sourceLocation: SourceLocation): string {
-  const arc4Type = ptypeToArc4PType(arg, sourceLocation)
+export function getArc4TypeName(arg: PType, direction: 'in' | 'out', sourceLocation: SourceLocation): string {
+  const arc4Type = ptypeToArc4PType(arg, direction, sourceLocation)
   if (arc4Type.wtype instanceof wtypes.ARC4Type || arc4Type.wtype instanceof wtypes.WGroupTransaction) {
     return arc4Type.wtype.arc4Name
   }
