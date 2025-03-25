@@ -9,12 +9,13 @@ import { Constants } from '../../constants'
 import { CodeError } from '../../errors'
 import { logger } from '../../logger'
 import { codeInvariant, invariant, isIn } from '../../util'
+import { ptypeToArc4PType } from '../arc4-util'
 import type { NodeBuilder } from '../eb'
 import { ContractSuperBuilder, ContractThisBuilder } from '../eb/contract-builder'
 import { requireExpressionOfType } from '../eb/util'
 import type { Arc4AbiDecoratorData, DecoratorData } from '../models/decorator-data'
 import type { ContractClassPType, FunctionPType } from '../ptypes'
-import { GlobalStateType, LocalStateType } from '../ptypes'
+import { GlobalStateType, LocalStateType, voidPType } from '../ptypes'
 import { DecoratorVisitor } from './decorator-visitor'
 import { FunctionVisitor } from './function-visitor'
 import { visitInChildContext } from './util'
@@ -130,6 +131,7 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
     if (isProgramMethod || !isPublic || isStatic) return null
 
     if (decorator?.type === 'arc4.baremethod') {
+      this.checkBareMethodTypes(functionType, methodLocation)
       return new ARC4BareMethodConfig({
         sourceLocation: decorator.sourceLocation,
         allowedCompletionTypes: decorator.ocas,
@@ -138,6 +140,7 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
     }
 
     if (decorator?.type === 'arc4.abimethod') {
+      this.checkABIMethodTypes(functionType, methodLocation)
       return new ARC4ABIMethodConfig({
         sourceLocation: decorator.sourceLocation,
         allowedCompletionTypes: decorator.ocas,
@@ -157,6 +160,7 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
         ),
       })
     } else if (isPublic && this._contractType.isARC4) {
+      this.checkABIMethodTypes(functionType, methodLocation)
       return new ARC4ABIMethodConfig({
         sourceLocation: methodLocation,
         allowedCompletionTypes: [OnCompletionAction.NoOp],
@@ -167,6 +171,26 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
       })
     }
     return null
+  }
+
+  checkABIMethodTypes(functionType: FunctionPType, sourceLocation: SourceLocation) {
+    for (const [, paramType] of functionType.parameters) {
+      codeInvariant(
+        ptypeToArc4PType(paramType, 'in', sourceLocation),
+        'ABI method parameter types must have an ARC4 equivalent',
+        sourceLocation,
+      )
+    }
+    codeInvariant(
+      ptypeToArc4PType(functionType.returnType, 'out', sourceLocation),
+      'ABI method return type must have an ARC4 equivalent',
+      sourceLocation,
+    )
+  }
+
+  checkBareMethodTypes(functionType: FunctionPType, sourceLocation: SourceLocation) {
+    codeInvariant(functionType.parameters.length === 0, 'Bare methods cannot have any parameters', sourceLocation)
+    codeInvariant(functionType.returnType.equals(voidPType), 'Bare method return type must be void', sourceLocation)
   }
 
   private buildDefaultArgument({

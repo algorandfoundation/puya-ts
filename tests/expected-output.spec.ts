@@ -53,10 +53,10 @@ describe('Expected output', async () => {
       for (const expectedLog of expectedLogs) {
         const matchedLog = logs.find((l) => expectedLog.test(l))
         if (!matchedLog) {
-          const potentialCandidate = logs.find(
+          const potentialCandidates = logs.filter(
             (l) => l.sourceLocation?.file === expectedLog.sourceLocation.file && l.sourceLocation.line === expectedLog.sourceLocation.line,
           )
-          throw new MissingLogError(expectedLog, potentialCandidate)
+          throw new MissingLogError(expectedLog, potentialCandidates)
         } else {
           matchedLogs.add(matchedLog)
         }
@@ -82,14 +82,16 @@ class MissingLogError implements Error {
       message: string
       sourceLocation: SourceLocation
     },
-    private potentialMatch?: LogEvent,
+    private potentialMatches?: LogEvent[],
   ) {}
   get message() {
-    const foundLog = this.potentialMatch ? `Found log: [${this.potentialMatch.level}] ${this.potentialMatch.message}` : 'Found log: <none>'
+    const foundLog = this.potentialMatches
+      ? `Found logs: ${this.potentialMatches.map((m) => `[${m.level}] ${m.message}`).join('\n')}`
+      : 'Found log: <none>'
     return `Expected log: [${this.expectedLog.level}] ${this.expectedLog.message}\n${foundLog}`
   }
   get stack() {
-    return this.potentialMatch?.sourceLocation?.toString() ?? this.expectedLog.sourceLocation.toString()
+    return this.potentialMatches?.[0]?.sourceLocation?.toString() ?? this.expectedLog.sourceLocation.toString()
   }
   get name() {
     return 'MissingLogError'
