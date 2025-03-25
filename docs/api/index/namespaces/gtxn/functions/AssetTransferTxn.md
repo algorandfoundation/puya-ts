@@ -6,13 +6,16 @@
 
 # Function: AssetTransferTxn()
 
-> **AssetTransferTxn**(`groupIndex`): [`AssetTransferTxn`](../interfaces/AssetTransferTxn.md)
+> **AssetTransferTxn**(`n`): [`AssetTransferTxn`](../interfaces/AssetTransferTxn.md)
 
-Defined in: [packages/algo-ts/src/gtxn.ts:45](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L45)
+Defined in: [packages/algo-ts/src/gtxn.ts:614](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L614)
+
+Get the nth transaction in the group
+Verifies the txn type is 'axfer'
 
 ## Parameters
 
-### groupIndex
+### n
 
 [`uint64`](../../../type-aliases/uint64.md)
 

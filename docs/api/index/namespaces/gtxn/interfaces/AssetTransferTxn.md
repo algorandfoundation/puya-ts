@@ -6,11 +6,9 @@
 
 # Interface: AssetTransferTxn
 
-Defined in: [packages/algo-ts/src/gtxn.ts:45](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L45)
+Defined in: [packages/algo-ts/src/gtxn.ts:614](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L614)
 
-## Extends
-
-- [`AssetTransferTxn`](../../../-internal-/interfaces/AssetTransferTxn.md)
+A group transaction of type 'axfer'
 
 ## Constructors
 
@@ -20,13 +18,9 @@ Defined in: [packages/algo-ts/src/gtxn.ts:45](https://github.com/algorandfoundat
 
 > `readonly` **assetAmount**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:239](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L239)
+Defined in: [packages/algo-ts/src/gtxn.ts:330](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L330)
 
 value in Asset's units
-
-#### Inherited from
-
-[`AssetTransferTxn`](../../../-internal-/interfaces/AssetTransferTxn.md).[`assetAmount`](../../../-internal-/interfaces/AssetTransferTxn.md#assetamount)
 
 ***
 
@@ -34,13 +28,9 @@ value in Asset's units
 
 > `readonly` **assetCloseTo**: [`Account`](../../../type-aliases/Account.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:254](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L254)
+Defined in: [packages/algo-ts/src/gtxn.ts:342](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L342)
 
 32 byte address
-
-#### Inherited from
-
-[`AssetTransferTxn`](../../../-internal-/interfaces/AssetTransferTxn.md).[`assetCloseTo`](../../../-internal-/interfaces/AssetTransferTxn.md#assetcloseto)
 
 ***
 
@@ -48,13 +38,9 @@ Defined in: [packages/algo-ts/src/transactions.ts:254](https://github.com/algora
 
 > `readonly` **assetReceiver**: [`Account`](../../../type-aliases/Account.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:249](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L249)
+Defined in: [packages/algo-ts/src/gtxn.ts:338](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L338)
 
 32 byte address
-
-#### Inherited from
-
-[`AssetTransferTxn`](../../../-internal-/interfaces/AssetTransferTxn.md).[`assetReceiver`](../../../-internal-/interfaces/AssetTransferTxn.md#assetreceiver)
 
 ***
 
@@ -62,13 +48,9 @@ Defined in: [packages/algo-ts/src/transactions.ts:249](https://github.com/algora
 
 > `readonly` **assetSender**: [`Account`](../../../type-aliases/Account.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:244](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L244)
+Defined in: [packages/algo-ts/src/gtxn.ts:334](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L334)
 
 32 byte address. Source of assets if Sender is the Asset's Clawback address.
-
-#### Inherited from
-
-[`AssetTransferTxn`](../../../-internal-/interfaces/AssetTransferTxn.md).[`assetSender`](../../../-internal-/interfaces/AssetTransferTxn.md#assetsender)
 
 ***
 
@@ -76,13 +58,9 @@ Defined in: [packages/algo-ts/src/transactions.ts:244](https://github.com/algora
 
 > `readonly` **fee**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:44](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L44)
+Defined in: [packages/algo-ts/src/gtxn.ts:281](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L281)
 
 microalgos
-
-#### Inherited from
-
-[`AssetTransferTxn`](../../../-internal-/interfaces/AssetTransferTxn.md).[`fee`](../../../-internal-/interfaces/AssetTransferTxn.md#fee)
 
 ***
 
@@ -90,13 +68,9 @@ microalgos
 
 > `readonly` **firstValid**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:49](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L49)
+Defined in: [packages/algo-ts/src/gtxn.ts:285](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L285)
 
 round number
-
-#### Inherited from
-
-[`AssetTransferTxn`](../../../-internal-/interfaces/AssetTransferTxn.md).[`firstValid`](../../../-internal-/interfaces/AssetTransferTxn.md#firstvalid)
 
 ***
 
@@ -104,13 +78,9 @@ round number
 
 > `readonly` **firstValidTime**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:54](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L54)
+Defined in: [packages/algo-ts/src/gtxn.ts:289](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L289)
 
 UNIX timestamp of block before txn.FirstValid. Fails if negative
-
-#### Inherited from
-
-[`AssetTransferTxn`](../../../-internal-/interfaces/AssetTransferTxn.md).[`firstValidTime`](../../../-internal-/interfaces/AssetTransferTxn.md#firstvalidtime)
 
 ***
 
@@ -118,14 +88,10 @@ UNIX timestamp of block before txn.FirstValid. Fails if negative
 
 > `readonly` **groupIndex**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:80](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L80)
+Defined in: [packages/algo-ts/src/gtxn.ts:314](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L314)
 
 Position of this transaction within an atomic group
 A stand-alone transaction is implicitly element 0 in a group of 1
-
-#### Inherited from
-
-[`AssetTransferTxn`](../../../-internal-/interfaces/AssetTransferTxn.md).[`groupIndex`](../../../-internal-/interfaces/AssetTransferTxn.md#groupindex)
 
 ***
 
@@ -133,13 +99,9 @@ A stand-alone transaction is implicitly element 0 in a group of 1
 
 > `readonly` **lastValid**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:59](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L59)
+Defined in: [packages/algo-ts/src/gtxn.ts:293](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L293)
 
 round number
-
-#### Inherited from
-
-[`AssetTransferTxn`](../../../-internal-/interfaces/AssetTransferTxn.md).[`lastValid`](../../../-internal-/interfaces/AssetTransferTxn.md#lastvalid)
 
 ***
 
@@ -147,13 +109,9 @@ round number
 
 > `readonly` **lease**: [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:69](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L69)
+Defined in: [packages/algo-ts/src/gtxn.ts:301](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L301)
 
 32 byte lease value
-
-#### Inherited from
-
-[`AssetTransferTxn`](../../../-internal-/interfaces/AssetTransferTxn.md).[`lease`](../../../-internal-/interfaces/AssetTransferTxn.md#lease)
 
 ***
 
@@ -161,13 +119,9 @@ Defined in: [packages/algo-ts/src/transactions.ts:69](https://github.com/algoran
 
 > `readonly` **note**: [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:64](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L64)
+Defined in: [packages/algo-ts/src/gtxn.ts:297](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L297)
 
 Any data up to 1024 bytes
-
-#### Inherited from
-
-[`AssetTransferTxn`](../../../-internal-/interfaces/AssetTransferTxn.md).[`note`](../../../-internal-/interfaces/AssetTransferTxn.md#note)
 
 ***
 
@@ -175,13 +129,9 @@ Any data up to 1024 bytes
 
 > `readonly` **rekeyTo**: [`Account`](../../../type-aliases/Account.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:90](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L90)
+Defined in: [packages/algo-ts/src/gtxn.ts:322](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L322)
 
 32 byte Sender's new AuthAddr
-
-#### Inherited from
-
-[`AssetTransferTxn`](../../../-internal-/interfaces/AssetTransferTxn.md).[`rekeyTo`](../../../-internal-/interfaces/AssetTransferTxn.md#rekeyto)
 
 ***
 
@@ -189,13 +139,9 @@ Defined in: [packages/algo-ts/src/transactions.ts:90](https://github.com/algoran
 
 > `readonly` **sender**: [`Account`](../../../type-aliases/Account.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:39](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L39)
+Defined in: [packages/algo-ts/src/gtxn.ts:277](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L277)
 
 32 byte address
-
-#### Inherited from
-
-[`AssetTransferTxn`](../../../-internal-/interfaces/AssetTransferTxn.md).[`sender`](../../../-internal-/interfaces/AssetTransferTxn.md#sender)
 
 ***
 
@@ -203,13 +149,9 @@ Defined in: [packages/algo-ts/src/transactions.ts:39](https://github.com/algoran
 
 > `readonly` **txnId**: [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:85](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L85)
+Defined in: [packages/algo-ts/src/gtxn.ts:318](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L318)
 
 The computed ID for this transaction. 32 bytes.
-
-#### Inherited from
-
-[`AssetTransferTxn`](../../../-internal-/interfaces/AssetTransferTxn.md).[`txnId`](../../../-internal-/interfaces/AssetTransferTxn.md#txnid)
 
 ***
 
@@ -217,13 +159,9 @@ The computed ID for this transaction. 32 bytes.
 
 > `readonly` **type**: [`AssetTransfer`](../../../enumerations/TransactionType.md#assettransfer)
 
-Defined in: [packages/algo-ts/src/transactions.ts:258](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L258)
+Defined in: [packages/algo-ts/src/gtxn.ts:309](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L309)
 
-Transaction type as integer
-
-#### Inherited from
-
-[`AssetTransferTxn`](../../../-internal-/interfaces/AssetTransferTxn.md).[`type`](../../../-internal-/interfaces/AssetTransferTxn.md#type)
+Transaction type
 
 ***
 
@@ -231,13 +169,9 @@ Transaction type as integer
 
 > `readonly` **typeBytes**: [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:74](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L74)
+Defined in: [packages/algo-ts/src/gtxn.ts:305](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L305)
 
 Transaction type as bytes
-
-#### Inherited from
-
-[`AssetTransferTxn`](../../../-internal-/interfaces/AssetTransferTxn.md).[`typeBytes`](../../../-internal-/interfaces/AssetTransferTxn.md#typebytes)
 
 ***
 
@@ -245,10 +179,6 @@ Transaction type as bytes
 
 > `readonly` **xferAsset**: [`Asset`](../../../type-aliases/Asset.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:234](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L234)
+Defined in: [packages/algo-ts/src/gtxn.ts:326](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L326)
 
 Asset ID
-
-#### Inherited from
-
-[`AssetTransferTxn`](../../../-internal-/interfaces/AssetTransferTxn.md).[`xferAsset`](../../../-internal-/interfaces/AssetTransferTxn.md#xferasset)

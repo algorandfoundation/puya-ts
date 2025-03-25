@@ -6,6 +6,6 @@
 
 # Type Alias: InnerTxnList
 
-> **InnerTxnList**: \[`...InnerTransaction[]`\]
+> **InnerTxnList**: \[`...ItxnParams[]`\]
 
-Defined in: [packages/algo-ts/src/itxn.ts:181](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L181)
+Defined in: [packages/algo-ts/src/itxn.ts:972](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L972)

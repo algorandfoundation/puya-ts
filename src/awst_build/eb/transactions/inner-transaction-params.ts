@@ -7,6 +7,8 @@ import { logger } from '../../../logger'
 import { codeInvariant, invariant } from '../../../util'
 import type { PType } from '../../ptypes'
 import { ItxnParamsPType, ObjectPType, submitGroupItxnFunction, TransactionFunctionType, TuplePType } from '../../ptypes'
+import type { TxnFieldsMetaData } from '../../txn-fields'
+import { anyTxnFields, txnKindToFields } from '../../txn-fields'
 import { instanceEb } from '../../type-registry'
 import type { InstanceBuilder, NodeBuilder } from '../index'
 import { FunctionBuilder, InstanceExpressionBuilder } from '../index'
@@ -14,7 +16,6 @@ import { isStaticallyIterable, StaticIterator } from '../traits/static-iterator'
 import { parseFunctionArgs } from '../util/arg-parsing'
 import { resolveCompatExpression } from '../util/resolve-compat-builder'
 import { InnerTransactionExpressionBuilder } from './inner-transactions'
-import { anyTxnFields, txnKindToFields } from './txn-fields'
 import { getInnerTransactionType, getItxnParamsType } from './util'
 
 export class ItxnParamsFactoryFunctionBuilder extends FunctionBuilder {
@@ -64,11 +65,11 @@ export function mapTransactionFields(
   ignoreProps?: Set<string>,
 ) {
   codeInvariant(fields.ptype instanceof ObjectPType, 'fields argument must be an object type')
-  const validFields: Record<string, readonly [TxnField, PType]> = kind !== undefined ? txnKindToFields[kind] : anyTxnFields
+  const validFields: TxnFieldsMetaData = kind !== undefined ? txnKindToFields[kind] : anyTxnFields
   for (const [prop] of fields.ptype.orderedProperties()) {
     if (ignoreProps?.has(prop)) continue
     if (prop in validFields) {
-      const [txnField, fieldType] = validFields[prop as keyof typeof validFields]
+      const { field: txnField, ptype: fieldType } = validFields[prop as keyof typeof validFields]
       const txnFieldData = TxnFields[txnField]
       const propValue = fields.memberAccess(prop, sourceLocation)
       if (txnField === TxnField.ApplicationArgs) {

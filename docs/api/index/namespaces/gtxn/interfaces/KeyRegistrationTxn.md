@@ -6,11 +6,9 @@
 
 # Interface: KeyRegistrationTxn
 
-Defined in: [packages/algo-ts/src/gtxn.ts:39](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L39)
+Defined in: [packages/algo-ts/src/gtxn.ts:600](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L600)
 
-## Extends
-
-- [`KeyRegistrationTxn`](../../../-internal-/interfaces/KeyRegistrationTxn.md)
+A group transaction of type 'keyreg'
 
 ## Constructors
 
@@ -20,13 +18,9 @@ Defined in: [packages/algo-ts/src/gtxn.ts:39](https://github.com/algorandfoundat
 
 > `readonly` **fee**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:44](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L44)
+Defined in: [packages/algo-ts/src/gtxn.ts:89](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L89)
 
 microalgos
-
-#### Inherited from
-
-[`KeyRegistrationTxn`](../../../-internal-/interfaces/KeyRegistrationTxn.md).[`fee`](../../../-internal-/interfaces/KeyRegistrationTxn.md#fee)
 
 ***
 
@@ -34,13 +28,9 @@ microalgos
 
 > `readonly` **firstValid**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:49](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L49)
+Defined in: [packages/algo-ts/src/gtxn.ts:93](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L93)
 
 round number
-
-#### Inherited from
-
-[`KeyRegistrationTxn`](../../../-internal-/interfaces/KeyRegistrationTxn.md).[`firstValid`](../../../-internal-/interfaces/KeyRegistrationTxn.md#firstvalid)
 
 ***
 
@@ -48,13 +38,9 @@ round number
 
 > `readonly` **firstValidTime**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:54](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L54)
+Defined in: [packages/algo-ts/src/gtxn.ts:97](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L97)
 
 UNIX timestamp of block before txn.FirstValid. Fails if negative
-
-#### Inherited from
-
-[`KeyRegistrationTxn`](../../../-internal-/interfaces/KeyRegistrationTxn.md).[`firstValidTime`](../../../-internal-/interfaces/KeyRegistrationTxn.md#firstvalidtime)
 
 ***
 
@@ -62,14 +48,10 @@ UNIX timestamp of block before txn.FirstValid. Fails if negative
 
 > `readonly` **groupIndex**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:80](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L80)
+Defined in: [packages/algo-ts/src/gtxn.ts:122](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L122)
 
 Position of this transaction within an atomic group
 A stand-alone transaction is implicitly element 0 in a group of 1
-
-#### Inherited from
-
-[`KeyRegistrationTxn`](../../../-internal-/interfaces/KeyRegistrationTxn.md).[`groupIndex`](../../../-internal-/interfaces/KeyRegistrationTxn.md#groupindex)
 
 ***
 
@@ -77,13 +59,9 @@ A stand-alone transaction is implicitly element 0 in a group of 1
 
 > `readonly` **lastValid**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:59](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L59)
+Defined in: [packages/algo-ts/src/gtxn.ts:101](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L101)
 
 round number
-
-#### Inherited from
-
-[`KeyRegistrationTxn`](../../../-internal-/interfaces/KeyRegistrationTxn.md).[`lastValid`](../../../-internal-/interfaces/KeyRegistrationTxn.md#lastvalid)
 
 ***
 
@@ -91,13 +69,9 @@ round number
 
 > `readonly` **lease**: [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:69](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L69)
+Defined in: [packages/algo-ts/src/gtxn.ts:109](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L109)
 
 32 byte lease value
-
-#### Inherited from
-
-[`KeyRegistrationTxn`](../../../-internal-/interfaces/KeyRegistrationTxn.md).[`lease`](../../../-internal-/interfaces/KeyRegistrationTxn.md#lease)
 
 ***
 
@@ -105,13 +79,9 @@ Defined in: [packages/algo-ts/src/transactions.ts:69](https://github.com/algoran
 
 > `readonly` **nonparticipation**: `boolean`
 
-Defined in: [packages/algo-ts/src/transactions.ts:147](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L147)
+Defined in: [packages/algo-ts/src/gtxn.ts:154](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L154)
 
 Marks an account nonparticipating for rewards
-
-#### Inherited from
-
-[`KeyRegistrationTxn`](../../../-internal-/interfaces/KeyRegistrationTxn.md).[`nonparticipation`](../../../-internal-/interfaces/KeyRegistrationTxn.md#nonparticipation)
 
 ***
 
@@ -119,13 +89,9 @@ Marks an account nonparticipating for rewards
 
 > `readonly` **note**: [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:64](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L64)
+Defined in: [packages/algo-ts/src/gtxn.ts:105](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L105)
 
 Any data up to 1024 bytes
-
-#### Inherited from
-
-[`KeyRegistrationTxn`](../../../-internal-/interfaces/KeyRegistrationTxn.md).[`note`](../../../-internal-/interfaces/KeyRegistrationTxn.md#note)
 
 ***
 
@@ -133,13 +99,9 @@ Any data up to 1024 bytes
 
 > `readonly` **rekeyTo**: [`Account`](../../../type-aliases/Account.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:90](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L90)
+Defined in: [packages/algo-ts/src/gtxn.ts:130](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L130)
 
 32 byte Sender's new AuthAddr
-
-#### Inherited from
-
-[`KeyRegistrationTxn`](../../../-internal-/interfaces/KeyRegistrationTxn.md).[`rekeyTo`](../../../-internal-/interfaces/KeyRegistrationTxn.md#rekeyto)
 
 ***
 
@@ -147,13 +109,9 @@ Defined in: [packages/algo-ts/src/transactions.ts:90](https://github.com/algoran
 
 > `readonly` **selectionKey**: [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:127](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L127)
+Defined in: [packages/algo-ts/src/gtxn.ts:138](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L138)
 
 32 byte address
-
-#### Inherited from
-
-[`KeyRegistrationTxn`](../../../-internal-/interfaces/KeyRegistrationTxn.md).[`selectionKey`](../../../-internal-/interfaces/KeyRegistrationTxn.md#selectionkey)
 
 ***
 
@@ -161,13 +119,9 @@ Defined in: [packages/algo-ts/src/transactions.ts:127](https://github.com/algora
 
 > `readonly` **sender**: [`Account`](../../../type-aliases/Account.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:39](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L39)
+Defined in: [packages/algo-ts/src/gtxn.ts:85](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L85)
 
 32 byte address
-
-#### Inherited from
-
-[`KeyRegistrationTxn`](../../../-internal-/interfaces/KeyRegistrationTxn.md).[`sender`](../../../-internal-/interfaces/KeyRegistrationTxn.md#sender)
 
 ***
 
@@ -175,13 +129,9 @@ Defined in: [packages/algo-ts/src/transactions.ts:39](https://github.com/algoran
 
 > `readonly` **stateProofKey**: [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:152](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L152)
+Defined in: [packages/algo-ts/src/gtxn.ts:158](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L158)
 
 64 byte state proof public key
-
-#### Inherited from
-
-[`KeyRegistrationTxn`](../../../-internal-/interfaces/KeyRegistrationTxn.md).[`stateProofKey`](../../../-internal-/interfaces/KeyRegistrationTxn.md#stateproofkey)
 
 ***
 
@@ -189,13 +139,9 @@ Defined in: [packages/algo-ts/src/transactions.ts:152](https://github.com/algora
 
 > `readonly` **txnId**: [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:85](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L85)
+Defined in: [packages/algo-ts/src/gtxn.ts:126](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L126)
 
 The computed ID for this transaction. 32 bytes.
-
-#### Inherited from
-
-[`KeyRegistrationTxn`](../../../-internal-/interfaces/KeyRegistrationTxn.md).[`txnId`](../../../-internal-/interfaces/KeyRegistrationTxn.md#txnid)
 
 ***
 
@@ -203,13 +149,9 @@ The computed ID for this transaction. 32 bytes.
 
 > `readonly` **type**: [`KeyRegistration`](../../../enumerations/TransactionType.md#keyregistration)
 
-Defined in: [packages/algo-ts/src/transactions.ts:156](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L156)
+Defined in: [packages/algo-ts/src/gtxn.ts:117](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L117)
 
-Transaction type as integer
-
-#### Inherited from
-
-[`KeyRegistrationTxn`](../../../-internal-/interfaces/KeyRegistrationTxn.md).[`type`](../../../-internal-/interfaces/KeyRegistrationTxn.md#type)
+Transaction type
 
 ***
 
@@ -217,13 +159,9 @@ Transaction type as integer
 
 > `readonly` **typeBytes**: [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:74](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L74)
+Defined in: [packages/algo-ts/src/gtxn.ts:113](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L113)
 
 Transaction type as bytes
-
-#### Inherited from
-
-[`KeyRegistrationTxn`](../../../-internal-/interfaces/KeyRegistrationTxn.md).[`typeBytes`](../../../-internal-/interfaces/KeyRegistrationTxn.md#typebytes)
 
 ***
 
@@ -231,13 +169,9 @@ Transaction type as bytes
 
 > `readonly` **voteFirst**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:132](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L132)
+Defined in: [packages/algo-ts/src/gtxn.ts:142](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L142)
 
 The first round that the participation key is valid.
-
-#### Inherited from
-
-[`KeyRegistrationTxn`](../../../-internal-/interfaces/KeyRegistrationTxn.md).[`voteFirst`](../../../-internal-/interfaces/KeyRegistrationTxn.md#votefirst)
 
 ***
 
@@ -245,13 +179,9 @@ The first round that the participation key is valid.
 
 > `readonly` **voteKey**: [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:122](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L122)
+Defined in: [packages/algo-ts/src/gtxn.ts:134](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L134)
 
 32 byte address
-
-#### Inherited from
-
-[`KeyRegistrationTxn`](../../../-internal-/interfaces/KeyRegistrationTxn.md).[`voteKey`](../../../-internal-/interfaces/KeyRegistrationTxn.md#votekey)
 
 ***
 
@@ -259,13 +189,9 @@ Defined in: [packages/algo-ts/src/transactions.ts:122](https://github.com/algora
 
 > `readonly` **voteKeyDilution**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:142](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L142)
+Defined in: [packages/algo-ts/src/gtxn.ts:150](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L150)
 
 Dilution for the 2-level participation key
-
-#### Inherited from
-
-[`KeyRegistrationTxn`](../../../-internal-/interfaces/KeyRegistrationTxn.md).[`voteKeyDilution`](../../../-internal-/interfaces/KeyRegistrationTxn.md#votekeydilution)
 
 ***
 
@@ -273,10 +199,6 @@ Dilution for the 2-level participation key
 
 > `readonly` **voteLast**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:137](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L137)
+Defined in: [packages/algo-ts/src/gtxn.ts:146](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L146)
 
 The last round that the participation key is valid.
-
-#### Inherited from
-
-[`KeyRegistrationTxn`](../../../-internal-/interfaces/KeyRegistrationTxn.md).[`voteLast`](../../../-internal-/interfaces/KeyRegistrationTxn.md#votelast)
