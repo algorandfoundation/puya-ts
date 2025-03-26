@@ -1,0 +1,130 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        let tmp%0#1: uint64 = (txn NumAppArgs)
+        goto tmp%0#1 ? block@2 : block@8
+    block@2: // abi_routing_L4
+        let tmp%2#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%2#0 {method "testSingleArg()uint64[]" => block@3, method "testTwoArg()uint64[]" => block@4, method "testThreeArg()uint64[]" => block@5, * => block@12}
+    block@3: // testSingleArg_route_L5
+        let tmp%3#0: uint64 = (txn OnCompletion)
+        let tmp%4#0: bool = (! tmp%3#0)
+        (assert tmp%4#0) // OnCompletion is not NoOp
+        let tmp%5#0: uint64 = (txn ApplicationID)
+        (assert tmp%5#0) // can only call when not creating
+        let results#6: uint64[] = 0x0000
+        let i#6: uint64 = 0u
+        goto block@27
+    block@27: // for_header_L7
+        let i#7: uint64 = φ(i#6 <- block@3, i#8 <- block@28)
+        let results#7: uint64[] = φ(results#6 <- block@3, results#8 <- block@28)
+        let continue_looping%0#2: bool = (< i#7 5u)
+        goto continue_looping%0#2 ? block@28 : block@29
+    block@28: // for_body_L7
+        let expr_value_trimmed%0#2: bytes = ((extract 2 0) results#7)
+        let array%sub_item%0#1: bytes[8] = (itob i#7)
+        let byte_len%0#2: uint64 = (len array%sub_item%0#1)
+        let len_%0#2: uint64 = (/ byte_len%0#2 8u)
+        let as_bytes%0#2: bytes[8] = (itob len_%0#2)
+        let len_16_bit%0#2: bytes = ((extract 6 2) as_bytes%0#2)
+        let concat_result%0#2: bytes = (concat len_16_bit%0#2 array%sub_item%0#1)
+        let expr_value_trimmed%2#2: bytes = ((extract 2 0) concat_result%0#2)
+        let concatenated%1#2: bytes = (concat expr_value_trimmed%0#2 expr_value_trimmed%2#2)
+        let byte_len%1#2: uint64 = (len concatenated%1#2)
+        let len_%1#2: uint64 = (/ byte_len%1#2 8u)
+        let as_bytes%1#2: bytes[8] = (itob len_%1#2)
+        let len_16_bit%1#2: bytes = ((extract 6 2) as_bytes%1#2)
+        let results#8: uint64[] = (concat len_16_bit%1#2 concatenated%1#2)
+        let i#8: uint64 = (+ i#7 1u)
+        goto block@27
+    block@29: // after_for_L7
+        let tmp%8#0: bytes = (concat 0x151f7c75 results#7)
+        (log tmp%8#0)
+        let tests/approvals/urange.algo.ts::UrangeAlgo.__puya_arc4_router__%0#0: bool = 1u
+        goto block@13
+    block@4: // testTwoArg_route_L12
+        let tmp%9#0: uint64 = (txn OnCompletion)
+        let tmp%10#0: bool = (! tmp%9#0)
+        (assert tmp%10#0) // OnCompletion is not NoOp
+        let tmp%11#0: uint64 = (txn ApplicationID)
+        (assert tmp%11#0) // can only call when not creating
+        let results#3: uint64[] = 0x0000
+        let i#3: uint64 = 2u
+        goto block@22
+    block@22: // for_header_L14
+        let i#4: uint64 = φ(i#3 <- block@4, i#5 <- block@23)
+        let results#4: uint64[] = φ(results#3 <- block@4, results#5 <- block@23)
+        let continue_looping%0#1: bool = (< i#4 5u)
+        goto continue_looping%0#1 ? block@23 : block@24
+    block@23: // for_body_L14
+        let expr_value_trimmed%0#1: bytes = ((extract 2 0) results#4)
+        let array%sub_item%1#1: bytes[8] = (itob i#4)
+        let byte_len%0#1: uint64 = (len array%sub_item%1#1)
+        let len_%0#1: uint64 = (/ byte_len%0#1 8u)
+        let as_bytes%0#1: bytes[8] = (itob len_%0#1)
+        let len_16_bit%0#1: bytes = ((extract 6 2) as_bytes%0#1)
+        let concat_result%0#1: bytes = (concat len_16_bit%0#1 array%sub_item%1#1)
+        let expr_value_trimmed%2#1: bytes = ((extract 2 0) concat_result%0#1)
+        let concatenated%1#1: bytes = (concat expr_value_trimmed%0#1 expr_value_trimmed%2#1)
+        let byte_len%1#1: uint64 = (len concatenated%1#1)
+        let len_%1#1: uint64 = (/ byte_len%1#1 8u)
+        let as_bytes%1#1: bytes[8] = (itob len_%1#1)
+        let len_16_bit%1#1: bytes = ((extract 6 2) as_bytes%1#1)
+        let results#5: uint64[] = (concat len_16_bit%1#1 concatenated%1#1)
+        let i#5: uint64 = (+ i#4 1u)
+        goto block@22
+    block@24: // after_for_L14
+        let tmp%14#0: bytes = (concat 0x151f7c75 results#4)
+        (log tmp%14#0)
+        let tests/approvals/urange.algo.ts::UrangeAlgo.__puya_arc4_router__%0#1: bool = 1u
+        goto block@13
+    block@5: // testThreeArg_route_L19
+        let tmp%15#0: uint64 = (txn OnCompletion)
+        let tmp%16#0: bool = (! tmp%15#0)
+        (assert tmp%16#0) // OnCompletion is not NoOp
+        let tmp%17#0: uint64 = (txn ApplicationID)
+        (assert tmp%17#0) // can only call when not creating
+        let results#0: uint64[] = 0x0000
+        let i#0: uint64 = 2u
+        goto block@17
+    block@17: // for_header_L21
+        let i#1: uint64 = φ(i#0 <- block@5, i#2 <- block@18)
+        let results#1: uint64[] = φ(results#0 <- block@5, results#2 <- block@18)
+        let continue_looping%0#0: bool = (< i#1 10u)
+        goto continue_looping%0#0 ? block@18 : block@19
+    block@18: // for_body_L21
+        let expr_value_trimmed%0#0: bytes = ((extract 2 0) results#1)
+        let array%sub_item%2#1: bytes[8] = (itob i#1)
+        let byte_len%0#0: uint64 = (len array%sub_item%2#1)
+        let len_%0#0: uint64 = (/ byte_len%0#0 8u)
+        let as_bytes%0#0: bytes[8] = (itob len_%0#0)
+        let len_16_bit%0#0: bytes = ((extract 6 2) as_bytes%0#0)
+        let concat_result%0#0: bytes = (concat len_16_bit%0#0 array%sub_item%2#1)
+        let expr_value_trimmed%2#0: bytes = ((extract 2 0) concat_result%0#0)
+        let concatenated%1#0: bytes = (concat expr_value_trimmed%0#0 expr_value_trimmed%2#0)
+        let byte_len%1#0: uint64 = (len concatenated%1#0)
+        let len_%1#0: uint64 = (/ byte_len%1#0 8u)
+        let as_bytes%1#0: bytes[8] = (itob len_%1#0)
+        let len_16_bit%1#0: bytes = ((extract 6 2) as_bytes%1#0)
+        let results#2: uint64[] = (concat len_16_bit%1#0 concatenated%1#0)
+        let i#2: uint64 = (+ i#1 3u)
+        goto block@17
+    block@19: // after_for_L21
+        let tmp%20#0: bytes = (concat 0x151f7c75 results#1)
+        (log tmp%20#0)
+        let tests/approvals/urange.algo.ts::UrangeAlgo.__puya_arc4_router__%0#2: bool = 1u
+        goto block@13
+    block@8: // bare_routing_L4
+        let tmp%21#0: uint64 = (txn OnCompletion)
+        goto tmp%21#0 ? block@12 : block@9
+    block@9: // __algots__.defaultCreate_L4
+        let tmp%22#0: uint64 = (txn ApplicationID)
+        let tmp%23#0: bool = (! tmp%22#0)
+        (assert tmp%23#0) // can only call when creating
+        let tests/approvals/urange.algo.ts::UrangeAlgo.__puya_arc4_router__%0#3: bool = 1u
+        goto block@13
+    block@12: // after_if_else_L4
+        let tests/approvals/urange.algo.ts::UrangeAlgo.__puya_arc4_router__%0#4: bool = 0u
+        goto block@13
+    block@13: // after_inlined_tests/approvals/urange.algo.ts::UrangeAlgo.__puya_arc4_router___L1
+        let tmp%0#0: bool = φ(tests/approvals/urange.algo.ts::UrangeAlgo.__puya_arc4_router__%0#0 <- block@29, tests/approvals/urange.algo.ts::UrangeAlgo.__puya_arc4_router__%0#1 <- block@24, tests/approvals/urange.algo.ts::UrangeAlgo.__puya_arc4_router__%0#2 <- block@19, tests/approvals/urange.algo.ts::UrangeAlgo.__puya_arc4_router__%0#3 <- block@9, tests/approvals/urange.algo.ts::UrangeAlgo.__puya_arc4_router__%0#4 <- block@12)
+        return tmp%0#0

@@ -32,7 +32,7 @@ export class UrangeFunctionBuilder extends FunctionBuilder {
       expr = nodeFactory.range({
         start: uArgs[0].resolve(),
         stop: uArgs[1].resolve(),
-        step: nodeFactory.uInt64Constant({ value: 0n, sourceLocation }),
+        step: nodeFactory.uInt64Constant({ value: 1n, sourceLocation }),
         sourceLocation,
         wtype: wtypes.uint64RangeWType,
       })
