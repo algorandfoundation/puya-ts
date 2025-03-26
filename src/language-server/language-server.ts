@@ -172,18 +172,18 @@ export async function startLanguageServer() {
 
 async function buildWorkspaceDiagnosticsMap(
   connection: Connection,
-  workspaceFolder: string,
+  workspaceFolder: string | undefined,
   documents: TextDocuments<TextDocument>,
   puyaService: PuyaService,
 ): Promise<Map<string, Diagnostic[]>> {
-  try {
-    const workspacePath = URI.parse(workspaceFolder).fsPath
-    return await getWorkspaceDiagnostics(connection, workspacePath, documents, puyaService)
-  } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : String(error)
-    connection.console.error(`Error getting diagnostics: ${errorMessage}`)
+  if (!workspaceFolder) {
+    connection.console.error('Workspace folder not set')
+
     return new Map()
   }
+
+  const workspacePath = URI.parse(workspaceFolder).fsPath
+  return await getWorkspaceDiagnostics(connection, workspacePath, documents, puyaService)
 }
 
 async function sendDiagnostics(connection: Connection, diagnosticsMap: Map<string, Diagnostic[]>) {

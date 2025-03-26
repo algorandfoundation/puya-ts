@@ -37,7 +37,7 @@ function prepareFiles(workspaceFolder: string, documents: TextDocuments<TextDocu
   })
 }
 
-async function compileAndExtractLogs(files: AlgoFile[], connection: Connection, puyaService: PuyaService): Promise<LogEventWithSource[]> {
+async function compileAndExtractLogs(files: AlgoFile[], puyaService: PuyaService): Promise<LogEventWithSource[]> {
   const logCtx = LoggingContext.create()
 
   return await logCtx.run(async () => {
@@ -48,7 +48,6 @@ async function compileAndExtractLogs(files: AlgoFile[], connection: Connection, 
         dryRun: true,
       })
 
-      connection.console.info('Starting AWST compilation')
       const { awst, compilationSet, programDirectory, ast: sourceFiles } = await compile(compileOptions)
 
       if (!awst || !compilationSet || !sourceFiles) {
@@ -56,7 +55,6 @@ async function compileAndExtractLogs(files: AlgoFile[], connection: Connection, 
       }
 
       // Serialize AWST and build compilation set mapping for the puya service
-      connection.console.info('Serializing AWST and preparing compilation set')
       const serializer = new AwstSerializer({
         programDirectory: programDirectory,
         sourcePaths: 'absolute',
@@ -72,16 +70,13 @@ async function compileAndExtractLogs(files: AlgoFile[], connection: Connection, 
       })
 
       // Use the puya service to compile the AWST
-      connection.console.info('Sending compilation request to puya service')
-      const result = await puyaService.compile({
+      await puyaService.compile({
         awst: serializedAwst,
         compilationSet: compilationSetMapping,
         sourceAnnotations,
       })
 
       // Convert puya service logs to LogEvents
-      connection.console.info(`Received ${result.logs.length} logs from puya service`)
-
       return logCtx.logEvents
         .filter((e) => e.level === LogLevel.Error || e.level === LogLevel.Warning)
         .filter((e): e is LogEventWithSource => Boolean(e.sourceLocation?.file))
@@ -121,7 +116,7 @@ export async function getWorkspaceDiagnostics(
     connection.console.debug(`Parsing ${workspaceFolder}`)
 
     const files = prepareFiles(workspaceFolder, documents)
-    const logEvents = await compileAndExtractLogs(files, connection, puyaService)
+    const logEvents = await compileAndExtractLogs(files, puyaService)
 
     return files.reduce((acc, file) => {
       const diagnostics = logEvents.filter((e) => e.sourceLocation.file === file.sourceFile).map(mapToDiagnostic)
@@ -129,8 +124,7 @@ export async function getWorkspaceDiagnostics(
       return acc
     }, new Map<string, Diagnostic[]>())
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : String(error)
-    connection.console.error(`Failed to compile: ${errorMessage}`)
+    connection.console.error(`Failed to compile: ${JSON.stringify(error)}`)
     return new Map()
   }
 }
