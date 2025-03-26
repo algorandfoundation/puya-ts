@@ -1,6 +1,13 @@
 import { concatMap, debounceTime, map, Observable } from 'rxjs'
 import { TextDocument } from 'vscode-languageserver-textdocument'
-import type { CodeAction, Diagnostic, InitializeResult, TextDocumentChangeEvent } from 'vscode-languageserver/node.js'
+import type {
+  CodeAction,
+  Connection,
+  Diagnostic,
+  Disposable,
+  InitializeResult,
+  TextDocumentChangeEvent,
+} from 'vscode-languageserver/node.js'
 import {
   createClientSocketTransport,
   createConnection,
@@ -9,6 +16,7 @@ import {
   TextDocumentSyncKind,
 } from 'vscode-languageserver/node.js'
 import { URI } from 'vscode-uri'
+import { Constants } from '../constants'
 import type { WellKnownErrors } from '../errors'
 import { codeFixes } from './code-fix'
 import { getWorkspaceDiagnostics } from './diagnostics'
@@ -44,81 +52,103 @@ export async function startLanguageServer() {
   const documents = new TextDocuments(TextDocument)
   let workspaceFolder: string | undefined
 
-  connection.onInitialize((params) => {
-    // The extension sets the workspaceFolder property
-    // therefore, workspaceFolders is an array with one element
-    workspaceFolder = params.workspaceFolders?.[0]?.uri
+  const disposables: Disposable[] = []
 
-    const result: InitializeResult = {
-      capabilities: {
-        textDocumentSync: TextDocumentSyncKind.Incremental,
-        codeActionProvider: {
-          resolveProvider: false,
+  disposables.push(
+    connection.onInitialize((params) => {
+      // The extension sets the workspaceFolder property
+      // therefore, workspaceFolders is an array with one element
+      workspaceFolder = params.workspaceFolders?.[0]?.uri
+
+      const result: InitializeResult = {
+        capabilities: {
+          textDocumentSync: TextDocumentSyncKind.Incremental,
+          codeActionProvider: {
+            resolveProvider: false,
+          },
         },
-      },
-    }
-    return result
-  })
+      }
+      return result
+    }),
+  )
 
-  connection.onInitialized(() => {
-    connection.console.log('Algorand TypeScript Language Server initialized')
-  })
+  disposables.push(
+    connection.onInitialized(() => {
+      connection.console.log(`${Constants.languageServerSource}-ls initialized`)
+    }),
+  )
 
   const documentChangeObservable = new Observable<TextDocumentChangeEvent<TextDocument>>((subscriber) => {
-    documents.onDidChangeContent((event) => {
+    const subscription = documents.onDidChangeContent((event) => {
       subscriber.next(event)
     })
+
+    return subscription.dispose
   })
-
-  async function buildWorkspaceDiagnosticsMap(): Promise<Map<string, Diagnostic[]>> {
-    // TODO: maybe this can be moved outside of this scope
-    if (!workspaceFolder) {
-      connection.console.error('Workspace folder not set')
-
-      return new Map()
-    }
-
-    const workspacePath = URI.parse(workspaceFolder).fsPath
-    return await getWorkspaceDiagnostics(connection, workspacePath, documents)
-  }
-
-  async function sendDiagnostics(diagnosticsMap: Map<string, Diagnostic[]>) {
-    for (const [docUri, diagnostics] of diagnosticsMap.entries()) {
-      await connection.sendDiagnostics({
-        uri: docUri,
-        diagnostics: diagnostics,
-      })
-    }
-  }
 
   const documentChangeSubscription = documentChangeObservable
     .pipe(
       debounceTime(200),
-      map(buildWorkspaceDiagnosticsMap),
-      concatMap(async (v) => sendDiagnostics(await v)),
+      map((_) => buildWorkspaceDiagnosticsMap(connection, workspaceFolder, documents)),
+      concatMap(async (v) => sendDiagnostics(connection, await v)),
     )
     .subscribe(async () => {
-      // Need a subscriber or the observable won't fire
+      // All logic for handling the document change event is done inside the pipe
+      // This is to make sure that the diagnostics are sent in the right order
+      // The empty subscribe function here is to make the observable run
     })
 
   // Make the text document manager listen on the connection
   // for open, change and close text document events
-  documents.listen(connection)
+  disposables.push(documents.listen(connection))
 
-  connection.onCodeAction((params) => {
-    const document = documents.get(params.textDocument.uri)
-    if (!document) {
-      return []
-    }
+  disposables.push(
+    connection.onCodeAction((params) => {
+      const document = documents.get(params.textDocument.uri)
+      if (!document) {
+        return []
+      }
 
-    return getCodeActions(document, params.context.diagnostics[0])
+      return getCodeActions(document, params.context.diagnostics[0])
+    }),
+  )
+
+  const shutdownDisposable = connection.onShutdown(() => {
+    documentChangeSubscription.unsubscribe()
+    disposables.forEach((d) => d.dispose())
   })
 
-  connection.onShutdown(() => {
-    documentChangeSubscription.unsubscribe()
+  connection.onExit(() => {
+    shutdownDisposable.dispose()
   })
 
   connection.listen()
+}
+
+async function buildWorkspaceDiagnosticsMap(
+  connection: Connection,
+  workspaceFolder: string | undefined,
+  documents: TextDocuments<TextDocument>,
+): Promise<Map<string, Diagnostic[]>> {
+  if (!workspaceFolder) {
+    connection.console.error('Workspace folder not set')
+
+    return new Map()
+  }
+
+  const workspacePath = URI.parse(workspaceFolder).fsPath
+  return await getWorkspaceDiagnostics(connection, workspacePath, documents)
+}
+
+async function sendDiagnostics(connection: Connection, diagnosticsMap: Map<string, Diagnostic[]>) {
+  await Promise.all(
+    Array.from(diagnosticsMap, ([docUri, diagnostics]) =>
+      connection.sendDiagnostics({
+        uri: docUri,
+        diagnostics: diagnostics,
+      }),
+    ),
+  )
 }
 
 function getCodeActions(document: TextDocument, diagnostic: Diagnostic): CodeAction[] {

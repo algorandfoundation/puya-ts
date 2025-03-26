@@ -9,7 +9,8 @@ export function* emitOpFuncTypes(module: OpModule) {
 import { NoImplementation } from "./internal/errors";
 import { bytes, uint64, biguint } from './primitives'
 import { Account, Application, Asset } from './reference'
-
+import { OnCompleteAction } from "./on-complete-action";
+import { TransactionType } from "./transactions";
 `
   }
   function* noImplementation() {
@@ -60,6 +61,8 @@ import { Account, Application, Asset } from './reference'
     if (hasFlags(returnType, AlgoTsType.Boolean)) yield 'boolean'
     if (hasFlags(returnType, AlgoTsType.BigUint)) yield 'biguint'
     if (hasFlags(returnType, AlgoTsType.Void)) yield 'void'
+    if (hasFlags(returnType, AlgoTsType.TransactionType)) yield 'TransactionType'
+    if (hasFlags(returnType, AlgoTsType.OnCompletion)) yield 'OnCompleteAction'
     if (hasFlags(returnType, AlgoTsType.Enum)) {
       for (const enumDef of module.enums.filter((a) => hasFlags(a.typeFlag, returnType))) {
         yield enumDef.tsName
@@ -94,6 +97,8 @@ import { Account, Application, Asset } from './reference'
     if (hasFlags(argType, AlgoTsType.Boolean)) yield 'boolean'
     if (hasFlags(argType, AlgoTsType.BigUint)) yield 'biguint'
     if (hasFlags(argType, AlgoTsType.Void)) yield 'void'
+    if (hasFlags(argType, AlgoTsType.TransactionType)) yield 'TransactionType'
+    if (hasFlags(argType, AlgoTsType.OnCompletion)) yield 'OnCompleteAction'
     if (hasFlags(argType, AlgoTsType.Enum)) {
       for (const enumDef of module.enums.filter((a) => hasFlags(argType, a.typeFlag))) {
         yield enumDef.tsName

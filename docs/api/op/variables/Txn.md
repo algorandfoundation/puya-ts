@@ -8,7 +8,7 @@
 
 > `const` **Txn**: `object`
 
-Defined in: [packages/algo-ts/src/op.ts:3455](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3455)
+Defined in: [packages/algo-ts/src/op.ts:3456](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3456)
 
 Get values for the current executing transaction
 
@@ -629,14 +629,14 @@ Min AVM version: 5
 
 #### Get Signature
 
-> **get** **onCompletion**(): [`uint64`](../../index/type-aliases/uint64.md)
+> **get** **onCompletion**(): [`OnCompleteAction`](../../index/enumerations/OnCompleteAction.md)
 
 ApplicationCall transaction on completion action
 Min AVM version: 2
 
 ##### Returns
 
-[`uint64`](../../index/type-aliases/uint64.md)
+[`OnCompleteAction`](../../index/enumerations/OnCompleteAction.md)
 
 ### receiver
 
@@ -733,14 +733,14 @@ Min AVM version: 1
 
 #### Get Signature
 
-> **get** **typeEnum**(): [`uint64`](../../index/type-aliases/uint64.md)
+> **get** **typeEnum**(): [`TransactionType`](../../index/enumerations/TransactionType.md)
 
 Transaction type as integer
 Min AVM version: 1
 
 ##### Returns
 
-[`uint64`](../../index/type-aliases/uint64.md)
+[`TransactionType`](../../index/enumerations/TransactionType.md)
 
 ### voteFirst
 

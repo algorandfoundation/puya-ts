@@ -18,9 +18,14 @@
 
 ## Type Aliases
 
+- [AnyFunction](type-aliases/AnyFunction.md)
 - [BigUintBitSize](type-aliases/BigUintBitSize.md)
 - [CompatForArc4Int](type-aliases/CompatForArc4Int.md)
-- [ContractMethod](type-aliases/ContractMethod.md)
+- [ConstructorFor](type-aliases/ConstructorFor.md)
+- [Exclude](type-aliases/Exclude.md)
+- [InstanceMethod](type-aliases/InstanceMethod.md)
 - [NativeForArc4Int](type-aliases/NativeForArc4Int.md)
+- [Omit](type-aliases/Omit.md)
+- [Pick](type-aliases/Pick.md)
 - [StructConstructor](type-aliases/StructConstructor.md)
 - [UintBitSize](type-aliases/UintBitSize.md)

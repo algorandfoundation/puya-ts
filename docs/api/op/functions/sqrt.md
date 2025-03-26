@@ -8,7 +8,7 @@
 
 > **sqrt**(`a`): [`uint64`](../../index/type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/op.ts:3430](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3430)
+Defined in: [packages/algo-ts/src/op.ts:3431](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3431)
 
 The largest integer I such that I^2 <= A
 
@@ -24,5 +24,5 @@ The largest integer I such that I^2 <= A
 
 ## See
 
-Native TEAL opcode: [`sqrt`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#sqrt)
+Native TEAL opcode: [`sqrt`](https://dev.algorand.co/reference/algorand-teal/opcodes#sqrt)
 Min AVM version: 4

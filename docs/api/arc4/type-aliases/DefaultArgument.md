@@ -8,7 +8,7 @@
 
 > **DefaultArgument**\<`TContract`\>: \{ `constant`: `string` \| `boolean` \| `number` \| `bigint`; \} \| \{ `from`: keyof `TContract`; \}
 
-Defined in: [packages/algo-ts/src/arc4/index.ts:68](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L68)
+Defined in: [packages/algo-ts/src/arc4/index.ts:37](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L37)
 
 Type alias for a default argument schema
 

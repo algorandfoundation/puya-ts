@@ -8,7 +8,7 @@
 
 > `const` **AppLocal**: `object`
 
-Defined in: [packages/algo-ts/src/op.ts:254](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L254)
+Defined in: [packages/algo-ts/src/op.ts:255](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L255)
 
 Get or modify Local app state
 
@@ -34,7 +34,7 @@ delete key B from account A's local state of the current application
 
 #### See
 
-Native TEAL opcode: [`app_local_del`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_local_del)
+Native TEAL opcode: [`app_local_del`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_local_del)
 Min AVM version: 2
 
 ### getBytes()
@@ -59,7 +59,7 @@ value. The value is zero (of type uint64) if the key does not exist.
 
 #### See
 
-Native TEAL opcode: [`app_local_get`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_local_get)
+Native TEAL opcode: [`app_local_get`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_local_get)
 Min AVM version: 2
 
 ### getExBytes()
@@ -88,7 +88,7 @@ did_exist flag (top of the stack, 1 if the application and key existed and 0 oth
 
 #### See
 
-Native TEAL opcode: [`app_local_get_ex`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_local_get_ex)
+Native TEAL opcode: [`app_local_get_ex`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_local_get_ex)
 Min AVM version: 2
 
 ### getExUint64()
@@ -117,7 +117,7 @@ did_exist flag (top of the stack, 1 if the application and key existed and 0 oth
 
 #### See
 
-Native TEAL opcode: [`app_local_get_ex`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_local_get_ex)
+Native TEAL opcode: [`app_local_get_ex`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_local_get_ex)
 Min AVM version: 2
 
 ### getUint64()
@@ -142,7 +142,7 @@ value. The value is zero (of type uint64) if the key does not exist.
 
 #### See
 
-Native TEAL opcode: [`app_local_get`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_local_get)
+Native TEAL opcode: [`app_local_get`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_local_get)
 Min AVM version: 2
 
 ### put()
@@ -169,5 +169,5 @@ write C to key B in account A's local state of the current application
 
 #### See
 
-Native TEAL opcode: [`app_local_put`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#app_local_put)
+Native TEAL opcode: [`app_local_put`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_local_put)
 Min AVM version: 2

@@ -8,7 +8,7 @@
 
 > **bsqrt**(`a`): [`biguint`](../../index/type-aliases/biguint.md)
 
-Defined in: [packages/algo-ts/src/op.ts:697](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L697)
+Defined in: [packages/algo-ts/src/op.ts:698](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L698)
 
 The largest integer I such that I^2 <= A. A and I are interpreted as big-endian unsigned integers
 
@@ -24,5 +24,5 @@ The largest integer I such that I^2 <= A. A and I are interpreted as big-endian 
 
 ## See
 
-Native TEAL opcode: [`bsqrt`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#bsqrt)
+Native TEAL opcode: [`bsqrt`](https://dev.algorand.co/reference/algorand-teal/opcodes#bsqrt)
 Min AVM version: 6

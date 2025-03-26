@@ -8,7 +8,7 @@
 
 > **interpretAsArc4**\<`T`\>(`bytes`, `prefix`): `T`
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:562](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L562)
+Defined in: [packages/algo-ts/src/arc4/index.ts:153](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L153)
 
 Interpret the provided bytes as an ARC4 encoded type with no validation
 
