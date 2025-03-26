@@ -5,6 +5,7 @@ import type { TextDocuments } from 'vscode-languageserver/node.js'
 import { URI } from 'vscode-uri'
 import type { SourceLocation } from '../awst/source-location'
 import { compile } from '../compile'
+import { Constants } from '../constants'
 import { processInputPaths } from '../input-paths/process-input-paths'
 import type { LogEvent } from '../logger'
 import { LoggingContext, LogLevel } from '../logger'
@@ -49,7 +50,7 @@ async function compileAndExtractLogs(files: AlgoFile[]): Promise<LogEventWithSou
 
 function mapToDiagnostic(event: LogEventWithSource): Diagnostic {
   return {
-    source: 'Algorand TypeScript',
+    source: Constants.languageServerSource,
     severity: event.level === LogLevel.Error ? DiagnosticSeverity.Error : DiagnosticSeverity.Warning,
     range: {
       start: {
