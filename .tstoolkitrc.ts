@@ -13,7 +13,7 @@ const config: TsToolkitConfig = {
     bin: {
       'puya-ts': 'bin/run-cli.ts',
       puyats: 'bin/run-cli.ts',
-      'run-language-server': 'bin/run-language-server.ts',
+      'puyats-ls': 'bin/puyats-ls.ts',
       'download-puya-binary': 'bin/download-puya-binary.ts',
     },
     customSections: ['bundledDependencies'],

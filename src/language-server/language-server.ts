@@ -16,6 +16,7 @@ import {
   TextDocumentSyncKind,
 } from 'vscode-languageserver/node.js'
 import { URI } from 'vscode-uri'
+import { Constants } from '../constants'
 import { getWorkspaceDiagnostics } from './diagnostics'
 
 export const getDebugLspPort = () => {
@@ -71,7 +72,7 @@ export async function startLanguageServer() {
 
   disposables.push(
     connection.onInitialized(() => {
-      connection.console.log('Algorand TypeScript Language Server initialized')
+      connection.console.log(`${Constants.languageServerSource}-ls initialized`)
     }),
   )
 
@@ -141,7 +142,7 @@ async function buildWorkspaceDiagnosticsMap(
 
 async function sendDiagnostics(connection: Connection, diagnosticsMap: Map<string, Diagnostic[]>) {
   await Promise.all(
-    diagnosticsMap.entries().map(([docUri, diagnostics]) =>
+    Array.from(diagnosticsMap, ([docUri, diagnostics]) =>
       connection.sendDiagnostics({
         uri: docUri,
         diagnostics: diagnostics,
