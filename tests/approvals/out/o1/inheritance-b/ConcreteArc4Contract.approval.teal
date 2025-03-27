@@ -5,13 +5,13 @@
 main:
     txn ApplicationID
     bnz main_after_if_else@2
-    // tests/approvals/inheritance-b.algo.ts:15
+    // tests/approvals/inheritance-b.algo.ts:17
     // concreteState = GlobalState({ initialValue: 'testing' })
     pushbytess "concreteState" "testing" // "concreteState", "testing"
     app_global_put
 
 main_after_if_else@2:
-    // tests/approvals/inheritance-b.algo.ts:14
+    // tests/approvals/inheritance-b.algo.ts:16
     // export class ConcreteArc4Contract extends Arc4Contract {
     txn NumAppArgs
     bz main_bare_routing@9
@@ -20,7 +20,7 @@ main_after_if_else@2:
     match main_getVeryImportantValue_route@5 main_simpleAbiMethod_route@6
 
 main_after_if_else@13:
-    // tests/approvals/inheritance-b.algo.ts:14
+    // tests/approvals/inheritance-b.algo.ts:16
     // export class ConcreteArc4Contract extends Arc4Contract {
     pushint 0 // 0
     return
@@ -33,7 +33,7 @@ main_simpleAbiMethod_route@6:
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/inheritance-b.algo.ts:14
+    // tests/approvals/inheritance-b.algo.ts:16
     // export class ConcreteArc4Contract extends Arc4Contract {
     txna ApplicationArgs 1
     btoi
@@ -51,20 +51,20 @@ main_simpleAbiMethod_route@6:
     return
 
 main_getVeryImportantValue_route@5:
-    // tests/approvals/inheritance-b.algo.ts:16
+    // tests/approvals/inheritance-b.algo.ts:18
     // public getVeryImportantValue() {
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    pushbytes 0x151f7c7500023432
+    pushbytes 0x151f7c750007343268656c6c6f
     log
     pushint 1 // 1
     return
 
 main_bare_routing@9:
-    // tests/approvals/inheritance-b.algo.ts:14
+    // tests/approvals/inheritance-b.algo.ts:16
     // export class ConcreteArc4Contract extends Arc4Contract {
     txn OnCompletion
     bnz main_after_if_else@13

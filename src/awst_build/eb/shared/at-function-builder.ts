@@ -1,7 +1,6 @@
 import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
-import type { wtypes } from '../../../awst/wtypes'
 import type { PType } from '../../ptypes'
 import { numberPType, uint64PType } from '../../ptypes'
 import { instanceEb } from '../../type-registry'
@@ -13,7 +12,7 @@ import { translateNegativeIndex } from '../util/translate-negative-index'
 export class AtFunctionBuilder extends FunctionBuilder {
   constructor(
     private expr: Expression,
-    private itemPType: PType & { wtype: wtypes.WType },
+    private itemPType: PType,
     private exprLength: Expression | bigint,
   ) {
     super(expr.sourceLocation)
@@ -36,7 +35,7 @@ export class AtFunctionBuilder extends FunctionBuilder {
         base: this.expr,
         sourceLocation: sourceLocation,
         index: translateNegativeIndex(this.exprLength, index),
-        wtype: this.itemPType.wtype,
+        wtype: this.itemPType.wtypeOrThrow,
       }),
       this.itemPType,
     )

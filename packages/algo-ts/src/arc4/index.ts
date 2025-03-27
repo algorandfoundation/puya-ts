@@ -1,10 +1,12 @@
 import { BaseContract } from '../base-contract'
 import { NoImplementation } from '../internal/errors'
-import { DeliberateAny } from '../internal/typescript-helpers'
+import { DeliberateAny, InstanceMethod } from '../internal/typescript-helpers'
 import { OnCompleteActionStr } from '../on-complete-action'
-import { bytes } from '../primitives'
+import { bytes, BytesCompat, uint64 } from '../primitives'
+import { ARC4Encoded } from './encoded-types'
 
 export * from './encoded-types'
+export * from './c2c'
 
 /**
  * The base type for all ARC4 contracts in Algorand TypeScript
@@ -125,18 +127,56 @@ export function baremethod<TContract extends Contract>(config?: BareMethodConfig
     throw new NoImplementation()
   }
 }
-
-/**
- * A type alias for a contract instance method
- */
-type ContractMethod = (this: Contract, ...args: DeliberateAny[]) => DeliberateAny
-
 /**
  * Returns the ARC4 method selector for a given ARC4 method signature. The method selector is the first
  * 4 bytes of the SHA512/256 hash of the method signature.
- * @param methodSignature An ARC4 method signature string ( Eg. `hello(string)string`.  Must be a compile time constant), or a contract method reference. (Eg. `MyContract.prototype.myMethod`)
+ * @param methodSignature An ARC4 contract method reference. (Eg. `MyContract.prototype.myMethod`)
  * @returns The ARC4 method selector. Eg. `02BECE11`
  */
-export function methodSelector(methodSignature: string | ContractMethod): bytes {
+export function methodSelector(methodSignature: InstanceMethod<Contract>): bytes
+/**
+ * Returns the ARC4 method selector for a given ARC4 method signature. The method selector is the first
+ * 4 bytes of the SHA512/256 hash of the method signature.
+ * @param methodSignature An ARC4 method signature string (Eg. `hello(string)string`.  Must be a compile time constant)
+ * @returns The ARC4 method selector. Eg. `02BECE11`
+ */
+export function methodSelector(methodSignature: string): bytes
+export function methodSelector(methodSignature: string | InstanceMethod<Contract>): bytes {
+  throw new NoImplementation()
+}
+
+/**
+ * Interpret the provided bytes as an ARC4 encoded type with no validation
+ * @param bytes An arc4 encoded bytes value
+ * @param prefix The prefix (if any), present in the bytes value. This prefix will be validated and removed
+ */
+export function interpretAsArc4<T extends ARC4Encoded>(bytes: BytesCompat, prefix: 'none' | 'log' = 'none'): T {
+  throw new NoImplementation()
+}
+
+/**
+ * Decode the provided bytes to a native Algorand TypeScript value
+ * @param bytes An arc4 encoded bytes value
+ * @param prefix The prefix (if any), present in the bytes value. This prefix will be validated and removed
+ */
+export function decodeArc4<T>(bytes: BytesCompat, prefix: 'none' | 'log' = 'none'): T {
+  throw new NoImplementation()
+}
+
+/**
+ * Encode the provided Algorand TypeScript value as ARC4 bytes
+ * @param value Any native Algorand TypeScript value with a supported ARC4 encoding
+ */
+export function encodeArc4<T>(value: T): bytes {
+  throw new NoImplementation()
+}
+
+/**
+ * Return the total number of bytes required to store T as ARC4 bytes.
+ *
+ * T must represent a type with a fixed length encoding scheme.
+ * @typeParam T Any native or arc4 type with a fixed encoding size.
+ */
+export function arc4EncodedLength<T>(): uint64 {
   throw new NoImplementation()
 }

@@ -36,12 +36,10 @@ To set up the project locally:
 
 1. Copy the latest [langspec.puya.json](./langspec.puya.json) from [puya](https://github.com/algorandfoundation/puya/blob/main/langspec.puya.json). Refer to the [contributing guide](https://github.com/algorandfoundation/puya/blob/main/CONTRIBUTING.md#updating-langspec-for-new-avm-versions) on the Puya repo for more information on how the file itself is updated for a new AVM version.
 
-2. Run the following scripts to update relevant files:
+2. Run the following script to update relevant files:
 
    ```sh
-   npm run script:op-metadata
-   npm run script:op-types
-   npm run script:op-ptypes
+   npm run script:code-gen
    ```
 
 3. If a new `enum` type is required, add it to [ENUMS_TO_EXPOSE](./scripts/build-op-module.ts#L12). Re-run the scripts and update [index.ts](./packages/algo-ts/src/index.ts#L17).

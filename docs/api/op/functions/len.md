@@ -8,7 +8,7 @@
 
 > **len**(`a`): [`uint64`](../../index/type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/op.ts:3285](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3285)
+Defined in: [packages/algo-ts/src/op.ts:3286](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3286)
 
 yields length of byte value A
 
@@ -24,5 +24,5 @@ yields length of byte value A
 
 ## See
 
-Native TEAL opcode: [`len`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#len)
+Native TEAL opcode: [`len`](https://dev.algorand.co/reference/algorand-teal/opcodes#len)
 Min AVM version: 1

@@ -1,6 +1,9 @@
+import { getInnerTransactionType } from '../awst_build/eb/transactions/util'
+import { anyItxnType } from '../awst_build/ptypes'
 import { CodeError } from '../errors'
 import type { DeliberateAny, Props } from '../typescript-helpers'
 import { codeInvariant, instanceOfAny, invariant } from '../util'
+import { constantEvaluation } from './constant-evaluation'
 import type { Expression, Statement } from './nodes'
 import {
   ArrayLength,
@@ -25,6 +28,7 @@ import {
   ReinterpretCast,
   SingleEvaluation,
   StringConstant,
+  SubmitInnerTransaction,
   TupleExpression,
   TupleItemExpression,
   UInt64BinaryOperation,
@@ -32,6 +36,8 @@ import {
 } from './nodes'
 import type { SourceLocation } from './source-location'
 import { wtypes } from './wtypes'
+import WInnerTransactionFields = wtypes.WInnerTransactionFields
+import WTuple = wtypes.WTuple
 
 type ConcreteNodes = typeof concreteNodes
 
@@ -96,13 +102,34 @@ const explicitNodeFactory = {
       wtype: wtypes.boolWType,
     })
   },
-  uInt64BinaryOperation(props: Omit<Props<UInt64BinaryOperation>, 'wtype'>): UInt64BinaryOperation {
+  uInt64BinaryOperation(props: Omit<Props<UInt64BinaryOperation>, 'wtype'>): UInt64BinaryOperation | IntegerConstant {
+    if (props.left instanceof IntegerConstant && props.right instanceof IntegerConstant) {
+      invariant(props.left.wtype.equals(wtypes.uint64WType) && props.right.wtype.equals(wtypes.uint64WType), 'left & right must be uint64')
+      return new IntegerConstant({
+        value: constantEvaluation.uint64Binary(props.op, props.left.value, props.right.value),
+        tealAlias: null,
+        sourceLocation: props.sourceLocation,
+        wtype: wtypes.uint64WType,
+      })
+    }
     return new UInt64BinaryOperation({
       ...props,
       wtype: wtypes.uint64WType,
     })
   },
-  bigUIntBinaryOperation(props: Omit<Props<BigUIntBinaryOperation>, 'wtype'>): BigUIntBinaryOperation {
+  bigUIntBinaryOperation(props: Omit<Props<BigUIntBinaryOperation>, 'wtype'>): BigUIntBinaryOperation | IntegerConstant {
+    if (props.left instanceof IntegerConstant && props.right instanceof IntegerConstant) {
+      invariant(
+        props.left.wtype.equals(wtypes.biguintWType) && props.right.wtype.equals(wtypes.biguintWType),
+        'left & right must be biguint',
+      )
+      return new IntegerConstant({
+        value: constantEvaluation.biguintBinary(props.op, props.left.value, props.right.value),
+        tealAlias: null,
+        sourceLocation: props.sourceLocation,
+        wtype: wtypes.biguintWType,
+      })
+    }
     return new BigUIntBinaryOperation({
       ...props,
       wtype: wtypes.biguintWType,
@@ -163,6 +190,13 @@ const explicitNodeFactory = {
     })
   },
   booleanBinaryOperation(props: Omit<Props<BooleanBinaryOperation>, 'wtype'>) {
+    if (props.left instanceof BoolConstant && props.right instanceof BoolConstant) {
+      return new BoolConstant({
+        value: constantEvaluation.booleanBinary(props.op, props.left.value, props.right.value),
+        sourceLocation: props.sourceLocation,
+        wtype: wtypes.boolWType,
+      })
+    }
     return new BooleanBinaryOperation({
       ...props,
       wtype: wtypes.boolWType,
@@ -281,6 +315,21 @@ const explicitNodeFactory = {
       value,
       sourceLocation,
       wtype: base.wtype,
+    })
+  },
+  submitInnerTransaction({ itxns, sourceLocation }: Omit<Props<SubmitInnerTransaction>, 'wtype'>) {
+    const itxnWTypes = itxns.map(({ wtype }, index) => {
+      invariant(
+        wtype instanceof WInnerTransactionFields,
+        `WType at index ${index} must be WInnerTransactionFields with type`,
+        sourceLocation,
+      )
+      return wtype.transactionType === null ? anyItxnType.wtype : getInnerTransactionType(wtype.transactionType).wtype
+    })
+    return new SubmitInnerTransaction({
+      itxns,
+      sourceLocation,
+      wtype: itxnWTypes.length === 1 ? itxnWTypes[0] : new WTuple({ types: itxnWTypes, immutable: true }),
     })
   },
 } satisfies { [key in keyof ConcreteNodes]?: (...args: DeliberateAny[]) => DeliberateAny }

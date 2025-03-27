@@ -10,7 +10,7 @@
 
 > **select**(`a`, `b`, `c`): [`bytes`](../../index/type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/op.ts:4045](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L4045)
+Defined in: [packages/algo-ts/src/op.ts:4046](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L4046)
 
 selects one of two values based on top-of-stack: B if C != 0, else A
 
@@ -36,7 +36,7 @@ selects one of two values based on top-of-stack: B if C != 0, else A
 
 > **select**(`a`, `b`, `c`): [`uint64`](../../index/type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/op.ts:4050](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L4050)
+Defined in: [packages/algo-ts/src/op.ts:4051](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L4051)
 
 selects one of two values based on top-of-stack: B if C != 0, else A
 

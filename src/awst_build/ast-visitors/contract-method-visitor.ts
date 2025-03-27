@@ -108,9 +108,12 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
     modifiers: { isPublic: boolean; isStatic: boolean }
     methodLocation: SourceLocation
   }): awst.ARC4MethodConfig | null {
-    const isProgramMethod = isIn(functionType.name, [Constants.approvalProgramMethodName, Constants.clearStateProgramMethodName])
+    const isProgramMethod = isIn(functionType.name, [
+      Constants.symbolNames.approvalProgramMethodName,
+      Constants.symbolNames.clearStateProgramMethodName,
+    ])
 
-    if (decorator && isIn(decorator.type, [Constants.arc4BareDecoratorName, Constants.arc4AbiDecoratorName])) {
+    if (decorator && isIn(decorator.type, [Constants.symbolNames.arc4BareDecoratorName, Constants.symbolNames.arc4AbiDecoratorName])) {
       if (!isPublic) {
         logger.error(methodLocation, 'Private or protected methods cannot be exposed as an abi method')
         return null

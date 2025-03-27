@@ -8,7 +8,7 @@
 
 ## Interfaces
 
-- [ApplicationTxn](interfaces/ApplicationTxn.md)
+- [ApplicationCallTxn](interfaces/ApplicationCallTxn.md)
 - [AssetConfigTxn](interfaces/AssetConfigTxn.md)
 - [AssetFreezeTxn](interfaces/AssetFreezeTxn.md)
 - [AssetTransferTxn](interfaces/AssetTransferTxn.md)
@@ -21,7 +21,7 @@
 
 ## Functions
 
-- [ApplicationTxn](functions/ApplicationTxn.md)
+- [ApplicationCallTxn](functions/ApplicationCallTxn.md)
 - [AssetConfigTxn](functions/AssetConfigTxn.md)
 - [AssetFreezeTxn](functions/AssetFreezeTxn.md)
 - [AssetTransferTxn](functions/AssetTransferTxn.md)

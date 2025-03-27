@@ -8,7 +8,7 @@
 
 > **exp**(`a`, `b`): [`uint64`](../../index/type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/op.ts:877](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L877)
+Defined in: [packages/algo-ts/src/op.ts:878](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L878)
 
 A raised to the Bth power. Fail if A == B == 0 and on overflow
 
@@ -28,5 +28,5 @@ A raised to the Bth power. Fail if A == B == 0 and on overflow
 
 ## See
 
-Native TEAL opcode: [`exp`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#exp)
+Native TEAL opcode: [`exp`](https://dev.algorand.co/reference/algorand-teal/opcodes#exp)
 Min AVM version: 4

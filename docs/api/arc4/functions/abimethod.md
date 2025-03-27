@@ -8,7 +8,7 @@
 
 > **abimethod**\<`TContract`\>(`config`?): \<`TArgs`, `TReturn`\>(`target`, `ctx`) => (`this`, ...`args`) => `TReturn`
 
-Defined in: [packages/algo-ts/src/arc4/index.ts:123](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L123)
+Defined in: [packages/algo-ts/src/arc4/index.ts:92](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L92)
 
 Declares the decorated method as an abimethod that is called when the first transaction arg matches the method selector
 

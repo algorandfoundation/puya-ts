@@ -1,12 +1,15 @@
 import type { SourceLocation } from '../../awst/source-location'
 import { wtypes } from '../../awst/wtypes'
 import { Constants } from '../../constants'
-import { codeInvariant } from '../../util'
+import { codeInvariant, invariant } from '../../util'
 import { GenericPType, PType } from './base'
 import {
+  applicationItxnType,
   biguintPType,
   boolPType,
   bytesPType,
+  compiledContractType,
+  ContractClassPType,
   LibClassType,
   LibFunctionType,
   NumericLiteralPType,
@@ -14,41 +17,43 @@ import {
   stringPType,
   TuplePType,
   uint64PType,
+  voidPType,
 } from './index'
 import ARC4StaticArray = wtypes.ARC4StaticArray
+import WTuple = wtypes.WTuple
 
 export const UintNClass = new LibClassType({
   name: 'UintN',
-  module: Constants.arc4EncodedTypesModuleName,
+  module: Constants.moduleNames.algoTs.arc4.encodedTypes,
 })
 
 export const ByteClass = new LibClassType({
   name: 'Byte',
-  module: Constants.arc4EncodedTypesModuleName,
+  module: Constants.moduleNames.algoTs.arc4.encodedTypes,
 })
 export const UintN8Class = new LibClassType({
   name: 'UintN8',
-  module: Constants.arc4EncodedTypesModuleName,
+  module: Constants.moduleNames.algoTs.arc4.encodedTypes,
 })
 export const UintN16Class = new LibClassType({
   name: 'UintN16',
-  module: Constants.arc4EncodedTypesModuleName,
+  module: Constants.moduleNames.algoTs.arc4.encodedTypes,
 })
 export const UintN32Class = new LibClassType({
   name: 'UintN32',
-  module: Constants.arc4EncodedTypesModuleName,
+  module: Constants.moduleNames.algoTs.arc4.encodedTypes,
 })
 export const UintN64Class = new LibClassType({
   name: 'UintN64',
-  module: Constants.arc4EncodedTypesModuleName,
+  module: Constants.moduleNames.algoTs.arc4.encodedTypes,
 })
 export const UintN128Class = new LibClassType({
   name: 'UintN128',
-  module: Constants.arc4EncodedTypesModuleName,
+  module: Constants.moduleNames.algoTs.arc4.encodedTypes,
 })
 export const UintN256Class = new LibClassType({
   name: 'UintN256',
-  module: Constants.arc4EncodedTypesModuleName,
+  module: Constants.moduleNames.algoTs.arc4.encodedTypes,
 })
 export abstract class ARC4EncodedType extends PType {
   abstract readonly wtype: wtypes.ARC4Type
@@ -97,7 +102,7 @@ export abstract class ARC4ArrayType extends ARC4EncodedType {
 export class ARC4InstanceType extends ARC4EncodedType {
   readonly wtype: wtypes.ARC4Type
   readonly name: string
-  readonly module = Constants.arc4EncodedTypesModuleName
+  readonly module = Constants.moduleNames.algoTs.arc4.encodedTypes
   readonly singleton = false
   readonly nativeType: PType
   readonly encodedBitSize: bigint | null
@@ -122,12 +127,12 @@ export class ARC4InstanceType extends ARC4EncodedType {
 
 export const ARC4BoolClass = new LibClassType({
   name: 'Bool',
-  module: Constants.arc4EncodedTypesModuleName,
+  module: Constants.moduleNames.algoTs.arc4.encodedTypes,
 })
 
 export const ARC4StrClass = new LibClassType({
   name: 'Str',
-  module: Constants.arc4EncodedTypesModuleName,
+  module: Constants.moduleNames.algoTs.arc4.encodedTypes,
 })
 
 export const arc4BooleanType = new ARC4InstanceType({
@@ -232,7 +237,7 @@ export class ARC4StructType extends ARC4EncodedType {
 
 export const arc4StructBaseType = new ARC4StructType({
   name: 'StructBase',
-  module: Constants.arc4EncodedTypesModuleName,
+  module: Constants.moduleNames.algoTs.arc4.encodedTypes,
   fields: {},
   description: undefined,
   frozen: false,
@@ -240,12 +245,12 @@ export const arc4StructBaseType = new ARC4StructType({
 
 export const Arc4TupleClass = new LibClassType({
   name: 'Tuple',
-  module: Constants.arc4EncodedTypesModuleName,
+  module: Constants.moduleNames.algoTs.arc4.encodedTypes,
 })
 
 export const Arc4TupleGeneric = new GenericPType({
   name: 'Tuple',
-  module: Constants.arc4EncodedTypesModuleName,
+  module: Constants.moduleNames.algoTs.arc4.encodedTypes,
   parameterise(ptypes: PType[]) {
     codeInvariant(ptypes.length, `${this.name} expects 1 generic parameter`)
     codeInvariant(ptypes[0] instanceof TuplePType, `${this.name} generic parameter must be a native tuple type`)
@@ -261,7 +266,7 @@ export const Arc4TupleGeneric = new GenericPType({
 
 export class ARC4TupleType extends ARC4EncodedType {
   readonly name = 'Tuple'
-  readonly module = Constants.arc4EncodedTypesModuleName
+  readonly module = Constants.moduleNames.algoTs.arc4.encodedTypes
   readonly singleton = false
   readonly items: ARC4EncodedType[]
   readonly sourceLocation: SourceLocation | undefined
@@ -285,7 +290,7 @@ export class ARC4TupleType extends ARC4EncodedType {
 }
 export const UintNGeneric = new GenericPType({
   name: 'UintN',
-  module: Constants.arc4EncodedTypesModuleName,
+  module: Constants.moduleNames.algoTs.arc4.encodedTypes,
   parameterise(typeArgs: PType[]): UintNType {
     codeInvariant(typeArgs.length === 1, 'UintNType type expects exactly one type parameter')
     const [size] = typeArgs
@@ -298,7 +303,7 @@ export const UintNGeneric = new GenericPType({
   },
 })
 export class UintNType extends ARC4EncodedType {
-  readonly module = Constants.arc4EncodedTypesModuleName
+  readonly module = Constants.moduleNames.algoTs.arc4.encodedTypes
   readonly n: bigint
   readonly name: string
   readonly singleton = false
@@ -322,7 +327,7 @@ export class UintNType extends ARC4EncodedType {
 }
 export const UFixedNxMClass = new LibClassType({
   name: 'UFixedNxM',
-  module: Constants.arc4EncodedTypesModuleName,
+  module: Constants.moduleNames.algoTs.arc4.encodedTypes,
 })
 export const UFixedNxMGeneric = new GenericPType({
   name: UFixedNxMClass.name,
@@ -345,7 +350,7 @@ export const UFixedNxMGeneric = new GenericPType({
   },
 })
 export class UFixedNxMType extends ARC4EncodedType {
-  readonly module = Constants.arc4EncodedTypesModuleName
+  readonly module = Constants.moduleNames.algoTs.arc4.encodedTypes
   readonly n: bigint
   readonly m: bigint
   readonly name: string
@@ -375,11 +380,11 @@ export const arc4ByteAlias = new UintNType({ n: 8n, wtype: wtypes.arc4ByteAliasW
 
 export const DynamicArrayConstructor = new LibClassType({
   name: 'DynamicArray',
-  module: Constants.arc4EncodedTypesModuleName,
+  module: Constants.moduleNames.algoTs.arc4.encodedTypes,
 })
 export const DynamicArrayGeneric = new GenericPType({
   name: 'DynamicArray',
-  module: Constants.arc4EncodedTypesModuleName,
+  module: Constants.moduleNames.algoTs.arc4.encodedTypes,
   parameterise: (typeArgs: PType[]): DynamicArrayType => {
     codeInvariant(typeArgs.length === 1, 'DynamicArray type expects exactly one type parameter')
     const [elementType] = typeArgs
@@ -392,7 +397,7 @@ export const DynamicArrayGeneric = new GenericPType({
   },
 })
 export class DynamicArrayType extends ARC4ArrayType {
-  readonly module = Constants.arc4EncodedTypesModuleName
+  readonly module = Constants.moduleNames.algoTs.arc4.encodedTypes
 
   readonly immutable: boolean
   readonly name: string
@@ -432,11 +437,11 @@ export class DynamicArrayType extends ARC4ArrayType {
 }
 export const StaticArrayConstructor = new LibClassType({
   name: 'StaticArray',
-  module: Constants.arc4EncodedTypesModuleName,
+  module: Constants.moduleNames.algoTs.arc4.encodedTypes,
 })
 export const StaticArrayGeneric = new GenericPType({
   name: 'StaticArray',
-  module: Constants.arc4EncodedTypesModuleName,
+  module: Constants.moduleNames.algoTs.arc4.encodedTypes,
   parameterise: (typeArgs: PType[]): StaticArrayType => {
     codeInvariant(typeArgs.length === 2, 'StaticArray type expects exactly one type parameters')
     const [elementType, arraySize] = typeArgs
@@ -453,7 +458,7 @@ export const StaticArrayGeneric = new GenericPType({
   },
 })
 export class StaticArrayType extends ARC4ArrayType {
-  readonly module = Constants.arc4EncodedTypesModuleName
+  readonly module = Constants.moduleNames.algoTs.arc4.encodedTypes
   readonly arraySize: bigint
   readonly immutable: boolean
   readonly name: string
@@ -507,12 +512,12 @@ export const arc4AddressAlias = new StaticArrayType({
 
 export const AddressClass = new LibClassType({
   name: 'Address',
-  module: Constants.arc4EncodedTypesModuleName,
+  module: Constants.moduleNames.algoTs.arc4.encodedTypes,
 })
 
 export const StaticBytesGeneric = new GenericPType({
   name: 'StaticBytes',
-  module: Constants.arc4EncodedTypesModuleName,
+  module: Constants.moduleNames.algoTs.arc4.encodedTypes,
   parameterise: (typeArgs: PType[]): StaticBytesType => {
     codeInvariant(typeArgs.length === 1, 'StaticBytes type expects exactly one type parameter')
     const [length] = typeArgs
@@ -528,7 +533,7 @@ export const StaticBytesGeneric = new GenericPType({
 })
 export const StaticBytesConstructor = new LibClassType({
   name: 'StaticBytes',
-  module: Constants.arc4EncodedTypesModuleName,
+  module: Constants.moduleNames.algoTs.arc4.encodedTypes,
 })
 export class StaticBytesType extends StaticArrayType {
   constructor({ length }: { length: bigint }) {
@@ -544,7 +549,7 @@ export class StaticBytesType extends StaticArrayType {
 }
 export const DynamicBytesConstructor = new LibClassType({
   name: 'DynamicBytes',
-  module: Constants.arc4EncodedTypesModuleName,
+  module: Constants.moduleNames.algoTs.arc4.encodedTypes,
 })
 export const DynamicBytesType = new DynamicArrayType({
   name: `DynamicBytes`,
@@ -555,24 +560,89 @@ export const DynamicBytesType = new DynamicArrayType({
 
 export const interpretAsArc4Function = new LibFunctionType({
   name: 'interpretAsArc4',
-  module: Constants.arc4EncodedTypesModuleName,
+  module: Constants.moduleNames.algoTs.arc4.index,
 })
 
 export const encodeArc4Function = new LibFunctionType({
   name: 'encodeArc4',
-  module: Constants.arc4EncodedTypesModuleName,
+  module: Constants.moduleNames.algoTs.arc4.index,
 })
 export const arc4EncodedLengthFunction = new LibFunctionType({
   name: 'arc4EncodedLength',
-  module: Constants.arc4EncodedTypesModuleName,
+  module: Constants.moduleNames.algoTs.arc4.index,
 })
 
 export const decodeArc4Function = new LibFunctionType({
   name: 'decodeArc4',
-  module: Constants.arc4EncodedTypesModuleName,
+  module: Constants.moduleNames.algoTs.arc4.index,
 })
 
 export const methodSelectorFunction = new LibFunctionType({
   name: 'methodSelector',
-  module: Constants.arc4ModuleName,
+  module: Constants.moduleNames.algoTs.arc4.index,
 })
+
+export const abiCallFunction = new LibFunctionType({
+  name: 'abiCall',
+  module: Constants.moduleNames.algoTs.arc4.c2c,
+})
+export const compileArc4Function = new LibFunctionType({
+  name: 'compileArc4',
+  module: Constants.moduleNames.algoTs.arc4.c2c,
+})
+
+export const ContractProxyGeneric = new GenericPType({
+  name: 'ContractProxy',
+  module: Constants.moduleNames.algoTs.arc4.c2c,
+  parameterise(args: PType[]) {
+    invariant(args.length === 1, 'ContractProxy expects exactly 1 type arg')
+    const [typeArg] = args
+    invariant(typeArg instanceof ContractClassPType && typeArg.isARC4, 'Contract Proxy generic type arg must extend arc4 Contract type')
+    return new ContractProxyType({ contractType: typeArg })
+  },
+})
+
+export class ContractProxyType extends PType {
+  readonly name: string
+  readonly module = Constants.moduleNames.algoTs.arc4.c2c
+  readonly wtype: WTuple
+  readonly singleton = false
+  readonly contractType: ContractClassPType
+  constructor({ contractType }: { contractType: ContractClassPType }) {
+    super()
+    this.name = `ContractProxy<${contractType.name}>`
+
+    this.wtype = compiledContractType.wtype
+    this.contractType = contractType
+  }
+}
+
+export const TypedApplicationCallResponseGeneric = new GenericPType({
+  name: 'TypedApplicationCallResponse',
+  module: Constants.moduleNames.algoTs.arc4.c2c,
+  parameterise(args: PType[]) {
+    invariant(args.length === 1, 'TypedApplicationCallResponse expects exactly 1 type arg')
+    const [typeArg] = args
+    return new TypedApplicationCallResponseType({ returnValue: typeArg })
+  },
+})
+
+export class TypedApplicationCallResponseType extends ObjectPType {
+  readonly name: string
+  readonly module = Constants.moduleNames.algoTs.arc4.c2c
+  readonly singleton = false
+  readonly returnValue: PType
+
+  constructor({ returnValue }: { returnValue: PType }) {
+    super({
+      properties: returnValue.equals(voidPType)
+        ? { itxn: applicationItxnType }
+        : {
+            itxn: applicationItxnType,
+            returnValue,
+          },
+    })
+    this.name = `TypedApplicationCallResponseType<${returnValue.name}>`
+    this.returnValue = returnValue
+  }
+}

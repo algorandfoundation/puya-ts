@@ -97,10 +97,10 @@ export class LogicSigVisitor extends BaseVisitor implements Visitor<ClassElement
     const sourceLocation = this.sourceLocation(node)
     const methodType = this.context.getPTypeForNode(node)
     invariant(methodType instanceof FunctionPType, 'type of function must be FunctionPType')
-    if (methodType.name !== Constants.logicSigProgramMethodName) {
+    if (methodType.name !== Constants.symbolNames.logicSigProgramMethodName) {
       logger.error(
         sourceLocation,
-        `LogicSig classes may only contain a program implementation method named '${Constants.logicSigProgramMethodName}'. Consider making '${methodType.name}' a free subroutine.`,
+        `LogicSig classes may only contain a program implementation method named '${Constants.symbolNames.logicSigProgramMethodName}'. Consider making '${methodType.name}' a free subroutine.`,
       )
       return
     }

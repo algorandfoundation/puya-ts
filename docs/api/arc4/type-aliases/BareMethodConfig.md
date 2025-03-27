@@ -8,7 +8,7 @@
 
 > **BareMethodConfig**: `object`
 
-Defined in: [packages/algo-ts/src/arc4/index.ts:135](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L135)
+Defined in: [packages/algo-ts/src/arc4/index.ts:104](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L104)
 
 Configuration options for a bare method
 
@@ -16,7 +16,7 @@ Configuration options for a bare method
 
 ### allowActions?
 
-> `optional` **allowActions**: [`OnCompleteActionStr`](OnCompleteActionStr.md) \| [`OnCompleteActionStr`](OnCompleteActionStr.md)[]
+> `optional` **allowActions**: [`OnCompleteActionStr`](../../index/type-aliases/OnCompleteActionStr.md) \| [`OnCompleteActionStr`](../../index/type-aliases/OnCompleteActionStr.md)[]
 
 Which on complete action(s) are allowed when invoking this method.
 

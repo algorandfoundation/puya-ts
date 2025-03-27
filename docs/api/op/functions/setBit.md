@@ -10,7 +10,7 @@
 
 > **setBit**(`target`, `n`, `c`): [`bytes`](../../index/type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/op.ts:4058](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L4058)
+Defined in: [packages/algo-ts/src/op.ts:4059](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L4059)
 
 Set the nth bit of target to the value of c (1 or 0)
 
@@ -36,7 +36,7 @@ Set the nth bit of target to the value of c (1 or 0)
 
 > **setBit**(`target`, `n`, `c`): [`uint64`](../../index/type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/op.ts:4063](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L4063)
+Defined in: [packages/algo-ts/src/op.ts:4064](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L4064)
 
 Set the nth bit of target to the value of c (1 or 0)
 

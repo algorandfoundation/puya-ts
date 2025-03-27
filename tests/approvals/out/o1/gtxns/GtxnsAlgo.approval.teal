@@ -3,23 +3,62 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 0
-    // tests/approvals/gtxns.algo.ts:3
+    intcblock 1 0 6
+    bytecblock 0xdf920f37 "Hello test4"
+    // tests/approvals/gtxns.algo.ts:15
     // export class GtxnsAlgo extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@7
+    bz main_bare_routing@9
     pushbytess 0xa78000de 0xf1908524 // method "test()void", method "test2()void"
+    bytec_0 // method "test3()void"
+    pushbytes 0xedb4f973 // method "test4(appl)void"
     txna ApplicationArgs 0
-    match main_test_route@3 main_test2_route@4
+    match main_test_route@3 main_test2_route@4 main_test3_route@5 main_test4_route@6
 
-main_after_if_else@11:
-    // tests/approvals/gtxns.algo.ts:3
+main_after_if_else@13:
+    // tests/approvals/gtxns.algo.ts:15
     // export class GtxnsAlgo extends Contract {
     intc_1 // 0
     return
 
+main_test4_route@6:
+    // tests/approvals/gtxns.algo.ts:52
+    // test4(other: gtxn.ApplicationCallTxn) {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    // tests/approvals/gtxns.algo.ts:15
+    // export class GtxnsAlgo extends Contract {
+    txn GroupIndex
+    intc_0 // 1
+    -
+    dup
+    gtxns TypeEnum
+    intc_2 // appl
+    ==
+    assert // transaction type is appl
+    // tests/approvals/gtxns.algo.ts:52
+    // test4(other: gtxn.ApplicationCallTxn) {
+    callsub test4
+    intc_0 // 1
+    return
+
+main_test3_route@5:
+    // tests/approvals/gtxns.algo.ts:46
+    // test3() {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    callsub test3
+    intc_0 // 1
+    return
+
 main_test2_route@4:
-    // tests/approvals/gtxns.algo.ts:8
+    // tests/approvals/gtxns.algo.ts:20
     // test2() {
     txn OnCompletion
     !
@@ -31,7 +70,7 @@ main_test2_route@4:
     return
 
 main_test_route@3:
-    // tests/approvals/gtxns.algo.ts:4
+    // tests/approvals/gtxns.algo.ts:16
     // test() {
     txn OnCompletion
     !
@@ -42,11 +81,11 @@ main_test_route@3:
     intc_0 // 1
     return
 
-main_bare_routing@7:
-    // tests/approvals/gtxns.algo.ts:3
+main_bare_routing@9:
+    // tests/approvals/gtxns.algo.ts:15
     // export class GtxnsAlgo extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@11
+    bnz main_after_if_else@13
     txn ApplicationID
     !
     assert // can only call when creating
@@ -56,7 +95,7 @@ main_bare_routing@7:
 
 // tests/approvals/gtxns.algo.ts::GtxnsAlgo.test() -> void:
 test:
-    // tests/approvals/gtxns.algo.ts:5
+    // tests/approvals/gtxns.algo.ts:17
     // assert(gtxn.PaymentTxn(0).amount > 0)
     intc_1 // 0
     gtxns TypeEnum
@@ -71,38 +110,38 @@ test:
 
 // tests/approvals/gtxns.algo.ts::GtxnsAlgo.test2() -> void:
 test2:
-    // tests/approvals/gtxns.algo.ts:8
+    // tests/approvals/gtxns.algo.ts:20
     // test2() {
     proto 0 0
     pushbytes ""
-    // tests/approvals/gtxns.algo.ts:9
+    // tests/approvals/gtxns.algo.ts:21
     // for (const i of urange(Global.groupSize)) {
     global GroupSize
     intc_1 // 0
 
 test2_for_header@1:
-    // tests/approvals/gtxns.algo.ts:9
+    // tests/approvals/gtxns.algo.ts:21
     // for (const i of urange(Global.groupSize)) {
     frame_dig 2
     frame_dig 1
     <
     bz test2_after_for@21
-    // tests/approvals/gtxns.algo.ts:11
+    // tests/approvals/gtxns.algo.ts:23
     // switch (txn.type) {
     frame_dig 2
     gtxns TypeEnum
     dup
     frame_bury 0
-    // tests/approvals/gtxns.algo.ts:12
+    // tests/approvals/gtxns.algo.ts:24
     // case TransactionType.ApplicationCall:
-    pushint 6 // 6
+    intc_2 // 6
     ==
-    // tests/approvals/gtxns.algo.ts:12-14
+    // tests/approvals/gtxns.algo.ts:24-26
     // case TransactionType.ApplicationCall:
     //   log(txn.appId.id)
     //   break
     bz test2_after_if_else@5
-    // tests/approvals/gtxns.algo.ts:13
+    // tests/approvals/gtxns.algo.ts:25
     // log(txn.appId.id)
     frame_dig 2
     gtxns ApplicationID
@@ -110,7 +149,7 @@ test2_for_header@1:
     log
 
 test2_block@19:
-    // tests/approvals/gtxns.algo.ts:9
+    // tests/approvals/gtxns.algo.ts:21
     // for (const i of urange(Global.groupSize)) {
     frame_dig 2
     intc_0 // 1
@@ -119,97 +158,160 @@ test2_block@19:
     b test2_for_header@1
 
 test2_after_if_else@5:
-    // tests/approvals/gtxns.algo.ts:15
+    // tests/approvals/gtxns.algo.ts:27
     // case TransactionType.AssetTransfer:
     frame_dig 0
     pushint 4 // 4
     ==
-    // tests/approvals/gtxns.algo.ts:15-17
+    // tests/approvals/gtxns.algo.ts:27-29
     // case TransactionType.AssetTransfer:
     //   log(txn.xferAsset.id)
     //   break
     bz test2_after_if_else@8
-    // tests/approvals/gtxns.algo.ts:16
+    // tests/approvals/gtxns.algo.ts:28
     // log(txn.xferAsset.id)
     frame_dig 2
     gtxns XferAsset
-    itob
-    log
-    // tests/approvals/gtxns.algo.ts:17
-    // break
-    b test2_block@19
-
-test2_after_if_else@8:
-    // tests/approvals/gtxns.algo.ts:18
-    // case TransactionType.AssetConfig:
-    frame_dig 0
-    pushint 3 // 3
-    ==
-    // tests/approvals/gtxns.algo.ts:18-20
-    // case TransactionType.AssetConfig:
-    //   log(txn.configAsset.id)
-    //   break
-    bz test2_after_if_else@11
-    // tests/approvals/gtxns.algo.ts:19
-    // log(txn.configAsset.id)
-    frame_dig 2
-    gtxns ConfigAsset
-    itob
-    log
-    // tests/approvals/gtxns.algo.ts:20
-    // break
-    b test2_block@19
-
-test2_after_if_else@11:
-    // tests/approvals/gtxns.algo.ts:21
-    // case TransactionType.Payment:
-    frame_dig 0
-    intc_0 // 1
-    ==
-    // tests/approvals/gtxns.algo.ts:21-23
-    // case TransactionType.Payment:
-    //   log(txn.receiver)
-    //   break
-    bz test2_after_if_else@14
-    // tests/approvals/gtxns.algo.ts:22
-    // log(txn.receiver)
-    frame_dig 2
-    gtxns Receiver
-    log
-    // tests/approvals/gtxns.algo.ts:23
-    // break
-    b test2_block@19
-
-test2_after_if_else@14:
-    // tests/approvals/gtxns.algo.ts:24
-    // case TransactionType.KeyRegistration:
-    frame_dig 0
-    pushint 2 // 2
-    ==
-    // tests/approvals/gtxns.algo.ts:24-26
-    // case TransactionType.KeyRegistration:
-    //   log(txn.voteKey)
-    //   break
-    bz test2_after_if_else@17
-    // tests/approvals/gtxns.algo.ts:25
-    // log(txn.voteKey)
-    frame_dig 2
-    gtxns VotePK
-    log
-    // tests/approvals/gtxns.algo.ts:26
-    // break
-    b test2_block@19
-
-test2_after_if_else@17:
-    // tests/approvals/gtxns.algo.ts:28
-    // log(txn.freezeAsset.id)
-    frame_dig 2
-    gtxns FreezeAsset
     itob
     log
     // tests/approvals/gtxns.algo.ts:29
     // break
     b test2_block@19
 
+test2_after_if_else@8:
+    // tests/approvals/gtxns.algo.ts:30
+    // case TransactionType.AssetConfig:
+    frame_dig 0
+    pushint 3 // 3
+    ==
+    // tests/approvals/gtxns.algo.ts:30-32
+    // case TransactionType.AssetConfig:
+    //   log(txn.configAsset.id)
+    //   break
+    bz test2_after_if_else@11
+    // tests/approvals/gtxns.algo.ts:31
+    // log(txn.configAsset.id)
+    frame_dig 2
+    gtxns ConfigAsset
+    itob
+    log
+    // tests/approvals/gtxns.algo.ts:32
+    // break
+    b test2_block@19
+
+test2_after_if_else@11:
+    // tests/approvals/gtxns.algo.ts:33
+    // case TransactionType.Payment:
+    frame_dig 0
+    intc_0 // 1
+    ==
+    // tests/approvals/gtxns.algo.ts:33-35
+    // case TransactionType.Payment:
+    //   log(txn.receiver)
+    //   break
+    bz test2_after_if_else@14
+    // tests/approvals/gtxns.algo.ts:34
+    // log(txn.receiver)
+    frame_dig 2
+    gtxns Receiver
+    log
+    // tests/approvals/gtxns.algo.ts:35
+    // break
+    b test2_block@19
+
+test2_after_if_else@14:
+    // tests/approvals/gtxns.algo.ts:36
+    // case TransactionType.KeyRegistration:
+    frame_dig 0
+    pushint 2 // 2
+    ==
+    // tests/approvals/gtxns.algo.ts:36-38
+    // case TransactionType.KeyRegistration:
+    //   log(txn.voteKey)
+    //   break
+    bz test2_after_if_else@17
+    // tests/approvals/gtxns.algo.ts:37
+    // log(txn.voteKey)
+    frame_dig 2
+    gtxns VotePK
+    log
+    // tests/approvals/gtxns.algo.ts:38
+    // break
+    b test2_block@19
+
+test2_after_if_else@17:
+    // tests/approvals/gtxns.algo.ts:40
+    // log(txn.freezeAsset.id)
+    frame_dig 2
+    gtxns FreezeAsset
+    itob
+    log
+    // tests/approvals/gtxns.algo.ts:41
+    // break
+    b test2_block@19
+
 test2_after_for@21:
+    retsub
+
+
+// tests/approvals/gtxns.algo.ts::GtxnsAlgo.test3() -> void:
+test3:
+    // tests/approvals/gtxns.algo.ts:47
+    // assert(Txn.onCompletion === OnCompleteAction.NoOp, 'OCA must be NoOp')
+    txn OnCompletion
+    !
+    assert // OCA must be NoOp
+    // tests/approvals/gtxns.algo.ts:48
+    // assert(Txn.typeEnum === TransactionType.ApplicationCall)
+    txn TypeEnum
+    intc_2 // 6
+    ==
+    assert
+    // tests/approvals/gtxns.algo.ts:49
+    // log('Hello test4')
+    bytec_1 // "Hello test4"
+    log
+    retsub
+
+
+// tests/approvals/gtxns.algo.ts::GtxnsAlgo.test4(other: uint64) -> void:
+test4:
+    // tests/approvals/gtxns.algo.ts:52
+    // test4(other: gtxn.ApplicationCallTxn) {
+    proto 1 0
+    // tests/approvals/gtxns.algo.ts:53
+    // assert(other.onCompletion === OnCompleteAction.NoOp, 'Other txn must be NoOp')
+    frame_dig -1
+    gtxns OnCompletion
+    !
+    assert // Other txn must be NoOp
+    // tests/approvals/gtxns.algo.ts:54
+    // assert(other.type === TransactionType.ApplicationCall)
+    frame_dig -1
+    gtxns TypeEnum
+    intc_2 // 6
+    ==
+    assert
+    // tests/approvals/gtxns.algo.ts:55
+    // assert(other.lastLog === Bytes('Hello test4'))
+    frame_dig -1
+    gtxns LastLog
+    bytec_1 // "Hello test4"
+    ==
+    assert
+    // tests/approvals/gtxns.algo.ts:56
+    // assert(other.appArgs(0) === methodSelector(GtxnsAlgo.prototype.test3))
+    frame_dig -1
+    intc_1 // 0
+    gtxnsas ApplicationArgs
+    bytec_0 // method "test3()void"
+    ==
+    assert
+    // tests/approvals/gtxns.algo.ts:57
+    // assert(other.appId === Global.currentApplicationId)
+    frame_dig -1
+    gtxns ApplicationID
+    global CurrentApplicationID
+    ==
+    assert
     retsub

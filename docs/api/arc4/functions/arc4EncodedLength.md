@@ -8,7 +8,7 @@
 
 > **arc4EncodedLength**\<`T`\>(): [`uint64`](../../index/type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:589](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L589)
+Defined in: [packages/algo-ts/src/arc4/index.ts:180](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L180)
 
 Return the total number of bytes required to store T as ARC4 bytes.
 

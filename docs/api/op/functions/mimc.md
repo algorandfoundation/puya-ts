@@ -8,7 +8,7 @@
 
 > **mimc**(`c`, `a`): [`bytes`](../../index/type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/op.ts:3328](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3328)
+Defined in: [packages/algo-ts/src/op.ts:3329](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3329)
 
 MiMC hash of scalars A, using curve and parameters specified by configuration C
 A is a list of concatenated 32 byte big-endian unsigned integer scalars.  Fail if A's length is not a multiple of 32 or any element exceeds the curve modulus.
@@ -30,5 +30,5 @@ The MiMC hash function has known collisions since any input which is a multiple 
 
 ## See
 
-Native TEAL opcode: [`mimc`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#mimc)
+Native TEAL opcode: [`mimc`](https://dev.algorand.co/reference/algorand-teal/opcodes#mimc)
 Min AVM version: 11

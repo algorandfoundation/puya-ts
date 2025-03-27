@@ -91,6 +91,9 @@ function testStaticBytes() {
   const s2 = new StaticBytes<4>()
   const s3 = new StaticBytes<5>(Bytes.fromHex('AABBCCDDEE'))
 
+  const s5 = new StaticArray<StaticBytes<5>, 1>(new StaticBytes<5>(Bytes.fromHex('AABBCCDDEE')))
+  assert(s5[0].native === Bytes.fromHex('AABBCCDDEE'))
+
   const s4 = s2.concat(s3)
   assert(s4.native === Bytes.fromHex('00000000AABBCCDDEE'))
 }

@@ -8,7 +8,7 @@
 
 > **ed25519verifyBare**(`a`, `b`, `c`): `boolean`
 
-Defined in: [packages/algo-ts/src/op.ts:868](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L868)
+Defined in: [packages/algo-ts/src/op.ts:869](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L869)
 
 for (data A, signature B, pubkey C) verify the signature of the data against the pubkey => {0 or 1}
 
@@ -32,5 +32,5 @@ for (data A, signature B, pubkey C) verify the signature of the data against the
 
 ## See
 
-Native TEAL opcode: [`ed25519verify_bare`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#ed25519verify_bare)
+Native TEAL opcode: [`ed25519verify_bare`](https://dev.algorand.co/reference/algorand-teal/opcodes#ed25519verify_bare)
 Min AVM version: 7

@@ -8,7 +8,7 @@
 
 > **TxnFor**\<`TFields`\>: `TFields` *extends* \[\{ `submit`: `TTxn`; \}, `...(infer TRest extends InnerTxnList)`\] ? \[`TTxn`, `...TxnFor<TRest>`\] : \[\]
 
-Defined in: [packages/algo-ts/src/itxn.ts:183](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L183)
+Defined in: [packages/algo-ts/src/itxn.ts:973](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L973)
 
 ## Type Parameters
 

@@ -8,7 +8,7 @@
 
 > **concat**(`a`, `b`): [`bytes`](../../index/type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/op.ts:726](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L726)
+Defined in: [packages/algo-ts/src/op.ts:727](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L727)
 
 join A and B
 `concat` fails if the result would be greater than 4096 bytes.
@@ -29,5 +29,5 @@ join A and B
 
 ## See
 
-Native TEAL opcode: [`concat`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#concat)
+Native TEAL opcode: [`concat`](https://dev.algorand.co/reference/algorand-teal/opcodes#concat)
 Min AVM version: 2

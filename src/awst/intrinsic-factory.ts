@@ -4,7 +4,7 @@ import { nodeFactory } from './node-factory'
 import type { Expression } from './nodes'
 import * as awst from './nodes'
 import { BytesConstant, BytesEncoding, StringConstant } from './nodes'
-import { SourceLocation } from './source-location'
+import type { SourceLocation } from './source-location'
 import { wtypes } from './wtypes'
 
 export const intrinsicFactory = {
@@ -18,12 +18,12 @@ export const intrinsicFactory = {
           value: concatValue,
           wtype: left.wtype,
           encoding: left.encoding,
-          sourceLocation: SourceLocation.fromLocations(left.sourceLocation, right.sourceLocation),
+          sourceLocation,
         })
       } else if (left instanceof StringConstant && right instanceof StringConstant) {
         return nodeFactory.stringConstant({
           value: left.value + right.value,
-          sourceLocation: SourceLocation.fromLocations(left.sourceLocation, right.sourceLocation),
+          sourceLocation,
         })
       }
     }
