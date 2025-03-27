@@ -1,0 +1,80 @@
+subroutine add(p: readonlytuple[uint64, uint64], p₁: readonlytuple[uint64, uint64]): readonlytuple[uint64, uint64]
+{
+  <tuple>[a_h, a_l]: readonlytuple[uint64, uint64] = p
+  <tuple>[b_h, b_l]: readonlytuple[uint64, uint64] = p₁
+  <tuple>[high, low]: readonlytuple[uint64, uint64] = addw(a_l, b_l)
+  return <tuple>[high + a_h + b_h, low]
+}
+subroutine twosComp(n: uint64): uint64
+{
+  return addw(~n, 1).1
+}
+subroutine sub(p: readonlytuple[uint64, uint64], p₁: readonlytuple[uint64, uint64]): readonlytuple[uint64, uint64]
+{
+  <tuple>[a_h, a_l]: readonlytuple[uint64, uint64] = p
+  <tuple>[b_h, b_l]: readonlytuple[uint64, uint64] = p₁
+  <tuple>[ol, resl]: readonlytuple[uint64, uint64] = addw(a_l, tests/approvals/wide-math.algo.ts::twosComp(b_l))
+  <tuple>[oh, resh]: readonlytuple[uint64, uint64] = addw(a_h, tests/approvals/wide-math.algo.ts::twosComp(b_h))
+  if (resh > a_h) {
+    err(, comment=u128 underflow)
+  }
+  if (resl > a_l) {
+    return tests/approvals/wide-math.algo.ts::sub(<tuple>[resh, resl], <tuple>[1, 0])
+  }
+  return <tuple>[resh, resl]
+}
+subroutine mul(p: readonlytuple[uint64, uint64], p₁: readonlytuple[uint64, uint64]): readonlytuple[uint64, uint64]
+{
+  <tuple>[a_h, a_l]: readonlytuple[uint64, uint64] = p
+  <tuple>[b_h, b_l]: readonlytuple[uint64, uint64] = p₁
+  if (Boolean(a_h) and Boolean(b_h)) {
+    err(, comment=u128 overflow)
+  }
+  a_l_m: readonlytuple[uint64, uint64] = mulw(a_l, b_l)
+  return <tuple>[a_h * b_l + a_l_m.0 * b_h * a_l, a_l_m.1]
+}
+subroutine div(p: readonlytuple[uint64, uint64], p₁: readonlytuple[uint64, uint64]): readonlytuple[uint64, uint64]
+{
+  <tuple>[a_h, a_l]: readonlytuple[uint64, uint64] = p
+  <tuple>[b_h, b_l]: readonlytuple[uint64, uint64] = p₁
+  <tuple>[r_h, r_l, _, _₁]: readonlytuple[uint64, uint64, uint64, uint64] = divmodw(a_h, a_l, b_h, b_l)
+  return <tuple>[r_h, r_l]
+}
+contract WideMath
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  test(): void
+  {
+    ensure_budget(2000, 0)
+    u64max: readonlytuple[uint64, uint64] = <tuple>[0, 18446744073709551615]
+    one: readonlytuple[uint64, uint64] = <tuple>[0, 1]
+    u128MaxMinOne: readonlytuple[uint64, uint64] = <tuple>[18446744073709551615, 18446744073709551614]
+    u128Max: readonlytuple[uint64, uint64] = <tuple>[18446744073709551615, 18446744073709551615]
+    assert(2 == 2 and tests/approvals/wide-math.algo.ts::add(one, one).0 == 0 and tests/approvals/wide-math.algo.ts::add(one, one).1 == 2, comment=assert target is match for conditions)
+    assert(2 == 2 and tests/approvals/wide-math.algo.ts::add(u64max, one).0 == 1 and tests/approvals/wide-math.algo.ts::add(u64max, one).1 == 0, comment=assert target is match for conditions)
+    assert(2 == 2 and tests/approvals/wide-math.algo.ts::add(u128MaxMinOne, one).0 == u128Max.0 and tests/approvals/wide-math.algo.ts::add(u128MaxMinOne, one).1 == u128Max.1, comment=assert target is match for conditions)
+    assert(2 == 2 and tests/approvals/wide-math.algo.ts::sub(one, one).0 == 0 and tests/approvals/wide-math.algo.ts::sub(one, one).1 == 0, comment=assert target is match for conditions)
+    assert(2 == 2 and tests/approvals/wide-math.algo.ts::sub(<tuple>[1, 0], one).0 == u64max.0 and tests/approvals/wide-math.algo.ts::sub(<tuple>[1, 0], one).1 == u64max.1, comment=assert target is match for conditions)
+    assert(2 == 2 and tests/approvals/wide-math.algo.ts::sub(<tuple>[1, 1], <tuple>[0, 2]).0 == u64max.0 and tests/approvals/wide-math.algo.ts::sub(<tuple>[1, 1], <tuple>[0, 2]).1 == u64max.1, comment=assert target is match for conditions)
+    assert(2 == 2 and tests/approvals/wide-math.algo.ts::sub(u128Max, u128Max).0 == 0 and tests/approvals/wide-math.algo.ts::sub(u128Max, u128Max).1 == 0, comment=assert target is match for conditions)
+    assert(2 == 2 and tests/approvals/wide-math.algo.ts::sub(u64max, u64max).0 == 0 and tests/approvals/wide-math.algo.ts::sub(u64max, u64max).1 == 0, comment=assert target is match for conditions)
+    assert(2 == 2 and tests/approvals/wide-math.algo.ts::mul(one, one).0 == one.0 and tests/approvals/wide-math.algo.ts::mul(one, one).1 == one.1, comment=assert target is match for conditions)
+    assert(2 == 2 and tests/approvals/wide-math.algo.ts::mul(<tuple>[1, 0], <tuple>[0, 2]).0 == 2 and tests/approvals/wide-math.algo.ts::mul(<tuple>[1, 0], <tuple>[0, 2]).1 == 0, comment=assert target is match for conditions)
+    assert(2 == 2 and tests/approvals/wide-math.algo.ts::mul(<tuple>[1, 0], u64max).0 == 18446744073709551615 and tests/approvals/wide-math.algo.ts::mul(<tuple>[1, 0], u64max).1 == 0, comment=assert target is match for conditions)
+    assert(2 == 2 and tests/approvals/wide-math.algo.ts::div(<tuple>[128, 0], <tuple>[0, 2]).0 == 64 and tests/approvals/wide-math.algo.ts::div(<tuple>[128, 0], <tuple>[0, 2]).1 == 0, comment=assert target is match for conditions)
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

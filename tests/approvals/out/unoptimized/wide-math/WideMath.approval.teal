@@ -1,0 +1,943 @@
+#pragma version 10
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0 1 2 18446744073709551615 18446744073709551614
+    bytecblock 0x068101
+
+main_block@0:
+
+main_block@1:
+    // tests/approvals/wide-math.algo.ts:45
+    // class WideMath extends Contract {
+    txn NumAppArgs
+    intc_0 // 0
+    !=
+    bz main_bare_routing@6
+
+main_abi_routing@2:
+    // tests/approvals/wide-math.algo.ts:45
+    // class WideMath extends Contract {
+    txna ApplicationArgs 0
+    pushbytes 0xa78000de // method "test()void"
+    swap
+    match main_test_route@3
+
+main_switch_case_default@4:
+
+main_switch_case_next@5:
+
+main_after_if_else@10:
+    // tests/approvals/wide-math.algo.ts:45
+    // class WideMath extends Contract {
+    intc_0 // 0
+
+main_after_inlined_tests/approvals/wide-math.algo.ts::WideMath.__puya_arc4_router__@11:
+    return
+
+main_test_route@3:
+    // tests/approvals/wide-math.algo.ts:46
+    // test() {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    callsub test
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/wide-math.algo.ts::WideMath.__puya_arc4_router__@11
+
+main_bare_routing@6:
+    // tests/approvals/wide-math.algo.ts:45
+    // class WideMath extends Contract {
+    txn OnCompletion
+    intc_0 // 0
+    swap
+    match main___algots__.defaultCreate@7
+
+main_switch_case_default@8:
+
+main_switch_case_next@9:
+    b main_after_if_else@10
+
+main___algots__.defaultCreate@7:
+    // tests/approvals/wide-math.algo.ts:45
+    // class WideMath extends Contract {
+    txn ApplicationID
+    intc_0 // 0
+    ==
+    assert // can only call when creating
+    callsub __algots__.defaultCreate
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/wide-math.algo.ts::WideMath.__puya_arc4_router__@11
+
+
+// _puya_lib.util.ensure_budget(required_budget: uint64, fee_source: uint64) -> void:
+ensure_budget:
+    proto 2 0
+
+ensure_budget_block@0:
+    frame_dig -2
+    pushint 10 // 10
+    +
+
+ensure_budget_while_top@1:
+    global OpcodeBudget
+    frame_dig 0
+    <
+    bz ensure_budget_after_while@7
+
+ensure_budget_while_body@2:
+    itxn_begin
+    pushint 6 // appl
+    itxn_field TypeEnum
+    pushint 5 // DeleteApplication
+    itxn_field OnCompletion
+    bytec_0 // 0x068101
+    itxn_field ApprovalProgram
+    bytec_0 // 0x068101
+    itxn_field ClearStateProgram
+    intc_0 // 0
+    intc_1 // 1
+    frame_dig -1
+    match ensure_budget_switch_case_0@3 ensure_budget_switch_case_1@4
+
+ensure_budget_switch_case_default@5:
+
+ensure_budget_switch_case_next@6:
+    itxn_submit
+    b ensure_budget_while_top@1
+
+ensure_budget_switch_case_1@4:
+    global MinTxnFee
+    itxn_field Fee
+    b ensure_budget_switch_case_next@6
+
+ensure_budget_switch_case_0@3:
+    intc_0 // 0
+    itxn_field Fee
+    b ensure_budget_switch_case_next@6
+
+ensure_budget_after_while@7:
+    retsub
+
+
+// tests/approvals/wide-math.algo.ts::add(p.0: uint64, p.1: uint64, p₁.0: uint64, p₁.1: uint64) -> uint64, uint64:
+add:
+    // tests/approvals/wide-math.algo.ts:7
+    // function add([a_h, a_l]: Uint128, [b_h, b_l]: Uint128): Uint128 {
+    proto 4 2
+
+add_block@0:
+    // tests/approvals/wide-math.algo.ts:7
+    // function add([a_h, a_l]: Uint128, [b_h, b_l]: Uint128): Uint128 {
+    frame_dig -4
+    frame_dig -3
+    frame_dig -2
+    cover 2
+    frame_dig -1
+    // tests/approvals/wide-math.algo.ts:8
+    // const [high, low] = addw(a_l, b_l)
+    addw
+    swap
+    // tests/approvals/wide-math.algo.ts:9
+    // return [high + a_h + b_h, low]
+    uncover 2
+    +
+    uncover 2
+    +
+    swap
+    retsub
+
+
+// tests/approvals/wide-math.algo.ts::twosComp(n: uint64) -> uint64:
+twosComp:
+    // tests/approvals/wide-math.algo.ts:12
+    // function twosComp(n: uint64): uint64 {
+    proto 1 1
+
+twosComp_block@0:
+    // tests/approvals/wide-math.algo.ts:13
+    // return addw(~n, 1)[1]
+    frame_dig -1
+    ~
+    intc_1 // 1
+    addw
+    bury 1
+    retsub
+
+
+// tests/approvals/wide-math.algo.ts::sub(p.0: uint64, p.1: uint64, p₁.0: uint64, p₁.1: uint64) -> uint64, uint64:
+sub:
+    // tests/approvals/wide-math.algo.ts:16
+    // function sub([a_h, a_l]: Uint128, [b_h, b_l]: Uint128): Uint128 {
+    proto 4 2
+
+sub_block@0:
+    // tests/approvals/wide-math.algo.ts:16
+    // function sub([a_h, a_l]: Uint128, [b_h, b_l]: Uint128): Uint128 {
+    frame_dig -4
+    frame_dig -3
+    dup
+    cover 2
+    frame_dig -2
+    swap
+    frame_dig -1
+    // tests/approvals/wide-math.algo.ts:17
+    // const [ol, resl] = addw(a_l, twosComp(b_l))
+    callsub twosComp
+    addw
+    bury 1
+    cover 2
+    // tests/approvals/wide-math.algo.ts:19
+    // const [oh, resh] = addw(a_h, twosComp(b_h))
+    callsub twosComp
+    dig 1
+    addw
+    bury 1
+    dup
+    cover 2
+    // tests/approvals/wide-math.algo.ts:20
+    // if (resh > a_h) {
+    <
+    bz sub_after_if_else@2
+
+sub_if_body@1:
+    // tests/approvals/wide-math.algo.ts:21
+    // err('u128 underflow')
+    err // u128 underflow
+
+sub_after_if_else@2:
+    // tests/approvals/wide-math.algo.ts:24
+    // if (resl > a_l) {
+    frame_dig 1
+    frame_dig 0
+    >
+    bz sub_after_if_else@4
+
+sub_if_body@3:
+    // tests/approvals/wide-math.algo.ts:25
+    // return sub([resh, resl], [1, 0])
+    frame_dig 2
+    frame_dig 1
+    intc_1 // 1
+    intc_0 // 0
+    callsub sub
+    frame_bury 1
+    frame_bury 0
+    retsub
+
+sub_after_if_else@4:
+    // tests/approvals/wide-math.algo.ts:28
+    // return [resh, resl]
+    frame_dig 2
+    frame_bury 0
+    retsub
+
+
+// tests/approvals/wide-math.algo.ts::mul(p.0: uint64, p.1: uint64, p₁.0: uint64, p₁.1: uint64) -> uint64, uint64:
+mul:
+    // tests/approvals/wide-math.algo.ts:31
+    // function mul([a_h, a_l]: Uint128, [b_h, b_l]: Uint128): Uint128 {
+    proto 4 2
+
+mul_block@0:
+    // tests/approvals/wide-math.algo.ts:31
+    // function mul([a_h, a_l]: Uint128, [b_h, b_l]: Uint128): Uint128 {
+    frame_dig -4
+    dup
+    frame_dig -3
+    swap
+    frame_dig -2
+    swap
+    frame_dig -1
+    swap
+    // tests/approvals/wide-math.algo.ts:32
+    // if (a_h && b_h) {
+    bz mul_after_if_else@3
+
+mul_and_contd@1:
+    // tests/approvals/wide-math.algo.ts:32
+    // if (a_h && b_h) {
+    frame_dig 2
+    bz mul_after_if_else@3
+
+mul_if_body@2:
+    // tests/approvals/wide-math.algo.ts:33
+    // err('u128 overflow')
+    err // u128 overflow
+
+mul_after_if_else@3:
+    // tests/approvals/wide-math.algo.ts:35
+    // const a_l_m = mulw(a_l, b_l)
+    frame_dig 1
+    dup
+    frame_dig 3
+    dup
+    cover 2
+    mulw
+    cover 3
+    swap
+    // tests/approvals/wide-math.algo.ts:37
+    // return [a_h * b_l + a_l_m[0] * b_h * a_l, a_l_m[1]]
+    frame_dig 0
+    *
+    swap
+    frame_dig 2
+    *
+    uncover 2
+    *
+    +
+    swap
+    frame_bury 1
+    frame_bury 0
+    retsub
+
+
+// tests/approvals/wide-math.algo.ts::div(p.0: uint64, p.1: uint64, p₁.0: uint64, p₁.1: uint64) -> uint64, uint64:
+div:
+    // tests/approvals/wide-math.algo.ts:40
+    // function div([a_h, a_l]: Uint128, [b_h, b_l]: Uint128): Uint128 {
+    proto 4 2
+
+div_block@0:
+    // tests/approvals/wide-math.algo.ts:40
+    // function div([a_h, a_l]: Uint128, [b_h, b_l]: Uint128): Uint128 {
+    frame_dig -4
+    frame_dig -3
+    frame_dig -2
+    frame_dig -1
+    // tests/approvals/wide-math.algo.ts:41
+    // const [r_h, r_l] = divmodw(a_h, a_l, b_h, b_l)
+    uncover 3
+    uncover 3
+    uncover 3
+    uncover 3
+    divmodw
+    popn 2
+    // tests/approvals/wide-math.algo.ts:42
+    // return [r_h, r_l]
+    retsub
+
+
+// tests/approvals/wide-math.algo.ts::WideMath.test() -> void:
+test:
+
+test_block@0:
+    // tests/approvals/wide-math.algo.ts:47
+    // ensureBudget(2000)
+    pushint 2000 // 2000
+    intc_0 // 0
+    callsub ensure_budget
+    // tests/approvals/wide-math.algo.ts:54
+    // assertMatch(add(one, one), [0, 2])
+    intc_2 // 2
+    dup
+    ==
+    bz test_bool_false@4
+
+test_and_contd@1:
+    // tests/approvals/wide-math.algo.ts:49
+    // const one: Uint128 = [0, 1]
+    intc_0 // 0
+    intc_1 // 1
+    dup2
+    // tests/approvals/wide-math.algo.ts:54
+    // assertMatch(add(one, one), [0, 2])
+    callsub add
+    pop
+    intc_0 // 0
+    ==
+    bz test_bool_false@4
+
+test_and_contd@2:
+    // tests/approvals/wide-math.algo.ts:49
+    // const one: Uint128 = [0, 1]
+    intc_0 // 0
+    intc_1 // 1
+    dup2
+    // tests/approvals/wide-math.algo.ts:54
+    // assertMatch(add(one, one), [0, 2])
+    callsub add
+    bury 1
+    intc_2 // 2
+    ==
+    bz test_bool_false@4
+
+test_bool_true@3:
+    intc_1 // 1
+
+test_bool_merge@5:
+    // tests/approvals/wide-math.algo.ts:54
+    // assertMatch(add(one, one), [0, 2])
+    assert // assert target is match for conditions
+    // tests/approvals/wide-math.algo.ts:55
+    // assertMatch(add(u64max, one), [1, 0])
+    intc_2 // 2
+    dup
+    ==
+    bz test_bool_false@9
+
+test_and_contd@6:
+    // tests/approvals/wide-math.algo.ts:48
+    // const u64max: Uint128 = [0, 2 ** 64 - 1]
+    intc_0 // 0
+    intc_3 // 18446744073709551615
+    // tests/approvals/wide-math.algo.ts:49
+    // const one: Uint128 = [0, 1]
+    intc_0 // 0
+    intc_1 // 1
+    // tests/approvals/wide-math.algo.ts:55
+    // assertMatch(add(u64max, one), [1, 0])
+    callsub add
+    pop
+    intc_1 // 1
+    ==
+    bz test_bool_false@9
+
+test_and_contd@7:
+    // tests/approvals/wide-math.algo.ts:48
+    // const u64max: Uint128 = [0, 2 ** 64 - 1]
+    intc_0 // 0
+    intc_3 // 18446744073709551615
+    // tests/approvals/wide-math.algo.ts:49
+    // const one: Uint128 = [0, 1]
+    intc_0 // 0
+    intc_1 // 1
+    // tests/approvals/wide-math.algo.ts:55
+    // assertMatch(add(u64max, one), [1, 0])
+    callsub add
+    bury 1
+    intc_0 // 0
+    ==
+    bz test_bool_false@9
+
+test_bool_true@8:
+    intc_1 // 1
+
+test_bool_merge@10:
+    // tests/approvals/wide-math.algo.ts:55
+    // assertMatch(add(u64max, one), [1, 0])
+    assert // assert target is match for conditions
+    // tests/approvals/wide-math.algo.ts:56
+    // assertMatch(add(u128MaxMinOne, one), u128Max)
+    intc_2 // 2
+    dup
+    ==
+    bz test_bool_false@14
+
+test_and_contd@11:
+    // tests/approvals/wide-math.algo.ts:51
+    // const u128MaxMinOne: Uint128 = [2 ** 64 - 1, 2 ** 64 - 2]
+    intc_3 // 18446744073709551615
+    intc 4 // 18446744073709551614
+    // tests/approvals/wide-math.algo.ts:49
+    // const one: Uint128 = [0, 1]
+    intc_0 // 0
+    intc_1 // 1
+    // tests/approvals/wide-math.algo.ts:56
+    // assertMatch(add(u128MaxMinOne, one), u128Max)
+    callsub add
+    pop
+    // tests/approvals/wide-math.algo.ts:52
+    // const u128Max: Uint128 = [2 ** 64 - 1, 2 ** 64 - 1]
+    intc_3 // 18446744073709551615
+    // tests/approvals/wide-math.algo.ts:56
+    // assertMatch(add(u128MaxMinOne, one), u128Max)
+    ==
+    bz test_bool_false@14
+
+test_and_contd@12:
+    // tests/approvals/wide-math.algo.ts:51
+    // const u128MaxMinOne: Uint128 = [2 ** 64 - 1, 2 ** 64 - 2]
+    intc_3 // 18446744073709551615
+    intc 4 // 18446744073709551614
+    // tests/approvals/wide-math.algo.ts:49
+    // const one: Uint128 = [0, 1]
+    intc_0 // 0
+    intc_1 // 1
+    // tests/approvals/wide-math.algo.ts:56
+    // assertMatch(add(u128MaxMinOne, one), u128Max)
+    callsub add
+    bury 1
+    // tests/approvals/wide-math.algo.ts:52
+    // const u128Max: Uint128 = [2 ** 64 - 1, 2 ** 64 - 1]
+    intc_3 // 18446744073709551615
+    // tests/approvals/wide-math.algo.ts:56
+    // assertMatch(add(u128MaxMinOne, one), u128Max)
+    ==
+    bz test_bool_false@14
+
+test_bool_true@13:
+    intc_1 // 1
+
+test_bool_merge@15:
+    // tests/approvals/wide-math.algo.ts:56
+    // assertMatch(add(u128MaxMinOne, one), u128Max)
+    assert // assert target is match for conditions
+    // tests/approvals/wide-math.algo.ts:58
+    // assertMatch(sub(one, one), [0, 0])
+    intc_2 // 2
+    dup
+    ==
+    bz test_bool_false@19
+
+test_and_contd@16:
+    // tests/approvals/wide-math.algo.ts:49
+    // const one: Uint128 = [0, 1]
+    intc_0 // 0
+    intc_1 // 1
+    dup2
+    // tests/approvals/wide-math.algo.ts:58
+    // assertMatch(sub(one, one), [0, 0])
+    callsub sub
+    pop
+    intc_0 // 0
+    ==
+    bz test_bool_false@19
+
+test_and_contd@17:
+    // tests/approvals/wide-math.algo.ts:49
+    // const one: Uint128 = [0, 1]
+    intc_0 // 0
+    intc_1 // 1
+    dup2
+    // tests/approvals/wide-math.algo.ts:58
+    // assertMatch(sub(one, one), [0, 0])
+    callsub sub
+    bury 1
+    intc_0 // 0
+    ==
+    bz test_bool_false@19
+
+test_bool_true@18:
+    intc_1 // 1
+
+test_bool_merge@20:
+    // tests/approvals/wide-math.algo.ts:58
+    // assertMatch(sub(one, one), [0, 0])
+    assert // assert target is match for conditions
+    // tests/approvals/wide-math.algo.ts:59
+    // assertMatch(sub([1, 0], one), u64max)
+    intc_2 // 2
+    dup
+    ==
+    bz test_bool_false@24
+
+test_and_contd@21:
+    // tests/approvals/wide-math.algo.ts:59
+    // assertMatch(sub([1, 0], one), u64max)
+    intc_1 // 1
+    intc_0 // 0
+    // tests/approvals/wide-math.algo.ts:49
+    // const one: Uint128 = [0, 1]
+    dup
+    intc_1 // 1
+    // tests/approvals/wide-math.algo.ts:59
+    // assertMatch(sub([1, 0], one), u64max)
+    callsub sub
+    pop
+    // tests/approvals/wide-math.algo.ts:48
+    // const u64max: Uint128 = [0, 2 ** 64 - 1]
+    intc_0 // 0
+    // tests/approvals/wide-math.algo.ts:59
+    // assertMatch(sub([1, 0], one), u64max)
+    ==
+    bz test_bool_false@24
+
+test_and_contd@22:
+    // tests/approvals/wide-math.algo.ts:59
+    // assertMatch(sub([1, 0], one), u64max)
+    intc_1 // 1
+    intc_0 // 0
+    // tests/approvals/wide-math.algo.ts:49
+    // const one: Uint128 = [0, 1]
+    dup
+    intc_1 // 1
+    // tests/approvals/wide-math.algo.ts:59
+    // assertMatch(sub([1, 0], one), u64max)
+    callsub sub
+    bury 1
+    // tests/approvals/wide-math.algo.ts:48
+    // const u64max: Uint128 = [0, 2 ** 64 - 1]
+    intc_3 // 18446744073709551615
+    // tests/approvals/wide-math.algo.ts:59
+    // assertMatch(sub([1, 0], one), u64max)
+    ==
+    bz test_bool_false@24
+
+test_bool_true@23:
+    intc_1 // 1
+
+test_bool_merge@25:
+    // tests/approvals/wide-math.algo.ts:59
+    // assertMatch(sub([1, 0], one), u64max)
+    assert // assert target is match for conditions
+    // tests/approvals/wide-math.algo.ts:60
+    // assertMatch(sub([1, 1], [0, 2]), u64max)
+    intc_2 // 2
+    dup
+    ==
+    bz test_bool_false@29
+
+test_and_contd@26:
+    // tests/approvals/wide-math.algo.ts:60
+    // assertMatch(sub([1, 1], [0, 2]), u64max)
+    intc_1 // 1
+    dup
+    intc_0 // 0
+    intc_2 // 2
+    callsub sub
+    pop
+    // tests/approvals/wide-math.algo.ts:48
+    // const u64max: Uint128 = [0, 2 ** 64 - 1]
+    intc_0 // 0
+    // tests/approvals/wide-math.algo.ts:60
+    // assertMatch(sub([1, 1], [0, 2]), u64max)
+    ==
+    bz test_bool_false@29
+
+test_and_contd@27:
+    // tests/approvals/wide-math.algo.ts:60
+    // assertMatch(sub([1, 1], [0, 2]), u64max)
+    intc_1 // 1
+    dup
+    intc_0 // 0
+    intc_2 // 2
+    callsub sub
+    bury 1
+    // tests/approvals/wide-math.algo.ts:48
+    // const u64max: Uint128 = [0, 2 ** 64 - 1]
+    intc_3 // 18446744073709551615
+    // tests/approvals/wide-math.algo.ts:60
+    // assertMatch(sub([1, 1], [0, 2]), u64max)
+    ==
+    bz test_bool_false@29
+
+test_bool_true@28:
+    intc_1 // 1
+
+test_bool_merge@30:
+    // tests/approvals/wide-math.algo.ts:60
+    // assertMatch(sub([1, 1], [0, 2]), u64max)
+    assert // assert target is match for conditions
+    // tests/approvals/wide-math.algo.ts:61
+    // assertMatch(sub(u128Max, u128Max), [0, 0])
+    intc_2 // 2
+    dup
+    ==
+    bz test_bool_false@34
+
+test_and_contd@31:
+    // tests/approvals/wide-math.algo.ts:52
+    // const u128Max: Uint128 = [2 ** 64 - 1, 2 ** 64 - 1]
+    intc_3 // 18446744073709551615
+    dupn 3
+    // tests/approvals/wide-math.algo.ts:61
+    // assertMatch(sub(u128Max, u128Max), [0, 0])
+    callsub sub
+    pop
+    intc_0 // 0
+    ==
+    bz test_bool_false@34
+
+test_and_contd@32:
+    // tests/approvals/wide-math.algo.ts:52
+    // const u128Max: Uint128 = [2 ** 64 - 1, 2 ** 64 - 1]
+    intc_3 // 18446744073709551615
+    dupn 3
+    // tests/approvals/wide-math.algo.ts:61
+    // assertMatch(sub(u128Max, u128Max), [0, 0])
+    callsub sub
+    bury 1
+    intc_0 // 0
+    ==
+    bz test_bool_false@34
+
+test_bool_true@33:
+    intc_1 // 1
+
+test_bool_merge@35:
+    // tests/approvals/wide-math.algo.ts:61
+    // assertMatch(sub(u128Max, u128Max), [0, 0])
+    assert // assert target is match for conditions
+    // tests/approvals/wide-math.algo.ts:62
+    // assertMatch(sub(u64max, u64max), [0, 0])
+    intc_2 // 2
+    dup
+    ==
+    bz test_bool_false@39
+
+test_and_contd@36:
+    // tests/approvals/wide-math.algo.ts:48
+    // const u64max: Uint128 = [0, 2 ** 64 - 1]
+    intc_0 // 0
+    intc_3 // 18446744073709551615
+    dup2
+    // tests/approvals/wide-math.algo.ts:62
+    // assertMatch(sub(u64max, u64max), [0, 0])
+    callsub sub
+    pop
+    intc_0 // 0
+    ==
+    bz test_bool_false@39
+
+test_and_contd@37:
+    // tests/approvals/wide-math.algo.ts:48
+    // const u64max: Uint128 = [0, 2 ** 64 - 1]
+    intc_0 // 0
+    intc_3 // 18446744073709551615
+    dup2
+    // tests/approvals/wide-math.algo.ts:62
+    // assertMatch(sub(u64max, u64max), [0, 0])
+    callsub sub
+    bury 1
+    intc_0 // 0
+    ==
+    bz test_bool_false@39
+
+test_bool_true@38:
+    intc_1 // 1
+
+test_bool_merge@40:
+    // tests/approvals/wide-math.algo.ts:62
+    // assertMatch(sub(u64max, u64max), [0, 0])
+    assert // assert target is match for conditions
+    // tests/approvals/wide-math.algo.ts:64
+    // assertMatch(mul(one, one), one)
+    intc_2 // 2
+    dup
+    ==
+    bz test_bool_false@44
+
+test_and_contd@41:
+    // tests/approvals/wide-math.algo.ts:49
+    // const one: Uint128 = [0, 1]
+    intc_0 // 0
+    intc_1 // 1
+    dup2
+    // tests/approvals/wide-math.algo.ts:64
+    // assertMatch(mul(one, one), one)
+    callsub mul
+    pop
+    // tests/approvals/wide-math.algo.ts:49
+    // const one: Uint128 = [0, 1]
+    intc_0 // 0
+    // tests/approvals/wide-math.algo.ts:64
+    // assertMatch(mul(one, one), one)
+    ==
+    bz test_bool_false@44
+
+test_and_contd@42:
+    // tests/approvals/wide-math.algo.ts:49
+    // const one: Uint128 = [0, 1]
+    intc_0 // 0
+    intc_1 // 1
+    dup2
+    // tests/approvals/wide-math.algo.ts:64
+    // assertMatch(mul(one, one), one)
+    callsub mul
+    bury 1
+    // tests/approvals/wide-math.algo.ts:49
+    // const one: Uint128 = [0, 1]
+    intc_1 // 1
+    // tests/approvals/wide-math.algo.ts:64
+    // assertMatch(mul(one, one), one)
+    ==
+    bz test_bool_false@44
+
+test_bool_true@43:
+    intc_1 // 1
+
+test_bool_merge@45:
+    // tests/approvals/wide-math.algo.ts:64
+    // assertMatch(mul(one, one), one)
+    assert // assert target is match for conditions
+    // tests/approvals/wide-math.algo.ts:65
+    // assertMatch(mul([1, 0], [0, 2]), [2, 0])
+    intc_2 // 2
+    dup
+    ==
+    bz test_bool_false@49
+
+test_and_contd@46:
+    // tests/approvals/wide-math.algo.ts:65
+    // assertMatch(mul([1, 0], [0, 2]), [2, 0])
+    intc_1 // 1
+    intc_0 // 0
+    dup
+    intc_2 // 2
+    callsub mul
+    pop
+    intc_2 // 2
+    ==
+    bz test_bool_false@49
+
+test_and_contd@47:
+    // tests/approvals/wide-math.algo.ts:65
+    // assertMatch(mul([1, 0], [0, 2]), [2, 0])
+    intc_1 // 1
+    intc_0 // 0
+    dup
+    intc_2 // 2
+    callsub mul
+    bury 1
+    intc_0 // 0
+    ==
+    bz test_bool_false@49
+
+test_bool_true@48:
+    intc_1 // 1
+
+test_bool_merge@50:
+    // tests/approvals/wide-math.algo.ts:65
+    // assertMatch(mul([1, 0], [0, 2]), [2, 0])
+    assert // assert target is match for conditions
+    // tests/approvals/wide-math.algo.ts:66
+    // assertMatch(mul([1, 0], u64max), [2 ** 64 - 1, 0])
+    intc_2 // 2
+    dup
+    ==
+    bz test_bool_false@54
+
+test_and_contd@51:
+    // tests/approvals/wide-math.algo.ts:66
+    // assertMatch(mul([1, 0], u64max), [2 ** 64 - 1, 0])
+    intc_1 // 1
+    intc_0 // 0
+    // tests/approvals/wide-math.algo.ts:48
+    // const u64max: Uint128 = [0, 2 ** 64 - 1]
+    dup
+    intc_3 // 18446744073709551615
+    // tests/approvals/wide-math.algo.ts:66
+    // assertMatch(mul([1, 0], u64max), [2 ** 64 - 1, 0])
+    callsub mul
+    pop
+    intc_3 // 18446744073709551615
+    ==
+    bz test_bool_false@54
+
+test_and_contd@52:
+    // tests/approvals/wide-math.algo.ts:66
+    // assertMatch(mul([1, 0], u64max), [2 ** 64 - 1, 0])
+    intc_1 // 1
+    intc_0 // 0
+    // tests/approvals/wide-math.algo.ts:48
+    // const u64max: Uint128 = [0, 2 ** 64 - 1]
+    dup
+    intc_3 // 18446744073709551615
+    // tests/approvals/wide-math.algo.ts:66
+    // assertMatch(mul([1, 0], u64max), [2 ** 64 - 1, 0])
+    callsub mul
+    bury 1
+    intc_0 // 0
+    ==
+    bz test_bool_false@54
+
+test_bool_true@53:
+    intc_1 // 1
+
+test_bool_merge@55:
+    // tests/approvals/wide-math.algo.ts:66
+    // assertMatch(mul([1, 0], u64max), [2 ** 64 - 1, 0])
+    assert // assert target is match for conditions
+    // tests/approvals/wide-math.algo.ts:68
+    // assertMatch(div([128, 0], [0, 2]), [64, 0])
+    intc_2 // 2
+    dup
+    ==
+    bz test_bool_false@59
+
+test_and_contd@56:
+    // tests/approvals/wide-math.algo.ts:68
+    // assertMatch(div([128, 0], [0, 2]), [64, 0])
+    pushint 128 // 128
+    intc_0 // 0
+    dup
+    intc_2 // 2
+    callsub div
+    pop
+    pushint 64 // 64
+    ==
+    bz test_bool_false@59
+
+test_and_contd@57:
+    // tests/approvals/wide-math.algo.ts:68
+    // assertMatch(div([128, 0], [0, 2]), [64, 0])
+    pushint 128 // 128
+    intc_0 // 0
+    dup
+    intc_2 // 2
+    callsub div
+    bury 1
+    intc_0 // 0
+    ==
+    bz test_bool_false@59
+
+test_bool_true@58:
+    intc_1 // 1
+
+test_bool_merge@60:
+    // tests/approvals/wide-math.algo.ts:68
+    // assertMatch(div([128, 0], [0, 2]), [64, 0])
+    assert // assert target is match for conditions
+    retsub
+
+test_bool_false@59:
+    intc_0 // 0
+    b test_bool_merge@60
+
+test_bool_false@54:
+    intc_0 // 0
+    b test_bool_merge@55
+
+test_bool_false@49:
+    intc_0 // 0
+    b test_bool_merge@50
+
+test_bool_false@44:
+    intc_0 // 0
+    b test_bool_merge@45
+
+test_bool_false@39:
+    intc_0 // 0
+    b test_bool_merge@40
+
+test_bool_false@34:
+    intc_0 // 0
+    b test_bool_merge@35
+
+test_bool_false@29:
+    intc_0 // 0
+    b test_bool_merge@30
+
+test_bool_false@24:
+    intc_0 // 0
+    b test_bool_merge@25
+
+test_bool_false@19:
+    intc_0 // 0
+    b test_bool_merge@20
+
+test_bool_false@14:
+    intc_0 // 0
+    b test_bool_merge@15
+
+test_bool_false@9:
+    intc_0 // 0
+    b test_bool_merge@10
+
+test_bool_false@4:
+    intc_0 // 0
+    b test_bool_merge@5
+
+
+// tests/approvals/wide-math.algo.ts::WideMath.__algots__.defaultCreate() -> void:
+__algots__.defaultCreate:
+
+__algots__.defaultCreate_block@0:
+    retsub

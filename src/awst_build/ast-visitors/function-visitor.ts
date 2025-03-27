@@ -21,7 +21,7 @@ import { OmittedExpressionBuilder } from '../eb/omitted-expression-builder'
 import { TupleExpressionBuilder } from '../eb/tuple-expression-builder'
 import { requireExpressionOfType, requireInstanceBuilder } from '../eb/util'
 import type { PType } from '../ptypes'
-import { FunctionPType, ObjectPType } from '../ptypes'
+import { FunctionPType, ObjectPType, TuplePType } from '../ptypes'
 import { getSequenceItemType } from '../ptypes/util'
 import { typeRegistry } from '../type-registry'
 import { BaseVisitor } from './base-visitor'
@@ -489,6 +489,13 @@ export abstract class FunctionVisitor
       })
     } else if (ts.isObjectBindingPattern(node.name)) {
       codeInvariant(paramPType instanceof ObjectPType, 'Param type must be object if it is being destructured', sourceLocation)
+      return nodeFactory.subroutineArgument({
+        sourceLocation,
+        name: this.context.resolveDestructuredParamName(node),
+        wtype: paramPType.wtype,
+      })
+    } else if (ts.isArrayBindingPattern(node.name)) {
+      codeInvariant(paramPType instanceof TuplePType, 'Param type must be tuple if it is being destructured', sourceLocation)
       return nodeFactory.subroutineArgument({
         sourceLocation,
         name: this.context.resolveDestructuredParamName(node),

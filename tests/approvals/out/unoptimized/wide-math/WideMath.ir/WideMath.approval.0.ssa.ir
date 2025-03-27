@@ -1,0 +1,392 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        let tmp%0#0: bool = tests/approvals/wide-math.algo.ts::WideMath.__puya_arc4_router__()
+        return tmp%0#0
+
+subroutine _puya_lib.util.ensure_budget(required_budget: uint64, fee_source: uint64) -> void:
+    block@0: // L12
+        let required_budget_with_buffer#0: uint64 = (+ required_budget#0 10u)
+        goto block@1
+    block@1: // while_top_L20
+        let tmp%0#0: uint64 = (global OpcodeBudget)
+        let tmp%1#0: bool = (> required_budget_with_buffer#0 tmp%0#0)
+        goto tmp%1#0 ? block@2 : block@7
+    block@2: // while_body_L21
+        itxn_begin
+        ((itxn_field TypeEnum) appl)
+        ((itxn_field OnCompletion) DeleteApplication)
+        ((itxn_field ApprovalProgram) 0x068101)
+        ((itxn_field ClearStateProgram) 0x068101)
+        switch fee_source#0 {0u => block@3, 1u => block@4, * => block@5}
+    block@3: // switch_case_0_L28
+        ((itxn_field Fee) 0u)
+        goto block@6
+    block@4: // switch_case_1_L30
+        let tmp%2#0: uint64 = (global MinTxnFee)
+        ((itxn_field Fee) tmp%2#0)
+        goto block@6
+    block@5: // switch_case_default_L26
+        goto block@6
+    block@6: // switch_case_next_L26
+        itxn_submit
+        goto block@1
+    block@7: // after_while_L20
+        return 
+
+subroutine tests/approvals/wide-math.algo.ts::add(p.0: uint64, p.1: uint64, p₁.0: uint64, p₁.1: uint64) -> <uint64, uint64>:
+    block@0: // L7
+        let a_h#0: uint64 = p.0#0
+        let a_l#0: uint64 = p.1#0
+        let b_h#0: uint64 = p₁.0#0
+        let b_l#0: uint64 = p₁.1#0
+        let (tuple_assignment%0#0: uint64, tuple_assignment%1#0: uint64) = (addw a_l#0 b_l#0)
+        let high#0: uint64 = tuple_assignment%0#0
+        let low#0: uint64 = tuple_assignment%1#0
+        let tmp%0#0: uint64 = (+ high#0 a_h#0)
+        let tmp%1#0: uint64 = (+ tmp%0#0 b_h#0)
+        return tmp%1#0 low#0
+
+subroutine tests/approvals/wide-math.algo.ts::twosComp(n: uint64) -> uint64:
+    block@0: // L12
+        let tmp%0#0: uint64 = (~ n#0)
+        let (tmp%1#0: uint64, tmp%2#0: uint64) = (addw tmp%0#0 1u)
+        return tmp%2#0
+
+subroutine tests/approvals/wide-math.algo.ts::sub(p.0: uint64, p.1: uint64, p₁.0: uint64, p₁.1: uint64) -> <uint64, uint64>:
+    block@0: // L16
+        let a_h#0: uint64 = p.0#0
+        let a_l#0: uint64 = p.1#0
+        let b_h#0: uint64 = p₁.0#0
+        let b_l#0: uint64 = p₁.1#0
+        let tmp%0#0: uint64 = tests/approvals/wide-math.algo.ts::twosComp(b_l#0)
+        let (tuple_assignment%0#0: uint64, tuple_assignment%1#0: uint64) = (addw a_l#0 tmp%0#0)
+        let ol#0: uint64 = tuple_assignment%0#0
+        let resl#0: uint64 = tuple_assignment%1#0
+        let tmp%1#0: uint64 = tests/approvals/wide-math.algo.ts::twosComp(b_h#0)
+        let (tuple_assignment%2#0: uint64, tuple_assignment%3#0: uint64) = (addw a_h#0 tmp%1#0)
+        let oh#0: uint64 = tuple_assignment%2#0
+        let resh#0: uint64 = tuple_assignment%3#0
+        let tmp%2#0: bool = (> resh#0 a_h#0)
+        goto tmp%2#0 ? block@1 : block@2
+    block@1: // if_body_L20
+        fail // u128 underflow
+    block@2: // after_if_else_L20
+        let tmp%3#0: bool = (> resl#0 a_l#0)
+        goto tmp%3#0 ? block@3 : block@4
+    block@3: // if_body_L24
+        let (tmp%4#0: uint64, tmp%5#0: uint64) = tests/approvals/wide-math.algo.ts::sub(resh#0, resl#0, 1u, 0u)
+        return tmp%4#0 tmp%5#0
+    block@4: // after_if_else_L24
+        return resh#0 resl#0
+
+subroutine tests/approvals/wide-math.algo.ts::mul(p.0: uint64, p.1: uint64, p₁.0: uint64, p₁.1: uint64) -> <uint64, uint64>:
+    block@0: // L31
+        let a_h#0: uint64 = p.0#0
+        let a_l#0: uint64 = p.1#0
+        let b_h#0: uint64 = p₁.0#0
+        let b_l#0: uint64 = p₁.1#0
+        let reinterpret_bool%0#0: bool = a_h#0
+        goto reinterpret_bool%0#0 ? block@1 : block@3
+    block@1: // and_contd_L32
+        let reinterpret_bool%1#0: bool = b_h#0
+        goto reinterpret_bool%1#0 ? block@2 : block@3
+    block@2: // if_body_L32
+        fail // u128 overflow
+    block@3: // after_if_else_L32
+        let (a_l_m.0#0: uint64, a_l_m.1#0: uint64) = (mulw a_l#0 b_l#0)
+        let tmp%0#0: uint64 = (* a_h#0 b_l#0)
+        let tmp%1#0: uint64 = (* a_l_m.0#0 b_h#0)
+        let tmp%2#0: uint64 = (* tmp%1#0 a_l#0)
+        let tmp%3#0: uint64 = (+ tmp%0#0 tmp%2#0)
+        return tmp%3#0 a_l_m.1#0
+
+subroutine tests/approvals/wide-math.algo.ts::div(p.0: uint64, p.1: uint64, p₁.0: uint64, p₁.1: uint64) -> <uint64, uint64>:
+    block@0: // L40
+        let a_h#0: uint64 = p.0#0
+        let a_l#0: uint64 = p.1#0
+        let b_h#0: uint64 = p₁.0#0
+        let b_l#0: uint64 = p₁.1#0
+        let (tuple_assignment%0#0: uint64, tuple_assignment%1#0: uint64, tuple_assignment%2#0: uint64, tuple_assignment%3#0: uint64) = (divmodw a_h#0 a_l#0 b_h#0 b_l#0)
+        let r_h#0: uint64 = tuple_assignment%0#0
+        let r_l#0: uint64 = tuple_assignment%1#0
+        let _#0: uint64 = tuple_assignment%2#0
+        let _₁#0: uint64 = tuple_assignment%3#0
+        return r_h#0 r_l#0
+
+subroutine tests/approvals/wide-math.algo.ts::WideMath.__puya_arc4_router__() -> bool:
+    block@0: // L45
+        let tmp%0#0: uint64 = (txn NumAppArgs)
+        let tmp%1#0: bool = (!= tmp%0#0 0u)
+        goto tmp%1#0 ? block@1 : block@5
+    block@1: // abi_routing_L45
+        let tmp%2#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%2#0 {method "test()void" => block@2, * => block@3}
+    block@2: // test_route_L46
+        let tmp%3#0: uint64 = (txn OnCompletion)
+        let tmp%4#0: bool = (== tmp%3#0 NoOp)
+        (assert tmp%4#0) // OnCompletion is not NoOp
+        let tmp%5#0: uint64 = (txn ApplicationID)
+        let tmp%6#0: bool = (!= tmp%5#0 0u)
+        (assert tmp%6#0) // can only call when not creating
+        tests/approvals/wide-math.algo.ts::WideMath.test()
+        return 1u
+    block@3: // switch_case_default_L45
+        goto block@4
+    block@4: // switch_case_next_L45
+        goto block@9
+    block@5: // bare_routing_L45
+        let tmp%7#0: uint64 = (txn OnCompletion)
+        switch tmp%7#0 {0u => block@6, * => block@7}
+    block@6: // __algots__.defaultCreate_L45
+        let tmp%8#0: uint64 = (txn ApplicationID)
+        let tmp%9#0: bool = (== tmp%8#0 0u)
+        (assert tmp%9#0) // can only call when creating
+        tests/approvals/wide-math.algo.ts::WideMath.__algots__.defaultCreate()
+        return 1u
+    block@7: // switch_case_default_L45
+        goto block@8
+    block@8: // switch_case_next_L45
+        goto block@9
+    block@9: // after_if_else_L45
+        return 0u
+
+subroutine tests/approvals/wide-math.algo.ts::WideMath.test() -> void:
+    block@0: // L46
+        _puya_lib.util.ensure_budget(2000u, 0u)
+        let (u64max.0#0: uint64, u64max.1#0: uint64) = (0u, 18446744073709551615u)
+        let (one.0#0: uint64, one.1#0: uint64) = (0u, 1u)
+        let (u128MaxMinOne.0#0: uint64, u128MaxMinOne.1#0: uint64) = (18446744073709551615u, 18446744073709551614u)
+        let (u128Max.0#0: uint64, u128Max.1#0: uint64) = (18446744073709551615u, 18446744073709551615u)
+        let tmp%0#0: bool = (== 2u 2u)
+        goto tmp%0#0 ? block@1 : block@4
+    block@1: // and_contd_L54
+        let (tmp%1#0: uint64, tmp%2#0: uint64) = tests/approvals/wide-math.algo.ts::add(one.0#0, one.1#0, one.0#0, one.1#0)
+        let tmp%3#0: bool = (== tmp%1#0 0u)
+        goto tmp%3#0 ? block@2 : block@4
+    block@2: // and_contd_L54
+        let (tmp%4#0: uint64, tmp%5#0: uint64) = tests/approvals/wide-math.algo.ts::add(one.0#0, one.1#0, one.0#0, one.1#0)
+        let tmp%6#0: bool = (== tmp%5#0 2u)
+        goto tmp%6#0 ? block@3 : block@4
+    block@3: // bool_true_L54
+        let and_result%0#0: bool = 1u
+        goto block@5
+    block@4: // bool_false_L54
+        let and_result%0#1: bool = 0u
+        goto block@5
+    block@5: // bool_merge_L54
+        let and_result%0#2: bool = φ(and_result%0#0 <- block@3, and_result%0#1 <- block@4)
+        (assert and_result%0#2) // assert target is match for conditions
+        let tmp%7#0: bool = (== 2u 2u)
+        goto tmp%7#0 ? block@6 : block@9
+    block@6: // and_contd_L55
+        let (tmp%8#0: uint64, tmp%9#0: uint64) = tests/approvals/wide-math.algo.ts::add(u64max.0#0, u64max.1#0, one.0#0, one.1#0)
+        let tmp%10#0: bool = (== tmp%8#0 1u)
+        goto tmp%10#0 ? block@7 : block@9
+    block@7: // and_contd_L55
+        let (tmp%11#0: uint64, tmp%12#0: uint64) = tests/approvals/wide-math.algo.ts::add(u64max.0#0, u64max.1#0, one.0#0, one.1#0)
+        let tmp%13#0: bool = (== tmp%12#0 0u)
+        goto tmp%13#0 ? block@8 : block@9
+    block@8: // bool_true_L55
+        let and_result%1#0: bool = 1u
+        goto block@10
+    block@9: // bool_false_L55
+        let and_result%1#1: bool = 0u
+        goto block@10
+    block@10: // bool_merge_L55
+        let and_result%1#2: bool = φ(and_result%1#0 <- block@8, and_result%1#1 <- block@9)
+        (assert and_result%1#2) // assert target is match for conditions
+        let tmp%14#0: bool = (== 2u 2u)
+        goto tmp%14#0 ? block@11 : block@14
+    block@11: // and_contd_L56
+        let (tmp%15#0: uint64, tmp%16#0: uint64) = tests/approvals/wide-math.algo.ts::add(u128MaxMinOne.0#0, u128MaxMinOne.1#0, one.0#0, one.1#0)
+        let tmp%17#0: bool = (== tmp%15#0 u128Max.0#0)
+        goto tmp%17#0 ? block@12 : block@14
+    block@12: // and_contd_L56
+        let (tmp%18#0: uint64, tmp%19#0: uint64) = tests/approvals/wide-math.algo.ts::add(u128MaxMinOne.0#0, u128MaxMinOne.1#0, one.0#0, one.1#0)
+        let tmp%20#0: bool = (== tmp%19#0 u128Max.1#0)
+        goto tmp%20#0 ? block@13 : block@14
+    block@13: // bool_true_L56
+        let and_result%2#0: bool = 1u
+        goto block@15
+    block@14: // bool_false_L56
+        let and_result%2#1: bool = 0u
+        goto block@15
+    block@15: // bool_merge_L56
+        let and_result%2#2: bool = φ(and_result%2#0 <- block@13, and_result%2#1 <- block@14)
+        (assert and_result%2#2) // assert target is match for conditions
+        let tmp%21#0: bool = (== 2u 2u)
+        goto tmp%21#0 ? block@16 : block@19
+    block@16: // and_contd_L58
+        let (tmp%22#0: uint64, tmp%23#0: uint64) = tests/approvals/wide-math.algo.ts::sub(one.0#0, one.1#0, one.0#0, one.1#0)
+        let tmp%24#0: bool = (== tmp%22#0 0u)
+        goto tmp%24#0 ? block@17 : block@19
+    block@17: // and_contd_L58
+        let (tmp%25#0: uint64, tmp%26#0: uint64) = tests/approvals/wide-math.algo.ts::sub(one.0#0, one.1#0, one.0#0, one.1#0)
+        let tmp%27#0: bool = (== tmp%26#0 0u)
+        goto tmp%27#0 ? block@18 : block@19
+    block@18: // bool_true_L58
+        let and_result%3#0: bool = 1u
+        goto block@20
+    block@19: // bool_false_L58
+        let and_result%3#1: bool = 0u
+        goto block@20
+    block@20: // bool_merge_L58
+        let and_result%3#2: bool = φ(and_result%3#0 <- block@18, and_result%3#1 <- block@19)
+        (assert and_result%3#2) // assert target is match for conditions
+        let tmp%28#0: bool = (== 2u 2u)
+        goto tmp%28#0 ? block@21 : block@24
+    block@21: // and_contd_L59
+        let (tmp%29#0: uint64, tmp%30#0: uint64) = tests/approvals/wide-math.algo.ts::sub(1u, 0u, one.0#0, one.1#0)
+        let tmp%31#0: bool = (== tmp%29#0 u64max.0#0)
+        goto tmp%31#0 ? block@22 : block@24
+    block@22: // and_contd_L59
+        let (tmp%32#0: uint64, tmp%33#0: uint64) = tests/approvals/wide-math.algo.ts::sub(1u, 0u, one.0#0, one.1#0)
+        let tmp%34#0: bool = (== tmp%33#0 u64max.1#0)
+        goto tmp%34#0 ? block@23 : block@24
+    block@23: // bool_true_L59
+        let and_result%4#0: bool = 1u
+        goto block@25
+    block@24: // bool_false_L59
+        let and_result%4#1: bool = 0u
+        goto block@25
+    block@25: // bool_merge_L59
+        let and_result%4#2: bool = φ(and_result%4#0 <- block@23, and_result%4#1 <- block@24)
+        (assert and_result%4#2) // assert target is match for conditions
+        let tmp%35#0: bool = (== 2u 2u)
+        goto tmp%35#0 ? block@26 : block@29
+    block@26: // and_contd_L60
+        let (tmp%36#0: uint64, tmp%37#0: uint64) = tests/approvals/wide-math.algo.ts::sub(1u, 1u, 0u, 2u)
+        let tmp%38#0: bool = (== tmp%36#0 u64max.0#0)
+        goto tmp%38#0 ? block@27 : block@29
+    block@27: // and_contd_L60
+        let (tmp%39#0: uint64, tmp%40#0: uint64) = tests/approvals/wide-math.algo.ts::sub(1u, 1u, 0u, 2u)
+        let tmp%41#0: bool = (== tmp%40#0 u64max.1#0)
+        goto tmp%41#0 ? block@28 : block@29
+    block@28: // bool_true_L60
+        let and_result%5#0: bool = 1u
+        goto block@30
+    block@29: // bool_false_L60
+        let and_result%5#1: bool = 0u
+        goto block@30
+    block@30: // bool_merge_L60
+        let and_result%5#2: bool = φ(and_result%5#0 <- block@28, and_result%5#1 <- block@29)
+        (assert and_result%5#2) // assert target is match for conditions
+        let tmp%42#0: bool = (== 2u 2u)
+        goto tmp%42#0 ? block@31 : block@34
+    block@31: // and_contd_L61
+        let (tmp%43#0: uint64, tmp%44#0: uint64) = tests/approvals/wide-math.algo.ts::sub(u128Max.0#0, u128Max.1#0, u128Max.0#0, u128Max.1#0)
+        let tmp%45#0: bool = (== tmp%43#0 0u)
+        goto tmp%45#0 ? block@32 : block@34
+    block@32: // and_contd_L61
+        let (tmp%46#0: uint64, tmp%47#0: uint64) = tests/approvals/wide-math.algo.ts::sub(u128Max.0#0, u128Max.1#0, u128Max.0#0, u128Max.1#0)
+        let tmp%48#0: bool = (== tmp%47#0 0u)
+        goto tmp%48#0 ? block@33 : block@34
+    block@33: // bool_true_L61
+        let and_result%6#0: bool = 1u
+        goto block@35
+    block@34: // bool_false_L61
+        let and_result%6#1: bool = 0u
+        goto block@35
+    block@35: // bool_merge_L61
+        let and_result%6#2: bool = φ(and_result%6#0 <- block@33, and_result%6#1 <- block@34)
+        (assert and_result%6#2) // assert target is match for conditions
+        let tmp%49#0: bool = (== 2u 2u)
+        goto tmp%49#0 ? block@36 : block@39
+    block@36: // and_contd_L62
+        let (tmp%50#0: uint64, tmp%51#0: uint64) = tests/approvals/wide-math.algo.ts::sub(u64max.0#0, u64max.1#0, u64max.0#0, u64max.1#0)
+        let tmp%52#0: bool = (== tmp%50#0 0u)
+        goto tmp%52#0 ? block@37 : block@39
+    block@37: // and_contd_L62
+        let (tmp%53#0: uint64, tmp%54#0: uint64) = tests/approvals/wide-math.algo.ts::sub(u64max.0#0, u64max.1#0, u64max.0#0, u64max.1#0)
+        let tmp%55#0: bool = (== tmp%54#0 0u)
+        goto tmp%55#0 ? block@38 : block@39
+    block@38: // bool_true_L62
+        let and_result%7#0: bool = 1u
+        goto block@40
+    block@39: // bool_false_L62
+        let and_result%7#1: bool = 0u
+        goto block@40
+    block@40: // bool_merge_L62
+        let and_result%7#2: bool = φ(and_result%7#0 <- block@38, and_result%7#1 <- block@39)
+        (assert and_result%7#2) // assert target is match for conditions
+        let tmp%56#0: bool = (== 2u 2u)
+        goto tmp%56#0 ? block@41 : block@44
+    block@41: // and_contd_L64
+        let (tmp%57#0: uint64, tmp%58#0: uint64) = tests/approvals/wide-math.algo.ts::mul(one.0#0, one.1#0, one.0#0, one.1#0)
+        let tmp%59#0: bool = (== tmp%57#0 one.0#0)
+        goto tmp%59#0 ? block@42 : block@44
+    block@42: // and_contd_L64
+        let (tmp%60#0: uint64, tmp%61#0: uint64) = tests/approvals/wide-math.algo.ts::mul(one.0#0, one.1#0, one.0#0, one.1#0)
+        let tmp%62#0: bool = (== tmp%61#0 one.1#0)
+        goto tmp%62#0 ? block@43 : block@44
+    block@43: // bool_true_L64
+        let and_result%8#0: bool = 1u
+        goto block@45
+    block@44: // bool_false_L64
+        let and_result%8#1: bool = 0u
+        goto block@45
+    block@45: // bool_merge_L64
+        let and_result%8#2: bool = φ(and_result%8#0 <- block@43, and_result%8#1 <- block@44)
+        (assert and_result%8#2) // assert target is match for conditions
+        let tmp%63#0: bool = (== 2u 2u)
+        goto tmp%63#0 ? block@46 : block@49
+    block@46: // and_contd_L65
+        let (tmp%64#0: uint64, tmp%65#0: uint64) = tests/approvals/wide-math.algo.ts::mul(1u, 0u, 0u, 2u)
+        let tmp%66#0: bool = (== tmp%64#0 2u)
+        goto tmp%66#0 ? block@47 : block@49
+    block@47: // and_contd_L65
+        let (tmp%67#0: uint64, tmp%68#0: uint64) = tests/approvals/wide-math.algo.ts::mul(1u, 0u, 0u, 2u)
+        let tmp%69#0: bool = (== tmp%68#0 0u)
+        goto tmp%69#0 ? block@48 : block@49
+    block@48: // bool_true_L65
+        let and_result%9#0: bool = 1u
+        goto block@50
+    block@49: // bool_false_L65
+        let and_result%9#1: bool = 0u
+        goto block@50
+    block@50: // bool_merge_L65
+        let and_result%9#2: bool = φ(and_result%9#0 <- block@48, and_result%9#1 <- block@49)
+        (assert and_result%9#2) // assert target is match for conditions
+        let tmp%70#0: bool = (== 2u 2u)
+        goto tmp%70#0 ? block@51 : block@54
+    block@51: // and_contd_L66
+        let (tmp%71#0: uint64, tmp%72#0: uint64) = tests/approvals/wide-math.algo.ts::mul(1u, 0u, u64max.0#0, u64max.1#0)
+        let tmp%73#0: bool = (== tmp%71#0 18446744073709551615u)
+        goto tmp%73#0 ? block@52 : block@54
+    block@52: // and_contd_L66
+        let (tmp%74#0: uint64, tmp%75#0: uint64) = tests/approvals/wide-math.algo.ts::mul(1u, 0u, u64max.0#0, u64max.1#0)
+        let tmp%76#0: bool = (== tmp%75#0 0u)
+        goto tmp%76#0 ? block@53 : block@54
+    block@53: // bool_true_L66
+        let and_result%10#0: bool = 1u
+        goto block@55
+    block@54: // bool_false_L66
+        let and_result%10#1: bool = 0u
+        goto block@55
+    block@55: // bool_merge_L66
+        let and_result%10#2: bool = φ(and_result%10#0 <- block@53, and_result%10#1 <- block@54)
+        (assert and_result%10#2) // assert target is match for conditions
+        let tmp%77#0: bool = (== 2u 2u)
+        goto tmp%77#0 ? block@56 : block@59
+    block@56: // and_contd_L68
+        let (tmp%78#0: uint64, tmp%79#0: uint64) = tests/approvals/wide-math.algo.ts::div(128u, 0u, 0u, 2u)
+        let tmp%80#0: bool = (== tmp%78#0 64u)
+        goto tmp%80#0 ? block@57 : block@59
+    block@57: // and_contd_L68
+        let (tmp%81#0: uint64, tmp%82#0: uint64) = tests/approvals/wide-math.algo.ts::div(128u, 0u, 0u, 2u)
+        let tmp%83#0: bool = (== tmp%82#0 0u)
+        goto tmp%83#0 ? block@58 : block@59
+    block@58: // bool_true_L68
+        let and_result%11#0: bool = 1u
+        goto block@60
+    block@59: // bool_false_L68
+        let and_result%11#1: bool = 0u
+        goto block@60
+    block@60: // bool_merge_L68
+        let and_result%11#2: bool = φ(and_result%11#0 <- block@58, and_result%11#1 <- block@59)
+        (assert and_result%11#2) // assert target is match for conditions
+        return 
+
+subroutine tests/approvals/wide-math.algo.ts::WideMath.__algots__.defaultCreate() -> void:
+    block@0: // L45
+        return 
