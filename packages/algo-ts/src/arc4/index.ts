@@ -167,7 +167,7 @@ export function decodeArc4<T>(bytes: BytesCompat, prefix: 'none' | 'log' = 'none
  * Encode the provided Algorand TypeScript value as ARC4 bytes
  * @param value Any native Algorand TypeScript value with a supported ARC4 encoding
  */
-export function encodeArc4<T>(value: T): bytes {
+export function encodeArc4<const T>(value: T): bytes {
   throw new NoImplementation()
 }
 

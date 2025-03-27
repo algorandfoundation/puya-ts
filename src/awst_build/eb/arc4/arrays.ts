@@ -9,7 +9,6 @@ import { wrapInCodeError } from '../../../errors'
 import { logger } from '../../../logger'
 
 import { base32ToUint8Array, bigIntToUint8Array, codeInvariant, invariant } from '../../../util'
-import { zeroValue } from '../../arc4-util'
 import type { PType } from '../../ptypes'
 import { accountPType, bytesPType, IterableIteratorGeneric, NumericLiteralPType, stringPType, TuplePType, uint64PType } from '../../ptypes'
 import {
@@ -95,7 +94,11 @@ export class StaticArrayClassBuilder extends ClassBuilder {
     )
     const ptype = new StaticArrayType({ elementType, arraySize: arraySize.literalValue, sourceLocation })
     if (initialItems.length === 0) {
-      return new StaticArrayExpressionBuilder(zeroValue(ptype, sourceLocation), ptype)
+      codeInvariant(ptype.fixedByteSize !== null, 'Zero arg constructor can only be used for static arrays with a fixed size encoding.')
+      return new StaticArrayExpressionBuilder(
+        intrinsicFactory.bzero({ size: ptype.fixedByteSize, wtype: ptype.wtype, sourceLocation }),
+        ptype,
+      )
     }
 
     codeInvariant(

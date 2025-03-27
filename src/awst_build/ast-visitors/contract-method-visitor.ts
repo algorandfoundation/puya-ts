@@ -9,7 +9,7 @@ import { Constants } from '../../constants'
 import { CodeError } from '../../errors'
 import { logger } from '../../logger'
 import { codeInvariant, invariant, isIn } from '../../util'
-import { ptypeToArc4PType } from '../arc4-util'
+import { ptypeToAbiPType } from '../arc4-util'
 import type { NodeBuilder } from '../eb'
 import { ContractSuperBuilder, ContractThisBuilder } from '../eb/contract-builder'
 import { requireExpressionOfType } from '../eb/util'
@@ -176,13 +176,13 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
   checkABIMethodTypes(functionType: FunctionPType, sourceLocation: SourceLocation) {
     for (const [, paramType] of functionType.parameters) {
       codeInvariant(
-        ptypeToArc4PType(paramType, 'in', sourceLocation),
+        ptypeToAbiPType(paramType, 'in', sourceLocation),
         'ABI method parameter types must have an ARC4 equivalent',
         sourceLocation,
       )
     }
     codeInvariant(
-      ptypeToArc4PType(functionType.returnType, 'out', sourceLocation),
+      ptypeToAbiPType(functionType.returnType, 'out', sourceLocation),
       'ABI method return type must have an ARC4 equivalent',
       sourceLocation,
     )
