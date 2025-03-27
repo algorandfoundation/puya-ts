@@ -3,7 +3,7 @@ import { fileURLToPath } from 'node:url'
 import upath from 'upath'
 import { Constants } from '../constants'
 
-export function appVersion() {
+export function appVersion(name: string = 'puya-ts') {
   let dirName = upath.dirname(fileURLToPath(import.meta.url))
 
   while (true) {
@@ -11,7 +11,7 @@ export function appVersion() {
     if (fs.existsSync(packageJsonPath)) {
       const version = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8')).version
       return [
-        `puya-ts ${version}`,
+        `${name} ${version}`,
         '',
         'Targets:',
         `puya ${Constants.targetedPuyaVersion}`,
