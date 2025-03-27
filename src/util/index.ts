@@ -185,6 +185,7 @@ export function instanceOfAny<T extends Array<{ new (...args: DeliberateAny[]): 
  * @param workingDirectory
  */
 export function normalisePath(filePath: string, workingDirectory: string): string {
+  const isWindows = process.platform === 'win32'
   const localPackageName = /packages\/algo-ts\/dist\/(.*)$/.exec(filePath)
   if (localPackageName) {
     return `${Constants.algoTsPackage}/${localPackageName[1]}`
@@ -193,9 +194,10 @@ export function normalisePath(filePath: string, workingDirectory: string): strin
   if (nodeModuleName) {
     return nodeModuleName[1]
   }
+
   const cwd = upath.normalize(`${workingDirectory}/`)
   const normalizedPath = upath.normalize(filePath)
-  const moduleName = normalizedPath.startsWith(cwd) ? normalizedPath.slice(cwd.length) : normalizedPath
+  const moduleName = startsWith(normalizedPath, cwd, isWindows) ? normalizedPath.slice(cwd.length) : normalizedPath
   return moduleName.replaceAll('\\', '/')
 }
 
@@ -263,4 +265,11 @@ export function joinUint8Arrays(...arrays: Uint8Array[]): Uint8Array {
     offset += a.length
   }
   return result
+}
+
+export function startsWith(str: string, prefix: string, ignoreCase = false): boolean {
+  if (ignoreCase) {
+    return str.toLowerCase().startsWith(prefix.toLowerCase())
+  }
+  return str.startsWith(prefix)
 }
