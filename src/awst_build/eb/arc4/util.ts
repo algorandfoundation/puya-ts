@@ -60,6 +60,7 @@ export class EncodeArc4FunctionBuilder extends FunctionBuilder {
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [valueToEncode],
+      ptypes: [valueType],
     } = parseFunctionArgs({
       args,
       typeArgs,
@@ -68,12 +69,13 @@ export class EncodeArc4FunctionBuilder extends FunctionBuilder {
       argSpec: (a) => [a.required()],
       callLocation: sourceLocation,
     })
-    const encodedType = ptypeToArc4EncodedType(valueToEncode.ptype, sourceLocation)
+
+    const encodedType = ptypeToArc4EncodedType(valueType, sourceLocation)
 
     return instanceEb(
       nodeFactory.reinterpretCast({
         expr: nodeFactory.aRC4Encode({
-          value: valueToEncode.resolve(),
+          value: valueToEncode.resolveToPType(valueType).resolve(),
           wtype: encodedType.wtype,
           sourceLocation,
         }),
@@ -226,14 +228,14 @@ export class Arc4EncodedLengthFunctionBuilder extends FunctionBuilder {
     const arc4Type = ptypeToArc4EncodedType(typeToEncode, sourceLocation)
 
     codeInvariant(
-      arc4Type.fixedBitSize !== null,
+      arc4Type.fixedByteSize !== null,
       `Target type must encode to a fixed size. ${typeToEncode} encodes with a variable length`,
       sourceLocation,
     )
 
     return instanceEb(
       nodeFactory.uInt64Constant({
-        value: ARC4EncodedType.bitsToBytes(arc4Type.fixedBitSize),
+        value: arc4Type.fixedByteSize,
         sourceLocation,
       }),
       uint64PType,

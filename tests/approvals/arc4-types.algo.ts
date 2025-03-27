@@ -6,6 +6,7 @@ import {
   Byte,
   DynamicArray,
   DynamicBytes,
+  encodeArc4,
   interpretAsArc4,
   StaticArray,
   StaticBytes,
@@ -16,7 +17,7 @@ import {
   UintN128,
   UintN32,
   UintN64,
-  type UintN8,
+  UintN8,
 } from '@algorandfoundation/algorand-typescript/arc4'
 import { bzero } from '@algorandfoundation/algorand-typescript/op'
 
@@ -171,12 +172,27 @@ export class Arc4TypesTestContract extends BaseContract {
 }
 
 function testZeroValues() {
-  assert(new StaticArray<UintN8, 4>().bytes === bzero(4))
-  assert(new StaticArray<Bool, 4>().bytes === bzero(1))
-  assert(new StaticArray<Bool, 9>().bytes === bzero(2))
-  assert(new StaticArray<Str, 4>().bytes === bzero(4 * 2))
-  assert(new Tuple<[UintN8, Bool, Bool, Str]>().bytes === bzero(4))
+  assert(new StaticArray<UintN8, 4>().bytes === new StaticArray(new UintN8(0), new UintN8(0), new UintN8(0), new UintN8(0)).bytes)
+  assert(new StaticArray<Bool, 4>().bytes === new StaticArray(new Bool(false), new Bool(false), new Bool(false), new Bool(false)).bytes)
+  assert(
+    new StaticArray<Bool, 9>().bytes ===
+      new StaticArray(
+        new Bool(false),
+        new Bool(false),
+        new Bool(false),
+        new Bool(false),
+        new Bool(false),
+        new Bool(false),
+        new Bool(false),
+        new Bool(false),
+        new Bool(false),
+      ).bytes,
+  )
   assert(new DynamicArray<UintN8>().bytes === bzero(2))
+  assert(
+    new Tuple<[Bool, Bool, Bool, Bool, Bool, Bool, Bool, Bool, Bool]>().bytes ===
+      encodeArc4([false, false, false, false, false, false, false, false, false]),
+  )
   assert(new Str().bytes === bzero(2))
   assert(new DynamicBytes().bytes === bzero(2))
   assert(new StaticBytes<5>().bytes === bzero(5))

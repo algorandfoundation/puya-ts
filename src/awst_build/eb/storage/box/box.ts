@@ -11,7 +11,7 @@ import { FunctionBuilder, type NodeBuilder, ParameterlessFunctionBuilder } from 
 import { parseFunctionArgs } from '../../util/arg-parsing'
 import { extractKey } from '../util'
 import { boxExists, boxLength, BoxProxyExpressionBuilder, boxValue, BoxValueExpressionBuilder } from './base'
-import { checkBoxType, getMinBoxSize } from './util'
+import { checkBoxType, getBoxSize } from './util'
 
 export class BoxFunctionBuilder extends FunctionBuilder {
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
@@ -99,14 +99,14 @@ class BoxCreateFunctionBuilder extends FunctionBuilder {
         boolPType,
       )
     }
-    const minBoxSize = getMinBoxSize(this.contentType)
-    if (minBoxSize === 0n) {
-      logger.warn(sourceLocation, `${this.contentType} does not have a minimum byte size. Box will be created with length of 0`)
+    const boxSize = getBoxSize(this.contentType)
+    if (boxSize === null) {
+      logger.error(sourceLocation, `${this.contentType} does not have a fixed byte size. Please specify a size argument.`)
     }
     return instanceEb(
       nodeFactory.intrinsicCall({
         opCode: 'box_create',
-        stackArgs: [this.boxValue.key, nodeFactory.uInt64Constant({ value: minBoxSize, sourceLocation })],
+        stackArgs: [this.boxValue.key, nodeFactory.uInt64Constant({ value: boxSize ?? 0n, sourceLocation })],
         wtype: wtypes.boolWType,
         immediates: [],
         sourceLocation,

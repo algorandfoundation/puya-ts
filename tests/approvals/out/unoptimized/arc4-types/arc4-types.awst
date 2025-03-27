@@ -110,12 +110,11 @@ contract Arc4TypesTestContract
 }
 subroutine testZeroValues(): void
 {
-  assert(reinterpret_cast<bytes>(bzero(4)) == bzero(4))
-  assert(reinterpret_cast<bytes>(bzero(1)) == bzero(1))
-  assert(reinterpret_cast<bytes>(bzero(2)) == bzero(2))
-  assert(reinterpret_cast<bytes>(bzero(8)) == bzero(8))
-  assert(reinterpret_cast<bytes>(bzero(4)) == bzero(4))
+  assert(reinterpret_cast<bytes>(bzero(4)) == reinterpret_cast<bytes>(new arc4.static_array<arc4.uint8>(0, 0, 0, 0)))
+  assert(reinterpret_cast<bytes>(bzero(1)) == reinterpret_cast<bytes>(new arc4.static_array<arc4.bool>(False, False, False, False)))
+  assert(reinterpret_cast<bytes>(bzero(2)) == reinterpret_cast<bytes>(new arc4.static_array<arc4.bool>(False, False, False, False, False, False, False, False, False)))
   assert(reinterpret_cast<bytes>(new arc4.dynamic_array<arc4.uint8>()) == bzero(2))
+  assert(reinterpret_cast<bytes>(bzero(2)) == reinterpret_cast<bytes>(ARC4_ENCODE(<tuple>[False, False, False, False, False, False, False, False, False], wtype=arc4.tuple<bool,bool,bool,bool,bool,bool,bool,bool,bool>)))
   assert(reinterpret_cast<bytes>("") == bzero(2))
   assert(0x0000 == bzero(2))
   assert(0x0000000000 == bzero(5))

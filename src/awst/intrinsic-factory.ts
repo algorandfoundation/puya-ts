@@ -95,4 +95,18 @@ export const intrinsicFactory = {
       opCode: 'btoi',
     })
   },
+  bzero({ size, sourceLocation, wtype = wtypes.bytesWType }: { size: bigint; sourceLocation: SourceLocation; wtype: wtypes.WType }) {
+    return nodeFactory.intrinsicCall({
+      opCode: 'bzero',
+      immediates: [],
+      stackArgs: [
+        nodeFactory.uInt64Constant({
+          value: size,
+          sourceLocation,
+        }),
+      ],
+      sourceLocation,
+      wtype: wtype,
+    })
+  },
 } satisfies Record<string, (args: DeliberateAny) => awst.Expression>
