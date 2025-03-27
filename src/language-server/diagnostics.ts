@@ -33,7 +33,7 @@ function prepareFiles(workspaceFolder: string, documents: TextDocuments<TextDocu
   })
 }
 
-async function compileAndExtractLogs(files: AlgoFile[]): Promise<LogEventWithSource[]> {
+export async function compileAndExtractLogs(files: AlgoFile[]): Promise<LogEventWithSource[]> {
   const logCtx = LoggingContext.create()
   await logCtx.run(async () => {
     await compile(
@@ -48,7 +48,7 @@ async function compileAndExtractLogs(files: AlgoFile[]): Promise<LogEventWithSou
     .filter((e): e is LogEventWithSource => Boolean(e.sourceLocation?.file))
 }
 
-function mapToDiagnostic(event: LogEventWithSource): Diagnostic {
+export function mapToDiagnostic(event: LogEventWithSource): Diagnostic {
   return {
     source: Constants.languageServerSource,
     severity: event.level === LogLevel.Error ? DiagnosticSeverity.Error : DiagnosticSeverity.Warning,
