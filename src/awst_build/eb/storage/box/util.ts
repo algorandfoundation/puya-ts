@@ -5,6 +5,11 @@ import type { PType } from '../../../ptypes'
 import { accountPType } from '../../../ptypes'
 import { ARC4EncodedType } from '../../../ptypes/arc4-types'
 
+/**
+ * Verifies contentType is able to be stored in a box.
+ * @param contentType The content type of the box
+ * @param sourceLocation The source location of the box proxy declaration
+ */
 export function checkBoxType(contentType: PType, sourceLocation: SourceLocation) {
   if (contentType instanceof ARC4EncodedType) {
     return
@@ -15,16 +20,18 @@ export function checkBoxType(contentType: PType, sourceLocation: SourceLocation)
   }
 }
 
-export function getMinBoxSize(contentType: PType): bigint {
+/**
+ * Returns the fixed size requirement for a box of a given ptype or null if the contentType is dynamically sized.
+ * @param contentType The content type of the box
+ */
+export function getBoxSize(contentType: PType): bigint | null {
   if (contentType instanceof ARC4EncodedType) {
-    return contentType.minByteSize
+    return contentType.fixedByteSize
   } else if (contentType.wtype?.scalarType === AVMType.uint64) {
     return 8n
-  } else if (contentType.equalsOneOf(accountPType)) {
+  } else if (contentType.equals(accountPType)) {
     return 32n
-  } else if (contentType.wtype?.scalarType === AVMType.bytes) {
-    return 0n
   } else {
-    return 0n
+    return null
   }
 }

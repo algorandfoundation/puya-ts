@@ -9,7 +9,7 @@ export type Box<TValue> = {
   /**
    * Create the box for this proxy with a bzero value.
    *  - If options.size is specified, the box will be created with that length
-   *  - Otherwise the box will be created with the minimum size for the given data type
+   *  - Otherwise the box will be created with arc4EncodedLength(TValue). Errors if the encoded length is not fixed
    *
    * No op if the box already exists
    * @returns True if the box was created, false if it already existed

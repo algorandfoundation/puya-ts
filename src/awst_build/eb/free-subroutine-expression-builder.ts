@@ -5,7 +5,7 @@ import { ARC4ABIMethodConfig } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { InternalError } from '../../errors'
 import { codeInvariant } from '../../util'
-import { getArc4MethodConstant } from '../arc4-util'
+import { buildArc4MethodConstant } from '../arc4-util'
 import { AwstBuildContext } from '../context/awst-build-context'
 import type { ContractClassPType, PType } from '../ptypes'
 import { FunctionPType } from '../ptypes'
@@ -70,7 +70,7 @@ export class ContractMethodExpressionBuilder extends SubroutineExpressionBuilder
     const methodTarget = this.target
     const arc4Config = AwstBuildContext.current.getArc4Config(this.contractType, methodTarget.memberName)
     codeInvariant(arc4Config instanceof ARC4ABIMethodConfig, `${methodTarget.memberName} is not an ABI method`, this.sourceLocation)
-    return getArc4MethodConstant(this.ptype, arc4Config, sourceLocation)
+    return buildArc4MethodConstant(this.ptype, arc4Config, sourceLocation)
   }
 }
 

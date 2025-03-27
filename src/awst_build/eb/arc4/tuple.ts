@@ -1,9 +1,10 @@
+import { intrinsicFactory } from '../../../awst/intrinsic-factory'
 import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { logger } from '../../../logger'
 import { codeInvariant, invariant } from '../../../util'
-import { ptypeToArc4EncodedType, zeroValue } from '../../arc4-util'
+import { ptypeToArc4EncodedType } from '../../arc4-util'
 import type { PType } from '../../ptypes'
 import { numberPType, TuplePType, uint64PType } from '../../ptypes'
 import { ARC4EncodedType, Arc4TupleClass, ARC4TupleType } from '../../ptypes/arc4-types'
@@ -33,7 +34,11 @@ export class Arc4TupleClassBuilder extends ClassBuilder {
 
     if (args.length === 0) {
       const arc4Type = ptypeToArc4EncodedType(tupleType, sourceLocation)
-      return new Arc4TupleExpressionBuilder(zeroValue(arc4Type, sourceLocation), arc4Type)
+      codeInvariant(arc4Type.fixedByteSize !== null, 'Zero arg constructor can only be used for tuples with a fixed size encoding.')
+      return new Arc4TupleExpressionBuilder(
+        intrinsicFactory.bzero({ size: arc4Type.fixedByteSize, wtype: arc4Type.wtype, sourceLocation }),
+        arc4Type,
+      )
     }
 
     const expressions: Expression[] = []

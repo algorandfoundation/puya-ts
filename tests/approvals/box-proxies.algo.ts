@@ -140,7 +140,7 @@ class BoxCreate extends Contract {
     assert(this.boxUint.length === 8)
     this.boxStaticArray.create()
     assert(this.boxStaticArray.length === (32 / 8) * 10)
-    this.boxDynamicArray.create()
+    this.boxDynamicArray.create({ size: 2 })
     assert(this.boxDynamicArray.length === 2)
     this.boxTuple.create()
     assert(this.boxTuple.length === 3)
