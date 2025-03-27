@@ -8,7 +8,9 @@
 
 > **Transaction**(`groupIndex`): [`Transaction`](../type-aliases/Transaction.md)
 
-Defined in: [packages/algo-ts/src/gtxn.ts:33](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L33)
+Defined in: [packages/algo-ts/src/gtxn.ts:586](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L586)
+
+Get the nth transaction in the group without verifying its type
 
 ## Parameters
 

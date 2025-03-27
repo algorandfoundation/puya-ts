@@ -6,13 +6,9 @@
 
 # Interface: PaymentInnerTxn
 
-Defined in: [packages/algo-ts/src/itxn.ts:9](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L9)
+Defined in: [packages/algo-ts/src/itxn.ts:12](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L12)
 
-A payment transaction
-
-## Extends
-
-- [`PaymentTxn`](../../../-internal-/interfaces/PaymentTxn.md)
+An inner transaction of type 'pay'
 
 ## Properties
 
@@ -20,13 +16,9 @@ A payment transaction
 
 > `readonly` **amount**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:105](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L105)
+Defined in: [packages/algo-ts/src/itxn.ts:71](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L71)
 
 microalgos
-
-#### Inherited from
-
-[`PaymentTxn`](../../../-internal-/interfaces/PaymentTxn.md).[`amount`](../../../-internal-/interfaces/PaymentTxn.md#amount)
 
 ***
 
@@ -34,13 +26,9 @@ microalgos
 
 > `readonly` **closeRemainderTo**: [`Account`](../../../type-aliases/Account.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:110](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L110)
+Defined in: [packages/algo-ts/src/itxn.ts:75](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L75)
 
 32 byte address
-
-#### Inherited from
-
-[`PaymentTxn`](../../../-internal-/interfaces/PaymentTxn.md).[`closeRemainderTo`](../../../-internal-/interfaces/PaymentTxn.md#closeremainderto)
 
 ***
 
@@ -48,13 +36,9 @@ Defined in: [packages/algo-ts/src/transactions.ts:110](https://github.com/algora
 
 > `readonly` **fee**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:44](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L44)
+Defined in: [packages/algo-ts/src/itxn.ts:22](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L22)
 
 microalgos
-
-#### Inherited from
-
-[`PaymentTxn`](../../../-internal-/interfaces/PaymentTxn.md).[`fee`](../../../-internal-/interfaces/PaymentTxn.md#fee)
 
 ***
 
@@ -62,13 +46,9 @@ microalgos
 
 > `readonly` **firstValid**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:49](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L49)
+Defined in: [packages/algo-ts/src/itxn.ts:26](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L26)
 
 round number
-
-#### Inherited from
-
-[`PaymentTxn`](../../../-internal-/interfaces/PaymentTxn.md).[`firstValid`](../../../-internal-/interfaces/PaymentTxn.md#firstvalid)
 
 ***
 
@@ -76,13 +56,9 @@ round number
 
 > `readonly` **firstValidTime**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:54](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L54)
+Defined in: [packages/algo-ts/src/itxn.ts:30](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L30)
 
 UNIX timestamp of block before txn.FirstValid. Fails if negative
-
-#### Inherited from
-
-[`PaymentTxn`](../../../-internal-/interfaces/PaymentTxn.md).[`firstValidTime`](../../../-internal-/interfaces/PaymentTxn.md#firstvalidtime)
 
 ***
 
@@ -90,14 +66,10 @@ UNIX timestamp of block before txn.FirstValid. Fails if negative
 
 > `readonly` **groupIndex**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:80](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L80)
+Defined in: [packages/algo-ts/src/itxn.ts:55](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L55)
 
 Position of this transaction within an atomic group
 A stand-alone transaction is implicitly element 0 in a group of 1
-
-#### Inherited from
-
-[`PaymentTxn`](../../../-internal-/interfaces/PaymentTxn.md).[`groupIndex`](../../../-internal-/interfaces/PaymentTxn.md#groupindex)
 
 ***
 
@@ -105,13 +77,9 @@ A stand-alone transaction is implicitly element 0 in a group of 1
 
 > `readonly` **lastValid**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:59](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L59)
+Defined in: [packages/algo-ts/src/itxn.ts:34](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L34)
 
 round number
-
-#### Inherited from
-
-[`PaymentTxn`](../../../-internal-/interfaces/PaymentTxn.md).[`lastValid`](../../../-internal-/interfaces/PaymentTxn.md#lastvalid)
 
 ***
 
@@ -119,13 +87,9 @@ round number
 
 > `readonly` **lease**: [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:69](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L69)
+Defined in: [packages/algo-ts/src/itxn.ts:42](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L42)
 
 32 byte lease value
-
-#### Inherited from
-
-[`PaymentTxn`](../../../-internal-/interfaces/PaymentTxn.md).[`lease`](../../../-internal-/interfaces/PaymentTxn.md#lease)
 
 ***
 
@@ -133,13 +97,9 @@ Defined in: [packages/algo-ts/src/transactions.ts:69](https://github.com/algoran
 
 > `readonly` **note**: [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:64](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L64)
+Defined in: [packages/algo-ts/src/itxn.ts:38](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L38)
 
 Any data up to 1024 bytes
-
-#### Inherited from
-
-[`PaymentTxn`](../../../-internal-/interfaces/PaymentTxn.md).[`note`](../../../-internal-/interfaces/PaymentTxn.md#note)
 
 ***
 
@@ -147,13 +107,9 @@ Any data up to 1024 bytes
 
 > `readonly` **receiver**: [`Account`](../../../type-aliases/Account.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:100](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L100)
+Defined in: [packages/algo-ts/src/itxn.ts:67](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L67)
 
 32 byte address
-
-#### Inherited from
-
-[`PaymentTxn`](../../../-internal-/interfaces/PaymentTxn.md).[`receiver`](../../../-internal-/interfaces/PaymentTxn.md#receiver)
 
 ***
 
@@ -161,13 +117,9 @@ Defined in: [packages/algo-ts/src/transactions.ts:100](https://github.com/algora
 
 > `readonly` **rekeyTo**: [`Account`](../../../type-aliases/Account.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:90](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L90)
+Defined in: [packages/algo-ts/src/itxn.ts:63](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L63)
 
 32 byte Sender's new AuthAddr
-
-#### Inherited from
-
-[`PaymentTxn`](../../../-internal-/interfaces/PaymentTxn.md).[`rekeyTo`](../../../-internal-/interfaces/PaymentTxn.md#rekeyto)
 
 ***
 
@@ -175,13 +127,9 @@ Defined in: [packages/algo-ts/src/transactions.ts:90](https://github.com/algoran
 
 > `readonly` **sender**: [`Account`](../../../type-aliases/Account.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:39](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L39)
+Defined in: [packages/algo-ts/src/itxn.ts:18](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L18)
 
 32 byte address
-
-#### Inherited from
-
-[`PaymentTxn`](../../../-internal-/interfaces/PaymentTxn.md).[`sender`](../../../-internal-/interfaces/PaymentTxn.md#sender)
 
 ***
 
@@ -189,13 +137,9 @@ Defined in: [packages/algo-ts/src/transactions.ts:39](https://github.com/algoran
 
 > `readonly` **txnId**: [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:85](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L85)
+Defined in: [packages/algo-ts/src/itxn.ts:59](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L59)
 
 The computed ID for this transaction. 32 bytes.
-
-#### Inherited from
-
-[`PaymentTxn`](../../../-internal-/interfaces/PaymentTxn.md).[`txnId`](../../../-internal-/interfaces/PaymentTxn.md#txnid)
 
 ***
 
@@ -203,13 +147,9 @@ The computed ID for this transaction. 32 bytes.
 
 > `readonly` **type**: [`Payment`](../../../enumerations/TransactionType.md#payment)
 
-Defined in: [packages/algo-ts/src/transactions.ts:115](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L115)
+Defined in: [packages/algo-ts/src/itxn.ts:50](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L50)
 
-Transaction type as integer
-
-#### Inherited from
-
-[`PaymentTxn`](../../../-internal-/interfaces/PaymentTxn.md).[`type`](../../../-internal-/interfaces/PaymentTxn.md#type)
+Transaction type
 
 ***
 
@@ -217,10 +157,6 @@ Transaction type as integer
 
 > `readonly` **typeBytes**: [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:74](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L74)
+Defined in: [packages/algo-ts/src/itxn.ts:46](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L46)
 
 Transaction type as bytes
-
-#### Inherited from
-
-[`PaymentTxn`](../../../-internal-/interfaces/PaymentTxn.md).[`typeBytes`](../../../-internal-/interfaces/PaymentTxn.md#typebytes)

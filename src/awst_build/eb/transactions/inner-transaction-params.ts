@@ -7,6 +7,8 @@ import { logger } from '../../../logger'
 import { codeInvariant, invariant } from '../../../util'
 import type { PType } from '../../ptypes'
 import { ItxnParamsPType, ObjectPType, submitGroupItxnFunction, TransactionFunctionType, TuplePType } from '../../ptypes'
+import type { TxnFieldsMetaData } from '../../txn-fields'
+import { anyTxnFields, txnKindToFields } from '../../txn-fields'
 import { instanceEb } from '../../type-registry'
 import type { InstanceBuilder, NodeBuilder } from '../index'
 import { FunctionBuilder, InstanceExpressionBuilder } from '../index'
@@ -14,7 +16,6 @@ import { isStaticallyIterable, StaticIterator } from '../traits/static-iterator'
 import { parseFunctionArgs } from '../util/arg-parsing'
 import { resolveCompatExpression } from '../util/resolve-compat-builder'
 import { InnerTransactionExpressionBuilder } from './inner-transactions'
-import { anyTxnFields, txnKindToFields } from './txn-fields'
 import { getInnerTransactionType, getItxnParamsType } from './util'
 
 export class ItxnParamsFactoryFunctionBuilder extends FunctionBuilder {
@@ -42,6 +43,7 @@ export class ItxnParamsFactoryFunctionBuilder extends FunctionBuilder {
     mappedFields.set(TxnField.Fee, nodeFactory.uInt64Constant({ value: 0n, sourceLocation }))
     if (this.ptype.kind) mappedFields.set(TxnField.TypeEnum, nodeFactory.uInt64Constant({ value: BigInt(this.ptype.kind), sourceLocation }))
     mapTransactionFields(mappedFields, initialFields, this.ptype.kind, sourceLocation)
+    invariant(this.ptype.kind !== undefined, 'Cannot have untyped itxn params factory', sourceLocation)
     const fieldsType = getItxnParamsType(this.ptype.kind)
 
     return new ItxnParamsExpressionBuilder(
@@ -55,17 +57,19 @@ export class ItxnParamsFactoryFunctionBuilder extends FunctionBuilder {
   }
 }
 
-function mapTransactionFields(
+export function mapTransactionFields(
   mappedFields: Map<TxnField, Expression>,
   fields: InstanceBuilder,
   kind: TransactionKind | undefined,
   sourceLocation: SourceLocation,
+  ignoreProps?: Set<string>,
 ) {
   codeInvariant(fields.ptype instanceof ObjectPType, 'fields argument must be an object type')
-  const validFields: Record<string, readonly [TxnField, PType]> = kind !== undefined ? txnKindToFields[kind] : anyTxnFields
+  const validFields: TxnFieldsMetaData = kind !== undefined ? txnKindToFields[kind] : anyTxnFields
   for (const [prop] of fields.ptype.orderedProperties()) {
+    if (ignoreProps?.has(prop)) continue
     if (prop in validFields) {
-      const [txnField, fieldType] = validFields[prop as keyof typeof validFields]
+      const { field: txnField, ptype: fieldType } = validFields[prop as keyof typeof validFields]
       const txnFieldData = TxnFields[txnField]
       const propValue = fields.memberAccess(prop, sourceLocation)
       if (txnField === TxnField.ApplicationArgs) {
@@ -125,11 +129,12 @@ class SubmitInnerTxnMethodBuilder extends InnerTxnFieldsMethodBuilder {
       funcName: 'submit',
       argSpec: () => [],
     })
+    invariant(this.builder.ptype.kind !== undefined, 'Cannot have untyped itxn params type', sourceLocation)
+
     const transactionPType = getInnerTransactionType(this.builder.ptype.kind)
     return new InnerTransactionExpressionBuilder(
       nodeFactory.submitInnerTransaction({
         itxns: [this.builder.resolve()],
-        wtype: transactionPType.wtype,
         sourceLocation,
       }),
       transactionPType,
@@ -152,6 +157,8 @@ export class SubmitItxnGroupFunctionBuilder extends FunctionBuilder {
     const resultType = new TuplePType({
       items: itxnParams.map((p, i) => {
         codeInvariant(p.ptype instanceof ItxnParamsPType, `Argument ${i} must be an itxn params type`, p.sourceLocation)
+        invariant(p.ptype.kind !== undefined, 'Cannot have untyped itxn params type', sourceLocation)
+
         return getInnerTransactionType(p.ptype.kind)
       }),
     })
@@ -159,7 +166,6 @@ export class SubmitItxnGroupFunctionBuilder extends FunctionBuilder {
     return instanceEb(
       nodeFactory.submitInnerTransaction({
         itxns: itxnParams.map((p) => p.resolve()),
-        wtype: resultType.wtype,
         sourceLocation,
       }),
       resultType,

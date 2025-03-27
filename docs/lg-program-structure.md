@@ -13,10 +13,9 @@ A contract in Algorand TypeScript is defined by declaring a class which extends 
 Contracts which extend the `Contract` type are ARC4 compatible contracts. Any `public` methods on the class will be exposed as ABI methods, callable from other contracts and off-chain clients. `private` and `protected` methods can only be called from within the contract itself, or its subclasses. Note that TypeScript methods are `public` by default if no access modifier is present. A contract is considered valid even if it has no methods, though its utility is questionable.
 
 ```ts
-import {Contract} from '@algorandfoundation/algorand-typescript'
+import { Contract } from '@algorandfoundation/algorand-typescript'
 
-class DoNothingContract extends Contract {
-}
+class DoNothingContract extends Contract {}
 
 class HelloWorldContract extends Contract {
   sayHello(name: string) {
@@ -32,10 +31,8 @@ The `contract` decorator allows you to specify additional options and configurat
 ```ts
 import { Contract, contract } from '@algorandfoundation/algorand-typescript'
 
-@contract({ name: 'My Contracts Name', avmVersion: 11, scratchSlots: [1, 2, 3], stateTotals: { globalUints: 4, localUints: 0 }})
-class MyContract extends Contract {
-
-}
+@contract({ name: 'My Contracts Name', avmVersion: 11, scratchSlots: [1, 2, 3], stateTotals: { globalUints: 4, localUints: 0 } })
+class MyContract extends Contract {}
 ```
 
 ### Application Lifecycle Methods and other method options
@@ -47,26 +44,22 @@ import type { uint64 } from '@algorandfoundation/algorand-typescript'
 import { abimethod, baremethod, Contract, Uint64 } from '@algorandfoundation/algorand-typescript'
 
 class AbiDecorators extends Contract {
-  @abimethod({allowActions: 'NoOp'})
-  public justNoop(): void {
-  }
+  @abimethod({ allowActions: 'NoOp' })
+  public justNoop(): void {}
 
-  @abimethod({onCreate: 'require'})
-  public createMethod(): void {
-  }
+  @abimethod({ onCreate: 'require' })
+  public createMethod(): void {}
 
-  @abimethod({allowActions: ['NoOp', 'OptIn', 'CloseOut', 'DeleteApplication', 'UpdateApplication']})
-  public allActions(): void {
-  }
+  @abimethod({ allowActions: ['NoOp', 'OptIn', 'CloseOut', 'DeleteApplication', 'UpdateApplication'] })
+  public allActions(): void {}
 
-  @abimethod({readonly: true, name: 'overrideReadonlyName'})
+  @abimethod({ readonly: true, name: 'overrideReadonlyName' })
   public readonly(): uint64 {
     return 5
   }
 
   @baremethod()
-  public noopBare() {
-  }
+  public noopBare() {}
 }
 ```
 
@@ -79,7 +72,7 @@ Contracts which define custom constructor logic will have this logic executed on
 ```ts
 export class MyContract extends Contract {
   constructor() {
-    super();
+    super()
     log('This is executed on create only')
   }
 }
@@ -111,18 +104,17 @@ class Arc4HybridAlgo extends Contract {
 }
 ```
 
-
 ### Application State
 
 Application state for a contract can be defined by declaring instance properties on a contract class using the relevant state proxy type. In the case of `GlobalState` it is possible to define an `initialValue` for the field. The logic to set this initial value will be injected into the contract's constructor. Global and local state keys default to the property name, but can be overridden with the `key` option. Box proxies always require an explicit key.
 
 ```ts
-import { Contract, uint64, bytes, GlobalState, LocalState, Box } from "@algorandfoundation/algorand-typescript"
+import { Contract, uint64, bytes, GlobalState, LocalState, Box } from '@algorandfoundation/algorand-typescript'
 
 export class ContractWithState extends Contract {
-  globalState = GlobalState<uint64>({initialValue: 123, key: 'customKey'})
+  globalState = GlobalState<uint64>({ initialValue: 123, key: 'customKey' })
   localState = LocalState<string>()
-  boxState = Box<bytes>({key: 'boxKey'})
+  boxState = Box<bytes>({ key: 'boxKey' })
 }
 ```
 
@@ -151,6 +143,44 @@ class Arc4HybridAlgo extends Contract {
   }
 }
 ```
+
+### Multi-inheritance
+
+Javascript does not support multi-inheritance natively, but it is a useful feature for composing a larger contract out of several smaller ones. Algorand TypeScript supports multi-inheritance via the [Polytype](https://github.com/fasttime/Polytype) package and the compiled code matches the semantics of Polytype at runtime. Method resolution order is _depth first_ meaning the entire prototype hierarchy of the _first_ base type will be walked before moving onto the _second_ base type and so on.
+
+```ts
+import type { uint64 } from '@algorandfoundation/algorand-typescript'
+import { Contract, GlobalState } from '@algorandfoundation/algorand-typescript'
+import { classes } from 'polytype'
+
+class StoreString extends Contract {
+  stringStore = GlobalState<string>()
+
+  setStore(value: string) {
+    this.stringStore.value = value
+  }
+}
+
+class StoreUint64 extends Contract {
+  uint64Store = GlobalState<uint64>()
+
+  setStore(value: uint64) {
+    this.uint64Store.value = value
+  }
+}
+
+class StoreBoth extends classes(StoreString, StoreUint64) {
+  test(theString: string, theUint: uint64) {
+    // setStore resolved from first base type
+    this.setStore(theString)
+
+    // Can explicitly resolve from other base type with .class
+    super.class(StoreUint64).setStore(theUint)
+  }
+}
+```
+
+Whilst method names can overlap between base types (and resolved as above), properties (Local and Global State + Boxes) must be unique, and will result in a compile error if they are redefined.
 
 ## BaseContract
 
@@ -183,7 +213,7 @@ class HelloWorldContract extends BaseContract {
 
 # Logic Signatures
 
-Logic signatures or smart signatures as they are sometimes referred to are single program constructs which can be used to sign transactions. If the logic defined in the program runs without error, the signature is considered valid - if the program crashes, or returns `0` or `false`, the signature is not valid and the transaction will be rejected. It is possible to delegate signature privileges for any standard account to a logic signature program such that any transaction signed with the logic signature program will pass on behalf of the delegating account provided the program logic succeeds. This is obviously a dangerous proposition and such a logic signature program should be meticulously designed to avoid abuse. You can read more about logic signatures on Algorand [here](https://developer.algorand.org/docs/get-details/dapps/smart-contracts/smartsigs/). Logic signature programs are stateless, and support a different subset of [op codes](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/) to smart contracts.
+Logic signatures or smart signatures as they are sometimes referred to are single program constructs which can be used to sign transactions. If the logic defined in the program runs without error, the signature is considered valid - if the program crashes, or returns `0` or `false`, the signature is not valid and the transaction will be rejected. It is possible to delegate signature privileges for any standard account to a logic signature program such that any transaction signed with the logic signature program will pass on behalf of the delegating account provided the program logic succeeds. This is obviously a dangerous proposition and such a logic signature program should be meticulously designed to avoid abuse. You can read more about logic signatures on Algorand [here](https://dev.algorand.co/concepts/smart-contracts/logic-sigs/). Logic signature programs are stateless, and support a different subset of [op codes](https://dev.algorand.co/reference/algorand-teal/opcodes/) to smart contracts.
 
 ```ts
 import { assert, LogicSig, Txn, Uint64 } from '@algorandfoundation/algorand-typescript'
@@ -205,5 +235,3 @@ export class AllowNoFee extends LogicSig {
   }
 }
 ```
-
-

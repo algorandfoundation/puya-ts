@@ -8,7 +8,7 @@
 
 > `const` **ITxnCreate**: `object`
 
-Defined in: [packages/algo-ts/src/op.ts:2817](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L2817)
+Defined in: [packages/algo-ts/src/op.ts:2818](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L2818)
 
 Create inner transactions
 
@@ -25,7 +25,7 @@ begin preparation of a new inner transaction in a new transaction group
 
 #### See
 
-Native TEAL opcode: [`itxn_begin`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#itxn_begin)
+Native TEAL opcode: [`itxn_begin`](https://dev.algorand.co/reference/algorand-teal/opcodes#itxn_begin)
 Min AVM version: 5
 
 ### next()
@@ -39,7 +39,7 @@ begin preparation of a new inner transaction in the same transaction group
 
 #### See
 
-Native TEAL opcode: [`itxn_next`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#itxn_next)
+Native TEAL opcode: [`itxn_next`](https://dev.algorand.co/reference/algorand-teal/opcodes#itxn_next)
 Min AVM version: 6
 
 ### setAccounts()
@@ -818,5 +818,5 @@ execute the current inner transaction group. Fail if executing this group would 
 
 #### See
 
-Native TEAL opcode: [`itxn_submit`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#itxn_submit)
+Native TEAL opcode: [`itxn_submit`](https://dev.algorand.co/reference/algorand-teal/opcodes#itxn_submit)
 Min AVM version: 5

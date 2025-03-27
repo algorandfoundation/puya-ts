@@ -8,7 +8,7 @@
 
 > `const` **Box**: `object`
 
-Defined in: [packages/algo-ts/src/op.ts:605](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L605)
+Defined in: [packages/algo-ts/src/op.ts:606](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L606)
 
 Get or modify box state
 
@@ -35,7 +35,7 @@ Newly created boxes are filled with 0 bytes. `box_create` will fail if the refer
 
 #### See
 
-Native TEAL opcode: [`box_create`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#box_create)
+Native TEAL opcode: [`box_create`](https://dev.algorand.co/reference/algorand-teal/opcodes#box_create)
 Min AVM version: 8
 
 ### delete()
@@ -54,7 +54,7 @@ delete box named A if it exists. Return 1 if A existed, 0 otherwise
 
 #### See
 
-Native TEAL opcode: [`box_del`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#box_del)
+Native TEAL opcode: [`box_del`](https://dev.algorand.co/reference/algorand-teal/opcodes#box_del)
 Min AVM version: 8
 
 ### extract()
@@ -81,7 +81,7 @@ read C bytes from box A, starting at offset B. Fail if A does not exist, or the 
 
 #### See
 
-Native TEAL opcode: [`box_extract`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#box_extract)
+Native TEAL opcode: [`box_extract`](https://dev.algorand.co/reference/algorand-teal/opcodes#box_extract)
 Min AVM version: 8
 
 ### get()
@@ -101,7 +101,7 @@ readonly \[[`bytes`](../../index/type-aliases/bytes.md), `boolean`\]
 
 #### See
 
-Native TEAL opcode: [`box_get`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#box_get)
+Native TEAL opcode: [`box_get`](https://dev.algorand.co/reference/algorand-teal/opcodes#box_get)
 Min AVM version: 8
 
 ### length()
@@ -120,7 +120,7 @@ readonly \[[`uint64`](../../index/type-aliases/uint64.md), `boolean`\]
 
 #### See
 
-Native TEAL opcode: [`box_len`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#box_len)
+Native TEAL opcode: [`box_len`](https://dev.algorand.co/reference/algorand-teal/opcodes#box_len)
 Min AVM version: 8
 
 ### put()
@@ -144,7 +144,7 @@ For boxes that exceed 4,096 bytes, consider `box_create`, `box_extract`, and `bo
 
 #### See
 
-Native TEAL opcode: [`box_put`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#box_put)
+Native TEAL opcode: [`box_put`](https://dev.algorand.co/reference/algorand-teal/opcodes#box_put)
 Min AVM version: 8
 
 ### replace()
@@ -171,7 +171,7 @@ write byte-array C into box A, starting at offset B. Fail if A does not exist, o
 
 #### See
 
-Native TEAL opcode: [`box_replace`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#box_replace)
+Native TEAL opcode: [`box_replace`](https://dev.algorand.co/reference/algorand-teal/opcodes#box_replace)
 Min AVM version: 8
 
 ### resize()
@@ -194,7 +194,7 @@ change the size of box named A to be of length B, adding zero bytes to end or re
 
 #### See
 
-Native TEAL opcode: [`box_resize`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#box_resize)
+Native TEAL opcode: [`box_resize`](https://dev.algorand.co/reference/algorand-teal/opcodes#box_resize)
 Min AVM version: 10
 
 ### splice()
@@ -226,5 +226,5 @@ Boxes are of constant length. If C < len(D), then len(D)-C bytes will be removed
 
 #### See
 
-Native TEAL opcode: [`box_splice`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#box_splice)
+Native TEAL opcode: [`box_splice`](https://dev.algorand.co/reference/algorand-teal/opcodes#box_splice)
 Min AVM version: 10

@@ -8,7 +8,7 @@
 
 > **BoxRef**: `object`
 
-Defined in: [packages/algo-ts/src/box.ts:214](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L214)
+Defined in: [packages/algo-ts/src/box.ts:217](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L217)
 
 A BoxRef proxy
 
@@ -36,7 +36,10 @@ Returns the length of the box, or error if the box does not exist
 
 > **value**: [`bytes`](bytes.md)
 
-Get the value of the box. Error if this value is larger than what the `bytes` type supports
+Get the value of the box.
+
+Error if this value is larger than what the `bytes` type supports
+Error if getting the value and the box does not exist
 
 ### create()
 

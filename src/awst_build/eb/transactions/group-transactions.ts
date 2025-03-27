@@ -9,11 +9,11 @@ import { logger } from '../../../logger'
 import { invariant } from '../../../util'
 import type { PType } from '../../ptypes'
 import { GroupTransactionPType, TransactionFunctionType, uint64PType } from '../../ptypes'
+import { anyTxnFields, txnKindToFields } from '../../txn-fields'
 import { instanceEb } from '../../type-registry'
 import type { NodeBuilder } from '../index'
 import { FunctionBuilder, InstanceExpressionBuilder } from '../index'
 import { parseFunctionArgs } from '../util/arg-parsing'
-import { anyTxnFields, txnKindToFields } from './txn-fields'
 import { getGroupTransactionType } from './util'
 
 export class GroupTransactionExpressionBuilder extends InstanceExpressionBuilder<GroupTransactionPType> {
@@ -32,7 +32,7 @@ export class GroupTransactionExpressionBuilder extends InstanceExpressionBuilder
     const txnKind = this.ptype.kind
     const fields = txnKind === undefined ? anyTxnFields : txnKindToFields[txnKind]
     if (name in fields) {
-      const [field, returnType] = fields[name as keyof typeof fields]
+      const { field, ptype: returnType } = fields[name as keyof typeof fields]
       const data = TxnFields[field]
 
       if (data.numValues === 1) {

@@ -94,7 +94,7 @@ export class LogicSigPType extends PType {
 
 export const logicSigBaseType = new LogicSigPType({
   name: 'LogicSig',
-  module: Constants.logicSigModuleName,
+  module: Constants.moduleNames.algoTs.logicSig,
   sourceLocation: SourceLocation.None,
 })
 
@@ -142,7 +142,7 @@ export class ClusteredContractClassType extends ContractClassPType {
     super({
       ...props,
       name: `ClusteredContract<${props.baseTypes.map((t) => t.fullName).join(',')}>`,
-      module: Constants.polytypeModuleName,
+      module: Constants.moduleNames.polytype,
       methods: Object.assign({}, ...props.baseTypes.toReversed().map((t) => t.methods)),
       properties: Object.assign({}, ...props.baseTypes.toReversed().map((t) => t.properties)),
     })
@@ -266,7 +266,7 @@ export abstract class StorageProxyPType extends PType {
 }
 export const GlobalStateGeneric = new GenericPType({
   name: 'GlobalState',
-  module: Constants.stateModuleName,
+  module: Constants.moduleNames.algoTs.state,
   parameterise(typeArgs: PType[]): GlobalStateType {
     codeInvariant(typeArgs.length === 1, 'GlobalState type expects exactly one type parameter')
     return new GlobalStateType({
@@ -276,8 +276,8 @@ export const GlobalStateGeneric = new GenericPType({
 })
 export class GlobalStateType extends StorageProxyPType {
   static readonly baseName = 'GlobalState'
-  static readonly baseFullName = `${Constants.stateModuleName}::${GlobalStateType.baseName}`
-  readonly module: string = Constants.stateModuleName
+  static readonly baseFullName = `${Constants.moduleNames.algoTs.state}::${GlobalStateType.baseName}`
+  readonly module: string = Constants.moduleNames.algoTs.state
   get name() {
     return `${GlobalStateType.baseName}<${this.contentType.name}>`
   }
@@ -290,7 +290,7 @@ export class GlobalStateType extends StorageProxyPType {
 }
 export const LocalStateGeneric = new GenericPType({
   name: 'LocalState',
-  module: Constants.stateModuleName,
+  module: Constants.moduleNames.algoTs.state,
   parameterise(typeArgs: PType[]): LocalStateType {
     codeInvariant(typeArgs.length === 1, 'LocalState type expects exactly one type parameter')
     return new LocalStateType({
@@ -300,8 +300,8 @@ export const LocalStateGeneric = new GenericPType({
 })
 export class LocalStateType extends StorageProxyPType {
   static readonly baseName = 'LocalState'
-  static readonly baseFullName = `${Constants.stateModuleName}::${LocalStateType.baseName}`
-  readonly module: string = Constants.stateModuleName
+  static readonly baseFullName = `${Constants.moduleNames.algoTs.state}::${LocalStateType.baseName}`
+  readonly module: string = Constants.moduleNames.algoTs.state
   get name() {
     return `${LocalStateType.baseName}<${this.contentType.name}>`
   }
@@ -320,7 +320,7 @@ export class LocalStateType extends StorageProxyPType {
 }
 export const BoxGeneric = new GenericPType({
   name: 'Box',
-  module: Constants.boxModuleName,
+  module: Constants.moduleNames.algoTs.box,
   parameterise(typeArgs: PType[]): BoxPType {
     codeInvariant(typeArgs.length === 1, `${this.name} type expects exactly one type parameter`)
     return new BoxPType({
@@ -329,7 +329,7 @@ export const BoxGeneric = new GenericPType({
   },
 })
 export class BoxPType extends StorageProxyPType {
-  readonly module: string = Constants.boxModuleName
+  readonly module: string = Constants.moduleNames.algoTs.box
   get name() {
     return `Box<${this.contentType.name}>`
   }
@@ -342,7 +342,7 @@ export class BoxPType extends StorageProxyPType {
 }
 export const BoxMapGeneric = new GenericPType({
   name: 'BoxMap',
-  module: Constants.boxModuleName,
+  module: Constants.moduleNames.algoTs.box,
   parameterise(typeArgs: PType[]): BoxMapPType {
     codeInvariant(typeArgs.length === 2, `${this.name} type expects exactly two type parameters`)
     return new BoxMapPType({
@@ -352,7 +352,7 @@ export const BoxMapGeneric = new GenericPType({
   },
 })
 export class BoxMapPType extends StorageProxyPType {
-  readonly module: string = Constants.boxModuleName
+  readonly module: string = Constants.moduleNames.algoTs.box
   get name() {
     return `BoxMap<${this.keyType.name}, ${this.contentType.name}>`
   }
@@ -366,7 +366,7 @@ export class BoxMapPType extends StorageProxyPType {
   }
 }
 export class BoxRefPType extends StorageProxyPType {
-  readonly module = Constants.boxModuleName
+  readonly module = Constants.moduleNames.algoTs.box
   get name() {
     return 'BoxRef'
   }
@@ -375,10 +375,6 @@ export class BoxRefPType extends StorageProxyPType {
   }
 }
 export type AppStorageType = GlobalStateType | LocalStateType
-
-export function isAppStorageType(ptype: PType): ptype is AppStorageType {
-  return ptype instanceof GlobalStateType || ptype instanceof LocalStateType
-}
 
 /**
  * An open generic type parameter
@@ -466,7 +462,7 @@ export class LibClassType extends PType {
 export class IntrinsicFunctionGroupType extends PType {
   readonly wtype: undefined
   readonly name: string
-  readonly module: string = Constants.opModuleName
+  readonly module: string = Constants.moduleNames.algoTs.op
   readonly singleton = true
 
   constructor({ name }: { name: string }) {
@@ -477,7 +473,7 @@ export class IntrinsicFunctionGroupType extends PType {
 export class IntrinsicFunctionGroupTypeType extends PType {
   readonly wtype: undefined
   readonly name: string
-  readonly module: string = Constants.opModuleName
+  readonly module: string = Constants.moduleNames.algoTs.op
   readonly singleton = false
 
   constructor({ name }: { name: string }) {
@@ -488,7 +484,7 @@ export class IntrinsicFunctionGroupTypeType extends PType {
 export class IntrinsicFunctionType extends PType {
   readonly wtype: undefined
   readonly name: string
-  readonly module: string = Constants.opModuleName
+  readonly module: string = Constants.moduleNames.algoTs.op
   readonly singleton = true
 
   constructor({ name }: { name: string }) {
@@ -499,7 +495,7 @@ export class IntrinsicFunctionType extends PType {
 export class IntrinsicFunctionTypeType extends PType {
   readonly wtype: undefined
   readonly name: string
-  readonly module: string = Constants.opModuleName
+  readonly module: string = Constants.moduleNames.algoTs.op
   readonly singleton = false
 
   constructor({ name }: { name: string }) {
@@ -791,12 +787,12 @@ export const StringFunction = new LibFunctionType({
 
 export const uint64PType = new InstanceType({
   name: 'uint64',
-  module: Constants.primitivesModuleName,
+  module: Constants.moduleNames.algoTs.primitives,
   wtype: wtypes.uint64WType,
 })
 export const biguintPType = new InstanceType({
   name: 'biguint',
-  module: Constants.primitivesModuleName,
+  module: Constants.moduleNames.algoTs.primitives,
   wtype: wtypes.biguintWType,
 })
 export class NumericLiteralPType extends NativeNumericType {
@@ -834,104 +830,104 @@ export const numberPType = new NativeNumericType({
 })
 export const Uint64Function = new LibFunctionType({
   name: 'Uint64',
-  module: Constants.primitivesModuleName,
+  module: Constants.moduleNames.algoTs.primitives,
 })
 
 export const BigUintFunction = new LibFunctionType({
   name: 'BigUint',
-  module: Constants.primitivesModuleName,
+  module: Constants.moduleNames.algoTs.primitives,
 })
 export const bytesPType = new InstanceType({
   name: 'bytes',
-  module: Constants.primitivesModuleName,
+  module: Constants.moduleNames.algoTs.primitives,
   wtype: wtypes.bytesWType,
 })
 export const BytesFunction = new LibFunctionType({
   name: 'Bytes',
-  module: Constants.primitivesModuleName,
+  module: Constants.moduleNames.algoTs.primitives,
 })
 
 export const logFunction = new LibFunctionType({
   name: 'log',
-  module: Constants.utilModuleName,
+  module: Constants.moduleNames.algoTs.util,
 })
 export const assertFunction = new LibFunctionType({
   name: 'assert',
-  module: Constants.utilModuleName,
+  module: Constants.moduleNames.algoTs.util,
 })
 
 export const errFunction = new LibFunctionType({
   name: 'err',
-  module: Constants.utilModuleName,
+  module: Constants.moduleNames.algoTs.util,
 })
 
 export const assetPType = new InstanceType({
   name: 'Asset',
   wtype: wtypes.assetWType,
-  module: Constants.referenceModuleName,
+  module: Constants.moduleNames.algoTs.reference,
 })
 export const AssetFunction = new LibFunctionType({
   name: 'Asset',
-  module: Constants.referenceModuleName,
+  module: Constants.moduleNames.algoTs.reference,
 })
 export const accountPType = new InstanceType({
   name: 'Account',
   wtype: wtypes.accountWType,
-  module: Constants.referenceModuleName,
+  module: Constants.moduleNames.algoTs.reference,
 })
 export const AccountFunction = new LibFunctionType({
   name: 'Account',
-  module: Constants.referenceModuleName,
+  module: Constants.moduleNames.algoTs.reference,
 })
 export const applicationPType = new InstanceType({
   name: 'Application',
   wtype: wtypes.applicationWType,
-  module: Constants.referenceModuleName,
+  module: Constants.moduleNames.algoTs.reference,
 })
 export const ApplicationFunctionType = new LibFunctionType({
   name: 'Application',
-  module: Constants.referenceModuleName,
+  module: Constants.moduleNames.algoTs.reference,
 })
 export const GlobalStateFunction = new LibFunctionType({
   name: 'GlobalState',
-  module: Constants.stateModuleName,
+  module: Constants.moduleNames.algoTs.state,
 })
 export const LocalStateFunction = new LibFunctionType({
   name: 'LocalState',
-  module: Constants.stateModuleName,
+  module: Constants.moduleNames.algoTs.state,
 })
 export const BoxFunction = new LibFunctionType({
   name: BoxGeneric.name,
-  module: Constants.boxModuleName,
+  module: Constants.moduleNames.algoTs.box,
 })
 export const BoxMapFunction = new LibFunctionType({
   name: BoxMapGeneric.name,
-  module: Constants.boxModuleName,
+  module: Constants.moduleNames.algoTs.box,
 })
 export const BoxRefFunction = new LibFunctionType({
   name: 'BoxRef',
-  module: Constants.boxModuleName,
+  module: Constants.moduleNames.algoTs.box,
 })
 export const boxRefType = new BoxRefPType()
 
 export const ClearStateProgram = new FunctionPType({
-  name: Constants.clearStateProgramMethodName,
-  module: Constants.baseContractModuleName,
+  name: Constants.symbolNames.clearStateProgramMethodName,
+  module: Constants.moduleNames.algoTs.baseContract,
   returnType: uint64PType,
   parameters: [],
   sourceLocation: undefined,
 })
 
 export const ApprovalProgram = new FunctionPType({
-  name: Constants.approvalProgramMethodName,
-  module: Constants.arc4ModuleName,
+  name: Constants.symbolNames.approvalProgramMethodName,
+  module: Constants.moduleNames.algoTs.arc4.index,
   returnType: boolPType,
   parameters: [],
   sourceLocation: undefined,
 })
 
 export const baseContractType = new BaseContractClassType({
-  module: Constants.baseContractModuleName,
+  module: Constants.moduleNames.algoTs.baseContract,
   name: 'BaseContract',
   methods: {
     clearStateProgram: ClearStateProgram,
@@ -942,7 +938,7 @@ export const baseContractType = new BaseContractClassType({
   sourceLocation: SourceLocation.None,
 })
 export const arc4BaseContractType = new BaseContractClassType({
-  module: Constants.arc4ModuleName,
+  module: Constants.moduleNames.algoTs.arc4.index,
   name: 'Contract',
   methods: {
     approvalProgram: ApprovalProgram,
@@ -955,21 +951,21 @@ export const arc4BaseContractType = new BaseContractClassType({
 })
 
 export const arc4BareMethodDecorator = new LibFunctionType({
-  module: Constants.arc4ModuleName,
+  module: Constants.moduleNames.algoTs.arc4.index,
   name: 'baremethod',
 })
 export const arc4AbiMethodDecorator = new LibFunctionType({
-  module: Constants.arc4ModuleName,
+  module: Constants.moduleNames.algoTs.arc4.index,
   name: 'abimethod',
 })
 
 export const contractOptionsDecorator = new LibFunctionType({
-  module: Constants.baseContractModuleName,
+  module: Constants.moduleNames.algoTs.baseContract,
   name: 'contract',
 })
 
 export const logicSigOptionsDecorator = new LibFunctionType({
-  module: Constants.logicSigModuleName,
+  module: Constants.moduleNames.algoTs.logicSig,
   name: 'logicsig',
 })
 
@@ -981,7 +977,7 @@ export class GroupTransactionPType extends PType {
   }
   readonly name: string
   readonly kind: TransactionKind | undefined
-  readonly module = Constants.gtxnModuleName
+  readonly module = Constants.moduleNames.algoTs.gtxn
   readonly singleton = false
 
   constructor({ kind, name }: { kind?: TransactionKind; name: string }) {
@@ -1006,7 +1002,7 @@ export const paymentGtxnType = new GroupTransactionPType({
 })
 export const PaymentTxnFunction = new TransactionFunctionType({
   name: 'PaymentTxn',
-  module: Constants.gtxnModuleName,
+  module: Constants.moduleNames.algoTs.gtxn,
   kind: TransactionKind.pay,
 })
 export const keyRegistrationGtxnType = new GroupTransactionPType({
@@ -1015,7 +1011,7 @@ export const keyRegistrationGtxnType = new GroupTransactionPType({
 })
 export const KeyRegistrationTxnFunction = new TransactionFunctionType({
   name: 'KeyRegistrationTxn',
-  module: Constants.gtxnModuleName,
+  module: Constants.moduleNames.algoTs.gtxn,
   kind: TransactionKind.keyreg,
 })
 export const assetConfigGtxnType = new GroupTransactionPType({
@@ -1024,7 +1020,7 @@ export const assetConfigGtxnType = new GroupTransactionPType({
 })
 export const AssetConfigTxnFunction = new TransactionFunctionType({
   name: 'AssetConfigTxn',
-  module: Constants.gtxnModuleName,
+  module: Constants.moduleNames.algoTs.gtxn,
   kind: TransactionKind.acfg,
 })
 export const assetTransferGtxnType = new GroupTransactionPType({
@@ -1033,7 +1029,7 @@ export const assetTransferGtxnType = new GroupTransactionPType({
 })
 export const AssetTransferTxnFunction = new TransactionFunctionType({
   name: 'AssetTransferTxn',
-  module: Constants.gtxnModuleName,
+  module: Constants.moduleNames.algoTs.gtxn,
   kind: TransactionKind.axfer,
 })
 export const assetFreezeGtxnType = new GroupTransactionPType({
@@ -1042,16 +1038,16 @@ export const assetFreezeGtxnType = new GroupTransactionPType({
 })
 export const AssetFreezeTxnFunction = new TransactionFunctionType({
   name: 'AssetFreezeTxn',
-  module: Constants.gtxnModuleName,
+  module: Constants.moduleNames.algoTs.gtxn,
   kind: TransactionKind.afrz,
 })
 export const applicationCallGtxnType = new GroupTransactionPType({
-  name: 'ApplicationTxn',
+  name: 'ApplicationCallTxn',
   kind: TransactionKind.appl,
 })
 export const ApplicationTxnFunction = new TransactionFunctionType({
-  name: 'ApplicationTxn',
-  module: Constants.gtxnModuleName,
+  name: 'ApplicationCallTxn',
+  module: Constants.moduleNames.algoTs.gtxn,
   kind: TransactionKind.appl,
 })
 export const gtxnUnion = UnionPType.fromTypes([
@@ -1068,17 +1064,17 @@ export const anyGtxnType = new GroupTransactionPType({
 })
 export const TransactionFunction = new TransactionFunctionType({
   name: 'Transaction',
-  module: Constants.gtxnModuleName,
+  module: Constants.moduleNames.algoTs.gtxn,
   kind: undefined,
 })
 
 export const assertMatchFunction = new LibFunctionType({
   name: 'assertMatch',
-  module: Constants.utilModuleName,
+  module: Constants.moduleNames.algoTs.util,
 })
 export const matchFunction = new LibFunctionType({
   name: 'match',
-  module: Constants.utilModuleName,
+  module: Constants.moduleNames.algoTs.util,
 })
 
 export class Uint64EnumMemberType extends PType {
@@ -1114,7 +1110,7 @@ export class Uint64EnumType extends PType {
 }
 
 export const transactionTypeType = new Uint64EnumType({
-  module: Constants.transactionsModuleName,
+  module: Constants.moduleNames.algoTs.transactions,
   name: 'TransactionType',
   members: {
     Payment: 1n,
@@ -1126,7 +1122,7 @@ export const transactionTypeType = new Uint64EnumType({
   },
 })
 export const onCompleteActionType = new Uint64EnumType({
-  module: Constants.onCompleteActionModuleName,
+  module: Constants.moduleNames.algoTs.onCompleteAction,
   name: 'OnCompleteAction',
   members: {
     NoOp: 0n,
@@ -1139,10 +1135,10 @@ export const onCompleteActionType = new Uint64EnumType({
 })
 export const ensureBudgetFunction = new LibFunctionType({
   name: 'ensureBudget',
-  module: Constants.utilModuleName,
+  module: Constants.moduleNames.algoTs.util,
 })
 export const opUpFeeSourceType = new Uint64EnumType({
-  module: Constants.utilModuleName,
+  module: Constants.moduleNames.algoTs.util,
   name: 'OpUpFeeSource',
   members: {
     GroupCredit: 0n,
@@ -1153,7 +1149,7 @@ export const opUpFeeSourceType = new Uint64EnumType({
 
 export const urangeFunction = new LibFunctionType({
   name: 'urange',
-  module: Constants.utilModuleName,
+  module: Constants.moduleNames.algoTs.util,
 })
 export const IterableIteratorGeneric = new GenericPType({
   name: 'IterableIterator',
@@ -1217,32 +1213,32 @@ export class GeneratorType extends UnsupportedType {
 
 export const paymentItxnFn = new TransactionFunctionType({
   name: 'payment',
-  module: Constants.itxnModuleName,
+  module: Constants.moduleNames.algoTs.itxn,
   kind: TransactionKind.pay,
 })
 export const keyRegistrationItxnFn = new TransactionFunctionType({
   name: 'keyRegistration',
-  module: Constants.itxnModuleName,
+  module: Constants.moduleNames.algoTs.itxn,
   kind: TransactionKind.keyreg,
 })
 export const assetConfigItxnFn = new TransactionFunctionType({
   name: 'assetConfig',
-  module: Constants.itxnModuleName,
+  module: Constants.moduleNames.algoTs.itxn,
   kind: TransactionKind.acfg,
 })
 export const assetTransferItxnFn = new TransactionFunctionType({
   name: 'assetTransfer',
-  module: Constants.itxnModuleName,
+  module: Constants.moduleNames.algoTs.itxn,
   kind: TransactionKind.axfer,
 })
 export const assetFreezeItxnFn = new TransactionFunctionType({
   name: 'assetFreeze',
-  module: Constants.itxnModuleName,
+  module: Constants.moduleNames.algoTs.itxn,
   kind: TransactionKind.afrz,
 })
 export const applicationCallItxnFn = new TransactionFunctionType({
   name: 'applicationCall',
-  module: Constants.itxnModuleName,
+  module: Constants.moduleNames.algoTs.itxn,
   kind: TransactionKind.appl,
 })
 
@@ -1254,7 +1250,7 @@ export class InnerTransactionPType extends PType {
   }
   readonly name: string
   readonly kind: TransactionKind | undefined
-  readonly module = Constants.itxnModuleName
+  readonly module = Constants.moduleNames.algoTs.itxn
   readonly singleton = false
 
   constructor({ kind, name }: { kind?: TransactionKind; name: string }) {
@@ -1271,7 +1267,7 @@ export class ItxnParamsPType extends PType {
   }
   readonly name: string
   readonly kind: TransactionKind | undefined
-  readonly module = Constants.itxnModuleName
+  readonly module = Constants.moduleNames.algoTs.itxn
   readonly singleton = false
 
   constructor({ kind, name }: { kind?: TransactionKind; name: string }) {
@@ -1325,29 +1321,32 @@ export const applicationCallItxnParamsType = new ItxnParamsPType({
   kind: TransactionKind.appl,
 })
 export const applicationItxnType = new InnerTransactionPType({
-  name: 'ApplicationInnerTxn',
+  name: 'ApplicationCallInnerTxn',
   kind: TransactionKind.appl,
+})
+export const anyItxnType = new InnerTransactionPType({
+  name: 'InnerTxn',
 })
 
 export const submitGroupItxnFunction = new LibFunctionType({
   name: 'submitGroup',
-  module: Constants.itxnModuleName,
+  module: Constants.moduleNames.algoTs.itxn,
 })
 
 export const TemplateVarFunction = new LibFunctionType({
   name: 'TemplateVar',
-  module: Constants.templateVarModuleName,
+  module: Constants.moduleNames.algoTs.templateVar,
 })
 
 export const compileFunctionType = new LibFunctionType({
   name: 'compile',
-  module: Constants.compiledModuleName,
+  module: Constants.moduleNames.algoTs.compiled,
 })
 
 export const compiledContractType = new ObjectPType({
   alias: new SymbolName({
     name: 'CompiledContract',
-    module: Constants.compiledModuleName,
+    module: Constants.moduleNames.algoTs.compiled,
   }),
   description: 'Provides compiled programs and state allocation values for a Contract. Created by calling `compile(ExampleContractType)`',
   properties: {
@@ -1363,7 +1362,7 @@ export const compiledContractType = new ObjectPType({
 export const compiledLogicSigType = new ObjectPType({
   alias: new SymbolName({
     name: 'CompiledLogicSig',
-    module: Constants.compiledModuleName,
+    module: Constants.moduleNames.algoTs.compiled,
   }),
   description: 'Provides account for a Logic Signature. Created by calling `compile(LogicSigType)``',
   properties: {
@@ -1373,12 +1372,12 @@ export const compiledLogicSigType = new ObjectPType({
 
 export const arc28EmitFunction = new LibFunctionType({
   name: 'emit',
-  module: Constants.arc28ModuleName,
+  module: Constants.moduleNames.algoTs.arc28,
 })
 
 export const SuperPrototypeSelectorGeneric = new GenericPType({
   name: 'SuperPrototypeSelector',
-  module: Constants.polytypeModuleName,
+  module: Constants.moduleNames.polytype,
   parameterise(ptypes: PType[]) {
     return new SuperPrototypeSelector({ bases: ptypes })
   },
@@ -1387,26 +1386,26 @@ export class SuperPrototypeSelector extends InternalType {
   constructor({ bases }: { bases: PType[] }) {
     super({
       name: 'SuperPrototypeSelector',
-      module: Constants.polytypeModuleName,
+      module: Constants.moduleNames.polytype,
     })
   }
 }
 export const ClusteredPrototype = new InternalType({
   name: 'ClusteredPrototype',
-  module: Constants.polytypeModuleName,
+  module: Constants.moduleNames.polytype,
 })
 export const PolytypeClassMethodHelper = new LibFunctionType({
   name: 'class',
-  module: Constants.polytypeModuleName,
+  module: Constants.moduleNames.polytype,
 })
 
 export const MutableArrayConstructor = new LibClassType({
   name: 'MutableArray',
-  module: Constants.mutableArrayModuleName,
+  module: Constants.moduleNames.algoTs.mutableArray,
 })
 export const MutableArrayGeneric = new GenericPType({
   name: 'MutableArray',
-  module: Constants.mutableArrayModuleName,
+  module: Constants.moduleNames.algoTs.mutableArray,
   parameterise: (typeArgs: PType[]): MutableArrayType => {
     codeInvariant(typeArgs.length === 1, 'MutableArray type expects exactly one type parameter')
     const [elementType] = typeArgs
@@ -1415,7 +1414,7 @@ export const MutableArrayGeneric = new GenericPType({
   },
 })
 export class MutableArrayType extends PType {
-  readonly module = Constants.mutableArrayModuleName
+  readonly module = Constants.moduleNames.algoTs.mutableArray
   readonly immutable = false as const
   readonly name: string
   readonly singleton = false

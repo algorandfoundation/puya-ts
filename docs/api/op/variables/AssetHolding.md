@@ -8,7 +8,7 @@
 
 > `const` **AssetHolding**: `object`
 
-Defined in: [packages/algo-ts/src/op.ts:413](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L413)
+Defined in: [packages/algo-ts/src/op.ts:414](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L414)
 
 ## Type declaration
 

@@ -51,6 +51,22 @@ contract GtxnsAlgo
     }
   }
   
+  test3(): void
+  {
+    assert(txn<OnCompletion>() == reinterpret_cast<uint64>(0), comment=OCA must be NoOp)
+    assert(txn<TypeEnum>() == reinterpret_cast<uint64>(6))
+    log("Hello test4")
+  }
+  
+  test4(other: group_transaction_appl): void
+  {
+    assert(gtxns<OnCompletion>(other) == reinterpret_cast<uint64>(0), comment=Other txn must be NoOp)
+    assert(gtxns<TypeEnum>(other) == reinterpret_cast<uint64>(6))
+    assert(gtxns<LastLog>(other) == "Hello test4")
+    assert(gtxnsas<ApplicationArgs>(other, 0) == Method("test3()void"))
+    assert(gtxns<ApplicationID>(other) == global<CurrentApplicationID>())
+  }
+  
   __algots__.defaultCreate(): void
   {
   }

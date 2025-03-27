@@ -8,7 +8,7 @@
 
 > **mulw**(`a`, `b`): readonly \[[`uint64`](../../index/type-aliases/uint64.md), [`uint64`](../../index/type-aliases/uint64.md)\]
 
-Defined in: [packages/algo-ts/src/op.ts:3348](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3348)
+Defined in: [packages/algo-ts/src/op.ts:3349](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3349)
 
 A times B as a 128-bit result in two uint64s. X is the high 64 bits, Y is the low
 
@@ -28,5 +28,5 @@ readonly \[[`uint64`](../../index/type-aliases/uint64.md), [`uint64`](../../inde
 
 ## See
 
-Native TEAL opcode: [`mulw`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#mulw)
+Native TEAL opcode: [`mulw`](https://dev.algorand.co/reference/algorand-teal/opcodes#mulw)
 Min AVM version: 1

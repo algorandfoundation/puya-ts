@@ -1,4 +1,4 @@
-import { describe } from 'vitest'
+import { describe, expect } from 'vitest'
 import { createArc4TestFixture } from './util/test-fixture'
 
 describe('multi-inheritance', () => {
@@ -60,5 +60,20 @@ describe('multi-inheritance', () => {
   test('super.class(...) can be used to target a specific base type', async ({ appClientMultiBases, expect }) => {
     expect((await appClientMultiBases.send.call({ method: 'callB2CantOverride' })).return).toEqual('base-two')
     expect((await appClientMultiBases.send.call({ method: 'callB2Common' })).return).toEqual('common')
+  })
+})
+
+describe('multi-inheritance 2', () => {
+  const test = createArc4TestFixture('tests/approvals/multi-inheritance-2.algo.ts', {
+    StoreBoth: {},
+  })
+
+  test('Both base functions can be resolved', async ({ appClientStoreBoth }) => {
+    await appClientStoreBoth.send.call({ method: 'test', args: ['abc', 123] })
+
+    const state = await appClientStoreBoth.getGlobalState()
+
+    expect(state.stringStore.value).toEqual('abc')
+    expect(state.uint64Store.value).toEqual(123n)
   })
 })

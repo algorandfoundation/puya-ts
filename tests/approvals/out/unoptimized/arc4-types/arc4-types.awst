@@ -41,6 +41,8 @@ subroutine testDynamicBytes(someBytes: bytes): void
 }
 subroutine testStaticBytes(): void
 {
+  s5: arc4.static_array<arc4.static_array<arc4.byte>> = new arc4.static_array<arc4.static_array<arc4.byte>>(0xaabbccddee)
+  assert(reinterpret_cast<bytes>(s5[0]) == 0xaabbccddee)
   s4: arc4.dynamic_array<arc4.byte> = 0x000400000000.concat(0xaabbccddee)
   assert(ARC4_DECODE(s4) == 0x00000000aabbccddee)
 }

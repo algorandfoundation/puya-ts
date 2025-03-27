@@ -30,7 +30,10 @@ export class Arc4ApprovalCallsRouter extends FunctionTraverser {
   }
 
   visitSubroutineCallExpression(expression: SubroutineCallExpression) {
-    if (expression.target instanceof InstanceSuperMethodTarget && expression.target.memberName === Constants.approvalProgramMethodName) {
+    if (
+      expression.target instanceof InstanceSuperMethodTarget &&
+      expression.target.memberName === Constants.symbolNames.approvalProgramMethodName
+    ) {
       this.#superCalled = true
     }
     super.visitSubroutineCallExpression(expression)

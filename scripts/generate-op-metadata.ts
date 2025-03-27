@@ -87,6 +87,14 @@ export type IntrinsicOpGrouping = {
       t ^= AlgoTsType.String
       yield 'ptypes.stringPType'
     }
+    if (hasFlags(t, AlgoTsType.OnCompletion)) {
+      t ^= AlgoTsType.OnCompletion
+      yield 'ptypes.onCompleteActionType.memberType'
+    }
+    if (hasFlags(t, AlgoTsType.TransactionType)) {
+      t ^= AlgoTsType.TransactionType
+      yield 'ptypes.transactionTypeType.memberType'
+    }
     if (Number(t) !== 0) throw new Error(`Unhandled flags ${t}`)
   }
 

@@ -8,7 +8,7 @@
 
 > `const` **JsonRef**: `object`
 
-Defined in: [packages/algo-ts/src/op.ts:3257](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3257)
+Defined in: [packages/algo-ts/src/op.ts:3258](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3258)
 
 ## Type declaration
 

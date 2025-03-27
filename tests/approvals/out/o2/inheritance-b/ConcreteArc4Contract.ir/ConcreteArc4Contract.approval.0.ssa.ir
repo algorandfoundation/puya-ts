@@ -10,14 +10,14 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         return tmp%0#0
 
 subroutine tests/approvals/inheritance-b.algo.ts::ConcreteArc4Contract.__puya_arc4_router__() -> bool:
-    block@0: // L14
+    block@0: // L16
         let tmp%0#0: uint64 = (txn NumAppArgs)
         let tmp%1#0: bool = (!= tmp%0#0 0u)
         goto tmp%1#0 ? block@1 : block@6
-    block@1: // abi_routing_L14
+    block@1: // abi_routing_L16
         let tmp%2#0: bytes = (txna ApplicationArgs 0)
         switch tmp%2#0 {method "getVeryImportantValue()string" => block@2, method "simpleAbiMethod(uint64,uint64)uint64" => block@3, * => block@4}
-    block@2: // getVeryImportantValue_route_L16
+    block@2: // getVeryImportantValue_route_L18
         let tmp%3#0: uint64 = (txn OnCompletion)
         let tmp%4#0: bool = (== tmp%3#0 NoOp)
         (assert tmp%4#0) // OnCompletion is not NoOp
@@ -48,29 +48,29 @@ subroutine tests/approvals/inheritance-b.algo.ts::ConcreteArc4Contract.__puya_ar
         let tmp%14#0: bytes = (concat 0x151f7c75 val_as_bytes%0#0)
         (log tmp%14#0)
         return 1u
-    block@4: // switch_case_default_L14
+    block@4: // switch_case_default_L16
         goto block@5
-    block@5: // switch_case_next_L14
+    block@5: // switch_case_next_L16
         goto block@10
-    block@6: // bare_routing_L14
+    block@6: // bare_routing_L16
         let tmp%15#0: uint64 = (txn OnCompletion)
         switch tmp%15#0 {0u => block@7, * => block@8}
-    block@7: // __algots__.defaultCreate_L14
+    block@7: // __algots__.defaultCreate_L16
         let tmp%16#0: uint64 = (txn ApplicationID)
         let tmp%17#0: bool = (== tmp%16#0 0u)
         (assert tmp%17#0) // can only call when creating
         tests/approvals/inheritance-b.algo.ts::ConcreteArc4Contract.__algots__.defaultCreate()
         return 1u
-    block@8: // switch_case_default_L14
+    block@8: // switch_case_default_L16
         goto block@9
-    block@9: // switch_case_next_L14
+    block@9: // switch_case_next_L16
         goto block@10
-    block@10: // after_if_else_L14
+    block@10: // after_if_else_L16
         return 0u
 
 subroutine tests/approvals/inheritance-b.algo.ts::ConcreteArc4Contract.getVeryImportantValue() -> bytes:
-    block@0: // L16
-        return "42"
+    block@0: // L18
+        return "42hello"
 
 subroutine tests/approvals/inheritance-a.algo.ts::Arc4Contract.simpleAbiMethod(a: uint64, b: uint64) -> uint64:
     block@0: // L17
@@ -78,11 +78,11 @@ subroutine tests/approvals/inheritance-a.algo.ts::Arc4Contract.simpleAbiMethod(a
         return tmp%0#0
 
 subroutine tests/approvals/inheritance-b.algo.ts::ConcreteArc4Contract.__algots__.defaultCreate() -> void:
-    block@0: // L14
+    block@0: // L16
         return 
 
 subroutine tests/approvals/inheritance-b.algo.ts::ConcreteArc4Contract.constructor() -> void:
-    block@0: // L14
+    block@0: // L16
         @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor()
         (app_global_put "concreteState" "testing")
         return 

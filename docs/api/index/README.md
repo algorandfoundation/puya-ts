@@ -17,6 +17,7 @@
 
 ## Enumerations
 
+- [OnCompleteAction](enumerations/OnCompleteAction.md)
 - [OpUpFeeSource](enumerations/OpUpFeeSource.md)
 - [TransactionType](enumerations/TransactionType.md)
 
@@ -51,6 +52,7 @@
 - [LocalState](type-aliases/LocalState.md)
 - [LocalStateForAccount](type-aliases/LocalStateForAccount.md)
 - [LocalStateOptions](type-aliases/LocalStateOptions.md)
+- [OnCompleteActionStr](type-aliases/OnCompleteActionStr.md)
 - [StringCompat](type-aliases/StringCompat.md)
 - [uint64](type-aliases/uint64.md)
 - [Uint64Compat](type-aliases/Uint64Compat.md)

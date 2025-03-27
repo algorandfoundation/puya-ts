@@ -125,7 +125,9 @@ export enum AlgoTsType {
   Void = 1 << 6,
   BigUint = 1 << 7,
   String = 1 << 8,
-  Enum = 1 << 9,
+  OnCompletion = 1 << 9,
+  TransactionType = 1 << 10,
+  Enum = 1 << 11,
 }
 
 export type EnumValue = {
@@ -179,6 +181,8 @@ const INPUT_ALGOTS_TYPE_MAP: Record<AlgoTsType, AlgoTsType> = {
   [AlgoTsType.Account]: AlgoTsType.Account,
   [AlgoTsType.Void]: AlgoTsType.Void,
   [AlgoTsType.BigUint]: AlgoTsType.BigUint,
+  [AlgoTsType.OnCompletion]: AlgoTsType.OnCompletion | AlgoTsType.Uint64,
+  [AlgoTsType.TransactionType]: AlgoTsType.TransactionType | AlgoTsType.Uint64,
   [AlgoTsType.Enum]: AlgoTsType.Enum,
 }
 
@@ -190,7 +194,7 @@ const ARG_ENUMS = Object.entries(langSpec.arg_enums).map(([name, values], index)
       doc: v.doc ?? '',
       mode: v.mode,
       minAvmVersion: v.min_avm_version,
-      stackType: v.stack_type === null ? null : getMappedType(v.stack_type, null),
+      stackType: v.stack_type === null ? null : getEnumStackType(name, v.name, v.stack_type),
     }),
   )
 
@@ -201,6 +205,19 @@ const ARG_ENUMS = Object.entries(langSpec.arg_enums).map(([name, values], index)
     members: enumValues,
   }
 })
+
+function getEnumStackType(enumName: string, enumMember: string, documentedType: string) {
+  switch (enumName) {
+    case 'txn':
+      switch (enumMember) {
+        case 'OnCompletion':
+          return AlgoTsType.OnCompletion
+        case 'TypeEnum':
+          return AlgoTsType.TransactionType
+      }
+  }
+  return getMappedType(documentedType, null)
+}
 
 const RENAMED_OPCODES_MAP = new Map([
   ['args', 'arg'],
@@ -652,5 +669,5 @@ const getOpDocs = (op: Op): string[] => [
     .filter(Boolean)
     .map((d: string) => `${d.replace('params: ', '@param ').replace('Return: ', '\n * @return ')}`.split('\n').map((s) => s.trimEnd()))
     .flat(),
-  `@see Native TEAL opcode: [\`${op.name}\`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#${op.name})`,
+  `@see Native TEAL opcode: [\`${op.name}\`](https://dev.algorand.co/reference/algorand-teal/opcodes#${op.name})`,
 ]

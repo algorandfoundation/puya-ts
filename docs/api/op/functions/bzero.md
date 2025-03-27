@@ -8,7 +8,7 @@
 
 > **bzero**(`a`): [`bytes`](../../index/type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/op.ts:716](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L716)
+Defined in: [packages/algo-ts/src/op.ts:717](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L717)
 
 zero filled byte-array of length A
 
@@ -24,5 +24,5 @@ zero filled byte-array of length A
 
 ## See
 
-Native TEAL opcode: [`bzero`](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v10/#bzero)
+Native TEAL opcode: [`bzero`](https://dev.algorand.co/reference/algorand-teal/opcodes#bzero)
 Min AVM version: 4
