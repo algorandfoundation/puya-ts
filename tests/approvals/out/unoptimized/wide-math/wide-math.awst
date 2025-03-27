@@ -1,0 +1,42 @@
+subroutine add(p: readonlytuple[uint64, uint64], p₁: readonlytuple[uint64, uint64]): readonlytuple[uint64, uint64]
+{
+  <tuple>[a_h, a_l]: readonlytuple[uint64, uint64] = p
+  <tuple>[b_h, b_l]: readonlytuple[uint64, uint64] = p₁
+  <tuple>[high, low]: readonlytuple[uint64, uint64] = addw(a_l, b_l)
+  return <tuple>[high + a_h + b_h, low]
+}
+subroutine sub(p: readonlytuple[uint64, uint64], p₁: readonlytuple[uint64, uint64]): readonlytuple[uint64, uint64]
+{
+  <tuple>[a_h, a_l]: readonlytuple[uint64, uint64] = p
+  <tuple>[b_h, b_l]: readonlytuple[uint64, uint64] = p₁
+  b_l_2c: uint64 = ~b_l + 1
+  return <tuple>[0, 0]
+}
+contract WideMath
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  test(): void
+  {
+    u64max: readonlytuple[uint64, uint64] = <tuple>[0, 18446744073709551615]
+    one: readonlytuple[uint64, uint64] = <tuple>[0, 1]
+    u128MaxMinOne: readonlytuple[uint64, uint64] = <tuple>[18446744073709551615, 18446744073709551614]
+    u128Max: readonlytuple[uint64, uint64] = <tuple>[18446744073709551615, 18446744073709551615]
+    assert(2 == 2 and tests/approvals/wide-math.algo.ts::add(one, one).0 == 0 and tests/approvals/wide-math.algo.ts::add(one, one).1 == 2, comment=assert target is match for conditions)
+    assert(2 == 2 and tests/approvals/wide-math.algo.ts::add(u64max, one).0 == 1 and tests/approvals/wide-math.algo.ts::add(u64max, one).1 == 0, comment=assert target is match for conditions)
+    assert(2 == 2 and tests/approvals/wide-math.algo.ts::add(u128MaxMinOne, one).0 == u128Max.0 and tests/approvals/wide-math.algo.ts::add(u128MaxMinOne, one).1 == u128Max.1, comment=assert target is match for conditions)
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
