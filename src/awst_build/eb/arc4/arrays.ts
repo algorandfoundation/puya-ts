@@ -343,6 +343,8 @@ export abstract class ArrayExpressionBuilder<
           this.ptype instanceof StaticArrayType ? new DynamicArrayType({ elementType: this.ptype.elementType }) : this.ptype
         return new SliceFunctionBuilder(this.resolve(), sliceResult)
       }
+      case 'forEach':
+        return super.memberAccess('foobar', sourceLocation)
     }
     return super.memberAccess(name, sourceLocation)
   }

@@ -1,7 +1,7 @@
 import { nodeFactory } from '../../awst/node-factory'
 import type { Expression } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
-import { CodeError } from '../../errors'
+import { CodeError, NotSupportedForEach } from '../../errors'
 import { invariant } from '../../util'
 import type { PType } from '../ptypes'
 import { ArrayPType, numberPType, TuplePType, uint64PType } from '../ptypes'
@@ -40,6 +40,8 @@ export class NativeArrayExpressionBuilder extends InstanceExpressionBuilder<Arra
         return new SliceFunctionBuilder(this.resolve(), this.ptype)
       case 'concat':
         return new ConcatFunctionBuilder(this, sourceLocation)
+      case 'forEach':
+        return new ForEachFunctionBuilder(this, sourceLocation)
     }
 
     return super.memberAccess(name, sourceLocation)
@@ -132,5 +134,18 @@ class WithFunctionBuilder extends FunctionBuilder {
       }),
       this.arrayBuilder.ptype,
     )
+  }
+}
+
+class ForEachFunctionBuilder extends FunctionBuilder {
+  constructor(
+    private arrayBuilder: NativeArrayExpressionBuilder,
+    sourceLocation: SourceLocation,
+  ) {
+    super(sourceLocation)
+  }
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    throw new NotSupportedForEach({ sourceLocation })
   }
 }

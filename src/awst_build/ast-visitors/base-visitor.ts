@@ -524,6 +524,10 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
     return this.baseAccept(node.expression)
   }
 
+  visitArrowFunction(node: ts.ArrowFunction): NodeBuilder {
+    this.throwNotSupported(node, 'arrow functions')
+  }
+
   handleAssignmentStatement(target: InstanceBuilder, source: InstanceBuilder, sourceLocation: SourceLocation): Statement {
     return nodeFactory.expressionStatement({ expr: this.handleAssignment(target, source, sourceLocation).resolve() })
   }

@@ -90,3 +90,9 @@ export const wrapInCodeError = <T>(func: () => T, sourceLocation: SourceLocation
     }
   }
 }
+
+export class NotSupportedForEach extends CodeError {
+  constructor(options?: PuyaErrorOptions) {
+    super(`Not Supported: forEach, with code actions`, options)
+  }
+}

@@ -32,14 +32,14 @@ export abstract class FunctionVisitor
   extends BaseVisitor
   implements
     Visitor<ts.ParameterDeclaration, awst.SubroutineArgument>,
-    Visitor<ts.Block, awst.Block>,
+    Visitor<ts.Block | ts.ConciseBody, awst.Block>,
     Visitor<Statements, awst.Statement | awst.Statement[]>
 {
   protected accept = <TNode extends ts.Node>(node: TNode) => accept<FunctionVisitor, TNode>(this, node)
 
   protected readonly _functionType: FunctionPType
 
-  constructor(protected readonly node: ts.MethodDeclaration | ts.FunctionDeclaration | ts.ConstructorDeclaration) {
+  constructor(protected readonly node: ts.MethodDeclaration | ts.FunctionDeclaration | ts.ConstructorDeclaration | ts.ArrowFunction) {
     super()
     const type = this.context.getPTypeForNode(node)
     invariant(type instanceof FunctionPType, 'type of function must be FunctionPType')
@@ -455,6 +455,32 @@ export abstract class FunctionVisitor
   }
 
   visitBlock(node: ts.Block): awst.Block {
+    return nodeFactory.block(
+      {
+        sourceLocation: this.sourceLocation(node),
+      },
+      node.statements.flatMap((s) => {
+        try {
+          return this.accept(s)
+        } catch (e) {
+          invariant(e instanceof Error, 'Only errors should be thrown')
+          logger.error(e)
+          return []
+        }
+      }),
+    )
+  }
+
+  visitConciseBody(node: ts.ConciseBody): awst.Block {
+    if (ts.isExpression(node)) {
+      return nodeFactory.block(
+        {
+          sourceLocation: this.sourceLocation(node),
+        },
+        nodeFactory.expressionStatement({ expr: this.accept(node) }),
+      )
+    }
+
     return nodeFactory.block(
       {
         sourceLocation: this.sourceLocation(node),
