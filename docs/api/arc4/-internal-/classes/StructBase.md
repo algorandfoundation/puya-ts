@@ -16,21 +16,23 @@ The base type for arc4 structs
 
 ## Type Parameters
 
-• **T**
+### T
+
+`T`
 
 ## Constructors
 
-### new StructBase()
+### Constructor
 
-> **new StructBase**\<`T`\>(): [`StructBase`](StructBase.md)\<`T`\>
+> **new StructBase**\<`T`\>(): `StructBase`\<`T`\>
 
 #### Returns
 
-[`StructBase`](StructBase.md)\<`T`\>
+`StructBase`\<`T`\>
 
 #### Inherited from
 
-[`ARC4Encoded`](../../classes/ARC4Encoded.md).[`constructor`](../../classes/ARC4Encoded.md#constructors)
+[`ARC4Encoded`](../../classes/ARC4Encoded.md).[`constructor`](../../classes/ARC4Encoded.md#constructor)
 
 ## Accessors
 

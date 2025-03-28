@@ -14,7 +14,9 @@ Creates a new proxy for manipulating a local state field
 
 ## Type Parameters
 
-• **ValueType**
+### ValueType
+
+`ValueType`
 
 ## Parameters
 

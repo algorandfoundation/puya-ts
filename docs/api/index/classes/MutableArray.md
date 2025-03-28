@@ -12,7 +12,9 @@ An in memory mutable array which is passed by reference
 
 ## Type Parameters
 
-• **TItem**
+### TItem
+
+`TItem`
 
 ## Indexable
 
@@ -20,9 +22,9 @@ An in memory mutable array which is passed by reference
 
 ## Constructors
 
-### new MutableArray()
+### Constructor
 
-> **new MutableArray**\<`TItem`\>(...`items`): [`MutableArray`](MutableArray.md)\<`TItem`\>
+> **new MutableArray**\<`TItem`\>(...`items`): `MutableArray`\<`TItem`\>
 
 Defined in: [packages/algo-ts/src/mutable-array.ts:12](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/mutable-array.ts#L12)
 
@@ -38,7 +40,7 @@ The initial items for the array
 
 #### Returns
 
-[`MutableArray`](MutableArray.md)\<`TItem`\>
+`MutableArray`\<`TItem`\>
 
 ## Accessors
 
@@ -60,7 +62,7 @@ Returns the current length of this array
 
 ### \[iterator\]()
 
-> **\[iterator\]**(): [`IterableIterator`](../../arc4/-internal-/interfaces/IterableIterator.md)\<`TItem`\>
+> **\[iterator\]**(): [`IterableIterator`](../-internal-/interfaces/IterableIterator.md)\<`TItem`\>
 
 Defined in: [packages/algo-ts/src/mutable-array.ts:57](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/mutable-array.ts#L57)
 
@@ -68,7 +70,7 @@ Returns an iterator for the items in this array
 
 #### Returns
 
-[`IterableIterator`](../../arc4/-internal-/interfaces/IterableIterator.md)\<`TItem`\>
+[`IterableIterator`](../-internal-/interfaces/IterableIterator.md)\<`TItem`\>
 
 ***
 
@@ -97,7 +99,7 @@ The index of the item to retrieve
 
 ### copy()
 
-> **copy**(): [`MutableArray`](MutableArray.md)\<`TItem`\>
+> **copy**(): `MutableArray`\<`TItem`\>
 
 Defined in: [packages/algo-ts/src/mutable-array.ts:99](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/mutable-array.ts#L99)
 
@@ -105,13 +107,13 @@ Create a copy of this array
 
 #### Returns
 
-[`MutableArray`](MutableArray.md)\<`TItem`\>
+`MutableArray`\<`TItem`\>
 
 ***
 
 ### entries()
 
-> **entries**(): [`IterableIterator`](../../arc4/-internal-/interfaces/IterableIterator.md)\<readonly \[[`uint64`](../type-aliases/uint64.md), `TItem`\]\>
+> **entries**(): [`IterableIterator`](../-internal-/interfaces/IterableIterator.md)\<readonly \[[`uint64`](../type-aliases/uint64.md), `TItem`\]\>
 
 Defined in: [packages/algo-ts/src/mutable-array.ts:64](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/mutable-array.ts#L64)
 
@@ -119,13 +121,13 @@ Returns an iterator for a tuple of the indexes and items in this array
 
 #### Returns
 
-[`IterableIterator`](../../arc4/-internal-/interfaces/IterableIterator.md)\<readonly \[[`uint64`](../type-aliases/uint64.md), `TItem`\]\>
+[`IterableIterator`](../-internal-/interfaces/IterableIterator.md)\<readonly \[[`uint64`](../type-aliases/uint64.md), `TItem`\]\>
 
 ***
 
 ### keys()
 
-> **keys**(): [`IterableIterator`](../../arc4/-internal-/interfaces/IterableIterator.md)\<[`uint64`](../type-aliases/uint64.md)\>
+> **keys**(): [`IterableIterator`](../-internal-/interfaces/IterableIterator.md)\<[`uint64`](../type-aliases/uint64.md)\>
 
 Defined in: [packages/algo-ts/src/mutable-array.ts:71](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/mutable-array.ts#L71)
 
@@ -133,7 +135,7 @@ Returns an iterator for the indexes in this array
 
 #### Returns
 
-[`IterableIterator`](../../arc4/-internal-/interfaces/IterableIterator.md)\<[`uint64`](../type-aliases/uint64.md)\>
+[`IterableIterator`](../-internal-/interfaces/IterableIterator.md)\<[`uint64`](../type-aliases/uint64.md)\>
 
 ***
 
@@ -177,7 +179,7 @@ The items to be added to this array
 
 #### Call Signature
 
-> **slice**(): [`MutableArray`](MutableArray.md)\<`TItem`\>
+> **slice**(): `MutableArray`\<`TItem`\>
 
 Defined in: [packages/algo-ts/src/mutable-array.ts:34](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/mutable-array.ts#L34)
 
@@ -188,11 +190,11 @@ Create a new Dynamic array with all items from this array
 
 ##### Returns
 
-[`MutableArray`](MutableArray.md)\<`TItem`\>
+`MutableArray`\<`TItem`\>
 
 #### Call Signature
 
-> **slice**(`end`): [`MutableArray`](MutableArray.md)\<`TItem`\>
+> **slice**(`end`): `MutableArray`\<`TItem`\>
 
 Defined in: [packages/algo-ts/src/mutable-array.ts:41](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/mutable-array.ts#L41)
 
@@ -212,11 +214,11 @@ An index in which to stop copying items.
 
 ##### Returns
 
-[`MutableArray`](MutableArray.md)\<`TItem`\>
+`MutableArray`\<`TItem`\>
 
 #### Call Signature
 
-> **slice**(`start`, `end`): [`MutableArray`](MutableArray.md)\<`TItem`\>
+> **slice**(`start`, `end`): `MutableArray`\<`TItem`\>
 
 Defined in: [packages/algo-ts/src/mutable-array.ts:49](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/mutable-array.ts#L49)
 
@@ -242,4 +244,4 @@ An index in which to stop copying items
 
 ##### Returns
 
-[`MutableArray`](MutableArray.md)\<`TItem`\>
+`MutableArray`\<`TItem`\>

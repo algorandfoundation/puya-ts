@@ -6,7 +6,7 @@
 
 # Interface: KeyRegistrationTxn
 
-Defined in: [packages/algo-ts/src/gtxn.ts:600](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L600)
+Defined in: [packages/algo-ts/src/gtxn.ts:599](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L599)
 
 A group transaction of type 'keyreg'
 

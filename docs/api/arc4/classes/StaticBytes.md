@@ -16,7 +16,9 @@ A fixed length sequence of bytes
 
 ## Type Parameters
 
-• **TLength** *extends* `number` = `0`
+### TLength
+
+`TLength` *extends* `number` = `0`
 
 ## Indexable
 
@@ -24,9 +26,9 @@ A fixed length sequence of bytes
 
 ## Constructors
 
-### new StaticBytes()
+### Constructor
 
-> **new StaticBytes**\<`TLength`\>(`value`?): [`StaticBytes`](StaticBytes.md)\<`TLength`\>
+> **new StaticBytes**\<`TLength`\>(`value`?): `StaticBytes`\<`TLength`\>
 
 Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:542](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L542)
 
@@ -42,11 +44,11 @@ THe bytes or utf8 interpreted string to initialize this type
 
 #### Returns
 
-[`StaticBytes`](StaticBytes.md)\<`TLength`\>
+`StaticBytes`\<`TLength`\>
 
 #### Overrides
 
-[`Arc4ArrayBase`](../-internal-/classes/Arc4ArrayBase.md).[`constructor`](../-internal-/classes/Arc4ArrayBase.md#constructors)
+[`Arc4ArrayBase`](../-internal-/classes/Arc4ArrayBase.md).[`constructor`](../-internal-/classes/Arc4ArrayBase.md#constructor)
 
 ## Accessors
 
@@ -108,7 +110,7 @@ Get the native bytes value
 
 ### \[iterator\]()
 
-> **\[iterator\]**(): [`IterableIterator`](../-internal-/interfaces/IterableIterator.md)\<[`Byte`](Byte.md)\>
+> **\[iterator\]**(): [`IterableIterator`](../../index/-internal-/interfaces/IterableIterator.md)\<[`Byte`](Byte.md)\>
 
 Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:277](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L277)
 
@@ -116,7 +118,7 @@ Returns an iterator for the items in this array
 
 #### Returns
 
-[`IterableIterator`](../-internal-/interfaces/IterableIterator.md)\<[`Byte`](Byte.md)\>
+[`IterableIterator`](../../index/-internal-/interfaces/IterableIterator.md)\<[`Byte`](Byte.md)\>
 
 #### Inherited from
 
@@ -175,7 +177,7 @@ Another array of bytes to concat with this one
 
 ### entries()
 
-> **entries**(): [`IterableIterator`](../-internal-/interfaces/IterableIterator.md)\<readonly \[[`uint64`](../../index/type-aliases/uint64.md), [`Byte`](Byte.md)\]\>
+> **entries**(): [`IterableIterator`](../../index/-internal-/interfaces/IterableIterator.md)\<readonly \[[`uint64`](../../index/type-aliases/uint64.md), [`Byte`](Byte.md)\]\>
 
 Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:284](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L284)
 
@@ -183,7 +185,7 @@ Returns an iterator for a tuple of the indexes and items in this array
 
 #### Returns
 
-[`IterableIterator`](../-internal-/interfaces/IterableIterator.md)\<readonly \[[`uint64`](../../index/type-aliases/uint64.md), [`Byte`](Byte.md)\]\>
+[`IterableIterator`](../../index/-internal-/interfaces/IterableIterator.md)\<readonly \[[`uint64`](../../index/type-aliases/uint64.md), [`Byte`](Byte.md)\]\>
 
 #### Inherited from
 
@@ -193,7 +195,7 @@ Returns an iterator for a tuple of the indexes and items in this array
 
 ### keys()
 
-> **keys**(): [`IterableIterator`](../-internal-/interfaces/IterableIterator.md)\<[`uint64`](../../index/type-aliases/uint64.md)\>
+> **keys**(): [`IterableIterator`](../../index/-internal-/interfaces/IterableIterator.md)\<[`uint64`](../../index/type-aliases/uint64.md)\>
 
 Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:291](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L291)
 
@@ -201,7 +203,7 @@ Returns an iterator for the indexes in this array
 
 #### Returns
 
-[`IterableIterator`](../-internal-/interfaces/IterableIterator.md)\<[`uint64`](../../index/type-aliases/uint64.md)\>
+[`IterableIterator`](../../index/-internal-/interfaces/IterableIterator.md)\<[`uint64`](../../index/type-aliases/uint64.md)\>
 
 #### Inherited from
 

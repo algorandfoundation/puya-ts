@@ -26,13 +26,13 @@ A base type for ARC4 encoded values
 
 ## Constructors
 
-### new ARC4Encoded()
+### Constructor
 
-> **new ARC4Encoded**(): [`ARC4Encoded`](ARC4Encoded.md)
+> **new ARC4Encoded**(): `ARC4Encoded`
 
 #### Returns
 
-[`ARC4Encoded`](ARC4Encoded.md)
+`ARC4Encoded`
 
 ## Accessors
 

@@ -16,9 +16,9 @@ An alias for UintN<256>
 
 ## Constructors
 
-### new UintN256()
+### Constructor
 
-> **new UintN256**(`v`?): [`UintN256`](UintN256.md)
+> **new UintN256**(`v`?): `UintN256`
 
 Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:136](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L136)
 
@@ -34,11 +34,11 @@ The native uint64 or biguint value to initialize this UintN from
 
 #### Returns
 
-[`UintN256`](UintN256.md)
+`UintN256`
 
 #### Inherited from
 
-[`UintN`](UintN.md).[`constructor`](UintN.md#constructors)
+[`UintN`](UintN.md).[`constructor`](UintN.md#constructor)
 
 ## Accessors
 

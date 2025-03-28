@@ -14,7 +14,9 @@ Decode the provided bytes to a native Algorand TypeScript value
 
 ## Type Parameters
 
-• **T**
+### T
+
+`T`
 
 ## Parameters
 

@@ -6,7 +6,7 @@
 
 # Type Alias: NumericComparison\<T\>
 
-> **NumericComparison**\<`T`\>: `T` \| \{ `lessThan`: `T`; \} \| \{ `greaterThan`: `T`; \} \| \{ `greaterThanEq`: `T`; \} \| \{ `lessThanEq`: `T`; \} \| \{ `between`: \[`T`, `T`\]; \}
+> **NumericComparison**\<`T`\> = `T` \| \{ `lessThan`: `T`; \} \| \{ `greaterThan`: `T`; \} \| \{ `greaterThanEq`: `T`; \} \| \{ `lessThanEq`: `T`; \} \| \{ `between`: \[`T`, `T`\]; \}
 
 Defined in: [packages/algo-ts/src/util.ts:34](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L34)
 
@@ -14,7 +14,9 @@ Defines possible comparison expressions for numeric types
 
 ## Type Parameters
 
-• **T**
+### T
+
+`T`
 
 ## Type declaration
 

@@ -6,7 +6,7 @@
 
 # Interface: AssetTransferFields
 
-Defined in: [packages/algo-ts/src/itxn.ts:770](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L770)
+Defined in: [packages/algo-ts/src/itxn.ts:766](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L766)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [packages/algo-ts/src/itxn.ts:770](https://github.com/algorandfounda
 
 > `optional` **assetAmount**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:810](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L810)
+Defined in: [packages/algo-ts/src/itxn.ts:806](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L806)
 
 value in Asset's units
 
@@ -24,7 +24,7 @@ value in Asset's units
 
 > `optional` **assetCloseTo**: [`bytes`](../../../type-aliases/bytes.md) \| [`Account`](../../../type-aliases/Account.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:822](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L822)
+Defined in: [packages/algo-ts/src/itxn.ts:818](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L818)
 
 32 byte address
 
@@ -34,7 +34,7 @@ Defined in: [packages/algo-ts/src/itxn.ts:822](https://github.com/algorandfounda
 
 > `optional` **assetReceiver**: [`bytes`](../../../type-aliases/bytes.md) \| [`Account`](../../../type-aliases/Account.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:818](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L818)
+Defined in: [packages/algo-ts/src/itxn.ts:814](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L814)
 
 32 byte address
 
@@ -44,7 +44,7 @@ Defined in: [packages/algo-ts/src/itxn.ts:818](https://github.com/algorandfounda
 
 > `optional` **assetSender**: [`bytes`](../../../type-aliases/bytes.md) \| [`Account`](../../../type-aliases/Account.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:814](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L814)
+Defined in: [packages/algo-ts/src/itxn.ts:810](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L810)
 
 32 byte address. Source of assets if Sender is the Asset's Clawback address.
 
@@ -54,7 +54,7 @@ Defined in: [packages/algo-ts/src/itxn.ts:814](https://github.com/algorandfounda
 
 > `optional` **fee**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:778](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L778)
+Defined in: [packages/algo-ts/src/itxn.ts:774](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L774)
 
 microalgos
 
@@ -64,7 +64,7 @@ microalgos
 
 > `optional` **firstValid**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:782](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L782)
+Defined in: [packages/algo-ts/src/itxn.ts:778](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L778)
 
 round number
 
@@ -74,7 +74,7 @@ round number
 
 > `optional` **firstValidTime**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:786](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L786)
+Defined in: [packages/algo-ts/src/itxn.ts:782](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L782)
 
 UNIX timestamp of block before txn.FirstValid. Fails if negative
 
@@ -84,7 +84,7 @@ UNIX timestamp of block before txn.FirstValid. Fails if negative
 
 > `optional` **lastValid**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:790](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L790)
+Defined in: [packages/algo-ts/src/itxn.ts:786](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L786)
 
 round number
 
@@ -94,7 +94,7 @@ round number
 
 > `optional` **lease**: [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:798](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L798)
+Defined in: [packages/algo-ts/src/itxn.ts:794](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L794)
 
 32 byte lease value
 
@@ -104,7 +104,7 @@ Defined in: [packages/algo-ts/src/itxn.ts:798](https://github.com/algorandfounda
 
 > `optional` **note**: `string` \| [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:794](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L794)
+Defined in: [packages/algo-ts/src/itxn.ts:790](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L790)
 
 Any data up to 1024 bytes
 
@@ -114,7 +114,7 @@ Any data up to 1024 bytes
 
 > `optional` **rekeyTo**: [`bytes`](../../../type-aliases/bytes.md) \| [`Account`](../../../type-aliases/Account.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:802](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L802)
+Defined in: [packages/algo-ts/src/itxn.ts:798](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L798)
 
 32 byte Sender's new AuthAddr
 
@@ -124,7 +124,7 @@ Defined in: [packages/algo-ts/src/itxn.ts:802](https://github.com/algorandfounda
 
 > `optional` **sender**: [`bytes`](../../../type-aliases/bytes.md) \| [`Account`](../../../type-aliases/Account.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:774](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L774)
+Defined in: [packages/algo-ts/src/itxn.ts:770](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L770)
 
 32 byte address
 
@@ -134,6 +134,6 @@ Defined in: [packages/algo-ts/src/itxn.ts:774](https://github.com/algorandfounda
 
 > `optional` **xferAsset**: [`uint64`](../../../type-aliases/uint64.md) \| [`Asset`](../../../type-aliases/Asset.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:806](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L806)
+Defined in: [packages/algo-ts/src/itxn.ts:802](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L802)
 
 Asset ID

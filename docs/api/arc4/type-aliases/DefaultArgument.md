@@ -6,7 +6,7 @@
 
 # Type Alias: DefaultArgument\<TContract\>
 
-> **DefaultArgument**\<`TContract`\>: \{ `constant`: `string` \| `boolean` \| `number` \| `bigint`; \} \| \{ `from`: keyof `TContract`; \}
+> **DefaultArgument**\<`TContract`\> = \{ `constant`: `string` \| `boolean` \| `number` \| `bigint`; \} \| \{ `from`: keyof `TContract`; \}
 
 Defined in: [packages/algo-ts/src/arc4/index.ts:37](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L37)
 
@@ -14,7 +14,9 @@ Type alias for a default argument schema
 
 ## Type Parameters
 
-• **TContract** *extends* [`Contract`](../classes/Contract.md)
+### TContract
+
+`TContract` *extends* [`Contract`](../classes/Contract.md)
 
 The type of the contract containing the method this default argument is for
 

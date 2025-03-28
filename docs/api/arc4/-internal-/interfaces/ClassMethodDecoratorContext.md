@@ -12,12 +12,16 @@ Context provided to a class method decorator.
 
 ## Type Parameters
 
-• **This** = `unknown`
+### This
+
+`This` = `unknown`
 
 The type on which the class element will be defined. For a static class element, this will be
 the type of the constructor. For a non-static class element, this will be the type of the instance.
 
-• **Value** *extends* (`this`, ...`args`) => `any` = (`this`, ...`args`) => `any`
+### Value
+
+`Value` *extends* (`this`, ...`args`) => `any` = (`this`, ...`args`) => `any`
 
 The type of the decorated class method.
 

@@ -16,9 +16,9 @@ An alias for UintN<32>
 
 ## Constructors
 
-### new UintN32()
+### Constructor
 
-> **new UintN32**(`v`?): [`UintN32`](UintN32.md)
+> **new UintN32**(`v`?): `UintN32`
 
 Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:136](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L136)
 
@@ -34,11 +34,11 @@ The native uint64 or biguint value to initialize this UintN from
 
 #### Returns
 
-[`UintN32`](UintN32.md)
+`UintN32`
 
 #### Inherited from
 
-[`UintN`](UintN.md).[`constructor`](UintN.md#constructors)
+[`UintN`](UintN.md).[`constructor`](UintN.md#constructor)
 
 ## Accessors
 

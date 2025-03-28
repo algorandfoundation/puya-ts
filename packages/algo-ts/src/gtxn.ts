@@ -469,10 +469,6 @@ export interface ApplicationCallTxn {
    */
   readonly appId: Application
   /**
-   * The application created by this transaction
-   */
-  readonly createdApplication: Application
-  /**
    * ApplicationCall transaction on completion action
    */
   readonly onCompletion: OnCompleteAction

@@ -16,9 +16,9 @@ An alias for UintN<16>
 
 ## Constructors
 
-### new UintN16()
+### Constructor
 
-> **new UintN16**(`v`?): [`UintN16`](UintN16.md)
+> **new UintN16**(`v`?): `UintN16`
 
 Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:136](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L136)
 
@@ -34,11 +34,11 @@ The native uint64 or biguint value to initialize this UintN from
 
 #### Returns
 
-[`UintN16`](UintN16.md)
+`UintN16`
 
 #### Inherited from
 
-[`UintN`](UintN.md).[`constructor`](UintN.md#constructors)
+[`UintN`](UintN.md).[`constructor`](UintN.md#constructor)
 
 ## Accessors
 

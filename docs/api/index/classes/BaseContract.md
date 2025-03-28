@@ -16,13 +16,13 @@ The base type for all Algorand TypeScript contracts
 
 ## Constructors
 
-### new BaseContract()
+### Constructor
 
-> **new BaseContract**(): [`BaseContract`](BaseContract.md)
+> **new BaseContract**(): `BaseContract`
 
 #### Returns
 
-[`BaseContract`](BaseContract.md)
+`BaseContract`
 
 ## Methods
 

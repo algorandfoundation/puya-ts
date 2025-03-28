@@ -16,17 +16,17 @@ The base type for all ARC4 contracts in Algorand TypeScript
 
 ## Constructors
 
-### new Contract()
+### Constructor
 
-> **new Contract**(): [`Contract`](Contract.md)
+> **new Contract**(): `Contract`
 
 #### Returns
 
-[`Contract`](Contract.md)
+`Contract`
 
 #### Inherited from
 
-[`BaseContract`](../../index/classes/BaseContract.md).[`constructor`](../../index/classes/BaseContract.md#constructors)
+[`BaseContract`](../../index/classes/BaseContract.md).[`constructor`](../../index/classes/BaseContract.md#constructor)
 
 ## Methods
 

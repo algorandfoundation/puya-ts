@@ -6,6 +6,8 @@
 
 # Type Alias: ItxnParams
 
-> **ItxnParams**: [`PaymentItxnParams`](../classes/PaymentItxnParams.md) \| [`KeyRegistrationItxnParams`](../classes/KeyRegistrationItxnParams.md) \| [`AssetConfigItxnParams`](../classes/AssetConfigItxnParams.md) \| [`AssetTransferItxnParams`](../classes/AssetTransferItxnParams.md) \| [`AssetFreezeItxnParams`](../classes/AssetFreezeItxnParams.md) \| [`ApplicationCallItxnParams`](../classes/ApplicationCallItxnParams.md)
+> **ItxnParams** = [`PaymentItxnParams`](../classes/PaymentItxnParams.md) \| [`KeyRegistrationItxnParams`](../classes/KeyRegistrationItxnParams.md) \| [`AssetConfigItxnParams`](../classes/AssetConfigItxnParams.md) \| [`AssetTransferItxnParams`](../classes/AssetTransferItxnParams.md) \| [`AssetFreezeItxnParams`](../classes/AssetFreezeItxnParams.md) \| [`ApplicationCallItxnParams`](../classes/ApplicationCallItxnParams.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:965](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L965)
+Defined in: [packages/algo-ts/src/itxn.ts:961](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L961)
+
+A union of all ItxnParams types

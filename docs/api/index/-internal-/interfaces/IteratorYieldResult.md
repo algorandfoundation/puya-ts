@@ -10,7 +10,9 @@ Defined in: node\_modules/typescript/lib/lib.es2015.iterable.d.ts:29
 
 ## Type Parameters
 
-• **TYield**
+### TYield
+
+`TYield`
 
 ## Properties
 

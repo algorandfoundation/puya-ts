@@ -6,31 +6,41 @@
 
 # Type Alias: ContractOptions
 
-> **ContractOptions**: `object`
+> **ContractOptions** = `object`
 
 Defined in: [packages/algo-ts/src/base-contract.ts:41](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/base-contract.ts#L41)
 
 Additional configuration options for a contract
 
-## Type declaration
+## Properties
 
 ### avmVersion?
 
 > `optional` **avmVersion**: `10` \| `11`
 
+Defined in: [packages/algo-ts/src/base-contract.ts:46](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/base-contract.ts#L46)
+
 Determines which AVM version to use, this affects what operations are supported.
 Defaults to value provided supplied on command line (which defaults to current mainnet version)
+
+***
 
 ### name?
 
 > `optional` **name**: `string`
 
+Defined in: [packages/algo-ts/src/base-contract.ts:52](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/base-contract.ts#L52)
+
 Override the name of the logic signature when generating build artifacts.
 Defaults to the class name
+
+***
 
 ### scratchSlots?
 
 > `optional` **scratchSlots**: (`number` \| [`NumberRange`](NumberRange.md))[]
+
+Defined in: [packages/algo-ts/src/base-contract.ts:65](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/base-contract.ts#L65)
 
 Allows you to mark a slot ID or range of slot IDs as "off limits" to Puya.
 These slot ID(s) will never be written to or otherwise manipulating by the compiler itself.
@@ -43,9 +53,13 @@ to have overlapping ranges or values either, so if a base class contract reserve
 0-5 inclusive and the derived contract reserves 5-10 inclusive, then within the derived
 contract all slots 0-10 will be marked as reserved.
 
+***
+
 ### stateTotals?
 
 > `optional` **stateTotals**: [`StateTotals`](StateTotals.md)
+
+Defined in: [packages/algo-ts/src/base-contract.ts:79](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/base-contract.ts#L79)
 
 Allows defining what values should be used for global and local uint and bytes storage
 values when creating a contract. Used when outputting ARC-32 application.json schemas.

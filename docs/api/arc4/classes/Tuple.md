@@ -16,15 +16,17 @@ An arc4 encoded tuple of values
 
 ## Type Parameters
 
-• **TTuple** *extends* \[[`ARC4Encoded`](ARC4Encoded.md), `...ARC4Encoded[]`\]
+### TTuple
+
+`TTuple` *extends* \[[`ARC4Encoded`](ARC4Encoded.md), `...ARC4Encoded[]`\]
 
 A type representing the native tuple of item types
 
 ## Constructors
 
-### new Tuple()
+### Constructor
 
-> **new Tuple**\<`TTuple`\>(): [`Tuple`](Tuple.md)\<`TTuple`\>
+> **new Tuple**\<`TTuple`\>(): `Tuple`\<`TTuple`\>
 
 Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:407](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L407)
 
@@ -32,15 +34,15 @@ Create a new Tuple with the default zero values for items
 
 #### Returns
 
-[`Tuple`](Tuple.md)\<`TTuple`\>
+`Tuple`\<`TTuple`\>
 
 #### Overrides
 
-[`ARC4Encoded`](ARC4Encoded.md).[`constructor`](ARC4Encoded.md#constructors)
+[`ARC4Encoded`](ARC4Encoded.md).[`constructor`](ARC4Encoded.md#constructor)
 
-### new Tuple()
+### Constructor
 
-> **new Tuple**\<`TTuple`\>(...`items`): [`Tuple`](Tuple.md)\<`TTuple`\>
+> **new Tuple**\<`TTuple`\>(...`items`): `Tuple`\<`TTuple`\>
 
 Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:412](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L412)
 
@@ -56,7 +58,7 @@ The tuple items
 
 #### Returns
 
-[`Tuple`](Tuple.md)\<`TTuple`\>
+`Tuple`\<`TTuple`\>
 
 #### Overrides
 
@@ -126,7 +128,9 @@ Returns the item at the specified index
 
 #### Type Parameters
 
-• **TIndex** *extends* `string` \| `number` \| `symbol`
+##### TIndex
+
+`TIndex` *extends* `string` \| `number` \| `symbol`
 
 #### Parameters
 

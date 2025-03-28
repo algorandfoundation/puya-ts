@@ -24,7 +24,9 @@ A base type for arc4 array types
 
 ## Type Parameters
 
-• **TItem** *extends* [`ARC4Encoded`](../../classes/ARC4Encoded.md)
+### TItem
+
+`TItem` *extends* [`ARC4Encoded`](../../classes/ARC4Encoded.md)
 
 ## Indexable
 
@@ -32,19 +34,19 @@ A base type for arc4 array types
 
 ## Constructors
 
-### new Arc4ArrayBase()
+### Constructor
 
-> `protected` **new Arc4ArrayBase**\<`TItem`\>(): [`Arc4ArrayBase`](Arc4ArrayBase.md)\<`TItem`\>
+> `protected` **new Arc4ArrayBase**\<`TItem`\>(): `Arc4ArrayBase`\<`TItem`\>
 
 Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:233](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L233)
 
 #### Returns
 
-[`Arc4ArrayBase`](Arc4ArrayBase.md)\<`TItem`\>
+`Arc4ArrayBase`\<`TItem`\>
 
 #### Overrides
 
-[`ARC4Encoded`](../../classes/ARC4Encoded.md).[`constructor`](../../classes/ARC4Encoded.md#constructors)
+[`ARC4Encoded`](../../classes/ARC4Encoded.md).[`constructor`](../../classes/ARC4Encoded.md#constructor)
 
 ## Accessors
 
@@ -86,7 +88,7 @@ Returns the current length of this array
 
 ### \[iterator\]()
 
-> **\[iterator\]**(): [`IterableIterator`](../interfaces/IterableIterator.md)\<`TItem`\>
+> **\[iterator\]**(): [`IterableIterator`](../../../index/-internal-/interfaces/IterableIterator.md)\<`TItem`\>
 
 Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:277](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L277)
 
@@ -94,7 +96,7 @@ Returns an iterator for the items in this array
 
 #### Returns
 
-[`IterableIterator`](../interfaces/IterableIterator.md)\<`TItem`\>
+[`IterableIterator`](../../../index/-internal-/interfaces/IterableIterator.md)\<`TItem`\>
 
 ***
 
@@ -123,7 +125,7 @@ The index of the item to retrieve
 
 ### entries()
 
-> **entries**(): [`IterableIterator`](../interfaces/IterableIterator.md)\<readonly \[[`uint64`](../../../index/type-aliases/uint64.md), `TItem`\]\>
+> **entries**(): [`IterableIterator`](../../../index/-internal-/interfaces/IterableIterator.md)\<readonly \[[`uint64`](../../../index/type-aliases/uint64.md), `TItem`\]\>
 
 Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:284](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L284)
 
@@ -131,13 +133,13 @@ Returns an iterator for a tuple of the indexes and items in this array
 
 #### Returns
 
-[`IterableIterator`](../interfaces/IterableIterator.md)\<readonly \[[`uint64`](../../../index/type-aliases/uint64.md), `TItem`\]\>
+[`IterableIterator`](../../../index/-internal-/interfaces/IterableIterator.md)\<readonly \[[`uint64`](../../../index/type-aliases/uint64.md), `TItem`\]\>
 
 ***
 
 ### keys()
 
-> **keys**(): [`IterableIterator`](../interfaces/IterableIterator.md)\<[`uint64`](../../../index/type-aliases/uint64.md)\>
+> **keys**(): [`IterableIterator`](../../../index/-internal-/interfaces/IterableIterator.md)\<[`uint64`](../../../index/type-aliases/uint64.md)\>
 
 Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:291](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L291)
 
@@ -145,7 +147,7 @@ Returns an iterator for the indexes in this array
 
 #### Returns
 
-[`IterableIterator`](../interfaces/IterableIterator.md)\<[`uint64`](../../../index/type-aliases/uint64.md)\>
+[`IterableIterator`](../../../index/-internal-/interfaces/IterableIterator.md)\<[`uint64`](../../../index/type-aliases/uint64.md)\>
 
 ***
 
