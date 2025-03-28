@@ -470,10 +470,6 @@ export interface ApplicationCallInnerTxn {
    */
   readonly appId: Application
   /**
-   * The application created by this transaction
-   */
-  readonly createdApplication: Application
-  /**
    * ApplicationCall transaction on completion action
    */
   readonly onCompletion: OnCompleteAction
