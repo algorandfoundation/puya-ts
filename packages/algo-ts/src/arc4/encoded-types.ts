@@ -1,5 +1,5 @@
 import { NoImplementation } from '../internal/errors'
-import { biguint, BigUintCompat, bytes, BytesBacked, StringCompat, uint64, Uint64Compat } from '../primitives'
+import { biguint, BigUintCompat, bytes, BytesBacked, BytesCompat, NTuple, StringCompat, uint64, Uint64Compat } from '../primitives'
 import { Account } from '../reference'
 
 /**
@@ -335,6 +335,13 @@ export class StaticArray<TItem extends ARC4Encoded, TLength extends number> exte
   concat(other: Arc4ArrayBase<TItem>): DynamicArray<TItem> {
     throw new NoImplementation()
   }
+
+  /**
+   * Return the array items as a native tuple
+   */
+  get native(): NTuple<TItem, TLength> {
+    throw new NoImplementation()
+  }
 }
 
 /**
@@ -380,6 +387,13 @@ export class DynamicArray<TItem extends ARC4Encoded> extends Arc4ArrayBase<TItem
    * @param other Another array to concat with this one
    */
   concat(other: Arc4ArrayBase<TItem>): DynamicArray<TItem> {
+    throw new NoImplementation()
+  }
+
+  /**
+   * Return the array items as a native immutable array
+   */
+  get native(): TItem[] {
     throw new NoImplementation()
   }
 }

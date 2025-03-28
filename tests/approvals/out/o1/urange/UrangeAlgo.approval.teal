@@ -4,7 +4,7 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 1 8 0 5
-    bytecblock 0x151f7c75 0x0000
+    bytecblock 0x151f7c75 0x0000 0x0001
     // tests/approvals/urange.algo.ts:4
     // class UrangeAlgo extends Contract {
     txn NumAppArgs
@@ -106,12 +106,7 @@ testSingleArg_for_header@1:
     dup
     cover 2
     itob
-    dup
-    len
-    intc_1 // 8
-    /
-    itob
-    extract 6 2
+    bytec_2 // 0x0001
     swap
     concat
     extract 2 0
@@ -165,12 +160,7 @@ testTwoArg_for_header@1:
     dup
     cover 2
     itob
-    dup
-    len
-    intc_1 // 8
-    /
-    itob
-    extract 6 2
+    bytec_2 // 0x0001
     swap
     concat
     extract 2 0
@@ -224,12 +214,7 @@ testThreeArg_for_header@1:
     dup
     cover 2
     itob
-    dup
-    len
-    intc_1 // 8
-    /
-    itob
-    extract 6 2
+    bytec_2 // 0x0001
     swap
     concat
     extract 2 0

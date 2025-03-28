@@ -26,7 +26,7 @@ jobs:
         set -e # Exit on error
         [ $diffExitCode -ne 0 ] && (echo "$thisVersion has not been published yet"; exit 0;) || echo "$thisVersion already published, checking diff against local build"
         diffTextLen=${#diffText}
-        [ $diffTextLen -eq 0 ] && echo 'No changes' || (echo 'ERROR: Code differs to published version. Please bump package version or revert changes'; echo $diffText; exit 1;)
+        [ $diffTextLen -eq 0 ] && echo 'No changes' || (echo 'ERROR: Code differs to published version. Please bump package version or revert changes'; echo "::group::diff"; echo $diffText; echo "::endgroup::";exit 1;)
 
   ci-puya-ts:
     name: 'Build @algorandfoundation/puya-ts'

@@ -69,6 +69,17 @@ export class EncodeArc4FunctionBuilder extends FunctionBuilder {
       argSpec: (a) => [a.required()],
       callLocation: sourceLocation,
     })
+    if (valueType instanceof ARC4EncodedType) {
+      // Already encoded, just reinterpret as bytes
+      return instanceEb(
+        nodeFactory.reinterpretCast({
+          expr: valueToEncode.resolve(),
+          wtype: wtypes.bytesWType,
+          sourceLocation,
+        }),
+        bytesPType,
+      )
+    }
 
     const encodedType = ptypeToArc4EncodedType(valueType, sourceLocation)
 
@@ -101,6 +112,12 @@ export class DecodeArc4FunctionBuilder extends FunctionBuilder {
       argSpec: (a) => [a.required(bytesPType), a.optional(stringPType)],
       callLocation: sourceLocation,
     })
+    codeInvariant(
+      !(ptype instanceof ARC4EncodedType),
+      `Cannot decode to ${ptype} as it is an ARC4 type. Use \`interpretAsArc4<${ptype}>\` instead`,
+      sourceLocation,
+    )
+
     codeInvariant(isArc4EncodableType(ptype), `Cannot determine ARC4 encoding for ${ptype}`, sourceLocation)
 
     const arc4Encoded = ptypeToArc4EncodedType(ptype, sourceLocation)

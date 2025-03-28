@@ -59,9 +59,7 @@ subroutine tests/approvals/byte-expressions.algo.ts::test(a: uint64, b: biguint,
         (assert tmp%5#0) // Bytes(uint64) returns an 8 byte encoding
         let tmp%6#0: bool = (== 256b 0x0100)
         (assert tmp%6#0)
-        let reinterpret_bytes%1#0: bytes = b#0
-        let reinterpret_biguint%0#0: biguint = reinterpret_bytes%1#0
-        let tmp%7#0: bool = (b== reinterpret_biguint%0#0 b#0)
+        let tmp%7#0: bool = (b== b#0 b#0)
         (assert tmp%7#0) // Round trip of biguint to bytes and back results in the same value
         let tmp%8#0: bool = (== c#0 c#0)
         (assert tmp%8#0)
