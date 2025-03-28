@@ -9,7 +9,7 @@ import { logger } from '../../../logger'
 import { codeInvariant, hexToUint8Array } from '../../../util'
 import { isArc4EncodableType, ptypeToArc4EncodedType } from '../../arc4-util'
 import type { PType } from '../../ptypes'
-import { ArrayLiteralPType, bytesPType, stringPType, uint64PType } from '../../ptypes'
+import { bytesPType, stringPType, uint64PType } from '../../ptypes'
 import {
   arc4EncodedLengthFunction,
   ARC4EncodedType,
@@ -58,7 +58,7 @@ export class EncodeArc4FunctionBuilder extends FunctionBuilder {
   readonly ptype = encodeArc4Function
 
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
-    let {
+    const {
       args: [valueToEncode],
       ptypes: [valueType],
     } = parseFunctionArgs({
