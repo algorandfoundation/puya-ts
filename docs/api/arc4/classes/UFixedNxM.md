@@ -28,7 +28,7 @@ A fixed bit size, fixed decimal unsigned value
 
 ### Constructor
 
-> **new UFixedNxM**\<`N`, `M`\>(`v`): `UFixedNxM`\<`N`, `M`\>
+> **new UFixedNxM**\<`N`, `M`\>(`v`?): `UFixedNxM`\<`N`, `M`\>
 
 Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:194](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L194)
 
@@ -36,7 +36,7 @@ Create a new UFixedNxM value
 
 #### Parameters
 
-##### v
+##### v?
 
 `` `${number}.${number}` ``
 

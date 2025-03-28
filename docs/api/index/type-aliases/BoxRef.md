@@ -18,7 +18,7 @@ A BoxRef proxy
 
 > `readonly` **exists**: `boolean`
 
-Defined in: [packages/algo-ts/src/box.ts:75](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L75)
+Defined in: [packages/algo-ts/src/box.ts:84](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L84)
 
 Get a boolean indicating if the box exists or not
 
@@ -28,7 +28,7 @@ Get a boolean indicating if the box exists or not
 
 > `readonly` **key**: [`bytes`](bytes.md)
 
-Defined in: [packages/algo-ts/src/box.ts:71](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L71)
+Defined in: [packages/algo-ts/src/box.ts:80](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L80)
 
 Get the key used by this box proxy
 
@@ -38,7 +38,7 @@ Get the key used by this box proxy
 
 > `readonly` **length**: [`uint64`](uint64.md)
 
-Defined in: [packages/algo-ts/src/box.ts:160](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L160)
+Defined in: [packages/algo-ts/src/box.ts:169](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L169)
 
 Returns the length of the box, or error if the box does not exist
 
@@ -48,7 +48,7 @@ Returns the length of the box, or error if the box does not exist
 
 > **value**: [`bytes`](bytes.md)
 
-Defined in: [packages/algo-ts/src/box.ts:82](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L82)
+Defined in: [packages/algo-ts/src/box.ts:91](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L91)
 
 Get the value of the box.
 
@@ -61,7 +61,7 @@ Error if getting the value and the box does not exist
 
 > **create**(`options`): `boolean`
 
-Defined in: [packages/algo-ts/src/box.ts:140](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L140)
+Defined in: [packages/algo-ts/src/box.ts:149](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L149)
 
 Create the box for this proxy with the specified size if it does not exist
 
@@ -89,7 +89,7 @@ True if the box was created, false if it already existed
 
 > **delete**(): `boolean`
 
-Defined in: [packages/algo-ts/src/box.ts:132](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L132)
+Defined in: [packages/algo-ts/src/box.ts:141](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L141)
 
 Delete the box associated with this proxy if it exists.
 
@@ -105,7 +105,7 @@ True if the box existed and was deleted, else false
 
 > **extract**(`start`, `length`): [`bytes`](bytes.md)
 
-Defined in: [packages/algo-ts/src/box.ts:127](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L127)
+Defined in: [packages/algo-ts/src/box.ts:136](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L136)
 
 Extract a slice of bytes from the box
 
@@ -138,7 +138,7 @@ The extracted bytes
 
 > **get**(`options`): [`bytes`](bytes.md)
 
-Defined in: [packages/algo-ts/src/box.ts:88](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L88)
+Defined in: [packages/algo-ts/src/box.ts:97](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L97)
 
 Get the value stored in the box, or return a specified default value if the box does not exist
 
@@ -164,7 +164,7 @@ The value if the box exists, else the default value
 
 > **maybe**(): readonly \[[`bytes`](bytes.md), `boolean`\]
 
-Defined in: [packages/algo-ts/src/box.ts:156](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L156)
+Defined in: [packages/algo-ts/src/box.ts:165](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L165)
 
 Get the value stored in the box if available, and a boolean indicating if the box exists.
 
@@ -182,7 +182,7 @@ A tuple with the first item being the box value, and the second item being a boo
 
 > **put**(`value`): `void`
 
-Defined in: [packages/algo-ts/src/box.ts:96](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L96)
+Defined in: [packages/algo-ts/src/box.ts:105](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L105)
 
 Puts the specified bytes into the box replacing any existing value.
 
@@ -207,7 +207,7 @@ The value to put into the box
 
 > **replace**(`start`, `value`): `void`
 
-Defined in: [packages/algo-ts/src/box.ts:117](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L117)
+Defined in: [packages/algo-ts/src/box.ts:126](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L126)
 
 Replace bytes in a box starting at `start`.
 
@@ -238,7 +238,7 @@ The value to be written
 
 > **resize**(`newSize`): `void`
 
-Defined in: [packages/algo-ts/src/box.ts:149](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L149)
+Defined in: [packages/algo-ts/src/box.ts:158](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L158)
 
 Resize the box to the specified size.
 
@@ -264,7 +264,7 @@ The new size for the box
 
 > **splice**(`start`, `length`, `value`): `void`
 
-Defined in: [packages/algo-ts/src/box.ts:108](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L108)
+Defined in: [packages/algo-ts/src/box.ts:117](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L117)
 
 Splice the specified bytes into the box starting at `start`, removing `length` bytes
 from the existing value and replacing them with `value` before appending the remainder of the original box value.

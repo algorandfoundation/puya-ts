@@ -28,7 +28,7 @@ The type of the data stored in the box.
 
 > **BoxMap**(`key`): [`Box`](Box.md)\<`TValue`\>
 
-Defined in: [packages/algo-ts/src/box.ts:61](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L61)
+Defined in: [packages/algo-ts/src/box.ts:70](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L70)
 
 A BoxMap proxy
 
@@ -50,6 +50,6 @@ The key of the box to retrieve a proxy for
 
 > `readonly` **keyPrefix**: [`bytes`](bytes.md)
 
-Defined in: [packages/algo-ts/src/box.ts:55](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L55)
+Defined in: [packages/algo-ts/src/box.ts:64](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L64)
 
 Get the bytes used to prefix each key
