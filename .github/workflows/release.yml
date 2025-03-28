@@ -65,3 +65,5 @@ jobs:
           token: ${{ secrets.NPM_TOKEN }}
           package: artifacts/puya-ts/package.json
           access: 'public'
+          # Tagging 'main' branch with latest for now, even though it's beta because we don't have a non-beta
+          tag: ${{ github.ref_name == 'alpha' && 'alpha' || github.ref_name == 'main' && 'latest' || github.ref_name == 'release' && 'latest' || 'pre-release' }}
