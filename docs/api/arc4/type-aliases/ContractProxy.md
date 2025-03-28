@@ -6,7 +6,7 @@
 
 # Type Alias: ContractProxy\<TContract\>
 
-> **ContractProxy**\<`TContract`\>: [`CompiledContract`](../../index/type-aliases/CompiledContract.md) & `object`
+> **ContractProxy**\<`TContract`\> = [`CompiledContract`](../../index/type-aliases/CompiledContract.md) & `object`
 
 Defined in: [packages/algo-ts/src/arc4/c2c.ts:78](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/c2c.ts#L78)
 
@@ -39,4 +39,6 @@ Specify values for transaction fields which should override the default values.
 
 ## Type Parameters
 
-• **TContract** *extends* [`Contract`](../classes/Contract.md)
+### TContract
+
+`TContract` *extends* [`Contract`](../classes/Contract.md)

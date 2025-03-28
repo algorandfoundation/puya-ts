@@ -6,7 +6,7 @@
 
 # Interface: AssetTransferTxn
 
-Defined in: [packages/algo-ts/src/gtxn.ts:614](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L614)
+Defined in: [packages/algo-ts/src/gtxn.ts:615](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L615)
 
 A group transaction of type 'axfer'
 

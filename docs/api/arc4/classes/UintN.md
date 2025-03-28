@@ -26,13 +26,15 @@ A fixed bit size unsigned int
 
 ## Type Parameters
 
-• **N** *extends* [`BitSize`](../type-aliases/BitSize.md)
+### N
+
+`N` *extends* [`BitSize`](../type-aliases/BitSize.md)
 
 ## Constructors
 
-### new UintN()
+### Constructor
 
-> **new UintN**\<`N`\>(`v`?): [`UintN`](UintN.md)\<`N`\>
+> **new UintN**\<`N`\>(`v`?): `UintN`\<`N`\>
 
 Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:136](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L136)
 
@@ -48,11 +50,11 @@ The native uint64 or biguint value to initialize this UintN from
 
 #### Returns
 
-[`UintN`](UintN.md)\<`N`\>
+`UintN`\<`N`\>
 
 #### Overrides
 
-[`ARC4Encoded`](ARC4Encoded.md).[`constructor`](ARC4Encoded.md#constructors)
+[`ARC4Encoded`](ARC4Encoded.md).[`constructor`](ARC4Encoded.md#constructor)
 
 ## Accessors
 

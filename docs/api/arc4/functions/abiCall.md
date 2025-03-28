@@ -14,9 +14,13 @@ Invokes the target ABI method using a strongly typed fields object.
 
 ## Type Parameters
 
-• **TArgs** *extends* `any`[]
+### TArgs
 
-• **TReturn**
+`TArgs` *extends* `any`[]
+
+### TReturn
+
+`TReturn`
 
 ## Parameters
 

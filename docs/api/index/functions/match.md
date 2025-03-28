@@ -14,7 +14,9 @@ Applies all tests in `test` against `subject` and returns a boolean indicating i
 
 ## Type Parameters
 
-• **T**
+### T
+
+`T`
 
 The type of the subject
 

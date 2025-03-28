@@ -8,7 +8,9 @@
 
 > **assetTransfer**(`fields`): [`AssetTransferItxnParams`](../classes/AssetTransferItxnParams.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:1032](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L1032)
+Defined in: [packages/algo-ts/src/itxn.ts:1093](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L1093)
+
+Create a new AssetTransferItxnParams object with the specified fields
 
 ## Parameters
 

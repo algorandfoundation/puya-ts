@@ -6,29 +6,33 @@
 
 # Class: `abstract` ApplicationCallItxnParams
 
-Defined in: [packages/algo-ts/src/itxn.ts:1049](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L1049)
+Defined in: [packages/algo-ts/src/itxn.ts:1128](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L1128)
+
+Holds ApplicationCall fields which can be updated, cloned, or submitted.
 
 ## Constructors
 
-### new ApplicationCallItxnParams()
+### Constructor
 
-> **new ApplicationCallItxnParams**(): [`ApplicationCallItxnParams`](ApplicationCallItxnParams.md)
+> **new ApplicationCallItxnParams**(): `ApplicationCallItxnParams`
 
 #### Returns
 
-[`ApplicationCallItxnParams`](ApplicationCallItxnParams.md)
+`ApplicationCallItxnParams`
 
 ## Methods
 
 ### copy()
 
-> **copy**(): [`ApplicationCallItxnParams`](ApplicationCallItxnParams.md)
+> **copy**(): `ApplicationCallItxnParams`
 
-Defined in: [packages/algo-ts/src/itxn.ts:1056](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L1056)
+Defined in: [packages/algo-ts/src/itxn.ts:1144](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L1144)
+
+Return a copy of this ApplicationCallItxnParams object
 
 #### Returns
 
-[`ApplicationCallItxnParams`](ApplicationCallItxnParams.md)
+`ApplicationCallItxnParams`
 
 ***
 
@@ -36,7 +40,9 @@ Defined in: [packages/algo-ts/src/itxn.ts:1056](https://github.com/algorandfound
 
 > **set**(`fields`): `void`
 
-Defined in: [packages/algo-ts/src/itxn.ts:1053](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L1053)
+Defined in: [packages/algo-ts/src/itxn.ts:1138](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L1138)
+
+Update one or more fields in this ApplicationCallItxnParams object
 
 #### Parameters
 
@@ -54,7 +60,9 @@ Defined in: [packages/algo-ts/src/itxn.ts:1053](https://github.com/algorandfound
 
 > **submit**(): [`ApplicationCallInnerTxn`](../interfaces/ApplicationCallInnerTxn.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:1050](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L1050)
+Defined in: [packages/algo-ts/src/itxn.ts:1132](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L1132)
+
+Submit an itxn with these fields and return the ApplicationCallInnerTxn result
 
 #### Returns
 

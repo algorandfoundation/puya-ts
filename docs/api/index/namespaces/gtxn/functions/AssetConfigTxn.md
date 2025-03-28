@@ -19,6 +19,8 @@ Verifies the txn type is 'acfg'
 
 [`uint64`](../../../type-aliases/uint64.md)
 
+The index of the txn in the group
+
 ## Returns
 
 [`AssetConfigTxn`](../interfaces/AssetConfigTxn.md)

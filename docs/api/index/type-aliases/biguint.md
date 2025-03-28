@@ -6,7 +6,7 @@
 
 # Type Alias: biguint
 
-> **biguint**: `object` & `bigint`
+> **biguint** = `object` & `bigint`
 
 Defined in: [packages/algo-ts/src/primitives.ts:59](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L59)
 

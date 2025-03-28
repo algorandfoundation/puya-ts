@@ -14,14 +14,12 @@
 ## Interfaces
 
 - [ClassMethodDecoratorContext](interfaces/ClassMethodDecoratorContext.md)
-- [IterableIterator](interfaces/IterableIterator.md)
 
 ## Type Aliases
 
 - [AnyFunction](type-aliases/AnyFunction.md)
 - [BigUintBitSize](type-aliases/BigUintBitSize.md)
 - [CompatForArc4Int](type-aliases/CompatForArc4Int.md)
-- [ConstructorFor](type-aliases/ConstructorFor.md)
 - [Exclude](type-aliases/Exclude.md)
 - [InstanceMethod](type-aliases/InstanceMethod.md)
 - [NativeForArc4Int](type-aliases/NativeForArc4Int.md)

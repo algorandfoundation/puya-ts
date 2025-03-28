@@ -8,7 +8,7 @@
 
 > **KeyRegistrationTxn**(`n`): [`KeyRegistrationTxn`](../interfaces/KeyRegistrationTxn.md)
 
-Defined in: [packages/algo-ts/src/gtxn.ts:600](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L600)
+Defined in: [packages/algo-ts/src/gtxn.ts:599](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L599)
 
 Get the nth transaction in the group
 Verifies the txn type is 'keyreg'
@@ -18,6 +18,8 @@ Verifies the txn type is 'keyreg'
 ### n
 
 [`uint64`](../../../type-aliases/uint64.md)
+
+The index of the txn in the group
 
 ## Returns
 

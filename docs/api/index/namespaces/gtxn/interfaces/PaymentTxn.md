@@ -6,7 +6,7 @@
 
 # Interface: PaymentTxn
 
-Defined in: [packages/algo-ts/src/gtxn.ts:593](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L593)
+Defined in: [packages/algo-ts/src/gtxn.ts:591](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L591)
 
 A group transaction of type 'pay'
 

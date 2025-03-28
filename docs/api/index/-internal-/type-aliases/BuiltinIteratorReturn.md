@@ -6,7 +6,7 @@
 
 # Type Alias: BuiltinIteratorReturn
 
-> **BuiltinIteratorReturn**: `intrinsic`
+> **BuiltinIteratorReturn** = `intrinsic`
 
 Defined in: node\_modules/typescript/lib/lib.es2015.iterable.d.ts:70
 
