@@ -1,4 +1,3 @@
-import upath from 'upath'
 import type { Connection, Diagnostic } from 'vscode-languageserver'
 import { DiagnosticSeverity } from 'vscode-languageserver'
 import type { TextDocument } from 'vscode-languageserver-textdocument'
@@ -76,16 +75,34 @@ export async function getWorkspaceDiagnostics(
     connection.console.debug(`Parsing ${workspaceFolder}`)
 
     const files = prepareFiles(workspaceFolder, documents)
+
+    connection.console.debug(`Found ${files.length} files`)
+    files.forEach((f) => {
+      connection.console.debug(`${f.sourceFile}`)
+    })
+
     const logEvents = await compileAndExtractLogs(files)
 
-    return files.reduce((acc, file) => {
+    connection.console.debug(`Found ${logEvents.length} log events`)
+    logEvents.forEach((e) => {
+      connection.console.debug(`${e.sourceLocation.file}:${e.sourceLocation.line}:${e.sourceLocation.column} - ${e.message}`)
+    })
+
+    const diagnosticsMap = files.reduce((acc, file) => {
       const diagnostics = logEvents.filter((e) => e.sourceLocation.file === file.sourceFile).map(mapToDiagnostic)
-      acc.set(
-        URI.file(upath.isAbsolute(file.sourceFile) ? file.sourceFile : upath.join(workspaceFolder, file.sourceFile)).toString(),
-        diagnostics,
-      )
+      acc.set(URI.file(file.sourceFile).toString(), diagnostics)
       return acc
     }, new Map<string, Diagnostic[]>())
+
+    connection.console.debug(`Found ${diagnosticsMap.size} diagnostics`)
+    for (const [uri, diagnostics] of diagnosticsMap.entries()) {
+      connection.console.debug(`${uri}`)
+      diagnostics.forEach((d) => {
+        connection.console.debug(`${d.source}:${d.range.start.line}:${d.range.start.character} - ${d.message}`)
+      })
+    }
+
+    return diagnosticsMap
   } catch (error) {
     connection.console.error(`Failed to compile: ${JSON.stringify(error)}`)
     return new Map()
