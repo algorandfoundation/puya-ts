@@ -1,13 +1,26 @@
 {
   "$schema": "https://typedoc.org/schema.json",
-  "entryPoints": ["./packages/algo-ts/src/index.ts", "./packages/algo-ts/src/op.ts", "./packages/algo-ts/src/arc4/index.ts"],
+  "entryPoints": [
+    "./packages/algo-ts/src/index.ts",
+    "./packages/algo-ts/src/op.ts",
+    "./packages/algo-ts/src/itxn.ts",
+    "./packages/algo-ts/src/gtxn.ts",
+    "./packages/algo-ts/src/arc4/index.ts"
+  ],
   "exclude": ["./packages/algo-ts/src/internal.ts"],
-  "out": "docs/api",
-  "plugin": ["typedoc-plugin-markdown", "typedoc-plugin-missing-exports"],
+  "outputs": [
+    {
+      "name": "html",
+      "path": "docs/_build"
+    }
+  ],
+  "projectDocuments": ["docs/language-guide.md", "docs/cli.md", "docs/reference.md"],
+  "plugin": ["typedoc-plugin-missing-exports"],
+  "name": "Algorand TypeScript",
   "cleanOutputDir": true,
   "excludeReferences": true,
   "includeHierarchySummary": false,
-  "readme": "none",
+  "readme": "docs/readme.md",
   "gitRevision": "main",
   "validation": {
     "notDocumented": true
