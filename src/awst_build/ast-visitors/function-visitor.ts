@@ -12,8 +12,9 @@ import type { Statements } from '../../visitor/syntax-names'
 import { getNodeName } from '../../visitor/syntax-names'
 import type { Visitor } from '../../visitor/visitor'
 import { accept } from '../../visitor/visitor'
-import type { InstanceBuilder } from '../eb'
+import type { InstanceBuilder, NodeBuilder } from '../eb'
 import { BuilderComparisonOp } from '../eb'
+import { ArrowFunctionBuilder } from '../eb/arrow-function-builder'
 import { ArrayLiteralExpressionBuilder } from '../eb/literal/array-literal-expression-builder'
 import { ObjectLiteralExpressionBuilder } from '../eb/literal/object-literal-expression-builder'
 import { NativeArrayExpressionBuilder } from '../eb/native-array-expression-builder'
@@ -32,14 +33,14 @@ export abstract class FunctionVisitor
   extends BaseVisitor
   implements
     Visitor<ts.ParameterDeclaration, awst.SubroutineArgument>,
-    Visitor<ts.Block | ts.ConciseBody, awst.Block>,
+    Visitor<ts.Block, awst.Block>,
     Visitor<Statements, awst.Statement | awst.Statement[]>
 {
   protected accept = <TNode extends ts.Node>(node: TNode) => accept<FunctionVisitor, TNode>(this, node)
 
   protected readonly _functionType: FunctionPType
 
-  constructor(protected readonly node: ts.MethodDeclaration | ts.FunctionDeclaration | ts.ConstructorDeclaration | ts.ArrowFunction) {
+  constructor(protected readonly node: ts.MethodDeclaration | ts.FunctionDeclaration | ts.ConstructorDeclaration) {
     super()
     const type = this.context.getPTypeForNode(node)
     invariant(type instanceof FunctionPType, 'type of function must be FunctionPType')
@@ -207,6 +208,26 @@ export abstract class FunctionVisitor
 
   visitVariableStatement(node: ts.VariableStatement): awst.Statement | awst.Statement[] {
     return this.accept(node.declarationList)
+  }
+
+  visitArrowFunction(node: ts.ArrowFunction): NodeBuilder {
+    const ptype = this.context.getPTypeForNode(node)
+    codeInvariant(ptype instanceof FunctionPType, 'TODO')
+
+    const params = node.parameters.map((p) => this.accept(p))
+
+    const body = ts.isExpression(node.body) ? requireInstanceBuilder(this.accept(node.body)).resolve() : this.accept(node.body)
+
+    return new ArrowFunctionBuilder(
+      {
+        parameters: params.map((p) => ({
+          ...p,
+        })),
+        body,
+        sourceLocation: this.sourceLocation(node),
+      },
+      ptype,
+    )
   }
 
   visitForStatement(node: ts.ForStatement): awst.Statement | awst.Statement[] {
@@ -471,41 +492,15 @@ export abstract class FunctionVisitor
     )
   }
 
-  visitConciseBody(node: ts.ConciseBody): awst.Block {
-    if (ts.isExpression(node)) {
-      return nodeFactory.block(
-        {
-          sourceLocation: this.sourceLocation(node),
-        },
-        nodeFactory.expressionStatement({ expr: this.accept(node) }),
-      )
-    }
-
-    return nodeFactory.block(
-      {
-        sourceLocation: this.sourceLocation(node),
-      },
-      node.statements.flatMap((s) => {
-        try {
-          return this.accept(s)
-        } catch (e) {
-          invariant(e instanceof Error, 'Only errors should be thrown')
-          logger.error(e)
-          return []
-        }
-      }),
-    )
-  }
-
   visitParameter(node: ts.ParameterDeclaration): awst.SubroutineArgument {
     const sourceLocation = this.sourceLocation(node)
-    codeInvariant(node.type, 'Parameters must have type annotation', sourceLocation)
+
     codeInvariant(!node.dotDotDotToken, 'Rest parameters are not supported', sourceLocation)
     codeInvariant(!node.questionToken, 'Optional parameters are not supported', sourceLocation)
     if (node.initializer) {
       logger.warn(sourceLocation, 'TODO: Default parameter values')
     }
-    const paramPType = this.context.getPTypeForNode(node.type)
+    const paramPType = this.context.getPTypeForNode(node)
 
     if (ts.isIdentifier(node.name)) {
       return nodeFactory.subroutineArgument({

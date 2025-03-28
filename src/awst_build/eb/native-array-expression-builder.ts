@@ -146,6 +146,17 @@ class ForEachFunctionBuilder extends FunctionBuilder {
   }
 
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    const {
+      args: [arrowFunction],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 0,
+      argSpec: (a) => [a.passthrough()],
+      callLocation: sourceLocation,
+      funcName: 'forEach',
+    })
+
     throw new NotSupportedForEach({ sourceLocation })
   }
 }
