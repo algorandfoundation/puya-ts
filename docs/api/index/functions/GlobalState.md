@@ -14,7 +14,9 @@ Creates a new proxy for manipulating a global state field
 
 ## Type Parameters
 
-• **ValueType**
+### ValueType
+
+`ValueType`
 
 The type of the value being stored - must be a serializable type
 

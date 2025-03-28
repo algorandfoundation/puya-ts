@@ -6,7 +6,7 @@
 
 # Type Alias: TypedApplicationCallFields\<TArgs\>
 
-> **TypedApplicationCallFields**\<`TArgs`\>: [`Omit`](../-internal-/type-aliases/Omit.md)\<[`ApplicationCallFields`](../../index/namespaces/itxn/interfaces/ApplicationCallFields.md), `"appArgs"`\> & `TArgs` *extends* \[\] ? `object` : `object`
+> **TypedApplicationCallFields**\<`TArgs`\> = [`Omit`](../-internal-/type-aliases/Omit.md)\<[`ApplicationCallFields`](../../index/namespaces/itxn/interfaces/ApplicationCallFields.md), `"appArgs"`\> & `TArgs` *extends* \[\] ? `object` : `object`
 
 Defined in: [packages/algo-ts/src/arc4/c2c.ts:57](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/c2c.ts#L57)
 
@@ -15,4 +15,6 @@ given application call.
 
 ## Type Parameters
 
-• **TArgs**
+### TArgs
+
+`TArgs`

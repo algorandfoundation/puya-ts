@@ -10,11 +10,17 @@ Defined in: node\_modules/typescript/lib/lib.es2015.iterable.d.ts:48
 
 ## Type Parameters
 
-• **T**
+### T
 
-• **TReturn** = `any`
+`T`
 
-• **TNext** = `any`
+### TReturn
+
+`TReturn` = `any`
+
+### TNext
+
+`TNext` = `any`
 
 ## Methods
 

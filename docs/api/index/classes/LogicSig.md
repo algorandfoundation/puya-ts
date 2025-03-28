@@ -12,13 +12,13 @@ Base class for Algorand TypeScript Logic Signatures (also known as Smart Signatu
 
 ## Constructors
 
-### new LogicSig()
+### Constructor
 
-> **new LogicSig**(): [`LogicSig`](LogicSig.md)
+> **new LogicSig**(): `LogicSig`
 
 #### Returns
 
-[`LogicSig`](LogicSig.md)
+`LogicSig`
 
 ## Methods
 

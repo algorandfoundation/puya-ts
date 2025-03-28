@@ -6,7 +6,7 @@
 
 # Type Alias: ContractProxyMethod\<TMethod\>
 
-> **ContractProxyMethod**\<`TMethod`\>: `TMethod` *extends* (...`args`) => infer TReturn ? (`fields`?) => [`TypedApplicationCallResponse`](TypedApplicationCallResponse.md)\<`TReturn`\> : `never`
+> **ContractProxyMethod**\<`TMethod`\> = `TMethod` *extends* (...`args`) => infer TReturn ? (`fields`?) => [`TypedApplicationCallResponse`](TypedApplicationCallResponse.md)\<`TReturn`\> : `never`
 
 Defined in: [packages/algo-ts/src/arc4/c2c.ts:70](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/c2c.ts#L70)
 
@@ -14,4 +14,6 @@ Conditional type which maps an ABI method to a factory method for constructing a
 
 ## Type Parameters
 
-• **TMethod**
+### TMethod
+
+`TMethod`

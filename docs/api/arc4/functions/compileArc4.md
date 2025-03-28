@@ -14,13 +14,15 @@ Pre compile the target ARC4 contract and return a proxy object for constructing 
 
 ## Type Parameters
 
-• **TContract** *extends* [`Contract`](../classes/Contract.md)
+### TContract
+
+`TContract` *extends* [`Contract`](../classes/Contract.md)
 
 ## Parameters
 
 ### contract
 
-[`ConstructorFor`](../-internal-/type-aliases/ConstructorFor.md)\<`TContract`\>
+[`ConstructorFor`](../../index/-internal-/type-aliases/ConstructorFor.md)\<`TContract`\>
 
 An ARC4 contract class
 

@@ -8,7 +8,7 @@
 
 ## Call Signature
 
-> **urange**(`stop`): [`IterableIterator`](../../arc4/-internal-/interfaces/IterableIterator.md)\<[`uint64`](../type-aliases/uint64.md)\>
+> **urange**(`stop`): [`IterableIterator`](../-internal-/interfaces/IterableIterator.md)\<[`uint64`](../type-aliases/uint64.md)\>
 
 Defined in: [packages/algo-ts/src/util.ts:138](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L138)
 
@@ -24,11 +24,11 @@ The stop number of the sequence
 
 ### Returns
 
-[`IterableIterator`](../../arc4/-internal-/interfaces/IterableIterator.md)\<[`uint64`](../type-aliases/uint64.md)\>
+[`IterableIterator`](../-internal-/interfaces/IterableIterator.md)\<[`uint64`](../type-aliases/uint64.md)\>
 
 ## Call Signature
 
-> **urange**(`start`, `stop`): [`IterableIterator`](../../arc4/-internal-/interfaces/IterableIterator.md)\<[`uint64`](../type-aliases/uint64.md)\>
+> **urange**(`start`, `stop`): [`IterableIterator`](../-internal-/interfaces/IterableIterator.md)\<[`uint64`](../type-aliases/uint64.md)\>
 
 Defined in: [packages/algo-ts/src/util.ts:144](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L144)
 
@@ -50,11 +50,11 @@ The stop number of the sequence
 
 ### Returns
 
-[`IterableIterator`](../../arc4/-internal-/interfaces/IterableIterator.md)\<[`uint64`](../type-aliases/uint64.md)\>
+[`IterableIterator`](../-internal-/interfaces/IterableIterator.md)\<[`uint64`](../type-aliases/uint64.md)\>
 
 ## Call Signature
 
-> **urange**(`start`, `stop`, `step`): [`IterableIterator`](../../arc4/-internal-/interfaces/IterableIterator.md)\<[`uint64`](../type-aliases/uint64.md)\>
+> **urange**(`start`, `stop`, `step`): [`IterableIterator`](../-internal-/interfaces/IterableIterator.md)\<[`uint64`](../type-aliases/uint64.md)\>
 
 Defined in: [packages/algo-ts/src/util.ts:151](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L151)
 
@@ -82,4 +82,4 @@ The step size of the sequence
 
 ### Returns
 
-[`IterableIterator`](../../arc4/-internal-/interfaces/IterableIterator.md)\<[`uint64`](../type-aliases/uint64.md)\>
+[`IterableIterator`](../-internal-/interfaces/IterableIterator.md)\<[`uint64`](../type-aliases/uint64.md)\>

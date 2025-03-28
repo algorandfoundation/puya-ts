@@ -16,7 +16,9 @@ The final variable name will be `prefix + variableName`
 
 ## Type Parameters
 
-• **T**
+### T
+
+`T`
 
 ## Parameters
 

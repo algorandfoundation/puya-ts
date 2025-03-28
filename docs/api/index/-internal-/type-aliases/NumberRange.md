@@ -6,22 +6,24 @@
 
 # Type Alias: NumberRange
 
-> **NumberRange**: `object`
+> **NumberRange** = `object`
 
-Defined in: [packages/algo-ts/src/logic-sig.ts:17](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/logic-sig.ts#L17)
+Defined in: [packages/algo-ts/src/util.ts:159](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L159)
 
-Alias for a numeric range specification.
+Defines a numeric range including all numbers between from and to
 
-## Type declaration
+## Properties
 
 ### from
 
 > **from**: `number`
 
-The start point of the range (inclusive)
+Defined in: [packages/algo-ts/src/util.ts:159](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L159)
+
+***
 
 ### to
 
 > **to**: `number`
 
-The end point of the range (inclusive)
+Defined in: [packages/algo-ts/src/util.ts:159](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L159)

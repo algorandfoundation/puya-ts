@@ -6,17 +6,19 @@
 
 # Type Alias: LocalStateOptions
 
-> **LocalStateOptions**: `object`
+> **LocalStateOptions** = `object`
 
 Defined in: [packages/algo-ts/src/state.ts:79](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/state.ts#L79)
 
 Options for declaring a local state field
 
-## Type declaration
+## Properties
 
 ### key?
 
 > `optional` **key**: [`bytes`](bytes.md) \| `string`
+
+Defined in: [packages/algo-ts/src/state.ts:85](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/state.ts#L85)
 
 The key to be used for this local state field.
 

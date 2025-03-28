@@ -12,7 +12,9 @@ Context provided to a class decorator.
 
 ## Type Parameters
 
-• **Class** *extends* (...`args`) => `any` = (...`args`) => `any`
+### Class
+
+`Class` *extends* (...`args`) => `any` = (...`args`) => `any`
 
 The type of the decorated class associated with this context.
 

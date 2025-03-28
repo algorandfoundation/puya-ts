@@ -16,9 +16,9 @@ A utf8 encoded string prefixed with its length expressed as a 2 byte uint
 
 ## Constructors
 
-### new Str()
+### Constructor
 
-> **new Str**(`s`?): [`Str`](Str.md)
+> **new Str**(`s`?): `Str`
 
 Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:113](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L113)
 
@@ -34,11 +34,11 @@ The native string to initialize this Str from
 
 #### Returns
 
-[`Str`](Str.md)
+`Str`
 
 #### Overrides
 
-[`ARC4Encoded`](ARC4Encoded.md).[`constructor`](ARC4Encoded.md#constructors)
+[`ARC4Encoded`](ARC4Encoded.md).[`constructor`](ARC4Encoded.md#constructor)
 
 ## Accessors
 

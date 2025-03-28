@@ -14,7 +14,9 @@ Declares the decorated method as an abimethod that is called when the first tran
 
 ## Type Parameters
 
-• **TContract** *extends* [`Contract`](../classes/Contract.md)
+### TContract
+
+`TContract` *extends* [`Contract`](../classes/Contract.md)
 
 the type of the contract this method is a part of
 
@@ -32,9 +34,13 @@ The config for this abi method
 
 ### Type Parameters
 
-• **TArgs** *extends* `any`[]
+#### TArgs
 
-• **TReturn**
+`TArgs` *extends* `any`[]
+
+#### TReturn
+
+`TReturn`
 
 ### Parameters
 

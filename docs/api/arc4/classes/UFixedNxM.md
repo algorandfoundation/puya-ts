@@ -16,15 +16,19 @@ A fixed bit size, fixed decimal unsigned value
 
 ## Type Parameters
 
-• **N** *extends* [`BitSize`](../type-aliases/BitSize.md)
+### N
 
-• **M** *extends* `number`
+`N` *extends* [`BitSize`](../type-aliases/BitSize.md)
+
+### M
+
+`M` *extends* `number`
 
 ## Constructors
 
-### new UFixedNxM()
+### Constructor
 
-> **new UFixedNxM**\<`N`, `M`\>(`v`?): [`UFixedNxM`](UFixedNxM.md)\<`N`, `M`\>
+> **new UFixedNxM**\<`N`, `M`\>(`v`): `UFixedNxM`\<`N`, `M`\>
 
 Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:194](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L194)
 
@@ -32,7 +36,7 @@ Create a new UFixedNxM value
 
 #### Parameters
 
-##### v?
+##### v
 
 `` `${number}.${number}` ``
 
@@ -40,11 +44,11 @@ A string representing the integer and fractional portion of the number
 
 #### Returns
 
-[`UFixedNxM`](UFixedNxM.md)\<`N`, `M`\>
+`UFixedNxM`\<`N`, `M`\>
 
 #### Overrides
 
-[`ARC4Encoded`](ARC4Encoded.md).[`constructor`](ARC4Encoded.md#constructors)
+[`ARC4Encoded`](ARC4Encoded.md).[`constructor`](ARC4Encoded.md#constructor)
 
 ## Accessors
 

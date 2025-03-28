@@ -10,7 +10,9 @@ Defined in: node\_modules/typescript/lib/lib.es5.d.ts:1315
 
 ## Type Parameters
 
-• **T**
+### T
+
+`T`
 
 ## Indexable
 

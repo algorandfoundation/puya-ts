@@ -6,7 +6,7 @@
 
 # Interface: ApplicationCallFields
 
-Defined in: [packages/algo-ts/src/itxn.ts:870](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L870)
+Defined in: [packages/algo-ts/src/itxn.ts:866](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L866)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [packages/algo-ts/src/itxn.ts:870](https://github.com/algorandfounda
 
 > `optional` **accounts**: readonly ([`bytes`](../../../type-aliases/bytes.md) \| [`Account`](../../../type-aliases/Account.md))[]
 
-Defined in: [packages/algo-ts/src/itxn.ts:950](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L950)
+Defined in: [packages/algo-ts/src/itxn.ts:946](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L946)
 
 Accounts listed in the ApplicationCall transaction
 
@@ -28,7 +28,7 @@ Index of the account to get
 
 > `optional` **appArgs**: readonly `unknown`[]
 
-Defined in: [packages/algo-ts/src/itxn.ts:945](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L945)
+Defined in: [packages/algo-ts/src/itxn.ts:941](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L941)
 
 Arguments passed to the application in the ApplicationCall transaction
 
@@ -42,7 +42,7 @@ Index of the arg to get
 
 > `optional` **appId**: [`uint64`](../../../type-aliases/uint64.md) \| [`Application`](../../../type-aliases/Application.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:906](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L906)
+Defined in: [packages/algo-ts/src/itxn.ts:902](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L902)
 
 ApplicationID from ApplicationCall transaction
 
@@ -52,7 +52,7 @@ ApplicationID from ApplicationCall transaction
 
 > `optional` **approvalProgram**: [`bytes`](../../../type-aliases/bytes.md) \| readonly [`bytes`](../../../type-aliases/bytes.md)[]
 
-Defined in: [packages/algo-ts/src/itxn.ts:935](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L935)
+Defined in: [packages/algo-ts/src/itxn.ts:931](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L931)
 
 All approval program pages
 
@@ -66,7 +66,7 @@ Index of the page to get
 
 > `optional` **apps**: readonly ([`uint64`](../../../type-aliases/uint64.md) \| [`Application`](../../../type-aliases/Application.md))[]
 
-Defined in: [packages/algo-ts/src/itxn.ts:960](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L960)
+Defined in: [packages/algo-ts/src/itxn.ts:956](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L956)
 
 Foreign Apps listed in the ApplicationCall transaction
 
@@ -80,7 +80,7 @@ Index of the application to get
 
 > `optional` **assets**: readonly ([`uint64`](../../../type-aliases/uint64.md) \| [`Asset`](../../../type-aliases/Asset.md))[]
 
-Defined in: [packages/algo-ts/src/itxn.ts:955](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L955)
+Defined in: [packages/algo-ts/src/itxn.ts:951](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L951)
 
 Foreign Assets listed in the ApplicationCall transaction
 
@@ -94,7 +94,7 @@ Index of the asset to get
 
 > `optional` **clearStateProgram**: [`bytes`](../../../type-aliases/bytes.md) \| readonly [`bytes`](../../../type-aliases/bytes.md)[]
 
-Defined in: [packages/algo-ts/src/itxn.ts:940](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L940)
+Defined in: [packages/algo-ts/src/itxn.ts:936](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L936)
 
 All clear state program pages
 
@@ -108,7 +108,7 @@ Index of the page to get
 
 > `optional` **extraProgramPages**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:930](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L930)
+Defined in: [packages/algo-ts/src/itxn.ts:926](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L926)
 
 Number of additional pages for each of the application's approval and clear state program
 
@@ -118,7 +118,7 @@ Number of additional pages for each of the application's approval and clear stat
 
 > `optional` **fee**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:878](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L878)
+Defined in: [packages/algo-ts/src/itxn.ts:874](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L874)
 
 microalgos
 
@@ -128,7 +128,7 @@ microalgos
 
 > `optional` **firstValid**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:882](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L882)
+Defined in: [packages/algo-ts/src/itxn.ts:878](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L878)
 
 round number
 
@@ -138,7 +138,7 @@ round number
 
 > `optional` **firstValidTime**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:886](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L886)
+Defined in: [packages/algo-ts/src/itxn.ts:882](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L882)
 
 UNIX timestamp of block before txn.FirstValid. Fails if negative
 
@@ -148,7 +148,7 @@ UNIX timestamp of block before txn.FirstValid. Fails if negative
 
 > `optional` **globalNumBytes**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:918](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L918)
+Defined in: [packages/algo-ts/src/itxn.ts:914](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L914)
 
 Number of global state byteslices this application makes use of.
 
@@ -158,7 +158,7 @@ Number of global state byteslices this application makes use of.
 
 > `optional` **globalNumUint**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:914](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L914)
+Defined in: [packages/algo-ts/src/itxn.ts:910](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L910)
 
 Number of global state integers this application makes use of.
 
@@ -168,7 +168,7 @@ Number of global state integers this application makes use of.
 
 > `optional` **lastValid**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:890](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L890)
+Defined in: [packages/algo-ts/src/itxn.ts:886](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L886)
 
 round number
 
@@ -178,7 +178,7 @@ round number
 
 > `optional` **lease**: [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:898](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L898)
+Defined in: [packages/algo-ts/src/itxn.ts:894](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L894)
 
 32 byte lease value
 
@@ -188,7 +188,7 @@ Defined in: [packages/algo-ts/src/itxn.ts:898](https://github.com/algorandfounda
 
 > `optional` **localNumBytes**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:926](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L926)
+Defined in: [packages/algo-ts/src/itxn.ts:922](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L922)
 
 Number of local state byteslices this application makes use of.
 
@@ -198,7 +198,7 @@ Number of local state byteslices this application makes use of.
 
 > `optional` **localNumUint**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:922](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L922)
+Defined in: [packages/algo-ts/src/itxn.ts:918](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L918)
 
 Number of local state integers this application makes use of.
 
@@ -208,7 +208,7 @@ Number of local state integers this application makes use of.
 
 > `optional` **note**: `string` \| [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:894](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L894)
+Defined in: [packages/algo-ts/src/itxn.ts:890](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L890)
 
 Any data up to 1024 bytes
 
@@ -218,7 +218,7 @@ Any data up to 1024 bytes
 
 > `optional` **onCompletion**: [`OnCompleteAction`](../../../enumerations/OnCompleteAction.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:910](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L910)
+Defined in: [packages/algo-ts/src/itxn.ts:906](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L906)
 
 ApplicationCall transaction on completion action
 
@@ -228,7 +228,7 @@ ApplicationCall transaction on completion action
 
 > `optional` **rekeyTo**: [`bytes`](../../../type-aliases/bytes.md) \| [`Account`](../../../type-aliases/Account.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:902](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L902)
+Defined in: [packages/algo-ts/src/itxn.ts:898](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L898)
 
 32 byte Sender's new AuthAddr
 
@@ -238,6 +238,6 @@ Defined in: [packages/algo-ts/src/itxn.ts:902](https://github.com/algorandfounda
 
 > `optional` **sender**: [`bytes`](../../../type-aliases/bytes.md) \| [`Account`](../../../type-aliases/Account.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:874](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L874)
+Defined in: [packages/algo-ts/src/itxn.ts:870](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L870)
 
 32 byte address

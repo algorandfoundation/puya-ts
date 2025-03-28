@@ -6,7 +6,7 @@
 
 # Interface: AssetFreezeTxn
 
-Defined in: [packages/algo-ts/src/gtxn.ts:621](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L621)
+Defined in: [packages/algo-ts/src/gtxn.ts:623](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L623)
 
 A group transaction of type 'afrz'
 

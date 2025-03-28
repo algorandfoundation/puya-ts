@@ -135,12 +135,6 @@ export const assetFreezeTxnFields = {
 export const applicationCallTxnFields = {
   ...baseTxnFields,
   appId: { field: TxnField.ApplicationID, ptype: applicationPType, comment: 'ApplicationID from ApplicationCall transaction' },
-  createdApplication: {
-    field: TxnField.CreatedApplicationID,
-    ptype: applicationPType,
-    comment: 'The application created by this transaction',
-    computed: true,
-  },
   onCompletion: {
     field: TxnField.OnCompletion,
     ptype: onCompleteActionType.memberType,

@@ -8,7 +8,9 @@
 
 > **assetConfig**(`fields`): [`AssetConfigItxnParams`](../classes/AssetConfigItxnParams.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:1018](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L1018)
+Defined in: [packages/algo-ts/src/itxn.ts:1064](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L1064)
+
+Create a new AssetConfigItxnParams object with the specified fields
 
 ## Parameters
 

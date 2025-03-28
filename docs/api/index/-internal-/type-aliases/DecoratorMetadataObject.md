@@ -6,6 +6,6 @@
 
 # Type Alias: DecoratorMetadataObject
 
-> **DecoratorMetadataObject**: [`Record`](Record.md)\<[`PropertyKey`](PropertyKey.md), `unknown`\> & `object`
+> **DecoratorMetadataObject** = [`Record`](Record.md)\<[`PropertyKey`](PropertyKey.md), `unknown`\> & `object`
 
 Defined in: node\_modules/typescript/lib/lib.decorators.d.ts:36

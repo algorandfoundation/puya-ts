@@ -6,7 +6,7 @@
 
 # Type Alias: OnCompleteActionStr
 
-> **OnCompleteActionStr**: `"NoOp"` \| `"OptIn"` \| `"ClearState"` \| `"CloseOut"` \| `"UpdateApplication"` \| `"DeleteApplication"`
+> **OnCompleteActionStr** = `"NoOp"` \| `"OptIn"` \| `"ClearState"` \| `"CloseOut"` \| `"UpdateApplication"` \| `"DeleteApplication"`
 
 Defined in: [packages/algo-ts/src/on-complete-action.ts:4](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/on-complete-action.ts#L4)
 

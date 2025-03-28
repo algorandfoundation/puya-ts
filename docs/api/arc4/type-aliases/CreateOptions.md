@@ -6,7 +6,7 @@
 
 # Type Alias: CreateOptions
 
-> **CreateOptions**: `"allow"` \| `"disallow"` \| `"require"`
+> **CreateOptions** = `"allow"` \| `"disallow"` \| `"require"`
 
 Defined in: [packages/algo-ts/src/arc4/index.ts:31](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L31)
 
