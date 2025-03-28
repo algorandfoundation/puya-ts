@@ -6,7 +6,7 @@
 
 # Type Alias: StructConstructor()
 
-> **StructConstructor**: \<`T`\>(`initial`) => [`StructBase`](../classes/StructBase.md)\<`T`\> & `T`
+> **StructConstructor** = \<`T`\>(`initial`) => [`StructBase`](../classes/StructBase.md)\<`T`\> & `T`
 
 Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:481](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L481)
 

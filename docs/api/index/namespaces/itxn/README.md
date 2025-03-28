@@ -32,7 +32,6 @@
 
 ## Type Aliases
 
-- [InnerTxnList](type-aliases/InnerTxnList.md)
 - [ItxnParams](type-aliases/ItxnParams.md)
 - [TxnFor](type-aliases/TxnFor.md)
 

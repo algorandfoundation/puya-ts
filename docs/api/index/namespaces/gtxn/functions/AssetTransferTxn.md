@@ -8,7 +8,7 @@
 
 > **AssetTransferTxn**(`n`): [`AssetTransferTxn`](../interfaces/AssetTransferTxn.md)
 
-Defined in: [packages/algo-ts/src/gtxn.ts:614](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L614)
+Defined in: [packages/algo-ts/src/gtxn.ts:615](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L615)
 
 Get the nth transaction in the group
 Verifies the txn type is 'axfer'
@@ -18,6 +18,8 @@ Verifies the txn type is 'axfer'
 ### n
 
 [`uint64`](../../../type-aliases/uint64.md)
+
+The index of the txn in the group
 
 ## Returns
 

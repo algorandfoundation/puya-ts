@@ -318,7 +318,9 @@ Determines whether all the members of an array satisfy the specified test.
 
 ##### Type Parameters
 
-• **S** *extends* `string`
+###### S
+
+`S` *extends* `string`
 
 ##### Parameters
 
@@ -392,7 +394,9 @@ Returns the elements of an array that meet the condition specified in a callback
 
 ##### Type Parameters
 
-• **S** *extends* `string`
+###### S
+
+`S` *extends* `string`
 
 ##### Parameters
 
@@ -461,7 +465,9 @@ otherwise.
 
 ##### Type Parameters
 
-• **S** *extends* `string`
+###### S
+
+`S` *extends* `string`
 
 ##### Parameters
 
@@ -563,7 +569,9 @@ otherwise.
 
 ##### Type Parameters
 
-• **S** *extends* `string`
+###### S
+
+`S` *extends* `string`
 
 ##### Parameters
 
@@ -663,9 +671,13 @@ specified depth.
 
 #### Type Parameters
 
-• **A**
+##### A
 
-• **D** *extends* `number` = `1`
+`A`
+
+##### D
+
+`D` *extends* `number` = `1`
 
 #### Parameters
 
@@ -701,9 +713,13 @@ This is identical to a map followed by flat with depth 1.
 
 #### Type Parameters
 
-• **U**
+##### U
 
-• **This** = `undefined`
+`U`
+
+##### This
+
+`This` = `undefined`
 
 #### Parameters
 
@@ -913,7 +929,9 @@ Calls a defined callback function on each element of an array, and returns an ar
 
 #### Type Parameters
 
-• **U**
+##### U
+
+`U`
 
 #### Parameters
 
@@ -999,7 +1017,9 @@ Calls the specified callback function for all the elements in an array. The retu
 
 ##### Type Parameters
 
-• **U**
+###### U
+
+`U`
 
 ##### Parameters
 
@@ -1085,7 +1105,9 @@ Calls the specified callback function for all the elements in an array, in desce
 
 ##### Type Parameters
 
-• **U**
+###### U
+
+`U`
 
 ##### Parameters
 

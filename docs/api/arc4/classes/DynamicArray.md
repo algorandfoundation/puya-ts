@@ -16,7 +16,9 @@ A dynamic sized array of arc4 items
 
 ## Type Parameters
 
-• **TItem** *extends* [`ARC4Encoded`](ARC4Encoded.md)
+### TItem
+
+`TItem` *extends* [`ARC4Encoded`](ARC4Encoded.md)
 
 The type of a single item in the array
 
@@ -26,9 +28,9 @@ The type of a single item in the array
 
 ## Constructors
 
-### new DynamicArray()
+### Constructor
 
-> **new DynamicArray**\<`TItem`\>(...`items`): [`DynamicArray`](DynamicArray.md)\<`TItem`\>
+> **new DynamicArray**\<`TItem`\>(...`items`): `DynamicArray`\<`TItem`\>
 
 Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:352](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L352)
 
@@ -44,11 +46,11 @@ The initial items for the array
 
 #### Returns
 
-[`DynamicArray`](DynamicArray.md)\<`TItem`\>
+`DynamicArray`\<`TItem`\>
 
 #### Overrides
 
-[`Arc4ArrayBase`](../-internal-/classes/Arc4ArrayBase.md).[`constructor`](../-internal-/classes/Arc4ArrayBase.md#constructors)
+[`Arc4ArrayBase`](../-internal-/classes/Arc4ArrayBase.md).[`constructor`](../-internal-/classes/Arc4ArrayBase.md#constructor)
 
 ## Accessors
 
@@ -94,7 +96,7 @@ Returns the current length of this array
 
 ### \[iterator\]()
 
-> **\[iterator\]**(): [`IterableIterator`](../-internal-/interfaces/IterableIterator.md)\<`TItem`\>
+> **\[iterator\]**(): [`IterableIterator`](../../index/-internal-/interfaces/IterableIterator.md)\<`TItem`\>
 
 Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:277](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L277)
 
@@ -102,7 +104,7 @@ Returns an iterator for the items in this array
 
 #### Returns
 
-[`IterableIterator`](../-internal-/interfaces/IterableIterator.md)\<`TItem`\>
+[`IterableIterator`](../../index/-internal-/interfaces/IterableIterator.md)\<`TItem`\>
 
 #### Inherited from
 
@@ -139,7 +141,7 @@ The index of the item to retrieve
 
 ### concat()
 
-> **concat**(`other`): [`DynamicArray`](DynamicArray.md)\<`TItem`\>
+> **concat**(`other`): `DynamicArray`\<`TItem`\>
 
 Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:382](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L382)
 
@@ -155,13 +157,13 @@ Another array to concat with this one
 
 #### Returns
 
-[`DynamicArray`](DynamicArray.md)\<`TItem`\>
+`DynamicArray`\<`TItem`\>
 
 ***
 
 ### copy()
 
-> **copy**(): [`DynamicArray`](DynamicArray.md)\<`TItem`\>
+> **copy**(): `DynamicArray`\<`TItem`\>
 
 Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:374](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L374)
 
@@ -169,13 +171,13 @@ Returns a copy of this array
 
 #### Returns
 
-[`DynamicArray`](DynamicArray.md)\<`TItem`\>
+`DynamicArray`\<`TItem`\>
 
 ***
 
 ### entries()
 
-> **entries**(): [`IterableIterator`](../-internal-/interfaces/IterableIterator.md)\<readonly \[[`uint64`](../../index/type-aliases/uint64.md), `TItem`\]\>
+> **entries**(): [`IterableIterator`](../../index/-internal-/interfaces/IterableIterator.md)\<readonly \[[`uint64`](../../index/type-aliases/uint64.md), `TItem`\]\>
 
 Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:284](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L284)
 
@@ -183,7 +185,7 @@ Returns an iterator for a tuple of the indexes and items in this array
 
 #### Returns
 
-[`IterableIterator`](../-internal-/interfaces/IterableIterator.md)\<readonly \[[`uint64`](../../index/type-aliases/uint64.md), `TItem`\]\>
+[`IterableIterator`](../../index/-internal-/interfaces/IterableIterator.md)\<readonly \[[`uint64`](../../index/type-aliases/uint64.md), `TItem`\]\>
 
 #### Inherited from
 
@@ -193,7 +195,7 @@ Returns an iterator for a tuple of the indexes and items in this array
 
 ### keys()
 
-> **keys**(): [`IterableIterator`](../-internal-/interfaces/IterableIterator.md)\<[`uint64`](../../index/type-aliases/uint64.md)\>
+> **keys**(): [`IterableIterator`](../../index/-internal-/interfaces/IterableIterator.md)\<[`uint64`](../../index/type-aliases/uint64.md)\>
 
 Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:291](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L291)
 
@@ -201,7 +203,7 @@ Returns an iterator for the indexes in this array
 
 #### Returns
 
-[`IterableIterator`](../-internal-/interfaces/IterableIterator.md)\<[`uint64`](../../index/type-aliases/uint64.md)\>
+[`IterableIterator`](../../index/-internal-/interfaces/IterableIterator.md)\<[`uint64`](../../index/type-aliases/uint64.md)\>
 
 #### Inherited from
 
@@ -249,7 +251,7 @@ The items to be added to this array
 
 #### Call Signature
 
-> **slice**(): [`DynamicArray`](DynamicArray.md)\<`TItem`\>
+> **slice**(): `DynamicArray`\<`TItem`\>
 
 Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:256](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L256)
 
@@ -259,7 +261,7 @@ Create a new Dynamic array with all items from this array
 
 ##### Returns
 
-[`DynamicArray`](DynamicArray.md)\<`TItem`\>
+`DynamicArray`\<`TItem`\>
 
 ##### Inherited from
 
@@ -267,7 +269,7 @@ Create a new Dynamic array with all items from this array
 
 #### Call Signature
 
-> **slice**(`end`): [`DynamicArray`](DynamicArray.md)\<`TItem`\>
+> **slice**(`end`): `DynamicArray`\<`TItem`\>
 
 Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:262](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L262)
 
@@ -286,7 +288,7 @@ An index in which to stop copying items.
 
 ##### Returns
 
-[`DynamicArray`](DynamicArray.md)\<`TItem`\>
+`DynamicArray`\<`TItem`\>
 
 ##### Inherited from
 
@@ -294,7 +296,7 @@ An index in which to stop copying items.
 
 #### Call Signature
 
-> **slice**(`start`, `end`): [`DynamicArray`](DynamicArray.md)\<`TItem`\>
+> **slice**(`start`, `end`): `DynamicArray`\<`TItem`\>
 
 Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:269](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L269)
 
@@ -319,7 +321,7 @@ An index in which to stop copying items
 
 ##### Returns
 
-[`DynamicArray`](DynamicArray.md)\<`TItem`\>
+`DynamicArray`\<`TItem`\>
 
 ##### Inherited from
 

@@ -6,29 +6,33 @@
 
 # Class: `abstract` AssetFreezeItxnParams
 
-Defined in: [packages/algo-ts/src/itxn.ts:1035](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L1035)
+Defined in: [packages/algo-ts/src/itxn.ts:1099](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L1099)
+
+Holds AssetFreeze fields which can be updated, cloned, or submitted.
 
 ## Constructors
 
-### new AssetFreezeItxnParams()
+### Constructor
 
-> **new AssetFreezeItxnParams**(): [`AssetFreezeItxnParams`](AssetFreezeItxnParams.md)
+> **new AssetFreezeItxnParams**(): `AssetFreezeItxnParams`
 
 #### Returns
 
-[`AssetFreezeItxnParams`](AssetFreezeItxnParams.md)
+`AssetFreezeItxnParams`
 
 ## Methods
 
 ### copy()
 
-> **copy**(): [`AssetFreezeItxnParams`](AssetFreezeItxnParams.md)
+> **copy**(): `AssetFreezeItxnParams`
 
-Defined in: [packages/algo-ts/src/itxn.ts:1042](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L1042)
+Defined in: [packages/algo-ts/src/itxn.ts:1115](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L1115)
+
+Return a copy of this AssetFreezeItxnParams object
 
 #### Returns
 
-[`AssetFreezeItxnParams`](AssetFreezeItxnParams.md)
+`AssetFreezeItxnParams`
 
 ***
 
@@ -36,7 +40,9 @@ Defined in: [packages/algo-ts/src/itxn.ts:1042](https://github.com/algorandfound
 
 > **set**(`fields`): `void`
 
-Defined in: [packages/algo-ts/src/itxn.ts:1039](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L1039)
+Defined in: [packages/algo-ts/src/itxn.ts:1109](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L1109)
+
+Update one or more fields in this AssetFreezeItxnParams object
 
 #### Parameters
 
@@ -54,7 +60,9 @@ Defined in: [packages/algo-ts/src/itxn.ts:1039](https://github.com/algorandfound
 
 > **submit**(): [`AssetFreezeInnerTxn`](../interfaces/AssetFreezeInnerTxn.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:1036](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L1036)
+Defined in: [packages/algo-ts/src/itxn.ts:1103](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L1103)
+
+Submit an itxn with these fields and return the AssetFreezeInnerTxn result
 
 #### Returns
 

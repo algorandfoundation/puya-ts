@@ -6,7 +6,7 @@
 
 # Interface: AssetFreezeFields
 
-Defined in: [packages/algo-ts/src/itxn.ts:824](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L824)
+Defined in: [packages/algo-ts/src/itxn.ts:820](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L820)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [packages/algo-ts/src/itxn.ts:824](https://github.com/algorandfounda
 
 > `optional` **fee**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:832](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L832)
+Defined in: [packages/algo-ts/src/itxn.ts:828](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L828)
 
 microalgos
 
@@ -24,7 +24,7 @@ microalgos
 
 > `optional` **firstValid**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:836](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L836)
+Defined in: [packages/algo-ts/src/itxn.ts:832](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L832)
 
 round number
 
@@ -34,7 +34,7 @@ round number
 
 > `optional` **firstValidTime**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:840](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L840)
+Defined in: [packages/algo-ts/src/itxn.ts:836](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L836)
 
 UNIX timestamp of block before txn.FirstValid. Fails if negative
 
@@ -44,7 +44,7 @@ UNIX timestamp of block before txn.FirstValid. Fails if negative
 
 > `optional` **freezeAccount**: [`bytes`](../../../type-aliases/bytes.md) \| [`Account`](../../../type-aliases/Account.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:864](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L864)
+Defined in: [packages/algo-ts/src/itxn.ts:860](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L860)
 
 32 byte address of the account whose asset slot is being frozen or un-frozen
 
@@ -54,7 +54,7 @@ Defined in: [packages/algo-ts/src/itxn.ts:864](https://github.com/algorandfounda
 
 > `optional` **freezeAsset**: [`uint64`](../../../type-aliases/uint64.md) \| [`Asset`](../../../type-aliases/Asset.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:860](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L860)
+Defined in: [packages/algo-ts/src/itxn.ts:856](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L856)
 
 Asset ID being frozen or un-frozen
 
@@ -64,7 +64,7 @@ Asset ID being frozen or un-frozen
 
 > `optional` **frozen**: `boolean`
 
-Defined in: [packages/algo-ts/src/itxn.ts:868](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L868)
+Defined in: [packages/algo-ts/src/itxn.ts:864](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L864)
 
 The new frozen value
 
@@ -74,7 +74,7 @@ The new frozen value
 
 > `optional` **lastValid**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:844](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L844)
+Defined in: [packages/algo-ts/src/itxn.ts:840](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L840)
 
 round number
 
@@ -84,7 +84,7 @@ round number
 
 > `optional` **lease**: [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:852](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L852)
+Defined in: [packages/algo-ts/src/itxn.ts:848](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L848)
 
 32 byte lease value
 
@@ -94,7 +94,7 @@ Defined in: [packages/algo-ts/src/itxn.ts:852](https://github.com/algorandfounda
 
 > `optional` **note**: `string` \| [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:848](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L848)
+Defined in: [packages/algo-ts/src/itxn.ts:844](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L844)
 
 Any data up to 1024 bytes
 
@@ -104,7 +104,7 @@ Any data up to 1024 bytes
 
 > `optional` **rekeyTo**: [`bytes`](../../../type-aliases/bytes.md) \| [`Account`](../../../type-aliases/Account.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:856](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L856)
+Defined in: [packages/algo-ts/src/itxn.ts:852](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L852)
 
 32 byte Sender's new AuthAddr
 
@@ -114,6 +114,6 @@ Defined in: [packages/algo-ts/src/itxn.ts:856](https://github.com/algorandfounda
 
 > `optional` **sender**: [`bytes`](../../../type-aliases/bytes.md) \| [`Account`](../../../type-aliases/Account.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:828](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L828)
+Defined in: [packages/algo-ts/src/itxn.ts:824](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L824)
 
 32 byte address

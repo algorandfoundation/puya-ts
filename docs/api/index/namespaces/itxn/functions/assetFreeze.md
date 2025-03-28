@@ -8,7 +8,9 @@
 
 > **assetFreeze**(`fields`): [`AssetFreezeItxnParams`](../classes/AssetFreezeItxnParams.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:1046](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L1046)
+Defined in: [packages/algo-ts/src/itxn.ts:1122](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L1122)
+
+Create a new AssetFreezeItxnParams object with the specified fields
 
 ## Parameters
 

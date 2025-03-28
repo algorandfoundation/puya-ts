@@ -6,29 +6,33 @@
 
 # Class: `abstract` KeyRegistrationItxnParams
 
-Defined in: [packages/algo-ts/src/itxn.ts:993](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L993)
+Defined in: [packages/algo-ts/src/itxn.ts:1012](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L1012)
+
+Holds KeyRegistration fields which can be updated, cloned, or submitted.
 
 ## Constructors
 
-### new KeyRegistrationItxnParams()
+### Constructor
 
-> **new KeyRegistrationItxnParams**(): [`KeyRegistrationItxnParams`](KeyRegistrationItxnParams.md)
+> **new KeyRegistrationItxnParams**(): `KeyRegistrationItxnParams`
 
 #### Returns
 
-[`KeyRegistrationItxnParams`](KeyRegistrationItxnParams.md)
+`KeyRegistrationItxnParams`
 
 ## Methods
 
 ### copy()
 
-> **copy**(): [`KeyRegistrationItxnParams`](KeyRegistrationItxnParams.md)
+> **copy**(): `KeyRegistrationItxnParams`
 
-Defined in: [packages/algo-ts/src/itxn.ts:1000](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L1000)
+Defined in: [packages/algo-ts/src/itxn.ts:1028](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L1028)
+
+Return a copy of this KeyRegistrationItxnParams object
 
 #### Returns
 
-[`KeyRegistrationItxnParams`](KeyRegistrationItxnParams.md)
+`KeyRegistrationItxnParams`
 
 ***
 
@@ -36,7 +40,9 @@ Defined in: [packages/algo-ts/src/itxn.ts:1000](https://github.com/algorandfound
 
 > **set**(`fields`): `void`
 
-Defined in: [packages/algo-ts/src/itxn.ts:997](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L997)
+Defined in: [packages/algo-ts/src/itxn.ts:1022](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L1022)
+
+Update one or more fields in this KeyRegistrationItxnParams object
 
 #### Parameters
 
@@ -54,7 +60,9 @@ Defined in: [packages/algo-ts/src/itxn.ts:997](https://github.com/algorandfounda
 
 > **submit**(): [`KeyRegistrationInnerTxn`](../interfaces/KeyRegistrationInnerTxn.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:994](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L994)
+Defined in: [packages/algo-ts/src/itxn.ts:1016](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L1016)
+
+Submit an itxn with these fields and return the KeyRegistrationInnerTxn result
 
 #### Returns
 

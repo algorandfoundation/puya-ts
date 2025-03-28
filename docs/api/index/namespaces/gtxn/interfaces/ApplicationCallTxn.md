@@ -6,7 +6,7 @@
 
 # Interface: ApplicationCallTxn
 
-Defined in: [packages/algo-ts/src/gtxn.ts:628](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L628)
+Defined in: [packages/algo-ts/src/gtxn.ts:631](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L631)
 
 A group transaction of type 'appl'
 
@@ -28,7 +28,7 @@ ApplicationID from ApplicationCall transaction
 
 > `readonly` **approvalProgram**: [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/gtxn.ts:490](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L490)
+Defined in: [packages/algo-ts/src/gtxn.ts:486](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L486)
 
 The first page of the Approval program
 
@@ -38,7 +38,7 @@ The first page of the Approval program
 
 > `readonly` **clearStateProgram**: [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/gtxn.ts:494](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L494)
+Defined in: [packages/algo-ts/src/gtxn.ts:490](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L490)
 
 The first page of the Clear State program
 
@@ -48,19 +48,9 @@ The first page of the Clear State program
 
 > `readonly` **createdApp**: [`Application`](../../../type-aliases/Application.md)
 
-Defined in: [packages/algo-ts/src/gtxn.ts:573](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L573)
+Defined in: [packages/algo-ts/src/gtxn.ts:569](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L569)
 
 The id of the created application
-
-***
-
-### createdApplication
-
-> `readonly` **createdApplication**: [`Application`](../../../type-aliases/Application.md)
-
-Defined in: [packages/algo-ts/src/gtxn.ts:474](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L474)
-
-The application created by this transaction
 
 ***
 
@@ -68,7 +58,7 @@ The application created by this transaction
 
 > `readonly` **extraProgramPages**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/gtxn.ts:522](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L522)
+Defined in: [packages/algo-ts/src/gtxn.ts:518](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L518)
 
 Number of additional pages for each of the application's approval and clear state program
 
@@ -108,7 +98,7 @@ UNIX timestamp of block before txn.FirstValid. Fails if negative
 
 > `readonly` **globalNumBytes**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/gtxn.ts:510](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L510)
+Defined in: [packages/algo-ts/src/gtxn.ts:506](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L506)
 
 Number of global state byteslices this application makes use of.
 
@@ -118,7 +108,7 @@ Number of global state byteslices this application makes use of.
 
 > `readonly` **globalNumUint**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/gtxn.ts:506](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L506)
+Defined in: [packages/algo-ts/src/gtxn.ts:502](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L502)
 
 Number of global state integers this application makes use of.
 
@@ -139,7 +129,7 @@ A stand-alone transaction is implicitly element 0 in a group of 1
 
 > `readonly` **lastLog**: [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/gtxn.ts:526](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L526)
+Defined in: [packages/algo-ts/src/gtxn.ts:522](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L522)
 
 The last message emitted. Empty bytes if none were emitted. App mode only
 
@@ -169,7 +159,7 @@ Defined in: [packages/algo-ts/src/gtxn.ts:445](https://github.com/algorandfounda
 
 > `readonly` **localNumBytes**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/gtxn.ts:518](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L518)
+Defined in: [packages/algo-ts/src/gtxn.ts:514](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L514)
 
 Number of local state byteslices this application makes use of.
 
@@ -179,7 +169,7 @@ Number of local state byteslices this application makes use of.
 
 > `readonly` **localNumUint**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/gtxn.ts:514](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L514)
+Defined in: [packages/algo-ts/src/gtxn.ts:510](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L510)
 
 Number of local state integers this application makes use of.
 
@@ -199,7 +189,7 @@ Any data up to 1024 bytes
 
 > `readonly` **numAccounts**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/gtxn.ts:486](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L486)
+Defined in: [packages/algo-ts/src/gtxn.ts:482](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L482)
 
 Number of ApplicationArgs
 
@@ -209,7 +199,7 @@ Number of ApplicationArgs
 
 > `readonly` **numAppArgs**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/gtxn.ts:482](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L482)
+Defined in: [packages/algo-ts/src/gtxn.ts:478](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L478)
 
 Number of ApplicationArgs
 
@@ -219,7 +209,7 @@ Number of ApplicationArgs
 
 > `readonly` **numApprovalProgramPages**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/gtxn.ts:535](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L535)
+Defined in: [packages/algo-ts/src/gtxn.ts:531](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L531)
 
 Number of Approval Program pages
 
@@ -229,7 +219,7 @@ Number of Approval Program pages
 
 > `readonly` **numApps**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/gtxn.ts:502](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L502)
+Defined in: [packages/algo-ts/src/gtxn.ts:498](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L498)
 
 Number of Applications
 
@@ -239,7 +229,7 @@ Number of Applications
 
 > `readonly` **numAssets**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/gtxn.ts:498](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L498)
+Defined in: [packages/algo-ts/src/gtxn.ts:494](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L494)
 
 Number of Assets
 
@@ -249,7 +239,7 @@ Number of Assets
 
 > `readonly` **numClearStateProgramPages**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/gtxn.ts:544](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L544)
+Defined in: [packages/algo-ts/src/gtxn.ts:540](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L540)
 
 Number of Clear State Program pages
 
@@ -259,7 +249,7 @@ Number of Clear State Program pages
 
 > `readonly` **numLogs**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/gtxn.ts:577](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L577)
+Defined in: [packages/algo-ts/src/gtxn.ts:573](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L573)
 
 Number of logs
 
@@ -269,7 +259,7 @@ Number of logs
 
 > `readonly` **onCompletion**: [`OnCompleteAction`](../../../enumerations/OnCompleteAction.md)
 
-Defined in: [packages/algo-ts/src/gtxn.ts:478](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L478)
+Defined in: [packages/algo-ts/src/gtxn.ts:474](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L474)
 
 ApplicationCall transaction on completion action
 
@@ -329,7 +319,7 @@ Transaction type as bytes
 
 > **accounts**(`index`): [`Account`](../../../type-aliases/Account.md)
 
-Defined in: [packages/algo-ts/src/gtxn.ts:559](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L559)
+Defined in: [packages/algo-ts/src/gtxn.ts:555](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L555)
 
 Accounts listed in the ApplicationCall transaction
 
@@ -351,7 +341,7 @@ Index of the account to get
 
 > **appArgs**(`index`): [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/gtxn.ts:554](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L554)
+Defined in: [packages/algo-ts/src/gtxn.ts:550](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L550)
 
 Arguments passed to the application in the ApplicationCall transaction
 
@@ -373,7 +363,7 @@ Index of the arg to get
 
 > **approvalProgramPages**(`index`): [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/gtxn.ts:540](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L540)
+Defined in: [packages/algo-ts/src/gtxn.ts:536](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L536)
 
 All approval program pages
 
@@ -395,7 +385,7 @@ Index of the page to get
 
 > **apps**(`index`): [`Application`](../../../type-aliases/Application.md)
 
-Defined in: [packages/algo-ts/src/gtxn.ts:569](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L569)
+Defined in: [packages/algo-ts/src/gtxn.ts:565](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L565)
 
 Foreign Apps listed in the ApplicationCall transaction
 
@@ -417,7 +407,7 @@ Index of the application to get
 
 > **assets**(`index`): [`Asset`](../../../type-aliases/Asset.md)
 
-Defined in: [packages/algo-ts/src/gtxn.ts:564](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L564)
+Defined in: [packages/algo-ts/src/gtxn.ts:560](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L560)
 
 Foreign Assets listed in the ApplicationCall transaction
 
@@ -439,7 +429,7 @@ Index of the asset to get
 
 > **clearStateProgramPages**(`index`): [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/gtxn.ts:549](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L549)
+Defined in: [packages/algo-ts/src/gtxn.ts:545](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L545)
 
 All clear state program pages
 
@@ -461,7 +451,7 @@ Index of the page to get
 
 > **logs**(`index`): [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/gtxn.ts:531](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L531)
+Defined in: [packages/algo-ts/src/gtxn.ts:527](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L527)
 
 Read application logs
 

@@ -14,7 +14,9 @@ Interpret the provided bytes as an ARC4 encoded type with no validation
 
 ## Type Parameters
 
-• **T** *extends* [`ARC4Encoded`](../classes/ARC4Encoded.md)
+### T
+
+`T` *extends* [`ARC4Encoded`](../classes/ARC4Encoded.md)
 
 ## Parameters
 

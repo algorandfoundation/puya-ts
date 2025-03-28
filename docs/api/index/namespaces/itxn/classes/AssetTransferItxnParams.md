@@ -6,29 +6,33 @@
 
 # Class: `abstract` AssetTransferItxnParams
 
-Defined in: [packages/algo-ts/src/itxn.ts:1021](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L1021)
+Defined in: [packages/algo-ts/src/itxn.ts:1070](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L1070)
+
+Holds AssetTransfer fields which can be updated, cloned, or submitted.
 
 ## Constructors
 
-### new AssetTransferItxnParams()
+### Constructor
 
-> **new AssetTransferItxnParams**(): [`AssetTransferItxnParams`](AssetTransferItxnParams.md)
+> **new AssetTransferItxnParams**(): `AssetTransferItxnParams`
 
 #### Returns
 
-[`AssetTransferItxnParams`](AssetTransferItxnParams.md)
+`AssetTransferItxnParams`
 
 ## Methods
 
 ### copy()
 
-> **copy**(): [`AssetTransferItxnParams`](AssetTransferItxnParams.md)
+> **copy**(): `AssetTransferItxnParams`
 
-Defined in: [packages/algo-ts/src/itxn.ts:1028](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L1028)
+Defined in: [packages/algo-ts/src/itxn.ts:1086](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L1086)
+
+Return a copy of this AssetTransferItxnParams object
 
 #### Returns
 
-[`AssetTransferItxnParams`](AssetTransferItxnParams.md)
+`AssetTransferItxnParams`
 
 ***
 
@@ -36,7 +40,9 @@ Defined in: [packages/algo-ts/src/itxn.ts:1028](https://github.com/algorandfound
 
 > **set**(`fields`): `void`
 
-Defined in: [packages/algo-ts/src/itxn.ts:1025](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L1025)
+Defined in: [packages/algo-ts/src/itxn.ts:1080](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L1080)
+
+Update one or more fields in this AssetTransferItxnParams object
 
 #### Parameters
 
@@ -54,7 +60,9 @@ Defined in: [packages/algo-ts/src/itxn.ts:1025](https://github.com/algorandfound
 
 > **submit**(): [`AssetTransferInnerTxn`](../interfaces/AssetTransferInnerTxn.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:1022](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L1022)
+Defined in: [packages/algo-ts/src/itxn.ts:1074](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L1074)
+
+Submit an itxn with these fields and return the AssetTransferInnerTxn result
 
 #### Returns
 

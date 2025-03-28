@@ -16,9 +16,9 @@ A boolean value
 
 ## Constructors
 
-### new Bool()
+### Constructor
 
-> **new Bool**(`v`?): [`Bool`](Bool.md)
+> **new Bool**(`v`?): `Bool`
 
 Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:217](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L217)
 
@@ -34,11 +34,11 @@ The native boolean to initialize this value from
 
 #### Returns
 
-[`Bool`](Bool.md)
+`Bool`
 
 #### Overrides
 
-[`ARC4Encoded`](ARC4Encoded.md).[`constructor`](ARC4Encoded.md#constructors)
+[`ARC4Encoded`](ARC4Encoded.md).[`constructor`](ARC4Encoded.md#constructor)
 
 ## Accessors
 

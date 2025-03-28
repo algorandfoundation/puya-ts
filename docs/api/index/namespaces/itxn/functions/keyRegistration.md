@@ -8,7 +8,9 @@
 
 > **keyRegistration**(`fields`): [`KeyRegistrationItxnParams`](../classes/KeyRegistrationItxnParams.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:1004](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L1004)
+Defined in: [packages/algo-ts/src/itxn.ts:1035](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L1035)
+
+Create a new KeyRegistrationItxnParams object with the specified fields
 
 ## Parameters
 

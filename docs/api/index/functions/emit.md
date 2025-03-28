@@ -19,7 +19,9 @@ Anonymous types cannot be used as the type name is used to determine the event p
 
 ### Type Parameters
 
-• **TEvent** *extends* [`Record`](../-internal-/type-aliases/Record.md)\<`string`, `any`\>
+#### TEvent
+
+`TEvent` *extends* [`Record`](../-internal-/type-aliases/Record.md)\<`string`, `any`\>
 
 ### Parameters
 
@@ -59,7 +61,9 @@ Property types must be ARC4 or have an ARC4 equivalent type.
 
 ### Type Parameters
 
-• **TProps** *extends* `any`[]
+#### TProps
+
+`TProps` *extends* `any`[]
 
 ### Parameters
 

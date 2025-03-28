@@ -16,7 +16,9 @@ T must represent a type with a fixed length encoding scheme.
 
 ## Type Parameters
 
-• **T**
+### T
+
+`T`
 
 Any native or arc4 type with a fixed encoding size.
 

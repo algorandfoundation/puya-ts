@@ -14,7 +14,9 @@ Declares the decorated method as a baremethod that can only be called with no tr
 
 ## Type Parameters
 
-• **TContract** *extends* [`Contract`](../classes/Contract.md)
+### TContract
+
+`TContract` *extends* [`Contract`](../classes/Contract.md)
 
 the type of the contract this method is a part of
 
@@ -32,9 +34,13 @@ The config for this bare method
 
 ### Type Parameters
 
-• **TArgs** *extends* `any`[]
+#### TArgs
 
-• **TReturn**
+`TArgs` *extends* `any`[]
+
+#### TReturn
+
+`TReturn`
 
 ### Parameters
 

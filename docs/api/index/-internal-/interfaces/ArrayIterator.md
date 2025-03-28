@@ -14,7 +14,9 @@ Defined in: node\_modules/typescript/lib/lib.es2015.iterable.d.ts:72
 
 ## Type Parameters
 
-• **T**
+### T
+
+`T`
 
 ## Properties
 
@@ -64,13 +66,13 @@ Defined in: node\_modules/@types/node/compatibility/disposable.d.ts:11
 
 ### \[iterator\]()
 
-> **\[iterator\]**(): [`ArrayIterator`](ArrayIterator.md)\<`T`\>
+> **\[iterator\]**(): `ArrayIterator`\<`T`\>
 
 Defined in: node\_modules/typescript/lib/lib.es2015.iterable.d.ts:73
 
 #### Returns
 
-[`ArrayIterator`](ArrayIterator.md)\<`T`\>
+`ArrayIterator`\<`T`\>
 
 #### Overrides
 
@@ -144,7 +146,9 @@ Creates an iterator whose values are those from this iterator for which the prov
 
 ##### Type Parameters
 
-• **S**
+###### S
+
+`S`
 
 ##### Parameters
 
@@ -201,7 +205,9 @@ otherwise.
 
 ##### Type Parameters
 
-• **S**
+###### S
+
+`S`
 
 ##### Parameters
 
@@ -253,7 +259,9 @@ Creates an iterator whose values are the result of applying the callback to the 
 
 #### Type Parameters
 
-• **U**
+##### U
+
+`U`
 
 #### Parameters
 
@@ -309,7 +317,9 @@ Creates an iterator whose values are the result of applying the callback to the 
 
 #### Type Parameters
 
-• **U**
+##### U
+
+`U`
 
 #### Parameters
 
@@ -411,7 +421,9 @@ Calls the specified callback function for all the elements in this iterator. The
 
 ##### Type Parameters
 
-• **U**
+###### U
+
+`U`
 
 ##### Parameters
 

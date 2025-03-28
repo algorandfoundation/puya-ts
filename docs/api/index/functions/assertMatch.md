@@ -14,7 +14,9 @@ Applies all tests in `test` against `subject` and asserts they all pass
 
 ## Type Parameters
 
-• **T**
+### T
+
+`T`
 
 The type of the subject
 

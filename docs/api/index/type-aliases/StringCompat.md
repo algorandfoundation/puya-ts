@@ -6,7 +6,7 @@
 
 # Type Alias: StringCompat
 
-> **StringCompat**: `string`
+> **StringCompat** = `string`
 
 Defined in: [packages/algo-ts/src/primitives.ts:14](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L14)
 

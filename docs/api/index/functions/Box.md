@@ -14,7 +14,9 @@ Creates a Box proxy object offering methods of getting and setting the value sto
 
 ## Type Parameters
 
-• **TValue**
+### TValue
+
+`TValue`
 
 The type of the data stored in the box. This value will be encoded to bytes when stored and decoded on retrieval.
 
