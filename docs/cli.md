@@ -1,3 +1,7 @@
+---
+title: Compiler CLI Guide
+---
+
 # Puya TS Cli
 
 The puya-ts cli is a tool for compiling Algorand TypeScript code into artifacts which can be used to deploy smart contracts and logic signatures on the Algorand Virtual Machine (AVM). At a high level these include:

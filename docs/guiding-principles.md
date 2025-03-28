@@ -1,3 +1,7 @@
+---
+title: Guiding Principals
+---
+
 # Guiding Principles
 
 ## Familiarity

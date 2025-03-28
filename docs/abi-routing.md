@@ -1,3 +1,7 @@
+---
+title: ABI Routing
+---
+
 # ABI Routing
 
 Contracts in Algorand are created, called, updated, and deleted using [Application Call](https://dev.algorand.co/concepts/transactions/types/#application-call-transaction) transactions. That transaction type has a number of fields, with various ones being required depending on the type of call being made. This document aims to describe some of these scenarios and how they interact with an Algorand TypeScript smart contract.
@@ -7,9 +11,11 @@ Contracts in Algorand are created, called, updated, and deleted using [Applicati
 An Application Call Transaction passes or fails based on the result of running one of the programs associated with that application. The [OnComplete](https://dev.algorand.co/concepts/smart-contracts/avm/#oncomplete) (`apan`) field is used to decide which _program_ is run. If the on completion action is ClearState (`3`), the Clear State Program is run - for all other on complete actions the Approval Program is run.
 
 ### Approval Program
+
 If the program runs without error and returns a non-zero result, the transaction is allowed (though another transaction in the group may cause the whole group to fail as transaction groups are all or nothing).
 
 ### Clear State Program
+
 A transaction which invokes the clear state program will be allowed even if the logic errors.
 
 ## Application creating
@@ -41,8 +47,3 @@ The `abimethod` and `baremethod` decorators accept an `onCreate` configuration v
 ### Handling on completion actions
 
 The `abimethod` and `baremethod` decorators accept an `allowActions` configuration value which can be one or more on completion actions. A method will be callable if the current transaction's on complete action matches one of the listed actions. If the method selector matches a particular method and that method does not list that on completion action, the transaction will be rejected. The default value for this is `NoOp`
-
-
-
-
-

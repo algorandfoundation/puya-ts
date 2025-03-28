@@ -1,3 +1,7 @@
+---
+title: Program Structure
+---
+
 # Program Structure
 
 An Algorand TypeScript program is declared in a TypeScript module with a file extension of `.algo.ts`. Declarations can be split across multiple files, and types can be imported between these files using standard TypeScript import statements. The commonjs `require` function is not supported, and the asynchronous `import(...)` expression is also not supported as imports must be compile-time constant.

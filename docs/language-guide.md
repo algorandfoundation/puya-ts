@@ -1,3 +1,13 @@
+---
+title: Algorand TypeScript Language Guide
+children:
+  - ./lg-program-structure.md
+  - ./lg-types.md
+  - ./lg-storage.md
+  - ./lg-ops.md
+  - ./lg-itxns.md
+---
+
 # Algorand TypeScript Language Guide
 
 Algorand TypeScript is a partial implementation of the TypeScript programming language that runs on the Algorand Virtual Machine (AVM). It defines a library of types, classes and functions to facilitate the development of smart contracts and logic signatures for the Algorand blockchain.
@@ -14,7 +24,7 @@ Another example is the equality operator `===`, in EcmaScript this always operat
 
 EcmaScript is extremely liberal in its type system when it comes to type coercion in comparison between types. Algorand TypeScript aims to be more restrictive in this regard as this behaviour can often lead to unintended bugs. For example, the comparison between unrelated types in EcmaScript will simply return `false` (or something [barely predicable](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Equality) if using the `==` operator). Algorand TypeScript will instead error as the comparison is likely a bug.
 
-If you are interested in learning about the design of Algorand TypeScript, you can see our [Guiding Principles](lg-guiding-principles) for more detail including the Architectural Decision Records (ADRs) which got us here.
+If you are interested in learning about the design of Algorand TypeScript, you can see our [Guiding Principles](./guiding-principles.md) for more detail including the Architectural Decision Records (ADRs) which got us here.
 
 ## Table of Contents
 

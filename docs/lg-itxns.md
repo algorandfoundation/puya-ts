@@ -1,3 +1,7 @@
+---
+title: Inner Transactions
+---
+
 # Inner Transactions
 
 ## Basic API

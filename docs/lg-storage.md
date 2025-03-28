@@ -1,3 +1,7 @@
+---
+title: Storage
+---
+
 # Storage
 
 Algorand smart contracts have [three different types of on-chain storage](https://dev.algorand.co/concepts/smart-contracts/storage/overview/)
@@ -10,14 +14,13 @@ Global or Application storage is a key/value store of `bytes` or `uint64` values
 Global storage values are declared using the [GlobalState](api/index/functions/GlobalState.md) function to create a [GlobalState](api/index/type-aliases/GlobalState.md) proxy object.
 
 ```ts
-import {GlobalState, Contract, uint64, bytes, Uint64, contract} from "@algorandfoundation/algorand-typescript";
+import { GlobalState, Contract, uint64, bytes, Uint64, contract } from '@algorandfoundation/algorand-typescript'
 
 class DemoContract extends Contract {
   // The property name 'globalInt' will be used as the key
-  globalInt = GlobalState<uint64>({initialValue: Uint64(1)})
+  globalInt = GlobalState<uint64>({ initialValue: Uint64(1) })
   // Explicitly override the key
-  globalBytes = GlobalState<bytes>({key: "alternativeKey"})
-
+  globalBytes = GlobalState<bytes>({ key: 'alternativeKey' })
 }
 
 // If using dynamic keys, state must be explicitly reserved
@@ -25,7 +28,7 @@ class DemoContract extends Contract {
 class DynamicAccessContract extends Contract {
   test(key: string, value: string) {
     // Interact with state using a dynamic key
-    const dynamicAccess = GlobalState<string>({key})
+    const dynamicAccess = GlobalState<string>({ key })
     dynamicAccess.value = value
   }
 }
@@ -115,7 +118,7 @@ export class BoxContract extends Contract {
     if (this.boxRefThree.exists) {
       this.boxRefThree.resize(8000)
     } else {
-      this.boxRefThree.create({size: 8000})
+      this.boxRefThree.create({ size: 8000 })
     }
 
     this.boxRefThree.replace(0, bzero(0).bitwiseInvert())
