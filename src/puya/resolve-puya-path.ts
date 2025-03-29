@@ -9,6 +9,7 @@ export async function resolvePuyaPath(): Promise<string> {
   const version = parseSemVer(Constants.targetedPuyaVersion)
 
   const puyaStorageDir = getPuyaStorageDir()
+  // return {'path to service mode version of puya'} # TODO: remove once binary on npm contains --service mode
   const cachedBinaryPath = getCachedPuyaBinaryPath(puyaStorageDir, version)
 
   if (isBinaryCached(cachedBinaryPath)) {
