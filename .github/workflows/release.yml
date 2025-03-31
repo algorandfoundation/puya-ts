@@ -45,6 +45,11 @@ jobs:
         with:
           path: artifacts
 
+      - name: Generate semantic version for @algorandfoundation/puya-ts
+        run: npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Publish @algorandfoundation/algorand-typescript
         uses: JS-DevTools/npm-publish@v3
         id: publish-algo-ts
@@ -52,11 +57,8 @@ jobs:
           token: ${{ secrets.NPM_TOKEN }}
           package: artifacts/algo-ts/package.json
           access: 'public'
-
-      - name: Generate semantic version for @algorandfoundation/puya-ts
-        run: npx semantic-release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Tagging 'main' branch with latest for now, even though it's beta because we don't have a non-beta
+          tag: ${{ github.ref_name == 'alpha' && 'alpha' || github.ref_name == 'main' && 'latest' || github.ref_name == 'release' && 'latest' || 'pre-release' }}
 
       - name: Publish @algorandfoundation/puya-ts
         uses: JS-DevTools/npm-publish@v3
