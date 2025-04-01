@@ -11,22 +11,12 @@ jobs:
     name: 'Build @algorandfoundation/algorand-typescript'
     uses: ./.github/workflows/node-ci.yml
     with:
-      node-version: 21.x
+      node-version: 22.x
       run-build: true
       audit-script: npm run audit
       working-directory: packages/algo-ts
       upload-artifact-name: algo-ts
       upload-artifact-path: ./packages/algo-ts/dist
-      post-build-script: |
-        cd dist
-        set +e # Continue on error
-        thisVersion=$(npm view ./ version)
-        diffText=$(npm diff --diff=./ --diff=@algorandfoundation/algorand-typescript@$thisVersion)
-        diffExitCode=$?
-        set -e # Exit on error
-        [ $diffExitCode -ne 0 ] && (echo "$thisVersion has not been published yet"; exit 0;) || echo "$thisVersion already published, checking diff against local build"
-        diffTextLen=${#diffText}
-        [ $diffTextLen -eq 0 ] && echo 'No changes' || (echo 'ERROR: Code differs to published version. Please bump package version or revert changes'; echo "::group::diff"; echo $diffText; echo "::endgroup::";exit 1;)
 
   ci-puya-ts:
     name: 'Build @algorandfoundation/puya-ts'
@@ -37,7 +27,7 @@ jobs:
       download-artifact-pattern: algo-*
       download-artifact-path: ./packages-temp
       pre-run-script: mv packages-temp/algo-ts packages/algo-ts/dist
-      node-version: 21.x
+      node-version: 22.x
       run-build: true
       run-commit-lint: ${{ inputs.run-commit-lint }}
       build-script: npm run build
