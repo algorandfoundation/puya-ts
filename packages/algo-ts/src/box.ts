@@ -169,6 +169,39 @@ export type BoxRef = {
   readonly length: uint64
 }
 
+export type BoxArray<TLength, TValue> = {
+  create(): boolean
+
+  /**
+   * Get the key used by this box proxy
+   */
+  readonly key: bytes
+
+  /**
+   * Get a boolean indicating if the box exists or not
+   */
+  readonly exists: boolean
+
+  at(index: uint64): TValue
+
+  replace(index: uint64, value: TValue): void
+
+  /**
+   * Delete the box associated with this proxy if it exists.
+   * @returns True if the box existed and was deleted, else false
+   */
+  delete(): boolean
+
+  /**
+   * Returns the length of the array in the box
+   */
+  readonly arrayLength: uint64
+  /**
+   * Returns the length of the box, or error if the box does not exist
+   */
+  readonly boxLength: uint64
+}
+
 /**
  * Options for creating a Box proxy
  */
