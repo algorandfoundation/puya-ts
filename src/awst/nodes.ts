@@ -5,6 +5,7 @@ import type { ContractReference, LogicSigReference, OnCompletionAction } from '.
 import type { SourceLocation } from './source-location'
 import type { TxnField } from './txn-fields'
 import type { wtypes } from './wtypes'
+
 export abstract class Node {
   constructor(props: Props<Node>) {
     this.sourceLocation = props.sourceLocation
@@ -189,12 +190,12 @@ export enum BytesEncoding {
 export class BytesConstant extends Expression {
   constructor(props: Props<BytesConstant>) {
     super(props)
-    this.wtype = props.wtype
     this.value = props.value
+    this.wtype = props.wtype
     this.encoding = props.encoding
   }
-  readonly wtype: wtypes.WType
   readonly value: Uint8Array
+  readonly wtype: wtypes.WType
   readonly encoding: BytesEncoding
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitBytesConstant(this)
@@ -509,9 +510,11 @@ export class IndexExpression extends Expression {
     super(props)
     this.base = props.base
     this.index = props.index
+    this.wtype = props.wtype
   }
   readonly base: Expression
   readonly index: Expression
+  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitIndexExpression(this)
   }
@@ -522,10 +525,12 @@ export class SliceExpression extends Expression {
     this.base = props.base
     this.beginIndex = props.beginIndex
     this.endIndex = props.endIndex
+    this.wtype = props.wtype
   }
   readonly base: Expression
   readonly beginIndex: Expression | null
   readonly endIndex: Expression | null
+  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitSliceExpression(this)
   }
@@ -536,13 +541,20 @@ export class IntersectionSliceExpression extends Expression {
     this.base = props.base
     this.beginIndex = props.beginIndex
     this.endIndex = props.endIndex
+    this.wtype = props.wtype
   }
   readonly base: Expression
   readonly beginIndex: Expression | bigint | null
   readonly endIndex: Expression | bigint | null
+  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitIntersectionSliceExpression(this)
   }
+}
+export enum AppStorageKind {
+  appGlobal = 1,
+  accountLocal = 2,
+  box = 3,
 }
 export class AppStateExpression extends Expression {
   constructor(props: Props<AppStateExpression>) {
@@ -906,7 +918,14 @@ export class BigUIntPostfixUnaryOperation extends Expression {
     this.wtype = props.wtype
   }
   readonly op: BigUIntPostfixUnaryOperator
-  readonly target: Expression
+  readonly target:
+    | VarExpression
+    | FieldExpression
+    | IndexExpression
+    | TupleExpression
+    | AppStateExpression
+    | AppAccountStateExpression
+    | BoxValueExpression
   readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitBigUIntPostfixUnaryOperation(this)
@@ -1278,11 +1297,6 @@ export class ContractMethod extends classes(_Function, ContractMemberNode) {
   accept<T>(visitor: ContractMemberNodeVisitor<T>): T {
     return visitor.visitContractMethod(this)
   }
-}
-export enum AppStorageKind {
-  appGlobal = 1,
-  accountLocal = 2,
-  box = 3,
 }
 export class AppStorageDefinition extends ContractMemberNode {
   constructor(props: Props<AppStorageDefinition>) {
