@@ -34,8 +34,7 @@ describe('Expected output', async () => {
       new CompileOptions({
         filePaths,
         dryRun: true,
-        logLevel: LogLevel.Debug,
-        skipVersionCheck: true,
+        logLevel: LogLevel.Info,
       }),
     )
   })
