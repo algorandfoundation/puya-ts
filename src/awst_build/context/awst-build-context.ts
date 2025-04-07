@@ -44,7 +44,7 @@ export abstract class AwstBuildContext {
    * Reflect generic type parameters for a call expression
    * @param node
    */
-  abstract getTypeParameters(node: ts.CallExpression | ts.NewExpression): PType[]
+  abstract getTypeParameters(node: ts.CallExpression | ts.NewExpression | ts.TaggedTemplateExpression): PType[]
 
   /**
    * Resolve the given identifier to a unique variable name that accounts

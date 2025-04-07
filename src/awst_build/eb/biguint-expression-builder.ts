@@ -41,7 +41,7 @@ export class BigUintFunctionBuilder extends FunctionBuilder {
       })
     } else if (initialValue.ptype.equals(boolPType)) {
       biguint = nodeFactory.reinterpretCast({
-        expr: initialValue.toBytes(sourceLocation),
+        expr: initialValue.toBytes(sourceLocation).resolve(),
         sourceLocation,
         wtype: biguintPType.wtype,
       })
@@ -71,7 +71,7 @@ export class BigUintFunctionBuilder extends FunctionBuilder {
         })
       } else {
         biguint = nodeFactory.reinterpretCast({
-          expr: initialValue.toBytes(sourceLocation),
+          expr: initialValue.toBytes(sourceLocation).resolve(),
           sourceLocation,
           wtype: biguintPType.wtype,
         })
@@ -198,7 +198,7 @@ export class BigUintExpressionBuilder extends InstanceExpressionBuilder<Instance
     )
   }
 
-  toBytes(sourceLocation: SourceLocation): awst.Expression {
-    return nodeFactory.reinterpretCast({ expr: this.resolve(), sourceLocation, wtype: wtypes.bytesWType })
+  toBytes(sourceLocation: SourceLocation): InstanceBuilder {
+    return instanceEb(nodeFactory.reinterpretCast({ expr: this.resolve(), sourceLocation, wtype: wtypes.bytesWType }), bytesPType)
   }
 }

@@ -4,10 +4,10 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@1: // L15
         let tmp%0#1: uint64 = (txn NumAppArgs)
         let tmp%1#0: bool = (!= tmp%0#1 0u)
-        goto tmp%1#0 ? block@2 : block@9
+        goto tmp%1#0 ? block@2 : block@10
     block@2: // abi_routing_L15
         let tmp%2#0: bytes = (txna ApplicationArgs 0)
-        switch tmp%2#0 {method "test()void" => block@3, method "test2()void" => block@4, method "test3()void" => block@5, method "test4(appl)void" => block@6, * => block@7}
+        switch tmp%2#0 {method "test()void" => block@3, method "test2()void" => block@4, method "test3()void" => block@5, method "test4(appl)void" => block@6, method "reflectAllPay(pay)(byte[32],uint64,uint64,uint64,uint64,byte[],byte[32],byte[],uint64,byte[32],byte[32],byte[32],uint64,byte[32])" => block@7, * => block@8}
     block@3: // test_route_L16
         let tmp%3#0: uint64 = (txn OnCompletion)
         let tmp%4#0: bool = (== tmp%3#0 NoOp)
@@ -17,7 +17,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%6#0) // can only call when not creating
         tests/approvals/gtxns.algo.ts::GtxnsAlgo.test()
         let tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#0: bool = 1u
-        goto block@14
+        goto block@15
     block@4: // test2_route_L20
         let tmp%7#0: uint64 = (txn OnCompletion)
         let tmp%8#0: bool = (== tmp%7#0 NoOp)
@@ -27,7 +27,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%10#0) // can only call when not creating
         tests/approvals/gtxns.algo.ts::GtxnsAlgo.test2()
         let tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#1: bool = 1u
-        goto block@14
+        goto block@15
     block@5: // test3_route_L46
         let tmp%11#0: uint64 = (txn OnCompletion)
         let tmp%12#0: bool = (== tmp%11#0 NoOp)
@@ -37,7 +37,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%14#0) // can only call when not creating
         tests/approvals/gtxns.algo.ts::GtxnsAlgo.test3()
         let tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#2: bool = 1u
-        goto block@14
+        goto block@15
     block@6: // test4_route_L52
         let tmp%15#0: uint64 = (txn OnCompletion)
         let tmp%16#0: bool = (== tmp%15#0 NoOp)
@@ -52,30 +52,101 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert gtxn_type_matches%0#0) // transaction type is appl
         tests/approvals/gtxns.algo.ts::GtxnsAlgo.test4(gtxn_idx%0#0)
         let tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#3: bool = 1u
-        goto block@14
-    block@7: // switch_case_default_L15
-        goto block@8
-    block@8: // switch_case_next_L15
-        goto block@13
-    block@9: // bare_routing_L15
+        goto block@15
+    block@7: // reflectAllPay_route_L60
         let tmp%20#0: uint64 = (txn OnCompletion)
-        switch tmp%20#0 {0u => block@10, * => block@11}
-    block@10: // __algots__.defaultCreate_L15
-        let tmp%21#0: uint64 = (txn ApplicationID)
-        let tmp%22#0: bool = (== tmp%21#0 0u)
-        (assert tmp%22#0) // can only call when creating
-        tests/approvals/gtxns.algo.ts::GtxnsAlgo.__algots__.defaultCreate()
+        let tmp%21#0: bool = (== tmp%20#0 NoOp)
+        (assert tmp%21#0) // OnCompletion is not NoOp
+        let tmp%22#0: uint64 = (txn ApplicationID)
+        let tmp%23#0: bool = (!= tmp%22#0 0u)
+        (assert tmp%23#0) // can only call when not creating
+        let tmp%24#0: uint64 = (txn GroupIndex)
+        let gtxn_idx%1#0: uint64 = (- tmp%24#0 1u)
+        let gtxn_type%1#0: uint64 = ((gtxns TypeEnum) gtxn_idx%1#0)
+        let gtxn_type_matches%1#0: bool = (== gtxn_type%1#0 pay)
+        (assert gtxn_type_matches%1#0) // transaction type is pay
+        let (elements_to_encode%0#0: bytes[32], elements_to_encode%1#0: uint64, elements_to_encode%2#0: uint64, elements_to_encode%3#0: uint64, elements_to_encode%4#0: uint64, elements_to_encode%5#0: bytes, elements_to_encode%6#0: bytes[32], elements_to_encode%7#0: bytes, elements_to_encode%8#0: uint64, elements_to_encode%9#0: bytes[32], elements_to_encode%10#0: bytes[32], elements_to_encode%11#0: bytes[32], elements_to_encode%12#0: uint64, elements_to_encode%13#0: bytes[32]) = tests/approvals/gtxns.algo.ts::GtxnsAlgo.reflectAllPay(gtxn_idx%1#0)
+        let length%0#0: uint64 = (len elements_to_encode%0#0)
+        let lengths_equal%0#0: bool = (== length%0#0 32u)
+        (assert lengths_equal%0#0) // invalid size
+        let val_as_bytes%0#0: bytes[8] = (itob elements_to_encode%1#0)
+        let val_as_bytes%1#0: bytes[8] = (itob elements_to_encode%2#0)
+        let val_as_bytes%2#0: bytes[8] = (itob elements_to_encode%3#0)
+        let val_as_bytes%3#0: bytes[8] = (itob elements_to_encode%4#0)
+        let length%1#0: uint64 = (len elements_to_encode%5#0)
+        let as_bytes%0#0: bytes[8] = (itob length%1#0)
+        let length_uint16%0#0: bytes = ((extract 6 2) as_bytes%0#0)
+        let encoded_value%0#0: bytes = (concat length_uint16%0#0 elements_to_encode%5#0)
+        let length%2#0: uint64 = (len elements_to_encode%6#0)
+        let lengths_equal%1#0: bool = (== length%2#0 32u)
+        (assert lengths_equal%1#0) // invalid size
+        let length%3#0: uint64 = (len elements_to_encode%7#0)
+        let as_bytes%1#0: bytes[8] = (itob length%3#0)
+        let length_uint16%1#0: bytes = ((extract 6 2) as_bytes%1#0)
+        let encoded_value%1#0: bytes = (concat length_uint16%1#0 elements_to_encode%7#0)
+        let val_as_bytes%4#0: bytes[8] = (itob elements_to_encode%8#0)
+        let length%4#0: uint64 = (len elements_to_encode%9#0)
+        let lengths_equal%2#0: bool = (== length%4#0 32u)
+        (assert lengths_equal%2#0) // invalid size
+        let length%5#0: uint64 = (len elements_to_encode%10#0)
+        let lengths_equal%3#0: bool = (== length%5#0 32u)
+        (assert lengths_equal%3#0) // invalid size
+        let length%6#0: uint64 = (len elements_to_encode%11#0)
+        let lengths_equal%4#0: bool = (== length%6#0 32u)
+        (assert lengths_equal%4#0) // invalid size
+        let val_as_bytes%5#0: bytes[8] = (itob elements_to_encode%12#0)
+        let length%7#0: uint64 = (len elements_to_encode%13#0)
+        let lengths_equal%5#0: bool = (== length%7#0 32u)
+        (assert lengths_equal%5#0) // invalid size
+        let encoded_tuple_buffer%1#0: bytes = (concat 0x elements_to_encode%0#0)
+        let encoded_tuple_buffer%2#0: bytes = (concat encoded_tuple_buffer%1#0 val_as_bytes%0#0)
+        let encoded_tuple_buffer%3#0: bytes = (concat encoded_tuple_buffer%2#0 val_as_bytes%1#0)
+        let encoded_tuple_buffer%4#0: bytes = (concat encoded_tuple_buffer%3#0 val_as_bytes%2#0)
+        let encoded_tuple_buffer%5#0: bytes = (concat encoded_tuple_buffer%4#0 val_as_bytes%3#0)
+        let as_bytes%2#0: bytes[8] = (itob 244u)
+        let offset_as_uint16%0#0: bytes = ((extract 6 2) as_bytes%2#0)
+        let encoded_tuple_buffer%6#0: bytes = (concat encoded_tuple_buffer%5#0 offset_as_uint16%0#0)
+        let data_length%0#0: uint64 = (len encoded_value%0#0)
+        let current_tail_offset%1#0: uint64 = (+ 244u data_length%0#0)
+        let encoded_tuple_buffer%7#0: bytes = (concat encoded_tuple_buffer%6#0 elements_to_encode%6#0)
+        let as_bytes%3#0: bytes[8] = (itob current_tail_offset%1#0)
+        let offset_as_uint16%1#0: bytes = ((extract 6 2) as_bytes%3#0)
+        let encoded_tuple_buffer%8#0: bytes = (concat encoded_tuple_buffer%7#0 offset_as_uint16%1#0)
+        let encoded_tuple_buffer%9#0: bytes = (concat encoded_tuple_buffer%8#0 val_as_bytes%4#0)
+        let encoded_tuple_buffer%10#0: bytes = (concat encoded_tuple_buffer%9#0 elements_to_encode%9#0)
+        let encoded_tuple_buffer%11#0: bytes = (concat encoded_tuple_buffer%10#0 elements_to_encode%10#0)
+        let encoded_tuple_buffer%12#0: bytes = (concat encoded_tuple_buffer%11#0 elements_to_encode%11#0)
+        let encoded_tuple_buffer%13#0: bytes = (concat encoded_tuple_buffer%12#0 val_as_bytes%5#0)
+        let encoded_tuple_buffer%14#0: bytes = (concat encoded_tuple_buffer%13#0 elements_to_encode%13#0)
+        let encoded_tuple_buffer%15#0: bytes = (concat encoded_tuple_buffer%14#0 encoded_value%0#0)
+        let encoded_tuple_buffer%16#0: bytes = (concat encoded_tuple_buffer%15#0 encoded_value%1#0)
+        let tmp%25#0: bytes = (concat 0x151f7c75 encoded_tuple_buffer%16#0)
+        (log tmp%25#0)
         let tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#4: bool = 1u
+        goto block@15
+    block@8: // switch_case_default_L15
+        goto block@9
+    block@9: // switch_case_next_L15
         goto block@14
-    block@11: // switch_case_default_L15
-        goto block@12
-    block@12: // switch_case_next_L15
+    block@10: // bare_routing_L15
+        let tmp%26#0: uint64 = (txn OnCompletion)
+        switch tmp%26#0 {0u => block@11, * => block@12}
+    block@11: // __algots__.defaultCreate_L15
+        let tmp%27#0: uint64 = (txn ApplicationID)
+        let tmp%28#0: bool = (== tmp%27#0 0u)
+        (assert tmp%28#0) // can only call when creating
+        tests/approvals/gtxns.algo.ts::GtxnsAlgo.__algots__.defaultCreate()
+        let tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#5: bool = 1u
+        goto block@15
+    block@12: // switch_case_default_L15
         goto block@13
-    block@13: // after_if_else_L15
-        let tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#5: bool = 0u
+    block@13: // switch_case_next_L15
         goto block@14
-    block@14: // after_inlined_tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router___L1
-        let tmp%0#0: bool = φ(tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#0 <- block@3, tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#1 <- block@4, tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#2 <- block@5, tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#3 <- block@6, tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#4 <- block@10, tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#5 <- block@13)
+    block@14: // after_if_else_L15
+        let tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#6: bool = 0u
+        goto block@15
+    block@15: // after_inlined_tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router___L1
+        let tmp%0#0: bool = φ(tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#0 <- block@3, tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#1 <- block@4, tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#2 <- block@5, tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#3 <- block@6, tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#4 <- block@7, tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#5 <- block@11, tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#6 <- block@14)
         return tmp%0#0
 
 subroutine tests/approvals/gtxns.algo.ts::GtxnsAlgo.test() -> void:
@@ -107,7 +178,7 @@ subroutine tests/approvals/gtxns.algo.ts::GtxnsAlgo.test2() -> void:
         goto block@4
     block@4: // L24
         let tmp%2#0: uint64 = ((gtxns ApplicationID) txn#0)
-        let tmp%3#0: bytes = (itob tmp%2#0)
+        let tmp%3#0: bytes[8] = (itob tmp%2#0)
         (log tmp%3#0)
         goto block@19
     block@5: // after_if_else_L24
@@ -117,7 +188,7 @@ subroutine tests/approvals/gtxns.algo.ts::GtxnsAlgo.test2() -> void:
         goto block@7
     block@7: // L27
         let tmp%5#0: uint64 = ((gtxns XferAsset) txn#0)
-        let tmp%6#0: bytes = (itob tmp%5#0)
+        let tmp%6#0: bytes[8] = (itob tmp%5#0)
         (log tmp%6#0)
         goto block@19
     block@8: // after_if_else_L27
@@ -127,7 +198,7 @@ subroutine tests/approvals/gtxns.algo.ts::GtxnsAlgo.test2() -> void:
         goto block@10
     block@10: // L30
         let tmp%8#0: uint64 = ((gtxns ConfigAsset) txn#0)
-        let tmp%9#0: bytes = (itob tmp%8#0)
+        let tmp%9#0: bytes[8] = (itob tmp%8#0)
         (log tmp%9#0)
         goto block@19
     block@11: // after_if_else_L30
@@ -145,14 +216,14 @@ subroutine tests/approvals/gtxns.algo.ts::GtxnsAlgo.test2() -> void:
     block@15: // if_body_L36
         goto block@16
     block@16: // L36
-        let tmp%13#0: bytes = ((gtxns VotePK) txn#0)
+        let tmp%13#0: bytes[32] = ((gtxns VotePK) txn#0)
         (log tmp%13#0)
         goto block@19
     block@17: // after_if_else_L36
         goto block@18
     block@18: // L39
         let tmp%14#0: uint64 = ((gtxns FreezeAsset) txn#0)
-        let tmp%15#0: bytes = (itob tmp%14#0)
+        let tmp%15#0: bytes[8] = (itob tmp%14#0)
         (log tmp%15#0)
         goto block@19
     block@19: // L23
@@ -193,6 +264,24 @@ subroutine tests/approvals/gtxns.algo.ts::GtxnsAlgo.test4(other: uint64) -> void
         let tmp%10#0: bool = (== tmp%8#0 tmp%9#0)
         (assert tmp%10#0)
         return 
+
+subroutine tests/approvals/gtxns.algo.ts::GtxnsAlgo.reflectAllPay(pay: uint64) -> <bytes[32], uint64, uint64, uint64, uint64, bytes, bytes[32], bytes, uint64, bytes[32], bytes[32], bytes[32], uint64, bytes[32]>:
+    block@0: // L60
+        let tmp%0#0: bytes[32] = ((gtxns Sender) pay#0)
+        let tmp%1#0: uint64 = ((gtxns Fee) pay#0)
+        let tmp%2#0: uint64 = ((gtxns FirstValid) pay#0)
+        let tmp%3#0: uint64 = ((gtxns FirstValidTime) pay#0)
+        let tmp%4#0: uint64 = ((gtxns LastValid) pay#0)
+        let tmp%5#0: bytes = ((gtxns Note) pay#0)
+        let tmp%6#0: bytes[32] = ((gtxns Lease) pay#0)
+        let tmp%7#0: bytes = ((gtxns Type) pay#0)
+        let tmp%8#0: uint64 = ((gtxns GroupIndex) pay#0)
+        let tmp%9#0: bytes[32] = ((gtxns TxID) pay#0)
+        let tmp%10#0: bytes[32] = ((gtxns RekeyTo) pay#0)
+        let tmp%11#0: bytes[32] = ((gtxns Receiver) pay#0)
+        let tmp%12#0: uint64 = ((gtxns Amount) pay#0)
+        let tmp%13#0: bytes[32] = ((gtxns CloseRemainderTo) pay#0)
+        return tmp%0#0 tmp%1#0 tmp%2#0 tmp%3#0 tmp%4#0 tmp%5#0 tmp%6#0 tmp%7#0 tmp%8#0 tmp%9#0 tmp%10#0 tmp%11#0 tmp%12#0 tmp%13#0
 
 subroutine tests/approvals/gtxns.algo.ts::GtxnsAlgo.__algots__.defaultCreate() -> void:
     block@0: // L15

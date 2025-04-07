@@ -295,7 +295,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
             immediateArgs: [],
             stackArgs: [
               { name: 'a', ptypes: [ptypes.bytesPType] },
-              { name: 'b', ptypes: [ptypes.uint64PType, ptypes.bytesPType] },
+              { name: 'b', ptypes: [ptypes.bytesPType, ptypes.uint64PType] },
             ],
             returnType: ptypes.voidPType,
           },
@@ -394,7 +394,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
             stackArgs: [
               { name: 'a', ptypes: [ptypes.accountPType, ptypes.uint64PType] },
               { name: 'b', ptypes: [ptypes.bytesPType] },
-              { name: 'c', ptypes: [ptypes.uint64PType, ptypes.bytesPType] },
+              { name: 'c', ptypes: [ptypes.bytesPType, ptypes.uint64PType] },
             ],
             returnType: ptypes.voidPType,
           },
@@ -658,7 +658,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
             argNames: ['a'],
             immediateArgs: ['AssetMetadataHash'],
             stackArgs: [{ name: 'a', ptypes: [ptypes.assetPType, ptypes.uint64PType] }],
-            returnType: new ptypes.TuplePType({ items: [ptypes.bytesPType, ptypes.boolPType] }),
+            returnType: new ptypes.TuplePType({ items: [new ptypes.BytesPType({ length: 32n }), ptypes.boolPType] }),
           },
         ],
       },
@@ -755,7 +755,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
       {
         argNames: ['a'],
         immediateArgs: [],
-        stackArgs: [{ name: 'a', ptypes: [ptypes.uint64PType, ptypes.bytesPType] }],
+        stackArgs: [{ name: 'a', ptypes: [ptypes.bytesPType, ptypes.uint64PType] }],
         returnType: ptypes.uint64PType,
       },
     ],
@@ -772,7 +772,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
             argNames: ['a'],
             immediateArgs: ['BlkSeed'],
             stackArgs: [{ name: 'a', ptypes: [ptypes.uint64PType] }],
-            returnType: ptypes.bytesPType,
+            returnType: new ptypes.BytesPType({ length: 32n }),
           },
         ],
       },
@@ -832,7 +832,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
             argNames: ['a'],
             immediateArgs: ['BlkBranch'],
             stackArgs: [{ name: 'a', ptypes: [ptypes.uint64PType] }],
-            returnType: ptypes.bytesPType,
+            returnType: new ptypes.BytesPType({ length: 32n }),
           },
         ],
       },
@@ -1183,8 +1183,8 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
       {
         argNames: ['v', 'a'],
         immediateArgs: [{ name: 'v', ptypes: [ptypes.ecdsaPType] }],
-        stackArgs: [{ name: 'a', ptypes: [ptypes.bytesPType] }],
-        returnType: new ptypes.TuplePType({ items: [ptypes.bytesPType, ptypes.bytesPType] }),
+        stackArgs: [{ name: 'a', ptypes: [new ptypes.BytesPType({ length: 33n })] }],
+        returnType: new ptypes.TuplePType({ items: [new ptypes.BytesPType({ length: 32n }), new ptypes.BytesPType({ length: 32n })] }),
       },
     ],
   },
@@ -1196,12 +1196,12 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
         argNames: ['v', 'a', 'b', 'c', 'd'],
         immediateArgs: [{ name: 'v', ptypes: [ptypes.ecdsaPType] }],
         stackArgs: [
-          { name: 'a', ptypes: [ptypes.bytesPType] },
+          { name: 'a', ptypes: [new ptypes.BytesPType({ length: 32n })] },
           { name: 'b', ptypes: [ptypes.uint64PType] },
-          { name: 'c', ptypes: [ptypes.bytesPType] },
-          { name: 'd', ptypes: [ptypes.bytesPType] },
+          { name: 'c', ptypes: [new ptypes.BytesPType({ length: 32n })] },
+          { name: 'd', ptypes: [new ptypes.BytesPType({ length: 32n })] },
         ],
-        returnType: new ptypes.TuplePType({ items: [ptypes.bytesPType, ptypes.bytesPType] }),
+        returnType: new ptypes.TuplePType({ items: [new ptypes.BytesPType({ length: 32n }), new ptypes.BytesPType({ length: 32n })] }),
       },
     ],
   },
@@ -1213,11 +1213,11 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
         argNames: ['v', 'a', 'b', 'c', 'd', 'e'],
         immediateArgs: [{ name: 'v', ptypes: [ptypes.ecdsaPType] }],
         stackArgs: [
-          { name: 'a', ptypes: [ptypes.bytesPType] },
-          { name: 'b', ptypes: [ptypes.bytesPType] },
-          { name: 'c', ptypes: [ptypes.bytesPType] },
-          { name: 'd', ptypes: [ptypes.bytesPType] },
-          { name: 'e', ptypes: [ptypes.bytesPType] },
+          { name: 'a', ptypes: [new ptypes.BytesPType({ length: 32n })] },
+          { name: 'b', ptypes: [new ptypes.BytesPType({ length: 32n })] },
+          { name: 'c', ptypes: [new ptypes.BytesPType({ length: 32n })] },
+          { name: 'd', ptypes: [new ptypes.BytesPType({ length: 32n })] },
+          { name: 'e', ptypes: [new ptypes.BytesPType({ length: 32n })] },
         ],
         returnType: ptypes.boolPType,
       },
@@ -1232,8 +1232,8 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
         immediateArgs: [],
         stackArgs: [
           { name: 'a', ptypes: [ptypes.bytesPType] },
-          { name: 'b', ptypes: [ptypes.bytesPType] },
-          { name: 'c', ptypes: [ptypes.bytesPType] },
+          { name: 'b', ptypes: [new ptypes.BytesPType({ length: 64n })] },
+          { name: 'c', ptypes: [new ptypes.BytesPType({ length: 32n })] },
         ],
         returnType: ptypes.boolPType,
       },
@@ -1248,8 +1248,8 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
         immediateArgs: [],
         stackArgs: [
           { name: 'a', ptypes: [ptypes.bytesPType] },
-          { name: 'b', ptypes: [ptypes.bytesPType] },
-          { name: 'c', ptypes: [ptypes.bytesPType] },
+          { name: 'b', ptypes: [new ptypes.BytesPType({ length: 64n })] },
+          { name: 'c', ptypes: [new ptypes.BytesPType({ length: 32n })] },
         ],
         returnType: ptypes.boolPType,
       },
@@ -1339,8 +1339,8 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
         immediateArgs: [],
         stackArgs: [
           { name: 'a', ptypes: [ptypes.bytesPType] },
-          { name: 'b', ptypes: [ptypes.bytesPType] },
-          { name: 'c', ptypes: [ptypes.bytesPType] },
+          { name: 'b', ptypes: [new ptypes.BytesPType({ length: 1232n })] },
+          { name: 'c', ptypes: [new ptypes.BytesPType({ length: 1793n })] },
         ],
         returnType: ptypes.boolPType,
       },
@@ -1361,7 +1361,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
         argNames: ['a', 'b'],
         immediateArgs: [],
         stackArgs: [
-          { name: 'a', ptypes: [ptypes.uint64PType, ptypes.bytesPType] },
+          { name: 'a', ptypes: [ptypes.bytesPType, ptypes.uint64PType] },
           { name: 'b', ptypes: [ptypes.uint64PType] },
         ],
         returnType: ptypes.uint64PType,
@@ -1467,7 +1467,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
             argNames: ['t'],
             immediateArgs: [{ name: 't', ptypes: [ptypes.uint64PType] }, 'Lease'],
             stackArgs: [],
-            returnType: ptypes.bytesPType,
+            returnType: new ptypes.BytesPType({ length: 32n }),
           },
         ],
       },
@@ -1515,7 +1515,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
             argNames: ['t'],
             immediateArgs: [{ name: 't', ptypes: [ptypes.uint64PType] }, 'VotePK'],
             stackArgs: [],
-            returnType: ptypes.bytesPType,
+            returnType: new ptypes.BytesPType({ length: 32n }),
           },
         ],
       },
@@ -1527,7 +1527,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
             argNames: ['t'],
             immediateArgs: [{ name: 't', ptypes: [ptypes.uint64PType] }, 'SelectionPK'],
             stackArgs: [],
-            returnType: ptypes.bytesPType,
+            returnType: new ptypes.BytesPType({ length: 32n }),
           },
         ],
       },
@@ -1671,7 +1671,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
             argNames: ['t'],
             immediateArgs: [{ name: 't', ptypes: [ptypes.uint64PType] }, 'TxID'],
             stackArgs: [],
-            returnType: ptypes.bytesPType,
+            returnType: new ptypes.BytesPType({ length: 32n }),
           },
         ],
       },
@@ -1875,7 +1875,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
             argNames: ['t'],
             immediateArgs: [{ name: 't', ptypes: [ptypes.uint64PType] }, 'ConfigAssetMetadataHash'],
             stackArgs: [],
-            returnType: ptypes.bytesPType,
+            returnType: new ptypes.BytesPType({ length: 32n }),
           },
         ],
       },
@@ -2297,7 +2297,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
       groupId: {
         type: 'op-mapping',
         op: 'global',
-        signatures: [{ argNames: [], immediateArgs: ['GroupID'], stackArgs: [], returnType: ptypes.bytesPType }],
+        signatures: [{ argNames: [], immediateArgs: ['GroupID'], stackArgs: [], returnType: new ptypes.BytesPType({ length: 32n }) }],
       },
       opcodeBudget: {
         type: 'op-mapping',
@@ -2327,7 +2327,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
       genesisHash: {
         type: 'op-mapping',
         op: 'global',
-        signatures: [{ argNames: [], immediateArgs: ['GenesisHash'], stackArgs: [], returnType: ptypes.bytesPType }],
+        signatures: [{ argNames: [], immediateArgs: ['GenesisHash'], stackArgs: [], returnType: new ptypes.BytesPType({ length: 32n }) }],
       },
       payoutsEnabled: {
         type: 'op-mapping',
@@ -2440,7 +2440,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
             argNames: ['a'],
             immediateArgs: ['Lease'],
             stackArgs: [{ name: 'a', ptypes: [ptypes.uint64PType] }],
-            returnType: ptypes.bytesPType,
+            returnType: new ptypes.BytesPType({ length: 32n }),
           },
         ],
       },
@@ -2488,7 +2488,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
             argNames: ['a'],
             immediateArgs: ['VotePK'],
             stackArgs: [{ name: 'a', ptypes: [ptypes.uint64PType] }],
-            returnType: ptypes.bytesPType,
+            returnType: new ptypes.BytesPType({ length: 32n }),
           },
         ],
       },
@@ -2500,7 +2500,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
             argNames: ['a'],
             immediateArgs: ['SelectionPK'],
             stackArgs: [{ name: 'a', ptypes: [ptypes.uint64PType] }],
-            returnType: ptypes.bytesPType,
+            returnType: new ptypes.BytesPType({ length: 32n }),
           },
         ],
       },
@@ -2644,7 +2644,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
             argNames: ['a'],
             immediateArgs: ['TxID'],
             stackArgs: [{ name: 'a', ptypes: [ptypes.uint64PType] }],
-            returnType: ptypes.bytesPType,
+            returnType: new ptypes.BytesPType({ length: 32n }),
           },
         ],
       },
@@ -2854,7 +2854,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
             argNames: ['a'],
             immediateArgs: ['ConfigAssetMetadataHash'],
             stackArgs: [{ name: 'a', ptypes: [ptypes.uint64PType] }],
-            returnType: ptypes.bytesPType,
+            returnType: new ptypes.BytesPType({ length: 32n }),
           },
         ],
       },
@@ -3203,7 +3203,12 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
     type: 'op-mapping',
     op: 'itob',
     signatures: [
-      { argNames: ['a'], immediateArgs: [], stackArgs: [{ name: 'a', ptypes: [ptypes.uint64PType] }], returnType: ptypes.bytesPType },
+      {
+        argNames: ['a'],
+        immediateArgs: [],
+        stackArgs: [{ name: 'a', ptypes: [ptypes.uint64PType] }],
+        returnType: new ptypes.BytesPType({ length: 8n }),
+      },
     ],
   },
   ITxn: {
@@ -3243,7 +3248,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
       lease: {
         type: 'op-mapping',
         op: 'itxn',
-        signatures: [{ argNames: [], immediateArgs: ['Lease'], stackArgs: [], returnType: ptypes.bytesPType }],
+        signatures: [{ argNames: [], immediateArgs: ['Lease'], stackArgs: [], returnType: new ptypes.BytesPType({ length: 32n }) }],
       },
       receiver: {
         type: 'op-mapping',
@@ -3263,12 +3268,12 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
       votePk: {
         type: 'op-mapping',
         op: 'itxn',
-        signatures: [{ argNames: [], immediateArgs: ['VotePK'], stackArgs: [], returnType: ptypes.bytesPType }],
+        signatures: [{ argNames: [], immediateArgs: ['VotePK'], stackArgs: [], returnType: new ptypes.BytesPType({ length: 32n }) }],
       },
       selectionPk: {
         type: 'op-mapping',
         op: 'itxn',
-        signatures: [{ argNames: [], immediateArgs: ['SelectionPK'], stackArgs: [], returnType: ptypes.bytesPType }],
+        signatures: [{ argNames: [], immediateArgs: ['SelectionPK'], stackArgs: [], returnType: new ptypes.BytesPType({ length: 32n }) }],
       },
       voteFirst: {
         type: 'op-mapping',
@@ -3328,7 +3333,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
       txId: {
         type: 'op-mapping',
         op: 'itxn',
-        signatures: [{ argNames: [], immediateArgs: ['TxID'], stackArgs: [], returnType: ptypes.bytesPType }],
+        signatures: [{ argNames: [], immediateArgs: ['TxID'], stackArgs: [], returnType: new ptypes.BytesPType({ length: 32n }) }],
       },
       applicationId: {
         type: 'op-mapping',
@@ -3427,7 +3432,9 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
       configAssetMetadataHash: {
         type: 'op-mapping',
         op: 'itxn',
-        signatures: [{ argNames: [], immediateArgs: ['ConfigAssetMetadataHash'], stackArgs: [], returnType: ptypes.bytesPType }],
+        signatures: [
+          { argNames: [], immediateArgs: ['ConfigAssetMetadataHash'], stackArgs: [], returnType: new ptypes.BytesPType({ length: 32n }) },
+        ],
       },
       configAssetManager: {
         type: 'op-mapping',
@@ -3689,7 +3696,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           {
             argNames: ['a'],
             immediateArgs: ['VotePK'],
-            stackArgs: [{ name: 'a', ptypes: [ptypes.bytesPType] }],
+            stackArgs: [{ name: 'a', ptypes: [new ptypes.BytesPType({ length: 32n })] }],
             returnType: ptypes.voidPType,
           },
         ],
@@ -3701,7 +3708,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           {
             argNames: ['a'],
             immediateArgs: ['SelectionPK'],
-            stackArgs: [{ name: 'a', ptypes: [ptypes.bytesPType] }],
+            stackArgs: [{ name: 'a', ptypes: [new ptypes.BytesPType({ length: 32n })] }],
             returnType: ptypes.voidPType,
           },
         ],
@@ -4001,7 +4008,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           {
             argNames: ['a'],
             immediateArgs: ['ConfigAssetMetadataHash'],
-            stackArgs: [{ name: 'a', ptypes: [ptypes.bytesPType] }],
+            stackArgs: [{ name: 'a', ptypes: [new ptypes.BytesPType({ length: 32n })] }],
             returnType: ptypes.voidPType,
           },
         ],
@@ -4289,7 +4296,12 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
     type: 'op-mapping',
     op: 'keccak256',
     signatures: [
-      { argNames: ['a'], immediateArgs: [], stackArgs: [{ name: 'a', ptypes: [ptypes.bytesPType] }], returnType: ptypes.bytesPType },
+      {
+        argNames: ['a'],
+        immediateArgs: [],
+        stackArgs: [{ name: 'a', ptypes: [ptypes.bytesPType] }],
+        returnType: new ptypes.BytesPType({ length: 32n }),
+      },
     ],
   },
   len: {
@@ -4326,7 +4338,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
             immediateArgs: [],
             stackArgs: [
               { name: 'a', ptypes: [ptypes.uint64PType] },
-              { name: 'b', ptypes: [ptypes.uint64PType, ptypes.bytesPType] },
+              { name: 'b', ptypes: [ptypes.bytesPType, ptypes.uint64PType] },
             ],
             returnType: ptypes.voidPType,
           },
@@ -4342,7 +4354,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
         argNames: ['c', 'a'],
         immediateArgs: [{ name: 'c', ptypes: [ptypes.mimcConfigurationsPType] }],
         stackArgs: [{ name: 'a', ptypes: [ptypes.bytesPType] }],
-        returnType: ptypes.bytesPType,
+        returnType: new ptypes.BytesPType({ length: 32n }),
       },
     ],
   },
@@ -4414,21 +4426,36 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
     type: 'op-mapping',
     op: 'sha256',
     signatures: [
-      { argNames: ['a'], immediateArgs: [], stackArgs: [{ name: 'a', ptypes: [ptypes.bytesPType] }], returnType: ptypes.bytesPType },
+      {
+        argNames: ['a'],
+        immediateArgs: [],
+        stackArgs: [{ name: 'a', ptypes: [ptypes.bytesPType] }],
+        returnType: new ptypes.BytesPType({ length: 32n }),
+      },
     ],
   },
   sha3_256: {
     type: 'op-mapping',
     op: 'sha3_256',
     signatures: [
-      { argNames: ['a'], immediateArgs: [], stackArgs: [{ name: 'a', ptypes: [ptypes.bytesPType] }], returnType: ptypes.bytesPType },
+      {
+        argNames: ['a'],
+        immediateArgs: [],
+        stackArgs: [{ name: 'a', ptypes: [ptypes.bytesPType] }],
+        returnType: new ptypes.BytesPType({ length: 32n }),
+      },
     ],
   },
   sha512_256: {
     type: 'op-mapping',
     op: 'sha512_256',
     signatures: [
-      { argNames: ['a'], immediateArgs: [], stackArgs: [{ name: 'a', ptypes: [ptypes.bytesPType] }], returnType: ptypes.bytesPType },
+      {
+        argNames: ['a'],
+        immediateArgs: [],
+        stackArgs: [{ name: 'a', ptypes: [ptypes.bytesPType] }],
+        returnType: new ptypes.BytesPType({ length: 32n }),
+      },
     ],
   },
   shl: {
@@ -4488,7 +4515,12 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
     type: 'op-mapping',
     op: 'sumhash512',
     signatures: [
-      { argNames: ['a'], immediateArgs: [], stackArgs: [{ name: 'a', ptypes: [ptypes.bytesPType] }], returnType: ptypes.bytesPType },
+      {
+        argNames: ['a'],
+        immediateArgs: [],
+        stackArgs: [{ name: 'a', ptypes: [ptypes.bytesPType] }],
+        returnType: new ptypes.BytesPType({ length: 64n }),
+      },
     ],
   },
   Txn: {
@@ -4528,7 +4560,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
       lease: {
         type: 'op-mapping',
         op: 'txn',
-        signatures: [{ argNames: [], immediateArgs: ['Lease'], stackArgs: [], returnType: ptypes.bytesPType }],
+        signatures: [{ argNames: [], immediateArgs: ['Lease'], stackArgs: [], returnType: new ptypes.BytesPType({ length: 32n }) }],
       },
       receiver: {
         type: 'op-mapping',
@@ -4548,12 +4580,12 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
       votePk: {
         type: 'op-mapping',
         op: 'txn',
-        signatures: [{ argNames: [], immediateArgs: ['VotePK'], stackArgs: [], returnType: ptypes.bytesPType }],
+        signatures: [{ argNames: [], immediateArgs: ['VotePK'], stackArgs: [], returnType: new ptypes.BytesPType({ length: 32n }) }],
       },
       selectionPk: {
         type: 'op-mapping',
         op: 'txn',
-        signatures: [{ argNames: [], immediateArgs: ['SelectionPK'], stackArgs: [], returnType: ptypes.bytesPType }],
+        signatures: [{ argNames: [], immediateArgs: ['SelectionPK'], stackArgs: [], returnType: new ptypes.BytesPType({ length: 32n }) }],
       },
       voteFirst: {
         type: 'op-mapping',
@@ -4613,7 +4645,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
       txId: {
         type: 'op-mapping',
         op: 'txn',
-        signatures: [{ argNames: [], immediateArgs: ['TxID'], stackArgs: [], returnType: ptypes.bytesPType }],
+        signatures: [{ argNames: [], immediateArgs: ['TxID'], stackArgs: [], returnType: new ptypes.BytesPType({ length: 32n }) }],
       },
       applicationId: {
         type: 'op-mapping',
@@ -4712,7 +4744,9 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
       configAssetMetadataHash: {
         type: 'op-mapping',
         op: 'txn',
-        signatures: [{ argNames: [], immediateArgs: ['ConfigAssetMetadataHash'], stackArgs: [], returnType: ptypes.bytesPType }],
+        signatures: [
+          { argNames: [], immediateArgs: ['ConfigAssetMetadataHash'], stackArgs: [], returnType: new ptypes.BytesPType({ length: 32n }) },
+        ],
       },
       configAssetManager: {
         type: 'op-mapping',
@@ -4925,10 +4959,10 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
         immediateArgs: [{ name: 's', ptypes: [ptypes.vrfVerifyPType] }],
         stackArgs: [
           { name: 'a', ptypes: [ptypes.bytesPType] },
-          { name: 'b', ptypes: [ptypes.bytesPType] },
-          { name: 'c', ptypes: [ptypes.bytesPType] },
+          { name: 'b', ptypes: [new ptypes.BytesPType({ length: 80n })] },
+          { name: 'c', ptypes: [new ptypes.BytesPType({ length: 32n })] },
         ],
-        returnType: new ptypes.TuplePType({ items: [ptypes.bytesPType, ptypes.boolPType] }),
+        returnType: new ptypes.TuplePType({ items: [new ptypes.BytesPType({ length: 64n }), ptypes.boolPType] }),
       },
     ],
   },

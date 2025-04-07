@@ -345,31 +345,20 @@
           "_type": "ARC4Tuple",
           "name": "arc4.tuple<uint64,uint64>",
           "immutable": true,
-          "native_type": null,
-          "arc4_name": "(uint64,uint64)",
+          "arc4_alias": "(uint64,uint64)",
           "types": [
             {
               "_type": "ARC4UIntN",
               "name": "arc4.uint64",
               "immutable": true,
-              "native_type": {
-                "_type": "WType",
-                "name": "uint64",
-                "immutable": true
-              },
-              "arc4_name": "uint64",
+              "arc4_alias": "uint64",
               "n": 64
             },
             {
               "_type": "ARC4UIntN",
               "name": "arc4.uint64",
               "immutable": true,
-              "native_type": {
-                "_type": "WType",
-                "name": "uint64",
-                "immutable": true
-              },
-              "arc4_name": "uint64",
+              "arc4_alias": "uint64",
               "n": 64
             }
           ],
@@ -432,9 +421,10 @@
                       "end_column": 38
                     },
                     "wtype": {
-                      "_type": "WType",
+                      "_type": "BytesWType",
                       "name": "bytes",
-                      "immutable": true
+                      "immutable": true,
+                      "length": null
                     },
                     "base": {
                       "_type": "IntrinsicCall",
@@ -451,9 +441,10 @@
                         "immutable": true,
                         "types": [
                           {
-                            "_type": "WType",
+                            "_type": "BytesWType",
                             "name": "bytes",
-                            "immutable": true
+                            "immutable": true,
+                            "length": null
                           },
                           {
                             "_type": "WType",
@@ -475,9 +466,10 @@
                             "end_column": 33
                           },
                           "wtype": {
-                            "_type": "WType",
+                            "_type": "BytesWType",
                             "name": "bytes",
-                            "immutable": true
+                            "immutable": true,
+                            "length": null
                           },
                           "value": "Z)0H",
                           "encoding": "utf8"
@@ -488,7 +480,7 @@
                   },
                   "operator": "==",
                   "rhs": {
-                    "_type": "IntrinsicCall",
+                    "_type": "ReinterpretCast",
                     "source_location": {
                       "file": "tests/approvals/box-enum-contract.algo.ts",
                       "line": 16,
@@ -497,29 +489,31 @@
                       "end_column": 66
                     },
                     "wtype": {
-                      "_type": "WType",
+                      "_type": "BytesWType",
                       "name": "bytes",
-                      "immutable": true
+                      "immutable": true,
+                      "length": null
                     },
-                    "op_code": "itob",
-                    "immediates": [],
-                    "stack_args": [
-                      {
-                        "_type": "ReinterpretCast",
-                        "source_location": {
-                          "file": "tests/approvals/box-enum-contract.algo.ts",
-                          "line": 16,
-                          "end_line": 16,
-                          "column": 60,
-                          "end_column": 65
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true
-                        },
-                        "expr": {
-                          "_type": "BoxValueExpression",
+                    "expr": {
+                      "_type": "IntrinsicCall",
+                      "source_location": {
+                        "file": "tests/approvals/box-enum-contract.algo.ts",
+                        "line": 16,
+                        "end_line": 16,
+                        "column": 43,
+                        "end_column": 66
+                      },
+                      "wtype": {
+                        "_type": "BytesWType",
+                        "name": "bytes[8]",
+                        "immutable": true,
+                        "length": 8
+                      },
+                      "op_code": "itob",
+                      "immediates": [],
+                      "stack_args": [
+                        {
+                          "_type": "ReinterpretCast",
                           "source_location": {
                             "file": "tests/approvals/box-enum-contract.algo.ts",
                             "line": 16,
@@ -532,27 +526,42 @@
                             "name": "uint64",
                             "immutable": true
                           },
-                          "key": {
-                            "_type": "BytesConstant",
+                          "expr": {
+                            "_type": "BoxValueExpression",
                             "source_location": {
                               "file": "tests/approvals/box-enum-contract.algo.ts",
-                              "line": 5,
-                              "end_line": 5,
-                              "column": 43,
-                              "end_column": 48
+                              "line": 16,
+                              "end_line": 16,
+                              "column": 60,
+                              "end_column": 65
                             },
                             "wtype": {
                               "_type": "WType",
-                              "name": "box_key",
+                              "name": "uint64",
                               "immutable": true
                             },
-                            "value": "Z)0H",
-                            "encoding": "utf8"
-                          },
-                          "exists_assertion_message": "Box must have value"
+                            "key": {
+                              "_type": "BytesConstant",
+                              "source_location": {
+                                "file": "tests/approvals/box-enum-contract.algo.ts",
+                                "line": 5,
+                                "end_line": 5,
+                                "column": 43,
+                                "end_column": 48
+                              },
+                              "wtype": {
+                                "_type": "WType",
+                                "name": "box_key",
+                                "immutable": true
+                              },
+                              "value": "Z)0H",
+                              "encoding": "utf8"
+                            },
+                            "exists_assertion_message": "Box must have value"
+                          }
                         }
-                      }
-                    ]
+                      ]
+                    }
                   }
                 },
                 "error_message": null
@@ -605,9 +614,10 @@
                       "end_column": 38
                     },
                     "wtype": {
-                      "_type": "WType",
+                      "_type": "BytesWType",
                       "name": "bytes",
-                      "immutable": true
+                      "immutable": true,
+                      "length": null
                     },
                     "base": {
                       "_type": "IntrinsicCall",
@@ -624,9 +634,10 @@
                         "immutable": true,
                         "types": [
                           {
-                            "_type": "WType",
+                            "_type": "BytesWType",
                             "name": "bytes",
-                            "immutable": true
+                            "immutable": true,
+                            "length": null
                           },
                           {
                             "_type": "WType",
@@ -648,9 +659,10 @@
                             "end_column": 33
                           },
                           "wtype": {
-                            "_type": "WType",
+                            "_type": "BytesWType",
                             "name": "bytes",
-                            "immutable": true
+                            "immutable": true,
+                            "length": null
                           },
                           "value": "ba-w",
                           "encoding": "utf8"
@@ -661,7 +673,7 @@
                   },
                   "operator": "==",
                   "rhs": {
-                    "_type": "IntrinsicCall",
+                    "_type": "ReinterpretCast",
                     "source_location": {
                       "file": "tests/approvals/box-enum-contract.algo.ts",
                       "line": 17,
@@ -670,29 +682,31 @@
                       "end_column": 66
                     },
                     "wtype": {
-                      "_type": "WType",
+                      "_type": "BytesWType",
                       "name": "bytes",
-                      "immutable": true
+                      "immutable": true,
+                      "length": null
                     },
-                    "op_code": "itob",
-                    "immediates": [],
-                    "stack_args": [
-                      {
-                        "_type": "ReinterpretCast",
-                        "source_location": {
-                          "file": "tests/approvals/box-enum-contract.algo.ts",
-                          "line": 17,
-                          "end_line": 17,
-                          "column": 60,
-                          "end_column": 65
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true
-                        },
-                        "expr": {
-                          "_type": "BoxValueExpression",
+                    "expr": {
+                      "_type": "IntrinsicCall",
+                      "source_location": {
+                        "file": "tests/approvals/box-enum-contract.algo.ts",
+                        "line": 17,
+                        "end_line": 17,
+                        "column": 43,
+                        "end_column": 66
+                      },
+                      "wtype": {
+                        "_type": "BytesWType",
+                        "name": "bytes[8]",
+                        "immutable": true,
+                        "length": 8
+                      },
+                      "op_code": "itob",
+                      "immediates": [],
+                      "stack_args": [
+                        {
+                          "_type": "ReinterpretCast",
                           "source_location": {
                             "file": "tests/approvals/box-enum-contract.algo.ts",
                             "line": 17,
@@ -705,27 +719,42 @@
                             "name": "uint64",
                             "immutable": true
                           },
-                          "key": {
-                            "_type": "BytesConstant",
+                          "expr": {
+                            "_type": "BoxValueExpression",
                             "source_location": {
                               "file": "tests/approvals/box-enum-contract.algo.ts",
-                              "line": 6,
-                              "end_line": 6,
-                              "column": 42,
-                              "end_column": 47
+                              "line": 17,
+                              "end_line": 17,
+                              "column": 60,
+                              "end_column": 65
                             },
                             "wtype": {
                               "_type": "WType",
-                              "name": "box_key",
+                              "name": "uint64",
                               "immutable": true
                             },
-                            "value": "ba-w",
-                            "encoding": "utf8"
-                          },
-                          "exists_assertion_message": "Box must have value"
+                            "key": {
+                              "_type": "BytesConstant",
+                              "source_location": {
+                                "file": "tests/approvals/box-enum-contract.algo.ts",
+                                "line": 6,
+                                "end_line": 6,
+                                "column": 42,
+                                "end_column": 47
+                              },
+                              "wtype": {
+                                "_type": "WType",
+                                "name": "box_key",
+                                "immutable": true
+                              },
+                              "value": "ba-w",
+                              "encoding": "utf8"
+                            },
+                            "exists_assertion_message": "Box must have value"
+                          }
                         }
-                      }
-                    ]
+                      ]
+                    }
                   }
                 },
                 "error_message": null
@@ -753,31 +782,20 @@
                   "_type": "ARC4Tuple",
                   "name": "arc4.tuple<uint64,uint64>",
                   "immutable": true,
-                  "native_type": null,
-                  "arc4_name": "(uint64,uint64)",
+                  "arc4_alias": "(uint64,uint64)",
                   "types": [
                     {
                       "_type": "ARC4UIntN",
                       "name": "arc4.uint64",
                       "immutable": true,
-                      "native_type": {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true
-                      },
-                      "arc4_name": "uint64",
+                      "arc4_alias": "uint64",
                       "n": 64
                     },
                     {
                       "_type": "ARC4UIntN",
                       "name": "arc4.uint64",
                       "immutable": true,
-                      "native_type": {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true
-                      },
-                      "arc4_name": "uint64",
+                      "arc4_alias": "uint64",
                       "n": 64
                     }
                   ],
@@ -807,24 +825,14 @@
                         "_type": "ARC4UIntN",
                         "name": "arc4.uint64",
                         "immutable": true,
-                        "native_type": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true
-                        },
-                        "arc4_name": "uint64",
+                        "arc4_alias": "uint64",
                         "n": 64
                       },
                       {
                         "_type": "ARC4UIntN",
                         "name": "arc4.uint64",
                         "immutable": true,
-                        "native_type": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true
-                        },
-                        "arc4_name": "uint64",
+                        "arc4_alias": "uint64",
                         "n": 64
                       }
                     ]
@@ -843,12 +851,7 @@
                         "_type": "ARC4UIntN",
                         "name": "arc4.uint64",
                         "immutable": true,
-                        "native_type": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true
-                        },
-                        "arc4_name": "uint64",
+                        "arc4_alias": "uint64",
                         "n": 64
                       },
                       "value": {
@@ -913,12 +916,7 @@
                         "_type": "ARC4UIntN",
                         "name": "arc4.uint64",
                         "immutable": true,
-                        "native_type": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true
-                        },
-                        "arc4_name": "uint64",
+                        "arc4_alias": "uint64",
                         "n": 64
                       },
                       "value": {

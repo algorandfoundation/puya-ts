@@ -267,7 +267,7 @@ export abstract class StorageProxyPType extends PType {
 export const GlobalStateGeneric = new GenericPType({
   name: 'GlobalState',
   module: Constants.moduleNames.algoTs.state,
-  parameterise(typeArgs: PType[]): GlobalStateType {
+  parameterise(typeArgs: readonly PType[]): GlobalStateType {
     codeInvariant(typeArgs.length === 1, 'GlobalState type expects exactly one type parameter')
     return new GlobalStateType({
       content: typeArgs[0],
@@ -291,7 +291,7 @@ export class GlobalStateType extends StorageProxyPType {
 export const LocalStateGeneric = new GenericPType({
   name: 'LocalState',
   module: Constants.moduleNames.algoTs.state,
-  parameterise(typeArgs: PType[]): LocalStateType {
+  parameterise(typeArgs: readonly PType[]): LocalStateType {
     codeInvariant(typeArgs.length === 1, 'LocalState type expects exactly one type parameter')
     return new LocalStateType({
       content: typeArgs[0],
@@ -321,7 +321,7 @@ export class LocalStateType extends StorageProxyPType {
 export const BoxGeneric = new GenericPType({
   name: 'Box',
   module: Constants.moduleNames.algoTs.box,
-  parameterise(typeArgs: PType[]): BoxPType {
+  parameterise(typeArgs: readonly PType[]): BoxPType {
     codeInvariant(typeArgs.length === 1, `${this.name} type expects exactly one type parameter`)
     return new BoxPType({
       content: typeArgs[0],
@@ -343,7 +343,7 @@ export class BoxPType extends StorageProxyPType {
 export const BoxMapGeneric = new GenericPType({
   name: 'BoxMap',
   module: Constants.moduleNames.algoTs.box,
-  parameterise(typeArgs: PType[]): BoxMapPType {
+  parameterise(typeArgs: readonly PType[]): BoxMapPType {
     codeInvariant(typeArgs.length === 2, `${this.name} type expects exactly two type parameters`)
     return new BoxMapPType({
       keyType: typeArgs[0],
@@ -743,7 +743,7 @@ export const undefinedPType = new UnsupportedType({
 export const PromiseGeneric = new GenericPType({
   name: 'Promise',
   module: 'typescript/lib/lib.es5.d.ts',
-  parameterise(ptypes: PType[]) {
+  parameterise(ptypes: readonly PType[]) {
     codeInvariant(ptypes.length === 1, 'Promise expects exactly 1 generic parameter')
     return new PromiseType({ resolveType: ptypes[0] })
   },
@@ -813,6 +813,8 @@ export class NumericLiteralPType extends NativeNumericType {
     })
     this.literalValue = literalValue
   }
+
+  static typeDescription = 'numeric literal'
 }
 export class BigIntLiteralPType extends NativeNumericType {
   readonly literalValue: bigint
@@ -826,6 +828,8 @@ export class BigIntLiteralPType extends NativeNumericType {
     })
     this.literalValue = literalValue
   }
+
+  static typeDescription = 'bigint literal'
 }
 export const numberPType = new NativeNumericType({
   name: 'number',
@@ -843,11 +847,42 @@ export const BigUintFunction = new LibFunctionType({
   name: 'BigUint',
   module: Constants.moduleNames.algoTs.primitives,
 })
-export const bytesPType = new InstanceType({
+export class BytesPType extends PType {
+  readonly wtype: wtypes.WType
+  readonly name: string
+  readonly module: string
+  readonly singleton = false
+  readonly length: bigint | null
+
+  constructor({ length }: { length: bigint | null }) {
+    super()
+    this.length = length
+    this.name = length === null ? 'bytes' : `bytes<${length}>`
+    this.wtype = new wtypes.BytesWType({ length })
+    this.module = Constants.moduleNames.algoTs.primitives
+  }
+}
+export const BytesGeneric = new GenericPType({
   name: 'bytes',
   module: Constants.moduleNames.algoTs.primitives,
-  wtype: wtypes.bytesWType,
+  parameterise(typeArgs: readonly PType[]): BytesPType {
+    codeInvariant(typeArgs.length === 1, `${this.name} type expects exactly one type parameter`)
+    const bytesSize = typeArgs[0]
+    if (bytesSize.equals(uint64PType)) {
+      return new BytesPType({
+        length: null,
+      })
+    }
+    codeInvariant(
+      bytesSize instanceof NumericLiteralPType,
+      `Bytes size generic type param for bytes type must be a literal number. Inferred type is ${bytesSize.name}`,
+    )
+    return new BytesPType({
+      length: bytesSize.literalValue,
+    })
+  },
 })
+export const bytesPType = new BytesPType({ length: null })
 export const BytesFunction = new LibFunctionType({
   name: 'Bytes',
   module: Constants.moduleNames.algoTs.primitives,
@@ -1160,7 +1195,7 @@ export const urangeFunction = new LibFunctionType({
 export const IterableIteratorGeneric = new GenericPType({
   name: 'IterableIterator',
   module: 'typescript/lib/lib.es2015.iterable.d.ts',
-  parameterise(typeArgs: PType[]): IterableIteratorType {
+  parameterise(typeArgs: readonly PType[]): IterableIteratorType {
     codeInvariant(typeArgs.length >= 1 && typeArgs.length <= 3, 'IterableIterator type expects 1-3 type parameters')
     // Currently ignoring return and next types
     const [yieldType, _returnType, _nextType] = typeArgs
@@ -1384,16 +1419,18 @@ export const arc28EmitFunction = new LibFunctionType({
 export const SuperPrototypeSelectorGeneric = new GenericPType({
   name: 'SuperPrototypeSelector',
   module: Constants.moduleNames.polytype,
-  parameterise(ptypes: PType[]) {
+  parameterise(ptypes: readonly PType[]) {
     return new SuperPrototypeSelector({ bases: ptypes })
   },
 })
 export class SuperPrototypeSelector extends InternalType {
-  constructor({ bases }: { bases: PType[] }) {
+  readonly bases: readonly PType[]
+  constructor({ bases }: { bases: readonly PType[] }) {
     super({
       name: 'SuperPrototypeSelector',
       module: Constants.moduleNames.polytype,
     })
+    this.bases = bases
   }
 }
 export const ClusteredPrototype = new InternalType({
@@ -1412,7 +1449,7 @@ export const MutableArrayConstructor = new LibClassType({
 export const MutableArrayGeneric = new GenericPType({
   name: 'MutableArray',
   module: Constants.moduleNames.algoTs.mutableArray,
-  parameterise: (typeArgs: PType[]): MutableArrayType => {
+  parameterise: (typeArgs: readonly PType[]): MutableArrayType => {
     codeInvariant(typeArgs.length === 1, 'MutableArray type expects exactly one type parameter')
     const [elementType] = typeArgs
 

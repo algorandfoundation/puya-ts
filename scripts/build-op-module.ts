@@ -1,6 +1,6 @@
 import { camelCase, pascalCase } from 'change-case'
 import langSpec from '../langspec.puya.json'
-import { hasFlags, invariant } from '../src/util'
+import { invariant } from '../src/util'
 import type { Op } from './langspec'
 
 function range(start: number, end: number) {
@@ -114,20 +114,68 @@ const OPERATOR_OPCODES = new Set([
   '~',
 ])
 
-export enum AlgoTsType {
-  None = 0,
-  Bytes = 1 << 0,
-  Uint64 = 1 << 1,
-  Boolean = 1 << 2,
-  Account = 1 << 3,
-  Asset = 1 << 4,
-  Application = 1 << 5,
-  Void = 1 << 6,
-  BigUint = 1 << 7,
-  String = 1 << 8,
-  OnCompletion = 1 << 9,
-  TransactionType = 1 << 10,
-  Enum = 1 << 11,
+export type AlgoTsType = SimpleAlgoTsType | BytesAlgoTsType | EnumAlgoTsType | UnionAlgoTsType
+
+export class SimpleAlgoTsType {
+  constructor(
+    public readonly name: string,
+    public readonly tsName: string,
+  ) {}
+}
+
+export class BytesAlgoTsType {
+  get name() {
+    return `Bytes[${this.size}]`
+  }
+  get tsName() {
+    return `bytes<${this.size}>`
+  }
+  constructor(public readonly size: number) {}
+}
+export class EnumAlgoTsType {
+  constructor(public readonly name: string) {}
+  get tsName() {
+    return pascalCase(this.name)
+  }
+}
+export class UnionAlgoTsType {
+  get name(): string {
+    return this.types.map((t) => t.name).join(' | ')
+  }
+  get tsName(): string {
+    return this.types.map((t) => t.tsName).join(' | ')
+  }
+  readonly types: AlgoTsType[]
+  constructor(...types: AlgoTsType[]) {
+    this.types = types
+  }
+}
+
+export const AlgoTsType = {
+  None: new SimpleAlgoTsType('None', 'void'),
+  Bytes: new SimpleAlgoTsType('Bytes', 'bytes'),
+  Uint64: new SimpleAlgoTsType('Uint64', 'uint64'),
+  Boolean: new SimpleAlgoTsType('Boolean', 'boolean'),
+  Account: new SimpleAlgoTsType('Account', 'Account'),
+  Asset: new SimpleAlgoTsType('Asset', 'Asset'),
+  Application: new SimpleAlgoTsType('Application', 'Application'),
+  Void: new SimpleAlgoTsType('Void', 'void'),
+  BigUint: new SimpleAlgoTsType('BigUint', 'biguint'),
+  String: new SimpleAlgoTsType('String', 'string'),
+  OnCompletion: new SimpleAlgoTsType('OnCompletion', 'OnCompleteAction'),
+  TransactionType: new SimpleAlgoTsType('TransactionType', 'TransactionType'),
+}
+
+function getInputTypes(typ: AlgoTsType): AlgoTsType {
+  switch (typ.name) {
+    case 'Asset':
+    case 'Application':
+    case 'OnCompletion':
+    case 'TransactionType':
+      return new UnionAlgoTsType(typ, AlgoTsType.Uint64)
+    default:
+      return typ
+  }
 }
 
 export type EnumValue = {
@@ -140,7 +188,7 @@ export type EnumValue = {
 }
 
 export type EnumDef = {
-  typeFlag: number
+  typeFlag: EnumAlgoTsType
   name: string
   tsName: string
   members: EnumValue[]
@@ -149,7 +197,7 @@ export type EnumDef = {
 const TYPE_MAP: Record<string, AlgoTsType> = {
   account: AlgoTsType.Account,
   address: AlgoTsType.Account,
-  address_or_index: AlgoTsType.Account | AlgoTsType.Uint64,
+  address_or_index: new UnionAlgoTsType(AlgoTsType.Account, AlgoTsType.Uint64),
   application: AlgoTsType.Application,
   asset: AlgoTsType.Asset,
   bool: AlgoTsType.Boolean,
@@ -160,33 +208,17 @@ const TYPE_MAP: Record<string, AlgoTsType> = {
   bigint: AlgoTsType.BigUint,
 
   '[]byte': AlgoTsType.Bytes,
-  '[8]byte': AlgoTsType.Bytes,
-  '[32]byte': AlgoTsType.Bytes,
-  '[33]byte': AlgoTsType.Bytes,
-  '[64]byte': AlgoTsType.Bytes,
-  '[80]byte': AlgoTsType.Bytes,
-  '[1232]byte': AlgoTsType.Bytes,
-  '[1793]byte': AlgoTsType.Bytes,
-  any: AlgoTsType.Uint64 | AlgoTsType.Bytes,
+  '[8]byte': new BytesAlgoTsType(8),
+  '[32]byte': new BytesAlgoTsType(32),
+  '[33]byte': new BytesAlgoTsType(33),
+  '[64]byte': new BytesAlgoTsType(64),
+  '[80]byte': new BytesAlgoTsType(80),
+  '[1232]byte': new BytesAlgoTsType(1232),
+  '[1793]byte': new BytesAlgoTsType(1793),
+  any: new UnionAlgoTsType(AlgoTsType.Bytes, AlgoTsType.Uint64),
 }
 
-const INPUT_ALGOTS_TYPE_MAP: Record<AlgoTsType, AlgoTsType> = {
-  [AlgoTsType.None]: AlgoTsType.None,
-  [AlgoTsType.Asset]: AlgoTsType.Asset | AlgoTsType.Uint64,
-  [AlgoTsType.Application]: AlgoTsType.Application | AlgoTsType.Uint64,
-  [AlgoTsType.Bytes]: AlgoTsType.Bytes,
-  [AlgoTsType.String]: AlgoTsType.String,
-  [AlgoTsType.Uint64]: AlgoTsType.Uint64,
-  [AlgoTsType.Boolean]: AlgoTsType.Boolean,
-  [AlgoTsType.Account]: AlgoTsType.Account,
-  [AlgoTsType.Void]: AlgoTsType.Void,
-  [AlgoTsType.BigUint]: AlgoTsType.BigUint,
-  [AlgoTsType.OnCompletion]: AlgoTsType.OnCompletion | AlgoTsType.Uint64,
-  [AlgoTsType.TransactionType]: AlgoTsType.TransactionType | AlgoTsType.Uint64,
-  [AlgoTsType.Enum]: AlgoTsType.Enum,
-}
-
-const ARG_ENUMS = Object.entries(langSpec.arg_enums).map(([name, values], index): EnumDef => {
+const ARG_ENUMS = Object.entries(langSpec.arg_enums).map(([name, values]): EnumDef => {
   const enumValues = values.map(
     (v): EnumValue => ({
       name: v.name,
@@ -199,7 +231,7 @@ const ARG_ENUMS = Object.entries(langSpec.arg_enums).map(([name, values], index)
   )
 
   return {
-    typeFlag: (AlgoTsType.Enum << (index + 1)) | AlgoTsType.Enum,
+    typeFlag: new EnumAlgoTsType(pascalCase(name)),
     name,
     tsName: pascalCase(name),
     members: enumValues,
@@ -357,18 +389,8 @@ export type OpModule = {
   enums: EnumDef[]
 }
 
-const atomicTypes = [
-  AlgoTsType.Bytes,
-  AlgoTsType.Uint64,
-  AlgoTsType.Boolean,
-  AlgoTsType.Account,
-  AlgoTsType.Asset,
-  AlgoTsType.Application,
-  AlgoTsType.Void,
-  AlgoTsType.BigUint,
-]
 function isSplitableUnion(t: AlgoTsType): boolean {
-  return !(hasFlags(t, AlgoTsType.Enum) || atomicTypes.includes(t))
+  return t instanceof UnionAlgoTsType
 }
 /**
  * If a function returns a union type, split into multiple functions for each part of the union
@@ -388,11 +410,11 @@ function* splitUnionReturnTypes(opFunction: OpFunction): IterableIterator<OpFunc
     yield opFunction
   } else {
     const unionReturnType = opFunction.returnTypes[indexOfUnionReturnType]
-    for (const atomicType of atomicTypes) {
-      if (!hasFlags(unionReturnType, atomicType)) continue
+    invariant(unionReturnType instanceof UnionAlgoTsType, 'union type should be union type...')
+    for (const atomicType of unionReturnType.types) {
       yield {
         ...opFunction,
-        name: opFunction.name + AlgoTsType[atomicType],
+        name: opFunction.name + atomicType.name,
         returnTypes: opFunction.returnTypes.map((t, i) => (i === indexOfUnionReturnType ? atomicType : t)),
       }
     }
@@ -442,14 +464,14 @@ export function buildOpModule() {
           name: getEnumOpName(member.name, opNameConfig),
           immediateArgs: def.immediate_args.map((i) => ({
             name: camelCase(i.name),
-            type: expandInputType(getMappedType(i.immediate_type, i.arg_enum)),
+            type: getInputTypes(getMappedType(i.immediate_type, i.arg_enum)),
           })),
           stackArgs: def.stack_inputs.map((sa, i) => {
             if (i === enumArg.modifies_stack_input) {
               invariant(member.stackType, 'Member must have stack type')
-              return { name: camelCase(sa.name), type: expandInputType(member.stackType) }
+              return { name: camelCase(sa.name), type: getInputTypes(member.stackType) }
             }
-            return { name: camelCase(sa.name), type: expandInputType(getMappedType(sa.stack_type, null)) }
+            return { name: camelCase(sa.name), type: getInputTypes(getMappedType(sa.stack_type, null)) }
           }),
           returnTypes: def.stack_outputs.map((o, i) => {
             if (i === enumArg.modifies_stack_output) {
@@ -469,9 +491,9 @@ export function buildOpModule() {
           name: getOpName(def.name, opNameConfig),
           immediateArgs: def.immediate_args.map((i) => ({
             name: camelCase(i.name),
-            type: expandInputType(getMappedType(i.immediate_type, i.arg_enum)),
+            type: getInputTypes(getMappedType(i.immediate_type, i.arg_enum)),
           })),
-          stackArgs: def.stack_inputs.map((i) => ({ name: camelCase(i.name), type: expandInputType(getMappedType(i.stack_type, null)) })),
+          stackArgs: def.stack_inputs.map((i) => ({ name: camelCase(i.name), type: getInputTypes(getMappedType(i.stack_type, null)) })),
           returnTypes: def.stack_outputs.map((o) => getMappedType(o.stack_type, null)),
           docs: getOpDocs(def),
         }),
@@ -650,18 +672,6 @@ function getMappedType(t: string | null, enumName: string | null): AlgoTsType {
   const mappedType = TYPE_MAP[t ?? '']
   invariant(mappedType, `Mapped type must exist for ${t}`)
   return mappedType
-}
-
-function splitBitFlags<T extends number>(aType: T): T[] {
-  if (!aType) return []
-  return new Array(Math.floor(Math.log2(aType)) + 1).fill(null).flatMap((_, i) => {
-    const n = (2 ** i) as T
-    return n & aType ? n : []
-  })
-}
-
-function expandInputType(aType: AlgoTsType): AlgoTsType {
-  return splitBitFlags(aType).reduce((acc, cur) => acc | (cur in INPUT_ALGOTS_TYPE_MAP ? INPUT_ALGOTS_TYPE_MAP[cur] : cur), AlgoTsType.None)
 }
 
 const getOpDocs = (op: Op): string[] => [

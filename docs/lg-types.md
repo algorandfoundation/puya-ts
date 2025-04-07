@@ -123,6 +123,19 @@ const interpolated = Bytes`${fromUtf8}${fromHex}${fromBase32}${fromBase64}`
 const concatenated = fromUtf8.concat(fromHex).concat(fromBase32).concat(fromBase64)
 ```
 
+The bytes type can also be declared with a generic length parameter to declare a value which should always by a byte array of a specific length. Due to covariance a `bytes<N>` value can always be assigned to a `bytes` target but in order to do the opposite, you will need to call `.toFixed` on the unbounded value. This method takes a length and an optional boolean `checked` option to indicate if this conversion should be _checked_ at runtime (via asserting the length) versus an `unchecked` conversion which changes the type but doesn't verify the length. The default is a `checked` conversion.
+
+```ts
+const fromUtf8 = Bytes<3>('abc')
+const fromHex = Bytes.fromHex<2>('AAFF')
+const fromBase32 = Bytes.fromBase32<36>('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ')
+const fromBase64 = Bytes.fromBase64<14>('SGVsbG8gQWxnb3JhbmQ=')
+
+function padTo32(b: bytes<16>): bytes<32> {
+  return b.bitwiseOr(bzero(32)).toFixed({ length: 32, checked: false })
+}
+```
+
 ### String
 
 `string` literals and values are supported in Algorand TypeScript however most of the prototype is not implemented. Strings in EcmaScript are implemented using utf-16 characters and achieving semantic compatability for any prototype method which slices or splits strings based on characters would be non-trivial (and opcode expensive) to implement on the AVM with no clear benefit as string manipulation tasks can easily be performed off-chain. Algorand TypeScript APIs which expect a `bytes` value will often also accept a `string` value. In these cases, the `string` will be interpreted as a `utf8` encoded value.

@@ -42,7 +42,7 @@ subroutine tests/approvals/avm11.algo.ts::Avm11Contract.__puya_arc4_router__() -
 
 subroutine tests/approvals/avm11.algo.ts::Avm11Contract.testNewOps() -> void:
     block@0: // L25
-        let tmp%0#0: bytes = ((mimc BLS12_381Mp111) 0x00000000000000000000000000000000000000000000000000000000499602d2)
+        let tmp%0#0: bytes[32] = ((mimc BLS12_381Mp111) 0x00000000000000000000000000000000000000000000000000000000499602d2)
         let reinterpret_bool%0#0: bool = (len tmp%0#0)
         (assert reinterpret_bool%0#0)
         let reinterpret_bool%1#0: bool = online_stake
@@ -67,7 +67,7 @@ subroutine tests/approvals/avm11.algo.ts::Avm11Contract.testNewOps() -> void:
         (assert reinterpret_bool%2#0) // fees collected
         let reinterpret_bool%3#0: bool = ((block BlkBonus) 0u)
         (assert reinterpret_bool%3#0) // bonus
-        let tmp%7#0: bytes = ((block BlkBranch) 0u)
+        let tmp%7#0: bytes[32] = ((block BlkBranch) 0u)
         let reinterpret_bool%4#0: bool = (len tmp%7#0)
         (assert reinterpret_bool%4#0) // branch
         let tmp%8#0: bytes[32] = ((block BlkFeeSink) 0u)

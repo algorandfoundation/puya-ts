@@ -39,7 +39,7 @@ export interface PaymentInnerTxn {
   /**
    * 32 byte lease value
    */
-  readonly lease: bytes
+  readonly lease: bytes<32>
   /**
    * Transaction type as bytes
    */
@@ -56,7 +56,7 @@ export interface PaymentInnerTxn {
   /**
    * The computed ID for this transaction. 32 bytes.
    */
-  readonly txnId: bytes
+  readonly txnId: bytes<32>
   /**
    * 32 byte Sender's new AuthAddr
    */
@@ -107,7 +107,7 @@ export interface KeyRegistrationInnerTxn {
   /**
    * 32 byte lease value
    */
-  readonly lease: bytes
+  readonly lease: bytes<32>
   /**
    * Transaction type as bytes
    */
@@ -124,7 +124,7 @@ export interface KeyRegistrationInnerTxn {
   /**
    * The computed ID for this transaction. 32 bytes.
    */
-  readonly txnId: bytes
+  readonly txnId: bytes<32>
   /**
    * 32 byte Sender's new AuthAddr
    */
@@ -132,11 +132,11 @@ export interface KeyRegistrationInnerTxn {
   /**
    * 32 byte address
    */
-  readonly voteKey: bytes
+  readonly voteKey: bytes<32>
   /**
    * 32 byte address
    */
-  readonly selectionKey: bytes
+  readonly selectionKey: bytes<32>
   /**
    * The first round that the participation key is valid.
    */
@@ -156,7 +156,7 @@ export interface KeyRegistrationInnerTxn {
   /**
    * 64 byte state proof public key
    */
-  readonly stateProofKey: bytes
+  readonly stateProofKey: bytes<64>
 }
 /**
  * An inner transaction of type 'acfg'
@@ -191,7 +191,7 @@ export interface AssetConfigInnerTxn {
   /**
    * 32 byte lease value
    */
-  readonly lease: bytes
+  readonly lease: bytes<32>
   /**
    * Transaction type as bytes
    */
@@ -208,7 +208,7 @@ export interface AssetConfigInnerTxn {
   /**
    * The computed ID for this transaction. 32 bytes.
    */
-  readonly txnId: bytes
+  readonly txnId: bytes<32>
   /**
    * 32 byte Sender's new AuthAddr
    */
@@ -248,7 +248,7 @@ export interface AssetConfigInnerTxn {
   /**
    * 32 byte commitment to unspecified asset metadata
    */
-  readonly metadataHash: bytes
+  readonly metadataHash: bytes<32>
   /**
    * 32 byte address
    */
@@ -299,7 +299,7 @@ export interface AssetTransferInnerTxn {
   /**
    * 32 byte lease value
    */
-  readonly lease: bytes
+  readonly lease: bytes<32>
   /**
    * Transaction type as bytes
    */
@@ -316,7 +316,7 @@ export interface AssetTransferInnerTxn {
   /**
    * The computed ID for this transaction. 32 bytes.
    */
-  readonly txnId: bytes
+  readonly txnId: bytes<32>
   /**
    * 32 byte Sender's new AuthAddr
    */
@@ -375,7 +375,7 @@ export interface AssetFreezeInnerTxn {
   /**
    * 32 byte lease value
    */
-  readonly lease: bytes
+  readonly lease: bytes<32>
   /**
    * Transaction type as bytes
    */
@@ -392,7 +392,7 @@ export interface AssetFreezeInnerTxn {
   /**
    * The computed ID for this transaction. 32 bytes.
    */
-  readonly txnId: bytes
+  readonly txnId: bytes<32>
   /**
    * 32 byte Sender's new AuthAddr
    */
@@ -443,7 +443,7 @@ export interface ApplicationCallInnerTxn {
   /**
    * 32 byte lease value
    */
-  readonly lease: bytes
+  readonly lease: bytes<32>
   /**
    * Transaction type as bytes
    */
@@ -460,7 +460,7 @@ export interface ApplicationCallInnerTxn {
   /**
    * The computed ID for this transaction. 32 bytes.
    */
-  readonly txnId: bytes
+  readonly txnId: bytes<32>
   /**
    * 32 byte Sender's new AuthAddr
    */
@@ -601,7 +601,7 @@ export interface PaymentFields {
   /**
    * 32 byte lease value
    */
-  lease?: bytes
+  lease?: bytes<32>
   /**
    * 32 byte Sender's new AuthAddr
    */
@@ -647,7 +647,7 @@ export interface KeyRegistrationFields {
   /**
    * 32 byte lease value
    */
-  lease?: bytes
+  lease?: bytes<32>
   /**
    * 32 byte Sender's new AuthAddr
    */
@@ -655,11 +655,11 @@ export interface KeyRegistrationFields {
   /**
    * 32 byte address
    */
-  voteKey?: bytes
+  voteKey?: bytes<32>
   /**
    * 32 byte address
    */
-  selectionKey?: bytes
+  selectionKey?: bytes<32>
   /**
    * The first round that the participation key is valid.
    */
@@ -679,7 +679,7 @@ export interface KeyRegistrationFields {
   /**
    * 64 byte state proof public key
    */
-  stateProofKey?: bytes
+  stateProofKey?: bytes<64>
 }
 export interface AssetConfigFields {
   /**
@@ -709,7 +709,7 @@ export interface AssetConfigFields {
   /**
    * 32 byte lease value
    */
-  lease?: bytes
+  lease?: bytes<32>
   /**
    * 32 byte Sender's new AuthAddr
    */
@@ -745,7 +745,7 @@ export interface AssetConfigFields {
   /**
    * 32 byte commitment to unspecified asset metadata
    */
-  metadataHash?: bytes
+  metadataHash?: bytes<32>
   /**
    * 32 byte address
    */
@@ -791,7 +791,7 @@ export interface AssetTransferFields {
   /**
    * 32 byte lease value
    */
-  lease?: bytes
+  lease?: bytes<32>
   /**
    * 32 byte Sender's new AuthAddr
    */
@@ -845,7 +845,7 @@ export interface AssetFreezeFields {
   /**
    * 32 byte lease value
    */
-  lease?: bytes
+  lease?: bytes<32>
   /**
    * 32 byte Sender's new AuthAddr
    */
@@ -891,7 +891,7 @@ export interface ApplicationCallFields {
   /**
    * 32 byte lease value
    */
-  lease?: bytes
+  lease?: bytes<32>
   /**
    * 32 byte Sender's new AuthAddr
    */

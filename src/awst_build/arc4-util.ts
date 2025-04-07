@@ -12,7 +12,7 @@ import {
   assetPType,
   biguintPType,
   boolPType,
-  bytesPType,
+  BytesPType,
   GroupTransactionPType,
   NativeNumericType,
   numberPType,
@@ -30,6 +30,7 @@ import {
   ARC4TupleType,
   DynamicArrayType,
   DynamicBytesType,
+  StaticBytesType,
   UintNType,
 } from './ptypes/arc4-types'
 
@@ -67,7 +68,7 @@ export function buildArc4MethodConstant(functionType: FunctionPType, arc4Config:
   const returnType = getABITypeName(functionType.returnType, 'out', sourceLocation)
   return nodeFactory.methodConstant({
     value: `${arc4Config.name}(${params})${returnType}`,
-    wtype: wtypes.bytesWType,
+    wtype: new wtypes.BytesWType({ length: 4n }),
     sourceLocation,
   })
 }
@@ -81,7 +82,7 @@ export function buildArc4MethodConstant(functionType: FunctionPType, arc4Config:
 export function getABITypeName(ptype: PType, direction: 'in' | 'out', sourceLocation: SourceLocation): string {
   const arc4Type = ptypeToAbiPType(ptype, direction, sourceLocation)
   if (arc4Type.wtype instanceof wtypes.ARC4Type || arc4Type.wtype instanceof wtypes.WGroupTransaction) {
-    return arc4Type.wtype.arc4Name
+    return arc4Type.wtype.arc4Alias
   }
   return arc4Type.wtypeOrThrow.name
 }
@@ -95,7 +96,7 @@ export function isArc4EncodableType(ptype: PType): boolean {
   if (ptype.equals(boolPType)) return true
   if (ptype.equals(uint64PType)) return true
   if (ptype.equals(biguintPType)) return true
-  if (ptype.equals(bytesPType)) return true
+  if (ptype instanceof BytesPType) return true
   if (ptype.equals(stringPType)) return true
   if (ptype instanceof TuplePType) return ptype.items.every((i) => isArc4EncodableType(i))
   if (ptype instanceof ObjectPType) return ptype.orderedProperties().every(([, pt]) => isArc4EncodableType(pt))
@@ -118,7 +119,7 @@ export function ptypeToArc4EncodedType(ptype: PType, sourceLocation: SourceLocat
   if (ptype.equals(boolPType)) return arc4BooleanType
   if (ptype.equals(uint64PType)) return new UintNType({ n: 64n })
   if (ptype.equals(biguintPType)) return new UintNType({ n: 512n })
-  if (ptype.equals(bytesPType)) return DynamicBytesType
+  if (ptype instanceof BytesPType) return ptype.length === null ? DynamicBytesType : new StaticBytesType({ length: ptype.length })
   if (ptype.equals(stringPType)) return arc4StringType
   if (ptype instanceof NativeNumericType) {
     throw new CodeError(numberPType.expressionMessage, { sourceLocation })

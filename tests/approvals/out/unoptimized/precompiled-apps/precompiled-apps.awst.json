@@ -3013,9 +3013,10 @@
     },
     "args": [],
     "return_type": {
-      "_type": "WType",
+      "_type": "BytesWType",
       "name": "bytes",
-      "immutable": true
+      "immutable": true,
+      "length": null
     },
     "body": {
       "_type": "Block",
@@ -3046,9 +3047,10 @@
               "end_column": 23
             },
             "wtype": {
-              "_type": "WType",
+              "_type": "BytesWType",
               "name": "bytes",
-              "immutable": true
+              "immutable": true,
+              "length": null
             },
             "op_code": "bzero",
             "immediates": [],
@@ -3304,9 +3306,10 @@
                       "end_column": 24
                     },
                     "wtype": {
-                      "_type": "WType",
+                      "_type": "BytesWType",
                       "name": "bytes",
-                      "immutable": true
+                      "immutable": true,
+                      "length": null
                     },
                     "target": {
                       "_type": "SubroutineID",
@@ -3811,7 +3814,7 @@
               "name": "group_transaction",
               "immutable": true,
               "transaction_type": null,
-              "arc4_name": "txn"
+              "arc4_alias": "txn"
             }
           }
         ],
@@ -3910,7 +3913,7 @@
                               "name": "group_transaction",
                               "immutable": true,
                               "transaction_type": null,
-                              "arc4_name": "txn"
+                              "arc4_alias": "txn"
                             },
                             "name": "txn"
                           }
@@ -4073,7 +4076,7 @@
                                         "name": "group_transaction_acfg",
                                         "immutable": true,
                                         "transaction_type": 3,
-                                        "arc4_name": "acfg"
+                                        "arc4_alias": "acfg"
                                       },
                                       "name": "txn"
                                     }
@@ -4144,7 +4147,7 @@
                                       "name": "group_transaction_acfg",
                                       "immutable": true,
                                       "transaction_type": 3,
-                                      "arc4_name": "acfg"
+                                      "arc4_alias": "acfg"
                                     },
                                     "name": "txn"
                                   }
@@ -4200,7 +4203,7 @@
                                     "name": "group_transaction_acfg",
                                     "immutable": true,
                                     "transaction_type": 3,
-                                    "arc4_name": "acfg"
+                                    "arc4_alias": "acfg"
                                   },
                                   "name": "txn"
                                 }
@@ -4285,7 +4288,7 @@
                               "name": "group_transaction",
                               "immutable": true,
                               "transaction_type": null,
-                              "arc4_name": "txn"
+                              "arc4_alias": "txn"
                             },
                             "name": "txn"
                           }
@@ -4448,7 +4451,7 @@
                                         "name": "group_transaction_appl",
                                         "immutable": true,
                                         "transaction_type": 6,
-                                        "arc4_name": "appl"
+                                        "arc4_alias": "appl"
                                       },
                                       "name": "txn"
                                     }
@@ -4519,7 +4522,7 @@
                                       "name": "group_transaction_appl",
                                       "immutable": true,
                                       "transaction_type": 6,
-                                      "arc4_name": "appl"
+                                      "arc4_alias": "appl"
                                     },
                                     "name": "txn"
                                   }
@@ -4575,7 +4578,7 @@
                                     "name": "group_transaction_appl",
                                     "immutable": true,
                                     "transaction_type": 6,
-                                    "arc4_name": "appl"
+                                    "arc4_alias": "appl"
                                   },
                                   "name": "txn"
                                 }
@@ -4704,14 +4707,15 @@
               "name": "group_transaction_acfg",
               "immutable": true,
               "transaction_type": 3,
-              "arc4_name": "acfg"
+              "arc4_alias": "acfg"
             }
           }
         ],
         "return_type": {
-          "_type": "WType",
+          "_type": "BytesWType",
           "name": "bytes",
-          "immutable": true
+          "immutable": true,
+          "length": null
         },
         "body": {
           "_type": "Block",
@@ -4733,7 +4737,7 @@
                 "end_column": 25
               },
               "value": {
-                "_type": "IntrinsicCall",
+                "_type": "ReinterpretCast",
                 "source_location": {
                   "file": "tests/approvals/precompiled-apps.algo.ts",
                   "line": 96,
@@ -4742,34 +4746,51 @@
                   "end_column": 25
                 },
                 "wtype": {
-                  "_type": "WType",
+                  "_type": "BytesWType",
                   "name": "bytes",
-                  "immutable": true
+                  "immutable": true,
+                  "length": null
                 },
-                "op_code": "gtxns",
-                "immediates": [
-                  "TxID"
-                ],
-                "stack_args": [
-                  {
-                    "_type": "VarExpression",
-                    "source_location": {
-                      "file": "tests/approvals/precompiled-apps.algo.ts",
-                      "line": 96,
-                      "end_line": 96,
-                      "column": 11,
-                      "end_column": 19
-                    },
-                    "wtype": {
-                      "_type": "WGroupTransaction",
-                      "name": "group_transaction_acfg",
-                      "immutable": true,
-                      "transaction_type": 3,
-                      "arc4_name": "acfg"
-                    },
-                    "name": "assetCfg"
-                  }
-                ]
+                "expr": {
+                  "_type": "IntrinsicCall",
+                  "source_location": {
+                    "file": "tests/approvals/precompiled-apps.algo.ts",
+                    "line": 96,
+                    "end_line": 96,
+                    "column": 20,
+                    "end_column": 25
+                  },
+                  "wtype": {
+                    "_type": "BytesWType",
+                    "name": "bytes[32]",
+                    "immutable": true,
+                    "length": 32
+                  },
+                  "op_code": "gtxns",
+                  "immediates": [
+                    "TxID"
+                  ],
+                  "stack_args": [
+                    {
+                      "_type": "VarExpression",
+                      "source_location": {
+                        "file": "tests/approvals/precompiled-apps.algo.ts",
+                        "line": 96,
+                        "end_line": 96,
+                        "column": 11,
+                        "end_column": 19
+                      },
+                      "wtype": {
+                        "_type": "WGroupTransaction",
+                        "name": "group_transaction_acfg",
+                        "immutable": true,
+                        "transaction_type": 3,
+                        "arc4_alias": "acfg"
+                      },
+                      "name": "assetCfg"
+                    }
+                  ]
+                }
               }
             }
           ],
@@ -4828,7 +4849,7 @@
               "name": "group_transaction_acfg",
               "immutable": true,
               "transaction_type": 3,
-              "arc4_name": "acfg"
+              "arc4_alias": "acfg"
             }
           },
           {
@@ -4846,7 +4867,7 @@
               "name": "group_transaction_pay",
               "immutable": true,
               "transaction_type": 1,
-              "arc4_name": "pay"
+              "arc4_alias": "pay"
             }
           }
         ],
@@ -4935,7 +4956,7 @@
                           "name": "group_transaction_acfg",
                           "immutable": true,
                           "transaction_type": 3,
-                          "arc4_name": "acfg"
+                          "arc4_alias": "acfg"
                         },
                         "name": "assetCfg"
                       }
@@ -5048,7 +5069,7 @@
                           "name": "group_transaction_pay",
                           "immutable": true,
                           "transaction_type": 1,
-                          "arc4_name": "pay"
+                          "arc4_alias": "pay"
                         },
                         "name": "payTxn"
                       }
@@ -5452,9 +5473,10 @@
                       "end_column": 20
                     },
                     "wtype": {
-                      "_type": "WType",
+                      "_type": "BytesWType",
                       "name": "bytes",
-                      "immutable": true
+                      "immutable": true,
+                      "length": null
                     },
                     "expr": {
                       "_type": "CheckedMaybe",
@@ -5561,9 +5583,10 @@
                       "end_column": 17
                     },
                     "wtype": {
-                      "_type": "WType",
-                      "name": "bytes",
-                      "immutable": true
+                      "_type": "BytesWType",
+                      "name": "bytes[32]",
+                      "immutable": true,
+                      "length": 32
                     },
                     "expr": {
                       "_type": "VarExpression",
@@ -5621,9 +5644,10 @@
                       "end_column": 18
                     },
                     "wtype": {
-                      "_type": "WType",
+                      "_type": "BytesWType",
                       "name": "bytes",
-                      "immutable": true
+                      "immutable": true,
+                      "length": null
                     },
                     "expr": {
                       "_type": "IntrinsicCall",
@@ -5640,9 +5664,10 @@
                         "immutable": true,
                         "types": [
                           {
-                            "_type": "WType",
+                            "_type": "BytesWType",
                             "name": "bytes",
-                            "immutable": true
+                            "immutable": true,
+                            "length": null
                           },
                           {
                             "_type": "WType",

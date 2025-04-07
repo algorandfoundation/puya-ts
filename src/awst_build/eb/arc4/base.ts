@@ -4,11 +4,10 @@ import { EqualityComparison } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { wtypes } from '../../../awst/wtypes'
 import { tryConvertEnum } from '../../../util'
-import { type PType } from '../../ptypes'
+import { bytesPType, type PType } from '../../ptypes'
 import type { ARC4EncodedType } from '../../ptypes/arc4-types'
 import { instanceEb } from '../../type-registry'
 import { BooleanExpressionBuilder } from '../boolean-expression-builder'
-import { BytesExpressionBuilder } from '../bytes-expression-builder'
 import type { InstanceBuilder, NodeBuilder } from '../index'
 import { BuilderComparisonOp, FunctionBuilder, InstanceExpressionBuilder } from '../index'
 import { requireBuilderOfType } from '../util'
@@ -28,8 +27,8 @@ export class Arc4EncodedBaseExpressionBuilder<T extends ARC4EncodedType> extends
         return new BooleanExpressionBuilder(
           nodeFactory.bytesComparisonExpression({
             operator: equalityOp,
-            lhs: this.toBytes(sourceLocation),
-            rhs: requireBuilderOfType(other, this.ptype).toBytes(sourceLocation),
+            lhs: this.toBytes(sourceLocation).resolve(),
+            rhs: requireBuilderOfType(other, this.ptype).toBytes(sourceLocation).resolve(),
             sourceLocation,
           }),
         )
@@ -40,7 +39,7 @@ export class Arc4EncodedBaseExpressionBuilder<T extends ARC4EncodedType> extends
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
     switch (name) {
       case 'bytes':
-        return new BytesExpressionBuilder(this.toBytes(sourceLocation))
+        return this.toBytes(sourceLocation)
       case 'equals':
         return new Arc4EqualsFunctionBuilder(this, sourceLocation)
       case 'native':
@@ -57,12 +56,15 @@ export class Arc4EncodedBaseExpressionBuilder<T extends ARC4EncodedType> extends
     return super.memberAccess(name, sourceLocation)
   }
 
-  toBytes(sourceLocation: SourceLocation): Expression {
-    return nodeFactory.reinterpretCast({
-      expr: this.resolve(),
-      wtype: wtypes.bytesWType,
-      sourceLocation,
-    })
+  toBytes(sourceLocation: SourceLocation): InstanceBuilder {
+    return instanceEb(
+      nodeFactory.reinterpretCast({
+        expr: this.resolve(),
+        wtype: wtypes.bytesWType,
+        sourceLocation,
+      }),
+      bytesPType,
+    )
   }
 }
 
@@ -88,8 +90,8 @@ class Arc4EqualsFunctionBuilder extends FunctionBuilder {
     return new BooleanExpressionBuilder(
       nodeFactory.bytesComparisonExpression({
         operator: EqualityComparison.eq,
-        lhs: this.left.toBytes(sourceLocation),
-        rhs: right.toBytes(sourceLocation),
+        lhs: this.left.toBytes(sourceLocation).resolve(),
+        rhs: right.toBytes(sourceLocation).resolve(),
         sourceLocation,
       }),
     )

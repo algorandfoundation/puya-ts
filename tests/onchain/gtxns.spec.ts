@@ -53,4 +53,33 @@ describe('gtxns contract', () => {
 
     await appClientGtxnsAlgo.send.call({ method: 'test4', args: [callTest3.transactions[0]] })
   })
+
+  test('pay txn properties can be read', async ({ appClientGtxnsAlgo, algorand, testAccount }) => {
+    const result = await appClientGtxnsAlgo.send.call({
+      method: 'reflectAllPay',
+      args: [
+        algorand.createTransaction.payment({
+          amount: algos(1),
+          receiver: appClientGtxnsAlgo.appAddress,
+          sender: testAccount,
+        }),
+      ],
+    })
+    expect(Object.keys(result.return as object)).toEqual([
+      'sender',
+      'fee',
+      'firstValid',
+      'firstValidTime',
+      'lastValid',
+      'note',
+      'lease',
+      'typeBytes',
+      'groupIndex',
+      'txnId',
+      'rekeyTo',
+      'receiver',
+      'amount',
+      'closeRemainderTo',
+    ])
+  })
 })

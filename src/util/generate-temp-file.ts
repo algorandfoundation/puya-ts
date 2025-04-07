@@ -2,6 +2,7 @@ import { randomUUID } from 'crypto'
 import fs from 'fs'
 import { globIterateSync } from 'glob'
 import type { WriteFileOptions } from 'node:fs'
+import { writeFileSync } from 'node:fs'
 import os from 'os'
 import upath from 'upath'
 import { mkDirIfNotExists } from './index'
@@ -37,6 +38,11 @@ export function generateTempFile(options?: { ext?: string }): TempFile {
 export type TempDir = {
   readonly dirPath: string
   files(): IterableIterator<string>
+
+  makeFile(args: { name: string; ext?: string }): {
+    readonly filePath: string
+    writeFileSync(data: string | NodeJS.ArrayBufferView, options?: WriteFileOptions): void
+  }
 } & Disposable
 
 export function generateTempDir(): TempDir {
@@ -52,6 +58,17 @@ export function generateTempDir(): TempDir {
         nodir: true,
       })) {
         yield p
+      }
+    },
+    makeFile({ name, ext }) {
+      const path = upath.join(this.dirPath, `${name}.${ext ?? 'tmp'}`)
+      return {
+        get filePath() {
+          return path
+        },
+        writeFileSync(data, options) {
+          writeFileSync(path, data, options)
+        },
       }
     },
     [Symbol.dispose]() {

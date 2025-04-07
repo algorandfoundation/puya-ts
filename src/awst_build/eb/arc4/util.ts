@@ -9,7 +9,7 @@ import { logger } from '../../../logger'
 import { codeInvariant, hexToUint8Array } from '../../../util'
 import { isArc4EncodableType, ptypeToArc4EncodedType } from '../../arc4-util'
 import type { PType } from '../../ptypes'
-import { bytesPType, stringPType, uint64PType } from '../../ptypes'
+import { BytesPType, bytesPType, stringPType, uint64PType } from '../../ptypes'
 import {
   arc4EncodedLengthFunction,
   ARC4EncodedType,
@@ -201,13 +201,13 @@ export class MethodSelectorFunctionBuilder extends FunctionBuilder {
       funcName: this.typeDescription,
       argSpec: (a) => [a.passthrough()],
     })
-
+    const methodConstantType = new BytesPType({ length: 4n })
     if (methodSignature instanceof SubroutineExpressionBuilder) {
       codeInvariant(
         methodSignature instanceof ContractMethodExpressionBuilder,
         `Expected contract instance method, found ${methodSignature.typeDescription}`,
       )
-      return instanceEb(methodSignature.getMethodSelector(sourceLocation), bytesPType)
+      return instanceEb(methodSignature.getMethodSelector(sourceLocation), methodConstantType)
     } else {
       if (methodSignature === undefined) {
         throw new CodeError(
@@ -218,10 +218,10 @@ export class MethodSelectorFunctionBuilder extends FunctionBuilder {
       return instanceEb(
         nodeFactory.methodConstant({
           value: requireStringConstant(methodSignature).value,
-          wtype: wtypes.bytesWType,
+          wtype: methodConstantType.wtype,
           sourceLocation,
         }),
-        bytesPType,
+        methodConstantType,
       )
     }
   }

@@ -9,7 +9,7 @@ export function extractKey(key: InstanceBuilder | undefined, keyWType: wtypes.WT
 export function extractKey(key: InstanceBuilder | undefined, keyWType: wtypes.WType): Expression | undefined {
   if (!key) return undefined
 
-  const keyBytes = key.toBytes(key.sourceLocation)
+  const keyBytes = key.toBytes(key.sourceLocation).resolve()
   if (keyBytes instanceof BytesConstant) {
     return nodeFactory.bytesConstant({
       ...keyBytes,

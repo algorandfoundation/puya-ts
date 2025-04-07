@@ -20,14 +20,14 @@ export class LogFunctionBuilder extends FunctionBuilder {
     if (argsExps.length === 0) {
       throw new CodeError(`log expects at least 1 argument`, { sourceLocation })
     } else if (argsExps.length === 1) {
-      logBytes = argsExps[0].toBytes(sourceLocation)
+      logBytes = argsExps[0].toBytes(sourceLocation).resolve()
     } else {
       logBytes =
         argsExps.reduce(
           (a: Expression | undefined, b): Expression | undefined =>
             a === undefined
-              ? b.toBytes(sourceLocation)
-              : intrinsicFactory.bytesConcat({ left: a, right: b.toBytes(sourceLocation), sourceLocation }),
+              ? b.toBytes(sourceLocation).resolve()
+              : intrinsicFactory.bytesConcat({ left: a, right: b.toBytes(sourceLocation).resolve(), sourceLocation }),
           undefined,
         ) ?? throwError(new InternalError('Should never get here given previous conditions', { sourceLocation }))
     }

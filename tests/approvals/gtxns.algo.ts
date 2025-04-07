@@ -56,4 +56,23 @@ export class GtxnsAlgo extends Contract {
     assert(other.appArgs(0) === methodSelector(GtxnsAlgo.prototype.test3))
     assert(other.appId === Global.currentApplicationId)
   }
+
+  reflectAllPay(pay: gtxn.PaymentTxn) {
+    return {
+      sender: pay.sender.bytes,
+      fee: pay.fee,
+      firstValid: pay.firstValid,
+      firstValidTime: pay.firstValidTime,
+      lastValid: pay.lastValid,
+      note: pay.note,
+      lease: pay.lease,
+      typeBytes: pay.typeBytes,
+      groupIndex: pay.groupIndex,
+      txnId: pay.txnId,
+      rekeyTo: pay.rekeyTo.bytes,
+      receiver: pay.receiver.bytes,
+      amount: pay.amount,
+      closeRemainderTo: pay.closeRemainderTo.bytes,
+    }
+  }
 }

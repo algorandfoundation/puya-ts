@@ -5,7 +5,7 @@ import { logger, LogLevel } from '../logger'
 import type { CompileOptions } from '../options'
 import type { SourceFileMapping } from '../parser'
 import { jsonSerializeSourceFiles } from '../parser/json-serialize-source-files'
-import { generateTempFile } from '../util/generate-temp-file'
+import { generateTempDir } from '../util/generate-temp-file'
 import { buildCompilationSetMapping } from './build-compilation-set-mapping'
 import { checkPuyaVersion } from './check-puya-version'
 import { deserializeAndLog } from './log-deserializer'
@@ -26,13 +26,15 @@ export async function invokePuya({
   compilationSet: CompilationSet
 }) {
   if (options.customPuyaPath && !options.skipVersionCheck) {
-    checkPuyaVersion(options.customPuyaPath)
+    await checkPuyaVersion(options.customPuyaPath)
   }
 
   const puyaPath = options.customPuyaPath ?? (await resolvePuyaPath())
 
+  using buildDir = generateTempDir()
+
   // Write AWST file
-  using moduleAwstFile = generateTempFile()
+  const moduleAwstFile = buildDir.makeFile({ name: 'module', ext: 'awst.json' })
   logger.debug(undefined, `Writing awst to ${moduleAwstFile.filePath}`)
   const serializer = new AwstSerializer({
     programDirectory: programDirectory,
@@ -41,7 +43,7 @@ export async function invokePuya({
   moduleAwstFile.writeFileSync(serializer.serialize(moduleAwst), 'utf-8')
 
   // Write source annotations
-  using moduleSourceFile = generateTempFile()
+  const moduleSourceFile = buildDir.makeFile({ name: 'sources', ext: 'json' })
   logger.debug(undefined, `Write source to ${moduleSourceFile.filePath}`)
   moduleSourceFile.writeFileSync(jsonSerializeSourceFiles(sourceFiles, programDirectory), 'utf-8')
 
@@ -53,7 +55,7 @@ export async function invokePuya({
       compilationSet,
     }),
   )
-  using optionsFile = generateTempFile()
+  const optionsFile = buildDir.makeFile({ name: 'options', ext: 'json' })
   logger.debug(undefined, `Write options to ${optionsFile.filePath}`)
   optionsFile.writeFileSync(new SnakeCaseSerializer().serialize(puyaOptions))
   const puyaArgs = [

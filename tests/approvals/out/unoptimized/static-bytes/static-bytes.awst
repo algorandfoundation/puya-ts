@@ -1,0 +1,60 @@
+subroutine padTo32(b: bytes[16]): bytes[32]
+{
+  return checked_maybe(<tuple>[reinterpret_cast<bytes[32]>((#0 = reinterpret_cast<bytes>(b) | bzero(32))), len(#0) == 32], comment=Length must be 32)
+}
+contract StaticBytesAlgo
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  hashAddresses(a1: bytes[32], a2: bytes[32]): bytes[32]
+  {
+    return sha512_256(concat(reinterpret_cast<bytes>(a1), reinterpret_cast<bytes>(a2)))
+  }
+  
+  receiveB32(b: bytes[32]): bytes[32]
+  {
+    assert(len(b) == 32)
+    return sha512_256(reinterpret_cast<bytes>(b))
+  }
+  
+  receiveBytes(b: bytes, length: uint64): void
+  {
+    assert(len(b) == length)
+  }
+  
+  returnLength(b: bytes[32]): uint64
+  {
+    return len(b)
+  }
+  
+  test(): void
+  {
+    tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32(reinterpret_cast<bytes[32]>(txn<Sender>()))
+    tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveBytes(reinterpret_cast<bytes>(reinterpret_cast<bytes[32]>(txn<Sender>())), 32)
+    tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32("abcdefghabcdefghabcdefghabcdefgh")
+    joined: bytes[55] = checked_maybe(<tuple>[reinterpret_cast<bytes[55]>((#1 = "" + "abc" + 0xaaff + b32<AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ> + b64<SGVsbG8gQWxnb3JhbmQ=>)), len(#1) == 55], comment=Length must be 55)
+    assert(len(joined) == 55)
+  }
+  
+  testArray(): void
+  {
+    a: readonlytuple[bytes[32], bytes[32]] = <tuple>[reinterpret_cast<bytes[32]>(txn<Sender>()), reinterpret_cast<bytes[32]>(txn<Sender>())]
+    b: ref_array<bytes[32]> = new ref_array<bytes[32]>(reinterpret_cast<bytes[32]>(txn<Sender>()))
+    b.push(...<tuple>[a.0, a.1]
+    bitAnd: bytes[32] = a.0 & b[0]
+    assert(bitAnd == reinterpret_cast<bytes[32]>(txn<Sender>()))
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

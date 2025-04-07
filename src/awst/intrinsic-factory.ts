@@ -71,18 +71,20 @@ export const intrinsicFactory = {
     })
   },
   itob({ value, sourceLocation }: { value: awst.Expression; sourceLocation: SourceLocation }): awst.Expression {
+    const wtype = new wtypes.BytesWType({ length: 8n })
     if (value instanceof awst.IntegerConstant) {
       return nodeFactory.bytesConstant({
         sourceLocation,
-        value: bigIntToUint8Array(value.value, value.wtype.equals(wtypes.uint64WType) ? 8 : 'dynamic'),
+        value: bigIntToUint8Array(value.value, 8),
         encoding: BytesEncoding.base16,
+        wtype,
       })
     }
     return nodeFactory.intrinsicCall({
       sourceLocation,
       stackArgs: [value],
       immediates: [],
-      wtype: wtypes.bytesWType,
+      wtype,
       opCode: 'itob',
     })
   },

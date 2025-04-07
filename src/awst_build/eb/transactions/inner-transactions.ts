@@ -1,11 +1,11 @@
 import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
-import { type TxnField, type TxnFieldData, TxnFields } from '../../../awst/txn-fields'
 import { invariant } from '../../../util'
 import type { PType } from '../../ptypes'
 import { InnerTransactionPType, uint64PType } from '../../ptypes'
-import { anyTxnFields, txnKindToFields } from '../../txn-fields'
+import type { TxnFieldMetaData } from '../../txn-fields'
+import { getTxnFieldMetaData } from '../../txn-fields'
 import { instanceEb } from '../../type-registry'
 import type { NodeBuilder } from '../index'
 import { FunctionBuilder, InstanceExpressionBuilder } from '../index'
@@ -16,30 +16,29 @@ export class InnerTransactionExpressionBuilder extends InstanceExpressionBuilder
     invariant(ptype instanceof InnerTransactionPType, 'ptype must be InnerTransactionPType')
     super(expr, ptype)
   }
-  memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
-    const txnKind = this.ptype.kind
-    const fields = txnKind === undefined ? anyTxnFields : txnKindToFields[txnKind]
-    if (name in fields) {
-      const { field, ptype: returnType } = fields[name as keyof typeof fields]
-      const data = TxnFields[field]
 
-      if (data.numValues === 1) {
+  hasProperty(name: string): boolean {
+    return getTxnFieldMetaData({ kind: this.ptype.kind, memberName: name }) !== false
+  }
+
+  memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
+    const data = getTxnFieldMetaData({ kind: this.ptype.kind, memberName: name })
+    if (data) {
+      if (data.indexable !== true) {
         return instanceEb(
           nodeFactory.innerTransactionField({
             sourceLocation,
             itxn: this.resolve(),
             arrayIndex: null,
-            field,
-            wtype: data.wtype,
+            field: data.field,
+            wtype: data.ptype.wtypeOrThrow,
           }),
-          returnType,
+          data.ptype,
         )
       } else {
         return new IndexedTransactionFieldFunctionBuilder(this._expr, {
           txnData: data,
-          returnType,
           memberName: name,
-          field,
         })
       }
     }
@@ -50,7 +49,7 @@ export class InnerTransactionExpressionBuilder extends InstanceExpressionBuilder
 class IndexedTransactionFieldFunctionBuilder extends FunctionBuilder {
   constructor(
     private gtxn: Expression,
-    private config: { txnData: TxnFieldData; returnType: PType; memberName: string; field: TxnField },
+    private config: { txnData: TxnFieldMetaData; memberName: string },
   ) {
     super(gtxn.sourceLocation)
   }
@@ -72,10 +71,10 @@ class IndexedTransactionFieldFunctionBuilder extends FunctionBuilder {
         sourceLocation,
         itxn: this.gtxn,
         arrayIndex: index.resolve(),
-        field: this.config.field,
-        wtype: this.config.txnData.wtype,
+        field: this.config.txnData.field,
+        wtype: this.config.txnData.ptype.wtypeOrThrow,
       }),
-      this.config.returnType,
+      this.config.txnData.ptype,
     )
   }
 }

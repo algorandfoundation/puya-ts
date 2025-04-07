@@ -6,7 +6,7 @@ import { invariant } from '../../../../util'
 import type { PType } from '../../../ptypes'
 import { boolPType, BoxPType, BoxRefPType, bytesPType, stringPType, TuplePType, uint64PType } from '../../../ptypes'
 import { instanceEb } from '../../../type-registry'
-import { FunctionBuilder, type NodeBuilder, ParameterlessFunctionBuilder } from '../../index'
+import { FunctionBuilder, type NodeBuilder } from '../../index'
 import { parseFunctionArgs } from '../../util/arg-parsing'
 import { extractKey } from '../util'
 import { boxExists, boxLength, BoxProxyExpressionBuilder, boxValue, BoxValueExpressionBuilder } from './base'
@@ -47,7 +47,7 @@ export class BoxExpressionBuilder extends BoxProxyExpressionBuilder<BoxPType> {
       case 'create':
         return new BoxCreateFunctionBuilder(boxValueExpr, this.ptype.contentType, sourceLocation)
       case 'key':
-        return instanceEb(this.toBytes(sourceLocation), bytesPType)
+        return this.toBytes(sourceLocation)
       case 'value':
         return new BoxValueExpressionBuilder(boxValueExpr, this.ptype.contentType)
       case 'exists':
@@ -116,17 +116,29 @@ class BoxCreateFunctionBuilder extends FunctionBuilder {
   }
 }
 
-class BoxDeleteFunctionBuilder extends ParameterlessFunctionBuilder {
-  constructor(boxValue: BoxValueExpression, sourceLocation: SourceLocation) {
-    super(boxValue, (expr) =>
-      instanceEb(
-        nodeFactory.stateDelete({
-          sourceLocation,
-          field: boxValue,
-          wtype: wtypes.boolWType,
-        }),
-        boolPType,
-      ),
+class BoxDeleteFunctionBuilder extends FunctionBuilder {
+  constructor(
+    private boxValue: BoxValueExpression,
+    sourceLocation: SourceLocation,
+  ) {
+    super(sourceLocation)
+  }
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 0,
+      argSpec: (a) => [],
+      callLocation: sourceLocation,
+      funcName: 'delete',
+    })
+    return instanceEb(
+      nodeFactory.stateDelete({
+        sourceLocation,
+        field: this.boxValue,
+        wtype: wtypes.boolWType,
+      }),
+      boolPType,
     )
   }
 }

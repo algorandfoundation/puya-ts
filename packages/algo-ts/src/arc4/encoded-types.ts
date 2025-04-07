@@ -1,5 +1,5 @@
 import { NoImplementation } from '../internal/errors'
-import { biguint, BigUintCompat, bytes, BytesBacked, BytesCompat, NTuple, StringCompat, uint64, Uint64Compat } from '../primitives'
+import { biguint, BigUintCompat, bytes, BytesBacked, NTuple, StringCompat, uint64, Uint64Compat } from '../primitives'
 import { Account } from '../reference'
 
 /**
@@ -545,14 +545,24 @@ export class DynamicBytes extends Arc4ArrayBase<Byte> {
 /**
  * A fixed length sequence of bytes
  */
-export class StaticBytes<TLength extends number = 0> extends Arc4ArrayBase<Byte> {
+export class StaticBytes<TLength extends uint64 = 0> extends Arc4ArrayBase<Byte> {
   /** @hidden */
   [TypeProperty]?: `arc4.StaticBytes<${TLength}>`
 
   /**
-   * Create a new StaticBytes instance
-   * @param value THe bytes or utf8 interpreted string to initialize this type
+   * Create a new StaticBytes instance from native bytes
+   * @param value The bytes
    */
+  constructor(value: bytes<TLength>)
+  /**
+   * Create a new StaticBytes instance from a utf8 string
+   * @param value A string
+   */
+  constructor(value: string)
+  /**
+   * Create a new StaticBytes instance of length 0
+   */
+  constructor()
   constructor(value?: bytes | string) {
     super()
   }
@@ -560,7 +570,7 @@ export class StaticBytes<TLength extends number = 0> extends Arc4ArrayBase<Byte>
   /**
    * Get the native bytes value
    */
-  get native(): bytes {
+  get native(): bytes<TLength> {
     throw new NoImplementation()
   }
 

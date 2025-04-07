@@ -73,7 +73,7 @@ class StructDemo extends Contract {
       adminPrivileges: new arc4.Bool(false),
       methods: new arc4.DynamicArray(
         new MethodInfo({
-          selector: new arc4.StaticBytes<4>(methodSelector('test()void')),
+          selector: new arc4.StaticBytes(methodSelector('test()void')),
           cooldown: new arc4.UintN64(1),
           lastCalled: new arc4.UintN64(1),
         }),

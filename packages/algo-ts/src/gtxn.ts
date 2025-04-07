@@ -38,7 +38,7 @@ export interface PaymentTxn {
   /**
    * 32 byte lease value
    */
-  readonly lease: bytes
+  readonly lease: bytes<32>
   /**
    * Transaction type as bytes
    */
@@ -55,7 +55,7 @@ export interface PaymentTxn {
   /**
    * The computed ID for this transaction. 32 bytes.
    */
-  readonly txnId: bytes
+  readonly txnId: bytes<32>
   /**
    * 32 byte Sender's new AuthAddr
    */
@@ -106,7 +106,7 @@ export interface KeyRegistrationTxn {
   /**
    * 32 byte lease value
    */
-  readonly lease: bytes
+  readonly lease: bytes<32>
   /**
    * Transaction type as bytes
    */
@@ -123,7 +123,7 @@ export interface KeyRegistrationTxn {
   /**
    * The computed ID for this transaction. 32 bytes.
    */
-  readonly txnId: bytes
+  readonly txnId: bytes<32>
   /**
    * 32 byte Sender's new AuthAddr
    */
@@ -131,11 +131,11 @@ export interface KeyRegistrationTxn {
   /**
    * 32 byte address
    */
-  readonly voteKey: bytes
+  readonly voteKey: bytes<32>
   /**
    * 32 byte address
    */
-  readonly selectionKey: bytes
+  readonly selectionKey: bytes<32>
   /**
    * The first round that the participation key is valid.
    */
@@ -155,7 +155,7 @@ export interface KeyRegistrationTxn {
   /**
    * 64 byte state proof public key
    */
-  readonly stateProofKey: bytes
+  readonly stateProofKey: bytes<64>
 }
 /**
  * A group transaction of type 'acfg'
@@ -190,7 +190,7 @@ export interface AssetConfigTxn {
   /**
    * 32 byte lease value
    */
-  readonly lease: bytes
+  readonly lease: bytes<32>
   /**
    * Transaction type as bytes
    */
@@ -207,7 +207,7 @@ export interface AssetConfigTxn {
   /**
    * The computed ID for this transaction. 32 bytes.
    */
-  readonly txnId: bytes
+  readonly txnId: bytes<32>
   /**
    * 32 byte Sender's new AuthAddr
    */
@@ -247,7 +247,7 @@ export interface AssetConfigTxn {
   /**
    * 32 byte commitment to unspecified asset metadata
    */
-  readonly metadataHash: bytes
+  readonly metadataHash: bytes<32>
   /**
    * 32 byte address
    */
@@ -298,7 +298,7 @@ export interface AssetTransferTxn {
   /**
    * 32 byte lease value
    */
-  readonly lease: bytes
+  readonly lease: bytes<32>
   /**
    * Transaction type as bytes
    */
@@ -315,7 +315,7 @@ export interface AssetTransferTxn {
   /**
    * The computed ID for this transaction. 32 bytes.
    */
-  readonly txnId: bytes
+  readonly txnId: bytes<32>
   /**
    * 32 byte Sender's new AuthAddr
    */
@@ -374,7 +374,7 @@ export interface AssetFreezeTxn {
   /**
    * 32 byte lease value
    */
-  readonly lease: bytes
+  readonly lease: bytes<32>
   /**
    * Transaction type as bytes
    */
@@ -391,7 +391,7 @@ export interface AssetFreezeTxn {
   /**
    * The computed ID for this transaction. 32 bytes.
    */
-  readonly txnId: bytes
+  readonly txnId: bytes<32>
   /**
    * 32 byte Sender's new AuthAddr
    */
@@ -442,7 +442,7 @@ export interface ApplicationCallTxn {
   /**
    * 32 byte lease value
    */
-  readonly lease: bytes
+  readonly lease: bytes<32>
   /**
    * Transaction type as bytes
    */
@@ -459,7 +459,7 @@ export interface ApplicationCallTxn {
   /**
    * The computed ID for this transaction. 32 bytes.
    */
-  readonly txnId: bytes
+  readonly txnId: bytes<32>
   /**
    * 32 byte Sender's new AuthAddr
    */

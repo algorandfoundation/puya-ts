@@ -9,9 +9,7 @@ main tests/approvals/box-proxies.algo.ts::BoxContract.approvalProgram:
         (box_put "A" "aaaaaargh")
         let (maybe_value%0#0: bytes, maybe_exists%0#0: bool) = (box_get "one")
         (assert maybe_exists%0#0) // Box must have value
-        let (maybe_value%1#0: bytes, maybe_exists%1#0: bool) = (box_get "A")
-        (assert maybe_exists%1#0) // Box must have value
-        let tmp%2#1: bool = (== maybe_value%0#0 maybe_value%1#0)
+        let tmp%2#1: bool = (== maybe_value%0#0 "aaaaaargh")
         (assert tmp%2#1)
         let (_%0#0: uint64, maybe_exists%2#0: bool) = (box_len "one")
         goto maybe_exists%2#0 ? block@4 : block@6
@@ -50,17 +48,14 @@ main tests/approvals/box-proxies.algo.ts::BoxContract.approvalProgram:
         (assert and_result%1#2)
         let (maybe_value%2#0: bytes, maybe_exists%6#0: bool) = (box_get "A")
         let state_get%0#0: bytes = (select "O" maybe_value%2#0 maybe_exists%6#0)
-        let (maybe_value%3#0: bytes, maybe_exists%7#0: bool) = (box_get "one")
-        let state_get%1#0: bytes = (select "O" maybe_value%3#0 maybe_exists%7#0)
+        let (_#0: bytes, e#0: bool) = (box_get "one")
+        let state_get%1#0: bytes = (select "O" _#0 e#0)
         let tmp%4#0: bool = (== state_get%0#0 state_get%1#0)
         (assert tmp%4#0)
-        let (_#0: bytes, e#0: bool) = (box_get "one")
         let tmp%5#0: bool = (! e#0)
         (assert tmp%5#0)
         (box_del "one")
         (box_put "one" "aaaaaargh")
-        let (_₁#0: bytes, e#1: bool) = (box_get "one")
-        (assert e#1)
         let value#1: bytes = (itob 256456u)
         (box_del "twowhat?")
         (box_put "twowhat?" value#1)
@@ -73,11 +68,7 @@ main tests/approvals/box-proxies.algo.ts::BoxContract.approvalProgram:
         (assert value%0#1)
         let (maybe_value%0#1: bytes, maybe_exists%1#1: bool) = (box_get "twowhat?")
         (assert maybe_exists%1#1)
-        let (maybe_value%1#1: bytes, maybe_exists%2#1: bool) = (box_get "twowhat?")
-        (assert maybe_exists%2#1) // Box must have value
-        let (maybe_value%2#1: bytes, maybe_exists%3#1: bool) = (box_get "what?")
-        (assert maybe_exists%3#1) // Box must have value
-        let tmp%2#2: bool = (== maybe_value%1#1 maybe_value%2#1)
+        let tmp%2#2: bool = (== maybe_value%0#1 value#1)
         (assert tmp%2#2)
         let isBoxDeleted#0: bool = (box_del "twowhat?")
         (assert isBoxDeleted#0) // delete failed
@@ -111,16 +102,6 @@ main tests/approvals/box-proxies.algo.ts::BoxContract.approvalProgram:
         goto block@23
     block@23: // after_if_else_L72
         (box_put "three" 0xffffffff)
-        let (maybe_value%0#2: bytes, maybe_exists%2#2: bool) = (box_get "three")
-        let state_get%0#2: bytes = (select 0x maybe_value%0#2 maybe_exists%2#2)
-        let tmp%3#2: bool = (== state_get%0#2 0xffffffff)
-        (assert tmp%3#2)
-        let (maybeBox.0#0: bytes, maybeBox.1#0: bool) = (box_get "three")
-        (assert maybeBox.1#0)
-        let (maybe_value%2#2: bytes, maybe_exists%4#2: bool) = (box_get "three")
-        (assert maybe_exists%4#2) // Box must have value
-        let tmp%4#2: bool = (== maybe_value%2#2 0xffffffff)
-        (assert tmp%4#2)
         (box_splice "three" 1u 1u 0x00)
         let (maybe_value%3#2: bytes, maybe_exists%5#2: bool) = (box_get "three")
         (assert maybe_exists%5#2) // Box must have value

@@ -13,11 +13,11 @@ describe('arc 28 events', () => {
     const [first, second, third, fourth, fifth, sixth] = result.confirmation.logs!.map(uint8ArrayToHex)
 
     // sha_512_256("Swapped(uint8,uint8)").slice(0, 4)
-    const eventPrefixHex = '0b6325ed'
+    const eventPrefixHex = '0B6325ED'
     // sha_512_256("SwappedArc4(uint8,uint8)").slice(0,4)
-    const arc4EventPrefixHex = '441e2cd8'
+    const arc4EventPrefixHex = '441E2CD8'
 
-    const swappedUint8 = 'ff00'
+    const swappedUint8 = 'FF00'
     expect(first).toEqual(`${eventPrefixHex}${swappedUint8}`)
     expect(second).toEqual(`${eventPrefixHex}${swappedUint8}`)
     expect(third).toEqual(`${arc4EventPrefixHex}${swappedUint8}`)
@@ -25,7 +25,7 @@ describe('arc 28 events', () => {
     expect(fifth).toEqual(`${eventPrefixHex}${swappedUint8}`)
 
     // sha_512_256("Swapped((uint8,uint8),uint8)").slice(0, 4) => 388cc12d
-    expect(sixth).toEqual(`388cc12dffff00`)
+    expect(sixth).toEqual(`388CC12DFFFF00`)
   })
 
   test('It works with dynamic bytes', async ({ appClientEventEmitter, expect }) => {
@@ -38,7 +38,7 @@ describe('arc 28 events', () => {
 
     const [first] = result.confirmation.logs!.map(uint8ArrayToHex)
 
-    const prefix = '4524e1dd'
+    const prefix = '4524E1DD'
     const abc = '616263'
     const def = '646566'
     expect(first).toEqual(`${prefix}000400090003${abc}0003${def}`)

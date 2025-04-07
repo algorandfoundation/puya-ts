@@ -63,8 +63,13 @@ contract GtxnsAlgo
     assert(gtxns<OnCompletion>(other) == reinterpret_cast<uint64>(0), comment=Other txn must be NoOp)
     assert(gtxns<TypeEnum>(other) == reinterpret_cast<uint64>(6))
     assert(gtxns<LastLog>(other) == "Hello test4")
-    assert(gtxnsas<ApplicationArgs>(other, 0) == Method("test3()void"))
+    assert(gtxnsas<ApplicationArgs>(other, 0) == reinterpret_cast<bytes>(Method("test3()void")))
     assert(gtxns<ApplicationID>(other) == global<CurrentApplicationID>())
+  }
+  
+  reflectAllPay(pay: group_transaction_pay): reflectAllPayResult{ sender: bytes[32], fee: uint64, firstValid: uint64, firstValidTime: uint64, lastValid: uint64, note: bytes, lease: bytes[32], typeBytes: bytes, groupIndex: uint64, txnId: bytes[32], rekeyTo: bytes[32], receiver: bytes[32], amount: uint64, closeRemainderTo: bytes[32] }
+  {
+    return { sender: (#1 = { sender: reinterpret_cast<bytes[32]>(gtxns<Sender>(pay)), fee: gtxns<Fee>(pay), firstValid: gtxns<FirstValid>(pay), firstValidTime: gtxns<FirstValidTime>(pay), lastValid: gtxns<LastValid>(pay), note: gtxns<Note>(pay), lease: gtxns<Lease>(pay), typeBytes: gtxns<Type>(pay), groupIndex: gtxns<GroupIndex>(pay), txnId: gtxns<TxID>(pay), rekeyTo: reinterpret_cast<bytes[32]>(gtxns<RekeyTo>(pay)), receiver: reinterpret_cast<bytes[32]>(gtxns<Receiver>(pay)), amount: gtxns<Amount>(pay), closeRemainderTo: reinterpret_cast<bytes[32]>(gtxns<CloseRemainderTo>(pay)) }).sender, fee: #1.fee, firstValid: #1.firstValid, firstValidTime: #1.firstValidTime, lastValid: #1.lastValid, note: #1.note, lease: #1.lease, typeBytes: #1.typeBytes, groupIndex: #1.groupIndex, txnId: #1.txnId, rekeyTo: #1.rekeyTo, receiver: #1.receiver, amount: #1.amount, closeRemainderTo: #1.closeRemainderTo }
   }
   
   __algots__.defaultCreate(): void

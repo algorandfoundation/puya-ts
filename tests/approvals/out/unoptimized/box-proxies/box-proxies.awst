@@ -71,7 +71,7 @@ contract BoxContract
   {
     if (reinterpret_cast<uint64>(txn<ApplicationID>()) != 0) {
       tests/approvals/box-proxies.algo.ts::testBox("one", "aaaaaargh")
-      tests/approvals/box-proxies.algo.ts::testBoxMap("two", "what?", itob(256456))
+      tests/approvals/box-proxies.algo.ts::testBoxMap("two", "what?", reinterpret_cast<bytes>(itob(256456)))
       tests/approvals/box-proxies.algo.ts::testBoxRef("three", 99)
     }
     return True
