@@ -1,8 +1,36 @@
+---
+title: Program Structure
+---
+
 # Program Structure
 
 An Algorand TypeScript program is declared in a TypeScript module with a file extension of `.algo.ts`. Declarations can be split across multiple files, and types can be imported between these files using standard TypeScript import statements. The commonjs `require` function is not supported, and the asynchronous `import(...)` expression is also not supported as imports must be compile-time constant.
 
 Algorand TypeScript constructs and types can be imported from the `@algorandfoundation/algorand-typescript` module, or one of its submodules. Compilation artifacts do not need to be exported unless you require them in another module; any non-abstract contract or logic signature discovered in your entry files will be output. Contracts and logic signatures discovered in non-entry files will not be output.
+
+## Constants
+
+Constants declared at the module level have a compile-time constant value or a template variable. Some basic expressions are supported so long as they result in a compile time constant.
+
+```ts
+import { uint64 } from '@algorandfoundation/algorand-typescript'
+
+const a: uint64 = 1000
+const b: uint64 = 2000
+const c: uint64 = a * b
+```
+
+## Free Subroutines
+
+Free subroutines can be declared at the module level and called from any contract, logic signature, or other subroutine. Subroutines do not have any compiler output on their own unless they are called by a contract or logic signature.
+
+```ts
+import { uint64 } from '@algorandfoundation/algorand-typescript'
+
+function add(a: uint64, b: uint64): uint64 {
+  return a + b
+}
+```
 
 ## Contracts
 
@@ -213,7 +241,9 @@ class HelloWorldContract extends BaseContract {
 
 # Logic Signatures
 
-Logic signatures or smart signatures as they are sometimes referred to are single program constructs which can be used to sign transactions. If the logic defined in the program runs without error, the signature is considered valid - if the program crashes, or returns `0` or `false`, the signature is not valid and the transaction will be rejected. It is possible to delegate signature privileges for any standard account to a logic signature program such that any transaction signed with the logic signature program will pass on behalf of the delegating account provided the program logic succeeds. This is obviously a dangerous proposition and such a logic signature program should be meticulously designed to avoid abuse. You can read more about logic signatures on Algorand [here](https://dev.algorand.co/concepts/smart-contracts/logic-sigs/). Logic signature programs are stateless, and support a different subset of [op codes](https://dev.algorand.co/reference/algorand-teal/opcodes/) to smart contracts.
+Logic signatures or smart signatures as they are sometimes referred to are single program constructs which can be used to sign transactions. If the logic defined in the program runs without error, the signature is considered valid - if the program crashes, or returns `0` or `false`, the signature is not valid and the transaction will be rejected. It is possible to delegate signature privileges for any standard account to a logic signature program such that any transaction signed with the logic signature program will pass on behalf of the delegating account provided the program logic succeeds. This is obviously a dangerous proposition and such a logic signature program should be meticulously designed to avoid abuse. You can read more about logic signatures on Algorand [here](https://dev.algorand.co/concepts/smart-contracts/logic-sigs/).
+
+Logic signature programs are stateless, and support a different subset of [op codes](https://dev.algorand.co/reference/algorand-teal/opcodes/) to smart contracts. The LogicSig class should only ever have a `program` method, complex signatures can make use of [free subroutines](#free-subroutines) to break up logic into smaller chunks.
 
 ```ts
 import { assert, LogicSig, Txn, Uint64 } from '@algorandfoundation/algorand-typescript'
