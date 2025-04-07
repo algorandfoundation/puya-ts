@@ -6,11 +6,7 @@
 
 # Interface: KeyRegistrationFields
 
-Defined in: [packages/algo-ts/src/itxn.ts:90](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L90)
-
-## Extends
-
-- [`CommonTransactionFields`](CommonTransactionFields.md)
+Defined in: [packages/algo-ts/src/itxn.ts:622](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L622)
 
 ## Properties
 
@@ -18,13 +14,9 @@ Defined in: [packages/algo-ts/src/itxn.ts:90](https://github.com/algorandfoundat
 
 > `optional` **fee**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:47](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L47)
+Defined in: [packages/algo-ts/src/itxn.ts:630](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L630)
 
 microalgos
-
-#### Inherited from
-
-[`CommonTransactionFields`](CommonTransactionFields.md).[`fee`](CommonTransactionFields.md#fee)
 
 ***
 
@@ -32,13 +24,9 @@ microalgos
 
 > `optional` **firstValid**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:52](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L52)
+Defined in: [packages/algo-ts/src/itxn.ts:634](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L634)
 
 round number
-
-#### Inherited from
-
-[`CommonTransactionFields`](CommonTransactionFields.md).[`firstValid`](CommonTransactionFields.md#firstvalid)
 
 ***
 
@@ -46,13 +34,19 @@ round number
 
 > `optional` **firstValidTime**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:57](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L57)
+Defined in: [packages/algo-ts/src/itxn.ts:638](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L638)
 
 UNIX timestamp of block before txn.FirstValid. Fails if negative
 
-#### Inherited from
+***
 
-[`CommonTransactionFields`](CommonTransactionFields.md).[`firstValidTime`](CommonTransactionFields.md#firstvalidtime)
+### lastValid?
+
+> `optional` **lastValid**: [`uint64`](../../../type-aliases/uint64.md)
+
+Defined in: [packages/algo-ts/src/itxn.ts:642](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L642)
+
+round number
 
 ***
 
@@ -60,13 +54,9 @@ UNIX timestamp of block before txn.FirstValid. Fails if negative
 
 > `optional` **lease**: [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:67](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L67)
+Defined in: [packages/algo-ts/src/itxn.ts:650](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L650)
 
 32 byte lease value
-
-#### Inherited from
-
-[`CommonTransactionFields`](CommonTransactionFields.md).[`lease`](CommonTransactionFields.md#lease)
 
 ***
 
@@ -74,7 +64,7 @@ Defined in: [packages/algo-ts/src/itxn.ts:67](https://github.com/algorandfoundat
 
 > `optional` **nonparticipation**: `boolean`
 
-Defined in: [packages/algo-ts/src/itxn.ts:119](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L119)
+Defined in: [packages/algo-ts/src/itxn.ts:678](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L678)
 
 Marks an account nonparticipating for rewards
 
@@ -84,27 +74,19 @@ Marks an account nonparticipating for rewards
 
 > `optional` **note**: `string` \| [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:62](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L62)
+Defined in: [packages/algo-ts/src/itxn.ts:646](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L646)
 
 Any data up to 1024 bytes
-
-#### Inherited from
-
-[`CommonTransactionFields`](CommonTransactionFields.md).[`note`](CommonTransactionFields.md#note)
 
 ***
 
 ### rekeyTo?
 
-> `optional` **rekeyTo**: [`AccountInput`](../../../-internal-/type-aliases/AccountInput.md)
+> `optional` **rekeyTo**: [`bytes`](../../../type-aliases/bytes.md) \| [`Account`](../../../type-aliases/Account.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:72](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L72)
+Defined in: [packages/algo-ts/src/itxn.ts:654](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L654)
 
 32 byte Sender's new AuthAddr
-
-#### Inherited from
-
-[`CommonTransactionFields`](CommonTransactionFields.md).[`rekeyTo`](CommonTransactionFields.md#rekeyto)
 
 ***
 
@@ -112,7 +94,7 @@ Defined in: [packages/algo-ts/src/itxn.ts:72](https://github.com/algorandfoundat
 
 > `optional` **selectionKey**: [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:99](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L99)
+Defined in: [packages/algo-ts/src/itxn.ts:662](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L662)
 
 32 byte address
 
@@ -120,15 +102,11 @@ Defined in: [packages/algo-ts/src/itxn.ts:99](https://github.com/algorandfoundat
 
 ### sender?
 
-> `optional` **sender**: [`AccountInput`](../../../-internal-/type-aliases/AccountInput.md)
+> `optional` **sender**: [`bytes`](../../../type-aliases/bytes.md) \| [`Account`](../../../type-aliases/Account.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:42](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L42)
+Defined in: [packages/algo-ts/src/itxn.ts:626](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L626)
 
 32 byte address
-
-#### Inherited from
-
-[`CommonTransactionFields`](CommonTransactionFields.md).[`sender`](CommonTransactionFields.md#sender)
 
 ***
 
@@ -136,7 +114,7 @@ Defined in: [packages/algo-ts/src/itxn.ts:42](https://github.com/algorandfoundat
 
 > `optional` **stateProofKey**: [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:124](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L124)
+Defined in: [packages/algo-ts/src/itxn.ts:682](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L682)
 
 64 byte state proof public key
 
@@ -146,7 +124,7 @@ Defined in: [packages/algo-ts/src/itxn.ts:124](https://github.com/algorandfounda
 
 > `optional` **voteFirst**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:104](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L104)
+Defined in: [packages/algo-ts/src/itxn.ts:666](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L666)
 
 The first round that the participation key is valid.
 
@@ -156,7 +134,7 @@ The first round that the participation key is valid.
 
 > `optional` **voteKey**: [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:94](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L94)
+Defined in: [packages/algo-ts/src/itxn.ts:658](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L658)
 
 32 byte address
 
@@ -166,7 +144,7 @@ Defined in: [packages/algo-ts/src/itxn.ts:94](https://github.com/algorandfoundat
 
 > `optional` **voteKeyDilution**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:114](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L114)
+Defined in: [packages/algo-ts/src/itxn.ts:674](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L674)
 
 Dilution for the 2-level participation key
 
@@ -176,6 +154,6 @@ Dilution for the 2-level participation key
 
 > `optional` **voteLast**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:109](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L109)
+Defined in: [packages/algo-ts/src/itxn.ts:670](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L670)
 
 The last round that the participation key is valid.

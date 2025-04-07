@@ -10,7 +10,9 @@ Defined in: node\_modules/typescript/lib/lib.es2015.iterable.d.ts:34
 
 ## Type Parameters
 
-• **TReturn**
+### TReturn
+
+`TReturn`
 
 ## Properties
 

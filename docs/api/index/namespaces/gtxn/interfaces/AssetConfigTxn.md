@@ -6,11 +6,9 @@
 
 # Interface: AssetConfigTxn
 
-Defined in: [packages/algo-ts/src/gtxn.ts:42](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L42)
+Defined in: [packages/algo-ts/src/gtxn.ts:607](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L607)
 
-## Extends
-
-- [`AssetConfigTxn`](../../../-internal-/interfaces/AssetConfigTxn.md)
+A group transaction of type 'acfg'
 
 ## Constructors
 
@@ -20,13 +18,9 @@ Defined in: [packages/algo-ts/src/gtxn.ts:42](https://github.com/algorandfoundat
 
 > `readonly` **assetName**: [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:188](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L188)
+Defined in: [packages/algo-ts/src/gtxn.ts:242](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L242)
 
 The asset name
-
-#### Inherited from
-
-[`AssetConfigTxn`](../../../-internal-/interfaces/AssetConfigTxn.md).[`assetName`](../../../-internal-/interfaces/AssetConfigTxn.md#assetname)
 
 ***
 
@@ -34,13 +28,9 @@ The asset name
 
 > `readonly` **clawback**: [`Account`](../../../type-aliases/Account.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:218](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L218)
+Defined in: [packages/algo-ts/src/gtxn.ts:266](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L266)
 
 32 byte address
-
-#### Inherited from
-
-[`AssetConfigTxn`](../../../-internal-/interfaces/AssetConfigTxn.md).[`clawback`](../../../-internal-/interfaces/AssetConfigTxn.md#clawback)
 
 ***
 
@@ -48,27 +38,19 @@ Defined in: [packages/algo-ts/src/transactions.ts:218](https://github.com/algora
 
 > `readonly` **configAsset**: [`Asset`](../../../type-aliases/Asset.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:163](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L163)
+Defined in: [packages/algo-ts/src/gtxn.ts:218](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L218)
 
 Asset ID in asset config transaction
-
-#### Inherited from
-
-[`AssetConfigTxn`](../../../-internal-/interfaces/AssetConfigTxn.md).[`configAsset`](../../../-internal-/interfaces/AssetConfigTxn.md#configasset)
 
 ***
 
 ### createdAsset
 
-> **createdAsset**: [`Asset`](../../../type-aliases/Asset.md)
+> `readonly` **createdAsset**: [`Asset`](../../../type-aliases/Asset.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:222](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L222)
+Defined in: [packages/algo-ts/src/gtxn.ts:222](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L222)
 
-Asset ID allocated by the creation of an ASA
-
-#### Inherited from
-
-[`AssetConfigTxn`](../../../-internal-/interfaces/AssetConfigTxn.md).[`createdAsset`](../../../-internal-/interfaces/AssetConfigTxn.md#createdasset)
+The asset created by this transaction
 
 ***
 
@@ -76,13 +58,9 @@ Asset ID allocated by the creation of an ASA
 
 > `readonly` **decimals**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:173](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L173)
+Defined in: [packages/algo-ts/src/gtxn.ts:230](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L230)
 
 Number of digits to display after the decimal place when displaying the asset
-
-#### Inherited from
-
-[`AssetConfigTxn`](../../../-internal-/interfaces/AssetConfigTxn.md).[`decimals`](../../../-internal-/interfaces/AssetConfigTxn.md#decimals)
 
 ***
 
@@ -90,13 +68,9 @@ Number of digits to display after the decimal place when displaying the asset
 
 > `readonly` **defaultFrozen**: `boolean`
 
-Defined in: [packages/algo-ts/src/transactions.ts:178](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L178)
+Defined in: [packages/algo-ts/src/gtxn.ts:234](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L234)
 
 Whether the asset's slots are frozen by default or not, 0 or 1
-
-#### Inherited from
-
-[`AssetConfigTxn`](../../../-internal-/interfaces/AssetConfigTxn.md).[`defaultFrozen`](../../../-internal-/interfaces/AssetConfigTxn.md#defaultfrozen)
 
 ***
 
@@ -104,13 +78,9 @@ Whether the asset's slots are frozen by default or not, 0 or 1
 
 > `readonly` **fee**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:44](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L44)
+Defined in: [packages/algo-ts/src/gtxn.ts:173](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L173)
 
 microalgos
-
-#### Inherited from
-
-[`AssetConfigTxn`](../../../-internal-/interfaces/AssetConfigTxn.md).[`fee`](../../../-internal-/interfaces/AssetConfigTxn.md#fee)
 
 ***
 
@@ -118,13 +88,9 @@ microalgos
 
 > `readonly` **firstValid**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:49](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L49)
+Defined in: [packages/algo-ts/src/gtxn.ts:177](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L177)
 
 round number
-
-#### Inherited from
-
-[`AssetConfigTxn`](../../../-internal-/interfaces/AssetConfigTxn.md).[`firstValid`](../../../-internal-/interfaces/AssetConfigTxn.md#firstvalid)
 
 ***
 
@@ -132,13 +98,9 @@ round number
 
 > `readonly` **firstValidTime**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:54](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L54)
+Defined in: [packages/algo-ts/src/gtxn.ts:181](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L181)
 
 UNIX timestamp of block before txn.FirstValid. Fails if negative
-
-#### Inherited from
-
-[`AssetConfigTxn`](../../../-internal-/interfaces/AssetConfigTxn.md).[`firstValidTime`](../../../-internal-/interfaces/AssetConfigTxn.md#firstvalidtime)
 
 ***
 
@@ -146,13 +108,9 @@ UNIX timestamp of block before txn.FirstValid. Fails if negative
 
 > `readonly` **freeze**: [`Account`](../../../type-aliases/Account.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:213](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L213)
+Defined in: [packages/algo-ts/src/gtxn.ts:262](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L262)
 
 32 byte address
-
-#### Inherited from
-
-[`AssetConfigTxn`](../../../-internal-/interfaces/AssetConfigTxn.md).[`freeze`](../../../-internal-/interfaces/AssetConfigTxn.md#freeze)
 
 ***
 
@@ -160,14 +118,10 @@ Defined in: [packages/algo-ts/src/transactions.ts:213](https://github.com/algora
 
 > `readonly` **groupIndex**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:80](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L80)
+Defined in: [packages/algo-ts/src/gtxn.ts:206](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L206)
 
 Position of this transaction within an atomic group
 A stand-alone transaction is implicitly element 0 in a group of 1
-
-#### Inherited from
-
-[`AssetConfigTxn`](../../../-internal-/interfaces/AssetConfigTxn.md).[`groupIndex`](../../../-internal-/interfaces/AssetConfigTxn.md#groupindex)
 
 ***
 
@@ -175,13 +129,9 @@ A stand-alone transaction is implicitly element 0 in a group of 1
 
 > `readonly` **lastValid**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:59](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L59)
+Defined in: [packages/algo-ts/src/gtxn.ts:185](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L185)
 
 round number
-
-#### Inherited from
-
-[`AssetConfigTxn`](../../../-internal-/interfaces/AssetConfigTxn.md).[`lastValid`](../../../-internal-/interfaces/AssetConfigTxn.md#lastvalid)
 
 ***
 
@@ -189,13 +139,9 @@ round number
 
 > `readonly` **lease**: [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:69](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L69)
+Defined in: [packages/algo-ts/src/gtxn.ts:193](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L193)
 
 32 byte lease value
-
-#### Inherited from
-
-[`AssetConfigTxn`](../../../-internal-/interfaces/AssetConfigTxn.md).[`lease`](../../../-internal-/interfaces/AssetConfigTxn.md#lease)
 
 ***
 
@@ -203,13 +149,9 @@ Defined in: [packages/algo-ts/src/transactions.ts:69](https://github.com/algoran
 
 > `readonly` **manager**: [`Account`](../../../type-aliases/Account.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:203](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L203)
+Defined in: [packages/algo-ts/src/gtxn.ts:254](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L254)
 
 32 byte address
-
-#### Inherited from
-
-[`AssetConfigTxn`](../../../-internal-/interfaces/AssetConfigTxn.md).[`manager`](../../../-internal-/interfaces/AssetConfigTxn.md#manager)
 
 ***
 
@@ -217,13 +159,9 @@ Defined in: [packages/algo-ts/src/transactions.ts:203](https://github.com/algora
 
 > `readonly` **metadataHash**: [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:198](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L198)
+Defined in: [packages/algo-ts/src/gtxn.ts:250](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L250)
 
 32 byte commitment to unspecified asset metadata
-
-#### Inherited from
-
-[`AssetConfigTxn`](../../../-internal-/interfaces/AssetConfigTxn.md).[`metadataHash`](../../../-internal-/interfaces/AssetConfigTxn.md#metadatahash)
 
 ***
 
@@ -231,13 +169,9 @@ Defined in: [packages/algo-ts/src/transactions.ts:198](https://github.com/algora
 
 > `readonly` **note**: [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:64](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L64)
+Defined in: [packages/algo-ts/src/gtxn.ts:189](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L189)
 
 Any data up to 1024 bytes
-
-#### Inherited from
-
-[`AssetConfigTxn`](../../../-internal-/interfaces/AssetConfigTxn.md).[`note`](../../../-internal-/interfaces/AssetConfigTxn.md#note)
 
 ***
 
@@ -245,13 +179,9 @@ Any data up to 1024 bytes
 
 > `readonly` **rekeyTo**: [`Account`](../../../type-aliases/Account.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:90](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L90)
+Defined in: [packages/algo-ts/src/gtxn.ts:214](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L214)
 
 32 byte Sender's new AuthAddr
-
-#### Inherited from
-
-[`AssetConfigTxn`](../../../-internal-/interfaces/AssetConfigTxn.md).[`rekeyTo`](../../../-internal-/interfaces/AssetConfigTxn.md#rekeyto)
 
 ***
 
@@ -259,13 +189,9 @@ Defined in: [packages/algo-ts/src/transactions.ts:90](https://github.com/algoran
 
 > `readonly` **reserve**: [`Account`](../../../type-aliases/Account.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:208](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L208)
+Defined in: [packages/algo-ts/src/gtxn.ts:258](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L258)
 
 32 byte address
-
-#### Inherited from
-
-[`AssetConfigTxn`](../../../-internal-/interfaces/AssetConfigTxn.md).[`reserve`](../../../-internal-/interfaces/AssetConfigTxn.md#reserve)
 
 ***
 
@@ -273,13 +199,9 @@ Defined in: [packages/algo-ts/src/transactions.ts:208](https://github.com/algora
 
 > `readonly` **sender**: [`Account`](../../../type-aliases/Account.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:39](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L39)
+Defined in: [packages/algo-ts/src/gtxn.ts:169](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L169)
 
 32 byte address
-
-#### Inherited from
-
-[`AssetConfigTxn`](../../../-internal-/interfaces/AssetConfigTxn.md).[`sender`](../../../-internal-/interfaces/AssetConfigTxn.md#sender)
 
 ***
 
@@ -287,13 +209,9 @@ Defined in: [packages/algo-ts/src/transactions.ts:39](https://github.com/algoran
 
 > `readonly` **total**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:168](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L168)
+Defined in: [packages/algo-ts/src/gtxn.ts:226](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L226)
 
 Total number of units of this asset created
-
-#### Inherited from
-
-[`AssetConfigTxn`](../../../-internal-/interfaces/AssetConfigTxn.md).[`total`](../../../-internal-/interfaces/AssetConfigTxn.md#total)
 
 ***
 
@@ -301,13 +219,9 @@ Total number of units of this asset created
 
 > `readonly` **txnId**: [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:85](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L85)
+Defined in: [packages/algo-ts/src/gtxn.ts:210](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L210)
 
 The computed ID for this transaction. 32 bytes.
-
-#### Inherited from
-
-[`AssetConfigTxn`](../../../-internal-/interfaces/AssetConfigTxn.md).[`txnId`](../../../-internal-/interfaces/AssetConfigTxn.md#txnid)
 
 ***
 
@@ -315,13 +229,9 @@ The computed ID for this transaction. 32 bytes.
 
 > `readonly` **type**: [`AssetConfig`](../../../enumerations/TransactionType.md#assetconfig)
 
-Defined in: [packages/algo-ts/src/transactions.ts:227](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L227)
+Defined in: [packages/algo-ts/src/gtxn.ts:201](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L201)
 
-Transaction type as integer
-
-#### Inherited from
-
-[`AssetConfigTxn`](../../../-internal-/interfaces/AssetConfigTxn.md).[`type`](../../../-internal-/interfaces/AssetConfigTxn.md#type)
+Transaction type
 
 ***
 
@@ -329,13 +239,9 @@ Transaction type as integer
 
 > `readonly` **typeBytes**: [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:74](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L74)
+Defined in: [packages/algo-ts/src/gtxn.ts:197](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L197)
 
 Transaction type as bytes
-
-#### Inherited from
-
-[`AssetConfigTxn`](../../../-internal-/interfaces/AssetConfigTxn.md).[`typeBytes`](../../../-internal-/interfaces/AssetConfigTxn.md#typebytes)
 
 ***
 
@@ -343,13 +249,9 @@ Transaction type as bytes
 
 > `readonly` **unitName**: [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:183](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L183)
+Defined in: [packages/algo-ts/src/gtxn.ts:238](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L238)
 
 Unit name of the asset
-
-#### Inherited from
-
-[`AssetConfigTxn`](../../../-internal-/interfaces/AssetConfigTxn.md).[`unitName`](../../../-internal-/interfaces/AssetConfigTxn.md#unitname)
 
 ***
 
@@ -357,10 +259,6 @@ Unit name of the asset
 
 > `readonly` **url**: [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:193](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L193)
+Defined in: [packages/algo-ts/src/gtxn.ts:246](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L246)
 
 URL
-
-#### Inherited from
-
-[`AssetConfigTxn`](../../../-internal-/interfaces/AssetConfigTxn.md).[`url`](../../../-internal-/interfaces/AssetConfigTxn.md#url)

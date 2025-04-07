@@ -6,9 +6,11 @@
 
 # Function: assetTransfer()
 
-> **assetTransfer**(`fields`): [`AssetTransferItxnParams`](../interfaces/AssetTransferItxnParams.md)
+> **assetTransfer**(`fields`): [`AssetTransferItxnParams`](../classes/AssetTransferItxnParams.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:230](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L230)
+Defined in: [packages/algo-ts/src/itxn.ts:1093](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L1093)
+
+Create a new AssetTransferItxnParams object with the specified fields
 
 ## Parameters
 
@@ -18,4 +20,4 @@ Defined in: [packages/algo-ts/src/itxn.ts:230](https://github.com/algorandfounda
 
 ## Returns
 
-[`AssetTransferItxnParams`](../interfaces/AssetTransferItxnParams.md)
+[`AssetTransferItxnParams`](../classes/AssetTransferItxnParams.md)

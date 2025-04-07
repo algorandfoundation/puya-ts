@@ -6,9 +6,11 @@
 
 # Function: assetFreeze()
 
-> **assetFreeze**(`fields`): [`AssetFreezeItxnParams`](../interfaces/AssetFreezeItxnParams.md)
+> **assetFreeze**(`fields`): [`AssetFreezeItxnParams`](../classes/AssetFreezeItxnParams.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:233](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L233)
+Defined in: [packages/algo-ts/src/itxn.ts:1122](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L1122)
+
+Create a new AssetFreezeItxnParams object with the specified fields
 
 ## Parameters
 
@@ -18,4 +20,4 @@ Defined in: [packages/algo-ts/src/itxn.ts:233](https://github.com/algorandfounda
 
 ## Returns
 
-[`AssetFreezeItxnParams`](../interfaces/AssetFreezeItxnParams.md)
+[`AssetFreezeItxnParams`](../classes/AssetFreezeItxnParams.md)

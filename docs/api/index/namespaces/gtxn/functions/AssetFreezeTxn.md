@@ -6,15 +6,20 @@
 
 # Function: AssetFreezeTxn()
 
-> **AssetFreezeTxn**(`groupIndex`): [`AssetFreezeTxn`](../interfaces/AssetFreezeTxn.md)
+> **AssetFreezeTxn**(`n`): [`AssetFreezeTxn`](../interfaces/AssetFreezeTxn.md)
 
-Defined in: [packages/algo-ts/src/gtxn.ts:48](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L48)
+Defined in: [packages/algo-ts/src/gtxn.ts:623](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L623)
+
+Get the nth transaction in the group
+Verifies the txn type is 'afrz'
 
 ## Parameters
 
-### groupIndex
+### n
 
 [`uint64`](../../../type-aliases/uint64.md)
+
+The index of the txn in the group
 
 ## Returns
 

@@ -14,7 +14,9 @@ Encode the provided Algorand TypeScript value as ARC4 bytes
 
 ## Type Parameters
 
-• **T**
+### T
+
+`T`
 
 ## Parameters
 

@@ -6,7 +6,7 @@
 
 # Type Alias: uint64
 
-> **uint64**: `object` & `number`
+> **uint64** = `object` & `number`
 
 Defined in: [packages/algo-ts/src/primitives.ts:23](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L23)
 

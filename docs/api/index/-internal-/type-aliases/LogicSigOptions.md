@@ -6,31 +6,41 @@
 
 # Type Alias: LogicSigOptions
 
-> **LogicSigOptions**: `object`
+> **LogicSigOptions** = `object`
 
 Defined in: [packages/algo-ts/src/logic-sig.ts:31](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/logic-sig.ts#L31)
 
 Defines optional configuration for a logic signature
 
-## Type declaration
+## Properties
 
 ### avmVersion?
 
 > `optional` **avmVersion**: `10` \| `11`
 
+Defined in: [packages/algo-ts/src/logic-sig.ts:36](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/logic-sig.ts#L36)
+
 Determines which AVM version to use, this affects what operations are supported.
 Defaults to value provided supplied on command line (which defaults to current mainnet version)
+
+***
 
 ### name?
 
 > `optional` **name**: `string`
 
+Defined in: [packages/algo-ts/src/logic-sig.ts:41](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/logic-sig.ts#L41)
+
 Override the name of the logic signature when generating build artifacts.
 Defaults to the class name
 
+***
+
 ### scratchSlots?
 
-> `optional` **scratchSlots**: (`number` \| [`NumberRange`](NumberRange.md))[]
+> `optional` **scratchSlots**: (`number` \| [`NumberRange`](NumberRange-1.md))[]
+
+Defined in: [packages/algo-ts/src/logic-sig.ts:49](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/logic-sig.ts#L49)
 
 Allows you to mark a slot ID or range of slot IDs as "off limits" to Puya.
 These slot ID(s) will never be written to or otherwise manipulating by the compiler itself.

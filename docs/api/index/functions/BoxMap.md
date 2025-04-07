@@ -14,11 +14,15 @@ Creates a BoxMap proxy object offering methods of getting and setting a set of v
 
 ## Type Parameters
 
-• **TKey**
+### TKey
+
+`TKey`
 
 The type of the value used to key each box. This key will be encoded to bytes and prefixed with `keyPrefix`
 
-• **TValue**
+### TValue
+
+`TValue`
 
 The type of the data stored in the box. This value will be encoded to bytes when stored and decoded on retrieval.
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
 
-import { startLanguageServer } from '../language-server/language-server'
+import { parseCliArguments } from '../language-server/parse'
 
-void startLanguageServer()
+void parseCliArguments()

@@ -6,11 +6,7 @@
 
 # Interface: AssetFreezeFields
 
-Defined in: [packages/algo-ts/src/itxn.ts:152](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L152)
-
-## Extends
-
-- [`CommonTransactionFields`](CommonTransactionFields.md)
+Defined in: [packages/algo-ts/src/itxn.ts:820](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L820)
 
 ## Properties
 
@@ -18,13 +14,9 @@ Defined in: [packages/algo-ts/src/itxn.ts:152](https://github.com/algorandfounda
 
 > `optional` **fee**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:47](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L47)
+Defined in: [packages/algo-ts/src/itxn.ts:828](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L828)
 
 microalgos
-
-#### Inherited from
-
-[`CommonTransactionFields`](CommonTransactionFields.md).[`fee`](CommonTransactionFields.md#fee)
 
 ***
 
@@ -32,13 +24,9 @@ microalgos
 
 > `optional` **firstValid**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:52](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L52)
+Defined in: [packages/algo-ts/src/itxn.ts:832](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L832)
 
 round number
-
-#### Inherited from
-
-[`CommonTransactionFields`](CommonTransactionFields.md).[`firstValid`](CommonTransactionFields.md#firstvalid)
 
 ***
 
@@ -46,29 +34,29 @@ round number
 
 > `optional` **firstValidTime**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:57](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L57)
+Defined in: [packages/algo-ts/src/itxn.ts:836](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L836)
 
 UNIX timestamp of block before txn.FirstValid. Fails if negative
-
-#### Inherited from
-
-[`CommonTransactionFields`](CommonTransactionFields.md).[`firstValidTime`](CommonTransactionFields.md#firstvalidtime)
 
 ***
 
 ### freezeAccount?
 
-> `optional` **freezeAccount**: [`AccountInput`](../../../-internal-/type-aliases/AccountInput.md)
+> `optional` **freezeAccount**: [`bytes`](../../../type-aliases/bytes.md) \| [`Account`](../../../type-aliases/Account.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:154](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L154)
+Defined in: [packages/algo-ts/src/itxn.ts:860](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L860)
+
+32 byte address of the account whose asset slot is being frozen or un-frozen
 
 ***
 
-### freezeAsset
+### freezeAsset?
 
-> **freezeAsset**: [`AssetInput`](../../../-internal-/type-aliases/AssetInput.md)
+> `optional` **freezeAsset**: [`uint64`](../../../type-aliases/uint64.md) \| [`Asset`](../../../type-aliases/Asset.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:153](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L153)
+Defined in: [packages/algo-ts/src/itxn.ts:856](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L856)
+
+Asset ID being frozen or un-frozen
 
 ***
 
@@ -76,7 +64,19 @@ Defined in: [packages/algo-ts/src/itxn.ts:153](https://github.com/algorandfounda
 
 > `optional` **frozen**: `boolean`
 
-Defined in: [packages/algo-ts/src/itxn.ts:155](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L155)
+Defined in: [packages/algo-ts/src/itxn.ts:864](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L864)
+
+The new frozen value
+
+***
+
+### lastValid?
+
+> `optional` **lastValid**: [`uint64`](../../../type-aliases/uint64.md)
+
+Defined in: [packages/algo-ts/src/itxn.ts:840](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L840)
+
+round number
 
 ***
 
@@ -84,13 +84,9 @@ Defined in: [packages/algo-ts/src/itxn.ts:155](https://github.com/algorandfounda
 
 > `optional` **lease**: [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:67](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L67)
+Defined in: [packages/algo-ts/src/itxn.ts:848](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L848)
 
 32 byte lease value
-
-#### Inherited from
-
-[`CommonTransactionFields`](CommonTransactionFields.md).[`lease`](CommonTransactionFields.md#lease)
 
 ***
 
@@ -98,38 +94,26 @@ Defined in: [packages/algo-ts/src/itxn.ts:67](https://github.com/algorandfoundat
 
 > `optional` **note**: `string` \| [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:62](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L62)
+Defined in: [packages/algo-ts/src/itxn.ts:844](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L844)
 
 Any data up to 1024 bytes
-
-#### Inherited from
-
-[`CommonTransactionFields`](CommonTransactionFields.md).[`note`](CommonTransactionFields.md#note)
 
 ***
 
 ### rekeyTo?
 
-> `optional` **rekeyTo**: [`AccountInput`](../../../-internal-/type-aliases/AccountInput.md)
+> `optional` **rekeyTo**: [`bytes`](../../../type-aliases/bytes.md) \| [`Account`](../../../type-aliases/Account.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:72](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L72)
+Defined in: [packages/algo-ts/src/itxn.ts:852](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L852)
 
 32 byte Sender's new AuthAddr
-
-#### Inherited from
-
-[`CommonTransactionFields`](CommonTransactionFields.md).[`rekeyTo`](CommonTransactionFields.md#rekeyto)
 
 ***
 
 ### sender?
 
-> `optional` **sender**: [`AccountInput`](../../../-internal-/type-aliases/AccountInput.md)
+> `optional` **sender**: [`bytes`](../../../type-aliases/bytes.md) \| [`Account`](../../../type-aliases/Account.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:42](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L42)
+Defined in: [packages/algo-ts/src/itxn.ts:824](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L824)
 
 32 byte address
-
-#### Inherited from
-
-[`CommonTransactionFields`](CommonTransactionFields.md).[`sender`](CommonTransactionFields.md#sender)

@@ -6,11 +6,9 @@
 
 # Interface: AssetFreezeTxn
 
-Defined in: [packages/algo-ts/src/gtxn.ts:48](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L48)
+Defined in: [packages/algo-ts/src/gtxn.ts:623](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L623)
 
-## Extends
-
-- [`AssetFreezeTxn`](../../../-internal-/interfaces/AssetFreezeTxn.md)
+A group transaction of type 'afrz'
 
 ## Constructors
 
@@ -20,13 +18,9 @@ Defined in: [packages/algo-ts/src/gtxn.ts:48](https://github.com/algorandfoundat
 
 > `readonly` **fee**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:44](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L44)
+Defined in: [packages/algo-ts/src/gtxn.ts:357](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L357)
 
 microalgos
-
-#### Inherited from
-
-[`AssetFreezeTxn`](../../../-internal-/interfaces/AssetFreezeTxn.md).[`fee`](../../../-internal-/interfaces/AssetFreezeTxn.md#fee)
 
 ***
 
@@ -34,13 +28,9 @@ microalgos
 
 > `readonly` **firstValid**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:49](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L49)
+Defined in: [packages/algo-ts/src/gtxn.ts:361](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L361)
 
 round number
-
-#### Inherited from
-
-[`AssetFreezeTxn`](../../../-internal-/interfaces/AssetFreezeTxn.md).[`firstValid`](../../../-internal-/interfaces/AssetFreezeTxn.md#firstvalid)
 
 ***
 
@@ -48,13 +38,9 @@ round number
 
 > `readonly` **firstValidTime**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:54](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L54)
+Defined in: [packages/algo-ts/src/gtxn.ts:365](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L365)
 
 UNIX timestamp of block before txn.FirstValid. Fails if negative
-
-#### Inherited from
-
-[`AssetFreezeTxn`](../../../-internal-/interfaces/AssetFreezeTxn.md).[`firstValidTime`](../../../-internal-/interfaces/AssetFreezeTxn.md#firstvalidtime)
 
 ***
 
@@ -62,13 +48,9 @@ UNIX timestamp of block before txn.FirstValid. Fails if negative
 
 > `readonly` **freezeAccount**: [`Account`](../../../type-aliases/Account.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:270](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L270)
+Defined in: [packages/algo-ts/src/gtxn.ts:406](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L406)
 
 32 byte address of the account whose asset slot is being frozen or un-frozen
-
-#### Inherited from
-
-[`AssetFreezeTxn`](../../../-internal-/interfaces/AssetFreezeTxn.md).[`freezeAccount`](../../../-internal-/interfaces/AssetFreezeTxn.md#freezeaccount)
 
 ***
 
@@ -76,13 +58,9 @@ Defined in: [packages/algo-ts/src/transactions.ts:270](https://github.com/algora
 
 > `readonly` **freezeAsset**: [`Asset`](../../../type-aliases/Asset.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:265](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L265)
+Defined in: [packages/algo-ts/src/gtxn.ts:402](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L402)
 
 Asset ID being frozen or un-frozen
-
-#### Inherited from
-
-[`AssetFreezeTxn`](../../../-internal-/interfaces/AssetFreezeTxn.md).[`freezeAsset`](../../../-internal-/interfaces/AssetFreezeTxn.md#freezeasset)
 
 ***
 
@@ -90,13 +68,9 @@ Asset ID being frozen or un-frozen
 
 > `readonly` **frozen**: `boolean`
 
-Defined in: [packages/algo-ts/src/transactions.ts:275](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L275)
+Defined in: [packages/algo-ts/src/gtxn.ts:410](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L410)
 
 The new frozen value
-
-#### Inherited from
-
-[`AssetFreezeTxn`](../../../-internal-/interfaces/AssetFreezeTxn.md).[`frozen`](../../../-internal-/interfaces/AssetFreezeTxn.md#frozen)
 
 ***
 
@@ -104,14 +78,10 @@ The new frozen value
 
 > `readonly` **groupIndex**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:80](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L80)
+Defined in: [packages/algo-ts/src/gtxn.ts:390](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L390)
 
 Position of this transaction within an atomic group
 A stand-alone transaction is implicitly element 0 in a group of 1
-
-#### Inherited from
-
-[`AssetFreezeTxn`](../../../-internal-/interfaces/AssetFreezeTxn.md).[`groupIndex`](../../../-internal-/interfaces/AssetFreezeTxn.md#groupindex)
 
 ***
 
@@ -119,13 +89,9 @@ A stand-alone transaction is implicitly element 0 in a group of 1
 
 > `readonly` **lastValid**: [`uint64`](../../../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:59](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L59)
+Defined in: [packages/algo-ts/src/gtxn.ts:369](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L369)
 
 round number
-
-#### Inherited from
-
-[`AssetFreezeTxn`](../../../-internal-/interfaces/AssetFreezeTxn.md).[`lastValid`](../../../-internal-/interfaces/AssetFreezeTxn.md#lastvalid)
 
 ***
 
@@ -133,13 +99,9 @@ round number
 
 > `readonly` **lease**: [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:69](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L69)
+Defined in: [packages/algo-ts/src/gtxn.ts:377](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L377)
 
 32 byte lease value
-
-#### Inherited from
-
-[`AssetFreezeTxn`](../../../-internal-/interfaces/AssetFreezeTxn.md).[`lease`](../../../-internal-/interfaces/AssetFreezeTxn.md#lease)
 
 ***
 
@@ -147,13 +109,9 @@ Defined in: [packages/algo-ts/src/transactions.ts:69](https://github.com/algoran
 
 > `readonly` **note**: [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:64](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L64)
+Defined in: [packages/algo-ts/src/gtxn.ts:373](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L373)
 
 Any data up to 1024 bytes
-
-#### Inherited from
-
-[`AssetFreezeTxn`](../../../-internal-/interfaces/AssetFreezeTxn.md).[`note`](../../../-internal-/interfaces/AssetFreezeTxn.md#note)
 
 ***
 
@@ -161,13 +119,9 @@ Any data up to 1024 bytes
 
 > `readonly` **rekeyTo**: [`Account`](../../../type-aliases/Account.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:90](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L90)
+Defined in: [packages/algo-ts/src/gtxn.ts:398](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L398)
 
 32 byte Sender's new AuthAddr
-
-#### Inherited from
-
-[`AssetFreezeTxn`](../../../-internal-/interfaces/AssetFreezeTxn.md).[`rekeyTo`](../../../-internal-/interfaces/AssetFreezeTxn.md#rekeyto)
 
 ***
 
@@ -175,13 +129,9 @@ Defined in: [packages/algo-ts/src/transactions.ts:90](https://github.com/algoran
 
 > `readonly` **sender**: [`Account`](../../../type-aliases/Account.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:39](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L39)
+Defined in: [packages/algo-ts/src/gtxn.ts:353](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L353)
 
 32 byte address
-
-#### Inherited from
-
-[`AssetFreezeTxn`](../../../-internal-/interfaces/AssetFreezeTxn.md).[`sender`](../../../-internal-/interfaces/AssetFreezeTxn.md#sender)
 
 ***
 
@@ -189,13 +139,9 @@ Defined in: [packages/algo-ts/src/transactions.ts:39](https://github.com/algoran
 
 > `readonly` **txnId**: [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:85](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L85)
+Defined in: [packages/algo-ts/src/gtxn.ts:394](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L394)
 
 The computed ID for this transaction. 32 bytes.
-
-#### Inherited from
-
-[`AssetFreezeTxn`](../../../-internal-/interfaces/AssetFreezeTxn.md).[`txnId`](../../../-internal-/interfaces/AssetFreezeTxn.md#txnid)
 
 ***
 
@@ -203,13 +149,9 @@ The computed ID for this transaction. 32 bytes.
 
 > `readonly` **type**: [`AssetFreeze`](../../../enumerations/TransactionType.md#assetfreeze)
 
-Defined in: [packages/algo-ts/src/transactions.ts:279](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L279)
+Defined in: [packages/algo-ts/src/gtxn.ts:385](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L385)
 
-Transaction type as integer
-
-#### Inherited from
-
-[`AssetFreezeTxn`](../../../-internal-/interfaces/AssetFreezeTxn.md).[`type`](../../../-internal-/interfaces/AssetFreezeTxn.md#type)
+Transaction type
 
 ***
 
@@ -217,10 +159,6 @@ Transaction type as integer
 
 > `readonly` **typeBytes**: [`bytes`](../../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/transactions.ts:74](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/transactions.ts#L74)
+Defined in: [packages/algo-ts/src/gtxn.ts:381](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L381)
 
 Transaction type as bytes
-
-#### Inherited from
-
-[`AssetFreezeTxn`](../../../-internal-/interfaces/AssetFreezeTxn.md).[`typeBytes`](../../../-internal-/interfaces/AssetFreezeTxn.md#typebytes)

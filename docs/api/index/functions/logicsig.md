@@ -26,7 +26,9 @@ An object containing the configuration options
 
 ### Type Parameters
 
-• **T** *extends* [`ConstructorFor`](../../arc4/-internal-/type-aliases/ConstructorFor.md)\<[`LogicSig`](../classes/LogicSig.md)\>
+#### T
+
+`T` *extends* [`ConstructorFor`](../-internal-/type-aliases/ConstructorFor.md)\<[`LogicSig`](../classes/LogicSig.md)\>
 
 ### Parameters
 

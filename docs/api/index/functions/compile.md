@@ -18,7 +18,7 @@ Compile a contract and return the resulting byte code for approval and clear sta
 
 #### contract
 
-[`ConstructorFor`](../../arc4/-internal-/type-aliases/ConstructorFor.md)\<[`BaseContract`](../classes/BaseContract.md)\>
+[`ConstructorFor`](../-internal-/type-aliases/ConstructorFor.md)\<[`BaseContract`](../classes/BaseContract.md)\>
 
 The contract class to compile
 
@@ -44,7 +44,7 @@ Compile a logic signature and return an account ready for signing transactions.
 
 #### logicSig
 
-[`ConstructorFor`](../../arc4/-internal-/type-aliases/ConstructorFor.md)\<[`LogicSig`](../classes/LogicSig.md)\>
+[`ConstructorFor`](../-internal-/type-aliases/ConstructorFor.md)\<[`LogicSig`](../classes/LogicSig.md)\>
 
 The logic sig class to compile
 

@@ -1,0 +1,100 @@
+contract StoreString
+{
+  globals {
+    ["stringStore"]: string
+  }
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  setStore(value: string): void
+  {
+    GlobalState["stringStore"]: string = value
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+contract StoreUint64
+{
+  globals {
+    ["uint64Store"]: uint64
+  }
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  setStore(value: uint64): void
+  {
+    GlobalState["uint64Store"]: uint64 = value
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+contract StoreBoth
+{
+  globals {
+    ["stringStore"]: string
+    ["uint64Store"]: uint64
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  test(theString: string, theUint: uint64): void
+  {
+    polytype/lib/polytype-module.d.ts::ClusteredContract<tests/approvals/multi-inheritance-2.algo.ts::StoreString,tests/approvals/multi-inheritance-2.algo.ts::StoreUint64>.setStore(theString)
+    tests/approvals/multi-inheritance-2.algo.ts::StoreUint64.setStore(theUint)
+  }
+  
+  StoreString::setStore(value: string): void
+  {
+    GlobalState["stringStore"]: string = value
+  }
+  
+  StoreUint64::setStore(value: uint64): void
+  {
+    GlobalState["uint64Store"]: uint64 = value
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+  ClusteredContract<tests/approvals/multi-inheritance-2.algo.ts::StoreString,tests/approvals/multi-inheritance-2.algo.ts::StoreUint64>::constructor(): void
+  {
+    @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor()
+    @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor()
+  }
+  
+  BaseContract::constructor(): void
+  {
+  }
+  
+}

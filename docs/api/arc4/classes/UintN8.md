@@ -16,9 +16,9 @@ An alias for UintN<8>
 
 ## Constructors
 
-### new UintN8()
+### Constructor
 
-> **new UintN8**(`v`?): [`UintN8`](UintN8.md)
+> **new UintN8**(`v`?): `UintN8`
 
 Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:136](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L136)
 
@@ -34,11 +34,11 @@ The native uint64 or biguint value to initialize this UintN from
 
 #### Returns
 
-[`UintN8`](UintN8.md)
+`UintN8`
 
 #### Inherited from
 
-[`UintN`](UintN.md).[`constructor`](UintN.md#constructors)
+[`UintN`](UintN.md).[`constructor`](UintN.md#constructor)
 
 ## Accessors
 

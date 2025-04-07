@@ -6,9 +6,11 @@
 
 # Function: payment()
 
-> **payment**(`fields`): [`PaymentItxnParams`](../interfaces/PaymentItxnParams.md)
+> **payment**(`fields`): [`PaymentItxnParams`](../classes/PaymentItxnParams.md)
 
-Defined in: [packages/algo-ts/src/itxn.ts:221](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L221)
+Defined in: [packages/algo-ts/src/itxn.ts:1006](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/itxn.ts#L1006)
+
+Create a new PaymentItxnParams object with the specified fields
 
 ## Parameters
 
@@ -18,4 +20,4 @@ Defined in: [packages/algo-ts/src/itxn.ts:221](https://github.com/algorandfounda
 
 ## Returns
 
-[`PaymentItxnParams`](../interfaces/PaymentItxnParams.md)
+[`PaymentItxnParams`](../classes/PaymentItxnParams.md)

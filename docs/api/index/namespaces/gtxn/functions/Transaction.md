@@ -6,15 +6,19 @@
 
 # Function: Transaction()
 
-> **Transaction**(`groupIndex`): [`Transaction`](../type-aliases/Transaction.md)
+> **Transaction**(`n`): [`Transaction`](../type-aliases/Transaction.md)
 
-Defined in: [packages/algo-ts/src/gtxn.ts:33](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L33)
+Defined in: [packages/algo-ts/src/gtxn.ts:583](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/gtxn.ts#L583)
+
+Get the nth transaction in the group without verifying its type
 
 ## Parameters
 
-### groupIndex
+### n
 
 [`uint64`](../../../type-aliases/uint64.md)
+
+The index of the txn in the group
 
 ## Returns
 

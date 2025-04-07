@@ -1042,11 +1042,11 @@ export const AssetFreezeTxnFunction = new TransactionFunctionType({
   kind: TransactionKind.afrz,
 })
 export const applicationCallGtxnType = new GroupTransactionPType({
-  name: 'ApplicationTxn',
+  name: 'ApplicationCallTxn',
   kind: TransactionKind.appl,
 })
 export const ApplicationTxnFunction = new TransactionFunctionType({
-  name: 'ApplicationTxn',
+  name: 'ApplicationCallTxn',
   module: Constants.moduleNames.algoTs.gtxn,
   kind: TransactionKind.appl,
 })
@@ -1321,11 +1321,11 @@ export const applicationCallItxnParamsType = new ItxnParamsPType({
   kind: TransactionKind.appl,
 })
 export const applicationItxnType = new InnerTransactionPType({
-  name: 'ApplicationInnerTxn',
+  name: 'ApplicationCallInnerTxn',
   kind: TransactionKind.appl,
 })
 export const anyItxnType = new InnerTransactionPType({
-  name: 'AnyInnerTxn',
+  name: 'InnerTxn',
 })
 
 export const submitGroupItxnFunction = new LibFunctionType({
