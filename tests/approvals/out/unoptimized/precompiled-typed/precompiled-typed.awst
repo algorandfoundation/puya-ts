@@ -69,8 +69,8 @@ contract HelloFactory
     appId: application = submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, OnCompletion=0, ApprovalProgramPages=compiled.approvalProgram, ClearStateProgramPages=compiled.clearStateProgram, GlobalNumUint=compiled.globalUints, GlobalNumByteSlice=compiled.globalBytes, LocalNumByteSlice=compiled.localBytes, LocalNumUint=compiled.localUints, ExtraProgramPages=compiled.extraProgramPages)).CreatedApplicationID
     asset: asset = submit_txn(create_inner_transaction(Fee=0, TypeEnum=3, ConfigAssetTotal=1, ConfigAssetUnitName="T", ConfigAssetName="TEST")).CreatedAssetID
     result: object{ itxn: inner_transaction_appl } = { itxn: (#21 = { itxn: submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=appId, OnCompletion=0, ApplicationArgs=<tuple>[Method("receivesReferenceTypes(application,account,asset)void"), 1, 1, 0], Applications=<tuple>[global<CurrentApplicationID>()], Assets=<tuple>[asset], Accounts=<tuple>[txn<Sender>()])) }).itxn }
-    assert(result.itxn.Logs[0] == reinterpret_cast<bytes>(global<CurrentApplicationAddress>()))
-    assert(result.itxn.Logs[1] == reinterpret_cast<bytes>(txn<Sender>()))
+    assert(result.itxn.Logs[0] == reinterpret_cast<bytes>(reinterpret_cast<bytes[32]>(global<CurrentApplicationAddress>())))
+    assert(result.itxn.Logs[1] == reinterpret_cast<bytes>(reinterpret_cast<bytes[32]>(txn<Sender>())))
     assert(result.itxn.Logs[2] == checked_maybe(asset_params_get<AssetName>(asset), comment=asset exists))
   }
   

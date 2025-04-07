@@ -163,15 +163,15 @@ export function baremethod<TContract extends Contract>(config?: BareMethodConfig
  * @param methodSignature An ARC4 contract method reference. (Eg. `MyContract.prototype.myMethod`)
  * @returns The ARC4 method selector. Eg. `02BECE11`
  */
-export function methodSelector(methodSignature: InstanceMethod<Contract>): bytes
+export function methodSelector(methodSignature: InstanceMethod<Contract>): bytes<4>
 /**
  * Returns the ARC4 method selector for a given ARC4 method signature. The method selector is the first
  * 4 bytes of the SHA512/256 hash of the method signature.
  * @param methodSignature An ARC4 method signature string (Eg. `hello(string)string`.  Must be a compile time constant)
  * @returns The ARC4 method selector. Eg. `02BECE11`
  */
-export function methodSelector(methodSignature: string): bytes
-export function methodSelector(methodSignature: string | InstanceMethod<Contract>): bytes {
+export function methodSelector(methodSignature: string): bytes<4>
+export function methodSelector(methodSignature: string | InstanceMethod<Contract>): bytes<4> {
   throw new NoImplementation()
 }
 

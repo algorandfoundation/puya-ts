@@ -84,9 +84,10 @@
           "end_column": 84
         },
         "wtype": {
-          "_type": "WType",
+          "_type": "BytesWType",
           "name": "bytes",
-          "immutable": true
+          "immutable": true,
+          "length": null
         }
       },
       {
@@ -258,9 +259,10 @@
                     "end_column": 22
                   },
                   "wtype": {
-                    "_type": "WType",
-                    "name": "bytes",
-                    "immutable": true
+                    "_type": "BytesWType",
+                    "name": "bytes[8]",
+                    "immutable": true,
+                    "length": 8
                   },
                   "op_code": "itob",
                   "immediates": [],
@@ -367,9 +369,10 @@
                     "end_column": 23
                   },
                   "wtype": {
-                    "_type": "WType",
-                    "name": "bytes",
-                    "immutable": true
+                    "_type": "BytesWType",
+                    "name": "bytes[8]",
+                    "immutable": true,
+                    "length": 8
                   },
                   "op_code": "itob",
                   "immediates": [],
@@ -932,9 +935,10 @@
                     "end_column": 19
                   },
                   "wtype": {
-                    "_type": "WType",
-                    "name": "bytes",
-                    "immutable": true
+                    "_type": "BytesWType",
+                    "name": "bytes[8]",
+                    "immutable": true,
+                    "length": 8
                   },
                   "op_code": "itob",
                   "immediates": [],
@@ -1040,9 +1044,10 @@
                     "end_column": 23
                   },
                   "wtype": {
-                    "_type": "WType",
-                    "name": "bytes",
-                    "immutable": true
+                    "_type": "BytesWType",
+                    "name": "bytes[8]",
+                    "immutable": true,
+                    "length": 8
                   },
                   "op_code": "itob",
                   "immediates": [],
@@ -1212,9 +1217,10 @@
                     "end_column": 19
                   },
                   "wtype": {
-                    "_type": "WType",
-                    "name": "bytes",
-                    "immutable": true
+                    "_type": "BytesWType",
+                    "name": "bytes[8]",
+                    "immutable": true,
+                    "length": 8
                   },
                   "op_code": "itob",
                   "immediates": [],
@@ -1320,9 +1326,10 @@
                     "end_column": 18
                   },
                   "wtype": {
-                    "_type": "WType",
+                    "_type": "BytesWType",
                     "name": "bytes",
-                    "immutable": true
+                    "immutable": true,
+                    "length": null
                   },
                   "name": "c"
                 }
@@ -1868,9 +1875,10 @@
                     "end_column": 63
                   },
                   "wtype": {
-                    "_type": "WType",
+                    "_type": "BytesWType",
                     "name": "bytes",
-                    "immutable": true
+                    "immutable": true,
+                    "length": null
                   },
                   "op_code": "concat",
                   "immediates": [],
@@ -1885,9 +1893,10 @@
                         "end_column": 40
                       },
                       "wtype": {
-                        "_type": "WType",
+                        "_type": "BytesWType",
                         "name": "bytes",
-                        "immutable": true
+                        "immutable": true,
+                        "length": null
                       },
                       "op_code": "bzero",
                       "immediates": [],
@@ -1921,9 +1930,10 @@
                         "end_column": 62
                       },
                       "wtype": {
-                        "_type": "WType",
+                        "_type": "BytesWType",
                         "name": "bytes",
-                        "immutable": true
+                        "immutable": true,
+                        "length": null
                       },
                       "expr": {
                         "_type": "VarExpression",
@@ -2118,7 +2128,7 @@
                   "_type": "CallArg",
                   "name": null,
                   "value": {
-                    "_type": "IntrinsicCall",
+                    "_type": "ReinterpretCast",
                     "source_location": {
                       "file": "tests/approvals/biguint-expressions.algo.ts",
                       "line": 32,
@@ -2127,31 +2137,48 @@
                       "end_column": 59
                     },
                     "wtype": {
-                      "_type": "WType",
+                      "_type": "BytesWType",
                       "name": "bytes",
-                      "immutable": true
+                      "immutable": true,
+                      "length": null
                     },
-                    "op_code": "itob",
-                    "immediates": [],
-                    "stack_args": [
-                      {
-                        "_type": "IntegerConstant",
-                        "source_location": {
-                          "file": "tests/approvals/biguint-expressions.algo.ts",
-                          "line": 32,
-                          "end_line": 32,
-                          "column": 57,
-                          "end_column": 58
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true
-                        },
-                        "value": 4,
-                        "teal_alias": null
-                      }
-                    ]
+                    "expr": {
+                      "_type": "IntrinsicCall",
+                      "source_location": {
+                        "file": "tests/approvals/biguint-expressions.algo.ts",
+                        "line": 32,
+                        "end_line": 32,
+                        "column": 52,
+                        "end_column": 59
+                      },
+                      "wtype": {
+                        "_type": "BytesWType",
+                        "name": "bytes[8]",
+                        "immutable": true,
+                        "length": 8
+                      },
+                      "op_code": "itob",
+                      "immediates": [],
+                      "stack_args": [
+                        {
+                          "_type": "IntegerConstant",
+                          "source_location": {
+                            "file": "tests/approvals/biguint-expressions.algo.ts",
+                            "line": 32,
+                            "end_line": 32,
+                            "column": 57,
+                            "end_column": 58
+                          },
+                          "wtype": {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          "value": 4,
+                          "teal_alias": null
+                        }
+                      ]
+                    }
                   }
                 },
                 {

@@ -151,7 +151,7 @@ subroutine tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.receivesAnyTxn
 
 subroutine tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.receivesAssetConfig(assetCfg: uint64) -> bytes:
     block@0: // L95
-        let tmp%0#0: bytes = ((gtxns TxID) assetCfg#0)
+        let tmp%0#0: bytes[32] = ((gtxns TxID) assetCfg#0)
         return tmp%0#0
 
 subroutine tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.receivesAssetConfigAndPay(assetCfg: uint64, payTxn: uint64) -> void:

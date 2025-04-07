@@ -43,7 +43,7 @@ describe('arc4-encode-decode', () => {
   test('encoding', async ({ appClientArc4EncodeDecode, testAccount }) => {
     await appClientArc4EncodeDecode.send.call({
       method: 'testEncoding',
-      args: [234234, true, 340943934n, new Uint8Array([1, 2, 3, 4, 5]), 'hello world', testAccount.addr.toString()],
+      args: [234234, true, 340943934n, new Uint8Array([1, 2, 3, 4, 5]), 'hello world', testAccount.addr.toString(), new Uint8Array(12)],
       extraFee: algos(1),
     })
   })
@@ -63,6 +63,8 @@ describe('arc4-encode-decode', () => {
         new Uint8Array([...bigIntToUint8Array(50n, 8), 0, 10, 0, 5, 1, 2, 3, 4, 5]),
         testAccount.addr.toString(),
         testAccount.addr.publicKey,
+        new Uint8Array(12),
+        new Uint8Array(12),
       ],
     })
   })

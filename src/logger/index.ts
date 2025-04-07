@@ -60,7 +60,7 @@ class PuyaLogger {
       const stack = source instanceof UserError ? '' : `\n ${source.stack}`
       this.addLog(LogLevel.Error, tryGetSourceLocationFromError(source), `${source.message}${stack}`)
       if (source.cause) {
-        this.addLog(LogLevel.Error, tryGetSourceLocationFromError(source.cause), `Caused by: ${source.cause}`)
+        this.addLog(LogLevel.Debug, tryGetSourceLocationFromError(source.cause), `Caused by: ${source.cause}`)
       }
     } else {
       this.addLog(LogLevel.Error, source, message ?? '')

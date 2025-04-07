@@ -31,52 +31,28 @@ main_read_enums_route@4:
     // assert(op.Box.get(Bytes('oca'))[0] === op.itob(this.oca.value))
     bytec_0 // "oca"
     box_get
-    pop
-    // tests/approvals/box-enum-contract.algo.ts:5
-    // oca = Box<OnCompleteAction>({ key: Bytes('oca') })
-    bytec_0 // "oca"
-    // tests/approvals/box-enum-contract.algo.ts:16
-    // assert(op.Box.get(Bytes('oca'))[0] === op.itob(this.oca.value))
-    box_get
     assert // Box must have value
+    dup
     btoi
     itob
+    swap
+    dig 1
     ==
     assert
     // tests/approvals/box-enum-contract.algo.ts:17
     // assert(op.Box.get(Bytes('txn'))[0] === op.itob(this.txn.value))
     bytec_1 // "txn"
     box_get
-    pop
-    // tests/approvals/box-enum-contract.algo.ts:6
-    // txn = Box<TransactionType>({ key: Bytes('txn') })
-    bytec_1 // "txn"
-    // tests/approvals/box-enum-contract.algo.ts:17
-    // assert(op.Box.get(Bytes('txn'))[0] === op.itob(this.txn.value))
-    box_get
     assert // Box must have value
+    dup
     btoi
     itob
+    swap
+    dig 1
     ==
     assert
-    // tests/approvals/box-enum-contract.algo.ts:5
-    // oca = Box<OnCompleteAction>({ key: Bytes('oca') })
-    bytec_0 // "oca"
     // tests/approvals/box-enum-contract.algo.ts:19
     // return new Tuple(new UintN64(this.oca.value), new UintN64(this.txn.value))
-    box_get
-    assert // Box must have value
-    btoi
-    itob
-    // tests/approvals/box-enum-contract.algo.ts:6
-    // txn = Box<TransactionType>({ key: Bytes('txn') })
-    bytec_1 // "txn"
-    // tests/approvals/box-enum-contract.algo.ts:19
-    // return new Tuple(new UintN64(this.oca.value), new UintN64(this.txn.value))
-    box_get
-    assert // Box must have value
-    btoi
-    itob
     concat
     // tests/approvals/box-enum-contract.algo.ts:14
     // @arc4.abimethod({ name: 'read_enums' })

@@ -30,7 +30,7 @@ import { ObjectLiteralExpressionBuilder } from '../eb/literal/object-literal-exp
 import { NamespaceBuilder } from '../eb/namespace-builder'
 import { OmittedExpressionBuilder } from '../eb/omitted-expression-builder'
 import { SpreadExpressionBuilder } from '../eb/spread-expression-builder'
-import { StringExpressionBuilder, StringFunctionBuilder } from '../eb/string-expression-builder'
+import { StringExpressionBuilder, stringFromTemplate } from '../eb/string-expression-builder'
 import { StaticIterator } from '../eb/traits/static-iterator'
 import { requireExpressionOfType, requireInstanceBuilder } from '../eb/util'
 import { concatArrays } from '../eb/util/array/concat'
@@ -275,14 +275,15 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   visitTaggedTemplateExpression(node: ts.TaggedTemplateExpression): NodeBuilder {
     const sourceLocation = this.sourceLocation(node)
     const target = this.baseAccept(node.tag)
+    const typeArgs = this.context.getTypeParameters(node)
     if (ts.isNoSubstitutionTemplateLiteral(node.template)) {
-      return target.taggedTemplate(this.textVisitor.accept(node.template), [], sourceLocation)
+      return target.taggedTemplate(this.textVisitor.accept(node.template), [], typeArgs, sourceLocation)
     } else {
       const head = this.textVisitor.accept(node.template.head)
       const spans = node.template.templateSpans.map(
         (s) => [requireInstanceBuilder(this.baseAccept(s.expression)), this.textVisitor.accept(s.literal)] as const,
       )
-      return target.taggedTemplate(head, spans, sourceLocation)
+      return target.taggedTemplate(head, spans, typeArgs, sourceLocation)
     }
   }
 
@@ -483,13 +484,11 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
 
   visitTemplateExpression(node: ts.TemplateExpression): NodeBuilder {
     const sourceLocation = this.sourceLocation(node)
-    const target = new StringFunctionBuilder(sourceLocation)
-
     const head = this.textVisitor.accept(node.head)
     const spans = node.templateSpans.map(
       (s) => [requireInstanceBuilder(this.baseAccept(s.expression)), this.textVisitor.accept(s.literal)] as const,
     )
-    return target.taggedTemplate(head, spans, sourceLocation)
+    return stringFromTemplate(head, spans, sourceLocation)
   }
 
   visitYieldExpression(node: ts.YieldExpression): NodeBuilder {

@@ -58,6 +58,8 @@ function testStaticBytes() {
   const s1 = new StaticBytes<-1>()
   // @expect-error Value should have byte length of 4
   const s2 = new StaticBytes<4>('')
+  // @expect-error Length generic type param for StaticBytes must be a literal number. Inferred type is uint64
+  const s3 = new StaticBytes(Bytes('abc'))
 }
 
 type ARC4Uint64 = UintN<64>

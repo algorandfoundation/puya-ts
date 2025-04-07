@@ -1,10 +1,8 @@
 import { awst, isConstant } from '../../awst'
 import { nodeFactory } from '../../awst/node-factory'
-import type { Expression } from '../../awst/nodes'
 import { TupleItemExpression } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { CodeError, NotSupported } from '../../errors'
-import { logger } from '../../logger'
 import type { DecoratorData } from '../models/decorator-data'
 import type { LibClassType, PType, PTypeOrClass } from '../ptypes'
 import { instanceEb } from '../type-registry'
@@ -69,7 +67,12 @@ export abstract class NodeBuilder {
     throw new NotSupported(`Calling ${this.typeDescription} with the new keyword`, { sourceLocation })
   }
 
-  taggedTemplate(head: string, spans: ReadonlyArray<readonly [InstanceBuilder, string]>, sourceLocation: SourceLocation): InstanceBuilder {
+  taggedTemplate(
+    head: string,
+    spans: ReadonlyArray<readonly [InstanceBuilder, string]>,
+    typeArgs: ReadonlyArray<PType>,
+    sourceLocation: SourceLocation,
+  ): InstanceBuilder {
     throw new NotSupported(`Tagged templates on ${this.typeDescription}`, {
       sourceLocation,
     })
@@ -145,7 +148,7 @@ export abstract class InstanceBuilder<TPType extends PType = PType> extends Node
     )
   }
 
-  toBytes(sourceLocation: SourceLocation): awst.Expression {
+  toBytes(sourceLocation: SourceLocation): InstanceBuilder {
     throw new NotSupported(`Serializing ${this.typeDescription} to bytes`, {
       sourceLocation,
     })
@@ -223,21 +226,6 @@ export abstract class FunctionBuilder extends NodeBuilder {
   }
 
   abstract call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder
-}
-
-export abstract class ParameterlessFunctionBuilder extends FunctionBuilder {
-  constructor(
-    private readonly expression: Expression,
-    private readonly definition: (expr: Expression, sourceLocation: SourceLocation) => NodeBuilder,
-  ) {
-    super(expression.sourceLocation)
-  }
-
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
-    if (args.length) logger.error(sourceLocation, 'Function expects no arguments')
-    if (typeArgs.length) logger.error(sourceLocation, 'Function expects type arguments')
-    return this.definition(this.expression, sourceLocation)
-  }
 }
 
 export abstract class InstanceExpressionBuilder<TPType extends PType> extends InstanceBuilder<PType> {

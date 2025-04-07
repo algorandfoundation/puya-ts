@@ -63,7 +63,7 @@ export class TypeResolver {
     return undefined
   }
 
-  resolveTypeParameters(node: ts.CallExpression | ts.NewExpression, sourceLocation: SourceLocation) {
+  resolveTypeParameters(node: ts.CallExpression | ts.NewExpression | ts.TaggedTemplateExpression, sourceLocation: SourceLocation) {
     if (node.typeArguments) {
       // Explicit type arguments
       return node.typeArguments.map((t) => this.resolveTypeNode(t, sourceLocation))
