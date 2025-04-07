@@ -6,7 +6,6 @@ import { resolvePuyaPath } from './resolve-puya-path'
 
 // Service configuration
 const SERVICE_TIMEOUT_MS = 30000
-const SERVICE_THREADS = 2
 
 // Log levels
 const LOG_LEVELS = {
@@ -23,8 +22,6 @@ interface PuyaServiceLog {
   message: string
   location?: SourceLocation
 }
-
-export type DebugCallback = (message: string) => void
 
 /**
  * Maps numeric log levels to string literals
@@ -59,27 +56,26 @@ interface AnalyseResult {
 
 export class PuyaService {
   private process: ReturnType<typeof spawn> | null = null
-  private connection: rpc.MessageConnection | null = null
+  private _connection: rpc.MessageConnection | null = null
   private analyseRequest = new rpc.RequestType<AnalyseParams, AnalyseResult, void>('analyse')
 
-  constructor(
-    private cwd: string,
-    private debugCallback?: DebugCallback,
-  ) {}
+  constructor(private cwd: string) {}
 
-  setDebugCallback(callback: DebugCallback) {
-    this.debugCallback = callback
+  private get connection(): rpc.MessageConnection {
+    if (!this._connection) {
+      throw new Error('Connection not initialized. Call start() first.')
+    }
+    return this._connection
   }
 
   private log(message: string, level: 'debug' | 'error' = 'debug') {
     level === 'error' ? logger.error(undefined, message) : logger.debug(undefined, message)
-    this.debugCallback?.(message)
   }
 
   private cleanup() {
-    if (this.connection) {
-      this.connection.dispose()
-      this.connection = null
+    if (this._connection) {
+      this._connection.dispose()
+      this._connection = null
     }
 
     if (this.process) {
@@ -88,36 +84,43 @@ export class PuyaService {
     }
   }
 
-  async start() {
-    if (this.process && this.connection) return
+  private setupProcessListeners(process: ReturnType<typeof spawn>): void {
+    process.on('error', (err) => {
+      this.log(`Failed to start puya service: ${err.message}`, 'error')
+      this.cleanup()
+    })
+
+    process.on('exit', (code) => {
+      this.log(`Puya service exited with code ${code}`, 'error')
+      this.cleanup()
+    })
+
+    process.stderr?.on('data', (data: Buffer) => {
+      this.log(`Puya stderr: ${data.toString()}`, 'debug')
+    })
+  }
+
+  private createConnection(process: ReturnType<typeof spawn>): rpc.MessageConnection {
+    const connection = rpc.createMessageConnection(
+      new rpc.StreamMessageReader(process.stdout!),
+      new rpc.StreamMessageWriter(process.stdin!),
+    )
+    connection.listen()
+    return connection
+  }
+
+  async start(): Promise<void> {
+    if (this.process && this._connection) return
 
     try {
       const puyaPath = await resolvePuyaPath()
-      this.process = spawn(puyaPath, ['--service', '--service-threads', `${SERVICE_THREADS}`], {
+      this.process = spawn(puyaPath, ['serve'], {
         cwd: this.cwd,
         stdio: ['pipe', 'pipe', 'pipe'],
       })
 
-      this.connection = rpc.createMessageConnection(
-        new rpc.StreamMessageReader(this.process.stdout!),
-        new rpc.StreamMessageWriter(this.process.stdin!),
-      )
-
-      this.process.on('error', (err) => {
-        this.log(`Failed to start puya service: ${err.message}`, 'error')
-        this.cleanup()
-      })
-
-      this.process.on('exit', (code) => {
-        this.log(`Puya service exited with code ${code}`, 'error')
-        this.cleanup()
-      })
-
-      this.process.stderr?.on('data', (data: Buffer) => {
-        this.log(`Puya stderr: ${data.toString()}`, 'debug')
-      })
-
-      this.connection.listen()
+      this.setupProcessListeners(this.process)
+      this._connection = this.createConnection(this.process)
     } catch (err) {
       this.cleanup()
       this.log(`Failed to start puya service: ${err}`, 'error')
@@ -130,10 +133,8 @@ export class PuyaService {
     compilationSet: Record<string, string>
     sourceAnnotations?: string
   }): Promise<{ logs: PuyaServiceLog[]; cancelled: boolean }> {
-    if (!this.process || !this.connection) {
-      await this.start()
-      if (!this.process || !this.connection) throw new Error('Failed to start puya service')
-    }
+    // Ensure service is started
+    await this.start()
 
     const params: AnalyseParams = {
       awst: JSON.parse(options.awst),

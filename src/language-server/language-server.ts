@@ -55,10 +55,18 @@ export async function startLanguageServer() {
   const disposables: Disposable[] = []
 
   disposables.push(
-    connection.onInitialize((params) => {
+    connection.onInitialize(async (params) => {
       // The extension sets the workspaceFolder property
       // therefore, workspaceFolders is an array with one element
       workspaceFolder = params.workspaceFolders?.[0]?.uri
+
+      // Initialize PuyaService if workspace folder is available
+      if (workspaceFolder) {
+        puyaService = await initializePuyaService()
+        if (!puyaService) {
+          return Promise.reject(new Error('Failed to initialize PuyaService'))
+        }
+      }
 
       const result: InitializeResult = {
         capabilities: {
@@ -77,18 +85,16 @@ export async function startLanguageServer() {
     if (workspaceFolder) {
       const workspacePath = URI.parse(workspaceFolder).fsPath
 
-      connection.console.log(`Initializing PuyaService with workspace path: ${workspacePath}`)
-      const service = new PuyaService(workspacePath, (message) => {
-        connection.console.debug(`[PUYA-SERVICE]: ${message}`)
-      })
+      connection.console.log(`[${Constants.puyaServiceSource}]: Initializing PuyaService with workspace path: ${workspacePath}`)
+      const service = new PuyaService(workspacePath)
 
       try {
         await service.start()
-        connection.console.log('PuyaService started successfully')
+        connection.console.log(`[${Constants.puyaServiceSource}]: PuyaService started successfully`)
         return service
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error)
-        connection.console.error(`Failed to start PuyaService: ${errorMessage}`)
+        connection.console.error(`[${Constants.puyaServiceSource}]: Failed to start PuyaService: ${errorMessage}`)
         return undefined
       }
     }
@@ -98,11 +104,6 @@ export async function startLanguageServer() {
   disposables.push(
     connection.onInitialized(async () => {
       connection.console.log(`${Constants.languageServerSource}-ls initialized`)
-      // Initialize PuyaService if workspace folder is available
-      puyaService = await initializePuyaService()
-      if (!puyaService) {
-        connection.window.showErrorMessage('Failed to initialize PuyaService. Diagnostics will not be available.')
-      }
     }),
   )
 
@@ -118,11 +119,7 @@ export async function startLanguageServer() {
     .pipe(
       debounceTime(200),
       map(async (_) => {
-        // Only run diagnostics if puyaService is initialized
-        if (puyaService && workspaceFolder) {
-          return await buildWorkspaceDiagnosticsMap(connection, workspaceFolder, documents, puyaService)
-        }
-        return new Map<string, Diagnostic[]>()
+        return await buildWorkspaceDiagnosticsMap(connection, workspaceFolder, documents, puyaService!)
       }),
       concatMap(async (v) => sendDiagnostics(connection, await v)),
     )
@@ -152,10 +149,10 @@ export async function startLanguageServer() {
     if (puyaService) {
       try {
         await puyaService.stop()
-        connection.console.log('PuyaService stopped successfully')
+        connection.console.log(`[${Constants.puyaServiceSource}]: PuyaService stopped successfully`)
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error)
-        connection.console.error(`Error stopping PuyaService: ${errorMessage}`)
+        connection.console.error(`[${Constants.puyaServiceSource}]: Error stopping PuyaService: ${errorMessage}`)
       }
     }
 

@@ -40,7 +40,7 @@ function prepareFiles(workspaceFolder: string, documents: TextDocuments<TextDocu
 async function compileAndExtractLogs(files: AlgoFile[], puyaService: PuyaService): Promise<LogEventWithSource[]> {
   const logCtx = LoggingContext.create()
 
-  return await logCtx.run(async () => {
+  await logCtx.run(async () => {
     try {
       // Compile with the original compile method but in dry-run mode to get the AWST
       const compileOptions = new CompileOptions({
@@ -51,7 +51,7 @@ async function compileAndExtractLogs(files: AlgoFile[], puyaService: PuyaService
       const { awst, compilationSet, programDirectory, ast: sourceFiles } = await compile(compileOptions)
 
       if (!awst || !compilationSet || !sourceFiles) {
-        throw new Error('Failed to compile TypeScript to AWST')
+        return
       }
 
       // Serialize AWST and build compilation set mapping for the puya service
@@ -75,17 +75,15 @@ async function compileAndExtractLogs(files: AlgoFile[], puyaService: PuyaService
         compilationSet: compilationSetMapping,
         sourceAnnotations,
       })
-
-      // Convert puya service logs to LogEvents
-      return logCtx.logEvents
-        .filter((e) => e.level === LogLevel.Error || e.level === LogLevel.Warning)
-        .filter((e): e is LogEventWithSource => Boolean(e.sourceLocation?.file))
     } catch (_) {
-      return logCtx.logEvents
-        .filter((e) => e.level === LogLevel.Error || e.level === LogLevel.Warning)
-        .filter((e): e is LogEventWithSource => Boolean(e.sourceLocation?.file))
+      // Error caught silently - will be handled via log events
     }
   })
+
+  // Filter log events outside the run block to dedupe the filtering logic
+  return logCtx.logEvents
+    .filter((e) => e.level === LogLevel.Error || e.level === LogLevel.Warning)
+    .filter((e): e is LogEventWithSource => Boolean(e.sourceLocation?.file))
 }
 
 function mapToDiagnostic(event: LogEventWithSource): Diagnostic {
