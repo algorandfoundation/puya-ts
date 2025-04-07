@@ -271,6 +271,16 @@ export class ARC4Encode extends Expression {
     return visitor.visitARC4Encode(this)
   }
 }
+export class ARC4Decode extends Expression {
+  constructor(props: Props<ARC4Decode>) {
+    super(props)
+    this.value = props.value
+  }
+  readonly value: Expression
+  accept<T>(visitor: ExpressionVisitor<T>): T {
+    return visitor.visitARC4Decode(this)
+  }
+}
 export class Copy extends Expression {
   constructor(props: Props<Copy>) {
     super(props)
@@ -337,16 +347,6 @@ export class ArrayReplace extends Expression {
   readonly wtype: wtypes.StackArray
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitArrayReplace(this)
-  }
-}
-export class ARC4Decode extends Expression {
-  constructor(props: Props<ARC4Decode>) {
-    super(props)
-    this.value = props.value
-  }
-  readonly value: Expression
-  accept<T>(visitor: ExpressionVisitor<T>): T {
-    return visitor.visitARC4Decode(this)
   }
 }
 export class IntrinsicCall extends Expression {
@@ -1424,10 +1424,17 @@ export class ARC4ABIMethodConfig {
   readonly readonly: boolean
   readonly defaultArgs: Map<string, ABIMethodArgMemberDefault | ABIMethodArgConstantDefault>
 }
-export type LValue = VarExpression | FieldExpression | IndexExpression | TupleExpression | AppStateExpression | AppAccountStateExpression
-export type Constant = IntegerConstant | BoolConstant | BytesConstant | StringConstant | DecimalConstant | MethodConstant | AddressConstant
-export type AWST = Contract | LogicSignature | Subroutine
+export type Constant = IntegerConstant | DecimalConstant | BoolConstant | BytesConstant | AddressConstant | MethodConstant
+export type LValue =
+  | VarExpression
+  | FieldExpression
+  | IndexExpression
+  | TupleExpression
+  | AppStateExpression
+  | AppAccountStateExpression
+  | BoxValueExpression
 export type ARC4MethodConfig = ARC4BareMethodConfig | ARC4ABIMethodConfig
+export type AWST = Subroutine | LogicSignature | Contract
 export const concreteNodes = {
   expressionStatement: ExpressionStatement,
   block: Block,
@@ -1449,12 +1456,12 @@ export const concreteNodes = {
   methodConstant: MethodConstant,
   addressConstant: AddressConstant,
   aRC4Encode: ARC4Encode,
+  aRC4Decode: ARC4Decode,
   copy: Copy,
   arrayConcat: ArrayConcat,
   arrayExtend: ArrayExtend,
   arrayPop: ArrayPop,
   arrayReplace: ArrayReplace,
-  aRC4Decode: ARC4Decode,
   intrinsicCall: IntrinsicCall,
   createInnerTransaction: CreateInnerTransaction,
   updateInnerTransaction: UpdateInnerTransaction,
@@ -1529,6 +1536,22 @@ export const concreteNodes = {
   uInt64Constant: IntegerConstant,
   bigUIntConstant: IntegerConstant,
 } as const
+export interface StatementVisitor<T> {
+  visitExpressionStatement(statement: ExpressionStatement): T
+  visitBlock(statement: Block): T
+  visitGoto(statement: Goto): T
+  visitIfElse(statement: IfElse): T
+  visitSwitch(statement: Switch): T
+  visitWhileLoop(statement: WhileLoop): T
+  visitLoopExit(statement: LoopExit): T
+  visitLoopContinue(statement: LoopContinue): T
+  visitReturnStatement(statement: ReturnStatement): T
+  visitAssignmentStatement(statement: AssignmentStatement): T
+  visitUInt64AugmentedAssignment(statement: UInt64AugmentedAssignment): T
+  visitBigUIntAugmentedAssignment(statement: BigUIntAugmentedAssignment): T
+  visitBytesAugmentedAssignment(statement: BytesAugmentedAssignment): T
+  visitForInLoop(statement: ForInLoop): T
+}
 export interface ExpressionVisitor<T> {
   visitAssertExpression(expression: AssertExpression): T
   visitIntegerConstant(expression: IntegerConstant): T
@@ -1541,12 +1564,12 @@ export interface ExpressionVisitor<T> {
   visitMethodConstant(expression: MethodConstant): T
   visitAddressConstant(expression: AddressConstant): T
   visitARC4Encode(expression: ARC4Encode): T
+  visitARC4Decode(expression: ARC4Decode): T
   visitCopy(expression: Copy): T
   visitArrayConcat(expression: ArrayConcat): T
   visitArrayExtend(expression: ArrayExtend): T
   visitArrayPop(expression: ArrayPop): T
   visitArrayReplace(expression: ArrayReplace): T
-  visitARC4Decode(expression: ARC4Decode): T
   visitIntrinsicCall(expression: IntrinsicCall): T
   visitCreateInnerTransaction(expression: CreateInnerTransaction): T
   visitUpdateInnerTransaction(expression: UpdateInnerTransaction): T
@@ -1596,28 +1619,12 @@ export interface ExpressionVisitor<T> {
   visitCompiledLogicSig(expression: CompiledLogicSig): T
   visitARC4Router(expression: ARC4Router): T
 }
-export interface StatementVisitor<T> {
-  visitExpressionStatement(statement: ExpressionStatement): T
-  visitBlock(statement: Block): T
-  visitGoto(statement: Goto): T
-  visitIfElse(statement: IfElse): T
-  visitSwitch(statement: Switch): T
-  visitWhileLoop(statement: WhileLoop): T
-  visitLoopExit(statement: LoopExit): T
-  visitLoopContinue(statement: LoopContinue): T
-  visitReturnStatement(statement: ReturnStatement): T
-  visitAssignmentStatement(statement: AssignmentStatement): T
-  visitUInt64AugmentedAssignment(statement: UInt64AugmentedAssignment): T
-  visitBigUIntAugmentedAssignment(statement: BigUIntAugmentedAssignment): T
-  visitBytesAugmentedAssignment(statement: BytesAugmentedAssignment): T
-  visitForInLoop(statement: ForInLoop): T
-}
-export interface ContractMemberNodeVisitor<T> {
-  visitContractMethod(contractMemberNode: ContractMethod): T
-  visitAppStorageDefinition(contractMemberNode: AppStorageDefinition): T
-}
 export interface RootNodeVisitor<T> {
   visitSubroutine(rootNode: Subroutine): T
   visitLogicSignature(rootNode: LogicSignature): T
   visitContract(rootNode: Contract): T
+}
+export interface ContractMemberNodeVisitor<T> {
+  visitContractMethod(contractMemberNode: ContractMethod): T
+  visitAppStorageDefinition(contractMemberNode: AppStorageDefinition): T
 }
