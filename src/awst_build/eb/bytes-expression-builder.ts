@@ -10,18 +10,28 @@ import {
   BytesUnaryOperator,
   EqualityComparison,
   IntegerConstant,
+  NumericComparison,
 } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { wtypes } from '../../awst/wtypes'
 import { wrapInCodeError } from '../../errors'
 import { logger } from '../../logger'
-import { base32ToUint8Array, base64ToUint8Array, enumKeyFromValue, hexToUint8Array, uint8ArrayToUtf8, utf8ToUint8Array } from '../../util'
-import type { InstanceType, PType } from '../ptypes'
+import {
+  base32ToUint8Array,
+  base64ToUint8Array,
+  enumKeyFromValue,
+  hexToUint8Array,
+  invariant,
+  uint8ArrayToUtf8,
+  utf8ToUint8Array,
+} from '../../util'
+import type { PType, PTypeOrClass } from '../ptypes'
 import {
   ArrayPType,
   bigIntPType,
   biguintPType,
   BytesFunction,
+  BytesPType,
   bytesPType,
   numberPType,
   NumericLiteralPType,
@@ -37,7 +47,7 @@ import { SliceFunctionBuilder } from './shared/slice-function-builder'
 import { StringExpressionBuilder } from './string-expression-builder'
 import { isStaticallyIterable, StaticIterator } from './traits/static-iterator'
 import { UInt64ExpressionBuilder } from './uint64-expression-builder'
-import { requireExpressionOfType, requireStringConstant } from './util'
+import { requireExpressionOfType, requireIntegerConstant, requireStringConstant } from './util'
 import { parseFunctionArgs } from './util/arg-parsing'
 import { compareBytes } from './util/compare-bytes'
 
@@ -189,9 +199,10 @@ class FromEncodingBuilder extends FunctionBuilder {
   }
 }
 
-export class BytesExpressionBuilder extends InstanceExpressionBuilder<InstanceType> {
-  constructor(expr: Expression) {
-    super(expr, bytesPType)
+export class BytesExpressionBuilder extends InstanceExpressionBuilder<BytesPType> {
+  constructor(expr: Expression, ptype: PType = bytesPType) {
+    invariant(ptype instanceof BytesPType, 'ptype must be BytesPType')
+    super(expr, ptype)
   }
   prefixUnaryOp(op: BuilderUnaryOp, sourceLocation: SourceLocation): InstanceBuilder {
     switch (op) {
@@ -225,7 +236,9 @@ export class BytesExpressionBuilder extends InstanceExpressionBuilder<InstanceTy
       case 'toString':
         return new ToStringBuilder(this._expr)
       case 'concat':
-        return new ConcatExpressionBuilder(this._expr)
+        return new ConcatFunctionBuilder(this._expr)
+      case 'toFixedLength':
+        return new ToFixedLengthFunctionBuilder(this)
       case 'at':
         return new AtFunctionBuilder(
           this._expr,
@@ -268,9 +281,23 @@ export class BytesExpressionBuilder extends InstanceExpressionBuilder<InstanceTy
       wtype: wtypes.stringWType,
     })
   }
+
+  resolvableToPType(ptype: PTypeOrClass): ptype is BytesPType {
+    if (ptype instanceof BytesPType) {
+      return this.ptype.length === ptype.length || ptype.length === null
+    }
+    return false
+  }
+  resolveToPType(ptype: PTypeOrClass): InstanceBuilder {
+    if (this.resolvableToPType(ptype)) {
+      return new BytesExpressionBuilder(this.resolve(), ptype)
+    }
+
+    return super.resolveToPType(ptype)
+  }
 }
 
-export class ConcatExpressionBuilder extends FunctionBuilder {
+export class ConcatFunctionBuilder extends FunctionBuilder {
   constructor(private expr: awst.Expression) {
     super(expr.sourceLocation)
   }
@@ -292,6 +319,50 @@ export class ConcatExpressionBuilder extends FunctionBuilder {
         right: other.resolve(),
         sourceLocation: sourceLocation,
       }),
+    )
+  }
+}
+export class ToFixedLengthFunctionBuilder extends FunctionBuilder {
+  constructor(private builder: BytesExpressionBuilder) {
+    super(builder.sourceLocation)
+  }
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    const {
+      args: [size],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      callLocation: sourceLocation,
+      funcName: 'toFixedLength',
+      genericTypeArgs: 1,
+      argSpec: (a) => [a.required(NumericLiteralPType)],
+    })
+    const sizeConst = requireIntegerConstant(size)
+    const ptype = new BytesPType({ length: sizeConst.value })
+
+    const single = this.builder.singleEvaluation()
+
+    return new BytesExpressionBuilder(
+      nodeFactory.checkedMaybe({
+        comment: `Length must be ${sizeConst.value}`,
+        expr: nodeFactory.tupleExpression({
+          items: [
+            single.resolve(),
+            nodeFactory.numericComparisonExpression({
+              sourceLocation,
+              operator: NumericComparison.eq,
+              lhs: intrinsicFactory.bytesLen({
+                value: single.resolve(),
+                sourceLocation,
+              }),
+              rhs: sizeConst,
+            }),
+          ],
+          sourceLocation,
+        }),
+      }),
+      ptype,
     )
   }
 }

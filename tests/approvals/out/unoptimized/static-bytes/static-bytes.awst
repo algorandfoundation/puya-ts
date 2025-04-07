@@ -1,0 +1,44 @@
+contract StaticBytesAlgo
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  hashAddresses(a1: bytes, a2: bytes): bytes
+  {
+    return sha512_256(concat(a1, a2))
+  }
+  
+  receiveB32(b: bytes): void
+  {
+    assert(len(b) == 32)
+  }
+  
+  receiveBytes(b: bytes, length: uint64): void
+  {
+    assert(len(b) == length)
+  }
+  
+  returnLength(b: bytes): uint64
+  {
+    return len(b)
+  }
+  
+  test(): void
+  {
+    tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32(reinterpret_cast<bytes>(txn<Sender>()))
+    tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveBytes(reinterpret_cast<bytes>(txn<Sender>()), 32)
+    tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32(checked_maybe(<tuple>[(#0 = "hmmm"), len(#0) == 32], comment=Length must be 32))
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

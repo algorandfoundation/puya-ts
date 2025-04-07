@@ -837,11 +837,42 @@ export const BigUintFunction = new LibFunctionType({
   name: 'BigUint',
   module: Constants.moduleNames.algoTs.primitives,
 })
-export const bytesPType = new InstanceType({
+export class BytesPType extends PType {
+  readonly wtype: wtypes.WType
+  readonly name: string
+  readonly module: string
+  readonly singleton = false
+  readonly length: bigint | null
+
+  constructor({ length }: { length: bigint | null }) {
+    super()
+    this.length = length
+    this.name = length === null ? 'bytes' : `bytes<${length}>`
+    this.wtype = wtypes.bytesWType
+    this.module = Constants.moduleNames.algoTs.primitives
+  }
+}
+export const BytesGeneric = new GenericPType({
   name: 'bytes',
   module: Constants.moduleNames.algoTs.primitives,
-  wtype: wtypes.bytesWType,
+  parameterise(typeArgs: PType[]): BytesPType {
+    codeInvariant(typeArgs.length === 1, `${this.name} type expects exactly one type parameter`)
+    const bytesSize = typeArgs[0]
+    if (bytesSize.equals(uint64PType)) {
+      return new BytesPType({
+        length: null,
+      })
+    }
+    codeInvariant(
+      bytesSize instanceof NumericLiteralPType,
+      `Bytes size generic type param for bytes type must be a literal number. Inferred type is ${bytesSize.name}`,
+    )
+    return new BytesPType({
+      length: bytesSize.literalValue,
+    })
+  },
 })
+export const bytesPType = new BytesPType({ length: null })
 export const BytesFunction = new LibFunctionType({
   name: 'Bytes',
   module: Constants.moduleNames.algoTs.primitives,

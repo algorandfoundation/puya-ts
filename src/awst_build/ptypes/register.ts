@@ -170,7 +170,9 @@ import {
   BoxRefFunction,
   boxRefType,
   BytesFunction,
+  BytesGeneric,
   bytesPType,
+  BytesPType,
   ClassMethodDecoratorContext,
   compileFunctionType,
   ContractClassPType,
@@ -246,6 +248,7 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: Uint64Function, singletonEb: UInt64FunctionBuilder })
   typeRegistry.register({ ptype: biguintPType, instanceEb: BigUintExpressionBuilder })
   typeRegistry.register({ ptype: BigUintFunction, singletonEb: BigUintFunctionBuilder })
+  typeRegistry.registerGeneric({ generic: BytesGeneric, ptype: BytesPType, instanceEb: BytesExpressionBuilder })
   typeRegistry.register({ ptype: bytesPType, instanceEb: BytesExpressionBuilder })
   typeRegistry.register({ ptype: BytesFunction, singletonEb: BytesFunctionBuilder })
   typeRegistry.register({ ptype: stringPType, instanceEb: StringExpressionBuilder })

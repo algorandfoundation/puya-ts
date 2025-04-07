@@ -3,7 +3,7 @@ import type { Expression } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { wtypes } from '../../../awst/wtypes'
 import type { PType } from '../../ptypes'
-import { accountPType, applicationPType, assetPType, bytesPType, stringPType, uint64PType } from '../../ptypes'
+import { accountPType, applicationPType, assetPType, BytesPType, bytesPType, stringPType, uint64PType } from '../../ptypes'
 import { BooleanExpressionBuilder } from '../boolean-expression-builder'
 import type { BuilderComparisonOp, InstanceBuilder, NodeBuilder } from '../index'
 import { FunctionBuilder } from '../index'
@@ -59,7 +59,7 @@ export class AccountFunctionBuilder extends FunctionBuilder {
 export class AccountExpressionBuilder extends ReferenceTypeExpressionBuilder {
   constructor(expr: Expression) {
     super(expr, {
-      backingType: bytesPType,
+      backingType: new BytesPType({ length: 32n }),
       backingMember: 'bytes',
       fieldMapping: {
         balance: ['AcctBalance', uint64PType],

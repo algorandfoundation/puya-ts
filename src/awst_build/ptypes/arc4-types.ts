@@ -21,8 +21,6 @@ import {
   uint64PType,
   voidPType,
 } from './index'
-import ARC4StaticArray = wtypes.ARC4StaticArray
-import WTuple = wtypes.WTuple
 
 export const UintNClass = new LibClassType({
   name: 'UintN',
@@ -486,7 +484,7 @@ export class StaticArrayType extends ARC4ArrayType {
     elementType: ARC4EncodedType
     arraySize: bigint
     sourceLocation?: SourceLocation
-    wtype?: ARC4StaticArray
+    wtype?: wtypes.ARC4StaticArray
     name?: string
     nativeType?: PType
   }) {
@@ -612,7 +610,7 @@ export const ContractProxyGeneric = new GenericPType({
 export class ContractProxyType extends PType {
   readonly name: string
   readonly module = Constants.moduleNames.algoTs.arc4.c2c
-  readonly wtype: WTuple
+  readonly wtype: wtypes.WTuple
   readonly singleton = false
   readonly contractType: ContractClassPType
   constructor({ contractType }: { contractType: ContractClassPType }) {

@@ -98,11 +98,11 @@ export function BigUint(v?: BigUintCompat | string): biguint {
 /**
  * A sequence of zero or more bytes (ie. byte[])
  */
-export type bytes = {
+export type bytes<TLength extends uint64 = uint64> = {
   /**
    * Retrieve the length of the byte sequence
    */
-  readonly length: uint64
+  readonly length: TLength
 
   /**
    * Retrieve the byte at the index i
@@ -149,7 +149,7 @@ export type bytes = {
    * Perform a bitwise INVERT operation with this bytes value
    * @returns The bitwise operation result
    */
-  bitwiseInvert(): bytes
+  bitwiseInvert(): bytes<TLength>
 
   /**
    * Compares this bytes value with another.
@@ -161,7 +161,7 @@ export type bytes = {
   /**
    * Returns a copy of this bytes sequence
    */
-  slice(): bytes
+  slice(): bytes<TLength>
   /**
    * Returns a slice of this bytes sequence from the specified start to the end
    * @param start The index to start slicing from. Can be negative to count from the end.
@@ -182,6 +182,13 @@ export type bytes = {
    * Interpret this byte sequence as a utf-8 string
    */
   toString(): string
+
+  /**
+   * Assert the length of this bytes sequence is 'length' and return the sequence with
+   * a stronger type
+   * @param length The length to assert
+   */
+  toFixedLength<TLength extends uint64>(length: TLength): bytes<TLength>
 }
 
 /**
