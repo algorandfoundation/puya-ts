@@ -1,3 +1,4 @@
+import upath from 'upath'
 import type { Connection, Diagnostic } from 'vscode-languageserver'
 import { DiagnosticSeverity } from 'vscode-languageserver'
 import type { TextDocument } from 'vscode-languageserver-textdocument'
@@ -79,7 +80,10 @@ export async function getWorkspaceDiagnostics(
 
     return files.reduce((acc, file) => {
       const diagnostics = logEvents.filter((e) => e.sourceLocation.file === file.sourceFile).map(mapToDiagnostic)
-      acc.set(URI.file(file.sourceFile).toString(), diagnostics)
+      acc.set(
+        URI.file(upath.isAbsolute(file.sourceFile) ? file.sourceFile : upath.join(workspaceFolder, file.sourceFile)).toString(),
+        diagnostics,
+      )
       return acc
     }, new Map<string, Diagnostic[]>())
   } catch (error) {
