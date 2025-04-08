@@ -64,7 +64,7 @@ contract BoxContract
 {
   boxes {
     ["one"]: string
-    ["two"]: bytes
+    ["two"]: string => bytes
     ["three"]: bytes
   }
   approvalProgram(): bool
@@ -148,6 +148,26 @@ contract BoxCreate
     assert(checked_maybe(box_len("bool"), comment=Box must have value) == 8)
     box_create("arc4b", 1)
     assert(checked_maybe(box_len("arc4b"), comment=Box must have value) == 1)
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+contract BoxMapTest
+{
+  boxes {
+    [""]: account => string
+  }
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
   }
   
   __algots__.defaultCreate(): void

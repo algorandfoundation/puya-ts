@@ -1,4 +1,4 @@
-import type { bytes, uint64 } from '@algorandfoundation/algorand-typescript'
+import type { Account, bytes, uint64 } from '@algorandfoundation/algorand-typescript'
 import { assert, BaseContract, Box, BoxMap, BoxRef, Bytes, Contract, Txn } from '@algorandfoundation/algorand-typescript'
 import type { Bool, DynamicArray, StaticArray, Tuple, UintN32, UintN8 } from '@algorandfoundation/algorand-typescript/arc4'
 import { itob } from '@algorandfoundation/algorand-typescript/op'
@@ -149,4 +149,8 @@ class BoxCreate extends Contract {
     this.boxArc4Bool.create()
     assert(this.boxArc4Bool.length === 1)
   }
+}
+
+class BoxMapTest extends Contract {
+  bmap = BoxMap<Account, string>({ keyPrefix: '' })
 }
