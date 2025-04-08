@@ -195,25 +195,8 @@ export function normalisePath(filePath: string, workingDirectory: string): strin
   }
   const cwd = upath.normalize(`${workingDirectory}/`)
   const normalizedPath = upath.normalize(filePath)
-  const moduleName = isChildPath(cwd, normalizedPath) ? normalizedPath.slice(cwd.length) : normalizedPath
+  const moduleName = normalizedPath.startsWith(cwd) ? normalizedPath.slice(cwd.length) : normalizedPath
   return moduleName.replaceAll('\\', '/')
-}
-
-/**
- * Check if pathB is a child of pathA
- * @param pathA
- * @param pathB
- * @returns true if pathB is a child of pathA, false otherwise
- */
-function isChildPath(pathA: string, pathB: string): boolean {
-  // Use path.relative to get the relative path
-  const relativePath = upath.relative(pathA, pathB)
-
-  // If it starts with '..' or is an absolute path, then pathB is not a child of pathA
-  if (relativePath.startsWith('..') || upath.isAbsolute(relativePath)) {
-    return false
-  }
-  return true
 }
 
 type SortDir = 'asc' | 'desc'
