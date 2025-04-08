@@ -66,7 +66,7 @@ export class AppStorageDeclaration {
       ...this,
       kind: this.kind,
       key: this.key,
-      keyWtype: null,
+      keyWtype: this.ptype instanceof BoxMapPType ? this.ptype.keyType.wtypeOrThrow : null,
       storageWtype: this.ptype.contentType.wtypeOrThrow,
     })
   }
