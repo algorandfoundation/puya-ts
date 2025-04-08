@@ -39,6 +39,13 @@ export const Constants = {
     constructorMethodName: 'constructor',
     logicSigProgramMethodName: 'program',
     defaultCreateMethodName: '__algots__.defaultCreate',
+    conventionalRouting: {
+      closeOutOfApplicationMethodName: 'closeOutOfApplication',
+      createApplicationMethodName: 'createApplication',
+      deleteApplicationMethodName: 'deleteApplication',
+      optInToApplicationMethodName: 'optInToApplication',
+      updateApplicationMethodName: 'updateApplication',
+    },
   },
 
   algo: {
@@ -54,7 +61,7 @@ export const Constants = {
   supportedAvmVersions: [10n, 11n],
   targetedPuyaVersion: '4.6.1',
   puyaGithubRepo: 'algorandfoundation/puya',
-  minNodeVersion: '20.19.0',
+  minNodeVersion: '22.14.0',
   languageServerSource: 'puyats',
 } as const
 

@@ -137,15 +137,11 @@ function extractExpectLogs(sourceFile: ts.SourceFile, programDirectory: string) 
         if (match) {
           const level = enumFromValue(match[1], LogLevel, 'Unexpected log level in @expect-* comment: ')
           const message = match[2]
-          const commentLocation = SourceLocation.fromTextRange(sourceFile, commentRange, programDirectory)
+          const targetLocation = SourceLocation.fromNode(node, programDirectory)
           expectedLogs.push({
             level,
             message,
-            sourceLocation: new SourceLocation({
-              ...commentLocation,
-              line: commentLocation.line + 1,
-              endLine: commentLocation.endLine + 1,
-            }),
+            sourceLocation: targetLocation,
             test(log) {
               if (log.level === this.level && log.sourceLocation?.line === this.sourceLocation.line) {
                 if (this.message.endsWith('...')) {

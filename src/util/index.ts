@@ -245,6 +245,12 @@ export function mkDirIfNotExists(dir: string) {
   }
 }
 
+export function sameSets<T>(a: Iterable<T>, b: Iterable<T>) {
+  const setA = new Set(a)
+  const setB = new Set(b)
+  return setA.intersection(setB).size === setA.size
+}
+
 export const zipStrict = <T1, T2>(array1: T1[], array2: T2[]): [T1, T2][] => {
   invariant(array1.length === array2.length, 'Array lengths must match')
   return array1.map((t1, idx) => [t1, array2[idx]])
