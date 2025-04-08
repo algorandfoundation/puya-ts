@@ -30,6 +30,7 @@ import {
   ContractProxyType,
   TypedApplicationCallResponseGeneric,
 } from '../../ptypes/arc4-types'
+import { txnFieldName } from '../../txn-fields'
 import { instanceEb } from '../../type-registry'
 import { CompileFunctionBuilder } from '../compiled/compile-function'
 import { ContractMethodExpressionBuilder } from '../free-subroutine-expression-builder'
@@ -37,7 +38,6 @@ import type { InstanceBuilder } from '../index'
 import { FunctionBuilder, InstanceExpressionBuilder, NodeBuilder } from '../index'
 import { isStaticallyIterable, StaticIterator } from '../traits/static-iterator'
 import { mapTransactionFields } from '../transactions/inner-transaction-params'
-import { txnFieldName } from '../transactions/txn-fields'
 import { requireExpressionOfType, requireInstanceBuilder } from '../util'
 import { parseFunctionArgs } from '../util/arg-parsing'
 import { validatePrefix } from './util'

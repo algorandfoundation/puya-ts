@@ -8,6 +8,7 @@ import { buildOpModule } from './build-op-module'
 import { emitOpFuncTypes } from './generate-op-funcs'
 import { emitOpMetaData } from './generate-op-metadata'
 import { emitOpPTypes } from './generate-op-ptypes'
+import { emitGTxnTypes, emitITxnTypes } from './generate-txn-types'
 
 /**
  * Generate several files from the langspec.puya.json. This file is created by a script in the puya project
@@ -52,6 +53,16 @@ function runCodeGen(puyaTsRootDir: string) {
       emitFn: emitOpPTypes,
       projectRoot: '',
       outPath: 'src/awst_build/ptypes/op-ptypes.ts',
+    },
+    gtxn: {
+      emitFn: emitGTxnTypes,
+      projectRoot: 'packages/algo-ts',
+      outPath: 'src/gtxn.ts',
+    },
+    itxn: {
+      emitFn: emitITxnTypes,
+      projectRoot: 'packages/algo-ts',
+      outPath: 'src/itxn.ts',
     },
   }
 

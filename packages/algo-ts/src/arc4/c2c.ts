@@ -3,7 +3,7 @@ import * as gtxn from '../gtxn'
 import { NoImplementation } from '../internal/errors'
 import { AnyFunction, ConstructorFor, DeliberateAny, InstanceMethod } from '../internal/typescript-helpers'
 import * as itxn from '../itxn'
-import { ApplicationCallFields, ApplicationInnerTxn } from '../itxn'
+import { ApplicationCallFields, ApplicationCallInnerTxn } from '../itxn'
 import { Contract } from './index'
 
 /**
@@ -29,9 +29,9 @@ export type GtxnToItxnFields<T extends gtxn.Transaction> = T extends gtxn.Paymen
         ? itxn.AssetTransferItxnParams
         : T extends gtxn.AssetFreezeTxn
           ? itxn.AssetFreezeItxnParams
-          : T extends gtxn.ApplicationTxn
+          : T extends gtxn.ApplicationCallTxn
             ? itxn.ApplicationCallItxnParams
-            : itxn.InnerTransaction
+            : itxn.ItxnParams
 
 /**
  * Conditional type which given an application argument, returns the input type for that argument.
@@ -61,8 +61,8 @@ export type TypedApplicationCallFields<TArgs> = Omit<ApplicationCallFields, 'app
  * The response type of a typed application call. Includes the raw itxn result object and the parsed ABI return value if applicable.
  */
 export type TypedApplicationCallResponse<TReturn> = TReturn extends void
-  ? { itxn: ApplicationInnerTxn }
-  : { itxn: ApplicationInnerTxn; returnValue: TReturn }
+  ? { itxn: ApplicationCallInnerTxn }
+  : { itxn: ApplicationCallInnerTxn; returnValue: TReturn }
 
 /**
  * Conditional type which maps an ABI method to a factory method for constructing an application call transaction to call that method.
@@ -93,7 +93,7 @@ export type ContractProxy<TContract extends Contract> = CompiledContract & {
    * Create a bare application call itxn to create the contract.
    * @param fields Specify values for transaction fields which should override the default values.
    */
-  bareCreate(fields?: BareCreateApplicationCallFields): ApplicationInnerTxn
+  bareCreate(fields?: BareCreateApplicationCallFields): ApplicationCallInnerTxn
 }
 
 /**
