@@ -53,8 +53,10 @@ export class Arc4BareMethodDecoratorBuilder extends NodeBuilder {
     })
     return new DecoratorDataBuilder(sourceLocation, {
       type: Constants.symbolNames.arc4BareDecoratorName,
-      ocas: resolveOnCompletionActions(allowActions),
-      create: onCreate ? mapStringConstant(createMap, onCreate?.resolve()) : ARC4CreateOption.disallow,
+      allowedCompletionTypes: allowActions && resolveOnCompletionActions(allowActions),
+      allowedCompletionTypesLocation: allowActions?.sourceLocation,
+      create: onCreate && mapStringConstant(createMap, onCreate?.resolve()),
+      createLocation: onCreate?.sourceLocation,
       sourceLocation: sourceLocation,
     })
   }
@@ -87,12 +89,13 @@ export class Arc4AbiMethodDecoratorBuilder extends NodeBuilder {
 
     return new DecoratorDataBuilder(sourceLocation, {
       type: Constants.symbolNames.arc4AbiDecoratorName,
-      ocas: resolveOnCompletionActions(allowActions),
-      create: onCreate ? mapStringConstant(createMap, onCreate?.resolve()) : ARC4CreateOption.disallow,
+      allowedCompletionTypes: allowActions && resolveOnCompletionActions(allowActions),
+      allowedCompletionTypesLocation: allowActions?.sourceLocation,
+      create: onCreate && mapStringConstant(createMap, onCreate?.resolve()),
+      createLocation: onCreate?.sourceLocation,
       sourceLocation: sourceLocation,
       nameOverride: name ? requireStringConstant(name).value : undefined,
       readonly: readonly ? requireBooleanConstant(readonly).value : false,
-
       defaultArguments: resolveDefaultArguments(defaultArguments, sourceLocation),
     })
   }
@@ -105,8 +108,7 @@ function mapStringConstant<T>(map: Record<string, T>, expr: Expression) {
   throw new CodeError(`${strValue} is not valid at this location`, { sourceLocation: expr.sourceLocation })
 }
 
-function resolveOnCompletionActions(oca: InstanceBuilder | undefined): OnCompletionAction[] {
-  if (!oca) return [OnCompletionAction.NoOp]
+function resolveOnCompletionActions(oca: InstanceBuilder): OnCompletionAction[] {
   const value = oca.resolve()
   let ocaRawExpr: Expression[]
   if (value instanceof StringConstant) {
