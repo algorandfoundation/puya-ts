@@ -62,7 +62,7 @@ export async function startLanguageServer() {
 
       // Initialize PuyaService if workspace folder is available
       if (workspaceFolder) {
-        puyaService = await initializePuyaService()
+        puyaService = await initializePuyaService(workspaceFolder)
         if (!puyaService) {
           return Promise.reject(new Error('Failed to initialize PuyaService'))
         }
@@ -81,28 +81,25 @@ export async function startLanguageServer() {
   )
 
   // Initialize PuyaService and wait for it to be ready
-  const initializePuyaService = async (): Promise<PuyaService | undefined> => {
-    if (workspaceFolder) {
-      const workspacePath = URI.parse(workspaceFolder).fsPath
+  const initializePuyaService = async (workspaceFolder: string): Promise<PuyaService | undefined> => {
+    const workspacePath = URI.parse(workspaceFolder).fsPath
 
-      connection.console.log(`[${Constants.puyaServiceSource}]: Initializing PuyaService with workspace path: ${workspacePath}`)
-      const service = new PuyaService(workspacePath)
+    connection.console.log(`[${Constants.puyaServiceSource}]: Initializing PuyaService with workspace path: ${workspacePath}`)
+    const service = new PuyaService(workspacePath)
 
-      try {
-        await service.start()
-        connection.console.log(`[${Constants.puyaServiceSource}]: PuyaService started successfully`)
-        return service
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
-        connection.console.error(`[${Constants.puyaServiceSource}]: Failed to start PuyaService: ${errorMessage}`)
-        return undefined
-      }
+    try {
+      await service.start()
+      connection.console.log(`[${Constants.puyaServiceSource}]: PuyaService started successfully`)
+      return service
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error)
+      connection.console.error(`[${Constants.puyaServiceSource}]: Failed to start PuyaService: ${errorMessage}`)
+      return undefined
     }
-    return undefined
   }
 
   disposables.push(
-    connection.onInitialized(async () => {
+    connection.onInitialized(() => {
       connection.console.log(`${Constants.languageServerSource}-ls initialized`)
     }),
   )
@@ -123,6 +120,7 @@ export async function startLanguageServer() {
       }),
       concatMap(async (v) => sendDiagnostics(connection, await v)),
     )
+    // All logic for handling the document change event is done inside the pipe
     .subscribe()
 
   // Make the text document manager listen on the connection

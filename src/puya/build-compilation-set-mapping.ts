@@ -17,8 +17,10 @@ export function buildCompilationSetMapping({
   return awst.reduce((acc, cur) => {
     if (setIds.has(cur.id.toString())) {
       const matchedPath = inputPaths.find((p) => p.sourceFile === cur.sourceLocation.file)
-      if (matchedPath?.outDir) {
-        mkDirIfNotExists(matchedPath.outDir)
+      if (matchedPath) {
+        if (matchedPath.outDir?.trim()) {
+          mkDirIfNotExists(matchedPath.outDir)
+        }
         acc[cur.id.toString()] = matchedPath.outDir
       }
     }
