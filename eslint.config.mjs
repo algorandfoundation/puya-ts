@@ -1,9 +1,7 @@
-import globals from 'globals'
+import { FlatCompat } from '@eslint/eslintrc'
+import js from '@eslint/js'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import js from '@eslint/js'
-import { FlatCompat } from '@eslint/eslintrc'
-/* eslint-disable no-redeclare */
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -15,35 +13,10 @@ const compat = new FlatCompat({
 
 export default [
   {
-    ignores: [
-      '**/.eslintrc.js',
-      '**/node_modules',
-      '**/dist',
-      '**/build',
-      '**/coverage',
-      '**/generated/types.d.ts',
-      '**/generated/types.ts',
-      '**/.idea',
-      '**/.vscode',
-      '**/packages',
-    ],
+    ignores: ['*.cjs', '**/node_modules/', '**/dist/', '**/build/', '**/coverage/', '**/.idea', '**/.vscode', 'packages/**'],
   },
   ...compat.extends('@makerx/eslint-config'),
   {
-    languageOptions: {
-      globals: {
-        ...globals.node,
-      },
-
-      ecmaVersion: 5,
-      sourceType: 'commonjs',
-
-      parserOptions: {
-        project: true,
-        tsconfigRootDir: '.',
-      },
-    },
-
     rules: {
       '@typescript-eslint/no-for-in-array': 'error',
       eqeqeq: 'error',
@@ -60,6 +33,12 @@ export default [
         },
       ],
       'no-unused-private-class-members': 'off',
+    },
+  },
+  {
+    files: ['tests/**/*.algo.ts'],
+    rules: {
+      '@typescript-eslint/no-unused-vars': 'off',
     },
   },
 ]
