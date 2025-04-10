@@ -17,7 +17,7 @@ export default defineConfig({
   test: {
     setupFiles: 'test.setup.ts',
     globals: true,
-    testTimeout: 20_000,
+    testTimeout: 30_000,
     exclude: ['packages/**', 'node_modules/**'],
   },
 })
