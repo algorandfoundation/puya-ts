@@ -86,6 +86,9 @@ main tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract.approvalProgram:
         let and_result%1#2: bool = φ(and_result%1#0 <- block@31, and_result%1#1 <- block@32)
         (assert and_result%1#2) // assert target is match for conditions
         let b#1: bytes[32] = (txn Sender)
-        let tmp%0#6: bool = (!= addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ b#1)
-        (assert tmp%0#6) // Zero address should not match sender
+        let tmp%0#6: bytes[32] = (txn Sender)
+        let tmp%1#5: bool = (== b#1 tmp%0#6)
+        (assert tmp%1#5)
+        let tmp%2#4: bool = (!= addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ b#1)
+        (assert tmp%2#4) // Zero address should not match sender
         return 1u
