@@ -4,6 +4,7 @@ import { Constants } from '../../constants'
 import { codeInvariant, invariant } from '../../util'
 import { GenericPType, PType } from './base'
 import {
+  accountPType,
   applicationItxnType,
   ArrayPType,
   biguintPType,
@@ -511,6 +512,7 @@ export const arc4AddressAlias = new StaticArrayType({
   arraySize: BigInt(Constants.algo.addressLength),
   elementType: arc4ByteAlias,
   wtype: wtypes.arc4AddressAliasWType,
+  nativeType: accountPType,
   immutable: true,
   name: 'Address',
 })
