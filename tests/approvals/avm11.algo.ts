@@ -1,5 +1,16 @@
 import type { uint64 } from '@algorandfoundation/algorand-typescript'
-import { assert, Bytes, Contract, contract, Global, logicsig, LogicSig, MimcConfigurations, op, Txn } from '@algorandfoundation/algorand-typescript'
+import {
+  assert,
+  Bytes,
+  Contract,
+  contract,
+  Global,
+  logicsig,
+  LogicSig,
+  MimcConfigurations,
+  op,
+  Txn,
+} from '@algorandfoundation/algorand-typescript'
 
 @logicsig({ name: 'AVM11SIG', avmVersion: 11 })
 export class Avm11Sig extends LogicSig {

@@ -185,22 +185,22 @@ function testZeroValues() {
   assert(new StaticArray<Bool, 4>().bytes === new StaticArray(new Bool(false), new Bool(false), new Bool(false), new Bool(false)).bytes)
   assert(
     new StaticArray<Bool, 9>().bytes ===
-    new StaticArray(
-      new Bool(false),
-      new Bool(false),
-      new Bool(false),
-      new Bool(false),
-      new Bool(false),
-      new Bool(false),
-      new Bool(false),
-      new Bool(false),
-      new Bool(false),
-    ).bytes,
+      new StaticArray(
+        new Bool(false),
+        new Bool(false),
+        new Bool(false),
+        new Bool(false),
+        new Bool(false),
+        new Bool(false),
+        new Bool(false),
+        new Bool(false),
+        new Bool(false),
+      ).bytes,
   )
   assert(new DynamicArray<UintN8>().bytes === bzero(2))
   assert(
     new Tuple<[Bool, Bool, Bool, Bool, Bool, Bool, Bool, Bool, Bool]>().bytes ===
-    encodeArc4([false, false, false, false, false, false, false, false, false]),
+      encodeArc4([false, false, false, false, false, false, false, false, false]),
   )
   assert(new Str().bytes === bzero(2))
   assert(new DynamicBytes().bytes === bzero(2))

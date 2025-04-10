@@ -18,7 +18,7 @@ describe('inheritance', () => {
   describe('arc4', () => {
     const test = createArc4TestFixture('tests/approvals/inheritance-b.algo.ts', { ConcreteArc4Contract: {} })
     test('ARC4 contract can be created', async ({ appFactoryConcreteArc4Contract }) => {
-      const result = appFactoryConcreteArc4Contract.send.bare.create()
+      await appFactoryConcreteArc4Contract.send.bare.create()
     })
   })
 })
