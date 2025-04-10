@@ -1,7 +1,7 @@
 import { algos } from '@algorandfoundation/algokit-utils'
 import { describe, expect } from 'vitest'
 import { invariant, utf8ToUint8Array } from '../../src/util'
-import { createBaseTestFixture } from './util/test-fixture'
+import { createArc4TestFixture, createBaseTestFixture } from './util/test-fixture'
 
 describe('BoxProxies', () => {
   const test = createBaseTestFixture('tests/approvals/box-proxies.algo.ts', ['BoxContract', 'BoxNotExist'])
@@ -69,5 +69,11 @@ describe('BoxProxies', () => {
       boxReferences: ['abc'],
       args: [utf8ToUint8Array('boxmap')],
     })
+  })
+
+  const it = createArc4TestFixture('tests/approvals/box-proxies.algo.ts', { BoxCreate: {} })
+  it('creates boxes of the min size', async ({ appClientBoxCreate }) => {
+    await appClientBoxCreate.fundAppAccount({ amount: algos(1) })
+    await appClientBoxCreate.send.call({ method: 'createBoxes', boxReferences: ['bool', 'arc4b', 'a', 'b', 'c', 'd', 'e'] })
   })
 })

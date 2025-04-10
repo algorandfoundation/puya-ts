@@ -1,10 +1,12 @@
 import type { biguint, bytes, uint64 } from '@algorandfoundation/algorand-typescript'
-import { arc4, assert, BaseContract, BigUint, Bytes, Txn } from '@algorandfoundation/algorand-typescript'
+import { arc4, assert, assertMatch, BaseContract, BigUint, Bytes, ensureBudget, Txn } from '@algorandfoundation/algorand-typescript'
 import {
   Address,
+  Bool,
   Byte,
   DynamicArray,
   DynamicBytes,
+  encodeArc4,
   interpretAsArc4,
   StaticArray,
   StaticBytes,
@@ -15,7 +17,9 @@ import {
   UintN128,
   UintN32,
   UintN64,
+  UintN8,
 } from '@algorandfoundation/algorand-typescript/arc4'
+import { bzero } from '@algorandfoundation/algorand-typescript/op'
 
 function testUFixed() {
   const a = new UFixedNxM<32, 4>('1.244')
@@ -117,6 +121,12 @@ function testArrays(n: ARC4Uint64) {
   myStatic[1] = new UintN<64>(50)
 
   const myStatic2 = new StaticArray<ARC4Uint64, 3>(n, n, n)
+
+  const staticNative = myStatic2.native
+  assertMatch(staticNative, [n, n, n])
+
+  const dynamicNative = doubleArray.native
+  assertMatch(dynamicNative, [n, n, n, n, n, n, n, n])
 }
 
 function testByte() {
@@ -128,6 +138,8 @@ function testByte() {
 function testAddress() {
   const a = new Address()
   const b = new Address(Txn.sender)
+
+  assert(b.native === Txn.sender)
 
   assert(a !== b, 'Zero address should not match sender')
   assert(a === new Address(), 'Two zero addresses should match')
@@ -149,6 +161,7 @@ export class Arc4TypesTestContract extends BaseContract {
   }
 
   public approvalProgram(): boolean {
+    ensureBudget(1400)
     const x = new ARC4Uint64()
     testStr()
     testUintN(1, 2n, new UintN<256>(4))
@@ -160,8 +173,40 @@ export class Arc4TypesTestContract extends BaseContract {
     testUFixed()
     testDynamicBytes(Bytes('hmmmmmmmmm'))
     testStaticBytes()
+    testZeroValues()
     const result = new arc4.DynamicArray<arc4.UintN<64>>()
     assert(result.length === 0)
     return true
   }
+}
+
+function testZeroValues() {
+  assert(new StaticArray<UintN8, 4>().bytes === new StaticArray(new UintN8(0), new UintN8(0), new UintN8(0), new UintN8(0)).bytes)
+  assert(new StaticArray<Bool, 4>().bytes === new StaticArray(new Bool(false), new Bool(false), new Bool(false), new Bool(false)).bytes)
+  assert(
+    new StaticArray<Bool, 9>().bytes ===
+      new StaticArray(
+        new Bool(false),
+        new Bool(false),
+        new Bool(false),
+        new Bool(false),
+        new Bool(false),
+        new Bool(false),
+        new Bool(false),
+        new Bool(false),
+        new Bool(false),
+      ).bytes,
+  )
+  assert(new DynamicArray<UintN8>().bytes === bzero(2))
+  assert(
+    new Tuple<[Bool, Bool, Bool, Bool, Bool, Bool, Bool, Bool, Bool]>().bytes ===
+      encodeArc4([false, false, false, false, false, false, false, false, false]),
+  )
+  assert(new Str().bytes === bzero(2))
+  assert(new DynamicBytes().bytes === bzero(2))
+  assert(new StaticBytes<5>().bytes === bzero(5))
+  assert(new Address().bytes === bzero(32))
+  assert(new UFixedNxM<32, 4>().bytes === bzero(32 / 8))
+  assert(new Bool().bytes === bzero(1))
+  assert(new UintN32().bytes === bzero(32 / 8))
 }

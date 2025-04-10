@@ -17,19 +17,19 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let arg.1.0#0: biguint = ((extract 0 64) item1%0#0) // on error: Index access is out of bounds
         let arg.1.1#0: biguint = ((extract 64 64) item1%0#0) // on error: Index access is out of bounds
         let val_as_bytes%0#0: bytes[8] = (itob arg.0#0)
-        let len_%0#0: uint64 = (len arg.1.0#0)
-        let no_overflow%0#0: bool = (<= len_%0#0 64u)
-        (assert no_overflow%0#0) // overflow
-        let b_zeros%0#0: bytes = (bzero 64u)
-        let arc4_item%0#0: bytes = (b| arg.1.0#0 b_zeros%0#0)
-        let len_%1#0: uint64 = (len arg.1.1#0)
-        let no_overflow%1#0: bool = (<= len_%1#0 64u)
-        (assert no_overflow%1#0) // overflow
-        let arc4_item%1#0: bytes = (b| arg.1.1#0 b_zeros%0#0)
-        let encoded_tuple_buffer%2#0: bytes = (concat arc4_item%0#0 arc4_item%1#0)
+        let value_len%0#0: uint64 = (len arg.1.0#0)
+        let len_ok%0#0: bool = (<= value_len%0#0 64u)
+        (assert len_ok%0#0) // overflow
+        let bzero%0#0: bytes = (bzero 64u)
+        let arc4_encoded%0#0: bytes[64] = (b| arg.1.0#0 bzero%0#0)
+        let value_len%1#0: uint64 = (len arg.1.1#0)
+        let len_ok%1#0: bool = (<= value_len%1#0 64u)
+        (assert len_ok%1#0) // overflow
+        let arc4_encoded%1#0: bytes[64] = (b| arg.1.1#0 bzero%0#0)
+        let encoded_tuple_buffer%2#0: bytes = (concat arc4_encoded%0#0 arc4_encoded%1#0)
         let encoded_tuple_buffer%5#0: bytes = (concat val_as_bytes%0#0 encoded_tuple_buffer%2#0)
         let encoded_tuple_buffer%6#0: bytes = (concat encoded_tuple_buffer%5#0 val_as_bytes%0#0)
-        let encoded_tuple_buffer%7#0: bytes = (concat encoded_tuple_buffer%6#0 arc4_item%0#0)
+        let encoded_tuple_buffer%7#0: bytes = (concat encoded_tuple_buffer%6#0 arc4_encoded%0#0)
         let tmp%7#0: bytes = (concat 0x151f7c75 encoded_tuple_buffer%7#0)
         (log tmp%7#0)
         let tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.__puya_arc4_router__%0#0: bool = 1u

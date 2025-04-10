@@ -345,9 +345,24 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
     }
   }
 
+  private getBinaryOpKind(token: ts.BinaryOperatorToken): ts.SyntaxKind {
+    const sourceLocation = this.sourceLocation(token)
+    switch (token.kind) {
+      case ts.SyntaxKind.EqualsEqualsToken:
+        logger.error(sourceLocation, `Loose equality operator '==' is not supported. Please use strict equality operator '==='`)
+        return ts.SyntaxKind.EqualsEqualsEqualsToken
+      case ts.SyntaxKind.ExclamationEqualsToken:
+        logger.error(sourceLocation, `Loose inequality operator '!=' is not supported. Please use strict inequality operator '!=='`)
+        return ts.SyntaxKind.ExclamationEqualsEqualsToken
+      default:
+        return token.kind
+    }
+  }
+
   visitBinaryExpression(node: ts.BinaryExpression): NodeBuilder {
     const sourceLocation = this.sourceLocation(node)
-    const binaryOpKind = node.operatorToken.kind
+    const binaryOpKind = this.getBinaryOpKind(node.operatorToken)
+
     if (isKeyOf(binaryOpKind, BinaryOpSyntaxes)) {
       const left = requireInstanceBuilder(this.baseAccept(node.left))
       const right = requireInstanceBuilder(this.baseAccept(node.right))

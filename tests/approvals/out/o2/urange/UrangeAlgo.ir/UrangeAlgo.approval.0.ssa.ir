@@ -18,7 +18,7 @@ subroutine tests/approvals/urange.algo.ts::UrangeAlgo.__puya_arc4_router__() -> 
         let tmp%5#0: uint64 = (txn ApplicationID)
         let tmp%6#0: bool = (!= tmp%5#0 0u)
         (assert tmp%6#0) // can only call when not creating
-        let tmp%7#0: uint64[] = tests/approvals/urange.algo.ts::UrangeAlgo.testSingleArg()
+        let tmp%7#0: encoded_uint64[] = tests/approvals/urange.algo.ts::UrangeAlgo.testSingleArg()
         let tmp%8#0: bytes = (concat 0x151f7c75 tmp%7#0)
         (log tmp%8#0)
         return 1u
@@ -29,7 +29,7 @@ subroutine tests/approvals/urange.algo.ts::UrangeAlgo.__puya_arc4_router__() -> 
         let tmp%11#0: uint64 = (txn ApplicationID)
         let tmp%12#0: bool = (!= tmp%11#0 0u)
         (assert tmp%12#0) // can only call when not creating
-        let tmp%13#0: uint64[] = tests/approvals/urange.algo.ts::UrangeAlgo.testTwoArg()
+        let tmp%13#0: encoded_uint64[] = tests/approvals/urange.algo.ts::UrangeAlgo.testTwoArg()
         let tmp%14#0: bytes = (concat 0x151f7c75 tmp%13#0)
         (log tmp%14#0)
         return 1u
@@ -40,7 +40,7 @@ subroutine tests/approvals/urange.algo.ts::UrangeAlgo.__puya_arc4_router__() -> 
         let tmp%17#0: uint64 = (txn ApplicationID)
         let tmp%18#0: bool = (!= tmp%17#0 0u)
         (assert tmp%18#0) // can only call when not creating
-        let tmp%19#0: uint64[] = tests/approvals/urange.algo.ts::UrangeAlgo.testThreeArg()
+        let tmp%19#0: encoded_uint64[] = tests/approvals/urange.algo.ts::UrangeAlgo.testThreeArg()
         let tmp%20#0: bytes = (concat 0x151f7c75 tmp%19#0)
         (log tmp%20#0)
         return 1u
@@ -64,23 +64,23 @@ subroutine tests/approvals/urange.algo.ts::UrangeAlgo.__puya_arc4_router__() -> 
     block@11: // after_if_else_L4
         return 0u
 
-subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testSingleArg() -> uint64[]:
+subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testSingleArg() -> encoded_uint64[]:
     block@0: // L5
         let array_data%0#0: bytes = (concat 0x0000 0x)
-        let results#0: uint64[] = array_data%0#0
+        let results#0: encoded_uint64[] = array_data%0#0
         (assert 1u) // Step cannot be zero
         let i#0: uint64 = 0u
         goto block@1
     block@1: // for_header_L7
         let i#1: uint64 = φ(i#0 <- block@0, i#2 <- block@3)
-        let results#1: uint64[] = φ(results#0 <- block@0, results#2 <- block@3)
+        let results#1: encoded_uint64[] = φ(results#0 <- block@0, results#2 <- block@3)
         let continue_looping%0#0: bool = (< i#1 5u)
         goto continue_looping%0#0 ? block@2 : block@4
     block@2: // for_body_L7
         let expr_value_trimmed%0#0: bytes = ((extract 2 0) results#1)
         let array_data%1#0: bytes = (concat 0x0000 0x)
         let expr_value_trimmed%1#0: bytes = ((extract 2 0) array_data%1#0)
-        let encoded%0#0: uint64[] = encode<uint64>(i#1)
+        let encoded%0#0: encoded_uint64[] = encode<encoded_uint64>(i#1)
         let concatenated%0#0: bytes = (concat expr_value_trimmed%1#0 encoded%0#0)
         let byte_len%0#0: uint64 = (len concatenated%0#0)
         let len_%0#0: uint64 = (/ byte_len%0#0 8u)
@@ -94,7 +94,7 @@ subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testSingleArg() -> uint64[
         let as_bytes%1#0: bytes[8] = (itob len_%1#0)
         let len_16_bit%1#0: bytes = ((extract 6 2) as_bytes%1#0)
         let concat_result%1#0: bytes = (concat len_16_bit%1#0 concatenated%1#0)
-        let results#2: uint64[] = concat_result%1#0
+        let results#2: encoded_uint64[] = concat_result%1#0
         goto block@3
     block@3: // for_footer_L7
         let i#2: uint64 = (+ i#1 1u)
@@ -102,23 +102,23 @@ subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testSingleArg() -> uint64[
     block@4: // after_for_L7
         return results#1
 
-subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testTwoArg() -> uint64[]:
+subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testTwoArg() -> encoded_uint64[]:
     block@0: // L12
         let array_data%0#0: bytes = (concat 0x0000 0x)
-        let results#0: uint64[] = array_data%0#0
+        let results#0: encoded_uint64[] = array_data%0#0
         (assert 1u) // Step cannot be zero
         let i#0: uint64 = 2u
         goto block@1
     block@1: // for_header_L14
         let i#1: uint64 = φ(i#0 <- block@0, i#2 <- block@3)
-        let results#1: uint64[] = φ(results#0 <- block@0, results#2 <- block@3)
+        let results#1: encoded_uint64[] = φ(results#0 <- block@0, results#2 <- block@3)
         let continue_looping%0#0: bool = (< i#1 5u)
         goto continue_looping%0#0 ? block@2 : block@4
     block@2: // for_body_L14
         let expr_value_trimmed%0#0: bytes = ((extract 2 0) results#1)
         let array_data%1#0: bytes = (concat 0x0000 0x)
         let expr_value_trimmed%1#0: bytes = ((extract 2 0) array_data%1#0)
-        let encoded%0#0: uint64[] = encode<uint64>(i#1)
+        let encoded%0#0: encoded_uint64[] = encode<encoded_uint64>(i#1)
         let concatenated%0#0: bytes = (concat expr_value_trimmed%1#0 encoded%0#0)
         let byte_len%0#0: uint64 = (len concatenated%0#0)
         let len_%0#0: uint64 = (/ byte_len%0#0 8u)
@@ -132,7 +132,7 @@ subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testTwoArg() -> uint64[]:
         let as_bytes%1#0: bytes[8] = (itob len_%1#0)
         let len_16_bit%1#0: bytes = ((extract 6 2) as_bytes%1#0)
         let concat_result%1#0: bytes = (concat len_16_bit%1#0 concatenated%1#0)
-        let results#2: uint64[] = concat_result%1#0
+        let results#2: encoded_uint64[] = concat_result%1#0
         goto block@3
     block@3: // for_footer_L14
         let i#2: uint64 = (+ i#1 1u)
@@ -140,23 +140,23 @@ subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testTwoArg() -> uint64[]:
     block@4: // after_for_L14
         return results#1
 
-subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testThreeArg() -> uint64[]:
+subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testThreeArg() -> encoded_uint64[]:
     block@0: // L19
         let array_data%0#0: bytes = (concat 0x0000 0x)
-        let results#0: uint64[] = array_data%0#0
+        let results#0: encoded_uint64[] = array_data%0#0
         (assert 3u) // Step cannot be zero
         let i#0: uint64 = 2u
         goto block@1
     block@1: // for_header_L21
         let i#1: uint64 = φ(i#0 <- block@0, i#2 <- block@3)
-        let results#1: uint64[] = φ(results#0 <- block@0, results#2 <- block@3)
+        let results#1: encoded_uint64[] = φ(results#0 <- block@0, results#2 <- block@3)
         let continue_looping%0#0: bool = (< i#1 10u)
         goto continue_looping%0#0 ? block@2 : block@4
     block@2: // for_body_L21
         let expr_value_trimmed%0#0: bytes = ((extract 2 0) results#1)
         let array_data%1#0: bytes = (concat 0x0000 0x)
         let expr_value_trimmed%1#0: bytes = ((extract 2 0) array_data%1#0)
-        let encoded%0#0: uint64[] = encode<uint64>(i#1)
+        let encoded%0#0: encoded_uint64[] = encode<encoded_uint64>(i#1)
         let concatenated%0#0: bytes = (concat expr_value_trimmed%1#0 encoded%0#0)
         let byte_len%0#0: uint64 = (len concatenated%0#0)
         let len_%0#0: uint64 = (/ byte_len%0#0 8u)
@@ -170,7 +170,7 @@ subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testThreeArg() -> uint64[]
         let as_bytes%1#0: bytes[8] = (itob len_%1#0)
         let len_16_bit%1#0: bytes = ((extract 6 2) as_bytes%1#0)
         let concat_result%1#0: bytes = (concat len_16_bit%1#0 concatenated%1#0)
-        let results#2: uint64[] = concat_result%1#0
+        let results#2: encoded_uint64[] = concat_result%1#0
         goto block@3
     block@3: // for_footer_L21
         let i#2: uint64 = (+ i#1 3u)

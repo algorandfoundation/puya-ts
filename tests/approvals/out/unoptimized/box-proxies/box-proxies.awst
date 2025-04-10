@@ -64,7 +64,7 @@ contract BoxContract
 {
   boxes {
     ["one"]: string
-    ["two"]: bytes
+    ["two"]: string => bytes
     ["three"]: bytes
   }
   approvalProgram(): bool
@@ -108,6 +108,70 @@ contract BoxNotExist
   clearProgram(): bool
   {
     return True
+  }
+  
+}
+contract BoxCreate
+{
+  boxes {
+    ["bool"]: bool
+    ["arc4b"]: arc4.bool
+    ["a"]: string
+    ["b"]: uint64
+    ["c"]: arc4.static_array<arc4.uint32>
+    ["d"]: arc4.dynamic_array<arc4.uint8>
+    ["e"]: arc4.tuple<uint8,uint8,bool,bool>
+  }
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  createBoxes(): void
+  {
+    box_create("a", 10)
+    assert(checked_maybe(box_len("a"), comment=Box must have value) == 10)
+    box_create("b", 8)
+    assert(checked_maybe(box_len("b"), comment=Box must have value) == 8)
+    box_create("c", 40)
+    assert(checked_maybe(box_len("c"), comment=Box must have value) == 40)
+    box_create("d", 2)
+    assert(checked_maybe(box_len("d"), comment=Box must have value) == 2)
+    box_create("e", 3)
+    assert(checked_maybe(box_len("e"), comment=Box must have value) == 3)
+    box_create("bool", 8)
+    assert(checked_maybe(box_len("bool"), comment=Box must have value) == 8)
+    box_create("arc4b", 1)
+    assert(checked_maybe(box_len("arc4b"), comment=Box must have value) == 1)
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+contract BoxMapTest
+{
+  boxes {
+    [""]: account => string
+  }
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  __algots__.defaultCreate(): void
+  {
   }
   
 }

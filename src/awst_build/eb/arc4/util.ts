@@ -60,6 +60,7 @@ export class EncodeArc4FunctionBuilder extends FunctionBuilder {
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [valueToEncode],
+      ptypes: [valueType],
     } = parseFunctionArgs({
       args,
       typeArgs,
@@ -68,12 +69,24 @@ export class EncodeArc4FunctionBuilder extends FunctionBuilder {
       argSpec: (a) => [a.required()],
       callLocation: sourceLocation,
     })
-    const encodedType = ptypeToArc4EncodedType(valueToEncode.ptype, sourceLocation)
+    if (valueType instanceof ARC4EncodedType) {
+      // Already encoded, just reinterpret as bytes
+      return instanceEb(
+        nodeFactory.reinterpretCast({
+          expr: valueToEncode.resolve(),
+          wtype: wtypes.bytesWType,
+          sourceLocation,
+        }),
+        bytesPType,
+      )
+    }
+
+    const encodedType = ptypeToArc4EncodedType(valueType, sourceLocation)
 
     return instanceEb(
       nodeFactory.reinterpretCast({
         expr: nodeFactory.aRC4Encode({
-          value: valueToEncode.resolve(),
+          value: valueToEncode.resolveToPType(valueType).resolve(),
           wtype: encodedType.wtype,
           sourceLocation,
         }),
@@ -99,6 +112,12 @@ export class DecodeArc4FunctionBuilder extends FunctionBuilder {
       argSpec: (a) => [a.required(bytesPType), a.optional(stringPType)],
       callLocation: sourceLocation,
     })
+    codeInvariant(
+      !(ptype instanceof ARC4EncodedType),
+      `Cannot decode to ${ptype} as it is an ARC4 type. Use \`interpretAsArc4<${ptype}>\` instead`,
+      sourceLocation,
+    )
+
     codeInvariant(isArc4EncodableType(ptype), `Cannot determine ARC4 encoding for ${ptype}`, sourceLocation)
 
     const arc4Encoded = ptypeToArc4EncodedType(ptype, sourceLocation)
@@ -226,14 +245,14 @@ export class Arc4EncodedLengthFunctionBuilder extends FunctionBuilder {
     const arc4Type = ptypeToArc4EncodedType(typeToEncode, sourceLocation)
 
     codeInvariant(
-      arc4Type.encodedBitSize !== null,
+      arc4Type.fixedByteSize !== null,
       `Target type must encode to a fixed size. ${typeToEncode} encodes with a variable length`,
       sourceLocation,
     )
 
     return instanceEb(
       nodeFactory.uInt64Constant({
-        value: ARC4EncodedType.bitsToBytes(arc4Type.encodedBitSize),
+        value: arc4Type.fixedByteSize,
         sourceLocation,
       }),
       uint64PType,

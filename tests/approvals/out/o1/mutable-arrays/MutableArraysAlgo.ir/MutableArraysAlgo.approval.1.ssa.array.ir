@@ -47,8 +47,8 @@ subroutine tests/approvals/mutable-arrays.algo.ts::MutableArraysAlgo.test(length
         itxn_submit
         goto block@5
     block@10: // after_while_L20
-        let encoded%0#0: uint64[] = 0x
-        let ma#0: uint64[]* = new()
+        let encoded%0#0: encoded_uint64[] = 0x
+        let ma#0: encoded_uint64[]* = new()
         write(ma#0, encoded%0#0)
         let i#0: uint64 = 0u
         goto block@1
@@ -58,17 +58,17 @@ subroutine tests/approvals/mutable-arrays.algo.ts::MutableArraysAlgo.test(length
         goto tmp%0#0 ? block@2 : block@3
     block@2: // while_body_L8
         let array%sub_item%0#1: bytes[8] = (itob i#1)
-        let array%encoded%0#1: uint64[] = (concat 0x array%sub_item%0#1)
-        let array%data%0#1: uint64[] = (concat 0x array%encoded%0#1)
-        let encoded%1#0: uint64[] = array%data%0#1
-        let slot_contents%0#0: uint64[] = read(ma#0)
+        let array%encoded%0#1: encoded_uint64[] = (concat 0x array%sub_item%0#1)
+        let array%data%0#1: encoded_uint64[] = (concat 0x array%encoded%0#1)
+        let encoded%1#0: encoded_uint64[] = array%data%0#1
+        let slot_contents%0#0: encoded_uint64[] = read(ma#0)
         let array%array_contents%0#1: bytes = (concat slot_contents%0#0 encoded%1#0) // on error: max array length exceeded
-        let extended%0#0: uint64[] = array%array_contents%0#1
+        let extended%0#0: encoded_uint64[] = array%array_contents%0#1
         write(ma#0, extended%0#0)
         let i#2: uint64 = (+ i#1 1u)
         goto block@1
     block@3: // after_while_L8
-        let slot_contents%1#0: uint64[] = read(ma#0)
+        let slot_contents%1#0: encoded_uint64[] = read(ma#0)
         let array%bytes_len%0#1: uint64 = (len slot_contents%1#0)
         let array%array_len%0#1: uint64 = (/ array%bytes_len%0#1 8u)
         let tmp%1#0: uint64 = array%array_len%0#1
@@ -83,7 +83,7 @@ subroutine tests/approvals/mutable-arrays.algo.ts::MutableArraysAlgo.test(length
         let array%value%0#1: bytes = (extract3 slot_contents%1#0 array%bytes_index%0#1 8u)
         let array%sub_item%1#1: bytes = (extract3 array%value%0#1 0u 8u)
         let array%sub_item%2#1: uint64 = (btoi array%sub_item%1#1)
-        let (new_contents%0#0: uint64[], popped#0: uint64) = (array%array_contents%1#1, array%sub_item%2#1)
+        let (new_contents%0#0: encoded_uint64[], popped#0: uint64) = (array%array_contents%1#1, array%sub_item%2#1)
         write(ma#0, new_contents%0#0)
         let tmp%3#0: uint64 = (- length#0 1u)
         let tmp%4#0: bool = (== popped#0 tmp%3#0)

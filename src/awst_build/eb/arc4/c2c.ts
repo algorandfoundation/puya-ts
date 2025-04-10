@@ -8,7 +8,7 @@ import { wtypes } from '../../../awst/wtypes'
 import { Constants } from '../../../constants'
 import { logger } from '../../../logger'
 import { codeInvariant, enumFromValue, hexToUint8Array, invariant } from '../../../util'
-import { getArc4MethodConstant, ptypeToArc4EncodedType } from '../../arc4-util'
+import { buildArc4MethodConstant, ptypeToArc4EncodedType } from '../../arc4-util'
 import { AwstBuildContext } from '../../context/awst-build-context'
 import type { FunctionPType, PType } from '../../ptypes'
 import {
@@ -65,7 +65,7 @@ export class AbiCallFunctionBuilder extends FunctionBuilder {
     } = functionRef
     const arc4Config = AwstBuildContext.current.getArc4Config(contractType, memberName)
     codeInvariant(arc4Config instanceof ARC4ABIMethodConfig, `${memberName} is not an ABI method`, functionRef.sourceLocation)
-    const methodSelector = getArc4MethodConstant(functionType, arc4Config, sourceLocation)
+    const methodSelector = buildArc4MethodConstant(functionType, arc4Config, sourceLocation)
 
     const itxnResult = makeApplicationCall({
       fields,
@@ -206,7 +206,7 @@ export class ContractProxyCallFunctionBuilder extends FunctionBuilder {
     codeInvariant(arc4Config, `${this.functionType.name} is not callable`)
 
     const methodSelector =
-      arc4Config instanceof ARC4ABIMethodConfig ? getArc4MethodConstant(this.functionType, arc4Config, sourceLocation) : null
+      arc4Config instanceof ARC4ABIMethodConfig ? buildArc4MethodConstant(this.functionType, arc4Config, sourceLocation) : null
 
     return formatApplicationCallResponse({
       itxnResult: makeApplicationCall({
