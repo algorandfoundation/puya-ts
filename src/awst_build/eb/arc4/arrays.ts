@@ -1,9 +1,8 @@
 import { intrinsicFactory } from '../../../awst/intrinsic-factory'
 import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
-import { BytesConstant, NumericComparison, StringConstant } from '../../../awst/nodes'
+import { BytesConstant, StringConstant } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
-import { wtypes } from '../../../awst/wtypes'
 import { Constants } from '../../../constants'
 import { wrapInCodeError } from '../../../errors'
 import { logger } from '../../../logger'
@@ -28,7 +27,6 @@ import { instanceEb } from '../../type-registry'
 import type { InstanceBuilder, NodeBuilder } from '../index'
 import { ClassBuilder, FunctionBuilder } from '../index'
 import { IterableIteratorExpressionBuilder } from '../iterable-iterator-expression-builder'
-import { AccountExpressionBuilder } from '../reference/account'
 import { Arc4CopyFunctionBuilder } from '../shared/arc4-copy-function-builder'
 import { AtFunctionBuilder } from '../shared/at-function-builder'
 import { ArrayPopFunctionBuilder } from '../shared/pop-function-builder'
@@ -92,20 +90,24 @@ export class StaticArrayClassBuilder extends ClassBuilder {
       `Array size type parameter of ${this.typeDescription} must be a literal number. Inferred type is ${arraySize.name}`,
       sourceLocation,
     )
-    const initialItemExprs = initialItems.map((i) => requireExpressionOfType(i, elementType))
     const ptype = new StaticArrayType({ elementType, arraySize: arraySize.literalValue, sourceLocation })
+    if (initialItems.length === 0) {
+      codeInvariant(ptype.fixedByteSize !== null, 'Zero arg constructor can only be used for static arrays with a fixed size encoding.')
+      return new StaticArrayExpressionBuilder(
+        intrinsicFactory.bzero({ size: ptype.fixedByteSize, wtype: ptype.wtype, sourceLocation }),
+        ptype,
+      )
+    }
 
-    // TODO: We should support passing no args in which case the array should be initialized with 'default' values where
-    // default is specific to the element type.
     codeInvariant(
-      BigInt(initialItemExprs.length) === arraySize.literalValue,
+      BigInt(initialItems.length) === arraySize.literalValue,
       `Static array of size ${arraySize.literalValue} must be initialized with ${arraySize.literalValue} values`,
       sourceLocation,
     )
 
     return new StaticArrayExpressionBuilder(
       nodeFactory.newArray({
-        values: initialItemExprs,
+        values: initialItems.map((i) => requireExpressionOfType(i, elementType)),
         wtype: ptype.wtype,
         sourceLocation,
       }),
@@ -216,43 +218,11 @@ export class StaticBytesClassBuilder extends ClassBuilder {
         resultPType,
       )
     } else {
-      // TODO: puya should support encoding bytes to static bytes but currently doesn't
-      // return instanceEb(
-      //   nodeFactory.aRC4Encode({
-      //     value: initialValue.resolve(),
-      //     sourceLocation,
-      //     wtype: resultPType.wtype,
-      //   }),
-      //   resultPType,
-      // )
-
-      const value = initialValue.singleEvaluation().resolve()
-
       return instanceEb(
-        nodeFactory.checkedMaybe({
-          comment: `Length is ${resultPType.arraySize}`,
-          expr: nodeFactory.tupleExpression({
-            items: [
-              nodeFactory.reinterpretCast({
-                expr: value,
-                wtype: resultPType.wtype,
-                sourceLocation,
-              }),
-              nodeFactory.numericComparisonExpression({
-                operator: NumericComparison.eq,
-                lhs: nodeFactory.uInt64Constant({
-                  value: resultPType.arraySize,
-                  sourceLocation,
-                }),
-                rhs: intrinsicFactory.bytesLen({
-                  value,
-                  sourceLocation,
-                }),
-                sourceLocation,
-              }),
-            ],
-            sourceLocation,
-          }),
+        nodeFactory.aRC4Encode({
+          value: initialValue.resolve(),
+          sourceLocation,
+          wtype: resultPType.wtype,
         }),
         resultPType,
       )
@@ -343,6 +313,15 @@ export abstract class ArrayExpressionBuilder<
           this.ptype instanceof StaticArrayType ? new DynamicArrayType({ elementType: this.ptype.elementType }) : this.ptype
         return new SliceFunctionBuilder(this.resolve(), sliceResult)
       }
+      case 'native':
+        return instanceEb(
+          nodeFactory.aRC4Decode({
+            value: this.resolve(),
+            wtype: this.ptype.nativeType.wtypeOrThrow,
+            sourceLocation,
+          }),
+          this.ptype.nativeType,
+        )
     }
     return super.memberAccess(name, sourceLocation)
   }
@@ -409,33 +388,25 @@ export class StaticArrayExpressionBuilder extends ArrayExpressionBuilder<StaticA
     invariant(ptype instanceof StaticArrayType, 'ptype must be instance of StaticArrayType')
     super(expr, ptype)
   }
-}
 
-export class DynamicBytesExpressionBuilder extends DynamicArrayExpressionBuilder {
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
     switch (name) {
       case 'native':
         return instanceEb(
           nodeFactory.aRC4Decode({
-            wtype: bytesPType.wtype,
             value: this.resolve(),
+            wtype: this.ptype.nativeType.wtypeOrThrow,
             sourceLocation,
           }),
-          bytesPType,
+          this.ptype.nativeType,
         )
     }
     return super.memberAccess(name, sourceLocation)
   }
 }
-export class StaticBytesExpressionBuilder extends StaticArrayExpressionBuilder {
-  memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
-    switch (name) {
-      case 'native':
-        return instanceEb(this.toBytes(sourceLocation), bytesPType)
-    }
-    return super.memberAccess(name, sourceLocation)
-  }
-}
+
+export class DynamicBytesExpressionBuilder extends DynamicArrayExpressionBuilder {}
+export class StaticBytesExpressionBuilder extends StaticArrayExpressionBuilder {}
 
 export class AddressExpressionBuilder extends ArrayExpressionBuilder<StaticArrayType> {
   constructor(expr: Expression, ptype: PType) {
@@ -448,10 +419,6 @@ export class AddressExpressionBuilder extends ArrayExpressionBuilder<StaticArray
     switch (name) {
       case 'length':
         return new UInt64ExpressionBuilder(nodeFactory.uInt64Constant({ value: this.ptype.arraySize, sourceLocation }))
-      case 'native':
-        return new AccountExpressionBuilder(
-          nodeFactory.reinterpretCast({ expr: this.toBytes(sourceLocation), sourceLocation, wtype: wtypes.accountWType }),
-        )
     }
     return super.memberAccess(name, sourceLocation)
   }

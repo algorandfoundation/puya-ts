@@ -1,5 +1,6 @@
-import type { bytes, uint64 } from '@algorandfoundation/algorand-typescript'
-import { assert, BaseContract, Box, BoxMap, BoxRef, Bytes, Txn } from '@algorandfoundation/algorand-typescript'
+import type { Account, bytes, uint64 } from '@algorandfoundation/algorand-typescript'
+import { assert, BaseContract, Box, BoxMap, BoxRef, Bytes, Contract, Txn } from '@algorandfoundation/algorand-typescript'
+import type { Bool, DynamicArray, StaticArray, Tuple, UintN32, UintN8 } from '@algorandfoundation/algorand-typescript/arc4'
 import { itob } from '@algorandfoundation/algorand-typescript/op'
 
 const boxA = Box<string>({ key: Bytes('A') })
@@ -121,4 +122,35 @@ class BoxNotExist extends BaseContract {
     }
     return true
   }
+}
+
+class BoxCreate extends Contract {
+  boxBool = Box<boolean>({ key: 'bool' })
+  boxArc4Bool = Box<Bool>({ key: 'arc4b' })
+  boxStr = Box<string>({ key: 'a' })
+  boxUint = Box<uint64>({ key: 'b' })
+  boxStaticArray = Box<StaticArray<UintN32, 10>>({ key: 'c' })
+  boxDynamicArray = Box<DynamicArray<UintN8>>({ key: 'd' })
+  boxTuple = Box<Tuple<[UintN8, UintN8, Bool, Bool]>>({ key: 'e' })
+
+  createBoxes() {
+    this.boxStr.create({ size: 10 })
+    assert(this.boxStr.length === 10)
+    this.boxUint.create()
+    assert(this.boxUint.length === 8)
+    this.boxStaticArray.create()
+    assert(this.boxStaticArray.length === (32 / 8) * 10)
+    this.boxDynamicArray.create({ size: 2 })
+    assert(this.boxDynamicArray.length === 2)
+    this.boxTuple.create()
+    assert(this.boxTuple.length === 3)
+    this.boxBool.create()
+    assert(this.boxBool.length === 8)
+    this.boxArc4Bool.create()
+    assert(this.boxArc4Bool.length === 1)
+  }
+}
+
+class BoxMapTest extends Contract {
+  bmap = BoxMap<Account, string>({ keyPrefix: '' })
 }

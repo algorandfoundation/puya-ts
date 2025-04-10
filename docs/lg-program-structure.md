@@ -65,7 +65,62 @@ class MyContract extends Contract {}
 
 ### Application Lifecycle Methods and other method options
 
-The default `OnCompletionAction` (oca) for public methods is `NoOp`. To change this, a method should be decorated with the `abimethod` or `baremethod` decorators. These decorators can also be used to change the exported name of the method, determine if a method should be available on application create or not, and specify default values for arguments.
+There are two approaches to handling application lifecycle events. By implementing a well-known method (convention based), or by using decorators (decorator based). It is also possible to use a combination of the two however decorators must not conflict with the implied behaviour of a well-known method.
+
+#### Convention based
+
+Application lifecycle methods can be handled by a convention of well-known method names. The easiest way to discover these method names is to `implement` the interface `ConventionalRouting` from the `@algorandfoundation/algorand-typescript/arc4` module.
+
+- Explicit implementation of this interface is not required, but it will assist in auto complete suggestions for supported methods.
+- Only implement the methods your application should support. I.e. don't implement `updateApplication` if your application should not be updatable.
+- 'Well-known' methods can receive arguments and return values
+
+```ts
+import type { bytes, uint64 } from '@algorandfoundation/algorand-typescript'
+import { Contract, log } from '@algorandfoundation/algorand-typescript'
+import type { ConventionalRouting } from '@algorandfoundation/algorand-typescript/arc4'
+
+export class TealScriptConventionsAlgo extends Contract implements ConventionalRouting {
+  /**
+   * The function to invoke when closing out of this application
+   */
+  closeOutOfApplication(arg: uint64) {
+    return arg
+  }
+
+  /**
+   * The function to invoke when creating this application
+   */
+  createApplication(value: bytes) {
+    log(value)
+  }
+
+  /**
+   * The function to invoke when deleting this application
+   */
+  deleteApplication() {}
+
+  /**
+   * The function to invoke when opting in to this application
+   */
+  optInToApplication() {}
+
+  /**
+   * The function to invoke when updating this application
+   */
+  updateApplication() {}
+
+  /**
+   * Any public method that is not one of the 'well-known' names exhibit the default behaviour detailed in
+   * the next section.
+   */
+  customMethod() {}
+}
+```
+
+#### Decorator based
+
+The default `OnCompletionAction` (OCA) for public methods is `NoOp`. To change this, a method should be decorated with the `abimethod` or `baremethod` decorators. These decorators can also be used to change the exported name of the method, determine if a method should be available on application create or not, and specify default values for arguments. See the [ABI Routing guide](./abi-routing.md) for more details on how these various options work together.
 
 ```ts
 import type { uint64 } from '@algorandfoundation/algorand-typescript'

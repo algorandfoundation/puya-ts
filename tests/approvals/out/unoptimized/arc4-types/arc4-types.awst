@@ -42,7 +42,7 @@ subroutine testDynamicBytes(someBytes: bytes): void
 subroutine testStaticBytes(): void
 {
   s5: arc4.static_array<arc4.static_array<arc4.byte>> = new arc4.static_array<arc4.static_array<arc4.byte>>(0xaabbccddee)
-  assert(reinterpret_cast<bytes>(s5[0]) == 0xaabbccddee)
+  assert(ARC4_DECODE(s5[0]) == 0xaabbccddee)
   s4: arc4.dynamic_array<arc4.byte> = 0x000400000000.concat(0xaabbccddee)
   assert(ARC4_DECODE(s4) == 0x00000000aabbccddee)
 }
@@ -56,6 +56,10 @@ subroutine testArrays(n: arc4.uint64): void
   assert(reinterpret_cast<bytes>(myStatic[0]) == reinterpret_cast<bytes>(myArray.pop()))
   myStatic[1]: arc4.uint64 = 50
   myStatic2: arc4.static_array<arc4.uint64> = new arc4.static_array<arc4.uint64>(n, n, n)
+  staticNative: readonlytuple[arc4.uint64, arc4.uint64, arc4.uint64] = ARC4_DECODE(myStatic2)
+  assert(3 == 3 and reinterpret_cast<bytes>(staticNative.0) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(staticNative.1) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(staticNative.2) == reinterpret_cast<bytes>(n), comment=assert target is match for conditions)
+  dynamicNative: stack_array<arc4.uint64> = ARC4_DECODE(doubleArray)
+  assert(dynamicNative.length == 8 and reinterpret_cast<bytes>(dynamicNative[0]) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(dynamicNative[1]) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(dynamicNative[2]) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(dynamicNative[3]) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(dynamicNative[4]) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(dynamicNative[5]) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(dynamicNative[6]) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(dynamicNative[7]) == reinterpret_cast<bytes>(n), comment=assert target is match for conditions)
 }
 subroutine testByte(): void
 {
@@ -64,6 +68,7 @@ subroutine testByte(): void
 subroutine testAddress(): void
 {
   b: arc4.static_array<arc4.byte> = reinterpret_cast<arc4.static_array<arc4.byte>>(txn<Sender>())
+  assert(ARC4_DECODE(b) == txn<Sender>())
   assert(reinterpret_cast<bytes>(Address("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ")) != reinterpret_cast<bytes>(b), comment=Zero address should not match sender)
   assert(reinterpret_cast<bytes>(Address("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ")) == reinterpret_cast<bytes>(Address("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ")), comment=Two zero addresses should match)
   assert(reinterpret_cast<bytes>(Address("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ")[0]) == reinterpret_cast<bytes>(0), comment=Zero address should start with zero byte)
@@ -81,6 +86,7 @@ contract Arc4TypesTestContract
 {
   approvalProgram(): bool
   {
+    ensure_budget(1400, 0)
     tests/approvals/arc4-types.algo.ts::testStr()
     tests/approvals/arc4-types.algo.ts::testUintN(1, 2, 4)
     tests/approvals/arc4-types.algo.ts::testUFixed()
@@ -91,6 +97,7 @@ contract Arc4TypesTestContract
     tests/approvals/arc4-types.algo.ts::testUFixed()
     tests/approvals/arc4-types.algo.ts::testDynamicBytes("hmmmmmmmmm")
     tests/approvals/arc4-types.algo.ts::testStaticBytes()
+    tests/approvals/arc4-types.algo.ts::testZeroValues()
     result: arc4.dynamic_array<arc4.uint64> = new arc4.dynamic_array<arc4.uint64>()
     assert(result.length == 0)
     return True
@@ -106,4 +113,19 @@ contract Arc4TypesTestContract
     return <tuple>[0, 255, Address("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ")]
   }
   
+}
+subroutine testZeroValues(): void
+{
+  assert(reinterpret_cast<bytes>(bzero(4)) == reinterpret_cast<bytes>(new arc4.static_array<arc4.uint8>(0, 0, 0, 0)))
+  assert(reinterpret_cast<bytes>(bzero(1)) == reinterpret_cast<bytes>(new arc4.static_array<arc4.bool>(False, False, False, False)))
+  assert(reinterpret_cast<bytes>(bzero(2)) == reinterpret_cast<bytes>(new arc4.static_array<arc4.bool>(False, False, False, False, False, False, False, False, False)))
+  assert(reinterpret_cast<bytes>(new arc4.dynamic_array<arc4.uint8>()) == bzero(2))
+  assert(reinterpret_cast<bytes>(bzero(2)) == reinterpret_cast<bytes>(ARC4_ENCODE(<tuple>[False, False, False, False, False, False, False, False, False], wtype=arc4.tuple<bool,bool,bool,bool,bool,bool,bool,bool,bool>)))
+  assert(reinterpret_cast<bytes>("") == bzero(2))
+  assert(0x0000 == bzero(2))
+  assert(0x0000000000 == bzero(5))
+  assert(reinterpret_cast<bytes>(Address("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ")) == bzero(32))
+  assert(reinterpret_cast<bytes>(0m) == bzero(4))
+  assert(reinterpret_cast<bytes>(False) == bzero(1))
+  assert(reinterpret_cast<bytes>(0) == bzero(4))
 }

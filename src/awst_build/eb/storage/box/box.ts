@@ -2,14 +2,16 @@ import { nodeFactory } from '../../../../awst/node-factory'
 import type { BoxValueExpression, Expression } from '../../../../awst/nodes'
 import type { SourceLocation } from '../../../../awst/source-location'
 import { wtypes } from '../../../../awst/wtypes'
+import { logger } from '../../../../logger'
 import { invariant } from '../../../../util'
 import type { PType } from '../../../ptypes'
-import { boolPType, BoxPType, bytesPType, stringPType, TuplePType } from '../../../ptypes'
+import { boolPType, BoxPType, bytesPType, stringPType, TuplePType, uint64PType } from '../../../ptypes'
 import { instanceEb } from '../../../type-registry'
 import { FunctionBuilder, type NodeBuilder, ParameterlessFunctionBuilder } from '../../index'
 import { parseFunctionArgs } from '../../util/arg-parsing'
 import { extractKey } from '../util'
 import { boxExists, boxLength, BoxProxyExpressionBuilder, boxValue, BoxValueExpressionBuilder } from './base'
+import { checkBoxType, getBoxSize } from './util'
 
 export class BoxFunctionBuilder extends FunctionBuilder {
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
@@ -24,6 +26,7 @@ export class BoxFunctionBuilder extends FunctionBuilder {
       genericTypeArgs: 1,
       argSpec: (a) => [a.obj({ key: a.required(bytesPType, stringPType) })],
     })
+    checkBoxType(contentPType, sourceLocation)
 
     const ptype = new BoxPType({ content: contentPType })
     return new BoxExpressionBuilder(extractKey(key, wtypes.boxKeyWType), ptype)
@@ -43,6 +46,8 @@ export class BoxExpressionBuilder extends BoxProxyExpressionBuilder<BoxPType> {
       contentType: this.ptype.contentType,
     })
     switch (name) {
+      case 'create':
+        return new BoxCreateFunctionBuilder(boxValueExpr, this.ptype.contentType, sourceLocation)
       case 'key':
         return instanceEb(this.toBytes(sourceLocation), bytesPType)
       case 'value':
@@ -59,6 +64,55 @@ export class BoxExpressionBuilder extends BoxProxyExpressionBuilder<BoxPType> {
         return new BoxMaybeFunctionBuilder(boxValueExpr, this.ptype.contentType, sourceLocation)
     }
     return super.memberAccess(name, sourceLocation)
+  }
+}
+
+class BoxCreateFunctionBuilder extends FunctionBuilder {
+  constructor(
+    private boxValue: BoxValueExpression,
+    private contentType: PType,
+    sourceLocation: SourceLocation,
+  ) {
+    super(sourceLocation)
+  }
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    const {
+      args: [{ size }],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 0,
+      callLocation: sourceLocation,
+      funcName: 'Box.create',
+      argSpec: (a) => [a.obj({ size: a.optional(uint64PType) })],
+    })
+    if (size) {
+      return instanceEb(
+        nodeFactory.intrinsicCall({
+          opCode: 'box_create',
+          stackArgs: [this.boxValue.key, size.resolve()],
+          wtype: wtypes.boolWType,
+          immediates: [],
+          sourceLocation,
+        }),
+        boolPType,
+      )
+    }
+    const boxSize = getBoxSize(this.contentType)
+    if (boxSize === null) {
+      logger.error(sourceLocation, `${this.contentType} does not have a fixed byte size. Please specify a size argument.`)
+    }
+    return instanceEb(
+      nodeFactory.intrinsicCall({
+        opCode: 'box_create',
+        stackArgs: [this.boxValue.key, nodeFactory.uInt64Constant({ value: boxSize ?? 0n, sourceLocation })],
+        wtype: wtypes.boolWType,
+        immediates: [],
+        sourceLocation,
+      }),
+      boolPType,
+    )
   }
 }
 

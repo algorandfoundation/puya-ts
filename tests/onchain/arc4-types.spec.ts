@@ -1,3 +1,4 @@
+import { algos } from '@algorandfoundation/algokit-utils'
 import { describe } from 'vitest'
 import { bigIntToUint8Array, utf8ToUint8Array } from '../../src/util'
 import { createArc4TestFixture, createBaseTestFixture } from './util/test-fixture'
@@ -6,7 +7,7 @@ describe('arc4-types', () => {
   const test = createBaseTestFixture('tests/approvals/arc4-types.algo.ts', ['Arc4TypesTestContract'])
 
   test('runs', async ({ Arc4TypesTestContractInvoker }) => {
-    await Arc4TypesTestContractInvoker.send()
+    await Arc4TypesTestContractInvoker.send({ extraFee: algos(1) })
   })
 })
 
@@ -39,13 +40,14 @@ describe('arc4-struct', () => {
 })
 describe('arc4-encode-decode', () => {
   const test = createArc4TestFixture('tests/approvals/arc4-encode-decode.algo.ts', { Arc4EncodeDecode: {} })
-  test('encoding', async ({ appClientArc4EncodeDecode, expect }) => {
+  test('encoding', async ({ appClientArc4EncodeDecode, testAccount }) => {
     await appClientArc4EncodeDecode.send.call({
       method: 'testEncoding',
-      args: [234234, true, 340943934n, new Uint8Array([1, 2, 3, 4, 5]), 'hello world'],
+      args: [234234, true, 340943934n, new Uint8Array([1, 2, 3, 4, 5]), 'hello world', testAccount.addr.toString()],
+      extraFee: algos(1),
     })
   })
-  test('decoding', async ({ appClientArc4EncodeDecode, expect }) => {
+  test('decoding', async ({ appClientArc4EncodeDecode, testAccount }) => {
     await appClientArc4EncodeDecode.send.call({
       method: 'testDecoding',
       args: [
@@ -54,11 +56,13 @@ describe('arc4-encode-decode', () => {
         true,
         bigIntToUint8Array(128n, 1),
         340943934n,
-        bigIntToUint8Array(340943934n, 8),
+        bigIntToUint8Array(340943934n, 512 / 8),
         'hello world',
         new Uint8Array([...bigIntToUint8Array(BigInt('hello world'.length), 2), ...utf8ToUint8Array('hello world')]),
         { a: 50n, b: new Uint8Array([1, 2, 3, 4, 5]) },
         new Uint8Array([...bigIntToUint8Array(50n, 8), 0, 10, 0, 5, 1, 2, 3, 4, 5]),
+        testAccount.addr.toString(),
+        testAccount.addr.publicKey,
       ],
     })
   })

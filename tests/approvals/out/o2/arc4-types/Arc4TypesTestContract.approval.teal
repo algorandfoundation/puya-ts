@@ -3,17 +3,44 @@
 
 // tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract.approvalProgram() -> uint64:
 main:
-    // tests/approvals/arc4-types.algo.ts:129
-    // const a = new Address()
-    pushbytes base32(AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA) // addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ
-    // tests/approvals/arc4-types.algo.ts:130
+    bytecblock 0x068101
+
+main_while_top@2:
+    pushint 1410 // 1410
+    global OpcodeBudget
+    >
+    bz main_after_while@8
+    itxn_begin
+    pushint 6 // appl
+    itxn_field TypeEnum
+    pushint 5 // DeleteApplication
+    itxn_field OnCompletion
+    bytec_0 // 0x068101
+    itxn_field ApprovalProgram
+    bytec_0 // 0x068101
+    itxn_field ClearStateProgram
+    pushint 0 // 0
+    itxn_field Fee
+    itxn_submit
+    b main_while_top@2
+
+main_after_while@8:
+    // tests/approvals/arc4-types.algo.ts:140
     // const b = new Address(Txn.sender)
     txn Sender
-    // tests/approvals/arc4-types.algo.ts:132
+    // tests/approvals/arc4-types.algo.ts:142
+    // assert(b.native === Txn.sender)
+    dupn 2
+    ==
+    assert
+    // tests/approvals/arc4-types.algo.ts:139
+    // const a = new Address()
+    pushbytes base32(AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA) // addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ
+    // tests/approvals/arc4-types.algo.ts:144
     // assert(a !== b, 'Zero address should not match sender')
     !=
     assert // Zero address should not match sender
-    // tests/approvals/arc4-types.algo.ts:165
+    // tests/approvals/arc4-types.algo.ts:179
     // return true
     pushint 1 // 1
     return

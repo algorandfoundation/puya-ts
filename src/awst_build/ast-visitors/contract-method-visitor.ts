@@ -8,13 +8,14 @@ import type { SourceLocation } from '../../awst/source-location'
 import { Constants } from '../../constants'
 import { CodeError } from '../../errors'
 import { logger } from '../../logger'
-import { codeInvariant, invariant, isIn } from '../../util'
+import { codeInvariant, invariant, isIn, sameSets } from '../../util'
+import { ptypeToAbiPType } from '../arc4-util'
 import type { NodeBuilder } from '../eb'
 import { ContractSuperBuilder, ContractThisBuilder } from '../eb/contract-builder'
 import { requireExpressionOfType } from '../eb/util'
-import type { Arc4AbiDecoratorData, DecoratorData } from '../models/decorator-data'
+import type { Arc4AbiDecoratorData, RoutingDecoratorData } from '../models/decorator-data'
 import type { ContractClassPType, FunctionPType } from '../ptypes'
-import { GlobalStateType, LocalStateType } from '../ptypes'
+import { GlobalStateType, LocalStateType, voidPType } from '../ptypes'
 import { DecoratorVisitor } from './decorator-visitor'
 import { FunctionVisitor } from './function-visitor'
 import { visitInChildContext } from './util'
@@ -38,6 +39,11 @@ export class ContractMethodBaseVisitor extends FunctionVisitor {
     const sourceLocation = this.sourceLocation(node)
     return new ContractThisBuilder(this._contractType, sourceLocation)
   }
+}
+
+type RoutingProps = {
+  allowedCompletionTypes?: OnCompletionAction[]
+  create?: ARC4CreateOption
 }
 
 export class ContractMethodVisitor extends ContractMethodBaseVisitor {
@@ -104,7 +110,7 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
     methodLocation,
   }: {
     functionType: FunctionPType
-    decorator: DecoratorData | undefined
+    decorator: RoutingDecoratorData | undefined
     modifiers: { isPublic: boolean; isStatic: boolean }
     methodLocation: SourceLocation
   }): awst.ARC4MethodConfig | null {
@@ -129,21 +135,35 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
     }
     if (isProgramMethod || !isPublic || isStatic) return null
 
+    const conventionalDefaults = this.getConventionalRoutingConfig(functionType.name)
+
+    this.validateDecoratorRoutingData(functionType, decorator, conventionalDefaults)
+
+    // Default routing properties used when these values aren't specified explicitly.
+    const unspecifiedDefaults = {
+      allowedCompletionTypes: [OnCompletionAction.NoOp],
+      create: ARC4CreateOption.disallow,
+    }
+
     if (decorator?.type === 'arc4.baremethod') {
+      this.checkBareMethodTypes(functionType, methodLocation)
       return new ARC4BareMethodConfig({
         sourceLocation: decorator.sourceLocation,
-        allowedCompletionTypes: decorator.ocas,
-        create: decorator.create,
+        allowedCompletionTypes:
+          decorator.allowedCompletionTypes ?? conventionalDefaults?.allowedCompletionTypes ?? unspecifiedDefaults.allowedCompletionTypes,
+        create: decorator.create ?? conventionalDefaults?.create ?? unspecifiedDefaults.create,
       })
     }
 
     if (decorator?.type === 'arc4.abimethod') {
+      this.checkABIMethodTypes(functionType, methodLocation)
       return new ARC4ABIMethodConfig({
-        sourceLocation: decorator.sourceLocation,
-        allowedCompletionTypes: decorator.ocas,
-        create: decorator.create,
-        name: decorator.nameOverride ?? functionType.name,
         readonly: decorator.readonly,
+        sourceLocation: decorator.sourceLocation,
+        allowedCompletionTypes:
+          decorator.allowedCompletionTypes ?? conventionalDefaults?.allowedCompletionTypes ?? unspecifiedDefaults.allowedCompletionTypes,
+        create: decorator.create ?? conventionalDefaults?.create ?? unspecifiedDefaults.create,
+        name: decorator.nameOverride ?? functionType.name,
         defaultArgs: new Map(
           Object.entries(decorator.defaultArguments).map(([parameterName, argConfig]) => [
             parameterName,
@@ -157,16 +177,98 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
         ),
       })
     } else if (isPublic && this._contractType.isARC4) {
+      this.checkABIMethodTypes(functionType, methodLocation)
       return new ARC4ABIMethodConfig({
+        allowedCompletionTypes: conventionalDefaults?.allowedCompletionTypes ?? unspecifiedDefaults.allowedCompletionTypes,
+        create: conventionalDefaults?.create ?? unspecifiedDefaults.create,
         sourceLocation: methodLocation,
-        allowedCompletionTypes: [OnCompletionAction.NoOp],
-        create: ARC4CreateOption.disallow,
         name: functionType.name,
         readonly: false,
         defaultArgs: new Map(),
       })
     }
     return null
+  }
+
+  private validateDecoratorRoutingData(
+    functionType: FunctionPType,
+    decorator: RoutingDecoratorData | undefined,
+    impliedByConvention: RoutingProps | undefined,
+  ) {
+    if (!decorator || !impliedByConvention) return
+
+    if (
+      decorator.allowedCompletionTypes !== undefined &&
+      impliedByConvention.allowedCompletionTypes !== undefined &&
+      !sameSets(decorator.allowedCompletionTypes, impliedByConvention.allowedCompletionTypes)
+    ) {
+      const impliedOcaNames = impliedByConvention.allowedCompletionTypes.map((oca) => OnCompletionAction[oca]).join(', ')
+      logger.error(
+        decorator.allowedCompletionTypesLocation ?? decorator.sourceLocation,
+        `allowActions for conventional routing method '${functionType.name}' must be: ${impliedOcaNames}`,
+      )
+    }
+    if (decorator.create !== undefined && impliedByConvention.create !== undefined && decorator.create !== impliedByConvention.create) {
+      const impliedCreateAction = ARC4CreateOption[impliedByConvention.create]
+      logger.error(
+        decorator.createLocation ?? decorator.sourceLocation,
+        `onCreate for conventional routing method '${functionType.name}' must be: ${impliedCreateAction}`,
+      )
+    }
+  }
+
+  /**
+   * Get routing properties inferred by conventional naming
+   * @param methodName The name of the method
+   * @private
+   */
+  private getConventionalRoutingConfig(methodName: string): RoutingProps | undefined {
+    switch (methodName) {
+      case Constants.symbolNames.conventionalRouting.closeOutOfApplicationMethodName:
+        return {
+          allowedCompletionTypes: [OnCompletionAction.CloseOut],
+          create: ARC4CreateOption.disallow,
+        }
+      case Constants.symbolNames.conventionalRouting.createApplicationMethodName:
+        return {
+          create: ARC4CreateOption.require,
+        }
+      case Constants.symbolNames.conventionalRouting.deleteApplicationMethodName:
+        return {
+          allowedCompletionTypes: [OnCompletionAction.DeleteApplication],
+        }
+      case Constants.symbolNames.conventionalRouting.optInToApplicationMethodName:
+        return {
+          allowedCompletionTypes: [OnCompletionAction.OptIn],
+        }
+      case Constants.symbolNames.conventionalRouting.updateApplicationMethodName:
+        return {
+          allowedCompletionTypes: [OnCompletionAction.UpdateApplication],
+          create: ARC4CreateOption.disallow,
+        }
+      default:
+        return undefined
+    }
+  }
+
+  checkABIMethodTypes(functionType: FunctionPType, sourceLocation: SourceLocation) {
+    for (const [, paramType] of functionType.parameters) {
+      codeInvariant(
+        ptypeToAbiPType(paramType, 'in', sourceLocation),
+        'ABI method parameter types must have an ARC4 equivalent',
+        sourceLocation,
+      )
+    }
+    codeInvariant(
+      ptypeToAbiPType(functionType.returnType, 'out', sourceLocation),
+      'ABI method return type must have an ARC4 equivalent',
+      sourceLocation,
+    )
+  }
+
+  checkBareMethodTypes(functionType: FunctionPType, sourceLocation: SourceLocation) {
+    codeInvariant(functionType.parameters.length === 0, 'Bare methods cannot have any parameters', sourceLocation)
+    codeInvariant(functionType.returnType.equals(voidPType), 'Bare method return type must be void', sourceLocation)
   }
 
   private buildDefaultArgument({

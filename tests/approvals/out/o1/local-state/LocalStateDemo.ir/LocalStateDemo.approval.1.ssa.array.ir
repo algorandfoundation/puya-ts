@@ -20,13 +20,13 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%9#0: uint64 = (txn ApplicationID)
         (assert tmp%9#0) // can only call when not creating
         let tmp%11#0: bytes = (txna ApplicationArgs 1)
-        let item0%0%0#0: uint64 = (extract_uint64 tmp%11#0 0u)
+        let item0%1#0: uint64 = (extract_uint64 tmp%11#0 0u)
         let item_start_offset%0#0: uint64 = (extract_uint16 tmp%11#0 8u)
         let item_end_offset%0#0: uint64 = (len tmp%11#0)
         let item1%0#0: bytes = (substring3 tmp%11#0 item_start_offset%0#0 item_end_offset%0#0)
-        let item1%0%0#0: bytes = ((extract 2 0) item1%0#0)
+        let item1%1#0: bytes = ((extract 2 0) item1%0#0)
         let reinterpret_bytes[80]%0#0: bytes[80] = (txna ApplicationArgs 2)
-        tests/approvals/local-state.algo.ts::LocalStateDemo.setState(item0%0%0#0, item1%0%0#0, reinterpret_bytes[80]%0#0)
+        tests/approvals/local-state.algo.ts::LocalStateDemo.setState(item0%1#0, item1%1#0, reinterpret_bytes[80]%0#0)
         let tests/approvals/local-state.algo.ts::LocalStateDemo.__puya_arc4_router__%0#1: bool = 1u
         goto block@14
     block@5: // getState_route_L25

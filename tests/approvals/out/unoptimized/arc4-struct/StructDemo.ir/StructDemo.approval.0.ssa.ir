@@ -295,9 +295,9 @@ subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.setLastCalled(key: by
 
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.setPlugin(key: bytes) -> void:
     block@0: // L68
-        let tmp%0#0: uint64 = (len method "test()void")
-        let tmp%1#0: bool = (== 4u tmp%0#0)
-        (assert tmp%1#0) // Length is 4
+        let length%0#0: uint64 = (len method "test()void")
+        let lengths_equal%0#0: bool = (== length%0#0 4u)
+        (assert lengths_equal%0#0) // invalid size
         let current_tail_offset%0#0: uint64 = 20u
         let encoded_tuple_buffer%0#0: bytes[0] = 0x
         let encoded_tuple_buffer%1#0: bytes = (concat encoded_tuple_buffer%0#0 method "test()void")
@@ -317,9 +317,9 @@ subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.setPlugin(key: bytes)
         let data_length%0#0: uint64 = (len array_data%0#0)
         let current_tail_offset%2#0: uint64 = (+ current_tail_offset%1#0 data_length%0#0)
         let encoded_tuple_buffer%10#0: bytes = (concat encoded_tuple_buffer%9#0 array_data%0#0)
-        let tmp%2#0: bytes = (concat "plugins" key#0)
-        (box_del tmp%2#0)
-        (box_put tmp%2#0 encoded_tuple_buffer%10#0)
+        let tmp%0#0: bytes = (concat "plugins" key#0)
+        (box_del tmp%0#0)
+        (box_put tmp%0#0 encoded_tuple_buffer%10#0)
         return 
 
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.__algots__.defaultCreate() -> void:

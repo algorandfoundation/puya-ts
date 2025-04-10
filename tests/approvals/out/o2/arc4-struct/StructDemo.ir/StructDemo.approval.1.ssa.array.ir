@@ -23,9 +23,9 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%9#0) // can only call when not creating
         let v1#6: bytes[16] = (txna ApplicationArgs 1)
         let v2#1: bytes[16] = (txna ApplicationArgs 2)
-        let tmp%1#6: uint64 = (extract_uint64 v1#6 0u)
+        let tmp%1#5: uint64 = (extract_uint64 v1#6 0u)
         let tmp%3#3: uint64 = (extract_uint64 v2#1 0u)
-        let to_encode%0#0: uint64 = (+ tmp%1#6 tmp%3#3)
+        let to_encode%0#0: uint64 = (+ tmp%1#5 tmp%3#3)
         let val_as_bytes%0#1: bytes[8] = (itob to_encode%0#0)
         let tmp%5#1: uint64 = (extract_uint64 v1#6 8u)
         let tmp%7#1: uint64 = (extract_uint64 v2#1 8u)
@@ -62,10 +62,10 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let item1%0#1: bytes = ((extract 8 8) v1#2) // on error: Index access is out of bounds
         let v2#0: bytes[16] = (concat item0%0#1 item1%0#1)
         let tmp%0#6: bytes = ((extract 0 8) v2#0) // on error: Index access is out of bounds
-        let tmp%1#5: bytes = ((extract 8 8) v2#0) // on error: Index access is out of bounds
-        let v3#0: bytes[16] = (concat tmp%0#6 tmp%1#5)
-        let tmp%2#5: bool = (== v1#2 v2#0)
-        (assert tmp%2#5)
+        let tmp%1#4: bytes = ((extract 8 8) v2#0) // on error: Index access is out of bounds
+        let v3#0: bytes[16] = (concat tmp%0#6 tmp%1#4)
+        let tmp%2#4: bool = (== v1#2 v2#0)
+        (assert tmp%2#4)
         let tmp%3#2: bool = (== v3#0 v1#2)
         (assert tmp%3#2)
         let tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#3: bool = 1u
@@ -106,8 +106,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%0#5: bytes = (concat "plugins" key#2)
         let (value#1: bytes, maybe_exists%0#2: bool) = (box_get tmp%0#5)
         (assert maybe_exists%0#2) // Box must have value
-        let tmp%2#4: uint64 = (extract_uint64 value#1 16u)
-        (assert tmp%2#4) // Last called not zero
+        let tmp%2#3: uint64 = (extract_uint64 value#1 16u)
+        (assert tmp%2#3) // Last called not zero
         let tmp%41#0: bytes = (concat 0x151f7c75 value#1)
         (log tmp%41#0)
         let tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#6: bool = 1u
@@ -120,8 +120,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%44#0) // can only call when not creating
         let (value#0: bytes, maybe_exists%0#1: bool) = (box_get "main")
         (assert maybe_exists%0#1) // Box must have value
-        let tmp%1#3: uint64 = (extract_uint64 value#0 16u)
-        (assert tmp%1#3) // Last called not zero
+        let tmp%1#2: uint64 = (extract_uint64 value#0 16u)
+        (assert tmp%1#2) // Last called not zero
         let tmp%47#0: bytes = (concat 0x151f7c75 value#0)
         (log tmp%47#0)
         let tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#7: bool = 1u
@@ -144,16 +144,16 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert maybe_exists%0#0) // Box must have value
         let item_start_offset%0#0: uint64 = (extract_uint16 maybe_value%0#0 25u)
         let item_end_offset%0#0: uint64 = (len maybe_value%0#0)
-        let tmp%1#2: bytes = (substring3 maybe_value%0#0 item_start_offset%0#0 item_end_offset%0#0)
-        let array_head_and_tail%0#0: bytes = ((extract 2 0) tmp%1#2)
+        let tmp%1#1: bytes = (substring3 maybe_value%0#0 item_start_offset%0#0 item_end_offset%0#0)
+        let array_head_and_tail%0#0: bytes = ((extract 2 0) tmp%1#1)
         let item_offset%0#0: uint64 = (* index#0 20u)
-        let tmp%2#2: bytes = (extract3 array_head_and_tail%0#0 item_offset%0#0 20u) // on error: Index access is out of bounds
-        let updated_data%0#0: bytes = ((replace2 12) tmp%2#2 val_as_bytes%0#0)
-        let array_length%0#0: uint64 = (extract_uint16 tmp%1#2 0u)
+        let tmp%2#1: bytes = (extract3 array_head_and_tail%0#0 item_offset%0#0 20u) // on error: Index access is out of bounds
+        let updated_data%0#0: bytes = ((replace2 12) tmp%2#1 val_as_bytes%0#0)
+        let array_length%0#0: uint64 = (extract_uint16 tmp%1#1 0u)
         let index_is_in_bounds%0#0: bool = (< index#0 array_length%0#0)
         (assert index_is_in_bounds%0#0) // Index access is out of bounds
         let write_offset%0#1: uint64 = (+ item_offset%0#0 2u)
-        let updated_target%0#0: bytes = (replace3 tmp%1#2 write_offset%0#1 updated_data%0#0)
+        let updated_target%0#0: bytes = (replace3 tmp%1#1 write_offset%0#1 updated_data%0#0)
         let data_up_to_item%0#0: bytes = (extract3 maybe_value%0#0 0u item_start_offset%0#0)
         let updated_data%1#0: bytes = (concat data_up_to_item%0#0 updated_target%0#0)
         (box_del tmp%0#3)
@@ -168,9 +168,9 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%58#0) // can only call when not creating
         let tmp%60#0: bytes = (txna ApplicationArgs 1)
         let key#0: bytes = ((extract 2 0) tmp%60#0)
-        let tmp%2#1: bytes = (concat "plugins" key#0)
-        (box_del tmp%2#1)
-        (box_put tmp%2#1 0x00000000000000010000000000000000000000000000000000001b0001a78000de00000000000000010000000000000001)
+        let tmp%0#2: bytes = (concat "plugins" key#0)
+        (box_del tmp%0#2)
+        (box_put tmp%0#2 0x00000000000000010000000000000000000000000000000000001b0001a78000de00000000000000010000000000000001)
         let tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#9: bool = 1u
         goto block@20
     block@15: // bare_routing_L10
