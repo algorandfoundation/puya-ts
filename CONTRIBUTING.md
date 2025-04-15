@@ -4,13 +4,27 @@ Contributions are welcome. For new features, please open an issue to discuss fir
 
 ## Workflow
 
+### Commits
+
 We use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/#summary). User-facing changes should include at least one `fix:` or `feat:` commit for release notes. Other conventions like `docs:` or `test:` are optional but helpful.
+
+### Branches
+
+| Name      | Description                                                               |
+| --------- | ------------------------------------------------------------------------- |
+| `alpha`   | Commits to this branch will generate an alpha release of the npm packages |
+| `main`    | Commits to this branch will generate a beta release of the npm packages   |
+| `release` | Commits to this branch will generate a new release of the npm packages    |
+
+In general, most changes should begin as a branch based on `alpha`. Once you are happy with the changes, open a PR to merge your branch into `alpha` and it will trigger a PR build to compile and test the code. When the build passes and you have relevant approvals - your code will be merged into `alpha` branch and after the release workflow has completed, you can install the published alpha packages from npm to check they are still working as expected.
+
+Depending on the velocity of new changes, there will be a periodic merge of `alpha` branch into `main` in order to create a `beta` release. On a slower cycle again, changes will be promoted from `main` into `release`.
 
 ## Local Development
 
 To set up the project locally:
 
-1. **Install Node.js**: Download from [nodejs.org](https://nodejs.org/).
+1. **Install Node.js**: Download from [nodejs.org](https://nodejs.org/). See src/constants.ts `minNodeVersion` for minimum version.
 
 1. **Install AlgoKit CLI**: Follow the guide from [Algokit](https://github.com/algorandfoundation/algokit-cli?tab=readme-ov-file#install).
 
