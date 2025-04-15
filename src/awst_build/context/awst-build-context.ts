@@ -1,6 +1,5 @@
 import { AsyncLocalStorage } from 'node:async_hooks'
 import ts from 'typescript'
-import type { awst } from '../../awst'
 import type { ContractReference, LogicSigReference } from '../../awst/models'
 import { nodeFactory } from '../../awst/node-factory'
 import type { AppStorageDefinition, ARC4MethodConfig } from '../../awst/nodes'
@@ -8,7 +7,7 @@ import { SourceLocation } from '../../awst/source-location'
 import { logger } from '../../logger'
 import { invariant } from '../../util'
 import { ConstantStore } from '../constant-store'
-import type { NodeBuilder } from '../eb'
+import type { InstanceBuilder, NodeBuilder } from '../eb'
 import type { AppStorageDeclaration } from '../models/app-storage-declaration'
 import type { ContractClassModel } from '../models/contract-class-model'
 import { CompilationSet } from '../models/contract-class-model'
@@ -68,9 +67,9 @@ export abstract class AwstBuildContext {
   /**
    * Add a named constant to the current context
    * @param identifier The identifier of the constant declaration in this source file
-   * @param value The compile time constant value
+   * @param builder The builder for the constant
    */
-  abstract addConstant(identifier: ts.Identifier, value: awst.Constant | awst.TemplateVar): void
+  abstract addConstant(identifier: ts.Identifier, builder: InstanceBuilder): void
 
   /**
    * Retrieve the evaluation context
@@ -213,8 +212,8 @@ class AwstBuildContextImpl extends AwstBuildContext {
     )
   }
 
-  addConstant(identifier: ts.Identifier, value: awst.Constant | awst.TemplateVar) {
-    this.constants.addConstant(identifier, value, this.getSourceLocation(identifier))
+  addConstant(identifier: ts.Identifier, builder: InstanceBuilder) {
+    this.constants.addConstant(identifier, builder, this.getSourceLocation(identifier))
   }
 
   createChildContext(): AwstBuildContext {
@@ -260,9 +259,9 @@ class AwstBuildContextImpl extends AwstBuildContext {
     if (ptype.singleton) {
       return typeRegistry.getSingletonEb(ptype, sourceLocation)
     }
-    const constantValue = this.constants.tryResolveConstant(node)
-    if (constantValue) {
-      return typeRegistry.getInstanceEb(constantValue, ptype)
+    const constantBuilder = this.constants.tryResolveConstant(node)
+    if (constantBuilder) {
+      return constantBuilder
     }
     const variableName = this.resolveVariableName(node)
     return typeRegistry.getInstanceEb(

@@ -18,6 +18,24 @@ There are further "bounded" types supported by the AVM, which are backed by thes
 For example, `biguint` represents a variably sized (up to 512-bits), unsigned integer, but is actually
 backed by a `byte[]`. This is represented by [`biguint`](./#biguint) in Algorand TypeScript.
 
+### Number and BigInt
+
+JavaScript's native `number` and `bigint` cannot be used as variable, parameter, return, or storage types as they do not have an equivalent representation on the AVM. They can however be used to define numeric constants which are then interpreted as `uint64` or `biguint` values when used elsewhere. As such, Algorand TypeScript supports `number` and `bigint` literals when they assigned to a `const` variable. Basic expressions are also allowed as long as they evaluate to a compile-time constant.
+
+```ts
+import { BigUint, uint64 } from '@algorandfoundation/algorand-typescript'
+
+const x = 123
+const y = x * 500
+const a = 2n ** 128n
+
+// elsewhere
+let myUint: uint64 = x
+let myBiguint = BigUint(a)
+```
+
+> **Note:** `number` literals cannot exceed `Number.MAX_SAFE_INTEGER` as they will lose precision when parsed, but it is possible to write expressions that would evaluate to unsafe integers eg. `2 ** 54`. This is because evaluation is handled by the compiler and performed using the `bigint` type.
+
 ### Uint64
 
 `uint64` represents an unsigned 64-bit integer type that will error on both underflow (negative values) and overflows (values larger than 64-bit). It can be declared with a numeric literal and a type annotation of `uint64` or by using the `Uint64` factory method (think `number` (type) vs `Number` (a function for creating numbers))
