@@ -1,0 +1,285 @@
+#pragma version 10
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0 1 64 9223372036854775808
+    bytecblock 0x151f7c75
+
+main_block@0:
+
+main_block@1:
+    // tests/approvals/const-literals.algo.ts:15
+    // class ConstLiteralsAlgo extends Contract {
+    txn NumAppArgs
+    intc_0 // 0
+    !=
+    bz main_bare_routing@11
+
+main_abi_routing@2:
+    // tests/approvals/const-literals.algo.ts:15
+    // class ConstLiteralsAlgo extends Contract {
+    txna ApplicationArgs 0
+    pushbytes 0xffbc3914 // method "test()uint64"
+    pushbytes 0x341a3794 // method "test2()uint64"
+    pushbytes 0x73e5b0c7 // method "test3()uint64"
+    pushbytes 0x5034266b // method "test4()uint64"
+    pushbytes 0xaada8eee // method "test5()uint512"
+    pushbytes 0x4e935b6e // method "test6()uint512"
+    uncover 6
+    match main_test_route@3 main_test2_route@4 main_test3_route@5 main_test4_route@6 main_test5_route@7 main_test6_route@8
+
+main_switch_case_default@9:
+
+main_switch_case_next@10:
+
+main_after_if_else@15:
+    // tests/approvals/const-literals.algo.ts:15
+    // class ConstLiteralsAlgo extends Contract {
+    intc_0 // 0
+
+main_after_inlined_tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.__puya_arc4_router__@16:
+    return
+
+main_test6_route@8:
+    // tests/approvals/const-literals.algo.ts:41
+    // test6(): biguint {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    callsub test6
+    dup
+    len
+    intc_2 // 64
+    <=
+    assert // overflow
+    intc_2 // 64
+    bzero
+    b|
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.__puya_arc4_router__@16
+
+main_test5_route@7:
+    // tests/approvals/const-literals.algo.ts:37
+    // test5() {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    callsub test5
+    dup
+    len
+    intc_2 // 64
+    <=
+    assert // overflow
+    intc_2 // 64
+    bzero
+    b|
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.__puya_arc4_router__@16
+
+main_test4_route@6:
+    // tests/approvals/const-literals.algo.ts:32
+    // test4(): uint64 {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    callsub test4
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.__puya_arc4_router__@16
+
+main_test3_route@5:
+    // tests/approvals/const-literals.algo.ts:25
+    // test3(): uint64 {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    callsub test3
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.__puya_arc4_router__@16
+
+main_test2_route@4:
+    // tests/approvals/const-literals.algo.ts:20
+    // test2() {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    callsub test2
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.__puya_arc4_router__@16
+
+main_test_route@3:
+    // tests/approvals/const-literals.algo.ts:16
+    // test(): uint64 {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    callsub test
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.__puya_arc4_router__@16
+
+main_bare_routing@11:
+    // tests/approvals/const-literals.algo.ts:15
+    // class ConstLiteralsAlgo extends Contract {
+    txn OnCompletion
+    intc_0 // 0
+    swap
+    match main___algots__.defaultCreate@12
+
+main_switch_case_default@13:
+
+main_switch_case_next@14:
+    b main_after_if_else@15
+
+main___algots__.defaultCreate@12:
+    // tests/approvals/const-literals.algo.ts:15
+    // class ConstLiteralsAlgo extends Contract {
+    txn ApplicationID
+    intc_0 // 0
+    ==
+    assert // can only call when creating
+    callsub __algots__.defaultCreate
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.__puya_arc4_router__@16
+
+
+// tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.test() -> uint64:
+test:
+
+test_block@0:
+    // tests/approvals/const-literals.algo.ts:5
+    // const x = 123
+    pushint 123 // 123
+    // tests/approvals/const-literals.algo.ts:17
+    // return x
+    retsub
+
+
+// tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.test2() -> uint64:
+test2:
+
+test2_block@0:
+    // tests/approvals/const-literals.algo.ts:7
+    // const z: uint64 = 4
+    pushint 4 // 4
+    // tests/approvals/const-literals.algo.ts:22
+    // return test
+    retsub
+
+
+// tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.test3() -> uint64:
+test3:
+
+test3_block@0:
+    // tests/approvals/const-literals.algo.ts:29
+    // return x * y
+    pushint 12 // 12
+    retsub
+
+
+// tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.test4() -> uint64:
+test4:
+
+test4_block@0:
+    // tests/approvals/const-literals.algo.ts:9
+    // const unsafeNumber = 2 ** 63
+    intc_3 // 9223372036854775808
+    // tests/approvals/const-literals.algo.ts:33
+    // assert(getBit(unsafeNumber, 63))
+    pushint 63 // 63
+    getbit
+    assert
+    // tests/approvals/const-literals.algo.ts:9
+    // const unsafeNumber = 2 ** 63
+    intc_3 // 9223372036854775808
+    // tests/approvals/const-literals.algo.ts:34
+    // return unsafeNumber
+    retsub
+
+
+// tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.test5() -> bytes:
+test5:
+
+test5_block@0:
+    // tests/approvals/const-literals.algo.ts:11
+    // const unsafeUint64 = 2 ** 128
+    pushbytes 0x0100000000000000000000000000000000
+    // tests/approvals/const-literals.algo.ts:38
+    // return BigUint(unsafeUint64)
+    retsub
+
+
+// tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.test6() -> bytes:
+test6:
+
+test6_block@0:
+    // tests/approvals/const-literals.algo.ts:13
+    // const a = 2n ** 256n
+    pushbytes 0x010000000000000000000000000000000000000000000000000000000000000000
+    // tests/approvals/const-literals.algo.ts:42
+    // return a
+    retsub
+
+
+// tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.__algots__.defaultCreate() -> void:
+__algots__.defaultCreate:
+
+__algots__.defaultCreate_block@0:
+    retsub

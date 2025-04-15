@@ -1,4 +1,4 @@
-import { awst } from '../../awst'
+import { awst, isConstant } from '../../awst'
 import { nodeFactory } from '../../awst/node-factory'
 import type { Expression } from '../../awst/nodes'
 import { TupleItemExpression } from '../../awst/nodes'
@@ -105,6 +105,11 @@ export abstract class InstanceBuilder<TPType extends PType = PType> extends Node
   abstract get ptype(): TPType
   abstract resolve(): awst.Expression
   abstract resolveLValue(): awst.LValue
+
+  get isConstant() {
+    const expr = this.resolve()
+    return isConstant(expr) || expr instanceof awst.TemplateVar
+  }
 
   /**
    * Returns a boolean indicating if the current builder can be resolved to the target type.

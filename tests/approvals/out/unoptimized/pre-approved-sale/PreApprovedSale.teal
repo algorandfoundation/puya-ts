@@ -7,18 +7,6 @@ main:
     bytecblock TMPL_SELLER
 
 main_block@0:
-    // tests/approvals/pre-approved-sale.algo.ts:12
-    // const seller = TemplateVar<Account>('SELLER')
-    bytec_0 // TMPL_SELLER
-    dup
-    // tests/approvals/pre-approved-sale.algo.ts:13
-    // const price = TemplateVar<uint64>('PRICE')
-    intc_2 // TMPL_PRICE
-    swap
-    // tests/approvals/pre-approved-sale.algo.ts:14
-    // const asset = TemplateVar<Asset>('ASSET')
-    intc_3 // TMPL_ASSET
-    swap
     // tests/approvals/pre-approved-sale.algo.ts:16
     // const payTxn = gtxn.PaymentTxn(0)
     intc_1 // 0
@@ -42,6 +30,14 @@ main_block@0:
     //   amount: price,
     // })
     gtxns Receiver
+    // tests/approvals/pre-approved-sale.algo.ts:12
+    // const seller = TemplateVar<Account>('SELLER')
+    bytec_0 // TMPL_SELLER
+    // tests/approvals/pre-approved-sale.algo.ts:18-21
+    // assertMatch(payTxn, {
+    //   receiver: seller,
+    //   amount: price,
+    // })
     ==
     bz main_bool_false@3
 
@@ -55,7 +51,14 @@ main_and_contd@1:
     //   amount: price,
     // })
     gtxns Amount
-    dig 2
+    // tests/approvals/pre-approved-sale.algo.ts:13
+    // const price = TemplateVar<uint64>('PRICE')
+    intc_2 // TMPL_PRICE
+    // tests/approvals/pre-approved-sale.algo.ts:18-21
+    // assertMatch(payTxn, {
+    //   receiver: seller,
+    //   amount: price,
+    // })
     ==
     bz main_bool_false@3
 
@@ -108,7 +111,17 @@ main_and_contd@5:
     //   rekeyTo: Global.zeroAddress,
     // })
     gtxns Sender
-    dig 3
+    // tests/approvals/pre-approved-sale.algo.ts:12
+    // const seller = TemplateVar<Account>('SELLER')
+    bytec_0 // TMPL_SELLER
+    // tests/approvals/pre-approved-sale.algo.ts:23-29
+    // assertMatch(assetTxn, {
+    //   assetAmount: Uint64(1),
+    //   sender: seller,
+    //   xferAsset: asset,
+    //   assetCloseTo: Global.zeroAddress,
+    //   rekeyTo: Global.zeroAddress,
+    // })
     ==
     bz main_bool_false@10
 
@@ -125,7 +138,17 @@ main_and_contd@6:
     //   rekeyTo: Global.zeroAddress,
     // })
     gtxns XferAsset
-    dig 1
+    // tests/approvals/pre-approved-sale.algo.ts:14
+    // const asset = TemplateVar<Asset>('ASSET')
+    intc_3 // TMPL_ASSET
+    // tests/approvals/pre-approved-sale.algo.ts:23-29
+    // assertMatch(assetTxn, {
+    //   assetAmount: Uint64(1),
+    //   sender: seller,
+    //   xferAsset: asset,
+    //   assetCloseTo: Global.zeroAddress,
+    //   rekeyTo: Global.zeroAddress,
+    // })
     ==
     bz main_bool_false@10
 
