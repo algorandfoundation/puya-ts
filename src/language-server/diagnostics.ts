@@ -4,6 +4,7 @@ import { DiagnosticSeverity } from 'vscode-languageserver'
 import type { TextDocument } from 'vscode-languageserver-textdocument'
 import type { TextDocuments } from 'vscode-languageserver/node.js'
 import { URI } from 'vscode-uri'
+import { AwstSerializer } from '../awst/json-serialize-awst'
 import type { SourceLocation } from '../awst/source-location'
 import { compile } from '../compile'
 import { Constants } from '../constants'
@@ -12,6 +13,9 @@ import type { LogEvent } from '../logger'
 import { LoggingContext, LogLevel } from '../logger'
 import type { AlgoFile } from '../options'
 import { CompileOptions } from '../options'
+import { jsonSerializeSourceFiles } from '../parser/json-serialize-source-files'
+import { buildCompilationSetMapping } from '../puya/build-compilation-set-mapping'
+import type { PuyaService } from '../puya/puya-service'
 
 type LogEventWithSource = LogEvent & { sourceLocation: SourceLocation & { file: string } }
 
@@ -34,16 +38,50 @@ function prepareFiles(workspaceFolder: string, documents: TextDocuments<TextDocu
   })
 }
 
-async function compileAndExtractLogs(files: AlgoFile[]): Promise<LogEventWithSource[]> {
+async function compileAndExtractLogs(files: AlgoFile[], puyaService: PuyaService): Promise<LogEventWithSource[]> {
   const logCtx = LoggingContext.create()
+
   await logCtx.run(async () => {
-    await compile(
-      new CompileOptions({
+    try {
+      // Compile with the original compile method but in dry-run mode to get the AWST
+      const compileOptions = new CompileOptions({
         filePaths: files,
-        dryRun: false,
-      }),
-    )
+        dryRun: true,
+      })
+
+      const { awst, compilationSet, programDirectory, ast: sourceFiles } = await compile(compileOptions)
+
+      if (!awst || !compilationSet || !sourceFiles) {
+        return
+      }
+
+      // Serialize AWST and build compilation set mapping for the puya service
+      const serializer = new AwstSerializer({
+        programDirectory: programDirectory,
+        sourcePaths: 'absolute',
+      })
+
+      const serializedAwst = serializer.serialize(awst)
+      const sourceAnnotations = jsonSerializeSourceFiles(sourceFiles, programDirectory)
+
+      const compilationSetMapping = buildCompilationSetMapping({
+        awst,
+        inputPaths: files,
+        compilationSet,
+      })
+
+      // Use the puya service to compile the AWST
+      await puyaService.compile({
+        awst: serializedAwst,
+        compilationSet: compilationSetMapping,
+        sourceAnnotations,
+      })
+    } catch (_) {
+      // Error caught silently - will be handled via log events
+    }
   })
+
+  // Filter log events outside the run block to dedupe the filtering logic
   return logCtx.logEvents
     .filter((e) => e.level === LogLevel.Error || e.level === LogLevel.Warning)
     .filter((e): e is LogEventWithSource => Boolean(e.sourceLocation?.file))
@@ -71,12 +109,13 @@ export async function getWorkspaceDiagnostics(
   connection: Connection,
   workspaceFolder: string,
   documents: TextDocuments<TextDocument>,
+  puyaService: PuyaService,
 ): Promise<Map<string, Diagnostic[]>> {
   try {
     connection.console.debug(`Parsing ${workspaceFolder}`)
 
     const files = prepareFiles(workspaceFolder, documents)
-    const logEvents = await compileAndExtractLogs(files)
+    const logEvents = await compileAndExtractLogs(files, puyaService)
 
     return files.reduce((acc, file) => {
       const diagnostics = logEvents.filter((e) => e.sourceLocation.file === file.sourceFile).map(mapToDiagnostic)
