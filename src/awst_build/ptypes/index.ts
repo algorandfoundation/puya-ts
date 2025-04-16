@@ -724,6 +724,12 @@ export const unknownPType = new UnsupportedType({
   fullName: 'unknown',
 })
 
+export const esSymbol = new UnsupportedType({
+  name: 'symbol',
+  module: 'lib.d.ts',
+  fullName: 'symbol',
+})
+
 export const nullPType = new UnsupportedType({
   name: 'null',
   module: 'lib.d.ts',
