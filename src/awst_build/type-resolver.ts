@@ -109,8 +109,9 @@ export class TypeResolver {
     }
     if (ts.isConstructorDeclaration(node)) {
       const signature = this.checker.getSignatureFromDeclaration(node)
-      invariant(signature, 'Constructor node must have call signature')
+      invariant(signature, 'Constructor node must have call signature', sourceLocation)
       const parentType = this.getTypeName(this.checker.getTypeAtLocation(node.parent), sourceLocation)
+      invariant(parentType, 'Parent type must have name', sourceLocation)
       return this.reflectFunctionType(
         new SymbolName({
           name: Constants.symbolNames.constructorMethodName,
@@ -128,13 +129,10 @@ export class TypeResolver {
     return this.resolveType(type, sourceLocation)
   }
 
+  @CacheResolvedType
+  @CaptureTypeContext
   resolveType(tsType: ts.Type, sourceLocation: SourceLocation): PType {
-    if (tsType.symbol) {
-      const symbolType = this.checker.getTypeOfSymbol(tsType.symbol)
-      if (symbolType !== tsType && !tsType.isClass() && symbolType.isClass()) {
-        tsType = symbolType
-      }
-    }
+    const typeName = this.getTypeName(tsType, sourceLocation)
 
     intersect: if (isIntersectionType(tsType)) {
       if (tsType.aliasSymbol) {
@@ -202,8 +200,7 @@ export class TypeResolver {
       return this.resolve(tsType.node.expression, sourceLocation)
     }
 
-    const typeName = this.getTypeName(tsType, sourceLocation)
-    logger.debug(sourceLocation, `Resolving ptype for ${typeName}`)
+    invariant(typeName, 'Non builtin type must have a name', sourceLocation)
 
     if (typeName.name === '__type' && typeName.module.startsWith(Constants.algoTsPackage)) {
       // We are likely dealing with `typeof X` where X is a singleton exported by algo-ts
@@ -301,9 +298,12 @@ export class TypeResolver {
         continue
       }
       const type = this.checker.getTypeOfSymbol(prop)
-      const ptype = this.resolveType(type, sourceLocation)
-      if (ptype.singleton) {
-        logger.error(sourceLocation, `${ptype} is not a valid object property type`)
+      const propLocation = this.getLocationOfSymbol(prop) ?? sourceLocation
+      const ptype = this.resolveType(type, propLocation)
+      if (ptype instanceof FunctionPType) {
+        logger.error(propLocation, `Invalid object type. Functions are not supported`)
+      } else if (ptype.singleton) {
+        logger.error(propLocation, `Invalid property ${ptype}.`)
       } else {
         properties[prop.name] = ptype
       }
@@ -430,15 +430,15 @@ export class TypeResolver {
     })
   }
 
-  private getTypeName(type: ts.Type, sourceLocation: SourceLocation): SymbolName {
+  getTypeName(type: ts.Type, sourceLocation: SourceLocation): SymbolName | undefined {
     if (type.aliasSymbol) {
       const name = this.getSymbolFullName(type.aliasSymbol, sourceLocation)
       // We only respect type aliases within certain modules, otherwise use the
       // unaliased symbol
       if (name.module.startsWith(Constants.algoTsPackage) || name.module === Constants.moduleNames.polytype) return name
     }
-    invariant(type.symbol, 'Type must have a symbol', sourceLocation)
-    return this.getSymbolFullName(type.symbol, sourceLocation)
+
+    return type.symbol ? this.getSymbolFullName(type.symbol, sourceLocation) : undefined
   }
 
   private getLocationOfSymbol(symbol: ts.Symbol): SourceLocation | undefined {
@@ -508,4 +508,29 @@ function tryGetTypeDescription(tsType: ts.Type): string | undefined {
     }
   }
   return undefined
+}
+
+function CaptureTypeContext(resolveType: (this: TypeResolver, tsType: ts.Type, sourceLocation: SourceLocation) => PType) {
+  const resolveStack: Array<SymbolName | undefined> = []
+  return function (this: TypeResolver, tsType: ts.Type, sourceLocation: SourceLocation): PType {
+    try {
+      const name = this.getTypeName(tsType, sourceLocation)
+      resolveStack.push(name)
+      return resolveType.call(this, tsType, sourceLocation)
+    } finally {
+      resolveStack.pop()
+    }
+  }
+}
+
+function CacheResolvedType(resolveType: (this: TypeResolver, tsType: ts.Type, sourceLocation: SourceLocation) => PType) {
+  const resolvedTypes = new WeakMap<ts.Type, PType>()
+  return function (this: TypeResolver, tsType: ts.Type, sourceLocation: SourceLocation): PType {
+    const existing = resolvedTypes.get(tsType)
+    if (existing) return existing
+
+    const res = resolveType.call(this, tsType, sourceLocation)
+    resolvedTypes.set(tsType, res)
+    return res
+  }
 }
