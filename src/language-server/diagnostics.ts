@@ -20,16 +20,16 @@ function prepareFiles(workspaceFolder: string, documents: TextDocuments<TextDocu
 
   // To support unsaved files, we need to replace the file content with the content of the document
   return files.map((file) => {
-    const fileUri = URI.file(file.sourceFile).toString()
+    const fileUri = URI.file(upath.join(workspaceFolder, file.sourceFile)).toString()
     const document = documents.get(fileUri)
 
     if (document) {
       return {
-        sourceFile: file.sourceFile,
-        outDir: '',
+        ...file,
         fileContents: document.getText(),
       } satisfies AlgoFile
     }
+
     return file
   })
 }
