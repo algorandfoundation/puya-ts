@@ -204,7 +204,7 @@
           "source_location": {
             "file": "tests/approvals/match-expr.algo.ts",
             "line": 5,
-            "end_line": 21,
+            "end_line": 22,
             "column": 32,
             "end_column": 3
           },
@@ -415,19 +415,19 @@
               "_type": "ExpressionStatement",
               "source_location": {
                 "file": "tests/approvals/match-expr.algo.ts",
-                "line": 9,
-                "end_line": 9,
+                "line": 8,
+                "end_line": 8,
                 "column": 4,
-                "end_column": 50
+                "end_column": 61
               },
               "expr": {
                 "_type": "AssertExpression",
                 "source_location": {
                   "file": "tests/approvals/match-expr.algo.ts",
-                  "line": 9,
-                  "end_line": 9,
+                  "line": 8,
+                  "end_line": 8,
                   "column": 4,
-                  "end_column": 50
+                  "end_column": 61
                 },
                 "wtype": {
                   "_type": "WType",
@@ -440,10 +440,10 @@
                   "_type": "NumericComparisonExpression",
                   "source_location": {
                     "file": "tests/approvals/match-expr.algo.ts",
-                    "line": 9,
-                    "end_line": 9,
-                    "column": 11,
-                    "end_column": 49
+                    "line": 8,
+                    "end_line": 8,
+                    "column": 4,
+                    "end_column": 61
                   },
                   "wtype": {
                     "_type": "WType",
@@ -456,10 +456,10 @@
                     "_type": "FieldExpression",
                     "source_location": {
                       "file": "tests/approvals/match-expr.algo.ts",
-                      "line": 9,
-                      "end_line": 9,
-                      "column": 11,
-                      "end_column": 49
+                      "line": 8,
+                      "end_line": 8,
+                      "column": 4,
+                      "end_column": 61
                     },
                     "wtype": {
                       "_type": "WType",
@@ -472,10 +472,10 @@
                       "_type": "VarExpression",
                       "source_location": {
                         "file": "tests/approvals/match-expr.algo.ts",
-                        "line": 9,
-                        "end_line": 9,
-                        "column": 17,
-                        "end_column": 21
+                        "line": 8,
+                        "end_line": 8,
+                        "column": 16,
+                        "end_column": 20
                       },
                       "wtype": {
                         "_type": "WTuple",
@@ -500,15 +500,15 @@
                     },
                     "name": "x"
                   },
-                  "operator": ">",
+                  "operator": "!=",
                   "rhs": {
                     "_type": "IntegerConstant",
                     "source_location": {
                       "file": "tests/approvals/match-expr.algo.ts",
-                      "line": 9,
-                      "end_line": 9,
-                      "column": 43,
-                      "end_column": 44
+                      "line": 8,
+                      "end_line": 8,
+                      "column": 34,
+                      "end_column": 35
                     },
                     "wtype": {
                       "_type": "WType",
@@ -517,11 +517,101 @@
                       "ephemeral": false,
                       "scalar_type": 2
                     },
-                    "value": 4,
+                    "value": 3,
                     "teal_alias": null
                   }
                 },
-                "error_message": null
+                "error_message": "x should not be 3"
+              }
+            },
+            {
+              "_type": "ExpressionStatement",
+              "source_location": {
+                "file": "tests/approvals/match-expr.algo.ts",
+                "line": 9,
+                "end_line": 9,
+                "column": 4,
+                "end_column": 61
+              },
+              "expr": {
+                "_type": "AssertExpression",
+                "source_location": {
+                  "file": "tests/approvals/match-expr.algo.ts",
+                  "line": 9,
+                  "end_line": 9,
+                  "column": 4,
+                  "end_column": 61
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "void",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": null
+                },
+                "condition": {
+                  "_type": "BytesComparisonExpression",
+                  "source_location": {
+                    "file": "tests/approvals/match-expr.algo.ts",
+                    "line": 9,
+                    "end_line": 9,
+                    "column": 4,
+                    "end_column": 61
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "bool",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 2
+                  },
+                  "lhs": {
+                    "_type": "IntrinsicCall",
+                    "source_location": {
+                      "file": "tests/approvals/match-expr.algo.ts",
+                      "line": 9,
+                      "end_line": 9,
+                      "column": 4,
+                      "end_column": 61
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "account",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 1
+                    },
+                    "op_code": "txn",
+                    "immediates": [
+                      "Sender"
+                    ],
+                    "stack_args": []
+                  },
+                  "operator": "!=",
+                  "rhs": {
+                    "_type": "IntrinsicCall",
+                    "source_location": {
+                      "file": "tests/approvals/match-expr.algo.ts",
+                      "line": 9,
+                      "end_line": 9,
+                      "column": 45,
+                      "end_column": 56
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "account",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 1
+                    },
+                    "op_code": "global",
+                    "immediates": [
+                      "ZeroAddress"
+                    ],
+                    "stack_args": []
+                  }
+                },
+                "error_message": "assert target is match for conditions"
               }
             },
             {
@@ -531,7 +621,7 @@
                 "line": 10,
                 "end_line": 10,
                 "column": 4,
-                "end_column": 47
+                "end_column": 50
               },
               "expr": {
                 "_type": "AssertExpression",
@@ -540,7 +630,7 @@
                   "line": 10,
                   "end_line": 10,
                   "column": 4,
-                  "end_column": 47
+                  "end_column": 50
                 },
                 "wtype": {
                   "_type": "WType",
@@ -556,7 +646,7 @@
                     "line": 10,
                     "end_line": 10,
                     "column": 11,
-                    "end_column": 46
+                    "end_column": 49
                   },
                   "wtype": {
                     "_type": "WType",
@@ -572,7 +662,7 @@
                       "line": 10,
                       "end_line": 10,
                       "column": 11,
-                      "end_column": 46
+                      "end_column": 49
                     },
                     "wtype": {
                       "_type": "WType",
@@ -613,15 +703,15 @@
                     },
                     "name": "x"
                   },
-                  "operator": "<",
+                  "operator": ">",
                   "rhs": {
                     "_type": "IntegerConstant",
                     "source_location": {
                       "file": "tests/approvals/match-expr.algo.ts",
                       "line": 10,
                       "end_line": 10,
-                      "column": 40,
-                      "end_column": 41
+                      "column": 43,
+                      "end_column": 44
                     },
                     "wtype": {
                       "_type": "WType",
@@ -630,7 +720,7 @@
                       "ephemeral": false,
                       "scalar_type": 2
                     },
-                    "value": 6,
+                    "value": 4,
                     "teal_alias": null
                   }
                 },
@@ -644,7 +734,7 @@
                 "line": 11,
                 "end_line": 11,
                 "column": 4,
-                "end_column": 52
+                "end_column": 47
               },
               "expr": {
                 "_type": "AssertExpression",
@@ -653,7 +743,7 @@
                   "line": 11,
                   "end_line": 11,
                   "column": 4,
-                  "end_column": 52
+                  "end_column": 47
                 },
                 "wtype": {
                   "_type": "WType",
@@ -669,7 +759,7 @@
                     "line": 11,
                     "end_line": 11,
                     "column": 11,
-                    "end_column": 51
+                    "end_column": 46
                   },
                   "wtype": {
                     "_type": "WType",
@@ -685,7 +775,7 @@
                       "line": 11,
                       "end_line": 11,
                       "column": 11,
-                      "end_column": 51
+                      "end_column": 46
                     },
                     "wtype": {
                       "_type": "WType",
@@ -726,15 +816,15 @@
                     },
                     "name": "x"
                   },
-                  "operator": ">=",
+                  "operator": "<",
                   "rhs": {
                     "_type": "IntegerConstant",
                     "source_location": {
                       "file": "tests/approvals/match-expr.algo.ts",
                       "line": 11,
                       "end_line": 11,
-                      "column": 45,
-                      "end_column": 46
+                      "column": 40,
+                      "end_column": 41
                     },
                     "wtype": {
                       "_type": "WType",
@@ -743,7 +833,7 @@
                       "ephemeral": false,
                       "scalar_type": 2
                     },
-                    "value": 5,
+                    "value": 6,
                     "teal_alias": null
                   }
                 },
@@ -757,7 +847,7 @@
                 "line": 12,
                 "end_line": 12,
                 "column": 4,
-                "end_column": 49
+                "end_column": 52
               },
               "expr": {
                 "_type": "AssertExpression",
@@ -766,7 +856,7 @@
                   "line": 12,
                   "end_line": 12,
                   "column": 4,
-                  "end_column": 49
+                  "end_column": 52
                 },
                 "wtype": {
                   "_type": "WType",
@@ -782,7 +872,7 @@
                     "line": 12,
                     "end_line": 12,
                     "column": 11,
-                    "end_column": 48
+                    "end_column": 51
                   },
                   "wtype": {
                     "_type": "WType",
@@ -798,7 +888,7 @@
                       "line": 12,
                       "end_line": 12,
                       "column": 11,
-                      "end_column": 48
+                      "end_column": 51
                     },
                     "wtype": {
                       "_type": "WType",
@@ -839,13 +929,126 @@
                     },
                     "name": "x"
                   },
-                  "operator": "<=",
+                  "operator": ">=",
                   "rhs": {
                     "_type": "IntegerConstant",
                     "source_location": {
                       "file": "tests/approvals/match-expr.algo.ts",
                       "line": 12,
                       "end_line": 12,
+                      "column": 45,
+                      "end_column": 46
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "uint64",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 2
+                    },
+                    "value": 5,
+                    "teal_alias": null
+                  }
+                },
+                "error_message": null
+              }
+            },
+            {
+              "_type": "ExpressionStatement",
+              "source_location": {
+                "file": "tests/approvals/match-expr.algo.ts",
+                "line": 13,
+                "end_line": 13,
+                "column": 4,
+                "end_column": 49
+              },
+              "expr": {
+                "_type": "AssertExpression",
+                "source_location": {
+                  "file": "tests/approvals/match-expr.algo.ts",
+                  "line": 13,
+                  "end_line": 13,
+                  "column": 4,
+                  "end_column": 49
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "void",
+                  "immutable": true,
+                  "ephemeral": false,
+                  "scalar_type": null
+                },
+                "condition": {
+                  "_type": "NumericComparisonExpression",
+                  "source_location": {
+                    "file": "tests/approvals/match-expr.algo.ts",
+                    "line": 13,
+                    "end_line": 13,
+                    "column": 11,
+                    "end_column": 48
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "bool",
+                    "immutable": true,
+                    "ephemeral": false,
+                    "scalar_type": 2
+                  },
+                  "lhs": {
+                    "_type": "FieldExpression",
+                    "source_location": {
+                      "file": "tests/approvals/match-expr.algo.ts",
+                      "line": 13,
+                      "end_line": 13,
+                      "column": 11,
+                      "end_column": 48
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "uint64",
+                      "immutable": true,
+                      "ephemeral": false,
+                      "scalar_type": 2
+                    },
+                    "base": {
+                      "_type": "VarExpression",
+                      "source_location": {
+                        "file": "tests/approvals/match-expr.algo.ts",
+                        "line": 13,
+                        "end_line": 13,
+                        "column": 17,
+                        "end_column": 21
+                      },
+                      "wtype": {
+                        "_type": "WTuple",
+                        "name": "lib.d.ts::object",
+                        "immutable": true,
+                        "ephemeral": false,
+                        "scalar_type": null,
+                        "types": [
+                          {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true,
+                            "ephemeral": false,
+                            "scalar_type": 2
+                          }
+                        ],
+                        "names": [
+                          "x"
+                        ]
+                      },
+                      "name": "xObj"
+                    },
+                    "name": "x"
+                  },
+                  "operator": "<=",
+                  "rhs": {
+                    "_type": "IntegerConstant",
+                    "source_location": {
+                      "file": "tests/approvals/match-expr.algo.ts",
+                      "line": 13,
+                      "end_line": 13,
                       "column": 42,
                       "end_column": 43
                     },
@@ -867,8 +1070,8 @@
               "_type": "AssignmentStatement",
               "source_location": {
                 "file": "tests/approvals/match-expr.algo.ts",
-                "line": 14,
-                "end_line": 14,
+                "line": 15,
+                "end_line": 15,
                 "column": 10,
                 "end_column": 22
               },
@@ -876,8 +1079,8 @@
                 "_type": "VarExpression",
                 "source_location": {
                   "file": "tests/approvals/match-expr.algo.ts",
-                  "line": 14,
-                  "end_line": 14,
+                  "line": 15,
+                  "end_line": 15,
                   "column": 10,
                   "end_column": 16
                 },
@@ -902,8 +1105,8 @@
                 "_type": "NewArray",
                 "source_location": {
                   "file": "tests/approvals/match-expr.algo.ts",
-                  "line": 14,
-                  "end_line": 14,
+                  "line": 15,
+                  "end_line": 15,
                   "column": 20,
                   "end_column": 21
                 },
@@ -927,8 +1130,8 @@
                     "_type": "VarExpression",
                     "source_location": {
                       "file": "tests/approvals/match-expr.algo.ts",
-                      "line": 14,
-                      "end_line": 14,
+                      "line": 15,
+                      "end_line": 15,
                       "column": 20,
                       "end_column": 21
                     },
@@ -948,8 +1151,8 @@
               "_type": "ExpressionStatement",
               "source_location": {
                 "file": "tests/approvals/match-expr.algo.ts",
-                "line": 16,
-                "end_line": 16,
+                "line": 17,
+                "end_line": 17,
                 "column": 4,
                 "end_column": 30
               },
@@ -957,8 +1160,8 @@
                 "_type": "AssertExpression",
                 "source_location": {
                   "file": "tests/approvals/match-expr.algo.ts",
-                  "line": 16,
-                  "end_line": 16,
+                  "line": 17,
+                  "end_line": 17,
                   "column": 4,
                   "end_column": 30
                 },
@@ -973,8 +1176,8 @@
                   "_type": "BooleanBinaryOperation",
                   "source_location": {
                     "file": "tests/approvals/match-expr.algo.ts",
-                    "line": 16,
-                    "end_line": 16,
+                    "line": 17,
+                    "end_line": 17,
                     "column": 11,
                     "end_column": 29
                   },
@@ -989,8 +1192,8 @@
                     "_type": "NumericComparisonExpression",
                     "source_location": {
                       "file": "tests/approvals/match-expr.algo.ts",
-                      "line": 16,
-                      "end_line": 16,
+                      "line": 17,
+                      "end_line": 17,
                       "column": 11,
                       "end_column": 29
                     },
@@ -1005,8 +1208,8 @@
                       "_type": "ArrayLength",
                       "source_location": {
                         "file": "tests/approvals/match-expr.algo.ts",
-                        "line": 16,
-                        "end_line": 16,
+                        "line": 17,
+                        "end_line": 17,
                         "column": 11,
                         "end_column": 29
                       },
@@ -1021,8 +1224,8 @@
                         "_type": "VarExpression",
                         "source_location": {
                           "file": "tests/approvals/match-expr.algo.ts",
-                          "line": 16,
-                          "end_line": 16,
+                          "line": 17,
+                          "end_line": 17,
                           "column": 17,
                           "end_column": 23
                         },
@@ -1049,8 +1252,8 @@
                       "_type": "IntegerConstant",
                       "source_location": {
                         "file": "tests/approvals/match-expr.algo.ts",
-                        "line": 16,
-                        "end_line": 16,
+                        "line": 17,
+                        "end_line": 17,
                         "column": 11,
                         "end_column": 29
                       },
@@ -1070,8 +1273,8 @@
                     "_type": "NumericComparisonExpression",
                     "source_location": {
                       "file": "tests/approvals/match-expr.algo.ts",
-                      "line": 16,
-                      "end_line": 16,
+                      "line": 17,
+                      "end_line": 17,
                       "column": 11,
                       "end_column": 29
                     },
@@ -1086,8 +1289,8 @@
                       "_type": "IndexExpression",
                       "source_location": {
                         "file": "tests/approvals/match-expr.algo.ts",
-                        "line": 16,
-                        "end_line": 16,
+                        "line": 17,
+                        "end_line": 17,
                         "column": 11,
                         "end_column": 29
                       },
@@ -1102,8 +1305,8 @@
                         "_type": "VarExpression",
                         "source_location": {
                           "file": "tests/approvals/match-expr.algo.ts",
-                          "line": 16,
-                          "end_line": 16,
+                          "line": 17,
+                          "end_line": 17,
                           "column": 17,
                           "end_column": 23
                         },
@@ -1128,8 +1331,8 @@
                         "_type": "IntegerConstant",
                         "source_location": {
                           "file": "tests/approvals/match-expr.algo.ts",
-                          "line": 16,
-                          "end_line": 16,
+                          "line": 17,
+                          "end_line": 17,
                           "column": 11,
                           "end_column": 29
                         },
@@ -1149,8 +1352,8 @@
                       "_type": "IntegerConstant",
                       "source_location": {
                         "file": "tests/approvals/match-expr.algo.ts",
-                        "line": 16,
-                        "end_line": 16,
+                        "line": 17,
+                        "end_line": 17,
                         "column": 26,
                         "end_column": 27
                       },
@@ -1173,8 +1376,8 @@
               "_type": "ExpressionStatement",
               "source_location": {
                 "file": "tests/approvals/match-expr.algo.ts",
-                "line": 17,
-                "end_line": 17,
+                "line": 18,
+                "end_line": 18,
                 "column": 4,
                 "end_column": 47
               },
@@ -1182,8 +1385,8 @@
                 "_type": "AssertExpression",
                 "source_location": {
                   "file": "tests/approvals/match-expr.algo.ts",
-                  "line": 17,
-                  "end_line": 17,
+                  "line": 18,
+                  "end_line": 18,
                   "column": 4,
                   "end_column": 47
                 },
@@ -1198,8 +1401,8 @@
                   "_type": "BooleanBinaryOperation",
                   "source_location": {
                     "file": "tests/approvals/match-expr.algo.ts",
-                    "line": 17,
-                    "end_line": 17,
+                    "line": 18,
+                    "end_line": 18,
                     "column": 11,
                     "end_column": 46
                   },
@@ -1214,8 +1417,8 @@
                     "_type": "NumericComparisonExpression",
                     "source_location": {
                       "file": "tests/approvals/match-expr.algo.ts",
-                      "line": 17,
-                      "end_line": 17,
+                      "line": 18,
+                      "end_line": 18,
                       "column": 11,
                       "end_column": 46
                     },
@@ -1230,8 +1433,8 @@
                       "_type": "ArrayLength",
                       "source_location": {
                         "file": "tests/approvals/match-expr.algo.ts",
-                        "line": 17,
-                        "end_line": 17,
+                        "line": 18,
+                        "end_line": 18,
                         "column": 11,
                         "end_column": 46
                       },
@@ -1246,8 +1449,8 @@
                         "_type": "VarExpression",
                         "source_location": {
                           "file": "tests/approvals/match-expr.algo.ts",
-                          "line": 17,
-                          "end_line": 17,
+                          "line": 18,
+                          "end_line": 18,
                           "column": 17,
                           "end_column": 23
                         },
@@ -1274,8 +1477,8 @@
                       "_type": "IntegerConstant",
                       "source_location": {
                         "file": "tests/approvals/match-expr.algo.ts",
-                        "line": 17,
-                        "end_line": 17,
+                        "line": 18,
+                        "end_line": 18,
                         "column": 11,
                         "end_column": 46
                       },
@@ -1295,8 +1498,8 @@
                     "_type": "NumericComparisonExpression",
                     "source_location": {
                       "file": "tests/approvals/match-expr.algo.ts",
-                      "line": 17,
-                      "end_line": 17,
+                      "line": 18,
+                      "end_line": 18,
                       "column": 11,
                       "end_column": 46
                     },
@@ -1311,8 +1514,8 @@
                       "_type": "IndexExpression",
                       "source_location": {
                         "file": "tests/approvals/match-expr.algo.ts",
-                        "line": 17,
-                        "end_line": 17,
+                        "line": 18,
+                        "end_line": 18,
                         "column": 11,
                         "end_column": 46
                       },
@@ -1327,8 +1530,8 @@
                         "_type": "VarExpression",
                         "source_location": {
                           "file": "tests/approvals/match-expr.algo.ts",
-                          "line": 17,
-                          "end_line": 17,
+                          "line": 18,
+                          "end_line": 18,
                           "column": 17,
                           "end_column": 23
                         },
@@ -1353,8 +1556,8 @@
                         "_type": "IntegerConstant",
                         "source_location": {
                           "file": "tests/approvals/match-expr.algo.ts",
-                          "line": 17,
-                          "end_line": 17,
+                          "line": 18,
+                          "end_line": 18,
                           "column": 11,
                           "end_column": 46
                         },
@@ -1374,8 +1577,8 @@
                       "_type": "IntegerConstant",
                       "source_location": {
                         "file": "tests/approvals/match-expr.algo.ts",
-                        "line": 17,
-                        "end_line": 17,
+                        "line": 18,
+                        "end_line": 18,
                         "column": 41,
                         "end_column": 42
                       },
@@ -1398,8 +1601,8 @@
               "_type": "ExpressionStatement",
               "source_location": {
                 "file": "tests/approvals/match-expr.algo.ts",
-                "line": 18,
-                "end_line": 18,
+                "line": 19,
+                "end_line": 19,
                 "column": 4,
                 "end_column": 44
               },
@@ -1407,8 +1610,8 @@
                 "_type": "AssertExpression",
                 "source_location": {
                   "file": "tests/approvals/match-expr.algo.ts",
-                  "line": 18,
-                  "end_line": 18,
+                  "line": 19,
+                  "end_line": 19,
                   "column": 4,
                   "end_column": 44
                 },
@@ -1423,8 +1626,8 @@
                   "_type": "BooleanBinaryOperation",
                   "source_location": {
                     "file": "tests/approvals/match-expr.algo.ts",
-                    "line": 18,
-                    "end_line": 18,
+                    "line": 19,
+                    "end_line": 19,
                     "column": 11,
                     "end_column": 43
                   },
@@ -1439,8 +1642,8 @@
                     "_type": "NumericComparisonExpression",
                     "source_location": {
                       "file": "tests/approvals/match-expr.algo.ts",
-                      "line": 18,
-                      "end_line": 18,
+                      "line": 19,
+                      "end_line": 19,
                       "column": 11,
                       "end_column": 43
                     },
@@ -1455,8 +1658,8 @@
                       "_type": "ArrayLength",
                       "source_location": {
                         "file": "tests/approvals/match-expr.algo.ts",
-                        "line": 18,
-                        "end_line": 18,
+                        "line": 19,
+                        "end_line": 19,
                         "column": 11,
                         "end_column": 43
                       },
@@ -1471,8 +1674,8 @@
                         "_type": "VarExpression",
                         "source_location": {
                           "file": "tests/approvals/match-expr.algo.ts",
-                          "line": 18,
-                          "end_line": 18,
+                          "line": 19,
+                          "end_line": 19,
                           "column": 17,
                           "end_column": 23
                         },
@@ -1499,8 +1702,8 @@
                       "_type": "IntegerConstant",
                       "source_location": {
                         "file": "tests/approvals/match-expr.algo.ts",
-                        "line": 18,
-                        "end_line": 18,
+                        "line": 19,
+                        "end_line": 19,
                         "column": 11,
                         "end_column": 43
                       },
@@ -1520,8 +1723,8 @@
                     "_type": "NumericComparisonExpression",
                     "source_location": {
                       "file": "tests/approvals/match-expr.algo.ts",
-                      "line": 18,
-                      "end_line": 18,
+                      "line": 19,
+                      "end_line": 19,
                       "column": 11,
                       "end_column": 43
                     },
@@ -1536,8 +1739,8 @@
                       "_type": "IndexExpression",
                       "source_location": {
                         "file": "tests/approvals/match-expr.algo.ts",
-                        "line": 18,
-                        "end_line": 18,
+                        "line": 19,
+                        "end_line": 19,
                         "column": 11,
                         "end_column": 43
                       },
@@ -1552,8 +1755,8 @@
                         "_type": "VarExpression",
                         "source_location": {
                           "file": "tests/approvals/match-expr.algo.ts",
-                          "line": 18,
-                          "end_line": 18,
+                          "line": 19,
+                          "end_line": 19,
                           "column": 17,
                           "end_column": 23
                         },
@@ -1578,8 +1781,8 @@
                         "_type": "IntegerConstant",
                         "source_location": {
                           "file": "tests/approvals/match-expr.algo.ts",
-                          "line": 18,
-                          "end_line": 18,
+                          "line": 19,
+                          "end_line": 19,
                           "column": 11,
                           "end_column": 43
                         },
@@ -1599,8 +1802,8 @@
                       "_type": "IntegerConstant",
                       "source_location": {
                         "file": "tests/approvals/match-expr.algo.ts",
-                        "line": 18,
-                        "end_line": 18,
+                        "line": 19,
+                        "end_line": 19,
                         "column": 38,
                         "end_column": 39
                       },
@@ -1623,8 +1826,8 @@
               "_type": "ExpressionStatement",
               "source_location": {
                 "file": "tests/approvals/match-expr.algo.ts",
-                "line": 19,
-                "end_line": 19,
+                "line": 20,
+                "end_line": 20,
                 "column": 4,
                 "end_column": 49
               },
@@ -1632,8 +1835,8 @@
                 "_type": "AssertExpression",
                 "source_location": {
                   "file": "tests/approvals/match-expr.algo.ts",
-                  "line": 19,
-                  "end_line": 19,
+                  "line": 20,
+                  "end_line": 20,
                   "column": 4,
                   "end_column": 49
                 },
@@ -1648,8 +1851,8 @@
                   "_type": "BooleanBinaryOperation",
                   "source_location": {
                     "file": "tests/approvals/match-expr.algo.ts",
-                    "line": 19,
-                    "end_line": 19,
+                    "line": 20,
+                    "end_line": 20,
                     "column": 11,
                     "end_column": 48
                   },
@@ -1664,8 +1867,8 @@
                     "_type": "NumericComparisonExpression",
                     "source_location": {
                       "file": "tests/approvals/match-expr.algo.ts",
-                      "line": 19,
-                      "end_line": 19,
+                      "line": 20,
+                      "end_line": 20,
                       "column": 11,
                       "end_column": 48
                     },
@@ -1680,8 +1883,8 @@
                       "_type": "ArrayLength",
                       "source_location": {
                         "file": "tests/approvals/match-expr.algo.ts",
-                        "line": 19,
-                        "end_line": 19,
+                        "line": 20,
+                        "end_line": 20,
                         "column": 11,
                         "end_column": 48
                       },
@@ -1696,8 +1899,8 @@
                         "_type": "VarExpression",
                         "source_location": {
                           "file": "tests/approvals/match-expr.algo.ts",
-                          "line": 19,
-                          "end_line": 19,
+                          "line": 20,
+                          "end_line": 20,
                           "column": 17,
                           "end_column": 23
                         },
@@ -1724,8 +1927,8 @@
                       "_type": "IntegerConstant",
                       "source_location": {
                         "file": "tests/approvals/match-expr.algo.ts",
-                        "line": 19,
-                        "end_line": 19,
+                        "line": 20,
+                        "end_line": 20,
                         "column": 11,
                         "end_column": 48
                       },
@@ -1745,8 +1948,8 @@
                     "_type": "NumericComparisonExpression",
                     "source_location": {
                       "file": "tests/approvals/match-expr.algo.ts",
-                      "line": 19,
-                      "end_line": 19,
+                      "line": 20,
+                      "end_line": 20,
                       "column": 11,
                       "end_column": 48
                     },
@@ -1761,8 +1964,8 @@
                       "_type": "IndexExpression",
                       "source_location": {
                         "file": "tests/approvals/match-expr.algo.ts",
-                        "line": 19,
-                        "end_line": 19,
+                        "line": 20,
+                        "end_line": 20,
                         "column": 11,
                         "end_column": 48
                       },
@@ -1777,8 +1980,8 @@
                         "_type": "VarExpression",
                         "source_location": {
                           "file": "tests/approvals/match-expr.algo.ts",
-                          "line": 19,
-                          "end_line": 19,
+                          "line": 20,
+                          "end_line": 20,
                           "column": 17,
                           "end_column": 23
                         },
@@ -1803,8 +2006,8 @@
                         "_type": "IntegerConstant",
                         "source_location": {
                           "file": "tests/approvals/match-expr.algo.ts",
-                          "line": 19,
-                          "end_line": 19,
+                          "line": 20,
+                          "end_line": 20,
                           "column": 11,
                           "end_column": 48
                         },
@@ -1824,8 +2027,8 @@
                       "_type": "IntegerConstant",
                       "source_location": {
                         "file": "tests/approvals/match-expr.algo.ts",
-                        "line": 19,
-                        "end_line": 19,
+                        "line": 20,
+                        "end_line": 20,
                         "column": 43,
                         "end_column": 44
                       },
@@ -1848,8 +2051,8 @@
               "_type": "ExpressionStatement",
               "source_location": {
                 "file": "tests/approvals/match-expr.algo.ts",
-                "line": 20,
-                "end_line": 20,
+                "line": 21,
+                "end_line": 21,
                 "column": 4,
                 "end_column": 46
               },
@@ -1857,8 +2060,8 @@
                 "_type": "AssertExpression",
                 "source_location": {
                   "file": "tests/approvals/match-expr.algo.ts",
-                  "line": 20,
-                  "end_line": 20,
+                  "line": 21,
+                  "end_line": 21,
                   "column": 4,
                   "end_column": 46
                 },
@@ -1873,8 +2076,8 @@
                   "_type": "BooleanBinaryOperation",
                   "source_location": {
                     "file": "tests/approvals/match-expr.algo.ts",
-                    "line": 20,
-                    "end_line": 20,
+                    "line": 21,
+                    "end_line": 21,
                     "column": 11,
                     "end_column": 45
                   },
@@ -1889,8 +2092,8 @@
                     "_type": "NumericComparisonExpression",
                     "source_location": {
                       "file": "tests/approvals/match-expr.algo.ts",
-                      "line": 20,
-                      "end_line": 20,
+                      "line": 21,
+                      "end_line": 21,
                       "column": 11,
                       "end_column": 45
                     },
@@ -1905,8 +2108,8 @@
                       "_type": "ArrayLength",
                       "source_location": {
                         "file": "tests/approvals/match-expr.algo.ts",
-                        "line": 20,
-                        "end_line": 20,
+                        "line": 21,
+                        "end_line": 21,
                         "column": 11,
                         "end_column": 45
                       },
@@ -1921,8 +2124,8 @@
                         "_type": "VarExpression",
                         "source_location": {
                           "file": "tests/approvals/match-expr.algo.ts",
-                          "line": 20,
-                          "end_line": 20,
+                          "line": 21,
+                          "end_line": 21,
                           "column": 17,
                           "end_column": 23
                         },
@@ -1949,8 +2152,8 @@
                       "_type": "IntegerConstant",
                       "source_location": {
                         "file": "tests/approvals/match-expr.algo.ts",
-                        "line": 20,
-                        "end_line": 20,
+                        "line": 21,
+                        "end_line": 21,
                         "column": 11,
                         "end_column": 45
                       },
@@ -1970,8 +2173,8 @@
                     "_type": "NumericComparisonExpression",
                     "source_location": {
                       "file": "tests/approvals/match-expr.algo.ts",
-                      "line": 20,
-                      "end_line": 20,
+                      "line": 21,
+                      "end_line": 21,
                       "column": 11,
                       "end_column": 45
                     },
@@ -1986,8 +2189,8 @@
                       "_type": "IndexExpression",
                       "source_location": {
                         "file": "tests/approvals/match-expr.algo.ts",
-                        "line": 20,
-                        "end_line": 20,
+                        "line": 21,
+                        "end_line": 21,
                         "column": 11,
                         "end_column": 45
                       },
@@ -2002,8 +2205,8 @@
                         "_type": "VarExpression",
                         "source_location": {
                           "file": "tests/approvals/match-expr.algo.ts",
-                          "line": 20,
-                          "end_line": 20,
+                          "line": 21,
+                          "end_line": 21,
                           "column": 17,
                           "end_column": 23
                         },
@@ -2028,8 +2231,8 @@
                         "_type": "IntegerConstant",
                         "source_location": {
                           "file": "tests/approvals/match-expr.algo.ts",
-                          "line": 20,
-                          "end_line": 20,
+                          "line": 21,
+                          "end_line": 21,
                           "column": 11,
                           "end_column": 45
                         },
@@ -2049,8 +2252,8 @@
                       "_type": "IntegerConstant",
                       "source_location": {
                         "file": "tests/approvals/match-expr.algo.ts",
-                        "line": 20,
-                        "end_line": 20,
+                        "line": 21,
+                        "end_line": 21,
                         "column": 40,
                         "end_column": 41
                       },

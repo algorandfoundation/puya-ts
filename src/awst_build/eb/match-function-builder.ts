@@ -117,6 +117,7 @@ function getComparisonOpAndOperand(testProperty: InstanceBuilder, targetType: PT
     lessThanEq: BuilderComparisonOp.lte,
     greaterThan: BuilderComparisonOp.gt,
     greaterThanEq: BuilderComparisonOp.gte,
+    not: BuilderComparisonOp.ne,
   }
   for (const [prop, op] of Object.entries(ops)) {
     if (testProperty.hasProperty(prop)) {
