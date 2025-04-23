@@ -251,8 +251,9 @@ export class Arc4EncodedLengthFunctionBuilder extends FunctionBuilder {
     )
 
     return instanceEb(
-      nodeFactory.uInt64Constant({
-        value: arc4Type.fixedByteSize,
+      nodeFactory.sizeOf({
+        sizeWtype: arc4Type.wtypeOrThrow,
+        wtype: uint64PType.wtype,
         sourceLocation,
       }),
       uint64PType,

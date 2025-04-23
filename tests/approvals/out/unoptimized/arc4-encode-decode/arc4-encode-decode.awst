@@ -32,13 +32,13 @@ contract Arc4EncodeDecode
     assert(reinterpret_cast<bytes>(ARC4_ENCODE(new stack_array<bytes>(d), wtype=arc4.dynamic_array<arc4.dynamic_array<arc4.byte>>)) == reinterpret_cast<bytes>(new arc4.dynamic_array<arc4.dynamic_array<arc4.byte>>(ARC4_ENCODE(d, wtype=arc4.dynamic_array<arc4.byte>))))
     assert(reinterpret_cast<bytes>(ARC4_ENCODE(new stack_array<string>(e), wtype=arc4.dynamic_array<arc4.dynamic_array<arc4.byte>>)) == reinterpret_cast<bytes>(new arc4.dynamic_array<arc4.dynamic_array<arc4.byte>>(ARC4_ENCODE(e, wtype=arc4.dynamic_array<arc4.byte>))))
     assert(reinterpret_cast<bytes>(ARC4_ENCODE(new stack_array<arc4.static_array<arc4.byte>>(f), wtype=arc4.dynamic_array<arc4.static_array<arc4.byte>>)) == reinterpret_cast<bytes>(new arc4.dynamic_array<arc4.static_array<arc4.byte>>(f)))
-    assert(8 == 8)
-    assert(1 == 1)
-    assert(64 == 64)
-    assert(17 == 17)
-    assert(17 == 17)
-    assert(3 == 3)
-    assert(3 == 3)
+    assert(SIZE_OF(arc4.uint64) == 8)
+    assert(SIZE_OF(arc4.bool) == 1)
+    assert(SIZE_OF(arc4.uint512) == 64)
+    assert(SIZE_OF(arc4.tuple<uint64,uint64,bool>) == 17)
+    assert(SIZE_OF(arc4.tuple<uint64,uint64,bool,bool>) == 17)
+    assert(SIZE_OF(arc4.tuple<bool[10],bool,bool>) == 3)
+    assert(SIZE_OF(arc4.tuple<(bool,bool,bool,bool,bool,bool,bool,bool,bool,bool),bool,bool>) == 3)
   }
   
   testDecoding(a: uint64, a_bytes: bytes, b: bool, b_bytes: bytes, c: biguint, c_bytes: bytes, d: string, d_bytes: bytes, e: TestObj{ a: arc4.uint64, b: arc4.dynamic_array<arc4.byte> }, e_bytes: bytes, f: arc4.static_array<arc4.byte>, f_bytes: bytes): void

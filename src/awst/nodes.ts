@@ -1644,6 +1644,7 @@ export interface ExpressionVisitor<T> {
   visitStateExists(expression: StateExists): T
   visitStateDelete(expression: StateDelete): T
   visitNewStruct(expression: NewStruct): T
+  visitSizeOf(expression: SizeOf): T
   visitCompiledContract(expression: CompiledContract): T
   visitCompiledLogicSig(expression: CompiledLogicSig): T
   visitARC4Router(expression: ARC4Router): T
