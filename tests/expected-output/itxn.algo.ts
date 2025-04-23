@@ -15,7 +15,7 @@ class ItxnAlgo extends Contract {
             amount: Global.assetOptInMinBalance,
             fee: 0,
           }),
-          // @expect-error String value must be explicitly converted to `bytes` or `arc4.Str` using `Bytes(value)` `new arc4.Str(value)`
+          // @expect-error String value must be explicitly converted to `bytes` or `arc4.Str` using `Bytes(value)` or `new arc4.Str(value)`
           'abc',
         ],
         fee: 0,

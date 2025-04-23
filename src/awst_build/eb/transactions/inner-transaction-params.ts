@@ -88,7 +88,7 @@ export function mapTransactionFields(
               if (i.ptype.equals(stringPType)) {
                 logger.error(
                   i.sourceLocation,
-                  'String value must be explicitly converted to `bytes` or `arc4.Str` using `Bytes(value)` `new arc4.Str(value)`',
+                  'String value must be explicitly converted to `bytes` or `arc4.Str` using `Bytes(value)` or `new arc4.Str(value)`',
                 )
               }
               return i.toBytes(i.sourceLocation)
