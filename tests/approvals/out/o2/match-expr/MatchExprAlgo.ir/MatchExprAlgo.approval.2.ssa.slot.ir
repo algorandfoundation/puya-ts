@@ -15,86 +15,92 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let x#0: uint64 = (btoi reinterpret_bytes[8]%0#0)
         let tmp%0#2: bool = (== x#0 5u)
         (assert tmp%0#2) // x should be 5
-        let tmp%1#1: bool = (> x#0 4u)
-        (assert tmp%1#1)
-        let tmp%2#1: bool = (< x#0 6u)
-        (assert tmp%2#1)
-        let tmp%3#1: bool = (>= x#0 5u)
-        (assert tmp%3#1)
-        let tmp%4#1: bool = (<= x#0 5u)
-        (assert tmp%4#1)
+        let tmp%1#1: bool = (!= x#0 3u)
+        (assert tmp%1#1) // x should not be 3
+        let tmp%2#1: bytes[32] = (txn Sender)
+        let tmp%3#1: bytes[32] = (global ZeroAddress)
+        let tmp%4#1: bool = (!= tmp%2#1 tmp%3#1)
+        (assert tmp%4#1) // assert target is match for conditions
+        let tmp%5#1: bool = (> x#0 4u)
+        (assert tmp%5#1)
+        let tmp%6#1: bool = (< x#0 6u)
+        (assert tmp%6#1)
+        let tmp%7#1: bool = (>= x#0 5u)
+        (assert tmp%7#1)
+        let tmp%8#1: bool = (<= x#0 5u)
+        (assert tmp%8#1)
         let array%sub_item%0#1: bytes[8] = (itob x#0)
         let xArray#0: encoded_uint64[] = (concat 0x0001 array%sub_item%0#1)
-        let tmp%5#1: uint64 = (extract_uint16 xArray#0 0u)
-        let tmp%6#1: bool = (== tmp%5#1 1u)
-        goto tmp%6#1 ? block@15 : block@17
-    block@15: // and_contd_L16
-        let tmp%7#1: uint64 = (extract_uint64 xArray#0 2u)
-        let tmp%8#1: bool = (== tmp%7#1 5u)
-        goto tmp%8#1 ? block@16 : block@17
-    block@16: // bool_true_L16
+        let tmp%9#1: uint64 = (extract_uint16 xArray#0 0u)
+        let tmp%10#1: bool = (== tmp%9#1 1u)
+        goto tmp%10#1 ? block@15 : block@17
+    block@15: // and_contd_L17
+        let tmp%11#0: uint64 = (extract_uint64 xArray#0 2u)
+        let tmp%12#0: bool = (== tmp%11#0 5u)
+        goto tmp%12#0 ? block@16 : block@17
+    block@16: // bool_true_L17
         let and_result%0#0: bool = 1u
         goto block@18
-    block@17: // bool_false_L16
+    block@17: // bool_false_L17
         let and_result%0#1: bool = 0u
         goto block@18
-    block@18: // bool_merge_L16
+    block@18: // bool_merge_L17
         let and_result%0#2: bool = φ(and_result%0#0 <- block@16, and_result%0#1 <- block@17)
         (assert and_result%0#2)
-        goto tmp%6#1 ? block@19 : block@21
-    block@19: // and_contd_L17
-        let tmp%11#0: uint64 = (extract_uint64 xArray#0 2u)
-        let tmp%12#0: bool = (> tmp%11#0 4u)
-        goto tmp%12#0 ? block@20 : block@21
-    block@20: // bool_true_L17
+        goto tmp%10#1 ? block@19 : block@21
+    block@19: // and_contd_L18
+        let tmp%15#0: uint64 = (extract_uint64 xArray#0 2u)
+        let tmp%16#0: bool = (> tmp%15#0 4u)
+        goto tmp%16#0 ? block@20 : block@21
+    block@20: // bool_true_L18
         let and_result%1#0: bool = 1u
         goto block@22
-    block@21: // bool_false_L17
+    block@21: // bool_false_L18
         let and_result%1#1: bool = 0u
         goto block@22
-    block@22: // bool_merge_L17
+    block@22: // bool_merge_L18
         let and_result%1#2: bool = φ(and_result%1#0 <- block@20, and_result%1#1 <- block@21)
         (assert and_result%1#2)
-        goto tmp%6#1 ? block@23 : block@25
-    block@23: // and_contd_L18
-        let tmp%15#0: uint64 = (extract_uint64 xArray#0 2u)
-        let tmp%16#0: bool = (< tmp%15#0 6u)
-        goto tmp%16#0 ? block@24 : block@25
-    block@24: // bool_true_L18
+        goto tmp%10#1 ? block@23 : block@25
+    block@23: // and_contd_L19
+        let tmp%19#0: uint64 = (extract_uint64 xArray#0 2u)
+        let tmp%20#0: bool = (< tmp%19#0 6u)
+        goto tmp%20#0 ? block@24 : block@25
+    block@24: // bool_true_L19
         let and_result%2#0: bool = 1u
         goto block@26
-    block@25: // bool_false_L18
+    block@25: // bool_false_L19
         let and_result%2#1: bool = 0u
         goto block@26
-    block@26: // bool_merge_L18
+    block@26: // bool_merge_L19
         let and_result%2#2: bool = φ(and_result%2#0 <- block@24, and_result%2#1 <- block@25)
         (assert and_result%2#2)
-        goto tmp%6#1 ? block@27 : block@29
-    block@27: // and_contd_L19
-        let tmp%19#0: uint64 = (extract_uint64 xArray#0 2u)
-        let tmp%20#0: bool = (>= tmp%19#0 5u)
-        goto tmp%20#0 ? block@28 : block@29
-    block@28: // bool_true_L19
+        goto tmp%10#1 ? block@27 : block@29
+    block@27: // and_contd_L20
+        let tmp%23#0: uint64 = (extract_uint64 xArray#0 2u)
+        let tmp%24#0: bool = (>= tmp%23#0 5u)
+        goto tmp%24#0 ? block@28 : block@29
+    block@28: // bool_true_L20
         let and_result%3#0: bool = 1u
         goto block@30
-    block@29: // bool_false_L19
+    block@29: // bool_false_L20
         let and_result%3#1: bool = 0u
         goto block@30
-    block@30: // bool_merge_L19
+    block@30: // bool_merge_L20
         let and_result%3#2: bool = φ(and_result%3#0 <- block@28, and_result%3#1 <- block@29)
         (assert and_result%3#2)
-        goto tmp%6#1 ? block@31 : block@33
-    block@31: // and_contd_L20
-        let tmp%23#0: uint64 = (extract_uint64 xArray#0 2u)
-        let tmp%24#0: bool = (<= tmp%23#0 5u)
-        goto tmp%24#0 ? block@32 : block@33
-    block@32: // bool_true_L20
+        goto tmp%10#1 ? block@31 : block@33
+    block@31: // and_contd_L21
+        let tmp%27#0: uint64 = (extract_uint64 xArray#0 2u)
+        let tmp%28#0: bool = (<= tmp%27#0 5u)
+        goto tmp%28#0 ? block@32 : block@33
+    block@32: // bool_true_L21
         let and_result%4#0: bool = 1u
         goto block@34
-    block@33: // bool_false_L20
+    block@33: // bool_false_L21
         let and_result%4#1: bool = 0u
         goto block@34
-    block@34: // bool_merge_L20
+    block@34: // bool_merge_L21
         let and_result%4#2: bool = φ(and_result%4#0 <- block@32, and_result%4#1 <- block@33)
         (assert and_result%4#2)
         let tests/approvals/match-expr.algo.ts::MatchExprAlgo.__puya_arc4_router__%0#0: bool = 1u
