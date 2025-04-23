@@ -3,8 +3,8 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 6 5 3 1000
-    bytecblock 0x098101 0x09361a00b08101 "name" "1" "unit" "2" "AST1" "AST2" "AST3" "3" "4" "5" "3rd" "with args param set" "42" "10" "11" "12" "13" "14" "15" "16"
+    intcblock 0 6 5 1 1000
+    bytecblock 0x098101 0x09361a00b08101 "name" "1" "unit" "2" "AST1" "AST2" "AST3" "3" "5" "3rd" "with args param set" "42" "10" "11" "12" "13" "14" "15" "16"
 
 main_block@0:
     txn ApplicationID
@@ -16,38 +16,61 @@ main_if_body@1:
 main_after_if_else@2:
 
 main_block@3:
-    // tests/approvals/itxn.algo.ts:6
+    // tests/approvals/itxn.algo.ts:21
     // export class ItxnDemoContract extends Contract {
     txn NumAppArgs
     intc_0 // 0
     !=
-    bz main_bare_routing@11
+    bz main_bare_routing@12
 
 main_abi_routing@4:
-    // tests/approvals/itxn.algo.ts:6
+    // tests/approvals/itxn.algo.ts:21
     // export class ItxnDemoContract extends Contract {
     txna ApplicationArgs 0
     pushbytes 0x20254f91 // method "test1()void"
     pushbytes 0xf1908524 // method "test2()void"
     pushbytes 0xdf920f37 // method "test3()void"
     pushbytes 0x3d46345c // method "test4()void"
-    uncover 4
-    match main_test1_route@5 main_test2_route@6 main_test3_route@7 main_test4_route@8
+    pushbytes 0x06403c64 // method "test5(application)void"
+    uncover 5
+    match main_test1_route@5 main_test2_route@6 main_test3_route@7 main_test4_route@8 main_test5_route@9
 
-main_switch_case_default@9:
+main_switch_case_default@10:
 
-main_switch_case_next@10:
+main_switch_case_next@11:
 
-main_after_if_else@15:
-    // tests/approvals/itxn.algo.ts:6
+main_after_if_else@16:
+    // tests/approvals/itxn.algo.ts:21
     // export class ItxnDemoContract extends Contract {
     intc_0 // 0
 
-main_after_inlined_tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__@16:
+main_after_inlined_tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__@17:
     return
 
+main_test5_route@9:
+    // tests/approvals/itxn.algo.ts:208
+    // public test5(appId: Application) {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    // tests/approvals/itxn.algo.ts:21
+    // export class ItxnDemoContract extends Contract {
+    txna ApplicationArgs 1
+    btoi
+    txnas Applications
+    // tests/approvals/itxn.algo.ts:208
+    // public test5(appId: Application) {
+    callsub test5
+    intc_3 // 1
+    b main_after_inlined_tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__@17
+
 main_test4_route@8:
-    // tests/approvals/itxn.algo.ts:170
+    // tests/approvals/itxn.algo.ts:185
     // public test4() {
     txn OnCompletion
     intc_0 // NoOp
@@ -58,11 +81,11 @@ main_test4_route@8:
     !=
     assert // can only call when not creating
     callsub test4
-    pushint 1 // 1
-    b main_after_inlined_tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__@16
+    intc_3 // 1
+    b main_after_inlined_tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__@17
 
 main_test3_route@7:
-    // tests/approvals/itxn.algo.ts:94
+    // tests/approvals/itxn.algo.ts:109
     // public test3() {
     txn OnCompletion
     intc_0 // NoOp
@@ -73,11 +96,11 @@ main_test3_route@7:
     !=
     assert // can only call when not creating
     callsub test3
-    pushint 1 // 1
-    b main_after_inlined_tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__@16
+    intc_3 // 1
+    b main_after_inlined_tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__@17
 
 main_test2_route@6:
-    // tests/approvals/itxn.algo.ts:57
+    // tests/approvals/itxn.algo.ts:72
     // public test2() {
     txn OnCompletion
     intc_0 // NoOp
@@ -88,11 +111,11 @@ main_test2_route@6:
     !=
     assert // can only call when not creating
     callsub test2
-    pushint 1 // 1
-    b main_after_inlined_tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__@16
+    intc_3 // 1
+    b main_after_inlined_tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__@17
 
 main_test1_route@5:
-    // tests/approvals/itxn.algo.ts:9
+    // tests/approvals/itxn.algo.ts:24
     // public test1() {
     txn OnCompletion
     intc_0 // NoOp
@@ -103,91 +126,91 @@ main_test1_route@5:
     !=
     assert // can only call when not creating
     callsub test1
-    pushint 1 // 1
-    b main_after_inlined_tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__@16
+    intc_3 // 1
+    b main_after_inlined_tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__@17
 
-main_bare_routing@11:
-    // tests/approvals/itxn.algo.ts:6
+main_bare_routing@12:
+    // tests/approvals/itxn.algo.ts:21
     // export class ItxnDemoContract extends Contract {
     txn OnCompletion
     intc_0 // 0
     swap
-    match main___algots__.defaultCreate@12
+    match main___algots__.defaultCreate@13
 
-main_switch_case_default@13:
+main_switch_case_default@14:
 
-main_switch_case_next@14:
-    b main_after_if_else@15
+main_switch_case_next@15:
+    b main_after_if_else@16
 
-main___algots__.defaultCreate@12:
-    // tests/approvals/itxn.algo.ts:6
+main___algots__.defaultCreate@13:
+    // tests/approvals/itxn.algo.ts:21
     // export class ItxnDemoContract extends Contract {
     txn ApplicationID
     intc_0 // 0
     ==
     assert // can only call when creating
     callsub __algots__.defaultCreate
-    pushint 1 // 1
-    b main_after_inlined_tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__@16
+    intc_3 // 1
+    b main_after_inlined_tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__@17
 
 
 // tests/approvals/itxn.algo.ts::ItxnDemoContract.test1() -> void:
 test1:
-    // tests/approvals/itxn.algo.ts:9
+    // tests/approvals/itxn.algo.ts:24
     // public test1() {
     proto 0 0
     intc_0 // 0
 
 test1_block@0:
-    // tests/approvals/itxn.algo.ts:7
+    // tests/approvals/itxn.algo.ts:22
     // name = GlobalState({ initialValue: Bytes() })
     bytec_2 // "name"
-    // tests/approvals/itxn.algo.ts:10
+    // tests/approvals/itxn.algo.ts:25
     // this.name.value = Bytes('AST1')
     bytec 6 // "AST1"
     app_global_put
-    // tests/approvals/itxn.algo.ts:7
+    // tests/approvals/itxn.algo.ts:22
     // name = GlobalState({ initialValue: Bytes() })
     intc_0 // 0
     bytec_2 // "name"
     app_global_get_ex
     assert // check GlobalState exists
-    // tests/approvals/itxn.algo.ts:17
+    // tests/approvals/itxn.algo.ts:32
     // manager: Global.currentApplicationAddress,
     global CurrentApplicationAddress
     dup
     cover 2
-    // tests/approvals/itxn.algo.ts:18
+    // tests/approvals/itxn.algo.ts:33
     // reserve: Global.currentApplicationAddress,
     global CurrentApplicationAddress
     dup
     cover 3
-    // tests/approvals/itxn.algo.ts:7
+    // tests/approvals/itxn.algo.ts:22
     // name = GlobalState({ initialValue: Bytes() })
     bytec_2 // "name"
-    // tests/approvals/itxn.algo.ts:21
+    // tests/approvals/itxn.algo.ts:36
     // this.name.value = Bytes('AST2')
     bytec 7 // "AST2"
     app_global_put
-    // tests/approvals/itxn.algo.ts:22
+    // tests/approvals/itxn.algo.ts:37
     // const asset1_txn = assetParams.submit()
     itxn_begin
     itxn_field ConfigAssetReserve
     itxn_field ConfigAssetManager
-    // tests/approvals/itxn.algo.ts:16
+    // tests/approvals/itxn.algo.ts:31
     // decimals: 3,
-    intc_3 // 3
+    pushint 3 // 3
     itxn_field ConfigAssetDecimals
-    // tests/approvals/itxn.algo.ts:15
+    // tests/approvals/itxn.algo.ts:30
     // unitName: 'unit',
     bytec 4 // "unit"
     itxn_field ConfigAssetUnitName
     itxn_field ConfigAssetName
-    // tests/approvals/itxn.algo.ts:13
+    // tests/approvals/itxn.algo.ts:28
     // total: 1000,
     intc 4 // 1000
     itxn_field ConfigAssetTotal
-    // tests/approvals/itxn.algo.ts:12-19
+    // tests/approvals/itxn.algo.ts:27-34
     // const assetParams = itxn.assetConfig({
     //   total: 1000,
     //   assetName: this.name.value,
@@ -196,45 +219,45 @@ test1_block@0:
     //   manager: Global.currentApplicationAddress,
     //   reserve: Global.currentApplicationAddress,
     // })
-    intc_3 // 3
+    pushint 3 // 3
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
 
 test1_next_txn@1:
-    // tests/approvals/itxn.algo.ts:22
+    // tests/approvals/itxn.algo.ts:37
     // const asset1_txn = assetParams.submit()
     itxn_submit
     itxn ConfigAssetName
     frame_bury 0
     itxn CreatedAssetID
-    // tests/approvals/itxn.algo.ts:7
+    // tests/approvals/itxn.algo.ts:22
     // name = GlobalState({ initialValue: Bytes() })
     intc_0 // 0
     bytec_2 // "name"
     app_global_get_ex
     assert // check GlobalState exists
-    // tests/approvals/itxn.algo.ts:26
+    // tests/approvals/itxn.algo.ts:41
     // const asset2_txn = assetParams.submit()
     itxn_begin
     frame_dig 2
     itxn_field ConfigAssetReserve
     frame_dig 1
     itxn_field ConfigAssetManager
-    // tests/approvals/itxn.algo.ts:16
+    // tests/approvals/itxn.algo.ts:31
     // decimals: 3,
-    intc_3 // 3
+    pushint 3 // 3
     itxn_field ConfigAssetDecimals
-    // tests/approvals/itxn.algo.ts:15
+    // tests/approvals/itxn.algo.ts:30
     // unitName: 'unit',
     bytec 4 // "unit"
     itxn_field ConfigAssetUnitName
     itxn_field ConfigAssetName
-    // tests/approvals/itxn.algo.ts:13
+    // tests/approvals/itxn.algo.ts:28
     // total: 1000,
     intc 4 // 1000
     itxn_field ConfigAssetTotal
-    // tests/approvals/itxn.algo.ts:12-19
+    // tests/approvals/itxn.algo.ts:27-34
     // const assetParams = itxn.assetConfig({
     //   total: 1000,
     //   assetName: this.name.value,
@@ -243,30 +266,30 @@ test1_next_txn@1:
     //   manager: Global.currentApplicationAddress,
     //   reserve: Global.currentApplicationAddress,
     // })
-    intc_3 // 3
+    pushint 3 // 3
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
 
 test1_next_txn@2:
-    // tests/approvals/itxn.algo.ts:26
+    // tests/approvals/itxn.algo.ts:41
     // const asset2_txn = assetParams.submit()
     itxn_submit
     itxn ConfigAssetName
     itxn CreatedAssetID
     swap
-    // tests/approvals/itxn.algo.ts:28
+    // tests/approvals/itxn.algo.ts:43
     // assert(asset1_txn.assetName === Bytes('AST1'), 'asset1_txn is correct')
     frame_dig 0
     bytec 6 // "AST1"
     ==
     assert // asset1_txn is correct
-    // tests/approvals/itxn.algo.ts:29
+    // tests/approvals/itxn.algo.ts:44
     // assert(asset2_txn.assetName === Bytes('AST2'), 'asset2_txn is correct')
     bytec 7 // "AST2"
     ==
     assert // asset2_txn is correct
-    // tests/approvals/itxn.algo.ts:30
+    // tests/approvals/itxn.algo.ts:45
     // assert(asset1_txn.createdAsset.name === Bytes('AST1'), 'created asset 1 is correct')
     swap
     asset_params_get AssetName
@@ -274,23 +297,23 @@ test1_next_txn@2:
     bytec 6 // "AST1"
     ==
     assert // created asset 1 is correct
-    // tests/approvals/itxn.algo.ts:31
+    // tests/approvals/itxn.algo.ts:46
     // assert(asset2_txn.createdAsset.name === Bytes('AST2'), 'created asset 2 is correct')
     asset_params_get AssetName
     assert // asset exists
     bytec 7 // "AST2"
     ==
     assert // created asset 2 is correct
-    // tests/approvals/itxn.algo.ts:43
+    // tests/approvals/itxn.algo.ts:58
     // const [appCreateTxn, asset3_txn] = itxn.submitGroup(appCreateParams, assetParams)
     itxn_begin
-    // tests/approvals/itxn.algo.ts:4
+    // tests/approvals/itxn.algo.ts:19
     // const APPROVE = Bytes.fromHex('098101')
     bytec_0 // 0x098101
     itxn_field ClearStateProgramPages
     bytec_0 // 0x098101
     itxn_field ApprovalProgramPages
-    // tests/approvals/itxn.algo.ts:33-37
+    // tests/approvals/itxn.algo.ts:48-52
     // const appCreateParams = itxn.applicationCall({
     //   approvalProgram: APPROVE,
     //   clearStateProgram: APPROVE,
@@ -298,36 +321,36 @@ test1_next_txn@2:
     // })
     intc_1 // 6
     itxn_field TypeEnum
-    // tests/approvals/itxn.algo.ts:36
+    // tests/approvals/itxn.algo.ts:51
     // fee: 0,
     intc_0 // 0
     itxn_field Fee
 
 test1_next_txn@3:
-    // tests/approvals/itxn.algo.ts:43
+    // tests/approvals/itxn.algo.ts:58
     // const [appCreateTxn, asset3_txn] = itxn.submitGroup(appCreateParams, assetParams)
     itxn_next
     frame_dig 2
     itxn_field ConfigAssetReserve
     frame_dig 1
     itxn_field ConfigAssetManager
-    // tests/approvals/itxn.algo.ts:16
+    // tests/approvals/itxn.algo.ts:31
     // decimals: 3,
-    intc_3 // 3
+    pushint 3 // 3
     itxn_field ConfigAssetDecimals
-    // tests/approvals/itxn.algo.ts:15
+    // tests/approvals/itxn.algo.ts:30
     // unitName: 'unit',
     bytec 4 // "unit"
     itxn_field ConfigAssetUnitName
-    // tests/approvals/itxn.algo.ts:40
+    // tests/approvals/itxn.algo.ts:55
     // assetName: 'AST3',
     bytec 8 // "AST3"
     itxn_field ConfigAssetName
-    // tests/approvals/itxn.algo.ts:13
+    // tests/approvals/itxn.algo.ts:28
     // total: 1000,
     intc 4 // 1000
     itxn_field ConfigAssetTotal
-    // tests/approvals/itxn.algo.ts:12-19
+    // tests/approvals/itxn.algo.ts:27-34
     // const assetParams = itxn.assetConfig({
     //   total: 1000,
     //   assetName: this.name.value,
@@ -336,52 +359,52 @@ test1_next_txn@3:
     //   manager: Global.currentApplicationAddress,
     //   reserve: Global.currentApplicationAddress,
     // })
-    intc_3 // 3
+    pushint 3 // 3
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
 
 test1_next_txn@4:
-    // tests/approvals/itxn.algo.ts:43
+    // tests/approvals/itxn.algo.ts:58
     // const [appCreateTxn, asset3_txn] = itxn.submitGroup(appCreateParams, assetParams)
     itxn_submit
     gitxn 0 CreatedApplicationID
     itxn ConfigAssetName
     swap
-    // tests/approvals/itxn.algo.ts:45
+    // tests/approvals/itxn.algo.ts:60
     // assert(appCreateTxn.createdApp, 'app is created')
     assert // app is created
-    // tests/approvals/itxn.algo.ts:46
+    // tests/approvals/itxn.algo.ts:61
     // assert(asset3_txn.assetName === Bytes('AST3'), 'asset3_txn is correct')
     bytec 8 // "AST3"
     ==
     assert // asset3_txn is correct
-    // tests/approvals/itxn.algo.ts:54
+    // tests/approvals/itxn.algo.ts:69
     // itxn.submitGroup(appCreateParams, assetParams)
     itxn_begin
-    // tests/approvals/itxn.algo.ts:49
+    // tests/approvals/itxn.algo.ts:64
     // note: '3rd',
-    pushint 1 // 1
+    intc_3 // 1
     dup
     >=
-    // tests/approvals/itxn.algo.ts:54
+    // tests/approvals/itxn.algo.ts:69
     // itxn.submitGroup(appCreateParams, assetParams)
     bz test1_next_field@6
 
 test1_set_Note_0_to_0@5:
-    // tests/approvals/itxn.algo.ts:49
+    // tests/approvals/itxn.algo.ts:64
     // note: '3rd',
-    bytec 12 // "3rd"
+    bytec 11 // "3rd"
     itxn_field Note
 
 test1_next_field@6:
-    // tests/approvals/itxn.algo.ts:4
+    // tests/approvals/itxn.algo.ts:19
     // const APPROVE = Bytes.fromHex('098101')
     bytec_0 // 0x098101
     itxn_field ClearStateProgramPages
     bytec_0 // 0x098101
     itxn_field ApprovalProgramPages
-    // tests/approvals/itxn.algo.ts:33-37
+    // tests/approvals/itxn.algo.ts:48-52
     // const appCreateParams = itxn.applicationCall({
     //   approvalProgram: APPROVE,
     //   clearStateProgram: APPROVE,
@@ -389,28 +412,28 @@ test1_next_field@6:
     // })
     intc_1 // 6
     itxn_field TypeEnum
-    // tests/approvals/itxn.algo.ts:36
+    // tests/approvals/itxn.algo.ts:51
     // fee: 0,
     intc_0 // 0
     itxn_field Fee
 
 test1_next_txn@7:
-    // tests/approvals/itxn.algo.ts:54
+    // tests/approvals/itxn.algo.ts:69
     // itxn.submitGroup(appCreateParams, assetParams)
     itxn_next
-    // tests/approvals/itxn.algo.ts:52
+    // tests/approvals/itxn.algo.ts:67
     // note: '3rd',
-    pushint 1 // 1
+    intc_3 // 1
     dup
     >=
-    // tests/approvals/itxn.algo.ts:54
+    // tests/approvals/itxn.algo.ts:69
     // itxn.submitGroup(appCreateParams, assetParams)
     bz test1_next_field@9
 
 test1_set_Note_0_to_0@8:
-    // tests/approvals/itxn.algo.ts:52
+    // tests/approvals/itxn.algo.ts:67
     // note: '3rd',
-    bytec 12 // "3rd"
+    bytec 11 // "3rd"
     itxn_field Note
 
 test1_next_field@9:
@@ -418,23 +441,23 @@ test1_next_field@9:
     itxn_field ConfigAssetReserve
     frame_dig 1
     itxn_field ConfigAssetManager
-    // tests/approvals/itxn.algo.ts:16
+    // tests/approvals/itxn.algo.ts:31
     // decimals: 3,
-    intc_3 // 3
+    pushint 3 // 3
     itxn_field ConfigAssetDecimals
-    // tests/approvals/itxn.algo.ts:15
+    // tests/approvals/itxn.algo.ts:30
     // unitName: 'unit',
     bytec 4 // "unit"
     itxn_field ConfigAssetUnitName
-    // tests/approvals/itxn.algo.ts:40
+    // tests/approvals/itxn.algo.ts:55
     // assetName: 'AST3',
     bytec 8 // "AST3"
     itxn_field ConfigAssetName
-    // tests/approvals/itxn.algo.ts:13
+    // tests/approvals/itxn.algo.ts:28
     // total: 1000,
     intc 4 // 1000
     itxn_field ConfigAssetTotal
-    // tests/approvals/itxn.algo.ts:12-19
+    // tests/approvals/itxn.algo.ts:27-34
     // const assetParams = itxn.assetConfig({
     //   total: 1000,
     //   assetName: this.name.value,
@@ -443,13 +466,13 @@ test1_next_field@9:
     //   manager: Global.currentApplicationAddress,
     //   reserve: Global.currentApplicationAddress,
     // })
-    intc_3 // 3
+    pushint 3 // 3
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
 
 test1_next_txn@10:
-    // tests/approvals/itxn.algo.ts:54
+    // tests/approvals/itxn.algo.ts:69
     // itxn.submitGroup(appCreateParams, assetParams)
     itxn_submit
     retsub
@@ -457,7 +480,7 @@ test1_next_txn@10:
 
 // tests/approvals/itxn.algo.ts::ItxnDemoContract.test2() -> void:
 test2:
-    // tests/approvals/itxn.algo.ts:57
+    // tests/approvals/itxn.algo.ts:72
     // public test2() {
     proto 0 0
     intc_0 // 0
@@ -468,39 +491,39 @@ test2:
 test2_block@0:
     intc_0 // 0
     pushbytes ""
-    // tests/approvals/itxn.algo.ts:59
+    // tests/approvals/itxn.algo.ts:74
     // if (Txn.numAppArgs) {
     txn NumAppArgs
     bz test2_else_body@2
 
 test2_if_body@1:
-    // tests/approvals/itxn.algo.ts:60
+    // tests/approvals/itxn.algo.ts:75
     // const args = [Bytes('1'), Bytes('2')] as const
     bytec_3 // "1"
     frame_bury 0
     bytec 5 // "2"
     frame_bury 1
-    // tests/approvals/itxn.algo.ts:64
+    // tests/approvals/itxn.algo.ts:79
     // appArgs: args,
     pushint 2 // 2
     frame_bury 3
-    // tests/approvals/itxn.algo.ts:65
+    // tests/approvals/itxn.algo.ts:80
     // onCompletion: OnCompleteAction.NoOp,
     intc_0 // 0
     frame_bury 6
-    pushint 1 // 1
+    intc_3 // 1
     frame_bury 4
-    // tests/approvals/itxn.algo.ts:66
+    // tests/approvals/itxn.algo.ts:81
     // note: 'with args param set',
-    bytec 13 // "with args param set"
+    bytec 12 // "with args param set"
 
 test2_after_if_else@3:
-    // tests/approvals/itxn.algo.ts:76
+    // tests/approvals/itxn.algo.ts:91
     // const createAppTxn = createAppParams.submit()
     itxn_begin
     itxn_field Note
     frame_dig 4
-    pushint 1 // 1
+    intc_3 // 1
     >=
     bz test2_next_field@5
 
@@ -514,9 +537,9 @@ test2_next_field@5:
     frame_dig 1
     itxn_field ApplicationArgs
     frame_dig 3
-    intc_3 // 3
+    pushint 3 // 3
     >=
-    // tests/approvals/itxn.algo.ts:76
+    // tests/approvals/itxn.algo.ts:91
     // const createAppTxn = createAppParams.submit()
     bz test2_next_field@7
 
@@ -525,13 +548,13 @@ test2_set_ApplicationArgs_2_to_2@6:
     itxn_field ApplicationArgs
 
 test2_next_field@7:
-    // tests/approvals/itxn.algo.ts:4
+    // tests/approvals/itxn.algo.ts:19
     // const APPROVE = Bytes.fromHex('098101')
     bytec_0 // 0x098101
     itxn_field ClearStateProgramPages
     bytec_0 // 0x098101
     itxn_field ApprovalProgramPages
-    // tests/approvals/itxn.algo.ts:61-67
+    // tests/approvals/itxn.algo.ts:76-82
     // createAppParams = itxn.applicationCall({
     //   approvalProgram: APPROVE,
     //   clearStateProgram: APPROVE,
@@ -545,34 +568,34 @@ test2_next_field@7:
     itxn_field Fee
 
 test2_next_txn@8:
-    // tests/approvals/itxn.algo.ts:76
+    // tests/approvals/itxn.algo.ts:91
     // const createAppTxn = createAppParams.submit()
     itxn_submit
     itxn Note
     frame_bury 2
-    // tests/approvals/itxn.algo.ts:77
+    // tests/approvals/itxn.algo.ts:92
     // assert(createAppTxn.appArgs(0) === Bytes('1'), 'correct args used 1')
     intc_0 // 0
     itxnas ApplicationArgs
     bytec_3 // "1"
     ==
     assert // correct args used 1
-    // tests/approvals/itxn.algo.ts:78
+    // tests/approvals/itxn.algo.ts:93
     // assert(createAppTxn.appArgs(1) === Bytes('2'), 'correct args used 2')
-    pushint 1 // 1
+    intc_3 // 1
     itxnas ApplicationArgs
     bytec 5 // "2"
     ==
     assert // correct args used 2
-    // tests/approvals/itxn.algo.ts:80
+    // tests/approvals/itxn.algo.ts:95
     // if (Txn.numAppArgs > 1) {
     txn NumAppArgs
-    pushint 1 // 1
+    intc_3 // 1
     >
     bz test2_after_if_else@11
 
 test2_if_body@9:
-    // tests/approvals/itxn.algo.ts:81-88
+    // tests/approvals/itxn.algo.ts:96-103
     // const createAppTxn2 = itxn
     //   .applicationCall({
     //     approvalProgram: APPROVE,
@@ -582,21 +605,21 @@ test2_if_body@9:
     //   })
     //   .submit()
     itxn_begin
-    // tests/approvals/itxn.algo.ts:86
+    // tests/approvals/itxn.algo.ts:101
     // appArgs: [Bytes('42')],
-    bytec 14 // "42"
+    bytec 13 // "42"
     itxn_field ApplicationArgs
-    // tests/approvals/itxn.algo.ts:85
+    // tests/approvals/itxn.algo.ts:100
     // onCompletion: OnCompleteAction.DeleteApplication,
     intc_2 // 5
     itxn_field OnCompletion
-    // tests/approvals/itxn.algo.ts:4
+    // tests/approvals/itxn.algo.ts:19
     // const APPROVE = Bytes.fromHex('098101')
     bytec_0 // 0x098101
     itxn_field ClearStateProgramPages
     bytec_0 // 0x098101
     itxn_field ApprovalProgramPages
-    // tests/approvals/itxn.algo.ts:81-87
+    // tests/approvals/itxn.algo.ts:96-102
     // const createAppTxn2 = itxn
     //   .applicationCall({
     //     approvalProgram: APPROVE,
@@ -610,7 +633,7 @@ test2_if_body@9:
     itxn_field Fee
 
 test2_next_txn@10:
-    // tests/approvals/itxn.algo.ts:81-88
+    // tests/approvals/itxn.algo.ts:96-103
     // const createAppTxn2 = itxn
     //   .applicationCall({
     //     approvalProgram: APPROVE,
@@ -620,17 +643,17 @@ test2_next_txn@10:
     //   })
     //   .submit()
     itxn_submit
-    // tests/approvals/itxn.algo.ts:89
+    // tests/approvals/itxn.algo.ts:104
     // assert(createAppTxn2.appArgs(0) === Bytes('42'), 'correct args used 2')
     intc_0 // 0
     itxnas ApplicationArgs
-    bytec 14 // "42"
+    bytec 13 // "42"
     ==
     assert // correct args used 2
-    // tests/approvals/itxn.algo.ts:90
+    // tests/approvals/itxn.algo.ts:105
     // assert(createAppTxn.note === Bytes('with args param set'))
     frame_dig 2
-    bytec 13 // "with args param set"
+    bytec 12 // "with args param set"
     ==
     assert
 
@@ -638,23 +661,24 @@ test2_after_if_else@11:
     retsub
 
 test2_else_body@2:
-    // tests/approvals/itxn.algo.ts:72
-    // appArgs: [Bytes('3'), '4', Bytes('5')],
+    // tests/approvals/itxn.algo.ts:87
+    // appArgs: [Bytes('3'), new Str('4'), Bytes('5')],
     bytec 9 // "3"
     frame_bury 0
-    bytec 10 // "4"
-    frame_bury 1
-    bytec 11 // "5"
+    pushbytes 0x000134
+    bytec 10 // "5"
     frame_bury 5
-    intc_3 // 3
+    pushint 3 // 3
     frame_bury 3
-    // tests/approvals/itxn.algo.ts:73
+    // tests/approvals/itxn.algo.ts:88
     // note: 'no args param set',
     pushbytes "no args param set"
-    // tests/approvals/itxn.algo.ts:69
+    swap
+    // tests/approvals/itxn.algo.ts:84
     // createAppParams = itxn.applicationCall({
     intc_0 // 0
     frame_bury 4
+    frame_bury 1
     b test2_after_if_else@3
 
 
@@ -662,7 +686,7 @@ test2_else_body@2:
 test3:
 
 test3_block@0:
-    // tests/approvals/itxn.algo.ts:133-150
+    // tests/approvals/itxn.algo.ts:148-165
     // const [app1, app2, app3, app4, app5, app6, app7, app8, app9, app10, app11, app12, app13, app14, app15, app16] = itxn.submitGroup(
     //   appTxn1,
     //   appTxn2,
@@ -682,23 +706,23 @@ test3_block@0:
     //   appTxn16,
     // )
     itxn_begin
-    // tests/approvals/itxn.algo.ts:99
+    // tests/approvals/itxn.algo.ts:114
     // appArgs: [Bytes('1')],
     bytec_3 // "1"
     itxn_field ApplicationArgs
-    // tests/approvals/itxn.algo.ts:98
+    // tests/approvals/itxn.algo.ts:113
     // onCompletion: OnCompleteAction.DeleteApplication,
     intc_2 // 5
     itxn_field OnCompletion
-    // tests/approvals/itxn.algo.ts:4
+    // tests/approvals/itxn.algo.ts:19
     // const APPROVE = Bytes.fromHex('098101')
     bytec_0 // 0x098101
     itxn_field ClearStateProgramPages
-    // tests/approvals/itxn.algo.ts:3
+    // tests/approvals/itxn.algo.ts:18
     // const LOG_1ST_ARG_AND_APPROVE = Bytes.fromHex('09361A00B08101')
     bytec_1 // 0x09361a00b08101
     itxn_field ApprovalProgramPages
-    // tests/approvals/itxn.algo.ts:95-100
+    // tests/approvals/itxn.algo.ts:110-115
     // const appTxn1 = itxn.applicationCall({
     //   approvalProgram: LOG_1ST_ARG_AND_APPROVE,
     //   clearStateProgram: APPROVE,
@@ -711,26 +735,26 @@ test3_block@0:
     itxn_field Fee
 
 test3_next_txn@1:
-    // tests/approvals/itxn.algo.ts:135
+    // tests/approvals/itxn.algo.ts:150
     // appTxn2,
     itxn_next
-    // tests/approvals/itxn.algo.ts:4
+    // tests/approvals/itxn.algo.ts:19
     // const APPROVE = Bytes.fromHex('098101')
     bytec_0 // 0x098101
     itxn_field ClearStateProgramPages
-    // tests/approvals/itxn.algo.ts:3
+    // tests/approvals/itxn.algo.ts:18
     // const LOG_1ST_ARG_AND_APPROVE = Bytes.fromHex('09361A00B08101')
     bytec_1 // 0x09361a00b08101
     itxn_field ApprovalProgramPages
-    // tests/approvals/itxn.algo.ts:103
+    // tests/approvals/itxn.algo.ts:118
     // appTxn2.set({ appArgs: [Bytes('2')] })
     bytec 5 // "2"
     itxn_field ApplicationArgs
-    // tests/approvals/itxn.algo.ts:98
+    // tests/approvals/itxn.algo.ts:113
     // onCompletion: OnCompleteAction.DeleteApplication,
     intc_2 // 5
     itxn_field OnCompletion
-    // tests/approvals/itxn.algo.ts:95-100
+    // tests/approvals/itxn.algo.ts:110-115
     // const appTxn1 = itxn.applicationCall({
     //   approvalProgram: LOG_1ST_ARG_AND_APPROVE,
     //   clearStateProgram: APPROVE,
@@ -743,26 +767,26 @@ test3_next_txn@1:
     itxn_field Fee
 
 test3_next_txn@2:
-    // tests/approvals/itxn.algo.ts:136
+    // tests/approvals/itxn.algo.ts:151
     // appTxn3,
     itxn_next
-    // tests/approvals/itxn.algo.ts:4
+    // tests/approvals/itxn.algo.ts:19
     // const APPROVE = Bytes.fromHex('098101')
     bytec_0 // 0x098101
     itxn_field ClearStateProgramPages
-    // tests/approvals/itxn.algo.ts:3
+    // tests/approvals/itxn.algo.ts:18
     // const LOG_1ST_ARG_AND_APPROVE = Bytes.fromHex('09361A00B08101')
     bytec_1 // 0x09361a00b08101
     itxn_field ApprovalProgramPages
-    // tests/approvals/itxn.algo.ts:105
+    // tests/approvals/itxn.algo.ts:120
     // appTxn3.set({ appArgs: [Bytes('3')] })
     bytec 9 // "3"
     itxn_field ApplicationArgs
-    // tests/approvals/itxn.algo.ts:98
+    // tests/approvals/itxn.algo.ts:113
     // onCompletion: OnCompleteAction.DeleteApplication,
     intc_2 // 5
     itxn_field OnCompletion
-    // tests/approvals/itxn.algo.ts:95-100
+    // tests/approvals/itxn.algo.ts:110-115
     // const appTxn1 = itxn.applicationCall({
     //   approvalProgram: LOG_1ST_ARG_AND_APPROVE,
     //   clearStateProgram: APPROVE,
@@ -775,26 +799,26 @@ test3_next_txn@2:
     itxn_field Fee
 
 test3_next_txn@3:
-    // tests/approvals/itxn.algo.ts:137
+    // tests/approvals/itxn.algo.ts:152
     // appTxn4,
     itxn_next
-    // tests/approvals/itxn.algo.ts:4
+    // tests/approvals/itxn.algo.ts:19
     // const APPROVE = Bytes.fromHex('098101')
     bytec_0 // 0x098101
     itxn_field ClearStateProgramPages
-    // tests/approvals/itxn.algo.ts:3
+    // tests/approvals/itxn.algo.ts:18
     // const LOG_1ST_ARG_AND_APPROVE = Bytes.fromHex('09361A00B08101')
     bytec_1 // 0x09361a00b08101
     itxn_field ApprovalProgramPages
-    // tests/approvals/itxn.algo.ts:107
+    // tests/approvals/itxn.algo.ts:122
     // appTxn4.set({ appArgs: [Bytes('4')] })
-    bytec 10 // "4"
+    pushbytes "4"
     itxn_field ApplicationArgs
-    // tests/approvals/itxn.algo.ts:98
+    // tests/approvals/itxn.algo.ts:113
     // onCompletion: OnCompleteAction.DeleteApplication,
     intc_2 // 5
     itxn_field OnCompletion
-    // tests/approvals/itxn.algo.ts:95-100
+    // tests/approvals/itxn.algo.ts:110-115
     // const appTxn1 = itxn.applicationCall({
     //   approvalProgram: LOG_1ST_ARG_AND_APPROVE,
     //   clearStateProgram: APPROVE,
@@ -807,26 +831,26 @@ test3_next_txn@3:
     itxn_field Fee
 
 test3_next_txn@4:
-    // tests/approvals/itxn.algo.ts:138
+    // tests/approvals/itxn.algo.ts:153
     // appTxn5,
     itxn_next
-    // tests/approvals/itxn.algo.ts:4
+    // tests/approvals/itxn.algo.ts:19
     // const APPROVE = Bytes.fromHex('098101')
     bytec_0 // 0x098101
     itxn_field ClearStateProgramPages
-    // tests/approvals/itxn.algo.ts:3
+    // tests/approvals/itxn.algo.ts:18
     // const LOG_1ST_ARG_AND_APPROVE = Bytes.fromHex('09361A00B08101')
     bytec_1 // 0x09361a00b08101
     itxn_field ApprovalProgramPages
-    // tests/approvals/itxn.algo.ts:109
+    // tests/approvals/itxn.algo.ts:124
     // appTxn5.set({ appArgs: [Bytes('5')] })
-    bytec 11 // "5"
+    bytec 10 // "5"
     itxn_field ApplicationArgs
-    // tests/approvals/itxn.algo.ts:98
+    // tests/approvals/itxn.algo.ts:113
     // onCompletion: OnCompleteAction.DeleteApplication,
     intc_2 // 5
     itxn_field OnCompletion
-    // tests/approvals/itxn.algo.ts:95-100
+    // tests/approvals/itxn.algo.ts:110-115
     // const appTxn1 = itxn.applicationCall({
     //   approvalProgram: LOG_1ST_ARG_AND_APPROVE,
     //   clearStateProgram: APPROVE,
@@ -839,26 +863,26 @@ test3_next_txn@4:
     itxn_field Fee
 
 test3_next_txn@5:
-    // tests/approvals/itxn.algo.ts:139
+    // tests/approvals/itxn.algo.ts:154
     // appTxn6,
     itxn_next
-    // tests/approvals/itxn.algo.ts:4
+    // tests/approvals/itxn.algo.ts:19
     // const APPROVE = Bytes.fromHex('098101')
     bytec_0 // 0x098101
     itxn_field ClearStateProgramPages
-    // tests/approvals/itxn.algo.ts:3
+    // tests/approvals/itxn.algo.ts:18
     // const LOG_1ST_ARG_AND_APPROVE = Bytes.fromHex('09361A00B08101')
     bytec_1 // 0x09361a00b08101
     itxn_field ApprovalProgramPages
-    // tests/approvals/itxn.algo.ts:111
+    // tests/approvals/itxn.algo.ts:126
     // appTxn6.set({ appArgs: [Bytes('6')] })
     pushbytes "6"
     itxn_field ApplicationArgs
-    // tests/approvals/itxn.algo.ts:98
+    // tests/approvals/itxn.algo.ts:113
     // onCompletion: OnCompleteAction.DeleteApplication,
     intc_2 // 5
     itxn_field OnCompletion
-    // tests/approvals/itxn.algo.ts:95-100
+    // tests/approvals/itxn.algo.ts:110-115
     // const appTxn1 = itxn.applicationCall({
     //   approvalProgram: LOG_1ST_ARG_AND_APPROVE,
     //   clearStateProgram: APPROVE,
@@ -871,26 +895,26 @@ test3_next_txn@5:
     itxn_field Fee
 
 test3_next_txn@6:
-    // tests/approvals/itxn.algo.ts:140
+    // tests/approvals/itxn.algo.ts:155
     // appTxn7,
     itxn_next
-    // tests/approvals/itxn.algo.ts:4
+    // tests/approvals/itxn.algo.ts:19
     // const APPROVE = Bytes.fromHex('098101')
     bytec_0 // 0x098101
     itxn_field ClearStateProgramPages
-    // tests/approvals/itxn.algo.ts:3
+    // tests/approvals/itxn.algo.ts:18
     // const LOG_1ST_ARG_AND_APPROVE = Bytes.fromHex('09361A00B08101')
     bytec_1 // 0x09361a00b08101
     itxn_field ApprovalProgramPages
-    // tests/approvals/itxn.algo.ts:113
+    // tests/approvals/itxn.algo.ts:128
     // appTxn7.set({ appArgs: [Bytes('7')] })
     pushbytes "7"
     itxn_field ApplicationArgs
-    // tests/approvals/itxn.algo.ts:98
+    // tests/approvals/itxn.algo.ts:113
     // onCompletion: OnCompleteAction.DeleteApplication,
     intc_2 // 5
     itxn_field OnCompletion
-    // tests/approvals/itxn.algo.ts:95-100
+    // tests/approvals/itxn.algo.ts:110-115
     // const appTxn1 = itxn.applicationCall({
     //   approvalProgram: LOG_1ST_ARG_AND_APPROVE,
     //   clearStateProgram: APPROVE,
@@ -903,26 +927,26 @@ test3_next_txn@6:
     itxn_field Fee
 
 test3_next_txn@7:
-    // tests/approvals/itxn.algo.ts:141
+    // tests/approvals/itxn.algo.ts:156
     // appTxn8,
     itxn_next
-    // tests/approvals/itxn.algo.ts:4
+    // tests/approvals/itxn.algo.ts:19
     // const APPROVE = Bytes.fromHex('098101')
     bytec_0 // 0x098101
     itxn_field ClearStateProgramPages
-    // tests/approvals/itxn.algo.ts:3
+    // tests/approvals/itxn.algo.ts:18
     // const LOG_1ST_ARG_AND_APPROVE = Bytes.fromHex('09361A00B08101')
     bytec_1 // 0x09361a00b08101
     itxn_field ApprovalProgramPages
-    // tests/approvals/itxn.algo.ts:115
+    // tests/approvals/itxn.algo.ts:130
     // appTxn8.set({ appArgs: [Bytes('8')] })
     pushbytes "8"
     itxn_field ApplicationArgs
-    // tests/approvals/itxn.algo.ts:98
+    // tests/approvals/itxn.algo.ts:113
     // onCompletion: OnCompleteAction.DeleteApplication,
     intc_2 // 5
     itxn_field OnCompletion
-    // tests/approvals/itxn.algo.ts:95-100
+    // tests/approvals/itxn.algo.ts:110-115
     // const appTxn1 = itxn.applicationCall({
     //   approvalProgram: LOG_1ST_ARG_AND_APPROVE,
     //   clearStateProgram: APPROVE,
@@ -935,26 +959,26 @@ test3_next_txn@7:
     itxn_field Fee
 
 test3_next_txn@8:
-    // tests/approvals/itxn.algo.ts:142
+    // tests/approvals/itxn.algo.ts:157
     // appTxn9,
     itxn_next
-    // tests/approvals/itxn.algo.ts:4
+    // tests/approvals/itxn.algo.ts:19
     // const APPROVE = Bytes.fromHex('098101')
     bytec_0 // 0x098101
     itxn_field ClearStateProgramPages
-    // tests/approvals/itxn.algo.ts:3
+    // tests/approvals/itxn.algo.ts:18
     // const LOG_1ST_ARG_AND_APPROVE = Bytes.fromHex('09361A00B08101')
     bytec_1 // 0x09361a00b08101
     itxn_field ApprovalProgramPages
-    // tests/approvals/itxn.algo.ts:117
+    // tests/approvals/itxn.algo.ts:132
     // appTxn9.set({ appArgs: [Bytes('9')] })
     pushbytes "9"
     itxn_field ApplicationArgs
-    // tests/approvals/itxn.algo.ts:98
+    // tests/approvals/itxn.algo.ts:113
     // onCompletion: OnCompleteAction.DeleteApplication,
     intc_2 // 5
     itxn_field OnCompletion
-    // tests/approvals/itxn.algo.ts:95-100
+    // tests/approvals/itxn.algo.ts:110-115
     // const appTxn1 = itxn.applicationCall({
     //   approvalProgram: LOG_1ST_ARG_AND_APPROVE,
     //   clearStateProgram: APPROVE,
@@ -967,26 +991,26 @@ test3_next_txn@8:
     itxn_field Fee
 
 test3_next_txn@9:
-    // tests/approvals/itxn.algo.ts:143
+    // tests/approvals/itxn.algo.ts:158
     // appTxn10,
     itxn_next
-    // tests/approvals/itxn.algo.ts:4
+    // tests/approvals/itxn.algo.ts:19
     // const APPROVE = Bytes.fromHex('098101')
     bytec_0 // 0x098101
     itxn_field ClearStateProgramPages
-    // tests/approvals/itxn.algo.ts:3
+    // tests/approvals/itxn.algo.ts:18
     // const LOG_1ST_ARG_AND_APPROVE = Bytes.fromHex('09361A00B08101')
     bytec_1 // 0x09361a00b08101
     itxn_field ApprovalProgramPages
-    // tests/approvals/itxn.algo.ts:119
+    // tests/approvals/itxn.algo.ts:134
     // appTxn10.set({ appArgs: [Bytes('10')] })
-    bytec 15 // "10"
+    bytec 14 // "10"
     itxn_field ApplicationArgs
-    // tests/approvals/itxn.algo.ts:98
+    // tests/approvals/itxn.algo.ts:113
     // onCompletion: OnCompleteAction.DeleteApplication,
     intc_2 // 5
     itxn_field OnCompletion
-    // tests/approvals/itxn.algo.ts:95-100
+    // tests/approvals/itxn.algo.ts:110-115
     // const appTxn1 = itxn.applicationCall({
     //   approvalProgram: LOG_1ST_ARG_AND_APPROVE,
     //   clearStateProgram: APPROVE,
@@ -999,26 +1023,26 @@ test3_next_txn@9:
     itxn_field Fee
 
 test3_next_txn@10:
-    // tests/approvals/itxn.algo.ts:144
+    // tests/approvals/itxn.algo.ts:159
     // appTxn11,
     itxn_next
-    // tests/approvals/itxn.algo.ts:4
+    // tests/approvals/itxn.algo.ts:19
     // const APPROVE = Bytes.fromHex('098101')
     bytec_0 // 0x098101
     itxn_field ClearStateProgramPages
-    // tests/approvals/itxn.algo.ts:3
+    // tests/approvals/itxn.algo.ts:18
     // const LOG_1ST_ARG_AND_APPROVE = Bytes.fromHex('09361A00B08101')
     bytec_1 // 0x09361a00b08101
     itxn_field ApprovalProgramPages
-    // tests/approvals/itxn.algo.ts:121
+    // tests/approvals/itxn.algo.ts:136
     // appTxn11.set({ appArgs: [Bytes('11')] })
-    bytec 16 // "11"
+    bytec 15 // "11"
     itxn_field ApplicationArgs
-    // tests/approvals/itxn.algo.ts:98
+    // tests/approvals/itxn.algo.ts:113
     // onCompletion: OnCompleteAction.DeleteApplication,
     intc_2 // 5
     itxn_field OnCompletion
-    // tests/approvals/itxn.algo.ts:95-100
+    // tests/approvals/itxn.algo.ts:110-115
     // const appTxn1 = itxn.applicationCall({
     //   approvalProgram: LOG_1ST_ARG_AND_APPROVE,
     //   clearStateProgram: APPROVE,
@@ -1031,26 +1055,26 @@ test3_next_txn@10:
     itxn_field Fee
 
 test3_next_txn@11:
-    // tests/approvals/itxn.algo.ts:145
+    // tests/approvals/itxn.algo.ts:160
     // appTxn12,
     itxn_next
-    // tests/approvals/itxn.algo.ts:4
+    // tests/approvals/itxn.algo.ts:19
     // const APPROVE = Bytes.fromHex('098101')
     bytec_0 // 0x098101
     itxn_field ClearStateProgramPages
-    // tests/approvals/itxn.algo.ts:3
+    // tests/approvals/itxn.algo.ts:18
     // const LOG_1ST_ARG_AND_APPROVE = Bytes.fromHex('09361A00B08101')
     bytec_1 // 0x09361a00b08101
     itxn_field ApprovalProgramPages
-    // tests/approvals/itxn.algo.ts:123
+    // tests/approvals/itxn.algo.ts:138
     // appTxn12.set({ appArgs: [Bytes('12')] })
-    bytec 17 // "12"
+    bytec 16 // "12"
     itxn_field ApplicationArgs
-    // tests/approvals/itxn.algo.ts:98
+    // tests/approvals/itxn.algo.ts:113
     // onCompletion: OnCompleteAction.DeleteApplication,
     intc_2 // 5
     itxn_field OnCompletion
-    // tests/approvals/itxn.algo.ts:95-100
+    // tests/approvals/itxn.algo.ts:110-115
     // const appTxn1 = itxn.applicationCall({
     //   approvalProgram: LOG_1ST_ARG_AND_APPROVE,
     //   clearStateProgram: APPROVE,
@@ -1063,26 +1087,26 @@ test3_next_txn@11:
     itxn_field Fee
 
 test3_next_txn@12:
-    // tests/approvals/itxn.algo.ts:146
+    // tests/approvals/itxn.algo.ts:161
     // appTxn13,
     itxn_next
-    // tests/approvals/itxn.algo.ts:4
+    // tests/approvals/itxn.algo.ts:19
     // const APPROVE = Bytes.fromHex('098101')
     bytec_0 // 0x098101
     itxn_field ClearStateProgramPages
-    // tests/approvals/itxn.algo.ts:3
+    // tests/approvals/itxn.algo.ts:18
     // const LOG_1ST_ARG_AND_APPROVE = Bytes.fromHex('09361A00B08101')
     bytec_1 // 0x09361a00b08101
     itxn_field ApprovalProgramPages
-    // tests/approvals/itxn.algo.ts:125
+    // tests/approvals/itxn.algo.ts:140
     // appTxn13.set({ appArgs: [Bytes('13')] })
-    bytec 18 // "13"
+    bytec 17 // "13"
     itxn_field ApplicationArgs
-    // tests/approvals/itxn.algo.ts:98
+    // tests/approvals/itxn.algo.ts:113
     // onCompletion: OnCompleteAction.DeleteApplication,
     intc_2 // 5
     itxn_field OnCompletion
-    // tests/approvals/itxn.algo.ts:95-100
+    // tests/approvals/itxn.algo.ts:110-115
     // const appTxn1 = itxn.applicationCall({
     //   approvalProgram: LOG_1ST_ARG_AND_APPROVE,
     //   clearStateProgram: APPROVE,
@@ -1095,26 +1119,26 @@ test3_next_txn@12:
     itxn_field Fee
 
 test3_next_txn@13:
-    // tests/approvals/itxn.algo.ts:147
+    // tests/approvals/itxn.algo.ts:162
     // appTxn14,
     itxn_next
-    // tests/approvals/itxn.algo.ts:4
+    // tests/approvals/itxn.algo.ts:19
     // const APPROVE = Bytes.fromHex('098101')
     bytec_0 // 0x098101
     itxn_field ClearStateProgramPages
-    // tests/approvals/itxn.algo.ts:3
+    // tests/approvals/itxn.algo.ts:18
     // const LOG_1ST_ARG_AND_APPROVE = Bytes.fromHex('09361A00B08101')
     bytec_1 // 0x09361a00b08101
     itxn_field ApprovalProgramPages
-    // tests/approvals/itxn.algo.ts:127
+    // tests/approvals/itxn.algo.ts:142
     // appTxn14.set({ appArgs: [Bytes('14')] })
-    bytec 19 // "14"
+    bytec 18 // "14"
     itxn_field ApplicationArgs
-    // tests/approvals/itxn.algo.ts:98
+    // tests/approvals/itxn.algo.ts:113
     // onCompletion: OnCompleteAction.DeleteApplication,
     intc_2 // 5
     itxn_field OnCompletion
-    // tests/approvals/itxn.algo.ts:95-100
+    // tests/approvals/itxn.algo.ts:110-115
     // const appTxn1 = itxn.applicationCall({
     //   approvalProgram: LOG_1ST_ARG_AND_APPROVE,
     //   clearStateProgram: APPROVE,
@@ -1127,26 +1151,26 @@ test3_next_txn@13:
     itxn_field Fee
 
 test3_next_txn@14:
-    // tests/approvals/itxn.algo.ts:148
+    // tests/approvals/itxn.algo.ts:163
     // appTxn15,
     itxn_next
-    // tests/approvals/itxn.algo.ts:4
+    // tests/approvals/itxn.algo.ts:19
     // const APPROVE = Bytes.fromHex('098101')
     bytec_0 // 0x098101
     itxn_field ClearStateProgramPages
-    // tests/approvals/itxn.algo.ts:3
+    // tests/approvals/itxn.algo.ts:18
     // const LOG_1ST_ARG_AND_APPROVE = Bytes.fromHex('09361A00B08101')
     bytec_1 // 0x09361a00b08101
     itxn_field ApprovalProgramPages
-    // tests/approvals/itxn.algo.ts:129
+    // tests/approvals/itxn.algo.ts:144
     // appTxn15.set({ appArgs: [Bytes('15')] })
-    bytec 20 // "15"
+    bytec 19 // "15"
     itxn_field ApplicationArgs
-    // tests/approvals/itxn.algo.ts:98
+    // tests/approvals/itxn.algo.ts:113
     // onCompletion: OnCompleteAction.DeleteApplication,
     intc_2 // 5
     itxn_field OnCompletion
-    // tests/approvals/itxn.algo.ts:95-100
+    // tests/approvals/itxn.algo.ts:110-115
     // const appTxn1 = itxn.applicationCall({
     //   approvalProgram: LOG_1ST_ARG_AND_APPROVE,
     //   clearStateProgram: APPROVE,
@@ -1159,26 +1183,26 @@ test3_next_txn@14:
     itxn_field Fee
 
 test3_next_txn@15:
-    // tests/approvals/itxn.algo.ts:149
+    // tests/approvals/itxn.algo.ts:164
     // appTxn16,
     itxn_next
-    // tests/approvals/itxn.algo.ts:4
+    // tests/approvals/itxn.algo.ts:19
     // const APPROVE = Bytes.fromHex('098101')
     bytec_0 // 0x098101
     itxn_field ClearStateProgramPages
-    // tests/approvals/itxn.algo.ts:3
+    // tests/approvals/itxn.algo.ts:18
     // const LOG_1ST_ARG_AND_APPROVE = Bytes.fromHex('09361A00B08101')
     bytec_1 // 0x09361a00b08101
     itxn_field ApprovalProgramPages
-    // tests/approvals/itxn.algo.ts:131
+    // tests/approvals/itxn.algo.ts:146
     // appTxn16.set({ appArgs: [Bytes('16')] })
-    bytec 21 // "16"
+    bytec 20 // "16"
     itxn_field ApplicationArgs
-    // tests/approvals/itxn.algo.ts:98
+    // tests/approvals/itxn.algo.ts:113
     // onCompletion: OnCompleteAction.DeleteApplication,
     intc_2 // 5
     itxn_field OnCompletion
-    // tests/approvals/itxn.algo.ts:95-100
+    // tests/approvals/itxn.algo.ts:110-115
     // const appTxn1 = itxn.applicationCall({
     //   approvalProgram: LOG_1ST_ARG_AND_APPROVE,
     //   clearStateProgram: APPROVE,
@@ -1191,7 +1215,7 @@ test3_next_txn@15:
     itxn_field Fee
 
 test3_next_txn@16:
-    // tests/approvals/itxn.algo.ts:133-150
+    // tests/approvals/itxn.algo.ts:148-165
     // const [app1, app2, app3, app4, app5, app6, app7, app8, app9, app10, app11, app12, app13, app14, app15, app16] = itxn.submitGroup(
     //   appTxn1,
     //   appTxn2,
@@ -1211,116 +1235,116 @@ test3_next_txn@16:
     //   appTxn16,
     // )
     itxn_submit
-    // tests/approvals/itxn.algo.ts:152
+    // tests/approvals/itxn.algo.ts:167
     // assert(app1.logs(0) === Bytes('1'))
     intc_0 // 0
     gitxnas 0 Logs
     bytec_3 // "1"
     ==
     assert
-    // tests/approvals/itxn.algo.ts:153
+    // tests/approvals/itxn.algo.ts:168
     // assert(app2.logs(0) === Bytes('2'))
     intc_0 // 0
     gitxnas 1 Logs
     bytec 5 // "2"
     ==
     assert
-    // tests/approvals/itxn.algo.ts:154
+    // tests/approvals/itxn.algo.ts:169
     // assert(app3.logs(0) === Bytes('3'))
     intc_0 // 0
     gitxnas 2 Logs
     bytec 9 // "3"
     ==
     assert
-    // tests/approvals/itxn.algo.ts:155
+    // tests/approvals/itxn.algo.ts:170
     // assert(app4.logs(0) === Bytes('4'))
     intc_0 // 0
     gitxnas 3 Logs
-    bytec 10 // "4"
+    pushbytes "4"
     ==
     assert
-    // tests/approvals/itxn.algo.ts:156
+    // tests/approvals/itxn.algo.ts:171
     // assert(app5.logs(0) === Bytes('5'))
     intc_0 // 0
     gitxnas 4 Logs
-    bytec 11 // "5"
+    bytec 10 // "5"
     ==
     assert
-    // tests/approvals/itxn.algo.ts:157
+    // tests/approvals/itxn.algo.ts:172
     // assert(app6.logs(0) === Bytes('6'))
     intc_0 // 0
     gitxnas 5 Logs
     pushbytes "6"
     ==
     assert
-    // tests/approvals/itxn.algo.ts:158
+    // tests/approvals/itxn.algo.ts:173
     // assert(app7.logs(0) === Bytes('7'))
     intc_0 // 0
     gitxnas 6 Logs
     pushbytes "7"
     ==
     assert
-    // tests/approvals/itxn.algo.ts:159
+    // tests/approvals/itxn.algo.ts:174
     // assert(app8.logs(0) === Bytes('8'))
     intc_0 // 0
     gitxnas 7 Logs
     pushbytes "8"
     ==
     assert
-    // tests/approvals/itxn.algo.ts:160
+    // tests/approvals/itxn.algo.ts:175
     // assert(app9.logs(0) === Bytes('9'))
     intc_0 // 0
     gitxnas 8 Logs
     pushbytes "9"
     ==
     assert
-    // tests/approvals/itxn.algo.ts:161
+    // tests/approvals/itxn.algo.ts:176
     // assert(app10.logs(0) === Bytes('10'))
     intc_0 // 0
     gitxnas 9 Logs
-    bytec 15 // "10"
+    bytec 14 // "10"
     ==
     assert
-    // tests/approvals/itxn.algo.ts:162
+    // tests/approvals/itxn.algo.ts:177
     // assert(app11.logs(0) === Bytes('11'))
     intc_0 // 0
     gitxnas 10 Logs
-    bytec 16 // "11"
+    bytec 15 // "11"
     ==
     assert
-    // tests/approvals/itxn.algo.ts:163
+    // tests/approvals/itxn.algo.ts:178
     // assert(app12.logs(0) === Bytes('12'))
     intc_0 // 0
     gitxnas 11 Logs
-    bytec 17 // "12"
+    bytec 16 // "12"
     ==
     assert
-    // tests/approvals/itxn.algo.ts:164
+    // tests/approvals/itxn.algo.ts:179
     // assert(app13.logs(0) === Bytes('13'))
     intc_0 // 0
     gitxnas 12 Logs
-    bytec 18 // "13"
+    bytec 17 // "13"
     ==
     assert
-    // tests/approvals/itxn.algo.ts:165
+    // tests/approvals/itxn.algo.ts:180
     // assert(app14.logs(0) === Bytes('14'))
     intc_0 // 0
     gitxnas 13 Logs
-    bytec 19 // "14"
+    bytec 18 // "14"
     ==
     assert
-    // tests/approvals/itxn.algo.ts:166
+    // tests/approvals/itxn.algo.ts:181
     // assert(app15.logs(0) === Bytes('15'))
     intc_0 // 0
     gitxnas 14 Logs
-    bytec 20 // "15"
+    bytec 19 // "15"
     ==
     assert
-    // tests/approvals/itxn.algo.ts:167
+    // tests/approvals/itxn.algo.ts:182
     // assert(app16.logs(0) === Bytes('16'))
     intc_0 // 0
     itxnas Logs
-    bytec 21 // "16"
+    bytec 20 // "16"
     ==
     assert
     retsub
@@ -1330,47 +1354,47 @@ test3_next_txn@16:
 test4:
 
 test4_block@0:
-    // tests/approvals/itxn.algo.ts:171
+    // tests/approvals/itxn.algo.ts:186
     // const lotsOfBytes = op.bzero(2044)
     pushint 2044 // 2044
     bzero
-    // tests/approvals/itxn.algo.ts:173
+    // tests/approvals/itxn.algo.ts:188
     // const approval2 = Bytes.fromHex('80' + 'FC0f')
     pushbytes 0x80fc0f
-    // tests/approvals/itxn.algo.ts:173-174
+    // tests/approvals/itxn.algo.ts:188-189
     // const approval2 = Bytes.fromHex('80' + 'FC0f')
     //   .concat(lotsOfBytes)
     swap
     concat
-    // tests/approvals/itxn.algo.ts:175
+    // tests/approvals/itxn.algo.ts:190
     // .concat(Bytes.fromHex('48'))
     pushbytes 0x48
-    // tests/approvals/itxn.algo.ts:173-175
+    // tests/approvals/itxn.algo.ts:188-190
     // const approval2 = Bytes.fromHex('80' + 'FC0f')
     //   .concat(lotsOfBytes)
     //   .concat(Bytes.fromHex('48'))
     concat
     dupn 3
-    // tests/approvals/itxn.algo.ts:178
+    // tests/approvals/itxn.algo.ts:193
     // approvalProgram: [approval1, approval2, approval2, approval2],
     cover 2
     cover 2
-    // tests/approvals/itxn.algo.ts:184
+    // tests/approvals/itxn.algo.ts:199
     // const app1 = appTxn1.submit()
     itxn_begin
-    // tests/approvals/itxn.algo.ts:182
+    // tests/approvals/itxn.algo.ts:197
     // extraProgramPages: 3,
-    intc_3 // 3
+    pushint 3 // 3
     itxn_field ExtraProgramPages
-    // tests/approvals/itxn.algo.ts:181
+    // tests/approvals/itxn.algo.ts:196
     // appArgs: [Bytes('1')],
     bytec_3 // "1"
     itxn_field ApplicationArgs
-    // tests/approvals/itxn.algo.ts:180
+    // tests/approvals/itxn.algo.ts:195
     // onCompletion: OnCompleteAction.DeleteApplication,
     intc_2 // 5
     itxn_field OnCompletion
-    // tests/approvals/itxn.algo.ts:4
+    // tests/approvals/itxn.algo.ts:19
     // const APPROVE = Bytes.fromHex('098101')
     bytec_0 // 0x098101
     itxn_field ClearStateProgramPages
@@ -1379,7 +1403,7 @@ test4_block@0:
     itxn_field ApprovalProgramPages
     itxn_field ApprovalProgramPages
     itxn_field ApprovalProgramPages
-    // tests/approvals/itxn.algo.ts:177-183
+    // tests/approvals/itxn.algo.ts:192-198
     // const appTxn1 = itxn.applicationCall({
     //   approvalProgram: [approval1, approval2, approval2, approval2],
     //   clearStateProgram: APPROVE,
@@ -1393,7 +1417,7 @@ test4_block@0:
     itxn_field Fee
 
 test4_next_txn@1:
-    // tests/approvals/itxn.algo.ts:184
+    // tests/approvals/itxn.algo.ts:199
     // const app1 = appTxn1.submit()
     itxn_submit
     itxn ExtraProgramPages
@@ -1401,24 +1425,24 @@ test4_next_txn@1:
     swap
     itxn NumClearStateProgramPages
     cover 2
-    // tests/approvals/itxn.algo.ts:185
+    // tests/approvals/itxn.algo.ts:200
     // assert(app1.extraProgramPages === 3, 'extra pages = 3')
-    intc_3 // 3
+    pushint 3 // 3
     ==
     assert // extra pages = 3
-    // tests/approvals/itxn.algo.ts:186
+    // tests/approvals/itxn.algo.ts:201
     // assert(app1.numApprovalProgramPages === 2, 'approval pages = 2')
     pushint 2 // 2
     ==
     assert // approval pages = 2
-    // tests/approvals/itxn.algo.ts:187
+    // tests/approvals/itxn.algo.ts:202
     // assert(app1.approvalProgramPages(0) === approval1.concat(approval2).concat(approval2.slice(0, -3)), 'expected approval page 0')
     intc_0 // 0
     itxnas ApprovalProgramPages
-    // tests/approvals/itxn.algo.ts:4
+    // tests/approvals/itxn.algo.ts:19
     // const APPROVE = Bytes.fromHex('098101')
     bytec_0 // 0x098101
-    // tests/approvals/itxn.algo.ts:187
+    // tests/approvals/itxn.algo.ts:202
     // assert(app1.approvalProgramPages(0) === approval1.concat(approval2).concat(approval2.slice(0, -3)), 'expected approval page 0')
     uncover 3
     dup
@@ -1435,10 +1459,10 @@ test4_next_txn@1:
     uncover 2
     select
     swap
-    intc_3 // 3
+    pushint 3 // 3
     dig 1
     >=
-    intc_3 // 3
+    pushint 3 // 3
     dig 2
     uncover 2
     select
@@ -1460,17 +1484,17 @@ test4_next_txn@1:
     uncover 2
     ==
     assert // expected approval page 0
-    // tests/approvals/itxn.algo.ts:188
+    // tests/approvals/itxn.algo.ts:203
     // assert(app1.approvalProgramPages(1) === approval2.slice(-3).concat(approval2), 'expected approval page 1')
-    pushint 1 // 1
+    intc_3 // 1
     itxnas ApprovalProgramPages
     swap
     dup
     len
-    intc_3 // 3
+    pushint 3 // 3
     dig 1
     >=
-    intc_3 // 3
+    pushint 3 // 3
     dig 2
     uncover 2
     select
@@ -1485,23 +1509,170 @@ test4_next_txn@1:
     concat
     ==
     assert // expected approval page 1
-    // tests/approvals/itxn.algo.ts:189
+    // tests/approvals/itxn.algo.ts:204
     // assert(app1.numClearStateProgramPages === 1, 'clear state pages = 1')
-    pushint 1 // 1
+    intc_3 // 1
     ==
     assert // clear state pages = 1
-    // tests/approvals/itxn.algo.ts:190
+    // tests/approvals/itxn.algo.ts:205
     // assert(app1.clearStateProgramPages(0) === APPROVE, 'expected clear state page')
     intc_0 // 0
     itxnas ClearStateProgramPages
-    // tests/approvals/itxn.algo.ts:4
+    // tests/approvals/itxn.algo.ts:19
     // const APPROVE = Bytes.fromHex('098101')
     bytec_0 // 0x098101
-    // tests/approvals/itxn.algo.ts:190
+    // tests/approvals/itxn.algo.ts:205
     // assert(app1.clearStateProgramPages(0) === APPROVE, 'expected clear state page')
     ==
     assert // expected clear state page
     retsub
+
+
+// tests/approvals/itxn.algo.ts::ItxnDemoContract.test5(appId: uint64) -> void:
+test5:
+    // tests/approvals/itxn.algo.ts:208
+    // public test5(appId: Application) {
+    proto 1 0
+    intc_0 // 0
+    pushbytes ""
+    dup
+
+test5_block@0:
+    // tests/approvals/itxn.algo.ts:210
+    // receiver: appId.address,
+    frame_dig -1
+    app_params_get AppAddress
+    assert // application exists
+    // tests/approvals/itxn.algo.ts:215
+    // appId,
+    frame_dig -1
+    swap
+    // tests/approvals/itxn.algo.ts:219
+    // const [, appRes] = submitGroup(pay, app)
+    itxn_begin
+    // tests/approvals/itxn.algo.ts:211
+    // amount: 1000,
+    intc 4 // 1000
+    itxn_field Amount
+    itxn_field Receiver
+    // tests/approvals/itxn.algo.ts:209-212
+    // const pay = itxn.payment({
+    //   receiver: appId.address,
+    //   amount: 1000,
+    // })
+    intc_3 // 1
+    itxn_field TypeEnum
+    intc_0 // 0
+    itxn_field Fee
+
+test5_next_txn@1:
+    // tests/approvals/itxn.algo.ts:219
+    // const [, appRes] = submitGroup(pay, app)
+    itxn_next
+    // tests/approvals/itxn.algo.ts:216
+    // appArgs: [methodSelector(ItxnReceiver.prototype.receivePay), Uint64(1), new Str('hello')],
+    pushbytes 0x1971d197 // method "receivePay(uint64,pay,string)(uint64,uint64,string)"
+    itxn_field ApplicationArgs
+    pushbytes 0x0000000000000001
+    itxn_field ApplicationArgs
+    pushbytes 0x000568656c6c6f
+    itxn_field ApplicationArgs
+    itxn_field ApplicationID
+    // tests/approvals/itxn.algo.ts:214-217
+    // const app = itxn.applicationCall({
+    //   appId,
+    //   appArgs: [methodSelector(ItxnReceiver.prototype.receivePay), Uint64(1), new Str('hello')],
+    // })
+    intc_1 // 6
+    itxn_field TypeEnum
+    intc_0 // 0
+    itxn_field Fee
+
+test5_next_txn@2:
+    // tests/approvals/itxn.algo.ts:219
+    // const [, appRes] = submitGroup(pay, app)
+    itxn_submit
+    itxn LastLog
+    // tests/approvals/itxn.algo.ts:221
+    // const returnValue = decodeArc4<[uint64, uint64, string]>(appRes.lastLog, 'log')
+    dup
+    extract 4 0
+    swap
+    extract 0 4
+    pushbytes 0x151f7c75
+    ==
+    assert // Bytes has valid prefix
+    dup
+    intc_0 // 0
+    pushint 8 // 8
+    extract3 // on error: Index access is out of bounds
+    btoi
+    swap
+    dup
+    pushint 8 // 8
+    dup
+    extract3 // on error: Index access is out of bounds
+    btoi
+    swap
+    dup
+    pushint 16 // 16
+    extract_uint16
+    swap
+    dup
+    len
+    swap
+    uncover 2
+    uncover 2
+    substring3
+    extract 2 0
+    uncover 2
+    frame_bury 1
+    swap
+    frame_bury 2
+    frame_bury 0
+    // tests/approvals/itxn.algo.ts:223
+    // assertMatch(returnValue, [1, 1000, 'hello'])
+    pushint 3 // 3
+    dup
+    ==
+    bz test5_bool_false@7
+
+test5_and_contd@3:
+    // tests/approvals/itxn.algo.ts:223
+    // assertMatch(returnValue, [1, 1000, 'hello'])
+    frame_dig 1
+    intc_3 // 1
+    ==
+    bz test5_bool_false@7
+
+test5_and_contd@4:
+    // tests/approvals/itxn.algo.ts:223
+    // assertMatch(returnValue, [1, 1000, 'hello'])
+    frame_dig 2
+    intc 4 // 1000
+    ==
+    bz test5_bool_false@7
+
+test5_and_contd@5:
+    // tests/approvals/itxn.algo.ts:223
+    // assertMatch(returnValue, [1, 1000, 'hello'])
+    frame_dig 0
+    pushbytes "hello"
+    ==
+    bz test5_bool_false@7
+
+test5_bool_true@6:
+    intc_3 // 1
+
+test5_bool_merge@8:
+    // tests/approvals/itxn.algo.ts:223
+    // assertMatch(returnValue, [1, 1000, 'hello'])
+    assert // assert target is match for conditions
+    retsub
+
+test5_bool_false@7:
+    intc_0 // 0
+    b test5_bool_merge@8
 
 
 // tests/approvals/itxn.algo.ts::ItxnDemoContract.__algots__.defaultCreate() -> void:
@@ -1519,7 +1690,7 @@ constructor_block@0:
 constructor_block@1:
 
 constructor_after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor@2:
-    // tests/approvals/itxn.algo.ts:7
+    // tests/approvals/itxn.algo.ts:22
     // name = GlobalState({ initialValue: Bytes() })
     bytec_2 // "name"
     pushbytes 0x
