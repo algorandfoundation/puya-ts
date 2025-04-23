@@ -1,4 +1,19 @@
-import { assert, Bytes, Contract, Global, GlobalState, itxn, OnCompleteAction, op, Txn } from '@algorandfoundation/algorand-typescript'
+import type { Application, gtxn, uint64 } from '@algorandfoundation/algorand-typescript'
+import {
+  assert,
+  assertMatch,
+  Bytes,
+  Contract,
+  Global,
+  GlobalState,
+  itxn,
+  OnCompleteAction,
+  op,
+  Txn,
+  Uint64,
+} from '@algorandfoundation/algorand-typescript'
+import { decodeArc4, methodSelector, Str } from '@algorandfoundation/algorand-typescript/arc4'
+import { submitGroup } from '@algorandfoundation/algorand-typescript/itxn'
 
 const LOG_1ST_ARG_AND_APPROVE = Bytes.fromHex('09361A00B08101')
 const APPROVE = Bytes.fromHex('098101')
@@ -69,7 +84,7 @@ export class ItxnDemoContract extends Contract {
       createAppParams = itxn.applicationCall({
         approvalProgram: APPROVE,
         clearStateProgram: APPROVE,
-        appArgs: [Bytes('3'), '4', Bytes('5')],
+        appArgs: [Bytes('3'), new Str('4'), Bytes('5')],
         note: 'no args param set',
       })
     }
@@ -188,5 +203,29 @@ export class ItxnDemoContract extends Contract {
     assert(app1.approvalProgramPages(1) === approval2.slice(-3).concat(approval2), 'expected approval page 1')
     assert(app1.numClearStateProgramPages === 1, 'clear state pages = 1')
     assert(app1.clearStateProgramPages(0) === APPROVE, 'expected clear state page')
+  }
+
+  public test5(appId: Application) {
+    const pay = itxn.payment({
+      receiver: appId.address,
+      amount: 1000,
+    })
+
+    const app = itxn.applicationCall({
+      appId,
+      appArgs: [methodSelector(ItxnReceiver.prototype.receivePay), Uint64(1), new Str('hello')],
+    })
+
+    const [, appRes] = submitGroup(pay, app)
+
+    const returnValue = decodeArc4<[uint64, uint64, string]>(appRes.lastLog, 'log')
+
+    assertMatch(returnValue, [1, 1000, 'hello'])
+  }
+}
+
+class ItxnReceiver extends Contract {
+  public receivePay(a: uint64, b: gtxn.PaymentTxn, c: string): [uint64, uint64, string] {
+    return [a, b.amount, c]
   }
 }

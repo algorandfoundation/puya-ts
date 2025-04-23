@@ -5,6 +5,7 @@ import { createArc4TestFixture } from './util/test-fixture'
 describe('itxn contract', () => {
   const test = createArc4TestFixture('tests/approvals/itxn.algo.ts', {
     ItxnDemoContract: { funding: algos(2) },
+    ItxnReceiver: { funding: algos(1) },
   })
 
   test('test1 runs', async ({ appClientItxnDemoContract }) => {
@@ -21,5 +22,8 @@ describe('itxn contract', () => {
 
   test('test4 runs', async ({ appClientItxnDemoContract }) => {
     await appClientItxnDemoContract.send.call({ method: 'test4', extraFee: microAlgos(17_000) })
+  })
+  test('test5 runs', async ({ appClientItxnDemoContract, appClientItxnReceiver }) => {
+    await appClientItxnDemoContract.send.call({ method: 'test5', args: [appClientItxnReceiver.appId], extraFee: microAlgos(10_000) })
   })
 })

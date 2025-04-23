@@ -6,7 +6,7 @@ import { TxnField, TxnFields } from '../../../awst/txn-fields'
 import { logger } from '../../../logger'
 import { codeInvariant, invariant } from '../../../util'
 import type { PType } from '../../ptypes'
-import { ItxnParamsPType, ObjectPType, submitGroupItxnFunction, TransactionFunctionType, TuplePType } from '../../ptypes'
+import { ItxnParamsPType, ObjectPType, stringPType, submitGroupItxnFunction, TransactionFunctionType, TuplePType } from '../../ptypes'
 import type { TxnFieldsMetaData } from '../../txn-fields'
 import { anyTxnFields, txnKindToFields } from '../../txn-fields'
 import { instanceEb } from '../../type-registry'
@@ -77,7 +77,22 @@ export function mapTransactionFields(
         mappedFields.set(
           txnField,
           nodeFactory.tupleExpression({
-            items: propValue[StaticIterator]().map((i) => i.toBytes(propValue.sourceLocation)),
+            items: propValue[StaticIterator]().flatMap((i) => {
+              if (i.ptype instanceof ItxnParamsPType) {
+                logger.error(
+                  i.sourceLocation,
+                  'Transaction parameters should not be passed as application args, instead include them in the same transaction group, immediately preceding this call.',
+                )
+                return []
+              }
+              if (i.ptype.equals(stringPType)) {
+                logger.error(
+                  i.sourceLocation,
+                  'String value must be explicitly converted to `bytes` or `arc4.Str` using `Bytes(value)` `new arc4.Str(value)`',
+                )
+              }
+              return i.toBytes(i.sourceLocation)
+            }),
             sourceLocation: propValue.sourceLocation,
           }),
         )
