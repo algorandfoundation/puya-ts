@@ -45,6 +45,7 @@ import { MutableArrayClassBuilder, MutableArrayExpressionBuilder } from '../eb/m
 import { NamespaceBuilder } from '../eb/namespace-builder'
 import { NativeArrayExpressionBuilder } from '../eb/native-array-expression-builder'
 import { NeverExpressionBuilder } from '../eb/never-expression-builder'
+import { ObjectWithOptionalFieldsExpressionBuilder } from '../eb/object-with-optional-fields'
 import { FreeIntrinsicOpBuilder, IntrinsicOpGroupBuilder, IntrinsicOpGroupOrFunctionTypeBuilder } from '../eb/op-module-builder'
 import { AccountExpressionBuilder, AccountFunctionBuilder } from '../eb/reference/account'
 import { ApplicationExpressionBuilder, ApplicationFunctionBuilder } from '../eb/reference/application'
@@ -68,6 +69,7 @@ import {
   SubmitItxnGroupFunctionBuilder,
 } from '../eb/transactions/inner-transaction-params'
 import { InnerTransactionExpressionBuilder } from '../eb/transactions/inner-transactions'
+import { ItxnComposeBuilder } from '../eb/transactions/itxn-compose'
 import { TupleExpressionBuilder } from '../eb/tuple-expression-builder'
 import { Uint64EnumMemberExpressionBuilder, Uint64EnumTypeBuilder } from '../eb/uint64-enum-type-builder'
 import { UInt64ExpressionBuilder, UInt64FunctionBuilder } from '../eb/uint64-expression-builder'
@@ -185,12 +187,14 @@ import {
   GlobalStateFunction,
   GlobalStateGeneric,
   GlobalStateType,
+  inputOnlyObjects,
   IntrinsicFunctionGroupType,
   IntrinsicFunctionGroupTypeType,
   IntrinsicFunctionType,
   IntrinsicFunctionTypeType,
   IterableIteratorGeneric,
   IterableIteratorType,
+  itxnComposePType,
   keyRegistrationGtxnType,
   keyRegistrationItxnFn,
   keyRegistrationItxnParamsType,
@@ -447,4 +451,11 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: assetTransferItxnParamsType, instanceEb: ItxnParamsExpressionBuilder })
   typeRegistry.register({ ptype: assetFreezeItxnParamsType, instanceEb: ItxnParamsExpressionBuilder })
   typeRegistry.register({ ptype: applicationCallItxnParamsType, instanceEb: ItxnParamsExpressionBuilder })
+
+  // ITXN Compose
+  typeRegistry.register({ ptype: itxnComposePType, singletonEb: ItxnComposeBuilder })
+
+  for (const inputType of inputOnlyObjects) {
+    typeRegistry.register({ ptype: inputType, instanceEb: ObjectWithOptionalFieldsExpressionBuilder })
+  }
 }

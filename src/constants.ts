@@ -15,6 +15,7 @@ export const Constants = {
       box: `${algoTsPackage}/box.d.ts`,
       compiled: `${algoTsPackage}/compiled.d.ts`,
       itxn: `${algoTsPackage}/itxn.d.ts`,
+      itxnCompose: `${algoTsPackage}/itxn-compose.d.ts`,
       gtxn: `${algoTsPackage}/gtxn.d.ts`,
       logicSig: `${algoTsPackage}/logic-sig.d.ts`,
       mutableArray: `${algoTsPackage}/mutable-array.d.ts`,
