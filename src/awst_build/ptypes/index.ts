@@ -3,8 +3,8 @@ import { SourceLocation } from '../../awst/source-location'
 import { wtypes } from '../../awst/wtypes'
 
 import { Constants } from '../../constants'
-import { CodeError, InternalError, NotSupported } from '../../errors'
-import { codeInvariant, distinctByEquality, sortBy } from '../../util'
+import { CodeError, InternalError, NotSupported, throwError } from '../../errors'
+import { codeInvariant, distinctByEquality, invariant, sortBy } from '../../util'
 import { SymbolName } from '../symbol-name'
 import { GenericPType, PType } from './base'
 import { transientTypeErrors } from './transient-type-errors'
@@ -73,6 +73,19 @@ export class UnsupportedType extends PType {
 
   get wtypeOrThrow(): wtypes.WType {
     throw new NotSupported(`The type ${this.fullName} is not supported`)
+  }
+}
+
+export class ObjectWithOptionalFieldsType extends TransientType {
+  constructor({ name, module }: { name: string; module: string }) {
+    const errors = transientTypeErrors.optionalFields(name)
+    super({
+      name,
+      module,
+      singleton: false,
+      expressionMessage: errors.usedInExpression,
+      typeMessage: errors.usedAsType,
+    })
   }
 }
 
@@ -447,6 +460,18 @@ export class LibFunctionType extends PType {
   }
 }
 export class LibClassType extends PType {
+  readonly wtype: undefined
+  readonly name: string
+  readonly module: string
+  readonly singleton = true
+
+  constructor({ name, module }: { name: string; module: string }) {
+    super()
+    this.name = name
+    this.module = module
+  }
+}
+export class LibObjType extends PType {
   readonly wtype: undefined
   readonly name: string
   readonly module: string
@@ -1133,6 +1158,25 @@ export class Uint64EnumMemberType extends PType {
   }
 }
 
+export class Uint64EnumMemberLiteralType extends Uint64EnumMemberType {
+  readonly wtype = wtypes.uint64WType
+  readonly member: string
+  readonly value: bigint
+
+  constructor(enumType: Uint64EnumType, member: string | bigint) {
+    super(enumType)
+    if (typeof member === 'bigint') {
+      ;[this.member, this.value] =
+        Object.entries(enumType.members).find(([n, v]) => v === member) ??
+        throwError(new InternalError(`${member} is not a valid member for ${enumType.name}`))
+    } else {
+      invariant(member in enumType.members, `${member} is not a valid member for ${enumType.name}`)
+      this.member = member
+      this.value = enumType.members[member]
+    }
+  }
+}
+
 export class Uint64EnumType extends PType {
   readonly memberType: Uint64EnumMemberType
   readonly wtype = wtypes.uint64WType
@@ -1147,6 +1191,14 @@ export class Uint64EnumType extends PType {
     this.module = props.module
     this.members = props.members
     this.memberType = new Uint64EnumMemberType(this)
+  }
+
+  getMemberLiteral(member: string | bigint) {
+    return new Uint64EnumMemberLiteralType(this, member)
+  }
+
+  hasMember(member: string | bigint) {
+    return Object.entries(this.members).some((m) => m[0] === member || m[1] === member)
   }
 }
 
@@ -1365,9 +1417,26 @@ export const applicationItxnType = new InnerTransactionPType({
   name: 'ApplicationCallInnerTxn',
   kind: TransactionKind.appl,
 })
+export const anyItxnParamsType = new ItxnParamsPType({
+  name: 'AnyItxnParams',
+})
+
 export const anyItxnType = new InnerTransactionPType({
   name: 'InnerTxn',
 })
+
+export const inputOnlyObjects = ['Payment', 'KeyRegistration', 'AssetConfig', 'AssetTransfer', 'AssetFreeze', 'ApplicationCall'].flatMap(
+  (txnKind) => [
+    new ObjectWithOptionalFieldsType({
+      name: `${txnKind}Fields`,
+      module: Constants.moduleNames.algoTs.itxn,
+    }),
+    new ObjectWithOptionalFieldsType({
+      name: `${txnKind}ComposeFields`,
+      module: Constants.moduleNames.algoTs.itxnCompose,
+    }),
+  ],
+)
 
 export const submitGroupItxnFunction = new LibFunctionType({
   name: 'submitGroup',
@@ -1488,3 +1557,8 @@ export class MutableArrayType extends PType {
     })
   }
 }
+
+export const itxnComposePType = new LibObjType({
+  module: Constants.moduleNames.algoTs.itxnCompose,
+  name: 'itxnCompose',
+})

@@ -65,6 +65,7 @@ import type {
   ReturnStatement,
   Reversed,
   RootNodeVisitor,
+  SetInnerTransactionFields,
   SingleEvaluation,
   SizeOf,
   SliceExpression,
@@ -260,11 +261,19 @@ export class FunctionTraverser implements ExpressionVisitor<void>, StatementVisi
     expression.arrayIndex?.accept(this)
   }
 
+  visitSetInnerTransactionFields(expression: SetInnerTransactionFields): void {
+    for (const itxn of expression.itxns) {
+      itxn.accept(this)
+    }
+  }
+
   visitSubmitInnerTransaction(expression: SubmitInnerTransaction): void {
     for (const itxn of expression.itxns) {
       itxn.accept(this)
     }
   }
+
+  visitSizeOf(expression: SizeOf): void {}
 
   visitFieldExpression(expression: FieldExpression): void {
     expression.base.accept(this)
@@ -294,6 +303,11 @@ export class FunctionTraverser implements ExpressionVisitor<void>, StatementVisi
   visitAppAccountStateExpression(expression: AppAccountStateExpression): void {
     expression.key.accept(this)
     expression.account.accept(this)
+  }
+
+  visitBoxPrefixedKeyExpression(expression: BoxPrefixedKeyExpression): void {
+    expression.key.accept(this)
+    expression.prefix.accept(this)
   }
 
   visitBoxValueExpression(expression: BoxValueExpression): void {
@@ -427,10 +441,6 @@ export class FunctionTraverser implements ExpressionVisitor<void>, StatementVisi
       v.accept(this)
     }
   }
-
-  visitBoxPrefixedKeyExpression(expression: BoxPrefixedKeyExpression): void {}
-
-  visitSizeOf(expression: SizeOf): void {}
 
   visitCompiledContract(expression: CompiledContract): void {
     for (const v of expression.templateVariables.values()) {

@@ -136,17 +136,17 @@ contract BoxCreate
   {
     box_create("a", 10)
     assert(checked_maybe(box_len("a"), comment=Box must have value) == 10)
-    box_create("b", SIZE_OF(uint64))
+    box_create("b", size_of(uint64))
     assert(checked_maybe(box_len("b"), comment=Box must have value) == 8)
-    box_create("c", SIZE_OF(arc4.static_array<arc4.uint32>))
+    box_create("c", size_of(arc4.static_array<arc4.uint32>))
     assert(checked_maybe(box_len("c"), comment=Box must have value) == 40)
     box_create("d", 2)
     assert(checked_maybe(box_len("d"), comment=Box must have value) == 2)
-    box_create("e", SIZE_OF(arc4.tuple<uint8,uint8,bool,bool>))
+    box_create("e", size_of(arc4.tuple<uint8,uint8,bool,bool>))
     assert(checked_maybe(box_len("e"), comment=Box must have value) == 3)
-    box_create("bool", SIZE_OF(bool))
+    box_create("bool", size_of(bool))
     assert(checked_maybe(box_len("bool"), comment=Box must have value) == 8)
-    box_create("arc4b", SIZE_OF(arc4.bool))
+    box_create("arc4b", size_of(arc4.bool))
     assert(checked_maybe(box_len("arc4b"), comment=Box must have value) == 1)
   }
   
@@ -262,7 +262,7 @@ contract BoxToRefTest
   test(): void
   {
     boxForCaller: box_key = BoxMapKey(prefix="", key=txn<Sender>())
-    box_create(boxForCaller, SIZE_OF(arc4.static_array<arc4.uint8>))
+    box_create(boxForCaller, size_of(arc4.static_array<arc4.uint8>))
     boxRef: box_key = boxForCaller
     box_replace(boxRef, 0, reinterpret_cast<bytes>(123))
     assert(ARC4_DECODE(Box[boxForCaller].value[0]) == 123, comment=First array item in box should be 123)

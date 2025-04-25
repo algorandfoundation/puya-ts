@@ -2,15 +2,6 @@ import { Buffer } from 'node:buffer'
 import { InternalError } from '../errors'
 import { uint8ArrayToBase32, uint8ArrayToUtf8 } from '../util'
 import type { ContractReference } from './models'
-import type {
-  AppStorageDefinition,
-  AssertExpression,
-  ContractMemberNodeVisitor,
-  Emit,
-  ExpressionVisitor,
-  RootNodeVisitor,
-  StatementVisitor,
-} from './nodes'
 import * as nodes from './nodes'
 import { AppStorageKind, BytesEncoding, ContractMethodTarget, InstanceMethodTarget, InstanceSuperMethodTarget, SubroutineID } from './nodes'
 import { SymbolToNumber } from './util'
@@ -29,7 +20,11 @@ function printBytes(value: Uint8Array, encoding: BytesEncoding) {
   }
 }
 export class ToCodeVisitor
-  implements RootNodeVisitor<string[]>, ContractMemberNodeVisitor<string[]>, StatementVisitor<string[]>, ExpressionVisitor<string>
+  implements
+    nodes.RootNodeVisitor<string[]>,
+    nodes.ContractMemberNodeVisitor<string[]>,
+    nodes.StatementVisitor<string[]>,
+    nodes.ExpressionVisitor<string>
 {
   visitRange(expression: nodes.Range): string {
     return `urange(${expression.start.accept(this)}, ${expression.stop.accept(this)}, ${expression.step.accept(this)})`
@@ -46,7 +41,7 @@ export class ToCodeVisitor
   visitARC4Router(expression: nodes.ARC4Router): string {
     return `arc4Router()`
   }
-  visitAppStorageDefinition(contractMemberNode: AppStorageDefinition): string[] {
+  visitAppStorageDefinition(contractMemberNode: nodes.AppStorageDefinition): string[] {
     throw new Error('Method not implemented.')
   }
   #singleEval = new SymbolToNumber()
@@ -102,6 +97,10 @@ export class ToCodeVisitor
       .join(', ')
     return `${expression.base.accept(this)}.slice(${args})`
   }
+  visitBoxPrefixedKeyExpression(expression: nodes.BoxPrefixedKeyExpression): string {
+    return `BoxMapKey(prefix=${expression.prefix.accept(this)}, key=${expression.key.accept(this)})`
+  }
+
   visitBoxValueExpression(expression: nodes.BoxValueExpression): string {
     return `Box[${expression.key.accept(this)}].value`
   }
@@ -192,6 +191,13 @@ export class ToCodeVisitor
     const indexAccess = expression.arrayIndex ? `[${expression.arrayIndex.accept(this)}]` : ''
     return `${expression.itxn.accept(this)}.${expression.field}${indexAccess}`
   }
+  visitSetInnerTransactionFields(expression: nodes.SetInnerTransactionFields): string {
+    return `${expression.startWithBegin ? 'begin' : 'next'}_txn(${expression.itxns.map((i) => i.accept(this)).join(', ')})`
+  }
+  visitSizeOf(expression: nodes.SizeOf): string {
+    return `size_of(${expression.sizeWtype})`
+  }
+
   visitSubmitInnerTransaction(expression: nodes.SubmitInnerTransaction): string {
     return `submit_txn(${expression.itxns.map((i) => i.accept(this)).join(', ')})`
   }
@@ -298,12 +304,6 @@ export class ToCodeVisitor
       .join(', ')
     return `new ${expression.wtype.name}(${props})`
   }
-  visitBoxPrefixedKeyExpression(expression: nodes.BoxPrefixedKeyExpression): string {
-    return `BoxMapKey(prefix=${expression.prefix.accept(this)}, key=${expression.key.accept(this)})`
-  }
-  visitSizeOf(expression: nodes.SizeOf): string {
-    return `SIZE_OF(${expression.sizeWtype})`
-  }
   visitExpressionStatement(statement: nodes.ExpressionStatement): string[] {
     return [statement.expr.accept(this)]
   }
@@ -361,7 +361,7 @@ export class ToCodeVisitor
       '}',
     ]
   }
-  visitEmit(expression: Emit): string {
+  visitEmit(expression: nodes.Emit): string {
     return `emit("${expression.signature}", ${expression.value.accept(this)})`
   }
 
@@ -374,7 +374,7 @@ export class ToCodeVisitor
   visitLogicSignature(moduleStatement: nodes.LogicSignature): string[] {
     return ['', `logicsig ${moduleStatement.id} {`, ...indent(moduleStatement.program.body.accept(this)), '}']
   }
-  visitAssertExpression(expression: AssertExpression): string {
+  visitAssertExpression(expression: nodes.AssertExpression): string {
     return [
       expression.condition ? 'assert(' : 'err(',
       expression.condition?.accept(this) ?? '',
@@ -396,7 +396,7 @@ export class ToCodeVisitor
     if (c.appState.length) {
       const storageByKind = Array.from(c.appState.values()).reduce(
         (acc, cur) => acc.set(cur.kind, [...(acc.get(cur.kind) ?? []), cur]),
-        new Map<AppStorageKind, AppStorageDefinition[]>(),
+        new Map<AppStorageKind, nodes.AppStorageDefinition[]>(),
       )
       for (const [name, kind] of [
         ['globals', AppStorageKind.appGlobal],

@@ -37,6 +37,7 @@ import {
   SuperPrototypeSelector,
   TuplePType,
   TypeParameterType,
+  Uint64EnumType,
   undefinedPType,
   UnionPType,
   unknownPType,
@@ -175,6 +176,11 @@ export class TypeResolver {
       case ts.TypeFlags.Unknown:
         return unknownPType
       case ts.TypeFlags.NumberLiteral | ts.TypeFlags.EnumLiteral:
+        invariant(tsType.isNumberLiteral(), 'type must be literal', sourceLocation)
+        return (
+          this.tryResolveLiteralToEnumMember(tsType, BigInt(tsType.value), sourceLocation) ??
+          new NumericLiteralPType({ literalValue: BigInt(tsType.value) })
+        )
       case ts.TypeFlags.NumberLiteral:
         invariant(tsType.isNumberLiteral(), 'type must be literal', sourceLocation)
         return new NumericLiteralPType({ literalValue: BigInt(tsType.value) })
@@ -295,6 +301,27 @@ export class TypeResolver {
       return this.reflectObjectType(tsType, sourceLocation)
     }
     throw new InternalError(`Cannot determine type of ${typeName}`, { sourceLocation })
+  }
+
+  /**
+   * Given a literal value with a named symbol, check its parent to see if it's actually an enum member.
+   *
+   * @param tsType
+   * @param sourceLocation
+   * @private
+   *
+   * @remarks
+   * Given an enum `enum E { A = 0, B = 1 }`, E. A will resolve to the literal `0`, but it is more useful to know that
+   * it is E.A
+   */
+  private tryResolveLiteralToEnumMember(tsType: ts.Type, literalValue: bigint, sourceLocation: SourceLocation) {
+    const memberDeclaration = tsType.symbol?.declarations?.[0]
+    if (!memberDeclaration || !ts.isEnumMember(memberDeclaration)) return undefined
+
+    const parentType = this.resolve(memberDeclaration.parent.name, sourceLocation)
+    if (parentType instanceof Uint64EnumType) {
+      return parentType.getMemberLiteral(literalValue)
+    }
   }
 
   private reflectObjectType(tsType: ts.Type, sourceLocation: SourceLocation): ObjectPType {

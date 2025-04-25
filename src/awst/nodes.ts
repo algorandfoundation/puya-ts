@@ -479,6 +479,20 @@ export class InnerTransactionField extends Expression {
     return visitor.visitInnerTransactionField(this)
   }
 }
+export class SetInnerTransactionFields extends Expression {
+  constructor(props: Props<SetInnerTransactionFields>) {
+    super(props)
+    this.itxns = props.itxns
+    this.startWithBegin = props.startWithBegin
+    this.wtype = props.wtype
+  }
+  readonly itxns: Array<Expression>
+  readonly startWithBegin: boolean
+  readonly wtype: wtypes.WType
+  accept<T>(visitor: ExpressionVisitor<T>): T {
+    return visitor.visitSetInnerTransactionFields(this)
+  }
+}
 export class SubmitInnerTransaction extends Expression {
   constructor(props: Props<SubmitInnerTransaction>) {
     super(props)
@@ -1511,6 +1525,7 @@ export const concreteNodes = {
   tupleItemExpression: TupleItemExpression,
   varExpression: VarExpression,
   innerTransactionField: InnerTransactionField,
+  setInnerTransactionFields: SetInnerTransactionFields,
   submitInnerTransaction: SubmitInnerTransaction,
   fieldExpression: FieldExpression,
   indexExpression: IndexExpression,
@@ -1621,6 +1636,7 @@ export interface ExpressionVisitor<T> {
   visitTupleItemExpression(expression: TupleItemExpression): T
   visitVarExpression(expression: VarExpression): T
   visitInnerTransactionField(expression: InnerTransactionField): T
+  visitSetInnerTransactionFields(expression: SetInnerTransactionFields): T
   visitSubmitInnerTransaction(expression: SubmitInnerTransaction): T
   visitFieldExpression(expression: FieldExpression): T
   visitIndexExpression(expression: IndexExpression): T
