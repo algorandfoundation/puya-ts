@@ -13,9 +13,6 @@ export abstract class Node {
   readonly sourceLocation: SourceLocation
 }
 export abstract class Statement extends Node {
-  constructor(props: Props<Statement>) {
-    super(props)
-  }
   abstract accept<T>(visitor: StatementVisitor<T>): T
 }
 export abstract class Expression extends Node {
@@ -30,10 +27,8 @@ export class ExpressionStatement extends Statement {
   constructor(props: Props<ExpressionStatement>) {
     super(props)
     this.expr = props.expr
-    this.sourceLocation = props.sourceLocation
   }
   readonly expr: Expression
-  readonly sourceLocation: SourceLocation
   accept<T>(visitor: StatementVisitor<T>): T {
     return visitor.visitExpressionStatement(this)
   }
@@ -133,11 +128,9 @@ export class AssertExpression extends Expression {
     super(props)
     this.condition = props.condition
     this.errorMessage = props.errorMessage
-    this.wtype = props.wtype
   }
   readonly condition: Expression | null
   readonly errorMessage: string | null
-  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitAssertExpression(this)
   }
@@ -145,11 +138,9 @@ export class AssertExpression extends Expression {
 export class IntegerConstant extends Expression {
   constructor(props: Props<IntegerConstant>) {
     super(props)
-    this.wtype = props.wtype
     this.value = props.value
     this.tealAlias = props.tealAlias
   }
-  readonly wtype: wtypes.WType
   readonly value: bigint
   readonly tealAlias: string | null
   accept<T>(visitor: ExpressionVisitor<T>): T {
@@ -172,10 +163,8 @@ export class BoolConstant extends Expression {
   constructor(props: Props<BoolConstant>) {
     super(props)
     this.value = props.value
-    this.wtype = props.wtype
   }
   readonly value: boolean
-  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitBoolConstant(this)
   }
@@ -190,11 +179,9 @@ export enum BytesEncoding {
 export class BytesConstant extends Expression {
   constructor(props: Props<BytesConstant>) {
     super(props)
-    this.wtype = props.wtype
     this.value = props.value
     this.encoding = props.encoding
   }
-  readonly wtype: wtypes.WType
   readonly value: Uint8Array
   readonly encoding: BytesEncoding
   accept<T>(visitor: ExpressionVisitor<T>): T {
@@ -205,20 +192,13 @@ export class StringConstant extends Expression {
   constructor(props: Props<StringConstant>) {
     super(props)
     this.value = props.value
-    this.wtype = props.wtype
   }
   readonly value: string
-  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitStringConstant(this)
   }
 }
 export class VoidConstant extends Expression {
-  constructor(props: Props<VoidConstant>) {
-    super(props)
-    this.wtype = props.wtype
-  }
-  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitVoidConstant(this)
   }
@@ -226,10 +206,8 @@ export class VoidConstant extends Expression {
 export class TemplateVar extends Expression {
   constructor(props: Props<TemplateVar>) {
     super(props)
-    this.wtype = props.wtype
     this.name = props.name
   }
-  readonly wtype: wtypes.WType
   readonly name: string
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitTemplateVar(this)
@@ -238,10 +216,8 @@ export class TemplateVar extends Expression {
 export class MethodConstant extends Expression {
   constructor(props: Props<MethodConstant>) {
     super(props)
-    this.wtype = props.wtype
     this.value = props.value
   }
-  readonly wtype: wtypes.WType
   readonly value: string
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitMethodConstant(this)
@@ -250,10 +226,8 @@ export class MethodConstant extends Expression {
 export class AddressConstant extends Expression {
   constructor(props: Props<AddressConstant>) {
     super(props)
-    this.wtype = props.wtype
     this.value = props.value
   }
-  readonly wtype: wtypes.WType
   readonly value: string
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitAddressConstant(this)
@@ -275,10 +249,8 @@ export class Copy extends Expression {
   constructor(props: Props<Copy>) {
     super(props)
     this.value = props.value
-    this.wtype = props.wtype
   }
   readonly value: Expression
-  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitCopy(this)
   }
@@ -302,11 +274,9 @@ export class ArrayExtend extends Expression {
     super(props)
     this.base = props.base
     this.other = props.other
-    this.wtype = props.wtype
   }
   readonly base: Expression
   readonly other: Expression
-  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitArrayExtend(this)
   }
@@ -315,10 +285,8 @@ export class ArrayPop extends Expression {
   constructor(props: Props<ArrayPop>) {
     super(props)
     this.base = props.base
-    this.wtype = props.wtype
   }
   readonly base: Expression
-  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitArrayPop(this)
   }
@@ -380,11 +348,9 @@ export class UpdateInnerTransaction extends Expression {
     super(props)
     this.itxn = props.itxn
     this.fields = props.fields
-    this.wtype = props.wtype
   }
   readonly itxn: Expression
   readonly fields: Map<TxnField, Expression>
-  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitUpdateInnerTransaction(this)
   }
@@ -406,13 +372,9 @@ export class CheckedMaybe extends Expression {
     super(props)
     this.expr = props.expr
     this.comment = props.comment
-    this.wtype = props.wtype
-    this.sourceLocation = props.sourceLocation
   }
   readonly expr: Expression
   readonly comment: string
-  readonly wtype: wtypes.WType
-  readonly sourceLocation: SourceLocation
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitCheckedMaybe(this)
   }
@@ -434,11 +396,9 @@ export class TupleItemExpression extends Expression {
     super(props)
     this.base = props.base
     this.index = props.index
-    this.wtype = props.wtype
   }
   readonly base: Expression
   readonly index: bigint
-  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitTupleItemExpression(this)
   }
@@ -471,10 +431,8 @@ export class SubmitInnerTransaction extends Expression {
   constructor(props: Props<SubmitInnerTransaction>) {
     super(props)
     this.itxns = props.itxns
-    this.wtype = props.wtype
   }
   readonly itxns: Array<Expression>
-  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitSubmitInnerTransaction(this)
   }
@@ -484,11 +442,9 @@ export class FieldExpression extends Expression {
     super(props)
     this.base = props.base
     this.name = props.name
-    this.wtype = props.wtype
   }
   readonly base: Expression
   readonly name: string
-  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitFieldExpression(this)
   }
@@ -576,13 +532,9 @@ export class SingleEvaluation extends Expression {
     super(props)
     this.source = props.source
     this.id = props.id
-    this.wtype = props.wtype
-    this.sourceLocation = props.sourceLocation
   }
   readonly source: Expression
   readonly id: symbol
-  readonly wtype: wtypes.WType
-  readonly sourceLocation: SourceLocation
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitSingleEvaluation(this)
   }
@@ -613,10 +565,8 @@ export class ArrayLength extends Expression {
   constructor(props: Props<ArrayLength>) {
     super(props)
     this.array = props.array
-    this.wtype = props.wtype
   }
   readonly array: Expression
-  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitArrayLength(this)
   }
@@ -627,12 +577,10 @@ export class ConditionalExpression extends Expression {
     this.condition = props.condition
     this.trueExpr = props.trueExpr
     this.falseExpr = props.falseExpr
-    this.wtype = props.wtype
   }
   readonly condition: Expression
   readonly trueExpr: Expression
   readonly falseExpr: Expression
-  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitConditionalExpression(this)
   }
@@ -661,7 +609,6 @@ export class AssignmentExpression extends Expression {
     super(props)
     this.target = props.target
     this.value = props.value
-    this.wtype = props.wtype
   }
   readonly target:
     | VarExpression
@@ -672,7 +619,6 @@ export class AssignmentExpression extends Expression {
     | AppAccountStateExpression
     | BoxValueExpression
   readonly value: Expression
-  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitAssignmentExpression(this)
   }
@@ -692,12 +638,10 @@ export enum NumericComparison {
 export class NumericComparisonExpression extends Expression {
   constructor(props: Props<NumericComparisonExpression>) {
     super(props)
-    this.wtype = props.wtype
     this.lhs = props.lhs
     this.operator = props.operator
     this.rhs = props.rhs
   }
-  readonly wtype: wtypes.WType
   readonly lhs: Expression
   readonly operator: NumericComparison
   readonly rhs: Expression
@@ -708,12 +652,10 @@ export class NumericComparisonExpression extends Expression {
 export class BytesComparisonExpression extends Expression {
   constructor(props: Props<BytesComparisonExpression>) {
     super(props)
-    this.wtype = props.wtype
     this.lhs = props.lhs
     this.operator = props.operator
     this.rhs = props.rhs
   }
-  readonly wtype: wtypes.WType
   readonly lhs: Expression
   readonly operator: EqualityComparison
   readonly rhs: Expression
@@ -786,11 +728,9 @@ export class PuyaLibCall extends Expression {
     super(props)
     this.func = props.func
     this.args = props.args
-    this.wtype = props.wtype
   }
   readonly func: PuyaLibFunction
   readonly args: Array<CallArg>
-  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitPuyaLibCall(this)
   }
@@ -839,11 +779,9 @@ export class UInt64UnaryOperation extends Expression {
     super(props)
     this.op = props.op
     this.expr = props.expr
-    this.wtype = props.wtype
   }
   readonly op: UInt64UnaryOperator
   readonly expr: Expression
-  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitUInt64UnaryOperation(this)
   }
@@ -853,7 +791,6 @@ export class UInt64PostfixUnaryOperation extends Expression {
     super(props)
     this.op = props.op
     this.target = props.target
-    this.wtype = props.wtype
   }
   readonly op: UInt64PostfixUnaryOperator
   readonly target:
@@ -864,7 +801,6 @@ export class UInt64PostfixUnaryOperation extends Expression {
     | AppStateExpression
     | AppAccountStateExpression
     | BoxValueExpression
-  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitUInt64PostfixUnaryOperation(this)
   }
@@ -878,11 +814,9 @@ export class BigUIntPostfixUnaryOperation extends Expression {
     super(props)
     this.op = props.op
     this.target = props.target
-    this.wtype = props.wtype
   }
   readonly op: BigUIntPostfixUnaryOperator
   readonly target: Expression
-  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitBigUIntPostfixUnaryOperation(this)
   }
@@ -892,11 +826,9 @@ export class BytesUnaryOperation extends Expression {
     super(props)
     this.op = props.op
     this.expr = props.expr
-    this.wtype = props.wtype
   }
   readonly op: BytesUnaryOperator
   readonly expr: Expression
-  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitBytesUnaryOperation(this)
   }
@@ -907,12 +839,10 @@ export class UInt64BinaryOperation extends Expression {
     this.left = props.left
     this.op = props.op
     this.right = props.right
-    this.wtype = props.wtype
   }
   readonly left: Expression
   readonly op: UInt64BinaryOperator
   readonly right: Expression
-  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitUInt64BinaryOperation(this)
   }
@@ -923,12 +853,10 @@ export class BigUIntBinaryOperation extends Expression {
     this.left = props.left
     this.op = props.op
     this.right = props.right
-    this.wtype = props.wtype
   }
   readonly left: Expression
   readonly op: BigUIntBinaryOperator
   readonly right: Expression
-  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitBigUIntBinaryOperation(this)
   }
@@ -939,12 +867,10 @@ export class BytesBinaryOperation extends Expression {
     this.left = props.left
     this.op = props.op
     this.right = props.right
-    this.wtype = props.wtype
   }
   readonly left: Expression
   readonly op: BytesBinaryOperator
   readonly right: Expression
-  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitBytesBinaryOperation(this)
   }
@@ -959,12 +885,10 @@ export class BooleanBinaryOperation extends Expression {
     this.left = props.left
     this.op = props.op
     this.right = props.right
-    this.wtype = props.wtype
   }
   readonly left: Expression
   readonly op: BinaryBooleanOperator
   readonly right: Expression
-  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitBooleanBinaryOperation(this)
   }
@@ -973,10 +897,8 @@ export class Not extends Expression {
   constructor(props: Props<Not>) {
     super(props)
     this.expr = props.expr
-    this.wtype = props.wtype
   }
   readonly expr: Expression
-  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitNot(this)
   }
@@ -1049,11 +971,9 @@ export class Emit extends Expression {
     super(props)
     this.signature = props.signature
     this.value = props.value
-    this.wtype = props.wtype
   }
   readonly signature: string
   readonly value: Expression
-  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitEmit(this)
   }
@@ -1061,12 +981,10 @@ export class Emit extends Expression {
 export class Range extends Expression {
   constructor(props: Props<Range>) {
     super(props)
-    this.wtype = props.wtype
     this.start = props.start
     this.stop = props.stop
     this.step = props.step
   }
-  readonly wtype: wtypes.WType
   readonly start: Expression
   readonly stop: Expression
   readonly step: Expression
@@ -1090,10 +1008,8 @@ export class Reversed extends Expression {
   constructor(props: Props<Reversed>) {
     super(props)
     this.expr = props.expr
-    this.wtype = props.wtype
   }
   readonly expr: Expression
-  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitReversed(this)
   }
@@ -1124,11 +1040,9 @@ export class StateGet extends Expression {
     super(props)
     this.field = props.field
     this.default = props.default
-    this.wtype = props.wtype
   }
   readonly field: AppStateExpression | AppAccountStateExpression | BoxValueExpression
   readonly default: Expression
-  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitStateGet(this)
   }
@@ -1149,10 +1063,8 @@ export class StateExists extends Expression {
   constructor(props: Props<StateExists>) {
     super(props)
     this.field = props.field
-    this.wtype = props.wtype
   }
   readonly field: AppStateExpression | AppAccountStateExpression | BoxValueExpression
-  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitStateExists(this)
   }
@@ -1161,10 +1073,8 @@ export class StateDelete extends Expression {
   constructor(props: Props<StateDelete>) {
     super(props)
     this.field = props.field
-    this.wtype = props.wtype
   }
   readonly field: AppStateExpression | AppAccountStateExpression | BoxValueExpression
-  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitStateDelete(this)
   }
@@ -1182,9 +1092,6 @@ export class NewStruct extends Expression {
   }
 }
 export abstract class RootNode extends Node {
-  constructor(props: Props<RootNode>) {
-    super(props)
-  }
   abstract accept<T>(visitor: RootNodeVisitor<T>): T
 }
 export class SubroutineArgument {
@@ -1342,11 +1249,6 @@ export class StateTotals {
   readonly localBytes: bigint | null
 }
 export class ARC4Router extends Expression {
-  constructor(props: Props<ARC4Router>) {
-    super(props)
-    this.wtype = props.wtype
-  }
-  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitARC4Router(this)
   }
