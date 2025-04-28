@@ -44,7 +44,7 @@ contract ItxnDemoContract
       args: readonlytuple[bytes, bytes] = <tuple>["1", "2"]
       createAppParams: inner_transaction_fields_appl = create_inner_transaction(Fee=0, TypeEnum=6, ApprovalProgramPages=<tuple>[0x098101], ClearStateProgramPages=<tuple>[0x098101], ApplicationArgs=<tuple>[args.0, args.1], OnCompletion=0, Note="with args param set")
     } else {
-      createAppParams: inner_transaction_fields_appl = create_inner_transaction(Fee=0, TypeEnum=6, ApprovalProgramPages=<tuple>[0x098101], ClearStateProgramPages=<tuple>[0x098101], ApplicationArgs=<tuple>["3", "4", "5"], Note="no args param set")
+      createAppParams: inner_transaction_fields_appl = create_inner_transaction(Fee=0, TypeEnum=6, ApprovalProgramPages=<tuple>[0x098101], ClearStateProgramPages=<tuple>[0x098101], ApplicationArgs=<tuple>["3", reinterpret_cast<bytes>("4"), "5"], Note="no args param set")
     }
     createAppTxn: inner_transaction_appl = submit_txn(createAppParams)
     assert(createAppTxn.ApplicationArgs[0] == "1", comment=correct args used 1)
@@ -122,6 +122,15 @@ contract ItxnDemoContract
     assert(app1.ClearStateProgramPages[0] == 0x098101, comment=expected clear state page)
   }
   
+  test5(appId: application): void
+  {
+    pay: inner_transaction_fields_pay = create_inner_transaction(Fee=0, TypeEnum=1, Receiver=checked_maybe(app_params_get<AppAddress>(appId), comment=application exists), Amount=1000)
+    app: inner_transaction_fields_appl = create_inner_transaction(Fee=0, TypeEnum=6, ApplicationID=appId, ApplicationArgs=<tuple>[Method("receivePay(uint64,pay,string)(uint64,uint64,string)"), 0x0000000000000001, reinterpret_cast<bytes>("hello")])
+    <tuple>[_, appRes]: readonlytuple[inner_transaction_pay, inner_transaction_appl] = submit_txn(pay, app)
+    returnValue: readonlytuple[uint64, uint64, string] = ARC4_DECODE(reinterpret_cast<arc4.tuple<uint64,uint64,string>>(checked_maybe(<tuple>[extract<4, 0>((#0 = appRes.LastLog)), extract<0, 4>(#0) == 0x151f7c75], comment=Bytes has valid prefix)))
+    assert(3 == 3 and returnValue.0 == 1 and returnValue.1 == 1000 and returnValue.2 == "hello", comment=assert target is match for conditions)
+  }
+  
   __algots__.defaultCreate(): void
   {
   }
@@ -133,6 +142,28 @@ contract ItxnDemoContract
   }
   
   BaseContract::constructor(): void
+  {
+  }
+  
+}
+contract ItxnReceiver
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  receivePay(a: uint64, b: group_transaction_pay, c: string): readonlytuple[uint64, uint64, string]
+  {
+    return <tuple>[a, gtxns<Amount>(b), c]
+  }
+  
+  __algots__.defaultCreate(): void
   {
   }
   
