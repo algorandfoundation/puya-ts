@@ -13,7 +13,7 @@ import { ARC4EncodedType } from '../../../ptypes/arc4-types'
 export function checkBoxType(contentType: PType, sourceLocation: SourceLocation) {
   if (contentType instanceof ARC4EncodedType) {
     return
-  } else if (contentType.wtype && contentType.wtype.scalarType !== null) {
+  } else if (contentType.wtype && contentType.wtype.valueType && !contentType.wtype.ephemeral) {
     return
   } else {
     logger.error(sourceLocation, `Objects of type ${contentType} cannot be stored in a box`)

@@ -1,21 +1,25 @@
-subroutine testBox(box: box_key, value: string): void
+subroutine testBox(box: box_key, str: string): void
 {
-  Box[box].value: string = value
-  Box["A"].value: string = value
+  value: readonlytuple[string, bytes] = <tuple>[str, "a"]
+  Box[box].value: readonlytuple[string, bytes] = value
+  Box["A"].value: readonlytuple[string, bytes] = value
   assert(reinterpret_cast<bytes>(box) == "one")
   assert("A" == "A")
-  assert(Box[box].value == Box["A"].value)
+  assert(Box[box].value.0 == Box["A"].value.0)
+  assert(Box[box].value.1 == Box["A"].value.1)
   assert(STATE_EXISTS(Box[box].value) and STATE_EXISTS(Box["A"].value))
   assert(Boolean(checked_maybe(box_len(box), comment=Box must have value)))
   assert(STATE_DELETE(Box[box].value), comment=delete failed)
   isBoxADeleted: bool = STATE_DELETE(Box["A"].value)
   assert(isBoxADeleted, comment=delete failed)
   assert(!STATE_EXISTS(Box[box].value) and !STATE_EXISTS(Box["A"].value))
-  assert(STATE_GET(Box["A"].value, default="O") == STATE_GET(Box[box].value, default="O"))
-  <tuple>[_, e]: readonlytuple[string, bool] = STATE_GET_EX(Box[box].value)
+  defaultVal: readonlytuple[string, bytes] = <tuple>["O", "0"]
+  assert(STATE_GET(Box["A"].value, default=defaultVal).0 == STATE_GET(Box[box].value, default=defaultVal).0)
+  assert(STATE_GET(Box["A"].value, default=defaultVal).1 == STATE_GET(Box[box].value, default=defaultVal).1)
+  <tuple>[_, e]: readonlytuple[readonlytuple[string, bytes], bool] = STATE_GET_EX(Box[box].value)
   assert(!e)
-  Box[box].value: string = value
-  <tuple>[_₁, e]: readonlytuple[string, bool] = STATE_GET_EX(Box[box].value)
+  Box[box].value: readonlytuple[string, bytes] = value
+  <tuple>[_₁, e]: readonlytuple[readonlytuple[string, bytes], bool] = STATE_GET_EX(Box[box].value)
   assert(e)
 }
 subroutine testBoxMap(box: box_key, key: string, value: bytes): void
@@ -63,7 +67,7 @@ subroutine testBoxRef(box: box_key, length: uint64): void
 contract BoxContract
 {
   boxes {
-    ["one"]: string
+    ["one"]: readonlytuple[string, bytes]
     ["two"]: string => bytes
     ["three"]: bytes
   }

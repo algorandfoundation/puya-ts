@@ -3,198 +3,392 @@
 
 // tests/approvals/box-proxies.algo.ts::BoxContract.approvalProgram() -> uint64:
 main:
-    intcblock 1 4 99 0
-    bytecblock "one" "three" "A" "twowhat?" "what?" "abc" "aaaaaargh" 0xffffffff
-    // tests/approvals/box-proxies.algo.ts:99
+    intcblock 0 2 1 4
+    bytecblock "one" "three" "A" "twowhat?" "what?" "abc" 0x0004000f0009616161616161726768000161 0xffffffff
+    intc_0 // 0
+    dupn 15
+    pushbytes ""
+    dupn 7
+    // tests/approvals/box-proxies.algo.ts:102
     // if (Txn.applicationId.id !== 0) {
     txn ApplicationID
     bz main_after_if_else@2
-    // tests/approvals/box-proxies.algo.ts:94
-    // boxOne = Box<string>({ key: 'one' })
+    // tests/approvals/box-proxies.algo.ts:97
+    // boxOne = Box<[string, bytes]>({ key: 'one' })
     bytec_0 // "one"
-    // tests/approvals/box-proxies.algo.ts:8
+    // tests/approvals/box-proxies.algo.ts:9
     // box.value = value
     box_del
     pop
-    // tests/approvals/box-proxies.algo.ts:94
-    // boxOne = Box<string>({ key: 'one' })
+    // tests/approvals/box-proxies.algo.ts:97
+    // boxOne = Box<[string, bytes]>({ key: 'one' })
     bytec_0 // "one"
-    // tests/approvals/box-proxies.algo.ts:100
-    // testBox(this.boxOne, 'aaaaaargh')
-    bytec 6 // "aaaaaargh"
-    // tests/approvals/box-proxies.algo.ts:8
+    // tests/approvals/box-proxies.algo.ts:9
     // box.value = value
+    bytec 6 // 0x0004000f0009616161616161726768000161
     box_put
     // tests/approvals/box-proxies.algo.ts:6
-    // const boxA = Box<string>({ key: Bytes('A') })
+    // const boxA = Box<[string, bytes]>({ key: Bytes('A') })
     bytec_2 // "A"
-    // tests/approvals/box-proxies.algo.ts:9
+    // tests/approvals/box-proxies.algo.ts:10
     // boxA.value = value
     box_del
     pop
     // tests/approvals/box-proxies.algo.ts:6
-    // const boxA = Box<string>({ key: Bytes('A') })
+    // const boxA = Box<[string, bytes]>({ key: Bytes('A') })
     bytec_2 // "A"
-    // tests/approvals/box-proxies.algo.ts:100
-    // testBox(this.boxOne, 'aaaaaargh')
-    bytec 6 // "aaaaaargh"
-    // tests/approvals/box-proxies.algo.ts:9
+    // tests/approvals/box-proxies.algo.ts:10
     // boxA.value = value
+    bytec 6 // 0x0004000f0009616161616161726768000161
     box_put
-    // tests/approvals/box-proxies.algo.ts:94
-    // boxOne = Box<string>({ key: 'one' })
+    // tests/approvals/box-proxies.algo.ts:97
+    // boxOne = Box<[string, bytes]>({ key: 'one' })
     bytec_0 // "one"
-    // tests/approvals/box-proxies.algo.ts:14
-    // assert(box.value === boxA.value)
+    // tests/approvals/box-proxies.algo.ts:15
+    // assert(box.value[0] === boxA.value[0])
     box_get
+    dup
+    cover 2
+    bury 10
+    bury 25
+    bz main_ternary_false@5
+    dig 23
+    dup
+    intc_0 // 0
+    extract_uint16
+    dig 1
+    intc_1 // 2
+    extract_uint16
+    substring3
+    extract 2 0
+    bury 16
+
+main_ternary_merge@6:
+    // tests/approvals/box-proxies.algo.ts:15
+    // assert(box.value[0] === boxA.value[0])
+    dig 7
     assert // Box must have value
     // tests/approvals/box-proxies.algo.ts:6
-    // const boxA = Box<string>({ key: Bytes('A') })
+    // const boxA = Box<[string, bytes]>({ key: Bytes('A') })
     bytec_2 // "A"
-    // tests/approvals/box-proxies.algo.ts:14
-    // assert(box.value === boxA.value)
+    // tests/approvals/box-proxies.algo.ts:15
+    // assert(box.value[0] === boxA.value[0])
     box_get
+    dup
+    cover 2
+    bury 9
+    bury 24
+    bz main_ternary_false@8
+    dig 22
+    dup
+    intc_0 // 0
+    extract_uint16
+    dig 1
+    intc_1 // 2
+    extract_uint16
+    substring3
+    extract 2 0
+
+main_ternary_merge@9:
+    // tests/approvals/box-proxies.algo.ts:15
+    // assert(box.value[0] === boxA.value[0])
+    dig 7
     assert // Box must have value
+    dig 16
     ==
     assert
-    // tests/approvals/box-proxies.algo.ts:94
-    // boxOne = Box<string>({ key: 'one' })
+    // tests/approvals/box-proxies.algo.ts:97
+    // boxOne = Box<[string, bytes]>({ key: 'one' })
     bytec_0 // "one"
     // tests/approvals/box-proxies.algo.ts:16
-    // assert(box.exists && boxA.exists)
-    box_len
-    bury 1
-    bz main_bool_false@6
+    // assert(box.value[1] === boxA.value[1])
+    box_get
+    dup
+    cover 2
+    bury 6
+    bury 23
+    bz main_ternary_false@11
+    dig 21
+    dup
+    intc_1 // 2
+    extract_uint16
+    dig 1
+    len
+    substring3
+    extract 2 0
+    bury 14
+
+main_ternary_merge@12:
+    // tests/approvals/box-proxies.algo.ts:16
+    // assert(box.value[1] === boxA.value[1])
+    dig 3
+    assert // Box must have value
     // tests/approvals/box-proxies.algo.ts:6
-    // const boxA = Box<string>({ key: Bytes('A') })
+    // const boxA = Box<[string, bytes]>({ key: Bytes('A') })
     bytec_2 // "A"
     // tests/approvals/box-proxies.algo.ts:16
+    // assert(box.value[1] === boxA.value[1])
+    box_get
+    dup
+    cover 2
+    bury 5
+    bury 22
+    bz main_ternary_false@14
+    dig 20
+    dup
+    intc_1 // 2
+    extract_uint16
+    dig 1
+    len
+    substring3
+    extract 2 0
+
+main_ternary_merge@15:
+    // tests/approvals/box-proxies.algo.ts:16
+    // assert(box.value[1] === boxA.value[1])
+    dig 3
+    assert // Box must have value
+    dig 14
+    ==
+    assert
+    // tests/approvals/box-proxies.algo.ts:97
+    // boxOne = Box<[string, bytes]>({ key: 'one' })
+    bytec_0 // "one"
+    // tests/approvals/box-proxies.algo.ts:18
     // assert(box.exists && boxA.exists)
     box_len
     bury 1
-    bz main_bool_false@6
-    intc_0 // 1
+    bz main_bool_false@18
+    // tests/approvals/box-proxies.algo.ts:6
+    // const boxA = Box<[string, bytes]>({ key: Bytes('A') })
+    bytec_2 // "A"
+    // tests/approvals/box-proxies.algo.ts:18
+    // assert(box.exists && boxA.exists)
+    box_len
+    bury 1
+    bz main_bool_false@18
+    intc_2 // 1
 
-main_bool_merge@7:
-    // tests/approvals/box-proxies.algo.ts:16
+main_bool_merge@19:
+    // tests/approvals/box-proxies.algo.ts:18
     // assert(box.exists && boxA.exists)
     assert
-    // tests/approvals/box-proxies.algo.ts:94
-    // boxOne = Box<string>({ key: 'one' })
+    // tests/approvals/box-proxies.algo.ts:97
+    // boxOne = Box<[string, bytes]>({ key: 'one' })
     bytec_0 // "one"
-    // tests/approvals/box-proxies.algo.ts:18
+    // tests/approvals/box-proxies.algo.ts:20
     // assert(box.length)
     box_len
     assert // Box must have value
     assert
-    // tests/approvals/box-proxies.algo.ts:94
-    // boxOne = Box<string>({ key: 'one' })
+    // tests/approvals/box-proxies.algo.ts:97
+    // boxOne = Box<[string, bytes]>({ key: 'one' })
     bytec_0 // "one"
-    // tests/approvals/box-proxies.algo.ts:20
+    // tests/approvals/box-proxies.algo.ts:22
     // assert(box.delete(), 'delete failed')
     box_del
     assert // delete failed
     // tests/approvals/box-proxies.algo.ts:6
-    // const boxA = Box<string>({ key: Bytes('A') })
+    // const boxA = Box<[string, bytes]>({ key: Bytes('A') })
     bytec_2 // "A"
-    // tests/approvals/box-proxies.algo.ts:21
+    // tests/approvals/box-proxies.algo.ts:23
     // const isBoxADeleted = boxA.delete()
     box_del
-    // tests/approvals/box-proxies.algo.ts:22
+    // tests/approvals/box-proxies.algo.ts:24
     // assert(isBoxADeleted, 'delete failed')
     assert // delete failed
-    // tests/approvals/box-proxies.algo.ts:94
-    // boxOne = Box<string>({ key: 'one' })
+    // tests/approvals/box-proxies.algo.ts:97
+    // boxOne = Box<[string, bytes]>({ key: 'one' })
     bytec_0 // "one"
-    // tests/approvals/box-proxies.algo.ts:23
+    // tests/approvals/box-proxies.algo.ts:25
     // assert(!box.exists && !boxA.exists)
     box_len
     bury 1
-    bnz main_bool_false@10
+    bnz main_bool_false@22
     // tests/approvals/box-proxies.algo.ts:6
-    // const boxA = Box<string>({ key: Bytes('A') })
+    // const boxA = Box<[string, bytes]>({ key: Bytes('A') })
     bytec_2 // "A"
-    // tests/approvals/box-proxies.algo.ts:23
+    // tests/approvals/box-proxies.algo.ts:25
     // assert(!box.exists && !boxA.exists)
     box_len
     bury 1
-    bnz main_bool_false@10
-    intc_0 // 1
+    bnz main_bool_false@22
+    intc_2 // 1
 
-main_bool_merge@11:
-    // tests/approvals/box-proxies.algo.ts:23
+main_bool_merge@23:
+    // tests/approvals/box-proxies.algo.ts:25
     // assert(!box.exists && !boxA.exists)
     assert
     // tests/approvals/box-proxies.algo.ts:6
-    // const boxA = Box<string>({ key: Bytes('A') })
+    // const boxA = Box<[string, bytes]>({ key: Bytes('A') })
     bytec_2 // "A"
-    // tests/approvals/box-proxies.algo.ts:26
-    // assert(boxA.get({ default: defaultVal }) === box.get({ default: defaultVal }))
+    // tests/approvals/box-proxies.algo.ts:28
+    // assert(boxA.get({ default: defaultVal })[0] === box.get({ default: defaultVal })[0])
     box_get
-    // tests/approvals/box-proxies.algo.ts:25
-    // const defaultVal = 'O'
-    pushbytes "O"
-    // tests/approvals/box-proxies.algo.ts:26
-    // assert(boxA.get({ default: defaultVal }) === box.get({ default: defaultVal }))
+    dup
     cover 2
-    select
-    // tests/approvals/box-proxies.algo.ts:94
-    // boxOne = Box<string>({ key: 'one' })
-    bytec_0 // "one"
-    // tests/approvals/box-proxies.algo.ts:26
-    // assert(boxA.get({ default: defaultVal }) === box.get({ default: defaultVal }))
-    box_get
-    // tests/approvals/box-proxies.algo.ts:25
-    // const defaultVal = 'O'
-    pushbytes "O"
-    // tests/approvals/box-proxies.algo.ts:26
-    // assert(boxA.get({ default: defaultVal }) === box.get({ default: defaultVal }))
-    cover 2
-    select
-    ==
-    assert
-    // tests/approvals/box-proxies.algo.ts:94
-    // boxOne = Box<string>({ key: 'one' })
+    bury 4
+    bury 21
+    bz main_ternary_false@25
+    dig 19
+    dup
+    intc_0 // 0
+    extract_uint16
+    dig 1
+    intc_1 // 2
+    extract_uint16
+    substring3
+    extract 2 0
+    bury 13
+
+main_ternary_merge@26:
+    // tests/approvals/box-proxies.algo.ts:28
+    // assert(boxA.get({ default: defaultVal })[0] === box.get({ default: defaultVal })[0])
+    dig 1
+    bz main_ternary_false@28
+    dig 12
+    bury 12
+
+main_ternary_merge@29:
+    // tests/approvals/box-proxies.algo.ts:97
+    // boxOne = Box<[string, bytes]>({ key: 'one' })
     bytec_0 // "one"
     // tests/approvals/box-proxies.algo.ts:28
+    // assert(boxA.get({ default: defaultVal })[0] === box.get({ default: defaultVal })[0])
+    box_get
+    dup
+    cover 2
+    bury 3
+    bury 20
+    bz main_ternary_false@31
+    dig 18
+    dup
+    intc_0 // 0
+    extract_uint16
+    dig 1
+    intc_1 // 2
+    extract_uint16
+    substring3
+    extract 2 0
+    bury 11
+
+main_ternary_merge@32:
+    // tests/approvals/box-proxies.algo.ts:28
+    // assert(boxA.get({ default: defaultVal })[0] === box.get({ default: defaultVal })[0])
+    dup
+    bz main_ternary_false@34
+    dig 10
+
+main_ternary_merge@35:
+    // tests/approvals/box-proxies.algo.ts:28
+    // assert(boxA.get({ default: defaultVal })[0] === box.get({ default: defaultVal })[0])
+    dig 12
+    ==
+    assert
+    // tests/approvals/box-proxies.algo.ts:6
+    // const boxA = Box<[string, bytes]>({ key: Bytes('A') })
+    bytec_2 // "A"
+    // tests/approvals/box-proxies.algo.ts:29
+    // assert(boxA.get({ default: defaultVal })[1] === box.get({ default: defaultVal })[1])
+    box_get
+    dup
+    cover 2
+    bury 8
+    bury 19
+    bz main_ternary_false@37
+    dig 17
+    dup
+    intc_1 // 2
+    extract_uint16
+    dig 1
+    len
+    substring3
+    extract 2 0
+    bury 10
+
+main_ternary_merge@38:
+    // tests/approvals/box-proxies.algo.ts:29
+    // assert(boxA.get({ default: defaultVal })[1] === box.get({ default: defaultVal })[1])
+    dig 5
+    bz main_ternary_false@40
+    dig 9
+    bury 9
+
+main_ternary_merge@41:
+    // tests/approvals/box-proxies.algo.ts:97
+    // boxOne = Box<[string, bytes]>({ key: 'one' })
+    bytec_0 // "one"
+    // tests/approvals/box-proxies.algo.ts:29
+    // assert(boxA.get({ default: defaultVal })[1] === box.get({ default: defaultVal })[1])
+    box_get
+    dup
+    cover 2
+    bury 7
+    bury 18
+    bz main_ternary_false@43
+    dig 16
+    dup
+    intc_1 // 2
+    extract_uint16
+    dig 1
+    len
+    substring3
+    extract 2 0
+    bury 15
+
+main_ternary_merge@44:
+    // tests/approvals/box-proxies.algo.ts:29
+    // assert(boxA.get({ default: defaultVal })[1] === box.get({ default: defaultVal })[1])
+    dig 4
+    bz main_ternary_false@46
+    dig 14
+
+main_ternary_merge@47:
+    // tests/approvals/box-proxies.algo.ts:29
+    // assert(boxA.get({ default: defaultVal })[1] === box.get({ default: defaultVal })[1])
+    dig 9
+    ==
+    assert
+    // tests/approvals/box-proxies.algo.ts:97
+    // boxOne = Box<[string, bytes]>({ key: 'one' })
+    bytec_0 // "one"
+    // tests/approvals/box-proxies.algo.ts:31
     // let [, e] = box.maybe()
     box_get
     bury 1
-    // tests/approvals/box-proxies.algo.ts:29
+    // tests/approvals/box-proxies.algo.ts:32
     // assert(!e)
     !
     assert
-    // tests/approvals/box-proxies.algo.ts:94
-    // boxOne = Box<string>({ key: 'one' })
+    // tests/approvals/box-proxies.algo.ts:97
+    // boxOne = Box<[string, bytes]>({ key: 'one' })
     bytec_0 // "one"
-    // tests/approvals/box-proxies.algo.ts:30
+    // tests/approvals/box-proxies.algo.ts:33
     // box.value = value
     box_del
     pop
-    // tests/approvals/box-proxies.algo.ts:94
-    // boxOne = Box<string>({ key: 'one' })
+    // tests/approvals/box-proxies.algo.ts:97
+    // boxOne = Box<[string, bytes]>({ key: 'one' })
     bytec_0 // "one"
-    // tests/approvals/box-proxies.algo.ts:100
-    // testBox(this.boxOne, 'aaaaaargh')
-    bytec 6 // "aaaaaargh"
-    // tests/approvals/box-proxies.algo.ts:30
+    // tests/approvals/box-proxies.algo.ts:33
     // box.value = value
+    bytec 6 // 0x0004000f0009616161616161726768000161
     box_put
-    // tests/approvals/box-proxies.algo.ts:94
-    // boxOne = Box<string>({ key: 'one' })
+    // tests/approvals/box-proxies.algo.ts:97
+    // boxOne = Box<[string, bytes]>({ key: 'one' })
     bytec_0 // "one"
-    // tests/approvals/box-proxies.algo.ts:31
+    // tests/approvals/box-proxies.algo.ts:34
     // ;[, e] = box.maybe()
     box_get
     bury 1
-    // tests/approvals/box-proxies.algo.ts:32
+    // tests/approvals/box-proxies.algo.ts:35
     // assert(e)
     assert
-    // tests/approvals/box-proxies.algo.ts:102
+    // tests/approvals/box-proxies.algo.ts:105
     // testBoxMap(this.boxMapTwo, 'what?', itob(256456))
     pushint 256456 // 256456
     itob
-    // tests/approvals/box-proxies.algo.ts:38
+    // tests/approvals/box-proxies.algo.ts:41
     // box(key).value = value
     bytec_3 // "twowhat?"
     box_del
@@ -202,62 +396,62 @@ main_bool_merge@11:
     bytec_3 // "twowhat?"
     dig 1
     box_put
-    // tests/approvals/box-proxies.algo.ts:102
+    // tests/approvals/box-proxies.algo.ts:105
     // testBoxMap(this.boxMapTwo, 'what?', itob(256456))
     bytec 4 // "what?"
-    // tests/approvals/box-proxies.algo.ts:39
+    // tests/approvals/box-proxies.algo.ts:42
     // boxMap(key).value = value
     box_del
     pop
-    // tests/approvals/box-proxies.algo.ts:102
+    // tests/approvals/box-proxies.algo.ts:105
     // testBoxMap(this.boxMapTwo, 'what?', itob(256456))
     bytec 4 // "what?"
-    // tests/approvals/box-proxies.algo.ts:39
+    // tests/approvals/box-proxies.algo.ts:42
     // boxMap(key).value = value
     swap
     box_put
-    // tests/approvals/box-proxies.algo.ts:102
+    // tests/approvals/box-proxies.algo.ts:105
     // testBoxMap(this.boxMapTwo, 'what?', itob(256456))
     bytec 4 // "what?"
-    // tests/approvals/box-proxies.algo.ts:43
+    // tests/approvals/box-proxies.algo.ts:46
     // assert(boxMapItem.exists)
     box_len
     bury 1
     assert
-    // tests/approvals/box-proxies.algo.ts:48
+    // tests/approvals/box-proxies.algo.ts:51
     // assert(box(key).length)
     bytec_3 // "twowhat?"
     box_len
     assert // Box must have value
     assert
-    // tests/approvals/box-proxies.algo.ts:50
+    // tests/approvals/box-proxies.algo.ts:53
     // assert(box(key).maybe()[1])
     bytec_3 // "twowhat?"
     box_get
     bury 1
     assert
-    // tests/approvals/box-proxies.algo.ts:52
+    // tests/approvals/box-proxies.algo.ts:55
     // assert(box(key).value === boxMap(key).value)
     bytec_3 // "twowhat?"
     box_get
     assert // Box must have value
-    // tests/approvals/box-proxies.algo.ts:102
+    // tests/approvals/box-proxies.algo.ts:105
     // testBoxMap(this.boxMapTwo, 'what?', itob(256456))
     bytec 4 // "what?"
-    // tests/approvals/box-proxies.algo.ts:52
+    // tests/approvals/box-proxies.algo.ts:55
     // assert(box(key).value === boxMap(key).value)
     box_get
     assert // Box must have value
     ==
     assert
-    // tests/approvals/box-proxies.algo.ts:54
+    // tests/approvals/box-proxies.algo.ts:57
     // const isBoxDeleted = box(key).delete()
     bytec_3 // "twowhat?"
     box_del
-    // tests/approvals/box-proxies.algo.ts:55
+    // tests/approvals/box-proxies.algo.ts:58
     // assert(isBoxDeleted, 'delete failed')
     assert // delete failed
-    // tests/approvals/box-proxies.algo.ts:57
+    // tests/approvals/box-proxies.algo.ts:60
     // assert(box(`${key}x`).get({ default: Bytes('b') }) === boxMap(`${key}x`).get({ default: Bytes('b') }))
     pushbytes "twowhat?x"
     box_get
@@ -271,54 +465,54 @@ main_bool_merge@11:
     select
     ==
     assert
-    // tests/approvals/box-proxies.algo.ts:60
+    // tests/approvals/box-proxies.algo.ts:63
     // const boxRef = BoxRef({ key: 'abc' })
     bytec 5 // "abc"
-    // tests/approvals/box-proxies.algo.ts:66
+    // tests/approvals/box-proxies.algo.ts:69
     // if (!boxRef.exists) {
     box_len
     bury 1
-    bnz main_else_body@17
-    // tests/approvals/box-proxies.algo.ts:60
+    bnz main_else_body@59
+    // tests/approvals/box-proxies.algo.ts:63
     // const boxRef = BoxRef({ key: 'abc' })
     bytec 5 // "abc"
-    // tests/approvals/box-proxies.algo.ts:67
+    // tests/approvals/box-proxies.algo.ts:70
     // boxRef.create({ size: 1000 })
     pushint 1000 // 1000
     box_create
     pop
 
-main_after_if_else@20:
-    // tests/approvals/box-proxies.algo.ts:96
+main_after_if_else@62:
+    // tests/approvals/box-proxies.algo.ts:99
     // boxRefThree = BoxRef({ key: 'three' })
     bytec_1 // "three"
-    // tests/approvals/box-proxies.algo.ts:71
+    // tests/approvals/box-proxies.algo.ts:74
     // if (box.exists) {
     box_len
     bury 1
-    bz main_else_body@22
-    // tests/approvals/box-proxies.algo.ts:96
+    bz main_else_body@64
+    // tests/approvals/box-proxies.algo.ts:99
     // boxRefThree = BoxRef({ key: 'three' })
     bytec_1 // "three"
-    // tests/approvals/box-proxies.algo.ts:72
+    // tests/approvals/box-proxies.algo.ts:75
     // box.resize(4)
-    intc_1 // 4
+    intc_3 // 4
     box_resize
 
-main_after_if_else@23:
-    // tests/approvals/box-proxies.algo.ts:96
-    // boxRefThree = BoxRef({ key: 'three' })
-    bytec_1 // "three"
-    // tests/approvals/box-proxies.algo.ts:76
-    // const someBytes = Bytes.fromHex('FFFFFFFF')
-    bytec 7 // 0xffffffff
-    // tests/approvals/box-proxies.algo.ts:77
-    // box.put(someBytes)
-    box_put
-    // tests/approvals/box-proxies.algo.ts:96
+main_after_if_else@65:
+    // tests/approvals/box-proxies.algo.ts:99
     // boxRefThree = BoxRef({ key: 'three' })
     bytec_1 // "three"
     // tests/approvals/box-proxies.algo.ts:79
+    // const someBytes = Bytes.fromHex('FFFFFFFF')
+    bytec 7 // 0xffffffff
+    // tests/approvals/box-proxies.algo.ts:80
+    // box.put(someBytes)
+    box_put
+    // tests/approvals/box-proxies.algo.ts:99
+    // boxRefThree = BoxRef({ key: 'three' })
+    bytec_1 // "three"
+    // tests/approvals/box-proxies.algo.ts:82
     // assert(box.get({ default: Bytes() }) === Bytes.fromHex('FFFFFFFF'))
     box_get
     pushbytes 0x
@@ -327,58 +521,58 @@ main_after_if_else@23:
     bytec 7 // 0xffffffff
     ==
     assert
-    // tests/approvals/box-proxies.algo.ts:96
-    // boxRefThree = BoxRef({ key: 'three' })
-    bytec_1 // "three"
-    // tests/approvals/box-proxies.algo.ts:81
-    // const maybeBox = box.maybe()
-    box_get
-    bury 1
-    // tests/approvals/box-proxies.algo.ts:82
-    // assert(maybeBox[1])
-    assert
-    // tests/approvals/box-proxies.algo.ts:96
+    // tests/approvals/box-proxies.algo.ts:99
     // boxRefThree = BoxRef({ key: 'three' })
     bytec_1 // "three"
     // tests/approvals/box-proxies.algo.ts:84
+    // const maybeBox = box.maybe()
+    box_get
+    bury 1
+    // tests/approvals/box-proxies.algo.ts:85
+    // assert(maybeBox[1])
+    assert
+    // tests/approvals/box-proxies.algo.ts:99
+    // boxRefThree = BoxRef({ key: 'three' })
+    bytec_1 // "three"
+    // tests/approvals/box-proxies.algo.ts:87
     // assert(box.value === Bytes.fromHex('FFFFFFFF'))
     box_get
     assert // Box must have value
     bytec 7 // 0xffffffff
     ==
     assert
-    // tests/approvals/box-proxies.algo.ts:96
+    // tests/approvals/box-proxies.algo.ts:99
     // boxRefThree = BoxRef({ key: 'three' })
     bytec_1 // "three"
-    // tests/approvals/box-proxies.algo.ts:85
+    // tests/approvals/box-proxies.algo.ts:88
     // box.splice(1, 1, Bytes.fromHex('00'))
-    intc_0 // 1
+    intc_2 // 1
     dup
     pushbytes 0x00
     box_splice
-    // tests/approvals/box-proxies.algo.ts:96
+    // tests/approvals/box-proxies.algo.ts:99
     // boxRefThree = BoxRef({ key: 'three' })
     bytec_1 // "three"
-    // tests/approvals/box-proxies.algo.ts:86
+    // tests/approvals/box-proxies.algo.ts:89
     // assert(box.value === Bytes.fromHex('FF00FFFF'))
     box_get
     assert // Box must have value
     pushbytes 0xff00ffff
     ==
     assert
-    // tests/approvals/box-proxies.algo.ts:96
+    // tests/approvals/box-proxies.algo.ts:99
     // boxRefThree = BoxRef({ key: 'three' })
     bytec_1 // "three"
-    // tests/approvals/box-proxies.algo.ts:88
+    // tests/approvals/box-proxies.algo.ts:91
     // const x = box.delete()
     box_del
-    // tests/approvals/box-proxies.algo.ts:89
+    // tests/approvals/box-proxies.algo.ts:92
     // assert(x, 'delete failed')
     assert // delete failed
-    // tests/approvals/box-proxies.algo.ts:96
+    // tests/approvals/box-proxies.algo.ts:99
     // boxRefThree = BoxRef({ key: 'three' })
     bytec_1 // "three"
-    // tests/approvals/box-proxies.algo.ts:90
+    // tests/approvals/box-proxies.algo.ts:93
     // assert(!box.exists)
     box_len
     bury 1
@@ -386,52 +580,136 @@ main_after_if_else@23:
     assert
 
 main_after_if_else@2:
-    // tests/approvals/box-proxies.algo.ts:106
+    // tests/approvals/box-proxies.algo.ts:109
     // return true
-    intc_0 // 1
+    intc_2 // 1
     return
 
-main_else_body@22:
-    // tests/approvals/box-proxies.algo.ts:96
+main_else_body@64:
+    // tests/approvals/box-proxies.algo.ts:99
     // boxRefThree = BoxRef({ key: 'three' })
     bytec_1 // "three"
-    // tests/approvals/box-proxies.algo.ts:74
+    // tests/approvals/box-proxies.algo.ts:77
     // box.create({ size: 4 })
-    intc_1 // 4
+    intc_3 // 4
     box_create
     pop
-    b main_after_if_else@23
+    b main_after_if_else@65
 
-main_else_body@17:
-    // tests/approvals/box-proxies.algo.ts:60
+main_else_body@59:
+    // tests/approvals/box-proxies.algo.ts:63
     // const boxRef = BoxRef({ key: 'abc' })
     bytec 5 // "abc"
-    // tests/approvals/box-proxies.algo.ts:68
+    // tests/approvals/box-proxies.algo.ts:71
     // } else if (boxRef.length !== length) {
     box_len
     assert // Box must have value
-    // tests/approvals/box-proxies.algo.ts:104
+    // tests/approvals/box-proxies.algo.ts:107
     // testBoxRef(this.boxRefThree, 99)
-    intc_2 // 99
-    // tests/approvals/box-proxies.algo.ts:68
+    pushint 99 // 99
+    // tests/approvals/box-proxies.algo.ts:71
     // } else if (boxRef.length !== length) {
     !=
-    bz main_after_if_else@20
-    // tests/approvals/box-proxies.algo.ts:60
+    bz main_after_if_else@62
+    // tests/approvals/box-proxies.algo.ts:63
     // const boxRef = BoxRef({ key: 'abc' })
     bytec 5 // "abc"
-    // tests/approvals/box-proxies.algo.ts:104
+    // tests/approvals/box-proxies.algo.ts:107
     // testBoxRef(this.boxRefThree, 99)
-    intc_2 // 99
-    // tests/approvals/box-proxies.algo.ts:69
+    pushint 99 // 99
+    // tests/approvals/box-proxies.algo.ts:72
     // boxRef.resize(length)
     box_resize
-    b main_after_if_else@20
+    b main_after_if_else@62
 
-main_bool_false@10:
-    intc_3 // 0
-    b main_bool_merge@11
+main_ternary_false@46:
+    // tests/approvals/box-proxies.algo.ts:27
+    // const defaultVal: [string, bytes] = ['O', Bytes('0')]
+    pushbytes "0"
+    b main_ternary_merge@47
 
-main_bool_false@6:
-    intc_3 // 0
-    b main_bool_merge@7
+main_ternary_false@43:
+    // tests/approvals/box-proxies.algo.ts:29
+    // assert(boxA.get({ default: defaultVal })[1] === box.get({ default: defaultVal })[1])
+    intc_0 // 0
+    bury 15
+    b main_ternary_merge@44
+
+main_ternary_false@40:
+    // tests/approvals/box-proxies.algo.ts:27
+    // const defaultVal: [string, bytes] = ['O', Bytes('0')]
+    pushbytes "0"
+    // tests/approvals/box-proxies.algo.ts:29
+    // assert(boxA.get({ default: defaultVal })[1] === box.get({ default: defaultVal })[1])
+    bury 9
+    b main_ternary_merge@41
+
+main_ternary_false@37:
+    // tests/approvals/box-proxies.algo.ts:29
+    // assert(boxA.get({ default: defaultVal })[1] === box.get({ default: defaultVal })[1])
+    intc_0 // 0
+    bury 10
+    b main_ternary_merge@38
+
+main_ternary_false@34:
+    // tests/approvals/box-proxies.algo.ts:27
+    // const defaultVal: [string, bytes] = ['O', Bytes('0')]
+    pushbytes "O"
+    b main_ternary_merge@35
+
+main_ternary_false@31:
+    // tests/approvals/box-proxies.algo.ts:28
+    // assert(boxA.get({ default: defaultVal })[0] === box.get({ default: defaultVal })[0])
+    intc_0 // 0
+    bury 11
+    b main_ternary_merge@32
+
+main_ternary_false@28:
+    // tests/approvals/box-proxies.algo.ts:27
+    // const defaultVal: [string, bytes] = ['O', Bytes('0')]
+    pushbytes "O"
+    // tests/approvals/box-proxies.algo.ts:28
+    // assert(boxA.get({ default: defaultVal })[0] === box.get({ default: defaultVal })[0])
+    bury 12
+    b main_ternary_merge@29
+
+main_ternary_false@25:
+    // tests/approvals/box-proxies.algo.ts:28
+    // assert(boxA.get({ default: defaultVal })[0] === box.get({ default: defaultVal })[0])
+    intc_0 // 0
+    bury 13
+    b main_ternary_merge@26
+
+main_bool_false@22:
+    intc_0 // 0
+    b main_bool_merge@23
+
+main_bool_false@18:
+    intc_0 // 0
+    b main_bool_merge@19
+
+main_ternary_false@14:
+    // tests/approvals/box-proxies.algo.ts:16
+    // assert(box.value[1] === boxA.value[1])
+    intc_0 // 0
+    b main_ternary_merge@15
+
+main_ternary_false@11:
+    // tests/approvals/box-proxies.algo.ts:16
+    // assert(box.value[1] === boxA.value[1])
+    intc_0 // 0
+    bury 14
+    b main_ternary_merge@12
+
+main_ternary_false@8:
+    // tests/approvals/box-proxies.algo.ts:15
+    // assert(box.value[0] === boxA.value[0])
+    intc_0 // 0
+    b main_ternary_merge@9
+
+main_ternary_false@5:
+    // tests/approvals/box-proxies.algo.ts:15
+    // assert(box.value[0] === boxA.value[0])
+    intc_0 // 0
+    bury 16
+    b main_ternary_merge@6

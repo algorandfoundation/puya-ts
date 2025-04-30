@@ -11,11 +11,12 @@ export enum AVMType {
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace wtypes {
   export class WType {
-    constructor(props: { name: string; immutable?: boolean; scalarType: AVMType | null; ephemeral?: boolean }) {
+    constructor(props: { name: string; immutable?: boolean; scalarType: AVMType | null; ephemeral?: boolean; valueType?: boolean }) {
       this.name = props.name
       this.immutable = props.immutable ?? true
       this.scalarType = props.scalarType
       this.ephemeral = props.ephemeral ?? false
+      this.valueType = props.valueType ?? false
     }
 
     readonly name: string
@@ -25,6 +26,10 @@ export namespace wtypes {
      *      even if their underlying type is a simple stack value
      */
     readonly ephemeral: boolean
+    /**
+     * True if a value type, False if a static type that has no value at runtime
+     */
+    readonly valueType: boolean
     /**
      * The AVM stack type of this type (if any)
      */
@@ -50,10 +55,12 @@ export namespace wtypes {
   export const boolWType = new WType({
     name: 'bool',
     scalarType: AVMType.uint64,
+    valueType: true,
   })
   export const uint64WType = new WType({
     name: 'uint64',
     scalarType: AVMType.uint64,
+    valueType: true,
   })
   export const uint64RangeWType = new WType({
     name: 'uint64_range',
@@ -63,35 +70,43 @@ export namespace wtypes {
   export const bytesWType = new WType({
     name: 'bytes',
     scalarType: AVMType.bytes,
+    valueType: true,
   })
   export const stateKeyWType = new WType({
     name: 'state_key',
     scalarType: AVMType.bytes,
+    valueType: true,
   })
   export const boxKeyWType = new WType({
     name: 'box_key',
     scalarType: AVMType.bytes,
+    valueType: true,
   })
   export const stringWType = new WType({
     name: 'string',
     scalarType: AVMType.bytes,
+    valueType: true,
   })
   export const biguintWType = new WType({
     name: 'biguint',
     scalarType: AVMType.bytes,
+    valueType: true,
   })
   export const assetWType = new WType({
     name: 'asset',
     scalarType: AVMType.uint64,
+    valueType: true,
   })
 
   export const accountWType = new WType({
     name: 'account',
     scalarType: AVMType.bytes,
+    valueType: true,
   })
   export const applicationWType = new WType({
     name: 'application',
     scalarType: AVMType.uint64,
+    valueType: true,
   })
 
   export class ARC4Type extends WType {
@@ -109,7 +124,7 @@ export namespace wtypes {
       scalarType?: AVMType | null
       ephemeral?: boolean
     }) {
-      super({ ...rest, scalarType: rest.scalarType ?? AVMType.bytes })
+      super({ ...rest, scalarType: rest.scalarType ?? AVMType.bytes, valueType: true })
       this.arc4Name = arc4Name
       this.nativeType = nativeType
     }
@@ -124,6 +139,7 @@ export namespace wtypes {
         name,
         scalarType: null,
         immutable: true,
+        valueType: true,
       })
       this.fields = fields
     }
@@ -137,6 +153,7 @@ export namespace wtypes {
         name: props.name ?? 'tuple',
         scalarType: null,
         immutable: props.immutable ?? true,
+        valueType: true,
       })
       invariant(props.types.length, 'Tuple length cannot be zero')
       this.types = props.types
@@ -168,10 +185,18 @@ export namespace wtypes {
   export abstract class NativeArray extends WType {
     readonly elementType: WType
     readonly sourceLocation: SourceLocation | null
-    protected constructor(props: { name: string; itemType: WType; sourceLocation?: SourceLocation; scalarType?: AVMType }) {
+    protected constructor(props: {
+      name: string
+      itemType: WType
+      sourceLocation?: SourceLocation
+      scalarType?: AVMType
+      ephemeral?: boolean
+    }) {
       super({
         name: props.name,
         scalarType: props.scalarType ?? null,
+        ephemeral: props.ephemeral,
+        valueType: true,
       })
       this.elementType = props.itemType
       this.sourceLocation = props.sourceLocation ?? null
@@ -193,6 +218,7 @@ export namespace wtypes {
     constructor(props: { itemType: WType; immutable: boolean; sourceLocation?: SourceLocation }) {
       super({
         name: `ref_array<${props.itemType.name}>`,
+        ephemeral: true,
         ...props,
       })
     }
@@ -216,6 +242,8 @@ export namespace wtypes {
       super({
         scalarType: AVMType.uint64,
         name: transactionType === undefined ? 'group_transaction' : `group_transaction_${TransactionKind[transactionType]}`,
+        ephemeral: true,
+        valueType: true,
       })
       this.transactionType = transactionType ?? null
       this.arc4Name = transactionType ? TransactionKind[transactionType] : 'txn'
@@ -227,6 +255,8 @@ export namespace wtypes {
       super({
         scalarType: null,
         name: transactionType === undefined ? 'inner_transaction' : `inner_transaction_${TransactionKind[transactionType]}`,
+        ephemeral: true,
+        valueType: true,
       })
       this.transactionType = transactionType ?? null
     }
@@ -237,6 +267,8 @@ export namespace wtypes {
       super({
         scalarType: null,
         name: transactionType === undefined ? 'inner_transaction_fields' : `inner_transaction_fields_${TransactionKind[transactionType]}`,
+        ephemeral: true,
+        valueType: true,
       })
       this.transactionType = transactionType ?? null
     }
@@ -340,7 +372,12 @@ export namespace wtypes {
       nativeType?: WType
       immutable?: boolean
     }) {
-      super({ ...props, scalarType: AVMType.bytes, immutable: props.immutable ?? false, nativeType: props.nativeType ?? null })
+      super({
+        ...props,
+        scalarType: AVMType.bytes,
+        immutable: props.immutable ?? false,
+        nativeType: props.nativeType ?? null,
+      })
       this.elementType = props.elementType
     }
   }

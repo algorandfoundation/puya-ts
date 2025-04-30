@@ -3,15 +3,17 @@ import { assert, BaseContract, Box, BoxMap, BoxRef, Bytes, Contract, Txn } from 
 import type { Bool, DynamicArray, StaticArray, Tuple, UintN32, UintN8 } from '@algorandfoundation/algorand-typescript/arc4'
 import { itob } from '@algorandfoundation/algorand-typescript/op'
 
-const boxA = Box<string>({ key: Bytes('A') })
-function testBox(box: Box<string>, value: string) {
+const boxA = Box<[string, bytes]>({ key: Bytes('A') })
+function testBox(box: Box<[string, bytes]>, str: string) {
+  const value: [string, bytes] = [str, Bytes('a')]
   box.value = value
   boxA.value = value
 
   assert(box.key === Bytes('one'))
   assert(boxA.key === Bytes('A'))
 
-  assert(box.value === boxA.value)
+  assert(box.value[0] === boxA.value[0])
+  assert(box.value[1] === boxA.value[1])
 
   assert(box.exists && boxA.exists)
 
@@ -22,8 +24,9 @@ function testBox(box: Box<string>, value: string) {
   assert(isBoxADeleted, 'delete failed')
   assert(!box.exists && !boxA.exists)
 
-  const defaultVal = 'O'
-  assert(boxA.get({ default: defaultVal }) === box.get({ default: defaultVal }))
+  const defaultVal: [string, bytes] = ['O', Bytes('0')]
+  assert(boxA.get({ default: defaultVal })[0] === box.get({ default: defaultVal })[0])
+  assert(boxA.get({ default: defaultVal })[1] === box.get({ default: defaultVal })[1])
 
   let [, e] = box.maybe()
   assert(!e)
@@ -91,7 +94,7 @@ function testBoxRef(box: BoxRef, length: uint64) {
 }
 
 export class BoxContract extends BaseContract {
-  boxOne = Box<string>({ key: 'one' })
+  boxOne = Box<[string, bytes]>({ key: 'one' })
   boxMapTwo = BoxMap<string, bytes>({ keyPrefix: 'two' })
   boxRefThree = BoxRef({ key: 'three' })
 

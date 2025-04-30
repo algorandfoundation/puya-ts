@@ -59,7 +59,7 @@ export class AppStorageDeclaration {
   }
 
   get definition(): AppStorageDefinition {
-    if (!this.ptype.contentType.wtype || !this.ptype.contentType.wtype.scalarType) {
+    if (!this.ptype.contentType.wtype || !this.ptype.contentType.wtype.valueType || this.ptype.contentType.wtype.ephemeral) {
       throw new CodeError(`${this.ptype.contentType.fullName} is not a valid type for storage`, { sourceLocation: this.sourceLocation })
     }
     return nodeFactory.appStorageDefinition({

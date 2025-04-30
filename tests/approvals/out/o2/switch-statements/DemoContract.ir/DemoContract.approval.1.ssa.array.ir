@@ -90,6 +90,6 @@ subroutine tests/approvals/switch-statements.algo.ts::DemoContract.increaseEvalA
     block@0: // L63
         let (maybe_value%0#0: uint64, maybe_exists%0#0: bool) = (app_global_get_ex 0u "evalCount")
         (assert maybe_exists%0#0) // check GlobalState exists
-        let new_state_value%0#0: uint64 = (+ maybe_value%0#0 1u)
-        (app_global_put "evalCount" new_state_value%0#0)
+        let materialized_values%0#0: uint64 = (+ maybe_value%0#0 1u)
+        (app_global_put "evalCount" materialized_values%0#0)
         return n#0

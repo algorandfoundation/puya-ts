@@ -298,6 +298,9 @@ export class ToCodeVisitor
       .join(', ')
     return `new ${expression.wtype.name}(${props})`
   }
+  visitBoxPrefixedKeyExpression(expression: nodes.BoxPrefixedKeyExpression): string {
+    return `BoxMapKey(prefix=${expression.prefix.accept(this)}, key=${expression.key.accept(this)})`
+  }
   visitExpressionStatement(statement: nodes.ExpressionStatement): string[] {
     return [statement.expr.accept(this)]
   }

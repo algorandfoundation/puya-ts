@@ -253,6 +253,7 @@ async function compilePath(
         outputTeal: false,
         outputSourceMap: true,
         optimizationLevel: 0,
+        customPuyaPath: '/home/parallels/.local/bin/puya',
         ...options,
       }),
     )
