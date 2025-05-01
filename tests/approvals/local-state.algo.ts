@@ -10,9 +10,11 @@ export class LocalStateDemo extends Contract {
   localBytes = LocalState<bytes>({ key: 'b1' })
   localBytes2 = LocalState<bytes>()
   localEncoded = LocalState<SampleArray>()
+  localTuple = LocalState<[uint64, bytes]>()
+  localObject = LocalState<{ a: uint64; b: bytes }>()
 
   @abimethod({ allowActions: 'OptIn' })
-  optIn() {}
+  optIn() { }
 
   public setState({ a, b }: { a: uint64; b: bytes }, c: SampleArray) {
     this.localUint(Txn.sender).value = a
@@ -20,6 +22,8 @@ export class LocalStateDemo extends Contract {
     this.localBytes(Txn.sender).value = b
     this.localBytes2(Txn.sender).value = b
     this.localEncoded(Txn.sender).value = c.copy()
+    this.localTuple(Txn.sender).value = [a, b]
+    this.localObject(Txn.sender).value = { a, b }
   }
 
   public getState() {
@@ -29,6 +33,8 @@ export class LocalStateDemo extends Contract {
       localBytes: this.localBytes(Txn.sender).value,
       localBytes2: this.localBytes2(Txn.sender).value,
       localEncoded: this.localEncoded(Txn.sender).value.copy(),
+      localTuple: this.localTuple(Txn.sender).value,
+      localObject: this.localObject(Txn.sender).value,
     }
   }
 
@@ -38,5 +44,7 @@ export class LocalStateDemo extends Contract {
     this.localBytes(Txn.sender).delete()
     this.localBytes2(Txn.sender).delete()
     this.localEncoded(Txn.sender).delete()
+    this.localTuple(Txn.sender).delete()
+    this.localObject(Txn.sender).delete()
   }
 }

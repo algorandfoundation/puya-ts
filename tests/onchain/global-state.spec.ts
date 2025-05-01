@@ -49,3 +49,11 @@ describe('global state arc4', () => {
     await appClientTestArc4.send.call({ method: 'setState', args: ['key6', 6] })
   })
 })
+
+describe('global state tuple', () => {
+  const test = createArc4TestFixture('tests/approvals/global-state.algo.ts', { TestTuple: {} })
+
+  test('tuple runs', async ({ appClientTestTuple }) => {
+    await appClientTestTuple.send.call({ method: 'testTuple' })
+  })
+})

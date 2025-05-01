@@ -3,17 +3,15 @@ import { assert, BaseContract, Box, BoxMap, BoxRef, Bytes, Contract, Txn } from 
 import type { Bool, DynamicArray, StaticArray, Tuple, UintN32, UintN8 } from '@algorandfoundation/algorand-typescript/arc4'
 import { itob } from '@algorandfoundation/algorand-typescript/op'
 
-const boxA = Box<[string, bytes]>({ key: Bytes('A') })
-function testBox(box: Box<[string, bytes]>, str: string) {
-  const value: [string, bytes] = [str, Bytes('a')]
+const boxA = Box<string>({ key: Bytes('A') })
+function testBox(box: Box<string>, value: string) {
   box.value = value
   boxA.value = value
 
   assert(box.key === Bytes('one'))
   assert(boxA.key === Bytes('A'))
 
-  assert(box.value[0] === boxA.value[0])
-  assert(box.value[1] === boxA.value[1])
+  assert(box.value === boxA.value)
 
   assert(box.exists && boxA.exists)
 
@@ -24,14 +22,13 @@ function testBox(box: Box<[string, bytes]>, str: string) {
   assert(isBoxADeleted, 'delete failed')
   assert(!box.exists && !boxA.exists)
 
-  const defaultVal: [string, bytes] = ['O', Bytes('0')]
-  assert(boxA.get({ default: defaultVal })[0] === box.get({ default: defaultVal })[0])
-  assert(boxA.get({ default: defaultVal })[1] === box.get({ default: defaultVal })[1])
+  const defaultVal = 'O'
+  assert(boxA.get({ default: defaultVal }) === box.get({ default: defaultVal }))
 
   let [, e] = box.maybe()
   assert(!e)
   box.value = value
-  ;[, e] = box.maybe()
+    ;[, e] = box.maybe()
   assert(e)
 }
 
@@ -94,7 +91,7 @@ function testBoxRef(box: BoxRef, length: uint64) {
 }
 
 export class BoxContract extends BaseContract {
-  boxOne = Box<[string, bytes]>({ key: 'one' })
+  boxOne = Box<string>({ key: 'one' })
   boxMapTwo = BoxMap<string, bytes>({ keyPrefix: 'two' })
   boxRefThree = BoxRef({ key: 'three' })
 
@@ -156,4 +153,67 @@ class BoxCreate extends Contract {
 
 class BoxMapTest extends Contract {
   bmap = BoxMap<Account, string>({ keyPrefix: '' })
+}
+
+class TupleBox extends Contract {
+  box1 = Box<[string, bytes, boolean]>({ key: 't1' })
+  box2 = Box<{ a: string; b: bytes; c: boolean }>({ key: 't2' })
+  boxMap1 = BoxMap<string, [string, bytes, boolean]>({ keyPrefix: 'tm1' })
+  boxMap2 = BoxMap<string, { a: string; b: bytes; c: boolean }>({ keyPrefix: 'tm2' })
+
+  testBox() {
+    this.box1.create({ size: 10 })
+    this.box2.create({ size: 20 })
+    assert(this.box1.length === 10)
+    assert(this.box2.length === 20)
+
+    assert(this.box1.exists)
+    assert(this.box2.exists)
+
+    this.box1.value = ['hello', Bytes('world'), true]
+    assert(this.box1.value[0] === 'hello')
+    assert(this.box1.value[1].equals(Bytes('world')))
+    assert(this.box1.value[2])
+
+    this.box2.value = { a: 'hello', b: Bytes('world'), c: true }
+    assert(this.box2.value.a === 'hello')
+    assert(this.box2.value.b.equals(Bytes('world')))
+    assert(this.box2.value.c)
+
+    this.box1.delete()
+    assert(!this.box1.exists)
+
+    this.box2.delete()
+    assert(!this.box2.exists)
+  }
+
+  testBoxMap() {
+    assert(!this.boxMap1('a').exists)
+    assert(!this.boxMap2('a').exists)
+
+    this.boxMap1('a').value = ['hello', Bytes('world'), true]
+    this.boxMap2('a').value = { a: 'hello', b: Bytes('world'), c: true }
+    assert(this.boxMap1('a').exists)
+
+    assert(this.boxMap1('a').value[0] === 'hello')
+    assert(this.boxMap1('a').value[1].equals(Bytes('world')))
+    assert(this.boxMap1('a').value[2])
+
+    assert(this.boxMap2('a').exists)
+    assert(this.boxMap2('a').value.a === 'hello')
+    assert(this.boxMap2('a').value.b.equals(Bytes('world')))
+    assert(this.boxMap2('a').value.c)
+
+    this.boxMap1('b').value = ['abc', Bytes('def'), false]
+    assert(this.boxMap1('b').exists)
+
+    this.boxMap2('b').value = { a: 'abc', b: Bytes('def'), c: false }
+    assert(this.boxMap2('b').exists)
+
+    this.boxMap1('a').delete()
+    assert(!this.boxMap1('a').exists)
+
+    this.boxMap2('a').delete()
+    assert(!this.boxMap2('a').exists)
+  }
 }

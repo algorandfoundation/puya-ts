@@ -3,13 +3,13 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 1
-    bytecblock "l1" "localUint2" "b1" "localBytes2" "localEncoded"
+    intcblock 0 1 8
+    bytecblock 0x000a "l1" "localUint2" "b1" "localBytes2" "localEncoded" "localTuple" "localObject"
     // tests/approvals/local-state.algo.ts:7
     // export class LocalStateDemo extends Contract {
     txn NumAppArgs
     bz main_bare_routing@9
-    pushbytess 0x29314d95 0xaaefcb43 0x67816cc5 0x11170534 // method "optIn()void", method "setState((uint64,byte[]),uint64[10])void", method "getState()(uint64,uint64,byte[],byte[],uint64[10])", method "clearState()void"
+    pushbytess 0x29314d95 0xaaefcb43 0xa88a06d9 0x11170534 // method "optIn()void", method "setState((uint64,byte[]),uint64[10])void", method "getState()(uint64,uint64,byte[],byte[],uint64[10],(uint64,byte[]),(uint64,byte[]))", method "clearState()void"
     txna ApplicationArgs 0
     match main_optIn_route@3 main_setState_route@4 main_getState_route@5 main_clearState_route@6
 
@@ -20,7 +20,7 @@ main_after_if_else@13:
     return
 
 main_clearState_route@6:
-    // tests/approvals/local-state.algo.ts:35
+    // tests/approvals/local-state.algo.ts:41
     // public clearState() {
     txn OnCompletion
     !
@@ -32,7 +32,7 @@ main_clearState_route@6:
     return
 
 main_getState_route@5:
-    // tests/approvals/local-state.algo.ts:25
+    // tests/approvals/local-state.algo.ts:29
     // public getState() {
     txn OnCompletion
     !
@@ -40,33 +40,82 @@ main_getState_route@5:
     txn ApplicationID
     assert // can only call when not creating
     callsub getState
-    uncover 4
+    uncover 8
     itob
-    uncover 4
+    uncover 8
     itob
-    dig 4
+    dig 8
     len
     itob
     extract 6 2
-    uncover 5
+    uncover 9
     concat
-    dig 4
+    dig 8
     len
     itob
     extract 6 2
+    uncover 9
+    concat
+    uncover 7
+    itob
+    dig 7
+    len
+    itob
+    extract 6 2
+    uncover 8
+    concat
+    swap
+    bytec_0 // 0x000a
+    concat
+    swap
+    concat
+    uncover 6
+    itob
+    dig 6
+    len
+    itob
+    extract 6 2
+    uncover 7
+    concat
+    swap
+    bytec_0 // 0x000a
+    concat
+    swap
+    concat
+    uncover 5
     uncover 5
     concat
-    uncover 3
-    uncover 3
+    pushbytes 0x0068
     concat
-    pushbytes 0x0064
-    concat
-    dig 2
+    dig 4
     len
-    pushint 100 // 100
+    pushint 104 // 104
+    +
+    dup
+    itob
+    extract 6 2
+    uncover 2
+    swap
+    concat
+    dig 4
+    len
+    uncover 2
+    +
+    swap
+    uncover 6
+    concat
+    dig 1
+    itob
+    extract 6 2
+    concat
+    dig 3
+    len
+    uncover 2
     +
     itob
     extract 6 2
+    concat
+    uncover 4
     concat
     uncover 3
     concat
@@ -82,7 +131,7 @@ main_getState_route@5:
     return
 
 main_setState_route@4:
-    // tests/approvals/local-state.algo.ts:17
+    // tests/approvals/local-state.algo.ts:19
     // public setState({ a, b }: { a: uint64; b: bytes }, c: SampleArray) {
     txn OnCompletion
     !
@@ -96,7 +145,7 @@ main_setState_route@4:
     intc_0 // 0
     extract_uint64
     dig 1
-    pushint 8 // 8
+    intc_2 // 8
     extract_uint16
     dig 2
     len
@@ -105,14 +154,14 @@ main_setState_route@4:
     substring3
     extract 2 0
     txna ApplicationArgs 2
-    // tests/approvals/local-state.algo.ts:17
+    // tests/approvals/local-state.algo.ts:19
     // public setState({ a, b }: { a: uint64; b: bytes }, c: SampleArray) {
     callsub setState
     intc_1 // 1
     return
 
 main_optIn_route@3:
-    // tests/approvals/local-state.algo.ts:14
+    // tests/approvals/local-state.algo.ts:16
     // @abimethod({ allowActions: 'OptIn' })
     txn OnCompletion
     intc_1 // OptIn
@@ -137,175 +186,342 @@ main_bare_routing@9:
 
 // tests/approvals/local-state.algo.ts::LocalStateDemo.setState(p.a: uint64, p.b: bytes, c: bytes) -> void:
 setState:
-    // tests/approvals/local-state.algo.ts:17
+    // tests/approvals/local-state.algo.ts:19
     // public setState({ a, b }: { a: uint64; b: bytes }, c: SampleArray) {
     proto 3 0
-    // tests/approvals/local-state.algo.ts:18
+    // tests/approvals/local-state.algo.ts:20
     // this.localUint(Txn.sender).value = a
     txn Sender
     // tests/approvals/local-state.algo.ts:8
     // localUint = LocalState<uint64>({ key: 'l1' })
-    bytec_0 // "l1"
-    // tests/approvals/local-state.algo.ts:18
+    bytec_1 // "l1"
+    // tests/approvals/local-state.algo.ts:20
     // this.localUint(Txn.sender).value = a
     frame_dig -3
     app_local_put
-    // tests/approvals/local-state.algo.ts:19
+    // tests/approvals/local-state.algo.ts:21
     // this.localUint2(Txn.sender).value = a
     txn Sender
     // tests/approvals/local-state.algo.ts:9
     // localUint2 = LocalState<uint64>()
-    bytec_1 // "localUint2"
-    // tests/approvals/local-state.algo.ts:19
+    bytec_2 // "localUint2"
+    // tests/approvals/local-state.algo.ts:21
     // this.localUint2(Txn.sender).value = a
     frame_dig -3
     app_local_put
-    // tests/approvals/local-state.algo.ts:20
+    // tests/approvals/local-state.algo.ts:22
     // this.localBytes(Txn.sender).value = b
     txn Sender
     // tests/approvals/local-state.algo.ts:10
     // localBytes = LocalState<bytes>({ key: 'b1' })
-    bytec_2 // "b1"
-    // tests/approvals/local-state.algo.ts:20
+    bytec_3 // "b1"
+    // tests/approvals/local-state.algo.ts:22
     // this.localBytes(Txn.sender).value = b
     frame_dig -2
     app_local_put
-    // tests/approvals/local-state.algo.ts:21
+    // tests/approvals/local-state.algo.ts:23
     // this.localBytes2(Txn.sender).value = b
     txn Sender
     // tests/approvals/local-state.algo.ts:11
     // localBytes2 = LocalState<bytes>()
-    bytec_3 // "localBytes2"
-    // tests/approvals/local-state.algo.ts:21
+    bytec 4 // "localBytes2"
+    // tests/approvals/local-state.algo.ts:23
     // this.localBytes2(Txn.sender).value = b
     frame_dig -2
     app_local_put
-    // tests/approvals/local-state.algo.ts:22
+    // tests/approvals/local-state.algo.ts:24
     // this.localEncoded(Txn.sender).value = c.copy()
     txn Sender
     // tests/approvals/local-state.algo.ts:12
     // localEncoded = LocalState<SampleArray>()
-    bytec 4 // "localEncoded"
-    // tests/approvals/local-state.algo.ts:22
+    bytec 5 // "localEncoded"
+    // tests/approvals/local-state.algo.ts:24
     // this.localEncoded(Txn.sender).value = c.copy()
     frame_dig -1
+    app_local_put
+    // tests/approvals/local-state.algo.ts:25
+    // this.localTuple(Txn.sender).value = [a, b]
+    txn Sender
+    frame_dig -3
+    itob
+    frame_dig -2
+    len
+    itob
+    extract 6 2
+    frame_dig -2
+    concat
+    swap
+    bytec_0 // 0x000a
+    concat
+    swap
+    concat
+    swap
+    // tests/approvals/local-state.algo.ts:13
+    // localTuple = LocalState<[uint64, bytes]>()
+    bytec 6 // "localTuple"
+    // tests/approvals/local-state.algo.ts:25
+    // this.localTuple(Txn.sender).value = [a, b]
+    dig 2
+    app_local_put
+    // tests/approvals/local-state.algo.ts:26
+    // this.localObject(Txn.sender).value = { a, b }
+    txn Sender
+    // tests/approvals/local-state.algo.ts:14
+    // localObject = LocalState<{ a: uint64; b: bytes }>()
+    bytec 7 // "localObject"
+    // tests/approvals/local-state.algo.ts:26
+    // this.localObject(Txn.sender).value = { a, b }
+    uncover 2
     app_local_put
     retsub
 
 
-// tests/approvals/local-state.algo.ts::LocalStateDemo.getState() -> uint64, uint64, bytes, bytes, bytes:
+// tests/approvals/local-state.algo.ts::LocalStateDemo.getState() -> uint64, uint64, bytes, bytes, bytes, uint64, bytes, uint64, bytes:
 getState:
-    // tests/approvals/local-state.algo.ts:27
+    // tests/approvals/local-state.algo.ts:29
+    // public getState() {
+    proto 0 9
+    intc_0 // 0
+    dup
+    pushbytes ""
+    dupn 2
+    // tests/approvals/local-state.algo.ts:31
     // localUint: this.localUint(Txn.sender).value,
     txn Sender
     intc_0 // 0
     // tests/approvals/local-state.algo.ts:8
     // localUint = LocalState<uint64>({ key: 'l1' })
-    bytec_0 // "l1"
-    // tests/approvals/local-state.algo.ts:27
+    bytec_1 // "l1"
+    // tests/approvals/local-state.algo.ts:31
     // localUint: this.localUint(Txn.sender).value,
     app_local_get_ex
     assert // check LocalState exists
-    // tests/approvals/local-state.algo.ts:28
+    // tests/approvals/local-state.algo.ts:32
     // localUint2: this.localUint2(Txn.sender).value,
     txn Sender
     intc_0 // 0
     // tests/approvals/local-state.algo.ts:9
     // localUint2 = LocalState<uint64>()
-    bytec_1 // "localUint2"
-    // tests/approvals/local-state.algo.ts:28
+    bytec_2 // "localUint2"
+    // tests/approvals/local-state.algo.ts:32
     // localUint2: this.localUint2(Txn.sender).value,
     app_local_get_ex
     assert // check LocalState exists
-    // tests/approvals/local-state.algo.ts:29
+    // tests/approvals/local-state.algo.ts:33
     // localBytes: this.localBytes(Txn.sender).value,
     txn Sender
     intc_0 // 0
     // tests/approvals/local-state.algo.ts:10
     // localBytes = LocalState<bytes>({ key: 'b1' })
-    bytec_2 // "b1"
-    // tests/approvals/local-state.algo.ts:29
+    bytec_3 // "b1"
+    // tests/approvals/local-state.algo.ts:33
     // localBytes: this.localBytes(Txn.sender).value,
     app_local_get_ex
     assert // check LocalState exists
-    // tests/approvals/local-state.algo.ts:30
+    // tests/approvals/local-state.algo.ts:34
     // localBytes2: this.localBytes2(Txn.sender).value,
     txn Sender
     intc_0 // 0
     // tests/approvals/local-state.algo.ts:11
     // localBytes2 = LocalState<bytes>()
-    bytec_3 // "localBytes2"
-    // tests/approvals/local-state.algo.ts:30
+    bytec 4 // "localBytes2"
+    // tests/approvals/local-state.algo.ts:34
     // localBytes2: this.localBytes2(Txn.sender).value,
     app_local_get_ex
     assert // check LocalState exists
-    // tests/approvals/local-state.algo.ts:31
+    // tests/approvals/local-state.algo.ts:35
     // localEncoded: this.localEncoded(Txn.sender).value.copy(),
     txn Sender
     intc_0 // 0
     // tests/approvals/local-state.algo.ts:12
     // localEncoded = LocalState<SampleArray>()
-    bytec 4 // "localEncoded"
-    // tests/approvals/local-state.algo.ts:31
+    bytec 5 // "localEncoded"
+    // tests/approvals/local-state.algo.ts:35
     // localEncoded: this.localEncoded(Txn.sender).value.copy(),
     app_local_get_ex
     assert // check LocalState exists
-    // tests/approvals/local-state.algo.ts:26-32
+    // tests/approvals/local-state.algo.ts:36
+    // localTuple: this.localTuple(Txn.sender).value,
+    txn Sender
+    intc_0 // 0
+    // tests/approvals/local-state.algo.ts:13
+    // localTuple = LocalState<[uint64, bytes]>()
+    bytec 6 // "localTuple"
+    // tests/approvals/local-state.algo.ts:36
+    // localTuple: this.localTuple(Txn.sender).value,
+    app_local_get_ex
+    dup
+    uncover 2
+    swap
+    bz getState_ternary_false@2
+    frame_dig 11
+    dup
+    intc_0 // 0
+    extract_uint64
+    dig 1
+    intc_2 // 8
+    extract_uint16
+    dig 2
+    len
+    uncover 3
+    cover 2
+    substring3
+    extract 2 0
+    frame_bury 1
+    frame_bury 3
+
+getState_ternary_merge@3:
+    // tests/approvals/local-state.algo.ts:36
+    // localTuple: this.localTuple(Txn.sender).value,
+    frame_dig 10
+    assert // check LocalState exists
+    // tests/approvals/local-state.algo.ts:37
+    // localObject: this.localObject(Txn.sender).value,
+    txn Sender
+    intc_0 // 0
+    // tests/approvals/local-state.algo.ts:14
+    // localObject = LocalState<{ a: uint64; b: bytes }>()
+    bytec 7 // "localObject"
+    // tests/approvals/local-state.algo.ts:37
+    // localObject: this.localObject(Txn.sender).value,
+    app_local_get_ex
+    dup
+    cover 2
+    frame_bury 2
+    frame_bury 0
+    bz getState_ternary_false@5
+    frame_dig 0
+    dup
+    intc_0 // 0
+    extract_uint64
+    dig 1
+    intc_2 // 8
+    extract_uint16
+    dig 2
+    len
+    uncover 3
+    cover 2
+    substring3
+    extract 2 0
+    swap
+    frame_bury 4
+
+getState_ternary_merge@6:
+    // tests/approvals/local-state.algo.ts:37
+    // localObject: this.localObject(Txn.sender).value,
+    frame_dig 2
+    assert // check LocalState exists
+    // tests/approvals/local-state.algo.ts:30-38
     // return {
     //   localUint: this.localUint(Txn.sender).value,
     //   localUint2: this.localUint2(Txn.sender).value,
     //   localBytes: this.localBytes(Txn.sender).value,
     //   localBytes2: this.localBytes2(Txn.sender).value,
     //   localEncoded: this.localEncoded(Txn.sender).value.copy(),
+    //   localTuple: this.localTuple(Txn.sender).value,
+    //   localObject: this.localObject(Txn.sender).value,
     // }
+    frame_dig 5
+    frame_dig 6
+    frame_dig 7
+    frame_dig 8
+    frame_dig 9
+    frame_dig 3
+    frame_dig 1
+    frame_dig 4
+    uncover 8
+    frame_bury 8
+    frame_bury 7
+    frame_bury 6
+    frame_bury 5
+    frame_bury 4
+    frame_bury 3
+    frame_bury 2
+    frame_bury 1
+    frame_bury 0
     retsub
+
+getState_ternary_false@5:
+    // tests/approvals/local-state.algo.ts:37
+    // localObject: this.localObject(Txn.sender).value,
+    pushbytes ""
+    frame_bury 4
+    intc_0 // 0
+    b getState_ternary_merge@6
+
+getState_ternary_false@2:
+    // tests/approvals/local-state.algo.ts:36
+    // localTuple: this.localTuple(Txn.sender).value,
+    pushbytes ""
+    frame_bury 3
+    intc_0 // 0
+    frame_bury 1
+    b getState_ternary_merge@3
 
 
 // tests/approvals/local-state.algo.ts::LocalStateDemo.clearState() -> void:
 clearState:
-    // tests/approvals/local-state.algo.ts:36
+    // tests/approvals/local-state.algo.ts:42
     // this.localUint(Txn.sender).delete()
     txn Sender
     // tests/approvals/local-state.algo.ts:8
     // localUint = LocalState<uint64>({ key: 'l1' })
-    bytec_0 // "l1"
-    // tests/approvals/local-state.algo.ts:36
+    bytec_1 // "l1"
+    // tests/approvals/local-state.algo.ts:42
     // this.localUint(Txn.sender).delete()
     app_local_del
-    // tests/approvals/local-state.algo.ts:37
+    // tests/approvals/local-state.algo.ts:43
     // this.localUint2(Txn.sender).delete()
     txn Sender
     // tests/approvals/local-state.algo.ts:9
     // localUint2 = LocalState<uint64>()
-    bytec_1 // "localUint2"
-    // tests/approvals/local-state.algo.ts:37
+    bytec_2 // "localUint2"
+    // tests/approvals/local-state.algo.ts:43
     // this.localUint2(Txn.sender).delete()
     app_local_del
-    // tests/approvals/local-state.algo.ts:38
+    // tests/approvals/local-state.algo.ts:44
     // this.localBytes(Txn.sender).delete()
     txn Sender
     // tests/approvals/local-state.algo.ts:10
     // localBytes = LocalState<bytes>({ key: 'b1' })
-    bytec_2 // "b1"
-    // tests/approvals/local-state.algo.ts:38
+    bytec_3 // "b1"
+    // tests/approvals/local-state.algo.ts:44
     // this.localBytes(Txn.sender).delete()
     app_local_del
-    // tests/approvals/local-state.algo.ts:39
+    // tests/approvals/local-state.algo.ts:45
     // this.localBytes2(Txn.sender).delete()
     txn Sender
     // tests/approvals/local-state.algo.ts:11
     // localBytes2 = LocalState<bytes>()
-    bytec_3 // "localBytes2"
-    // tests/approvals/local-state.algo.ts:39
+    bytec 4 // "localBytes2"
+    // tests/approvals/local-state.algo.ts:45
     // this.localBytes2(Txn.sender).delete()
     app_local_del
-    // tests/approvals/local-state.algo.ts:40
+    // tests/approvals/local-state.algo.ts:46
     // this.localEncoded(Txn.sender).delete()
     txn Sender
     // tests/approvals/local-state.algo.ts:12
     // localEncoded = LocalState<SampleArray>()
-    bytec 4 // "localEncoded"
-    // tests/approvals/local-state.algo.ts:40
+    bytec 5 // "localEncoded"
+    // tests/approvals/local-state.algo.ts:46
     // this.localEncoded(Txn.sender).delete()
+    app_local_del
+    // tests/approvals/local-state.algo.ts:47
+    // this.localTuple(Txn.sender).delete()
+    txn Sender
+    // tests/approvals/local-state.algo.ts:13
+    // localTuple = LocalState<[uint64, bytes]>()
+    bytec 6 // "localTuple"
+    // tests/approvals/local-state.algo.ts:47
+    // this.localTuple(Txn.sender).delete()
+    app_local_del
+    // tests/approvals/local-state.algo.ts:48
+    // this.localObject(Txn.sender).delete()
+    txn Sender
+    // tests/approvals/local-state.algo.ts:14
+    // localObject = LocalState<{ a: uint64; b: bytes }>()
+    bytec 7 // "localObject"
+    // tests/approvals/local-state.algo.ts:48
+    // this.localObject(Txn.sender).delete()
     app_local_del
     retsub
