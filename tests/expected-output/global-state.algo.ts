@@ -1,9 +1,6 @@
 import { Bytes, Contract, GlobalState, type uint64 } from '@algorandfoundation/algorand-typescript'
 
 export class TestContract extends Contract {
-  // @expect-error unknown is not a valid type for storage
-  noInitial = GlobalState()
-
   // @expect-error Global state must have explicit key provided if not being assigned to a contract property
   incorrect = GlobalState<string>().hasValue
 

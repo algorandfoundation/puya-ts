@@ -11,7 +11,7 @@ import { FunctionBuilder, type NodeBuilder, ParameterlessFunctionBuilder } from 
 import { parseFunctionArgs } from '../../util/arg-parsing'
 import { extractKey } from '../util'
 import { boxExists, boxLength, BoxProxyExpressionBuilder, boxValue, BoxValueExpressionBuilder } from './base'
-import { checkBoxType, getBoxSize } from './util'
+import { getBoxSize } from './util'
 
 export class BoxFunctionBuilder extends FunctionBuilder {
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
@@ -26,7 +26,6 @@ export class BoxFunctionBuilder extends FunctionBuilder {
       genericTypeArgs: 1,
       argSpec: (a) => [a.obj({ key: a.required(bytesPType, stringPType) })],
     })
-    checkBoxType(contentPType, sourceLocation)
 
     const ptype = new BoxPType({ content: contentPType })
     return new BoxExpressionBuilder(extractKey(key, wtypes.boxKeyWType), ptype)

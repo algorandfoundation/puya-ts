@@ -73,18 +73,7 @@ export namespace wtypes {
   export class ARC4Type extends WType {
     readonly nativeType: WType | null
     readonly arc4Name: string
-    constructor({
-      nativeType,
-      arc4Name,
-      ...rest
-    }: {
-      nativeType: WType | null
-      arc4Name: string
-      name: string
-      immutable?: boolean
-      scalarType?: AVMType | null
-      ephemeral?: boolean
-    }) {
+    constructor({ nativeType, arc4Name, ...rest }: { nativeType: WType | null; arc4Name: string; name: string; immutable?: boolean }) {
       super({ ...rest })
       this.arc4Name = arc4Name
       this.nativeType = nativeType
@@ -142,13 +131,7 @@ export namespace wtypes {
   export abstract class NativeArray extends WType {
     readonly elementType: WType
     readonly sourceLocation: SourceLocation | null
-    protected constructor(props: {
-      name: string
-      itemType: WType
-      sourceLocation?: SourceLocation
-      scalarType?: AVMType
-      ephemeral?: boolean
-    }) {
+    protected constructor(props: { name: string; itemType: WType; sourceLocation?: SourceLocation }) {
       super({
         name: props.name,
       })
@@ -162,7 +145,6 @@ export namespace wtypes {
     constructor(props: { itemType: WType; immutable: boolean; sourceLocation?: SourceLocation }) {
       super({
         name: `stack_array<${props.itemType.name}>`,
-        scalarType: AVMType.bytes,
         ...props,
       })
     }
@@ -172,7 +154,6 @@ export namespace wtypes {
     constructor(props: { itemType: WType; immutable: boolean; sourceLocation?: SourceLocation }) {
       super({
         name: `ref_array<${props.itemType.name}>`,
-        ephemeral: true,
         ...props,
       })
     }
@@ -223,7 +204,6 @@ export namespace wtypes {
     constructor({ n, arc4Name }: { n: bigint; arc4Name?: string }) {
       super({
         name: arc4Name ? `arc4.${arc4Name}` : `arc4.uint${n}`,
-        scalarType: AVMType.bytes,
         nativeType: n <= 64 ? uint64WType : biguintWType,
         arc4Name: arc4Name ?? `uint${n}`,
       })
@@ -239,7 +219,6 @@ export namespace wtypes {
     constructor({ n, m }: { n: bigint; m: bigint }) {
       super({
         name: `arc4.ufixed${n}x${m}`,
-        scalarType: AVMType.bytes,
         nativeType: n <= 64 ? uint64WType : biguintWType,
         arc4Name: `ufixed${n}x${m}`,
       })
@@ -318,7 +297,6 @@ export namespace wtypes {
     }) {
       super({
         ...props,
-        scalarType: AVMType.bytes,
         immutable: props.immutable ?? false,
         nativeType: props.nativeType ?? null,
       })

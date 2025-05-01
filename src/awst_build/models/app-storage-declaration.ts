@@ -2,11 +2,9 @@ import { nodeFactory } from '../../awst/node-factory'
 import type { AppStorageDefinition, BytesConstant } from '../../awst/nodes'
 import { AppStorageKind, BytesEncoding } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
-import { CodeError } from '../../errors'
 import { invariant, utf8ToUint8Array } from '../../util'
 import type { ContractClassPType, StorageProxyPType } from '../ptypes'
 import { BoxMapPType, BoxPType, BoxRefPType, GlobalStateType, LocalStateType } from '../ptypes'
-import { isPersistableStackType } from '../ptypes/util'
 
 export class AppStorageDeclaration {
   readonly memberName: string
@@ -60,9 +58,6 @@ export class AppStorageDeclaration {
   }
 
   get definition(): AppStorageDefinition {
-    if (!isPersistableStackType(this.ptype.contentType)) {
-      throw new CodeError(`${this.ptype.contentType.fullName} is not a valid type for storage`, { sourceLocation: this.sourceLocation })
-    }
     return nodeFactory.appStorageDefinition({
       ...this,
       kind: this.kind,
