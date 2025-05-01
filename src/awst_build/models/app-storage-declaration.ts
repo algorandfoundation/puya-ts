@@ -6,6 +6,7 @@ import { CodeError } from '../../errors'
 import { invariant, utf8ToUint8Array } from '../../util'
 import type { ContractClassPType, StorageProxyPType } from '../ptypes'
 import { BoxMapPType, BoxPType, BoxRefPType, GlobalStateType, LocalStateType } from '../ptypes'
+import { isPersistableStackType } from '../ptypes/util'
 
 export class AppStorageDeclaration {
   readonly memberName: string
@@ -59,7 +60,7 @@ export class AppStorageDeclaration {
   }
 
   get definition(): AppStorageDefinition {
-    if (!this.ptype.contentType.wtype || !this.ptype.contentType.wtype.valueType || this.ptype.contentType.wtype.ephemeral) {
+    if (!isPersistableStackType(this.ptype.contentType)) {
       throw new CodeError(`${this.ptype.contentType.fullName} is not a valid type for storage`, { sourceLocation: this.sourceLocation })
     }
     return nodeFactory.appStorageDefinition({

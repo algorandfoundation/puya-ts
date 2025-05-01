@@ -66,6 +66,7 @@ import type {
   Reversed,
   RootNodeVisitor,
   SingleEvaluation,
+  SizeOf,
   SliceExpression,
   StateDelete,
   StateExists,
@@ -427,6 +428,10 @@ export class FunctionTraverser implements ExpressionVisitor<void>, StatementVisi
     }
   }
 
+  visitBoxPrefixedKeyExpression(expression: BoxPrefixedKeyExpression): void {}
+
+  visitSizeOf(expression: SizeOf): void {}
+
   visitCompiledContract(expression: CompiledContract): void {
     for (const v of expression.templateVariables.values()) {
       v.accept(this)
@@ -443,8 +448,6 @@ export class FunctionTraverser implements ExpressionVisitor<void>, StatementVisi
   }
 
   visitARC4Router(expression: ARC4Router): void {}
-
-  visitBoxPrefixedKeyExpression(expression: BoxPrefixedKeyExpression): void {}
 }
 
 export class AwstTraverser extends FunctionTraverser implements RootNodeVisitor<void>, ContractMemberNodeVisitor<void> {

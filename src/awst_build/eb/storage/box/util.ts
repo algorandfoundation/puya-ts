@@ -1,9 +1,10 @@
 import type { SourceLocation } from '../../../../awst/source-location'
-import { AVMType } from '../../../../awst/wtypes'
+import { wtypes } from '../../../../awst/wtypes'
 import { logger } from '../../../../logger'
 import type { PType } from '../../../ptypes'
 import { accountPType } from '../../../ptypes'
 import { ARC4EncodedType } from '../../../ptypes/arc4-types'
+import { isPersistableStackType } from '../../../ptypes/util'
 
 /**
  * Verifies contentType is able to be stored in a box.
@@ -11,12 +12,10 @@ import { ARC4EncodedType } from '../../../ptypes/arc4-types'
  * @param sourceLocation The source location of the box proxy declaration
  */
 export function checkBoxType(contentType: PType, sourceLocation: SourceLocation) {
-  if (contentType instanceof ARC4EncodedType) {
-    return
-  } else if (contentType.wtype && contentType.wtype.valueType && !contentType.wtype.ephemeral) {
+  if (isPersistableStackType(contentType)) {
     return
   } else {
-    logger.error(sourceLocation, `Objects of type ${contentType} cannot be stored in a box`)
+    logger.error(sourceLocation, `${contentType} is not a valid type for storage`)
   }
 }
 
@@ -27,7 +26,7 @@ export function checkBoxType(contentType: PType, sourceLocation: SourceLocation)
 export function getBoxSize(contentType: PType): bigint | null {
   if (contentType instanceof ARC4EncodedType) {
     return contentType.fixedByteSize
-  } else if (contentType.wtype?.scalarType === AVMType.uint64) {
+  } else if (contentType.wtype?.equals(wtypes.uint64WType) || contentType.wtype?.equals(wtypes.boolWType)) {
     return 8n
   } else if (contentType.equals(accountPType)) {
     return 32n
