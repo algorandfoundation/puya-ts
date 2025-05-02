@@ -33,7 +33,6 @@ describe('Approvals', async () => {
           outputArc32: true,
           outputArc56: true,
           outputSsaIr: true,
-          customPuyaPath: '/home/parallels/.local/bin/puya',
           ...puyaOptions,
         }),
       )
