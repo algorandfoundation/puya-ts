@@ -136,17 +136,17 @@ contract BoxCreate
   {
     box_create("a", 10)
     assert(checked_maybe(box_len("a"), comment=Box must have value) == 10)
-    box_create("b", 8)
+    box_create("b", SIZE_OF(uint64))
     assert(checked_maybe(box_len("b"), comment=Box must have value) == 8)
-    box_create("c", 40)
+    box_create("c", SIZE_OF(arc4.static_array<arc4.uint32>))
     assert(checked_maybe(box_len("c"), comment=Box must have value) == 40)
     box_create("d", 2)
     assert(checked_maybe(box_len("d"), comment=Box must have value) == 2)
-    box_create("e", 3)
+    box_create("e", SIZE_OF(arc4.tuple<uint8,uint8,bool,bool>))
     assert(checked_maybe(box_len("e"), comment=Box must have value) == 3)
-    box_create("bool", 8)
+    box_create("bool", SIZE_OF(bool))
     assert(checked_maybe(box_len("bool"), comment=Box must have value) == 8)
-    box_create("arc4b", 1)
+    box_create("arc4b", SIZE_OF(arc4.bool))
     assert(checked_maybe(box_len("arc4b"), comment=Box must have value) == 1)
   }
   

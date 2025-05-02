@@ -14,7 +14,7 @@ export class LocalStateDemo extends Contract {
   localObject = LocalState<{ a: uint64; b: bytes }>()
 
   @abimethod({ allowActions: 'OptIn' })
-  optIn() { }
+  optIn() {}
 
   public setState({ a, b }: { a: uint64; b: bytes }, c: SampleArray) {
     this.localUint(Txn.sender).value = a

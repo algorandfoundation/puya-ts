@@ -28,7 +28,7 @@ function testBox(box: Box<string>, value: string) {
   let [, e] = box.maybe()
   assert(!e)
   box.value = value
-    ;[, e] = box.maybe()
+  ;[, e] = box.maybe()
   assert(e)
 }
 
