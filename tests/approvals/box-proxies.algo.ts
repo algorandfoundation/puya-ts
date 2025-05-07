@@ -1,6 +1,7 @@
 import type { Account, bytes, uint64 } from '@algorandfoundation/algorand-typescript'
 import { assert, BaseContract, Box, BoxMap, BoxRef, Bytes, Contract, Txn } from '@algorandfoundation/algorand-typescript'
-import type { Bool, DynamicArray, StaticArray, Tuple, UintN32, UintN8 } from '@algorandfoundation/algorand-typescript/arc4'
+import type { Bool, DynamicArray, StaticArray, Tuple, UintN32 } from '@algorandfoundation/algorand-typescript/arc4'
+import { UintN8 } from '@algorandfoundation/algorand-typescript/arc4'
 import { itob } from '@algorandfoundation/algorand-typescript/op'
 
 const boxA = Box<string>({ key: Bytes('A') })
@@ -215,5 +216,21 @@ class TupleBox extends Contract {
 
     this.boxMap2('a').delete()
     assert(!this.boxMap2('a').exists)
+  }
+}
+
+class BoxToRefTest extends Contract {
+  boxMap = BoxMap<Account, StaticArray<UintN8, 4>>({ keyPrefix: '' })
+
+  test() {
+    const boxForCaller = this.boxMap(Txn.sender)
+
+    boxForCaller.create()
+
+    const boxRef = boxForCaller.ref
+
+    boxRef.replace(0, new UintN8(123).bytes)
+
+    assert(boxForCaller.value[0].native === 123, 'First array item in box should be 123')
   }
 }
