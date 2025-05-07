@@ -53,6 +53,11 @@ export type Box<TValue> = {
    * Returns the length of the box, or error if the box does not exist
    */
   readonly length: uint64
+
+  /**
+   * Returns a BoxRef instance which allows for more direct mutation of the bytes contained in this box
+   */
+  readonly ref: BoxRef
 }
 /**
  * A BoxMap proxy

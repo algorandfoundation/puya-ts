@@ -93,10 +93,12 @@ The `Box` type provides an abstraction over storing a single value in a single b
 subroutine. `Box` proxy instances can be passed around like any other value.
 
 `BoxMap` is similar to the `Box` type, but allows for grouping a set of boxes with a common key and content type.
-A `keyPrefix` is specified when the `BoxMap` is created and the item key can be a `Bytes` value, or anything that can be converted to `Bytes`. The final box name is the combination of `keyPrefix + key`.
+A `keyPrefix` is specified when the `BoxMap` is created and the item key can be a `Bytes` value, or anything that can be converted to `Bytes`. The final box name is the combination of `keyPrefix + key`. The `BoxMap` proxy is a function which takes a `key` argument and returns you a `Box` proxy object for that item.
 
 `BoxRef` is a specialised type for interacting with boxes which contain binary data. In addition to being able to set and read the box value, there are operations for extracting and replacing just a portion of the box data which
 is useful for minimizing the amount of reads and writes required, but also allows you to interact with byte arrays which are longer than the AVM can support (currently 4096).
+
+The `Box` proxy object contains a `ref` property which will return a `BoxRef` proxy for that box. This allows you to directly manipulate the bytes of any box, though it should note that mutations via this approach are not validated against the `Box` value type which could lead to box content which is not valid for the expected type.
 
 ```ts
 import type { Account, uint64 } from '@algorandfoundation/algorand-typescript'

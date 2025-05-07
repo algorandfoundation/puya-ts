@@ -244,3 +244,32 @@ contract TupleBox
   }
   
 }
+contract BoxToRefTest
+{
+  boxes {
+    [""]: account => arc4.static_array<arc4.uint8>
+  }
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  test(): void
+  {
+    boxForCaller: box_key = concat("", reinterpret_cast<bytes>(txn<Sender>()))
+    box_create(boxForCaller, SIZE_OF(arc4.static_array<arc4.uint8>))
+    boxRef: box_key = boxForCaller
+    box_replace(boxRef, 0, reinterpret_cast<bytes>(123))
+    assert(ARC4_DECODE(Box[boxForCaller].value[0]) == 123, comment=First array item in box should be 123)
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
