@@ -398,13 +398,6 @@ setState_block@0:
 
 // tests/approvals/local-state.algo.ts::LocalStateDemo.getState() -> uint64, uint64, bytes, bytes, bytes, uint64, bytes, uint64, bytes:
 getState:
-    // tests/approvals/local-state.algo.ts:29
-    // public getState() {
-    proto 0 9
-    intc_0 // 0
-    dup
-    bytec_0 // ""
-    dupn 2
 
 getState_block@0:
     // tests/approvals/local-state.algo.ts:31
@@ -472,16 +465,7 @@ getState_block@0:
     // tests/approvals/local-state.algo.ts:36
     // localTuple: this.localTuple(Txn.sender).value,
     app_local_get_ex
-    dup
-    cover 2
-    cover 2
-    swap
-    bz getState_ternary_false@2
-
-getState_ternary_true@1:
-    // tests/approvals/local-state.algo.ts:36
-    // localTuple: this.localTuple(Txn.sender).value,
-    frame_dig 11
+    assert // check LocalState exists
     dup
     intc_0 // 0
     intc_2 // 8
@@ -499,15 +483,6 @@ getState_ternary_true@1:
     uncover 2
     substring3
     extract 2 0
-    swap
-    frame_bury 3
-    frame_bury 1
-
-getState_ternary_merge@3:
-    // tests/approvals/local-state.algo.ts:36
-    // localTuple: this.localTuple(Txn.sender).value,
-    frame_dig 10
-    assert // check LocalState exists
     // tests/approvals/local-state.algo.ts:37
     // localObject: this.localObject(Txn.sender).value,
     txn Sender
@@ -518,16 +493,7 @@ getState_ternary_merge@3:
     // tests/approvals/local-state.algo.ts:37
     // localObject: this.localObject(Txn.sender).value,
     app_local_get_ex
-    dup
-    cover 2
-    frame_bury 2
-    frame_bury 0
-    bz getState_ternary_false@5
-
-getState_ternary_true@4:
-    // tests/approvals/local-state.algo.ts:37
-    // localObject: this.localObject(Txn.sender).value,
-    frame_dig 0
+    assert // check LocalState exists
     dup
     intc_0 // 0
     intc_2 // 8
@@ -545,14 +511,6 @@ getState_ternary_true@4:
     uncover 2
     substring3
     extract 2 0
-    swap
-    frame_bury 4
-
-getState_ternary_merge@6:
-    // tests/approvals/local-state.algo.ts:37
-    // localObject: this.localObject(Txn.sender).value,
-    frame_dig 2
-    assert // check LocalState exists
     // tests/approvals/local-state.algo.ts:30-38
     // return {
     //   localUint: this.localUint(Txn.sender).value,
@@ -563,42 +521,16 @@ getState_ternary_merge@6:
     //   localTuple: this.localTuple(Txn.sender).value,
     //   localObject: this.localObject(Txn.sender).value,
     // }
-    frame_dig 5
-    frame_dig 6
-    frame_dig 7
-    frame_dig 8
-    frame_dig 9
-    frame_dig 3
-    frame_dig 1
-    frame_dig 4
     uncover 8
-    frame_bury 8
-    frame_bury 7
-    frame_bury 6
-    frame_bury 5
-    frame_bury 4
-    frame_bury 3
-    frame_bury 2
-    frame_bury 1
-    frame_bury 0
+    uncover 8
+    uncover 8
+    uncover 8
+    uncover 8
+    uncover 8
+    uncover 8
+    uncover 8
+    uncover 8
     retsub
-
-getState_ternary_false@5:
-    // tests/approvals/local-state.algo.ts:37
-    // localObject: this.localObject(Txn.sender).value,
-    bytec_0 // ""
-    frame_bury 4
-    intc_0 // 0
-    b getState_ternary_merge@6
-
-getState_ternary_false@2:
-    // tests/approvals/local-state.algo.ts:36
-    // localTuple: this.localTuple(Txn.sender).value,
-    bytec_0 // ""
-    frame_bury 3
-    intc_0 // 0
-    frame_bury 1
-    b getState_ternary_merge@3
 
 
 // tests/approvals/local-state.algo.ts::LocalStateDemo.clearState() -> void:

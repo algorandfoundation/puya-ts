@@ -68,44 +68,24 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let (maybe_value%3#0: bytes, maybe_exists%3#0: bool) = (app_local_get_ex tmp%3#2 0u "localBytes2")
         (assert maybe_exists%3#0) // check LocalState exists
         let tmp%4#2: bytes[32] = (txn Sender)
-        let (maybe_value%4#0: bytes[80], maybe_exists%4#0: bool) = (app_local_get_ex tmp%4#2 0u "localEncoded")
+        let (maybe_value%4#0: bytes, maybe_exists%4#0: bool) = (app_local_get_ex tmp%4#2 0u "localEncoded")
         (assert maybe_exists%4#0) // check LocalState exists
         let tmp%5#2: bytes[32] = (txn Sender)
         let (maybe_value%5#0: bytes, maybe_exists%5#0: bool) = (app_local_get_ex tmp%5#2 0u "localTuple")
-        goto maybe_exists%5#0 ? block@20 : block@21
-    block@20: // ternary_true_L36
+        (assert maybe_exists%5#0) // check LocalState exists
         let item0%1#1: uint64 = (extract_uint64 maybe_value%5#0 0u)
         let item_start_offset%0#1: uint64 = (extract_uint16 maybe_value%5#0 8u)
         let item_end_offset%0#1: uint64 = (len maybe_value%5#0)
         let item1%0#1: bytes = (substring3 maybe_value%5#0 item_start_offset%0#1 item_end_offset%0#1)
         let item1%1#1: bytes = ((extract 2 0) item1%0#1)
-        goto block@22
-    block@21: // ternary_false_L36
-        let ternary_result%0.0#1: uint64 = undefined
-        let ternary_result%0.1#1: bytes = undefined
-        goto block@22
-    block@22: // ternary_merge_L36
-        let ternary_result%0.0#2: uint64 = φ(item0%1#1 <- block@20, ternary_result%0.0#1 <- block@21)
-        let ternary_result%0.1#2: bytes = φ(item1%1#1 <- block@20, ternary_result%0.1#1 <- block@21)
-        (assert maybe_exists%5#0) // check LocalState exists
         let tmp%6#2: bytes[32] = (txn Sender)
         let (maybe_value%6#0: bytes, maybe_exists%6#0: bool) = (app_local_get_ex tmp%6#2 0u "localObject")
-        goto maybe_exists%6#0 ? block@23 : block@24
-    block@23: // ternary_true_L37
+        (assert maybe_exists%6#0) // check LocalState exists
         let item0%3#0: uint64 = (extract_uint64 maybe_value%6#0 0u)
         let item_start_offset%1#0: uint64 = (extract_uint16 maybe_value%6#0 8u)
         let item_end_offset%1#0: uint64 = (len maybe_value%6#0)
         let item1%2#0: bytes = (substring3 maybe_value%6#0 item_start_offset%1#0 item_end_offset%1#0)
         let item1%3#0: bytes = ((extract 2 0) item1%2#0)
-        goto block@25
-    block@24: // ternary_false_L37
-        let ternary_result%1.a#1: uint64 = undefined
-        let ternary_result%1.b#1: bytes = undefined
-        goto block@25
-    block@25: // ternary_merge_L37
-        let ternary_result%1.a#2: uint64 = φ(item0%3#0 <- block@23, ternary_result%1.a#1 <- block@24)
-        let ternary_result%1.b#2: bytes = φ(item1%3#0 <- block@23, ternary_result%1.b#1 <- block@24)
-        (assert maybe_exists%6#0) // check LocalState exists
         let val_as_bytes%0#0: bytes[8] = (itob maybe_value%0#0)
         let val_as_bytes%1#0: bytes[8] = (itob maybe_value%1#0)
         let length%0#0: uint64 = (len maybe_value%2#0)
@@ -116,18 +96,18 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let as_bytes%1#0: bytes[8] = (itob length%1#0)
         let length_uint16%1#0: bytes = ((extract 6 2) as_bytes%1#0)
         let encoded_value%1#0: bytes = (concat length_uint16%1#0 maybe_value%3#0)
-        let val_as_bytes%2#0: bytes[8] = (itob ternary_result%0.0#2)
-        let length%2#0: uint64 = (len ternary_result%0.1#2)
+        let val_as_bytes%2#0: bytes[8] = (itob item0%1#1)
+        let length%2#0: uint64 = (len item1%1#1)
         let as_bytes%2#0: bytes[8] = (itob length%2#0)
         let length_uint16%2#0: bytes = ((extract 6 2) as_bytes%2#0)
-        let encoded_value%2#0: bytes = (concat length_uint16%2#0 ternary_result%0.1#2)
+        let encoded_value%2#0: bytes = (concat length_uint16%2#0 item1%1#1)
         let encoded_tuple_buffer%2#0: bytes = (concat val_as_bytes%2#0 0x000a)
         let encoded_tuple_buffer%3#0: bytes = (concat encoded_tuple_buffer%2#0 encoded_value%2#0)
-        let val_as_bytes%3#0: bytes[8] = (itob ternary_result%1.a#2)
-        let length%3#0: uint64 = (len ternary_result%1.b#2)
+        let val_as_bytes%3#0: bytes[8] = (itob item0%3#0)
+        let length%3#0: uint64 = (len item1%3#0)
         let as_bytes%4#0: bytes[8] = (itob length%3#0)
         let length_uint16%3#0: bytes = ((extract 6 2) as_bytes%4#0)
-        let encoded_value%3#0: bytes = (concat length_uint16%3#0 ternary_result%1.b#2)
+        let encoded_value%3#0: bytes = (concat length_uint16%3#0 item1%3#0)
         let encoded_tuple_buffer%6#0: bytes = (concat val_as_bytes%3#0 0x000a)
         let encoded_tuple_buffer%7#0: bytes = (concat encoded_tuple_buffer%6#0 encoded_value%3#0)
         let encoded_tuple_buffer%10#0: bytes = (concat val_as_bytes%0#0 val_as_bytes%1#0)
@@ -191,5 +171,5 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tests/approvals/local-state.algo.ts::LocalStateDemo.__puya_arc4_router__%0#5: bool = 0u
         goto block@14
     block@14: // after_inlined_tests/approvals/local-state.algo.ts::LocalStateDemo.__puya_arc4_router___L1
-        let tmp%0#0: bool = φ(tests/approvals/local-state.algo.ts::LocalStateDemo.__puya_arc4_router__%0#0 <- block@3, tests/approvals/local-state.algo.ts::LocalStateDemo.__puya_arc4_router__%0#1 <- block@4, tests/approvals/local-state.algo.ts::LocalStateDemo.__puya_arc4_router__%0#2 <- block@25, tests/approvals/local-state.algo.ts::LocalStateDemo.__puya_arc4_router__%0#3 <- block@6, tests/approvals/local-state.algo.ts::LocalStateDemo.__puya_arc4_router__%0#4 <- block@10, tests/approvals/local-state.algo.ts::LocalStateDemo.__puya_arc4_router__%0#5 <- block@13)
+        let tmp%0#0: bool = φ(tests/approvals/local-state.algo.ts::LocalStateDemo.__puya_arc4_router__%0#0 <- block@3, tests/approvals/local-state.algo.ts::LocalStateDemo.__puya_arc4_router__%0#1 <- block@4, tests/approvals/local-state.algo.ts::LocalStateDemo.__puya_arc4_router__%0#2 <- block@5, tests/approvals/local-state.algo.ts::LocalStateDemo.__puya_arc4_router__%0#3 <- block@6, tests/approvals/local-state.algo.ts::LocalStateDemo.__puya_arc4_router__%0#4 <- block@10, tests/approvals/local-state.algo.ts::LocalStateDemo.__puya_arc4_router__%0#5 <- block@13)
         return tmp%0#0

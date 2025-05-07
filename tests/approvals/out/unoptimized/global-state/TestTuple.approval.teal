@@ -4,7 +4,7 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 0 2 1 64
-    bytecblock 0x 0x00 "hello" "a" "b" 0x01c8 "t2" "t4" "t1" "t3"
+    bytecblock 0x00 "hello" 0x "a" "b" 0x01c8 "t2" "t4" "t1" "t3"
 
 main_block@0:
 
@@ -78,26 +78,19 @@ main___algots__.defaultCreate@7:
 
 // tests/approvals/global-state.algo.ts::TestTuple.testTuple() -> void:
 testTuple:
-    // tests/approvals/global-state.algo.ts:53
-    // testTuple() {
-    proto 0 0
-    intc_0 // 0
-    dupn 12
-    bytec_0 // ""
-    dupn 12
 
 testTuple_block@0:
     // tests/approvals/global-state.algo.ts:54
     // this.t1.value = ['hello', 123, true]
-    bytec_2 // "hello"
+    bytec_1 // "hello"
     len
     itob
     extract 6 2
-    bytec_2 // "hello"
+    bytec_1 // "hello"
     concat
     pushint 123 // 123
     itob
-    bytec_1 // 0x00
+    bytec_0 // 0x00
     intc_0 // 0
     intc_2 // 1
     setbit
@@ -106,7 +99,7 @@ testTuple_block@0:
     pushint 11 // 11
     itob
     extract 6 2
-    bytec_0 // 0x
+    bytec_2 // 0x
     swap
     concat
     uncover 2
@@ -125,16 +118,7 @@ testTuple_block@0:
     intc_0 // 0
     bytec 8 // "t1"
     app_global_get_ex
-    dup
-    cover 2
-    cover 2
-    swap
-    bz testTuple_ternary_false@2
-
-testTuple_ternary_true@1:
-    // tests/approvals/global-state.algo.ts:47
-    // t1 = GlobalState<[string, uint64, boolean]>()
-    frame_dig 27
+    assert // check GlobalState exists
     dup
     intc_0 // 0
     extract_uint16
@@ -146,15 +130,9 @@ testTuple_ternary_true@1:
     uncover 2
     substring3
     extract 2 0
-
-testTuple_ternary_merge@3:
-    // tests/approvals/global-state.algo.ts:47
-    // t1 = GlobalState<[string, uint64, boolean]>()
-    frame_dig 26
-    assert // check GlobalState exists
     // tests/approvals/global-state.algo.ts:55
     // assert(this.t1.value[0] === 'hello', 'Tuple value should be set')
-    bytec_2 // "hello"
+    bytec_1 // "hello"
     ==
     assert // Tuple value should be set
     // tests/approvals/global-state.algo.ts:47
@@ -162,26 +140,11 @@ testTuple_ternary_merge@3:
     intc_0 // 0
     bytec 8 // "t1"
     app_global_get_ex
-    dup
-    cover 2
-    frame_bury 13
-    frame_bury 0
-    bz testTuple_ternary_false@5
-
-testTuple_ternary_true@4:
-    // tests/approvals/global-state.algo.ts:47
-    // t1 = GlobalState<[string, uint64, boolean]>()
-    frame_dig 0
+    assert // check GlobalState exists
     intc_1 // 2
     pushint 8 // 8
     extract3 // on error: Index access is out of bounds
     btoi
-
-testTuple_ternary_merge@6:
-    // tests/approvals/global-state.algo.ts:47
-    // t1 = GlobalState<[string, uint64, boolean]>()
-    frame_dig 13
-    assert // check GlobalState exists
     // tests/approvals/global-state.algo.ts:56
     // assert(this.t1.value[1] === 123, 'Tuple value should be set')
     pushint 123 // 123
@@ -192,30 +155,15 @@ testTuple_ternary_merge@6:
     intc_0 // 0
     bytec 8 // "t1"
     app_global_get_ex
-    dup
-    cover 2
-    frame_bury 18
-    frame_bury 5
-    bz testTuple_ternary_false@8
-
-testTuple_ternary_true@7:
-    // tests/approvals/global-state.algo.ts:47
-    // t1 = GlobalState<[string, uint64, boolean]>()
-    frame_dig 5
+    assert // check GlobalState exists
     pushint 80 // 80
     getbit
-    bytec_1 // 0x00
+    bytec_0 // 0x00
     intc_0 // 0
     uncover 2
     setbit
     intc_0 // 0
     getbit
-
-testTuple_ternary_merge@9:
-    // tests/approvals/global-state.algo.ts:47
-    // t1 = GlobalState<[string, uint64, boolean]>()
-    frame_dig 18
-    assert // check GlobalState exists
     // tests/approvals/global-state.algo.ts:57
     // assert(this.t1.value[2] === true, 'Tuple value should be set')
     intc_2 // 1
@@ -244,14 +192,14 @@ testTuple_ternary_merge@9:
     bzero
     bytec 5 // 0x01c8
     b|
-    bytec_1 // 0x00
+    bytec_0 // 0x00
     intc_0 // 0
     intc_2 // 1
     setbit
     pushint 67 // 67
     itob
     extract 6 2
-    bytec_0 // 0x
+    bytec_2 // 0x
     swap
     concat
     uncover 2
@@ -265,7 +213,7 @@ testTuple_ternary_merge@9:
     pushint 4 // 4
     itob
     extract 6 2
-    bytec_0 // 0x
+    bytec_2 // 0x
     swap
     concat
     dig 2
@@ -289,16 +237,7 @@ testTuple_ternary_merge@9:
     intc_0 // 0
     bytec 6 // "t2"
     app_global_get_ex
-    dup
-    cover 2
-    frame_bury 19
-    frame_bury 6
-    bz testTuple_ternary_false@11
-
-testTuple_ternary_true@10:
-    // tests/approvals/global-state.algo.ts:48
-    // t2 = GlobalState<[string, [string, biguint, boolean]]>()
-    frame_dig 6
+    assert // check GlobalState exists
     dup
     intc_0 // 0
     extract_uint16
@@ -311,12 +250,6 @@ testTuple_ternary_true@10:
     uncover 2
     substring3
     extract 2 0
-
-testTuple_ternary_merge@12:
-    // tests/approvals/global-state.algo.ts:48
-    // t2 = GlobalState<[string, [string, biguint, boolean]]>()
-    frame_dig 19
-    assert // check GlobalState exists
     // tests/approvals/global-state.algo.ts:60
     // assert(this.t2.value[0] === 'a', 'Tuple value should be set')
     bytec_3 // "a"
@@ -327,16 +260,7 @@ testTuple_ternary_merge@12:
     intc_0 // 0
     bytec 6 // "t2"
     app_global_get_ex
-    dup
-    cover 2
-    frame_bury 20
-    frame_bury 7
-    bz testTuple_ternary_false@14
-
-testTuple_ternary_true@13:
-    // tests/approvals/global-state.algo.ts:48
-    // t2 = GlobalState<[string, [string, biguint, boolean]]>()
-    frame_dig 7
+    assert // check GlobalState exists
     dup
     intc_1 // 2
     extract_uint16
@@ -358,12 +282,6 @@ testTuple_ternary_true@13:
     uncover 2
     substring3
     extract 2 0
-
-testTuple_ternary_merge@15:
-    // tests/approvals/global-state.algo.ts:48
-    // t2 = GlobalState<[string, [string, biguint, boolean]]>()
-    frame_dig 20
-    assert // check GlobalState exists
     // tests/approvals/global-state.algo.ts:61
     // assert(this.t2.value[1][0] === 'b', 'Tuple value should be set')
     bytec 4 // "b"
@@ -374,16 +292,7 @@ testTuple_ternary_merge@15:
     intc_0 // 0
     bytec 6 // "t2"
     app_global_get_ex
-    dup
-    cover 2
-    frame_bury 21
-    frame_bury 8
-    bz testTuple_ternary_false@17
-
-testTuple_ternary_true@16:
-    // tests/approvals/global-state.algo.ts:48
-    // t2 = GlobalState<[string, [string, biguint, boolean]]>()
-    frame_dig 8
+    assert // check GlobalState exists
     dup
     intc_1 // 2
     extract_uint16
@@ -397,12 +306,6 @@ testTuple_ternary_true@16:
     intc_1 // 2
     intc_3 // 64
     extract3 // on error: Index access is out of bounds
-
-testTuple_ternary_merge@18:
-    // tests/approvals/global-state.algo.ts:48
-    // t2 = GlobalState<[string, [string, biguint, boolean]]>()
-    frame_dig 21
-    assert // check GlobalState exists
     // tests/approvals/global-state.algo.ts:62
     // assert(this.t2.value[1][1] === 456n, 'Tuple value should be set')
     bytec 5 // 0x01c8
@@ -413,16 +316,7 @@ testTuple_ternary_merge@18:
     intc_0 // 0
     bytec 6 // "t2"
     app_global_get_ex
-    dup
-    cover 2
-    frame_bury 22
-    frame_bury 9
-    bz testTuple_ternary_false@20
-
-testTuple_ternary_true@19:
-    // tests/approvals/global-state.algo.ts:48
-    // t2 = GlobalState<[string, [string, biguint, boolean]]>()
-    frame_dig 9
+    assert // check GlobalState exists
     dup
     intc_1 // 2
     extract_uint16
@@ -435,18 +329,12 @@ testTuple_ternary_true@19:
     substring3
     pushint 528 // 528
     getbit
-    bytec_1 // 0x00
+    bytec_0 // 0x00
     intc_0 // 0
     uncover 2
     setbit
     intc_0 // 0
     getbit
-
-testTuple_ternary_merge@21:
-    // tests/approvals/global-state.algo.ts:48
-    // t2 = GlobalState<[string, [string, biguint, boolean]]>()
-    frame_dig 22
-    assert // check GlobalState exists
     // tests/approvals/global-state.algo.ts:63
     // assert(this.t2.value[1][2] === true, 'Tuple value should be set')
     intc_2 // 1
@@ -454,15 +342,15 @@ testTuple_ternary_merge@21:
     assert // Tuple value should be set
     // tests/approvals/global-state.algo.ts:65
     // this.t3.value = { a: 'hello', b: 123, c: true }
-    bytec_2 // "hello"
+    bytec_1 // "hello"
     len
     itob
     extract 6 2
-    bytec_2 // "hello"
+    bytec_1 // "hello"
     concat
     pushint 123 // 123
     itob
-    bytec_1 // 0x00
+    bytec_0 // 0x00
     intc_0 // 0
     intc_2 // 1
     setbit
@@ -471,7 +359,7 @@ testTuple_ternary_merge@21:
     pushint 11 // 11
     itob
     extract 6 2
-    bytec_0 // 0x
+    bytec_2 // 0x
     swap
     concat
     uncover 2
@@ -490,16 +378,7 @@ testTuple_ternary_merge@21:
     intc_0 // 0
     bytec 9 // "t3"
     app_global_get_ex
-    dup
-    cover 2
-    frame_bury 23
-    frame_bury 10
-    bz testTuple_ternary_false@23
-
-testTuple_ternary_true@22:
-    // tests/approvals/global-state.algo.ts:50
-    // t3 = GlobalState<{ a: string; b: uint64; c: boolean }>()
-    frame_dig 10
+    assert // check GlobalState exists
     dup
     intc_0 // 0
     extract_uint16
@@ -511,15 +390,9 @@ testTuple_ternary_true@22:
     uncover 2
     substring3
     extract 2 0
-
-testTuple_ternary_merge@24:
-    // tests/approvals/global-state.algo.ts:50
-    // t3 = GlobalState<{ a: string; b: uint64; c: boolean }>()
-    frame_dig 23
-    assert // check GlobalState exists
     // tests/approvals/global-state.algo.ts:66
     // assert(this.t3.value.a === 'hello', 'Tuple value should be set')
-    bytec_2 // "hello"
+    bytec_1 // "hello"
     ==
     assert // Tuple value should be set
     // tests/approvals/global-state.algo.ts:50
@@ -527,26 +400,11 @@ testTuple_ternary_merge@24:
     intc_0 // 0
     bytec 9 // "t3"
     app_global_get_ex
-    dup
-    cover 2
-    frame_bury 24
-    frame_bury 11
-    bz testTuple_ternary_false@26
-
-testTuple_ternary_true@25:
-    // tests/approvals/global-state.algo.ts:50
-    // t3 = GlobalState<{ a: string; b: uint64; c: boolean }>()
-    frame_dig 11
+    assert // check GlobalState exists
     intc_1 // 2
     pushint 8 // 8
     extract3 // on error: Index access is out of bounds
     btoi
-
-testTuple_ternary_merge@27:
-    // tests/approvals/global-state.algo.ts:50
-    // t3 = GlobalState<{ a: string; b: uint64; c: boolean }>()
-    frame_dig 24
-    assert // check GlobalState exists
     // tests/approvals/global-state.algo.ts:67
     // assert(this.t3.value.b === 123, 'Tuple value should be set')
     pushint 123 // 123
@@ -557,30 +415,15 @@ testTuple_ternary_merge@27:
     intc_0 // 0
     bytec 9 // "t3"
     app_global_get_ex
-    dup
-    cover 2
-    frame_bury 25
-    frame_bury 12
-    bz testTuple_ternary_false@29
-
-testTuple_ternary_true@28:
-    // tests/approvals/global-state.algo.ts:50
-    // t3 = GlobalState<{ a: string; b: uint64; c: boolean }>()
-    frame_dig 12
+    assert // check GlobalState exists
     pushint 80 // 80
     getbit
-    bytec_1 // 0x00
+    bytec_0 // 0x00
     intc_0 // 0
     uncover 2
     setbit
     intc_0 // 0
     getbit
-
-testTuple_ternary_merge@30:
-    // tests/approvals/global-state.algo.ts:50
-    // t3 = GlobalState<{ a: string; b: uint64; c: boolean }>()
-    frame_dig 25
-    assert // check GlobalState exists
     // tests/approvals/global-state.algo.ts:68
     // assert(this.t3.value.c === true, 'Tuple value should be set')
     intc_2 // 1
@@ -609,14 +452,14 @@ testTuple_ternary_merge@30:
     bzero
     bytec 5 // 0x01c8
     b|
-    bytec_1 // 0x00
+    bytec_0 // 0x00
     intc_0 // 0
     intc_2 // 1
     setbit
     pushint 67 // 67
     itob
     extract 6 2
-    bytec_0 // 0x
+    bytec_2 // 0x
     swap
     concat
     uncover 2
@@ -630,7 +473,7 @@ testTuple_ternary_merge@30:
     pushint 4 // 4
     itob
     extract 6 2
-    bytec_0 // 0x
+    bytec_2 // 0x
     swap
     concat
     dig 2
@@ -654,16 +497,7 @@ testTuple_ternary_merge@30:
     intc_0 // 0
     bytec 7 // "t4"
     app_global_get_ex
-    dup
-    cover 2
-    frame_bury 14
-    frame_bury 1
-    bz testTuple_ternary_false@32
-
-testTuple_ternary_true@31:
-    // tests/approvals/global-state.algo.ts:51
-    // t4 = GlobalState<[string, { a: string; b: biguint; c: boolean }]>()
-    frame_dig 1
+    assert // check GlobalState exists
     dup
     intc_0 // 0
     extract_uint16
@@ -676,12 +510,6 @@ testTuple_ternary_true@31:
     uncover 2
     substring3
     extract 2 0
-
-testTuple_ternary_merge@33:
-    // tests/approvals/global-state.algo.ts:51
-    // t4 = GlobalState<[string, { a: string; b: biguint; c: boolean }]>()
-    frame_dig 14
-    assert // check GlobalState exists
     // tests/approvals/global-state.algo.ts:71
     // assert(this.t4.value[0] === 'a', 'Tuple value should be set')
     bytec_3 // "a"
@@ -692,16 +520,7 @@ testTuple_ternary_merge@33:
     intc_0 // 0
     bytec 7 // "t4"
     app_global_get_ex
-    dup
-    cover 2
-    frame_bury 15
-    frame_bury 2
-    bz testTuple_ternary_false@35
-
-testTuple_ternary_true@34:
-    // tests/approvals/global-state.algo.ts:51
-    // t4 = GlobalState<[string, { a: string; b: biguint; c: boolean }]>()
-    frame_dig 2
+    assert // check GlobalState exists
     dup
     intc_1 // 2
     extract_uint16
@@ -723,12 +542,6 @@ testTuple_ternary_true@34:
     uncover 2
     substring3
     extract 2 0
-
-testTuple_ternary_merge@36:
-    // tests/approvals/global-state.algo.ts:51
-    // t4 = GlobalState<[string, { a: string; b: biguint; c: boolean }]>()
-    frame_dig 15
-    assert // check GlobalState exists
     // tests/approvals/global-state.algo.ts:72
     // assert(this.t4.value[1].a === 'b', 'Tuple value should be set')
     bytec 4 // "b"
@@ -739,16 +552,7 @@ testTuple_ternary_merge@36:
     intc_0 // 0
     bytec 7 // "t4"
     app_global_get_ex
-    dup
-    cover 2
-    frame_bury 16
-    frame_bury 3
-    bz testTuple_ternary_false@38
-
-testTuple_ternary_true@37:
-    // tests/approvals/global-state.algo.ts:51
-    // t4 = GlobalState<[string, { a: string; b: biguint; c: boolean }]>()
-    frame_dig 3
+    assert // check GlobalState exists
     dup
     intc_1 // 2
     extract_uint16
@@ -762,12 +566,6 @@ testTuple_ternary_true@37:
     intc_1 // 2
     intc_3 // 64
     extract3 // on error: Index access is out of bounds
-
-testTuple_ternary_merge@39:
-    // tests/approvals/global-state.algo.ts:51
-    // t4 = GlobalState<[string, { a: string; b: biguint; c: boolean }]>()
-    frame_dig 16
-    assert // check GlobalState exists
     // tests/approvals/global-state.algo.ts:73
     // assert(this.t4.value[1].b === 456n, 'Tuple value should be set')
     bytec 5 // 0x01c8
@@ -778,16 +576,7 @@ testTuple_ternary_merge@39:
     intc_0 // 0
     bytec 7 // "t4"
     app_global_get_ex
-    dup
-    cover 2
-    frame_bury 17
-    frame_bury 4
-    bz testTuple_ternary_false@41
-
-testTuple_ternary_true@40:
-    // tests/approvals/global-state.algo.ts:51
-    // t4 = GlobalState<[string, { a: string; b: biguint; c: boolean }]>()
-    frame_dig 4
+    assert // check GlobalState exists
     dup
     intc_1 // 2
     extract_uint16
@@ -800,108 +589,18 @@ testTuple_ternary_true@40:
     substring3
     pushint 528 // 528
     getbit
-    bytec_1 // 0x00
+    bytec_0 // 0x00
     intc_0 // 0
     uncover 2
     setbit
     intc_0 // 0
     getbit
-
-testTuple_ternary_merge@42:
-    // tests/approvals/global-state.algo.ts:51
-    // t4 = GlobalState<[string, { a: string; b: biguint; c: boolean }]>()
-    frame_dig 17
-    assert // check GlobalState exists
     // tests/approvals/global-state.algo.ts:74
     // assert(this.t4.value[1].c === true, 'Tuple value should be set')
     intc_2 // 1
     ==
     assert // Tuple value should be set
     retsub
-
-testTuple_ternary_false@41:
-    // tests/approvals/global-state.algo.ts:51
-    // t4 = GlobalState<[string, { a: string; b: biguint; c: boolean }]>()
-    bytec_0 // ""
-    b testTuple_ternary_merge@42
-
-testTuple_ternary_false@38:
-    // tests/approvals/global-state.algo.ts:51
-    // t4 = GlobalState<[string, { a: string; b: biguint; c: boolean }]>()
-    intc_0 // 0
-    b testTuple_ternary_merge@39
-
-testTuple_ternary_false@35:
-    // tests/approvals/global-state.algo.ts:51
-    // t4 = GlobalState<[string, { a: string; b: biguint; c: boolean }]>()
-    intc_0 // 0
-    b testTuple_ternary_merge@36
-
-testTuple_ternary_false@32:
-    // tests/approvals/global-state.algo.ts:51
-    // t4 = GlobalState<[string, { a: string; b: biguint; c: boolean }]>()
-    intc_0 // 0
-    b testTuple_ternary_merge@33
-
-testTuple_ternary_false@29:
-    // tests/approvals/global-state.algo.ts:50
-    // t3 = GlobalState<{ a: string; b: uint64; c: boolean }>()
-    bytec_0 // ""
-    b testTuple_ternary_merge@30
-
-testTuple_ternary_false@26:
-    // tests/approvals/global-state.algo.ts:50
-    // t3 = GlobalState<{ a: string; b: uint64; c: boolean }>()
-    bytec_0 // ""
-    b testTuple_ternary_merge@27
-
-testTuple_ternary_false@23:
-    // tests/approvals/global-state.algo.ts:50
-    // t3 = GlobalState<{ a: string; b: uint64; c: boolean }>()
-    intc_0 // 0
-    b testTuple_ternary_merge@24
-
-testTuple_ternary_false@20:
-    // tests/approvals/global-state.algo.ts:48
-    // t2 = GlobalState<[string, [string, biguint, boolean]]>()
-    bytec_0 // ""
-    b testTuple_ternary_merge@21
-
-testTuple_ternary_false@17:
-    // tests/approvals/global-state.algo.ts:48
-    // t2 = GlobalState<[string, [string, biguint, boolean]]>()
-    intc_0 // 0
-    b testTuple_ternary_merge@18
-
-testTuple_ternary_false@14:
-    // tests/approvals/global-state.algo.ts:48
-    // t2 = GlobalState<[string, [string, biguint, boolean]]>()
-    intc_0 // 0
-    b testTuple_ternary_merge@15
-
-testTuple_ternary_false@11:
-    // tests/approvals/global-state.algo.ts:48
-    // t2 = GlobalState<[string, [string, biguint, boolean]]>()
-    intc_0 // 0
-    b testTuple_ternary_merge@12
-
-testTuple_ternary_false@8:
-    // tests/approvals/global-state.algo.ts:47
-    // t1 = GlobalState<[string, uint64, boolean]>()
-    bytec_0 // ""
-    b testTuple_ternary_merge@9
-
-testTuple_ternary_false@5:
-    // tests/approvals/global-state.algo.ts:47
-    // t1 = GlobalState<[string, uint64, boolean]>()
-    bytec_0 // ""
-    b testTuple_ternary_merge@6
-
-testTuple_ternary_false@2:
-    // tests/approvals/global-state.algo.ts:47
-    // t1 = GlobalState<[string, uint64, boolean]>()
-    intc_0 // 0
-    b testTuple_ternary_merge@3
 
 
 // tests/approvals/global-state.algo.ts::TestTuple.__algots__.defaultCreate() -> void:

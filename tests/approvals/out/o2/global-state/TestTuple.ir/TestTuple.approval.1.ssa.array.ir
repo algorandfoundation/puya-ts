@@ -13,69 +13,36 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%5#0) // can only call when not creating
         (app_global_put "t1" 0x000b000000000000007b80000568656c6c6f)
         let (maybe_value%0#0: bytes, maybe_exists%0#0: bool) = (app_global_get_ex 0u "t1")
-        goto maybe_exists%0#0 ? block@15 : block@16
-    block@15: // ternary_true_L47
+        (assert maybe_exists%0#0) // check GlobalState exists
         let item_start_offset%0#0: uint64 = (extract_uint16 maybe_value%0#0 0u)
         let item_end_offset%0#0: uint64 = (len maybe_value%0#0)
         let item0%0#0: bytes = (substring3 maybe_value%0#0 item_start_offset%0#0 item_end_offset%0#0)
         let item0%1#0: bytes = ((extract 2 0) item0%0#0)
-        goto block@17
-    block@16: // ternary_false_L47
-        let ternary_result%0.0#1: bytes = undefined
-        goto block@17
-    block@17: // ternary_merge_L47
-        let ternary_result%0.0#2: bytes = φ(item0%1#0 <- block@15, ternary_result%0.0#1 <- block@16)
-        (assert maybe_exists%0#0) // check GlobalState exists
-        let tmp%0#2: bool = (== ternary_result%0.0#2 "hello")
+        let tmp%0#2: bool = (== item0%1#0 "hello")
         (assert tmp%0#2) // Tuple value should be set
         let (maybe_value%1#0: bytes, maybe_exists%1#0: bool) = (app_global_get_ex 0u "t1")
-        goto maybe_exists%1#0 ? block@18 : block@19
-    block@18: // ternary_true_L47
-        let item1%3#0: uint64 = (extract_uint64 maybe_value%1#0 2u)
-        goto block@20
-    block@19: // ternary_false_L47
-        let ternary_result%1.1#1: uint64 = undefined
-        goto block@20
-    block@20: // ternary_merge_L47
-        let ternary_result%1.1#2: uint64 = φ(item1%3#0 <- block@18, ternary_result%1.1#1 <- block@19)
         (assert maybe_exists%1#0) // check GlobalState exists
-        let tmp%1#1: bool = (== ternary_result%1.1#2 123u)
+        let item1%3#0: uint64 = (extract_uint64 maybe_value%1#0 2u)
+        let tmp%1#1: bool = (== item1%3#0 123u)
         (assert tmp%1#1) // Tuple value should be set
         let (maybe_value%2#0: bytes, maybe_exists%2#0: bool) = (app_global_get_ex 0u "t1")
-        goto maybe_exists%2#0 ? block@21 : block@22
-    block@21: // ternary_true_L47
+        (assert maybe_exists%2#0) // check GlobalState exists
         let is_true%2#0: uint64 = (getbit maybe_value%2#0 80u)
         let encoded_bool%3#0: bytes[1] = (setbit 0x00 0u is_true%2#0)
         let item2%2#0: bool = (getbit encoded_bool%3#0 0u)
-        goto block@23
-    block@22: // ternary_false_L47
-        let ternary_result%2.2#1: bool = undefined
-        goto block@23
-    block@23: // ternary_merge_L47
-        let ternary_result%2.2#2: bool = φ(item2%2#0 <- block@21, ternary_result%2.2#1 <- block@22)
-        (assert maybe_exists%2#0) // check GlobalState exists
-        let tmp%2#1: bool = (== ternary_result%2.2#2 1u)
+        let tmp%2#1: bool = (== item2%2#0 1u)
         (assert tmp%2#1) // Tuple value should be set
         (app_global_put "t2" 0x000400070001610043000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001c880000162)
         let (maybe_value%3#0: bytes, maybe_exists%3#0: bool) = (app_global_get_ex 0u "t2")
-        goto maybe_exists%3#0 ? block@24 : block@25
-    block@24: // ternary_true_L48
+        (assert maybe_exists%3#0) // check GlobalState exists
         let item_start_offset%3#0: uint64 = (extract_uint16 maybe_value%3#0 0u)
         let item_end_offset%3#0: uint64 = (extract_uint16 maybe_value%3#0 2u)
         let item0%6#0: bytes = (substring3 maybe_value%3#0 item_start_offset%3#0 item_end_offset%3#0)
         let item0%7#0: bytes = ((extract 2 0) item0%6#0)
-        goto block@26
-    block@25: // ternary_false_L48
-        let ternary_result%3.0#1: bytes = undefined
-        goto block@26
-    block@26: // ternary_merge_L48
-        let ternary_result%3.0#2: bytes = φ(item0%7#0 <- block@24, ternary_result%3.0#1 <- block@25)
-        (assert maybe_exists%3#0) // check GlobalState exists
-        let tmp%3#1: bool = (== ternary_result%3.0#2 "a")
+        let tmp%3#1: bool = (== item0%7#0 "a")
         (assert tmp%3#1) // Tuple value should be set
         let (maybe_value%4#0: bytes, maybe_exists%4#0: bool) = (app_global_get_ex 0u "t2")
-        goto maybe_exists%4#0 ? block@27 : block@28
-    block@27: // ternary_true_L48
+        (assert maybe_exists%4#0) // check GlobalState exists
         let item_end_offset%6#0: uint64 = (extract_uint16 maybe_value%4#0 2u)
         let item_end_offset%7#0: uint64 = (len maybe_value%4#0)
         let item1%8#0: bytes = (substring3 maybe_value%4#0 item_end_offset%6#0 item_end_offset%7#0)
@@ -83,114 +50,58 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let item_end_offset%8#0: uint64 = (len item1%8#0)
         let item0%12#0: bytes = (substring3 item1%8#0 item_start_offset%8#0 item_end_offset%8#0)
         let item0%13#0: bytes = ((extract 2 0) item0%12#0)
-        goto block@29
-    block@28: // ternary_false_L48
-        let ternary_result%4.1.0#1: bytes = undefined
-        goto block@29
-    block@29: // ternary_merge_L48
-        let ternary_result%4.1.0#2: bytes = φ(item0%13#0 <- block@27, ternary_result%4.1.0#1 <- block@28)
-        (assert maybe_exists%4#0) // check GlobalState exists
-        let tmp%4#1: bool = (== ternary_result%4.1.0#2 "b")
+        let tmp%4#1: bool = (== item0%13#0 "b")
         (assert tmp%4#1) // Tuple value should be set
         let (maybe_value%5#0: bytes, maybe_exists%5#0: bool) = (app_global_get_ex 0u "t2")
-        goto maybe_exists%5#0 ? block@30 : block@31
-    block@30: // ternary_true_L48
+        (assert maybe_exists%5#0) // check GlobalState exists
         let item_end_offset%9#0: uint64 = (extract_uint16 maybe_value%5#0 2u)
         let item_end_offset%10#0: uint64 = (len maybe_value%5#0)
         let item1%10#0: bytes = (substring3 maybe_value%5#0 item_end_offset%9#0 item_end_offset%10#0)
         let item1%11#0: bytes = ((extract 2 64) item1%10#0) // on error: Index access is out of bounds
-        goto block@32
-    block@31: // ternary_false_L48
-        let ternary_result%5.1.1#1: biguint = undefined
-        goto block@32
-    block@32: // ternary_merge_L48
-        let ternary_result%5.1.1#2: biguint = φ(item1%11#0 <- block@30, ternary_result%5.1.1#1 <- block@31)
-        (assert maybe_exists%5#0) // check GlobalState exists
-        let tmp%5#1: bool = (b== ternary_result%5.1.1#2 456b)
+        let tmp%5#1: bool = (b== item1%11#0 456b)
         (assert tmp%5#1) // Tuple value should be set
         let (maybe_value%6#0: bytes, maybe_exists%6#0: bool) = (app_global_get_ex 0u "t2")
-        goto maybe_exists%6#0 ? block@33 : block@34
-    block@33: // ternary_true_L48
+        (assert maybe_exists%6#0) // check GlobalState exists
         let item_end_offset%12#0: uint64 = (extract_uint16 maybe_value%6#0 2u)
         let item_end_offset%13#0: uint64 = (len maybe_value%6#0)
         let item1%12#0: bytes = (substring3 maybe_value%6#0 item_end_offset%12#0 item_end_offset%13#0)
         let is_true%6#0: uint64 = (getbit item1%12#0 528u)
         let encoded_bool%8#0: bytes[1] = (setbit 0x00 0u is_true%6#0)
         let item2%6#0: bool = (getbit encoded_bool%8#0 0u)
-        goto block@35
-    block@34: // ternary_false_L48
-        let ternary_result%6.1.2#1: bool = undefined
-        goto block@35
-    block@35: // ternary_merge_L48
-        let ternary_result%6.1.2#2: bool = φ(item2%6#0 <- block@33, ternary_result%6.1.2#1 <- block@34)
-        (assert maybe_exists%6#0) // check GlobalState exists
-        let tmp%6#1: bool = (== ternary_result%6.1.2#2 1u)
+        let tmp%6#1: bool = (== item2%6#0 1u)
         (assert tmp%6#1) // Tuple value should be set
         (app_global_put "t3" 0x000b000000000000007b80000568656c6c6f)
         let (maybe_value%7#0: bytes, maybe_exists%7#0: bool) = (app_global_get_ex 0u "t3")
-        goto maybe_exists%7#0 ? block@36 : block@37
-    block@36: // ternary_true_L50
+        (assert maybe_exists%7#0) // check GlobalState exists
         let item_start_offset%15#0: uint64 = (extract_uint16 maybe_value%7#0 0u)
         let item_end_offset%15#0: uint64 = (len maybe_value%7#0)
         let item0%22#0: bytes = (substring3 maybe_value%7#0 item_start_offset%15#0 item_end_offset%15#0)
         let item0%23#0: bytes = ((extract 2 0) item0%22#0)
-        goto block@38
-    block@37: // ternary_false_L50
-        let ternary_result%7.a#1: bytes = undefined
-        goto block@38
-    block@38: // ternary_merge_L50
-        let ternary_result%7.a#2: bytes = φ(item0%23#0 <- block@36, ternary_result%7.a#1 <- block@37)
-        (assert maybe_exists%7#0) // check GlobalState exists
-        let tmp%7#1: bool = (== ternary_result%7.a#2 "hello")
+        let tmp%7#1: bool = (== item0%23#0 "hello")
         (assert tmp%7#1) // Tuple value should be set
         let (maybe_value%8#0: bytes, maybe_exists%8#0: bool) = (app_global_get_ex 0u "t3")
-        goto maybe_exists%8#0 ? block@39 : block@40
-    block@39: // ternary_true_L50
-        let item1%17#0: uint64 = (extract_uint64 maybe_value%8#0 2u)
-        goto block@41
-    block@40: // ternary_false_L50
-        let ternary_result%8.b#1: uint64 = undefined
-        goto block@41
-    block@41: // ternary_merge_L50
-        let ternary_result%8.b#2: uint64 = φ(item1%17#0 <- block@39, ternary_result%8.b#1 <- block@40)
         (assert maybe_exists%8#0) // check GlobalState exists
-        let tmp%8#1: bool = (== ternary_result%8.b#2 123u)
+        let item1%17#0: uint64 = (extract_uint64 maybe_value%8#0 2u)
+        let tmp%8#1: bool = (== item1%17#0 123u)
         (assert tmp%8#1) // Tuple value should be set
         let (maybe_value%9#0: bytes, maybe_exists%9#0: bool) = (app_global_get_ex 0u "t3")
-        goto maybe_exists%9#0 ? block@42 : block@43
-    block@42: // ternary_true_L50
+        (assert maybe_exists%9#0) // check GlobalState exists
         let is_true%9#0: uint64 = (getbit maybe_value%9#0 80u)
         let encoded_bool%12#0: bytes[1] = (setbit 0x00 0u is_true%9#0)
         let item2%9#0: bool = (getbit encoded_bool%12#0 0u)
-        goto block@44
-    block@43: // ternary_false_L50
-        let ternary_result%9.c#1: bool = undefined
-        goto block@44
-    block@44: // ternary_merge_L50
-        let ternary_result%9.c#2: bool = φ(item2%9#0 <- block@42, ternary_result%9.c#1 <- block@43)
-        (assert maybe_exists%9#0) // check GlobalState exists
-        let tmp%9#1: bool = (== ternary_result%9.c#2 1u)
+        let tmp%9#1: bool = (== item2%9#0 1u)
         (assert tmp%9#1) // Tuple value should be set
         (app_global_put "t4" 0x000400070001610043000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001c880000162)
         let (maybe_value%10#0: bytes, maybe_exists%10#0: bool) = (app_global_get_ex 0u "t4")
-        goto maybe_exists%10#0 ? block@45 : block@46
-    block@45: // ternary_true_L51
+        (assert maybe_exists%10#0) // check GlobalState exists
         let item_start_offset%18#0: uint64 = (extract_uint16 maybe_value%10#0 0u)
         let item_end_offset%18#0: uint64 = (extract_uint16 maybe_value%10#0 2u)
         let item0%28#0: bytes = (substring3 maybe_value%10#0 item_start_offset%18#0 item_end_offset%18#0)
         let item0%29#0: bytes = ((extract 2 0) item0%28#0)
-        goto block@47
-    block@46: // ternary_false_L51
-        let ternary_result%10.0#1: bytes = undefined
-        goto block@47
-    block@47: // ternary_merge_L51
-        let ternary_result%10.0#2: bytes = φ(item0%29#0 <- block@45, ternary_result%10.0#1 <- block@46)
-        (assert maybe_exists%10#0) // check GlobalState exists
-        let tmp%10#0: bool = (== ternary_result%10.0#2 "a")
+        let tmp%10#0: bool = (== item0%29#0 "a")
         (assert tmp%10#0) // Tuple value should be set
         let (maybe_value%11#0: bytes, maybe_exists%11#0: bool) = (app_global_get_ex 0u "t4")
-        goto maybe_exists%11#0 ? block@48 : block@49
-    block@48: // ternary_true_L51
+        (assert maybe_exists%11#0) // check GlobalState exists
         let item_end_offset%21#0: uint64 = (extract_uint16 maybe_value%11#0 2u)
         let item_end_offset%22#0: uint64 = (len maybe_value%11#0)
         let item1%22#0: bytes = (substring3 maybe_value%11#0 item_end_offset%21#0 item_end_offset%22#0)
@@ -198,48 +109,25 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let item_end_offset%23#0: uint64 = (len item1%22#0)
         let item0%34#0: bytes = (substring3 item1%22#0 item_start_offset%23#0 item_end_offset%23#0)
         let item0%35#0: bytes = ((extract 2 0) item0%34#0)
-        goto block@50
-    block@49: // ternary_false_L51
-        let ternary_result%11.1.a#1: bytes = undefined
-        goto block@50
-    block@50: // ternary_merge_L51
-        let ternary_result%11.1.a#2: bytes = φ(item0%35#0 <- block@48, ternary_result%11.1.a#1 <- block@49)
-        (assert maybe_exists%11#0) // check GlobalState exists
-        let tmp%11#0: bool = (== ternary_result%11.1.a#2 "b")
+        let tmp%11#0: bool = (== item0%35#0 "b")
         (assert tmp%11#0) // Tuple value should be set
         let (maybe_value%12#0: bytes, maybe_exists%12#0: bool) = (app_global_get_ex 0u "t4")
-        goto maybe_exists%12#0 ? block@51 : block@52
-    block@51: // ternary_true_L51
+        (assert maybe_exists%12#0) // check GlobalState exists
         let item_end_offset%24#0: uint64 = (extract_uint16 maybe_value%12#0 2u)
         let item_end_offset%25#0: uint64 = (len maybe_value%12#0)
         let item1%24#0: bytes = (substring3 maybe_value%12#0 item_end_offset%24#0 item_end_offset%25#0)
         let item1%25#0: bytes = ((extract 2 64) item1%24#0) // on error: Index access is out of bounds
-        goto block@53
-    block@52: // ternary_false_L51
-        let ternary_result%12.1.b#1: biguint = undefined
-        goto block@53
-    block@53: // ternary_merge_L51
-        let ternary_result%12.1.b#2: biguint = φ(item1%25#0 <- block@51, ternary_result%12.1.b#1 <- block@52)
-        (assert maybe_exists%12#0) // check GlobalState exists
-        let tmp%12#0: bool = (b== ternary_result%12.1.b#2 456b)
+        let tmp%12#0: bool = (b== item1%25#0 456b)
         (assert tmp%12#0) // Tuple value should be set
         let (maybe_value%13#0: bytes, maybe_exists%13#0: bool) = (app_global_get_ex 0u "t4")
-        goto maybe_exists%13#0 ? block@54 : block@55
-    block@54: // ternary_true_L51
+        (assert maybe_exists%13#0) // check GlobalState exists
         let item_end_offset%27#0: uint64 = (extract_uint16 maybe_value%13#0 2u)
         let item_end_offset%28#0: uint64 = (len maybe_value%13#0)
         let item1%26#0: bytes = (substring3 maybe_value%13#0 item_end_offset%27#0 item_end_offset%28#0)
         let is_true%13#0: uint64 = (getbit item1%26#0 528u)
         let encoded_bool%17#0: bytes[1] = (setbit 0x00 0u is_true%13#0)
         let item2%13#0: bool = (getbit encoded_bool%17#0 0u)
-        goto block@56
-    block@55: // ternary_false_L51
-        let ternary_result%13.1.c#1: bool = undefined
-        goto block@56
-    block@56: // ternary_merge_L51
-        let ternary_result%13.1.c#2: bool = φ(item2%13#0 <- block@54, ternary_result%13.1.c#1 <- block@55)
-        (assert maybe_exists%13#0) // check GlobalState exists
-        let tmp%13#0: bool = (== ternary_result%13.1.c#2 1u)
+        let tmp%13#0: bool = (== item2%13#0 1u)
         (assert tmp%13#0) // Tuple value should be set
         let tests/approvals/global-state.algo.ts::TestTuple.__puya_arc4_router__%0#0: bool = 1u
         goto block@11
@@ -256,5 +144,5 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tests/approvals/global-state.algo.ts::TestTuple.__puya_arc4_router__%0#2: bool = 0u
         goto block@11
     block@11: // after_inlined_tests/approvals/global-state.algo.ts::TestTuple.__puya_arc4_router___L1
-        let tmp%0#0: bool = φ(tests/approvals/global-state.algo.ts::TestTuple.__puya_arc4_router__%0#0 <- block@56, tests/approvals/global-state.algo.ts::TestTuple.__puya_arc4_router__%0#1 <- block@7, tests/approvals/global-state.algo.ts::TestTuple.__puya_arc4_router__%0#2 <- block@10)
+        let tmp%0#0: bool = φ(tests/approvals/global-state.algo.ts::TestTuple.__puya_arc4_router__%0#0 <- block@3, tests/approvals/global-state.algo.ts::TestTuple.__puya_arc4_router__%0#1 <- block@7, tests/approvals/global-state.algo.ts::TestTuple.__puya_arc4_router__%0#2 <- block@10)
         return tmp%0#0
