@@ -4,7 +4,7 @@ import { Constants } from '../constants'
 import { CodeError, InternalError } from '../errors'
 import { logger } from '../logger'
 import type { DeliberateAny } from '../typescript-helpers'
-import { codeInvariant, hasFlags, intersectsFlags, invariant, isIn, normalisePath } from '../util'
+import { codeInvariant, hasFlags, instanceOfAny, intersectsFlags, invariant, isIn, normalisePath } from '../util'
 import { getNodeName } from '../visitor/syntax-names'
 import type { AppStorageType, PType } from './ptypes'
 import {
@@ -12,31 +12,35 @@ import {
   anyPType,
   ApprovalProgram,
   arc4BaseContractType,
-  ArrayPType,
   baseContractType,
   BigIntLiteralPType,
   bigIntPType,
   boolPType,
+  BoxMapPType,
+  BoxPType,
+  BoxRefPType,
   ClearStateProgram,
   ClusteredContractClassType,
   ClusteredPrototype,
   ContractClassPType,
   esSymbol,
   FunctionPType,
+  GlobalStateType,
   gtxnUnion,
   IntersectionPType,
+  LocalStateType,
   logicSigBaseType,
   LogicSigPType,
+  MutableTuplePType,
   NamespacePType,
   neverPType,
   nullPType,
   numberPType,
   NumericLiteralPType,
   ObjectPType,
-  StorageProxyPType,
+  ReadonlyTuplePType,
   stringPType,
   SuperPrototypeSelector,
-  TuplePType,
   TypeParameterType,
   Uint64EnumType,
   undefinedPType,
@@ -200,26 +204,29 @@ export class TypeResolver {
         sourceLocation,
       )
       codeInvariant(tsType.typeArguments, 'Tuple items must have types', sourceLocation)
-
-      return new TuplePType({
-        items: tsType.typeArguments.map((t) => this.resolveType(t, sourceLocation)),
-      })
+      const items = tsType.typeArguments.map((t) => this.resolveType(t, sourceLocation))
+      if (tsType.target.readonly) {
+        return new ReadonlyTuplePType({ items })
+      } else {
+        return new MutableTuplePType({ items })
+      }
     }
     if (isInstantiationExpression(tsType)) {
       return this.resolve(tsType.node.expression, sourceLocation)
     }
 
-    if (this.checker.isArrayType(tsType)) {
-      const itemType = tsType.getNumberIndexType()
-      if (!itemType) {
-        throw new CodeError('Cannot determine array item type', { sourceLocation })
-      } else {
-        const itemPType = this.resolveType(itemType, sourceLocation)
-        return new ArrayPType({
-          elementType: itemPType,
-        })
-      }
-    }
+    // if (this.checker.isArrayType(tsType)) {
+    //   const itemType = tsType.getNumberIndexType()
+    //   if (!itemType) {
+    //     throw new CodeError('Cannot determine array item type', { sourceLocation })
+    //   } else {
+    //     const itemPType = this.resolveType(itemType, sourceLocation)
+    //     return new ArrayPType({
+    //       elementType: itemPType,
+    //       immutable: false,
+    //     })
+    //   }
+    // }
 
     invariant(typeName, 'Non builtin type must have a name', sourceLocation)
 
@@ -322,6 +329,7 @@ export class TypeResolver {
    * Given a literal value with a named symbol, check its parent to see if it's actually an enum member.
    *
    * @param tsType
+   * @param literalValue
    * @param sourceLocation
    * @private
    *
@@ -444,7 +452,7 @@ export class TypeResolver {
     for (const prop of tsType.getProperties()) {
       const type = this.checker.getTypeOfSymbol(prop)
       const ptype = this.resolveType(type, this.getLocationOfSymbol(prop) ?? sourceLocation)
-      if (ptype instanceof StorageProxyPType) {
+      if (instanceOfAny(ptype, GlobalStateType, LocalStateType, BoxPType, BoxRefPType, BoxMapPType)) {
         properties[prop.name] = ptype
       } else if (ptype instanceof FunctionPType) {
         methods[prop.name] = ptype

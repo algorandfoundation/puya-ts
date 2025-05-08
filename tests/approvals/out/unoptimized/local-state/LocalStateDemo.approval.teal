@@ -66,112 +66,105 @@ main_getState_route@5:
     !=
     assert // can only call when not creating
     callsub getState
-    cover 8
     cover 7
     cover 6
     cover 5
-    cover 8
+    cover 4
     cover 3
     cover 2
     swap
     itob
-    cover 7
-    itob
-    cover 7
-    dup
-    len
-    itob
-    extract 6 2
-    swap
-    concat
-    cover 7
-    dup
-    len
-    itob
-    extract 6 2
-    swap
-    concat
-    cover 7
-    itob
-    dig 1
-    len
-    itob
-    extract 6 2
-    uncover 2
-    concat
-    swap
     bytec_0 // 0x
     swap
     concat
-    intc_3 // 10
+    swap
     itob
-    extract 6 2
     concat
     swap
+    dup
+    len
+    itob
+    extract 6 2
+    swap
+    concat
+    bytec_0 // 0x
+    dig 1
     concat
     cover 2
+    len
+    pushint 104 // 104
+    +
+    cover 2
+    pushint 104 // 104
     itob
-    dig 1
+    extract 6 2
+    concat
+    cover 2
+    dig 3
     len
     itob
     extract 6 2
-    uncover 2
+    uncover 4
     concat
     swap
+    dig 1
+    concat
+    swap
+    len
+    dig 2
+    +
+    cover 2
+    swap
+    itob
+    extract 6 2
+    uncover 3
+    swap
+    concat
+    uncover 3
+    concat
+    swap
+    dig 3
+    concat
+    cover 3
+    uncover 2
+    len
+    dig 2
+    +
+    cover 2
+    swap
+    itob
+    extract 6 2
+    concat
+    uncover 3
+    itob
+    bytec_0 // 0x
+    swap
+    concat
+    dig 4
+    len
+    itob
+    extract 6 2
+    uncover 5
+    concat
     bytec_0 // 0x
     swap
     concat
     intc_3 // 10
     itob
     extract 6 2
-    concat
-    swap
-    concat
-    bytec_0 // 0x
-    uncover 3
-    concat
-    uncover 3
-    concat
-    pushint 104 // 104
-    itob
-    extract 6 2
-    concat
-    dig 3
-    len
-    pushint 104 // 104
-    +
-    dup
-    itob
-    extract 6 2
-    uncover 2
-    swap
-    concat
-    dig 5
-    len
-    uncover 2
-    +
-    swap
-    uncover 6
-    concat
-    swap
-    dup
-    itob
-    extract 6 2
     uncover 2
     swap
     concat
     swap
-    dig 3
-    len
-    +
-    itob
-    extract 6 2
     concat
     uncover 3
-    concat
-    uncover 3
+    swap
     concat
     uncover 2
+    itob
+    extract 6 2
+    uncover 2
+    swap
     concat
     swap
     concat
@@ -199,7 +192,7 @@ main_setState_route@4:
     dup
     intc_0 // 0
     intc_2 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     swap
     dup
@@ -323,22 +316,23 @@ setState_block@0:
     dig 3
     app_local_put
     // tests/approvals/local-state.algo.ts:24
-    // this.localEncoded(Txn.sender).value = c.copy()
+    // this.localEncoded(Txn.sender).value = clone(c)
     frame_dig -1
     txn Sender
     // tests/approvals/local-state.algo.ts:12
     // localEncoded = LocalState<SampleArray>()
     bytec 5 // "localEncoded"
     // tests/approvals/local-state.algo.ts:24
-    // this.localEncoded(Txn.sender).value = c.copy()
+    // this.localEncoded(Txn.sender).value = clone(c)
     uncover 2
     app_local_put
     // tests/approvals/local-state.algo.ts:25
     // this.localTuple(Txn.sender).value = [a, b]
-    txn Sender
-    cover 2
     dup
     itob
+    bytec_0 // 0x
+    swap
+    concat
     swap
     dig 2
     len
@@ -346,17 +340,18 @@ setState_block@0:
     extract 6 2
     dig 3
     concat
-    swap
     bytec_0 // 0x
-    uncover 3
+    swap
     concat
     intc_3 // 10
     itob
     extract 6 2
-    concat
-    uncover 2
-    concat
     uncover 3
+    swap
+    concat
+    swap
+    concat
+    txn Sender
     // tests/approvals/local-state.algo.ts:13
     // localTuple = LocalState<[uint64, bytes]>()
     bytec 6 // "localTuple"
@@ -369,19 +364,23 @@ setState_block@0:
     txn Sender
     swap
     itob
+    bytec_0 // 0x
+    swap
+    concat
     dig 2
     len
     itob
     extract 6 2
     uncover 3
     concat
-    swap
     bytec_0 // 0x
     swap
     concat
     intc_3 // 10
     itob
     extract 6 2
+    uncover 2
+    swap
     concat
     swap
     concat
@@ -396,7 +395,7 @@ setState_block@0:
     retsub
 
 
-// tests/approvals/local-state.algo.ts::LocalStateDemo.getState() -> uint64, uint64, bytes, bytes, bytes, uint64, bytes, uint64, bytes:
+// tests/approvals/local-state.algo.ts::LocalStateDemo.getState() -> uint64, uint64, bytes, bytes, bytes, bytes, uint64, bytes:
 getState:
 
 getState_block@0:
@@ -445,14 +444,14 @@ getState_block@0:
     app_local_get_ex
     assert // check LocalState exists
     // tests/approvals/local-state.algo.ts:35
-    // localEncoded: this.localEncoded(Txn.sender).value.copy(),
+    // localEncoded: clone(this.localEncoded(Txn.sender).value),
     txn Sender
     intc_0 // 0
     // tests/approvals/local-state.algo.ts:12
     // localEncoded = LocalState<SampleArray>()
     bytec 5 // "localEncoded"
     // tests/approvals/local-state.algo.ts:35
-    // localEncoded: this.localEncoded(Txn.sender).value.copy(),
+    // localEncoded: clone(this.localEncoded(Txn.sender).value),
     app_local_get_ex
     assert // check LocalState exists
     // tests/approvals/local-state.algo.ts:36
@@ -466,23 +465,6 @@ getState_block@0:
     // localTuple: this.localTuple(Txn.sender).value,
     app_local_get_ex
     assert // check LocalState exists
-    dup
-    intc_0 // 0
-    intc_2 // 8
-    extract3 // on error: Index access is out of bounds
-    btoi
-    swap
-    dup
-    intc_2 // 8
-    extract_uint16
-    swap
-    dup
-    len
-    swap
-    uncover 2
-    uncover 2
-    substring3
-    extract 2 0
     // tests/approvals/local-state.algo.ts:37
     // localObject: this.localObject(Txn.sender).value,
     txn Sender
@@ -497,7 +479,7 @@ getState_block@0:
     dup
     intc_0 // 0
     intc_2 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     swap
     dup
@@ -517,19 +499,18 @@ getState_block@0:
     //   localUint2: this.localUint2(Txn.sender).value,
     //   localBytes: this.localBytes(Txn.sender).value,
     //   localBytes2: this.localBytes2(Txn.sender).value,
-    //   localEncoded: this.localEncoded(Txn.sender).value.copy(),
+    //   localEncoded: clone(this.localEncoded(Txn.sender).value),
     //   localTuple: this.localTuple(Txn.sender).value,
     //   localObject: this.localObject(Txn.sender).value,
     // }
-    uncover 8
-    uncover 8
-    uncover 8
-    uncover 8
-    uncover 8
-    uncover 8
-    uncover 8
-    uncover 8
-    uncover 8
+    uncover 7
+    uncover 7
+    uncover 7
+    uncover 7
+    uncover 7
+    uncover 7
+    uncover 7
+    uncover 7
     retsub
 
 

@@ -52,8 +52,7 @@ export class CodeError extends UserError {
     sourceType: PType
     targetType: PTypeOrClass
   }) {
-    const targetName = targetType instanceof Function ? targetType.name : targetType.fullName
-    return new CodeError(`Cannot resolve ${sourceType} to ${targetName}`, { sourceLocation })
+    return new CodeError(`Cannot resolve expression of type ${sourceType} to ${targetType}`, { sourceLocation })
   }
 }
 

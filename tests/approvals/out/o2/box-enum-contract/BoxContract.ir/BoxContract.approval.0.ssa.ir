@@ -27,7 +27,7 @@ subroutine tests/approvals/box-enum-contract.algo.ts::BoxContract.__puya_arc4_ro
         let tmp%9#0: uint64 = (txn ApplicationID)
         let tmp%10#0: bool = (!= tmp%9#0 0u)
         (assert tmp%10#0) // can only call when not creating
-        let tmp%11#0: bytes[16] = tests/approvals/box-enum-contract.algo.ts::BoxContract.readEnums()
+        let tmp%11#0: Encoded(uint64,uint64) = tests/approvals/box-enum-contract.algo.ts::BoxContract.readEnums()
         let tmp%12#0: bytes = (concat 0x151f7c75 tmp%11#0)
         (log tmp%12#0)
         return 1u
@@ -54,40 +54,37 @@ subroutine tests/approvals/box-enum-contract.algo.ts::BoxContract.__puya_arc4_ro
 subroutine tests/approvals/box-enum-contract.algo.ts::BoxContract.storeEnums() -> void:
     block@0: // L8
         let encoded_value%0#0: bytes[8] = (itob 1u)
-        (box_put "oca" encoded_value%0#0)
+        box_write("oca", encoded_value%0#0)
         let encoded_value%1#0: bytes[8] = (itob 6u)
-        (box_put "txn" encoded_value%1#0)
+        box_write("txn", encoded_value%1#0)
         return 
 
-subroutine tests/approvals/box-enum-contract.algo.ts::BoxContract.readEnums() -> bytes[16]:
+subroutine tests/approvals/box-enum-contract.algo.ts::BoxContract.readEnums() -> Encoded(uint64,uint64):
     block@0: // L14
         let (tmp%0#0: bytes, tmp%1#0: bool) = (box_get "oca")
-        let (maybe_value%0#0: bytes, maybe_exists%0#0: bool) = (box_get "oca")
+        let (maybe_value%0#0: bytes, maybe_exists%0#0: bool) = box_read("oca")
         (assert maybe_exists%0#0) // Box must have value
         let maybe_value_converted%0#0: uint64 = (btoi maybe_value%0#0)
         let tmp%2#0: bytes[8] = (itob maybe_value_converted%0#0)
         let tmp%3#0: bool = (== tmp%0#0 tmp%2#0)
         (assert tmp%3#0)
         let (tmp%4#0: bytes, tmp%5#0: bool) = (box_get "txn")
-        let (maybe_value%1#0: bytes, maybe_exists%1#0: bool) = (box_get "txn")
+        let (maybe_value%1#0: bytes, maybe_exists%1#0: bool) = box_read("txn")
         (assert maybe_exists%1#0) // Box must have value
         let maybe_value_converted%1#0: uint64 = (btoi maybe_value%1#0)
         let tmp%6#0: bytes[8] = (itob maybe_value_converted%1#0)
         let tmp%7#0: bool = (== tmp%4#0 tmp%6#0)
         (assert tmp%7#0)
-        let (maybe_value%2#0: bytes, maybe_exists%2#0: bool) = (box_get "oca")
+        let (maybe_value%2#0: bytes, maybe_exists%2#0: bool) = box_read("oca")
         (assert maybe_exists%2#0) // Box must have value
         let maybe_value_converted%2#0: uint64 = (btoi maybe_value%2#0)
-        let val_as_bytes%0#0: bytes[8] = (itob maybe_value_converted%2#0)
-        let (maybe_value%3#0: bytes, maybe_exists%3#0: bool) = (box_get "txn")
+        let tmp%8#0: Encoded(uint64) = encode<uint64>(maybe_value_converted%2#0)
+        let (maybe_value%3#0: bytes, maybe_exists%3#0: bool) = box_read("txn")
         (assert maybe_exists%3#0) // Box must have value
         let maybe_value_converted%3#0: uint64 = (btoi maybe_value%3#0)
-        let val_as_bytes%1#0: bytes[8] = (itob maybe_value_converted%3#0)
-        let current_tail_offset%0#0: uint64 = 16u
-        let encoded_tuple_buffer%0#0: bytes[0] = 0x
-        let encoded_tuple_buffer%1#0: bytes = (concat encoded_tuple_buffer%0#0 val_as_bytes%0#0)
-        let encoded_tuple_buffer%2#0: bytes = (concat encoded_tuple_buffer%1#0 val_as_bytes%1#0)
-        return encoded_tuple_buffer%2#0
+        let tmp%9#0: Encoded(uint64) = encode<uint64>(maybe_value_converted%3#0)
+        let tmp%10#0: Encoded(uint64,uint64) = encode<(uint64,uint64)>(tmp%8#0, tmp%9#0)
+        return tmp%10#0
 
 subroutine tests/approvals/box-enum-contract.algo.ts::BoxContract.__algots__.defaultCreate() -> void:
     block@0: // L4

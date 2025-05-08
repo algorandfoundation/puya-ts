@@ -5,7 +5,7 @@ import { wtypes } from '../../../../awst/wtypes'
 
 import { invariant } from '../../../../util'
 import type { PType } from '../../../ptypes'
-import { boolPType, BoxRefPType, boxRefType, bytesPType, stringPType, TuplePType, uint64PType, voidPType } from '../../../ptypes'
+import { boolPType, BoxRefPType, boxRefType, bytesPType, ReadonlyTuplePType, stringPType, uint64PType, voidPType } from '../../../ptypes'
 import { instanceEb } from '../../../type-registry'
 import { FunctionBuilder, type NodeBuilder } from '../../index'
 import { parseFunctionArgs } from '../../util/arg-parsing'
@@ -263,7 +263,7 @@ class BoxRefMaybeFunctionBuilder extends BoxRefBaseFunctionBuilder {
       genericTypeArgs: 0,
       argSpec: () => [],
     })
-    const type = new TuplePType({ items: [bytesPType, boolPType] })
+    const type = new ReadonlyTuplePType({ items: [bytesPType, boolPType] })
 
     return instanceEb(
       nodeFactory.stateGetEx({

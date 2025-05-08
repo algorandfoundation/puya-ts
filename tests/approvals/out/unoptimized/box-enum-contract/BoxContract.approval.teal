@@ -4,7 +4,7 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 0 1
-    bytecblock "oca" "txn"
+    bytecblock "oca" "txn" 0x
 
 main_block@0:
 
@@ -179,10 +179,12 @@ readEnums_block@0:
     assert // Box must have value
     btoi
     itob
-    pushbytes 0x
+    bytec_2 // 0x
     uncover 2
     concat
     swap
+    concat
+    bytec_2 // 0x
     concat
     retsub
 

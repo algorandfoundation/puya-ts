@@ -75,7 +75,7 @@ export function boxLength(box: BoxValueExpression, sourceLocation: SourceLocatio
       expr: nodeFactory.intrinsicCall({
         opCode: 'box_len',
         stackArgs: [box.key],
-        wtype: new wtypes.WTuple({ types: [wtypes.uint64WType, wtypes.boolWType], immutable: true }),
+        wtype: new wtypes.WTuple({ types: [wtypes.uint64WType, wtypes.boolWType] }),
         immediates: [],
         sourceLocation,
       }),

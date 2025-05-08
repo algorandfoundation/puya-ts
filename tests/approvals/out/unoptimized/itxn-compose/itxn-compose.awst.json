@@ -176,9 +176,10 @@
               "end_column": 33
             },
             "wtype": {
-              "_type": "StackArray",
-              "name": "stack_array<arc4.static_array<arc4.byte>>",
-              "immutable": true,
+              "_type": "ARC4DynamicArray",
+              "name": "arc4.dynamic_array<arc4.static_array<arc4.byte>>",
+              "immutable": false,
+              "arc4_alias": null,
               "element_type": {
                 "_type": "ARC4StaticArray",
                 "name": "arc4.static_array<arc4.byte>",
@@ -211,8 +212,7 @@
               "_type": "WGroupTransaction",
               "name": "group_transaction_pay",
               "immutable": true,
-              "transaction_type": 1,
-              "arc4_alias": "pay"
+              "transaction_type": 1
             }
           },
           {
@@ -316,8 +316,7 @@
                           "_type": "WGroupTransaction",
                           "name": "group_transaction_pay",
                           "immutable": true,
-                          "transaction_type": 1,
-                          "arc4_alias": "pay"
+                          "transaction_type": 1
                         },
                         "name": "funds"
                       }
@@ -409,9 +408,10 @@
                         "end_column": 20
                       },
                       "wtype": {
-                        "_type": "StackArray",
-                        "name": "stack_array<arc4.static_array<arc4.byte>>",
-                        "immutable": true,
+                        "_type": "ARC4DynamicArray",
+                        "name": "arc4.dynamic_array<arc4.static_array<arc4.byte>>",
+                        "immutable": false,
+                        "arc4_alias": null,
                         "element_type": {
                           "_type": "ARC4StaticArray",
                           "name": "arc4.static_array<arc4.byte>",
@@ -507,8 +507,7 @@
                         "_type": "WGroupTransaction",
                         "name": "group_transaction_pay",
                         "immutable": true,
-                        "transaction_type": 1,
-                        "arc4_alias": "pay"
+                        "transaction_type": 1
                       },
                       "name": "funds"
                     }
@@ -539,9 +538,10 @@
                       "end_column": 50
                     },
                     "wtype": {
-                      "_type": "StackArray",
-                      "name": "stack_array<arc4.static_array<arc4.byte>>",
-                      "immutable": true,
+                      "_type": "ARC4DynamicArray",
+                      "name": "arc4.dynamic_array<arc4.static_array<arc4.byte>>",
+                      "immutable": false,
+                      "arc4_alias": null,
                       "element_type": {
                         "_type": "ARC4StaticArray",
                         "name": "arc4.static_array<arc4.byte>",
@@ -732,9 +732,10 @@
                           "end_column": 25
                         },
                         "wtype": {
-                          "_type": "StackArray",
-                          "name": "stack_array<arc4.static_array<arc4.byte>>",
-                          "immutable": true,
+                          "_type": "ARC4DynamicArray",
+                          "name": "arc4.dynamic_array<arc4.static_array<arc4.byte>>",
+                          "immutable": false,
+                          "arc4_alias": null,
                           "element_type": {
                             "_type": "ARC4StaticArray",
                             "name": "arc4.static_array<arc4.byte>",
@@ -1094,9 +1095,10 @@
                           "end_column": 39
                         },
                         "wtype": {
-                          "_type": "StackArray",
-                          "name": "stack_array<arc4.static_array<arc4.byte>>",
-                          "immutable": true,
+                          "_type": "ARC4DynamicArray",
+                          "name": "arc4.dynamic_array<arc4.static_array<arc4.byte>>",
+                          "immutable": false,
+                          "arc4_alias": null,
                           "element_type": {
                             "_type": "ARC4StaticArray",
                             "name": "arc4.static_array<arc4.byte>",
@@ -1141,7 +1143,7 @@
                       "file": "tests/approvals/itxn-compose.algo.ts",
                       "line": 32,
                       "end_line": 32,
-                      "column": 15,
+                      "column": 9,
                       "end_column": 16
                     },
                     "wtype": {
@@ -1149,7 +1151,7 @@
                       "name": "uint64",
                       "immutable": true
                     },
-                    "name": "i"
+                    "name": "temp"
                   },
                   "loop_body": {
                     "_type": "Block",
@@ -1161,6 +1163,48 @@
                       "end_column": 48
                     },
                     "body": [
+                      {
+                        "_type": "AssignmentStatement",
+                        "source_location": {
+                          "file": "tests/approvals/itxn-compose.algo.ts",
+                          "line": 32,
+                          "end_line": 32,
+                          "column": 9,
+                          "end_column": 16
+                        },
+                        "target": {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/itxn-compose.algo.ts",
+                            "line": 32,
+                            "end_line": 32,
+                            "column": 15,
+                            "end_column": 16
+                          },
+                          "wtype": {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          "name": "i"
+                        },
+                        "value": {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/itxn-compose.algo.ts",
+                            "line": 32,
+                            "end_line": 32,
+                            "column": 9,
+                            "end_column": 16
+                          },
+                          "wtype": {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          "name": "temp"
+                        }
+                      },
                       {
                         "_type": "Block",
                         "source_location": {
@@ -1240,9 +1284,10 @@
                                   "end_column": 28
                                 },
                                 "wtype": {
-                                  "_type": "StackArray",
-                                  "name": "stack_array<arc4.static_array<arc4.byte>>",
-                                  "immutable": true,
+                                  "_type": "ARC4DynamicArray",
+                                  "name": "arc4.dynamic_array<arc4.static_array<arc4.byte>>",
+                                  "immutable": false,
+                                  "arc4_alias": null,
                                   "element_type": {
                                     "_type": "ARC4StaticArray",
                                     "name": "arc4.static_array<arc4.byte>",
@@ -3184,7 +3229,7 @@
                       "file": "tests/approvals/itxn-compose.algo.ts",
                       "line": 57,
                       "end_line": 57,
-                      "column": 15,
+                      "column": 9,
                       "end_column": 16
                     },
                     "wtype": {
@@ -3192,7 +3237,7 @@
                       "name": "uint64",
                       "immutable": true
                     },
-                    "name": "i"
+                    "name": "temp"
                   },
                   "loop_body": {
                     "_type": "Block",
@@ -3204,6 +3249,48 @@
                       "end_column": 34
                     },
                     "body": [
+                      {
+                        "_type": "AssignmentStatement",
+                        "source_location": {
+                          "file": "tests/approvals/itxn-compose.algo.ts",
+                          "line": 57,
+                          "end_line": 57,
+                          "column": 9,
+                          "end_column": 16
+                        },
+                        "target": {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/itxn-compose.algo.ts",
+                            "line": 57,
+                            "end_line": 57,
+                            "column": 15,
+                            "end_column": 16
+                          },
+                          "wtype": {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          "name": "i"
+                        },
+                        "value": {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/itxn-compose.algo.ts",
+                            "line": 57,
+                            "end_line": 57,
+                            "column": 9,
+                            "end_column": 16
+                          },
+                          "wtype": {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          "name": "temp"
+                        }
+                      },
                       {
                         "_type": "Block",
                         "source_location": {
@@ -4176,8 +4263,7 @@
                             "_type": "WGroupTransaction",
                             "name": "group_transaction",
                             "immutable": true,
-                            "transaction_type": null,
-                            "arc4_alias": "txn"
+                            "transaction_type": null
                           },
                           "name": "txn"
                         },
@@ -4194,8 +4280,7 @@
                             "_type": "WGroupTransaction",
                             "name": "group_transaction",
                             "immutable": true,
-                            "transaction_type": null,
-                            "arc4_alias": "txn"
+                            "transaction_type": null
                           },
                           "index": {
                             "_type": "VarExpression",
@@ -4284,8 +4369,7 @@
                                     "_type": "WGroupTransaction",
                                     "name": "group_transaction",
                                     "immutable": true,
-                                    "transaction_type": null,
-                                    "arc4_alias": "txn"
+                                    "transaction_type": null
                                   },
                                   "name": "txn"
                                 }

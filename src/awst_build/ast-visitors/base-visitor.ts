@@ -4,7 +4,7 @@ import type { Expression, LValue, MethodDocumentation, Statement } from '../../a
 import type { SourceLocation } from '../../awst/source-location'
 import { CodeError, InternalError, NotSupported } from '../../errors'
 import { logger } from '../../logger'
-import { codeInvariant, enumerate, invariant, sortBy } from '../../util'
+import { codeInvariant, enumerate, instanceOfAny, invariant, sortBy } from '../../util'
 import type { Expressions } from '../../visitor/syntax-names'
 import {
   AugmentedAssignmentBinaryOp,
@@ -25,10 +25,12 @@ import { BooleanExpressionBuilder } from '../eb/boolean-expression-builder'
 import { ArrayLiteralExpressionBuilder } from '../eb/literal/array-literal-expression-builder'
 import { BigIntLiteralExpressionBuilder } from '../eb/literal/big-int-literal-expression-builder'
 import { ConditionalExpressionBuilder } from '../eb/literal/conditional-expression-builder'
+import { NumericLiteralExpressionBuilder } from '../eb/literal/numeric-literal-expression-builder'
 import type { ObjectLiteralParts } from '../eb/literal/object-literal-expression-builder'
 import { ObjectLiteralExpressionBuilder } from '../eb/literal/object-literal-expression-builder'
 import { NamespaceBuilder } from '../eb/namespace-builder'
 import { OmittedExpressionBuilder } from '../eb/omitted-expression-builder'
+import { OptionalExpressionBuilder } from '../eb/optional-expression-builder'
 import { SpreadExpressionBuilder } from '../eb/spread-expression-builder'
 import { StringExpressionBuilder, stringFromTemplate } from '../eb/string-expression-builder'
 import { StaticIterator } from '../eb/traits/static-iterator'
@@ -42,12 +44,13 @@ import {
   bigIntPType,
   biguintPType,
   boolPType,
-  neverPType,
+  MutableTuplePType,
   numberPType,
   NumericLiteralPType,
   ObjectPType,
+  ReadonlyArrayPType,
+  ReadonlyTuplePType,
   TransientType,
-  TuplePType,
   uint64PType,
   UnionPType,
 } from '../ptypes'
@@ -77,7 +80,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   visitBigIntLiteral(node: ts.BigIntLiteral): InstanceBuilder {
     const literalValue = BigInt(node.text.slice(0, -1))
     const ptype = this.context.getPTypeForNode(node)
-    invariant(ptype instanceof TransientType, 'Literals should resolve to transient PTypes')
+    invariant(ptype instanceof BigIntLiteralPType, 'ptype should be BigIntLiteralPType')
     return new BigIntLiteralExpressionBuilder(literalValue, ptype, this.sourceLocation(node))
   }
 
@@ -120,8 +123,8 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
       )
     }
     const ptype = this.context.getPTypeForNode(node)
-    invariant(ptype instanceof TransientType, 'Literals should resolve to transient PTypes')
-    return new BigIntLiteralExpressionBuilder(literalValue, ptype, this.sourceLocation(node))
+    invariant(ptype instanceof NumericLiteralPType, 'ptype should be NumericLiteralPType')
+    return new NumericLiteralExpressionBuilder(literalValue, ptype, this.sourceLocation(node))
   }
 
   visitIdentifier(node: ts.Identifier): NodeBuilder {
@@ -529,7 +532,15 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   }
 
   visitNonNullExpression(node: ts.NonNullExpression): NodeBuilder {
-    this.throwNotSupported(node, 'non null assertions')
+    const target = this.baseAccept(node.expression)
+    if (target instanceof OptionalExpressionBuilder) {
+      return target.base
+    }
+
+    throw new CodeError(
+      'The non-null assertion operator "!" is not valid here. It is only valid in limited scenarios where built in types require it. Eg. Array.prototype.pop',
+      { sourceLocation: this.sourceLocation(node) },
+    )
   }
 
   visitSatisfiesExpression(node: ts.SatisfiesExpression): NodeBuilder {
@@ -542,13 +553,130 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
 
   handleAssignment(target: InstanceBuilder, source: InstanceBuilder, sourceLocation: SourceLocation): InstanceBuilder {
     const assignmentType = this.buildAssignmentExpressionType(target.ptype, source.ptype, sourceLocation)
+
+    return this.buildAssignmentExpression(target, source.resolveToPType(assignmentType), assignmentType, sourceLocation)
+  }
+
+  buildAssignmentExpression(
+    target: InstanceBuilder,
+    source: InstanceBuilder,
+    assignmentType: PType,
+    sourceLocation: SourceLocation,
+  ): InstanceBuilder {
+    if (target instanceof ArrayLiteralExpressionBuilder && !(assignmentType instanceof ReadonlyTuplePType)) {
+      // Destructured array
+      const sourceSingle = source.singleEvaluation()
+      const assignments: Expression[] = []
+      for (const [index, item] of target[StaticIterator]().entries()) {
+        if (item instanceof OmittedExpressionBuilder) continue
+        const itemType = assignmentType.getIndexType(BigInt(index), sourceLocation)
+        codeInvariant(itemType, `Cannot resolve type of item at index ${index}`, sourceLocation)
+        assignments.push(
+          this.buildAssignmentExpression(
+            item,
+            requireInstanceBuilder(
+              sourceSingle.indexAccess(
+                instanceEb(nodeFactory.uInt64Constant({ value: BigInt(index), sourceLocation }), uint64PType),
+                sourceLocation,
+              ),
+            ),
+            itemType,
+            sourceLocation,
+          ).resolve(),
+        )
+      }
+      return instanceEb(
+        nodeFactory.commaExpression({
+          expressions: [...assignments, sourceSingle.resolve()],
+          sourceLocation,
+          wtype: assignmentType.wtypeOrThrow,
+        }),
+        assignmentType,
+      )
+    } else if (target instanceof ObjectLiteralExpressionBuilder && !(assignmentType instanceof ObjectPType)) {
+      // Destructured object
+      const sourceSingle = source.singleEvaluation()
+      const assignments: Expression[] = []
+
+      for (const [propName, propType] of target.ptype.orderedProperties()) {
+        assignments.push(
+          this.buildAssignmentExpression(
+            requireInstanceBuilder(target.memberAccess(propName, sourceLocation)),
+            requireInstanceBuilder(sourceSingle.memberAccess(propName, sourceLocation)),
+            propType,
+            sourceLocation,
+          ).resolve(),
+        )
+      }
+      return instanceEb(
+        nodeFactory.commaExpression({
+          expressions: [...assignments, sourceSingle.resolve()],
+          sourceLocation,
+          wtype: assignmentType.wtypeOrThrow,
+        }),
+        assignmentType,
+      )
+    }
     return instanceEb(
       nodeFactory.assignmentExpression({
         target: this.buildLValue(target, assignmentType, sourceLocation),
         sourceLocation,
-        value: source.resolveToPType(assignmentType).resolve(),
+        value: source.resolve(),
       }),
       assignmentType,
+    )
+  }
+
+  buildLValue(target: InstanceBuilder, assignmentType: PType, sourceLocation: SourceLocation): LValue {
+    if (target instanceof ArrayLiteralExpressionBuilder) {
+      if (assignmentType instanceof ReadonlyTuplePType || assignmentType instanceof MutableTuplePType) {
+        const targetItems = target[StaticIterator]()
+
+        const targets: LValue[] = []
+        for (const [index, sourceItemType] of enumerate(assignmentType.items)) {
+          const targetItem = targetItems[index]
+          if (targetItem && !(targetItem instanceof OmittedExpressionBuilder)) {
+            targets.push(this.buildLValue(targetItem, sourceItemType, sourceLocation))
+          } else {
+            targets.push(
+              nodeFactory.varExpression({
+                name: this.context.generateVarName('discard'),
+                sourceLocation,
+                wtype: sourceItemType.wtypeOrThrow,
+              }),
+            )
+          }
+        }
+        return nodeFactory.tupleExpression({ items: targets, sourceLocation })
+      }
+    }
+    if (target instanceof ObjectLiteralExpressionBuilder) {
+      if (assignmentType instanceof ObjectPType) {
+        const targets: LValue[] = []
+        for (const [propName, propType] of assignmentType.orderedProperties()) {
+          if (target.hasProperty(propName)) {
+            targets.push(this.buildLValue(requireInstanceBuilder(target.memberAccess(propName, sourceLocation)), propType, sourceLocation))
+          } else {
+            targets.push(
+              nodeFactory.varExpression({
+                name: this.context.generateVarName('discard'),
+                sourceLocation,
+                wtype: propType.wtypeOrThrow,
+              }),
+            )
+          }
+        }
+        return nodeFactory.tupleExpression({ items: targets, sourceLocation, wtype: assignmentType.wtype })
+      }
+    }
+    if (target.ptype.equals(assignmentType)) {
+      return target.resolveLValue()
+    }
+    throw new CodeError(
+      `The target of an assignment must have the same type as the source. Target: ${target.ptype}, Source: ${assignmentType}`,
+      {
+        sourceLocation,
+      },
     )
   }
 
@@ -565,13 +693,36 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
    * @private
    */
   private buildAssignmentExpressionType(targetType: PType, sourceType: PType, sourceLocation: SourceLocation): PType {
-    if (targetType instanceof ArrayLiteralPType)
-      // Puya does not support assigning to array targets, but we can treat array literals as tuples
-      return this.buildAssignmentExpressionType(targetType.getTupleType(), sourceType, sourceLocation)
-
-    const errorMessage = `Value of type ${sourceType.name} cannot be assigned to target of type ${targetType.name}`
-    if (sourceType.equals(targetType)) {
+    if (sourceType.equals(targetType) && !(sourceType instanceof ArrayLiteralPType)) {
       return targetType
+    }
+    const errorMessage = `Value of type ${sourceType.name} cannot be assigned to target of type ${targetType.name}`
+
+    if (sourceType instanceof ArrayLiteralPType) {
+      if (instanceOfAny(targetType, ArrayPType, ReadonlyArrayPType)) {
+        return targetType
+      }
+      if (targetType instanceof ReadonlyTuplePType) {
+        return new ReadonlyTuplePType({
+          items: sourceType.items.map((item, index) =>
+            this.buildAssignmentExpressionType(targetType.items[index] ?? item, item, sourceLocation),
+          ),
+        })
+      }
+      if (targetType instanceof MutableTuplePType) {
+        return new MutableTuplePType({
+          items: sourceType.items.map((item, index) =>
+            this.buildAssignmentExpressionType(targetType.items[index] ?? item, item, sourceLocation),
+          ),
+        })
+      }
+      if (targetType instanceof ArrayLiteralPType) {
+        return new MutableTuplePType({
+          items: sourceType.items.map((item, index) =>
+            this.buildAssignmentExpressionType(targetType.items[index] ?? item, item, sourceLocation),
+          ),
+        })
+      }
     }
     if (
       sourceType instanceof NumericLiteralPType ||
@@ -591,27 +742,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
       // Narrow `biguint | bigint` or `bigint` to target type
       return targetType
     }
-    if (sourceType instanceof ArrayLiteralPType) {
-      if (targetType instanceof TuplePType) {
-        // Narrow array literal types to tuple item types
-        codeInvariant(targetType.items.length <= sourceType.items.length, errorMessage, sourceLocation)
-        return new TuplePType({
-          items: sourceType.items.map((item, index) =>
-            index < targetType.items.length ? this.buildAssignmentExpressionType(targetType.items[index], item, sourceLocation) : item,
-          ),
-        })
-      } else if (targetType instanceof ArrayPType) {
-        // Narrow array literal types to array type
-        codeInvariant(
-          sourceType.items.every((i) =>
-            this.buildAssignmentExpressionType(targetType.elementType, i, sourceLocation).equals(targetType.elementType),
-          ),
-          errorMessage,
-          sourceLocation,
-        )
-        return targetType
-      }
-    }
+
     if (sourceType instanceof ObjectPType) {
       // Recursively narrow object properties
       codeInvariant(targetType instanceof ObjectPType, errorMessage)
@@ -634,65 +765,12 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
         ),
       })
     }
-    // Array<never> can be assigned to any target array type
-    if (sourceType instanceof ArrayPType && sourceType.elementType.equals(neverPType)) {
-      codeInvariant(targetType instanceof ArrayPType, errorMessage)
-      return targetType
+    if (sourceType instanceof ArrayPType && targetType instanceof ReadonlyArrayPType) {
+      return new ReadonlyArrayPType({
+        elementType: this.buildAssignmentExpressionType(targetType.elementType, sourceType.elementType, sourceLocation),
+      })
     }
     return sourceType
-  }
-
-  buildLValue(target: InstanceBuilder, assignmentType: PType, sourceLocation: SourceLocation): LValue {
-    if (target instanceof ArrayLiteralExpressionBuilder) {
-      if (assignmentType instanceof TuplePType) {
-        const targetItems = target[StaticIterator]()
-
-        const targets: LValue[] = []
-        for (const [index, sourceItemType] of enumerate(assignmentType.items)) {
-          const targetItem = targetItems[index]
-          if (targetItem && !(targetItem instanceof OmittedExpressionBuilder)) {
-            targets.push(this.buildLValue(targetItem, sourceItemType, sourceLocation))
-          } else {
-            targets.push(
-              nodeFactory.varExpression({
-                name: this.context.generateDiscardedVarName(),
-                sourceLocation,
-                wtype: sourceItemType.wtypeOrThrow,
-              }),
-            )
-          }
-        }
-        return nodeFactory.tupleExpression({ items: targets, sourceLocation })
-      }
-    }
-    if (target instanceof ObjectLiteralExpressionBuilder) {
-      if (assignmentType instanceof ObjectPType) {
-        const targets: LValue[] = []
-        for (const [propName, propType] of assignmentType.orderedProperties()) {
-          if (target.hasProperty(propName)) {
-            targets.push(this.buildLValue(requireInstanceBuilder(target.memberAccess(propName, sourceLocation)), propType, sourceLocation))
-          } else {
-            targets.push(
-              nodeFactory.varExpression({
-                name: this.context.generateDiscardedVarName(),
-                sourceLocation,
-                wtype: propType.wtypeOrThrow,
-              }),
-            )
-          }
-        }
-        return nodeFactory.tupleExpression({ items: targets, sourceLocation, wtype: assignmentType.wtype })
-      }
-    }
-    if (target.ptype.equals(assignmentType)) {
-      return target.resolveLValue()
-    }
-    throw new CodeError(
-      `The target of an assignment must have the same type as the source. Target: ${target.ptype}, Source: ${assignmentType}`,
-      {
-        sourceLocation,
-      },
-    )
   }
 
   protected parseMemberModifiers(node: { modifiers?: readonly ts.ModifierLike[] }) {

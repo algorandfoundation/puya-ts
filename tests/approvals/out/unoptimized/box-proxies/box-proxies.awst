@@ -12,10 +12,10 @@ subroutine testBox(box: box_key, value: string): void
   assert(isBoxADeleted, comment=delete failed)
   assert(!STATE_EXISTS(Box[box].value) and !STATE_EXISTS(Box["A"].value))
   assert(STATE_GET(Box["A"].value, default="O") == STATE_GET(Box[box].value, default="O"))
-  <tuple>[_, e]: readonlytuple[string, bool] = STATE_GET_EX(Box[box].value)
+  <tuple>[_, e]: readonly [string, bool] = STATE_GET_EX(Box[box].value)
   assert(!e)
   Box[box].value: string = value
-  <tuple>[_₁, e]: readonlytuple[string, bool] = STATE_GET_EX(Box[box].value)
+  <tuple>[_₁, e]: readonly [string, bool] = STATE_GET_EX(Box[box].value)
   assert(e)
 }
 subroutine testBoxMap(box: box_key, key: string, value: bytes): void
@@ -51,7 +51,7 @@ subroutine testBoxRef(box: box_key, length: uint64): void
   }
   box_put(box, 0xffffffff)
   assert(STATE_GET(Box[box].value, default=0x) == 0xffffffff)
-  maybeBox: readonlytuple[bytes, bool] = STATE_GET_EX(Box[box].value)
+  maybeBox: readonly [bytes, bool] = STATE_GET_EX(Box[box].value)
   assert(maybeBox.1)
   assert(Box[box].value == 0xffffffff)
   box_splice(box, 1, 1, 0x00)
@@ -120,7 +120,7 @@ contract BoxCreate
     ["b"]: uint64
     ["c"]: arc4.static_array<arc4.uint32>
     ["d"]: arc4.dynamic_array<arc4.uint8>
-    ["e"]: arc4.tuple<uint8,uint8,bool,bool>
+    ["e"]: arc4.tuple<arc4.uint8,arc4.uint8,arc4.bool,arc4.bool>
   }
   approvalProgram(): bool
   {
@@ -142,7 +142,7 @@ contract BoxCreate
     assert(checked_maybe(box_len("c"), comment=Box must have value) == 40)
     box_create("d", 2)
     assert(checked_maybe(box_len("d"), comment=Box must have value) == 2)
-    box_create("e", size_of(arc4.tuple<uint8,uint8,bool,bool>))
+    box_create("e", size_of(arc4.tuple<arc4.uint8,arc4.uint8,arc4.bool,arc4.bool>))
     assert(checked_maybe(box_len("e"), comment=Box must have value) == 3)
     box_create("bool", size_of(bool))
     assert(checked_maybe(box_len("bool"), comment=Box must have value) == 8)
@@ -178,9 +178,9 @@ contract BoxMapTest
 contract TupleBox
 {
   boxes {
-    ["t1"]: readonlytuple[string, bytes, bool]
+    ["t1"]: arc4.tuple<string,bytes,bool>
     ["t2"]: object{ a: string, b: bytes, c: bool }
-    ["tm1"]: string => readonlytuple[string, bytes, bool]
+    ["tm1"]: string => arc4.tuple<string,bytes,bool>
     ["tm2"]: string => object{ a: string, b: bytes, c: bool }
   }
   approvalProgram(): bool
@@ -201,7 +201,7 @@ contract TupleBox
     assert(checked_maybe(box_len("t2"), comment=Box must have value) == 20)
     assert(STATE_EXISTS(Box["t1"].value))
     assert(STATE_EXISTS(Box["t2"].value))
-    Box["t1"].value: readonlytuple[string, bytes, bool] = <tuple>["hello", "world", True]
+    Box["t1"].value: arc4.tuple<string,bytes,bool> = ARC4_ENCODE(<tuple>["hello", "world", True], wtype=arc4.tuple<string,bytes,bool>)
     assert(Box["t1"].value.0 == "hello")
     assert(Box["t1"].value.1 == "world")
     assert(Box["t1"].value.2)
@@ -219,7 +219,7 @@ contract TupleBox
   {
     assert(!STATE_EXISTS(Box[BoxMapKey(prefix="tm1", key="a")].value))
     assert(!STATE_EXISTS(Box[BoxMapKey(prefix="tm2", key="a")].value))
-    Box[BoxMapKey(prefix="tm1", key="a")].value: readonlytuple[string, bytes, bool] = <tuple>["hello", "world", True]
+    Box[BoxMapKey(prefix="tm1", key="a")].value: arc4.tuple<string,bytes,bool> = ARC4_ENCODE(<tuple>["hello", "world", True], wtype=arc4.tuple<string,bytes,bool>)
     Box[BoxMapKey(prefix="tm2", key="a")].value: object{ a: string, b: bytes, c: bool } = { a: "hello", b: "world", c: True }
     assert(STATE_EXISTS(Box[BoxMapKey(prefix="tm1", key="a")].value))
     assert(Box[BoxMapKey(prefix="tm1", key="a")].value.0 == "hello")
@@ -229,7 +229,7 @@ contract TupleBox
     assert(Box[BoxMapKey(prefix="tm2", key="a")].value.a == "hello")
     assert(Box[BoxMapKey(prefix="tm2", key="a")].value.b == "world")
     assert(Box[BoxMapKey(prefix="tm2", key="a")].value.c)
-    Box[BoxMapKey(prefix="tm1", key="b")].value: readonlytuple[string, bytes, bool] = <tuple>["abc", "def", False]
+    Box[BoxMapKey(prefix="tm1", key="b")].value: arc4.tuple<string,bytes,bool> = ARC4_ENCODE(<tuple>["abc", "def", False], wtype=arc4.tuple<string,bytes,bool>)
     assert(STATE_EXISTS(Box[BoxMapKey(prefix="tm1", key="b")].value))
     Box[BoxMapKey(prefix="tm2", key="b")].value: object{ a: string, b: bytes, c: bool } = { a: "abc", b: "def", c: False }
     assert(STATE_EXISTS(Box[BoxMapKey(prefix="tm2", key="b")].value))

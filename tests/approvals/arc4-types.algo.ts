@@ -122,11 +122,9 @@ function testArrays(n: ARC4Uint64) {
 
   const myStatic2 = new StaticArray<ARC4Uint64, 3>(n, n, n)
 
-  const staticNative = myStatic2.native
-  assertMatch(staticNative, [n, n, n])
+  assertMatch(myStatic2, [n, n, n])
 
-  const dynamicNative = doubleArray.native
-  assertMatch(dynamicNative, [n, n, n, n, n, n, n, n])
+  assertMatch(doubleArray, [n, n, n, n, n, n, n, n])
 }
 
 function testByte() {

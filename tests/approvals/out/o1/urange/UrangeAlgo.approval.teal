@@ -100,25 +100,24 @@ testSingleArg_for_header@1:
     bz testSingleArg_after_for@4
     // tests/approvals/urange.algo.ts:8
     // results = [...results, i]
-    frame_dig 0
-    extract 2 0
     frame_dig 1
     dup
-    cover 2
     itob
     bytec_2 // 0x0001
     swap
     concat
     extract 2 0
-    concat
+    frame_dig 0
+    swap
+    concat // on error: max array length exceeded
     dup
+    extract 2 0
     len
     intc_1 // 8
     /
     itob
     extract 6 2
-    swap
-    concat
+    replace2 0
     frame_bury 0
     // tests/approvals/urange.algo.ts:7
     // for (const i of urange(5)) {
@@ -154,25 +153,24 @@ testTwoArg_for_header@1:
     bz testTwoArg_after_for@4
     // tests/approvals/urange.algo.ts:15
     // results = [...results, i]
-    frame_dig 0
-    extract 2 0
     frame_dig 1
     dup
-    cover 2
     itob
     bytec_2 // 0x0001
     swap
     concat
     extract 2 0
-    concat
+    frame_dig 0
+    swap
+    concat // on error: max array length exceeded
     dup
+    extract 2 0
     len
     intc_1 // 8
     /
     itob
     extract 6 2
-    swap
-    concat
+    replace2 0
     frame_bury 0
     // tests/approvals/urange.algo.ts:14
     // for (const i of urange(2, 5)) {
@@ -208,25 +206,24 @@ testThreeArg_for_header@1:
     bz testThreeArg_after_for@4
     // tests/approvals/urange.algo.ts:22
     // results = [...results, i]
-    frame_dig 0
-    extract 2 0
     frame_dig 1
     dup
-    cover 2
     itob
     bytec_2 // 0x0001
     swap
     concat
     extract 2 0
-    concat
+    frame_dig 0
+    swap
+    concat // on error: max array length exceeded
     dup
+    extract 2 0
     len
     intc_1 // 8
     /
     itob
     extract 6 2
-    swap
-    concat
+    replace2 0
     frame_bury 0
     // tests/approvals/urange.algo.ts:21
     // for (const i of urange(2, 10, 3)) {

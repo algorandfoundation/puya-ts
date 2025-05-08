@@ -948,10 +948,10 @@
                   "_type": "IntegerConstant",
                   "source_location": {
                     "file": "tests/approvals/global-state.algo.ts",
-                    "line": 15,
-                    "end_line": 15,
+                    "line": 18,
+                    "end_line": 18,
                     "column": 30,
-                    "end_column": 37
+                    "end_column": 39
                   },
                   "wtype": {
                     "_type": "WType",
@@ -2177,9 +2177,10 @@
                   "end_column": 4
                 },
                 "wtype": {
-                  "_type": "WTuple",
-                  "name": "tuple",
-                  "immutable": true,
+                  "_type": "ARC4Tuple",
+                  "name": "arc4.tuple<string,uint64,bool>",
+                  "immutable": false,
+                  "arc4_alias": null,
                   "types": [
                     {
                       "_type": "WType",
@@ -2196,7 +2197,8 @@
                       "name": "bool",
                       "immutable": true
                     }
-                  ]
+                  ],
+                  "source_location": null
                 },
                 "key": {
                   "_type": "BytesConstant",
@@ -2218,7 +2220,7 @@
                 "exists_assertion_message": "check GlobalState exists"
               },
               "value": {
-                "_type": "TupleExpression",
+                "_type": "ARC4Encode",
                 "source_location": {
                   "file": "tests/approvals/global-state.algo.ts",
                   "line": 54,
@@ -2227,9 +2229,10 @@
                   "end_column": 40
                 },
                 "wtype": {
-                  "_type": "WTuple",
-                  "name": "tuple",
-                  "immutable": true,
+                  "_type": "ARC4Tuple",
+                  "name": "arc4.tuple<string,uint64,bool>",
+                  "immutable": false,
+                  "arc4_alias": null,
                   "types": [
                     {
                       "_type": "WType",
@@ -2246,59 +2249,92 @@
                       "name": "bool",
                       "immutable": true
                     }
-                  ]
+                  ],
+                  "source_location": null
                 },
-                "items": [
-                  {
-                    "_type": "StringConstant",
-                    "source_location": {
-                      "file": "tests/approvals/global-state.algo.ts",
-                      "line": 54,
-                      "end_line": 54,
-                      "column": 21,
-                      "end_column": 28
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "string",
-                      "immutable": true
-                    },
-                    "value": "hello"
+                "value": {
+                  "_type": "TupleExpression",
+                  "source_location": {
+                    "file": "tests/approvals/global-state.algo.ts",
+                    "line": 54,
+                    "end_line": 54,
+                    "column": 20,
+                    "end_column": 40
                   },
-                  {
-                    "_type": "IntegerConstant",
-                    "source_location": {
-                      "file": "tests/approvals/global-state.algo.ts",
-                      "line": 54,
-                      "end_line": 54,
-                      "column": 30,
-                      "end_column": 33
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true
-                    },
-                    "value": 123,
-                    "teal_alias": null
+                  "wtype": {
+                    "_type": "WTuple",
+                    "name": "tuple",
+                    "immutable": true,
+                    "types": [
+                      {
+                        "_type": "WType",
+                        "name": "string",
+                        "immutable": true
+                      },
+                      {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true
+                      },
+                      {
+                        "_type": "WType",
+                        "name": "bool",
+                        "immutable": true
+                      }
+                    ]
                   },
-                  {
-                    "_type": "BoolConstant",
-                    "source_location": {
-                      "file": "tests/approvals/global-state.algo.ts",
-                      "line": 54,
-                      "end_line": 54,
-                      "column": 35,
-                      "end_column": 39
+                  "items": [
+                    {
+                      "_type": "StringConstant",
+                      "source_location": {
+                        "file": "tests/approvals/global-state.algo.ts",
+                        "line": 54,
+                        "end_line": 54,
+                        "column": 21,
+                        "end_column": 28
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "string",
+                        "immutable": true
+                      },
+                      "value": "hello"
                     },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "bool",
-                      "immutable": true
+                    {
+                      "_type": "IntegerConstant",
+                      "source_location": {
+                        "file": "tests/approvals/global-state.algo.ts",
+                        "line": 54,
+                        "end_line": 54,
+                        "column": 30,
+                        "end_column": 33
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true
+                      },
+                      "value": 123,
+                      "teal_alias": null
                     },
-                    "value": true
-                  }
-                ]
+                    {
+                      "_type": "BoolConstant",
+                      "source_location": {
+                        "file": "tests/approvals/global-state.algo.ts",
+                        "line": 54,
+                        "end_line": 54,
+                        "column": 35,
+                        "end_column": 39
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "bool",
+                        "immutable": true
+                      },
+                      "value": true
+                    }
+                  ]
+                }
               }
             },
             {
@@ -2362,9 +2398,10 @@
                         "end_column": 4
                       },
                       "wtype": {
-                        "_type": "WTuple",
-                        "name": "tuple",
-                        "immutable": true,
+                        "_type": "ARC4Tuple",
+                        "name": "arc4.tuple<string,uint64,bool>",
+                        "immutable": false,
+                        "arc4_alias": null,
                         "types": [
                           {
                             "_type": "WType",
@@ -2381,7 +2418,8 @@
                             "name": "bool",
                             "immutable": true
                           }
-                        ]
+                        ],
+                        "source_location": null
                       },
                       "key": {
                         "_type": "BytesConstant",
@@ -2486,9 +2524,10 @@
                         "end_column": 4
                       },
                       "wtype": {
-                        "_type": "WTuple",
-                        "name": "tuple",
-                        "immutable": true,
+                        "_type": "ARC4Tuple",
+                        "name": "arc4.tuple<string,uint64,bool>",
+                        "immutable": false,
+                        "arc4_alias": null,
                         "types": [
                           {
                             "_type": "WType",
@@ -2505,7 +2544,8 @@
                             "name": "bool",
                             "immutable": true
                           }
-                        ]
+                        ],
+                        "source_location": null
                       },
                       "key": {
                         "_type": "BytesConstant",
@@ -2611,9 +2651,10 @@
                         "end_column": 4
                       },
                       "wtype": {
-                        "_type": "WTuple",
-                        "name": "tuple",
-                        "immutable": true,
+                        "_type": "ARC4Tuple",
+                        "name": "arc4.tuple<string,uint64,bool>",
+                        "immutable": false,
+                        "arc4_alias": null,
                         "types": [
                           {
                             "_type": "WType",
@@ -2630,7 +2671,8 @@
                             "name": "bool",
                             "immutable": true
                           }
-                        ]
+                        ],
+                        "source_location": null
                       },
                       "key": {
                         "_type": "BytesConstant",
@@ -2693,9 +2735,10 @@
                   "end_column": 4
                 },
                 "wtype": {
-                  "_type": "WTuple",
-                  "name": "tuple",
-                  "immutable": true,
+                  "_type": "ARC4Tuple",
+                  "name": "arc4.tuple<string,arc4.tuple<string,biguint,bool>>",
+                  "immutable": false,
+                  "arc4_alias": null,
                   "types": [
                     {
                       "_type": "WType",
@@ -2703,9 +2746,10 @@
                       "immutable": true
                     },
                     {
-                      "_type": "WTuple",
-                      "name": "tuple",
-                      "immutable": true,
+                      "_type": "ARC4Tuple",
+                      "name": "arc4.tuple<string,biguint,bool>",
+                      "immutable": false,
+                      "arc4_alias": null,
                       "types": [
                         {
                           "_type": "WType",
@@ -2722,9 +2766,11 @@
                           "name": "bool",
                           "immutable": true
                         }
-                      ]
+                      ],
+                      "source_location": null
                     }
-                  ]
+                  ],
+                  "source_location": null
                 },
                 "key": {
                   "_type": "BytesConstant",
@@ -2746,7 +2792,7 @@
                 "exists_assertion_message": "check GlobalState exists"
               },
               "value": {
-                "_type": "TupleExpression",
+                "_type": "ARC4Encode",
                 "source_location": {
                   "file": "tests/approvals/global-state.algo.ts",
                   "line": 59,
@@ -2755,9 +2801,10 @@
                   "end_column": 44
                 },
                 "wtype": {
-                  "_type": "WTuple",
-                  "name": "tuple",
-                  "immutable": true,
+                  "_type": "ARC4Tuple",
+                  "name": "arc4.tuple<string,arc4.tuple<string,biguint,bool>>",
+                  "immutable": false,
+                  "arc4_alias": null,
                   "types": [
                     {
                       "_type": "WType",
@@ -2765,9 +2812,10 @@
                       "immutable": true
                     },
                     {
-                      "_type": "WTuple",
-                      "name": "tuple",
-                      "immutable": true,
+                      "_type": "ARC4Tuple",
+                      "name": "arc4.tuple<string,biguint,bool>",
+                      "immutable": false,
+                      "arc4_alias": null,
                       "types": [
                         {
                           "_type": "WType",
@@ -2784,111 +2832,193 @@
                           "name": "bool",
                           "immutable": true
                         }
-                      ]
+                      ],
+                      "source_location": null
                     }
-                  ]
+                  ],
+                  "source_location": null
                 },
-                "items": [
-                  {
-                    "_type": "StringConstant",
-                    "source_location": {
-                      "file": "tests/approvals/global-state.algo.ts",
-                      "line": 59,
-                      "end_line": 59,
-                      "column": 21,
-                      "end_column": 24
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "string",
-                      "immutable": true
-                    },
-                    "value": "a"
+                "value": {
+                  "_type": "TupleExpression",
+                  "source_location": {
+                    "file": "tests/approvals/global-state.algo.ts",
+                    "line": 59,
+                    "end_line": 59,
+                    "column": 20,
+                    "end_column": 44
                   },
-                  {
-                    "_type": "TupleExpression",
-                    "source_location": {
-                      "file": "tests/approvals/global-state.algo.ts",
-                      "line": 59,
-                      "end_line": 59,
-                      "column": 26,
-                      "end_column": 43
-                    },
-                    "wtype": {
-                      "_type": "WTuple",
-                      "name": "tuple",
-                      "immutable": true,
-                      "types": [
-                        {
-                          "_type": "WType",
-                          "name": "string",
-                          "immutable": true
-                        },
-                        {
-                          "_type": "WType",
-                          "name": "biguint",
-                          "immutable": true
-                        },
-                        {
-                          "_type": "WType",
-                          "name": "bool",
-                          "immutable": true
-                        }
-                      ]
-                    },
-                    "items": [
+                  "wtype": {
+                    "_type": "WTuple",
+                    "name": "tuple",
+                    "immutable": true,
+                    "types": [
                       {
-                        "_type": "StringConstant",
-                        "source_location": {
-                          "file": "tests/approvals/global-state.algo.ts",
-                          "line": 59,
-                          "end_line": 59,
-                          "column": 27,
-                          "end_column": 30
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "string",
-                          "immutable": true
-                        },
-                        "value": "b"
+                        "_type": "WType",
+                        "name": "string",
+                        "immutable": true
                       },
                       {
-                        "_type": "IntegerConstant",
-                        "source_location": {
-                          "file": "tests/approvals/global-state.algo.ts",
-                          "line": 59,
-                          "end_line": 59,
-                          "column": 32,
-                          "end_column": 36
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "biguint",
-                          "immutable": true
-                        },
-                        "value": 456,
-                        "teal_alias": null
-                      },
-                      {
-                        "_type": "BoolConstant",
-                        "source_location": {
-                          "file": "tests/approvals/global-state.algo.ts",
-                          "line": 59,
-                          "end_line": 59,
-                          "column": 38,
-                          "end_column": 42
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "bool",
-                          "immutable": true
-                        },
-                        "value": true
+                        "_type": "ARC4Tuple",
+                        "name": "arc4.tuple<string,biguint,bool>",
+                        "immutable": false,
+                        "arc4_alias": null,
+                        "types": [
+                          {
+                            "_type": "WType",
+                            "name": "string",
+                            "immutable": true
+                          },
+                          {
+                            "_type": "WType",
+                            "name": "biguint",
+                            "immutable": true
+                          },
+                          {
+                            "_type": "WType",
+                            "name": "bool",
+                            "immutable": true
+                          }
+                        ],
+                        "source_location": null
                       }
                     ]
-                  }
-                ]
+                  },
+                  "items": [
+                    {
+                      "_type": "StringConstant",
+                      "source_location": {
+                        "file": "tests/approvals/global-state.algo.ts",
+                        "line": 59,
+                        "end_line": 59,
+                        "column": 21,
+                        "end_column": 24
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "string",
+                        "immutable": true
+                      },
+                      "value": "a"
+                    },
+                    {
+                      "_type": "ARC4Encode",
+                      "source_location": {
+                        "file": "tests/approvals/global-state.algo.ts",
+                        "line": 59,
+                        "end_line": 59,
+                        "column": 26,
+                        "end_column": 43
+                      },
+                      "wtype": {
+                        "_type": "ARC4Tuple",
+                        "name": "arc4.tuple<string,biguint,bool>",
+                        "immutable": false,
+                        "arc4_alias": null,
+                        "types": [
+                          {
+                            "_type": "WType",
+                            "name": "string",
+                            "immutable": true
+                          },
+                          {
+                            "_type": "WType",
+                            "name": "biguint",
+                            "immutable": true
+                          },
+                          {
+                            "_type": "WType",
+                            "name": "bool",
+                            "immutable": true
+                          }
+                        ],
+                        "source_location": null
+                      },
+                      "value": {
+                        "_type": "TupleExpression",
+                        "source_location": {
+                          "file": "tests/approvals/global-state.algo.ts",
+                          "line": 59,
+                          "end_line": 59,
+                          "column": 26,
+                          "end_column": 43
+                        },
+                        "wtype": {
+                          "_type": "WTuple",
+                          "name": "tuple",
+                          "immutable": true,
+                          "types": [
+                            {
+                              "_type": "WType",
+                              "name": "string",
+                              "immutable": true
+                            },
+                            {
+                              "_type": "WType",
+                              "name": "biguint",
+                              "immutable": true
+                            },
+                            {
+                              "_type": "WType",
+                              "name": "bool",
+                              "immutable": true
+                            }
+                          ]
+                        },
+                        "items": [
+                          {
+                            "_type": "StringConstant",
+                            "source_location": {
+                              "file": "tests/approvals/global-state.algo.ts",
+                              "line": 59,
+                              "end_line": 59,
+                              "column": 27,
+                              "end_column": 30
+                            },
+                            "wtype": {
+                              "_type": "WType",
+                              "name": "string",
+                              "immutable": true
+                            },
+                            "value": "b"
+                          },
+                          {
+                            "_type": "IntegerConstant",
+                            "source_location": {
+                              "file": "tests/approvals/global-state.algo.ts",
+                              "line": 59,
+                              "end_line": 59,
+                              "column": 32,
+                              "end_column": 36
+                            },
+                            "wtype": {
+                              "_type": "WType",
+                              "name": "biguint",
+                              "immutable": true
+                            },
+                            "value": 456,
+                            "teal_alias": null
+                          },
+                          {
+                            "_type": "BoolConstant",
+                            "source_location": {
+                              "file": "tests/approvals/global-state.algo.ts",
+                              "line": 59,
+                              "end_line": 59,
+                              "column": 38,
+                              "end_column": 42
+                            },
+                            "wtype": {
+                              "_type": "WType",
+                              "name": "bool",
+                              "immutable": true
+                            },
+                            "value": true
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
               }
             },
             {
@@ -2952,9 +3082,10 @@
                         "end_column": 4
                       },
                       "wtype": {
-                        "_type": "WTuple",
-                        "name": "tuple",
-                        "immutable": true,
+                        "_type": "ARC4Tuple",
+                        "name": "arc4.tuple<string,arc4.tuple<string,biguint,bool>>",
+                        "immutable": false,
+                        "arc4_alias": null,
                         "types": [
                           {
                             "_type": "WType",
@@ -2962,9 +3093,10 @@
                             "immutable": true
                           },
                           {
-                            "_type": "WTuple",
-                            "name": "tuple",
-                            "immutable": true,
+                            "_type": "ARC4Tuple",
+                            "name": "arc4.tuple<string,biguint,bool>",
+                            "immutable": false,
+                            "arc4_alias": null,
                             "types": [
                               {
                                 "_type": "WType",
@@ -2981,9 +3113,11 @@
                                 "name": "bool",
                                 "immutable": true
                               }
-                            ]
+                            ],
+                            "source_location": null
                           }
-                        ]
+                        ],
+                        "source_location": null
                       },
                       "key": {
                         "_type": "BytesConstant",
@@ -3088,9 +3222,10 @@
                         "end_column": 27
                       },
                       "wtype": {
-                        "_type": "WTuple",
-                        "name": "tuple",
-                        "immutable": true,
+                        "_type": "ARC4Tuple",
+                        "name": "arc4.tuple<string,biguint,bool>",
+                        "immutable": false,
+                        "arc4_alias": null,
                         "types": [
                           {
                             "_type": "WType",
@@ -3107,7 +3242,8 @@
                             "name": "bool",
                             "immutable": true
                           }
-                        ]
+                        ],
+                        "source_location": null
                       },
                       "base": {
                         "_type": "AppStateExpression",
@@ -3119,9 +3255,10 @@
                           "end_column": 4
                         },
                         "wtype": {
-                          "_type": "WTuple",
-                          "name": "tuple",
-                          "immutable": true,
+                          "_type": "ARC4Tuple",
+                          "name": "arc4.tuple<string,arc4.tuple<string,biguint,bool>>",
+                          "immutable": false,
+                          "arc4_alias": null,
                           "types": [
                             {
                               "_type": "WType",
@@ -3129,9 +3266,10 @@
                               "immutable": true
                             },
                             {
-                              "_type": "WTuple",
-                              "name": "tuple",
-                              "immutable": true,
+                              "_type": "ARC4Tuple",
+                              "name": "arc4.tuple<string,biguint,bool>",
+                              "immutable": false,
+                              "arc4_alias": null,
                               "types": [
                                 {
                                   "_type": "WType",
@@ -3148,9 +3286,11 @@
                                   "name": "bool",
                                   "immutable": true
                                 }
-                              ]
+                              ],
+                              "source_location": null
                             }
-                          ]
+                          ],
+                          "source_location": null
                         },
                         "key": {
                           "_type": "BytesConstant",
@@ -3257,9 +3397,10 @@
                         "end_column": 27
                       },
                       "wtype": {
-                        "_type": "WTuple",
-                        "name": "tuple",
-                        "immutable": true,
+                        "_type": "ARC4Tuple",
+                        "name": "arc4.tuple<string,biguint,bool>",
+                        "immutable": false,
+                        "arc4_alias": null,
                         "types": [
                           {
                             "_type": "WType",
@@ -3276,7 +3417,8 @@
                             "name": "bool",
                             "immutable": true
                           }
-                        ]
+                        ],
+                        "source_location": null
                       },
                       "base": {
                         "_type": "AppStateExpression",
@@ -3288,9 +3430,10 @@
                           "end_column": 4
                         },
                         "wtype": {
-                          "_type": "WTuple",
-                          "name": "tuple",
-                          "immutable": true,
+                          "_type": "ARC4Tuple",
+                          "name": "arc4.tuple<string,arc4.tuple<string,biguint,bool>>",
+                          "immutable": false,
+                          "arc4_alias": null,
                           "types": [
                             {
                               "_type": "WType",
@@ -3298,9 +3441,10 @@
                               "immutable": true
                             },
                             {
-                              "_type": "WTuple",
-                              "name": "tuple",
-                              "immutable": true,
+                              "_type": "ARC4Tuple",
+                              "name": "arc4.tuple<string,biguint,bool>",
+                              "immutable": false,
+                              "arc4_alias": null,
                               "types": [
                                 {
                                   "_type": "WType",
@@ -3317,9 +3461,11 @@
                                   "name": "bool",
                                   "immutable": true
                                 }
-                              ]
+                              ],
+                              "source_location": null
                             }
-                          ]
+                          ],
+                          "source_location": null
                         },
                         "key": {
                           "_type": "BytesConstant",
@@ -3427,9 +3573,10 @@
                         "end_column": 27
                       },
                       "wtype": {
-                        "_type": "WTuple",
-                        "name": "tuple",
-                        "immutable": true,
+                        "_type": "ARC4Tuple",
+                        "name": "arc4.tuple<string,biguint,bool>",
+                        "immutable": false,
+                        "arc4_alias": null,
                         "types": [
                           {
                             "_type": "WType",
@@ -3446,7 +3593,8 @@
                             "name": "bool",
                             "immutable": true
                           }
-                        ]
+                        ],
+                        "source_location": null
                       },
                       "base": {
                         "_type": "AppStateExpression",
@@ -3458,9 +3606,10 @@
                           "end_column": 4
                         },
                         "wtype": {
-                          "_type": "WTuple",
-                          "name": "tuple",
-                          "immutable": true,
+                          "_type": "ARC4Tuple",
+                          "name": "arc4.tuple<string,arc4.tuple<string,biguint,bool>>",
+                          "immutable": false,
+                          "arc4_alias": null,
                           "types": [
                             {
                               "_type": "WType",
@@ -3468,9 +3617,10 @@
                               "immutable": true
                             },
                             {
-                              "_type": "WTuple",
-                              "name": "tuple",
-                              "immutable": true,
+                              "_type": "ARC4Tuple",
+                              "name": "arc4.tuple<string,biguint,bool>",
+                              "immutable": false,
+                              "arc4_alias": null,
                               "types": [
                                 {
                                   "_type": "WType",
@@ -3487,9 +3637,11 @@
                                   "name": "bool",
                                   "immutable": true
                                 }
-                              ]
+                              ],
+                              "source_location": null
                             }
-                          ]
+                          ],
+                          "source_location": null
                         },
                         "key": {
                           "_type": "BytesConstant",
@@ -4472,9 +4624,10 @@
                   "end_column": 4
                 },
                 "wtype": {
-                  "_type": "WTuple",
-                  "name": "tuple",
-                  "immutable": true,
+                  "_type": "ARC4Tuple",
+                  "name": "arc4.tuple<string,lib.d.ts::object>",
+                  "immutable": false,
+                  "arc4_alias": null,
                   "types": [
                     {
                       "_type": "WType",
@@ -4508,7 +4661,8 @@
                         "c"
                       ]
                     }
-                  ]
+                  ],
+                  "source_location": null
                 },
                 "key": {
                   "_type": "BytesConstant",
@@ -4530,7 +4684,7 @@
                 "exists_assertion_message": "check GlobalState exists"
               },
               "value": {
-                "_type": "TupleExpression",
+                "_type": "ARC4Encode",
                 "source_location": {
                   "file": "tests/approvals/global-state.algo.ts",
                   "line": 70,
@@ -4539,9 +4693,10 @@
                   "end_column": 55
                 },
                 "wtype": {
-                  "_type": "WTuple",
-                  "name": "tuple",
-                  "immutable": true,
+                  "_type": "ARC4Tuple",
+                  "name": "arc4.tuple<string,lib.d.ts::object>",
+                  "immutable": false,
+                  "arc4_alias": null,
                   "types": [
                     {
                       "_type": "WType",
@@ -4575,491 +4730,541 @@
                         "c"
                       ]
                     }
-                  ]
+                  ],
+                  "source_location": null
                 },
-                "items": [
-                  {
-                    "_type": "StringConstant",
-                    "source_location": {
-                      "file": "tests/approvals/global-state.algo.ts",
-                      "line": 70,
-                      "end_line": 70,
-                      "column": 21,
-                      "end_column": 24
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "string",
-                      "immutable": true
-                    },
-                    "value": "a"
+                "value": {
+                  "_type": "TupleExpression",
+                  "source_location": {
+                    "file": "tests/approvals/global-state.algo.ts",
+                    "line": 70,
+                    "end_line": 70,
+                    "column": 20,
+                    "end_column": 55
                   },
-                  {
-                    "_type": "TupleExpression",
-                    "source_location": {
-                      "file": "tests/approvals/global-state.algo.ts",
-                      "line": 70,
-                      "end_line": 70,
-                      "column": 26,
-                      "end_column": 54
-                    },
-                    "wtype": {
-                      "_type": "WTuple",
-                      "name": "lib.d.ts::object",
-                      "immutable": true,
-                      "types": [
-                        {
-                          "_type": "WType",
-                          "name": "string",
-                          "immutable": true
-                        },
-                        {
-                          "_type": "WType",
-                          "name": "biguint",
-                          "immutable": true
-                        },
-                        {
-                          "_type": "WType",
-                          "name": "bool",
-                          "immutable": true
-                        }
-                      ],
-                      "names": [
-                        "a",
-                        "b",
-                        "c"
-                      ]
-                    },
-                    "items": [
+                  "wtype": {
+                    "_type": "WTuple",
+                    "name": "tuple",
+                    "immutable": true,
+                    "types": [
                       {
-                        "_type": "FieldExpression",
-                        "source_location": {
-                          "file": "tests/approvals/global-state.algo.ts",
-                          "line": 70,
-                          "end_line": 70,
-                          "column": 26,
-                          "end_column": 54
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "string",
-                          "immutable": true
-                        },
-                        "base": {
-                          "_type": "SingleEvaluation",
-                          "source_location": {
-                            "file": "tests/approvals/global-state.algo.ts",
-                            "line": 70,
-                            "end_line": 70,
-                            "column": 26,
-                            "end_column": 54
-                          },
-                          "wtype": {
-                            "_type": "WTuple",
-                            "name": "lib.d.ts::object",
-                            "immutable": true,
-                            "types": [
-                              {
-                                "_type": "WType",
-                                "name": "string",
-                                "immutable": true
-                              },
-                              {
-                                "_type": "WType",
-                                "name": "biguint",
-                                "immutable": true
-                              },
-                              {
-                                "_type": "WType",
-                                "name": "bool",
-                                "immutable": true
-                              }
-                            ],
-                            "names": [
-                              "a",
-                              "b",
-                              "c"
-                            ]
-                          },
-                          "source": {
-                            "_type": "TupleExpression",
-                            "source_location": {
-                              "file": "tests/approvals/global-state.algo.ts",
-                              "line": 70,
-                              "end_line": 70,
-                              "column": 26,
-                              "end_column": 54
-                            },
-                            "wtype": {
-                              "_type": "WTuple",
-                              "name": "lib.d.ts::object",
-                              "immutable": true,
-                              "types": [
-                                {
-                                  "_type": "WType",
-                                  "name": "string",
-                                  "immutable": true
-                                },
-                                {
-                                  "_type": "WType",
-                                  "name": "biguint",
-                                  "immutable": true
-                                },
-                                {
-                                  "_type": "WType",
-                                  "name": "bool",
-                                  "immutable": true
-                                }
-                              ],
-                              "names": [
-                                "a",
-                                "b",
-                                "c"
-                              ]
-                            },
-                            "items": [
-                              {
-                                "_type": "StringConstant",
-                                "source_location": {
-                                  "file": "tests/approvals/global-state.algo.ts",
-                                  "line": 70,
-                                  "end_line": 70,
-                                  "column": 31,
-                                  "end_column": 34
-                                },
-                                "wtype": {
-                                  "_type": "WType",
-                                  "name": "string",
-                                  "immutable": true
-                                },
-                                "value": "b"
-                              },
-                              {
-                                "_type": "IntegerConstant",
-                                "source_location": {
-                                  "file": "tests/approvals/global-state.algo.ts",
-                                  "line": 70,
-                                  "end_line": 70,
-                                  "column": 39,
-                                  "end_column": 43
-                                },
-                                "wtype": {
-                                  "_type": "WType",
-                                  "name": "biguint",
-                                  "immutable": true
-                                },
-                                "value": 456,
-                                "teal_alias": null
-                              },
-                              {
-                                "_type": "BoolConstant",
-                                "source_location": {
-                                  "file": "tests/approvals/global-state.algo.ts",
-                                  "line": 70,
-                                  "end_line": 70,
-                                  "column": 48,
-                                  "end_column": 52
-                                },
-                                "wtype": {
-                                  "_type": "WType",
-                                  "name": "bool",
-                                  "immutable": true
-                                },
-                                "value": true
-                              }
-                            ]
-                          },
-                          "_id": "1"
-                        },
-                        "name": "a"
+                        "_type": "WType",
+                        "name": "string",
+                        "immutable": true
                       },
                       {
-                        "_type": "FieldExpression",
-                        "source_location": {
-                          "file": "tests/approvals/global-state.algo.ts",
-                          "line": 70,
-                          "end_line": 70,
-                          "column": 26,
-                          "end_column": 54
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "biguint",
-                          "immutable": true
-                        },
-                        "base": {
-                          "_type": "SingleEvaluation",
-                          "source_location": {
-                            "file": "tests/approvals/global-state.algo.ts",
-                            "line": 70,
-                            "end_line": 70,
-                            "column": 26,
-                            "end_column": 54
+                        "_type": "WTuple",
+                        "name": "lib.d.ts::object",
+                        "immutable": true,
+                        "types": [
+                          {
+                            "_type": "WType",
+                            "name": "string",
+                            "immutable": true
                           },
-                          "wtype": {
-                            "_type": "WTuple",
-                            "name": "lib.d.ts::object",
-                            "immutable": true,
-                            "types": [
-                              {
-                                "_type": "WType",
-                                "name": "string",
-                                "immutable": true
-                              },
-                              {
-                                "_type": "WType",
-                                "name": "biguint",
-                                "immutable": true
-                              },
-                              {
-                                "_type": "WType",
-                                "name": "bool",
-                                "immutable": true
-                              }
-                            ],
-                            "names": [
-                              "a",
-                              "b",
-                              "c"
-                            ]
+                          {
+                            "_type": "WType",
+                            "name": "biguint",
+                            "immutable": true
                           },
-                          "source": {
-                            "_type": "TupleExpression",
-                            "source_location": {
-                              "file": "tests/approvals/global-state.algo.ts",
-                              "line": 70,
-                              "end_line": 70,
-                              "column": 26,
-                              "end_column": 54
-                            },
-                            "wtype": {
-                              "_type": "WTuple",
-                              "name": "lib.d.ts::object",
-                              "immutable": true,
-                              "types": [
-                                {
-                                  "_type": "WType",
-                                  "name": "string",
-                                  "immutable": true
-                                },
-                                {
-                                  "_type": "WType",
-                                  "name": "biguint",
-                                  "immutable": true
-                                },
-                                {
-                                  "_type": "WType",
-                                  "name": "bool",
-                                  "immutable": true
-                                }
-                              ],
-                              "names": [
-                                "a",
-                                "b",
-                                "c"
-                              ]
-                            },
-                            "items": [
-                              {
-                                "_type": "StringConstant",
-                                "source_location": {
-                                  "file": "tests/approvals/global-state.algo.ts",
-                                  "line": 70,
-                                  "end_line": 70,
-                                  "column": 31,
-                                  "end_column": 34
-                                },
-                                "wtype": {
-                                  "_type": "WType",
-                                  "name": "string",
-                                  "immutable": true
-                                },
-                                "value": "b"
-                              },
-                              {
-                                "_type": "IntegerConstant",
-                                "source_location": {
-                                  "file": "tests/approvals/global-state.algo.ts",
-                                  "line": 70,
-                                  "end_line": 70,
-                                  "column": 39,
-                                  "end_column": 43
-                                },
-                                "wtype": {
-                                  "_type": "WType",
-                                  "name": "biguint",
-                                  "immutable": true
-                                },
-                                "value": 456,
-                                "teal_alias": null
-                              },
-                              {
-                                "_type": "BoolConstant",
-                                "source_location": {
-                                  "file": "tests/approvals/global-state.algo.ts",
-                                  "line": 70,
-                                  "end_line": 70,
-                                  "column": 48,
-                                  "end_column": 52
-                                },
-                                "wtype": {
-                                  "_type": "WType",
-                                  "name": "bool",
-                                  "immutable": true
-                                },
-                                "value": true
-                              }
-                            ]
-                          },
-                          "_id": "1"
-                        },
-                        "name": "b"
-                      },
-                      {
-                        "_type": "FieldExpression",
-                        "source_location": {
-                          "file": "tests/approvals/global-state.algo.ts",
-                          "line": 70,
-                          "end_line": 70,
-                          "column": 26,
-                          "end_column": 54
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "bool",
-                          "immutable": true
-                        },
-                        "base": {
-                          "_type": "SingleEvaluation",
-                          "source_location": {
-                            "file": "tests/approvals/global-state.algo.ts",
-                            "line": 70,
-                            "end_line": 70,
-                            "column": 26,
-                            "end_column": 54
-                          },
-                          "wtype": {
-                            "_type": "WTuple",
-                            "name": "lib.d.ts::object",
-                            "immutable": true,
-                            "types": [
-                              {
-                                "_type": "WType",
-                                "name": "string",
-                                "immutable": true
-                              },
-                              {
-                                "_type": "WType",
-                                "name": "biguint",
-                                "immutable": true
-                              },
-                              {
-                                "_type": "WType",
-                                "name": "bool",
-                                "immutable": true
-                              }
-                            ],
-                            "names": [
-                              "a",
-                              "b",
-                              "c"
-                            ]
-                          },
-                          "source": {
-                            "_type": "TupleExpression",
-                            "source_location": {
-                              "file": "tests/approvals/global-state.algo.ts",
-                              "line": 70,
-                              "end_line": 70,
-                              "column": 26,
-                              "end_column": 54
-                            },
-                            "wtype": {
-                              "_type": "WTuple",
-                              "name": "lib.d.ts::object",
-                              "immutable": true,
-                              "types": [
-                                {
-                                  "_type": "WType",
-                                  "name": "string",
-                                  "immutable": true
-                                },
-                                {
-                                  "_type": "WType",
-                                  "name": "biguint",
-                                  "immutable": true
-                                },
-                                {
-                                  "_type": "WType",
-                                  "name": "bool",
-                                  "immutable": true
-                                }
-                              ],
-                              "names": [
-                                "a",
-                                "b",
-                                "c"
-                              ]
-                            },
-                            "items": [
-                              {
-                                "_type": "StringConstant",
-                                "source_location": {
-                                  "file": "tests/approvals/global-state.algo.ts",
-                                  "line": 70,
-                                  "end_line": 70,
-                                  "column": 31,
-                                  "end_column": 34
-                                },
-                                "wtype": {
-                                  "_type": "WType",
-                                  "name": "string",
-                                  "immutable": true
-                                },
-                                "value": "b"
-                              },
-                              {
-                                "_type": "IntegerConstant",
-                                "source_location": {
-                                  "file": "tests/approvals/global-state.algo.ts",
-                                  "line": 70,
-                                  "end_line": 70,
-                                  "column": 39,
-                                  "end_column": 43
-                                },
-                                "wtype": {
-                                  "_type": "WType",
-                                  "name": "biguint",
-                                  "immutable": true
-                                },
-                                "value": 456,
-                                "teal_alias": null
-                              },
-                              {
-                                "_type": "BoolConstant",
-                                "source_location": {
-                                  "file": "tests/approvals/global-state.algo.ts",
-                                  "line": 70,
-                                  "end_line": 70,
-                                  "column": 48,
-                                  "end_column": 52
-                                },
-                                "wtype": {
-                                  "_type": "WType",
-                                  "name": "bool",
-                                  "immutable": true
-                                },
-                                "value": true
-                              }
-                            ]
-                          },
-                          "_id": "1"
-                        },
-                        "name": "c"
+                          {
+                            "_type": "WType",
+                            "name": "bool",
+                            "immutable": true
+                          }
+                        ],
+                        "names": [
+                          "a",
+                          "b",
+                          "c"
+                        ]
                       }
                     ]
-                  }
-                ]
+                  },
+                  "items": [
+                    {
+                      "_type": "StringConstant",
+                      "source_location": {
+                        "file": "tests/approvals/global-state.algo.ts",
+                        "line": 70,
+                        "end_line": 70,
+                        "column": 21,
+                        "end_column": 24
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "string",
+                        "immutable": true
+                      },
+                      "value": "a"
+                    },
+                    {
+                      "_type": "TupleExpression",
+                      "source_location": {
+                        "file": "tests/approvals/global-state.algo.ts",
+                        "line": 70,
+                        "end_line": 70,
+                        "column": 26,
+                        "end_column": 54
+                      },
+                      "wtype": {
+                        "_type": "WTuple",
+                        "name": "lib.d.ts::object",
+                        "immutable": true,
+                        "types": [
+                          {
+                            "_type": "WType",
+                            "name": "string",
+                            "immutable": true
+                          },
+                          {
+                            "_type": "WType",
+                            "name": "biguint",
+                            "immutable": true
+                          },
+                          {
+                            "_type": "WType",
+                            "name": "bool",
+                            "immutable": true
+                          }
+                        ],
+                        "names": [
+                          "a",
+                          "b",
+                          "c"
+                        ]
+                      },
+                      "items": [
+                        {
+                          "_type": "FieldExpression",
+                          "source_location": {
+                            "file": "tests/approvals/global-state.algo.ts",
+                            "line": 70,
+                            "end_line": 70,
+                            "column": 26,
+                            "end_column": 54
+                          },
+                          "wtype": {
+                            "_type": "WType",
+                            "name": "string",
+                            "immutable": true
+                          },
+                          "base": {
+                            "_type": "SingleEvaluation",
+                            "source_location": {
+                              "file": "tests/approvals/global-state.algo.ts",
+                              "line": 70,
+                              "end_line": 70,
+                              "column": 26,
+                              "end_column": 54
+                            },
+                            "wtype": {
+                              "_type": "WTuple",
+                              "name": "lib.d.ts::object",
+                              "immutable": true,
+                              "types": [
+                                {
+                                  "_type": "WType",
+                                  "name": "string",
+                                  "immutable": true
+                                },
+                                {
+                                  "_type": "WType",
+                                  "name": "biguint",
+                                  "immutable": true
+                                },
+                                {
+                                  "_type": "WType",
+                                  "name": "bool",
+                                  "immutable": true
+                                }
+                              ],
+                              "names": [
+                                "a",
+                                "b",
+                                "c"
+                              ]
+                            },
+                            "source": {
+                              "_type": "TupleExpression",
+                              "source_location": {
+                                "file": "tests/approvals/global-state.algo.ts",
+                                "line": 70,
+                                "end_line": 70,
+                                "column": 26,
+                                "end_column": 54
+                              },
+                              "wtype": {
+                                "_type": "WTuple",
+                                "name": "lib.d.ts::object",
+                                "immutable": true,
+                                "types": [
+                                  {
+                                    "_type": "WType",
+                                    "name": "string",
+                                    "immutable": true
+                                  },
+                                  {
+                                    "_type": "WType",
+                                    "name": "biguint",
+                                    "immutable": true
+                                  },
+                                  {
+                                    "_type": "WType",
+                                    "name": "bool",
+                                    "immutable": true
+                                  }
+                                ],
+                                "names": [
+                                  "a",
+                                  "b",
+                                  "c"
+                                ]
+                              },
+                              "items": [
+                                {
+                                  "_type": "StringConstant",
+                                  "source_location": {
+                                    "file": "tests/approvals/global-state.algo.ts",
+                                    "line": 70,
+                                    "end_line": 70,
+                                    "column": 31,
+                                    "end_column": 34
+                                  },
+                                  "wtype": {
+                                    "_type": "WType",
+                                    "name": "string",
+                                    "immutable": true
+                                  },
+                                  "value": "b"
+                                },
+                                {
+                                  "_type": "IntegerConstant",
+                                  "source_location": {
+                                    "file": "tests/approvals/global-state.algo.ts",
+                                    "line": 70,
+                                    "end_line": 70,
+                                    "column": 39,
+                                    "end_column": 43
+                                  },
+                                  "wtype": {
+                                    "_type": "WType",
+                                    "name": "biguint",
+                                    "immutable": true
+                                  },
+                                  "value": 456,
+                                  "teal_alias": null
+                                },
+                                {
+                                  "_type": "BoolConstant",
+                                  "source_location": {
+                                    "file": "tests/approvals/global-state.algo.ts",
+                                    "line": 70,
+                                    "end_line": 70,
+                                    "column": 48,
+                                    "end_column": 52
+                                  },
+                                  "wtype": {
+                                    "_type": "WType",
+                                    "name": "bool",
+                                    "immutable": true
+                                  },
+                                  "value": true
+                                }
+                              ]
+                            },
+                            "_id": "1"
+                          },
+                          "name": "a"
+                        },
+                        {
+                          "_type": "FieldExpression",
+                          "source_location": {
+                            "file": "tests/approvals/global-state.algo.ts",
+                            "line": 70,
+                            "end_line": 70,
+                            "column": 26,
+                            "end_column": 54
+                          },
+                          "wtype": {
+                            "_type": "WType",
+                            "name": "biguint",
+                            "immutable": true
+                          },
+                          "base": {
+                            "_type": "SingleEvaluation",
+                            "source_location": {
+                              "file": "tests/approvals/global-state.algo.ts",
+                              "line": 70,
+                              "end_line": 70,
+                              "column": 26,
+                              "end_column": 54
+                            },
+                            "wtype": {
+                              "_type": "WTuple",
+                              "name": "lib.d.ts::object",
+                              "immutable": true,
+                              "types": [
+                                {
+                                  "_type": "WType",
+                                  "name": "string",
+                                  "immutable": true
+                                },
+                                {
+                                  "_type": "WType",
+                                  "name": "biguint",
+                                  "immutable": true
+                                },
+                                {
+                                  "_type": "WType",
+                                  "name": "bool",
+                                  "immutable": true
+                                }
+                              ],
+                              "names": [
+                                "a",
+                                "b",
+                                "c"
+                              ]
+                            },
+                            "source": {
+                              "_type": "TupleExpression",
+                              "source_location": {
+                                "file": "tests/approvals/global-state.algo.ts",
+                                "line": 70,
+                                "end_line": 70,
+                                "column": 26,
+                                "end_column": 54
+                              },
+                              "wtype": {
+                                "_type": "WTuple",
+                                "name": "lib.d.ts::object",
+                                "immutable": true,
+                                "types": [
+                                  {
+                                    "_type": "WType",
+                                    "name": "string",
+                                    "immutable": true
+                                  },
+                                  {
+                                    "_type": "WType",
+                                    "name": "biguint",
+                                    "immutable": true
+                                  },
+                                  {
+                                    "_type": "WType",
+                                    "name": "bool",
+                                    "immutable": true
+                                  }
+                                ],
+                                "names": [
+                                  "a",
+                                  "b",
+                                  "c"
+                                ]
+                              },
+                              "items": [
+                                {
+                                  "_type": "StringConstant",
+                                  "source_location": {
+                                    "file": "tests/approvals/global-state.algo.ts",
+                                    "line": 70,
+                                    "end_line": 70,
+                                    "column": 31,
+                                    "end_column": 34
+                                  },
+                                  "wtype": {
+                                    "_type": "WType",
+                                    "name": "string",
+                                    "immutable": true
+                                  },
+                                  "value": "b"
+                                },
+                                {
+                                  "_type": "IntegerConstant",
+                                  "source_location": {
+                                    "file": "tests/approvals/global-state.algo.ts",
+                                    "line": 70,
+                                    "end_line": 70,
+                                    "column": 39,
+                                    "end_column": 43
+                                  },
+                                  "wtype": {
+                                    "_type": "WType",
+                                    "name": "biguint",
+                                    "immutable": true
+                                  },
+                                  "value": 456,
+                                  "teal_alias": null
+                                },
+                                {
+                                  "_type": "BoolConstant",
+                                  "source_location": {
+                                    "file": "tests/approvals/global-state.algo.ts",
+                                    "line": 70,
+                                    "end_line": 70,
+                                    "column": 48,
+                                    "end_column": 52
+                                  },
+                                  "wtype": {
+                                    "_type": "WType",
+                                    "name": "bool",
+                                    "immutable": true
+                                  },
+                                  "value": true
+                                }
+                              ]
+                            },
+                            "_id": "1"
+                          },
+                          "name": "b"
+                        },
+                        {
+                          "_type": "FieldExpression",
+                          "source_location": {
+                            "file": "tests/approvals/global-state.algo.ts",
+                            "line": 70,
+                            "end_line": 70,
+                            "column": 26,
+                            "end_column": 54
+                          },
+                          "wtype": {
+                            "_type": "WType",
+                            "name": "bool",
+                            "immutable": true
+                          },
+                          "base": {
+                            "_type": "SingleEvaluation",
+                            "source_location": {
+                              "file": "tests/approvals/global-state.algo.ts",
+                              "line": 70,
+                              "end_line": 70,
+                              "column": 26,
+                              "end_column": 54
+                            },
+                            "wtype": {
+                              "_type": "WTuple",
+                              "name": "lib.d.ts::object",
+                              "immutable": true,
+                              "types": [
+                                {
+                                  "_type": "WType",
+                                  "name": "string",
+                                  "immutable": true
+                                },
+                                {
+                                  "_type": "WType",
+                                  "name": "biguint",
+                                  "immutable": true
+                                },
+                                {
+                                  "_type": "WType",
+                                  "name": "bool",
+                                  "immutable": true
+                                }
+                              ],
+                              "names": [
+                                "a",
+                                "b",
+                                "c"
+                              ]
+                            },
+                            "source": {
+                              "_type": "TupleExpression",
+                              "source_location": {
+                                "file": "tests/approvals/global-state.algo.ts",
+                                "line": 70,
+                                "end_line": 70,
+                                "column": 26,
+                                "end_column": 54
+                              },
+                              "wtype": {
+                                "_type": "WTuple",
+                                "name": "lib.d.ts::object",
+                                "immutable": true,
+                                "types": [
+                                  {
+                                    "_type": "WType",
+                                    "name": "string",
+                                    "immutable": true
+                                  },
+                                  {
+                                    "_type": "WType",
+                                    "name": "biguint",
+                                    "immutable": true
+                                  },
+                                  {
+                                    "_type": "WType",
+                                    "name": "bool",
+                                    "immutable": true
+                                  }
+                                ],
+                                "names": [
+                                  "a",
+                                  "b",
+                                  "c"
+                                ]
+                              },
+                              "items": [
+                                {
+                                  "_type": "StringConstant",
+                                  "source_location": {
+                                    "file": "tests/approvals/global-state.algo.ts",
+                                    "line": 70,
+                                    "end_line": 70,
+                                    "column": 31,
+                                    "end_column": 34
+                                  },
+                                  "wtype": {
+                                    "_type": "WType",
+                                    "name": "string",
+                                    "immutable": true
+                                  },
+                                  "value": "b"
+                                },
+                                {
+                                  "_type": "IntegerConstant",
+                                  "source_location": {
+                                    "file": "tests/approvals/global-state.algo.ts",
+                                    "line": 70,
+                                    "end_line": 70,
+                                    "column": 39,
+                                    "end_column": 43
+                                  },
+                                  "wtype": {
+                                    "_type": "WType",
+                                    "name": "biguint",
+                                    "immutable": true
+                                  },
+                                  "value": 456,
+                                  "teal_alias": null
+                                },
+                                {
+                                  "_type": "BoolConstant",
+                                  "source_location": {
+                                    "file": "tests/approvals/global-state.algo.ts",
+                                    "line": 70,
+                                    "end_line": 70,
+                                    "column": 48,
+                                    "end_column": 52
+                                  },
+                                  "wtype": {
+                                    "_type": "WType",
+                                    "name": "bool",
+                                    "immutable": true
+                                  },
+                                  "value": true
+                                }
+                              ]
+                            },
+                            "_id": "1"
+                          },
+                          "name": "c"
+                        }
+                      ]
+                    }
+                  ]
+                }
               }
             },
             {
@@ -5123,9 +5328,10 @@
                         "end_column": 4
                       },
                       "wtype": {
-                        "_type": "WTuple",
-                        "name": "tuple",
-                        "immutable": true,
+                        "_type": "ARC4Tuple",
+                        "name": "arc4.tuple<string,lib.d.ts::object>",
+                        "immutable": false,
+                        "arc4_alias": null,
                         "types": [
                           {
                             "_type": "WType",
@@ -5159,7 +5365,8 @@
                               "c"
                             ]
                           }
-                        ]
+                        ],
+                        "source_location": null
                       },
                       "key": {
                         "_type": "BytesConstant",
@@ -5300,9 +5507,10 @@
                           "end_column": 4
                         },
                         "wtype": {
-                          "_type": "WTuple",
-                          "name": "tuple",
-                          "immutable": true,
+                          "_type": "ARC4Tuple",
+                          "name": "arc4.tuple<string,lib.d.ts::object>",
+                          "immutable": false,
+                          "arc4_alias": null,
                           "types": [
                             {
                               "_type": "WType",
@@ -5336,7 +5544,8 @@
                                 "c"
                               ]
                             }
-                          ]
+                          ],
+                          "source_location": null
                         },
                         "key": {
                           "_type": "BytesConstant",
@@ -5479,9 +5688,10 @@
                           "end_column": 4
                         },
                         "wtype": {
-                          "_type": "WTuple",
-                          "name": "tuple",
-                          "immutable": true,
+                          "_type": "ARC4Tuple",
+                          "name": "arc4.tuple<string,lib.d.ts::object>",
+                          "immutable": false,
+                          "arc4_alias": null,
                           "types": [
                             {
                               "_type": "WType",
@@ -5515,7 +5725,8 @@
                                 "c"
                               ]
                             }
-                          ]
+                          ],
+                          "source_location": null
                         },
                         "key": {
                           "_type": "BytesConstant",
@@ -5659,9 +5870,10 @@
                           "end_column": 4
                         },
                         "wtype": {
-                          "_type": "WTuple",
-                          "name": "tuple",
-                          "immutable": true,
+                          "_type": "ARC4Tuple",
+                          "name": "arc4.tuple<string,lib.d.ts::object>",
+                          "immutable": false,
+                          "arc4_alias": null,
                           "types": [
                             {
                               "_type": "WType",
@@ -5695,7 +5907,8 @@
                                 "c"
                               ]
                             }
-                          ]
+                          ],
+                          "source_location": null
                         },
                         "key": {
                           "_type": "BytesConstant",
@@ -5838,9 +6051,10 @@
         "member_name": "t1",
         "kind": 1,
         "storage_wtype": {
-          "_type": "WTuple",
-          "name": "tuple",
-          "immutable": true,
+          "_type": "ARC4Tuple",
+          "name": "arc4.tuple<string,uint64,bool>",
+          "immutable": false,
+          "arc4_alias": null,
           "types": [
             {
               "_type": "WType",
@@ -5857,7 +6071,8 @@
               "name": "bool",
               "immutable": true
             }
-          ]
+          ],
+          "source_location": null
         },
         "key_wtype": null,
         "key": {
@@ -5891,9 +6106,10 @@
         "member_name": "t2",
         "kind": 1,
         "storage_wtype": {
-          "_type": "WTuple",
-          "name": "tuple",
-          "immutable": true,
+          "_type": "ARC4Tuple",
+          "name": "arc4.tuple<string,arc4.tuple<string,biguint,bool>>",
+          "immutable": false,
+          "arc4_alias": null,
           "types": [
             {
               "_type": "WType",
@@ -5901,9 +6117,10 @@
               "immutable": true
             },
             {
-              "_type": "WTuple",
-              "name": "tuple",
-              "immutable": true,
+              "_type": "ARC4Tuple",
+              "name": "arc4.tuple<string,biguint,bool>",
+              "immutable": false,
+              "arc4_alias": null,
               "types": [
                 {
                   "_type": "WType",
@@ -5920,9 +6137,11 @@
                   "name": "bool",
                   "immutable": true
                 }
-              ]
+              ],
+              "source_location": null
             }
-          ]
+          ],
+          "source_location": null
         },
         "key_wtype": null,
         "key": {
@@ -6014,9 +6233,10 @@
         "member_name": "t4",
         "kind": 1,
         "storage_wtype": {
-          "_type": "WTuple",
-          "name": "tuple",
-          "immutable": true,
+          "_type": "ARC4Tuple",
+          "name": "arc4.tuple<string,lib.d.ts::object>",
+          "immutable": false,
+          "arc4_alias": null,
           "types": [
             {
               "_type": "WType",
@@ -6050,7 +6270,8 @@
                 "c"
               ]
             }
-          ]
+          ],
+          "source_location": null
         },
         "key_wtype": null,
         "key": {

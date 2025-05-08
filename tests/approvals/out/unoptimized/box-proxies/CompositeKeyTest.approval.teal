@@ -52,12 +52,12 @@ main_test_route@3:
     dup
     intc_0 // 0
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     swap
     intc_1 // 8
     dup
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     txna ApplicationArgs 2
     extract 2 0
@@ -102,19 +102,17 @@ test:
     proto 3 0
 
 test_block@0:
-    // tests/approvals/box-proxies.algo.ts:241
-    // test(key: { a: uint64; b: uint64 }, val: string) {
-    frame_dig -3
-    itob
-    frame_dig -2
-    itob
-    swap
     // tests/approvals/box-proxies.algo.ts:242
     // this.boxMap(key).value = val
+    frame_dig -3
+    itob
     pushbytes 0x
     swap
     concat
-    swap
+    frame_dig -2
+    itob
+    concat
+    pushbytes 0x
     concat
     // tests/approvals/box-proxies.algo.ts:239
     // boxMap = BoxMap<{ a: uint64; b: uint64 }, string>({ keyPrefix: '' })

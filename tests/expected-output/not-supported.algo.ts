@@ -24,7 +24,7 @@ function test2(x: uint): uint {
     return x * 10
   }
 
-  // @expect-error Expected expression of type uint64, got never
+  // @expect-error Cannot resolve expression of type never to uint64
   return x
 }
 
@@ -66,7 +66,7 @@ function notNull(): uint64 {
   // @expect-error Union types are not valid as a variable, parameter, return, or property type. Expression type is uint64 | undefined
   const x: uint64 | undefined = 123
 
-  // @expect-error Not Supported: non null assertions
+  // @expect-error The non-null assertion operator "!" is not valid here...
   return x!
 }
 

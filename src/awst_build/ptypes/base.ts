@@ -1,12 +1,25 @@
+import type { SourceLocation } from '../../awst/source-location'
 import { wtypes } from '../../awst/wtypes'
 import { CodeError } from '../../errors'
 import type { DeliberateAny } from '../../typescript-helpers'
 import { zipStrict } from '../../util'
 
+const PTypeId = Symbol('PTypeId')
+
 /**
  * Represents a public type visible to a developer of AlgoTS
  */
 export abstract class PType {
+  static readonly IdSymbol: typeof PTypeId = PTypeId
+  /**
+   * Since TypeScript is structurally typed, different PTypes with compatible
+   * structures will often be assignable to one and another and this is generally
+   * not desirable. The PTypeId property should be used to declare a literal value
+   * (usually the class name) on each distinct PType class to ensure they are
+   * structurally different.
+   */
+  abstract readonly [PTypeId]: string
+
   /**
    * Get the associated wtype for this ptype if applicable
    */
@@ -23,6 +36,20 @@ export abstract class PType {
   abstract readonly module: string
 
   abstract readonly singleton: boolean
+
+  /**
+   * Return the type that would result from accessing the specified index of a value of this type.
+   *
+   * @param index
+   * @param sourceLocation
+   */
+  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType | undefined {
+    throw new CodeError(`${this.name} is not indexable by ${typeof index === 'bigint' ? 'number' : 'string'}`, { sourceLocation })
+  }
+
+  getIteratorType(): PType | undefined {
+    return undefined
+  }
 
   get fullName() {
     return `${this.module}::${this.name}`
@@ -44,7 +71,7 @@ export abstract class PType {
   }
 
   static equals(other: PType): boolean {
-    return other instanceof this
+    return other.constructor === this
   }
 
   equalsOrInstanceOf(other: PTypeOrClass): boolean {
@@ -65,10 +92,15 @@ export abstract class PType {
   }
 }
 
+export interface ABIType {
+  readonly abiTypeSignature: string
+}
+
 export class GenericPType<T extends PType = PType> extends PType {
+  readonly [PTypeId] = 'GenericPType'
   readonly name: string
   readonly module: string
-  readonly singleton = false
+  readonly singleton = true
   readonly wtype = undefined
   readonly parameterise: (typeArgs: readonly PType[]) => T
   constructor(props: { name: string; module: string; parameterise: (typeArgs: readonly PType[]) => T }) {
@@ -82,7 +114,7 @@ export class GenericPType<T extends PType = PType> extends PType {
 export type PTypeOrClass = PType | { new (...args: DeliberateAny[]): PType; equals(other: PType): boolean }
 
 function ptypesAreEqual(left: PType, right: PType): boolean {
-  if (!(right instanceof left.constructor)) {
+  if (right.constructor !== left.constructor) {
     return false
   }
   return compareProperties(left, right)

@@ -45,7 +45,7 @@ export abstract class ReferenceTypeExpressionBuilder extends InstanceExpressionB
         opCode: this.options.fieldOpCode,
         immediates: [immediate],
         stackArgs: [this.resolve()],
-        wtype: new wtypes.WTuple({ types: [resultType.wtypeOrThrow, wtypes.boolWType], immutable: true }),
+        wtype: new wtypes.WTuple({ types: [resultType.wtypeOrThrow, wtypes.boolWType] }),
         sourceLocation,
       })
       return instanceEb(nodeFactory.checkedMaybe({ expr: op, comment: this.options.fieldBoolComment }), resultType)

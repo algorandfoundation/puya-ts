@@ -25,22 +25,20 @@ main_while_top@2:
     b main_while_top@2
 
 main_after_while@8:
-    // tests/approvals/arc4-types.algo.ts:140
+    // tests/approvals/arc4-types.algo.ts:138
     // const b = new Address(Txn.sender)
     txn Sender
-    // tests/approvals/arc4-types.algo.ts:142
+    // tests/approvals/arc4-types.algo.ts:140
     // assert(b.native === Txn.sender)
     dupn 2
     ==
     assert
-    // tests/approvals/arc4-types.algo.ts:139
-    // const a = new Address()
-    pushbytes base32(AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA) // addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ
-    // tests/approvals/arc4-types.algo.ts:144
+    // tests/approvals/arc4-types.algo.ts:142
     // assert(a !== b, 'Zero address should not match sender')
+    pushbytes base32(AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA) // addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ
     !=
     assert // Zero address should not match sender
-    // tests/approvals/arc4-types.algo.ts:179
+    // tests/approvals/arc4-types.algo.ts:177
     // return true
     pushint 1 // 1
     return

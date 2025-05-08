@@ -15,32 +15,36 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%5#0: uint64 = (txn ApplicationID)
         let tmp%6#0: bool = (!= tmp%5#0 0u)
         (assert tmp%6#0) // can only call when not creating
-        let to_encode%0#0: bool = tests/approvals/arc4-method-selector.algo.ts::ContractOne.test()
-        let encoded_bool%0#0: bytes[1] = (setbit 0x00 0u to_encode%0#0)
-        let tmp%7#0: bytes = (concat 0x151f7c75 encoded_bool%0#0)
-        (log tmp%7#0)
+        let tmp%7#0: bool = tests/approvals/arc4-method-selector.algo.ts::ContractOne.test()
+        let array%encoded_bool%0#1: bytes[1] = (setbit 0x00 0u tmp%7#0)
+        let array%as_Encoded(bool8)%0#1: Encoded(bool8) = array%encoded_bool%0#1
+        let tmp%8#0: Encoded(bool8) = array%as_Encoded(bool8)%0#1
+        let tmp%9#0: bytes = (concat 0x151f7c75 tmp%8#0)
+        (log tmp%9#0)
         let tests/approvals/arc4-method-selector.algo.ts::ContractOne.__puya_arc4_router__%0#0: bool = 1u
         goto block@13
     block@4: // someMethod_route_L9
-        let tmp%8#0: uint64 = (txn OnCompletion)
-        let tmp%9#0: bool = (== tmp%8#0 NoOp)
-        (assert tmp%9#0) // OnCompletion is not NoOp
-        let tmp%10#0: uint64 = (txn ApplicationID)
-        let tmp%11#0: bool = (!= tmp%10#0 0u)
-        (assert tmp%11#0) // can only call when not creating
-        let to_encode%1#0: uint64 = tests/approvals/arc4-method-selector.algo.ts::ContractOne.someMethod()
-        let val_as_bytes%0#0: bytes[8] = (itob to_encode%1#0)
-        let tmp%12#0: bytes = (concat 0x151f7c75 val_as_bytes%0#0)
-        (log tmp%12#0)
+        let tmp%10#0: uint64 = (txn OnCompletion)
+        let tmp%11#0: bool = (== tmp%10#0 NoOp)
+        (assert tmp%11#0) // OnCompletion is not NoOp
+        let tmp%12#0: uint64 = (txn ApplicationID)
+        let tmp%13#0: bool = (!= tmp%12#0 0u)
+        (assert tmp%13#0) // can only call when not creating
+        let tmp%14#0: uint64 = tests/approvals/arc4-method-selector.algo.ts::ContractOne.someMethod()
+        let array%val_as_bytes%0#1: bytes[8] = (itob tmp%14#0)
+        let array%as_Encoded(uint64)%0#1: Encoded(uint64) = array%val_as_bytes%0#1
+        let tmp%15#0: Encoded(uint64) = array%as_Encoded(uint64)%0#1
+        let tmp%16#0: bytes = (concat 0x151f7c75 tmp%15#0)
+        (log tmp%16#0)
         let tests/approvals/arc4-method-selector.algo.ts::ContractOne.__puya_arc4_router__%0#1: bool = 1u
         goto block@13
     block@5: // test2_route_L13
-        let tmp%13#0: uint64 = (txn OnCompletion)
-        let tmp%14#0: bool = (== tmp%13#0 NoOp)
-        (assert tmp%14#0) // OnCompletion is not NoOp
-        let tmp%15#0: uint64 = (txn ApplicationID)
-        let tmp%16#0: bool = (!= tmp%15#0 0u)
-        (assert tmp%16#0) // can only call when not creating
+        let tmp%17#0: uint64 = (txn OnCompletion)
+        let tmp%18#0: bool = (== tmp%17#0 NoOp)
+        (assert tmp%18#0) // OnCompletion is not NoOp
+        let tmp%19#0: uint64 = (txn ApplicationID)
+        let tmp%20#0: bool = (!= tmp%19#0 0u)
+        (assert tmp%20#0) // can only call when not creating
         tests/approvals/arc4-method-selector.algo.ts::ContractOne.test2()
         let tests/approvals/arc4-method-selector.algo.ts::ContractOne.__puya_arc4_router__%0#2: bool = 1u
         goto block@13
@@ -49,12 +53,12 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@7: // switch_case_next_L5
         goto block@12
     block@8: // bare_routing_L5
-        let tmp%17#0: uint64 = (txn OnCompletion)
-        switch tmp%17#0 {0u => block@9, * => block@10}
+        let tmp%21#0: uint64 = (txn OnCompletion)
+        switch tmp%21#0 {0u => block@9, * => block@10}
     block@9: // __algots__.defaultCreate_L5
-        let tmp%18#0: uint64 = (txn ApplicationID)
-        let tmp%19#0: bool = (== tmp%18#0 0u)
-        (assert tmp%19#0) // can only call when creating
+        let tmp%22#0: uint64 = (txn ApplicationID)
+        let tmp%23#0: bool = (== tmp%22#0 0u)
+        (assert tmp%23#0) // can only call when creating
         tests/approvals/arc4-method-selector.algo.ts::ContractOne.__algots__.defaultCreate()
         let tests/approvals/arc4-method-selector.algo.ts::ContractOne.__puya_arc4_router__%0#3: bool = 1u
         goto block@13

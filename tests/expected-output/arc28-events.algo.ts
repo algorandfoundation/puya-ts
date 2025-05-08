@@ -20,12 +20,12 @@ class EventEmitter extends Contract {
     // @expect-error Expected type UintN<16> does not match actual type UintN<64>
     emit('Swapped(uint16,uint64)', b, a)
 
-    // @expect-error [uint64, uint64] cannot be encoded to an ARC4 type
-    emit('Swapped((uint64,uint64),uint64)', [b, b], a)
+    // @expect-error Expected type DynamicArray<UintN<64>> does not match actual type Tuple<UintN<64>,UintN<64>
+    emit('Swapped(uint64[],uint64)', [b, b] as const, a)
   }
 
   emitCustom(arg0: string, arg1: boolean) {
-    // @expect-error Expression of type `number` must be explicitly converted to an algo-ts type...
+    // @expect-error Expression of type `1` must be explicitly converted to an algo-ts type...
     emit('Custom2', 1)
   }
 }

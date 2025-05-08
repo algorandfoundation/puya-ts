@@ -17,7 +17,8 @@ contract GtxnsAlgo
   
   test2(): void
   {
-    for (i in urange(0, global<GroupSize>(), 1)) {
+    for (temp in urange(0, global<GroupSize>(), 1)) {
+      i: uint64 = temp
       txn: group_transaction = group_transaction(index=i, type=group_transaction)
       if ((#0 = gtxns<TypeEnum>(txn)) == reinterpret_cast<uint64>(6)) {
         #switch₁ᶜ₀:
