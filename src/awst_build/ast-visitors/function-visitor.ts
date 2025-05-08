@@ -17,7 +17,7 @@ import { ArrayLiteralExpressionBuilder } from '../eb/literal/array-literal-expre
 import { ObjectLiteralExpressionBuilder } from '../eb/literal/object-literal-expression-builder'
 import { NativeArrayExpressionBuilder } from '../eb/native-array-expression-builder'
 import { OmittedExpressionBuilder } from '../eb/omitted-expression-builder'
-import { TupleExpressionBuilder } from '../eb/tuple-expression-builder'
+import { ReadonlyTupleExpressionBuilder } from '../eb/readonly-tuple-expression-builder'
 import { requireExpressionOfType, requireInstanceBuilder } from '../eb/util'
 import type { PType } from '../ptypes'
 import { FunctionPType, ObjectPType } from '../ptypes'
@@ -104,7 +104,7 @@ export abstract class FunctionVisitor
                   'Spread operator is not supported in assignment expressions where the resulting type is a variadic array',
                   { sourceLocation },
                 )
-              } else if (spreadResult instanceof TupleExpressionBuilder) {
+              } else if (spreadResult instanceof ReadonlyTupleExpressionBuilder) {
                 throw new CodeError('Spread operator is not currently supported with tuple expressions', { sourceLocation })
               } else {
                 throw InternalError.shouldBeUnreachable()

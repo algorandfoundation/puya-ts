@@ -728,6 +728,18 @@ export class AssignmentExpression extends Expression {
     return visitor.visitAssignmentExpression(this)
   }
 }
+export class CommaExpression extends Expression {
+  constructor(props: Props<CommaExpression>) {
+    super(props)
+    this.expressions = props.expressions
+    this.wtype = props.wtype
+  }
+  readonly expressions: Array<Expression>
+  readonly wtype: wtypes.WType
+  accept<T>(visitor: ExpressionVisitor<T>): T {
+    return visitor.visitCommaExpression(this)
+  }
+}
 export enum EqualityComparison {
   eq = '==',
   ne = '!=',
@@ -1233,7 +1245,7 @@ export class NewStruct extends Expression {
     this.wtype = props.wtype
     this.values = props.values
   }
-  readonly wtype: wtypes.WStructType | wtypes.ARC4Struct
+  readonly wtype: wtypes.ARC4Struct
   readonly values: Map<string, Expression>
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitNewStruct(this)
@@ -1542,6 +1554,7 @@ export const concreteNodes = {
   conditionalExpression: ConditionalExpression,
   assignmentStatement: AssignmentStatement,
   assignmentExpression: AssignmentExpression,
+  commaExpression: CommaExpression,
   numericComparisonExpression: NumericComparisonExpression,
   bytesComparisonExpression: BytesComparisonExpression,
   subroutineID: SubroutineID,
@@ -1652,6 +1665,7 @@ export interface ExpressionVisitor<T> {
   visitArrayLength(expression: ArrayLength): T
   visitConditionalExpression(expression: ConditionalExpression): T
   visitAssignmentExpression(expression: AssignmentExpression): T
+  visitCommaExpression(expression: CommaExpression): T
   visitNumericComparisonExpression(expression: NumericComparisonExpression): T
   visitBytesComparisonExpression(expression: BytesComparisonExpression): T
   visitSubroutineCallExpression(expression: SubroutineCallExpression): T

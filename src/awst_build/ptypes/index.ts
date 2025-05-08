@@ -6,6 +6,7 @@ import { Constants } from '../../constants'
 import { CodeError, InternalError, NotSupported, throwError } from '../../errors'
 import { codeInvariant, distinctByEquality, invariant, sortBy } from '../../util'
 import { SymbolName } from '../symbol-name'
+import type { ABIType } from './base'
 import { GenericPType, PType } from './base'
 import { transientTypeErrors } from './transient-type-errors'
 
@@ -447,6 +448,14 @@ export class InstanceType extends PType {
   }
 }
 
+export class ABICompatibleInstanceType extends InstanceType implements ABIType {
+  readonly abiTypeSignature: string
+  constructor({ abiTypeSignature, ...props }: { name: string; module: string; wtype: wtypes.WType; abiTypeSignature: string }) {
+    super(props)
+    this.abiTypeSignature = abiTypeSignature
+  }
+}
+
 export class LibFunctionType extends PType {
   readonly wtype: undefined
   readonly name: string
@@ -612,44 +621,92 @@ export class ArrayLiteralPType extends TransientType {
     })
   }
 
-  getTupleType(): TuplePType {
-    return new TuplePType({
+  getTupleType(): ReadonlyTuplePType {
+    return new ReadonlyTuplePType({
       items: this.items,
     })
   }
 }
 
-export class TuplePType extends PType {
+export class MutableTuplePType extends PType {
   readonly module: string = 'lib.d.ts'
   get name() {
-    return `Tuple<${this.items.map((i) => i.name).join(', ')}>`
+    return `[${this.items.map((i) => i.name).join(', ')}]`
   }
   get fullName() {
-    return `${this.module}::Tuple<${this.items.map((i) => i.fullName).join(', ')}>`
+    return `${this.module}::[${this.items.map((i) => i.fullName).join(', ')}]`
   }
 
   readonly items: PType[]
   readonly singleton = false
-  readonly immutable: boolean
   constructor(props: { items: PType[] }) {
     super()
     this.items = props.items
-    this.immutable = true
+  }
+
+  get wtype(): wtypes.ARC4Tuple {
+    return new wtypes.ARC4Tuple({
+      types: this.items.map((i) => i.wtypeOrThrow),
+      immutable: false,
+    })
+  }
+
+  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType {
+    if (typeof index === 'bigint') {
+      if (index >= 0 && index < this.items.length) {
+        return this.items[Number(index)]
+      }
+      throw new CodeError(`Cannot access index ${index} of ${this.name}`, { sourceLocation })
+    }
+    return super.getIndexType(index, sourceLocation)
+  }
+}
+export class ReadonlyTuplePType extends PType {
+  readonly module: string = 'lib.d.ts'
+  get name() {
+    return `readonly [${this.items.map((i) => i.name).join(', ')}]`
+  }
+  get fullName() {
+    return `${this.module}::readonly [${this.items.map((i) => i.fullName).join(', ')}]`
+  }
+
+  readonly items: PType[]
+  readonly singleton = false
+  constructor(props: { items: PType[] }) {
+    super()
+    this.items = props.items
   }
 
   get wtype(): wtypes.WTuple {
     return new wtypes.WTuple({
       types: this.items.map((i) => i.wtypeOrThrow),
-      immutable: this.immutable,
     })
   }
+
+  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType {
+    if (typeof index === 'bigint') {
+      if (index >= 0 && index < this.items.length) {
+        return this.items[Number(index)]
+      }
+      throw new CodeError(`Cannot access index ${index} of ${this.name}`, { sourceLocation })
+    }
+    return super.getIndexType(index, sourceLocation)
+  }
 }
+export const ArrayGeneric = new GenericPType({
+  name: 'Array',
+  module: Constants.moduleNames.typescript.array,
+  parameterise(typeArgs) {
+    codeInvariant(typeArgs.length === 1, 'Array expects exactly 1 type argument')
+    return new ArrayPType({ elementType: typeArgs[0] })
+  },
+})
 export class ArrayPType extends PType {
   readonly elementType: PType
-  readonly immutable = true
+  readonly immutable: boolean = false
   readonly singleton = false
   readonly name: string
-  readonly module: string = 'lib.d.ts'
+  readonly module: string = Constants.moduleNames.typescript.array
   get fullName() {
     return `${this.module}::Array<${this.elementType.fullName}>`
   }
@@ -660,10 +717,30 @@ export class ArrayPType extends PType {
   }
 
   get wtype() {
-    return new wtypes.StackArray({
-      itemType: this.elementType.wtypeOrThrow,
+    return new wtypes.ARC4DynamicArray({
+      elementType: this.elementType.wtypeOrThrow,
       immutable: this.immutable,
     })
+  }
+}
+export const ReadonlyArrayGeneric = new GenericPType({
+  name: 'ReadonlyArray',
+  module: Constants.moduleNames.typescript.readonlyArray,
+  parameterise(typeArgs) {
+    codeInvariant(typeArgs.length === 1, 'ReadonlyArray expects exactly 1 type argument')
+    return new ReadonlyArrayPType({ elementType: typeArgs[0] })
+  },
+})
+export class ReadonlyArrayPType extends ArrayPType {
+  readonly immutable = true
+  readonly name: string
+  readonly module: string = Constants.moduleNames.typescript.readonlyArray
+  get fullName() {
+    return `${this.module}::ReadonlyArray<${this.elementType.fullName}>`
+  }
+  constructor(props: { elementType: PType }) {
+    super(props)
+    this.name = `ReadonlyArray<${props.elementType.name}>`
   }
 }
 
@@ -703,7 +780,6 @@ export class ObjectPType extends PType {
       name: this.alias?.fullName ?? this.fullName,
       names: tupleNames,
       types: tupleTypes,
-      immutable: true,
     })
   }
 
@@ -733,10 +809,11 @@ export class ObjectPType extends PType {
   }
 }
 
-export const voidPType = new InstanceType({
+export const voidPType = new ABICompatibleInstanceType({
   name: 'void',
   module: 'lib.d.ts',
   wtype: wtypes.voidWType,
+  abiTypeSignature: 'void',
 })
 export const neverPType = new InstanceType({
   name: 'never',
@@ -927,28 +1004,31 @@ export const errFunction = new LibFunctionType({
   module: Constants.moduleNames.algoTs.util,
 })
 
-export const assetPType = new InstanceType({
+export const assetPType = new ABICompatibleInstanceType({
   name: 'Asset',
   wtype: wtypes.assetWType,
   module: Constants.moduleNames.algoTs.reference,
+  abiTypeSignature: 'asset',
 })
 export const AssetFunction = new LibFunctionType({
   name: 'Asset',
   module: Constants.moduleNames.algoTs.reference,
 })
-export const accountPType = new InstanceType({
+export const accountPType = new ABICompatibleInstanceType({
   name: 'Account',
   wtype: wtypes.accountWType,
   module: Constants.moduleNames.algoTs.reference,
+  abiTypeSignature: 'account',
 })
 export const AccountFunction = new LibFunctionType({
   name: 'Account',
   module: Constants.moduleNames.algoTs.reference,
 })
-export const applicationPType = new InstanceType({
+export const applicationPType = new ABICompatibleInstanceType({
   name: 'Application',
   wtype: wtypes.applicationWType,
   module: Constants.moduleNames.algoTs.reference,
+  abiTypeSignature: 'application',
 })
 export const ApplicationFunctionType = new LibFunctionType({
   name: 'Application',
@@ -1035,7 +1115,7 @@ export const logicSigOptionsDecorator = new LibFunctionType({
   name: 'logicsig',
 })
 
-export class GroupTransactionPType extends PType {
+export class GroupTransactionPType extends PType implements ABIType {
   get wtype() {
     return new wtypes.WGroupTransaction({
       transactionType: this.kind,
@@ -1045,11 +1125,13 @@ export class GroupTransactionPType extends PType {
   readonly kind: TransactionKind | undefined
   readonly module = Constants.moduleNames.algoTs.gtxn
   readonly singleton = false
+  readonly abiTypeSignature: string
 
   constructor({ kind, name }: { kind?: TransactionKind; name: string }) {
     super()
     this.name = name
     this.kind = kind
+    this.abiTypeSignature = kind !== undefined ? TransactionKind[kind] : 'txn'
   }
 }
 
@@ -1460,8 +1542,8 @@ export const compiledContractType = new ObjectPType({
   }),
   description: 'Provides compiled programs and state allocation values for a Contract. Created by calling `compile(ExampleContractType)`',
   properties: {
-    approvalProgram: new TuplePType({ items: [bytesPType, bytesPType] }),
-    clearStateProgram: new TuplePType({ items: [bytesPType, bytesPType] }),
+    approvalProgram: new ReadonlyTuplePType({ items: [bytesPType, bytesPType] }),
+    clearStateProgram: new ReadonlyTuplePType({ items: [bytesPType, bytesPType] }),
     extraProgramPages: uint64PType,
     globalUints: uint64PType,
     globalBytes: uint64PType,
@@ -1511,22 +1593,22 @@ export const PolytypeClassMethodHelper = new LibFunctionType({
   module: Constants.moduleNames.polytype,
 })
 
-export const MutableArrayConstructor = new LibClassType({
-  name: 'MutableArray',
-  module: Constants.moduleNames.algoTs.mutableArray,
+export const ReferenceArrayConstructor = new LibClassType({
+  name: 'ReferenceArray',
+  module: Constants.moduleNames.algoTs.referenceArray,
 })
-export const MutableArrayGeneric = new GenericPType({
-  name: 'MutableArray',
-  module: Constants.moduleNames.algoTs.mutableArray,
-  parameterise: (typeArgs: readonly PType[]): MutableArrayType => {
-    codeInvariant(typeArgs.length === 1, 'MutableArray type expects exactly one type parameter')
+export const ReferenceArrayGeneric = new GenericPType({
+  name: 'ReferenceArray',
+  module: Constants.moduleNames.algoTs.referenceArray,
+  parameterise: (typeArgs: readonly PType[]): ReferenceArrayType => {
+    codeInvariant(typeArgs.length === 1, 'ReferenceArray type expects exactly one type parameter')
     const [elementType] = typeArgs
 
-    return new MutableArrayType({ elementType: elementType })
+    return new ReferenceArrayType({ elementType: elementType })
   },
 })
-export class MutableArrayType extends PType {
-  readonly module = Constants.moduleNames.algoTs.mutableArray
+export class ReferenceArrayType extends PType {
+  readonly module = Constants.moduleNames.algoTs.referenceArray
   readonly immutable = false as const
   readonly name: string
   readonly singleton = false
@@ -1544,7 +1626,7 @@ export class MutableArrayType extends PType {
     immutable?: boolean
   }) {
     super()
-    this.name = name ?? `MutableArray<${elementType}>`
+    this.name = name ?? `ReferenceArray<${elementType}>`
     this.sourceLocation = sourceLocation
     this.elementType = elementType
   }

@@ -61,7 +61,7 @@ type NumericComparison<T> =
       /**
        * Is the subject between the specified values (inclusive)
        */
-      between: [T, T]
+      between: readonly [T, T]
     }
   | {
       /**

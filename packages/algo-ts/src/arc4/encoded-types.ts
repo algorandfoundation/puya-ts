@@ -401,7 +401,7 @@ export class DynamicArray<TItem extends ARC4Encoded> extends Arc4ArrayBase<TItem
 /**
  * @hidden
  */
-type ExpandTupleType<T extends ARC4Encoded[]> = T extends [infer T1 extends ARC4Encoded, ...infer TRest extends ARC4Encoded[]]
+type ExpandTupleType<T extends readonly ARC4Encoded[]> = T extends [infer T1 extends ARC4Encoded, ...infer TRest extends ARC4Encoded[]]
   ? TRest extends []
     ? `${T1[typeof TypeProperty]}`
     : `${T1[typeof TypeProperty]},${ExpandTupleType<TRest>}`
@@ -411,7 +411,7 @@ type ExpandTupleType<T extends ARC4Encoded[]> = T extends [infer T1 extends ARC4
  * An arc4 encoded tuple of values
  * @typeParam TTuple A type representing the native tuple of item types
  */
-export class Tuple<TTuple extends [ARC4Encoded, ...ARC4Encoded[]]> extends ARC4Encoded {
+export class Tuple<const TTuple extends readonly [ARC4Encoded, ...ARC4Encoded[]]> extends ARC4Encoded {
   /** @hidden */
   [TypeProperty]?: `arc4.Tuple<${ExpandTupleType<TTuple>}>`
 

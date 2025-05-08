@@ -9,7 +9,15 @@ import { logger } from '../../../logger'
 
 import { base32ToUint8Array, bigIntToUint8Array, codeInvariant, invariant } from '../../../util'
 import type { PType } from '../../ptypes'
-import { accountPType, bytesPType, IterableIteratorGeneric, NumericLiteralPType, stringPType, TuplePType, uint64PType } from '../../ptypes'
+import {
+  accountPType,
+  bytesPType,
+  IterableIteratorGeneric,
+  MutableTuplePType,
+  NumericLiteralPType,
+  stringPType,
+  uint64PType,
+} from '../../ptypes'
 import {
   AddressClass,
   arc4AddressAlias,
@@ -298,9 +306,8 @@ export abstract class ArrayExpressionBuilder<
         return new AtFunctionBuilder(
           this.resolve(),
           this.ptype.elementType,
-          this.ptype instanceof StaticArrayType
-            ? this.ptype.arraySize
-            : requireExpressionOfType(this.memberAccess('length', sourceLocation), uint64PType),
+          this.ptype instanceof StaticArrayType ? this.ptype.arraySize : arrayLength(this, sourceLocation).resolve(),
+          sourceLocation,
         )
       case 'entries':
         return new EntriesFunctionBuilder(this)
@@ -354,7 +361,7 @@ class EntriesFunctionBuilder extends FunctionBuilder {
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     parseFunctionArgs({ args, typeArgs, callLocation: sourceLocation, argSpec: (_) => [], genericTypeArgs: 0, funcName: 'entries' })
     const iteratorType = IterableIteratorGeneric.parameterise([
-      new TuplePType({ items: [uint64PType, this.arrayBuilder.ptype.elementType] }),
+      new MutableTuplePType({ items: [uint64PType, this.arrayBuilder.ptype.elementType] }),
     ])
     return new IterableIteratorExpressionBuilder(
       nodeFactory.enumeration({

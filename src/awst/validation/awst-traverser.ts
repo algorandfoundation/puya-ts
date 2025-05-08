@@ -28,6 +28,7 @@ import type {
   BytesConstant,
   BytesUnaryOperation,
   CheckedMaybe,
+  CommaExpression,
   CompiledContract,
   CompiledLogicSig,
   ConditionalExpression,
@@ -101,6 +102,12 @@ export class FunctionTraverser implements ExpressionVisitor<void>, StatementVisi
   visitBlock(statement: Block): void {
     for (const s of statement.body) {
       s.accept(this)
+    }
+  }
+
+  visitCommaExpression(expression: CommaExpression): void {
+    for (const expr of expression.expressions) {
+      expr.accept(this)
     }
   }
 

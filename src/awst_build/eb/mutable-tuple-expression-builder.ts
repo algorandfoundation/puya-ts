@@ -1,9 +1,9 @@
 import { nodeFactory } from '../../awst/node-factory'
 import type { Expression } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
-import { codeInvariant, invariant } from '../../util'
+import { codeInvariant, invariant, zipStrict } from '../../util'
 import type { PType, PTypeOrClass } from '../ptypes'
-import { ArrayPType, TuplePType, uint64PType } from '../ptypes'
+import { ArrayPType, MutableTuplePType, ReadonlyTuplePType, uint64PType } from '../ptypes'
 import { instanceEb } from '../type-registry'
 import type { InstanceBuilder, NodeBuilder } from './index'
 import { InstanceExpressionBuilder } from './index'
@@ -11,9 +11,9 @@ import type { StaticallyIterable } from './traits/static-iterator'
 import { StaticIterator } from './traits/static-iterator'
 import { requireIntegerConstant } from './util'
 
-export class TupleExpressionBuilder extends InstanceExpressionBuilder<TuplePType> implements StaticallyIterable {
+export class MutableTupleExpressionBuilder extends InstanceExpressionBuilder<MutableTuplePType> implements StaticallyIterable {
   constructor(expression: Expression, ptype: PType) {
-    invariant(ptype instanceof TuplePType, 'TupleExpressionBuilder must be built with ptype of type TuplePType')
+    invariant(ptype instanceof MutableTuplePType, 'MutableTupleExpressionBuilder must be built with ptype of type MutableTuplePType')
     super(expression, ptype)
   }
 
@@ -22,8 +22,11 @@ export class TupleExpressionBuilder extends InstanceExpressionBuilder<TuplePType
   }
 
   resolvableToPType(ptype: PTypeOrClass): boolean {
-    if (ptype instanceof ArrayPType && this.ptype.items.every((i) => i.equals(ptype.elementType))) {
-      return true
+    if (ptype instanceof ArrayPType) {
+      return this[StaticIterator]().every((item) => item.resolvableToPType(ptype.elementType))
+    }
+    if (ptype instanceof ReadonlyTuplePType) {
+      return zipStrict(this[StaticIterator](), ptype.items).every(([item, itemType]) => item.resolvableToPType(itemType))
     }
     return super.resolvableToPType(ptype)
   }
@@ -34,6 +37,15 @@ export class TupleExpressionBuilder extends InstanceExpressionBuilder<TuplePType
         nodeFactory.newArray({
           values: this[StaticIterator]().map((i) => i.resolve()),
           wtype: ptype.wtype,
+          sourceLocation: this.sourceLocation,
+        }),
+        ptype,
+      )
+    }
+    if (ptype instanceof ReadonlyTuplePType) {
+      return instanceEb(
+        nodeFactory.tupleExpression({
+          items: zipStrict(this[StaticIterator](), ptype.items).map(([item, itemType]) => item.resolveToPType(itemType).resolve()),
           sourceLocation: this.sourceLocation,
         }),
         ptype,

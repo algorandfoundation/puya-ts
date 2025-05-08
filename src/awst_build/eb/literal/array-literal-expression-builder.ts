@@ -4,12 +4,12 @@ import type { SourceLocation } from '../../../awst/source-location'
 import { CodeError } from '../../../errors'
 import { codeInvariant } from '../../../util'
 import type { PTypeOrClass } from '../../ptypes'
-import { ArrayLiteralPType, ArrayPType, TuplePType } from '../../ptypes'
+import { ArrayLiteralPType, ArrayPType, MutableTuplePType, ReadonlyTuplePType } from '../../ptypes'
+import { instanceEb } from '../../type-registry'
 import type { NodeBuilder } from '../index'
 import { InstanceBuilder } from '../index'
 import type { StaticallyIterable } from '../traits/static-iterator'
 import { StaticIterator } from '../traits/static-iterator'
-import { TupleExpressionBuilder } from '../tuple-expression-builder'
 import { requireIntegerConstant } from '../util'
 import { arrayLength } from '../util/array/length'
 
@@ -60,18 +60,27 @@ export class ArrayLiteralExpressionBuilder extends InstanceBuilder implements St
   }
 
   resolveToPType(ptype: PTypeOrClass): InstanceBuilder {
-    if (ptype instanceof TuplePType) {
+    if (ptype instanceof ReadonlyTuplePType) {
       codeInvariant(
         ptype.items.length <= this.items.length,
         `Value of length ${this.items.length} cannot be resolved to type of length ${ptype.items.length}`,
       )
-      return new TupleExpressionBuilder(
-        nodeFactory.tupleExpression({
-          items: ptype.items.map((itemType, index) => this.items[index].resolveToPType(itemType).resolve()),
-          sourceLocation: this.sourceLocation,
-        }),
-        ptype,
+      const tupleExpr = nodeFactory.tupleExpression({
+        items: ptype.items.map((itemType, index) => this.items[index].resolveToPType(itemType).resolve()),
+        sourceLocation: this.sourceLocation,
+      })
+      return instanceEb(tupleExpr, ptype)
+    }
+    if (ptype instanceof MutableTuplePType) {
+      codeInvariant(
+        ptype.items.length <= this.items.length,
+        `Value of length ${this.items.length} cannot be resolved to type of length ${ptype.items.length}`,
       )
+      const tupleExpr = nodeFactory.tupleExpression({
+        items: ptype.items.map((itemType, index) => this.items[index].resolveToPType(itemType).resolve()),
+        sourceLocation: this.sourceLocation,
+      })
+      return instanceEb(nodeFactory.aRC4Encode({ value: tupleExpr, wtype: ptype.wtype, sourceLocation: this.sourceLocation }), ptype)
     }
     if (ptype instanceof ArrayPType) {
       return new ArrayLiteralExpressionBuilder(
@@ -85,7 +94,7 @@ export class ArrayLiteralExpressionBuilder extends InstanceBuilder implements St
 
   resolvableToPType(ptype: PTypeOrClass): boolean {
     if (ptype.equals(this.ptype)) return true
-    if (ptype instanceof TuplePType) {
+    if (ptype instanceof ReadonlyTuplePType || ptype instanceof MutableTuplePType) {
       return ptype.items.every((itemType, index) => this.items[index].resolvableToPType(itemType))
     }
     if (ptype instanceof ArrayPType) {

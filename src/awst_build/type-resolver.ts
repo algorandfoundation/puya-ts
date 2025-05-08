@@ -12,7 +12,6 @@ import {
   anyPType,
   ApprovalProgram,
   arc4BaseContractType,
-  ArrayPType,
   baseContractType,
   BigIntLiteralPType,
   bigIntPType,
@@ -27,16 +26,17 @@ import {
   IntersectionPType,
   logicSigBaseType,
   LogicSigPType,
+  MutableTuplePType,
   NamespacePType,
   neverPType,
   nullPType,
   numberPType,
   NumericLiteralPType,
   ObjectPType,
+  ReadonlyTuplePType,
   StorageProxyPType,
   stringPType,
   SuperPrototypeSelector,
-  TuplePType,
   TypeParameterType,
   Uint64EnumType,
   undefinedPType,
@@ -200,26 +200,29 @@ export class TypeResolver {
         sourceLocation,
       )
       codeInvariant(tsType.typeArguments, 'Tuple items must have types', sourceLocation)
-
-      return new TuplePType({
-        items: tsType.typeArguments.map((t) => this.resolveType(t, sourceLocation)),
-      })
+      const items = tsType.typeArguments.map((t) => this.resolveType(t, sourceLocation))
+      if (tsType.target.readonly) {
+        return new ReadonlyTuplePType({ items })
+      } else {
+        return new MutableTuplePType({ items })
+      }
     }
     if (isInstantiationExpression(tsType)) {
       return this.resolve(tsType.node.expression, sourceLocation)
     }
 
-    if (this.checker.isArrayType(tsType)) {
-      const itemType = tsType.getNumberIndexType()
-      if (!itemType) {
-        throw new CodeError('Cannot determine array item type', { sourceLocation })
-      } else {
-        const itemPType = this.resolveType(itemType, sourceLocation)
-        return new ArrayPType({
-          elementType: itemPType,
-        })
-      }
-    }
+    // if (this.checker.isArrayType(tsType)) {
+    //   const itemType = tsType.getNumberIndexType()
+    //   if (!itemType) {
+    //     throw new CodeError('Cannot determine array item type', { sourceLocation })
+    //   } else {
+    //     const itemPType = this.resolveType(itemType, sourceLocation)
+    //     return new ArrayPType({
+    //       elementType: itemPType,
+    //       immutable: false,
+    //     })
+    //   }
+    // }
 
     invariant(typeName, 'Non builtin type must have a name', sourceLocation)
 

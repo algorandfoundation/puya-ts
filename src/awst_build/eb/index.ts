@@ -262,7 +262,7 @@ export function requireLValue(expr: awst.Expression): awst.LValue {
     awst.AppAccountStateExpression,
     awst.BoxValueExpression,
   ]
-  if (expr instanceof TupleItemExpression) {
+  if (expr instanceof TupleItemExpression && expr.base.wtype.immutable) {
     throw new CodeError('Expression is not a valid assignment target - object is immutable', { sourceLocation: expr.sourceLocation })
   }
   if (!lValueNodes.some((l) => expr instanceof l)) {
