@@ -298,9 +298,8 @@ export abstract class ArrayExpressionBuilder<
         return new AtFunctionBuilder(
           this.resolve(),
           this.ptype.elementType,
-          this.ptype instanceof StaticArrayType
-            ? this.ptype.arraySize
-            : requireExpressionOfType(this.memberAccess('length', sourceLocation), uint64PType),
+          this.ptype instanceof StaticArrayType ? this.ptype.arraySize : arrayLength(this, sourceLocation).resolve(),
+          sourceLocation,
         )
       case 'entries':
         return new EntriesFunctionBuilder(this)

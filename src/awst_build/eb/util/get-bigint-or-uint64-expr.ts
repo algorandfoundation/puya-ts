@@ -1,3 +1,4 @@
+import { IntegerConstant } from '../../../awst/nodes'
 import { invariant } from '../../../util'
 import { numberPType, uint64PType } from '../../ptypes'
 import type { InstanceBuilder } from '../index'
@@ -9,6 +10,8 @@ export function getBigIntOrUint64Expr(builder: InstanceBuilder) {
     return builder.value
   } else {
     invariant(builder.ptype.equals(uint64PType), 'Builder must be uint64 if not number', builder.sourceLocation)
-    return builder.resolve()
+    const result = builder.resolve()
+    if (result instanceof IntegerConstant) return result.value
+    return result
   }
 }

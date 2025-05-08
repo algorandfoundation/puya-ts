@@ -644,12 +644,20 @@ export class TuplePType extends PType {
     })
   }
 }
+export const ArrayGeneric = new GenericPType({
+  name: 'Array',
+  module: Constants.moduleNames.typescript.array,
+  parameterise(typeArgs) {
+    codeInvariant(typeArgs.length === 1, 'Array expects exactly 1 type argument')
+    return new ArrayPType({ elementType: typeArgs[0] })
+  },
+})
 export class ArrayPType extends PType {
   readonly elementType: PType
-  readonly immutable = true
+  readonly immutable: boolean = false
   readonly singleton = false
   readonly name: string
-  readonly module: string = 'lib.d.ts'
+  readonly module: string = Constants.moduleNames.typescript.array
   get fullName() {
     return `${this.module}::Array<${this.elementType.fullName}>`
   }
@@ -664,6 +672,26 @@ export class ArrayPType extends PType {
       itemType: this.elementType.wtypeOrThrow,
       immutable: this.immutable,
     })
+  }
+}
+export const ReadonlyArrayGeneric = new GenericPType({
+  name: 'ReadonlyArray',
+  module: Constants.moduleNames.typescript.readonlyArray,
+  parameterise(typeArgs) {
+    codeInvariant(typeArgs.length === 1, 'ReadonlyArray expects exactly 1 type argument')
+    return new ReadonlyArrayPType({ elementType: typeArgs[0] })
+  },
+})
+export class ReadonlyArrayPType extends ArrayPType {
+  readonly immutable = true
+  readonly name: string
+  readonly module: string = Constants.moduleNames.typescript.readonlyArray
+  get fullName() {
+    return `${this.module}::ReadonlyArray<${this.elementType.fullName}>`
+  }
+  constructor(props: { elementType: PType }) {
+    super(props)
+    this.name = `ReadonlyArray<${props.elementType.name}>`
   }
 }
 
@@ -1511,22 +1539,22 @@ export const PolytypeClassMethodHelper = new LibFunctionType({
   module: Constants.moduleNames.polytype,
 })
 
-export const MutableArrayConstructor = new LibClassType({
-  name: 'MutableArray',
-  module: Constants.moduleNames.algoTs.mutableArray,
+export const ReferenceArrayConstructor = new LibClassType({
+  name: 'ReferenceArray',
+  module: Constants.moduleNames.algoTs.referenceArray,
 })
-export const MutableArrayGeneric = new GenericPType({
-  name: 'MutableArray',
-  module: Constants.moduleNames.algoTs.mutableArray,
-  parameterise: (typeArgs: readonly PType[]): MutableArrayType => {
-    codeInvariant(typeArgs.length === 1, 'MutableArray type expects exactly one type parameter')
+export const ReferenceArrayGeneric = new GenericPType({
+  name: 'ReferenceArray',
+  module: Constants.moduleNames.algoTs.referenceArray,
+  parameterise: (typeArgs: readonly PType[]): ReferenceArrayType => {
+    codeInvariant(typeArgs.length === 1, 'ReferenceArray type expects exactly one type parameter')
     const [elementType] = typeArgs
 
-    return new MutableArrayType({ elementType: elementType })
+    return new ReferenceArrayType({ elementType: elementType })
   },
 })
-export class MutableArrayType extends PType {
-  readonly module = Constants.moduleNames.algoTs.mutableArray
+export class ReferenceArrayType extends PType {
+  readonly module = Constants.moduleNames.algoTs.referenceArray
   readonly immutable = false as const
   readonly name: string
   readonly singleton = false
@@ -1544,7 +1572,7 @@ export class MutableArrayType extends PType {
     immutable?: boolean
   }) {
     super()
-    this.name = name ?? `MutableArray<${elementType}>`
+    this.name = name ?? `ReferenceArray<${elementType}>`
     this.sourceLocation = sourceLocation
     this.elementType = elementType
   }

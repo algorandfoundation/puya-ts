@@ -15,20 +15,26 @@ contract NativeArraysAlgo
     return new stack_array<uint64>(1, 2, 3, 4)
   }
   
+  buildReadonly(): stack_array<uint64>
+  {
+    return new stack_array<uint64>(1, 2, 3, 4)
+  }
+  
   doThings(): void
   {
     arr: stack_array<uint64> = tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.buildArray()
     assert(arr.length == 4 and arr[0] == 1 and arr[1] == 2 and arr[2] == 3 and arr[3] == 4, comment=assert target is match for conditions)
-    arr: stack_array<uint64> = arr.concat(new stack_array<uint64>(5))
+    assert(arr[0] == 1)
+    assert(arr[arr.length - 1] == 4)
+    arr.push(...<tuple>[5]
     assert(arr.length == 5 and arr[0] == 1 and arr[1] == 2 and arr[2] == 3 and arr[3] == 4 and arr[4] == 5, comment=assert target is match for conditions)
-    top: uint64 = arr[arr.length - 1]
+    top: uint64 = arr.pop()
     assert(top == 5)
-    arr: stack_array<uint64> = new stack_array<uint64>(1, 2, 3, 4)
     assert(arr.length == 4 and arr[0] == 1 and arr[1] == 2 and arr[2] == 3 and arr[3] == 4, comment=assert target is match for conditions)
-    arr: stack_array<uint64> = arr.with(1, 10)
+    arr[1]: uint64 = 10
     assert(arr.length == 4 and arr[0] == 1 and arr[1] == 10 and arr[2] == 3 and arr[3] == 4, comment=assert target is match for conditions)
     t1: readonlytuple[uint64, uint64] = <tuple>[12, 13]
-    arr: stack_array<uint64> = arr.concat(arr).concat(<tuple>[11]).concat(t1)
+    arr: stack_array<uint64> = arr.concat(arr).concat(t1)
     assert(arr.length == 11 and arr[0] == 1 and arr[1] == 10 and arr[2] == 3 and arr[3] == 4 and arr[4] == 1 and arr[5] == 10 and arr[6] == 3 and arr[7] == 4 and arr[8] == 11 and arr[9] == 12 and arr[10] == 13, comment=assert target is match for conditions)
   }
   

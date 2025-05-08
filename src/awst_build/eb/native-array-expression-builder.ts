@@ -2,13 +2,15 @@ import { nodeFactory } from '../../awst/node-factory'
 import type { Expression } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { CodeError } from '../../errors'
-import { invariant } from '../../util'
+import { codeInvariant, invariant } from '../../util'
 import type { PType } from '../ptypes'
 import { ArrayPType, numberPType, TuplePType, uint64PType } from '../ptypes'
 import { ARC4ArrayType, ARC4EncodedType } from '../ptypes/arc4-types'
 import { instanceEb } from '../type-registry'
 import type { InstanceBuilder, NodeBuilder } from './index'
 import { FunctionBuilder, InstanceExpressionBuilder } from './index'
+import { OptionalExpressionBuilder } from './optional-expression-builder'
+import { AtFunctionBuilder } from './shared/at-function-builder'
 import { SliceFunctionBuilder } from './shared/slice-function-builder'
 import { parseFunctionArgs } from './util/arg-parsing'
 import { concatArrays } from './util/array/concat'
@@ -30,6 +32,10 @@ export class NativeArrayExpressionBuilder extends InstanceExpressionBuilder<Arra
     return indexAccess(this, index, sourceLocation)
   }
 
+  private requireMutable(method: string, sourceLocation: SourceLocation) {
+    codeInvariant(!this.ptype.immutable, `Cannot call ${method} on immutable array`, sourceLocation)
+  }
+
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
     switch (name) {
       case 'with':
@@ -40,9 +46,85 @@ export class NativeArrayExpressionBuilder extends InstanceExpressionBuilder<Arra
         return new SliceFunctionBuilder(this.resolve(), this.ptype)
       case 'concat':
         return new ConcatFunctionBuilder(this, sourceLocation)
+      case 'at':
+        return new AtFunctionBuilder(
+          this.resolve(),
+          this.ptype.elementType,
+          arrayLength(this, sourceLocation).resolve(),
+          sourceLocation,
+          true,
+        )
+      case 'pop':
+        this.requireMutable(name, sourceLocation)
+        return new PopFunctionBuilder(this, sourceLocation)
+      case 'push':
+        this.requireMutable(name, sourceLocation)
+        return new PushFunctionBuilder(this, sourceLocation)
     }
 
     return super.memberAccess(name, sourceLocation)
+  }
+}
+class PopFunctionBuilder extends FunctionBuilder {
+  constructor(
+    private arrayBuilder: NativeArrayExpressionBuilder,
+    sourceLocation: SourceLocation,
+  ) {
+    super(sourceLocation)
+  }
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 0,
+      argSpec: () => [],
+      callLocation: sourceLocation,
+      funcName: 'Array.pop',
+    })
+    const elementType = this.arrayBuilder.ptype.elementType
+
+    return new OptionalExpressionBuilder(
+      instanceEb(
+        nodeFactory.arrayPop({
+          sourceLocation,
+          base: this.arrayBuilder.resolve(),
+          wtype: elementType.wtypeOrThrow,
+        }),
+        elementType,
+      ),
+    )
+  }
+}
+class PushFunctionBuilder extends FunctionBuilder {
+  constructor(
+    private arrayBuilder: NativeArrayExpressionBuilder,
+    sourceLocation: SourceLocation,
+  ) {
+    super(sourceLocation)
+  }
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    const elementType = this.arrayBuilder.ptype.elementType
+    const { args: items } = parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 0,
+      argSpec: (a) => args.map(() => a.required(elementType)),
+      callLocation: sourceLocation,
+      funcName: 'Array.pop',
+    })
+
+    return instanceEb(
+      nodeFactory.arrayExtend({
+        sourceLocation,
+        base: this.arrayBuilder.resolve(),
+        other: nodeFactory.tupleExpression({
+          items: items.map((i) => i.resolve()),
+          sourceLocation,
+        }),
+        wtype: elementType.wtypeOrThrow,
+      }),
+      elementType,
+    )
   }
 }
 

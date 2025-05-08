@@ -12,7 +12,6 @@ import {
   anyPType,
   ApprovalProgram,
   arc4BaseContractType,
-  ArrayPType,
   baseContractType,
   BigIntLiteralPType,
   bigIntPType,
@@ -209,17 +208,18 @@ export class TypeResolver {
       return this.resolve(tsType.node.expression, sourceLocation)
     }
 
-    if (this.checker.isArrayType(tsType)) {
-      const itemType = tsType.getNumberIndexType()
-      if (!itemType) {
-        throw new CodeError('Cannot determine array item type', { sourceLocation })
-      } else {
-        const itemPType = this.resolveType(itemType, sourceLocation)
-        return new ArrayPType({
-          elementType: itemPType,
-        })
-      }
-    }
+    // if (this.checker.isArrayType(tsType)) {
+    //   const itemType = tsType.getNumberIndexType()
+    //   if (!itemType) {
+    //     throw new CodeError('Cannot determine array item type', { sourceLocation })
+    //   } else {
+    //     const itemPType = this.resolveType(itemType, sourceLocation)
+    //     return new ArrayPType({
+    //       elementType: itemPType,
+    //       immutable: false,
+    //     })
+    //   }
+    // }
 
     invariant(typeName, 'Non builtin type must have a name', sourceLocation)
 

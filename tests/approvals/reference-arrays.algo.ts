@@ -1,10 +1,10 @@
 import type { uint64 } from '@algorandfoundation/algorand-typescript'
-import { assert, Contract, ensureBudget, MutableArray } from '@algorandfoundation/algorand-typescript'
+import { assert, Contract, ensureBudget, ReferenceArray } from '@algorandfoundation/algorand-typescript'
 
-class MutableArraysAlgo extends Contract {
+class ReferenceArraysAlgo extends Contract {
   test(length: uint64) {
     ensureBudget(2000)
-    const ma = new MutableArray<uint64>()
+    const ma = new ReferenceArray<uint64>()
     for (let i: uint64 = 0; i < length; i++) {
       ma.push(i)
     }

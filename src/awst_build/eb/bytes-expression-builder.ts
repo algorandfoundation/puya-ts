@@ -28,7 +28,6 @@ import {
 } from '../../util'
 import type { PType, PTypeOrClass } from '../ptypes'
 import {
-  ArrayPType,
   bigIntPType,
   biguintPType,
   boolPType,
@@ -38,6 +37,7 @@ import {
   bytesPType,
   numberPType,
   NumericLiteralPType,
+  ReadonlyArrayPType,
   stringPType,
   uint64PType,
 } from '../ptypes'
@@ -117,7 +117,7 @@ export class BytesFunctionBuilder extends FunctionBuilder {
           biguintPType,
           stringPType,
           bytesPType,
-          new ArrayPType({ elementType: uint64PType }),
+          new ReadonlyArrayPType({ elementType: uint64PType }),
         ),
       ],
     })
@@ -278,6 +278,7 @@ export class BytesExpressionBuilder extends InstanceExpressionBuilder<BytesPType
           this._expr,
           bytesPType,
           requireExpressionOfType(this.memberAccess('length', sourceLocation), uint64PType),
+          sourceLocation,
         )
       case 'slice':
         return new SliceFunctionBuilder(this._expr, bytesPType)

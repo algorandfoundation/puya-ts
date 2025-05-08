@@ -41,12 +41,12 @@ import { ObjectExpressionBuilder } from '../eb/literal/object-expression-builder
 import { LogFunctionBuilder } from '../eb/log-function-builder'
 import { LogicSigClassBuilder, LogicSigOptionsDecoratorBuilder } from '../eb/logic-sig-builder'
 import { MatchFunctionBuilder } from '../eb/match-function-builder'
-import { MutableArrayClassBuilder, MutableArrayExpressionBuilder } from '../eb/mutable-arrays'
 import { NamespaceBuilder } from '../eb/namespace-builder'
 import { NativeArrayExpressionBuilder } from '../eb/native-array-expression-builder'
 import { NeverExpressionBuilder } from '../eb/never-expression-builder'
 import { ObjectWithOptionalFieldsExpressionBuilder } from '../eb/object-with-optional-fields'
 import { FreeIntrinsicOpBuilder, IntrinsicOpGroupBuilder, IntrinsicOpGroupOrFunctionTypeBuilder } from '../eb/op-module-builder'
+import { ReferenceArrayClassBuilder, ReferenceArrayExpressionBuilder } from '../eb/reference-arrays'
 import { AccountExpressionBuilder, AccountFunctionBuilder } from '../eb/reference/account'
 import { ApplicationExpressionBuilder, ApplicationFunctionBuilder } from '../eb/reference/application'
 import { AssetExpressionBuilder, AssetFunctionBuilder } from '../eb/reference/asset'
@@ -139,6 +139,7 @@ import {
   arc28EmitFunction,
   arc4AbiMethodDecorator,
   arc4BareMethodDecorator,
+  ArrayGeneric,
   ArrayPType,
   assertFunction,
   assertMatchFunction,
@@ -207,9 +208,6 @@ import {
   logicSigOptionsDecorator,
   LogicSigPType,
   matchFunction,
-  MutableArrayConstructor,
-  MutableArrayGeneric,
-  MutableArrayType,
   NamespacePType,
   neverPType,
   ObjectPType,
@@ -223,6 +221,11 @@ import {
   PolytypeClassMethodHelper,
   PromiseGeneric,
   PromiseType,
+  ReadonlyArrayGeneric,
+  ReadonlyArrayPType,
+  ReferenceArrayConstructor,
+  ReferenceArrayGeneric,
+  ReferenceArrayType,
   StringFunction,
   stringPType,
   submitGroupItxnFunction,
@@ -260,12 +263,13 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: StringFunction, singletonEb: StringFunctionBuilder })
 
   // Compound
-  typeRegistry.register({ ptype: ArrayPType, instanceEb: NativeArrayExpressionBuilder })
+  typeRegistry.registerGeneric({ generic: ArrayGeneric, ptype: ArrayPType, instanceEb: NativeArrayExpressionBuilder })
+  typeRegistry.registerGeneric({ generic: ReadonlyArrayGeneric, ptype: ReadonlyArrayPType, instanceEb: NativeArrayExpressionBuilder })
   typeRegistry.register({ ptype: TuplePType, instanceEb: TupleExpressionBuilder })
   typeRegistry.register({ ptype: ObjectPType, instanceEb: ObjectExpressionBuilder })
 
-  typeRegistry.register({ ptype: MutableArrayConstructor, singletonEb: MutableArrayClassBuilder })
-  typeRegistry.registerGeneric({ generic: MutableArrayGeneric, ptype: MutableArrayType, instanceEb: MutableArrayExpressionBuilder })
+  typeRegistry.register({ ptype: ReferenceArrayConstructor, singletonEb: ReferenceArrayClassBuilder })
+  typeRegistry.registerGeneric({ generic: ReferenceArrayGeneric, ptype: ReferenceArrayType, instanceEb: ReferenceArrayExpressionBuilder })
 
   // Unresolvable
   typeRegistry.registerGeneric({ ptype: GeneratorType, generic: GeneratorGeneric, instanceEb: UnresolvableExpressionBuilder })

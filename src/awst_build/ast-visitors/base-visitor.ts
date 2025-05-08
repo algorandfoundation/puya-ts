@@ -29,6 +29,7 @@ import type { ObjectLiteralParts } from '../eb/literal/object-literal-expression
 import { ObjectLiteralExpressionBuilder } from '../eb/literal/object-literal-expression-builder'
 import { NamespaceBuilder } from '../eb/namespace-builder'
 import { OmittedExpressionBuilder } from '../eb/omitted-expression-builder'
+import { OptionalExpressionBuilder } from '../eb/optional-expression-builder'
 import { SpreadExpressionBuilder } from '../eb/spread-expression-builder'
 import { StringExpressionBuilder, stringFromTemplate } from '../eb/string-expression-builder'
 import { StaticIterator } from '../eb/traits/static-iterator'
@@ -529,7 +530,15 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   }
 
   visitNonNullExpression(node: ts.NonNullExpression): NodeBuilder {
-    this.throwNotSupported(node, 'non null assertions')
+    const target = this.baseAccept(node.expression)
+    if (target instanceof OptionalExpressionBuilder) {
+      return target.base
+    }
+
+    throw new CodeError(
+      'The non-null assertion operator "!" is not valid here. It is only valid in limited scenarios where built in types require it. Eg. Array.prototype.pop',
+      { sourceLocation: this.sourceLocation(node) },
+    )
   }
 
   visitSatisfiesExpression(node: ts.SatisfiesExpression): NodeBuilder {

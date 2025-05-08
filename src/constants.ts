@@ -3,6 +3,10 @@ const algoTsPackage = '@algorandfoundation/algorand-typescript'
 export const Constants = {
   algoTsPackage,
   moduleNames: {
+    typescript: {
+      array: 'typescript/lib/lib.es5.d.ts',
+      readonlyArray: 'typescript/lib/lib.es5.d.ts',
+    },
     polytype: 'polytype/lib/polytype-module.d.ts',
     algoTs: {
       arc28: `${algoTsPackage}/arc-28.d.ts`,
@@ -18,7 +22,7 @@ export const Constants = {
       itxnCompose: `${algoTsPackage}/itxn-compose.d.ts`,
       gtxn: `${algoTsPackage}/gtxn.d.ts`,
       logicSig: `${algoTsPackage}/logic-sig.d.ts`,
-      mutableArray: `${algoTsPackage}/mutable-array.d.ts`,
+      referenceArray: `${algoTsPackage}/reference-array.d.ts`,
       onCompleteAction: `${algoTsPackage}/on-complete-action.d.ts`,
       op: `${algoTsPackage}/op.d.ts`,
       primitives: `${algoTsPackage}/primitives.d.ts`,

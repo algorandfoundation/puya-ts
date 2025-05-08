@@ -141,12 +141,13 @@ export namespace wtypes {
   }
 
   export class StackArray extends NativeArray {
-    readonly immutable = true
+    readonly immutable: boolean
     constructor(props: { itemType: WType; immutable: boolean; sourceLocation?: SourceLocation }) {
       super({
         name: `stack_array<${props.itemType.name}>`,
         ...props,
       })
+      this.immutable = props.immutable
     }
   }
   export class ReferenceArray extends NativeArray {
