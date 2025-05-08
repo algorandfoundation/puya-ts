@@ -20,6 +20,7 @@ import type {
   Block,
   BoolConstant,
   BooleanBinaryOperation,
+  BoxPrefixedKeyExpression,
   BoxValueExpression,
   BytesAugmentedAssignment,
   BytesBinaryOperation,
@@ -65,6 +66,7 @@ import type {
   Reversed,
   RootNodeVisitor,
   SingleEvaluation,
+  SizeOf,
   SliceExpression,
   StateDelete,
   StateExists,
@@ -425,6 +427,10 @@ export class FunctionTraverser implements ExpressionVisitor<void>, StatementVisi
       v.accept(this)
     }
   }
+
+  visitBoxPrefixedKeyExpression(expression: BoxPrefixedKeyExpression): void {}
+
+  visitSizeOf(expression: SizeOf): void {}
 
   visitCompiledContract(expression: CompiledContract): void {
     for (const v of expression.templateVariables.values()) {

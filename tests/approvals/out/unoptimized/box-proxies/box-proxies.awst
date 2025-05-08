@@ -136,17 +136,17 @@ contract BoxCreate
   {
     box_create("a", 10)
     assert(checked_maybe(box_len("a"), comment=Box must have value) == 10)
-    box_create("b", 8)
+    box_create("b", SIZE_OF(uint64))
     assert(checked_maybe(box_len("b"), comment=Box must have value) == 8)
-    box_create("c", 40)
+    box_create("c", SIZE_OF(arc4.static_array<arc4.uint32>))
     assert(checked_maybe(box_len("c"), comment=Box must have value) == 40)
     box_create("d", 2)
     assert(checked_maybe(box_len("d"), comment=Box must have value) == 2)
-    box_create("e", 3)
+    box_create("e", SIZE_OF(arc4.tuple<uint8,uint8,bool,bool>))
     assert(checked_maybe(box_len("e"), comment=Box must have value) == 3)
-    box_create("bool", 8)
+    box_create("bool", SIZE_OF(bool))
     assert(checked_maybe(box_len("bool"), comment=Box must have value) == 8)
-    box_create("arc4b", 1)
+    box_create("arc4b", SIZE_OF(arc4.bool))
     assert(checked_maybe(box_len("arc4b"), comment=Box must have value) == 1)
   }
   
@@ -168,6 +168,75 @@ contract BoxMapTest
   clearProgram(): bool
   {
     return True
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+contract TupleBox
+{
+  boxes {
+    ["t1"]: readonlytuple[string, bytes, bool]
+    ["t2"]: object{ a: string, b: bytes, c: bool }
+    ["tm1"]: string => readonlytuple[string, bytes, bool]
+    ["tm2"]: string => object{ a: string, b: bytes, c: bool }
+  }
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  testBox(): void
+  {
+    box_create("t1", 10)
+    box_create("t2", 20)
+    assert(checked_maybe(box_len("t1"), comment=Box must have value) == 10)
+    assert(checked_maybe(box_len("t2"), comment=Box must have value) == 20)
+    assert(STATE_EXISTS(Box["t1"].value))
+    assert(STATE_EXISTS(Box["t2"].value))
+    Box["t1"].value: readonlytuple[string, bytes, bool] = <tuple>["hello", "world", True]
+    assert(Box["t1"].value.0 == "hello")
+    assert(Box["t1"].value.1 == "world")
+    assert(Box["t1"].value.2)
+    Box["t2"].value: object{ a: string, b: bytes, c: bool } = { a: "hello", b: "world", c: True }
+    assert(Box["t2"].value.a == "hello")
+    assert(Box["t2"].value.b == "world")
+    assert(Box["t2"].value.c)
+    STATE_DELETE(Box["t1"].value)
+    assert(!STATE_EXISTS(Box["t1"].value))
+    STATE_DELETE(Box["t2"].value)
+    assert(!STATE_EXISTS(Box["t2"].value))
+  }
+  
+  testBoxMap(): void
+  {
+    assert(!STATE_EXISTS(Box[concat("tm1", "a")].value))
+    assert(!STATE_EXISTS(Box[concat("tm2", "a")].value))
+    Box[concat("tm1", "a")].value: readonlytuple[string, bytes, bool] = <tuple>["hello", "world", True]
+    Box[concat("tm2", "a")].value: object{ a: string, b: bytes, c: bool } = { a: "hello", b: "world", c: True }
+    assert(STATE_EXISTS(Box[concat("tm1", "a")].value))
+    assert(Box[concat("tm1", "a")].value.0 == "hello")
+    assert(Box[concat("tm1", "a")].value.1 == "world")
+    assert(Box[concat("tm1", "a")].value.2)
+    assert(STATE_EXISTS(Box[concat("tm2", "a")].value))
+    assert(Box[concat("tm2", "a")].value.a == "hello")
+    assert(Box[concat("tm2", "a")].value.b == "world")
+    assert(Box[concat("tm2", "a")].value.c)
+    Box[concat("tm1", "b")].value: readonlytuple[string, bytes, bool] = <tuple>["abc", "def", False]
+    assert(STATE_EXISTS(Box[concat("tm1", "b")].value))
+    Box[concat("tm2", "b")].value: object{ a: string, b: bytes, c: bool } = { a: "abc", b: "def", c: False }
+    assert(STATE_EXISTS(Box[concat("tm2", "b")].value))
+    STATE_DELETE(Box[concat("tm1", "a")].value)
+    assert(!STATE_EXISTS(Box[concat("tm1", "a")].value))
+    STATE_DELETE(Box[concat("tm2", "a")].value)
+    assert(!STATE_EXISTS(Box[concat("tm2", "a")].value))
   }
   
   __algots__.defaultCreate(): void

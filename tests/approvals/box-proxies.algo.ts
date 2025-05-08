@@ -154,3 +154,66 @@ class BoxCreate extends Contract {
 class BoxMapTest extends Contract {
   bmap = BoxMap<Account, string>({ keyPrefix: '' })
 }
+
+class TupleBox extends Contract {
+  box1 = Box<[string, bytes, boolean]>({ key: 't1' })
+  box2 = Box<{ a: string; b: bytes; c: boolean }>({ key: 't2' })
+  boxMap1 = BoxMap<string, [string, bytes, boolean]>({ keyPrefix: 'tm1' })
+  boxMap2 = BoxMap<string, { a: string; b: bytes; c: boolean }>({ keyPrefix: 'tm2' })
+
+  testBox() {
+    this.box1.create({ size: 10 })
+    this.box2.create({ size: 20 })
+    assert(this.box1.length === 10)
+    assert(this.box2.length === 20)
+
+    assert(this.box1.exists)
+    assert(this.box2.exists)
+
+    this.box1.value = ['hello', Bytes('world'), true]
+    assert(this.box1.value[0] === 'hello')
+    assert(this.box1.value[1].equals(Bytes('world')))
+    assert(this.box1.value[2])
+
+    this.box2.value = { a: 'hello', b: Bytes('world'), c: true }
+    assert(this.box2.value.a === 'hello')
+    assert(this.box2.value.b.equals(Bytes('world')))
+    assert(this.box2.value.c)
+
+    this.box1.delete()
+    assert(!this.box1.exists)
+
+    this.box2.delete()
+    assert(!this.box2.exists)
+  }
+
+  testBoxMap() {
+    assert(!this.boxMap1('a').exists)
+    assert(!this.boxMap2('a').exists)
+
+    this.boxMap1('a').value = ['hello', Bytes('world'), true]
+    this.boxMap2('a').value = { a: 'hello', b: Bytes('world'), c: true }
+    assert(this.boxMap1('a').exists)
+
+    assert(this.boxMap1('a').value[0] === 'hello')
+    assert(this.boxMap1('a').value[1].equals(Bytes('world')))
+    assert(this.boxMap1('a').value[2])
+
+    assert(this.boxMap2('a').exists)
+    assert(this.boxMap2('a').value.a === 'hello')
+    assert(this.boxMap2('a').value.b.equals(Bytes('world')))
+    assert(this.boxMap2('a').value.c)
+
+    this.boxMap1('b').value = ['abc', Bytes('def'), false]
+    assert(this.boxMap1('b').exists)
+
+    this.boxMap2('b').value = { a: 'abc', b: Bytes('def'), c: false }
+    assert(this.boxMap2('b').exists)
+
+    this.boxMap1('a').delete()
+    assert(!this.boxMap1('a').exists)
+
+    this.boxMap2('a').delete()
+    assert(!this.boxMap2('a').exists)
+  }
+}

@@ -71,9 +71,16 @@ describe('BoxProxies', () => {
     })
   })
 
-  const it = createArc4TestFixture('tests/approvals/box-proxies.algo.ts', { BoxCreate: {} })
+  const it = createArc4TestFixture('tests/approvals/box-proxies.algo.ts', {
+    BoxCreate: { funding: algos(1) },
+    TupleBox: { funding: algos(1) },
+  })
   it('creates boxes of the min size', async ({ appClientBoxCreate }) => {
-    await appClientBoxCreate.fundAppAccount({ amount: algos(1) })
     await appClientBoxCreate.send.call({ method: 'createBoxes', boxReferences: ['bool', 'arc4b', 'a', 'b', 'c', 'd', 'e'] })
+  })
+
+  it('should be able to store tuples in boxes', async ({ appClientTupleBox }) => {
+    await appClientTupleBox.send.call({ method: 'testBox', boxReferences: ['t1', 't2'] })
+    await appClientTupleBox.send.call({ method: 'testBoxMap', boxReferences: ['tm1', 'tm2'] })
   })
 })

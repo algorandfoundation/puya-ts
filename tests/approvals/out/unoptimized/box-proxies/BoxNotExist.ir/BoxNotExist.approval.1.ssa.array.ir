@@ -11,8 +11,8 @@ main tests/approvals/box-proxies.algo.ts::BoxNotExist.approvalProgram:
         goto block@3
     block@3: // L114
         let (maybe_value%0#0: bytes, maybe_exists%0#0: bool) = (box_get "abc")
-        let maybe_value_converted%0#0: bool = (btoi maybe_value%0#0)
         (assert maybe_exists%0#0) // Box must have value
+        let maybe_value_converted%0#0: uint64 = (btoi maybe_value%0#0)
         return maybe_value_converted%0#0
     block@4: // after_if_else_L114
         let tmp%3#0: bool = (== awst_tmp%0#0 "boxmap")
@@ -22,8 +22,8 @@ main tests/approvals/box-proxies.algo.ts::BoxNotExist.approvalProgram:
     block@6: // L116
         let tmp%4#0: bytes = (concat "a" "bc")
         let (maybe_value%1#0: bytes, maybe_exists%1#0: bool) = (box_get tmp%4#0)
-        let maybe_value_converted%1#0: bool = (btoi maybe_value%1#0)
         (assert maybe_exists%1#0) // Box must have value
+        let maybe_value_converted%1#0: uint64 = (btoi maybe_value%1#0)
         return maybe_value_converted%1#0
     block@7: // after_if_else_L116
         let tmp%5#0: bool = (== awst_tmp%0#0 "createbox")
@@ -31,8 +31,8 @@ main tests/approvals/box-proxies.algo.ts::BoxNotExist.approvalProgram:
     block@8: // if_body_L118
         goto block@9
     block@9: // L118
-        let new_box_value%0#0: bytes[8] = (itob 1u)
-        (box_put "abc" new_box_value%0#0)
+        let encoded_value%0#0: bytes[8] = (itob 1u)
+        (box_put "abc" encoded_value%0#0)
         return 1u
     block@10: // after_if_else_L118
         goto block@11

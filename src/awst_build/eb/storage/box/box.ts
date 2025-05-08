@@ -2,7 +2,6 @@ import { nodeFactory } from '../../../../awst/node-factory'
 import type { BoxValueExpression, Expression } from '../../../../awst/nodes'
 import type { SourceLocation } from '../../../../awst/source-location'
 import { wtypes } from '../../../../awst/wtypes'
-import { logger } from '../../../../logger'
 import { invariant } from '../../../../util'
 import type { PType } from '../../../ptypes'
 import { boolPType, BoxPType, bytesPType, stringPType, TuplePType, uint64PType } from '../../../ptypes'
@@ -11,7 +10,6 @@ import { FunctionBuilder, type NodeBuilder, ParameterlessFunctionBuilder } from 
 import { parseFunctionArgs } from '../../util/arg-parsing'
 import { extractKey } from '../util'
 import { boxExists, boxLength, BoxProxyExpressionBuilder, boxValue, BoxValueExpressionBuilder } from './base'
-import { checkBoxType, getBoxSize } from './util'
 
 export class BoxFunctionBuilder extends FunctionBuilder {
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
@@ -26,7 +24,6 @@ export class BoxFunctionBuilder extends FunctionBuilder {
       genericTypeArgs: 1,
       argSpec: (a) => [a.obj({ key: a.required(bytesPType, stringPType) })],
     })
-    checkBoxType(contentPType, sourceLocation)
 
     const ptype = new BoxPType({ content: contentPType })
     return new BoxExpressionBuilder(extractKey(key, wtypes.boxKeyWType), ptype)
@@ -99,14 +96,14 @@ class BoxCreateFunctionBuilder extends FunctionBuilder {
         boolPType,
       )
     }
-    const boxSize = getBoxSize(this.contentType)
-    if (boxSize === null) {
-      logger.error(sourceLocation, `${this.contentType} does not have a fixed byte size. Please specify a size argument.`)
-    }
+
     return instanceEb(
       nodeFactory.intrinsicCall({
         opCode: 'box_create',
-        stackArgs: [this.boxValue.key, nodeFactory.uInt64Constant({ value: boxSize ?? 0n, sourceLocation })],
+        stackArgs: [
+          this.boxValue.key,
+          nodeFactory.sizeOf({ sizeWtype: this.contentType.wtypeOrThrow, sourceLocation, wtype: wtypes.uint64WType }),
+        ],
         wtype: wtypes.boolWType,
         immediates: [],
         sourceLocation,
