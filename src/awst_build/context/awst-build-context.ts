@@ -6,6 +6,7 @@ import type { AppStorageDefinition, ARC4MethodConfig } from '../../awst/nodes'
 import { SourceLocation } from '../../awst/source-location'
 import { logger } from '../../logger'
 import { invariant } from '../../util'
+import { DefaultMap } from '../../util/default-map'
 import { ConstantStore } from '../constant-store'
 import type { InstanceBuilder, NodeBuilder } from '../eb'
 import type { AppStorageDeclaration } from '../models/app-storage-declaration'
@@ -139,8 +140,8 @@ class AwstBuildContextImpl extends AwstBuildContext {
     public readonly program: ts.Program,
     private readonly constants: ConstantStore,
     private readonly nameResolver: UniqueNameResolver,
-    private readonly storageDeclarations: Map<string, Map<string, AppStorageDeclaration>>,
-    private readonly arc4MethodConfig: Map<string, Map<string, ARC4MethodConfig>>,
+    private readonly storageDeclarations: DefaultMap<string, Map<string, AppStorageDeclaration>>,
+    private readonly arc4MethodConfig: DefaultMap<string, Map<string, ARC4MethodConfig>>,
     compilationSet: CompilationSet,
   ) {
     super()
@@ -160,11 +161,7 @@ class AwstBuildContextImpl extends AwstBuildContext {
     arc4MethodConfig: ARC4MethodConfig
     memberName: string
   }): void {
-    const contractConfig = this.arc4MethodConfig.get(contractReference.id) ?? new Map<string, ARC4MethodConfig>()
-    if (contractConfig.size === 0) {
-      // Add to map if new
-      this.arc4MethodConfig.set(contractReference.id, contractConfig)
-    }
+    const contractConfig = this.arc4MethodConfig.getOrDefault(contractReference.id, () => new Map())
     if (contractConfig.has(memberName)) {
       logger.error(sourceLocation, `Duplicate declaration of member ${memberName} on ${contractReference}`)
     }
@@ -177,8 +174,9 @@ class AwstBuildContextImpl extends AwstBuildContext {
     if (memberName) {
       for (const ct of [contractType, ...contractType.allBases()]) {
         if (ct.equals(baseContractType) || ct.equals(arc4BaseContractType) || ct instanceof ClusteredContractClassType) continue
+
         const contractMethods = this.arc4MethodConfig.get(ct.fullName)
-        invariant(contractMethods, `${ct} has not been visited`)
+        if (!contractMethods) continue
         if (contractMethods.has(memberName)) {
           return contractMethods.get(memberName)
         }
@@ -189,10 +187,10 @@ class AwstBuildContextImpl extends AwstBuildContext {
         [contractType, ...contractType.allBases()]
           .toReversed()
           .reduce((acc, ct) => {
-            if (ct.equals(baseContractType) || ct.equals(arc4BaseContractType)) return acc
+            if (ct.equals(baseContractType) || ct.equals(arc4BaseContractType) || ct instanceof ClusteredContractClassType) return acc
 
             const contractMethods = this.arc4MethodConfig.get(ct.fullName)
-            invariant(contractMethods, `${ct} has not been visited`)
+            if (!contractMethods) return acc
 
             return new Map([...acc, ...contractMethods])
           }, new Map<string, ARC4MethodConfig>())
@@ -206,8 +204,8 @@ class AwstBuildContextImpl extends AwstBuildContext {
       program,
       new ConstantStore(program),
       new UniqueNameResolver(),
-      new Map(),
-      new Map(),
+      new DefaultMap(),
+      new DefaultMap(),
       new CompilationSet(),
     )
   }
@@ -279,11 +277,7 @@ class AwstBuildContextImpl extends AwstBuildContext {
   }
 
   addStorageDeclaration(declaration: AppStorageDeclaration): void {
-    const contractDeclarations = this.storageDeclarations.get(declaration.definedIn.fullName) ?? new Map()
-    if (contractDeclarations.size === 0) {
-      // Add to map if new
-      this.storageDeclarations.set(declaration.definedIn.fullName, contractDeclarations)
-    }
+    const contractDeclarations = this.storageDeclarations.getOrDefault(declaration.definedIn.fullName, () => new Map())
     if (contractDeclarations.has(declaration.memberName)) {
       logger.error(declaration.sourceLocation, `Duplicate declaration of member ${declaration.memberName} on ${declaration.definedIn}`)
     }

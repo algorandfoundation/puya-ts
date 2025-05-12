@@ -7,19 +7,19 @@ main:
     bytecblock 0x151f7c750006636f6d6d6f6e
     txn ApplicationID
     bnz main_after_if_else@2
-    // tests/approvals/multi-inheritance.algo.ts:7
+    // tests/approvals/multi-inheritance.algo.ts:11
     // stateCommon = GlobalState<uint64>({ initialValue: 123 })
     pushbytes "stateCommon"
     pushint 123 // 123
     app_global_put
-    // tests/approvals/multi-inheritance.algo.ts:19
+    // tests/approvals/multi-inheritance.algo.ts:23
     // stateOne = GlobalState({ initialValue: Uint64(45) })
     pushbytes "stateOne"
     pushint 45 // 45
     app_global_put
 
 main_after_if_else@2:
-    // tests/approvals/multi-inheritance.algo.ts:18
+    // tests/approvals/multi-inheritance.algo.ts:22
     // export class BaseOne extends CommonBase {
     txn NumAppArgs
     bz main_bare_routing@10
@@ -28,13 +28,13 @@ main_after_if_else@2:
     match main_methodOne_route@5 main_methodCommon_route@6 main_b2CantOverride_route@7
 
 main_after_if_else@14:
-    // tests/approvals/multi-inheritance.algo.ts:18
+    // tests/approvals/multi-inheritance.algo.ts:22
     // export class BaseOne extends CommonBase {
     pushint 0 // 0
     return
 
 main_b2CantOverride_route@7:
-    // tests/approvals/multi-inheritance.algo.ts:13
+    // tests/approvals/multi-inheritance.algo.ts:17
     // b2CantOverride(): string {
     txn OnCompletion
     !
@@ -47,7 +47,7 @@ main_b2CantOverride_route@7:
     return
 
 main_methodCommon_route@6:
-    // tests/approvals/multi-inheritance.algo.ts:9
+    // tests/approvals/multi-inheritance.algo.ts:13
     // methodCommon() {
     txn OnCompletion
     !
@@ -60,7 +60,7 @@ main_methodCommon_route@6:
     return
 
 main_methodOne_route@5:
-    // tests/approvals/multi-inheritance.algo.ts:20
+    // tests/approvals/multi-inheritance.algo.ts:24
     // methodOne() {
     txn OnCompletion
     !
@@ -73,7 +73,7 @@ main_methodOne_route@5:
     return
 
 main_bare_routing@10:
-    // tests/approvals/multi-inheritance.algo.ts:18
+    // tests/approvals/multi-inheritance.algo.ts:22
     // export class BaseOne extends CommonBase {
     txn OnCompletion
     bnz main_after_if_else@14
