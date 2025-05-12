@@ -1,0 +1,77 @@
+#pragma version 10
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0 1
+    // tests/approvals/multi-inheritance.algo.ts:61
+    // class AbiCallMultiInheritance extends Contract {
+    txn NumAppArgs
+    bz main_bare_routing@6
+    pushbytes 0xfefe8691 // method "test(application)void"
+    txna ApplicationArgs 0
+    match main_test_route@3
+
+main_after_if_else@10:
+    // tests/approvals/multi-inheritance.algo.ts:61
+    // class AbiCallMultiInheritance extends Contract {
+    intc_0 // 0
+    return
+
+main_test_route@3:
+    // tests/approvals/multi-inheritance.algo.ts:62
+    // test(app: Application) {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    // tests/approvals/multi-inheritance.algo.ts:61
+    // class AbiCallMultiInheritance extends Contract {
+    txna ApplicationArgs 1
+    btoi
+    txnas Applications
+    // tests/approvals/multi-inheritance.algo.ts:62
+    // test(app: Application) {
+    callsub test
+    intc_1 // 1
+    return
+
+main_bare_routing@6:
+    // tests/approvals/multi-inheritance.algo.ts:61
+    // class AbiCallMultiInheritance extends Contract {
+    txn OnCompletion
+    bnz main_after_if_else@10
+    txn ApplicationID
+    !
+    assert // can only call when creating
+    intc_1 // 1
+    return
+
+
+// tests/approvals/multi-inheritance.algo.ts::AbiCallMultiInheritance.test(app: uint64) -> void:
+test:
+    // tests/approvals/multi-inheritance.algo.ts:62
+    // test(app: Application) {
+    proto 1 0
+    // tests/approvals/multi-inheritance.algo.ts:63-66
+    // abiCall(MultiBases.prototype.methodTwo, {
+    //   args: [],
+    //   appId: app,
+    // })
+    itxn_begin
+    pushbytes 0x363b329e // method "methodTwo()string"
+    itxn_field ApplicationArgs
+    frame_dig -1
+    itxn_field ApplicationID
+    pushint 6 // appl
+    itxn_field TypeEnum
+    intc_0 // 0
+    itxn_field Fee
+    itxn_submit
+    itxn LastLog
+    extract 0 4
+    pushbytes 0x151f7c75
+    ==
+    assert // Bytes has valid prefix
+    retsub

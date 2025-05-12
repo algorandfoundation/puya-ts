@@ -1,5 +1,6 @@
-import type { uint64 } from '@algorandfoundation/algorand-typescript'
+import type { Application, uint64 } from '@algorandfoundation/algorand-typescript'
 import { Contract, GlobalState, Uint64 } from '@algorandfoundation/algorand-typescript'
+import { abiCall } from '@algorandfoundation/algorand-typescript/arc4'
 import { classes } from 'polytype'
 
 export class CommonBase extends Contract {
@@ -54,5 +55,14 @@ export class MultiBases extends classes(BaseOne, BaseTwo) {
 
   callB2Common() {
     return super.class(BaseTwo).methodCommon()
+  }
+}
+
+class AbiCallMultiInheritance extends Contract {
+  test(app: Application) {
+    abiCall(MultiBases.prototype.methodTwo, {
+      args: [],
+      appId: app,
+    })
   }
 }

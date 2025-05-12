@@ -261,3 +261,25 @@ contract MultiBases
   }
   
 }
+contract AbiCallMultiInheritance
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  test(app: application): void
+  {
+    { itxn: (#0 = submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=app, ApplicationArgs=<tuple>[Method("methodTwo()string")]))), returnValue: ARC4_DECODE(reinterpret_cast<arc4.dynamic_array<arc4.byte>>(checked_maybe(<tuple>[extract<4, 0>((#1 = #0.LastLog)), extract<0, 4>(#1) == 0x151f7c75], comment=Bytes has valid prefix))) }
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
