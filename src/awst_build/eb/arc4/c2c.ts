@@ -64,7 +64,11 @@ export class AbiCallFunctionBuilder extends FunctionBuilder {
       ptype: functionType,
     } = functionRef
     const arc4Config = AwstBuildContext.current.getArc4Config(contractType, memberName)
-    codeInvariant(arc4Config instanceof ARC4ABIMethodConfig, `${memberName} is not an ABI method`, functionRef.sourceLocation)
+    codeInvariant(
+      arc4Config instanceof ARC4ABIMethodConfig,
+      `${memberName} is not an ABI method, or the containing contract has not been visited (possibly due to a circular reference)`,
+      functionRef.sourceLocation,
+    )
     const methodSelector = buildArc4MethodConstant(functionType, arc4Config, sourceLocation)
 
     const itxnResult = makeApplicationCall({
@@ -203,8 +207,11 @@ export class ContractProxyCallFunctionBuilder extends FunctionBuilder {
     })
 
     const arc4Config = AwstBuildContext.current.getArc4Config(this.proxy.ptype.contractType, this.functionType.name)
-    codeInvariant(arc4Config, `${this.functionType.name} is not callable`)
-
+    codeInvariant(
+      arc4Config instanceof ARC4ABIMethodConfig,
+      `${this.functionType.name} is not an ABI method, or the containing contract has not been visited (possibly due to a circular reference)`,
+      sourceLocation,
+    )
     const methodSelector =
       arc4Config instanceof ARC4ABIMethodConfig ? buildArc4MethodConstant(this.functionType, arc4Config, sourceLocation) : null
 

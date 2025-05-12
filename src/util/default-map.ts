@@ -1,10 +1,8 @@
-export function defaultRecord<TKey extends PropertyKey, TValue>(defaultInit: (key: TKey) => TValue) {
-  return new Proxy({} as Record<TKey, TValue>, {
-    get(target, property, receiver) {
-      if (!(property in target)) {
-        Object.assign(target, { [property]: defaultInit(property as TKey) })
-      }
-      return Reflect.get(target, property, receiver)
-    },
-  })
+export class DefaultMap<K, V> extends Map<K, V> {
+  getOrDefault(key: K, defaultFactory: () => V): V {
+    if (!super.has(key)) {
+      super.set(key, defaultFactory())
+    }
+    return super.get(key)!
+  }
 }
