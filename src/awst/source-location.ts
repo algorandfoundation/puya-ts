@@ -114,23 +114,6 @@ export class SourceLocation {
     return `${this.file}:${this.line}:${this.column + 1}`
   }
 
-  static fromLocations(...sourceLocation: SourceLocation[]): SourceLocation {
-    const [first, ...rest] = sourceLocation
-    invariant(first && rest.every((r) => r.file === first.file), 'All locations must of the same file')
-    if (rest.length === 0) return first
-    return sourceLocation.reduce((acc, cur) => {
-      return new SourceLocation({
-        file: acc.file,
-        line: Math.min(acc.line, cur.line),
-        endLine: Math.max(acc.endLine, cur.endLine),
-        column: acc.line === cur.line ? Math.min(acc.column, cur.column) : acc.line < cur.line ? acc.column : cur.column,
-        endColumn:
-          acc.endLine === cur.endLine ? Math.max(acc.endColumn, cur.endColumn) : acc.endLine > cur.endLine ? acc.endColumn : cur.endColumn,
-        scope: 'range',
-      })
-    })
-  }
-
   static None = new SourceLocation({
     line: 1,
     endLine: 1,

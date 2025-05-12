@@ -1,7 +1,7 @@
 import ts from 'typescript'
 import { nodeFactory } from '../../awst/node-factory'
 import type { Expression, LValue, MethodDocumentation, Statement } from '../../awst/nodes'
-import { SourceLocation } from '../../awst/source-location'
+import type { SourceLocation } from '../../awst/source-location'
 import { CodeError, InternalError, NotSupported } from '../../errors'
 import { logger } from '../../logger'
 import { codeInvariant, enumerate, invariant, sortBy } from '../../util'
@@ -223,9 +223,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
     }
 
     return toConcat
-      .map((i) =>
-        Array.isArray(i) ? new ArrayLiteralExpressionBuilder(SourceLocation.fromLocations(...i.map((li) => li.sourceLocation)), i) : i,
-      )
+      .map((i) => (Array.isArray(i) ? new ArrayLiteralExpressionBuilder(sourceLocation, i) : i))
       .reduce((acc, cur) => concatArrays(acc, cur, sourceLocation))
   }
 

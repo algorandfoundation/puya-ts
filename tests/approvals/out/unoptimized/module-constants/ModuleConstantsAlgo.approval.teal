@@ -514,24 +514,26 @@ getBigUintConstants_block@0:
 getStringConstants:
 
 getStringConstants_block@0:
-    // tests/approvals/module-constants.algo.ts:40
-    // const s_add = s_a + s_b
+    // tests/approvals/module-constants.algo.ts:53
+    // return [s_add]
     pushbytes 0x0000
     bytec_0 // 0x
     concat
+    // tests/approvals/module-constants.algo.ts:40
+    // const s_add = s_a + s_b
     bytec 4 // "ab"
     len
     itob
     extract 6 2
     bytec 4 // "ab"
     concat
+    // tests/approvals/module-constants.algo.ts:53
+    // return [s_add]
     bytec_0 // 0x
     swap
     concat
     intc_3 // 1
     callsub dynamic_array_concat_byte_length_head
-    // tests/approvals/module-constants.algo.ts:53
-    // return [s_add]
     retsub
 
 
