@@ -13,7 +13,7 @@ import type { ContractClassModel } from '../models/contract-class-model'
 import { CompilationSet } from '../models/contract-class-model'
 import type { LogicSigClassModel } from '../models/logic-sig-class-model'
 import type { ContractClassPType, PType } from '../ptypes'
-import { arc4BaseContractType, baseContractType } from '../ptypes'
+import { arc4BaseContractType, baseContractType, ClusteredContractClassType } from '../ptypes'
 import { typeRegistry } from '../type-registry'
 import { TypeResolver } from '../type-resolver'
 import { EvaluationContext } from './evaluation-context'
@@ -176,7 +176,7 @@ class AwstBuildContextImpl extends AwstBuildContext {
   getArc4Config(contractType: ContractClassPType, memberName?: string): ARC4MethodConfig | undefined | ARC4MethodConfig[] {
     if (memberName) {
       for (const ct of [contractType, ...contractType.allBases()]) {
-        if (ct.equals(baseContractType) || ct.equals(arc4BaseContractType)) continue
+        if (ct.equals(baseContractType) || ct.equals(arc4BaseContractType) || ct instanceof ClusteredContractClassType) continue
         const contractMethods = this.arc4MethodConfig.get(ct.fullName)
         invariant(contractMethods, `${ct} has not been visited`)
         if (contractMethods.has(memberName)) {

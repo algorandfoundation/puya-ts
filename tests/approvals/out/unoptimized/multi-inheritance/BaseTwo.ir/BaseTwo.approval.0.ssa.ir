@@ -10,14 +10,14 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         return tmp%0#0
 
 subroutine tests/approvals/multi-inheritance.algo.ts::BaseTwo.__puya_arc4_router__() -> bool:
-    block@0: // L24
+    block@0: // L25
         let tmp%0#0: uint64 = (txn NumAppArgs)
         let tmp%1#0: bool = (!= tmp%0#0 0u)
         goto tmp%1#0 ? block@1 : block@7
-    block@1: // abi_routing_L24
+    block@1: // abi_routing_L25
         let tmp%2#0: bytes = (txna ApplicationArgs 0)
         switch tmp%2#0 {method "methodTwo()string" => block@2, method "b2CantOverride()string" => block@3, method "methodCommon()string" => block@4, * => block@5}
-    block@2: // methodTwo_route_L26
+    block@2: // methodTwo_route_L27
         let tmp%3#0: uint64 = (txn OnCompletion)
         let tmp%4#0: bool = (== tmp%3#0 NoOp)
         (assert tmp%4#0) // OnCompletion is not NoOp
@@ -32,7 +32,7 @@ subroutine tests/approvals/multi-inheritance.algo.ts::BaseTwo.__puya_arc4_router
         let tmp%7#0: bytes = (concat 0x151f7c75 encoded_value%0#0)
         (log tmp%7#0)
         return 1u
-    block@3: // b2CantOverride_route_L35
+    block@3: // b2CantOverride_route_L36
         let tmp%8#0: uint64 = (txn OnCompletion)
         let tmp%9#0: bool = (== tmp%8#0 NoOp)
         (assert tmp%9#0) // OnCompletion is not NoOp
@@ -47,7 +47,7 @@ subroutine tests/approvals/multi-inheritance.algo.ts::BaseTwo.__puya_arc4_router
         let tmp%12#0: bytes = (concat 0x151f7c75 encoded_value%1#0)
         (log tmp%12#0)
         return 1u
-    block@4: // methodCommon_route_L8
+    block@4: // methodCommon_route_L9
         let tmp%13#0: uint64 = (txn OnCompletion)
         let tmp%14#0: bool = (== tmp%13#0 NoOp)
         (assert tmp%14#0) // OnCompletion is not NoOp
@@ -62,50 +62,50 @@ subroutine tests/approvals/multi-inheritance.algo.ts::BaseTwo.__puya_arc4_router
         let tmp%17#0: bytes = (concat 0x151f7c75 encoded_value%2#0)
         (log tmp%17#0)
         return 1u
-    block@5: // switch_case_default_L24
+    block@5: // switch_case_default_L25
         goto block@6
-    block@6: // switch_case_next_L24
+    block@6: // switch_case_next_L25
         goto block@11
-    block@7: // bare_routing_L24
+    block@7: // bare_routing_L25
         let tmp%18#0: uint64 = (txn OnCompletion)
         switch tmp%18#0 {0u => block@8, * => block@9}
-    block@8: // __algots__.defaultCreate_L24
+    block@8: // __algots__.defaultCreate_L25
         let tmp%19#0: uint64 = (txn ApplicationID)
         let tmp%20#0: bool = (== tmp%19#0 0u)
         (assert tmp%20#0) // can only call when creating
         tests/approvals/multi-inheritance.algo.ts::BaseTwo.__algots__.defaultCreate()
         return 1u
-    block@9: // switch_case_default_L24
+    block@9: // switch_case_default_L25
         goto block@10
-    block@10: // switch_case_next_L24
+    block@10: // switch_case_next_L25
         goto block@11
-    block@11: // after_if_else_L24
+    block@11: // after_if_else_L25
         return 0u
 
 subroutine tests/approvals/multi-inheritance.algo.ts::BaseTwo.methodTwo() -> bytes:
-    block@0: // L26
+    block@0: // L27
         return "base-two"
 
 subroutine tests/approvals/multi-inheritance.algo.ts::BaseTwo.b2CantOverride() -> bytes:
-    block@0: // L35
+    block@0: // L36
         return "base-two"
 
 subroutine tests/approvals/multi-inheritance.algo.ts::CommonBase.methodCommon() -> bytes:
-    block@0: // L8
+    block@0: // L9
         return "common"
 
 subroutine tests/approvals/multi-inheritance.algo.ts::BaseTwo.__algots__.defaultCreate() -> void:
-    block@0: // L24
+    block@0: // L25
         return 
 
 subroutine tests/approvals/multi-inheritance.algo.ts::BaseTwo.constructor() -> void:
-    block@0: // L24
+    block@0: // L25
         tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor()
         (app_global_put "stateTwo" "Hello")
         return 
 
 subroutine tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor() -> void:
-    block@0: // L5
+    block@0: // L6
         @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor()
         (app_global_put "stateCommon" 123u)
         return 

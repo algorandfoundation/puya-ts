@@ -7,32 +7,32 @@ main:
     bytecblock 0x151f7c750008626173652d74776f 0x151f7c750006636f6d6d6f6e "stateCommon"
     txn ApplicationID
     bnz main_after_if_else@2
-    // tests/approvals/multi-inheritance.algo.ts:6
+    // tests/approvals/multi-inheritance.algo.ts:7
     // stateCommon = GlobalState<uint64>({ initialValue: 123 })
     bytec_2 // "stateCommon"
     intc_1 // 123
     app_global_put
-    // tests/approvals/multi-inheritance.algo.ts:18
+    // tests/approvals/multi-inheritance.algo.ts:19
     // stateOne = GlobalState({ initialValue: Uint64(45) })
     pushbytes "stateOne"
     pushint 45 // 45
     app_global_put
-    // tests/approvals/multi-inheritance.algo.ts:6
+    // tests/approvals/multi-inheritance.algo.ts:7
     // stateCommon = GlobalState<uint64>({ initialValue: 123 })
     bytec_2 // "stateCommon"
     intc_1 // 123
     app_global_put
-    // tests/approvals/multi-inheritance.algo.ts:25
+    // tests/approvals/multi-inheritance.algo.ts:26
     // stateTwo = GlobalState({ initialValue: 'Hello' })
     pushbytess "stateTwo" "Hello" // "stateTwo", "Hello"
     app_global_put
-    // tests/approvals/multi-inheritance.algo.ts:41
+    // tests/approvals/multi-inheritance.algo.ts:42
     // stateMulti = GlobalState({ initialValue: 'Hmmm' })
     pushbytess "stateMulti" "Hmmm" // "stateMulti", "Hmmm"
     app_global_put
 
 main_after_if_else@2:
-    // tests/approvals/multi-inheritance.algo.ts:40
+    // tests/approvals/multi-inheritance.algo.ts:41
     // export class MultiBases extends classes(BaseOne, BaseTwo) {
     txn NumAppArgs
     bz main_bare_routing@15
@@ -41,13 +41,13 @@ main_after_if_else@2:
     match main_methodMulti_route@5 main_methodCallsSuper_route@6 main_callB2CantOverride_route@7 main_callB2Common_route@8 main_methodOne_route@9 main_methodCommon_route@10 main_b2CantOverride_route@11 main_methodTwo_route@12
 
 main_after_if_else@19:
-    // tests/approvals/multi-inheritance.algo.ts:40
+    // tests/approvals/multi-inheritance.algo.ts:41
     // export class MultiBases extends classes(BaseOne, BaseTwo) {
     pushint 0 // 0
     return
 
 main_methodTwo_route@12:
-    // tests/approvals/multi-inheritance.algo.ts:26
+    // tests/approvals/multi-inheritance.algo.ts:27
     // methodTwo() {
     txn OnCompletion
     !
@@ -60,7 +60,7 @@ main_methodTwo_route@12:
     return
 
 main_b2CantOverride_route@11:
-    // tests/approvals/multi-inheritance.algo.ts:12
+    // tests/approvals/multi-inheritance.algo.ts:13
     // b2CantOverride(): string {
     txn OnCompletion
     !
@@ -73,7 +73,7 @@ main_b2CantOverride_route@11:
     return
 
 main_methodCommon_route@10:
-    // tests/approvals/multi-inheritance.algo.ts:8
+    // tests/approvals/multi-inheritance.algo.ts:9
     // methodCommon() {
     txn OnCompletion
     !
@@ -86,7 +86,7 @@ main_methodCommon_route@10:
     return
 
 main_methodOne_route@9:
-    // tests/approvals/multi-inheritance.algo.ts:19
+    // tests/approvals/multi-inheritance.algo.ts:20
     // methodOne() {
     txn OnCompletion
     !
@@ -99,7 +99,7 @@ main_methodOne_route@9:
     return
 
 main_callB2Common_route@8:
-    // tests/approvals/multi-inheritance.algo.ts:55
+    // tests/approvals/multi-inheritance.algo.ts:56
     // callB2Common() {
     txn OnCompletion
     !
@@ -112,7 +112,7 @@ main_callB2Common_route@8:
     return
 
 main_callB2CantOverride_route@7:
-    // tests/approvals/multi-inheritance.algo.ts:51
+    // tests/approvals/multi-inheritance.algo.ts:52
     // callB2CantOverride() {
     txn OnCompletion
     !
@@ -125,7 +125,7 @@ main_callB2CantOverride_route@7:
     return
 
 main_methodCallsSuper_route@6:
-    // tests/approvals/multi-inheritance.algo.ts:47
+    // tests/approvals/multi-inheritance.algo.ts:48
     // methodCallsSuper() {
     txn OnCompletion
     !
@@ -138,7 +138,7 @@ main_methodCallsSuper_route@6:
     return
 
 main_methodMulti_route@5:
-    // tests/approvals/multi-inheritance.algo.ts:43
+    // tests/approvals/multi-inheritance.algo.ts:44
     // methodMulti() {
     txn OnCompletion
     !
@@ -151,7 +151,7 @@ main_methodMulti_route@5:
     return
 
 main_bare_routing@15:
-    // tests/approvals/multi-inheritance.algo.ts:40
+    // tests/approvals/multi-inheritance.algo.ts:41
     // export class MultiBases extends classes(BaseOne, BaseTwo) {
     txn OnCompletion
     bnz main_after_if_else@19

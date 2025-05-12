@@ -6,14 +6,14 @@ main:
     bytecblock 0x151f7c750006636f6d6d6f6e
     txn ApplicationID
     bnz main_after_if_else@2
-    // tests/approvals/multi-inheritance.algo.ts:6
+    // tests/approvals/multi-inheritance.algo.ts:7
     // stateCommon = GlobalState<uint64>({ initialValue: 123 })
     pushbytes "stateCommon"
     pushint 123 // 123
     app_global_put
 
 main_after_if_else@2:
-    // tests/approvals/multi-inheritance.algo.ts:5
+    // tests/approvals/multi-inheritance.algo.ts:6
     // export class CommonBase extends Contract {
     txn NumAppArgs
     bz main_bare_routing@9
@@ -22,13 +22,13 @@ main_after_if_else@2:
     match main_methodCommon_route@5 main_b2CantOverride_route@6
 
 main_after_if_else@13:
-    // tests/approvals/multi-inheritance.algo.ts:5
+    // tests/approvals/multi-inheritance.algo.ts:6
     // export class CommonBase extends Contract {
     pushint 0 // 0
     return
 
 main_b2CantOverride_route@6:
-    // tests/approvals/multi-inheritance.algo.ts:12
+    // tests/approvals/multi-inheritance.algo.ts:13
     // b2CantOverride(): string {
     txn OnCompletion
     !
@@ -41,7 +41,7 @@ main_b2CantOverride_route@6:
     return
 
 main_methodCommon_route@5:
-    // tests/approvals/multi-inheritance.algo.ts:8
+    // tests/approvals/multi-inheritance.algo.ts:9
     // methodCommon() {
     txn OnCompletion
     !
@@ -54,7 +54,7 @@ main_methodCommon_route@5:
     return
 
 main_bare_routing@9:
-    // tests/approvals/multi-inheritance.algo.ts:5
+    // tests/approvals/multi-inheritance.algo.ts:6
     // export class CommonBase extends Contract {
     txn OnCompletion
     bnz main_after_if_else@13
