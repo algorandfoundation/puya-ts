@@ -39,7 +39,7 @@ export class GlobalStateFunctionBuilder extends FunctionBuilder {
     })
     const ptype = new GlobalStateType({ content: contentPType })
 
-    return new GlobalStateFunctionResultBuilder(extractKey(key, wtypes.stateKeyWType), ptype, {
+    return new GlobalStateFunctionResultBuilder(extractKey(key, wtypes.stateKeyWType, sourceLocation), ptype, {
       initialValue: initialValue?.resolve(),
       sourceLocation,
     })
@@ -82,13 +82,13 @@ export class GlobalStateExpressionBuilder extends InstanceExpressionBuilder<Glob
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
     switch (name) {
       case 'delete':
-        return new GlobalStateDeleteFunctionBuilder(this.buildField(), sourceLocation)
+        return new GlobalStateDeleteFunctionBuilder(this.buildField(sourceLocation), sourceLocation)
       case 'value':
-        return typeRegistry.getInstanceEb(this.buildField(), this.ptype.contentType)
+        return typeRegistry.getInstanceEb(this.buildField(sourceLocation), this.ptype.contentType)
       case 'hasValue':
         return new BooleanExpressionBuilder(
           nodeFactory.stateExists({
-            field: this.buildField(),
+            field: this.buildField(sourceLocation),
             wtype: boolPType.wtype,
             sourceLocation,
           }),
@@ -97,12 +97,12 @@ export class GlobalStateExpressionBuilder extends InstanceExpressionBuilder<Glob
     return super.memberAccess(name, sourceLocation)
   }
 
-  protected buildField(): AppStateExpression {
+  protected buildField(sourceLocation: SourceLocation): AppStateExpression {
     return nodeFactory.appStateExpression({
       key: this._expr,
       wtype: this.ptype.contentType.wtypeOrThrow,
       existsAssertionMessage: 'check GlobalState exists',
-      sourceLocation: this.sourceLocation,
+      sourceLocation: sourceLocation,
     })
   }
 }
@@ -129,13 +129,13 @@ export class GlobalStateFunctionResultBuilder extends GlobalStateExpressionBuild
     this._keyExpr = expr
   }
 
-  protected buildField(): AppStateExpression {
+  protected buildField(sourceLocation: SourceLocation): AppStateExpression {
     codeInvariant(
       this._keyExpr,
       'Global state must have explicit key provided if not being assigned to a contract property',
       this.sourceLocation,
     )
-    return super.buildField()
+    return super.buildField(sourceLocation)
   }
 
   buildStorageDeclaration(

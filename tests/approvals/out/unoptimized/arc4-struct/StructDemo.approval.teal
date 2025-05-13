@@ -519,10 +519,10 @@ getPlugin_block@0:
     // tests/approvals/arc4-struct.algo.ts:48
     // plugins = BoxMap<string, PluginInfo>({ keyPrefix: 'plugins' })
     bytec_3 // "plugins"
-    frame_dig -1
-    concat
     // tests/approvals/arc4-struct.algo.ts:53
     // const value = this.plugins(key).value.copy()
+    frame_dig -1
+    concat
     box_get
     assert // Box must have value
     // tests/approvals/arc4-struct.algo.ts:54
@@ -580,10 +580,10 @@ setLastCalled_block@0:
     // tests/approvals/arc4-struct.algo.ts:48
     // plugins = BoxMap<string, PluginInfo>({ keyPrefix: 'plugins' })
     bytec_3 // "plugins"
-    frame_dig -3
-    concat
     // tests/approvals/arc4-struct.algo.ts:65
     // this.plugins(key).value.methods[index].lastCalled = new arc4.UintN64(lastCalled)
+    frame_dig -3
+    concat
     dup
     box_get
     assert // Box must have value
@@ -801,6 +801,8 @@ setPlugin_block@0:
     // tests/approvals/arc4-struct.algo.ts:48
     // plugins = BoxMap<string, PluginInfo>({ keyPrefix: 'plugins' })
     bytec_3 // "plugins"
+    // tests/approvals/arc4-struct.algo.ts:69
+    // this.plugins(key).value = new PluginInfo({
     frame_dig -1
     concat
     // tests/approvals/arc4-struct.algo.ts:69-81

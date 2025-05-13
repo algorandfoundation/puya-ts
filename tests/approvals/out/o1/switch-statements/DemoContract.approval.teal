@@ -340,14 +340,16 @@ increaseEvalAndReturn:
     // tests/approvals/switch-statements.algo.ts:63
     // private increaseEvalAndReturn(n: uint64) {
     proto 1 1
-    // tests/approvals/switch-statements.algo.ts:61
-    // evalCount = GlobalState<uint64>()
-    intc_3 // 0
-    bytec_0 // "evalCount"
-    app_global_get_ex
-    assert // check GlobalState exists
     // tests/approvals/switch-statements.algo.ts:64
     // this.evalCount.value++
+    intc_3 // 0
+    // tests/approvals/switch-statements.algo.ts:61
+    // evalCount = GlobalState<uint64>()
+    bytec_0 // "evalCount"
+    // tests/approvals/switch-statements.algo.ts:64
+    // this.evalCount.value++
+    app_global_get_ex
+    assert // check GlobalState exists
     intc_0 // 1
     +
     // tests/approvals/switch-statements.algo.ts:61
@@ -406,14 +408,16 @@ test_side_effects:
     pop
 
 test_side_effects_block@10:
-    // tests/approvals/switch-statements.algo.ts:61
-    // evalCount = GlobalState<uint64>()
-    intc_3 // 0
-    bytec_0 // "evalCount"
-    app_global_get_ex
-    assert // check GlobalState exists
     // tests/approvals/switch-statements.algo.ts:80
     // assert(this.evalCount.value === 2, 'Only two functions should be evaluated')
+    intc_3 // 0
+    // tests/approvals/switch-statements.algo.ts:61
+    // evalCount = GlobalState<uint64>()
+    bytec_0 // "evalCount"
+    // tests/approvals/switch-statements.algo.ts:80
+    // assert(this.evalCount.value === 2, 'Only two functions should be evaluated')
+    app_global_get_ex
+    assert // check GlobalState exists
     intc_2 // 2
     ==
     assert // Only two functions should be evaluated

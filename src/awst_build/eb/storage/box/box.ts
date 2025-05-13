@@ -27,7 +27,7 @@ export class BoxFunctionBuilder extends FunctionBuilder {
     })
 
     const ptype = new BoxPType({ content: contentPType })
-    return new BoxExpressionBuilder(extractKey(key, wtypes.boxKeyWType), ptype)
+    return new BoxExpressionBuilder(extractKey(key, wtypes.boxKeyWType, sourceLocation), ptype)
   }
 }
 

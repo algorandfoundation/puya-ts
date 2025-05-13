@@ -256,10 +256,10 @@ testBoxMap_block@0:
     // tests/approvals/box-proxies.algo.ts:36
     // const boxMap = BoxMap<string, bytes>({ keyPrefix: '' })
     bytec_1 // ""
-    frame_dig -2
-    concat
     // tests/approvals/box-proxies.algo.ts:40
     // boxMap(key).value = value
+    frame_dig -2
+    concat
     dup
     box_del
     pop
@@ -268,6 +268,8 @@ testBoxMap_block@0:
     // tests/approvals/box-proxies.algo.ts:36
     // const boxMap = BoxMap<string, bytes>({ keyPrefix: '' })
     bytec_1 // ""
+    // tests/approvals/box-proxies.algo.ts:42
+    // const boxMapItem = boxMap(key)
     frame_dig -2
     concat
     // tests/approvals/box-proxies.algo.ts:44
@@ -313,10 +315,10 @@ testBoxMap_block@0:
     // tests/approvals/box-proxies.algo.ts:36
     // const boxMap = BoxMap<string, bytes>({ keyPrefix: '' })
     bytec_1 // ""
-    frame_dig -2
-    concat
     // tests/approvals/box-proxies.algo.ts:53
     // assert(box(key).value === boxMap(key).value)
+    frame_dig -2
+    concat
     box_get
     assert // Box must have value
     ==
@@ -354,10 +356,10 @@ testBoxMap_block@0:
     // tests/approvals/box-proxies.algo.ts:36
     // const boxMap = BoxMap<string, bytes>({ keyPrefix: '' })
     bytec_1 // ""
-    swap
-    concat
     // tests/approvals/box-proxies.algo.ts:58
     // assert(box(`${key}x`).get({ default: Bytes('b') }) === boxMap(`${key}x`).get({ default: Bytes('b') }))
+    swap
+    concat
     box_get
     swap
     pushbytes "b"

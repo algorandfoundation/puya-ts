@@ -37,7 +37,7 @@ export class LocalStateFunctionBuilder extends FunctionBuilder {
       callLocation: sourceLocation,
     })
     const ptype = new LocalStateType({ content: contentPType })
-    return new LocalStateFunctionResultBuilder(extractKey(key, wtypes.stateKeyWType), ptype, { sourceLocation })
+    return new LocalStateFunctionResultBuilder(extractKey(key, wtypes.stateKeyWType, sourceLocation), ptype, { sourceLocation })
   }
 }
 
