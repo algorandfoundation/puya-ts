@@ -1,0 +1,93 @@
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        required: false
+        type: string
+        default: 20.x
+      working-directory:
+        required: false
+        type: string
+        default: '.'
+      repository:
+        required: true
+        type: string
+      pre-test-script:
+        required: false
+        type: string
+      test-script:
+        required: false
+        type: string
+        default: npm run test --if-present
+      test-environment-variables:
+        required: false
+        type: string
+        default: '{}'
+      install-script:
+        required: true
+        type: string
+      download-artifact-name:
+        required: false
+        type: string
+      download-artifact-pattern:
+        required: false
+        type: string
+      download-artifact-path:
+        required: false
+        description: The full path to the artifact directory, this path does not take working-directory into account
+        type: string
+        default: .
+
+jobs:
+  smoke-test:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: ${{ inputs.working-directory }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ inputs.repository }}
+          ref: 'main'
+          fetch-depth: 0
+
+      - name: Use Node.js ${{ inputs.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+          registry-url: 'https://npm.pkg.github.com'
+          cache: 'npm'
+          cache-dependency-path: ${{ inputs.working-directory }}/package-lock.json
+
+      - name: Download artifacts
+        if: ${{ inputs.download-artifact-name || inputs.download-artifact-pattern || inputs.download-artifact-path }}
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.download-artifact-name }}
+          pattern: ${{ inputs.download-artifact-pattern }}
+          path: ${{ inputs.download-artifact-path }}
+
+      # run npm ci preventing script access to npm auth token
+      - run: npm ci --ignore-scripts
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.npm-auth-token || secrets.GITHUB_TOKEN }}
+      # allow scripts to run without npm auth token
+      - run: npm rebuild && npm run prepare --if-present
+
+      - name: Install package
+        run: ${{ inputs.install-script }}
+
+      - name: Pre-test
+        if: ${{ inputs.pre-test-script }}
+        run: ${{ inputs.pre-test-script }}
+
+      - name: Test
+        run: ${{ inputs.test-script }}
+        env: ${{ fromJson(inputs.test-environment-variables) }}
+
+
+
