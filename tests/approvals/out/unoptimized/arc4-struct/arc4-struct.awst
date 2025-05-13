@@ -56,7 +56,7 @@ contract StructDemo
   
   getPlugin(key: string): PluginInfo
   {
-    value: PluginInfo = copy(Box[concat("plugins", reinterpret_cast<bytes>(key))].value)
+    value: PluginInfo = copy(Box[BoxMapKey(prefix="plugins", key=key)].value)
     assert(ARC4_DECODE(value.lastCalled) > 0, comment=Last called not zero)
     return value
   }
@@ -70,12 +70,12 @@ contract StructDemo
   
   setLastCalled(key: string, index: uint64, lastCalled: uint64): void
   {
-    Box[concat("plugins", reinterpret_cast<bytes>(key))].value.methods[index].lastCalled: arc4.uint64 = ARC4_ENCODE(lastCalled, wtype=arc4.uint64)
+    Box[BoxMapKey(prefix="plugins", key=key)].value.methods[index].lastCalled: arc4.uint64 = ARC4_ENCODE(lastCalled, wtype=arc4.uint64)
   }
   
   setPlugin(key: string): void
   {
-    Box[concat("plugins", reinterpret_cast<bytes>(key))].value: PluginInfo = new PluginInfo(lastValidRound=(#7 = { lastValidRound: 1, cooldown: 0, lastCalled: 0, adminPrivileges: False, methods: new arc4.dynamic_array<MethodInfo>(new MethodInfo(selector=(#8 = { selector: ARC4_ENCODE(Method("test()void"), wtype=arc4.static_array<arc4.byte>), cooldown: 1, lastCalled: 1 }).selector, cooldown=#8.cooldown, lastCalled=#8.lastCalled)) }).lastValidRound, cooldown=#7.cooldown, lastCalled=#7.lastCalled, adminPrivileges=#7.adminPrivileges, methods=#7.methods)
+    Box[BoxMapKey(prefix="plugins", key=key)].value: PluginInfo = new PluginInfo(lastValidRound=(#7 = { lastValidRound: 1, cooldown: 0, lastCalled: 0, adminPrivileges: False, methods: new arc4.dynamic_array<MethodInfo>(new MethodInfo(selector=(#8 = { selector: ARC4_ENCODE(Method("test()void"), wtype=arc4.static_array<arc4.byte>), cooldown: 1, lastCalled: 1 }).selector, cooldown=#8.cooldown, lastCalled=#8.lastCalled)) }).lastValidRound, cooldown=#7.cooldown, lastCalled=#7.lastCalled, adminPrivileges=#7.adminPrivileges, methods=#7.methods)
   }
   
   __algots__.defaultCreate(): void

@@ -20,18 +20,18 @@ subroutine testBox(box: box_key, value: string): void
 }
 subroutine testBoxMap(box: box_key, key: string, value: bytes): void
 {
-  Box[concat(box, reinterpret_cast<bytes>(key))].value: bytes = value
-  Box[concat("", reinterpret_cast<bytes>(key))].value: bytes = value
-  boxMapItem: box_key = concat("", reinterpret_cast<bytes>(key))
+  Box[BoxMapKey(prefix=box, key=key)].value: bytes = value
+  Box[BoxMapKey(prefix="", key=key)].value: bytes = value
+  boxMapItem: box_key = BoxMapKey(prefix="", key=key)
   assert(STATE_EXISTS(Box[boxMapItem].value))
   assert(reinterpret_cast<bytes>(box) == "two")
   assert("" == "")
-  assert(Boolean(checked_maybe(box_len(concat(box, reinterpret_cast<bytes>(key))), comment=Box must have value)))
-  assert(STATE_GET_EX(Box[concat(box, reinterpret_cast<bytes>(key))].value).1)
-  assert(Box[concat(box, reinterpret_cast<bytes>(key))].value == Box[concat("", reinterpret_cast<bytes>(key))].value)
-  isBoxDeleted: bool = STATE_DELETE(Box[concat(box, reinterpret_cast<bytes>(key))].value)
+  assert(Boolean(checked_maybe(box_len(BoxMapKey(prefix=box, key=key)), comment=Box must have value)))
+  assert(STATE_GET_EX(Box[BoxMapKey(prefix=box, key=key)].value).1)
+  assert(Box[BoxMapKey(prefix=box, key=key)].value == Box[BoxMapKey(prefix="", key=key)].value)
+  isBoxDeleted: bool = STATE_DELETE(Box[BoxMapKey(prefix=box, key=key)].value)
   assert(isBoxDeleted, comment=delete failed)
-  assert(STATE_GET(Box[concat(box, reinterpret_cast<bytes>("" + key + "x"))].value, default="b") == STATE_GET(Box[concat("", reinterpret_cast<bytes>("" + key + "x"))].value, default="b"))
+  assert(STATE_GET(Box[BoxMapKey(prefix=box, key="" + key + "x")].value, default="b") == STATE_GET(Box[BoxMapKey(prefix="", key="" + key + "x")].value, default="b"))
 }
 subroutine testBoxRef(box: box_key, length: uint64): void
 {
@@ -94,7 +94,7 @@ contract BoxNotExist
       }
       if (#0 == "boxmap") {
         #switch₁ᶜ₁:
-        return Box[concat("a", "bc")].value
+        return Box[BoxMapKey(prefix="a", key="bc")].value
       }
       if (#0 == "createbox") {
         #switch₁ᶜ₂:
@@ -217,26 +217,26 @@ contract TupleBox
   
   testBoxMap(): void
   {
-    assert(!STATE_EXISTS(Box[concat("tm1", "a")].value))
-    assert(!STATE_EXISTS(Box[concat("tm2", "a")].value))
-    Box[concat("tm1", "a")].value: readonlytuple[string, bytes, bool] = <tuple>["hello", "world", True]
-    Box[concat("tm2", "a")].value: object{ a: string, b: bytes, c: bool } = { a: "hello", b: "world", c: True }
-    assert(STATE_EXISTS(Box[concat("tm1", "a")].value))
-    assert(Box[concat("tm1", "a")].value.0 == "hello")
-    assert(Box[concat("tm1", "a")].value.1 == "world")
-    assert(Box[concat("tm1", "a")].value.2)
-    assert(STATE_EXISTS(Box[concat("tm2", "a")].value))
-    assert(Box[concat("tm2", "a")].value.a == "hello")
-    assert(Box[concat("tm2", "a")].value.b == "world")
-    assert(Box[concat("tm2", "a")].value.c)
-    Box[concat("tm1", "b")].value: readonlytuple[string, bytes, bool] = <tuple>["abc", "def", False]
-    assert(STATE_EXISTS(Box[concat("tm1", "b")].value))
-    Box[concat("tm2", "b")].value: object{ a: string, b: bytes, c: bool } = { a: "abc", b: "def", c: False }
-    assert(STATE_EXISTS(Box[concat("tm2", "b")].value))
-    STATE_DELETE(Box[concat("tm1", "a")].value)
-    assert(!STATE_EXISTS(Box[concat("tm1", "a")].value))
-    STATE_DELETE(Box[concat("tm2", "a")].value)
-    assert(!STATE_EXISTS(Box[concat("tm2", "a")].value))
+    assert(!STATE_EXISTS(Box[BoxMapKey(prefix="tm1", key="a")].value))
+    assert(!STATE_EXISTS(Box[BoxMapKey(prefix="tm2", key="a")].value))
+    Box[BoxMapKey(prefix="tm1", key="a")].value: readonlytuple[string, bytes, bool] = <tuple>["hello", "world", True]
+    Box[BoxMapKey(prefix="tm2", key="a")].value: object{ a: string, b: bytes, c: bool } = { a: "hello", b: "world", c: True }
+    assert(STATE_EXISTS(Box[BoxMapKey(prefix="tm1", key="a")].value))
+    assert(Box[BoxMapKey(prefix="tm1", key="a")].value.0 == "hello")
+    assert(Box[BoxMapKey(prefix="tm1", key="a")].value.1 == "world")
+    assert(Box[BoxMapKey(prefix="tm1", key="a")].value.2)
+    assert(STATE_EXISTS(Box[BoxMapKey(prefix="tm2", key="a")].value))
+    assert(Box[BoxMapKey(prefix="tm2", key="a")].value.a == "hello")
+    assert(Box[BoxMapKey(prefix="tm2", key="a")].value.b == "world")
+    assert(Box[BoxMapKey(prefix="tm2", key="a")].value.c)
+    Box[BoxMapKey(prefix="tm1", key="b")].value: readonlytuple[string, bytes, bool] = <tuple>["abc", "def", False]
+    assert(STATE_EXISTS(Box[BoxMapKey(prefix="tm1", key="b")].value))
+    Box[BoxMapKey(prefix="tm2", key="b")].value: object{ a: string, b: bytes, c: bool } = { a: "abc", b: "def", c: False }
+    assert(STATE_EXISTS(Box[BoxMapKey(prefix="tm2", key="b")].value))
+    STATE_DELETE(Box[BoxMapKey(prefix="tm1", key="a")].value)
+    assert(!STATE_EXISTS(Box[BoxMapKey(prefix="tm1", key="a")].value))
+    STATE_DELETE(Box[BoxMapKey(prefix="tm2", key="a")].value)
+    assert(!STATE_EXISTS(Box[BoxMapKey(prefix="tm2", key="a")].value))
   }
   
   __algots__.defaultCreate(): void
@@ -261,11 +261,36 @@ contract BoxToRefTest
   
   test(): void
   {
-    boxForCaller: box_key = concat("", reinterpret_cast<bytes>(txn<Sender>()))
+    boxForCaller: box_key = BoxMapKey(prefix="", key=txn<Sender>())
     box_create(boxForCaller, SIZE_OF(arc4.static_array<arc4.uint8>))
     boxRef: box_key = boxForCaller
     box_replace(boxRef, 0, reinterpret_cast<bytes>(123))
     assert(ARC4_DECODE(Box[boxForCaller].value[0]) == 123, comment=First array item in box should be 123)
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+contract CompositeKeyTest
+{
+  boxes {
+    [""]: object{ a: uint64, b: uint64 } => string
+  }
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  test(key: object{ a: uint64, b: uint64 }, val: string): void
+  {
+    Box[BoxMapKey(prefix="", key=key)].value: string = val
   }
   
   __algots__.defaultCreate(): void

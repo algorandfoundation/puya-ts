@@ -1,4 +1,4 @@
-import { intrinsicFactory } from '../../../../awst/intrinsic-factory'
+import { nodeFactory } from '../../../../awst/node-factory'
 import type { Expression } from '../../../../awst/nodes'
 import type { SourceLocation } from '../../../../awst/source-location'
 import { wtypes } from '../../../../awst/wtypes'
@@ -50,10 +50,11 @@ export class BoxMapExpressionBuilder extends BoxProxyExpressionBuilder<BoxMapPTy
     })
 
     return new BoxExpressionBuilder(
-      intrinsicFactory.bytesConcat({
-        left: this._expr,
-        right: key.toBytes(sourceLocation),
+      nodeFactory.boxPrefixedKeyExpression({
+        key: key.resolve(),
+        prefix: this._expr,
         sourceLocation: this.sourceLocation,
+        wtype: wtypes.boxKeyWType,
       }),
       new BoxPType({
         content: this.ptype.contentType,
