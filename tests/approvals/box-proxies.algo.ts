@@ -234,3 +234,11 @@ class BoxToRefTest extends Contract {
     assert(boxForCaller.value[0].native === 123, 'First array item in box should be 123')
   }
 }
+
+class CompositeKeyTest extends Contract {
+  boxMap = BoxMap<{ a: uint64; b: uint64 }, string>({ keyPrefix: '' })
+
+  test(key: { a: uint64; b: uint64 }, val: string) {
+    this.boxMap(key).value = val
+  }
+}

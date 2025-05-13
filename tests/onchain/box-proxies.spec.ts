@@ -1,6 +1,6 @@
 import { algos } from '@algorandfoundation/algokit-utils'
 import { describe, expect } from 'vitest'
-import { invariant, utf8ToUint8Array } from '../../src/util'
+import { bigIntToUint8Array, invariant, utf8ToUint8Array } from '../../src/util'
 import { createArc4TestFixture, createBaseTestFixture } from './util/test-fixture'
 
 describe('BoxProxies', () => {
@@ -75,6 +75,7 @@ describe('BoxProxies', () => {
     BoxCreate: { funding: algos(1) },
     TupleBox: { funding: algos(1) },
     BoxToRefTest: { funding: algos(1) },
+    CompositeKeyTest: { funding: algos(1) },
   })
   it('creates boxes of the min size', async ({ appClientBoxCreate }) => {
     await appClientBoxCreate.send.call({ method: 'createBoxes', boxReferences: ['bool', 'arc4b', 'a', 'b', 'c', 'd', 'e'] })
@@ -86,5 +87,12 @@ describe('BoxProxies', () => {
   it('should be able to store tuples in boxes', async ({ appClientTupleBox }) => {
     await appClientTupleBox.send.call({ method: 'testBox', boxReferences: ['t1', 't2'] })
     await appClientTupleBox.send.call({ method: 'testBoxMap', boxReferences: ['tm1', 'tm2'] })
+  })
+  it('should work with composite keys', async ({ appClientCompositeKeyTest }) => {
+    await appClientCompositeKeyTest.send.call({
+      method: 'test',
+      args: [{ a: 1, b: 2 }, 'value'],
+      boxReferences: [bigIntToUint8Array(1n << (8n + 2n), 16)],
+    })
   })
 })
