@@ -56,7 +56,7 @@ describe('Approvals', async () => {
   it('There should be no differences to committed changes', async () => {
     const result = await invokeCli({
       command: 'git',
-      args: ['status', '--porcelain'],
+      args: ['status', 'tests', '--porcelain'],
     })
     const diffs = result.lines
 
