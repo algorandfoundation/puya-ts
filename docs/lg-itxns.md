@@ -28,11 +28,40 @@ log(asset1_txn.createdAsset.id)
 
 Both the `submitGroup` and `params.submit()` functions return a `*InnerTxn` object per input params object which allow you to read application logs or created asset/application ids. There are restrictions on accessing these properties which come from the current AVM implementation. The restrictions are detailed below.
 
-## Restrictions
+### Restrictions
 
 The `*ItxnParams` objects cannot be passed between subroutines, or stored in arrays or application state. This is because they contain up to 20 fields each with many of the fields being of variable length. Storing this object would require encoding it to binary and would be very expensive and inefficient.
 
-Submitting dynamic group sizes with `submitGroup` is not supported as the AVM is quite restrictive in how transaction results are accessed. [gitxn](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v11/#gitxn) op codes require transaction indexes to be referenced with a compile time constant value and this is obviously not possible with dynamic group sizes. An alternative API may be offered in the future which allows dynamic group sizes with the caveat of not having access to the transaction results.
+Submitting dynamic group sizes with `submitGroup` is not supported as the AVM is quite restrictive in how transaction results are accessed. [gitxn](https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/v11/#gitxn) op codes require transaction indexes to be referenced with a compile time constant value and this is obviously not possible with dynamic group sizes. Instead, one can use the static `itxnCompose` helper to build a dynamic group which does not provide a strongly typed API for reading transaction results.
+
+## Itxn Compose API
+
+The `itxnCompose` API allows for composition of dynamically sized inner transaction groups. It makes some sacrifices to the developer experience in order to support this scenario so its use should be limited to situations which require it, an example being when an arbitrarily number of transactions must be submitted as a single group in order for another application to introspect this group. In most cases it will be easier to variadic groups in batches and rely on the atomic nature of the outer transaction to provide transactional consistency.
+
+The `itxnCompose` helper exposes three methods, `begin` and `next`, and `submit`. The first two share the same set of overloads for 'staging' a transaction from an itxn params object (eg. `itxn.assetConfig({...})`), directly from a set of itxn fields (eg. `{ type: TransactionType.Payment, amount: ..., receiver: ... }`), or using an API matching that of the [abiCall](#strongly-typed-abi-calls) helper. The first transaction staged for any group should make use of the `begin` method, all other transactions should use the `next` method. Multiple calls to `begin`, or calls to `next` that are not preceded by a `begin` will fail when executed on chain. When all transactions in the group have been staged, `submit` can be called to dispatch these transactions.
+
+To read the result from any of these transactions, one can make use of the `GITxn` ops - eg `op.GITxn.lastLog(1)`.
+
+```ts
+import type { uint64 } from '@algorandfoundation/algorand-typescript'
+import { Contract, itxnCompose, urange } from '@algorandfoundation/algorand-typescript'
+import { compileArc4 } from '@algorandfoundation/algorand-typescript/arc4'
+import { Hello } from './precompiled-apps.algo'
+
+function demo() {
+  const hello = compileArc4(Hello)
+  const appId = hello.call.create({ args: ['Hi'] }).itxn.createdApp
+
+  for (const i of urange(count)) {
+    if (i === 0) {
+      itxnCompose.begin(Hello.prototype.greet, { appId, args: ['ho'] })
+    } else {
+      itxnCompose.next(Hello.prototype.greet, { appId, args: ['ho'] })
+    }
+  }
+  itxnCompose.submit()
+}
+```
 
 ## Pre-compiled contracts
 
