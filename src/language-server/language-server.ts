@@ -17,6 +17,7 @@ import {
 } from 'vscode-languageserver/node.js'
 import { URI } from 'vscode-uri'
 import { Constants } from '../constants'
+import { PuyaService } from '../puya/puya-service'
 import { getWorkspaceDiagnostics } from './diagnostics'
 
 export const getDebugLspPort = () => {
@@ -49,14 +50,23 @@ export async function startLanguageServer() {
   // Create a simple text document manager.
   const documents = new TextDocuments(TextDocument)
   let workspaceFolder: string | undefined
+  let puyaService: PuyaService | undefined
 
   const disposables: Disposable[] = []
 
   disposables.push(
-    connection.onInitialize((params) => {
+    connection.onInitialize(async (params) => {
       // The extension sets the workspaceFolder property
       // therefore, workspaceFolders is an array with one element
       workspaceFolder = params.workspaceFolders?.[0]?.uri
+
+      // Initialize PuyaService if workspace folder is available
+      if (workspaceFolder) {
+        puyaService = await initializePuyaService(workspaceFolder)
+        if (!puyaService) {
+          return Promise.reject(new Error('Failed to initialize PuyaService'))
+        }
+      }
 
       const result: InitializeResult = {
         capabilities: {
@@ -69,6 +79,24 @@ export async function startLanguageServer() {
       return result
     }),
   )
+
+  // Initialize PuyaService and wait for it to be ready
+  const initializePuyaService = async (workspaceFolder: string): Promise<PuyaService | undefined> => {
+    const workspacePath = URI.parse(workspaceFolder).fsPath
+
+    connection.console.log(`[${Constants.puyaServiceSource}]: Initializing PuyaService with workspace path: ${workspacePath}`)
+    const service = new PuyaService(workspacePath)
+
+    try {
+      await service.start()
+      connection.console.log(`[${Constants.puyaServiceSource}]: PuyaService started successfully`)
+      return service
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error)
+      connection.console.error(`[${Constants.puyaServiceSource}]: Failed to start PuyaService: ${errorMessage}`)
+      return undefined
+    }
+  }
 
   disposables.push(
     connection.onInitialized(() => {
@@ -87,14 +115,13 @@ export async function startLanguageServer() {
   const documentChangeSubscription = documentChangeObservable
     .pipe(
       debounceTime(200),
-      map((_) => buildWorkspaceDiagnosticsMap(connection, workspaceFolder, documents)),
+      map(async (_) => {
+        return await buildWorkspaceDiagnosticsMap(connection, workspaceFolder, documents, puyaService!)
+      }),
       concatMap(async (v) => sendDiagnostics(connection, await v)),
     )
-    .subscribe(async () => {
-      // All logic for handling the document change event is done inside the pipe
-      // This is to make sure that the diagnostics are sent in the right order
-      // The empty subscribe function here is to make the observable run
-    })
+    // All logic for handling the document change event is done inside the pipe
+    .subscribe()
 
   // Make the text document manager listen on the connection
   // for open, change and close text document events
@@ -113,8 +140,21 @@ export async function startLanguageServer() {
     }),
   )
 
-  const shutdownDisposable = connection.onShutdown(() => {
+  const shutdownDisposable = connection.onShutdown(async () => {
     documentChangeSubscription.unsubscribe()
+
+    // Gracefully shutdown the PuyaService
+    if (puyaService) {
+      try {
+        await puyaService.stop()
+        connection.console.log(`[${Constants.puyaServiceSource}]: PuyaService stopped successfully`)
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : String(error)
+        connection.console.error(`[${Constants.puyaServiceSource}]: Error stopping PuyaService: ${errorMessage}`)
+      }
+    }
+
+    // Dispose all other disposables
     disposables.forEach((d) => d.dispose())
   })
 
@@ -129,6 +169,7 @@ async function buildWorkspaceDiagnosticsMap(
   connection: Connection,
   workspaceFolder: string | undefined,
   documents: TextDocuments<TextDocument>,
+  puyaService: PuyaService,
 ): Promise<Map<string, Diagnostic[]>> {
   if (!workspaceFolder) {
     connection.console.error('Workspace folder not set')
@@ -137,7 +178,7 @@ async function buildWorkspaceDiagnosticsMap(
   }
 
   const workspacePath = URI.parse(workspaceFolder).fsPath
-  return await getWorkspaceDiagnostics(connection, workspacePath, documents)
+  return await getWorkspaceDiagnostics(connection, workspacePath, documents, puyaService)
 }
 
 async function sendDiagnostics(connection: Connection, diagnosticsMap: Map<string, Diagnostic[]>) {
