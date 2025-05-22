@@ -3,18 +3,19 @@
 
 // tests/approvals/property-ordering.algo.ts::Demo.approvalProgram() -> uint64:
 main:
+    intcblock 8 0 2 4
 
 main_block@0:
-    // tests/approvals/property-ordering.algo.ts:20
+    // tests/approvals/property-ordering.algo.ts:29
     // test_assign_from_literal(4)
-    pushint 4 // 4
+    intc_3 // 4
     callsub test_assign_from_literal
-    // tests/approvals/property-ordering.algo.ts:22
+    // tests/approvals/property-ordering.algo.ts:31
     // test_assign_from_var({ a: 3, b: 4 })
     pushint 3 // 3
-    pushint 4 // 4
+    intc_3 // 4
     callsub test_assign_from_var
-    // tests/approvals/property-ordering.algo.ts:24
+    // tests/approvals/property-ordering.algo.ts:33
     // return true
     pushint 1 // 1
     return
@@ -22,19 +23,151 @@ main_block@0:
 
 // tests/approvals/property-ordering.algo.ts::test_assign_from_var(x.a: uint64, x.b: uint64) -> void:
 test_assign_from_var:
-    // tests/approvals/property-ordering.algo.ts:6
+    // tests/approvals/property-ordering.algo.ts:7
     // function test_assign_from_var(x: { a: uint64; b: uint64 }) {
     proto 2 0
 
 test_assign_from_var_block@0:
+    // tests/approvals/property-ordering.algo.ts:8
+    // assert(x.a !== x.b, 'For the purpose of this test, a should not equal b')
+    frame_dig -2
+    frame_dig -1
+    !=
+    assert // For the purpose of this test, a should not equal b
+    // tests/approvals/property-ordering.algo.ts:9
+    // const obj: BthenA = x
+    frame_dig -1
+    frame_dig -2
+    swap
+    // tests/approvals/property-ordering.algo.ts:7
+    // function test_assign_from_var(x: { a: uint64; b: uint64 }) {
+    frame_dig -2
+    itob
+    frame_dig -1
+    itob
+    swap
+    // tests/approvals/property-ordering.algo.ts:10
+    // const xEncoded = encodeArc4(x)
+    pushbytes 0x
+    swap
+    concat
+    swap
+    concat
+    cover 2
+    // tests/approvals/property-ordering.algo.ts:9
+    // const obj: BthenA = x
+    itob
+    swap
+    itob
+    swap
+    // tests/approvals/property-ordering.algo.ts:11
+    // const objEncoded = encodeArc4(obj)
+    pushbytes 0x
+    swap
+    concat
+    swap
+    concat
+    // tests/approvals/property-ordering.algo.ts:12
+    // assert(xEncoded === objEncoded.slice(8).concat(objEncoded.slice(0, 8)), 'Encoded order should be swapped')
+    dup
+    len
+    intc_0 // 8
+    dig 1
+    >=
+    intc_0 // 8
+    dig 2
+    uncover 2
+    select
+    dig 2
+    swap
+    uncover 2
+    substring3
+    swap
+    dup
+    len
+    intc_1 // 0
+    dig 1
+    >=
+    intc_1 // 0
+    dig 2
+    uncover 2
+    select
+    swap
+    intc_0 // 8
+    dig 1
+    >=
+    intc_0 // 8
+    uncover 2
+    uncover 2
+    select
+    uncover 2
+    uncover 2
+    uncover 2
+    substring3
+    concat
+    ==
+    assert // Encoded order should be swapped
     retsub
 
 
 // tests/approvals/property-ordering.algo.ts::test_assign_from_literal(x: uint64) -> void:
 test_assign_from_literal:
-    // tests/approvals/property-ordering.algo.ts:10
+    // tests/approvals/property-ordering.algo.ts:15
     // function test_assign_from_literal(x: uint64) {
     proto 1 0
 
 test_assign_from_literal_block@0:
+    // tests/approvals/property-ordering.algo.ts:18
+    // z: (b = x * 2),
+    frame_dig -1
+    intc_2 // 2
+    *
+    // tests/approvals/property-ordering.algo.ts:17-20
+    // const obj: { a: uint64; z: uint64 } = {
+    //   z: (b = x * 2),
+    //   a: b,
+    // }
+    dup
+    // tests/approvals/property-ordering.algo.ts:22
+    // z: x * 2,
+    frame_dig -1
+    intc_2 // 2
+    *
+    // tests/approvals/property-ordering.algo.ts:21-24
+    // assertMatch(obj, {
+    //   z: x * 2,
+    //   a: x * 2,
+    // })
+    ==
+    bz test_assign_from_literal_bool_false@3
+
+test_assign_from_literal_and_contd@1:
+    // tests/approvals/property-ordering.algo.ts:23
+    // a: x * 2,
+    frame_dig -1
+    intc_2 // 2
+    *
+    // tests/approvals/property-ordering.algo.ts:21-24
+    // assertMatch(obj, {
+    //   z: x * 2,
+    //   a: x * 2,
+    // })
+    frame_dig 0
+    ==
+    bz test_assign_from_literal_bool_false@3
+
+test_assign_from_literal_bool_true@2:
+    pushint 1 // 1
+
+test_assign_from_literal_bool_merge@4:
+    // tests/approvals/property-ordering.algo.ts:21-24
+    // assertMatch(obj, {
+    //   z: x * 2,
+    //   a: x * 2,
+    // })
+    assert // assert target is match for conditions
     retsub
+
+test_assign_from_literal_bool_false@3:
+    intc_1 // 0
+    b test_assign_from_literal_bool_merge@4
