@@ -80,19 +80,6 @@ export namespace wtypes {
     }
   }
 
-  export class WStructType extends WType {
-    fields: Record<string, WType>
-    readonly frozen = true
-
-    constructor({ fields, name }: { fields: Record<string, WType>; name: string }) {
-      super({
-        name,
-        immutable: true,
-      })
-      this.fields = fields
-    }
-  }
-
   export class WTuple extends WType {
     types: WType[]
     names: string[] | undefined
@@ -230,7 +217,7 @@ export namespace wtypes {
   }
 
   export class ARC4Struct extends ARC4Type {
-    fields: Record<string, ARC4Type>
+    fields: Record<string, WType>
     sourceLocation: SourceLocation | null
     frozen: boolean
     desc: string | null
@@ -245,12 +232,12 @@ export namespace wtypes {
       frozen: boolean
       name: string
       desc: string | null
-      fields: Record<string, ARC4Type>
+      fields: Record<string, WType>
       sourceLocation?: SourceLocation
     }) {
       super({
         arc4Alias: `(${Object.values(fields)
-          .map((f) => f.arc4Alias)
+          .map((f) => (f instanceof ARC4Type ? f.arc4Alias : f.name))
           .join(',')})`,
         name,
         immutable: frozen && Object.values(fields).every((t) => t.immutable),

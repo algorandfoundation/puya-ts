@@ -42,6 +42,7 @@ import { LogFunctionBuilder } from '../eb/log-function-builder'
 import { LogicSigClassBuilder, LogicSigOptionsDecoratorBuilder } from '../eb/logic-sig-builder'
 import { MatchFunctionBuilder } from '../eb/match-function-builder'
 import { MutableArrayClassBuilder, MutableArrayExpressionBuilder } from '../eb/mutable-arrays'
+import { MutableObjectClassBuilder, MutableObjectExpressionBuilder } from '../eb/mutable-object'
 import { NamespaceBuilder } from '../eb/namespace-builder'
 import { NativeArrayExpressionBuilder } from '../eb/native-array-expression-builder'
 import { NeverExpressionBuilder } from '../eb/never-expression-builder'
@@ -238,6 +239,7 @@ import {
   urangeFunction,
   voidPType,
 } from './index'
+import { MutableObjectClass, MutableObjectType } from './mutable-object'
 import { ALL_OP_ENUMS } from './op-ptypes'
 
 export function registerPTypes(typeRegistry: TypeRegistry) {
@@ -402,6 +404,8 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.registerGeneric({ generic: Arc4TupleGeneric, ptype: ARC4TupleType, instanceEb: Arc4TupleExpressionBuilder })
   typeRegistry.register({ ptype: ARC4StructType, instanceEb: StructExpressionBuilder })
   typeRegistry.register({ ptype: ARC4StructClass, singletonEb: StructClassBuilder })
+  typeRegistry.register({ ptype: MutableObjectType, instanceEb: MutableObjectExpressionBuilder })
+  typeRegistry.register({ ptype: MutableObjectClass, singletonEb: MutableObjectClassBuilder })
 
   // ARC4 lib
   typeRegistry.register({ ptype: interpretAsArc4Function, singletonEb: InterpretAsArc4FunctionBuilder })
