@@ -1,11 +1,15 @@
+import upath from 'upath'
 import { describe, expect, it } from 'vitest'
+import { files } from '../scripts/code-gen'
 import { invokeCli } from '../src/util/invoke-cli'
 
 describe('code generated files', () => {
   it('should be not have uncommitted changes', async () => {
+    const filePaths = Object.values(files).flatMap((f) => (f.disabled ? [] : upath.join(f.projectRoot, f.outPath)))
+
     const result = await invokeCli({
       command: 'git',
-      args: ['status', 'src', 'packages', '--porcelain'],
+      args: ['status', ...filePaths, '--porcelain'],
     })
     const diffs = result.lines
 
