@@ -3,6 +3,7 @@ import { SourceLocation } from '../awst/source-location'
 import { Constants } from '../constants'
 import { CodeError, InternalError } from '../errors'
 import { logger } from '../logger'
+import type { DeliberateAny } from '../typescript-helpers'
 import { codeInvariant, hasFlags, intersectsFlags, invariant, isIn, normalisePath } from '../util'
 import { getNodeName } from '../visitor/syntax-names'
 import type { AppStorageType, PType } from './ptypes'
@@ -71,11 +72,6 @@ export class TypeResolver {
     }
     const sig = this.checker.getResolvedSignature(node)
     invariant(sig, 'CallExpression must resolve to a signature')
-    /*
-      The method getTypeArgumentsForResolvedSignature has not made it into typescript yet, but it has been
-      proposed here: https://github.com/microsoft/TypeScript/issues/59637 and added to the backlog. For now
-      the method has been patched into the TypeScript 5.7.2 using patch-package
-     */
     const tps = this.checker.getTypeArgumentsForResolvedSignature(sig)
     return tps?.map((t) => this.resolveType(t, sourceLocation)) ?? []
   }
@@ -133,7 +129,7 @@ export class TypeResolver {
   }
 
   @CacheResolvedType
-  @CaptureTypeContext
+  //@CaptureTypeContext
   resolveType(tsType: ts.Type, sourceLocation: SourceLocation): PType {
     const typeName = this.getTypeName(tsType, sourceLocation)
 
@@ -244,12 +240,8 @@ export class TypeResolver {
         return this.resolveClusteredPrototype(tsType, sourceLocation)
     }
 
-    if (tsType.aliasTypeArguments?.length) {
-      const typeArgs = tsType.aliasTypeArguments.map((a) => this.resolveType(a, sourceLocation))
-      const gt = typeRegistry.tryResolveGenericPType(typeName, typeArgs)
-      if (gt) return gt
-    } else if (isTypeReference(tsType) && tsType.typeArguments?.length) {
-      const typeArgs = tsType.typeArguments.map((a) => this.resolveType(a, sourceLocation))
+    const typeArgs = this.tryResolveGenericTypeArgs(tsType, sourceLocation)
+    if (typeArgs?.length) {
       const gt = typeRegistry.tryResolveGenericPType(typeName, typeArgs)
       if (gt) return gt
     } else {
@@ -301,6 +293,30 @@ export class TypeResolver {
       return this.reflectObjectType(tsType, sourceLocation)
     }
     throw new InternalError(`Cannot determine type of ${typeName}`, { sourceLocation })
+  }
+
+  private tryResolveGenericTypeArgs(tsType: ts.Type, sourceLocation: SourceLocation) {
+    if (tsType.aliasTypeArguments?.length) {
+      return tsType.aliasTypeArguments.map((a) => this.resolveType(a, sourceLocation))
+    } else if (isTypeReference(tsType) && tsType.typeArguments?.length) {
+      return tsType.typeArguments.map((a) => this.resolveType(a, sourceLocation))
+    } else if (hasTypeReferenceTarget(tsType) && 'mapper' in tsType) {
+      /*
+      Dodgy code alert!!
+      If an alias closes a generic parameter for example by doing `type B32 = bytes<32>` the current type won't have
+      typeArguments and the target type will have unresolved type arguments (ie. a type param TLength). The mapper
+      object contains the information needed to fill these type arguments but the logic to extract this information is
+      internal. getTypeArgumentsForResolvedSignature 'exposes' this logic for the purpose of retrieving inferred type
+      params in a function signature - we're doing a dodgy here and passing in a mock signature object with only the
+      required properties set.
+       */
+      return this.checker
+        .getTypeArgumentsForResolvedSignature({
+          typeParameters: tsType.target.aliasTypeArguments,
+          mapper: tsType.mapper,
+        } as DeliberateAny)
+        ?.map((t) => this.resolveType(t, sourceLocation))
+    }
   }
 
   /**
@@ -467,14 +483,26 @@ export class TypeResolver {
   }
 
   getTypeName(type: ts.Type, sourceLocation: SourceLocation): SymbolName | undefined {
-    if (type.aliasSymbol) {
-      const name = this.getSymbolFullName(type.aliasSymbol, sourceLocation)
-      // We only respect type aliases within certain modules, otherwise use the
-      // unaliased symbol
-      if (name?.module.startsWith(Constants.algoTsPackage) || name?.module === Constants.moduleNames.polytype) return name
-    }
+    const typeName = type.symbol ? this.getSymbolFullName(type.symbol, sourceLocation) : undefined
+    const aliasName = type.aliasSymbol ? this.getSymbolFullName(type.aliasSymbol, sourceLocation) : undefined
 
-    return type.symbol ? this.getSymbolFullName(type.symbol, sourceLocation) : undefined
+    // If the alias was defined in algo-ts or polytype, respect the alias
+    if (aliasName?.module.startsWith(Constants.algoTsPackage) || aliasName?.module === Constants.moduleNames.polytype) {
+      return aliasName
+    }
+    // If the type refers to a type literal in algo-ts or polytype, attempt to resolve the alias
+    if (typeName?.module.startsWith(Constants.algoTsPackage) || typeName?.module === Constants.moduleNames.polytype) {
+      if (typeName?.name === '__type') {
+        const parentDeclaration = type.symbol.declarations?.[0]?.parent
+        if (parentDeclaration && ts.isTypeAliasDeclaration(parentDeclaration)) {
+          const name = this.getUnaliasedSymbolForNode(parentDeclaration.name)
+          if (name) {
+            return this.getSymbolFullName(name, sourceLocation)
+          }
+        }
+      }
+    }
+    return typeName
   }
 
   private getLocationOfSymbol(symbol: ts.Symbol): SourceLocation | undefined {
@@ -513,6 +541,14 @@ function isObjectType(tsType: ts.Type): tsType is ts.ObjectType {
 }
 function isTypeReference(tsType: ts.Type): tsType is ts.TypeReference {
   return isObjectType(tsType) && hasFlags(tsType.objectFlags, ts.ObjectFlags.Reference)
+}
+
+/**
+ * The type may not have ts.ObjectFlags.Reference set, but it does have a target property
+ * @param tsType
+ */
+function hasTypeReferenceTarget(tsType: ts.Type): tsType is ts.Type & Pick<ts.TypeReference, 'target'> {
+  return isObjectType(tsType) && 'target' in tsType
 }
 function isTupleType(tsType: ts.Type): tsType is ts.TupleType {
   return isObjectType(tsType) && hasFlags(tsType.objectFlags, ts.ObjectFlags.Tuple)
@@ -557,7 +593,7 @@ function CaptureTypeContext(resolveType: (this: TypeResolver, tsType: ts.Type, s
       if (e instanceof CodeError) throw e
       invariant(e instanceof Error, `Only errors should be thrown. Found: ${e}`)
 
-      throw new InternalError(`Error resolving type: ${resolveStack.map((s) => `${s?.fullName ?? '<unnamed>'}`).join('>')}`, {
+      throw new InternalError(`Error resolving type: ${resolveStack.map((s) => `${s?.fullName ?? '<unnamed>'}`).join('>')} ${e.message}`, {
         sourceLocation,
         cause: e,
       })

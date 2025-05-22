@@ -113,7 +113,7 @@ main_receiveB32_route@4:
 
 main_hashAddresses_route@3:
     // tests/approvals/static-bytes.algo.ts:15
-    // hashAddresses(a1: bytes<32>, a2: bytes<32>): bytes<32> {
+    // hashAddresses(a1: B32, a2: B32): B32Alias {
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
@@ -124,7 +124,7 @@ main_hashAddresses_route@3:
     txna ApplicationArgs 1
     txna ApplicationArgs 2
     // tests/approvals/static-bytes.algo.ts:15
-    // hashAddresses(a1: bytes<32>, a2: bytes<32>): bytes<32> {
+    // hashAddresses(a1: B32, a2: B32): B32Alias {
     callsub hashAddresses
     dup
     len
@@ -153,7 +153,7 @@ main_bare_routing@11:
 // tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.hashAddresses(a1: bytes, a2: bytes) -> bytes:
 hashAddresses:
     // tests/approvals/static-bytes.algo.ts:15
-    // hashAddresses(a1: bytes<32>, a2: bytes<32>): bytes<32> {
+    // hashAddresses(a1: B32, a2: B32): B32Alias {
     proto 2 1
     // tests/approvals/static-bytes.algo.ts:16
     // return sha512_256(a1.concat(a2))
