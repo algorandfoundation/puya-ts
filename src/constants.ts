@@ -27,6 +27,7 @@ export const Constants = {
       templateVar: `${algoTsPackage}/template-var.d.ts`,
       transactions: `${algoTsPackage}/transactions.d.ts`,
       util: `${algoTsPackage}/util.d.ts`,
+      mutableObject: `${algoTsPackage}/mutable-object.d.ts`,
     },
   },
 

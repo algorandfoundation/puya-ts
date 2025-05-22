@@ -19,3 +19,4 @@ export { compile, CompiledContract, CompiledLogicSig, CompileContractOptions, Co
 export { MutableArray } from './mutable-array'
 export { emit } from './arc-28'
 export { OnCompleteAction, OnCompleteActionStr } from './on-complete-action'
+export * from './mutable-object'
