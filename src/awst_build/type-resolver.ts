@@ -129,7 +129,6 @@ export class TypeResolver {
   }
 
   @CacheResolvedType
-  //@CaptureTypeContext
   resolveType(tsType: ts.Type, sourceLocation: SourceLocation): PType {
     const typeName = this.getTypeName(tsType, sourceLocation)
 
@@ -580,27 +579,6 @@ function tryGetTypeDescription(tsType: ts.Type): string | undefined {
     }
   }
   return undefined
-}
-
-function CaptureTypeContext(resolveType: (this: TypeResolver, tsType: ts.Type, sourceLocation: SourceLocation) => PType) {
-  const resolveStack: Array<SymbolName | undefined> = []
-  return function (this: TypeResolver, tsType: ts.Type, sourceLocation: SourceLocation): PType {
-    try {
-      const name = this.getTypeName(tsType, sourceLocation)
-      resolveStack.push(name)
-      return resolveType.call(this, tsType, sourceLocation)
-    } catch (e) {
-      if (e instanceof CodeError) throw e
-      invariant(e instanceof Error, `Only errors should be thrown. Found: ${e}`)
-
-      throw new InternalError(`Error resolving type: ${resolveStack.map((s) => `${s?.fullName ?? '<unnamed>'}`).join('>')} ${e.message}`, {
-        sourceLocation,
-        cause: e,
-      })
-    } finally {
-      resolveStack.pop()
-    }
-  }
 }
 
 function CacheResolvedType(resolveType: (this: TypeResolver, tsType: ts.Type, sourceLocation: SourceLocation) => PType) {
