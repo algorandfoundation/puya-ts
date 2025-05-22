@@ -12,7 +12,7 @@ function padTo32(b: bytes<16>): bytes<32> {
 }
 
 class StaticBytesAlgo extends Contract {
-  hashAddresses(a1: bytes<32>, a2: bytes<32>): bytes<32> {
+  hashAddresses(a1: B32, a2: B32): B32Alias {
     return sha512_256(a1.concat(a2))
   }
 
@@ -47,3 +47,7 @@ class StaticBytesAlgo extends Contract {
     assert(bitAnd === Txn.sender.bytes)
   }
 }
+
+type B<T extends uint64> = bytes<T>
+type B32 = B<32>
+type B32Alias = B32
