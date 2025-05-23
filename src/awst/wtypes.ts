@@ -254,11 +254,11 @@ export namespace wtypes {
     }
   }
   export class ARC4Tuple extends ARC4Type {
-    readonly types: ARC4Type[]
+    readonly types: WType[]
     readonly sourceLocation: SourceLocation | null
 
-    constructor({ types, sourceLocation }: { types: ARC4Type[]; sourceLocation?: SourceLocation }) {
-      const typesStr = types.map((t) => t.arc4Alias).join(',')
+    constructor({ types, sourceLocation }: { types: WType[]; sourceLocation?: SourceLocation }) {
+      const typesStr = types.map((t) => (t instanceof ARC4Type ? t.arc4Alias : t.name)).join(',')
       super({
         name: `arc4.tuple<${typesStr}>`,
         arc4Alias: `(${typesStr})`,
@@ -269,8 +269,8 @@ export namespace wtypes {
   }
 
   export abstract class ARC4Array extends ARC4Type {
-    readonly elementType: ARC4Type
-    protected constructor(props: { arc4Alias: string; name: string; elementType: ARC4Type; immutable?: boolean }) {
+    readonly elementType: WType
+    protected constructor(props: { arc4Alias: string; name: string; elementType: WType; immutable?: boolean }) {
       super({
         ...props,
         immutable: props.immutable ?? false,
@@ -287,7 +287,7 @@ export namespace wtypes {
       arc4Alias,
       immutable,
     }: {
-      elementType: ARC4Type
+      elementType: WType
       sourceLocation?: SourceLocation
       arc4Alias?: string
       immutable?: boolean
@@ -295,7 +295,7 @@ export namespace wtypes {
       super({
         elementType,
         name: `arc4.dynamic_array<${elementType.name}>`,
-        arc4Alias: arc4Alias ?? `${elementType.arc4Alias}[]`,
+        arc4Alias: arc4Alias ?? `${elementType instanceof ARC4Type ? elementType.arc4Alias : elementType.name}[]`,
         immutable,
       })
       this.sourceLocation = sourceLocation ?? null
@@ -312,7 +312,7 @@ export namespace wtypes {
       immutable,
     }: {
       arraySize: bigint
-      elementType: ARC4Type
+      elementType: WType
       sourceLocation?: SourceLocation
       arc4Alias?: string
       immutable?: boolean
@@ -320,7 +320,7 @@ export namespace wtypes {
       super({
         elementType,
         name: `arc4.static_array<${elementType.name}>`,
-        arc4Alias: arc4Alias ?? `${elementType.arc4Alias}[${arraySize}]`,
+        arc4Alias: arc4Alias ?? `${elementType instanceof ARC4Type ? elementType.arc4Alias : elementType.name}[${arraySize}]`,
         immutable,
       })
       this.sourceLocation = sourceLocation ?? null
