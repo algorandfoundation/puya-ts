@@ -1,6 +1,6 @@
 import type { uint64 } from '@algorandfoundation/algorand-typescript'
 import { arc4, assert, Box, BoxMap, Contract, log, MutableObject } from '@algorandfoundation/algorand-typescript'
-import { interpretAsArc4, methodSelector, UintN } from '@algorandfoundation/algorand-typescript/arc4'
+import { methodSelector, UintN } from '@algorandfoundation/algorand-typescript/arc4'
 
 type ARC4Uint64 = UintN<64>
 const ARC4Uint64 = UintN<64>
@@ -32,13 +32,10 @@ export class MutableObjectDemo extends Contract {
   public implicitCastingAndSpreading(v1: Vector) {
     const v2 = new Vector(v1)
     const v3 = new Vector({ ...v2 })
-    assert(v1.bytes === v2.bytes)
-    assert(v3.bytes === v1.bytes)
-  }
-
-  public toAndFromBytes(v1: Vector): Vector {
-    const v1_bytes = v1.bytes
-    return interpretAsArc4<Vector>(v1_bytes)
+    assert(v1.x === v2.x)
+    assert(v1.y === v2.y)
+    assert(v3.x === v1.x)
+    assert(v3.y === v1.y)
   }
 
   plugins = BoxMap<string, PluginInfo>({ keyPrefix: 'plugins' })

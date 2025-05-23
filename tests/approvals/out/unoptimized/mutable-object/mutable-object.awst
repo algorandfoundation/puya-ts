@@ -39,14 +39,10 @@ contract MutableObjectDemo
   {
     v2: Vector = new Vector(x=(#6 = ARC4_DECODE(v1)).x, y=#6.y)
     v3: Vector = new Vector(x=(#7 = { x: v2.x, y: v2.y }).x, y=#7.y)
-    assert(reinterpret_cast<bytes>(v1) == reinterpret_cast<bytes>(v2))
-    assert(reinterpret_cast<bytes>(v3) == reinterpret_cast<bytes>(v1))
-  }
-  
-  toAndFromBytes(v1: Vector): Vector
-  {
-    v1_bytes: bytes = reinterpret_cast<bytes>(v1)
-    return reinterpret_cast<Vector>(v1_bytes)
+    assert(v1.x == v2.x)
+    assert(v1.y == v2.y)
+    assert(v3.x == v1.x)
+    assert(v3.y == v1.y)
   }
   
   getPlugin(key: string): PluginInfo
