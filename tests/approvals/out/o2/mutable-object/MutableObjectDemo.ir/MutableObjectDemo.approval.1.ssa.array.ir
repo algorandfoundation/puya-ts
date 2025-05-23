@@ -11,8 +11,9 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%4#0) // OnCompletion is not NoOp
         let tmp%5#0: uint64 = (txn ApplicationID)
         (assert tmp%5#0) // can only call when not creating
-        (log 0x0000000000000000)
-        (log 0x0000000000000000)
+        let val_as_bytes%0#4: bytes[8] = (itob 0u)
+        (log val_as_bytes%0#4)
+        (log val_as_bytes%0#4)
         let tests/approvals/mutable-object.algo.ts::MutableObjectDemo.__puya_arc4_router__%0#0: bool = 1u
         goto block@19
     block@4: // addVectors_route_L19
@@ -23,15 +24,15 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%9#0) // can only call when not creating
         let v1#5: bytes[16] = (txna ApplicationArgs 1)
         let v2#1: bytes[16] = (txna ApplicationArgs 2)
-        let tmp%1#5: uint64 = (extract_uint64 v1#5 0u)
-        let tmp%3#2: uint64 = (extract_uint64 v2#1 0u)
-        let to_encode%0#0: uint64 = (+ tmp%1#5 tmp%3#2)
-        let val_as_bytes%0#2: bytes[8] = (itob to_encode%0#0)
-        let tmp%5#1: uint64 = (extract_uint64 v1#5 8u)
-        let tmp%7#1: uint64 = (extract_uint64 v2#1 8u)
-        let to_encode%1#0: uint64 = (+ tmp%5#1 tmp%7#1)
-        let val_as_bytes%1#1: bytes[8] = (itob to_encode%1#0)
-        let encoded_tuple_buffer%2#1: bytes = (concat val_as_bytes%0#2 val_as_bytes%1#1)
+        let tmp%0#6: uint64 = (extract_uint64 v1#5 0u)
+        let tmp%1#5: uint64 = (extract_uint64 v2#1 0u)
+        let tmp%2#4: uint64 = (+ tmp%0#6 tmp%1#5)
+        let tmp%3#2: uint64 = (extract_uint64 v1#5 8u)
+        let tmp%4#1: uint64 = (extract_uint64 v2#1 8u)
+        let tmp%5#1: uint64 = (+ tmp%3#2 tmp%4#1)
+        let val_as_bytes%0#3: bytes[8] = (itob tmp%2#4)
+        let val_as_bytes%1#2: bytes[8] = (itob tmp%5#1)
+        let encoded_tuple_buffer%2#1: bytes = (concat val_as_bytes%0#3 val_as_bytes%1#2)
         let tmp%12#0: bytes = (concat 0x151f7c75 encoded_tuple_buffer%2#1)
         (log tmp%12#0)
         let tests/approvals/mutable-object.algo.ts::MutableObjectDemo.__puya_arc4_router__%0#1: bool = 1u
@@ -43,27 +44,35 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%15#0: uint64 = (txn ApplicationID)
         (assert tmp%15#0) // can only call when not creating
         let v1#2: bytes[16] = (txna ApplicationArgs 1)
-        let newX#0: bytes[8] = (txna ApplicationArgs 2)
-        let newY#0: bytes[8] = (txna ApplicationArgs 3)
-        let v1#3: bytes[16] = ((replace2 0) v1#2 newX#0)
-        let v1#4: bytes[16] = ((replace2 8) v1#3 newY#0)
-        let tmp%18#0: bytes = (concat 0x151f7c75 v1#4)
-        (log tmp%18#0)
+        let reinterpret_bytes[8]%0#0: bytes[8] = (txna ApplicationArgs 2)
+        let newX#0: uint64 = (btoi reinterpret_bytes[8]%0#0)
+        let reinterpret_bytes[8]%1#0: bytes[8] = (txna ApplicationArgs 3)
+        let newY#0: uint64 = (btoi reinterpret_bytes[8]%1#0)
+        let val_as_bytes%0#2: bytes[8] = (itob newX#0)
+        let v1#3: bytes[16] = ((replace2 0) v1#2 val_as_bytes%0#2)
+        let val_as_bytes%1#1: bytes[8] = (itob newY#0)
+        let v1#4: bytes[16] = ((replace2 8) v1#3 val_as_bytes%1#1)
+        let tmp%20#0: bytes = (concat 0x151f7c75 v1#4)
+        (log tmp%20#0)
         let tests/approvals/mutable-object.algo.ts::MutableObjectDemo.__puya_arc4_router__%0#2: bool = 1u
         goto block@19
     block@6: // implicitCastingAndSpreading_route_L32
-        let tmp%19#0: uint64 = (txn OnCompletion)
-        let tmp%20#0: bool = (! tmp%19#0)
-        (assert tmp%20#0) // OnCompletion is not NoOp
-        let tmp%21#0: uint64 = (txn ApplicationID)
-        (assert tmp%21#0) // can only call when not creating
+        let tmp%21#0: uint64 = (txn OnCompletion)
+        let tmp%22#0: bool = (! tmp%21#0)
+        (assert tmp%22#0) // OnCompletion is not NoOp
+        let tmp%23#0: uint64 = (txn ApplicationID)
+        (assert tmp%23#0) // can only call when not creating
         let v1#1: bytes[16] = (txna ApplicationArgs 1)
-        let item0%0#0: bytes = ((extract 0 8) v1#1) // on error: Index access is out of bounds
-        let item1%0#0: bytes = ((extract 8 8) v1#1) // on error: Index access is out of bounds
-        let v2#0: bytes[16] = (concat item0%0#0 item1%0#0)
-        let tmp%0#5: bytes = ((extract 0 8) v2#0) // on error: Index access is out of bounds
-        let tmp%1#4: bytes = ((extract 8 8) v2#0) // on error: Index access is out of bounds
-        let v3#0: bytes[16] = (concat tmp%0#5 tmp%1#4)
+        let item0%1#0: uint64 = (extract_uint64 v1#1 0u)
+        let item1%1#0: uint64 = (extract_uint64 v1#1 8u)
+        let val_as_bytes%0#1: bytes[8] = (itob item0%1#0)
+        let val_as_bytes%1#0: bytes[8] = (itob item1%1#0)
+        let v2#0: bytes[16] = (concat val_as_bytes%0#1 val_as_bytes%1#0)
+        let tmp%0#5: uint64 = (extract_uint64 v2#0 0u)
+        let tmp%1#4: uint64 = (extract_uint64 v2#0 8u)
+        let val_as_bytes%2#0: bytes[8] = (itob tmp%0#5)
+        let val_as_bytes%3#0: bytes[8] = (itob tmp%1#4)
+        let v3#0: bytes[16] = (concat val_as_bytes%2#0 val_as_bytes%3#0)
         let tmp%2#3: bool = (== v1#1 v2#0)
         (assert tmp%2#3)
         let tmp%3#1: bool = (== v3#0 v1#1)
@@ -71,60 +80,60 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tests/approvals/mutable-object.algo.ts::MutableObjectDemo.__puya_arc4_router__%0#3: bool = 1u
         goto block@19
     block@7: // toAndFromBytes_route_L39
-        let tmp%23#0: uint64 = (txn OnCompletion)
-        let tmp%24#0: bool = (! tmp%23#0)
-        (assert tmp%24#0) // OnCompletion is not NoOp
-        let tmp%25#0: uint64 = (txn ApplicationID)
-        (assert tmp%25#0) // can only call when not creating
+        let tmp%25#0: uint64 = (txn OnCompletion)
+        let tmp%26#0: bool = (! tmp%25#0)
+        (assert tmp%26#0) // OnCompletion is not NoOp
+        let tmp%27#0: uint64 = (txn ApplicationID)
+        (assert tmp%27#0) // can only call when not creating
         let v1#0: bytes[16] = (txna ApplicationArgs 1)
-        let tmp%28#0: bytes = (concat 0x151f7c75 v1#0)
-        (log tmp%28#0)
+        let tmp%30#0: bytes = (concat 0x151f7c75 v1#0)
+        (log tmp%30#0)
         let tests/approvals/mutable-object.algo.ts::MutableObjectDemo.__puya_arc4_router__%0#4: bool = 1u
         goto block@19
     block@8: // getPlugin_route_L48
-        let tmp%29#0: uint64 = (txn OnCompletion)
-        let tmp%30#0: bool = (! tmp%29#0)
-        (assert tmp%30#0) // OnCompletion is not NoOp
-        let tmp%31#0: uint64 = (txn ApplicationID)
-        (assert tmp%31#0) // can only call when not creating
-        let tmp%33#0: bytes = (txna ApplicationArgs 1)
-        let key#2: bytes = ((extract 2 0) tmp%33#0)
+        let tmp%31#0: uint64 = (txn OnCompletion)
+        let tmp%32#0: bool = (! tmp%31#0)
+        (assert tmp%32#0) // OnCompletion is not NoOp
+        let tmp%33#0: uint64 = (txn ApplicationID)
+        (assert tmp%33#0) // can only call when not creating
+        let tmp%35#0: bytes = (txna ApplicationArgs 1)
+        let key#2: bytes = ((extract 2 0) tmp%35#0)
         let box_prefixed_key%0#2: bytes = (concat "plugins" key#2)
         let (value#1: bytes, maybe_exists%0#2: bool) = (box_get box_prefixed_key%0#2)
         (assert maybe_exists%0#2) // Box must have value
         let tmp%1#3: uint64 = (extract_uint64 value#1 16u)
         (assert tmp%1#3) // Last called not zero
-        let tmp%36#0: bytes = (concat 0x151f7c75 value#1)
-        (log tmp%36#0)
+        let tmp%38#0: bytes = (concat 0x151f7c75 value#1)
+        (log tmp%38#0)
         let tests/approvals/mutable-object.algo.ts::MutableObjectDemo.__puya_arc4_router__%0#5: bool = 1u
         goto block@19
     block@9: // getMain_route_L54
-        let tmp%37#0: uint64 = (txn OnCompletion)
-        let tmp%38#0: bool = (! tmp%37#0)
-        (assert tmp%38#0) // OnCompletion is not NoOp
-        let tmp%39#0: uint64 = (txn ApplicationID)
-        (assert tmp%39#0) // can only call when not creating
+        let tmp%39#0: uint64 = (txn OnCompletion)
+        let tmp%40#0: bool = (! tmp%39#0)
+        (assert tmp%40#0) // OnCompletion is not NoOp
+        let tmp%41#0: uint64 = (txn ApplicationID)
+        (assert tmp%41#0) // can only call when not creating
         let (value#0: bytes, maybe_exists%0#1: bool) = (box_get "main")
         (assert maybe_exists%0#1) // Box must have value
         let tmp%1#2: uint64 = (extract_uint64 value#0 16u)
         (assert tmp%1#2) // Last called not zero
-        let tmp%42#0: bytes = (concat 0x151f7c75 value#0)
-        (log tmp%42#0)
+        let tmp%44#0: bytes = (concat 0x151f7c75 value#0)
+        (log tmp%44#0)
         let tests/approvals/mutable-object.algo.ts::MutableObjectDemo.__puya_arc4_router__%0#6: bool = 1u
         goto block@19
     block@10: // setLastCalled_route_L60
-        let tmp%43#0: uint64 = (txn OnCompletion)
-        let tmp%44#0: bool = (! tmp%43#0)
-        (assert tmp%44#0) // OnCompletion is not NoOp
-        let tmp%45#0: uint64 = (txn ApplicationID)
-        (assert tmp%45#0) // can only call when not creating
-        let tmp%47#0: bytes = (txna ApplicationArgs 1)
-        let key#1: bytes = ((extract 2 0) tmp%47#0)
+        let tmp%45#0: uint64 = (txn OnCompletion)
+        let tmp%46#0: bool = (! tmp%45#0)
+        (assert tmp%46#0) // OnCompletion is not NoOp
+        let tmp%47#0: uint64 = (txn ApplicationID)
+        (assert tmp%47#0) // can only call when not creating
+        let tmp%49#0: bytes = (txna ApplicationArgs 1)
+        let key#1: bytes = ((extract 2 0) tmp%49#0)
         let reinterpret_bytes[8]%2#0: bytes[8] = (txna ApplicationArgs 2)
         let index#0: uint64 = (btoi reinterpret_bytes[8]%2#0)
         let reinterpret_bytes[8]%3#0: bytes[8] = (txna ApplicationArgs 3)
         let lastCalled#0: uint64 = (btoi reinterpret_bytes[8]%3#0)
-        let val_as_bytes%0#1: bytes[8] = (itob lastCalled#0)
+        let val_as_bytes%0#0: bytes[8] = (itob lastCalled#0)
         let box_prefixed_key%0#1: bytes = (concat "plugins" key#1)
         let (maybe_value%0#0: bytes, maybe_exists%0#0: bool) = (box_get box_prefixed_key%0#1)
         (assert maybe_exists%0#0) // Box must have value
@@ -134,7 +143,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let array_head_and_tail%0#0: bytes = ((extract 2 0) tmp%0#2)
         let item_offset%0#0: uint64 = (* index#0 20u)
         let tmp%1#1: bytes = (extract3 array_head_and_tail%0#0 item_offset%0#0 20u) // on error: Index access is out of bounds
-        let updated_data%0#0: bytes = ((replace2 12) tmp%1#1 val_as_bytes%0#1)
+        let updated_data%0#0: bytes = ((replace2 12) tmp%1#1 val_as_bytes%0#0)
         let array_length%0#0: uint64 = (extract_uint16 tmp%0#2 0u)
         let index_is_in_bounds%0#0: bool = (< index#0 array_length%0#0)
         (assert index_is_in_bounds%0#0) // Index access is out of bounds
@@ -147,25 +156,25 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tests/approvals/mutable-object.algo.ts::MutableObjectDemo.__puya_arc4_router__%0#7: bool = 1u
         goto block@19
     block@11: // setPlugin_route_L64
-        let tmp%51#0: uint64 = (txn OnCompletion)
-        let tmp%52#0: bool = (! tmp%51#0)
-        (assert tmp%52#0) // OnCompletion is not NoOp
-        let tmp%53#0: uint64 = (txn ApplicationID)
-        (assert tmp%53#0) // can only call when not creating
-        let tmp%55#0: bytes = (txna ApplicationArgs 1)
-        let key#0: bytes = ((extract 2 0) tmp%55#0)
+        let tmp%53#0: uint64 = (txn OnCompletion)
+        let tmp%54#0: bool = (! tmp%53#0)
+        (assert tmp%54#0) // OnCompletion is not NoOp
+        let tmp%55#0: uint64 = (txn ApplicationID)
+        (assert tmp%55#0) // can only call when not creating
+        let tmp%57#0: bytes = (txna ApplicationArgs 1)
+        let key#0: bytes = ((extract 2 0) tmp%57#0)
         let box_prefixed_key%0#0: bytes = (concat "plugins" key#0)
         (box_del box_prefixed_key%0#0)
         (box_put box_prefixed_key%0#0 0x00000000000000010000000000000000000000000000000000001b0001a78000de00000000000000010000000000000001)
         let tests/approvals/mutable-object.algo.ts::MutableObjectDemo.__puya_arc4_router__%0#8: bool = 1u
         goto block@19
     block@14: // bare_routing_L10
-        let tmp%57#0: uint64 = (txn OnCompletion)
-        goto tmp%57#0 ? block@18 : block@15
+        let tmp%59#0: uint64 = (txn OnCompletion)
+        goto tmp%59#0 ? block@18 : block@15
     block@15: // __algots__.defaultCreate_L10
-        let tmp%58#0: uint64 = (txn ApplicationID)
-        let tmp%59#0: bool = (! tmp%58#0)
-        (assert tmp%59#0) // can only call when creating
+        let tmp%60#0: uint64 = (txn ApplicationID)
+        let tmp%61#0: bool = (! tmp%60#0)
+        (assert tmp%61#0) // can only call when creating
         let tests/approvals/mutable-object.algo.ts::MutableObjectDemo.__puya_arc4_router__%0#9: bool = 1u
         goto block@19
     block@18: // after_if_else_L10

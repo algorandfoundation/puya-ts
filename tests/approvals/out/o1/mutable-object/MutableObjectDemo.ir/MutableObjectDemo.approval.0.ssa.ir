@@ -42,94 +42,96 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.__puya_arc4
         (assert tmp%16#0) // can only call when not creating
         let reinterpret_bytes[16]%2#0: bytes[16] = (txna ApplicationArgs 1)
         let reinterpret_bytes[8]%0#0: bytes[8] = (txna ApplicationArgs 2)
+        let tmp%17#0: uint64 = (btoi reinterpret_bytes[8]%0#0)
         let reinterpret_bytes[8]%1#0: bytes[8] = (txna ApplicationArgs 3)
-        let tmp%17#0: bytes[16] = tests/approvals/mutable-object.algo.ts::MutableObjectDemo.mutateVector(reinterpret_bytes[16]%2#0, reinterpret_bytes[8]%0#0, reinterpret_bytes[8]%1#0)
-        let tmp%18#0: bytes = (concat 0x151f7c75 tmp%17#0)
-        (log tmp%18#0)
+        let tmp%18#0: uint64 = (btoi reinterpret_bytes[8]%1#0)
+        let tmp%19#0: bytes[16] = tests/approvals/mutable-object.algo.ts::MutableObjectDemo.mutateVector(reinterpret_bytes[16]%2#0, tmp%17#0, tmp%18#0)
+        let tmp%20#0: bytes = (concat 0x151f7c75 tmp%19#0)
+        (log tmp%20#0)
         return 1u
     block@5: // implicitCastingAndSpreading_route_L32
-        let tmp%19#0: uint64 = (txn OnCompletion)
-        let tmp%20#0: bool = (== tmp%19#0 NoOp)
-        (assert tmp%20#0) // OnCompletion is not NoOp
-        let tmp%21#0: uint64 = (txn ApplicationID)
-        let tmp%22#0: bool = (!= tmp%21#0 0u)
-        (assert tmp%22#0) // can only call when not creating
+        let tmp%21#0: uint64 = (txn OnCompletion)
+        let tmp%22#0: bool = (== tmp%21#0 NoOp)
+        (assert tmp%22#0) // OnCompletion is not NoOp
+        let tmp%23#0: uint64 = (txn ApplicationID)
+        let tmp%24#0: bool = (!= tmp%23#0 0u)
+        (assert tmp%24#0) // can only call when not creating
         let reinterpret_bytes[16]%3#0: bytes[16] = (txna ApplicationArgs 1)
         tests/approvals/mutable-object.algo.ts::MutableObjectDemo.implicitCastingAndSpreading(reinterpret_bytes[16]%3#0)
         return 1u
     block@6: // toAndFromBytes_route_L39
-        let tmp%23#0: uint64 = (txn OnCompletion)
-        let tmp%24#0: bool = (== tmp%23#0 NoOp)
-        (assert tmp%24#0) // OnCompletion is not NoOp
-        let tmp%25#0: uint64 = (txn ApplicationID)
-        let tmp%26#0: bool = (!= tmp%25#0 0u)
-        (assert tmp%26#0) // can only call when not creating
+        let tmp%25#0: uint64 = (txn OnCompletion)
+        let tmp%26#0: bool = (== tmp%25#0 NoOp)
+        (assert tmp%26#0) // OnCompletion is not NoOp
+        let tmp%27#0: uint64 = (txn ApplicationID)
+        let tmp%28#0: bool = (!= tmp%27#0 0u)
+        (assert tmp%28#0) // can only call when not creating
         let reinterpret_bytes[16]%4#0: bytes[16] = (txna ApplicationArgs 1)
-        let tmp%27#0: bytes[16] = tests/approvals/mutable-object.algo.ts::MutableObjectDemo.toAndFromBytes(reinterpret_bytes[16]%4#0)
-        let tmp%28#0: bytes = (concat 0x151f7c75 tmp%27#0)
-        (log tmp%28#0)
+        let tmp%29#0: bytes[16] = tests/approvals/mutable-object.algo.ts::MutableObjectDemo.toAndFromBytes(reinterpret_bytes[16]%4#0)
+        let tmp%30#0: bytes = (concat 0x151f7c75 tmp%29#0)
+        (log tmp%30#0)
         return 1u
     block@7: // getPlugin_route_L48
-        let tmp%29#0: uint64 = (txn OnCompletion)
-        let tmp%30#0: bool = (== tmp%29#0 NoOp)
-        (assert tmp%30#0) // OnCompletion is not NoOp
-        let tmp%31#0: uint64 = (txn ApplicationID)
-        let tmp%32#0: bool = (!= tmp%31#0 0u)
-        (assert tmp%32#0) // can only call when not creating
-        let tmp%33#0: bytes = (txna ApplicationArgs 1)
-        let tmp%34#0: bytes = ((extract 2 0) tmp%33#0)
-        let tmp%35#0: bytes = tests/approvals/mutable-object.algo.ts::MutableObjectDemo.getPlugin(tmp%34#0)
-        let tmp%36#0: bytes = (concat 0x151f7c75 tmp%35#0)
-        (log tmp%36#0)
+        let tmp%31#0: uint64 = (txn OnCompletion)
+        let tmp%32#0: bool = (== tmp%31#0 NoOp)
+        (assert tmp%32#0) // OnCompletion is not NoOp
+        let tmp%33#0: uint64 = (txn ApplicationID)
+        let tmp%34#0: bool = (!= tmp%33#0 0u)
+        (assert tmp%34#0) // can only call when not creating
+        let tmp%35#0: bytes = (txna ApplicationArgs 1)
+        let tmp%36#0: bytes = ((extract 2 0) tmp%35#0)
+        let tmp%37#0: bytes = tests/approvals/mutable-object.algo.ts::MutableObjectDemo.getPlugin(tmp%36#0)
+        let tmp%38#0: bytes = (concat 0x151f7c75 tmp%37#0)
+        (log tmp%38#0)
         return 1u
     block@8: // getMain_route_L54
-        let tmp%37#0: uint64 = (txn OnCompletion)
-        let tmp%38#0: bool = (== tmp%37#0 NoOp)
-        (assert tmp%38#0) // OnCompletion is not NoOp
-        let tmp%39#0: uint64 = (txn ApplicationID)
-        let tmp%40#0: bool = (!= tmp%39#0 0u)
-        (assert tmp%40#0) // can only call when not creating
-        let tmp%41#0: bytes = tests/approvals/mutable-object.algo.ts::MutableObjectDemo.getMain()
-        let tmp%42#0: bytes = (concat 0x151f7c75 tmp%41#0)
-        (log tmp%42#0)
+        let tmp%39#0: uint64 = (txn OnCompletion)
+        let tmp%40#0: bool = (== tmp%39#0 NoOp)
+        (assert tmp%40#0) // OnCompletion is not NoOp
+        let tmp%41#0: uint64 = (txn ApplicationID)
+        let tmp%42#0: bool = (!= tmp%41#0 0u)
+        (assert tmp%42#0) // can only call when not creating
+        let tmp%43#0: bytes = tests/approvals/mutable-object.algo.ts::MutableObjectDemo.getMain()
+        let tmp%44#0: bytes = (concat 0x151f7c75 tmp%43#0)
+        (log tmp%44#0)
         return 1u
     block@9: // setLastCalled_route_L60
-        let tmp%43#0: uint64 = (txn OnCompletion)
-        let tmp%44#0: bool = (== tmp%43#0 NoOp)
-        (assert tmp%44#0) // OnCompletion is not NoOp
-        let tmp%45#0: uint64 = (txn ApplicationID)
-        let tmp%46#0: bool = (!= tmp%45#0 0u)
-        (assert tmp%46#0) // can only call when not creating
-        let tmp%47#0: bytes = (txna ApplicationArgs 1)
-        let tmp%48#0: bytes = ((extract 2 0) tmp%47#0)
+        let tmp%45#0: uint64 = (txn OnCompletion)
+        let tmp%46#0: bool = (== tmp%45#0 NoOp)
+        (assert tmp%46#0) // OnCompletion is not NoOp
+        let tmp%47#0: uint64 = (txn ApplicationID)
+        let tmp%48#0: bool = (!= tmp%47#0 0u)
+        (assert tmp%48#0) // can only call when not creating
+        let tmp%49#0: bytes = (txna ApplicationArgs 1)
+        let tmp%50#0: bytes = ((extract 2 0) tmp%49#0)
         let reinterpret_bytes[8]%2#0: bytes[8] = (txna ApplicationArgs 2)
-        let tmp%49#0: uint64 = (btoi reinterpret_bytes[8]%2#0)
+        let tmp%51#0: uint64 = (btoi reinterpret_bytes[8]%2#0)
         let reinterpret_bytes[8]%3#0: bytes[8] = (txna ApplicationArgs 3)
-        let tmp%50#0: uint64 = (btoi reinterpret_bytes[8]%3#0)
-        tests/approvals/mutable-object.algo.ts::MutableObjectDemo.setLastCalled(tmp%48#0, tmp%49#0, tmp%50#0)
+        let tmp%52#0: uint64 = (btoi reinterpret_bytes[8]%3#0)
+        tests/approvals/mutable-object.algo.ts::MutableObjectDemo.setLastCalled(tmp%50#0, tmp%51#0, tmp%52#0)
         return 1u
     block@10: // setPlugin_route_L64
-        let tmp%51#0: uint64 = (txn OnCompletion)
-        let tmp%52#0: bool = (== tmp%51#0 NoOp)
-        (assert tmp%52#0) // OnCompletion is not NoOp
-        let tmp%53#0: uint64 = (txn ApplicationID)
-        let tmp%54#0: bool = (!= tmp%53#0 0u)
-        (assert tmp%54#0) // can only call when not creating
-        let tmp%55#0: bytes = (txna ApplicationArgs 1)
-        let tmp%56#0: bytes = ((extract 2 0) tmp%55#0)
-        tests/approvals/mutable-object.algo.ts::MutableObjectDemo.setPlugin(tmp%56#0)
+        let tmp%53#0: uint64 = (txn OnCompletion)
+        let tmp%54#0: bool = (== tmp%53#0 NoOp)
+        (assert tmp%54#0) // OnCompletion is not NoOp
+        let tmp%55#0: uint64 = (txn ApplicationID)
+        let tmp%56#0: bool = (!= tmp%55#0 0u)
+        (assert tmp%56#0) // can only call when not creating
+        let tmp%57#0: bytes = (txna ApplicationArgs 1)
+        let tmp%58#0: bytes = ((extract 2 0) tmp%57#0)
+        tests/approvals/mutable-object.algo.ts::MutableObjectDemo.setPlugin(tmp%58#0)
         return 1u
     block@11: // switch_case_default_L10
         goto block@12
     block@12: // switch_case_next_L10
         goto block@17
     block@13: // bare_routing_L10
-        let tmp%57#0: uint64 = (txn OnCompletion)
-        switch tmp%57#0 {0u => block@14, * => block@15}
+        let tmp%59#0: uint64 = (txn OnCompletion)
+        switch tmp%59#0 {0u => block@14, * => block@15}
     block@14: // __algots__.defaultCreate_L10
-        let tmp%58#0: uint64 = (txn ApplicationID)
-        let tmp%59#0: bool = (== tmp%58#0 0u)
-        (assert tmp%59#0) // can only call when creating
+        let tmp%60#0: uint64 = (txn ApplicationID)
+        let tmp%61#0: bool = (== tmp%60#0 0u)
+        (assert tmp%61#0) // can only call when creating
         tests/approvals/mutable-object.algo.ts::MutableObjectDemo.__algots__.defaultCreate()
         return 1u
     block@15: // switch_case_default_L10
@@ -141,69 +143,89 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.__puya_arc4
 
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testVectorCreationAndEquality() -> void:
     block@0: // L11
+        let val_as_bytes%0#0: bytes[8] = (itob 0u)
+        let val_as_bytes%1#0: bytes[8] = (itob 0u)
         let current_tail_offset%0#0: uint64 = 16u
         let encoded_tuple_buffer%0#0: bytes[0] = 0x
-        let encoded_tuple_buffer%1#0: bytes = (concat encoded_tuple_buffer%0#0 0x0000000000000000)
-        let encoded_tuple_buffer%2#0: bytes = (concat encoded_tuple_buffer%1#0 0x0000000000000000)
+        let encoded_tuple_buffer%1#0: bytes = (concat encoded_tuple_buffer%0#0 val_as_bytes%0#0)
+        let encoded_tuple_buffer%2#0: bytes = (concat encoded_tuple_buffer%1#0 val_as_bytes%1#0)
         let v1#0: bytes[16] = encoded_tuple_buffer%2#0
-        let tmp%0#0: bytes = (extract3 v1#0 0u 8u) // on error: Index access is out of bounds
-        (log tmp%0#0)
-        let tmp%1#0: bytes = (extract3 v1#0 8u 8u) // on error: Index access is out of bounds
+        let encoded%0#0: bytes = (extract3 v1#0 0u 8u) // on error: Index access is out of bounds
+        let tmp%0#0: uint64 = (btoi encoded%0#0)
+        let tmp%1#0: bytes[8] = (itob tmp%0#0)
         (log tmp%1#0)
+        let encoded%1#0: bytes = (extract3 v1#0 8u 8u) // on error: Index access is out of bounds
+        let tmp%2#0: uint64 = (btoi encoded%1#0)
+        let tmp%3#0: bytes[8] = (itob tmp%2#0)
+        (log tmp%3#0)
+        let val_as_bytes%2#0: bytes[8] = (itob 0u)
+        let val_as_bytes%3#0: bytes[8] = (itob 0u)
         let current_tail_offset%1#0: uint64 = 16u
         let encoded_tuple_buffer%3#0: bytes[0] = 0x
-        let encoded_tuple_buffer%4#0: bytes = (concat encoded_tuple_buffer%3#0 0x0000000000000000)
-        let encoded_tuple_buffer%5#0: bytes = (concat encoded_tuple_buffer%4#0 0x0000000000000000)
+        let encoded_tuple_buffer%4#0: bytes = (concat encoded_tuple_buffer%3#0 val_as_bytes%2#0)
+        let encoded_tuple_buffer%5#0: bytes = (concat encoded_tuple_buffer%4#0 val_as_bytes%3#0)
         let v2#0: bytes[16] = encoded_tuple_buffer%5#0
-        let tmp%2#0: bool = (== v1#0 v2#0)
-        (assert tmp%2#0)
+        let tmp%4#0: bool = (== v1#0 v2#0)
+        (assert tmp%4#0)
         return 
 
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.addVectors(v1: bytes[16], v2: bytes[16]) -> bytes[16]:
     block@0: // L19
-        let tmp%0#0: bytes = (extract3 v1#0 0u 8u) // on error: Index access is out of bounds
-        let tmp%1#0: uint64 = (btoi tmp%0#0)
-        let tmp%2#0: bytes = (extract3 v2#0 0u 8u) // on error: Index access is out of bounds
-        let tmp%3#0: uint64 = (btoi tmp%2#0)
-        let to_encode%0#0: uint64 = (+ tmp%1#0 tmp%3#0)
-        let val_as_bytes%0#0: bytes[8] = (itob to_encode%0#0)
-        let tmp%4#0: bytes = (extract3 v1#0 8u 8u) // on error: Index access is out of bounds
-        let tmp%5#0: uint64 = (btoi tmp%4#0)
-        let tmp%6#0: bytes = (extract3 v2#0 8u 8u) // on error: Index access is out of bounds
-        let tmp%7#0: uint64 = (btoi tmp%6#0)
-        let to_encode%1#0: uint64 = (+ tmp%5#0 tmp%7#0)
-        let val_as_bytes%1#0: bytes[8] = (itob to_encode%1#0)
+        let encoded%0#0: bytes = (extract3 v1#0 0u 8u) // on error: Index access is out of bounds
+        let tmp%0#0: uint64 = (btoi encoded%0#0)
+        let encoded%1#0: bytes = (extract3 v2#0 0u 8u) // on error: Index access is out of bounds
+        let tmp%1#0: uint64 = (btoi encoded%1#0)
+        let tmp%2#0: uint64 = (+ tmp%0#0 tmp%1#0)
+        let encoded%2#0: bytes = (extract3 v1#0 8u 8u) // on error: Index access is out of bounds
+        let tmp%3#0: uint64 = (btoi encoded%2#0)
+        let encoded%3#0: bytes = (extract3 v2#0 8u 8u) // on error: Index access is out of bounds
+        let tmp%4#0: uint64 = (btoi encoded%3#0)
+        let tmp%5#0: uint64 = (+ tmp%3#0 tmp%4#0)
+        let val_as_bytes%0#0: bytes[8] = (itob tmp%2#0)
+        let val_as_bytes%1#0: bytes[8] = (itob tmp%5#0)
         let current_tail_offset%0#0: uint64 = 16u
         let encoded_tuple_buffer%0#0: bytes[0] = 0x
         let encoded_tuple_buffer%1#0: bytes = (concat encoded_tuple_buffer%0#0 val_as_bytes%0#0)
         let encoded_tuple_buffer%2#0: bytes = (concat encoded_tuple_buffer%1#0 val_as_bytes%1#0)
         return encoded_tuple_buffer%2#0
 
-subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.mutateVector(v1: bytes[16], newX: bytes[8], newY: bytes[8]) -> bytes[16]:
+subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.mutateVector(v1: bytes[16], newX: uint64, newY: uint64) -> bytes[16]:
     block@0: // L26
-        let assigned_value%0#0: bytes[8] = newX#0
-        let updated_data%0#0: bytes = (replace3 v1#0 0u assigned_value%0#0)
+        let assigned_value%0#0: uint64 = newX#0
+        let val_as_bytes%0#0: bytes[8] = (itob assigned_value%0#0)
+        let encoded%0#0: bytes[8] = val_as_bytes%0#0
+        let updated_data%0#0: bytes = (replace3 v1#0 0u encoded%0#0)
         let v1#1: bytes[16] = updated_data%0#0
-        let assigned_value%1#0: bytes[8] = newY#0
-        let updated_data%1#0: bytes = (replace3 v1#1 8u assigned_value%1#0)
+        let assigned_value%1#0: uint64 = newY#0
+        let val_as_bytes%1#0: bytes[8] = (itob assigned_value%1#0)
+        let encoded%1#0: bytes[8] = val_as_bytes%1#0
+        let updated_data%1#0: bytes = (replace3 v1#1 8u encoded%1#0)
         let v1#2: bytes[16] = updated_data%1#0
         return v1#2
 
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.implicitCastingAndSpreading(v1: bytes[16]) -> void:
     block@0: // L32
         let item0%0#0: bytes = (extract3 v1#0 0u 8u) // on error: Index access is out of bounds
+        let item0%1#0: uint64 = (btoi item0%0#0)
         let item1%0#0: bytes = (extract3 v1#0 8u 8u) // on error: Index access is out of bounds
+        let item1%1#0: uint64 = (btoi item1%0#0)
+        let val_as_bytes%0#0: bytes[8] = (itob item0%1#0)
+        let val_as_bytes%1#0: bytes[8] = (itob item1%1#0)
         let current_tail_offset%0#0: uint64 = 16u
         let encoded_tuple_buffer%0#0: bytes[0] = 0x
-        let encoded_tuple_buffer%1#0: bytes = (concat encoded_tuple_buffer%0#0 item0%0#0)
-        let encoded_tuple_buffer%2#0: bytes = (concat encoded_tuple_buffer%1#0 item1%0#0)
+        let encoded_tuple_buffer%1#0: bytes = (concat encoded_tuple_buffer%0#0 val_as_bytes%0#0)
+        let encoded_tuple_buffer%2#0: bytes = (concat encoded_tuple_buffer%1#0 val_as_bytes%1#0)
         let v2#0: bytes[16] = encoded_tuple_buffer%2#0
-        let tmp%0#0: bytes = (extract3 v2#0 0u 8u) // on error: Index access is out of bounds
-        let tmp%1#0: bytes = (extract3 v2#0 8u 8u) // on error: Index access is out of bounds
+        let encoded%0#0: bytes = (extract3 v2#0 0u 8u) // on error: Index access is out of bounds
+        let tmp%0#0: uint64 = (btoi encoded%0#0)
+        let encoded%1#0: bytes = (extract3 v2#0 8u 8u) // on error: Index access is out of bounds
+        let tmp%1#0: uint64 = (btoi encoded%1#0)
+        let val_as_bytes%2#0: bytes[8] = (itob tmp%0#0)
+        let val_as_bytes%3#0: bytes[8] = (itob tmp%1#0)
         let current_tail_offset%1#0: uint64 = 16u
         let encoded_tuple_buffer%3#0: bytes[0] = 0x
-        let encoded_tuple_buffer%4#0: bytes = (concat encoded_tuple_buffer%3#0 tmp%0#0)
-        let encoded_tuple_buffer%5#0: bytes = (concat encoded_tuple_buffer%4#0 tmp%1#0)
+        let encoded_tuple_buffer%4#0: bytes = (concat encoded_tuple_buffer%3#0 val_as_bytes%2#0)
+        let encoded_tuple_buffer%5#0: bytes = (concat encoded_tuple_buffer%4#0 val_as_bytes%3#0)
         let v3#0: bytes[16] = encoded_tuple_buffer%5#0
         let tmp%2#0: bool = (== v1#0 v2#0)
         (assert tmp%2#0)
@@ -275,19 +297,17 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.setPlugin(k
         let length%0#0: uint64 = (len method "test()void")
         let lengths_equal%0#0: bool = (== length%0#0 4u)
         (assert lengths_equal%0#0) // invalid size
-        let val_as_bytes%0#0: bytes[8] = (itob 1u)
         let current_tail_offset%0#0: uint64 = 20u
         let encoded_tuple_buffer%0#0: bytes[0] = 0x
         let encoded_tuple_buffer%1#0: bytes = (concat encoded_tuple_buffer%0#0 method "test()void")
-        let encoded_tuple_buffer%2#0: bytes = (concat encoded_tuple_buffer%1#0 val_as_bytes%0#0)
+        let encoded_tuple_buffer%2#0: bytes = (concat encoded_tuple_buffer%1#0 0x0000000000000001)
         let encoded_tuple_buffer%3#0: bytes = (concat encoded_tuple_buffer%2#0 0x0000000000000001)
         let result%0#0: bytes = (concat 0x encoded_tuple_buffer%3#0)
         let array_data%0#0: bytes = (concat 0x0001 result%0#0)
-        let val_as_bytes%1#0: bytes[8] = (itob 0u)
         let current_tail_offset%1#0: uint64 = 27u
         let encoded_tuple_buffer%4#0: bytes[0] = 0x
         let encoded_tuple_buffer%5#0: bytes = (concat encoded_tuple_buffer%4#0 0x0000000000000001)
-        let encoded_tuple_buffer%6#0: bytes = (concat encoded_tuple_buffer%5#0 val_as_bytes%1#0)
+        let encoded_tuple_buffer%6#0: bytes = (concat encoded_tuple_buffer%5#0 0x0000000000000000)
         let encoded_tuple_buffer%7#0: bytes = (concat encoded_tuple_buffer%6#0 0x0000000000000000)
         let encoded_tuple_buffer%8#0: bytes = (concat encoded_tuple_buffer%7#0 0x00)
         let as_bytes%0#0: bytes[8] = (itob current_tail_offset%1#0)

@@ -5,25 +5,25 @@ import { interpretAsArc4, methodSelector, UintN } from '@algorandfoundation/algo
 type ARC4Uint64 = UintN<64>
 const ARC4Uint64 = UintN<64>
 
-class Vector extends MutableObject<{ x: ARC4Uint64; y: ARC4Uint64 }> { }
+class Vector extends MutableObject<{ x: uint64; y: uint64 }> {}
 
 export class MutableObjectDemo extends Contract {
   public testVectorCreationAndEquality() {
-    const v1 = new Vector({ x: new ARC4Uint64(0), y: new ARC4Uint64(0) })
+    const v1 = new Vector({ x: 0, y: 0 })
     log(v1.x)
     log(v1.y)
-    const v2 = new Vector({ y: new ARC4Uint64(0), x: new ARC4Uint64(0) })
+    const v2 = new Vector({ y: 0, x: 0 })
     assert(v1 === v2)
   }
 
   public addVectors(v1: Vector, v2: Vector) {
     return new Vector({
-      x: new ARC4Uint64(v1.x.native + v2.x.native),
-      y: new ARC4Uint64(v1.y.native + v2.y.native),
+      x: v1.x + v2.x,
+      y: v1.y + v2.y,
     })
   }
 
-  public mutateVector(v1: Vector, newX: ARC4Uint64, newY: ARC4Uint64): Vector {
+  public mutateVector(v1: Vector, newX: uint64, newY: uint64): Vector {
     v1.x = newX
     v1.y = newY
     return v1
@@ -64,13 +64,13 @@ export class MutableObjectDemo extends Contract {
   public setPlugin(key: string) {
     this.plugins(key).value = new PluginInfo({
       lastValidRound: new arc4.UintN64(1),
-      cooldown: 0,
+      cooldown: new arc4.UintN64(),
       lastCalled: new arc4.UintN64(),
       adminPrivileges: new arc4.Bool(false),
       methods: new arc4.DynamicArray(
         new MethodInfo({
           selector: new arc4.StaticBytes(methodSelector('test()void')),
-          cooldown: 1,
+          cooldown: new arc4.UintN64(1),
           lastCalled: new arc4.UintN64(1),
         }),
       ),
@@ -82,20 +82,20 @@ export class PluginInfo extends MutableObject<{
   /** The last round at which this plugin can be called */
   lastValidRound: arc4.UintN64
   /** The number of rounds that must pass before the plugin can be called again */
-  cooldown: uint64
+  cooldown: ARC4Uint64
   /** The last round the plugin was called */
   lastCalled: arc4.UintN64
   /** Whether the plugin has permissions to change the admin account */
   adminPrivileges: arc4.Bool
   /** The methods that are allowed to be called for the plugin by the address */
   methods: arc4.DynamicArray<MethodInfo>
-}> { }
+}> {}
 
 export class MethodInfo extends MutableObject<{
   /** The method signature */
   selector: arc4.StaticBytes<4>
   /** The number of rounds that must pass before the method can be called again */
-  cooldown: uint64
+  cooldown: ARC4Uint64
   /** The last round the method was called */
   lastCalled: arc4.UintN64
-}> { }
+}> {}
