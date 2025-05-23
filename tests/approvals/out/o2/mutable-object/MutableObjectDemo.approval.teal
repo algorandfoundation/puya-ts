@@ -3,8 +3,8 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 0 20 16
-    bytecblock 0x151f7c75 "plugins" 0x0000000000000000
+    intcblock 1 0 8 20
+    bytecblock 0x151f7c75 "plugins"
     // tests/approvals/mutable-object.algo.ts:10
     // export class MutableObjectDemo extends Contract {
     txn NumAppArgs
@@ -39,13 +39,13 @@ main_setPlugin_route@11:
     // tests/approvals/mutable-object.algo.ts:65-77
     // this.plugins(key).value = new PluginInfo({
     //   lastValidRound: new arc4.UintN64(1),
-    //   cooldown: 0,
+    //   cooldown: new arc4.UintN64(),
     //   lastCalled: new arc4.UintN64(),
     //   adminPrivileges: new arc4.Bool(false),
     //   methods: new arc4.DynamicArray(
     //     new MethodInfo({
     //       selector: new arc4.StaticBytes(methodSelector('test()void')),
-    //       cooldown: 1,
+    //       cooldown: new arc4.UintN64(1),
     //       lastCalled: new arc4.UintN64(1),
     //     }),
     //   ),
@@ -101,11 +101,11 @@ main_setLastCalled_route@10:
     dup
     extract 2 0
     dig 6
-    intc_2 // 20
+    intc_3 // 20
     *
     swap
     dig 1
-    intc_2 // 20
+    intc_3 // 20
     extract3 // on error: Index access is out of bounds
     uncover 6
     replace2 12
@@ -153,7 +153,7 @@ main_getMain_route@9:
     // tests/approvals/mutable-object.algo.ts:56
     // assert(value.lastCalled.native > 0, 'Last called not zero')
     dup
-    intc_3 // 16
+    pushint 16 // 16
     extract_uint64
     assert // Last called not zero
     // tests/approvals/mutable-object.algo.ts:54
@@ -189,7 +189,7 @@ main_getPlugin_route@8:
     // tests/approvals/mutable-object.algo.ts:50
     // assert(value.lastCalled.native > 0, 'Last called not zero')
     dup
-    intc_3 // 16
+    pushint 16 // 16
     extract_uint64
     assert // Last called not zero
     // tests/approvals/mutable-object.algo.ts:48
@@ -234,16 +234,28 @@ main_implicitCastingAndSpreading_route@6:
     // tests/approvals/mutable-object.algo.ts:33
     // const v2 = new Vector(v1)
     dup
-    extract 0 8 // on error: Index access is out of bounds
+    intc_1 // 0
+    extract_uint64
     dig 1
-    extract 8 8 // on error: Index access is out of bounds
+    intc_2 // 8
+    extract_uint64
+    swap
+    itob
+    swap
+    itob
     concat
     // tests/approvals/mutable-object.algo.ts:34
     // const v3 = new Vector({ ...v2 })
     dup
-    extract 0 8 // on error: Index access is out of bounds
+    intc_1 // 0
+    extract_uint64
     dig 1
-    extract 8 8 // on error: Index access is out of bounds
+    intc_2 // 8
+    extract_uint64
+    swap
+    itob
+    swap
+    itob
     concat
     // tests/approvals/mutable-object.algo.ts:35
     // assert(v1.bytes === v2.bytes)
@@ -262,7 +274,7 @@ main_implicitCastingAndSpreading_route@6:
 
 main_mutateVector_route@5:
     // tests/approvals/mutable-object.algo.ts:26
-    // public mutateVector(v1: Vector, newX: ARC4Uint64, newY: ARC4Uint64): Vector {
+    // public mutateVector(v1: Vector, newX: uint64, newY: uint64): Vector {
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
@@ -270,18 +282,25 @@ main_mutateVector_route@5:
     assert // can only call when not creating
     // tests/approvals/mutable-object.algo.ts:10
     // export class MutableObjectDemo extends Contract {
-    txna ApplicationArgs 3
     txna ApplicationArgs 1
     txna ApplicationArgs 2
+    btoi
+    txna ApplicationArgs 3
+    btoi
     // tests/approvals/mutable-object.algo.ts:27
     // v1.x = newX
+    swap
+    itob
+    uncover 2
+    swap
     replace2 0
     // tests/approvals/mutable-object.algo.ts:28
     // v1.y = newY
     swap
+    itob
     replace2 8
     // tests/approvals/mutable-object.algo.ts:26
-    // public mutateVector(v1: Vector, newX: ARC4Uint64, newY: ARC4Uint64): Vector {
+    // public mutateVector(v1: Vector, newX: uint64, newY: uint64): Vector {
     bytec_0 // 0x151f7c75
     swap
     concat
@@ -302,7 +321,7 @@ main_addVectors_route@4:
     txna ApplicationArgs 1
     txna ApplicationArgs 2
     // tests/approvals/mutable-object.algo.ts:21
-    // x: new ARC4Uint64(v1.x.native + v2.x.native),
+    // x: v1.x + v2.x,
     dig 1
     intc_1 // 0
     extract_uint64
@@ -310,21 +329,27 @@ main_addVectors_route@4:
     intc_1 // 0
     extract_uint64
     +
+    // tests/approvals/mutable-object.algo.ts:22
+    // y: v1.y + v2.y,
+    uncover 2
+    intc_2 // 8
+    extract_uint64
+    uncover 2
+    intc_2 // 8
+    extract_uint64
+    +
+    // tests/approvals/mutable-object.algo.ts:21
+    // x: v1.x + v2.x,
+    swap
     itob
     // tests/approvals/mutable-object.algo.ts:22
-    // y: new ARC4Uint64(v1.y.native + v2.y.native),
-    uncover 2
-    pushint 8 // 8
-    extract_uint64
-    uncover 2
-    pushint 8 // 8
-    extract_uint64
-    +
+    // y: v1.y + v2.y,
+    swap
     itob
     // tests/approvals/mutable-object.algo.ts:20-23
     // return new Vector({
-    //   x: new ARC4Uint64(v1.x.native + v2.x.native),
-    //   y: new ARC4Uint64(v1.y.native + v2.y.native),
+    //   x: v1.x + v2.x,
+    //   y: v1.y + v2.y,
     // })
     concat
     // tests/approvals/mutable-object.algo.ts:19
@@ -344,13 +369,16 @@ main_testVectorCreationAndEquality_route@3:
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
+    // tests/approvals/mutable-object.algo.ts:12
+    // const v1 = new Vector({ x: 0, y: 0 })
+    intc_1 // 0
+    itob
     // tests/approvals/mutable-object.algo.ts:13
     // log(v1.x)
-    bytec_2 // 0x0000000000000000
+    dup
     log
     // tests/approvals/mutable-object.algo.ts:14
     // log(v1.y)
-    bytec_2 // 0x0000000000000000
     log
     // tests/approvals/mutable-object.algo.ts:11
     // public testVectorCreationAndEquality() {
