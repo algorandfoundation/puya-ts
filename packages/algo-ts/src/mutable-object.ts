@@ -1,18 +1,10 @@
 import { NoImplementation } from './internal/errors'
 import { DeliberateAny } from './internal/typescript-helpers'
-import { bytes, BytesBacked } from './primitives'
 
 /**
  * The base type for mutable objects
  */
-class MutableObjectBase<T> implements BytesBacked {
-  /**
-   * Retrieve the encoded bytes for this type
-   */
-  get bytes(): bytes {
-    throw new NoImplementation()
-  }
-
+class MutableObjectBase<T> {
   /**
    * Returns a deep copy of this object
    */

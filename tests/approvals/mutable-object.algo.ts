@@ -1,6 +1,6 @@
 import type { uint64 } from '@algorandfoundation/algorand-typescript'
 import { arc4, assert, Box, BoxMap, Contract, log, MutableObject } from '@algorandfoundation/algorand-typescript'
-import { interpretAsArc4, methodSelector, UintN } from '@algorandfoundation/algorand-typescript/arc4'
+import { UintN } from '@algorandfoundation/algorand-typescript/arc4'
 
 type ARC4Uint64 = UintN<64>
 const ARC4Uint64 = UintN<64>
@@ -32,13 +32,10 @@ export class MutableObjectDemo extends Contract {
   public implicitCastingAndSpreading(v1: Vector) {
     const v2 = new Vector(v1)
     const v3 = new Vector({ ...v2 })
-    assert(v1.bytes === v2.bytes)
-    assert(v3.bytes === v1.bytes)
-  }
-
-  public toAndFromBytes(v1: Vector): Vector {
-    const v1_bytes = v1.bytes
-    return interpretAsArc4<Vector>(v1_bytes)
+    assert(v1.x === v2.x)
+    assert(v1.y === v2.y)
+    assert(v3.x === v1.x)
+    assert(v3.y === v1.y)
   }
 
   plugins = BoxMap<string, PluginInfo>({ keyPrefix: 'plugins' })
@@ -57,9 +54,9 @@ export class MutableObjectDemo extends Contract {
     return value
   }
 
-  public setLastCalled(key: string, index: uint64, lastCalled: uint64) {
-    this.plugins(key).value.methods[index].lastCalled = new arc4.UintN64(lastCalled)
-  }
+  // public setLastCalled(key: string, index: uint64, lastCalled: uint64) {
+  //   this.plugins(key).value.methods[index].lastCalled = new arc4.UintN64(lastCalled)
+  // }
 
   public setPlugin(key: string) {
     this.plugins(key).value = new PluginInfo({
@@ -67,13 +64,13 @@ export class MutableObjectDemo extends Contract {
       cooldown: new arc4.UintN64(),
       lastCalled: new arc4.UintN64(),
       adminPrivileges: new arc4.Bool(false),
-      methods: new arc4.DynamicArray(
-        new MethodInfo({
-          selector: new arc4.StaticBytes(methodSelector('test()void')),
-          cooldown: new arc4.UintN64(1),
-          lastCalled: new arc4.UintN64(1),
-        }),
-      ),
+      //   methods: [
+      //     new MethodInfo({
+      //       selector: new arc4.StaticBytes(methodSelector('test()void')),
+      //       cooldown: new arc4.UintN64(1),
+      //       lastCalled: new arc4.UintN64(1),
+      //     }),
+      //   ],
     })
   }
 }
@@ -87,8 +84,9 @@ export class PluginInfo extends MutableObject<{
   lastCalled: arc4.UintN64
   /** Whether the plugin has permissions to change the admin account */
   adminPrivileges: arc4.Bool
+  // TODO: add this property back when we have mutable arrays
   /** The methods that are allowed to be called for the plugin by the address */
-  methods: arc4.DynamicArray<MethodInfo>
+  // methods: MethodInfo[]
 }> {}
 
 export class MethodInfo extends MutableObject<{
