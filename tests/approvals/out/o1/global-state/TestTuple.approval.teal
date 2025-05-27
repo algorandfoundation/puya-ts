@@ -4,7 +4,7 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     bytecblock 0x000b000000000000007b80000568656c6c6f 0x000400070001610043000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001c880000162
-    // tests/approvals/global-state.algo.ts:46
+    // tests/approvals/global-state.algo.ts:60
     // export class TestTuple extends Contract {
     txn NumAppArgs
     bz main_bare_routing@6
@@ -13,13 +13,13 @@ main:
     match main_testTuple_route@3
 
 main_after_if_else@10:
-    // tests/approvals/global-state.algo.ts:46
+    // tests/approvals/global-state.algo.ts:60
     // export class TestTuple extends Contract {
     pushint 0 // 0
     return
 
 main_testTuple_route@3:
-    // tests/approvals/global-state.algo.ts:53
+    // tests/approvals/global-state.algo.ts:69
     // testTuple() {
     txn OnCompletion
     !
@@ -31,7 +31,7 @@ main_testTuple_route@3:
     return
 
 main_bare_routing@6:
-    // tests/approvals/global-state.algo.ts:46
+    // tests/approvals/global-state.algo.ts:60
     // export class TestTuple extends Contract {
     txn OnCompletion
     bnz main_after_if_else@10
@@ -44,32 +44,38 @@ main_bare_routing@6:
 
 // tests/approvals/global-state.algo.ts::TestTuple.testTuple() -> void:
 testTuple:
-    // tests/approvals/global-state.algo.ts:47
+    // tests/approvals/global-state.algo.ts:61
     // t1 = GlobalState<[string, uint64, boolean]>()
     pushbytes "t1"
     bytec_0 // 0x000b000000000000007b80000568656c6c6f
-    // tests/approvals/global-state.algo.ts:54
+    // tests/approvals/global-state.algo.ts:70
     // this.t1.value = ['hello', 123, true]
     app_global_put
-    // tests/approvals/global-state.algo.ts:48
+    // tests/approvals/global-state.algo.ts:62
     // t2 = GlobalState<[string, [string, biguint, boolean]]>()
     pushbytes "t2"
     bytec_1 // 0x000400070001610043000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001c880000162
-    // tests/approvals/global-state.algo.ts:59
+    // tests/approvals/global-state.algo.ts:75
     // this.t2.value = ['a', ['b', 456n, true]]
     app_global_put
-    // tests/approvals/global-state.algo.ts:50
+    // tests/approvals/global-state.algo.ts:64
     // t3 = GlobalState<{ a: string; b: uint64; c: boolean }>()
     pushbytes "t3"
     bytec_0 // 0x000b000000000000007b80000568656c6c6f
-    // tests/approvals/global-state.algo.ts:65
+    // tests/approvals/global-state.algo.ts:81
     // this.t3.value = { a: 'hello', b: 123, c: true }
     app_global_put
-    // tests/approvals/global-state.algo.ts:51
+    // tests/approvals/global-state.algo.ts:65
     // t4 = GlobalState<[string, { a: string; b: biguint; c: boolean }]>()
     pushbytes "t4"
     bytec_1 // 0x000400070001610043000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001c880000162
-    // tests/approvals/global-state.algo.ts:70
+    // tests/approvals/global-state.algo.ts:86
     // this.t4.value = ['a', { a: 'b', b: 456n, c: true }]
+    app_global_put
+    // tests/approvals/global-state.algo.ts:67
+    // t5 = GlobalState<Data>()
+    pushbytess "t5" 0x000d000000000000007b800014000568656c6c6f0005576f726c64 // "t5", 0x000d000000000000007b800014000568656c6c6f0005576f726c64
+    // tests/approvals/global-state.algo.ts:92
+    // this.t5.value = new Data({ a: 'hello', b: 123, c: true, d: new arc4.Str('World') })
     app_global_put
     retsub

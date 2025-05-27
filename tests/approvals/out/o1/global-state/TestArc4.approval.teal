@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    // tests/approvals/global-state.algo.ts:33-34
+    // tests/approvals/global-state.algo.ts:45-46
     // @contract({ stateTotals: { globalUints: 5 } })
     // export class TestArc4 extends Contract {
     txn NumAppArgs
@@ -13,54 +13,54 @@ main:
     match main_setState_route@3 main_deleteState_route@4
 
 main_after_if_else@11:
-    // tests/approvals/global-state.algo.ts:33-34
+    // tests/approvals/global-state.algo.ts:45-46
     // @contract({ stateTotals: { globalUints: 5 } })
     // export class TestArc4 extends Contract {
     pushint 0 // 0
     return
 
 main_deleteState_route@4:
-    // tests/approvals/global-state.algo.ts:41
+    // tests/approvals/global-state.algo.ts:53
     // deleteState(key: string) {
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/global-state.algo.ts:33-34
+    // tests/approvals/global-state.algo.ts:45-46
     // @contract({ stateTotals: { globalUints: 5 } })
     // export class TestArc4 extends Contract {
     txna ApplicationArgs 1
     extract 2 0
-    // tests/approvals/global-state.algo.ts:41
+    // tests/approvals/global-state.algo.ts:53
     // deleteState(key: string) {
     callsub deleteState
     pushint 1 // 1
     return
 
 main_setState_route@3:
-    // tests/approvals/global-state.algo.ts:35
+    // tests/approvals/global-state.algo.ts:47
     // setState(key: string, value: uint64) {
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/global-state.algo.ts:33-34
+    // tests/approvals/global-state.algo.ts:45-46
     // @contract({ stateTotals: { globalUints: 5 } })
     // export class TestArc4 extends Contract {
     txna ApplicationArgs 1
     extract 2 0
     txna ApplicationArgs 2
     btoi
-    // tests/approvals/global-state.algo.ts:35
+    // tests/approvals/global-state.algo.ts:47
     // setState(key: string, value: uint64) {
     callsub setState
     pushint 1 // 1
     return
 
 main_bare_routing@7:
-    // tests/approvals/global-state.algo.ts:33-34
+    // tests/approvals/global-state.algo.ts:45-46
     // @contract({ stateTotals: { globalUints: 5 } })
     // export class TestArc4 extends Contract {
     txn OnCompletion
@@ -74,10 +74,10 @@ main_bare_routing@7:
 
 // tests/approvals/global-state.algo.ts::TestArc4.setState(key: bytes, value: uint64) -> void:
 setState:
-    // tests/approvals/global-state.algo.ts:35
+    // tests/approvals/global-state.algo.ts:47
     // setState(key: string, value: uint64) {
     proto 2 0
-    // tests/approvals/global-state.algo.ts:38
+    // tests/approvals/global-state.algo.ts:50
     // proxy.value = value
     frame_dig -2
     frame_dig -1
@@ -87,10 +87,10 @@ setState:
 
 // tests/approvals/global-state.algo.ts::TestArc4.deleteState(key: bytes) -> void:
 deleteState:
-    // tests/approvals/global-state.algo.ts:41
+    // tests/approvals/global-state.algo.ts:53
     // deleteState(key: string) {
     proto 1 0
-    // tests/approvals/global-state.algo.ts:42
+    // tests/approvals/global-state.algo.ts:54
     // GlobalState<uint64>({ key }).delete()
     frame_dig -1
     app_global_del

@@ -16,10 +16,10 @@ contract MutableObjectDemo
   
   testVectorCreationAndEquality(): void
   {
-    v1: Vector = new Vector(x=(#0 = { x: (#1 = { x: 0, y: 0 }).x, y: #1.y }).x, y=#0.y)
+    v1: Vector = new Vector(x=(#0 = { x: (#1 = { x: 0, y: 1 }).x, y: #1.y }).x, y=#0.y)
     log(itob(v1.x))
     log(itob(v1.y))
-    v2: Vector = new Vector(x=(#2 = { x: (#3 = { y: 0, x: 0 }).x, y: #3.y }).x, y=#2.y)
+    v2: Vector = new Vector(x=(#2 = { x: (#3 = { y: 1, x: 0 }).x, y: #3.y }).x, y=#2.y)
     assert(reinterpret_cast<bytes>(v1) == reinterpret_cast<bytes>(v2))
   }
   
@@ -41,8 +41,48 @@ contract MutableObjectDemo
     v3: Vector = new Vector(x=(#7 = { x: v2.x, y: v2.y }).x, y=#7.y)
     assert(v1.x == v2.x)
     assert(v1.y == v2.y)
+    assert(reinterpret_cast<bytes>(v1) == reinterpret_cast<bytes>(v2))
     assert(v3.x == v1.x)
     assert(v3.y == v1.y)
+    assert(reinterpret_cast<bytes>(v3) == reinterpret_cast<bytes>(v1))
+  }
+  
+  testNestedObjects(vp: VectorPoint): void
+  {
+    v1: Vector = new Vector(x=(#8 = { x: vp.v.x, y: vp.v.y }).x, y=#8.y)
+    p1: Point = new Point(y=(#9 = { y: (#10 = { x: vp.p.x, y: vp.p.y }).y, x: #10.x }).y, x=#9.x)
+    vp1: VectorPoint = new VectorPoint(v=(#11 = { v: copy(v1), p: copy(p1) }).v, p=#11.p)
+    log(itob(vp1.v.x))
+    log(itob(vp1.v.y))
+    log(itob(vp1.p.x))
+    log(itob(vp1.p.y))
+    assert(reinterpret_cast<bytes>(vp1) == reinterpret_cast<bytes>(vp))
+  }
+  
+  testMethodSelector(): void
+  {
+    assert(Method("mutateVector((uint64,uint64),uint64,uint64)(uint64,uint64)") == Method("mutateVector((uint64,uint64),uint64,uint64)(uint64,uint64)"))
+    assert(Method("getPlugin(string)(uint64,uint64,uint64,bool)") == Method("getPlugin(string)(uint64,uint64,uint64,bool)"))
+    assert(Method("testNestedObjects(((uint64,uint64),(uint64,uint64)))void") == Method("testNestedObjects(((uint64,uint64),(uint64,uint64)))void"))
+  }
+  
+  testAssertMatch(x: uint64): void
+  {
+    obj: Vector = new Vector(x=(#12 = { x: (#13 = { y: (b = x * 2), x: b }).x, y: #13.y }).x, y=#12.y)
+    assert(obj.y == x * 2 and obj.x == x * 2, comment=assert target is match for conditions)
+    v: Point = new Point(y=(#14 = { y: obj.y, x: obj.x }).y, x=#14.x)
+    assert(obj.x == v.x and obj.y == v.y, comment=assert target is match for conditions)
+    assert(obj.y > x, comment=assert target is match for conditions)
+    assert(obj.x > x, comment=assert target is match for conditions)
+  }
+  
+  testArc4Encoding(p: Point): void
+  {
+    assert(p.x != p.y, comment=For the purpose of this test, a should not equal b)
+    obj: Vector = new Vector(x=(#15 = { x: p.x, y: p.y }).x, y=#15.y)
+    pEncoded: bytes = reinterpret_cast<bytes>(p)
+    objEncoded: bytes = reinterpret_cast<bytes>(obj)
+    assert(pEncoded == concat(objEncoded.slice(8), objEncoded.slice(0, 8)), comment=Encoded order should be swapped)
   }
   
   getPlugin(key: string): PluginInfo
@@ -61,7 +101,7 @@ contract MutableObjectDemo
   
   setPlugin(key: string): void
   {
-    Box[BoxMapKey(prefix="plugins", key=key)].value: PluginInfo = new PluginInfo(lastValidRound=(#8 = { lastValidRound: 1, cooldown: 0, lastCalled: 0, adminPrivileges: False }).lastValidRound, cooldown=#8.cooldown, lastCalled=#8.lastCalled, adminPrivileges=#8.adminPrivileges)
+    Box[BoxMapKey(prefix="plugins", key=key)].value: PluginInfo = new PluginInfo(lastValidRound=(#16 = { lastValidRound: 1, cooldown: 0, lastCalled: 0, adminPrivileges: False }).lastValidRound, cooldown=#16.cooldown, lastCalled=#16.lastCalled, adminPrivileges=#16.adminPrivileges)
   }
   
   __algots__.defaultCreate(): void

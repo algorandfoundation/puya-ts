@@ -1,6 +1,7 @@
-import { assert, Contract, Global, itxn, Txn } from '@algorandfoundation/algorand-typescript'
+import { arc4, assert, Contract, Global, itxn, Txn } from '@algorandfoundation/algorand-typescript'
 import { abiCall, compileArc4, methodSelector } from '@algorandfoundation/algorand-typescript/arc4'
 import {
+  Greeting,
   Hello,
   HelloStubbed,
   HelloTemplate,
@@ -37,6 +38,13 @@ class HelloFactory extends Contract {
     }).returnValue
     assert(result3 === 'hello stubbed')
 
+    const result4 = abiCall(Hello.prototype.sendGreetings, {
+      appId: app,
+      args: [new Greeting({ name: 'world', termination: new arc4.Str('!') })],
+    }).returnValue
+
+    assert(result4 === 'hello world!')
+
     compiled.call.delete({
       appId: app,
     })
@@ -47,12 +55,19 @@ class HelloFactory extends Contract {
 
     const helloApp = compiled.call.create().itxn.createdApp
 
-    const txn = compiled.call.greet({
+    const txn1 = compiled.call.greet({
       args: ['world'],
       appId: helloApp,
     })
 
-    assert(txn.returnValue === 'hey world')
+    assert(txn1.returnValue === 'hey world')
+
+    const txn2 = compiled.call.sendGreetings({
+      args: [new Greeting({ name: 'world', termination: new arc4.Str('!') })],
+      appId: helloApp,
+    })
+
+    assert(txn2.returnValue === 'hey world!')
 
     compiled.call.delete({
       appId: helloApp,

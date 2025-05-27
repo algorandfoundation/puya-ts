@@ -1,18 +1,20 @@
 import type { uint64 } from '@algorandfoundation/algorand-typescript'
-import { arc4, assert, Box, BoxMap, Contract, log, MutableObject } from '@algorandfoundation/algorand-typescript'
-import { UintN } from '@algorandfoundation/algorand-typescript/arc4'
+import { arc4, assert, assertMatch, Box, BoxMap, Contract, log, MutableObject } from '@algorandfoundation/algorand-typescript'
+import { encodeArc4, methodSelector, UintN } from '@algorandfoundation/algorand-typescript/arc4'
 
 type ARC4Uint64 = UintN<64>
 const ARC4Uint64 = UintN<64>
 
 class Vector extends MutableObject<{ x: uint64; y: uint64 }> {}
+class Point extends MutableObject<{ y: uint64; x: uint64 }> {}
+class VectorPoint extends MutableObject<{ v: Vector; p: Point }> {}
 
 export class MutableObjectDemo extends Contract {
   public testVectorCreationAndEquality() {
-    const v1 = new Vector({ x: 0, y: 0 })
+    const v1 = new Vector({ x: 0, y: 1 })
     log(v1.x)
     log(v1.y)
-    const v2 = new Vector({ y: 0, x: 0 })
+    const v2 = new Vector({ y: 1, x: 0 })
     assert(v1 === v2)
   }
 
@@ -34,8 +36,61 @@ export class MutableObjectDemo extends Contract {
     const v3 = new Vector({ ...v2 })
     assert(v1.x === v2.x)
     assert(v1.y === v2.y)
+    assert(v1 === v2)
     assert(v3.x === v1.x)
     assert(v3.y === v1.y)
+    assert(v3 === v1)
+  }
+
+  public testNestedObjects(vp: VectorPoint) {
+    const v1 = new Vector({ x: vp.v.x, y: vp.v.y })
+    const p1 = new Point({ x: vp.p.x, y: vp.p.y })
+    const vp1 = new VectorPoint({ v: v1.copy(), p: p1.copy() })
+    log(vp1.v.x)
+    log(vp1.v.y)
+    log(vp1.p.x)
+    log(vp1.p.y)
+    assert(vp1 === vp)
+  }
+
+  public testMethodSelector() {
+    assert(
+      methodSelector(MutableObjectDemo.prototype.mutateVector) ===
+        methodSelector('mutateVector((uint64,uint64),uint64,uint64)(uint64,uint64)'),
+    )
+    assert(methodSelector(MutableObjectDemo.prototype.getPlugin) === methodSelector('getPlugin(string)(uint64,uint64,uint64,bool)'))
+    assert(
+      methodSelector(MutableObjectDemo.prototype.testNestedObjects) ===
+        methodSelector('testNestedObjects(((uint64,uint64),(uint64,uint64)))void'),
+    )
+  }
+
+  testAssertMatch(x: uint64) {
+    let b: uint64
+    const obj: Vector = new Vector({
+      y: (b = x * 2),
+      x: b,
+    })
+    assertMatch(obj, {
+      y: x * 2,
+      x: x * 2,
+    })
+    const v = new Point({ y: obj.y, x: obj.x })
+
+    assertMatch(obj, { x: v.x, y: v.y })
+    assertMatch(obj, { y: { greaterThan: x } })
+    assertMatch(obj, { x: { greaterThan: x } })
+  }
+
+  testArc4Encoding(p: Point) {
+    assert(p.x !== p.y, 'For the purpose of this test, a should not equal b')
+    const obj: Vector = new Vector({
+      x: p.x,
+      y: p.y,
+    })
+    const pEncoded = encodeArc4(p)
+    const objEncoded = encodeArc4(obj)
+    assert(pEncoded === objEncoded.slice(8).concat(objEncoded.slice(0, 8)), 'Encoded order should be swapped')
   }
 
   plugins = BoxMap<string, PluginInfo>({ keyPrefix: 'plugins' })
@@ -64,13 +119,13 @@ export class MutableObjectDemo extends Contract {
       cooldown: new arc4.UintN64(),
       lastCalled: new arc4.UintN64(),
       adminPrivileges: new arc4.Bool(false),
-      //   methods: [
-      //     new MethodInfo({
-      //       selector: new arc4.StaticBytes(methodSelector('test()void')),
-      //       cooldown: new arc4.UintN64(1),
-      //       lastCalled: new arc4.UintN64(1),
-      //     }),
-      //   ],
+      // methods: new MutableArray(
+      //   new MethodInfo({
+      //     selector: new arc4.StaticBytes(methodSelector('test()void')),
+      //     cooldown: new arc4.UintN64(1),
+      //     lastCalled: new arc4.UintN64(1),
+      //   }),
+      // ),
     })
   }
 }
@@ -84,9 +139,9 @@ export class PluginInfo extends MutableObject<{
   lastCalled: arc4.UintN64
   /** Whether the plugin has permissions to change the admin account */
   adminPrivileges: arc4.Bool
-  // TODO: add this property back when we have mutable arrays
+  // TODO: add this property back in when mutable arrays are supported
   /** The methods that are allowed to be called for the plugin by the address */
-  // methods: MethodInfo[]
+  // methods: MutableArray<MethodInfo>
 }> {}
 
 export class MethodInfo extends MutableObject<{

@@ -22,4 +22,17 @@ describe('mutable-object', () => {
     const result = await appClientMutableObjectDemo.send.call({ method: 'mutateVector', args: [v1, 50, 50] })
     expect(result.return).toStrictEqual({ x: 50n, y: 50n })
   })
+  test('assert match', async ({ appClientMutableObjectDemo }) => {
+    await appClientMutableObjectDemo.send.call({ method: 'testAssertMatch', args: [50] })
+  })
+  test('arc4 encoding', async ({ appClientMutableObjectDemo }) => {
+    await appClientMutableObjectDemo.send.call({ method: 'testArc4Encoding', args: [{ y: 10, x: 20 }] })
+  })
+  test('assert match nested objects', async ({ appClientMutableObjectDemo }) => {
+    await appClientMutableObjectDemo.send.call({ method: 'testNestedObjects', args: [{ v: { x: 1, y: 2 }, p: { x: 3, y: 4 } }] })
+  })
+
+  test('method selector', async ({ appClientMutableObjectDemo }) => {
+    await appClientMutableObjectDemo.send.call({ method: 'testMethodSelector', args: [] })
+  })
 })
