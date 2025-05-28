@@ -59,7 +59,7 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.__puya_arc4
         let reinterpret_bytes[16]%3#0: bytes[16] = (txna ApplicationArgs 1)
         tests/approvals/mutable-object.algo.ts::MutableObjectDemo.implicitCastingAndSpreading(reinterpret_bytes[16]%3#0)
         return 1u
-    block@6: // testNestedObjects_route_L45
+    block@6: // testNestedObjects_route_L49
         let tmp%25#0: uint64 = (txn OnCompletion)
         let tmp%26#0: bool = (== tmp%25#0 NoOp)
         (assert tmp%26#0) // OnCompletion is not NoOp
@@ -69,7 +69,7 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.__puya_arc4
         let reinterpret_bytes[32]%0#0: bytes[32] = (txna ApplicationArgs 1)
         tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testNestedObjects(reinterpret_bytes[32]%0#0)
         return 1u
-    block@7: // testMethodSelector_route_L56
+    block@7: // testMethodSelector_route_L60
         let tmp%29#0: uint64 = (txn OnCompletion)
         let tmp%30#0: bool = (== tmp%29#0 NoOp)
         (assert tmp%30#0) // OnCompletion is not NoOp
@@ -78,7 +78,7 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.__puya_arc4
         (assert tmp%32#0) // can only call when not creating
         tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testMethodSelector()
         return 1u
-    block@8: // testAssertMatch_route_L68
+    block@8: // testAssertMatch_route_L72
         let tmp%33#0: uint64 = (txn OnCompletion)
         let tmp%34#0: bool = (== tmp%33#0 NoOp)
         (assert tmp%34#0) // OnCompletion is not NoOp
@@ -89,7 +89,7 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.__puya_arc4
         let tmp%37#0: uint64 = (btoi reinterpret_bytes[8]%2#0)
         tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testAssertMatch(tmp%37#0)
         return 1u
-    block@9: // testArc4Encoding_route_L85
+    block@9: // testArc4Encoding_route_L89
         let tmp%38#0: uint64 = (txn OnCompletion)
         let tmp%39#0: bool = (== tmp%38#0 NoOp)
         (assert tmp%39#0) // OnCompletion is not NoOp
@@ -99,7 +99,7 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.__puya_arc4
         let reinterpret_bytes[16]%4#0: bytes[16] = (txna ApplicationArgs 1)
         tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testArc4Encoding(reinterpret_bytes[16]%4#0)
         return 1u
-    block@10: // getPlugin_route_L100
+    block@10: // getPlugin_route_L104
         let tmp%42#0: uint64 = (txn OnCompletion)
         let tmp%43#0: bool = (== tmp%42#0 NoOp)
         (assert tmp%43#0) // OnCompletion is not NoOp
@@ -112,7 +112,7 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.__puya_arc4
         let tmp%49#0: bytes = (concat 0x151f7c75 tmp%48#0)
         (log tmp%49#0)
         return 1u
-    block@11: // getMain_route_L106
+    block@11: // getMain_route_L110
         let tmp%50#0: uint64 = (txn OnCompletion)
         let tmp%51#0: bool = (== tmp%50#0 NoOp)
         (assert tmp%51#0) // OnCompletion is not NoOp
@@ -123,7 +123,7 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.__puya_arc4
         let tmp%55#0: bytes = (concat 0x151f7c75 tmp%54#0)
         (log tmp%55#0)
         return 1u
-    block@12: // setPlugin_route_L116
+    block@12: // setPlugin_route_L120
         let tmp%56#0: uint64 = (txn OnCompletion)
         let tmp%57#0: bool = (== tmp%56#0 NoOp)
         (assert tmp%57#0) // OnCompletion is not NoOp
@@ -268,10 +268,24 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.implicitCas
         (assert tmp%14#0)
         let tmp%15#0: bool = (== v3#0 v1#0)
         (assert tmp%15#0)
+        let item0%2#0: bytes = (extract3 v3#0 0u 8u) // on error: Index access is out of bounds
+        let item0%3#0: uint64 = (btoi item0%2#0)
+        let item1%2#0: bytes = (extract3 v3#0 8u 8u) // on error: Index access is out of bounds
+        let item1%3#0: uint64 = (btoi item1%2#0)
+        let x#0: uint64 = item0%3#0
+        let y#0: uint64 = item1%3#0
+        let encoded%10#0: bytes = (extract3 v3#0 0u 8u) // on error: Index access is out of bounds
+        let tmp%16#0: uint64 = (btoi encoded%10#0)
+        let tmp%17#0: bool = (== x#0 tmp%16#0)
+        (assert tmp%17#0)
+        let encoded%11#0: bytes = (extract3 v3#0 8u 8u) // on error: Index access is out of bounds
+        let tmp%18#0: uint64 = (btoi encoded%11#0)
+        let tmp%19#0: bool = (== y#0 tmp%18#0)
+        (assert tmp%19#0)
         return 
 
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testNestedObjects(vp: bytes[32]) -> void:
-    block@0: // L45
+    block@0: // L49
         let tmp%0#0: bytes = (extract3 vp#0 0u 16u) // on error: Index access is out of bounds
         let encoded%0#0: bytes = (extract3 tmp%0#0 0u 8u) // on error: Index access is out of bounds
         let tmp%1#0: uint64 = (btoi encoded%0#0)
@@ -330,7 +344,7 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testNestedO
         return 
 
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testMethodSelector() -> void:
-    block@0: // L56
+    block@0: // L60
         let tmp%0#0: bool = (== method "mutateVector((uint64,uint64),uint64,uint64)(uint64,uint64)" method "mutateVector((uint64,uint64),uint64,uint64)(uint64,uint64)")
         (assert tmp%0#0)
         let tmp%1#0: bool = (== method "getPlugin(string)(uint64,uint64,uint64,bool)" method "getPlugin(string)(uint64,uint64,uint64,bool)")
@@ -340,7 +354,7 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testMethodS
         return 
 
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testAssertMatch(x: uint64) -> void:
-    block@0: // L68
+    block@0: // L72
         let b#0: uint64 = (* x#0 2u)
         let val_as_bytes%0#0: bytes[8] = (itob b#0)
         let val_as_bytes%1#0: bytes[8] = (itob b#0)
@@ -354,19 +368,19 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testAssertM
         let tmp%1#0: uint64 = (* x#0 2u)
         let tmp%2#0: bool = (== tmp%0#0 tmp%1#0)
         goto tmp%2#0 ? block@1 : block@3
-    block@1: // and_contd_L74
+    block@1: // and_contd_L78
         let encoded%1#0: bytes = (extract3 obj#0 0u 8u) // on error: Index access is out of bounds
         let tmp%3#0: uint64 = (btoi encoded%1#0)
         let tmp%4#0: uint64 = (* x#0 2u)
         let tmp%5#0: bool = (== tmp%3#0 tmp%4#0)
         goto tmp%5#0 ? block@2 : block@3
-    block@2: // bool_true_L74
+    block@2: // bool_true_L78
         let and_result%0#0: bool = 1u
         goto block@4
-    block@3: // bool_false_L74
+    block@3: // bool_false_L78
         let and_result%0#1: bool = 0u
         goto block@4
-    block@4: // bool_merge_L74
+    block@4: // bool_merge_L78
         let and_result%0#2: bool = φ(and_result%0#0 <- block@2, and_result%0#1 <- block@3)
         (assert and_result%0#2) // assert target is match for conditions
         let encoded%2#0: bytes = (extract3 obj#0 8u 8u) // on error: Index access is out of bounds
@@ -386,20 +400,20 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testAssertM
         let tmp%9#0: uint64 = (btoi encoded%5#0)
         let tmp%10#0: bool = (== tmp%8#0 tmp%9#0)
         goto tmp%10#0 ? block@5 : block@7
-    block@5: // and_contd_L80
+    block@5: // and_contd_L84
         let encoded%6#0: bytes = (extract3 obj#0 8u 8u) // on error: Index access is out of bounds
         let tmp%11#0: uint64 = (btoi encoded%6#0)
         let encoded%7#0: bytes = (extract3 v#0 0u 8u) // on error: Index access is out of bounds
         let tmp%12#0: uint64 = (btoi encoded%7#0)
         let tmp%13#0: bool = (== tmp%11#0 tmp%12#0)
         goto tmp%13#0 ? block@6 : block@7
-    block@6: // bool_true_L80
+    block@6: // bool_true_L84
         let and_result%1#0: bool = 1u
         goto block@8
-    block@7: // bool_false_L80
+    block@7: // bool_false_L84
         let and_result%1#1: bool = 0u
         goto block@8
-    block@8: // bool_merge_L80
+    block@8: // bool_merge_L84
         let and_result%1#2: bool = φ(and_result%1#0 <- block@6, and_result%1#1 <- block@7)
         (assert and_result%1#2) // assert target is match for conditions
         let encoded%8#0: bytes = (extract3 obj#0 8u 8u) // on error: Index access is out of bounds
@@ -413,7 +427,7 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testAssertM
         return 
 
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testArc4Encoding(p: bytes[16]) -> void:
-    block@0: // L85
+    block@0: // L89
         let encoded%0#0: bytes = (extract3 p#0 8u 8u) // on error: Index access is out of bounds
         let tmp%0#0: uint64 = (btoi encoded%0#0)
         let encoded%1#0: bytes = (extract3 p#0 0u 8u) // on error: Index access is out of bounds
@@ -449,7 +463,7 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testArc4Enc
         return 
 
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.getPlugin(key: bytes) -> bytes[25]:
-    block@0: // L100
+    block@0: // L104
         let box_prefixed_key%0#0: bytes = (concat "plugins" key#0)
         let (maybe_value%0#0: bytes, maybe_exists%0#0: bool) = (box_get box_prefixed_key%0#0)
         (assert maybe_exists%0#0) // Box must have value
@@ -462,7 +476,7 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.getPlugin(k
         return value#0
 
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.getMain() -> bytes[25]:
-    block@0: // L106
+    block@0: // L110
         let (maybe_value%0#0: bytes, maybe_exists%0#0: bool) = (box_get "main")
         (assert maybe_exists%0#0) // Box must have value
         let copy%0#0: bytes = maybe_value%0#0
@@ -474,7 +488,7 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.getMain() -
         return value#0
 
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.setPlugin(key: bytes) -> void:
-    block@0: // L116
+    block@0: // L120
         let current_tail_offset%0#0: uint64 = 25u
         let encoded_tuple_buffer%0#0: bytes[0] = 0x
         let encoded_tuple_buffer%1#0: bytes = (concat encoded_tuple_buffer%0#0 0x0000000000000001)

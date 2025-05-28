@@ -7,6 +7,7 @@ import { CodeError, InternalError, NotSupported, throwError } from '../../errors
 import { codeInvariant, distinctByEquality, invariant, sortBy } from '../../util'
 import { SymbolName } from '../symbol-name'
 import { GenericPType, PType } from './base'
+
 import { transientTypeErrors } from './transient-type-errors'
 
 export * from './base'

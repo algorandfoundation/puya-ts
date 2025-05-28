@@ -1,7 +1,6 @@
 import { ObjectPType } from '.'
 import type { SourceLocation } from '../../awst/source-location'
 import { wtypes } from '../../awst/wtypes'
-
 import { Constants } from '../../constants'
 import { ptypeToArc4EncodedType } from '../arc4-util'
 import { ARC4EncodedType } from './arc4-types'

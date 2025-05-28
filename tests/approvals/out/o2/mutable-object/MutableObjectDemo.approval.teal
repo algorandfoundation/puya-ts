@@ -24,7 +24,7 @@ main_after_if_else@20:
     return
 
 main_setPlugin_route@13:
-    // tests/approvals/mutable-object.algo.ts:116
+    // tests/approvals/mutable-object.algo.ts:120
     // public setPlugin(key: string) {
     txn OnCompletion
     !
@@ -35,12 +35,12 @@ main_setPlugin_route@13:
     // export class MutableObjectDemo extends Contract {
     txna ApplicationArgs 1
     extract 2 0
-    // tests/approvals/mutable-object.algo.ts:96
+    // tests/approvals/mutable-object.algo.ts:100
     // plugins = BoxMap<string, PluginInfo>({ keyPrefix: 'plugins' })
     bytec_1 // "plugins"
     swap
     concat
-    // tests/approvals/mutable-object.algo.ts:117-129
+    // tests/approvals/mutable-object.algo.ts:121-133
     // this.plugins(key).value = new PluginInfo({
     //   lastValidRound: new arc4.UintN64(1),
     //   cooldown: new arc4.UintN64(),
@@ -56,33 +56,33 @@ main_setPlugin_route@13:
     // })
     pushbytes 0x00000000000000010000000000000000000000000000000000
     box_put
-    // tests/approvals/mutable-object.algo.ts:116
+    // tests/approvals/mutable-object.algo.ts:120
     // public setPlugin(key: string) {
     intc_1 // 1
     return
 
 main_getMain_route@12:
-    // tests/approvals/mutable-object.algo.ts:106
+    // tests/approvals/mutable-object.algo.ts:110
     // public getMain() {
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/mutable-object.algo.ts:98
+    // tests/approvals/mutable-object.algo.ts:102
     // plugin = Box<PluginInfo>({ key: 'main' })
     pushbytes "main"
-    // tests/approvals/mutable-object.algo.ts:107
+    // tests/approvals/mutable-object.algo.ts:111
     // const value = this.plugin.value.copy()
     box_get
     assert // Box must have value
-    // tests/approvals/mutable-object.algo.ts:108
+    // tests/approvals/mutable-object.algo.ts:112
     // assert(value.lastCalled.native > 0, 'Last called not zero')
     dup
     intc_3 // 16
     extract_uint64
     assert // Last called not zero
-    // tests/approvals/mutable-object.algo.ts:106
+    // tests/approvals/mutable-object.algo.ts:110
     // public getMain() {
     bytec_0 // 0x151f7c75
     swap
@@ -92,7 +92,7 @@ main_getMain_route@12:
     return
 
 main_getPlugin_route@11:
-    // tests/approvals/mutable-object.algo.ts:100
+    // tests/approvals/mutable-object.algo.ts:104
     // public getPlugin(key: string): PluginInfo {
     txn OnCompletion
     !
@@ -103,22 +103,22 @@ main_getPlugin_route@11:
     // export class MutableObjectDemo extends Contract {
     txna ApplicationArgs 1
     extract 2 0
-    // tests/approvals/mutable-object.algo.ts:96
+    // tests/approvals/mutable-object.algo.ts:100
     // plugins = BoxMap<string, PluginInfo>({ keyPrefix: 'plugins' })
     bytec_1 // "plugins"
     swap
     concat
-    // tests/approvals/mutable-object.algo.ts:101
+    // tests/approvals/mutable-object.algo.ts:105
     // const value = this.plugins(key).value.copy()
     box_get
     assert // Box must have value
-    // tests/approvals/mutable-object.algo.ts:102
+    // tests/approvals/mutable-object.algo.ts:106
     // assert(value.lastCalled.native > 0, 'Last called not zero')
     dup
     intc_3 // 16
     extract_uint64
     assert // Last called not zero
-    // tests/approvals/mutable-object.algo.ts:100
+    // tests/approvals/mutable-object.algo.ts:104
     // public getPlugin(key: string): PluginInfo {
     bytec_0 // 0x151f7c75
     swap
@@ -128,7 +128,7 @@ main_getPlugin_route@11:
     return
 
 main_testArc4Encoding_route@10:
-    // tests/approvals/mutable-object.algo.ts:85
+    // tests/approvals/mutable-object.algo.ts:89
     // testArc4Encoding(p: Point) {
     txn OnCompletion
     !
@@ -138,7 +138,7 @@ main_testArc4Encoding_route@10:
     // tests/approvals/mutable-object.algo.ts:12
     // export class MutableObjectDemo extends Contract {
     txna ApplicationArgs 1
-    // tests/approvals/mutable-object.algo.ts:86
+    // tests/approvals/mutable-object.algo.ts:90
     // assert(p.x !== p.y, 'For the purpose of this test, a should not equal b')
     dup
     intc_2 // 8
@@ -149,21 +149,21 @@ main_testArc4Encoding_route@10:
     dup2
     !=
     assert // For the purpose of this test, a should not equal b
-    // tests/approvals/mutable-object.algo.ts:88
+    // tests/approvals/mutable-object.algo.ts:92
     // x: p.x,
     swap
     itob
-    // tests/approvals/mutable-object.algo.ts:89
+    // tests/approvals/mutable-object.algo.ts:93
     // y: p.y,
     swap
     itob
-    // tests/approvals/mutable-object.algo.ts:87-90
+    // tests/approvals/mutable-object.algo.ts:91-94
     // const obj: Vector = new Vector({
     //   x: p.x,
     //   y: p.y,
     // })
     concat
-    // tests/approvals/mutable-object.algo.ts:93
+    // tests/approvals/mutable-object.algo.ts:97
     // assert(pEncoded === objEncoded.slice(8).concat(objEncoded.slice(0, 8)), 'Encoded order should be swapped')
     dup
     len
@@ -191,13 +191,13 @@ main_testArc4Encoding_route@10:
     concat
     ==
     assert // Encoded order should be swapped
-    // tests/approvals/mutable-object.algo.ts:85
+    // tests/approvals/mutable-object.algo.ts:89
     // testArc4Encoding(p: Point) {
     intc_1 // 1
     return
 
 main_testAssertMatch_route@9:
-    // tests/approvals/mutable-object.algo.ts:68
+    // tests/approvals/mutable-object.algo.ts:72
     // testAssertMatch(x: uint64) {
     txn OnCompletion
     !
@@ -210,17 +210,17 @@ main_testAssertMatch_route@9:
     btoi
     dup
     bury 2
-    // tests/approvals/mutable-object.algo.ts:71
+    // tests/approvals/mutable-object.algo.ts:75
     // y: (b = x * 2),
     pushint 2 // 2
     *
     dup
     bury 5
-    // tests/approvals/mutable-object.algo.ts:72
+    // tests/approvals/mutable-object.algo.ts:76
     // x: b,
     dup
     itob
-    // tests/approvals/mutable-object.algo.ts:70-73
+    // tests/approvals/mutable-object.algo.ts:74-77
     // const obj: Vector = new Vector({
     //   y: (b = x * 2),
     //   x: b,
@@ -229,7 +229,7 @@ main_testAssertMatch_route@9:
     concat
     dup
     bury 8
-    // tests/approvals/mutable-object.algo.ts:74-77
+    // tests/approvals/mutable-object.algo.ts:78-81
     // assertMatch(obj, {
     //   y: x * 2,
     //   x: x * 2,
@@ -249,13 +249,13 @@ main_testAssertMatch_route@9:
     intc_1 // 1
 
 main_bool_merge@36:
-    // tests/approvals/mutable-object.algo.ts:74-77
+    // tests/approvals/mutable-object.algo.ts:78-81
     // assertMatch(obj, {
     //   y: x * 2,
     //   x: x * 2,
     // })
     assert // assert target is match for conditions
-    // tests/approvals/mutable-object.algo.ts:78
+    // tests/approvals/mutable-object.algo.ts:82
     // const v = new Point({ y: obj.y, x: obj.x })
     dig 5
     intc_0 // 0
@@ -269,7 +269,7 @@ main_bool_merge@36:
     concat
     dup
     bury 7
-    // tests/approvals/mutable-object.algo.ts:80
+    // tests/approvals/mutable-object.algo.ts:84
     // assertMatch(obj, { x: v.x, y: v.y })
     intc_2 // 8
     extract_uint64
@@ -284,10 +284,10 @@ main_bool_merge@36:
     intc_1 // 1
 
 main_bool_merge@40:
-    // tests/approvals/mutable-object.algo.ts:80
+    // tests/approvals/mutable-object.algo.ts:84
     // assertMatch(obj, { x: v.x, y: v.y })
     assert // assert target is match for conditions
-    // tests/approvals/mutable-object.algo.ts:81
+    // tests/approvals/mutable-object.algo.ts:85
     // assertMatch(obj, { y: { greaterThan: x } })
     dig 2
     dig 1
@@ -295,12 +295,12 @@ main_bool_merge@40:
     cover 2
     >
     assert // assert target is match for conditions
-    // tests/approvals/mutable-object.algo.ts:82
+    // tests/approvals/mutable-object.algo.ts:86
     // assertMatch(obj, { x: { greaterThan: x } })
     dig 2
     <
     assert // assert target is match for conditions
-    // tests/approvals/mutable-object.algo.ts:68
+    // tests/approvals/mutable-object.algo.ts:72
     // testAssertMatch(x: uint64) {
     intc_1 // 1
     return
@@ -314,7 +314,7 @@ main_bool_false@35:
     b main_bool_merge@36
 
 main_testMethodSelector_route@8:
-    // tests/approvals/mutable-object.algo.ts:56
+    // tests/approvals/mutable-object.algo.ts:60
     // public testMethodSelector() {
     txn OnCompletion
     !
@@ -325,7 +325,7 @@ main_testMethodSelector_route@8:
     return
 
 main_testNestedObjects_route@7:
-    // tests/approvals/mutable-object.algo.ts:45
+    // tests/approvals/mutable-object.algo.ts:49
     // public testNestedObjects(vp: VectorPoint) {
     txn OnCompletion
     !
@@ -335,7 +335,7 @@ main_testNestedObjects_route@7:
     // tests/approvals/mutable-object.algo.ts:12
     // export class MutableObjectDemo extends Contract {
     txna ApplicationArgs 1
-    // tests/approvals/mutable-object.algo.ts:46
+    // tests/approvals/mutable-object.algo.ts:50
     // const v1 = new Vector({ x: vp.v.x, y: vp.v.y })
     dup
     extract 0 16 // on error: Index access is out of bounds
@@ -350,7 +350,7 @@ main_testNestedObjects_route@7:
     swap
     itob
     concat
-    // tests/approvals/mutable-object.algo.ts:47
+    // tests/approvals/mutable-object.algo.ts:51
     // const p1 = new Point({ x: vp.p.x, y: vp.p.y })
     dig 1
     extract 16 16 // on error: Index access is out of bounds
@@ -364,10 +364,10 @@ main_testNestedObjects_route@7:
     swap
     itob
     concat
-    // tests/approvals/mutable-object.algo.ts:48
+    // tests/approvals/mutable-object.algo.ts:52
     // const vp1 = new VectorPoint({ v: v1.copy(), p: p1.copy() })
     concat
-    // tests/approvals/mutable-object.algo.ts:49
+    // tests/approvals/mutable-object.algo.ts:53
     // log(vp1.v.x)
     dup
     extract 0 16 // on error: Index access is out of bounds
@@ -376,13 +376,13 @@ main_testNestedObjects_route@7:
     extract_uint64
     itob
     log
-    // tests/approvals/mutable-object.algo.ts:50
+    // tests/approvals/mutable-object.algo.ts:54
     // log(vp1.v.y)
     intc_2 // 8
     extract_uint64
     itob
     log
-    // tests/approvals/mutable-object.algo.ts:51
+    // tests/approvals/mutable-object.algo.ts:55
     // log(vp1.p.x)
     dup
     extract 16 16 // on error: Index access is out of bounds
@@ -391,17 +391,17 @@ main_testNestedObjects_route@7:
     extract_uint64
     itob
     log
-    // tests/approvals/mutable-object.algo.ts:52
+    // tests/approvals/mutable-object.algo.ts:56
     // log(vp1.p.y)
     intc_0 // 0
     extract_uint64
     itob
     log
-    // tests/approvals/mutable-object.algo.ts:53
+    // tests/approvals/mutable-object.algo.ts:57
     // assert(vp1 === vp)
     ==
     assert
-    // tests/approvals/mutable-object.algo.ts:45
+    // tests/approvals/mutable-object.algo.ts:49
     // public testNestedObjects(vp: VectorPoint) {
     intc_1 // 1
     return

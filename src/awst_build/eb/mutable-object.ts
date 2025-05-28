@@ -1,9 +1,9 @@
 import { nodeFactory } from '../../awst/node-factory'
 import type { Expression } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
+import { wtypes } from '../../awst/wtypes'
 import { invariant } from '../../util'
-import type { PType, PTypeOrClass } from '../ptypes'
-import { ObjectPType } from '../ptypes'
+import { ObjectPType, type PType, type PTypeOrClass } from '../ptypes'
 import { MutableObjectClass, MutableObjectType } from '../ptypes/mutable-object'
 import { instanceEb } from '../type-registry'
 import { ClassBuilder, InstanceBuilder } from './'
@@ -93,7 +93,32 @@ export class MutableObjectExpressionBuilder extends Arc4EncodedBaseExpressionBui
   }
 
   resolveToPType(ptype: PTypeOrClass): InstanceBuilder {
-    if (ptype.equals(this.ptype)) return this
+    if (ptype.equals(this.ptype)) {
+      // if the ptype is exactly the same, but the expression has WTuple as its wtype,
+      // we need to convert it to a struct expression with the correct field types.
+      // given the following code:
+      // ```
+      // class Coordinate extends MutableObject<{ x: uint64; y: uint64; z: biguint }> {}
+      // let g: uint64, i: biguint
+      // const f = ({ x: g, z: i } = new Coordinate({ x: 1, y: 2, z: 3n }))
+      // ```
+      // the right most assignment expression (MutableObjectExpressionBuilder._expr) will have a WTuple as its wtype,
+      // and we need to convert it to a struct expression.
+      if (this._expr.wtype instanceof wtypes.WTuple) {
+        const fields = Object.entries(this.ptype.fields).map(
+          ([p, t]) => [p, requireExpressionOfType(this.memberAccess(p, this.sourceLocation), t)] as const,
+        )
+        return instanceEb(
+          nodeFactory.newStruct({
+            sourceLocation: this.sourceLocation,
+            values: new Map(fields),
+            wtype: this.ptype.wtype,
+          }),
+          this.ptype,
+        )
+      }
+      return this
+    }
 
     if (ptype instanceof ObjectPType) {
       const native = this.memberAccess('native', this.sourceLocation)

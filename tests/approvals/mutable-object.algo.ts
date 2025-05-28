@@ -40,6 +40,10 @@ export class MutableObjectDemo extends Contract {
     assert(v3.x === v1.x)
     assert(v3.y === v1.y)
     assert(v3 === v1)
+
+    const { x, y } = v3
+    assert(x === v3.x)
+    assert(y === v3.y)
   }
 
   public testNestedObjects(vp: VectorPoint) {

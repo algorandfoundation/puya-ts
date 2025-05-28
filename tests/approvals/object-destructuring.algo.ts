@@ -1,11 +1,18 @@
 import type { biguint, bytes, uint64 } from '@algorandfoundation/algorand-typescript'
-import { Bytes } from '@algorandfoundation/algorand-typescript'
+import { Bytes, MutableObject } from '@algorandfoundation/algorand-typescript'
 
-function testPartialDestructure(arg: { x: uint64; y: uint64; z: uint64 }) {
+class Coordinate extends MutableObject<{ x: uint64; y: uint64; z: biguint }> {}
+
+function testPartialDestructure(arg: { x: uint64; y: uint64; z: biguint }) {
   const { x } = arg
   const {
     nested: { y },
   } = { nested: arg }
+}
+
+function testPartialDestructureMutableObject(arg: Coordinate) {
+  const { x } = arg
+  const { nested } = { nested: arg.copy() }
 }
 
 function test() {
@@ -14,6 +21,14 @@ function test() {
   let g: uint64, i: biguint
   const f = ({ a: g, d: i } = produceItems())
   receivePartial(produceItems())
+}
+
+function testMutableObject() {
+  const { x, y, z } = produceCoordinates()
+  const { y: b } = produceCoordinates()
+  let g: uint64, i: biguint
+  const f = ({ x: g, z: i } = produceCoordinates())
+  receivePartialMutableObject(produceCoordinates())
 }
 
 function produceItems(): { a: uint64; b: bytes; c: boolean; d: biguint } {
@@ -25,7 +40,13 @@ function produceItems(): { a: uint64; b: bytes; c: boolean; d: biguint } {
   }
 }
 
+function produceCoordinates(): Coordinate {
+  return new Coordinate({ x: 1, y: 2, z: 3n })
+}
+
 function receivePartial(x: { a: uint64; d: biguint }) {}
+
+function receivePartialMutableObject(v: { x: uint64; y: uint64 }) {}
 
 function testLiteralToLiteral() {
   const a: uint64 = 4
