@@ -724,7 +724,13 @@ export class ObjectPType extends PType {
   }
 
   hasPropertyOfType(name: string, type: PType) {
-    return this.hasProperty(name) && this.properties[name].equals(type)
+    if (!this.hasProperty(name)) {
+      return false
+    }
+    const thisPropertyType = this.properties[name]
+    return ('nativeType' in thisPropertyType ? (thisPropertyType.nativeType as PType) : thisPropertyType).equals(
+      'nativeType' in type ? (type.nativeType as PType) : type,
+    )
   }
 
   toString(): string {

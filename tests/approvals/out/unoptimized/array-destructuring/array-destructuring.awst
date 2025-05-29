@@ -13,15 +13,15 @@ contract ArrayDestructuringAlgo
   testNested(arg: readonlytuple[uint64, readonlytuple[biguint, biguint]]): readonlytuple[uint64, readonlytuple[biguint, biguint], uint64, biguint]
   {
     <tuple>[a, b]: readonlytuple[uint64, readonlytuple[biguint, biguint]] = arg
-    <tuple>[c, <tuple>[d, _]]: readonlytuple[uint64, readonlytuple[biguint, biguint]] = arg
+    <tuple>[c, <tuple>[d, _₁]]: readonlytuple[uint64, readonlytuple[biguint, biguint]] = arg
     return <tuple>[a, b, c, d]
   }
   
   test(): void
   {
     <tuple>[a, b, c, d]: readonlytuple[uint64, bytes, bool, biguint] = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceItems()
-    <tuple>[_, _₁, e, _₂]: readonlytuple[uint64, bytes, bool, biguint] = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceItems()
-    f: readonlytuple[uint64, bytes, bool, biguint] = (<tuple>[g, _₃, _₄, i] = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceItems())
+    <tuple>[_₃, _₄, e, _₅]: readonlytuple[uint64, bytes, bool, biguint] = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceItems()
+    f: readonlytuple[uint64, bytes, bool, biguint] = (<tuple>[g, _₈, _₉, i] = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceItems())
     assert(a == 5)
     assert(b == 0x)
     assert(!c)
