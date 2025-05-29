@@ -12,7 +12,9 @@ function testPartialDestructure(arg: { x: uint64; y: uint64; z: biguint }) {
 
 function testPartialDestructureMutableObject(arg: Coordinate) {
   const { x } = arg
-  const { nested } = { nested: arg.copy() }
+  const {
+    nested: { y },
+  } = { nested: arg.copy() }
 }
 
 function test() {

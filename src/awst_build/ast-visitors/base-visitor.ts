@@ -2,6 +2,7 @@ import ts from 'typescript'
 import { nodeFactory } from '../../awst/node-factory'
 import type { Expression, LValue, MethodDocumentation, Statement } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
+import { wtypes } from '../../awst/wtypes'
 import { CodeError, InternalError, NotSupported } from '../../errors'
 import { logger } from '../../logger'
 import { codeInvariant, enumerate, invariant, sortBy } from '../../util'
@@ -547,7 +548,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
       nodeFactory.assignmentExpression({
         target: this.buildLValue(target, assignmentType, sourceLocation),
         sourceLocation,
-        value: this.buildRValue(source, target, assignmentType),
+        value: source.resolveToPType(this.buildRValueType(assignmentType, target.ptype, sourceLocation)).resolve(),
       }),
       assignmentType,
     )
@@ -643,6 +644,42 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
     return sourceType
   }
 
+  private buildRValueType(assignmentType: PType, targetType: PType, sourceLocation: SourceLocation): PType {
+    const errorMessage = `Target of type ${targetType.name} cannot be resolved to assignment expression of type ${assignmentType.name}`
+    // given obj is an instance of `MutableObject<{x: uint64, y: uint64, z: uint64}>`,
+    //   `const {x, y} = obj` should resolve to a RValue
+    //     => which is a tuple expression with the values of [x, y, z]
+    //        with a type equivalent to nativeType (ObjectPType) of the MutableObjectType
+    if (assignmentType instanceof MutableObjectType && targetType instanceof ObjectPType) {
+      return assignmentType.nativeType
+    }
+    // if obj is nested inside an object expression, e.g.
+    // `const { nested: { y } } = { nested: obj.copy() }` will produce a RValue that is:
+    //     => RValue type is recursively constructed so that every nested MutableObjectType in assignment type mapped to an ObjectPType in target type
+    //        uses nativeType (ObjectPType) of MutableObject
+    if (assignmentType instanceof ObjectPType) {
+      // Recursively narrow object properties
+      codeInvariant(targetType instanceof ObjectPType, errorMessage)
+      const assignmentPropertyOrder = assignmentType
+        .orderedProperties()
+        .reduce((acc, [prop], index) => acc.set(prop, index), new Map<string, number>())
+      return new ObjectPType({
+        alias: assignmentType.alias,
+        description: assignmentType.description,
+        properties: Object.fromEntries(
+          assignmentType
+            .orderedProperties()
+            .map(([prop, propType]): [string, PType] => [
+              prop,
+              prop in targetType.properties ? this.buildRValueType(propType, targetType.getPropertyType(prop), sourceLocation) : propType,
+            ])
+            .toSorted(sortBy(([prop]) => assignmentPropertyOrder.get(prop) ?? Number.MAX_SAFE_INTEGER)),
+        ),
+      })
+    }
+    return assignmentType
+  }
+
   buildLValue(target: InstanceBuilder, assignmentType: PType, sourceLocation: SourceLocation): LValue {
     if (target instanceof ArrayLiteralExpressionBuilder) {
       if (assignmentType instanceof TuplePType) {
@@ -674,6 +711,20 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
       //        where a random name is generated for each of the properties missing in the target,
       //        and wtype is WTuple
       if (assignmentType instanceof ObjectPType || assignmentType instanceof MutableObjectType) {
+        const getWTupleWithItemsMatchingTypes = (items: LValue[], ptype: ObjectPType | MutableObjectType): wtypes.WTuple => {
+          const basePType = ptype instanceof ObjectPType ? ptype : ptype.nativeType
+          const baseWType = basePType.wtype
+          const properties = basePType.orderedProperties().map(([propName, propType]) => propType)
+          const types = items.map((item, i) => {
+            if (item.wtype.equals(baseWType.types[i])) return baseWType.types[i]
+            if (properties[i] instanceof MutableObjectType) return properties[i].nativeType.wtype
+            return baseWType.types[i]
+          })
+          return new wtypes.WTuple({
+            ...baseWType,
+            types,
+          })
+        }
         const targets: LValue[] = []
         const assignmentProperties =
           assignmentType instanceof ObjectPType ? assignmentType.orderedProperties() : Object.entries(assignmentType.fields)
@@ -690,7 +741,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
             )
           }
         }
-        const wtype = assignmentType instanceof ObjectPType ? assignmentType.wtype : assignmentType.nativeType.wtype
+        const wtype = getWTupleWithItemsMatchingTypes(targets, assignmentType)
         return nodeFactory.tupleExpression({ items: targets, sourceLocation, wtype })
       }
     }
@@ -703,17 +754,6 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
         sourceLocation,
       },
     )
-  }
-
-  buildRValue(source: InstanceBuilder, target: InstanceBuilder, assignmentType: PType): Expression {
-    // given obj is `MutableObject<{x: uint64, y: uint64, z: uint64}>`,
-    //   `const {x, y} = obj` will produce a RValue that is:
-    //     => a tuple expression with the values of [x, y, z]
-    //        by resolving the source to nativeType (ObjectPType) of the MutableObjectType
-    if (assignmentType instanceof MutableObjectType && target.ptype instanceof ObjectPType) {
-      return source.resolveToPType(assignmentType.nativeType).resolve()
-    }
-    return source.resolveToPType(assignmentType).resolve()
   }
 
   protected parseMemberModifiers(node: { modifiers?: readonly ts.ModifierLike[] }) {
