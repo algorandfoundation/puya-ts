@@ -29,6 +29,9 @@ export class ToCodeVisitor
   visitRange(expression: nodes.Range): string {
     return `urange(${expression.start.accept(this)}, ${expression.stop.accept(this)}, ${expression.step.accept(this)})`
   }
+  visitCommaExpression(expression: nodes.CommaExpression): string {
+    return expression.expressions.map((e) => e.accept(this)).join(', ')
+  }
   visitVoidConstant(expression: nodes.VoidConstant): string {
     return `void`
   }

@@ -644,6 +644,16 @@ export class TuplePType extends PType {
       immutable: this.immutable,
     })
   }
+
+  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType {
+    if (typeof index === 'bigint') {
+      if (index >= 0 && index < this.items.length) {
+        return this.items[Number(index)]
+      }
+      throw new CodeError(`Cannot access index ${index} of ${this.name}`, { sourceLocation })
+    }
+    return super.getIndexType(index, sourceLocation)
+  }
 }
 export class ArrayPType extends PType {
   readonly elementType: PType

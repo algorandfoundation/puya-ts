@@ -1,6 +1,7 @@
 import ts from 'typescript'
 import { nodeFactory } from '../../awst/node-factory'
-import { TupleExpression, type Expression, type LValue, type MethodDocumentation, type Statement } from '../../awst/nodes'
+import type { LValue } from '../../awst/nodes'
+import { TupleExpression, type Expression, type MethodDocumentation, type Statement } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { wtypes } from '../../awst/wtypes'
 import { CodeError, InternalError, NotSupported } from '../../errors'
@@ -544,19 +545,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
 
   handleAssignment(target: InstanceBuilder, source: InstanceBuilder, sourceLocation: SourceLocation): InstanceBuilder {
     const assignmentType = this.buildAssignmentExpressionType(target.ptype, source.ptype, sourceLocation)
-    const lValue = this.buildLValue(target, assignmentType, sourceLocation)
-    const rType =
-      assignmentType.wtype && assignmentType.wtype.equals(lValue.wtype)
-        ? assignmentType
-        : this.buildRValueType(assignmentType, target.ptype, sourceLocation)
-    return instanceEb(
-      nodeFactory.assignmentExpression({
-        target: this.buildLValue(target, assignmentType, sourceLocation),
-        sourceLocation,
-        value: source.resolveToPType(rType).resolve(),
-      }),
-      assignmentType,
-    )
+    return this.buildAssignmentExpression(target, source.resolveToPType(assignmentType), assignmentType, sourceLocation)
   }
 
   /**
@@ -649,44 +638,88 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
     return sourceType
   }
 
-  private buildRValueType(assignmentType: PType, targetType: PType, sourceLocation: SourceLocation): PType {
-    const errorMessage = `Target of type ${targetType.name} cannot be resolved to assignment expression of type ${assignmentType.name}`
-    // given obj is an instance of `MutableObject<{x: uint64, y: uint64, z: uint64}>`,
-    //   `const {x, y} = obj` should resolve to a RValue
-    //     => which is a tuple expression with the values of [x, y, z]
-    //        with a type equivalent to nativeType (ObjectPType) of the MutableObjectType
-    // if (assignmentType instanceof MutableObjectType && targetType instanceof ObjectPType) {
-    //   return assignmentType.nativeType
-    // }
-    // if obj is nested inside an object expression, e.g.
-    // `const { nested: { y } } = { nested: obj.copy() }` will produce a RValue that is:
-    //     => RValue type is recursively constructed so that every nested MutableObjectType in assignment type mapped to an ObjectPType in target type
-    //        uses nativeType (ObjectPType) of MutableObject
-    if (instanceOfAny(assignmentType, ObjectPType, MutableObjectType)) {
-      // Recursively narrow object properties
-      codeInvariant(instanceOfAny(targetType, ObjectPType, MutableObjectType), errorMessage)
-      const baseAssignmentType = assignmentType instanceof MutableObjectType ? assignmentType.nativeType : assignmentType
-      const baseTargetType = targetType instanceof MutableObjectType ? targetType.nativeType : targetType
-      const assignmentPropertyOrder = baseAssignmentType
-        .orderedProperties()
-        .reduce((acc, [prop], index) => acc.set(prop, index), new Map<string, number>())
-      return new ObjectPType({
-        alias: baseAssignmentType.alias,
-        description: baseAssignmentType.description,
-        properties: Object.fromEntries(
-          baseAssignmentType
-            .orderedProperties()
-            .map(([prop, propType]): [string, PType] => [
-              prop,
-              prop in baseTargetType.properties
-                ? this.buildRValueType(propType, baseTargetType.getPropertyType(prop), sourceLocation)
-                : propType,
-            ])
-            .toSorted(sortBy(([prop]) => assignmentPropertyOrder.get(prop) ?? Number.MAX_SAFE_INTEGER)),
-        ),
-      })
+  buildAssignmentExpression(
+    target: InstanceBuilder,
+    source: InstanceBuilder,
+    assignmentType: PType,
+    sourceLocation: SourceLocation,
+  ): InstanceBuilder {
+    if (target instanceof ArrayLiteralExpressionBuilder) {
+      const sourceSingle = source.singleEvaluation()
+      // Destructured array
+      const assignments: Expression[] = []
+      for (const [index, item] of target[StaticIterator]().entries()) {
+        if (item instanceof OmittedExpressionBuilder) {
+          continue
+        }
+        assignments.push(
+          this.buildAssignmentExpression(
+            item,
+            requireInstanceBuilder(
+              sourceSingle.indexAccess(
+                instanceEb(nodeFactory.uInt64Constant({ value: BigInt(index), sourceLocation }), uint64PType),
+                sourceLocation,
+              ),
+            ),
+            assignmentType.getIndexType(BigInt(index), sourceLocation),
+            sourceLocation,
+          ).resolve(),
+        )
+      }
+      return instanceEb(
+        nodeFactory.commaExpression({
+          expressions: [...assignments, sourceSingle.resolve()],
+          sourceLocation,
+          wtype: assignmentType.wtypeOrThrow,
+        }),
+        assignmentType,
+      )
+    } else if (target instanceof ObjectLiteralExpressionBuilder) {
+      if (assignmentType instanceof ObjectPType || assignmentType instanceof MutableObjectType) {
+        const sourceSingle = source.singleEvaluation()
+        const targetProperties = target.ptype.orderedProperties()
+        const assignmentProperties = new Map(
+          assignmentType instanceof ObjectPType ? assignmentType.orderedProperties() : Object.entries(assignmentType.fields),
+        )
+        const assignments: Expression[] = []
+        for (const [propName, _] of targetProperties) {
+          const assignmentPropertyType = assignmentProperties.get(propName)
+          codeInvariant(assignmentPropertyType, `${propName} is not part of assignment type ${assignmentType.name}`)
+
+          assignments.push(
+            this.buildAssignmentExpression(
+              requireInstanceBuilder(target.memberAccess(propName, sourceLocation)),
+              requireInstanceBuilder(sourceSingle.memberAccess(propName, sourceLocation)),
+              assignmentPropertyType,
+              sourceLocation,
+            ).resolve(),
+          )
+        }
+        return instanceEb(
+          nodeFactory.commaExpression({
+            expressions: [...assignments, sourceSingle.resolve()],
+            sourceLocation,
+            wtype: assignmentType.wtypeOrThrow,
+          }),
+          assignmentType,
+        )
+      }
+    } else if (target.ptype.equals(assignmentType)) {
+      return instanceEb(
+        nodeFactory.assignmentExpression({
+          target: target.resolveLValue(),
+          sourceLocation,
+          value: source.resolve(),
+        }),
+        assignmentType,
+      )
     }
-    return assignmentType
+    throw new CodeError(
+      `The target of an assignment must have the same type as the source. Target: ${target.ptype}, Source: ${assignmentType}`,
+      {
+        sourceLocation,
+      },
+    )
   }
 
   buildLValue(target: InstanceBuilder, assignmentType: PType, sourceLocation: SourceLocation): LValue {

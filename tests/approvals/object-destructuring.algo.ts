@@ -39,10 +39,10 @@ function testMutableObject() {
     v: { y: b },
   } = produceCoordinates()
   let g: uint64, i: biguint
-  // const f = ({
-  //   v: { x: g },
-  //   z: i,
-  // } = produceCoordinates())
+  const f = ({
+    v: { x: g },
+    z: i,
+  } = produceCoordinates())
   receivePartialMutableObject(produceCoordinates())
 }
 

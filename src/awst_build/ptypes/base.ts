@@ -1,3 +1,4 @@
+import type { SourceLocation } from '../../awst/source-location'
 import { wtypes } from '../../awst/wtypes'
 import { CodeError } from '../../errors'
 import type { DeliberateAny } from '../../typescript-helpers'
@@ -23,6 +24,16 @@ export abstract class PType {
   abstract readonly module: string
 
   abstract readonly singleton: boolean
+
+  /**
+   * Return the type that would result from accessing the specified index of a value of this type.
+   *
+   * @param index
+   * @param sourceLocation
+   */
+  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType {
+    throw new CodeError(`${this.name} is not indexable by ${typeof index === 'bigint' ? 'number' : 'string'}`, { sourceLocation })
+  }
 
   get fullName() {
     return `${this.module}::${this.name}`
