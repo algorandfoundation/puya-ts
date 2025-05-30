@@ -15,6 +15,7 @@ export const Constants = {
         encodedTypes: `${algoTsPackage}/arc4/encoded-types.d.ts`,
         c2c: `${algoTsPackage}/arc4/c2c.d.ts`,
       },
+      arrays: `${algoTsPackage}/arrays.d.ts`,
       baseContract: `${algoTsPackage}/base-contract.d.ts`,
       box: `${algoTsPackage}/box.d.ts`,
       compiled: `${algoTsPackage}/compiled.d.ts`,

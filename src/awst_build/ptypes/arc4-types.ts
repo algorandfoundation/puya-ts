@@ -14,6 +14,7 @@ import {
   ContractClassPType,
   LibClassType,
   LibFunctionType,
+  MutableTuplePType,
   NumericLiteralPType,
   ObjectPType,
   ReadonlyArrayPType,
@@ -22,11 +23,6 @@ import {
   uint64PType,
   voidPType,
 } from './index'
-
-export const UintNClass = new LibClassType({
-  name: 'UintN',
-  module: Constants.moduleNames.algoTs.arc4.encodedTypes,
-})
 
 export const ByteClass = new LibClassType({
   name: 'Byte',
@@ -261,18 +257,16 @@ export const arc4StructBaseType = new ARC4StructType({
   frozen: false,
 })
 
-export const Arc4TupleClass = new LibClassType({
-  name: 'Tuple',
-  module: Constants.moduleNames.algoTs.arc4.encodedTypes,
-})
-
 export const Arc4TupleGeneric = new GenericPType({
   name: 'Tuple',
   module: Constants.moduleNames.algoTs.arc4.encodedTypes,
-  parameterise(ptypes: readonly PType[]) {
-    codeInvariant(ptypes.length, `${this.name} expects 1 generic parameter`)
-    codeInvariant(ptypes[0] instanceof ReadonlyTuplePType, `${this.name} generic parameter must be a native tuple type`)
-    const encodedTypes = ptypes[0].items.map((itemType, index) => {
+  parameterise([tupleType, ...rest]: readonly PType[]) {
+    codeInvariant(tupleType && !rest.length, `${this.name} expects 1 generic parameter`)
+    codeInvariant(
+      tupleType instanceof ReadonlyTuplePType || tupleType instanceof MutableTuplePType,
+      `${this.name} generic parameter must be a native tuple type`,
+    )
+    const encodedTypes = tupleType.items.map((itemType, index) => {
       codeInvariant(itemType instanceof ARC4EncodedType, `Item ${index} of ARC4 Tuple must be an ARC4 encoded type`)
       return itemType
     })
@@ -348,13 +342,9 @@ export class UintNType extends ARC4EncodedType {
     this.abiTypeSignature = wtype?.arc4Alias ?? `uint${n}`
   }
 }
-export const UFixedNxMClass = new LibClassType({
+export const UFixedNxMGeneric = new GenericPType({
   name: 'UFixedNxM',
   module: Constants.moduleNames.algoTs.arc4.encodedTypes,
-})
-export const UFixedNxMGeneric = new GenericPType({
-  name: UFixedNxMClass.name,
-  module: UFixedNxMClass.module,
   parameterise(typeArgs: readonly PType[]) {
     codeInvariant(typeArgs.length === 2, `${this.name} expects exactly 2 generic type parameters`)
     const [n, m] = typeArgs
@@ -395,7 +385,7 @@ export class UFixedNxMType extends ARC4EncodedType {
     codeInvariant(m >= 1n && m <= 160n, 'm must be between 1 and 160')
     this.n = n
     this.m = m
-    this.name = `${UFixedNxMClass.name}<${n}, ${m}>`
+    this.name = `${UFixedNxMGeneric.name}<${n}, ${m}>`
     this.wtype = new wtypes.ARC4UFixedNxM({ n: this.n, m: this.m })
     this.abiTypeSignature = `ufixed${n}x${m}`
   }
@@ -403,10 +393,6 @@ export class UFixedNxMType extends ARC4EncodedType {
 
 export const arc4ByteAlias = new UintNType({ n: 8n, wtype: wtypes.arc4ByteAliasWType, name: 'Byte' })
 
-export const DynamicArrayConstructor = new LibClassType({
-  name: 'DynamicArray',
-  module: Constants.moduleNames.algoTs.arc4.encodedTypes,
-})
 export const DynamicArrayGeneric = new GenericPType({
   name: 'DynamicArray',
   module: Constants.moduleNames.algoTs.arc4.encodedTypes,
@@ -461,10 +447,7 @@ export class DynamicArrayType extends ARC4ArrayType {
     this.abiTypeSignature = `${this.elementType.abiTypeSignature}[]`
   }
 }
-export const StaticArrayConstructor = new LibClassType({
-  name: 'StaticArray',
-  module: Constants.moduleNames.algoTs.arc4.encodedTypes,
-})
+
 export const StaticArrayGeneric = new GenericPType({
   name: 'StaticArray',
   module: Constants.moduleNames.algoTs.arc4.encodedTypes,
@@ -559,10 +542,6 @@ export const StaticBytesGeneric = new GenericPType({
       length: length.literalValue,
     })
   },
-})
-export const StaticBytesConstructor = new LibClassType({
-  name: 'StaticBytes',
-  module: Constants.moduleNames.algoTs.arc4.encodedTypes,
 })
 export class StaticBytesType extends StaticArrayType {
   constructor({ length }: { length: bigint }) {

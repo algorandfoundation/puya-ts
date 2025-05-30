@@ -20,6 +20,8 @@ export type ObjectLiteralParts =
     }
 
 export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
+  readonly isConstant = false
+
   readonly _ptype: ObjectPType
   get ptype(): ObjectPType {
     return this._ptype

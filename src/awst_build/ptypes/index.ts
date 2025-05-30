@@ -703,7 +703,7 @@ export const ArrayGeneric = new GenericPType({
 })
 export class ArrayPType extends PType {
   readonly elementType: PType
-  readonly immutable: boolean = false
+  readonly immutable = false
   readonly singleton = false
   readonly name: string
   readonly module: string = Constants.moduleNames.typescript.array
@@ -731,7 +731,9 @@ export const ReadonlyArrayGeneric = new GenericPType({
     return new ReadonlyArrayPType({ elementType: typeArgs[0] })
   },
 })
-export class ReadonlyArrayPType extends ArrayPType {
+export class ReadonlyArrayPType extends PType {
+  readonly elementType: PType
+  readonly singleton = false
   readonly immutable = true
   readonly name: string
   readonly module: string = Constants.moduleNames.typescript.readonlyArray
@@ -739,11 +741,57 @@ export class ReadonlyArrayPType extends ArrayPType {
     return `${this.module}::ReadonlyArray<${this.elementType.fullName}>`
   }
   constructor(props: { elementType: PType }) {
-    super(props)
+    super()
+    this.elementType = props.elementType
     this.name = `ReadonlyArray<${props.elementType.name}>`
+  }
+
+  get wtype() {
+    return new wtypes.ARC4DynamicArray({
+      elementType: this.elementType.wtypeOrThrow,
+      immutable: this.immutable,
+    })
   }
 }
 
+export const FixedArrayGeneric = new GenericPType({
+  name: 'FixedArray',
+  module: Constants.moduleNames.algoTs.arrays,
+  parameterise(typeArgs) {
+    codeInvariant(typeArgs.length === 2, 'FixedArray type expects exactly one type parameters')
+    const [elementType, arraySize] = typeArgs
+    codeInvariant(
+      arraySize instanceof NumericLiteralPType,
+      `Array size generic type param for FixedArray must be a literal number. Inferred type is ${arraySize.name}`,
+    )
+    return new FixedArrayPType({ elementType, arraySize: arraySize.literalValue })
+  },
+})
+
+export class FixedArrayPType extends PType {
+  readonly elementType: PType
+  readonly immutable: boolean = false
+  readonly singleton = false
+  readonly name: string
+  readonly module: string = Constants.moduleNames.algoTs.arrays
+  readonly arraySize: bigint
+  get fullName() {
+    return `${this.module}::FixedArray<${this.elementType.fullName}>`
+  }
+  constructor(props: { elementType: PType; arraySize: bigint }) {
+    super()
+    this.elementType = props.elementType
+    this.name = `FixedArray<${props.elementType.name}, ${props.arraySize}>`
+    this.arraySize = props.arraySize
+  }
+  get wtype() {
+    return new wtypes.ARC4StaticArray({
+      elementType: this.elementType.wtypeOrThrow,
+      arraySize: this.arraySize,
+      immutable: false,
+    })
+  }
+}
 export class ObjectPType extends PType {
   readonly name: string = 'object'
   readonly module: string = 'lib.d.ts'
@@ -1033,22 +1081,6 @@ export const applicationPType = new ABICompatibleInstanceType({
 export const ApplicationFunctionType = new LibFunctionType({
   name: 'Application',
   module: Constants.moduleNames.algoTs.reference,
-})
-export const GlobalStateFunction = new LibFunctionType({
-  name: 'GlobalState',
-  module: Constants.moduleNames.algoTs.state,
-})
-export const LocalStateFunction = new LibFunctionType({
-  name: 'LocalState',
-  module: Constants.moduleNames.algoTs.state,
-})
-export const BoxFunction = new LibFunctionType({
-  name: BoxGeneric.name,
-  module: Constants.moduleNames.algoTs.box,
-})
-export const BoxMapFunction = new LibFunctionType({
-  name: BoxMapGeneric.name,
-  module: Constants.moduleNames.algoTs.box,
 })
 export const BoxRefFunction = new LibFunctionType({
   name: 'BoxRef',
@@ -1592,11 +1624,6 @@ export const PolytypeClassMethodHelper = new LibFunctionType({
   name: 'class',
   module: Constants.moduleNames.polytype,
 })
-
-export const ReferenceArrayConstructor = new LibClassType({
-  name: 'ReferenceArray',
-  module: Constants.moduleNames.algoTs.referenceArray,
-})
 export const ReferenceArrayGeneric = new GenericPType({
   name: 'ReferenceArray',
   module: Constants.moduleNames.algoTs.referenceArray,
@@ -1643,4 +1670,9 @@ export class ReferenceArrayType extends PType {
 export const itxnComposePType = new LibObjType({
   module: Constants.moduleNames.algoTs.itxnCompose,
   name: 'itxnCompose',
+})
+
+export const cloneFunctionPType = new LibFunctionType({
+  name: 'clone',
+  module: Constants.moduleNames.algoTs.util,
 })

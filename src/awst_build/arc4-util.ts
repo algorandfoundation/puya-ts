@@ -14,11 +14,13 @@ import {
   biguintPType,
   boolPType,
   BytesPType,
+  FixedArrayPType,
   GroupTransactionPType,
   MutableTuplePType,
   NativeNumericType,
   numberPType,
   ObjectPType,
+  ReadonlyArrayPType,
   ReadonlyTuplePType,
   stringPType,
   uint64PType,
@@ -32,6 +34,7 @@ import {
   ARC4TupleType,
   DynamicArrayType,
   DynamicBytesType,
+  StaticArrayType,
   StaticBytesType,
   UintNType,
 } from './ptypes/arc4-types'
@@ -103,7 +106,8 @@ export function isArc4EncodableType(ptype: PType): boolean {
   if (ptype instanceof ReadonlyTuplePType) return ptype.items.every((i) => isArc4EncodableType(i))
   if (ptype instanceof MutableTuplePType) return ptype.items.every((i) => isArc4EncodableType(i))
   if (ptype instanceof ObjectPType) return ptype.orderedProperties().every(([, pt]) => isArc4EncodableType(pt))
-  if (ptype instanceof ArrayPType) return isArc4EncodableType(ptype.elementType)
+  if (ptype instanceof ArrayPType || ptype instanceof FixedArrayPType || ptype instanceof ReadonlyArrayPType)
+    return isArc4EncodableType(ptype.elementType)
   return false
 }
 
@@ -116,6 +120,8 @@ export function ptypeToArc4EncodedType(ptype: ReadonlyTuplePType, sourceLocation
 export function ptypeToArc4EncodedType(ptype: MutableTuplePType, sourceLocation: SourceLocation): ARC4TupleType
 export function ptypeToArc4EncodedType(ptype: ObjectPType, sourceLocation: SourceLocation): ARC4StructType
 export function ptypeToArc4EncodedType(ptype: ArrayPType, sourceLocation: SourceLocation): DynamicArrayType
+export function ptypeToArc4EncodedType(ptype: ReadonlyArrayPType, sourceLocation: SourceLocation): DynamicArrayType
+export function ptypeToArc4EncodedType(ptype: FixedArrayPType, sourceLocation: SourceLocation): StaticArrayType
 export function ptypeToArc4EncodedType<T extends ARC4EncodedType>(ptype: T, sourceLocation: SourceLocation): T
 export function ptypeToArc4EncodedType(ptype: PType, sourceLocation: SourceLocation): ARC4EncodedType
 export function ptypeToArc4EncodedType(ptype: PType, sourceLocation: SourceLocation): ARC4EncodedType {
@@ -131,7 +137,18 @@ export function ptypeToArc4EncodedType(ptype: PType, sourceLocation: SourceLocat
   if (ptype instanceof ArrayPType)
     return new DynamicArrayType({
       elementType: ptypeToArc4EncodedType(ptype.elementType, sourceLocation),
+      immutable: false,
+    })
+  if (ptype instanceof ReadonlyArrayPType)
+    return new DynamicArrayType({
+      elementType: ptypeToArc4EncodedType(ptype.elementType, sourceLocation),
       immutable: true,
+    })
+  if (ptype instanceof FixedArrayPType)
+    return new StaticArrayType({
+      elementType: ptypeToArc4EncodedType(ptype.elementType, sourceLocation),
+      arraySize: ptype.arraySize,
+      immutable: false,
     })
 
   if (ptype instanceof ReadonlyTuplePType)

@@ -4,10 +4,9 @@ import type { Expression } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { logger } from '../../../logger'
 import { codeInvariant, invariant } from '../../../util'
-import { ptypeToArc4EncodedType } from '../../arc4-util'
 import type { PType } from '../../ptypes'
-import { numberPType, ReadonlyTuplePType, uint64PType } from '../../ptypes'
-import { ARC4EncodedType, Arc4TupleClass, ARC4TupleType } from '../../ptypes/arc4-types'
+import { numberPType, uint64PType } from '../../ptypes'
+import { ARC4EncodedType, Arc4TupleGeneric, ARC4TupleType } from '../../ptypes/arc4-types'
 import { instanceEb } from '../../type-registry'
 import type { InstanceBuilder, NodeBuilder } from '../index'
 import { ClassBuilder, FunctionBuilder } from '../index'
@@ -16,7 +15,7 @@ import { parseFunctionArgs } from '../util/arg-parsing'
 import { Arc4EncodedBaseExpressionBuilder } from './base'
 
 export class Arc4TupleClassBuilder extends ClassBuilder {
-  readonly ptype = Arc4TupleClass
+  readonly ptype = Arc4TupleGeneric
 
   newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
     const {
@@ -30,42 +29,34 @@ export class Arc4TupleClassBuilder extends ClassBuilder {
       callLocation: sourceLocation,
       argSpec: (a) => args.map(() => a.required()),
     })
-    codeInvariant(tupleType instanceof ReadonlyTuplePType, 'Generic type must be a native tuple type', sourceLocation)
+    const ptype = Arc4TupleGeneric.parameterise([tupleType])
 
     if (args.length === 0) {
-      const arc4Type = ptypeToArc4EncodedType(tupleType, sourceLocation)
-      codeInvariant(arc4Type.fixedByteSize !== null, 'Zero arg constructor can only be used for tuples with a fixed size encoding.')
+      codeInvariant(ptype.fixedByteSize !== null, 'Zero arg constructor can only be used for tuples with a fixed size encoding.')
       return new Arc4TupleExpressionBuilder(
-        intrinsicFactory.bzero({ size: arc4Type.fixedByteSize, wtype: arc4Type.wtype, sourceLocation }),
-        arc4Type,
+        intrinsicFactory.bzero({ size: ptype.fixedByteSize, wtype: ptype.wtype, sourceLocation }),
+        ptype,
       )
     }
 
     const expressions: Expression[] = []
-    const types: ARC4EncodedType[] = []
     for (const item of tupleItems) {
       if (item.ptype instanceof ARC4EncodedType) {
         expressions.push(item.resolve())
-        types.push(item.ptype)
       } else {
         logger.error(item.sourceLocation, 'ARC4 tuple items must be ARC4 encoded types')
       }
     }
-    const arc4TupleType = new ARC4TupleType({
-      types,
-      sourceLocation,
-    })
     return new Arc4TupleExpressionBuilder(
       nodeFactory.aRC4Encode({
         value: nodeFactory.tupleExpression({
           items: expressions,
-          wtype: tupleType.wtype,
           sourceLocation,
         }),
-        wtype: arc4TupleType.wtype,
+        wtype: ptype.wtype,
         sourceLocation,
       }),
-      arc4TupleType,
+      ptype,
     )
   }
 }

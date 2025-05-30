@@ -1,11 +1,15 @@
 import type { uint64 } from '@algorandfoundation/algorand-typescript'
-import { assert, assertMatch, Contract, Uint64 } from '@algorandfoundation/algorand-typescript'
+import { assert, assertMatch, clone, Contract, FixedArray, Uint64 } from '@algorandfoundation/algorand-typescript'
 import { Bool, DynamicArray, StaticArray, UintN32 } from '@algorandfoundation/algorand-typescript/arc4'
 
 type Vector = { x: uint64; y: uint64 }
 export class NativeArraysAlgo extends Contract {
   buildArray(): Array<uint64> {
     return [1, 2, 3, 4]
+  }
+
+  arrayFromCtor(): Array<uint64> {
+    return new Array<uint64>(1, 2, 3)
   }
 
   buildReadonly(): ReadonlyArray<uint64> {
@@ -43,18 +47,21 @@ export class NativeArraysAlgo extends Contract {
 
     assertMatch(arr, [1, 10, 3, 4, 1, 10, 3, 4, 11, 12, 13])
   }
-  //
-  // fixedArray() {
-  //   const x: FixedArray<uint64, 4> = [1, 2, 3, 4]
-  //   x[0] = 0
-  //   assertMatch(x, [0, 2, 3, 4])
-  // }
+
+  fixedArray(y: FixedArray<uint64, 1024>) {
+    const x = new FixedArray<uint64, 4>(1, 2, 3, 4)
+    x[0] = 0
+    assert(x[0] === y[0])
+    assertMatch(x, [{ lessThan: 1 }, 2, 3, 4])
+    assertMatch(y, { 1024: { greaterThanEq: 0 } })
+  }
 
   arc4Interop() {
     const u1 = new UintN32(123)
 
     const da1 = new DynamicArray(u1, u1)
     const sa1 = new StaticArray(u1, u1)
+
     let a1 = [u1, u1]
 
     a1 = [...a1, ...da1, ...sa1]
@@ -85,5 +92,14 @@ export class NativeArraysAlgo extends Contract {
 
   arc4BooleansStatic() {
     return [new Bool(true), new Bool(false), new Bool(true)] as const
+  }
+
+  aliasing(a: uint64[], b: readonly uint64[]) {
+    const needClone = clone(a)
+    needClone[0] = 5
+
+    const noNeedClone = b
+
+    const needClone2: readonly uint64[] = a
   }
 }

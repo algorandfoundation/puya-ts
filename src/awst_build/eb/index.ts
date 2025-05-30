@@ -1,10 +1,11 @@
-import { awst, isConstant } from '../../awst'
+import { awst, isConstantOrTemplateVar } from '../../awst'
 import { nodeFactory } from '../../awst/node-factory'
 import { TupleItemExpression } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { CodeError, NotSupported } from '../../errors'
 import type { DecoratorData } from '../models/decorator-data'
-import type { LibClassType, PType, PTypeOrClass } from '../ptypes'
+import type { GenericPType, LibClassType, PType, PTypeOrClass } from '../ptypes'
+import { uint64PType } from '../ptypes'
 import { instanceEb } from '../type-registry'
 
 export enum BuilderComparisonOp {
@@ -83,6 +84,10 @@ export abstract class NodeBuilder {
   }
 
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
+    if (/^\d+$/.test(name)) {
+      const idx = instanceEb(nodeFactory.uInt64Constant({ value: BigInt(name), sourceLocation }), uint64PType)
+      return this.indexAccess(idx, sourceLocation)
+    }
     throw new NotSupported(`Accessing member ${name} on ${this.typeDescription}`, {
       sourceLocation,
     })
@@ -109,10 +114,7 @@ export abstract class InstanceBuilder<TPType extends PType = PType> extends Node
   abstract resolve(): awst.Expression
   abstract resolveLValue(): awst.LValue
 
-  get isConstant() {
-    const expr = this.resolve()
-    return isConstant(expr) || expr instanceof awst.TemplateVar
-  }
+  abstract get isConstant(): boolean
 
   /**
    * Returns a boolean indicating if the current builder can be resolved to the target type.
@@ -209,7 +211,7 @@ export abstract class InstanceBuilder<TPType extends PType = PType> extends Node
 }
 
 export abstract class ClassBuilder extends NodeBuilder {
-  abstract readonly ptype: LibClassType
+  abstract readonly ptype: LibClassType | GenericPType
 
   abstract newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder
 
@@ -233,6 +235,10 @@ export abstract class InstanceExpressionBuilder<TPType extends PType> extends In
 
   get ptype(): TPType {
     return this.#ptype
+  }
+
+  get isConstant() {
+    return isConstantOrTemplateVar(this._expr)
   }
 
   constructor(

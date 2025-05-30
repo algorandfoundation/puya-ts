@@ -5,6 +5,8 @@ import { anyPType } from '../ptypes'
 import { InstanceBuilder } from './index'
 
 export class OmittedExpressionBuilder extends InstanceBuilder {
+  readonly isConstant = false
+
   get ptype(): PType {
     return anyPType
   }

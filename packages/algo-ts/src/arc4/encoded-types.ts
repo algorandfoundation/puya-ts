@@ -322,13 +322,6 @@ export class StaticArray<TItem extends ARC4Encoded, TLength extends number> exte
   }
 
   /**
-   * Returns a copy of this array
-   */
-  copy(): StaticArray<TItem, TLength> {
-    throw new NoImplementation()
-  }
-
-  /**
    * Returns a new array containing all items from _this_ array, and _other_ array
    * @param other Another array to concat with this one
    */
@@ -372,13 +365,6 @@ export class DynamicArray<TItem extends ARC4Encoded> extends Arc4ArrayBase<TItem
    * Pop a single item from this array
    */
   pop(): TItem {
-    throw new NoImplementation()
-  }
-
-  /**
-   * Returns a copy of this array
-   */
-  copy(): DynamicArray<TItem> {
     throw new NoImplementation()
   }
 
@@ -482,13 +468,6 @@ class StructBase<T> extends ARC4Encoded {
   [TypeProperty] = 'arc4.Struct'
 
   get native(): T {
-    throw new NoImplementation()
-  }
-
-  /**
-   * Returns a deep copy of this struct
-   */
-  copy(): this {
     throw new NoImplementation()
   }
 }

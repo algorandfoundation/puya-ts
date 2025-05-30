@@ -21,21 +21,18 @@ import {
 import {
   AddressClass,
   arc4AddressAlias,
-  ARC4EncodedType,
-  DynamicArrayConstructor,
+  DynamicArrayGeneric,
   DynamicArrayType,
   DynamicBytesConstructor,
   DynamicBytesType,
-  StaticArrayConstructor,
+  StaticArrayGeneric,
   StaticArrayType,
-  StaticBytesConstructor,
   StaticBytesGeneric,
 } from '../../ptypes/arc4-types'
 import { instanceEb } from '../../type-registry'
 import type { InstanceBuilder, NodeBuilder } from '../index'
 import { ClassBuilder, FunctionBuilder } from '../index'
 import { IterableIteratorExpressionBuilder } from '../iterable-iterator-expression-builder'
-import { Arc4CopyFunctionBuilder } from '../shared/arc4-copy-function-builder'
 import { AtFunctionBuilder } from '../shared/at-function-builder'
 import { ArrayPopFunctionBuilder } from '../shared/pop-function-builder'
 import { ArrayPushFunctionBuilder } from '../shared/push-function-builder'
@@ -50,23 +47,19 @@ import { resolveCompatExpression } from '../util/resolve-compat-builder'
 import { Arc4EncodedBaseExpressionBuilder } from './base'
 
 export class DynamicArrayClassBuilder extends ClassBuilder {
-  readonly ptype = DynamicArrayConstructor
+  readonly ptype = DynamicArrayGeneric
 
   newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
-    const {
-      args: [...initialItems],
-      ptypes: [elementType],
-    } = parseFunctionArgs({
+    const ptype = this.ptype.parameterise(typeArgs)
+    const { args: initialItems } = parseFunctionArgs({
       args,
       typeArgs,
       callLocation: sourceLocation,
       funcName: 'DynamicArray constructor',
       genericTypeArgs: 1,
-      argSpec: (a) => args.map((_) => a.required()),
+      argSpec: (a) => args.map((_) => a.required(ptype.elementType)),
     })
-    codeInvariant(elementType instanceof ARC4EncodedType, 'Element type must be an ARC4 encoded type', sourceLocation)
-    const initialItemExprs = initialItems.map((i) => requireExpressionOfType(i, elementType))
-    const ptype = new DynamicArrayType({ elementType, sourceLocation })
+    const initialItemExprs = initialItems.map((i) => requireExpressionOfType(i, ptype.elementType))
     return new DynamicArrayExpressionBuilder(
       nodeFactory.newArray({
         values: initialItemExprs,
@@ -78,27 +71,20 @@ export class DynamicArrayClassBuilder extends ClassBuilder {
   }
 }
 export class StaticArrayClassBuilder extends ClassBuilder {
-  readonly ptype = StaticArrayConstructor
+  readonly ptype = StaticArrayGeneric
 
   newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
+    const ptype = this.ptype.parameterise(typeArgs)
     const {
       args: [...initialItems],
-      ptypes: [elementType, arraySize],
     } = parseFunctionArgs({
       args,
       typeArgs,
       callLocation: sourceLocation,
       funcName: 'StaticArray constructor',
       genericTypeArgs: 2,
-      argSpec: (a) => args.map((_) => a.required()),
+      argSpec: (a) => args.map((_) => a.required(ptype.elementType)),
     })
-    codeInvariant(elementType instanceof ARC4EncodedType, 'Element type must be an ARC4 encoded type', sourceLocation)
-    codeInvariant(
-      arraySize instanceof NumericLiteralPType,
-      `Array size type parameter of ${this.typeDescription} must be a literal number. Inferred type is ${arraySize.name}`,
-      sourceLocation,
-    )
-    const ptype = new StaticArrayType({ elementType, arraySize: arraySize.literalValue, sourceLocation })
     if (initialItems.length === 0) {
       codeInvariant(ptype.fixedByteSize !== null, 'Zero arg constructor can only be used for static arrays with a fixed size encoding.')
       return new StaticArrayExpressionBuilder(
@@ -108,14 +94,14 @@ export class StaticArrayClassBuilder extends ClassBuilder {
     }
 
     codeInvariant(
-      BigInt(initialItems.length) === arraySize.literalValue,
-      `Static array of size ${arraySize.literalValue} must be initialized with ${arraySize.literalValue} values`,
+      BigInt(initialItems.length) === ptype.arraySize,
+      `Static array of size ${ptype.arraySize} must be initialized with ${ptype.arraySize} values`,
       sourceLocation,
     )
 
     return new StaticArrayExpressionBuilder(
       nodeFactory.newArray({
-        values: initialItems.map((i) => requireExpressionOfType(i, elementType)),
+        values: initialItems.map((i) => requireExpressionOfType(i, ptype.elementType)),
         wtype: ptype.wtype,
         sourceLocation,
       }),
@@ -186,7 +172,7 @@ export class AddressClassBuilder extends ClassBuilder {
   }
 }
 export class StaticBytesClassBuilder extends ClassBuilder {
-  readonly ptype = StaticBytesConstructor
+  readonly ptype = StaticBytesGeneric
 
   newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
     const {
@@ -311,8 +297,6 @@ export abstract class ArrayExpressionBuilder<
         )
       case 'entries':
         return new EntriesFunctionBuilder(this)
-      case 'copy':
-        return new Arc4CopyFunctionBuilder(this)
       case 'concat':
         return new ConcatFunctionBuilder(this)
       case 'slice': {

@@ -7,6 +7,10 @@ import type { BuilderBinaryOp, BuilderComparisonOp, NodeBuilder } from './index'
 import { InstanceBuilder } from './index'
 
 export class OptionalExpressionBuilder extends InstanceBuilder {
+  get isConstant(): boolean {
+    return this.#base.isConstant
+  }
+
   get base() {
     return this.#base
   }

@@ -6,7 +6,7 @@ import { CodeError } from '../../../errors'
 import { codeInvariant, invariant } from '../../../util'
 import type { LibClassType, PType } from '../../ptypes'
 import { biguintPType, NumericLiteralPType, uint64PType } from '../../ptypes'
-import { UintNClass, UintNType } from '../../ptypes/arc4-types'
+import { UintNGeneric, UintNType } from '../../ptypes/arc4-types'
 import type { InstanceBuilder, NodeBuilder } from '../index'
 import { ClassBuilder } from '../index'
 import { parseFunctionArgs } from '../util/arg-parsing'
@@ -14,7 +14,7 @@ import { isValidLiteralForPType } from '../util/is-valid-literal-for-ptype'
 import { Arc4EncodedBaseExpressionBuilder } from './base'
 
 export class UintNClassBuilder extends ClassBuilder {
-  readonly ptype = UintNClass
+  readonly ptype = UintNGeneric
 
   newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
     const {

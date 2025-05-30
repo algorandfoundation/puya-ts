@@ -83,7 +83,7 @@ export interface ABIType {
 export class GenericPType<T extends PType = PType> extends PType {
   readonly name: string
   readonly module: string
-  readonly singleton = false
+  readonly singleton = true
   readonly wtype = undefined
   readonly parameterise: (typeArgs: readonly PType[]) => T
   constructor(props: { name: string; module: string; parameterise: (typeArgs: readonly PType[]) => T }) {

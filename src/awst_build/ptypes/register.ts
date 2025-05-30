@@ -26,14 +26,23 @@ import {
   InterpretAsArc4FunctionBuilder,
   MethodSelectorFunctionBuilder,
 } from '../eb/arc4/util'
+import {
+  FixedArrayClassBuilder,
+  FixedArrayExpressionBuilder,
+  NativeArrayClassBuilder,
+  NativeArrayExpressionBuilder,
+  ReadonlyArrayExpressionBuilder,
+} from '../eb/arrays'
 import { AssertFunctionBuilder, ErrFunctionBuilder } from '../eb/assert-function-builder'
 import { AssertMatchFunctionBuilder } from '../eb/assert-match-function-builder'
 import { BigUintExpressionBuilder, BigUintFunctionBuilder } from '../eb/biguint-expression-builder'
 import { BooleanExpressionBuilder, BooleanFunctionBuilder } from '../eb/boolean-expression-builder'
 import { BytesExpressionBuilder, BytesFunctionBuilder } from '../eb/bytes-expression-builder'
+import { CloneFunctionBuilder } from '../eb/clone-function-builder'
 import { CompileFunctionBuilder } from '../eb/compiled/compile-function'
 import { ContractClassBuilder, ContractOptionsDecoratorBuilder } from '../eb/contract-builder'
 import { EnsureBudgetFunctionBuilder } from '../eb/ensure-budget'
+
 import { FreeSubroutineExpressionBuilder } from '../eb/free-subroutine-expression-builder'
 import { IntrinsicEnumBuilder } from '../eb/intrinsic-enum-builder'
 import { IterableIteratorExpressionBuilder } from '../eb/iterable-iterator-expression-builder'
@@ -43,7 +52,6 @@ import { LogicSigClassBuilder, LogicSigOptionsDecoratorBuilder } from '../eb/log
 import { MatchFunctionBuilder } from '../eb/match-function-builder'
 import { MutableTupleExpressionBuilder } from '../eb/mutable-tuple-expression-builder'
 import { NamespaceBuilder } from '../eb/namespace-builder'
-import { NativeArrayExpressionBuilder } from '../eb/native-array-expression-builder'
 import { NeverExpressionBuilder } from '../eb/never-expression-builder'
 import { ObjectWithOptionalFieldsExpressionBuilder } from '../eb/object-with-optional-fields'
 import { FreeIntrinsicOpBuilder, IntrinsicOpGroupBuilder, IntrinsicOpGroupOrFunctionTypeBuilder } from '../eb/op-module-builder'
@@ -91,7 +99,6 @@ import {
   arc4StringType,
   ARC4StructClass,
   ARC4StructType,
-  Arc4TupleClass,
   Arc4TupleGeneric,
   ARC4TupleType,
   ByteClass,
@@ -99,7 +106,6 @@ import {
   ContractProxyGeneric,
   ContractProxyType,
   decodeArc4Function,
-  DynamicArrayConstructor,
   DynamicArrayGeneric,
   DynamicArrayType,
   DynamicBytesConstructor,
@@ -107,13 +113,10 @@ import {
   encodeArc4Function,
   interpretAsArc4Function,
   methodSelectorFunction,
-  StaticArrayConstructor,
   StaticArrayGeneric,
   StaticArrayType,
-  StaticBytesConstructor,
   StaticBytesGeneric,
   StaticBytesType,
-  UFixedNxMClass,
   UFixedNxMGeneric,
   UFixedNxMType,
   UintN128Class,
@@ -122,7 +125,6 @@ import {
   UintN32Class,
   UintN64Class,
   UintN8Class,
-  UintNClass,
   UintNGeneric,
   UintNType,
 } from './arc4-types'
@@ -165,9 +167,7 @@ import {
   biguintPType,
   BooleanFunction,
   boolPType,
-  BoxFunction,
   BoxGeneric,
-  BoxMapFunction,
   BoxMapGeneric,
   BoxMapPType,
   BoxPType,
@@ -178,15 +178,17 @@ import {
   bytesPType,
   BytesPType,
   ClassMethodDecoratorContext,
+  cloneFunctionPType,
   compileFunctionType,
   ContractClassPType,
   contractOptionsDecorator,
   ensureBudgetFunction,
   errFunction,
+  FixedArrayGeneric,
+  FixedArrayPType,
   FunctionPType,
   GeneratorGeneric,
   GeneratorType,
-  GlobalStateFunction,
   GlobalStateGeneric,
   GlobalStateType,
   inputOnlyObjects,
@@ -202,7 +204,6 @@ import {
   keyRegistrationItxnParamsType,
   keyRegistrationItxnType,
   KeyRegistrationTxnFunction,
-  LocalStateFunction,
   LocalStateGeneric,
   LocalStateType,
   logFunction,
@@ -226,7 +227,6 @@ import {
   ReadonlyArrayGeneric,
   ReadonlyArrayPType,
   ReadonlyTuplePType,
-  ReferenceArrayConstructor,
   ReferenceArrayGeneric,
   ReferenceArrayType,
   StringFunction,
@@ -265,14 +265,29 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: StringFunction, singletonEb: StringFunctionBuilder })
 
   // Compound
-  typeRegistry.registerGeneric({ generic: ArrayGeneric, ptype: ArrayPType, instanceEb: NativeArrayExpressionBuilder })
-  typeRegistry.registerGeneric({ generic: ReadonlyArrayGeneric, ptype: ReadonlyArrayPType, instanceEb: NativeArrayExpressionBuilder })
+  typeRegistry.registerGeneric({
+    generic: ArrayGeneric,
+    ptype: ArrayPType,
+    instanceEb: NativeArrayExpressionBuilder,
+    singletonEb: NativeArrayClassBuilder,
+  })
+  typeRegistry.registerGeneric({ generic: ReadonlyArrayGeneric, ptype: ReadonlyArrayPType, instanceEb: ReadonlyArrayExpressionBuilder })
   typeRegistry.register({ ptype: ReadonlyTuplePType, instanceEb: ReadonlyTupleExpressionBuilder })
   typeRegistry.register({ ptype: MutableTuplePType, instanceEb: MutableTupleExpressionBuilder })
   typeRegistry.register({ ptype: ObjectPType, instanceEb: ObjectExpressionBuilder })
+  typeRegistry.registerGeneric({
+    generic: FixedArrayGeneric,
+    ptype: FixedArrayPType,
+    instanceEb: FixedArrayExpressionBuilder,
+    singletonEb: FixedArrayClassBuilder,
+  })
 
-  typeRegistry.register({ ptype: ReferenceArrayConstructor, singletonEb: ReferenceArrayClassBuilder })
-  typeRegistry.registerGeneric({ generic: ReferenceArrayGeneric, ptype: ReferenceArrayType, instanceEb: ReferenceArrayExpressionBuilder })
+  typeRegistry.registerGeneric({
+    generic: ReferenceArrayGeneric,
+    ptype: ReferenceArrayType,
+    instanceEb: ReferenceArrayExpressionBuilder,
+    singletonEb: ReferenceArrayClassBuilder,
+  })
 
   // Unresolvable
   typeRegistry.registerGeneric({ ptype: GeneratorType, generic: GeneratorGeneric, instanceEb: UnresolvableExpressionBuilder })
@@ -296,7 +311,7 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: TemplateVarFunction, singletonEb: TemplateVarFunctionBuilder })
   typeRegistry.register({ ptype: compileFunctionType, singletonEb: CompileFunctionBuilder })
   typeRegistry.register({ ptype: arc28EmitFunction, singletonEb: Arc28EmitFunctionBuilder })
-
+  typeRegistry.register({ ptype: cloneFunctionPType, singletonEb: CloneFunctionBuilder })
   typeRegistry.register({ ptype: ContractClassPType, singletonEb: ContractClassBuilder })
   typeRegistry.register({ ptype: contractOptionsDecorator, singletonEb: ContractOptionsDecoratorBuilder })
   typeRegistry.register({ ptype: LogicSigPType, singletonEb: LogicSigClassBuilder })
@@ -352,14 +367,25 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   }
 
   // State
-  typeRegistry.register({ ptype: GlobalStateFunction, singletonEb: GlobalStateFunctionBuilder })
-  typeRegistry.registerGeneric({ generic: GlobalStateGeneric, ptype: GlobalStateType, instanceEb: GlobalStateExpressionBuilder })
-  typeRegistry.register({ ptype: LocalStateFunction, singletonEb: LocalStateFunctionBuilder })
-  typeRegistry.registerGeneric({ generic: LocalStateGeneric, ptype: LocalStateType, instanceEb: LocalStateExpressionBuilder })
-  typeRegistry.register({ ptype: BoxFunction, singletonEb: BoxFunctionBuilder })
-  typeRegistry.registerGeneric({ generic: BoxGeneric, ptype: BoxPType, instanceEb: BoxExpressionBuilder })
-  typeRegistry.register({ ptype: BoxMapFunction, singletonEb: BoxMapFunctionBuilder })
-  typeRegistry.registerGeneric({ generic: BoxMapGeneric, ptype: BoxMapPType, instanceEb: BoxMapExpressionBuilder })
+  typeRegistry.registerGeneric({
+    generic: GlobalStateGeneric,
+    ptype: GlobalStateType,
+    instanceEb: GlobalStateExpressionBuilder,
+    singletonEb: GlobalStateFunctionBuilder,
+  })
+  typeRegistry.registerGeneric({
+    generic: LocalStateGeneric,
+    ptype: LocalStateType,
+    instanceEb: LocalStateExpressionBuilder,
+    singletonEb: LocalStateFunctionBuilder,
+  })
+  typeRegistry.registerGeneric({ generic: BoxGeneric, ptype: BoxPType, instanceEb: BoxExpressionBuilder, singletonEb: BoxFunctionBuilder })
+  typeRegistry.registerGeneric({
+    generic: BoxMapGeneric,
+    ptype: BoxMapPType,
+    instanceEb: BoxMapExpressionBuilder,
+    singletonEb: BoxMapFunctionBuilder,
+  })
   typeRegistry.register({ ptype: BoxRefFunction, singletonEb: BoxRefFunctionBuilder })
   typeRegistry.register({ ptype: boxRefType, instanceEb: BoxRefExpressionBuilder })
 
@@ -372,7 +398,6 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: assetPType, instanceEb: AssetExpressionBuilder })
 
   // ARC4 encoded
-  typeRegistry.register({ ptype: UintNClass, singletonEb: UintNClassBuilder })
   typeRegistry.register({ ptype: arc4AbiMethodDecorator, singletonEb: Arc4AbiMethodDecoratorBuilder })
   typeRegistry.register({ ptype: arc4BareMethodDecorator, singletonEb: Arc4BareMethodDecoratorBuilder })
   typeRegistry.register({ ptype: ByteClass, singletonEb: classBuilderForUintNAlias(ByteClass, arc4ByteAlias) })
@@ -382,31 +407,56 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: UintN64Class, singletonEb: classBuilderForUintNAlias(UintN8Class, new UintNType({ n: 64n })) })
   typeRegistry.register({ ptype: UintN128Class, singletonEb: classBuilderForUintNAlias(UintN8Class, new UintNType({ n: 128n })) })
   typeRegistry.register({ ptype: UintN256Class, singletonEb: classBuilderForUintNAlias(UintN8Class, new UintNType({ n: 256n })) })
-  typeRegistry.registerGeneric({ generic: UintNGeneric, ptype: UintNType, instanceEb: UintNExpressionBuilder })
-  typeRegistry.register({ ptype: UFixedNxMClass, singletonEb: UFixedNxMClassBuilder })
-  typeRegistry.registerGeneric({ generic: UFixedNxMGeneric, ptype: UFixedNxMType, instanceEb: UFixedNxMExpressionBuilder })
+  typeRegistry.registerGeneric({
+    generic: UintNGeneric,
+    ptype: UintNType,
+    instanceEb: UintNExpressionBuilder,
+    singletonEb: UintNClassBuilder,
+  })
+  typeRegistry.registerGeneric({
+    generic: UFixedNxMGeneric,
+    ptype: UFixedNxMType,
+    instanceEb: UFixedNxMExpressionBuilder,
+    singletonEb: UFixedNxMClassBuilder,
+  })
   typeRegistry.register({ ptype: arc4ByteAlias, instanceEb: UintNExpressionBuilder })
 
   // More specific types need to be registered before their base types
   // This ensures the specific type is selected during type resolution
   // For example, StaticBytesExpressionBuilder should be selected over general StaticArrayExpressionBuilder for StaticBytesType
   typeRegistry.register({ ptype: DynamicBytesConstructor, singletonEb: DynamicBytesClassBuilder })
-  typeRegistry.register({ ptype: StaticBytesConstructor, singletonEb: StaticBytesClassBuilder })
   typeRegistry.register({ ptype: DynamicBytesType, instanceEb: DynamicBytesExpressionBuilder })
-  typeRegistry.registerGeneric({ generic: StaticBytesGeneric, ptype: StaticBytesType, instanceEb: StaticBytesExpressionBuilder })
+  typeRegistry.registerGeneric({
+    generic: StaticBytesGeneric,
+    ptype: StaticBytesType,
+    instanceEb: StaticBytesExpressionBuilder,
+    singletonEb: StaticBytesClassBuilder,
+  })
 
-  typeRegistry.register({ ptype: DynamicArrayConstructor, singletonEb: DynamicArrayClassBuilder })
-  typeRegistry.registerGeneric({ generic: DynamicArrayGeneric, ptype: DynamicArrayType, instanceEb: DynamicArrayExpressionBuilder })
-  typeRegistry.register({ ptype: StaticArrayConstructor, singletonEb: StaticArrayClassBuilder })
-  typeRegistry.registerGeneric({ generic: StaticArrayGeneric, ptype: StaticArrayType, instanceEb: StaticArrayExpressionBuilder })
+  typeRegistry.registerGeneric({
+    generic: DynamicArrayGeneric,
+    ptype: DynamicArrayType,
+    instanceEb: DynamicArrayExpressionBuilder,
+    singletonEb: DynamicArrayClassBuilder,
+  })
+  typeRegistry.registerGeneric({
+    generic: StaticArrayGeneric,
+    ptype: StaticArrayType,
+    instanceEb: StaticArrayExpressionBuilder,
+    singletonEb: StaticArrayClassBuilder,
+  })
   typeRegistry.register({ ptype: arc4AddressAlias, instanceEb: AddressExpressionBuilder })
   typeRegistry.register({ ptype: AddressClass, singletonEb: AddressClassBuilder })
   typeRegistry.register({ ptype: ARC4BoolClass, singletonEb: BoolClassBuilder })
   typeRegistry.register({ ptype: arc4BooleanType, instanceEb: BoolExpressionBuilder })
   typeRegistry.register({ ptype: arc4StringType, instanceEb: StrExpressionBuilder })
   typeRegistry.register({ ptype: ARC4StrClass, singletonEb: StrClassBuilder })
-  typeRegistry.register({ ptype: Arc4TupleClass, singletonEb: Arc4TupleClassBuilder })
-  typeRegistry.registerGeneric({ generic: Arc4TupleGeneric, ptype: ARC4TupleType, instanceEb: Arc4TupleExpressionBuilder })
+  typeRegistry.registerGeneric({
+    generic: Arc4TupleGeneric,
+    ptype: ARC4TupleType,
+    instanceEb: Arc4TupleExpressionBuilder,
+    singletonEb: Arc4TupleClassBuilder,
+  })
   typeRegistry.register({ ptype: ARC4StructType, instanceEb: StructExpressionBuilder })
   typeRegistry.register({ ptype: ARC4StructClass, singletonEb: StructClassBuilder })
 

@@ -1,29 +1,65 @@
+import { intrinsicFactory } from '../../awst/intrinsic-factory'
 import { nodeFactory } from '../../awst/node-factory'
 import type { Expression } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
+import { wtypes } from '../../awst/wtypes'
 import { CodeError } from '../../errors'
+import { logger } from '../../logger'
 import { codeInvariant, invariant } from '../../util'
-import type { PType } from '../ptypes'
-import { ArrayPType, numberPType, ReadonlyTuplePType, uint64PType } from '../ptypes'
+import type { PType, PTypeOrClass } from '../ptypes'
+import {
+  ArrayGeneric,
+  ArrayPType,
+  FixedArrayGeneric,
+  FixedArrayPType,
+  numberPType,
+  ReadonlyArrayPType,
+  ReadonlyTuplePType,
+  uint64PType,
+} from '../ptypes'
 import { ARC4ArrayType, ARC4EncodedType } from '../ptypes/arc4-types'
 import { instanceEb } from '../type-registry'
+import { StaticArrayExpressionBuilder } from './arc4/arrays'
 import type { InstanceBuilder, NodeBuilder } from './index'
-import { FunctionBuilder, InstanceExpressionBuilder } from './index'
+import { ClassBuilder, FunctionBuilder, InstanceExpressionBuilder } from './index'
 import { OptionalExpressionBuilder } from './optional-expression-builder'
 import { AtFunctionBuilder } from './shared/at-function-builder'
 import { SliceFunctionBuilder } from './shared/slice-function-builder'
+import { requireExpressionOfType } from './util'
 import { parseFunctionArgs } from './util/arg-parsing'
 import { concatArrays } from './util/array/concat'
 import { indexAccess } from './util/array/index-access'
 import { arrayLength } from './util/array/length'
 import { translateNegativeIndex } from './util/translate-negative-index'
 
-export class NativeArrayExpressionBuilder extends InstanceExpressionBuilder<ArrayPType> {
-  constructor(expr: Expression, ptype: PType) {
-    invariant(ptype instanceof ArrayPType, 'ptype must be instance of ArrayPType')
-    super(expr, ptype)
-  }
+export type NativeArrayLike = FixedArrayPType | ReadonlyArrayPType | ArrayPType
 
+export class NativeArrayClassBuilder extends ClassBuilder {
+  readonly ptype = ArrayGeneric
+
+  newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
+    const ptype = this.ptype.parameterise(typeArgs)
+    const { args: initialItems } = parseFunctionArgs({
+      args,
+      typeArgs,
+      callLocation: sourceLocation,
+      funcName: this.typeDescription,
+      genericTypeArgs: 1,
+      argSpec: (a) => args.map((_) => a.required(ptype.elementType)),
+    })
+    const initialItemExprs = initialItems.map((i) => requireExpressionOfType(i, ptype.elementType))
+    return new NativeArrayExpressionBuilder(
+      nodeFactory.newArray({
+        values: initialItemExprs,
+        wtype: ptype.wtype,
+        sourceLocation,
+      }),
+      ptype,
+    )
+  }
+}
+
+export class NativeArrayLikeExpressionBuilder<T extends NativeArrayLike = NativeArrayLike> extends InstanceExpressionBuilder<T> {
   iterate(sourceLocation: SourceLocation): Expression {
     return this.resolve()
   }
@@ -32,7 +68,7 @@ export class NativeArrayExpressionBuilder extends InstanceExpressionBuilder<Arra
     return indexAccess(this, index, sourceLocation)
   }
 
-  private requireMutable(method: string, sourceLocation: SourceLocation) {
+  protected requireMutable(method: string, sourceLocation: SourceLocation) {
     codeInvariant(!this.ptype.immutable, `Cannot call ${method} on immutable array`, sourceLocation)
   }
 
@@ -61,13 +97,65 @@ export class NativeArrayExpressionBuilder extends InstanceExpressionBuilder<Arra
         this.requireMutable(name, sourceLocation)
         return new PushFunctionBuilder(this, sourceLocation)
     }
+    return super.memberAccess(name, sourceLocation)
+  }
+}
+export class NativeArrayExpressionBuilder extends NativeArrayLikeExpressionBuilder<ArrayPType> {
+  constructor(expr: Expression, ptype: PType) {
+    invariant(ptype instanceof ArrayPType, 'ptype must be instance of ArrayPType')
+    super(expr, ptype)
+  }
+
+  iterate(sourceLocation: SourceLocation): Expression {
+    return this.resolve()
+  }
+
+  indexAccess(index: InstanceBuilder, sourceLocation: SourceLocation): NodeBuilder {
+    return indexAccess(this, index, sourceLocation)
+  }
+
+  memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
+    switch (name) {
+      case 'pop':
+        this.requireMutable(name, sourceLocation)
+        return new PopFunctionBuilder(this, sourceLocation)
+      case 'push':
+        this.requireMutable(name, sourceLocation)
+        return new PushFunctionBuilder(this, sourceLocation)
+    }
 
     return super.memberAccess(name, sourceLocation)
+  }
+
+  resolvableToPType(ptype: PTypeOrClass): boolean {
+    if (ptype.equals(this.ptype)) return true
+    if (ptype instanceof ReadonlyArrayPType) {
+      // Mutable array can be assigned to immutable of same type
+      return this.ptype.elementType.equals(ptype.elementType)
+    }
+    return super.resolvableToPType(ptype)
+  }
+
+  resolveToPType(ptype: PTypeOrClass): InstanceBuilder {
+    if (ptype.equals(this.ptype)) return this
+    if (ptype instanceof ReadonlyArrayPType && this.ptype.elementType.equals(ptype.elementType)) {
+      // TODO: We should require a clone here
+      logger.warn(this.sourceLocation, 'We should require a clone here')
+      return instanceEb(
+        nodeFactory.reinterpretCast({
+          expr: this.resolve(),
+          sourceLocation: this.sourceLocation,
+          wtype: ptype.wtype,
+        }),
+        ptype,
+      )
+    }
+    return super.resolveToPType(ptype)
   }
 }
 class PopFunctionBuilder extends FunctionBuilder {
   constructor(
-    private arrayBuilder: NativeArrayExpressionBuilder,
+    private arrayBuilder: NativeArrayLikeExpressionBuilder,
     sourceLocation: SourceLocation,
   ) {
     super(sourceLocation)
@@ -97,7 +185,7 @@ class PopFunctionBuilder extends FunctionBuilder {
 }
 class PushFunctionBuilder extends FunctionBuilder {
   constructor(
-    private arrayBuilder: NativeArrayExpressionBuilder,
+    private arrayBuilder: NativeArrayLikeExpressionBuilder,
     sourceLocation: SourceLocation,
   ) {
     super(sourceLocation)
@@ -113,28 +201,33 @@ class PushFunctionBuilder extends FunctionBuilder {
       funcName: 'Array.pop',
     })
 
-    // TODO: Correctly handle returning the new array length as the below does not work
-    return arrayLength(
-      instanceEb(
-        nodeFactory.arrayExtend({
-          sourceLocation,
-          base: this.arrayBuilder.resolve(),
-          other: nodeFactory.tupleExpression({
-            items: items.map((i) => i.resolve()),
+    const target = this.arrayBuilder.singleEvaluation()
+
+    return instanceEb(
+      nodeFactory.commaExpression({
+        expressions: [
+          nodeFactory.arrayExtend({
             sourceLocation,
+            base: target.resolve(),
+            other: nodeFactory.tupleExpression({
+              items: items.map((i) => i.resolve()),
+              sourceLocation,
+            }),
+            wtype: wtypes.voidWType,
           }),
-          wtype: this.arrayBuilder.ptype.wtype,
-        }),
-        this.arrayBuilder.ptype,
-      ),
-      sourceLocation,
+          arrayLength(target, sourceLocation).resolve(),
+        ],
+        sourceLocation,
+        wtype: uint64PType.wtype,
+      }),
+      uint64PType,
     )
   }
 }
 
 class ConcatFunctionBuilder extends FunctionBuilder {
   constructor(
-    private arrayBuilder: NativeArrayExpressionBuilder,
+    private arrayBuilder: NativeArrayLikeExpressionBuilder,
     sourceLocation: SourceLocation,
   ) {
     super(sourceLocation)
@@ -191,7 +284,7 @@ class ConcatFunctionBuilder extends FunctionBuilder {
 
 class WithFunctionBuilder extends FunctionBuilder {
   constructor(
-    private arrayBuilder: NativeArrayExpressionBuilder,
+    private arrayBuilder: NativeArrayLikeExpressionBuilder,
     sourceLocation: SourceLocation,
   ) {
     super(sourceLocation)
@@ -209,7 +302,7 @@ class WithFunctionBuilder extends FunctionBuilder {
       funcName: 'Array.with',
     })
 
-    return new NativeArrayExpressionBuilder(
+    return instanceEb(
       nodeFactory.arrayReplace({
         base: this.arrayBuilder.resolve(),
         value: newValue.resolve(),
@@ -218,5 +311,61 @@ class WithFunctionBuilder extends FunctionBuilder {
       }),
       this.arrayBuilder.ptype,
     )
+  }
+}
+
+export class FixedArrayClassBuilder extends ClassBuilder {
+  readonly ptype = FixedArrayGeneric
+
+  newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
+    const ptype = this.ptype.parameterise(typeArgs)
+    const { args: initialItems } = parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 2,
+      argSpec: (a) => args.map(() => a.required(ptype.elementType)),
+      callLocation: sourceLocation,
+      funcName: this.typeDescription,
+    })
+
+    if (initialItems.length === 0) {
+      return new StaticArrayExpressionBuilder(
+        intrinsicFactory.bzero({
+          size: nodeFactory.sizeOf({ sizeWtype: ptype.wtype, sourceLocation, wtype: wtypes.uint64WType }),
+          wtype: ptype.wtype,
+          sourceLocation,
+        }),
+        ptype,
+      )
+    }
+
+    codeInvariant(
+      BigInt(initialItems.length) === ptype.arraySize,
+      `FixedArray of size ${ptype.arraySize} must be initialized with ${ptype.arraySize} values`,
+      sourceLocation,
+    )
+
+    return new FixedArrayExpressionBuilder(
+      nodeFactory.newArray({
+        values: initialItems.map((i) => requireExpressionOfType(i, ptype.elementType)),
+        wtype: ptype.wtype,
+        sourceLocation,
+      }),
+      ptype,
+    )
+  }
+}
+
+export class FixedArrayExpressionBuilder extends NativeArrayLikeExpressionBuilder<FixedArrayPType> {
+  constructor(expr: Expression, ptype: PType) {
+    invariant(ptype instanceof FixedArrayPType, 'ptype must be FixedArrayPType', expr.sourceLocation)
+    super(expr, ptype)
+  }
+}
+
+export class ReadonlyArrayExpressionBuilder extends NativeArrayLikeExpressionBuilder<ReadonlyArrayPType> {
+  constructor(expr: Expression, ptype: PType) {
+    invariant(ptype instanceof ReadonlyArrayPType, 'ptype must be ReadonlyArrayPType', expr.sourceLocation)
+    super(expr, ptype)
   }
 }

@@ -321,7 +321,7 @@ export namespace wtypes {
       immutable,
     }: {
       arraySize: bigint
-      elementType: ARC4Type
+      elementType: WType
       sourceLocation?: SourceLocation
       arc4Alias?: string
       immutable?: boolean

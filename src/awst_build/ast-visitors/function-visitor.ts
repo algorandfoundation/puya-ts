@@ -13,15 +13,14 @@ import type { Visitor } from '../../visitor/visitor'
 import { accept } from '../../visitor/visitor'
 import type { InstanceBuilder } from '../eb'
 import { BuilderComparisonOp } from '../eb'
+import { NativeArrayExpressionBuilder } from '../eb/arrays'
 import { ArrayLiteralExpressionBuilder } from '../eb/literal/array-literal-expression-builder'
 import { ObjectLiteralExpressionBuilder } from '../eb/literal/object-literal-expression-builder'
-import { NativeArrayExpressionBuilder } from '../eb/native-array-expression-builder'
 import { OmittedExpressionBuilder } from '../eb/omitted-expression-builder'
 import { ReadonlyTupleExpressionBuilder } from '../eb/readonly-tuple-expression-builder'
 import { requireExpressionOfType, requireInstanceBuilder } from '../eb/util'
 import type { PType } from '../ptypes'
 import { FunctionPType, ObjectPType } from '../ptypes'
-import { getSequenceItemType } from '../ptypes/util'
 import { typeRegistry } from '../type-registry'
 import { BaseVisitor } from './base-visitor'
 import { maybeNodes } from './util'
@@ -193,6 +192,7 @@ export abstract class FunctionVisitor
        */
       storeConst: if (isConstDeclaration && ts.isIdentifier(d.name)) {
         const targetType = this.context.getPTypeForNode(d.name)
+        if (!source.isConstant) break storeConst
         if (!source.resolvableToPType(targetType)) break storeConst
         const builder = source.resolveToPType(targetType)
         if (!builder.isConstant) break storeConst
@@ -251,10 +251,7 @@ export abstract class FunctionVisitor
 
   visitForOfStatement(node: ts.ForOfStatement): awst.Statement | awst.Statement[] {
     const sourceLocation = this.sourceLocation(node)
-    const sequenceLocation = this.sourceLocation(node.expression)
     const initializerLocation = this.sourceLocation(node.initializer)
-    const sequenceType = this.context.getPTypeForNode(node.expression)
-    const itemType = getSequenceItemType(sequenceType, sequenceLocation)
 
     let items: awst.LValue
     if (ts.isExpression(node.initializer)) {
@@ -262,7 +259,7 @@ export abstract class FunctionVisitor
     } else {
       codeInvariant(node.initializer.declarations.length === 1, 'For of loops can only declare a single loop variable', initializerLocation)
       const [declaration] = node.initializer.declarations
-      items = this.buildLValue(this.visitBindingName(declaration.name, initializerLocation), itemType, initializerLocation)
+      items = this.visitBindingName(declaration.name, initializerLocation).resolveLValue()
     }
     using ctx = this.context.switchLoopCtx.enterLoop(node, sourceLocation)
     return nodeFactory.block(

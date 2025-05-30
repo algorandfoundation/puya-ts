@@ -1,5 +1,14 @@
 import type { Constant, Expression } from './nodes'
-import { AddressConstant, BoolConstant, BytesConstant, DecimalConstant, IntegerConstant, MethodConstant, StringConstant } from './nodes'
+import {
+  AddressConstant,
+  BoolConstant,
+  BytesConstant,
+  DecimalConstant,
+  IntegerConstant,
+  MethodConstant,
+  StringConstant,
+  TemplateVar,
+} from './nodes'
 
 export function isConstant(expr: Expression): expr is Constant {
   return (
@@ -11,6 +20,10 @@ export function isConstant(expr: Expression): expr is Constant {
     expr instanceof MethodConstant ||
     expr instanceof DecimalConstant
   )
+}
+
+export function isConstantOrTemplateVar(expr: Expression): expr is Constant | TemplateVar {
+  return isConstant(expr) || expr instanceof TemplateVar
 }
 
 export class SymbolToNumber {

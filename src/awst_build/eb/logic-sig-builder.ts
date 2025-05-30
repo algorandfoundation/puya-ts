@@ -10,6 +10,8 @@ import { requireAvmVersion } from './util/avm-version'
 import { processScratchRanges } from './util/scratch-slots'
 
 export class LogicSigClassBuilder extends InstanceBuilder {
+  readonly isConstant = false
+
   resolve(): Expression {
     throw new CodeError('LogicSig class cannot be used as a value')
   }

@@ -1,5 +1,5 @@
 import type { bytes, uint64 } from '@algorandfoundation/algorand-typescript'
-import { abimethod, Contract, LocalState, Txn } from '@algorandfoundation/algorand-typescript'
+import { abimethod, clone, Contract, LocalState, Txn } from '@algorandfoundation/algorand-typescript'
 import type { StaticArray, UintN } from '@algorandfoundation/algorand-typescript/arc4'
 
 type SampleArray = StaticArray<UintN<64>, 10>
@@ -21,7 +21,7 @@ export class LocalStateDemo extends Contract {
     this.localUint2(Txn.sender).value = a
     this.localBytes(Txn.sender).value = b
     this.localBytes2(Txn.sender).value = b
-    this.localEncoded(Txn.sender).value = c.copy()
+    this.localEncoded(Txn.sender).value = clone(c)
     this.localTuple(Txn.sender).value = [a, b]
     this.localObject(Txn.sender).value = { a, b }
   }
@@ -32,7 +32,7 @@ export class LocalStateDemo extends Contract {
       localUint2: this.localUint2(Txn.sender).value,
       localBytes: this.localBytes(Txn.sender).value,
       localBytes2: this.localBytes2(Txn.sender).value,
-      localEncoded: this.localEncoded(Txn.sender).value.copy(),
+      localEncoded: clone(this.localEncoded(Txn.sender).value),
       localTuple: this.localTuple(Txn.sender).value,
       localObject: this.localObject(Txn.sender).value,
     }
