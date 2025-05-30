@@ -34,6 +34,11 @@ contract Hello
     return "" + GlobalState["greeting"] + " " + name
   }
   
+  HelloBase::sendGreetings(a: Greeting): string
+  {
+    return "" + GlobalState["greeting"] + " " + a.name + ARC4_DECODE(a.termination)
+  }
+  
   HelloBase::constructor(): void
   {
     super.constructor()
@@ -78,6 +83,11 @@ contract HelloTemplate
   HelloBase::greet(name: string): string
   {
     return "" + GlobalState["greeting"] + " " + name
+  }
+  
+  HelloBase::sendGreetings(a: Greeting): string
+  {
+    return "" + GlobalState["greeting"] + " " + a.name + ARC4_DECODE(a.termination)
   }
   
   constructor(): void
@@ -130,6 +140,11 @@ contract HelloTemplateCustomPrefix
   HelloBase::greet(name: string): string
   {
     return "" + GlobalState["greeting"] + " " + name
+  }
+  
+  HelloBase::sendGreetings(a: Greeting): string
+  {
+    return "" + GlobalState["greeting"] + " " + a.name + ARC4_DECODE(a.termination)
   }
   
   constructor(): void

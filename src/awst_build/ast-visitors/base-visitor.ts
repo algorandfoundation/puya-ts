@@ -1,10 +1,12 @@
 import ts from 'typescript'
 import { nodeFactory } from '../../awst/node-factory'
-import type { Expression, LValue, MethodDocumentation, Statement } from '../../awst/nodes'
+import type { LValue } from '../../awst/nodes'
+import { TupleExpression, type Expression, type MethodDocumentation, type Statement } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
+import { wtypes } from '../../awst/wtypes'
 import { CodeError, InternalError, NotSupported } from '../../errors'
 import { logger } from '../../logger'
-import { codeInvariant, enumerate, invariant, sortBy } from '../../util'
+import { codeInvariant, enumerate, instanceOfAny, invariant, sortBy } from '../../util'
 import type { Expressions } from '../../visitor/syntax-names'
 import {
   AugmentedAssignmentBinaryOp,
@@ -51,6 +53,7 @@ import {
   uint64PType,
   UnionPType,
 } from '../ptypes'
+import { MutableObjectType } from '../ptypes/mutable-object'
 import { instanceEb, typeRegistry } from '../type-registry'
 import { TextVisitor } from './text-visitor'
 
@@ -542,14 +545,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
 
   handleAssignment(target: InstanceBuilder, source: InstanceBuilder, sourceLocation: SourceLocation): InstanceBuilder {
     const assignmentType = this.buildAssignmentExpressionType(target.ptype, source.ptype, sourceLocation)
-    return instanceEb(
-      nodeFactory.assignmentExpression({
-        target: this.buildLValue(target, assignmentType, sourceLocation),
-        sourceLocation,
-        value: source.resolveToPType(assignmentType).resolve(),
-      }),
-      assignmentType,
-    )
+    return this.buildAssignmentExpression(target, source.resolveToPType(assignmentType), assignmentType, sourceLocation)
   }
 
   /**
@@ -642,6 +638,90 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
     return sourceType
   }
 
+  buildAssignmentExpression(
+    target: InstanceBuilder,
+    source: InstanceBuilder,
+    assignmentType: PType,
+    sourceLocation: SourceLocation,
+  ): InstanceBuilder {
+    if (target instanceof ArrayLiteralExpressionBuilder) {
+      const sourceSingle = source.singleEvaluation()
+      // Destructured array
+      const assignments: Expression[] = []
+      for (const [index, item] of target[StaticIterator]().entries()) {
+        if (item instanceof OmittedExpressionBuilder) {
+          continue
+        }
+        assignments.push(
+          this.buildAssignmentExpression(
+            item,
+            requireInstanceBuilder(
+              sourceSingle.indexAccess(
+                instanceEb(nodeFactory.uInt64Constant({ value: BigInt(index), sourceLocation }), uint64PType),
+                sourceLocation,
+              ),
+            ),
+            assignmentType.getIndexType(BigInt(index), sourceLocation),
+            sourceLocation,
+          ).resolve(),
+        )
+      }
+      return instanceEb(
+        nodeFactory.commaExpression({
+          expressions: [...assignments, sourceSingle.resolve()],
+          sourceLocation,
+          wtype: assignmentType.wtypeOrThrow,
+        }),
+        assignmentType,
+      )
+    } else if (target instanceof ObjectLiteralExpressionBuilder) {
+      if (assignmentType instanceof ObjectPType || assignmentType instanceof MutableObjectType) {
+        const sourceSingle = source.singleEvaluation()
+        const targetProperties = target.ptype.orderedProperties()
+        const assignmentProperties = new Map(
+          assignmentType instanceof ObjectPType ? assignmentType.orderedProperties() : Object.entries(assignmentType.fields),
+        )
+        const assignments: Expression[] = []
+        for (const [propName, _] of targetProperties) {
+          const assignmentPropertyType = assignmentProperties.get(propName)
+          codeInvariant(assignmentPropertyType, `${propName} is not part of assignment type ${assignmentType.name}`)
+
+          assignments.push(
+            this.buildAssignmentExpression(
+              requireInstanceBuilder(target.memberAccess(propName, sourceLocation)),
+              requireInstanceBuilder(sourceSingle.memberAccess(propName, sourceLocation)),
+              assignmentPropertyType,
+              sourceLocation,
+            ).resolve(),
+          )
+        }
+        return instanceEb(
+          nodeFactory.commaExpression({
+            expressions: [...assignments, sourceSingle.resolve()],
+            sourceLocation,
+            wtype: assignmentType.wtypeOrThrow,
+          }),
+          assignmentType,
+        )
+      }
+    } else if (target.ptype.equals(assignmentType)) {
+      return instanceEb(
+        nodeFactory.assignmentExpression({
+          target: target.resolveLValue(),
+          sourceLocation,
+          value: source.resolve(),
+        }),
+        assignmentType,
+      )
+    }
+    throw new CodeError(
+      `The target of an assignment must have the same type as the source. Target: ${target.ptype}, Source: ${assignmentType}`,
+      {
+        sourceLocation,
+      },
+    )
+  }
+
   buildLValue(target: InstanceBuilder, assignmentType: PType, sourceLocation: SourceLocation): LValue {
     if (target instanceof ArrayLiteralExpressionBuilder) {
       if (assignmentType instanceof TuplePType) {
@@ -665,10 +745,32 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
         return nodeFactory.tupleExpression({ items: targets, sourceLocation })
       }
     }
-    if (target instanceof ObjectLiteralExpressionBuilder) {
-      if (assignmentType instanceof ObjectPType) {
+    if (instanceOfAny(target, ObjectLiteralExpressionBuilder)) {
+      // given obj is `{x: uint64, y: uint64, z: uint64}`, OR
+      // given obj is `MutableObject<{x: uint64, y: uint64, z: uint64}>`,
+      //   `const {x, y} = obj` will produce a LValue that is:
+      //     => a tuple expression with the values of [x, y, <rando>]
+      //        where a random name is generated for each of the properties missing in the target,
+      //        and wtype is WTuple
+      if (assignmentType instanceof ObjectPType || assignmentType instanceof MutableObjectType) {
+        // const getWTupleWithItemsMatchingTypes = (items: LValue[], ptype: ObjectPType | MutableObjectType): wtypes.WTuple => {
+        //   const basePType = ptype instanceof ObjectPType ? ptype : ptype.nativeType
+        //   const baseWType = basePType.wtype
+        //   const properties = basePType.orderedProperties().map(([propName, propType]) => propType)
+        //   const types = items.map((item, i) => {
+        //     if (item.wtype.equals(baseWType.types[i])) return baseWType.types[i]
+        //     if (properties[i] instanceof MutableObjectType) return properties[i].nativeType.wtype
+        //     return baseWType.types[i]
+        //   })
+        //   return new wtypes.WTuple({
+        //     ...baseWType,
+        //     types,
+        //   })
+        // }
         const targets: LValue[] = []
-        for (const [propName, propType] of assignmentType.orderedProperties()) {
+        const assignmentProperties =
+          assignmentType instanceof ObjectPType ? assignmentType.orderedProperties() : Object.entries(assignmentType.fields)
+        for (const [propName, propType] of assignmentProperties) {
           if (target.hasProperty(propName)) {
             targets.push(this.buildLValue(requireInstanceBuilder(target.memberAccess(propName, sourceLocation)), propType, sourceLocation))
           } else {
@@ -681,7 +783,8 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
             )
           }
         }
-        return nodeFactory.tupleExpression({ items: targets, sourceLocation, wtype: assignmentType.wtype })
+        const wtype = this.getWTupleWithItemsMatchingTypes(targets, assignmentType)
+        return nodeFactory.tupleExpression({ items: targets, sourceLocation, wtype })
       }
     }
     if (target.ptype.equals(assignmentType)) {
@@ -693,6 +796,24 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
         sourceLocation,
       },
     )
+  }
+
+  private getWTupleWithItemsMatchingTypes(items: Expression[], ptype: ObjectPType | MutableObjectType): wtypes.WTuple {
+    const basePType = ptype instanceof ObjectPType ? ptype : ptype.nativeType
+    const baseWType = basePType.wtype
+    const properties = basePType.orderedProperties().map(([propName, propType]) => propType)
+    const types = items.map((item, i) => {
+      if (item.wtype.equals(baseWType.types[i])) return baseWType.types[i]
+      if (item instanceof TupleExpression && instanceOfAny(properties[i], ObjectPType, MutableObjectType)) {
+        return this.getWTupleWithItemsMatchingTypes(item.items, properties[i])
+      }
+      if (properties[i] instanceof MutableObjectType) return properties[i].nativeType.wtype
+      return baseWType.types[i]
+    })
+    return new wtypes.WTuple({
+      ...baseWType,
+      types,
+    })
   }
 
   protected parseMemberModifiers(node: { modifiers?: readonly ts.ModifierLike[] }) {

@@ -2,10 +2,10 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@0: // L1
         let tmp%0#1: uint64 = (txn NumAppArgs)
         goto tmp%0#1 ? block@2 : block@7
-    block@2: // abi_routing_L22
+    block@2: // abi_routing_L24
         let tmp%2#0: bytes = (txna ApplicationArgs 0)
         switch tmp%2#0 {method "testEncoding(uint64,bool,uint512,byte[],string,address,byte[12])void" => block@3, method "testDecoding(uint64,byte[],bool,byte[],uint512,byte[],string,byte[],(uint64,byte[]),byte[],address,byte[],byte[12],byte[])void" => block@4, * => block@11}
-    block@3: // testEncoding_route_L23
+    block@3: // testEncoding_route_L25
         let tmp%3#0: uint64 = (txn OnCompletion)
         let tmp%4#0: bool = (! tmp%3#0)
         (assert tmp%4#0) // OnCompletion is not NoOp
@@ -52,23 +52,23 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let as_bytes%2#0: bytes[8] = (itob length%2#0)
         let length_uint16%2#0: bytes = ((extract 6 2) as_bytes%2#0)
         let encoded_value%2#0: bytes = (concat length_uint16%2#0 e#0)
-        let length%6#0: uint64 = (len g#1)
-        let lengths_equal%0#0: bool = (== length%6#0 12u)
+        let length%8#0: uint64 = (len g#1)
+        let lengths_equal%0#0: bool = (== length%8#0 12u)
         (assert lengths_equal%0#0) // invalid size
-        let encoded_tuple_buffer%16#0: bytes = (concat 0x0002 encoded_value%0#0)
-        let encoded_tuple_buffer%19#0: bytes = (concat 0x0002 encoded_value%2#0)
+        let encoded_tuple_buffer%30#0: bytes = (concat 0x0002 encoded_value%0#0)
+        let encoded_tuple_buffer%33#0: bytes = (concat 0x0002 encoded_value%2#0)
         let array%sub_item%0#1: bytes[8] = (itob a#1)
         let array%encoded%0#1: encoded_uint64[] = (concat 0x array%sub_item%0#1)
         let array%data%0#1: encoded_uint64[] = (concat 0x array%encoded%0#1)
         let encoded%0#0: encoded_uint64[] = array%data%0#1
         let byte_len%0#0: uint64 = (len encoded%0#0)
         let len_%0#0: uint64 = (/ byte_len%0#0 8u)
-        let as_bytes%16#0: bytes[8] = (itob len_%0#0)
-        let len_16_bit%0#0: bytes = ((extract 6 2) as_bytes%16#0)
+        let as_bytes%20#0: bytes[8] = (itob len_%0#0)
+        let len_16_bit%0#0: bytes = ((extract 6 2) as_bytes%20#0)
         let concat_result%0#0: bytes = (concat len_16_bit%0#0 encoded%0#0)
         let array_data%8#0: bytes = (concat 0x0001 val_as_bytes%0#0)
-        let tmp%15#2: bool = (== concat_result%0#0 array_data%8#0)
-        (assert tmp%15#2)
+        let tmp%17#2: bool = (== concat_result%0#0 array_data%8#0)
+        (assert tmp%17#2)
         let result#1: bytes = 0x000100
         let read_offset#0: uint64 = 0u
         let write_offset#0: uint64 = 16u
@@ -87,8 +87,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         goto block@51
     block@53: // after_while_L153
         let array_data%10#0: bytes = (concat 0x0001 new_items_bytes#0)
-        let tmp%16#2: bool = (== result#2 array_data%10#0)
-        (assert tmp%16#2)
+        let tmp%18#2: bool = (== result#2 array_data%10#0)
+        (assert tmp%18#2)
         let array%value_len%0#1: uint64 = (len c#1)
         let array%len_ok%0#1: bool = (<= array%value_len%0#1 64u)
         (assert array%len_ok%0#1) // value is bigger than 64 bytes
@@ -99,45 +99,45 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let encoded%1#0: bytes[64][] = array%data%1#1
         let byte_len%1#0: uint64 = (len encoded%1#0)
         let len_%1#0: uint64 = (/ byte_len%1#0 64u)
-        let as_bytes%17#0: bytes[8] = (itob len_%1#0)
-        let len_16_bit%1#0: bytes = ((extract 6 2) as_bytes%17#0)
+        let as_bytes%21#0: bytes[8] = (itob len_%1#0)
+        let len_16_bit%1#0: bytes = ((extract 6 2) as_bytes%21#0)
         let concat_result%2#0: bytes = (concat len_16_bit%1#0 encoded%1#0)
         let array_data%12#0: bytes = (concat 0x0001 arc4_encoded%0#0)
-        let tmp%17#2: bool = (== concat_result%2#0 array_data%12#0)
-        (assert tmp%17#2)
-        let concat_result%3#0: bytes = _puya_lib.arc4.dynamic_array_concat_byte_length_head(0x0000, encoded_value%0#0, 1u)
-        let array_data%14#0: bytes = (concat 0x0001 encoded_tuple_buffer%16#0)
-        let tmp%18#2: bool = (== concat_result%3#0 array_data%14#0)
-        (assert tmp%18#2)
-        let concat_result%4#0: bytes = _puya_lib.arc4.dynamic_array_concat_byte_length_head(0x0000, encoded_value%2#0, 1u)
-        let array_data%16#0: bytes = (concat 0x0001 encoded_tuple_buffer%19#0)
-        let tmp%19#2: bool = (== concat_result%4#0 array_data%16#0)
+        let tmp%19#2: bool = (== concat_result%2#0 array_data%12#0)
         (assert tmp%19#2)
+        let concat_result%3#0: bytes = _puya_lib.arc4.dynamic_array_concat_byte_length_head(0x0000, encoded_value%0#0, 1u)
+        let array_data%14#0: bytes = (concat 0x0001 encoded_tuple_buffer%30#0)
+        let tmp%20#1: bool = (== concat_result%3#0 array_data%14#0)
+        (assert tmp%20#1)
+        let concat_result%4#0: bytes = _puya_lib.arc4.dynamic_array_concat_byte_length_head(0x0000, encoded_value%2#0, 1u)
+        let array_data%16#0: bytes = (concat 0x0001 encoded_tuple_buffer%33#0)
+        let tmp%21#2: bool = (== concat_result%4#0 array_data%16#0)
+        (assert tmp%21#2)
         let array%encoded%2#1: bytes[32][] = (concat 0x f#1)
         let array%data%2#1: bytes[32][] = (concat 0x array%encoded%2#1)
         let encoded%2#0: bytes[32][] = array%data%2#1
         let byte_len%2#0: uint64 = (len encoded%2#0)
         let len_%2#0: uint64 = (/ byte_len%2#0 32u)
-        let as_bytes%24#0: bytes[8] = (itob len_%2#0)
-        let len_16_bit%2#0: bytes = ((extract 6 2) as_bytes%24#0)
+        let as_bytes%28#0: bytes[8] = (itob len_%2#0)
+        let len_16_bit%2#0: bytes = ((extract 6 2) as_bytes%28#0)
         let concat_result%5#0: bytes = (concat len_16_bit%2#0 encoded%2#0)
         let array_data%18#0: bytes = (concat 0x0001 f#1)
-        let tmp%20#1: bool = (== concat_result%5#0 array_data%18#0)
-        (assert tmp%20#1)
+        let tmp%22#2: bool = (== concat_result%5#0 array_data%18#0)
+        (assert tmp%22#2)
         let array%encoded%3#1: bytes[12][] = (concat 0x g#1)
         let array%data%3#1: bytes[12][] = (concat 0x array%encoded%3#1)
         let encoded%3#0: bytes[12][] = array%data%3#1
         let byte_len%3#0: uint64 = (len encoded%3#0)
         let len_%3#0: uint64 = (/ byte_len%3#0 12u)
-        let as_bytes%25#0: bytes[8] = (itob len_%3#0)
-        let len_16_bit%3#0: bytes = ((extract 6 2) as_bytes%25#0)
+        let as_bytes%29#0: bytes[8] = (itob len_%3#0)
+        let len_16_bit%3#0: bytes = ((extract 6 2) as_bytes%29#0)
         let concat_result%6#0: bytes = (concat len_16_bit%3#0 encoded%3#0)
         let array_data%20#0: bytes = (concat 0x0001 g#1)
-        let tmp%21#2: bool = (== concat_result%6#0 array_data%20#0)
-        (assert tmp%21#2)
+        let tmp%23#2: bool = (== concat_result%6#0 array_data%20#0)
+        (assert tmp%23#2)
         let tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.__puya_arc4_router__%0#0: bool = 1u
         goto block@12
-    block@4: // testDecoding_route_L64
+    block@4: // testDecoding_route_L69
         let tmp%13#0: uint64 = (txn OnCompletion)
         let tmp%14#0: bool = (! tmp%13#0)
         (assert tmp%14#0) // OnCompletion is not NoOp
@@ -187,41 +187,41 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let item_end_offset%0#1: uint64 = (len e_bytes#0)
         let tmp%7#1: bool = (== item0%0#1 e.a#0)
         goto tmp%7#1 ? block@16 : block@18
-    block@16: // and_contd_L84
+    block@16: // and_contd_L89
         let item1%1#0: bytes = (substring3 e_bytes#0 item_start_offset%0#1 item_end_offset%0#1)
         let tmp%8#1: bool = (== item1%1#0 e.b#0)
         goto tmp%8#1 ? block@17 : block@18
-    block@17: // bool_true_L84
+    block@17: // bool_true_L89
         let and_result%0#0: bool = 1u
         goto block@19
-    block@18: // bool_false_L84
+    block@18: // bool_false_L89
         let and_result%0#1: bool = 0u
         goto block@19
-    block@19: // bool_merge_L84
+    block@19: // bool_merge_L89
         let and_result%0#2: bool = φ(and_result%0#0 <- block@17, and_result%0#1 <- block@18)
         (assert and_result%0#2) // assert target is match for conditions
         let tmp%11#1: bytes = (concat 0x0001 a_bytes#0)
         let tmp%12#1: uint64 = (extract_uint16 tmp%11#1 0u)
         let tmp%13#1: bool = (== tmp%12#1 1u)
         goto tmp%13#1 ? block@20 : block@22
-    block@20: // and_contd_L88
+    block@20: // and_contd_L93
         let tmp%15#1: uint64 = (extract_uint64 tmp%11#1 2u)
         let tmp%16#1: bool = (== tmp%15#1 a#0)
         goto tmp%16#1 ? block@21 : block@22
-    block@21: // bool_true_L88
+    block@21: // bool_true_L93
         let and_result%1#0: bool = 1u
         goto block@23
-    block@22: // bool_false_L88
+    block@22: // bool_false_L93
         let and_result%1#1: bool = 0u
         goto block@23
-    block@23: // bool_merge_L88
+    block@23: // bool_merge_L93
         let and_result%1#2: bool = φ(and_result%1#0 <- block@21, and_result%1#1 <- block@22)
         (assert and_result%1#2) // Array of uint64 matches
         let tmp%17#1: bytes = (concat 0x0001 b_bytes#0)
         let tmp%18#1: uint64 = (extract_uint16 tmp%17#1 0u)
         let tmp%19#1: bool = (== tmp%18#1 1u)
         goto tmp%19#1 ? block@24 : block@26
-    block@24: // and_contd_L89
+    block@24: // and_contd_L94
         let array_head_and_tail%1#0: bytes = ((extract 2 0) tmp%17#1)
         (assert tmp%18#1) // Index access is out of bounds
         let is_true%0#0: uint64 = (getbit array_head_and_tail%1#0 0u)
@@ -229,13 +229,13 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%21#1: bool = (getbit encoded_bool%0#0 0u)
         let tmp%22#1: bool = (== tmp%21#1 b#0)
         goto tmp%22#1 ? block@25 : block@26
-    block@25: // bool_true_L89
+    block@25: // bool_true_L94
         let and_result%2#0: bool = 1u
         goto block@27
-    block@26: // bool_false_L89
+    block@26: // bool_false_L94
         let and_result%2#1: bool = 0u
         goto block@27
-    block@27: // bool_merge_L89
+    block@27: // bool_merge_L94
         let and_result%2#2: bool = φ(and_result%2#0 <- block@25, and_result%2#1 <- block@26)
         (assert and_result%2#2) // Array of boolean matches
         let tmp%23#1: bytes = (concat 0x0001 c_bytes#0)
@@ -243,24 +243,24 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%25#1: uint64 = (extract_uint16 tmp%23#1 0u)
         let tmp%26#1: bool = (== tmp%25#1 1u)
         goto tmp%26#1 ? block@28 : block@30
-    block@28: // and_contd_L91
+    block@28: // and_contd_L96
         let arc4_item%1#0: bytes = ((extract 2 64) tmp%23#1)
         let tmp%28#1: bool = (b== arc4_item%1#0 c#0)
         goto tmp%28#1 ? block@29 : block@30
-    block@29: // bool_true_L91
+    block@29: // bool_true_L96
         let and_result%3#0: bool = 1u
         goto block@31
-    block@30: // bool_false_L91
+    block@30: // bool_false_L96
         let and_result%3#1: bool = 0u
         goto block@31
-    block@31: // bool_merge_L91
+    block@31: // bool_merge_L96
         let and_result%3#2: bool = φ(and_result%3#0 <- block@29, and_result%3#1 <- block@30)
         (assert and_result%3#2) // Array of biguint matches
         let tmp%31#1: bytes = (concat 0x00010002 d_bytes#0)
         let tmp%32#1: uint64 = (extract_uint16 tmp%31#1 0u)
         let tmp%33#1: bool = (== tmp%32#1 1u)
         goto tmp%33#1 ? block@32 : block@34
-    block@32: // and_contd_L92
+    block@32: // and_contd_L97
         let array_head_and_tail%3#0: bytes = ((extract 2 0) tmp%31#1)
         (assert tmp%32#1) // Index access is out of bounds
         let item_offset%2#0: uint64 = (extract_uint16 array_head_and_tail%3#0 0u)
@@ -270,20 +270,20 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%37#1: bytes = ((extract 2 0) arc4_item%2#0)
         let tmp%38#1: bool = (== tmp%37#1 d#0)
         goto tmp%38#1 ? block@33 : block@34
-    block@33: // bool_true_L92
+    block@33: // bool_true_L97
         let and_result%4#0: bool = 1u
         goto block@35
-    block@34: // bool_false_L92
+    block@34: // bool_false_L97
         let and_result%4#1: bool = 0u
         goto block@35
-    block@35: // bool_merge_L92
+    block@35: // bool_merge_L97
         let and_result%4#2: bool = φ(and_result%4#0 <- block@33, and_result%4#1 <- block@34)
         (assert and_result%4#2) // Array of string matches
         let tmp%41#0: bytes = (concat 0x00010002 e_bytes#0)
         let tmp%42#0: uint64 = (extract_uint16 tmp%41#0 0u)
         let tmp%43#0: bool = (== tmp%42#0 1u)
         goto tmp%43#0 ? block@36 : block@39
-    block@36: // and_contd_L94
+    block@36: // and_contd_L99
         let array_head_and_tail%4#0: bytes = ((extract 2 0) tmp%41#0)
         let item_offset%3#0: uint64 = (extract_uint16 array_head_and_tail%4#0 0u)
         let has_next%0#0: uint64 = (- tmp%42#0 1u) // on error: Index access is out of bounds
@@ -296,50 +296,50 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let item_end_offset%2#0: uint64 = (len arc4_item%3#0)
         let tmp%47#0: bool = (== item0%2#0 e.a#0)
         goto tmp%47#0 ? block@37 : block@39
-    block@37: // and_contd_L94
+    block@37: // and_contd_L99
         let item1%3#0: bytes = (substring3 arc4_item%3#0 item_start_offset%2#0 item_end_offset%2#0)
         let tmp%51#0: bool = (== item1%3#0 e.b#0)
         goto tmp%51#0 ? block@38 : block@39
-    block@38: // bool_true_L94
+    block@38: // bool_true_L99
         let and_result%5#0: bool = 1u
         goto block@40
-    block@39: // bool_false_L94
+    block@39: // bool_false_L99
         let and_result%5#1: bool = 0u
         goto block@40
-    block@40: // bool_merge_L94
+    block@40: // bool_merge_L99
         let and_result%5#2: bool = φ(and_result%5#0 <- block@38, and_result%5#1 <- block@39)
         (assert and_result%5#2) // Array of struct matches
         let tmp%53#0: bytes = (concat 0x0001 f_bytes#0)
         let tmp%54#0: uint64 = (extract_uint16 tmp%53#0 0u)
         let tmp%55#0: bool = (== tmp%54#0 1u)
         goto tmp%55#0 ? block@41 : block@43
-    block@41: // and_contd_L95
+    block@41: // and_contd_L100
         let tmp%58#0: bytes = ((extract 2 32) tmp%53#0)
         let tmp%59#0: bool = (== tmp%58#0 f#0)
         goto tmp%59#0 ? block@42 : block@43
-    block@42: // bool_true_L95
+    block@42: // bool_true_L100
         let and_result%6#0: bool = 1u
         goto block@44
-    block@43: // bool_false_L95
+    block@43: // bool_false_L100
         let and_result%6#1: bool = 0u
         goto block@44
-    block@44: // bool_merge_L95
+    block@44: // bool_merge_L100
         let and_result%6#2: bool = φ(and_result%6#0 <- block@42, and_result%6#1 <- block@43)
         (assert and_result%6#2) // Array of address matches
         let tmp%60#0: bool = (== g_bytes#0 g#0)
         (assert tmp%60#0)
         let tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.__puya_arc4_router__%0#1: bool = 1u
         goto block@12
-    block@7: // bare_routing_L22
+    block@7: // bare_routing_L24
         let tmp%36#0: uint64 = (txn OnCompletion)
         goto tmp%36#0 ? block@11 : block@8
-    block@8: // __algots__.defaultCreate_L22
+    block@8: // __algots__.defaultCreate_L24
         let tmp%37#0: uint64 = (txn ApplicationID)
         let tmp%38#0: bool = (! tmp%37#0)
         (assert tmp%38#0) // can only call when creating
         let tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.__puya_arc4_router__%0#2: bool = 1u
         goto block@12
-    block@11: // after_if_else_L22
+    block@11: // after_if_else_L24
         let tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.__puya_arc4_router__%0#3: bool = 0u
         goto block@12
     block@12: // after_inlined_tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.__puya_arc4_router___L1

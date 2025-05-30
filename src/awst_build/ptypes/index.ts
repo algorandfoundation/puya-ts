@@ -7,6 +7,7 @@ import { CodeError, InternalError, NotSupported, throwError } from '../../errors
 import { codeInvariant, distinctByEquality, invariant, sortBy } from '../../util'
 import { SymbolName } from '../symbol-name'
 import { GenericPType, PType } from './base'
+
 import { transientTypeErrors } from './transient-type-errors'
 
 export * from './base'
@@ -643,6 +644,16 @@ export class TuplePType extends PType {
       immutable: this.immutable,
     })
   }
+
+  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType {
+    if (typeof index === 'bigint') {
+      if (index >= 0 && index < this.items.length) {
+        return this.items[Number(index)]
+      }
+      throw new CodeError(`Cannot access index ${index} of ${this.name}`, { sourceLocation })
+    }
+    return super.getIndexType(index, sourceLocation)
+  }
 }
 export class ArrayPType extends PType {
   readonly elementType: PType
@@ -723,7 +734,13 @@ export class ObjectPType extends PType {
   }
 
   hasPropertyOfType(name: string, type: PType) {
-    return this.hasProperty(name) && this.properties[name].equals(type)
+    if (!this.hasProperty(name)) {
+      return false
+    }
+    const thisPropertyType = this.properties[name]
+    return ('nativeType' in thisPropertyType ? (thisPropertyType.nativeType as PType) : thisPropertyType).equals(
+      'nativeType' in type ? (type.nativeType as PType) : type,
+    )
   }
 
   toString(): string {
