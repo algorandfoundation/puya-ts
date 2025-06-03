@@ -48,6 +48,7 @@ export class MutableObjectType extends ARC4EncodedType {
   readonly fields: Record<string, PType>
   readonly sourceLocation: SourceLocation | undefined
   readonly frozen: boolean
+  readonly abiTypeSignature: string
 
   constructor({
     name,
@@ -74,6 +75,9 @@ export class MutableObjectType extends ARC4EncodedType {
     this.fixedBitSize = sourceLocation
       ? ARC4EncodedType.calculateFixedBitSize(Object.values(fields).map((f) => ptypeToArc4EncodedType(f, sourceLocation)))
       : null
+    this.abiTypeSignature = sourceLocation
+      ? ARC4EncodedType.buildAbiTupleSignature(Object.values(fields).map((f) => ptypeToArc4EncodedType(f, sourceLocation)))
+      : '()'
   }
 
   get nativeType(): ObjectPType {

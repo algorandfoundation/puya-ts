@@ -75,10 +75,10 @@ contract TestArc4
 contract TestTuple
 {
   globals {
-    ["t1"]: readonlytuple[string, uint64, bool]
-    ["t2"]: readonlytuple[string, readonlytuple[string, biguint, bool]]
+    ["t1"]: readonly [string, uint64, bool]
+    ["t2"]: readonly [string, readonly [string, biguint, bool]]
     ["t3"]: object{ a: string, b: uint64, c: bool }
-    ["t4"]: readonlytuple[string, object{ a: string, b: biguint, c: bool }]
+    ["t4"]: readonly [string, object{ a: string, b: biguint, c: bool }]
     ["t5"]: Data
   }
   approvalProgram(): bool
@@ -93,11 +93,11 @@ contract TestTuple
   
   testTuple(): void
   {
-    GlobalState["t1"]: readonlytuple[string, uint64, bool] = <tuple>["hello", 123, True]
+    GlobalState["t1"]: readonly [string, uint64, bool] = <tuple>["hello", 123, True]
     assert(GlobalState["t1"].0 == "hello", comment=Tuple value should be set)
     assert(GlobalState["t1"].1 == 123, comment=Tuple value should be set)
     assert(GlobalState["t1"].2 == True, comment=Tuple value should be set)
-    GlobalState["t2"]: readonlytuple[string, readonlytuple[string, biguint, bool]] = <tuple>["a", <tuple>["b", 456, True]]
+    GlobalState["t2"]: readonly [string, readonly [string, biguint, bool]] = <tuple>["a", <tuple>["b", 456, True]]
     assert(GlobalState["t2"].0 == "a", comment=Tuple value should be set)
     assert(GlobalState["t2"].1.0 == "b", comment=Tuple value should be set)
     assert(GlobalState["t2"].1.1 == 456, comment=Tuple value should be set)
@@ -106,7 +106,7 @@ contract TestTuple
     assert(GlobalState["t3"].a == "hello", comment=Object value should be set)
     assert(GlobalState["t3"].b == 123, comment=Object value should be set)
     assert(GlobalState["t3"].c == True, comment=Object value should be set)
-    GlobalState["t4"]: readonlytuple[string, object{ a: string, b: biguint, c: bool }] = <tuple>["a", { a: (#1 = { a: "b", b: 456, c: True }).a, b: #1.b, c: #1.c }]
+    GlobalState["t4"]: readonly [string, object{ a: string, b: biguint, c: bool }] = <tuple>["a", { a: (#1 = { a: "b", b: 456, c: True }).a, b: #1.b, c: #1.c }]
     assert(GlobalState["t4"].0 == "a", comment=Tuple value should be set)
     assert(GlobalState["t4"].1.a == "b", comment=Tuple value should be set)
     assert(GlobalState["t4"].1.b == 456, comment=Tuple value should be set)

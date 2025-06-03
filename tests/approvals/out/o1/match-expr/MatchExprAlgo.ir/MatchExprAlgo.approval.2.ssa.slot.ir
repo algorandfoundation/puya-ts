@@ -11,8 +11,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%4#0) // OnCompletion is not NoOp
         let tmp%5#0: uint64 = (txn ApplicationID)
         (assert tmp%5#0) // can only call when not creating
-        let reinterpret_bytes[8]%0#0: bytes[8] = (txna ApplicationArgs 1)
-        let tmp%7#0: uint64 = (btoi reinterpret_bytes[8]%0#0)
+        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
+        let tmp%7#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
         tests/approvals/match-expr.algo.ts::MatchExprAlgo.testMatches(tmp%7#0)
         let tests/approvals/match-expr.algo.ts::MatchExprAlgo.__puya_arc4_router__%0#0: bool = 1u
         goto block@11
@@ -38,8 +38,8 @@ subroutine tests/approvals/match-expr.algo.ts::MatchExprAlgo.testMatches(x: uint
         (assert tmp%0#0) // x should be 5
         let tmp%1#0: bool = (!= x#0 3u)
         (assert tmp%1#0) // x should not be 3
-        let tmp%2#0: bytes[32] = (txn Sender)
-        let tmp%3#0: bytes[32] = (global ZeroAddress)
+        let tmp%2#0: account = (txn Sender)
+        let tmp%3#0: account = (global ZeroAddress)
         let tmp%4#0: bool = (!= tmp%2#0 tmp%3#0)
         (assert tmp%4#0) // assert target is match for conditions
         let tmp%5#0: bool = (> x#0 4u)
@@ -50,15 +50,15 @@ subroutine tests/approvals/match-expr.algo.ts::MatchExprAlgo.testMatches(x: uint
         (assert tmp%7#0)
         let tmp%8#0: bool = (<= x#0 5u)
         (assert tmp%8#0)
-        let array%sub_item%0#1: bytes[8] = (itob x#0)
-        let xArray#0: encoded_uint64[] = (concat 0x0001 array%sub_item%0#1)
-        let tmp%9#0: uint64 = (extract_uint16 xArray#0 0u)
-        let tmp%10#0: bool = (== tmp%9#0 1u)
-        goto tmp%10#0 ? block@1 : block@3
+        let array%val_as_bytes%0#1: bytes[8] = (itob x#0)
+        let xArray#0: Encoded(len+uint64[]) = (concat 0x0001 array%val_as_bytes%0#1)
+        let array_length%0#0: uint64 = (extract_uint16 xArray#0 0u)
+        let tmp%9#0: bool = (== array_length%0#0 1u)
+        goto tmp%9#0 ? block@1 : block@3
     block@1: // and_contd_L17
-        let tmp%11#0: uint64 = (extract_uint64 xArray#0 2u)
-        let tmp%12#0: bool = (== tmp%11#0 5u)
-        goto tmp%12#0 ? block@2 : block@3
+        let tmp%10#0: uint64 = (extract_uint64 xArray#0 2u)
+        let tmp%11#0: bool = (== tmp%10#0 5u)
+        goto tmp%11#0 ? block@2 : block@3
     block@2: // bool_true_L17
         let and_result%0#0: bool = 1u
         goto block@4
@@ -68,11 +68,11 @@ subroutine tests/approvals/match-expr.algo.ts::MatchExprAlgo.testMatches(x: uint
     block@4: // bool_merge_L17
         let and_result%0#2: bool = φ(and_result%0#0 <- block@2, and_result%0#1 <- block@3)
         (assert and_result%0#2)
-        goto tmp%10#0 ? block@5 : block@7
+        goto tmp%9#0 ? block@5 : block@7
     block@5: // and_contd_L18
-        let tmp%15#0: uint64 = (extract_uint64 xArray#0 2u)
-        let tmp%16#0: bool = (> tmp%15#0 4u)
-        goto tmp%16#0 ? block@6 : block@7
+        let tmp%13#0: uint64 = (extract_uint64 xArray#0 2u)
+        let tmp%14#0: bool = (> tmp%13#0 4u)
+        goto tmp%14#0 ? block@6 : block@7
     block@6: // bool_true_L18
         let and_result%1#0: bool = 1u
         goto block@8
@@ -82,11 +82,11 @@ subroutine tests/approvals/match-expr.algo.ts::MatchExprAlgo.testMatches(x: uint
     block@8: // bool_merge_L18
         let and_result%1#2: bool = φ(and_result%1#0 <- block@6, and_result%1#1 <- block@7)
         (assert and_result%1#2)
-        goto tmp%10#0 ? block@9 : block@11
+        goto tmp%9#0 ? block@9 : block@11
     block@9: // and_contd_L19
-        let tmp%19#0: uint64 = (extract_uint64 xArray#0 2u)
-        let tmp%20#0: bool = (< tmp%19#0 6u)
-        goto tmp%20#0 ? block@10 : block@11
+        let tmp%16#0: uint64 = (extract_uint64 xArray#0 2u)
+        let tmp%17#0: bool = (< tmp%16#0 6u)
+        goto tmp%17#0 ? block@10 : block@11
     block@10: // bool_true_L19
         let and_result%2#0: bool = 1u
         goto block@12
@@ -96,11 +96,11 @@ subroutine tests/approvals/match-expr.algo.ts::MatchExprAlgo.testMatches(x: uint
     block@12: // bool_merge_L19
         let and_result%2#2: bool = φ(and_result%2#0 <- block@10, and_result%2#1 <- block@11)
         (assert and_result%2#2)
-        goto tmp%10#0 ? block@13 : block@15
+        goto tmp%9#0 ? block@13 : block@15
     block@13: // and_contd_L20
-        let tmp%23#0: uint64 = (extract_uint64 xArray#0 2u)
-        let tmp%24#0: bool = (>= tmp%23#0 5u)
-        goto tmp%24#0 ? block@14 : block@15
+        let tmp%19#0: uint64 = (extract_uint64 xArray#0 2u)
+        let tmp%20#0: bool = (>= tmp%19#0 5u)
+        goto tmp%20#0 ? block@14 : block@15
     block@14: // bool_true_L20
         let and_result%3#0: bool = 1u
         goto block@16
@@ -110,11 +110,11 @@ subroutine tests/approvals/match-expr.algo.ts::MatchExprAlgo.testMatches(x: uint
     block@16: // bool_merge_L20
         let and_result%3#2: bool = φ(and_result%3#0 <- block@14, and_result%3#1 <- block@15)
         (assert and_result%3#2)
-        goto tmp%10#0 ? block@17 : block@19
+        goto tmp%9#0 ? block@17 : block@19
     block@17: // and_contd_L21
-        let tmp%27#0: uint64 = (extract_uint64 xArray#0 2u)
-        let tmp%28#0: bool = (<= tmp%27#0 5u)
-        goto tmp%28#0 ? block@18 : block@19
+        let tmp%22#0: uint64 = (extract_uint64 xArray#0 2u)
+        let tmp%23#0: bool = (<= tmp%22#0 5u)
+        goto tmp%23#0 ? block@18 : block@19
     block@18: // bool_true_L21
         let and_result%4#0: bool = 1u
         goto block@20

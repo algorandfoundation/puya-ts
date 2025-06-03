@@ -149,19 +149,15 @@ main_testArc4Encoding_route@10:
     dup2
     !=
     assert // For the purpose of this test, a should not equal b
-    // tests/approvals/mutable-object.algo.ts:92
-    // x: p.x,
-    swap
-    itob
-    // tests/approvals/mutable-object.algo.ts:93
-    // y: p.y,
-    swap
-    itob
     // tests/approvals/mutable-object.algo.ts:91-94
     // const obj: Vector = new Vector({
     //   x: p.x,
     //   y: p.y,
     // })
+    swap
+    itob
+    swap
+    itob
     concat
     // tests/approvals/mutable-object.algo.ts:97
     // assert(pEncoded === objEncoded.slice(8).concat(objEncoded.slice(0, 8)), 'Encoded order should be swapped')
@@ -216,15 +212,13 @@ main_testAssertMatch_route@9:
     *
     dup
     bury 5
-    // tests/approvals/mutable-object.algo.ts:76
-    // x: b,
-    dup
-    itob
     // tests/approvals/mutable-object.algo.ts:74-77
     // const obj: Vector = new Vector({
     //   y: (b = x * 2),
     //   x: b,
     // })
+    dup
+    itob
     dup
     concat
     dup
@@ -338,7 +332,7 @@ main_testNestedObjects_route@7:
     // tests/approvals/mutable-object.algo.ts:50
     // const v1 = new Vector({ x: vp.v.x, y: vp.v.y })
     dup
-    extract 0 16 // on error: Index access is out of bounds
+    extract 0 16
     dup
     intc_0 // 0
     extract_uint64
@@ -353,7 +347,7 @@ main_testNestedObjects_route@7:
     // tests/approvals/mutable-object.algo.ts:51
     // const p1 = new Point({ x: vp.p.x, y: vp.p.y })
     dig 1
-    extract 16 16 // on error: Index access is out of bounds
+    extract 16 16
     dup
     intc_2 // 8
     extract_uint64
@@ -370,7 +364,7 @@ main_testNestedObjects_route@7:
     // tests/approvals/mutable-object.algo.ts:53
     // log(vp1.v.x)
     dup
-    extract 0 16 // on error: Index access is out of bounds
+    extract 0 16
     dup
     intc_0 // 0
     extract_uint64
@@ -385,7 +379,7 @@ main_testNestedObjects_route@7:
     // tests/approvals/mutable-object.algo.ts:55
     // log(vp1.p.x)
     dup
-    extract 16 16 // on error: Index access is out of bounds
+    extract 16 16
     dup
     intc_2 // 8
     extract_uint64
@@ -552,19 +546,15 @@ main_addVectors_route@4:
     intc_2 // 8
     extract_uint64
     +
-    // tests/approvals/mutable-object.algo.ts:23
-    // x: v1.x + v2.x,
-    swap
-    itob
-    // tests/approvals/mutable-object.algo.ts:24
-    // y: v1.y + v2.y,
-    swap
-    itob
     // tests/approvals/mutable-object.algo.ts:22-25
     // return new Vector({
     //   x: v1.x + v2.x,
     //   y: v1.y + v2.y,
     // })
+    swap
+    itob
+    swap
+    itob
     concat
     // tests/approvals/mutable-object.algo.ts:21
     // public addVectors(v1: Vector, v2: Vector) {

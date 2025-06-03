@@ -6,6 +6,7 @@ import { Constants } from '../../constants'
 import { CodeError, InternalError, NotSupported, throwError } from '../../errors'
 import { codeInvariant, distinctByEquality, invariant, sortBy } from '../../util'
 import { SymbolName } from '../symbol-name'
+import type { ABIType } from './base'
 import { GenericPType, PType } from './base'
 
 import { transientTypeErrors } from './transient-type-errors'
@@ -448,6 +449,14 @@ export class InstanceType extends PType {
   }
 }
 
+export class ABICompatibleInstanceType extends InstanceType implements ABIType {
+  readonly abiTypeSignature: string
+  constructor({ abiTypeSignature, ...props }: { name: string; module: string; wtype: wtypes.WType; abiTypeSignature: string }) {
+    super(props)
+    this.abiTypeSignature = abiTypeSignature
+  }
+}
+
 export class LibFunctionType extends PType {
   readonly wtype: undefined
   readonly name: string
@@ -671,8 +680,8 @@ export class ArrayPType extends PType {
   }
 
   get wtype() {
-    return new wtypes.StackArray({
-      itemType: this.elementType.wtypeOrThrow,
+    return new wtypes.ARC4DynamicArray({
+      elementType: this.elementType.wtypeOrThrow,
       immutable: this.immutable,
     })
   }
@@ -750,10 +759,11 @@ export class ObjectPType extends PType {
   }
 }
 
-export const voidPType = new InstanceType({
+export const voidPType = new ABICompatibleInstanceType({
   name: 'void',
   module: 'lib.d.ts',
   wtype: wtypes.voidWType,
+  abiTypeSignature: 'void',
 })
 export const neverPType = new InstanceType({
   name: 'never',
@@ -944,28 +954,31 @@ export const errFunction = new LibFunctionType({
   module: Constants.moduleNames.algoTs.util,
 })
 
-export const assetPType = new InstanceType({
+export const assetPType = new ABICompatibleInstanceType({
   name: 'Asset',
   wtype: wtypes.assetWType,
   module: Constants.moduleNames.algoTs.reference,
+  abiTypeSignature: 'asset',
 })
 export const AssetFunction = new LibFunctionType({
   name: 'Asset',
   module: Constants.moduleNames.algoTs.reference,
 })
-export const accountPType = new InstanceType({
+export const accountPType = new ABICompatibleInstanceType({
   name: 'Account',
   wtype: wtypes.accountWType,
   module: Constants.moduleNames.algoTs.reference,
+  abiTypeSignature: 'account',
 })
 export const AccountFunction = new LibFunctionType({
   name: 'Account',
   module: Constants.moduleNames.algoTs.reference,
 })
-export const applicationPType = new InstanceType({
+export const applicationPType = new ABICompatibleInstanceType({
   name: 'Application',
   wtype: wtypes.applicationWType,
   module: Constants.moduleNames.algoTs.reference,
+  abiTypeSignature: 'application',
 })
 export const ApplicationFunctionType = new LibFunctionType({
   name: 'Application',
@@ -1052,7 +1065,7 @@ export const logicSigOptionsDecorator = new LibFunctionType({
   name: 'logicsig',
 })
 
-export class GroupTransactionPType extends PType {
+export class GroupTransactionPType extends PType implements ABIType {
   get wtype() {
     return new wtypes.WGroupTransaction({
       transactionType: this.kind,
@@ -1062,11 +1075,13 @@ export class GroupTransactionPType extends PType {
   readonly kind: TransactionKind | undefined
   readonly module = Constants.moduleNames.algoTs.gtxn
   readonly singleton = false
+  readonly abiTypeSignature: string
 
   constructor({ kind, name }: { kind?: TransactionKind; name: string }) {
     super()
     this.name = name
     this.kind = kind
+    this.abiTypeSignature = kind ? TransactionKind[kind] : 'txn'
   }
 }
 

@@ -230,30 +230,40 @@ main_getState_route@5:
     itob
     uncover 9
     itob
-    dig 9
-    len
-    itob
-    extract 6 2
-    uncover 10
     concat
-    dig 9
-    len
-    itob
-    extract 6 2
-    uncover 10
-    concat
-    uncover 8
-    itob
     dig 8
     len
     itob
     extract 6 2
     uncover 9
     concat
-    swap
-    bytec 8 // 0x000a
+    dup
+    len
+    pushint 106 // 106
+    +
+    uncover 2
+    pushbytes 0x006a
+    concat
+    dig 9
+    len
+    itob
+    extract 6 2
+    uncover 10
+    concat
+    uncover 3
+    dig 1
     concat
     swap
+    len
+    dig 3
+    +
+    uncover 3
+    itob
+    extract 6 2
+    uncover 3
+    swap
+    concat
+    uncover 8
     concat
     uncover 7
     itob
@@ -268,55 +278,52 @@ main_getState_route@5:
     concat
     swap
     concat
-    uncover 5
-    uncover 5
-    concat
-    pushbytes 0x006a
-    concat
-    dig 4
-    len
-    pushint 106 // 106
-    +
-    dup
-    itob
-    extract 6 2
-    uncover 2
-    swap
-    concat
-    dig 4
-    len
-    uncover 2
-    +
-    swap
-    uncover 7
-    concat
+    uncover 3
     dig 1
-    itob
-    extract 6 2
     concat
-    dig 3
+    swap
     len
-    uncover 2
+    dig 3
     +
-    dup
+    uncover 3
     itob
     extract 6 2
-    uncover 2
+    uncover 3
     swap
     concat
-    dig 2
+    uncover 5
+    itob
+    dig 5
     len
-    uncover 2
-    +
     itob
     extract 6 2
+    uncover 6
     concat
-    uncover 4
+    swap
+    bytec 8 // 0x000a
     concat
+    swap
+    concat
+    uncover 3
+    dig 1
+    concat
+    swap
+    len
+    dig 3
+    +
+    uncover 3
+    itob
+    extract 6 2
+    uncover 3
+    swap
+    concat
+    uncover 2
     uncover 3
     concat
     uncover 2
-    concat
+    itob
+    extract 6 2
+    uncover 2
     swap
     concat
     swap
@@ -417,11 +424,8 @@ main_setState_route@4:
     bytec 8 // 0x000a
     concat
     dig 1
-    len
-    swap
-    dig 2
     concat
-    uncover 4
+    uncover 3
     // tests/approvals/local-state.algo.ts:14
     // localTuple = LocalState<[uint64, bytes]>()
     bytec 5 // "localTuple"
@@ -441,22 +445,25 @@ main_setState_route@4:
     app_local_put
     // tests/approvals/local-state.algo.ts:29
     // this.localMutableObject(Txn.sender).value = new Data({ a, b, c: true, d: new arc4.Str('hello') })
+    dup
+    len
+    pushint 13 // 13
+    +
     uncover 2
     pushbytes 0x000d
     concat
-    pushint 13 // 13
-    uncover 2
-    +
-    swap
     pushbytes 0x80
     concat
-    swap
+    uncover 2
+    pushbytes 0x000568656c6c6f
+    concat
+    uncover 2
     itob
     extract 6 2
-    concat
+    uncover 2
     swap
     concat
-    pushbytes 0x000568656c6c6f
+    swap
     concat
     txn Sender
     // tests/approvals/local-state.algo.ts:16

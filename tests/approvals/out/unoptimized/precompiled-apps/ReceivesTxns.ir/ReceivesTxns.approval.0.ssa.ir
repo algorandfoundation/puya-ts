@@ -18,59 +18,56 @@ subroutine tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.__puya_arc4_ro
         let tmp%5#0: uint64 = (txn ApplicationID)
         let tmp%6#0: bool = (!= tmp%5#0 0u)
         (assert tmp%6#0) // can only call when not creating
-        let to_encode%0#0: uint64 = tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.getOne()
-        let val_as_bytes%0#0: bytes[8] = (itob to_encode%0#0)
-        let tmp%7#0: bytes = (concat 0x151f7c75 val_as_bytes%0#0)
-        (log tmp%7#0)
+        let tmp%7#0: uint64 = tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.getOne()
+        let tmp%8#0: Encoded(uint64) = encode<uint64>(tmp%7#0)
+        let tmp%9#0: bytes = (concat 0x151f7c75 tmp%8#0)
+        (log tmp%9#0)
         return 1u
     block@3: // receivesAnyTxn_route_L91
-        let tmp%8#0: uint64 = (txn OnCompletion)
-        let tmp%9#0: bool = (== tmp%8#0 NoOp)
-        (assert tmp%9#0) // OnCompletion is not NoOp
-        let tmp%10#0: uint64 = (txn ApplicationID)
-        let tmp%11#0: bool = (!= tmp%10#0 0u)
-        (assert tmp%11#0) // can only call when not creating
-        let tmp%12#0: uint64 = (txn GroupIndex)
-        let gtxn_idx%0#0: uint64 = (- tmp%12#0 1u)
-        let to_encode%1#0: uint64 = tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.receivesAnyTxn(gtxn_idx%0#0)
-        let val_as_bytes%1#0: bytes[8] = (itob to_encode%1#0)
-        let tmp%13#0: bytes = (concat 0x151f7c75 val_as_bytes%1#0)
-        (log tmp%13#0)
+        let tmp%10#0: uint64 = (txn OnCompletion)
+        let tmp%11#0: bool = (== tmp%10#0 NoOp)
+        (assert tmp%11#0) // OnCompletion is not NoOp
+        let tmp%12#0: uint64 = (txn ApplicationID)
+        let tmp%13#0: bool = (!= tmp%12#0 0u)
+        (assert tmp%13#0) // can only call when not creating
+        let tmp%14#0: uint64 = (txn GroupIndex)
+        let gtxn_idx%0#0: uint64 = (- tmp%14#0 1u)
+        let tmp%15#0: uint64 = tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.receivesAnyTxn(gtxn_idx%0#0)
+        let tmp%16#0: Encoded(uint64) = encode<uint64>(tmp%15#0)
+        let tmp%17#0: bytes = (concat 0x151f7c75 tmp%16#0)
+        (log tmp%17#0)
         return 1u
     block@4: // receivesAssetConfig_route_L102
-        let tmp%14#0: uint64 = (txn OnCompletion)
-        let tmp%15#0: bool = (== tmp%14#0 NoOp)
-        (assert tmp%15#0) // OnCompletion is not NoOp
-        let tmp%16#0: uint64 = (txn ApplicationID)
-        let tmp%17#0: bool = (!= tmp%16#0 0u)
-        (assert tmp%17#0) // can only call when not creating
-        let tmp%18#0: uint64 = (txn GroupIndex)
-        let gtxn_idx%1#0: uint64 = (- tmp%18#0 1u)
+        let tmp%18#0: uint64 = (txn OnCompletion)
+        let tmp%19#0: bool = (== tmp%18#0 NoOp)
+        (assert tmp%19#0) // OnCompletion is not NoOp
+        let tmp%20#0: uint64 = (txn ApplicationID)
+        let tmp%21#0: bool = (!= tmp%20#0 0u)
+        (assert tmp%21#0) // can only call when not creating
+        let tmp%22#0: uint64 = (txn GroupIndex)
+        let gtxn_idx%1#0: uint64 = (- tmp%22#0 1u)
         let gtxn_type%0#0: uint64 = ((gtxns TypeEnum) gtxn_idx%1#0)
         let gtxn_type_matches%0#0: bool = (== gtxn_type%0#0 acfg)
         (assert gtxn_type_matches%0#0) // transaction type is acfg
-        let to_encode%2#0: bytes = tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.receivesAssetConfig(gtxn_idx%1#0)
-        let length%0#0: uint64 = (len to_encode%2#0)
-        let as_bytes%0#0: bytes[8] = (itob length%0#0)
-        let length_uint16%0#0: bytes = ((extract 6 2) as_bytes%0#0)
-        let encoded_value%0#0: bytes = (concat length_uint16%0#0 to_encode%2#0)
-        let tmp%19#0: bytes = (concat 0x151f7c75 encoded_value%0#0)
-        (log tmp%19#0)
+        let tmp%23#0: bytes = tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.receivesAssetConfig(gtxn_idx%1#0)
+        let tmp%24#0: Encoded(len+uint8[]) = encode<(len+uint8[])>(tmp%23#0)
+        let tmp%25#0: bytes = (concat 0x151f7c75 tmp%24#0)
+        (log tmp%25#0)
         return 1u
     block@5: // receivesAssetConfigAndPay_route_L105
-        let tmp%20#0: uint64 = (txn OnCompletion)
-        let tmp%21#0: bool = (== tmp%20#0 NoOp)
-        (assert tmp%21#0) // OnCompletion is not NoOp
-        let tmp%22#0: uint64 = (txn ApplicationID)
-        let tmp%23#0: bool = (!= tmp%22#0 0u)
-        (assert tmp%23#0) // can only call when not creating
-        let tmp%24#0: uint64 = (txn GroupIndex)
-        let gtxn_idx%2#0: uint64 = (- tmp%24#0 2u)
+        let tmp%26#0: uint64 = (txn OnCompletion)
+        let tmp%27#0: bool = (== tmp%26#0 NoOp)
+        (assert tmp%27#0) // OnCompletion is not NoOp
+        let tmp%28#0: uint64 = (txn ApplicationID)
+        let tmp%29#0: bool = (!= tmp%28#0 0u)
+        (assert tmp%29#0) // can only call when not creating
+        let tmp%30#0: uint64 = (txn GroupIndex)
+        let gtxn_idx%2#0: uint64 = (- tmp%30#0 2u)
         let gtxn_type%1#0: uint64 = ((gtxns TypeEnum) gtxn_idx%2#0)
         let gtxn_type_matches%1#0: bool = (== gtxn_type%1#0 acfg)
         (assert gtxn_type_matches%1#0) // transaction type is acfg
-        let tmp%25#0: uint64 = (txn GroupIndex)
-        let gtxn_idx%3#0: uint64 = (- tmp%25#0 1u)
+        let tmp%31#0: uint64 = (txn GroupIndex)
+        let gtxn_idx%3#0: uint64 = (- tmp%31#0 1u)
         let gtxn_type%2#0: uint64 = ((gtxns TypeEnum) gtxn_idx%3#0)
         let gtxn_type_matches%2#0: bool = (== gtxn_type%2#0 pay)
         (assert gtxn_type_matches%2#0) // transaction type is pay
@@ -81,12 +78,12 @@ subroutine tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.__puya_arc4_ro
     block@7: // switch_case_next_L86
         goto block@12
     block@8: // bare_routing_L86
-        let tmp%26#0: uint64 = (txn OnCompletion)
-        switch tmp%26#0 {0u => block@9, * => block@10}
+        let tmp%32#0: uint64 = (txn OnCompletion)
+        switch tmp%32#0 {0u => block@9, * => block@10}
     block@9: // __algots__.defaultCreate_L86
-        let tmp%27#0: uint64 = (txn ApplicationID)
-        let tmp%28#0: bool = (== tmp%27#0 0u)
-        (assert tmp%28#0) // can only call when creating
+        let tmp%33#0: uint64 = (txn ApplicationID)
+        let tmp%34#0: bool = (== tmp%33#0 0u)
+        (assert tmp%34#0) // can only call when creating
         tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.__algots__.defaultCreate()
         return 1u
     block@10: // switch_case_default_L86

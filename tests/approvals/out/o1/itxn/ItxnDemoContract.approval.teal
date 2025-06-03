@@ -536,10 +536,9 @@ test2_after_if_else@11:
 test2_else_body@2:
     // tests/approvals/itxn.algo.ts:87
     // appArgs: [Bytes('3'), new Str('4'), Bytes('5')],
+    pushbytes 0x000134
     bytec 8 // "3"
     frame_bury 0
-    pushbytes 0x000134
-    frame_bury 1
     bytec 9 // "5"
     frame_bury 5
     intc_3 // 3
@@ -547,10 +546,12 @@ test2_else_body@2:
     // tests/approvals/itxn.algo.ts:88
     // note: 'no args param set',
     pushbytes "no args param set"
+    swap
     // tests/approvals/itxn.algo.ts:84
     // createAppParams = itxn.applicationCall({
     intc_0 // 0
     frame_bury 4
+    frame_bury 1
     b test2_after_if_else@3
 
 

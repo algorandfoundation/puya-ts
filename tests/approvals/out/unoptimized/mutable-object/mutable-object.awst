@@ -45,7 +45,7 @@ contract MutableObjectDemo
     assert(v3.x == v1.x)
     assert(v3.y == v1.y)
     assert(reinterpret_cast<bytes>(v3) == reinterpret_cast<bytes>(v1))
-    { x: x, y: y }: object{ x: uint64, y: uint64 } = ARC4_DECODE(v3)
+    (x = v3.x), (y = v3.y), v3
     assert(x == v3.x)
     assert(y == v3.y)
   }

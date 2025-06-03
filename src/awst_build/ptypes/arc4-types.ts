@@ -59,6 +59,7 @@ export abstract class ARC4EncodedType extends PType {
   abstract readonly wtype: wtypes.ARC4Type
   abstract readonly nativeType: PType | undefined
   abstract readonly fixedBitSize: bigint | null
+  abstract readonly abiTypeSignature: string
 
   get fixedByteSize(): bigint | null {
     return this.fixedBitSize === null ? null : ARC4EncodedType.bitsToBytes(this.fixedBitSize)
@@ -80,6 +81,10 @@ export abstract class ARC4EncodedType extends PType {
         return this.roundBitsUpToNearestByte(acc) + this.roundBitsUpToNearestByte(cur.fixedBitSize)
       }
     }, 0n)
+  }
+
+  protected static buildAbiTupleSignature(types: ARC4EncodedType[]): string {
+    return `(${types.map((t) => t.abiTypeSignature).join(',')})`
   }
 
   /**
@@ -110,22 +115,26 @@ export class ARC4InstanceType extends ARC4EncodedType {
   readonly singleton = false
   readonly nativeType: PType
   readonly fixedBitSize: bigint | null
+  readonly abiTypeSignature: string
   constructor({
     wtype,
     nativeType,
     name,
     fixedBitSize,
+    abiName,
   }: {
     wtype: wtypes.ARC4Type
     name: string
     nativeType: PType
     fixedBitSize: bigint | null
+    abiName: string
   }) {
     super()
     this.wtype = wtype
     this.name = name
     this.nativeType = nativeType
     this.fixedBitSize = fixedBitSize
+    this.abiTypeSignature = abiName
   }
 }
 
@@ -144,6 +153,7 @@ export const arc4BooleanType = new ARC4InstanceType({
   wtype: wtypes.arc4BooleanWType,
   nativeType: boolPType,
   fixedBitSize: 1n,
+  abiName: 'bool',
 })
 
 export const arc4StringType = new ARC4InstanceType({
@@ -151,6 +161,7 @@ export const arc4StringType = new ARC4InstanceType({
   wtype: wtypes.arc4StringAliasWType,
   nativeType: stringPType,
   fixedBitSize: null,
+  abiName: 'string',
 })
 
 export class ARC4StructClass extends PType {
@@ -195,6 +206,7 @@ export class ARC4StructType extends ARC4EncodedType {
   readonly sourceLocation: SourceLocation | undefined
   readonly frozen: boolean
   readonly fixedBitSize: bigint | null
+  readonly abiTypeSignature: string
   constructor({
     name,
     frozen,
@@ -218,6 +230,7 @@ export class ARC4StructType extends ARC4EncodedType {
     this.description = description
     this.sourceLocation = sourceLocation
     this.fixedBitSize = ARC4EncodedType.calculateFixedBitSize(Object.values(fields))
+    this.abiTypeSignature = ARC4EncodedType.buildAbiTupleSignature(Object.values(fields))
   }
 
   get nativeType(): ObjectPType {
@@ -235,7 +248,7 @@ export class ARC4StructType extends ARC4EncodedType {
   }
 
   get signature(): string {
-    return `${this.name}${this.wtype.arc4Alias}`
+    return `${this.name}${this.abiTypeSignature}`
   }
 }
 
@@ -276,6 +289,7 @@ export class ARC4TupleType extends ARC4EncodedType {
   readonly sourceLocation: SourceLocation | undefined
   readonly fixedBitSize: bigint | null
   readonly nativeType: TuplePType
+  readonly abiTypeSignature: string
 
   constructor({ types, sourceLocation }: { types: ARC4EncodedType[]; sourceLocation?: SourceLocation }) {
     super()
@@ -283,12 +297,14 @@ export class ARC4TupleType extends ARC4EncodedType {
     this.sourceLocation = sourceLocation
     this.nativeType = new TuplePType({ items: this.items })
     this.fixedBitSize = ARC4EncodedType.calculateFixedBitSize(types)
+    this.abiTypeSignature = ARC4EncodedType.buildAbiTupleSignature(types)
   }
 
   get wtype(): wtypes.ARC4Tuple {
     return new wtypes.ARC4Tuple({
       types: this.items.map((t) => t.wtype),
       sourceLocation: this.sourceLocation,
+      immutable: false,
     })
   }
 }
@@ -312,6 +328,7 @@ export class UintNType extends ARC4EncodedType {
   readonly name: string
   readonly singleton = false
   readonly wtype: wtypes.ARC4UIntN
+  readonly abiTypeSignature: string
 
   get fixedBitSize() {
     return this.n
@@ -327,6 +344,7 @@ export class UintNType extends ARC4EncodedType {
     this.n = n
     this.name = name ?? `UintN<${n}>`
     this.wtype = wtype ?? new wtypes.ARC4UIntN({ n: this.n })
+    this.abiTypeSignature = wtype?.arc4Alias ?? `uint${this.n}`
   }
 }
 export const UFixedNxMClass = new LibClassType({
@@ -360,6 +378,7 @@ export class UFixedNxMType extends ARC4EncodedType {
   readonly name: string
   readonly singleton = false
   readonly wtype: wtypes.ARC4UFixedNxM
+  readonly abiTypeSignature: string
 
   get fixedBitSize() {
     return this.n
@@ -377,6 +396,7 @@ export class UFixedNxMType extends ARC4EncodedType {
     this.m = m
     this.name = `${UFixedNxMClass.name}<${n}, ${m}>`
     this.wtype = new wtypes.ARC4UFixedNxM({ n: this.n, m: this.m })
+    this.abiTypeSignature = `ufixed${this.n}x${this.m}`
   }
 }
 
@@ -410,6 +430,7 @@ export class DynamicArrayType extends ARC4ArrayType {
   readonly nativeType: PType
   readonly wtype: wtypes.ARC4DynamicArray
   readonly fixedBitSize = null
+  readonly abiTypeSignature: string
 
   constructor({
     elementType,
@@ -436,6 +457,7 @@ export class DynamicArrayType extends ARC4ArrayType {
       sourceLocation: this.sourceLocation,
       immutable: this.immutable,
     })
+    this.abiTypeSignature = `${this.elementType.abiTypeSignature}[]`
   }
 }
 export const StaticArrayConstructor = new LibClassType({
@@ -470,6 +492,7 @@ export class StaticArrayType extends ARC4ArrayType {
   readonly wtype: wtypes.ARC4StaticArray
   readonly nativeType: PType
   readonly fixedBitSize: bigint | null
+  readonly abiTypeSignature: string
   constructor({
     elementType,
     arraySize,
@@ -502,6 +525,7 @@ export class StaticArrayType extends ARC4ArrayType {
         immutable: this.immutable,
       })
     this.fixedBitSize = ARC4EncodedType.calculateFixedBitSize(new Array(Number(arraySize)).fill(elementType))
+    this.abiTypeSignature = `${this.elementType.abiTypeSignature}[${this.arraySize}]`
   }
 }
 export const arc4AddressAlias = new StaticArrayType({

@@ -172,20 +172,6 @@ const explicitNodeFactory = {
         ...expr,
       })
     }
-    // TODO: fix line 58 in itxn.algo.ts
-    // `const [appCreateTxn, asset3_txn] = itxn.submitGroup(appCreateParams, assetParams)`
-    // throwing `INNER_TRANSACTION_ASSIGNMENT_EXPRESSION_ERROR` in `visit_assignment_expression`
-    // if (expr instanceof CommaExpression) {
-    //   return new ExpressionStatement({
-    //     expr: new CommaExpression({
-    //       ...expr,
-    //       expressions: expr.expressions.map((e) =>
-    //         e instanceof AssignmentExpression ? new AssignmentStatement({ ...e }) : e,
-    //       ) as Expression[],
-    //     }),
-    //     sourceLocation: expr.sourceLocation,
-    //   })
-    // }
 
     return new ExpressionStatement({
       expr,
@@ -322,7 +308,7 @@ const explicitNodeFactory = {
     value: Expression
     sourceLocation: SourceLocation
   }) {
-    invariant(base.wtype instanceof wtypes.StackArray, 'base must have wtype of StackArray', base.sourceLocation)
+    invariant(base.wtype instanceof wtypes.ARC4DynamicArray, 'base must have wtype of StackArray', base.sourceLocation)
     return new ArrayReplace({
       base,
       index,

@@ -267,12 +267,12 @@
               "_type": "ARC4StaticArray",
               "name": "arc4.static_array<arc4.uint64>",
               "immutable": false,
-              "arc4_alias": "uint64[10]",
+              "arc4_alias": null,
               "element_type": {
                 "_type": "ARC4UIntN",
                 "name": "arc4.uint64",
                 "immutable": true,
-                "arc4_alias": "uint64",
+                "arc4_alias": null,
                 "n": 64
               },
               "source_location": null,
@@ -306,7 +306,7 @@
               },
               "body": [
                 {
-                  "_type": "AssignmentStatement",
+                  "_type": "ExpressionStatement",
                   "source_location": {
                     "file": "tests/approvals/local-state.algo.ts",
                     "line": 21,
@@ -314,8 +314,8 @@
                     "column": 18,
                     "end_column": 51
                   },
-                  "target": {
-                    "_type": "TupleExpression",
+                  "expr": {
+                    "_type": "CommaExpression",
                     "source_location": {
                       "file": "tests/approvals/local-state.algo.ts",
                       "line": 21,
@@ -345,22 +345,169 @@
                         "b"
                       ]
                     },
-                    "items": [
+                    "expressions": [
                       {
-                        "_type": "VarExpression",
+                        "_type": "AssignmentExpression",
                         "source_location": {
                           "file": "tests/approvals/local-state.algo.ts",
                           "line": 21,
                           "end_line": 21,
-                          "column": 20,
-                          "end_column": 21
+                          "column": 18,
+                          "end_column": 51
                         },
                         "wtype": {
                           "_type": "WType",
                           "name": "uint64",
                           "immutable": true
                         },
-                        "name": "a"
+                        "target": {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/local-state.algo.ts",
+                            "line": 21,
+                            "end_line": 21,
+                            "column": 20,
+                            "end_column": 21
+                          },
+                          "wtype": {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          "name": "a"
+                        },
+                        "value": {
+                          "_type": "FieldExpression",
+                          "source_location": {
+                            "file": "tests/approvals/local-state.algo.ts",
+                            "line": 21,
+                            "end_line": 21,
+                            "column": 18,
+                            "end_column": 51
+                          },
+                          "wtype": {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          "base": {
+                            "_type": "VarExpression",
+                            "source_location": {
+                              "file": "tests/approvals/local-state.algo.ts",
+                              "line": 21,
+                              "end_line": 21,
+                              "column": 18,
+                              "end_column": 51
+                            },
+                            "wtype": {
+                              "_type": "WTuple",
+                              "name": "lib.d.ts::object",
+                              "immutable": true,
+                              "types": [
+                                {
+                                  "_type": "WType",
+                                  "name": "uint64",
+                                  "immutable": true
+                                },
+                                {
+                                  "_type": "BytesWType",
+                                  "name": "bytes",
+                                  "immutable": true,
+                                  "length": null
+                                }
+                              ],
+                              "names": [
+                                "a",
+                                "b"
+                              ]
+                            },
+                            "name": "p"
+                          },
+                          "name": "a"
+                        }
+                      },
+                      {
+                        "_type": "AssignmentExpression",
+                        "source_location": {
+                          "file": "tests/approvals/local-state.algo.ts",
+                          "line": 21,
+                          "end_line": 21,
+                          "column": 18,
+                          "end_column": 51
+                        },
+                        "wtype": {
+                          "_type": "BytesWType",
+                          "name": "bytes",
+                          "immutable": true,
+                          "length": null
+                        },
+                        "target": {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/local-state.algo.ts",
+                            "line": 21,
+                            "end_line": 21,
+                            "column": 23,
+                            "end_column": 24
+                          },
+                          "wtype": {
+                            "_type": "BytesWType",
+                            "name": "bytes",
+                            "immutable": true,
+                            "length": null
+                          },
+                          "name": "b"
+                        },
+                        "value": {
+                          "_type": "FieldExpression",
+                          "source_location": {
+                            "file": "tests/approvals/local-state.algo.ts",
+                            "line": 21,
+                            "end_line": 21,
+                            "column": 18,
+                            "end_column": 51
+                          },
+                          "wtype": {
+                            "_type": "BytesWType",
+                            "name": "bytes",
+                            "immutable": true,
+                            "length": null
+                          },
+                          "base": {
+                            "_type": "VarExpression",
+                            "source_location": {
+                              "file": "tests/approvals/local-state.algo.ts",
+                              "line": 21,
+                              "end_line": 21,
+                              "column": 18,
+                              "end_column": 51
+                            },
+                            "wtype": {
+                              "_type": "WTuple",
+                              "name": "lib.d.ts::object",
+                              "immutable": true,
+                              "types": [
+                                {
+                                  "_type": "WType",
+                                  "name": "uint64",
+                                  "immutable": true
+                                },
+                                {
+                                  "_type": "BytesWType",
+                                  "name": "bytes",
+                                  "immutable": true,
+                                  "length": null
+                                }
+                              ],
+                              "names": [
+                                "a",
+                                "b"
+                              ]
+                            },
+                            "name": "p"
+                          },
+                          "name": "b"
+                        }
                       },
                       {
                         "_type": "VarExpression",
@@ -368,51 +515,34 @@
                           "file": "tests/approvals/local-state.algo.ts",
                           "line": 21,
                           "end_line": 21,
-                          "column": 23,
-                          "end_column": 24
+                          "column": 18,
+                          "end_column": 51
                         },
                         "wtype": {
-                          "_type": "BytesWType",
-                          "name": "bytes",
+                          "_type": "WTuple",
+                          "name": "lib.d.ts::object",
                           "immutable": true,
-                          "length": null
+                          "types": [
+                            {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true
+                            },
+                            {
+                              "_type": "BytesWType",
+                              "name": "bytes",
+                              "immutable": true,
+                              "length": null
+                            }
+                          ],
+                          "names": [
+                            "a",
+                            "b"
+                          ]
                         },
-                        "name": "b"
+                        "name": "p"
                       }
                     ]
-                  },
-                  "value": {
-                    "_type": "VarExpression",
-                    "source_location": {
-                      "file": "tests/approvals/local-state.algo.ts",
-                      "line": 21,
-                      "end_line": 21,
-                      "column": 18,
-                      "end_column": 51
-                    },
-                    "wtype": {
-                      "_type": "WTuple",
-                      "name": "lib.d.ts::object",
-                      "immutable": true,
-                      "types": [
-                        {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true
-                        },
-                        {
-                          "_type": "BytesWType",
-                          "name": "bytes",
-                          "immutable": true,
-                          "length": null
-                        }
-                      ],
-                      "names": [
-                        "a",
-                        "b"
-                      ]
-                    },
-                    "name": "p"
                   }
                 }
               ],
@@ -771,12 +901,12 @@
                       "_type": "ARC4StaticArray",
                       "name": "arc4.static_array<arc4.uint64>",
                       "immutable": false,
-                      "arc4_alias": "uint64[10]",
+                      "arc4_alias": null,
                       "element_type": {
                         "_type": "ARC4UIntN",
                         "name": "arc4.uint64",
                         "immutable": true,
-                        "arc4_alias": "uint64",
+                        "arc4_alias": null,
                         "n": 64
                       },
                       "source_location": null,
@@ -834,12 +964,12 @@
                       "_type": "ARC4StaticArray",
                       "name": "arc4.static_array<arc4.uint64>",
                       "immutable": false,
-                      "arc4_alias": "uint64[10]",
+                      "arc4_alias": null,
                       "element_type": {
                         "_type": "ARC4UIntN",
                         "name": "arc4.uint64",
                         "immutable": true,
-                        "arc4_alias": "uint64",
+                        "arc4_alias": null,
                         "n": 64
                       },
                       "source_location": null,
@@ -858,12 +988,12 @@
                         "_type": "ARC4StaticArray",
                         "name": "arc4.static_array<arc4.uint64>",
                         "immutable": false,
-                        "arc4_alias": "uint64[10]",
+                        "arc4_alias": null,
                         "element_type": {
                           "_type": "ARC4UIntN",
                           "name": "arc4.uint64",
                           "immutable": true,
-                          "arc4_alias": "uint64",
+                          "arc4_alias": null,
                           "n": 64
                         },
                         "source_location": null,
@@ -1181,7 +1311,7 @@
                       "_type": "ARC4Struct",
                       "name": "Data",
                       "immutable": false,
-                      "arc4_alias": "(uint64,bytes,bool,string)",
+                      "arc4_alias": null,
                       "fields": {
                         "a": {
                           "_type": "WType",
@@ -1276,7 +1406,7 @@
                       "_type": "ARC4Struct",
                       "name": "Data",
                       "immutable": false,
-                      "arc4_alias": "(uint64,bytes,bool,string)",
+                      "arc4_alias": null,
                       "fields": {
                         "a": {
                           "_type": "WType",
@@ -2205,12 +2335,12 @@
               "_type": "ARC4StaticArray",
               "name": "arc4.static_array<arc4.uint64>",
               "immutable": false,
-              "arc4_alias": "uint64[10]",
+              "arc4_alias": null,
               "element_type": {
                 "_type": "ARC4UIntN",
                 "name": "arc4.uint64",
                 "immutable": true,
-                "arc4_alias": "uint64",
+                "arc4_alias": null,
                 "n": 64
               },
               "source_location": null,
@@ -2260,7 +2390,7 @@
               "_type": "ARC4Struct",
               "name": "Data",
               "immutable": false,
-              "arc4_alias": "(uint64,bytes,bool,string)",
+              "arc4_alias": null,
               "fields": {
                 "a": {
                   "_type": "WType",
@@ -2374,12 +2504,12 @@
                       "_type": "ARC4StaticArray",
                       "name": "arc4.static_array<arc4.uint64>",
                       "immutable": false,
-                      "arc4_alias": "uint64[10]",
+                      "arc4_alias": null,
                       "element_type": {
                         "_type": "ARC4UIntN",
                         "name": "arc4.uint64",
                         "immutable": true,
-                        "arc4_alias": "uint64",
+                        "arc4_alias": null,
                         "n": 64
                       },
                       "source_location": null,
@@ -2429,7 +2559,7 @@
                       "_type": "ARC4Struct",
                       "name": "Data",
                       "immutable": false,
-                      "arc4_alias": "(uint64,bytes,bool,string)",
+                      "arc4_alias": null,
                       "fields": {
                         "a": {
                           "_type": "WType",
@@ -2539,12 +2669,12 @@
                             "_type": "ARC4StaticArray",
                             "name": "arc4.static_array<arc4.uint64>",
                             "immutable": false,
-                            "arc4_alias": "uint64[10]",
+                            "arc4_alias": null,
                             "element_type": {
                               "_type": "ARC4UIntN",
                               "name": "arc4.uint64",
                               "immutable": true,
-                              "arc4_alias": "uint64",
+                              "arc4_alias": null,
                               "n": 64
                             },
                             "source_location": null,
@@ -2594,7 +2724,7 @@
                             "_type": "ARC4Struct",
                             "name": "Data",
                             "immutable": false,
-                            "arc4_alias": "(uint64,bytes,bool,string)",
+                            "arc4_alias": null,
                             "fields": {
                               "a": {
                                 "_type": "WType",
@@ -2689,12 +2819,12 @@
                               "_type": "ARC4StaticArray",
                               "name": "arc4.static_array<arc4.uint64>",
                               "immutable": false,
-                              "arc4_alias": "uint64[10]",
+                              "arc4_alias": null,
                               "element_type": {
                                 "_type": "ARC4UIntN",
                                 "name": "arc4.uint64",
                                 "immutable": true,
-                                "arc4_alias": "uint64",
+                                "arc4_alias": null,
                                 "n": 64
                               },
                               "source_location": null,
@@ -2744,7 +2874,7 @@
                               "_type": "ARC4Struct",
                               "name": "Data",
                               "immutable": false,
-                              "arc4_alias": "(uint64,bytes,bool,string)",
+                              "arc4_alias": null,
                               "fields": {
                                 "a": {
                                   "_type": "WType",
@@ -3027,12 +3157,12 @@
                               "_type": "ARC4StaticArray",
                               "name": "arc4.static_array<arc4.uint64>",
                               "immutable": false,
-                              "arc4_alias": "uint64[10]",
+                              "arc4_alias": null,
                               "element_type": {
                                 "_type": "ARC4UIntN",
                                 "name": "arc4.uint64",
                                 "immutable": true,
-                                "arc4_alias": "uint64",
+                                "arc4_alias": null,
                                 "n": 64
                               },
                               "source_location": null,
@@ -3051,12 +3181,12 @@
                                 "_type": "ARC4StaticArray",
                                 "name": "arc4.static_array<arc4.uint64>",
                                 "immutable": false,
-                                "arc4_alias": "uint64[10]",
+                                "arc4_alias": null,
                                 "element_type": {
                                   "_type": "ARC4UIntN",
                                   "name": "arc4.uint64",
                                   "immutable": true,
-                                  "arc4_alias": "uint64",
+                                  "arc4_alias": null,
                                   "n": 64
                                 },
                                 "source_location": null,
@@ -3251,7 +3381,7 @@
                               "_type": "ARC4Struct",
                               "name": "Data",
                               "immutable": false,
-                              "arc4_alias": "(uint64,bytes,bool,string)",
+                              "arc4_alias": null,
                               "fields": {
                                 "a": {
                                   "_type": "WType",
@@ -3307,7 +3437,7 @@
                                 "_type": "ARC4Struct",
                                 "name": "Data",
                                 "immutable": false,
-                                "arc4_alias": "(uint64,bytes,bool,string)",
+                                "arc4_alias": null,
                                 "fields": {
                                   "a": {
                                     "_type": "WType",
@@ -3450,12 +3580,12 @@
                             "_type": "ARC4StaticArray",
                             "name": "arc4.static_array<arc4.uint64>",
                             "immutable": false,
-                            "arc4_alias": "uint64[10]",
+                            "arc4_alias": null,
                             "element_type": {
                               "_type": "ARC4UIntN",
                               "name": "arc4.uint64",
                               "immutable": true,
-                              "arc4_alias": "uint64",
+                              "arc4_alias": null,
                               "n": 64
                             },
                             "source_location": null,
@@ -3505,7 +3635,7 @@
                             "_type": "ARC4Struct",
                             "name": "Data",
                             "immutable": false,
-                            "arc4_alias": "(uint64,bytes,bool,string)",
+                            "arc4_alias": null,
                             "fields": {
                               "a": {
                                 "_type": "WType",
@@ -3600,12 +3730,12 @@
                               "_type": "ARC4StaticArray",
                               "name": "arc4.static_array<arc4.uint64>",
                               "immutable": false,
-                              "arc4_alias": "uint64[10]",
+                              "arc4_alias": null,
                               "element_type": {
                                 "_type": "ARC4UIntN",
                                 "name": "arc4.uint64",
                                 "immutable": true,
-                                "arc4_alias": "uint64",
+                                "arc4_alias": null,
                                 "n": 64
                               },
                               "source_location": null,
@@ -3655,7 +3785,7 @@
                               "_type": "ARC4Struct",
                               "name": "Data",
                               "immutable": false,
-                              "arc4_alias": "(uint64,bytes,bool,string)",
+                              "arc4_alias": null,
                               "fields": {
                                 "a": {
                                   "_type": "WType",
@@ -3938,12 +4068,12 @@
                               "_type": "ARC4StaticArray",
                               "name": "arc4.static_array<arc4.uint64>",
                               "immutable": false,
-                              "arc4_alias": "uint64[10]",
+                              "arc4_alias": null,
                               "element_type": {
                                 "_type": "ARC4UIntN",
                                 "name": "arc4.uint64",
                                 "immutable": true,
-                                "arc4_alias": "uint64",
+                                "arc4_alias": null,
                                 "n": 64
                               },
                               "source_location": null,
@@ -3962,12 +4092,12 @@
                                 "_type": "ARC4StaticArray",
                                 "name": "arc4.static_array<arc4.uint64>",
                                 "immutable": false,
-                                "arc4_alias": "uint64[10]",
+                                "arc4_alias": null,
                                 "element_type": {
                                   "_type": "ARC4UIntN",
                                   "name": "arc4.uint64",
                                   "immutable": true,
-                                  "arc4_alias": "uint64",
+                                  "arc4_alias": null,
                                   "n": 64
                                 },
                                 "source_location": null,
@@ -4162,7 +4292,7 @@
                               "_type": "ARC4Struct",
                               "name": "Data",
                               "immutable": false,
-                              "arc4_alias": "(uint64,bytes,bool,string)",
+                              "arc4_alias": null,
                               "fields": {
                                 "a": {
                                   "_type": "WType",
@@ -4218,7 +4348,7 @@
                                 "_type": "ARC4Struct",
                                 "name": "Data",
                                 "immutable": false,
-                                "arc4_alias": "(uint64,bytes,bool,string)",
+                                "arc4_alias": null,
                                 "fields": {
                                   "a": {
                                     "_type": "WType",
@@ -4362,12 +4492,12 @@
                             "_type": "ARC4StaticArray",
                             "name": "arc4.static_array<arc4.uint64>",
                             "immutable": false,
-                            "arc4_alias": "uint64[10]",
+                            "arc4_alias": null,
                             "element_type": {
                               "_type": "ARC4UIntN",
                               "name": "arc4.uint64",
                               "immutable": true,
-                              "arc4_alias": "uint64",
+                              "arc4_alias": null,
                               "n": 64
                             },
                             "source_location": null,
@@ -4417,7 +4547,7 @@
                             "_type": "ARC4Struct",
                             "name": "Data",
                             "immutable": false,
-                            "arc4_alias": "(uint64,bytes,bool,string)",
+                            "arc4_alias": null,
                             "fields": {
                               "a": {
                                 "_type": "WType",
@@ -4512,12 +4642,12 @@
                               "_type": "ARC4StaticArray",
                               "name": "arc4.static_array<arc4.uint64>",
                               "immutable": false,
-                              "arc4_alias": "uint64[10]",
+                              "arc4_alias": null,
                               "element_type": {
                                 "_type": "ARC4UIntN",
                                 "name": "arc4.uint64",
                                 "immutable": true,
-                                "arc4_alias": "uint64",
+                                "arc4_alias": null,
                                 "n": 64
                               },
                               "source_location": null,
@@ -4567,7 +4697,7 @@
                               "_type": "ARC4Struct",
                               "name": "Data",
                               "immutable": false,
-                              "arc4_alias": "(uint64,bytes,bool,string)",
+                              "arc4_alias": null,
                               "fields": {
                                 "a": {
                                   "_type": "WType",
@@ -4850,12 +4980,12 @@
                               "_type": "ARC4StaticArray",
                               "name": "arc4.static_array<arc4.uint64>",
                               "immutable": false,
-                              "arc4_alias": "uint64[10]",
+                              "arc4_alias": null,
                               "element_type": {
                                 "_type": "ARC4UIntN",
                                 "name": "arc4.uint64",
                                 "immutable": true,
-                                "arc4_alias": "uint64",
+                                "arc4_alias": null,
                                 "n": 64
                               },
                               "source_location": null,
@@ -4874,12 +5004,12 @@
                                 "_type": "ARC4StaticArray",
                                 "name": "arc4.static_array<arc4.uint64>",
                                 "immutable": false,
-                                "arc4_alias": "uint64[10]",
+                                "arc4_alias": null,
                                 "element_type": {
                                   "_type": "ARC4UIntN",
                                   "name": "arc4.uint64",
                                   "immutable": true,
-                                  "arc4_alias": "uint64",
+                                  "arc4_alias": null,
                                   "n": 64
                                 },
                                 "source_location": null,
@@ -5074,7 +5204,7 @@
                               "_type": "ARC4Struct",
                               "name": "Data",
                               "immutable": false,
-                              "arc4_alias": "(uint64,bytes,bool,string)",
+                              "arc4_alias": null,
                               "fields": {
                                 "a": {
                                   "_type": "WType",
@@ -5130,7 +5260,7 @@
                                 "_type": "ARC4Struct",
                                 "name": "Data",
                                 "immutable": false,
-                                "arc4_alias": "(uint64,bytes,bool,string)",
+                                "arc4_alias": null,
                                 "fields": {
                                   "a": {
                                     "_type": "WType",
@@ -5274,12 +5404,12 @@
                             "_type": "ARC4StaticArray",
                             "name": "arc4.static_array<arc4.uint64>",
                             "immutable": false,
-                            "arc4_alias": "uint64[10]",
+                            "arc4_alias": null,
                             "element_type": {
                               "_type": "ARC4UIntN",
                               "name": "arc4.uint64",
                               "immutable": true,
-                              "arc4_alias": "uint64",
+                              "arc4_alias": null,
                               "n": 64
                             },
                             "source_location": null,
@@ -5329,7 +5459,7 @@
                             "_type": "ARC4Struct",
                             "name": "Data",
                             "immutable": false,
-                            "arc4_alias": "(uint64,bytes,bool,string)",
+                            "arc4_alias": null,
                             "fields": {
                               "a": {
                                 "_type": "WType",
@@ -5424,12 +5554,12 @@
                               "_type": "ARC4StaticArray",
                               "name": "arc4.static_array<arc4.uint64>",
                               "immutable": false,
-                              "arc4_alias": "uint64[10]",
+                              "arc4_alias": null,
                               "element_type": {
                                 "_type": "ARC4UIntN",
                                 "name": "arc4.uint64",
                                 "immutable": true,
-                                "arc4_alias": "uint64",
+                                "arc4_alias": null,
                                 "n": 64
                               },
                               "source_location": null,
@@ -5479,7 +5609,7 @@
                               "_type": "ARC4Struct",
                               "name": "Data",
                               "immutable": false,
-                              "arc4_alias": "(uint64,bytes,bool,string)",
+                              "arc4_alias": null,
                               "fields": {
                                 "a": {
                                   "_type": "WType",
@@ -5762,12 +5892,12 @@
                               "_type": "ARC4StaticArray",
                               "name": "arc4.static_array<arc4.uint64>",
                               "immutable": false,
-                              "arc4_alias": "uint64[10]",
+                              "arc4_alias": null,
                               "element_type": {
                                 "_type": "ARC4UIntN",
                                 "name": "arc4.uint64",
                                 "immutable": true,
-                                "arc4_alias": "uint64",
+                                "arc4_alias": null,
                                 "n": 64
                               },
                               "source_location": null,
@@ -5786,12 +5916,12 @@
                                 "_type": "ARC4StaticArray",
                                 "name": "arc4.static_array<arc4.uint64>",
                                 "immutable": false,
-                                "arc4_alias": "uint64[10]",
+                                "arc4_alias": null,
                                 "element_type": {
                                   "_type": "ARC4UIntN",
                                   "name": "arc4.uint64",
                                   "immutable": true,
-                                  "arc4_alias": "uint64",
+                                  "arc4_alias": null,
                                   "n": 64
                                 },
                                 "source_location": null,
@@ -5986,7 +6116,7 @@
                               "_type": "ARC4Struct",
                               "name": "Data",
                               "immutable": false,
-                              "arc4_alias": "(uint64,bytes,bool,string)",
+                              "arc4_alias": null,
                               "fields": {
                                 "a": {
                                   "_type": "WType",
@@ -6042,7 +6172,7 @@
                                 "_type": "ARC4Struct",
                                 "name": "Data",
                                 "immutable": false,
-                                "arc4_alias": "(uint64,bytes,bool,string)",
+                                "arc4_alias": null,
                                 "fields": {
                                   "a": {
                                     "_type": "WType",
@@ -6144,12 +6274,12 @@
                       "_type": "ARC4StaticArray",
                       "name": "arc4.static_array<arc4.uint64>",
                       "immutable": false,
-                      "arc4_alias": "uint64[10]",
+                      "arc4_alias": null,
                       "element_type": {
                         "_type": "ARC4UIntN",
                         "name": "arc4.uint64",
                         "immutable": true,
-                        "arc4_alias": "uint64",
+                        "arc4_alias": null,
                         "n": 64
                       },
                       "source_location": null,
@@ -6195,12 +6325,12 @@
                             "_type": "ARC4StaticArray",
                             "name": "arc4.static_array<arc4.uint64>",
                             "immutable": false,
-                            "arc4_alias": "uint64[10]",
+                            "arc4_alias": null,
                             "element_type": {
                               "_type": "ARC4UIntN",
                               "name": "arc4.uint64",
                               "immutable": true,
-                              "arc4_alias": "uint64",
+                              "arc4_alias": null,
                               "n": 64
                             },
                             "source_location": null,
@@ -6250,7 +6380,7 @@
                             "_type": "ARC4Struct",
                             "name": "Data",
                             "immutable": false,
-                            "arc4_alias": "(uint64,bytes,bool,string)",
+                            "arc4_alias": null,
                             "fields": {
                               "a": {
                                 "_type": "WType",
@@ -6345,12 +6475,12 @@
                               "_type": "ARC4StaticArray",
                               "name": "arc4.static_array<arc4.uint64>",
                               "immutable": false,
-                              "arc4_alias": "uint64[10]",
+                              "arc4_alias": null,
                               "element_type": {
                                 "_type": "ARC4UIntN",
                                 "name": "arc4.uint64",
                                 "immutable": true,
-                                "arc4_alias": "uint64",
+                                "arc4_alias": null,
                                 "n": 64
                               },
                               "source_location": null,
@@ -6400,7 +6530,7 @@
                               "_type": "ARC4Struct",
                               "name": "Data",
                               "immutable": false,
-                              "arc4_alias": "(uint64,bytes,bool,string)",
+                              "arc4_alias": null,
                               "fields": {
                                 "a": {
                                   "_type": "WType",
@@ -6683,12 +6813,12 @@
                               "_type": "ARC4StaticArray",
                               "name": "arc4.static_array<arc4.uint64>",
                               "immutable": false,
-                              "arc4_alias": "uint64[10]",
+                              "arc4_alias": null,
                               "element_type": {
                                 "_type": "ARC4UIntN",
                                 "name": "arc4.uint64",
                                 "immutable": true,
-                                "arc4_alias": "uint64",
+                                "arc4_alias": null,
                                 "n": 64
                               },
                               "source_location": null,
@@ -6707,12 +6837,12 @@
                                 "_type": "ARC4StaticArray",
                                 "name": "arc4.static_array<arc4.uint64>",
                                 "immutable": false,
-                                "arc4_alias": "uint64[10]",
+                                "arc4_alias": null,
                                 "element_type": {
                                   "_type": "ARC4UIntN",
                                   "name": "arc4.uint64",
                                   "immutable": true,
-                                  "arc4_alias": "uint64",
+                                  "arc4_alias": null,
                                   "n": 64
                                 },
                                 "source_location": null,
@@ -6907,7 +7037,7 @@
                               "_type": "ARC4Struct",
                               "name": "Data",
                               "immutable": false,
-                              "arc4_alias": "(uint64,bytes,bool,string)",
+                              "arc4_alias": null,
                               "fields": {
                                 "a": {
                                   "_type": "WType",
@@ -6963,7 +7093,7 @@
                                 "_type": "ARC4Struct",
                                 "name": "Data",
                                 "immutable": false,
-                                "arc4_alias": "(uint64,bytes,bool,string)",
+                                "arc4_alias": null,
                                 "fields": {
                                   "a": {
                                     "_type": "WType",
@@ -7119,12 +7249,12 @@
                             "_type": "ARC4StaticArray",
                             "name": "arc4.static_array<arc4.uint64>",
                             "immutable": false,
-                            "arc4_alias": "uint64[10]",
+                            "arc4_alias": null,
                             "element_type": {
                               "_type": "ARC4UIntN",
                               "name": "arc4.uint64",
                               "immutable": true,
-                              "arc4_alias": "uint64",
+                              "arc4_alias": null,
                               "n": 64
                             },
                             "source_location": null,
@@ -7174,7 +7304,7 @@
                             "_type": "ARC4Struct",
                             "name": "Data",
                             "immutable": false,
-                            "arc4_alias": "(uint64,bytes,bool,string)",
+                            "arc4_alias": null,
                             "fields": {
                               "a": {
                                 "_type": "WType",
@@ -7269,12 +7399,12 @@
                               "_type": "ARC4StaticArray",
                               "name": "arc4.static_array<arc4.uint64>",
                               "immutable": false,
-                              "arc4_alias": "uint64[10]",
+                              "arc4_alias": null,
                               "element_type": {
                                 "_type": "ARC4UIntN",
                                 "name": "arc4.uint64",
                                 "immutable": true,
-                                "arc4_alias": "uint64",
+                                "arc4_alias": null,
                                 "n": 64
                               },
                               "source_location": null,
@@ -7324,7 +7454,7 @@
                               "_type": "ARC4Struct",
                               "name": "Data",
                               "immutable": false,
-                              "arc4_alias": "(uint64,bytes,bool,string)",
+                              "arc4_alias": null,
                               "fields": {
                                 "a": {
                                   "_type": "WType",
@@ -7607,12 +7737,12 @@
                               "_type": "ARC4StaticArray",
                               "name": "arc4.static_array<arc4.uint64>",
                               "immutable": false,
-                              "arc4_alias": "uint64[10]",
+                              "arc4_alias": null,
                               "element_type": {
                                 "_type": "ARC4UIntN",
                                 "name": "arc4.uint64",
                                 "immutable": true,
-                                "arc4_alias": "uint64",
+                                "arc4_alias": null,
                                 "n": 64
                               },
                               "source_location": null,
@@ -7631,12 +7761,12 @@
                                 "_type": "ARC4StaticArray",
                                 "name": "arc4.static_array<arc4.uint64>",
                                 "immutable": false,
-                                "arc4_alias": "uint64[10]",
+                                "arc4_alias": null,
                                 "element_type": {
                                   "_type": "ARC4UIntN",
                                   "name": "arc4.uint64",
                                   "immutable": true,
-                                  "arc4_alias": "uint64",
+                                  "arc4_alias": null,
                                   "n": 64
                                 },
                                 "source_location": null,
@@ -7831,7 +7961,7 @@
                               "_type": "ARC4Struct",
                               "name": "Data",
                               "immutable": false,
-                              "arc4_alias": "(uint64,bytes,bool,string)",
+                              "arc4_alias": null,
                               "fields": {
                                 "a": {
                                   "_type": "WType",
@@ -7887,7 +8017,7 @@
                                 "_type": "ARC4Struct",
                                 "name": "Data",
                                 "immutable": false,
-                                "arc4_alias": "(uint64,bytes,bool,string)",
+                                "arc4_alias": null,
                                 "fields": {
                                   "a": {
                                     "_type": "WType",
@@ -8047,12 +8177,12 @@
                             "_type": "ARC4StaticArray",
                             "name": "arc4.static_array<arc4.uint64>",
                             "immutable": false,
-                            "arc4_alias": "uint64[10]",
+                            "arc4_alias": null,
                             "element_type": {
                               "_type": "ARC4UIntN",
                               "name": "arc4.uint64",
                               "immutable": true,
-                              "arc4_alias": "uint64",
+                              "arc4_alias": null,
                               "n": 64
                             },
                             "source_location": null,
@@ -8102,7 +8232,7 @@
                             "_type": "ARC4Struct",
                             "name": "Data",
                             "immutable": false,
-                            "arc4_alias": "(uint64,bytes,bool,string)",
+                            "arc4_alias": null,
                             "fields": {
                               "a": {
                                 "_type": "WType",
@@ -8197,12 +8327,12 @@
                               "_type": "ARC4StaticArray",
                               "name": "arc4.static_array<arc4.uint64>",
                               "immutable": false,
-                              "arc4_alias": "uint64[10]",
+                              "arc4_alias": null,
                               "element_type": {
                                 "_type": "ARC4UIntN",
                                 "name": "arc4.uint64",
                                 "immutable": true,
-                                "arc4_alias": "uint64",
+                                "arc4_alias": null,
                                 "n": 64
                               },
                               "source_location": null,
@@ -8252,7 +8382,7 @@
                               "_type": "ARC4Struct",
                               "name": "Data",
                               "immutable": false,
-                              "arc4_alias": "(uint64,bytes,bool,string)",
+                              "arc4_alias": null,
                               "fields": {
                                 "a": {
                                   "_type": "WType",
@@ -8535,12 +8665,12 @@
                               "_type": "ARC4StaticArray",
                               "name": "arc4.static_array<arc4.uint64>",
                               "immutable": false,
-                              "arc4_alias": "uint64[10]",
+                              "arc4_alias": null,
                               "element_type": {
                                 "_type": "ARC4UIntN",
                                 "name": "arc4.uint64",
                                 "immutable": true,
-                                "arc4_alias": "uint64",
+                                "arc4_alias": null,
                                 "n": 64
                               },
                               "source_location": null,
@@ -8559,12 +8689,12 @@
                                 "_type": "ARC4StaticArray",
                                 "name": "arc4.static_array<arc4.uint64>",
                                 "immutable": false,
-                                "arc4_alias": "uint64[10]",
+                                "arc4_alias": null,
                                 "element_type": {
                                   "_type": "ARC4UIntN",
                                   "name": "arc4.uint64",
                                   "immutable": true,
-                                  "arc4_alias": "uint64",
+                                  "arc4_alias": null,
                                   "n": 64
                                 },
                                 "source_location": null,
@@ -8759,7 +8889,7 @@
                               "_type": "ARC4Struct",
                               "name": "Data",
                               "immutable": false,
-                              "arc4_alias": "(uint64,bytes,bool,string)",
+                              "arc4_alias": null,
                               "fields": {
                                 "a": {
                                   "_type": "WType",
@@ -8815,7 +8945,7 @@
                                 "_type": "ARC4Struct",
                                 "name": "Data",
                                 "immutable": false,
-                                "arc4_alias": "(uint64,bytes,bool,string)",
+                                "arc4_alias": null,
                                 "fields": {
                                   "a": {
                                     "_type": "WType",
@@ -8917,7 +9047,7 @@
                       "_type": "ARC4Struct",
                       "name": "Data",
                       "immutable": false,
-                      "arc4_alias": "(uint64,bytes,bool,string)",
+                      "arc4_alias": null,
                       "fields": {
                         "a": {
                           "_type": "WType",
@@ -9000,12 +9130,12 @@
                             "_type": "ARC4StaticArray",
                             "name": "arc4.static_array<arc4.uint64>",
                             "immutable": false,
-                            "arc4_alias": "uint64[10]",
+                            "arc4_alias": null,
                             "element_type": {
                               "_type": "ARC4UIntN",
                               "name": "arc4.uint64",
                               "immutable": true,
-                              "arc4_alias": "uint64",
+                              "arc4_alias": null,
                               "n": 64
                             },
                             "source_location": null,
@@ -9055,7 +9185,7 @@
                             "_type": "ARC4Struct",
                             "name": "Data",
                             "immutable": false,
-                            "arc4_alias": "(uint64,bytes,bool,string)",
+                            "arc4_alias": null,
                             "fields": {
                               "a": {
                                 "_type": "WType",
@@ -9150,12 +9280,12 @@
                               "_type": "ARC4StaticArray",
                               "name": "arc4.static_array<arc4.uint64>",
                               "immutable": false,
-                              "arc4_alias": "uint64[10]",
+                              "arc4_alias": null,
                               "element_type": {
                                 "_type": "ARC4UIntN",
                                 "name": "arc4.uint64",
                                 "immutable": true,
-                                "arc4_alias": "uint64",
+                                "arc4_alias": null,
                                 "n": 64
                               },
                               "source_location": null,
@@ -9205,7 +9335,7 @@
                               "_type": "ARC4Struct",
                               "name": "Data",
                               "immutable": false,
-                              "arc4_alias": "(uint64,bytes,bool,string)",
+                              "arc4_alias": null,
                               "fields": {
                                 "a": {
                                   "_type": "WType",
@@ -9488,12 +9618,12 @@
                               "_type": "ARC4StaticArray",
                               "name": "arc4.static_array<arc4.uint64>",
                               "immutable": false,
-                              "arc4_alias": "uint64[10]",
+                              "arc4_alias": null,
                               "element_type": {
                                 "_type": "ARC4UIntN",
                                 "name": "arc4.uint64",
                                 "immutable": true,
-                                "arc4_alias": "uint64",
+                                "arc4_alias": null,
                                 "n": 64
                               },
                               "source_location": null,
@@ -9512,12 +9642,12 @@
                                 "_type": "ARC4StaticArray",
                                 "name": "arc4.static_array<arc4.uint64>",
                                 "immutable": false,
-                                "arc4_alias": "uint64[10]",
+                                "arc4_alias": null,
                                 "element_type": {
                                   "_type": "ARC4UIntN",
                                   "name": "arc4.uint64",
                                   "immutable": true,
-                                  "arc4_alias": "uint64",
+                                  "arc4_alias": null,
                                   "n": 64
                                 },
                                 "source_location": null,
@@ -9712,7 +9842,7 @@
                               "_type": "ARC4Struct",
                               "name": "Data",
                               "immutable": false,
-                              "arc4_alias": "(uint64,bytes,bool,string)",
+                              "arc4_alias": null,
                               "fields": {
                                 "a": {
                                   "_type": "WType",
@@ -9768,7 +9898,7 @@
                                 "_type": "ARC4Struct",
                                 "name": "Data",
                                 "immutable": false,
-                                "arc4_alias": "(uint64,bytes,bool,string)",
+                                "arc4_alias": null,
                                 "fields": {
                                   "a": {
                                     "_type": "WType",
@@ -10266,12 +10396,12 @@
                     "_type": "ARC4StaticArray",
                     "name": "arc4.static_array<arc4.uint64>",
                     "immutable": false,
-                    "arc4_alias": "uint64[10]",
+                    "arc4_alias": null,
                     "element_type": {
                       "_type": "ARC4UIntN",
                       "name": "arc4.uint64",
                       "immutable": true,
-                      "arc4_alias": "uint64",
+                      "arc4_alias": null,
                       "n": 64
                     },
                     "source_location": null,
@@ -10540,7 +10670,7 @@
                     "_type": "ARC4Struct",
                     "name": "Data",
                     "immutable": false,
-                    "arc4_alias": "(uint64,bytes,bool,string)",
+                    "arc4_alias": null,
                     "fields": {
                       "a": {
                         "_type": "WType",
@@ -10870,12 +11000,12 @@
           "_type": "ARC4StaticArray",
           "name": "arc4.static_array<arc4.uint64>",
           "immutable": false,
-          "arc4_alias": "uint64[10]",
+          "arc4_alias": null,
           "element_type": {
             "_type": "ARC4UIntN",
             "name": "arc4.uint64",
             "immutable": true,
-            "arc4_alias": "uint64",
+            "arc4_alias": null,
             "n": 64
           },
           "source_location": null,
@@ -11018,7 +11148,7 @@
           "_type": "ARC4Struct",
           "name": "Data",
           "immutable": false,
-          "arc4_alias": "(uint64,bytes,bool,string)",
+          "arc4_alias": null,
           "fields": {
             "a": {
               "_type": "WType",

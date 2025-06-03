@@ -76,6 +76,10 @@ export abstract class PType {
   }
 }
 
+export interface ABIType {
+  readonly abiTypeSignature: string
+}
+
 export class GenericPType<T extends PType = PType> extends PType {
   readonly name: string
   readonly module: string

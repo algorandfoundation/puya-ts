@@ -36,61 +36,57 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%18#0) // OnCompletion is not NoOp
         let tmp%19#0: uint64 = (txn ApplicationID)
         (assert tmp%19#0) // can only call when not creating
-        let reinterpret_bytes[16]%0#0: bytes[16] = (txna ApplicationArgs 1)
-        let item0%1#0: uint64 = (extract_uint64 reinterpret_bytes[16]%0#0 0u)
-        let item1%1#0: uint64 = (extract_uint64 reinterpret_bytes[16]%0#0 8u)
-        let tmp%21#0: (encoded_uint64,encoded_uint64)[] = tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.structs(item0%1#0, item1%1#0)
-        let tmp%22#0: bytes = (concat 0x151f7c75 tmp%21#0)
-        (log tmp%22#0)
+        let reinterpret_Encoded(uint64,uint64)%0#0: Encoded(uint64,uint64) = (txna ApplicationArgs 1)
+        let array%item0%0#1: uint64 = (extract_uint64 reinterpret_Encoded(uint64,uint64)%0#0 0u)
+        let array%item1%0#1: uint64 = (extract_uint64 reinterpret_Encoded(uint64,uint64)%0#0 8u)
+        let tmp%23#0: Encoded(len+(uint64,uint64)[]) = tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.structs(array%item0%0#1, array%item1%0#1)
+        let tmp%24#0: bytes = (concat 0x151f7c75 tmp%23#0)
+        (log tmp%24#0)
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#3: bool = 1u
         goto block@18
     block@7: // booleans_route_L63
-        let tmp%23#0: uint64 = (txn OnCompletion)
-        let tmp%24#0: bool = (! tmp%23#0)
-        (assert tmp%24#0) // OnCompletion is not NoOp
-        let tmp%25#0: uint64 = (txn ApplicationID)
-        (assert tmp%25#0) // can only call when not creating
-        let tmp%27#0: encoded_uint8[] = tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.booleans()
-        let tmp%28#0: bytes = (concat 0x151f7c75 tmp%27#0)
-        (log tmp%28#0)
+        let tmp%25#0: uint64 = (txn OnCompletion)
+        let tmp%26#0: bool = (! tmp%25#0)
+        (assert tmp%26#0) // OnCompletion is not NoOp
+        let tmp%27#0: uint64 = (txn ApplicationID)
+        (assert tmp%27#0) // can only call when not creating
+        (log 0x151f7c750003a0)
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#4: bool = 1u
         goto block@18
     block@8: // booleansStatic_route_L67
-        let tmp%29#0: uint64 = (txn OnCompletion)
-        let tmp%30#0: bool = (! tmp%29#0)
-        (assert tmp%30#0) // OnCompletion is not NoOp
-        let tmp%31#0: uint64 = (txn ApplicationID)
-        (assert tmp%31#0) // can only call when not creating
+        let tmp%31#0: uint64 = (txn OnCompletion)
+        let tmp%32#0: bool = (! tmp%31#0)
+        (assert tmp%32#0) // OnCompletion is not NoOp
+        let tmp%33#0: uint64 = (txn ApplicationID)
+        (assert tmp%33#0) // can only call when not creating
         (log 0x151f7c75a0)
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#5: bool = 1u
         goto block@18
     block@9: // arc4Booleans_route_L71
-        let tmp%34#0: uint64 = (txn OnCompletion)
-        let tmp%35#0: bool = (! tmp%34#0)
-        (assert tmp%35#0) // OnCompletion is not NoOp
-        let tmp%36#0: uint64 = (txn ApplicationID)
-        (assert tmp%36#0) // can only call when not creating
-        let tmp%38#0: bytes[1][] = tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Booleans()
-        let tmp%39#0: bytes = (concat 0x151f7c75 tmp%38#0)
-        (log tmp%39#0)
-        let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#6: bool = 1u
-        goto block@18
-    block@10: // arc4BooleansStatic_route_L75
         let tmp%40#0: uint64 = (txn OnCompletion)
         let tmp%41#0: bool = (! tmp%40#0)
         (assert tmp%41#0) // OnCompletion is not NoOp
         let tmp%42#0: uint64 = (txn ApplicationID)
         (assert tmp%42#0) // can only call when not creating
+        (log 0x151f7c750003a0)
+        let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#6: bool = 1u
+        goto block@18
+    block@10: // arc4BooleansStatic_route_L75
+        let tmp%46#0: uint64 = (txn OnCompletion)
+        let tmp%47#0: bool = (! tmp%46#0)
+        (assert tmp%47#0) // OnCompletion is not NoOp
+        let tmp%48#0: uint64 = (txn ApplicationID)
+        (assert tmp%48#0) // can only call when not creating
         (log 0x151f7c75a0)
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#7: bool = 1u
         goto block@18
     block@13: // bare_routing_L6
-        let tmp%45#0: uint64 = (txn OnCompletion)
-        goto tmp%45#0 ? block@17 : block@14
+        let tmp%55#0: uint64 = (txn OnCompletion)
+        goto tmp%55#0 ? block@17 : block@14
     block@14: // __algots__.defaultCreate_L6
-        let tmp%46#0: uint64 = (txn ApplicationID)
-        let tmp%47#0: bool = (! tmp%46#0)
-        (assert tmp%47#0) // can only call when creating
+        let tmp%56#0: uint64 = (txn ApplicationID)
+        let tmp%57#0: bool = (! tmp%56#0)
+        (assert tmp%57#0) // can only call when creating
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#8: bool = 1u
         goto block@18
     block@17: // after_if_else_L6
@@ -100,67 +96,24 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%0#0: bool = φ(tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#0 <- block@3, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#1 <- block@4, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#2 <- block@5, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#3 <- block@6, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#4 <- block@7, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#5 <- block@8, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#6 <- block@9, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#7 <- block@10, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#8 <- block@14, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#9 <- block@17)
         return tmp%0#0
 
-subroutine _puya_lib.arc4.dynamic_array_concat_bits(array: bytes, new_items_bytes: bytes, new_items_count: uint64, read_step: uint64) -> bytes:
-    block@0: // L124
-        let array_length#0: uint64 = (extract_uint16 array#0 0u)
-        let new_array_length#0: uint64 = (+ array_length#0 new_items_count#0)
-        let tmp%0#0: bytes = (itob new_array_length#0)
-        let new_array_length_b#0: bytes = ((extract 6 0) tmp%0#0)
-        let result#0: bytes = ((replace2 0) array#0 new_array_length_b#0)
-        let tmp%1#0: uint64 = (+ array_length#0 7u)
-        let current_bytes#0: uint64 = (/ tmp%1#0 8u)
-        let tmp%2#0: uint64 = (+ new_array_length#0 7u)
-        let required_bytes#0: uint64 = (/ tmp%2#0 8u)
-        let tmp%3#0: bool = (< current_bytes#0 required_bytes#0)
-        goto tmp%3#0 ? block@1 : block@2
-    block@1: // if_body_L148
-        let tmp%4#0: uint64 = (- required_bytes#0 current_bytes#0)
-        let tmp%5#0: bytes = (bzero tmp%4#0)
-        let result#1: bytes = (concat result#0 tmp%5#0)
-        goto block@2
-    block@2: // after_if_else_L147
-        let result#4: bytes = φ(result#0 <- block@0, result#1 <- block@1)
-        let read_offset#0: uint64 = 0u
-        let write_offset#0: uint64 = (+ array_length#0 16u)
-        let write_end#0: uint64 = (+ write_offset#0 new_items_count#0)
-        goto block@3
-    block@3: // while_top_L153
-        let write_offset#1: uint64 = φ(write_offset#0 <- block@2, write_offset#2 <- block@4)
-        let result#2: bytes = φ(result#4 <- block@2, result#3 <- block@4)
-        let read_offset#1: uint64 = φ(read_offset#0 <- block@2, read_offset#2 <- block@4)
-        let tmp%6#0: bool = (< write_offset#1 write_end#0)
-        goto tmp%6#0 ? block@4 : block@5
-    block@4: // while_body_L154
-        let tmp%7#0: uint64 = (getbit new_items_bytes#0 read_offset#1)
-        let result#3: bytes = (setbit result#2 write_offset#1 tmp%7#0)
-        let write_offset#2: uint64 = (+ write_offset#1 1u)
-        let read_offset#2: uint64 = (+ read_offset#1 read_step#0)
-        goto block@3
-    block@5: // after_while_L153
-        return result#2
-
-subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.structs(p.x: uint64, p.y: uint64) -> (encoded_uint64,encoded_uint64)[]:
+subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.structs(p.x: uint64, p.y: uint64) -> Encoded(len+(uint64,uint64)[]):
     block@0: // L54
-        let array%sub_item%0#1: bytes[8] = (itob p.x#0)
-        let array%sub_item%1#1: bytes[8] = (itob p.y#0)
-        let array%encoded%1#1: (encoded_uint64,encoded_uint64)[] = (concat array%sub_item%0#1 array%sub_item%1#1)
-        let byte_len%0#0: uint64 = (len array%encoded%1#1)
-        let len_%0#0: uint64 = (/ byte_len%0#0 16u)
-        let as_bytes%0#0: bytes[8] = (itob len_%0#0)
-        let len_16_bit%0#0: bytes = ((extract 6 2) as_bytes%0#0)
-        let myVectors#1: (encoded_uint64,encoded_uint64)[] = (concat len_16_bit%0#0 array%encoded%1#1)
-        let tmp%0#0: uint64 = (extract_uint16 myVectors#1 0u)
-        let tmp%1#0: bool = (== tmp%0#0 1u)
-        goto tmp%1#0 ? block@1 : block@4
+        let array%val_as_bytes%0#1: bytes[8] = (itob p.x#0)
+        let array%val_as_bytes%1#1: bytes[8] = (itob p.y#0)
+        let array%encoded%3#1: Encoded(uint64,uint64) = (concat array%val_as_bytes%0#1 array%val_as_bytes%1#1)
+        let myVectors#1: Encoded(len+(uint64,uint64)[]) = (concat 0x0001 array%encoded%3#1)
+        let array_length%0#0: uint64 = (extract_uint16 myVectors#1 0u)
+        let tmp%0#0: bool = (== array_length%0#0 1u)
+        goto tmp%0#0 ? block@1 : block@4
     block@1: // and_contd_L59
-        let arc4_item%0#0: bytes = ((extract 2 16) myVectors#1)
-        let item0%1#0: uint64 = (extract_uint64 arc4_item%0#0 0u)
-        let tmp%2#0: bool = (== item0%1#0 p.x#0)
-        goto tmp%2#0 ? block@2 : block@4
+        let array%encoded_element%0#1: bytes = ((extract 2 16) myVectors#1)
+        let array%item0%0#1: uint64 = (extract_uint64 array%encoded_element%0#1 0u)
+        let tmp%3#0: bool = (== array%item0%0#1 p.x#0)
+        goto tmp%3#0 ? block@2 : block@4
     block@2: // and_contd_L59
-        let item1%3#0: uint64 = (extract_uint64 arc4_item%0#0 8u)
-        let tmp%3#0: bool = (== item1%3#0 p.y#0)
-        goto tmp%3#0 ? block@3 : block@4
+        let array%item1%1#1: uint64 = (extract_uint64 array%encoded_element%0#1 8u)
+        let tmp%6#0: bool = (== array%item1%1#1 p.y#0)
+        goto tmp%6#0 ? block@3 : block@4
     block@3: // bool_true_L59
         let and_result%0#0: bool = 1u
         goto block@5
@@ -171,13 +124,3 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.structs(p.x: 
         let and_result%0#2: bool = φ(and_result%0#0 <- block@3, and_result%0#1 <- block@4)
         (assert and_result%0#2) // assert target is match for conditions
         return myVectors#1
-
-subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.booleans() -> encoded_uint8[]:
-    block@0: // L63
-        let concat_result%0#0: bytes = _puya_lib.arc4.dynamic_array_concat_bits(0x0000, 0x800080, 3u, 8u)
-        return concat_result%0#0
-
-subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Booleans() -> bytes[1][]:
-    block@0: // L71
-        let concat_result%0#0: bytes = _puya_lib.arc4.dynamic_array_concat_bits(0x0000, 0x800080, 3u, 8u)
-        return concat_result%0#0

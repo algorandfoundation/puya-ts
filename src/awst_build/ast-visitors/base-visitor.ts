@@ -645,32 +645,11 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
     sourceLocation: SourceLocation,
   ): InstanceBuilder {
     if (target instanceof ArrayLiteralExpressionBuilder) {
-      const sourceSingle = source.singleEvaluation()
-      // Destructured array
-      const assignments: Expression[] = []
-      for (const [index, item] of target[StaticIterator]().entries()) {
-        if (item instanceof OmittedExpressionBuilder) {
-          continue
-        }
-        assignments.push(
-          this.buildAssignmentExpression(
-            item,
-            requireInstanceBuilder(
-              sourceSingle.indexAccess(
-                instanceEb(nodeFactory.uInt64Constant({ value: BigInt(index), sourceLocation }), uint64PType),
-                sourceLocation,
-              ),
-            ),
-            assignmentType.getIndexType(BigInt(index), sourceLocation),
-            sourceLocation,
-          ).resolve(),
-        )
-      }
       return instanceEb(
-        nodeFactory.commaExpression({
-          expressions: [...assignments, sourceSingle.resolve()],
+        nodeFactory.assignmentExpression({
+          target: this.buildLValue(target, assignmentType, sourceLocation),
           sourceLocation,
-          wtype: assignmentType.wtypeOrThrow,
+          value: source.resolveToPType(assignmentType).resolve(),
         }),
         assignmentType,
       )
@@ -709,7 +688,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
         nodeFactory.assignmentExpression({
           target: target.resolveLValue(),
           sourceLocation,
-          value: source.resolve(),
+          value: source.resolveToPType(assignmentType).resolve(),
         }),
         assignmentType,
       )

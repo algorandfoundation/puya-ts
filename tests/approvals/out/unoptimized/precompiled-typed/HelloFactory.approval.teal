@@ -4,7 +4,7 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 0 6 1 4
-    bytecblock 0x 0x151f7c75 "world" base64(CoEBQw==) 0xd0a28200 0x24378d3c "TEST" "T" "hello" "abi" "stubbed" 0x000121 0x5180ba20 0x4c5c61ba 0x9cd87de3
+    bytecblock 0x 0x151f7c75 "world" base64(CoEBQw==) 0xd0a28200 0x21 0x24378d3c "TEST" "T" "hello" "abi" "stubbed" 0x5180ba20 0x4c5c61ba 0x9cd87de3
 
 main_block@0:
 
@@ -171,11 +171,11 @@ test_compile_contract_block@0:
     itxn_begin
     // tests/approvals/precompiled-typed.algo.ts:19
     // args: ['hello'],
-    bytec 8 // "hello"
+    bytec 9 // "hello"
     len
     itob
     extract 6 2
-    bytec 8 // "hello"
+    bytec 9 // "hello"
     concat
     // tests/approvals/precompiled-typed.algo.ts:18-20
     // const app = compiled.call.create({
@@ -292,11 +292,11 @@ test_compile_contract_next_txn@2:
     frame_dig 0
     // tests/approvals/precompiled-typed.algo.ts:30
     // args: ['abi'],
-    bytec 9 // "abi"
+    bytec 10 // "abi"
     len
     itob
     extract 6 2
-    bytec 9 // "abi"
+    bytec 10 // "abi"
     concat
     // tests/approvals/precompiled-typed.algo.ts:28-31
     // const result2 = abiCall(Hello.prototype.greet, {
@@ -344,11 +344,11 @@ test_compile_contract_next_txn@3:
     frame_dig 0
     // tests/approvals/precompiled-typed.algo.ts:37
     // args: ['stubbed'],
-    bytec 10 // "stubbed"
+    bytec 11 // "stubbed"
     len
     itob
     extract 6 2
-    bytec 10 // "stubbed"
+    bytec 11 // "stubbed"
     concat
     // tests/approvals/precompiled-typed.algo.ts:35-38
     // const result3 = abiCall(HelloStubbed.prototype.greet, {
@@ -396,31 +396,40 @@ test_compile_contract_next_txn@4:
     frame_dig 0
     // tests/approvals/precompiled-typed.algo.ts:43
     // args: [new Greeting({ name: 'world', termination: new arc4.Str('!') })],
+    bytec 5 // 0x21
+    len
+    itob
+    extract 6 2
+    bytec 5 // 0x21
+    concat
     bytec_2 // "world"
     len
     itob
     extract 6 2
     bytec_2 // "world"
     concat
+    bytec_0 // 0x
+    dig 1
+    concat
+    swap
+    len
+    intc_3 // 4
+    +
     intc_3 // 4
     itob
     extract 6 2
     bytec_0 // 0x
     swap
     concat
+    uncover 2
+    uncover 3
+    concat
     swap
-    dup
-    len
-    intc_3 // 4
-    +
+    uncover 2
     itob
     extract 6 2
-    uncover 2
-    swap
     concat
     swap
-    concat
-    bytec 11 // 0x000121
     concat
     // tests/approvals/precompiled-typed.algo.ts:41-44
     // const result4 = abiCall(Hello.prototype.sendGreetings, {
@@ -469,7 +478,7 @@ test_compile_contract_next_txn@5:
     // compiled.call.delete({
     //   appId: app,
     // })
-    bytec 5 // method "delete()void"
+    bytec 6 // method "delete()void"
     itxn_field ApplicationArgs
     pushint 5 // 5
     itxn_field OnCompletion
@@ -599,31 +608,40 @@ test_compile_contract_with_template_next_txn@2:
     frame_dig 0
     // tests/approvals/precompiled-typed.algo.ts:66
     // args: [new Greeting({ name: 'world', termination: new arc4.Str('!') })],
+    bytec 5 // 0x21
+    len
+    itob
+    extract 6 2
+    bytec 5 // 0x21
+    concat
     bytec_2 // "world"
     len
     itob
     extract 6 2
     bytec_2 // "world"
     concat
+    bytec_0 // 0x
+    dig 1
+    concat
+    swap
+    len
+    intc_3 // 4
+    +
     intc_3 // 4
     itob
     extract 6 2
     bytec_0 // 0x
     swap
     concat
+    uncover 2
+    uncover 3
+    concat
     swap
-    dup
-    len
-    intc_3 // 4
-    +
+    uncover 2
     itob
     extract 6 2
-    uncover 2
-    swap
     concat
     swap
-    concat
-    bytec 11 // 0x000121
     concat
     // tests/approvals/precompiled-typed.algo.ts:65-68
     // const txn2 = compiled.call.sendGreetings({
@@ -674,7 +692,7 @@ test_compile_contract_with_template_next_txn@3:
     // compiled.call.delete({
     //   appId: helloApp,
     // })
-    bytec 5 // method "delete()void"
+    bytec 6 // method "delete()void"
     itxn_field ApplicationArgs
     pushint 5 // 5
     itxn_field OnCompletion
@@ -793,7 +811,7 @@ test_compile_contract_with_template_and_custom_prefix_next_txn@2:
     //   appId: helloApp,
     // })
     itxn_begin
-    bytec 5 // method "delete()void"
+    bytec 6 // method "delete()void"
     itxn_field ApplicationArgs
     pushint 5 // 5
     itxn_field OnCompletion
@@ -894,7 +912,7 @@ test_compile_contract_large_next_txn@2:
     //   appId: largeApp,
     // })
     itxn_begin
-    bytec 5 // method "delete()void"
+    bytec 6 // method "delete()void"
     itxn_field ApplicationArgs
     pushint 5 // 5
     itxn_field OnCompletion
@@ -967,11 +985,11 @@ test_call_contract_with_transactions_next_txn@1:
     itxn_begin
     // tests/approvals/precompiled-typed.algo.ts:118
     // assetName: 'TEST',
-    bytec 6 // "TEST"
+    bytec 7 // "TEST"
     itxn_field ConfigAssetName
     // tests/approvals/precompiled-typed.algo.ts:117
     // unitName: 'T',
-    bytec 7 // "T"
+    bytec 8 // "T"
     itxn_field ConfigAssetUnitName
     // tests/approvals/precompiled-typed.algo.ts:116
     // total: 1,
@@ -1094,11 +1112,11 @@ test_call_contract_with_transactions_next_txn@5:
     itxn_begin
     // tests/approvals/precompiled-typed.algo.ts:118
     // assetName: 'TEST',
-    bytec 6 // "TEST"
+    bytec 7 // "TEST"
     itxn_field ConfigAssetName
     // tests/approvals/precompiled-typed.algo.ts:117
     // unitName: 'T',
-    bytec 7 // "T"
+    bytec 8 // "T"
     itxn_field ConfigAssetUnitName
     // tests/approvals/precompiled-typed.algo.ts:116
     // total: 1,
@@ -1171,11 +1189,11 @@ test_call_contract_with_transactions_next_txn@7:
     itxn_begin
     // tests/approvals/precompiled-typed.algo.ts:118
     // assetName: 'TEST',
-    bytec 6 // "TEST"
+    bytec 7 // "TEST"
     itxn_field ConfigAssetName
     // tests/approvals/precompiled-typed.algo.ts:117
     // unitName: 'T',
-    bytec 7 // "T"
+    bytec 8 // "T"
     itxn_field ConfigAssetUnitName
     // tests/approvals/precompiled-typed.algo.ts:116
     // total: 1,
@@ -1301,11 +1319,11 @@ test_call_contract_with_reference_types_next_txn@1:
     itxn_begin
     // tests/approvals/precompiled-typed.algo.ts:162
     // assetName: 'TEST',
-    bytec 6 // "TEST"
+    bytec 7 // "TEST"
     itxn_field ConfigAssetName
     // tests/approvals/precompiled-typed.algo.ts:161
     // unitName: 'T',
-    bytec 7 // "T"
+    bytec 8 // "T"
     itxn_field ConfigAssetUnitName
     // tests/approvals/precompiled-typed.algo.ts:160
     // total: 1,

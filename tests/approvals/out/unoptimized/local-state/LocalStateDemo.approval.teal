@@ -4,7 +4,7 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 0 1 8 10
-    bytecblock 0x "l1" "localUint2" "b1" "localBytes2" "localEncoded" "localTuple" "localObject" "localMutableObject"
+    bytecblock 0x "l1" "localUint2" "b1" "localBytes2" "localEncoded" "localTuple" "localObject" "localMutableObject" 0x68656c6c6f
 
 main_block@0:
 
@@ -71,120 +71,134 @@ main_getState_route@5:
     cover 7
     cover 6
     cover 5
-    cover 8
+    cover 4
     cover 3
     cover 2
     swap
     itob
-    cover 7
-    itob
-    cover 7
-    dup
-    len
-    itob
-    extract 6 2
-    swap
-    concat
-    cover 7
-    dup
-    len
-    itob
-    extract 6 2
-    swap
-    concat
-    cover 7
-    itob
-    dig 1
-    len
-    itob
-    extract 6 2
-    uncover 2
-    concat
-    swap
     bytec_0 // 0x
     swap
     concat
-    intc_3 // 10
+    swap
     itob
-    extract 6 2
     concat
     swap
+    dup
+    len
+    itob
+    extract 6 2
+    swap
+    concat
+    bytec_0 // 0x
+    dig 1
     concat
     cover 2
+    len
+    pushint 106 // 106
+    +
+    cover 2
+    pushint 106 // 106
     itob
-    dig 1
+    extract 6 2
+    concat
+    cover 2
+    dig 3
     len
     itob
     extract 6 2
-    uncover 2
+    uncover 4
     concat
     swap
+    dig 1
+    concat
+    cover 3
+    len
+    dig 1
+    +
+    cover 3
+    itob
+    extract 6 2
+    concat
+    uncover 3
+    concat
+    uncover 3
+    itob
+    bytec_0 // 0x
+    swap
+    concat
+    dig 4
+    len
+    itob
+    extract 6 2
+    uncover 5
+    concat
     bytec_0 // 0x
     swap
     concat
     intc_3 // 10
     itob
     extract 6 2
+    uncover 2
+    swap
     concat
     swap
+    concat
+    uncover 2
+    dig 1
+    concat
+    cover 2
+    len
+    dig 3
+    +
+    cover 3
+    uncover 2
+    itob
+    extract 6 2
+    concat
+    cover 2
+    uncover 3
+    itob
+    bytec_0 // 0x
+    swap
+    concat
+    dig 4
+    len
+    itob
+    extract 6 2
+    uncover 5
     concat
     bytec_0 // 0x
-    uncover 3
+    swap
     concat
-    uncover 3
-    concat
-    pushint 106 // 106
+    intc_3 // 10
     itob
     extract 6 2
+    uncover 2
+    swap
     concat
-    dig 3
+    swap
+    concat
+    swap
+    dig 1
+    concat
+    swap
     len
-    pushint 106 // 106
-    +
-    dup
-    itob
-    extract 6 2
-    uncover 2
-    swap
-    concat
-    dig 5
-    len
-    uncover 2
-    +
-    swap
-    uncover 6
-    concat
-    swap
-    dup
-    itob
-    extract 6 2
-    uncover 2
-    swap
-    concat
-    swap
-    dig 3
-    len
-    +
-    dup
-    itob
-    extract 6 2
-    uncover 2
-    swap
-    concat
-    swap
     dig 2
-    len
     +
+    swap
+    uncover 2
     itob
     extract 6 2
-    concat
     uncover 3
-    concat
-    uncover 3
-    concat
-    uncover 2
+    swap
     concat
     swap
+    uncover 3
+    concat
+    swap
+    uncover 2
+    itob
+    extract 6 2
     concat
     swap
     concat
@@ -212,7 +226,7 @@ main_setState_route@4:
     dup
     intc_0 // 0
     intc_2 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     swap
     dup
@@ -352,6 +366,9 @@ setState_block@0:
     cover 2
     dup
     itob
+    bytec_0 // 0x
+    swap
+    concat
     swap
     dig 2
     len
@@ -359,15 +376,16 @@ setState_block@0:
     extract 6 2
     dig 3
     concat
-    swap
     bytec_0 // 0x
-    uncover 3
+    swap
     concat
     intc_3 // 10
     itob
     extract 6 2
+    uncover 3
+    swap
     concat
-    uncover 2
+    swap
     concat
     uncover 3
     // tests/approvals/local-state.algo.ts:14
@@ -383,19 +401,23 @@ setState_block@0:
     swap
     dup
     itob
+    bytec_0 // 0x
+    swap
+    concat
     dig 3
     len
     itob
     extract 6 2
     dig 4
     concat
-    swap
     bytec_0 // 0x
     swap
     concat
     intc_3 // 10
     itob
     extract 6 2
+    uncover 2
+    swap
     concat
     swap
     concat
@@ -409,40 +431,50 @@ setState_block@0:
     app_local_put
     // tests/approvals/local-state.algo.ts:29
     // this.localMutableObject(Txn.sender).value = new Data({ a, b, c: true, d: new arc4.Str('hello') })
-    itob
-    dig 1
+    bytec 9 // 0x68656c6c6f
     len
     itob
     extract 6 2
-    uncover 2
+    bytec 9 // 0x68656c6c6f
     concat
     swap
+    itob
+    bytec_0 // 0x
+    swap
+    concat
+    dig 2
+    len
+    itob
+    extract 6 2
+    uncover 3
+    concat
+    bytec_0 // 0x
+    dig 1
+    concat
+    swap
+    len
+    pushint 13 // 13
+    +
+    pushint 13 // 13
+    itob
+    extract 6 2
+    uncover 3
+    swap
+    concat
     pushbytes 0x00
     intc_0 // 0
     intc_1 // 1
     setbit
-    cover 2
-    bytec_0 // 0x
-    swap
     concat
-    pushint 13 // 13
-    itob
-    extract 6 2
-    concat
-    dig 1
-    len
-    pushint 13 // 13
-    +
-    swap
+    uncover 2
     uncover 3
     concat
     swap
+    uncover 2
     itob
     extract 6 2
     concat
     swap
-    concat
-    pushbytes 0x000568656c6c6f
     concat
     txn Sender
     // tests/approvals/local-state.algo.ts:16
@@ -528,7 +560,7 @@ getState_block@0:
     dup
     intc_0 // 0
     intc_2 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     swap
     dup
@@ -556,7 +588,7 @@ getState_block@0:
     dup
     intc_0 // 0
     intc_2 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     swap
     dup

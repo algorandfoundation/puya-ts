@@ -10,18 +10,18 @@ contract ArrayDestructuringAlgo
     return True
   }
   
-  testNested(arg: readonlytuple[uint64, readonlytuple[biguint, biguint]]): readonlytuple[uint64, readonlytuple[biguint, biguint], uint64, biguint]
+  testNested(arg: readonly [uint64, readonly [biguint, biguint]]): readonly [uint64, readonly [biguint, biguint], uint64, biguint]
   {
-    <tuple>[a, b]: readonlytuple[uint64, readonlytuple[biguint, biguint]] = arg
-    <tuple>[c, <tuple>[d, _₁]]: readonlytuple[uint64, readonlytuple[biguint, biguint]] = arg
+    <tuple>[a, b]: readonly [uint64, readonly [biguint, biguint]] = arg
+    <tuple>[c, <tuple>[d, _]]: readonly [uint64, readonly [biguint, biguint]] = arg
     return <tuple>[a, b, c, d]
   }
   
   test(): void
   {
-    <tuple>[a, b, c, d]: readonlytuple[uint64, bytes, bool, biguint] = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceItems()
-    <tuple>[_₃, _₄, e, _₅]: readonlytuple[uint64, bytes, bool, biguint] = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceItems()
-    f: readonlytuple[uint64, bytes, bool, biguint] = (<tuple>[g, _₈, _₉, i] = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceItems())
+    <tuple>[a, b, c, d]: readonly [uint64, bytes, bool, biguint] = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceItems()
+    <tuple>[_, _₁, e, _₂]: readonly [uint64, bytes, bool, biguint] = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceItems()
+    f: readonly [uint64, bytes, bool, biguint] = (<tuple>[g, _₃, _₄, i] = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceItems())
     assert(a == 5)
     assert(b == 0x)
     assert(!c)
@@ -32,7 +32,7 @@ contract ArrayDestructuringAlgo
     assert(4 == 4 and f.0 == 5 and f.1 == 0x and f.2 == False and f.3 == 6, comment=assert target is match for conditions)
   }
   
-  produceItems(): readonlytuple[uint64, bytes, bool, biguint]
+  produceItems(): readonly [uint64, bytes, bool, biguint]
   {
     return <tuple>[5, 0x, False, 6]
   }
@@ -41,7 +41,7 @@ contract ArrayDestructuringAlgo
   {
     a: uint64 = 1
     b: uint64 = 2
-    <tuple>[x, y]: readonlytuple[uint64, uint64] = (<tuple>[b, a] = <tuple>[a, b])
+    <tuple>[x, y]: readonly [uint64, uint64] = (<tuple>[b, a] = <tuple>[a, b])
     assert(x == b)
     assert(y == a)
   }

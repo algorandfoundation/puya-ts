@@ -1,33 +1,34 @@
 subroutine testPartialDestructure(arg: object{ x: uint64, y: uint64, z: biguint }): void
 {
-  { x: x, y: _₂, z: _₃ }: object{ x: uint64, y: uint64, z: biguint } = arg
-  { nested: { y: y, x: _₆, z: _₇ } }: object{ nested: object{ y: uint64, x: uint64, z: biguint } } = { nested: (#0 = { nested: { y: arg.y, x: arg.x, z: arg.z } }).nested }
+  (x = arg.x), arg
+  (y = (#0 = (#1 = { nested: (#2 = { nested: { y: arg.y, x: arg.x, z: arg.z } }).nested }).nested).y), #0, #1
 }
 subroutine testPartialDestructureMutableObject(arg: Coordinate): void
 {
-  { v: { x: x, y: _₂ }, z: _₃ }: object{ v: object{ x: uint64, y: uint64 }, z: biguint } = { v: ARC4_DECODE((#1 = ARC4_DECODE(arg)).v), z: #1.z }
-  { nested: { v: { x: _₆, y: y }, z: _₇ } }: object{ nested: object{ v: object{ x: uint64, y: uint64 }, z: biguint } } = { nested: (#2 = { nested: { v: ARC4_DECODE((#3 = ARC4_DECODE(copy(arg))).v), z: #3.z } }).nested }
+  (x = (#3 = arg.v).x), #3, arg
+  (y = (#4 = (#5 = (#6 = { nested: copy(arg) }).nested).v).y), #4, #5, #6
 }
 subroutine test(): void
 {
-  { a: a, b: b, c: c, d: d }: object{ a: uint64, b: bytes, c: bool, d: biguint } = { a: (#4 = tests/approvals/object-destructuring.algo.ts::produceItems()).a, b: #4.b, c: #4.c, d: #4.d }
-  { d: e, a: _₃, b: _₄, c: _₅ }: object{ d: biguint, a: uint64, b: bytes, c: bool } = { d: (#5 = tests/approvals/object-destructuring.algo.ts::produceItems()).d, a: #5.a, b: #5.b, c: #5.c }
-  f: object{ a: uint64, b: bytes, c: bool, d: biguint } = { a: (#6 = ({ a: g, d: i, b: _₈, c: _₉ } = { a: (#7 = tests/approvals/object-destructuring.algo.ts::produceItems()).a, d: #7.d, b: #7.b, c: #7.c })).a, b: #6.b, c: #6.c, d: #6.d }
-  tests/approvals/object-destructuring.algo.ts::receivePartial({ a: (#8 = tests/approvals/object-destructuring.algo.ts::produceItems()).a, d: #8.d })
+  (a = (#7 = { a: (#8 = tests/approvals/object-destructuring.algo.ts::produceItems()).a, b: #8.b, c: #8.c, d: #8.d }).a), (b = #7.b), (c = #7.c), (d = #7.d), #7
+  (e = (#9 = { d: (#10 = tests/approvals/object-destructuring.algo.ts::produceItems()).d, a: #10.a, b: #10.b, c: #10.c }).d), #9
+  f: object{ a: uint64, b: bytes, c: bool, d: biguint } = { a: (#11 = (g = (#12 = { a: (#13 = tests/approvals/object-destructuring.algo.ts::produceItems()).a, d: #13.d, b: #13.b, c: #13.c }).a), (i = #12.d), #12).a, b: #11.b, c: #11.c, d: #11.d }
+  tests/approvals/object-destructuring.algo.ts::receivePartial({ a: (#14 = tests/approvals/object-destructuring.algo.ts::produceItems()).a, d: #14.d })
 }
 subroutine testMutableObject(): void
 {
-  { v: { x: x, y: y }, z: z }: object{ v: object{ x: uint64, y: uint64 }, z: biguint } = { v: ARC4_DECODE((#9 = ARC4_DECODE(tests/approvals/object-destructuring.algo.ts::produceCoordinates())).v), z: #9.z }
-  { v: { x: _₂, y: b }, z: _₃ }: object{ v: object{ x: uint64, y: uint64 }, z: biguint } = { v: ARC4_DECODE((#10 = ARC4_DECODE(tests/approvals/object-destructuring.algo.ts::produceCoordinates())).v), z: #10.z }
-  tests/approvals/object-destructuring.algo.ts::receivePartialMutableObject({ v: ARC4_DECODE((#11 = ARC4_DECODE(tests/approvals/object-destructuring.algo.ts::produceCoordinates())).v) })
+  (x = (#15 = (#16 = tests/approvals/object-destructuring.algo.ts::produceCoordinates()).v).x), (y = #15.y), #15, (z = #16.z), #16
+  (b = (#17 = (#18 = tests/approvals/object-destructuring.algo.ts::produceCoordinates()).v).y), #17, #18
+  f: Coordinate = (g = (#19 = (#20 = tests/approvals/object-destructuring.algo.ts::produceCoordinates()).v).x), #19, (i = #20.z), #20
+  tests/approvals/object-destructuring.algo.ts::receivePartialMutableObject({ v: ARC4_DECODE((#21 = ARC4_DECODE(tests/approvals/object-destructuring.algo.ts::produceCoordinates())).v) })
 }
 subroutine produceItems(): produceItemsResult{ a: uint64, b: bytes, c: bool, d: biguint }
 {
-  return { a: (#12 = { a: 1, b: "", c: False, d: 999 }).a, b: #12.b, c: #12.c, d: #12.d }
+  return { a: (#22 = { a: 1, b: "", c: False, d: 999 }).a, b: #22.b, c: #22.c, d: #22.d }
 }
 subroutine produceCoordinates(): Coordinate
 {
-  return new Coordinate(v=(#13 = { v: (#14 = { v: new Vector(x=(#15 = { x: (#16 = { x: 1, y: 2 }).x, y: #16.y }).x, y=#15.y), z: 3 }).v, z: #14.z }).v, z=#13.z)
+  return new Coordinate(v=(#23 = { v: (#24 = { v: new Vector(x=(#25 = { x: (#26 = { x: 1, y: 2 }).x, y: #26.y }).x, y=#25.y), z: 3 }).v, z: #24.z }).v, z=#23.z)
 }
 subroutine receivePartial(x: object{ a: uint64, d: biguint }): void
 {
@@ -37,14 +38,14 @@ subroutine receivePartialMutableObject(a: object{ v: object{ x: uint64, y: uint6
 }
 subroutine testLiteralToLiteral(): void
 {
-  { a: e, b: f }: object{ a: uint64, b: uint64 } = ({ a: c, b: d } = { a: 4, b: 1 })
+  (e = (#27 = (c = (#28 = { a: 4, b: 1 }).a), (d = #28.b), #28).a), (f = #27.b), #27
 }
 subroutine testNumericResolution(): void
 {
-  x: object{ a: uint64 } = (y = { a: (#17 = { a: 434 }).a })
+  x: object{ a: uint64 } = (y = { a: (#29 = { a: 434 }).a })
 }
-subroutine test2(args: object{ x: bool, y: bool, z: readonlytuple[string, string] }): void
+subroutine test2(args: object{ x: bool, y: bool, z: readonly [string, string] }): void
 {
-  { a: a, b: b, args: { x: x, y: y, z: _₁ } }: object{ a: bool, b: bool, args: object{ x: bool, y: bool, z: readonlytuple[string, string] } } = { a: True, b: False, args: args }
-  args2: object{ x: bool, y: bool, z: readonlytuple[string, string] } = { x: True, y: True, z: args.z }
+  (a = (#30 = { a: True, b: False, args: args }).a), (b = #30.b), (x = (#31 = #30.args).x), (y = #31.y), #31, #30
+  args2: object{ x: bool, y: bool, z: readonly [string, string] } = { x: True, y: True, z: args.z }
 }

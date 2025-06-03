@@ -311,20 +311,20 @@ testVectorCreationAndEquality_block@0:
     // const v1 = new Vector({ x: 0, y: 1 })
     intc_0 // 0
     itob
-    intc_2 // 1
-    itob
-    swap
     bytec_0 // 0x
     swap
     concat
-    swap
+    intc_2 // 1
+    itob
+    concat
+    bytec_0 // 0x
     concat
     // tests/approvals/mutable-object.algo.ts:15
     // log(v1.x)
     dup
     intc_0 // 0
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     itob
     log
@@ -333,7 +333,7 @@ testVectorCreationAndEquality_block@0:
     dup
     intc_1 // 8
     dup
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     itob
     log
@@ -341,13 +341,13 @@ testVectorCreationAndEquality_block@0:
     // const v2 = new Vector({ y: 1, x: 0 })
     intc_0 // 0
     itob
-    intc_2 // 1
-    itob
-    swap
     bytec_0 // 0x
     swap
     concat
-    swap
+    intc_2 // 1
+    itob
+    concat
+    bytec_0 // 0x
     concat
     // tests/approvals/mutable-object.algo.ts:18
     // assert(v1 === v2)
@@ -368,12 +368,12 @@ addVectors_block@0:
     frame_dig -2
     intc_0 // 0
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     frame_dig -1
     intc_0 // 0
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     +
     // tests/approvals/mutable-object.algo.ts:24
@@ -381,32 +381,28 @@ addVectors_block@0:
     frame_dig -2
     intc_1 // 8
     dup
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     frame_dig -1
     intc_1 // 8
     dup
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     +
-    // tests/approvals/mutable-object.algo.ts:23
-    // x: v1.x + v2.x,
-    swap
-    itob
-    swap
-    // tests/approvals/mutable-object.algo.ts:24
-    // y: v1.y + v2.y,
-    itob
-    swap
     // tests/approvals/mutable-object.algo.ts:22-25
     // return new Vector({
     //   x: v1.x + v2.x,
     //   y: v1.y + v2.y,
     // })
+    swap
+    itob
     bytec_0 // 0x
     swap
     concat
     swap
+    itob
+    concat
+    bytec_0 // 0x
     concat
     retsub
 
@@ -454,45 +450,45 @@ implicitCastingAndSpreading_block@0:
     frame_dig -1
     intc_0 // 0
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     frame_dig -1
     intc_1 // 8
     dup
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     swap
     itob
-    swap
-    itob
-    swap
     bytec_0 // 0x
     swap
     concat
     swap
+    itob
+    concat
+    bytec_0 // 0x
     concat
     // tests/approvals/mutable-object.algo.ts:36
     // const v3 = new Vector({ ...v2 })
     dup
     intc_0 // 0
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     swap
     dup
     intc_1 // 8
     dup
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     uncover 2
     itob
-    swap
-    itob
-    swap
     bytec_0 // 0x
     swap
     concat
     swap
+    itob
+    concat
+    bytec_0 // 0x
     concat
     swap
     // tests/approvals/mutable-object.algo.ts:37
@@ -500,12 +496,12 @@ implicitCastingAndSpreading_block@0:
     frame_dig -1
     intc_0 // 0
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     dig 1
     intc_0 // 0
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     ==
     assert
@@ -514,12 +510,12 @@ implicitCastingAndSpreading_block@0:
     frame_dig -1
     intc_1 // 8
     dup
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     dig 1
     intc_1 // 8
     dup
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     ==
     assert
@@ -533,12 +529,12 @@ implicitCastingAndSpreading_block@0:
     dup
     intc_0 // 0
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     frame_dig -1
     intc_0 // 0
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     ==
     assert
@@ -547,12 +543,12 @@ implicitCastingAndSpreading_block@0:
     dup
     intc_1 // 8
     dup
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     frame_dig -1
     intc_1 // 8
     dup
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     ==
     assert
@@ -567,31 +563,30 @@ implicitCastingAndSpreading_block@0:
     dup
     intc_0 // 0
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     swap
     dup
     intc_1 // 8
     dup
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
-    uncover 2
-    swap
     cover 2
     // tests/approvals/mutable-object.algo.ts:45
     // assert(x === v3.x)
-    dig 1
+    dup
     intc_0 // 0
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
+    uncover 2
     ==
     assert
     // tests/approvals/mutable-object.algo.ts:46
     // assert(y === v3.y)
     intc_1 // 8
     dup
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     ==
     assert
@@ -610,55 +605,55 @@ testNestedObjects_block@0:
     frame_dig -1
     intc_0 // 0
     intc_3 // 16
-    extract3 // on error: Index access is out of bounds
+    extract3
     intc_0 // 0
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     frame_dig -1
     intc_0 // 0
     intc_3 // 16
-    extract3 // on error: Index access is out of bounds
+    extract3
     intc_1 // 8
     dup
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     swap
     itob
-    swap
-    itob
-    swap
     bytec_0 // 0x
     swap
     concat
     swap
+    itob
+    concat
+    bytec_0 // 0x
     concat
     // tests/approvals/mutable-object.algo.ts:51
     // const p1 = new Point({ x: vp.p.x, y: vp.p.y })
     frame_dig -1
     intc_3 // 16
     dup
-    extract3 // on error: Index access is out of bounds
+    extract3
     intc_1 // 8
     dup
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     frame_dig -1
     intc_3 // 16
     dup
-    extract3 // on error: Index access is out of bounds
+    extract3
     intc_0 // 0
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     itob
-    swap
-    itob
-    swap
     bytec_0 // 0x
     swap
     concat
     swap
+    itob
+    concat
+    bytec_0 // 0x
     concat
     // tests/approvals/mutable-object.algo.ts:52
     // const vp1 = new VectorPoint({ v: v1.copy(), p: p1.copy() })
@@ -668,15 +663,17 @@ testNestedObjects_block@0:
     concat
     swap
     concat
+    bytec_0 // 0x
+    concat
     // tests/approvals/mutable-object.algo.ts:53
     // log(vp1.v.x)
     dup
     intc_0 // 0
     intc_3 // 16
-    extract3 // on error: Index access is out of bounds
+    extract3
     intc_0 // 0
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     itob
     log
@@ -685,10 +682,10 @@ testNestedObjects_block@0:
     dup
     intc_0 // 0
     intc_3 // 16
-    extract3 // on error: Index access is out of bounds
+    extract3
     intc_1 // 8
     dup
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     itob
     log
@@ -697,10 +694,10 @@ testNestedObjects_block@0:
     dup
     intc_3 // 16
     dup
-    extract3 // on error: Index access is out of bounds
+    extract3
     intc_1 // 8
     dup
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     itob
     log
@@ -709,10 +706,10 @@ testNestedObjects_block@0:
     dup
     intc_3 // 16
     dup
-    extract3 // on error: Index access is out of bounds
+    extract3
     intc_0 // 0
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     itob
     log
@@ -782,24 +779,20 @@ testAssertMatch_block@0:
     frame_dig -1
     pushint 2 // 2
     *
-    // tests/approvals/mutable-object.algo.ts:76
-    // x: b,
-    dup
-    itob
-    swap
-    // tests/approvals/mutable-object.algo.ts:75
-    // y: (b = x * 2),
-    itob
-    swap
     // tests/approvals/mutable-object.algo.ts:74-77
     // const obj: Vector = new Vector({
     //   y: (b = x * 2),
     //   x: b,
     // })
+    dup
+    itob
     bytec_0 // 0x
     swap
     concat
     swap
+    itob
+    concat
+    bytec_0 // 0x
     concat
     dup
     // tests/approvals/mutable-object.algo.ts:78-81
@@ -809,7 +802,7 @@ testAssertMatch_block@0:
     // })
     intc_1 // 8
     dup
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     // tests/approvals/mutable-object.algo.ts:79
     // y: x * 2,
@@ -833,7 +826,7 @@ testAssertMatch_and_contd@1:
     frame_dig 1
     intc_0 // 0
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     // tests/approvals/mutable-object.algo.ts:80
     // x: x * 2,
@@ -864,23 +857,23 @@ testAssertMatch_bool_merge@4:
     dup
     intc_1 // 8
     dup
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     swap
     dup
     intc_0 // 0
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     uncover 2
     itob
-    swap
-    itob
-    swap
     bytec_0 // 0x
     swap
     concat
     swap
+    itob
+    concat
+    bytec_0 // 0x
     concat
     dup
     frame_bury 0
@@ -889,12 +882,12 @@ testAssertMatch_bool_merge@4:
     swap
     intc_0 // 0
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     swap
     intc_1 // 8
     dup
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     ==
     bz testAssertMatch_bool_false@7
@@ -905,12 +898,12 @@ testAssertMatch_and_contd@5:
     frame_dig 1
     intc_1 // 8
     dup
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     frame_dig 0
     intc_0 // 0
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     ==
     bz testAssertMatch_bool_false@7
@@ -928,7 +921,7 @@ testAssertMatch_bool_merge@8:
     dup
     intc_1 // 8
     dup
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     frame_dig -1
     >
@@ -937,7 +930,7 @@ testAssertMatch_bool_merge@8:
     // assertMatch(obj, { x: { greaterThan: x } })
     intc_0 // 0
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     frame_dig -1
     >
@@ -965,12 +958,12 @@ testArc4Encoding_block@0:
     frame_dig -1
     intc_1 // 8
     dup
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     frame_dig -1
     intc_0 // 0
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     !=
     assert // For the purpose of this test, a should not equal b
@@ -979,33 +972,29 @@ testArc4Encoding_block@0:
     frame_dig -1
     intc_1 // 8
     dup
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     // tests/approvals/mutable-object.algo.ts:93
     // y: p.y,
     frame_dig -1
     intc_0 // 0
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
-    // tests/approvals/mutable-object.algo.ts:92
-    // x: p.x,
-    swap
-    itob
-    swap
-    // tests/approvals/mutable-object.algo.ts:93
-    // y: p.y,
-    itob
-    swap
     // tests/approvals/mutable-object.algo.ts:91-94
     // const obj: Vector = new Vector({
     //   x: p.x,
     //   y: p.y,
     // })
+    swap
+    itob
     bytec_0 // 0x
     swap
     concat
     swap
+    itob
+    concat
+    bytec_0 // 0x
     concat
     // tests/approvals/mutable-object.algo.ts:95
     // const pEncoded = encodeArc4(p)
@@ -1075,7 +1064,7 @@ getPlugin_block@0:
     dup
     intc_3 // 16
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     intc_0 // 0
     >
@@ -1101,7 +1090,7 @@ getMain_block@0:
     dup
     intc_3 // 16
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     intc_0 // 0
     >
@@ -1118,6 +1107,12 @@ setPlugin:
     proto 1 0
 
 setPlugin_block@0:
+    // tests/approvals/mutable-object.algo.ts:125
+    // adminPrivileges: new arc4.Bool(false),
+    pushbytes 0x00
+    intc_0 // 0
+    dup
+    setbit
     // tests/approvals/mutable-object.algo.ts:121-133
     // this.plugins(key).value = new PluginInfo({
     //   lastValidRound: new arc4.UintN64(1),
@@ -1187,23 +1182,9 @@ setPlugin_block@0:
     //   // ),
     // })
     concat
-    // tests/approvals/mutable-object.algo.ts:125
-    // adminPrivileges: new arc4.Bool(false),
-    pushbytes 0x00
-    // tests/approvals/mutable-object.algo.ts:121-133
-    // this.plugins(key).value = new PluginInfo({
-    //   lastValidRound: new arc4.UintN64(1),
-    //   cooldown: new arc4.UintN64(),
-    //   lastCalled: new arc4.UintN64(),
-    //   adminPrivileges: new arc4.Bool(false),
-    //   // methods: new MutableArray(
-    //   //   new MethodInfo({
-    //   //     selector: new arc4.StaticBytes(methodSelector('test()void')),
-    //   //     cooldown: new arc4.UintN64(1),
-    //   //     lastCalled: new arc4.UintN64(1),
-    //   //   }),
-    //   // ),
-    // })
+    swap
+    concat
+    bytec_0 // 0x
     concat
     // tests/approvals/mutable-object.algo.ts:100
     // plugins = BoxMap<string, PluginInfo>({ keyPrefix: 'plugins' })

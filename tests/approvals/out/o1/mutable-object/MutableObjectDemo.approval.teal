@@ -267,19 +267,15 @@ addVectors:
     intc_2 // 8
     extract_uint64
     +
-    // tests/approvals/mutable-object.algo.ts:23
-    // x: v1.x + v2.x,
-    swap
-    itob
-    // tests/approvals/mutable-object.algo.ts:24
-    // y: v1.y + v2.y,
-    swap
-    itob
     // tests/approvals/mutable-object.algo.ts:22-25
     // return new Vector({
     //   x: v1.x + v2.x,
     //   y: v1.y + v2.y,
     // })
+    swap
+    itob
+    swap
+    itob
     concat
     retsub
 
@@ -392,7 +388,7 @@ testNestedObjects:
     // tests/approvals/mutable-object.algo.ts:50
     // const v1 = new Vector({ x: vp.v.x, y: vp.v.y })
     frame_dig -1
-    extract 0 16 // on error: Index access is out of bounds
+    extract 0 16
     dup
     intc_0 // 0
     extract_uint64
@@ -407,7 +403,7 @@ testNestedObjects:
     // tests/approvals/mutable-object.algo.ts:51
     // const p1 = new Point({ x: vp.p.x, y: vp.p.y })
     frame_dig -1
-    extract 16 16 // on error: Index access is out of bounds
+    extract 16 16
     dup
     intc_2 // 8
     extract_uint64
@@ -424,7 +420,7 @@ testNestedObjects:
     // tests/approvals/mutable-object.algo.ts:53
     // log(vp1.v.x)
     dup
-    extract 0 16 // on error: Index access is out of bounds
+    extract 0 16
     dup
     intc_0 // 0
     extract_uint64
@@ -439,7 +435,7 @@ testNestedObjects:
     // tests/approvals/mutable-object.algo.ts:55
     // log(vp1.p.x)
     dup
-    extract 16 16 // on error: Index access is out of bounds
+    extract 16 16
     dup
     intc_2 // 8
     extract_uint64
@@ -472,14 +468,12 @@ testAssertMatch:
     pushint 2 // 2
     *
     dupn 2
-    // tests/approvals/mutable-object.algo.ts:76
-    // x: b,
-    itob
     // tests/approvals/mutable-object.algo.ts:74-77
     // const obj: Vector = new Vector({
     //   y: (b = x * 2),
     //   x: b,
     // })
+    itob
     dup
     concat
     dup
@@ -581,19 +575,15 @@ testArc4Encoding:
     dup2
     !=
     assert // For the purpose of this test, a should not equal b
-    // tests/approvals/mutable-object.algo.ts:92
-    // x: p.x,
-    swap
-    itob
-    // tests/approvals/mutable-object.algo.ts:93
-    // y: p.y,
-    swap
-    itob
     // tests/approvals/mutable-object.algo.ts:91-94
     // const obj: Vector = new Vector({
     //   x: p.x,
     //   y: p.y,
     // })
+    swap
+    itob
+    swap
+    itob
     concat
     // tests/approvals/mutable-object.algo.ts:97
     // assert(pEncoded === objEncoded.slice(8).concat(objEncoded.slice(0, 8)), 'Encoded order should be swapped')
