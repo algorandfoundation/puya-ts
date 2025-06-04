@@ -198,7 +198,7 @@ class PushFunctionBuilder extends FunctionBuilder {
       genericTypeArgs: 0,
       argSpec: (a) => args.map(() => a.required(elementType)),
       callLocation: sourceLocation,
-      funcName: 'Array.pop',
+      funcName: 'Array.push',
     })
 
     const target = this.arrayBuilder.singleEvaluation()

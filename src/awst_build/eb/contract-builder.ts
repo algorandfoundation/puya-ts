@@ -5,16 +5,20 @@ import type { SourceLocation } from '../../awst/source-location'
 import { wtypes } from '../../awst/wtypes'
 import { Constants } from '../../constants'
 import { CodeError } from '../../errors'
-import { codeInvariant, invariant } from '../../util'
+import { codeInvariant, instanceOfAny, invariant } from '../../util'
 import { AwstBuildContext } from '../context/awst-build-context'
 import type { ContractOptionsDecoratorData } from '../models/decorator-data'
 import type { PType } from '../ptypes'
 import {
+  BoxMapPType,
+  BoxPType,
+  BoxRefPType,
   ClusteredContractClassType,
   ContractClassPType,
   contractOptionsDecorator,
+  GlobalStateType,
+  LocalStateType,
   numberPType,
-  StorageProxyPType,
   stringPType,
 } from '../ptypes'
 
@@ -53,7 +57,7 @@ export class ContractThisBuilder extends InstanceBuilder<ContractClassPType> {
     const property = this.ptype.properties[name]
     if (property) {
       const storageDeclaration = AwstBuildContext.current.getStorageDeclaration(this.ptype, name)
-      if (property instanceof StorageProxyPType) {
+      if (instanceOfAny(property, GlobalStateType, LocalStateType, BoxPType, BoxRefPType, BoxMapPType)) {
         codeInvariant(storageDeclaration, `No declaration exists for property ${property}.`, sourceLocation)
         return instanceEb(storageDeclaration.key, property)
       }

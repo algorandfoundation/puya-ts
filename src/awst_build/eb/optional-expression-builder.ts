@@ -1,12 +1,42 @@
 import type { Expression, LValue } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { CodeError } from '../../errors'
-import type { PType } from '../ptypes'
-import { uint64PType, UnionPType } from '../ptypes'
-import type { BuilderBinaryOp, BuilderComparisonOp, NodeBuilder } from './index'
-import { InstanceBuilder } from './index'
+import type { PType, PTypeOrClass } from '../ptypes'
+import { undefinedPType, UnionPType } from '../ptypes'
+import type { BuilderBinaryOp, BuilderComparisonOp, BuilderUnaryOp, InstanceBuilder, NodeBuilder } from './index'
+import { WrappingInstanceBuilder } from './index'
 
-export class OptionalExpressionBuilder extends InstanceBuilder {
+export class OptionalExpressionBuilder extends WrappingInstanceBuilder {
+  resolvableToPType(ptype: PTypeOrClass): boolean {
+    this.#throwRequiresBang()
+  }
+  resolveToPType(ptype: PTypeOrClass): InstanceBuilder {
+    this.#throwRequiresBang()
+  }
+  singleEvaluation(): InstanceBuilder {
+    this.#throwRequiresBang()
+  }
+  toBytes(sourceLocation: SourceLocation): InstanceBuilder {
+    this.#throwRequiresBang()
+  }
+  toString(sourceLocation: SourceLocation): Expression {
+    this.#throwRequiresBang()
+  }
+  prefixUnaryOp(op: BuilderUnaryOp, sourceLocation: SourceLocation): InstanceBuilder {
+    this.#throwRequiresBang()
+  }
+  postfixUnaryOp(op: BuilderUnaryOp, sourceLocation: SourceLocation): InstanceBuilder {
+    this.#throwRequiresBang()
+  }
+  iterate(sourceLocation: SourceLocation): Expression {
+    this.#throwRequiresBang()
+  }
+  hasProperty(_name: string): boolean {
+    this.#throwRequiresBang()
+  }
+  boolEval(sourceLocation: SourceLocation, negate: boolean): Expression {
+    this.#throwRequiresBang()
+  }
   get isConstant(): boolean {
     return this.#base.isConstant
   }
@@ -22,7 +52,7 @@ export class OptionalExpressionBuilder extends InstanceBuilder {
   }
 
   get ptype(): PType {
-    return UnionPType.fromTypes([uint64PType, this.base.ptype])
+    return UnionPType.fromTypes([undefinedPType, this.base.ptype])
   }
 
   #throwRequiresBang(): never {

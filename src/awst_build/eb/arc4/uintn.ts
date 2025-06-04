@@ -33,7 +33,7 @@ export class UintNClassBuilder extends ClassBuilder {
       `Generic type of ${this.typeDescription} must be a literal number. Inferred type is ${size.name}`,
       sourceLocation,
     )
-    const ptype = new UintNType({ n: size.literalValue })
+    const ptype = this.ptype.parameterise([size])
 
     return newUintN(initialValueBuilder, ptype, sourceLocation)
   }
@@ -71,7 +71,7 @@ function newUintN(initialValueBuilder: InstanceBuilder | undefined, ptype: UintN
       ptype,
     )
   }
-  if (ptype.n <= 64 && initialValueBuilder.resolvableToPType(uint64PType)) {
+  if (initialValueBuilder.resolvableToPType(uint64PType)) {
     const initialValue = initialValueBuilder.resolveToPType(uint64PType).resolve()
     if (initialValue instanceof IntegerConstant) {
       codeInvariant(isValidLiteralForPType(initialValue.value, ptype), `${initialValue.value} cannot be converted to ${ptype}`)

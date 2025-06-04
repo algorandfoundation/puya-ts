@@ -1,5 +1,5 @@
 import type { biguint, bytes, uint64 } from '@algorandfoundation/algorand-typescript'
-import { assert, assertMatch, Bytes, Contract, Uint64 } from '@algorandfoundation/algorand-typescript'
+import { assert, assertMatch, Bytes, Contract, FixedArray, Uint64 } from '@algorandfoundation/algorand-typescript'
 
 export class ArrayDestructuringAlgo extends Contract {
   testNested(arg: [uint64, [biguint, biguint]]) {
@@ -23,6 +23,8 @@ export class ArrayDestructuringAlgo extends Contract {
     assert(g === 5)
     assert(i === 6n)
     assertMatch(f, [5, Bytes(), false, 6n])
+
+    const [x, y, z] = this.produceFixed()
   }
 
   private produceItems(): [uint64, bytes, boolean, biguint] {
@@ -37,5 +39,9 @@ export class ArrayDestructuringAlgo extends Contract {
 
     assert(x === b)
     assert(y === a)
+  }
+
+  produceFixed(): FixedArray<uint64, 3> {
+    return new FixedArray<uint64, 3>(1, 2, 3)
   }
 }

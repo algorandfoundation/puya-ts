@@ -13,11 +13,9 @@ import type { Visitor } from '../../visitor/visitor'
 import { accept } from '../../visitor/visitor'
 import type { InstanceBuilder } from '../eb'
 import { BuilderComparisonOp } from '../eb'
-import { NativeArrayExpressionBuilder } from '../eb/arrays'
 import { ArrayLiteralExpressionBuilder } from '../eb/literal/array-literal-expression-builder'
 import { ObjectLiteralExpressionBuilder } from '../eb/literal/object-literal-expression-builder'
 import { OmittedExpressionBuilder } from '../eb/omitted-expression-builder'
-import { ReadonlyTupleExpressionBuilder } from '../eb/readonly-tuple-expression-builder'
 import { requireExpressionOfType, requireInstanceBuilder } from '../eb/util'
 import type { PType } from '../ptypes'
 import { FunctionPType, ObjectPType } from '../ptypes'
@@ -77,7 +75,7 @@ export abstract class FunctionVisitor
           invariant(ts.isIdentifier(propertyNameIdentifier), 'propertyName must be an identifier')
 
           const propertyName = this.textVisitor.accept(propertyNameIdentifier)
-          codeInvariant(!element.dotDotDotToken, 'Spread operator is not supported', sourceLocation)
+          codeInvariant(!element.dotDotDotToken, 'Spread operator is not supported here', sourceLocation)
           codeInvariant(!element.initializer, 'Initializer on object binding pattern is not supported', sourceLocation)
 
           props.push([propertyName, this.visitBindingName(element.name, sourceLocation)])
@@ -95,22 +93,9 @@ export abstract class FunctionVisitor
           } else {
             codeInvariant(!element.initializer, 'Initializer on array binding expression is not supported', sourceLocation)
             codeInvariant(!element.propertyName, 'Property name on array binding expression is not supported', sourceLocation)
+            codeInvariant(!element.dotDotDotToken, 'Spread operator is not supported here', sourceLocation)
 
-            if (element.dotDotDotToken) {
-              const spreadResult = this.visitBindingName(element.name, sourceLocation)
-              if (spreadResult instanceof NativeArrayExpressionBuilder) {
-                throw new CodeError(
-                  'Spread operator is not supported in assignment expressions where the resulting type is a variadic array',
-                  { sourceLocation },
-                )
-              } else if (spreadResult instanceof ReadonlyTupleExpressionBuilder) {
-                throw new CodeError('Spread operator is not currently supported with tuple expressions', { sourceLocation })
-              } else {
-                throw InternalError.shouldBeUnreachable()
-              }
-            } else {
-              items.push(this.visitBindingName(element.name, sourceLocation))
-            }
+            items.push(this.visitBindingName(element.name, sourceLocation))
           }
         }
         return new ArrayLiteralExpressionBuilder(sourceLocation, items)

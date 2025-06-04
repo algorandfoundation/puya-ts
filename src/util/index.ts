@@ -156,7 +156,7 @@ export function toSubScript(num: number) {
     .join('')
 }
 
-export function instanceOfAny<T extends Array<{ new (...args: DeliberateAny[]): DeliberateAny }>>(
+export function instanceOfAny<T extends Array<new (...args: DeliberateAny[]) => DeliberateAny>>(
   x: unknown,
   ...types: T
 ): x is InstanceType<T[number]> {

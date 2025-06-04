@@ -8,10 +8,11 @@ import { wtypes } from '../../awst/wtypes'
 import { NotSupported } from '../../errors'
 import { tryConvertEnum } from '../../util'
 import type { InstanceType, PType } from '../ptypes'
-import { boolPType, BytesPType, stringPType, Uint64Function, uint64PType } from '../ptypes'
+import { BigIntLiteralPType, boolPType, BytesPType, NumericLiteralPType, stringPType, Uint64Function, uint64PType } from '../ptypes'
 import { instanceEb } from '../type-registry'
 import type { BuilderComparisonOp, InstanceBuilder, NodeBuilder } from './index'
 import { BuilderBinaryOp, BuilderUnaryOp, FunctionBuilder, InstanceExpressionBuilder } from './index'
+import { BigIntLiteralExpressionBuilder } from './literal/big-int-literal-expression-builder'
 import { requireExpressionOfType, requireStringConstant } from './util'
 import { parseFunctionArgs } from './util/arg-parsing'
 import { compareUint64 } from './util/compare-uint64'
@@ -29,7 +30,7 @@ export class UInt64FunctionBuilder extends FunctionBuilder {
       genericTypeArgs: 0,
       callLocation: sourceLocation,
       funcName: 'Uint64',
-      argSpec: (a) => [a.optional(uint64PType, boolPType, stringPType)],
+      argSpec: (a) => [a.optional(uint64PType, NumericLiteralPType, BigIntLiteralPType, boolPType, stringPType)],
     })
 
     if (!value) {
@@ -40,7 +41,14 @@ export class UInt64FunctionBuilder extends FunctionBuilder {
         }),
       )
     }
-    if (value.ptype.equals(boolPType)) {
+    if (value instanceof BigIntLiteralExpressionBuilder) {
+      return new UInt64ExpressionBuilder(
+        nodeFactory.uInt64Constant({
+          sourceLocation,
+          value: value.value,
+        }),
+      )
+    } else if (value.ptype.equals(boolPType)) {
       const expr = value.resolve()
       if (expr instanceof BoolConstant) {
         return new UInt64ExpressionBuilder(
@@ -67,7 +75,7 @@ export class UInt64FunctionBuilder extends FunctionBuilder {
         }),
       )
     }
-    return value
+    return value.resolveToPType(uint64PType)
   }
 
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {

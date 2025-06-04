@@ -257,7 +257,7 @@ class AwstBuildContextImpl extends AwstBuildContext {
     if (ptype.singleton) {
       return typeRegistry.getSingletonEb(ptype, sourceLocation)
     }
-    const constantBuilder = this.constants.tryResolveConstant(node)
+    const constantBuilder = this.constants.tryResolveConstant(node, sourceLocation)
     if (constantBuilder) {
       return constantBuilder
     }

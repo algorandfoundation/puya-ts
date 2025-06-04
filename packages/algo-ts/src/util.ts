@@ -94,7 +94,9 @@ type ComparisonFor<T> = T extends uint64 | biguint ? NumericComparison<T> : NonN
  */
 type MatchTest<T> =
   T extends ConcatArray<infer TItem>
-    ? { [index: number]: ComparisonFor<TItem> }
+    ? { [index: number]: ComparisonFor<TItem> } & {
+        length?: ComparisonFor<uint64>
+      }
     : {
         [key in keyof T]?: ComparisonFor<T[key]>
       }

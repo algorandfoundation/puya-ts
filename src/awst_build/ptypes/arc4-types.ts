@@ -106,6 +106,7 @@ export abstract class ARC4ArrayType extends ARC4EncodedType {
 }
 
 export class ARC4InstanceType extends ARC4EncodedType {
+  readonly [PType.IdSymbol] = 'ARC4InstanceType'
   readonly wtype: wtypes.ARC4Type
   readonly name: string
   readonly module = Constants.moduleNames.algoTs.arc4.encodedTypes
@@ -162,6 +163,7 @@ export const arc4StringType = new ARC4InstanceType({
 })
 
 export class ARC4StructClass extends PType {
+  readonly [PType.IdSymbol] = 'ARC4StructClass'
   readonly name: string
   readonly module: string
   readonly singleton = true
@@ -195,6 +197,7 @@ export class ARC4StructClass extends PType {
 }
 
 export class ARC4StructType extends ARC4EncodedType {
+  readonly [PType.IdSymbol] = 'ARC4StructType'
   readonly name: string
   readonly module: string
   readonly description: string | undefined
@@ -277,7 +280,8 @@ export const Arc4TupleGeneric = new GenericPType({
 })
 
 export class ARC4TupleType extends ARC4EncodedType {
-  readonly name = 'Tuple'
+  readonly [PType.IdSymbol] = 'ARC4TupleType'
+  readonly name: string
   readonly module = Constants.moduleNames.algoTs.arc4.encodedTypes
   readonly singleton = false
   readonly items: ARC4EncodedType[]
@@ -289,6 +293,7 @@ export class ARC4TupleType extends ARC4EncodedType {
   constructor({ types, sourceLocation }: { types: ARC4EncodedType[]; sourceLocation?: SourceLocation }) {
     super()
     this.items = types
+    this.name = `Tuple<${this.items.map((i) => i.name).join(',')}`
     this.sourceLocation = sourceLocation
     this.nativeType = new ReadonlyTuplePType({ items: this.items })
     this.fixedBitSize = ARC4EncodedType.calculateFixedBitSize(types)
@@ -318,6 +323,7 @@ export const UintNGeneric = new GenericPType({
   },
 })
 export class UintNType extends ARC4EncodedType {
+  readonly [PType.IdSymbol] = 'UintNType'
   readonly module = Constants.moduleNames.algoTs.arc4.encodedTypes
   readonly n: bigint
   readonly name: string
@@ -363,6 +369,7 @@ export const UFixedNxMGeneric = new GenericPType({
   },
 })
 export class UFixedNxMType extends ARC4EncodedType {
+  readonly [PType.IdSymbol] = 'UFixedNxMType'
   readonly module = Constants.moduleNames.algoTs.arc4.encodedTypes
   readonly n: bigint
   readonly m: bigint
@@ -408,6 +415,7 @@ export const DynamicArrayGeneric = new GenericPType({
   },
 })
 export class DynamicArrayType extends ARC4ArrayType {
+  readonly [PType.IdSymbol] = 'DynamicArrayType'
   readonly module = Constants.moduleNames.algoTs.arc4.encodedTypes
 
   readonly immutable: boolean
@@ -467,6 +475,7 @@ export const StaticArrayGeneric = new GenericPType({
   },
 })
 export class StaticArrayType extends ARC4ArrayType {
+  readonly [PType.IdSymbol] = 'StaticArrayType'
   readonly module = Constants.moduleNames.algoTs.arc4.encodedTypes
   readonly arraySize: bigint
   readonly immutable: boolean
@@ -611,6 +620,7 @@ export const ContractProxyGeneric = new GenericPType({
 })
 
 export class ContractProxyType extends PType {
+  readonly [PType.IdSymbol] = 'ContractProxyType'
   readonly name: string
   readonly module = Constants.moduleNames.algoTs.arc4.c2c
   readonly wtype: wtypes.WTuple

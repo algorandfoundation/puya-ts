@@ -39,6 +39,8 @@ export class NativeArraysAlgo extends Contract {
     // replace
     arr[1] = 10
 
+    const arr2 = arr.with(1, 5)
+
     assertMatch(arr, [1, 10, 3, 4])
 
     // concat

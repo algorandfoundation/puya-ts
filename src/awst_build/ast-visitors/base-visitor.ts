@@ -25,6 +25,7 @@ import { BooleanExpressionBuilder } from '../eb/boolean-expression-builder'
 import { ArrayLiteralExpressionBuilder } from '../eb/literal/array-literal-expression-builder'
 import { BigIntLiteralExpressionBuilder } from '../eb/literal/big-int-literal-expression-builder'
 import { ConditionalExpressionBuilder } from '../eb/literal/conditional-expression-builder'
+import { NumericLiteralExpressionBuilder } from '../eb/literal/numeric-literal-expression-builder'
 import type { ObjectLiteralParts } from '../eb/literal/object-literal-expression-builder'
 import { ObjectLiteralExpressionBuilder } from '../eb/literal/object-literal-expression-builder'
 import { NamespaceBuilder } from '../eb/namespace-builder'
@@ -80,7 +81,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   visitBigIntLiteral(node: ts.BigIntLiteral): InstanceBuilder {
     const literalValue = BigInt(node.text.slice(0, -1))
     const ptype = this.context.getPTypeForNode(node)
-    invariant(ptype instanceof TransientType, 'Literals should resolve to transient PTypes')
+    invariant(ptype instanceof BigIntLiteralPType, 'ptype should be BigIntLiteralPType')
     return new BigIntLiteralExpressionBuilder(literalValue, ptype, this.sourceLocation(node))
   }
 
@@ -123,8 +124,8 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
       )
     }
     const ptype = this.context.getPTypeForNode(node)
-    invariant(ptype instanceof TransientType, 'Literals should resolve to transient PTypes')
-    return new BigIntLiteralExpressionBuilder(literalValue, ptype, this.sourceLocation(node))
+    invariant(ptype instanceof NumericLiteralPType, 'ptype should be NumericLiteralPType')
+    return new NumericLiteralExpressionBuilder(literalValue, ptype, this.sourceLocation(node))
   }
 
   visitIdentifier(node: ts.Identifier): NodeBuilder {
@@ -568,6 +569,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
       const sourceSingle = source.singleEvaluation()
       const assignments: Expression[] = []
       for (const [index, item] of target[StaticIterator]().entries()) {
+        if (item instanceof OmittedExpressionBuilder) continue
         assignments.push(
           this.buildAssignmentExpression(
             item,
@@ -646,7 +648,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   private buildAssignmentExpressionType(targetType: PType, sourceType: PType, sourceLocation: SourceLocation): PType {
     if (targetType instanceof ArrayLiteralPType)
       // Puya does not support assigning to array targets, but we can treat array literals as tuples
-      return this.buildAssignmentExpressionType(targetType.getTupleType(), sourceType, sourceLocation)
+      return this.buildAssignmentExpressionType(targetType.getReadonlyTupleType(), sourceType, sourceLocation)
 
     const errorMessage = `Value of type ${sourceType.name} cannot be assigned to target of type ${targetType.name}`
     if (sourceType.equals(targetType)) {

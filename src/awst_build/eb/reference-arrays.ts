@@ -2,7 +2,7 @@ import { nodeFactory } from '../../awst/node-factory'
 import type { Expression } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { invariant } from '../../util'
-import type { LibClassType, PType } from '../ptypes'
+import type { PType } from '../ptypes'
 import { ReferenceArrayGeneric, ReferenceArrayType } from '../ptypes'
 import type { InstanceBuilder, NodeBuilder } from './index'
 import { ClassBuilder, InstanceExpressionBuilder } from './index'
@@ -15,7 +15,7 @@ import { indexAccess } from './util/array/index-access'
 import { arrayLength } from './util/array/length'
 
 export class ReferenceArrayClassBuilder extends ClassBuilder {
-  ptype: LibClassType = ReferenceArrayGeneric
+  ptype = ReferenceArrayGeneric
   newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
     const {
       args: [...initialValues],
