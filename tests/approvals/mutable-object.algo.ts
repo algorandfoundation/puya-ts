@@ -1,5 +1,5 @@
 import type { uint64 } from '@algorandfoundation/algorand-typescript'
-import { arc4, assert, assertMatch, Box, BoxMap, Contract, log, MutableObject } from '@algorandfoundation/algorand-typescript'
+import { arc4, assert, assertMatch, Box, BoxMap, clone, Contract, log, MutableObject } from '@algorandfoundation/algorand-typescript'
 import { encodeArc4, methodSelector, UintN } from '@algorandfoundation/algorand-typescript/arc4'
 
 type ARC4Uint64 = UintN<64>
@@ -49,7 +49,7 @@ export class MutableObjectDemo extends Contract {
   public testNestedObjects(vp: VectorPoint) {
     const v1 = new Vector({ x: vp.v.x, y: vp.v.y })
     const p1 = new Point({ x: vp.p.x, y: vp.p.y })
-    const vp1 = new VectorPoint({ v: v1.copy(), p: p1.copy() })
+    const vp1 = new VectorPoint({ v: clone(v1), p: clone(p1) })
     log(vp1.v.x)
     log(vp1.v.y)
     log(vp1.p.x)
@@ -102,13 +102,13 @@ export class MutableObjectDemo extends Contract {
   plugin = Box<PluginInfo>({ key: 'main' })
 
   public getPlugin(key: string): PluginInfo {
-    const value = this.plugins(key).value.copy()
+    const value = clone(this.plugins(key).value)
     assert(value.lastCalled.native > 0, 'Last called not zero')
     return value
   }
 
   public getMain() {
-    const value = this.plugin.value.copy()
+    const value = clone(this.plugin.value)
     assert(value.lastCalled.native > 0, 'Last called not zero')
     return value
   }

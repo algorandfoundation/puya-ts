@@ -656,7 +656,7 @@ testNestedObjects_block@0:
     bytec_0 // 0x
     concat
     // tests/approvals/mutable-object.algo.ts:52
-    // const vp1 = new VectorPoint({ v: v1.copy(), p: p1.copy() })
+    // const vp1 = new VectorPoint({ v: clone(v1), p: clone(p1) })
     swap
     bytec_0 // 0x
     swap
@@ -1056,7 +1056,7 @@ getPlugin_block@0:
     frame_dig -1
     concat
     // tests/approvals/mutable-object.algo.ts:105
-    // const value = this.plugins(key).value.copy()
+    // const value = clone(this.plugins(key).value)
     box_get
     assert // Box must have value
     // tests/approvals/mutable-object.algo.ts:106
@@ -1082,7 +1082,7 @@ getMain_block@0:
     // plugin = Box<PluginInfo>({ key: 'main' })
     pushbytes "main"
     // tests/approvals/mutable-object.algo.ts:111
-    // const value = this.plugin.value.copy()
+    // const value = clone(this.plugin.value)
     box_get
     assert // Box must have value
     // tests/approvals/mutable-object.algo.ts:112

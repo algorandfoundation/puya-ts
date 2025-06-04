@@ -1,17 +1,9 @@
-import { NoImplementation } from './internal/errors'
 import { DeliberateAny } from './internal/typescript-helpers'
 
 /**
  * The base type for mutable objects
  */
-class MutableObjectBase<T> {
-  /**
-   * Returns a deep copy of this object
-   */
-  copy(): this {
-    throw new NoImplementation()
-  }
-}
+class MutableObjectBase<T> {}
 
 /**
  * Type alias for the Mutable Object constructor function

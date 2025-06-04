@@ -27,7 +27,6 @@ import { instanceEb } from '../../type-registry'
 import type { InstanceBuilder, NodeBuilder } from '../index'
 import { ClassBuilder, FunctionBuilder } from '../index'
 import { IterableIteratorExpressionBuilder } from '../iterable-iterator-expression-builder'
-import { Arc4CopyFunctionBuilder } from '../shared/arc4-copy-function-builder'
 import { AtFunctionBuilder } from '../shared/at-function-builder'
 import { ArrayPopFunctionBuilder } from '../shared/pop-function-builder'
 import { ArrayPushFunctionBuilder } from '../shared/push-function-builder'
@@ -304,8 +303,6 @@ export abstract class ArrayExpressionBuilder<
         )
       case 'entries':
         return new EntriesFunctionBuilder(this)
-      case 'copy':
-        return new Arc4CopyFunctionBuilder(this)
       case 'concat':
         return new ConcatFunctionBuilder(this)
       case 'slice': {

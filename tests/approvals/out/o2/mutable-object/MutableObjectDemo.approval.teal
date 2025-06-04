@@ -73,7 +73,7 @@ main_getMain_route@12:
     // plugin = Box<PluginInfo>({ key: 'main' })
     pushbytes "main"
     // tests/approvals/mutable-object.algo.ts:111
-    // const value = this.plugin.value.copy()
+    // const value = clone(this.plugin.value)
     box_get
     assert // Box must have value
     // tests/approvals/mutable-object.algo.ts:112
@@ -109,7 +109,7 @@ main_getPlugin_route@11:
     swap
     concat
     // tests/approvals/mutable-object.algo.ts:105
-    // const value = this.plugins(key).value.copy()
+    // const value = clone(this.plugins(key).value)
     box_get
     assert // Box must have value
     // tests/approvals/mutable-object.algo.ts:106
@@ -359,7 +359,7 @@ main_testNestedObjects_route@7:
     itob
     concat
     // tests/approvals/mutable-object.algo.ts:52
-    // const vp1 = new VectorPoint({ v: v1.copy(), p: p1.copy() })
+    // const vp1 = new VectorPoint({ v: clone(v1), p: clone(p1) })
     concat
     // tests/approvals/mutable-object.algo.ts:53
     // log(vp1.v.x)

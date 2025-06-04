@@ -1,5 +1,5 @@
 import type { biguint, bytes, uint64 } from '@algorandfoundation/algorand-typescript'
-import { Bytes, MutableObject } from '@algorandfoundation/algorand-typescript'
+import { Bytes, clone, MutableObject } from '@algorandfoundation/algorand-typescript'
 
 class Vector extends MutableObject<{ x: uint64; y: uint64 }> {}
 class Coordinate extends MutableObject<{ v: Vector; z: biguint }> {}
@@ -19,7 +19,7 @@ function testPartialDestructureMutableObject(arg: Coordinate) {
     nested: {
       v: { y },
     },
-  } = { nested: arg.copy() }
+  } = { nested: clone(arg) }
 }
 
 function test() {

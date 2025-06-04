@@ -1594,3 +1594,8 @@ export const itxnComposePType = new LibObjType({
   module: Constants.moduleNames.algoTs.itxnCompose,
   name: 'itxnCompose',
 })
+
+export const cloneFunctionPType = new LibFunctionType({
+  name: 'clone',
+  module: Constants.moduleNames.algoTs.util,
+})

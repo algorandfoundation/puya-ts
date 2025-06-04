@@ -31,6 +31,7 @@ import { AssertMatchFunctionBuilder } from '../eb/assert-match-function-builder'
 import { BigUintExpressionBuilder, BigUintFunctionBuilder } from '../eb/biguint-expression-builder'
 import { BooleanExpressionBuilder, BooleanFunctionBuilder } from '../eb/boolean-expression-builder'
 import { BytesExpressionBuilder, BytesFunctionBuilder } from '../eb/bytes-expression-builder'
+import { CloneFunctionBuilder } from '../eb/clone-function-builder'
 import { CompileFunctionBuilder } from '../eb/compiled/compile-function'
 import { ContractClassBuilder, ContractOptionsDecoratorBuilder } from '../eb/contract-builder'
 import { EnsureBudgetFunctionBuilder } from '../eb/ensure-budget'
@@ -177,6 +178,7 @@ import {
   bytesPType,
   BytesPType,
   ClassMethodDecoratorContext,
+  cloneFunctionPType,
   compileFunctionType,
   ContractClassPType,
   contractOptionsDecorator,
@@ -291,7 +293,7 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: TemplateVarFunction, singletonEb: TemplateVarFunctionBuilder })
   typeRegistry.register({ ptype: compileFunctionType, singletonEb: CompileFunctionBuilder })
   typeRegistry.register({ ptype: arc28EmitFunction, singletonEb: Arc28EmitFunctionBuilder })
-
+  typeRegistry.register({ ptype: cloneFunctionPType, singletonEb: CloneFunctionBuilder })
   typeRegistry.register({ ptype: ContractClassPType, singletonEb: ContractClassBuilder })
   typeRegistry.register({ ptype: contractOptionsDecorator, singletonEb: ContractOptionsDecoratorBuilder })
   typeRegistry.register({ ptype: LogicSigPType, singletonEb: LogicSigClassBuilder })

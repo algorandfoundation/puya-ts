@@ -141,7 +141,7 @@ main_getMain_route@10:
     // plugin = Box<PluginInfo>({ key: 'main' })
     pushbytes "main"
     // tests/approvals/arc4-struct.algo.ts:59
-    // const value = this.plugin.value.copy()
+    // const value = clone(this.plugin.value)
     box_get
     assert // Box must have value
     // tests/approvals/arc4-struct.algo.ts:60
@@ -177,7 +177,7 @@ main_getPlugin_route@9:
     swap
     concat
     // tests/approvals/arc4-struct.algo.ts:53
-    // const value = this.plugins(key).value.copy()
+    // const value = clone(this.plugins(key).value)
     box_get
     assert // Box must have value
     // tests/approvals/arc4-struct.algo.ts:54

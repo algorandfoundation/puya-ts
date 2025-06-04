@@ -157,14 +157,14 @@ main_getState_route@5:
     app_local_get_ex
     assert // check LocalState exists
     // tests/approvals/local-state.algo.ts:38
-    // localEncoded: this.localEncoded(Txn.sender).value.copy(),
+    // localEncoded: clone(this.localEncoded(Txn.sender).value),
     txn Sender
     intc_0 // 0
     // tests/approvals/local-state.algo.ts:13
     // localEncoded = LocalState<SampleArray>()
     bytec 4 // "localEncoded"
     // tests/approvals/local-state.algo.ts:38
-    // localEncoded: this.localEncoded(Txn.sender).value.copy(),
+    // localEncoded: clone(this.localEncoded(Txn.sender).value),
     app_local_get_ex
     assert // check LocalState exists
     // tests/approvals/local-state.algo.ts:39
@@ -214,14 +214,14 @@ main_getState_route@5:
     substring3
     extract 2 0
     // tests/approvals/local-state.algo.ts:41
-    // localMutableObject: this.localMutableObject(Txn.sender).value.copy(),
+    // localMutableObject: clone(this.localMutableObject(Txn.sender).value),
     txn Sender
     intc_0 // 0
     // tests/approvals/local-state.algo.ts:16
     // localMutableObject = LocalState<Data>()
     bytec 7 // "localMutableObject"
     // tests/approvals/local-state.algo.ts:41
-    // localMutableObject: this.localMutableObject(Txn.sender).value.copy(),
+    // localMutableObject: clone(this.localMutableObject(Txn.sender).value),
     app_local_get_ex
     assert // check LocalState exists
     // tests/approvals/local-state.algo.ts:32
@@ -400,13 +400,13 @@ main_setState_route@4:
     dig 3
     app_local_put
     // tests/approvals/local-state.algo.ts:26
-    // this.localEncoded(Txn.sender).value = c.copy()
+    // this.localEncoded(Txn.sender).value = clone(c)
     txn Sender
     // tests/approvals/local-state.algo.ts:13
     // localEncoded = LocalState<SampleArray>()
     bytec 4 // "localEncoded"
     // tests/approvals/local-state.algo.ts:26
-    // this.localEncoded(Txn.sender).value = c.copy()
+    // this.localEncoded(Txn.sender).value = clone(c)
     uncover 2
     app_local_put
     // tests/approvals/local-state.algo.ts:27

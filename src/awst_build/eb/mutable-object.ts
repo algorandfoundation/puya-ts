@@ -9,7 +9,6 @@ import { instanceEb } from '../type-registry'
 import { ClassBuilder, InstanceBuilder } from './'
 import { Arc4EncodedBaseExpressionBuilder } from './arc4/base'
 import type { NodeBuilder } from './index'
-import { Arc4CopyFunctionBuilder } from './shared/arc4-copy-function-builder'
 import { requireExpressionOfType } from './util'
 import { parseFunctionArgs } from './util/arg-parsing'
 
@@ -60,11 +59,6 @@ export class MutableObjectExpressionBuilder extends Arc4EncodedBaseExpressionBui
   }
 
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
-    switch (name) {
-      case 'copy':
-        return new Arc4CopyFunctionBuilder(this)
-    }
-
     if (name in this.ptype.fields) {
       const fieldType = this.ptype.fields[name]
       return instanceEb(
