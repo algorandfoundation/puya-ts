@@ -83,7 +83,7 @@ export interface ABIType {
 export class GenericPType<T extends PType = PType> extends PType {
   readonly name: string
   readonly module: string
-  readonly singleton = false
+  readonly singleton = true
   readonly wtype = undefined
   readonly parameterise: (typeArgs: readonly PType[]) => T
   constructor(props: { name: string; module: string; parameterise: (typeArgs: readonly PType[]) => T }) {
@@ -97,7 +97,7 @@ export class GenericPType<T extends PType = PType> extends PType {
 export type PTypeOrClass = PType | { new (...args: DeliberateAny[]): PType; equals(other: PType): boolean }
 
 function ptypesAreEqual(left: PType, right: PType): boolean {
-  if (!(right instanceof left.constructor)) {
+  if (right.constructor !== left.constructor) {
     return false
   }
   return compareProperties(left, right)

@@ -4,7 +4,9 @@ import { TupleItemExpression } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { CodeError, NotSupported } from '../../errors'
 import type { DecoratorData } from '../models/decorator-data'
-import type { LibClassType, PType, PTypeOrClass } from '../ptypes'
+import type { GenericPType, LibClassType, PType, PTypeOrClass } from '../ptypes'
+import type { ARC4StructClass } from '../ptypes/arc4-types'
+import type { MutableObjectClass } from '../ptypes/mutable-object'
 import { instanceEb } from '../type-registry'
 
 export enum BuilderComparisonOp {
@@ -46,7 +48,7 @@ export enum BuilderBinaryOp {
 }
 
 export abstract class NodeBuilder {
-  constructor(public readonly sourceLocation: SourceLocation) {}
+  constructor(public readonly sourceLocation: SourceLocation) { }
 
   abstract readonly ptype: PType | undefined
 
@@ -209,7 +211,7 @@ export abstract class InstanceBuilder<TPType extends PType = PType> extends Node
 }
 
 export abstract class ClassBuilder extends NodeBuilder {
-  abstract readonly ptype: LibClassType
+  abstract readonly ptype: LibClassType | GenericPType | ARC4StructClass | MutableObjectClass
 
   abstract newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder
 

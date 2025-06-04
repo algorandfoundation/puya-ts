@@ -117,7 +117,7 @@ export class ContractClassPType extends PType {
   readonly wtype = undefined
   readonly name: string
   readonly module: string
-  readonly properties: Record<string, PType>
+  readonly properties: Record<string, AppStorageType>
   readonly methods: Record<string, FunctionPType>
   readonly singleton = true
   readonly baseTypes: ContractClassPType[]
@@ -389,7 +389,7 @@ export class BoxRefPType extends StorageProxyPType {
     super({ keyWType: wtypes.boxKeyWType, content: bytesPType })
   }
 }
-export type AppStorageType = GlobalStateType | LocalStateType
+export type AppStorageType = GlobalStateType | LocalStateType | BoxPType | BoxRefPType | BoxMapPType
 
 /**
  * An open generic type parameter
@@ -983,22 +983,6 @@ export const applicationPType = new ABICompatibleInstanceType({
 export const ApplicationFunctionType = new LibFunctionType({
   name: 'Application',
   module: Constants.moduleNames.algoTs.reference,
-})
-export const GlobalStateFunction = new LibFunctionType({
-  name: 'GlobalState',
-  module: Constants.moduleNames.algoTs.state,
-})
-export const LocalStateFunction = new LibFunctionType({
-  name: 'LocalState',
-  module: Constants.moduleNames.algoTs.state,
-})
-export const BoxFunction = new LibFunctionType({
-  name: BoxGeneric.name,
-  module: Constants.moduleNames.algoTs.box,
-})
-export const BoxMapFunction = new LibFunctionType({
-  name: BoxMapGeneric.name,
-  module: Constants.moduleNames.algoTs.box,
 })
 export const BoxRefFunction = new LibFunctionType({
   name: 'BoxRef',

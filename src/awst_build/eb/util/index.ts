@@ -59,7 +59,9 @@ export function requestBuilderOfType(builder: NodeBuilder, ptype: PTypeOrClass):
 }
 
 export function requireInstanceBuilder(builder: NodeBuilder): InstanceBuilder {
-  if (builder instanceof InstanceBuilder) return builder
+  if (builder instanceof InstanceBuilder) {
+    return builder
+  }
   throw new CodeError(`Expected instance of a type, got ${builder.typeDescription}`, { sourceLocation: builder.sourceLocation })
 }
 

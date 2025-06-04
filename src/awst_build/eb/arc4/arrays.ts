@@ -14,13 +14,12 @@ import {
   AddressClass,
   arc4AddressAlias,
   ARC4EncodedType,
-  DynamicArrayConstructor,
+  DynamicArrayGeneric,
   DynamicArrayType,
   DynamicBytesConstructor,
   DynamicBytesType,
-  StaticArrayConstructor,
+  StaticArrayGeneric,
   StaticArrayType,
-  StaticBytesConstructor,
   StaticBytesGeneric,
 } from '../../ptypes/arc4-types'
 import { instanceEb } from '../../type-registry'
@@ -41,7 +40,7 @@ import { resolveCompatExpression } from '../util/resolve-compat-builder'
 import { Arc4EncodedBaseExpressionBuilder } from './base'
 
 export class DynamicArrayClassBuilder extends ClassBuilder {
-  readonly ptype = DynamicArrayConstructor
+  readonly ptype = DynamicArrayGeneric
 
   newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
     const {
@@ -57,7 +56,7 @@ export class DynamicArrayClassBuilder extends ClassBuilder {
     })
     codeInvariant(elementType instanceof ARC4EncodedType, 'Element type must be an ARC4 encoded type', sourceLocation)
     const initialItemExprs = initialItems.map((i) => requireExpressionOfType(i, elementType))
-    const ptype = new DynamicArrayType({ elementType, sourceLocation })
+    const ptype = this.ptype.parameterise([elementType])
     return new DynamicArrayExpressionBuilder(
       nodeFactory.newArray({
         values: initialItemExprs,
@@ -69,7 +68,7 @@ export class DynamicArrayClassBuilder extends ClassBuilder {
   }
 }
 export class StaticArrayClassBuilder extends ClassBuilder {
-  readonly ptype = StaticArrayConstructor
+  readonly ptype = StaticArrayGeneric
 
   newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
     const {
@@ -89,7 +88,7 @@ export class StaticArrayClassBuilder extends ClassBuilder {
       `Array size type parameter of ${this.typeDescription} must be a literal number. Inferred type is ${arraySize.name}`,
       sourceLocation,
     )
-    const ptype = new StaticArrayType({ elementType, arraySize: arraySize.literalValue, sourceLocation })
+    const ptype = this.ptype.parameterise([elementType, arraySize])
     if (initialItems.length === 0) {
       codeInvariant(ptype.fixedByteSize !== null, 'Zero arg constructor can only be used for static arrays with a fixed size encoding.')
       return new StaticArrayExpressionBuilder(
@@ -177,7 +176,7 @@ export class AddressClassBuilder extends ClassBuilder {
   }
 }
 export class StaticBytesClassBuilder extends ClassBuilder {
-  readonly ptype = StaticBytesConstructor
+  readonly ptype = StaticBytesGeneric
 
   newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
     const {
@@ -191,7 +190,7 @@ export class StaticBytesClassBuilder extends ClassBuilder {
       genericTypeArgs: 1,
       argSpec: (a) => [a.optional(bytesPType, stringPType)],
     })
-    const resultPType = StaticBytesGeneric.parameterise([length])
+    const resultPType = this.ptype.parameterise([length])
 
     codeInvariant(length instanceof NumericLiteralPType, 'length must be numeric literal', sourceLocation)
     const byteLength = Number(length.literalValue)
