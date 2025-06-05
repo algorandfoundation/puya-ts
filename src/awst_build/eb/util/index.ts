@@ -9,7 +9,7 @@ import { biguintPType, boolPType, stringPType, uint64PType } from '../../ptypes'
 import type { NodeBuilder } from '../index'
 import { InstanceBuilder } from '../index'
 import { LiteralExpressionBuilder } from '../literal-expression-builder'
-import { BigIntLiteralExpressionBuilder } from '../literal/big-int-literal-expression-builder'
+import { NumericLiteralExpressionBuilder } from '../literal/numeric-literal-expression-builder'
 
 export function requireExpressionOfType(builder: NodeBuilder, ptype: PTypeOrClass): Expression {
   if (builder instanceof InstanceBuilder) {
@@ -103,6 +103,6 @@ export function requireConstantOfType(builder: NodeBuilder, ptype: PType, messag
 }
 
 export function requireLiteralNumber(builder: NodeBuilder) {
-  codeInvariant(builder instanceof BigIntLiteralExpressionBuilder, 'Expected numeric literal', builder.sourceLocation)
+  codeInvariant(builder instanceof NumericLiteralExpressionBuilder, 'Expected numeric literal', builder.sourceLocation)
   return builder.value
 }

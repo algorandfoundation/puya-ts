@@ -71,7 +71,7 @@ function newUintN(initialValueBuilder: InstanceBuilder | undefined, ptype: UintN
       ptype,
     )
   }
-  if (ptype.n <= 64 && initialValueBuilder.resolvableToPType(uint64PType)) {
+  if (initialValueBuilder.resolvableToPType(uint64PType)) {
     const initialValue = initialValueBuilder.resolveToPType(uint64PType).resolve()
     if (initialValue instanceof IntegerConstant) {
       codeInvariant(isValidLiteralForPType(initialValue.value, ptype), `${initialValue.value} cannot be converted to ${ptype}`)

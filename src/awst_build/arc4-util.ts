@@ -15,10 +15,9 @@ import {
   boolPType,
   BytesPType,
   GroupTransactionPType,
-  NativeNumericType,
-  numberPType,
   ObjectPType,
   stringPType,
+  TransientType,
   TuplePType,
   uint64PType,
   voidPType,
@@ -122,8 +121,8 @@ export function ptypeToArc4EncodedType(ptype: PType, sourceLocation: SourceLocat
   if (ptype.equals(biguintPType)) return new UintNType({ n: 512n })
   if (ptype instanceof BytesPType) return ptype.length === null ? DynamicBytesType : new StaticBytesType({ length: ptype.length })
   if (ptype.equals(stringPType)) return arc4StringType
-  if (ptype instanceof NativeNumericType) {
-    throw new CodeError(numberPType.expressionMessage, { sourceLocation })
+  if (ptype instanceof TransientType) {
+    throw new CodeError(ptype.expressionMessage, { sourceLocation })
   }
   if (ptype instanceof ArrayPType)
     return new DynamicArrayType({

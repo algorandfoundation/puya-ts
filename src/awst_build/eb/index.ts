@@ -48,7 +48,7 @@ export enum BuilderBinaryOp {
 }
 
 export abstract class NodeBuilder {
-  constructor(public readonly sourceLocation: SourceLocation) { }
+  constructor(public readonly sourceLocation: SourceLocation) {}
 
   abstract readonly ptype: PType | undefined
 

@@ -4,10 +4,6 @@ type TransientTypeError = {
 }
 
 export const transientTypeErrors = {
-  arrays: (typeName) => ({
-    usedAsType: `\`${typeName}\` is not valid as a variable, parameter, return, or property type. Please define a static tuple type or use an \`as const\` expression`,
-    usedInExpression: `Expression of type \`${typeName}\` cannot be used conditionally`,
-  }),
   nativeNumeric: (typeName) => ({
     usedAsType: `\`${typeName}\` is not valid as a variable, parameter, return, or property type. Please use an algo-ts type such as \`biguint\` or \`uint64\``,
     usedInExpression: `Expression of type \`${typeName}\` must be explicitly converted to an algo-ts type, for example by wrapping the expression in \`Uint64(...)\` or \`BigUint(...)\``,

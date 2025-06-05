@@ -39,13 +39,14 @@ import {
   numberPType,
   NumericLiteralPType,
   stringPType,
+  TransientType,
   uint64PType,
 } from '../ptypes'
 import { instanceEb } from '../type-registry'
 import { BooleanExpressionBuilder } from './boolean-expression-builder'
 import type { BuilderComparisonOp, InstanceBuilder, NodeBuilder } from './index'
 import { BuilderUnaryOp, FunctionBuilder, InstanceExpressionBuilder } from './index'
-import { BigIntLiteralExpressionBuilder } from './literal/big-int-literal-expression-builder'
+import { NumericLiteralExpressionBuilder } from './literal/numeric-literal-expression-builder'
 import { AtFunctionBuilder } from './shared/at-function-builder'
 import { SliceFunctionBuilder } from './shared/slice-function-builder'
 import { StringExpressionBuilder } from './string-expression-builder'
@@ -135,7 +136,7 @@ export class BytesFunctionBuilder extends FunctionBuilder {
 
     if (!initialValue) {
       bytesBuilder = empty
-    } else if (initialValue instanceof BigIntLiteralExpressionBuilder) {
+    } else if (initialValue.ptype instanceof TransientType) {
       logger.error(initialValue.sourceLocation, initialValue.ptype.expressionMessage)
       bytesBuilder = empty
     } else if (initialValue.ptype.equals(uint64PType)) {
@@ -245,7 +246,7 @@ export class BytesExpressionBuilder extends InstanceExpressionBuilder<BytesPType
           sourceLocation,
           `The '~' ${this.typeDescription} operator coerces the target value to a number type. Use {bytes expression}.bitwiseInvert() instead`,
         )
-        return new BigIntLiteralExpressionBuilder(0n, new NumericLiteralPType({ literalValue: 0n }), sourceLocation)
+        return new NumericLiteralExpressionBuilder(0n, new NumericLiteralPType({ literalValue: 0n }), sourceLocation)
     }
     return super.prefixUnaryOp(op, sourceLocation)
   }
@@ -278,6 +279,7 @@ export class BytesExpressionBuilder extends InstanceExpressionBuilder<BytesPType
           this._expr,
           bytesPType,
           requireExpressionOfType(this.memberAccess('length', sourceLocation), uint64PType),
+          sourceLocation,
         )
       case 'slice':
         return new SliceFunctionBuilder(this._expr, bytesPType)

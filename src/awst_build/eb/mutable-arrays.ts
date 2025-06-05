@@ -63,7 +63,7 @@ export class MutableArrayExpressionBuilder extends InstanceExpressionBuilder<Mut
       case 'length':
         return arrayLength(this, sourceLocation)
       case 'at':
-        return new AtFunctionBuilder(this._expr, this.ptype.elementType, arrayLength(this, sourceLocation).resolve())
+        return new AtFunctionBuilder(this._expr, this.ptype.elementType, arrayLength(this, sourceLocation).resolve(), sourceLocation)
     }
     return super.memberAccess(name, sourceLocation)
   }

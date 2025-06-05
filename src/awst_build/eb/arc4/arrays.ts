@@ -299,6 +299,7 @@ export abstract class ArrayExpressionBuilder<
           this.ptype instanceof StaticArrayType
             ? this.ptype.arraySize
             : requireExpressionOfType(this.memberAccess('length', sourceLocation), uint64PType),
+          sourceLocation,
         )
       case 'entries':
         return new EntriesFunctionBuilder(this)

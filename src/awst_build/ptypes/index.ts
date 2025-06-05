@@ -4,7 +4,7 @@ import { wtypes } from '../../awst/wtypes'
 
 import { Constants } from '../../constants'
 import { CodeError, InternalError, NotSupported, throwError } from '../../errors'
-import { codeInvariant, distinctByEquality, invariant, sortBy } from '../../util'
+import { codeInvariant, distinctByEquality, instanceOfAny, invariant, sortBy } from '../../util'
 import { SymbolName } from '../symbol-name'
 import type { ABIType } from './base'
 import { GenericPType, PType } from './base'
@@ -233,12 +233,12 @@ export class UnionPType extends TransientType {
     const name = types.map((t) => t).join(' | ')
     const transientType = types.find((t) => t instanceof TransientType)
     if (transientType) {
-      if (transientType instanceof NativeNumericType) {
+      if (instanceOfAny(transientType, BigIntLiteralPType, NumericLiteralPType, BigIntPType, NumberPType)) {
         typeMessage = transientTypeErrors.nativeNumeric(name).usedAsType
         expressionMessage = transientTypeErrors.nativeNumeric(name).usedInExpression
       } else {
-        typeMessage = transientType.typeMessage
-        expressionMessage = transientType.expressionMessage
+        typeMessage = (transientType as TransientType).typeMessage
+        expressionMessage = (transientType as TransientType).expressionMessage
       }
     } else {
       typeMessage = transientTypeErrors.unionTypes(name).usedAsType
@@ -593,7 +593,7 @@ export class FunctionPType extends PType {
     this.parameters = props.parameters
   }
 }
-export class ArrayLiteralPType extends TransientType {
+export class ArrayLiteralPType extends PType {
   get fullName() {
     return `${this.module}::[${this.items.map((i) => i).join(', ')}]`
   }
@@ -602,18 +602,20 @@ export class ArrayLiteralPType extends TransientType {
     return this.items.length ? UnionPType.fromTypes(this.items) : neverPType
   }
 
+  readonly singleton = false
+  readonly name: string
+  readonly module = Constants.moduleNames.typescript.array
   readonly items: PType[]
   readonly immutable = true
   constructor(props: { items: PType[] }) {
-    const name = `[${props.items.map((i) => i.name).join(', ')}]`
-    super({
-      module: 'lib.d.ts',
-      name,
-      typeMessage: transientTypeErrors.arrays(name).usedAsType,
-      expressionMessage: transientTypeErrors.arrays(name).usedInExpression,
-      singleton: false,
-    })
+    super()
+    this.name = `[${props.items.map((i) => i.name).join(', ')}]`
+
     this.items = props.items
+  }
+
+  get wtype() {
+    return this.getArrayType().wtype
   }
 
   getArrayType(): ArrayPType {
@@ -823,9 +825,11 @@ export const BooleanFunction = new LibFunctionType({
   module: 'typescript/lib/lib.es5.d.ts',
 })
 
-export class NativeNumericType extends TransientType {}
+export class BigIntPType extends TransientType {}
 
-export const bigIntPType = new NativeNumericType({
+export class NumberPType extends TransientType {}
+
+export const bigIntPType = new BigIntPType({
   name: 'bigint',
   module: 'lib.d.ts',
   singleton: false,
@@ -853,7 +857,7 @@ export const biguintPType = new InstanceType({
   module: Constants.moduleNames.algoTs.primitives,
   wtype: wtypes.biguintWType,
 })
-export class NumericLiteralPType extends NativeNumericType {
+export class NumericLiteralPType extends TransientType {
   readonly literalValue: bigint
   constructor({ literalValue }: { literalValue: bigint }) {
     super({
@@ -868,7 +872,7 @@ export class NumericLiteralPType extends NativeNumericType {
 
   static typeDescription = 'numeric literal'
 }
-export class BigIntLiteralPType extends NativeNumericType {
+export class BigIntLiteralPType extends TransientType {
   readonly literalValue: bigint
   constructor({ literalValue }: { literalValue: bigint }) {
     super({
@@ -883,7 +887,7 @@ export class BigIntLiteralPType extends NativeNumericType {
 
   static typeDescription = 'bigint literal'
 }
-export const numberPType = new NativeNumericType({
+export const numberPType = new NumberPType({
   name: 'number',
   module: 'lib.d.ts',
   singleton: false,
