@@ -4,10 +4,22 @@ import { CodeError } from '../../errors'
 import type { DeliberateAny } from '../../typescript-helpers'
 import { zipStrict } from '../../util'
 
+const PTypeId = Symbol('PTypeId')
+
 /**
  * Represents a public type visible to a developer of AlgoTS
  */
 export abstract class PType {
+  static readonly IdSymbol: typeof PTypeId = PTypeId
+  /**
+   * Since TypeScript is structurally typed, different PTypes with compatible
+   * structures will often be assignable to one and another and this is generally
+   * not desirable. The PTypeId property should be used to declare a literal value
+   * (usually the class name) on each distinct PType class to ensure they are
+   * structurally different.
+   */
+  abstract readonly [PTypeId]: string
+
   /**
    * Get the associated wtype for this ptype if applicable
    */
@@ -81,6 +93,7 @@ export interface ABIType {
 }
 
 export class GenericPType<T extends PType = PType> extends PType {
+  readonly [PTypeId] = 'GenericPType'
   readonly name: string
   readonly module: string
   readonly singleton = true

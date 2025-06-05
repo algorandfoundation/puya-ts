@@ -7,6 +7,7 @@ import { ARC4EncodedType } from './arc4-types'
 import { PType } from './base'
 
 export class MutableObjectClass extends PType {
+  readonly [PType.IdSymbol] = 'MutableObjectClass'
   readonly name: string
   readonly module: string
   readonly singleton = true
@@ -40,6 +41,7 @@ export class MutableObjectClass extends PType {
 }
 
 export class MutableObjectType extends ARC4EncodedType {
+  readonly [PType.IdSymbol] = 'MutableObjectType'
   fixedBitSize: bigint | null
   readonly name: string
   readonly module: string
