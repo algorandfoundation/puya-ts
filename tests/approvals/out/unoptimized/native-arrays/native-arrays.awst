@@ -37,6 +37,7 @@ contract NativeArraysAlgo
     assert(top == 5)
     assert(arr.length == 4 and arr[0] == 1 and arr[1] == 2 and arr[2] == 3 and arr[3] == 4, comment=assert target is match for conditions)
     arr[1]: uint64 = 10
+    arr2: arc4.dynamic_array<uint64> = arr.with(1, 5)
     assert(arr.length == 4 and arr[0] == 1 and arr[1] == 10 and arr[2] == 3 and arr[3] == 4, comment=assert target is match for conditions)
     t1: arc4.tuple<uint64,uint64> = ARC4_ENCODE(<tuple>[12, 13], wtype=arc4.tuple<uint64,uint64>)
     arr: arc4.dynamic_array<uint64> = arr.concat(arr).concat(new arc4.dynamic_array<uint64>(t1.0, t1.1))
@@ -63,9 +64,9 @@ contract NativeArraysAlgo
   
   structs(p: Vector{ x: uint64, y: uint64 }): arc4.dynamic_array<tests/approvals/native-arrays.algo.ts::Vector>
   {
-    (x = (#0 = { x: p.x, y: p.y }).x), (y = #0.y), #0
+    { x: x, y: y }: object{ x: uint64, y: uint64 } = { x: p.x, y: p.y }
     myVectors: arc4.dynamic_array<tests/approvals/native-arrays.algo.ts::Vector> = new arc4.dynamic_array<tests/approvals/native-arrays.algo.ts::Vector>()
-    myVectors: arc4.dynamic_array<tests/approvals/native-arrays.algo.ts::Vector> = new arc4.dynamic_array<tests/approvals/native-arrays.algo.ts::Vector>({ x: (#1 = { x: x, y: y }).x, y: #1.y })
+    myVectors: arc4.dynamic_array<tests/approvals/native-arrays.algo.ts::Vector> = new arc4.dynamic_array<tests/approvals/native-arrays.algo.ts::Vector>({ x: (#0 = { x: x, y: y }).x, y: #0.y })
     assert(myVectors.length == 1 and myVectors[0].x == x and myVectors[0].y == y, comment=assert target is match for conditions)
     return myVectors
   }
@@ -90,12 +91,26 @@ contract NativeArraysAlgo
     return <tuple>[True, False, True]
   }
   
-  aliasing(a: arc4.dynamic_array<uint64>, b: arc4.dynamic_array<uint64>): void
+  aliasing(mutable: arc4.dynamic_array<uint64>, readOnly: arc4.dynamic_array<uint64>): void
   {
-    needClone: arc4.dynamic_array<uint64> = copy(a)
+    needClone: arc4.dynamic_array<uint64> = copy(mutable)
     needClone[0]: uint64 = 5
-    noNeedClone: arc4.dynamic_array<uint64> = b
-    needClone2: arc4.dynamic_array<uint64> = reinterpret_cast<arc4.dynamic_array<uint64>>(a)
+    noNeedClone: arc4.dynamic_array<uint64> = readOnly
+    needClone2: arc4.dynamic_array<uint64> = reinterpret_cast<arc4.dynamic_array<uint64>>(mutable)
+    mutable[1]: uint64 = mutable[1] + 2
+    assert(mutable[1] != needClone2[1], comment=These should not match)
+    tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveMutable(mutable)
+    tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveReadonly(reinterpret_cast<arc4.dynamic_array<uint64>>(mutable))
+    tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveReadonly(readOnly)
+  }
+  
+  receiveMutable(a: arc4.dynamic_array<uint64>): void
+  {
+    a[0]: uint64 = 1
+  }
+  
+  receiveReadonly(a: arc4.dynamic_array<uint64>): void
+  {
   }
   
   __algots__.defaultCreate(): void

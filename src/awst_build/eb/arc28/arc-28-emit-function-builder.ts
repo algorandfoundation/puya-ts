@@ -27,7 +27,17 @@ export class Arc28EmitFunctionBuilder extends FunctionBuilder {
   }
 
   private resolvePropertyValue(builder: InstanceBuilder, expectedType?: ARC4EncodedType): [Expression, ARC4EncodedType] {
-    if (builder.ptype instanceof ARC4EncodedType) return [builder.resolve(), builder.ptype]
+    if (builder.ptype instanceof ARC4EncodedType) {
+      if (expectedType) {
+        codeInvariant(
+          expectedType.wtype.equals(builder.ptype.wtype),
+          `Expected type ${expectedType} does not match actual type ${builder.ptype}`,
+          builder.sourceLocation,
+        )
+      }
+
+      return [builder.resolve(), builder.ptype]
+    }
 
     if (builder.ptype instanceof ArrayLiteralPType) {
       if (!expectedType) {

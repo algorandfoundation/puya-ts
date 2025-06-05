@@ -96,12 +96,35 @@ export class NativeArraysAlgo extends Contract {
     return [new Bool(true), new Bool(false), new Bool(true)] as const
   }
 
-  aliasing(a: uint64[], b: readonly uint64[]) {
-    const needClone = clone(a)
+  aliasing(mutable: uint64[], readOnly: readonly uint64[]) {
+    // Existing arc4 copy checking picks up this alias of a mutable type and asks for a copy
+    const needClone = clone(mutable)
     needClone[0] = 5
 
-    const noNeedClone = b
+    // No issue with aliasing an immutable type
+    const noNeedClone = readOnly
 
-    const needClone2: readonly uint64[] = a
+    // This should require a clone, otherwise updates to mutable will be visible in `needClone2`
+    const needClone2: readonly uint64[] = mutable
+
+    mutable[1] += 2
+
+    assert(mutable[1] !== needClone2[1], 'These should not match')
+
+    // Magic parameter auto return handles this
+    this.receiveMutable(mutable)
+    // Mutable type needs to be reinterpreted/converted to immutable, but otherwise no copy required
+    this.receiveReadonly(mutable)
+
+    // Typescript captures this as being invalid
+    // this.receiveMutable(readOnly)
+
+    this.receiveReadonly(readOnly)
   }
+
+  receiveMutable(a: uint64[]) {
+    a[0] = 1
+  }
+
+  receiveReadonly(a: readonly uint64[]) {}
 }

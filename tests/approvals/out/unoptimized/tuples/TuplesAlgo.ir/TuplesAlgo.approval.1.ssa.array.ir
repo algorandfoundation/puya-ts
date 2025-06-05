@@ -51,18 +51,18 @@ subroutine tests/approvals/tuples.algo.ts::TuplesAlgo.test(a: Encoded(uint64), b
         let readonlyTuple.0#0: Encoded(uint64) = a#0
         let readonlyTuple.1#0: Encoded(uint64) = b#0
         let readonlyTuple.2#0: Encoded(uint64) = c#0
-        let array%encoded%0#1: Encoded((uint64)) = (concat 0x a#0)
-        let array%encoded%1#1: Encoded((uint64,uint64)) = (concat array%encoded%0#1 b#0)
-        let array%encoded%2#1: Encoded((uint64,uint64,uint64)) = (concat array%encoded%1#1 c#0)
-        let array%encoded%3#1: Encoded((uint64,uint64,uint64)) = (concat array%encoded%2#1 0x)
-        let tmp%0#0: Encoded((uint64,uint64,uint64)) = array%encoded%3#1
-        let mutableTuple#0: Encoded((uint64,uint64,uint64)) = tmp%0#0
-        let array%encoded%4#1: Encoded((uint64)) = (concat 0x a#0)
-        let array%encoded%5#1: Encoded((uint64,uint64)) = (concat array%encoded%4#1 b#0)
-        let array%encoded%6#1: Encoded((uint64,uint64,uint64)) = (concat array%encoded%5#1 c#0)
-        let array%encoded%7#1: Encoded((uint64,uint64,uint64)) = (concat array%encoded%6#1 0x)
-        let tmp%1#0: Encoded((uint64,uint64,uint64)) = array%encoded%7#1
-        let arc4Tuple#0: Encoded((uint64,uint64,uint64)) = tmp%1#0
+        let array%encoded%0#1: Encoded(uint64) = (concat 0x a#0)
+        let array%encoded%1#1: Encoded(uint64,uint64) = (concat array%encoded%0#1 b#0)
+        let array%encoded%2#1: Encoded(uint64,uint64,uint64) = (concat array%encoded%1#1 c#0)
+        let array%encoded%3#1: Encoded(uint64,uint64,uint64) = (concat array%encoded%2#1 0x)
+        let tmp%0#0: Encoded(uint64,uint64,uint64) = array%encoded%3#1
+        let mutableTuple#0: Encoded(uint64,uint64,uint64) = tmp%0#0
+        let array%encoded%4#1: Encoded(uint64) = (concat 0x a#0)
+        let array%encoded%5#1: Encoded(uint64,uint64) = (concat array%encoded%4#1 b#0)
+        let array%encoded%6#1: Encoded(uint64,uint64,uint64) = (concat array%encoded%5#1 c#0)
+        let array%encoded%7#1: Encoded(uint64,uint64,uint64) = (concat array%encoded%6#1 0x)
+        let tmp%1#0: Encoded(uint64,uint64,uint64) = array%encoded%7#1
+        let arc4Tuple#0: Encoded(uint64,uint64,uint64) = tmp%1#0
         tests/approvals/tuples.algo.ts::TuplesAlgo.receiveReadonly(readonlyTuple.0#0, readonlyTuple.1#0, readonlyTuple.2#0)
         let array%extract%0#1: bytes = (extract3 mutableTuple#0 0u 8u)
         let tuple_item%0#0: Encoded(uint64) = array%extract%0#1
@@ -91,7 +91,7 @@ subroutine tests/approvals/tuples.algo.ts::TuplesAlgo.receiveReadonly(arg.0: Enc
     block@0: // L28
         return 3u
 
-subroutine tests/approvals/tuples.algo.ts::TuplesAlgo.receiveMutable(arg: Encoded((uint64,uint64,uint64))) -> uint64:
+subroutine tests/approvals/tuples.algo.ts::TuplesAlgo.receiveMutable(arg: Encoded(uint64,uint64,uint64)) -> uint64:
     block@0: // L32
         return 3u
 

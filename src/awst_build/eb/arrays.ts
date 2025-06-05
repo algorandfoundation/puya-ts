@@ -4,7 +4,6 @@ import type { Expression } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { wtypes } from '../../awst/wtypes'
 import { CodeError } from '../../errors'
-import { logger } from '../../logger'
 import { codeInvariant, invariant } from '../../util'
 import type { PType, PTypeOrClass } from '../ptypes'
 import {
@@ -139,8 +138,6 @@ export class NativeArrayExpressionBuilder extends NativeArrayLikeExpressionBuild
   resolveToPType(ptype: PTypeOrClass): InstanceBuilder {
     if (ptype.equals(this.ptype)) return this
     if (ptype instanceof ReadonlyArrayPType && this.ptype.elementType.equals(ptype.elementType)) {
-      // TODO: We should require a clone here
-      logger.warn(this.sourceLocation, 'We should require a clone here')
       return instanceEb(
         nodeFactory.reinterpretCast({
           expr: this.resolve(),

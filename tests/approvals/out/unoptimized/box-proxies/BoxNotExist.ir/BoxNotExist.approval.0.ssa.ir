@@ -4,8 +4,8 @@ main tests/approvals/box-proxies.algo.ts::BoxNotExist.approvalProgram:
         let tmp%1#0: bool = (!= tmp%0#0 0u)
         goto tmp%1#0 ? block@1 : block@11
     block@1: // if_body_L113
-        let awst_tmp%0#0: bytes = ((txnas ApplicationArgs) 0u)
-        let tmp%2#0: bool = (== awst_tmp%0#0 "box")
+        let reinterpret_string%0#0: string = ((txnas ApplicationArgs) 0u)
+        let tmp%2#0: bool = (== reinterpret_string%0#0 "box")
         goto tmp%2#0 ? block@2 : block@4
     block@2: // if_body_L115
         goto block@3
@@ -15,7 +15,7 @@ main tests/approvals/box-proxies.algo.ts::BoxNotExist.approvalProgram:
         let maybe_value_converted%0#0: uint64 = (btoi maybe_value%0#0)
         return maybe_value_converted%0#0
     block@4: // after_if_else_L115
-        let tmp%3#0: bool = (== awst_tmp%0#0 "boxmap")
+        let tmp%3#0: bool = (== reinterpret_string%0#0 "boxmap")
         goto tmp%3#0 ? block@5 : block@7
     block@5: // if_body_L117
         goto block@6
@@ -26,7 +26,7 @@ main tests/approvals/box-proxies.algo.ts::BoxNotExist.approvalProgram:
         let maybe_value_converted%1#0: uint64 = (btoi maybe_value%1#0)
         return maybe_value_converted%1#0
     block@7: // after_if_else_L117
-        let tmp%4#0: bool = (== awst_tmp%0#0 "createbox")
+        let tmp%4#0: bool = (== reinterpret_string%0#0 "createbox")
         goto tmp%4#0 ? block@8 : block@10
     block@8: // if_body_L119
         goto block@9

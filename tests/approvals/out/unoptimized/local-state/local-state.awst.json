@@ -267,12 +267,12 @@
               "_type": "ARC4StaticArray",
               "name": "arc4.static_array<arc4.uint64>",
               "immutable": false,
-              "arc4_alias": "uint64[10]",
+              "arc4_alias": null,
               "element_type": {
                 "_type": "ARC4UIntN",
                 "name": "arc4.uint64",
                 "immutable": true,
-                "arc4_alias": "uint64",
+                "arc4_alias": null,
                 "n": 64
               },
               "source_location": null,
@@ -771,12 +771,12 @@
                       "_type": "ARC4StaticArray",
                       "name": "arc4.static_array<arc4.uint64>",
                       "immutable": false,
-                      "arc4_alias": "uint64[10]",
+                      "arc4_alias": null,
                       "element_type": {
                         "_type": "ARC4UIntN",
                         "name": "arc4.uint64",
                         "immutable": true,
-                        "arc4_alias": "uint64",
+                        "arc4_alias": null,
                         "n": 64
                       },
                       "source_location": null,
@@ -834,12 +834,12 @@
                       "_type": "ARC4StaticArray",
                       "name": "arc4.static_array<arc4.uint64>",
                       "immutable": false,
-                      "arc4_alias": "uint64[10]",
+                      "arc4_alias": null,
                       "element_type": {
                         "_type": "ARC4UIntN",
                         "name": "arc4.uint64",
                         "immutable": true,
-                        "arc4_alias": "uint64",
+                        "arc4_alias": null,
                         "n": 64
                       },
                       "source_location": null,
@@ -851,19 +851,19 @@
                         "file": "tests/approvals/local-state.algo.ts",
                         "line": 24,
                         "end_line": 24,
-                        "column": 42,
-                        "end_column": 43
+                        "column": 48,
+                        "end_column": 49
                       },
                       "wtype": {
                         "_type": "ARC4StaticArray",
                         "name": "arc4.static_array<arc4.uint64>",
                         "immutable": false,
-                        "arc4_alias": "uint64[10]",
+                        "arc4_alias": null,
                         "element_type": {
                           "_type": "ARC4UIntN",
                           "name": "arc4.uint64",
                           "immutable": true,
-                          "arc4_alias": "uint64",
+                          "arc4_alias": null,
                           "n": 64
                         },
                         "source_location": null,
@@ -892,9 +892,10 @@
                       "end_column": 37
                     },
                     "wtype": {
-                      "_type": "WTuple",
-                      "name": "tuple",
-                      "immutable": true,
+                      "_type": "ARC4Tuple",
+                      "name": "arc4.tuple<uint64,bytes>",
+                      "immutable": false,
+                      "arc4_alias": null,
                       "types": [
                         {
                           "_type": "WType",
@@ -907,7 +908,8 @@
                           "immutable": true,
                           "length": null
                         }
-                      ]
+                      ],
+                      "source_location": null
                     },
                     "key": {
                       "_type": "BytesConstant",
@@ -949,7 +951,7 @@
                     }
                   },
                   "value": {
-                    "_type": "TupleExpression",
+                    "_type": "ARC4Encode",
                     "source_location": {
                       "file": "tests/approvals/local-state.algo.ts",
                       "line": 25,
@@ -958,9 +960,10 @@
                       "end_column": 46
                     },
                     "wtype": {
-                      "_type": "WTuple",
-                      "name": "tuple",
-                      "immutable": true,
+                      "_type": "ARC4Tuple",
+                      "name": "arc4.tuple<uint64,bytes>",
+                      "immutable": false,
+                      "arc4_alias": null,
                       "types": [
                         {
                           "_type": "WType",
@@ -973,43 +976,72 @@
                           "immutable": true,
                           "length": null
                         }
-                      ]
+                      ],
+                      "source_location": null
                     },
-                    "items": [
-                      {
-                        "_type": "VarExpression",
-                        "source_location": {
-                          "file": "tests/approvals/local-state.algo.ts",
-                          "line": 25,
-                          "end_line": 25,
-                          "column": 41,
-                          "end_column": 42
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true
-                        },
-                        "name": "a"
+                    "value": {
+                      "_type": "TupleExpression",
+                      "source_location": {
+                        "file": "tests/approvals/local-state.algo.ts",
+                        "line": 25,
+                        "end_line": 25,
+                        "column": 40,
+                        "end_column": 46
                       },
-                      {
-                        "_type": "VarExpression",
-                        "source_location": {
-                          "file": "tests/approvals/local-state.algo.ts",
-                          "line": 25,
-                          "end_line": 25,
-                          "column": 44,
-                          "end_column": 45
+                      "wtype": {
+                        "_type": "WTuple",
+                        "name": "tuple",
+                        "immutable": true,
+                        "types": [
+                          {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          {
+                            "_type": "BytesWType",
+                            "name": "bytes",
+                            "immutable": true,
+                            "length": null
+                          }
+                        ]
+                      },
+                      "items": [
+                        {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/local-state.algo.ts",
+                            "line": 25,
+                            "end_line": 25,
+                            "column": 41,
+                            "end_column": 42
+                          },
+                          "wtype": {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          "name": "a"
                         },
-                        "wtype": {
-                          "_type": "BytesWType",
-                          "name": "bytes",
-                          "immutable": true,
-                          "length": null
-                        },
-                        "name": "b"
-                      }
-                    ]
+                        {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/local-state.algo.ts",
+                            "line": 25,
+                            "end_line": 25,
+                            "column": 44,
+                            "end_column": 45
+                          },
+                          "wtype": {
+                            "_type": "BytesWType",
+                            "name": "bytes",
+                            "immutable": true,
+                            "length": null
+                          },
+                          "name": "b"
+                        }
+                      ]
+                    }
                   }
                 },
                 {
@@ -1235,21 +1267,22 @@
               "_type": "ARC4StaticArray",
               "name": "arc4.static_array<arc4.uint64>",
               "immutable": false,
-              "arc4_alias": "uint64[10]",
+              "arc4_alias": null,
               "element_type": {
                 "_type": "ARC4UIntN",
                 "name": "arc4.uint64",
                 "immutable": true,
-                "arc4_alias": "uint64",
+                "arc4_alias": null,
                 "n": 64
               },
               "source_location": null,
               "array_size": 10
             },
             {
-              "_type": "WTuple",
-              "name": "tuple",
-              "immutable": true,
+              "_type": "ARC4Tuple",
+              "name": "arc4.tuple<uint64,bytes>",
+              "immutable": false,
+              "arc4_alias": null,
               "types": [
                 {
                   "_type": "WType",
@@ -1262,7 +1295,8 @@
                   "immutable": true,
                   "length": null
                 }
-              ]
+              ],
+              "source_location": null
             },
             {
               "_type": "WTuple",
@@ -1356,21 +1390,22 @@
                       "_type": "ARC4StaticArray",
                       "name": "arc4.static_array<arc4.uint64>",
                       "immutable": false,
-                      "arc4_alias": "uint64[10]",
+                      "arc4_alias": null,
                       "element_type": {
                         "_type": "ARC4UIntN",
                         "name": "arc4.uint64",
                         "immutable": true,
-                        "arc4_alias": "uint64",
+                        "arc4_alias": null,
                         "n": 64
                       },
                       "source_location": null,
                       "array_size": 10
                     },
                     {
-                      "_type": "WTuple",
-                      "name": "tuple",
-                      "immutable": true,
+                      "_type": "ARC4Tuple",
+                      "name": "arc4.tuple<uint64,bytes>",
+                      "immutable": false,
+                      "arc4_alias": null,
                       "types": [
                         {
                           "_type": "WType",
@@ -1383,7 +1418,8 @@
                           "immutable": true,
                           "length": null
                         }
-                      ]
+                      ],
+                      "source_location": null
                     },
                     {
                       "_type": "WTuple",
@@ -1473,21 +1509,22 @@
                             "_type": "ARC4StaticArray",
                             "name": "arc4.static_array<arc4.uint64>",
                             "immutable": false,
-                            "arc4_alias": "uint64[10]",
+                            "arc4_alias": null,
                             "element_type": {
                               "_type": "ARC4UIntN",
                               "name": "arc4.uint64",
                               "immutable": true,
-                              "arc4_alias": "uint64",
+                              "arc4_alias": null,
                               "n": 64
                             },
                             "source_location": null,
                             "array_size": 10
                           },
                           {
-                            "_type": "WTuple",
-                            "name": "tuple",
-                            "immutable": true,
+                            "_type": "ARC4Tuple",
+                            "name": "arc4.tuple<uint64,bytes>",
+                            "immutable": false,
+                            "arc4_alias": null,
                             "types": [
                               {
                                 "_type": "WType",
@@ -1500,7 +1537,8 @@
                                 "immutable": true,
                                 "length": null
                               }
-                            ]
+                            ],
+                            "source_location": null
                           },
                           {
                             "_type": "WTuple",
@@ -1575,21 +1613,22 @@
                               "_type": "ARC4StaticArray",
                               "name": "arc4.static_array<arc4.uint64>",
                               "immutable": false,
-                              "arc4_alias": "uint64[10]",
+                              "arc4_alias": null,
                               "element_type": {
                                 "_type": "ARC4UIntN",
                                 "name": "arc4.uint64",
                                 "immutable": true,
-                                "arc4_alias": "uint64",
+                                "arc4_alias": null,
                                 "n": 64
                               },
                               "source_location": null,
                               "array_size": 10
                             },
                             {
-                              "_type": "WTuple",
-                              "name": "tuple",
-                              "immutable": true,
+                              "_type": "ARC4Tuple",
+                              "name": "arc4.tuple<uint64,bytes>",
+                              "immutable": false,
+                              "arc4_alias": null,
                               "types": [
                                 {
                                   "_type": "WType",
@@ -1602,7 +1641,8 @@
                                   "immutable": true,
                                   "length": null
                                 }
-                              ]
+                              ],
+                              "source_location": null
                             },
                             {
                               "_type": "WTuple",
@@ -1865,12 +1905,12 @@
                               "_type": "ARC4StaticArray",
                               "name": "arc4.static_array<arc4.uint64>",
                               "immutable": false,
-                              "arc4_alias": "uint64[10]",
+                              "arc4_alias": null,
                               "element_type": {
                                 "_type": "ARC4UIntN",
                                 "name": "arc4.uint64",
                                 "immutable": true,
-                                "arc4_alias": "uint64",
+                                "arc4_alias": null,
                                 "n": 64
                               },
                               "source_location": null,
@@ -1882,19 +1922,19 @@
                                 "file": "tests/approvals/local-state.algo.ts",
                                 "line": 35,
                                 "end_line": 35,
-                                "column": 50,
-                                "end_column": 55
+                                "column": 56,
+                                "end_column": 61
                               },
                               "wtype": {
                                 "_type": "ARC4StaticArray",
                                 "name": "arc4.static_array<arc4.uint64>",
                                 "immutable": false,
-                                "arc4_alias": "uint64[10]",
+                                "arc4_alias": null,
                                 "element_type": {
                                   "_type": "ARC4UIntN",
                                   "name": "arc4.uint64",
                                   "immutable": true,
-                                  "arc4_alias": "uint64",
+                                  "arc4_alias": null,
                                   "n": 64
                                 },
                                 "source_location": null,
@@ -1924,8 +1964,8 @@
                                   "file": "tests/approvals/local-state.algo.ts",
                                   "line": 35,
                                   "end_line": 35,
-                                  "column": 42,
-                                  "end_column": 48
+                                  "column": 48,
+                                  "end_column": 54
                                 },
                                 "wtype": {
                                   "_type": "WType",
@@ -1950,9 +1990,10 @@
                               "end_column": 51
                             },
                             "wtype": {
-                              "_type": "WTuple",
-                              "name": "tuple",
-                              "immutable": true,
+                              "_type": "ARC4Tuple",
+                              "name": "arc4.tuple<uint64,bytes>",
+                              "immutable": false,
+                              "arc4_alias": null,
                               "types": [
                                 {
                                   "_type": "WType",
@@ -1965,7 +2006,8 @@
                                   "immutable": true,
                                   "length": null
                                 }
-                              ]
+                              ],
+                              "source_location": null
                             },
                             "key": {
                               "_type": "BytesConstant",
@@ -2136,21 +2178,22 @@
                             "_type": "ARC4StaticArray",
                             "name": "arc4.static_array<arc4.uint64>",
                             "immutable": false,
-                            "arc4_alias": "uint64[10]",
+                            "arc4_alias": null,
                             "element_type": {
                               "_type": "ARC4UIntN",
                               "name": "arc4.uint64",
                               "immutable": true,
-                              "arc4_alias": "uint64",
+                              "arc4_alias": null,
                               "n": 64
                             },
                             "source_location": null,
                             "array_size": 10
                           },
                           {
-                            "_type": "WTuple",
-                            "name": "tuple",
-                            "immutable": true,
+                            "_type": "ARC4Tuple",
+                            "name": "arc4.tuple<uint64,bytes>",
+                            "immutable": false,
+                            "arc4_alias": null,
                             "types": [
                               {
                                 "_type": "WType",
@@ -2163,7 +2206,8 @@
                                 "immutable": true,
                                 "length": null
                               }
-                            ]
+                            ],
+                            "source_location": null
                           },
                           {
                             "_type": "WTuple",
@@ -2238,21 +2282,22 @@
                               "_type": "ARC4StaticArray",
                               "name": "arc4.static_array<arc4.uint64>",
                               "immutable": false,
-                              "arc4_alias": "uint64[10]",
+                              "arc4_alias": null,
                               "element_type": {
                                 "_type": "ARC4UIntN",
                                 "name": "arc4.uint64",
                                 "immutable": true,
-                                "arc4_alias": "uint64",
+                                "arc4_alias": null,
                                 "n": 64
                               },
                               "source_location": null,
                               "array_size": 10
                             },
                             {
-                              "_type": "WTuple",
-                              "name": "tuple",
-                              "immutable": true,
+                              "_type": "ARC4Tuple",
+                              "name": "arc4.tuple<uint64,bytes>",
+                              "immutable": false,
+                              "arc4_alias": null,
                               "types": [
                                 {
                                   "_type": "WType",
@@ -2265,7 +2310,8 @@
                                   "immutable": true,
                                   "length": null
                                 }
-                              ]
+                              ],
+                              "source_location": null
                             },
                             {
                               "_type": "WTuple",
@@ -2528,12 +2574,12 @@
                               "_type": "ARC4StaticArray",
                               "name": "arc4.static_array<arc4.uint64>",
                               "immutable": false,
-                              "arc4_alias": "uint64[10]",
+                              "arc4_alias": null,
                               "element_type": {
                                 "_type": "ARC4UIntN",
                                 "name": "arc4.uint64",
                                 "immutable": true,
-                                "arc4_alias": "uint64",
+                                "arc4_alias": null,
                                 "n": 64
                               },
                               "source_location": null,
@@ -2545,19 +2591,19 @@
                                 "file": "tests/approvals/local-state.algo.ts",
                                 "line": 35,
                                 "end_line": 35,
-                                "column": 50,
-                                "end_column": 55
+                                "column": 56,
+                                "end_column": 61
                               },
                               "wtype": {
                                 "_type": "ARC4StaticArray",
                                 "name": "arc4.static_array<arc4.uint64>",
                                 "immutable": false,
-                                "arc4_alias": "uint64[10]",
+                                "arc4_alias": null,
                                 "element_type": {
                                   "_type": "ARC4UIntN",
                                   "name": "arc4.uint64",
                                   "immutable": true,
-                                  "arc4_alias": "uint64",
+                                  "arc4_alias": null,
                                   "n": 64
                                 },
                                 "source_location": null,
@@ -2587,8 +2633,8 @@
                                   "file": "tests/approvals/local-state.algo.ts",
                                   "line": 35,
                                   "end_line": 35,
-                                  "column": 42,
-                                  "end_column": 48
+                                  "column": 48,
+                                  "end_column": 54
                                 },
                                 "wtype": {
                                   "_type": "WType",
@@ -2613,9 +2659,10 @@
                               "end_column": 51
                             },
                             "wtype": {
-                              "_type": "WTuple",
-                              "name": "tuple",
-                              "immutable": true,
+                              "_type": "ARC4Tuple",
+                              "name": "arc4.tuple<uint64,bytes>",
+                              "immutable": false,
+                              "arc4_alias": null,
                               "types": [
                                 {
                                   "_type": "WType",
@@ -2628,7 +2675,8 @@
                                   "immutable": true,
                                   "length": null
                                 }
-                              ]
+                              ],
+                              "source_location": null
                             },
                             "key": {
                               "_type": "BytesConstant",
@@ -2800,21 +2848,22 @@
                             "_type": "ARC4StaticArray",
                             "name": "arc4.static_array<arc4.uint64>",
                             "immutable": false,
-                            "arc4_alias": "uint64[10]",
+                            "arc4_alias": null,
                             "element_type": {
                               "_type": "ARC4UIntN",
                               "name": "arc4.uint64",
                               "immutable": true,
-                              "arc4_alias": "uint64",
+                              "arc4_alias": null,
                               "n": 64
                             },
                             "source_location": null,
                             "array_size": 10
                           },
                           {
-                            "_type": "WTuple",
-                            "name": "tuple",
-                            "immutable": true,
+                            "_type": "ARC4Tuple",
+                            "name": "arc4.tuple<uint64,bytes>",
+                            "immutable": false,
+                            "arc4_alias": null,
                             "types": [
                               {
                                 "_type": "WType",
@@ -2827,7 +2876,8 @@
                                 "immutable": true,
                                 "length": null
                               }
-                            ]
+                            ],
+                            "source_location": null
                           },
                           {
                             "_type": "WTuple",
@@ -2902,21 +2952,22 @@
                               "_type": "ARC4StaticArray",
                               "name": "arc4.static_array<arc4.uint64>",
                               "immutable": false,
-                              "arc4_alias": "uint64[10]",
+                              "arc4_alias": null,
                               "element_type": {
                                 "_type": "ARC4UIntN",
                                 "name": "arc4.uint64",
                                 "immutable": true,
-                                "arc4_alias": "uint64",
+                                "arc4_alias": null,
                                 "n": 64
                               },
                               "source_location": null,
                               "array_size": 10
                             },
                             {
-                              "_type": "WTuple",
-                              "name": "tuple",
-                              "immutable": true,
+                              "_type": "ARC4Tuple",
+                              "name": "arc4.tuple<uint64,bytes>",
+                              "immutable": false,
+                              "arc4_alias": null,
                               "types": [
                                 {
                                   "_type": "WType",
@@ -2929,7 +2980,8 @@
                                   "immutable": true,
                                   "length": null
                                 }
-                              ]
+                              ],
+                              "source_location": null
                             },
                             {
                               "_type": "WTuple",
@@ -3192,12 +3244,12 @@
                               "_type": "ARC4StaticArray",
                               "name": "arc4.static_array<arc4.uint64>",
                               "immutable": false,
-                              "arc4_alias": "uint64[10]",
+                              "arc4_alias": null,
                               "element_type": {
                                 "_type": "ARC4UIntN",
                                 "name": "arc4.uint64",
                                 "immutable": true,
-                                "arc4_alias": "uint64",
+                                "arc4_alias": null,
                                 "n": 64
                               },
                               "source_location": null,
@@ -3209,19 +3261,19 @@
                                 "file": "tests/approvals/local-state.algo.ts",
                                 "line": 35,
                                 "end_line": 35,
-                                "column": 50,
-                                "end_column": 55
+                                "column": 56,
+                                "end_column": 61
                               },
                               "wtype": {
                                 "_type": "ARC4StaticArray",
                                 "name": "arc4.static_array<arc4.uint64>",
                                 "immutable": false,
-                                "arc4_alias": "uint64[10]",
+                                "arc4_alias": null,
                                 "element_type": {
                                   "_type": "ARC4UIntN",
                                   "name": "arc4.uint64",
                                   "immutable": true,
-                                  "arc4_alias": "uint64",
+                                  "arc4_alias": null,
                                   "n": 64
                                 },
                                 "source_location": null,
@@ -3251,8 +3303,8 @@
                                   "file": "tests/approvals/local-state.algo.ts",
                                   "line": 35,
                                   "end_line": 35,
-                                  "column": 42,
-                                  "end_column": 48
+                                  "column": 48,
+                                  "end_column": 54
                                 },
                                 "wtype": {
                                   "_type": "WType",
@@ -3277,9 +3329,10 @@
                               "end_column": 51
                             },
                             "wtype": {
-                              "_type": "WTuple",
-                              "name": "tuple",
-                              "immutable": true,
+                              "_type": "ARC4Tuple",
+                              "name": "arc4.tuple<uint64,bytes>",
+                              "immutable": false,
+                              "arc4_alias": null,
                               "types": [
                                 {
                                   "_type": "WType",
@@ -3292,7 +3345,8 @@
                                   "immutable": true,
                                   "length": null
                                 }
-                              ]
+                              ],
+                              "source_location": null
                             },
                             "key": {
                               "_type": "BytesConstant",
@@ -3464,21 +3518,22 @@
                             "_type": "ARC4StaticArray",
                             "name": "arc4.static_array<arc4.uint64>",
                             "immutable": false,
-                            "arc4_alias": "uint64[10]",
+                            "arc4_alias": null,
                             "element_type": {
                               "_type": "ARC4UIntN",
                               "name": "arc4.uint64",
                               "immutable": true,
-                              "arc4_alias": "uint64",
+                              "arc4_alias": null,
                               "n": 64
                             },
                             "source_location": null,
                             "array_size": 10
                           },
                           {
-                            "_type": "WTuple",
-                            "name": "tuple",
-                            "immutable": true,
+                            "_type": "ARC4Tuple",
+                            "name": "arc4.tuple<uint64,bytes>",
+                            "immutable": false,
+                            "arc4_alias": null,
                             "types": [
                               {
                                 "_type": "WType",
@@ -3491,7 +3546,8 @@
                                 "immutable": true,
                                 "length": null
                               }
-                            ]
+                            ],
+                            "source_location": null
                           },
                           {
                             "_type": "WTuple",
@@ -3566,21 +3622,22 @@
                               "_type": "ARC4StaticArray",
                               "name": "arc4.static_array<arc4.uint64>",
                               "immutable": false,
-                              "arc4_alias": "uint64[10]",
+                              "arc4_alias": null,
                               "element_type": {
                                 "_type": "ARC4UIntN",
                                 "name": "arc4.uint64",
                                 "immutable": true,
-                                "arc4_alias": "uint64",
+                                "arc4_alias": null,
                                 "n": 64
                               },
                               "source_location": null,
                               "array_size": 10
                             },
                             {
-                              "_type": "WTuple",
-                              "name": "tuple",
-                              "immutable": true,
+                              "_type": "ARC4Tuple",
+                              "name": "arc4.tuple<uint64,bytes>",
+                              "immutable": false,
+                              "arc4_alias": null,
                               "types": [
                                 {
                                   "_type": "WType",
@@ -3593,7 +3650,8 @@
                                   "immutable": true,
                                   "length": null
                                 }
-                              ]
+                              ],
+                              "source_location": null
                             },
                             {
                               "_type": "WTuple",
@@ -3856,12 +3914,12 @@
                               "_type": "ARC4StaticArray",
                               "name": "arc4.static_array<arc4.uint64>",
                               "immutable": false,
-                              "arc4_alias": "uint64[10]",
+                              "arc4_alias": null,
                               "element_type": {
                                 "_type": "ARC4UIntN",
                                 "name": "arc4.uint64",
                                 "immutable": true,
-                                "arc4_alias": "uint64",
+                                "arc4_alias": null,
                                 "n": 64
                               },
                               "source_location": null,
@@ -3873,19 +3931,19 @@
                                 "file": "tests/approvals/local-state.algo.ts",
                                 "line": 35,
                                 "end_line": 35,
-                                "column": 50,
-                                "end_column": 55
+                                "column": 56,
+                                "end_column": 61
                               },
                               "wtype": {
                                 "_type": "ARC4StaticArray",
                                 "name": "arc4.static_array<arc4.uint64>",
                                 "immutable": false,
-                                "arc4_alias": "uint64[10]",
+                                "arc4_alias": null,
                                 "element_type": {
                                   "_type": "ARC4UIntN",
                                   "name": "arc4.uint64",
                                   "immutable": true,
-                                  "arc4_alias": "uint64",
+                                  "arc4_alias": null,
                                   "n": 64
                                 },
                                 "source_location": null,
@@ -3915,8 +3973,8 @@
                                   "file": "tests/approvals/local-state.algo.ts",
                                   "line": 35,
                                   "end_line": 35,
-                                  "column": 42,
-                                  "end_column": 48
+                                  "column": 48,
+                                  "end_column": 54
                                 },
                                 "wtype": {
                                   "_type": "WType",
@@ -3941,9 +3999,10 @@
                               "end_column": 51
                             },
                             "wtype": {
-                              "_type": "WTuple",
-                              "name": "tuple",
-                              "immutable": true,
+                              "_type": "ARC4Tuple",
+                              "name": "arc4.tuple<uint64,bytes>",
+                              "immutable": false,
+                              "arc4_alias": null,
                               "types": [
                                 {
                                   "_type": "WType",
@@ -3956,7 +4015,8 @@
                                   "immutable": true,
                                   "length": null
                                 }
-                              ]
+                              ],
+                              "source_location": null
                             },
                             "key": {
                               "_type": "BytesConstant",
@@ -4086,12 +4146,12 @@
                       "_type": "ARC4StaticArray",
                       "name": "arc4.static_array<arc4.uint64>",
                       "immutable": false,
-                      "arc4_alias": "uint64[10]",
+                      "arc4_alias": null,
                       "element_type": {
                         "_type": "ARC4UIntN",
                         "name": "arc4.uint64",
                         "immutable": true,
-                        "arc4_alias": "uint64",
+                        "arc4_alias": null,
                         "n": 64
                       },
                       "source_location": null,
@@ -4137,21 +4197,22 @@
                             "_type": "ARC4StaticArray",
                             "name": "arc4.static_array<arc4.uint64>",
                             "immutable": false,
-                            "arc4_alias": "uint64[10]",
+                            "arc4_alias": null,
                             "element_type": {
                               "_type": "ARC4UIntN",
                               "name": "arc4.uint64",
                               "immutable": true,
-                              "arc4_alias": "uint64",
+                              "arc4_alias": null,
                               "n": 64
                             },
                             "source_location": null,
                             "array_size": 10
                           },
                           {
-                            "_type": "WTuple",
-                            "name": "tuple",
-                            "immutable": true,
+                            "_type": "ARC4Tuple",
+                            "name": "arc4.tuple<uint64,bytes>",
+                            "immutable": false,
+                            "arc4_alias": null,
                             "types": [
                               {
                                 "_type": "WType",
@@ -4164,7 +4225,8 @@
                                 "immutable": true,
                                 "length": null
                               }
-                            ]
+                            ],
+                            "source_location": null
                           },
                           {
                             "_type": "WTuple",
@@ -4239,21 +4301,22 @@
                               "_type": "ARC4StaticArray",
                               "name": "arc4.static_array<arc4.uint64>",
                               "immutable": false,
-                              "arc4_alias": "uint64[10]",
+                              "arc4_alias": null,
                               "element_type": {
                                 "_type": "ARC4UIntN",
                                 "name": "arc4.uint64",
                                 "immutable": true,
-                                "arc4_alias": "uint64",
+                                "arc4_alias": null,
                                 "n": 64
                               },
                               "source_location": null,
                               "array_size": 10
                             },
                             {
-                              "_type": "WTuple",
-                              "name": "tuple",
-                              "immutable": true,
+                              "_type": "ARC4Tuple",
+                              "name": "arc4.tuple<uint64,bytes>",
+                              "immutable": false,
+                              "arc4_alias": null,
                               "types": [
                                 {
                                   "_type": "WType",
@@ -4266,7 +4329,8 @@
                                   "immutable": true,
                                   "length": null
                                 }
-                              ]
+                              ],
+                              "source_location": null
                             },
                             {
                               "_type": "WTuple",
@@ -4529,12 +4593,12 @@
                               "_type": "ARC4StaticArray",
                               "name": "arc4.static_array<arc4.uint64>",
                               "immutable": false,
-                              "arc4_alias": "uint64[10]",
+                              "arc4_alias": null,
                               "element_type": {
                                 "_type": "ARC4UIntN",
                                 "name": "arc4.uint64",
                                 "immutable": true,
-                                "arc4_alias": "uint64",
+                                "arc4_alias": null,
                                 "n": 64
                               },
                               "source_location": null,
@@ -4546,19 +4610,19 @@
                                 "file": "tests/approvals/local-state.algo.ts",
                                 "line": 35,
                                 "end_line": 35,
-                                "column": 50,
-                                "end_column": 55
+                                "column": 56,
+                                "end_column": 61
                               },
                               "wtype": {
                                 "_type": "ARC4StaticArray",
                                 "name": "arc4.static_array<arc4.uint64>",
                                 "immutable": false,
-                                "arc4_alias": "uint64[10]",
+                                "arc4_alias": null,
                                 "element_type": {
                                   "_type": "ARC4UIntN",
                                   "name": "arc4.uint64",
                                   "immutable": true,
-                                  "arc4_alias": "uint64",
+                                  "arc4_alias": null,
                                   "n": 64
                                 },
                                 "source_location": null,
@@ -4588,8 +4652,8 @@
                                   "file": "tests/approvals/local-state.algo.ts",
                                   "line": 35,
                                   "end_line": 35,
-                                  "column": 42,
-                                  "end_column": 48
+                                  "column": 48,
+                                  "end_column": 54
                                 },
                                 "wtype": {
                                   "_type": "WType",
@@ -4614,9 +4678,10 @@
                               "end_column": 51
                             },
                             "wtype": {
-                              "_type": "WTuple",
-                              "name": "tuple",
-                              "immutable": true,
+                              "_type": "ARC4Tuple",
+                              "name": "arc4.tuple<uint64,bytes>",
+                              "immutable": false,
+                              "arc4_alias": null,
                               "types": [
                                 {
                                   "_type": "WType",
@@ -4629,7 +4694,8 @@
                                   "immutable": true,
                                   "length": null
                                 }
-                              ]
+                              ],
+                              "source_location": null
                             },
                             "key": {
                               "_type": "BytesConstant",
@@ -4756,9 +4822,10 @@
                       "end_column": 5
                     },
                     "wtype": {
-                      "_type": "WTuple",
-                      "name": "tuple",
-                      "immutable": true,
+                      "_type": "ARC4Tuple",
+                      "name": "arc4.tuple<uint64,bytes>",
+                      "immutable": false,
+                      "arc4_alias": null,
                       "types": [
                         {
                           "_type": "WType",
@@ -4771,7 +4838,8 @@
                           "immutable": true,
                           "length": null
                         }
-                      ]
+                      ],
+                      "source_location": null
                     },
                     "base": {
                       "_type": "SingleEvaluation",
@@ -4813,21 +4881,22 @@
                             "_type": "ARC4StaticArray",
                             "name": "arc4.static_array<arc4.uint64>",
                             "immutable": false,
-                            "arc4_alias": "uint64[10]",
+                            "arc4_alias": null,
                             "element_type": {
                               "_type": "ARC4UIntN",
                               "name": "arc4.uint64",
                               "immutable": true,
-                              "arc4_alias": "uint64",
+                              "arc4_alias": null,
                               "n": 64
                             },
                             "source_location": null,
                             "array_size": 10
                           },
                           {
-                            "_type": "WTuple",
-                            "name": "tuple",
-                            "immutable": true,
+                            "_type": "ARC4Tuple",
+                            "name": "arc4.tuple<uint64,bytes>",
+                            "immutable": false,
+                            "arc4_alias": null,
                             "types": [
                               {
                                 "_type": "WType",
@@ -4840,7 +4909,8 @@
                                 "immutable": true,
                                 "length": null
                               }
-                            ]
+                            ],
+                            "source_location": null
                           },
                           {
                             "_type": "WTuple",
@@ -4915,21 +4985,22 @@
                               "_type": "ARC4StaticArray",
                               "name": "arc4.static_array<arc4.uint64>",
                               "immutable": false,
-                              "arc4_alias": "uint64[10]",
+                              "arc4_alias": null,
                               "element_type": {
                                 "_type": "ARC4UIntN",
                                 "name": "arc4.uint64",
                                 "immutable": true,
-                                "arc4_alias": "uint64",
+                                "arc4_alias": null,
                                 "n": 64
                               },
                               "source_location": null,
                               "array_size": 10
                             },
                             {
-                              "_type": "WTuple",
-                              "name": "tuple",
-                              "immutable": true,
+                              "_type": "ARC4Tuple",
+                              "name": "arc4.tuple<uint64,bytes>",
+                              "immutable": false,
+                              "arc4_alias": null,
                               "types": [
                                 {
                                   "_type": "WType",
@@ -4942,7 +5013,8 @@
                                   "immutable": true,
                                   "length": null
                                 }
-                              ]
+                              ],
+                              "source_location": null
                             },
                             {
                               "_type": "WTuple",
@@ -5205,12 +5277,12 @@
                               "_type": "ARC4StaticArray",
                               "name": "arc4.static_array<arc4.uint64>",
                               "immutable": false,
-                              "arc4_alias": "uint64[10]",
+                              "arc4_alias": null,
                               "element_type": {
                                 "_type": "ARC4UIntN",
                                 "name": "arc4.uint64",
                                 "immutable": true,
-                                "arc4_alias": "uint64",
+                                "arc4_alias": null,
                                 "n": 64
                               },
                               "source_location": null,
@@ -5222,19 +5294,19 @@
                                 "file": "tests/approvals/local-state.algo.ts",
                                 "line": 35,
                                 "end_line": 35,
-                                "column": 50,
-                                "end_column": 55
+                                "column": 56,
+                                "end_column": 61
                               },
                               "wtype": {
                                 "_type": "ARC4StaticArray",
                                 "name": "arc4.static_array<arc4.uint64>",
                                 "immutable": false,
-                                "arc4_alias": "uint64[10]",
+                                "arc4_alias": null,
                                 "element_type": {
                                   "_type": "ARC4UIntN",
                                   "name": "arc4.uint64",
                                   "immutable": true,
-                                  "arc4_alias": "uint64",
+                                  "arc4_alias": null,
                                   "n": 64
                                 },
                                 "source_location": null,
@@ -5264,8 +5336,8 @@
                                   "file": "tests/approvals/local-state.algo.ts",
                                   "line": 35,
                                   "end_line": 35,
-                                  "column": 42,
-                                  "end_column": 48
+                                  "column": 48,
+                                  "end_column": 54
                                 },
                                 "wtype": {
                                   "_type": "WType",
@@ -5290,9 +5362,10 @@
                               "end_column": 51
                             },
                             "wtype": {
-                              "_type": "WTuple",
-                              "name": "tuple",
-                              "immutable": true,
+                              "_type": "ARC4Tuple",
+                              "name": "arc4.tuple<uint64,bytes>",
+                              "immutable": false,
+                              "arc4_alias": null,
                               "types": [
                                 {
                                   "_type": "WType",
@@ -5305,7 +5378,8 @@
                                   "immutable": true,
                                   "length": null
                                 }
-                              ]
+                              ],
+                              "source_location": null
                             },
                             "key": {
                               "_type": "BytesConstant",
@@ -5493,21 +5567,22 @@
                             "_type": "ARC4StaticArray",
                             "name": "arc4.static_array<arc4.uint64>",
                             "immutable": false,
-                            "arc4_alias": "uint64[10]",
+                            "arc4_alias": null,
                             "element_type": {
                               "_type": "ARC4UIntN",
                               "name": "arc4.uint64",
                               "immutable": true,
-                              "arc4_alias": "uint64",
+                              "arc4_alias": null,
                               "n": 64
                             },
                             "source_location": null,
                             "array_size": 10
                           },
                           {
-                            "_type": "WTuple",
-                            "name": "tuple",
-                            "immutable": true,
+                            "_type": "ARC4Tuple",
+                            "name": "arc4.tuple<uint64,bytes>",
+                            "immutable": false,
+                            "arc4_alias": null,
                             "types": [
                               {
                                 "_type": "WType",
@@ -5520,7 +5595,8 @@
                                 "immutable": true,
                                 "length": null
                               }
-                            ]
+                            ],
+                            "source_location": null
                           },
                           {
                             "_type": "WTuple",
@@ -5595,21 +5671,22 @@
                               "_type": "ARC4StaticArray",
                               "name": "arc4.static_array<arc4.uint64>",
                               "immutable": false,
-                              "arc4_alias": "uint64[10]",
+                              "arc4_alias": null,
                               "element_type": {
                                 "_type": "ARC4UIntN",
                                 "name": "arc4.uint64",
                                 "immutable": true,
-                                "arc4_alias": "uint64",
+                                "arc4_alias": null,
                                 "n": 64
                               },
                               "source_location": null,
                               "array_size": 10
                             },
                             {
-                              "_type": "WTuple",
-                              "name": "tuple",
-                              "immutable": true,
+                              "_type": "ARC4Tuple",
+                              "name": "arc4.tuple<uint64,bytes>",
+                              "immutable": false,
+                              "arc4_alias": null,
                               "types": [
                                 {
                                   "_type": "WType",
@@ -5622,7 +5699,8 @@
                                   "immutable": true,
                                   "length": null
                                 }
-                              ]
+                              ],
+                              "source_location": null
                             },
                             {
                               "_type": "WTuple",
@@ -5885,12 +5963,12 @@
                               "_type": "ARC4StaticArray",
                               "name": "arc4.static_array<arc4.uint64>",
                               "immutable": false,
-                              "arc4_alias": "uint64[10]",
+                              "arc4_alias": null,
                               "element_type": {
                                 "_type": "ARC4UIntN",
                                 "name": "arc4.uint64",
                                 "immutable": true,
-                                "arc4_alias": "uint64",
+                                "arc4_alias": null,
                                 "n": 64
                               },
                               "source_location": null,
@@ -5902,19 +5980,19 @@
                                 "file": "tests/approvals/local-state.algo.ts",
                                 "line": 35,
                                 "end_line": 35,
-                                "column": 50,
-                                "end_column": 55
+                                "column": 56,
+                                "end_column": 61
                               },
                               "wtype": {
                                 "_type": "ARC4StaticArray",
                                 "name": "arc4.static_array<arc4.uint64>",
                                 "immutable": false,
-                                "arc4_alias": "uint64[10]",
+                                "arc4_alias": null,
                                 "element_type": {
                                   "_type": "ARC4UIntN",
                                   "name": "arc4.uint64",
                                   "immutable": true,
-                                  "arc4_alias": "uint64",
+                                  "arc4_alias": null,
                                   "n": 64
                                 },
                                 "source_location": null,
@@ -5944,8 +6022,8 @@
                                   "file": "tests/approvals/local-state.algo.ts",
                                   "line": 35,
                                   "end_line": 35,
-                                  "column": 42,
-                                  "end_column": 48
+                                  "column": 48,
+                                  "end_column": 54
                                 },
                                 "wtype": {
                                   "_type": "WType",
@@ -5970,9 +6048,10 @@
                               "end_column": 51
                             },
                             "wtype": {
-                              "_type": "WTuple",
-                              "name": "tuple",
-                              "immutable": true,
+                              "_type": "ARC4Tuple",
+                              "name": "arc4.tuple<uint64,bytes>",
+                              "immutable": false,
+                              "arc4_alias": null,
                               "types": [
                                 {
                                   "_type": "WType",
@@ -5985,7 +6064,8 @@
                                   "immutable": true,
                                   "length": null
                                 }
-                              ]
+                              ],
+                              "source_location": null
                             },
                             "key": {
                               "_type": "BytesConstant",
@@ -6511,12 +6591,12 @@
                     "_type": "ARC4StaticArray",
                     "name": "arc4.static_array<arc4.uint64>",
                     "immutable": false,
-                    "arc4_alias": "uint64[10]",
+                    "arc4_alias": null,
                     "element_type": {
                       "_type": "ARC4UIntN",
                       "name": "arc4.uint64",
                       "immutable": true,
-                      "arc4_alias": "uint64",
+                      "arc4_alias": null,
                       "n": 64
                     },
                     "source_location": null,
@@ -6596,9 +6676,10 @@
                     "end_column": 31
                   },
                   "wtype": {
-                    "_type": "WTuple",
-                    "name": "tuple",
-                    "immutable": true,
+                    "_type": "ARC4Tuple",
+                    "name": "arc4.tuple<uint64,bytes>",
+                    "immutable": false,
+                    "arc4_alias": null,
                     "types": [
                       {
                         "_type": "WType",
@@ -6611,7 +6692,8 @@
                         "immutable": true,
                         "length": null
                       }
-                    ]
+                    ],
+                    "source_location": null
                   },
                   "key": {
                     "_type": "BytesConstant",
@@ -6995,12 +7077,12 @@
           "_type": "ARC4StaticArray",
           "name": "arc4.static_array<arc4.uint64>",
           "immutable": false,
-          "arc4_alias": "uint64[10]",
+          "arc4_alias": null,
           "element_type": {
             "_type": "ARC4UIntN",
             "name": "arc4.uint64",
             "immutable": true,
-            "arc4_alias": "uint64",
+            "arc4_alias": null,
             "n": 64
           },
           "source_location": null,
@@ -7038,9 +7120,10 @@
         "member_name": "localTuple",
         "kind": 2,
         "storage_wtype": {
-          "_type": "WTuple",
-          "name": "tuple",
-          "immutable": true,
+          "_type": "ARC4Tuple",
+          "name": "arc4.tuple<uint64,bytes>",
+          "immutable": false,
+          "arc4_alias": null,
           "types": [
             {
               "_type": "WType",
@@ -7053,7 +7136,8 @@
               "immutable": true,
               "length": null
             }
-          ]
+          ],
+          "source_location": null
         },
         "key_wtype": null,
         "key": {

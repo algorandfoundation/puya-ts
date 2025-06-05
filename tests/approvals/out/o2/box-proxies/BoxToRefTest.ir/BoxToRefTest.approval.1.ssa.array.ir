@@ -16,9 +16,12 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (box_replace boxForCaller#0 0u 0x7b)
         let (maybe_value%0#0: bytes, maybe_exists%0#0: bool) = (box_get boxForCaller#0)
         (assert maybe_exists%0#0) // Box must have value
-        let tmp%1#1: uint64 = (getbyte maybe_value%0#0 0u)
-        let tmp%2#1: bool = (== tmp%1#1 123u)
-        (assert tmp%2#1) // First array item in box should be 123
+        let array%bytes_offset%0#1: uint64 = (* 0u 1u)
+        let array%encoded_element%0#1: bytes = (extract3 maybe_value%0#0 array%bytes_offset%0#1 1u) // on error: index access is out of bounds
+        let array_item%0#0: Encoded(uint8) = array%encoded_element%0#1
+        let tmp%0#2: uint64 = (btoi array_item%0#0)
+        let tmp%1#1: bool = (== tmp%0#2 123u)
+        (assert tmp%1#1) // First array item in box should be 123
         let tests/approvals/box-proxies.algo.ts::BoxToRefTest.__puya_arc4_router__%0#0: bool = 1u
         goto block@11
     block@6: // bare_routing_L222

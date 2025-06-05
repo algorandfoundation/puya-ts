@@ -302,16 +302,16 @@ implicitCastingAndSpreading:
     // tests/approvals/arc4-struct.algo.ts:33
     // const v2 = new Vector(v1)
     frame_dig -1
-    extract 0 8 // on error: Index access is out of bounds
+    extract 0 8
     frame_dig -1
-    extract 8 8 // on error: Index access is out of bounds
+    extract 8 8
     concat
     // tests/approvals/arc4-struct.algo.ts:34
     // const v3 = new Vector({ ...v2 })
     dup
-    extract 0 8 // on error: Index access is out of bounds
+    extract 0 8
     dig 1
-    extract 8 8 // on error: Index access is out of bounds
+    extract 8 8
     concat
     // tests/approvals/arc4-struct.algo.ts:35
     // assert(v1.bytes === v2.bytes)
@@ -335,9 +335,9 @@ toNative:
     // tests/approvals/arc4-struct.algo.ts:45
     // return v1.native
     frame_dig -1
-    extract 0 8 // on error: Index access is out of bounds
+    extract 0 8
     frame_dig -1
-    extract 8 8 // on error: Index access is out of bounds
+    extract 8 8
     retsub
 
 
@@ -352,7 +352,7 @@ getPlugin:
     frame_dig -1
     concat
     // tests/approvals/arc4-struct.algo.ts:53
-    // const value = this.plugins(key).value.copy()
+    // const value = clone(this.plugins(key).value)
     box_get
     assert // Box must have value
     // tests/approvals/arc4-struct.algo.ts:54
@@ -372,7 +372,7 @@ getMain:
     // plugin = Box<PluginInfo>({ key: 'main' })
     pushbytes "main"
     // tests/approvals/arc4-struct.algo.ts:59
-    // const value = this.plugin.value.copy()
+    // const value = clone(this.plugin.value)
     box_get
     assert // Box must have value
     // tests/approvals/arc4-struct.algo.ts:60
@@ -422,15 +422,9 @@ setLastCalled:
     swap
     dig 1
     pushint 20 // 20
-    extract3 // on error: Index access is out of bounds
+    extract3 // on error: index access is out of bounds
     uncover 6
     replace2 12
-    dig 2
-    intc_1 // 0
-    extract_uint16
-    frame_dig -2
-    >
-    assert // Index access is out of bounds
     swap
     pushint 2 // 2
     +

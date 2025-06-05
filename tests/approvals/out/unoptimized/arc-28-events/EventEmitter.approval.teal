@@ -4,7 +4,7 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 0 1 3 4
-    bytecblock 0x 0x0b6325ed 0x00 0xa313c066
+    bytecblock 0x 0xb66e9d66 0x00 0x1ae84e1e
 
 main_block@0:
 
@@ -39,7 +39,7 @@ main_after_inlined_tests/approvals/arc-28-events.algo.ts::EventEmitter.__puya_ar
     return
 
 main_emitDynamicBytes_route@5:
-    // tests/approvals/arc-28-events.algo.ts:37
+    // tests/approvals/arc-28-events.algo.ts:40
     // emitDynamicBytes(x: bytes, y: DynamicBytes) {
     txn OnCompletion
     intc_0 // NoOp
@@ -54,14 +54,14 @@ main_emitDynamicBytes_route@5:
     txna ApplicationArgs 1
     extract 2 0
     txna ApplicationArgs 2
-    // tests/approvals/arc-28-events.algo.ts:37
+    // tests/approvals/arc-28-events.algo.ts:40
     // emitDynamicBytes(x: bytes, y: DynamicBytes) {
     callsub emitDynamicBytes
     intc_1 // 1
     b main_after_inlined_tests/approvals/arc-28-events.algo.ts::EventEmitter.__puya_arc4_router__@13
 
 main_emitCustom_route@4:
-    // tests/approvals/arc-28-events.algo.ts:32
+    // tests/approvals/arc-28-events.algo.ts:35
     // emitCustom(arg0: string, arg1: boolean) {
     txn OnCompletion
     intc_0 // NoOp
@@ -78,7 +78,7 @@ main_emitCustom_route@4:
     txna ApplicationArgs 2
     intc_0 // 0
     getbit
-    // tests/approvals/arc-28-events.algo.ts:32
+    // tests/approvals/arc-28-events.algo.ts:35
     // emitCustom(arg0: string, arg1: boolean) {
     callsub emitCustom
     intc_1 // 1
@@ -144,7 +144,9 @@ emitSwapped_block@0:
     concat
     frame_dig -2
     concat
-    bytec_1 // method "Swapped(uint8,uint8)"
+    bytec_0 // 0x
+    concat
+    bytec_1 // method "Swappednull"
     swap
     concat
     log
@@ -160,7 +162,9 @@ emitSwapped_block@0:
     concat
     swap
     concat
-    bytec_1 // method "Swapped(uint8,uint8)"
+    bytec_0 // 0x
+    concat
+    bytec_1 // method "Swappednull"
     swap
     concat
     log
@@ -174,9 +178,11 @@ emitSwapped_block@0:
     concat
     frame_dig -2
     concat
+    bytec_0 // 0x
+    concat
     // tests/approvals/arc-28-events.algo.ts:24
     // emit(y)
-    pushbytes 0x441e2cd8 // method "SwappedArc4(uint8,uint8)"
+    pushbytes 0x226e658f // method "SwappedArc4null"
     swap
     concat
     log
@@ -187,7 +193,9 @@ emitSwapped_block@0:
     concat
     frame_dig -2
     concat
-    bytec_1 // method "Swapped(uint8,uint8)"
+    bytec_0 // 0x
+    concat
+    bytec_1 // method "Swappednull"
     swap
     concat
     log
@@ -198,7 +206,9 @@ emitSwapped_block@0:
     concat
     frame_dig -2
     concat
-    bytec_1 // method "Swapped(uint8,uint8)"
+    bytec_0 // 0x
+    concat
+    bytec_1 // method "Swappednull"
     swap
     concat
     log
@@ -210,11 +220,66 @@ emitSwapped_block@0:
     frame_dig -1
     concat
     bytec_0 // 0x
+    concat
+    bytec_0 // 0x
     swap
     concat
     frame_dig -2
     concat
-    pushbytes 0x388cc12d // method "Swapped((uint8,uint8),uint8)"
+    bytec_0 // 0x
+    concat
+    bytec_1 // method "Swappednull"
+    swap
+    concat
+    log
+    // tests/approvals/arc-28-events.algo.ts:31
+    // emit('Swapped((uint8,uint8),uint8)', [b, b], a)
+    bytec_0 // 0x
+    frame_dig -1
+    concat
+    frame_dig -1
+    concat
+    bytec_0 // 0x
+    concat
+    bytec_0 // 0x
+    swap
+    concat
+    frame_dig -2
+    concat
+    bytec_0 // 0x
+    concat
+    bytec_1 // method "Swappednull"
+    swap
+    concat
+    log
+    // tests/approvals/arc-28-events.algo.ts:32
+    // emit('Swapped(uint8[],uint8)', [b, b], a)
+    bytec_0 // 0x
+    frame_dig -1
+    concat
+    frame_dig -1
+    concat
+    pushint 2 // 2
+    itob
+    extract 6 2
+    swap
+    concat
+    bytec_0 // 0x
+    concat
+    bytec_0 // 0x
+    swap
+    concat
+    intc_2 // 3
+    itob
+    extract 6 2
+    bytec_0 // 0x
+    swap
+    concat
+    frame_dig -2
+    concat
+    swap
+    concat
+    bytec_1 // method "Swappednull"
     swap
     concat
     log
@@ -223,12 +288,12 @@ emitSwapped_block@0:
 
 // tests/approvals/arc-28-events.algo.ts::EventEmitter.emitCustom(arg0: bytes, arg1: uint64) -> void:
 emitCustom:
-    // tests/approvals/arc-28-events.algo.ts:32
+    // tests/approvals/arc-28-events.algo.ts:35
     // emitCustom(arg0: string, arg1: boolean) {
     proto 2 0
 
 emitCustom_block@0:
-    // tests/approvals/arc-28-events.algo.ts:33
+    // tests/approvals/arc-28-events.algo.ts:36
     // emit('Custom', arg0, arg1)
     frame_dig -2
     len
@@ -240,6 +305,11 @@ emitCustom_block@0:
     intc_0 // 0
     frame_dig -1
     setbit
+    swap
+    bytec_0 // 0x
+    swap
+    concat
+    swap
     intc_2 // 3
     itob
     extract 6 2
@@ -250,11 +320,11 @@ emitCustom_block@0:
     concat
     swap
     concat
-    bytec_3 // method "Custom(string,bool)"
+    bytec_3 // method "Customnull"
     swap
     concat
     log
-    // tests/approvals/arc-28-events.algo.ts:34
+    // tests/approvals/arc-28-events.algo.ts:37
     // emit('Custom(string,bool)', arg0, arg1)
     frame_dig -2
     len
@@ -266,6 +336,11 @@ emitCustom_block@0:
     intc_0 // 0
     frame_dig -1
     setbit
+    swap
+    bytec_0 // 0x
+    swap
+    concat
+    swap
     intc_2 // 3
     itob
     extract 6 2
@@ -276,7 +351,7 @@ emitCustom_block@0:
     concat
     swap
     concat
-    bytec_3 // method "Custom(string,bool)"
+    bytec_3 // method "Customnull"
     swap
     concat
     log
@@ -285,12 +360,12 @@ emitCustom_block@0:
 
 // tests/approvals/arc-28-events.algo.ts::EventEmitter.emitDynamicBytes(x: bytes, y: bytes) -> void:
 emitDynamicBytes:
-    // tests/approvals/arc-28-events.algo.ts:37
+    // tests/approvals/arc-28-events.algo.ts:40
     // emitDynamicBytes(x: bytes, y: DynamicBytes) {
     proto 2 0
 
 emitDynamicBytes_block@0:
-    // tests/approvals/arc-28-events.algo.ts:38
+    // tests/approvals/arc-28-events.algo.ts:41
     // emit('DB(byte[],byte[])', x, y)
     frame_dig -2
     len
@@ -298,27 +373,30 @@ emitDynamicBytes_block@0:
     extract 6 2
     frame_dig -2
     concat
+    bytec_0 // 0x
+    dig 1
+    concat
+    swap
+    len
+    intc_3 // 4
+    +
     intc_3 // 4
     itob
     extract 6 2
     bytec_0 // 0x
     swap
     concat
-    swap
-    dup
-    len
-    intc_3 // 4
-    +
-    itob
-    extract 6 2
     uncover 2
-    swap
-    concat
-    swap
-    concat
     frame_dig -1
     concat
-    pushbytes 0x4524e1dd // method "DB(byte[],byte[])"
+    swap
+    uncover 2
+    itob
+    extract 6 2
+    concat
+    swap
+    concat
+    pushbytes 0xf596c93f // method "DBnull"
     swap
     concat
     log

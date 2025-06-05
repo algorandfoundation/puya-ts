@@ -18,14 +18,14 @@ subroutine tests/approvals/precompiled-apps.algo.ts::ReceivesReferenceTypes.__pu
         let tmp%5#0: uint64 = (txn ApplicationID)
         let tmp%6#0: bool = (!= tmp%5#0 0u)
         (assert tmp%6#0) // can only call when not creating
-        let reinterpret_bytes[1]%0#0: bytes[1] = (txna ApplicationArgs 1)
-        let tmp%7#0: uint64 = (btoi reinterpret_bytes[1]%0#0)
+        let reinterpret_Encoded(uint8)%0#0: Encoded(uint8) = (txna ApplicationArgs 1)
+        let tmp%7#0: uint64 = (btoi reinterpret_Encoded(uint8)%0#0)
         let tmp%8#0: uint64 = ((txnas Applications) tmp%7#0)
-        let reinterpret_bytes[1]%1#0: bytes[1] = (txna ApplicationArgs 2)
-        let tmp%9#0: uint64 = (btoi reinterpret_bytes[1]%1#0)
-        let tmp%10#0: bytes[32] = ((txnas Accounts) tmp%9#0)
-        let reinterpret_bytes[1]%2#0: bytes[1] = (txna ApplicationArgs 3)
-        let tmp%11#0: uint64 = (btoi reinterpret_bytes[1]%2#0)
+        let reinterpret_Encoded(uint8)%1#0: Encoded(uint8) = (txna ApplicationArgs 2)
+        let tmp%9#0: uint64 = (btoi reinterpret_Encoded(uint8)%1#0)
+        let tmp%10#0: account = ((txnas Accounts) tmp%9#0)
+        let reinterpret_Encoded(uint8)%2#0: Encoded(uint8) = (txna ApplicationArgs 3)
+        let tmp%11#0: uint64 = (btoi reinterpret_Encoded(uint8)%2#0)
         let tmp%12#0: uint64 = ((txnas Assets) tmp%11#0)
         tests/approvals/precompiled-apps.algo.ts::ReceivesReferenceTypes.receivesReferenceTypes(tmp%8#0, tmp%10#0, tmp%12#0)
         return 1u
@@ -49,12 +49,13 @@ subroutine tests/approvals/precompiled-apps.algo.ts::ReceivesReferenceTypes.__pu
     block@9: // after_if_else_L104
         return 0u
 
-subroutine tests/approvals/precompiled-apps.algo.ts::ReceivesReferenceTypes.receivesReferenceTypes(app: uint64, acc: bytes[32], asset: uint64) -> void:
+subroutine tests/approvals/precompiled-apps.algo.ts::ReceivesReferenceTypes.receivesReferenceTypes(app: uint64, acc: account, asset: uint64) -> void:
     block@0: // L105
-        let (value%0#0: bytes[32], check%0#0: bool) = ((app_params_get AppAddress) app#0)
+        let (value%0#0: account, check%0#0: bool) = ((app_params_get AppAddress) app#0)
         (assert check%0#0) // application exists
         (log value%0#0)
-        (log acc#0)
+        let reinterpret_bytes[32]%0#0: bytes[32] = acc#0
+        (log reinterpret_bytes[32]%0#0)
         let (value%1#0: bytes, check%1#0: bool) = ((asset_params_get AssetName) asset#0)
         (assert check%1#0) // asset exists
         (log value%1#0)

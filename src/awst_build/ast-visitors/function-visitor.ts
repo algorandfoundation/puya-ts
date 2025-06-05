@@ -19,7 +19,7 @@ import { OmittedExpressionBuilder } from '../eb/omitted-expression-builder'
 import { requireExpressionOfType, requireInstanceBuilder } from '../eb/util'
 import type { PType } from '../ptypes'
 import { FunctionPType, ObjectPType } from '../ptypes'
-import { typeRegistry } from '../type-registry'
+import { instanceEb, typeRegistry } from '../type-registry'
 import { BaseVisitor } from './base-visitor'
 import { maybeNodes } from './util'
 
@@ -237,23 +237,38 @@ export abstract class FunctionVisitor
   visitForOfStatement(node: ts.ForOfStatement): awst.Statement | awst.Statement[] {
     const sourceLocation = this.sourceLocation(node)
     const initializerLocation = this.sourceLocation(node.initializer)
-
-    let items: awst.LValue
+    const sequence = requireInstanceBuilder(this.accept(node.expression))
+    const itemType = sequence.ptype.getIteratorType()
+    codeInvariant(itemType, `${sequence.ptype} is not iterable`, this.sourceLocation(node.expression))
+    let items: InstanceBuilder
     if (ts.isExpression(node.initializer)) {
-      items = requireInstanceBuilder(this.accept(node.initializer)).resolveLValue()
+      items = requireInstanceBuilder(this.accept(node.initializer))
     } else {
       codeInvariant(node.initializer.declarations.length === 1, 'For of loops can only declare a single loop variable', initializerLocation)
       const [declaration] = node.initializer.declarations
-      items = this.visitBindingName(declaration.name, initializerLocation).resolveLValue()
+      items = this.visitBindingName(declaration.name, initializerLocation)
     }
+    const itemVar = instanceEb(
+      nodeFactory.varExpression({
+        name: this.context.generateVarName('temp'),
+        wtype: itemType.wtypeOrThrow,
+        sourceLocation: initializerLocation,
+      }),
+      itemType,
+    )
     using ctx = this.context.switchLoopCtx.enterLoop(node, sourceLocation)
     return nodeFactory.block(
       { sourceLocation },
       nodeFactory.forInLoop({
         sourceLocation,
-        sequence: requireInstanceBuilder(this.accept(node.expression)).iterate(sourceLocation),
-        items,
-        loopBody: nodeFactory.block({ sourceLocation }, this.accept(node.statement), ...maybeNodes(ctx.hasContinues, ctx.continueTarget)),
+        sequence: sequence.iterate(sourceLocation),
+        items: itemVar.resolveLValue(),
+        loopBody: nodeFactory.block(
+          { sourceLocation },
+          this.handleAssignmentStatement(items, itemVar, initializerLocation),
+          this.accept(node.statement),
+          ...maybeNodes(ctx.hasContinues, ctx.continueTarget),
+        ),
       }),
       ...maybeNodes(ctx.hasBreaks, ctx.breakTarget),
     )

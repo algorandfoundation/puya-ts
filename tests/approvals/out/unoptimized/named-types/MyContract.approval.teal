@@ -58,40 +58,40 @@ main_testing_route@7:
     cover 2
     swap
     itob
-    swap
-    itob
-    swap
     bytec_0 // 0x
     swap
     concat
     swap
+    itob
     concat
-    cover 2
-    itob
-    swap
-    itob
-    swap
+    bytec_0 // 0x
+    concat
     bytec_0 // 0x
     swap
     concat
+    swap
+    itob
+    bytec_0 // 0x
     swap
     concat
     uncover 2
     itob
-    uncover 3
+    concat
+    bytec_0 // 0x
+    concat
+    concat
+    swap
     itob
-    swap
     bytec_0 // 0x
     swap
-    concat
-    swap
-    concat
-    bytec_0 // 0x
-    uncover 3
     concat
     uncover 2
+    itob
     concat
-    swap
+    bytec_0 // 0x
+    concat
+    concat
+    bytec_0 // 0x
     concat
     bytec_1 // 0x151f7c75
     swap
@@ -117,23 +117,23 @@ main_test_route@6:
     dup
     intc_0 // 0
     intc_2 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     swap
     intc_2 // 8
     dup
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     txna ApplicationArgs 2
     dup
     intc_0 // 0
     intc_2 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     swap
     intc_2 // 8
     dup
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     // tests/approvals/named-types.algo.ts:36
     // public test(x: XY, y: YX) {
@@ -159,13 +159,13 @@ main_getAnon_route@5:
     callsub getAnon
     swap
     itob
-    swap
-    itob
-    swap
     bytec_0 // 0x
     swap
     concat
     swap
+    itob
+    concat
+    bytec_0 // 0x
     concat
     bytec_1 // 0x151f7c75
     swap
@@ -188,13 +188,13 @@ main_getYX_route@4:
     callsub getYX
     swap
     itob
-    swap
-    itob
-    swap
     bytec_0 // 0x
     swap
     concat
     swap
+    itob
+    concat
+    bytec_0 // 0x
     concat
     bytec_1 // 0x151f7c75
     swap
@@ -217,13 +217,13 @@ main_getXY_route@3:
     callsub getXY
     swap
     itob
-    swap
-    itob
-    swap
     bytec_0 // 0x
     swap
     concat
     swap
+    itob
+    concat
+    bytec_0 // 0x
     concat
     bytec_1 // 0x151f7c75
     swap
@@ -354,19 +354,17 @@ testing_block@0:
     // tests/approvals/named-types.algo.ts:41
     // const a = this.getXY()
     callsub getXY
-    swap
     // tests/approvals/named-types.algo.ts:42
     // const b = this.getYX()
     callsub getYX
-    cover 2
     // tests/approvals/named-types.algo.ts:43
     // const c = this.getAnon()
     callsub getAnon
     // tests/approvals/named-types.algo.ts:44
     // return [a, b, c] as const
-    uncover 3
     uncover 5
-    uncover 4
+    uncover 5
+    uncover 5
     uncover 5
     uncover 5
     uncover 5

@@ -652,6 +652,12 @@ export class ArrayLiteralPType extends PType {
       items: this.items,
     })
   }
+  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType | undefined {
+    if (typeof index === 'bigint') {
+      return this.items[Number(index)]
+    }
+    return super.getIndexType(index, sourceLocation)
+  }
 }
 
 export class MutableTuplePType extends PType {
@@ -677,13 +683,13 @@ export class MutableTuplePType extends PType {
       immutable: false,
     })
   }
+  getIteratorType(): PType | undefined {
+    return UnionPType.fromTypes(this.items)
+  }
 
-  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType {
+  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType | undefined {
     if (typeof index === 'bigint') {
-      if (index >= 0 && index < this.items.length) {
-        return this.items[Number(index)]
-      }
-      throw new CodeError(`Cannot access index ${index} of ${this.name}`, { sourceLocation })
+      return this.items[Number(index)]
     }
     return super.getIndexType(index, sourceLocation)
   }
@@ -711,12 +717,13 @@ export class ReadonlyTuplePType extends PType {
     })
   }
 
-  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType {
+  getIteratorType(): PType | undefined {
+    return UnionPType.fromTypes(this.items)
+  }
+
+  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType | undefined {
     if (typeof index === 'bigint') {
-      if (index >= 0 && index < this.items.length) {
-        return this.items[Number(index)]
-      }
-      throw new CodeError(`Cannot access index ${index} of ${this.name}`, { sourceLocation })
+      return this.items[Number(index)]
     }
     return super.getIndexType(index, sourceLocation)
   }
@@ -751,6 +758,14 @@ export class ArrayPType extends PType {
       immutable: this.immutable,
     })
   }
+  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType | undefined {
+    if (typeof index === 'bigint') return this.elementType
+    return super.getIndexType(index, sourceLocation)
+  }
+
+  getIteratorType(): PType | undefined {
+    return this.elementType
+  }
 }
 export const ReadonlyArrayGeneric = new GenericPType({
   name: 'ReadonlyArray',
@@ -781,6 +796,14 @@ export class ReadonlyArrayPType extends PType {
       elementType: this.elementType.wtypeOrThrow,
       immutable: this.immutable,
     })
+  }
+  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType | undefined {
+    if (typeof index === 'bigint') return this.elementType
+    return super.getIndexType(index, sourceLocation)
+  }
+
+  getIteratorType(): PType | undefined {
+    return this.elementType
   }
 }
 
@@ -826,9 +849,13 @@ export class FixedArrayPType extends PType {
     })
   }
 
-  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType {
+  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType | undefined {
     if (typeof index === 'bigint') return this.elementType
     return super.getIndexType(index, sourceLocation)
+  }
+
+  getIteratorType(): PType | undefined {
+    return this.elementType
   }
 }
 export class ObjectPType extends PType {
@@ -1439,6 +1466,10 @@ export class IterableIteratorType extends TransientType {
   get wtype(): wtypes.WEnumeration {
     return new wtypes.WEnumeration({ sequenceType: this.itemType.wtypeOrThrow })
   }
+
+  getIteratorType(): PType | undefined {
+    return this.itemType
+  }
 }
 
 export const GeneratorGeneric = new GenericPType({
@@ -1722,6 +1753,14 @@ export class ReferenceArrayType extends PType {
       sourceLocation: this.sourceLocation,
       immutable: false,
     })
+  }
+  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType | undefined {
+    if (typeof index === 'bigint') return this.elementType
+    return super.getIndexType(index, sourceLocation)
+  }
+
+  getIteratorType(): PType | undefined {
+    return this.elementType
   }
 }
 

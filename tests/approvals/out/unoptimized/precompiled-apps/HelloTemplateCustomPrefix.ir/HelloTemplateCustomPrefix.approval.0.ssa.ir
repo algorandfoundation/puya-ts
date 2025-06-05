@@ -51,15 +51,12 @@ subroutine tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix._
         let tmp%17#0: uint64 = (txn ApplicationID)
         let tmp%18#0: bool = (!= tmp%17#0 0u)
         (assert tmp%18#0) // can only call when not creating
-        let tmp%19#0: bytes = (txna ApplicationArgs 1)
-        let tmp%20#0: bytes = ((extract 2 0) tmp%19#0)
-        let to_encode%0#0: bytes = tests/approvals/precompiled-apps.algo.ts::HelloBase.greet(tmp%20#0)
-        let length%0#0: uint64 = (len to_encode%0#0)
-        let as_bytes%0#0: bytes[8] = (itob length%0#0)
-        let length_uint16%0#0: bytes = ((extract 6 2) as_bytes%0#0)
-        let encoded_value%0#0: bytes = (concat length_uint16%0#0 to_encode%0#0)
-        let tmp%21#0: bytes = (concat 0x151f7c75 encoded_value%0#0)
-        (log tmp%21#0)
+        let reinterpret_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = (txna ApplicationArgs 1)
+        let tmp%19#0: string = decode<string>(reinterpret_Encoded(len+utf8[])%0#0)
+        let tmp%20#0: string = tests/approvals/precompiled-apps.algo.ts::HelloBase.greet(tmp%19#0)
+        let tmp%21#0: Encoded(len+utf8[]) = encode<(len+utf8[])>(tmp%20#0)
+        let tmp%22#0: bytes = (concat 0x151f7c75 tmp%21#0)
+        (log tmp%22#0)
         return 1u
     block@6: // switch_case_default_L46
         goto block@7
@@ -82,7 +79,7 @@ subroutine tests/approvals/precompiled-apps.algo.ts::HelloBase.update() -> void:
     block@0: // L21
         return 
 
-subroutine tests/approvals/precompiled-apps.algo.ts::HelloBase.greet(name: bytes) -> bytes:
+subroutine tests/approvals/precompiled-apps.algo.ts::HelloBase.greet(name: string) -> string:
     block@0: // L24
         let (maybe_value%0#0: bytes, maybe_exists%0#0: bool) = (app_global_get_ex 0u "greeting")
         (assert maybe_exists%0#0) // check GlobalState exists
@@ -94,7 +91,7 @@ subroutine tests/approvals/precompiled-apps.algo.ts::HelloBase.greet(name: bytes
 subroutine tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix.constructor() -> void:
     block@0: // L47
         tests/approvals/precompiled-apps.algo.ts::HelloBase.constructor()
-        (app_global_put "greeting" TemplateVar[bytes](PRFX_GREETING))
+        (app_global_put "greeting" TemplateVar[string](PRFX_GREETING))
         return 
 
 subroutine tests/approvals/precompiled-apps.algo.ts::HelloBase.constructor() -> void:

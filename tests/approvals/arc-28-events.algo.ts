@@ -28,8 +28,8 @@ class EventEmitter extends Contract {
     emit('Swapped(uint8,uint8)', b, a)
     emit('Swapped((uint8,uint8),uint8)', [b, b] as const, a)
 
-    emit('Swapped((uint64,uint64),uint64)', [b, b], a)
-    emit('Swapped(uint64[],uint64)', [b, b], a)
+    emit('Swapped((uint8,uint8),uint8)', [b, b], a)
+    emit('Swapped(uint8[],uint8)', [b, b], a)
   }
 
   emitCustom(arg0: string, arg1: boolean) {

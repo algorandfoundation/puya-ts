@@ -4,10 +4,10 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@1: // L6
         let tmp%0#1: uint64 = (txn NumAppArgs)
         let tmp%1#0: bool = (!= tmp%0#1 0u)
-        goto tmp%1#0 ? block@2 : block@17
+        goto tmp%1#0 ? block@2 : block@19
     block@2: // abi_routing_L6
         let tmp%2#0: bytes = (txna ApplicationArgs 0)
-        switch tmp%2#0 {method "buildArray()uint64[]" => block@3, method "arrayFromCtor()uint64[]" => block@4, method "buildReadonly()uint64[]" => block@5, method "doThings()void" => block@6, method "fixedArray(uint64[1024])void" => block@7, method "arc4Interop()void" => block@8, method "structs((uint64,uint64))(uint64,uint64)[]" => block@9, method "booleans()bool[]" => block@10, method "booleansStatic()(bool,bool,bool)" => block@11, method "arc4Booleans()bool[]" => block@12, method "arc4BooleansStatic()(bool,bool,bool)" => block@13, method "aliasing(uint64[],uint64[])void" => block@14, * => block@15}
+        switch tmp%2#0 {method "buildArray()uint64[]" => block@3, method "arrayFromCtor()uint64[]" => block@4, method "buildReadonly()uint64[]" => block@5, method "doThings()void" => block@6, method "fixedArray(uint64[1024])void" => block@7, method "arc4Interop()void" => block@8, method "structs((uint64,uint64))(uint64,uint64)[]" => block@9, method "booleans()bool[]" => block@10, method "booleansStatic()(bool,bool,bool)" => block@11, method "arc4Booleans()bool[]" => block@12, method "arc4BooleansStatic()(bool,bool,bool)" => block@13, method "aliasing(uint64[],uint64[])void" => block@14, method "receiveMutable(uint64[])void" => block@15, method "receiveReadonly(uint64[])void" => block@16, * => block@17}
     block@3: // buildArray_route_L7
         let tmp%3#0: uint64 = (txn OnCompletion)
         let tmp%4#0: bool = (== tmp%3#0 NoOp)
@@ -19,7 +19,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%8#0: bytes = (concat 0x151f7c75 tmp%7#0)
         (log tmp%8#0)
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#0: bool = 1u
-        goto block@22
+        goto block@24
     block@4: // arrayFromCtor_route_L11
         let tmp%9#0: uint64 = (txn OnCompletion)
         let tmp%10#0: bool = (== tmp%9#0 NoOp)
@@ -31,7 +31,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%14#0: bytes = (concat 0x151f7c75 tmp%13#0)
         (log tmp%14#0)
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#1: bool = 1u
-        goto block@22
+        goto block@24
     block@5: // buildReadonly_route_L15
         let tmp%15#0: uint64 = (txn OnCompletion)
         let tmp%16#0: bool = (== tmp%15#0 NoOp)
@@ -43,7 +43,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%20#0: bytes = (concat 0x151f7c75 tmp%19#0)
         (log tmp%20#0)
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#2: bool = 1u
-        goto block@22
+        goto block@24
     block@6: // doThings_route_L19
         let tmp%21#0: uint64 = (txn OnCompletion)
         let tmp%22#0: bool = (== tmp%21#0 NoOp)
@@ -53,8 +53,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%24#0) // can only call when not creating
         tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings()
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#3: bool = 1u
-        goto block@22
-    block@7: // fixedArray_route_L51
+        goto block@24
+    block@7: // fixedArray_route_L53
         let tmp%25#0: uint64 = (txn OnCompletion)
         let tmp%26#0: bool = (== tmp%25#0 NoOp)
         (assert tmp%26#0) // OnCompletion is not NoOp
@@ -64,8 +64,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let reinterpret_Encoded(uint64[1024])%0#0: Encoded(uint64[1024]) = (txna ApplicationArgs 1)
         tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.fixedArray(reinterpret_Encoded(uint64[1024])%0#0)
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#4: bool = 1u
-        goto block@22
-    block@8: // arc4Interop_route_L59
+        goto block@24
+    block@8: // arc4Interop_route_L61
         let tmp%29#0: uint64 = (txn OnCompletion)
         let tmp%30#0: bool = (== tmp%29#0 NoOp)
         (assert tmp%30#0) // OnCompletion is not NoOp
@@ -74,8 +74,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%32#0) // can only call when not creating
         tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop()
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#5: bool = 1u
-        goto block@22
-    block@9: // structs_route_L72
+        goto block@24
+    block@9: // structs_route_L74
         let tmp%33#0: uint64 = (txn OnCompletion)
         let tmp%34#0: bool = (== tmp%33#0 NoOp)
         (assert tmp%34#0) // OnCompletion is not NoOp
@@ -93,8 +93,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%40#0: bytes = (concat 0x151f7c75 tmp%39#0)
         (log tmp%40#0)
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#6: bool = 1u
-        goto block@22
-    block@10: // booleans_route_L81
+        goto block@24
+    block@10: // booleans_route_L83
         let tmp%41#0: uint64 = (txn OnCompletion)
         let tmp%42#0: bool = (== tmp%41#0 NoOp)
         (assert tmp%42#0) // OnCompletion is not NoOp
@@ -105,8 +105,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%46#0: bytes = (concat 0x151f7c75 tmp%45#0)
         (log tmp%46#0)
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#7: bool = 1u
-        goto block@22
-    block@11: // booleansStatic_route_L85
+        goto block@24
+    block@11: // booleansStatic_route_L87
         let tmp%47#0: uint64 = (txn OnCompletion)
         let tmp%48#0: bool = (== tmp%47#0 NoOp)
         (assert tmp%48#0) // OnCompletion is not NoOp
@@ -123,8 +123,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%55#0: bytes = (concat 0x151f7c75 tmp%54#0)
         (log tmp%55#0)
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#8: bool = 1u
-        goto block@22
-    block@12: // arc4Booleans_route_L89
+        goto block@24
+    block@12: // arc4Booleans_route_L91
         let tmp%56#0: uint64 = (txn OnCompletion)
         let tmp%57#0: bool = (== tmp%56#0 NoOp)
         (assert tmp%57#0) // OnCompletion is not NoOp
@@ -135,8 +135,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%61#0: bytes = (concat 0x151f7c75 tmp%60#0)
         (log tmp%61#0)
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#9: bool = 1u
-        goto block@22
-    block@13: // arc4BooleansStatic_route_L93
+        goto block@24
+    block@13: // arc4BooleansStatic_route_L95
         let tmp%62#0: uint64 = (txn OnCompletion)
         let tmp%63#0: bool = (== tmp%62#0 NoOp)
         (assert tmp%63#0) // OnCompletion is not NoOp
@@ -154,8 +154,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%70#0: bytes = (concat 0x151f7c75 tmp%69#0)
         (log tmp%70#0)
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#10: bool = 1u
-        goto block@22
-    block@14: // aliasing_route_L97
+        goto block@24
+    block@14: // aliasing_route_L99
         let tmp%71#0: uint64 = (txn OnCompletion)
         let tmp%72#0: bool = (== tmp%71#0 NoOp)
         (assert tmp%72#0) // OnCompletion is not NoOp
@@ -166,30 +166,52 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let reinterpret_Encoded(len+uint64[])%1#0: Encoded(len+uint64[]) = (txna ApplicationArgs 2)
         tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.aliasing(reinterpret_Encoded(len+uint64[])%0#0, reinterpret_Encoded(len+uint64[])%1#0)
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#11: bool = 1u
-        goto block@22
-    block@15: // switch_case_default_L6
-        goto block@16
-    block@16: // switch_case_next_L6
-        goto block@21
-    block@17: // bare_routing_L6
+        goto block@24
+    block@15: // receiveMutable_route_L125
         let tmp%75#0: uint64 = (txn OnCompletion)
-        switch tmp%75#0 {0u => block@18, * => block@19}
-    block@18: // __algots__.defaultCreate_L6
-        let tmp%76#0: uint64 = (txn ApplicationID)
-        let tmp%77#0: bool = (== tmp%76#0 0u)
-        (assert tmp%77#0) // can only call when creating
-        tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__algots__.defaultCreate()
+        let tmp%76#0: bool = (== tmp%75#0 NoOp)
+        (assert tmp%76#0) // OnCompletion is not NoOp
+        let tmp%77#0: uint64 = (txn ApplicationID)
+        let tmp%78#0: bool = (!= tmp%77#0 0u)
+        (assert tmp%78#0) // can only call when not creating
+        let reinterpret_Encoded(len+uint64[])%2#0: Encoded(len+uint64[]) = (txna ApplicationArgs 1)
+        let receiveMutable%0#0: Encoded(len+uint64[]) = tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveMutable(reinterpret_Encoded(len+uint64[])%2#0)
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#12: bool = 1u
+        goto block@24
+    block@16: // receiveReadonly_route_L129
+        let tmp%79#0: uint64 = (txn OnCompletion)
+        let tmp%80#0: bool = (== tmp%79#0 NoOp)
+        (assert tmp%80#0) // OnCompletion is not NoOp
+        let tmp%81#0: uint64 = (txn ApplicationID)
+        let tmp%82#0: bool = (!= tmp%81#0 0u)
+        (assert tmp%82#0) // can only call when not creating
+        let reinterpret_Encoded(len+uint64[])%3#0: Encoded(len+uint64[]) = (txna ApplicationArgs 1)
+        tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveReadonly(reinterpret_Encoded(len+uint64[])%3#0)
+        let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#13: bool = 1u
+        goto block@24
+    block@17: // switch_case_default_L6
+        goto block@18
+    block@18: // switch_case_next_L6
+        goto block@23
+    block@19: // bare_routing_L6
+        let tmp%83#0: uint64 = (txn OnCompletion)
+        switch tmp%83#0 {0u => block@20, * => block@21}
+    block@20: // __algots__.defaultCreate_L6
+        let tmp%84#0: uint64 = (txn ApplicationID)
+        let tmp%85#0: bool = (== tmp%84#0 0u)
+        (assert tmp%85#0) // can only call when creating
+        tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__algots__.defaultCreate()
+        let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#14: bool = 1u
+        goto block@24
+    block@21: // switch_case_default_L6
         goto block@22
-    block@19: // switch_case_default_L6
-        goto block@20
-    block@20: // switch_case_next_L6
-        goto block@21
-    block@21: // after_if_else_L6
-        let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#13: bool = 0u
-        goto block@22
-    block@22: // after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router___L1
-        let tmp%0#0: bool = φ(tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#0 <- block@3, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#1 <- block@4, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#2 <- block@5, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#3 <- block@6, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#4 <- block@7, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#5 <- block@8, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#6 <- block@9, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#7 <- block@10, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#8 <- block@11, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#9 <- block@12, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#10 <- block@13, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#11 <- block@14, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#12 <- block@18, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#13 <- block@21)
+    block@22: // switch_case_next_L6
+        goto block@23
+    block@23: // after_if_else_L6
+        let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#15: bool = 0u
+        goto block@24
+    block@24: // after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router___L1
+        let tmp%0#0: bool = φ(tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#0 <- block@3, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#1 <- block@4, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#2 <- block@5, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#3 <- block@6, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#4 <- block@7, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#5 <- block@8, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#6 <- block@9, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#7 <- block@10, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#8 <- block@11, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#9 <- block@12, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#10 <- block@13, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#11 <- block@14, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#12 <- block@15, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#13 <- block@16, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#14 <- block@20, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#15 <- block@23)
         return tmp%0#0
 
 subroutine _puya_lib.arc4.dynamic_array_pop_fixed_size(array: bytes, fixed_byte_size: uint64) -> <bytes, bytes>:
@@ -461,7 +483,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings() ->
         let array_length%5#0: uint64 = (extract_uint16 arr#9 0u)
         let tmp%41#0: bool = (== array_length%5#0 4u)
         goto tmp%41#0 ? block@23 : block@28
-    block@23: // and_contd_L42
+    block@23: // and_contd_L44
         let array%array_trimmed%16#1: bytes = ((extract 2 0) arr#9)
         let array%bytes_offset%16#1: uint64 = (* 0u 8u)
         let array%encoded_element%16#1: bytes = (extract3 array%array_trimmed%16#1 array%bytes_offset%16#1 8u) // on error: index access is out of bounds
@@ -469,7 +491,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings() ->
         let tmp%42#0: uint64 = (btoi array_item%16#0)
         let tmp%43#0: bool = (== tmp%42#0 1u)
         goto tmp%43#0 ? block@24 : block@28
-    block@24: // and_contd_L42
+    block@24: // and_contd_L44
         let array%array_trimmed%17#1: bytes = ((extract 2 0) arr#9)
         let array%bytes_offset%17#1: uint64 = (* 1u 8u)
         let array%encoded_element%17#1: bytes = (extract3 array%array_trimmed%17#1 array%bytes_offset%17#1 8u) // on error: index access is out of bounds
@@ -477,7 +499,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings() ->
         let tmp%44#0: uint64 = (btoi array_item%17#0)
         let tmp%45#0: bool = (== tmp%44#0 10u)
         goto tmp%45#0 ? block@25 : block@28
-    block@25: // and_contd_L42
+    block@25: // and_contd_L44
         let array%array_trimmed%18#1: bytes = ((extract 2 0) arr#9)
         let array%bytes_offset%18#1: uint64 = (* 2u 8u)
         let array%encoded_element%18#1: bytes = (extract3 array%array_trimmed%18#1 array%bytes_offset%18#1 8u) // on error: index access is out of bounds
@@ -485,7 +507,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings() ->
         let tmp%46#0: uint64 = (btoi array_item%18#0)
         let tmp%47#0: bool = (== tmp%46#0 3u)
         goto tmp%47#0 ? block@26 : block@28
-    block@26: // and_contd_L42
+    block@26: // and_contd_L44
         let array%array_trimmed%19#1: bytes = ((extract 2 0) arr#9)
         let array%bytes_offset%19#1: uint64 = (* 3u 8u)
         let array%encoded_element%19#1: bytes = (extract3 array%array_trimmed%19#1 array%bytes_offset%19#1 8u) // on error: index access is out of bounds
@@ -493,21 +515,21 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings() ->
         let tmp%48#0: uint64 = (btoi array_item%19#0)
         let tmp%49#0: bool = (== tmp%48#0 4u)
         goto tmp%49#0 ? block@27 : block@28
-    block@27: // bool_true_L42
+    block@27: // bool_true_L44
         let and_result%3#0: bool = 1u
         goto block@29
-    block@28: // bool_false_L42
+    block@28: // bool_false_L44
         let and_result%3#1: bool = 0u
         goto block@29
-    block@29: // bool_merge_L42
+    block@29: // bool_merge_L44
         let and_result%3#2: bool = φ(and_result%3#0 <- block@27, and_result%3#1 <- block@28)
         (assert and_result%3#2) // assert target is match for conditions
-        let array%val_as_bytes%2#1: bytes[8] = (itob 12u)
-        let array%as_Encoded(uint64)%2#1: Encoded(uint64) = array%val_as_bytes%2#1
-        let array%encoded%2#1: Encoded(uint64) = (concat 0x array%as_Encoded(uint64)%2#1)
-        let array%val_as_bytes%3#1: bytes[8] = (itob 13u)
+        let array%val_as_bytes%3#1: bytes[8] = (itob 12u)
         let array%as_Encoded(uint64)%3#1: Encoded(uint64) = array%val_as_bytes%3#1
-        let array%encoded%3#1: Encoded(uint64,uint64) = (concat array%encoded%2#1 array%as_Encoded(uint64)%3#1)
+        let array%encoded%2#1: Encoded(uint64) = (concat 0x array%as_Encoded(uint64)%3#1)
+        let array%val_as_bytes%4#1: bytes[8] = (itob 13u)
+        let array%as_Encoded(uint64)%4#1: Encoded(uint64) = array%val_as_bytes%4#1
+        let array%encoded%3#1: Encoded(uint64,uint64) = (concat array%encoded%2#1 array%as_Encoded(uint64)%4#1)
         let array%encoded%4#1: Encoded(uint64,uint64) = (concat array%encoded%3#1 0x)
         let tmp%50#0: Encoded(uint64,uint64) = array%encoded%4#1
         let t1#0: Encoded(uint64,uint64) = tmp%50#0
@@ -526,12 +548,12 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings() ->
         let array%extract%1#1: bytes = (extract3 t1#0 8u 8u)
         let tuple_item%1#0: Encoded(uint64) = array%extract%1#1
         let values%1#0: uint64 = (btoi tuple_item%1#0)
-        let array%val_as_bytes%4#1: bytes[8] = (itob values%0#0)
-        let array%as_Encoded(uint64)%4#1: Encoded(uint64) = array%val_as_bytes%4#1
-        let array%encoded%5#1: Encoded(uint64) = (concat 0x array%as_Encoded(uint64)%4#1)
-        let array%val_as_bytes%5#1: bytes[8] = (itob values%1#0)
+        let array%val_as_bytes%5#1: bytes[8] = (itob values%0#0)
         let array%as_Encoded(uint64)%5#1: Encoded(uint64) = array%val_as_bytes%5#1
-        let array%encoded%6#1: Encoded(uint64,uint64) = (concat array%encoded%5#1 array%as_Encoded(uint64)%5#1)
+        let array%encoded%5#1: Encoded(uint64) = (concat 0x array%as_Encoded(uint64)%5#1)
+        let array%val_as_bytes%6#1: bytes[8] = (itob values%1#0)
+        let array%as_Encoded(uint64)%6#1: Encoded(uint64) = array%val_as_bytes%6#1
+        let array%encoded%6#1: Encoded(uint64,uint64) = (concat array%encoded%5#1 array%as_Encoded(uint64)%6#1)
         let array%as_bytes%0#1: bytes[8] = (itob 2u)
         let array%len_u16%0#1: bytes = ((extract 6 2) array%as_bytes%0#1)
         let array%encoded%7#1: bytes = (concat array%len_u16%0#1 array%encoded%6#1)
@@ -550,7 +572,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings() ->
         let array_length%8#0: uint64 = (extract_uint16 arr#12 0u)
         let tmp%51#0: bool = (== array_length%8#0 11u)
         goto tmp%51#0 ? block@30 : block@42
-    block@30: // and_contd_L48
+    block@30: // and_contd_L50
         let array%array_trimmed%20#1: bytes = ((extract 2 0) arr#12)
         let array%bytes_offset%20#1: uint64 = (* 0u 8u)
         let array%encoded_element%20#1: bytes = (extract3 array%array_trimmed%20#1 array%bytes_offset%20#1 8u) // on error: index access is out of bounds
@@ -558,7 +580,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings() ->
         let tmp%52#0: uint64 = (btoi array_item%20#0)
         let tmp%53#0: bool = (== tmp%52#0 1u)
         goto tmp%53#0 ? block@31 : block@42
-    block@31: // and_contd_L48
+    block@31: // and_contd_L50
         let array%array_trimmed%21#1: bytes = ((extract 2 0) arr#12)
         let array%bytes_offset%21#1: uint64 = (* 1u 8u)
         let array%encoded_element%21#1: bytes = (extract3 array%array_trimmed%21#1 array%bytes_offset%21#1 8u) // on error: index access is out of bounds
@@ -566,7 +588,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings() ->
         let tmp%54#0: uint64 = (btoi array_item%21#0)
         let tmp%55#0: bool = (== tmp%54#0 10u)
         goto tmp%55#0 ? block@32 : block@42
-    block@32: // and_contd_L48
+    block@32: // and_contd_L50
         let array%array_trimmed%22#1: bytes = ((extract 2 0) arr#12)
         let array%bytes_offset%22#1: uint64 = (* 2u 8u)
         let array%encoded_element%22#1: bytes = (extract3 array%array_trimmed%22#1 array%bytes_offset%22#1 8u) // on error: index access is out of bounds
@@ -574,7 +596,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings() ->
         let tmp%56#0: uint64 = (btoi array_item%22#0)
         let tmp%57#0: bool = (== tmp%56#0 3u)
         goto tmp%57#0 ? block@33 : block@42
-    block@33: // and_contd_L48
+    block@33: // and_contd_L50
         let array%array_trimmed%23#1: bytes = ((extract 2 0) arr#12)
         let array%bytes_offset%23#1: uint64 = (* 3u 8u)
         let array%encoded_element%23#1: bytes = (extract3 array%array_trimmed%23#1 array%bytes_offset%23#1 8u) // on error: index access is out of bounds
@@ -582,7 +604,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings() ->
         let tmp%58#0: uint64 = (btoi array_item%23#0)
         let tmp%59#0: bool = (== tmp%58#0 4u)
         goto tmp%59#0 ? block@34 : block@42
-    block@34: // and_contd_L48
+    block@34: // and_contd_L50
         let array%array_trimmed%24#1: bytes = ((extract 2 0) arr#12)
         let array%bytes_offset%24#1: uint64 = (* 4u 8u)
         let array%encoded_element%24#1: bytes = (extract3 array%array_trimmed%24#1 array%bytes_offset%24#1 8u) // on error: index access is out of bounds
@@ -590,7 +612,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings() ->
         let tmp%60#0: uint64 = (btoi array_item%24#0)
         let tmp%61#0: bool = (== tmp%60#0 1u)
         goto tmp%61#0 ? block@35 : block@42
-    block@35: // and_contd_L48
+    block@35: // and_contd_L50
         let array%array_trimmed%25#1: bytes = ((extract 2 0) arr#12)
         let array%bytes_offset%25#1: uint64 = (* 5u 8u)
         let array%encoded_element%25#1: bytes = (extract3 array%array_trimmed%25#1 array%bytes_offset%25#1 8u) // on error: index access is out of bounds
@@ -598,7 +620,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings() ->
         let tmp%62#0: uint64 = (btoi array_item%25#0)
         let tmp%63#0: bool = (== tmp%62#0 10u)
         goto tmp%63#0 ? block@36 : block@42
-    block@36: // and_contd_L48
+    block@36: // and_contd_L50
         let array%array_trimmed%26#1: bytes = ((extract 2 0) arr#12)
         let array%bytes_offset%26#1: uint64 = (* 6u 8u)
         let array%encoded_element%26#1: bytes = (extract3 array%array_trimmed%26#1 array%bytes_offset%26#1 8u) // on error: index access is out of bounds
@@ -606,7 +628,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings() ->
         let tmp%64#0: uint64 = (btoi array_item%26#0)
         let tmp%65#0: bool = (== tmp%64#0 3u)
         goto tmp%65#0 ? block@37 : block@42
-    block@37: // and_contd_L48
+    block@37: // and_contd_L50
         let array%array_trimmed%27#1: bytes = ((extract 2 0) arr#12)
         let array%bytes_offset%27#1: uint64 = (* 7u 8u)
         let array%encoded_element%27#1: bytes = (extract3 array%array_trimmed%27#1 array%bytes_offset%27#1 8u) // on error: index access is out of bounds
@@ -614,7 +636,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings() ->
         let tmp%66#0: uint64 = (btoi array_item%27#0)
         let tmp%67#0: bool = (== tmp%66#0 4u)
         goto tmp%67#0 ? block@38 : block@42
-    block@38: // and_contd_L48
+    block@38: // and_contd_L50
         let array%array_trimmed%28#1: bytes = ((extract 2 0) arr#12)
         let array%bytes_offset%28#1: uint64 = (* 8u 8u)
         let array%encoded_element%28#1: bytes = (extract3 array%array_trimmed%28#1 array%bytes_offset%28#1 8u) // on error: index access is out of bounds
@@ -622,7 +644,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings() ->
         let tmp%68#0: uint64 = (btoi array_item%28#0)
         let tmp%69#0: bool = (== tmp%68#0 11u)
         goto tmp%69#0 ? block@39 : block@42
-    block@39: // and_contd_L48
+    block@39: // and_contd_L50
         let array%array_trimmed%29#1: bytes = ((extract 2 0) arr#12)
         let array%bytes_offset%29#1: uint64 = (* 9u 8u)
         let array%encoded_element%29#1: bytes = (extract3 array%array_trimmed%29#1 array%bytes_offset%29#1 8u) // on error: index access is out of bounds
@@ -630,7 +652,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings() ->
         let tmp%70#0: uint64 = (btoi array_item%29#0)
         let tmp%71#0: bool = (== tmp%70#0 12u)
         goto tmp%71#0 ? block@40 : block@42
-    block@40: // and_contd_L48
+    block@40: // and_contd_L50
         let array%array_trimmed%30#1: bytes = ((extract 2 0) arr#12)
         let array%bytes_offset%30#1: uint64 = (* 10u 8u)
         let array%encoded_element%30#1: bytes = (extract3 array%array_trimmed%30#1 array%bytes_offset%30#1 8u) // on error: index access is out of bounds
@@ -638,19 +660,19 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings() ->
         let tmp%72#0: uint64 = (btoi array_item%30#0)
         let tmp%73#0: bool = (== tmp%72#0 13u)
         goto tmp%73#0 ? block@41 : block@42
-    block@41: // bool_true_L48
+    block@41: // bool_true_L50
         let and_result%4#0: bool = 1u
         goto block@43
-    block@42: // bool_false_L48
+    block@42: // bool_false_L50
         let and_result%4#1: bool = 0u
         goto block@43
-    block@43: // bool_merge_L48
+    block@43: // bool_merge_L50
         let and_result%4#2: bool = φ(and_result%4#0 <- block@41, and_result%4#1 <- block@42)
         (assert and_result%4#2) // assert target is match for conditions
         return 
 
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.fixedArray(y: Encoded(uint64[1024])) -> void:
-    block@0: // L51
+    block@0: // L53
         let array%val_as_bytes%0#1: bytes[8] = (itob 1u)
         let array%as_Encoded(uint64)%0#1: Encoded(uint64) = array%val_as_bytes%0#1
         let array%encoded%0#1: Encoded(uint64) = (concat 0x array%as_Encoded(uint64)%0#1)
@@ -685,41 +707,41 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.fixedArray(y:
         (assert tmp%3#0)
         let tmp%4#0: bool = (== 4u 4u)
         goto tmp%4#0 ? block@1 : block@6
-    block@1: // and_contd_L55
+    block@1: // and_contd_L57
         let array%bytes_offset%3#1: uint64 = (* 0u 8u)
         let array%encoded_element%3#1: bytes = (extract3 x#1 array%bytes_offset%3#1 8u) // on error: index access is out of bounds
         let array_item%3#0: Encoded(uint64) = array%encoded_element%3#1
         let tmp%5#0: uint64 = (btoi array_item%3#0)
         let tmp%6#0: bool = (< tmp%5#0 1u)
         goto tmp%6#0 ? block@2 : block@6
-    block@2: // and_contd_L55
+    block@2: // and_contd_L57
         let array%bytes_offset%4#1: uint64 = (* 1u 8u)
         let array%encoded_element%4#1: bytes = (extract3 x#1 array%bytes_offset%4#1 8u) // on error: index access is out of bounds
         let array_item%4#0: Encoded(uint64) = array%encoded_element%4#1
         let tmp%7#0: uint64 = (btoi array_item%4#0)
         let tmp%8#0: bool = (== tmp%7#0 2u)
         goto tmp%8#0 ? block@3 : block@6
-    block@3: // and_contd_L55
+    block@3: // and_contd_L57
         let array%bytes_offset%5#1: uint64 = (* 2u 8u)
         let array%encoded_element%5#1: bytes = (extract3 x#1 array%bytes_offset%5#1 8u) // on error: index access is out of bounds
         let array_item%5#0: Encoded(uint64) = array%encoded_element%5#1
         let tmp%9#0: uint64 = (btoi array_item%5#0)
         let tmp%10#0: bool = (== tmp%9#0 3u)
         goto tmp%10#0 ? block@4 : block@6
-    block@4: // and_contd_L55
+    block@4: // and_contd_L57
         let array%bytes_offset%6#1: uint64 = (* 3u 8u)
         let array%encoded_element%6#1: bytes = (extract3 x#1 array%bytes_offset%6#1 8u) // on error: index access is out of bounds
         let array_item%6#0: Encoded(uint64) = array%encoded_element%6#1
         let tmp%11#0: uint64 = (btoi array_item%6#0)
         let tmp%12#0: bool = (== tmp%11#0 4u)
         goto tmp%12#0 ? block@5 : block@6
-    block@5: // bool_true_L55
+    block@5: // bool_true_L57
         let and_result%0#0: bool = 1u
         goto block@7
-    block@6: // bool_false_L55
+    block@6: // bool_false_L57
         let and_result%0#1: bool = 0u
         goto block@7
-    block@7: // bool_merge_L55
+    block@7: // bool_merge_L57
         let and_result%0#2: bool = φ(and_result%0#0 <- block@5, and_result%0#1 <- block@6)
         (assert and_result%0#2) // assert target is match for conditions
         let array%bytes_offset%7#1: uint64 = (* 1024u 8u)
@@ -731,7 +753,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.fixedArray(y:
         return 
 
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop() -> void:
-    block@0: // L59
+    block@0: // L61
         let array%encoded%0#1: Encoded(uint32) = (concat 0x 0x0000007b)
         let array%encoded%1#1: Encoded(uint32,uint32) = (concat array%encoded%0#1 0x0000007b)
         let array%as_bytes%0#1: bytes[8] = (itob 2u)
@@ -774,61 +796,61 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop()
         let array_length%1#0: uint64 = (extract_uint16 a1#1 0u)
         let tmp%0#0: bool = (== array_length%1#0 6u)
         goto tmp%0#0 ? block@1 : block@8
-    block@1: // and_contd_L69
+    block@1: // and_contd_L71
         let array%array_trimmed%0#1: bytes = ((extract 2 0) a1#1)
         let array%bytes_offset%0#1: uint64 = (* 0u 4u)
         let array%encoded_element%0#1: bytes = (extract3 array%array_trimmed%0#1 array%bytes_offset%0#1 4u) // on error: index access is out of bounds
         let array_item%0#0: Encoded(uint32) = array%encoded_element%0#1
         let tmp%1#0: bool = (== array_item%0#0 0x0000007b)
         goto tmp%1#0 ? block@2 : block@8
-    block@2: // and_contd_L69
+    block@2: // and_contd_L71
         let array%array_trimmed%1#1: bytes = ((extract 2 0) a1#1)
         let array%bytes_offset%1#1: uint64 = (* 1u 4u)
         let array%encoded_element%1#1: bytes = (extract3 array%array_trimmed%1#1 array%bytes_offset%1#1 4u) // on error: index access is out of bounds
         let array_item%1#0: Encoded(uint32) = array%encoded_element%1#1
         let tmp%2#0: bool = (== array_item%1#0 0x0000007b)
         goto tmp%2#0 ? block@3 : block@8
-    block@3: // and_contd_L69
+    block@3: // and_contd_L71
         let array%array_trimmed%2#1: bytes = ((extract 2 0) a1#1)
         let array%bytes_offset%2#1: uint64 = (* 2u 4u)
         let array%encoded_element%2#1: bytes = (extract3 array%array_trimmed%2#1 array%bytes_offset%2#1 4u) // on error: index access is out of bounds
         let array_item%2#0: Encoded(uint32) = array%encoded_element%2#1
         let tmp%3#0: bool = (== array_item%2#0 0x0000007b)
         goto tmp%3#0 ? block@4 : block@8
-    block@4: // and_contd_L69
+    block@4: // and_contd_L71
         let array%array_trimmed%3#1: bytes = ((extract 2 0) a1#1)
         let array%bytes_offset%3#1: uint64 = (* 3u 4u)
         let array%encoded_element%3#1: bytes = (extract3 array%array_trimmed%3#1 array%bytes_offset%3#1 4u) // on error: index access is out of bounds
         let array_item%3#0: Encoded(uint32) = array%encoded_element%3#1
         let tmp%4#0: bool = (== array_item%3#0 0x0000007b)
         goto tmp%4#0 ? block@5 : block@8
-    block@5: // and_contd_L69
+    block@5: // and_contd_L71
         let array%array_trimmed%4#1: bytes = ((extract 2 0) a1#1)
         let array%bytes_offset%4#1: uint64 = (* 4u 4u)
         let array%encoded_element%4#1: bytes = (extract3 array%array_trimmed%4#1 array%bytes_offset%4#1 4u) // on error: index access is out of bounds
         let array_item%4#0: Encoded(uint32) = array%encoded_element%4#1
         let tmp%5#0: bool = (== array_item%4#0 0x0000007b)
         goto tmp%5#0 ? block@6 : block@8
-    block@6: // and_contd_L69
+    block@6: // and_contd_L71
         let array%array_trimmed%5#1: bytes = ((extract 2 0) a1#1)
         let array%bytes_offset%5#1: uint64 = (* 5u 4u)
         let array%encoded_element%5#1: bytes = (extract3 array%array_trimmed%5#1 array%bytes_offset%5#1 4u) // on error: index access is out of bounds
         let array_item%5#0: Encoded(uint32) = array%encoded_element%5#1
         let tmp%6#0: bool = (== array_item%5#0 0x0000007b)
         goto tmp%6#0 ? block@7 : block@8
-    block@7: // bool_true_L69
+    block@7: // bool_true_L71
         let and_result%0#0: bool = 1u
         goto block@9
-    block@8: // bool_false_L69
+    block@8: // bool_false_L71
         let and_result%0#1: bool = 0u
         goto block@9
-    block@9: // bool_merge_L69
+    block@9: // bool_merge_L71
         let and_result%0#2: bool = φ(and_result%0#0 <- block@7, and_result%0#1 <- block@8)
         (assert and_result%0#2) // assert target is match for conditions
         return 
 
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.structs(p.x: uint64, p.y: uint64) -> Encoded(len+(uint64,uint64)[]):
-    block@0: // L72
+    block@0: // L74
         let x#0: uint64 = p.x#0
         let y#0: uint64 = p.y#0
         let array%val_as_bytes%0#1: bytes[8] = (itob x#0)
@@ -848,7 +870,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.structs(p.x: 
         let array_length%0#0: uint64 = (extract_uint16 myVectors#1 0u)
         let tmp%0#0: bool = (== array_length%0#0 1u)
         goto tmp%0#0 ? block@1 : block@4
-    block@1: // and_contd_L77
+    block@1: // and_contd_L79
         let array%array_trimmed%0#1: bytes = ((extract 2 0) myVectors#1)
         let array%bytes_offset%0#1: uint64 = (* 0u 16u)
         let array%encoded_element%0#1: bytes = (extract3 array%array_trimmed%0#1 array%bytes_offset%0#1 16u) // on error: index access is out of bounds
@@ -858,7 +880,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.structs(p.x: 
         let tmp%1#0: uint64 = array%item0%0#1
         let tmp%3#0: bool = (== tmp%1#0 x#0)
         goto tmp%3#0 ? block@2 : block@4
-    block@2: // and_contd_L77
+    block@2: // and_contd_L79
         let array%array_trimmed%1#1: bytes = ((extract 2 0) myVectors#1)
         let array%bytes_offset%1#1: uint64 = (* 0u 16u)
         let array%encoded_element%1#1: bytes = (extract3 array%array_trimmed%1#1 array%bytes_offset%1#1 16u) // on error: index access is out of bounds
@@ -868,19 +890,19 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.structs(p.x: 
         let tmp%5#0: uint64 = array%item1%1#1
         let tmp%6#0: bool = (== tmp%5#0 y#0)
         goto tmp%6#0 ? block@3 : block@4
-    block@3: // bool_true_L77
+    block@3: // bool_true_L79
         let and_result%0#0: bool = 1u
         goto block@5
-    block@4: // bool_false_L77
+    block@4: // bool_false_L79
         let and_result%0#1: bool = 0u
         goto block@5
-    block@5: // bool_merge_L77
+    block@5: // bool_merge_L79
         let and_result%0#2: bool = φ(and_result%0#0 <- block@3, and_result%0#1 <- block@4)
         (assert and_result%0#2) // assert target is match for conditions
         return myVectors#1
 
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.booleans() -> Encoded(len+bool1[]):
-    block@0: // L81
+    block@0: // L83
         let array%encoded_bit%0#1: bytes = (setbit 0x00 0u 1u)
         let array%encoded%0#1: Encoded(bool1) = (concat 0x array%encoded_bit%0#1)
         let array%set_bit%0#1: Encoded(bool1) = (setbit array%encoded%0#1 1u 0u)
@@ -893,11 +915,11 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.booleans() ->
         return encoded_array%0#0
 
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.booleansStatic() -> <bool, bool, bool>:
-    block@0: // L85
+    block@0: // L87
         return 1u 0u 1u
 
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Booleans() -> Encoded(len+bool1[]):
-    block@0: // L89
+    block@0: // L91
         let array%encoded_bool%0#1: bytes[1] = (setbit 0x00 0u 1u)
         let array%as_Encoded(bool8)%0#1: Encoded(bool8) = array%encoded_bool%0#1
         let tmp%0#0: Encoded(bool8) = array%as_Encoded(bool8)%0#1
@@ -920,7 +942,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Booleans(
         return encoded_array%0#0
 
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4BooleansStatic() -> <Encoded(bool8), Encoded(bool8), Encoded(bool8)>:
-    block@0: // L93
+    block@0: // L95
         let array%encoded_bool%0#1: bytes[1] = (setbit 0x00 0u 1u)
         let array%as_Encoded(bool8)%0#1: Encoded(bool8) = array%encoded_bool%0#1
         let tmp%0#0: Encoded(bool8) = array%as_Encoded(bool8)%0#1
@@ -932,8 +954,62 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4BooleansS
         let tmp%2#0: Encoded(bool8) = array%as_Encoded(bool8)%2#1
         return tmp%0#0 tmp%1#0 tmp%2#0
 
-subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.aliasing(a: Encoded(len+uint64[]), b: Encoded(len+uint64[])) -> void:
-    block@0: // L97
+subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.aliasing(mutable: Encoded(len+uint64[]), readOnly: Encoded(len+uint64[])) -> void:
+    block@0: // L99
+        let needClone2#0: Encoded(len+uint64[]) = mutable#0
+        let array%array_trimmed%1#1: bytes = ((extract 2 0) mutable#0)
+        let array%bytes_offset%1#1: uint64 = (* 1u 8u)
+        let array%encoded_element%1#1: bytes = (extract3 array%array_trimmed%1#1 array%bytes_offset%1#1 8u) // on error: index access is out of bounds
+        let array_item%1#0: Encoded(uint64) = array%encoded_element%1#1
+        let tmp%1#0: uint64 = (btoi array_item%1#0)
+        let tmp%2#0: uint64 = (+ tmp%1#0 2u)
+        let array%val_as_bytes%1#1: bytes[8] = (itob tmp%2#0)
+        let array%as_Encoded(uint64)%1#1: Encoded(uint64) = array%val_as_bytes%1#1
+        let encoded_value%1#0: Encoded(uint64) = array%as_Encoded(uint64)%1#1
+        let array%write_offset%1#1: uint64 = (* 1u 8u)
+        let array%write_offset_with_length_header%1#1: uint64 = (+ array%write_offset%1#1 2u)
+        let array%updated_array%1#1: bytes = (replace3 mutable#0 array%write_offset_with_length_header%1#1 encoded_value%1#0)
+        let updated_array%1#0: Encoded(len+uint64[]) = array%updated_array%1#1
+        let mutable#1: Encoded(len+uint64[]) = updated_array%1#0
+        let array%array_trimmed%3#1: bytes = ((extract 2 0) mutable#1)
+        let array%bytes_offset%3#1: uint64 = (* 1u 8u)
+        let array%encoded_element%3#1: bytes = (extract3 array%array_trimmed%3#1 array%bytes_offset%3#1 8u) // on error: index access is out of bounds
+        let array_item%3#0: Encoded(uint64) = array%encoded_element%3#1
+        let tmp%4#0: uint64 = (btoi array_item%3#0)
+        let array%array_trimmed%4#1: bytes = ((extract 2 0) needClone2#0)
+        let array%bytes_offset%4#1: uint64 = (* 1u 8u)
+        let array%encoded_element%4#1: bytes = (extract3 array%array_trimmed%4#1 array%bytes_offset%4#1 8u) // on error: index access is out of bounds
+        let array_item%4#0: Encoded(uint64) = array%encoded_element%4#1
+        let tmp%5#0: uint64 = (btoi array_item%4#0)
+        let tmp%6#0: bool = (!= tmp%4#0 tmp%5#0)
+        (assert tmp%6#0) // These should not match
+        let receiveMutable%0#0: Encoded(len+uint64[]) = tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveMutable(mutable#1)
+        let mutable#2: Encoded(len+uint64[]) = receiveMutable%0#0
+        tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveReadonly(mutable#2)
+        tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveReadonly(readOnly#0)
+        return 
+
+subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveMutable(a: Encoded(len+uint64[])) -> Encoded(len+uint64[]):
+    block@0: // L125
+        let a%out#0: Encoded(len+uint64[]) = a#0
+        let array%val_as_bytes%0#1: bytes[8] = (itob 1u)
+        let array%as_Encoded(uint64)%0#1: Encoded(uint64) = array%val_as_bytes%0#1
+        let encoded_value%0#0: Encoded(uint64) = array%as_Encoded(uint64)%0#1
+        let array%write_offset%0#1: uint64 = (* 0u 8u)
+        let array%write_offset_with_length_header%0#1: uint64 = (+ array%write_offset%0#1 2u)
+        let array%updated_array%0#1: bytes = (replace3 a#0 array%write_offset_with_length_header%0#1 encoded_value%0#0)
+        let updated_array%0#0: Encoded(len+uint64[]) = array%updated_array%0#1
+        let a#1: Encoded(len+uint64[]) = updated_array%0#0
+        goto 1u ? block@1 : block@2
+    block@1: // if_body_L1
+        let a%out#1: Encoded(len+uint64[]) = a#1
+        goto block@2
+    block@2: // after_if_else_L1
+        let a%out#2: Encoded(len+uint64[]) = φ(a%out#0 <- block@0, a%out#1 <- block@1)
+        return a%out#2
+
+subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveReadonly(a: Encoded(len+uint64[])) -> void:
+    block@0: // L129
         return 
 
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__algots__.defaultCreate() -> void:

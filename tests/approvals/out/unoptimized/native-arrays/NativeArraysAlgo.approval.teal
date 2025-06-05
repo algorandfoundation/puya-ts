@@ -14,7 +14,7 @@ main_block@1:
     txn NumAppArgs
     intc_1 // 0
     !=
-    bz main_bare_routing@17
+    bz main_bare_routing@19
 
 main_abi_routing@2:
     // tests/approvals/native-arrays.algo.ts:6
@@ -32,24 +32,67 @@ main_abi_routing@2:
     pushbytes 0x43e7ee45 // method "arc4Booleans()bool[]"
     pushbytes 0xcbe3a4f8 // method "arc4BooleansStatic()(bool,bool,bool)"
     pushbytes 0x143f223b // method "aliasing(uint64[],uint64[])void"
-    uncover 12
-    match main_buildArray_route@3 main_arrayFromCtor_route@4 main_buildReadonly_route@5 main_doThings_route@6 main_fixedArray_route@7 main_arc4Interop_route@8 main_structs_route@9 main_booleans_route@10 main_booleansStatic_route@11 main_arc4Booleans_route@12 main_arc4BooleansStatic_route@13 main_aliasing_route@14
+    pushbytes 0xd9895442 // method "receiveMutable(uint64[])void"
+    pushbytes 0xe213f5b6 // method "receiveReadonly(uint64[])void"
+    uncover 14
+    match main_buildArray_route@3 main_arrayFromCtor_route@4 main_buildReadonly_route@5 main_doThings_route@6 main_fixedArray_route@7 main_arc4Interop_route@8 main_structs_route@9 main_booleans_route@10 main_booleansStatic_route@11 main_arc4Booleans_route@12 main_arc4BooleansStatic_route@13 main_aliasing_route@14 main_receiveMutable_route@15 main_receiveReadonly_route@16
 
-main_switch_case_default@15:
+main_switch_case_default@17:
 
-main_switch_case_next@16:
+main_switch_case_next@18:
 
-main_after_if_else@21:
+main_after_if_else@23:
     // tests/approvals/native-arrays.algo.ts:6
     // export class NativeArraysAlgo extends Contract {
     intc_1 // 0
 
-main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@22:
+main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@24:
     return
 
+main_receiveReadonly_route@16:
+    // tests/approvals/native-arrays.algo.ts:129
+    // receiveReadonly(a: readonly uint64[]) {}
+    txn OnCompletion
+    intc_1 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_1 // 0
+    !=
+    assert // can only call when not creating
+    // tests/approvals/native-arrays.algo.ts:6
+    // export class NativeArraysAlgo extends Contract {
+    txna ApplicationArgs 1
+    // tests/approvals/native-arrays.algo.ts:129
+    // receiveReadonly(a: readonly uint64[]) {}
+    callsub receiveReadonly
+    intc_2 // 1
+    b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@24
+
+main_receiveMutable_route@15:
+    // tests/approvals/native-arrays.algo.ts:125
+    // receiveMutable(a: uint64[]) {
+    txn OnCompletion
+    intc_1 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_1 // 0
+    !=
+    assert // can only call when not creating
+    // tests/approvals/native-arrays.algo.ts:6
+    // export class NativeArraysAlgo extends Contract {
+    txna ApplicationArgs 1
+    // tests/approvals/native-arrays.algo.ts:125
+    // receiveMutable(a: uint64[]) {
+    callsub receiveMutable
+    pop
+    intc_2 // 1
+    b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@24
+
 main_aliasing_route@14:
-    // tests/approvals/native-arrays.algo.ts:97
-    // aliasing(a: uint64[], b: readonly uint64[]) {
+    // tests/approvals/native-arrays.algo.ts:99
+    // aliasing(mutable: uint64[], readOnly: readonly uint64[]) {
     txn OnCompletion
     intc_1 // NoOp
     ==
@@ -62,14 +105,14 @@ main_aliasing_route@14:
     // export class NativeArraysAlgo extends Contract {
     txna ApplicationArgs 1
     txna ApplicationArgs 2
-    // tests/approvals/native-arrays.algo.ts:97
-    // aliasing(a: uint64[], b: readonly uint64[]) {
+    // tests/approvals/native-arrays.algo.ts:99
+    // aliasing(mutable: uint64[], readOnly: readonly uint64[]) {
     callsub aliasing
     intc_2 // 1
-    b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@22
+    b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@24
 
 main_arc4BooleansStatic_route@13:
-    // tests/approvals/native-arrays.algo.ts:93
+    // tests/approvals/native-arrays.algo.ts:95
     // arc4BooleansStatic() {
     txn OnCompletion
     intc_1 // NoOp
@@ -106,10 +149,10 @@ main_arc4BooleansStatic_route@13:
     concat
     log
     intc_2 // 1
-    b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@22
+    b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@24
 
 main_arc4Booleans_route@12:
-    // tests/approvals/native-arrays.algo.ts:89
+    // tests/approvals/native-arrays.algo.ts:91
     // arc4Booleans() {
     txn OnCompletion
     intc_1 // NoOp
@@ -125,10 +168,10 @@ main_arc4Booleans_route@12:
     concat
     log
     intc_2 // 1
-    b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@22
+    b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@24
 
 main_booleansStatic_route@11:
-    // tests/approvals/native-arrays.algo.ts:85
+    // tests/approvals/native-arrays.algo.ts:87
     // booleansStatic() {
     txn OnCompletion
     intc_1 // NoOp
@@ -161,10 +204,10 @@ main_booleansStatic_route@11:
     concat
     log
     intc_2 // 1
-    b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@22
+    b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@24
 
 main_booleans_route@10:
-    // tests/approvals/native-arrays.algo.ts:81
+    // tests/approvals/native-arrays.algo.ts:83
     // booleans() {
     txn OnCompletion
     intc_1 // NoOp
@@ -180,10 +223,10 @@ main_booleans_route@10:
     concat
     log
     intc_2 // 1
-    b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@22
+    b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@24
 
 main_structs_route@9:
-    // tests/approvals/native-arrays.algo.ts:72
+    // tests/approvals/native-arrays.algo.ts:74
     // structs({ x, y }: Vector) {
     txn OnCompletion
     intc_1 // NoOp
@@ -206,7 +249,7 @@ main_structs_route@9:
     dup
     extract3
     btoi
-    // tests/approvals/native-arrays.algo.ts:72
+    // tests/approvals/native-arrays.algo.ts:74
     // structs({ x, y }: Vector) {
     callsub structs
     bytec_2 // 0x151f7c75
@@ -214,10 +257,10 @@ main_structs_route@9:
     concat
     log
     intc_2 // 1
-    b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@22
+    b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@24
 
 main_arc4Interop_route@8:
-    // tests/approvals/native-arrays.algo.ts:59
+    // tests/approvals/native-arrays.algo.ts:61
     // arc4Interop() {
     txn OnCompletion
     intc_1 // NoOp
@@ -229,10 +272,10 @@ main_arc4Interop_route@8:
     assert // can only call when not creating
     callsub arc4Interop
     intc_2 // 1
-    b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@22
+    b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@24
 
 main_fixedArray_route@7:
-    // tests/approvals/native-arrays.algo.ts:51
+    // tests/approvals/native-arrays.algo.ts:53
     // fixedArray(y: FixedArray<uint64, 1024>) {
     txn OnCompletion
     intc_1 // NoOp
@@ -245,11 +288,11 @@ main_fixedArray_route@7:
     // tests/approvals/native-arrays.algo.ts:6
     // export class NativeArraysAlgo extends Contract {
     txna ApplicationArgs 1
-    // tests/approvals/native-arrays.algo.ts:51
+    // tests/approvals/native-arrays.algo.ts:53
     // fixedArray(y: FixedArray<uint64, 1024>) {
     callsub fixedArray
     intc_2 // 1
-    b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@22
+    b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@24
 
 main_doThings_route@6:
     // tests/approvals/native-arrays.algo.ts:19
@@ -264,7 +307,7 @@ main_doThings_route@6:
     assert // can only call when not creating
     callsub doThings
     intc_2 // 1
-    b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@22
+    b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@24
 
 main_buildReadonly_route@5:
     // tests/approvals/native-arrays.algo.ts:15
@@ -283,7 +326,7 @@ main_buildReadonly_route@5:
     concat
     log
     intc_2 // 1
-    b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@22
+    b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@24
 
 main_arrayFromCtor_route@4:
     // tests/approvals/native-arrays.algo.ts:11
@@ -302,7 +345,7 @@ main_arrayFromCtor_route@4:
     concat
     log
     intc_2 // 1
-    b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@22
+    b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@24
 
 main_buildArray_route@3:
     // tests/approvals/native-arrays.algo.ts:7
@@ -321,22 +364,22 @@ main_buildArray_route@3:
     concat
     log
     intc_2 // 1
-    b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@22
+    b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@24
 
-main_bare_routing@17:
+main_bare_routing@19:
     // tests/approvals/native-arrays.algo.ts:6
     // export class NativeArraysAlgo extends Contract {
     txn OnCompletion
     intc_1 // 0
     swap
-    match main___algots__.defaultCreate@18
+    match main___algots__.defaultCreate@20
 
-main_switch_case_default@19:
+main_switch_case_default@21:
 
-main_switch_case_next@20:
-    b main_after_if_else@21
+main_switch_case_next@22:
+    b main_after_if_else@23
 
-main___algots__.defaultCreate@18:
+main___algots__.defaultCreate@20:
     // tests/approvals/native-arrays.algo.ts:6
     // export class NativeArraysAlgo extends Contract {
     txn ApplicationID
@@ -345,7 +388,7 @@ main___algots__.defaultCreate@18:
     assert // can only call when creating
     callsub __algots__.defaultCreate
     intc_2 // 1
-    b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@22
+    b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@24
 
 
 // _puya_lib.arc4.dynamic_array_pop_fixed_size(array: bytes, fixed_byte_size: uint64) -> bytes, bytes:
@@ -804,7 +847,7 @@ doThings_bool_merge@22:
     replace3
     dup
     frame_bury 0
-    // tests/approvals/native-arrays.algo.ts:42
+    // tests/approvals/native-arrays.algo.ts:44
     // assertMatch(arr, [1, 10, 3, 4])
     intc_1 // 0
     extract_uint16
@@ -813,7 +856,7 @@ doThings_bool_merge@22:
     bz doThings_bool_false@28
 
 doThings_and_contd@23:
-    // tests/approvals/native-arrays.algo.ts:42
+    // tests/approvals/native-arrays.algo.ts:44
     // assertMatch(arr, [1, 10, 3, 4])
     frame_dig 0
     extract 2 0
@@ -828,7 +871,7 @@ doThings_and_contd@23:
     bz doThings_bool_false@28
 
 doThings_and_contd@24:
-    // tests/approvals/native-arrays.algo.ts:42
+    // tests/approvals/native-arrays.algo.ts:44
     // assertMatch(arr, [1, 10, 3, 4])
     frame_dig 0
     extract 2 0
@@ -843,7 +886,7 @@ doThings_and_contd@24:
     bz doThings_bool_false@28
 
 doThings_and_contd@25:
-    // tests/approvals/native-arrays.algo.ts:42
+    // tests/approvals/native-arrays.algo.ts:44
     // assertMatch(arr, [1, 10, 3, 4])
     frame_dig 0
     extract 2 0
@@ -858,7 +901,7 @@ doThings_and_contd@25:
     bz doThings_bool_false@28
 
 doThings_and_contd@26:
-    // tests/approvals/native-arrays.algo.ts:42
+    // tests/approvals/native-arrays.algo.ts:44
     // assertMatch(arr, [1, 10, 3, 4])
     frame_dig 0
     extract 2 0
@@ -876,10 +919,10 @@ doThings_bool_true@27:
     intc_2 // 1
 
 doThings_bool_merge@29:
-    // tests/approvals/native-arrays.algo.ts:42
+    // tests/approvals/native-arrays.algo.ts:44
     // assertMatch(arr, [1, 10, 3, 4])
     assert // assert target is match for conditions
-    // tests/approvals/native-arrays.algo.ts:45
+    // tests/approvals/native-arrays.algo.ts:47
     // const t1: [uint64, uint64] = [12, 13]
     pushint 12 // 12
     itob
@@ -891,7 +934,7 @@ doThings_bool_merge@29:
     concat
     bytec_0 // 0x
     concat
-    // tests/approvals/native-arrays.algo.ts:46
+    // tests/approvals/native-arrays.algo.ts:48
     // arr = arr.concat(arr).concat(t1)
     frame_dig 0
     dup
@@ -949,7 +992,7 @@ doThings_bool_merge@29:
     replace3
     dup
     frame_bury 0
-    // tests/approvals/native-arrays.algo.ts:48
+    // tests/approvals/native-arrays.algo.ts:50
     // assertMatch(arr, [1, 10, 3, 4, 1, 10, 3, 4, 11, 12, 13])
     intc_1 // 0
     extract_uint16
@@ -958,7 +1001,7 @@ doThings_bool_merge@29:
     bz doThings_bool_false@42
 
 doThings_and_contd@30:
-    // tests/approvals/native-arrays.algo.ts:48
+    // tests/approvals/native-arrays.algo.ts:50
     // assertMatch(arr, [1, 10, 3, 4, 1, 10, 3, 4, 11, 12, 13])
     frame_dig 0
     extract 2 0
@@ -973,7 +1016,7 @@ doThings_and_contd@30:
     bz doThings_bool_false@42
 
 doThings_and_contd@31:
-    // tests/approvals/native-arrays.algo.ts:48
+    // tests/approvals/native-arrays.algo.ts:50
     // assertMatch(arr, [1, 10, 3, 4, 1, 10, 3, 4, 11, 12, 13])
     frame_dig 0
     extract 2 0
@@ -988,7 +1031,7 @@ doThings_and_contd@31:
     bz doThings_bool_false@42
 
 doThings_and_contd@32:
-    // tests/approvals/native-arrays.algo.ts:48
+    // tests/approvals/native-arrays.algo.ts:50
     // assertMatch(arr, [1, 10, 3, 4, 1, 10, 3, 4, 11, 12, 13])
     frame_dig 0
     extract 2 0
@@ -1003,7 +1046,7 @@ doThings_and_contd@32:
     bz doThings_bool_false@42
 
 doThings_and_contd@33:
-    // tests/approvals/native-arrays.algo.ts:48
+    // tests/approvals/native-arrays.algo.ts:50
     // assertMatch(arr, [1, 10, 3, 4, 1, 10, 3, 4, 11, 12, 13])
     frame_dig 0
     extract 2 0
@@ -1018,7 +1061,7 @@ doThings_and_contd@33:
     bz doThings_bool_false@42
 
 doThings_and_contd@34:
-    // tests/approvals/native-arrays.algo.ts:48
+    // tests/approvals/native-arrays.algo.ts:50
     // assertMatch(arr, [1, 10, 3, 4, 1, 10, 3, 4, 11, 12, 13])
     frame_dig 0
     extract 2 0
@@ -1033,7 +1076,7 @@ doThings_and_contd@34:
     bz doThings_bool_false@42
 
 doThings_and_contd@35:
-    // tests/approvals/native-arrays.algo.ts:48
+    // tests/approvals/native-arrays.algo.ts:50
     // assertMatch(arr, [1, 10, 3, 4, 1, 10, 3, 4, 11, 12, 13])
     frame_dig 0
     extract 2 0
@@ -1048,7 +1091,7 @@ doThings_and_contd@35:
     bz doThings_bool_false@42
 
 doThings_and_contd@36:
-    // tests/approvals/native-arrays.algo.ts:48
+    // tests/approvals/native-arrays.algo.ts:50
     // assertMatch(arr, [1, 10, 3, 4, 1, 10, 3, 4, 11, 12, 13])
     frame_dig 0
     extract 2 0
@@ -1063,7 +1106,7 @@ doThings_and_contd@36:
     bz doThings_bool_false@42
 
 doThings_and_contd@37:
-    // tests/approvals/native-arrays.algo.ts:48
+    // tests/approvals/native-arrays.algo.ts:50
     // assertMatch(arr, [1, 10, 3, 4, 1, 10, 3, 4, 11, 12, 13])
     frame_dig 0
     extract 2 0
@@ -1078,7 +1121,7 @@ doThings_and_contd@37:
     bz doThings_bool_false@42
 
 doThings_and_contd@38:
-    // tests/approvals/native-arrays.algo.ts:48
+    // tests/approvals/native-arrays.algo.ts:50
     // assertMatch(arr, [1, 10, 3, 4, 1, 10, 3, 4, 11, 12, 13])
     frame_dig 0
     extract 2 0
@@ -1093,7 +1136,7 @@ doThings_and_contd@38:
     bz doThings_bool_false@42
 
 doThings_and_contd@39:
-    // tests/approvals/native-arrays.algo.ts:48
+    // tests/approvals/native-arrays.algo.ts:50
     // assertMatch(arr, [1, 10, 3, 4, 1, 10, 3, 4, 11, 12, 13])
     frame_dig 0
     extract 2 0
@@ -1108,7 +1151,7 @@ doThings_and_contd@39:
     bz doThings_bool_false@42
 
 doThings_and_contd@40:
-    // tests/approvals/native-arrays.algo.ts:48
+    // tests/approvals/native-arrays.algo.ts:50
     // assertMatch(arr, [1, 10, 3, 4, 1, 10, 3, 4, 11, 12, 13])
     frame_dig 0
     extract 2 0
@@ -1126,7 +1169,7 @@ doThings_bool_true@41:
     intc_2 // 1
 
 doThings_bool_merge@43:
-    // tests/approvals/native-arrays.algo.ts:48
+    // tests/approvals/native-arrays.algo.ts:50
     // assertMatch(arr, [1, 10, 3, 4, 1, 10, 3, 4, 11, 12, 13])
     assert // assert target is match for conditions
     retsub
@@ -1154,12 +1197,12 @@ doThings_bool_false@6:
 
 // tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.fixedArray(y: bytes) -> void:
 fixedArray:
-    // tests/approvals/native-arrays.algo.ts:51
+    // tests/approvals/native-arrays.algo.ts:53
     // fixedArray(y: FixedArray<uint64, 1024>) {
     proto 1 0
 
 fixedArray_block@0:
-    // tests/approvals/native-arrays.algo.ts:52
+    // tests/approvals/native-arrays.algo.ts:54
     // const x = new FixedArray<uint64, 4>(1, 2, 3, 4)
     intc_2 // 1
     itob
@@ -1177,7 +1220,7 @@ fixedArray_block@0:
     concat
     bytec_0 // 0x
     concat
-    // tests/approvals/native-arrays.algo.ts:53
+    // tests/approvals/native-arrays.algo.ts:55
     // x[0] = 0
     intc_1 // 0
     itob
@@ -1189,7 +1232,7 @@ fixedArray_block@0:
     uncover 2
     replace3
     dup
-    // tests/approvals/native-arrays.algo.ts:54
+    // tests/approvals/native-arrays.algo.ts:56
     // assert(x[0] === y[0])
     intc_1 // 0
     intc_0 // 8
@@ -1207,7 +1250,7 @@ fixedArray_block@0:
     btoi
     ==
     assert
-    // tests/approvals/native-arrays.algo.ts:55
+    // tests/approvals/native-arrays.algo.ts:57
     // assertMatch(x, [{ lessThan: 1 }, 2, 3, 4])
     intc_3 // 4
     dup
@@ -1215,7 +1258,7 @@ fixedArray_block@0:
     bz fixedArray_bool_false@6
 
 fixedArray_and_contd@1:
-    // tests/approvals/native-arrays.algo.ts:55
+    // tests/approvals/native-arrays.algo.ts:57
     // assertMatch(x, [{ lessThan: 1 }, 2, 3, 4])
     intc_1 // 0
     intc_0 // 8
@@ -1230,7 +1273,7 @@ fixedArray_and_contd@1:
     bz fixedArray_bool_false@6
 
 fixedArray_and_contd@2:
-    // tests/approvals/native-arrays.algo.ts:55
+    // tests/approvals/native-arrays.algo.ts:57
     // assertMatch(x, [{ lessThan: 1 }, 2, 3, 4])
     intc_2 // 1
     intc_0 // 8
@@ -1245,7 +1288,7 @@ fixedArray_and_contd@2:
     bz fixedArray_bool_false@6
 
 fixedArray_and_contd@3:
-    // tests/approvals/native-arrays.algo.ts:55
+    // tests/approvals/native-arrays.algo.ts:57
     // assertMatch(x, [{ lessThan: 1 }, 2, 3, 4])
     pushint 2 // 2
     intc_0 // 8
@@ -1260,7 +1303,7 @@ fixedArray_and_contd@3:
     bz fixedArray_bool_false@6
 
 fixedArray_and_contd@4:
-    // tests/approvals/native-arrays.algo.ts:55
+    // tests/approvals/native-arrays.algo.ts:57
     // assertMatch(x, [{ lessThan: 1 }, 2, 3, 4])
     pushint 3 // 3
     intc_0 // 8
@@ -1278,10 +1321,10 @@ fixedArray_bool_true@5:
     intc_2 // 1
 
 fixedArray_bool_merge@7:
-    // tests/approvals/native-arrays.algo.ts:55
+    // tests/approvals/native-arrays.algo.ts:57
     // assertMatch(x, [{ lessThan: 1 }, 2, 3, 4])
     assert // assert target is match for conditions
-    // tests/approvals/native-arrays.algo.ts:56
+    // tests/approvals/native-arrays.algo.ts:58
     // assertMatch(y, { 1024: { greaterThanEq: 0 } })
     pushint 1024 // 1024
     intc_0 // 8
@@ -1303,25 +1346,17 @@ fixedArray_bool_false@6:
 
 // tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop() -> void:
 arc4Interop:
-    // tests/approvals/native-arrays.algo.ts:59
+    // tests/approvals/native-arrays.algo.ts:61
     // arc4Interop() {
     proto 0 0
 
 arc4Interop_block@0:
-    // tests/approvals/native-arrays.algo.ts:62
+    // tests/approvals/native-arrays.algo.ts:64
     // const da1 = new DynamicArray(u1, u1)
     bytec_0 // 0x
-    // tests/approvals/native-arrays.algo.ts:60
-    // const u1 = new UintN32(123)
     bytec_1 // 0x0000007b
-    // tests/approvals/native-arrays.algo.ts:62
-    // const da1 = new DynamicArray(u1, u1)
     concat
-    // tests/approvals/native-arrays.algo.ts:60
-    // const u1 = new UintN32(123)
     bytec_1 // 0x0000007b
-    // tests/approvals/native-arrays.algo.ts:62
-    // const da1 = new DynamicArray(u1, u1)
     concat
     pushint 2 // 2
     itob
@@ -1330,47 +1365,31 @@ arc4Interop_block@0:
     concat
     bytec_0 // 0x
     concat
-    // tests/approvals/native-arrays.algo.ts:63
+    // tests/approvals/native-arrays.algo.ts:65
     // const sa1 = new StaticArray(u1, u1)
     bytec_0 // 0x
-    // tests/approvals/native-arrays.algo.ts:60
-    // const u1 = new UintN32(123)
     bytec_1 // 0x0000007b
-    // tests/approvals/native-arrays.algo.ts:63
-    // const sa1 = new StaticArray(u1, u1)
     concat
-    // tests/approvals/native-arrays.algo.ts:60
-    // const u1 = new UintN32(123)
     bytec_1 // 0x0000007b
-    // tests/approvals/native-arrays.algo.ts:63
-    // const sa1 = new StaticArray(u1, u1)
     concat
     bytec_0 // 0x
     concat
     swap
-    // tests/approvals/native-arrays.algo.ts:65
-    // let a1 = [u1, u1]
-    bytec_0 // 0x
-    // tests/approvals/native-arrays.algo.ts:60
-    // const u1 = new UintN32(123)
-    bytec_1 // 0x0000007b
-    // tests/approvals/native-arrays.algo.ts:65
-    // let a1 = [u1, u1]
-    concat
-    // tests/approvals/native-arrays.algo.ts:60
-    // const u1 = new UintN32(123)
-    bytec_1 // 0x0000007b
-    // tests/approvals/native-arrays.algo.ts:65
-    // let a1 = [u1, u1]
-    concat
-    pushint 2 // 2
-    itob
-    extract 6 2
-    swap
-    concat
-    bytec_0 // 0x
-    concat
     // tests/approvals/native-arrays.algo.ts:67
+    // let a1 = [u1, u1]
+    bytec_0 // 0x
+    bytec_1 // 0x0000007b
+    concat
+    bytec_1 // 0x0000007b
+    concat
+    pushint 2 // 2
+    itob
+    extract 6 2
+    swap
+    concat
+    bytec_0 // 0x
+    concat
+    // tests/approvals/native-arrays.algo.ts:69
     // a1 = [...a1, ...da1, ...sa1]
     swap
     extract 2 0
@@ -1400,7 +1419,7 @@ arc4Interop_block@0:
     uncover 2
     replace3
     dup
-    // tests/approvals/native-arrays.algo.ts:69
+    // tests/approvals/native-arrays.algo.ts:71
     // assertMatch(a1, [u1, u1, u1, u1, u1, u1])
     intc_1 // 0
     extract_uint16
@@ -1409,7 +1428,7 @@ arc4Interop_block@0:
     bz arc4Interop_bool_false@8
 
 arc4Interop_and_contd@1:
-    // tests/approvals/native-arrays.algo.ts:69
+    // tests/approvals/native-arrays.algo.ts:71
     // assertMatch(a1, [u1, u1, u1, u1, u1, u1])
     frame_dig 0
     extract 2 0
@@ -1418,16 +1437,12 @@ arc4Interop_and_contd@1:
     *
     intc_3 // 4
     extract3 // on error: index access is out of bounds
-    // tests/approvals/native-arrays.algo.ts:60
-    // const u1 = new UintN32(123)
     bytec_1 // 0x0000007b
-    // tests/approvals/native-arrays.algo.ts:69
-    // assertMatch(a1, [u1, u1, u1, u1, u1, u1])
     ==
     bz arc4Interop_bool_false@8
 
 arc4Interop_and_contd@2:
-    // tests/approvals/native-arrays.algo.ts:69
+    // tests/approvals/native-arrays.algo.ts:71
     // assertMatch(a1, [u1, u1, u1, u1, u1, u1])
     frame_dig 0
     extract 2 0
@@ -1436,16 +1451,12 @@ arc4Interop_and_contd@2:
     *
     intc_3 // 4
     extract3 // on error: index access is out of bounds
-    // tests/approvals/native-arrays.algo.ts:60
-    // const u1 = new UintN32(123)
     bytec_1 // 0x0000007b
-    // tests/approvals/native-arrays.algo.ts:69
-    // assertMatch(a1, [u1, u1, u1, u1, u1, u1])
     ==
     bz arc4Interop_bool_false@8
 
 arc4Interop_and_contd@3:
-    // tests/approvals/native-arrays.algo.ts:69
+    // tests/approvals/native-arrays.algo.ts:71
     // assertMatch(a1, [u1, u1, u1, u1, u1, u1])
     frame_dig 0
     extract 2 0
@@ -1454,16 +1465,12 @@ arc4Interop_and_contd@3:
     *
     intc_3 // 4
     extract3 // on error: index access is out of bounds
-    // tests/approvals/native-arrays.algo.ts:60
-    // const u1 = new UintN32(123)
     bytec_1 // 0x0000007b
-    // tests/approvals/native-arrays.algo.ts:69
-    // assertMatch(a1, [u1, u1, u1, u1, u1, u1])
     ==
     bz arc4Interop_bool_false@8
 
 arc4Interop_and_contd@4:
-    // tests/approvals/native-arrays.algo.ts:69
+    // tests/approvals/native-arrays.algo.ts:71
     // assertMatch(a1, [u1, u1, u1, u1, u1, u1])
     frame_dig 0
     extract 2 0
@@ -1472,16 +1479,12 @@ arc4Interop_and_contd@4:
     *
     intc_3 // 4
     extract3 // on error: index access is out of bounds
-    // tests/approvals/native-arrays.algo.ts:60
-    // const u1 = new UintN32(123)
     bytec_1 // 0x0000007b
-    // tests/approvals/native-arrays.algo.ts:69
-    // assertMatch(a1, [u1, u1, u1, u1, u1, u1])
     ==
     bz arc4Interop_bool_false@8
 
 arc4Interop_and_contd@5:
-    // tests/approvals/native-arrays.algo.ts:69
+    // tests/approvals/native-arrays.algo.ts:71
     // assertMatch(a1, [u1, u1, u1, u1, u1, u1])
     frame_dig 0
     extract 2 0
@@ -1490,16 +1493,12 @@ arc4Interop_and_contd@5:
     *
     intc_3 // 4
     extract3 // on error: index access is out of bounds
-    // tests/approvals/native-arrays.algo.ts:60
-    // const u1 = new UintN32(123)
     bytec_1 // 0x0000007b
-    // tests/approvals/native-arrays.algo.ts:69
-    // assertMatch(a1, [u1, u1, u1, u1, u1, u1])
     ==
     bz arc4Interop_bool_false@8
 
 arc4Interop_and_contd@6:
-    // tests/approvals/native-arrays.algo.ts:69
+    // tests/approvals/native-arrays.algo.ts:71
     // assertMatch(a1, [u1, u1, u1, u1, u1, u1])
     frame_dig 0
     extract 2 0
@@ -1508,11 +1507,7 @@ arc4Interop_and_contd@6:
     *
     intc_3 // 4
     extract3 // on error: index access is out of bounds
-    // tests/approvals/native-arrays.algo.ts:60
-    // const u1 = new UintN32(123)
     bytec_1 // 0x0000007b
-    // tests/approvals/native-arrays.algo.ts:69
-    // assertMatch(a1, [u1, u1, u1, u1, u1, u1])
     ==
     bz arc4Interop_bool_false@8
 
@@ -1520,7 +1515,7 @@ arc4Interop_bool_true@7:
     intc_2 // 1
 
 arc4Interop_bool_merge@9:
-    // tests/approvals/native-arrays.algo.ts:69
+    // tests/approvals/native-arrays.algo.ts:71
     // assertMatch(a1, [u1, u1, u1, u1, u1, u1])
     assert // assert target is match for conditions
     retsub
@@ -1532,12 +1527,12 @@ arc4Interop_bool_false@8:
 
 // tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.structs(p.x: uint64, p.y: uint64) -> bytes:
 structs:
-    // tests/approvals/native-arrays.algo.ts:72
+    // tests/approvals/native-arrays.algo.ts:74
     // structs({ x, y }: Vector) {
     proto 2 1
 
 structs_block@0:
-    // tests/approvals/native-arrays.algo.ts:72
+    // tests/approvals/native-arrays.algo.ts:74
     // structs({ x, y }: Vector) {
     frame_dig -2
     dup
@@ -1545,7 +1540,7 @@ structs_block@0:
     dup
     cover 2
     cover 2
-    // tests/approvals/native-arrays.algo.ts:75
+    // tests/approvals/native-arrays.algo.ts:77
     // myVectors = [{ x, y }]
     itob
     bytec_0 // 0x
@@ -1567,7 +1562,7 @@ structs_block@0:
     bytec_0 // 0x
     concat
     dup
-    // tests/approvals/native-arrays.algo.ts:77
+    // tests/approvals/native-arrays.algo.ts:79
     // assertMatch(myVectors, [{ x, y }])
     intc_1 // 0
     extract_uint16
@@ -1576,7 +1571,7 @@ structs_block@0:
     bz structs_bool_false@4
 
 structs_and_contd@1:
-    // tests/approvals/native-arrays.algo.ts:77
+    // tests/approvals/native-arrays.algo.ts:79
     // assertMatch(myVectors, [{ x, y }])
     frame_dig 2
     extract 2 0
@@ -1594,7 +1589,7 @@ structs_and_contd@1:
     bz structs_bool_false@4
 
 structs_and_contd@2:
-    // tests/approvals/native-arrays.algo.ts:77
+    // tests/approvals/native-arrays.algo.ts:79
     // assertMatch(myVectors, [{ x, y }])
     frame_dig 2
     extract 2 0
@@ -1615,10 +1610,10 @@ structs_bool_true@3:
     intc_2 // 1
 
 structs_bool_merge@5:
-    // tests/approvals/native-arrays.algo.ts:77
+    // tests/approvals/native-arrays.algo.ts:79
     // assertMatch(myVectors, [{ x, y }])
     assert // assert target is match for conditions
-    // tests/approvals/native-arrays.algo.ts:78
+    // tests/approvals/native-arrays.algo.ts:80
     // return myVectors
     frame_dig 2
     frame_bury 0
@@ -1633,7 +1628,7 @@ structs_bool_false@4:
 booleans:
 
 booleans_block@0:
-    // tests/approvals/native-arrays.algo.ts:82
+    // tests/approvals/native-arrays.algo.ts:84
     // return [true, false, true]
     bytec_3 // 0x00
     intc_1 // 0
@@ -1662,7 +1657,7 @@ booleans_block@0:
 booleansStatic:
 
 booleansStatic_block@0:
-    // tests/approvals/native-arrays.algo.ts:86
+    // tests/approvals/native-arrays.algo.ts:88
     // return [true, false, true] as const
     intc_2 // 1
     intc_1 // 0
@@ -1674,7 +1669,7 @@ booleansStatic_block@0:
 arc4Booleans:
 
 arc4Booleans_block@0:
-    // tests/approvals/native-arrays.algo.ts:90
+    // tests/approvals/native-arrays.algo.ts:92
     // return [new Bool(true), new Bool(false), new Bool(true)]
     bytec_3 // 0x00
     intc_1 // 0
@@ -1720,7 +1715,7 @@ arc4Booleans_block@0:
 arc4BooleansStatic:
 
 arc4BooleansStatic_block@0:
-    // tests/approvals/native-arrays.algo.ts:94
+    // tests/approvals/native-arrays.algo.ts:96
     // return [new Bool(true), new Bool(false), new Bool(true)] as const
     bytec_3 // 0x00
     intc_1 // 0
@@ -1740,13 +1735,117 @@ arc4BooleansStatic_block@0:
     retsub
 
 
-// tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.aliasing(a: bytes, b: bytes) -> void:
+// tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.aliasing(mutable: bytes, readOnly: bytes) -> void:
 aliasing:
-    // tests/approvals/native-arrays.algo.ts:97
-    // aliasing(a: uint64[], b: readonly uint64[]) {
+    // tests/approvals/native-arrays.algo.ts:99
+    // aliasing(mutable: uint64[], readOnly: readonly uint64[]) {
     proto 2 0
 
 aliasing_block@0:
+    // tests/approvals/native-arrays.algo.ts:108
+    // const needClone2: readonly uint64[] = mutable
+    frame_dig -2
+    // tests/approvals/native-arrays.algo.ts:110
+    // mutable[1] += 2
+    dup
+    extract 2 0
+    intc_2 // 1
+    intc_0 // 8
+    *
+    intc_0 // 8
+    extract3 // on error: index access is out of bounds
+    btoi
+    pushint 2 // 2
+    +
+    itob
+    intc_2 // 1
+    intc_0 // 8
+    *
+    pushint 2 // 2
+    +
+    frame_dig -2
+    swap
+    uncover 2
+    replace3
+    dup
+    frame_bury -2
+    // tests/approvals/native-arrays.algo.ts:112
+    // assert(mutable[1] !== needClone2[1], 'These should not match')
+    extract 2 0
+    intc_2 // 1
+    intc_0 // 8
+    *
+    intc_0 // 8
+    extract3 // on error: index access is out of bounds
+    btoi
+    swap
+    extract 2 0
+    intc_2 // 1
+    intc_0 // 8
+    *
+    intc_0 // 8
+    extract3 // on error: index access is out of bounds
+    btoi
+    !=
+    assert // These should not match
+    // tests/approvals/native-arrays.algo.ts:115
+    // this.receiveMutable(mutable)
+    frame_dig -2
+    callsub receiveMutable
+    dup
+    frame_bury -2
+    // tests/approvals/native-arrays.algo.ts:117
+    // this.receiveReadonly(mutable)
+    callsub receiveReadonly
+    // tests/approvals/native-arrays.algo.ts:122
+    // this.receiveReadonly(readOnly)
+    frame_dig -1
+    callsub receiveReadonly
+    retsub
+
+
+// tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveMutable(a: bytes) -> bytes:
+receiveMutable:
+    // tests/approvals/native-arrays.algo.ts:125
+    // receiveMutable(a: uint64[]) {
+    proto 1 1
+
+receiveMutable_block@0:
+    frame_dig -1
+    // tests/approvals/native-arrays.algo.ts:126
+    // a[0] = 1
+    intc_2 // 1
+    itob
+    intc_1 // 0
+    intc_0 // 8
+    *
+    pushint 2 // 2
+    +
+    frame_dig -1
+    swap
+    uncover 2
+    replace3
+    frame_bury -1
+    intc_2 // 1
+    bz receiveMutable_after_if_else@2
+
+receiveMutable_if_body@1:
+    frame_dig -1
+    frame_bury 0
+
+receiveMutable_after_if_else@2:
+    frame_dig 0
+    swap
+    retsub
+
+
+// tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveReadonly(a: bytes) -> void:
+receiveReadonly:
+    // tests/approvals/native-arrays.algo.ts:129
+    // receiveReadonly(a: readonly uint64[]) {}
+    proto 1 0
+
+receiveReadonly_block@0:
     retsub
 
 

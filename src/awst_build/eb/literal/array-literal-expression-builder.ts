@@ -1,6 +1,7 @@
 import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression, LValue } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
+import { CodeError } from '../../../errors'
 import { codeInvariant } from '../../../util'
 import type { PTypeOrClass } from '../../ptypes'
 import { ArrayLiteralPType, ArrayPType, MutableTuplePType, ReadonlyArrayPType, ReadonlyTuplePType } from '../../ptypes'
@@ -36,10 +37,7 @@ export class ArrayLiteralExpressionBuilder extends InstanceBuilder implements St
   }
 
   resolveLValue(): LValue {
-    return nodeFactory.tupleExpression({
-      items: this.items.map((i) => i.resolveLValue()),
-      sourceLocation: this.sourceLocation,
-    })
+    throw new CodeError('Array literal is not a valid assignment target', { sourceLocation: this.sourceLocation })
   }
 
   singleEvaluation(): InstanceBuilder {

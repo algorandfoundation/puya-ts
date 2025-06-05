@@ -454,6 +454,15 @@ export class DynamicArrayType extends ARC4ArrayType {
     })
     this.abiTypeSignature = `${this.elementType.abiTypeSignature}[]`
   }
+
+  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType | undefined {
+    if (typeof index === 'bigint') return this.elementType
+    return super.getIndexType(index, sourceLocation)
+  }
+
+  getIteratorType(): PType | undefined {
+    return this.elementType
+  }
 }
 
 export const StaticArrayGeneric = new GenericPType({
@@ -520,6 +529,15 @@ export class StaticArrayType extends ARC4ArrayType {
       })
     this.fixedBitSize = ARC4EncodedType.calculateFixedBitSize(new Array(Number(arraySize)).fill(elementType))
     this.abiTypeSignature = `${this.elementType.abiTypeSignature}[${this.arraySize}]`
+  }
+
+  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType | undefined {
+    if (typeof index === 'bigint') return this.elementType
+    return super.getIndexType(index, sourceLocation)
+  }
+
+  getIteratorType(): PType | undefined {
+    return this.elementType
   }
 }
 export const arc4AddressAlias = new StaticArrayType({
