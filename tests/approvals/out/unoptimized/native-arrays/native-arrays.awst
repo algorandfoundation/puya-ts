@@ -43,9 +43,9 @@ contract NativeArraysAlgo
   
   structs(p: Vector{ x: uint64, y: uint64 }): arc4.dynamic_array<tests/approvals/native-arrays.algo.ts::Vector>
   {
-    (x = (#0 = { x: p.x, y: p.y }).x), (y = #0.y), #0
+    { x: x, y: y }: object{ x: uint64, y: uint64 } = { x: p.x, y: p.y }
     myVectors: arc4.dynamic_array<tests/approvals/native-arrays.algo.ts::Vector> = new arc4.dynamic_array<tests/approvals/native-arrays.algo.ts::Vector>()
-    myVectors: arc4.dynamic_array<tests/approvals/native-arrays.algo.ts::Vector> = new arc4.dynamic_array<tests/approvals/native-arrays.algo.ts::Vector>({ x: (#1 = { x: x, y: y }).x, y: #1.y })
+    myVectors: arc4.dynamic_array<tests/approvals/native-arrays.algo.ts::Vector> = new arc4.dynamic_array<tests/approvals/native-arrays.algo.ts::Vector>({ x: (#0 = { x: x, y: y }).x, y: #0.y })
     assert(myVectors.length == 1 and myVectors[0].x == x and myVectors[0].y == y, comment=assert target is match for conditions)
     return myVectors
   }
