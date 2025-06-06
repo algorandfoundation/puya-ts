@@ -6,7 +6,7 @@ import { CodeError } from '../../../errors'
 import { codeInvariant, invariant } from '../../../util'
 import type { LibClassType, PType } from '../../ptypes'
 import { biguintPType, NumericLiteralPType, uint64PType } from '../../ptypes'
-import { UintNClass, UintNType } from '../../ptypes/arc4-types'
+import { UintNGeneric, UintNType } from '../../ptypes/arc4-types'
 import type { InstanceBuilder, NodeBuilder } from '../index'
 import { ClassBuilder } from '../index'
 import { parseFunctionArgs } from '../util/arg-parsing'
@@ -14,7 +14,7 @@ import { isValidLiteralForPType } from '../util/is-valid-literal-for-ptype'
 import { Arc4EncodedBaseExpressionBuilder } from './base'
 
 export class UintNClassBuilder extends ClassBuilder {
-  readonly ptype = UintNClass
+  readonly ptype = UintNGeneric
 
   newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
     const {
@@ -33,7 +33,7 @@ export class UintNClassBuilder extends ClassBuilder {
       `Generic type of ${this.typeDescription} must be a literal number. Inferred type is ${size.name}`,
       sourceLocation,
     )
-    const ptype = new UintNType({ n: size.literalValue })
+    const ptype = this.ptype.parameterise([size])
 
     return newUintN(initialValueBuilder, ptype, sourceLocation)
   }
@@ -71,7 +71,7 @@ function newUintN(initialValueBuilder: InstanceBuilder | undefined, ptype: UintN
       ptype,
     )
   }
-  if (ptype.n <= 64 && initialValueBuilder.resolvableToPType(uint64PType)) {
+  if (initialValueBuilder.resolvableToPType(uint64PType)) {
     const initialValue = initialValueBuilder.resolveToPType(uint64PType).resolve()
     if (initialValue instanceof IntegerConstant) {
       codeInvariant(isValidLiteralForPType(initialValue.value, ptype), `${initialValue.value} cannot be converted to ${ptype}`)

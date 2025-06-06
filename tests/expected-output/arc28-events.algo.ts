@@ -25,7 +25,7 @@ class EventEmitter extends Contract {
   }
 
   emitCustom(arg0: string, arg1: boolean) {
-    // @expect-error Expression of type `number` must be explicitly converted to an algo-ts type...
+    // @expect-error Expression of type `1` must be explicitly converted to an algo-ts type...
     emit('Custom2', 1)
   }
 }

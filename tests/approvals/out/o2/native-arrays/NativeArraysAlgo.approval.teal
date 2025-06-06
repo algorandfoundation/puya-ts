@@ -3,11 +3,11 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 0 8 3
-    bytecblock 0x151f7c75 "" 0x151f7c75a0 0x0000 0x800080
+    intcblock 1 0 8
+    bytecblock 0x151f7c75a0 0x151f7c750003a0
     intc_1 // 0
     dup
-    bytec_1 // ""
+    pushbytes ""
     dup
     // tests/approvals/native-arrays.algo.ts:6
     // export class NativeArraysAlgo extends Contract {
@@ -31,7 +31,7 @@ main_arc4BooleansStatic_route@10:
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    bytec_2 // 0x151f7c75a0
+    bytec_0 // 0x151f7c75a0
     log
     intc_0 // 1
     return
@@ -44,18 +44,7 @@ main_arc4Booleans_route@9:
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/native-arrays.algo.ts:72
-    // return [new Bool(true), new Bool(false), new Bool(true)]
-    bytec_3 // 0x0000
-    bytec 4 // 0x800080
-    intc_3 // 3
-    intc_2 // 8
-    callsub dynamic_array_concat_bits
-    // tests/approvals/native-arrays.algo.ts:71
-    // arc4Booleans() {
-    bytec_0 // 0x151f7c75
-    swap
-    concat
+    bytec_1 // 0x151f7c750003a0
     log
     intc_0 // 1
     return
@@ -68,7 +57,7 @@ main_booleansStatic_route@8:
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    bytec_2 // 0x151f7c75a0
+    bytec_0 // 0x151f7c75a0
     log
     intc_0 // 1
     return
@@ -81,18 +70,7 @@ main_booleans_route@7:
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/native-arrays.algo.ts:64
-    // return [true, false, true]
-    bytec_3 // 0x0000
-    bytec 4 // 0x800080
-    intc_3 // 3
-    intc_2 // 8
-    callsub dynamic_array_concat_bits
-    // tests/approvals/native-arrays.algo.ts:63
-    // booleans() {
-    bytec_0 // 0x151f7c75
-    swap
-    concat
+    bytec_1 // 0x151f7c750003a0
     log
     intc_0 // 1
     return
@@ -118,21 +96,14 @@ main_structs_route@6:
     extract_uint64
     dup
     bury 3
-    // tests/approvals/native-arrays.algo.ts:54
-    // structs({ x, y }: Vector) {
+    // tests/approvals/native-arrays.algo.ts:57
+    // myVectors = [{ x, y }]
     swap
     itob
     swap
     itob
     concat
-    // tests/approvals/native-arrays.algo.ts:57
-    // myVectors = [{ x, y }]
-    dup
-    len
-    pushint 16 // 16
-    /
-    itob
-    extract 6 2
+    pushbytes 0x0001
     swap
     concat
     dup
@@ -167,7 +138,7 @@ main_bool_merge@34:
     assert // assert target is match for conditions
     // tests/approvals/native-arrays.algo.ts:54
     // structs({ x, y }: Vector) {
-    bytec_0 // 0x151f7c75
+    pushbytes 0x151f7c75
     dig 3
     concat
     log
@@ -223,92 +194,3 @@ main_bare_routing@13:
     assert // can only call when creating
     intc_0 // 1
     return
-
-
-// _puya_lib.arc4.dynamic_array_concat_bits(array: bytes, new_items_bytes: bytes, new_items_count: uint64, read_step: uint64) -> bytes:
-dynamic_array_concat_bits:
-    proto 4 1
-    bytec_1 // ""
-    dupn 2
-    frame_dig -4
-    intc_1 // 0
-    extract_uint16
-    dupn 2
-    frame_dig -2
-    +
-    dup
-    itob
-    extract 6 0
-    frame_dig -4
-    swap
-    replace2 0
-    dup
-    uncover 2
-    uncover 3
-    pushint 7 // 7
-    +
-    intc_2 // 8
-    /
-    dup
-    cover 3
-    swap
-    pushint 7 // 7
-    +
-    intc_2 // 8
-    /
-    dup
-    cover 3
-    <
-    bz dynamic_array_concat_bits_after_if_else@2
-    frame_dig 6
-    frame_dig 5
-    -
-    bzero
-    frame_dig 4
-    swap
-    concat
-    frame_bury 7
-
-dynamic_array_concat_bits_after_if_else@2:
-    frame_dig 7
-    frame_bury 4
-    intc_1 // 0
-    frame_bury 0
-    frame_dig 3
-    pushint 16 // 16
-    +
-    dup
-    frame_bury 2
-    frame_dig -2
-    +
-    frame_bury 1
-
-dynamic_array_concat_bits_while_top@3:
-    frame_dig 2
-    frame_dig 1
-    <
-    bz dynamic_array_concat_bits_after_while@5
-    frame_dig -3
-    frame_dig 0
-    dup
-    cover 2
-    getbit
-    frame_dig 4
-    frame_dig 2
-    dup
-    cover 3
-    uncover 2
-    setbit
-    frame_bury 4
-    intc_0 // 1
-    +
-    frame_bury 2
-    frame_dig -1
-    +
-    frame_bury 0
-    b dynamic_array_concat_bits_while_top@3
-
-dynamic_array_concat_bits_after_while@5:
-    frame_dig 4
-    frame_bury 0
-    retsub

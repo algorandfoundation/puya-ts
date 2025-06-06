@@ -1,6 +1,7 @@
 import { PType } from './base'
 
 export class IntrinsicEnumType extends PType {
+  readonly [PType.IdSymbol] = 'IntrinsicEnumType'
   readonly wtype: undefined
   readonly name: string
   readonly factory: undefined

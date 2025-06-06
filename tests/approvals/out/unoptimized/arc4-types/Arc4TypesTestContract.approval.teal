@@ -4,7 +4,7 @@
 // tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract.approvalProgram() -> uint64:
 main:
     intcblock 0 8 1 2
-    bytecblock 0x00 0x 0x0000 base32(AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA) 0xaabbccddee 0x068101 0x000548656c6c6f 0x000568656c6c6f 0x00000000
+    bytecblock 0x 0x00 0x48656c6c6f 0x0000 base32(AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA) 0xaabbccddee 0x068101 0x000568656c6c6f 0x00000000
 
 main_block@0:
     // tests/approvals/arc4-types.algo.ts:164
@@ -52,8 +52,12 @@ main_block@0:
     callsub testZeroValues
     // tests/approvals/arc4-types.algo.ts:177
     // const result = new arc4.DynamicArray<arc4.UintN<64>>()
-    bytec_2 // 0x0000
-    bytec_1 // 0x
+    intc_0 // 0
+    itob
+    extract 6 2
+    bytec_0 // 0x
+    concat
+    bytec_0 // 0x
     concat
     // tests/approvals/arc4-types.algo.ts:178
     // assert(result.length === 0)
@@ -89,9 +93,9 @@ ensure_budget_while_body@2:
     itxn_field TypeEnum
     pushint 5 // DeleteApplication
     itxn_field OnCompletion
-    bytec 5 // 0x068101
+    bytec 6 // 0x068101
     itxn_field ApprovalProgram
-    bytec 5 // 0x068101
+    bytec 6 // 0x068101
     itxn_field ClearStateProgram
     intc_0 // 0
     intc_2 // 1
@@ -191,7 +195,7 @@ testUintN_block@0:
     assert
     // tests/approvals/arc4-types.algo.ts:37
     // const y = new UintN<16>()
-    bytec_2 // 0x0000
+    bytec_3 // 0x0000
     // tests/approvals/arc4-types.algo.ts:38
     // assert(y.bytes.length === 2)
     len
@@ -274,7 +278,7 @@ testUintN_block@0:
     // tests/approvals/arc4-types.algo.ts:63
     // assert(byte.bytes.bitwiseInvert() === Bytes.fromHex('00'))
     b~
-    bytec_0 // 0x00
+    bytec_1 // 0x00
     ==
     assert
     retsub
@@ -286,25 +290,45 @@ testStr:
 testStr_block@0:
     // tests/approvals/arc4-types.algo.ts:67
     // const s1 = new Str()
-    bytec_2 // 0x0000
+    bytec_0 // 0x
+    len
+    itob
+    extract 6 2
+    bytec_0 // 0x
+    concat
     // tests/approvals/arc4-types.algo.ts:68
     // assert(s1.bytes === new UintN<16>(0).bytes, 'Empty string should equal the uint16 length prefix')
-    dup
+    bytec_3 // 0x0000
     ==
     assert // Empty string should equal the uint16 length prefix
     // tests/approvals/arc4-types.algo.ts:69
     // const s2 = new Str('Hello')
-    bytec 6 // 0x000548656c6c6f
+    bytec_2 // 0x48656c6c6f
+    len
+    itob
+    extract 6 2
+    bytec_2 // 0x48656c6c6f
+    concat
     // tests/approvals/arc4-types.algo.ts:70
     // assert(s2.native === 'Hello')
     extract 2 0
-    pushbytes "Hello"
+    bytec_2 // "Hello"
     ==
     assert
     // tests/approvals/arc4-types.algo.ts:69
     // const s2 = new Str('Hello')
-    bytec 6 // 0x000548656c6c6f
-    dup
+    bytec_2 // 0x48656c6c6f
+    len
+    itob
+    extract 6 2
+    bytec_2 // 0x48656c6c6f
+    concat
+    bytec_2 // 0x48656c6c6f
+    len
+    itob
+    extract 6 2
+    bytec_2 // 0x48656c6c6f
+    concat
     // tests/approvals/arc4-types.algo.ts:76
     // assert(s2 === s2_from_bytes)
     ==
@@ -321,16 +345,16 @@ testDynamicBytes:
 testDynamicBytes_block@0:
     // tests/approvals/arc4-types.algo.ts:80
     // const db1 = new DynamicBytes()
-    bytec_2 // 0x0000
+    bytec_3 // 0x0000
     // tests/approvals/arc4-types.algo.ts:81
     // assert(db1.native === Bytes(), 'No args should give empty bytes')
     extract 2 0
-    bytec_1 // 0x
+    bytec_0 // 0x
     ==
     assert // No args should give empty bytes
     // tests/approvals/arc4-types.algo.ts:82
     // assert(db1.bytes === new UintN<16>(0).bytes, 'bytes prop should return length header (of 0)')
-    bytec_2 // 0x0000
+    bytec_3 // 0x0000
     dup
     ==
     assert // bytes prop should return length header (of 0)
@@ -357,21 +381,28 @@ testDynamicBytes_block@0:
     pushbytes "hello"
     ==
     assert
+    // tests/approvals/arc4-types.algo.ts:89
+    // const db4 = db3.concat(new DynamicBytes(' world'))
+    pushbytes 0x000620776f726c64
+    extract 2 0
     // tests/approvals/arc4-types.algo.ts:86
     // const db3 = new DynamicBytes('hello')
     bytec 7 // 0x000568656c6c6f
     // tests/approvals/arc4-types.algo.ts:89
     // const db4 = db3.concat(new DynamicBytes(' world'))
-    extract 2 0
-    pushbytes 0x000620776f726c64
-    extract 2 0
-    concat
+    swap
+    concat // on error: max array length exceeded
     dup
+    extract 2 0
     len
+    intc_2 // 1
+    /
     itob
     extract 6 2
     swap
-    concat
+    intc_0 // 0
+    uncover 2
+    replace3
     // tests/approvals/arc4-types.algo.ts:90
     // assert(db4.native === Bytes('hello world'))
     extract 2 0
@@ -387,11 +418,10 @@ testStaticBytes:
 testStaticBytes_block@0:
     // tests/approvals/arc4-types.algo.ts:98
     // const s5 = new StaticArray<StaticBytes<5>, 1>(new StaticBytes<5>(Bytes.fromHex('AABBCCDDEE')))
-    bytec_1 // 0x
-    bytec 4 // 0xaabbccddee
+    bytec_0 // 0x
+    bytec 5 // 0xaabbccddee
     concat
-    bytec_1 // 0x
-    swap
+    bytec_0 // 0x
     concat
     // tests/approvals/arc4-types.algo.ts:99
     // assert(s5[0].native === Bytes.fromHex('AABBCCDDEE'))
@@ -399,28 +429,30 @@ testStaticBytes_block@0:
     pushint 5 // 5
     *
     pushint 5 // 5
-    extract3 // on error: Index access is out of bounds
-    bytec 4 // 0xaabbccddee
+    extract3 // on error: index access is out of bounds
+    bytec 5 // 0xaabbccddee
     ==
     assert
     // tests/approvals/arc4-types.algo.ts:95
     // const s2 = new StaticBytes<4>()
     pushbytes 0x000400000000
-    // tests/approvals/arc4-types.algo.ts:101
-    // const s4 = s2.concat(s3)
-    extract 2 0
     // tests/approvals/arc4-types.algo.ts:96
     // const s3 = new StaticBytes<5>(Bytes.fromHex('AABBCCDDEE'))
-    bytec 4 // 0xaabbccddee
+    bytec 5 // 0xaabbccddee
     // tests/approvals/arc4-types.algo.ts:101
     // const s4 = s2.concat(s3)
-    concat
+    concat // on error: max array length exceeded
     dup
+    extract 2 0
     len
+    intc_2 // 1
+    /
     itob
     extract 6 2
     swap
-    concat
+    intc_0 // 0
+    uncover 2
+    replace3
     // tests/approvals/arc4-types.algo.ts:102
     // assert(s4.native === Bytes.fromHex('00000000AABBCCDDEE'))
     extract 2 0
@@ -440,57 +472,64 @@ testArrays:
 testArrays_block@0:
     // tests/approvals/arc4-types.algo.ts:109
     // const myArray = new DynamicArray(n, n, n)
-    bytec_1 // 0x
+    bytec_0 // 0x
     frame_dig -1
     concat
     frame_dig -1
     concat
     frame_dig -1
     concat
-    pushbytes 0x0003
-    swap
-    concat
-    // tests/approvals/arc4-types.algo.ts:111
-    // myArray.push(n)
-    extract 2 0
-    bytec_1 // 0x
-    frame_dig -1
-    concat
-    bytec_1 // 0x
-    swap
-    concat
-    concat
-    dup
-    len
-    intc_1 // 8
-    /
+    pushint 3 // 3
     itob
     extract 6 2
     swap
     concat
+    bytec_0 // 0x
+    concat
+    // tests/approvals/arc4-types.algo.ts:111
+    // myArray.push(n)
+    bytec_0 // 0x
+    frame_dig -1
+    concat
+    bytec_0 // 0x
+    concat
+    dig 1
+    swap
+    concat // on error: max array length exceeded
+    swap
+    intc_0 // 0
+    extract_uint16
+    intc_2 // 1
+    +
+    itob
+    extract 6 2
+    swap
+    intc_0 // 0
+    uncover 2
+    replace3
     // tests/approvals/arc4-types.algo.ts:113
     // const doubleArray = myArray.concat(myArray)
     dup
     extract 2 0
+    dig 1
     swap
+    concat // on error: max array length exceeded
     dup
     extract 2 0
-    uncover 2
-    swap
-    concat
-    dup
     len
     intc_1 // 8
     /
     itob
     extract 6 2
     swap
-    concat
+    intc_0 // 0
+    uncover 2
+    replace3
     dup
     cover 2
     // tests/approvals/arc4-types.algo.ts:115
     // assert(doubleArray === new DynamicArray(n, n, n, n, n, n, n, n))
-    bytec_1 // 0x
+    bytec_0 // 0x
     frame_dig -1
     concat
     frame_dig -1
@@ -507,20 +546,23 @@ testArrays_block@0:
     concat
     frame_dig -1
     concat
-    pushbytes 0x0008
+    intc_1 // 8
+    itob
+    extract 6 2
     swap
+    concat
+    bytec_0 // 0x
     concat
     ==
     assert
     // tests/approvals/arc4-types.algo.ts:117
     // const myStatic = new StaticArray(n, n)
-    bytec_1 // 0x
+    bytec_0 // 0x
     frame_dig -1
     concat
     frame_dig -1
     concat
-    bytec_1 // 0x
-    swap
+    bytec_0 // 0x
     concat
     // tests/approvals/arc4-types.algo.ts:119
     // assert(myStatic[0] === myArray.pop())
@@ -528,7 +570,7 @@ testArrays_block@0:
     intc_1 // 8
     *
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3 // on error: index access is out of bounds
     swap
     intc_1 // 8
     callsub dynamic_array_pop_fixed_size
@@ -537,31 +579,35 @@ testArrays_block@0:
     assert
     // tests/approvals/arc4-types.algo.ts:123
     // const myStatic2 = new StaticArray<ARC4Uint64, 3>(n, n, n)
-    bytec_1 // 0x
+    bytec_0 // 0x
     frame_dig -1
     concat
     frame_dig -1
     concat
     frame_dig -1
     concat
-    bytec_1 // 0x
-    swap
+    bytec_0 // 0x
     concat
     // tests/approvals/arc4-types.algo.ts:125
     // const staticNative = myStatic2.native
     dup
     intc_0 // 0
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     swap
     dup
     intc_1 // 8
     dup
-    extract3 // on error: Index access is out of bounds
+    extract3
     swap
     pushint 16 // 16
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
+    uncover 2
+    swap
+    cover 2
+    cover 2
+    swap
     // tests/approvals/arc4-types.algo.ts:126
     // assertMatch(staticNative, [n, n, n])
     pushint 3 // 3
@@ -622,7 +668,7 @@ testArrays_and_contd@7:
     intc_1 // 8
     *
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3 // on error: index access is out of bounds
     frame_dig -1
     ==
     bz testArrays_bool_false@16
@@ -636,7 +682,7 @@ testArrays_and_contd@8:
     intc_1 // 8
     *
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3 // on error: index access is out of bounds
     frame_dig -1
     ==
     bz testArrays_bool_false@16
@@ -650,7 +696,7 @@ testArrays_and_contd@9:
     intc_1 // 8
     *
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3 // on error: index access is out of bounds
     frame_dig -1
     ==
     bz testArrays_bool_false@16
@@ -664,7 +710,7 @@ testArrays_and_contd@10:
     intc_1 // 8
     *
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3 // on error: index access is out of bounds
     frame_dig -1
     ==
     bz testArrays_bool_false@16
@@ -678,7 +724,7 @@ testArrays_and_contd@11:
     intc_1 // 8
     *
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3 // on error: index access is out of bounds
     frame_dig -1
     ==
     bz testArrays_bool_false@16
@@ -692,7 +738,7 @@ testArrays_and_contd@12:
     intc_1 // 8
     *
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3 // on error: index access is out of bounds
     frame_dig -1
     ==
     bz testArrays_bool_false@16
@@ -706,7 +752,7 @@ testArrays_and_contd@13:
     intc_1 // 8
     *
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3 // on error: index access is out of bounds
     frame_dig -1
     ==
     bz testArrays_bool_false@16
@@ -720,7 +766,7 @@ testArrays_and_contd@14:
     intc_1 // 8
     *
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3 // on error: index access is out of bounds
     frame_dig -1
     ==
     bz testArrays_bool_false@16
@@ -749,7 +795,7 @@ testByte:
 testByte_block@0:
     // tests/approvals/arc4-types.algo.ts:133
     // const b = new Byte()
-    bytec_0 // 0x00
+    bytec_1 // 0x00
     // tests/approvals/arc4-types.algo.ts:134
     // const b2 = new Byte(0)
     dup
@@ -770,19 +816,19 @@ testAddress_block@0:
     // tests/approvals/arc4-types.algo.ts:142
     // assert(b.native === Txn.sender)
     dup
-    dig 1
+    txn Sender
     ==
     assert
     // tests/approvals/arc4-types.algo.ts:139
     // const a = new Address()
-    bytec_3 // addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ
+    bytec 4 // addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ
     // tests/approvals/arc4-types.algo.ts:144
     // assert(a !== b, 'Zero address should not match sender')
     !=
     assert // Zero address should not match sender
     // tests/approvals/arc4-types.algo.ts:139
     // const a = new Address()
-    bytec_3 // addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ
+    bytec 4 // addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ
     // tests/approvals/arc4-types.algo.ts:145
     // assert(a === new Address(), 'Two zero addresses should match')
     dup
@@ -795,13 +841,13 @@ testAddress_block@0:
     *
     // tests/approvals/arc4-types.algo.ts:139
     // const a = new Address()
-    bytec_3 // addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ
+    bytec 4 // addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ
     // tests/approvals/arc4-types.algo.ts:146
     // assert(a[0] === new Byte(), 'Zero address should start with zero byte')
     swap
     intc_2 // 1
-    extract3 // on error: Index access is out of bounds
-    bytec_0 // 0x00
+    extract3 // on error: index access is out of bounds
+    bytec_1 // 0x00
     ==
     assert // Zero address should start with zero byte
     retsub
@@ -813,21 +859,23 @@ testTuple:
 testTuple_block@0:
     // tests/approvals/arc4-types.algo.ts:150
     // const t = new Tuple(new ARC4Uint64(34))
-    bytec_1 // 0x
+    bytec_0 // 0x
     pushbytes 0x0000000000000022
+    concat
+    bytec_0 // 0x
     concat
     // tests/approvals/arc4-types.algo.ts:151
     // const firstItem = t.at(0)
     dup
     intc_0 // 0
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     swap
     // tests/approvals/arc4-types.algo.ts:152
     // const firstItemIndexer = t.native[0]
     intc_0 // 0
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     // tests/approvals/arc4-types.algo.ts:153
     // assert(firstItem === firstItemIndexer)
     ==
@@ -849,17 +897,16 @@ testZeroValues_block@0:
     // assert(new StaticArray<UintN8, 4>().bytes === new StaticArray(new UintN8(0), new UintN8(0), new UintN8(0), new UintN8(0)).bytes)
     pushint 4 // 4
     bzero
-    bytec_1 // 0x
-    bytec_0 // 0x00
+    bytec_0 // 0x
+    bytec_1 // 0x00
     concat
-    bytec_0 // 0x00
+    bytec_1 // 0x00
     concat
-    bytec_0 // 0x00
+    bytec_1 // 0x00
     concat
-    bytec_0 // 0x00
+    bytec_1 // 0x00
     concat
-    bytec_1 // 0x
-    swap
+    bytec_0 // 0x
     concat
     ==
     assert
@@ -867,32 +914,49 @@ testZeroValues_block@0:
     // assert(new StaticArray<Bool, 4>().bytes === new StaticArray(new Bool(false), new Bool(false), new Bool(false), new Bool(false)).bytes)
     intc_2 // 1
     bzero
-    bytec_1 // 0x
-    bytec_0 // 0x00
+    bytec_1 // 0x00
+    intc_0 // 0
+    dup
+    setbit
+    bytec_1 // 0x00
+    intc_0 // 0
+    dup
+    setbit
+    bytec_1 // 0x00
+    intc_0 // 0
+    dup
+    setbit
+    swap
+    bytec_1 // 0x00
+    intc_0 // 0
+    dup
+    setbit
+    cover 2
+    bytec_0 // 0x
+    uncover 4
     concat
-    bytec_0 // 0x00
+    swap
     intc_0 // 0
     getbit
     swap
     intc_2 // 1
     uncover 2
     setbit
-    bytec_0 // 0x00
+    swap
     intc_0 // 0
     getbit
     swap
     intc_3 // 2
     uncover 2
     setbit
-    bytec_0 // 0x00
+    swap
     intc_0 // 0
     getbit
     swap
     pushint 3 // 3
     uncover 2
     setbit
-    bytec_1 // 0x
-    swap
+    bytec_0 // 0x
     concat
     ==
     assert
@@ -900,38 +964,67 @@ testZeroValues_block@0:
     // new StaticArray<Bool, 9>().bytes ===
     intc_3 // 2
     bzero
-    // tests/approvals/arc4-types.algo.ts:188-198
-    // new StaticArray(
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    // ).bytes,
-    bytec_1 // 0x
     // tests/approvals/arc4-types.algo.ts:189
     // new Bool(false),
-    bytec_0 // 0x00
-    // tests/approvals/arc4-types.algo.ts:188-198
-    // new StaticArray(
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    // ).bytes,
-    concat
+    bytec_1 // 0x00
+    intc_0 // 0
+    dup
+    setbit
     // tests/approvals/arc4-types.algo.ts:190
     // new Bool(false),
-    bytec_0 // 0x00
+    bytec_1 // 0x00
+    intc_0 // 0
+    dup
+    setbit
+    // tests/approvals/arc4-types.algo.ts:191
+    // new Bool(false),
+    bytec_1 // 0x00
+    intc_0 // 0
+    dup
+    setbit
+    swap
+    // tests/approvals/arc4-types.algo.ts:192
+    // new Bool(false),
+    bytec_1 // 0x00
+    intc_0 // 0
+    dup
+    setbit
+    cover 2
+    // tests/approvals/arc4-types.algo.ts:193
+    // new Bool(false),
+    bytec_1 // 0x00
+    intc_0 // 0
+    dup
+    setbit
+    cover 3
+    // tests/approvals/arc4-types.algo.ts:194
+    // new Bool(false),
+    bytec_1 // 0x00
+    intc_0 // 0
+    dup
+    setbit
+    cover 4
+    // tests/approvals/arc4-types.algo.ts:195
+    // new Bool(false),
+    bytec_1 // 0x00
+    intc_0 // 0
+    dup
+    setbit
+    cover 5
+    // tests/approvals/arc4-types.algo.ts:196
+    // new Bool(false),
+    bytec_1 // 0x00
+    intc_0 // 0
+    dup
+    setbit
+    cover 6
+    // tests/approvals/arc4-types.algo.ts:197
+    // new Bool(false),
+    bytec_1 // 0x00
+    intc_0 // 0
+    dup
+    setbit
+    cover 7
     // tests/approvals/arc4-types.algo.ts:188-198
     // new StaticArray(
     //   new Bool(false),
@@ -944,156 +1037,67 @@ testZeroValues_block@0:
     //   new Bool(false),
     //   new Bool(false),
     // ).bytes,
+    bytec_0 // 0x
+    uncover 9
+    concat
+    swap
     intc_0 // 0
     getbit
     swap
     intc_2 // 1
     uncover 2
     setbit
-    // tests/approvals/arc4-types.algo.ts:191
-    // new Bool(false),
-    bytec_0 // 0x00
-    // tests/approvals/arc4-types.algo.ts:188-198
-    // new StaticArray(
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    // ).bytes,
+    swap
     intc_0 // 0
     getbit
     swap
     intc_3 // 2
     uncover 2
     setbit
-    // tests/approvals/arc4-types.algo.ts:192
-    // new Bool(false),
-    bytec_0 // 0x00
-    // tests/approvals/arc4-types.algo.ts:188-198
-    // new StaticArray(
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    // ).bytes,
+    swap
     intc_0 // 0
     getbit
     swap
     pushint 3 // 3
     uncover 2
     setbit
-    // tests/approvals/arc4-types.algo.ts:193
-    // new Bool(false),
-    bytec_0 // 0x00
-    // tests/approvals/arc4-types.algo.ts:188-198
-    // new StaticArray(
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    // ).bytes,
+    swap
     intc_0 // 0
     getbit
     swap
     pushint 4 // 4
     uncover 2
     setbit
-    // tests/approvals/arc4-types.algo.ts:194
-    // new Bool(false),
-    bytec_0 // 0x00
-    // tests/approvals/arc4-types.algo.ts:188-198
-    // new StaticArray(
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    // ).bytes,
+    swap
     intc_0 // 0
     getbit
     swap
     pushint 5 // 5
     uncover 2
     setbit
-    // tests/approvals/arc4-types.algo.ts:195
-    // new Bool(false),
-    bytec_0 // 0x00
-    // tests/approvals/arc4-types.algo.ts:188-198
-    // new StaticArray(
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    // ).bytes,
+    swap
     intc_0 // 0
     getbit
     swap
     pushint 6 // 6
     uncover 2
     setbit
-    // tests/approvals/arc4-types.algo.ts:196
-    // new Bool(false),
-    bytec_0 // 0x00
-    // tests/approvals/arc4-types.algo.ts:188-198
-    // new StaticArray(
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    // ).bytes,
+    swap
     intc_0 // 0
     getbit
     swap
     pushint 7 // 7
     uncover 2
     setbit
-    // tests/approvals/arc4-types.algo.ts:197
-    // new Bool(false),
-    bytec_0 // 0x00
-    // tests/approvals/arc4-types.algo.ts:188-198
-    // new StaticArray(
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    //   new Bool(false),
-    // ).bytes,
-    concat
-    bytec_1 // 0x
     swap
+    intc_0 // 0
+    getbit
+    bytec_1 // 0x00
+    intc_0 // 0
+    uncover 2
+    setbit
+    concat
+    bytec_0 // 0x
     concat
     // tests/approvals/arc4-types.algo.ts:187-198
     // new StaticArray<Bool, 9>().bytes ===
@@ -1127,8 +1131,12 @@ testZeroValues_block@0:
     assert
     // tests/approvals/arc4-types.algo.ts:200
     // assert(new DynamicArray<UintN8>().bytes === bzero(2))
-    bytec_2 // 0x0000
-    bytec_1 // 0x
+    intc_0 // 0
+    itob
+    extract 6 2
+    bytec_0 // 0x
+    concat
+    bytec_0 // 0x
     concat
     intc_3 // 2
     bzero
@@ -1140,102 +1148,40 @@ testZeroValues_block@0:
     bzero
     // tests/approvals/arc4-types.algo.ts:203
     // encodeArc4([false, false, false, false, false, false, false, false, false]),
-    bytec_0 // 0x00
+    bytec_1 // 0x00
     intc_0 // 0
     dup
     setbit
-    bytec_0 // 0x00
-    intc_0 // 0
-    dup
-    setbit
-    bytec_0 // 0x00
-    intc_0 // 0
-    dup
-    setbit
-    cover 2
-    bytec_0 // 0x00
-    intc_0 // 0
-    dup
-    setbit
-    cover 3
-    bytec_0 // 0x00
-    intc_0 // 0
-    dup
-    setbit
-    cover 4
-    bytec_0 // 0x00
-    intc_0 // 0
-    dup
-    setbit
-    cover 5
-    bytec_0 // 0x00
-    intc_0 // 0
-    dup
-    setbit
-    cover 6
-    bytec_0 // 0x00
-    intc_0 // 0
-    dup
-    setbit
-    cover 7
-    bytec_0 // 0x00
-    intc_0 // 0
-    dup
-    setbit
-    cover 8
-    bytec_1 // 0x
-    uncover 2
+    bytec_0 // 0x
+    swap
     concat
-    swap
-    intc_0 // 0
-    getbit
-    swap
     intc_2 // 1
-    uncover 2
-    setbit
-    swap
     intc_0 // 0
-    getbit
-    swap
+    setbit
     intc_3 // 2
-    uncover 2
-    setbit
-    swap
     intc_0 // 0
-    getbit
-    swap
+    setbit
     pushint 3 // 3
-    uncover 2
-    setbit
-    swap
     intc_0 // 0
-    getbit
-    swap
+    setbit
     pushint 4 // 4
-    uncover 2
-    setbit
-    swap
     intc_0 // 0
-    getbit
-    swap
+    setbit
     pushint 5 // 5
-    uncover 2
-    setbit
-    swap
     intc_0 // 0
-    getbit
-    swap
+    setbit
     pushint 6 // 6
-    uncover 2
-    setbit
-    swap
     intc_0 // 0
-    getbit
-    swap
-    pushint 7 // 7
-    uncover 2
     setbit
-    swap
+    pushint 7 // 7
+    intc_0 // 0
+    setbit
+    bytec_1 // 0x00
+    intc_0 // 0
+    dup
+    setbit
+    concat
+    bytec_0 // 0x
     concat
     // tests/approvals/arc4-types.algo.ts:202-203
     // new Tuple<[Bool, Bool, Bool, Bool, Bool, Bool, Bool, Bool, Bool]>().bytes ===
@@ -1249,16 +1195,21 @@ testZeroValues_block@0:
     assert
     // tests/approvals/arc4-types.algo.ts:205
     // assert(new Str().bytes === bzero(2))
+    bytec_0 // 0x
+    len
+    itob
+    extract 6 2
+    bytec_0 // 0x
+    concat
     intc_3 // 2
     bzero
-    bytec_2 // 0x0000
     ==
     assert
     // tests/approvals/arc4-types.algo.ts:206
     // assert(new DynamicBytes().bytes === bzero(2))
     intc_3 // 2
     bzero
-    bytec_2 // 0x0000
+    bytec_3 // 0x0000
     ==
     assert
     // tests/approvals/arc4-types.algo.ts:207
@@ -1272,7 +1223,7 @@ testZeroValues_block@0:
     // assert(new Address().bytes === bzero(32))
     pushint 32 // 32
     bzero
-    bytec_3 // addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ
+    bytec 4 // addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ
     ==
     assert
     // tests/approvals/arc4-types.algo.ts:209
@@ -1284,9 +1235,12 @@ testZeroValues_block@0:
     assert
     // tests/approvals/arc4-types.algo.ts:210
     // assert(new Bool().bytes === bzero(1))
+    bytec_1 // 0x00
+    intc_0 // 0
+    dup
+    setbit
     intc_2 // 1
     bzero
-    bytec_0 // 0x00
     ==
     assert
     // tests/approvals/arc4-types.algo.ts:211

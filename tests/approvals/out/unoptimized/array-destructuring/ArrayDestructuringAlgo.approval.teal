@@ -85,20 +85,24 @@ main_testNested_route@3:
     dup
     intc_0 // 0
     pushint 8 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     swap
     pushint 8 // 8
     pushint 128 // 128
-    extract3 // on error: Index access is out of bounds
+    extract3
     dup
     intc_0 // 0
     intc_1 // 64
-    extract3 // on error: Index access is out of bounds
+    extract3
     swap
     intc_1 // 64
     dup
-    extract3 // on error: Index access is out of bounds
+    extract3
+    uncover 2
+    swap
+    uncover 2
+    swap
     // tests/approvals/array-destructuring.algo.ts:5
     // testNested(arg: [uint64, [biguint, biguint]]) {
     uncover 2
@@ -110,7 +114,10 @@ main_testNested_route@3:
     cover 2
     swap
     itob
-    cover 4
+    bytec_0 // 0x
+    swap
+    concat
+    cover 2
     dup
     len
     intc_1 // 64
@@ -119,6 +126,9 @@ main_testNested_route@3:
     intc_1 // 64
     bzero
     b|
+    bytec_0 // 0x
+    swap
+    concat
     dig 1
     len
     intc_1 // 64
@@ -128,31 +138,24 @@ main_testNested_route@3:
     bzero
     uncover 2
     b|
-    bytec_0 // 0x
-    uncover 2
     concat
-    swap
+    bytec_0 // 0x
+    concat
     concat
     swap
     itob
-    swap
-    dig 2
+    concat
+    dig 1
     len
     intc_1 // 64
     <=
     assert // overflow
     intc_1 // 64
     bzero
-    uncover 3
+    uncover 2
     b|
+    concat
     bytec_0 // 0x
-    uncover 4
-    concat
-    uncover 2
-    concat
-    uncover 2
-    concat
-    swap
     concat
     pushbytes 0x151f7c75
     swap

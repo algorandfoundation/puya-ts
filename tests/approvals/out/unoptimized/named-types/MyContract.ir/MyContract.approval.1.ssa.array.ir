@@ -15,92 +15,117 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%5#0: uint64 = (txn ApplicationID)
         let tmp%6#0: bool = (!= tmp%5#0 0u)
         (assert tmp%6#0) // can only call when not creating
-        let (elements_to_encode%0#0: uint64, elements_to_encode%1#0: uint64) = tests/approvals/named-types.algo.ts::MyContract.getXY()
-        let val_as_bytes%0#0: bytes[8] = (itob elements_to_encode%0#0)
-        let val_as_bytes%1#0: bytes[8] = (itob elements_to_encode%1#0)
-        let encoded_tuple_buffer%1#0: bytes = (concat 0x val_as_bytes%0#0)
-        let encoded_tuple_buffer%2#0: bytes = (concat encoded_tuple_buffer%1#0 val_as_bytes%1#0)
-        let tmp%7#0: bytes = (concat 0x151f7c75 encoded_tuple_buffer%2#0)
-        (log tmp%7#0)
+        let (tmp%7#0: uint64, tmp%8#0: uint64) = tests/approvals/named-types.algo.ts::MyContract.getXY()
+        let array%val_as_bytes%0#1: bytes[8] = (itob tmp%7#0)
+        let array%as_Encoded(uint64)%0#1: Encoded(uint64) = array%val_as_bytes%0#1
+        let array%encoded%0#1: Encoded(uint64) = (concat 0x array%as_Encoded(uint64)%0#1)
+        let array%val_as_bytes%1#1: bytes[8] = (itob tmp%8#0)
+        let array%as_Encoded(uint64)%1#1: Encoded(uint64) = array%val_as_bytes%1#1
+        let array%encoded%1#1: Encoded(uint64,uint64) = (concat array%encoded%0#1 array%as_Encoded(uint64)%1#1)
+        let array%encoded%2#1: Encoded(uint64,uint64) = (concat array%encoded%1#1 0x)
+        let tmp%9#0: Encoded(uint64,uint64) = array%encoded%2#1
+        let tmp%10#0: bytes = (concat 0x151f7c75 tmp%9#0)
+        (log tmp%10#0)
         let tests/approvals/named-types.algo.ts::MyContract.__puya_arc4_router__%0#0: bool = 1u
         goto block@15
     block@4: // getYX_route_L22
-        let tmp%8#0: uint64 = (txn OnCompletion)
-        let tmp%9#0: bool = (== tmp%8#0 NoOp)
-        (assert tmp%9#0) // OnCompletion is not NoOp
-        let tmp%10#0: uint64 = (txn ApplicationID)
-        let tmp%11#0: bool = (!= tmp%10#0 0u)
-        (assert tmp%11#0) // can only call when not creating
-        let (elements_to_encode%2#0: uint64, elements_to_encode%3#0: uint64) = tests/approvals/named-types.algo.ts::MyContract.getYX()
-        let val_as_bytes%2#0: bytes[8] = (itob elements_to_encode%2#0)
-        let val_as_bytes%3#0: bytes[8] = (itob elements_to_encode%3#0)
-        let encoded_tuple_buffer%4#0: bytes = (concat 0x val_as_bytes%2#0)
-        let encoded_tuple_buffer%5#0: bytes = (concat encoded_tuple_buffer%4#0 val_as_bytes%3#0)
-        let tmp%12#0: bytes = (concat 0x151f7c75 encoded_tuple_buffer%5#0)
-        (log tmp%12#0)
+        let tmp%11#0: uint64 = (txn OnCompletion)
+        let tmp%12#0: bool = (== tmp%11#0 NoOp)
+        (assert tmp%12#0) // OnCompletion is not NoOp
+        let tmp%13#0: uint64 = (txn ApplicationID)
+        let tmp%14#0: bool = (!= tmp%13#0 0u)
+        (assert tmp%14#0) // can only call when not creating
+        let (tmp%15#0: uint64, tmp%16#0: uint64) = tests/approvals/named-types.algo.ts::MyContract.getYX()
+        let array%val_as_bytes%2#1: bytes[8] = (itob tmp%15#0)
+        let array%as_Encoded(uint64)%2#1: Encoded(uint64) = array%val_as_bytes%2#1
+        let array%encoded%3#1: Encoded(uint64) = (concat 0x array%as_Encoded(uint64)%2#1)
+        let array%val_as_bytes%3#1: bytes[8] = (itob tmp%16#0)
+        let array%as_Encoded(uint64)%3#1: Encoded(uint64) = array%val_as_bytes%3#1
+        let array%encoded%4#1: Encoded(uint64,uint64) = (concat array%encoded%3#1 array%as_Encoded(uint64)%3#1)
+        let array%encoded%5#1: Encoded(uint64,uint64) = (concat array%encoded%4#1 0x)
+        let tmp%17#0: Encoded(uint64,uint64) = array%encoded%5#1
+        let tmp%18#0: bytes = (concat 0x151f7c75 tmp%17#0)
+        (log tmp%18#0)
         let tests/approvals/named-types.algo.ts::MyContract.__puya_arc4_router__%0#1: bool = 1u
         goto block@15
     block@5: // getAnon_route_L29
-        let tmp%13#0: uint64 = (txn OnCompletion)
-        let tmp%14#0: bool = (== tmp%13#0 NoOp)
-        (assert tmp%14#0) // OnCompletion is not NoOp
-        let tmp%15#0: uint64 = (txn ApplicationID)
-        let tmp%16#0: bool = (!= tmp%15#0 0u)
-        (assert tmp%16#0) // can only call when not creating
-        let (elements_to_encode%4#0: uint64, elements_to_encode%5#0: uint64) = tests/approvals/named-types.algo.ts::MyContract.getAnon()
-        let val_as_bytes%4#0: bytes[8] = (itob elements_to_encode%4#0)
-        let val_as_bytes%5#0: bytes[8] = (itob elements_to_encode%5#0)
-        let encoded_tuple_buffer%7#0: bytes = (concat 0x val_as_bytes%4#0)
-        let encoded_tuple_buffer%8#0: bytes = (concat encoded_tuple_buffer%7#0 val_as_bytes%5#0)
-        let tmp%17#0: bytes = (concat 0x151f7c75 encoded_tuple_buffer%8#0)
-        (log tmp%17#0)
+        let tmp%19#0: uint64 = (txn OnCompletion)
+        let tmp%20#0: bool = (== tmp%19#0 NoOp)
+        (assert tmp%20#0) // OnCompletion is not NoOp
+        let tmp%21#0: uint64 = (txn ApplicationID)
+        let tmp%22#0: bool = (!= tmp%21#0 0u)
+        (assert tmp%22#0) // can only call when not creating
+        let (tmp%23#0: uint64, tmp%24#0: uint64) = tests/approvals/named-types.algo.ts::MyContract.getAnon()
+        let array%val_as_bytes%4#1: bytes[8] = (itob tmp%23#0)
+        let array%as_Encoded(uint64)%4#1: Encoded(uint64) = array%val_as_bytes%4#1
+        let array%encoded%6#1: Encoded(uint64) = (concat 0x array%as_Encoded(uint64)%4#1)
+        let array%val_as_bytes%5#1: bytes[8] = (itob tmp%24#0)
+        let array%as_Encoded(uint64)%5#1: Encoded(uint64) = array%val_as_bytes%5#1
+        let array%encoded%7#1: Encoded(uint64,uint64) = (concat array%encoded%6#1 array%as_Encoded(uint64)%5#1)
+        let array%encoded%8#1: Encoded(uint64,uint64) = (concat array%encoded%7#1 0x)
+        let tmp%25#0: Encoded(uint64,uint64) = array%encoded%8#1
+        let tmp%26#0: bytes = (concat 0x151f7c75 tmp%25#0)
+        (log tmp%26#0)
         let tests/approvals/named-types.algo.ts::MyContract.__puya_arc4_router__%0#2: bool = 1u
         goto block@15
     block@6: // test_route_L36
-        let tmp%18#0: uint64 = (txn OnCompletion)
-        let tmp%19#0: bool = (== tmp%18#0 NoOp)
-        (assert tmp%19#0) // OnCompletion is not NoOp
-        let tmp%20#0: uint64 = (txn ApplicationID)
-        let tmp%21#0: bool = (!= tmp%20#0 0u)
-        (assert tmp%21#0) // can only call when not creating
-        let reinterpret_bytes[16]%0#0: bytes[16] = (txna ApplicationArgs 1)
-        let item0%0#0: bytes = (extract3 reinterpret_bytes[16]%0#0 0u 8u) // on error: Index access is out of bounds
-        let item0%1#0: uint64 = (btoi item0%0#0)
-        let item1%0#0: bytes = (extract3 reinterpret_bytes[16]%0#0 8u 8u) // on error: Index access is out of bounds
-        let item1%1#0: uint64 = (btoi item1%0#0)
-        let reinterpret_bytes[16]%1#0: bytes[16] = (txna ApplicationArgs 2)
-        let item0%2#0: bytes = (extract3 reinterpret_bytes[16]%1#0 0u 8u) // on error: Index access is out of bounds
-        let item0%3#0: uint64 = (btoi item0%2#0)
-        let item1%2#0: bytes = (extract3 reinterpret_bytes[16]%1#0 8u 8u) // on error: Index access is out of bounds
-        let item1%3#0: uint64 = (btoi item1%2#0)
-        tests/approvals/named-types.algo.ts::MyContract.test(item0%1#0, item1%1#0, item0%3#0, item1%3#0)
+        let tmp%27#0: uint64 = (txn OnCompletion)
+        let tmp%28#0: bool = (== tmp%27#0 NoOp)
+        (assert tmp%28#0) // OnCompletion is not NoOp
+        let tmp%29#0: uint64 = (txn ApplicationID)
+        let tmp%30#0: bool = (!= tmp%29#0 0u)
+        (assert tmp%30#0) // can only call when not creating
+        let reinterpret_Encoded(uint64,uint64)%0#0: Encoded(uint64,uint64) = (txna ApplicationArgs 1)
+        let array%extract%0#1: bytes = (extract3 reinterpret_Encoded(uint64,uint64)%0#0 0u 8u)
+        let array%item0%0#1: uint64 = (btoi array%extract%0#1)
+        let array%extract%1#1: bytes = (extract3 reinterpret_Encoded(uint64,uint64)%0#0 8u 8u)
+        let array%item1%0#1: uint64 = (btoi array%extract%1#1)
+        let (tmp%31#0: uint64, tmp%32#0: uint64) = (array%item0%0#1, array%item1%0#1)
+        let reinterpret_Encoded(uint64,uint64)%1#0: Encoded(uint64,uint64) = (txna ApplicationArgs 2)
+        let array%extract%2#1: bytes = (extract3 reinterpret_Encoded(uint64,uint64)%1#0 0u 8u)
+        let array%item0%1#1: uint64 = (btoi array%extract%2#1)
+        let array%extract%3#1: bytes = (extract3 reinterpret_Encoded(uint64,uint64)%1#0 8u 8u)
+        let array%item1%1#1: uint64 = (btoi array%extract%3#1)
+        let (tmp%33#0: uint64, tmp%34#0: uint64) = (array%item0%1#1, array%item1%1#1)
+        tests/approvals/named-types.algo.ts::MyContract.test(tmp%31#0, tmp%32#0, tmp%33#0, tmp%34#0)
         let tests/approvals/named-types.algo.ts::MyContract.__puya_arc4_router__%0#3: bool = 1u
         goto block@15
     block@7: // testing_route_L40
-        let tmp%22#0: uint64 = (txn OnCompletion)
-        let tmp%23#0: bool = (== tmp%22#0 NoOp)
-        (assert tmp%23#0) // OnCompletion is not NoOp
-        let tmp%24#0: uint64 = (txn ApplicationID)
-        let tmp%25#0: bool = (!= tmp%24#0 0u)
-        (assert tmp%25#0) // can only call when not creating
-        let (elements_to_encode%6#0: uint64, elements_to_encode%7#0: uint64, elements_to_encode%8#0: uint64, elements_to_encode%9#0: uint64, elements_to_encode%10#0: uint64, elements_to_encode%11#0: uint64) = tests/approvals/named-types.algo.ts::MyContract.testing()
-        let val_as_bytes%6#0: bytes[8] = (itob elements_to_encode%6#0)
-        let val_as_bytes%7#0: bytes[8] = (itob elements_to_encode%7#0)
-        let encoded_tuple_buffer%10#0: bytes = (concat 0x val_as_bytes%6#0)
-        let encoded_tuple_buffer%11#0: bytes = (concat encoded_tuple_buffer%10#0 val_as_bytes%7#0)
-        let val_as_bytes%8#0: bytes[8] = (itob elements_to_encode%8#0)
-        let val_as_bytes%9#0: bytes[8] = (itob elements_to_encode%9#0)
-        let encoded_tuple_buffer%13#0: bytes = (concat 0x val_as_bytes%8#0)
-        let encoded_tuple_buffer%14#0: bytes = (concat encoded_tuple_buffer%13#0 val_as_bytes%9#0)
-        let val_as_bytes%10#0: bytes[8] = (itob elements_to_encode%10#0)
-        let val_as_bytes%11#0: bytes[8] = (itob elements_to_encode%11#0)
-        let encoded_tuple_buffer%16#0: bytes = (concat 0x val_as_bytes%10#0)
-        let encoded_tuple_buffer%17#0: bytes = (concat encoded_tuple_buffer%16#0 val_as_bytes%11#0)
-        let encoded_tuple_buffer%19#0: bytes = (concat 0x encoded_tuple_buffer%11#0)
-        let encoded_tuple_buffer%20#0: bytes = (concat encoded_tuple_buffer%19#0 encoded_tuple_buffer%14#0)
-        let encoded_tuple_buffer%21#0: bytes = (concat encoded_tuple_buffer%20#0 encoded_tuple_buffer%17#0)
-        let tmp%26#0: bytes = (concat 0x151f7c75 encoded_tuple_buffer%21#0)
-        (log tmp%26#0)
+        let tmp%35#0: uint64 = (txn OnCompletion)
+        let tmp%36#0: bool = (== tmp%35#0 NoOp)
+        (assert tmp%36#0) // OnCompletion is not NoOp
+        let tmp%37#0: uint64 = (txn ApplicationID)
+        let tmp%38#0: bool = (!= tmp%37#0 0u)
+        (assert tmp%38#0) // can only call when not creating
+        let (tmp%39#0: uint64, tmp%40#0: uint64, tmp%41#0: uint64, tmp%42#0: uint64, tmp%43#0: uint64, tmp%44#0: uint64) = tests/approvals/named-types.algo.ts::MyContract.testing()
+        let array%val_as_bytes%6#1: bytes[8] = (itob tmp%39#0)
+        let array%as_Encoded(uint64)%6#1: Encoded(uint64) = array%val_as_bytes%6#1
+        let array%encoded%9#1: Encoded(uint64) = (concat 0x array%as_Encoded(uint64)%6#1)
+        let array%val_as_bytes%7#1: bytes[8] = (itob tmp%40#0)
+        let array%as_Encoded(uint64)%7#1: Encoded(uint64) = array%val_as_bytes%7#1
+        let array%encoded%10#1: Encoded(uint64,uint64) = (concat array%encoded%9#1 array%as_Encoded(uint64)%7#1)
+        let array%encoded%11#1: Encoded(uint64,uint64) = (concat array%encoded%10#1 0x)
+        let array%encoded%12#1: Encoded((uint64,uint64)) = (concat 0x array%encoded%11#1)
+        let array%val_as_bytes%8#1: bytes[8] = (itob tmp%41#0)
+        let array%as_Encoded(uint64)%8#1: Encoded(uint64) = array%val_as_bytes%8#1
+        let array%encoded%13#1: Encoded(uint64) = (concat 0x array%as_Encoded(uint64)%8#1)
+        let array%val_as_bytes%9#1: bytes[8] = (itob tmp%42#0)
+        let array%as_Encoded(uint64)%9#1: Encoded(uint64) = array%val_as_bytes%9#1
+        let array%encoded%14#1: Encoded(uint64,uint64) = (concat array%encoded%13#1 array%as_Encoded(uint64)%9#1)
+        let array%encoded%15#1: Encoded(uint64,uint64) = (concat array%encoded%14#1 0x)
+        let array%encoded%16#1: Encoded((uint64,uint64),(uint64,uint64)) = (concat array%encoded%12#1 array%encoded%15#1)
+        let array%val_as_bytes%10#1: bytes[8] = (itob tmp%43#0)
+        let array%as_Encoded(uint64)%10#1: Encoded(uint64) = array%val_as_bytes%10#1
+        let array%encoded%17#1: Encoded(uint64) = (concat 0x array%as_Encoded(uint64)%10#1)
+        let array%val_as_bytes%11#1: bytes[8] = (itob tmp%44#0)
+        let array%as_Encoded(uint64)%11#1: Encoded(uint64) = array%val_as_bytes%11#1
+        let array%encoded%18#1: Encoded(uint64,uint64) = (concat array%encoded%17#1 array%as_Encoded(uint64)%11#1)
+        let array%encoded%19#1: Encoded(uint64,uint64) = (concat array%encoded%18#1 0x)
+        let array%encoded%20#1: Encoded((uint64,uint64),(uint64,uint64),(uint64,uint64)) = (concat array%encoded%16#1 array%encoded%19#1)
+        let array%encoded%21#1: Encoded((uint64,uint64),(uint64,uint64),(uint64,uint64)) = (concat array%encoded%20#1 0x)
+        let tmp%45#0: Encoded((uint64,uint64),(uint64,uint64),(uint64,uint64)) = array%encoded%21#1
+        let tmp%46#0: bytes = (concat 0x151f7c75 tmp%45#0)
+        (log tmp%46#0)
         let tests/approvals/named-types.algo.ts::MyContract.__puya_arc4_router__%0#4: bool = 1u
         goto block@15
     block@8: // switch_case_default_L14
@@ -108,12 +133,12 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@9: // switch_case_next_L14
         goto block@14
     block@10: // bare_routing_L14
-        let tmp%27#0: uint64 = (txn OnCompletion)
-        switch tmp%27#0 {0u => block@11, * => block@12}
+        let tmp%47#0: uint64 = (txn OnCompletion)
+        switch tmp%47#0 {0u => block@11, * => block@12}
     block@11: // __algots__.defaultCreate_L14
-        let tmp%28#0: uint64 = (txn ApplicationID)
-        let tmp%29#0: bool = (== tmp%28#0 0u)
-        (assert tmp%29#0) // can only call when creating
+        let tmp%48#0: uint64 = (txn ApplicationID)
+        let tmp%49#0: bool = (== tmp%48#0 0u)
+        (assert tmp%49#0) // can only call when creating
         tests/approvals/named-types.algo.ts::MyContract.__algots__.defaultCreate()
         let tests/approvals/named-types.algo.ts::MyContract.__puya_arc4_router__%0#5: bool = 1u
         goto block@15
@@ -160,8 +185,12 @@ subroutine tests/approvals/named-types.algo.ts::MyContract.test(x.x: uint64, x.y
 
 subroutine tests/approvals/named-types.algo.ts::MyContract.testing() -> <uint64, uint64, uint64, uint64, uint64, uint64>:
     block@0: // L40
-        let (a.x#0: uint64, a.y#0: uint64) = tests/approvals/named-types.algo.ts::MyContract.getXY()
-        let (b.y#0: uint64, b.x#0: uint64) = tests/approvals/named-types.algo.ts::MyContract.getYX()
+        let (tmp%0#0: uint64, tmp%1#0: uint64) = tests/approvals/named-types.algo.ts::MyContract.getXY()
+        let a.x#0: uint64 = tmp%0#0
+        let a.y#0: uint64 = tmp%1#0
+        let (tmp%2#0: uint64, tmp%3#0: uint64) = tests/approvals/named-types.algo.ts::MyContract.getYX()
+        let b.y#0: uint64 = tmp%2#0
+        let b.x#0: uint64 = tmp%3#0
         let (awst_tmp%0#0: uint64, awst_tmp%1#0: uint64) = tests/approvals/named-types.algo.ts::MyContract.getAnon()
         let c.x#0: uint64 = awst_tmp%0#0
         let c.y#0: uint64 = awst_tmp%1#0

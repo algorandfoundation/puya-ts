@@ -68,7 +68,7 @@ main_test_route@3:
     dup
     intc_0 // 0
     intc_2 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     swap
     dup
@@ -86,12 +86,12 @@ main_test_route@3:
     swap
     pushint 80 // 80
     getbit
-    pushbytes 0x00
-    intc_0 // 0
-    uncover 2
-    setbit
     intc_0 // 0
     getbit
+    uncover 2
+    swap
+    uncover 2
+    swap
     // tests/approvals/destructured-params.algo.ts:5
     // test({ a, b, c }: { a: uint64; b: bytes; c: boolean }): void {
     uncover 2

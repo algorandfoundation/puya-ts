@@ -37,7 +37,10 @@ subroutine tests/approvals/box-proxies.algo.ts::BoxToRefTest.test() -> void:
         (box_replace boxForCaller#0 0u 0x7b)
         let (maybe_value%0#0: bytes, maybe_exists%0#0: bool) = (box_get boxForCaller#0)
         (assert maybe_exists%0#0) // Box must have value
-        let tmp%1#0: uint64 = (getbyte maybe_value%0#0 0u)
-        let tmp%2#0: bool = (== tmp%1#0 123u)
-        (assert tmp%2#0) // First array item in box should be 123
+        let array%bytes_offset%0#1: uint64 = (* 0u 1u)
+        let array%encoded_element%0#1: bytes = (extract3 maybe_value%0#0 array%bytes_offset%0#1 1u) // on error: index access is out of bounds
+        let array_item%0#0: Encoded(uint8) = array%encoded_element%0#1
+        let tmp%0#0: uint64 = (btoi array_item%0#0)
+        let tmp%1#0: bool = (== tmp%0#0 123u)
+        (assert tmp%1#0) // First array item in box should be 123
         return 

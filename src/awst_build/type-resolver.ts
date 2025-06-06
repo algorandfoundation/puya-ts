@@ -4,7 +4,7 @@ import { Constants } from '../constants'
 import { CodeError, InternalError } from '../errors'
 import { logger } from '../logger'
 import type { DeliberateAny } from '../typescript-helpers'
-import { codeInvariant, hasFlags, intersectsFlags, invariant, isIn, normalisePath } from '../util'
+import { codeInvariant, hasFlags, instanceOfAny, intersectsFlags, invariant, isIn, normalisePath } from '../util'
 import { getNodeName } from '../visitor/syntax-names'
 import type { AppStorageType, PType } from './ptypes'
 import {
@@ -17,14 +17,19 @@ import {
   BigIntLiteralPType,
   bigIntPType,
   boolPType,
+  BoxMapPType,
+  BoxPType,
+  BoxRefPType,
   ClearStateProgram,
   ClusteredContractClassType,
   ClusteredPrototype,
   ContractClassPType,
   esSymbol,
   FunctionPType,
+  GlobalStateType,
   gtxnUnion,
   IntersectionPType,
+  LocalStateType,
   logicSigBaseType,
   LogicSigPType,
   NamespacePType,
@@ -33,7 +38,6 @@ import {
   numberPType,
   NumericLiteralPType,
   ObjectPType,
-  StorageProxyPType,
   stringPType,
   SuperPrototypeSelector,
   TuplePType,
@@ -45,6 +49,7 @@ import {
   voidPType,
 } from './ptypes'
 import { ARC4EncodedType, arc4StructBaseType, ARC4StructClass, ARC4StructType, UintNType } from './ptypes/arc4-types'
+import { mutableObjectBaseType, MutableObjectClass, MutableObjectType } from './ptypes/mutable-object'
 import { SymbolName } from './symbol-name'
 import { typeRegistry } from './type-registry'
 
@@ -136,10 +141,12 @@ export class TypeResolver {
       if (tsType.aliasSymbol) {
         break intersect
       }
-      // Special handling of struct base types which are an intersection of `StructBase` and the generic `T` type
+      // Special handling of struct and mutable object base types which are an intersection of `StructBase` or `MutableObjectBase` and the generic `T` type
       const parts = tsType.types.map((t) => this.resolveType(t, sourceLocation))
       if (parts.some((p) => p.equals(arc4StructBaseType))) {
         return arc4StructBaseType
+      } else if (parts.some((p) => p.equals(mutableObjectBaseType))) {
+        return mutableObjectBaseType
       } else {
         return IntersectionPType.fromTypes(parts)
       }
@@ -235,6 +242,8 @@ export class TypeResolver {
     switch (typeName.fullName) {
       case arc4StructBaseType.fullName:
         return arc4StructBaseType
+      case mutableObjectBaseType.fullName:
+        return mutableObjectBaseType
       case ClusteredPrototype.fullName:
         return this.resolveClusteredPrototype(tsType, sourceLocation)
     }
@@ -271,6 +280,9 @@ export class TypeResolver {
       }
       if (baseType instanceof ARC4StructType) {
         return this.reflectStructType(typeName, tsType, baseType, sourceLocation)
+      }
+      if (baseType instanceof MutableObjectType) {
+        return this.reflectMutableObjectType(typeName, tsType, baseType, sourceLocation)
       }
       if (baseType instanceof LogicSigPType) {
         return new LogicSigPType({
@@ -373,6 +385,8 @@ export class TypeResolver {
       const ptype = this.resolve(typeDeclaration, sourceLocation)
       if (ptype instanceof ARC4StructType) {
         return ARC4StructClass.fromStructType(ptype)
+      } else if (ptype instanceof MutableObjectType) {
+        return MutableObjectClass.fromObjectType(ptype)
       } else if (ptype instanceof ContractClassPType || ptype instanceof LogicSigPType) {
         return ptype
       }
@@ -432,6 +446,30 @@ export class TypeResolver {
     })
   }
 
+  private reflectMutableObjectType(
+    typeName: SymbolName,
+    tsType: ts.Type,
+    baseType: MutableObjectType,
+    sourceLocation: SourceLocation,
+  ): MutableObjectType {
+    const ignoredProps = ['bytes', 'copy', Constants.symbolNames.constructorMethodName]
+    const fields: Record<string, PType> = {}
+    for (const prop of tsType.getProperties()) {
+      if (isIn(prop.name, ignoredProps)) continue
+      const type = this.checker.getTypeOfSymbol(prop)
+      const propLocation = this.getLocationOfSymbol(prop) ?? sourceLocation
+      const ptype = this.resolveType(type, propLocation)
+      fields[prop.name] = ptype
+    }
+    return new MutableObjectType({
+      ...typeName,
+      fields: fields,
+      sourceLocation: sourceLocation,
+      description: tryGetTypeDescription(tsType),
+      frozen: baseType.frozen,
+    })
+  }
+
   private reflectContractType(
     typeName: SymbolName,
     tsType: ts.Type,
@@ -444,7 +482,7 @@ export class TypeResolver {
     for (const prop of tsType.getProperties()) {
       const type = this.checker.getTypeOfSymbol(prop)
       const ptype = this.resolveType(type, this.getLocationOfSymbol(prop) ?? sourceLocation)
-      if (ptype instanceof StorageProxyPType) {
+      if (instanceOfAny(ptype, GlobalStateType, LocalStateType, BoxPType, BoxRefPType, BoxMapPType)) {
         properties[prop.name] = ptype
       } else if (ptype instanceof FunctionPType) {
         methods[prop.name] = ptype

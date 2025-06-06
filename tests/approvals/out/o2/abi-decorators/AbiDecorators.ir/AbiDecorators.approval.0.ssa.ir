@@ -48,28 +48,28 @@ subroutine tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_rou
         let tmp%15#0: uint64 = (txn ApplicationID)
         let tmp%16#0: bool = (!= tmp%15#0 0u)
         (assert tmp%16#0) // can only call when not creating
-        let to_encode%0#0: uint64 = tests/approvals/abi-decorators.algo.ts::AbiDecorators.readonly()
-        let val_as_bytes%0#0: bytes[8] = (itob to_encode%0#0)
-        let tmp%17#0: bytes = (concat 0x151f7c75 val_as_bytes%0#0)
-        (log tmp%17#0)
+        let tmp%17#0: uint64 = tests/approvals/abi-decorators.algo.ts::AbiDecorators.readonly()
+        let tmp%18#0: Encoded(uint64) = encode<uint64>(tmp%17#0)
+        let tmp%19#0: bytes = (concat 0x151f7c75 tmp%18#0)
+        (log tmp%19#0)
         return 1u
     block@6: // methodWithDefaults_route_L18
-        let tmp%18#0: uint64 = (txn OnCompletion)
-        let tmp%19#0: bool = (== tmp%18#0 NoOp)
-        (assert tmp%19#0) // OnCompletion is not NoOp
-        let tmp%20#0: uint64 = (txn ApplicationID)
-        let tmp%21#0: bool = (!= tmp%20#0 0u)
-        (assert tmp%21#0) // can only call when not creating
-        let reinterpret_bytes[8]%0#0: bytes[8] = (txna ApplicationArgs 1)
-        let tmp%22#0: uint64 = (btoi reinterpret_bytes[8]%0#0)
-        let reinterpret_bytes[8]%1#0: bytes[8] = (txna ApplicationArgs 2)
-        let tmp%23#0: uint64 = (btoi reinterpret_bytes[8]%1#0)
-        let reinterpret_bytes[8]%2#0: bytes[8] = (txna ApplicationArgs 3)
-        let tmp%24#0: uint64 = (btoi reinterpret_bytes[8]%2#0)
-        let to_encode%1#0: uint64 = tests/approvals/abi-decorators.algo.ts::AbiDecorators.methodWithDefaults(tmp%22#0, tmp%23#0, tmp%24#0)
-        let val_as_bytes%1#0: bytes[8] = (itob to_encode%1#0)
-        let tmp%25#0: bytes = (concat 0x151f7c75 val_as_bytes%1#0)
-        (log tmp%25#0)
+        let tmp%20#0: uint64 = (txn OnCompletion)
+        let tmp%21#0: bool = (== tmp%20#0 NoOp)
+        (assert tmp%21#0) // OnCompletion is not NoOp
+        let tmp%22#0: uint64 = (txn ApplicationID)
+        let tmp%23#0: bool = (!= tmp%22#0 0u)
+        (assert tmp%23#0) // can only call when not creating
+        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
+        let tmp%24#0: uint64 = decode<uint64>(reinterpret_Encoded(uint64)%0#0)
+        let reinterpret_Encoded(uint64)%1#0: Encoded(uint64) = (txna ApplicationArgs 2)
+        let tmp%25#0: uint64 = decode<uint64>(reinterpret_Encoded(uint64)%1#0)
+        let reinterpret_Encoded(uint64)%2#0: Encoded(uint64) = (txna ApplicationArgs 3)
+        let tmp%26#0: uint64 = decode<uint64>(reinterpret_Encoded(uint64)%2#0)
+        let tmp%27#0: uint64 = tests/approvals/abi-decorators.algo.ts::AbiDecorators.methodWithDefaults(tmp%24#0, tmp%25#0, tmp%26#0)
+        let tmp%28#0: Encoded(uint64) = encode<uint64>(tmp%27#0)
+        let tmp%29#0: bytes = (concat 0x151f7c75 tmp%28#0)
+        (log tmp%29#0)
         return 1u
     block@7: // switch_case_default_L4
         goto block@8

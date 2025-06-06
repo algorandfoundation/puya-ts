@@ -10,7 +10,7 @@ contract ForOfLoopsAlgo
     return True
   }
   
-  test_for_of_loop_tuple(items: readonlytuple[uint64, uint64, uint64]): uint64
+  test_for_of_loop_tuple(items: readonly [uint64, uint64, uint64]): uint64
   {
     total: uint64 = 0
     for (item in items) {
@@ -49,7 +49,7 @@ contract ForOfLoopsAlgo
     return total
   }
   
-  test_for_of_loop_native_immutable_array(items: stack_array<uint64>): uint64
+  test_for_of_loop_native_immutable_array(items: arc4.dynamic_array<uint64>): uint64
   {
     total: uint64 = 0
     for (item in items) {
@@ -62,7 +62,7 @@ contract ForOfLoopsAlgo
     return total
   }
   
-  test_for_of_loop_native_mutable_array(items: readonlytuple[uint64, uint64, uint64]): uint64
+  test_for_of_loop_native_mutable_array(items: readonly [uint64, uint64, uint64]): uint64
   {
     mutable: ref_array<uint64> = new ref_array<uint64>(items.0, items.1, items.2)
     total: uint64 = 0

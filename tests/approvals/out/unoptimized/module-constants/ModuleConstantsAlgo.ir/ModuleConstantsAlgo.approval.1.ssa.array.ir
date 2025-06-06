@@ -15,120 +15,143 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%5#0: uint64 = (txn ApplicationID)
         let tmp%6#0: bool = (!= tmp%5#0 0u)
         (assert tmp%6#0) // can only call when not creating
-        let (elements_to_encode%0#0: bool, elements_to_encode%1#0: bool) = tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.getBoolConstants()
-        let encoded_bool%0#0: bytes[1] = (setbit 0x00 0u elements_to_encode%0#0)
-        let encoded_bool%1#0: bytes[1] = (setbit 0x00 0u elements_to_encode%1#0)
-        let encoded_tuple_buffer%1#0: bytes = (concat 0x encoded_bool%0#0)
-        let is_true%0#0: uint64 = (getbit encoded_bool%1#0 0u)
-        let encoded_tuple_buffer%2#0: bytes = (setbit encoded_tuple_buffer%1#0 1u is_true%0#0)
-        let tmp%7#0: bytes = (concat 0x151f7c75 encoded_tuple_buffer%2#0)
-        (log tmp%7#0)
+        let (tmp%7#0: bool, tmp%8#0: bool) = tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.getBoolConstants()
+        let array%encoded_bit%0#1: bytes = (setbit 0x00 0u tmp%7#0)
+        let array%encoded%0#1: Encoded(bool1) = (concat 0x array%encoded_bit%0#1)
+        let array%set_bit%0#1: Encoded(bool1) = (setbit array%encoded%0#1 1u tmp%8#0)
+        let array%encoded%1#1: Encoded(bool1,bool1) = (concat array%set_bit%0#1 0x)
+        let tmp%9#0: Encoded(bool1,bool1) = array%encoded%1#1
+        let tmp%10#0: bytes = (concat 0x151f7c75 tmp%9#0)
+        (log tmp%10#0)
         let tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.__puya_arc4_router__%0#0: bool = 1u
         goto block@14
     block@4: // getUintConstants_route_L46
-        let tmp%8#0: uint64 = (txn OnCompletion)
-        let tmp%9#0: bool = (== tmp%8#0 NoOp)
-        (assert tmp%9#0) // OnCompletion is not NoOp
-        let tmp%10#0: uint64 = (txn ApplicationID)
-        let tmp%11#0: bool = (!= tmp%10#0 0u)
-        (assert tmp%11#0) // can only call when not creating
-        let (elements_to_encode%2#0: uint64, elements_to_encode%3#0: uint64, elements_to_encode%4#0: uint64, elements_to_encode%5#0: uint64, elements_to_encode%6#0: uint64, elements_to_encode%7#0: uint64, elements_to_encode%8#0: uint64, elements_to_encode%9#0: uint64, elements_to_encode%10#0: uint64, elements_to_encode%11#0: uint64, elements_to_encode%12#0: uint64) = tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.getUintConstants()
-        let val_as_bytes%0#0: bytes[8] = (itob elements_to_encode%2#0)
-        let val_as_bytes%1#0: bytes[8] = (itob elements_to_encode%3#0)
-        let val_as_bytes%2#0: bytes[8] = (itob elements_to_encode%4#0)
-        let val_as_bytes%3#0: bytes[8] = (itob elements_to_encode%5#0)
-        let val_as_bytes%4#0: bytes[8] = (itob elements_to_encode%6#0)
-        let val_as_bytes%5#0: bytes[8] = (itob elements_to_encode%7#0)
-        let val_as_bytes%6#0: bytes[8] = (itob elements_to_encode%8#0)
-        let val_as_bytes%7#0: bytes[8] = (itob elements_to_encode%9#0)
-        let val_as_bytes%8#0: bytes[8] = (itob elements_to_encode%10#0)
-        let val_as_bytes%9#0: bytes[8] = (itob elements_to_encode%11#0)
-        let val_as_bytes%10#0: bytes[8] = (itob elements_to_encode%12#0)
-        let encoded_tuple_buffer%4#0: bytes = (concat 0x val_as_bytes%0#0)
-        let encoded_tuple_buffer%5#0: bytes = (concat encoded_tuple_buffer%4#0 val_as_bytes%1#0)
-        let encoded_tuple_buffer%6#0: bytes = (concat encoded_tuple_buffer%5#0 val_as_bytes%2#0)
-        let encoded_tuple_buffer%7#0: bytes = (concat encoded_tuple_buffer%6#0 val_as_bytes%3#0)
-        let encoded_tuple_buffer%8#0: bytes = (concat encoded_tuple_buffer%7#0 val_as_bytes%4#0)
-        let encoded_tuple_buffer%9#0: bytes = (concat encoded_tuple_buffer%8#0 val_as_bytes%5#0)
-        let encoded_tuple_buffer%10#0: bytes = (concat encoded_tuple_buffer%9#0 val_as_bytes%6#0)
-        let encoded_tuple_buffer%11#0: bytes = (concat encoded_tuple_buffer%10#0 val_as_bytes%7#0)
-        let encoded_tuple_buffer%12#0: bytes = (concat encoded_tuple_buffer%11#0 val_as_bytes%8#0)
-        let encoded_tuple_buffer%13#0: bytes = (concat encoded_tuple_buffer%12#0 val_as_bytes%9#0)
-        let encoded_tuple_buffer%14#0: bytes = (concat encoded_tuple_buffer%13#0 val_as_bytes%10#0)
-        let tmp%12#0: bytes = (concat 0x151f7c75 encoded_tuple_buffer%14#0)
-        (log tmp%12#0)
+        let tmp%11#0: uint64 = (txn OnCompletion)
+        let tmp%12#0: bool = (== tmp%11#0 NoOp)
+        (assert tmp%12#0) // OnCompletion is not NoOp
+        let tmp%13#0: uint64 = (txn ApplicationID)
+        let tmp%14#0: bool = (!= tmp%13#0 0u)
+        (assert tmp%14#0) // can only call when not creating
+        let (tmp%15#0: uint64, tmp%16#0: uint64, tmp%17#0: uint64, tmp%18#0: uint64, tmp%19#0: uint64, tmp%20#0: uint64, tmp%21#0: uint64, tmp%22#0: uint64, tmp%23#0: uint64, tmp%24#0: uint64, tmp%25#0: uint64) = tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.getUintConstants()
+        let array%val_as_bytes%0#1: bytes[8] = (itob tmp%15#0)
+        let array%as_Encoded(uint64)%0#1: Encoded(uint64) = array%val_as_bytes%0#1
+        let array%encoded%2#1: Encoded(uint64) = (concat 0x array%as_Encoded(uint64)%0#1)
+        let array%val_as_bytes%1#1: bytes[8] = (itob tmp%16#0)
+        let array%as_Encoded(uint64)%1#1: Encoded(uint64) = array%val_as_bytes%1#1
+        let array%encoded%3#1: Encoded(uint64,uint64) = (concat array%encoded%2#1 array%as_Encoded(uint64)%1#1)
+        let array%val_as_bytes%2#1: bytes[8] = (itob tmp%17#0)
+        let array%as_Encoded(uint64)%2#1: Encoded(uint64) = array%val_as_bytes%2#1
+        let array%encoded%4#1: Encoded(uint64,uint64,uint64) = (concat array%encoded%3#1 array%as_Encoded(uint64)%2#1)
+        let array%val_as_bytes%3#1: bytes[8] = (itob tmp%18#0)
+        let array%as_Encoded(uint64)%3#1: Encoded(uint64) = array%val_as_bytes%3#1
+        let array%encoded%5#1: Encoded(uint64,uint64,uint64,uint64) = (concat array%encoded%4#1 array%as_Encoded(uint64)%3#1)
+        let array%val_as_bytes%4#1: bytes[8] = (itob tmp%19#0)
+        let array%as_Encoded(uint64)%4#1: Encoded(uint64) = array%val_as_bytes%4#1
+        let array%encoded%6#1: Encoded(uint64,uint64,uint64,uint64,uint64) = (concat array%encoded%5#1 array%as_Encoded(uint64)%4#1)
+        let array%val_as_bytes%5#1: bytes[8] = (itob tmp%20#0)
+        let array%as_Encoded(uint64)%5#1: Encoded(uint64) = array%val_as_bytes%5#1
+        let array%encoded%7#1: Encoded(uint64,uint64,uint64,uint64,uint64,uint64) = (concat array%encoded%6#1 array%as_Encoded(uint64)%5#1)
+        let array%val_as_bytes%6#1: bytes[8] = (itob tmp%21#0)
+        let array%as_Encoded(uint64)%6#1: Encoded(uint64) = array%val_as_bytes%6#1
+        let array%encoded%8#1: Encoded(uint64,uint64,uint64,uint64,uint64,uint64,uint64) = (concat array%encoded%7#1 array%as_Encoded(uint64)%6#1)
+        let array%val_as_bytes%7#1: bytes[8] = (itob tmp%22#0)
+        let array%as_Encoded(uint64)%7#1: Encoded(uint64) = array%val_as_bytes%7#1
+        let array%encoded%9#1: Encoded(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64) = (concat array%encoded%8#1 array%as_Encoded(uint64)%7#1)
+        let array%val_as_bytes%8#1: bytes[8] = (itob tmp%23#0)
+        let array%as_Encoded(uint64)%8#1: Encoded(uint64) = array%val_as_bytes%8#1
+        let array%encoded%10#1: Encoded(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64) = (concat array%encoded%9#1 array%as_Encoded(uint64)%8#1)
+        let array%val_as_bytes%9#1: bytes[8] = (itob tmp%24#0)
+        let array%as_Encoded(uint64)%9#1: Encoded(uint64) = array%val_as_bytes%9#1
+        let array%encoded%11#1: Encoded(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64) = (concat array%encoded%10#1 array%as_Encoded(uint64)%9#1)
+        let array%val_as_bytes%10#1: bytes[8] = (itob tmp%25#0)
+        let array%as_Encoded(uint64)%10#1: Encoded(uint64) = array%val_as_bytes%10#1
+        let array%encoded%12#1: Encoded(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64) = (concat array%encoded%11#1 array%as_Encoded(uint64)%10#1)
+        let array%encoded%13#1: Encoded(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64) = (concat array%encoded%12#1 0x)
+        let tmp%26#0: Encoded(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64) = array%encoded%13#1
+        let tmp%27#0: bytes = (concat 0x151f7c75 tmp%26#0)
+        (log tmp%27#0)
         let tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.__puya_arc4_router__%0#1: bool = 1u
         goto block@14
     block@5: // getBigUintConstants_route_L49
-        let tmp%13#0: uint64 = (txn OnCompletion)
-        let tmp%14#0: bool = (== tmp%13#0 NoOp)
-        (assert tmp%14#0) // OnCompletion is not NoOp
-        let tmp%15#0: uint64 = (txn ApplicationID)
-        let tmp%16#0: bool = (!= tmp%15#0 0u)
-        (assert tmp%16#0) // can only call when not creating
-        let (elements_to_encode%13#0: biguint, elements_to_encode%14#0: biguint, elements_to_encode%15#0: biguint, elements_to_encode%16#0: biguint, elements_to_encode%17#0: biguint, elements_to_encode%18#0: biguint, elements_to_encode%19#0: biguint, elements_to_encode%20#0: biguint) = tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.getBigUintConstants()
-        let value_len%0#0: uint64 = (len elements_to_encode%13#0)
-        let len_ok%0#0: bool = (<= value_len%0#0 64u)
-        (assert len_ok%0#0) // overflow
-        let bzero%0#0: bytes = (bzero 64u)
-        let arc4_encoded%0#0: bytes[64] = (b| elements_to_encode%13#0 bzero%0#0)
-        let value_len%1#0: uint64 = (len elements_to_encode%14#0)
-        let len_ok%1#0: bool = (<= value_len%1#0 64u)
-        (assert len_ok%1#0) // overflow
-        let bzero%1#0: bytes = (bzero 64u)
-        let arc4_encoded%1#0: bytes[64] = (b| elements_to_encode%14#0 bzero%1#0)
-        let value_len%2#0: uint64 = (len elements_to_encode%15#0)
-        let len_ok%2#0: bool = (<= value_len%2#0 64u)
-        (assert len_ok%2#0) // overflow
-        let bzero%2#0: bytes = (bzero 64u)
-        let arc4_encoded%2#0: bytes[64] = (b| elements_to_encode%15#0 bzero%2#0)
-        let value_len%3#0: uint64 = (len elements_to_encode%16#0)
-        let len_ok%3#0: bool = (<= value_len%3#0 64u)
-        (assert len_ok%3#0) // overflow
-        let bzero%3#0: bytes = (bzero 64u)
-        let arc4_encoded%3#0: bytes[64] = (b| elements_to_encode%16#0 bzero%3#0)
-        let value_len%4#0: uint64 = (len elements_to_encode%17#0)
-        let len_ok%4#0: bool = (<= value_len%4#0 64u)
-        (assert len_ok%4#0) // overflow
-        let bzero%4#0: bytes = (bzero 64u)
-        let arc4_encoded%4#0: bytes[64] = (b| elements_to_encode%17#0 bzero%4#0)
-        let value_len%5#0: uint64 = (len elements_to_encode%18#0)
-        let len_ok%5#0: bool = (<= value_len%5#0 64u)
-        (assert len_ok%5#0) // overflow
-        let bzero%5#0: bytes = (bzero 64u)
-        let arc4_encoded%5#0: bytes[64] = (b| elements_to_encode%18#0 bzero%5#0)
-        let value_len%6#0: uint64 = (len elements_to_encode%19#0)
-        let len_ok%6#0: bool = (<= value_len%6#0 64u)
-        (assert len_ok%6#0) // overflow
-        let bzero%6#0: bytes = (bzero 64u)
-        let arc4_encoded%6#0: bytes[64] = (b| elements_to_encode%19#0 bzero%6#0)
-        let value_len%7#0: uint64 = (len elements_to_encode%20#0)
-        let len_ok%7#0: bool = (<= value_len%7#0 64u)
-        (assert len_ok%7#0) // overflow
-        let bzero%7#0: bytes = (bzero 64u)
-        let arc4_encoded%7#0: bytes[64] = (b| elements_to_encode%20#0 bzero%7#0)
-        let encoded_tuple_buffer%16#0: bytes = (concat 0x arc4_encoded%0#0)
-        let encoded_tuple_buffer%17#0: bytes = (concat encoded_tuple_buffer%16#0 arc4_encoded%1#0)
-        let encoded_tuple_buffer%18#0: bytes = (concat encoded_tuple_buffer%17#0 arc4_encoded%2#0)
-        let encoded_tuple_buffer%19#0: bytes = (concat encoded_tuple_buffer%18#0 arc4_encoded%3#0)
-        let encoded_tuple_buffer%20#0: bytes = (concat encoded_tuple_buffer%19#0 arc4_encoded%4#0)
-        let encoded_tuple_buffer%21#0: bytes = (concat encoded_tuple_buffer%20#0 arc4_encoded%5#0)
-        let encoded_tuple_buffer%22#0: bytes = (concat encoded_tuple_buffer%21#0 arc4_encoded%6#0)
-        let encoded_tuple_buffer%23#0: bytes = (concat encoded_tuple_buffer%22#0 arc4_encoded%7#0)
-        let tmp%17#0: bytes = (concat 0x151f7c75 encoded_tuple_buffer%23#0)
-        (log tmp%17#0)
+        let tmp%28#0: uint64 = (txn OnCompletion)
+        let tmp%29#0: bool = (== tmp%28#0 NoOp)
+        (assert tmp%29#0) // OnCompletion is not NoOp
+        let tmp%30#0: uint64 = (txn ApplicationID)
+        let tmp%31#0: bool = (!= tmp%30#0 0u)
+        (assert tmp%31#0) // can only call when not creating
+        let (tmp%32#0: biguint, tmp%33#0: biguint, tmp%34#0: biguint, tmp%35#0: biguint, tmp%36#0: biguint, tmp%37#0: biguint, tmp%38#0: biguint, tmp%39#0: biguint) = tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.getBigUintConstants()
+        let array%value_len%0#1: uint64 = (len tmp%32#0)
+        let array%len_ok%0#1: bool = (<= array%value_len%0#1 64u)
+        (assert array%len_ok%0#1) // overflow
+        let array%bzero%0#1: bytes = (bzero 64u)
+        let array%arc4_encoded%0#1: bytes[64] = (b| tmp%32#0 array%bzero%0#1)
+        let array%as_Encoded(uint512)%0#1: Encoded(uint512) = array%arc4_encoded%0#1
+        let array%encoded%14#1: Encoded(uint512) = (concat 0x array%as_Encoded(uint512)%0#1)
+        let array%value_len%1#1: uint64 = (len tmp%33#0)
+        let array%len_ok%1#1: bool = (<= array%value_len%1#1 64u)
+        (assert array%len_ok%1#1) // overflow
+        let array%bzero%1#1: bytes = (bzero 64u)
+        let array%arc4_encoded%1#1: bytes[64] = (b| tmp%33#0 array%bzero%1#1)
+        let array%as_Encoded(uint512)%1#1: Encoded(uint512) = array%arc4_encoded%1#1
+        let array%encoded%15#1: Encoded(uint512,uint512) = (concat array%encoded%14#1 array%as_Encoded(uint512)%1#1)
+        let array%value_len%2#1: uint64 = (len tmp%34#0)
+        let array%len_ok%2#1: bool = (<= array%value_len%2#1 64u)
+        (assert array%len_ok%2#1) // overflow
+        let array%bzero%2#1: bytes = (bzero 64u)
+        let array%arc4_encoded%2#1: bytes[64] = (b| tmp%34#0 array%bzero%2#1)
+        let array%as_Encoded(uint512)%2#1: Encoded(uint512) = array%arc4_encoded%2#1
+        let array%encoded%16#1: Encoded(uint512,uint512,uint512) = (concat array%encoded%15#1 array%as_Encoded(uint512)%2#1)
+        let array%value_len%3#1: uint64 = (len tmp%35#0)
+        let array%len_ok%3#1: bool = (<= array%value_len%3#1 64u)
+        (assert array%len_ok%3#1) // overflow
+        let array%bzero%3#1: bytes = (bzero 64u)
+        let array%arc4_encoded%3#1: bytes[64] = (b| tmp%35#0 array%bzero%3#1)
+        let array%as_Encoded(uint512)%3#1: Encoded(uint512) = array%arc4_encoded%3#1
+        let array%encoded%17#1: Encoded(uint512,uint512,uint512,uint512) = (concat array%encoded%16#1 array%as_Encoded(uint512)%3#1)
+        let array%value_len%4#1: uint64 = (len tmp%36#0)
+        let array%len_ok%4#1: bool = (<= array%value_len%4#1 64u)
+        (assert array%len_ok%4#1) // overflow
+        let array%bzero%4#1: bytes = (bzero 64u)
+        let array%arc4_encoded%4#1: bytes[64] = (b| tmp%36#0 array%bzero%4#1)
+        let array%as_Encoded(uint512)%4#1: Encoded(uint512) = array%arc4_encoded%4#1
+        let array%encoded%18#1: Encoded(uint512,uint512,uint512,uint512,uint512) = (concat array%encoded%17#1 array%as_Encoded(uint512)%4#1)
+        let array%value_len%5#1: uint64 = (len tmp%37#0)
+        let array%len_ok%5#1: bool = (<= array%value_len%5#1 64u)
+        (assert array%len_ok%5#1) // overflow
+        let array%bzero%5#1: bytes = (bzero 64u)
+        let array%arc4_encoded%5#1: bytes[64] = (b| tmp%37#0 array%bzero%5#1)
+        let array%as_Encoded(uint512)%5#1: Encoded(uint512) = array%arc4_encoded%5#1
+        let array%encoded%19#1: Encoded(uint512,uint512,uint512,uint512,uint512,uint512) = (concat array%encoded%18#1 array%as_Encoded(uint512)%5#1)
+        let array%value_len%6#1: uint64 = (len tmp%38#0)
+        let array%len_ok%6#1: bool = (<= array%value_len%6#1 64u)
+        (assert array%len_ok%6#1) // overflow
+        let array%bzero%6#1: bytes = (bzero 64u)
+        let array%arc4_encoded%6#1: bytes[64] = (b| tmp%38#0 array%bzero%6#1)
+        let array%as_Encoded(uint512)%6#1: Encoded(uint512) = array%arc4_encoded%6#1
+        let array%encoded%20#1: Encoded(uint512,uint512,uint512,uint512,uint512,uint512,uint512) = (concat array%encoded%19#1 array%as_Encoded(uint512)%6#1)
+        let array%value_len%7#1: uint64 = (len tmp%39#0)
+        let array%len_ok%7#1: bool = (<= array%value_len%7#1 64u)
+        (assert array%len_ok%7#1) // overflow
+        let array%bzero%7#1: bytes = (bzero 64u)
+        let array%arc4_encoded%7#1: bytes[64] = (b| tmp%39#0 array%bzero%7#1)
+        let array%as_Encoded(uint512)%7#1: Encoded(uint512) = array%arc4_encoded%7#1
+        let array%encoded%21#1: Encoded(uint512,uint512,uint512,uint512,uint512,uint512,uint512,uint512) = (concat array%encoded%20#1 array%as_Encoded(uint512)%7#1)
+        let array%encoded%22#1: Encoded(uint512,uint512,uint512,uint512,uint512,uint512,uint512,uint512) = (concat array%encoded%21#1 0x)
+        let tmp%40#0: Encoded(uint512,uint512,uint512,uint512,uint512,uint512,uint512,uint512) = array%encoded%22#1
+        let tmp%41#0: bytes = (concat 0x151f7c75 tmp%40#0)
+        (log tmp%41#0)
         let tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.__puya_arc4_router__%0#2: bool = 1u
         goto block@14
     block@6: // getStringConstants_route_L52
-        let tmp%18#0: uint64 = (txn OnCompletion)
-        let tmp%19#0: bool = (== tmp%18#0 NoOp)
-        (assert tmp%19#0) // OnCompletion is not NoOp
-        let tmp%20#0: uint64 = (txn ApplicationID)
-        let tmp%21#0: bool = (!= tmp%20#0 0u)
-        (assert tmp%21#0) // can only call when not creating
-        let tmp%22#0: bytes[] = tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.getStringConstants()
-        let tmp%23#0: bytes = (concat 0x151f7c75 tmp%22#0)
-        (log tmp%23#0)
+        let tmp%42#0: uint64 = (txn OnCompletion)
+        let tmp%43#0: bool = (== tmp%42#0 NoOp)
+        (assert tmp%43#0) // OnCompletion is not NoOp
+        let tmp%44#0: uint64 = (txn ApplicationID)
+        let tmp%45#0: bool = (!= tmp%44#0 0u)
+        (assert tmp%45#0) // can only call when not creating
+        let tmp%46#0: Encoded(len+(len+utf8[])[]) = tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.getStringConstants()
+        let tmp%47#0: bytes = (concat 0x151f7c75 tmp%46#0)
+        (log tmp%47#0)
         let tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.__puya_arc4_router__%0#3: bool = 1u
         goto block@14
     block@7: // switch_case_default_L42
@@ -136,12 +159,12 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@8: // switch_case_next_L42
         goto block@13
     block@9: // bare_routing_L42
-        let tmp%24#0: uint64 = (txn OnCompletion)
-        switch tmp%24#0 {0u => block@10, * => block@11}
+        let tmp%48#0: uint64 = (txn OnCompletion)
+        switch tmp%48#0 {0u => block@10, * => block@11}
     block@10: // __algots__.defaultCreate_L42
-        let tmp%25#0: uint64 = (txn ApplicationID)
-        let tmp%26#0: bool = (== tmp%25#0 0u)
-        (assert tmp%26#0) // can only call when creating
+        let tmp%49#0: uint64 = (txn ApplicationID)
+        let tmp%50#0: bool = (== tmp%49#0 0u)
+        (assert tmp%50#0) // can only call when creating
         tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.__algots__.defaultCreate()
         let tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.__puya_arc4_router__%0#4: bool = 1u
         goto block@14
@@ -156,57 +179,6 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%0#0: bool = φ(tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.__puya_arc4_router__%0#0 <- block@3, tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.__puya_arc4_router__%0#1 <- block@4, tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.__puya_arc4_router__%0#2 <- block@5, tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.__puya_arc4_router__%0#3 <- block@6, tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.__puya_arc4_router__%0#4 <- block@10, tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.__puya_arc4_router__%0#5 <- block@13)
         return tmp%0#0
 
-subroutine _puya_lib.arc4.dynamic_array_concat_byte_length_head(array: bytes, new_items_bytes: bytes, new_items_count: uint64) -> bytes:
-    block@0: // L161
-        let array_length#0: uint64 = (extract_uint16 array#0 0u)
-        let new_length#0: uint64 = (+ array_length#0 new_items_count#0)
-        let tmp%0#0: uint64 = (* array_length#0 2u)
-        let header_end#0: uint64 = (+ tmp%0#0 2u)
-        let tmp%1#0: bytes = (itob new_length#0)
-        let tmp%2#0: bytes = ((extract 6 2) tmp%1#0)
-        let tmp%3#0: bytes = (substring3 array#0 2u header_end#0)
-        let tmp%4#0: uint64 = (* new_items_count#0 2u)
-        let tmp%5#0: bytes = (bzero tmp%4#0)
-        let tmp%6#0: bytes = (concat tmp%3#0 tmp%5#0)
-        let tmp%7#0: uint64 = (len array#0)
-        let tmp%8#0: bytes = (substring3 array#0 header_end#0 tmp%7#0)
-        let tmp%9#0: bytes = (concat tmp%6#0 tmp%8#0)
-        let tmp%10#0: bytes = (concat tmp%9#0 new_items_bytes#0)
-        let tmp%11#0: bytes = _puya_lib.arc4.recalculate_head_for_elements_with_byte_length_head(tmp%10#0, new_length#0, 0u)
-        let tmp%12#0: bytes = (concat tmp%2#0 tmp%11#0)
-        return tmp%12#0
-
-subroutine _puya_lib.arc4.recalculate_head_for_elements_with_byte_length_head(array_head_and_tail: bytes, length: uint64, start_at_index: uint64) -> bytes:
-    block@0: // L310
-        let tmp%0#0: uint64 = (* length#0 2u)
-        let tmp%1#0: uint64 = (* start_at_index#0 2u)
-        let tmp%2#0: uint64 = (extract_uint16 array_head_and_tail#0 tmp%1#0)
-        let tail_offset#0: uint64 = (select tmp%0#0 tmp%2#0 start_at_index#0)
-        let tmp%3#0: uint64 = (* length#0 2u)
-        let tmp%4#0: uint64 = (* start_at_index#0 2u)
-        (assert 2u) // Step cannot be zero
-        let head_offset#0: uint64 = tmp%4#0
-        goto block@1
-    block@1: // for_header_L331
-        let head_offset#1: uint64 = φ(head_offset#0 <- block@0, head_offset#3 <- block@3)
-        let tail_offset#1: uint64 = φ(tail_offset#0 <- block@0, tail_offset#2 <- block@3)
-        let array_head_and_tail#1: bytes = φ(array_head_and_tail#0 <- block@0, array_head_and_tail#2 <- block@3)
-        let continue_looping%0#0: bool = (< head_offset#1 tmp%3#0)
-        goto continue_looping%0#0 ? block@2 : block@4
-    block@2: // for_body_L332
-        let tmp%5#0: bytes = (itob tail_offset#1)
-        let tail_offset_bytes#0: bytes = ((extract 6 2) tmp%5#0)
-        let array_head_and_tail#2: bytes = (replace3 array_head_and_tail#1 head_offset#1 tail_offset_bytes#0)
-        let tmp%6#0: uint64 = (extract_uint16 array_head_and_tail#2 tail_offset#1)
-        let tmp%7#0: uint64 = (+ tmp%6#0 2u)
-        let tail_offset#2: uint64 = (+ tail_offset#1 tmp%7#0)
-        goto block@3
-    block@3: // for_footer_L331
-        let head_offset#3: uint64 = (+ head_offset#1 2u)
-        goto block@1
-    block@4: // after_for_L331
-        return array_head_and_tail#1
-
 subroutine tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.getBoolConstants() -> <bool, bool>:
     block@0: // L43
         return 0u 1u
@@ -219,16 +191,25 @@ subroutine tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.getBigU
     block@0: // L49
         return 12b 8b 20b 5b 0b 10b 8b 2b
 
-subroutine tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.getStringConstants() -> bytes[]:
+subroutine tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.getStringConstants() -> Encoded(len+(len+utf8[])[]):
     block@0: // L52
-        let array_data%0#0: bytes = (concat 0x0000 0x)
-        let length%0#0: uint64 = (len "ab")
-        let as_bytes%0#0: bytes[8] = (itob length%0#0)
-        let length_uint16%0#0: bytes = ((extract 6 2) as_bytes%0#0)
-        let encoded_value%0#0: bytes = (concat length_uint16%0#0 "ab")
-        let data%0#0: bytes = (concat 0x encoded_value%0#0)
-        let concat_result%0#0: bytes = _puya_lib.arc4.dynamic_array_concat_byte_length_head(array_data%0#0, data%0#0, 1u)
-        return concat_result%0#0
+        let array%length%0#1: uint64 = (len "ab")
+        let array%as_bytes%0#1: bytes[8] = (itob array%length%0#1)
+        let array%length_uint16%0#1: bytes = ((extract 6 2) array%as_bytes%0#1)
+        let array%encoded_value%0#1: bytes = (concat array%length_uint16%0#1 "ab")
+        let array%as_Encoded(len+utf8[])%0#1: Encoded(len+utf8[]) = array%encoded_value%0#1
+        let array%tail%0#1: bytes = (concat 0x array%as_Encoded(len+utf8[])%0#1)
+        let array%data_length%0#1: uint64 = (len array%as_Encoded(len+utf8[])%0#1)
+        let array%current_tail_offset%0#1: uint64 = (+ 2u array%data_length%0#1)
+        let array%as_bytes%1#1: bytes[8] = (itob 2u)
+        let array%offset_as_uint16%0#1: bytes = ((extract 6 2) array%as_bytes%1#1)
+        let array%encoded%0#1: Encoded((len+utf8[])) = (concat 0x array%offset_as_uint16%0#1)
+        let array%as_bytes%2#1: bytes[8] = (itob 1u)
+        let array%len_u16%0#1: bytes = ((extract 6 2) array%as_bytes%2#1)
+        let array%encoded%1#1: bytes = (concat array%len_u16%0#1 array%encoded%0#1)
+        let array%encoded%2#1: Encoded(len+(len+utf8[])[]) = (concat array%encoded%1#1 array%tail%0#1)
+        let encoded_array%0#0: Encoded(len+(len+utf8[])[]) = array%encoded%2#1
+        return encoded_array%0#0
 
 subroutine tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.__algots__.defaultCreate() -> void:
     block@0: // L42

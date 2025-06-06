@@ -3,9 +3,10 @@ import type { ARC4ABIMethodConfig } from '../awst/nodes'
 import type { SourceLocation } from '../awst/source-location'
 import { wtypes } from '../awst/wtypes'
 import { CodeError } from '../errors'
-import { codeInvariant } from '../util'
-import type { FunctionPType, PType } from './ptypes'
+import { codeInvariant, invariant } from '../util'
+import type { ABIType, FunctionPType, PType } from './ptypes'
 import {
+  ABICompatibleInstanceType,
   accountPType,
   applicationPType,
   ArrayPType,
@@ -14,10 +15,9 @@ import {
   boolPType,
   BytesPType,
   GroupTransactionPType,
-  NativeNumericType,
-  numberPType,
   ObjectPType,
   stringPType,
+  TransientType,
   TuplePType,
   uint64PType,
   voidPType,
@@ -40,17 +40,21 @@ import {
  * @param direction The direction of the parameter (in for method args, out for method returns)
  * @param sourceLocation The location of the method or parameter, for use in error metadata
  */
-export function ptypeToAbiPType(ptype: PType, direction: 'in' | 'out', sourceLocation: SourceLocation): PType {
+export function ptypeToAbiPType(ptype: PType, direction: 'in' | 'out', sourceLocation: SourceLocation): PType & ABIType {
   if (ptype instanceof ARC4EncodedType) return ptype
   if (ptype instanceof GroupTransactionPType) {
     codeInvariant(direction === 'in', `${ptype.name} cannot be used as an ABI return type`, sourceLocation)
     return ptype
   }
-  if (ptype.equals(applicationPType) || ptype.equals(accountPType) || ptype.equals(assetPType)) {
+  if (ptype.equalsOneOf(applicationPType, accountPType, assetPType)) {
+    invariant(ptype instanceof ABICompatibleInstanceType, 'application, account, and asset are all ABICompatibleInstanceType')
     codeInvariant(direction === 'in', `${ptype.name} cannot be used as an ABI return type`, sourceLocation)
     return ptype
   }
-  if (ptype.equals(voidPType)) return voidPType
+  if (ptype.equals(voidPType)) {
+    codeInvariant(direction === 'out', `${ptype.name} cannot be used as an ABI param type`, sourceLocation)
+    return voidPType
+  }
   if (isArc4EncodableType(ptype)) {
     return ptypeToArc4EncodedType(ptype, sourceLocation)
   }
@@ -80,11 +84,7 @@ export function buildArc4MethodConstant(functionType: FunctionPType, arc4Config:
  * @param sourceLocation The location of the method or parameter, for use in error metadata
  */
 export function getABITypeName(ptype: PType, direction: 'in' | 'out', sourceLocation: SourceLocation): string {
-  const arc4Type = ptypeToAbiPType(ptype, direction, sourceLocation)
-  if (arc4Type.wtype instanceof wtypes.ARC4Type || arc4Type.wtype instanceof wtypes.WGroupTransaction) {
-    return arc4Type.wtype.arc4Alias
-  }
-  return arc4Type.wtypeOrThrow.name
+  return ptypeToAbiPType(ptype, direction, sourceLocation).abiTypeSignature
 }
 
 /**
@@ -121,8 +121,8 @@ export function ptypeToArc4EncodedType(ptype: PType, sourceLocation: SourceLocat
   if (ptype.equals(biguintPType)) return new UintNType({ n: 512n })
   if (ptype instanceof BytesPType) return ptype.length === null ? DynamicBytesType : new StaticBytesType({ length: ptype.length })
   if (ptype.equals(stringPType)) return arc4StringType
-  if (ptype instanceof NativeNumericType) {
-    throw new CodeError(numberPType.expressionMessage, { sourceLocation })
+  if (ptype instanceof TransientType) {
+    throw new CodeError(ptype.expressionMessage, { sourceLocation })
   }
   if (ptype instanceof ArrayPType)
     return new DynamicArrayType({

@@ -52,14 +52,19 @@ export class TypeRegistry {
     generic,
     ptype,
     instanceEb,
+    singletonEb,
   }: {
     generic: GenericPType<T>
     ptype: PTypeClass<T>
     instanceEb: ValueExpressionBuilderCtor<PType>
+    singletonEb?: SingletonExpressionBuilderCtor
   }) {
     if (this.genericTypes.has(generic) || this.types.has(ptype)) throw new InternalError(`${ptype} has already been registered`)
     this.genericTypes.add(generic)
     this.instanceEbs.set(ptype, instanceEb)
+    if (singletonEb) {
+      this.singletonEbs.set(generic, singletonEb)
+    }
   }
 
   /**

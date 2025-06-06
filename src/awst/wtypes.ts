@@ -73,23 +73,15 @@ export namespace wtypes {
   export const bytesWType = new BytesWType()
 
   export class ARC4Type extends WType {
-    readonly arc4Alias: string
-    constructor({ arc4Alias, ...rest }: { arc4Alias: string; name: string; immutable?: boolean }) {
+    /**
+     * Override the default name of this type with a valid arc4 alias.
+     *
+     * eg uint8 can be aliased with byte, byte[32] can be aliased with address
+     */
+    readonly arc4Alias: string | null
+    constructor({ arc4Alias, ...rest }: { arc4Alias?: string | null; name: string; immutable?: boolean }) {
       super({ ...rest })
-      this.arc4Alias = arc4Alias
-    }
-  }
-
-  export class WStructType extends WType {
-    fields: Record<string, WType>
-    readonly frozen = true
-
-    constructor({ fields, name }: { fields: Record<string, WType>; name: string }) {
-      super({
-        name,
-        immutable: true,
-      })
-      this.fields = fields
+      this.arc4Alias = arc4Alias ?? null
     }
   }
 
@@ -125,7 +117,7 @@ export namespace wtypes {
       if (this.names) {
         return `${displayName}{ ${this.names.map((n, i) => `${n}: ${this.types[i]}`).join(', ')} }`
       }
-      return `${this.immutable ? 'readonly' : ''}${displayName}[${this.types.join(', ')}]`
+      return `${this.immutable ? 'readonly ' : ''}[${this.types.join(', ')}]`
     }
   }
   export abstract class NativeArray extends WType {
@@ -171,13 +163,11 @@ export namespace wtypes {
   }
   export class WGroupTransaction extends WType {
     transactionType: TransactionKind | null
-    arc4Alias: string
     constructor({ transactionType }: { transactionType?: TransactionKind }) {
       super({
         name: transactionType === undefined ? 'group_transaction' : `group_transaction_${TransactionKind[transactionType]}`,
       })
       this.transactionType = transactionType ?? null
-      this.arc4Alias = transactionType ? TransactionKind[transactionType] : 'txn'
     }
   }
   export class WInnerTransaction extends WType {
@@ -201,10 +191,10 @@ export namespace wtypes {
 
   export class ARC4UIntN extends ARC4Type {
     readonly n: bigint
-    constructor({ n, arc4Name }: { n: bigint; arc4Name?: string }) {
+    constructor({ n, arc4Alias }: { n: bigint; arc4Alias?: string }) {
       super({
-        name: arc4Name ? `arc4.${arc4Name}` : `arc4.uint${n}`,
-        arc4Alias: arc4Name ?? `uint${n}`,
+        name: arc4Alias ? `arc4.${arc4Alias}` : `arc4.uint${n}`,
+        arc4Alias: arc4Alias,
       })
       invariant(n >= 8n && n <= 512n, 'Invalid uint: n must be between 8 and 512')
       invariant(n % 8n === 0n, 'Invalid uint: n must be multiple of 8')
@@ -218,7 +208,6 @@ export namespace wtypes {
     constructor({ n, m }: { n: bigint; m: bigint }) {
       super({
         name: `arc4.ufixed${n}x${m}`,
-        arc4Alias: `ufixed${n}x${m}`,
       })
 
       invariant(n >= 8n && n <= 512n, 'Invalid ufixed: n must be between 8 and 512')
@@ -230,7 +219,7 @@ export namespace wtypes {
   }
 
   export class ARC4Struct extends ARC4Type {
-    fields: Record<string, ARC4Type>
+    fields: Record<string, WType>
     sourceLocation: SourceLocation | null
     frozen: boolean
     desc: string | null
@@ -245,13 +234,10 @@ export namespace wtypes {
       frozen: boolean
       name: string
       desc: string | null
-      fields: Record<string, ARC4Type>
+      fields: Record<string, WType>
       sourceLocation?: SourceLocation
     }) {
       super({
-        arc4Alias: `(${Object.values(fields)
-          .map((f) => f.arc4Alias)
-          .join(',')})`,
         name,
         immutable: frozen && Object.values(fields).every((t) => t.immutable),
       })
@@ -260,21 +246,15 @@ export namespace wtypes {
       this.frozen = frozen
       this.desc = desc
     }
-
-    toString(): string {
-      if (!this.name) return this.arc4Alias
-      return super.toString()
-    }
   }
   export class ARC4Tuple extends ARC4Type {
-    readonly types: ARC4Type[]
+    readonly types: WType[]
     readonly sourceLocation: SourceLocation | null
 
-    constructor({ types, sourceLocation }: { types: ARC4Type[]; sourceLocation?: SourceLocation }) {
-      const typesStr = types.map((t) => t.arc4Alias).join(',')
+    constructor({ types, sourceLocation }: { types: WType[]; sourceLocation?: SourceLocation; immutable: boolean }) {
+      const typesStr = types.map((t) => t.name).join(',')
       super({
         name: `arc4.tuple<${typesStr}>`,
-        arc4Alias: `(${typesStr})`,
       })
       this.sourceLocation = sourceLocation ?? null
       this.types = types
@@ -282,8 +262,8 @@ export namespace wtypes {
   }
 
   export abstract class ARC4Array extends ARC4Type {
-    readonly elementType: ARC4Type
-    protected constructor(props: { arc4Alias: string; name: string; elementType: ARC4Type; immutable?: boolean }) {
+    readonly elementType: WType
+    protected constructor(props: { arc4Alias: string | null; name: string; elementType: WType; immutable?: boolean }) {
       super({
         ...props,
         immutable: props.immutable ?? false,
@@ -300,7 +280,7 @@ export namespace wtypes {
       arc4Alias,
       immutable,
     }: {
-      elementType: ARC4Type
+      elementType: WType
       sourceLocation?: SourceLocation
       arc4Alias?: string
       immutable?: boolean
@@ -308,7 +288,7 @@ export namespace wtypes {
       super({
         elementType,
         name: `arc4.dynamic_array<${elementType.name}>`,
-        arc4Alias: arc4Alias ?? `${elementType.arc4Alias}[]`,
+        arc4Alias: arc4Alias ?? null,
         immutable,
       })
       this.sourceLocation = sourceLocation ?? null
@@ -325,7 +305,7 @@ export namespace wtypes {
       immutable,
     }: {
       arraySize: bigint
-      elementType: ARC4Type
+      elementType: WType
       sourceLocation?: SourceLocation
       arc4Alias?: string
       immutable?: boolean
@@ -333,7 +313,7 @@ export namespace wtypes {
       super({
         elementType,
         name: `arc4.static_array<${elementType.name}>`,
-        arc4Alias: arc4Alias ?? `${elementType.arc4Alias}[${arraySize}]`,
+        arc4Alias: arc4Alias ?? null,
         immutable,
       })
       this.sourceLocation = sourceLocation ?? null
@@ -343,7 +323,7 @@ export namespace wtypes {
 
   export const arc4ByteAliasWType = new ARC4UIntN({
     n: 8n,
-    arc4Name: 'byte',
+    arc4Alias: 'byte',
   })
   export const arc4AddressAliasWType = new ARC4StaticArray({
     arraySize: 32n,
@@ -354,7 +334,6 @@ export namespace wtypes {
 
   export const arc4BooleanWType = new ARC4Type({
     name: 'arc4.bool',
-    arc4Alias: 'bool',
     immutable: true,
   })
 

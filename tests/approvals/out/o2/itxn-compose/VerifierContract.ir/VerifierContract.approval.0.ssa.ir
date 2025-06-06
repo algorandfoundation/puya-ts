@@ -54,7 +54,8 @@ subroutine tests/approvals/itxn-compose.algo.ts::VerifierContract.verify() -> vo
         let tmp%2#0: uint64 = ((gtxns TypeEnum) txn#0)
         let tmp%3#0: bool = (== tmp%2#0 1u)
         (assert tmp%3#0) // Txn must be pay
-        let i#2: uint64 = (+ i#1 1u)
+        let tmp%4#0: uint64 = (+ i#1 1u)
+        let i#2: uint64 = tmp%4#0
         goto block@1
     block@3: // after_while_L70
         return 

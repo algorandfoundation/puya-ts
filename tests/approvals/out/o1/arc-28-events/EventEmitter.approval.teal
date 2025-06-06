@@ -184,14 +184,16 @@ emitDynamicBytes:
     len
     pushint 4 // 4
     +
+    swap
+    frame_dig -1
+    concat
+    swap
     itob
     extract 6 2
     pushbytes 0x0004
     swap
     concat
     swap
-    concat
-    frame_dig -1
     concat
     pushbytes 0x4524e1dd // method "DB(byte[],byte[])"
     swap

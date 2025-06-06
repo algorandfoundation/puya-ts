@@ -14,8 +14,9 @@ export class AtFunctionBuilder extends FunctionBuilder {
     private expr: Expression,
     private itemPType: PType,
     private exprLength: Expression | bigint,
+    sourceLocation: SourceLocation,
   ) {
-    super(expr.sourceLocation)
+    super(sourceLocation)
   }
 
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {

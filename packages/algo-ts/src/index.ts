@@ -1,5 +1,5 @@
 export * from './primitives'
-export { log, err, assert, match, assertMatch, ensureBudget, urange, OpUpFeeSource } from './util'
+export { log, err, assert, match, assertMatch, ensureBudget, urange, OpUpFeeSource, clone } from './util'
 export * from './reference'
 export * as op from './op'
 export { Txn, Global } from './op'
@@ -19,3 +19,4 @@ export { compile, CompiledContract, CompiledLogicSig, CompileContractOptions, Co
 export { MutableArray } from './mutable-array'
 export { emit } from './arc-28'
 export { OnCompleteAction, OnCompleteActionStr } from './on-complete-action'
+export * from './mutable-object'

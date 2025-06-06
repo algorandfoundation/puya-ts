@@ -20,8 +20,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%8#0) // OnCompletion is not NoOp
         let tmp%9#0: uint64 = (txn ApplicationID)
         (assert tmp%9#0) // can only call when not creating
-        let reinterpret_bytes[8]%0#0: bytes[8] = (txna ApplicationArgs 1)
-        let tmp%11#0: uint64 = (btoi reinterpret_bytes[8]%0#0)
+        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
+        let tmp%11#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
         tests/approvals/switch-statements.algo.ts::DemoContract.test_side_effects(tmp%11#0)
         let tests/approvals/switch-statements.algo.ts::DemoContract.__puya_arc4_router__%0#1: bool = 1u
         goto block@13
@@ -31,23 +31,23 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%13#0) // OnCompletion is not NoOp
         let tmp%14#0: uint64 = (txn ApplicationID)
         (assert tmp%14#0) // can only call when not creating
-        let reinterpret_bytes[8]%1#0: bytes[8] = (txna ApplicationArgs 1)
-        let tmp%16#0: uint64 = (btoi reinterpret_bytes[8]%1#0)
-        let reinterpret_bytes[8]%2#0: bytes[8] = (txna ApplicationArgs 2)
-        let tmp%17#0: uint64 = (btoi reinterpret_bytes[8]%2#0)
-        let to_encode%0#0: uint64 = tests/approvals/switch-statements.algo.ts::DemoContract.test_non_trivial_termination_of_clause(tmp%16#0, tmp%17#0)
-        let val_as_bytes%0#0: bytes[8] = (itob to_encode%0#0)
-        let tmp%18#0: bytes = (concat 0x151f7c75 val_as_bytes%0#0)
-        (log tmp%18#0)
+        let reinterpret_Encoded(uint64)%1#0: Encoded(uint64) = (txna ApplicationArgs 1)
+        let tmp%16#0: uint64 = (btoi reinterpret_Encoded(uint64)%1#0)
+        let reinterpret_Encoded(uint64)%2#0: Encoded(uint64) = (txna ApplicationArgs 2)
+        let tmp%17#0: uint64 = (btoi reinterpret_Encoded(uint64)%2#0)
+        let tmp%18#0: uint64 = tests/approvals/switch-statements.algo.ts::DemoContract.test_non_trivial_termination_of_clause(tmp%16#0, tmp%17#0)
+        let array%val_as_bytes%0#1: bytes[8] = (itob tmp%18#0)
+        let tmp%20#0: bytes = (concat 0x151f7c75 array%val_as_bytes%0#1)
+        (log tmp%20#0)
         let tests/approvals/switch-statements.algo.ts::DemoContract.__puya_arc4_router__%0#2: bool = 1u
         goto block@13
     block@8: // bare_routing_L4
-        let tmp%19#0: uint64 = (txn OnCompletion)
-        goto tmp%19#0 ? block@12 : block@9
+        let tmp%21#0: uint64 = (txn OnCompletion)
+        goto tmp%21#0 ? block@12 : block@9
     block@9: // __algots__.defaultCreate_L4
-        let tmp%20#0: uint64 = (txn ApplicationID)
-        let tmp%21#0: bool = (! tmp%20#0)
-        (assert tmp%21#0) // can only call when creating
+        let tmp%22#0: uint64 = (txn ApplicationID)
+        let tmp%23#0: bool = (! tmp%22#0)
+        (assert tmp%23#0) // can only call when creating
         let tests/approvals/switch-statements.algo.ts::DemoContract.__puya_arc4_router__%0#3: bool = 1u
         goto block@13
     block@12: // after_if_else_L4
@@ -129,8 +129,8 @@ subroutine tests/approvals/switch-statements.algo.ts::DemoContract.test_break(x:
         let i#2: uint64 = (+ 10u x#0)
         goto block@13
     block@9: // after_if_else_L41
-        let tmp%3#0: bool = (== x#0 5u)
-        goto tmp%3#0 ? block@10 : block@12
+        let tmp%4#0: bool = (== x#0 5u)
+        goto tmp%4#0 ? block@10 : block@12
     block@10: // if_body_L44
         let i#4: uint64 = (* 10u x#0)
         goto block@12
@@ -163,8 +163,8 @@ subroutine tests/approvals/switch-statements.algo.ts::DemoContract.increaseEvalA
     block@0: // L63
         let (maybe_value%0#0: uint64, maybe_exists%0#0: bool) = (app_global_get_ex 0u "evalCount")
         (assert maybe_exists%0#0) // check GlobalState exists
-        let materialized_values%0#0: uint64 = (+ maybe_value%0#0 1u)
-        (app_global_put "evalCount" materialized_values%0#0)
+        let tmp%0#0: uint64 = (+ maybe_value%0#0 1u)
+        (app_global_put "evalCount" tmp%0#0)
         return n#0
 
 subroutine tests/approvals/switch-statements.algo.ts::DemoContract.test_side_effects(n: uint64) -> void:

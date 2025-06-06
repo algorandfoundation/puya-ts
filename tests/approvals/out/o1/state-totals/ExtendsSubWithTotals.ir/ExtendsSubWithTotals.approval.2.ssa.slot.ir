@@ -17,8 +17,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%4#0) // OnCompletion is not OptIn
         let tmp%5#0: uint64 = (txn ApplicationID)
         (assert tmp%5#0) // can only call when not creating
-        let reinterpret_bytes[8]%0#0: bytes[8] = (txna ApplicationArgs 1)
-        let tmp%7#0: uint64 = (btoi reinterpret_bytes[8]%0#0)
+        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
+        let tmp%7#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
         tests/approvals/state-totals.algo.ts::ExtendsSubWithTotals.setState(tmp%7#0)
         let tests/approvals/state-totals.algo.ts::ExtendsSubWithTotals.__puya_arc4_router__%0#0: bool = 1u
         goto block@13
@@ -42,6 +42,6 @@ subroutine tests/approvals/state-totals.algo.ts::ExtendsSubWithTotals.setState(n
     block@0: // L31
         (app_global_put "oneGlobal" n#0)
         (app_global_put "twoGlobal" n#0)
-        let tmp%0#0: bytes[32] = (txn Sender)
+        let tmp%0#0: account = (txn Sender)
         (app_local_put tmp%0#0 "oneLocal" n#0)
         return 
