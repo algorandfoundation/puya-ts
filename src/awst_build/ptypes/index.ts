@@ -772,14 +772,24 @@ export class ObjectPType extends PType {
     return Object.hasOwn(this.properties, name)
   }
 
-  hasPropertyOfType(name: string, type: PType) {
+  hasPropertyOfType(name: string, type: PType): boolean {
     if (!this.hasProperty(name)) {
       return false
     }
     const thisPropertyType = this.properties[name]
-    return ('nativeType' in thisPropertyType ? (thisPropertyType.nativeType as PType) : thisPropertyType).equals(
-      'nativeType' in type ? (type.nativeType as PType) : type,
-    )
+    if (
+      thisPropertyType instanceof ObjectPType ||
+      thisPropertyType[PType.IdSymbol] === 'MutableObjectType' ||
+      thisPropertyType[PType.IdSymbol] === 'ARC4StructType'
+    ) {
+      const thisPropertyTypeToCompare = ('nativeType' in thisPropertyType ? thisPropertyType.nativeType : thisPropertyType) as ObjectPType
+      const otherPropertyTypeToCompare = ('nativeType' in type ? type.nativeType : type) as ObjectPType
+      return otherPropertyTypeToCompare
+        .orderedProperties()
+        .every(([prop, propType]) => thisPropertyTypeToCompare.hasPropertyOfType(prop, propType))
+    }
+
+    return thisPropertyType.equals(type)
   }
 
   toString(): string {

@@ -12,7 +12,7 @@ contract DestructuredParamsAlgo
   
   test(p: object{ a: uint64, b: bytes, c: bool }): void
   {
-    (a = p.a), (b = p.b), (c = p.c), p
+    { a: a, b: b, c: c }: object{ a: uint64, b: bytes, c: bool } = p
     log(concat(concat(itob(a), b), itob(c)))
   }
   
