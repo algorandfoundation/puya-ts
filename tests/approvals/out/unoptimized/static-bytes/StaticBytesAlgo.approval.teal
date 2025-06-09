@@ -295,29 +295,13 @@ test_block@0:
     // tests/approvals/static-bytes.algo.ts:37
     // const joined = Bytes<55>`${fromUtf8}${fromHex}${fromBase32}${fromBase64}`
     bytec_0 // ""
-    // tests/approvals/static-bytes.algo.ts:5
-    // const fromUtf8 = Bytes<3>('abc')
     pushbytes "abc"
-    // tests/approvals/static-bytes.algo.ts:37
-    // const joined = Bytes<55>`${fromUtf8}${fromHex}${fromBase32}${fromBase64}`
     concat
-    // tests/approvals/static-bytes.algo.ts:6
-    // const fromHex = Bytes.fromHex<2>('AAFF')
     pushbytes 0xaaff
-    // tests/approvals/static-bytes.algo.ts:37
-    // const joined = Bytes<55>`${fromUtf8}${fromHex}${fromBase32}${fromBase64}`
     concat
-    // tests/approvals/static-bytes.algo.ts:7
-    // const fromBase32 = Bytes.fromBase32<36>('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ')
     pushbytes base32(AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ)
-    // tests/approvals/static-bytes.algo.ts:37
-    // const joined = Bytes<55>`${fromUtf8}${fromHex}${fromBase32}${fromBase64}`
     concat
-    // tests/approvals/static-bytes.algo.ts:8
-    // const fromBase64 = Bytes.fromBase64<14>('SGVsbG8gQWxnb3JhbmQ=')
     pushbytes base64(SGVsbG8gQWxnb3JhbmQ=)
-    // tests/approvals/static-bytes.algo.ts:37
-    // const joined = Bytes<55>`${fromUtf8}${fromHex}${fromBase32}${fromBase64}`
     concat
     dup
     len
