@@ -137,7 +137,7 @@ export class Arc28EmitFunctionBuilder extends FunctionBuilder {
 function emitStruct(ptype: ARC4StructType, expression: Expression, sourceLocation: SourceLocation) {
   return instanceEb(
     nodeFactory.emit({
-      signature: ptype.signature,
+      signature: ptype.name + ptype.abiTypeSignature,
       value: expression,
       wtype: voidPType.wtype,
       sourceLocation,

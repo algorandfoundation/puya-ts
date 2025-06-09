@@ -49,7 +49,7 @@ subroutine tests/approvals/box-proxies.algo.ts::CompositeKeyTest.test(key.a: uin
         let encoded_for_storage%0#0: Encoded(uint64,uint64) = encode<(uint64,uint64)>(key.a#0, key.b#0)
         let box_prefixed_key%0#0: bytes = (concat "" encoded_for_storage%0#0)
         (box_del box_prefixed_key%0#0)
-        (box_put box_prefixed_key%0#0 val#0)
+        box_write(box_prefixed_key%0#0, val#0)
         return 
 
 subroutine tests/approvals/box-proxies.algo.ts::CompositeKeyTest.__algots__.defaultCreate() -> void:

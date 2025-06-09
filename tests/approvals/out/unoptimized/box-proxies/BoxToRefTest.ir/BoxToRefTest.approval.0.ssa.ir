@@ -48,7 +48,7 @@ subroutine tests/approvals/box-proxies.algo.ts::BoxToRefTest.test() -> void:
         (box_create boxForCaller#0 4u)
         let boxRef#0: bytes = boxForCaller#0
         (box_replace boxRef#0 0u 0x7b)
-        let (maybe_value%0#0: bytes, maybe_exists%0#0: bool) = (box_get boxForCaller#0)
+        let (maybe_value%0#0: bytes, maybe_exists%0#0: bool) = box_read(boxForCaller#0)
         (assert maybe_exists%0#0) // Box must have value
         let array_item%0#0: Encoded(uint8) = maybe_value%0#0[0u]
         let tmp%0#0: uint64 = decode<uint64>(array_item%0#0)

@@ -70,33 +70,33 @@ subroutine tests/approvals/arc-28-events.algo.ts::EventEmitter.__puya_arc4_route
 subroutine tests/approvals/arc-28-events.algo.ts::EventEmitter.emitSwapped(a: Encoded(uint8), b: Encoded(uint8)) -> void:
     block@0: // L14
         let tmp%0#0: Encoded(uint8,uint8) = encode<(uint8,uint8)>(b#0, a#0)
-        let event%0#0: bytes = (concat method "Swappednull" tmp%0#0)
+        let event%0#0: bytes = (concat method "Swapped(uint8,uint8)" tmp%0#0)
         (log event%0#0)
         let (x.a#0: Encoded(uint8), x.b#0: Encoded(uint8)) = (b#0, a#0)
         let tmp%1#0: Encoded(uint8,uint8) = encode<(uint8,uint8)>(x.a#0, x.b#0)
-        let event%1#0: bytes = (concat method "Swappednull" tmp%1#0)
+        let event%1#0: bytes = (concat method "Swapped(uint8,uint8)" tmp%1#0)
         (log event%1#0)
         let tmp%2#0: Encoded(uint8,uint8) = encode<(uint8,uint8)>(b#0, a#0)
         let y#0: Encoded(uint8,uint8) = tmp%2#0
-        let event%2#0: bytes = (concat method "SwappedArc4null" y#0)
+        let event%2#0: bytes = (concat method "SwappedArc4(uint8,uint8)" y#0)
         (log event%2#0)
         let tmp%3#0: Encoded(uint8,uint8) = encode<(uint8,uint8)>(b#0, a#0)
-        let event%3#0: bytes = (concat method "Swappednull" tmp%3#0)
+        let event%3#0: bytes = (concat method "Swapped(uint8,uint8)" tmp%3#0)
         (log event%3#0)
         let tmp%4#0: Encoded(uint8,uint8) = encode<(uint8,uint8)>(b#0, a#0)
-        let event%4#0: bytes = (concat method "Swappednull" tmp%4#0)
+        let event%4#0: bytes = (concat method "Swapped(uint8,uint8)" tmp%4#0)
         (log event%4#0)
         let tmp%5#0: Encoded(uint8,uint8) = encode<(uint8,uint8)>(b#0, b#0)
         let tmp%6#0: Encoded((uint8,uint8),uint8) = encode<((uint8,uint8),uint8)>(tmp%5#0, a#0)
-        let event%5#0: bytes = (concat method "Swappednull" tmp%6#0)
+        let event%5#0: bytes = (concat method "Swapped((uint8,uint8),uint8)" tmp%6#0)
         (log event%5#0)
         let tmp%7#0: Encoded(uint8,uint8) = encode<(uint8,uint8)>(b#0, b#0)
         let tmp%8#0: Encoded((uint8,uint8),uint8) = encode<((uint8,uint8),uint8)>(tmp%7#0, a#0)
-        let event%6#0: bytes = (concat method "Swappednull" tmp%8#0)
+        let event%6#0: bytes = (concat method "Swapped((uint8,uint8),uint8)" tmp%8#0)
         (log event%6#0)
         let tmp%9#0: Encoded(len+uint8[]) = encode<(len+uint8[])>(b#0, b#0)
         let tmp%10#0: Encoded((len+uint8[]),uint8) = encode<((len+uint8[]),uint8)>(tmp%9#0, a#0)
-        let event%7#0: bytes = (concat method "Swappednull" tmp%10#0)
+        let event%7#0: bytes = (concat method "Swapped(uint8[],uint8)" tmp%10#0)
         (log event%7#0)
         return 
 
@@ -105,12 +105,12 @@ subroutine tests/approvals/arc-28-events.algo.ts::EventEmitter.emitCustom(arg0: 
         let tmp%0#0: Encoded(len+utf8[]) = encode<(len+utf8[])>(arg0#0)
         let tmp%1#0: Encoded(bool8) = encode<bool8>(arg1#0)
         let tmp%2#0: Encoded((len+utf8[]),bool1) = encode<((len+utf8[]),bool1)>(tmp%0#0, tmp%1#0)
-        let event%0#0: bytes = (concat method "Customnull" tmp%2#0)
+        let event%0#0: bytes = (concat method "Custom(string,bool)" tmp%2#0)
         (log event%0#0)
         let tmp%3#0: Encoded(len+utf8[]) = encode<(len+utf8[])>(arg0#0)
         let tmp%4#0: Encoded(bool8) = encode<bool8>(arg1#0)
         let tmp%5#0: Encoded((len+utf8[]),bool1) = encode<((len+utf8[]),bool1)>(tmp%3#0, tmp%4#0)
-        let event%1#0: bytes = (concat method "Customnull" tmp%5#0)
+        let event%1#0: bytes = (concat method "Custom(string,bool)" tmp%5#0)
         (log event%1#0)
         return 
 
@@ -118,7 +118,7 @@ subroutine tests/approvals/arc-28-events.algo.ts::EventEmitter.emitDynamicBytes(
     block@0: // L40
         let tmp%0#0: Encoded(len+uint8[]) = encode<(len+uint8[])>(x#0)
         let tmp%1#0: Encoded((len+uint8[]),(len+uint8[])) = encode<((len+uint8[]),(len+uint8[]))>(tmp%0#0, y#0)
-        let event%0#0: bytes = (concat method "DBnull" tmp%1#0)
+        let event%0#0: bytes = (concat method "DB(byte[],byte[])" tmp%1#0)
         (log event%0#0)
         return 
 

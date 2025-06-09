@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest'
+import { SourceLocation } from '../awst/source-location'
+import { getABITypeName } from '../awst_build/arc4-util'
 import { Arc4ParseError, parseArc4Type } from './arc4-signature-parser'
 import { invariant } from './index'
 
@@ -38,8 +40,8 @@ describe('arc4 signature parser', () => {
       ['(bool,string,uint8,(uint16,string[]),bool[])[1][]'],
     ])('%s parses', (arc4TypeString) => {
       const match = parseArc4Type(arc4TypeString)
-
-      expect(match.wtype.arc4Alias).toBe(arc4TypeString)
+      const parsedName = getABITypeName(match, 'in', SourceLocation.None)
+      expect(parsedName).toBe(arc4TypeString)
     })
   })
   describe('errors on invalid types', () => {

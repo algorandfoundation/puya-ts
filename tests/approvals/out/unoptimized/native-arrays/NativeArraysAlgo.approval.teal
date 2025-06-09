@@ -935,7 +935,7 @@ doThings_bool_merge@29:
     bytec_0 // 0x
     concat
     // tests/approvals/native-arrays.algo.ts:48
-    // arr = arr.concat(arr).concat(t1)
+    // arr = arr.concat(arr).concat(11).concat(t1)
     frame_dig 0
     dup
     extract 2 0
@@ -951,18 +951,39 @@ doThings_bool_merge@29:
     intc_1 // 0
     uncover 2
     replace3
+    pushint 11 // 11
+    itob
+    bytec_0 // 0x
     swap
-    dup
+    concat
+    bytec_0 // 0x
+    concat
+    dig 1
+    swap
+    concat // on error: max array length exceeded
+    swap
+    intc_1 // 0
+    extract_uint16
+    intc_2 // 1
+    +
+    itob
+    extract 6 2
+    swap
+    intc_1 // 0
+    uncover 2
+    replace3
+    dig 1
     intc_1 // 0
     intc_0 // 8
     extract3
     btoi
     swap
+    uncover 2
     intc_0 // 8
     dup
     extract3
     btoi
-    swap
+    uncover 2
     itob
     bytec_0 // 0x
     swap

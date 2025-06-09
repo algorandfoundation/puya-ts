@@ -66,9 +66,9 @@ subroutine tests/approvals/match-expr.algo.ts::MatchExprAlgo.testMatches(x: uint
         let array%bytes_offset%0#1: uint64 = (* 0u 8u)
         let array%encoded_element%0#1: bytes = (extract3 array%array_trimmed%0#1 array%bytes_offset%0#1 8u) // on error: index access is out of bounds
         let array_item%0#0: Encoded(uint64) = array%encoded_element%0#1
-        let tmp%10#0: uint64 = (btoi array_item%0#0)
-        let tmp%11#0: bool = (== tmp%10#0 5u)
-        goto tmp%11#0 ? block@2 : block@3
+        let values%0#0: uint64 = (btoi array_item%0#0)
+        let tmp%10#0: bool = (== values%0#0 5u)
+        goto tmp%10#0 ? block@2 : block@3
     block@2: // bool_true_L17
         let and_result%0#0: bool = 1u
         goto block@4
@@ -84,9 +84,9 @@ subroutine tests/approvals/match-expr.algo.ts::MatchExprAlgo.testMatches(x: uint
         let array%bytes_offset%1#1: uint64 = (* 0u 8u)
         let array%encoded_element%1#1: bytes = (extract3 array%array_trimmed%1#1 array%bytes_offset%1#1 8u) // on error: index access is out of bounds
         let array_item%1#0: Encoded(uint64) = array%encoded_element%1#1
-        let tmp%13#0: uint64 = (btoi array_item%1#0)
-        let tmp%14#0: bool = (> tmp%13#0 4u)
-        goto tmp%14#0 ? block@6 : block@7
+        let values%1#0: uint64 = (btoi array_item%1#0)
+        let tmp%12#0: bool = (> values%1#0 4u)
+        goto tmp%12#0 ? block@6 : block@7
     block@6: // bool_true_L18
         let and_result%1#0: bool = 1u
         goto block@8
@@ -102,9 +102,9 @@ subroutine tests/approvals/match-expr.algo.ts::MatchExprAlgo.testMatches(x: uint
         let array%bytes_offset%2#1: uint64 = (* 0u 8u)
         let array%encoded_element%2#1: bytes = (extract3 array%array_trimmed%2#1 array%bytes_offset%2#1 8u) // on error: index access is out of bounds
         let array_item%2#0: Encoded(uint64) = array%encoded_element%2#1
-        let tmp%16#0: uint64 = (btoi array_item%2#0)
-        let tmp%17#0: bool = (< tmp%16#0 6u)
-        goto tmp%17#0 ? block@10 : block@11
+        let values%2#0: uint64 = (btoi array_item%2#0)
+        let tmp%14#0: bool = (< values%2#0 6u)
+        goto tmp%14#0 ? block@10 : block@11
     block@10: // bool_true_L19
         let and_result%2#0: bool = 1u
         goto block@12
@@ -120,9 +120,9 @@ subroutine tests/approvals/match-expr.algo.ts::MatchExprAlgo.testMatches(x: uint
         let array%bytes_offset%3#1: uint64 = (* 0u 8u)
         let array%encoded_element%3#1: bytes = (extract3 array%array_trimmed%3#1 array%bytes_offset%3#1 8u) // on error: index access is out of bounds
         let array_item%3#0: Encoded(uint64) = array%encoded_element%3#1
-        let tmp%19#0: uint64 = (btoi array_item%3#0)
-        let tmp%20#0: bool = (>= tmp%19#0 5u)
-        goto tmp%20#0 ? block@14 : block@15
+        let values%3#0: uint64 = (btoi array_item%3#0)
+        let tmp%16#0: bool = (>= values%3#0 5u)
+        goto tmp%16#0 ? block@14 : block@15
     block@14: // bool_true_L20
         let and_result%3#0: bool = 1u
         goto block@16
@@ -138,9 +138,9 @@ subroutine tests/approvals/match-expr.algo.ts::MatchExprAlgo.testMatches(x: uint
         let array%bytes_offset%4#1: uint64 = (* 0u 8u)
         let array%encoded_element%4#1: bytes = (extract3 array%array_trimmed%4#1 array%bytes_offset%4#1 8u) // on error: index access is out of bounds
         let array_item%4#0: Encoded(uint64) = array%encoded_element%4#1
-        let tmp%22#0: uint64 = (btoi array_item%4#0)
-        let tmp%23#0: bool = (<= tmp%22#0 5u)
-        goto tmp%23#0 ? block@18 : block@19
+        let values%4#0: uint64 = (btoi array_item%4#0)
+        let tmp%18#0: bool = (<= values%4#0 5u)
+        goto tmp%18#0 ? block@18 : block@19
     block@18: // bool_true_L21
         let and_result%4#0: bool = 1u
         goto block@20

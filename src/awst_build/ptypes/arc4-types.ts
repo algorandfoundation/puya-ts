@@ -246,10 +246,6 @@ export class ARC4StructType extends ARC4EncodedType {
       frozen: this.frozen,
     })
   }
-
-  get signature(): string {
-    return `${this.name}${this.wtype.arc4Alias}`
-  }
 }
 
 export const arc4StructBaseType = new ARC4StructType({

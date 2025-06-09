@@ -114,33 +114,33 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let array%bytes_offset%0#1: uint64 = (* 0u 8u)
         let array%encoded_element%0#1: bytes = (extract3 array%array_trimmed%0#1 array%bytes_offset%0#1 8u) // on error: index access is out of bounds
         let array_item%0#4: Encoded(uint64) = array%encoded_element%0#1
-        let tmp%2#7: uint64 = (btoi array_item%0#4)
-        let tmp%3#5: bool = (== tmp%2#7 1u)
-        goto tmp%3#5 ? block@67 : block@71
+        let values%0#3: uint64 = (btoi array_item%0#4)
+        let tmp%2#6: bool = (== values%0#3 1u)
+        goto tmp%2#6 ? block@67 : block@71
     block@67: // and_contd_L22
         let array%array_trimmed%1#1: bytes = ((extract 2 0) arr#0)
         let array%bytes_offset%1#1: uint64 = (* 1u 8u)
         let array%encoded_element%1#1: bytes = (extract3 array%array_trimmed%1#1 array%bytes_offset%1#1 8u) // on error: index access is out of bounds
         let array_item%1#4: Encoded(uint64) = array%encoded_element%1#1
-        let tmp%4#5: uint64 = (btoi array_item%1#4)
-        let tmp%5#5: bool = (== tmp%4#5 2u)
-        goto tmp%5#5 ? block@68 : block@71
+        let values%1#3: uint64 = (btoi array_item%1#4)
+        let tmp%3#3: bool = (== values%1#3 2u)
+        goto tmp%3#3 ? block@68 : block@71
     block@68: // and_contd_L22
         let array%array_trimmed%2#1: bytes = ((extract 2 0) arr#0)
         let array%bytes_offset%2#1: uint64 = (* 2u 8u)
         let array%encoded_element%2#1: bytes = (extract3 array%array_trimmed%2#1 array%bytes_offset%2#1 8u) // on error: index access is out of bounds
         let array_item%2#3: Encoded(uint64) = array%encoded_element%2#1
-        let tmp%6#5: uint64 = (btoi array_item%2#3)
-        let tmp%7#2: bool = (== tmp%6#5 3u)
-        goto tmp%7#2 ? block@69 : block@71
+        let values%2#3: uint64 = (btoi array_item%2#3)
+        let tmp%4#3: bool = (== values%2#3 3u)
+        goto tmp%4#3 ? block@69 : block@71
     block@69: // and_contd_L22
         let array%array_trimmed%3#1: bytes = ((extract 2 0) arr#0)
         let array%bytes_offset%3#1: uint64 = (* 3u 8u)
         let array%encoded_element%3#1: bytes = (extract3 array%array_trimmed%3#1 array%bytes_offset%3#1 8u) // on error: index access is out of bounds
-        let array_item%3#3: Encoded(uint64) = array%encoded_element%3#1
-        let tmp%8#2: uint64 = (btoi array_item%3#3)
-        let tmp%9#2: bool = (== tmp%8#2 4u)
-        goto tmp%9#2 ? block@70 : block@71
+        let array_item%3#2: Encoded(uint64) = array%encoded_element%3#1
+        let values%3#2: uint64 = (btoi array_item%3#2)
+        let tmp%5#3: bool = (== values%3#2 4u)
+        goto tmp%5#3 ? block@70 : block@71
     block@70: // bool_true_L22
         let and_result%0#9: bool = 1u
         goto block@72
@@ -153,71 +153,71 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let array%array_trimmed%4#1: bytes = ((extract 2 0) arr#0)
         let array%bytes_offset%4#1: uint64 = (* 0u 8u)
         let array%encoded_element%4#1: bytes = (extract3 array%array_trimmed%4#1 array%bytes_offset%4#1 8u) // on error: index access is out of bounds
-        let array_item%4#3: Encoded(uint64) = array%encoded_element%4#1
-        let tmp%10#2: uint64 = (btoi array_item%4#3)
-        let tmp%11#2: bool = (== tmp%10#2 1u)
-        (assert tmp%11#2)
-        let tmp%12#2: uint64 = (- array_length%0#1 1u)
+        let array_item%4#2: Encoded(uint64) = array%encoded_element%4#1
+        let values%4#1: uint64 = (btoi array_item%4#2)
+        let tmp%6#3: bool = (== values%4#1 1u)
+        (assert tmp%6#3)
+        let tmp%7#1: uint64 = (- array_length%0#1 1u)
         let array%array_trimmed%5#1: bytes = ((extract 2 0) arr#0)
-        let array%bytes_offset%5#1: uint64 = (* tmp%12#2 8u)
+        let array%bytes_offset%5#1: uint64 = (* tmp%7#1 8u)
         let array%encoded_element%5#1: bytes = (extract3 array%array_trimmed%5#1 array%bytes_offset%5#1 8u) // on error: index access is out of bounds
         let array_item%5#2: Encoded(uint64) = array%encoded_element%5#1
-        let tmp%13#2: uint64 = (btoi array_item%5#2)
-        let tmp%14#2: bool = (== tmp%13#2 4u)
-        (assert tmp%14#2)
+        let values%5#1: uint64 = (btoi array_item%5#2)
+        let tmp%8#1: bool = (== values%5#1 4u)
+        (assert tmp%8#1)
         let array%val_as_bytes%15#1: bytes[8] = (itob 5u)
         let array%as_Encoded(uint64)%15#1: Encoded(uint64) = array%val_as_bytes%15#1
         let array%encoded%23#1: Encoded(uint64) = (concat 0x array%as_Encoded(uint64)%15#1)
         let array%encoded%24#1: Encoded(uint64[]) = (concat array%encoded%23#1 0x)
-        let tmp%15#1: Encoded(uint64[]) = array%encoded%24#1
-        let concat%0#1: Encoded(len+uint64[]) = (concat arr#0 tmp%15#1) // on error: max array length exceeded
+        let tmp%9#1: Encoded(uint64[]) = array%encoded%24#1
+        let concat%0#1: Encoded(len+uint64[]) = (concat arr#0 tmp%9#1) // on error: max array length exceeded
         let add%0#0: uint64 = (+ array_length%0#1 1u)
         let as_bytes%0#1: bytes[8] = (itob add%0#0)
         let as_u16_bytes%0#1: bytes = ((extract 6 2) as_bytes%0#1)
         let arr#3: Encoded(len+uint64[]) = ((replace2 0) concat%0#1 as_u16_bytes%0#1)
         let array_length#0: uint64 = (extract_uint16 arr#3 0u)
-        let tmp%16#1: bool = (== array_length#0 5u)
-        goto tmp%16#1 ? block@73 : block@79
+        let tmp%10#1: bool = (== array_length#0 5u)
+        goto tmp%10#1 ? block@73 : block@79
     block@73: // and_contd_L31
         let array%array_trimmed%6#1: bytes = ((extract 2 0) arr#3)
         let array%bytes_offset%6#1: uint64 = (* 0u 8u)
         let array%encoded_element%6#1: bytes = (extract3 array%array_trimmed%6#1 array%bytes_offset%6#1 8u) // on error: index access is out of bounds
         let array_item%6#1: Encoded(uint64) = array%encoded_element%6#1
-        let tmp%17#1: uint64 = (btoi array_item%6#1)
-        let tmp%18#1: bool = (== tmp%17#1 1u)
-        goto tmp%18#1 ? block@74 : block@79
+        let values%6#1: uint64 = (btoi array_item%6#1)
+        let tmp%11#1: bool = (== values%6#1 1u)
+        goto tmp%11#1 ? block@74 : block@79
     block@74: // and_contd_L31
         let array%array_trimmed%7#1: bytes = ((extract 2 0) arr#3)
         let array%bytes_offset%7#1: uint64 = (* 1u 8u)
         let array%encoded_element%7#1: bytes = (extract3 array%array_trimmed%7#1 array%bytes_offset%7#1 8u) // on error: index access is out of bounds
-        let array_item%7#1: Encoded(uint64) = array%encoded_element%7#1
-        let tmp%19#1: uint64 = (btoi array_item%7#1)
-        let tmp%20#1: bool = (== tmp%19#1 2u)
-        goto tmp%20#1 ? block@75 : block@79
+        let array_item%7#0: Encoded(uint64) = array%encoded_element%7#1
+        let values%7#0: uint64 = (btoi array_item%7#0)
+        let tmp%12#1: bool = (== values%7#0 2u)
+        goto tmp%12#1 ? block@75 : block@79
     block@75: // and_contd_L31
         let array%array_trimmed%8#1: bytes = ((extract 2 0) arr#3)
         let array%bytes_offset%8#1: uint64 = (* 2u 8u)
         let array%encoded_element%8#1: bytes = (extract3 array%array_trimmed%8#1 array%bytes_offset%8#1 8u) // on error: index access is out of bounds
         let array_item%8#0: Encoded(uint64) = array%encoded_element%8#1
-        let tmp%21#1: uint64 = (btoi array_item%8#0)
-        let tmp%22#1: bool = (== tmp%21#1 3u)
-        goto tmp%22#1 ? block@76 : block@79
+        let values%8#0: uint64 = (btoi array_item%8#0)
+        let tmp%13#1: bool = (== values%8#0 3u)
+        goto tmp%13#1 ? block@76 : block@79
     block@76: // and_contd_L31
         let array%array_trimmed%9#1: bytes = ((extract 2 0) arr#3)
         let array%bytes_offset%9#1: uint64 = (* 3u 8u)
         let array%encoded_element%9#1: bytes = (extract3 array%array_trimmed%9#1 array%bytes_offset%9#1 8u) // on error: index access is out of bounds
         let array_item%9#0: Encoded(uint64) = array%encoded_element%9#1
-        let tmp%23#1: uint64 = (btoi array_item%9#0)
-        let tmp%24#1: bool = (== tmp%23#1 4u)
-        goto tmp%24#1 ? block@77 : block@79
+        let values%9#0: uint64 = (btoi array_item%9#0)
+        let tmp%14#1: bool = (== values%9#0 4u)
+        goto tmp%14#1 ? block@77 : block@79
     block@77: // and_contd_L31
         let array%array_trimmed%10#1: bytes = ((extract 2 0) arr#3)
         let array%bytes_offset%10#1: uint64 = (* 4u 8u)
         let array%encoded_element%10#1: bytes = (extract3 array%array_trimmed%10#1 array%bytes_offset%10#1 8u) // on error: index access is out of bounds
         let array_item%10#0: Encoded(uint64) = array%encoded_element%10#1
-        let tmp%25#1: uint64 = (btoi array_item%10#0)
-        let tmp%26#1: bool = (== tmp%25#1 5u)
-        goto tmp%26#1 ? block@78 : block@79
+        let values%10#0: uint64 = (btoi array_item%10#0)
+        let tmp%15#1: bool = (== values%10#0 5u)
+        goto tmp%15#1 ? block@78 : block@79
     block@78: // bool_true_L31
         let and_result%1#0: bool = 1u
         goto block@80
@@ -228,51 +228,51 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let and_result%1#2: bool = φ(and_result%1#0 <- block@78, and_result%1#1 <- block@79)
         (assert and_result%1#2) // assert target is match for conditions
         let length_minus_1#0: uint64 = (- array_length#0 1u)
-        let tmp%2#8: bytes = (itob length_minus_1#0)
-        let tmp%3#6: bytes = ((extract 6 0) tmp%2#8)
-        let result#0: bytes = ((replace2 0) arr#3 tmp%3#6)
-        let tmp%5#6: uint64 = (len result#0)
-        let item_location#0: uint64 = (- tmp%5#6 8u)
+        let tmp%2#7: bytes = (itob length_minus_1#0)
+        let tmp%3#4: bytes = ((extract 6 0) tmp%2#7)
+        let result#0: bytes = ((replace2 0) arr#3 tmp%3#4)
+        let tmp%5#4: uint64 = (len result#0)
+        let item_location#0: uint64 = (- tmp%5#4 8u)
         let popped#0: bytes = (extract3 result#0 item_location#0 8u)
         let result#1: bytes = (substring3 result#0 0u item_location#0)
         let top#0: uint64 = (btoi popped#0)
-        let tmp%30#1: bool = (== top#0 5u)
-        (assert tmp%30#1)
+        let tmp%19#1: bool = (== top#0 5u)
+        (assert tmp%19#1)
         let array_length%4#0: uint64 = (extract_uint16 result#1 0u)
-        let tmp%31#1: bool = (== array_length%4#0 4u)
-        goto tmp%31#1 ? block@81 : block@86
+        let tmp%20#1: bool = (== array_length%4#0 4u)
+        goto tmp%20#1 ? block@81 : block@86
     block@81: // and_contd_L37
         let array%array_trimmed%11#1: bytes = ((extract 2 0) result#1)
         let array%bytes_offset%11#1: uint64 = (* 0u 8u)
         let array%encoded_element%11#1: bytes = (extract3 array%array_trimmed%11#1 array%bytes_offset%11#1 8u) // on error: index access is out of bounds
         let array_item%11#0: Encoded(uint64) = array%encoded_element%11#1
-        let tmp%32#1: uint64 = (btoi array_item%11#0)
-        let tmp%33#1: bool = (== tmp%32#1 1u)
-        goto tmp%33#1 ? block@82 : block@86
+        let values%11#0: uint64 = (btoi array_item%11#0)
+        let tmp%21#1: bool = (== values%11#0 1u)
+        goto tmp%21#1 ? block@82 : block@86
     block@82: // and_contd_L37
         let array%array_trimmed%12#1: bytes = ((extract 2 0) result#1)
         let array%bytes_offset%12#1: uint64 = (* 1u 8u)
         let array%encoded_element%12#1: bytes = (extract3 array%array_trimmed%12#1 array%bytes_offset%12#1 8u) // on error: index access is out of bounds
         let array_item%12#0: Encoded(uint64) = array%encoded_element%12#1
-        let tmp%34#1: uint64 = (btoi array_item%12#0)
-        let tmp%35#1: bool = (== tmp%34#1 2u)
-        goto tmp%35#1 ? block@83 : block@86
+        let values%12#0: uint64 = (btoi array_item%12#0)
+        let tmp%22#1: bool = (== values%12#0 2u)
+        goto tmp%22#1 ? block@83 : block@86
     block@83: // and_contd_L37
         let array%array_trimmed%13#1: bytes = ((extract 2 0) result#1)
         let array%bytes_offset%13#1: uint64 = (* 2u 8u)
         let array%encoded_element%13#1: bytes = (extract3 array%array_trimmed%13#1 array%bytes_offset%13#1 8u) // on error: index access is out of bounds
         let array_item%13#0: Encoded(uint64) = array%encoded_element%13#1
-        let tmp%36#1: uint64 = (btoi array_item%13#0)
-        let tmp%37#1: bool = (== tmp%36#1 3u)
-        goto tmp%37#1 ? block@84 : block@86
+        let values%13#0: uint64 = (btoi array_item%13#0)
+        let tmp%23#1: bool = (== values%13#0 3u)
+        goto tmp%23#1 ? block@84 : block@86
     block@84: // and_contd_L37
         let array%array_trimmed%14#1: bytes = ((extract 2 0) result#1)
         let array%bytes_offset%14#1: uint64 = (* 3u 8u)
         let array%encoded_element%14#1: bytes = (extract3 array%array_trimmed%14#1 array%bytes_offset%14#1 8u) // on error: index access is out of bounds
         let array_item%14#0: Encoded(uint64) = array%encoded_element%14#1
-        let tmp%38#1: uint64 = (btoi array_item%14#0)
-        let tmp%39#1: bool = (== tmp%38#1 4u)
-        goto tmp%39#1 ? block@85 : block@86
+        let values%14#0: uint64 = (btoi array_item%14#0)
+        let tmp%24#1: bool = (== values%14#0 4u)
+        goto tmp%24#1 ? block@85 : block@86
     block@85: // bool_true_L37
         let and_result%2#0: bool = 1u
         goto block@87
@@ -282,14 +282,12 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@87: // bool_merge_L37
         let and_result%2#2: bool = φ(and_result%2#0 <- block@85, and_result%2#1 <- block@86)
         (assert and_result%2#2) // assert target is match for conditions
-        let array%array_trimmed%15#1: bytes = ((extract 2 0) result#1)
-        let array%bytes_offset%15#1: uint64 = (* 1u 8u)
-        let array%encoded_element%15#1: bytes = (extract3 array%array_trimmed%15#1 array%bytes_offset%15#1 8u) // on error: index access is out of bounds
-        let array_item%15#0: Encoded(uint64) = array%encoded_element%15#1
-        let tmp%40#1: uint64 = (btoi array_item%15#0)
         let array%val_as_bytes%16#1: bytes[8] = (itob 10u)
         let array%as_Encoded(uint64)%16#1: Encoded(uint64) = array%val_as_bytes%16#1
         let encoded_value%0#2: Encoded(uint64) = array%as_Encoded(uint64)%16#1
+        let array%array_trimmed%15#1: bytes = ((extract 2 0) result#1)
+        let array%bytes_offset%15#1: uint64 = (* 1u 8u)
+        let array%encoded_element%15#1: bytes = (extract3 array%array_trimmed%15#1 array%bytes_offset%15#1 8u) // on error: index access is out of bounds
         let array%write_offset%0#1: uint64 = (* 1u 8u)
         let array%write_offset_with_length_header%0#1: uint64 = (+ array%write_offset%0#1 2u)
         let array%updated_array%0#1: bytes = (replace3 result#1 array%write_offset_with_length_header%0#1 encoded_value%0#2)
@@ -297,45 +295,48 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let array%val_as_bytes%17#1: bytes[8] = (itob 5u)
         let array%as_Encoded(uint64)%17#1: Encoded(uint64) = array%val_as_bytes%17#1
         let encoded_value%1#1: Encoded(uint64) = array%as_Encoded(uint64)%17#1
+        let array%array_trimmed%16#1: bytes = ((extract 2 0) arr#9)
+        let array%bytes_offset%16#1: uint64 = (* 1u 8u)
+        let array%encoded_element%16#1: bytes = (extract3 array%array_trimmed%16#1 array%bytes_offset%16#1 8u) // on error: index access is out of bounds
         let array%write_offset%1#1: uint64 = (* 1u 8u)
         let array%write_offset_with_length_header%1#1: uint64 = (+ array%write_offset%1#1 2u)
         let array%updated_array%1#1: bytes = (replace3 arr#9 array%write_offset_with_length_header%1#1 encoded_value%1#1)
         let arr2#0: Encoded(len+uint64[]) = array%updated_array%1#1
         let array_length%5#0: uint64 = (extract_uint16 arr#9 0u)
-        let tmp%41#1: bool = (== array_length%5#0 4u)
-        goto tmp%41#1 ? block@88 : block@93
+        let tmp%25#1: bool = (== array_length%5#0 4u)
+        goto tmp%25#1 ? block@88 : block@93
     block@88: // and_contd_L44
-        let array%array_trimmed%16#1: bytes = ((extract 2 0) arr#9)
-        let array%bytes_offset%16#1: uint64 = (* 0u 8u)
-        let array%encoded_element%16#1: bytes = (extract3 array%array_trimmed%16#1 array%bytes_offset%16#1 8u) // on error: index access is out of bounds
-        let array_item%16#0: Encoded(uint64) = array%encoded_element%16#1
-        let tmp%42#1: uint64 = (btoi array_item%16#0)
-        let tmp%43#1: bool = (== tmp%42#1 1u)
-        goto tmp%43#1 ? block@89 : block@93
-    block@89: // and_contd_L44
         let array%array_trimmed%17#1: bytes = ((extract 2 0) arr#9)
-        let array%bytes_offset%17#1: uint64 = (* 1u 8u)
+        let array%bytes_offset%17#1: uint64 = (* 0u 8u)
         let array%encoded_element%17#1: bytes = (extract3 array%array_trimmed%17#1 array%bytes_offset%17#1 8u) // on error: index access is out of bounds
-        let array_item%17#0: Encoded(uint64) = array%encoded_element%17#1
-        let tmp%44#1: uint64 = (btoi array_item%17#0)
-        let tmp%45#1: bool = (== tmp%44#1 10u)
-        goto tmp%45#1 ? block@90 : block@93
-    block@90: // and_contd_L44
+        let array_item%15#0: Encoded(uint64) = array%encoded_element%17#1
+        let values%15#0: uint64 = (btoi array_item%15#0)
+        let tmp%26#1: bool = (== values%15#0 1u)
+        goto tmp%26#1 ? block@89 : block@93
+    block@89: // and_contd_L44
         let array%array_trimmed%18#1: bytes = ((extract 2 0) arr#9)
-        let array%bytes_offset%18#1: uint64 = (* 2u 8u)
+        let array%bytes_offset%18#1: uint64 = (* 1u 8u)
         let array%encoded_element%18#1: bytes = (extract3 array%array_trimmed%18#1 array%bytes_offset%18#1 8u) // on error: index access is out of bounds
-        let array_item%18#0: Encoded(uint64) = array%encoded_element%18#1
-        let tmp%46#1: uint64 = (btoi array_item%18#0)
-        let tmp%47#1: bool = (== tmp%46#1 3u)
-        goto tmp%47#1 ? block@91 : block@93
-    block@91: // and_contd_L44
+        let array_item%16#0: Encoded(uint64) = array%encoded_element%18#1
+        let values%16#0: uint64 = (btoi array_item%16#0)
+        let tmp%27#1: bool = (== values%16#0 10u)
+        goto tmp%27#1 ? block@90 : block@93
+    block@90: // and_contd_L44
         let array%array_trimmed%19#1: bytes = ((extract 2 0) arr#9)
-        let array%bytes_offset%19#1: uint64 = (* 3u 8u)
+        let array%bytes_offset%19#1: uint64 = (* 2u 8u)
         let array%encoded_element%19#1: bytes = (extract3 array%array_trimmed%19#1 array%bytes_offset%19#1 8u) // on error: index access is out of bounds
-        let array_item%19#0: Encoded(uint64) = array%encoded_element%19#1
-        let tmp%48#1: uint64 = (btoi array_item%19#0)
-        let tmp%49#1: bool = (== tmp%48#1 4u)
-        goto tmp%49#1 ? block@92 : block@93
+        let array_item%17#0: Encoded(uint64) = array%encoded_element%19#1
+        let values%17#0: uint64 = (btoi array_item%17#0)
+        let tmp%28#1: bool = (== values%17#0 3u)
+        goto tmp%28#1 ? block@91 : block@93
+    block@91: // and_contd_L44
+        let array%array_trimmed%20#1: bytes = ((extract 2 0) arr#9)
+        let array%bytes_offset%20#1: uint64 = (* 3u 8u)
+        let array%encoded_element%20#1: bytes = (extract3 array%array_trimmed%20#1 array%bytes_offset%20#1 8u) // on error: index access is out of bounds
+        let array_item%18#0: Encoded(uint64) = array%encoded_element%20#1
+        let values%18#0: uint64 = (btoi array_item%18#0)
+        let tmp%29#1: bool = (== values%18#0 4u)
+        goto tmp%29#1 ? block@92 : block@93
     block@92: // bool_true_L44
         let and_result%3#0: bool = 1u
         goto block@94
@@ -361,122 +362,133 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let as_bytes%1#1: bytes[8] = (itob div_floor%0#1)
         let as_u16_bytes%1#1: bytes = ((extract 6 2) as_bytes%1#1)
         let replace%1#0: bytes = ((replace2 0) concat%1#1 as_u16_bytes%1#1)
-        let array%extract%0#1: bytes = (extract3 t1#0 0u 8u)
-        let tuple_item%0#0: Encoded(uint64) = array%extract%0#1
-        let values%0#0: uint64 = (btoi tuple_item%0#0)
-        let array%extract%1#1: bytes = (extract3 t1#0 8u 8u)
-        let tuple_item%1#0: Encoded(uint64) = array%extract%1#1
-        let values%1#0: uint64 = (btoi tuple_item%1#0)
-        let array%val_as_bytes%20#1: bytes[8] = (itob values%0#0)
+        let array%val_as_bytes%20#1: bytes[8] = (itob 11u)
         let array%as_Encoded(uint64)%20#1: Encoded(uint64) = array%val_as_bytes%20#1
         let array%encoded%28#1: Encoded(uint64) = (concat 0x array%as_Encoded(uint64)%20#1)
-        let array%val_as_bytes%21#1: bytes[8] = (itob values%1#0)
+        let array%encoded%29#1: Encoded(uint64[]) = (concat array%encoded%28#1 0x)
+        let tmp%31#1: Encoded(uint64[]) = array%encoded%29#1
+        let concat%2#0: Encoded(len+uint64[]) = (concat replace%1#0 tmp%31#1) // on error: max array length exceeded
+        let extract_uint16%1#0: uint64 = (extract_uint16 replace%1#0 0u)
+        let add%1#0: uint64 = (+ extract_uint16%1#0 1u)
+        let as_bytes%2#0: bytes[8] = (itob add%1#0)
+        let as_u16_bytes%2#0: bytes = ((extract 6 2) as_bytes%2#0)
+        let replace%2#0: bytes = ((replace2 0) concat%2#0 as_u16_bytes%2#0)
+        let array%extract%0#1: bytes = (extract3 t1#0 0u 8u)
+        let tuple_item%0#0: Encoded(uint64) = array%extract%0#1
+        let values%19#0: uint64 = (btoi tuple_item%0#0)
+        let array%extract%1#1: bytes = (extract3 t1#0 8u 8u)
+        let tuple_item%1#0: Encoded(uint64) = array%extract%1#1
+        let values%20#0: uint64 = (btoi tuple_item%1#0)
+        let array%val_as_bytes%21#1: bytes[8] = (itob values%19#0)
         let array%as_Encoded(uint64)%21#1: Encoded(uint64) = array%val_as_bytes%21#1
-        let array%encoded%29#1: Encoded(uint64,uint64) = (concat array%encoded%28#1 array%as_Encoded(uint64)%21#1)
+        let array%encoded%30#1: Encoded(uint64) = (concat 0x array%as_Encoded(uint64)%21#1)
+        let array%val_as_bytes%22#1: bytes[8] = (itob values%20#0)
+        let array%as_Encoded(uint64)%22#1: Encoded(uint64) = array%val_as_bytes%22#1
+        let array%encoded%31#1: Encoded(uint64,uint64) = (concat array%encoded%30#1 array%as_Encoded(uint64)%22#1)
         let array%as_bytes%4#1: bytes[8] = (itob 2u)
         let array%len_u16%4#1: bytes = ((extract 6 2) array%as_bytes%4#1)
-        let array%encoded%30#1: bytes = (concat array%len_u16%4#1 array%encoded%29#1)
-        let array%encoded%31#1: Encoded(len+uint64[]) = (concat array%encoded%30#1 0x)
-        let encoded_array%0#2: Encoded(len+uint64[]) = array%encoded%31#1
+        let array%encoded%32#1: bytes = (concat array%len_u16%4#1 array%encoded%31#1)
+        let array%encoded%33#1: Encoded(len+uint64[]) = (concat array%encoded%32#1 0x)
+        let encoded_array%0#2: Encoded(len+uint64[]) = array%encoded%33#1
         let extract_to_end%2#1: bytes = ((extract 2 0) encoded_array%0#2)
-        let concat%2#0: Encoded(len+uint64[]) = (concat replace%1#0 extract_to_end%2#1) // on error: max array length exceeded
-        let extract_to_end%3#0: bytes = ((extract 2 0) concat%2#0)
+        let concat%3#0: Encoded(len+uint64[]) = (concat replace%2#0 extract_to_end%2#1) // on error: max array length exceeded
+        let extract_to_end%3#0: bytes = ((extract 2 0) concat%3#0)
         let len%1#1: uint64 = (len extract_to_end%3#0)
         let div_floor%1#1: uint64 = (/ len%1#1 8u)
-        let as_bytes%2#0: bytes[8] = (itob div_floor%1#1)
-        let as_u16_bytes%2#0: bytes = ((extract 6 2) as_bytes%2#0)
-        let arr#12: Encoded(len+uint64[]) = ((replace2 0) concat%2#0 as_u16_bytes%2#0)
+        let as_bytes%3#0: bytes[8] = (itob div_floor%1#1)
+        let as_u16_bytes%3#0: bytes = ((extract 6 2) as_bytes%3#0)
+        let arr#12: Encoded(len+uint64[]) = ((replace2 0) concat%3#0 as_u16_bytes%3#0)
         let array_length%8#0: uint64 = (extract_uint16 arr#12 0u)
-        let tmp%51#1: bool = (== array_length%8#0 11u)
-        goto tmp%51#1 ? block@95 : block@107
+        let tmp%32#1: bool = (== array_length%8#0 11u)
+        goto tmp%32#1 ? block@95 : block@107
     block@95: // and_contd_L50
-        let array%array_trimmed%20#1: bytes = ((extract 2 0) arr#12)
-        let array%bytes_offset%20#1: uint64 = (* 0u 8u)
-        let array%encoded_element%20#1: bytes = (extract3 array%array_trimmed%20#1 array%bytes_offset%20#1 8u) // on error: index access is out of bounds
-        let array_item%20#0: Encoded(uint64) = array%encoded_element%20#1
-        let tmp%52#1: uint64 = (btoi array_item%20#0)
-        let tmp%53#1: bool = (== tmp%52#1 1u)
-        goto tmp%53#1 ? block@96 : block@107
-    block@96: // and_contd_L50
         let array%array_trimmed%21#1: bytes = ((extract 2 0) arr#12)
-        let array%bytes_offset%21#1: uint64 = (* 1u 8u)
+        let array%bytes_offset%21#1: uint64 = (* 0u 8u)
         let array%encoded_element%21#1: bytes = (extract3 array%array_trimmed%21#1 array%bytes_offset%21#1 8u) // on error: index access is out of bounds
-        let array_item%21#0: Encoded(uint64) = array%encoded_element%21#1
-        let tmp%54#1: uint64 = (btoi array_item%21#0)
-        let tmp%55#1: bool = (== tmp%54#1 10u)
-        goto tmp%55#1 ? block@97 : block@107
-    block@97: // and_contd_L50
+        let array_item%19#0: Encoded(uint64) = array%encoded_element%21#1
+        let values%21#0: uint64 = (btoi array_item%19#0)
+        let tmp%33#1: bool = (== values%21#0 1u)
+        goto tmp%33#1 ? block@96 : block@107
+    block@96: // and_contd_L50
         let array%array_trimmed%22#1: bytes = ((extract 2 0) arr#12)
-        let array%bytes_offset%22#1: uint64 = (* 2u 8u)
+        let array%bytes_offset%22#1: uint64 = (* 1u 8u)
         let array%encoded_element%22#1: bytes = (extract3 array%array_trimmed%22#1 array%bytes_offset%22#1 8u) // on error: index access is out of bounds
-        let array_item%22#0: Encoded(uint64) = array%encoded_element%22#1
-        let tmp%56#1: uint64 = (btoi array_item%22#0)
-        let tmp%57#1: bool = (== tmp%56#1 3u)
-        goto tmp%57#1 ? block@98 : block@107
-    block@98: // and_contd_L50
+        let array_item%20#0: Encoded(uint64) = array%encoded_element%22#1
+        let values%22#0: uint64 = (btoi array_item%20#0)
+        let tmp%34#1: bool = (== values%22#0 10u)
+        goto tmp%34#1 ? block@97 : block@107
+    block@97: // and_contd_L50
         let array%array_trimmed%23#1: bytes = ((extract 2 0) arr#12)
-        let array%bytes_offset%23#1: uint64 = (* 3u 8u)
+        let array%bytes_offset%23#1: uint64 = (* 2u 8u)
         let array%encoded_element%23#1: bytes = (extract3 array%array_trimmed%23#1 array%bytes_offset%23#1 8u) // on error: index access is out of bounds
-        let array_item%23#0: Encoded(uint64) = array%encoded_element%23#1
-        let tmp%58#1: uint64 = (btoi array_item%23#0)
-        let tmp%59#1: bool = (== tmp%58#1 4u)
-        goto tmp%59#1 ? block@99 : block@107
-    block@99: // and_contd_L50
+        let array_item%21#0: Encoded(uint64) = array%encoded_element%23#1
+        let values%23#0: uint64 = (btoi array_item%21#0)
+        let tmp%35#1: bool = (== values%23#0 3u)
+        goto tmp%35#1 ? block@98 : block@107
+    block@98: // and_contd_L50
         let array%array_trimmed%24#1: bytes = ((extract 2 0) arr#12)
-        let array%bytes_offset%24#1: uint64 = (* 4u 8u)
+        let array%bytes_offset%24#1: uint64 = (* 3u 8u)
         let array%encoded_element%24#1: bytes = (extract3 array%array_trimmed%24#1 array%bytes_offset%24#1 8u) // on error: index access is out of bounds
-        let array_item%24#0: Encoded(uint64) = array%encoded_element%24#1
-        let tmp%60#1: uint64 = (btoi array_item%24#0)
-        let tmp%61#1: bool = (== tmp%60#1 1u)
-        goto tmp%61#1 ? block@100 : block@107
-    block@100: // and_contd_L50
+        let array_item%22#0: Encoded(uint64) = array%encoded_element%24#1
+        let values%24#0: uint64 = (btoi array_item%22#0)
+        let tmp%36#1: bool = (== values%24#0 4u)
+        goto tmp%36#1 ? block@99 : block@107
+    block@99: // and_contd_L50
         let array%array_trimmed%25#1: bytes = ((extract 2 0) arr#12)
-        let array%bytes_offset%25#1: uint64 = (* 5u 8u)
+        let array%bytes_offset%25#1: uint64 = (* 4u 8u)
         let array%encoded_element%25#1: bytes = (extract3 array%array_trimmed%25#1 array%bytes_offset%25#1 8u) // on error: index access is out of bounds
-        let array_item%25#0: Encoded(uint64) = array%encoded_element%25#1
-        let tmp%62#1: uint64 = (btoi array_item%25#0)
-        let tmp%63#1: bool = (== tmp%62#1 10u)
-        goto tmp%63#1 ? block@101 : block@107
-    block@101: // and_contd_L50
+        let array_item%23#0: Encoded(uint64) = array%encoded_element%25#1
+        let values%25#0: uint64 = (btoi array_item%23#0)
+        let tmp%37#1: bool = (== values%25#0 1u)
+        goto tmp%37#1 ? block@100 : block@107
+    block@100: // and_contd_L50
         let array%array_trimmed%26#1: bytes = ((extract 2 0) arr#12)
-        let array%bytes_offset%26#1: uint64 = (* 6u 8u)
+        let array%bytes_offset%26#1: uint64 = (* 5u 8u)
         let array%encoded_element%26#1: bytes = (extract3 array%array_trimmed%26#1 array%bytes_offset%26#1 8u) // on error: index access is out of bounds
-        let array_item%26#0: Encoded(uint64) = array%encoded_element%26#1
-        let tmp%64#1: uint64 = (btoi array_item%26#0)
-        let tmp%65#1: bool = (== tmp%64#1 3u)
-        goto tmp%65#1 ? block@102 : block@107
-    block@102: // and_contd_L50
+        let array_item%24#0: Encoded(uint64) = array%encoded_element%26#1
+        let values%26#0: uint64 = (btoi array_item%24#0)
+        let tmp%38#1: bool = (== values%26#0 10u)
+        goto tmp%38#1 ? block@101 : block@107
+    block@101: // and_contd_L50
         let array%array_trimmed%27#1: bytes = ((extract 2 0) arr#12)
-        let array%bytes_offset%27#1: uint64 = (* 7u 8u)
+        let array%bytes_offset%27#1: uint64 = (* 6u 8u)
         let array%encoded_element%27#1: bytes = (extract3 array%array_trimmed%27#1 array%bytes_offset%27#1 8u) // on error: index access is out of bounds
-        let array_item%27#0: Encoded(uint64) = array%encoded_element%27#1
-        let tmp%66#1: uint64 = (btoi array_item%27#0)
-        let tmp%67#1: bool = (== tmp%66#1 4u)
-        goto tmp%67#1 ? block@103 : block@107
-    block@103: // and_contd_L50
+        let array_item%25#0: Encoded(uint64) = array%encoded_element%27#1
+        let values%27#0: uint64 = (btoi array_item%25#0)
+        let tmp%39#1: bool = (== values%27#0 3u)
+        goto tmp%39#1 ? block@102 : block@107
+    block@102: // and_contd_L50
         let array%array_trimmed%28#1: bytes = ((extract 2 0) arr#12)
-        let array%bytes_offset%28#1: uint64 = (* 8u 8u)
+        let array%bytes_offset%28#1: uint64 = (* 7u 8u)
         let array%encoded_element%28#1: bytes = (extract3 array%array_trimmed%28#1 array%bytes_offset%28#1 8u) // on error: index access is out of bounds
-        let array_item%28#0: Encoded(uint64) = array%encoded_element%28#1
-        let tmp%68#1: uint64 = (btoi array_item%28#0)
-        let tmp%69#1: bool = (== tmp%68#1 11u)
-        goto tmp%69#1 ? block@104 : block@107
-    block@104: // and_contd_L50
+        let array_item%26#0: Encoded(uint64) = array%encoded_element%28#1
+        let values%28#0: uint64 = (btoi array_item%26#0)
+        let tmp%40#1: bool = (== values%28#0 4u)
+        goto tmp%40#1 ? block@103 : block@107
+    block@103: // and_contd_L50
         let array%array_trimmed%29#1: bytes = ((extract 2 0) arr#12)
-        let array%bytes_offset%29#1: uint64 = (* 9u 8u)
+        let array%bytes_offset%29#1: uint64 = (* 8u 8u)
         let array%encoded_element%29#1: bytes = (extract3 array%array_trimmed%29#1 array%bytes_offset%29#1 8u) // on error: index access is out of bounds
-        let array_item%29#0: Encoded(uint64) = array%encoded_element%29#1
-        let tmp%70#1: uint64 = (btoi array_item%29#0)
-        let tmp%71#1: bool = (== tmp%70#1 12u)
-        goto tmp%71#1 ? block@105 : block@107
-    block@105: // and_contd_L50
+        let array_item%27#0: Encoded(uint64) = array%encoded_element%29#1
+        let values%29#0: uint64 = (btoi array_item%27#0)
+        let tmp%41#1: bool = (== values%29#0 11u)
+        goto tmp%41#1 ? block@104 : block@107
+    block@104: // and_contd_L50
         let array%array_trimmed%30#1: bytes = ((extract 2 0) arr#12)
-        let array%bytes_offset%30#1: uint64 = (* 10u 8u)
+        let array%bytes_offset%30#1: uint64 = (* 9u 8u)
         let array%encoded_element%30#1: bytes = (extract3 array%array_trimmed%30#1 array%bytes_offset%30#1 8u) // on error: index access is out of bounds
-        let array_item%30#0: Encoded(uint64) = array%encoded_element%30#1
-        let tmp%72#1: uint64 = (btoi array_item%30#0)
-        let tmp%73#1: bool = (== tmp%72#1 13u)
-        goto tmp%73#1 ? block@106 : block@107
+        let array_item%28#0: Encoded(uint64) = array%encoded_element%30#1
+        let values%30#0: uint64 = (btoi array_item%28#0)
+        let tmp%42#1: bool = (== values%30#0 12u)
+        goto tmp%42#1 ? block@105 : block@107
+    block@105: // and_contd_L50
+        let array%array_trimmed%31#1: bytes = ((extract 2 0) arr#12)
+        let array%bytes_offset%31#1: uint64 = (* 10u 8u)
+        let array%encoded_element%31#1: bytes = (extract3 array%array_trimmed%31#1 array%bytes_offset%31#1 8u) // on error: index access is out of bounds
+        let array_item%29#0: Encoded(uint64) = array%encoded_element%31#1
+        let values%31#0: uint64 = (btoi array_item%29#0)
+        let tmp%43#1: bool = (== values%31#0 13u)
+        goto tmp%43#1 ? block@106 : block@107
     block@106: // bool_true_L50
         let and_result%4#0: bool = 1u
         goto block@108
@@ -495,67 +507,65 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%27#0: uint64 = (txn ApplicationID)
         (assert tmp%27#0) // can only call when not creating
         let y#0: Encoded(uint64[1024]) = (txna ApplicationArgs 1)
-        let array%val_as_bytes%22#1: bytes[8] = (itob 1u)
-        let array%as_Encoded(uint64)%22#1: Encoded(uint64) = array%val_as_bytes%22#1
-        let array%encoded%32#1: Encoded(uint64) = (concat 0x array%as_Encoded(uint64)%22#1)
-        let array%val_as_bytes%23#1: bytes[8] = (itob 2u)
+        let array%val_as_bytes%23#1: bytes[8] = (itob 1u)
         let array%as_Encoded(uint64)%23#1: Encoded(uint64) = array%val_as_bytes%23#1
-        let array%encoded%33#1: Encoded(uint64,uint64) = (concat array%encoded%32#1 array%as_Encoded(uint64)%23#1)
-        let array%val_as_bytes%24#1: bytes[8] = (itob 3u)
+        let array%encoded%34#1: Encoded(uint64) = (concat 0x array%as_Encoded(uint64)%23#1)
+        let array%val_as_bytes%24#1: bytes[8] = (itob 2u)
         let array%as_Encoded(uint64)%24#1: Encoded(uint64) = array%val_as_bytes%24#1
-        let array%encoded%34#1: Encoded(uint64,uint64,uint64) = (concat array%encoded%33#1 array%as_Encoded(uint64)%24#1)
-        let array%val_as_bytes%25#1: bytes[8] = (itob 4u)
+        let array%encoded%35#1: Encoded(uint64,uint64) = (concat array%encoded%34#1 array%as_Encoded(uint64)%24#1)
+        let array%val_as_bytes%25#1: bytes[8] = (itob 3u)
         let array%as_Encoded(uint64)%25#1: Encoded(uint64) = array%val_as_bytes%25#1
-        let array%encoded%35#1: Encoded(uint64,uint64,uint64,uint64) = (concat array%encoded%34#1 array%as_Encoded(uint64)%25#1)
-        let array%encoded%36#1: Encoded(uint64[4]) = (concat array%encoded%35#1 0x)
-        let x#0: Encoded(uint64[4]) = array%encoded%36#1
-        let array%bytes_offset%31#1: uint64 = (* 0u 8u)
-        let array%encoded_element%31#1: bytes = (extract3 x#0 array%bytes_offset%31#1 8u) // on error: index access is out of bounds
-        let array_item%0#3: Encoded(uint64) = array%encoded_element%31#1
-        let tmp%0#7: uint64 = (btoi array_item%0#3)
-        let array%val_as_bytes%26#1: bytes[8] = (itob 0u)
+        let array%encoded%36#1: Encoded(uint64,uint64,uint64) = (concat array%encoded%35#1 array%as_Encoded(uint64)%25#1)
+        let array%val_as_bytes%26#1: bytes[8] = (itob 4u)
         let array%as_Encoded(uint64)%26#1: Encoded(uint64) = array%val_as_bytes%26#1
-        let encoded_value%0#1: Encoded(uint64) = array%as_Encoded(uint64)%26#1
+        let array%encoded%37#1: Encoded(uint64,uint64,uint64,uint64) = (concat array%encoded%36#1 array%as_Encoded(uint64)%26#1)
+        let array%encoded%38#1: Encoded(uint64[4]) = (concat array%encoded%37#1 0x)
+        let x#0: Encoded(uint64[4]) = array%encoded%38#1
+        let array%val_as_bytes%27#1: bytes[8] = (itob 0u)
+        let array%as_Encoded(uint64)%27#1: Encoded(uint64) = array%val_as_bytes%27#1
+        let encoded_value%0#1: Encoded(uint64) = array%as_Encoded(uint64)%27#1
+        let array%bytes_offset%32#1: uint64 = (* 0u 8u)
+        let array%encoded_element%32#1: bytes = (extract3 x#0 array%bytes_offset%32#1 8u) // on error: index access is out of bounds
         let array%write_offset%2#1: uint64 = (* 0u 8u)
         let array%updated_array%2#1: bytes = (replace3 x#0 array%write_offset%2#1 encoded_value%0#1)
         let x#1: Encoded(uint64[4]) = array%updated_array%2#1
-        let array%bytes_offset%32#1: uint64 = (* 0u 8u)
-        let array%encoded_element%32#1: bytes = (extract3 x#1 array%bytes_offset%32#1 8u) // on error: index access is out of bounds
-        let array_item%1#3: Encoded(uint64) = array%encoded_element%32#1
-        let tmp%1#6: uint64 = (btoi array_item%1#3)
         let array%bytes_offset%33#1: uint64 = (* 0u 8u)
-        let array%encoded_element%33#1: bytes = (extract3 y#0 array%bytes_offset%33#1 8u) // on error: index access is out of bounds
-        let array_item%2#2: Encoded(uint64) = array%encoded_element%33#1
-        let tmp%2#6: uint64 = (btoi array_item%2#2)
-        let tmp%3#4: bool = (== tmp%1#6 tmp%2#6)
-        (assert tmp%3#4)
+        let array%encoded_element%33#1: bytes = (extract3 x#1 array%bytes_offset%33#1 8u) // on error: index access is out of bounds
+        let array_item%0#3: Encoded(uint64) = array%encoded_element%33#1
+        let values%0#2: uint64 = (btoi array_item%0#3)
         let array%bytes_offset%34#1: uint64 = (* 0u 8u)
-        let array%encoded_element%34#1: bytes = (extract3 x#1 array%bytes_offset%34#1 8u) // on error: index access is out of bounds
-        let array_item%3#2: Encoded(uint64) = array%encoded_element%34#1
-        let tmp%5#4: uint64 = (btoi array_item%3#2)
-        let tmp%6#4: bool = (< tmp%5#4 1u)
-        goto tmp%6#4 ? block@58 : block@62
-    block@58: // and_contd_L57
-        let array%bytes_offset%35#1: uint64 = (* 1u 8u)
+        let array%encoded_element%34#1: bytes = (extract3 y#0 array%bytes_offset%34#1 8u) // on error: index access is out of bounds
+        let array_item%1#3: Encoded(uint64) = array%encoded_element%34#1
+        let values%1#2: uint64 = (btoi array_item%1#3)
+        let tmp%0#7: bool = (== values%0#2 values%1#2)
+        (assert tmp%0#7)
+        let array%bytes_offset%35#1: uint64 = (* 0u 8u)
         let array%encoded_element%35#1: bytes = (extract3 x#1 array%bytes_offset%35#1 8u) // on error: index access is out of bounds
-        let array_item%4#2: Encoded(uint64) = array%encoded_element%35#1
-        let tmp%7#1: uint64 = (btoi array_item%4#2)
-        let tmp%8#1: bool = (== tmp%7#1 2u)
-        goto tmp%8#1 ? block@59 : block@62
-    block@59: // and_contd_L57
-        let array%bytes_offset%36#1: uint64 = (* 2u 8u)
+        let array_item%2#2: Encoded(uint64) = array%encoded_element%35#1
+        let values%2#2: uint64 = (btoi array_item%2#2)
+        let tmp%2#5: bool = (< values%2#2 1u)
+        goto tmp%2#5 ? block@58 : block@62
+    block@58: // and_contd_L57
+        let array%bytes_offset%36#1: uint64 = (* 1u 8u)
         let array%encoded_element%36#1: bytes = (extract3 x#1 array%bytes_offset%36#1 8u) // on error: index access is out of bounds
-        let array_item%5#1: Encoded(uint64) = array%encoded_element%36#1
-        let tmp%9#1: uint64 = (btoi array_item%5#1)
-        let tmp%10#1: bool = (== tmp%9#1 3u)
-        goto tmp%10#1 ? block@60 : block@62
-    block@60: // and_contd_L57
-        let array%bytes_offset%37#1: uint64 = (* 3u 8u)
+        let array_item%3#1: Encoded(uint64) = array%encoded_element%36#1
+        let values%3#1: uint64 = (btoi array_item%3#1)
+        let tmp%3#2: bool = (== values%3#1 2u)
+        goto tmp%3#2 ? block@59 : block@62
+    block@59: // and_contd_L57
+        let array%bytes_offset%37#1: uint64 = (* 2u 8u)
         let array%encoded_element%37#1: bytes = (extract3 x#1 array%bytes_offset%37#1 8u) // on error: index access is out of bounds
-        let array_item%6#0: Encoded(uint64) = array%encoded_element%37#1
-        let tmp%11#1: uint64 = (btoi array_item%6#0)
-        let tmp%12#1: bool = (== tmp%11#1 4u)
-        goto tmp%12#1 ? block@61 : block@62
+        let array_item%4#1: Encoded(uint64) = array%encoded_element%37#1
+        let values%4#0: uint64 = (btoi array_item%4#1)
+        let tmp%4#2: bool = (== values%4#0 3u)
+        goto tmp%4#2 ? block@60 : block@62
+    block@60: // and_contd_L57
+        let array%bytes_offset%38#1: uint64 = (* 3u 8u)
+        let array%encoded_element%38#1: bytes = (extract3 x#1 array%bytes_offset%38#1 8u) // on error: index access is out of bounds
+        let array_item%5#1: Encoded(uint64) = array%encoded_element%38#1
+        let values%5#0: uint64 = (btoi array_item%5#1)
+        let tmp%5#2: bool = (== values%5#0 4u)
+        goto tmp%5#2 ? block@61 : block@62
     block@61: // bool_true_L57
         let and_result%0#6: bool = 1u
         goto block@63
@@ -565,10 +575,10 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@63: // bool_merge_L57
         let and_result%0#8: bool = φ(and_result%0#6 <- block@61, and_result%0#7 <- block@62)
         (assert and_result%0#8) // assert target is match for conditions
-        let array%bytes_offset%38#1: uint64 = (* 1024u 8u)
-        let array%encoded_element%38#1: bytes = (extract3 y#0 array%bytes_offset%38#1 8u) // on error: index access is out of bounds
-        let array_item%7#0: Encoded(uint64) = array%encoded_element%38#1
-        let tmp%13#1: uint64 = (btoi array_item%7#0)
+        let array%bytes_offset%39#1: uint64 = (* 1024u 8u)
+        let array%encoded_element%39#1: bytes = (extract3 y#0 array%bytes_offset%39#1 8u) // on error: index access is out of bounds
+        let array_item%6#0: Encoded(uint64) = array%encoded_element%39#1
+        let values%6#0: uint64 = (btoi array_item%6#0)
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#4: bool = 1u
         goto block@24
     block@8: // arc4Interop_route_L61
@@ -577,24 +587,24 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%30#0) // OnCompletion is not NoOp
         let tmp%31#0: uint64 = (txn ApplicationID)
         (assert tmp%31#0) // can only call when not creating
-        let array%encoded%37#1: Encoded(uint32) = (concat 0x 0x0000007b)
-        let array%encoded%38#1: Encoded(uint32,uint32) = (concat array%encoded%37#1 0x0000007b)
+        let array%encoded%39#1: Encoded(uint32) = (concat 0x 0x0000007b)
+        let array%encoded%40#1: Encoded(uint32,uint32) = (concat array%encoded%39#1 0x0000007b)
         let array%as_bytes%5#1: bytes[8] = (itob 2u)
         let array%len_u16%5#1: bytes = ((extract 6 2) array%as_bytes%5#1)
-        let array%encoded%39#1: bytes = (concat array%len_u16%5#1 array%encoded%38#1)
-        let array%encoded%40#1: Encoded(len+uint32[]) = (concat array%encoded%39#1 0x)
-        let da1#0: Encoded(len+uint32[]) = array%encoded%40#1
-        let array%encoded%41#1: Encoded(uint32) = (concat 0x 0x0000007b)
-        let array%encoded%42#1: Encoded(uint32,uint32) = (concat array%encoded%41#1 0x0000007b)
-        let array%encoded%43#1: Encoded(uint32[2]) = (concat array%encoded%42#1 0x)
-        let sa1#0: Encoded(uint32[2]) = array%encoded%43#1
-        let array%encoded%44#1: Encoded(uint32) = (concat 0x 0x0000007b)
-        let array%encoded%45#1: Encoded(uint32,uint32) = (concat array%encoded%44#1 0x0000007b)
+        let array%encoded%41#1: bytes = (concat array%len_u16%5#1 array%encoded%40#1)
+        let array%encoded%42#1: Encoded(len+uint32[]) = (concat array%encoded%41#1 0x)
+        let da1#0: Encoded(len+uint32[]) = array%encoded%42#1
+        let array%encoded%43#1: Encoded(uint32) = (concat 0x 0x0000007b)
+        let array%encoded%44#1: Encoded(uint32,uint32) = (concat array%encoded%43#1 0x0000007b)
+        let array%encoded%45#1: Encoded(uint32[2]) = (concat array%encoded%44#1 0x)
+        let sa1#0: Encoded(uint32[2]) = array%encoded%45#1
+        let array%encoded%46#1: Encoded(uint32) = (concat 0x 0x0000007b)
+        let array%encoded%47#1: Encoded(uint32,uint32) = (concat array%encoded%46#1 0x0000007b)
         let array%as_bytes%6#1: bytes[8] = (itob 2u)
         let array%len_u16%6#1: bytes = ((extract 6 2) array%as_bytes%6#1)
-        let array%encoded%46#1: bytes = (concat array%len_u16%6#1 array%encoded%45#1)
-        let array%encoded%47#1: Encoded(len+uint32[]) = (concat array%encoded%46#1 0x)
-        let a1#0: Encoded(len+uint32[]) = array%encoded%47#1
+        let array%encoded%48#1: bytes = (concat array%len_u16%6#1 array%encoded%47#1)
+        let array%encoded%49#1: Encoded(len+uint32[]) = (concat array%encoded%48#1 0x)
+        let a1#0: Encoded(len+uint32[]) = array%encoded%49#1
         let extract_to_end%0#0: bytes = ((extract 2 0) da1#0)
         let concat%0#0: Encoded(len+uint32[]) = (concat a1#0 extract_to_end%0#0) // on error: max array length exceeded
         let extract_to_end%1#0: bytes = ((extract 2 0) concat%0#0)
@@ -614,47 +624,47 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%0#6: bool = (== array_length%1#0 6u)
         goto tmp%0#6 ? block@47 : block@54
     block@47: // and_contd_L71
-        let array%array_trimmed%31#1: bytes = ((extract 2 0) a1#1)
-        let array%bytes_offset%39#1: uint64 = (* 0u 4u)
-        let array%encoded_element%39#1: bytes = (extract3 array%array_trimmed%31#1 array%bytes_offset%39#1 4u) // on error: index access is out of bounds
-        let array_item%0#2: Encoded(uint32) = array%encoded_element%39#1
+        let array%array_trimmed%32#1: bytes = ((extract 2 0) a1#1)
+        let array%bytes_offset%40#1: uint64 = (* 0u 4u)
+        let array%encoded_element%40#1: bytes = (extract3 array%array_trimmed%32#1 array%bytes_offset%40#1 4u) // on error: index access is out of bounds
+        let array_item%0#2: Encoded(uint32) = array%encoded_element%40#1
         let tmp%1#5: bool = (== array_item%0#2 0x0000007b)
         goto tmp%1#5 ? block@48 : block@54
     block@48: // and_contd_L71
-        let array%array_trimmed%32#1: bytes = ((extract 2 0) a1#1)
-        let array%bytes_offset%40#1: uint64 = (* 1u 4u)
-        let array%encoded_element%40#1: bytes = (extract3 array%array_trimmed%32#1 array%bytes_offset%40#1 4u) // on error: index access is out of bounds
-        let array_item%1#2: Encoded(uint32) = array%encoded_element%40#1
-        let tmp%2#5: bool = (== array_item%1#2 0x0000007b)
-        goto tmp%2#5 ? block@49 : block@54
-    block@49: // and_contd_L71
         let array%array_trimmed%33#1: bytes = ((extract 2 0) a1#1)
-        let array%bytes_offset%41#1: uint64 = (* 2u 4u)
+        let array%bytes_offset%41#1: uint64 = (* 1u 4u)
         let array%encoded_element%41#1: bytes = (extract3 array%array_trimmed%33#1 array%bytes_offset%41#1 4u) // on error: index access is out of bounds
-        let array_item%2#1: Encoded(uint32) = array%encoded_element%41#1
-        let tmp%3#3: bool = (== array_item%2#1 0x0000007b)
-        goto tmp%3#3 ? block@50 : block@54
-    block@50: // and_contd_L71
+        let array_item%1#2: Encoded(uint32) = array%encoded_element%41#1
+        let tmp%2#4: bool = (== array_item%1#2 0x0000007b)
+        goto tmp%2#4 ? block@49 : block@54
+    block@49: // and_contd_L71
         let array%array_trimmed%34#1: bytes = ((extract 2 0) a1#1)
-        let array%bytes_offset%42#1: uint64 = (* 3u 4u)
+        let array%bytes_offset%42#1: uint64 = (* 2u 4u)
         let array%encoded_element%42#1: bytes = (extract3 array%array_trimmed%34#1 array%bytes_offset%42#1 4u) // on error: index access is out of bounds
-        let array_item%3#1: Encoded(uint32) = array%encoded_element%42#1
-        let tmp%4#3: bool = (== array_item%3#1 0x0000007b)
-        goto tmp%4#3 ? block@51 : block@54
-    block@51: // and_contd_L71
+        let array_item%2#1: Encoded(uint32) = array%encoded_element%42#1
+        let tmp%3#1: bool = (== array_item%2#1 0x0000007b)
+        goto tmp%3#1 ? block@50 : block@54
+    block@50: // and_contd_L71
         let array%array_trimmed%35#1: bytes = ((extract 2 0) a1#1)
-        let array%bytes_offset%43#1: uint64 = (* 4u 4u)
+        let array%bytes_offset%43#1: uint64 = (* 3u 4u)
         let array%encoded_element%43#1: bytes = (extract3 array%array_trimmed%35#1 array%bytes_offset%43#1 4u) // on error: index access is out of bounds
-        let array_item%4#1: Encoded(uint32) = array%encoded_element%43#1
-        let tmp%5#3: bool = (== array_item%4#1 0x0000007b)
-        goto tmp%5#3 ? block@52 : block@54
-    block@52: // and_contd_L71
+        let array_item%3#0: Encoded(uint32) = array%encoded_element%43#1
+        let tmp%4#1: bool = (== array_item%3#0 0x0000007b)
+        goto tmp%4#1 ? block@51 : block@54
+    block@51: // and_contd_L71
         let array%array_trimmed%36#1: bytes = ((extract 2 0) a1#1)
-        let array%bytes_offset%44#1: uint64 = (* 5u 4u)
+        let array%bytes_offset%44#1: uint64 = (* 4u 4u)
         let array%encoded_element%44#1: bytes = (extract3 array%array_trimmed%36#1 array%bytes_offset%44#1 4u) // on error: index access is out of bounds
-        let array_item%5#0: Encoded(uint32) = array%encoded_element%44#1
-        let tmp%6#3: bool = (== array_item%5#0 0x0000007b)
-        goto tmp%6#3 ? block@53 : block@54
+        let array_item%4#0: Encoded(uint32) = array%encoded_element%44#1
+        let tmp%5#1: bool = (== array_item%4#0 0x0000007b)
+        goto tmp%5#1 ? block@52 : block@54
+    block@52: // and_contd_L71
+        let array%array_trimmed%37#1: bytes = ((extract 2 0) a1#1)
+        let array%bytes_offset%45#1: uint64 = (* 5u 4u)
+        let array%encoded_element%45#1: bytes = (extract3 array%array_trimmed%37#1 array%bytes_offset%45#1 4u) // on error: index access is out of bounds
+        let array_item%5#0: Encoded(uint32) = array%encoded_element%45#1
+        let tmp%6#1: bool = (== array_item%5#0 0x0000007b)
+        goto tmp%6#1 ? block@53 : block@54
     block@53: // bool_true_L71
         let and_result%0#3: bool = 1u
         goto block@55
@@ -680,49 +690,49 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let (p.x#0: uint64, p.y#0: uint64) = (array%item0%0#1, array%item1%0#1)
         let array%as_bytes%7#1: bytes[8] = (itob 0u)
         let array%len_u16%7#1: bytes = ((extract 6 2) array%as_bytes%7#1)
-        let array%encoded%48#1: bytes = (concat array%len_u16%7#1 0x)
-        let array%encoded%49#1: Encoded(len+(uint64,uint64)[]) = (concat array%encoded%48#1 0x)
-        let myVectors#0: Encoded(len+(uint64,uint64)[]) = array%encoded%49#1
-        let array%val_as_bytes%27#1: bytes[8] = (itob p.x#0)
-        let array%as_Encoded(uint64)%27#1: Encoded(uint64) = array%val_as_bytes%27#1
-        let array%encoded%50#1: Encoded(uint64) = (concat 0x array%as_Encoded(uint64)%27#1)
-        let array%val_as_bytes%28#1: bytes[8] = (itob p.y#0)
+        let array%encoded%50#1: bytes = (concat array%len_u16%7#1 0x)
+        let array%encoded%51#1: Encoded(len+(uint64,uint64)[]) = (concat array%encoded%50#1 0x)
+        let myVectors#0: Encoded(len+(uint64,uint64)[]) = array%encoded%51#1
+        let array%val_as_bytes%28#1: bytes[8] = (itob p.x#0)
         let array%as_Encoded(uint64)%28#1: Encoded(uint64) = array%val_as_bytes%28#1
-        let array%encoded%51#1: Encoded(uint64,uint64) = (concat array%encoded%50#1 array%as_Encoded(uint64)%28#1)
-        let array%encoded%52#1: Encoded(uint64,uint64) = (concat array%encoded%51#1 0x)
-        let array%encoded%53#1: Encoded((uint64,uint64)) = (concat 0x array%encoded%52#1)
+        let array%encoded%52#1: Encoded(uint64) = (concat 0x array%as_Encoded(uint64)%28#1)
+        let array%val_as_bytes%29#1: bytes[8] = (itob p.y#0)
+        let array%as_Encoded(uint64)%29#1: Encoded(uint64) = array%val_as_bytes%29#1
+        let array%encoded%53#1: Encoded(uint64,uint64) = (concat array%encoded%52#1 array%as_Encoded(uint64)%29#1)
+        let array%encoded%54#1: Encoded(uint64,uint64) = (concat array%encoded%53#1 0x)
+        let array%encoded%55#1: Encoded((uint64,uint64)) = (concat 0x array%encoded%54#1)
         let array%as_bytes%8#1: bytes[8] = (itob 1u)
         let array%len_u16%8#1: bytes = ((extract 6 2) array%as_bytes%8#1)
-        let array%encoded%54#1: bytes = (concat array%len_u16%8#1 array%encoded%53#1)
-        let array%encoded%55#1: Encoded(len+(uint64,uint64)[]) = (concat array%encoded%54#1 0x)
-        let myVectors#1: Encoded(len+(uint64,uint64)[]) = array%encoded%55#1
+        let array%encoded%56#1: bytes = (concat array%len_u16%8#1 array%encoded%55#1)
+        let array%encoded%57#1: Encoded(len+(uint64,uint64)[]) = (concat array%encoded%56#1 0x)
+        let myVectors#1: Encoded(len+(uint64,uint64)[]) = array%encoded%57#1
         let array_length%0#0: uint64 = (extract_uint16 myVectors#1 0u)
         let tmp%0#5: bool = (== array_length%0#0 1u)
         goto tmp%0#5 ? block@40 : block@43
     block@40: // and_contd_L79
-        let array%array_trimmed%37#1: bytes = ((extract 2 0) myVectors#1)
-        let array%bytes_offset%45#1: uint64 = (* 0u 16u)
-        let array%encoded_element%45#1: bytes = (extract3 array%array_trimmed%37#1 array%bytes_offset%45#1 16u) // on error: index access is out of bounds
-        let array_item%0#1: Encoded(uint64,uint64) = array%encoded_element%45#1
+        let array%array_trimmed%38#1: bytes = ((extract 2 0) myVectors#1)
+        let array%bytes_offset%46#1: uint64 = (* 0u 16u)
+        let array%encoded_element%46#1: bytes = (extract3 array%array_trimmed%38#1 array%bytes_offset%46#1 16u) // on error: index access is out of bounds
+        let array_item%0#1: Encoded(uint64,uint64) = array%encoded_element%46#1
         let array%extract%4#1: bytes = (extract3 array_item%0#1 0u 8u)
         let array%item0%1#1: uint64 = (btoi array%extract%4#1)
         let array%extract%5#1: bytes = (extract3 array_item%0#1 8u 8u)
         let array%item1%1#1: uint64 = (btoi array%extract%5#1)
-        let (tmp%1#4: uint64, tmp%2#4: uint64) = (array%item0%1#1, array%item1%1#1)
-        let tmp%3#2: bool = (== tmp%1#4 p.x#0)
-        goto tmp%3#2 ? block@41 : block@43
+        let (values%0#1: uint64, values%1#1: uint64) = (array%item0%1#1, array%item1%1#1)
+        let tmp%1#4: bool = (== values%0#1 p.x#0)
+        goto tmp%1#4 ? block@41 : block@43
     block@41: // and_contd_L79
-        let array%array_trimmed%38#1: bytes = ((extract 2 0) myVectors#1)
-        let array%bytes_offset%46#1: uint64 = (* 0u 16u)
-        let array%encoded_element%46#1: bytes = (extract3 array%array_trimmed%38#1 array%bytes_offset%46#1 16u) // on error: index access is out of bounds
-        let array_item%1#1: Encoded(uint64,uint64) = array%encoded_element%46#1
+        let array%array_trimmed%39#1: bytes = ((extract 2 0) myVectors#1)
+        let array%bytes_offset%47#1: uint64 = (* 0u 16u)
+        let array%encoded_element%47#1: bytes = (extract3 array%array_trimmed%39#1 array%bytes_offset%47#1 16u) // on error: index access is out of bounds
+        let array_item%1#1: Encoded(uint64,uint64) = array%encoded_element%47#1
         let array%extract%6#1: bytes = (extract3 array_item%1#1 0u 8u)
         let array%item0%2#1: uint64 = (btoi array%extract%6#1)
         let array%extract%7#1: bytes = (extract3 array_item%1#1 8u 8u)
         let array%item1%2#1: uint64 = (btoi array%extract%7#1)
-        let (tmp%4#2: uint64, tmp%5#2: uint64) = (array%item0%2#1, array%item1%2#1)
-        let tmp%6#2: bool = (== tmp%5#2 p.y#0)
-        goto tmp%6#2 ? block@42 : block@43
+        let (values%2#1: uint64, values%3#0: uint64) = (array%item0%2#1, array%item1%2#1)
+        let tmp%2#3: bool = (== values%3#0 p.y#0)
+        goto tmp%2#3 ? block@42 : block@43
     block@42: // bool_true_L79
         let and_result%0#0: bool = 1u
         goto block@44
@@ -743,14 +753,14 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%43#0: uint64 = (txn ApplicationID)
         (assert tmp%43#0) // can only call when not creating
         let array%encoded_bit%0#1: bytes = (setbit 0x00 0u 1u)
-        let array%encoded%56#1: Encoded(bool1) = (concat 0x array%encoded_bit%0#1)
-        let array%set_bit%0#1: Encoded(bool1) = (setbit array%encoded%56#1 1u 0u)
+        let array%encoded%58#1: Encoded(bool1) = (concat 0x array%encoded_bit%0#1)
+        let array%set_bit%0#1: Encoded(bool1) = (setbit array%encoded%58#1 1u 0u)
         let array%set_bit%1#1: Encoded(bool1) = (setbit array%set_bit%0#1 2u 1u)
         let array%as_bytes%9#1: bytes[8] = (itob 3u)
         let array%len_u16%9#1: bytes = ((extract 6 2) array%as_bytes%9#1)
-        let array%encoded%57#1: bytes = (concat array%len_u16%9#1 array%set_bit%1#1)
-        let array%encoded%58#1: Encoded(len+bool1[]) = (concat array%encoded%57#1 0x)
-        let encoded_array%0#1: Encoded(len+bool1[]) = array%encoded%58#1
+        let array%encoded%59#1: bytes = (concat array%len_u16%9#1 array%set_bit%1#1)
+        let array%encoded%60#1: Encoded(len+bool1[]) = (concat array%encoded%59#1 0x)
+        let encoded_array%0#1: Encoded(len+bool1[]) = array%encoded%60#1
         let tmp%46#0: bytes = (concat 0x151f7c75 encoded_array%0#1)
         (log tmp%46#0)
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#7: bool = 1u
@@ -762,11 +772,11 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%49#0: uint64 = (txn ApplicationID)
         (assert tmp%49#0) // can only call when not creating
         let array%encoded_bit%1#1: bytes = (setbit 0x00 0u 1u)
-        let array%encoded%59#1: Encoded(bool1) = (concat 0x array%encoded_bit%1#1)
-        let array%set_bit%2#1: Encoded(bool1) = (setbit array%encoded%59#1 1u 0u)
+        let array%encoded%61#1: Encoded(bool1) = (concat 0x array%encoded_bit%1#1)
+        let array%set_bit%2#1: Encoded(bool1) = (setbit array%encoded%61#1 1u 0u)
         let array%set_bit%3#1: Encoded(bool1) = (setbit array%set_bit%2#1 2u 1u)
-        let array%encoded%60#1: Encoded(bool1,bool1,bool1) = (concat array%set_bit%3#1 0x)
-        let tmp%54#0: Encoded(bool1,bool1,bool1) = array%encoded%60#1
+        let array%encoded%62#1: Encoded(bool1,bool1,bool1) = (concat array%set_bit%3#1 0x)
+        let tmp%54#0: Encoded(bool1,bool1,bool1) = array%encoded%62#1
         let tmp%55#0: bytes = (concat 0x151f7c75 tmp%54#0)
         (log tmp%55#0)
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#8: bool = 1u
@@ -785,17 +795,17 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%1#3: Encoded(bool8) = array%as_Encoded(bool8)%1#1
         let array%encoded_bool%2#1: bytes[1] = (setbit 0x00 0u 1u)
         let array%as_Encoded(bool8)%2#1: Encoded(bool8) = array%encoded_bool%2#1
-        let tmp%2#3: Encoded(bool8) = array%as_Encoded(bool8)%2#1
-        let array%encoded%61#1: Encoded(bool1) = (concat 0x tmp%0#4)
+        let tmp%2#2: Encoded(bool8) = array%as_Encoded(bool8)%2#1
+        let array%encoded%63#1: Encoded(bool1) = (concat 0x tmp%0#4)
         let array%get_bit%0#1: uint64 = (getbit tmp%1#3 0u)
-        let array%set_bit%4#1: Encoded(bool1) = (setbit array%encoded%61#1 1u array%get_bit%0#1)
-        let array%get_bit%1#1: uint64 = (getbit tmp%2#3 0u)
+        let array%set_bit%4#1: Encoded(bool1) = (setbit array%encoded%63#1 1u array%get_bit%0#1)
+        let array%get_bit%1#1: uint64 = (getbit tmp%2#2 0u)
         let array%set_bit%5#1: Encoded(bool1) = (setbit array%set_bit%4#1 2u array%get_bit%1#1)
         let array%as_bytes%10#1: bytes[8] = (itob 3u)
         let array%len_u16%10#1: bytes = ((extract 6 2) array%as_bytes%10#1)
-        let array%encoded%62#1: bytes = (concat array%len_u16%10#1 array%set_bit%5#1)
-        let array%encoded%63#1: Encoded(len+bool1[]) = (concat array%encoded%62#1 0x)
-        let encoded_array%0#0: Encoded(len+bool1[]) = array%encoded%63#1
+        let array%encoded%64#1: bytes = (concat array%len_u16%10#1 array%set_bit%5#1)
+        let array%encoded%65#1: Encoded(len+bool1[]) = (concat array%encoded%64#1 0x)
+        let encoded_array%0#0: Encoded(len+bool1[]) = array%encoded%65#1
         let tmp%61#0: bytes = (concat 0x151f7c75 encoded_array%0#0)
         (log tmp%61#0)
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#9: bool = 1u
@@ -814,14 +824,14 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%1#2: Encoded(bool8) = array%as_Encoded(bool8)%4#1
         let array%encoded_bool%5#1: bytes[1] = (setbit 0x00 0u 1u)
         let array%as_Encoded(bool8)%5#1: Encoded(bool8) = array%encoded_bool%5#1
-        let tmp%2#2: Encoded(bool8) = array%as_Encoded(bool8)%5#1
-        let array%encoded%64#1: Encoded(bool1) = (concat 0x tmp%0#3)
+        let tmp%2#1: Encoded(bool8) = array%as_Encoded(bool8)%5#1
+        let array%encoded%66#1: Encoded(bool1) = (concat 0x tmp%0#3)
         let array%get_bit%2#1: uint64 = (getbit tmp%1#2 0u)
-        let array%set_bit%6#1: Encoded(bool1) = (setbit array%encoded%64#1 1u array%get_bit%2#1)
-        let array%get_bit%3#1: uint64 = (getbit tmp%2#2 0u)
+        let array%set_bit%6#1: Encoded(bool1) = (setbit array%encoded%66#1 1u array%get_bit%2#1)
+        let array%get_bit%3#1: uint64 = (getbit tmp%2#1 0u)
         let array%set_bit%7#1: Encoded(bool1) = (setbit array%set_bit%6#1 2u array%get_bit%3#1)
-        let array%encoded%65#1: Encoded(bool1,bool1,bool1) = (concat array%set_bit%7#1 0x)
-        let tmp%69#0: Encoded(bool1,bool1,bool1) = array%encoded%65#1
+        let array%encoded%67#1: Encoded(bool1,bool1,bool1) = (concat array%set_bit%7#1 0x)
+        let tmp%69#0: Encoded(bool1,bool1,bool1) = array%encoded%67#1
         let tmp%70#0: bytes = (concat 0x151f7c75 tmp%69#0)
         (log tmp%70#0)
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#10: bool = 1u
@@ -833,49 +843,54 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%73#0: uint64 = (txn ApplicationID)
         (assert tmp%73#0) // can only call when not creating
         let mutable#0: Encoded(len+uint64[]) = (txna ApplicationArgs 1)
-        let array%array_trimmed%39#1: bytes = ((extract 2 0) mutable#0)
-        let array%bytes_offset%47#1: uint64 = (* 0u 8u)
-        let array%encoded_element%47#1: bytes = (extract3 array%array_trimmed%39#1 array%bytes_offset%47#1 8u) // on error: index access is out of bounds
-        let array_item%0#0: Encoded(uint64) = array%encoded_element%47#1
-        let tmp%0#2: uint64 = (btoi array_item%0#0)
-        let array%val_as_bytes%29#1: bytes[8] = (itob 5u)
-        let array%as_Encoded(uint64)%29#1: Encoded(uint64) = array%val_as_bytes%29#1
-        let encoded_value%0#0: Encoded(uint64) = array%as_Encoded(uint64)%29#1
+        let array%val_as_bytes%30#1: bytes[8] = (itob 5u)
+        let array%as_Encoded(uint64)%30#1: Encoded(uint64) = array%val_as_bytes%30#1
+        let encoded_value%0#0: Encoded(uint64) = array%as_Encoded(uint64)%30#1
+        let array%array_trimmed%40#1: bytes = ((extract 2 0) mutable#0)
+        let array%bytes_offset%48#1: uint64 = (* 0u 8u)
+        let array%encoded_element%48#1: bytes = (extract3 array%array_trimmed%40#1 array%bytes_offset%48#1 8u) // on error: index access is out of bounds
         let array%write_offset%3#1: uint64 = (* 0u 8u)
         let array%write_offset_with_length_header%2#1: uint64 = (+ array%write_offset%3#1 2u)
         let array%updated_array%3#1: bytes = (replace3 mutable#0 array%write_offset_with_length_header%2#1 encoded_value%0#0)
         let needClone#1: Encoded(len+uint64[]) = array%updated_array%3#1
-        let array%array_trimmed%40#1: bytes = ((extract 2 0) mutable#0)
-        let array%bytes_offset%48#1: uint64 = (* 1u 8u)
-        let array%encoded_element%48#1: bytes = (extract3 array%array_trimmed%40#1 array%bytes_offset%48#1 8u) // on error: index access is out of bounds
-        let array_item%1#0: Encoded(uint64) = array%encoded_element%48#1
-        let tmp%1#1: uint64 = (btoi array_item%1#0)
-        let tmp%2#1: uint64 = (+ tmp%1#1 2u)
         let array%array_trimmed%41#1: bytes = ((extract 2 0) mutable#0)
         let array%bytes_offset%49#1: uint64 = (* 1u 8u)
         let array%encoded_element%49#1: bytes = (extract3 array%array_trimmed%41#1 array%bytes_offset%49#1 8u) // on error: index access is out of bounds
-        let array_item%2#0: Encoded(uint64) = array%encoded_element%49#1
-        let tmp%3#1: uint64 = (btoi array_item%2#0)
-        let array%val_as_bytes%30#1: bytes[8] = (itob tmp%2#1)
-        let array%as_Encoded(uint64)%30#1: Encoded(uint64) = array%val_as_bytes%30#1
-        let encoded_value%1#0: Encoded(uint64) = array%as_Encoded(uint64)%30#1
+        let array_item%0#0: Encoded(uint64) = array%encoded_element%49#1
+        let values%0#0: uint64 = (btoi array_item%0#0)
+        let tmp%0#2: uint64 = (+ values%0#0 2u)
+        let array%val_as_bytes%31#1: bytes[8] = (itob tmp%0#2)
+        let array%as_Encoded(uint64)%31#1: Encoded(uint64) = array%val_as_bytes%31#1
+        let encoded_value%1#0: Encoded(uint64) = array%as_Encoded(uint64)%31#1
+        let array%array_trimmed%42#1: bytes = ((extract 2 0) mutable#0)
+        let array%bytes_offset%50#1: uint64 = (* 1u 8u)
+        let array%encoded_element%50#1: bytes = (extract3 array%array_trimmed%42#1 array%bytes_offset%50#1 8u) // on error: index access is out of bounds
         let array%write_offset%4#1: uint64 = (* 1u 8u)
         let array%write_offset_with_length_header%3#1: uint64 = (+ array%write_offset%4#1 2u)
         let array%updated_array%4#1: bytes = (replace3 mutable#0 array%write_offset_with_length_header%3#1 encoded_value%1#0)
         let mutable#1: Encoded(len+uint64[]) = array%updated_array%4#1
-        let array%array_trimmed%42#1: bytes = ((extract 2 0) mutable#1)
-        let array%bytes_offset%50#1: uint64 = (* 1u 8u)
-        let array%encoded_element%50#1: bytes = (extract3 array%array_trimmed%42#1 array%bytes_offset%50#1 8u) // on error: index access is out of bounds
-        let array_item%3#0: Encoded(uint64) = array%encoded_element%50#1
-        let tmp%4#1: uint64 = (btoi array_item%3#0)
-        let array%array_trimmed%43#1: bytes = ((extract 2 0) mutable#0)
+        let array%array_trimmed%43#1: bytes = ((extract 2 0) mutable#1)
         let array%bytes_offset%51#1: uint64 = (* 1u 8u)
         let array%encoded_element%51#1: bytes = (extract3 array%array_trimmed%43#1 array%bytes_offset%51#1 8u) // on error: index access is out of bounds
-        let array_item%4#0: Encoded(uint64) = array%encoded_element%51#1
-        let tmp%5#1: uint64 = (btoi array_item%4#0)
-        let tmp%6#1: bool = (!= tmp%4#1 tmp%5#1)
-        (assert tmp%6#1) // These should not match
-        let mutable#2: Encoded(len+uint64[]) = tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveMutable(mutable#1)
+        let array_item%1#0: Encoded(uint64) = array%encoded_element%51#1
+        let values%1#0: uint64 = (btoi array_item%1#0)
+        let array%array_trimmed%44#1: bytes = ((extract 2 0) mutable#0)
+        let array%bytes_offset%52#1: uint64 = (* 1u 8u)
+        let array%encoded_element%52#1: bytes = (extract3 array%array_trimmed%44#1 array%bytes_offset%52#1 8u) // on error: index access is out of bounds
+        let array_item%2#0: Encoded(uint64) = array%encoded_element%52#1
+        let values%2#0: uint64 = (btoi array_item%2#0)
+        let tmp%1#1: bool = (!= values%1#0 values%2#0)
+        (assert tmp%1#1) // These should not match
+        let array%val_as_bytes%32#1: bytes[8] = (itob 1u)
+        let array%as_Encoded(uint64)%32#1: Encoded(uint64) = array%val_as_bytes%32#1
+        let encoded_value%0#4: Encoded(uint64) = array%as_Encoded(uint64)%32#1
+        let array%array_trimmed%45#1: bytes = ((extract 2 0) mutable#1)
+        let array%bytes_offset%53#1: uint64 = (* 0u 8u)
+        let array%encoded_element%53#1: bytes = (extract3 array%array_trimmed%45#1 array%bytes_offset%53#1 8u) // on error: index access is out of bounds
+        let array%write_offset%5#1: uint64 = (* 0u 8u)
+        let array%write_offset_with_length_header%4#1: uint64 = (+ array%write_offset%5#1 2u)
+        let array%updated_array%5#1: bytes = (replace3 mutable#1 array%write_offset_with_length_header%4#1 encoded_value%0#4)
+        let a#3: Encoded(len+uint64[]) = array%updated_array%5#1
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#11: bool = 1u
         goto block@24
     block@15: // receiveMutable_route_L125
@@ -884,8 +899,17 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%76#0) // OnCompletion is not NoOp
         let tmp%77#0: uint64 = (txn ApplicationID)
         (assert tmp%77#0) // can only call when not creating
-        let reinterpret_Encoded(len+uint64[])%2#0: Encoded(len+uint64[]) = (txna ApplicationArgs 1)
-        let receiveMutable%0#0: Encoded(len+uint64[]) = tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveMutable(reinterpret_Encoded(len+uint64[])%2#0)
+        let a#0: Encoded(len+uint64[]) = (txna ApplicationArgs 1)
+        let array%val_as_bytes%33#1: bytes[8] = (itob 1u)
+        let array%as_Encoded(uint64)%33#1: Encoded(uint64) = array%val_as_bytes%33#1
+        let encoded_value%0#3: Encoded(uint64) = array%as_Encoded(uint64)%33#1
+        let array%array_trimmed%46#1: bytes = ((extract 2 0) a#0)
+        let array%bytes_offset%54#1: uint64 = (* 0u 8u)
+        let array%encoded_element%54#1: bytes = (extract3 array%array_trimmed%46#1 array%bytes_offset%54#1 8u) // on error: index access is out of bounds
+        let array%write_offset%6#1: uint64 = (* 0u 8u)
+        let array%write_offset_with_length_header%5#1: uint64 = (+ array%write_offset%6#1 2u)
+        let array%updated_array%6#1: bytes = (replace3 a#0 array%write_offset_with_length_header%5#1 encoded_value%0#3)
+        let a#1: Encoded(len+uint64[]) = array%updated_array%6#1
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#12: bool = 1u
         goto block@24
     block@16: // receiveReadonly_route_L129
@@ -1088,19 +1112,3 @@ subroutine _puya_lib.arc4.recalculate_head_for_elements_with_byte_length_head(ar
         goto block@1
     block@4: // after_for_L331
         return array_head_and_tail#1
-
-subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveMutable(a: Encoded(len+uint64[])) -> Encoded(len+uint64[]):
-    block@0: // L125
-        let array%array_trimmed%0#1: bytes = ((extract 2 0) a#0)
-        let array%bytes_offset%0#1: uint64 = (* 0u 8u)
-        let array%encoded_element%0#1: bytes = (extract3 array%array_trimmed%0#1 array%bytes_offset%0#1 8u) // on error: index access is out of bounds
-        let array_item%0#0: Encoded(uint64) = array%encoded_element%0#1
-        let tmp%0#0: uint64 = (btoi array_item%0#0)
-        let array%val_as_bytes%0#1: bytes[8] = (itob 1u)
-        let array%as_Encoded(uint64)%0#1: Encoded(uint64) = array%val_as_bytes%0#1
-        let encoded_value%0#0: Encoded(uint64) = array%as_Encoded(uint64)%0#1
-        let array%write_offset%0#1: uint64 = (* 0u 8u)
-        let array%write_offset_with_length_header%0#1: uint64 = (+ array%write_offset%0#1 2u)
-        let array%updated_array%0#1: bytes = (replace3 a#0 array%write_offset_with_length_header%0#1 encoded_value%0#0)
-        let a#1: Encoded(len+uint64[]) = array%updated_array%0#1
-        return a#1

@@ -245,13 +245,13 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop
         let array%bytes_offset%0#1: uint64 = (* item_index_internal%0#1 8u)
         let array%encoded_element%0#1: bytes = (extract3 array%array_trimmed%0#1 array%bytes_offset%0#1 8u) // on error: index access is out of bounds
         let array_item%0#0: Encoded(uint64) = array%encoded_element%0#1
-        let tmp%0#0: uint64 = (btoi array_item%0#0)
-        let temp#0: uint64 = tmp%0#0
+        let values%0#0: uint64 = (btoi array_item%0#0)
+        let temp#0: uint64 = values%0#0
         let item#0: uint64 = temp#0
-        let tmp%1#0: uint64 = (+ total#1 item#0)
-        let total#2: uint64 = tmp%1#0
-        let tmp%2#0: bool = (== item#0 42u)
-        goto tmp%2#0 ? block@3 : block@4
+        let tmp%0#0: uint64 = (+ total#1 item#0)
+        let total#2: uint64 = tmp%0#0
+        let tmp%1#0: bool = (== item#0 42u)
+        goto tmp%1#0 ? block@3 : block@4
     block@3: // if_body_L39
         goto block@7
     block@4: // after_if_else_L39
@@ -306,13 +306,13 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop
         let array%bytes_offset%0#1: uint64 = (* item_index_internal%0#1 8u)
         let array%encoded_element%0#1: bytes = (extract3 slot_contents%1#0 array%bytes_offset%0#1 8u) // on error: index access is out of bounds
         let array_item%0#0: Encoded(uint64) = array%encoded_element%0#1
-        let tmp%0#0: uint64 = (btoi array_item%0#0)
-        let temp#0: uint64 = tmp%0#0
+        let values%3#0: uint64 = (btoi array_item%0#0)
+        let temp#0: uint64 = values%3#0
         let item#0: uint64 = temp#0
-        let tmp%1#0: uint64 = (+ total#1 item#0)
-        let total#2: uint64 = tmp%1#0
-        let tmp%2#0: bool = (== item#0 42u)
-        goto tmp%2#0 ? block@3 : block@4
+        let tmp%0#0: uint64 = (+ total#1 item#0)
+        let total#2: uint64 = tmp%0#0
+        let tmp%1#0: bool = (== item#0 42u)
+        goto tmp%1#0 ? block@3 : block@4
     block@3: // if_body_L49
         goto block@7
     block@4: // after_if_else_L49

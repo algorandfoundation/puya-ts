@@ -71,13 +71,13 @@ subroutine tests/approvals/box-proxies.algo.ts::testBox(box: bytes, value: strin
         let state_get%1#0: bytes = (select "O" maybe_value%3#0 maybe_exists%7#0)
         let tmp%5#0: bool = (== state_get%0#0 state_get%1#0)
         (assert tmp%5#0)
-        let (maybe_value%4#0: bytes, maybe_exists%8#0: bool) = (box_get box#0)
+        let (maybe_value%4#0: uint64, maybe_exists%8#0: bool) = (box_len box#0)
         let e#0: bool = maybe_exists%8#0
         let tmp%6#0: bool = (! e#0)
         (assert tmp%6#0)
         (box_del box#0)
         (box_put box#0 value#0)
-        let (maybe_value%5#0: bytes, maybe_exists%9#0: bool) = (box_get box#0)
+        let (maybe_value%5#0: uint64, maybe_exists%9#0: bool) = (box_len box#0)
         let e#1: bool = maybe_exists%9#0
         (assert e#1)
         return 
@@ -104,7 +104,7 @@ subroutine tests/approvals/box-proxies.algo.ts::testBoxMap(box: bytes, key: stri
         let reinterpret_bool%0#0: bool = value%0#0
         (assert reinterpret_bool%0#0)
         let box_prefixed_key%4#0: bytes = (concat box#0 key#0)
-        let (maybe_value%0#0: bytes, maybe_exists%1#0: bool) = (box_get box_prefixed_key%4#0)
+        let (maybe_value%0#0: uint64, maybe_exists%1#0: bool) = (box_len box_prefixed_key%4#0)
         (assert maybe_exists%1#0)
         let box_prefixed_key%5#0: bytes = (concat box#0 key#0)
         let (maybe_value%1#0: bytes, maybe_exists%2#0: bool) = (box_get box_prefixed_key%5#0)
@@ -168,7 +168,7 @@ subroutine tests/approvals/box-proxies.algo.ts::testBoxRef(box: bytes, length: u
         let state_get%0#0: bytes = (select 0x maybe_value%0#0 maybe_exists%2#0)
         let tmp%3#0: bool = (== state_get%0#0 0xffffffff)
         (assert tmp%3#0)
-        let (maybe_value%1#0: bytes, maybe_exists%3#0: bool) = (box_get box#0)
+        let (maybe_value%1#0: uint64, maybe_exists%3#0: bool) = (box_len box#0)
         let maybeBox.1#0: bool = maybe_exists%3#0
         (assert maybeBox.1#0)
         let (maybe_value%2#0: bytes, maybe_exists%4#0: bool) = (box_get box#0)

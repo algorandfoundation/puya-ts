@@ -175,14 +175,6 @@ main_bool_merge@11:
     // boxMap(key).value = value
     dig 1
     box_put
-    // tests/approvals/box-proxies.algo.ts:103
-    // testBoxMap(this.boxMapTwo, 'what?', itob(256456))
-    bytec 6 // "what?"
-    // tests/approvals/box-proxies.algo.ts:44
-    // assert(boxMapItem.exists)
-    box_len
-    bury 1
-    assert
     // tests/approvals/box-proxies.algo.ts:49
     // assert(box(key).length)
     bytec_3 // "twowhat?"
@@ -193,7 +185,7 @@ main_bool_merge@11:
     // assert(box(key).maybe()[1])
     bytec_3 // "twowhat?"
     box_get
-    assert
+    pop
     // tests/approvals/box-proxies.algo.ts:53
     // assert(box(key).value === boxMap(key).value)
     ==
@@ -272,7 +264,7 @@ main_after_if_else@23:
     // tests/approvals/box-proxies.algo.ts:87
     // assert(box.value === Bytes.fromHex('FF00FFFF'))
     box_get
-    assert // Box must have value
+    pop
     pushbytes 0xff00ffff
     ==
     assert

@@ -145,9 +145,9 @@ subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDeco
         let tmp%19#0: bool = (== array_length%0#0 1u)
         goto tmp%19#0 ? block@5 : block@7
     block@5: // and_contd_L88
-        let tmp%21#0: uint64 = (extract_uint64 reinterpret_Encoded(len+uint64[])%0#0 2u)
-        let tmp%22#0: bool = (== tmp%21#0 a#0)
-        goto tmp%22#0 ? block@6 : block@7
+        let values%0#0: uint64 = (extract_uint64 reinterpret_Encoded(len+uint64[])%0#0 2u)
+        let tmp%21#0: bool = (== values%0#0 a#0)
+        goto tmp%21#0 ? block@6 : block@7
     block@6: // bool_true_L88
         let and_result%1#0: bool = 1u
         goto block@8
@@ -159,15 +159,15 @@ subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDeco
         (assert and_result%1#2) // Array of uint64 matches
         let reinterpret_Encoded(len+bool1[])%0#0: Encoded(len+bool1[]) = (concat 0x0001 b_bytes#0)
         let array_length%1#0: uint64 = (extract_uint16 reinterpret_Encoded(len+bool1[])%0#0 0u)
-        let tmp%24#0: bool = (== array_length%1#0 1u)
-        goto tmp%24#0 ? block@9 : block@11
+        let tmp%23#0: bool = (== array_length%1#0 1u)
+        goto tmp%23#0 ? block@9 : block@11
     block@9: // and_contd_L89
         (assert array_length%1#0) // index access is out of bounds
         let array%array_trimmed%1#1: bytes = ((extract 2 0) reinterpret_Encoded(len+bool1[])%0#0)
         let array%is_true%0#1: bool = (getbit array%array_trimmed%1#1 0u)
-        let tmp%26#0: bool = (getbit array%is_true%0#1 0u)
-        let tmp%27#0: bool = (== tmp%26#0 b#0)
-        goto tmp%27#0 ? block@10 : block@11
+        let values%1#0: bool = (getbit array%is_true%0#1 0u)
+        let tmp%25#0: bool = (== values%1#0 b#0)
+        goto tmp%25#0 ? block@10 : block@11
     block@10: // bool_true_L89
         let and_result%2#0: bool = 1u
         goto block@12
@@ -177,15 +177,15 @@ subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDeco
     block@12: // bool_merge_L89
         let and_result%2#2: bool = φ(and_result%2#0 <- block@10, and_result%2#1 <- block@11)
         (assert and_result%2#2) // Array of boolean matches
-        let tmp%28#0: bytes = (concat 0x0001 c_bytes#0)
-        (log tmp%28#0)
-        let array_length%2#0: uint64 = (extract_uint16 tmp%28#0 0u)
-        let tmp%30#0: bool = (== array_length%2#0 1u)
-        goto tmp%30#0 ? block@13 : block@15
+        let tmp%26#0: bytes = (concat 0x0001 c_bytes#0)
+        (log tmp%26#0)
+        let array_length%2#0: uint64 = (extract_uint16 tmp%26#0 0u)
+        let tmp%28#0: bool = (== array_length%2#0 1u)
+        goto tmp%28#0 ? block@13 : block@15
     block@13: // and_contd_L91
-        let array%encoded_element%1#1: bytes = ((extract 2 64) tmp%28#0)
-        let tmp%33#0: bool = (b== array%encoded_element%1#1 c#0)
-        goto tmp%33#0 ? block@14 : block@15
+        let array%encoded_element%1#1: bytes = ((extract 2 64) tmp%26#0)
+        let tmp%30#0: bool = (b== array%encoded_element%1#1 c#0)
+        goto tmp%30#0 ? block@14 : block@15
     block@14: // bool_true_L91
         let and_result%3#0: bool = 1u
         goto block@16
@@ -197,8 +197,8 @@ subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDeco
         (assert and_result%3#2) // Array of biguint matches
         let reinterpret_Encoded(len+(len+utf8[])[])%0#0: Encoded(len+(len+utf8[])[]) = (concat 0x00010002 d_bytes#0)
         let array_length%3#0: uint64 = (extract_uint16 reinterpret_Encoded(len+(len+utf8[])[])%0#0 0u)
-        let tmp%37#0: bool = (== array_length%3#0 1u)
-        goto tmp%37#0 ? block@17 : block@19
+        let tmp%34#0: bool = (== array_length%3#0 1u)
+        goto tmp%34#0 ? block@17 : block@19
     block@17: // and_contd_L92
         let array%array_head_and_tail%0#1: bytes = ((extract 2 0) reinterpret_Encoded(len+(len+utf8[])[])%0#0)
         (assert array_length%3#0) // index access is out of bounds
@@ -206,9 +206,9 @@ subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDeco
         let array%item_length%0#1: uint64 = (extract_uint16 array%array_head_and_tail%0#1 array%item_offset%0#1)
         let array%item_head_tail_length%0#1: uint64 = (+ array%item_length%0#1 2u)
         let array%item%0#1: bytes = (extract3 array%array_head_and_tail%0#1 array%item_offset%0#1 array%item_head_tail_length%0#1)
-        let tmp%41#0: string = ((extract 2 0) array%item%0#1)
-        let tmp%42#0: bool = (== tmp%41#0 d#0)
-        goto tmp%42#0 ? block@18 : block@19
+        let values%3#0: string = ((extract 2 0) array%item%0#1)
+        let tmp%38#0: bool = (== values%3#0 d#0)
+        goto tmp%38#0 ? block@18 : block@19
     block@18: // bool_true_L92
         let and_result%4#0: bool = 1u
         goto block@20
@@ -220,8 +220,8 @@ subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDeco
         (assert and_result%4#2) // Array of string matches
         let reinterpret_Encoded(len+(uint64,(len+uint8[]))[])%0#0: Encoded(len+(uint64,(len+uint8[]))[]) = (concat 0x00010002 e_bytes#0)
         let array_length%4#0: uint64 = (extract_uint16 reinterpret_Encoded(len+(uint64,(len+uint8[]))[])%0#0 0u)
-        let tmp%46#0: bool = (== array_length%4#0 1u)
-        goto tmp%46#0 ? block@21 : block@24
+        let tmp%42#0: bool = (== array_length%4#0 1u)
+        goto tmp%42#0 ? block@21 : block@24
     block@21: // and_contd_L94
         let array%array_head_and_tail%1#1: bytes = ((extract 2 0) reinterpret_Encoded(len+(uint64,(len+uint8[]))[])%0#0)
         let array%item_offset%1#1: uint64 = (extract_uint16 array%array_head_and_tail%1#1 0u)
@@ -231,14 +231,14 @@ subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDeco
         let array%end_offset%0#1: uint64 = (select array%end_of_array%0#1 array%next_item_offset%0#1 array%has_next%0#1)
         let array%substring3%2#1: bytes = (substring3 array%array_head_and_tail%1#1 array%item_offset%1#1 array%end_offset%0#1)
         let array%extract%2#1: bytes = ((extract 0 8) array%substring3%2#1)
-        let tmp%52#0: bool = (== array%extract%2#1 e.a#0)
-        goto tmp%52#0 ? block@22 : block@24
+        let tmp%46#0: bool = (== array%extract%2#1 e.a#0)
+        goto tmp%46#0 ? block@22 : block@24
     block@22: // and_contd_L94
         let array%extract_uint16%3#1: uint64 = (extract_uint16 array%substring3%2#1 8u)
         let array%len%3#1: uint64 = (len array%substring3%2#1)
         let array%substring3%5#1: bytes = (substring3 array%substring3%2#1 array%extract_uint16%3#1 array%len%3#1)
-        let tmp%58#0: bool = (== array%substring3%5#1 e.b#0)
-        goto tmp%58#0 ? block@23 : block@24
+        let tmp%50#0: bool = (== array%substring3%5#1 e.b#0)
+        goto tmp%50#0 ? block@23 : block@24
     block@23: // bool_true_L94
         let and_result%5#0: bool = 1u
         goto block@25
@@ -250,12 +250,12 @@ subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDeco
         (assert and_result%5#2) // Array of struct matches
         let reinterpret_Encoded(len+uint8[32][])%0#0: Encoded(len+uint8[32][]) = (concat 0x0001 f_bytes#0)
         let array_length%5#0: uint64 = (extract_uint16 reinterpret_Encoded(len+uint8[32][])%0#0 0u)
-        let tmp%61#0: bool = (== array_length%5#0 1u)
-        goto tmp%61#0 ? block@26 : block@28
+        let tmp%53#0: bool = (== array_length%5#0 1u)
+        goto tmp%53#0 ? block@26 : block@28
     block@26: // and_contd_L95
         let array%encoded_element%2#1: bytes = ((extract 2 32) reinterpret_Encoded(len+uint8[32][])%0#0)
-        let tmp%64#0: bool = (== array%encoded_element%2#1 f#0)
-        goto tmp%64#0 ? block@27 : block@28
+        let tmp%56#0: bool = (== array%encoded_element%2#1 f#0)
+        goto tmp%56#0 ? block@27 : block@28
     block@27: // bool_true_L95
         let and_result%6#0: bool = 1u
         goto block@29
@@ -265,6 +265,6 @@ subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDeco
     block@29: // bool_merge_L95
         let and_result%6#2: bool = φ(and_result%6#0 <- block@27, and_result%6#1 <- block@28)
         (assert and_result%6#2) // Array of address matches
-        let tmp%66#0: bool = (== g_bytes#0 g#0)
-        (assert tmp%66#0)
+        let tmp%58#0: bool = (== g_bytes#0 g#0)
+        (assert tmp%58#0)
         return 
