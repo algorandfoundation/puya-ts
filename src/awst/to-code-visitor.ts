@@ -386,6 +386,10 @@ export class ToCodeVisitor
     ].join('')
   }
 
+  visitConvertArray(expression: nodes.ConvertArray): string {
+    return `convert_array(${expression.expr.accept(this)}, wtype=${expression.wtype})`
+  }
+
   private currentContract: ContractReference[] = []
   visitContract(c: nodes.Contract): string[] {
     this.currentContract.push(c.id)

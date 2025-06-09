@@ -194,7 +194,7 @@ export namespace wtypes {
     constructor({ n, arc4Alias }: { n: bigint; arc4Alias?: string }) {
       super({
         name: arc4Alias ? `arc4.${arc4Alias}` : `arc4.uint${n}`,
-        arc4Alias: arc4Alias,
+        arc4Alias,
       })
       invariant(n >= 8n && n <= 512n, 'Invalid uint: n must be between 8 and 512')
       invariant(n % 8n === 0n, 'Invalid uint: n must be multiple of 8')

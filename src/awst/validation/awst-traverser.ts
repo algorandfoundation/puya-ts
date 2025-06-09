@@ -35,6 +35,7 @@ import type {
   Contract,
   ContractMemberNodeVisitor,
   ContractMethod,
+  ConvertArray,
   Copy,
   CreateInnerTransaction,
   DecimalConstant,
@@ -103,6 +104,10 @@ export class FunctionTraverser implements ExpressionVisitor<void>, StatementVisi
     for (const s of statement.body) {
       s.accept(this)
     }
+  }
+
+  visitConvertArray(expression: ConvertArray): void {
+    expression.expr.accept(this)
   }
 
   visitCommaExpression(expression: CommaExpression): void {
