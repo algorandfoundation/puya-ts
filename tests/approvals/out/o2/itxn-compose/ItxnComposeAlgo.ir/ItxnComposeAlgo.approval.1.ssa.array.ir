@@ -37,15 +37,15 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         ((itxn_field Amount) share#0)
         ((itxn_field TypeEnum) 1u)
         ((itxn_field Fee) 0u)
-        let i#3: uint64 = 1u
+        let temp#3: uint64 = 1u
         goto block@24
     block@24: // for_header_L32
-        let i#4: uint64 = φ(i#3 <- block@3, i#5 <- block@25)
-        let continue_looping%0#1: bool = (< i#4 array_length%0#0)
+        let temp#4: uint64 = φ(temp#3 <- block@3, temp#5 <- block@25)
+        let continue_looping%0#1: bool = (< temp#4 array_length%0#0)
         goto continue_looping%0#1 ? block@25 : block@26
     block@25: // for_body_L32
         let array%array_trimmed%1#1: bytes = ((extract 2 0) addresses#0)
-        let array%bytes_offset%1#1: uint64 = (* i#4 32u)
+        let array%bytes_offset%1#1: uint64 = (* temp#4 32u)
         let array%encoded_element%1#1: bytes = (extract3 array%array_trimmed%1#1 array%bytes_offset%1#1 32u) // on error: index access is out of bounds
         let addr#0: Encoded(uint8[32]) = array%encoded_element%1#1
         itxn_next
@@ -53,7 +53,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         ((itxn_field TypeEnum) 1u)
         ((itxn_field Receiver) addr#0)
         ((itxn_field Fee) 0u)
-        let i#5: uint64 = (+ i#4 1u)
+        let temp#5: uint64 = (+ temp#4 1u)
         goto block@24
     block@26: // after_for_L32
         itxn_next
@@ -93,14 +93,14 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         ((itxn_field Fee) 0u)
         itxn_submit
         let appId#0: uint64 = (gitxn 0 CreatedApplicationID)
-        let i#0: uint64 = 0u
+        let temp#0: uint64 = 0u
         goto block@16
     block@16: // for_header_L57
-        let i#1: uint64 = φ(i#0 <- block@4, i#2 <- block@20)
-        let continue_looping%0#0: bool = (< i#1 count#0)
+        let temp#1: uint64 = φ(temp#0 <- block@4, temp#2 <- block@20)
+        let continue_looping%0#0: bool = (< temp#1 count#0)
         goto continue_looping%0#0 ? block@17 : block@21
     block@17: // for_body_L57
-        goto i#1 ? block@19 : block@18
+        goto temp#1 ? block@19 : block@18
     block@18: // if_body_L58
         itxn_begin
         let array%length%1#1: uint64 = (len "ho")
@@ -130,7 +130,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         ((itxn_field Fee) 0u)
         goto block@20
     block@20: // after_if_else_L58
-        let i#2: uint64 = (+ i#1 1u)
+        let temp#2: uint64 = (+ temp#1 1u)
         goto block@16
     block@21: // after_for_L57
         itxn_submit

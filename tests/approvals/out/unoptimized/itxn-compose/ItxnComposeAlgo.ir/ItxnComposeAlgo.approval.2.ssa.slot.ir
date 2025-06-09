@@ -93,15 +93,16 @@ subroutine tests/approvals/itxn-compose.algo.ts::ItxnComposeAlgo.distribute(addr
         ((itxn_field Fee) 0u)
         let array_length%2#0: uint64 = (extract_uint16 addresses#0 0u)
         (assert 1u) // Step cannot be zero
-        let i#0: uint64 = 1u
+        let temp#0: uint64 = 1u
         goto block@1
     block@1: // for_header_L32
-        let i#1: uint64 = φ(i#0 <- block@0, i#2 <- block@3)
-        let continue_looping%0#0: bool = (< i#1 array_length%2#0)
+        let temp#1: uint64 = φ(temp#0 <- block@0, temp#2 <- block@3)
+        let continue_looping%0#0: bool = (< temp#1 array_length%2#0)
         goto continue_looping%0#0 ? block@2 : block@4
     block@2: // for_body_L32
+        let i#0: uint64 = temp#1
         let array%array_trimmed%1#1: bytes = ((extract 2 0) addresses#0)
-        let array%bytes_offset%1#1: uint64 = (* i#1 32u)
+        let array%bytes_offset%1#1: uint64 = (* i#0 32u)
         let array%encoded_element%1#1: bytes = (extract3 array%array_trimmed%1#1 array%bytes_offset%1#1 32u) // on error: index access is out of bounds
         let array_item%1#0: Encoded(uint8[32]) = array%encoded_element%1#1
         let addr#0: Encoded(uint8[32]) = array_item%1#0
@@ -115,7 +116,7 @@ subroutine tests/approvals/itxn-compose.algo.ts::ItxnComposeAlgo.distribute(addr
         ((itxn_field Fee) 0u)
         goto block@3
     block@3: // for_footer_L32
-        let i#2: uint64 = (+ i#1 1u)
+        let temp#2: uint64 = (+ temp#1 1u)
         goto block@1
     block@4: // after_for_L32
         itxn_next
@@ -161,14 +162,15 @@ subroutine tests/approvals/itxn-compose.algo.ts::ItxnComposeAlgo.conditionalBegi
         let tmp%1#0: uint64 = (gitxn 0 CreatedApplicationID)
         let appId#0: uint64 = tmp%1#0
         (assert 1u) // Step cannot be zero
-        let i#0: uint64 = 0u
+        let temp#0: uint64 = 0u
         goto block@2
     block@2: // for_header_L57
-        let i#1: uint64 = φ(i#0 <- block@1, i#2 <- block@7)
-        let continue_looping%0#0: bool = (< i#1 count#0)
+        let temp#1: uint64 = φ(temp#0 <- block@1, temp#2 <- block@7)
+        let continue_looping%0#0: bool = (< temp#1 count#0)
         goto continue_looping%0#0 ? block@3 : block@8
     block@3: // for_body_L57
-        let tmp%2#0: bool = (== i#1 0u)
+        let i#0: uint64 = temp#1
+        let tmp%2#0: bool = (== i#0 0u)
         goto tmp%2#0 ? block@4 : block@5
     block@4: // if_body_L58
         itxn_begin
@@ -205,7 +207,7 @@ subroutine tests/approvals/itxn-compose.algo.ts::ItxnComposeAlgo.conditionalBegi
     block@6: // after_if_else_L58
         goto block@7
     block@7: // for_footer_L57
-        let i#2: uint64 = (+ i#1 1u)
+        let temp#2: uint64 = (+ temp#1 1u)
         goto block@2
     block@8: // after_for_L57
         itxn_submit

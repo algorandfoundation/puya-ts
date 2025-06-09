@@ -16,15 +16,15 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let array%encoded%0#1: bytes = (concat array%len_u16%0#1 0x)
         let array%encoded%1#1: Encoded(len+uint64[]) = (concat array%encoded%0#1 0x)
         let results#6: Encoded(len+uint64[]) = array%encoded%1#1
-        let i#6: uint64 = 0u
+        let temp#6: uint64 = 0u
         goto block@27
     block@27: // for_header_L7
-        let i#7: uint64 = φ(i#6 <- block@3, i#8 <- block@28)
+        let temp#7: uint64 = φ(temp#6 <- block@3, temp#8 <- block@28)
         let results#7: Encoded(len+uint64[]) = φ(results#6 <- block@3, results#8 <- block@28)
-        let continue_looping%0#2: bool = (< i#7 5u)
+        let continue_looping%0#2: bool = (< temp#7 5u)
         goto continue_looping%0#2 ? block@28 : block@29
     block@28: // for_body_L7
-        let array%val_as_bytes%0#1: bytes[8] = (itob i#7)
+        let array%val_as_bytes%0#1: bytes[8] = (itob temp#7)
         let array%as_Encoded(uint64)%0#1: Encoded(uint64) = array%val_as_bytes%0#1
         let array%encoded%2#1: Encoded(uint64) = (concat 0x array%as_Encoded(uint64)%0#1)
         let array%as_bytes%1#1: bytes[8] = (itob 1u)
@@ -40,7 +40,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let as_bytes%0#2: bytes[8] = (itob div_floor%0#2)
         let as_u16_bytes%0#2: bytes = ((extract 6 2) as_bytes%0#2)
         let results#8: Encoded(len+uint64[]) = ((replace2 0) concat%0#2 as_u16_bytes%0#2)
-        let i#8: uint64 = (+ i#7 1u)
+        let temp#8: uint64 = (+ temp#7 1u)
         goto block@27
     block@29: // after_for_L7
         let tmp%8#0: bytes = (concat 0x151f7c75 results#7)
@@ -58,15 +58,15 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let array%encoded%5#1: bytes = (concat array%len_u16%2#1 0x)
         let array%encoded%6#1: Encoded(len+uint64[]) = (concat array%encoded%5#1 0x)
         let results#3: Encoded(len+uint64[]) = array%encoded%6#1
-        let i#3: uint64 = 2u
+        let temp#3: uint64 = 2u
         goto block@22
     block@22: // for_header_L14
-        let i#4: uint64 = φ(i#3 <- block@4, i#5 <- block@23)
+        let temp#4: uint64 = φ(temp#3 <- block@4, temp#5 <- block@23)
         let results#4: Encoded(len+uint64[]) = φ(results#3 <- block@4, results#5 <- block@23)
-        let continue_looping%0#1: bool = (< i#4 5u)
+        let continue_looping%0#1: bool = (< temp#4 5u)
         goto continue_looping%0#1 ? block@23 : block@24
     block@23: // for_body_L14
-        let array%val_as_bytes%1#1: bytes[8] = (itob i#4)
+        let array%val_as_bytes%1#1: bytes[8] = (itob temp#4)
         let array%as_Encoded(uint64)%1#1: Encoded(uint64) = array%val_as_bytes%1#1
         let array%encoded%7#1: Encoded(uint64) = (concat 0x array%as_Encoded(uint64)%1#1)
         let array%as_bytes%3#1: bytes[8] = (itob 1u)
@@ -82,7 +82,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let as_bytes%0#1: bytes[8] = (itob div_floor%0#1)
         let as_u16_bytes%0#1: bytes = ((extract 6 2) as_bytes%0#1)
         let results#5: Encoded(len+uint64[]) = ((replace2 0) concat%0#1 as_u16_bytes%0#1)
-        let i#5: uint64 = (+ i#4 1u)
+        let temp#5: uint64 = (+ temp#4 1u)
         goto block@22
     block@24: // after_for_L14
         let tmp%14#0: bytes = (concat 0x151f7c75 results#4)
@@ -100,15 +100,15 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let array%encoded%10#1: bytes = (concat array%len_u16%4#1 0x)
         let array%encoded%11#1: Encoded(len+uint64[]) = (concat array%encoded%10#1 0x)
         let results#0: Encoded(len+uint64[]) = array%encoded%11#1
-        let i#0: uint64 = 2u
+        let temp#0: uint64 = 2u
         goto block@17
     block@17: // for_header_L21
-        let i#1: uint64 = φ(i#0 <- block@5, i#2 <- block@18)
+        let temp#1: uint64 = φ(temp#0 <- block@5, temp#2 <- block@18)
         let results#1: Encoded(len+uint64[]) = φ(results#0 <- block@5, results#2 <- block@18)
-        let continue_looping%0#0: bool = (< i#1 10u)
+        let continue_looping%0#0: bool = (< temp#1 10u)
         goto continue_looping%0#0 ? block@18 : block@19
     block@18: // for_body_L21
-        let array%val_as_bytes%2#1: bytes[8] = (itob i#1)
+        let array%val_as_bytes%2#1: bytes[8] = (itob temp#1)
         let array%as_Encoded(uint64)%2#1: Encoded(uint64) = array%val_as_bytes%2#1
         let array%encoded%12#1: Encoded(uint64) = (concat 0x array%as_Encoded(uint64)%2#1)
         let array%as_bytes%5#1: bytes[8] = (itob 1u)
@@ -124,7 +124,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let as_bytes%0#0: bytes[8] = (itob div_floor%0#0)
         let as_u16_bytes%0#0: bytes = ((extract 6 2) as_bytes%0#0)
         let results#2: Encoded(len+uint64[]) = ((replace2 0) concat%0#0 as_u16_bytes%0#0)
-        let i#2: uint64 = (+ i#1 3u)
+        let temp#2: uint64 = (+ temp#1 3u)
         goto block@17
     block@19: // after_for_L21
         let tmp%20#0: bytes = (concat 0x151f7c75 results#1)

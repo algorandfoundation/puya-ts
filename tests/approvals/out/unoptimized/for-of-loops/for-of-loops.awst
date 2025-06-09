@@ -13,7 +13,8 @@ contract ForOfLoopsAlgo
   test_for_of_loop_tuple(items: readonly [uint64, uint64, uint64]): uint64
   {
     total: uint64 = 0
-    for (item in items) {
+    for (temp in items) {
+      item: uint64 = temp
       total: uint64 = total + item
       if (item == 42) {
         goto #loop₁ᵇ
@@ -26,7 +27,8 @@ contract ForOfLoopsAlgo
   test_for_of_loop_arc4_dynamic_array(items: arc4.dynamic_array<arc4.uint64>): uint64
   {
     total: uint64 = 0
-    for (item in items) {
+    for (temp in items) {
+      item: arc4.uint64 = temp
       total: uint64 = total + ARC4_DECODE(item)
       if (ARC4_DECODE(item) == 42) {
         goto #loop₁ᵇ
@@ -39,7 +41,8 @@ contract ForOfLoopsAlgo
   test_for_of_loop_arc4_static_array(items: arc4.static_array<arc4.uint64>): uint64
   {
     total: uint64 = 0
-    for (item in items) {
+    for (temp in items) {
+      item: arc4.uint64 = temp
       total: uint64 = total + ARC4_DECODE(item)
       if (ARC4_DECODE(item) == 42) {
         goto #loop₁ᵇ
@@ -52,7 +55,8 @@ contract ForOfLoopsAlgo
   test_for_of_loop_native_immutable_array(items: arc4.dynamic_array<uint64>): uint64
   {
     total: uint64 = 0
-    for (item in items) {
+    for (temp in items) {
+      item: uint64 = temp
       total: uint64 = total + item
       if (item == 42) {
         goto #loop₁ᵇ
@@ -66,7 +70,8 @@ contract ForOfLoopsAlgo
   {
     mutable: ref_array<uint64> = new ref_array<uint64>(items.0, items.1, items.2)
     total: uint64 = 0
-    for (item in mutable) {
+    for (temp in mutable) {
+      item: uint64 = temp
       total: uint64 = total + item
       if (item == 42) {
         goto #loop₁ᵇ

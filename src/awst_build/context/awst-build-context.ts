@@ -61,9 +61,13 @@ export abstract class AwstBuildContext {
   abstract resolveDestructuredParamName(node: ts.ParameterDeclaration): string
 
   /**
-   * Generate a unique variable name for a discarded value.
+   * Generate a unique variable name.
+   *
+   * discard: Used to consume an RValue that is not required
+   * temp: Used to hold a temp assignment
+   * @param purpose The purpose of the variable.
    */
-  abstract generateDiscardedVarName(): string
+  abstract generateVarName(purpose: 'discard' | 'temp'): string
 
   /**
    * Add a named constant to the current context
@@ -230,8 +234,13 @@ class AwstBuildContextImpl extends AwstBuildContext {
     invariant(symbol, 'Param node must have symbol')
     return this.nameResolver.resolveUniqueName('p', symbol)
   }
-  generateDiscardedVarName() {
-    return this.nameResolver.resolveUniqueName('_', undefined)
+  generateVarName(purpose: 'temp' | 'discard'): string {
+    switch (purpose) {
+      case 'discard':
+        return this.nameResolver.resolveUniqueName('_', undefined)
+      case 'temp':
+        return this.nameResolver.resolveUniqueName('temp', undefined)
+    }
   }
   resolveVariableName(node: ts.Identifier) {
     const symbol = this.typeChecker.resolveName(node.text, node, ts.SymbolFlags.All, false)

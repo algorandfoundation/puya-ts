@@ -69,15 +69,16 @@ subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testSingleArg() -> Encoded
         let encoded_array%0#0: Encoded(len+uint64[]) = encode<(len+uint64[])>()
         let results#0: Encoded(len+uint64[]) = encoded_array%0#0
         (assert 1u) // Step cannot be zero
-        let i#0: uint64 = 0u
+        let temp#0: uint64 = 0u
         goto block@1
     block@1: // for_header_L7
-        let i#1: uint64 = φ(i#0 <- block@0, i#2 <- block@3)
+        let temp#1: uint64 = φ(temp#0 <- block@0, temp#2 <- block@3)
         let results#1: Encoded(len+uint64[]) = φ(results#0 <- block@0, results#2 <- block@3)
-        let continue_looping%0#0: bool = (< i#1 5u)
+        let continue_looping%0#0: bool = (< temp#1 5u)
         goto continue_looping%0#0 ? block@2 : block@4
     block@2: // for_body_L7
-        let encoded_array%1#0: Encoded(len+uint64[]) = encode<(len+uint64[])>(i#1)
+        let i#0: uint64 = temp#1
+        let encoded_array%1#0: Encoded(len+uint64[]) = encode<(len+uint64[])>(i#0)
         let array_length%0#0: uint64 = (extract_uint16 encoded_array%1#0 0u)
         let extract_to_end%0#0: bytes = ((extract 2 0) encoded_array%1#0)
         let concat%0#0: Encoded(len+uint64[]) = (concat results#1 extract_to_end%0#0) // on error: max array length exceeded
@@ -91,7 +92,7 @@ subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testSingleArg() -> Encoded
         let results#2: Encoded(len+uint64[]) = as_Encoded(len+uint64[])%0#0
         goto block@3
     block@3: // for_footer_L7
-        let i#2: uint64 = (+ i#1 1u)
+        let temp#2: uint64 = (+ temp#1 1u)
         goto block@1
     block@4: // after_for_L7
         return results#1
@@ -101,15 +102,16 @@ subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testTwoArg() -> Encoded(le
         let encoded_array%0#0: Encoded(len+uint64[]) = encode<(len+uint64[])>()
         let results#0: Encoded(len+uint64[]) = encoded_array%0#0
         (assert 1u) // Step cannot be zero
-        let i#0: uint64 = 2u
+        let temp#0: uint64 = 2u
         goto block@1
     block@1: // for_header_L14
-        let i#1: uint64 = φ(i#0 <- block@0, i#2 <- block@3)
+        let temp#1: uint64 = φ(temp#0 <- block@0, temp#2 <- block@3)
         let results#1: Encoded(len+uint64[]) = φ(results#0 <- block@0, results#2 <- block@3)
-        let continue_looping%0#0: bool = (< i#1 5u)
+        let continue_looping%0#0: bool = (< temp#1 5u)
         goto continue_looping%0#0 ? block@2 : block@4
     block@2: // for_body_L14
-        let encoded_array%1#0: Encoded(len+uint64[]) = encode<(len+uint64[])>(i#1)
+        let i#0: uint64 = temp#1
+        let encoded_array%1#0: Encoded(len+uint64[]) = encode<(len+uint64[])>(i#0)
         let array_length%0#0: uint64 = (extract_uint16 encoded_array%1#0 0u)
         let extract_to_end%0#0: bytes = ((extract 2 0) encoded_array%1#0)
         let concat%0#0: Encoded(len+uint64[]) = (concat results#1 extract_to_end%0#0) // on error: max array length exceeded
@@ -123,7 +125,7 @@ subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testTwoArg() -> Encoded(le
         let results#2: Encoded(len+uint64[]) = as_Encoded(len+uint64[])%0#0
         goto block@3
     block@3: // for_footer_L14
-        let i#2: uint64 = (+ i#1 1u)
+        let temp#2: uint64 = (+ temp#1 1u)
         goto block@1
     block@4: // after_for_L14
         return results#1
@@ -133,15 +135,16 @@ subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testThreeArg() -> Encoded(
         let encoded_array%0#0: Encoded(len+uint64[]) = encode<(len+uint64[])>()
         let results#0: Encoded(len+uint64[]) = encoded_array%0#0
         (assert 3u) // Step cannot be zero
-        let i#0: uint64 = 2u
+        let temp#0: uint64 = 2u
         goto block@1
     block@1: // for_header_L21
-        let i#1: uint64 = φ(i#0 <- block@0, i#2 <- block@3)
+        let temp#1: uint64 = φ(temp#0 <- block@0, temp#2 <- block@3)
         let results#1: Encoded(len+uint64[]) = φ(results#0 <- block@0, results#2 <- block@3)
-        let continue_looping%0#0: bool = (< i#1 10u)
+        let continue_looping%0#0: bool = (< temp#1 10u)
         goto continue_looping%0#0 ? block@2 : block@4
     block@2: // for_body_L21
-        let encoded_array%1#0: Encoded(len+uint64[]) = encode<(len+uint64[])>(i#1)
+        let i#0: uint64 = temp#1
+        let encoded_array%1#0: Encoded(len+uint64[]) = encode<(len+uint64[])>(i#0)
         let array_length%0#0: uint64 = (extract_uint16 encoded_array%1#0 0u)
         let extract_to_end%0#0: bytes = ((extract 2 0) encoded_array%1#0)
         let concat%0#0: Encoded(len+uint64[]) = (concat results#1 extract_to_end%0#0) // on error: max array length exceeded
@@ -155,7 +158,7 @@ subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testThreeArg() -> Encoded(
         let results#2: Encoded(len+uint64[]) = as_Encoded(len+uint64[])%0#0
         goto block@3
     block@3: // for_footer_L21
-        let i#2: uint64 = (+ i#1 3u)
+        let temp#2: uint64 = (+ temp#1 3u)
         goto block@1
     block@4: // after_for_L21
         return results#1

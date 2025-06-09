@@ -603,7 +603,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
           } else {
             targets.push(
               nodeFactory.varExpression({
-                name: this.context.generateDiscardedVarName(),
+                name: this.context.generateVarName('discard'),
                 sourceLocation,
                 wtype: sourceItemType.wtypeOrThrow,
               }),
@@ -622,7 +622,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
           } else {
             targets.push(
               nodeFactory.varExpression({
-                name: this.context.generateDiscardedVarName(),
+                name: this.context.generateVarName('discard'),
                 sourceLocation,
                 wtype: propType.wtypeOrThrow,
               }),

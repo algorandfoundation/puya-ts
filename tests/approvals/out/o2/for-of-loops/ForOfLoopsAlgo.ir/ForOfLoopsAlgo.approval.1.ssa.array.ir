@@ -24,10 +24,10 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         goto block@51
     block@51: // for_body_L10
         let loop_counter%0#1: uint64 = φ(loop_counter%0#0 <- block@3, loop_counter%0#2 <- block@53, loop_counter%0#3 <- block@54)
+        let temp#5: uint64 = φ(items.0#1 <- block@3, items.1#1 <- block@53, items.2#1 <- block@54)
         let total#17: uint64 = φ(total#16 <- block@3, total#18 <- block@53, total#18 <- block@54)
-        let item#5: uint64 = φ(items.0#1 <- block@3, items.1#1 <- block@53, items.2#1 <- block@54)
-        let total#18: uint64 = (+ total#17 item#5)
-        let tmp%1#1: bool = (== item#5 42u)
+        let total#18: uint64 = (+ total#17 temp#5)
+        let tmp%1#1: bool = (== temp#5 42u)
         goto tmp%1#1 ? block@55 : block@52
     block@52: // after_if_else_L12
         goto_nth [block@53, block@54][loop_counter%0#1] else goto block@55
@@ -65,10 +65,10 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let array%array_trimmed%0#1: bytes = ((extract 2 0) items#2)
         let array%bytes_offset%0#1: uint64 = (* item_index_internal%0#10 8u)
         let array%encoded_element%0#1: bytes = (extract3 array%array_trimmed%0#1 array%bytes_offset%0#1 8u) // on error: index access is out of bounds
-        let item#3: Encoded(uint64) = array%encoded_element%0#1
-        let tmp%0#3: uint64 = (btoi item#3)
+        let temp#3: Encoded(uint64) = array%encoded_element%0#1
+        let tmp%0#3: uint64 = (btoi temp#3)
         let total#14: uint64 = (+ total#13 tmp%0#3)
-        let tmp%2#4: uint64 = (btoi item#3)
+        let tmp%2#4: uint64 = (btoi temp#3)
         let tmp%3#2: bool = (== tmp%2#4 42u)
         goto tmp%3#2 ? block@45 : block@46
     block@45: // if_body_L21
@@ -105,10 +105,10 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@36: // for_body_L28
         let array%bytes_offset%1#1: uint64 = (* item_index_internal%0#7 8u)
         let array%encoded_element%1#1: bytes = (extract3 items#1 array%bytes_offset%1#1 8u) // on error: index access is out of bounds
-        let item#2: Encoded(uint64) = array%encoded_element%1#1
-        let tmp%0#2: uint64 = (btoi item#2)
+        let temp#2: Encoded(uint64) = array%encoded_element%1#1
+        let tmp%0#2: uint64 = (btoi temp#2)
         let total#10: uint64 = (+ total#9 tmp%0#2)
-        let tmp%2#3: uint64 = (btoi item#2)
+        let tmp%2#3: uint64 = (btoi temp#2)
         let tmp%3#1: bool = (== tmp%2#3 42u)
         goto tmp%3#1 ? block@37 : block@38
     block@37: // if_body_L30
@@ -148,9 +148,9 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let array%bytes_offset%2#1: uint64 = (* item_index_internal%0#4 8u)
         let array%encoded_element%2#1: bytes = (extract3 array%array_trimmed%1#1 array%bytes_offset%2#1 8u) // on error: index access is out of bounds
         let array_item%0#1: Encoded(uint64) = array%encoded_element%2#1
-        let item#1: uint64 = (btoi array_item%0#1)
-        let total#6: uint64 = (+ total#5 item#1)
-        let tmp%2#2: bool = (== item#1 42u)
+        let temp#1: uint64 = (btoi array_item%0#1)
+        let total#6: uint64 = (+ total#5 temp#1)
+        let tmp%2#2: bool = (== temp#1 42u)
         goto tmp%2#2 ? block@29 : block@30
     block@29: // if_body_L39
         goto block@32
@@ -210,9 +210,9 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let array%bytes_offset%3#1: uint64 = (* item_index_internal%0#1 8u)
         let array%encoded_element%3#1: bytes = (extract3 slot_contents%1#0 array%bytes_offset%3#1 8u) // on error: index access is out of bounds
         let array_item%0#0: Encoded(uint64) = array%encoded_element%3#1
-        let item#0: uint64 = (btoi array_item%0#0)
-        let total#2: uint64 = (+ total#1 item#0)
-        let tmp%2#1: bool = (== item#0 42u)
+        let temp#0: uint64 = (btoi array_item%0#0)
+        let total#2: uint64 = (+ total#1 temp#0)
+        let tmp%2#1: bool = (== temp#0 42u)
         goto tmp%2#1 ? block@21 : block@22
     block@21: // if_body_L49
         goto block@24

@@ -117,10 +117,10 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop
         goto block@1
     block@1: // for_body_L10
         let loop_counter%0#1: uint64 = φ(loop_counter%0#0 <- block@0, loop_counter%0#2 <- block@5, loop_counter%0#3 <- block@6)
+        let temp#1: uint64 = φ(items.0#0 <- block@0, items.1#0 <- block@5, items.2#0 <- block@6)
         let total#1: uint64 = φ(total#0 <- block@0, total#2 <- block@5, total#2 <- block@6)
-        let item#1: uint64 = φ(items.0#0 <- block@0, items.1#0 <- block@5, items.2#0 <- block@6)
-        let total#2: uint64 = (+ total#1 item#1)
-        let tmp%1#0: bool = (== item#1 42u)
+        let total#2: uint64 = (+ total#1 temp#1)
+        let tmp%1#0: bool = (== temp#1 42u)
         goto tmp%1#0 ? block@8 : block@3
     block@3: // after_if_else_L12
         goto_nth [block@5, block@6][loop_counter%0#1] else goto block@8
@@ -148,10 +148,10 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop
         let array%array_trimmed%0#1: bytes = ((extract 2 0) items#0)
         let array%bytes_offset%0#1: uint64 = (* item_index_internal%0#1 8u)
         let array%encoded_element%0#1: bytes = (extract3 array%array_trimmed%0#1 array%bytes_offset%0#1 8u) // on error: index access is out of bounds
-        let item#0: Encoded(uint64) = array%encoded_element%0#1
-        let tmp%0#0: uint64 = (btoi item#0)
+        let temp#0: Encoded(uint64) = array%encoded_element%0#1
+        let tmp%0#0: uint64 = (btoi temp#0)
         let total#2: uint64 = (+ total#1 tmp%0#0)
-        let tmp%2#0: uint64 = (btoi item#0)
+        let tmp%2#0: uint64 = (btoi temp#0)
         let tmp%3#0: bool = (== tmp%2#0 42u)
         goto tmp%3#0 ? block@3 : block@4
     block@3: // if_body_L21
@@ -178,10 +178,10 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop
     block@2: // for_body_L28
         let array%bytes_offset%0#1: uint64 = (* item_index_internal%0#1 8u)
         let array%encoded_element%0#1: bytes = (extract3 items#0 array%bytes_offset%0#1 8u) // on error: index access is out of bounds
-        let item#0: Encoded(uint64) = array%encoded_element%0#1
-        let tmp%0#0: uint64 = (btoi item#0)
+        let temp#0: Encoded(uint64) = array%encoded_element%0#1
+        let tmp%0#0: uint64 = (btoi temp#0)
         let total#2: uint64 = (+ total#1 tmp%0#0)
-        let tmp%2#0: uint64 = (btoi item#0)
+        let tmp%2#0: uint64 = (btoi temp#0)
         let tmp%3#0: bool = (== tmp%2#0 42u)
         goto tmp%3#0 ? block@3 : block@4
     block@3: // if_body_L30
@@ -211,9 +211,9 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop
         let array%bytes_offset%0#1: uint64 = (* item_index_internal%0#1 8u)
         let array%encoded_element%0#1: bytes = (extract3 array%array_trimmed%0#1 array%bytes_offset%0#1 8u) // on error: index access is out of bounds
         let array_item%0#0: Encoded(uint64) = array%encoded_element%0#1
-        let item#0: uint64 = (btoi array_item%0#0)
-        let total#2: uint64 = (+ total#1 item#0)
-        let tmp%2#0: bool = (== item#0 42u)
+        let temp#0: uint64 = (btoi array_item%0#0)
+        let total#2: uint64 = (+ total#1 temp#0)
+        let tmp%2#0: bool = (== temp#0 42u)
         goto tmp%2#0 ? block@3 : block@4
     block@3: // if_body_L39
         goto block@7
@@ -256,9 +256,9 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop
         let array%bytes_offset%0#1: uint64 = (* item_index_internal%0#1 8u)
         let array%encoded_element%0#1: bytes = (extract3 slot_contents%1#0 array%bytes_offset%0#1 8u) // on error: index access is out of bounds
         let array_item%0#0: Encoded(uint64) = array%encoded_element%0#1
-        let item#0: uint64 = (btoi array_item%0#0)
-        let total#2: uint64 = (+ total#1 item#0)
-        let tmp%2#0: bool = (== item#0 42u)
+        let temp#0: uint64 = (btoi array_item%0#0)
+        let total#2: uint64 = (+ total#1 temp#0)
+        let tmp%2#0: bool = (== temp#0 42u)
         goto tmp%2#0 ? block@3 : block@4
     block@3: // if_body_L49
         goto block@7

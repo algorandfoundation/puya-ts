@@ -102,15 +102,16 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop
     block@0: // L8
         let total#0: uint64 = 0u
         let loop_counter%0#0: uint64 = 0u
-        let item#0: uint64 = items.0#0
+        let temp#0: uint64 = items.0#0
         goto block@1
     block@1: // for_body_L10
         let loop_counter%0#1: uint64 = φ(loop_counter%0#0 <- block@0, loop_counter%0#2 <- block@5, loop_counter%0#3 <- block@6)
+        let temp#1: uint64 = φ(temp#0 <- block@0, temp#2 <- block@5, temp#3 <- block@6)
         let total#1: uint64 = φ(total#0 <- block@0, total#2 <- block@5, total#2 <- block@6)
-        let item#1: uint64 = φ(item#0 <- block@0, item#2 <- block@5, item#3 <- block@6)
-        let tmp%0#0: uint64 = (+ total#1 item#1)
+        let item#0: uint64 = temp#1
+        let tmp%0#0: uint64 = (+ total#1 item#0)
         let total#2: uint64 = tmp%0#0
-        let tmp%1#0: bool = (== item#1 42u)
+        let tmp%1#0: bool = (== item#0 42u)
         goto tmp%1#0 ? block@2 : block@3
     block@2: // if_body_L12
         goto block@8
@@ -120,11 +121,11 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop
         goto_nth [block@5, block@6][loop_counter%0#1] else goto block@7
     block@5: // for_header_1_L10
         let loop_counter%0#2: uint64 = 1u
-        let item#2: uint64 = items.1#0
+        let temp#2: uint64 = items.1#0
         goto block@1
     block@6: // for_header_2_L10
         let loop_counter%0#3: uint64 = 2u
-        let item#3: uint64 = items.2#0
+        let temp#3: uint64 = items.2#0
         goto block@1
     block@7: // after_for_L10
         goto block@8
@@ -145,7 +146,8 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop
         goto continue_looping%0#0 ? block@2 : block@6
     block@2: // for_body_L19
         let array_item%0#0: Encoded(uint64) = items#0[item_index_internal%0#1]
-        let item#0: Encoded(uint64) = array_item%0#0
+        let temp#0: Encoded(uint64) = array_item%0#0
+        let item#0: Encoded(uint64) = temp#0
         let tmp%0#0: uint64 = decode<uint64>(item#0)
         let tmp%1#0: uint64 = (+ total#1 tmp%0#0)
         let total#2: uint64 = tmp%1#0
@@ -178,7 +180,8 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop
         goto continue_looping%0#0 ? block@2 : block@6
     block@2: // for_body_L28
         let array_item%0#0: Encoded(uint64) = items#0[item_index_internal%0#1]
-        let item#0: Encoded(uint64) = array_item%0#0
+        let temp#0: Encoded(uint64) = array_item%0#0
+        let item#0: Encoded(uint64) = temp#0
         let tmp%0#0: uint64 = decode<uint64>(item#0)
         let tmp%1#0: uint64 = (+ total#1 tmp%0#0)
         let total#2: uint64 = tmp%1#0
@@ -213,7 +216,8 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop
     block@2: // for_body_L37
         let array_item%0#0: Encoded(uint64) = items#0[item_index_internal%0#1]
         let tmp%0#0: uint64 = decode<uint64>(array_item%0#0)
-        let item#0: uint64 = tmp%0#0
+        let temp#0: uint64 = tmp%0#0
+        let item#0: uint64 = temp#0
         let tmp%1#0: uint64 = (+ total#1 item#0)
         let total#2: uint64 = tmp%1#0
         let tmp%2#0: bool = (== item#0 42u)
@@ -253,7 +257,8 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop
         let slot_contents%1#0: Encoded(uint64[]) = read(mutable#0)
         let array_item%0#0: Encoded(uint64) = slot_contents%1#0[item_index_internal%0#1]
         let tmp%0#0: uint64 = decode<uint64>(array_item%0#0)
-        let item#0: uint64 = tmp%0#0
+        let temp#0: uint64 = tmp%0#0
+        let item#0: uint64 = temp#0
         let tmp%1#0: uint64 = (+ total#1 item#0)
         let total#2: uint64 = tmp%1#0
         let tmp%2#0: bool = (== item#0 42u)
