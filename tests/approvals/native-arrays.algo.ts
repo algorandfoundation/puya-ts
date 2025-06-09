@@ -42,6 +42,7 @@ export class NativeArraysAlgo extends Contract {
     const arr2 = arr.with(1, 5)
 
     assertMatch(arr, [1, 10, 3, 4])
+    assertMatch(arr2, [1, 5, 3, 4])
 
     // concat
     const t1: [uint64, uint64] = [12, 13]

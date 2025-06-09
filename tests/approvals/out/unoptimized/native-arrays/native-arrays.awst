@@ -39,6 +39,7 @@ contract NativeArraysAlgo
     arr[1]: uint64 = 10
     arr2: arc4.dynamic_array<uint64> = arr.with(1, 5)
     assert(arr.length == 4 and arr[0] == 1 and arr[1] == 10 and arr[2] == 3 and arr[3] == 4, comment=assert target is match for conditions)
+    assert(arr2.length == 4 and arr2[0] == 1 and arr2[1] == 5 and arr2[2] == 3 and arr2[3] == 4, comment=assert target is match for conditions)
     t1: arc4.tuple<uint64,uint64> = ARC4_ENCODE(<tuple>[12, 13], wtype=arc4.tuple<uint64,uint64>)
     arr: arc4.dynamic_array<uint64> = arr.concat(arr).concat(<tuple>[11]).concat(new arc4.dynamic_array<uint64>(t1.0, t1.1))
     assert(arr.length == 11 and arr[0] == 1 and arr[1] == 10 and arr[2] == 3 and arr[3] == 4 and arr[4] == 1 and arr[5] == 10 and arr[6] == 3 and arr[7] == 4 and arr[8] == 11 and arr[9] == 12 and arr[10] == 13, comment=assert target is match for conditions)
