@@ -46,7 +46,7 @@ export function* emitGTxnTypes() {
   yield `import { Account, Application, Asset } from './reference';`
   yield `import { TransactionType } from './transactions';`
   yield `import { NoImplementation } from "./internal/errors";`
-  yield ''
+  yield '\n\n'
   yield `const isGtxn = Symbol('isGtxn');`
   yield ''
   for (const [txnType, fields] of Object.entries(txnTypes)) {
@@ -88,7 +88,7 @@ export function* emitITxnTypes() {
   yield `import { bytes, uint64 } from './primitives';`
   yield `import { Account, Application, Asset } from './reference';`
   yield `import { TransactionType } from './transactions';`
-  yield '\n'
+  yield '\n\n'
   yield `const isItxn = Symbol('isItxn');`
   yield '\n'
 

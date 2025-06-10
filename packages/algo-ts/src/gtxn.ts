@@ -4,6 +4,7 @@ import { bytes, uint64 } from './primitives'
 import { Account, Application, Asset } from './reference'
 import { TransactionType } from './transactions'
 import { NoImplementation } from './internal/errors'
+
 const isGtxn = Symbol('isGtxn')
 /**
  * A group transaction of type 'pay'
