@@ -1,6 +1,4 @@
 import { describe, expect, it } from 'vitest'
-import { SourceLocation } from '../awst/source-location'
-import { getABITypeName } from '../awst_build/arc4-util'
 import { Arc4ParseError, parseArc4Type } from './arc4-signature-parser'
 import { invariant } from './index'
 

@@ -21,7 +21,6 @@ import {
 import {
   AddressClass,
   arc4AddressAlias,
-  ARC4EncodedType,
   DynamicArrayGeneric,
   DynamicArrayType,
   DynamicBytesConstructor,
