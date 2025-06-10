@@ -473,7 +473,7 @@ export abstract class FunctionVisitor
     codeInvariant(!node.dotDotDotToken, 'Rest parameters are not supported', sourceLocation)
     codeInvariant(!node.questionToken, 'Optional parameters are not supported', sourceLocation)
     if (node.initializer) {
-      logger.warn(sourceLocation, 'TODO: Default parameter values')
+      logger.error(sourceLocation, 'Default parameter values are not supported')
     }
     const paramPType = this.context.getPTypeForNode(node.type)
 
@@ -484,11 +484,10 @@ export abstract class FunctionVisitor
         wtype: paramPType.wtypeOrThrow,
       })
     } else if (ts.isObjectBindingPattern(node.name)) {
-      codeInvariant(paramPType instanceof ObjectPType, 'Param type must be object if it is being destructured', sourceLocation)
       return nodeFactory.subroutineArgument({
         sourceLocation,
         name: this.context.resolveDestructuredParamName(node),
-        wtype: paramPType.wtype,
+        wtype: paramPType.wtypeOrThrow,
       })
     } else {
       throw new CodeError(`Unsupported parameter declaration type ${getNodeName(node)}`, { sourceLocation })
