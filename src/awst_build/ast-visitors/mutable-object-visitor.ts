@@ -1,4 +1,5 @@
 import type ts from 'typescript'
+import { CodeError } from '../../errors'
 import type { ClassElements } from '../../visitor/syntax-names'
 import type { Visitor } from '../../visitor/visitor'
 import { accept } from '../../visitor/visitor'
@@ -17,6 +18,13 @@ export class MutableObjectVisitor extends ClassDefinitionVisitor implements Visi
   }
 
   constructor(classDec: ts.ClassDeclaration, ptype: MutableObjectType) {
-    super(classDec)
+    super()
+    this.visitAllMembers(classDec)
+  }
+
+  throwNotSupported(node: ts.Node, desc: string): never {
+    throw new CodeError(`${desc} are not supported in mutable object definitions`, {
+      sourceLocation: this.sourceLocation(node),
+    })
   }
 }

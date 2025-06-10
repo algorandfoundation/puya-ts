@@ -48,12 +48,12 @@ class BadContract extends Contract {
     return this.#myState
   }
 
-  // @expect-error Not Supported: get accessors
+  // @expect-error Property declarations are not supported in contract definitions
   get someValue() {
     // The following is an error, but we don't parse accessor statement bodies
     return this.#myState
   }
-  // @expect-error Not Supported: set accessors
+  // @expect-error Property declarations are not supported in contract definitions
   set someValue(v: uint64) {
     // The following is an error, but we don't parse accessor statement bodies
     this.#myState = v

@@ -1,5 +1,4 @@
 import type ts from 'typescript'
-import { CodeError } from '../../errors'
 import { logger } from '../../logger'
 import { invariant } from '../../util'
 import type { ClassElements } from '../../visitor/syntax-names'
@@ -10,9 +9,7 @@ import { BaseVisitor } from './base-visitor'
 export abstract class ClassDefinitionVisitor extends BaseVisitor implements Visitor<ClassElements, void> {
   public accept = <TNode extends ts.Node>(node: TNode) => accept<ClassDefinitionVisitor, TNode>(this, node)
 
-  constructor(classDec: ts.ClassDeclaration) {
-    super()
-
+  protected visitAllMembers(classDec: ts.ClassDeclaration) {
     for (const member of classDec.members) {
       try {
         this.accept(member)
@@ -23,34 +20,30 @@ export abstract class ClassDefinitionVisitor extends BaseVisitor implements Visi
     }
   }
 
-  private throwStructNotSupported(node: ts.Node, desc: string): never {
-    throw new CodeError(`${desc} are not supported in ARC4 struct definitions`, {
-      sourceLocation: this.sourceLocation(node),
-    })
-  }
+  abstract throwNotSupported(node: ts.Node, desc: string): never
 
   visitClassStaticBlockDeclaration(node: ts.ClassStaticBlockDeclaration) {
-    this.throwStructNotSupported(node, 'Class static block declarations')
+    this.throwNotSupported(node, 'Class static block declarations')
   }
   visitConstructor(node: ts.ConstructorDeclaration) {
-    this.throwStructNotSupported(node, 'Constructor declarations')
+    this.throwNotSupported(node, 'Constructor declarations')
   }
   visitGetAccessor(node: ts.GetAccessorDeclaration) {
-    this.throwStructNotSupported(node, 'Property declarations')
+    this.throwNotSupported(node, 'Property declarations')
   }
   visitIndexSignature(node: ts.IndexSignatureDeclaration) {
-    this.throwStructNotSupported(node, 'Index signature declarations')
+    this.throwNotSupported(node, 'Index signature declarations')
   }
   visitMethodDeclaration(node: ts.MethodDeclaration) {
-    this.throwStructNotSupported(node, 'Method declarations')
+    this.throwNotSupported(node, 'Method declarations')
   }
   visitPropertyDeclaration(node: ts.PropertyDeclaration) {
-    this.throwStructNotSupported(node, 'Property declarations')
+    this.throwNotSupported(node, 'Property declarations')
   }
   visitSemicolonClassElement(node: ts.SemicolonClassElement) {
     // Ignore
   }
   visitSetAccessor(node: ts.SetAccessorDeclaration) {
-    this.throwStructNotSupported(node, 'Property declarations')
+    this.throwNotSupported(node, 'Property declarations')
   }
 }
