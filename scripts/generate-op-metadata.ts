@@ -109,7 +109,7 @@ export type IntrinsicOpGrouping = {
     if (ptypes.length === 1) {
       return ptypes[0]
     }
-    return `new ptypes.TuplePType({items: [${ptypes.join(', ')}]})`
+    return `new ptypes.ReadonlyTuplePType({items: [${ptypes.join(', ')}] })`
   }
 
   function* emitTypes() {

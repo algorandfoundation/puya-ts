@@ -4,6 +4,7 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 1 0
+    bytecblock 0x0003
     // tests/approvals/arc-28-events.algo.ts:13
     // class EventEmitter extends Contract {
     txn NumAppArgs
@@ -19,7 +20,7 @@ main_after_if_else@12:
     return
 
 main_emitDynamicBytes_route@5:
-    // tests/approvals/arc-28-events.algo.ts:37
+    // tests/approvals/arc-28-events.algo.ts:40
     // emitDynamicBytes(x: bytes, y: DynamicBytes) {
     txn OnCompletion
     !
@@ -31,7 +32,7 @@ main_emitDynamicBytes_route@5:
     txna ApplicationArgs 1
     extract 2 0
     txna ApplicationArgs 2
-    // tests/approvals/arc-28-events.algo.ts:38
+    // tests/approvals/arc-28-events.algo.ts:41
     // emit('DB(byte[],byte[])', x, y)
     dig 1
     len
@@ -58,13 +59,13 @@ main_emitDynamicBytes_route@5:
     swap
     concat
     log
-    // tests/approvals/arc-28-events.algo.ts:37
+    // tests/approvals/arc-28-events.algo.ts:40
     // emitDynamicBytes(x: bytes, y: DynamicBytes) {
     intc_0 // 1
     return
 
 main_emitCustom_route@4:
-    // tests/approvals/arc-28-events.algo.ts:32
+    // tests/approvals/arc-28-events.algo.ts:35
     // emitCustom(arg0: string, arg1: boolean) {
     txn OnCompletion
     !
@@ -78,7 +79,7 @@ main_emitCustom_route@4:
     txna ApplicationArgs 2
     intc_1 // 0
     getbit
-    // tests/approvals/arc-28-events.algo.ts:33
+    // tests/approvals/arc-28-events.algo.ts:36
     // emit('Custom', arg0, arg1)
     dig 1
     len
@@ -90,7 +91,7 @@ main_emitCustom_route@4:
     intc_1 // 0
     uncover 3
     setbit
-    pushbytes 0x0003
+    bytec_0 // 0x0003
     swap
     concat
     swap
@@ -100,10 +101,10 @@ main_emitCustom_route@4:
     concat
     dup
     log
-    // tests/approvals/arc-28-events.algo.ts:34
+    // tests/approvals/arc-28-events.algo.ts:37
     // emit('Custom(string,bool)', arg0, arg1)
     log
-    // tests/approvals/arc-28-events.algo.ts:32
+    // tests/approvals/arc-28-events.algo.ts:35
     // emitCustom(arg0: string, arg1: boolean) {
     intc_0 // 1
     return
@@ -151,9 +152,28 @@ main_emitSwapped_route@3:
     // emit('Swapped((uint8,uint8),uint8)', [b, b] as const, a)
     dup
     concat
-    swap
+    dup
+    dig 2
     concat
     pushbytes 0x388cc12d // method "Swapped((uint8,uint8),uint8)"
+    swap
+    concat
+    dup
+    log
+    // tests/approvals/arc-28-events.algo.ts:31
+    // emit('Swapped((uint8,uint8),uint8)', [b, b], a)
+    log
+    // tests/approvals/arc-28-events.algo.ts:32
+    // emit('Swapped(uint8[],uint8)', [b, b], a)
+    pushbytes 0x0002
+    swap
+    concat
+    bytec_0 // 0x0003
+    uncover 2
+    concat
+    swap
+    concat
+    pushbytes 0x08754e0c // method "Swapped(uint8[],uint8)"
     swap
     concat
     log

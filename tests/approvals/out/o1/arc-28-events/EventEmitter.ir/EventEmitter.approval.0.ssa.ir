@@ -22,7 +22,7 @@ subroutine tests/approvals/arc-28-events.algo.ts::EventEmitter.__puya_arc4_route
         let reinterpret_Encoded(uint8)%1#0: Encoded(uint8) = (txna ApplicationArgs 2)
         tests/approvals/arc-28-events.algo.ts::EventEmitter.emitSwapped(reinterpret_Encoded(uint8)%0#0, reinterpret_Encoded(uint8)%1#0)
         return 1u
-    block@3: // emitCustom_route_L32
+    block@3: // emitCustom_route_L35
         let tmp%7#0: uint64 = (txn OnCompletion)
         let tmp%8#0: bool = (== tmp%7#0 NoOp)
         (assert tmp%8#0) // OnCompletion is not NoOp
@@ -35,7 +35,7 @@ subroutine tests/approvals/arc-28-events.algo.ts::EventEmitter.__puya_arc4_route
         let tmp%12#0: bool = decode<bool>(reinterpret_Encoded(bool8)%0#0)
         tests/approvals/arc-28-events.algo.ts::EventEmitter.emitCustom(tmp%11#0, tmp%12#0)
         return 1u
-    block@4: // emitDynamicBytes_route_L37
+    block@4: // emitDynamicBytes_route_L40
         let tmp%13#0: uint64 = (txn OnCompletion)
         let tmp%14#0: bool = (== tmp%13#0 NoOp)
         (assert tmp%14#0) // OnCompletion is not NoOp
@@ -90,10 +90,18 @@ subroutine tests/approvals/arc-28-events.algo.ts::EventEmitter.emitSwapped(a: En
         let tmp%6#0: Encoded((uint8,uint8),uint8) = encode<((uint8,uint8),uint8)>(tmp%5#0, a#0)
         let event%5#0: bytes = (concat method "Swapped((uint8,uint8),uint8)" tmp%6#0)
         (log event%5#0)
+        let tmp%7#0: Encoded(uint8,uint8) = encode<(uint8,uint8)>(b#0, b#0)
+        let tmp%8#0: Encoded((uint8,uint8),uint8) = encode<((uint8,uint8),uint8)>(tmp%7#0, a#0)
+        let event%6#0: bytes = (concat method "Swapped((uint8,uint8),uint8)" tmp%8#0)
+        (log event%6#0)
+        let tmp%9#0: Encoded(len+uint8[]) = encode<(len+uint8[])>(b#0, b#0)
+        let tmp%10#0: Encoded((len+uint8[]),uint8) = encode<((len+uint8[]),uint8)>(tmp%9#0, a#0)
+        let event%7#0: bytes = (concat method "Swapped(uint8[],uint8)" tmp%10#0)
+        (log event%7#0)
         return 
 
 subroutine tests/approvals/arc-28-events.algo.ts::EventEmitter.emitCustom(arg0: string, arg1: bool) -> void:
-    block@0: // L32
+    block@0: // L35
         let tmp%0#0: Encoded(len+utf8[]) = encode<(len+utf8[])>(arg0#0)
         let tmp%1#0: Encoded(bool8) = encode<bool8>(arg1#0)
         let tmp%2#0: Encoded((len+utf8[]),bool1) = encode<((len+utf8[]),bool1)>(tmp%0#0, tmp%1#0)
@@ -107,7 +115,7 @@ subroutine tests/approvals/arc-28-events.algo.ts::EventEmitter.emitCustom(arg0: 
         return 
 
 subroutine tests/approvals/arc-28-events.algo.ts::EventEmitter.emitDynamicBytes(x: bytes, y: Encoded(len+uint8[])) -> void:
-    block@0: // L37
+    block@0: // L40
         let tmp%0#0: Encoded(len+uint8[]) = encode<(len+uint8[])>(x#0)
         let tmp%1#0: Encoded((len+uint8[]),(len+uint8[])) = encode<((len+uint8[]),(len+uint8[]))>(tmp%0#0, y#0)
         let event%0#0: bytes = (concat method "DB(byte[],byte[])" tmp%1#0)

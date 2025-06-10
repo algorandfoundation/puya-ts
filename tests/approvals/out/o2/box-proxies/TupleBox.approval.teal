@@ -4,7 +4,7 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 0 1 10 20
-    bytecblock "tm1a" "t1" "t2" "tm2a" 0x0005000c80000568656c6c6f0005776f726c64 "tm1b" "tm2b" 0x0005000a0000036162630003646566
+    bytecblock "tm1a" "t1" "t2" "tm2a" 0x0005000c80000568656c6c6f0005776f726c64 "tm1b" 0x0005000a0000036162630003646566 "tm2b"
     // tests/approvals/box-proxies.algo.ts:159
     // class TupleBox extends Contract {
     txn NumAppArgs
@@ -87,7 +87,7 @@ main_testBoxMap_route@4:
     // tests/approvals/box-proxies.algo.ts:199
     // assert(this.boxMap1('a').value[0] === 'hello')
     box_get
-    assert // Box must have value
+    pop
     dup
     intc_0 // 0
     extract_uint16
@@ -120,14 +120,6 @@ main_testBoxMap_route@4:
     intc_0 // 0
     getbit
     assert
-    // tests/approvals/box-proxies.algo.ts:163
-    // boxMap2 = BoxMap<string, { a: string; b: bytes; c: boolean }>({ keyPrefix: 'tm2' })
-    bytec_3 // "tm2a"
-    // tests/approvals/box-proxies.algo.ts:203
-    // assert(this.boxMap2('a').exists)
-    box_len
-    bury 1
-    assert
     // tests/approvals/box-proxies.algo.ts:162
     // boxMap1 = BoxMap<string, [string, bytes, boolean]>({ keyPrefix: 'tm1' })
     bytec 5 // "tm1b"
@@ -140,38 +132,22 @@ main_testBoxMap_route@4:
     bytec 5 // "tm1b"
     // tests/approvals/box-proxies.algo.ts:208
     // this.boxMap1('b').value = ['abc', Bytes('def'), false]
-    bytec 7 // 0x0005000a0000036162630003646566
+    bytec 6 // 0x0005000a0000036162630003646566
     box_put
-    // tests/approvals/box-proxies.algo.ts:162
-    // boxMap1 = BoxMap<string, [string, bytes, boolean]>({ keyPrefix: 'tm1' })
-    bytec 5 // "tm1b"
-    // tests/approvals/box-proxies.algo.ts:209
-    // assert(this.boxMap1('b').exists)
-    box_len
-    bury 1
-    assert
     // tests/approvals/box-proxies.algo.ts:163
     // boxMap2 = BoxMap<string, { a: string; b: bytes; c: boolean }>({ keyPrefix: 'tm2' })
-    bytec 6 // "tm2b"
+    bytec 7 // "tm2b"
     // tests/approvals/box-proxies.algo.ts:211
     // this.boxMap2('b').value = { a: 'abc', b: Bytes('def'), c: false }
     box_del
     pop
     // tests/approvals/box-proxies.algo.ts:163
     // boxMap2 = BoxMap<string, { a: string; b: bytes; c: boolean }>({ keyPrefix: 'tm2' })
-    bytec 6 // "tm2b"
+    bytec 7 // "tm2b"
     // tests/approvals/box-proxies.algo.ts:211
     // this.boxMap2('b').value = { a: 'abc', b: Bytes('def'), c: false }
-    bytec 7 // 0x0005000a0000036162630003646566
+    bytec 6 // 0x0005000a0000036162630003646566
     box_put
-    // tests/approvals/box-proxies.algo.ts:163
-    // boxMap2 = BoxMap<string, { a: string; b: bytes; c: boolean }>({ keyPrefix: 'tm2' })
-    bytec 6 // "tm2b"
-    // tests/approvals/box-proxies.algo.ts:212
-    // assert(this.boxMap2('b').exists)
-    box_len
-    bury 1
-    assert
     // tests/approvals/box-proxies.algo.ts:162
     // boxMap1 = BoxMap<string, [string, bytes, boolean]>({ keyPrefix: 'tm1' })
     bytec_0 // "tm1a"
@@ -239,7 +215,7 @@ main_testBox_route@3:
     // tests/approvals/box-proxies.algo.ts:168
     // assert(this.box1.length === 10)
     box_len
-    assert // Box must have value
+    pop
     intc_2 // 10
     ==
     assert
@@ -249,25 +225,9 @@ main_testBox_route@3:
     // tests/approvals/box-proxies.algo.ts:169
     // assert(this.box2.length === 20)
     box_len
-    assert // Box must have value
+    pop
     intc_3 // 20
     ==
-    assert
-    // tests/approvals/box-proxies.algo.ts:160
-    // box1 = Box<[string, bytes, boolean]>({ key: 't1' })
-    bytec_1 // "t1"
-    // tests/approvals/box-proxies.algo.ts:171
-    // assert(this.box1.exists)
-    box_len
-    bury 1
-    assert
-    // tests/approvals/box-proxies.algo.ts:161
-    // box2 = Box<{ a: string; b: bytes; c: boolean }>({ key: 't2' })
-    bytec_2 // "t2"
-    // tests/approvals/box-proxies.algo.ts:172
-    // assert(this.box2.exists)
-    box_len
-    bury 1
     assert
     // tests/approvals/box-proxies.algo.ts:160
     // box1 = Box<[string, bytes, boolean]>({ key: 't1' })

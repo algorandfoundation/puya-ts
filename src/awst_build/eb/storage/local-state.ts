@@ -137,6 +137,8 @@ class LocalStateDeleteFunctionBuilder extends FunctionBuilder {
 }
 
 export class LocalStateFunctionResultBuilder extends InstanceBuilder<LocalStateType> {
+  readonly isConstant = false
+
   resolve(): Expression {
     codeInvariant(
       this._expr,

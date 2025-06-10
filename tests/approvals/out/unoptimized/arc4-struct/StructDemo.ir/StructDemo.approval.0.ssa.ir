@@ -319,11 +319,9 @@ subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.addVectors(v1: Encode
 
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.mutateVector(v1: Encoded(uint64,uint64), newX: Encoded(uint64), newY: Encoded(uint64)) -> Encoded(uint64,uint64):
     block@0: // L26
-        let tuple_item%0#0: Encoded(uint64) = v1#0[0]
-        let updated_tuple%0#0: Encoded(uint64,uint64) = v1#0.update(0, newX#0)
+        let updated_tuple%0#0: Encoded(uint64,uint64) = v1#0.update((0), newX#0)
         let v1#1: Encoded(uint64,uint64) = updated_tuple%0#0
-        let tuple_item%1#0: Encoded(uint64) = v1#1[1]
-        let updated_tuple%1#0: Encoded(uint64,uint64) = v1#1.update(1, newY#0)
+        let updated_tuple%1#0: Encoded(uint64,uint64) = v1#1.update((1), newY#0)
         let v1#2: Encoded(uint64,uint64) = updated_tuple%1#0
         return v1#2
 
@@ -356,7 +354,7 @@ subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.toNative(v1: Encoded(
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.getPlugin(key: string) -> Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])):
     block@0: // L52
         let box_prefixed_key%0#0: bytes = (concat "plugins" key#0)
-        let (maybe_value%0#0: bytes, maybe_exists%0#0: bool) = (box_get box_prefixed_key%0#0)
+        let (maybe_value%0#0: bytes, maybe_exists%0#0: bool) = box_read(box_prefixed_key%0#0)
         (assert maybe_exists%0#0) // Box must have value
         let copy%0#0: bytes = maybe_value%0#0
         let value#0: Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])) = copy%0#0
@@ -368,7 +366,7 @@ subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.getPlugin(key: string
 
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.getMain() -> Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])):
     block@0: // L58
-        let (maybe_value%0#0: bytes, maybe_exists%0#0: bool) = (box_get "main")
+        let (maybe_value%0#0: bytes, maybe_exists%0#0: bool) = box_read("main")
         (assert maybe_exists%0#0) // Box must have value
         let copy%0#0: bytes = maybe_value%0#0
         let value#0: Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])) = copy%0#0
@@ -382,16 +380,11 @@ subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.setLastCalled(key: st
     block@0: // L64
         let tmp%0#0: Encoded(uint64) = encode<uint64>(lastCalled#0)
         let box_prefixed_key%0#0: bytes = (concat "plugins" key#0)
-        let (maybe_value%0#0: bytes, maybe_exists%0#0: bool) = (box_get box_prefixed_key%0#0)
+        let (maybe_value%0#0: bytes, maybe_exists%0#0: bool) = box_read(box_prefixed_key%0#0)
         (assert maybe_exists%0#0) // Box must have value
-        let tuple_item%0#0: Encoded(len+(uint8[4],uint64,uint64)[]) = maybe_value%0#0[4]
-        let array_item%0#0: Encoded(uint8[4],uint64,uint64) = tuple_item%0#0[index#0]
-        let tuple_item%1#0: Encoded(uint64) = array_item%0#0[2]
-        let updated_tuple%0#0: Encoded(uint8[4],uint64,uint64) = array_item%0#0.update(2, tmp%0#0)
-        let updated_array%0#0: Encoded(len+(uint8[4],uint64,uint64)[]) = tuple_item%0#0.update(index#0, updated_tuple%0#0)
-        let updated_tuple%1#0: Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])) = maybe_value%0#0.update(4, updated_array%0#0)
+        let updated_tuple%0#0: Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])) = maybe_value%0#0.update((4, index#0, 2), tmp%0#0)
         (box_del box_prefixed_key%0#0)
-        (box_put box_prefixed_key%0#0 updated_tuple%1#0)
+        box_write(box_prefixed_key%0#0, updated_tuple%0#0)
         return 
 
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.setPlugin(key: string) -> void:
@@ -403,7 +396,7 @@ subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.setPlugin(key: string
         let tmp%3#0: Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])) = encode<(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[]))>(0x0000000000000001, 0x0000000000000000, 0x0000000000000000, tmp%0#0, encoded_array%0#0)
         let box_prefixed_key%0#0: bytes = (concat "plugins" key#0)
         (box_del box_prefixed_key%0#0)
-        (box_put box_prefixed_key%0#0 tmp%3#0)
+        box_write(box_prefixed_key%0#0, tmp%3#0)
         return 
 
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.__algots__.defaultCreate() -> void:

@@ -97,15 +97,25 @@ export const intrinsicFactory = {
       opCode: 'btoi',
     })
   },
-  bzero({ size, sourceLocation, wtype = wtypes.bytesWType }: { size: bigint; sourceLocation: SourceLocation; wtype: wtypes.WType }) {
+  bzero({
+    size,
+    sourceLocation,
+    wtype = wtypes.bytesWType,
+  }: {
+    size: bigint | Expression
+    sourceLocation: SourceLocation
+    wtype: wtypes.WType
+  }) {
     return nodeFactory.intrinsicCall({
       opCode: 'bzero',
       immediates: [],
       stackArgs: [
-        nodeFactory.uInt64Constant({
-          value: size,
-          sourceLocation,
-        }),
+        typeof size === 'bigint'
+          ? nodeFactory.uInt64Constant({
+              value: size,
+              sourceLocation,
+            })
+          : size,
       ],
       sourceLocation,
       wtype: wtype,

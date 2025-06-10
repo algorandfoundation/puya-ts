@@ -208,12 +208,12 @@ subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.testArray() -> 
         let array%bytes_offset%0#1: uint64 = (* 0u 32u)
         let array%encoded_element%0#1: bytes = (extract3 slot_contents%1#0 array%bytes_offset%0#1 32u) // on error: index access is out of bounds
         let array_item%0#0: Encoded(uint8[32]) = array%encoded_element%0#1
-        let tmp%1#0: bytes[32] = array_item%0#0
-        let tmp%2#0: bytes = (b& a.0#0 tmp%1#0)
-        let bitAnd#0: bytes[32] = tmp%2#0
+        let values%0#0: bytes[32] = array_item%0#0
+        let tmp%1#0: bytes = (b& a.0#0 values%0#0)
+        let bitAnd#0: bytes[32] = tmp%1#0
         let reinterpret_bytes[32]%3#0: bytes[32] = (txn Sender)
-        let tmp%3#0: bool = (== bitAnd#0 reinterpret_bytes[32]%3#0)
-        (assert tmp%3#0)
+        let tmp%2#0: bool = (== bitAnd#0 reinterpret_bytes[32]%3#0)
+        (assert tmp%2#0)
         return 
 
 subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__algots__.defaultCreate() -> void:

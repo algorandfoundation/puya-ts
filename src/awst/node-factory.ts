@@ -238,7 +238,7 @@ const explicitNodeFactory = {
   tupleExpression(props: Omit<Props<TupleExpression>, 'wtype'> & { wtype?: wtypes.WTuple }) {
     return new TupleExpression({
       ...props,
-      wtype: props.wtype ?? new wtypes.WTuple({ types: props.items.map((i) => i.wtype), immutable: true }),
+      wtype: props.wtype ?? new wtypes.WTuple({ types: props.items.map((i) => i.wtype) }),
     })
   },
   methodDocumentation(props?: { description?: string | null; args?: Map<string, string>; returns?: string | null }) {
@@ -308,7 +308,7 @@ const explicitNodeFactory = {
     value: Expression
     sourceLocation: SourceLocation
   }) {
-    invariant(base.wtype instanceof wtypes.ARC4DynamicArray, 'base must have wtype of StackArray', base.sourceLocation)
+    invariant(base.wtype instanceof wtypes.ARC4DynamicArray, 'base must have wtype of ARC4DynamicArray', base.sourceLocation)
     return new ArrayReplace({
       base,
       index,
@@ -329,7 +329,7 @@ const explicitNodeFactory = {
     return new SubmitInnerTransaction({
       itxns,
       sourceLocation,
-      wtype: itxnWTypes.length === 1 ? itxnWTypes[0] : new WTuple({ types: itxnWTypes, immutable: true }),
+      wtype: itxnWTypes.length === 1 ? itxnWTypes[0] : new WTuple({ types: itxnWTypes }),
     })
   },
 } satisfies { [key in keyof ConcreteNodes]?: (...args: DeliberateAny[]) => DeliberateAny }

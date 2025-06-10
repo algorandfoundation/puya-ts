@@ -26,6 +26,13 @@ import {
   InterpretAsArc4FunctionBuilder,
   MethodSelectorFunctionBuilder,
 } from '../eb/arc4/util'
+import {
+  FixedArrayClassBuilder,
+  FixedArrayExpressionBuilder,
+  NativeArrayClassBuilder,
+  NativeArrayExpressionBuilder,
+  ReadonlyArrayExpressionBuilder,
+} from '../eb/arrays'
 import { AssertFunctionBuilder, ErrFunctionBuilder } from '../eb/assert-function-builder'
 import { AssertMatchFunctionBuilder } from '../eb/assert-match-function-builder'
 import { BigUintExpressionBuilder, BigUintFunctionBuilder } from '../eb/biguint-expression-builder'
@@ -35,6 +42,7 @@ import { CloneFunctionBuilder } from '../eb/clone-function-builder'
 import { CompileFunctionBuilder } from '../eb/compiled/compile-function'
 import { ContractClassBuilder, ContractOptionsDecoratorBuilder } from '../eb/contract-builder'
 import { EnsureBudgetFunctionBuilder } from '../eb/ensure-budget'
+
 import { FreeSubroutineExpressionBuilder } from '../eb/free-subroutine-expression-builder'
 import { IntrinsicEnumBuilder } from '../eb/intrinsic-enum-builder'
 import { IterableIteratorExpressionBuilder } from '../eb/iterable-iterator-expression-builder'
@@ -42,13 +50,14 @@ import { ObjectExpressionBuilder } from '../eb/literal/object-expression-builder
 import { LogFunctionBuilder } from '../eb/log-function-builder'
 import { LogicSigClassBuilder, LogicSigOptionsDecoratorBuilder } from '../eb/logic-sig-builder'
 import { MatchFunctionBuilder } from '../eb/match-function-builder'
-import { MutableArrayClassBuilder, MutableArrayExpressionBuilder } from '../eb/mutable-arrays'
+import { MutableTupleExpressionBuilder } from '../eb/mutable-tuple-expression-builder'
 import { MutableObjectClassBuilder, MutableObjectExpressionBuilder } from '../eb/mutable-object'
 import { NamespaceBuilder } from '../eb/namespace-builder'
-import { NativeArrayExpressionBuilder } from '../eb/native-array-expression-builder'
 import { NeverExpressionBuilder } from '../eb/never-expression-builder'
 import { ObjectWithOptionalFieldsExpressionBuilder } from '../eb/object-with-optional-fields'
 import { FreeIntrinsicOpBuilder, IntrinsicOpGroupBuilder, IntrinsicOpGroupOrFunctionTypeBuilder } from '../eb/op-module-builder'
+import { ReadonlyTupleExpressionBuilder } from '../eb/readonly-tuple-expression-builder'
+import { ReferenceArrayClassBuilder, ReferenceArrayExpressionBuilder } from '../eb/reference-arrays'
 import { AccountExpressionBuilder, AccountFunctionBuilder } from '../eb/reference/account'
 import { ApplicationExpressionBuilder, ApplicationFunctionBuilder } from '../eb/reference/application'
 import { AssetExpressionBuilder, AssetFunctionBuilder } from '../eb/reference/asset'
@@ -72,7 +81,6 @@ import {
 } from '../eb/transactions/inner-transaction-params'
 import { InnerTransactionExpressionBuilder } from '../eb/transactions/inner-transactions'
 import { ItxnComposeBuilder } from '../eb/transactions/itxn-compose'
-import { TupleExpressionBuilder } from '../eb/tuple-expression-builder'
 import { Uint64EnumMemberExpressionBuilder, Uint64EnumTypeBuilder } from '../eb/uint64-enum-type-builder'
 import { UInt64ExpressionBuilder, UInt64FunctionBuilder } from '../eb/uint64-expression-builder'
 import { UnresolvableExpressionBuilder } from '../eb/unresolvable-expression-builder'
@@ -135,6 +143,7 @@ import {
   arc28EmitFunction,
   arc4AbiMethodDecorator,
   arc4BareMethodDecorator,
+  ArrayGeneric,
   ArrayPType,
   assertFunction,
   assertMatchFunction,
@@ -176,6 +185,8 @@ import {
   contractOptionsDecorator,
   ensureBudgetFunction,
   errFunction,
+  FixedArrayGeneric,
+  FixedArrayPType,
   FunctionPType,
   GeneratorGeneric,
   GeneratorType,
@@ -200,9 +211,7 @@ import {
   logicSigOptionsDecorator,
   LogicSigPType,
   matchFunction,
-  MutableArrayConstructor,
-  MutableArrayGeneric,
-  MutableArrayType,
+  MutableTuplePType,
   NamespacePType,
   neverPType,
   ObjectPType,
@@ -216,6 +225,11 @@ import {
   PolytypeClassMethodHelper,
   PromiseGeneric,
   PromiseType,
+  ReadonlyArrayGeneric,
+  ReadonlyArrayPType,
+  ReadonlyTuplePType,
+  ReferenceArrayGeneric,
+  ReferenceArrayType,
   StringFunction,
   stringPType,
   submitGroupItxnFunction,
@@ -224,7 +238,6 @@ import {
   TemplateVarFunction,
   TransactionFunction,
   transactionTypeType,
-  TuplePType,
   Uint64EnumMemberType,
   Uint64Function,
   uint64PType,
@@ -254,12 +267,29 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: StringFunction, singletonEb: StringFunctionBuilder })
 
   // Compound
-  typeRegistry.register({ ptype: ArrayPType, instanceEb: NativeArrayExpressionBuilder })
-  typeRegistry.register({ ptype: TuplePType, instanceEb: TupleExpressionBuilder })
+  typeRegistry.registerGeneric({
+    generic: ArrayGeneric,
+    ptype: ArrayPType,
+    instanceEb: NativeArrayExpressionBuilder,
+    singletonEb: NativeArrayClassBuilder,
+  })
+  typeRegistry.registerGeneric({ generic: ReadonlyArrayGeneric, ptype: ReadonlyArrayPType, instanceEb: ReadonlyArrayExpressionBuilder })
+  typeRegistry.register({ ptype: ReadonlyTuplePType, instanceEb: ReadonlyTupleExpressionBuilder })
+  typeRegistry.register({ ptype: MutableTuplePType, instanceEb: MutableTupleExpressionBuilder })
   typeRegistry.register({ ptype: ObjectPType, instanceEb: ObjectExpressionBuilder })
+  typeRegistry.registerGeneric({
+    generic: FixedArrayGeneric,
+    ptype: FixedArrayPType,
+    instanceEb: FixedArrayExpressionBuilder,
+    singletonEb: FixedArrayClassBuilder,
+  })
 
-  typeRegistry.register({ ptype: MutableArrayConstructor, singletonEb: MutableArrayClassBuilder })
-  typeRegistry.registerGeneric({ generic: MutableArrayGeneric, ptype: MutableArrayType, instanceEb: MutableArrayExpressionBuilder })
+  typeRegistry.registerGeneric({
+    generic: ReferenceArrayGeneric,
+    ptype: ReferenceArrayType,
+    instanceEb: ReferenceArrayExpressionBuilder,
+    singletonEb: ReferenceArrayClassBuilder,
+  })
 
   // Unresolvable
   typeRegistry.registerGeneric({ ptype: GeneratorType, generic: GeneratorGeneric, instanceEb: UnresolvableExpressionBuilder })

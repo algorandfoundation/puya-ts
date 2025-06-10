@@ -72,23 +72,22 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_rout
         let tmp%37#0: bool = (!= tmp%36#0 0u)
         (assert tmp%37#0) // can only call when not creating
         let reinterpret_Encoded(uint64,uint64,uint64)%1#0: Encoded(uint64,uint64,uint64) = (txna ApplicationArgs 1)
-        let (tmp%38#0: uint64, tmp%39#0: uint64, tmp%40#0: uint64) = decode<(uint64,uint64,uint64,)>(reinterpret_Encoded(uint64,uint64,uint64)%1#0)
-        let tmp%41#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array(tmp%38#0, tmp%39#0, tmp%40#0)
-        let tmp%42#0: Encoded(uint64) = encode<uint64>(tmp%41#0)
-        let tmp%43#0: bytes = (concat 0x151f7c75 tmp%42#0)
-        (log tmp%43#0)
+        let tmp%38#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array(reinterpret_Encoded(uint64,uint64,uint64)%1#0)
+        let tmp%39#0: Encoded(uint64) = encode<uint64>(tmp%38#0)
+        let tmp%40#0: bytes = (concat 0x151f7c75 tmp%39#0)
+        (log tmp%40#0)
         return 1u
     block@7: // switch_case_default_L7
         goto block@8
     block@8: // switch_case_next_L7
         goto block@13
     block@9: // bare_routing_L7
-        let tmp%44#0: uint64 = (txn OnCompletion)
-        switch tmp%44#0 {0u => block@10, * => block@11}
+        let tmp%41#0: uint64 = (txn OnCompletion)
+        switch tmp%41#0 {0u => block@10, * => block@11}
     block@10: // __algots__.defaultCreate_L7
-        let tmp%45#0: uint64 = (txn ApplicationID)
-        let tmp%46#0: bool = (== tmp%45#0 0u)
-        (assert tmp%46#0) // can only call when creating
+        let tmp%42#0: uint64 = (txn ApplicationID)
+        let tmp%43#0: bool = (== tmp%42#0 0u)
+        (assert tmp%43#0) // can only call when creating
         tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__algots__.defaultCreate()
         return 1u
     block@11: // switch_case_default_L7
@@ -215,13 +214,13 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop
         goto continue_looping%0#0 ? block@2 : block@6
     block@2: // for_body_L37
         let array_item%0#0: Encoded(uint64) = items#0[item_index_internal%0#1]
-        let tmp%0#0: uint64 = decode<uint64>(array_item%0#0)
-        let temp#0: uint64 = tmp%0#0
+        let values%0#0: uint64 = decode<uint64>(array_item%0#0)
+        let temp#0: uint64 = values%0#0
         let item#0: uint64 = temp#0
-        let tmp%1#0: uint64 = (+ total#1 item#0)
-        let total#2: uint64 = tmp%1#0
-        let tmp%2#0: bool = (== item#0 42u)
-        goto tmp%2#0 ? block@3 : block@4
+        let tmp%0#0: uint64 = (+ total#1 item#0)
+        let total#2: uint64 = tmp%0#0
+        let tmp%1#0: bool = (== item#0 42u)
+        goto tmp%1#0 ? block@3 : block@4
     block@3: // if_body_L39
         goto block@7
     block@4: // after_if_else_L39
@@ -235,9 +234,15 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop
         let total#3: uint64 = φ(total#2 <- block@3, total#1 <- block@6)
         return total#3
 
-subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array(items.0: uint64, items.1: uint64, items.2: uint64) -> uint64:
+subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array(items: Encoded(uint64,uint64,uint64)) -> uint64:
     block@0: // L44
-        let encoded_array%0#0: Encoded(uint64[]) = encode<uint64[]>(items.0#0, items.1#0, items.2#0)
+        let tuple_item%0#0: Encoded(uint64) = items#0[0]
+        let values%0#0: uint64 = decode<uint64>(tuple_item%0#0)
+        let tuple_item%1#0: Encoded(uint64) = items#0[1]
+        let values%1#0: uint64 = decode<uint64>(tuple_item%1#0)
+        let tuple_item%2#0: Encoded(uint64) = items#0[2]
+        let values%2#0: uint64 = decode<uint64>(tuple_item%2#0)
+        let encoded_array%0#0: Encoded(uint64[]) = encode<uint64[]>(values%0#0, values%1#0, values%2#0)
         let slot%0#0: Encoded(uint64[])* = new()
         write(slot%0#0, encoded_array%0#0)
         let mutable#0: Encoded(uint64[])* = slot%0#0
@@ -256,13 +261,13 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop
     block@2: // for_body_L47
         let slot_contents%1#0: Encoded(uint64[]) = read(mutable#0)
         let array_item%0#0: Encoded(uint64) = slot_contents%1#0[item_index_internal%0#1]
-        let tmp%0#0: uint64 = decode<uint64>(array_item%0#0)
-        let temp#0: uint64 = tmp%0#0
+        let values%3#0: uint64 = decode<uint64>(array_item%0#0)
+        let temp#0: uint64 = values%3#0
         let item#0: uint64 = temp#0
-        let tmp%1#0: uint64 = (+ total#1 item#0)
-        let total#2: uint64 = tmp%1#0
-        let tmp%2#0: bool = (== item#0 42u)
-        goto tmp%2#0 ? block@3 : block@4
+        let tmp%0#0: uint64 = (+ total#1 item#0)
+        let total#2: uint64 = tmp%0#0
+        let tmp%1#0: bool = (== item#0 42u)
+        goto tmp%1#0 ? block@3 : block@4
     block@3: // if_body_L49
         goto block@7
     block@4: // after_if_else_L49

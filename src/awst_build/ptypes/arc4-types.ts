@@ -14,10 +14,12 @@ import {
   ContractClassPType,
   LibClassType,
   LibFunctionType,
+  MutableTuplePType,
   NumericLiteralPType,
   ObjectPType,
+  ReadonlyArrayPType,
+  ReadonlyTuplePType,
   stringPType,
-  TuplePType,
   uint64PType,
   voidPType,
 } from './index'
@@ -244,10 +246,6 @@ export class ARC4StructType extends ARC4EncodedType {
       frozen: this.frozen,
     })
   }
-
-  get signature(): string {
-    return `${this.name}${this.abiTypeSignature}`
-  }
 }
 
 export const arc4StructBaseType = new ARC4StructType({
@@ -261,10 +259,13 @@ export const arc4StructBaseType = new ARC4StructType({
 export const Arc4TupleGeneric = new GenericPType({
   name: 'Tuple',
   module: Constants.moduleNames.algoTs.arc4.encodedTypes,
-  parameterise(ptypes: readonly PType[]) {
-    codeInvariant(ptypes.length, `${this.name} expects 1 generic parameter`)
-    codeInvariant(ptypes[0] instanceof TuplePType, `${this.name} generic parameter must be a native tuple type`)
-    const encodedTypes = ptypes[0].items.map((itemType, index) => {
+  parameterise([tupleType, ...rest]: readonly PType[]) {
+    codeInvariant(tupleType && !rest.length, `${this.name} expects 1 generic parameter`)
+    codeInvariant(
+      tupleType instanceof ReadonlyTuplePType || tupleType instanceof MutableTuplePType,
+      `${this.name} generic parameter must be a native tuple type`,
+    )
+    const encodedTypes = tupleType.items.map((itemType, index) => {
       codeInvariant(itemType instanceof ARC4EncodedType, `Item ${index} of ARC4 Tuple must be an ARC4 encoded type`)
       return itemType
     })
@@ -276,20 +277,21 @@ export const Arc4TupleGeneric = new GenericPType({
 
 export class ARC4TupleType extends ARC4EncodedType {
   readonly [PType.IdSymbol] = 'ARC4TupleType'
-  readonly name = 'Tuple'
+  readonly name: string
   readonly module = Constants.moduleNames.algoTs.arc4.encodedTypes
   readonly singleton = false
   readonly items: ARC4EncodedType[]
   readonly sourceLocation: SourceLocation | undefined
   readonly fixedBitSize: bigint | null
-  readonly nativeType: TuplePType
+  readonly nativeType: ReadonlyTuplePType
   readonly abiTypeSignature: string
 
   constructor({ types, sourceLocation }: { types: ARC4EncodedType[]; sourceLocation?: SourceLocation }) {
     super()
     this.items = types
+    this.name = `Tuple<${this.items.map((i) => i.name).join(',')}`
     this.sourceLocation = sourceLocation
-    this.nativeType = new TuplePType({ items: this.items })
+    this.nativeType = new ReadonlyTuplePType({ items: this.items })
     this.fixedBitSize = ARC4EncodedType.calculateFixedBitSize(types)
     this.abiTypeSignature = ARC4EncodedType.buildAbiTupleSignature(types)
   }
@@ -339,7 +341,7 @@ export class UintNType extends ARC4EncodedType {
     this.n = n
     this.name = name ?? `UintN<${n}>`
     this.wtype = wtype ?? new wtypes.ARC4UIntN({ n: this.n })
-    this.abiTypeSignature = wtype?.arc4Alias ?? `uint${this.n}`
+    this.abiTypeSignature = wtype?.arc4Alias ?? `uint${n}`
   }
 }
 export const UFixedNxMGeneric = new GenericPType({
@@ -388,7 +390,7 @@ export class UFixedNxMType extends ARC4EncodedType {
     this.m = m
     this.name = `${UFixedNxMGeneric.name}<${n}, ${m}>`
     this.wtype = new wtypes.ARC4UFixedNxM({ n: this.n, m: this.m })
-    this.abiTypeSignature = `ufixed${this.n}x${this.m}`
+    this.abiTypeSignature = `ufixed${n}x${m}`
   }
 }
 
@@ -448,7 +450,17 @@ export class DynamicArrayType extends ARC4ArrayType {
     })
     this.abiTypeSignature = `${this.elementType.abiTypeSignature}[]`
   }
+
+  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType | undefined {
+    if (typeof index === 'bigint') return this.elementType
+    return super.getIndexType(index, sourceLocation)
+  }
+
+  getIteratorType(): PType | undefined {
+    return this.elementType
+  }
 }
+
 export const StaticArrayGeneric = new GenericPType({
   name: 'StaticArray',
   module: Constants.moduleNames.algoTs.arc4.encodedTypes,
@@ -502,7 +514,7 @@ export class StaticArrayType extends ARC4ArrayType {
     this.arraySize = arraySize
     this.name = name ?? `StaticArray<${elementType}, ${arraySize}>`
     this.sourceLocation = sourceLocation
-    this.nativeType = nativeType ?? new TuplePType({ items: new Array(Number(arraySize)).fill(elementType) })
+    this.nativeType = nativeType ?? (this.immutable ? new ReadonlyArrayPType({ elementType }) : new ArrayPType({ elementType }))
     this.wtype =
       wtype ??
       new wtypes.ARC4StaticArray({
@@ -512,6 +524,15 @@ export class StaticArrayType extends ARC4ArrayType {
       })
     this.fixedBitSize = ARC4EncodedType.calculateFixedBitSize(new Array(Number(arraySize)).fill(elementType))
     this.abiTypeSignature = `${this.elementType.abiTypeSignature}[${this.arraySize}]`
+  }
+
+  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType | undefined {
+    if (typeof index === 'bigint') return this.elementType
+    return super.getIndexType(index, sourceLocation)
+  }
+
+  getIteratorType(): PType | undefined {
+    return this.elementType
   }
 }
 export const arc4AddressAlias = new StaticArrayType({

@@ -10,6 +10,8 @@ import { LiteralExpressionBuilder } from '../literal-expression-builder'
 import { requireBuilderOfType, resolvableToType } from '../util'
 
 export class ConditionalExpressionBuilder extends LiteralExpressionBuilder {
+  readonly isConstant = false
+
   private readonly _ptype: PType
   private readonly whenTrue: InstanceBuilder
   private readonly whenFalse: InstanceBuilder

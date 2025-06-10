@@ -649,56 +649,102 @@ export class ArrayLiteralPType extends PType {
     })
   }
 
-  getTupleType(): TuplePType {
-    return new TuplePType({
+  getReadonlyTupleType(): ReadonlyTuplePType {
+    return new ReadonlyTuplePType({
       items: this.items,
     })
   }
+  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType | undefined {
+    if (typeof index === 'bigint') {
+      return this.items[Number(index)]
+    }
+    return super.getIndexType(index, sourceLocation)
+  }
 }
 
-export class TuplePType extends PType {
-  readonly [PType.IdSymbol] = 'TuplePType'
+export class MutableTuplePType extends PType {
+  readonly [PType.IdSymbol] = 'MutableTuplePType'
   readonly module: string = 'lib.d.ts'
   get name() {
-    return `Tuple<${this.items.map((i) => i.name).join(', ')}>`
+    return `[${this.items.map((i) => i.name).join(', ')}]`
   }
   get fullName() {
-    return `${this.module}::Tuple<${this.items.map((i) => i.fullName).join(', ')}>`
+    return `${this.module}::[${this.items.map((i) => i.fullName).join(', ')}]`
   }
 
   readonly items: PType[]
   readonly singleton = false
-  readonly immutable: boolean
   constructor(props: { items: PType[] }) {
     super()
     this.items = props.items
-    this.immutable = true
+  }
+
+  get wtype(): wtypes.ARC4Tuple {
+    return new wtypes.ARC4Tuple({
+      types: this.items.map((i) => i.wtypeOrThrow),
+      immutable: false,
+    })
+  }
+  getIteratorType(): PType | undefined {
+    return UnionPType.fromTypes(this.items)
+  }
+
+  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType | undefined {
+    if (typeof index === 'bigint') {
+      return this.items[Number(index)]
+    }
+    return super.getIndexType(index, sourceLocation)
+  }
+}
+export class ReadonlyTuplePType extends PType {
+  readonly [PType.IdSymbol] = 'ReadonlyTuplePType'
+  readonly module: string = 'lib.d.ts'
+  get name() {
+    return `readonly [${this.items.map((i) => i.name).join(', ')}]`
+  }
+  get fullName() {
+    return `${this.module}::readonly [${this.items.map((i) => i.fullName).join(', ')}]`
+  }
+
+  readonly items: PType[]
+  readonly singleton = false
+  constructor(props: { items: PType[] }) {
+    super()
+    this.items = props.items
   }
 
   get wtype(): wtypes.WTuple {
     return new wtypes.WTuple({
       types: this.items.map((i) => i.wtypeOrThrow),
-      immutable: this.immutable,
     })
   }
 
-  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType {
+  getIteratorType(): PType | undefined {
+    return UnionPType.fromTypes(this.items)
+  }
+
+  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType | undefined {
     if (typeof index === 'bigint') {
-      if (index >= 0 && index < this.items.length) {
-        return this.items[Number(index)]
-      }
-      throw new CodeError(`Cannot access index ${index} of ${this.name}`, { sourceLocation })
+      return this.items[Number(index)]
     }
     return super.getIndexType(index, sourceLocation)
   }
 }
+export const ArrayGeneric = new GenericPType({
+  name: 'Array',
+  module: Constants.moduleNames.typescript.array,
+  parameterise(typeArgs) {
+    codeInvariant(typeArgs.length === 1, 'Array expects exactly 1 type argument')
+    return new ArrayPType({ elementType: typeArgs[0] })
+  },
+})
 export class ArrayPType extends PType {
   readonly [PType.IdSymbol] = 'ArrayPType'
   readonly elementType: PType
-  readonly immutable = true
+  readonly immutable = false
   readonly singleton = false
   readonly name: string
-  readonly module: string = 'lib.d.ts'
+  readonly module: string = Constants.moduleNames.typescript.array
   get fullName() {
     return `${this.module}::Array<${this.elementType.fullName}>`
   }
@@ -714,8 +760,106 @@ export class ArrayPType extends PType {
       immutable: this.immutable,
     })
   }
+  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType | undefined {
+    if (typeof index === 'bigint') return this.elementType
+    return super.getIndexType(index, sourceLocation)
+  }
+
+  getIteratorType(): PType | undefined {
+    return this.elementType
+  }
+}
+export const ReadonlyArrayGeneric = new GenericPType({
+  name: 'ReadonlyArray',
+  module: Constants.moduleNames.typescript.readonlyArray,
+  parameterise(typeArgs) {
+    codeInvariant(typeArgs.length === 1, 'ReadonlyArray expects exactly 1 type argument')
+    return new ReadonlyArrayPType({ elementType: typeArgs[0] })
+  },
+})
+export class ReadonlyArrayPType extends PType {
+  readonly [PType.IdSymbol] = 'ReadonlyArrayPType'
+  readonly elementType: PType
+  readonly singleton = false
+  readonly immutable = true
+  readonly name: string
+  readonly module: string = Constants.moduleNames.typescript.readonlyArray
+  get fullName() {
+    return `${this.module}::ReadonlyArray<${this.elementType.fullName}>`
+  }
+  constructor(props: { elementType: PType }) {
+    super()
+    this.elementType = props.elementType
+    this.name = `ReadonlyArray<${props.elementType.name}>`
+  }
+
+  get wtype() {
+    return new wtypes.ARC4DynamicArray({
+      elementType: this.elementType.wtypeOrThrow,
+      immutable: this.immutable,
+    })
+  }
+  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType | undefined {
+    if (typeof index === 'bigint') return this.elementType
+    return super.getIndexType(index, sourceLocation)
+  }
+
+  getIteratorType(): PType | undefined {
+    return this.elementType
+  }
 }
 
+export const FixedArrayGeneric = new GenericPType({
+  name: 'FixedArray',
+  module: Constants.moduleNames.algoTs.arrays,
+  parameterise(typeArgs) {
+    codeInvariant(typeArgs.length === 2, 'FixedArray type expects exactly one type parameters')
+    const [elementType, arraySize] = typeArgs
+    codeInvariant(
+      arraySize instanceof NumericLiteralPType,
+      `Array size generic type param for FixedArray must be a literal number. Inferred type is ${arraySize.name}`,
+    )
+    if (elementType instanceof TransientType) {
+      throw new CodeError(elementType.typeMessage)
+    }
+    return new FixedArrayPType({ elementType, arraySize: arraySize.literalValue })
+  },
+})
+
+export class FixedArrayPType extends PType {
+  readonly [PType.IdSymbol] = 'FixedArrayPType'
+  readonly elementType: PType
+  readonly immutable: boolean = false
+  readonly singleton = false
+  readonly name: string
+  readonly module: string = Constants.moduleNames.algoTs.arrays
+  readonly arraySize: bigint
+  get fullName() {
+    return `${this.module}::FixedArray<${this.elementType.fullName}>`
+  }
+  constructor(props: { elementType: PType; arraySize: bigint }) {
+    super()
+    this.elementType = props.elementType
+    this.name = `FixedArray<${props.elementType.name}, ${props.arraySize}>`
+    this.arraySize = props.arraySize
+  }
+  get wtype() {
+    return new wtypes.ARC4StaticArray({
+      elementType: this.elementType.wtypeOrThrow,
+      arraySize: this.arraySize,
+      immutable: false,
+    })
+  }
+
+  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType | undefined {
+    if (typeof index === 'bigint') return this.elementType
+    return super.getIndexType(index, sourceLocation)
+  }
+
+  getIteratorType(): PType | undefined {
+    return this.elementType
+  }
+}
 export class ObjectPType extends PType {
   readonly [PType.IdSymbol] = 'ObjectPType'
   readonly name: string = 'object'
@@ -753,7 +897,6 @@ export class ObjectPType extends PType {
       name: this.alias?.fullName ?? this.fullName,
       names: tupleNames,
       types: tupleTypes,
-      immutable: true,
     })
   }
 
@@ -1115,7 +1258,7 @@ export class GroupTransactionPType extends PType implements ABIType {
     super()
     this.name = name
     this.kind = kind
-    this.abiTypeSignature = kind ? TransactionKind[kind] : 'txn'
+    this.abiTypeSignature = kind !== undefined ? TransactionKind[kind] : 'txn'
   }
 }
 
@@ -1341,6 +1484,10 @@ export class IterableIteratorType extends TransientType {
   get wtype(): wtypes.WEnumeration {
     return new wtypes.WEnumeration({ sequenceType: this.itemType.wtypeOrThrow })
   }
+
+  getIteratorType(): PType | undefined {
+    return this.itemType
+  }
 }
 
 export const GeneratorGeneric = new GenericPType({
@@ -1531,8 +1678,8 @@ export const compiledContractType = new ObjectPType({
   }),
   description: 'Provides compiled programs and state allocation values for a Contract. Created by calling `compile(ExampleContractType)`',
   properties: {
-    approvalProgram: new TuplePType({ items: [bytesPType, bytesPType] }),
-    clearStateProgram: new TuplePType({ items: [bytesPType, bytesPType] }),
+    approvalProgram: new ReadonlyTuplePType({ items: [bytesPType, bytesPType] }),
+    clearStateProgram: new ReadonlyTuplePType({ items: [bytesPType, bytesPType] }),
     extraProgramPages: uint64PType,
     globalUints: uint64PType,
     globalBytes: uint64PType,
@@ -1563,13 +1710,15 @@ export const SuperPrototypeSelectorGeneric = new GenericPType({
     return new SuperPrototypeSelector({ bases: ptypes })
   },
 })
-export class SuperPrototypeSelector extends InternalType {
+export class SuperPrototypeSelector extends PType {
+  readonly [PType.IdSymbol] = 'SuperPrototypeSelector'
   readonly bases: readonly PType[]
+  readonly name = 'SuperPrototypeSelector'
+  readonly singleton = false
+  readonly wtype = undefined
+  readonly module = Constants.moduleNames.polytype
   constructor({ bases }: { bases: readonly PType[] }) {
-    super({
-      name: 'SuperPrototypeSelector',
-      module: Constants.moduleNames.polytype,
-    })
+    super()
     this.bases = bases
   }
 }
@@ -1581,24 +1730,19 @@ export const PolytypeClassMethodHelper = new LibFunctionType({
   name: 'class',
   module: Constants.moduleNames.polytype,
 })
-
-export const MutableArrayConstructor = new LibClassType({
-  name: 'MutableArray',
-  module: Constants.moduleNames.algoTs.mutableArray,
-})
-export const MutableArrayGeneric = new GenericPType({
-  name: 'MutableArray',
-  module: Constants.moduleNames.algoTs.mutableArray,
-  parameterise: (typeArgs: readonly PType[]): MutableArrayType => {
-    codeInvariant(typeArgs.length === 1, 'MutableArray type expects exactly one type parameter')
+export const ReferenceArrayGeneric = new GenericPType({
+  name: 'ReferenceArray',
+  module: Constants.moduleNames.algoTs.referenceArray,
+  parameterise: (typeArgs: readonly PType[]): ReferenceArrayType => {
+    codeInvariant(typeArgs.length === 1, 'ReferenceArray type expects exactly one type parameter')
     const [elementType] = typeArgs
 
-    return new MutableArrayType({ elementType: elementType })
+    return new ReferenceArrayType({ elementType: elementType })
   },
 })
-export class MutableArrayType extends PType {
-  readonly [PType.IdSymbol] = 'MutableArrayType'
-  readonly module = Constants.moduleNames.algoTs.mutableArray
+export class ReferenceArrayType extends PType {
+  readonly [PType.IdSymbol] = 'ReferenceArrayType'
+  readonly module = Constants.moduleNames.algoTs.referenceArray
   readonly immutable = false as const
   readonly name: string
   readonly singleton = false
@@ -1616,7 +1760,7 @@ export class MutableArrayType extends PType {
     immutable?: boolean
   }) {
     super()
-    this.name = name ?? `MutableArray<${elementType}>`
+    this.name = name ?? `ReferenceArray<${elementType}>`
     this.sourceLocation = sourceLocation
     this.elementType = elementType
   }
@@ -1627,6 +1771,14 @@ export class MutableArrayType extends PType {
       sourceLocation: this.sourceLocation,
       immutable: false,
     })
+  }
+  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType | undefined {
+    if (typeof index === 'bigint') return this.elementType
+    return super.getIndexType(index, sourceLocation)
+  }
+
+  getIteratorType(): PType | undefined {
+    return this.elementType
   }
 }
 

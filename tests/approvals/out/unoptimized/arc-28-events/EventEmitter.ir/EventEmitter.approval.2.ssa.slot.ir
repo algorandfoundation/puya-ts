@@ -20,7 +20,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         tests/approvals/arc-28-events.algo.ts::EventEmitter.emitSwapped(reinterpret_Encoded(uint8)%0#0, reinterpret_Encoded(uint8)%1#0)
         let tests/approvals/arc-28-events.algo.ts::EventEmitter.__puya_arc4_router__%0#0: bool = 1u
         goto block@13
-    block@4: // emitCustom_route_L32
+    block@4: // emitCustom_route_L35
         let tmp%7#0: uint64 = (txn OnCompletion)
         let tmp%8#0: bool = (== tmp%7#0 NoOp)
         (assert tmp%8#0) // OnCompletion is not NoOp
@@ -34,7 +34,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         tests/approvals/arc-28-events.algo.ts::EventEmitter.emitCustom(tmp%11#0, tmp%12#0)
         let tests/approvals/arc-28-events.algo.ts::EventEmitter.__puya_arc4_router__%0#1: bool = 1u
         goto block@13
-    block@5: // emitDynamicBytes_route_L37
+    block@5: // emitDynamicBytes_route_L40
         let tmp%13#0: uint64 = (txn OnCompletion)
         let tmp%14#0: bool = (== tmp%13#0 NoOp)
         (assert tmp%14#0) // OnCompletion is not NoOp
@@ -117,10 +117,36 @@ subroutine tests/approvals/arc-28-events.algo.ts::EventEmitter.emitSwapped(a: En
         let tmp%6#0: Encoded((uint8,uint8),uint8) = array%encoded%20#1
         let event%5#0: bytes = (concat method "Swapped((uint8,uint8),uint8)" tmp%6#0)
         (log event%5#0)
+        let array%encoded%21#1: Encoded(uint8) = (concat 0x b#0)
+        let array%encoded%22#1: Encoded(uint8,uint8) = (concat array%encoded%21#1 b#0)
+        let array%encoded%23#1: Encoded(uint8,uint8) = (concat array%encoded%22#1 0x)
+        let tmp%7#0: Encoded(uint8,uint8) = array%encoded%23#1
+        let array%encoded%24#1: Encoded((uint8,uint8)) = (concat 0x tmp%7#0)
+        let array%encoded%25#1: Encoded((uint8,uint8),uint8) = (concat array%encoded%24#1 a#0)
+        let array%encoded%26#1: Encoded((uint8,uint8),uint8) = (concat array%encoded%25#1 0x)
+        let tmp%8#0: Encoded((uint8,uint8),uint8) = array%encoded%26#1
+        let event%6#0: bytes = (concat method "Swapped((uint8,uint8),uint8)" tmp%8#0)
+        (log event%6#0)
+        let array%encoded%27#1: Encoded(uint8) = (concat 0x b#0)
+        let array%encoded%28#1: Encoded(uint8,uint8) = (concat array%encoded%27#1 b#0)
+        let array%as_bytes%0#1: bytes[8] = (itob 2u)
+        let array%len_u16%0#1: bytes = ((extract 6 2) array%as_bytes%0#1)
+        let array%encoded%29#1: bytes = (concat array%len_u16%0#1 array%encoded%28#1)
+        let array%encoded%30#1: Encoded(len+uint8[]) = (concat array%encoded%29#1 0x)
+        let tmp%9#0: Encoded(len+uint8[]) = array%encoded%30#1
+        let array%tail%0#1: bytes = (concat 0x tmp%9#0)
+        let array%as_bytes%1#1: bytes[8] = (itob 3u)
+        let array%offset_as_uint16%0#1: bytes = ((extract 6 2) array%as_bytes%1#1)
+        let array%encoded%31#1: Encoded((len+uint8[])) = (concat 0x array%offset_as_uint16%0#1)
+        let array%encoded%32#1: Encoded((len+uint8[]),uint8) = (concat array%encoded%31#1 a#0)
+        let array%encoded%33#1: Encoded((len+uint8[]),uint8) = (concat array%encoded%32#1 array%tail%0#1)
+        let tmp%10#0: Encoded((len+uint8[]),uint8) = array%encoded%33#1
+        let event%7#0: bytes = (concat method "Swapped(uint8[],uint8)" tmp%10#0)
+        (log event%7#0)
         return 
 
 subroutine tests/approvals/arc-28-events.algo.ts::EventEmitter.emitCustom(arg0: string, arg1: bool) -> void:
-    block@0: // L32
+    block@0: // L35
         let array%length%0#1: uint64 = (len arg0#0)
         let array%as_bytes%0#1: bytes[8] = (itob array%length%0#1)
         let array%length_uint16%0#1: bytes = ((extract 6 2) array%as_bytes%0#1)
@@ -160,7 +186,7 @@ subroutine tests/approvals/arc-28-events.algo.ts::EventEmitter.emitCustom(arg0: 
         return 
 
 subroutine tests/approvals/arc-28-events.algo.ts::EventEmitter.emitDynamicBytes(x: bytes, y: Encoded(len+uint8[])) -> void:
-    block@0: // L37
+    block@0: // L40
         let array%length%0#1: uint64 = (len x#0)
         let array%as_bytes%0#1: bytes[8] = (itob array%length%0#1)
         let array%length_uint16%0#1: bytes = ((extract 6 2) array%as_bytes%0#1)

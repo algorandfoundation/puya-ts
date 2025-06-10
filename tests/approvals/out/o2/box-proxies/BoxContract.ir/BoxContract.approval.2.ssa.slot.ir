@@ -61,13 +61,10 @@ main tests/approvals/box-proxies.algo.ts::BoxContract.approvalProgram:
         (box_put "twowhat?" value#1)
         (box_del "what?")
         (box_put "what?" value#1)
-        let (_%0#1: uint64, maybe_exists%0#1: bool) = (box_len "what?")
-        (assert maybe_exists%0#1)
         let (value%0#1: uint64, check%0#1: bool) = (box_len "twowhat?")
         (assert check%0#1) // Box must have value
         (assert value%0#1)
         let (maybe_value%0#1: bytes, maybe_exists%1#1: bool) = (box_get "twowhat?")
-        (assert maybe_exists%1#1)
         let tmp%2#2: bool = (== maybe_value%0#1 value#1)
         (assert tmp%2#2)
         let isBoxDeleted#0: bool = (box_del "twowhat?")
@@ -104,7 +101,6 @@ main tests/approvals/box-proxies.algo.ts::BoxContract.approvalProgram:
         (box_put "three" 0xffffffff)
         (box_splice "three" 1u 1u 0x00)
         let (maybe_value%3#2: bytes, maybe_exists%5#2: bool) = (box_get "three")
-        (assert maybe_exists%5#2) // Box must have value
         let tmp%5#2: bool = (== maybe_value%3#2 0xff00ffff)
         (assert tmp%5#2)
         let x#0: bool = (box_del "three")

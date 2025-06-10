@@ -61,7 +61,7 @@ type NumericComparison<T> =
       /**
        * Is the subject between the specified values (inclusive)
        */
-      between: [T, T]
+      between: readonly [T, T]
     }
   | {
       /**
@@ -92,9 +92,14 @@ type ComparisonFor<T> = T extends uint64 | biguint ? NumericComparison<T> : NonN
  * A set of tests to apply to the match subject
  * @typeParam T The type of the test subject
  */
-type MatchTest<T> = {
-  [key in keyof T]?: ComparisonFor<T[key]>
-}
+type MatchTest<T> =
+  T extends ConcatArray<infer TItem>
+    ? { [index: number]: ComparisonFor<TItem> } & {
+        length?: ComparisonFor<uint64>
+      }
+    : {
+        [key in keyof T]?: ComparisonFor<T[key]>
+      }
 
 /**
  * Applies all tests in `test` against `subject` and returns a boolean indicating if they all pass

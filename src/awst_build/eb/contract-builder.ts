@@ -36,6 +36,7 @@ import { VoidExpressionBuilder } from './void-expression-builder'
  * Handles expressions using `this` in the context of a contract
  */
 export class ContractThisBuilder extends InstanceBuilder<ContractClassPType> {
+  readonly isConstant = false
   resolve(): Expression {
     throw new CodeError('this keyword is not valid as a value', { sourceLocation: this.sourceLocation })
   }
@@ -78,6 +79,7 @@ export class ContractThisBuilder extends InstanceBuilder<ContractClassPType> {
  * Handles expressions using `super` in the context of a contract
  */
 export class ContractSuperBuilder extends ContractThisBuilder {
+  readonly isConstant = false
   constructor(ptype: ContractClassPType, sourceLocation: SourceLocation) {
     super(ptype, sourceLocation)
   }
@@ -142,6 +144,7 @@ class PolytypeClassSuperMethodBuilder extends FunctionBuilder {
  * Matches polytype's super.class(SomeType) expression
  */
 export class PolytypeExplicitClassAccessExpressionBuilder extends InstanceBuilder {
+  readonly isConstant = false
   resolve(): Expression {
     throw new CodeError('Contract class cannot be used as a value')
   }
@@ -170,6 +173,8 @@ export class PolytypeExplicitClassAccessExpressionBuilder extends InstanceBuilde
 }
 
 export class ContractClassBuilder extends InstanceBuilder {
+  readonly isConstant = false
+
   resolve(): Expression {
     throw new CodeError('Contract class cannot be used as a value')
   }

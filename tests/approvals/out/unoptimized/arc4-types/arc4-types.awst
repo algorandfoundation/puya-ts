@@ -56,10 +56,8 @@ subroutine testArrays(n: arc4.uint64): void
   assert(reinterpret_cast<bytes>(myStatic[0]) == reinterpret_cast<bytes>(myArray.pop()))
   myStatic[1]: arc4.uint64 = 50
   myStatic2: arc4.static_array<arc4.uint64> = new arc4.static_array<arc4.uint64>(n, n, n)
-  staticNative: readonly [arc4.uint64, arc4.uint64, arc4.uint64] = ARC4_DECODE(myStatic2)
-  assert(3 == 3 and reinterpret_cast<bytes>(staticNative.0) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(staticNative.1) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(staticNative.2) == reinterpret_cast<bytes>(n), comment=assert target is match for conditions)
-  dynamicNative: arc4.dynamic_array<arc4.uint64> = ARC4_DECODE(doubleArray)
-  assert(dynamicNative.length == 8 and reinterpret_cast<bytes>(dynamicNative[0]) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(dynamicNative[1]) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(dynamicNative[2]) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(dynamicNative[3]) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(dynamicNative[4]) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(dynamicNative[5]) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(dynamicNative[6]) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(dynamicNative[7]) == reinterpret_cast<bytes>(n), comment=assert target is match for conditions)
+  assert(myStatic2.length == 3 and reinterpret_cast<bytes>(myStatic2[0]) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(myStatic2[1]) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(myStatic2[2]) == reinterpret_cast<bytes>(n), comment=assert target is match for conditions)
+  assert(doubleArray.length == 8 and reinterpret_cast<bytes>(doubleArray[0]) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(doubleArray[1]) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(doubleArray[2]) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(doubleArray[3]) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(doubleArray[4]) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(doubleArray[5]) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(doubleArray[6]) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(doubleArray[7]) == reinterpret_cast<bytes>(n), comment=assert target is match for conditions)
 }
 subroutine testByte(): void
 {
@@ -108,9 +106,9 @@ contract Arc4TypesTestContract
     return True
   }
   
-  getArc4Values(): readonly [arc4.byte, arc4.uint8, arc4.static_array<arc4.byte>]
+  getArc4Values(): arc4.tuple<arc4.byte,arc4.uint8,arc4.static_array<arc4.byte>>
   {
-    return <tuple>[0, 255, Address("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ")]
+    return ARC4_ENCODE(<tuple>[0, 255, Address("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ")], wtype=arc4.tuple<arc4.byte,arc4.uint8,arc4.static_array<arc4.byte>>)
   }
   
 }

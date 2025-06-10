@@ -13,9 +13,7 @@ import { NumericLiteralExpressionBuilder } from '../literal/numeric-literal-expr
 
 export function requireExpressionOfType(builder: NodeBuilder, ptype: PTypeOrClass): Expression {
   if (builder instanceof InstanceBuilder) {
-    if (builder.resolvableToPType(ptype)) {
-      return builder.resolveToPType(ptype).resolve()
-    }
+    return builder.resolveToPType(ptype).resolve()
   }
   throw new CodeError(`Expected expression of type ${ptype}, got ${builder.typeDescription}`, {
     sourceLocation: builder.sourceLocation,
@@ -23,9 +21,7 @@ export function requireExpressionOfType(builder: NodeBuilder, ptype: PTypeOrClas
 }
 export function requireBuilderOfType(builder: NodeBuilder, ptype: PTypeOrClass): InstanceBuilder {
   if (builder instanceof InstanceBuilder) {
-    if (builder.resolvableToPType(ptype)) {
-      return builder.resolveToPType(ptype)
-    }
+    return builder.resolveToPType(ptype)
   }
   throw new CodeError(`Expected expression of type ${ptype}, got ${builder.typeDescription}`, {
     sourceLocation: builder.sourceLocation,

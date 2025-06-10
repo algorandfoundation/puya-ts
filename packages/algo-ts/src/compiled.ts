@@ -12,11 +12,11 @@ export type CompiledContract = {
   /**
    * Approval program pages for a contract, after template variables have been replaced and compiled to AVM bytecode
    */
-  approvalProgram: [bytes, bytes]
+  approvalProgram: readonly [bytes, bytes]
   /**
    * Clear state program pages for a contract, after template variables have been replaced and compiled to AVM bytecode
    */
-  clearStateProgram: [bytes, bytes]
+  clearStateProgram: readonly [bytes, bytes]
   /**
    * By default, provides extra program pages required based on approval and clear state program size, can be overridden when calling `compile(ExampleContractType, { extraProgramPages: ... })`
    */

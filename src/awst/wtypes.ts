@@ -88,10 +88,10 @@ export namespace wtypes {
   export class WTuple extends WType {
     types: WType[]
     names: string[] | undefined
-    constructor(props: { names?: string[]; types: WType[]; immutable?: boolean; name?: string }) {
+    constructor(props: { names?: string[]; types: WType[]; name?: string }) {
       super({
         name: props.name ?? 'tuple',
-        immutable: props.immutable ?? true,
+        immutable: true,
       })
       invariant(props.types.length, 'Tuple length cannot be zero')
       this.types = props.types
@@ -133,12 +133,13 @@ export namespace wtypes {
   }
 
   export class StackArray extends NativeArray {
-    readonly immutable = true
+    readonly immutable: boolean
     constructor(props: { itemType: WType; immutable: boolean; sourceLocation?: SourceLocation }) {
       super({
         name: `stack_array<${props.itemType.name}>`,
         ...props,
       })
+      this.immutable = props.immutable
     }
   }
   export class ReferenceArray extends NativeArray {
@@ -250,14 +251,16 @@ export namespace wtypes {
   export class ARC4Tuple extends ARC4Type {
     readonly types: WType[]
     readonly sourceLocation: SourceLocation | null
+    readonly immutable: boolean
 
-    constructor({ types, sourceLocation }: { types: WType[]; sourceLocation?: SourceLocation; immutable: boolean }) {
+    constructor({ types, sourceLocation, immutable }: { types: WType[]; sourceLocation?: SourceLocation; immutable: boolean }) {
       const typesStr = types.map((t) => t.name).join(',')
       super({
         name: `arc4.tuple<${typesStr}>`,
       })
       this.sourceLocation = sourceLocation ?? null
       this.types = types
+      this.immutable = immutable
     }
   }
 

@@ -13,9 +13,7 @@ import { LiteralExpressionBuilder } from '../literal-expression-builder'
 import { isValidLiteralForPType } from '../util/is-valid-literal-for-ptype'
 
 export class BigIntLiteralExpressionBuilder extends LiteralExpressionBuilder {
-  get isConstant() {
-    return true
-  }
+  readonly isConstant = true
 
   singleEvaluation(): InstanceBuilder {
     return this

@@ -12,7 +12,7 @@ export class BoxContract extends arc4.Contract {
   }
 
   @arc4.abimethod({ name: 'read_enums' })
-  public readEnums(): Tuple<[UintN64, UintN64]> {
+  public readEnums(): Tuple<readonly [UintN64, UintN64]> {
     assert(op.Box.get(Bytes('oca'))[0] === op.itob(this.oca.value))
     assert(op.Box.get(Bytes('txn'))[0] === op.itob(this.txn.value))
 

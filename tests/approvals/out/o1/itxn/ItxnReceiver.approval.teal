@@ -43,22 +43,6 @@ main_receivePay_route@3:
     // tests/approvals/itxn.algo.ts:228
     // public receivePay(a: uint64, b: gtxn.PaymentTxn, c: string): [uint64, uint64, string] {
     callsub receivePay
-    uncover 2
-    itob
-    uncover 2
-    itob
-    concat
-    dig 1
-    len
-    itob
-    extract 6 2
-    uncover 2
-    concat
-    swap
-    pushbytes 0x0012
-    concat
-    swap
-    concat
     pushbytes 0x151f7c75
     swap
     concat
@@ -78,16 +62,29 @@ main_bare_routing@6:
     return
 
 
-// tests/approvals/itxn.algo.ts::ItxnReceiver.receivePay(a: uint64, b: uint64, c: bytes) -> uint64, uint64, bytes:
+// tests/approvals/itxn.algo.ts::ItxnReceiver.receivePay(a: uint64, b: uint64, c: bytes) -> bytes:
 receivePay:
     // tests/approvals/itxn.algo.ts:228
     // public receivePay(a: uint64, b: gtxn.PaymentTxn, c: string): [uint64, uint64, string] {
-    proto 3 3
+    proto 3 1
     // tests/approvals/itxn.algo.ts:229
     // return [a, b.amount, c]
     frame_dig -2
     gtxns Amount
     frame_dig -3
+    itob
     swap
+    itob
+    concat
     frame_dig -1
+    len
+    itob
+    extract 6 2
+    frame_dig -1
+    concat
+    swap
+    pushbytes 0x0012
+    concat
+    swap
+    concat
     retsub

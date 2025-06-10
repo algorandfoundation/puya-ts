@@ -43,8 +43,12 @@ export abstract class PType {
    * @param index
    * @param sourceLocation
    */
-  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType {
+  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType | undefined {
     throw new CodeError(`${this.name} is not indexable by ${typeof index === 'bigint' ? 'number' : 'string'}`, { sourceLocation })
+  }
+
+  getIteratorType(): PType | undefined {
+    return undefined
   }
 
   get fullName() {
@@ -67,7 +71,7 @@ export abstract class PType {
   }
 
   static equals(other: PType): boolean {
-    return other instanceof this
+    return other.constructor === this
   }
 
   equalsOrInstanceOf(other: PTypeOrClass): boolean {

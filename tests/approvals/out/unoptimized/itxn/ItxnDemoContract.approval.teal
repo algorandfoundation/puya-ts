@@ -1540,8 +1540,6 @@ test5:
     // public test5(appId: Application) {
     proto 1 0
     intc_0 // 0
-    pushbytes ""
-    dup
 
 test5_block@0:
     // tests/approvals/itxn.algo.ts:210
@@ -1617,34 +1615,6 @@ test5_next_txn@2:
     pushbytes 0x151f7c75
     ==
     assert // Bytes has valid prefix
-    dup
-    intc_0 // 0
-    pushint 8 // 8
-    extract3
-    btoi
-    swap
-    dup
-    pushint 8 // 8
-    dup
-    extract3
-    btoi
-    swap
-    dup
-    pushint 16 // 16
-    extract_uint16
-    swap
-    dup
-    len
-    swap
-    uncover 2
-    uncover 2
-    substring3
-    extract 2 0
-    uncover 2
-    swap
-    cover 2
-    frame_bury 1
-    frame_bury 2
     frame_bury 0
     // tests/approvals/itxn.algo.ts:223
     // assertMatch(returnValue, [1, 1000, 'hello'])
@@ -1656,7 +1626,11 @@ test5_next_txn@2:
 test5_and_contd@3:
     // tests/approvals/itxn.algo.ts:223
     // assertMatch(returnValue, [1, 1000, 'hello'])
-    frame_dig 1
+    frame_dig 0
+    intc_0 // 0
+    pushint 8 // 8
+    extract3
+    btoi
     intc_3 // 1
     ==
     bz test5_bool_false@7
@@ -1664,7 +1638,11 @@ test5_and_contd@3:
 test5_and_contd@4:
     // tests/approvals/itxn.algo.ts:223
     // assertMatch(returnValue, [1, 1000, 'hello'])
-    frame_dig 2
+    frame_dig 0
+    pushint 8 // 8
+    dup
+    extract3
+    btoi
     intc 4 // 1000
     ==
     bz test5_bool_false@7
@@ -1673,6 +1651,17 @@ test5_and_contd@5:
     // tests/approvals/itxn.algo.ts:223
     // assertMatch(returnValue, [1, 1000, 'hello'])
     frame_dig 0
+    dup
+    pushint 16 // 16
+    extract_uint16
+    swap
+    dup
+    len
+    swap
+    uncover 2
+    uncover 2
+    substring3
+    extract 2 0
     bytec 12 // "hello"
     ==
     bz test5_bool_false@7

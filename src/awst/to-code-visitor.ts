@@ -3,6 +3,7 @@ import { InternalError } from '../errors'
 import { uint8ArrayToBase32, uint8ArrayToUtf8 } from '../util'
 import type { ContractReference } from './models'
 import * as nodes from './nodes'
+import type { CommaExpression, ConvertArray } from './nodes'
 import { AppStorageKind, BytesEncoding, ContractMethodTarget, InstanceMethodTarget, InstanceSuperMethodTarget, SubroutineID } from './nodes'
 import { SymbolToNumber } from './util'
 import { wtypes } from './wtypes'
@@ -386,7 +387,7 @@ export class ToCodeVisitor
     ].join('')
   }
 
-  visitConvertArray(expression: nodes.ConvertArray): string {
+  visitConvertArray(expression: ConvertArray): string {
     return `convert_array(${expression.expr.accept(this)}, wtype=${expression.wtype})`
   }
 

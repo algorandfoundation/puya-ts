@@ -305,23 +305,19 @@ subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.setLastCalled(key: st
         let array%extract_uint16%0#1: uint64 = (extract_uint16 maybe_value%0#0 25u)
         let array%len%0#1: uint64 = (len maybe_value%0#0)
         let array%substring3%0#1: bytes = (substring3 maybe_value%0#0 array%extract_uint16%0#1 array%len%0#1)
-        let tuple_item%0#0: Encoded(len+(uint8[4],uint64,uint64)[]) = array%substring3%0#1
-        let array%array_trimmed%0#1: bytes = ((extract 2 0) tuple_item%0#0)
+        let array%array_trimmed%0#1: bytes = ((extract 2 0) array%substring3%0#1)
         let array%bytes_offset%0#1: uint64 = (* index#0 20u)
         let array%encoded_element%0#1: bytes = (extract3 array%array_trimmed%0#1 array%bytes_offset%0#1 20u) // on error: index access is out of bounds
-        let array_item%0#0: Encoded(uint8[4],uint64,uint64) = array%encoded_element%0#1
-        let array%updated_data%0#1: bytes = (replace3 array_item%0#0 12u tmp%0#0)
-        let updated_tuple%0#0: Encoded(uint8[4],uint64,uint64) = array%updated_data%0#1
+        let array%updated_data%0#1: bytes = (replace3 array%encoded_element%0#1 12u tmp%0#0)
         let array%write_offset%0#1: uint64 = (* index#0 20u)
         let array%write_offset_with_length_header%0#1: uint64 = (+ array%write_offset%0#1 2u)
-        let array%updated_array%0#1: bytes = (replace3 tuple_item%0#0 array%write_offset_with_length_header%0#1 updated_tuple%0#0)
-        let updated_array%0#0: Encoded(len+(uint8[4],uint64,uint64)[]) = array%updated_array%0#1
+        let array%updated_array%0#1: bytes = (replace3 array%substring3%0#1 array%write_offset_with_length_header%0#1 array%updated_data%0#1)
         let array%item_offset%0#1: uint64 = (extract_uint16 maybe_value%0#0 25u)
         let array%data_up_to_item%0#1: bytes = (extract3 maybe_value%0#0 0u array%item_offset%0#1)
-        let array%updated_data%1#1: bytes = (concat array%data_up_to_item%0#1 updated_array%0#0)
-        let updated_tuple%1#0: Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])) = array%updated_data%1#1
+        let array%updated_data%1#1: bytes = (concat array%data_up_to_item%0#1 array%updated_array%0#1)
+        let updated_tuple%0#0: Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])) = array%updated_data%1#1
         (box_del box_prefixed_key%0#0)
-        (box_put box_prefixed_key%0#0 updated_tuple%1#0)
+        (box_put box_prefixed_key%0#0 updated_tuple%0#0)
         return 
 
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.setPlugin(key: string) -> void:

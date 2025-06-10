@@ -90,21 +90,12 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%37#0: bool = (!= tmp%36#0 0u)
         (assert tmp%37#0) // can only call when not creating
         let reinterpret_Encoded(uint64,uint64,uint64)%1#0: Encoded(uint64,uint64,uint64) = (txna ApplicationArgs 1)
-        let array%extract%3#1: bytes = (extract3 reinterpret_Encoded(uint64,uint64,uint64)%1#0 0u 8u)
-        let array%item0%1#1: uint64 = (btoi array%extract%3#1)
-        let array%extract%4#1: bytes = (extract3 reinterpret_Encoded(uint64,uint64,uint64)%1#0 8u 8u)
-        let array%item1%1#1: uint64 = (btoi array%extract%4#1)
-        let array%extract%5#1: bytes = (extract3 reinterpret_Encoded(uint64,uint64,uint64)%1#0 16u 8u)
-        let array%item2%1#1: uint64 = (btoi array%extract%5#1)
-        let tmp%38#0: uint64 = array%item0%1#1
-        let tmp%39#0: uint64 = array%item1%1#1
-        let tmp%40#0: uint64 = array%item2%1#1
-        let tmp%41#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array(tmp%38#0, tmp%39#0, tmp%40#0)
-        let array%val_as_bytes%4#1: bytes[8] = (itob tmp%41#0)
+        let tmp%38#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array(reinterpret_Encoded(uint64,uint64,uint64)%1#0)
+        let array%val_as_bytes%4#1: bytes[8] = (itob tmp%38#0)
         let array%as_Encoded(uint64)%4#1: Encoded(uint64) = array%val_as_bytes%4#1
-        let tmp%42#0: Encoded(uint64) = array%as_Encoded(uint64)%4#1
-        let tmp%43#0: bytes = (concat 0x151f7c75 tmp%42#0)
-        (log tmp%43#0)
+        let tmp%39#0: Encoded(uint64) = array%as_Encoded(uint64)%4#1
+        let tmp%40#0: bytes = (concat 0x151f7c75 tmp%39#0)
+        (log tmp%40#0)
         let tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__%0#4: bool = 1u
         goto block@15
     block@8: // switch_case_default_L7
@@ -112,12 +103,12 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@9: // switch_case_next_L7
         goto block@14
     block@10: // bare_routing_L7
-        let tmp%44#0: uint64 = (txn OnCompletion)
-        switch tmp%44#0 {0u => block@11, * => block@12}
+        let tmp%41#0: uint64 = (txn OnCompletion)
+        switch tmp%41#0 {0u => block@11, * => block@12}
     block@11: // __algots__.defaultCreate_L7
-        let tmp%45#0: uint64 = (txn ApplicationID)
-        let tmp%46#0: bool = (== tmp%45#0 0u)
-        (assert tmp%46#0) // can only call when creating
+        let tmp%42#0: uint64 = (txn ApplicationID)
+        let tmp%43#0: bool = (== tmp%42#0 0u)
+        (assert tmp%43#0) // can only call when creating
         tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__algots__.defaultCreate()
         let tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__%0#5: bool = 1u
         goto block@15
@@ -254,13 +245,13 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop
         let array%bytes_offset%0#1: uint64 = (* item_index_internal%0#1 8u)
         let array%encoded_element%0#1: bytes = (extract3 array%array_trimmed%0#1 array%bytes_offset%0#1 8u) // on error: index access is out of bounds
         let array_item%0#0: Encoded(uint64) = array%encoded_element%0#1
-        let tmp%0#0: uint64 = (btoi array_item%0#0)
-        let temp#0: uint64 = tmp%0#0
+        let values%0#0: uint64 = (btoi array_item%0#0)
+        let temp#0: uint64 = values%0#0
         let item#0: uint64 = temp#0
-        let tmp%1#0: uint64 = (+ total#1 item#0)
-        let total#2: uint64 = tmp%1#0
-        let tmp%2#0: bool = (== item#0 42u)
-        goto tmp%2#0 ? block@3 : block@4
+        let tmp%0#0: uint64 = (+ total#1 item#0)
+        let total#2: uint64 = tmp%0#0
+        let tmp%1#0: bool = (== item#0 42u)
+        goto tmp%1#0 ? block@3 : block@4
     block@3: // if_body_L39
         goto block@7
     block@4: // after_if_else_L39
@@ -274,15 +265,24 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop
         let total#3: uint64 = φ(total#2 <- block@3, total#1 <- block@6)
         return total#3
 
-subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array(items.0: uint64, items.1: uint64, items.2: uint64) -> uint64:
+subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array(items: Encoded(uint64,uint64,uint64)) -> uint64:
     block@0: // L44
-        let array%val_as_bytes%0#1: bytes[8] = (itob items.0#0)
+        let array%extract%0#1: bytes = (extract3 items#0 0u 8u)
+        let tuple_item%0#0: Encoded(uint64) = array%extract%0#1
+        let values%0#0: uint64 = (btoi tuple_item%0#0)
+        let array%extract%1#1: bytes = (extract3 items#0 8u 8u)
+        let tuple_item%1#0: Encoded(uint64) = array%extract%1#1
+        let values%1#0: uint64 = (btoi tuple_item%1#0)
+        let array%extract%2#1: bytes = (extract3 items#0 16u 8u)
+        let tuple_item%2#0: Encoded(uint64) = array%extract%2#1
+        let values%2#0: uint64 = (btoi tuple_item%2#0)
+        let array%val_as_bytes%0#1: bytes[8] = (itob values%0#0)
         let array%as_Encoded(uint64)%0#1: Encoded(uint64) = array%val_as_bytes%0#1
         let array%encoded%0#1: Encoded(uint64) = (concat 0x array%as_Encoded(uint64)%0#1)
-        let array%val_as_bytes%1#1: bytes[8] = (itob items.1#0)
+        let array%val_as_bytes%1#1: bytes[8] = (itob values%1#0)
         let array%as_Encoded(uint64)%1#1: Encoded(uint64) = array%val_as_bytes%1#1
         let array%encoded%1#1: Encoded(uint64,uint64) = (concat array%encoded%0#1 array%as_Encoded(uint64)%1#1)
-        let array%val_as_bytes%2#1: bytes[8] = (itob items.2#0)
+        let array%val_as_bytes%2#1: bytes[8] = (itob values%2#0)
         let array%as_Encoded(uint64)%2#1: Encoded(uint64) = array%val_as_bytes%2#1
         let array%encoded%2#1: Encoded(uint64,uint64,uint64) = (concat array%encoded%1#1 array%as_Encoded(uint64)%2#1)
         let array%encoded%3#1: Encoded(uint64[]) = (concat array%encoded%2#1 0x)
@@ -306,13 +306,13 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop
         let array%bytes_offset%0#1: uint64 = (* item_index_internal%0#1 8u)
         let array%encoded_element%0#1: bytes = (extract3 slot_contents%1#0 array%bytes_offset%0#1 8u) // on error: index access is out of bounds
         let array_item%0#0: Encoded(uint64) = array%encoded_element%0#1
-        let tmp%0#0: uint64 = (btoi array_item%0#0)
-        let temp#0: uint64 = tmp%0#0
+        let values%3#0: uint64 = (btoi array_item%0#0)
+        let temp#0: uint64 = values%3#0
         let item#0: uint64 = temp#0
-        let tmp%1#0: uint64 = (+ total#1 item#0)
-        let total#2: uint64 = tmp%1#0
-        let tmp%2#0: bool = (== item#0 42u)
-        goto tmp%2#0 ? block@3 : block@4
+        let tmp%0#0: uint64 = (+ total#1 item#0)
+        let total#2: uint64 = tmp%0#0
+        let tmp%1#0: bool = (== item#0 42u)
+        goto tmp%1#0 ? block@3 : block@4
     block@3: // if_body_L49
         goto block@7
     block@4: // after_if_else_L49

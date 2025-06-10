@@ -1,5 +1,5 @@
 import { NoImplementation } from '../internal/errors'
-import { biguint, BigUintCompat, bytes, BytesBacked, NTuple, StringCompat, uint64, Uint64Compat } from '../primitives'
+import { biguint, BigUintCompat, bytes, BytesBacked, StringCompat, uint64, Uint64Compat } from '../primitives'
 import { Account } from '../reference'
 
 /**
@@ -209,7 +209,7 @@ export class Bool extends ARC4Encoded {
 /**
  * A base type for arc4 array types
  */
-abstract class Arc4ArrayBase<TItem extends ARC4Encoded> extends ARC4Encoded {
+abstract class Arc4ArrayBase<TItem extends ARC4Encoded> extends ARC4Encoded implements ConcatArray<TItem> {
   protected constructor() {
     super()
   }
@@ -230,24 +230,34 @@ abstract class Arc4ArrayBase<TItem extends ARC4Encoded> extends ARC4Encoded {
     throw new NoImplementation()
   }
 
-  /** @internal
+  /** @deprecated Array slicing is not yet supported in Algorand TypeScript
    * Create a new Dynamic array with all items from this array
    */
-  slice(): DynamicArray<TItem>
-  /** @internal
+  slice(): Array<TItem>
+  /** @deprecated Array slicing is not yet supported in Algorand TypeScript
    * Create a new DynamicArray with all items up till `end`.
    * Negative indexes are taken from the end.
    * @param end An index in which to stop copying items.
    */
-  slice(end: Uint64Compat): DynamicArray<TItem>
-  /** @internal
+  slice(end: Uint64Compat): Array<TItem>
+  /** @deprecated Array slicing is not yet supported in Algorand TypeScript
    * Create a new DynamicArray with items from `start`, up until `end`
    * Negative indexes are taken from the end.
    * @param start An index in which to start copying items.
    * @param end An index in which to stop copying items
    */
-  slice(start: Uint64Compat, end: Uint64Compat): DynamicArray<TItem>
-  slice(start?: Uint64Compat, end?: Uint64Compat): DynamicArray<TItem> {
+  slice(start: Uint64Compat, end: Uint64Compat): Array<TItem>
+  slice(start?: Uint64Compat, end?: Uint64Compat): Array<TItem> {
+    throw new NoImplementation()
+  }
+
+  /**
+   * Creates a string by concatenating all the items in the array delimited by the
+   * specified separator (or ',' by default)
+   * @param separator
+   * @deprecated Join is not supported in Algorand TypeScript
+   */
+  join(separator?: string): string {
     throw new NoImplementation()
   }
 
@@ -305,13 +315,6 @@ export class StaticArray<TItem extends ARC4Encoded, TLength extends number> exte
   concat(other: Arc4ArrayBase<TItem>): DynamicArray<TItem> {
     throw new NoImplementation()
   }
-
-  /**
-   * Return the array items as a native tuple
-   */
-  get native(): NTuple<TItem, TLength> {
-    throw new NoImplementation()
-  }
 }
 
 /**
@@ -349,20 +352,13 @@ export class DynamicArray<TItem extends ARC4Encoded> extends Arc4ArrayBase<TItem
   concat(other: Arc4ArrayBase<TItem>): DynamicArray<TItem> {
     throw new NoImplementation()
   }
-
-  /**
-   * Return the array items as a native immutable array
-   */
-  get native(): TItem[] {
-    throw new NoImplementation()
-  }
 }
 
 /**
  * An arc4 encoded tuple of values
  * @typeParam TTuple A type representing the native tuple of item types
  */
-export class Tuple<TTuple extends [ARC4Encoded, ...ARC4Encoded[]]> extends ARC4Encoded {
+export class Tuple<const TTuple extends readonly [ARC4Encoded, ...ARC4Encoded[]]> extends ARC4Encoded {
   /**
    * Create a new Tuple with the default zero values for items
    */

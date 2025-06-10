@@ -1,10 +1,11 @@
-import { awst, isConstant } from '../../awst'
+import { awst, isConstantOrTemplateVar } from '../../awst'
 import { nodeFactory } from '../../awst/node-factory'
 import { TupleItemExpression } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { CodeError, NotSupported } from '../../errors'
 import type { DecoratorData } from '../models/decorator-data'
 import type { GenericPType, LibClassType, PType, PTypeOrClass } from '../ptypes'
+import { uint64PType } from '../ptypes'
 import type { ARC4StructClass } from '../ptypes/arc4-types'
 import type { MutableObjectClass } from '../ptypes/mutable-object'
 import { instanceEb } from '../type-registry'
@@ -85,6 +86,10 @@ export abstract class NodeBuilder {
   }
 
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
+    if (/^\d+$/.test(name)) {
+      const idx = instanceEb(nodeFactory.uInt64Constant({ value: BigInt(name), sourceLocation }), uint64PType)
+      return this.indexAccess(idx, sourceLocation)
+    }
     throw new NotSupported(`Accessing member ${name} on ${this.typeDescription}`, {
       sourceLocation,
     })
@@ -104,17 +109,11 @@ export abstract class NodeBuilder {
 }
 
 export abstract class InstanceBuilder<TPType extends PType = PType> extends NodeBuilder {
-  constructor(sourceLocation: SourceLocation) {
-    super(sourceLocation)
-  }
   abstract get ptype(): TPType
   abstract resolve(): awst.Expression
   abstract resolveLValue(): awst.LValue
 
-  get isConstant() {
-    const expr = this.resolve()
-    return isConstant(expr) || expr instanceof awst.TemplateVar
-  }
+  abstract get isConstant(): boolean
 
   /**
    * Returns a boolean indicating if the current builder can be resolved to the target type.
@@ -197,17 +196,41 @@ export abstract class InstanceBuilder<TPType extends PType = PType> extends Node
       sourceLocation,
     })
   }
+}
 
-  reinterpretCast(target: PType, sourceLocation?: SourceLocation) {
-    return instanceEb(
-      nodeFactory.reinterpretCast({
-        expr: this.resolve(),
-        sourceLocation: sourceLocation ?? this.sourceLocation,
-        wtype: target.wtypeOrThrow,
-      }),
-      target,
-    )
-  }
+/**
+ * Base type for an instance builder that wraps another instance builder.
+ * All methods are abstract to ensure they are implemented in the extending class
+ */
+export abstract class WrappingInstanceBuilder<TPType extends PType = PType> extends InstanceBuilder<TPType> {
+  abstract get ptype(): TPType
+  abstract resolve(): awst.Expression
+  abstract resolveLValue(): awst.LValue
+
+  abstract get isConstant(): boolean
+  abstract resolvableToPType(ptype: PTypeOrClass): boolean
+  abstract resolveToPType(ptype: PTypeOrClass): InstanceBuilder
+  abstract singleEvaluation(): InstanceBuilder
+  abstract toBytes(sourceLocation: SourceLocation): InstanceBuilder
+  abstract toString(sourceLocation: SourceLocation): awst.Expression
+  abstract prefixUnaryOp(op: BuilderUnaryOp, sourceLocation: SourceLocation): InstanceBuilder
+  abstract postfixUnaryOp(op: BuilderUnaryOp, sourceLocation: SourceLocation): InstanceBuilder
+  abstract compare(other: InstanceBuilder, op: BuilderComparisonOp, sourceLocation: SourceLocation): InstanceBuilder
+  abstract binaryOp(other: InstanceBuilder, op: BuilderBinaryOp, sourceLocation: SourceLocation): InstanceBuilder
+  abstract iterate(sourceLocation: SourceLocation): awst.Expression
+  abstract augmentedAssignment(other: InstanceBuilder, op: BuilderBinaryOp, sourceLocation: SourceLocation): InstanceBuilder
+  abstract call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder
+  abstract newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder
+  abstract taggedTemplate(
+    head: string,
+    spans: ReadonlyArray<readonly [InstanceBuilder, string]>,
+    typeArgs: ReadonlyArray<PType>,
+    sourceLocation: SourceLocation,
+  ): InstanceBuilder
+  abstract hasProperty(_name: string): boolean
+  abstract memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder
+  abstract indexAccess(index: InstanceBuilder, sourceLocation: SourceLocation): NodeBuilder
+  abstract boolEval(sourceLocation: SourceLocation, negate: boolean): awst.Expression
 }
 
 export abstract class ClassBuilder extends NodeBuilder {
@@ -237,6 +260,10 @@ export abstract class InstanceExpressionBuilder<TPType extends PType> extends In
     return this.#ptype
   }
 
+  get isConstant() {
+    return isConstantOrTemplateVar(this._expr)
+  }
+
   constructor(
     protected _expr: awst.Expression,
     ptype: TPType,
@@ -264,7 +291,7 @@ export function requireLValue(expr: awst.Expression): awst.LValue {
     awst.AppAccountStateExpression,
     awst.BoxValueExpression,
   ]
-  if (expr instanceof TupleItemExpression) {
+  if (expr instanceof TupleItemExpression && expr.base.wtype.immutable) {
     throw new CodeError('Expression is not a valid assignment target - object is immutable', { sourceLocation: expr.sourceLocation })
   }
   if (!lValueNodes.some((l) => expr instanceof l)) {

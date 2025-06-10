@@ -15,13 +15,10 @@ import type { InstanceBuilder } from '../eb'
 import { BuilderComparisonOp } from '../eb'
 import { ArrayLiteralExpressionBuilder } from '../eb/literal/array-literal-expression-builder'
 import { ObjectLiteralExpressionBuilder } from '../eb/literal/object-literal-expression-builder'
-import { NativeArrayExpressionBuilder } from '../eb/native-array-expression-builder'
 import { OmittedExpressionBuilder } from '../eb/omitted-expression-builder'
-import { TupleExpressionBuilder } from '../eb/tuple-expression-builder'
 import { requireExpressionOfType, requireInstanceBuilder } from '../eb/util'
 import type { PType } from '../ptypes'
 import { FunctionPType, ObjectPType } from '../ptypes'
-import { getSequenceItemType } from '../ptypes/util'
 import { instanceEb, typeRegistry } from '../type-registry'
 import { BaseVisitor } from './base-visitor'
 import { maybeNodes } from './util'
@@ -78,7 +75,7 @@ export abstract class FunctionVisitor
           invariant(ts.isIdentifier(propertyNameIdentifier), 'propertyName must be an identifier')
 
           const propertyName = this.textVisitor.accept(propertyNameIdentifier)
-          codeInvariant(!element.dotDotDotToken, 'Spread operator is not supported', sourceLocation)
+          codeInvariant(!element.dotDotDotToken, 'Spread operator is not supported here', sourceLocation)
           codeInvariant(!element.initializer, 'Initializer on object binding pattern is not supported', sourceLocation)
 
           props.push([propertyName, this.visitBindingName(element.name, sourceLocation)])
@@ -96,22 +93,9 @@ export abstract class FunctionVisitor
           } else {
             codeInvariant(!element.initializer, 'Initializer on array binding expression is not supported', sourceLocation)
             codeInvariant(!element.propertyName, 'Property name on array binding expression is not supported', sourceLocation)
+            codeInvariant(!element.dotDotDotToken, 'Spread operator is not supported here', sourceLocation)
 
-            if (element.dotDotDotToken) {
-              const spreadResult = this.visitBindingName(element.name, sourceLocation)
-              if (spreadResult instanceof NativeArrayExpressionBuilder) {
-                throw new CodeError(
-                  'Spread operator is not supported in assignment expressions where the resulting type is a variadic array',
-                  { sourceLocation },
-                )
-              } else if (spreadResult instanceof TupleExpressionBuilder) {
-                throw new CodeError('Spread operator is not currently supported with tuple expressions', { sourceLocation })
-              } else {
-                throw InternalError.shouldBeUnreachable()
-              }
-            } else {
-              items.push(this.visitBindingName(element.name, sourceLocation))
-            }
+            items.push(this.visitBindingName(element.name, sourceLocation))
           }
         }
         return new ArrayLiteralExpressionBuilder(sourceLocation, items)
@@ -193,6 +177,7 @@ export abstract class FunctionVisitor
        */
       storeConst: if (isConstDeclaration && ts.isIdentifier(d.name)) {
         const targetType = this.context.getPTypeForNode(d.name)
+        if (!source.isConstant) break storeConst
         if (!source.resolvableToPType(targetType)) break storeConst
         const builder = source.resolveToPType(targetType)
         if (!builder.isConstant) break storeConst
@@ -253,10 +238,7 @@ export abstract class FunctionVisitor
     const sourceLocation = this.sourceLocation(node)
     const initializerLocation = this.sourceLocation(node.initializer)
     const sequence = requireInstanceBuilder(this.accept(node.expression))
-    const sequenceLocation = this.sourceLocation(node.expression)
-    const sequenceType = this.context.getPTypeForNode(node.expression)
-    const itemType = getSequenceItemType(sequenceType, sequenceLocation)
-
+    const itemType = sequence.ptype.getIteratorType()
     codeInvariant(itemType, `${sequence.ptype} is not iterable`, this.sourceLocation(node.expression))
     let items: InstanceBuilder
     if (ts.isExpression(node.initializer)) {
@@ -491,7 +473,7 @@ export abstract class FunctionVisitor
     codeInvariant(!node.dotDotDotToken, 'Rest parameters are not supported', sourceLocation)
     codeInvariant(!node.questionToken, 'Optional parameters are not supported', sourceLocation)
     if (node.initializer) {
-      logger.warn(sourceLocation, 'TODO: Default parameter values')
+      logger.error(sourceLocation, 'Default parameter values are not supported')
     }
     const paramPType = this.context.getPTypeForNode(node.type)
 
@@ -502,11 +484,10 @@ export abstract class FunctionVisitor
         wtype: paramPType.wtypeOrThrow,
       })
     } else if (ts.isObjectBindingPattern(node.name)) {
-      codeInvariant(paramPType instanceof ObjectPType, 'Param type must be object if it is being destructured', sourceLocation)
       return nodeFactory.subroutineArgument({
         sourceLocation,
         name: this.context.resolveDestructuredParamName(node),
-        wtype: paramPType.wtype,
+        wtype: paramPType.wtypeOrThrow,
       })
     } else {
       throw new CodeError(`Unsupported parameter declaration type ${getNodeName(node)}`, { sourceLocation })

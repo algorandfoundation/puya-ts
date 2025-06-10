@@ -6,6 +6,7 @@ import { numberPType, uint64PType } from '../../ptypes'
 import { instanceEb } from '../../type-registry'
 import type { NodeBuilder } from '../index'
 import { FunctionBuilder } from '../index'
+import { OptionalExpressionBuilder } from '../optional-expression-builder'
 import { parseFunctionArgs } from '../util/arg-parsing'
 import { translateNegativeIndex } from '../util/translate-negative-index'
 
@@ -15,6 +16,7 @@ export class AtFunctionBuilder extends FunctionBuilder {
     private itemPType: PType,
     private exprLength: Expression | bigint,
     sourceLocation: SourceLocation,
+    private returnsOptional = false,
   ) {
     super(sourceLocation)
   }
@@ -31,7 +33,7 @@ export class AtFunctionBuilder extends FunctionBuilder {
       argSpec: (a) => [a.required(uint64PType, numberPType)],
     })
 
-    return instanceEb(
+    const result = instanceEb(
       nodeFactory.indexExpression({
         base: this.expr,
         sourceLocation: sourceLocation,
@@ -40,5 +42,6 @@ export class AtFunctionBuilder extends FunctionBuilder {
       }),
       this.itemPType,
     )
+    return this.returnsOptional ? new OptionalExpressionBuilder(result) : result
   }
 }

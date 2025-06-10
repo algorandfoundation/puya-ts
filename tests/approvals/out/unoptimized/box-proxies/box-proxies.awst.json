@@ -7463,7 +7463,7 @@
                     "size_wtype": {
                       "_type": "ARC4Tuple",
                       "name": "arc4.tuple<arc4.uint8,arc4.uint8,arc4.bool,arc4.bool>",
-                      "immutable": true,
+                      "immutable": false,
                       "arc4_alias": null,
                       "types": [
                         {
@@ -8336,7 +8336,7 @@
         "storage_wtype": {
           "_type": "ARC4Tuple",
           "name": "arc4.tuple<arc4.uint8,arc4.uint8,arc4.bool,arc4.bool>",
-          "immutable": true,
+          "immutable": false,
           "arc4_alias": null,
           "types": [
             {
@@ -9260,9 +9260,10 @@
                       "end_column": 27
                     },
                     "wtype": {
-                      "_type": "WTuple",
-                      "name": "tuple",
-                      "immutable": true,
+                      "_type": "ARC4Tuple",
+                      "name": "arc4.tuple<string,bytes,bool>",
+                      "immutable": false,
+                      "arc4_alias": null,
                       "types": [
                         {
                           "_type": "WType",
@@ -9280,7 +9281,8 @@
                           "name": "bool",
                           "immutable": true
                         }
-                      ]
+                      ],
+                      "source_location": null
                     },
                     "key": {
                       "_type": "BytesConstant",
@@ -9421,9 +9423,10 @@
                   "end_column": 19
                 },
                 "wtype": {
-                  "_type": "WTuple",
-                  "name": "tuple",
-                  "immutable": true,
+                  "_type": "ARC4Tuple",
+                  "name": "arc4.tuple<string,bytes,bool>",
+                  "immutable": false,
+                  "arc4_alias": null,
                   "types": [
                     {
                       "_type": "WType",
@@ -9441,7 +9444,8 @@
                       "name": "bool",
                       "immutable": true
                     }
-                  ]
+                  ],
+                  "source_location": null
                 },
                 "key": {
                   "_type": "BytesConstant",
@@ -9463,7 +9467,7 @@
                 "exists_assertion_message": "Box must have value"
               },
               "value": {
-                "_type": "TupleExpression",
+                "_type": "ARC4Encode",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
                   "line": 174,
@@ -9472,9 +9476,10 @@
                   "end_column": 53
                 },
                 "wtype": {
-                  "_type": "WTuple",
-                  "name": "tuple",
-                  "immutable": true,
+                  "_type": "ARC4Tuple",
+                  "name": "arc4.tuple<string,bytes,bool>",
+                  "immutable": false,
+                  "arc4_alias": null,
                   "types": [
                     {
                       "_type": "WType",
@@ -9492,60 +9497,94 @@
                       "name": "bool",
                       "immutable": true
                     }
-                  ]
+                  ],
+                  "source_location": null
                 },
-                "items": [
-                  {
-                    "_type": "StringConstant",
-                    "source_location": {
-                      "file": "tests/approvals/box-proxies.algo.ts",
-                      "line": 174,
-                      "end_line": 174,
-                      "column": 23,
-                      "end_column": 30
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "string",
-                      "immutable": true
-                    },
-                    "value": "hello"
+                "value": {
+                  "_type": "TupleExpression",
+                  "source_location": {
+                    "file": "tests/approvals/box-proxies.algo.ts",
+                    "line": 174,
+                    "end_line": 174,
+                    "column": 22,
+                    "end_column": 53
                   },
-                  {
-                    "_type": "BytesConstant",
-                    "source_location": {
-                      "file": "tests/approvals/box-proxies.algo.ts",
-                      "line": 174,
-                      "end_line": 174,
-                      "column": 38,
-                      "end_column": 45
-                    },
-                    "wtype": {
-                      "_type": "BytesWType",
-                      "name": "bytes",
-                      "immutable": true,
-                      "length": null
-                    },
-                    "value": "cW-iRWB",
-                    "encoding": "utf8"
+                  "wtype": {
+                    "_type": "WTuple",
+                    "name": "tuple",
+                    "immutable": true,
+                    "types": [
+                      {
+                        "_type": "WType",
+                        "name": "string",
+                        "immutable": true
+                      },
+                      {
+                        "_type": "BytesWType",
+                        "name": "bytes",
+                        "immutable": true,
+                        "length": null
+                      },
+                      {
+                        "_type": "WType",
+                        "name": "bool",
+                        "immutable": true
+                      }
+                    ]
                   },
-                  {
-                    "_type": "BoolConstant",
-                    "source_location": {
-                      "file": "tests/approvals/box-proxies.algo.ts",
-                      "line": 174,
-                      "end_line": 174,
-                      "column": 48,
-                      "end_column": 52
+                  "items": [
+                    {
+                      "_type": "StringConstant",
+                      "source_location": {
+                        "file": "tests/approvals/box-proxies.algo.ts",
+                        "line": 174,
+                        "end_line": 174,
+                        "column": 23,
+                        "end_column": 30
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "string",
+                        "immutable": true
+                      },
+                      "value": "hello"
                     },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "bool",
-                      "immutable": true
+                    {
+                      "_type": "BytesConstant",
+                      "source_location": {
+                        "file": "tests/approvals/box-proxies.algo.ts",
+                        "line": 174,
+                        "end_line": 174,
+                        "column": 38,
+                        "end_column": 45
+                      },
+                      "wtype": {
+                        "_type": "BytesWType",
+                        "name": "bytes",
+                        "immutable": true,
+                        "length": null
+                      },
+                      "value": "cW-iRWB",
+                      "encoding": "utf8"
                     },
-                    "value": true
-                  }
-                ]
+                    {
+                      "_type": "BoolConstant",
+                      "source_location": {
+                        "file": "tests/approvals/box-proxies.algo.ts",
+                        "line": 174,
+                        "end_line": 174,
+                        "column": 48,
+                        "end_column": 52
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "bool",
+                        "immutable": true
+                      },
+                      "value": true
+                    }
+                  ]
+                }
               }
             },
             {
@@ -9609,9 +9648,10 @@
                         "end_column": 26
                       },
                       "wtype": {
-                        "_type": "WTuple",
-                        "name": "tuple",
-                        "immutable": true,
+                        "_type": "ARC4Tuple",
+                        "name": "arc4.tuple<string,bytes,bool>",
+                        "immutable": false,
+                        "arc4_alias": null,
                         "types": [
                           {
                             "_type": "WType",
@@ -9629,7 +9669,8 @@
                             "name": "bool",
                             "immutable": true
                           }
-                        ]
+                        ],
+                        "source_location": null
                       },
                       "key": {
                         "_type": "BytesConstant",
@@ -9735,9 +9776,10 @@
                         "end_column": 26
                       },
                       "wtype": {
-                        "_type": "WTuple",
-                        "name": "tuple",
-                        "immutable": true,
+                        "_type": "ARC4Tuple",
+                        "name": "arc4.tuple<string,bytes,bool>",
+                        "immutable": false,
+                        "arc4_alias": null,
                         "types": [
                           {
                             "_type": "WType",
@@ -9755,7 +9797,8 @@
                             "name": "bool",
                             "immutable": true
                           }
-                        ]
+                        ],
+                        "source_location": null
                       },
                       "key": {
                         "_type": "BytesConstant",
@@ -9848,9 +9891,10 @@
                       "end_column": 26
                     },
                     "wtype": {
-                      "_type": "WTuple",
-                      "name": "tuple",
-                      "immutable": true,
+                      "_type": "ARC4Tuple",
+                      "name": "arc4.tuple<string,bytes,bool>",
+                      "immutable": false,
+                      "arc4_alias": null,
                       "types": [
                         {
                           "_type": "WType",
@@ -9868,7 +9912,8 @@
                           "name": "bool",
                           "immutable": true
                         }
-                      ]
+                      ],
+                      "source_location": null
                     },
                     "key": {
                       "_type": "BytesConstant",
@@ -10444,9 +10489,10 @@
                     "end_column": 20
                   },
                   "wtype": {
-                    "_type": "WTuple",
-                    "name": "tuple",
-                    "immutable": true,
+                    "_type": "ARC4Tuple",
+                    "name": "arc4.tuple<string,bytes,bool>",
+                    "immutable": false,
+                    "arc4_alias": null,
                     "types": [
                       {
                         "_type": "WType",
@@ -10464,7 +10510,8 @@
                         "name": "bool",
                         "immutable": true
                       }
-                    ]
+                    ],
+                    "source_location": null
                   },
                   "key": {
                     "_type": "BytesConstant",
@@ -10548,9 +10595,10 @@
                         "end_column": 28
                       },
                       "wtype": {
-                        "_type": "WTuple",
-                        "name": "tuple",
-                        "immutable": true,
+                        "_type": "ARC4Tuple",
+                        "name": "arc4.tuple<string,bytes,bool>",
+                        "immutable": false,
+                        "arc4_alias": null,
                         "types": [
                           {
                             "_type": "WType",
@@ -10568,7 +10616,8 @@
                             "name": "bool",
                             "immutable": true
                           }
-                        ]
+                        ],
+                        "source_location": null
                       },
                       "key": {
                         "_type": "BytesConstant",
@@ -10904,9 +10953,10 @@
                         "end_column": 36
                       },
                       "wtype": {
-                        "_type": "WTuple",
-                        "name": "tuple",
-                        "immutable": true,
+                        "_type": "ARC4Tuple",
+                        "name": "arc4.tuple<string,bytes,bool>",
+                        "immutable": false,
+                        "arc4_alias": null,
                         "types": [
                           {
                             "_type": "WType",
@@ -10924,7 +10974,8 @@
                             "name": "bool",
                             "immutable": true
                           }
-                        ]
+                        ],
+                        "source_location": null
                       },
                       "key": {
                         "_type": "BoxPrefixedKeyExpression",
@@ -11143,9 +11194,10 @@
                   "end_column": 27
                 },
                 "wtype": {
-                  "_type": "WTuple",
-                  "name": "tuple",
-                  "immutable": true,
+                  "_type": "ARC4Tuple",
+                  "name": "arc4.tuple<string,bytes,bool>",
+                  "immutable": false,
+                  "arc4_alias": null,
                   "types": [
                     {
                       "_type": "WType",
@@ -11163,7 +11215,8 @@
                       "name": "bool",
                       "immutable": true
                     }
-                  ]
+                  ],
+                  "source_location": null
                 },
                 "key": {
                   "_type": "BoxPrefixedKeyExpression",
@@ -11216,7 +11269,7 @@
                 "exists_assertion_message": "Box must have value"
               },
               "value": {
-                "_type": "TupleExpression",
+                "_type": "ARC4Encode",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
                   "line": 195,
@@ -11225,9 +11278,10 @@
                   "end_column": 61
                 },
                 "wtype": {
-                  "_type": "WTuple",
-                  "name": "tuple",
-                  "immutable": true,
+                  "_type": "ARC4Tuple",
+                  "name": "arc4.tuple<string,bytes,bool>",
+                  "immutable": false,
+                  "arc4_alias": null,
                   "types": [
                     {
                       "_type": "WType",
@@ -11245,60 +11299,94 @@
                       "name": "bool",
                       "immutable": true
                     }
-                  ]
+                  ],
+                  "source_location": null
                 },
-                "items": [
-                  {
-                    "_type": "StringConstant",
-                    "source_location": {
-                      "file": "tests/approvals/box-proxies.algo.ts",
-                      "line": 195,
-                      "end_line": 195,
-                      "column": 31,
-                      "end_column": 38
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "string",
-                      "immutable": true
-                    },
-                    "value": "hello"
+                "value": {
+                  "_type": "TupleExpression",
+                  "source_location": {
+                    "file": "tests/approvals/box-proxies.algo.ts",
+                    "line": 195,
+                    "end_line": 195,
+                    "column": 30,
+                    "end_column": 61
                   },
-                  {
-                    "_type": "BytesConstant",
-                    "source_location": {
-                      "file": "tests/approvals/box-proxies.algo.ts",
-                      "line": 195,
-                      "end_line": 195,
-                      "column": 46,
-                      "end_column": 53
-                    },
-                    "wtype": {
-                      "_type": "BytesWType",
-                      "name": "bytes",
-                      "immutable": true,
-                      "length": null
-                    },
-                    "value": "cW-iRWB",
-                    "encoding": "utf8"
+                  "wtype": {
+                    "_type": "WTuple",
+                    "name": "tuple",
+                    "immutable": true,
+                    "types": [
+                      {
+                        "_type": "WType",
+                        "name": "string",
+                        "immutable": true
+                      },
+                      {
+                        "_type": "BytesWType",
+                        "name": "bytes",
+                        "immutable": true,
+                        "length": null
+                      },
+                      {
+                        "_type": "WType",
+                        "name": "bool",
+                        "immutable": true
+                      }
+                    ]
                   },
-                  {
-                    "_type": "BoolConstant",
-                    "source_location": {
-                      "file": "tests/approvals/box-proxies.algo.ts",
-                      "line": 195,
-                      "end_line": 195,
-                      "column": 56,
-                      "end_column": 60
+                  "items": [
+                    {
+                      "_type": "StringConstant",
+                      "source_location": {
+                        "file": "tests/approvals/box-proxies.algo.ts",
+                        "line": 195,
+                        "end_line": 195,
+                        "column": 31,
+                        "end_column": 38
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "string",
+                        "immutable": true
+                      },
+                      "value": "hello"
                     },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "bool",
-                      "immutable": true
+                    {
+                      "_type": "BytesConstant",
+                      "source_location": {
+                        "file": "tests/approvals/box-proxies.algo.ts",
+                        "line": 195,
+                        "end_line": 195,
+                        "column": 46,
+                        "end_column": 53
+                      },
+                      "wtype": {
+                        "_type": "BytesWType",
+                        "name": "bytes",
+                        "immutable": true,
+                        "length": null
+                      },
+                      "value": "cW-iRWB",
+                      "encoding": "utf8"
                     },
-                    "value": true
-                  }
-                ]
+                    {
+                      "_type": "BoolConstant",
+                      "source_location": {
+                        "file": "tests/approvals/box-proxies.algo.ts",
+                        "line": 195,
+                        "end_line": 195,
+                        "column": 56,
+                        "end_column": 60
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "bool",
+                        "immutable": true
+                      },
+                      "value": true
+                    }
+                  ]
+                }
               }
             },
             {
@@ -11535,9 +11623,10 @@
                       "end_column": 35
                     },
                     "wtype": {
-                      "_type": "WTuple",
-                      "name": "tuple",
-                      "immutable": true,
+                      "_type": "ARC4Tuple",
+                      "name": "arc4.tuple<string,bytes,bool>",
+                      "immutable": false,
+                      "arc4_alias": null,
                       "types": [
                         {
                           "_type": "WType",
@@ -11555,7 +11644,8 @@
                           "name": "bool",
                           "immutable": true
                         }
-                      ]
+                      ],
+                      "source_location": null
                     },
                     "key": {
                       "_type": "BoxPrefixedKeyExpression",
@@ -11672,9 +11762,10 @@
                         "end_column": 34
                       },
                       "wtype": {
-                        "_type": "WTuple",
-                        "name": "tuple",
-                        "immutable": true,
+                        "_type": "ARC4Tuple",
+                        "name": "arc4.tuple<string,bytes,bool>",
+                        "immutable": false,
+                        "arc4_alias": null,
                         "types": [
                           {
                             "_type": "WType",
@@ -11692,7 +11783,8 @@
                             "name": "bool",
                             "immutable": true
                           }
-                        ]
+                        ],
+                        "source_location": null
                       },
                       "key": {
                         "_type": "BoxPrefixedKeyExpression",
@@ -11829,9 +11921,10 @@
                         "end_column": 34
                       },
                       "wtype": {
-                        "_type": "WTuple",
-                        "name": "tuple",
-                        "immutable": true,
+                        "_type": "ARC4Tuple",
+                        "name": "arc4.tuple<string,bytes,bool>",
+                        "immutable": false,
+                        "arc4_alias": null,
                         "types": [
                           {
                             "_type": "WType",
@@ -11849,7 +11942,8 @@
                             "name": "bool",
                             "immutable": true
                           }
-                        ]
+                        ],
+                        "source_location": null
                       },
                       "key": {
                         "_type": "BoxPrefixedKeyExpression",
@@ -11973,9 +12067,10 @@
                       "end_column": 34
                     },
                     "wtype": {
-                      "_type": "WTuple",
-                      "name": "tuple",
-                      "immutable": true,
+                      "_type": "ARC4Tuple",
+                      "name": "arc4.tuple<string,bytes,bool>",
+                      "immutable": false,
+                      "arc4_alias": null,
                       "types": [
                         {
                           "_type": "WType",
@@ -11993,7 +12088,8 @@
                           "name": "bool",
                           "immutable": true
                         }
-                      ]
+                      ],
+                      "source_location": null
                     },
                     "key": {
                       "_type": "BoxPrefixedKeyExpression",
@@ -12651,9 +12747,10 @@
                   "end_column": 27
                 },
                 "wtype": {
-                  "_type": "WTuple",
-                  "name": "tuple",
-                  "immutable": true,
+                  "_type": "ARC4Tuple",
+                  "name": "arc4.tuple<string,bytes,bool>",
+                  "immutable": false,
+                  "arc4_alias": null,
                   "types": [
                     {
                       "_type": "WType",
@@ -12671,7 +12768,8 @@
                       "name": "bool",
                       "immutable": true
                     }
-                  ]
+                  ],
+                  "source_location": null
                 },
                 "key": {
                   "_type": "BoxPrefixedKeyExpression",
@@ -12724,7 +12822,7 @@
                 "exists_assertion_message": "Box must have value"
               },
               "value": {
-                "_type": "TupleExpression",
+                "_type": "ARC4Encode",
                 "source_location": {
                   "file": "tests/approvals/box-proxies.algo.ts",
                   "line": 208,
@@ -12733,9 +12831,10 @@
                   "end_column": 58
                 },
                 "wtype": {
-                  "_type": "WTuple",
-                  "name": "tuple",
-                  "immutable": true,
+                  "_type": "ARC4Tuple",
+                  "name": "arc4.tuple<string,bytes,bool>",
+                  "immutable": false,
+                  "arc4_alias": null,
                   "types": [
                     {
                       "_type": "WType",
@@ -12753,60 +12852,94 @@
                       "name": "bool",
                       "immutable": true
                     }
-                  ]
+                  ],
+                  "source_location": null
                 },
-                "items": [
-                  {
-                    "_type": "StringConstant",
-                    "source_location": {
-                      "file": "tests/approvals/box-proxies.algo.ts",
-                      "line": 208,
-                      "end_line": 208,
-                      "column": 31,
-                      "end_column": 36
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "string",
-                      "immutable": true
-                    },
-                    "value": "abc"
+                "value": {
+                  "_type": "TupleExpression",
+                  "source_location": {
+                    "file": "tests/approvals/box-proxies.algo.ts",
+                    "line": 208,
+                    "end_line": 208,
+                    "column": 30,
+                    "end_column": 58
                   },
-                  {
-                    "_type": "BytesConstant",
-                    "source_location": {
-                      "file": "tests/approvals/box-proxies.algo.ts",
-                      "line": 208,
-                      "end_line": 208,
-                      "column": 44,
-                      "end_column": 49
-                    },
-                    "wtype": {
-                      "_type": "BytesWType",
-                      "name": "bytes",
-                      "immutable": true,
-                      "length": null
-                    },
-                    "value": "WMyU",
-                    "encoding": "utf8"
+                  "wtype": {
+                    "_type": "WTuple",
+                    "name": "tuple",
+                    "immutable": true,
+                    "types": [
+                      {
+                        "_type": "WType",
+                        "name": "string",
+                        "immutable": true
+                      },
+                      {
+                        "_type": "BytesWType",
+                        "name": "bytes",
+                        "immutable": true,
+                        "length": null
+                      },
+                      {
+                        "_type": "WType",
+                        "name": "bool",
+                        "immutable": true
+                      }
+                    ]
                   },
-                  {
-                    "_type": "BoolConstant",
-                    "source_location": {
-                      "file": "tests/approvals/box-proxies.algo.ts",
-                      "line": 208,
-                      "end_line": 208,
-                      "column": 52,
-                      "end_column": 57
+                  "items": [
+                    {
+                      "_type": "StringConstant",
+                      "source_location": {
+                        "file": "tests/approvals/box-proxies.algo.ts",
+                        "line": 208,
+                        "end_line": 208,
+                        "column": 31,
+                        "end_column": 36
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "string",
+                        "immutable": true
+                      },
+                      "value": "abc"
                     },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "bool",
-                      "immutable": true
+                    {
+                      "_type": "BytesConstant",
+                      "source_location": {
+                        "file": "tests/approvals/box-proxies.algo.ts",
+                        "line": 208,
+                        "end_line": 208,
+                        "column": 44,
+                        "end_column": 49
+                      },
+                      "wtype": {
+                        "_type": "BytesWType",
+                        "name": "bytes",
+                        "immutable": true,
+                        "length": null
+                      },
+                      "value": "WMyU",
+                      "encoding": "utf8"
                     },
-                    "value": false
-                  }
-                ]
+                    {
+                      "_type": "BoolConstant",
+                      "source_location": {
+                        "file": "tests/approvals/box-proxies.algo.ts",
+                        "line": 208,
+                        "end_line": 208,
+                        "column": 52,
+                        "end_column": 57
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "bool",
+                        "immutable": true
+                      },
+                      "value": false
+                    }
+                  ]
+                }
               }
             },
             {
@@ -12856,9 +12989,10 @@
                       "end_column": 35
                     },
                     "wtype": {
-                      "_type": "WTuple",
-                      "name": "tuple",
-                      "immutable": true,
+                      "_type": "ARC4Tuple",
+                      "name": "arc4.tuple<string,bytes,bool>",
+                      "immutable": false,
+                      "arc4_alias": null,
                       "types": [
                         {
                           "_type": "WType",
@@ -12876,7 +13010,8 @@
                           "name": "bool",
                           "immutable": true
                         }
-                      ]
+                      ],
+                      "source_location": null
                     },
                     "key": {
                       "_type": "BoxPrefixedKeyExpression",
@@ -13280,9 +13415,10 @@
                     "end_column": 28
                   },
                   "wtype": {
-                    "_type": "WTuple",
-                    "name": "tuple",
-                    "immutable": true,
+                    "_type": "ARC4Tuple",
+                    "name": "arc4.tuple<string,bytes,bool>",
+                    "immutable": false,
+                    "arc4_alias": null,
                     "types": [
                       {
                         "_type": "WType",
@@ -13300,7 +13436,8 @@
                         "name": "bool",
                         "immutable": true
                       }
-                    ]
+                    ],
+                    "source_location": null
                   },
                   "key": {
                     "_type": "BoxPrefixedKeyExpression",
@@ -13415,9 +13552,10 @@
                         "end_column": 36
                       },
                       "wtype": {
-                        "_type": "WTuple",
-                        "name": "tuple",
-                        "immutable": true,
+                        "_type": "ARC4Tuple",
+                        "name": "arc4.tuple<string,bytes,bool>",
+                        "immutable": false,
+                        "arc4_alias": null,
                         "types": [
                           {
                             "_type": "WType",
@@ -13435,7 +13573,8 @@
                             "name": "bool",
                             "immutable": true
                           }
-                        ]
+                        ],
+                        "source_location": null
                       },
                       "key": {
                         "_type": "BoxPrefixedKeyExpression",
@@ -13844,9 +13983,10 @@
         "member_name": "box1",
         "kind": 3,
         "storage_wtype": {
-          "_type": "WTuple",
-          "name": "tuple",
-          "immutable": true,
+          "_type": "ARC4Tuple",
+          "name": "arc4.tuple<string,bytes,bool>",
+          "immutable": false,
+          "arc4_alias": null,
           "types": [
             {
               "_type": "WType",
@@ -13864,7 +14004,8 @@
               "name": "bool",
               "immutable": true
             }
-          ]
+          ],
+          "source_location": null
         },
         "key_wtype": null,
         "key": {
@@ -13957,9 +14098,10 @@
         "member_name": "boxMap1",
         "kind": 3,
         "storage_wtype": {
-          "_type": "WTuple",
-          "name": "tuple",
-          "immutable": true,
+          "_type": "ARC4Tuple",
+          "name": "arc4.tuple<string,bytes,bool>",
+          "immutable": false,
+          "arc4_alias": null,
           "types": [
             {
               "_type": "WType",
@@ -13977,7 +14119,8 @@
               "name": "bool",
               "immutable": true
             }
-          ]
+          ],
+          "source_location": null
         },
         "key_wtype": {
           "_type": "WType",

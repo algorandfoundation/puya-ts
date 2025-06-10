@@ -28,7 +28,6 @@ import {
 } from '../../util'
 import type { PType, PTypeOrClass } from '../ptypes'
 import {
-  ArrayPType,
   bigIntPType,
   biguintPType,
   boolPType,
@@ -38,6 +37,7 @@ import {
   bytesPType,
   numberPType,
   NumericLiteralPType,
+  ReadonlyArrayPType,
   stringPType,
   TransientType,
   uint64PType,
@@ -118,7 +118,7 @@ export class BytesFunctionBuilder extends FunctionBuilder {
           biguintPType,
           stringPType,
           bytesPType,
-          new ArrayPType({ elementType: uint64PType }),
+          new ReadonlyArrayPType({ elementType: uint64PType }),
         ),
       ],
     })
