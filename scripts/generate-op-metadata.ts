@@ -1,5 +1,4 @@
 import { camelCase } from 'change-case'
-import { enumerate } from '../src/util'
 import type { OpFunction, OpGrouping, OpModule, OpOverloadedFunction } from './build-op-module'
 import { AlgoTsType, BytesAlgoTsType, EnumAlgoTsType, UnionAlgoTsType } from './build-op-module'
 
@@ -120,14 +119,14 @@ export type IntrinsicOpGrouping = {
       yield `op: '${op.opCode}',`
       yield `signatures: [{`
       yield `argNames: [`
-      for (const [index, arg] of enumerate(op.immediateArgs)) {
+      for (const [index, arg] of op.immediateArgs.entries()) {
         if (index === op.enumArg?.pos) continue
         yield `'${arg.name}',`
       }
       yield op.stackArgs.map((a) => `'${a.name}'`).join(', ')
       yield '],'
       yield 'immediateArgs: ['
-      for (const [index, ia] of enumerate(op.immediateArgs)) {
+      for (const [index, ia] of op.immediateArgs.entries()) {
         if (op.enumArg?.pos === index) {
           yield `'${op.enumArg.member}',`
         } else {

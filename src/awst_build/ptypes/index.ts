@@ -940,6 +940,13 @@ export class ObjectPType extends PType {
       .map((p) => `${p[0]}:${p[1].name}`)
       .join(',')}}`
   }
+
+  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType | undefined {
+    if (typeof index === 'string') {
+      return this.properties[index]
+    }
+    return super.getIndexType(index, sourceLocation)
+  }
 }
 
 export const voidPType = new ABICompatibleInstanceType({

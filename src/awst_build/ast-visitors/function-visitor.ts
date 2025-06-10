@@ -6,7 +6,7 @@ import { AssignmentExpression, Goto, ReturnStatement } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { CodeError, InternalError, NotSupported } from '../../errors'
 import { logger } from '../../logger'
-import { codeInvariant, enumerate, hasFlags, instanceOfAny, invariant } from '../../util'
+import { codeInvariant, hasFlags, instanceOfAny, invariant } from '../../util'
 import type { Statements } from '../../visitor/syntax-names'
 import { getNodeName } from '../../visitor/syntax-names'
 import type { Visitor } from '../../visitor/visitor'
@@ -20,6 +20,7 @@ import { requireExpressionOfType, requireInstanceBuilder } from '../eb/util'
 import type { PType } from '../ptypes'
 import { FunctionPType, ObjectPType } from '../ptypes'
 import { instanceEb, typeRegistry } from '../type-registry'
+import { handleAssignmentStatement } from './assignments'
 import { BaseVisitor } from './base-visitor'
 import { maybeNodes } from './util'
 
@@ -124,7 +125,9 @@ export abstract class FunctionVisitor
           paramPType,
         )
 
-        assignments.push(this.handleAssignmentStatement(this.visitBindingName(p.name, sourceLocation), paramBuilder, sourceLocation))
+        assignments.push(
+          handleAssignmentStatement(this.context, this.visitBindingName(p.name, sourceLocation), paramBuilder, sourceLocation),
+        )
       }
     }
 
@@ -185,7 +188,7 @@ export abstract class FunctionVisitor
         return []
       }
 
-      return this.handleAssignmentStatement(this.visitBindingName(d.name, sourceLocation), source, sourceLocation)
+      return handleAssignmentStatement(this.context, this.visitBindingName(d.name, sourceLocation), source, sourceLocation)
     })
   }
 
@@ -265,7 +268,7 @@ export abstract class FunctionVisitor
         items: itemVar.resolveLValue(),
         loopBody: nodeFactory.block(
           { sourceLocation },
-          this.handleAssignmentStatement(items, itemVar, initializerLocation),
+          handleAssignmentStatement(this.context, items, itemVar, initializerLocation),
           this.accept(node.statement),
           ...maybeNodes(ctx.hasContinues, ctx.continueTarget),
         ),
@@ -395,7 +398,7 @@ export abstract class FunctionVisitor
     let defaultCase: Block | null = null
 
     const clauses: awst.Statement[] = []
-    for (const [index, clause] of enumerate(node.caseBlock.clauses)) {
+    for (const [index, clause] of node.caseBlock.clauses.entries()) {
       const sourceLocation = this.sourceLocation(clause)
 
       const statements = clause.statements.flatMap((s) => this.accept(s))

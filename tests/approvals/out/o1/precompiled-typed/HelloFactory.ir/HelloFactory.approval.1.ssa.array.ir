@@ -2,10 +2,10 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@0: // L1
         let tmp%0#1: uint64 = (txn NumAppArgs)
         goto tmp%0#1 ? block@2 : block@11
-    block@2: // abi_routing_L13
+    block@2: // abi_routing_L14
         let tmp%2#0: bytes = (txna ApplicationArgs 0)
         switch tmp%2#0 {method "test_compile_contract()void" => block@3, method "test_compile_contract_with_template()void" => block@4, method "test_compile_contract_with_template_and_custom_prefix()void" => block@5, method "test_compile_contract_large()void" => block@6, method "test_call_contract_with_transactions()void" => block@7, method "test_call_contract_with_reference_types()void" => block@8, * => block@15}
-    block@3: // test_compile_contract_route_L14
+    block@3: // test_compile_contract_route_L15
         let tmp%3#0: uint64 = (txn OnCompletion)
         let tmp%4#0: bool = (! tmp%3#0)
         (assert tmp%4#0) // OnCompletion is not NoOp
@@ -14,7 +14,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract()
         let tests/approvals/precompiled-typed.algo.ts::HelloFactory.__puya_arc4_router__%0#0: bool = 1u
         goto block@16
-    block@4: // test_compile_contract_with_template_route_L45
+    block@4: // test_compile_contract_with_template_route_L53
         let tmp%7#0: uint64 = (txn OnCompletion)
         let tmp%8#0: bool = (! tmp%7#0)
         (assert tmp%8#0) // OnCompletion is not NoOp
@@ -23,7 +23,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_with_template()
         let tests/approvals/precompiled-typed.algo.ts::HelloFactory.__puya_arc4_router__%0#1: bool = 1u
         goto block@16
-    block@5: // test_compile_contract_with_template_and_custom_prefix_route_L62
+    block@5: // test_compile_contract_with_template_and_custom_prefix_route_L77
         let tmp%11#0: uint64 = (txn OnCompletion)
         let tmp%12#0: bool = (! tmp%11#0)
         (assert tmp%12#0) // OnCompletion is not NoOp
@@ -32,7 +32,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_with_template_and_custom_prefix()
         let tests/approvals/precompiled-typed.algo.ts::HelloFactory.__puya_arc4_router__%0#2: bool = 1u
         goto block@16
-    block@6: // test_compile_contract_large_route_L79
+    block@6: // test_compile_contract_large_route_L94
         let tmp%15#0: uint64 = (txn OnCompletion)
         let tmp%16#0: bool = (! tmp%15#0)
         (assert tmp%16#0) // OnCompletion is not NoOp
@@ -41,7 +41,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_large()
         let tests/approvals/precompiled-typed.algo.ts::HelloFactory.__puya_arc4_router__%0#3: bool = 1u
         goto block@16
-    block@7: // test_call_contract_with_transactions_route_L95
+    block@7: // test_call_contract_with_transactions_route_L110
         let tmp%19#0: uint64 = (txn OnCompletion)
         let tmp%20#0: bool = (! tmp%19#0)
         (assert tmp%20#0) // OnCompletion is not NoOp
@@ -50,7 +50,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_call_contract_with_transactions()
         let tests/approvals/precompiled-typed.algo.ts::HelloFactory.__puya_arc4_router__%0#4: bool = 1u
         goto block@16
-    block@8: // test_call_contract_with_reference_types_route_L138
+    block@8: // test_call_contract_with_reference_types_route_L153
         let tmp%23#0: uint64 = (txn OnCompletion)
         let tmp%24#0: bool = (! tmp%23#0)
         (assert tmp%24#0) // OnCompletion is not NoOp
@@ -59,16 +59,16 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_call_contract_with_reference_types()
         let tests/approvals/precompiled-typed.algo.ts::HelloFactory.__puya_arc4_router__%0#5: bool = 1u
         goto block@16
-    block@11: // bare_routing_L13
+    block@11: // bare_routing_L14
         let tmp%27#0: uint64 = (txn OnCompletion)
         goto tmp%27#0 ? block@15 : block@12
-    block@12: // __algots__.defaultCreate_L13
+    block@12: // __algots__.defaultCreate_L14
         let tmp%28#0: uint64 = (txn ApplicationID)
         let tmp%29#0: bool = (! tmp%28#0)
         (assert tmp%29#0) // can only call when creating
         let tests/approvals/precompiled-typed.algo.ts::HelloFactory.__puya_arc4_router__%0#6: bool = 1u
         goto block@16
-    block@15: // after_if_else_L13
+    block@15: // after_if_else_L14
         let tests/approvals/precompiled-typed.algo.ts::HelloFactory.__puya_arc4_router__%0#7: bool = 0u
         goto block@16
     block@16: // after_inlined_tests/approvals/precompiled-typed.algo.ts::HelloFactory.__puya_arc4_router___L1
@@ -76,7 +76,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         return tmp%0#0
 
 subroutine tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract() -> void:
-    block@0: // L14
+    block@0: // L15
         itxn_begin
         let array%length%0#1: uint64 = (len "hello")
         let array%as_bytes%0#1: bytes[8] = (itob array%length%0#1)
@@ -88,7 +88,7 @@ subroutine tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_
         ((itxn_field ApplicationArgs) tmp%0#0)
         ((itxn_field GlobalNumByteSlice) 1u)
         ((itxn_field ClearStateProgramPages) CoEBQw==)
-        ((itxn_field ApprovalProgramPages) CiACAQAmAQhncmVldGluZzEYQAAEKIAAZzEbQQAjggQEAJIlrgQkN408BKDoGHIE0KKCADYaAI4EADsAMAAlAAIjQzEZFEQxGEQ2GgFXAgCIAERJFRZXBgJMUIAEFR98dUxQsCJDMRmBBBJEMRhEIkMxGYEFEkQxGEQiQzEZFEQxGBRENhoBVwIAiAACIkOKAQAoi/9niYoBASMoZUSAASBQi/9QiQ==)
+        ((itxn_field ApprovalProgramPages) CiACAQAmAwhncmVldGluZwQVH3x1ASAxGEAABCiAAGcxG0EAKoIFBACSJa4EJDeNPASg6BhyBNCiggAEUYC6IDYaAI4FAFEARgA7AB0AAiNDMRkURDEYRDYaAYgAakkVFlcGAkxQKUxQsCJDMRkURDEYRDYaAVcCAIgAP0kVFlcGAkxQKUxQsCJDMRmBBBJEMRhEIkMxGYEFEkQxGEQiQzEZFEQxGBRENhoBVwIAiAACIkOKAQAoi/9niYoBASMoZUQqUIv/UImKAQEjKGVEKlCL/yNZi/+BAlmL/08CSwJSVwIATwJMUIv/FYv/TwNPAlJXAgBQiQ==)
         ((itxn_field OnCompletion) 0u)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
@@ -159,6 +159,46 @@ subroutine tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_
         let tmp%19#0: bool = (== result3#0 "hello stubbed")
         (assert tmp%19#0)
         itxn_begin
+        let array%length%4#1: uint64 = (len 0x21)
+        let array%as_bytes%4#1: bytes[8] = (itob array%length%4#1)
+        let array%length_uint16%4#1: bytes = ((extract 6 2) array%as_bytes%4#1)
+        let array%encoded_value%4#1: bytes = (concat array%length_uint16%4#1 0x21)
+        let array%as_Encoded(len+utf8[])%4#1: Encoded(len+utf8[]) = array%encoded_value%4#1
+        let encoded%0#0: Encoded(len+utf8[]) = array%as_Encoded(len+utf8[])%4#1
+        let array%length%5#1: uint64 = (len "world")
+        let array%as_bytes%5#1: bytes[8] = (itob array%length%5#1)
+        let array%length_uint16%5#1: bytes = ((extract 6 2) array%as_bytes%5#1)
+        let array%encoded_value%5#1: bytes = (concat array%length_uint16%5#1 "world")
+        let array%as_Encoded(len+utf8[])%5#1: Encoded(len+utf8[]) = array%encoded_value%5#1
+        let array%tail%0#1: bytes = (concat 0x array%as_Encoded(len+utf8[])%5#1)
+        let array%data_length%0#1: uint64 = (len array%as_Encoded(len+utf8[])%5#1)
+        let array%current_tail_offset%0#1: uint64 = (+ 4u array%data_length%0#1)
+        let array%as_bytes%6#1: bytes[8] = (itob 4u)
+        let array%offset_as_uint16%0#1: bytes = ((extract 6 2) array%as_bytes%6#1)
+        let array%encoded%0#1: Encoded((len+utf8[])) = (concat 0x array%offset_as_uint16%0#1)
+        let array%tail%1#1: bytes = (concat array%tail%0#1 encoded%0#0)
+        let array%data_length%1#1: uint64 = (len encoded%0#0)
+        let array%current_tail_offset%1#1: uint64 = (+ array%current_tail_offset%0#1 array%data_length%1#1)
+        let array%as_bytes%7#1: bytes[8] = (itob array%current_tail_offset%0#1)
+        let array%offset_as_uint16%1#1: bytes = ((extract 6 2) array%as_bytes%7#1)
+        let array%encoded%1#1: Encoded((len+utf8[]),(len+utf8[])) = (concat array%encoded%0#1 array%offset_as_uint16%1#1)
+        let array%encoded%2#1: Encoded((len+utf8[]),(len+utf8[])) = (concat array%encoded%1#1 array%tail%1#1)
+        let tmp%20#0: Encoded((len+utf8[]),(len+utf8[])) = array%encoded%2#1
+        ((itxn_field ApplicationArgs) method "sendGreetings((string,string))string")
+        ((itxn_field ApplicationArgs) tmp%20#0)
+        ((itxn_field ApplicationID) app#0)
+        ((itxn_field TypeEnum) appl)
+        ((itxn_field Fee) 0u)
+        itxn_submit
+        let awst_tmp%3#0: bytes = (itxn LastLog)
+        let tmp%21#0: bytes = ((extract 4 0) awst_tmp%3#0)
+        let tmp%22#0: bytes = ((extract 0 4) awst_tmp%3#0)
+        let tmp%23#0: bool = (== tmp%22#0 0x151f7c75)
+        (assert tmp%23#0) // Bytes has valid prefix
+        let result4#0: string = ((extract 2 0) tmp%21#0)
+        let tmp%25#0: bool = (== result4#0 "hello world!")
+        (assert tmp%25#0)
+        itxn_begin
         ((itxn_field ApplicationArgs) method "delete()void")
         ((itxn_field OnCompletion) 5u)
         ((itxn_field ApplicationID) app#0)
@@ -168,12 +208,12 @@ subroutine tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_
         return 
 
 subroutine tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_with_template() -> void:
-    block@0: // L45
+    block@0: // L53
         itxn_begin
         ((itxn_field ApplicationArgs) method "create()void")
         ((itxn_field GlobalNumByteSlice) 1u)
         ((itxn_field ClearStateProgramPages) CoEBQw==)
-        ((itxn_field ApprovalProgramPages) CiACAQAmAghncmVldGluZwNoZXkxGEAAAygpZzEbQQAjggQETFxhugQkN408BKDoGHIE0KKCADYaAI4EADsAMAAlAAIjQzEZFEQxGEQ2GgFXAgCIADNJFRZXBgJMUIAEFR98dUxQsCJDMRmBBBJEMRhEIkMxGYEFEkQxGEQiQzEZFEQxGBREIkOKAQEjKGVEgAEgUIv/UIk=)
+        ((itxn_field ApprovalProgramPages) CiACAQAmBAhncmVldGluZwQVH3x1ASADaGV5MRhAAAMoK2cxG0EAKoIFBExcYboEJDeNPASg6BhyBNCiggAEUYC6IDYaAI4FAFEARgA7AB0AAiNDMRkURDEYRDYaAYgAWUkVFlcGAkxQKUxQsCJDMRkURDEYRDYaAVcCAIgALkkVFlcGAkxQKUxQsCJDMRmBBBJEMRhEIkMxGYEFEkQxGEQiQzEZFEQxGBREIkOKAQEjKGVEKlCL/1CJigEBIyhlRCpQi/8jWYv/gQJZi/9PAksCUlcCAE8CTFCL/xWL/08DTwJSVwIAUIk=)
         ((itxn_field OnCompletion) 0u)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
@@ -198,9 +238,50 @@ subroutine tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_
         let tmp%3#0: bytes = ((extract 0 4) awst_tmp%0#0)
         let tmp%4#0: bool = (== tmp%3#0 0x151f7c75)
         (assert tmp%4#0) // Bytes has valid prefix
-        let txn.returnValue#0: string = ((extract 2 0) tmp%2#0)
-        let tmp%6#0: bool = (== txn.returnValue#0 "hey world")
+        let txn1.returnValue#0: string = ((extract 2 0) tmp%2#0)
+        let tmp%6#0: bool = (== txn1.returnValue#0 "hey world")
         (assert tmp%6#0)
+        itxn_begin
+        let array%length%1#1: uint64 = (len 0x21)
+        let array%as_bytes%1#1: bytes[8] = (itob array%length%1#1)
+        let array%length_uint16%1#1: bytes = ((extract 6 2) array%as_bytes%1#1)
+        let array%encoded_value%1#1: bytes = (concat array%length_uint16%1#1 0x21)
+        let array%as_Encoded(len+utf8[])%1#1: Encoded(len+utf8[]) = array%encoded_value%1#1
+        let encoded%0#0: Encoded(len+utf8[]) = array%as_Encoded(len+utf8[])%1#1
+        let array%length%2#1: uint64 = (len "world")
+        let array%as_bytes%2#1: bytes[8] = (itob array%length%2#1)
+        let array%length_uint16%2#1: bytes = ((extract 6 2) array%as_bytes%2#1)
+        let array%encoded_value%2#1: bytes = (concat array%length_uint16%2#1 "world")
+        let array%as_Encoded(len+utf8[])%2#1: Encoded(len+utf8[]) = array%encoded_value%2#1
+        let array%tail%0#1: bytes = (concat 0x array%as_Encoded(len+utf8[])%2#1)
+        let array%data_length%0#1: uint64 = (len array%as_Encoded(len+utf8[])%2#1)
+        let array%current_tail_offset%0#1: uint64 = (+ 4u array%data_length%0#1)
+        let array%as_bytes%3#1: bytes[8] = (itob 4u)
+        let array%offset_as_uint16%0#1: bytes = ((extract 6 2) array%as_bytes%3#1)
+        let array%encoded%0#1: Encoded((len+utf8[])) = (concat 0x array%offset_as_uint16%0#1)
+        let array%tail%1#1: bytes = (concat array%tail%0#1 encoded%0#0)
+        let array%data_length%1#1: uint64 = (len encoded%0#0)
+        let array%current_tail_offset%1#1: uint64 = (+ array%current_tail_offset%0#1 array%data_length%1#1)
+        let array%as_bytes%4#1: bytes[8] = (itob array%current_tail_offset%0#1)
+        let array%offset_as_uint16%1#1: bytes = ((extract 6 2) array%as_bytes%4#1)
+        let array%encoded%1#1: Encoded((len+utf8[]),(len+utf8[])) = (concat array%encoded%0#1 array%offset_as_uint16%1#1)
+        let array%encoded%2#1: Encoded((len+utf8[]),(len+utf8[])) = (concat array%encoded%1#1 array%tail%1#1)
+        let tmp%7#0: Encoded((len+utf8[]),(len+utf8[])) = array%encoded%2#1
+        ((itxn_field ApplicationArgs) method "sendGreetings((string,string))string")
+        ((itxn_field ApplicationArgs) tmp%7#0)
+        ((itxn_field OnCompletion) 0u)
+        ((itxn_field ApplicationID) helloApp#0)
+        ((itxn_field TypeEnum) appl)
+        ((itxn_field Fee) 0u)
+        itxn_submit
+        let awst_tmp%1#0: bytes = (itxn LastLog)
+        let tmp%8#0: bytes = ((extract 4 0) awst_tmp%1#0)
+        let tmp%9#0: bytes = ((extract 0 4) awst_tmp%1#0)
+        let tmp%10#0: bool = (== tmp%9#0 0x151f7c75)
+        (assert tmp%10#0) // Bytes has valid prefix
+        let txn2.returnValue#0: string = ((extract 2 0) tmp%8#0)
+        let tmp%12#0: bool = (== txn2.returnValue#0 "hey world!")
+        (assert tmp%12#0)
         itxn_begin
         ((itxn_field ApplicationArgs) method "delete()void")
         ((itxn_field OnCompletion) 5u)
@@ -211,12 +292,12 @@ subroutine tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_
         return 
 
 subroutine tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_with_template_and_custom_prefix() -> void:
-    block@0: // L62
+    block@0: // L77
         itxn_begin
         ((itxn_field ApplicationArgs) method "create()void")
         ((itxn_field GlobalNumByteSlice) 1u)
         ((itxn_field ClearStateProgramPages) CoEBQw==)
-        ((itxn_field ApprovalProgramPages) CiACAQAmAghncmVldGluZwdib25qb3VyMRhAAAMoKWcxG0EAI4IEBExcYboEJDeNPASg6BhyBNCiggA2GgCOBAA7ADAAJQACI0MxGRREMRhENhoBVwIAiAAzSRUWVwYCTFCABBUffHVMULAiQzEZgQQSRDEYRCJDMRmBBRJEMRhEIkMxGRREMRgURCJDigEBIyhlRIABIFCL/1CJ)
+        ((itxn_field ApprovalProgramPages) CiACAQAmBAhncmVldGluZwQVH3x1ASAHYm9uam91cjEYQAADKCtnMRtBACqCBQRMXGG6BCQ3jTwEoOgYcgTQooIABFGAuiA2GgCOBQBRAEYAOwAdAAIjQzEZFEQxGEQ2GgGIAFlJFRZXBgJMUClMULAiQzEZFEQxGEQ2GgFXAgCIAC5JFRZXBgJMUClMULAiQzEZgQQSRDEYRCJDMRmBBRJEMRhEIkMxGRREMRgURCJDigEBIyhlRCpQi/9QiYoBASMoZUQqUIv/I1mL/4ECWYv/TwJLAlJXAgBPAkxQi/8Vi/9PA08CUlcCAFCJ)
         ((itxn_field OnCompletion) 0u)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
@@ -254,7 +335,7 @@ subroutine tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_
         return 
 
 subroutine tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_large() -> void:
-    block@0: // L79
+    block@0: // L94
         itxn_begin
         ((itxn_field ClearStateProgramPages) CoEBQw==)
         ((itxn_field ApprovalProgramPages) CjEbQQA7ggIEAr8wzwQkN408NhoAjgIADwADgQBDMRmBBRJEMRhEgQFDMRkURDEYRIgAGRaABBUffHVMULCBAUMxGUD/1TEYFESBAUOBgCCvFYk=)
@@ -288,7 +369,7 @@ subroutine tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_
         return 
 
 subroutine tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_call_contract_with_transactions() -> void:
-    block@0: // L95
+    block@0: // L110
         itxn_begin
         ((itxn_field ClearStateProgramPages) CoEBQw==)
         ((itxn_field ApprovalProgramPages) CiADAQMAJgEEFR98dTEbQQCVggQEj2iS7wSc2H3jBNNmyGkEgbZzUjYaAI4EAFoARQAjAAIkQzEZFEQxGEQxFoECCUk4ECMSRDEWIglJOBAiEkSIAKwiQzEZFEQxGEQxFiIJSTgQIxJEiACOSRUWVwYCTFAoTFCwIkMxGRREMRhEMRYiCYgAKhYoTFCwIkMxGRREMRhEgAwVH3x1AAAAAAAAAAGwIkMxGUD/iTEYFEQiQ4oBAYAASYv/OBBJIxJBABaL/zg8SYwAQQAFiwCMAImL/zghQv/2iwKBBhJBABaL/zg9SYwBQQAFiwGMAImL/zgYQv/2JIwAiYoBAYv/OBeJigIAi/44ECMSRIv/OBAiEkSJ)
@@ -380,7 +461,7 @@ subroutine tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_call_con
         return 
 
 subroutine tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_call_contract_with_reference_types() -> void:
-    block@0: // L138
+    block@0: // L153
         itxn_begin
         ((itxn_field ClearStateProgramPages) CoEBQw==)
         ((itxn_field ApprovalProgramPages) CjEbQQAvgASDPRISNhoAjgEAA4EAQzEZFEQxGEQ2GgEXwDI2GgIXwBw2GgMXwDCIAA+BAUMxGUD/2TEYFESBAUOKAwCL/XIIRLCL/rCL/3EERLCJ)

@@ -3,13 +3,13 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 2 1 64
-    bytecblock 0x "hello" "b" 0x01c8 "a" "t2" "t4" 0x00 "t1" "t3"
+    intcblock 0 2 1 123
+    bytecblock 0x "hello" "b" 0x01c8 "a" 0x00 "t2" "t4" "t5" "t1" "t3" 0x576f726c64
 
 main_block@0:
 
 main_block@1:
-    // tests/approvals/global-state.algo.ts:46
+    // tests/approvals/global-state.algo.ts:60
     // export class TestTuple extends Contract {
     txn NumAppArgs
     intc_0 // 0
@@ -17,7 +17,7 @@ main_block@1:
     bz main_bare_routing@6
 
 main_abi_routing@2:
-    // tests/approvals/global-state.algo.ts:46
+    // tests/approvals/global-state.algo.ts:60
     // export class TestTuple extends Contract {
     txna ApplicationArgs 0
     pushbytes 0x125477f5 // method "testTuple()void"
@@ -29,7 +29,7 @@ main_switch_case_default@4:
 main_switch_case_next@5:
 
 main_after_if_else@10:
-    // tests/approvals/global-state.algo.ts:46
+    // tests/approvals/global-state.algo.ts:60
     // export class TestTuple extends Contract {
     intc_0 // 0
 
@@ -37,7 +37,7 @@ main_after_inlined_tests/approvals/global-state.algo.ts::TestTuple.__puya_arc4_r
     return
 
 main_testTuple_route@3:
-    // tests/approvals/global-state.algo.ts:53
+    // tests/approvals/global-state.algo.ts:69
     // testTuple() {
     txn OnCompletion
     intc_0 // NoOp
@@ -52,7 +52,7 @@ main_testTuple_route@3:
     b main_after_inlined_tests/approvals/global-state.algo.ts::TestTuple.__puya_arc4_router__@11
 
 main_bare_routing@6:
-    // tests/approvals/global-state.algo.ts:46
+    // tests/approvals/global-state.algo.ts:60
     // export class TestTuple extends Contract {
     txn OnCompletion
     intc_0 // 0
@@ -65,7 +65,7 @@ main_switch_case_next@9:
     b main_after_if_else@10
 
 main___algots__.defaultCreate@7:
-    // tests/approvals/global-state.algo.ts:46
+    // tests/approvals/global-state.algo.ts:60
     // export class TestTuple extends Contract {
     txn ApplicationID
     intc_0 // 0
@@ -80,7 +80,7 @@ main___algots__.defaultCreate@7:
 testTuple:
 
 testTuple_block@0:
-    // tests/approvals/global-state.algo.ts:54
+    // tests/approvals/global-state.algo.ts:70
     // this.t1.value = ['hello', 123, true]
     bytec_1 // "hello"
     len
@@ -97,30 +97,30 @@ testTuple_block@0:
     bytec_0 // 0x
     swap
     concat
-    pushint 123 // 123
+    intc_3 // 123
     itob
     concat
-    bytec 7 // 0x00
+    bytec 5 // 0x00
     intc_0 // 0
     intc_2 // 1
     setbit
     concat
     swap
     concat
-    // tests/approvals/global-state.algo.ts:47
+    // tests/approvals/global-state.algo.ts:61
     // t1 = GlobalState<[string, uint64, boolean]>()
-    bytec 8 // "t1"
-    // tests/approvals/global-state.algo.ts:54
+    bytec 9 // "t1"
+    // tests/approvals/global-state.algo.ts:70
     // this.t1.value = ['hello', 123, true]
     swap
     app_global_put
-    // tests/approvals/global-state.algo.ts:47
+    // tests/approvals/global-state.algo.ts:61
     // t1 = GlobalState<[string, uint64, boolean]>()
     intc_0 // 0
-    bytec 8 // "t1"
+    bytec 9 // "t1"
     app_global_get_ex
     assert // check GlobalState exists
-    // tests/approvals/global-state.algo.ts:55
+    // tests/approvals/global-state.algo.ts:71
     // assert(this.t1.value[0] === 'hello', 'Tuple value should be set')
     dup
     intc_0 // 0
@@ -136,28 +136,28 @@ testTuple_block@0:
     bytec_1 // "hello"
     ==
     assert // Tuple value should be set
-    // tests/approvals/global-state.algo.ts:47
+    // tests/approvals/global-state.algo.ts:61
     // t1 = GlobalState<[string, uint64, boolean]>()
     intc_0 // 0
-    bytec 8 // "t1"
+    bytec 9 // "t1"
     app_global_get_ex
     assert // check GlobalState exists
-    // tests/approvals/global-state.algo.ts:56
+    // tests/approvals/global-state.algo.ts:72
     // assert(this.t1.value[1] === 123, 'Tuple value should be set')
     intc_1 // 2
     pushint 8 // 8
     extract3
     btoi
-    pushint 123 // 123
+    intc_3 // 123
     ==
     assert // Tuple value should be set
-    // tests/approvals/global-state.algo.ts:47
+    // tests/approvals/global-state.algo.ts:61
     // t1 = GlobalState<[string, uint64, boolean]>()
     intc_0 // 0
-    bytec 8 // "t1"
+    bytec 9 // "t1"
     app_global_get_ex
     assert // check GlobalState exists
-    // tests/approvals/global-state.algo.ts:57
+    // tests/approvals/global-state.algo.ts:73
     // assert(this.t1.value[2] === true, 'Tuple value should be set')
     pushint 80 // 80
     getbit
@@ -166,7 +166,7 @@ testTuple_block@0:
     intc_2 // 1
     ==
     assert // Tuple value should be set
-    // tests/approvals/global-state.algo.ts:59
+    // tests/approvals/global-state.algo.ts:75
     // this.t2.value = ['a', ['b', 456n, true]]
     bytec_2 // "b"
     len
@@ -185,15 +185,15 @@ testTuple_block@0:
     concat
     bytec_3 // 0x01c8
     len
-    intc_3 // 64
+    pushint 64 // 64
     <=
     assert // overflow
-    intc_3 // 64
+    pushint 64 // 64
     bzero
     bytec_3 // 0x01c8
     b|
     concat
-    bytec 7 // 0x00
+    bytec 5 // 0x00
     intc_0 // 0
     intc_2 // 1
     setbit
@@ -229,20 +229,20 @@ testTuple_block@0:
     concat
     swap
     concat
-    // tests/approvals/global-state.algo.ts:48
+    // tests/approvals/global-state.algo.ts:62
     // t2 = GlobalState<[string, [string, biguint, boolean]]>()
-    bytec 5 // "t2"
-    // tests/approvals/global-state.algo.ts:59
+    bytec 6 // "t2"
+    // tests/approvals/global-state.algo.ts:75
     // this.t2.value = ['a', ['b', 456n, true]]
     swap
     app_global_put
-    // tests/approvals/global-state.algo.ts:48
+    // tests/approvals/global-state.algo.ts:62
     // t2 = GlobalState<[string, [string, biguint, boolean]]>()
     intc_0 // 0
-    bytec 5 // "t2"
+    bytec 6 // "t2"
     app_global_get_ex
     assert // check GlobalState exists
-    // tests/approvals/global-state.algo.ts:60
+    // tests/approvals/global-state.algo.ts:76
     // assert(this.t2.value[0] === 'a', 'Tuple value should be set')
     dup
     intc_0 // 0
@@ -259,13 +259,13 @@ testTuple_block@0:
     bytec 4 // "a"
     ==
     assert // Tuple value should be set
-    // tests/approvals/global-state.algo.ts:48
+    // tests/approvals/global-state.algo.ts:62
     // t2 = GlobalState<[string, [string, biguint, boolean]]>()
     intc_0 // 0
-    bytec 5 // "t2"
+    bytec 6 // "t2"
     app_global_get_ex
     assert // check GlobalState exists
-    // tests/approvals/global-state.algo.ts:61
+    // tests/approvals/global-state.algo.ts:77
     // assert(this.t2.value[1][0] === 'b', 'Tuple value should be set')
     dup
     intc_1 // 2
@@ -291,13 +291,13 @@ testTuple_block@0:
     bytec_2 // "b"
     ==
     assert // Tuple value should be set
-    // tests/approvals/global-state.algo.ts:48
+    // tests/approvals/global-state.algo.ts:62
     // t2 = GlobalState<[string, [string, biguint, boolean]]>()
     intc_0 // 0
-    bytec 5 // "t2"
+    bytec 6 // "t2"
     app_global_get_ex
     assert // check GlobalState exists
-    // tests/approvals/global-state.algo.ts:62
+    // tests/approvals/global-state.algo.ts:78
     // assert(this.t2.value[1][1] === 456n, 'Tuple value should be set')
     dup
     intc_1 // 2
@@ -310,18 +310,18 @@ testTuple_block@0:
     uncover 2
     substring3
     intc_1 // 2
-    intc_3 // 64
+    pushint 64 // 64
     extract3
     bytec_3 // 0x01c8
     b==
     assert // Tuple value should be set
-    // tests/approvals/global-state.algo.ts:48
+    // tests/approvals/global-state.algo.ts:62
     // t2 = GlobalState<[string, [string, biguint, boolean]]>()
     intc_0 // 0
-    bytec 5 // "t2"
+    bytec 6 // "t2"
     app_global_get_ex
     assert // check GlobalState exists
-    // tests/approvals/global-state.algo.ts:63
+    // tests/approvals/global-state.algo.ts:79
     // assert(this.t2.value[1][2] === true, 'Tuple value should be set')
     dup
     intc_1 // 2
@@ -340,18 +340,18 @@ testTuple_block@0:
     intc_2 // 1
     ==
     assert // Tuple value should be set
-    // tests/approvals/global-state.algo.ts:65
+    // tests/approvals/global-state.algo.ts:81
     // this.t3.value = { a: 'hello', b: 123, c: true }
     bytec_1 // "hello"
-    // tests/approvals/global-state.algo.ts:50
+    // tests/approvals/global-state.algo.ts:64
     // t3 = GlobalState<{ a: string; b: uint64; c: boolean }>()
     len
     itob
     extract 6 2
-    // tests/approvals/global-state.algo.ts:65
+    // tests/approvals/global-state.algo.ts:81
     // this.t3.value = { a: 'hello', b: 123, c: true }
     bytec_1 // "hello"
-    // tests/approvals/global-state.algo.ts:50
+    // tests/approvals/global-state.algo.ts:64
     // t3 = GlobalState<{ a: string; b: uint64; c: boolean }>()
     concat
     bytec_0 // 0x
@@ -363,33 +363,33 @@ testTuple_block@0:
     bytec_0 // 0x
     swap
     concat
-    // tests/approvals/global-state.algo.ts:65
+    // tests/approvals/global-state.algo.ts:81
     // this.t3.value = { a: 'hello', b: 123, c: true }
-    pushint 123 // 123
-    // tests/approvals/global-state.algo.ts:50
+    intc_3 // 123
+    // tests/approvals/global-state.algo.ts:64
     // t3 = GlobalState<{ a: string; b: uint64; c: boolean }>()
     itob
     concat
-    bytec 7 // 0x00
+    bytec 5 // 0x00
     intc_0 // 0
-    // tests/approvals/global-state.algo.ts:65
+    // tests/approvals/global-state.algo.ts:81
     // this.t3.value = { a: 'hello', b: 123, c: true }
     intc_2 // 1
-    // tests/approvals/global-state.algo.ts:50
+    // tests/approvals/global-state.algo.ts:64
     // t3 = GlobalState<{ a: string; b: uint64; c: boolean }>()
     setbit
     concat
     swap
     concat
-    bytec 9 // "t3"
-    // tests/approvals/global-state.algo.ts:65
+    bytec 10 // "t3"
+    // tests/approvals/global-state.algo.ts:81
     // this.t3.value = { a: 'hello', b: 123, c: true }
     swap
     app_global_put
-    // tests/approvals/global-state.algo.ts:50
+    // tests/approvals/global-state.algo.ts:64
     // t3 = GlobalState<{ a: string; b: uint64; c: boolean }>()
     intc_0 // 0
-    bytec 9 // "t3"
+    bytec 10 // "t3"
     app_global_get_ex
     assert // check GlobalState exists
     dup
@@ -403,42 +403,42 @@ testTuple_block@0:
     uncover 2
     substring3
     extract 2 0
-    // tests/approvals/global-state.algo.ts:66
-    // assert(this.t3.value.a === 'hello', 'Tuple value should be set')
+    // tests/approvals/global-state.algo.ts:82
+    // assert(this.t3.value.a === 'hello', 'Object value should be set')
     bytec_1 // "hello"
     ==
-    assert // Tuple value should be set
-    // tests/approvals/global-state.algo.ts:50
+    assert // Object value should be set
+    // tests/approvals/global-state.algo.ts:64
     // t3 = GlobalState<{ a: string; b: uint64; c: boolean }>()
     intc_0 // 0
-    bytec 9 // "t3"
+    bytec 10 // "t3"
     app_global_get_ex
     assert // check GlobalState exists
     intc_1 // 2
     pushint 8 // 8
     extract3
     btoi
-    // tests/approvals/global-state.algo.ts:67
-    // assert(this.t3.value.b === 123, 'Tuple value should be set')
-    pushint 123 // 123
+    // tests/approvals/global-state.algo.ts:83
+    // assert(this.t3.value.b === 123, 'Object value should be set')
+    intc_3 // 123
     ==
-    assert // Tuple value should be set
-    // tests/approvals/global-state.algo.ts:50
+    assert // Object value should be set
+    // tests/approvals/global-state.algo.ts:64
     // t3 = GlobalState<{ a: string; b: uint64; c: boolean }>()
     intc_0 // 0
-    bytec 9 // "t3"
+    bytec 10 // "t3"
     app_global_get_ex
     assert // check GlobalState exists
     pushint 80 // 80
     getbit
     intc_0 // 0
     getbit
-    // tests/approvals/global-state.algo.ts:68
-    // assert(this.t3.value.c === true, 'Tuple value should be set')
+    // tests/approvals/global-state.algo.ts:84
+    // assert(this.t3.value.c === true, 'Object value should be set')
     intc_2 // 1
     ==
-    assert // Tuple value should be set
-    // tests/approvals/global-state.algo.ts:70
+    assert // Object value should be set
+    // tests/approvals/global-state.algo.ts:86
     // this.t4.value = ['a', { a: 'b', b: 456n, c: true }]
     bytec 4 // "a"
     len
@@ -476,15 +476,15 @@ testTuple_block@0:
     concat
     bytec_3 // 0x01c8
     len
-    intc_3 // 64
+    pushint 64 // 64
     <=
     assert // overflow
-    intc_3 // 64
+    pushint 64 // 64
     bzero
     bytec_3 // 0x01c8
     b|
     concat
-    bytec 7 // 0x00
+    bytec 5 // 0x00
     intc_0 // 0
     intc_2 // 1
     setbit
@@ -502,20 +502,20 @@ testTuple_block@0:
     concat
     swap
     concat
-    // tests/approvals/global-state.algo.ts:51
+    // tests/approvals/global-state.algo.ts:65
     // t4 = GlobalState<[string, { a: string; b: biguint; c: boolean }]>()
-    bytec 6 // "t4"
-    // tests/approvals/global-state.algo.ts:70
+    bytec 7 // "t4"
+    // tests/approvals/global-state.algo.ts:86
     // this.t4.value = ['a', { a: 'b', b: 456n, c: true }]
     swap
     app_global_put
-    // tests/approvals/global-state.algo.ts:51
+    // tests/approvals/global-state.algo.ts:65
     // t4 = GlobalState<[string, { a: string; b: biguint; c: boolean }]>()
     intc_0 // 0
-    bytec 6 // "t4"
+    bytec 7 // "t4"
     app_global_get_ex
     assert // check GlobalState exists
-    // tests/approvals/global-state.algo.ts:71
+    // tests/approvals/global-state.algo.ts:87
     // assert(this.t4.value[0] === 'a', 'Tuple value should be set')
     dup
     intc_0 // 0
@@ -532,13 +532,13 @@ testTuple_block@0:
     bytec 4 // "a"
     ==
     assert // Tuple value should be set
-    // tests/approvals/global-state.algo.ts:51
+    // tests/approvals/global-state.algo.ts:65
     // t4 = GlobalState<[string, { a: string; b: biguint; c: boolean }]>()
     intc_0 // 0
-    bytec 6 // "t4"
+    bytec 7 // "t4"
     app_global_get_ex
     assert // check GlobalState exists
-    // tests/approvals/global-state.algo.ts:72
+    // tests/approvals/global-state.algo.ts:88
     // assert(this.t4.value[1].a === 'b', 'Tuple value should be set')
     dup
     intc_1 // 2
@@ -564,13 +564,13 @@ testTuple_block@0:
     bytec_2 // "b"
     ==
     assert // Tuple value should be set
-    // tests/approvals/global-state.algo.ts:51
+    // tests/approvals/global-state.algo.ts:65
     // t4 = GlobalState<[string, { a: string; b: biguint; c: boolean }]>()
     intc_0 // 0
-    bytec 6 // "t4"
+    bytec 7 // "t4"
     app_global_get_ex
     assert // check GlobalState exists
-    // tests/approvals/global-state.algo.ts:73
+    // tests/approvals/global-state.algo.ts:89
     // assert(this.t4.value[1].b === 456n, 'Tuple value should be set')
     dup
     intc_1 // 2
@@ -583,18 +583,18 @@ testTuple_block@0:
     uncover 2
     substring3
     intc_1 // 2
-    intc_3 // 64
+    pushint 64 // 64
     extract3
     bytec_3 // 0x01c8
     b==
     assert // Tuple value should be set
-    // tests/approvals/global-state.algo.ts:51
+    // tests/approvals/global-state.algo.ts:65
     // t4 = GlobalState<[string, { a: string; b: biguint; c: boolean }]>()
     intc_0 // 0
-    bytec 6 // "t4"
+    bytec 7 // "t4"
     app_global_get_ex
     assert // check GlobalState exists
-    // tests/approvals/global-state.algo.ts:74
+    // tests/approvals/global-state.algo.ts:90
     // assert(this.t4.value[1].c === true, 'Tuple value should be set')
     dup
     intc_1 // 2
@@ -613,6 +613,133 @@ testTuple_block@0:
     intc_2 // 1
     ==
     assert // Tuple value should be set
+    // tests/approvals/global-state.algo.ts:92
+    // this.t5.value = new Data({ a: 'hello', b: 123, c: true, d: new arc4.Str('World') })
+    bytec 11 // 0x576f726c64
+    len
+    itob
+    extract 6 2
+    bytec 11 // 0x576f726c64
+    concat
+    bytec_1 // "hello"
+    len
+    itob
+    extract 6 2
+    bytec_1 // "hello"
+    concat
+    bytec_0 // 0x
+    dig 1
+    concat
+    swap
+    len
+    pushint 13 // 13
+    +
+    pushint 13 // 13
+    itob
+    extract 6 2
+    bytec_0 // 0x
+    swap
+    concat
+    intc_3 // 123
+    itob
+    concat
+    bytec 5 // 0x00
+    intc_0 // 0
+    intc_2 // 1
+    setbit
+    concat
+    uncover 2
+    uncover 3
+    concat
+    swap
+    uncover 2
+    itob
+    extract 6 2
+    concat
+    swap
+    concat
+    // tests/approvals/global-state.algo.ts:67
+    // t5 = GlobalState<Data>()
+    bytec 8 // "t5"
+    // tests/approvals/global-state.algo.ts:92
+    // this.t5.value = new Data({ a: 'hello', b: 123, c: true, d: new arc4.Str('World') })
+    swap
+    app_global_put
+    // tests/approvals/global-state.algo.ts:67
+    // t5 = GlobalState<Data>()
+    intc_0 // 0
+    bytec 8 // "t5"
+    app_global_get_ex
+    assert // check GlobalState exists
+    // tests/approvals/global-state.algo.ts:93
+    // assert(this.t5.value.a === 'hello', 'Mutable object value should be set')
+    dup
+    intc_0 // 0
+    extract_uint16
+    swap
+    dup
+    pushint 11 // 11
+    extract_uint16
+    swap
+    uncover 2
+    uncover 2
+    substring3
+    extract 2 0
+    bytec_1 // "hello"
+    ==
+    assert // Mutable object value should be set
+    // tests/approvals/global-state.algo.ts:67
+    // t5 = GlobalState<Data>()
+    intc_0 // 0
+    bytec 8 // "t5"
+    app_global_get_ex
+    assert // check GlobalState exists
+    // tests/approvals/global-state.algo.ts:94
+    // assert(this.t5.value.b === 123, 'Mutable object value should be set')
+    intc_1 // 2
+    pushint 8 // 8
+    extract3
+    btoi
+    intc_3 // 123
+    ==
+    assert // Mutable object value should be set
+    // tests/approvals/global-state.algo.ts:67
+    // t5 = GlobalState<Data>()
+    intc_0 // 0
+    bytec 8 // "t5"
+    app_global_get_ex
+    assert // check GlobalState exists
+    // tests/approvals/global-state.algo.ts:95
+    // assert(this.t5.value.c === true, 'Mutable object value should be set')
+    pushint 80 // 80
+    getbit
+    intc_0 // 0
+    getbit
+    intc_2 // 1
+    ==
+    assert // Mutable object value should be set
+    // tests/approvals/global-state.algo.ts:67
+    // t5 = GlobalState<Data>()
+    intc_0 // 0
+    bytec 8 // "t5"
+    app_global_get_ex
+    assert // check GlobalState exists
+    // tests/approvals/global-state.algo.ts:96
+    // assert(this.t5.value.d.native === 'World', 'Mutable object value should be set')
+    dup
+    pushint 11 // 11
+    extract_uint16
+    swap
+    dup
+    len
+    swap
+    uncover 2
+    uncover 2
+    substring3
+    extract 2 0
+    bytec 11 // "World"
+    ==
+    assert // Mutable object value should be set
     retsub
 
 

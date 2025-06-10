@@ -139,14 +139,6 @@ export const bigIntToUint8Array = (val: bigint, fixedSize: number | 'dynamic' = 
 export const hasFlags = <T extends number>(value: T, flags: T): boolean => (value & flags) === flags
 export const intersectsFlags = <T extends number>(value: T, flags: T): boolean => Boolean(value & flags)
 
-export function* enumerate<T>(iterable: Iterable<T>): IterableIterator<readonly [number, T]> {
-  let i = 0
-  for (const item of iterable) {
-    yield [i, item]
-    i++
-  }
-}
-
 export function toSubScript(num: number) {
   const subNumbers = ['\u2080', '\u2081', '\u2082', '\u2083', '\u2084', '\u2085', '\u2086', '\u2087', '\u2088', '\u2089']
   return num

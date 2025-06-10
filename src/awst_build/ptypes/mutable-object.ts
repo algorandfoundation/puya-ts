@@ -99,6 +99,13 @@ export class MutableObjectType extends ARC4EncodedType {
   get signature(): string {
     return `${this.name}${this.wtype.arc4Alias}`
   }
+
+  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType | undefined {
+    if (typeof index === 'string') {
+      return this.fields[index]
+    }
+    return super.getIndexType(index, sourceLocation)
+  }
 }
 
 export const mutableObjectBaseType = new MutableObjectType({

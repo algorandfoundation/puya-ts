@@ -246,6 +246,13 @@ export class ARC4StructType extends ARC4EncodedType {
       frozen: this.frozen,
     })
   }
+
+  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType | undefined {
+    if (typeof index === 'string') {
+      return this.fields[index]
+    }
+    return super.getIndexType(index, sourceLocation)
+  }
 }
 
 export const arc4StructBaseType = new ARC4StructType({
