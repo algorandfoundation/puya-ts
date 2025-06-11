@@ -322,220 +322,237 @@ subroutine _puya_lib.arc4.recalculate_head_for_elements_with_byte_length_head(ar
 
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testVectorCreationAndEquality() -> void:
     block@0: // L13
-        let aggregate%val_as_bytes%0#1: bytes[8] = (itob 0u)
-        let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
-        let aggregate%encoded%0#1: Encoded(uint64) = (concat 0x aggregate%as_Encoded(uint64)%0#1)
-        let aggregate%val_as_bytes%1#1: bytes[8] = (itob 1u)
-        let aggregate%as_Encoded(uint64)%1#1: Encoded(uint64) = aggregate%val_as_bytes%1#1
-        let aggregate%encoded%1#1: Encoded(uint64,uint64) = (concat aggregate%encoded%0#1 aggregate%as_Encoded(uint64)%1#1)
-        let aggregate%encoded%2#1: Encoded(uint64,uint64) = (concat aggregate%encoded%1#1 0x)
-        let v1#0: Encoded(uint64,uint64) = aggregate%encoded%2#1
-        let aggregate%extract%0#1: bytes = (extract3 v1#0 0u 8u)
-        let tuple_item%0#0: Encoded(uint64) = aggregate%extract%0#1
+        let array%val_as_bytes%0#1: bytes[8] = (itob 0u)
+        let array%as_Encoded(uint64)%0#1: Encoded(uint64) = array%val_as_bytes%0#1
+        let array%encoded%0#1: Encoded(uint64) = (concat 0x array%as_Encoded(uint64)%0#1)
+        let array%val_as_bytes%1#1: bytes[8] = (itob 1u)
+        let array%as_Encoded(uint64)%1#1: Encoded(uint64) = array%val_as_bytes%1#1
+        let array%encoded%1#1: Encoded(uint64,uint64) = (concat array%encoded%0#1 array%as_Encoded(uint64)%1#1)
+        let array%encoded%2#1: Encoded(uint64,uint64) = (concat array%encoded%1#1 0x)
+        let v1#0: Encoded(uint64,uint64) = array%encoded%2#1
+        let array%extract%0#1: bytes = (extract3 v1#0 0u 8u)
+        let tuple_item%0#0: Encoded(uint64) = array%extract%0#1
         let values%0#0: uint64 = (btoi tuple_item%0#0)
         let tmp%1#0: bytes[8] = (itob values%0#0)
         (log tmp%1#0)
-        let aggregate%extract%1#1: bytes = (extract3 v1#0 8u 8u)
-        let tuple_item%1#0: Encoded(uint64) = aggregate%extract%1#1
+        let array%extract%1#1: bytes = (extract3 v1#0 8u 8u)
+        let tuple_item%1#0: Encoded(uint64) = array%extract%1#1
         let values%1#0: uint64 = (btoi tuple_item%1#0)
         let tmp%2#0: bytes[8] = (itob values%1#0)
         (log tmp%2#0)
-        let aggregate%val_as_bytes%2#1: bytes[8] = (itob 0u)
-        let aggregate%as_Encoded(uint64)%2#1: Encoded(uint64) = aggregate%val_as_bytes%2#1
-        let aggregate%encoded%3#1: Encoded(uint64) = (concat 0x aggregate%as_Encoded(uint64)%2#1)
-        let aggregate%val_as_bytes%3#1: bytes[8] = (itob 1u)
-        let aggregate%as_Encoded(uint64)%3#1: Encoded(uint64) = aggregate%val_as_bytes%3#1
-        let aggregate%encoded%4#1: Encoded(uint64,uint64) = (concat aggregate%encoded%3#1 aggregate%as_Encoded(uint64)%3#1)
-        let aggregate%encoded%5#1: Encoded(uint64,uint64) = (concat aggregate%encoded%4#1 0x)
-        let v2#0: Encoded(uint64,uint64) = aggregate%encoded%5#1
+        let array%val_as_bytes%2#1: bytes[8] = (itob 0u)
+        let array%as_Encoded(uint64)%2#1: Encoded(uint64) = array%val_as_bytes%2#1
+        let array%encoded%3#1: Encoded(uint64) = (concat 0x array%as_Encoded(uint64)%2#1)
+        let array%val_as_bytes%3#1: bytes[8] = (itob 1u)
+        let array%as_Encoded(uint64)%3#1: Encoded(uint64) = array%val_as_bytes%3#1
+        let array%encoded%4#1: Encoded(uint64,uint64) = (concat array%encoded%3#1 array%as_Encoded(uint64)%3#1)
+        let array%encoded%5#1: Encoded(uint64,uint64) = (concat array%encoded%4#1 0x)
+        let v2#0: Encoded(uint64,uint64) = array%encoded%5#1
         let tmp%4#0: bool = (== v1#0 v2#0)
         (assert tmp%4#0)
         return 
 
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.addVectors(v1: Encoded(uint64,uint64), v2: Encoded(uint64,uint64)) -> Encoded(uint64,uint64):
     block@0: // L21
-        let aggregate%extract%0#1: bytes = (extract3 v1#0 0u 8u)
-        let tuple_item%0#0: Encoded(uint64) = aggregate%extract%0#1
+        let array%extract%0#1: bytes = (extract3 v1#0 0u 8u)
+        let tuple_item%0#0: Encoded(uint64) = array%extract%0#1
         let values%0#0: uint64 = (btoi tuple_item%0#0)
-        let aggregate%extract%1#1: bytes = (extract3 v2#0 0u 8u)
-        let tuple_item%1#0: Encoded(uint64) = aggregate%extract%1#1
+        let array%extract%1#1: bytes = (extract3 v2#0 0u 8u)
+        let tuple_item%1#0: Encoded(uint64) = array%extract%1#1
         let values%1#0: uint64 = (btoi tuple_item%1#0)
         let tmp%0#0: uint64 = (+ values%0#0 values%1#0)
-        let aggregate%extract%2#1: bytes = (extract3 v1#0 8u 8u)
-        let tuple_item%2#0: Encoded(uint64) = aggregate%extract%2#1
+        let array%extract%2#1: bytes = (extract3 v1#0 8u 8u)
+        let tuple_item%2#0: Encoded(uint64) = array%extract%2#1
         let values%2#0: uint64 = (btoi tuple_item%2#0)
-        let aggregate%extract%3#1: bytes = (extract3 v2#0 8u 8u)
-        let tuple_item%3#0: Encoded(uint64) = aggregate%extract%3#1
+        let array%extract%3#1: bytes = (extract3 v2#0 8u 8u)
+        let tuple_item%3#0: Encoded(uint64) = array%extract%3#1
         let values%3#0: uint64 = (btoi tuple_item%3#0)
         let tmp%1#0: uint64 = (+ values%2#0 values%3#0)
-        let aggregate%val_as_bytes%0#1: bytes[8] = (itob tmp%0#0)
-        let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
-        let aggregate%encoded%0#1: Encoded(uint64) = (concat 0x aggregate%as_Encoded(uint64)%0#1)
-        let aggregate%val_as_bytes%1#1: bytes[8] = (itob tmp%1#0)
-        let aggregate%as_Encoded(uint64)%1#1: Encoded(uint64) = aggregate%val_as_bytes%1#1
-        let aggregate%encoded%1#1: Encoded(uint64,uint64) = (concat aggregate%encoded%0#1 aggregate%as_Encoded(uint64)%1#1)
-        let aggregate%encoded%2#1: Encoded(uint64,uint64) = (concat aggregate%encoded%1#1 0x)
-        let tmp%2#0: Encoded(uint64,uint64) = aggregate%encoded%2#1
+        let array%val_as_bytes%0#1: bytes[8] = (itob tmp%0#0)
+        let array%as_Encoded(uint64)%0#1: Encoded(uint64) = array%val_as_bytes%0#1
+        let array%encoded%0#1: Encoded(uint64) = (concat 0x array%as_Encoded(uint64)%0#1)
+        let array%val_as_bytes%1#1: bytes[8] = (itob tmp%1#0)
+        let array%as_Encoded(uint64)%1#1: Encoded(uint64) = array%val_as_bytes%1#1
+        let array%encoded%1#1: Encoded(uint64,uint64) = (concat array%encoded%0#1 array%as_Encoded(uint64)%1#1)
+        let array%encoded%2#1: Encoded(uint64,uint64) = (concat array%encoded%1#1 0x)
+        let tmp%2#0: Encoded(uint64,uint64) = array%encoded%2#1
         return tmp%2#0
 
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.mutateVector(v1: Encoded(uint64,uint64), newX: uint64, newY: uint64) -> Encoded(uint64,uint64):
     block@0: // L28
-        let aggregate%val_as_bytes%0#1: bytes[8] = (itob newX#0)
-        let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
-        let encoded_value%0#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#1
-        let aggregate%extract%0#1: bytes = (extract3 v1#0 0u 8u)
-        let aggregate%updated_data%0#1: bytes = (replace3 v1#0 0u encoded_value%0#0)
-        let v1#1: Encoded(uint64,uint64) = aggregate%updated_data%0#1
-        let aggregate%val_as_bytes%1#1: bytes[8] = (itob newY#0)
-        let aggregate%as_Encoded(uint64)%1#1: Encoded(uint64) = aggregate%val_as_bytes%1#1
-        let encoded_value%1#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%1#1
-        let aggregate%extract%1#1: bytes = (extract3 v1#1 8u 8u)
-        let aggregate%updated_data%1#1: bytes = (replace3 v1#1 8u encoded_value%1#0)
-        let v1#2: Encoded(uint64,uint64) = aggregate%updated_data%1#1
+        let array%val_as_bytes%0#1: bytes[8] = (itob newX#0)
+        let array%as_Encoded(uint64)%0#1: Encoded(uint64) = array%val_as_bytes%0#1
+        let encoded_value%0#0: Encoded(uint64) = array%as_Encoded(uint64)%0#1
+        let array%extract%0#1: bytes = (extract3 v1#0 0u 8u)
+        let array%updated_data%0#1: bytes = (replace3 v1#0 0u encoded_value%0#0)
+        let v1#1: Encoded(uint64,uint64) = array%updated_data%0#1
+        let array%val_as_bytes%1#1: bytes[8] = (itob newY#0)
+        let array%as_Encoded(uint64)%1#1: Encoded(uint64) = array%val_as_bytes%1#1
+        let encoded_value%1#0: Encoded(uint64) = array%as_Encoded(uint64)%1#1
+        let array%extract%1#1: bytes = (extract3 v1#1 8u 8u)
+        let array%updated_data%1#1: bytes = (replace3 v1#1 8u encoded_value%1#0)
+        let v1#2: Encoded(uint64,uint64) = array%updated_data%1#1
         return v1#2
 
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.implicitCastingAndSpreading(v1: Encoded(uint64,uint64)) -> void:
     block@0: // L34
-        let aggregate%extract%0#1: bytes = (extract3 v1#0 0u 8u)
-        let aggregate%item0%0#1: uint64 = (btoi aggregate%extract%0#1)
-        let aggregate%extract%1#1: bytes = (extract3 v1#0 8u 8u)
-        let aggregate%item1%0#1: uint64 = (btoi aggregate%extract%1#1)
-        let (awst_tmp%0#0: uint64, awst_tmp%1#0: uint64) = (aggregate%item0%0#1, aggregate%item1%0#1)
-        let aggregate%val_as_bytes%0#1: bytes[8] = (itob awst_tmp%0#0)
-        let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
-        let aggregate%encoded%0#1: Encoded(uint64) = (concat 0x aggregate%as_Encoded(uint64)%0#1)
-        let aggregate%val_as_bytes%1#1: bytes[8] = (itob awst_tmp%1#0)
-        let aggregate%as_Encoded(uint64)%1#1: Encoded(uint64) = aggregate%val_as_bytes%1#1
-        let aggregate%encoded%1#1: Encoded(uint64,uint64) = (concat aggregate%encoded%0#1 aggregate%as_Encoded(uint64)%1#1)
-        let aggregate%encoded%2#1: Encoded(uint64,uint64) = (concat aggregate%encoded%1#1 0x)
-        let v2#0: Encoded(uint64,uint64) = aggregate%encoded%2#1
-        let aggregate%extract%2#1: bytes = (extract3 v2#0 0u 8u)
-        let tuple_item%0#0: Encoded(uint64) = aggregate%extract%2#1
+        let array%extract%0#1: bytes = (extract3 v1#0 0u 8u)
+        let tuple_item%0#0: Encoded(uint64) = array%extract%0#1
         let values%0#0: uint64 = (btoi tuple_item%0#0)
-        let aggregate%extract%3#1: bytes = (extract3 v2#0 8u 8u)
-        let tuple_item%1#0: Encoded(uint64) = aggregate%extract%3#1
+        let array%extract%1#1: bytes = (extract3 v1#0 8u 8u)
+        let tuple_item%1#0: Encoded(uint64) = array%extract%1#1
         let values%1#0: uint64 = (btoi tuple_item%1#0)
-        let aggregate%val_as_bytes%2#1: bytes[8] = (itob values%0#0)
-        let aggregate%as_Encoded(uint64)%2#1: Encoded(uint64) = aggregate%val_as_bytes%2#1
-        let aggregate%encoded%3#1: Encoded(uint64) = (concat 0x aggregate%as_Encoded(uint64)%2#1)
-        let aggregate%val_as_bytes%3#1: bytes[8] = (itob values%1#0)
-        let aggregate%as_Encoded(uint64)%3#1: Encoded(uint64) = aggregate%val_as_bytes%3#1
-        let aggregate%encoded%4#1: Encoded(uint64,uint64) = (concat aggregate%encoded%3#1 aggregate%as_Encoded(uint64)%3#1)
-        let aggregate%encoded%5#1: Encoded(uint64,uint64) = (concat aggregate%encoded%4#1 0x)
-        let v3#0: Encoded(uint64,uint64) = aggregate%encoded%5#1
-        let aggregate%extract%4#1: bytes = (extract3 v1#0 0u 8u)
-        let tuple_item%2#0: Encoded(uint64) = aggregate%extract%4#1
+        let array%val_as_bytes%0#1: bytes[8] = (itob values%0#0)
+        let array%as_Encoded(uint64)%0#1: Encoded(uint64) = array%val_as_bytes%0#1
+        let array%encoded%0#1: Encoded(uint64) = (concat 0x array%as_Encoded(uint64)%0#1)
+        let array%val_as_bytes%1#1: bytes[8] = (itob values%1#0)
+        let array%as_Encoded(uint64)%1#1: Encoded(uint64) = array%val_as_bytes%1#1
+        let array%encoded%1#1: Encoded(uint64,uint64) = (concat array%encoded%0#1 array%as_Encoded(uint64)%1#1)
+        let array%encoded%2#1: Encoded(uint64,uint64) = (concat array%encoded%1#1 0x)
+        let v2#0: Encoded(uint64,uint64) = array%encoded%2#1
+        let array%extract%2#1: bytes = (extract3 v2#0 0u 8u)
+        let tuple_item%2#0: Encoded(uint64) = array%extract%2#1
         let values%2#0: uint64 = (btoi tuple_item%2#0)
-        let aggregate%extract%5#1: bytes = (extract3 v2#0 0u 8u)
-        let tuple_item%3#0: Encoded(uint64) = aggregate%extract%5#1
+        let array%extract%3#1: bytes = (extract3 v2#0 8u 8u)
+        let tuple_item%3#0: Encoded(uint64) = array%extract%3#1
         let values%3#0: uint64 = (btoi tuple_item%3#0)
-        let tmp%2#0: bool = (== values%2#0 values%3#0)
-        (assert tmp%2#0)
-        let aggregate%extract%6#1: bytes = (extract3 v1#0 8u 8u)
-        let tuple_item%4#0: Encoded(uint64) = aggregate%extract%6#1
+        let array%val_as_bytes%2#1: bytes[8] = (itob values%2#0)
+        let array%as_Encoded(uint64)%2#1: Encoded(uint64) = array%val_as_bytes%2#1
+        let array%encoded%3#1: Encoded(uint64) = (concat 0x array%as_Encoded(uint64)%2#1)
+        let array%val_as_bytes%3#1: bytes[8] = (itob values%3#0)
+        let array%as_Encoded(uint64)%3#1: Encoded(uint64) = array%val_as_bytes%3#1
+        let array%encoded%4#1: Encoded(uint64,uint64) = (concat array%encoded%3#1 array%as_Encoded(uint64)%3#1)
+        let array%encoded%5#1: Encoded(uint64,uint64) = (concat array%encoded%4#1 0x)
+        let v3#0: Encoded(uint64,uint64) = array%encoded%5#1
+        let array%extract%4#1: bytes = (extract3 v1#0 0u 8u)
+        let tuple_item%4#0: Encoded(uint64) = array%extract%4#1
         let values%4#0: uint64 = (btoi tuple_item%4#0)
-        let aggregate%extract%7#1: bytes = (extract3 v2#0 8u 8u)
-        let tuple_item%5#0: Encoded(uint64) = aggregate%extract%7#1
+        let array%extract%5#1: bytes = (extract3 v2#0 0u 8u)
+        let tuple_item%5#0: Encoded(uint64) = array%extract%5#1
         let values%5#0: uint64 = (btoi tuple_item%5#0)
-        let tmp%3#0: bool = (== values%4#0 values%5#0)
+        let tmp%2#0: bool = (== values%4#0 values%5#0)
+        (assert tmp%2#0)
+        let array%extract%6#1: bytes = (extract3 v1#0 8u 8u)
+        let tuple_item%6#0: Encoded(uint64) = array%extract%6#1
+        let values%6#0: uint64 = (btoi tuple_item%6#0)
+        let array%extract%7#1: bytes = (extract3 v2#0 8u 8u)
+        let tuple_item%7#0: Encoded(uint64) = array%extract%7#1
+        let values%7#0: uint64 = (btoi tuple_item%7#0)
+        let tmp%3#0: bool = (== values%6#0 values%7#0)
         (assert tmp%3#0)
         let tmp%4#0: bool = (== v1#0 v2#0)
         (assert tmp%4#0)
-        let aggregate%extract%8#1: bytes = (extract3 v3#0 0u 8u)
-        let tuple_item%6#0: Encoded(uint64) = aggregate%extract%8#1
-        let values%6#0: uint64 = (btoi tuple_item%6#0)
-        let aggregate%extract%9#1: bytes = (extract3 v1#0 0u 8u)
-        let tuple_item%7#0: Encoded(uint64) = aggregate%extract%9#1
-        let values%7#0: uint64 = (btoi tuple_item%7#0)
-        let tmp%5#0: bool = (== values%6#0 values%7#0)
-        (assert tmp%5#0)
-        let aggregate%extract%10#1: bytes = (extract3 v3#0 8u 8u)
-        let tuple_item%8#0: Encoded(uint64) = aggregate%extract%10#1
+        let array%extract%8#1: bytes = (extract3 v3#0 0u 8u)
+        let tuple_item%8#0: Encoded(uint64) = array%extract%8#1
         let values%8#0: uint64 = (btoi tuple_item%8#0)
-        let aggregate%extract%11#1: bytes = (extract3 v1#0 8u 8u)
-        let tuple_item%9#0: Encoded(uint64) = aggregate%extract%11#1
+        let array%extract%9#1: bytes = (extract3 v1#0 0u 8u)
+        let tuple_item%9#0: Encoded(uint64) = array%extract%9#1
         let values%9#0: uint64 = (btoi tuple_item%9#0)
-        let tmp%6#0: bool = (== values%8#0 values%9#0)
+        let tmp%5#0: bool = (== values%8#0 values%9#0)
+        (assert tmp%5#0)
+        let array%extract%10#1: bytes = (extract3 v3#0 8u 8u)
+        let tuple_item%10#0: Encoded(uint64) = array%extract%10#1
+        let values%10#0: uint64 = (btoi tuple_item%10#0)
+        let array%extract%11#1: bytes = (extract3 v1#0 8u 8u)
+        let tuple_item%11#0: Encoded(uint64) = array%extract%11#1
+        let values%11#0: uint64 = (btoi tuple_item%11#0)
+        let tmp%6#0: bool = (== values%10#0 values%11#0)
         (assert tmp%6#0)
         let tmp%7#0: bool = (== v3#0 v1#0)
         (assert tmp%7#0)
-        let aggregate%extract%12#1: bytes = (extract3 v3#0 0u 8u)
-        let tuple_item%10#0: Encoded(uint64) = aggregate%extract%12#1
-        let x#0: uint64 = (btoi tuple_item%10#0)
-        let aggregate%extract%13#1: bytes = (extract3 v3#0 8u 8u)
-        let tuple_item%11#0: Encoded(uint64) = aggregate%extract%13#1
-        let y#0: uint64 = (btoi tuple_item%11#0)
-        let aggregate%extract%14#1: bytes = (extract3 v3#0 0u 8u)
-        let tuple_item%12#0: Encoded(uint64) = aggregate%extract%14#1
-        let values%12#0: uint64 = (btoi tuple_item%12#0)
-        let tmp%8#0: bool = (== x#0 values%12#0)
+        let array%extract%12#1: bytes = (extract3 v3#0 0u 8u)
+        let tuple_item%12#0: Encoded(uint64) = array%extract%12#1
+        let x#0: uint64 = (btoi tuple_item%12#0)
+        let array%extract%13#1: bytes = (extract3 v3#0 8u 8u)
+        let tuple_item%13#0: Encoded(uint64) = array%extract%13#1
+        let y#0: uint64 = (btoi tuple_item%13#0)
+        let array%extract%14#1: bytes = (extract3 v3#0 0u 8u)
+        let tuple_item%14#0: Encoded(uint64) = array%extract%14#1
+        let values%14#0: uint64 = (btoi tuple_item%14#0)
+        let tmp%8#0: bool = (== x#0 values%14#0)
         (assert tmp%8#0)
-        let aggregate%extract%15#1: bytes = (extract3 v3#0 8u 8u)
-        let tuple_item%13#0: Encoded(uint64) = aggregate%extract%15#1
-        let values%13#0: uint64 = (btoi tuple_item%13#0)
-        let tmp%9#0: bool = (== y#0 values%13#0)
+        let array%extract%15#1: bytes = (extract3 v3#0 8u 8u)
+        let tuple_item%15#0: Encoded(uint64) = array%extract%15#1
+        let values%15#0: uint64 = (btoi tuple_item%15#0)
+        let tmp%9#0: bool = (== y#0 values%15#0)
         (assert tmp%9#0)
         return 
 
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testNestedObjects(vp: Encoded((uint64,uint64),(uint64,uint64))) -> void:
     block@0: // L49
-        let aggregate%extract%0#1: bytes = (extract3 vp#0 0u 16u)
-        let aggregate%extract%1#1: bytes = (extract3 aggregate%extract%0#1 0u 8u)
-        let tuple_item%1#0: Encoded(uint64) = aggregate%extract%1#1
+        let array%extract%0#1: bytes = (extract3 vp#0 0u 16u)
+        let tuple_item%0#0: Encoded(uint64,uint64) = array%extract%0#1
+        let array%extract%1#1: bytes = (extract3 vp#0 0u 16u)
+        let array%extract%2#1: bytes = (extract3 array%extract%1#1 0u 8u)
+        let tuple_item%1#0: Encoded(uint64) = array%extract%2#1
         let values%0#0: uint64 = (btoi tuple_item%1#0)
-        let aggregate%extract%2#1: bytes = (extract3 vp#0 0u 16u)
-        let aggregate%extract%3#1: bytes = (extract3 aggregate%extract%2#1 8u 8u)
-        let tuple_item%3#0: Encoded(uint64) = aggregate%extract%3#1
+        let array%extract%3#1: bytes = (extract3 vp#0 0u 16u)
+        let tuple_item%2#0: Encoded(uint64,uint64) = array%extract%3#1
+        let array%extract%4#1: bytes = (extract3 vp#0 0u 16u)
+        let array%extract%5#1: bytes = (extract3 array%extract%4#1 8u 8u)
+        let tuple_item%3#0: Encoded(uint64) = array%extract%5#1
         let values%1#0: uint64 = (btoi tuple_item%3#0)
-        let aggregate%val_as_bytes%0#1: bytes[8] = (itob values%0#0)
-        let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
-        let aggregate%encoded%0#1: Encoded(uint64) = (concat 0x aggregate%as_Encoded(uint64)%0#1)
-        let aggregate%val_as_bytes%1#1: bytes[8] = (itob values%1#0)
-        let aggregate%as_Encoded(uint64)%1#1: Encoded(uint64) = aggregate%val_as_bytes%1#1
-        let aggregate%encoded%1#1: Encoded(uint64,uint64) = (concat aggregate%encoded%0#1 aggregate%as_Encoded(uint64)%1#1)
-        let aggregate%encoded%2#1: Encoded(uint64,uint64) = (concat aggregate%encoded%1#1 0x)
-        let v1#0: Encoded(uint64,uint64) = aggregate%encoded%2#1
-        let aggregate%extract%4#1: bytes = (extract3 vp#0 16u 16u)
-        let aggregate%extract%5#1: bytes = (extract3 aggregate%extract%4#1 8u 8u)
-        let tuple_item%5#0: Encoded(uint64) = aggregate%extract%5#1
+        let array%val_as_bytes%0#1: bytes[8] = (itob values%0#0)
+        let array%as_Encoded(uint64)%0#1: Encoded(uint64) = array%val_as_bytes%0#1
+        let array%encoded%0#1: Encoded(uint64) = (concat 0x array%as_Encoded(uint64)%0#1)
+        let array%val_as_bytes%1#1: bytes[8] = (itob values%1#0)
+        let array%as_Encoded(uint64)%1#1: Encoded(uint64) = array%val_as_bytes%1#1
+        let array%encoded%1#1: Encoded(uint64,uint64) = (concat array%encoded%0#1 array%as_Encoded(uint64)%1#1)
+        let array%encoded%2#1: Encoded(uint64,uint64) = (concat array%encoded%1#1 0x)
+        let v1#0: Encoded(uint64,uint64) = array%encoded%2#1
+        let array%extract%6#1: bytes = (extract3 vp#0 16u 16u)
+        let tuple_item%4#0: Encoded(uint64,uint64) = array%extract%6#1
+        let array%extract%7#1: bytes = (extract3 vp#0 16u 16u)
+        let array%extract%8#1: bytes = (extract3 array%extract%7#1 8u 8u)
+        let tuple_item%5#0: Encoded(uint64) = array%extract%8#1
         let values%2#0: uint64 = (btoi tuple_item%5#0)
-        let aggregate%extract%6#1: bytes = (extract3 vp#0 16u 16u)
-        let aggregate%extract%7#1: bytes = (extract3 aggregate%extract%6#1 0u 8u)
-        let tuple_item%7#0: Encoded(uint64) = aggregate%extract%7#1
+        let array%extract%9#1: bytes = (extract3 vp#0 16u 16u)
+        let tuple_item%6#0: Encoded(uint64,uint64) = array%extract%9#1
+        let array%extract%10#1: bytes = (extract3 vp#0 16u 16u)
+        let array%extract%11#1: bytes = (extract3 array%extract%10#1 0u 8u)
+        let tuple_item%7#0: Encoded(uint64) = array%extract%11#1
         let values%3#0: uint64 = (btoi tuple_item%7#0)
-        let aggregate%val_as_bytes%2#1: bytes[8] = (itob values%3#0)
-        let aggregate%as_Encoded(uint64)%2#1: Encoded(uint64) = aggregate%val_as_bytes%2#1
-        let aggregate%encoded%3#1: Encoded(uint64) = (concat 0x aggregate%as_Encoded(uint64)%2#1)
-        let aggregate%val_as_bytes%3#1: bytes[8] = (itob values%2#0)
-        let aggregate%as_Encoded(uint64)%3#1: Encoded(uint64) = aggregate%val_as_bytes%3#1
-        let aggregate%encoded%4#1: Encoded(uint64,uint64) = (concat aggregate%encoded%3#1 aggregate%as_Encoded(uint64)%3#1)
-        let aggregate%encoded%5#1: Encoded(uint64,uint64) = (concat aggregate%encoded%4#1 0x)
-        let p1#0: Encoded(uint64,uint64) = aggregate%encoded%5#1
-        let aggregate%encoded%6#1: Encoded((uint64,uint64)) = (concat 0x v1#0)
-        let aggregate%encoded%7#1: Encoded((uint64,uint64),(uint64,uint64)) = (concat aggregate%encoded%6#1 p1#0)
-        let aggregate%encoded%8#1: Encoded((uint64,uint64),(uint64,uint64)) = (concat aggregate%encoded%7#1 0x)
-        let vp1#0: Encoded((uint64,uint64),(uint64,uint64)) = aggregate%encoded%8#1
-        let aggregate%extract%8#1: bytes = (extract3 vp1#0 0u 16u)
-        let aggregate%extract%9#1: bytes = (extract3 aggregate%extract%8#1 0u 8u)
-        let tuple_item%9#0: Encoded(uint64) = aggregate%extract%9#1
+        let array%val_as_bytes%2#1: bytes[8] = (itob values%3#0)
+        let array%as_Encoded(uint64)%2#1: Encoded(uint64) = array%val_as_bytes%2#1
+        let array%encoded%3#1: Encoded(uint64) = (concat 0x array%as_Encoded(uint64)%2#1)
+        let array%val_as_bytes%3#1: bytes[8] = (itob values%2#0)
+        let array%as_Encoded(uint64)%3#1: Encoded(uint64) = array%val_as_bytes%3#1
+        let array%encoded%4#1: Encoded(uint64,uint64) = (concat array%encoded%3#1 array%as_Encoded(uint64)%3#1)
+        let array%encoded%5#1: Encoded(uint64,uint64) = (concat array%encoded%4#1 0x)
+        let p1#0: Encoded(uint64,uint64) = array%encoded%5#1
+        let array%encoded%6#1: Encoded((uint64,uint64)) = (concat 0x v1#0)
+        let array%encoded%7#1: Encoded((uint64,uint64),(uint64,uint64)) = (concat array%encoded%6#1 p1#0)
+        let array%encoded%8#1: Encoded((uint64,uint64),(uint64,uint64)) = (concat array%encoded%7#1 0x)
+        let vp1#0: Encoded((uint64,uint64),(uint64,uint64)) = array%encoded%8#1
+        let array%extract%12#1: bytes = (extract3 vp1#0 0u 16u)
+        let tuple_item%8#0: Encoded(uint64,uint64) = array%extract%12#1
+        let array%extract%13#1: bytes = (extract3 vp1#0 0u 16u)
+        let array%extract%14#1: bytes = (extract3 array%extract%13#1 0u 8u)
+        let tuple_item%9#0: Encoded(uint64) = array%extract%14#1
         let values%4#0: uint64 = (btoi tuple_item%9#0)
         let tmp%3#0: bytes[8] = (itob values%4#0)
         (log tmp%3#0)
-        let aggregate%extract%10#1: bytes = (extract3 vp1#0 0u 16u)
-        let aggregate%extract%11#1: bytes = (extract3 aggregate%extract%10#1 8u 8u)
-        let tuple_item%11#0: Encoded(uint64) = aggregate%extract%11#1
+        let array%extract%15#1: bytes = (extract3 vp1#0 0u 16u)
+        let tuple_item%10#0: Encoded(uint64,uint64) = array%extract%15#1
+        let array%extract%16#1: bytes = (extract3 vp1#0 0u 16u)
+        let array%extract%17#1: bytes = (extract3 array%extract%16#1 8u 8u)
+        let tuple_item%11#0: Encoded(uint64) = array%extract%17#1
         let values%5#0: uint64 = (btoi tuple_item%11#0)
         let tmp%4#0: bytes[8] = (itob values%5#0)
         (log tmp%4#0)
-        let aggregate%extract%12#1: bytes = (extract3 vp1#0 16u 16u)
-        let aggregate%extract%13#1: bytes = (extract3 aggregate%extract%12#1 8u 8u)
-        let tuple_item%13#0: Encoded(uint64) = aggregate%extract%13#1
+        let array%extract%18#1: bytes = (extract3 vp1#0 16u 16u)
+        let tuple_item%12#0: Encoded(uint64,uint64) = array%extract%18#1
+        let array%extract%19#1: bytes = (extract3 vp1#0 16u 16u)
+        let array%extract%20#1: bytes = (extract3 array%extract%19#1 8u 8u)
+        let tuple_item%13#0: Encoded(uint64) = array%extract%20#1
         let values%6#0: uint64 = (btoi tuple_item%13#0)
         let tmp%5#0: bytes[8] = (itob values%6#0)
         (log tmp%5#0)
-        let aggregate%extract%14#1: bytes = (extract3 vp1#0 16u 16u)
-        let aggregate%extract%15#1: bytes = (extract3 aggregate%extract%14#1 0u 8u)
-        let tuple_item%15#0: Encoded(uint64) = aggregate%extract%15#1
+        let array%extract%21#1: bytes = (extract3 vp1#0 16u 16u)
+        let tuple_item%14#0: Encoded(uint64,uint64) = array%extract%21#1
+        let array%extract%22#1: bytes = (extract3 vp1#0 16u 16u)
+        let array%extract%23#1: bytes = (extract3 array%extract%22#1 0u 8u)
+        let tuple_item%15#0: Encoded(uint64) = array%extract%23#1
         let values%7#0: uint64 = (btoi tuple_item%15#0)
         let tmp%6#0: bytes[8] = (itob values%7#0)
         (log tmp%6#0)
@@ -546,22 +563,22 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testNestedO
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testAssertMatch(x: uint64) -> void:
     block@0: // L72
         let b#0: uint64 = (* x#0 2u)
-        let aggregate%val_as_bytes%0#1: bytes[8] = (itob b#0)
-        let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
-        let aggregate%encoded%0#1: Encoded(uint64) = (concat 0x aggregate%as_Encoded(uint64)%0#1)
-        let aggregate%val_as_bytes%1#1: bytes[8] = (itob b#0)
-        let aggregate%as_Encoded(uint64)%1#1: Encoded(uint64) = aggregate%val_as_bytes%1#1
-        let aggregate%encoded%1#1: Encoded(uint64,uint64) = (concat aggregate%encoded%0#1 aggregate%as_Encoded(uint64)%1#1)
-        let aggregate%encoded%2#1: Encoded(uint64,uint64) = (concat aggregate%encoded%1#1 0x)
-        let obj#0: Encoded(uint64,uint64) = aggregate%encoded%2#1
-        let aggregate%extract%0#1: bytes = (extract3 obj#0 8u 8u)
-        let tuple_item%0#0: Encoded(uint64) = aggregate%extract%0#1
+        let array%val_as_bytes%0#1: bytes[8] = (itob b#0)
+        let array%as_Encoded(uint64)%0#1: Encoded(uint64) = array%val_as_bytes%0#1
+        let array%encoded%0#1: Encoded(uint64) = (concat 0x array%as_Encoded(uint64)%0#1)
+        let array%val_as_bytes%1#1: bytes[8] = (itob b#0)
+        let array%as_Encoded(uint64)%1#1: Encoded(uint64) = array%val_as_bytes%1#1
+        let array%encoded%1#1: Encoded(uint64,uint64) = (concat array%encoded%0#1 array%as_Encoded(uint64)%1#1)
+        let array%encoded%2#1: Encoded(uint64,uint64) = (concat array%encoded%1#1 0x)
+        let obj#0: Encoded(uint64,uint64) = array%encoded%2#1
+        let array%extract%0#1: bytes = (extract3 obj#0 8u 8u)
+        let tuple_item%0#0: Encoded(uint64) = array%extract%0#1
         let values%0#0: uint64 = (btoi tuple_item%0#0)
         let tmp%3#0: bool = (== values%0#0 b#0)
         goto tmp%3#0 ? block@1 : block@3
     block@1: // and_contd_L78
-        let aggregate%extract%1#1: bytes = (extract3 obj#0 0u 8u)
-        let tuple_item%1#0: Encoded(uint64) = aggregate%extract%1#1
+        let array%extract%1#1: bytes = (extract3 obj#0 0u 8u)
+        let tuple_item%1#0: Encoded(uint64) = array%extract%1#1
         let values%1#0: uint64 = (btoi tuple_item%1#0)
         let tmp%5#0: bool = (== values%1#0 b#0)
         goto tmp%5#0 ? block@2 : block@3
@@ -574,34 +591,34 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testAssertM
     block@4: // bool_merge_L78
         let and_result%0#2: bool = φ(and_result%0#0 <- block@2, and_result%0#1 <- block@3)
         (assert and_result%0#2) // assert target is match for conditions
-        let aggregate%extract%2#1: bytes = (extract3 obj#0 8u 8u)
-        let tuple_item%2#0: Encoded(uint64) = aggregate%extract%2#1
+        let array%extract%2#1: bytes = (extract3 obj#0 8u 8u)
+        let tuple_item%2#0: Encoded(uint64) = array%extract%2#1
         let values%2#0: uint64 = (btoi tuple_item%2#0)
-        let aggregate%extract%3#1: bytes = (extract3 obj#0 0u 8u)
-        let tuple_item%3#0: Encoded(uint64) = aggregate%extract%3#1
+        let array%extract%3#1: bytes = (extract3 obj#0 0u 8u)
+        let tuple_item%3#0: Encoded(uint64) = array%extract%3#1
         let values%3#0: uint64 = (btoi tuple_item%3#0)
-        let aggregate%val_as_bytes%2#1: bytes[8] = (itob values%2#0)
-        let aggregate%as_Encoded(uint64)%2#1: Encoded(uint64) = aggregate%val_as_bytes%2#1
-        let aggregate%encoded%3#1: Encoded(uint64) = (concat 0x aggregate%as_Encoded(uint64)%2#1)
-        let aggregate%val_as_bytes%3#1: bytes[8] = (itob values%3#0)
-        let aggregate%as_Encoded(uint64)%3#1: Encoded(uint64) = aggregate%val_as_bytes%3#1
-        let aggregate%encoded%4#1: Encoded(uint64,uint64) = (concat aggregate%encoded%3#1 aggregate%as_Encoded(uint64)%3#1)
-        let aggregate%encoded%5#1: Encoded(uint64,uint64) = (concat aggregate%encoded%4#1 0x)
-        let v#0: Encoded(uint64,uint64) = aggregate%encoded%5#1
-        let aggregate%extract%4#1: bytes = (extract3 obj#0 0u 8u)
-        let tuple_item%4#0: Encoded(uint64) = aggregate%extract%4#1
+        let array%val_as_bytes%2#1: bytes[8] = (itob values%2#0)
+        let array%as_Encoded(uint64)%2#1: Encoded(uint64) = array%val_as_bytes%2#1
+        let array%encoded%3#1: Encoded(uint64) = (concat 0x array%as_Encoded(uint64)%2#1)
+        let array%val_as_bytes%3#1: bytes[8] = (itob values%3#0)
+        let array%as_Encoded(uint64)%3#1: Encoded(uint64) = array%val_as_bytes%3#1
+        let array%encoded%4#1: Encoded(uint64,uint64) = (concat array%encoded%3#1 array%as_Encoded(uint64)%3#1)
+        let array%encoded%5#1: Encoded(uint64,uint64) = (concat array%encoded%4#1 0x)
+        let v#0: Encoded(uint64,uint64) = array%encoded%5#1
+        let array%extract%4#1: bytes = (extract3 obj#0 0u 8u)
+        let tuple_item%4#0: Encoded(uint64) = array%extract%4#1
         let values%4#0: uint64 = (btoi tuple_item%4#0)
-        let aggregate%extract%5#1: bytes = (extract3 v#0 8u 8u)
-        let tuple_item%5#0: Encoded(uint64) = aggregate%extract%5#1
+        let array%extract%5#1: bytes = (extract3 v#0 8u 8u)
+        let tuple_item%5#0: Encoded(uint64) = array%extract%5#1
         let values%5#0: uint64 = (btoi tuple_item%5#0)
         let tmp%7#0: bool = (== values%4#0 values%5#0)
         goto tmp%7#0 ? block@5 : block@7
     block@5: // and_contd_L84
-        let aggregate%extract%6#1: bytes = (extract3 obj#0 8u 8u)
-        let tuple_item%6#0: Encoded(uint64) = aggregate%extract%6#1
+        let array%extract%6#1: bytes = (extract3 obj#0 8u 8u)
+        let tuple_item%6#0: Encoded(uint64) = array%extract%6#1
         let values%6#0: uint64 = (btoi tuple_item%6#0)
-        let aggregate%extract%7#1: bytes = (extract3 v#0 0u 8u)
-        let tuple_item%7#0: Encoded(uint64) = aggregate%extract%7#1
+        let array%extract%7#1: bytes = (extract3 v#0 0u 8u)
+        let tuple_item%7#0: Encoded(uint64) = array%extract%7#1
         let values%7#0: uint64 = (btoi tuple_item%7#0)
         let tmp%8#0: bool = (== values%6#0 values%7#0)
         goto tmp%8#0 ? block@6 : block@7
@@ -614,13 +631,13 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testAssertM
     block@8: // bool_merge_L84
         let and_result%1#2: bool = φ(and_result%1#0 <- block@6, and_result%1#1 <- block@7)
         (assert and_result%1#2) // assert target is match for conditions
-        let aggregate%extract%8#1: bytes = (extract3 obj#0 8u 8u)
-        let tuple_item%8#0: Encoded(uint64) = aggregate%extract%8#1
+        let array%extract%8#1: bytes = (extract3 obj#0 8u 8u)
+        let tuple_item%8#0: Encoded(uint64) = array%extract%8#1
         let values%8#0: uint64 = (btoi tuple_item%8#0)
         let tmp%9#0: bool = (> values%8#0 x#0)
         (assert tmp%9#0) // assert target is match for conditions
-        let aggregate%extract%9#1: bytes = (extract3 obj#0 0u 8u)
-        let tuple_item%9#0: Encoded(uint64) = aggregate%extract%9#1
+        let array%extract%9#1: bytes = (extract3 obj#0 0u 8u)
+        let tuple_item%9#0: Encoded(uint64) = array%extract%9#1
         let values%9#0: uint64 = (btoi tuple_item%9#0)
         let tmp%10#0: bool = (> values%9#0 x#0)
         (assert tmp%10#0) // assert target is match for conditions
@@ -628,28 +645,28 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testAssertM
 
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testArc4Encoding(p: Encoded(uint64,uint64)) -> void:
     block@0: // L89
-        let aggregate%extract%0#1: bytes = (extract3 p#0 8u 8u)
-        let tuple_item%0#0: Encoded(uint64) = aggregate%extract%0#1
+        let array%extract%0#1: bytes = (extract3 p#0 8u 8u)
+        let tuple_item%0#0: Encoded(uint64) = array%extract%0#1
         let values%0#0: uint64 = (btoi tuple_item%0#0)
-        let aggregate%extract%1#1: bytes = (extract3 p#0 0u 8u)
-        let tuple_item%1#0: Encoded(uint64) = aggregate%extract%1#1
+        let array%extract%1#1: bytes = (extract3 p#0 0u 8u)
+        let tuple_item%1#0: Encoded(uint64) = array%extract%1#1
         let values%1#0: uint64 = (btoi tuple_item%1#0)
         let tmp%0#0: bool = (!= values%0#0 values%1#0)
         (assert tmp%0#0) // For the purpose of this test, a should not equal b
-        let aggregate%extract%2#1: bytes = (extract3 p#0 8u 8u)
-        let tuple_item%2#0: Encoded(uint64) = aggregate%extract%2#1
+        let array%extract%2#1: bytes = (extract3 p#0 8u 8u)
+        let tuple_item%2#0: Encoded(uint64) = array%extract%2#1
         let values%2#0: uint64 = (btoi tuple_item%2#0)
-        let aggregate%extract%3#1: bytes = (extract3 p#0 0u 8u)
-        let tuple_item%3#0: Encoded(uint64) = aggregate%extract%3#1
+        let array%extract%3#1: bytes = (extract3 p#0 0u 8u)
+        let tuple_item%3#0: Encoded(uint64) = array%extract%3#1
         let values%3#0: uint64 = (btoi tuple_item%3#0)
-        let aggregate%val_as_bytes%0#1: bytes[8] = (itob values%2#0)
-        let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
-        let aggregate%encoded%0#1: Encoded(uint64) = (concat 0x aggregate%as_Encoded(uint64)%0#1)
-        let aggregate%val_as_bytes%1#1: bytes[8] = (itob values%3#0)
-        let aggregate%as_Encoded(uint64)%1#1: Encoded(uint64) = aggregate%val_as_bytes%1#1
-        let aggregate%encoded%1#1: Encoded(uint64,uint64) = (concat aggregate%encoded%0#1 aggregate%as_Encoded(uint64)%1#1)
-        let aggregate%encoded%2#1: Encoded(uint64,uint64) = (concat aggregate%encoded%1#1 0x)
-        let obj#0: Encoded(uint64,uint64) = aggregate%encoded%2#1
+        let array%val_as_bytes%0#1: bytes[8] = (itob values%2#0)
+        let array%as_Encoded(uint64)%0#1: Encoded(uint64) = array%val_as_bytes%0#1
+        let array%encoded%0#1: Encoded(uint64) = (concat 0x array%as_Encoded(uint64)%0#1)
+        let array%val_as_bytes%1#1: bytes[8] = (itob values%3#0)
+        let array%as_Encoded(uint64)%1#1: Encoded(uint64) = array%val_as_bytes%1#1
+        let array%encoded%1#1: Encoded(uint64,uint64) = (concat array%encoded%0#1 array%as_Encoded(uint64)%1#1)
+        let array%encoded%2#1: Encoded(uint64,uint64) = (concat array%encoded%1#1 0x)
+        let obj#0: Encoded(uint64,uint64) = array%encoded%2#1
         let length%0#0: uint64 = (len obj#0)
         let is_out_of_bounds%0#0: bool = (>= 8u length%0#0)
         let bounded_index%0#0: uint64 = (select 8u length%0#0 is_out_of_bounds%0#0)
@@ -665,37 +682,35 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testArc4Enc
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.getPlugin(key: string) -> Encoded(uint64,uint64,uint64,bool1):
     block@0: // L104
         let box_prefixed_key%0#0: bytes = (concat "plugins" key#0)
-        let (aggregate%box_get%0#1: bytes, aggregate%box_get%1#1: bool) = (box_get box_prefixed_key%0#0)
-        (assert aggregate%box_get%1#1) // Box must have value
-        let value#0: Encoded(uint64,uint64,uint64,bool1) = aggregate%box_get%0#1
-        let aggregate%extract%0#1: bytes = (extract3 value#0 16u 8u)
-        let tuple_item%0#0: Encoded(uint64) = aggregate%extract%0#1
+        let (value#0: Encoded(uint64,uint64,uint64,bool1), maybe_exists%0#0: bool) = (box_get box_prefixed_key%0#0)
+        (assert maybe_exists%0#0) // Box must have value
+        let array%extract%0#1: bytes = (extract3 value#0 16u 8u)
+        let tuple_item%0#0: Encoded(uint64) = array%extract%0#1
         let tmp%0#0: uint64 = (btoi tuple_item%0#0)
         (assert tmp%0#0) // Last called not zero
         return value#0
 
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.getMain() -> Encoded(uint64,uint64,uint64,bool1):
     block@0: // L110
-        let (aggregate%box_get%0#1: bytes, aggregate%box_get%1#1: bool) = (box_get "main")
-        (assert aggregate%box_get%1#1) // Box must have value
-        let value#0: Encoded(uint64,uint64,uint64,bool1) = aggregate%box_get%0#1
-        let aggregate%extract%0#1: bytes = (extract3 value#0 16u 8u)
-        let tuple_item%0#0: Encoded(uint64) = aggregate%extract%0#1
+        let (value#0: Encoded(uint64,uint64,uint64,bool1), maybe_exists%0#0: bool) = (box_get "main")
+        (assert maybe_exists%0#0) // Box must have value
+        let array%extract%0#1: bytes = (extract3 value#0 16u 8u)
+        let tuple_item%0#0: Encoded(uint64) = array%extract%0#1
         let tmp%0#0: uint64 = (btoi tuple_item%0#0)
         (assert tmp%0#0) // Last called not zero
         return value#0
 
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.setPlugin(key: string) -> void:
     block@0: // L120
-        let aggregate%encoded_bool%0#1: bytes[1] = (setbit 0x00 0u 0u)
-        let aggregate%as_Encoded(bool8)%0#1: Encoded(bool8) = aggregate%encoded_bool%0#1
-        let tmp%0#0: Encoded(bool8) = aggregate%as_Encoded(bool8)%0#1
-        let aggregate%encoded%0#1: Encoded(uint64) = (concat 0x 0x0000000000000001)
-        let aggregate%encoded%1#1: Encoded(uint64,uint64) = (concat aggregate%encoded%0#1 0x0000000000000000)
-        let aggregate%encoded%2#1: Encoded(uint64,uint64,uint64) = (concat aggregate%encoded%1#1 0x0000000000000000)
-        let aggregate%encoded%3#1: Encoded(uint64,uint64,uint64,bool1) = (concat aggregate%encoded%2#1 tmp%0#0)
-        let aggregate%encoded%4#1: Encoded(uint64,uint64,uint64,bool1) = (concat aggregate%encoded%3#1 0x)
-        let tmp%1#0: Encoded(uint64,uint64,uint64,bool1) = aggregate%encoded%4#1
+        let array%encoded_bool%0#1: bytes[1] = (setbit 0x00 0u 0u)
+        let array%as_Encoded(bool8)%0#1: Encoded(bool8) = array%encoded_bool%0#1
+        let tmp%0#0: Encoded(bool8) = array%as_Encoded(bool8)%0#1
+        let array%encoded%0#1: Encoded(uint64) = (concat 0x 0x0000000000000001)
+        let array%encoded%1#1: Encoded(uint64,uint64) = (concat array%encoded%0#1 0x0000000000000000)
+        let array%encoded%2#1: Encoded(uint64,uint64,uint64) = (concat array%encoded%1#1 0x0000000000000000)
+        let array%encoded%3#1: Encoded(uint64,uint64,uint64,bool1) = (concat array%encoded%2#1 tmp%0#0)
+        let array%encoded%4#1: Encoded(uint64,uint64,uint64,bool1) = (concat array%encoded%3#1 0x)
+        let tmp%1#0: Encoded(uint64,uint64,uint64,bool1) = array%encoded%4#1
         let box_prefixed_key%0#0: bytes = (concat "plugins" key#0)
         (box_put box_prefixed_key%0#0 tmp%1#0)
         return 

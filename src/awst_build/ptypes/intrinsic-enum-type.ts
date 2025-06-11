@@ -1,4 +1,5 @@
 import { PType } from './base'
+import type { PTypeVisitor } from './visitor'
 
 export class IntrinsicEnumType extends PType {
   readonly [PType.IdSymbol] = 'IntrinsicEnumType'
@@ -14,5 +15,9 @@ export class IntrinsicEnumType extends PType {
     this.members = members
     this.name = name
     this.module = module
+  }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitIntrinsicEnumType(this)
   }
 }

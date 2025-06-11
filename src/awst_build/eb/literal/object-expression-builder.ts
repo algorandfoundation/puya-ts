@@ -5,6 +5,7 @@ import { CodeError } from '../../../errors'
 import { invariant } from '../../../util'
 import type { PTypeOrClass } from '../../ptypes'
 import { ObjectPType, type PType } from '../../ptypes'
+import { getPropertyType, hasPropertyOfType } from '../../ptypes/visitors/index-type-visitor'
 import { instanceEb } from '../../type-registry'
 import type { InstanceBuilder } from '../index'
 import { InstanceExpressionBuilder, type NodeBuilder } from '../index'
@@ -21,7 +22,7 @@ export class ObjectExpressionBuilder extends InstanceExpressionBuilder<ObjectPTy
     if (propertyIndex === -1) {
       return super.memberAccess(name, sourceLocation)
     }
-    const propertyPtype = this.ptype.getPropertyType(name)
+    const propertyPtype = getPropertyType(this.ptype, name, sourceLocation)
     return instanceEb(
       nodeFactory.fieldExpression({
         name,
@@ -39,7 +40,7 @@ export class ObjectExpressionBuilder extends InstanceExpressionBuilder<ObjectPTy
 
   resolvableToPType(ptype: PTypeOrClass): ptype is ObjectPType {
     if (ptype instanceof ObjectPType) {
-      return ptype.orderedProperties().every(([prop, propType]) => this.ptype.hasPropertyOfType(prop, propType))
+      return ptype.orderedProperties().every(([prop, propType]) => hasPropertyOfType(this.ptype, prop, propType, this.sourceLocation))
     }
     return false
   }

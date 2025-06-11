@@ -11,11 +11,11 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%4#0) // OnCompletion is not NoOp
         let tmp%5#0: uint64 = (txn ApplicationID)
         (assert tmp%5#0) // can only call when not creating
-        let aggregate%encoded_bit%0#1: bytes = (setbit 0x00 0u 0u)
-        let aggregate%encoded%0#1: Encoded(bool1) = (concat 0x aggregate%encoded_bit%0#1)
-        let aggregate%set_bit%0#1: Encoded(bool1) = (setbit aggregate%encoded%0#1 1u 1u)
-        let aggregate%encoded%1#1: Encoded(bool1,bool1) = (concat aggregate%set_bit%0#1 0x)
-        let tmp%9#0: Encoded(bool1,bool1) = aggregate%encoded%1#1
+        let array%encoded_bit%0#1: bytes = (setbit 0x00 0u 0u)
+        let array%encoded%0#1: Encoded(bool1) = (concat 0x array%encoded_bit%0#1)
+        let array%set_bit%0#1: Encoded(bool1) = (setbit array%encoded%0#1 1u 1u)
+        let array%encoded%1#1: Encoded(bool1,bool1) = (concat array%set_bit%0#1 0x)
+        let tmp%9#0: Encoded(bool1,bool1) = array%encoded%1#1
         let tmp%10#0: bytes = (concat 0x151f7c75 tmp%9#0)
         (log tmp%10#0)
         let tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.__puya_arc4_router__%0#0: bool = 1u
@@ -26,41 +26,41 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%12#0) // OnCompletion is not NoOp
         let tmp%13#0: uint64 = (txn ApplicationID)
         (assert tmp%13#0) // can only call when not creating
-        let aggregate%val_as_bytes%0#1: bytes[8] = (itob 12u)
-        let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
-        let aggregate%encoded%2#1: Encoded(uint64) = (concat 0x aggregate%as_Encoded(uint64)%0#1)
-        let aggregate%val_as_bytes%1#1: bytes[8] = (itob 8u)
-        let aggregate%as_Encoded(uint64)%1#1: Encoded(uint64) = aggregate%val_as_bytes%1#1
-        let aggregate%encoded%3#1: Encoded(uint64,uint64) = (concat aggregate%encoded%2#1 aggregate%as_Encoded(uint64)%1#1)
-        let aggregate%val_as_bytes%2#1: bytes[8] = (itob 20u)
-        let aggregate%as_Encoded(uint64)%2#1: Encoded(uint64) = aggregate%val_as_bytes%2#1
-        let aggregate%encoded%4#1: Encoded(uint64,uint64,uint64) = (concat aggregate%encoded%3#1 aggregate%as_Encoded(uint64)%2#1)
-        let aggregate%val_as_bytes%3#1: bytes[8] = (itob 5u)
-        let aggregate%as_Encoded(uint64)%3#1: Encoded(uint64) = aggregate%val_as_bytes%3#1
-        let aggregate%encoded%5#1: Encoded(uint64,uint64,uint64,uint64) = (concat aggregate%encoded%4#1 aggregate%as_Encoded(uint64)%3#1)
-        let aggregate%val_as_bytes%4#1: bytes[8] = (itob 0u)
-        let aggregate%as_Encoded(uint64)%4#1: Encoded(uint64) = aggregate%val_as_bytes%4#1
-        let aggregate%encoded%6#1: Encoded(uint64,uint64,uint64,uint64,uint64) = (concat aggregate%encoded%5#1 aggregate%as_Encoded(uint64)%4#1)
-        let aggregate%val_as_bytes%5#1: bytes[8] = (itob 100u)
-        let aggregate%as_Encoded(uint64)%5#1: Encoded(uint64) = aggregate%val_as_bytes%5#1
-        let aggregate%encoded%7#1: Encoded(uint64,uint64,uint64,uint64,uint64,uint64) = (concat aggregate%encoded%6#1 aggregate%as_Encoded(uint64)%5#1)
-        let aggregate%val_as_bytes%6#1: bytes[8] = (itob 40u)
-        let aggregate%as_Encoded(uint64)%6#1: Encoded(uint64) = aggregate%val_as_bytes%6#1
-        let aggregate%encoded%8#1: Encoded(uint64,uint64,uint64,uint64,uint64,uint64,uint64) = (concat aggregate%encoded%7#1 aggregate%as_Encoded(uint64)%6#1)
-        let aggregate%val_as_bytes%7#1: bytes[8] = (itob 2u)
-        let aggregate%as_Encoded(uint64)%7#1: Encoded(uint64) = aggregate%val_as_bytes%7#1
-        let aggregate%encoded%9#1: Encoded(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64) = (concat aggregate%encoded%8#1 aggregate%as_Encoded(uint64)%7#1)
-        let aggregate%val_as_bytes%8#1: bytes[8] = (itob 10u)
-        let aggregate%as_Encoded(uint64)%8#1: Encoded(uint64) = aggregate%val_as_bytes%8#1
-        let aggregate%encoded%10#1: Encoded(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64) = (concat aggregate%encoded%9#1 aggregate%as_Encoded(uint64)%8#1)
-        let aggregate%val_as_bytes%9#1: bytes[8] = (itob 8u)
-        let aggregate%as_Encoded(uint64)%9#1: Encoded(uint64) = aggregate%val_as_bytes%9#1
-        let aggregate%encoded%11#1: Encoded(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64) = (concat aggregate%encoded%10#1 aggregate%as_Encoded(uint64)%9#1)
-        let aggregate%val_as_bytes%10#1: bytes[8] = (itob 2u)
-        let aggregate%as_Encoded(uint64)%10#1: Encoded(uint64) = aggregate%val_as_bytes%10#1
-        let aggregate%encoded%12#1: Encoded(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64) = (concat aggregate%encoded%11#1 aggregate%as_Encoded(uint64)%10#1)
-        let aggregate%encoded%13#1: Encoded(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64) = (concat aggregate%encoded%12#1 0x)
-        let tmp%26#0: Encoded(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64) = aggregate%encoded%13#1
+        let array%val_as_bytes%0#1: bytes[8] = (itob 12u)
+        let array%as_Encoded(uint64)%0#1: Encoded(uint64) = array%val_as_bytes%0#1
+        let array%encoded%2#1: Encoded(uint64) = (concat 0x array%as_Encoded(uint64)%0#1)
+        let array%val_as_bytes%1#1: bytes[8] = (itob 8u)
+        let array%as_Encoded(uint64)%1#1: Encoded(uint64) = array%val_as_bytes%1#1
+        let array%encoded%3#1: Encoded(uint64,uint64) = (concat array%encoded%2#1 array%as_Encoded(uint64)%1#1)
+        let array%val_as_bytes%2#1: bytes[8] = (itob 20u)
+        let array%as_Encoded(uint64)%2#1: Encoded(uint64) = array%val_as_bytes%2#1
+        let array%encoded%4#1: Encoded(uint64,uint64,uint64) = (concat array%encoded%3#1 array%as_Encoded(uint64)%2#1)
+        let array%val_as_bytes%3#1: bytes[8] = (itob 5u)
+        let array%as_Encoded(uint64)%3#1: Encoded(uint64) = array%val_as_bytes%3#1
+        let array%encoded%5#1: Encoded(uint64,uint64,uint64,uint64) = (concat array%encoded%4#1 array%as_Encoded(uint64)%3#1)
+        let array%val_as_bytes%4#1: bytes[8] = (itob 0u)
+        let array%as_Encoded(uint64)%4#1: Encoded(uint64) = array%val_as_bytes%4#1
+        let array%encoded%6#1: Encoded(uint64,uint64,uint64,uint64,uint64) = (concat array%encoded%5#1 array%as_Encoded(uint64)%4#1)
+        let array%val_as_bytes%5#1: bytes[8] = (itob 100u)
+        let array%as_Encoded(uint64)%5#1: Encoded(uint64) = array%val_as_bytes%5#1
+        let array%encoded%7#1: Encoded(uint64,uint64,uint64,uint64,uint64,uint64) = (concat array%encoded%6#1 array%as_Encoded(uint64)%5#1)
+        let array%val_as_bytes%6#1: bytes[8] = (itob 40u)
+        let array%as_Encoded(uint64)%6#1: Encoded(uint64) = array%val_as_bytes%6#1
+        let array%encoded%8#1: Encoded(uint64,uint64,uint64,uint64,uint64,uint64,uint64) = (concat array%encoded%7#1 array%as_Encoded(uint64)%6#1)
+        let array%val_as_bytes%7#1: bytes[8] = (itob 2u)
+        let array%as_Encoded(uint64)%7#1: Encoded(uint64) = array%val_as_bytes%7#1
+        let array%encoded%9#1: Encoded(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64) = (concat array%encoded%8#1 array%as_Encoded(uint64)%7#1)
+        let array%val_as_bytes%8#1: bytes[8] = (itob 10u)
+        let array%as_Encoded(uint64)%8#1: Encoded(uint64) = array%val_as_bytes%8#1
+        let array%encoded%10#1: Encoded(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64) = (concat array%encoded%9#1 array%as_Encoded(uint64)%8#1)
+        let array%val_as_bytes%9#1: bytes[8] = (itob 8u)
+        let array%as_Encoded(uint64)%9#1: Encoded(uint64) = array%val_as_bytes%9#1
+        let array%encoded%11#1: Encoded(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64) = (concat array%encoded%10#1 array%as_Encoded(uint64)%9#1)
+        let array%val_as_bytes%10#1: bytes[8] = (itob 2u)
+        let array%as_Encoded(uint64)%10#1: Encoded(uint64) = array%val_as_bytes%10#1
+        let array%encoded%12#1: Encoded(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64) = (concat array%encoded%11#1 array%as_Encoded(uint64)%10#1)
+        let array%encoded%13#1: Encoded(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64) = (concat array%encoded%12#1 0x)
+        let tmp%26#0: Encoded(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64) = array%encoded%13#1
         let tmp%27#0: bytes = (concat 0x151f7c75 tmp%26#0)
         (log tmp%27#0)
         let tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.__puya_arc4_router__%0#1: bool = 1u
@@ -71,64 +71,64 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%29#0) // OnCompletion is not NoOp
         let tmp%30#0: uint64 = (txn ApplicationID)
         (assert tmp%30#0) // can only call when not creating
-        let aggregate%value_len%0#1: uint64 = (len 12b)
-        let aggregate%len_ok%0#1: bool = (<= aggregate%value_len%0#1 64u)
-        (assert aggregate%len_ok%0#1) // overflow
-        let aggregate%bzero%0#1: bytes = (bzero 64u)
-        let aggregate%arc4_encoded%0#1: bytes[64] = (b| 12b aggregate%bzero%0#1)
-        let aggregate%as_Encoded(uint512)%0#1: Encoded(uint512) = aggregate%arc4_encoded%0#1
-        let aggregate%encoded%14#1: Encoded(uint512) = (concat 0x aggregate%as_Encoded(uint512)%0#1)
-        let aggregate%value_len%1#1: uint64 = (len 8b)
-        let aggregate%len_ok%1#1: bool = (<= aggregate%value_len%1#1 64u)
-        (assert aggregate%len_ok%1#1) // overflow
-        let aggregate%bzero%1#1: bytes = (bzero 64u)
-        let aggregate%arc4_encoded%1#1: bytes[64] = (b| 8b aggregate%bzero%1#1)
-        let aggregate%as_Encoded(uint512)%1#1: Encoded(uint512) = aggregate%arc4_encoded%1#1
-        let aggregate%encoded%15#1: Encoded(uint512,uint512) = (concat aggregate%encoded%14#1 aggregate%as_Encoded(uint512)%1#1)
-        let aggregate%value_len%2#1: uint64 = (len 20b)
-        let aggregate%len_ok%2#1: bool = (<= aggregate%value_len%2#1 64u)
-        (assert aggregate%len_ok%2#1) // overflow
-        let aggregate%bzero%2#1: bytes = (bzero 64u)
-        let aggregate%arc4_encoded%2#1: bytes[64] = (b| 20b aggregate%bzero%2#1)
-        let aggregate%as_Encoded(uint512)%2#1: Encoded(uint512) = aggregate%arc4_encoded%2#1
-        let aggregate%encoded%16#1: Encoded(uint512,uint512,uint512) = (concat aggregate%encoded%15#1 aggregate%as_Encoded(uint512)%2#1)
-        let aggregate%value_len%3#1: uint64 = (len 5b)
-        let aggregate%len_ok%3#1: bool = (<= aggregate%value_len%3#1 64u)
-        (assert aggregate%len_ok%3#1) // overflow
-        let aggregate%bzero%3#1: bytes = (bzero 64u)
-        let aggregate%arc4_encoded%3#1: bytes[64] = (b| 5b aggregate%bzero%3#1)
-        let aggregate%as_Encoded(uint512)%3#1: Encoded(uint512) = aggregate%arc4_encoded%3#1
-        let aggregate%encoded%17#1: Encoded(uint512,uint512,uint512,uint512) = (concat aggregate%encoded%16#1 aggregate%as_Encoded(uint512)%3#1)
-        let aggregate%value_len%4#1: uint64 = (len 0b)
-        let aggregate%len_ok%4#1: bool = (<= aggregate%value_len%4#1 64u)
-        (assert aggregate%len_ok%4#1) // overflow
-        let aggregate%bzero%4#1: bytes = (bzero 64u)
-        let aggregate%arc4_encoded%4#1: bytes[64] = (b| 0b aggregate%bzero%4#1)
-        let aggregate%as_Encoded(uint512)%4#1: Encoded(uint512) = aggregate%arc4_encoded%4#1
-        let aggregate%encoded%18#1: Encoded(uint512,uint512,uint512,uint512,uint512) = (concat aggregate%encoded%17#1 aggregate%as_Encoded(uint512)%4#1)
-        let aggregate%value_len%5#1: uint64 = (len 10b)
-        let aggregate%len_ok%5#1: bool = (<= aggregate%value_len%5#1 64u)
-        (assert aggregate%len_ok%5#1) // overflow
-        let aggregate%bzero%5#1: bytes = (bzero 64u)
-        let aggregate%arc4_encoded%5#1: bytes[64] = (b| 10b aggregate%bzero%5#1)
-        let aggregate%as_Encoded(uint512)%5#1: Encoded(uint512) = aggregate%arc4_encoded%5#1
-        let aggregate%encoded%19#1: Encoded(uint512,uint512,uint512,uint512,uint512,uint512) = (concat aggregate%encoded%18#1 aggregate%as_Encoded(uint512)%5#1)
-        let aggregate%value_len%6#1: uint64 = (len 8b)
-        let aggregate%len_ok%6#1: bool = (<= aggregate%value_len%6#1 64u)
-        (assert aggregate%len_ok%6#1) // overflow
-        let aggregate%bzero%6#1: bytes = (bzero 64u)
-        let aggregate%arc4_encoded%6#1: bytes[64] = (b| 8b aggregate%bzero%6#1)
-        let aggregate%as_Encoded(uint512)%6#1: Encoded(uint512) = aggregate%arc4_encoded%6#1
-        let aggregate%encoded%20#1: Encoded(uint512,uint512,uint512,uint512,uint512,uint512,uint512) = (concat aggregate%encoded%19#1 aggregate%as_Encoded(uint512)%6#1)
-        let aggregate%value_len%7#1: uint64 = (len 2b)
-        let aggregate%len_ok%7#1: bool = (<= aggregate%value_len%7#1 64u)
-        (assert aggregate%len_ok%7#1) // overflow
-        let aggregate%bzero%7#1: bytes = (bzero 64u)
-        let aggregate%arc4_encoded%7#1: bytes[64] = (b| 2b aggregate%bzero%7#1)
-        let aggregate%as_Encoded(uint512)%7#1: Encoded(uint512) = aggregate%arc4_encoded%7#1
-        let aggregate%encoded%21#1: Encoded(uint512,uint512,uint512,uint512,uint512,uint512,uint512,uint512) = (concat aggregate%encoded%20#1 aggregate%as_Encoded(uint512)%7#1)
-        let aggregate%encoded%22#1: Encoded(uint512,uint512,uint512,uint512,uint512,uint512,uint512,uint512) = (concat aggregate%encoded%21#1 0x)
-        let tmp%40#0: Encoded(uint512,uint512,uint512,uint512,uint512,uint512,uint512,uint512) = aggregate%encoded%22#1
+        let array%value_len%0#1: uint64 = (len 12b)
+        let array%len_ok%0#1: bool = (<= array%value_len%0#1 64u)
+        (assert array%len_ok%0#1) // overflow
+        let array%bzero%0#1: bytes = (bzero 64u)
+        let array%arc4_encoded%0#1: bytes[64] = (b| 12b array%bzero%0#1)
+        let array%as_Encoded(uint512)%0#1: Encoded(uint512) = array%arc4_encoded%0#1
+        let array%encoded%14#1: Encoded(uint512) = (concat 0x array%as_Encoded(uint512)%0#1)
+        let array%value_len%1#1: uint64 = (len 8b)
+        let array%len_ok%1#1: bool = (<= array%value_len%1#1 64u)
+        (assert array%len_ok%1#1) // overflow
+        let array%bzero%1#1: bytes = (bzero 64u)
+        let array%arc4_encoded%1#1: bytes[64] = (b| 8b array%bzero%1#1)
+        let array%as_Encoded(uint512)%1#1: Encoded(uint512) = array%arc4_encoded%1#1
+        let array%encoded%15#1: Encoded(uint512,uint512) = (concat array%encoded%14#1 array%as_Encoded(uint512)%1#1)
+        let array%value_len%2#1: uint64 = (len 20b)
+        let array%len_ok%2#1: bool = (<= array%value_len%2#1 64u)
+        (assert array%len_ok%2#1) // overflow
+        let array%bzero%2#1: bytes = (bzero 64u)
+        let array%arc4_encoded%2#1: bytes[64] = (b| 20b array%bzero%2#1)
+        let array%as_Encoded(uint512)%2#1: Encoded(uint512) = array%arc4_encoded%2#1
+        let array%encoded%16#1: Encoded(uint512,uint512,uint512) = (concat array%encoded%15#1 array%as_Encoded(uint512)%2#1)
+        let array%value_len%3#1: uint64 = (len 5b)
+        let array%len_ok%3#1: bool = (<= array%value_len%3#1 64u)
+        (assert array%len_ok%3#1) // overflow
+        let array%bzero%3#1: bytes = (bzero 64u)
+        let array%arc4_encoded%3#1: bytes[64] = (b| 5b array%bzero%3#1)
+        let array%as_Encoded(uint512)%3#1: Encoded(uint512) = array%arc4_encoded%3#1
+        let array%encoded%17#1: Encoded(uint512,uint512,uint512,uint512) = (concat array%encoded%16#1 array%as_Encoded(uint512)%3#1)
+        let array%value_len%4#1: uint64 = (len 0b)
+        let array%len_ok%4#1: bool = (<= array%value_len%4#1 64u)
+        (assert array%len_ok%4#1) // overflow
+        let array%bzero%4#1: bytes = (bzero 64u)
+        let array%arc4_encoded%4#1: bytes[64] = (b| 0b array%bzero%4#1)
+        let array%as_Encoded(uint512)%4#1: Encoded(uint512) = array%arc4_encoded%4#1
+        let array%encoded%18#1: Encoded(uint512,uint512,uint512,uint512,uint512) = (concat array%encoded%17#1 array%as_Encoded(uint512)%4#1)
+        let array%value_len%5#1: uint64 = (len 10b)
+        let array%len_ok%5#1: bool = (<= array%value_len%5#1 64u)
+        (assert array%len_ok%5#1) // overflow
+        let array%bzero%5#1: bytes = (bzero 64u)
+        let array%arc4_encoded%5#1: bytes[64] = (b| 10b array%bzero%5#1)
+        let array%as_Encoded(uint512)%5#1: Encoded(uint512) = array%arc4_encoded%5#1
+        let array%encoded%19#1: Encoded(uint512,uint512,uint512,uint512,uint512,uint512) = (concat array%encoded%18#1 array%as_Encoded(uint512)%5#1)
+        let array%value_len%6#1: uint64 = (len 8b)
+        let array%len_ok%6#1: bool = (<= array%value_len%6#1 64u)
+        (assert array%len_ok%6#1) // overflow
+        let array%bzero%6#1: bytes = (bzero 64u)
+        let array%arc4_encoded%6#1: bytes[64] = (b| 8b array%bzero%6#1)
+        let array%as_Encoded(uint512)%6#1: Encoded(uint512) = array%arc4_encoded%6#1
+        let array%encoded%20#1: Encoded(uint512,uint512,uint512,uint512,uint512,uint512,uint512) = (concat array%encoded%19#1 array%as_Encoded(uint512)%6#1)
+        let array%value_len%7#1: uint64 = (len 2b)
+        let array%len_ok%7#1: bool = (<= array%value_len%7#1 64u)
+        (assert array%len_ok%7#1) // overflow
+        let array%bzero%7#1: bytes = (bzero 64u)
+        let array%arc4_encoded%7#1: bytes[64] = (b| 2b array%bzero%7#1)
+        let array%as_Encoded(uint512)%7#1: Encoded(uint512) = array%arc4_encoded%7#1
+        let array%encoded%21#1: Encoded(uint512,uint512,uint512,uint512,uint512,uint512,uint512,uint512) = (concat array%encoded%20#1 array%as_Encoded(uint512)%7#1)
+        let array%encoded%22#1: Encoded(uint512,uint512,uint512,uint512,uint512,uint512,uint512,uint512) = (concat array%encoded%21#1 0x)
+        let tmp%40#0: Encoded(uint512,uint512,uint512,uint512,uint512,uint512,uint512,uint512) = array%encoded%22#1
         let tmp%41#0: bytes = (concat 0x151f7c75 tmp%40#0)
         (log tmp%41#0)
         let tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.__puya_arc4_router__%0#2: bool = 1u
@@ -139,22 +139,22 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%43#0) // OnCompletion is not NoOp
         let tmp%44#0: uint64 = (txn ApplicationID)
         (assert tmp%44#0) // can only call when not creating
-        let aggregate%length%0#1: uint64 = (len "ab")
-        let aggregate%as_bytes%0#1: bytes[8] = (itob aggregate%length%0#1)
-        let aggregate%length_uint16%0#1: bytes = ((extract 6 2) aggregate%as_bytes%0#1)
-        let aggregate%encoded_value%0#1: bytes = (concat aggregate%length_uint16%0#1 "ab")
-        let aggregate%as_Encoded(len+utf8[])%0#1: Encoded(len+utf8[]) = aggregate%encoded_value%0#1
-        let aggregate%tail%0#1: bytes = (concat 0x aggregate%as_Encoded(len+utf8[])%0#1)
-        let aggregate%data_length%0#1: uint64 = (len aggregate%as_Encoded(len+utf8[])%0#1)
-        let aggregate%current_tail_offset%0#1: uint64 = (+ 2u aggregate%data_length%0#1)
-        let aggregate%as_bytes%1#1: bytes[8] = (itob 2u)
-        let aggregate%offset_as_uint16%0#1: bytes = ((extract 6 2) aggregate%as_bytes%1#1)
-        let aggregate%encoded%23#1: Encoded((len+utf8[])) = (concat 0x aggregate%offset_as_uint16%0#1)
-        let aggregate%as_bytes%2#1: bytes[8] = (itob 1u)
-        let aggregate%len_u16%0#1: bytes = ((extract 6 2) aggregate%as_bytes%2#1)
-        let aggregate%encoded%24#1: bytes = (concat aggregate%len_u16%0#1 aggregate%encoded%23#1)
-        let aggregate%encoded%25#1: Encoded(len+(len+utf8[])[]) = (concat aggregate%encoded%24#1 aggregate%tail%0#1)
-        let encoded_array%0#0: Encoded(len+(len+utf8[])[]) = aggregate%encoded%25#1
+        let array%length%0#1: uint64 = (len "ab")
+        let array%as_bytes%0#1: bytes[8] = (itob array%length%0#1)
+        let array%length_uint16%0#1: bytes = ((extract 6 2) array%as_bytes%0#1)
+        let array%encoded_value%0#1: bytes = (concat array%length_uint16%0#1 "ab")
+        let array%as_Encoded(len+utf8[])%0#1: Encoded(len+utf8[]) = array%encoded_value%0#1
+        let array%tail%0#1: bytes = (concat 0x array%as_Encoded(len+utf8[])%0#1)
+        let array%data_length%0#1: uint64 = (len array%as_Encoded(len+utf8[])%0#1)
+        let array%current_tail_offset%0#1: uint64 = (+ 2u array%data_length%0#1)
+        let array%as_bytes%1#1: bytes[8] = (itob 2u)
+        let array%offset_as_uint16%0#1: bytes = ((extract 6 2) array%as_bytes%1#1)
+        let array%encoded%23#1: Encoded((len+utf8[])) = (concat 0x array%offset_as_uint16%0#1)
+        let array%as_bytes%2#1: bytes[8] = (itob 1u)
+        let array%len_u16%0#1: bytes = ((extract 6 2) array%as_bytes%2#1)
+        let array%encoded%24#1: bytes = (concat array%len_u16%0#1 array%encoded%23#1)
+        let array%encoded%25#1: Encoded(len+(len+utf8[])[]) = (concat array%encoded%24#1 array%tail%0#1)
+        let encoded_array%0#0: Encoded(len+(len+utf8[])[]) = array%encoded%25#1
         let tmp%47#0: bytes = (concat 0x151f7c75 encoded_array%0#0)
         (log tmp%47#0)
         let tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.__puya_arc4_router__%0#3: bool = 1u

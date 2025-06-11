@@ -5,6 +5,7 @@ import { Constants } from '../../constants'
 import { ptypeToArc4EncodedType } from '../arc4-util'
 import { ARC4EncodedType } from './arc4-types'
 import { PType } from './base'
+import type { PTypeVisitor } from './visitor'
 
 export class MutableObjectClass extends PType {
   readonly [PType.IdSymbol] = 'MutableObjectClass'
@@ -37,6 +38,10 @@ export class MutableObjectClass extends PType {
       ...ptype,
       instanceType: ptype,
     })
+  }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitMutableObjectClass(this)
   }
 }
 
@@ -100,11 +105,8 @@ export class MutableObjectType extends ARC4EncodedType {
     return `${this.name}${this.wtype.arc4Alias}`
   }
 
-  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType | undefined {
-    if (typeof index === 'string') {
-      return this.fields[index]
-    }
-    return super.getIndexType(index, sourceLocation)
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitMutableObjectType(this)
   }
 }
 

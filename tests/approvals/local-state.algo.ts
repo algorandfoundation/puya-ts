@@ -11,7 +11,7 @@ export class LocalStateDemo extends Contract {
   localBytes = LocalState<bytes>({ key: 'b1' })
   localBytes2 = LocalState<bytes>()
   localEncoded = LocalState<SampleArray>()
-  localTuple = LocalState<[uint64, bytes]>()
+  localTuple = LocalState<readonly [uint64, bytes]>()
   localObject = LocalState<{ a: uint64; b: bytes }>()
   localMutableObject = LocalState<Data>()
 

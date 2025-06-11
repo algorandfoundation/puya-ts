@@ -19,6 +19,7 @@ import { OmittedExpressionBuilder } from '../eb/omitted-expression-builder'
 import { requireExpressionOfType, requireInstanceBuilder } from '../eb/util'
 import type { PType } from '../ptypes'
 import { FunctionPType, ObjectPType } from '../ptypes'
+import { IteratorTypeVisitor } from '../ptypes/visitors/iterator-type-visitor'
 import { instanceEb, typeRegistry } from '../type-registry'
 import { handleAssignmentStatement } from './assignments'
 import { BaseVisitor } from './base-visitor'
@@ -241,7 +242,7 @@ export abstract class FunctionVisitor
     const sourceLocation = this.sourceLocation(node)
     const initializerLocation = this.sourceLocation(node.initializer)
     const sequence = requireInstanceBuilder(this.accept(node.expression))
-    const itemType = sequence.ptype.getIteratorType()
+    const itemType = IteratorTypeVisitor.accept(sequence.ptype)
     codeInvariant(itemType, `${sequence.ptype} is not iterable`, this.sourceLocation(node.expression))
     let items: InstanceBuilder
     if (ts.isExpression(node.initializer)) {

@@ -28,6 +28,7 @@ import {
 } from '../ptypes'
 import { ARC4StructType } from '../ptypes/arc4-types'
 import { MutableObjectType } from '../ptypes/mutable-object'
+import { getIndexType, getPropertyType } from '../ptypes/visitors/index-type-visitor'
 import { instanceEb } from '../type-registry'
 
 export function handleAssignmentStatement(
@@ -63,7 +64,7 @@ function buildAssignmentExpression(
     const assignments: Expression[] = []
     for (const [index, item] of target[StaticIterator]().entries()) {
       if (item instanceof OmittedExpressionBuilder) continue
-      const itemType = assignmentType.getIndexType(BigInt(index), sourceLocation)
+      const itemType = getIndexType(assignmentType, BigInt(index), sourceLocation)
       codeInvariant(itemType, `Cannot resolve type of item at index ${index}`, sourceLocation)
       assignments.push(
         buildAssignmentExpression(
@@ -96,7 +97,7 @@ function buildAssignmentExpression(
 
     for (const [propName] of target.ptype.orderedProperties()) {
       const sourceProperty = requireInstanceBuilder(sourceSingle.memberAccess(propName, sourceLocation))
-      const propertyAssignmentType = assignmentType.getIndexType(propName, sourceLocation)
+      const propertyAssignmentType = getIndexType(assignmentType, propName, sourceLocation)
       codeInvariant(propertyAssignmentType, `${propName} does not exist on ${assignmentType}`, sourceLocation)
       assignments.push(
         buildAssignmentExpression(
@@ -263,7 +264,7 @@ function buildAssignmentExpressionType(targetType: PType, sourceType: PType, sou
           .map(([prop, propType]): [string, PType] => [
             prop,
             prop in targetType.properties
-              ? buildAssignmentExpressionType(targetType.getPropertyType(prop), propType, sourceLocation)
+              ? buildAssignmentExpressionType(getPropertyType(targetType, prop, sourceLocation), propType, sourceLocation)
               : propType,
           ])
           .toSorted(sortBy(([prop]) => targetPropertyOrder.get(prop) ?? Number.MAX_SAFE_INTEGER)),

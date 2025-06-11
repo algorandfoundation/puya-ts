@@ -16,11 +16,11 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%6#0: bool = (!= tmp%5#0 0u)
         (assert tmp%6#0) // can only call when not creating
         let reinterpret_Encoded(uint64,uint64)%0#0: Encoded(uint64,uint64) = (txna ApplicationArgs 1)
-        let aggregate%extract%0#1: bytes = (extract3 reinterpret_Encoded(uint64,uint64)%0#0 0u 8u)
-        let aggregate%item0%0#1: uint64 = (btoi aggregate%extract%0#1)
-        let aggregate%extract%1#1: bytes = (extract3 reinterpret_Encoded(uint64,uint64)%0#0 8u 8u)
-        let aggregate%item1%0#1: uint64 = (btoi aggregate%extract%1#1)
-        let (tmp%7#0: uint64, tmp%8#0: uint64) = (aggregate%item0%0#1, aggregate%item1%0#1)
+        let array%extract%0#1: bytes = (extract3 reinterpret_Encoded(uint64,uint64)%0#0 0u 8u)
+        let array%item0%0#1: uint64 = (btoi array%extract%0#1)
+        let array%extract%1#1: bytes = (extract3 reinterpret_Encoded(uint64,uint64)%0#0 8u 8u)
+        let array%item1%0#1: uint64 = (btoi array%extract%1#1)
+        let (tmp%7#0: uint64, tmp%8#0: uint64) = (array%item0%0#1, array%item1%0#1)
         let reinterpret_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = (txna ApplicationArgs 2)
         let tmp%9#0: string = ((extract 2 0) reinterpret_Encoded(len+utf8[])%0#0)
         tests/approvals/box-proxies.algo.ts::CompositeKeyTest.test(tmp%7#0, tmp%8#0, tmp%9#0)
@@ -53,14 +53,14 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
 
 subroutine tests/approvals/box-proxies.algo.ts::CompositeKeyTest.test(key.a: uint64, key.b: uint64, val: string) -> void:
     block@0: // L241
-        let aggregate%val_as_bytes%0#1: bytes[8] = (itob key.a#0)
-        let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
-        let aggregate%encoded%0#1: Encoded(uint64) = (concat 0x aggregate%as_Encoded(uint64)%0#1)
-        let aggregate%val_as_bytes%1#1: bytes[8] = (itob key.b#0)
-        let aggregate%as_Encoded(uint64)%1#1: Encoded(uint64) = aggregate%val_as_bytes%1#1
-        let aggregate%encoded%1#1: Encoded(uint64,uint64) = (concat aggregate%encoded%0#1 aggregate%as_Encoded(uint64)%1#1)
-        let aggregate%encoded%2#1: Encoded(uint64,uint64) = (concat aggregate%encoded%1#1 0x)
-        let encoded_for_storage%0#0: Encoded(uint64,uint64) = aggregate%encoded%2#1
+        let array%val_as_bytes%0#1: bytes[8] = (itob key.a#0)
+        let array%as_Encoded(uint64)%0#1: Encoded(uint64) = array%val_as_bytes%0#1
+        let array%encoded%0#1: Encoded(uint64) = (concat 0x array%as_Encoded(uint64)%0#1)
+        let array%val_as_bytes%1#1: bytes[8] = (itob key.b#0)
+        let array%as_Encoded(uint64)%1#1: Encoded(uint64) = array%val_as_bytes%1#1
+        let array%encoded%1#1: Encoded(uint64,uint64) = (concat array%encoded%0#1 array%as_Encoded(uint64)%1#1)
+        let array%encoded%2#1: Encoded(uint64,uint64) = (concat array%encoded%1#1 0x)
+        let encoded_for_storage%0#0: Encoded(uint64,uint64) = array%encoded%2#1
         let box_prefixed_key%0#0: bytes = (concat "" encoded_for_storage%0#0)
         (box_del box_prefixed_key%0#0)
         (box_put box_prefixed_key%0#0 val#0)

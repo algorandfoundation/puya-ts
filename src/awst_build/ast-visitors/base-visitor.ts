@@ -22,6 +22,7 @@ import { accept } from '../../visitor/visitor'
 import { AwstBuildContext } from '../context/awst-build-context'
 import { InstanceBuilder, NodeBuilder } from '../eb'
 import { BooleanExpressionBuilder } from '../eb/boolean-expression-builder'
+import { CloneFunctionBuilder } from '../eb/clone-function-builder'
 import { ArrayLiteralExpressionBuilder } from '../eb/literal/array-literal-expression-builder'
 import { BigIntLiteralExpressionBuilder } from '../eb/literal/big-int-literal-expression-builder'
 import { ConditionalExpressionBuilder } from '../eb/literal/conditional-expression-builder'
@@ -37,6 +38,7 @@ import { requireExpressionOfType, requireInstanceBuilder } from '../eb/util'
 import { concatArrays } from '../eb/util/array/concat'
 import type { PType } from '../ptypes'
 import { BigIntLiteralPType, boolPType, NumericLiteralPType, ObjectPType, TransientType } from '../ptypes'
+import { containsMutableType, isMutableType } from '../ptypes/visitors/contains-mutable-visitor'
 import { typeRegistry } from '../type-registry'
 import { handleAssignment } from './assignments'
 import { TextVisitor } from './text-visitor'
@@ -200,7 +202,15 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
           toConcat.push(itemBuffer)
           itemBuffer = []
         }
-        toConcat.push(spreadExpr)
+        /*
+        If this is a mutable collection which does not contain nested mutable items, we can inject a
+        clone for the user since a spread is the same as a shallow clone.
+         */
+        if (isMutableType(spreadExpr.ptype) && !containsMutableType(spreadExpr.ptype)) {
+          toConcat.push(CloneFunctionBuilder.clone(spreadExpr, this.sourceLocation(node)))
+        } else {
+          toConcat.push(spreadExpr)
+        }
       } else {
         itemBuffer.push(requireInstanceBuilder(this.baseAccept(element)))
       }

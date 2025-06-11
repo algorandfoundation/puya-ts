@@ -14,12 +14,11 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let boxForCaller#0: bytes = (txn Sender)
         (box_create boxForCaller#0 4u)
         (box_replace boxForCaller#0 0u 0x7b)
-        let (aggregate%box_get%0#1: bytes, aggregate%box_get%1#1: bool) = (box_get boxForCaller#0)
-        (assert aggregate%box_get%1#1) // Box must have value
-        let storage_value%0#0: bytes = aggregate%box_get%0#1
-        let aggregate%bytes_offset%0#1: uint64 = (* 0u 1u)
-        let aggregate%encoded_element%0#1: bytes = (extract3 storage_value%0#0 aggregate%bytes_offset%0#1 1u) // on error: index access is out of bounds
-        let array_item%0#0: Encoded(uint8) = aggregate%encoded_element%0#1
+        let (maybe_value%0#0: bytes, maybe_exists%0#0: bool) = (box_get boxForCaller#0)
+        (assert maybe_exists%0#0) // Box must have value
+        let array%bytes_offset%0#1: uint64 = (* 0u 1u)
+        let array%encoded_element%0#1: bytes = (extract3 maybe_value%0#0 array%bytes_offset%0#1 1u) // on error: index access is out of bounds
+        let array_item%0#0: Encoded(uint8) = array%encoded_element%0#1
         let tmp%0#2: uint64 = (btoi array_item%0#0)
         let tmp%1#1: bool = (== tmp%0#2 123u)
         (assert tmp%1#1) // First array item in box should be 123

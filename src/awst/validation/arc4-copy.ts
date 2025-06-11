@@ -1,11 +1,14 @@
 import { logger } from '../../logger'
 import { instanceOfAny } from '../../util'
-import type { AssignmentExpression } from '../nodes'
+import type { ArrayConcat, AssignmentExpression } from '../nodes'
 import {
   AppAccountStateExpression,
   AppStateExpression,
+  type AssignmentStatement,
+  type AWST,
   BoxValueExpression,
   ConvertArray,
+  type Expression,
   FieldExpression,
   IndexExpression,
   StateGet,
@@ -13,9 +16,6 @@ import {
   TupleExpression,
   TupleItemExpression,
   VarExpression,
-  type AssignmentStatement,
-  type AWST,
-  type Expression,
 } from '../nodes'
 import { wtypes } from '../wtypes'
 import { AwstTraverser } from './awst-traverser'
@@ -41,26 +41,50 @@ export class ARC4CopyValidator extends AwstTraverser {
     checkAssignment(expression.target, expression.value)
     expression.value.accept(this)
   }
+
+  visitArrayConcat(expression: ArrayConcat) {
+    checkShallowCopy(expression.left, 'being concatenated')
+    checkShallowCopy(expression.right, 'being concatenated')
+  }
+
+  visitTupleExpression(expression: TupleExpression) {
+    super.visitTupleExpression(expression)
+    for (const item of expression.items) {
+      checkForArc4Copy(item, 'being passed to a tuple expression')
+    }
+  }
+}
+
+function checkShallowCopy(target: Expression, contextDesc: string) {
+  if (containsMutable(target.wtype) && isReferableExpression(target)) {
+    logger.error(
+      target.sourceLocation,
+      `expression containing a reference to value with nested mutable types must be cloned when ${contextDesc}`,
+    )
+  }
 }
 
 /**
- * Checks if an assignment needs to use .copy() for ARC-4 mutable values
+ * Checks if an assignment needs to use clone(...) for ARC-4 mutable values
  */
 function checkAssignment(target: Expression, value: Expression): void {
   if (!(target instanceof TupleExpression)) {
     checkForArc4Copy(value, 'being assigned to another variable')
-  } else if (isReferableExpression(value) && target.wtype.types.some((t) => isArc4Mutable(t))) {
+  } else if (isReferableExpression(value) && containsMutable(target.wtype)) {
     logger.error(
       value.sourceLocation,
-      'tuples containing a mutable reference to an ARC-4-encoded value cannot be unpacked,' + ' use index access instead',
+      'tuples containing a reference to a mutable stack type cannot be destructured, use index access with clone(...) instead',
     )
   }
 }
 
 function checkForArc4Copy(expr: Expression, contextDesc: string): void {
   if (expr instanceof ConvertArray) return checkForArc4Copy(expr.expr, contextDesc)
-  if (isArc4Mutable(expr.wtype) && isReferableExpression(expr)) {
-    logger.error(expr.sourceLocation, `mutable reference to ARC-4-encoded value must be copied using .copy() when ${contextDesc}`)
+  if (isMutableOrContainsMutable(expr.wtype) && isReferableExpression(expr)) {
+    logger.error(
+      expr.sourceLocation,
+      `cannot create multiple references to a mutable stack type, the value must be copied using clone(...) when ${contextDesc}`,
+    )
   }
 }
 
@@ -68,11 +92,21 @@ function checkForArc4Copy(expr: Expression, contextDesc: string): void {
  * Returns true if the type represents an arc4 type that is mutable
  */
 function isArc4Mutable(wtype: wtypes.WType): boolean {
-  if (wtype instanceof wtypes.ARC4Type && !wtype.immutable) {
-    return true
-  } else if (wtype instanceof wtypes.WTuple) {
-    return wtype.types.some((t) => isArc4Mutable(t))
-  }
+  return wtype instanceof wtypes.ARC4Type && !wtype.immutable
+}
+
+function isMutableOrContainsMutable(wtype: wtypes.WType) {
+  return isArc4Mutable(wtype) || containsMutable(wtype)
+}
+
+function anyMutableOrContainsMutable(types: wtypes.WType[]) {
+  return types.some(isMutableOrContainsMutable)
+}
+
+function containsMutable(wtype: wtypes.WType): boolean {
+  if (wtype instanceof wtypes.WTuple) return anyMutableOrContainsMutable(wtype.types)
+  if (wtype instanceof wtypes.ARC4Struct) return anyMutableOrContainsMutable(Object.values(wtype.fields))
+  if (wtype instanceof wtypes.ARC4Array) return isMutableOrContainsMutable(wtype.elementType)
   return false
 }
 

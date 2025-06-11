@@ -8,6 +8,7 @@ import { buildArc4MethodConstant } from '../../arc4-util'
 import { AwstBuildContext } from '../../context/awst-build-context'
 import type { PType } from '../../ptypes'
 import { anyItxnParamsType, itxnComposePType, ItxnParamsPType, ObjectPType, Uint64EnumMemberLiteralType, voidPType } from '../../ptypes'
+import { getPropertyType } from '../../ptypes/visitors/index-type-visitor'
 import { instanceEb } from '../../type-registry'
 import { buildApplicationCallTxnFields } from '../arc4/c2c'
 import { ContractMethodExpressionBuilder } from '../free-subroutine-expression-builder'
@@ -76,7 +77,7 @@ class ItxnComposeBeginOrNextFunctionBuilder extends FunctionBuilder {
           itxnOrFields.sourceLocation,
         )
 
-        const type = itxnOrFields.ptype.getPropertyType('type')
+        const type = getPropertyType(itxnOrFields.ptype, 'type', sourceLocation)
         let fieldsType: ItxnParamsPType
         if (type instanceof Uint64EnumMemberLiteralType) {
           const txnKind = enumFromValue(Number(type.value), TransactionKind)

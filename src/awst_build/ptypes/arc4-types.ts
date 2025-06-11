@@ -23,6 +23,7 @@ import {
   uint64PType,
   voidPType,
 } from './index'
+import type { PTypeVisitor } from './visitor'
 
 export const ByteClass = new LibClassType({
   name: 'Byte',
@@ -134,6 +135,10 @@ export class ARC4InstanceType extends ARC4EncodedType {
     this.fixedBitSize = fixedBitSize
     this.abiTypeSignature = abiName
   }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitARC4InstanceType(this)
+  }
 }
 
 export const ARC4BoolClass = new LibClassType({
@@ -194,6 +199,10 @@ export class ARC4StructClass extends PType {
       instanceType: ptype,
     })
   }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitARC4StructClass(this)
+  }
 }
 
 export class ARC4StructType extends ARC4EncodedType {
@@ -247,11 +256,8 @@ export class ARC4StructType extends ARC4EncodedType {
     })
   }
 
-  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType | undefined {
-    if (typeof index === 'string') {
-      return this.fields[index]
-    }
-    return super.getIndexType(index, sourceLocation)
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitARC4StructType(this)
   }
 }
 
@@ -310,6 +316,10 @@ export class ARC4TupleType extends ARC4EncodedType {
       immutable: false,
     })
   }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitARC4TupleType(this)
+  }
 }
 export const UintNGeneric = new GenericPType({
   name: 'UintN',
@@ -349,6 +359,10 @@ export class UintNType extends ARC4EncodedType {
     this.name = name ?? `UintN<${n}>`
     this.wtype = wtype ?? new wtypes.ARC4UIntN({ n: this.n })
     this.abiTypeSignature = wtype?.arc4Alias ?? `uint${n}`
+  }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitUintNType(this)
   }
 }
 export const UFixedNxMGeneric = new GenericPType({
@@ -398,6 +412,10 @@ export class UFixedNxMType extends ARC4EncodedType {
     this.name = `${UFixedNxMGeneric.name}<${n}, ${m}>`
     this.wtype = new wtypes.ARC4UFixedNxM({ n: this.n, m: this.m })
     this.abiTypeSignature = `ufixed${n}x${m}`
+  }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitUFixedNxMType(this)
   }
 }
 
@@ -458,13 +476,8 @@ export class DynamicArrayType extends ARC4ArrayType {
     this.abiTypeSignature = `${this.elementType.abiTypeSignature}[]`
   }
 
-  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType | undefined {
-    if (typeof index === 'bigint') return this.elementType
-    return super.getIndexType(index, sourceLocation)
-  }
-
-  getIteratorType(): PType | undefined {
-    return this.elementType
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitDynamicArrayType(this)
   }
 }
 
@@ -533,13 +546,8 @@ export class StaticArrayType extends ARC4ArrayType {
     this.abiTypeSignature = `${this.elementType.abiTypeSignature}[${this.arraySize}]`
   }
 
-  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType | undefined {
-    if (typeof index === 'bigint') return this.elementType
-    return super.getIndexType(index, sourceLocation)
-  }
-
-  getIteratorType(): PType | undefined {
-    return this.elementType
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitStaticArrayType(this)
   }
 }
 export const arc4AddressAlias = new StaticArrayType({
@@ -652,6 +660,10 @@ export class ContractProxyType extends PType {
 
     this.wtype = compiledContractType.wtype
     this.contractType = contractType
+  }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitContractProxyType(this)
   }
 }
 

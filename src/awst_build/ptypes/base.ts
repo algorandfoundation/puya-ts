@@ -1,8 +1,8 @@
-import type { SourceLocation } from '../../awst/source-location'
 import { wtypes } from '../../awst/wtypes'
 import { CodeError } from '../../errors'
 import type { DeliberateAny } from '../../typescript-helpers'
 import { zipStrict } from '../../util'
+import type { PTypeVisitor } from './visitor'
 
 const PTypeId = Symbol('PTypeId')
 
@@ -37,19 +37,7 @@ export abstract class PType {
 
   abstract readonly singleton: boolean
 
-  /**
-   * Return the type that would result from accessing the specified index of a value of this type.
-   *
-   * @param index
-   * @param sourceLocation
-   */
-  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType | undefined {
-    throw new CodeError(`${this.name} is not indexable by ${typeof index === 'bigint' ? 'number' : 'string'}`, { sourceLocation })
-  }
-
-  getIteratorType(): PType | undefined {
-    return undefined
-  }
+  abstract accept<T>(visitor: PTypeVisitor<T>): T
 
   get fullName() {
     return `${this.module}::${this.name}`
@@ -97,6 +85,9 @@ export interface ABIType {
 }
 
 export class GenericPType<T extends PType = PType> extends PType {
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitGeneric(this)
+  }
   readonly [PTypeId] = 'GenericPType'
   readonly name: string
   readonly module: string

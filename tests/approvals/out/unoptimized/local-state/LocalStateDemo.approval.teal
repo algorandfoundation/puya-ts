@@ -66,6 +66,7 @@ main_getState_route@5:
     !=
     assert // can only call when not creating
     callsub getState
+    cover 9
     cover 8
     cover 7
     cover 6
@@ -110,29 +111,47 @@ main_getState_route@5:
     swap
     dig 1
     concat
-    swap
+    cover 3
     len
-    dig 2
+    dig 1
     +
-    cover 2
-    swap
+    cover 3
     itob
     extract 6 2
-    uncover 3
-    swap
     concat
     uncover 3
     concat
+    uncover 3
+    itob
+    bytec_0 // 0x
     swap
-    dig 3
     concat
-    cover 3
-    uncover 2
+    dig 4
     len
-    dig 2
+    itob
+    extract 6 2
+    uncover 5
+    concat
+    bytec_0 // 0x
+    swap
+    concat
+    intc_3 // 10
+    itob
+    extract 6 2
+    uncover 2
+    swap
+    concat
+    swap
+    concat
+    uncover 2
+    dig 1
+    concat
+    cover 2
+    len
+    dig 3
     +
     cover 3
-    swap
+    uncover 2
     itob
     extract 6 2
     concat
@@ -343,6 +362,8 @@ setState_block@0:
     app_local_put
     // tests/approvals/local-state.algo.ts:27
     // this.localTuple(Txn.sender).value = [a, b]
+    txn Sender
+    cover 2
     dup
     itob
     bytec_0 // 0x
@@ -366,9 +387,9 @@ setState_block@0:
     concat
     swap
     concat
-    txn Sender
+    uncover 3
     // tests/approvals/local-state.algo.ts:14
-    // localTuple = LocalState<[uint64, bytes]>()
+    // localTuple = LocalState<readonly [uint64, bytes]>()
     bytec 6 // "localTuple"
     // tests/approvals/local-state.algo.ts:27
     // this.localTuple(Txn.sender).value = [a, b]
@@ -466,7 +487,7 @@ setState_block@0:
     retsub
 
 
-// tests/approvals/local-state.algo.ts::LocalStateDemo.getState() -> uint64, uint64, bytes, bytes, bytes, bytes, uint64, bytes, bytes:
+// tests/approvals/local-state.algo.ts::LocalStateDemo.getState() -> uint64, uint64, bytes, bytes, bytes, uint64, bytes, uint64, bytes, bytes:
 getState:
 
 getState_block@0:
@@ -530,12 +551,29 @@ getState_block@0:
     txn Sender
     intc_0 // 0
     // tests/approvals/local-state.algo.ts:14
-    // localTuple = LocalState<[uint64, bytes]>()
+    // localTuple = LocalState<readonly [uint64, bytes]>()
     bytec 6 // "localTuple"
     // tests/approvals/local-state.algo.ts:39
     // localTuple: this.localTuple(Txn.sender).value,
     app_local_get_ex
     assert // check LocalState exists
+    dup
+    intc_0 // 0
+    intc_2 // 8
+    extract3
+    btoi
+    swap
+    dup
+    intc_2 // 8
+    extract_uint16
+    swap
+    dup
+    len
+    swap
+    uncover 2
+    uncover 2
+    substring3
+    extract 2 0
     // tests/approvals/local-state.algo.ts:40
     // localObject: this.localObject(Txn.sender).value,
     txn Sender
@@ -586,15 +624,16 @@ getState_block@0:
     //   localObject: this.localObject(Txn.sender).value,
     //   localMutableObject: clone(this.localMutableObject(Txn.sender).value),
     // }
-    uncover 8
-    uncover 8
-    uncover 8
-    uncover 8
-    uncover 8
-    uncover 8
-    uncover 8
-    uncover 8
-    uncover 8
+    uncover 9
+    uncover 9
+    uncover 9
+    uncover 9
+    uncover 9
+    uncover 9
+    uncover 9
+    uncover 9
+    uncover 9
+    uncover 9
     retsub
 
 
@@ -651,7 +690,7 @@ clearState_block@0:
     // this.localTuple(Txn.sender).delete()
     txn Sender
     // tests/approvals/local-state.algo.ts:14
-    // localTuple = LocalState<[uint64, bytes]>()
+    // localTuple = LocalState<readonly [uint64, bytes]>()
     bytec 6 // "localTuple"
     // tests/approvals/local-state.algo.ts:51
     // this.localTuple(Txn.sender).delete()

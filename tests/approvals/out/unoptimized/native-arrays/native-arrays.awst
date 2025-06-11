@@ -59,7 +59,7 @@ contract NativeArraysAlgo
     da1: arc4.dynamic_array<arc4.uint32> = new arc4.dynamic_array<arc4.uint32>(123, 123)
     sa1: arc4.static_array<arc4.uint32> = new arc4.static_array<arc4.uint32>(123, 123)
     a1: arc4.dynamic_array<arc4.uint32> = new arc4.dynamic_array<arc4.uint32>(123, 123)
-    a1: arc4.dynamic_array<arc4.uint32> = a1.concat(da1).concat(sa1)
+    a1: arc4.dynamic_array<arc4.uint32> = copy(a1).concat(copy(da1)).concat(copy(sa1))
     assert(a1.length == 6 and reinterpret_cast<bytes>(a1[0]) == reinterpret_cast<bytes>(123) and reinterpret_cast<bytes>(a1[1]) == reinterpret_cast<bytes>(123) and reinterpret_cast<bytes>(a1[2]) == reinterpret_cast<bytes>(123) and reinterpret_cast<bytes>(a1[3]) == reinterpret_cast<bytes>(123) and reinterpret_cast<bytes>(a1[4]) == reinterpret_cast<bytes>(123) and reinterpret_cast<bytes>(a1[5]) == reinterpret_cast<bytes>(123), comment=assert target is match for conditions)
   }
   

@@ -5,6 +5,7 @@ import { logger } from '../../../../logger'
 import { invariant } from '../../../../util'
 import { uint64PType } from '../../../ptypes'
 import { StaticArrayType } from '../../../ptypes/arc4-types'
+import { getIndexType } from '../../../ptypes/visitors/index-type-visitor'
 import { instanceEb } from '../../../type-registry'
 import type { InstanceBuilder } from '../../index'
 import { type NodeBuilder } from '../../index'
@@ -17,7 +18,7 @@ export function indexAccess(target: InstanceBuilder, index: InstanceBuilder, sou
     logger.error(index.sourceLocation, 'Index access out of bounds')
   }
 
-  const elementType = target.ptype.getIndexType(0n, sourceLocation)
+  const elementType = getIndexType(target.ptype, 0n, sourceLocation)
   invariant(elementType, 'Cannot infer indexed item type', sourceLocation)
 
   return instanceEb(

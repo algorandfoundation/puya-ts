@@ -37,7 +37,7 @@ contract MutableObjectDemo
   
   implicitCastingAndSpreading(v1: Vector): void
   {
-    v2: Vector = new Vector(x=(#6 = ARC4_DECODE(v1)).x, y=#6.y)
+    v2: Vector = new Vector(x=(#6 = { x: v1.x, y: v1.y }).x, y=#6.y)
     v3: Vector = new Vector(x=(#7 = { x: v2.x, y: v2.y }).x, y=#7.y)
     assert(v1.x == v2.x)
     assert(v1.y == v2.y)

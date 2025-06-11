@@ -37,8 +37,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         goto tmp%0#2 ? block@20 : block@21
     block@20: // while_body_L8
         let slot_contents%0#0: Encoded(uint64[]) = read(local.0)
-        let aggregate%val_as_bytes%0#1: bytes[8] = (itob i#1)
-        let concat%0#0: Encoded(uint64[]) = (concat slot_contents%0#0 aggregate%val_as_bytes%0#1) // on error: max array length exceeded
+        let array%val_as_bytes%0#1: bytes[8] = (itob i#1)
+        let concat%0#0: Encoded(uint64[]) = (concat slot_contents%0#0 array%val_as_bytes%0#1) // on error: max array length exceeded
         write(local.0, concat%0#0)
         let i#2: uint64 = (+ i#1 1u)
         goto block@19
@@ -60,8 +60,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let bytes_len%1#0: uint64 = (len extract%0#0)
         let array_len%1#0: uint64 = (/ bytes_len%1#0 8u)
         let tmp%7#1: uint64 = (- array_len%1#0 1u)
-        let aggregate%bytes_offset%0#1: uint64 = (* tmp%7#1 8u)
-        let values%0#0: uint64 = (extract_uint64 extract%0#0 aggregate%bytes_offset%0#1)
+        let array%bytes_offset%0#1: uint64 = (* tmp%7#1 8u)
+        let values%0#0: uint64 = (extract_uint64 extract%0#0 array%bytes_offset%0#1)
         let tmp%8#1: uint64 = (- length#0 2u)
         let tmp%9#1: bool = (== values%0#0 tmp%8#1)
         (assert tmp%9#1)

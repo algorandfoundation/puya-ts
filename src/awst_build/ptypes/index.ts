@@ -10,6 +10,7 @@ import type { ABIType } from './base'
 import { GenericPType, PType } from './base'
 
 import { transientTypeErrors } from './transient-type-errors'
+import type { PTypeVisitor } from './visitor'
 
 export * from './base'
 export * from './intrinsic-enum-type'
@@ -53,6 +54,10 @@ export abstract class TransientType extends PType {
   get wtypeOrThrow(): wtypes.WType {
     throw new CodeError(this.typeMessage)
   }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitTransientType(this)
+  }
 }
 
 export class UnsupportedType extends PType {
@@ -76,6 +81,10 @@ export class UnsupportedType extends PType {
 
   get wtypeOrThrow(): wtypes.WType {
     throw new NotSupported(`The type ${this.fullName} is not supported`)
+  }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitUnsupportedType(this)
   }
 }
 
@@ -107,6 +116,10 @@ export class LogicSigPType extends PType {
     this.module = props.module
     this.baseType = props.baseType
     this.sourceLocation = props.sourceLocation
+  }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitLogicSigPType(this)
   }
 }
 
@@ -153,6 +166,10 @@ export class ContractClassPType extends PType {
       yield b
       yield* b.allBases()
     }
+  }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitContractClassPType(this)
   }
 }
 
@@ -309,6 +326,10 @@ export class GlobalStateType extends StorageProxyPType {
   constructor(props: { content: PType }) {
     super({ ...props, keyWType: wtypes.stateKeyWType })
   }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitGlobalStateType(this)
+  }
 }
 export const LocalStateGeneric = new GenericPType({
   name: 'LocalState',
@@ -340,6 +361,10 @@ export class LocalStateType extends StorageProxyPType {
       content: typeArgs[0],
     })
   }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitLocalStateType(this)
+  }
 }
 export const BoxGeneric = new GenericPType({
   name: 'Box',
@@ -362,6 +387,10 @@ export class BoxPType extends StorageProxyPType {
   }
   constructor(props: { content: PType }) {
     super({ ...props, keyWType: wtypes.boxKeyWType })
+  }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitBoxPType(this)
   }
 }
 export const BoxMapGeneric = new GenericPType({
@@ -389,6 +418,10 @@ export class BoxMapPType extends StorageProxyPType {
     super({ ...props, keyWType: wtypes.boxKeyWType })
     this.keyType = props.keyType
   }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitBoxMapPType(this)
+  }
 }
 export class BoxRefPType extends StorageProxyPType {
   readonly [PType.IdSymbol] = 'BoxRefPType'
@@ -398,6 +431,10 @@ export class BoxRefPType extends StorageProxyPType {
   }
   constructor() {
     super({ keyWType: wtypes.boxKeyWType, content: bytesPType })
+  }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitBoxRefPType(this)
   }
 }
 export type AppStorageType = GlobalStateType | LocalStateType | BoxPType | BoxRefPType | BoxMapPType
@@ -416,6 +453,10 @@ export class TypeParameterType extends PType {
     this.name = name
     this.module = module
   }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitTypeParameterType(this)
+  }
 }
 
 /**
@@ -433,6 +474,10 @@ export class InternalType extends PType {
     this.name = name
     this.module = module
   }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitInternalType(this)
+  }
 }
 export const ClassMethodDecoratorContext = new InternalType({
   module: 'typescript/lib/lib.decorators.d.ts',
@@ -447,6 +492,10 @@ export class AnyPType extends PType {
   readonly name = 'any'
   readonly module = 'lib.d.ts'
   readonly singleton = false
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitAnyPType(this)
+  }
 }
 
 export class InstanceType extends PType {
@@ -461,6 +510,10 @@ export class InstanceType extends PType {
     this.name = name
     this.wtype = wtype
     this.module = module
+  }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitInstanceType(this)
   }
 }
 
@@ -484,6 +537,10 @@ export class LibFunctionType extends PType {
     this.name = name
     this.module = module
   }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitLibFunctionType(this)
+  }
 }
 export class LibClassType extends PType {
   readonly [PType.IdSymbol] = 'LibClassType'
@@ -496,6 +553,10 @@ export class LibClassType extends PType {
     super()
     this.name = name
     this.module = module
+  }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitLibClassType(this)
   }
 }
 export class LibObjType extends PType {
@@ -510,6 +571,10 @@ export class LibObjType extends PType {
     this.name = name
     this.module = module
   }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitLibObjType(this)
+  }
 }
 
 export class IntrinsicFunctionGroupType extends PType {
@@ -523,6 +588,10 @@ export class IntrinsicFunctionGroupType extends PType {
     super()
     this.name = name
   }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitIntrinsicFunctionGroupType(this)
+  }
 }
 export class IntrinsicFunctionGroupTypeType extends PType {
   readonly [PType.IdSymbol] = 'IntrinsicFunctionGroupTypeType'
@@ -534,6 +603,10 @@ export class IntrinsicFunctionGroupTypeType extends PType {
   constructor({ name }: { name: string }) {
     super()
     this.name = name
+  }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitIntrinsicFunctionGroupTypeType(this)
   }
 }
 export class IntrinsicFunctionType extends PType {
@@ -547,6 +620,10 @@ export class IntrinsicFunctionType extends PType {
     super()
     this.name = name
   }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitIntrinsicFunctionType(this)
+  }
 }
 export class IntrinsicFunctionTypeType extends PType {
   readonly [PType.IdSymbol] = 'IntrinsicFunctionTypeType'
@@ -558,6 +635,10 @@ export class IntrinsicFunctionTypeType extends PType {
   constructor({ name }: { name: string }) {
     super()
     this.name = name
+  }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitIntrinsicFunctionTypeType(this)
   }
 }
 
@@ -581,6 +662,10 @@ export class NamespacePType extends PType {
 
   toString(): string {
     return this.module
+  }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitNamespacePType(this)
   }
 }
 
@@ -616,6 +701,10 @@ export class FunctionPType extends PType {
     }
     this.parameters = props.parameters
   }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitFunctionPType(this)
+  }
 }
 export class ArrayLiteralPType extends PType {
   readonly [PType.IdSymbol] = 'ArrayLiteralPType'
@@ -631,7 +720,6 @@ export class ArrayLiteralPType extends PType {
   readonly name: string
   readonly module = Constants.moduleNames.typescript.array
   readonly items: PType[]
-  readonly immutable = true
   constructor(props: { items: PType[] }) {
     super()
     this.name = `[${props.items.map((i) => i.name).join(', ')}]`
@@ -641,6 +729,10 @@ export class ArrayLiteralPType extends PType {
 
   get wtype() {
     return this.getArrayType().wtype
+  }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitArrayLiteralPType(this)
   }
 
   getArrayType(): ArrayPType {
@@ -653,12 +745,6 @@ export class ArrayLiteralPType extends PType {
     return new ReadonlyTuplePType({
       items: this.items,
     })
-  }
-  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType | undefined {
-    if (typeof index === 'bigint') {
-      return this.items[Number(index)]
-    }
-    return super.getIndexType(index, sourceLocation)
   }
 }
 
@@ -685,15 +771,9 @@ export class MutableTuplePType extends PType {
       immutable: false,
     })
   }
-  getIteratorType(): PType | undefined {
-    return UnionPType.fromTypes(this.items)
-  }
 
-  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType | undefined {
-    if (typeof index === 'bigint') {
-      return this.items[Number(index)]
-    }
-    return super.getIndexType(index, sourceLocation)
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitMutableTuplePType(this)
   }
 }
 export class ReadonlyTuplePType extends PType {
@@ -719,15 +799,8 @@ export class ReadonlyTuplePType extends PType {
     })
   }
 
-  getIteratorType(): PType | undefined {
-    return UnionPType.fromTypes(this.items)
-  }
-
-  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType | undefined {
-    if (typeof index === 'bigint') {
-      return this.items[Number(index)]
-    }
-    return super.getIndexType(index, sourceLocation)
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitReadonlyTuplePType(this)
   }
 }
 export const ArrayGeneric = new GenericPType({
@@ -760,13 +833,9 @@ export class ArrayPType extends PType {
       immutable: this.immutable,
     })
   }
-  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType | undefined {
-    if (typeof index === 'bigint') return this.elementType
-    return super.getIndexType(index, sourceLocation)
-  }
 
-  getIteratorType(): PType | undefined {
-    return this.elementType
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitArrayPType(this)
   }
 }
 export const ReadonlyArrayGeneric = new GenericPType({
@@ -799,13 +868,9 @@ export class ReadonlyArrayPType extends PType {
       immutable: this.immutable,
     })
   }
-  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType | undefined {
-    if (typeof index === 'bigint') return this.elementType
-    return super.getIndexType(index, sourceLocation)
-  }
 
-  getIteratorType(): PType | undefined {
-    return this.elementType
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitReadonlyArrayPType(this)
   }
 }
 
@@ -851,13 +916,8 @@ export class FixedArrayPType extends PType {
     })
   }
 
-  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType | undefined {
-    if (typeof index === 'bigint') return this.elementType
-    return super.getIndexType(index, sourceLocation)
-  }
-
-  getIteratorType(): PType | undefined {
-    return this.elementType
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitFixedArrayPType(this)
   }
 }
 export class ObjectPType extends PType {
@@ -904,48 +964,14 @@ export class ObjectPType extends PType {
     return Object.entries(this.properties)
   }
 
-  getPropertyType(name: string): PType {
-    if (Object.hasOwn(this.properties, name)) {
-      return this.properties[name]
-    }
-    throw new CodeError(`${this} does not have property ${name}`)
-  }
-
-  hasProperty(name: string): boolean {
-    return Object.hasOwn(this.properties, name)
-  }
-
-  hasPropertyOfType(name: string, type: PType): boolean {
-    if (!this.hasProperty(name)) {
-      return false
-    }
-    const thisPropertyType = this.properties[name]
-    if (
-      thisPropertyType instanceof ObjectPType ||
-      thisPropertyType[PType.IdSymbol] === 'MutableObjectType' ||
-      thisPropertyType[PType.IdSymbol] === 'ARC4StructType'
-    ) {
-      const thisPropertyTypeToCompare = ('nativeType' in thisPropertyType ? thisPropertyType.nativeType : thisPropertyType) as ObjectPType
-      const otherPropertyTypeToCompare = ('nativeType' in type ? type.nativeType : type) as ObjectPType
-      return otherPropertyTypeToCompare
-        .orderedProperties()
-        .every(([prop, propType]) => thisPropertyTypeToCompare.hasPropertyOfType(prop, propType))
-    }
-
-    return thisPropertyType.equals(type)
-  }
-
   toString(): string {
     return `{${this.orderedProperties()
       .map((p) => `${p[0]}:${p[1].name}`)
       .join(',')}}`
   }
 
-  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType | undefined {
-    if (typeof index === 'string') {
-      return this.properties[index]
-    }
-    return super.getIndexType(index, sourceLocation)
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitObjectPType(this)
   }
 }
 
@@ -1112,6 +1138,10 @@ export class BytesPType extends PType {
     this.wtype = new wtypes.BytesWType({ length })
     this.module = Constants.moduleNames.algoTs.primitives
   }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitBytesPType(this)
+  }
 }
 export const BytesGeneric = new GenericPType({
   name: 'bytes',
@@ -1267,6 +1297,10 @@ export class GroupTransactionPType extends PType implements ABIType {
     this.kind = kind
     this.abiTypeSignature = kind !== undefined ? TransactionKind[kind] : 'txn'
   }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitGroupTransactionPType(this)
+  }
 }
 
 export class TransactionFunctionType extends LibFunctionType {
@@ -1373,6 +1407,10 @@ export class Uint64EnumMemberType extends PType {
     this.module = enumType.module
     this.enumType = enumType
   }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitUint64EnumMemberType(this)
+  }
 }
 
 export class Uint64EnumMemberLiteralType extends Uint64EnumMemberType {
@@ -1417,6 +1455,10 @@ export class Uint64EnumType extends PType {
 
   hasMember(member: string | bigint) {
     return Object.entries(this.members).some((m) => m[0] === member || m[1] === member)
+  }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitUint64EnumType(this)
   }
 }
 
@@ -1492,8 +1534,8 @@ export class IterableIteratorType extends TransientType {
     return new wtypes.WEnumeration({ sequenceType: this.itemType.wtypeOrThrow })
   }
 
-  getIteratorType(): PType | undefined {
-    return this.itemType
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitIterableIterator(this)
   }
 }
 
@@ -1575,6 +1617,10 @@ export class InnerTransactionPType extends PType {
     this.name = name
     this.kind = kind
   }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitInnerTransactionPType(this)
+  }
 }
 export class ItxnParamsPType extends PType {
   readonly [PType.IdSymbol] = 'ItxnParamsPType'
@@ -1592,6 +1638,10 @@ export class ItxnParamsPType extends PType {
     super()
     this.name = name
     this.kind = kind
+  }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitItxnParamsPType(this)
   }
 }
 export const paymentItxnParamsType = new ItxnParamsPType({
@@ -1728,6 +1778,10 @@ export class SuperPrototypeSelector extends PType {
     super()
     this.bases = bases
   }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitSuperPrototypeSelector(this)
+  }
 }
 export const ClusteredPrototype = new InternalType({
   name: 'ClusteredPrototype',
@@ -1750,7 +1804,6 @@ export const ReferenceArrayGeneric = new GenericPType({
 export class ReferenceArrayType extends PType {
   readonly [PType.IdSymbol] = 'ReferenceArrayType'
   readonly module = Constants.moduleNames.algoTs.referenceArray
-  readonly immutable = false as const
   readonly name: string
   readonly singleton = false
   readonly sourceLocation: SourceLocation | undefined
@@ -1779,13 +1832,8 @@ export class ReferenceArrayType extends PType {
       immutable: false,
     })
   }
-  getIndexType(index: bigint | string, sourceLocation: SourceLocation): PType | undefined {
-    if (typeof index === 'bigint') return this.elementType
-    return super.getIndexType(index, sourceLocation)
-  }
-
-  getIteratorType(): PType | undefined {
-    return this.elementType
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitReferenceArrayType(this)
   }
 }
 

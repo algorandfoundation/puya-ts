@@ -60,6 +60,12 @@ export function requireInstanceBuilder(builder: NodeBuilder): InstanceBuilder {
   }
   throw new CodeError(`Expected instance of a type, got ${builder.typeDescription}`, { sourceLocation: builder.sourceLocation })
 }
+export function requestInstanceBuilder(builder: NodeBuilder): InstanceBuilder | undefined {
+  if (builder instanceof InstanceBuilder) {
+    return builder
+  }
+  return undefined
+}
 
 export function requireStringConstant(builder: NodeBuilder): awst.StringConstant {
   const constant = requireConstantOfType(builder, stringPType)

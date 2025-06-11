@@ -28,12 +28,12 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%13#0) // can only call when not creating
         let reinterpret_Encoded(len+uint8[])%1#0: Encoded(len+uint8[]) = (txna ApplicationArgs 1)
         let a#0: bytes = ((extract 2 0) reinterpret_Encoded(len+uint8[])%1#0)
-        let aggregate%length%0#1: uint64 = (len a#0)
-        let aggregate%as_bytes%0#1: bytes[8] = (itob aggregate%length%0#1)
-        let aggregate%length_uint16%0#1: bytes = ((extract 6 2) aggregate%as_bytes%0#1)
-        let aggregate%encoded_value%0#1: bytes = (concat aggregate%length_uint16%0#1 a#0)
-        let aggregate%encoded%1#1: Encoded((len+uint8[])) = (concat 0x0002 aggregate%encoded_value%0#1)
-        let tmp%18#0: bytes = (concat 0x151f7c75 aggregate%encoded%1#1)
+        let array%length%0#1: uint64 = (len a#0)
+        let array%as_bytes%0#1: bytes[8] = (itob array%length%0#1)
+        let array%length_uint16%0#1: bytes = ((extract 6 2) array%as_bytes%0#1)
+        let array%encoded_value%0#1: bytes = (concat array%length_uint16%0#1 a#0)
+        let array%encoded%1#1: Encoded((len+uint8[])) = (concat 0x0002 array%encoded_value%0#1)
+        let tmp%18#0: bytes = (concat 0x151f7c75 array%encoded%1#1)
         (log tmp%18#0)
         let tests/approvals/jsdoc.algo.ts::JSDocDemo.__puya_arc4_router__%0#1: bool = 1u
         goto block@12
@@ -55,5 +55,5 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
 
 subroutine tests/approvals/jsdoc.algo.ts::JSDocDemo.test(a: uint64, b: bytes) -> Encoded(uint64):
     block@0: // L30
-        let aggregate%val_as_bytes%0#1: bytes[8] = (itob a#0)
-        return aggregate%val_as_bytes%0#1
+        let array%val_as_bytes%0#1: bytes[8] = (itob a#0)
+        return array%val_as_bytes%0#1
