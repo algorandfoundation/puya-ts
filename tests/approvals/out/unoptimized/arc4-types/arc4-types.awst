@@ -49,7 +49,7 @@ subroutine testStaticBytes(): void
 subroutine testArrays(n: arc4.uint64): void
 {
   myArray: arc4.dynamic_array<arc4.uint64> = new arc4.dynamic_array<arc4.uint64>(n, n, n)
-  myArray.push(...<tuple>[n]
+  myArray.push(...<tuple>[n])
   doubleArray: arc4.dynamic_array<arc4.uint64> = myArray.concat(myArray)
   assert(reinterpret_cast<bytes>(doubleArray) == reinterpret_cast<bytes>(new arc4.dynamic_array<arc4.uint64>(n, n, n, n, n, n, n, n)))
   myStatic: arc4.static_array<arc4.uint64> = new arc4.static_array<arc4.uint64>(n, n)

@@ -51,17 +51,17 @@ subroutine tests/approvals/object-destructuring.algo.ts::testPartialDestructure(
 
 subroutine tests/approvals/object-destructuring.algo.ts::testPartialDestructureMutableObject(arg: Encoded((uint64,uint64),(uint64,uint64))) -> <uint64, uint64, Encoded((uint64,uint64),(uint64,uint64))>:
     block@0: // L15
-        let array%extract%0#1: bytes = (extract3 arg#0 0u 16u)
-        let tuple_item%0#0: Encoded(uint64,uint64) = array%extract%0#1
-        let array%extract%1#1: bytes = (extract3 tuple_item%0#0 0u 8u)
-        let tuple_item%1#0: Encoded(uint64) = array%extract%1#1
+        let aggregate%extract%0#1: bytes = (extract3 arg#0 0u 16u)
+        let tuple_item%0#0: Encoded(uint64,uint64) = aggregate%extract%0#1
+        let aggregate%extract%1#1: bytes = (extract3 tuple_item%0#0 0u 8u)
+        let tuple_item%1#0: Encoded(uint64) = aggregate%extract%1#1
         let values%0#0: uint64 = (btoi tuple_item%1#0)
         let x#0: uint64 = values%0#0
         let copy%0#0: Encoded((uint64,uint64),(uint64,uint64)) = arg#0
-        let array%extract%2#1: bytes = (extract3 copy%0#0 0u 16u)
-        let tuple_item%2#0: Encoded(uint64,uint64) = array%extract%2#1
-        let array%extract%3#1: bytes = (extract3 tuple_item%2#0 8u 8u)
-        let tuple_item%3#0: Encoded(uint64) = array%extract%3#1
+        let aggregate%extract%2#1: bytes = (extract3 copy%0#0 0u 16u)
+        let tuple_item%2#0: Encoded(uint64,uint64) = aggregate%extract%2#1
+        let aggregate%extract%3#1: bytes = (extract3 tuple_item%2#0 8u 8u)
+        let tuple_item%3#0: Encoded(uint64) = aggregate%extract%3#1
         let values%1#0: uint64 = (btoi tuple_item%3#0)
         let y#0: uint64 = values%1#0
         return x#0 y#0 arg#0
@@ -81,14 +81,14 @@ subroutine tests/approvals/object-destructuring.algo.ts::testMutableObject() -> 
         let awst_tmp%1#0: Encoded((uint64,uint64),(uint64,uint64)) = tests/approvals/object-destructuring.algo.ts::produceVector()
         let awst_tmp%2#0: Encoded((uint64,uint64),(uint64,uint64)) = tests/approvals/object-destructuring.algo.ts::produceVector()
         let tmp%0#0: Encoded((uint64,uint64),(uint64,uint64)) = tests/approvals/object-destructuring.algo.ts::produceVector()
-        let array%extract%9#1: bytes = (extract3 tmp%0#0 0u 16u)
-        let awst_tmp%3#0: Encoded(uint64,uint64) = array%extract%9#1
-        let array%extract%11#1: bytes = (extract3 awst_tmp%3#0 0u 8u)
-        let array%item0%0#1: uint64 = (btoi array%extract%11#1)
-        let array%extract%12#1: bytes = (extract3 awst_tmp%3#0 8u 8u)
-        let array%item1%0#1: uint64 = (btoi array%extract%12#1)
-        let tmp%1#0: uint64 = array%item0%0#1
-        let tmp%2#0: uint64 = array%item1%0#1
+        let aggregate%extract%7#1: bytes = (extract3 tmp%0#0 0u 16u)
+        let awst_tmp%3#0: Encoded(uint64,uint64) = aggregate%extract%7#1
+        let aggregate%extract%9#1: bytes = (extract3 awst_tmp%3#0 0u 8u)
+        let aggregate%item0%0#1: uint64 = (btoi aggregate%extract%9#1)
+        let aggregate%extract%10#1: bytes = (extract3 awst_tmp%3#0 8u 8u)
+        let aggregate%item1%0#1: uint64 = (btoi aggregate%extract%10#1)
+        let tmp%1#0: uint64 = aggregate%item0%0#1
+        let tmp%2#0: uint64 = aggregate%item1%0#1
         tests/approvals/object-destructuring.algo.ts::receivePartialMutableObject(tmp%1#0, tmp%2#0)
         return 
 
@@ -98,26 +98,26 @@ subroutine tests/approvals/object-destructuring.algo.ts::produceItems() -> <uint
 
 subroutine tests/approvals/object-destructuring.algo.ts::produceVector() -> Encoded((uint64,uint64),(uint64,uint64)):
     block@0: // L60
-        let array%val_as_bytes%0#1: bytes[8] = (itob 1u)
-        let array%as_Encoded(uint64)%0#1: Encoded(uint64) = array%val_as_bytes%0#1
-        let array%encoded%0#1: Encoded(uint64) = (concat 0x array%as_Encoded(uint64)%0#1)
-        let array%val_as_bytes%1#1: bytes[8] = (itob 2u)
-        let array%as_Encoded(uint64)%1#1: Encoded(uint64) = array%val_as_bytes%1#1
-        let array%encoded%1#1: Encoded(uint64,uint64) = (concat array%encoded%0#1 array%as_Encoded(uint64)%1#1)
-        let array%encoded%2#1: Encoded(uint64,uint64) = (concat array%encoded%1#1 0x)
-        let tmp%0#0: Encoded(uint64,uint64) = array%encoded%2#1
-        let array%val_as_bytes%2#1: bytes[8] = (itob 4u)
-        let array%as_Encoded(uint64)%2#1: Encoded(uint64) = array%val_as_bytes%2#1
-        let array%encoded%3#1: Encoded(uint64) = (concat 0x array%as_Encoded(uint64)%2#1)
-        let array%val_as_bytes%3#1: bytes[8] = (itob 1u)
-        let array%as_Encoded(uint64)%3#1: Encoded(uint64) = array%val_as_bytes%3#1
-        let array%encoded%4#1: Encoded(uint64,uint64) = (concat array%encoded%3#1 array%as_Encoded(uint64)%3#1)
-        let array%encoded%5#1: Encoded(uint64,uint64) = (concat array%encoded%4#1 0x)
-        let tmp%1#0: Encoded(uint64,uint64) = array%encoded%5#1
-        let array%encoded%6#1: Encoded((uint64,uint64)) = (concat 0x tmp%0#0)
-        let array%encoded%7#1: Encoded((uint64,uint64),(uint64,uint64)) = (concat array%encoded%6#1 tmp%1#0)
-        let array%encoded%8#1: Encoded((uint64,uint64),(uint64,uint64)) = (concat array%encoded%7#1 0x)
-        let tmp%2#0: Encoded((uint64,uint64),(uint64,uint64)) = array%encoded%8#1
+        let aggregate%val_as_bytes%0#1: bytes[8] = (itob 1u)
+        let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
+        let aggregate%encoded%0#1: Encoded(uint64) = (concat 0x aggregate%as_Encoded(uint64)%0#1)
+        let aggregate%val_as_bytes%1#1: bytes[8] = (itob 2u)
+        let aggregate%as_Encoded(uint64)%1#1: Encoded(uint64) = aggregate%val_as_bytes%1#1
+        let aggregate%encoded%1#1: Encoded(uint64,uint64) = (concat aggregate%encoded%0#1 aggregate%as_Encoded(uint64)%1#1)
+        let aggregate%encoded%2#1: Encoded(uint64,uint64) = (concat aggregate%encoded%1#1 0x)
+        let tmp%0#0: Encoded(uint64,uint64) = aggregate%encoded%2#1
+        let aggregate%val_as_bytes%2#1: bytes[8] = (itob 4u)
+        let aggregate%as_Encoded(uint64)%2#1: Encoded(uint64) = aggregate%val_as_bytes%2#1
+        let aggregate%encoded%3#1: Encoded(uint64) = (concat 0x aggregate%as_Encoded(uint64)%2#1)
+        let aggregate%val_as_bytes%3#1: bytes[8] = (itob 1u)
+        let aggregate%as_Encoded(uint64)%3#1: Encoded(uint64) = aggregate%val_as_bytes%3#1
+        let aggregate%encoded%4#1: Encoded(uint64,uint64) = (concat aggregate%encoded%3#1 aggregate%as_Encoded(uint64)%3#1)
+        let aggregate%encoded%5#1: Encoded(uint64,uint64) = (concat aggregate%encoded%4#1 0x)
+        let tmp%1#0: Encoded(uint64,uint64) = aggregate%encoded%5#1
+        let aggregate%encoded%6#1: Encoded((uint64,uint64)) = (concat 0x tmp%0#0)
+        let aggregate%encoded%7#1: Encoded((uint64,uint64),(uint64,uint64)) = (concat aggregate%encoded%6#1 tmp%1#0)
+        let aggregate%encoded%8#1: Encoded((uint64,uint64),(uint64,uint64)) = (concat aggregate%encoded%7#1 0x)
+        let tmp%2#0: Encoded((uint64,uint64),(uint64,uint64)) = aggregate%encoded%8#1
         return tmp%2#0
 
 subroutine tests/approvals/object-destructuring.algo.ts::receivePartial(x.a: uint64, x.d: biguint) -> void:
@@ -130,23 +130,23 @@ subroutine tests/approvals/object-destructuring.algo.ts::receivePartialMutableOb
 
 subroutine tests/approvals/object-destructuring.algo.ts::testLiteralToLiteral() -> Encoded(len+uint64[]):
     block@0: // L68
-        let array%val_as_bytes%0#1: bytes[8] = (itob 4u)
-        let array%as_Encoded(uint64)%0#1: Encoded(uint64) = array%val_as_bytes%0#1
-        let array%encoded%0#1: Encoded(uint64) = (concat 0x array%as_Encoded(uint64)%0#1)
-        let array%val_as_bytes%1#1: bytes[8] = (itob 1u)
-        let array%as_Encoded(uint64)%1#1: Encoded(uint64) = array%val_as_bytes%1#1
-        let array%encoded%1#1: Encoded(uint64,uint64) = (concat array%encoded%0#1 array%as_Encoded(uint64)%1#1)
-        let array%val_as_bytes%2#1: bytes[8] = (itob 4u)
-        let array%as_Encoded(uint64)%2#1: Encoded(uint64) = array%val_as_bytes%2#1
-        let array%encoded%2#1: Encoded(uint64,uint64,uint64) = (concat array%encoded%1#1 array%as_Encoded(uint64)%2#1)
-        let array%val_as_bytes%3#1: bytes[8] = (itob 1u)
-        let array%as_Encoded(uint64)%3#1: Encoded(uint64) = array%val_as_bytes%3#1
-        let array%encoded%3#1: Encoded(uint64,uint64,uint64,uint64) = (concat array%encoded%2#1 array%as_Encoded(uint64)%3#1)
-        let array%as_bytes%0#1: bytes[8] = (itob 4u)
-        let array%len_u16%0#1: bytes = ((extract 6 2) array%as_bytes%0#1)
-        let array%encoded%4#1: bytes = (concat array%len_u16%0#1 array%encoded%3#1)
-        let array%encoded%5#1: Encoded(len+uint64[]) = (concat array%encoded%4#1 0x)
-        let encoded_array%0#0: Encoded(len+uint64[]) = array%encoded%5#1
+        let aggregate%val_as_bytes%0#1: bytes[8] = (itob 4u)
+        let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
+        let aggregate%encoded%0#1: Encoded(uint64) = (concat 0x aggregate%as_Encoded(uint64)%0#1)
+        let aggregate%val_as_bytes%1#1: bytes[8] = (itob 1u)
+        let aggregate%as_Encoded(uint64)%1#1: Encoded(uint64) = aggregate%val_as_bytes%1#1
+        let aggregate%encoded%1#1: Encoded(uint64,uint64) = (concat aggregate%encoded%0#1 aggregate%as_Encoded(uint64)%1#1)
+        let aggregate%val_as_bytes%2#1: bytes[8] = (itob 4u)
+        let aggregate%as_Encoded(uint64)%2#1: Encoded(uint64) = aggregate%val_as_bytes%2#1
+        let aggregate%encoded%2#1: Encoded(uint64,uint64,uint64) = (concat aggregate%encoded%1#1 aggregate%as_Encoded(uint64)%2#1)
+        let aggregate%val_as_bytes%3#1: bytes[8] = (itob 1u)
+        let aggregate%as_Encoded(uint64)%3#1: Encoded(uint64) = aggregate%val_as_bytes%3#1
+        let aggregate%encoded%3#1: Encoded(uint64,uint64,uint64,uint64) = (concat aggregate%encoded%2#1 aggregate%as_Encoded(uint64)%3#1)
+        let aggregate%as_bytes%0#1: bytes[8] = (itob 4u)
+        let aggregate%len_u16%0#1: bytes = ((extract 6 2) aggregate%as_bytes%0#1)
+        let aggregate%encoded%4#1: bytes = (concat aggregate%len_u16%0#1 aggregate%encoded%3#1)
+        let aggregate%encoded%5#1: Encoded(len+uint64[]) = (concat aggregate%encoded%4#1 0x)
+        let encoded_array%0#0: Encoded(len+uint64[]) = aggregate%encoded%5#1
         return encoded_array%0#0
 
 subroutine tests/approvals/object-destructuring.algo.ts::testNumericResolution() -> void:
@@ -192,26 +192,26 @@ subroutine tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo
     block@5: // bool_merge_L99
         let and_result%0#2: bool = φ(and_result%0#0 <- block@3, and_result%0#1 <- block@4)
         (assert and_result%0#2) // assert target is match for conditions
-        let array%val_as_bytes%0#1: bytes[8] = (itob 10u)
-        let array%as_Encoded(uint64)%0#1: Encoded(uint64) = array%val_as_bytes%0#1
-        let array%encoded%0#1: Encoded(uint64) = (concat 0x array%as_Encoded(uint64)%0#1)
-        let array%val_as_bytes%1#1: bytes[8] = (itob 20u)
-        let array%as_Encoded(uint64)%1#1: Encoded(uint64) = array%val_as_bytes%1#1
-        let array%encoded%1#1: Encoded(uint64,uint64) = (concat array%encoded%0#1 array%as_Encoded(uint64)%1#1)
-        let array%encoded%2#1: Encoded(uint64,uint64) = (concat array%encoded%1#1 0x)
-        let tmp%5#0: Encoded(uint64,uint64) = array%encoded%2#1
-        let array%val_as_bytes%2#1: bytes[8] = (itob 20u)
-        let array%as_Encoded(uint64)%2#1: Encoded(uint64) = array%val_as_bytes%2#1
-        let array%encoded%3#1: Encoded(uint64) = (concat 0x array%as_Encoded(uint64)%2#1)
-        let array%val_as_bytes%3#1: bytes[8] = (itob 30u)
-        let array%as_Encoded(uint64)%3#1: Encoded(uint64) = array%val_as_bytes%3#1
-        let array%encoded%4#1: Encoded(uint64,uint64) = (concat array%encoded%3#1 array%as_Encoded(uint64)%3#1)
-        let array%encoded%5#1: Encoded(uint64,uint64) = (concat array%encoded%4#1 0x)
-        let tmp%6#0: Encoded(uint64,uint64) = array%encoded%5#1
-        let array%encoded%6#1: Encoded((uint64,uint64)) = (concat 0x tmp%5#0)
-        let array%encoded%7#1: Encoded((uint64,uint64),(uint64,uint64)) = (concat array%encoded%6#1 tmp%6#0)
-        let array%encoded%8#1: Encoded((uint64,uint64),(uint64,uint64)) = (concat array%encoded%7#1 0x)
-        let tmp%7#0: Encoded((uint64,uint64),(uint64,uint64)) = array%encoded%8#1
+        let aggregate%val_as_bytes%0#1: bytes[8] = (itob 10u)
+        let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
+        let aggregate%encoded%0#1: Encoded(uint64) = (concat 0x aggregate%as_Encoded(uint64)%0#1)
+        let aggregate%val_as_bytes%1#1: bytes[8] = (itob 20u)
+        let aggregate%as_Encoded(uint64)%1#1: Encoded(uint64) = aggregate%val_as_bytes%1#1
+        let aggregate%encoded%1#1: Encoded(uint64,uint64) = (concat aggregate%encoded%0#1 aggregate%as_Encoded(uint64)%1#1)
+        let aggregate%encoded%2#1: Encoded(uint64,uint64) = (concat aggregate%encoded%1#1 0x)
+        let tmp%5#0: Encoded(uint64,uint64) = aggregate%encoded%2#1
+        let aggregate%val_as_bytes%2#1: bytes[8] = (itob 20u)
+        let aggregate%as_Encoded(uint64)%2#1: Encoded(uint64) = aggregate%val_as_bytes%2#1
+        let aggregate%encoded%3#1: Encoded(uint64) = (concat 0x aggregate%as_Encoded(uint64)%2#1)
+        let aggregate%val_as_bytes%3#1: bytes[8] = (itob 30u)
+        let aggregate%as_Encoded(uint64)%3#1: Encoded(uint64) = aggregate%val_as_bytes%3#1
+        let aggregate%encoded%4#1: Encoded(uint64,uint64) = (concat aggregate%encoded%3#1 aggregate%as_Encoded(uint64)%3#1)
+        let aggregate%encoded%5#1: Encoded(uint64,uint64) = (concat aggregate%encoded%4#1 0x)
+        let tmp%6#0: Encoded(uint64,uint64) = aggregate%encoded%5#1
+        let aggregate%encoded%6#1: Encoded((uint64,uint64)) = (concat 0x tmp%5#0)
+        let aggregate%encoded%7#1: Encoded((uint64,uint64),(uint64,uint64)) = (concat aggregate%encoded%6#1 tmp%6#0)
+        let aggregate%encoded%8#1: Encoded((uint64,uint64),(uint64,uint64)) = (concat aggregate%encoded%7#1 0x)
+        let tmp%7#0: Encoded((uint64,uint64),(uint64,uint64)) = aggregate%encoded%8#1
         let (testPartialDestructureMutableObject%0#0: uint64, testPartialDestructureMutableObject%1#0: uint64, testPartialDestructureMutableObject%2#0: Encoded((uint64,uint64),(uint64,uint64))) = tests/approvals/object-destructuring.algo.ts::testPartialDestructureMutableObject(tmp%7#0)
         let res2.0#0: uint64 = testPartialDestructureMutableObject%0#0
         let res2.1#0: uint64 = testPartialDestructureMutableObject%1#0
@@ -239,34 +239,34 @@ subroutine tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo
         let tmp%12#0: bool = (== array_length%0#0 4u)
         goto tmp%12#0 ? block@11 : block@16
     block@11: // and_contd_L109
-        let array%array_trimmed%0#1: bytes = ((extract 2 0) res3#0)
-        let array%bytes_offset%0#1: uint64 = (* 0u 8u)
-        let array%encoded_element%0#1: bytes = (extract3 array%array_trimmed%0#1 array%bytes_offset%0#1 8u) // on error: index access is out of bounds
-        let array_item%0#0: Encoded(uint64) = array%encoded_element%0#1
+        let aggregate%array_trimmed%0#1: bytes = ((extract 2 0) res3#0)
+        let aggregate%bytes_offset%0#1: uint64 = (* 0u 8u)
+        let aggregate%encoded_element%0#1: bytes = (extract3 aggregate%array_trimmed%0#1 aggregate%bytes_offset%0#1 8u) // on error: index access is out of bounds
+        let array_item%0#0: Encoded(uint64) = aggregate%encoded_element%0#1
         let values%0#0: uint64 = (btoi array_item%0#0)
         let tmp%13#0: bool = (== values%0#0 4u)
         goto tmp%13#0 ? block@12 : block@16
     block@12: // and_contd_L109
-        let array%array_trimmed%1#1: bytes = ((extract 2 0) res3#0)
-        let array%bytes_offset%1#1: uint64 = (* 1u 8u)
-        let array%encoded_element%1#1: bytes = (extract3 array%array_trimmed%1#1 array%bytes_offset%1#1 8u) // on error: index access is out of bounds
-        let array_item%1#0: Encoded(uint64) = array%encoded_element%1#1
+        let aggregate%array_trimmed%1#1: bytes = ((extract 2 0) res3#0)
+        let aggregate%bytes_offset%1#1: uint64 = (* 1u 8u)
+        let aggregate%encoded_element%1#1: bytes = (extract3 aggregate%array_trimmed%1#1 aggregate%bytes_offset%1#1 8u) // on error: index access is out of bounds
+        let array_item%1#0: Encoded(uint64) = aggregate%encoded_element%1#1
         let values%1#0: uint64 = (btoi array_item%1#0)
         let tmp%14#0: bool = (== values%1#0 1u)
         goto tmp%14#0 ? block@13 : block@16
     block@13: // and_contd_L109
-        let array%array_trimmed%2#1: bytes = ((extract 2 0) res3#0)
-        let array%bytes_offset%2#1: uint64 = (* 2u 8u)
-        let array%encoded_element%2#1: bytes = (extract3 array%array_trimmed%2#1 array%bytes_offset%2#1 8u) // on error: index access is out of bounds
-        let array_item%2#0: Encoded(uint64) = array%encoded_element%2#1
+        let aggregate%array_trimmed%2#1: bytes = ((extract 2 0) res3#0)
+        let aggregate%bytes_offset%2#1: uint64 = (* 2u 8u)
+        let aggregate%encoded_element%2#1: bytes = (extract3 aggregate%array_trimmed%2#1 aggregate%bytes_offset%2#1 8u) // on error: index access is out of bounds
+        let array_item%2#0: Encoded(uint64) = aggregate%encoded_element%2#1
         let values%2#0: uint64 = (btoi array_item%2#0)
         let tmp%15#0: bool = (== values%2#0 4u)
         goto tmp%15#0 ? block@14 : block@16
     block@14: // and_contd_L109
-        let array%array_trimmed%3#1: bytes = ((extract 2 0) res3#0)
-        let array%bytes_offset%3#1: uint64 = (* 3u 8u)
-        let array%encoded_element%3#1: bytes = (extract3 array%array_trimmed%3#1 array%bytes_offset%3#1 8u) // on error: index access is out of bounds
-        let array_item%3#0: Encoded(uint64) = array%encoded_element%3#1
+        let aggregate%array_trimmed%3#1: bytes = ((extract 2 0) res3#0)
+        let aggregate%bytes_offset%3#1: uint64 = (* 3u 8u)
+        let aggregate%encoded_element%3#1: bytes = (extract3 aggregate%array_trimmed%3#1 aggregate%bytes_offset%3#1 8u) // on error: index access is out of bounds
+        let array_item%3#0: Encoded(uint64) = aggregate%encoded_element%3#1
         let values%3#0: uint64 = (btoi array_item%3#0)
         let tmp%16#0: bool = (== values%3#0 1u)
         goto tmp%16#0 ? block@15 : block@16

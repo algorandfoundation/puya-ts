@@ -123,12 +123,17 @@ main_bool_merge@11:
     // assert(boxA.get({ default: defaultVal }) === box.get({ default: defaultVal }))
     box_get
     pushbytes "O"
-    uncover 2
-    dig 2
+    cover 2
     select
-    uncover 2
     ==
     assert
+    // tests/approvals/box-proxies.algo.ts:95
+    // boxOne = Box<string>({ key: 'one' })
+    bytec_0 // "one"
+    // tests/approvals/box-proxies.algo.ts:29
+    // let [, e] = box.maybe()
+    box_len
+    bury 1
     // tests/approvals/box-proxies.algo.ts:30
     // assert(!e)
     !
@@ -181,13 +186,11 @@ main_bool_merge@11:
     box_len
     assert // Box must have value
     assert
-    // tests/approvals/box-proxies.algo.ts:51
-    // assert(box(key).maybe()[1])
+    // tests/approvals/box-proxies.algo.ts:53
+    // assert(box(key).value === boxMap(key).value)
     bytec_3 // "twowhat?"
     box_get
     pop
-    // tests/approvals/box-proxies.algo.ts:53
-    // assert(box(key).value === boxMap(key).value)
     ==
     assert
     // tests/approvals/box-proxies.algo.ts:55

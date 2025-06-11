@@ -168,7 +168,7 @@ subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.testArray() -> 
         let concat%0#0: Encoded(uint8[32][]) = (concat slot_contents%0#0 tmp%0#0) // on error: max array length exceeded
         write(b#0, concat%0#0)
         let slot_contents%1#0: Encoded(uint8[32][]) = read(b#0)
-        let array_item%0#0: Encoded(uint8[32]) = slot_contents%1#0[0u]
+        let array_item%0#0: Encoded(uint8[32]) = agg_read_index(slot_contents%1#0, 0u)
         let values%0#0: bytes[32] = decode<bytes[32]>(array_item%0#0)
         let tmp%1#0: bytes = (b& a.0#0 values%0#0)
         let bitAnd#0: bytes[32] = tmp%1#0

@@ -145,7 +145,7 @@ export class ToCodeVisitor
     return `${expression.base.accept(this)}.pop()`
   }
   visitArrayExtend(expression: nodes.ArrayExtend): string {
-    return `${expression.base.accept(this)}.push(...${expression.other.accept(this)}`
+    return `${expression.base.accept(this)}.push(...${expression.other.accept(this)})`
   }
   visitArrayLength(expression: nodes.ArrayLength): string {
     return `${expression.array.accept(this)}.length`

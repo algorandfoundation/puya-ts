@@ -106,7 +106,7 @@ export class NativeArraysAlgo extends Contract {
     const noNeedClone = readOnly
 
     // This should require a clone, otherwise updates to mutable will be visible in `needClone2`
-    const needClone2: readonly uint64[] = mutable
+    const needClone2: readonly uint64[] = clone(mutable)
 
     mutable[1] += 2
 

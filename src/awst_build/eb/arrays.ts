@@ -139,7 +139,7 @@ export class NativeArrayExpressionBuilder extends NativeArrayLikeExpressionBuild
     if (ptype.equals(this.ptype)) return this
     if (ptype instanceof ReadonlyArrayPType && this.ptype.elementType.equals(ptype.elementType)) {
       return instanceEb(
-        nodeFactory.reinterpretCast({
+        nodeFactory.convertArray({
           expr: this.resolve(),
           sourceLocation: this.sourceLocation,
           wtype: ptype.wtype,

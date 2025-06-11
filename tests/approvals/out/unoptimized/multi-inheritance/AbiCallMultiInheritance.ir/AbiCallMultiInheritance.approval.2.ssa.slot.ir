@@ -33,9 +33,9 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let reinterpret_Encoded(uint64)%1#0: Encoded(uint64) = (txna ApplicationArgs 2)
         let tmp%14#0: uint64 = (btoi reinterpret_Encoded(uint64)%1#0)
         let tmp%15#0: uint64 = tests/approvals/multi-inheritance.algo.ts::AbiCallMultiInheritance.add(tmp%13#0, tmp%14#0)
-        let array%val_as_bytes%0#1: bytes[8] = (itob tmp%15#0)
-        let array%as_Encoded(uint64)%0#1: Encoded(uint64) = array%val_as_bytes%0#1
-        let tmp%16#0: Encoded(uint64) = array%as_Encoded(uint64)%0#1
+        let aggregate%val_as_bytes%0#1: bytes[8] = (itob tmp%15#0)
+        let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
+        let tmp%16#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#1
         let tmp%17#0: bytes = (concat 0x151f7c75 tmp%16#0)
         (log tmp%17#0)
         let tests/approvals/multi-inheritance.algo.ts::AbiCallMultiInheritance.__puya_arc4_router__%0#1: bool = 1u
@@ -81,12 +81,12 @@ subroutine tests/approvals/multi-inheritance.algo.ts::AbiCallMultiInheritance.te
         let tmp%2#0: bool = (== tmp%1#0 0x151f7c75)
         (assert tmp%2#0) // Bytes has valid prefix
         itxn_begin
-        let array%val_as_bytes%0#1: bytes[8] = (itob 1u)
-        let array%as_Encoded(uint64)%0#1: Encoded(uint64) = array%val_as_bytes%0#1
-        let tmp%4#0: Encoded(uint64) = array%as_Encoded(uint64)%0#1
-        let array%val_as_bytes%1#1: bytes[8] = (itob 2u)
-        let array%as_Encoded(uint64)%1#1: Encoded(uint64) = array%val_as_bytes%1#1
-        let tmp%5#0: Encoded(uint64) = array%as_Encoded(uint64)%1#1
+        let aggregate%val_as_bytes%0#1: bytes[8] = (itob 1u)
+        let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
+        let tmp%4#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#1
+        let aggregate%val_as_bytes%1#1: bytes[8] = (itob 2u)
+        let aggregate%as_Encoded(uint64)%1#1: Encoded(uint64) = aggregate%val_as_bytes%1#1
+        let tmp%5#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%1#1
         let inner_txn_params%1%%param_ApplicationArgs_idx_1#0: Encoded(uint64) = tmp%4#0
         let inner_txn_params%1%%param_ApplicationArgs_idx_2#0: Encoded(uint64) = tmp%5#0
         ((itxn_field ApplicationArgs) method "add(uint64,uint64)uint64")

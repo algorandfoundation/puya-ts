@@ -31,7 +31,7 @@ contract NativeArraysAlgo
     assert(arr.length == 4 and arr[0] == 1 and arr[1] == 2 and arr[2] == 3 and arr[3] == 4, comment=assert target is match for conditions)
     assert(arr[0] == 1)
     assert(arr[arr.length - 1] == 4)
-    arr.push(...<tuple>[5], arr.length
+    arr.push(...<tuple>[5]), arr.length
     assert(arr.length == 5 and arr[0] == 1 and arr[1] == 2 and arr[2] == 3 and arr[3] == 4 and arr[4] == 5, comment=assert target is match for conditions)
     top: uint64 = arr.pop()
     assert(top == 5)
@@ -97,11 +97,11 @@ contract NativeArraysAlgo
     needClone: arc4.dynamic_array<uint64> = copy(mutable)
     needClone[0]: uint64 = 5
     noNeedClone: arc4.dynamic_array<uint64> = readOnly
-    needClone2: arc4.dynamic_array<uint64> = reinterpret_cast<arc4.dynamic_array<uint64>>(mutable)
+    needClone2: arc4.dynamic_array<uint64> = convert_array(copy(mutable), wtype=arc4.dynamic_array<uint64>)
     mutable[1]: uint64 = mutable[1] + 2
     assert(mutable[1] != needClone2[1], comment=These should not match)
     tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveMutable(mutable)
-    tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveReadonly(reinterpret_cast<arc4.dynamic_array<uint64>>(mutable))
+    tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveReadonly(convert_array(mutable, wtype=arc4.dynamic_array<uint64>))
     tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveReadonly(readOnly)
   }
   
