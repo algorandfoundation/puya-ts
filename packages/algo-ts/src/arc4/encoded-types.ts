@@ -80,9 +80,25 @@ type NativeForArc4Int<N extends BitSize> = N extends UintBitSize ? uint64 : bigu
 type CompatForArc4Int<N extends BitSize> = N extends UintBitSize ? Uint64Compat : BigUintCompat
 
 /**
+ * @hidden
+ */
+const TypeProperty = Symbol('ARC4Type')
+
+/**
  * A base type for ARC4 encoded values
  */
 export abstract class ARC4Encoded implements BytesBacked {
+  /**
+   * @hidden
+   *
+   * Since TypeScript is structurally typed, different ARC4Encodeds with compatible
+   * structures will often be assignable to one and another and this is generally
+   * not desirable. The TypeProperty property should be used to declare a literal value
+   * (usually the class name) on each distinct ARC4Encoded class to ensure they are
+   * structurally different.
+   */
+  abstract [TypeProperty]?: string
+
   /**
    * Retrieve the encoded bytes for this type
    */
@@ -95,6 +111,9 @@ export abstract class ARC4Encoded implements BytesBacked {
  * A utf8 encoded string prefixed with its length expressed as a 2 byte uint
  */
 export class Str extends ARC4Encoded {
+  /** @hidden */
+  [TypeProperty]?: 'arc4.Str'
+
   /**
    * Create a new Str instance
    * @param s The native string to initialize this Str from
@@ -115,6 +134,9 @@ export class Str extends ARC4Encoded {
  * A fixed bit size unsigned int
  */
 export class UintN<N extends BitSize> extends ARC4Encoded {
+  /** @hidden */
+  [TypeProperty]?: `arc4.UintN<${N}>`
+
   /**
    * Create a new UintN instance
    * @param v The native uint64 or biguint value to initialize this UintN from
@@ -170,6 +192,9 @@ export class UintN256 extends UintN<256> {}
  * A fixed bit size, fixed decimal unsigned value
  */
 export class UFixedNxM<N extends BitSize, M extends number> extends ARC4Encoded {
+  /** @hidden */
+  [TypeProperty]?: `arc4.UFixedNxM<${N}x${M}>`
+
   /**
    * Create a new UFixedNxM value
    * @param v A string representing the integer and fractional portion of the number
@@ -190,6 +215,9 @@ export class UFixedNxM<N extends BitSize, M extends number> extends ARC4Encoded 
  * A boolean value
  */
 export class Bool extends ARC4Encoded {
+  /** @hidden */
+  [TypeProperty]?: 'arc4.Bool'
+
   /**
    * Create a new Bool value
    * @param v The native boolean to initialize this value from
@@ -295,6 +323,9 @@ abstract class Arc4ArrayBase<TItem extends ARC4Encoded> extends ARC4Encoded impl
  * @typeParam TLength The fixed length of the array
  */
 export class StaticArray<TItem extends ARC4Encoded, TLength extends number> extends Arc4ArrayBase<TItem> {
+  /** @hidden */
+  [TypeProperty]?: `arc4.StaticArray<${TItem[typeof TypeProperty]}, ${TLength}>`
+
   /**
    * Create a new StaticArray instance
    */
@@ -322,6 +353,9 @@ export class StaticArray<TItem extends ARC4Encoded, TLength extends number> exte
  * @typeParam TItem The type of a single item in the array
  */
 export class DynamicArray<TItem extends ARC4Encoded> extends Arc4ArrayBase<TItem> {
+  /** @hidden */
+  [TypeProperty]?: `arc4.DynamicArray<${TItem[typeof TypeProperty]}>`
+
   /**
    * Create a new DynamicArray with the specified items
    * @param items The initial items for the array
@@ -355,10 +389,22 @@ export class DynamicArray<TItem extends ARC4Encoded> extends Arc4ArrayBase<TItem
 }
 
 /**
+ * @hidden
+ */
+type ExpandTupleType<T extends readonly ARC4Encoded[]> = T extends [infer T1 extends ARC4Encoded, ...infer TRest extends ARC4Encoded[]]
+  ? TRest extends []
+    ? `${T1[typeof TypeProperty]}`
+    : `${T1[typeof TypeProperty]},${ExpandTupleType<TRest>}`
+  : ''
+
+/**
  * An arc4 encoded tuple of values
  * @typeParam TTuple A type representing the native tuple of item types
  */
 export class Tuple<const TTuple extends readonly [ARC4Encoded, ...ARC4Encoded[]]> extends ARC4Encoded {
+  /** @hidden */
+  [TypeProperty]?: `arc4.Tuple<${ExpandTupleType<TTuple>}>`
+
   /**
    * Create a new Tuple with the default zero values for items
    */
@@ -399,6 +445,9 @@ export class Tuple<const TTuple extends readonly [ARC4Encoded, ...ARC4Encoded[]]
  * A 32 byte Algorand Address
  */
 export class Address extends Arc4ArrayBase<Byte> {
+  /** @hidden */
+  [TypeProperty]?: 'arc4.Address'
+
   /**
    * Create a new Address instance
    * @param value An Account, base 32 address string, or the address bytes
@@ -419,6 +468,9 @@ export class Address extends Arc4ArrayBase<Byte> {
  * The base type for arc4 structs
  */
 class StructBase<T> extends ARC4Encoded {
+  /** @hidden */
+  [TypeProperty]?: 'arc4.Struct'
+
   get native(): T {
     throw new NoImplementation()
   }
@@ -437,7 +489,7 @@ type StructConstructor = {
  *
  * Usage:
  * ```
- * class MyStruct extends Struct<{ x: UintN8, y: Str, z: DynamicBytes }> {}
+ * class MyStruct extends Struct<{ x: UintN8, y: Str, z: DynamicBytes }> { }
  * ```
  */
 export const Struct = StructBase as unknown as StructConstructor
@@ -446,6 +498,9 @@ export const Struct = StructBase as unknown as StructConstructor
  * A variable length sequence of bytes prefixed with its length expressed as a 2 byte uint
  */
 export class DynamicBytes extends Arc4ArrayBase<Byte> {
+  /** @hidden */
+  [TypeProperty]?: 'arc4.DynamicBytes'
+
   /**
    * Create a new DynamicBytes instance
    * @param value The bytes or utf8 interpreted string to initialize this type
@@ -474,6 +529,9 @@ export class DynamicBytes extends Arc4ArrayBase<Byte> {
  * A fixed length sequence of bytes
  */
 export class StaticBytes<TLength extends uint64 = 0> extends Arc4ArrayBase<Byte> {
+  /** @hidden */
+  [TypeProperty]?: `arc4.StaticBytes<${TLength}>`
+
   /**
    * Create a new StaticBytes instance from native bytes
    * @param value The bytes
