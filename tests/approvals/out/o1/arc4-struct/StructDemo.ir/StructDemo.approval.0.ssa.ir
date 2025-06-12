@@ -290,9 +290,9 @@ subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.testVectorCreationAnd
     block@0: // L11
         let tmp%0#0: Encoded(uint64,uint64) = encode<(uint64,uint64)>(0x0000000000000000, 0x0000000000000000)
         let v1#0: Encoded(uint64,uint64) = tmp%0#0
-        let tuple_item%0#0: Encoded(uint64) = v1#0[0]
+        let tuple_item%0#0: Encoded(uint64) = agg_read_index(v1#0, 0)
         (log tuple_item%0#0)
-        let tuple_item%1#0: Encoded(uint64) = v1#0[1]
+        let tuple_item%1#0: Encoded(uint64) = agg_read_index(v1#0, 1)
         (log tuple_item%1#0)
         let tmp%1#0: Encoded(uint64,uint64) = encode<(uint64,uint64)>(0x0000000000000000, 0x0000000000000000)
         let v2#0: Encoded(uint64,uint64) = tmp%1#0
@@ -302,15 +302,15 @@ subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.testVectorCreationAnd
 
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.addVectors(v1: Encoded(uint64,uint64), v2: Encoded(uint64,uint64)) -> Encoded(uint64,uint64):
     block@0: // L19
-        let tuple_item%0#0: Encoded(uint64) = v1#0[0]
+        let tuple_item%0#0: Encoded(uint64) = agg_read_index(v1#0, 0)
         let tmp%0#0: uint64 = decode<uint64>(tuple_item%0#0)
-        let tuple_item%1#0: Encoded(uint64) = v2#0[0]
+        let tuple_item%1#0: Encoded(uint64) = agg_read_index(v2#0, 0)
         let tmp%1#0: uint64 = decode<uint64>(tuple_item%1#0)
         let tmp%2#0: uint64 = (+ tmp%0#0 tmp%1#0)
         let tmp%3#0: Encoded(uint64) = encode<uint64>(tmp%2#0)
-        let tuple_item%2#0: Encoded(uint64) = v1#0[1]
+        let tuple_item%2#0: Encoded(uint64) = agg_read_index(v1#0, 1)
         let tmp%4#0: uint64 = decode<uint64>(tuple_item%2#0)
-        let tuple_item%3#0: Encoded(uint64) = v2#0[1]
+        let tuple_item%3#0: Encoded(uint64) = agg_read_index(v2#0, 1)
         let tmp%5#0: uint64 = decode<uint64>(tuple_item%3#0)
         let tmp%6#0: uint64 = (+ tmp%4#0 tmp%5#0)
         let tmp%7#0: Encoded(uint64) = encode<uint64>(tmp%6#0)
@@ -319,20 +319,20 @@ subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.addVectors(v1: Encode
 
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.mutateVector(v1: Encoded(uint64,uint64), newX: Encoded(uint64), newY: Encoded(uint64)) -> Encoded(uint64,uint64):
     block@0: // L26
-        let updated_tuple%0#0: Encoded(uint64,uint64) = v1#0.update((0), newX#0)
+        let updated_tuple%0#0: Encoded(uint64,uint64) = agg_write_index(v1#0, 0, newX#0)
         let v1#1: Encoded(uint64,uint64) = updated_tuple%0#0
-        let updated_tuple%1#0: Encoded(uint64,uint64) = v1#1.update((1), newY#0)
+        let updated_tuple%1#0: Encoded(uint64,uint64) = agg_write_index(v1#1, 1, newY#0)
         let v1#2: Encoded(uint64,uint64) = updated_tuple%1#0
         return v1#2
 
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.implicitCastingAndSpreading(v1: Encoded(uint64,uint64)) -> void:
     block@0: // L32
-        let tuple_item%0#0: Encoded(uint64) = v1#0[0]
-        let tuple_item%1#0: Encoded(uint64) = v1#0[1]
+        let tuple_item%0#0: Encoded(uint64) = agg_read_index(v1#0, 0)
+        let tuple_item%1#0: Encoded(uint64) = agg_read_index(v1#0, 1)
         let tmp%0#0: Encoded(uint64,uint64) = encode<(uint64,uint64)>(tuple_item%0#0, tuple_item%1#0)
         let v2#0: Encoded(uint64,uint64) = tmp%0#0
-        let tuple_item%2#0: Encoded(uint64) = v2#0[0]
-        let tuple_item%3#0: Encoded(uint64) = v2#0[1]
+        let tuple_item%2#0: Encoded(uint64) = agg_read_index(v2#0, 0)
+        let tuple_item%3#0: Encoded(uint64) = agg_read_index(v2#0, 1)
         let tmp%1#0: Encoded(uint64,uint64) = encode<(uint64,uint64)>(tuple_item%2#0, tuple_item%3#0)
         let v3#0: Encoded(uint64,uint64) = tmp%1#0
         let tmp%2#0: bool = (== v1#0 v2#0)
@@ -355,11 +355,9 @@ subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.toNative(v1: Encoded(
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.getPlugin(key: string) -> Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])):
     block@0: // L52
         let box_prefixed_key%0#0: bytes = (concat "plugins" key#0)
-        let (maybe_value%0#0: bytes, maybe_exists%0#0: bool) = box_read(box_prefixed_key%0#0)
-        (assert maybe_exists%0#0) // Box must have value
-        let copy%0#0: bytes = maybe_value%0#0
-        let value#0: Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])) = copy%0#0
-        let tuple_item%0#0: Encoded(uint64) = value#0[2]
+        let storage_value%0#0: bytes = box_read(box_prefixed_key%0#0)
+        let value#0: Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])) = storage_value%0#0
+        let tuple_item%0#0: Encoded(uint64) = agg_read_index(value#0, 2)
         let tmp%0#0: uint64 = decode<uint64>(tuple_item%0#0)
         let tmp%1#0: bool = (> tmp%0#0 0u)
         (assert tmp%1#0) // Last called not zero
@@ -367,11 +365,9 @@ subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.getPlugin(key: string
 
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.getMain() -> Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])):
     block@0: // L58
-        let (maybe_value%0#0: bytes, maybe_exists%0#0: bool) = box_read("main")
-        (assert maybe_exists%0#0) // Box must have value
-        let copy%0#0: bytes = maybe_value%0#0
-        let value#0: Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])) = copy%0#0
-        let tuple_item%0#0: Encoded(uint64) = value#0[2]
+        let storage_value%0#0: bytes = box_read("main")
+        let value#0: Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])) = storage_value%0#0
+        let tuple_item%0#0: Encoded(uint64) = agg_read_index(value#0, 2)
         let tmp%0#0: uint64 = decode<uint64>(tuple_item%0#0)
         let tmp%1#0: bool = (> tmp%0#0 0u)
         (assert tmp%1#0) // Last called not zero
@@ -381,9 +377,8 @@ subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.setLastCalled(key: st
     block@0: // L64
         let tmp%0#0: Encoded(uint64) = encode<uint64>(lastCalled#0)
         let box_prefixed_key%0#0: bytes = (concat "plugins" key#0)
-        let (maybe_value%0#0: bytes, maybe_exists%0#0: bool) = box_read(box_prefixed_key%0#0)
-        (assert maybe_exists%0#0) // Box must have value
-        let updated_tuple%0#0: Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])) = maybe_value%0#0.update((4, index#0, 2), tmp%0#0)
+        let storage_value%0#0: bytes = box_read(box_prefixed_key%0#0)
+        let updated_tuple%0#0: Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])) = agg_write_index(storage_value%0#0, 4, index#0, 2, tmp%0#0)
         (box_del box_prefixed_key%0#0)
         box_write(box_prefixed_key%0#0, updated_tuple%0#0)
         return 

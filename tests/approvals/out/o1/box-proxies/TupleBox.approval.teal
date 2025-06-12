@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 1 10 20
+    intcblock 1 0 10 20
     bytecblock "tm1a" "t1" "t2" "tm2a" 0x0005000c80000568656c6c6f0005776f726c64 "tm1b" 0x0005000a0000036162630003646566 "tm2b"
     // tests/approvals/box-proxies.algo.ts:159
     // class TupleBox extends Contract {
@@ -16,7 +16,7 @@ main:
 main_after_if_else@11:
     // tests/approvals/box-proxies.algo.ts:159
     // class TupleBox extends Contract {
-    intc_0 // 0
+    intc_1 // 0
     return
 
 main_testBoxMap_route@4:
@@ -28,7 +28,7 @@ main_testBoxMap_route@4:
     txn ApplicationID
     assert // can only call when not creating
     callsub testBoxMap
-    intc_1 // 1
+    intc_0 // 1
     return
 
 main_testBox_route@3:
@@ -40,7 +40,7 @@ main_testBox_route@3:
     txn ApplicationID
     assert // can only call when not creating
     callsub testBox
-    intc_1 // 1
+    intc_0 // 1
     return
 
 main_bare_routing@7:
@@ -51,7 +51,7 @@ main_bare_routing@7:
     txn ApplicationID
     !
     assert // can only call when creating
-    intc_1 // 1
+    intc_0 // 1
     return
 
 
@@ -220,7 +220,7 @@ testBoxMap:
     box_get
     pop
     dup
-    intc_0 // 0
+    intc_1 // 0
     extract_uint16
     dig 1
     pushint 2 // 2
@@ -247,8 +247,6 @@ testBoxMap:
     // tests/approvals/box-proxies.algo.ts:201
     // assert(this.boxMap1('a').value[2])
     pushint 32 // 32
-    getbit
-    intc_0 // 0
     getbit
     assert
     // tests/approvals/box-proxies.algo.ts:162

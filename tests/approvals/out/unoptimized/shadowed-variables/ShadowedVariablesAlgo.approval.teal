@@ -3,7 +3,7 @@
 
 // tests/approvals/shadowed-variables.algo.ts::ShadowedVariablesAlgo.approvalProgram() -> uint64:
 main:
-    intcblock 0 123
+    intcblock 123 0
     bytecblock "123" 0x
 
 main_block@0:
@@ -11,7 +11,7 @@ main_block@0:
     // const [b, u, f] = this.getValues()
     callsub getValues
     dup
-    intc_0 // 0
+    intc_1 // 0
     extract_uint16
     swap
     dup
@@ -31,21 +31,17 @@ main_block@0:
     swap
     pushint 80 // 80
     getbit
-    intc_0 // 0
-    getbit
+    swap
     // tests/approvals/shadowed-variables.algo.ts:9
     // assert(a === b, 'a should be module const (bytes)')
     bytec_0 // "123"
     uncover 3
     ==
     assert // a should be module const (bytes)
-    // tests/approvals/shadowed-variables.algo.ts:11
-    // const a = u
-    swap
     // tests/approvals/shadowed-variables.algo.ts:12
     // assert(a === 123, 'a should be local const (uint)')
     dup
-    intc_1 // 123
+    intc_0 // 123
     ==
     assert // a should be local const (uint)
     // tests/approvals/shadowed-variables.algo.ts:14
@@ -68,7 +64,7 @@ main_block@0:
     assert // a should still be modified local let (bool)
     // tests/approvals/shadowed-variables.algo.ts:22
     // assert(a === 123, 'a should be local const (uint)')
-    intc_1 // 123
+    intc_0 // 123
     ==
     assert // a should be local const (uint)
     // tests/approvals/shadowed-variables.algo.ts:24
@@ -104,11 +100,11 @@ getValues_block@0:
     bytec_1 // 0x
     swap
     concat
-    intc_1 // 123
+    intc_0 // 123
     itob
     concat
     pushbytes 0x00
-    intc_0 // 0
+    intc_1 // 0
     dup
     setbit
     concat

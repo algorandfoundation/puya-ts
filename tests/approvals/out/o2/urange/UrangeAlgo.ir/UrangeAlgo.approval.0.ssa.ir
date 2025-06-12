@@ -78,11 +78,10 @@ subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testSingleArg() -> Encoded
         goto continue_looping%0#0 ? block@2 : block@4
     block@2: // for_body_L7
         let i#0: uint64 = temp#1
-        let copy%0#0: Encoded(len+uint64[]) = results#1
         let encoded_array%1#0: Encoded(len+uint64[]) = encode<(len+uint64[])>(i#0)
         let array_length%0#0: uint64 = (extract_uint16 encoded_array%1#0 0u)
         let extract_to_end%0#0: bytes = ((extract 2 0) encoded_array%1#0)
-        let concat%0#0: Encoded(len+uint64[]) = (concat copy%0#0 extract_to_end%0#0) // on error: max array length exceeded
+        let concat%0#0: Encoded(len+uint64[]) = (concat results#1 extract_to_end%0#0) // on error: max array length exceeded
         let extract_to_end%1#0: bytes = ((extract 2 0) concat%0#0)
         let len%0#0: uint64 = (len extract_to_end%1#0)
         let div_floor%0#0: uint64 = (/ len%0#0 8u)
@@ -112,11 +111,10 @@ subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testTwoArg() -> Encoded(le
         goto continue_looping%0#0 ? block@2 : block@4
     block@2: // for_body_L14
         let i#0: uint64 = temp#1
-        let copy%0#0: Encoded(len+uint64[]) = results#1
         let encoded_array%1#0: Encoded(len+uint64[]) = encode<(len+uint64[])>(i#0)
         let array_length%0#0: uint64 = (extract_uint16 encoded_array%1#0 0u)
         let extract_to_end%0#0: bytes = ((extract 2 0) encoded_array%1#0)
-        let concat%0#0: Encoded(len+uint64[]) = (concat copy%0#0 extract_to_end%0#0) // on error: max array length exceeded
+        let concat%0#0: Encoded(len+uint64[]) = (concat results#1 extract_to_end%0#0) // on error: max array length exceeded
         let extract_to_end%1#0: bytes = ((extract 2 0) concat%0#0)
         let len%0#0: uint64 = (len extract_to_end%1#0)
         let div_floor%0#0: uint64 = (/ len%0#0 8u)
@@ -146,11 +144,10 @@ subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testThreeArg() -> Encoded(
         goto continue_looping%0#0 ? block@2 : block@4
     block@2: // for_body_L21
         let i#0: uint64 = temp#1
-        let copy%0#0: Encoded(len+uint64[]) = results#1
         let encoded_array%1#0: Encoded(len+uint64[]) = encode<(len+uint64[])>(i#0)
         let array_length%0#0: uint64 = (extract_uint16 encoded_array%1#0 0u)
         let extract_to_end%0#0: bytes = ((extract 2 0) encoded_array%1#0)
-        let concat%0#0: Encoded(len+uint64[]) = (concat copy%0#0 extract_to_end%0#0) // on error: max array length exceeded
+        let concat%0#0: Encoded(len+uint64[]) = (concat results#1 extract_to_end%0#0) // on error: max array length exceeded
         let extract_to_end%1#0: bytes = ((extract 2 0) concat%0#0)
         let len%0#0: uint64 = (len extract_to_end%1#0)
         let div_floor%0#0: uint64 = (/ len%0#0 8u)

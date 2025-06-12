@@ -292,11 +292,11 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testVectorC
     block@0: // L13
         let tmp%0#0: Encoded(uint64,uint64) = encode<(uint64,uint64)>(0u, 1u)
         let v1#0: Encoded(uint64,uint64) = tmp%0#0
-        let tuple_item%0#0: Encoded(uint64) = v1#0[0]
+        let tuple_item%0#0: Encoded(uint64) = agg_read_index(v1#0, 0)
         let values%0#0: uint64 = decode<uint64>(tuple_item%0#0)
         let tmp%1#0: bytes[8] = (itob values%0#0)
         (log tmp%1#0)
-        let tuple_item%1#0: Encoded(uint64) = v1#0[1]
+        let tuple_item%1#0: Encoded(uint64) = agg_read_index(v1#0, 1)
         let values%1#0: uint64 = decode<uint64>(tuple_item%1#0)
         let tmp%2#0: bytes[8] = (itob values%1#0)
         (log tmp%2#0)
@@ -308,14 +308,14 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testVectorC
 
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.addVectors(v1: Encoded(uint64,uint64), v2: Encoded(uint64,uint64)) -> Encoded(uint64,uint64):
     block@0: // L21
-        let tuple_item%0#0: Encoded(uint64) = v1#0[0]
+        let tuple_item%0#0: Encoded(uint64) = agg_read_index(v1#0, 0)
         let values%0#0: uint64 = decode<uint64>(tuple_item%0#0)
-        let tuple_item%1#0: Encoded(uint64) = v2#0[0]
+        let tuple_item%1#0: Encoded(uint64) = agg_read_index(v2#0, 0)
         let values%1#0: uint64 = decode<uint64>(tuple_item%1#0)
         let tmp%0#0: uint64 = (+ values%0#0 values%1#0)
-        let tuple_item%2#0: Encoded(uint64) = v1#0[1]
+        let tuple_item%2#0: Encoded(uint64) = agg_read_index(v1#0, 1)
         let values%2#0: uint64 = decode<uint64>(tuple_item%2#0)
-        let tuple_item%3#0: Encoded(uint64) = v2#0[1]
+        let tuple_item%3#0: Encoded(uint64) = agg_read_index(v2#0, 1)
         let values%3#0: uint64 = decode<uint64>(tuple_item%3#0)
         let tmp%1#0: uint64 = (+ values%2#0 values%3#0)
         let tmp%2#0: Encoded(uint64,uint64) = encode<(uint64,uint64)>(tmp%0#0, tmp%1#0)
@@ -324,66 +324,66 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.addVectors(
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.mutateVector(v1: Encoded(uint64,uint64), newX: uint64, newY: uint64) -> Encoded(uint64,uint64):
     block@0: // L28
         let encoded_value%0#0: Encoded(uint64) = encode<uint64>(newX#0)
-        let updated_tuple%0#0: Encoded(uint64,uint64) = v1#0.update((0), encoded_value%0#0)
+        let updated_tuple%0#0: Encoded(uint64,uint64) = agg_write_index(v1#0, 0, encoded_value%0#0)
         let v1#1: Encoded(uint64,uint64) = updated_tuple%0#0
         let encoded_value%1#0: Encoded(uint64) = encode<uint64>(newY#0)
-        let updated_tuple%1#0: Encoded(uint64,uint64) = v1#1.update((1), encoded_value%1#0)
+        let updated_tuple%1#0: Encoded(uint64,uint64) = agg_write_index(v1#1, 1, encoded_value%1#0)
         let v1#2: Encoded(uint64,uint64) = updated_tuple%1#0
         return v1#2
 
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.implicitCastingAndSpreading(v1: Encoded(uint64,uint64)) -> void:
     block@0: // L34
-        let tuple_item%0#0: Encoded(uint64) = v1#0[0]
+        let tuple_item%0#0: Encoded(uint64) = agg_read_index(v1#0, 0)
         let values%0#0: uint64 = decode<uint64>(tuple_item%0#0)
-        let tuple_item%1#0: Encoded(uint64) = v1#0[1]
+        let tuple_item%1#0: Encoded(uint64) = agg_read_index(v1#0, 1)
         let values%1#0: uint64 = decode<uint64>(tuple_item%1#0)
         let tmp%0#0: Encoded(uint64,uint64) = encode<(uint64,uint64)>(values%0#0, values%1#0)
         let v2#0: Encoded(uint64,uint64) = tmp%0#0
-        let tuple_item%2#0: Encoded(uint64) = v2#0[0]
+        let tuple_item%2#0: Encoded(uint64) = agg_read_index(v2#0, 0)
         let values%2#0: uint64 = decode<uint64>(tuple_item%2#0)
-        let tuple_item%3#0: Encoded(uint64) = v2#0[1]
+        let tuple_item%3#0: Encoded(uint64) = agg_read_index(v2#0, 1)
         let values%3#0: uint64 = decode<uint64>(tuple_item%3#0)
         let tmp%1#0: Encoded(uint64,uint64) = encode<(uint64,uint64)>(values%2#0, values%3#0)
         let v3#0: Encoded(uint64,uint64) = tmp%1#0
-        let tuple_item%4#0: Encoded(uint64) = v1#0[0]
+        let tuple_item%4#0: Encoded(uint64) = agg_read_index(v1#0, 0)
         let values%4#0: uint64 = decode<uint64>(tuple_item%4#0)
-        let tuple_item%5#0: Encoded(uint64) = v2#0[0]
+        let tuple_item%5#0: Encoded(uint64) = agg_read_index(v2#0, 0)
         let values%5#0: uint64 = decode<uint64>(tuple_item%5#0)
         let tmp%2#0: bool = (== values%4#0 values%5#0)
         (assert tmp%2#0)
-        let tuple_item%6#0: Encoded(uint64) = v1#0[1]
+        let tuple_item%6#0: Encoded(uint64) = agg_read_index(v1#0, 1)
         let values%6#0: uint64 = decode<uint64>(tuple_item%6#0)
-        let tuple_item%7#0: Encoded(uint64) = v2#0[1]
+        let tuple_item%7#0: Encoded(uint64) = agg_read_index(v2#0, 1)
         let values%7#0: uint64 = decode<uint64>(tuple_item%7#0)
         let tmp%3#0: bool = (== values%6#0 values%7#0)
         (assert tmp%3#0)
         let tmp%4#0: bool = (== v1#0 v2#0)
         (assert tmp%4#0)
-        let tuple_item%8#0: Encoded(uint64) = v3#0[0]
+        let tuple_item%8#0: Encoded(uint64) = agg_read_index(v3#0, 0)
         let values%8#0: uint64 = decode<uint64>(tuple_item%8#0)
-        let tuple_item%9#0: Encoded(uint64) = v1#0[0]
+        let tuple_item%9#0: Encoded(uint64) = agg_read_index(v1#0, 0)
         let values%9#0: uint64 = decode<uint64>(tuple_item%9#0)
         let tmp%5#0: bool = (== values%8#0 values%9#0)
         (assert tmp%5#0)
-        let tuple_item%10#0: Encoded(uint64) = v3#0[1]
+        let tuple_item%10#0: Encoded(uint64) = agg_read_index(v3#0, 1)
         let values%10#0: uint64 = decode<uint64>(tuple_item%10#0)
-        let tuple_item%11#0: Encoded(uint64) = v1#0[1]
+        let tuple_item%11#0: Encoded(uint64) = agg_read_index(v1#0, 1)
         let values%11#0: uint64 = decode<uint64>(tuple_item%11#0)
         let tmp%6#0: bool = (== values%10#0 values%11#0)
         (assert tmp%6#0)
         let tmp%7#0: bool = (== v3#0 v1#0)
         (assert tmp%7#0)
-        let tuple_item%12#0: Encoded(uint64) = v3#0[0]
+        let tuple_item%12#0: Encoded(uint64) = agg_read_index(v3#0, 0)
         let values%12#0: uint64 = decode<uint64>(tuple_item%12#0)
         let x#0: uint64 = values%12#0
-        let tuple_item%13#0: Encoded(uint64) = v3#0[1]
+        let tuple_item%13#0: Encoded(uint64) = agg_read_index(v3#0, 1)
         let values%13#0: uint64 = decode<uint64>(tuple_item%13#0)
         let y#0: uint64 = values%13#0
-        let tuple_item%14#0: Encoded(uint64) = v3#0[0]
+        let tuple_item%14#0: Encoded(uint64) = agg_read_index(v3#0, 0)
         let values%14#0: uint64 = decode<uint64>(tuple_item%14#0)
         let tmp%8#0: bool = (== x#0 values%14#0)
         (assert tmp%8#0)
-        let tuple_item%15#0: Encoded(uint64) = v3#0[1]
+        let tuple_item%15#0: Encoded(uint64) = agg_read_index(v3#0, 1)
         let values%15#0: uint64 = decode<uint64>(tuple_item%15#0)
         let tmp%9#0: bool = (== y#0 values%15#0)
         (assert tmp%9#0)
@@ -391,43 +391,41 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.implicitCas
 
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testNestedObjects(vp: Encoded((uint64,uint64),(uint64,uint64))) -> void:
     block@0: // L49
-        let tuple_item%0#0: Encoded(uint64,uint64) = vp#0[0]
-        let tuple_item%1#0: Encoded(uint64) = tuple_item%0#0[0]
+        let tuple_item%0#0: Encoded(uint64,uint64) = agg_read_index(vp#0, 0)
+        let tuple_item%1#0: Encoded(uint64) = agg_read_index(tuple_item%0#0, 0)
         let values%0#0: uint64 = decode<uint64>(tuple_item%1#0)
-        let tuple_item%2#0: Encoded(uint64,uint64) = vp#0[0]
-        let tuple_item%3#0: Encoded(uint64) = tuple_item%2#0[1]
+        let tuple_item%2#0: Encoded(uint64,uint64) = agg_read_index(vp#0, 0)
+        let tuple_item%3#0: Encoded(uint64) = agg_read_index(tuple_item%2#0, 1)
         let values%1#0: uint64 = decode<uint64>(tuple_item%3#0)
         let tmp%0#0: Encoded(uint64,uint64) = encode<(uint64,uint64)>(values%0#0, values%1#0)
         let v1#0: Encoded(uint64,uint64) = tmp%0#0
-        let tuple_item%4#0: Encoded(uint64,uint64) = vp#0[1]
-        let tuple_item%5#0: Encoded(uint64) = tuple_item%4#0[1]
+        let tuple_item%4#0: Encoded(uint64,uint64) = agg_read_index(vp#0, 1)
+        let tuple_item%5#0: Encoded(uint64) = agg_read_index(tuple_item%4#0, 1)
         let values%2#0: uint64 = decode<uint64>(tuple_item%5#0)
-        let tuple_item%6#0: Encoded(uint64,uint64) = vp#0[1]
-        let tuple_item%7#0: Encoded(uint64) = tuple_item%6#0[0]
+        let tuple_item%6#0: Encoded(uint64,uint64) = agg_read_index(vp#0, 1)
+        let tuple_item%7#0: Encoded(uint64) = agg_read_index(tuple_item%6#0, 0)
         let values%3#0: uint64 = decode<uint64>(tuple_item%7#0)
         let tmp%1#0: Encoded(uint64,uint64) = encode<(uint64,uint64)>(values%3#0, values%2#0)
         let p1#0: Encoded(uint64,uint64) = tmp%1#0
-        let copy%0#0: Encoded(uint64,uint64) = v1#0
-        let copy%1#0: Encoded(uint64,uint64) = p1#0
-        let tmp%2#0: Encoded((uint64,uint64),(uint64,uint64)) = encode<((uint64,uint64),(uint64,uint64))>(copy%0#0, copy%1#0)
+        let tmp%2#0: Encoded((uint64,uint64),(uint64,uint64)) = encode<((uint64,uint64),(uint64,uint64))>(v1#0, p1#0)
         let vp1#0: Encoded((uint64,uint64),(uint64,uint64)) = tmp%2#0
-        let tuple_item%8#0: Encoded(uint64,uint64) = vp1#0[0]
-        let tuple_item%9#0: Encoded(uint64) = tuple_item%8#0[0]
+        let tuple_item%8#0: Encoded(uint64,uint64) = agg_read_index(vp1#0, 0)
+        let tuple_item%9#0: Encoded(uint64) = agg_read_index(tuple_item%8#0, 0)
         let values%4#0: uint64 = decode<uint64>(tuple_item%9#0)
         let tmp%3#0: bytes[8] = (itob values%4#0)
         (log tmp%3#0)
-        let tuple_item%10#0: Encoded(uint64,uint64) = vp1#0[0]
-        let tuple_item%11#0: Encoded(uint64) = tuple_item%10#0[1]
+        let tuple_item%10#0: Encoded(uint64,uint64) = agg_read_index(vp1#0, 0)
+        let tuple_item%11#0: Encoded(uint64) = agg_read_index(tuple_item%10#0, 1)
         let values%5#0: uint64 = decode<uint64>(tuple_item%11#0)
         let tmp%4#0: bytes[8] = (itob values%5#0)
         (log tmp%4#0)
-        let tuple_item%12#0: Encoded(uint64,uint64) = vp1#0[1]
-        let tuple_item%13#0: Encoded(uint64) = tuple_item%12#0[1]
+        let tuple_item%12#0: Encoded(uint64,uint64) = agg_read_index(vp1#0, 1)
+        let tuple_item%13#0: Encoded(uint64) = agg_read_index(tuple_item%12#0, 1)
         let values%6#0: uint64 = decode<uint64>(tuple_item%13#0)
         let tmp%5#0: bytes[8] = (itob values%6#0)
         (log tmp%5#0)
-        let tuple_item%14#0: Encoded(uint64,uint64) = vp1#0[1]
-        let tuple_item%15#0: Encoded(uint64) = tuple_item%14#0[0]
+        let tuple_item%14#0: Encoded(uint64,uint64) = agg_read_index(vp1#0, 1)
+        let tuple_item%15#0: Encoded(uint64) = agg_read_index(tuple_item%14#0, 0)
         let values%7#0: uint64 = decode<uint64>(tuple_item%15#0)
         let tmp%6#0: bytes[8] = (itob values%7#0)
         (log tmp%6#0)
@@ -451,13 +449,13 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testAssertM
         let b#0: uint64 = tmp%0#0
         let tmp%1#0: Encoded(uint64,uint64) = encode<(uint64,uint64)>(b#0, b#0)
         let obj#0: Encoded(uint64,uint64) = tmp%1#0
-        let tuple_item%0#0: Encoded(uint64) = obj#0[1]
+        let tuple_item%0#0: Encoded(uint64) = agg_read_index(obj#0, 1)
         let values%0#0: uint64 = decode<uint64>(tuple_item%0#0)
         let tmp%2#0: uint64 = (* x#0 2u)
         let tmp%3#0: bool = (== values%0#0 tmp%2#0)
         goto tmp%3#0 ? block@1 : block@3
     block@1: // and_contd_L78
-        let tuple_item%1#0: Encoded(uint64) = obj#0[0]
+        let tuple_item%1#0: Encoded(uint64) = agg_read_index(obj#0, 0)
         let values%1#0: uint64 = decode<uint64>(tuple_item%1#0)
         let tmp%4#0: uint64 = (* x#0 2u)
         let tmp%5#0: bool = (== values%1#0 tmp%4#0)
@@ -471,22 +469,22 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testAssertM
     block@4: // bool_merge_L78
         let and_result%0#2: bool = φ(and_result%0#0 <- block@2, and_result%0#1 <- block@3)
         (assert and_result%0#2) // assert target is match for conditions
-        let tuple_item%2#0: Encoded(uint64) = obj#0[1]
+        let tuple_item%2#0: Encoded(uint64) = agg_read_index(obj#0, 1)
         let values%2#0: uint64 = decode<uint64>(tuple_item%2#0)
-        let tuple_item%3#0: Encoded(uint64) = obj#0[0]
+        let tuple_item%3#0: Encoded(uint64) = agg_read_index(obj#0, 0)
         let values%3#0: uint64 = decode<uint64>(tuple_item%3#0)
         let tmp%6#0: Encoded(uint64,uint64) = encode<(uint64,uint64)>(values%2#0, values%3#0)
         let v#0: Encoded(uint64,uint64) = tmp%6#0
-        let tuple_item%4#0: Encoded(uint64) = obj#0[0]
+        let tuple_item%4#0: Encoded(uint64) = agg_read_index(obj#0, 0)
         let values%4#0: uint64 = decode<uint64>(tuple_item%4#0)
-        let tuple_item%5#0: Encoded(uint64) = v#0[1]
+        let tuple_item%5#0: Encoded(uint64) = agg_read_index(v#0, 1)
         let values%5#0: uint64 = decode<uint64>(tuple_item%5#0)
         let tmp%7#0: bool = (== values%4#0 values%5#0)
         goto tmp%7#0 ? block@5 : block@7
     block@5: // and_contd_L84
-        let tuple_item%6#0: Encoded(uint64) = obj#0[1]
+        let tuple_item%6#0: Encoded(uint64) = agg_read_index(obj#0, 1)
         let values%6#0: uint64 = decode<uint64>(tuple_item%6#0)
-        let tuple_item%7#0: Encoded(uint64) = v#0[0]
+        let tuple_item%7#0: Encoded(uint64) = agg_read_index(v#0, 0)
         let values%7#0: uint64 = decode<uint64>(tuple_item%7#0)
         let tmp%8#0: bool = (== values%6#0 values%7#0)
         goto tmp%8#0 ? block@6 : block@7
@@ -499,11 +497,11 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testAssertM
     block@8: // bool_merge_L84
         let and_result%1#2: bool = φ(and_result%1#0 <- block@6, and_result%1#1 <- block@7)
         (assert and_result%1#2) // assert target is match for conditions
-        let tuple_item%8#0: Encoded(uint64) = obj#0[1]
+        let tuple_item%8#0: Encoded(uint64) = agg_read_index(obj#0, 1)
         let values%8#0: uint64 = decode<uint64>(tuple_item%8#0)
         let tmp%9#0: bool = (> values%8#0 x#0)
         (assert tmp%9#0) // assert target is match for conditions
-        let tuple_item%9#0: Encoded(uint64) = obj#0[0]
+        let tuple_item%9#0: Encoded(uint64) = agg_read_index(obj#0, 0)
         let values%9#0: uint64 = decode<uint64>(tuple_item%9#0)
         let tmp%10#0: bool = (> values%9#0 x#0)
         (assert tmp%10#0) // assert target is match for conditions
@@ -511,15 +509,15 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testAssertM
 
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testArc4Encoding(p: Encoded(uint64,uint64)) -> void:
     block@0: // L89
-        let tuple_item%0#0: Encoded(uint64) = p#0[1]
+        let tuple_item%0#0: Encoded(uint64) = agg_read_index(p#0, 1)
         let values%0#0: uint64 = decode<uint64>(tuple_item%0#0)
-        let tuple_item%1#0: Encoded(uint64) = p#0[0]
+        let tuple_item%1#0: Encoded(uint64) = agg_read_index(p#0, 0)
         let values%1#0: uint64 = decode<uint64>(tuple_item%1#0)
         let tmp%0#0: bool = (!= values%0#0 values%1#0)
         (assert tmp%0#0) // For the purpose of this test, a should not equal b
-        let tuple_item%2#0: Encoded(uint64) = p#0[1]
+        let tuple_item%2#0: Encoded(uint64) = agg_read_index(p#0, 1)
         let values%2#0: uint64 = decode<uint64>(tuple_item%2#0)
-        let tuple_item%3#0: Encoded(uint64) = p#0[0]
+        let tuple_item%3#0: Encoded(uint64) = agg_read_index(p#0, 0)
         let values%3#0: uint64 = decode<uint64>(tuple_item%3#0)
         let tmp%1#0: Encoded(uint64,uint64) = encode<(uint64,uint64)>(values%2#0, values%3#0)
         let obj#0: Encoded(uint64,uint64) = tmp%1#0
@@ -543,11 +541,9 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testArc4Enc
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.getPlugin(key: string) -> Encoded(uint64,uint64,uint64,bool1):
     block@0: // L104
         let box_prefixed_key%0#0: bytes = (concat "plugins" key#0)
-        let (maybe_value%0#0: bytes, maybe_exists%0#0: bool) = box_read(box_prefixed_key%0#0)
-        (assert maybe_exists%0#0) // Box must have value
-        let copy%0#0: bytes = maybe_value%0#0
-        let value#0: Encoded(uint64,uint64,uint64,bool1) = copy%0#0
-        let tuple_item%0#0: Encoded(uint64) = value#0[2]
+        let storage_value%0#0: bytes = box_read(box_prefixed_key%0#0)
+        let value#0: Encoded(uint64,uint64,uint64,bool1) = storage_value%0#0
+        let tuple_item%0#0: Encoded(uint64) = agg_read_index(value#0, 2)
         let tmp%0#0: uint64 = decode<uint64>(tuple_item%0#0)
         let tmp%1#0: bool = (> tmp%0#0 0u)
         (assert tmp%1#0) // Last called not zero
@@ -555,11 +551,9 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.getPlugin(k
 
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.getMain() -> Encoded(uint64,uint64,uint64,bool1):
     block@0: // L110
-        let (maybe_value%0#0: bytes, maybe_exists%0#0: bool) = box_read("main")
-        (assert maybe_exists%0#0) // Box must have value
-        let copy%0#0: bytes = maybe_value%0#0
-        let value#0: Encoded(uint64,uint64,uint64,bool1) = copy%0#0
-        let tuple_item%0#0: Encoded(uint64) = value#0[2]
+        let storage_value%0#0: bytes = box_read("main")
+        let value#0: Encoded(uint64,uint64,uint64,bool1) = storage_value%0#0
+        let tuple_item%0#0: Encoded(uint64) = agg_read_index(value#0, 2)
         let tmp%0#0: uint64 = decode<uint64>(tuple_item%0#0)
         let tmp%1#0: bool = (> tmp%0#0 0u)
         (assert tmp%1#0) // Last called not zero

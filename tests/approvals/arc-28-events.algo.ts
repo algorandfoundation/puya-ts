@@ -38,6 +38,7 @@ class EventEmitter extends Contract {
   }
 
   emitDynamicBytes(x: bytes, y: DynamicBytes) {
+    // this throws an error in python and requires `_HasAssignmentVisitor.check(emit)` in arc4 copy validator
     emit('DB(byte[],byte[])', x, y)
   }
 }

@@ -14,8 +14,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let boxForCaller#0: bytes = (txn Sender)
         (box_create boxForCaller#0 4u)
         (box_replace boxForCaller#0 0u 0x7b)
-        let (maybe_value%0#0: bytes, maybe_exists%0#0: bool) = (box_get boxForCaller#0)
-        let tmp%0#2: uint64 = (getbyte maybe_value%0#0 0u)
+        let (aggregate%box_get%0#1: bytes, aggregate%box_get%1#1: bool) = (box_get boxForCaller#0)
+        let tmp%0#2: uint64 = (getbyte aggregate%box_get%0#1 0u)
         let tmp%1#1: bool = (== tmp%0#2 123u)
         (assert tmp%1#1) // First array item in box should be 123
         let tests/approvals/box-proxies.algo.ts::BoxToRefTest.__puya_arc4_router__%0#0: bool = 1u

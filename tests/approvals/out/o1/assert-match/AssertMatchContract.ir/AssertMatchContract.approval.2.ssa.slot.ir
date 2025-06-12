@@ -17,8 +17,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let gtxn_type_matches%0#0: bool = (== gtxn_type%0#0 pay)
         (assert gtxn_type_matches%0#0) // transaction type is pay
         let tmp%8#0: bool = tests/approvals/assert-match.algo.ts::AssertMatchContract.testPay(gtxn_idx%0#0)
-        let array%encoded_bool%0#1: bytes[1] = (setbit 0x00 0u tmp%8#0)
-        let tmp%10#0: bytes = (concat 0x151f7c75 array%encoded_bool%0#1)
+        let aggregate%encoded_bool%0#1: bytes[1] = (setbit 0x00 0u tmp%8#0)
+        let tmp%10#0: bytes = (concat 0x151f7c75 aggregate%encoded_bool%0#1)
         (log tmp%10#0)
         let tests/approvals/assert-match.algo.ts::AssertMatchContract.__puya_arc4_router__%0#0: bool = 1u
         goto block@11

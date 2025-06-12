@@ -13,24 +13,24 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%5#0) // can only call when not creating
         let reinterpret_Encoded(uint64,(uint512,uint512))%0#0: Encoded(uint64,(uint512,uint512)) = (txna ApplicationArgs 1)
         let arg.0#0: uint64 = (extract_uint64 reinterpret_Encoded(uint64,(uint512,uint512))%0#0 0u)
-        let array%extract%1#1: bytes = ((extract 8 128) reinterpret_Encoded(uint64,(uint512,uint512))%0#0)
-        let arg.1.0#0: biguint = ((extract 0 64) array%extract%1#1)
-        let arg.1.1#0: biguint = ((extract 64 64) array%extract%1#1)
-        let array%val_as_bytes%0#1: bytes[8] = (itob arg.0#0)
-        let array%value_len%0#1: uint64 = (len arg.1.0#0)
-        let array%len_ok%0#1: bool = (<= array%value_len%0#1 64u)
-        (assert array%len_ok%0#1) // overflow
-        let array%bzero%0#1: bytes = (bzero 64u)
-        let array%arc4_encoded%0#1: bytes[64] = (b| arg.1.0#0 array%bzero%0#1)
-        let array%value_len%1#1: uint64 = (len arg.1.1#0)
-        let array%len_ok%1#1: bool = (<= array%value_len%1#1 64u)
-        (assert array%len_ok%1#1) // overflow
-        let array%arc4_encoded%1#1: bytes[64] = (b| arg.1.1#0 array%bzero%0#1)
-        let array%encoded%2#1: Encoded(uint512,uint512) = (concat array%arc4_encoded%0#1 array%arc4_encoded%1#1)
-        let array%encoded%4#1: Encoded(uint64,(uint512,uint512)) = (concat array%val_as_bytes%0#1 array%encoded%2#1)
-        let array%encoded%5#1: Encoded(uint64,(uint512,uint512),uint64) = (concat array%encoded%4#1 array%val_as_bytes%0#1)
-        let array%encoded%6#1: Encoded(uint64,(uint512,uint512),uint64,uint512) = (concat array%encoded%5#1 array%arc4_encoded%0#1)
-        let tmp%16#0: bytes = (concat 0x151f7c75 array%encoded%6#1)
+        let aggregate%extract%1#1: bytes = ((extract 8 128) reinterpret_Encoded(uint64,(uint512,uint512))%0#0)
+        let arg.1.0#0: biguint = ((extract 0 64) aggregate%extract%1#1)
+        let arg.1.1#0: biguint = ((extract 64 64) aggregate%extract%1#1)
+        let aggregate%val_as_bytes%0#1: bytes[8] = (itob arg.0#0)
+        let aggregate%value_len%0#1: uint64 = (len arg.1.0#0)
+        let aggregate%len_ok%0#1: bool = (<= aggregate%value_len%0#1 64u)
+        (assert aggregate%len_ok%0#1) // overflow
+        let aggregate%bzero%0#1: bytes = (bzero 64u)
+        let aggregate%arc4_encoded%0#1: bytes[64] = (b| arg.1.0#0 aggregate%bzero%0#1)
+        let aggregate%value_len%1#1: uint64 = (len arg.1.1#0)
+        let aggregate%len_ok%1#1: bool = (<= aggregate%value_len%1#1 64u)
+        (assert aggregate%len_ok%1#1) // overflow
+        let aggregate%arc4_encoded%1#1: bytes[64] = (b| arg.1.1#0 aggregate%bzero%0#1)
+        let aggregate%encoded%2#1: Encoded(uint512,uint512) = (concat aggregate%arc4_encoded%0#1 aggregate%arc4_encoded%1#1)
+        let aggregate%encoded%4#1: Encoded(uint64,(uint512,uint512)) = (concat aggregate%val_as_bytes%0#1 aggregate%encoded%2#1)
+        let aggregate%encoded%5#1: Encoded(uint64,(uint512,uint512),uint64) = (concat aggregate%encoded%4#1 aggregate%val_as_bytes%0#1)
+        let aggregate%encoded%6#1: Encoded(uint64,(uint512,uint512),uint64,uint512) = (concat aggregate%encoded%5#1 aggregate%arc4_encoded%0#1)
+        let tmp%16#0: bytes = (concat 0x151f7c75 aggregate%encoded%6#1)
         (log tmp%16#0)
         let tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.__puya_arc4_router__%0#0: bool = 1u
         goto block@14

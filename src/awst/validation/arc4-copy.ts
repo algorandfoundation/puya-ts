@@ -1,6 +1,6 @@
 import { logger } from '../../logger'
 import { instanceOfAny } from '../../util'
-import type { ArrayConcat, AssignmentExpression } from '../nodes'
+import type { ArrayConcat, AssignmentExpression, NewArray, SubmitInnerTransaction } from '../nodes'
 import {
   AppAccountStateExpression,
   AppStateExpression,
@@ -32,6 +32,14 @@ export class ARC4CopyValidator extends AwstTraverser {
     }
   }
 
+  // for nodes that can't modify the input don't need to check for copies unless an assignment
+  // expression is being used
+  visitSubmitInnerTransaction(call: SubmitInnerTransaction) {
+    if (HasAssignmentVisitor.check(call)) {
+      super.visitSubmitInnerTransaction(call)
+    }
+  }
+
   visitAssignmentStatement(assignment: AssignmentStatement) {
     checkAssignment(assignment.target, assignment.value)
     assignment.value.accept(this)
@@ -52,6 +60,29 @@ export class ARC4CopyValidator extends AwstTraverser {
     for (const item of expression.items) {
       checkForArc4Copy(item, 'being passed to a tuple expression')
     }
+  }
+
+  visitNewArray(expression: NewArray): void {
+    super.visitNewArray(expression)
+    if (expression.wtype instanceof wtypes.ARC4Array) {
+      expression.values.forEach((v) => {
+        checkForArc4Copy(v, 'being passed to an array constructor')
+      })
+    }
+  }
+}
+
+class HasAssignmentVisitor extends AwstTraverser {
+  hasAssignment: boolean = false
+
+  static check(expr: Expression): boolean {
+    const visitor = new HasAssignmentVisitor()
+    expr.accept(visitor)
+    return visitor.hasAssignment
+  }
+
+  visitAssignmentExpression(_expression: AssignmentExpression): void {
+    this.hasAssignment = true
   }
 }
 
@@ -88,9 +119,6 @@ function checkForArc4Copy(expr: Expression, contextDesc: string): void {
   }
 }
 
-/**
- * Returns true if the type represents an arc4 type that is mutable
- */
 function isArc4Mutable(wtype: wtypes.WType): boolean {
   return wtype instanceof wtypes.ARC4Type && !wtype.immutable
 }

@@ -42,7 +42,7 @@ main_after_inlined_tests/approvals/precompiled-typed.algo.ts::HelloFactory.__puy
     return
 
 main_test_call_contract_with_reference_types_route@8:
-    // tests/approvals/precompiled-typed.algo.ts:153
+    // tests/approvals/precompiled-typed.algo.ts:154
     // test_call_contract_with_reference_types() {
     txn OnCompletion
     intc_0 // NoOp
@@ -57,7 +57,7 @@ main_test_call_contract_with_reference_types_route@8:
     b main_after_inlined_tests/approvals/precompiled-typed.algo.ts::HelloFactory.__puya_arc4_router__@16
 
 main_test_call_contract_with_transactions_route@7:
-    // tests/approvals/precompiled-typed.algo.ts:110
+    // tests/approvals/precompiled-typed.algo.ts:111
     // test_call_contract_with_transactions() {
     txn OnCompletion
     intc_0 // NoOp
@@ -72,7 +72,7 @@ main_test_call_contract_with_transactions_route@7:
     b main_after_inlined_tests/approvals/precompiled-typed.algo.ts::HelloFactory.__puya_arc4_router__@16
 
 main_test_compile_contract_large_route@6:
-    // tests/approvals/precompiled-typed.algo.ts:94
+    // tests/approvals/precompiled-typed.algo.ts:95
     // test_compile_contract_large() {
     txn OnCompletion
     intc_0 // NoOp
@@ -87,7 +87,7 @@ main_test_compile_contract_large_route@6:
     b main_after_inlined_tests/approvals/precompiled-typed.algo.ts::HelloFactory.__puya_arc4_router__@16
 
 main_test_compile_contract_with_template_and_custom_prefix_route@5:
-    // tests/approvals/precompiled-typed.algo.ts:77
+    // tests/approvals/precompiled-typed.algo.ts:78
     // test_compile_contract_with_template_and_custom_prefix() {
     txn OnCompletion
     intc_0 // NoOp
@@ -597,17 +597,8 @@ test_compile_contract_with_template_next_txn@2:
     pushbytes "hey world"
     ==
     assert
-    // tests/approvals/precompiled-typed.algo.ts:65-68
-    // const txn2 = compiled.call.sendGreetings({
-    //   args: [new Greeting({ name: 'world', termination: new arc4.Str('!') })],
-    //   appId: helloApp,
-    // })
-    itxn_begin
-    // tests/approvals/precompiled-typed.algo.ts:67
-    // appId: helloApp,
-    frame_dig 0
-    // tests/approvals/precompiled-typed.algo.ts:66
-    // args: [new Greeting({ name: 'world', termination: new arc4.Str('!') })],
+    // tests/approvals/precompiled-typed.algo.ts:65
+    // const greeting = new Greeting({ name: 'world', termination: new arc4.Str('!') })
     bytec 5 // 0x21
     len
     itob
@@ -643,9 +634,19 @@ test_compile_contract_with_template_next_txn@2:
     concat
     swap
     concat
-    // tests/approvals/precompiled-typed.algo.ts:65-68
+    // tests/approvals/precompiled-typed.algo.ts:66-69
     // const txn2 = compiled.call.sendGreetings({
-    //   args: [new Greeting({ name: 'world', termination: new arc4.Str('!') })],
+    //   args: [greeting],
+    //   appId: helloApp,
+    // })
+    itxn_begin
+    // tests/approvals/precompiled-typed.algo.ts:68
+    // appId: helloApp,
+    frame_dig 0
+    swap
+    // tests/approvals/precompiled-typed.algo.ts:66-69
+    // const txn2 = compiled.call.sendGreetings({
+    //   args: [greeting],
     //   appId: helloApp,
     // })
     bytec 12 // method "sendGreetings((string,string))string"
@@ -660,9 +661,9 @@ test_compile_contract_with_template_next_txn@2:
     itxn_field Fee
 
 test_compile_contract_with_template_next_txn@3:
-    // tests/approvals/precompiled-typed.algo.ts:65-68
+    // tests/approvals/precompiled-typed.algo.ts:66-69
     // const txn2 = compiled.call.sendGreetings({
-    //   args: [new Greeting({ name: 'world', termination: new arc4.Str('!') })],
+    //   args: [greeting],
     //   appId: helloApp,
     // })
     itxn_submit
@@ -675,20 +676,20 @@ test_compile_contract_with_template_next_txn@3:
     ==
     assert // Bytes has valid prefix
     extract 2 0
-    // tests/approvals/precompiled-typed.algo.ts:70
+    // tests/approvals/precompiled-typed.algo.ts:71
     // assert(txn2.returnValue === 'hey world!')
     pushbytes "hey world!"
     ==
     assert
-    // tests/approvals/precompiled-typed.algo.ts:72-74
+    // tests/approvals/precompiled-typed.algo.ts:73-75
     // compiled.call.delete({
     //   appId: helloApp,
     // })
     itxn_begin
-    // tests/approvals/precompiled-typed.algo.ts:73
+    // tests/approvals/precompiled-typed.algo.ts:74
     // appId: helloApp,
     frame_dig 0
-    // tests/approvals/precompiled-typed.algo.ts:72-74
+    // tests/approvals/precompiled-typed.algo.ts:73-75
     // compiled.call.delete({
     //   appId: helloApp,
     // })
@@ -703,7 +704,7 @@ test_compile_contract_with_template_next_txn@3:
     itxn_field Fee
 
 test_compile_contract_with_template_next_txn@4:
-    // tests/approvals/precompiled-typed.algo.ts:72-74
+    // tests/approvals/precompiled-typed.algo.ts:73-75
     // compiled.call.delete({
     //   appId: helloApp,
     // })
@@ -715,12 +716,12 @@ test_compile_contract_with_template_next_txn@4:
 test_compile_contract_with_template_and_custom_prefix:
 
 test_compile_contract_with_template_and_custom_prefix_block@0:
-    // tests/approvals/precompiled-typed.algo.ts:80
+    // tests/approvals/precompiled-typed.algo.ts:81
     // const helloApp = compiled.call.create().itxn.createdApp
     itxn_begin
     bytec 13 // method "create()void"
     itxn_field ApplicationArgs
-    // tests/approvals/precompiled-typed.algo.ts:78
+    // tests/approvals/precompiled-typed.algo.ts:79
     // const compiled = compileArc4(HelloTemplateCustomPrefix, { templateVars: { GREETING: 'bonjour' }, templateVarsPrefix: 'PRFX_' })
     intc_0 // 0
     itxn_field ExtraProgramPages
@@ -740,7 +741,7 @@ test_compile_contract_with_template_and_custom_prefix_block@0:
     itxn_field ApprovalProgramPages
     bytec_0 // 0x
     itxn_field ApprovalProgramPages
-    // tests/approvals/precompiled-typed.algo.ts:80
+    // tests/approvals/precompiled-typed.algo.ts:81
     // const helloApp = compiled.call.create().itxn.createdApp
     intc_0 // 0
     itxn_field OnCompletion
@@ -750,18 +751,18 @@ test_compile_contract_with_template_and_custom_prefix_block@0:
     itxn_field Fee
 
 test_compile_contract_with_template_and_custom_prefix_next_txn@1:
-    // tests/approvals/precompiled-typed.algo.ts:80
+    // tests/approvals/precompiled-typed.algo.ts:81
     // const helloApp = compiled.call.create().itxn.createdApp
     itxn_submit
     gitxn 0 CreatedApplicationID
     dup
-    // tests/approvals/precompiled-typed.algo.ts:82-85
+    // tests/approvals/precompiled-typed.algo.ts:83-86
     // const { returnValue: result } = compiled.call.greet({
     //   args: ['world'],
     //   appId: helloApp,
     // })
     itxn_begin
-    // tests/approvals/precompiled-typed.algo.ts:83
+    // tests/approvals/precompiled-typed.algo.ts:84
     // args: ['world'],
     bytec_2 // "world"
     len
@@ -769,7 +770,7 @@ test_compile_contract_with_template_and_custom_prefix_next_txn@1:
     extract 6 2
     bytec_2 // "world"
     concat
-    // tests/approvals/precompiled-typed.algo.ts:82-85
+    // tests/approvals/precompiled-typed.algo.ts:83-86
     // const { returnValue: result } = compiled.call.greet({
     //   args: ['world'],
     //   appId: helloApp,
@@ -786,7 +787,7 @@ test_compile_contract_with_template_and_custom_prefix_next_txn@1:
     itxn_field Fee
 
 test_compile_contract_with_template_and_custom_prefix_next_txn@2:
-    // tests/approvals/precompiled-typed.algo.ts:82-85
+    // tests/approvals/precompiled-typed.algo.ts:83-86
     // const { returnValue: result } = compiled.call.greet({
     //   args: ['world'],
     //   appId: helloApp,
@@ -801,12 +802,12 @@ test_compile_contract_with_template_and_custom_prefix_next_txn@2:
     ==
     assert // Bytes has valid prefix
     extract 2 0
-    // tests/approvals/precompiled-typed.algo.ts:87
+    // tests/approvals/precompiled-typed.algo.ts:88
     // assert(result === 'bonjour world')
     pushbytes "bonjour world"
     ==
     assert
-    // tests/approvals/precompiled-typed.algo.ts:89-91
+    // tests/approvals/precompiled-typed.algo.ts:90-92
     // compiled.call.delete({
     //   appId: helloApp,
     // })
@@ -822,7 +823,7 @@ test_compile_contract_with_template_and_custom_prefix_next_txn@2:
     itxn_field Fee
 
 test_compile_contract_with_template_and_custom_prefix_next_txn@3:
-    // tests/approvals/precompiled-typed.algo.ts:89-91
+    // tests/approvals/precompiled-typed.algo.ts:90-92
     // compiled.call.delete({
     //   appId: helloApp,
     // })
@@ -834,10 +835,10 @@ test_compile_contract_with_template_and_custom_prefix_next_txn@3:
 test_compile_contract_large:
 
 test_compile_contract_large_block@0:
-    // tests/approvals/precompiled-typed.algo.ts:97
+    // tests/approvals/precompiled-typed.algo.ts:98
     // const largeApp = compiled.bareCreate().createdApp
     itxn_begin
-    // tests/approvals/precompiled-typed.algo.ts:95
+    // tests/approvals/precompiled-typed.algo.ts:96
     // const compiled = compileArc4(LargeProgram)
     intc_0 // 0
     itxn_field ExtraProgramPages
@@ -857,7 +858,7 @@ test_compile_contract_large_block@0:
     itxn_field ApprovalProgramPages
     bytec_0 // 0x
     itxn_field ApprovalProgramPages
-    // tests/approvals/precompiled-typed.algo.ts:97
+    // tests/approvals/precompiled-typed.algo.ts:98
     // const largeApp = compiled.bareCreate().createdApp
     intc_0 // 0
     itxn_field OnCompletion
@@ -867,12 +868,12 @@ test_compile_contract_large_block@0:
     itxn_field Fee
 
 test_compile_contract_large_next_txn@1:
-    // tests/approvals/precompiled-typed.algo.ts:97
+    // tests/approvals/precompiled-typed.algo.ts:98
     // const largeApp = compiled.bareCreate().createdApp
     itxn_submit
     itxn CreatedApplicationID
     dup
-    // tests/approvals/precompiled-typed.algo.ts:99-101
+    // tests/approvals/precompiled-typed.algo.ts:100-102
     // const { returnValue: result } = compiled.call.getBigBytesLength({
     //   appId: largeApp,
     // })
@@ -888,7 +889,7 @@ test_compile_contract_large_next_txn@1:
     itxn_field Fee
 
 test_compile_contract_large_next_txn@2:
-    // tests/approvals/precompiled-typed.algo.ts:99-101
+    // tests/approvals/precompiled-typed.algo.ts:100-102
     // const { returnValue: result } = compiled.call.getBigBytesLength({
     //   appId: largeApp,
     // })
@@ -902,12 +903,12 @@ test_compile_contract_large_next_txn@2:
     ==
     assert // Bytes has valid prefix
     btoi
-    // tests/approvals/precompiled-typed.algo.ts:103
+    // tests/approvals/precompiled-typed.algo.ts:104
     // assert(result === 4096)
     pushint 4096 // 4096
     ==
     assert
-    // tests/approvals/precompiled-typed.algo.ts:105-107
+    // tests/approvals/precompiled-typed.algo.ts:106-108
     // compiled.call.delete({
     //   appId: largeApp,
     // })
@@ -923,7 +924,7 @@ test_compile_contract_large_next_txn@2:
     itxn_field Fee
 
 test_compile_contract_large_next_txn@3:
-    // tests/approvals/precompiled-typed.algo.ts:105-107
+    // tests/approvals/precompiled-typed.algo.ts:106-108
     // compiled.call.delete({
     //   appId: largeApp,
     // })
@@ -933,16 +934,16 @@ test_compile_contract_large_next_txn@3:
 
 // tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_call_contract_with_transactions() -> void:
 test_call_contract_with_transactions:
-    // tests/approvals/precompiled-typed.algo.ts:110
+    // tests/approvals/precompiled-typed.algo.ts:111
     // test_call_contract_with_transactions() {
     proto 0 0
     bytec_0 // ""
 
 test_call_contract_with_transactions_block@0:
-    // tests/approvals/precompiled-typed.algo.ts:113
+    // tests/approvals/precompiled-typed.algo.ts:114
     // const appId = compiled.bareCreate().createdApp
     itxn_begin
-    // tests/approvals/precompiled-typed.algo.ts:111
+    // tests/approvals/precompiled-typed.algo.ts:112
     // const compiled = compileArc4(ReceivesTxns)
     intc_0 // 0
     itxn_field ExtraProgramPages
@@ -962,7 +963,7 @@ test_call_contract_with_transactions_block@0:
     itxn_field ApprovalProgramPages
     bytec_0 // 0x
     itxn_field ApprovalProgramPages
-    // tests/approvals/precompiled-typed.algo.ts:113
+    // tests/approvals/precompiled-typed.algo.ts:114
     // const appId = compiled.bareCreate().createdApp
     intc_0 // 0
     itxn_field OnCompletion
@@ -972,30 +973,30 @@ test_call_contract_with_transactions_block@0:
     itxn_field Fee
 
 test_call_contract_with_transactions_next_txn@1:
-    // tests/approvals/precompiled-typed.algo.ts:113
+    // tests/approvals/precompiled-typed.algo.ts:114
     // const appId = compiled.bareCreate().createdApp
     itxn_submit
     itxn CreatedApplicationID
     frame_bury 0
-    // tests/approvals/precompiled-typed.algo.ts:121-124
+    // tests/approvals/precompiled-typed.algo.ts:122-125
     // compiled.call.receivesAnyTxn({
     //   args: [assetCreate],
     //   appId,
     // })
     itxn_begin
-    // tests/approvals/precompiled-typed.algo.ts:118
+    // tests/approvals/precompiled-typed.algo.ts:119
     // assetName: 'TEST',
     bytec 7 // "TEST"
     itxn_field ConfigAssetName
-    // tests/approvals/precompiled-typed.algo.ts:117
+    // tests/approvals/precompiled-typed.algo.ts:118
     // unitName: 'T',
     bytec 8 // "T"
     itxn_field ConfigAssetUnitName
-    // tests/approvals/precompiled-typed.algo.ts:116
+    // tests/approvals/precompiled-typed.algo.ts:117
     // total: 1,
     intc_2 // 1
     itxn_field ConfigAssetTotal
-    // tests/approvals/precompiled-typed.algo.ts:115-119
+    // tests/approvals/precompiled-typed.algo.ts:116-120
     // const assetCreate = itxn.assetConfig({
     //   total: 1,
     //   unitName: 'T',
@@ -1007,16 +1008,16 @@ test_call_contract_with_transactions_next_txn@1:
     itxn_field Fee
 
 test_call_contract_with_transactions_next_txn@2:
-    // tests/approvals/precompiled-typed.algo.ts:121-124
+    // tests/approvals/precompiled-typed.algo.ts:122-125
     // compiled.call.receivesAnyTxn({
     //   args: [assetCreate],
     //   appId,
     // })
     itxn_next
-    // tests/approvals/precompiled-typed.algo.ts:123
+    // tests/approvals/precompiled-typed.algo.ts:124
     // appId,
     frame_dig 0
-    // tests/approvals/precompiled-typed.algo.ts:121-124
+    // tests/approvals/precompiled-typed.algo.ts:122-125
     // compiled.call.receivesAnyTxn({
     //   args: [assetCreate],
     //   appId,
@@ -1032,7 +1033,7 @@ test_call_contract_with_transactions_next_txn@2:
     itxn_field Fee
 
 test_call_contract_with_transactions_next_txn@3:
-    // tests/approvals/precompiled-typed.algo.ts:121-124
+    // tests/approvals/precompiled-typed.algo.ts:122-125
     // compiled.call.receivesAnyTxn({
     //   args: [assetCreate],
     //   appId,
@@ -1043,21 +1044,21 @@ test_call_contract_with_transactions_next_txn@3:
     bytec_1 // 0x151f7c75
     ==
     assert // Bytes has valid prefix
-    // tests/approvals/precompiled-typed.algo.ts:127
+    // tests/approvals/precompiled-typed.algo.ts:128
     // appId,
     frame_dig 0
-    // tests/approvals/precompiled-typed.algo.ts:131-134
+    // tests/approvals/precompiled-typed.algo.ts:132-135
     // compiled.call.receivesAnyTxn({
     //   appId,
     //   args: [appCall],
     // })
     itxn_begin
-    // tests/approvals/precompiled-typed.algo.ts:128
+    // tests/approvals/precompiled-typed.algo.ts:129
     // appArgs: [methodSelector(ReceivesTxns.prototype.getOne)],
     pushbytes 0x8f6892ef // method "getOne()uint64"
     itxn_field ApplicationArgs
     itxn_field ApplicationID
-    // tests/approvals/precompiled-typed.algo.ts:126-129
+    // tests/approvals/precompiled-typed.algo.ts:127-130
     // const appCall = itxn.applicationCall({
     //   appId,
     //   appArgs: [methodSelector(ReceivesTxns.prototype.getOne)],
@@ -1068,16 +1069,16 @@ test_call_contract_with_transactions_next_txn@3:
     itxn_field Fee
 
 test_call_contract_with_transactions_next_txn@4:
-    // tests/approvals/precompiled-typed.algo.ts:131-134
+    // tests/approvals/precompiled-typed.algo.ts:132-135
     // compiled.call.receivesAnyTxn({
     //   appId,
     //   args: [appCall],
     // })
     itxn_next
-    // tests/approvals/precompiled-typed.algo.ts:132
+    // tests/approvals/precompiled-typed.algo.ts:133
     // appId,
     frame_dig 0
-    // tests/approvals/precompiled-typed.algo.ts:131-134
+    // tests/approvals/precompiled-typed.algo.ts:132-135
     // compiled.call.receivesAnyTxn({
     //   appId,
     //   args: [appCall],
@@ -1093,7 +1094,7 @@ test_call_contract_with_transactions_next_txn@4:
     itxn_field Fee
 
 test_call_contract_with_transactions_next_txn@5:
-    // tests/approvals/precompiled-typed.algo.ts:131-134
+    // tests/approvals/precompiled-typed.algo.ts:132-135
     // compiled.call.receivesAnyTxn({
     //   appId,
     //   args: [appCall],
@@ -1104,25 +1105,25 @@ test_call_contract_with_transactions_next_txn@5:
     bytec_1 // 0x151f7c75
     ==
     assert // Bytes has valid prefix
-    // tests/approvals/precompiled-typed.algo.ts:136-139
+    // tests/approvals/precompiled-typed.algo.ts:137-140
     // compiled.call.receivesAssetConfig({
     //   appId,
     //   args: [assetCreate],
     // })
     itxn_begin
-    // tests/approvals/precompiled-typed.algo.ts:118
+    // tests/approvals/precompiled-typed.algo.ts:119
     // assetName: 'TEST',
     bytec 7 // "TEST"
     itxn_field ConfigAssetName
-    // tests/approvals/precompiled-typed.algo.ts:117
+    // tests/approvals/precompiled-typed.algo.ts:118
     // unitName: 'T',
     bytec 8 // "T"
     itxn_field ConfigAssetUnitName
-    // tests/approvals/precompiled-typed.algo.ts:116
+    // tests/approvals/precompiled-typed.algo.ts:117
     // total: 1,
     intc_2 // 1
     itxn_field ConfigAssetTotal
-    // tests/approvals/precompiled-typed.algo.ts:115-119
+    // tests/approvals/precompiled-typed.algo.ts:116-120
     // const assetCreate = itxn.assetConfig({
     //   total: 1,
     //   unitName: 'T',
@@ -1134,16 +1135,16 @@ test_call_contract_with_transactions_next_txn@5:
     itxn_field Fee
 
 test_call_contract_with_transactions_next_txn@6:
-    // tests/approvals/precompiled-typed.algo.ts:136-139
+    // tests/approvals/precompiled-typed.algo.ts:137-140
     // compiled.call.receivesAssetConfig({
     //   appId,
     //   args: [assetCreate],
     // })
     itxn_next
-    // tests/approvals/precompiled-typed.algo.ts:137
+    // tests/approvals/precompiled-typed.algo.ts:138
     // appId,
     frame_dig 0
-    // tests/approvals/precompiled-typed.algo.ts:136-139
+    // tests/approvals/precompiled-typed.algo.ts:137-140
     // compiled.call.receivesAssetConfig({
     //   appId,
     //   args: [assetCreate],
@@ -1159,7 +1160,7 @@ test_call_contract_with_transactions_next_txn@6:
     itxn_field Fee
 
 test_call_contract_with_transactions_next_txn@7:
-    // tests/approvals/precompiled-typed.algo.ts:136-139
+    // tests/approvals/precompiled-typed.algo.ts:137-140
     // compiled.call.receivesAssetConfig({
     //   appId,
     //   args: [assetCreate],
@@ -1170,36 +1171,36 @@ test_call_contract_with_transactions_next_txn@7:
     bytec_1 // 0x151f7c75
     ==
     assert // Bytes has valid prefix
-    // tests/approvals/precompiled-typed.algo.ts:142
+    // tests/approvals/precompiled-typed.algo.ts:143
     // receiver: appId.address,
     frame_dig 0
     app_params_get AppAddress
     assert // application exists
-    // tests/approvals/precompiled-typed.algo.ts:144
+    // tests/approvals/precompiled-typed.algo.ts:145
     // sender: Global.currentApplicationId.address,
     global CurrentApplicationID
     app_params_get AppAddress
     assert // application exists
     swap
-    // tests/approvals/precompiled-typed.algo.ts:147-150
+    // tests/approvals/precompiled-typed.algo.ts:148-151
     // compiled.call.receivesAssetConfigAndPay({
     //   appId,
     //   args: [assetCreate, pay],
     // })
     itxn_begin
-    // tests/approvals/precompiled-typed.algo.ts:118
+    // tests/approvals/precompiled-typed.algo.ts:119
     // assetName: 'TEST',
     bytec 7 // "TEST"
     itxn_field ConfigAssetName
-    // tests/approvals/precompiled-typed.algo.ts:117
+    // tests/approvals/precompiled-typed.algo.ts:118
     // unitName: 'T',
     bytec 8 // "T"
     itxn_field ConfigAssetUnitName
-    // tests/approvals/precompiled-typed.algo.ts:116
+    // tests/approvals/precompiled-typed.algo.ts:117
     // total: 1,
     intc_2 // 1
     itxn_field ConfigAssetTotal
-    // tests/approvals/precompiled-typed.algo.ts:115-119
+    // tests/approvals/precompiled-typed.algo.ts:116-120
     // const assetCreate = itxn.assetConfig({
     //   total: 1,
     //   unitName: 'T',
@@ -1211,17 +1212,17 @@ test_call_contract_with_transactions_next_txn@7:
     itxn_field Fee
 
 test_call_contract_with_transactions_next_txn@8:
-    // tests/approvals/precompiled-typed.algo.ts:149
+    // tests/approvals/precompiled-typed.algo.ts:150
     // args: [assetCreate, pay],
     itxn_next
     swap
     itxn_field Sender
-    // tests/approvals/precompiled-typed.algo.ts:143
+    // tests/approvals/precompiled-typed.algo.ts:144
     // amount: 100000,
     pushint 100000 // 100000
     itxn_field Amount
     itxn_field Receiver
-    // tests/approvals/precompiled-typed.algo.ts:141-145
+    // tests/approvals/precompiled-typed.algo.ts:142-146
     // const pay = itxn.payment({
     //   receiver: appId.address,
     //   amount: 100000,
@@ -1233,16 +1234,16 @@ test_call_contract_with_transactions_next_txn@8:
     itxn_field Fee
 
 test_call_contract_with_transactions_next_txn@9:
-    // tests/approvals/precompiled-typed.algo.ts:147-150
+    // tests/approvals/precompiled-typed.algo.ts:148-151
     // compiled.call.receivesAssetConfigAndPay({
     //   appId,
     //   args: [assetCreate, pay],
     // })
     itxn_next
-    // tests/approvals/precompiled-typed.algo.ts:148
+    // tests/approvals/precompiled-typed.algo.ts:149
     // appId,
     frame_dig 0
-    // tests/approvals/precompiled-typed.algo.ts:147-150
+    // tests/approvals/precompiled-typed.algo.ts:148-151
     // compiled.call.receivesAssetConfigAndPay({
     //   appId,
     //   args: [assetCreate, pay],
@@ -1258,7 +1259,7 @@ test_call_contract_with_transactions_next_txn@9:
     itxn_field Fee
 
 test_call_contract_with_transactions_next_txn@10:
-    // tests/approvals/precompiled-typed.algo.ts:147-150
+    // tests/approvals/precompiled-typed.algo.ts:148-151
     // compiled.call.receivesAssetConfigAndPay({
     //   appId,
     //   args: [assetCreate, pay],
@@ -1271,10 +1272,10 @@ test_call_contract_with_transactions_next_txn@10:
 test_call_contract_with_reference_types:
 
 test_call_contract_with_reference_types_block@0:
-    // tests/approvals/precompiled-typed.algo.ts:156
+    // tests/approvals/precompiled-typed.algo.ts:157
     // const appId = compiled.bareCreate().createdApp
     itxn_begin
-    // tests/approvals/precompiled-typed.algo.ts:154
+    // tests/approvals/precompiled-typed.algo.ts:155
     // const compiled = compileArc4(ReceivesReferenceTypes)
     intc_0 // 0
     itxn_field ExtraProgramPages
@@ -1294,7 +1295,7 @@ test_call_contract_with_reference_types_block@0:
     itxn_field ApprovalProgramPages
     bytec_0 // 0x
     itxn_field ApprovalProgramPages
-    // tests/approvals/precompiled-typed.algo.ts:156
+    // tests/approvals/precompiled-typed.algo.ts:157
     // const appId = compiled.bareCreate().createdApp
     intc_0 // 0
     itxn_field OnCompletion
@@ -1304,11 +1305,11 @@ test_call_contract_with_reference_types_block@0:
     itxn_field Fee
 
 test_call_contract_with_reference_types_next_txn@1:
-    // tests/approvals/precompiled-typed.algo.ts:156
+    // tests/approvals/precompiled-typed.algo.ts:157
     // const appId = compiled.bareCreate().createdApp
     itxn_submit
     itxn CreatedApplicationID
-    // tests/approvals/precompiled-typed.algo.ts:158-164
+    // tests/approvals/precompiled-typed.algo.ts:159-165
     // const asset = itxn
     //   .assetConfig({
     //     total: 1,
@@ -1317,19 +1318,19 @@ test_call_contract_with_reference_types_next_txn@1:
     //   })
     //   .submit().createdAsset
     itxn_begin
-    // tests/approvals/precompiled-typed.algo.ts:162
+    // tests/approvals/precompiled-typed.algo.ts:163
     // assetName: 'TEST',
     bytec 7 // "TEST"
     itxn_field ConfigAssetName
-    // tests/approvals/precompiled-typed.algo.ts:161
+    // tests/approvals/precompiled-typed.algo.ts:162
     // unitName: 'T',
     bytec 8 // "T"
     itxn_field ConfigAssetUnitName
-    // tests/approvals/precompiled-typed.algo.ts:160
+    // tests/approvals/precompiled-typed.algo.ts:161
     // total: 1,
     intc_2 // 1
     itxn_field ConfigAssetTotal
-    // tests/approvals/precompiled-typed.algo.ts:158-163
+    // tests/approvals/precompiled-typed.algo.ts:159-164
     // const asset = itxn
     //   .assetConfig({
     //     total: 1,
@@ -1342,7 +1343,7 @@ test_call_contract_with_reference_types_next_txn@1:
     itxn_field Fee
 
 test_call_contract_with_reference_types_next_txn@2:
-    // tests/approvals/precompiled-typed.algo.ts:158-164
+    // tests/approvals/precompiled-typed.algo.ts:159-165
     // const asset = itxn
     //   .assetConfig({
     //     total: 1,
@@ -1351,10 +1352,10 @@ test_call_contract_with_reference_types_next_txn@2:
     //   })
     //   .submit().createdAsset
     itxn_submit
-    // tests/approvals/precompiled-typed.algo.ts:164
+    // tests/approvals/precompiled-typed.algo.ts:165
     // .submit().createdAsset
     itxn CreatedAssetID
-    // tests/approvals/precompiled-typed.algo.ts:158-164
+    // tests/approvals/precompiled-typed.algo.ts:159-165
     // const asset = itxn
     //   .assetConfig({
     //     total: 1,
@@ -1364,13 +1365,13 @@ test_call_contract_with_reference_types_next_txn@2:
     //   .submit().createdAsset
     dup
     cover 2
-    // tests/approvals/precompiled-typed.algo.ts:166-169
+    // tests/approvals/precompiled-typed.algo.ts:167-170
     // const result = compiled.call.receivesReferenceTypes({
     //   args: [Global.currentApplicationId, Txn.sender, asset],
     //   appId,
     // })
     itxn_begin
-    // tests/approvals/precompiled-typed.algo.ts:167
+    // tests/approvals/precompiled-typed.algo.ts:168
     // args: [Global.currentApplicationId, Txn.sender, asset],
     global CurrentApplicationID
     swap
@@ -1378,7 +1379,7 @@ test_call_contract_with_reference_types_next_txn@2:
     itxn_field Accounts
     itxn_field Assets
     itxn_field Applications
-    // tests/approvals/precompiled-typed.algo.ts:166-169
+    // tests/approvals/precompiled-typed.algo.ts:167-170
     // const result = compiled.call.receivesReferenceTypes({
     //   args: [Global.currentApplicationId, Txn.sender, asset],
     //   appId,
@@ -1391,7 +1392,7 @@ test_call_contract_with_reference_types_next_txn@2:
     itxn_field ApplicationArgs
     pushbytes 0x00
     itxn_field ApplicationArgs
-    // tests/approvals/precompiled-typed.algo.ts:166-169
+    // tests/approvals/precompiled-typed.algo.ts:167-170
     // const result = compiled.call.receivesReferenceTypes({
     //   args: [Global.currentApplicationId, Txn.sender, asset],
     //   appId,
@@ -1405,27 +1406,27 @@ test_call_contract_with_reference_types_next_txn@2:
     itxn_field Fee
 
 test_call_contract_with_reference_types_next_txn@3:
-    // tests/approvals/precompiled-typed.algo.ts:166-169
+    // tests/approvals/precompiled-typed.algo.ts:167-170
     // const result = compiled.call.receivesReferenceTypes({
     //   args: [Global.currentApplicationId, Txn.sender, asset],
     //   appId,
     // })
     itxn_submit
-    // tests/approvals/precompiled-typed.algo.ts:171
+    // tests/approvals/precompiled-typed.algo.ts:172
     // assert(result.itxn.logs(0) === Global.currentApplicationAddress.bytes)
     intc_0 // 0
     itxnas Logs
     global CurrentApplicationAddress
     ==
     assert
-    // tests/approvals/precompiled-typed.algo.ts:172
+    // tests/approvals/precompiled-typed.algo.ts:173
     // assert(result.itxn.logs(1) === Txn.sender.bytes)
     intc_2 // 1
     itxnas Logs
     txn Sender
     ==
     assert
-    // tests/approvals/precompiled-typed.algo.ts:173
+    // tests/approvals/precompiled-typed.algo.ts:174
     // assert(result.itxn.logs(2) === asset.name)
     pushint 2 // 2
     itxnas Logs

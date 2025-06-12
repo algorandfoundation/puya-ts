@@ -119,13 +119,13 @@ subroutine tests/approvals/reference-arrays.algo.ts::ReferenceArraysAlgo.test(le
         let array_len%1#0: uint64 = (/ bytes_len%1#0 8u)
         let tmp%7#0: uint64 = (- array_len%1#0 1u)
         let slot_contents%4#0: Encoded(uint64[]) = read(ma#0)
-        let array_item%0#0: Encoded(uint64) = slot_contents%4#0[tmp%7#0]
+        let array_item%0#0: Encoded(uint64) = agg_read_index(slot_contents%4#0, tmp%7#0)
         let values%0#0: uint64 = decode<uint64>(array_item%0#0)
         let tmp%8#0: uint64 = (- length#0 2u)
         let tmp%9#0: bool = (== values%0#0 tmp%8#0)
         (assert tmp%9#0)
         let slot_contents%5#0: Encoded(uint64[]) = read(ma#0)
-        let array_item%1#0: Encoded(uint64) = slot_contents%5#0[1u]
+        let array_item%1#0: Encoded(uint64) = agg_read_index(slot_contents%5#0, 1u)
         let values%1#0: uint64 = decode<uint64>(array_item%1#0)
         let tmp%10#0: bool = (== values%1#0 1u)
         (assert tmp%10#0)

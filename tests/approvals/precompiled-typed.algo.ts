@@ -62,8 +62,9 @@ class HelloFactory extends Contract {
 
     assert(txn1.returnValue === 'hey world')
 
+    const greeting = new Greeting({ name: 'world', termination: new arc4.Str('!') })
     const txn2 = compiled.call.sendGreetings({
-      args: [new Greeting({ name: 'world', termination: new arc4.Str('!') })],
+      args: [greeting],
       appId: helloApp,
     })
 

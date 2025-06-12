@@ -30,6 +30,9 @@ export class Arc4CloneAlgo extends Contract {
 
     const nestedMutables = [[Uint64(1)]]
 
+    // @expect-error cannot create multiple references to a mutable stack type, the value must be copied using clone(...) when being passed to an array constructor
+    const nestedMutables2 = [mutable, [Uint64(2)]]
+
     // @expect-error cannot create multiple references to a mutable stack type, the value must be copied using clone(...) when being assigned to another variable
     const m3 = [...nestedMutables]
 

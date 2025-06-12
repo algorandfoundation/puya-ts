@@ -7,17 +7,17 @@ main tests/approvals/box-proxies.algo.ts::BoxNotExist.approvalProgram:
         let tmp%2#0: bool = (== reinterpret_string%0#0 "box")
         goto tmp%2#0 ? block@2 : block@4
     block@2: // if_body_L115
-        let (maybe_value%0#0: bytes, maybe_exists%0#0: bool) = (box_get "abc")
-        (assert maybe_exists%0#0) // Box must have value
-        let maybe_value_converted%0#0: uint64 = (btoi maybe_value%0#0)
+        let (aggregate%box_get%0#1: bytes, aggregate%box_get%1#1: bool) = (box_get "abc")
+        (assert aggregate%box_get%1#1) // Box must have value
+        let maybe_value_converted%0#0: uint64 = (btoi aggregate%box_get%0#1)
         return maybe_value_converted%0#0
     block@4: // after_if_else_L115
         let tmp%3#0: bool = (== reinterpret_string%0#0 "boxmap")
         goto tmp%3#0 ? block@5 : block@7
     block@5: // if_body_L117
-        let (maybe_value%1#0: bytes, maybe_exists%1#0: bool) = (box_get "abc")
-        (assert maybe_exists%1#0) // Box must have value
-        let maybe_value_converted%1#0: uint64 = (btoi maybe_value%1#0)
+        let (aggregate%box_get%2#1: bytes, aggregate%box_get%3#1: bool) = (box_get "abc")
+        (assert aggregate%box_get%3#1) // Box must have value
+        let maybe_value_converted%1#0: uint64 = (btoi aggregate%box_get%2#1)
         return maybe_value_converted%1#0
     block@7: // after_if_else_L117
         let tmp%4#0: bool = (== reinterpret_string%0#0 "createbox")

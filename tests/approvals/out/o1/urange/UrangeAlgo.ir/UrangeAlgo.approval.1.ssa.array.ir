@@ -56,11 +56,11 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
 
 subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testSingleArg() -> Encoded(len+uint64[]):
     block@0: // L5
-        let array%as_bytes%0#1: bytes[8] = (itob 0u)
-        let array%len_u16%0#1: bytes = ((extract 6 2) array%as_bytes%0#1)
-        let array%encoded%0#1: bytes = (concat array%len_u16%0#1 0x)
-        let array%encoded%1#1: Encoded(len+uint64[]) = (concat array%encoded%0#1 0x)
-        let results#0: Encoded(len+uint64[]) = array%encoded%1#1
+        let aggregate%as_bytes%0#1: bytes[8] = (itob 0u)
+        let aggregate%len_u16%0#1: bytes = ((extract 6 2) aggregate%as_bytes%0#1)
+        let aggregate%encoded%0#1: bytes = (concat aggregate%len_u16%0#1 0x)
+        let aggregate%encoded%1#1: Encoded(len+uint64[]) = (concat aggregate%encoded%0#1 0x)
+        let results#0: Encoded(len+uint64[]) = aggregate%encoded%1#1
         let temp#0: uint64 = 0u
         goto block@1
     block@1: // for_header_L7
@@ -69,14 +69,14 @@ subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testSingleArg() -> Encoded
         let continue_looping%0#0: bool = (< temp#1 5u)
         goto continue_looping%0#0 ? block@2 : block@4
     block@2: // for_body_L7
-        let array%val_as_bytes%0#1: bytes[8] = (itob temp#1)
-        let array%as_Encoded(uint64)%0#1: Encoded(uint64) = array%val_as_bytes%0#1
-        let array%encoded%2#1: Encoded(uint64) = (concat 0x array%as_Encoded(uint64)%0#1)
-        let array%as_bytes%1#1: bytes[8] = (itob 1u)
-        let array%len_u16%1#1: bytes = ((extract 6 2) array%as_bytes%1#1)
-        let array%encoded%3#1: bytes = (concat array%len_u16%1#1 array%encoded%2#1)
-        let array%encoded%4#1: Encoded(len+uint64[]) = (concat array%encoded%3#1 0x)
-        let encoded_array%1#0: Encoded(len+uint64[]) = array%encoded%4#1
+        let aggregate%val_as_bytes%0#1: bytes[8] = (itob temp#1)
+        let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
+        let aggregate%encoded%2#1: Encoded(uint64) = (concat 0x aggregate%as_Encoded(uint64)%0#1)
+        let aggregate%as_bytes%1#1: bytes[8] = (itob 1u)
+        let aggregate%len_u16%1#1: bytes = ((extract 6 2) aggregate%as_bytes%1#1)
+        let aggregate%encoded%3#1: bytes = (concat aggregate%len_u16%1#1 aggregate%encoded%2#1)
+        let aggregate%encoded%4#1: Encoded(len+uint64[]) = (concat aggregate%encoded%3#1 0x)
+        let encoded_array%1#0: Encoded(len+uint64[]) = aggregate%encoded%4#1
         let extract_to_end%0#0: bytes = ((extract 2 0) encoded_array%1#0)
         let concat%0#0: Encoded(len+uint64[]) = (concat results#1 extract_to_end%0#0) // on error: max array length exceeded
         let extract_to_end%1#0: bytes = ((extract 2 0) concat%0#0)
@@ -92,11 +92,11 @@ subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testSingleArg() -> Encoded
 
 subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testTwoArg() -> Encoded(len+uint64[]):
     block@0: // L12
-        let array%as_bytes%0#1: bytes[8] = (itob 0u)
-        let array%len_u16%0#1: bytes = ((extract 6 2) array%as_bytes%0#1)
-        let array%encoded%0#1: bytes = (concat array%len_u16%0#1 0x)
-        let array%encoded%1#1: Encoded(len+uint64[]) = (concat array%encoded%0#1 0x)
-        let results#0: Encoded(len+uint64[]) = array%encoded%1#1
+        let aggregate%as_bytes%0#1: bytes[8] = (itob 0u)
+        let aggregate%len_u16%0#1: bytes = ((extract 6 2) aggregate%as_bytes%0#1)
+        let aggregate%encoded%0#1: bytes = (concat aggregate%len_u16%0#1 0x)
+        let aggregate%encoded%1#1: Encoded(len+uint64[]) = (concat aggregate%encoded%0#1 0x)
+        let results#0: Encoded(len+uint64[]) = aggregate%encoded%1#1
         let temp#0: uint64 = 2u
         goto block@1
     block@1: // for_header_L14
@@ -105,14 +105,14 @@ subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testTwoArg() -> Encoded(le
         let continue_looping%0#0: bool = (< temp#1 5u)
         goto continue_looping%0#0 ? block@2 : block@4
     block@2: // for_body_L14
-        let array%val_as_bytes%0#1: bytes[8] = (itob temp#1)
-        let array%as_Encoded(uint64)%0#1: Encoded(uint64) = array%val_as_bytes%0#1
-        let array%encoded%2#1: Encoded(uint64) = (concat 0x array%as_Encoded(uint64)%0#1)
-        let array%as_bytes%1#1: bytes[8] = (itob 1u)
-        let array%len_u16%1#1: bytes = ((extract 6 2) array%as_bytes%1#1)
-        let array%encoded%3#1: bytes = (concat array%len_u16%1#1 array%encoded%2#1)
-        let array%encoded%4#1: Encoded(len+uint64[]) = (concat array%encoded%3#1 0x)
-        let encoded_array%1#0: Encoded(len+uint64[]) = array%encoded%4#1
+        let aggregate%val_as_bytes%0#1: bytes[8] = (itob temp#1)
+        let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
+        let aggregate%encoded%2#1: Encoded(uint64) = (concat 0x aggregate%as_Encoded(uint64)%0#1)
+        let aggregate%as_bytes%1#1: bytes[8] = (itob 1u)
+        let aggregate%len_u16%1#1: bytes = ((extract 6 2) aggregate%as_bytes%1#1)
+        let aggregate%encoded%3#1: bytes = (concat aggregate%len_u16%1#1 aggregate%encoded%2#1)
+        let aggregate%encoded%4#1: Encoded(len+uint64[]) = (concat aggregate%encoded%3#1 0x)
+        let encoded_array%1#0: Encoded(len+uint64[]) = aggregate%encoded%4#1
         let extract_to_end%0#0: bytes = ((extract 2 0) encoded_array%1#0)
         let concat%0#0: Encoded(len+uint64[]) = (concat results#1 extract_to_end%0#0) // on error: max array length exceeded
         let extract_to_end%1#0: bytes = ((extract 2 0) concat%0#0)
@@ -128,11 +128,11 @@ subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testTwoArg() -> Encoded(le
 
 subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testThreeArg() -> Encoded(len+uint64[]):
     block@0: // L19
-        let array%as_bytes%0#1: bytes[8] = (itob 0u)
-        let array%len_u16%0#1: bytes = ((extract 6 2) array%as_bytes%0#1)
-        let array%encoded%0#1: bytes = (concat array%len_u16%0#1 0x)
-        let array%encoded%1#1: Encoded(len+uint64[]) = (concat array%encoded%0#1 0x)
-        let results#0: Encoded(len+uint64[]) = array%encoded%1#1
+        let aggregate%as_bytes%0#1: bytes[8] = (itob 0u)
+        let aggregate%len_u16%0#1: bytes = ((extract 6 2) aggregate%as_bytes%0#1)
+        let aggregate%encoded%0#1: bytes = (concat aggregate%len_u16%0#1 0x)
+        let aggregate%encoded%1#1: Encoded(len+uint64[]) = (concat aggregate%encoded%0#1 0x)
+        let results#0: Encoded(len+uint64[]) = aggregate%encoded%1#1
         let temp#0: uint64 = 2u
         goto block@1
     block@1: // for_header_L21
@@ -141,14 +141,14 @@ subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testThreeArg() -> Encoded(
         let continue_looping%0#0: bool = (< temp#1 10u)
         goto continue_looping%0#0 ? block@2 : block@4
     block@2: // for_body_L21
-        let array%val_as_bytes%0#1: bytes[8] = (itob temp#1)
-        let array%as_Encoded(uint64)%0#1: Encoded(uint64) = array%val_as_bytes%0#1
-        let array%encoded%2#1: Encoded(uint64) = (concat 0x array%as_Encoded(uint64)%0#1)
-        let array%as_bytes%1#1: bytes[8] = (itob 1u)
-        let array%len_u16%1#1: bytes = ((extract 6 2) array%as_bytes%1#1)
-        let array%encoded%3#1: bytes = (concat array%len_u16%1#1 array%encoded%2#1)
-        let array%encoded%4#1: Encoded(len+uint64[]) = (concat array%encoded%3#1 0x)
-        let encoded_array%1#0: Encoded(len+uint64[]) = array%encoded%4#1
+        let aggregate%val_as_bytes%0#1: bytes[8] = (itob temp#1)
+        let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
+        let aggregate%encoded%2#1: Encoded(uint64) = (concat 0x aggregate%as_Encoded(uint64)%0#1)
+        let aggregate%as_bytes%1#1: bytes[8] = (itob 1u)
+        let aggregate%len_u16%1#1: bytes = ((extract 6 2) aggregate%as_bytes%1#1)
+        let aggregate%encoded%3#1: bytes = (concat aggregate%len_u16%1#1 aggregate%encoded%2#1)
+        let aggregate%encoded%4#1: Encoded(len+uint64[]) = (concat aggregate%encoded%3#1 0x)
+        let encoded_array%1#0: Encoded(len+uint64[]) = aggregate%encoded%4#1
         let extract_to_end%0#0: bytes = ((extract 2 0) encoded_array%1#0)
         let concat%0#0: Encoded(len+uint64[]) = (concat results#1 extract_to_end%0#0) // on error: max array length exceeded
         let extract_to_end%1#0: bytes = ((extract 2 0) concat%0#0)

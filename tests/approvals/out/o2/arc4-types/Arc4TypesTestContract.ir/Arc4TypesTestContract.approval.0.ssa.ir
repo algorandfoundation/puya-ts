@@ -303,7 +303,7 @@ subroutine tests/approvals/arc4-types.algo.ts::testStaticBytes() -> void:
     block@0: // L93
         let encoded_array%0#0: Encoded(uint8[5][1]) = encode<uint8[5][1]>(0xaabbccddee)
         let s5#0: Encoded(uint8[5][1]) = encoded_array%0#0
-        let array_item%0#0: Encoded(uint8[5]) = s5#0[0u]
+        let array_item%0#0: Encoded(uint8[5]) = agg_read_index(s5#0, 0u)
         let tmp%0#0: bytes = decode<bytes>(array_item%0#0)
         let tmp%1#0: bool = (== tmp%0#0 0xaabbccddee)
         (assert tmp%1#0)
@@ -350,27 +350,27 @@ subroutine tests/approvals/arc4-types.algo.ts::testArrays(n: Encoded(uint64)) ->
         (assert tmp%1#0)
         let encoded_array%2#0: Encoded(uint64[2]) = encode<uint64[2]>(n#0, n#0)
         let myStatic#0: Encoded(uint64[2]) = encoded_array%2#0
-        let array_item%0#0: Encoded(uint64) = myStatic#0[0u]
+        let array_item%0#0: Encoded(uint64) = agg_read_index(myStatic#0, 0u)
         let (tmp%2#0: bytes, tmp%3#0: bytes) = _puya_lib.arc4.dynamic_array_pop_fixed_size(myArray#1, 8u)
         let myArray#2: Encoded(len+uint64[]) = tmp%3#0
         let tmp%4#0: bool = (== array_item%0#0 tmp%2#0)
         (assert tmp%4#0)
-        let updated_array%0#0: Encoded(uint64[2]) = myStatic#0.update((1u), 0x0000000000000032)
+        let updated_array%0#0: Encoded(uint64[2]) = agg_write_index(myStatic#0, 1u, 0x0000000000000032)
         let myStatic#1: Encoded(uint64[2]) = updated_array%0#0
         let encoded_array%3#0: Encoded(uint64[3]) = encode<uint64[3]>(n#0, n#0, n#0)
         let myStatic2#0: Encoded(uint64[3]) = encoded_array%3#0
         let tmp%5#0: bool = (== 3u 3u)
         goto tmp%5#0 ? block@1 : block@5
     block@1: // and_contd_L125
-        let array_item%1#0: Encoded(uint64) = myStatic2#0[0u]
+        let array_item%1#0: Encoded(uint64) = agg_read_index(myStatic2#0, 0u)
         let tmp%6#0: bool = (== array_item%1#0 n#0)
         goto tmp%6#0 ? block@2 : block@5
     block@2: // and_contd_L125
-        let array_item%2#0: Encoded(uint64) = myStatic2#0[1u]
+        let array_item%2#0: Encoded(uint64) = agg_read_index(myStatic2#0, 1u)
         let tmp%7#0: bool = (== array_item%2#0 n#0)
         goto tmp%7#0 ? block@3 : block@5
     block@3: // and_contd_L125
-        let array_item%3#0: Encoded(uint64) = myStatic2#0[2u]
+        let array_item%3#0: Encoded(uint64) = agg_read_index(myStatic2#0, 2u)
         let tmp%8#0: bool = (== array_item%3#0 n#0)
         goto tmp%8#0 ? block@4 : block@5
     block@4: // bool_true_L125
@@ -386,35 +386,35 @@ subroutine tests/approvals/arc4-types.algo.ts::testArrays(n: Encoded(uint64)) ->
         let tmp%9#0: bool = (== array_length%1#0 8u)
         goto tmp%9#0 ? block@7 : block@16
     block@7: // and_contd_L127
-        let array_item%4#0: Encoded(uint64) = doubleArray#0[0u]
+        let array_item%4#0: Encoded(uint64) = agg_read_index(doubleArray#0, 0u)
         let tmp%10#0: bool = (== array_item%4#0 n#0)
         goto tmp%10#0 ? block@8 : block@16
     block@8: // and_contd_L127
-        let array_item%5#0: Encoded(uint64) = doubleArray#0[1u]
+        let array_item%5#0: Encoded(uint64) = agg_read_index(doubleArray#0, 1u)
         let tmp%11#0: bool = (== array_item%5#0 n#0)
         goto tmp%11#0 ? block@9 : block@16
     block@9: // and_contd_L127
-        let array_item%6#0: Encoded(uint64) = doubleArray#0[2u]
+        let array_item%6#0: Encoded(uint64) = agg_read_index(doubleArray#0, 2u)
         let tmp%12#0: bool = (== array_item%6#0 n#0)
         goto tmp%12#0 ? block@10 : block@16
     block@10: // and_contd_L127
-        let array_item%7#0: Encoded(uint64) = doubleArray#0[3u]
+        let array_item%7#0: Encoded(uint64) = agg_read_index(doubleArray#0, 3u)
         let tmp%13#0: bool = (== array_item%7#0 n#0)
         goto tmp%13#0 ? block@11 : block@16
     block@11: // and_contd_L127
-        let array_item%8#0: Encoded(uint64) = doubleArray#0[4u]
+        let array_item%8#0: Encoded(uint64) = agg_read_index(doubleArray#0, 4u)
         let tmp%14#0: bool = (== array_item%8#0 n#0)
         goto tmp%14#0 ? block@12 : block@16
     block@12: // and_contd_L127
-        let array_item%9#0: Encoded(uint64) = doubleArray#0[5u]
+        let array_item%9#0: Encoded(uint64) = agg_read_index(doubleArray#0, 5u)
         let tmp%15#0: bool = (== array_item%9#0 n#0)
         goto tmp%15#0 ? block@13 : block@16
     block@13: // and_contd_L127
-        let array_item%10#0: Encoded(uint64) = doubleArray#0[6u]
+        let array_item%10#0: Encoded(uint64) = agg_read_index(doubleArray#0, 6u)
         let tmp%16#0: bool = (== array_item%10#0 n#0)
         goto tmp%16#0 ? block@14 : block@16
     block@14: // and_contd_L127
-        let array_item%11#0: Encoded(uint64) = doubleArray#0[7u]
+        let array_item%11#0: Encoded(uint64) = agg_read_index(doubleArray#0, 7u)
         let tmp%17#0: bool = (== array_item%11#0 n#0)
         goto tmp%17#0 ? block@15 : block@16
     block@15: // bool_true_L127
@@ -446,7 +446,7 @@ subroutine tests/approvals/arc4-types.algo.ts::testAddress() -> void:
         (assert tmp%3#0) // Zero address should not match sender
         let tmp%4#0: bool = (== addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ)
         (assert tmp%4#0) // Two zero addresses should match
-        let array_item%0#0: Encoded(uint8) = addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ[0u]
+        let array_item%0#0: Encoded(uint8) = agg_read_index(addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ, 0u)
         let tmp%5#0: bool = (== array_item%0#0 0x00)
         (assert tmp%5#0) // Zero address should start with zero byte
         return 
@@ -455,7 +455,7 @@ subroutine tests/approvals/arc4-types.algo.ts::testTuple() -> void:
     block@0: // L147
         let tmp%0#0: Encoded(uint64) = encode<(uint64)>(0x0000000000000022)
         let t#0: Encoded(uint64) = tmp%0#0
-        let tuple_item%0#0: Encoded(uint64) = t#0[0]
+        let tuple_item%0#0: Encoded(uint64) = agg_read_index(t#0, 0)
         let firstItem#0: Encoded(uint64) = tuple_item%0#0
         let tmp%1#0: Encoded(uint64) = decode<(Encoded(uint64),)>(t#0)
         let firstItemIndexer#0: Encoded(uint64) = tmp%1#0

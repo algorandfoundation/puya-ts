@@ -89,9 +89,8 @@ subroutine tests/approvals/local-state.algo.ts::LocalStateDemo.setState(p.a: uin
         (app_local_put tmp%2#0 "b1" b#0)
         let tmp%3#0: account = (txn Sender)
         (app_local_put tmp%3#0 "localBytes2" b#0)
-        let copy%0#0: Encoded(uint64[10]) = c#0
         let tmp%4#0: account = (txn Sender)
-        (app_local_put tmp%4#0 "localEncoded" copy%0#0)
+        (app_local_put tmp%4#0 "localEncoded" c#0)
         let tmp%5#0: account = (txn Sender)
         let encoded_for_storage%0#0: Encoded(uint64,(len+uint8[])) = encode<(uint64,(len+uint8[]))>(a#0, b#0)
         (app_local_put tmp%5#0 "localTuple" encoded_for_storage%0#0)
@@ -121,7 +120,6 @@ subroutine tests/approvals/local-state.algo.ts::LocalStateDemo.getState() -> <ui
         let tmp%4#0: account = (txn Sender)
         let (maybe_value%4#0: bytes, maybe_exists%4#0: bool) = (app_local_get_ex tmp%4#0 0u "localEncoded")
         (assert maybe_exists%4#0) // check LocalState exists
-        let copy%0#0: bytes = maybe_value%4#0
         let tmp%5#0: account = (txn Sender)
         let (maybe_value%5#0: bytes, maybe_exists%5#0: bool) = (app_local_get_ex tmp%5#0 0u "localTuple")
         (assert maybe_exists%5#0) // check LocalState exists
@@ -133,8 +131,7 @@ subroutine tests/approvals/local-state.algo.ts::LocalStateDemo.getState() -> <ui
         let tmp%11#0: account = (txn Sender)
         let (maybe_value%7#0: bytes, maybe_exists%7#0: bool) = (app_local_get_ex tmp%11#0 0u "localMutableObject")
         (assert maybe_exists%7#0) // check LocalState exists
-        let copy%1#0: bytes = maybe_value%7#0
-        return maybe_value%0#0 maybe_value%1#0 maybe_value%2#0 maybe_value%3#0 copy%0#0 tmp%6#0 tmp%7#0 tmp%9#0 tmp%10#0 copy%1#0
+        return maybe_value%0#0 maybe_value%1#0 maybe_value%2#0 maybe_value%3#0 maybe_value%4#0 tmp%6#0 tmp%7#0 tmp%9#0 tmp%10#0 maybe_value%7#0
 
 subroutine tests/approvals/local-state.algo.ts::LocalStateDemo.clearState() -> void:
     block@0: // L45
