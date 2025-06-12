@@ -54,8 +54,13 @@ export abstract class ValueProxy<TPType extends PType> extends InstanceExpressio
   compare(other: InstanceBuilder, op: BuilderComparisonOp, sourceLocation: SourceLocation): InstanceBuilder {
     return this.proxied.compare(other, op, sourceLocation)
   }
-  taggedTemplate(head: string, spans: ReadonlyArray<readonly [InstanceBuilder, string]>, sourceLocation: SourceLocation): InstanceBuilder {
-    return this.proxied.taggedTemplate(head, spans, sourceLocation)
+  taggedTemplate(
+    head: string,
+    spans: ReadonlyArray<readonly [InstanceBuilder, string]>,
+    typeArgs: readonly PType[],
+    sourceLocation: SourceLocation,
+  ): InstanceBuilder {
+    return this.proxied.taggedTemplate(head, spans, typeArgs, sourceLocation)
   }
   singleEvaluation(): InstanceBuilder {
     return this.proxied.singleEvaluation()
@@ -63,7 +68,7 @@ export abstract class ValueProxy<TPType extends PType> extends InstanceExpressio
   hasProperty(_name: string): boolean {
     return this.proxied.hasProperty(_name)
   }
-  toBytes(sourceLocation: SourceLocation): Expression {
+  toBytes(sourceLocation: SourceLocation): InstanceBuilder {
     return this.proxied.toBytes(sourceLocation)
   }
   resolvableToPType(ptype: PTypeOrClass): boolean {

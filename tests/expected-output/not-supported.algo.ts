@@ -8,7 +8,7 @@ function buildPromise() {
   // @expect-error Not Supported: void expression
   void test2(123)
 
-  // @expect-error Unable to reflect constructor type
+  // @expect-error PromiseConstructor is not supported
   return Promise.resolve()
 }
 

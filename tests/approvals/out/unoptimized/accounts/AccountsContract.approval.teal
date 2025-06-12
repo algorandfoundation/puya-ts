@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 1 93
+    intcblock 0 1 32
     bytecblock 0x00 0x068101
 
 main_block@0:
@@ -20,7 +20,7 @@ main_abi_routing@2:
     // tests/approvals/accounts.algo.ts:8
     // export class AccountsContract extends Contract {
     txna ApplicationArgs 0
-    pushbytes 0xdfe9a035 // method "getAccountInfo(account,asset)(byte[],uint64,uint64,byte[],uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,bool)"
+    pushbytes 0x443be1d4 // method "getAccountInfo(account,asset)(byte[32],uint64,uint64,byte[32],uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,bool)"
     pushbytes 0xf62943d1 // method "otherAccount()void"
     uncover 2
     match main_getAccountInfo_route@3 main_otherAccount_route@4
@@ -90,77 +90,77 @@ main_getAccountInfo_route@3:
     swap
     dup
     len
-    itob
-    extract 6 2
+    intc_2 // 32
+    ==
+    assert // invalid size
     swap
-    concat
-    cover 11
-    itob
-    cover 12
-    itob
-    cover 12
-    dup
-    len
-    itob
-    extract 6 2
-    swap
-    concat
-    cover 14
     itob
     cover 9
-    itob
-    cover 10
-    itob
-    cover 11
-    itob
-    cover 11
-    itob
-    cover 12
-    itob
-    cover 12
-    itob
-    cover 12
-    itob
-    cover 12
     swap
     itob
-    cover 12
-    bytec_0 // 0x00
-    intc_0 // 0
-    uncover 9
-    setbit
+    cover 9
+    dig 1
+    len
+    intc_2 // 32
+    ==
+    assert // invalid size
+    uncover 2
+    itob
+    cover 5
+    uncover 2
+    itob
+    cover 6
+    uncover 2
+    itob
+    cover 6
+    uncover 2
+    itob
+    cover 7
+    uncover 3
+    itob
+    cover 8
+    uncover 5
+    itob
+    cover 9
+    uncover 10
+    itob
+    cover 9
+    uncover 11
+    itob
+    cover 10
+    uncover 12
+    itob
     cover 11
     bytec_0 // 0x00
     intc_0 // 0
     uncover 15
     setbit
-    cover 9
-    intc_2 // 93
-    itob
-    extract 6 2
+    cover 11
+    bytec_0 // 0x00
+    intc_0 // 0
+    uncover 16
+    setbit
+    cover 8
     pushbytes 0x
     swap
     concat
-    dig 1
-    len
-    intc_2 // 93
-    +
-    swap
-    uncover 4
+    uncover 6
     concat
-    uncover 5
+    uncover 8
     concat
     swap
-    itob
-    extract 6 2
     concat
-    uncover 2
+    swap
     concat
-    uncover 2
+    swap
     concat
-    uncover 2
+    swap
     concat
-    uncover 2
+    swap
+    concat
+    swap
+    concat
+    uncover 6
     concat
     uncover 2
     concat
@@ -168,23 +168,15 @@ main_getAccountInfo_route@3:
     concat
     uncover 3
     concat
-    uncover 3
-    concat
-    uncover 4
-    concat
-    uncover 3
-    concat
     uncover 2
+    concat
+    swap
     intc_0 // 0
     getbit
     swap
-    pushint 737 // 737
+    pushint 1217 // 1217
     uncover 2
     setbit
-    swap
-    concat
-    swap
-    concat
     pushbytes 0x151f7c75
     swap
     concat

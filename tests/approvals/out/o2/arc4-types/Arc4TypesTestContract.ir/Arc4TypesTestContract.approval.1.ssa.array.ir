@@ -1,12 +1,25 @@
 main tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract.approvalProgram:
-    block@0: // L151
+    block@2: // while_top_L20
+        let tmp%0#1: uint64 = (global OpcodeBudget)
+        let tmp%1#1: bool = (> 1410u tmp%0#1)
+        goto tmp%1#1 ? block@3 : block@8
+    block@3: // while_body_L21
+        itxn_begin
+        ((itxn_field TypeEnum) appl)
+        ((itxn_field OnCompletion) DeleteApplication)
+        ((itxn_field ApprovalProgram) 0x068101)
+        ((itxn_field ClearStateProgram) 0x068101)
+        ((itxn_field Fee) 0u)
+        itxn_submit
+        goto block@2
+    block@8: // after_while_L20
         let array%encoded%0#1: bytes[8][] = (concat 0x 0x0000000000000041)
         let array%data%0#1: bytes[8][] = (concat 0x array%encoded%0#1)
         let encoded%0#0: bytes[8][] = array%data%0#1
         let concatenated%0#0: bytes = (concat 0x000000000000004100000000000000410000000000000041 encoded%0#0)
         let byte_len%0#0: uint64 = (len concatenated%0#0)
-        let len_%0#1: uint64 = (/ byte_len%0#0 8u)
-        let as_bytes%0#0: bytes[8] = (itob len_%0#1)
+        let len_%0#0: uint64 = (/ byte_len%0#0 8u)
+        let as_bytes%0#0: bytes[8] = (itob len_%0#0)
         let len_16_bit%0#0: bytes = ((extract 6 2) as_bytes%0#0)
         let myArray#1: bytes = (concat len_16_bit%0#0 concatenated%0#0)
         let expr_value_trimmed%1#0: bytes = ((extract 2 0) myArray#1)
@@ -16,19 +29,66 @@ main tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract.approvalProgram:
         let as_bytes%1#0: bytes[8] = (itob len_%1#0)
         let len_16_bit%1#0: bytes = ((extract 6 2) as_bytes%1#0)
         let doubleArray#0: bytes = (concat len_16_bit%1#0 concatenated%1#0)
-        let tmp%0#5: bool = (== doubleArray#0 0x000800000000000000410000000000000041000000000000004100000000000000410000000000000041000000000000004100000000000000410000000000000041)
-        (assert tmp%0#5)
+        let tmp%0#6: bool = (== doubleArray#0 0x000800000000000000410000000000000041000000000000004100000000000000410000000000000041000000000000004100000000000000410000000000000041)
+        (assert tmp%0#6)
         let array_length#0: uint64 = (extract_uint16 myArray#1 0u)
         let length_minus_1#0: uint64 = (- array_length#0 1u)
-        let tmp%0#11: bytes = (itob length_minus_1#0)
-        let tmp%1#8: bytes = ((extract 6 0) tmp%0#11)
-        let result#1: bytes = ((replace2 0) myArray#1 tmp%1#8)
-        let tmp%2#6: uint64 = (len result#1)
-        let item_location#0: uint64 = (- tmp%2#6 8u)
+        let tmp%0#13: bytes = (itob length_minus_1#0)
+        let tmp%1#10: bytes = ((extract 6 0) tmp%0#13)
+        let result#1: bytes = ((replace2 0) myArray#1 tmp%1#10)
+        let tmp%2#8: uint64 = (len result#1)
+        let item_location#0: uint64 = (- tmp%2#8 8u)
         let popped#0: bytes = (extract3 result#1 item_location#0 8u)
-        let tmp%2#2: bool = (== 0x0000000000000041 popped#0)
-        (assert tmp%2#2)
+        let tmp%2#3: bool = (== 0x0000000000000041 popped#0)
+        (assert tmp%2#3)
+        let tmp%7#1: uint64 = (extract_uint16 doubleArray#0 0u)
+        let tmp%8#1: bool = (== tmp%7#1 8u)
+        goto tmp%8#1 ? block@25 : block@34
+    block@25: // and_contd_L129
+        let tmp%9#1: bytes = ((extract 2 8) doubleArray#0)
+        let tmp%10#1: bool = (== tmp%9#1 0x0000000000000041)
+        goto tmp%10#1 ? block@26 : block@34
+    block@26: // and_contd_L129
+        let tmp%11#1: bytes = ((extract 10 8) doubleArray#0)
+        let tmp%12#1: bool = (== tmp%11#1 0x0000000000000041)
+        goto tmp%12#1 ? block@27 : block@34
+    block@27: // and_contd_L129
+        let tmp%13#1: bytes = ((extract 18 8) doubleArray#0)
+        let tmp%14#1: bool = (== tmp%13#1 0x0000000000000041)
+        goto tmp%14#1 ? block@28 : block@34
+    block@28: // and_contd_L129
+        let tmp%15#0: bytes = ((extract 26 8) doubleArray#0)
+        let tmp%16#0: bool = (== tmp%15#0 0x0000000000000041)
+        goto tmp%16#0 ? block@29 : block@34
+    block@29: // and_contd_L129
+        let tmp%17#0: bytes = ((extract 34 8) doubleArray#0)
+        let tmp%18#0: bool = (== tmp%17#0 0x0000000000000041)
+        goto tmp%18#0 ? block@30 : block@34
+    block@30: // and_contd_L129
+        let tmp%19#0: bytes = ((extract 42 8) doubleArray#0)
+        let tmp%20#0: bool = (== tmp%19#0 0x0000000000000041)
+        goto tmp%20#0 ? block@31 : block@34
+    block@31: // and_contd_L129
+        let tmp%21#0: bytes = ((extract 50 8) doubleArray#0)
+        let tmp%22#0: bool = (== tmp%21#0 0x0000000000000041)
+        goto tmp%22#0 ? block@32 : block@34
+    block@32: // and_contd_L129
+        let tmp%23#0: bytes = ((extract 58 8) doubleArray#0)
+        let tmp%24#0: bool = (== tmp%23#0 0x0000000000000041)
+        goto tmp%24#0 ? block@33 : block@34
+    block@33: // bool_true_L129
+        let and_result%1#0: bool = 1u
+        goto block@35
+    block@34: // bool_false_L129
+        let and_result%1#1: bool = 0u
+        goto block@35
+    block@35: // bool_merge_L129
+        let and_result%1#2: bool = φ(and_result%1#0 <- block@33, and_result%1#1 <- block@34)
+        (assert and_result%1#2) // assert target is match for conditions
         let b#1: bytes[32] = (txn Sender)
-        let tmp%0#6: bool = (!= addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ b#1)
-        (assert tmp%0#6) // Zero address should not match sender
+        let tmp%0#7: bytes[32] = (txn Sender)
+        let tmp%1#5: bool = (== b#1 tmp%0#7)
+        (assert tmp%1#5)
+        let tmp%2#4: bool = (!= addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ b#1)
+        (assert tmp%2#4) // Zero address should not match sender
         return 1u

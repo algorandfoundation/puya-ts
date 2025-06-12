@@ -7,14 +7,14 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         goto block@2
     block@2: // after_if_else_L1
         goto block@3
-    block@3: // L24
+    block@3: // L29
         let tmp%0#1: uint64 = (txn NumAppArgs)
         let tmp%1#0: bool = (!= tmp%0#1 0u)
         goto tmp%1#0 ? block@4 : block@10
-    block@4: // abi_routing_L24
+    block@4: // abi_routing_L29
         let tmp%2#0: bytes = (txna ApplicationArgs 0)
         switch tmp%2#0 {method "methodTwo()string" => block@5, method "b2CantOverride()string" => block@6, method "methodCommon()string" => block@7, * => block@8}
-    block@5: // methodTwo_route_L26
+    block@5: // methodTwo_route_L31
         let tmp%3#0: uint64 = (txn OnCompletion)
         let tmp%4#0: bool = (== tmp%3#0 NoOp)
         (assert tmp%4#0) // OnCompletion is not NoOp
@@ -30,7 +30,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (log tmp%7#0)
         let tests/approvals/multi-inheritance.algo.ts::BaseTwo.__puya_arc4_router__%0#0: bool = 1u
         goto block@15
-    block@6: // b2CantOverride_route_L35
+    block@6: // b2CantOverride_route_L40
         let tmp%8#0: uint64 = (txn OnCompletion)
         let tmp%9#0: bool = (== tmp%8#0 NoOp)
         (assert tmp%9#0) // OnCompletion is not NoOp
@@ -46,7 +46,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (log tmp%12#0)
         let tests/approvals/multi-inheritance.algo.ts::BaseTwo.__puya_arc4_router__%0#1: bool = 1u
         goto block@15
-    block@7: // methodCommon_route_L8
+    block@7: // methodCommon_route_L13
         let tmp%13#0: uint64 = (txn OnCompletion)
         let tmp%14#0: bool = (== tmp%13#0 NoOp)
         (assert tmp%14#0) // OnCompletion is not NoOp
@@ -62,25 +62,25 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (log tmp%17#0)
         let tests/approvals/multi-inheritance.algo.ts::BaseTwo.__puya_arc4_router__%0#2: bool = 1u
         goto block@15
-    block@8: // switch_case_default_L24
+    block@8: // switch_case_default_L29
         goto block@9
-    block@9: // switch_case_next_L24
+    block@9: // switch_case_next_L29
         goto block@14
-    block@10: // bare_routing_L24
+    block@10: // bare_routing_L29
         let tmp%18#0: uint64 = (txn OnCompletion)
         switch tmp%18#0 {0u => block@11, * => block@12}
-    block@11: // __algots__.defaultCreate_L24
+    block@11: // __algots__.defaultCreate_L29
         let tmp%19#0: uint64 = (txn ApplicationID)
         let tmp%20#0: bool = (== tmp%19#0 0u)
         (assert tmp%20#0) // can only call when creating
         tests/approvals/multi-inheritance.algo.ts::BaseTwo.__algots__.defaultCreate()
         let tests/approvals/multi-inheritance.algo.ts::BaseTwo.__puya_arc4_router__%0#3: bool = 1u
         goto block@15
-    block@12: // switch_case_default_L24
+    block@12: // switch_case_default_L29
         goto block@13
-    block@13: // switch_case_next_L24
+    block@13: // switch_case_next_L29
         goto block@14
-    block@14: // after_if_else_L24
+    block@14: // after_if_else_L29
         let tests/approvals/multi-inheritance.algo.ts::BaseTwo.__puya_arc4_router__%0#4: bool = 0u
         goto block@15
     block@15: // after_inlined_tests/approvals/multi-inheritance.algo.ts::BaseTwo.__puya_arc4_router___L1
@@ -88,32 +88,32 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         return tmp%0#0
 
 subroutine tests/approvals/multi-inheritance.algo.ts::BaseTwo.methodTwo() -> bytes:
-    block@0: // L26
+    block@0: // L31
         return "base-two"
 
 subroutine tests/approvals/multi-inheritance.algo.ts::BaseTwo.b2CantOverride() -> bytes:
-    block@0: // L35
+    block@0: // L40
         return "base-two"
 
 subroutine tests/approvals/multi-inheritance.algo.ts::CommonBase.methodCommon() -> bytes:
-    block@0: // L8
+    block@0: // L13
         return "common"
 
 subroutine tests/approvals/multi-inheritance.algo.ts::BaseTwo.__algots__.defaultCreate() -> void:
-    block@0: // L24
+    block@0: // L29
         return 
 
 subroutine tests/approvals/multi-inheritance.algo.ts::BaseTwo.constructor() -> void:
-    block@0: // L24
+    block@0: // L29
         tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor()
         (app_global_put "stateTwo" "Hello")
         return 
 
 subroutine tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor() -> void:
-    block@0: // L5
+    block@0: // L10
         goto block@1
     block@1: // L1
         goto block@2
-    block@2: // after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor_L5
+    block@2: // after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor_L10
         (app_global_put "stateCommon" 123u)
         return 

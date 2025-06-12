@@ -51,6 +51,9 @@ export function Uint64(v?: Uint64Compat | string): uint64 {
   throw new NoImplementation()
 }
 
+Uint64.MAX_VALUE = NoImplementation.value<uint64>()
+Uint64.MIN_VALUE = NoImplementation.value<uint64>()
+
 /**
  * An unsigned integer of up to 512 bits
  *
@@ -97,12 +100,14 @@ export function BigUint(v?: BigUintCompat | string): biguint {
 
 /**
  * A sequence of zero or more bytes (ie. byte[])
+ *
+ * @typeParam TLength The static length of this byte array
  */
-export type bytes = {
+export type bytes<out TLength extends uint64 = uint64> = {
   /**
    * Retrieve the length of the byte sequence
    */
-  readonly length: uint64
+  readonly length: TLength
 
   /**
    * Retrieve the byte at the index i
@@ -119,6 +124,15 @@ export type bytes = {
   concat(other: BytesCompat): bytes
 
   /**
+   * Perform a bitwise AND operation with this bytes value and another bytes value
+   * of the same length.
+   *
+   * @param other The other bytes value
+   * @returns The bitwise operation result
+   */
+  bitwiseAnd(other: bytes<TLength>): bytes<TLength>
+
+  /**
    * Perform a bitwise AND operation with this bytes value and another bytes value.
    *
    * The shorter of the two values will be zero-left extended to the larger length.
@@ -129,12 +143,30 @@ export type bytes = {
 
   /**
    * Perform a bitwise OR operation with this bytes value and another bytes value
+   * of the same length.
+   *
+   * @param other The other bytes value
+   * @returns The bitwise operation result
+   */
+  bitwiseOr(other: bytes<TLength>): bytes<TLength>
+
+  /**
+   * Perform a bitwise OR operation with this bytes value and another bytes value
    *
    * The shorter of the two values will be zero-left extended to the larger length.
    * @param other The other bytes value
    * @returns The bitwise operation result
    */
   bitwiseOr(other: BytesCompat): bytes
+
+  /**
+   * Perform a bitwise XOR operation with this bytes value and another bytes value
+   * of the same length.
+   *
+   * @param other The other bytes value
+   * @returns The bitwise operation result
+   */
+  bitwiseXor(other: bytes<TLength>): bytes<TLength>
 
   /**
    * Perform a bitwise XOR operation with this bytes value and another bytes value.
@@ -149,7 +181,7 @@ export type bytes = {
    * Perform a bitwise INVERT operation with this bytes value
    * @returns The bitwise operation result
    */
-  bitwiseInvert(): bytes
+  bitwiseInvert(): bytes<TLength>
 
   /**
    * Compares this bytes value with another.
@@ -161,7 +193,7 @@ export type bytes = {
   /**
    * Returns a copy of this bytes sequence
    */
-  slice(): bytes
+  slice(): bytes<TLength>
   /**
    * Returns a slice of this bytes sequence from the specified start to the end
    * @param start The index to start slicing from. Can be negative to count from the end.
@@ -182,6 +214,21 @@ export type bytes = {
    * Interpret this byte sequence as a utf-8 string
    */
   toString(): string
+
+  /**
+   * Change this unbounded bytes instance into a bounded one, optionally asserting the length
+   * @param options Options for the conversion
+   */
+  toFixed<TNewLength extends TLength>(options: {
+    /**
+     * The length for the bounded type
+     */
+    length: TNewLength
+    /**
+     * Whether to assert the underlying value has the specified length (default: `true`)
+     */
+    checked?: boolean
+  }): bytes<TNewLength>
 }
 
 /**
@@ -189,35 +236,35 @@ export type bytes = {
  * @param value
  * @param replacements
  */
-export function Bytes(value: TemplateStringsArray, ...replacements: BytesCompat[]): bytes
+export function Bytes<TLength extends uint64 = uint64>(value: TemplateStringsArray, ...replacements: BytesCompat[]): bytes<TLength>
 /**
  * Create a byte array from a utf8 string
  */
-export function Bytes(value: string): bytes
+export function Bytes<TLength extends uint64 = uint64>(value: string): bytes<TLength>
 /**
  * No op, returns the provided byte array.
  */
-export function Bytes(value: bytes): bytes
+export function Bytes<TLength extends uint64 = uint64>(value: bytes): bytes<TLength>
 /**
  * Create a byte array from a biguint value encoded as a variable length big-endian number
  */
-export function Bytes(value: biguint): bytes
+export function Bytes<TLength extends uint64 = uint64>(value: biguint): bytes<TLength>
 /**
  * Create a byte array from a uint64 value encoded as a fixed length 64-bit number
  */
-export function Bytes(value: uint64): bytes
+export function Bytes<TLength extends 8 = 8>(value: uint64): bytes<TLength>
 /**
  * Create a byte array from an Iterable<uint64> where each item is interpreted as a single byte and must be between 0 and 255 inclusively
  */
-export function Bytes(value: Iterable<uint64>): bytes
+export function Bytes<TLength extends uint64 = uint64>(value: Iterable<uint64>): bytes<TLength>
 /**
  * Create an empty byte array
  */
-export function Bytes(): bytes
-export function Bytes(
+export function Bytes<TLength extends uint64 = uint64>(): bytes<TLength>
+export function Bytes<TLength extends uint64 = uint64>(
   value?: BytesCompat | TemplateStringsArray | biguint | uint64 | Iterable<number>,
   ...replacements: BytesCompat[]
-): bytes {
+): bytes<TLength> {
   throw new NoImplementation()
 }
 
@@ -225,14 +272,14 @@ export function Bytes(
  * Create a new bytes value from a hexadecimal encoded string
  * @param hex A literal string of hexadecimal characters
  */
-Bytes.fromHex = (hex: string): bytes => {
+Bytes.fromHex = <TLength extends uint64 = uint64>(hex: string): bytes<TLength> => {
   throw new NoImplementation()
 }
 /**
  * Create a new bytes value from a base 64 encoded string
  * @param b64 A literal string of b64 encoded characters
  */
-Bytes.fromBase64 = (b64: string): bytes => {
+Bytes.fromBase64 = <TLength extends uint64 = uint64>(b64: string): bytes<TLength> => {
   throw new NoImplementation()
 }
 
@@ -240,16 +287,26 @@ Bytes.fromBase64 = (b64: string): bytes => {
  * Create a new bytes value from a base 32 encoded string
  * @param b32 A literal string of b32 encoded characters
  */
-Bytes.fromBase32 = (b32: string): bytes => {
+Bytes.fromBase32 = <TLength extends uint64 = uint64>(b32: string): bytes<TLength> => {
   throw new NoImplementation()
 }
 
 /**
  * An interface for types which are backed by the AVM bytes type
  */
-export interface BytesBacked {
+export interface BytesBacked<TLength extends uint64 = uint64> {
   /**
    * Retrieve the underlying bytes representing this value
    */
-  get bytes(): bytes
+  get bytes(): bytes<TLength>
 }
+
+/**
+ * Declare a homogeneous tuple with the item type T and length N.
+ *
+ * Eg.
+ * NTuple<uint64, 3> === [uint64, uint64, uint64]
+ */
+export type NTuple<T, N extends number> = N extends N ? (number extends N ? T[] : _TupleOf<T, N, readonly []>) : never
+
+type _TupleOf<T, N extends number, R extends readonly unknown[]> = R['length'] extends N ? R : _TupleOf<T, N, readonly [T, ...R]>

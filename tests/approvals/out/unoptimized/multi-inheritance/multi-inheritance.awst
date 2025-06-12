@@ -164,6 +164,9 @@ contract MultiBases
     ["stateCommon"]: uint64
     ["stateTwo"]: string
   }
+  locals {
+    ["name"]: string
+  }
   approvalProgram(): bool
   {
     if (!Boolean(txn<ApplicationID>())) {
@@ -232,10 +235,15 @@ contract MultiBases
     GlobalState["stateMulti"]: string = "Hmmm"
   }
   
-  ClusteredContract<tests/approvals/multi-inheritance.algo.ts::BaseOne,tests/approvals/multi-inheritance.algo.ts::BaseTwo>::constructor(): void
+  ClusteredContract<tests/approvals/multi-inheritance.algo.ts::NameStore,tests/approvals/multi-inheritance.algo.ts::BaseOne,tests/approvals/multi-inheritance.algo.ts::BaseTwo>::constructor(): void
   {
+    @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor()
     tests/approvals/multi-inheritance.algo.ts::BaseOne.constructor()
     tests/approvals/multi-inheritance.algo.ts::BaseTwo.constructor()
+  }
+  
+  BaseContract::constructor(): void
+  {
   }
   
   BaseOne::constructor(): void
@@ -250,14 +258,39 @@ contract MultiBases
     GlobalState["stateCommon"]: uint64 = 123
   }
   
-  BaseContract::constructor(): void
-  {
-  }
-  
   BaseTwo::constructor(): void
   {
     super.constructor()
     GlobalState["stateTwo"]: string = "Hello"
+  }
+  
+}
+contract AbiCallMultiInheritance
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  test(app: application): void
+  {
+    { itxn: (#0 = submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=app, ApplicationArgs=<tuple>[Method("methodTwo()string")]))), returnValue: ARC4_DECODE(reinterpret_cast<arc4.dynamic_array<arc4.byte>>(checked_maybe(<tuple>[extract<4, 0>((#1 = #0.LastLog)), extract<0, 4>(#1) == 0x151f7c75], comment=Bytes has valid prefix))) }
+    result: uint64 = { itxn: (#2 = submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationArgs=<tuple>[Method("add(uint64,uint64)uint64"), ARC4_ENCODE(1, wtype=arc4.uint64), ARC4_ENCODE(2, wtype=arc4.uint64)]))), returnValue: ARC4_DECODE(reinterpret_cast<arc4.uint64>(checked_maybe(<tuple>[extract<4, 0>((#3 = #2.LastLog)), extract<0, 4>(#3) == 0x151f7c75], comment=Bytes has valid prefix))) }.returnValue
+    assert(result == 3)
+  }
+  
+  add(a: uint64, b: uint64): uint64
+  {
+    return a + b
+  }
+  
+  __algots__.defaultCreate(): void
+  {
   }
   
 }

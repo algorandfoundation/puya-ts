@@ -8,7 +8,7 @@ import { wtypes } from '../../../awst/wtypes'
 import { Constants } from '../../../constants'
 import { logger } from '../../../logger'
 import { codeInvariant, enumFromValue, hexToUint8Array, invariant } from '../../../util'
-import { getArc4MethodConstant, ptypeToArc4EncodedType } from '../../arc4-util'
+import { buildArc4MethodConstant, ptypeToArc4EncodedType } from '../../arc4-util'
 import { AwstBuildContext } from '../../context/awst-build-context'
 import type { FunctionPType, PType } from '../../ptypes'
 import {
@@ -30,6 +30,7 @@ import {
   ContractProxyType,
   TypedApplicationCallResponseGeneric,
 } from '../../ptypes/arc4-types'
+import { txnFieldName } from '../../txn-fields'
 import { instanceEb } from '../../type-registry'
 import { CompileFunctionBuilder } from '../compiled/compile-function'
 import { ContractMethodExpressionBuilder } from '../free-subroutine-expression-builder'
@@ -37,7 +38,6 @@ import type { InstanceBuilder } from '../index'
 import { FunctionBuilder, InstanceExpressionBuilder, NodeBuilder } from '../index'
 import { isStaticallyIterable, StaticIterator } from '../traits/static-iterator'
 import { mapTransactionFields } from '../transactions/inner-transaction-params'
-import { txnFieldName } from '../transactions/txn-fields'
 import { requireExpressionOfType, requireInstanceBuilder } from '../util'
 import { parseFunctionArgs } from '../util/arg-parsing'
 import { validatePrefix } from './util'
@@ -64,12 +64,16 @@ export class AbiCallFunctionBuilder extends FunctionBuilder {
       ptype: functionType,
     } = functionRef
     const arc4Config = AwstBuildContext.current.getArc4Config(contractType, memberName)
-    codeInvariant(arc4Config instanceof ARC4ABIMethodConfig, `${memberName} is not an ABI method`, functionRef.sourceLocation)
-    const methodSelector = getArc4MethodConstant(functionType, arc4Config, sourceLocation)
+    codeInvariant(
+      arc4Config instanceof ARC4ABIMethodConfig,
+      `${memberName} is not an ABI method, or the containing contract has not been visited (possibly due to a circular reference)`,
+      functionRef.sourceLocation,
+    )
+    const methodSelector = buildArc4MethodConstant(functionType, arc4Config, sourceLocation)
 
     const itxnResult = makeApplicationCall({
       fields,
-      methodSelector: methodSelector,
+      methodSelector,
       functionType,
       arc4Config,
       sourceLocation,
@@ -156,7 +160,7 @@ export class ContractProxyBareCreateFunctionBuilder extends FunctionBuilder {
       methodSelector: null,
       functionType: null,
       fields,
-      proxy: this.proxy,
+      applicationProxy: this.proxy,
     })
 
     return instanceEb(itxnResult, applicationItxnType)
@@ -203,14 +207,17 @@ export class ContractProxyCallFunctionBuilder extends FunctionBuilder {
     })
 
     const arc4Config = AwstBuildContext.current.getArc4Config(this.proxy.ptype.contractType, this.functionType.name)
-    codeInvariant(arc4Config, `${this.functionType.name} is not callable`)
-
+    codeInvariant(
+      arc4Config instanceof ARC4ABIMethodConfig,
+      `${this.functionType.name} is not an ABI method, or the containing contract has not been visited (possibly due to a circular reference)`,
+      sourceLocation,
+    )
     const methodSelector =
-      arc4Config instanceof ARC4ABIMethodConfig ? getArc4MethodConstant(this.functionType, arc4Config, sourceLocation) : null
+      arc4Config instanceof ARC4ABIMethodConfig ? buildArc4MethodConstant(this.functionType, arc4Config, sourceLocation) : null
 
     return formatApplicationCallResponse({
       itxnResult: makeApplicationCall({
-        proxy: this.proxy,
+        applicationProxy: this.proxy,
         arc4Config: arc4Config,
         functionType: this.functionType,
         methodSelector,
@@ -224,21 +231,21 @@ export class ContractProxyCallFunctionBuilder extends FunctionBuilder {
 }
 const typedAppCallIgnoredFields = new Set(['args', 'appArgs'])
 
-function makeApplicationCall({
+export function buildApplicationCallTxnFields({
   sourceLocation,
   fields,
   arc4Config,
-  proxy,
+  applicationProxy,
   methodSelector,
   functionType,
 }: {
-  proxy?: InstanceBuilder
+  applicationProxy?: InstanceBuilder
   fields?: InstanceBuilder
   functionType: FunctionPType | null
   arc4Config: ARC4MethodConfig
   methodSelector: MethodConstant | null
   sourceLocation: SourceLocation
-}): Expression {
+}) {
   const itxnGroup: Expression[] = []
   const mappedFields = new Map<TxnField, Expression>([
     // Set default fee to 0 (transaction will be paid for from transaction group budget, rather than from the application balance)
@@ -251,9 +258,9 @@ function makeApplicationCall({
     mapTransactionFields(mappedFields, fields, TransactionKind.appl, sourceLocation, typedAppCallIgnoredFields)
   }
   // Add implicit fields
-  if (proxy) {
+  if (applicationProxy) {
     // Create a copy of the fields
-    const implicitFields = getImplicitFields({ proxy, mappedFields, sourceLocation, methodConfig: arc4Config })
+    const implicitFields = getImplicitFields({ applicationProxy: applicationProxy, mappedFields, sourceLocation, methodConfig: arc4Config })
     // Only add fields that aren't explicitly provided
     for (const [key, expr] of implicitFields) {
       if (!mappedFields.has(key)) {
@@ -285,7 +292,32 @@ function makeApplicationCall({
       wtype: applicationCallItxnParamsType.wtype,
     }),
   )
+  return itxnGroup
+}
 
+function makeApplicationCall({
+  sourceLocation,
+  fields,
+  arc4Config,
+  applicationProxy,
+  methodSelector,
+  functionType,
+}: {
+  applicationProxy?: InstanceBuilder
+  fields?: InstanceBuilder
+  functionType: FunctionPType | null
+  arc4Config: ARC4MethodConfig
+  methodSelector: MethodConstant | null
+  sourceLocation: SourceLocation
+}): Expression {
+  const itxnGroup = buildApplicationCallTxnFields({
+    sourceLocation,
+    fields,
+    arc4Config,
+    applicationProxy,
+    methodSelector,
+    functionType,
+  })
   const txnGroup = nodeFactory.submitInnerTransaction({
     itxns: itxnGroup,
     sourceLocation,
@@ -337,12 +369,12 @@ function formatApplicationCallResponse({
 }
 
 function getImplicitFields({
-  proxy,
+  applicationProxy,
   methodConfig,
   mappedFields,
   sourceLocation,
 }: {
-  proxy: InstanceBuilder
+  applicationProxy: InstanceBuilder
   methodConfig: ARC4ABIMethodConfig | ARC4BareMethodConfig
   mappedFields: ReadonlyMap<TxnField, Expression>
   sourceLocation: SourceLocation
@@ -375,20 +407,32 @@ function getImplicitFields({
   if (oca === OnCompletionAction.UpdateApplication || !hasAppId) {
     implicitFields.set(
       TxnField.ApprovalProgramPages,
-      requireInstanceBuilder(proxy.memberAccess('approvalProgram', sourceLocation)).resolve(),
+      requireInstanceBuilder(applicationProxy.memberAccess('approvalProgram', sourceLocation)).resolve(),
     )
     implicitFields.set(
       TxnField.ClearStateProgramPages,
-      requireInstanceBuilder(proxy.memberAccess('clearStateProgram', sourceLocation)).resolve(),
+      requireInstanceBuilder(applicationProxy.memberAccess('clearStateProgram', sourceLocation)).resolve(),
     )
     if (!hasAppId) {
-      implicitFields.set(TxnField.GlobalNumUint, requireInstanceBuilder(proxy.memberAccess('globalUints', sourceLocation)).resolve())
-      implicitFields.set(TxnField.GlobalNumByteSlice, requireInstanceBuilder(proxy.memberAccess('globalBytes', sourceLocation)).resolve())
-      implicitFields.set(TxnField.LocalNumByteSlice, requireInstanceBuilder(proxy.memberAccess('localBytes', sourceLocation)).resolve())
-      implicitFields.set(TxnField.LocalNumUint, requireInstanceBuilder(proxy.memberAccess('localUints', sourceLocation)).resolve())
+      implicitFields.set(
+        TxnField.GlobalNumUint,
+        requireInstanceBuilder(applicationProxy.memberAccess('globalUints', sourceLocation)).resolve(),
+      )
+      implicitFields.set(
+        TxnField.GlobalNumByteSlice,
+        requireInstanceBuilder(applicationProxy.memberAccess('globalBytes', sourceLocation)).resolve(),
+      )
+      implicitFields.set(
+        TxnField.LocalNumByteSlice,
+        requireInstanceBuilder(applicationProxy.memberAccess('localBytes', sourceLocation)).resolve(),
+      )
+      implicitFields.set(
+        TxnField.LocalNumUint,
+        requireInstanceBuilder(applicationProxy.memberAccess('localUints', sourceLocation)).resolve(),
+      )
       implicitFields.set(
         TxnField.ExtraProgramPages,
-        requireInstanceBuilder(proxy.memberAccess('extraProgramPages', sourceLocation)).resolve(),
+        requireInstanceBuilder(applicationProxy.memberAccess('extraProgramPages', sourceLocation)).resolve(),
       )
     }
   }

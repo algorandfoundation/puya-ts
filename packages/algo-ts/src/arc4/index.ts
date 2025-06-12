@@ -1,6 +1,6 @@
 import { BaseContract } from '../base-contract'
 import { NoImplementation } from '../internal/errors'
-import { DeliberateAny, InstanceMethod } from '../internal/typescript-helpers'
+import { AnyFunction, DeliberateAny, InstanceMethod } from '../internal/typescript-helpers'
 import { OnCompleteActionStr } from '../on-complete-action'
 import { bytes, BytesCompat, uint64 } from '../primitives'
 import { ARC4Encoded } from './encoded-types'
@@ -19,6 +19,36 @@ export class Contract extends BaseContract {
   override approvalProgram(): boolean {
     throw new NoImplementation()
   }
+}
+
+/**
+ * Defines conventional routing method names. When used, methods with these names will be implicitly routed to the corresponding
+ * application lifecycle event.
+ *
+ * @remarks This behaviour is independent of a contract explicitly implementing this interface. The interface is provided simply to improve
+ * the developer experience of using this feature.
+ */
+export interface ConventionalRouting {
+  /**
+   * The function to invoke when closing out of this application
+   */
+  closeOutOfApplication?: AnyFunction
+  /**
+   * The function to invoke when creating this application
+   */
+  createApplication?: AnyFunction
+  /**
+   * The function to invoke when deleting this application
+   */
+  deleteApplication?: AnyFunction
+  /**
+   * The function to invoke when opting in to this application
+   */
+  optInToApplication?: AnyFunction
+  /**
+   * The function to invoke when updating this application
+   */
+  updateApplication?: AnyFunction
 }
 
 /**
@@ -133,15 +163,15 @@ export function baremethod<TContract extends Contract>(config?: BareMethodConfig
  * @param methodSignature An ARC4 contract method reference. (Eg. `MyContract.prototype.myMethod`)
  * @returns The ARC4 method selector. Eg. `02BECE11`
  */
-export function methodSelector(methodSignature: InstanceMethod<Contract>): bytes
+export function methodSelector(methodSignature: InstanceMethod<Contract>): bytes<4>
 /**
  * Returns the ARC4 method selector for a given ARC4 method signature. The method selector is the first
  * 4 bytes of the SHA512/256 hash of the method signature.
  * @param methodSignature An ARC4 method signature string (Eg. `hello(string)string`.  Must be a compile time constant)
  * @returns The ARC4 method selector. Eg. `02BECE11`
  */
-export function methodSelector(methodSignature: string): bytes
-export function methodSelector(methodSignature: string | InstanceMethod<Contract>): bytes {
+export function methodSelector(methodSignature: string): bytes<4>
+export function methodSelector(methodSignature: string | InstanceMethod<Contract>): bytes<4> {
   throw new NoImplementation()
 }
 
@@ -167,7 +197,7 @@ export function decodeArc4<T>(bytes: BytesCompat, prefix: 'none' | 'log' = 'none
  * Encode the provided Algorand TypeScript value as ARC4 bytes
  * @param value Any native Algorand TypeScript value with a supported ARC4 encoding
  */
-export function encodeArc4<T>(value: T): bytes {
+export function encodeArc4<const T>(value: T): bytes {
   throw new NoImplementation()
 }
 

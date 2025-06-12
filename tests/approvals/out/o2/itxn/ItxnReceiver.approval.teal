@@ -1,0 +1,81 @@
+#pragma version 10
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 1
+    // tests/approvals/itxn.algo.ts:227
+    // class ItxnReceiver extends Contract {
+    txn NumAppArgs
+    bz main_bare_routing@6
+    pushbytes 0x1971d197 // method "receivePay(uint64,pay,string)(uint64,uint64,string)"
+    txna ApplicationArgs 0
+    match main_receivePay_route@3
+
+main_after_if_else@10:
+    // tests/approvals/itxn.algo.ts:227
+    // class ItxnReceiver extends Contract {
+    pushint 0 // 0
+    return
+
+main_receivePay_route@3:
+    // tests/approvals/itxn.algo.ts:228
+    // public receivePay(a: uint64, b: gtxn.PaymentTxn, c: string): [uint64, uint64, string] {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    // tests/approvals/itxn.algo.ts:227
+    // class ItxnReceiver extends Contract {
+    txna ApplicationArgs 1
+    btoi
+    txn GroupIndex
+    intc_0 // 1
+    -
+    dup
+    gtxns TypeEnum
+    intc_0 // pay
+    ==
+    assert // transaction type is pay
+    txna ApplicationArgs 2
+    extract 2 0
+    // tests/approvals/itxn.algo.ts:229
+    // return [a, b.amount, c]
+    swap
+    gtxns Amount
+    // tests/approvals/itxn.algo.ts:228
+    // public receivePay(a: uint64, b: gtxn.PaymentTxn, c: string): [uint64, uint64, string] {
+    uncover 2
+    itob
+    swap
+    itob
+    dig 2
+    len
+    itob
+    extract 6 2
+    uncover 3
+    concat
+    cover 2
+    concat
+    pushbytes 0x0012
+    concat
+    swap
+    concat
+    pushbytes 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
+
+main_bare_routing@6:
+    // tests/approvals/itxn.algo.ts:227
+    // class ItxnReceiver extends Contract {
+    txn OnCompletion
+    bnz main_after_if_else@10
+    txn ApplicationID
+    !
+    assert // can only call when creating
+    intc_0 // 1
+    return

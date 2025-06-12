@@ -63,12 +63,30 @@ type NumericComparison<T> =
        */
       between: [T, T]
     }
+  | {
+      /**
+       * Is the subject not equal to the specified value
+       */
+      not: T
+    }
+
+/**
+ * Defines possible comparison expressions for non-numeric types
+ */
+type NonNumericComparison<T> =
+  | T
+  | {
+      /**
+       * Is the subject not equal to the specified value
+       */
+      not: T
+    }
 
 /**
  * Returns compatible comparison expressions for a type `T`
  * @typeParam T The type requiring comparison
  */
-type ComparisonFor<T> = T extends uint64 | biguint ? NumericComparison<T> : T
+type ComparisonFor<T> = T extends uint64 | biguint ? NumericComparison<T> : NonNumericComparison<T>
 
 /**
  * A set of tests to apply to the match subject

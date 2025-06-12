@@ -41,7 +41,12 @@ export abstract class LiteralExpressionBuilder extends InstanceBuilder {
     this.throwInvalidExpression()
   }
 
-  taggedTemplate(head: string, spans: ReadonlyArray<readonly [InstanceBuilder, string]>, sourceLocation: SourceLocation): InstanceBuilder {
+  taggedTemplate(
+    head: string,
+    spans: ReadonlyArray<readonly [InstanceBuilder, string]>,
+    typeArgs: readonly PType[],
+    sourceLocation: SourceLocation,
+  ): InstanceBuilder {
     this.throwInvalidExpression()
   }
 
@@ -53,7 +58,7 @@ export abstract class LiteralExpressionBuilder extends InstanceBuilder {
     this.throwInvalidExpression()
   }
 
-  toBytes(sourceLocation: SourceLocation): awst.Expression {
+  toBytes(sourceLocation: SourceLocation): InstanceBuilder {
     this.throwInvalidExpression()
   }
 

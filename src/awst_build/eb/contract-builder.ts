@@ -61,6 +61,11 @@ export class ContractThisBuilder extends InstanceBuilder<ContractClassPType> {
     if (method) {
       return new ContractMethodExpressionBuilder(sourceLocation, method, this.ptype)
     }
+    for (const base of this.ptype.allBases()) {
+      if (name in base.methods) {
+        return new ContractMethodExpressionBuilder(sourceLocation, base.methods[name], base)
+      }
+    }
     return super.memberAccess(name, sourceLocation)
   }
 }

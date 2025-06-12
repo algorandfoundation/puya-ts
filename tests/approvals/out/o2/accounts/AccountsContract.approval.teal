@@ -11,7 +11,7 @@ main:
     // export class AccountsContract extends Contract {
     txn NumAppArgs
     bz main_bare_routing@7
-    pushbytess 0xdfe9a035 0xf62943d1 // method "getAccountInfo(account,asset)(byte[],uint64,uint64,byte[],uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,bool)", method "otherAccount()void"
+    pushbytess 0x443be1d4 0xf62943d1 // method "getAccountInfo(account,asset)(byte[32],uint64,uint64,byte[32],uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,bool)", method "otherAccount()void"
     txna ApplicationArgs 0
     match main_getAccountInfo_route@3 main_otherAccount_route@4
 
@@ -142,64 +142,51 @@ main_after_while@21:
     dig 13
     dig 15
     asset_holding_get AssetBalance
-    cover 3
+    cover 2
     pop
     // tests/approvals/accounts.algo.ts:9
     // public getAccountInfo(account: Account, asset: Asset) {
-    dig 14
-    len
-    itob
-    extract 6 2
-    uncover 15
-    concat
-    uncover 14
-    itob
-    uncover 14
-    itob
-    dig 14
-    len
-    itob
-    extract 6 2
-    uncover 15
-    concat
-    uncover 14
-    itob
-    uncover 14
-    itob
-    uncover 14
-    itob
-    uncover 14
-    itob
-    uncover 14
-    itob
-    uncover 14
-    itob
-    uncover 14
-    itob
-    uncover 14
+    uncover 13
     itob
     uncover 13
     itob
-    bytec_1 // 0x00
-    intc_0 // 0
-    uncover 15
-    setbit
-    bytec_1 // 0x00
-    intc_0 // 0
-    uncover 16
-    setbit
-    dig 14
+    dig 13
     len
-    pushint 93 // 93
-    +
-    pushbytes 0x005d
-    uncover 15
-    concat
-    uncover 14
-    concat
-    swap
+    pushint 32 // 32
+    ==
+    assert // invalid size
+    uncover 12
     itob
-    extract 6 2
+    uncover 12
+    itob
+    uncover 12
+    itob
+    uncover 12
+    itob
+    uncover 12
+    itob
+    uncover 12
+    itob
+    uncover 12
+    itob
+    uncover 12
+    itob
+    uncover 12
+    itob
+    bytec_1 // 0x00
+    intc_0 // 0
+    uncover 13
+    setbit
+    bytec_1 // 0x00
+    intc_0 // 0
+    uncover 14
+    setbit
+    uncover 14
+    uncover 13
+    concat
+    uncover 12
+    concat
+    uncover 12
     concat
     uncover 11
     concat
@@ -224,13 +211,9 @@ main_after_while@21:
     swap
     intc_0 // 0
     getbit
-    pushint 737 // 737
+    pushint 1217 // 1217
     swap
     setbit
-    uncover 2
-    concat
-    swap
-    concat
     pushbytes 0x151f7c75
     swap
     concat

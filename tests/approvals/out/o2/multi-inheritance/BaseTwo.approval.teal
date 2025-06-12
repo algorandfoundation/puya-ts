@@ -7,18 +7,18 @@ main:
     bytecblock 0x151f7c750008626173652d74776f
     txn ApplicationID
     bnz main_after_if_else@2
-    // tests/approvals/multi-inheritance.algo.ts:6
+    // tests/approvals/multi-inheritance.algo.ts:11
     // stateCommon = GlobalState<uint64>({ initialValue: 123 })
     pushbytes "stateCommon"
     pushint 123 // 123
     app_global_put
-    // tests/approvals/multi-inheritance.algo.ts:25
+    // tests/approvals/multi-inheritance.algo.ts:30
     // stateTwo = GlobalState({ initialValue: 'Hello' })
     pushbytess "stateTwo" "Hello" // "stateTwo", "Hello"
     app_global_put
 
 main_after_if_else@2:
-    // tests/approvals/multi-inheritance.algo.ts:24
+    // tests/approvals/multi-inheritance.algo.ts:29
     // export class BaseTwo extends CommonBase {
     txn NumAppArgs
     bz main_bare_routing@10
@@ -27,13 +27,13 @@ main_after_if_else@2:
     match main_methodTwo_route@5 main_b2CantOverride_route@6 main_methodCommon_route@7
 
 main_after_if_else@14:
-    // tests/approvals/multi-inheritance.algo.ts:24
+    // tests/approvals/multi-inheritance.algo.ts:29
     // export class BaseTwo extends CommonBase {
     pushint 0 // 0
     return
 
 main_methodCommon_route@7:
-    // tests/approvals/multi-inheritance.algo.ts:8
+    // tests/approvals/multi-inheritance.algo.ts:13
     // methodCommon() {
     txn OnCompletion
     !
@@ -46,7 +46,7 @@ main_methodCommon_route@7:
     return
 
 main_b2CantOverride_route@6:
-    // tests/approvals/multi-inheritance.algo.ts:35
+    // tests/approvals/multi-inheritance.algo.ts:40
     // b2CantOverride(): string {
     txn OnCompletion
     !
@@ -59,7 +59,7 @@ main_b2CantOverride_route@6:
     return
 
 main_methodTwo_route@5:
-    // tests/approvals/multi-inheritance.algo.ts:26
+    // tests/approvals/multi-inheritance.algo.ts:31
     // methodTwo() {
     txn OnCompletion
     !
@@ -72,7 +72,7 @@ main_methodTwo_route@5:
     return
 
 main_bare_routing@10:
-    // tests/approvals/multi-inheritance.algo.ts:24
+    // tests/approvals/multi-inheritance.algo.ts:29
     // export class BaseTwo extends CommonBase {
     txn OnCompletion
     bnz main_after_if_else@14

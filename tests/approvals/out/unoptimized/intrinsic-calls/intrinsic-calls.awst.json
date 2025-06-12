@@ -22,9 +22,7 @@
         "wtype": {
           "_type": "WType",
           "name": "uint64",
-          "immutable": true,
-          "ephemeral": false,
-          "scalar_type": 2
+          "immutable": true
         }
       },
       {
@@ -38,20 +36,17 @@
           "end_column": 33
         },
         "wtype": {
-          "_type": "WType",
+          "_type": "BytesWType",
           "name": "bytes",
           "immutable": true,
-          "ephemeral": false,
-          "scalar_type": 1
+          "length": null
         }
       }
     ],
     "return_type": {
       "_type": "WType",
       "name": "void",
-      "immutable": true,
-      "ephemeral": false,
-      "scalar_type": null
+      "immutable": true
     },
     "body": {
       "_type": "Block",
@@ -84,9 +79,7 @@
             "wtype": {
               "_type": "WType",
               "name": "uint64",
-              "immutable": true,
-              "ephemeral": false,
-              "scalar_type": 2
+              "immutable": true
             },
             "name": "x"
           },
@@ -102,9 +95,7 @@
             "wtype": {
               "_type": "WType",
               "name": "uint64",
-              "immutable": true,
-              "ephemeral": false,
-              "scalar_type": 2
+              "immutable": true
             },
             "op_code": "setbit",
             "immediates": [],
@@ -121,9 +112,7 @@
                 "wtype": {
                   "_type": "WType",
                   "name": "uint64",
-                  "immutable": true,
-                  "ephemeral": false,
-                  "scalar_type": 2
+                  "immutable": true
                 },
                 "name": "a"
               },
@@ -139,9 +128,7 @@
                 "wtype": {
                   "_type": "WType",
                   "name": "uint64",
-                  "immutable": true,
-                  "ephemeral": false,
-                  "scalar_type": 2
+                  "immutable": true
                 },
                 "value": 8,
                 "teal_alias": null
@@ -158,9 +145,7 @@
                 "wtype": {
                   "_type": "WType",
                   "name": "uint64",
-                  "immutable": true,
-                  "ephemeral": false,
-                  "scalar_type": 2
+                  "immutable": true
                 },
                 "value": 1,
                 "teal_alias": null
@@ -187,11 +172,10 @@
               "end_column": 9
             },
             "wtype": {
-              "_type": "WType",
+              "_type": "BytesWType",
               "name": "bytes",
               "immutable": true,
-              "ephemeral": false,
-              "scalar_type": 1
+              "length": null
             },
             "name": "y"
           },
@@ -205,11 +189,10 @@
               "end_column": 31
             },
             "wtype": {
-              "_type": "WType",
+              "_type": "BytesWType",
               "name": "bytes",
               "immutable": true,
-              "ephemeral": false,
-              "scalar_type": 1
+              "length": null
             },
             "op_code": "setbit",
             "immediates": [],
@@ -224,11 +207,10 @@
                   "end_column": 23
                 },
                 "wtype": {
-                  "_type": "WType",
+                  "_type": "BytesWType",
                   "name": "bytes",
                   "immutable": true,
-                  "ephemeral": false,
-                  "scalar_type": 1
+                  "length": null
                 },
                 "name": "b"
               },
@@ -244,9 +226,7 @@
                 "wtype": {
                   "_type": "WType",
                   "name": "uint64",
-                  "immutable": true,
-                  "ephemeral": false,
-                  "scalar_type": 2
+                  "immutable": true
                 },
                 "value": 12,
                 "teal_alias": null
@@ -263,9 +243,7 @@
                 "wtype": {
                   "_type": "WType",
                   "name": "uint64",
-                  "immutable": true,
-                  "ephemeral": false,
-                  "scalar_type": 2
+                  "immutable": true
                 },
                 "value": 9,
                 "teal_alias": null
@@ -292,11 +270,10 @@
               "end_column": 9
             },
             "wtype": {
-              "_type": "WType",
-              "name": "bytes",
+              "_type": "BytesWType",
+              "name": "bytes[8]",
               "immutable": true,
-              "ephemeral": false,
-              "scalar_type": 1
+              "length": 8
             },
             "name": "z"
           },
@@ -310,11 +287,10 @@
               "end_column": 19
             },
             "wtype": {
-              "_type": "WType",
-              "name": "bytes",
+              "_type": "BytesWType",
+              "name": "bytes[8]",
               "immutable": true,
-              "ephemeral": false,
-              "scalar_type": 1
+              "length": 8
             },
             "op_code": "itob",
             "immediates": [],
@@ -331,9 +307,7 @@
                 "wtype": {
                   "_type": "WType",
                   "name": "uint64",
-                  "immutable": true,
-                  "ephemeral": false,
-                  "scalar_type": 2
+                  "immutable": true
                 },
                 "name": "x"
               }
@@ -359,11 +333,10 @@
               "end_column": 9
             },
             "wtype": {
-              "_type": "WType",
-              "name": "bytes",
+              "_type": "BytesWType",
+              "name": "bytes[32]",
               "immutable": true,
-              "ephemeral": false,
-              "scalar_type": 1
+              "length": 32
             },
             "name": "g"
           },
@@ -377,17 +350,16 @@
               "end_column": 21
             },
             "wtype": {
-              "_type": "WType",
-              "name": "bytes",
+              "_type": "BytesWType",
+              "name": "bytes[32]",
               "immutable": true,
-              "ephemeral": false,
-              "scalar_type": 1
+              "length": 32
             },
             "op_code": "sha256",
             "immediates": [],
             "stack_args": [
               {
-                "_type": "VarExpression",
+                "_type": "ReinterpretCast",
                 "source_location": {
                   "file": "tests/approvals/intrinsic-calls.algo.ts",
                   "line": 10,
@@ -396,13 +368,28 @@
                   "end_column": 20
                 },
                 "wtype": {
-                  "_type": "WType",
+                  "_type": "BytesWType",
                   "name": "bytes",
                   "immutable": true,
-                  "ephemeral": false,
-                  "scalar_type": 1
+                  "length": null
                 },
-                "name": "z"
+                "expr": {
+                  "_type": "VarExpression",
+                  "source_location": {
+                    "file": "tests/approvals/intrinsic-calls.algo.ts",
+                    "line": 10,
+                    "end_line": 10,
+                    "column": 19,
+                    "end_column": 20
+                  },
+                  "wtype": {
+                    "_type": "BytesWType",
+                    "name": "bytes[8]",
+                    "immutable": true,
+                    "length": 8
+                  },
+                  "name": "z"
+                }
               }
             ]
           }

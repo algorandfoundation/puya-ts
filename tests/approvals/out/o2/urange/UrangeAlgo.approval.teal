@@ -1,0 +1,222 @@
+#pragma version 10
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 1 0 8 2
+    bytecblock 0x0000 0x0001 0x151f7c75
+    intc_1 // 0
+    pushbytes ""
+    // tests/approvals/urange.algo.ts:4
+    // class UrangeAlgo extends Contract {
+    txn NumAppArgs
+    bz main_bare_routing@8
+    pushbytess 0x01329a32 0xea63d4ac 0xad2e1f0e // method "testSingleArg()uint64[]", method "testTwoArg()uint64[]", method "testThreeArg()uint64[]"
+    txna ApplicationArgs 0
+    match main_testSingleArg_route@3 main_testTwoArg_route@4 main_testThreeArg_route@5
+
+main_after_if_else@12:
+    // tests/approvals/urange.algo.ts:4
+    // class UrangeAlgo extends Contract {
+    intc_1 // 0
+    return
+
+main_testThreeArg_route@5:
+    // tests/approvals/urange.algo.ts:19
+    // testThreeArg() {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    // tests/approvals/urange.algo.ts:20
+    // let results: uint64[] = []
+    bytec_0 // 0x0000
+    bury 2
+    // tests/approvals/urange.algo.ts:21
+    // for (const i of urange(2, 10, 3)) {
+    intc_3 // 2
+    bury 1
+
+main_for_header@17:
+    // tests/approvals/urange.algo.ts:21
+    // for (const i of urange(2, 10, 3)) {
+    dup
+    pushint 10 // 10
+    <
+    bz main_after_for@19
+    // tests/approvals/urange.algo.ts:22
+    // results = [...results, i]
+    dig 1
+    extract 2 0
+    dig 1
+    dup
+    cover 2
+    itob
+    bytec_1 // 0x0001
+    swap
+    concat
+    extract 2 0
+    concat
+    dup
+    len
+    intc_2 // 8
+    /
+    itob
+    extract 6 2
+    swap
+    concat
+    bury 3
+    // tests/approvals/urange.algo.ts:21
+    // for (const i of urange(2, 10, 3)) {
+    pushint 3 // 3
+    +
+    bury 1
+    b main_for_header@17
+
+main_after_for@19:
+    // tests/approvals/urange.algo.ts:19
+    // testThreeArg() {
+    bytec_2 // 0x151f7c75
+    dig 2
+    concat
+    log
+    intc_0 // 1
+    return
+
+main_testTwoArg_route@4:
+    // tests/approvals/urange.algo.ts:12
+    // testTwoArg() {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    // tests/approvals/urange.algo.ts:13
+    // let results: uint64[] = []
+    bytec_0 // 0x0000
+    bury 2
+    // tests/approvals/urange.algo.ts:14
+    // for (const i of urange(2, 5)) {
+    intc_3 // 2
+    bury 1
+
+main_for_header@22:
+    // tests/approvals/urange.algo.ts:14
+    // for (const i of urange(2, 5)) {
+    dup
+    pushint 5 // 5
+    <
+    bz main_after_for@24
+    // tests/approvals/urange.algo.ts:15
+    // results = [...results, i]
+    dig 1
+    extract 2 0
+    dig 1
+    dup
+    cover 2
+    itob
+    bytec_1 // 0x0001
+    swap
+    concat
+    extract 2 0
+    concat
+    dup
+    len
+    intc_2 // 8
+    /
+    itob
+    extract 6 2
+    swap
+    concat
+    bury 3
+    // tests/approvals/urange.algo.ts:14
+    // for (const i of urange(2, 5)) {
+    intc_0 // 1
+    +
+    bury 1
+    b main_for_header@22
+
+main_after_for@24:
+    // tests/approvals/urange.algo.ts:12
+    // testTwoArg() {
+    bytec_2 // 0x151f7c75
+    dig 2
+    concat
+    log
+    intc_0 // 1
+    return
+
+main_testSingleArg_route@3:
+    // tests/approvals/urange.algo.ts:5
+    // testSingleArg() {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    // tests/approvals/urange.algo.ts:6
+    // let results: uint64[] = []
+    bytec_0 // 0x0000
+    bury 2
+    // tests/approvals/urange.algo.ts:7
+    // for (const i of urange(5)) {
+    intc_1 // 0
+    bury 1
+
+main_for_header@27:
+    // tests/approvals/urange.algo.ts:7
+    // for (const i of urange(5)) {
+    dup
+    pushint 5 // 5
+    <
+    bz main_after_for@29
+    // tests/approvals/urange.algo.ts:8
+    // results = [...results, i]
+    dig 1
+    extract 2 0
+    dig 1
+    dup
+    cover 2
+    itob
+    bytec_1 // 0x0001
+    swap
+    concat
+    extract 2 0
+    concat
+    dup
+    len
+    intc_2 // 8
+    /
+    itob
+    extract 6 2
+    swap
+    concat
+    bury 3
+    // tests/approvals/urange.algo.ts:7
+    // for (const i of urange(5)) {
+    intc_0 // 1
+    +
+    bury 1
+    b main_for_header@27
+
+main_after_for@29:
+    // tests/approvals/urange.algo.ts:5
+    // testSingleArg() {
+    bytec_2 // 0x151f7c75
+    dig 2
+    concat
+    log
+    intc_0 // 1
+    return
+
+main_bare_routing@8:
+    // tests/approvals/urange.algo.ts:4
+    // class UrangeAlgo extends Contract {
+    txn OnCompletion
+    bnz main_after_if_else@12
+    txn ApplicationID
+    !
+    assert // can only call when creating
+    intc_0 // 1
+    return

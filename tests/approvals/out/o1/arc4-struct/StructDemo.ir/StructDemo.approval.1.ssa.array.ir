@@ -188,11 +188,11 @@ subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.toNative(v1: bytes[16
 
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.getPlugin(key: bytes) -> bytes:
     block@0: // L52
-        let tmp%0#0: bytes = (concat "plugins" key#0)
-        let (value#0: bytes, maybe_exists%0#0: bool) = (box_get tmp%0#0)
+        let box_prefixed_key%0#0: bytes = (concat "plugins" key#0)
+        let (value#0: bytes, maybe_exists%0#0: bool) = (box_get box_prefixed_key%0#0)
         (assert maybe_exists%0#0) // Box must have value
-        let tmp%2#0: uint64 = (extract_uint64 value#0 16u)
-        (assert tmp%2#0) // Last called not zero
+        let tmp%1#0: uint64 = (extract_uint64 value#0 16u)
+        (assert tmp%1#0) // Last called not zero
         return value#0
 
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.getMain() -> bytes:
@@ -206,30 +206,30 @@ subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.getMain() -> bytes:
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.setLastCalled(key: bytes, index: uint64, lastCalled: uint64) -> void:
     block@0: // L64
         let val_as_bytes%0#0: bytes[8] = (itob lastCalled#0)
-        let tmp%0#0: bytes = (concat "plugins" key#0)
-        let (maybe_value%0#0: bytes, maybe_exists%0#0: bool) = (box_get tmp%0#0)
+        let box_prefixed_key%0#0: bytes = (concat "plugins" key#0)
+        let (maybe_value%0#0: bytes, maybe_exists%0#0: bool) = (box_get box_prefixed_key%0#0)
         (assert maybe_exists%0#0) // Box must have value
         let item_start_offset%0#0: uint64 = (extract_uint16 maybe_value%0#0 25u)
         let item_end_offset%0#0: uint64 = (len maybe_value%0#0)
-        let tmp%1#0: bytes = (substring3 maybe_value%0#0 item_start_offset%0#0 item_end_offset%0#0)
-        let array_head_and_tail%0#0: bytes = ((extract 2 0) tmp%1#0)
+        let tmp%0#0: bytes = (substring3 maybe_value%0#0 item_start_offset%0#0 item_end_offset%0#0)
+        let array_head_and_tail%0#0: bytes = ((extract 2 0) tmp%0#0)
         let item_offset%0#0: uint64 = (* index#0 20u)
-        let tmp%2#0: bytes = (extract3 array_head_and_tail%0#0 item_offset%0#0 20u) // on error: Index access is out of bounds
-        let updated_data%0#0: bytes = ((replace2 12) tmp%2#0 val_as_bytes%0#0)
-        let array_length%0#0: uint64 = (extract_uint16 tmp%1#0 0u)
+        let tmp%1#0: bytes = (extract3 array_head_and_tail%0#0 item_offset%0#0 20u) // on error: Index access is out of bounds
+        let updated_data%0#0: bytes = ((replace2 12) tmp%1#0 val_as_bytes%0#0)
+        let array_length%0#0: uint64 = (extract_uint16 tmp%0#0 0u)
         let index_is_in_bounds%0#0: bool = (< index#0 array_length%0#0)
         (assert index_is_in_bounds%0#0) // Index access is out of bounds
         let write_offset%0#1: uint64 = (+ item_offset%0#0 2u)
-        let updated_target%0#0: bytes = (replace3 tmp%1#0 write_offset%0#1 updated_data%0#0)
+        let updated_target%0#0: bytes = (replace3 tmp%0#0 write_offset%0#1 updated_data%0#0)
         let data_up_to_item%0#0: bytes = (extract3 maybe_value%0#0 0u item_start_offset%0#0)
         let updated_data%1#0: bytes = (concat data_up_to_item%0#0 updated_target%0#0)
-        (box_del tmp%0#0)
-        (box_put tmp%0#0 updated_data%1#0)
+        (box_del box_prefixed_key%0#0)
+        (box_put box_prefixed_key%0#0 updated_data%1#0)
         return 
 
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.setPlugin(key: bytes) -> void:
     block@0: // L68
-        let tmp%2#0: bytes = (concat "plugins" key#0)
-        (box_del tmp%2#0)
-        (box_put tmp%2#0 0x00000000000000010000000000000000000000000000000000001b0001a78000de00000000000000010000000000000001)
+        let box_prefixed_key%0#0: bytes = (concat "plugins" key#0)
+        (box_del box_prefixed_key%0#0)
+        (box_put box_prefixed_key%0#0 0x00000000000000010000000000000000000000000000000000001b0001a78000de00000000000000010000000000000001)
         return 

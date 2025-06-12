@@ -7,6 +7,17 @@ import { bytes, uint64 } from './primitives'
  */
 export type Box<TValue> = {
   /**
+   * Create the box for this proxy with a bzero value.
+   *  - If options.size is specified, the box will be created with that length
+   *  - Otherwise the box will be created with storage size of TValue. Errors if the size of TValue is not fixed
+   *
+   * No op if the box already exists with the same size
+   * Errors if the box already exists with a different size.
+   * Errors if the specified size is greater than the max box size (32,768)
+   * @returns True if the box was created, false if it already existed
+   */
+  create(options?: { size?: uint64 }): boolean
+  /**
    * Get the key used by this box proxy
    */
   readonly key: bytes
@@ -42,6 +53,11 @@ export type Box<TValue> = {
    * Returns the length of the box, or error if the box does not exist
    */
   readonly length: uint64
+
+  /**
+   * Returns a BoxRef instance which allows for more direct mutation of the bytes contained in this box
+   */
+  readonly ref: BoxRef
 }
 /**
  * A BoxMap proxy

@@ -56,7 +56,7 @@ export class CompileOptions {
     this.cliTemplateDefinitions = options.cliTemplateDefinitions ?? defaultPuyaOptions.cliTemplateDefinitions
     this.templateVarsPrefix = options.templateVarsPrefix ?? defaultPuyaOptions.templateVarsPrefix
     this.localsCoalescingStrategy = options.localsCoalescingStrategy ?? defaultPuyaOptions.localsCoalescingStrategy
-    this.customPuyaPath = options.customPuyaPath
+    this.customPuyaPath = options.customPuyaPath ?? process.env.PUYA_PATH
   }
 
   buildPuyaOptions(compilationSet: CompilationSetMapping) {

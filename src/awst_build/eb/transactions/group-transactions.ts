@@ -2,18 +2,17 @@ import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
 import { IntegerConstant } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
-import type { TxnFieldData } from '../../../awst/txn-fields'
-import { TxnFields } from '../../../awst/txn-fields'
 import { Constants } from '../../../constants'
 import { logger } from '../../../logger'
 import { invariant } from '../../../util'
 import type { PType } from '../../ptypes'
 import { GroupTransactionPType, TransactionFunctionType, uint64PType } from '../../ptypes'
+import type { TxnFieldMetaData } from '../../txn-fields'
+import { getTxnFieldMetaData } from '../../txn-fields'
 import { instanceEb } from '../../type-registry'
 import type { NodeBuilder } from '../index'
 import { FunctionBuilder, InstanceExpressionBuilder } from '../index'
 import { parseFunctionArgs } from '../util/arg-parsing'
-import { anyTxnFields, txnKindToFields } from './txn-fields'
 import { getGroupTransactionType } from './util'
 
 export class GroupTransactionExpressionBuilder extends InstanceExpressionBuilder<GroupTransactionPType> {
@@ -23,33 +22,26 @@ export class GroupTransactionExpressionBuilder extends InstanceExpressionBuilder
   }
 
   hasProperty(name: string): boolean {
-    const txnKind = this.ptype.kind
-    const fields = txnKind === undefined ? anyTxnFields : txnKindToFields[txnKind]
-    return name in fields
+    return getTxnFieldMetaData({ kind: this.ptype.kind, memberName: name }) !== false
   }
 
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
-    const txnKind = this.ptype.kind
-    const fields = txnKind === undefined ? anyTxnFields : txnKindToFields[txnKind]
-    if (name in fields) {
-      const [field, returnType] = fields[name as keyof typeof fields]
-      const data = TxnFields[field]
-
-      if (data.numValues === 1) {
+    const data = getTxnFieldMetaData({ kind: this.ptype.kind, memberName: name })
+    if (data) {
+      if (data.indexable !== true) {
         return instanceEb(
           nodeFactory.intrinsicCall({
             sourceLocation,
             stackArgs: [this._expr],
-            immediates: [data.immediate],
-            wtype: data.wtype,
+            immediates: [data.field],
+            wtype: data.ptype.wtypeOrThrow,
             opCode: 'gtxns',
           }),
-          returnType,
+          data.ptype,
         )
       } else {
         return new IndexedTransactionFieldFunctionBuilder(this._expr, {
           txnData: data,
-          returnType,
           memberName: name,
         })
       }
@@ -98,7 +90,7 @@ export class GroupTransactionFunctionBuilder extends FunctionBuilder {
 class IndexedTransactionFieldFunctionBuilder extends FunctionBuilder {
   constructor(
     private gtxn: Expression,
-    private config: { txnData: TxnFieldData; returnType: PType; memberName: string },
+    private config: { txnData: TxnFieldMetaData; memberName: string },
   ) {
     super(gtxn.sourceLocation)
   }
@@ -119,11 +111,11 @@ class IndexedTransactionFieldFunctionBuilder extends FunctionBuilder {
       nodeFactory.intrinsicCall({
         sourceLocation,
         stackArgs: [this.gtxn, index.resolve()],
-        immediates: [this.config.txnData.immediate],
-        wtype: this.config.txnData.wtype,
+        immediates: [this.config.txnData.field],
+        wtype: this.config.txnData.ptype.wtypeOrThrow,
         opCode: 'gtxnsas',
       }),
-      this.config.returnType,
+      this.config.txnData.ptype,
     )
   }
 }

@@ -1,0 +1,51 @@
+contract TealScriptConventionsAlgo
+{
+  globals {
+    ["global"]: bytes
+  }
+  locals {
+    ["local"]: string
+  }
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  closeOutOfApplication(arg: uint64): uint64
+  {
+    return arg
+  }
+  
+  createApplication(value: bytes): void
+  {
+    GlobalState["global"]: bytes = value
+  }
+  
+  setLocal(value: string): void
+  {
+    LocalState[txn<Sender>()]["local"]: string = value
+  }
+  
+  deleteApplication(): void
+  {
+  }
+  
+  optInToApplication(): void
+  {
+  }
+  
+  updateApplication(): void
+  {
+  }
+  
+  BaseContract::clearStateProgram(): bool
+  {
+    return True
+  }
+  
+}

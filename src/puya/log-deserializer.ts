@@ -31,7 +31,7 @@ export function deserializeAndLog(logText: string) {
           scope: 'range',
         })
       : undefined
-    logger.addLog(log.level, sourceLocation, log.message)
+    logger.addLog({ level: log.level, source: sourceLocation, message: log.message })
   } catch (e) {
     logger.error(undefined, `Could not parse log output from puya cli ${e}`)
   }

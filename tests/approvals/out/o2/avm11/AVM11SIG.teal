@@ -3,11 +3,12 @@
 
 // tests/approvals/avm11.algo.ts::program() -> uint64:
 main:
-    // tests/approvals/avm11.algo.ts:7
+    // tests/approvals/avm11.algo.ts:18
     // const a = Bytes.fromHex('00000000000000000000000000000000000000000000000000000000499602d2')
     pushbytes 0x00000000000000000000000000000000000000000000000000000000499602d2
-    // tests/approvals/avm11.algo.ts:8
+    // tests/approvals/avm11.algo.ts:19
     // return op.mimc(MimcConfigurations.BN254Mp110, a).length
     mimc BN254Mp110
-    len
+    pop
+    pushint 32 // 32
     return

@@ -43,7 +43,7 @@ export class BoxRefExpressionBuilder extends BoxProxyExpressionBuilder<BoxRefPTy
     })
     switch (name) {
       case 'key':
-        return instanceEb(this.toBytes(sourceLocation), bytesPType)
+        return this.toBytes(sourceLocation)
       case 'get':
         return new BoxRefGetFunctionBuilder(boxValueExpr)
       case 'delete':

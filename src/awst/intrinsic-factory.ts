@@ -71,18 +71,20 @@ export const intrinsicFactory = {
     })
   },
   itob({ value, sourceLocation }: { value: awst.Expression; sourceLocation: SourceLocation }): awst.Expression {
+    const wtype = new wtypes.BytesWType({ length: 8n })
     if (value instanceof awst.IntegerConstant) {
       return nodeFactory.bytesConstant({
         sourceLocation,
-        value: bigIntToUint8Array(value.value, value.wtype.equals(wtypes.uint64WType) ? 8 : 'dynamic'),
+        value: bigIntToUint8Array(value.value, 8),
         encoding: BytesEncoding.base16,
+        wtype,
       })
     }
     return nodeFactory.intrinsicCall({
       sourceLocation,
       stackArgs: [value],
       immediates: [],
-      wtype: wtypes.bytesWType,
+      wtype,
       opCode: 'itob',
     })
   },
@@ -93,6 +95,20 @@ export const intrinsicFactory = {
       immediates: [],
       wtype: wtypes.uint64WType,
       opCode: 'btoi',
+    })
+  },
+  bzero({ size, sourceLocation, wtype = wtypes.bytesWType }: { size: bigint; sourceLocation: SourceLocation; wtype: wtypes.WType }) {
+    return nodeFactory.intrinsicCall({
+      opCode: 'bzero',
+      immediates: [],
+      stackArgs: [
+        nodeFactory.uInt64Constant({
+          value: size,
+          sourceLocation,
+        }),
+      ],
+      sourceLocation,
+      wtype: wtype,
     })
   },
 } satisfies Record<string, (args: DeliberateAny) => awst.Expression>

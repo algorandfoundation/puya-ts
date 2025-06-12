@@ -38,44 +38,51 @@ main_testMatches_route@3:
     intc_2 // 5
     ==
     assert // x should be 5
+    // tests/approvals/match-expr.algo.ts:8
+    // assertMatch(xObj, { x: { not: 3 } }, 'x should not be 3')
+    dup
+    pushint 3 // 3
+    !=
+    assert // x should not be 3
     // tests/approvals/match-expr.algo.ts:9
+    // assertMatch(Txn, { sender: { not: Global.zeroAddress } })
+    txn Sender
+    global ZeroAddress
+    !=
+    assert // assert target is match for conditions
+    // tests/approvals/match-expr.algo.ts:10
     // assert(match(xObj, { x: { greaterThan: 4 } }))
     dup
     pushint 4 // 4
     >
     assert
-    // tests/approvals/match-expr.algo.ts:10
+    // tests/approvals/match-expr.algo.ts:11
     // assert(match(xObj, { x: { lessThan: 6 } }))
     dup
     pushint 6 // 6
     <
     assert
-    // tests/approvals/match-expr.algo.ts:11
+    // tests/approvals/match-expr.algo.ts:12
     // assert(match(xObj, { x: { greaterThanEq: 5 } }))
     dup
     intc_2 // 5
     >=
     assert
-    // tests/approvals/match-expr.algo.ts:12
+    // tests/approvals/match-expr.algo.ts:13
     // assert(match(xObj, { x: { lessThanEq: 5 } }))
     dup
     intc_2 // 5
     <=
     assert
-    // tests/approvals/match-expr.algo.ts:14
+    // tests/approvals/match-expr.algo.ts:15
     // const xArray = [x]
     itob
-    dup
-    len
-    pushint 8 // 8
-    /
-    itob
-    extract 6 2
+    pushbytes 0x0001
     swap
     concat
     dup
     bury 3
-    // tests/approvals/match-expr.algo.ts:16
+    // tests/approvals/match-expr.algo.ts:17
     // assert(match(xArray, [5]))
     intc_0 // 0
     extract_uint16
@@ -93,10 +100,10 @@ main_testMatches_route@3:
     intc_1 // 1
 
 main_bool_merge@18:
-    // tests/approvals/match-expr.algo.ts:16
+    // tests/approvals/match-expr.algo.ts:17
     // assert(match(xArray, [5]))
     assert
-    // tests/approvals/match-expr.algo.ts:17
+    // tests/approvals/match-expr.algo.ts:18
     // assert(match(xArray, [{ greaterThan: 4 }]))
     dup
     bz main_bool_false@21
@@ -109,10 +116,10 @@ main_bool_merge@18:
     intc_1 // 1
 
 main_bool_merge@22:
-    // tests/approvals/match-expr.algo.ts:17
+    // tests/approvals/match-expr.algo.ts:18
     // assert(match(xArray, [{ greaterThan: 4 }]))
     assert
-    // tests/approvals/match-expr.algo.ts:18
+    // tests/approvals/match-expr.algo.ts:19
     // assert(match(xArray, [{ lessThan: 6 }]))
     dup
     bz main_bool_false@25
@@ -125,10 +132,10 @@ main_bool_merge@22:
     intc_1 // 1
 
 main_bool_merge@26:
-    // tests/approvals/match-expr.algo.ts:18
+    // tests/approvals/match-expr.algo.ts:19
     // assert(match(xArray, [{ lessThan: 6 }]))
     assert
-    // tests/approvals/match-expr.algo.ts:19
+    // tests/approvals/match-expr.algo.ts:20
     // assert(match(xArray, [{ greaterThanEq: 5 }]))
     dup
     bz main_bool_false@29
@@ -141,10 +148,10 @@ main_bool_merge@26:
     intc_1 // 1
 
 main_bool_merge@30:
-    // tests/approvals/match-expr.algo.ts:19
+    // tests/approvals/match-expr.algo.ts:20
     // assert(match(xArray, [{ greaterThanEq: 5 }]))
     assert
-    // tests/approvals/match-expr.algo.ts:20
+    // tests/approvals/match-expr.algo.ts:21
     // assert(match(xArray, [{ lessThanEq: 5 }]))
     dup
     bz main_bool_false@33
@@ -157,7 +164,7 @@ main_bool_merge@30:
     intc_1 // 1
 
 main_bool_merge@34:
-    // tests/approvals/match-expr.algo.ts:20
+    // tests/approvals/match-expr.algo.ts:21
     // assert(match(xArray, [{ lessThanEq: 5 }]))
     assert
     // tests/approvals/match-expr.algo.ts:5

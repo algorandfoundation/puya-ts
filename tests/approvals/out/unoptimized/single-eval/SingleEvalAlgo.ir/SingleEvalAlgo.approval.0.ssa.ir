@@ -44,8 +44,8 @@ subroutine tests/approvals/single-eval.algo.ts::SingleEvalAlgo.a() -> bytes:
     block@0: // L7
         let (maybe_value%0#0: uint64, maybe_exists%0#0: bool) = (app_global_get_ex 0u "myState")
         (assert maybe_exists%0#0) // check GlobalState exists
-        let new_state_value%0#0: uint64 = (+ maybe_value%0#0 1u)
-        (app_global_put "myState" new_state_value%0#0)
+        let materialized_values%0#0: uint64 = (+ maybe_value%0#0 1u)
+        (app_global_put "myState" materialized_values%0#0)
         return "a"
 
 subroutine tests/approvals/single-eval.algo.ts::SingleEvalAlgo.b() -> bytes:

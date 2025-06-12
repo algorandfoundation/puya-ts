@@ -5,8 +5,9 @@ import { wtypes } from '../../../../awst/wtypes'
 import { codeInvariant } from '../../../../util'
 import { AppStorageDeclaration } from '../../../models/app-storage-declaration'
 import type { BoxPType, BoxRefPType } from '../../../ptypes'
-import { boolPType, BoxMapPType, type ContractClassPType, type PType, uint64PType } from '../../../ptypes'
+import { boolPType, BoxMapPType, bytesPType, type ContractClassPType, type PType, uint64PType } from '../../../ptypes'
 import { instanceEb } from '../../../type-registry'
+import type { InstanceBuilder } from '../../index'
 import { InstanceExpressionBuilder } from '../../index'
 import { ValueProxy } from '../value-proxy'
 
@@ -33,12 +34,8 @@ export abstract class BoxProxyExpressionBuilder<
     })
   }
 
-  toBytes(sourceLocation: SourceLocation): Expression {
-    return nodeFactory.reinterpretCast({
-      expr: this.resolve(),
-      wtype: wtypes.bytesWType,
-      sourceLocation,
-    })
+  toBytes(sourceLocation: SourceLocation): InstanceBuilder {
+    return instanceEb(nodeFactory.reinterpretCast({ expr: this.resolve(), wtype: wtypes.bytesWType, sourceLocation }), bytesPType)
   }
 }
 

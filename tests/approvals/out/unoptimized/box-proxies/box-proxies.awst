@@ -20,18 +20,18 @@ subroutine testBox(box: box_key, value: string): void
 }
 subroutine testBoxMap(box: box_key, key: string, value: bytes): void
 {
-  Box[concat(box, reinterpret_cast<bytes>(key))].value: bytes = value
-  Box[concat("", reinterpret_cast<bytes>(key))].value: bytes = value
-  boxMapItem: box_key = concat("", reinterpret_cast<bytes>(key))
+  Box[BoxMapKey(prefix=box, key=key)].value: bytes = value
+  Box[BoxMapKey(prefix="", key=key)].value: bytes = value
+  boxMapItem: box_key = BoxMapKey(prefix="", key=key)
   assert(STATE_EXISTS(Box[boxMapItem].value))
   assert(reinterpret_cast<bytes>(box) == "two")
   assert("" == "")
-  assert(Boolean(checked_maybe(box_len(concat(box, reinterpret_cast<bytes>(key))), comment=Box must have value)))
-  assert(STATE_GET_EX(Box[concat(box, reinterpret_cast<bytes>(key))].value).1)
-  assert(Box[concat(box, reinterpret_cast<bytes>(key))].value == Box[concat("", reinterpret_cast<bytes>(key))].value)
-  isBoxDeleted: bool = STATE_DELETE(Box[concat(box, reinterpret_cast<bytes>(key))].value)
+  assert(Boolean(checked_maybe(box_len(BoxMapKey(prefix=box, key=key)), comment=Box must have value)))
+  assert(STATE_GET_EX(Box[BoxMapKey(prefix=box, key=key)].value).1)
+  assert(Box[BoxMapKey(prefix=box, key=key)].value == Box[BoxMapKey(prefix="", key=key)].value)
+  isBoxDeleted: bool = STATE_DELETE(Box[BoxMapKey(prefix=box, key=key)].value)
   assert(isBoxDeleted, comment=delete failed)
-  assert(STATE_GET(Box[concat(box, reinterpret_cast<bytes>("" + key + "x"))].value, default="b") == STATE_GET(Box[concat("", reinterpret_cast<bytes>("" + key + "x"))].value, default="b"))
+  assert(STATE_GET(Box[BoxMapKey(prefix=box, key="" + key + "x")].value, default="b") == STATE_GET(Box[BoxMapKey(prefix="", key="" + key + "x")].value, default="b"))
 }
 subroutine testBoxRef(box: box_key, length: uint64): void
 {
@@ -64,14 +64,14 @@ contract BoxContract
 {
   boxes {
     ["one"]: string
-    ["two"]: bytes
+    ["two"]: string => bytes
     ["three"]: bytes
   }
   approvalProgram(): bool
   {
     if (reinterpret_cast<uint64>(txn<ApplicationID>()) != 0) {
       tests/approvals/box-proxies.algo.ts::testBox("one", "aaaaaargh")
-      tests/approvals/box-proxies.algo.ts::testBoxMap("two", "what?", itob(256456))
+      tests/approvals/box-proxies.algo.ts::testBoxMap("two", "what?", reinterpret_cast<bytes>(itob(256456)))
       tests/approvals/box-proxies.algo.ts::testBoxRef("three", 99)
     }
     return True
@@ -94,7 +94,7 @@ contract BoxNotExist
       }
       if (#0 == "boxmap") {
         #switch₁ᶜ₁:
-        return Box[concat("a", "bc")].value
+        return Box[BoxMapKey(prefix="a", key="bc")].value
       }
       if (#0 == "createbox") {
         #switch₁ᶜ₂:
@@ -108,6 +108,193 @@ contract BoxNotExist
   clearProgram(): bool
   {
     return True
+  }
+  
+}
+contract BoxCreate
+{
+  boxes {
+    ["bool"]: bool
+    ["arc4b"]: arc4.bool
+    ["a"]: string
+    ["b"]: uint64
+    ["c"]: arc4.static_array<arc4.uint32>
+    ["d"]: arc4.dynamic_array<arc4.uint8>
+    ["e"]: arc4.tuple<uint8,uint8,bool,bool>
+  }
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  createBoxes(): void
+  {
+    box_create("a", 10)
+    assert(checked_maybe(box_len("a"), comment=Box must have value) == 10)
+    box_create("b", size_of(uint64))
+    assert(checked_maybe(box_len("b"), comment=Box must have value) == 8)
+    box_create("c", size_of(arc4.static_array<arc4.uint32>))
+    assert(checked_maybe(box_len("c"), comment=Box must have value) == 40)
+    box_create("d", 2)
+    assert(checked_maybe(box_len("d"), comment=Box must have value) == 2)
+    box_create("e", size_of(arc4.tuple<uint8,uint8,bool,bool>))
+    assert(checked_maybe(box_len("e"), comment=Box must have value) == 3)
+    box_create("bool", size_of(bool))
+    assert(checked_maybe(box_len("bool"), comment=Box must have value) == 8)
+    box_create("arc4b", size_of(arc4.bool))
+    assert(checked_maybe(box_len("arc4b"), comment=Box must have value) == 1)
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+contract BoxMapTest
+{
+  boxes {
+    [""]: account => string
+  }
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+contract TupleBox
+{
+  boxes {
+    ["t1"]: readonlytuple[string, bytes, bool]
+    ["t2"]: object{ a: string, b: bytes, c: bool }
+    ["tm1"]: string => readonlytuple[string, bytes, bool]
+    ["tm2"]: string => object{ a: string, b: bytes, c: bool }
+  }
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  testBox(): void
+  {
+    box_create("t1", 10)
+    box_create("t2", 20)
+    assert(checked_maybe(box_len("t1"), comment=Box must have value) == 10)
+    assert(checked_maybe(box_len("t2"), comment=Box must have value) == 20)
+    assert(STATE_EXISTS(Box["t1"].value))
+    assert(STATE_EXISTS(Box["t2"].value))
+    Box["t1"].value: readonlytuple[string, bytes, bool] = <tuple>["hello", "world", True]
+    assert(Box["t1"].value.0 == "hello")
+    assert(Box["t1"].value.1 == "world")
+    assert(Box["t1"].value.2)
+    Box["t2"].value: object{ a: string, b: bytes, c: bool } = { a: "hello", b: "world", c: True }
+    assert(Box["t2"].value.a == "hello")
+    assert(Box["t2"].value.b == "world")
+    assert(Box["t2"].value.c)
+    STATE_DELETE(Box["t1"].value)
+    assert(!STATE_EXISTS(Box["t1"].value))
+    STATE_DELETE(Box["t2"].value)
+    assert(!STATE_EXISTS(Box["t2"].value))
+  }
+  
+  testBoxMap(): void
+  {
+    assert(!STATE_EXISTS(Box[BoxMapKey(prefix="tm1", key="a")].value))
+    assert(!STATE_EXISTS(Box[BoxMapKey(prefix="tm2", key="a")].value))
+    Box[BoxMapKey(prefix="tm1", key="a")].value: readonlytuple[string, bytes, bool] = <tuple>["hello", "world", True]
+    Box[BoxMapKey(prefix="tm2", key="a")].value: object{ a: string, b: bytes, c: bool } = { a: "hello", b: "world", c: True }
+    assert(STATE_EXISTS(Box[BoxMapKey(prefix="tm1", key="a")].value))
+    assert(Box[BoxMapKey(prefix="tm1", key="a")].value.0 == "hello")
+    assert(Box[BoxMapKey(prefix="tm1", key="a")].value.1 == "world")
+    assert(Box[BoxMapKey(prefix="tm1", key="a")].value.2)
+    assert(STATE_EXISTS(Box[BoxMapKey(prefix="tm2", key="a")].value))
+    assert(Box[BoxMapKey(prefix="tm2", key="a")].value.a == "hello")
+    assert(Box[BoxMapKey(prefix="tm2", key="a")].value.b == "world")
+    assert(Box[BoxMapKey(prefix="tm2", key="a")].value.c)
+    Box[BoxMapKey(prefix="tm1", key="b")].value: readonlytuple[string, bytes, bool] = <tuple>["abc", "def", False]
+    assert(STATE_EXISTS(Box[BoxMapKey(prefix="tm1", key="b")].value))
+    Box[BoxMapKey(prefix="tm2", key="b")].value: object{ a: string, b: bytes, c: bool } = { a: "abc", b: "def", c: False }
+    assert(STATE_EXISTS(Box[BoxMapKey(prefix="tm2", key="b")].value))
+    STATE_DELETE(Box[BoxMapKey(prefix="tm1", key="a")].value)
+    assert(!STATE_EXISTS(Box[BoxMapKey(prefix="tm1", key="a")].value))
+    STATE_DELETE(Box[BoxMapKey(prefix="tm2", key="a")].value)
+    assert(!STATE_EXISTS(Box[BoxMapKey(prefix="tm2", key="a")].value))
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+contract BoxToRefTest
+{
+  boxes {
+    [""]: account => arc4.static_array<arc4.uint8>
+  }
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  test(): void
+  {
+    boxForCaller: box_key = BoxMapKey(prefix="", key=txn<Sender>())
+    box_create(boxForCaller, size_of(arc4.static_array<arc4.uint8>))
+    boxRef: box_key = boxForCaller
+    box_replace(boxRef, 0, reinterpret_cast<bytes>(123))
+    assert(ARC4_DECODE(Box[boxForCaller].value[0]) == 123, comment=First array item in box should be 123)
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+contract CompositeKeyTest
+{
+  boxes {
+    [""]: object{ a: uint64, b: uint64 } => string
+  }
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  test(key: object{ a: uint64, b: uint64 }, val: string): void
+  {
+    Box[BoxMapKey(prefix="", key=key)].value: string = val
+  }
+  
+  __algots__.defaultCreate(): void
+  {
   }
   
 }

@@ -1,5 +1,5 @@
 import { NoImplementation } from '../internal/errors'
-import { biguint, BigUintCompat, bytes, BytesBacked, StringCompat, uint64, Uint64Compat } from '../primitives'
+import { biguint, BigUintCompat, bytes, BytesBacked, NTuple, StringCompat, uint64, Uint64Compat } from '../primitives'
 import { Account } from '../reference'
 
 /**
@@ -191,7 +191,7 @@ export class UFixedNxM<N extends BitSize, M extends number> extends ARC4Encoded 
    * Create a new UFixedNxM value
    * @param v A string representing the integer and fractional portion of the number
    */
-  constructor(v: `${number}.${number}`) {
+  constructor(v?: `${number}.${number}`) {
     super()
   }
 
@@ -335,6 +335,13 @@ export class StaticArray<TItem extends ARC4Encoded, TLength extends number> exte
   concat(other: Arc4ArrayBase<TItem>): DynamicArray<TItem> {
     throw new NoImplementation()
   }
+
+  /**
+   * Return the array items as a native tuple
+   */
+  get native(): NTuple<TItem, TLength> {
+    throw new NoImplementation()
+  }
 }
 
 /**
@@ -382,6 +389,13 @@ export class DynamicArray<TItem extends ARC4Encoded> extends Arc4ArrayBase<TItem
   concat(other: Arc4ArrayBase<TItem>): DynamicArray<TItem> {
     throw new NoImplementation()
   }
+
+  /**
+   * Return the array items as a native immutable array
+   */
+  get native(): TItem[] {
+    throw new NoImplementation()
+  }
 }
 
 /**
@@ -402,10 +416,15 @@ export class Tuple<TTuple extends [ARC4Encoded, ...ARC4Encoded[]]> extends ARC4E
   [TypeProperty]?: `arc4.Tuple<${ExpandTupleType<TTuple>}>`
 
   /**
+   * Create a new Tuple with the default zero values for items
+   */
+  constructor()
+  /**
    * Create a new Tuple with the specified items
    * @param items The tuple items
    */
-  constructor(...items: TTuple) {
+  constructor(...items: TTuple)
+  constructor(...items: TTuple | []) {
     super()
   }
 
@@ -526,14 +545,24 @@ export class DynamicBytes extends Arc4ArrayBase<Byte> {
 /**
  * A fixed length sequence of bytes
  */
-export class StaticBytes<TLength extends number = 0> extends Arc4ArrayBase<Byte> {
+export class StaticBytes<TLength extends uint64 = 0> extends Arc4ArrayBase<Byte> {
   /** @hidden */
   [TypeProperty]?: `arc4.StaticBytes<${TLength}>`
 
   /**
-   * Create a new StaticBytes instance
-   * @param value THe bytes or utf8 interpreted string to initialize this type
+   * Create a new StaticBytes instance from native bytes
+   * @param value The bytes
    */
+  constructor(value: bytes<TLength>)
+  /**
+   * Create a new StaticBytes instance from a utf8 string
+   * @param value A string
+   */
+  constructor(value: string)
+  /**
+   * Create a new StaticBytes instance of length 0
+   */
+  constructor()
   constructor(value?: bytes | string) {
     super()
   }
@@ -541,7 +570,7 @@ export class StaticBytes<TLength extends number = 0> extends Arc4ArrayBase<Byte>
   /**
    * Get the native bytes value
    */
-  get native(): bytes {
+  get native(): bytes<TLength> {
     throw new NoImplementation()
   }
 

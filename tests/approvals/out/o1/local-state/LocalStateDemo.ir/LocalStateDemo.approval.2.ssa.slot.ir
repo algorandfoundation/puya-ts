@@ -4,8 +4,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         goto tmp%0#1 ? block@2 : block@9
     block@2: // abi_routing_L7
         let tmp%2#0: bytes = (txna ApplicationArgs 0)
-        switch tmp%2#0 {method "optIn()void" => block@3, method "setState((uint64,byte[]),uint64[10])void" => block@4, method "getState()(uint64,uint64,byte[],byte[],uint64[10])" => block@5, method "clearState()void" => block@6, * => block@13}
-    block@3: // optIn_route_L14
+        switch tmp%2#0 {method "optIn()void" => block@3, method "setState((uint64,byte[]),uint64[10])void" => block@4, method "getState()(uint64,uint64,byte[],byte[],uint64[10],(uint64,byte[]),(uint64,byte[]))" => block@5, method "clearState()void" => block@6, * => block@13}
+    block@3: // optIn_route_L16
         let tmp%3#0: uint64 = (txn OnCompletion)
         let tmp%4#0: bool = (== tmp%3#0 OptIn)
         (assert tmp%4#0) // OnCompletion is not OptIn
@@ -13,29 +13,29 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%5#0) // can only call when not creating
         let tests/approvals/local-state.algo.ts::LocalStateDemo.__puya_arc4_router__%0#0: bool = 1u
         goto block@14
-    block@4: // setState_route_L17
+    block@4: // setState_route_L19
         let tmp%7#0: uint64 = (txn OnCompletion)
         let tmp%8#0: bool = (! tmp%7#0)
         (assert tmp%8#0) // OnCompletion is not NoOp
         let tmp%9#0: uint64 = (txn ApplicationID)
         (assert tmp%9#0) // can only call when not creating
         let tmp%11#0: bytes = (txna ApplicationArgs 1)
-        let item0%0%0#0: uint64 = (extract_uint64 tmp%11#0 0u)
+        let item0%1#0: uint64 = (extract_uint64 tmp%11#0 0u)
         let item_start_offset%0#0: uint64 = (extract_uint16 tmp%11#0 8u)
         let item_end_offset%0#0: uint64 = (len tmp%11#0)
         let item1%0#0: bytes = (substring3 tmp%11#0 item_start_offset%0#0 item_end_offset%0#0)
-        let item1%0%0#0: bytes = ((extract 2 0) item1%0#0)
+        let item1%1#0: bytes = ((extract 2 0) item1%0#0)
         let reinterpret_bytes[80]%0#0: bytes[80] = (txna ApplicationArgs 2)
-        tests/approvals/local-state.algo.ts::LocalStateDemo.setState(item0%0%0#0, item1%0%0#0, reinterpret_bytes[80]%0#0)
+        tests/approvals/local-state.algo.ts::LocalStateDemo.setState(item0%1#0, item1%1#0, reinterpret_bytes[80]%0#0)
         let tests/approvals/local-state.algo.ts::LocalStateDemo.__puya_arc4_router__%0#1: bool = 1u
         goto block@14
-    block@5: // getState_route_L25
+    block@5: // getState_route_L29
         let tmp%12#0: uint64 = (txn OnCompletion)
         let tmp%13#0: bool = (! tmp%12#0)
         (assert tmp%13#0) // OnCompletion is not NoOp
         let tmp%14#0: uint64 = (txn ApplicationID)
         (assert tmp%14#0) // can only call when not creating
-        let (elements_to_encode%0#0: uint64, elements_to_encode%1#0: uint64, elements_to_encode%2#0: bytes, elements_to_encode%3#0: bytes, elements_to_encode%4#0: bytes[80]) = tests/approvals/local-state.algo.ts::LocalStateDemo.getState()
+        let (elements_to_encode%0#0: uint64, elements_to_encode%1#0: uint64, elements_to_encode%2#0: bytes, elements_to_encode%3#0: bytes, elements_to_encode%4#0: bytes[80], elements_to_encode%5#0: uint64, elements_to_encode%6#0: bytes, elements_to_encode%7#0: uint64, elements_to_encode%8#0: bytes) = tests/approvals/local-state.algo.ts::LocalStateDemo.getState()
         let val_as_bytes%0#0: bytes[8] = (itob elements_to_encode%0#0)
         let val_as_bytes%1#0: bytes[8] = (itob elements_to_encode%1#0)
         let length%0#0: uint64 = (len elements_to_encode%2#0)
@@ -46,21 +46,47 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let as_bytes%1#0: bytes[8] = (itob length%1#0)
         let length_uint16%1#0: bytes = ((extract 6 2) as_bytes%1#0)
         let encoded_value%1#0: bytes = (concat length_uint16%1#0 elements_to_encode%3#0)
-        let encoded_tuple_buffer%2#0: bytes = (concat val_as_bytes%0#0 val_as_bytes%1#0)
-        let encoded_tuple_buffer%3#0: bytes = (concat encoded_tuple_buffer%2#0 0x0064)
-        let data_length%0#0: uint64 = (len encoded_value%0#0)
-        let current_tail_offset%1#0: uint64 = (+ 100u data_length%0#0)
-        let as_bytes%3#0: bytes[8] = (itob current_tail_offset%1#0)
-        let offset_as_uint16%1#0: bytes = ((extract 6 2) as_bytes%3#0)
-        let encoded_tuple_buffer%4#0: bytes = (concat encoded_tuple_buffer%3#0 offset_as_uint16%1#0)
-        let encoded_tuple_buffer%5#0: bytes = (concat encoded_tuple_buffer%4#0 elements_to_encode%4#0)
-        let encoded_tuple_buffer%6#0: bytes = (concat encoded_tuple_buffer%5#0 encoded_value%0#0)
-        let encoded_tuple_buffer%7#0: bytes = (concat encoded_tuple_buffer%6#0 encoded_value%1#0)
-        let tmp%16#0: bytes = (concat 0x151f7c75 encoded_tuple_buffer%7#0)
+        let val_as_bytes%2#0: bytes[8] = (itob elements_to_encode%5#0)
+        let length%2#0: uint64 = (len elements_to_encode%6#0)
+        let as_bytes%2#0: bytes[8] = (itob length%2#0)
+        let length_uint16%2#0: bytes = ((extract 6 2) as_bytes%2#0)
+        let encoded_value%2#0: bytes = (concat length_uint16%2#0 elements_to_encode%6#0)
+        let encoded_tuple_buffer%2#0: bytes = (concat val_as_bytes%2#0 0x000a)
+        let encoded_tuple_buffer%3#0: bytes = (concat encoded_tuple_buffer%2#0 encoded_value%2#0)
+        let val_as_bytes%3#0: bytes[8] = (itob elements_to_encode%7#0)
+        let length%3#0: uint64 = (len elements_to_encode%8#0)
+        let as_bytes%4#0: bytes[8] = (itob length%3#0)
+        let length_uint16%3#0: bytes = ((extract 6 2) as_bytes%4#0)
+        let encoded_value%3#0: bytes = (concat length_uint16%3#0 elements_to_encode%8#0)
+        let encoded_tuple_buffer%6#0: bytes = (concat val_as_bytes%3#0 0x000a)
+        let encoded_tuple_buffer%7#0: bytes = (concat encoded_tuple_buffer%6#0 encoded_value%3#0)
+        let encoded_tuple_buffer%10#0: bytes = (concat val_as_bytes%0#0 val_as_bytes%1#0)
+        let encoded_tuple_buffer%11#0: bytes = (concat encoded_tuple_buffer%10#0 0x0068)
+        let data_length%2#0: uint64 = (len encoded_value%0#0)
+        let current_tail_offset%5#0: uint64 = (+ 104u data_length%2#0)
+        let as_bytes%7#0: bytes[8] = (itob current_tail_offset%5#0)
+        let offset_as_uint16%3#0: bytes = ((extract 6 2) as_bytes%7#0)
+        let encoded_tuple_buffer%12#0: bytes = (concat encoded_tuple_buffer%11#0 offset_as_uint16%3#0)
+        let data_length%3#0: uint64 = (len encoded_value%1#0)
+        let current_tail_offset%6#0: uint64 = (+ current_tail_offset%5#0 data_length%3#0)
+        let encoded_tuple_buffer%13#0: bytes = (concat encoded_tuple_buffer%12#0 elements_to_encode%4#0)
+        let as_bytes%8#0: bytes[8] = (itob current_tail_offset%6#0)
+        let offset_as_uint16%4#0: bytes = ((extract 6 2) as_bytes%8#0)
+        let encoded_tuple_buffer%14#0: bytes = (concat encoded_tuple_buffer%13#0 offset_as_uint16%4#0)
+        let data_length%4#0: uint64 = (len encoded_tuple_buffer%3#0)
+        let current_tail_offset%7#0: uint64 = (+ current_tail_offset%6#0 data_length%4#0)
+        let as_bytes%9#0: bytes[8] = (itob current_tail_offset%7#0)
+        let offset_as_uint16%5#0: bytes = ((extract 6 2) as_bytes%9#0)
+        let encoded_tuple_buffer%15#0: bytes = (concat encoded_tuple_buffer%14#0 offset_as_uint16%5#0)
+        let encoded_tuple_buffer%16#0: bytes = (concat encoded_tuple_buffer%15#0 encoded_value%0#0)
+        let encoded_tuple_buffer%17#0: bytes = (concat encoded_tuple_buffer%16#0 encoded_value%1#0)
+        let encoded_tuple_buffer%18#0: bytes = (concat encoded_tuple_buffer%17#0 encoded_tuple_buffer%3#0)
+        let encoded_tuple_buffer%19#0: bytes = (concat encoded_tuple_buffer%18#0 encoded_tuple_buffer%7#0)
+        let tmp%16#0: bytes = (concat 0x151f7c75 encoded_tuple_buffer%19#0)
         (log tmp%16#0)
         let tests/approvals/local-state.algo.ts::LocalStateDemo.__puya_arc4_router__%0#2: bool = 1u
         goto block@14
-    block@6: // clearState_route_L35
+    block@6: // clearState_route_L41
         let tmp%17#0: uint64 = (txn OnCompletion)
         let tmp%18#0: bool = (! tmp%17#0)
         (assert tmp%18#0) // OnCompletion is not NoOp
@@ -86,7 +112,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         return tmp%0#0
 
 subroutine tests/approvals/local-state.algo.ts::LocalStateDemo.setState(p.a: uint64, p.b: bytes, c: bytes[80]) -> void:
-    block@0: // L17
+    block@0: // L19
         let tmp%0#0: bytes[32] = (txn Sender)
         (app_local_put tmp%0#0 "l1" p.a#0)
         let tmp%1#0: bytes[32] = (txn Sender)
@@ -97,10 +123,21 @@ subroutine tests/approvals/local-state.algo.ts::LocalStateDemo.setState(p.a: uin
         (app_local_put tmp%3#0 "localBytes2" p.b#0)
         let tmp%4#0: bytes[32] = (txn Sender)
         (app_local_put tmp%4#0 "localEncoded" c#0)
+        let tmp%5#0: bytes[32] = (txn Sender)
+        let val_as_bytes%0#0: bytes[8] = (itob p.a#0)
+        let length%0#0: uint64 = (len p.b#0)
+        let as_bytes%0#0: bytes[8] = (itob length%0#0)
+        let length_uint16%0#0: bytes = ((extract 6 2) as_bytes%0#0)
+        let encoded_value%0#0: bytes = (concat length_uint16%0#0 p.b#0)
+        let encoded_tuple_buffer%2#0: bytes = (concat val_as_bytes%0#0 0x000a)
+        let encoded_tuple_buffer%3#0: bytes = (concat encoded_tuple_buffer%2#0 encoded_value%0#0)
+        (app_local_put tmp%5#0 "localTuple" encoded_tuple_buffer%3#0)
+        let tmp%6#0: bytes[32] = (txn Sender)
+        (app_local_put tmp%6#0 "localObject" encoded_tuple_buffer%3#0)
         return 
 
-subroutine tests/approvals/local-state.algo.ts::LocalStateDemo.getState() -> <uint64, uint64, bytes, bytes, bytes[80]>:
-    block@0: // L25
+subroutine tests/approvals/local-state.algo.ts::LocalStateDemo.getState() -> <uint64, uint64, bytes, bytes, bytes[80], uint64, bytes, uint64, bytes>:
+    block@0: // L29
         let tmp%0#0: bytes[32] = (txn Sender)
         let (maybe_value%0#0: uint64, maybe_exists%0#0: bool) = (app_local_get_ex tmp%0#0 0u "l1")
         (assert maybe_exists%0#0) // check LocalState exists
@@ -114,12 +151,28 @@ subroutine tests/approvals/local-state.algo.ts::LocalStateDemo.getState() -> <ui
         let (maybe_value%3#0: bytes, maybe_exists%3#0: bool) = (app_local_get_ex tmp%3#0 0u "localBytes2")
         (assert maybe_exists%3#0) // check LocalState exists
         let tmp%4#0: bytes[32] = (txn Sender)
-        let (maybe_value%4#0: bytes[80], maybe_exists%4#0: bool) = (app_local_get_ex tmp%4#0 0u "localEncoded")
+        let (maybe_value%4#0: bytes, maybe_exists%4#0: bool) = (app_local_get_ex tmp%4#0 0u "localEncoded")
         (assert maybe_exists%4#0) // check LocalState exists
-        return maybe_value%0#0 maybe_value%1#0 maybe_value%2#0 maybe_value%3#0 maybe_value%4#0
+        let tmp%5#0: bytes[32] = (txn Sender)
+        let (maybe_value%5#0: bytes, maybe_exists%5#0: bool) = (app_local_get_ex tmp%5#0 0u "localTuple")
+        (assert maybe_exists%5#0) // check LocalState exists
+        let item0%1#0: uint64 = (extract_uint64 maybe_value%5#0 0u)
+        let item_start_offset%0#0: uint64 = (extract_uint16 maybe_value%5#0 8u)
+        let item_end_offset%0#0: uint64 = (len maybe_value%5#0)
+        let item1%0#0: bytes = (substring3 maybe_value%5#0 item_start_offset%0#0 item_end_offset%0#0)
+        let item1%1#0: bytes = ((extract 2 0) item1%0#0)
+        let tmp%6#0: bytes[32] = (txn Sender)
+        let (maybe_value%6#0: bytes, maybe_exists%6#0: bool) = (app_local_get_ex tmp%6#0 0u "localObject")
+        (assert maybe_exists%6#0) // check LocalState exists
+        let item0%3#0: uint64 = (extract_uint64 maybe_value%6#0 0u)
+        let item_start_offset%1#0: uint64 = (extract_uint16 maybe_value%6#0 8u)
+        let item_end_offset%1#0: uint64 = (len maybe_value%6#0)
+        let item1%2#0: bytes = (substring3 maybe_value%6#0 item_start_offset%1#0 item_end_offset%1#0)
+        let item1%3#0: bytes = ((extract 2 0) item1%2#0)
+        return maybe_value%0#0 maybe_value%1#0 maybe_value%2#0 maybe_value%3#0 maybe_value%4#0 item0%1#0 item1%1#0 item0%3#0 item1%3#0
 
 subroutine tests/approvals/local-state.algo.ts::LocalStateDemo.clearState() -> void:
-    block@0: // L35
+    block@0: // L41
         let tmp%0#0: bytes[32] = (txn Sender)
         (app_local_del tmp%0#0 "l1")
         let tmp%1#0: bytes[32] = (txn Sender)
@@ -130,4 +183,8 @@ subroutine tests/approvals/local-state.algo.ts::LocalStateDemo.clearState() -> v
         (app_local_del tmp%3#0 "localBytes2")
         let tmp%4#0: bytes[32] = (txn Sender)
         (app_local_del tmp%4#0 "localEncoded")
+        let tmp%5#0: bytes[32] = (txn Sender)
+        (app_local_del tmp%5#0 "localTuple")
+        let tmp%6#0: bytes[32] = (txn Sender)
+        (app_local_del tmp%6#0 "localObject")
         return 

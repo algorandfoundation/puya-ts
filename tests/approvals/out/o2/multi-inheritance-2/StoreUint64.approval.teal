@@ -1,0 +1,53 @@
+#pragma version 10
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    // tests/approvals/multi-inheritance-2.algo.ts:13
+    // class StoreUint64 extends Contract {
+    txn NumAppArgs
+    bz main_bare_routing@6
+    pushbytes 0x3ccf1199 // method "setStore(uint64)void"
+    txna ApplicationArgs 0
+    match main_setStore_route@3
+
+main_after_if_else@10:
+    // tests/approvals/multi-inheritance-2.algo.ts:13
+    // class StoreUint64 extends Contract {
+    pushint 0 // 0
+    return
+
+main_setStore_route@3:
+    // tests/approvals/multi-inheritance-2.algo.ts:16
+    // setStore(value: uint64) {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    // tests/approvals/multi-inheritance-2.algo.ts:13
+    // class StoreUint64 extends Contract {
+    txna ApplicationArgs 1
+    btoi
+    // tests/approvals/multi-inheritance-2.algo.ts:14
+    // uint64Store = GlobalState<uint64>()
+    pushbytes "uint64Store"
+    // tests/approvals/multi-inheritance-2.algo.ts:17
+    // this.uint64Store.value = value
+    swap
+    app_global_put
+    // tests/approvals/multi-inheritance-2.algo.ts:16
+    // setStore(value: uint64) {
+    pushint 1 // 1
+    return
+
+main_bare_routing@6:
+    // tests/approvals/multi-inheritance-2.algo.ts:13
+    // class StoreUint64 extends Contract {
+    txn OnCompletion
+    bnz main_after_if_else@10
+    txn ApplicationID
+    !
+    assert // can only call when creating
+    pushint 1 // 1
+    return

@@ -1,3 +1,4 @@
+import upath from 'upath'
 import type { Connection, Diagnostic } from 'vscode-languageserver'
 import { DiagnosticSeverity } from 'vscode-languageserver'
 import type { TextDocument } from 'vscode-languageserver-textdocument'
@@ -19,16 +20,16 @@ function prepareFiles(workspaceFolder: string, documents: TextDocuments<TextDocu
 
   // To support unsaved files, we need to replace the file content with the content of the document
   return files.map((file) => {
-    const fileUri = URI.file(file.sourceFile).toString()
+    const fileUri = URI.file(upath.join(workspaceFolder, file.sourceFile)).toString()
     const document = documents.get(fileUri)
 
     if (document) {
       return {
-        sourceFile: file.sourceFile,
-        outDir: '',
+        ...file,
         fileContents: document.getText(),
       } satisfies AlgoFile
     }
+
     return file
   })
 }
@@ -80,7 +81,10 @@ export async function getWorkspaceDiagnostics(
 
     return files.reduce((acc, file) => {
       const diagnostics = logEvents.filter((e) => e.sourceLocation.file === file.sourceFile).map(mapToDiagnostic)
-      acc.set(URI.file(file.sourceFile).toString(), diagnostics)
+      acc.set(
+        URI.file(upath.isAbsolute(file.sourceFile) ? file.sourceFile : upath.join(workspaceFolder, file.sourceFile)).toString(),
+        diagnostics,
+      )
       return acc
     }, new Map<string, Diagnostic[]>())
   } catch (error) {

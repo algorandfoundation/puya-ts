@@ -2,7 +2,6 @@ import { CodeError } from '../../../errors'
 import { codeInvariant } from '../../../util'
 import type { PType } from '../../ptypes'
 import { accountPType, applicationPType, assetPType, bytesPType, onCompleteActionType, stringPType, uint64PType } from '../../ptypes'
-import { instanceEb } from '../../type-registry'
 import type { NodeBuilder } from '../index'
 import { InstanceBuilder } from '../index'
 
@@ -30,7 +29,7 @@ export function resolveCompatBuilder(builder: NodeBuilder, targetType: PType) {
     }
   } else if (targetType.equals(bytesPType)) {
     if (builder.resolvableToPType(stringPType)) {
-      return instanceEb(builder.resolveToPType(stringPType).toBytes(builder.sourceLocation), bytesPType)
+      return builder.resolveToPType(stringPType).toBytes(builder.sourceLocation)
     }
   }
 

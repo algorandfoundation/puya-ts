@@ -4,7 +4,7 @@ import type { Expression } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { wtypes } from '../../../awst/wtypes'
 import type { PType } from '../../ptypes'
-import { uint64PType } from '../../ptypes'
+import { BytesPType, uint64PType } from '../../ptypes'
 import { instanceEb } from '../../type-registry'
 import type { BuilderComparisonOp, InstanceBuilder, NodeBuilder } from '../index'
 import { InstanceExpressionBuilder } from '../index'
@@ -71,8 +71,8 @@ export abstract class Uint64BackedReferenceTypeExpressionBuilder extends Referen
     })
   }
 
-  toBytes(sourceLocation: SourceLocation): Expression {
-    return intrinsicFactory.itob({ value: this.resolve(), sourceLocation })
+  toBytes(sourceLocation: SourceLocation): InstanceBuilder {
+    return instanceEb(intrinsicFactory.itob({ value: this.resolve(), sourceLocation }), new BytesPType({ length: 8n }))
   }
   boolEval(sourceLocation: SourceLocation, negate: boolean = false): Expression {
     if (negate) {

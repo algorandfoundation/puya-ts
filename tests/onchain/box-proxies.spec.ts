@@ -1,7 +1,7 @@
 import { algos } from '@algorandfoundation/algokit-utils'
 import { describe, expect } from 'vitest'
-import { invariant, utf8ToUint8Array } from '../../src/util'
-import { createBaseTestFixture } from './util/test-fixture'
+import { bigIntToUint8Array, invariant, utf8ToUint8Array } from '../../src/util'
+import { createArc4TestFixture, createBaseTestFixture } from './util/test-fixture'
 
 describe('BoxProxies', () => {
   const test = createBaseTestFixture('tests/approvals/box-proxies.algo.ts', ['BoxContract', 'BoxNotExist'])
@@ -68,6 +68,31 @@ describe('BoxProxies', () => {
       appId: created.confirmation.applicationIndex,
       boxReferences: ['abc'],
       args: [utf8ToUint8Array('boxmap')],
+    })
+  })
+
+  const it = createArc4TestFixture('tests/approvals/box-proxies.algo.ts', {
+    BoxCreate: { funding: algos(1) },
+    TupleBox: { funding: algos(1) },
+    BoxToRefTest: { funding: algos(1) },
+    CompositeKeyTest: { funding: algos(1) },
+  })
+  it('creates boxes of the min size', async ({ appClientBoxCreate }) => {
+    await appClientBoxCreate.send.call({ method: 'createBoxes', boxReferences: ['bool', 'arc4b', 'a', 'b', 'c', 'd', 'e'] })
+  })
+
+  it('ref can be used to mutate box data directly', async ({ appClientBoxToRefTest, testAccount }) => {
+    await appClientBoxToRefTest.send.call({ method: 'test', boxReferences: [testAccount.publicKey] })
+  })
+  it('should be able to store tuples in boxes', async ({ appClientTupleBox }) => {
+    await appClientTupleBox.send.call({ method: 'testBox', boxReferences: ['t1', 't2'] })
+    await appClientTupleBox.send.call({ method: 'testBoxMap', boxReferences: ['tm1', 'tm2'] })
+  })
+  it('should work with composite keys', async ({ appClientCompositeKeyTest }) => {
+    await appClientCompositeKeyTest.send.call({
+      method: 'test',
+      args: [{ a: 1, b: 2 }, 'value'],
+      boxReferences: [bigIntToUint8Array(1n << (8n + 2n), 16)],
     })
   })
 })

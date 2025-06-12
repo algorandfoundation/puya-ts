@@ -1,3 +1,7 @@
+---
+title: Types
+---
+
 # Types
 
 Types in Algorand TypeScript can be divided into two camps, 'native' AVM types where the implementation is opaque, and it is up to the compiler and the AVM how the type is represented in memory; and 'ARC4 Encoded types' where the in memory representation is always a byte array, and the exact format is determined by the [ARC4 Spec](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0004.md#encoding).
@@ -13,6 +17,24 @@ These are represented by [`uint64`](./#uint64) and [`bytes`](./#bytes) in Algora
 There are further "bounded" types supported by the AVM, which are backed by these two simple primitives.
 For example, `biguint` represents a variably sized (up to 512-bits), unsigned integer, but is actually
 backed by a `byte[]`. This is represented by [`biguint`](./#biguint) in Algorand TypeScript.
+
+### Number and BigInt
+
+JavaScript's native `number` and `bigint` cannot be used as variable, parameter, return, or storage types as they do not have an equivalent representation on the AVM. They can however be used to define numeric constants which are then interpreted as `uint64` or `biguint` values when used elsewhere. As such, Algorand TypeScript supports `number` and `bigint` literals when they assigned to a `const` variable. Basic expressions are also allowed as long as they evaluate to a compile-time constant.
+
+```ts
+import { BigUint, uint64 } from '@algorandfoundation/algorand-typescript'
+
+const x = 123
+const y = x * 500
+const a = 2n ** 128n
+
+// elsewhere
+let myUint: uint64 = x
+let myBiguint = BigUint(a)
+```
+
+> **Note:** `number` literals cannot exceed `Number.MAX_SAFE_INTEGER` as they will lose precision when parsed, but it is possible to write expressions that would evaluate to unsafe integers eg. `2 ** 54`. This is because evaluation is handled by the compiler and performed using the `bigint` type.
 
 ### Uint64
 
@@ -101,6 +123,19 @@ const interpolated = Bytes`${fromUtf8}${fromHex}${fromBase32}${fromBase64}`
 const concatenated = fromUtf8.concat(fromHex).concat(fromBase32).concat(fromBase64)
 ```
 
+The bytes type can also be declared with a generic length parameter to declare a value which should always by a byte array of a specific length. Due to covariance a `bytes<N>` value can always be assigned to a `bytes` target but in order to do the opposite, you will need to call `.toFixed` on the unbounded value. This method takes a length and an optional boolean `checked` option to indicate if this conversion should be _checked_ at runtime (via asserting the length) versus an `unchecked` conversion which changes the type but doesn't verify the length. The default is a `checked` conversion.
+
+```ts
+const fromUtf8 = Bytes<3>('abc')
+const fromHex = Bytes.fromHex<2>('AAFF')
+const fromBase32 = Bytes.fromBase32<36>('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ')
+const fromBase64 = Bytes.fromBase64<14>('SGVsbG8gQWxnb3JhbmQ=')
+
+function padTo32(b: bytes<16>): bytes<32> {
+  return b.bitwiseOr(bzero(32)).toFixed({ length: 32, checked: false })
+}
+```
+
 ### String
 
 `string` literals and values are supported in Algorand TypeScript however most of the prototype is not implemented. Strings in EcmaScript are implemented using utf-16 characters and achieving semantic compatability for any prototype method which slices or splits strings based on characters would be non-trivial (and opcode expensive) to implement on the AVM with no clear benefit as string manipulation tasks can easily be performed off-chain. Algorand TypeScript APIs which expect a `bytes` value will often also accept a `string` value. In these cases, the `string` will be interpreted as a `utf8` encoded value.
@@ -180,14 +215,14 @@ class Demo extends Contract {
 
 ### Arrays
 
-**Immutable**
+#### Immutable
 
 ```ts
 const myArray: uint64[] = [1, 2, 3]
 const myOtherArray = ['a', 'b', 'c']
 ```
 
-Arrays in Algorand TypeScript can be declared using the array literal syntax and are explicitly typed using either the `T[]` shorthand or `Array<T>` full name. The type can usually be inferred by uints will require a type hint. Native arrays are currently considered immutable (as if they were declared `readonly T[]`) as the AVM offers limited resources for storing mutable reference types in a heap. "Mutations" can be done using the pure methods available on the Array prototype.
+Arrays in Algorand TypeScript can be declared using the array literal syntax and are explicitly typed using either the `T[]` shorthand or `Array<T>` full name. The type can usually be inferred but uints will require a type hint. Native arrays are currently considered immutable (as if they were declared `readonly T[]`) as the AVM offers limited resources for storing mutable reference types in a heap. "Mutations" can be done using the pure methods available on the Array prototype.
 
 ```ts
 let myArray: uint64[] = [1, 2, 3]
@@ -201,7 +236,7 @@ myArray = myArray.with(2, 3)
 
 Similar to other supported native types, much of the full prototype of Array is not supported but this coverage may expand over time.
 
-**Mutable**
+#### Mutable
 
 ```ts
 import { MutableArray, uint64 } from '@algorandfoundation/algorand-typescript'
@@ -262,52 +297,52 @@ Where supported, the native equivalent of an ARC4 type can be obtained via the `
 
 ### Booleans
 
-**Type:** `@algorandfoundation/algorand-typescript/arc4::Bool`
-**Encoding:** A single byte where the most significant bit is `1` for `True` and `0` for `False`
+**Type:** `@algorandfoundation/algorand-typescript/arc4::Bool`<br>
+**Encoding:** A single byte where the most significant bit is `1` for `True` and `0` for `False`<br>
 **Native equivalent:** `bool`
 
 ### Unsigned ints
 
-**Types:** `@algorandfoundation/algorand-typescript/arc4::UIntN`
-**Encoding:** A big endian byte array of N bits
+**Types:** `@algorandfoundation/algorand-typescript/arc4::UIntN`<br>
+**Encoding:** A big endian byte array of N bits<br>
 **Native equivalent:** `uint64` or `biguint`
 
 Common bit sizes have also been aliased under `@algorandfoundation/algorand-typescript/arc4::UInt8`, `@algorandfoundation/algorand-typescript/arc4::UInt16` etc. A uint of any size between 8 and 512 bits (in intervals of 8bits) can be created using a generic parameter. `Byte` is an alias of `UintN<8>`
 
 ### Unsigned fixed point decimals
 
-**Types:** `@algorandfoundation/algorand-typescript/arc4::UFixedNxM`
-**Encoding:** A big endian byte array of N bits where `encoded_value = value / (10^M)`
+**Types:** `@algorandfoundation/algorand-typescript/arc4::UFixedNxM`<br>
+**Encoding:** A big endian byte array of N bits where `encoded_value = value / (10^M)`<br>
 **Native equivalent:** _none_
 
 ### Bytes and strings
 
-**Types:** `@algorandfoundation/algorand-typescript/arc4::DynamicBytes` and `@algorandfoundation/algorand-typescript/arc4::Str`
-**Encoding:** A variable length byte array prefixed with a 16-bit big endian header indicating the length of the data
+**Types:** `@algorandfoundation/algorand-typescript/arc4::DynamicBytes` and `@algorandfoundation/algorand-typescript/arc4::Str`<br>
+**Encoding:** A variable length byte array prefixed with a 16-bit big endian header indicating the length of the data<br>
 **Native equivalent:** `bytes` and `string`
 
 Strings are assumed to be utf-8 encoded and the length of a string is the total number of bytes, _not the total number of characters_.
 
 ### StaticBytes
 
-**Types:** `@algorandfoundation/algorand-typescript/arc4::StaticBytes`
-**Encoding:** A fixed length byte array
+**Types:** `@algorandfoundation/algorand-typescript/arc4::StaticBytes`<br>
+**Encoding:** A fixed length byte array<br>
 **Native equivalent:** `bytes`
 
 Like `DynamicBytes` but the length header can be omitted as the data is assumed to be of the specified length.
 
 ### Static arrays
 
-**Type:** `@algorandfoundation/algorand-typescript/arc4::StaticArray`
-**Encoding:** See [ARC4 Container Packing](#ARC4-Container-Packing)
+**Type:** `@algorandfoundation/algorand-typescript/arc4::StaticArray`<br>
+**Encoding:** See [ARC4 Container Packing](#ARC4-Container-Packing)<br>
 **Native equivalent:** _none_
 
 An ARC4 StaticArray is an array of a fixed size. The item type is specified by the first generic parameter and the size is specified by the second.
 
 ### Address
 
-**Type:** `@algorandfoundation/algorand-typescript/arc4::Address`
-**Encoding:** A byte array 32 bytes long
+**Type:** `@algorandfoundation/algorand-typescript/arc4::Address`<br>
+**Encoding:** A byte array 32 bytes long<br>
 **Native equivalent:** `Account`
 
 Address represents an Algorand address' public key, and can be used instead of `Account` when needing to
@@ -315,8 +350,8 @@ reference an address in an ARC4 struct, tuple or return type. It is a subclass o
 
 ### Dynamic arrays
 
-**Type:** `@algorandfoundation/algorand-typescript/arc4::DynamicArray`
-**Encoding:** See [ARC4 Container Packing](#ARC4-Container-Packing)
+**Type:** `@algorandfoundation/algorand-typescript/arc4::DynamicArray`<br>
+**Encoding:** See [ARC4 Container Packing](#ARC4-Container-Packing)<br>
 **Native equivalent:** _none_
 
 An ARC4 DynamicArray is an array of a variable size. The item type is specified by the first generic parameter. Items can be added and removed via `.pop`, `.append`, and `.extend`.
@@ -325,16 +360,16 @@ The current length of the array is encoded in a 16-bit prefix similar to the `ar
 
 ### Tuples
 
-**Type:** `@algorandfoundation/algorand-typescript/arc4::Tuple`
-**Encoding:** See [ARC4 Container Packing](#ARC4-Container-Packing)
+**Type:** `@algorandfoundation/algorand-typescript/arc4::Tuple`<br>
+**Encoding:** See [ARC4 Container Packing](#ARC4-Container-Packing)<br>
 **Native equivalent:** TypeScript tuple
 
 ARC4 Tuples are immutable statically sized arrays of mixed item types. Item types can be specified via generic parameters or inferred from constructor parameters.
 
 ### Structs
 
-**Type:** `@algorandfoundation/algorand-typescript/arc4::Struct`
-**Encoding:** See [ARC4 Container Packing](#ARC4-Container-Packing)
+**Type:** `@algorandfoundation/algorand-typescript/arc4::Struct`<br>
+**Encoding:** See [ARC4 Container Packing](#ARC4-Container-Packing)<br>
 **Native equivalent:** _None_
 
 ARC4 Structs are named tuples. Items can be accessed via names instead of indexes. They are also mutable

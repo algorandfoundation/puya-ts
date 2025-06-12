@@ -1,4 +1,4 @@
-import { intrinsicFactory } from '../../../../awst/intrinsic-factory'
+import { nodeFactory } from '../../../../awst/node-factory'
 import type { Expression } from '../../../../awst/nodes'
 import type { SourceLocation } from '../../../../awst/source-location'
 import { wtypes } from '../../../../awst/wtypes'
@@ -6,7 +6,6 @@ import { wtypes } from '../../../../awst/wtypes'
 import { invariant } from '../../../../util'
 import type { PType } from '../../../ptypes'
 import { BoxMapPType, BoxPType, bytesPType, stringPType } from '../../../ptypes'
-import { instanceEb } from '../../../type-registry'
 import { FunctionBuilder, type NodeBuilder } from '../../index'
 import { parseFunctionArgs } from '../../util/arg-parsing'
 import { extractKey } from '../util'
@@ -50,10 +49,11 @@ export class BoxMapExpressionBuilder extends BoxProxyExpressionBuilder<BoxMapPTy
     })
 
     return new BoxExpressionBuilder(
-      intrinsicFactory.bytesConcat({
-        left: this._expr,
-        right: key.toBytes(sourceLocation),
+      nodeFactory.boxPrefixedKeyExpression({
+        key: key.resolve(),
+        prefix: this._expr,
         sourceLocation: this.sourceLocation,
+        wtype: wtypes.boxKeyWType,
       }),
       new BoxPType({
         content: this.ptype.contentType,
@@ -64,7 +64,7 @@ export class BoxMapExpressionBuilder extends BoxProxyExpressionBuilder<BoxMapPTy
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
     switch (name) {
       case 'keyPrefix':
-        return instanceEb(this.toBytes(sourceLocation), bytesPType)
+        return this.toBytes(sourceLocation)
     }
     return super.memberAccess(name, sourceLocation)
   }

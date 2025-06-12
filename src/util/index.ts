@@ -1,4 +1,3 @@
-import { Buffer } from 'node:buffer'
 import fs from 'node:fs'
 import { TextDecoder } from 'node:util'
 import upath from 'upath'
@@ -8,6 +7,8 @@ import { CodeError, InternalError } from '../errors'
 import type { DeliberateAny } from '../typescript-helpers'
 
 export { base32ToUint8Array, uint8ArrayToBase32 } from './base-32'
+export { base64ToUint8Array, uint8ArrayToBase64 } from './base-64'
+export { hexToUint8Array, uint8ArrayToHex } from './base-16'
 
 class InvariantError extends InternalError {}
 
@@ -92,17 +93,6 @@ export const expandMaybeArray = <T>(maybeArray: T | T[]): T[] => {
   return Array.isArray(maybeArray) ? maybeArray : [maybeArray]
 }
 
-export const uint8ArrayToBase64 = (value: Uint8Array): string => Buffer.from(value).toString('base64')
-
-export const hexToUint8Array = (value: string): Uint8Array => {
-  invariant(value.length % 2 === 0, 'Hex string must have even number of characters')
-  return Uint8Array.from(Buffer.from(value, 'hex'))
-}
-
-export const base64ToUint8Array = (value: string): Uint8Array => {
-  return Uint8Array.from(Buffer.from(value, 'base64'))
-}
-
 export const utf8ToUint8Array = (value: string): Uint8Array => {
   const encoder = new TextEncoder()
   return encoder.encode(value)
@@ -115,8 +105,6 @@ export const uint8ArrayToBigInt = (v: Uint8Array): bigint => {
     .map((byte_value, i): bigint => BigInt(byte_value) << BigInt(i * 8))
     .reduce((a, b) => a + b, 0n)
 }
-
-export const uint8ArrayToHex = (value: Uint8Array): string => Buffer.from(value).toString('hex')
 
 export const uint8ArrayToUtf8 = (value: Uint8Array): string => {
   const decoder = new TextDecoder()
@@ -243,6 +231,12 @@ export function mkDirIfNotExists(dir: string) {
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true })
   }
+}
+
+export function sameSets<T>(a: Iterable<T>, b: Iterable<T>) {
+  const setA = new Set(a)
+  const setB = new Set(b)
+  return setA.intersection(setB).size === setA.size
 }
 
 export const zipStrict = <T1, T2>(array1: T1[], array2: T2[]): [T1, T2][] => {

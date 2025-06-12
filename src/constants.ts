@@ -15,6 +15,7 @@ export const Constants = {
       box: `${algoTsPackage}/box.d.ts`,
       compiled: `${algoTsPackage}/compiled.d.ts`,
       itxn: `${algoTsPackage}/itxn.d.ts`,
+      itxnCompose: `${algoTsPackage}/itxn-compose.d.ts`,
       gtxn: `${algoTsPackage}/gtxn.d.ts`,
       logicSig: `${algoTsPackage}/logic-sig.d.ts`,
       mutableArray: `${algoTsPackage}/mutable-array.d.ts`,
@@ -39,6 +40,13 @@ export const Constants = {
     constructorMethodName: 'constructor',
     logicSigProgramMethodName: 'program',
     defaultCreateMethodName: '__algots__.defaultCreate',
+    conventionalRouting: {
+      closeOutOfApplicationMethodName: 'closeOutOfApplication',
+      createApplicationMethodName: 'createApplication',
+      deleteApplicationMethodName: 'deleteApplication',
+      optInToApplicationMethodName: 'optInToApplication',
+      updateApplicationMethodName: 'updateApplication',
+    },
   },
 
   algo: {
@@ -52,9 +60,9 @@ export const Constants = {
   },
 
   supportedAvmVersions: [10n, 11n],
-  targetedPuyaVersion: '4.5.3',
+  targetedPuyaVersion: '4.9.0',
   puyaGithubRepo: 'algorandfoundation/puya',
-  minNodeVersion: '20.19.0',
+  minNodeVersion: '22.14.0',
   languageServerSource: 'puyats',
 } as const
 

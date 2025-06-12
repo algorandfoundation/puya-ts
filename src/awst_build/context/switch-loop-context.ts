@@ -3,7 +3,7 @@ import { nodeFactory } from '../../awst/node-factory'
 import type { Block, Goto } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { codeInvariant, invariant, toSubScript } from '../../util'
-import { defaultRecord } from '../../util/default-map'
+import { defaultRecord } from '../../util/default-record'
 
 type SwitchOrLoop = 'switch' | 'loop'
 type LoopContext = Disposable & { breakTarget: Block; continueTarget: Block; readonly hasBreaks: boolean; readonly hasContinues: boolean }

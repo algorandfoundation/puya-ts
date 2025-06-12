@@ -1,0 +1,135 @@
+#pragma version 10
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 1 0 6
+    bytecblock 0x151f7c75 0xfe6bdf69
+    // tests/approvals/multi-inheritance.algo.ts:65
+    // class AbiCallMultiInheritance extends Contract {
+    txn NumAppArgs
+    bz main_bare_routing@7
+    pushbytes 0xfefe8691 // method "test(application)void"
+    bytec_1 // method "add(uint64,uint64)uint64"
+    txna ApplicationArgs 0
+    match main_test_route@3 main_add_route@4
+
+main_after_if_else@11:
+    // tests/approvals/multi-inheritance.algo.ts:65
+    // class AbiCallMultiInheritance extends Contract {
+    intc_1 // 0
+    return
+
+main_add_route@4:
+    // tests/approvals/multi-inheritance.algo.ts:79
+    // add(a: uint64, b: uint64): uint64 {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    // tests/approvals/multi-inheritance.algo.ts:65
+    // class AbiCallMultiInheritance extends Contract {
+    txna ApplicationArgs 1
+    btoi
+    txna ApplicationArgs 2
+    btoi
+    // tests/approvals/multi-inheritance.algo.ts:80
+    // return a + b
+    +
+    // tests/approvals/multi-inheritance.algo.ts:79
+    // add(a: uint64, b: uint64): uint64 {
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
+
+main_test_route@3:
+    // tests/approvals/multi-inheritance.algo.ts:66
+    // test(app: Application) {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    // tests/approvals/multi-inheritance.algo.ts:65
+    // class AbiCallMultiInheritance extends Contract {
+    txna ApplicationArgs 1
+    btoi
+    txnas Applications
+    // tests/approvals/multi-inheritance.algo.ts:67-70
+    // abiCall(MultiBases.prototype.methodTwo, {
+    //   args: [],
+    //   appId: app,
+    // })
+    itxn_begin
+    pushbytes 0x363b329e // method "methodTwo()string"
+    itxn_field ApplicationArgs
+    itxn_field ApplicationID
+    intc_2 // appl
+    itxn_field TypeEnum
+    intc_1 // 0
+    itxn_field Fee
+    itxn_submit
+    itxn LastLog
+    extract 0 4
+    bytec_0 // 0x151f7c75
+    ==
+    assert // Bytes has valid prefix
+    // tests/approvals/multi-inheritance.algo.ts:72-74
+    // const result = abiCall(AbiCallMultiInheritance.prototype.add, {
+    //   args: [1, 2],
+    // }).returnValue
+    itxn_begin
+    // tests/approvals/multi-inheritance.algo.ts:73
+    // args: [1, 2],
+    intc_0 // 1
+    itob
+    pushint 2 // 2
+    itob
+    // tests/approvals/multi-inheritance.algo.ts:72-74
+    // const result = abiCall(AbiCallMultiInheritance.prototype.add, {
+    //   args: [1, 2],
+    // }).returnValue
+    bytec_1 // method "add(uint64,uint64)uint64"
+    itxn_field ApplicationArgs
+    swap
+    itxn_field ApplicationArgs
+    itxn_field ApplicationArgs
+    intc_2 // appl
+    itxn_field TypeEnum
+    intc_1 // 0
+    itxn_field Fee
+    itxn_submit
+    itxn LastLog
+    dup
+    extract 4 0
+    swap
+    extract 0 4
+    bytec_0 // 0x151f7c75
+    ==
+    assert // Bytes has valid prefix
+    btoi
+    // tests/approvals/multi-inheritance.algo.ts:76
+    // assert(result === 3)
+    pushint 3 // 3
+    ==
+    assert
+    // tests/approvals/multi-inheritance.algo.ts:66
+    // test(app: Application) {
+    intc_0 // 1
+    return
+
+main_bare_routing@7:
+    // tests/approvals/multi-inheritance.algo.ts:65
+    // class AbiCallMultiInheritance extends Contract {
+    txn OnCompletion
+    bnz main_after_if_else@11
+    txn ApplicationID
+    !
+    assert // can only call when creating
+    intc_0 // 1
+    return

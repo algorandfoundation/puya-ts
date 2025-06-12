@@ -8,10 +8,10 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@2: // after_if_else_L1
         let tmp%0#1: uint64 = (txn NumAppArgs)
         goto tmp%0#1 ? block@4 : block@9
-    block@4: // abi_routing_L5
+    block@4: // abi_routing_L10
         let tmp%2#0: bytes = (txna ApplicationArgs 0)
         switch tmp%2#0 {method "methodCommon()string" => block@5, method "b2CantOverride()string" => block@6, * => block@13}
-    block@5: // methodCommon_route_L8
+    block@5: // methodCommon_route_L13
         let tmp%3#0: uint64 = (txn OnCompletion)
         let tmp%4#0: bool = (! tmp%3#0)
         (assert tmp%4#0) // OnCompletion is not NoOp
@@ -20,7 +20,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (log 0x151f7c750006636f6d6d6f6e)
         let tests/approvals/multi-inheritance.algo.ts::CommonBase.__puya_arc4_router__%0#0: bool = 1u
         goto block@14
-    block@6: // b2CantOverride_route_L12
+    block@6: // b2CantOverride_route_L17
         let tmp%8#0: uint64 = (txn OnCompletion)
         let tmp%9#0: bool = (! tmp%8#0)
         (assert tmp%9#0) // OnCompletion is not NoOp
@@ -29,16 +29,16 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (log 0x151f7c750006636f6d6d6f6e)
         let tests/approvals/multi-inheritance.algo.ts::CommonBase.__puya_arc4_router__%0#1: bool = 1u
         goto block@14
-    block@9: // bare_routing_L5
+    block@9: // bare_routing_L10
         let tmp%13#0: uint64 = (txn OnCompletion)
         goto tmp%13#0 ? block@13 : block@10
-    block@10: // __algots__.defaultCreate_L5
+    block@10: // __algots__.defaultCreate_L10
         let tmp%14#0: uint64 = (txn ApplicationID)
         let tmp%15#0: bool = (! tmp%14#0)
         (assert tmp%15#0) // can only call when creating
         let tests/approvals/multi-inheritance.algo.ts::CommonBase.__puya_arc4_router__%0#2: bool = 1u
         goto block@14
-    block@13: // after_if_else_L5
+    block@13: // after_if_else_L10
         let tests/approvals/multi-inheritance.algo.ts::CommonBase.__puya_arc4_router__%0#3: bool = 0u
         goto block@14
     block@14: // after_inlined_tests/approvals/multi-inheritance.algo.ts::CommonBase.__puya_arc4_router___L1

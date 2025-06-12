@@ -1,5 +1,7 @@
-import type { bytes, uint64 } from '@algorandfoundation/algorand-typescript'
-import { assert, BaseContract, Box, BoxMap, BoxRef, Bytes, Txn } from '@algorandfoundation/algorand-typescript'
+import type { Account, bytes, uint64 } from '@algorandfoundation/algorand-typescript'
+import { assert, BaseContract, Box, BoxMap, BoxRef, Bytes, Contract, Txn } from '@algorandfoundation/algorand-typescript'
+import type { Bool, DynamicArray, StaticArray, Tuple, UintN32 } from '@algorandfoundation/algorand-typescript/arc4'
+import { UintN8 } from '@algorandfoundation/algorand-typescript/arc4'
 import { itob } from '@algorandfoundation/algorand-typescript/op'
 
 const boxA = Box<string>({ key: Bytes('A') })
@@ -120,5 +122,123 @@ class BoxNotExist extends BaseContract {
       }
     }
     return true
+  }
+}
+
+class BoxCreate extends Contract {
+  boxBool = Box<boolean>({ key: 'bool' })
+  boxArc4Bool = Box<Bool>({ key: 'arc4b' })
+  boxStr = Box<string>({ key: 'a' })
+  boxUint = Box<uint64>({ key: 'b' })
+  boxStaticArray = Box<StaticArray<UintN32, 10>>({ key: 'c' })
+  boxDynamicArray = Box<DynamicArray<UintN8>>({ key: 'd' })
+  boxTuple = Box<Tuple<[UintN8, UintN8, Bool, Bool]>>({ key: 'e' })
+
+  createBoxes() {
+    this.boxStr.create({ size: 10 })
+    assert(this.boxStr.length === 10)
+    this.boxUint.create()
+    assert(this.boxUint.length === 8)
+    this.boxStaticArray.create()
+    assert(this.boxStaticArray.length === (32 / 8) * 10)
+    this.boxDynamicArray.create({ size: 2 })
+    assert(this.boxDynamicArray.length === 2)
+    this.boxTuple.create()
+    assert(this.boxTuple.length === 3)
+    this.boxBool.create()
+    assert(this.boxBool.length === 8)
+    this.boxArc4Bool.create()
+    assert(this.boxArc4Bool.length === 1)
+  }
+}
+
+class BoxMapTest extends Contract {
+  bmap = BoxMap<Account, string>({ keyPrefix: '' })
+}
+
+class TupleBox extends Contract {
+  box1 = Box<[string, bytes, boolean]>({ key: 't1' })
+  box2 = Box<{ a: string; b: bytes; c: boolean }>({ key: 't2' })
+  boxMap1 = BoxMap<string, [string, bytes, boolean]>({ keyPrefix: 'tm1' })
+  boxMap2 = BoxMap<string, { a: string; b: bytes; c: boolean }>({ keyPrefix: 'tm2' })
+
+  testBox() {
+    this.box1.create({ size: 10 })
+    this.box2.create({ size: 20 })
+    assert(this.box1.length === 10)
+    assert(this.box2.length === 20)
+
+    assert(this.box1.exists)
+    assert(this.box2.exists)
+
+    this.box1.value = ['hello', Bytes('world'), true]
+    assert(this.box1.value[0] === 'hello')
+    assert(this.box1.value[1].equals(Bytes('world')))
+    assert(this.box1.value[2])
+
+    this.box2.value = { a: 'hello', b: Bytes('world'), c: true }
+    assert(this.box2.value.a === 'hello')
+    assert(this.box2.value.b.equals(Bytes('world')))
+    assert(this.box2.value.c)
+
+    this.box1.delete()
+    assert(!this.box1.exists)
+
+    this.box2.delete()
+    assert(!this.box2.exists)
+  }
+
+  testBoxMap() {
+    assert(!this.boxMap1('a').exists)
+    assert(!this.boxMap2('a').exists)
+
+    this.boxMap1('a').value = ['hello', Bytes('world'), true]
+    this.boxMap2('a').value = { a: 'hello', b: Bytes('world'), c: true }
+    assert(this.boxMap1('a').exists)
+
+    assert(this.boxMap1('a').value[0] === 'hello')
+    assert(this.boxMap1('a').value[1].equals(Bytes('world')))
+    assert(this.boxMap1('a').value[2])
+
+    assert(this.boxMap2('a').exists)
+    assert(this.boxMap2('a').value.a === 'hello')
+    assert(this.boxMap2('a').value.b.equals(Bytes('world')))
+    assert(this.boxMap2('a').value.c)
+
+    this.boxMap1('b').value = ['abc', Bytes('def'), false]
+    assert(this.boxMap1('b').exists)
+
+    this.boxMap2('b').value = { a: 'abc', b: Bytes('def'), c: false }
+    assert(this.boxMap2('b').exists)
+
+    this.boxMap1('a').delete()
+    assert(!this.boxMap1('a').exists)
+
+    this.boxMap2('a').delete()
+    assert(!this.boxMap2('a').exists)
+  }
+}
+
+class BoxToRefTest extends Contract {
+  boxMap = BoxMap<Account, StaticArray<UintN8, 4>>({ keyPrefix: '' })
+
+  test() {
+    const boxForCaller = this.boxMap(Txn.sender)
+
+    boxForCaller.create()
+
+    const boxRef = boxForCaller.ref
+
+    boxRef.replace(0, new UintN8(123).bytes)
+
+    assert(boxForCaller.value[0].native === 123, 'First array item in box should be 123')
+  }
+}
+
+class CompositeKeyTest extends Contract {
+  boxMap = BoxMap<{ a: uint64; b: uint64 }, string>({ keyPrefix: '' })
+
+  test(key: { a: uint64; b: uint64 }, val: string) {
+    this.boxMap(key).value = val
   }
 }

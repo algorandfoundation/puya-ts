@@ -1,6 +1,8 @@
+import fs from 'fs'
 import { globSync } from 'glob'
 import { rimraf } from 'rimraf'
 import { describe, expect, it } from 'vitest'
+import { gatherOutputStats } from '../scripts/gather-output-stats'
 import { compile, CompileOptions, processInputPaths } from '../src'
 import { isErrorOrCritical, LoggingContext, LogLevel } from '../src/logger'
 import { normalisePath } from '../src/util'
@@ -51,12 +53,15 @@ describe('Approvals', async () => {
 
       expect(awst, 'Contract file must produce awst').toBeDefined()
     })
+
+    const stats = gatherOutputStats('tests/approvals')
+    fs.writeFileSync('tests/approvals/out/stats.txt', stats, 'utf8')
   })
 
   it('There should be no differences to committed changes', async () => {
     const result = await invokeCli({
       command: 'git',
-      args: ['status', '--porcelain'],
+      args: ['status', 'tests', '--porcelain'],
     })
     const diffs = result.lines
 

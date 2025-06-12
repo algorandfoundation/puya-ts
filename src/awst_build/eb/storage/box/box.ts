@@ -4,12 +4,13 @@ import type { SourceLocation } from '../../../../awst/source-location'
 import { wtypes } from '../../../../awst/wtypes'
 import { invariant } from '../../../../util'
 import type { PType } from '../../../ptypes'
-import { boolPType, BoxPType, bytesPType, stringPType, TuplePType } from '../../../ptypes'
+import { boolPType, BoxPType, BoxRefPType, bytesPType, stringPType, TuplePType, uint64PType } from '../../../ptypes'
 import { instanceEb } from '../../../type-registry'
-import { FunctionBuilder, type NodeBuilder, ParameterlessFunctionBuilder } from '../../index'
+import { FunctionBuilder, type NodeBuilder } from '../../index'
 import { parseFunctionArgs } from '../../util/arg-parsing'
 import { extractKey } from '../util'
 import { boxExists, boxLength, BoxProxyExpressionBuilder, boxValue, BoxValueExpressionBuilder } from './base'
+import { BoxRefExpressionBuilder } from './box-ref'
 
 export class BoxFunctionBuilder extends FunctionBuilder {
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
@@ -43,8 +44,10 @@ export class BoxExpressionBuilder extends BoxProxyExpressionBuilder<BoxPType> {
       contentType: this.ptype.contentType,
     })
     switch (name) {
+      case 'create':
+        return new BoxCreateFunctionBuilder(boxValueExpr, this.ptype.contentType, sourceLocation)
       case 'key':
-        return instanceEb(this.toBytes(sourceLocation), bytesPType)
+        return this.toBytes(sourceLocation)
       case 'value':
         return new BoxValueExpressionBuilder(boxValueExpr, this.ptype.contentType)
       case 'exists':
@@ -57,22 +60,85 @@ export class BoxExpressionBuilder extends BoxProxyExpressionBuilder<BoxPType> {
         return new BoxGetFunctionBuilder(boxValueExpr, this.ptype.contentType, sourceLocation)
       case 'maybe':
         return new BoxMaybeFunctionBuilder(boxValueExpr, this.ptype.contentType, sourceLocation)
+      case 'ref':
+        return new BoxRefExpressionBuilder(this._expr, new BoxRefPType())
     }
     return super.memberAccess(name, sourceLocation)
   }
 }
 
-class BoxDeleteFunctionBuilder extends ParameterlessFunctionBuilder {
-  constructor(boxValue: BoxValueExpression, sourceLocation: SourceLocation) {
-    super(boxValue, (expr) =>
-      instanceEb(
-        nodeFactory.stateDelete({
-          sourceLocation,
-          field: boxValue,
+class BoxCreateFunctionBuilder extends FunctionBuilder {
+  constructor(
+    private boxValue: BoxValueExpression,
+    private contentType: PType,
+    sourceLocation: SourceLocation,
+  ) {
+    super(sourceLocation)
+  }
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    const {
+      args: [{ size }],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 0,
+      callLocation: sourceLocation,
+      funcName: 'Box.create',
+      argSpec: (a) => [a.obj({ size: a.optional(uint64PType) })],
+    })
+    if (size) {
+      return instanceEb(
+        nodeFactory.intrinsicCall({
+          opCode: 'box_create',
+          stackArgs: [this.boxValue.key, size.resolve()],
           wtype: wtypes.boolWType,
+          immediates: [],
+          sourceLocation,
         }),
         boolPType,
-      ),
+      )
+    }
+
+    return instanceEb(
+      nodeFactory.intrinsicCall({
+        opCode: 'box_create',
+        stackArgs: [
+          this.boxValue.key,
+          nodeFactory.sizeOf({ sizeWtype: this.contentType.wtypeOrThrow, sourceLocation, wtype: wtypes.uint64WType }),
+        ],
+        wtype: wtypes.boolWType,
+        immediates: [],
+        sourceLocation,
+      }),
+      boolPType,
+    )
+  }
+}
+
+class BoxDeleteFunctionBuilder extends FunctionBuilder {
+  constructor(
+    private boxValue: BoxValueExpression,
+    sourceLocation: SourceLocation,
+  ) {
+    super(sourceLocation)
+  }
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 0,
+      argSpec: (a) => [],
+      callLocation: sourceLocation,
+      funcName: 'delete',
+    })
+    return instanceEb(
+      nodeFactory.stateDelete({
+        sourceLocation,
+        field: this.boxValue,
+        wtype: wtypes.boolWType,
+      }),
+      boolPType,
     )
   }
 }

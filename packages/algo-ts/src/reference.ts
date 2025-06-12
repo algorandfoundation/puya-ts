@@ -8,7 +8,7 @@ export type Account = {
   /**
    * Get the accounts address in bytes
    */
-  readonly bytes: bytes
+  readonly bytes: bytes<32>
 
   /**
    * Account balance in microalgos
@@ -176,7 +176,7 @@ export type Asset = {
   /**
    * Arbitrary commitment
    */
-  readonly metadataHash: bytes
+  readonly metadataHash: bytes<32>
 
   /**
    * Manager address

@@ -1,5 +1,4 @@
 import ts from 'typescript'
-import { isConstant } from '../../awst'
 import { nodeFactory } from '../../awst/node-factory'
 import type * as awst from '../../awst/nodes'
 import type { Block } from '../../awst/nodes'
@@ -194,10 +193,10 @@ export abstract class FunctionVisitor
        */
       storeConst: if (isConstDeclaration && ts.isIdentifier(d.name)) {
         const targetType = this.context.getPTypeForNode(d.name)
-        if (!targetType.wtype) break storeConst
-        const expr = source.resolveToPType(targetType).resolve()
-        if (!isConstant(expr)) break storeConst
-        this.context.addConstant(d.name, expr)
+        if (!source.resolvableToPType(targetType)) break storeConst
+        const builder = source.resolveToPType(targetType)
+        if (!builder.isConstant) break storeConst
+        this.context.addConstant(d.name, builder)
         return []
       }
 

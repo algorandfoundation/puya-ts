@@ -6,8 +6,10 @@ import type { InstanceBuilder } from '../eb'
 
 export type Arc4AbiDecoratorData = {
   type: typeof Constants.symbolNames.arc4AbiDecoratorName
-  create: ARC4CreateOption
-  ocas: OnCompletionAction[]
+  create?: ARC4CreateOption
+  createLocation?: SourceLocation
+  allowedCompletionTypes?: OnCompletionAction[]
+  allowedCompletionTypesLocation?: SourceLocation
   sourceLocation: SourceLocation
   readonly: boolean
   nameOverride: string | undefined
@@ -26,8 +28,10 @@ export type Arc4AbiDecoratorData = {
 
 export type Arc4BareDecoratorData = {
   type: typeof Constants.symbolNames.arc4BareDecoratorName
-  create: ARC4CreateOption
-  ocas: OnCompletionAction[]
+  create?: ARC4CreateOption
+  createLocation?: SourceLocation
+  allowedCompletionTypes?: OnCompletionAction[]
+  allowedCompletionTypesLocation?: SourceLocation
   sourceLocation: SourceLocation
 }
 
@@ -53,6 +57,7 @@ export type ContractOptionsDecoratorData = {
 }
 
 export type DecoratorData = Arc4BareDecoratorData | Arc4AbiDecoratorData | LogicSigOptionsDecoratorData | ContractOptionsDecoratorData
+export type RoutingDecoratorData = Arc4AbiDecoratorData | Arc4BareDecoratorData
 
 export type DecoratorType = DecoratorData['type']
 

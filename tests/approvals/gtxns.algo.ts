@@ -1,5 +1,6 @@
 import {
   assert,
+  Bytes,
   Contract,
   Global,
   gtxn,
@@ -9,6 +10,7 @@ import {
   Txn,
   urange,
 } from '@algorandfoundation/algorand-typescript'
+import { methodSelector } from '@algorandfoundation/algorand-typescript/arc4'
 
 export class GtxnsAlgo extends Contract {
   test() {
@@ -44,10 +46,33 @@ export class GtxnsAlgo extends Contract {
   test3() {
     assert(Txn.onCompletion === OnCompleteAction.NoOp, 'OCA must be NoOp')
     assert(Txn.typeEnum === TransactionType.ApplicationCall)
+    log('Hello test4')
   }
 
-  test4(other: gtxn.ApplicationTxn) {
+  test4(other: gtxn.ApplicationCallTxn) {
     assert(other.onCompletion === OnCompleteAction.NoOp, 'Other txn must be NoOp')
     assert(other.type === TransactionType.ApplicationCall)
+    assert(other.lastLog === Bytes('Hello test4'))
+    assert(other.appArgs(0) === methodSelector(GtxnsAlgo.prototype.test3))
+    assert(other.appId === Global.currentApplicationId)
+  }
+
+  reflectAllPay(pay: gtxn.PaymentTxn) {
+    return {
+      sender: pay.sender.bytes,
+      fee: pay.fee,
+      firstValid: pay.firstValid,
+      firstValidTime: pay.firstValidTime,
+      lastValid: pay.lastValid,
+      note: pay.note,
+      lease: pay.lease,
+      typeBytes: pay.typeBytes,
+      groupIndex: pay.groupIndex,
+      txnId: pay.txnId,
+      rekeyTo: pay.rekeyTo.bytes,
+      receiver: pay.receiver.bytes,
+      amount: pay.amount,
+      closeRemainderTo: pay.closeRemainderTo.bytes,
+    }
   }
 }

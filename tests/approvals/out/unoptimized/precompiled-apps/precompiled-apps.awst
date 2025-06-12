@@ -216,7 +216,7 @@ contract ReceivesTxns
   
   receivesAssetConfig(assetCfg: group_transaction_acfg): bytes
   {
-    return gtxns<TxID>(assetCfg)
+    return reinterpret_cast<bytes>(gtxns<TxID>(assetCfg))
   }
   
   receivesAssetConfigAndPay(assetCfg: group_transaction_acfg, payTxn: group_transaction_pay): void
@@ -245,7 +245,7 @@ contract ReceivesReferenceTypes
   receivesReferenceTypes(app: application, acc: account, asset: asset): void
   {
     log(reinterpret_cast<bytes>(checked_maybe(app_params_get<AppAddress>(app), comment=application exists)))
-    log(reinterpret_cast<bytes>(acc))
+    log(reinterpret_cast<bytes[32]>(acc))
     log(checked_maybe(asset_params_get<AssetName>(asset), comment=asset exists))
   }
   

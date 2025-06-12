@@ -1,0 +1,111 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        let tmp%0#1: uint64 = (txn NumAppArgs)
+        goto tmp%0#1 ? block@2 : block@7
+    block@2: // abi_routing_L159
+        let tmp%2#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%2#0 {method "testBox()void" => block@3, method "testBoxMap()void" => block@4, * => block@11}
+    block@3: // testBox_route_L165
+        let tmp%3#0: uint64 = (txn OnCompletion)
+        let tmp%4#0: bool = (! tmp%3#0)
+        (assert tmp%4#0) // OnCompletion is not NoOp
+        let tmp%5#0: uint64 = (txn ApplicationID)
+        (assert tmp%5#0) // can only call when not creating
+        (box_create "t1" 10u)
+        (box_create "t2" 20u)
+        let (value%0#0: uint64, check%0#0: bool) = (box_len "t1")
+        (assert check%0#0) // Box must have value
+        let tmp%0#3: bool = (== value%0#0 10u)
+        (assert tmp%0#3)
+        let (value%1#0: uint64, check%1#0: bool) = (box_len "t2")
+        (assert check%1#0) // Box must have value
+        let tmp%1#2: bool = (== value%1#0 20u)
+        (assert tmp%1#2)
+        let (_%0#1: uint64, maybe_exists%0#1: bool) = (box_len "t1")
+        (assert maybe_exists%0#1)
+        let (_%1#1: uint64, maybe_exists%1#1: bool) = (box_len "t2")
+        (assert maybe_exists%1#1)
+        (box_del "t1")
+        (box_put "t1" 0x0005000c80000568656c6c6f0005776f726c64)
+        (box_del "t2")
+        (box_put "t2" 0x0005000c80000568656c6c6f0005776f726c64)
+        (box_del "t1")
+        let (_%2#1: uint64, maybe_exists%8#1: bool) = (box_len "t1")
+        let tmp%6#2: bool = (! maybe_exists%8#1)
+        (assert tmp%6#2)
+        (box_del "t2")
+        let (_%3#1: uint64, maybe_exists%9#1: bool) = (box_len "t2")
+        let tmp%7#2: bool = (! maybe_exists%9#1)
+        (assert tmp%7#2)
+        let tests/approvals/box-proxies.algo.ts::TupleBox.__puya_arc4_router__%0#0: bool = 1u
+        goto block@12
+    block@4: // testBoxMap_route_L191
+        let tmp%7#0: uint64 = (txn OnCompletion)
+        let tmp%8#0: bool = (! tmp%7#0)
+        (assert tmp%8#0) // OnCompletion is not NoOp
+        let tmp%9#0: uint64 = (txn ApplicationID)
+        (assert tmp%9#0) // can only call when not creating
+        let (_%0#0: uint64, maybe_exists%0#0: bool) = (box_len "tm1a")
+        let tmp%0#2: bool = (! maybe_exists%0#0)
+        (assert tmp%0#2)
+        let (_%1#0: uint64, maybe_exists%1#0: bool) = (box_len "tm2a")
+        let tmp%1#1: bool = (! maybe_exists%1#0)
+        (assert tmp%1#1)
+        (box_del "tm1a")
+        (box_put "tm1a" 0x0005000c80000568656c6c6f0005776f726c64)
+        (box_del "tm2a")
+        (box_put "tm2a" 0x0005000c80000568656c6c6f0005776f726c64)
+        let (_%2#0: uint64, maybe_exists%2#0: bool) = (box_len "tm1a")
+        (assert maybe_exists%2#0)
+        let (maybe_value%0#0: bytes, maybe_exists%3#0: bool) = (box_get "tm1a")
+        (assert maybe_exists%3#0) // Box must have value
+        let item_start_offset%0#0: uint64 = (extract_uint16 maybe_value%0#0 0u)
+        let item_end_offset%0#0: uint64 = (extract_uint16 maybe_value%0#0 2u)
+        let item0%0#0: bytes = (substring3 maybe_value%0#0 item_start_offset%0#0 item_end_offset%0#0)
+        let item0%1#0: bytes = ((extract 2 0) item0%0#0)
+        let item_end_offset%1#0: uint64 = (len maybe_value%0#0)
+        let is_true%0#0: uint64 = (getbit maybe_value%0#0 32u)
+        let tmp%2#1: bool = (== item0%1#0 "hello")
+        (assert tmp%2#1)
+        let item1%2#0: bytes = (substring3 maybe_value%0#0 item_end_offset%0#0 item_end_offset%1#0)
+        let item1%3#0: bytes = ((extract 2 0) item1%2#0)
+        let tmp%3#1: bool = (== item1%3#0 "world")
+        (assert tmp%3#1)
+        let encoded_bool%4#0: bytes[1] = (setbit 0x00 0u is_true%0#0)
+        let item2%2#0: bool = (getbit encoded_bool%4#0 0u)
+        (assert item2%2#0)
+        let (_%3#0: uint64, maybe_exists%6#0: bool) = (box_len "tm2a")
+        (assert maybe_exists%6#0)
+        (box_del "tm1b")
+        (box_put "tm1b" 0x0005000a0000036162630003646566)
+        let (_%4#0: uint64, maybe_exists%10#0: bool) = (box_len "tm1b")
+        (assert maybe_exists%10#0)
+        (box_del "tm2b")
+        (box_put "tm2b" 0x0005000a0000036162630003646566)
+        let (_%5#0: uint64, maybe_exists%11#0: bool) = (box_len "tm2b")
+        (assert maybe_exists%11#0)
+        (box_del "tm1a")
+        let (_%6#0: uint64, maybe_exists%12#0: bool) = (box_len "tm1a")
+        let tmp%6#1: bool = (! maybe_exists%12#0)
+        (assert tmp%6#1)
+        (box_del "tm2a")
+        let (_%7#0: uint64, maybe_exists%13#0: bool) = (box_len "tm2a")
+        let tmp%7#1: bool = (! maybe_exists%13#0)
+        (assert tmp%7#1)
+        let tests/approvals/box-proxies.algo.ts::TupleBox.__puya_arc4_router__%0#1: bool = 1u
+        goto block@12
+    block@7: // bare_routing_L159
+        let tmp%11#0: uint64 = (txn OnCompletion)
+        goto tmp%11#0 ? block@11 : block@8
+    block@8: // __algots__.defaultCreate_L159
+        let tmp%12#0: uint64 = (txn ApplicationID)
+        let tmp%13#0: bool = (! tmp%12#0)
+        (assert tmp%13#0) // can only call when creating
+        let tests/approvals/box-proxies.algo.ts::TupleBox.__puya_arc4_router__%0#2: bool = 1u
+        goto block@12
+    block@11: // after_if_else_L159
+        let tests/approvals/box-proxies.algo.ts::TupleBox.__puya_arc4_router__%0#3: bool = 0u
+        goto block@12
+    block@12: // after_inlined_tests/approvals/box-proxies.algo.ts::TupleBox.__puya_arc4_router___L1
+        let tmp%0#0: bool = φ(tests/approvals/box-proxies.algo.ts::TupleBox.__puya_arc4_router__%0#0 <- block@3, tests/approvals/box-proxies.algo.ts::TupleBox.__puya_arc4_router__%0#1 <- block@4, tests/approvals/box-proxies.algo.ts::TupleBox.__puya_arc4_router__%0#2 <- block@8, tests/approvals/box-proxies.algo.ts::TupleBox.__puya_arc4_router__%0#3 <- block@11)
+        return tmp%0#0

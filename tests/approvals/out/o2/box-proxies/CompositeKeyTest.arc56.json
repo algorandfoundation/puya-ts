@@ -1,0 +1,129 @@
+{
+    "name": "CompositeKeyTest",
+    "structs": {
+        "object": [
+            {
+                "name": "a",
+                "type": "uint64"
+            },
+            {
+                "name": "b",
+                "type": "uint64"
+            }
+        ]
+    },
+    "methods": [
+        {
+            "name": "test",
+            "args": [
+                {
+                    "type": "(uint64,uint64)",
+                    "struct": "object",
+                    "name": "key"
+                },
+                {
+                    "type": "string",
+                    "name": "val"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            },
+            "actions": {
+                "create": [],
+                "call": [
+                    "NoOp"
+                ]
+            },
+            "readonly": false,
+            "events": [],
+            "recommendations": {}
+        }
+    ],
+    "arcs": [
+        22,
+        28
+    ],
+    "networks": {},
+    "state": {
+        "schema": {
+            "global": {
+                "ints": 0,
+                "bytes": 0
+            },
+            "local": {
+                "ints": 0,
+                "bytes": 0
+            }
+        },
+        "keys": {
+            "global": {},
+            "local": {},
+            "box": {}
+        },
+        "maps": {
+            "global": {},
+            "local": {},
+            "box": {
+                "boxMap": {
+                    "keyType": "object",
+                    "valueType": "AVMString",
+                    "prefix": ""
+                }
+            }
+        }
+    },
+    "bareActions": {
+        "create": [
+            "NoOp"
+        ],
+        "call": []
+    },
+    "sourceInfo": {
+        "approval": {
+            "sourceInfo": [
+                {
+                    "pc": [
+                        28
+                    ],
+                    "errorMessage": "OnCompletion is not NoOp"
+                },
+                {
+                    "pc": [
+                        70
+                    ],
+                    "errorMessage": "can only call when creating"
+                },
+                {
+                    "pc": [
+                        31
+                    ],
+                    "errorMessage": "can only call when not creating"
+                }
+            ],
+            "pcOffsetMethod": "none"
+        },
+        "clear": {
+            "sourceInfo": [],
+            "pcOffsetMethod": "none"
+        }
+    },
+    "source": {
+        "approval": "I3ByYWdtYSB2ZXJzaW9uIDEwCiNwcmFnbWEgdHlwZXRyYWNrIGZhbHNlCgovLyBAYWxnb3JhbmRmb3VuZGF0aW9uL2FsZ29yYW5kLXR5cGVzY3JpcHQvYXJjNC9pbmRleC5kLnRzOjpDb250cmFjdC5hcHByb3ZhbFByb2dyYW0oKSAtPiB1aW50NjQ6Cm1haW46CiAgICBpbnRjYmxvY2sgMCAxCiAgICAvLyB0ZXN0cy9hcHByb3ZhbHMvYm94LXByb3hpZXMuYWxnby50czoyMzgKICAgIC8vIGNsYXNzIENvbXBvc2l0ZUtleVRlc3QgZXh0ZW5kcyBDb250cmFjdCB7CiAgICB0eG4gTnVtQXBwQXJncwogICAgYnogbWFpbl9iYXJlX3JvdXRpbmdANgogICAgcHVzaGJ5dGVzIDB4MTk3YTQxNjcgLy8gbWV0aG9kICJ0ZXN0KCh1aW50NjQsdWludDY0KSxzdHJpbmcpdm9pZCIKICAgIHR4bmEgQXBwbGljYXRpb25BcmdzIDAKICAgIG1hdGNoIG1haW5fdGVzdF9yb3V0ZUAzCgptYWluX2FmdGVyX2lmX2Vsc2VAMTA6CiAgICAvLyB0ZXN0cy9hcHByb3ZhbHMvYm94LXByb3hpZXMuYWxnby50czoyMzgKICAgIC8vIGNsYXNzIENvbXBvc2l0ZUtleVRlc3QgZXh0ZW5kcyBDb250cmFjdCB7CiAgICBpbnRjXzAgLy8gMAogICAgcmV0dXJuCgptYWluX3Rlc3Rfcm91dGVAMzoKICAgIC8vIHRlc3RzL2FwcHJvdmFscy9ib3gtcHJveGllcy5hbGdvLnRzOjI0MQogICAgLy8gdGVzdChrZXk6IHsgYTogdWludDY0OyBiOiB1aW50NjQgfSwgdmFsOiBzdHJpbmcpIHsKICAgIHR4biBPbkNvbXBsZXRpb24KICAgICEKICAgIGFzc2VydCAvLyBPbkNvbXBsZXRpb24gaXMgbm90IE5vT3AKICAgIHR4biBBcHBsaWNhdGlvbklECiAgICBhc3NlcnQgLy8gY2FuIG9ubHkgY2FsbCB3aGVuIG5vdCBjcmVhdGluZwogICAgLy8gdGVzdHMvYXBwcm92YWxzL2JveC1wcm94aWVzLmFsZ28udHM6MjM4CiAgICAvLyBjbGFzcyBDb21wb3NpdGVLZXlUZXN0IGV4dGVuZHMgQ29udHJhY3QgewogICAgdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQogICAgZHVwCiAgICBpbnRjXzAgLy8gMAogICAgZXh0cmFjdF91aW50NjQKICAgIHN3YXAKICAgIHB1c2hpbnQgOCAvLyA4CiAgICBleHRyYWN0X3VpbnQ2NAogICAgdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMgogICAgZXh0cmFjdCAyIDAKICAgIC8vIHRlc3RzL2FwcHJvdmFscy9ib3gtcHJveGllcy5hbGdvLnRzOjI0MQogICAgLy8gdGVzdChrZXk6IHsgYTogdWludDY0OyBiOiB1aW50NjQgfSwgdmFsOiBzdHJpbmcpIHsKICAgIHVuY292ZXIgMgogICAgaXRvYgogICAgdW5jb3ZlciAyCiAgICBpdG9iCiAgICAvLyB0ZXN0cy9hcHByb3ZhbHMvYm94LXByb3hpZXMuYWxnby50czoyNDIKICAgIC8vIHRoaXMuYm94TWFwKGtleSkudmFsdWUgPSB2YWwKICAgIGNvbmNhdAogICAgZHVwCiAgICBib3hfZGVsCiAgICBwb3AKICAgIHN3YXAKICAgIGJveF9wdXQKICAgIC8vIHRlc3RzL2FwcHJvdmFscy9ib3gtcHJveGllcy5hbGdvLnRzOjI0MQogICAgLy8gdGVzdChrZXk6IHsgYTogdWludDY0OyBiOiB1aW50NjQgfSwgdmFsOiBzdHJpbmcpIHsKICAgIGludGNfMSAvLyAxCiAgICByZXR1cm4KCm1haW5fYmFyZV9yb3V0aW5nQDY6CiAgICAvLyB0ZXN0cy9hcHByb3ZhbHMvYm94LXByb3hpZXMuYWxnby50czoyMzgKICAgIC8vIGNsYXNzIENvbXBvc2l0ZUtleVRlc3QgZXh0ZW5kcyBDb250cmFjdCB7CiAgICB0eG4gT25Db21wbGV0aW9uCiAgICBibnogbWFpbl9hZnRlcl9pZl9lbHNlQDEwCiAgICB0eG4gQXBwbGljYXRpb25JRAogICAgIQogICAgYXNzZXJ0IC8vIGNhbiBvbmx5IGNhbGwgd2hlbiBjcmVhdGluZwogICAgaW50Y18xIC8vIDEKICAgIHJldHVybgo=",
+        "clear": "I3ByYWdtYSB2ZXJzaW9uIDEwCiNwcmFnbWEgdHlwZXRyYWNrIGZhbHNlCgovLyBAYWxnb3JhbmRmb3VuZGF0aW9uL2FsZ29yYW5kLXR5cGVzY3JpcHQvYmFzZS1jb250cmFjdC5kLnRzOjpCYXNlQ29udHJhY3QuY2xlYXJTdGF0ZVByb2dyYW0oKSAtPiB1aW50NjQ6Cm1haW46CiAgICBwdXNoaW50IDEgLy8gMQogICAgcmV0dXJuCg=="
+    },
+    "byteCode": {
+        "approval": "CiACAAExG0EANIAEGXpBZzYaAI4BAAIiQzEZFEQxGEQ2GgFJIltMgQhbNhoCVwIATwIWTwIWUEm8SEy/I0MxGUD/1DEYFEQjQw==",
+        "clear": "CoEBQw=="
+    },
+    "compilerInfo": {
+        "compiler": "puya",
+        "compilerVersion": {
+            "major": 4,
+            "minor": 9,
+            "patch": 0
+        }
+    },
+    "events": [],
+    "templateVariables": {}
+}

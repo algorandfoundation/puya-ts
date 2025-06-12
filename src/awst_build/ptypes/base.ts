@@ -39,6 +39,10 @@ export abstract class PType {
     return ptypesAreEqual(this, other)
   }
 
+  equalsOneOf(...others: PType[]): boolean {
+    return others.some((o) => ptypesAreEqual(this, o))
+  }
+
   static equals(other: PType): boolean {
     return other instanceof this
   }
@@ -53,6 +57,12 @@ export abstract class PType {
   toString(): string {
     return this.name
   }
+
+  static typeDescription?: string
+
+  static toString() {
+    return this?.typeDescription ?? this.constructor.name
+  }
 }
 
 export class GenericPType<T extends PType = PType> extends PType {
@@ -60,8 +70,8 @@ export class GenericPType<T extends PType = PType> extends PType {
   readonly module: string
   readonly singleton = false
   readonly wtype = undefined
-  readonly parameterise: (typeArgs: PType[]) => T
-  constructor(props: { name: string; module: string; parameterise: (typeArgs: PType[]) => T }) {
+  readonly parameterise: (typeArgs: readonly PType[]) => T
+  constructor(props: { name: string; module: string; parameterise: (typeArgs: readonly PType[]) => T }) {
     super()
     this.name = props.name
     this.module = props.module

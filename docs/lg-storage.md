@@ -1,3 +1,7 @@
+---
+title: Storage
+---
+
 # Storage
 
 Algorand smart contracts have [three different types of on-chain storage](https://dev.algorand.co/concepts/smart-contracts/storage/overview/)
@@ -10,14 +14,13 @@ Global or Application storage is a key/value store of `bytes` or `uint64` values
 Global storage values are declared using the [GlobalState](api/index/functions/GlobalState.md) function to create a [GlobalState](api/index/type-aliases/GlobalState.md) proxy object.
 
 ```ts
-import {GlobalState, Contract, uint64, bytes, Uint64, contract} from "@algorandfoundation/algorand-typescript";
+import { GlobalState, Contract, uint64, bytes, Uint64, contract } from '@algorandfoundation/algorand-typescript'
 
 class DemoContract extends Contract {
   // The property name 'globalInt' will be used as the key
-  globalInt = GlobalState<uint64>({initialValue: Uint64(1)})
+  globalInt = GlobalState<uint64>({ initialValue: Uint64(1) })
   // Explicitly override the key
-  globalBytes = GlobalState<bytes>({key: "alternativeKey"})
-
+  globalBytes = GlobalState<bytes>({ key: 'alternativeKey' })
 }
 
 // If using dynamic keys, state must be explicitly reserved
@@ -25,7 +28,7 @@ class DemoContract extends Contract {
 class DynamicAccessContract extends Contract {
   test(key: string, value: string) {
     // Interact with state using a dynamic key
-    const dynamicAccess = GlobalState<string>({key})
+    const dynamicAccess = GlobalState<string>({ key })
     dynamicAccess.value = value
   }
 }
@@ -90,10 +93,12 @@ The `Box` type provides an abstraction over storing a single value in a single b
 subroutine. `Box` proxy instances can be passed around like any other value.
 
 `BoxMap` is similar to the `Box` type, but allows for grouping a set of boxes with a common key and content type.
-A `keyPrefix` is specified when the `BoxMap` is created and the item key can be a `Bytes` value, or anything that can be converted to `Bytes`. The final box name is the combination of `keyPrefix + key`.
+A `keyPrefix` is specified when the `BoxMap` is created and the item key can be a `Bytes` value, or anything that can be converted to `Bytes`. The final box name is the combination of `keyPrefix + key`. The `BoxMap` proxy is a function which takes a `key` argument and returns you a `Box` proxy object for that item.
 
 `BoxRef` is a specialised type for interacting with boxes which contain binary data. In addition to being able to set and read the box value, there are operations for extracting and replacing just a portion of the box data which
 is useful for minimizing the amount of reads and writes required, but also allows you to interact with byte arrays which are longer than the AVM can support (currently 4096).
+
+The `Box` proxy object contains a `ref` property which will return a `BoxRef` proxy for that box. This allows you to directly manipulate the bytes of any box, though it should note that mutations via this approach are not validated against the `Box` value type which could lead to box content which is not valid for the expected type.
 
 ```ts
 import type { Account, uint64 } from '@algorandfoundation/algorand-typescript'
@@ -115,7 +120,7 @@ export class BoxContract extends Contract {
     if (this.boxRefThree.exists) {
       this.boxRefThree.resize(8000)
     } else {
-      this.boxRefThree.create({size: 8000})
+      this.boxRefThree.create({ size: 8000 })
     }
 
     this.boxRefThree.replace(0, bzero(0).bitwiseInvert())

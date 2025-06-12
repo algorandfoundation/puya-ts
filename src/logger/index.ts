@@ -79,7 +79,7 @@ class PuyaLogger {
       })
       if (source.cause) {
         this.addLog({
-          level: LogLevel.Error,
+          level: LogLevel.Debug,
           source: tryGetSourceLocationFromError(source.cause),
           message: `Caused by: ${source.cause}`,
         })

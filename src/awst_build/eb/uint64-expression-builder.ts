@@ -1,4 +1,3 @@
-import type { awst } from '../../awst'
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
 import { nodeFactory } from '../../awst/node-factory'
 import type { Expression } from '../../awst/nodes'
@@ -9,7 +8,8 @@ import { wtypes } from '../../awst/wtypes'
 import { NotSupported } from '../../errors'
 import { tryConvertEnum } from '../../util'
 import type { InstanceType, PType } from '../ptypes'
-import { boolPType, stringPType, Uint64Function, uint64PType } from '../ptypes'
+import { boolPType, BytesPType, stringPType, Uint64Function, uint64PType } from '../ptypes'
+import { instanceEb } from '../type-registry'
 import type { BuilderComparisonOp, InstanceBuilder, NodeBuilder } from './index'
 import { BuilderBinaryOp, BuilderUnaryOp, FunctionBuilder, InstanceExpressionBuilder } from './index'
 import { requireExpressionOfType, requireStringConstant } from './util'
@@ -68,6 +68,26 @@ export class UInt64FunctionBuilder extends FunctionBuilder {
       )
     }
     return value
+  }
+
+  memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
+    switch (name) {
+      case 'MAX_VALUE':
+        return new UInt64ExpressionBuilder(
+          nodeFactory.uInt64Constant({
+            value: 2n ** 64n - 1n,
+            sourceLocation,
+          }),
+        )
+      case 'MIN_VALUE':
+        return new UInt64ExpressionBuilder(
+          nodeFactory.uInt64Constant({
+            value: 0n,
+            sourceLocation,
+          }),
+        )
+    }
+    return super.memberAccess(name, sourceLocation)
   }
 }
 
@@ -184,7 +204,7 @@ export class UInt64ExpressionBuilder extends InstanceExpressionBuilder<InstanceT
     )
   }
 
-  toBytes(sourceLocation: SourceLocation): awst.Expression {
-    return intrinsicFactory.itob({ value: this.resolve(), sourceLocation })
+  toBytes(sourceLocation: SourceLocation): InstanceBuilder {
+    return instanceEb(intrinsicFactory.itob({ value: this.resolve(), sourceLocation }), new BytesPType({ length: 8n }))
   }
 }
