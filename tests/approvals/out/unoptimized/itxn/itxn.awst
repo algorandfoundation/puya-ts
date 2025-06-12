@@ -30,7 +30,7 @@ contract ItxnDemoContract
     assert(checked_maybe(asset_params_get<AssetName>(asset2_txn.CreatedAssetID), comment=asset exists) == "AST2", comment=created asset 2 is correct)
     appCreateParams: inner_transaction_fields_appl = create_inner_transaction(Fee=0, TypeEnum=6, ApprovalProgramPages=<tuple>[0x098101], ClearStateProgramPages=<tuple>[0x098101])
     update_inner_transaction(assetParams, ConfigAssetName="AST3")
-    <tuple>[appCreateTxn, asset3_txn]: readonlytuple[inner_transaction_appl, inner_transaction_acfg] = submit_txn(appCreateParams, assetParams)
+    <tuple>[appCreateTxn, asset3_txn]: readonly [inner_transaction_appl, inner_transaction_acfg] = submit_txn(appCreateParams, assetParams)
     assert(Boolean(appCreateTxn.CreatedApplicationID), comment=app is created)
     assert(asset3_txn.ConfigAssetName == "AST3", comment=asset3_txn is correct)
     update_inner_transaction(appCreateParams, Note="3rd")
@@ -41,7 +41,7 @@ contract ItxnDemoContract
   test2(): void
   {
     if (Boolean(txn<NumAppArgs>())) {
-      args: readonlytuple[bytes, bytes] = <tuple>["1", "2"]
+      args: readonly [bytes, bytes] = <tuple>["1", "2"]
       createAppParams: inner_transaction_fields_appl = create_inner_transaction(Fee=0, TypeEnum=6, ApprovalProgramPages=<tuple>[0x098101], ClearStateProgramPages=<tuple>[0x098101], ApplicationArgs=<tuple>[args.0, args.1], OnCompletion=0, Note="with args param set")
     } else {
       createAppParams: inner_transaction_fields_appl = create_inner_transaction(Fee=0, TypeEnum=6, ApprovalProgramPages=<tuple>[0x098101], ClearStateProgramPages=<tuple>[0x098101], ApplicationArgs=<tuple>["3", reinterpret_cast<bytes>("4"), "5"], Note="no args param set")
@@ -89,7 +89,7 @@ contract ItxnDemoContract
     update_inner_transaction(appTxn15, ApplicationArgs=<tuple>["15"])
     appTxn16: inner_transaction_fields_appl = copy(appTxn1)
     update_inner_transaction(appTxn16, ApplicationArgs=<tuple>["16"])
-    <tuple>[app1, app2, app3, app4, app5, app6, app7, app8, app9, app10, app11, app12, app13, app14, app15, app16]: readonlytuple[inner_transaction_appl, inner_transaction_appl, inner_transaction_appl, inner_transaction_appl, inner_transaction_appl, inner_transaction_appl, inner_transaction_appl, inner_transaction_appl, inner_transaction_appl, inner_transaction_appl, inner_transaction_appl, inner_transaction_appl, inner_transaction_appl, inner_transaction_appl, inner_transaction_appl, inner_transaction_appl] = submit_txn(appTxn1, appTxn2, appTxn3, appTxn4, appTxn5, appTxn6, appTxn7, appTxn8, appTxn9, appTxn10, appTxn11, appTxn12, appTxn13, appTxn14, appTxn15, appTxn16)
+    <tuple>[app1, app2, app3, app4, app5, app6, app7, app8, app9, app10, app11, app12, app13, app14, app15, app16]: readonly [inner_transaction_appl, inner_transaction_appl, inner_transaction_appl, inner_transaction_appl, inner_transaction_appl, inner_transaction_appl, inner_transaction_appl, inner_transaction_appl, inner_transaction_appl, inner_transaction_appl, inner_transaction_appl, inner_transaction_appl, inner_transaction_appl, inner_transaction_appl, inner_transaction_appl, inner_transaction_appl] = submit_txn(appTxn1, appTxn2, appTxn3, appTxn4, appTxn5, appTxn6, appTxn7, appTxn8, appTxn9, appTxn10, appTxn11, appTxn12, appTxn13, appTxn14, appTxn15, appTxn16)
     assert(app1.Logs[0] == "1")
     assert(app2.Logs[0] == "2")
     assert(app3.Logs[0] == "3")
@@ -126,8 +126,8 @@ contract ItxnDemoContract
   {
     pay: inner_transaction_fields_pay = create_inner_transaction(Fee=0, TypeEnum=1, Receiver=checked_maybe(app_params_get<AppAddress>(appId), comment=application exists), Amount=1000)
     app: inner_transaction_fields_appl = create_inner_transaction(Fee=0, TypeEnum=6, ApplicationID=appId, ApplicationArgs=<tuple>[Method("receivePay(uint64,pay,string)(uint64,uint64,string)"), 0x0000000000000001, reinterpret_cast<bytes>("hello")])
-    <tuple>[_, appRes]: readonlytuple[inner_transaction_pay, inner_transaction_appl] = submit_txn(pay, app)
-    returnValue: readonlytuple[uint64, uint64, string] = ARC4_DECODE(reinterpret_cast<arc4.tuple<uint64,uint64,string>>(checked_maybe(<tuple>[extract<4, 0>((#0 = appRes.LastLog)), extract<0, 4>(#0) == 0x151f7c75], comment=Bytes has valid prefix)))
+    <tuple>[_, appRes]: readonly [inner_transaction_pay, inner_transaction_appl] = submit_txn(pay, app)
+    returnValue: arc4.tuple<uint64,uint64,string> = ARC4_DECODE(reinterpret_cast<arc4.tuple<arc4.uint64,arc4.uint64,arc4.dynamic_array<arc4.byte>>>(checked_maybe(<tuple>[extract<4, 0>((#0 = appRes.LastLog)), extract<0, 4>(#0) == 0x151f7c75], comment=Bytes has valid prefix)))
     assert(3 == 3 and returnValue.0 == 1 and returnValue.1 == 1000 and returnValue.2 == "hello", comment=assert target is match for conditions)
   }
   
@@ -158,9 +158,9 @@ contract ItxnReceiver
     return True
   }
   
-  receivePay(a: uint64, b: group_transaction_pay, c: string): readonlytuple[uint64, uint64, string]
+  receivePay(a: uint64, b: group_transaction_pay, c: string): arc4.tuple<uint64,uint64,string>
   {
-    return <tuple>[a, gtxns<Amount>(b), c]
+    return ARC4_ENCODE(<tuple>[a, gtxns<Amount>(b), c], wtype=arc4.tuple<uint64,uint64,string>)
   }
   
   __algots__.defaultCreate(): void

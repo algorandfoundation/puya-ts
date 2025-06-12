@@ -5,7 +5,7 @@ import type { SourceLocation } from '../../awst/source-location'
 import { CodeError } from '../../errors'
 import { codeInvariant } from '../../util'
 import type { PType } from '../ptypes'
-import { ArrayPType, boolPType, matchFunction, ObjectPType, TuplePType, uint64PType } from '../ptypes'
+import { ArrayPType, boolPType, matchFunction, MutableTuplePType, ObjectPType, ReadonlyTuplePType, uint64PType } from '../ptypes'
 import { instanceEb } from '../type-registry'
 import type { InstanceBuilder } from './index'
 import { BuilderComparisonOp, NodeBuilder } from './index'
@@ -82,7 +82,8 @@ function buildComparison(
   // Recurse comparisons for nested objects
   if (
     subjectProperty.ptype instanceof ObjectPType ||
-    subjectProperty.ptype instanceof TuplePType ||
+    subjectProperty.ptype instanceof ReadonlyTuplePType ||
+    subjectProperty.ptype instanceof MutableTuplePType ||
     subjectProperty.ptype instanceof ArrayPType
   ) {
     return buildComparisons(subjectProperty, testProperty, functionName, sourceLocation)
@@ -92,7 +93,7 @@ function buildComparison(
     return subjectProperty.compare(testProperty, BuilderComparisonOp.eq, sourceLocation)
   } else if (testProperty.hasProperty('between')) {
     const range = requireInstanceBuilder(testProperty.memberAccess('between', sourceLocation)).singleEvaluation()
-    const rangePType = new TuplePType({ items: [subjectType, subjectType] })
+    const rangePType = new ReadonlyTuplePType({ items: [subjectType, subjectType] })
     codeInvariant(range.resolvableToPType(rangePType), 'Between range must be of type $')
     const zeroIndex = instanceEb(nodeFactory.uInt64Constant({ value: 0n, sourceLocation }), uint64PType)
     const gte = subjectProperty

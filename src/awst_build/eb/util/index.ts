@@ -9,13 +9,11 @@ import { biguintPType, boolPType, stringPType, uint64PType } from '../../ptypes'
 import type { NodeBuilder } from '../index'
 import { InstanceBuilder } from '../index'
 import { LiteralExpressionBuilder } from '../literal-expression-builder'
-import { BigIntLiteralExpressionBuilder } from '../literal/big-int-literal-expression-builder'
+import { NumericLiteralExpressionBuilder } from '../literal/numeric-literal-expression-builder'
 
 export function requireExpressionOfType(builder: NodeBuilder, ptype: PTypeOrClass): Expression {
   if (builder instanceof InstanceBuilder) {
-    if (builder.resolvableToPType(ptype)) {
-      return builder.resolveToPType(ptype).resolve()
-    }
+    return builder.resolveToPType(ptype).resolve()
   }
   throw new CodeError(`Expected expression of type ${ptype}, got ${builder.typeDescription}`, {
     sourceLocation: builder.sourceLocation,
@@ -23,9 +21,7 @@ export function requireExpressionOfType(builder: NodeBuilder, ptype: PTypeOrClas
 }
 export function requireBuilderOfType(builder: NodeBuilder, ptype: PTypeOrClass): InstanceBuilder {
   if (builder instanceof InstanceBuilder) {
-    if (builder.resolvableToPType(ptype)) {
-      return builder.resolveToPType(ptype)
-    }
+    return builder.resolveToPType(ptype)
   }
   throw new CodeError(`Expected expression of type ${ptype}, got ${builder.typeDescription}`, {
     sourceLocation: builder.sourceLocation,
@@ -59,8 +55,16 @@ export function requestBuilderOfType(builder: NodeBuilder, ptype: PTypeOrClass):
 }
 
 export function requireInstanceBuilder(builder: NodeBuilder): InstanceBuilder {
-  if (builder instanceof InstanceBuilder) return builder
+  if (builder instanceof InstanceBuilder) {
+    return builder
+  }
   throw new CodeError(`Expected instance of a type, got ${builder.typeDescription}`, { sourceLocation: builder.sourceLocation })
+}
+export function requestInstanceBuilder(builder: NodeBuilder): InstanceBuilder | undefined {
+  if (builder instanceof InstanceBuilder) {
+    return builder
+  }
+  return undefined
 }
 
 export function requireStringConstant(builder: NodeBuilder): awst.StringConstant {
@@ -101,6 +105,6 @@ export function requireConstantOfType(builder: NodeBuilder, ptype: PType, messag
 }
 
 export function requireLiteralNumber(builder: NodeBuilder) {
-  codeInvariant(builder instanceof BigIntLiteralExpressionBuilder, 'Expected numeric literal', builder.sourceLocation)
+  codeInvariant(builder instanceof NumericLiteralExpressionBuilder, 'Expected numeric literal', builder.sourceLocation)
   return builder.value
 }

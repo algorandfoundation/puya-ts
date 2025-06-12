@@ -7,7 +7,6 @@ function test(a: uint64, b: uint64) {
   const conditionalExplicitTuple: [uint64, uint64] = a < b ? [a, b] : [b, a]
 
   const [c, d] = [a, b]
-
   //const [...f] = [a, b] as const
   const [, g] = [a, b] as const
   const [h] = [a, b] as const

@@ -4,28 +4,30 @@ import type { SourceLocation } from '../../../awst/source-location'
 import { CodeError } from '../../../errors'
 import { codeInvariant } from '../../../util'
 import type { PTypeOrClass } from '../../ptypes'
-import { ArrayLiteralPType, ArrayPType, TuplePType } from '../../ptypes'
+import { ArrayLiteralPType, ArrayPType, MutableTuplePType, ReadonlyArrayPType, ReadonlyTuplePType } from '../../ptypes'
+import { instanceEb } from '../../type-registry'
 import type { NodeBuilder } from '../index'
 import { InstanceBuilder } from '../index'
 import type { StaticallyIterable } from '../traits/static-iterator'
 import { StaticIterator } from '../traits/static-iterator'
-import { TupleExpressionBuilder } from '../tuple-expression-builder'
 import { requireIntegerConstant } from '../util'
 import { arrayLength } from '../util/array/length'
 
 export class ArrayLiteralExpressionBuilder extends InstanceBuilder implements StaticallyIterable {
-  readonly ptype: ArrayLiteralPType | ArrayPType
+  readonly isConstant = false
+
+  readonly ptype: ArrayLiteralPType | ArrayPType | ReadonlyArrayPType
   constructor(
     sourceLocation: SourceLocation,
     private readonly items: InstanceBuilder[],
-    ptype?: ArrayPType | ArrayLiteralPType,
+    ptype?: ArrayPType | ArrayLiteralPType | ReadonlyArrayPType,
   ) {
     super(sourceLocation)
     this.ptype = ptype ?? new ArrayLiteralPType({ items: items.map((i) => i.ptype) })
   }
 
   resolve(): Expression {
-    const arrayType = this.ptype instanceof ArrayPType ? this.ptype : this.ptype.getArrayType()
+    const arrayType = this.ptype instanceof ArrayLiteralPType ? this.ptype.getArrayType() : this.ptype
 
     return nodeFactory.newArray({
       sourceLocation: this.sourceLocation,
@@ -35,7 +37,7 @@ export class ArrayLiteralExpressionBuilder extends InstanceBuilder implements St
   }
 
   resolveLValue(): LValue {
-    throw new CodeError('Array literal is not a valid lvalue')
+    throw new CodeError('Array literal is not a valid assignment target', { sourceLocation: this.sourceLocation })
   }
 
   singleEvaluation(): InstanceBuilder {
@@ -60,20 +62,29 @@ export class ArrayLiteralExpressionBuilder extends InstanceBuilder implements St
   }
 
   resolveToPType(ptype: PTypeOrClass): InstanceBuilder {
-    if (ptype instanceof TuplePType) {
+    if (ptype instanceof ReadonlyTuplePType) {
       codeInvariant(
         ptype.items.length <= this.items.length,
         `Value of length ${this.items.length} cannot be resolved to type of length ${ptype.items.length}`,
       )
-      return new TupleExpressionBuilder(
-        nodeFactory.tupleExpression({
-          items: ptype.items.map((itemType, index) => this.items[index].resolveToPType(itemType).resolve()),
-          sourceLocation: this.sourceLocation,
-        }),
-        ptype,
-      )
+      const tupleExpr = nodeFactory.tupleExpression({
+        items: ptype.items.map((itemType, index) => this.items[index].resolveToPType(itemType).resolve()),
+        sourceLocation: this.sourceLocation,
+      })
+      return instanceEb(tupleExpr, ptype)
     }
-    if (ptype instanceof ArrayPType) {
+    if (ptype instanceof MutableTuplePType) {
+      codeInvariant(
+        ptype.items.length <= this.items.length,
+        `Value of length ${this.items.length} cannot be resolved to type of length ${ptype.items.length}`,
+      )
+      const tupleExpr = nodeFactory.tupleExpression({
+        items: ptype.items.map((itemType, index) => this.items[index].resolveToPType(itemType).resolve()),
+        sourceLocation: this.sourceLocation,
+      })
+      return instanceEb(nodeFactory.aRC4Encode({ value: tupleExpr, wtype: ptype.wtype, sourceLocation: this.sourceLocation }), ptype)
+    }
+    if (ptype instanceof ArrayPType || ptype instanceof ReadonlyArrayPType) {
       return new ArrayLiteralExpressionBuilder(
         this.sourceLocation,
         this.items.map((i) => i.resolveToPType(ptype.elementType)),
@@ -85,10 +96,10 @@ export class ArrayLiteralExpressionBuilder extends InstanceBuilder implements St
 
   resolvableToPType(ptype: PTypeOrClass): boolean {
     if (ptype.equals(this.ptype)) return true
-    if (ptype instanceof TuplePType) {
+    if (ptype instanceof ReadonlyTuplePType || ptype instanceof MutableTuplePType) {
       return ptype.items.every((itemType, index) => this.items[index].resolvableToPType(itemType))
     }
-    if (ptype instanceof ArrayPType) {
+    if (ptype instanceof ArrayPType || ptype instanceof ReadonlyArrayPType) {
       return this.items.every((i) => i.resolveToPType(ptype.elementType))
     }
     return false

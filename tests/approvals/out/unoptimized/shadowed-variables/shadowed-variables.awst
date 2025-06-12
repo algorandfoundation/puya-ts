@@ -2,7 +2,7 @@ contract ShadowedVariablesAlgo
 {
   approvalProgram(): bool
   {
-    <tuple>[b, u, f]: readonlytuple[bytes, uint64, bool] = tests/approvals/shadowed-variables.algo.ts::ShadowedVariablesAlgo.getValues()
+    (b = (#0 = tests/approvals/shadowed-variables.algo.ts::ShadowedVariablesAlgo.getValues()).0), (u = #0.1), (f = #0.2), #0
     assert("123" == b, comment=a should be module const (bytes))
     a: uint64 = u
     assert(a == 123, comment=a should be local const (uint))
@@ -21,9 +21,9 @@ contract ShadowedVariablesAlgo
     return True
   }
   
-  getValues(): readonlytuple[bytes, uint64, bool]
+  getValues(): arc4.tuple<bytes,uint64,bool>
   {
-    return <tuple>["123", 123, False]
+    return ARC4_ENCODE(<tuple>["123", 123, False], wtype=arc4.tuple<bytes,uint64,bool>)
   }
   
 }

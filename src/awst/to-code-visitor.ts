@@ -29,6 +29,9 @@ export class ToCodeVisitor
   visitRange(expression: nodes.Range): string {
     return `urange(${expression.start.accept(this)}, ${expression.stop.accept(this)}, ${expression.step.accept(this)})`
   }
+  visitCommaExpression(expression: nodes.CommaExpression): string {
+    return expression.expressions.map((e) => e.accept(this)).join(', ')
+  }
   visitVoidConstant(expression: nodes.VoidConstant): string {
     return `void`
   }
@@ -142,7 +145,7 @@ export class ToCodeVisitor
     return `${expression.base.accept(this)}.pop()`
   }
   visitArrayExtend(expression: nodes.ArrayExtend): string {
-    return `${expression.base.accept(this)}.push(...${expression.other.accept(this)}`
+    return `${expression.base.accept(this)}.push(...${expression.other.accept(this)})`
   }
   visitArrayLength(expression: nodes.ArrayLength): string {
     return `${expression.array.accept(this)}.length`
@@ -381,6 +384,10 @@ export class ToCodeVisitor
       expression.errorMessage ? `, comment=${expression.errorMessage}` : '',
       ')',
     ].join('')
+  }
+
+  visitConvertArray(expression: nodes.ConvertArray): string {
+    return `convert_array(${expression.expr.accept(this)}, wtype=${expression.wtype})`
   }
 
   private currentContract: ContractReference[] = []

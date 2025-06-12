@@ -30,15 +30,6 @@ main_test_for_of_loop_native_mutable_array_route@7:
     // tests/approvals/for-of-loops.algo.ts:7
     // export class ForOfLoopsAlgo extends Contract {
     txna ApplicationArgs 1
-    dup
-    intc_0 // 0
-    extract_uint64
-    dig 1
-    intc_2 // 8
-    extract_uint64
-    uncover 2
-    pushint 16 // 16
-    extract_uint64
     // tests/approvals/for-of-loops.algo.ts:44
     // test_for_of_loop_native_mutable_array(items: [uint64, uint64, uint64]) {
     callsub test_for_of_loop_native_mutable_array
@@ -177,11 +168,9 @@ test_for_of_loop_tuple_for_body@1:
     dig 1
     +
     frame_bury 0
-    // tests/approvals/for-of-loops.algo.ts:5
-    // const stopNumber: uint64 = 42
-    intc_3 // 42
     // tests/approvals/for-of-loops.algo.ts:12
     // if (item === stopNumber) break
+    intc_3 // 42
     ==
     bnz test_for_of_loop_tuple_block@8
     // tests/approvals/for-of-loops.algo.ts:10
@@ -241,11 +230,9 @@ test_for_of_loop_arc4_dynamic_array_for_header@1:
     dig 1
     +
     frame_bury 0
-    // tests/approvals/for-of-loops.algo.ts:5
-    // const stopNumber: uint64 = 42
-    intc_3 // 42
     // tests/approvals/for-of-loops.algo.ts:21
     // if (item.native === stopNumber) break
+    intc_3 // 42
     ==
     bnz test_for_of_loop_arc4_dynamic_array_block@7
     frame_dig 2
@@ -289,11 +276,9 @@ test_for_of_loop_arc4_static_array_for_header@1:
     dig 1
     +
     frame_bury 0
-    // tests/approvals/for-of-loops.algo.ts:5
-    // const stopNumber: uint64 = 42
-    intc_3 // 42
     // tests/approvals/for-of-loops.algo.ts:30
     // if (item.native === stopNumber) break
+    intc_3 // 42
     ==
     bnz test_for_of_loop_arc4_static_array_block@7
     frame_dig 1
@@ -342,11 +327,9 @@ test_for_of_loop_native_immutable_array_for_header@1:
     dig 1
     +
     frame_bury 0
-    // tests/approvals/for-of-loops.algo.ts:5
-    // const stopNumber: uint64 = 42
-    intc_3 // 42
     // tests/approvals/for-of-loops.algo.ts:39
     // if (item === stopNumber) break
+    intc_3 // 42
     ==
     bnz test_for_of_loop_native_immutable_array_block@7
     frame_dig 2
@@ -361,24 +344,29 @@ test_for_of_loop_native_immutable_array_block@7:
     retsub
 
 
-// tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array(items.0: uint64, items.1: uint64, items.2: uint64) -> uint64:
+// tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array(items: bytes) -> uint64:
 test_for_of_loop_native_mutable_array:
     // tests/approvals/for-of-loops.algo.ts:44
     // test_for_of_loop_native_mutable_array(items: [uint64, uint64, uint64]) {
-    proto 3 1
-    frame_dig -3
-    itob
-    frame_dig -2
-    itob
+    proto 1 1
     // tests/approvals/for-of-loops.algo.ts:45
-    // const mutable = new MutableArray(...items)
-    concat
-    // tests/approvals/for-of-loops.algo.ts:44
-    // test_for_of_loop_native_mutable_array(items: [uint64, uint64, uint64]) {
+    // const mutable = new ReferenceArray(...items)
     frame_dig -1
+    intc_0 // 0
+    extract_uint64
+    frame_dig -1
+    intc_2 // 8
+    extract_uint64
+    frame_dig -1
+    pushint 16 // 16
+    extract_uint64
+    uncover 2
     itob
-    // tests/approvals/for-of-loops.algo.ts:45
-    // const mutable = new MutableArray(...items)
+    uncover 2
+    itob
+    concat
+    swap
+    itob
     concat
     dup
     // tests/approvals/for-of-loops.algo.ts:46
@@ -403,9 +391,6 @@ test_for_of_loop_native_mutable_array_for_header@1:
     frame_dig 3
     intc_2 // 8
     *
-    intc_2 // 8
-    extract3
-    intc_0 // 0
     extract_uint64
     // tests/approvals/for-of-loops.algo.ts:48
     // total += item
@@ -413,11 +398,9 @@ test_for_of_loop_native_mutable_array_for_header@1:
     dig 1
     +
     frame_bury 1
-    // tests/approvals/for-of-loops.algo.ts:5
-    // const stopNumber: uint64 = 42
-    intc_3 // 42
     // tests/approvals/for-of-loops.algo.ts:49
     // if (item === stopNumber) break
+    intc_3 // 42
     ==
     bnz test_for_of_loop_native_mutable_array_block@7
     frame_dig 3

@@ -4,7 +4,7 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 0 1 32
-    bytecblock 0x00 0x068101
+    bytecblock 0x068101
     // tests/approvals/accounts.algo.ts:8
     // export class AccountsContract extends Contract {
     txn NumAppArgs
@@ -56,71 +56,53 @@ main_getAccountInfo_route@3:
     assert // invalid size
     uncover 13
     itob
+    uncover 14
+    swap
+    concat
     uncover 13
     itob
-    dig 13
+    concat
+    dig 12
     len
     intc_2 // 32
     ==
     assert // invalid size
     uncover 12
-    itob
-    uncover 12
-    itob
-    uncover 12
-    itob
-    uncover 12
-    itob
-    uncover 12
-    itob
-    uncover 12
-    itob
-    uncover 12
-    itob
-    uncover 12
-    itob
-    uncover 12
-    itob
-    bytec_0 // 0x00
-    intc_0 // 0
-    uncover 14
-    setbit
-    bytec_0 // 0x00
-    intc_0 // 0
-    uncover 14
-    setbit
-    uncover 14
-    uncover 13
-    concat
-    uncover 12
-    concat
-    uncover 12
     concat
     uncover 11
+    itob
     concat
     uncover 10
+    itob
     concat
     uncover 9
+    itob
     concat
     uncover 8
+    itob
     concat
     uncover 7
+    itob
     concat
     uncover 6
+    itob
     concat
     uncover 5
+    itob
     concat
     uncover 4
+    itob
     concat
     uncover 3
+    itob
     concat
-    uncover 2
-    concat
-    swap
+    pushbytes 0x00
     intc_0 // 0
-    getbit
+    uncover 4
+    setbit
+    concat
     pushint 1217 // 1217
-    swap
+    uncover 2
     setbit
     pushbytes 0x151f7c75
     swap
@@ -157,9 +139,9 @@ getAccountInfo_while_top@2:
     itxn_field TypeEnum
     pushint 5 // DeleteApplication
     itxn_field OnCompletion
-    bytec_1 // 0x068101
+    bytec_0 // 0x068101
     itxn_field ApprovalProgram
-    bytec_1 // 0x068101
+    bytec_0 // 0x068101
     itxn_field ClearStateProgram
     intc_0 // 0
     itxn_field Fee

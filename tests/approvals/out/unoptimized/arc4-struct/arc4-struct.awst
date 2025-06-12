@@ -37,7 +37,7 @@ contract StructDemo
   
   implicitCastingAndSpreading(v1: Vector): void
   {
-    v2: Vector = new Vector(x=(#4 = ARC4_DECODE(v1)).x, y=#4.y)
+    v2: Vector = new Vector(x=(#4 = { x: v1.x, y: v1.y }).x, y=#4.y)
     v3: Vector = new Vector(x=(#5 = { x: v2.x, y: v2.y }).x, y=#5.y)
     assert(reinterpret_cast<bytes>(v1) == reinterpret_cast<bytes>(v2))
     assert(reinterpret_cast<bytes>(v3) == reinterpret_cast<bytes>(v1))

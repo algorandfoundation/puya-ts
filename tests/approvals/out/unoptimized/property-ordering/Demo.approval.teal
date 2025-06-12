@@ -4,6 +4,7 @@
 // tests/approvals/property-ordering.algo.ts::Demo.approvalProgram() -> uint64:
 main:
     intcblock 8 0 2 4
+    bytecblock 0x
 
 main_block@0:
     // tests/approvals/property-ordering.algo.ts:29
@@ -39,33 +40,29 @@ test_assign_from_var_block@0:
     frame_dig -1
     frame_dig -2
     swap
-    // tests/approvals/property-ordering.algo.ts:7
-    // function test_assign_from_var(x: { a: uint64; b: uint64 }) {
-    frame_dig -2
-    itob
-    frame_dig -1
-    itob
-    swap
     // tests/approvals/property-ordering.algo.ts:10
     // const xEncoded = encodeArc4(x)
-    pushbytes 0x
+    frame_dig -2
+    itob
+    bytec_0 // 0x
     swap
     concat
-    swap
+    frame_dig -1
+    itob
+    concat
+    bytec_0 // 0x
     concat
     cover 2
-    // tests/approvals/property-ordering.algo.ts:9
-    // const obj: BthenA = x
-    itob
-    swap
-    itob
-    swap
     // tests/approvals/property-ordering.algo.ts:11
     // const objEncoded = encodeArc4(obj)
-    pushbytes 0x
+    itob
+    bytec_0 // 0x
     swap
     concat
     swap
+    itob
+    concat
+    bytec_0 // 0x
     concat
     // tests/approvals/property-ordering.algo.ts:12
     // assert(xEncoded === objEncoded.slice(8).concat(objEncoded.slice(0, 8)), 'Encoded order should be swapped')

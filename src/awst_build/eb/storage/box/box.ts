@@ -4,7 +4,7 @@ import type { SourceLocation } from '../../../../awst/source-location'
 import { wtypes } from '../../../../awst/wtypes'
 import { invariant } from '../../../../util'
 import type { PType } from '../../../ptypes'
-import { boolPType, BoxPType, BoxRefPType, bytesPType, stringPType, TuplePType, uint64PType } from '../../../ptypes'
+import { boolPType, BoxPType, BoxRefPType, bytesPType, ReadonlyTuplePType, stringPType, uint64PType } from '../../../ptypes'
 import { instanceEb } from '../../../type-registry'
 import { FunctionBuilder, type NodeBuilder } from '../../index'
 import { parseFunctionArgs } from '../../util/arg-parsing'
@@ -197,8 +197,7 @@ class BoxMaybeFunctionBuilder extends FunctionBuilder {
       genericTypeArgs: 0,
       argSpec: () => [],
     })
-    const type = new TuplePType({ items: [this.contentType, boolPType] })
-
+    const type = new ReadonlyTuplePType({ items: [this.contentType, boolPType] })
     return instanceEb(
       nodeFactory.stateGetEx({
         sourceLocation,

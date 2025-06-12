@@ -133,7 +133,7 @@ class IsOptedInFunctionBuilder extends FunctionBuilder {
             opCode: 'asset_holding_get',
             immediates: ['AssetBalance'],
             stackArgs: [this.expr, applicationOrAsset.resolve()],
-            wtype: new wtypes.WTuple({ types: [wtypes.uint64WType, wtypes.boolWType], immutable: true }),
+            wtype: new wtypes.WTuple({ types: [wtypes.uint64WType, wtypes.boolWType] }),
             sourceLocation,
           }),
           index: 1n,

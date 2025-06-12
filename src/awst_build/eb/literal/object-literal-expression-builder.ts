@@ -4,6 +4,7 @@ import type { SourceLocation } from '../../../awst/source-location'
 import { CodeError } from '../../../errors'
 import type { PTypeOrClass } from '../../ptypes'
 import { ObjectPType } from '../../ptypes'
+import { getPropertyType } from '../../ptypes/visitors/index-type-visitor'
 import type { InstanceBuilder, NodeBuilder } from '../index'
 import { LiteralExpressionBuilder } from '../literal-expression-builder'
 import { requestExpressionOfType, requireExpressionOfType, requireInstanceBuilder } from '../util'
@@ -20,6 +21,8 @@ export type ObjectLiteralParts =
     }
 
 export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
+  readonly isConstant = false
+
   readonly _ptype: ObjectPType
   get ptype(): ObjectPType {
     return this._ptype
@@ -75,7 +78,9 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
       // Resolve this object to a tuple using declared order but using the target property types.
       // This will resolve numeric literals to algo-ts types if available
       const tempType = new ObjectPType({
-        properties: Object.fromEntries(this.ptype.orderedProperties().map(([p]) => [p, ptype.getPropertyType(p)] as const)),
+        properties: Object.fromEntries(
+          this.ptype.orderedProperties().map(([p]) => [p, getPropertyType(ptype, p, this.sourceLocation)] as const),
+        ),
       })
 
       base = new ObjectExpressionBuilder(

@@ -32,7 +32,7 @@ main_testArray_route@8:
     txn Sender
     // tests/approvals/static-bytes.algo.ts:42-43
     // const a = [Txn.sender.bytes, Txn.sender.bytes] as const
-    // const b = new MutableArray<bytes<32>>(Txn.sender.bytes)
+    // const b = new ReferenceArray<bytes<32>>(Txn.sender.bytes)
     dupn 2
     // tests/approvals/static-bytes.algo.ts:44
     // b.push(...a)
@@ -42,8 +42,7 @@ main_testArray_route@8:
     concat // on error: max array length exceeded
     // tests/approvals/static-bytes.algo.ts:46
     // const bitAnd = a[0].bitwiseAnd(b[0])
-    extract 0 32
-    extract 0 32
+    extract 0 32 // on error: index access is out of bounds
     b&
     // tests/approvals/static-bytes.algo.ts:47
     // assert(bitAnd === Txn.sender.bytes)

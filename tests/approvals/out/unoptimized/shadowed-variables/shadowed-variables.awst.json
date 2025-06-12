@@ -40,7 +40,7 @@
         },
         "body": [
           {
-            "_type": "AssignmentStatement",
+            "_type": "ExpressionStatement",
             "source_location": {
               "file": "tests/approvals/shadowed-variables.algo.ts",
               "line": 8,
@@ -48,8 +48,8 @@
               "column": 10,
               "end_column": 38
             },
-            "target": {
-              "_type": "TupleExpression",
+            "expr": {
+              "_type": "CommaExpression",
               "source_location": {
                 "file": "tests/approvals/shadowed-variables.algo.ts",
                 "line": 8,
@@ -58,9 +58,10 @@
                 "end_column": 38
               },
               "wtype": {
-                "_type": "WTuple",
-                "name": "tuple",
-                "immutable": true,
+                "_type": "ARC4Tuple",
+                "name": "arc4.tuple<bytes,uint64,bool>",
+                "immutable": false,
+                "arc4_alias": null,
                 "types": [
                   {
                     "_type": "BytesWType",
@@ -78,17 +79,18 @@
                     "name": "bool",
                     "immutable": true
                   }
-                ]
+                ],
+                "source_location": null
               },
-              "items": [
+              "expressions": [
                 {
-                  "_type": "VarExpression",
+                  "_type": "AssignmentExpression",
                   "source_location": {
                     "file": "tests/approvals/shadowed-variables.algo.ts",
                     "line": 8,
                     "end_line": 8,
-                    "column": 11,
-                    "end_column": 12
+                    "column": 10,
+                    "end_column": 38
                   },
                   "wtype": {
                     "_type": "BytesWType",
@@ -96,80 +98,444 @@
                     "immutable": true,
                     "length": null
                   },
-                  "name": "b"
+                  "target": {
+                    "_type": "VarExpression",
+                    "source_location": {
+                      "file": "tests/approvals/shadowed-variables.algo.ts",
+                      "line": 8,
+                      "end_line": 8,
+                      "column": 11,
+                      "end_column": 12
+                    },
+                    "wtype": {
+                      "_type": "BytesWType",
+                      "name": "bytes",
+                      "immutable": true,
+                      "length": null
+                    },
+                    "name": "b"
+                  },
+                  "value": {
+                    "_type": "TupleItemExpression",
+                    "source_location": {
+                      "file": "tests/approvals/shadowed-variables.algo.ts",
+                      "line": 8,
+                      "end_line": 8,
+                      "column": 10,
+                      "end_column": 38
+                    },
+                    "wtype": {
+                      "_type": "BytesWType",
+                      "name": "bytes",
+                      "immutable": true,
+                      "length": null
+                    },
+                    "base": {
+                      "_type": "SingleEvaluation",
+                      "source_location": {
+                        "file": "tests/approvals/shadowed-variables.algo.ts",
+                        "line": 8,
+                        "end_line": 8,
+                        "column": 22,
+                        "end_column": 38
+                      },
+                      "wtype": {
+                        "_type": "ARC4Tuple",
+                        "name": "arc4.tuple<bytes,uint64,bool>",
+                        "immutable": false,
+                        "arc4_alias": null,
+                        "types": [
+                          {
+                            "_type": "BytesWType",
+                            "name": "bytes",
+                            "immutable": true,
+                            "length": null
+                          },
+                          {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          {
+                            "_type": "WType",
+                            "name": "bool",
+                            "immutable": true
+                          }
+                        ],
+                        "source_location": null
+                      },
+                      "source": {
+                        "_type": "SubroutineCallExpression",
+                        "source_location": {
+                          "file": "tests/approvals/shadowed-variables.algo.ts",
+                          "line": 8,
+                          "end_line": 8,
+                          "column": 22,
+                          "end_column": 38
+                        },
+                        "wtype": {
+                          "_type": "ARC4Tuple",
+                          "name": "arc4.tuple<bytes,uint64,bool>",
+                          "immutable": false,
+                          "arc4_alias": null,
+                          "types": [
+                            {
+                              "_type": "BytesWType",
+                              "name": "bytes",
+                              "immutable": true,
+                              "length": null
+                            },
+                            {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true
+                            },
+                            {
+                              "_type": "WType",
+                              "name": "bool",
+                              "immutable": true
+                            }
+                          ],
+                          "source_location": null
+                        },
+                        "target": {
+                          "_type": "ContractMethodTarget",
+                          "cref": "tests/approvals/shadowed-variables.algo.ts::ShadowedVariablesAlgo",
+                          "member_name": "getValues"
+                        },
+                        "args": []
+                      },
+                      "_id": "0"
+                    },
+                    "index": 0
+                  }
                 },
                 {
-                  "_type": "VarExpression",
+                  "_type": "AssignmentExpression",
                   "source_location": {
                     "file": "tests/approvals/shadowed-variables.algo.ts",
                     "line": 8,
                     "end_line": 8,
-                    "column": 14,
-                    "end_column": 15
+                    "column": 10,
+                    "end_column": 38
                   },
                   "wtype": {
                     "_type": "WType",
                     "name": "uint64",
                     "immutable": true
                   },
-                  "name": "u"
+                  "target": {
+                    "_type": "VarExpression",
+                    "source_location": {
+                      "file": "tests/approvals/shadowed-variables.algo.ts",
+                      "line": 8,
+                      "end_line": 8,
+                      "column": 14,
+                      "end_column": 15
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "uint64",
+                      "immutable": true
+                    },
+                    "name": "u"
+                  },
+                  "value": {
+                    "_type": "TupleItemExpression",
+                    "source_location": {
+                      "file": "tests/approvals/shadowed-variables.algo.ts",
+                      "line": 8,
+                      "end_line": 8,
+                      "column": 10,
+                      "end_column": 38
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "uint64",
+                      "immutable": true
+                    },
+                    "base": {
+                      "_type": "SingleEvaluation",
+                      "source_location": {
+                        "file": "tests/approvals/shadowed-variables.algo.ts",
+                        "line": 8,
+                        "end_line": 8,
+                        "column": 22,
+                        "end_column": 38
+                      },
+                      "wtype": {
+                        "_type": "ARC4Tuple",
+                        "name": "arc4.tuple<bytes,uint64,bool>",
+                        "immutable": false,
+                        "arc4_alias": null,
+                        "types": [
+                          {
+                            "_type": "BytesWType",
+                            "name": "bytes",
+                            "immutable": true,
+                            "length": null
+                          },
+                          {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          {
+                            "_type": "WType",
+                            "name": "bool",
+                            "immutable": true
+                          }
+                        ],
+                        "source_location": null
+                      },
+                      "source": {
+                        "_type": "SubroutineCallExpression",
+                        "source_location": {
+                          "file": "tests/approvals/shadowed-variables.algo.ts",
+                          "line": 8,
+                          "end_line": 8,
+                          "column": 22,
+                          "end_column": 38
+                        },
+                        "wtype": {
+                          "_type": "ARC4Tuple",
+                          "name": "arc4.tuple<bytes,uint64,bool>",
+                          "immutable": false,
+                          "arc4_alias": null,
+                          "types": [
+                            {
+                              "_type": "BytesWType",
+                              "name": "bytes",
+                              "immutable": true,
+                              "length": null
+                            },
+                            {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true
+                            },
+                            {
+                              "_type": "WType",
+                              "name": "bool",
+                              "immutable": true
+                            }
+                          ],
+                          "source_location": null
+                        },
+                        "target": {
+                          "_type": "ContractMethodTarget",
+                          "cref": "tests/approvals/shadowed-variables.algo.ts::ShadowedVariablesAlgo",
+                          "member_name": "getValues"
+                        },
+                        "args": []
+                      },
+                      "_id": "0"
+                    },
+                    "index": 1
+                  }
                 },
                 {
-                  "_type": "VarExpression",
+                  "_type": "AssignmentExpression",
                   "source_location": {
                     "file": "tests/approvals/shadowed-variables.algo.ts",
                     "line": 8,
                     "end_line": 8,
-                    "column": 17,
-                    "end_column": 18
+                    "column": 10,
+                    "end_column": 38
                   },
                   "wtype": {
                     "_type": "WType",
                     "name": "bool",
                     "immutable": true
                   },
-                  "name": "f"
+                  "target": {
+                    "_type": "VarExpression",
+                    "source_location": {
+                      "file": "tests/approvals/shadowed-variables.algo.ts",
+                      "line": 8,
+                      "end_line": 8,
+                      "column": 17,
+                      "end_column": 18
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "bool",
+                      "immutable": true
+                    },
+                    "name": "f"
+                  },
+                  "value": {
+                    "_type": "TupleItemExpression",
+                    "source_location": {
+                      "file": "tests/approvals/shadowed-variables.algo.ts",
+                      "line": 8,
+                      "end_line": 8,
+                      "column": 10,
+                      "end_column": 38
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "bool",
+                      "immutable": true
+                    },
+                    "base": {
+                      "_type": "SingleEvaluation",
+                      "source_location": {
+                        "file": "tests/approvals/shadowed-variables.algo.ts",
+                        "line": 8,
+                        "end_line": 8,
+                        "column": 22,
+                        "end_column": 38
+                      },
+                      "wtype": {
+                        "_type": "ARC4Tuple",
+                        "name": "arc4.tuple<bytes,uint64,bool>",
+                        "immutable": false,
+                        "arc4_alias": null,
+                        "types": [
+                          {
+                            "_type": "BytesWType",
+                            "name": "bytes",
+                            "immutable": true,
+                            "length": null
+                          },
+                          {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          {
+                            "_type": "WType",
+                            "name": "bool",
+                            "immutable": true
+                          }
+                        ],
+                        "source_location": null
+                      },
+                      "source": {
+                        "_type": "SubroutineCallExpression",
+                        "source_location": {
+                          "file": "tests/approvals/shadowed-variables.algo.ts",
+                          "line": 8,
+                          "end_line": 8,
+                          "column": 22,
+                          "end_column": 38
+                        },
+                        "wtype": {
+                          "_type": "ARC4Tuple",
+                          "name": "arc4.tuple<bytes,uint64,bool>",
+                          "immutable": false,
+                          "arc4_alias": null,
+                          "types": [
+                            {
+                              "_type": "BytesWType",
+                              "name": "bytes",
+                              "immutable": true,
+                              "length": null
+                            },
+                            {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true
+                            },
+                            {
+                              "_type": "WType",
+                              "name": "bool",
+                              "immutable": true
+                            }
+                          ],
+                          "source_location": null
+                        },
+                        "target": {
+                          "_type": "ContractMethodTarget",
+                          "cref": "tests/approvals/shadowed-variables.algo.ts::ShadowedVariablesAlgo",
+                          "member_name": "getValues"
+                        },
+                        "args": []
+                      },
+                      "_id": "0"
+                    },
+                    "index": 2
+                  }
+                },
+                {
+                  "_type": "SingleEvaluation",
+                  "source_location": {
+                    "file": "tests/approvals/shadowed-variables.algo.ts",
+                    "line": 8,
+                    "end_line": 8,
+                    "column": 22,
+                    "end_column": 38
+                  },
+                  "wtype": {
+                    "_type": "ARC4Tuple",
+                    "name": "arc4.tuple<bytes,uint64,bool>",
+                    "immutable": false,
+                    "arc4_alias": null,
+                    "types": [
+                      {
+                        "_type": "BytesWType",
+                        "name": "bytes",
+                        "immutable": true,
+                        "length": null
+                      },
+                      {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true
+                      },
+                      {
+                        "_type": "WType",
+                        "name": "bool",
+                        "immutable": true
+                      }
+                    ],
+                    "source_location": null
+                  },
+                  "source": {
+                    "_type": "SubroutineCallExpression",
+                    "source_location": {
+                      "file": "tests/approvals/shadowed-variables.algo.ts",
+                      "line": 8,
+                      "end_line": 8,
+                      "column": 22,
+                      "end_column": 38
+                    },
+                    "wtype": {
+                      "_type": "ARC4Tuple",
+                      "name": "arc4.tuple<bytes,uint64,bool>",
+                      "immutable": false,
+                      "arc4_alias": null,
+                      "types": [
+                        {
+                          "_type": "BytesWType",
+                          "name": "bytes",
+                          "immutable": true,
+                          "length": null
+                        },
+                        {
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
+                        },
+                        {
+                          "_type": "WType",
+                          "name": "bool",
+                          "immutable": true
+                        }
+                      ],
+                      "source_location": null
+                    },
+                    "target": {
+                      "_type": "ContractMethodTarget",
+                      "cref": "tests/approvals/shadowed-variables.algo.ts::ShadowedVariablesAlgo",
+                      "member_name": "getValues"
+                    },
+                    "args": []
+                  },
+                  "_id": "0"
                 }
               ]
-            },
-            "value": {
-              "_type": "SubroutineCallExpression",
-              "source_location": {
-                "file": "tests/approvals/shadowed-variables.algo.ts",
-                "line": 8,
-                "end_line": 8,
-                "column": 22,
-                "end_column": 38
-              },
-              "wtype": {
-                "_type": "WTuple",
-                "name": "tuple",
-                "immutable": true,
-                "types": [
-                  {
-                    "_type": "BytesWType",
-                    "name": "bytes",
-                    "immutable": true,
-                    "length": null
-                  },
-                  {
-                    "_type": "WType",
-                    "name": "uint64",
-                    "immutable": true
-                  },
-                  {
-                    "_type": "WType",
-                    "name": "bool",
-                    "immutable": true
-                  }
-                ]
-              },
-              "target": {
-                "_type": "ContractMethodTarget",
-                "cref": "tests/approvals/shadowed-variables.algo.ts::ShadowedVariablesAlgo",
-                "member_name": "getValues"
-              },
-              "args": []
             }
           },
           {
@@ -213,10 +579,10 @@
                   "_type": "BytesConstant",
                   "source_location": {
                     "file": "tests/approvals/shadowed-variables.algo.ts",
-                    "line": 4,
-                    "end_line": 4,
-                    "column": 16,
-                    "end_column": 21
+                    "line": 9,
+                    "end_line": 9,
+                    "column": 11,
+                    "end_column": 12
                   },
                   "wtype": {
                     "_type": "BytesWType",
@@ -764,10 +1130,10 @@
                   "_type": "BytesConstant",
                   "source_location": {
                     "file": "tests/approvals/shadowed-variables.algo.ts",
-                    "line": 4,
-                    "end_line": 4,
-                    "column": 16,
-                    "end_column": 21
+                    "line": 24,
+                    "end_line": 24,
+                    "column": 11,
+                    "end_column": 12
                   },
                   "wtype": {
                     "_type": "BytesWType",
@@ -924,9 +1290,10 @@
         },
         "args": [],
         "return_type": {
-          "_type": "WTuple",
-          "name": "tuple",
-          "immutable": true,
+          "_type": "ARC4Tuple",
+          "name": "arc4.tuple<bytes,uint64,bool>",
+          "immutable": false,
+          "arc4_alias": null,
           "types": [
             {
               "_type": "BytesWType",
@@ -944,7 +1311,8 @@
               "name": "bool",
               "immutable": true
             }
-          ]
+          ],
+          "source_location": null
         },
         "body": {
           "_type": "Block",
@@ -966,7 +1334,7 @@
                 "end_column": 34
               },
               "value": {
-                "_type": "TupleExpression",
+                "_type": "ARC4Encode",
                 "source_location": {
                   "file": "tests/approvals/shadowed-variables.algo.ts",
                   "line": 29,
@@ -975,9 +1343,10 @@
                   "end_column": 34
                 },
                 "wtype": {
-                  "_type": "WTuple",
-                  "name": "tuple",
-                  "immutable": true,
+                  "_type": "ARC4Tuple",
+                  "name": "arc4.tuple<bytes,uint64,bool>",
+                  "immutable": false,
+                  "arc4_alias": null,
                   "types": [
                     {
                       "_type": "BytesWType",
@@ -995,61 +1364,95 @@
                       "name": "bool",
                       "immutable": true
                     }
-                  ]
+                  ],
+                  "source_location": null
                 },
-                "items": [
-                  {
-                    "_type": "BytesConstant",
-                    "source_location": {
-                      "file": "tests/approvals/shadowed-variables.algo.ts",
-                      "line": 4,
-                      "end_line": 4,
-                      "column": 16,
-                      "end_column": 21
-                    },
-                    "wtype": {
-                      "_type": "BytesWType",
-                      "name": "bytes",
-                      "immutable": true,
-                      "length": null
-                    },
-                    "value": "F)}j",
-                    "encoding": "utf8"
+                "value": {
+                  "_type": "TupleExpression",
+                  "source_location": {
+                    "file": "tests/approvals/shadowed-variables.algo.ts",
+                    "line": 29,
+                    "end_line": 29,
+                    "column": 11,
+                    "end_column": 34
                   },
-                  {
-                    "_type": "IntegerConstant",
-                    "source_location": {
-                      "file": "tests/approvals/shadowed-variables.algo.ts",
-                      "line": 29,
-                      "end_line": 29,
-                      "column": 22,
-                      "end_column": 25
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true
-                    },
-                    "value": 123,
-                    "teal_alias": null
+                  "wtype": {
+                    "_type": "WTuple",
+                    "name": "tuple",
+                    "immutable": true,
+                    "types": [
+                      {
+                        "_type": "BytesWType",
+                        "name": "bytes",
+                        "immutable": true,
+                        "length": null
+                      },
+                      {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true
+                      },
+                      {
+                        "_type": "WType",
+                        "name": "bool",
+                        "immutable": true
+                      }
+                    ]
                   },
-                  {
-                    "_type": "BoolConstant",
-                    "source_location": {
-                      "file": "tests/approvals/shadowed-variables.algo.ts",
-                      "line": 29,
-                      "end_line": 29,
-                      "column": 28,
-                      "end_column": 33
+                  "items": [
+                    {
+                      "_type": "BytesConstant",
+                      "source_location": {
+                        "file": "tests/approvals/shadowed-variables.algo.ts",
+                        "line": 29,
+                        "end_line": 29,
+                        "column": 12,
+                        "end_column": 13
+                      },
+                      "wtype": {
+                        "_type": "BytesWType",
+                        "name": "bytes",
+                        "immutable": true,
+                        "length": null
+                      },
+                      "value": "F)}j",
+                      "encoding": "utf8"
                     },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "bool",
-                      "immutable": true
+                    {
+                      "_type": "IntegerConstant",
+                      "source_location": {
+                        "file": "tests/approvals/shadowed-variables.algo.ts",
+                        "line": 29,
+                        "end_line": 29,
+                        "column": 22,
+                        "end_column": 25
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true
+                      },
+                      "value": 123,
+                      "teal_alias": null
                     },
-                    "value": false
-                  }
-                ]
+                    {
+                      "_type": "BoolConstant",
+                      "source_location": {
+                        "file": "tests/approvals/shadowed-variables.algo.ts",
+                        "line": 29,
+                        "end_line": 29,
+                        "column": 28,
+                        "end_column": 33
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "bool",
+                        "immutable": true
+                      },
+                      "value": false
+                    }
+                  ]
+                }
               }
             }
           ],

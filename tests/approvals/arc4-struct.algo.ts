@@ -1,5 +1,5 @@
 import type { uint64 } from '@algorandfoundation/algorand-typescript'
-import { arc4, assert, Box, BoxMap, Contract, log } from '@algorandfoundation/algorand-typescript'
+import { arc4, assert, Box, BoxMap, clone, Contract, log } from '@algorandfoundation/algorand-typescript'
 import { interpretAsArc4, methodSelector, Struct, UintN } from '@algorandfoundation/algorand-typescript/arc4'
 
 type ARC4Uint64 = UintN<64>
@@ -50,13 +50,13 @@ class StructDemo extends Contract {
   plugin = Box<PluginInfo>({ key: 'main' })
 
   public getPlugin(key: string): PluginInfo {
-    const value = this.plugins(key).value.copy()
+    const value = clone(this.plugins(key).value)
     assert(value.lastCalled.native > 0, 'Last called not zero')
     return value
   }
 
   public getMain() {
-    const value = this.plugin.value.copy()
+    const value = clone(this.plugin.value)
     assert(value.lastCalled.native > 0, 'Last called not zero')
     return value
   }

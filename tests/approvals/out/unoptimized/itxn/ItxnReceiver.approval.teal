@@ -66,30 +66,6 @@ main_receivePay_route@3:
     uncover 2
     uncover 2
     callsub receivePay
-    cover 2
-    swap
-    itob
-    cover 2
-    itob
-    cover 2
-    dup
-    len
-    itob
-    extract 6 2
-    swap
-    concat
-    cover 2
-    pushbytes 0x
-    swap
-    concat
-    swap
-    concat
-    pushint 18 // 18
-    itob
-    extract 6 2
-    concat
-    swap
-    concat
     pushbytes 0x151f7c75
     swap
     concat
@@ -122,11 +98,11 @@ main___algots__.defaultCreate@7:
     b main_after_inlined_tests/approvals/itxn.algo.ts::ItxnReceiver.__puya_arc4_router__@11
 
 
-// tests/approvals/itxn.algo.ts::ItxnReceiver.receivePay(a: uint64, b: uint64, c: bytes) -> uint64, uint64, bytes:
+// tests/approvals/itxn.algo.ts::ItxnReceiver.receivePay(a: uint64, b: uint64, c: bytes) -> bytes:
 receivePay:
     // tests/approvals/itxn.algo.ts:228
     // public receivePay(a: uint64, b: gtxn.PaymentTxn, c: string): [uint64, uint64, string] {
-    proto 3 3
+    proto 3 1
 
 receivePay_block@0:
     // tests/approvals/itxn.algo.ts:229
@@ -134,8 +110,30 @@ receivePay_block@0:
     frame_dig -2
     gtxns Amount
     frame_dig -3
+    itob
+    pushbytes 0x
     swap
+    concat
+    swap
+    itob
+    concat
     frame_dig -1
+    len
+    itob
+    extract 6 2
+    frame_dig -1
+    concat
+    pushbytes 0x
+    swap
+    concat
+    pushint 18 // 18
+    itob
+    extract 6 2
+    uncover 2
+    swap
+    concat
+    swap
+    concat
     retsub
 
 

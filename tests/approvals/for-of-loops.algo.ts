@@ -1,5 +1,5 @@
 import type { uint64 } from '@algorandfoundation/algorand-typescript'
-import { Contract, MutableArray } from '@algorandfoundation/algorand-typescript'
+import { Contract, ReferenceArray } from '@algorandfoundation/algorand-typescript'
 import type { DynamicArray, StaticArray, UintN64 } from '@algorandfoundation/algorand-typescript/arc4'
 
 const stopNumber: uint64 = 42
@@ -42,7 +42,7 @@ export class ForOfLoopsAlgo extends Contract {
   }
 
   test_for_of_loop_native_mutable_array(items: [uint64, uint64, uint64]) {
-    const mutable = new MutableArray(...items)
+    const mutable = new ReferenceArray(...items)
     let total: uint64 = 0
     for (const item of mutable) {
       total += item

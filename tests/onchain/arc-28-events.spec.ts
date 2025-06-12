@@ -8,9 +8,9 @@ describe('arc 28 events', () => {
   test('It works with struct types', async ({ appClientEventEmitter, expect }) => {
     const result = await appClientEventEmitter.send.call({ method: 'emitSwapped', args: [0, 255] })
 
-    expect(result.confirmation.logs?.length).toBe(6)
+    expect(result.confirmation.logs?.length).toBe(8)
 
-    const [first, second, third, fourth, fifth, sixth] = result.confirmation.logs!.map(uint8ArrayToHex)
+    const [first, second, third, fourth, fifth, sixth, seventh, eighth] = result.confirmation.logs!.map(uint8ArrayToHex)
 
     // sha_512_256("Swapped(uint8,uint8)").slice(0, 4)
     const eventPrefixHex = '0B6325ED'
@@ -26,6 +26,10 @@ describe('arc 28 events', () => {
 
     // sha_512_256("Swapped((uint8,uint8),uint8)").slice(0, 4) => 388cc12d
     expect(sixth).toEqual(`388CC12DFFFF00`)
+    expect(seventh).toEqual(`388CC12DFFFF00`)
+
+    // sha_512_256("Swapped(uint8[],uint8)").slice(0, 4) => 08754e0c
+    expect(eighth).toEqual('08754E0C0003000002FFFF')
   })
 
   test('It works with dynamic bytes', async ({ appClientEventEmitter, expect }) => {

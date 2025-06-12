@@ -26,6 +26,12 @@ describe('local state', () => {
       localEncoded: [0n, 1n, 2n, 3n, 4n, 5n, 6n, 7n, 8n, 9n],
       localTuple: [123n, [...utf8ToUint8Array('bb')]],
       localObject: { a: 123n, b: [...utf8ToUint8Array('bb')] },
+      localMutableObject: {
+        a: 123n,
+        b: [...utf8ToUint8Array('bb')],
+        c: true,
+        d: 'hello',
+      },
     })
 
     await appClientLocalStateDemo.send.call({ method: 'clearState' })

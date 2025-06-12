@@ -24,34 +24,34 @@ subroutine tests/approvals/multi-inheritance-2.algo.ts::StoreBoth.__puya_arc4_ro
         let tmp%5#0: uint64 = (txn ApplicationID)
         let tmp%6#0: bool = (!= tmp%5#0 0u)
         (assert tmp%6#0) // can only call when not creating
-        let tmp%7#0: bytes = (txna ApplicationArgs 1)
-        let tmp%8#0: bytes = ((extract 2 0) tmp%7#0)
-        let reinterpret_bytes[8]%0#0: bytes[8] = (txna ApplicationArgs 2)
-        let tmp%9#0: uint64 = (btoi reinterpret_bytes[8]%0#0)
-        tests/approvals/multi-inheritance-2.algo.ts::StoreBoth.test(tmp%8#0, tmp%9#0)
+        let reinterpret_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = (txna ApplicationArgs 1)
+        let tmp%7#0: string = decode<string>(reinterpret_Encoded(len+utf8[])%0#0)
+        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 2)
+        let tmp%8#0: uint64 = decode<uint64>(reinterpret_Encoded(uint64)%0#0)
+        tests/approvals/multi-inheritance-2.algo.ts::StoreBoth.test(tmp%7#0, tmp%8#0)
         return 1u
     block@3: // setStore_route_L8
-        let tmp%10#0: uint64 = (txn OnCompletion)
-        let tmp%11#0: bool = (== tmp%10#0 NoOp)
-        (assert tmp%11#0) // OnCompletion is not NoOp
-        let tmp%12#0: uint64 = (txn ApplicationID)
-        let tmp%13#0: bool = (!= tmp%12#0 0u)
-        (assert tmp%13#0) // can only call when not creating
-        let tmp%14#0: bytes = (txna ApplicationArgs 1)
-        let tmp%15#0: bytes = ((extract 2 0) tmp%14#0)
-        tests/approvals/multi-inheritance-2.algo.ts::StoreString.setStore(tmp%15#0)
+        let tmp%9#0: uint64 = (txn OnCompletion)
+        let tmp%10#0: bool = (== tmp%9#0 NoOp)
+        (assert tmp%10#0) // OnCompletion is not NoOp
+        let tmp%11#0: uint64 = (txn ApplicationID)
+        let tmp%12#0: bool = (!= tmp%11#0 0u)
+        (assert tmp%12#0) // can only call when not creating
+        let reinterpret_Encoded(len+utf8[])%1#0: Encoded(len+utf8[]) = (txna ApplicationArgs 1)
+        let tmp%13#0: string = decode<string>(reinterpret_Encoded(len+utf8[])%1#0)
+        tests/approvals/multi-inheritance-2.algo.ts::StoreString.setStore(tmp%13#0)
         return 1u
     block@4: // switch_case_default_L21
         goto block@5
     block@5: // switch_case_next_L21
         goto block@10
     block@6: // bare_routing_L21
-        let tmp%16#0: uint64 = (txn OnCompletion)
-        switch tmp%16#0 {0u => block@7, * => block@8}
+        let tmp%14#0: uint64 = (txn OnCompletion)
+        switch tmp%14#0 {0u => block@7, * => block@8}
     block@7: // __algots__.defaultCreate_L21
-        let tmp%17#0: uint64 = (txn ApplicationID)
-        let tmp%18#0: bool = (== tmp%17#0 0u)
-        (assert tmp%18#0) // can only call when creating
+        let tmp%15#0: uint64 = (txn ApplicationID)
+        let tmp%16#0: bool = (== tmp%15#0 0u)
+        (assert tmp%16#0) // can only call when creating
         tests/approvals/multi-inheritance-2.algo.ts::StoreBoth.__algots__.defaultCreate()
         return 1u
     block@8: // switch_case_default_L21
@@ -61,13 +61,13 @@ subroutine tests/approvals/multi-inheritance-2.algo.ts::StoreBoth.__puya_arc4_ro
     block@10: // after_if_else_L21
         return 0u
 
-subroutine tests/approvals/multi-inheritance-2.algo.ts::StoreBoth.test(theString: bytes, theUint: uint64) -> void:
+subroutine tests/approvals/multi-inheritance-2.algo.ts::StoreBoth.test(theString: string, theUint: uint64) -> void:
     block@0: // L22
         tests/approvals/multi-inheritance-2.algo.ts::StoreString.setStore(theString#0)
         tests/approvals/multi-inheritance-2.algo.ts::StoreUint64.setStore(theUint#0)
         return 
 
-subroutine tests/approvals/multi-inheritance-2.algo.ts::StoreString.setStore(value: bytes) -> void:
+subroutine tests/approvals/multi-inheritance-2.algo.ts::StoreString.setStore(value: string) -> void:
     block@0: // L8
         (app_global_put "stringStore" value#0)
         return 

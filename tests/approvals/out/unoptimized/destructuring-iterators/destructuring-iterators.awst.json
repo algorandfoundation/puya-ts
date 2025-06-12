@@ -6,7 +6,7 @@
       "line": 4,
       "end_line": 4,
       "column": 0,
-      "end_column": 15
+      "end_column": 25
     },
     "args": [],
     "return_type": {
@@ -20,7 +20,7 @@
         "file": "tests/approvals/destructuring-iterators.algo.ts",
         "line": 4,
         "end_line": 15,
-        "column": 16,
+        "column": 26,
         "end_column": 1
       },
       "body": [
@@ -542,7 +542,7 @@
                 "name": "items"
               },
               "items": {
-                "_type": "TupleExpression",
+                "_type": "VarExpression",
                 "source_location": {
                   "file": "tests/approvals/destructuring-iterators.algo.ts",
                   "line": 11,
@@ -571,40 +571,7 @@
                     "b"
                   ]
                 },
-                "items": [
-                  {
-                    "_type": "VarExpression",
-                    "source_location": {
-                      "file": "tests/approvals/destructuring-iterators.algo.ts",
-                      "line": 11,
-                      "end_line": 11,
-                      "column": 15,
-                      "end_column": 16
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true
-                    },
-                    "name": "a"
-                  },
-                  {
-                    "_type": "VarExpression",
-                    "source_location": {
-                      "file": "tests/approvals/destructuring-iterators.algo.ts",
-                      "line": 11,
-                      "end_line": 11,
-                      "column": 7,
-                      "end_column": 18
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true
-                    },
-                    "name": "_"
-                  }
-                ]
+                "name": "temp"
               },
               "loop_body": {
                 "_type": "Block",
@@ -616,6 +583,113 @@
                   "end_column": 28
                 },
                 "body": [
+                  {
+                    "_type": "AssignmentStatement",
+                    "source_location": {
+                      "file": "tests/approvals/destructuring-iterators.algo.ts",
+                      "line": 11,
+                      "end_line": 11,
+                      "column": 7,
+                      "end_column": 18
+                    },
+                    "target": {
+                      "_type": "TupleExpression",
+                      "source_location": {
+                        "file": "tests/approvals/destructuring-iterators.algo.ts",
+                        "line": 11,
+                        "end_line": 11,
+                        "column": 7,
+                        "end_column": 18
+                      },
+                      "wtype": {
+                        "_type": "WTuple",
+                        "name": "lib.d.ts::object",
+                        "immutable": true,
+                        "types": [
+                          {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          }
+                        ],
+                        "names": [
+                          "a",
+                          "b"
+                        ]
+                      },
+                      "items": [
+                        {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/destructuring-iterators.algo.ts",
+                            "line": 11,
+                            "end_line": 11,
+                            "column": 15,
+                            "end_column": 16
+                          },
+                          "wtype": {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          "name": "a"
+                        },
+                        {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/destructuring-iterators.algo.ts",
+                            "line": 11,
+                            "end_line": 11,
+                            "column": 7,
+                            "end_column": 18
+                          },
+                          "wtype": {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          "name": "_"
+                        }
+                      ]
+                    },
+                    "value": {
+                      "_type": "VarExpression",
+                      "source_location": {
+                        "file": "tests/approvals/destructuring-iterators.algo.ts",
+                        "line": 11,
+                        "end_line": 11,
+                        "column": 7,
+                        "end_column": 18
+                      },
+                      "wtype": {
+                        "_type": "WTuple",
+                        "name": "lib.d.ts::object",
+                        "immutable": true,
+                        "types": [
+                          {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          }
+                        ],
+                        "names": [
+                          "a",
+                          "b"
+                        ]
+                      },
+                      "name": "temp"
+                    }
+                  },
                   {
                     "_type": "Block",
                     "source_location": {
@@ -799,7 +873,313 @@
       "returns": null
     },
     "inline": null,
-    "id": "tests/approvals/destructuring-iterators.algo.ts::test",
-    "name": "test"
+    "id": "tests/approvals/destructuring-iterators.algo.ts::test_immutable",
+    "name": "test_immutable"
+  },
+  {
+    "_type": "Contract",
+    "source_location": {
+      "file": "tests/approvals/destructuring-iterators.algo.ts",
+      "line": 17,
+      "end_line": 17,
+      "column": 0,
+      "end_column": 47
+    },
+    "id": "tests/approvals/destructuring-iterators.algo.ts::DestructuringIterators",
+    "name": "DestructuringIterators",
+    "description": null,
+    "method_resolution_order": [
+      "@algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract",
+      "@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract"
+    ],
+    "approval_program": {
+      "_type": "ContractMethod",
+      "source_location": {
+        "_type": "SourceLocation",
+        "file": null,
+        "line": 1,
+        "end_line": 1,
+        "column": 0,
+        "end_column": 1
+      },
+      "args": [],
+      "return_type": {
+        "_type": "WType",
+        "name": "bool",
+        "immutable": true
+      },
+      "body": {
+        "_type": "Block",
+        "source_location": {
+          "_type": "SourceLocation",
+          "file": null,
+          "line": 1,
+          "end_line": 1,
+          "column": 0,
+          "end_column": 1
+        },
+        "body": [
+          {
+            "_type": "ReturnStatement",
+            "source_location": {
+              "_type": "SourceLocation",
+              "file": null,
+              "line": 1,
+              "end_line": 1,
+              "column": 0,
+              "end_column": 1
+            },
+            "value": {
+              "_type": "ARC4Router",
+              "source_location": {
+                "_type": "SourceLocation",
+                "file": null,
+                "line": 1,
+                "end_line": 1,
+                "column": 0,
+                "end_column": 1
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true
+              }
+            }
+          }
+        ],
+        "label": null,
+        "comment": null
+      },
+      "documentation": {
+        "_type": "MethodDocumentation",
+        "description": null,
+        "args": {},
+        "returns": null
+      },
+      "inline": null,
+      "cref": "@algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract",
+      "member_name": "approvalProgram",
+      "arc4_method_config": null
+    },
+    "clear_program": {
+      "_type": "ContractMethod",
+      "source_location": {
+        "_type": "SourceLocation",
+        "file": null,
+        "line": 1,
+        "end_line": 1,
+        "column": 0,
+        "end_column": 1
+      },
+      "args": [],
+      "return_type": {
+        "_type": "WType",
+        "name": "bool",
+        "immutable": true
+      },
+      "body": {
+        "_type": "Block",
+        "source_location": {
+          "_type": "SourceLocation",
+          "file": null,
+          "line": 1,
+          "end_line": 1,
+          "column": 0,
+          "end_column": 1
+        },
+        "body": [
+          {
+            "_type": "ReturnStatement",
+            "source_location": {
+              "_type": "SourceLocation",
+              "file": null,
+              "line": 1,
+              "end_line": 1,
+              "column": 0,
+              "end_column": 1
+            },
+            "value": {
+              "_type": "BoolConstant",
+              "source_location": {
+                "_type": "SourceLocation",
+                "file": null,
+                "line": 1,
+                "end_line": 1,
+                "column": 0,
+                "end_column": 1
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true
+              },
+              "value": true
+            }
+          }
+        ],
+        "label": null,
+        "comment": null
+      },
+      "documentation": {
+        "_type": "MethodDocumentation",
+        "description": null,
+        "args": {},
+        "returns": null
+      },
+      "inline": null,
+      "cref": "@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract",
+      "member_name": "clearStateProgram",
+      "arc4_method_config": null
+    },
+    "methods": [
+      {
+        "_type": "ContractMethod",
+        "source_location": {
+          "file": "tests/approvals/destructuring-iterators.algo.ts",
+          "line": 18,
+          "end_line": 18,
+          "column": 2,
+          "end_column": 8
+        },
+        "args": [],
+        "return_type": {
+          "_type": "WType",
+          "name": "void",
+          "immutable": true
+        },
+        "body": {
+          "_type": "Block",
+          "source_location": {
+            "file": "tests/approvals/destructuring-iterators.algo.ts",
+            "line": 18,
+            "end_line": 20,
+            "column": 9,
+            "end_column": 3
+          },
+          "body": [
+            {
+              "_type": "ExpressionStatement",
+              "source_location": {
+                "file": "tests/approvals/destructuring-iterators.algo.ts",
+                "line": 19,
+                "end_line": 19,
+                "column": 4,
+                "end_column": 20
+              },
+              "expr": {
+                "_type": "SubroutineCallExpression",
+                "source_location": {
+                  "file": "tests/approvals/destructuring-iterators.algo.ts",
+                  "line": 19,
+                  "end_line": 19,
+                  "column": 4,
+                  "end_column": 20
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "void",
+                  "immutable": true
+                },
+                "target": {
+                  "_type": "SubroutineID",
+                  "target": "tests/approvals/destructuring-iterators.algo.ts::test_immutable"
+                },
+                "args": []
+              }
+            }
+          ],
+          "label": null,
+          "comment": null
+        },
+        "documentation": {
+          "_type": "MethodDocumentation",
+          "description": null,
+          "args": {},
+          "returns": null
+        },
+        "inline": null,
+        "cref": "tests/approvals/destructuring-iterators.algo.ts::DestructuringIterators",
+        "member_name": "test",
+        "arc4_method_config": {
+          "_type": "ARC4ABIMethodConfig",
+          "source_location": {
+            "file": "tests/approvals/destructuring-iterators.algo.ts",
+            "line": 18,
+            "end_line": 18,
+            "column": 2,
+            "end_column": 8
+          },
+          "allowed_completion_types": [
+            0
+          ],
+          "create": 3,
+          "name": "test",
+          "readonly": false,
+          "default_args": {}
+        }
+      },
+      {
+        "_type": "ContractMethod",
+        "source_location": {
+          "file": "tests/approvals/destructuring-iterators.algo.ts",
+          "line": 17,
+          "end_line": 17,
+          "column": 0,
+          "end_column": 47
+        },
+        "args": [],
+        "return_type": {
+          "_type": "WType",
+          "name": "void",
+          "immutable": true
+        },
+        "body": {
+          "_type": "Block",
+          "source_location": {
+            "file": "tests/approvals/destructuring-iterators.algo.ts",
+            "line": 17,
+            "end_line": 17,
+            "column": 0,
+            "end_column": 47
+          },
+          "body": [],
+          "label": null,
+          "comment": null
+        },
+        "documentation": {
+          "_type": "MethodDocumentation",
+          "description": "Implicitly generated create method",
+          "args": {},
+          "returns": null
+        },
+        "inline": null,
+        "cref": "tests/approvals/destructuring-iterators.algo.ts::DestructuringIterators",
+        "member_name": "__algots__.defaultCreate",
+        "arc4_method_config": {
+          "_type": "ARC4BareMethodConfig",
+          "source_location": {
+            "file": "tests/approvals/destructuring-iterators.algo.ts",
+            "line": 17,
+            "end_line": 17,
+            "column": 0,
+            "end_column": 47
+          },
+          "allowed_completion_types": [
+            0
+          ],
+          "create": 2
+        }
+      }
+    ],
+    "app_state": [],
+    "state_totals": {
+      "_type": "StateTotals",
+      "global_uints": null,
+      "local_uints": null,
+      "global_bytes": null,
+      "local_bytes": null
+    },
+    "reserved_scratch_space": [],
+    "avm_version": null
   }
 ]

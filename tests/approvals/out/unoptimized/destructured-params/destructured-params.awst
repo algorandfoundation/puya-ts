@@ -16,6 +16,12 @@ contract DestructuredParamsAlgo
     log(concat(concat(itob(a), b), itob(c)))
   }
   
+  testMutable(p: Arc4): void
+  {
+    (a = p.a), (b = p.b), (c = p.c), p
+    log(concat(concat(reinterpret_cast<bytes>(a), reinterpret_cast<bytes>(b)), reinterpret_cast<bytes>(c)))
+  }
+  
   init(): void
   {
     tests/approvals/destructured-params.algo.ts::DestructuredParamsAlgo.test({ a: (#0 = { a: 456, b: "", c: False }).a, b: #0.b, c: #0.c })
